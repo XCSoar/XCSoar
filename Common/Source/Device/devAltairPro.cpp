@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Device/devAltairPro.h"
+#include "Device/Internal.hpp"
 #include "Device/device.h"
 #include "Blackboard.hpp"
 #include "UtilsText.hpp"

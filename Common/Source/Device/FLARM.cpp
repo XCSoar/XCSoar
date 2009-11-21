@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Device/FLARM.hpp"
+#include "Device/Internal.hpp"
 #include "Device/device.h"
 
 #include <assert.h>

@@ -86,8 +86,6 @@ static Mutex mutexComm;
 //  of deadlock.  So, FlightData must never be locked after Comm.  Ever.
 //  Thankfully WinCE "critical sections" are recursive locks.
 
-#define debugIGNORERESPONCE 0
-
 static const TCHAR *const COMMPort[] = {
   _T("COM1:"),
   _T("COM2:"),
@@ -163,55 +161,12 @@ devGetBaroAltitude(double *Value)
 }
 
 bool
-ExpectString(struct DeviceDescriptor *d, const TCHAR *token)
-{
-  int i=0, ch;
-
-  assert(d != NULL);
-  assert(token != NULL);
-
-  if (!d->Com)
-    return false;
-
-  while ((ch = d->Com->GetChar()) != EOF){
-
-    if (token[i] == ch)
-      i++;
-    else
-      i=0;
-
-    if ((unsigned)i == _tcslen(token))
-      return true;
-
-  }
-
-  #if debugIGNORERESPONCE > 0
-  return true;
-  #endif
-  return false;
-}
-
-bool
 devRegisterGetName(int Index, TCHAR *Name)
 {
   Name[0] = '\0';
   if (Index < 0 || Index >= DeviceRegisterCount)
     return false;
   _tcscpy(Name, DeviceRegister[Index]->Name);
-  return true;
-}
-
-bool
-devIsFalseReturn(const struct DeviceDescriptor *d)
-{
-  (void)d;
-  return false;
-}
-
-bool
-devIsTrueReturn(const struct DeviceDescriptor *d)
-{
-  (void)d;
   return true;
 }
 

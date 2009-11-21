@@ -46,6 +46,7 @@ Copyright_License {
 // adding baro alt sentance paser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
 #include "Device/devPosiGraph.h"
+#include "Device/Internal.hpp"
 #include "Device/device.h"
 #include "Math/FastMath.h"
 #include "Math/Pressure.h"

@@ -42,6 +42,7 @@ Copyright_License {
 // adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
 #include "Device/devVolkslogger.h"
+#include "Device/Internal.hpp"
 #include "Device/device.h"
 #include "XCSoar.h"
 #include "Protection.hpp"

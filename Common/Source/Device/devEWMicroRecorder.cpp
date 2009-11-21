@@ -42,6 +42,7 @@ Copyright_License {
 // adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
 #include "Device/devEWMicroRecorder.h"
+#include "Device/Internal.hpp"
 #include "Device/device.h"
 #include "Math/Pressure.h"
 #include "Device/Parser.h"

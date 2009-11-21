@@ -147,14 +147,8 @@ extern struct DeviceDescriptor DeviceList[NUMDEV];
  */
 extern const struct DeviceRegister *const DeviceRegister[];
 
-extern struct DeviceDescriptor *pDevPrimaryBaroSource;
-extern struct DeviceDescriptor *pDevSecondaryBaroSource;
-
 bool
 devRegisterGetName(int Index, TCHAR *Name);
-
-bool
-ExpectString(struct DeviceDescriptor *d, const TCHAR *token);
 
 bool
 devHasBaroSource(void);
@@ -196,12 +190,6 @@ void AllDevicesPutQNH(double qnh);
 void AllDevicesPutVoice(const TCHAR *sentence);
 
 void AllDevicesLinkTimeout();
-
-bool
-devIsFalseReturn(const struct DeviceDescriptor *d);
-
-bool
-devIsTrueReturn(const struct DeviceDescriptor *d);
 
 void devStartup(LPTSTR lpCmdLine);
 void devShutdown();
