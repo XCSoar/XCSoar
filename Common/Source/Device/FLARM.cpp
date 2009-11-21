@@ -50,7 +50,7 @@ FlarmDeclareSetGet(struct DeviceDescriptor *d, TCHAR *Buffer) {
 
   TCHAR tmp[512];
 
-  _sntprintf(tmp, 512, TEXT("$%s\r\n"), Buffer);
+  _sntprintf(tmp, 512, _T("$%s\r\n"), Buffer);
 
   if (d->Com)
     d->Com->WriteString(tmp);
@@ -71,23 +71,23 @@ FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->StopRxThread();
   d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
-  _stprintf(Buffer,TEXT("PFLAC,S,PILOT,%s"),decl->PilotName);
+  _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"),decl->PilotName);
   if (!FlarmDeclareSetGet(d,Buffer))
     result = false;
 
-  _stprintf(Buffer,TEXT("PFLAC,S,GLIDERID,%s"),decl->AircraftRego);
+  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"),decl->AircraftRego);
   if (!FlarmDeclareSetGet(d,Buffer))
     result = false;
 
-  _stprintf(Buffer,TEXT("PFLAC,S,GLIDERTYPE,%s"),decl->AircraftType);
+  _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"),decl->AircraftType);
   if (!FlarmDeclareSetGet(d,Buffer))
     result = false;
 
-  _stprintf(Buffer,TEXT("PFLAC,S,NEWTASK,Task"));
+  _stprintf(Buffer, _T("PFLAC,S,NEWTASK,Task"));
   if (!FlarmDeclareSetGet(d,Buffer))
     result = false;
 
-  _stprintf(Buffer,TEXT("PFLAC,S,ADDWP,0000000N,00000000E,TAKEOFF"));
+  _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,TAKEOFF"));
   if (!FlarmDeclareSetGet(d,Buffer))
     result = false;
 
@@ -117,14 +117,14 @@ FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
     MinLon = (tmp - DegLon) * 60 * 1000;
 
     _stprintf(Buffer,
-	      TEXT("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"),
+	      _T("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"),
 	      DegLat, MinLat, NoS, DegLon, MinLon, EoW,
 	      decl->waypoint[i]->Name);
     if (!FlarmDeclareSetGet(d,Buffer))
       result = false;
   }
 
-  _stprintf(Buffer,TEXT("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
+  _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
   if (!FlarmDeclareSetGet(d,Buffer))
     result = false;
 

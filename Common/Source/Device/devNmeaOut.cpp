@@ -73,7 +73,7 @@ nmoPutQNH(struct DeviceDescriptor *d, double NewQNH)
 }
 
 const struct DeviceRegister nmoDevice = {
-  TEXT("NmeaOut"),
+  _T("NmeaOut"),
   drfNmeaOut,
   nmoParseNMEA,			// ParseNMEA
   NULL,				// PutMacCready

@@ -60,7 +60,7 @@ B50ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 {
   (void)d;
 
-  if(_tcsncmp(TEXT("$PBB50"), String, 6)==0)
+  if(_tcsncmp(_T("$PBB50"), String, 6)==0)
     {
       return PBB50(&String[7], GPS_INFO);
     }
@@ -69,7 +69,7 @@ B50ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 const struct DeviceRegister b50Device = {
-  TEXT("Borgelt B50"),
+  _T("Borgelt B50"),
   drfGPS,
   B50ParseNMEA,			// ParseNMEA
   NULL,				// PutMacCready

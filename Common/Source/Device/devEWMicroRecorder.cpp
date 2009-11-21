@@ -102,7 +102,7 @@ EWMicroRecorderParseNMEA(struct DeviceDescriptor *d,
   if (nparams < 1)
     return false;
 
-  if (!_tcscmp(params[0], TEXT("$PGRMZ")) && nparams >= 3) {
+  if (!_tcscmp(params[0], _T("$PGRMZ")) && nparams >= 3) {
     if (d == pDevPrimaryBaroSource) {
       double altitude = NMEAParser::ParseAltitude(params[1], params[2]);
 
@@ -124,7 +124,7 @@ EWMicroRecorderTryConnect(struct DeviceDescriptor *d)
 
   while (--retries){
 
-    d->Com->WriteString(TEXT("\x02"));         // send IO Mode command
+    d->Com->WriteString(_T("\x02"));         // send IO Mode command
 
     user_size = 0;
     bool started = false;
@@ -137,7 +137,7 @@ EWMicroRecorderTryConnect(struct DeviceDescriptor *d)
       }
       if (started) {
         if (ch == 0x13) {
-          d->Com->WriteString(TEXT("\x16"));
+          d->Com->WriteString(_T("\x16"));
           user_data[user_size] = 0;
           // found end of file
           return true;
@@ -203,7 +203,7 @@ EWMicroRecorderWriteWayPoint(struct DeviceDescriptor *d,
   MinLon = (tmp - DegLon) * 60 * 1000;
 
   EWMicroRecorderPrintf(d,
-            TEXT("%-17s %02d%05d%c%03d%05d%c %s\r\n"),
+            _T("%-17s %02d%05d%c%03d%05d%c %s\r\n"),
             EWType,
             DegLat, (int)MinLat, NoS,
             DegLon, (int)MinLon, EoW,
@@ -229,40 +229,40 @@ EWMicroRecorderDeclare(struct DeviceDescriptor *d,
     return false;
   }
 
-  d->Com->WriteString(TEXT("\x18"));         // start to upload file
+  d->Com->WriteString(_T("\x18"));         // start to upload file
   d->Com->WriteString(user_data);
-  EWMicroRecorderPrintf(d, TEXT("%-15s %s\r\n"),
-               TEXT("Pilot Name:"), decl->PilotName);
-  EWMicroRecorderPrintf(d, TEXT("%-15s %s\r\n"),
-               TEXT("Competition ID:"), decl->AircraftRego);
-  EWMicroRecorderPrintf(d, TEXT("%-15s %s\r\n"),
-               TEXT("Aircraft Type:"), decl->AircraftType);
-  d->Com->WriteString(TEXT("Description:      Declaration\r\n"));
+  EWMicroRecorderPrintf(d, _T("%-15s %s\r\n"),
+               _T("Pilot Name:"), decl->PilotName);
+  EWMicroRecorderPrintf(d, _T("%-15s %s\r\n"),
+               _T("Competition ID:"), decl->AircraftRego);
+  EWMicroRecorderPrintf(d, _T("%-15s %s\r\n"),
+               _T("Aircraft Type:"), decl->AircraftType);
+  d->Com->WriteString(_T("Description:      Declaration\r\n"));
 
   for (int i = 0; i < 11; i++) {
     wp = decl->waypoint[i];
     if (i == 0) {
-      EWMicroRecorderWriteWayPoint(d, wp, TEXT("Take Off LatLong:"));
-      EWMicroRecorderWriteWayPoint(d, wp, TEXT("Start LatLon:"));
+      EWMicroRecorderWriteWayPoint(d, wp, _T("Take Off LatLong:"));
+      EWMicroRecorderWriteWayPoint(d, wp, _T("Start LatLon:"));
     } else if (i + 1 < decl->num_waypoints) {
-      EWMicroRecorderWriteWayPoint(d, wp, TEXT("TP LatLon:"));
+      EWMicroRecorderWriteWayPoint(d, wp, _T("TP LatLon:"));
     } else {
-      EWMicroRecorderPrintf(d, TEXT("%-17s %s\r\n"),
-               TEXT("TP LatLon:"), TEXT("0000000N00000000E TURN POINT\r\n"));
+      EWMicroRecorderPrintf(d, _T("%-17s %s\r\n"),
+               _T("TP LatLon:"), _T("0000000N00000000E TURN POINT\r\n"));
     }
   }
 
   wp = decl->waypoint[decl->num_waypoints - 1];
-  EWMicroRecorderWriteWayPoint(d, wp, TEXT("Finish LatLon:"));
-  EWMicroRecorderWriteWayPoint(d, wp, TEXT("Land LatLon:"));
+  EWMicroRecorderWriteWayPoint(d, wp, _T("Finish LatLon:"));
+  EWMicroRecorderWriteWayPoint(d, wp, _T("Land LatLon:"));
 
-  d->Com->WriteString(TEXT("\x03"));         // finish sending user file
+  d->Com->WriteString(_T("\x03"));         // finish sending user file
 
-  if (!ExpectStringWait(d, TEXT("uploaded successfully"))) {
+  if (!ExpectStringWait(d, _T("uploaded successfully"))) {
     // error!
     nDeclErrorCode = 1;
   }
-  d->Com->WriteString(TEXT("!!\r\n"));         // go back to NMEA mode
+  d->Com->WriteString(_T("!!\r\n"));         // go back to NMEA mode
 
   d->Com->SetRxTimeout(0);                       // clear timeout
   d->Com->StartRxThread();                       // restart RX thread
@@ -271,7 +271,7 @@ EWMicroRecorderDeclare(struct DeviceDescriptor *d,
 }
 
 const struct DeviceRegister ewMicroRecorderDevice = {
-  TEXT("EW MicroRecorder"),
+  _T("EW MicroRecorder"),
   drfGPS | drfLogger | drfBaroAlt,
   EWMicroRecorderParseNMEA,	// ParseNMEA
   NULL,				// PutMacCready

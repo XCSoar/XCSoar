@@ -58,7 +58,7 @@ FlymasterF1ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 {
   (void)d;
 
-  if(_tcsncmp(TEXT("$VARIO"), String, 6)==0)
+  if(_tcsncmp(_T("$VARIO"), String, 6)==0)
     {
       return VARIO(d, &String[7], GPS_INFO);
     }
@@ -67,7 +67,7 @@ FlymasterF1ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 const struct DeviceRegister flymasterf1Device = {
-  TEXT("FlymasterF1"),
+  _T("FlymasterF1"),
   drfGPS | drfBaroAlt | drfVario,
   FlymasterF1ParseNMEA,		// ParseNMEA
   NULL,				// PutMacCready

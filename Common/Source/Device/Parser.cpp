@@ -248,41 +248,41 @@ bool NMEAParser::ParseNMEAString_Internal(const TCHAR *String,
   // if (proprietary sentence) ...
   if (params[0][1] == 'P') {
     // Airspeed and vario sentence
-    if (_tcscmp(params[0] + 1, TEXT("PTAS1")) == 0) {
+    if (_tcscmp(params[0] + 1, _T("PTAS1")) == 0) {
       return PTAS1(&String[7], params + 1, n_params, GPS_INFO);
     }
 
     // FLARM sentences
-    if (_tcscmp(params[0] + 1, TEXT("PFLAA")) == 0) {
+    if (_tcscmp(params[0] + 1, _T("PFLAA")) == 0) {
       return PFLAA(&String[7], params + 1, n_params, GPS_INFO);
     }
 
-    if (_tcscmp(params[0] + 1, TEXT("PFLAU")) == 0) {
+    if (_tcscmp(params[0] + 1, _T("PFLAU")) == 0) {
       return PFLAU(&String[7], params + 1, n_params, GPS_INFO);
     }
 
     // Garmin altitude sentence
-    if (_tcscmp(params[0] + 1, TEXT("PGRMZ")) == 0) {
+    if (_tcscmp(params[0] + 1, _T("PGRMZ")) == 0) {
       return RMZ(&String[7], params + 1, n_params, GPS_INFO);
     }
     return false;
   }
 
-  if (_tcscmp(params[0] + 3, TEXT("GSA")) == 0) {
+  if (_tcscmp(params[0] + 3, _T("GSA")) == 0) {
     return GSA(&String[7], params + 1, n_params, GPS_INFO);
   }
-  if (_tcscmp(params[0] + 3, TEXT("GLL")) == 0) {
+  if (_tcscmp(params[0] + 3, _T("GLL")) == 0) {
     //    return GLL(&String[7], params + 1, n_params, GPS_INFO);
     return false;
   }
-  if (_tcscmp(params[0] + 3, TEXT("RMB")) == 0) {
+  if (_tcscmp(params[0] + 3, _T("RMB")) == 0) {
     //return RMB(&String[7], params + 1, n_params, GPS_INFO);
     return false;
   }
-  if (_tcscmp(params[0] + 3, TEXT("RMC")) == 0) {
+  if (_tcscmp(params[0] + 3, _T("RMC")) == 0) {
     return RMC(&String[7], params + 1, n_params, GPS_INFO);
   }
-  if (_tcscmp(params[0] + 3, TEXT("GGA")) == 0) {
+  if (_tcscmp(params[0] + 3, _T("GGA")) == 0) {
     return GGA(&String[7], params + 1, n_params, GPS_INFO);
   }
 
@@ -1078,7 +1078,7 @@ bool NMEAParser::PFLAU(const TCHAR *String,
   }
 
   _stscanf(String,
-	  TEXT("%hu,%hu,%hu,%hu"),
+	  _T("%hu,%hu,%hu,%hu"),
 	  &GPS_INFO->FLARM_RX,
 	  &GPS_INFO->FLARM_TX,
 	  &GPS_INFO->FLARM_GPS,
@@ -1150,7 +1150,7 @@ bool NMEAParser::PFLAA(const TCHAR *String,
 
   // 5 id, 6 digit hex
   long ID;
-  _stscanf(params[5],TEXT("%lx"), &ID);
+  _stscanf(params[5], _T("%lx"), &ID);
   //  unsigned long uID = ID;
 
   flarm_slot = FLARM_FindSlot(GPS_INFO, ID);
@@ -1163,7 +1163,7 @@ bool NMEAParser::PFLAA(const TCHAR *String,
   GPS_INFO->FLARM_Traffic[flarm_slot].Time_Fix = GPS_INFO->Time;
 
   _stscanf(String,
-	  TEXT("%hu,%lf,%lf,%lf,%hu,%lx,%lf,%lf,%lf,%lf,%hu"),
+	  _T("%hu,%lf,%lf,%lf,%hu,%lx,%lf,%lf,%lf,%lf,%hu"),
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].AlarmLevel, // unsigned short 0
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth, // double?     1
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast, // double?      2
@@ -1208,15 +1208,15 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 #ifndef NDEBUG
 #ifndef GNAV
   static int i=90;
-  static TCHAR t1[] = TEXT("1,1,1,1");
-  static TCHAR t2[] = TEXT("1,300,500,220,2,DD927B,0,-4.5,30,-1.4,1");
-  static TCHAR t3[] = TEXT("0,0,1200,50,2,DD9146,270,-4.5,30,-1.4,1");
-  //  static TCHAR b50[] = TEXT("0,.1,.0,0,0,1.06,0,-222");
-  //  static TCHAR t4[] = TEXT("-3,500,1024,50");
+  static TCHAR t1[] = _T("1,1,1,1");
+  static TCHAR t2[] = _T("1,300,500,220,2,DD927B,0,-4.5,30,-1.4,1");
+  static TCHAR t3[] = _T("0,0,1200,50,2,DD9146,270,-4.5,30,-1.4,1");
+  //  static TCHAR b50[] = _T("0,.1,.0,0,0,1.06,0,-222");
+  //  static TCHAR t4[] = _T("-3,500,1024,50");
 
-  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$PTAS1,201,200,02583,000*2A"), GPS_INFO);
-  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$GPRMC,082430.00,A,3744.09096,S,14426.16069,E,0.520294.90,301207,,,A*77"), GPS_INFO);
-  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$GPGGA,082430.00,3744.09096,S,1426.16069,E,1,08,1.37,157.6,M,-4.9,M,,*5B"), GPS_INFO);
+  //  nmeaParser1.ParseNMEAString_Internal(_T("$PTAS1,201,200,02583,000*2A"), GPS_INFO);
+  //  nmeaParser1.ParseNMEAString_Internal(_T("$GPRMC,082430.00,A,3744.09096,S,14426.16069,E,0.520294.90,301207,,,A*77"), GPS_INFO);
+  //  nmeaParser1.ParseNMEAString_Internal(_T("$GPGGA,082430.00,3744.09096,S,1426.16069,E,1,08,1.37,157.6,M,-4.9,M,,*5B"), GPS_INFO);
 
   QNH=1013.25;
   double h;
@@ -1266,7 +1266,7 @@ void LogNMEA(const TCHAR* text) {
   DWORD dwBytesRead;
 
   if (nmeaLogFile == INVALID_HANDLE_VALUE) {
-    nmeaLogFile = CreateFile(TEXT("\\SD Card\\xcsoar-nmea.log"),
+    nmeaLogFile = CreateFile(_T("\\SD Card\\xcsoar-nmea.log"),
 			     GENERIC_WRITE, FILE_SHARE_WRITE,
 			     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
   }

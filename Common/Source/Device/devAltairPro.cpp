@@ -55,7 +55,7 @@ atrParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 
   // no propriatary sentence
 
-  if (_tcsncmp(TEXT("$PGRMZ"), String, 6) == 0){
+  if (_tcsncmp(_T("$PGRMZ"), String, 6) == 0){
     // eat $PGRMZ
 
     String = _tcschr(String + 6, ',');
@@ -126,7 +126,7 @@ atrOnSysTicker(struct DeviceDescriptor *d)
 }
 
 const struct DeviceRegister atrDevice = {
-  TEXT("Altair Pro"),
+  _T("Altair Pro"),
   drfGPS | drfBaroAlt, // drfLogger - ToDo
   atrParseNMEA,			// ParseNMEA
   NULL,				// PutMacCready

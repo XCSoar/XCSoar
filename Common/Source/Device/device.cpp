@@ -88,7 +88,20 @@ static Mutex mutexComm;
 
 #define debugIGNORERESPONCE 0
 
-static  const TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:"),TEXT("COM0:")};
+static const TCHAR *const COMMPort[] = {
+  _T("COM1:"),
+  _T("COM2:"),
+  _T("COM3:"),
+  _T("COM4:"),
+  _T("COM5:"),
+  _T("COM6:"),
+  _T("COM7:"),
+  _T("COM8:"),
+  _T("COM9:"),
+  _T("COM10:"),
+  _T("COM0:"),
+};
+
 static  const DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
 const struct DeviceRegister *const DeviceRegister[] = {
@@ -302,7 +315,7 @@ devInit(LPCTSTR CommandLine)
     TCHAR wcLogFileName[MAX_PATH];
     TCHAR sTmp[128];
 
-    pC = _tcsstr(CommandLine, TEXT("-logA="));
+    pC = _tcsstr(CommandLine, _T("-logA="));
     if (pC != NULL){
       pC += strlen("-logA=");
       if (*pC == '"'){
@@ -319,15 +332,15 @@ devInit(LPCTSTR CommandLine)
         wcLogFileName[pCe-pC] = '\0';
 
         if (devOpenLog(devA(), wcLogFileName)){
-          _stprintf(sTmp, TEXT("Device A logs to\r\n%s"), wcLogFileName);
+          _stprintf(sTmp, _T("Device A logs to\r\n%s"), wcLogFileName);
           MessageBoxX (sTmp,
-                      gettext(TEXT("Information")),
+                      gettext(_T("Information")),
                       MB_OK|MB_ICONINFORMATION);
         } else {
           _stprintf(sTmp,
-                    TEXT("Unable to open log\r\non device A\r\n%s"), wcLogFileName);
+                    _T("Unable to open log\r\non device A\r\n%s"), wcLogFileName);
           MessageBoxX (sTmp,
-                      gettext(TEXT("Error")),
+                      gettext(_T("Error")),
                       MB_OK|MB_ICONWARNING);
         }
 
@@ -335,7 +348,7 @@ devInit(LPCTSTR CommandLine)
 
     }
 
-    pC = _tcsstr(CommandLine, TEXT("-logB="));
+    pC = _tcsstr(CommandLine, _T("-logB="));
     if (pC != NULL){
       pC += strlen("-logA=");
       if (*pC == '"'){
@@ -352,15 +365,15 @@ devInit(LPCTSTR CommandLine)
         wcLogFileName[pCe-pC] = '\0';
 
         if (devOpenLog(devB(), wcLogFileName)){
-          _stprintf(sTmp, TEXT("Device B logs to\r\n%s"), wcLogFileName);
+          _stprintf(sTmp, _T("Device B logs to\r\n%s"), wcLogFileName);
           MessageBoxX (sTmp,
-                      gettext(TEXT("Information")),
+                      gettext(_T("Information")),
                       MB_OK|MB_ICONINFORMATION);
         } else {
-          _stprintf(sTmp, TEXT("Unable to open log\r\non device B\r\n%s"),
+          _stprintf(sTmp, _T("Unable to open log\r\non device B\r\n%s"),
                     wcLogFileName);
           MessageBoxX (sTmp,
-                      gettext(TEXT("Error")),
+                      gettext(_T("Error")),
                       MB_OK|MB_ICONWARNING);
         }
 
@@ -716,7 +729,7 @@ devOpenLog(struct DeviceDescriptor *d, const TCHAR *FileName)
 {
   assert(d != NULL);
 
-  d->fhLogFile = _tfopen(FileName, TEXT("a+b"));
+  d->fhLogFile = _tfopen(FileName, _T("a+b"));
   return d->fhLogFile != NULL;
 }
 
@@ -752,7 +765,7 @@ static void devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
   for (chk = i = 0; i < len; i++)
     chk ^= (BYTE)text[i];
 
-  _sntprintf(dst, sz, TEXT("$%s*%02X\r\n"), text, chk);
+  _sntprintf(dst, sz, _T("$%s*%02X\r\n"), text, chk);
 }
 
 void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *text)
@@ -777,7 +790,7 @@ void VarioWriteNMEA(const TCHAR *text)
 
   mutexComm.Lock();
   for (int i = 0; i < NUMDEV; i++)
-    if (_tcscmp(DeviceList[i].Name, TEXT("Vega")) == 0)
+    if (_tcscmp(DeviceList[i].Name, _T("Vega")) == 0)
       if (DeviceList[i].Com)
         DeviceList[i].Com->WriteString(tmp);
   mutexComm.Unlock();
@@ -786,7 +799,7 @@ void VarioWriteNMEA(const TCHAR *text)
 struct DeviceDescriptor *devVarioFindVega(void)
 {
   for (int i = 0; i < NUMDEV; i++)
-    if (_tcscmp(DeviceList[i].Name, TEXT("Vega")) == 0)
+    if (_tcscmp(DeviceList[i].Name, _T("Vega")) == 0)
       return &DeviceList[i];
   return NULL;
 }
@@ -892,7 +905,7 @@ void AllDevicesLinkTimeout()
 
 void devStartup(LPTSTR lpCmdLine)
 {
-  StartupStore(TEXT("Register serial devices\n"));
+  StartupStore(_T("Register serial devices\n"));
 
   devInit(lpCmdLine);
 }
@@ -902,7 +915,7 @@ void devShutdown()
   int i;
 
   // Stop COM devices
-  StartupStore(TEXT("Stop COM devices\n"));
+  StartupStore(_T("Stop COM devices\n"));
 
   for (i=0; i<NUMDEV; i++){
     DeviceList[i].Close();
@@ -924,14 +937,14 @@ void devRestart() {
   first = false;
 #endif
   */
-  StartupStore(TEXT("RestartCommPorts\n"));
+  StartupStore(_T("RestartCommPorts\n"));
 
   mutexComm.Lock();
 
   devShutdown();
   NMEAParser::Reset();
 
-  devInit(TEXT(""));
+  devInit(_T(""));
 
   mutexComm.Unlock();
 }

@@ -40,7 +40,7 @@ Copyright_License {
 #include "Device/device.h"
 
 const struct DeviceRegister genDevice = {
-  TEXT("Generic"),
+  _T("Generic"),
   drfGPS,
   NULL,				// ParseNMEA
   NULL,				// PutMacCready

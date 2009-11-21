@@ -57,20 +57,20 @@ Copyright_License {
 static bool
 caiGpsNavOpen(struct DeviceDescriptor *d, int Port)
 {
-  d->Com->WriteString(TEXT("\x03"));
+  d->Com->WriteString(_T("\x03"));
   Sleep(50);
-  d->Com->WriteString(TEXT("NMEA\r"));
+  d->Com->WriteString(_T("NMEA\r"));
 
   // This is for a slightly different mode, that
   // apparently outputs pressure info too...
-  //(d->Com.WriteString)(TEXT("PNP\r\n"));
-  //(d->Com.WriteString)(TEXT("LOG 0\r\n"));
+  //(d->Com.WriteString)(_T("PNP\r\n"));
+  //(d->Com.WriteString)(_T("LOG 0\r\n"));
 
   return true;
 }
 
 const struct DeviceRegister caiGpsNavDevice = {
-  TEXT("CAI GPS-NAV"),
+  _T("CAI GPS-NAV"),
   drfGPS,
   NULL,				// ParseNMEA
   NULL,				// PutMacCready

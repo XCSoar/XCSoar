@@ -64,8 +64,8 @@ OpenGeoid(void)
   int len;
 
   hResInfo = FindResource(XCSoarInterface::hInst,
-                          TEXT("IDR_RASTER_EGM96S"),
-                          TEXT("RASTERDATA"));
+                          _T("IDR_RASTER_EGM96S"),
+                          _T("RASTERDATA"));
 
   if (hResInfo == NULL) {
     // unable to find the resource

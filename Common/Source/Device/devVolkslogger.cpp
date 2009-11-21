@@ -116,7 +116,7 @@ VLParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
     return false;
   }
 
-  if(_tcsstr(String,TEXT("$PGCS,")) == String){
+  if(_tcsstr(String, _T("$PGCS,")) == String){
     return vl_PGCS1(d, &String[6], GPS_INFO);
   }
 
@@ -135,7 +135,7 @@ VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
 bool
 VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
-  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Comms with Volkslogger")));
+  XCSoarInterface::CreateProgressDialog(gettext(_T("Comms with Volkslogger")));
 
   vl.set_device(d);
   nturnpoints = 0;
@@ -300,7 +300,7 @@ VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 }
 
 const struct DeviceRegister vlDevice = {
-  TEXT("Device/Volkslogger"),
+  _T("Device/Volkslogger"),
   drfGPS | drfBaroAlt | drfLogger,
   VLParseNMEA,			// ParseNMEA
   NULL,				// PutMacCready

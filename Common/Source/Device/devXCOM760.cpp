@@ -46,7 +46,7 @@ static bool
 XCOM760PutVolume(struct DeviceDescriptor *d, int Volume)
 {
   TCHAR  szTmp[32];
-  _stprintf(szTmp, TEXT("$RVOL=%d\r\n"), Volume);
+  _stprintf(szTmp, _T("$RVOL=%d\r\n"), Volume);
   d->Com->WriteString(szTmp);
   return true;
 }
@@ -55,7 +55,7 @@ static bool
 XCOM760PutFreqActive(struct DeviceDescriptor *d, double Freq)
 {
   TCHAR  szTmp[32];
-  _stprintf(szTmp, TEXT("$TXAF=%.3f\r\n"), Freq);
+  _stprintf(szTmp, _T("$TXAF=%.3f\r\n"), Freq);
   d->Com->WriteString(szTmp);
   return true;
 }
@@ -64,13 +64,13 @@ static bool
 XCOM760PutFreqStandby(struct DeviceDescriptor *d, double Freq)
 {
   TCHAR  szTmp[32];
-  _stprintf(szTmp, TEXT("$TXSF=%.3f\r\n"), Freq);
+  _stprintf(szTmp, _T("$TXSF=%.3f\r\n"), Freq);
   d->Com->WriteString(szTmp);
   return true;
 }
 
 const struct DeviceRegister xcom760Device = {
-  TEXT("XCOM760"),
+  _T("XCOM760"),
   drfRadio,
   NULL,				// ParseNMEA
   NULL,				// PutMacCready

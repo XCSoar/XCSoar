@@ -64,13 +64,13 @@ LXParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 {
   (void)d;
 
-  if (_tcsncmp(TEXT("$LXWP0"), String, 6) == 0) {
+  if (_tcsncmp(_T("$LXWP0"), String, 6) == 0) {
     return LXWP0(d, &String[7], GPS_INFO);
   }
-  if (_tcsncmp(TEXT("$LXWP1"), String, 6) == 0) {
+  if (_tcsncmp(_T("$LXWP1"), String, 6) == 0) {
     return LXWP1(d, &String[7], GPS_INFO);
   }
-  if (_tcsncmp(TEXT("$LXWP2"), String, 6) == 0) {
+  if (_tcsncmp(_T("$LXWP2"), String, 6) == 0) {
     return LXWP2(d, &String[7], GPS_INFO);
   }
 
@@ -78,7 +78,7 @@ LXParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 const struct DeviceRegister lxDevice = {
-  TEXT("LX"),
+  _T("LX"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
   LXParseNMEA,			// ParseNMEA
   NULL,				// PutMacCready

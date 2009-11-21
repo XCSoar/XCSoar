@@ -59,11 +59,11 @@ ZanderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 {
   (void)d;
 
-  if(_tcsncmp(TEXT("$PZAN1"), String, 6)==0)
+  if(_tcsncmp(_T("$PZAN1"), String, 6)==0)
     {
       return PZAN1(d, &String[7], aGPS_INFO);
     }
-  if(_tcsncmp(TEXT("$PZAN2"), String, 6)==0)
+  if(_tcsncmp(_T("$PZAN2"), String, 6)==0)
     {
       return PZAN2(d, &String[7], aGPS_INFO);
     }
@@ -73,7 +73,7 @@ ZanderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 const struct DeviceRegister zanderDevice = {
-  TEXT("Zander"),
+  _T("Zander"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
   ZanderParseNMEA,		// ParseNMEA
   NULL,				// PutMacCready

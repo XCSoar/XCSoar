@@ -107,8 +107,8 @@ ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
     // Could not open the port.
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
-    ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL, TEXT("%s %s"),
-              gettext(TEXT("Unable to open port")), sPortName);
+    ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL, _T("%s %s"),
+              gettext(_T("Unable to open port")), sPortName);
     return false;
   }
 
@@ -154,8 +154,8 @@ ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 #endif
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
-    ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"),
-              gettext(TEXT("Unable to Change Settings on Port")), sPortName);
+    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
+              gettext(_T("Unable to Change Settings on Port")), sPortName);
     dwError = GetLastError();
     return false;
   }
@@ -399,8 +399,8 @@ ComPort::StopRxThread()
   }
   if (!fRxThreadTerminated) {
 //#if COMMDEBUG > 0
-    ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"), sPortName,
-                          gettext(TEXT("RX Thread not Terminated!")));
+    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"), sPortName,
+                          gettext(_T("RX Thread not Terminated!")));
 //#endif
   } else {
     CloseHandle(hReadThread);
@@ -431,8 +431,8 @@ ComPort::StartRxThread(void)
     //???? JMW Why close it here?    CloseHandle(hReadThread);
   } else {
     // Could not create the read thread.
-    ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"),
-              gettext(TEXT("Unable to Start RX Thread on Port")), sPortName);
+    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
+              gettext(_T("Unable to Start RX Thread on Port")), sPortName);
     dwError = GetLastError();
     return false;
   }
@@ -501,8 +501,8 @@ int ComPort::SetRxTimeout(int Timeout)
 #ifdef WINDOWSPC
     Sleep(2000); // needed for windows bug
 #endif
-    ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"),
-                 gettext(TEXT("Unable to Set Serial Port Timers")), sPortName);
+    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
+                 gettext(_T("Unable to Set Serial Port Timers")), sPortName);
     dwError = GetLastError();
     return -1;
   }

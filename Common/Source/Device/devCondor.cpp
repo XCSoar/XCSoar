@@ -66,15 +66,15 @@ CondorParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 {
   (void)d;
 
-  if(_tcsncmp(TEXT("$LXWP0"), String, 6)==0)
+  if(_tcsncmp(_T("$LXWP0"), String, 6)==0)
     {
       return cLXWP0(d, &String[7], GPS_INFO);
     }
-  if(_tcsncmp(TEXT("$LXWP1"), String, 6)==0)
+  if(_tcsncmp(_T("$LXWP1"), String, 6)==0)
     {
       return cLXWP1(d, &String[7], GPS_INFO);
     }
-  if(_tcsncmp(TEXT("$LXWP2"), String, 6)==0)
+  if(_tcsncmp(_T("$LXWP2"), String, 6)==0)
     {
       return cLXWP2(d, &String[7], GPS_INFO);
     }
@@ -83,7 +83,7 @@ CondorParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 const struct DeviceRegister condorDevice = {
-  TEXT("Condor"),
+  _T("Condor"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario | drfCondor,
   CondorParseNMEA,		// ParseNMEA
   NULL,				// PutMacCready

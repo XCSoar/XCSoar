@@ -87,7 +87,7 @@ PDSWC(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   (void)d;
   unsigned long uswitchinputs, uswitchoutputs;
   _stscanf(String,
-	  TEXT("%lf,%lx,%lx,%lf"),
+	  _T("%lf,%lx,%lx,%lf"),
 	  &MACCREADY,
 	  &uswitchinputs,
 	  &uswitchoutputs,
@@ -214,7 +214,7 @@ PDVSC(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   NMEAParser::ExtractParameter(String,responsetype,0);
   NMEAParser::ExtractParameter(String,name,1);
 
-  if (_tcscmp(name, TEXT("ERROR")) == 0){
+  if (_tcscmp(name, _T("ERROR")) == 0){
     // ignore error responses...
     return true;
   }
@@ -223,17 +223,17 @@ PDVSC(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   long value =  (long)StrToDouble(ctemp,NULL);
   DWORD dwvalue;
 
-  if (_tcscmp(name, TEXT("ToneDeadbandCruiseLow"))==0) {
+  if (_tcscmp(name, _T("ToneDeadbandCruiseLow"))==0) {
     value = max(value, -value);
   }
-  if (_tcscmp(name, TEXT("ToneDeadbandCirclingLow"))==0) {
+  if (_tcscmp(name, _T("ToneDeadbandCirclingLow"))==0) {
     value = max(value, -value);
   }
 
   TCHAR regname[100];
-  _stprintf(regname, TEXT("Vega%sUpdated"), name);
+  _stprintf(regname, _T("Vega%sUpdated"), name);
   SetToRegistry(regname, 1);
-  _stprintf(regname, TEXT("Vega%s"), name);
+  _stprintf(regname, _T("Vega%s"), name);
   dwvalue = *((DWORD*)&value);
   SetToRegistry(regname, dwvalue);
 
@@ -356,7 +356,7 @@ PDTSM(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   ++String;
 
   // todo duration handling
-  Message::AddMessage(TEXT("VEGA:"), String);
+  Message::AddMessage(_T("VEGA:"), String);
 
   return true;
 }
@@ -365,43 +365,43 @@ bool
 vgaParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
              NMEA_INFO *GPS_INFO)
 {
-  if(_tcsncmp(TEXT("$PDSWC"), String, 6)==0)
+  if(_tcsncmp(_T("$PDSWC"), String, 6)==0)
     {
       return PDSWC(d, &String[7], GPS_INFO);
     }
-  if(_tcsncmp(TEXT("$PDAAV"), String, 6)==0)
+  if(_tcsncmp(_T("$PDAAV"), String, 6)==0)
     {
       return PDAAV(d, &String[7], GPS_INFO);
     }
-  if(_tcsncmp(TEXT("$PDVSC"), String, 6)==0)
+  if(_tcsncmp(_T("$PDVSC"), String, 6)==0)
     {
       return PDVSC(d, &String[7], GPS_INFO);
     }
-  if(_tcsncmp(TEXT("$PDVDV"), String, 6)==0)
+  if(_tcsncmp(_T("$PDVDV"), String, 6)==0)
     {
       return PDVDV(d, &String[7], GPS_INFO);
     }
-  if(_tcsncmp(TEXT("$PDVDS"), String, 6)==0)
+  if(_tcsncmp(_T("$PDVDS"), String, 6)==0)
     {
       return PDVDS(d, &String[7], GPS_INFO);
     }
-  if(_tcsncmp(TEXT("$PDVVT"), String, 6)==0)
+  if(_tcsncmp(_T("$PDVVT"), String, 6)==0)
     {
       return PDVVT(d, &String[7], GPS_INFO);
     }
-  if(_tcsncmp(TEXT("$PDVSD"), String, 6)==0)
+  if(_tcsncmp(_T("$PDVSD"), String, 6)==0)
     {
       TCHAR cptext[80];
-      wsprintf(cptext,TEXT("%s"), &String[7]);
+      wsprintf(cptext,_T("%s"), &String[7]);
       // TODO code: JMW (from Scott)
       // 	Either use something like
-      // 		DoStatusMessage(TEXT("Vario Message"), cptext);
+      // 		DoStatusMessage(_T("Vario Message"), cptext);
       // 		(then you can assign time and sound to Vario Message)
       // 	or	Message::AddMessage
       Message::AddMessage(cptext);
       return false;
     }
-  if(_tcsncmp(TEXT("$PDTSM"), String, 6)==0)
+  if(_tcsncmp(_T("$PDTSM"), String, 6)==0)
     {
       return PDTSM(d, &String[7], GPS_INFO);
     }
@@ -436,7 +436,7 @@ _VarioWriteSettings(struct DeviceDescriptor *d)
 
     TCHAR mcbuf[100];
 
-    wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
+    wsprintf(mcbuf, _T("PDVMC,%d,%d,%d,%d,%d"),
 	     iround(GlidePolar::GetMacCready()*10),
 	     iround(device_blackboard.Calculated().VOpt*10),
 	     device_blackboard.Calculated().Circling,
@@ -469,7 +469,7 @@ vgaOnSysTicker(struct DeviceDescriptor *d)
 }
 
 const struct DeviceRegister vgaDevice = {
-  TEXT("Vega"),
+  _T("Vega"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario, // drfLogger if FLARM connected
   vgaParseNMEA,			// ParseNMEA
   NULL,				// PutMacCready

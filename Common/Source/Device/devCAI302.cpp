@@ -159,15 +159,15 @@ cai302ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
     return false;
   }
 
-  if(_tcsstr(String,TEXT("$PCAIB")) == String){
+  if(_tcsstr(String, _T("$PCAIB")) == String){
     return cai_PCAIB(&String[7], GPS_INFO);
   }
 
-  if(_tcsstr(String,TEXT("$PCAID")) == String){
+  if(_tcsstr(String, _T("$PCAID")) == String){
     return cai_PCAID(&String[7], GPS_INFO);
   }
 
-  if(_tcsstr(String,TEXT("!w")) == String){
+  if(_tcsstr(String, _T("!w")) == String){
     return cai_w(d, &String[3], GPS_INFO);
   }
 
@@ -179,7 +179,7 @@ cai302PutMacCready(struct DeviceDescriptor *d, double MacCready)
 {
   TCHAR  szTmp[32];
 
-  _stprintf(szTmp, TEXT("!g,m%d\r\n"), int(((MacCready * 10) / KNOTSTOMETRESSECONDS) + 0.5));
+  _stprintf(szTmp, _T("!g,m%d\r\n"), int(((MacCready * 10) / KNOTSTOMETRESSECONDS) + 0.5));
 
   d->Com->WriteString(szTmp);
 
@@ -193,7 +193,7 @@ cai302PutBugs(struct DeviceDescriptor *d, double Bugs)
 {
   TCHAR  szTmp[32];
 
-  _stprintf(szTmp, TEXT("!g,u%d\r\n"), int((Bugs * 100) + 0.5));
+  _stprintf(szTmp, _T("!g,u%d\r\n"), int((Bugs * 100) + 0.5));
 
   d->Com->WriteString(szTmp);
 
@@ -207,7 +207,7 @@ cai302PutBallast(struct DeviceDescriptor *d, double Ballast)
 {
   TCHAR  szTmp[32];
 
-  _stprintf(szTmp, TEXT("!g,b%d\r\n"), int((Ballast * 10) + 0.5));
+  _stprintf(szTmp, _T("!g,b%d\r\n"), int((Ballast * 10) + 0.5));
 
   d->Com->WriteString(szTmp);
 
@@ -227,12 +227,12 @@ void test(void){
   Buffer[0] = '\0';
 
   if (RegOpenKeyEx(HKEY_LOCAL_MACHINE ,
-      TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar"),
+      _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"),
       0, 0, &hKey
     ) == ERROR_SUCCESS){
 
     if (RegQueryValueEx(hKey ,
-        TEXT("DLL"),
+        _T("DLL"),
         NULL,
         &KeyType,
         (unsigned char *)&Buffer,
@@ -248,7 +248,7 @@ void test(void){
     if (Buffer[0] != '\0'){
 
       RegDeleteKey(HKEY_LOCAL_MACHINE,
-                   TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar"));
+                   _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"));
 
       for (retries=0; retries < 10 && DeleteFile(Buffer) == 0; retries++){
         SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
@@ -266,8 +266,8 @@ cai302Open(struct DeviceDescriptor *d, int Port)
 {
 //test();
 
-  d->Com->WriteString(TEXT("\x03"));
-  d->Com->WriteString(TEXT("LOG 0\r"));
+  d->Com->WriteString(_T("\x03"));
+  d->Com->WriteString(_T("LOG 0\r"));
 
   return true;
 }
@@ -290,36 +290,36 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   d->Com->StopRxThread();
 
   d->Com->SetRxTimeout(500);
-  d->Com->WriteString(TEXT("\x03"));
-  ExpectString(d, TEXT("$$$"));  // empty rx buffer (searching for
+  d->Com->WriteString(_T("\x03"));
+  ExpectString(d, _T("$$$"));  // empty rx buffer (searching for
                                  // pattern that never occure)
 
-  d->Com->WriteString(TEXT("\x03"));
-  if (!ExpectString(d, TEXT("cmd>"))){
+  d->Com->WriteString(_T("\x03"));
+  if (!ExpectString(d, _T("cmd>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  d->Com->WriteString(TEXT("upl 1\r"));
-  if (!ExpectString(d, TEXT("up>"))){
+  d->Com->WriteString(_T("upl 1\r"));
+  if (!ExpectString(d, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  ExpectString(d, TEXT("$$$"));
+  ExpectString(d, _T("$$$"));
 
-  d->Com->WriteString(TEXT("O\r"));
+  d->Com->WriteString(_T("O\r"));
   d->Com->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
-  if (!ExpectString(d, TEXT("up>"))){
+  if (!ExpectString(d, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  d->Com->WriteString(TEXT("O 0\r"));  // 0=active pilot
+  d->Com->WriteString(_T("O 0\r"));  // 0=active pilot
   Sleep(1000); // some params come up 0 if we don't wait!
   d->Com->Read(&cai302_OdataPilot, min(sizeof(cai302_OdataPilot),
                                        (size_t)cai302_OdataNoArgs.PilotRecordSize+3));
-  if (!ExpectString(d, TEXT("up>"))){
+  if (!ExpectString(d, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -333,17 +333,17 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   swap(cai302_OdataPilot.UnitWord);
   swap(cai302_OdataPilot.MarginHeight);
 
-  d->Com->WriteString(TEXT("G\r"));
+  d->Com->WriteString(_T("G\r"));
   d->Com->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
-  if (!ExpectString(d, TEXT("up>"))){
+  if (!ExpectString(d, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  d->Com->WriteString(TEXT("G 0\r"));
+  d->Com->WriteString(_T("G 0\r"));
   Sleep(1000);
   d->Com->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
-  if (!ExpectString(d, TEXT("up>"))){
+  if (!ExpectString(d, _T("up>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -355,14 +355,14 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   d->Com->SetRxTimeout(1500);
 
-  d->Com->WriteString(TEXT("\x03"));
-  if (!ExpectString(d, TEXT("cmd>"))){
+  d->Com->WriteString(_T("\x03"));
+  if (!ExpectString(d, _T("cmd>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  d->Com->WriteString(TEXT("dow 1\r"));
-  if (!ExpectString(d, TEXT("dn>"))){
+  d->Com->WriteString(_T("dow 1\r"));
+  if (!ExpectString(d, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -374,7 +374,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   _tcsncpy(GliderID, decl->AircraftRego, 12);
   GliderID[12] = '\0';
 
-  _stprintf(szTmp, TEXT("O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r"),
+  _stprintf(szTmp, _T("O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r"),
     PilotName,
     cai302_OdataPilot.OldUnit,
     cai302_OdataPilot.OldTemperaturUnit,
@@ -396,12 +396,12 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
 
   d->Com->WriteString(szTmp);
-  if (!ExpectString(d, TEXT("dn>"))){
+  if (!ExpectString(d, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
 
-  _stprintf(szTmp, TEXT("G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r"),
+  _stprintf(szTmp, _T("G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r"),
     GliderType,
     GliderID,
     cai302_Gdata.bestLD,
@@ -415,7 +415,7 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
   );
 
   d->Com->WriteString(szTmp);
-  if (!ExpectString(d, TEXT("dn>"))){
+  if (!ExpectString(d, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -427,12 +427,12 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   if (nDeclErrorCode == 0){
 
-    _stprintf(szTmp, TEXT("D,%d\r"), 255 /* end of declaration */);
+    _stprintf(szTmp, _T("D,%d\r"), 255 /* end of declaration */);
     d->Com->WriteString(szTmp);
 
     d->Com->SetRxTimeout(1500);            // D,255 takes more than 800ms
 
-    if (!ExpectString(d, TEXT("dn>"))){
+    if (!ExpectString(d, _T("dn>"))){
       nDeclErrorCode = 1;
     }
 
@@ -441,10 +441,10 @@ cai302Declare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   d->Com->SetRxTimeout(500);
 
-  d->Com->WriteString(TEXT("\x03"));
-  ExpectString(d, TEXT("cmd>"));
+  d->Com->WriteString(_T("\x03"));
+  ExpectString(d, _T("cmd>"));
 
-  d->Com->WriteString(TEXT("LOG 0\r"));
+  d->Com->WriteString(_T("LOG 0\r"));
 
   d->Com->SetRxTimeout(0);
   d->Com->StartRxThread();
@@ -489,7 +489,7 @@ cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
   DegLon = (int)tmp;
   MinLon = (tmp - DegLon) * 60;
 
-  _stprintf(szTmp, TEXT("D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r"),
+  _stprintf(szTmp, _T("D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r"),
     DeclIndex,
     DegLat, MinLat, NoS,
     DegLon, MinLon, EoW,
@@ -501,7 +501,7 @@ cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 
   d->Com->WriteString(szTmp);
 
-  if (!ExpectString(d, TEXT("dn>"))){
+  if (!ExpectString(d, _T("dn>"))){
     nDeclErrorCode = 1;
     return false;
   }
@@ -510,7 +510,7 @@ cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 }
 
 const struct DeviceRegister cai302Device = {
-  TEXT("CAI 302"),
+  _T("CAI 302"),
   drfGPS | drfLogger | drfSpeed | drfVario | drfBaroAlt | drfWind,
   cai302ParseNMEA,		// ParseNMEA
   cai302PutMacCready,		// PutMacCready

@@ -69,7 +69,7 @@ PGParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 
   // $GPWIN ... Winpilot proprietary sentance includinh baro altitude
   // $GPWIN ,01900 , 0 , 5159 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 * 6 B , 0 7 * 6 0 E
-  if(_tcsncmp(TEXT("$GPWIN"), String, 6)==0)
+  if(_tcsncmp(_T("$GPWIN"), String, 6)==0)
     {
       return GPWIN(d, &String[7], GPS_INFO);
     }
@@ -89,7 +89,7 @@ PGDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 }
 
 const struct DeviceRegister pgDevice = {
-  TEXT("PosiGraph Logger"),
+  _T("PosiGraph Logger"),
   drfGPS | drfBaroAlt | drfLogger,
   PGParseNMEA,			// ParseNMEA
   NULL,				// PutMacCready

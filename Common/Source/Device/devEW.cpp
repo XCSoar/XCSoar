@@ -78,7 +78,7 @@ void appendCheckSum(TCHAR *String){
     CalcCheckSum = (unsigned char)(CalcCheckSum ^ (unsigned char)String[i]);
   }
 
-  _stprintf(sTmp, TEXT("%02X\r\n"), CalcCheckSum);
+  _stprintf(sTmp, _T("%02X\r\n"), CalcCheckSum);
 	_tcscat(String, sTmp);
 
 }
@@ -89,11 +89,11 @@ EWTryConnect(struct DeviceDescriptor *d)
   int retries=10;
   while (--retries){
 
-    d->Com->WriteString(TEXT("##\r\n"));         // send IO Mode command
-    if (ExpectString(d, TEXT("IO Mode.\r")))
+    d->Com->WriteString(_T("##\r\n"));         // send IO Mode command
+    if (ExpectString(d, _T("IO Mode.\r")))
       return true;
 
-    ExpectString(d, TEXT("$$$"));                 // empty imput buffer
+    ExpectString(d, _T("$$$"));                 // empty imput buffer
   }
 
   nDeclErrorCode = 1;
@@ -125,7 +125,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
     return false;
   }
 
-  _stprintf(sTmp, TEXT("#SPI"));                  // send SetPilotInfo
+  _stprintf(sTmp, _T("#SPI"));                  // send SetPilotInfo
   appendCheckSum(sTmp);
   d->Com->WriteString(sTmp);
   Sleep(50);
@@ -138,68 +138,68 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   sGliderID[8] = '\0';
 
   // build string (field 4-5 are GPS info, no idea what to write)
-  _stprintf(sTmp, TEXT("%-12s%-8s%-8s%-12s%-12s%-6s\r"),
+  _stprintf(sTmp, _T("%-12s%-8s%-8s%-12s%-12s%-6s\r"),
            sPilot,
            sGliderType,
            sGliderID,
-           TEXT(""),                              // GPS Model
-           TEXT(""),                              // GPS Serial No.
-           TEXT("")                               // Flight Date,
+           _T(""),                              // GPS Model
+           _T(""),                              // GPS Serial No.
+           _T("")                               // Flight Date,
                                                   // format unknown,
                                                   // left blank (GPS
                                                   // has a RTC)
   );
   d->Com->WriteString(sTmp);
 
-  if (!ExpectString(d, TEXT("OK\r"))){
+  if (!ExpectString(d, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
 
 
   /*
-  _stprintf(sTmp, TEXT("#SUI%02d"), 0);           // send pilot name
+  _stprintf(sTmp, _T("#SUI%02d"), 0);           // send pilot name
   appendCheckSum(sTmp);
   d->Com->WriteString(sTmp);
   Sleep(50);
   d->Com->WriteString(PilotsName);
-  d->Com->WriteString(TEXT("\r"));
+  d->Com->WriteString(_T("\r"));
 
-  if (!ExpectString(d, TEXT("OK\r"))){
+  if (!ExpectString(d, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
 
-  _stprintf(sTmp, TEXT("#SUI%02d"), 1);           // send type of aircraft
+  _stprintf(sTmp, _T("#SUI%02d"), 1);           // send type of aircraft
   appendCheckSum(sTmp);
   d->Com->WriteString(sTmp);
   Sleep(50);
   d->Com->WriteString(Class);
-  d->Com->WriteString(TEXT("\r"));
+  d->Com->WriteString(_T("\r"));
 
-  if (!ExpectString(d, TEXT("OK\r"))){
+  if (!ExpectString(d, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
 
-  _stprintf(sTmp, TEXT("#SUI%02d"), 2);           // send aircraft ID
+  _stprintf(sTmp, _T("#SUI%02d"), 2);           // send aircraft ID
   appendCheckSum(sTmp);
   d->Com->WriteString(sTmp);
   Sleep(50);
   d->Com->WriteString(ID);
-  d->Com->WriteString(TEXT("\r"));
+  d->Com->WriteString(_T("\r"));
 
-  if (!ExpectString(d, TEXT("OK\r"))){
+  if (!ExpectString(d, _T("OK\r"))){
     nDeclErrorCode = 1;
     return false;
   };
   */
 
   for (int i=0; i<6; i++){                        // clear all 6 TP's
-    _stprintf(sTmp, TEXT("#CTP%02d"), i);
+    _stprintf(sTmp, _T("#CTP%02d"), i);
     appendCheckSum(sTmp);
     d->Com->WriteString(sTmp);
-    if (!ExpectString(d, TEXT("OK\r"))){
+    if (!ExpectString(d, _T("OK\r"))){
       nDeclErrorCode = 1;
       return false;
     };
@@ -208,7 +208,7 @@ EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   for (int j = 0; j < decl->num_waypoints; j++)
     EWDeclAddWayPoint(d, decl->waypoint[j]);
 
-  d->Com->WriteString(TEXT("NMEA\r\n"));         // switch to NMEA mode
+  d->Com->WriteString(_T("NMEA\r\n"));         // switch to NMEA mode
 
   d->Com->SetBaudrate(lLastBaudrate);            // restore baudrate
 
@@ -241,10 +241,10 @@ EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
   _tcsncpy(IDString, wp->Name, 6);                // copy at least 6 chars
 
   while (_tcslen(IDString) < 6)                   // fill up with spaces
-    _tcscat(IDString, TEXT(" "));
+    _tcscat(IDString, _T(" "));
 
   #if USESHORTTPNAME > 0
-    _tcscpy(&IDString[3], TEXT("   "));           // truncate to short name
+    _tcscpy(&IDString[3], _T("   "));           // truncate to short name
   #endif
 
   // prepare lat
@@ -297,7 +297,7 @@ EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
   EW_Flags = (short)(EoW_Flag | NoS_Flag);
 
                                                   // setup command string
-  _stprintf(EWRecord,TEXT("#STP%02X%02X%02X%02X%02X%02X%02X%02X%02X%04X%02X%04X"),
+  _stprintf(EWRecord, _T("#STP%02X%02X%02X%02X%02X%02X%02X%02X%02X%04X%02X%04X"),
                       ewDecelTpIndex,
                       IDString[0],
                       IDString[1],
@@ -313,7 +313,7 @@ EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 
   d->Com->WriteString(EWRecord);                 // put it to the logger
 
-  if (!ExpectString(d, TEXT("OK\r"))){            // wait for response
+  if (!ExpectString(d, _T("OK\r"))){            // wait for response
     nDeclErrorCode = 1;
     return false;
   }
@@ -328,13 +328,13 @@ EWLinkTimeout(struct DeviceDescriptor *d)
 {
   (void)d;
   if (!fDeclarationPending)
-    d->Com->WriteString(TEXT("NMEA\r\n"));
+    d->Com->WriteString(_T("NMEA\r\n"));
 
   return true;
 }
 
 const struct DeviceRegister ewDevice = {
-  TEXT("EW Logger"),
+  _T("EW Logger"),
   drfGPS | drfLogger,
   EWParseNMEA,			// ParseNMEA
   NULL,				// PutMacCready
