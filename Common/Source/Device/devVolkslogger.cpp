@@ -64,8 +64,7 @@ Copyright_License {
 // $PGCS,1,0EC0,FFF9,0C6E,02*61
 // $PGCS,1,0EC0,FFFA,0C6E,03*18
 static bool
-vl_PGCS1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
-         bool enable_baro)
+vl_PGCS1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
 
   TCHAR ctemp[80];
@@ -117,7 +116,7 @@ VLParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   }
 
   if(_tcsstr(String, _T("$PGCS,")) == String){
-    return vl_PGCS1(d, &String[6], GPS_INFO, enable_baro);
+    return vl_PGCS1(&String[6], GPS_INFO, enable_baro);
   }
 
   return false;
@@ -129,7 +128,7 @@ static VLAPI vl;
 static int nturnpoints = 0;
 
 static bool
-VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
+VLDeclAddWayPoint(const WAYPOINT *wp);
 
 bool
 VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
@@ -178,7 +177,7 @@ VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 
   int i;
   for (i = 0; i < decl->num_waypoints; i++)
-    VLDeclAddWayPoint(d, decl->waypoint[i]);
+    VLDeclAddWayPoint(decl->waypoint[i]);
 
   vl.declaration.task.nturnpoints = max(min(nturnpoints-2, 12), 0);
 
@@ -267,7 +266,7 @@ VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 }
 
 static bool
-VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
+VLDeclAddWayPoint(const WAYPOINT *wp)
 {
   char temp[100];
   sprintf(temp, "%S", wp->Name);
