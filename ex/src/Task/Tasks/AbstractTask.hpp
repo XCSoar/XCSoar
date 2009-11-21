@@ -59,6 +59,16 @@ public:
     }
 
 /** 
+ * Test if task has finished.  Used to determine whether
+ * or not to continue updating stats.
+ * 
+ * @return True if task is finished
+ */
+  virtual bool has_finished() const {
+    return false;
+  }
+
+/** 
  * Update internal states as flight progresses.  This may perform
  * callbacks to the task_events, and advance the active task point
  * based on task_behaviour.

@@ -107,7 +107,9 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
 
   update_stats_glide(state);
 
-  update_stats_speeds(state, state_last);
+  if (!has_finished()) {
+    update_stats_speeds(state, state_last);
+  }
   return retval;
 }
 
@@ -131,8 +133,10 @@ AbstractTask::update_stats_times(const AIRCRAFT_STATE &state)
 {
   // default for tasks with no start time...
   stats.Time = state.Time;
-  stats.total.set_times(scan_total_start_time(state), state);
-  stats.current_leg.set_times(scan_leg_start_time(state),state);
+  if (!has_finished()) {
+    stats.total.set_times(scan_total_start_time(state), state);
+    stats.current_leg.set_times(scan_leg_start_time(state),state);
+  }
 }
 
 

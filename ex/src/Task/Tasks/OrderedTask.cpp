@@ -680,3 +680,12 @@ OrderedTask::has_start_and_finish() const
     return true;
   }
 }
+
+bool 
+OrderedTask::has_finished() const
+{
+  if (tf) {
+    return (tf->has_entered());
+  }
+  return false;
+}

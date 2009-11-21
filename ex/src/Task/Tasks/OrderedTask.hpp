@@ -138,6 +138,14 @@ public:
   bool check_task() const;
 
 /** 
+ * Test if task has finished.  Used to determine whether
+ * or not to continue updating stats.
+ * 
+ * @return True if task is finished
+ */
+  virtual bool has_finished() const;
+
+/** 
  * Update internal states when aircraft state advances.
  * 
  * @param state_now Aircraft state at this time step
