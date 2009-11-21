@@ -47,7 +47,7 @@ static bool
 FlarmDeclareSetGet(ComPort *port, TCHAR *Buffer) {
   assert(port != NULL);
 
-  //devWriteNMEAString(d, Buffer);
+  //PortWriteNMEA(d->Com, Buffer);
 
   TCHAR tmp[512];
 

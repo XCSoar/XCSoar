@@ -426,7 +426,7 @@ vgaDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 bool
 vgaPutVoice(struct DeviceDescriptor *d, const TCHAR *Sentence)
 {
-  devWriteNMEAString(d, Sentence);
+  PortWriteNMEA(d->Com, Sentence);
   return true;
 }
 
@@ -446,7 +446,7 @@ _VarioWriteSettings(struct DeviceDescriptor *d)
 	     10132); // JMW 20080716 bug
 	     //	     iround(QNH*10));
 
-    devWriteNMEAString(d, mcbuf);
+    PortWriteNMEA(d->Com, mcbuf);
 }
 
 

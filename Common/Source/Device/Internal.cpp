@@ -38,10 +38,24 @@ Copyright_License {
 
 #include "Device/Internal.hpp"
 #include "Device/device.h"
+#include "NMEA/Checksum.h"
 
 #include <assert.h>
 
 #define debugIGNORERESPONCE 0
+
+void
+PortWriteNMEA(ComPort *port, const TCHAR *line)
+{
+  assert(port != NULL);
+  assert(line != NULL);
+
+  port->WriteString(line);
+
+  TCHAR checksum[16];
+  _sntprintf(checksum, sizeof(checksum), _T("*%02X\r\n"), NMEAChecksum(line));
+  port->WriteString(checksum);
+}
 
 bool
 ExpectString(ComPort *port, const TCHAR *token)
