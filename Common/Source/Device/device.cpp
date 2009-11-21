@@ -69,6 +69,7 @@ Copyright_License {
 #include "Device/devFlymasterF1.h"
 #include "Device/devXCOM760.h"
 #include "Device/devCondor.h"
+#include "NMEA/Checksum.h"
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
 #include "Asset.hpp"
 
@@ -714,13 +715,7 @@ void devTick()
 
 static void devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
 {
-  BYTE chk;
-  int i, len = _tcslen(text);
-
-  for (chk = i = 0; i < len; i++)
-    chk ^= (BYTE)text[i];
-
-  _sntprintf(dst, sz, _T("$%s*%02X\r\n"), text, chk);
+  _sntprintf(dst, sz, _T("$%s*%02X\r\n"), text, NMEAChecksum(text));
 }
 
 void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *text)

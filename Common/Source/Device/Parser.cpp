@@ -51,6 +51,7 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Math/Units.h"
 #include "NMEA/Info.h"
+#include "NMEA/Checksum.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -960,10 +961,7 @@ bool NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
  */
 bool NMEAParser::NMEAChecksum(const TCHAR *String)
 {
-  unsigned char CalcCheckSum = 0;
-  unsigned char ReadCheckSum;
-  int End;
-  int i;
+  unsigned char ReadCheckSum, CalcCheckSum;
   TCHAR c1,c2;
   unsigned char v1 = 0,v2 = 0;
   const TCHAR *pEnd;
@@ -989,13 +987,7 @@ bool NMEAParser::NMEAChecksum(const TCHAR *String)
     v2 = (unsigned char)(c2 - 'A' + 10);
 
   ReadCheckSum = (unsigned char)((v1<<4) + v2);
-
-  End =(int)( pEnd - String);
-
-  for(i=1;i<End;i++)
-    {
-      CalcCheckSum = (unsigned char)(CalcCheckSum ^ String[i]);
-    }
+  CalcCheckSum = ::NMEAChecksum(String + 1, pEnd - String - 1);
 
   if(CalcCheckSum == ReadCheckSum)
     return true;

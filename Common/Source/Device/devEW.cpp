@@ -45,6 +45,7 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Device/device.h"
 #include "Device/Port.h"
+#include "NMEA/Checksum.h"
 
 #include <tchar.h>
 
@@ -71,15 +72,9 @@ EWParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 
 
 void appendCheckSum(TCHAR *String){
-  int i;
-  unsigned char CalcCheckSum = 0;
   TCHAR sTmp[4];
 
-  for(i=1; String[i] != '\0'; i++){
-    CalcCheckSum = (unsigned char)(CalcCheckSum ^ (unsigned char)String[i]);
-  }
-
-  _stprintf(sTmp, _T("%02X\r\n"), CalcCheckSum);
+  _stprintf(sTmp, _T("%02X\r\n"), NMEAChecksum(String));
 	_tcscat(String, sTmp);
 
 }
