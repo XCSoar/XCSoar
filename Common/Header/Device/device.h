@@ -96,7 +96,7 @@ void devWriteNMEAString(PDeviceDescriptor_t d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
 PDeviceDescriptor_t devVarioFindVega(void);
 
-typedef	struct DeviceRegister {
+struct DeviceRegister {
   const TCHAR	*Name;
   unsigned int	Flags;
   BOOL (*ParseNMEA)(DeviceDescriptor_t *d, const TCHAR *String,
@@ -117,7 +117,7 @@ typedef	struct DeviceRegister {
   BOOL (*IsGPSSource)(DeviceDescriptor_t *d);
   BOOL (*IsBaroSource)(DeviceDescriptor_t *d);
   BOOL (*OnSysTicker)(DeviceDescriptor_t *d);
-} DeviceRegister_t;
+};
 
 
 
