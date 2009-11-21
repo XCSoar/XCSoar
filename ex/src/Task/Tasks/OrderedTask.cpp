@@ -494,7 +494,7 @@ void OrderedTask::setActiveTaskPoint(unsigned index)
   }
 }
 
-TaskPoint* OrderedTask::getActiveTaskPoint()
+TaskPoint* OrderedTask::getActiveTaskPoint() const
 {
   if (activeTaskPoint<tps.size()) {
     return tps[activeTaskPoint];

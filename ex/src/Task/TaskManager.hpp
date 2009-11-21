@@ -46,11 +46,18 @@ public:
     virtual void setActiveTaskPoint(unsigned index);
 
 /** 
+ * Accessor for active taskpoint sequence for active task
+ * 
+ * @return Sequence number of task point
+ */
+  virtual unsigned getActiveTaskPointIndex() const;
+
+/** 
  * Accessor of current task point of active task
  * 
- * @return TaskPoint of active task point
+ * @return TaskPoint of active task point, and 0 if no active task
  */
-  virtual TaskPoint* getActiveTaskPoint();
+  virtual TaskPoint* getActiveTaskPoint() const;
 
 /** 
  * Get a random point in the task OZ (for testing simulation route)

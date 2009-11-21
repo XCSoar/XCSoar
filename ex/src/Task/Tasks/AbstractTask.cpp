@@ -29,7 +29,7 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 
 
 unsigned 
-AbstractTask::getActiveTaskPointIndex() 
+AbstractTask::getActiveTaskPointIndex() const
 {
   return activeTaskPoint;
 }

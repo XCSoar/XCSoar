@@ -8,14 +8,15 @@
 
 class AircraftSim {
 public:
-  AircraftSim(int _test_num, const TaskManager& task_manager);
+  AircraftSim(int _test_num, const TaskManager& task_manager,
+    bool _goto_target=false);
 
   const AIRCRAFT_STATE& get_state() {
     return state;
   }
   GEOPOINT get_next() const;
 
-  bool far();
+  bool far(TaskManager &task_manager);
   double small_rand();
   void update_state(TaskManager &task_manager,
                     GlidePolar &glide_polar);
@@ -30,6 +31,9 @@ public:
   double time();
 
 private:
+  void update_bearing(TaskManager &task_manager);
+  GEOPOINT target(TaskManager &task_manager);
+  bool goto_target;
   AIRCRAFT_STATE state, state_last;
   std::vector<GEOPOINT> w;
   double bearing;

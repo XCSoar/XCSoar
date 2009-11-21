@@ -20,7 +20,7 @@ public:
  * 
  * @return Index of active task point sequence
  */
-  TaskPoint* getActiveTaskPoint();
+  TaskPoint* getActiveTaskPoint() const;
 
 /** 
  * Set active task point index

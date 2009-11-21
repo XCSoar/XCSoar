@@ -47,12 +47,24 @@ TaskManager::set_mode(const TaskMode_t the_mode)
   return mode;
 }
 
-void TaskManager::setActiveTaskPoint(unsigned index)
+void 
+TaskManager::setActiveTaskPoint(unsigned index)
 {
   if (active_task) active_task->setActiveTaskPoint(index);
 }
 
-TaskPoint* TaskManager::getActiveTaskPoint()
+unsigned 
+TaskManager::getActiveTaskPointIndex() const
+{
+  if (active_task) {
+    return active_task->getActiveTaskPointIndex();
+  } else {
+    return 0;
+  }
+}
+
+TaskPoint* 
+TaskManager::getActiveTaskPoint() const
 {
   if (active_task) 
     return active_task->getActiveTaskPoint();
@@ -61,8 +73,9 @@ TaskPoint* TaskManager::getActiveTaskPoint()
 }
 
 
-bool TaskManager::update(const AIRCRAFT_STATE &state, 
-                         const AIRCRAFT_STATE& state_last)
+bool 
+TaskManager::update(const AIRCRAFT_STATE &state, 
+                    const AIRCRAFT_STATE& state_last)
 {
   // always update ordered task so even if we are temporarily
   // in abort/goto mode, the task stats are still updated
@@ -85,7 +98,8 @@ TaskManager::update_idle(const AIRCRAFT_STATE& state)
 }
 
 
-const TaskStats& TaskManager::get_stats() const
+const TaskStats& 
+TaskManager::get_stats() const
 {
   if (active_task) {
     return active_task->get_stats();

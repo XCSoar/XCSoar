@@ -22,7 +22,8 @@ AbortTask::~AbortTask()
   clear();
 }
 
-void AbortTask::setActiveTaskPoint(unsigned index)
+void 
+AbortTask::setActiveTaskPoint(unsigned index)
 {
   if (index<tps.size()) {
     activeTaskPoint = index;
@@ -30,7 +31,8 @@ void AbortTask::setActiveTaskPoint(unsigned index)
   }
 }
 
-TaskPoint* AbortTask::getActiveTaskPoint()
+TaskPoint* 
+AbortTask::getActiveTaskPoint() const
 {
   if (activeTaskPoint<tps.size()) {
     return tps[activeTaskPoint];
@@ -48,7 +50,8 @@ struct Rank : public std::binary_function<WP_ALT, WP_ALT, bool> {
   }
 };
 
-void AbortTask::clear() {
+void 
+AbortTask::clear() {
   for (std::vector< TaskPoint* >::iterator v=tps.begin();
        v != tps.end(); ) {
     delete (*v); 
@@ -111,7 +114,8 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   }
 }
 
-bool AbortTask::update_sample(const AIRCRAFT_STATE &state, 
+bool 
+AbortTask::update_sample(const AIRCRAFT_STATE &state, 
                               const bool full_update)
 {
   update_polar();

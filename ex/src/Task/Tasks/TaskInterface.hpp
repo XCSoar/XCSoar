@@ -31,7 +31,7 @@ public:
  * 
  * @return Active task point
  */  
-  virtual TaskPoint* getActiveTaskPoint() = 0;
+  virtual TaskPoint* getActiveTaskPoint() const = 0;
 
 /** 
  * Convenience function, calculates and returns a vector (distance and bearing)

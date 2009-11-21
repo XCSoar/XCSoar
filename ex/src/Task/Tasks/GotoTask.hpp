@@ -19,7 +19,7 @@ public:
  * 
  * @return Index of active task point sequence
  */
-  virtual TaskPoint* getActiveTaskPoint();
+  virtual TaskPoint* getActiveTaskPoint() const;
 
 /** 
  * Set active task point index

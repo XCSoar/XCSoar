@@ -47,7 +47,7 @@ public:
  * 
  * @return Index of active task point sequence
  */
-    unsigned getActiveTaskPointIndex();
+  unsigned getActiveTaskPointIndex() const;
 
 /** 
  * Accessor for task statistics for this task

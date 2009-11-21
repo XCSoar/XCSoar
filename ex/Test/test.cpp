@@ -14,9 +14,10 @@
 bool test_flight(TaskManager &task_manager,
                  Airspaces &airspaces,
                  GlidePolar &glide_polar,
-                 int test_num) 
+                 int test_num,
+                 bool goto_target) 
 {
-  AircraftSim ac(test_num, task_manager);
+  AircraftSim ac(test_num, task_manager, goto_target);
   unsigned print_counter=0;
 
 #ifdef DO_PRINT
@@ -76,23 +77,29 @@ bool test_all(int test_num) {
 
   TaskEvents default_events;
 
-  TaskManager task_manager(default_events,
-                           task_behaviour,
-                           glide_polar,
-                           waypoints);
-
-  /*
-  if (!setup_task(task_manager, waypoints)) {
-    return false;
-  }
-  */
-
-  if (!test_task_aat(task_manager, waypoints)) {
-    printf("# task construction failed\n");
-    return false;
+  if (0) {
+    TaskManager task_manager(default_events,
+                             task_behaviour,
+                             glide_polar,
+                             waypoints);
+    
+    if (!setup_task(task_manager, waypoints)) {
+      return false;
+    }
+    test_flight(task_manager, airspaces, glide_polar, test_num, false);
   }
 
-  test_flight(task_manager, airspaces, glide_polar, test_num);
+  {
+    TaskManager task_manager(default_events,
+                             task_behaviour,
+                             glide_polar,
+                             waypoints);
+    
+    if (!setup_task(task_manager, waypoints)) {
+      return false;
+    }
+    test_flight(task_manager, airspaces, glide_polar, test_num, true);
+  }
 
   return 0;
 }

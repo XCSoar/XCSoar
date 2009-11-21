@@ -14,14 +14,16 @@ GotoTask::GotoTask(const TaskEvents &te,
 {
 }
 
-GotoTask::~GotoTask() {
+GotoTask::~GotoTask() 
+{
   if (tp) {
     delete tp;
   }
 }
 
 TaskPoint* 
-GotoTask::getActiveTaskPoint() { 
+GotoTask::getActiveTaskPoint() const
+{ 
   return tp;
 }
 

@@ -57,7 +57,7 @@ public:
  * 
  * @return Index of active task point sequence
  */
-  TaskPoint* getActiveTaskPoint();
+  TaskPoint* getActiveTaskPoint() const;
 
 /** 
  * Retrieve task point by sequence index
