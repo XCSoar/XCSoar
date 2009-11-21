@@ -63,7 +63,7 @@ Copyright_License {
 // Source data:
 // $PGCS,1,0EC0,FFF9,0C6E,02*61
 // $PGCS,1,0EC0,FFFA,0C6E,03*18
-bool
+static bool
 vl_PGCS1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
          bool enable_baro)
 {
@@ -124,12 +124,11 @@ VLParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 
 }
 
-
-VLAPI vl;
+static VLAPI vl;
 
 static int nturnpoints = 0;
 
-bool
+static bool
 VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
 
 bool
@@ -267,8 +266,7 @@ VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   return ok;
 }
 
-
-bool
+static bool
 VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp)
 {
   char temp[100];
