@@ -52,14 +52,13 @@ Copyright_License {
 #include <tchar.h>
 
 static bool
-cLXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
-       bool enable_baro);
+cLXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
 
 static bool
-cLXWP1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
+cLXWP1(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
 static bool
-cLXWP2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
+cLXWP2(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
 static bool
 CondorParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
@@ -69,15 +68,15 @@ CondorParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 
   if(_tcsncmp(_T("$LXWP0"), String, 6)==0)
     {
-      return cLXWP0(d, &String[7], GPS_INFO, enable_baro);
+      return cLXWP0(&String[7], GPS_INFO, enable_baro);
     }
   if(_tcsncmp(_T("$LXWP1"), String, 6)==0)
     {
-      return cLXWP1(d, &String[7], GPS_INFO);
+      return cLXWP1(&String[7], GPS_INFO);
     }
   if(_tcsncmp(_T("$LXWP2"), String, 6)==0)
     {
-      return cLXWP2(d, &String[7], GPS_INFO);
+      return cLXWP2(&String[7], GPS_INFO);
     }
 
   return false;
@@ -109,7 +108,7 @@ const struct DeviceRegister condorDevice = {
 // local stuff
 
 static bool
-cLXWP1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+cLXWP1(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   //  TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -119,7 +118,7 @@ cLXWP1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
 static bool
-cLXWP2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+cLXWP2(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -131,8 +130,7 @@ cLXWP2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
 static bool
-cLXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
-       bool enable_baro)
+cLXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   TCHAR ctemp[80];
 
