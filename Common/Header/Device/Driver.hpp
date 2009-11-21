@@ -65,7 +65,7 @@ struct DeviceRegister {
   const TCHAR *Name;
   unsigned int Flags;
   bool (*ParseNMEA)(struct DeviceDescriptor *d, const TCHAR *String,
-                    struct NMEA_INFO *info);
+                    struct NMEA_INFO *info, bool enable_baro);
   bool (*PutMacCready)(struct DeviceDescriptor *d, double McReady);
   bool (*PutBugs)(struct DeviceDescriptor *d, double Bugs);
   bool (*PutBallast)(struct DeviceDescriptor *d, double Ballast);

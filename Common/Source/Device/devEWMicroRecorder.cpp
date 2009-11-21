@@ -94,8 +94,8 @@ ExpectStringWait(struct DeviceDescriptor *d, const TCHAR *token)
 }
 
 static bool
-EWMicroRecorderParseNMEA(struct DeviceDescriptor *d,
-                         const TCHAR *String, NMEA_INFO *GPS_INFO)
+EWMicroRecorderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
+                         NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   TCHAR ctemp[80];
   const TCHAR *params[5];
@@ -104,7 +104,7 @@ EWMicroRecorderParseNMEA(struct DeviceDescriptor *d,
     return false;
 
   if (!_tcscmp(params[0], _T("$PGRMZ")) && nparams >= 3) {
-    if (d == pDevPrimaryBaroSource) {
+    if (enable_baro) {
       double altitude = NMEAParser::ParseAltitude(params[1], params[2]);
 
       GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(altitude);

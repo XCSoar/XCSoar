@@ -55,7 +55,7 @@ PZAN2(const TCHAR *String, NMEA_INFO *aGPS_INFO);
 
 static bool
 ZanderParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-                NMEA_INFO *aGPS_INFO)
+                NMEA_INFO *aGPS_INFO, bool enable_baro)
 {
   (void)d;
 

@@ -130,8 +130,8 @@ enum {
 
 struct DeviceDescriptor DeviceList[NUMDEV];
 
-struct DeviceDescriptor *pDevPrimaryBaroSource;
-struct DeviceDescriptor *pDevSecondaryBaroSource;
+static struct DeviceDescriptor *pDevPrimaryBaroSource;
+static struct DeviceDescriptor *pDevSecondaryBaroSource;
 
 // This function is used to determine whether a generic
 // baro source needs to be used if available
@@ -390,7 +390,8 @@ DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
   }
 
   if (Driver != NULL && Driver->ParseNMEA != NULL &&
-      Driver->ParseNMEA(this, String, GPS_INFO)) {
+      Driver->ParseNMEA(this, String, GPS_INFO,
+                        this == pDevPrimaryBaroSource)) {
     GPS_INFO->Connected = 2;
     return true;
   }

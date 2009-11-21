@@ -245,7 +245,8 @@ PDVSC(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure
 
 static bool
-PDVDV(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+PDVDV(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
+      bool enable_baro)
 {
   TCHAR ctemp[80];
   double alt;
@@ -263,7 +264,7 @@ PDVDV(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->VarioAvailable = true;
   GPS_INFO->AirspeedAvailable = true;
 
-  if (d == pDevPrimaryBaroSource){
+  if (enable_baro){
     NMEAParser::ExtractParameter(String,ctemp,3);
     alt = StrToDouble(ctemp,NULL);
     GPS_INFO->BaroAltitudeAvailable = true;
@@ -364,7 +365,7 @@ PDTSM(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
 bool
 vgaParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-             NMEA_INFO *GPS_INFO)
+             NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   if(_tcsncmp(_T("$PDSWC"), String, 6)==0)
     {
@@ -380,7 +381,7 @@ vgaParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
     }
   if(_tcsncmp(_T("$PDVDV"), String, 6)==0)
     {
-      return PDVDV(d, &String[7], GPS_INFO);
+      return PDVDV(d, &String[7], GPS_INFO, enable_baro);
     }
   if(_tcsncmp(_T("$PDVDS"), String, 6)==0)
     {

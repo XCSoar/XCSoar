@@ -59,7 +59,7 @@ static int ewDecelTpIndex = 0;
 
 static bool
 EWParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-            NMEA_INFO *GPS_INFO)
+            NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   (void)d;
   (void)String;

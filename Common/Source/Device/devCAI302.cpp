@@ -139,8 +139,8 @@ static cai302_Gdata_t cai302_Gdata;
 
 // Additional sentance for CAI302 support
 static bool
-cai_w(struct DeviceDescriptor *d, const TCHAR *String,
-      NMEA_INFO *GPS_INFO);
+cai_w(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
+      bool enable_baro);
 
 static bool
 cai_PCAIB(const TCHAR *String, NMEA_INFO *GPS_INFO);
@@ -154,7 +154,7 @@ static int  BallastUpdateTimeout = 0;
 
 static bool
 cai302ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-                NMEA_INFO *GPS_INFO)
+                NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   if (!NMEAParser::NMEAChecksum(String) || (GPS_INFO == NULL)){
     return false;
@@ -169,7 +169,7 @@ cai302ParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   }
 
   if(_tcsstr(String, _T("!w")) == String){
-    return cai_w(d, &String[3], GPS_INFO);
+    return cai_w(d, &String[3], GPS_INFO, enable_baro);
   }
 
   return false;
@@ -583,8 +583,9 @@ cai_PCAID(const TCHAR *String, NMEA_INFO *GPS_INFO)
 *hh  Checksum, XOR of all bytes
 */
 
-bool
-cai_w(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+static bool
+cai_w(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
+      bool enable_baro)
 {
 
   TCHAR ctemp[80];
@@ -599,7 +600,7 @@ cai_w(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   NMEAParser::ExtractParameter(String,ctemp,4);
 
-  if (d == pDevPrimaryBaroSource){
+  if (enable_baro){
 
     GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = StrToDouble(ctemp, NULL) - 1000;

@@ -57,11 +57,12 @@ Copyright_License {
 #include <tchar.h>
 
 static bool
-GPWIN(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
+GPWIN(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
+      bool enable_baro);
 
 bool
 PGParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-            NMEA_INFO *GPS_INFO)
+            NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   (void)d;
   (void)String;
@@ -71,7 +72,7 @@ PGParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   // $GPWIN ,01900 , 0 , 5159 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 * 6 B , 0 7 * 6 0 E
   if(_tcsncmp(_T("$GPWIN"), String, 6)==0)
     {
-      return GPWIN(d, &String[7], GPS_INFO);
+      return GPWIN(d, &String[7], GPS_INFO, enable_baro);
     }
 
   return false;
@@ -114,7 +115,8 @@ const struct DeviceRegister pgDevice = {
 // local stuff
 
 static bool
-GPWIN(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+GPWIN(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
+      bool enable_baro)
 {
   TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -122,7 +124,7 @@ GPWIN(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   NMEAParser::ExtractParameter(String, ctemp, 2);
 
-  if (d == pDevPrimaryBaroSource){
+  if (enable_baro) {
     GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(iround(StrToDouble(ctemp, NULL)/10));
   }

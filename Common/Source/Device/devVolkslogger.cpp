@@ -64,7 +64,8 @@ Copyright_License {
 // $PGCS,1,0EC0,FFF9,0C6E,02*61
 // $PGCS,1,0EC0,FFFA,0C6E,03*18
 bool
-vl_PGCS1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+vl_PGCS1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
+         bool enable_baro)
 {
 
   TCHAR ctemp[80];
@@ -74,8 +75,7 @@ vl_PGCS1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   // four characers, hex, barometric altitude
   InternalAltitude = HexStrToDouble(ctemp,NULL);
 
-  if (d == pDevPrimaryBaroSource) {
-
+  if (enable_baro) {
     if(InternalAltitude > 60000)
       GPS_INFO->BaroAltitude =
         AltitudeToQNHAltitude(InternalAltitude - 65535);
@@ -108,7 +108,7 @@ vl_PGCS1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
 bool
 VLParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-            NMEA_INFO *GPS_INFO)
+            NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   (void)d;
 
@@ -117,7 +117,7 @@ VLParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   }
 
   if(_tcsstr(String, _T("$PGCS,")) == String){
-    return vl_PGCS1(d, &String[6], GPS_INFO);
+    return vl_PGCS1(d, &String[6], GPS_INFO, enable_baro);
   }
 
   return false;

@@ -52,7 +52,8 @@ Copyright_License {
 #include <tchar.h>
 
 static bool
-cLXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
+cLXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
+       bool enable_baro);
 
 static bool
 cLXWP1(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
@@ -62,13 +63,13 @@ cLXWP2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO);
 
 static bool
 CondorParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-                NMEA_INFO *GPS_INFO)
+                NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   (void)d;
 
   if(_tcsncmp(_T("$LXWP0"), String, 6)==0)
     {
-      return cLXWP0(d, &String[7], GPS_INFO);
+      return cLXWP0(d, &String[7], GPS_INFO, enable_baro);
     }
   if(_tcsncmp(_T("$LXWP1"), String, 6)==0)
     {
@@ -130,7 +131,8 @@ cLXWP2(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
 static bool
-cLXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+cLXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
+       bool enable_baro)
 {
   TCHAR ctemp[80];
 
@@ -158,7 +160,7 @@ cLXWP0(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->IndicatedAirspeed = airspeed/AirDensityRatio(alt);
   GPS_INFO->TrueAirspeed = airspeed;
 
-  if (d == pDevPrimaryBaroSource){
+  if (enable_baro) {
     GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = alt;    // ToDo check if QNH correction is needed!
   }

@@ -47,10 +47,11 @@ Copyright_License {
 #include <tchar.h>
 
 static double lastAlt = 0;
+static bool last_enable_baro;
 
 bool
 atrParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-             NMEA_INFO *GPS_INFO)
+             NMEA_INFO *GPS_INFO, bool enable_baro)
 {
 
   // no propriatary sentence
@@ -79,11 +80,12 @@ atrParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
     if (*String == 'f' || *String== 'F')
       lastAlt /= TOFEET;
 
-
-    if (d == pDevPrimaryBaroSource){
+    if (enable_baro) {
       GPS_INFO->BaroAltitudeAvailable = true;
       GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(lastAlt);
     }
+
+    last_enable_baro = enable_baro;
 
     return true;
   }
@@ -109,9 +111,8 @@ bool
 atrPutQNH(struct DeviceDescriptor *d, double NewQNH)
 {
   (void)NewQNH; // TODO code: JMW check sending QNH to Altair
-  if (d == pDevPrimaryBaroSource){
+  if (last_enable_baro)
     device_blackboard.SetBaroAlt(AltitudeToQNHAltitude(lastAlt));
-  }
 
   return true;
 }
