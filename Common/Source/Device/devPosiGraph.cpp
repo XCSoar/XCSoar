@@ -57,8 +57,7 @@ Copyright_License {
 #include <tchar.h>
 
 static bool
-GPWIN(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
-      bool enable_baro);
+GPWIN(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
 
 bool
 PGParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
@@ -72,7 +71,7 @@ PGParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
   // $GPWIN ,01900 , 0 , 5159 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 * 6 B , 0 7 * 6 0 E
   if(_tcsncmp(_T("$GPWIN"), String, 6)==0)
     {
-      return GPWIN(d, &String[7], GPS_INFO, enable_baro);
+      return GPWIN(&String[7], GPS_INFO, enable_baro);
     }
 
   return false;
@@ -115,12 +114,9 @@ const struct DeviceRegister pgDevice = {
 // local stuff
 
 static bool
-GPWIN(struct DeviceDescriptor *d, const TCHAR *String, NMEA_INFO *GPS_INFO,
-      bool enable_baro)
+GPWIN(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   TCHAR ctemp[80];
-  (void)GPS_INFO;
-  (void)d;
 
   NMEAParser::ExtractParameter(String, ctemp, 2);
 
