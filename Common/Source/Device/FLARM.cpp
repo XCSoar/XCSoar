@@ -44,8 +44,8 @@ Copyright_License {
 #include <tchar.h>
 
 static bool
-FlarmDeclareSetGet(struct DeviceDescriptor *d, TCHAR *Buffer) {
-  assert(d != NULL);
+FlarmDeclareSetGet(ComPort *port, TCHAR *Buffer) {
+  assert(port != NULL);
 
   //devWriteNMEAString(d, Buffer);
 
@@ -53,43 +53,42 @@ FlarmDeclareSetGet(struct DeviceDescriptor *d, TCHAR *Buffer) {
 
   _sntprintf(tmp, 512, _T("$%s\r\n"), Buffer);
 
-  if (d->Com)
-    d->Com->WriteString(tmp);
+  port->WriteString(tmp);
 
   Buffer[6]= _T('A');
-  return ExpectString(d->Com, Buffer);
+  return ExpectString(port, Buffer);
 }
 
 bool
-FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
+FlarmDeclare(ComPort *port, const struct Declaration *decl)
 {
-  assert(d != NULL);
+  assert(port != NULL);
 
   bool result = true;
 
   TCHAR Buffer[256];
 
-  d->Com->StopRxThread();
-  d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+  port->StopRxThread();
+  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
   _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"),decl->PilotName);
-  if (!FlarmDeclareSetGet(d,Buffer))
+  if (!FlarmDeclareSetGet(port, Buffer))
     result = false;
 
   _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"),decl->AircraftRego);
-  if (!FlarmDeclareSetGet(d,Buffer))
+  if (!FlarmDeclareSetGet(port, Buffer))
     result = false;
 
   _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"),decl->AircraftType);
-  if (!FlarmDeclareSetGet(d,Buffer))
+  if (!FlarmDeclareSetGet(port, Buffer))
     result = false;
 
   _stprintf(Buffer, _T("PFLAC,S,NEWTASK,Task"));
-  if (!FlarmDeclareSetGet(d,Buffer))
+  if (!FlarmDeclareSetGet(port, Buffer))
     result = false;
 
   _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,TAKEOFF"));
-  if (!FlarmDeclareSetGet(d,Buffer))
+  if (!FlarmDeclareSetGet(port, Buffer))
     result = false;
 
   for (int i = 0; i < decl->num_waypoints; i++) {
@@ -121,12 +120,12 @@ FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 	      _T("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"),
 	      DegLat, MinLat, NoS, DegLon, MinLon, EoW,
 	      decl->waypoint[i]->Name);
-    if (!FlarmDeclareSetGet(d,Buffer))
+    if (!FlarmDeclareSetGet(port, Buffer))
       result = false;
   }
 
   _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
-  if (!FlarmDeclareSetGet(d,Buffer))
+  if (!FlarmDeclareSetGet(port, Buffer))
     result = false;
 
   // PFLAC,S,KEY,VALUE
@@ -145,8 +144,8 @@ FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
   // Total data size must not surpass 183 bytes
   // probably will issue PFLAC,ERROR if a problem?
 
-  d->Com->SetRxTimeout(0);                       // clear timeout
-  d->Com->StartRxThread();                       // restart RX thread
+  port->SetRxTimeout(0); // clear timeout
+  port->StartRxThread(); // restart RX thread
 
   return result;
 }

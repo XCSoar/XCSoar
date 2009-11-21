@@ -566,7 +566,7 @@ DeviceDescriptor::Declare(const struct Declaration *declaration)
     Driver->Declare(this, declaration);
 
   if (NMEAParser::PortIsFlarm(Port))
-    result = FlarmDeclare(this, declaration) || result;
+    result = FlarmDeclare(Com, declaration) || result;
 
   return result;
 }
