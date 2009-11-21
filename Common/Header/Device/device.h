@@ -110,7 +110,7 @@ struct DeviceRegister {
   BOOL (*Open)(struct DeviceDescriptor *d, int Port);
   BOOL (*Close)(struct DeviceDescriptor *d);
   BOOL (*LinkTimeout)(struct DeviceDescriptor *d);
-  BOOL (*Declare)(struct DeviceDescriptor *d, struct Declaration *decl);
+  BOOL (*Declare)(struct DeviceDescriptor *d, const struct Declaration *decl);
   BOOL (*IsLogger)(const struct DeviceDescriptor *d);
   BOOL (*IsGPSSource)(const struct DeviceDescriptor *d);
   BOOL (*IsBaroSource)(const struct DeviceDescriptor *d);
@@ -143,7 +143,10 @@ BOOL devPutVolume(struct DeviceDescriptor *d, int Volume);
 BOOL devPutFreqActive(struct DeviceDescriptor *d, double Freq);
 BOOL devPutFreqStandby(struct DeviceDescriptor *d, double Freq);
 BOOL devLinkTimeout(struct DeviceDescriptor *d);
-BOOL devDeclare(struct DeviceDescriptor *d, struct Declaration *decl);
+
+bool
+devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl);
+
 BOOL devIsLogger(const struct DeviceDescriptor *d);
 BOOL devIsGPSSource(const struct DeviceDescriptor *d);
 BOOL devIsBaroSource(const struct DeviceDescriptor *d);

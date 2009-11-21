@@ -93,7 +93,7 @@ atrParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 BOOL
-atrDeclare(struct DeviceDescriptor *d, struct Declaration *decl)
+atrDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   (void) d;
   (void) decl;

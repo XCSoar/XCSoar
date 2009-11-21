@@ -118,7 +118,8 @@ struct DeviceDescriptor DeviceList[NUMDEV];
 struct DeviceDescriptor *pDevPrimaryBaroSource;
 struct DeviceDescriptor *pDevSecondaryBaroSource;
 
-static BOOL FlarmDeclare(struct DeviceDescriptor *d, struct Declaration *decl);
+static bool
+FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl);
 
 
 // This function is used to determine whether a generic
@@ -568,7 +569,8 @@ BOOL devPutVoice(struct DeviceDescriptor *d, TCHAR *Sentence)
   return FALSE;
 }
 
-BOOL devDeclare(struct DeviceDescriptor *d, struct Declaration *decl)
+bool
+devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   BOOL result = FALSE;
 
@@ -840,7 +842,8 @@ FlarmDeclareSetGet(struct DeviceDescriptor *d, TCHAR *Buffer) {
 }
 
 
-BOOL FlarmDeclare(struct DeviceDescriptor *d, struct Declaration *decl)
+bool
+FlarmDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   BOOL result = TRUE;
 

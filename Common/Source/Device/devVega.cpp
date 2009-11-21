@@ -412,7 +412,7 @@ vgaParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 }
 
 BOOL
-vgaDeclare(struct DeviceDescriptor *d, struct Declaration *decl)
+vgaDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   (void) d;
   (void) decl;

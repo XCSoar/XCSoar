@@ -133,7 +133,7 @@ BOOL
 VLDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
 
 BOOL
-VLDeclare(struct DeviceDescriptor *d, struct Declaration *decl)
+VLDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Comms with Volkslogger")));
 

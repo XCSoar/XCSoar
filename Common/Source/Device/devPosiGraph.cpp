@@ -80,7 +80,7 @@ PGParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
 
 
 BOOL
-PGDeclare(struct DeviceDescriptor *d, struct Declaration *decl)
+PGDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
 
   (void)d;

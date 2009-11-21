@@ -106,7 +106,7 @@ BOOL
 EWDeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
 
 BOOL
-EWDeclare(struct DeviceDescriptor *d, struct Declaration *decl)
+EWDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   TCHAR sTmp[72];
   TCHAR sPilot[13];
