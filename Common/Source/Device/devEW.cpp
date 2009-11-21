@@ -58,19 +58,6 @@ static unsigned long lLastBaudrate = 0;
 static int nDeclErrorCode = 0;
 static int ewDecelTpIndex = 0;
 
-static bool
-EWParseNMEA(struct DeviceDescriptor *d, const TCHAR *String,
-            NMEA_INFO *GPS_INFO, bool enable_baro)
-{
-  (void)d;
-  (void)String;
-  (void)GPS_INFO;
-  // no propriatary sentence
-
-  return false;
-}
-
-
 void appendCheckSum(TCHAR *String){
   TCHAR sTmp[4];
 
@@ -332,7 +319,7 @@ EWLinkTimeout(struct DeviceDescriptor *d)
 const struct DeviceRegister ewDevice = {
   _T("EW Logger"),
   drfGPS | drfLogger,
-  EWParseNMEA,			// ParseNMEA
+  NULL, // ParseNMEA
   NULL,				// PutMacCready
   NULL,				// PutBugs
   NULL,				// PutBallast
