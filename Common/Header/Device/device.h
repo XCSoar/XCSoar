@@ -67,13 +67,13 @@ typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfN
 #define drfRadio	(1l << dfRadio)
 #define drfCondor	(1l << dfCondor)
 
-typedef struct Declaration {
+struct Declaration {
   TCHAR PilotName[64];
   TCHAR AircraftType[32];
   TCHAR AircraftRego[32];
   int num_waypoints;
   const WAYPOINT *waypoint[MAXTASKPOINTS];
-} Declaration_t;
+};
 
 struct DeviceRegister;
 
@@ -110,7 +110,7 @@ struct DeviceRegister {
   BOOL (*Open)(struct DeviceDescriptor *d, int Port);
   BOOL (*Close)(struct DeviceDescriptor *d);
   BOOL (*LinkTimeout)(struct DeviceDescriptor *d);
-  BOOL (*Declare)(struct DeviceDescriptor *d, Declaration_t *decl);
+  BOOL (*Declare)(struct DeviceDescriptor *d, struct Declaration *decl);
   BOOL (*IsLogger)(struct DeviceDescriptor *d);
   BOOL (*IsGPSSource)(struct DeviceDescriptor *d);
   BOOL (*IsBaroSource)(struct DeviceDescriptor *d);
@@ -143,7 +143,7 @@ BOOL devPutVolume(struct DeviceDescriptor *d, int Volume);
 BOOL devPutFreqActive(struct DeviceDescriptor *d, double Freq);
 BOOL devPutFreqStandby(struct DeviceDescriptor *d, double Freq);
 BOOL devLinkTimeout(struct DeviceDescriptor *d);
-BOOL devDeclare(struct DeviceDescriptor *d, Declaration_t *decl);
+BOOL devDeclare(struct DeviceDescriptor *d, struct Declaration *decl);
 BOOL devIsLogger(struct DeviceDescriptor *d);
 BOOL devIsGPSSource(struct DeviceDescriptor *d);
 BOOL devIsBaroSource(struct DeviceDescriptor *d);

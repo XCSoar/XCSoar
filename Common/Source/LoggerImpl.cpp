@@ -710,7 +710,7 @@ LoggerImpl::LoggerNote(const TCHAR *text) {
 
 
 bool
-LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev, Declaration_t *decl)
+LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev, struct Declaration *decl)
 {
   if (!devIsLogger(dev))
     return FALSE;
@@ -733,7 +733,7 @@ LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev, Declaration_t *decl)
 void
 LoggerImpl::LoggerDeviceDeclare() {
   bool found_logger = false;
-  Declaration_t Decl;
+  struct Declaration Decl;
   int i;
 
   GetRegistryString(szRegistryPilotName, Decl.PilotName, 64);

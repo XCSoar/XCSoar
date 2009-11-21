@@ -39,15 +39,16 @@ Copyright_License {
 #if !defined(XCSOAR_LOGGER_IMPL_HPP)
 #define XCSOAR_LOGGER_IMPL_HPP
 
+#include "NMEA/Info.h"
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
 #include "SettingsComputer.hpp"
-#include "Device/device.h"
 
 #define MAX_LOGGER_BUFFER 60
 
-struct NMEA_INFO;
+struct Declaration;
 
 typedef struct LoggerBuffer {
   double Latitude;
@@ -110,7 +111,7 @@ private:
   double GetFRecordLastTime(void);
   void ResetFRecord(void);
 
-  bool LoggerDeclare(struct DeviceDescriptor *dev, Declaration_t *decl);
+  bool LoggerDeclare(struct DeviceDescriptor *dev, struct Declaration *decl);
   void LoggerGInit();
 private:
   void LogPointToFile(const NMEA_INFO& gps_info);

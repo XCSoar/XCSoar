@@ -212,7 +212,7 @@ EWMicroRecorderWriteWayPoint(struct DeviceDescriptor *d,
 }
 
 static BOOL
-EWMicroRecorderDeclare(struct DeviceDescriptor *d, Declaration_t *decl)
+EWMicroRecorderDeclare(struct DeviceDescriptor *d, struct Declaration *decl)
 {
   const WAYPOINT *wp;
   nDeclErrorCode = 0;

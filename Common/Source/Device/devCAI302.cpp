@@ -285,7 +285,7 @@ BOOL
 cai302DeclAddWayPoint(struct DeviceDescriptor *d, const WAYPOINT *wp);
 
 BOOL
-cai302Declare(struct DeviceDescriptor *d, Declaration_t *decl)
+cai302Declare(struct DeviceDescriptor *d, struct Declaration *decl)
 {
   TCHAR PilotName[25];
   TCHAR GliderType[13];
