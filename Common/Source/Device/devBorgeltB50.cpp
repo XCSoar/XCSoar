@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Device/devBorgeltB50.h"
-#include "Device/device.h"
+#include "Device/Internal.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"

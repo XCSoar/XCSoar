@@ -43,7 +43,6 @@ Copyright_License {
 
 #include "Device/devVolkslogger.h"
 #include "Device/Internal.hpp"
-#include "Device/device.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Interface.hpp"

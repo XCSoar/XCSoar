@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Device/devGeneric.h"
-#include "Device/device.h"
+#include "Device/Internal.hpp"
 
 const struct DeviceRegister genDevice = {
   _T("Generic"),

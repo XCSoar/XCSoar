@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Device/devNmeaOut.h"
-#include "Device/device.h"
+#include "Device/Internal.hpp"
 #include "Device/Port.h"
 
 bool

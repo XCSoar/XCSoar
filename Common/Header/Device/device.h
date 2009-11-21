@@ -53,19 +53,6 @@ struct NMEA_INFO;
 #define	devA()	    (&DeviceList[0])
 #define	devB()	    (&DeviceList[1])
 
-typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut, dfRadio, dfCondor } DeviceFlags_t;
-
-#define drfGPS		(1l << dfGPS)
-#define drfLogger	(1l << dfLogger)
-#define drfSpeed	(1l << dfSpeed)
-#define drfVario	(1l << dfVario)
-#define drfBaroAlt	(1l << dfBaroAlt)
-#define drfWind		(1l << dfWind)
-#define drfVoice	(1l << dfVoice)
-#define drfNmeaOut	(1l << dfNmeaOut)
-#define drfRadio	(1l << dfRadio)
-#define drfCondor	(1l << dfCondor)
-
 struct Declaration {
   TCHAR PilotName[64];
   TCHAR AircraftType[32];
@@ -114,31 +101,6 @@ struct DeviceDescriptor {
 void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
 struct DeviceDescriptor *devVarioFindVega(void);
-
-struct DeviceRegister {
-  const TCHAR	*Name;
-  unsigned int	Flags;
-  bool (*ParseNMEA)(struct DeviceDescriptor *d, const TCHAR *String,
-                    NMEA_INFO *GPS_INFO);
-  bool (*PutMacCready)(struct DeviceDescriptor *d, double McReady);
-  bool (*PutBugs)(struct DeviceDescriptor *d, double Bugs);
-  bool (*PutBallast)(struct DeviceDescriptor *d, double Ballast);
-  bool (*PutQNH)(struct DeviceDescriptor *d, double NewQNH);
-  bool (*PutVoice)(struct DeviceDescriptor *d, const TCHAR *Sentence);
-  bool (*PutVolume)(struct DeviceDescriptor *d, int Volume);
-  bool (*PutFreqActive)(struct DeviceDescriptor *d, double Freq);
-  bool (*PutFreqStandby)(struct DeviceDescriptor *d, double Standby);
-  bool (*Open)(struct DeviceDescriptor *d, int Port);
-  bool (*Close)(struct DeviceDescriptor *d);
-  bool (*LinkTimeout)(struct DeviceDescriptor *d);
-  bool (*Declare)(struct DeviceDescriptor *d, const struct Declaration *decl);
-  bool (*IsLogger)(const struct DeviceDescriptor *d);
-  bool (*IsGPSSource)(const struct DeviceDescriptor *d);
-  bool (*IsBaroSource)(const struct DeviceDescriptor *d);
-  bool (*OnSysTicker)(struct DeviceDescriptor *d);
-};
-
-
 
 extern struct DeviceDescriptor DeviceList[NUMDEV];
 

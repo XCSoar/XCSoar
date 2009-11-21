@@ -47,7 +47,6 @@ Copyright_License {
 
 #include "Device/devPosiGraph.h"
 #include "Device/Internal.hpp"
-#include "Device/device.h"
 #include "Math/FastMath.h"
 #include "Math/Pressure.h"
 #include "Device/Parser.h"

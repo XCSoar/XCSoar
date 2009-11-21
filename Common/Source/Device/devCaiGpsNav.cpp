@@ -45,6 +45,7 @@ Copyright_License {
 // all other functions are called from windows message loop thread
 
 #include "Device/devCaiGpsNav.h"
+#include "Device/Internal.hpp"
 #include "Device/device.h"
 #include "Device/Port.h"
 

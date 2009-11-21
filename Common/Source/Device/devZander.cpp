@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Device/devZander.h"
-#include "Device/device.h"
+#include "Device/Internal.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Math/Pressure.h"

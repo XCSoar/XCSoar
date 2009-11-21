@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Device/devXCOM760.h"
+#include "Device/Internal.hpp"
 #include "Device/device.h"
 #include "Device/Port.h"
 
