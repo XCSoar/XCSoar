@@ -3,11 +3,11 @@
 #include <fstream>
 #include <iostream>
 
-void setup_airspaces(Airspaces& airspaces) {
+void setup_airspaces(Airspaces& airspaces, const unsigned n) {
 #ifdef DO_PRINT
   std::ofstream fin("results/res-bb-in.txt");
 #endif
-  for (unsigned i=0; i<150; i++) {
+  for (unsigned i=0; i<n; i++) {
     AbstractAirspace* as;
     if (rand()%3==0) {
       GEOPOINT c;

@@ -11,7 +11,7 @@ bool verbose = false;
 
 #ifdef INSTRUMENT_TASK
 extern long count_mc;
-extern unsigned count_intersections;
+long count_intersections;
 extern unsigned n_queries;
 extern unsigned count_distbearing;
 extern unsigned num_dijkstra;
@@ -27,7 +27,7 @@ void distance_counts() {
     printf("#     mc calcs/c %d\n",(int)(count_mc/n_samples));
     printf("#     dijkstra/c %d\n",num_dijkstra/n_samples);
     if (n_queries>0) {
-      printf("#     intersection tests/q %d\n",count_intersections/n_queries);
+      printf("#     intersection tests/q %d\n",(unsigned)(count_intersections/n_queries));
       printf("#    (total queries %d)\n\n",n_queries);
     }
 #endif

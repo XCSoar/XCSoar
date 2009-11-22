@@ -147,53 +147,6 @@ public:
   unsigned get_task_size() const;
 
 /** 
- * Replace taskpoint in ordered task.
- * May fail if the candidate is the wrong type.
- * Does nothing (but returns true) if replacement is equivalent
- * Ownership is transferred to this object.
- * 
- * @param tp Taskpoint to become replacement
- * @param position Index in task sequence of task point to replace
- * 
- * @return True on success
- */
-  bool replace(OrderedTaskPoint* tp, const unsigned position);
-
-/** 
- * Add taskpoint to ordered task.  It is the
- * user's responsibility to ensure the task is
- * valid (has a start/intermediate/finish).
- * 
- * @param new_tp New taskpoint to add
- * 
- * @return True if operation successful
- */
-  bool append(OrderedTaskPoint *new_tp);
-
-/** 
- * Insert taskpoint to ordered task.  It is the
- * user's responsibility to ensure the task is
- * valid (has a start/intermediate/finish).
- * 
- * @param new_tp New taskpoint to insert
- * @param position Sequence before which to insert new task point
- * 
- * @return True if operation successful
- */
-  bool insert(OrderedTaskPoint *new_tp, const unsigned position);
-
-/** 
- * Remove taskpoint from ordered task.  It is the
- * user's responsibility to ensure the task is
- * valid (has a start/intermediate/finish).
- * 
- * @param position Sequence number of taskpoint to remove
- * 
- * @return True if operation successful
- */
-  bool remove(const unsigned position);
-
-/** 
  * Check whether ordered task is valid
  * 
  * @return True if task is valid

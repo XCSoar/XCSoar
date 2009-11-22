@@ -4,6 +4,7 @@
 
 #ifdef INSTRUMENT_TASK
 extern unsigned n_queries;
+extern long count_intersections;
 #endif
 
 const std::vector<Airspace>
@@ -114,6 +115,11 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state) const
 
   for (std::vector<Airspace>::iterator v=vectors.begin();
        v != vectors.end(); ) {
+
+#ifdef INSTRUMENT_TASK
+        count_intersections++;
+#endif
+
     if (!(*v).inside(state)) {
       vectors.erase(v);
     } else {

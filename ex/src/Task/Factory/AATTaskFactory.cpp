@@ -18,7 +18,7 @@ AATTaskFactory::validate()
    * maybe warn on overlap?
    */
 
-  if (!task.has_start_and_finish()) {
+  if (!task.has_start() || !task.has_finish()) {
     return false;
   }
   if (task.task_size()<3) {

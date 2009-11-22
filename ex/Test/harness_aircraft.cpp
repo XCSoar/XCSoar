@@ -1,6 +1,7 @@
 
 #include "harness_aircraft.hpp"
 #include "test_debug.hpp"
+#include "Math/Geometry.hpp"
 
 /*
   void scan_airspaces(Airspaces &airspaces, bool do_print) {
@@ -14,7 +15,7 @@ void print_mode(const char* mode) {
 }
 
 GEOPOINT AircraftSim::get_next() const {
-  return w[awp+1];
+  return w[awp];
 }
 
 AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
@@ -25,7 +26,11 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   goto_target(_goto_target)
 {
   for (unsigned i=0; i<task_manager.get_task_size(); i++) {
-    w.push_back(task_manager.random_point_in_task(i, random_mag));
+    if (i==0) {
+      w.push_back(task_manager.random_point_in_task(i, 1.0));
+    } else {
+      w.push_back(task_manager.random_point_in_task(i, random_mag));
+    }
   }
   
   state.Location = w[0];
@@ -47,7 +52,11 @@ GEOPOINT AircraftSim::target(TaskManager &task_manager) {
   if (goto_target && (awp>0)) {
     return task_manager.getActiveTaskPoint()->getLocation();
   } else {
-    return w[awp+1];
+    if (awp>0) {
+      return w[awp];
+    } else {
+      return w[awp+1];
+    }
   }
 }
 
@@ -56,7 +65,15 @@ bool AircraftSim::far(TaskManager &task_manager) {
     const ElementStat stat = task_manager.get_stats().current_leg;
     return stat.remaining.get_distance()>100.0;
   } else {
-    return (w[awp+1].distance(state.Location)>state.Speed*2);
+    if (awp>0) {
+      double d0s = w[awp-1].distance(state.Location);
+      double d01 = w[awp-1].distance(w[awp]); 
+      if (d0s> d01) {
+//        return false;
+      }
+    }
+    double dc = w[awp].distance(state.Location);
+    return (dc>state.Speed);
   }
 }
 
@@ -69,8 +86,20 @@ void AircraftSim::update_bearing(TaskManager& task_manager) {
     const ElementStat stat = task_manager.get_stats().current_leg;
     bearing = stat.solution_remaining.Vector.Bearing;
   } else {
-    bearing = state.Location.bearing(target(task_manager))+small_rand();
+    bearing = state.Location.bearing(target(task_manager));
   }
+
+  double b_best = bearing;
+  double e_best = 370;
+  for (double bear=0; bear<360; bear+= 2.0) {
+    double b_this = state.Location.bearing(endpoint(bear));
+    double e_this = fabs(::AngleLimit180(b_this-bearing));
+    if (e_this<e_best) {
+      e_best = e_this;
+      b_best = bear;
+    }    
+  }
+  bearing = b_best+small_rand();
 }
 
 void AircraftSim::update_state(TaskManager &task_manager,
@@ -108,7 +137,8 @@ void AircraftSim::update_mode(TaskManager &task_manager,
   
   switch (acstate) {
   case Cruise:
-    if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)) {
+    if ((awp>0) && 
+        (task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)) {
       print_mode("# mode fg\n");
       acstate = FinalGlide;
     } else {
@@ -122,7 +152,8 @@ void AircraftSim::update_mode(TaskManager &task_manager,
 
     break;
   case Climb:
-    if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)) {
+    if ((awp>0) && 
+        (task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)) {
       print_mode("# mode fg\n");
       acstate = FinalGlide;
     } else if (state.Altitude>=1500) {
@@ -133,23 +164,30 @@ void AircraftSim::update_mode(TaskManager &task_manager,
   };
 }
 
+GEOPOINT AircraftSim::endpoint(const double bear) const
+{
+  GEOPOINT ref;
+  ref = GeoVector(state.Speed,bear).end_point(state.Location);
+  return GeoVector(state.WindSpeed,state.WindDirection).end_point(ref);
+}
+
 void AircraftSim::integrate() {
-  state.Location = GeoVector(state.Speed,bearing).end_point(state.Location);
+  state.Location = endpoint(bearing);
   state.Altitude -= sinkrate;
   state.Time += 1.0;
 }
 
 bool AircraftSim::advance(TaskManager &task_manager,
                           GlidePolar &glide_polar)  {
-  
+
   update_state(task_manager, glide_polar);
   
   integrate();
   
+  update_mode(task_manager, glide_polar);
+
   task_manager.update(state, state_last);
   task_manager.update_idle(state);
-
-  update_mode(task_manager, glide_polar);
   
   state_last = state;
   
@@ -157,7 +195,7 @@ bool AircraftSim::advance(TaskManager &task_manager,
     wait_prompt(time());
     
     awp++;
-    if (awp== w.size()) {
+    if (awp>= w.size()) {
       return false;
     } 
   }
@@ -168,6 +206,12 @@ bool AircraftSim::advance(TaskManager &task_manager,
       task_manager.setActiveTaskPoint(awp);
     }
   }
+  if (task_manager.getActiveTaskPointIndex() > awp) {
+    awp = task_manager.getActiveTaskPointIndex();
+  }
+  if (awp>= w.size()) {
+    return false;
+  } 
   return true;
 }
 
@@ -184,3 +228,10 @@ double AircraftSim::time() {
   return state.Time;
 }
 
+
+void 
+AircraftSim::set_wind(const double speed, const double direction) 
+{
+  state.WindSpeed = speed;
+  state.WindDirection = direction;
+}

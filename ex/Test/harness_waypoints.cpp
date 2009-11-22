@@ -1,7 +1,8 @@
 #include "harness_waypoints.hpp"
+#include "test_debug.hpp"
 #include <fstream>
 #include <iostream>
-
+#include <algorithm>
 
 /** 
  * Initialises waypoints with random and non-random waypoints
@@ -9,10 +10,8 @@
  *
  * @param waypoints waypoints class to add waypoints to
  */
-bool setup_waypoints(Waypoints &waypoints) {
-#ifdef DO_PRINT
-  std::ofstream fin("results/res-wp-in.txt");
-#endif
+bool setup_waypoints(Waypoints &waypoints, const unsigned n) 
+{
 
   Waypoint wp;
 
@@ -46,7 +45,7 @@ bool setup_waypoints(Waypoints &waypoints) {
   wp.Altitude=0.25;
   waypoints.insert(wp);
 
-  for (unsigned i=0; i<150; i++) {
+  for (unsigned i=0; i<(unsigned)std::max((int)n-5,0); i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
     wp.id++;
@@ -56,12 +55,15 @@ bool setup_waypoints(Waypoints &waypoints) {
   }
   waypoints.optimise();
 
-  for (unsigned i=1; i<=waypoints.size(); i++) {
-    Waypoints::WaypointTree::const_iterator it = waypoints.find_id(i);
-    if (it != waypoints.end()) {
+  if (verbose) {
+    std::ofstream fin("results/res-wp-in.txt");
+    for (unsigned i=1; i<=waypoints.size(); i++) {
+      Waypoints::WaypointTree::const_iterator it = waypoints.find_id(i);
+      if (it != waypoints.end()) {
 #ifdef DO_PRINT
-      fin << *it;
+        fin << *it;
 #endif
+      }
     }
   }
   return true;

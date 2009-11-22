@@ -69,11 +69,18 @@ public:
   const OrderedTaskPoint* getTaskPoint(const unsigned index) const;
 
 /** 
- * Check if task has a single StartPoint and FinishPoint
+ * Check if task has a single StartPoint
  * 
- * @return True if task has start/finish
+ * @return True if task has start
  */
-  virtual bool has_start_and_finish() const;
+  virtual bool has_start() const;
+
+/** 
+ * Check if task has a single FinishPoint
+ * 
+ * @return True if task has finish
+ */
+  virtual bool has_finish() const;
 
 /** 
  * Set active task point index
@@ -143,7 +150,7 @@ public:
  * 
  * @return True if task is finished
  */
-  virtual bool has_finished() const;
+  virtual bool task_finished() const;
 
 /** 
  * Update internal states when aircraft state advances.
@@ -218,6 +225,14 @@ public:
   }
 
 protected:
+
+/** 
+ * Scan task for valid start/finish points
+ * 
+ * @return True if start and finish found
+ */
+  bool scan_start_finish();
+
 /** 
  * Test whether (and how) transitioning into/out of task points should occur, typically
  * according to task_advance mechanism.  This also may call the task_event callbacks.
@@ -439,6 +454,13 @@ private:
  * data during task construction.
  */
   void update_geometry();
+
+/** 
+ * Erase taskpoint in sequence (for internal use)
+ * 
+ * @param i index of task point in sequence
+ */
+  void erase(unsigned i);
 
   std::vector<OrderedTaskPoint*> tps;
 

@@ -16,6 +16,7 @@ public:
     return state;
   }
   GEOPOINT get_next() const;
+  void set_wind(const double speed, const double direction);
 
   bool far(TaskManager &task_manager);
   double small_rand();
@@ -34,6 +35,7 @@ public:
   double time();
 
 private:
+  GEOPOINT endpoint(const double bear) const;
   void update_bearing(TaskManager &task_manager);
   GEOPOINT target(TaskManager &task_manager);
   bool goto_target;

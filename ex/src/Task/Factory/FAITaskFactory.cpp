@@ -20,7 +20,7 @@ FAITaskFactory::validate()
    * - adjustment to finish height if FAI finish height is on
    */
 
-  if (!task.has_start_and_finish()) {
+  if (!task.has_start() || !task.has_finish()) {
     return false;
   }
 

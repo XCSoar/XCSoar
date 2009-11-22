@@ -18,7 +18,6 @@
  * constructed task according to rules.
  *
  * \todo 
- * - maybe move orderedtask manipulation methods (insert, replace, append, remove) here
  * - add descriptor field so validate() methods can return feedback about
  *   validity of task etc.  This can also be added to saved files.
  *
@@ -51,6 +50,59 @@ public:
     FINISH_LINE,
     FINISH_CYLINDER
   };
+
+/** 
+ * Replace taskpoint in ordered task.
+ * May fail if the candidate is the wrong type.
+ * Does nothing (but returns true) if replacement is equivalent
+ * Ownership is transferred to this object.
+ * 
+ * @param tp Taskpoint to become replacement
+ * @param position Index in task sequence of task point to replace
+ * @param auto_mutate Modify task point types automatically to retain validity
+ * 
+ * @return True on success
+ */
+  bool replace(OrderedTaskPoint* tp, const unsigned position, const bool auto_mutate=true);
+
+/** 
+ * Add taskpoint to ordered task.  It is the
+ * user's responsibility to ensure the task is
+ * valid (has a start/intermediate/finish).
+ * 
+ * @param new_tp New taskpoint to add
+ * @param auto_mutate Modify task point types automatically to retain validity
+ * 
+ * @return True if operation successful
+ */
+  bool append(OrderedTaskPoint *new_tp, const bool auto_mutate=true);
+
+/** 
+ * Insert taskpoint to ordered task.  It is the
+ * user's responsibility to ensure the task is
+ * valid (has a start/intermediate/finish).
+ * 
+ * @param new_tp New taskpoint to insert
+ * @param position Sequence before which to insert new task point
+ * @param auto_mutate Modify task point types automatically to retain validity
+ * 
+ * @return True if operation successful
+ */
+  bool insert(OrderedTaskPoint *new_tp, const unsigned position, 
+              const bool auto_mutate=true);
+
+/** 
+ * Remove taskpoint from ordered task.  It is the
+ * user's responsibility to ensure the task is
+ * valid (has a start/intermediate/finish).
+ * 
+ * @param position Sequence number of taskpoint to remove
+ * @param auto_mutate Modify task point types automatically to retain validity
+ * 
+ * @return True if operation successful
+ */
+  bool remove(const unsigned position, 
+              const bool auto_mutate=true);
 
 /** 
  * Provide list of start types valid for later passing to createStart()
@@ -147,6 +199,8 @@ public:
   virtual bool validate() = 0;
 
 protected:
+  virtual bool validType(OrderedTaskPoint *new_tp, unsigned position) const;
+
   OrderedTask &task;
   const TaskBehaviour &behaviour;
   std::vector<LegalStartType_t> start_types;

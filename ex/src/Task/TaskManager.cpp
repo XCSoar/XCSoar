@@ -128,30 +128,6 @@ TaskManager::do_goto(const Waypoint & wp)
 }
 
 bool 
-TaskManager::append(OrderedTaskPoint *new_tp)
-{
-  return task_ordered.append(new_tp);
-}
-
-bool 
-TaskManager::replace(OrderedTaskPoint *new_tp, const unsigned position)
-{
-  return task_ordered.replace(new_tp, position);
-}
-
-bool 
-TaskManager::insert(OrderedTaskPoint *new_tp, const unsigned position)
-{
-  return task_ordered.insert(new_tp, position);
-}
-
-bool 
-TaskManager::remove(const unsigned position)
-{
-  return task_ordered.remove(position);
-}
-
-bool 
 TaskManager::check_task() const
 {
   return task_ordered.check_task();

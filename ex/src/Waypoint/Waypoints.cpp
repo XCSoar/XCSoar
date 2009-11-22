@@ -5,7 +5,7 @@
 
 #ifdef INSTRUMENT_TASK
 unsigned n_queries = 0;
-unsigned count_intersections = 0;
+extern long count_intersections;
 #endif
 
 Waypoints::Waypoints()
@@ -139,7 +139,12 @@ Waypoints::find_within_range_circle(const GEOPOINT &loc,
   FLAT_GEOPOINT floc = task_projection.project(loc);
 
   for (std::vector< Waypoint >::iterator v=vectors.begin();
-       v != vectors.end(); ) {      
+       v != vectors.end(); ) {
+
+#ifdef INSTRUMENT_TASK
+        count_intersections++;
+#endif
+
     if ((*v).FlatLocation.distance_to(floc)> mrange) {
       vectors.erase(v);
     } else {

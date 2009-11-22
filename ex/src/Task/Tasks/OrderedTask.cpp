@@ -11,14 +11,14 @@
 #include "TaskSolvers/TaskMinTarget.hpp"
 #include "TaskSolvers/TaskGlideRequired.hpp"
 #include "TaskSolvers/TaskOptTarget.hpp"
-#include <assert.h>
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
 void
 OrderedTask::update_geometry() 
 {
+  scan_start_finish();
 
-  if (!ts || !tps[0]) {
+  if (!has_start() || !tps[0]) {
     return;
   }
 
@@ -35,10 +35,13 @@ OrderedTask::update_geometry()
     tps[i]->update_oz();
   }
 
-  if (has_start_and_finish()) {
+  if (has_start()) {
     // update stats so data can be used during task construction
-    scan_distance_planned();
-    scan_distance_nominal();
+    /// \todo this should only be done if not flying! (currently done with has_entered)
+    if (!ts->has_entered()) {
+      GEOPOINT loc = ts->getLocation();
+      update_stats_distances(loc, true);
+    }
   }
 }
 
@@ -285,11 +288,11 @@ OrderedTask::check_task() const
     task_events.construction_error("Error! Empty task\n");
     return false;
   }
-  if (!dynamic_cast<const StartPoint*>(tps[0])) {
+  if (!has_start()) {
     task_events.construction_error("Error! No start point\n");
     return false;
   }
-  if (!dynamic_cast<const FinishPoint*>(tps[tps.size()-1])) {
+  if (!has_finish()) {
     task_events.construction_error("Error! No finish point\n");
     return false;
   }
@@ -298,27 +301,30 @@ OrderedTask::check_task() const
 
 
 bool 
-OrderedTask::check_startfinish(OrderedTaskPoint* new_tp)
+OrderedTask::scan_start_finish()
 {
-  if (StartPoint* ap = dynamic_cast<StartPoint*>(new_tp)) {
-    if (tps.size()) {
-      task_events.construction_error("Error! Already has a start point\n");
-      return false;
-    } else {
-      ts = ap;
-    }
+  /// \todo also check there are not more than one start/finish point
+
+  if (!tps.size()) {
+    ts = NULL;
+    tf = NULL;
+    return false;
   }
-  if (FinishPoint* fp = dynamic_cast<FinishPoint*>(new_tp)) {
-    if (tf) {
-      task_events.construction_error("Error! Already has a finish point\n");
-      return false;
-    } else {
-      tf = fp;
-    }
+  ts = dynamic_cast<StartPoint*>(tps[0]);
+  if (tps.size()>1) {
+    tf = dynamic_cast<FinishPoint*>(tps[tps.size()-1]);
+  } else {
+    tf = NULL;
   }
-  return true;
+  return has_start() && has_finish();
 }
 
+void
+OrderedTask::erase(const unsigned index)
+{
+  delete tps[index]; tps[index] = NULL;
+  tps.erase(tps.begin()+index);
+}
 
 bool
 OrderedTask::remove(const unsigned position)
@@ -331,61 +337,7 @@ OrderedTask::remove(const unsigned position)
     activeTaskPoint--;
   }
 
-  if (position==0) {
-    // special case, remove start point..
-
-    if (tps.size()==1) {
-      ts = NULL;
-      delete tps[position]; tps[position] = NULL;
-
-      tps.erase(tps.begin()+position); // 0,1,2,3 -> 0,1,3
-    } else {
-      // create new start point from next point
-      ObservationZonePoint *oz = tps[0]->get_oz()->clone(tps[1]->getLocation());
-      StartPoint* sp = new StartPoint(oz,
-                                      task_projection,
-                                      tps[1]->get_waypoint(),
-                                      task_behaviour);
-
-      delete tps[0]; tps[position] = NULL;
-
-      if (!replace(sp, 1)) {
-        // this will leave task in bad state!
-        return false;
-      }
-      ts = sp;
-
-      tps.erase(tps.begin()+position); // 0,1,2,3 -> 0,1,3
-
-    }
-  } else if (tf && (position+1 == tps.size()) && (position>0)) {
-    // special case, have a finish and want to remove it
-
-    // create new finish point from previous point
-    ObservationZonePoint *oz = 
-      tps[position]->get_oz()->clone(tps[position-1]->getLocation());
-
-    FinishPoint* fp = new FinishPoint(oz,
-                                      task_projection,
-                                      tps[position-1]->get_waypoint(),
-                                      task_behaviour);
-
-    delete tps[position]; tps[position] = NULL;
-
-    if (!replace(fp, position-1)) {
-      // this will leave task in bad state!
-      return false;
-    }
-    tf = fp;
-
-    tps.erase(tps.begin()+position); // 0,1,2,3 -> 0,1,3
-
-  } else {
-
-    delete tps[position]; tps[position] = NULL;
-    tps.erase(tps.begin()+position); // 0,1,2,3 -> 0,1,3
-
-  }
+  erase(position);
 
   set_neighbours(position);
   if (position) {
@@ -399,10 +351,6 @@ OrderedTask::remove(const unsigned position)
 bool 
 OrderedTask::append(OrderedTaskPoint* new_tp)
 {
-  if (!check_startfinish(new_tp)) {
-    return false;
-  }
-
   tps.push_back(new_tp);
   if (tps.size()>1) {
     set_neighbours(tps.size()-2);
@@ -413,28 +361,18 @@ OrderedTask::append(OrderedTaskPoint* new_tp)
 }
 
 bool 
-OrderedTask::insert(OrderedTaskPoint* new_tp, const unsigned position)
+OrderedTask::insert(OrderedTaskPoint* new_tp, 
+                    const unsigned position)
 {
-  if (!position) {
-    task_events.construction_error("Error! can't insert at start\n");
-    return false;
-  }
-  if (!check_startfinish(new_tp)) {
-    return false;
-  }
-
-  // inserts at position
   if (activeTaskPoint>=position) {
     activeTaskPoint++;
   }
-  // example, position=1
 
   if (position<tps.size()) {
-    tps.insert(tps.begin()+position, new_tp); // 0,1,2 -> 0,N,1,2
+    tps.insert(tps.begin()+position, new_tp);
   } else {
-    tps.push_back(new_tp);
+    return append(new_tp);
   }
-  // need to update 1,2,3
   set_neighbours(position-1);
   set_neighbours(position);
   set_neighbours(position+1);
@@ -444,32 +382,16 @@ OrderedTask::insert(OrderedTaskPoint* new_tp, const unsigned position)
 }
 
 bool 
-OrderedTask::replace(OrderedTaskPoint* new_tp, const unsigned position)
+OrderedTask::replace(OrderedTaskPoint* new_tp, 
+                     const unsigned position)
 {
-  if ((!position) || (position>=tps.size())) {
+  if (position>=tps.size()) {
     return false;
   }
   if (tps[position]->equals(new_tp)) {
     // nothing to do
     return true;
   }
-
-  if (position==0) {
-    if (StartPoint* ap = dynamic_cast<StartPoint*>(new_tp)) {
-      ts = ap;
-    } else {
-      return false;
-    }
-  }
-  if (tps.size() && (position+1 == tps.size())) {
-    if (FinishPoint* ap = dynamic_cast<FinishPoint*>(new_tp)) {
-      tf = ap;
-    } else {
-      return false;
-    }
-  }
-
-  /// \todo check start/finish type
 
   delete tps[position];
   tps[position] = new_tp;
@@ -478,7 +400,9 @@ OrderedTask::replace(OrderedTaskPoint* new_tp, const unsigned position)
     set_neighbours(position-1);
   }
   set_neighbours(position);
-  set_neighbours(position+1);
+  if (position+1<tps.size()) {
+    set_neighbours(position+1);
+  }
 
   update_geometry();
   return true;
@@ -670,11 +594,9 @@ OrderedTask::getTaskPoint(const unsigned index) const
 
 
 bool 
-OrderedTask::has_start_and_finish() const
+OrderedTask::has_start() const
 {
-  /// \todo to be paranoid, check only single ts and tf?
-
-  if ((ts==NULL) || (tf==NULL)) {
+  if (ts==NULL) {
     return false;
   } else {
     return true;
@@ -682,7 +604,18 @@ OrderedTask::has_start_and_finish() const
 }
 
 bool 
-OrderedTask::has_finished() const
+OrderedTask::has_finish() const
+{
+  if (tf==NULL) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+
+bool 
+OrderedTask::task_finished() const
 {
   if (tf) {
     return (tf->has_entered());

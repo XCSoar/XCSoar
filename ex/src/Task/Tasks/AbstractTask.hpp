@@ -315,10 +315,11 @@ protected:
   const TaskEvents &task_events;
   const TaskBehaviour &task_behaviour;
 
-private:
-  void update_glide_solutions(const AIRCRAFT_STATE &state);
   void update_stats_distances(const GEOPOINT &location,
                               const bool full_update);
+
+private:
+  void update_glide_solutions(const AIRCRAFT_STATE &state);
   void update_stats_times(const AIRCRAFT_STATE &);
   void update_stats_speeds(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   void update_stats_glide(const AIRCRAFT_STATE &state);
