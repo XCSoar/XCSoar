@@ -56,8 +56,8 @@ IDR_WAV_BELL			WAVE	DISCARDABLE		"bitmaps\\bell.wav"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps\\XCSoar.ICO"
-IDI_XCSOARS             ICON    DISCARDABLE     "bitmaps\\xcsoars.ico"
+IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps\\xcsoarswift.ico"
+IDI_XCSOARS             ICON    DISCARDABLE     "bitmaps\\xcsoarswift.ico"
 #endif    // Neutral (Default) resources
 /////////////////////////////////////////////////////////////////////////////
 
