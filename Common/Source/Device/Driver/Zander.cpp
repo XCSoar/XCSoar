@@ -46,7 +46,7 @@ Copyright_License {
 #include <stdlib.h>
 
 static bool
-PZAN1(const TCHAR *String, NMEA_INFO *aGPS_INFO);
+PZAN1(const TCHAR *String, NMEA_INFO *aGPS_INFO, bool enable_baro);
 
 static bool
 PZAN2(const TCHAR *String, NMEA_INFO *aGPS_INFO);
@@ -61,9 +61,7 @@ ZanderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *aGPS_INFO,
                         bool enable_baro)
 {
   if(_tcsncmp(_T("$PZAN1"), String, 6)==0)
-    {
-      return PZAN1(&String[7], aGPS_INFO);
-    }
+    return PZAN1(&String[7], aGPS_INFO, enable_baro);
   if(_tcsncmp(_T("$PZAN2"), String, 6)==0)
     {
       return PZAN2(&String[7], aGPS_INFO);
@@ -89,8 +87,11 @@ const struct DeviceRegister zanderDevice = {
 // local stuff
 
 static bool
-PZAN1(const TCHAR *String, NMEA_INFO *aGPS_INFO)
+PZAN1(const TCHAR *String, NMEA_INFO *aGPS_INFO, bool enable_baro)
 {
+  if (!enable_baro)
+    return true;
+
   TCHAR ctemp[80];
   aGPS_INFO->BaroAltitudeAvailable = true;
   NMEAParser::ExtractParameter(String,ctemp,0);
