@@ -81,19 +81,19 @@ double        TASKSPEEDMODIFY = TOKPH;
 
 UnitDescriptor_t Units::UnitDescriptors[] ={
   {NULL,         1,          0},
-  {TEXT("km"),   0.001,      0},
-  {TEXT("nm"),   0.00053996, 0},
-  {TEXT("sm"),   0.0006214,  0},
-  {TEXT("km/h"), 0.0036,     0},
-  {TEXT("kt"),   0.001944,   0},
-  {TEXT("mph"),  0.002237,   0},
-  {TEXT("m/s"),  1.0,        0},
-  {TEXT("fpm"),  3.281/60.0, 0},
-  {TEXT("m"),    1.0,        0},
-  {TEXT("ft"),   3.281,      0},
-  {TEXT("K"),    1,          0},
-  {TEXT(DEG)TEXT("C"),   1.0,       -273.15},
-  {TEXT(DEG)TEXT("F"),   1.8,       -459.67}
+  { _T("km"), 0.001, 0},
+  { _T("nm"), 0.00053996, 0},
+  { _T("sm"), 0.0006214, 0},
+  { _T("km/h"), 0.0036, 0},
+  { _T("kt"), 0.001944, 0},
+  { _T("mph"), 0.002237, 0},
+  { _T("m/s"), 1.0, 0},
+  { _T("fpm"), 3.281/60.0, 0},
+  { _T("m"), 1.0, 0},
+  { _T("ft"), 3.281, 0},
+  { _T("K"), 1, 0},
+  { _T(DEG)_T("C"), 1.0, -273.15},
+  { _T(DEG)_T("F"), 1.8, -459.67}
 };
 
 Units_t Units::UserDistanceUnit = unKiloMeter;
@@ -158,7 +158,7 @@ void Units::LatitudeToDMS(double Latitude,
 
 bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
   (void)size;
-  TCHAR EW[] = TEXT("WE");
+  TCHAR EW[] = _T("WE");
   int dd, mm, ss;
 
   int sign = Longitude<0 ? 0 : 1;
@@ -182,22 +182,22 @@ bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
           dd++;
           mm -= 60;
         }
-      _stprintf(Buffer, TEXT("%c%03d")TEXT(DEG)TEXT("%02d'%02d\""), EW[sign], dd, mm, ss);
+      _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%02d'%02d\""), EW[sign], dd, mm, ss);
     break;
     case cfDDMMSSss:
       dd = (int)Longitude;
       Longitude = (Longitude - dd) * 60.0;
       mm = (int)(Longitude);
       Longitude = (Longitude - mm) * 60.0;
-      _stprintf(Buffer, TEXT("%c%03d")TEXT(DEG)TEXT("%02d'%05.2f\""), EW[sign], dd, mm, Longitude);
+      _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%02d'%05.2f\""), EW[sign], dd, mm, Longitude);
     break;
     case cfDDMMmmm:
       dd = (int)Longitude;
       Longitude = (Longitude - dd) * 60.0;
-      _stprintf(Buffer, TEXT("%c%03d")TEXT(DEG)TEXT("%06.3f'"), EW[sign], dd, Longitude);
+      _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%06.3f'"), EW[sign], dd, Longitude);
     break;
     case cfDDdddd:
-      _stprintf(Buffer, TEXT("%c%08.4f")TEXT(DEG), EW[sign], Longitude);
+      _stprintf(Buffer, _T("%c%08.4f")_T(DEG), EW[sign], Longitude);
     break;
     default:
 //      assert(false /* undefined coordinateformat */);
@@ -211,7 +211,7 @@ bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
 
 bool Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size){
   (void)size;
-  TCHAR EW[] = TEXT("SN");
+  TCHAR EW[] = _T("SN");
   int dd, mm, ss;
 
   int sign = Latitude<0 ? 0 : 1;
@@ -232,22 +232,22 @@ bool Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size){
         dd++;
         mm -= 60;
       }
-      _stprintf(Buffer, TEXT("%c%02d")TEXT(DEG)TEXT("%02d'%02d\""), EW[sign], dd, mm, ss);
+      _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%02d'%02d\""), EW[sign], dd, mm, ss);
     break;
     case cfDDMMSSss:
       dd = (int)Latitude;
       Latitude = (Latitude - dd) * 60.0;
       mm = (int)(Latitude);
       Latitude = (Latitude - mm) * 60.0;
-      _stprintf(Buffer, TEXT("%c%02d")TEXT(DEG)TEXT("%02d'%05.2f\""), EW[sign], dd, mm, Latitude);
+      _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%02d'%05.2f\""), EW[sign], dd, mm, Latitude);
     break;
     case cfDDMMmmm:
       dd = (int)Latitude;
       Latitude = (Latitude - dd) * 60.0;
-      _stprintf(Buffer, TEXT("%c%02d")TEXT(DEG)TEXT("%06.3f'"), EW[sign], dd, Latitude);
+      _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%06.3f'"), EW[sign], dd, Latitude);
     break;
     case cfDDdddd:
-      _stprintf(Buffer, TEXT("%c%07.4f")TEXT(DEG), EW[sign], Latitude);
+      _stprintf(Buffer, _T("%c%07.4f")_T(DEG), EW[sign], Latitude);
     break;
     default:
 //      assert(false /* undefined coordinateformat */);
@@ -450,7 +450,7 @@ bool Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size){
 //  prec = max(prec, 0);
   prec = 0;
 
-  _stprintf(sTmp, TEXT("%.*f%s"), prec, Altitude, pU->Name);
+  _stprintf(sTmp, _T("%.*f%s"), prec, Altitude, pU->Name);
 
   if (_tcslen(sTmp) < size-1){
     _tcscpy(Buffer, sTmp);
@@ -493,7 +493,7 @@ bool Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size){
 //  prec = max(prec, 0);
   prec = 0;
 
-  _stprintf(sTmp, TEXT("%+.*f%s"), prec, Altitude, pU->Name);
+  _stprintf(sTmp, _T("%+.*f%s"), prec, Altitude, pU->Name);
 
   if (_tcslen(sTmp) < size-1){
     _tcscpy(Buffer, sTmp);
@@ -542,7 +542,7 @@ bool Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size){
     }
   }
 
-  _stprintf(sTmp, TEXT("%.*f%s"), prec, value, pU->Name);
+  _stprintf(sTmp, _T("%.*f%s"), prec, value, pU->Name);
 
   if (_tcslen(sTmp) < size-1){
     _tcscpy(Buffer, sTmp);
@@ -590,8 +590,8 @@ bool Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer, si
     }
   }
 
-//  _stprintf(sTmp, TEXT("%.*f%s"), prec, value, pU->Name);
-  _stprintf(sTmp, TEXT("%.*f"), prec, value);
+//  _stprintf(sTmp, _T("%.*f%s"), prec, value, pU->Name);
+  _stprintf(sTmp, _T("%.*f"), prec, value);
 
   if (_tcslen(sTmp) < size-1){
     _tcscpy(Buffer, sTmp);
@@ -690,11 +690,9 @@ void Units::TimeToText(TCHAR* text, int d) {
   mins = (dd/60-hours*60);
   hours = hours % 24;
   if (negative) {
-    _stprintf(text, TEXT("-%02d:%02d"),
-              hours, mins);
+    _stprintf(text, _T("-%02d:%02d"), hours, mins);
   } else {
-    _stprintf(text, TEXT("%02d:%02d"),
-              hours, mins);
+    _stprintf(text, _T("%02d:%02d"), hours, mins);
   }
 }
 
