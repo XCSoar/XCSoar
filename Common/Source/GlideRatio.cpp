@@ -41,6 +41,7 @@ Copyright_License {
 #include "Math/LowPassFilter.hpp"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
+#include "SettingsComputer.hpp"
 
 #include <math.h>
 #include <string.h>

@@ -41,13 +41,14 @@ Copyright_License {
 
 #include "Sizes.h"
 #include "SettingsAirspace.hpp"
-#include "SettingsComputer.hpp"
 #include "Screen/shapelib/mapshape.h"
 #include "GeoPoint.hpp"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
+
+struct SETTINGS_COMPUTER;
 
 struct AIRSPACE_ACK
 {

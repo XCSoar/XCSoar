@@ -42,7 +42,8 @@ Copyright_License {
 #define MAXSAFETYSPEED 200
 
 #include "Sizes.h"
-#include "SettingsComputer.hpp"
+
+struct SETTINGS_COMPUTER;
 
 extern unsigned POLARID;
 extern double POLAR[POLARSIZE];

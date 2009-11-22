@@ -44,11 +44,12 @@ Copyright_License {
 #include "Sizes.h"
 
 #include "GeoPoint.hpp"
-#include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"
 
 #include <stdio.h>
+
+struct SETTINGS_COMPUTER;
 
 typedef struct _START_POINT
 {

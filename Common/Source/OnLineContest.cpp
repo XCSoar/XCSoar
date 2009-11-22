@@ -42,6 +42,7 @@ Copyright_License {
 #include "Math/Constants.h"
 #include "McReady.h"
 #include "Math/Earth.hpp"
+#include "SettingsComputer.hpp"
 
 #include <math.h>
 

@@ -40,7 +40,6 @@ Copyright_License {
 
 #include "Math/FastMath.h"
 #include "Units.hpp"
-#include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "Screen/shapelib/mapprimitive.h"
 #include "Sizes.h"
@@ -49,6 +48,7 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
+struct SETTINGS_COMPUTER;
 class Canvas;
 
 class MapWindowProjection {

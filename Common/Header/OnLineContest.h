@@ -43,8 +43,9 @@ Copyright_License {
 #define MATSIZE (MAX_OLC_POINTS+1)*(MAX_OLC_POINTS/2) // for even MAX_OLC_POINTS
 
 #include "Thread/Mutex.hpp"
-#include "SettingsComputer.hpp"
 #include "GeoPoint.hpp"
+
+struct SETTINGS_COMPUTER;
 
 typedef struct _OLCSolution
 {
