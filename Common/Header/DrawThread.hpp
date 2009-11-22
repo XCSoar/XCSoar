@@ -78,6 +78,13 @@ public:
     mutexRun.Unlock();
   }
 
+private:
+  /**
+   * Exchanges blackboard data between the device (device_blackboard)
+   * and the #MapWindow.
+   */
+  void ExchangeBlackboard();
+
 protected:
   virtual void run();
 };

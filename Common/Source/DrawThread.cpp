@@ -40,6 +40,26 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Protection.hpp"
+#include "DeviceBlackboard.hpp"
+
+void
+DrawThread::ExchangeBlackboard()
+{
+  /* send device data to the MapWindow */
+  mutexBlackboard.Lock();
+  map.ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
+                     device_blackboard.SettingsComputer(),
+                     device_blackboard.SettingsMap());
+  mutexBlackboard.Unlock();
+
+  /* recalculate the MapWindow projection */
+  map.UpdateProjection();
+
+  /* return MapWindow projection to the device_blackboard */
+  mutexBlackboard.Lock();
+  device_blackboard.ReadMapProjection(map.MapProjection());
+  mutexBlackboard.Unlock();
+}
 
 /**
  * Main loop of the DrawThread
@@ -53,7 +73,7 @@ DrawThread::run()
   globalRunningEvent.wait();
 
   // Get data from the DeviceBlackboard
-  map.ExchangeBlackboard();
+  ExchangeBlackboard();
 
   // take control (or wait for the resume())
   mutexRun.Lock();
@@ -77,7 +97,7 @@ DrawThread::run()
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
       // Get data from the DeviceBlackboard
-      map.ExchangeBlackboard();
+      ExchangeBlackboard();
 
       // take control (or wait for the resume())
       mutexRun.Lock();

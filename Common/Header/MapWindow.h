@@ -104,10 +104,16 @@ class MapWindow
     SetRect(&MapRect, 0, 0, rc.right - rc.left, rc.bottom - rc.top);
   }
 
-  void ApplyScreenSize();
+  void ReadBlackboard(const NMEA_INFO &nmea_info,
+                      const DERIVED_INFO &derived_info,
+                      const SETTINGS_COMPUTER &settings_computer,
+                      const SETTINGS_MAP &settings_map);
 
-  // input events or reused code
-  void ExchangeBlackboard();
+  void UpdateProjection();
+
+  const MapWindowProjection &MapProjection() const {
+    return *this;
+  };
 
  private:
 
@@ -118,12 +124,7 @@ class MapWindow
   // state
   BOOL     Initialised;
 
-  void     ReadBlackboard(const NMEA_INFO &nmea_info,
-                          const DERIVED_INFO &derived_info,
-                          const SETTINGS_COMPUTER &settings_computer,
-                          const SETTINGS_MAP &settings_map);
-
-  void SendBlackboard();
+  void ApplyScreenSize();
 
   // display management
   void          RefreshMap();

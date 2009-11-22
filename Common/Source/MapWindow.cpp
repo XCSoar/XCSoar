@@ -40,7 +40,6 @@ Copyright_License {
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "LogFile.hpp"
-#include "Protection.hpp"
 #include "UtilsSystem.hpp"
 #include "Math/FastMath.h"
 #include "Dialogs.h"
@@ -161,8 +160,6 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
   */
 }
 
-#include "DeviceBlackboard.hpp"
-
 /**
  * Copies the given basic and calculated info to the MapWindowBlackboard
  * and reads the Settings from the DeviceBlackboard.
@@ -175,19 +172,16 @@ MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
                           const SETTINGS_COMPUTER &settings_computer,
                           const SETTINGS_MAP &settings_map)
 {
-  ScopeLock protect(mutexBlackboard);
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
   ReadSettingsComputer(settings_computer);
   ReadSettingsMap(settings_map);
 }
 
 void
-MapWindow::SendBlackboard()
+MapWindow::UpdateProjection()
 {
-  MapWindowProjection::ExchangeBlackboard(Calculated(),
-                                          SettingsMap());
-  ScopeLock protect(mutexBlackboard);
-  device_blackboard.ReadMapProjection(*this);
+  ApplyScreenSize();
+  MapWindowProjection::ExchangeBlackboard(Calculated(), SettingsMap());
 }
 
 typedef struct {
@@ -281,19 +275,6 @@ MapWindow::Idle(const bool do_force)
 	    | rasp_idle.dirty));
 
   return still_dirty;
-}
-
-/**
- * Exchanges blackboard data with the DeviceBlackboard
- */
-void
-MapWindow::ExchangeBlackboard(void)
-{
-  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
-                 device_blackboard.SettingsComputer(),
-                 device_blackboard.SettingsMap());
-  ApplyScreenSize();
-  SendBlackboard();
 }
 
 /**
