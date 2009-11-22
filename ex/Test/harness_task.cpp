@@ -67,7 +67,9 @@ void task_report(TaskManager& task_manager, const char* text)
     task_manager.Accept(tv);
   }
   task_manager.print(ac);
-  wait_prompt(0);
+  if (interactive>1) {
+    wait_prompt(0);
+  }
 }
 
 

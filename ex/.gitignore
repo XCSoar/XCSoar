@@ -31,3 +31,4 @@ Test/test_mc
 Test/test_trees
 Test/test_task
 Test/test_waypoints
+Test/test_flight

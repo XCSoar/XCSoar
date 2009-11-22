@@ -27,7 +27,7 @@ bool test_flight(TaskManager &task_manager,
   bool do_print;
 
   do {
-    do_print = (print_counter++ % 1 ==0);
+    do_print = (print_counter++ % output_skip ==0);
 
     if (do_print) {
       // task_manager.Accept(tv);
@@ -88,15 +88,12 @@ bool test_all(int test_num) {
   return 0;
 }
 
-#ifndef NEWTASK
-int main() {
+int main(int argc, char** argv) {
   ::InitSineTable();
-  
-  verbose = true;
-  
-  test_all(2);
-//  test_all(3);
-}
-#endif
 
+  if (!parse_args(argc,argv)) {
+    return 0;
+  }
+  test_all(2);
+}
 

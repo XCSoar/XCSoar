@@ -49,9 +49,12 @@ bool test_as(const unsigned n, std::ostream &fo) {
 }
 
 
-int main() {
-  interactive = false;
+int main(int argc, char** argv) {
   ::InitSineTable();
+
+  if (!parse_args(argc,argv)) {
+    return 0;
+  }
 
   std::ofstream fw("results/res-tree-wp.txt");
 

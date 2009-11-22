@@ -6,8 +6,9 @@
 #endif
 
 int n_samples = 0;
-bool interactive = true;
-bool verbose = false;
+int interactive = 0;
+int verbose = 0;
+int output_skip = 1;
 
 #ifdef INSTRUMENT_TASK
 extern long count_mc;
@@ -86,3 +87,67 @@ char wait_prompt(const double time) {
   test 4 111742: 70 ms/c
 
 */
+
+
+bool parse_args(int argc, char** argv) 
+{
+  while (1)    {
+    static struct option long_options[] =
+      {
+	/* These options set a flag. */
+	{"verbose", optional_argument,       0, 'v'},
+	{"interactive", optional_argument,   0, 'i'},
+	{"outputskip", required_argument,       0, 's'},
+	{0, 0, 0, 0}
+      };
+    /* getopt_long stores the option index here. */
+    int option_index = 0;
+    
+    int c = getopt_long (argc, argv, "s:v:i:",
+                         long_options, &option_index);
+    /* Detect the end of the options. */
+    if (c == -1)
+      break;
+    
+    switch (c) {
+    case 0:
+      /* If this option set a flag, do nothing else now. */
+      if (long_options[option_index].flag != 0)
+	break;
+      printf ("option %s", long_options[option_index].name);
+      if (optarg)
+	printf (" with arg %s", optarg);
+      printf ("\n");
+      break;
+    case 's':
+      output_skip = atoi(optarg);
+      break;
+    case 'v':
+      if (optarg) {
+        verbose = atoi(optarg);
+      } else {
+        verbose = 1;
+      }
+      break;
+    case 'i':
+      if (optarg) {
+        interactive = atoi(optarg);
+      } else {
+        interactive = 1;
+      }
+      break;
+    case '?':
+      /* getopt_long already printed an error message. */
+      return false;
+      break;      
+    default:
+      return false;
+    }
+  }
+
+  if (interactive && !verbose) {
+    verbose=1;
+  }
+
+  return true;
+}

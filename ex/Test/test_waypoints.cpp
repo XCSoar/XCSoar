@@ -36,10 +36,13 @@ bool test_lookup(const Waypoints& waypoints)
   return (wp!= NULL);
 }
 
-int main()
+int main(int argc, char** argv)
 {
-  interactive = false;
   ::InitSineTable();
+
+  if (!parse_args(argc,argv)) {
+    return 0;
+  }
 
   plan_tests(4);
 

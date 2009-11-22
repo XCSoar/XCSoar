@@ -2,13 +2,15 @@
 #include "harness_waypoints.hpp"
 #include "test_debug.hpp"
 
-int main()
+int main(int argc, char** argv)
 {
-  interactive = false;
   ::InitSineTable();
 
+  if (!parse_args(argc,argv)) {
+    return 0;
+  }
+
   plan_tests(6);
-  verbose = true;
 
   TaskBehaviour task_behaviour;
   TaskEvents default_events;

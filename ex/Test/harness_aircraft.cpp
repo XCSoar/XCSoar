@@ -9,7 +9,7 @@
 */
 
 void print_mode(const char* mode) {
-  if (verbose) {
+  if (verbose>1) {
     printf("%s",mode);
   }
 }
