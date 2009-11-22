@@ -50,6 +50,7 @@ Copyright_License {
 #include "Screen/Animation.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Viewport.hpp"
+#include "Screen/Bitmap.hpp"
 #include "DataField/Base.hpp"
 #include "resource.h"
 

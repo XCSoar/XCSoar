@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "DataField/FileReader.hpp"
 #include "LogFile.hpp"
+#include "Screen/Bitmap.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "Version.hpp"
