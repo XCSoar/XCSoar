@@ -515,11 +515,11 @@ double MapWindowProjection::LimitMapScale(double value,
     }
   }
 
-  if (ScaleListCount>0) {
-    return FindMapScale(max(minreasonable,min(160.0,value)));
-  } else {
-    return max(minreasonable,min(160.0,value));
-  }
+  value = max(minreasonable, min(160.0, value));
+  if (ScaleListCount > 0)
+    value = FindMapScale(value);
+
+  return value;
 }
 
 
