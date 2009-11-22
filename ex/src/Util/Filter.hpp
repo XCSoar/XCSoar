@@ -9,7 +9,8 @@ public:
  * 
  * @param cutoff_wavelength 3dB cutoff wavelength (in cycles) of filter design
  */
-  Filter(const double cutoff_wavelength);
+  Filter(const double cutoff_wavelength,
+    const bool bessel=true);
 
 /** 
  * Resets filter to produce static value

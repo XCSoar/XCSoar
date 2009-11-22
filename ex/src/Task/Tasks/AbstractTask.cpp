@@ -108,7 +108,7 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
   update_stats_glide(state);
 
   if (!has_finished()) {
-    update_stats_speeds(state, state_last);
+    update_stats_speeds(state, state_last); // JMW 1
   }
   return retval;
 }

@@ -6,22 +6,33 @@
 // ref http://unicorn.us.com/alex/2polefilters.html
 
 
-Filter::Filter(const double cutoff_wavelength)
+Filter::Filter(const double cutoff_wavelength,
+               const bool bessel)
 {
   double sample_freq = 1.0;
   double n= 1.0;
-  // Bessel
-  double c= pow((sqrt(pow(2.0,1.0/n)-0.75)-0.5),-0.5)/sqrt(3.0);
+  double c;
+  double g;
+  double p;
+
+  if (bessel) {
+    // Bessel
+    c= pow((sqrt(pow(2.0,1.0/n)-0.75)-0.5),-0.5)/sqrt(3.0);
+    g= 3;
+    p= 3;
+  } else {
+    // Critically damped
+    c = pow((pow(2.0,1.0/(2.0*n))-1),-0.5);
+    g= 1;
+    p= 2;
+  }
+
   double f_star = c/(sample_freq*cutoff_wavelength);
-
   assert(f_star<1.0/8.0);
-
   double omega0 = tan(3.1415926*f_star);
-  double g= 3;
-  double p= 3;
   double K1 = p*omega0;
   double K2 = g*omega0*omega0;
-
+    
   a[0] = K2/(1.0+K1+K2);
   a[1] = 2*a[0];
   a[2] = a[0];

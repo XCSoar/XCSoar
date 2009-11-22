@@ -2,13 +2,15 @@
 #include "Navigation/Aircraft.hpp"
 #include <algorithm>
 
+#define N_AV 6
 
 DistanceStat::DistanceStat():
   distance(0.0),
-  distance_last(0.0),
   speed(0.0),
-  counter(0),
-  lpf(60.0)
+  av_dist(N_AV),
+  dist_lpf(60.0,false),
+  df(0.0),
+  v_lpf(100.0,false)
 {
 
 }
@@ -42,34 +44,47 @@ void DistanceTravelledStat::calc_speed(const ElementStat* es)
 
 void DistanceStat::calc_incremental_speed(const double dt)
 {  
+  /// \todo handle case where dt>1
   if (dt>0) {
-    if (counter++ % 5 == 0) {
-      double d = lpf.update(distance);
-      double v = (distance_last-d)/(5*dt);
-      distance_last = d;
-      speed_incremental = v;
+    if (av_dist.update(distance)) {
+      speed_incremental = 
+        -v_lpf.update(
+          df.update(
+            dist_lpf.update(
+              av_dist.average()
+              )
+            )/(N_AV*dt));
+      av_dist.reset();
     }
   } else {
-    distance_last = lpf.reset(distance);
+    df.reset(dist_lpf.reset(distance));
+    v_lpf.reset(speed);
     speed_incremental = speed;
-    counter=0;
+    av_dist.reset();
   }
 }
 
 void DistanceTravelledStat::calc_incremental_speed(const double dt)
 {
+  /// \todo handle case where dt>1
+
   // negative of normal
   if (dt>0) {
-    if (counter++ % 5 == 0) {
-      double d = lpf.update(distance);
-      double v = (d-distance_last)/(5*dt);
-      distance_last = d;
-      speed_incremental = v;
+    if (av_dist.update(distance)) {
+      speed_incremental = 
+        v_lpf.update(
+          df.update(
+            dist_lpf.update(
+              av_dist.average()
+              )
+            )/(N_AV*dt));
+      av_dist.reset();
     }
   } else {
-    distance_last = lpf.reset(distance);
+    df.reset(dist_lpf.reset(distance));
+    v_lpf.reset(speed);
     speed_incremental = speed;
-    counter=0;
+    av_dist.reset();
   }
 }
 

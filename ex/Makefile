@@ -140,6 +140,8 @@ OBJS	:=\
 	src/Math/Geometry.o \
 	src/Math/FastMath.o \
 	src/Math/Earth.o \
+	src/Util/AvFilter.o \
+	src/Util/DiffFilter.o \
 	src/Util/Filter.o \
 	src/Util/Gradient.o \
 	src/Util/Printing.o \

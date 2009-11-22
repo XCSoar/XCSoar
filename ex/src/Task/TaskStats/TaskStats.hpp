@@ -6,6 +6,8 @@
 #include <iostream>
 #endif
 #include "Util/Filter.hpp"
+#include "Util/AvFilter.hpp"
+#include "Util/DiffFilter.hpp"
 
 struct AIRCRAFT_STATE;
 
@@ -76,11 +78,12 @@ public:
 
 protected:
   double distance;
-  double distance_last;
   double speed;
   double speed_incremental;
-  int counter;
-  Filter lpf;
+  AvFilter av_dist;
+  Filter dist_lpf;
+  DiffFilter df;
+  Filter v_lpf;
 };
 
 class DistanceRemainingStat:
