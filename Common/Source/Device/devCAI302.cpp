@@ -47,12 +47,10 @@ Copyright_License {
 #include "Device/devCAI302.h"
 #include "Device/Internal.hpp"
 #include "WayPoint.hpp"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Device/Parser.h"
 #include "Device/Port.h"
 #include "Math/Units.h"
-#include "SettingsComputer.hpp"
 #include "McReady.h"
 #include "NMEA/Info.h"
 

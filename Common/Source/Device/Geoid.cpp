@@ -42,9 +42,9 @@ Copyright_License {
  * @see http://en.wikipedia.org/wiki/EGM96
  */
 
-#include "XCSoar.h"
-#include "Math/FastMath.h"
+#include "Device/Geoid.h"
 #include "Interface.hpp"
+
 #include <stdlib.h>
 #include <tchar.h>
 

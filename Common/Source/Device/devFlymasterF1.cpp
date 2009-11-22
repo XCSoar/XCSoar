@@ -38,11 +38,9 @@ Copyright_License {
 
 #include "Device/devFlymasterF1.h"
 #include "Device/Internal.hpp"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
-#include "Device/Port.h"
 #include "NMEA/Info.h"
 
 #include <tchar.h>

@@ -38,10 +38,9 @@ Copyright_License {
 
 #include "Device/devAltairPro.h"
 #include "Device/Internal.hpp"
-#include "Blackboard.hpp"
-#include "Device/Port.h"
 #include "Math/Pressure.h"
 #include "Math/Units.h"
+#include "NMEA/Info.h"
 
 #include <tchar.h>
 #include <stdlib.h>

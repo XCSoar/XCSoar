@@ -36,15 +36,14 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Protection.hpp"
-#include "Interface.hpp"
 #include "Device/Port.h"
+#include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Device/device.h"
 #include "Message.h"
+
 #include <windows.h>
 #include <tchar.h>
 

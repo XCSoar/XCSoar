@@ -50,7 +50,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
-#include "Device/Port.h"
 #include "NMEA/Info.h"
 
 #include <tchar.h>

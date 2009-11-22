@@ -43,21 +43,18 @@ Copyright_License {
 
 #include "Device/devVolkslogger.h"
 #include "Device/Internal.hpp"
-#include "XCSoar.h"
-#include "Protection.hpp"
 #include "Interface.hpp"
 #include "Language.hpp"
 #include "Task.h"
+#include "SettingsTask.hpp"
 #include "UtilsText.hpp"
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
-#include "Device/Port.h"
-#include "WayPointList.hpp"
-#include "Components.hpp"
 #include "Device/Volkslogger/vlapi2.h"
 #include "Device/Volkslogger/vlapihlp.h"
 #include "Components.hpp"
 #include "WayPointList.hpp"
+#include "NMEA/Info.h"
 
 class VolksloggerDevice : public AbstractDevice {
 private:

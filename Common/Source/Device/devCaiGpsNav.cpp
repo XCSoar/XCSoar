@@ -48,7 +48,6 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Device/Port.h"
 
-#include <windows.h>
 #include <tchar.h>
 
 #define  CtrlC  0x03

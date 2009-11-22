@@ -38,11 +38,8 @@ Copyright_License {
 
 #include "Device/devBorgeltB50.h"
 #include "Device/Internal.hpp"
-#include "XCSoar.h"
 #include "Protection.hpp"
-#include "SettingsComputer.hpp"
 #include "Device/Parser.h"
-#include "Device/Port.h"
 #include "Math/Units.h"
 #include "McReady.h"
 #include "NMEA/Info.h"
