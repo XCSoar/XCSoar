@@ -101,7 +101,6 @@ class InfoBox : public BufferWindow {
     RECT   recValue;
     RECT   recComment;
     const Bitmap *mhBitmapUnit;
-    HBITMAP mBufBitMap;
     POINT  mBitmapUnitPos;
     POINT  mBitmapUnitSize;
 
