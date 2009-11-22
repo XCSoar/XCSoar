@@ -39,12 +39,12 @@ Copyright_License {
 #include "Device/devAltairPro.h"
 #include "Device/Internal.hpp"
 #include "Blackboard.hpp"
-#include "UtilsText.hpp"
 #include "Device/Port.h"
 #include "Math/Pressure.h"
 #include "Math/Units.h"
 
 #include <tchar.h>
+#include <stdlib.h>
 
 class AltairProDevice : public AbstractDevice {
 private:
@@ -80,7 +80,7 @@ AltairProDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
     // get <alt>
 
-    lastAlt = StrToDouble(String, NULL);
+    lastAlt = _tcstod(String, NULL);
 
     String = _tcschr(String, ',');
     if (String == NULL)

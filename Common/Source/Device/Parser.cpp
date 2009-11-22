@@ -42,7 +42,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include <math.h>
-#include "UtilsText.hpp"
 #include "Audio/VarioSound.h"
 #include "Device/device.h"
 #include "Device/Geoid.h"
@@ -386,7 +385,7 @@ int NAVWarn(TCHAR c)
  */
 double NMEAParser::ParseAltitude(const TCHAR *value, const TCHAR *format)
 {
-  double alt = StrToDouble(value, NULL);
+  double alt = _tcstod(value, NULL);
 
   if (format[0] == _T('f') || format[0] == _T('F'))
     alt /= TOFEET;
@@ -517,7 +516,7 @@ bool NMEAParser::GSA(const TCHAR *String,
   for (int i = 0; i < MAXSATELLITES; i++)
   {
     if (3+i < (int) nparams) {
-      GPS_INFO->SatelliteIDs[i] = (int)(StrToDouble(params[2+i], NULL)); // 2 because params is 0-index
+      GPS_INFO->SatelliteIDs[i] = (int)(_tcstod(params[2+i], NULL)); // 2 because params is 0-index
       if (GPS_INFO->SatelliteIDs[i] > 0)
 	iSatelliteCount ++;
     }
@@ -563,17 +562,17 @@ bool NMEAParser::GLL(const TCHAR *String,
   GPS_INFO->NAVWarning = !gpsValid;
 
 
-  double ThisTime = TimeModify(StrToDouble(params[4],NULL), GPS_INFO);
+  double ThisTime = TimeModify(_tcstod(params[4], NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 
   double tmplat;
   double tmplon;
 
-  tmplat = MixedFormatToDegrees(StrToDouble(params[0], NULL));
+  tmplat = MixedFormatToDegrees(_tcstod(params[0], NULL));
   tmplat = NorthOrSouth(tmplat, params[1][0]);
 
-  tmplon = MixedFormatToDegrees(StrToDouble(params[2], NULL));
+  tmplon = MixedFormatToDegrees(_tcstod(params[2], NULL));
   tmplon = EastOrWest(tmplon,params[3][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
@@ -626,16 +625,16 @@ bool NMEAParser::RMB(const TCHAR *String,
 
   GPS_INFO->NAVWarning = NAVWarn(params[0][0]);
 
-  GPS_INFO->CrossTrackError = NAUTICALMILESTOMETRES * StrToDouble(params[1], NULL);
+  GPS_INFO->CrossTrackError = NAUTICALMILESTOMETRES * _tcstod(params[1], NULL);
   GPS_INFO->CrossTrackError = LeftOrRight(GPS_INFO->CrossTrackError,params[2][0]);
 
   _tcscpy(ctemp, params[4]);
   ctemp[WAY_POINT_ID_SIZE] = '\0';
   _tcscpy(GPS_INFO->WaypointID,ctemp);
 
-  GPS_INFO->WaypointDistance = NAUTICALMILESTOMETRES * StrToDouble(params[9], NULL);
-  GPS_INFO->WaypointBearing = StrToDouble(params[10], NULL);
-  GPS_INFO->WaypointSpeed = KNOTSTOMETRESSECONDS * StrToDouble(params[11], NULL);
+  GPS_INFO->WaypointDistance = NAUTICALMILESTOMETRES * _tcstod(params[9], NULL);
+  GPS_INFO->WaypointBearing = _tcstod(params[10], NULL);
+  GPS_INFO->WaypointSpeed = KNOTSTOMETRESSECONDS * _tcstod(params[11], NULL);
   */
 
   return true;
@@ -678,7 +677,7 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!activeGPS)
     return true;
 
-  double speed = StrToDouble(params[6], NULL);
+  double speed = _tcstod(params[6], NULL);
 
   if (speed>2.0) {
     GPS_INFO->MovementDetected = true;
@@ -706,17 +705,17 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   date_buffer[2] = '\0';
   GPS_INFO->Day = _tcstol(&date_buffer[0], &Stop, 10);
 
-  double ThisTime = TimeModify(StrToDouble(params[0],NULL), GPS_INFO);
+  double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 
   double tmplat;
   double tmplon;
 
-  tmplat = MixedFormatToDegrees(StrToDouble(params[2], NULL));
+  tmplat = MixedFormatToDegrees(_tcstod(params[2], NULL));
   tmplat = NorthOrSouth(tmplat, params[3][0]);
 
-  tmplon = MixedFormatToDegrees(StrToDouble(params[4], NULL));
+  tmplon = MixedFormatToDegrees(_tcstod(params[4], NULL));
   tmplon = EastOrWest(tmplon,params[5][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
@@ -728,7 +727,7 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   if (GPS_INFO->Speed>1.0) {
     // JMW don't update bearing unless we're moving
-    GPS_INFO->TrackBearing = AngleLimit360(StrToDouble(params[7], NULL));
+    GPS_INFO->TrackBearing = AngleLimit360(_tcstod(params[7], NULL));
   }
 
   if (!GPS_INFO->Replay) {
@@ -808,7 +807,7 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   GGAAvailable = true;
 
-  nSatellites = (int)(min(16.0, StrToDouble(params[6], NULL)));
+  nSatellites = (int)(min(16.0, _tcstod(params[6], NULL)));
   if (nSatellites==0) {
     gpsValid = false;
   }
@@ -816,19 +815,19 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!activeGPS)
     return true;
 
-  GPS_INFO->SatellitesUsed = (int)(min(16,StrToDouble(params[6], NULL)));
+  GPS_INFO->SatellitesUsed = (int)(min(16,_tcstod(params[6], NULL)));
 
-  double ThisTime = TimeModify(StrToDouble(params[0],NULL), GPS_INFO);
+  double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 
   double tmplat;
   double tmplon;
 
-  tmplat = MixedFormatToDegrees(StrToDouble(params[1], NULL));
+  tmplat = MixedFormatToDegrees(_tcstod(params[1], NULL));
   tmplat = NorthOrSouth(tmplat, params[2][0]);
 
-  tmplon = MixedFormatToDegrees(StrToDouble(params[3], NULL));
+  tmplon = MixedFormatToDegrees(_tcstod(params[3], NULL));
   tmplon = EastOrWest(tmplon,params[4][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
@@ -1009,9 +1008,9 @@ bool NMEAParser::PTAS1(const TCHAR *String,
 {
   double wnet,baralt,vtas;
 
-  wnet = (StrToDouble(params[0],NULL)-200)/(10*TOKNOTS);
-  baralt = max(0.0, (StrToDouble(params[2],NULL)-2000)/TOFEET);
-  vtas = StrToDouble(params[3],NULL)/TOKNOTS;
+  wnet = (_tcstod(params[0], NULL) - 200) / (10 * TOKNOTS);
+  baralt = max(0.0, (_tcstod(params[2], NULL) - 2000) / TOFEET);
+  vtas = _tcstod(params[3], NULL) / TOKNOTS;
 
   GPS_INFO->AirspeedAvailable = true;
   GPS_INFO->TrueAirspeed = vtas;

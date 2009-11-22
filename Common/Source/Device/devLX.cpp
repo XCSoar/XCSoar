@@ -40,7 +40,6 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "UtilsText.hpp"
 #include "Math/Pressure.h"
 #include "Math/Units.h"
 #include "Device/Parser.h"
@@ -50,6 +49,7 @@ Copyright_License {
 #include "NMEA/Info.h"
 
 #include <tchar.h>
+#include <stdlib.h>
 
 class LXDevice : public AbstractDevice {
 public:
@@ -112,7 +112,7 @@ LXWP2(const TCHAR *String, NMEA_INFO *GPS_INFO)
   (void)GPS_INFO;
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GlidePolar::SetMacCready(StrToDouble(ctemp,NULL));
+  GlidePolar::SetMacCready(_tcstod(ctemp, NULL));
   return true;
 }
 
@@ -137,10 +137,10 @@ LXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   double alt, airspeed;
 
   NMEAParser::ExtractParameter(String,ctemp,1);
-  airspeed = StrToDouble(ctemp,NULL)/TOKPH;
+  airspeed = _tcstod(ctemp, NULL) / TOKPH;
 
   NMEAParser::ExtractParameter(String,ctemp,2);
-  alt = StrToDouble(ctemp,NULL);
+  alt = _tcstod(ctemp, NULL);
 
   GPS_INFO->IndicatedAirspeed = airspeed/AirDensityRatio(alt);
   GPS_INFO->TrueAirspeed = airspeed;
@@ -151,7 +151,7 @@ LXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   }
 
   NMEAParser::ExtractParameter(String,ctemp,3);
-  GPS_INFO->Vario = StrToDouble(ctemp,NULL);
+  GPS_INFO->Vario = _tcstod(ctemp, NULL);
 
   GPS_INFO->AirspeedAvailable = true;
   GPS_INFO->VarioAvailable = true;

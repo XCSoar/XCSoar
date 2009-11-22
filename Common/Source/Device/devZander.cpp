@@ -43,8 +43,9 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
-#include "UtilsText.hpp"
 #include "NMEA/Info.h"
+
+#include <stdlib.h>
 
 static bool
 PZAN1(const TCHAR *String, NMEA_INFO *aGPS_INFO);
@@ -95,7 +96,7 @@ PZAN1(const TCHAR *String, NMEA_INFO *aGPS_INFO)
   TCHAR ctemp[80];
   aGPS_INFO->BaroAltitudeAvailable = true;
   NMEAParser::ExtractParameter(String,ctemp,0);
-  aGPS_INFO->BaroAltitude = AltitudeToQNHAltitude(StrToDouble(ctemp,NULL));
+  aGPS_INFO->BaroAltitude = AltitudeToQNHAltitude(_tcstod(ctemp, NULL));
   return true;
 }
 
@@ -107,11 +108,11 @@ PZAN2(const TCHAR *String, NMEA_INFO *aGPS_INFO)
   double vtas, wnet, vias;
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  vtas = StrToDouble(ctemp,NULL)/3.6;
+  vtas = _tcstod(ctemp, NULL) / 3.6;
   // JMW 20080721 fixed km/h->m/s conversion
 
   NMEAParser::ExtractParameter(String,ctemp,1);
-  wnet = (StrToDouble(ctemp,NULL)-10000)/100; // cm/s
+  wnet = (_tcstod(ctemp, NULL) - 10000) / 100; // cm/s
   aGPS_INFO->Vario = wnet;
 
   if (aGPS_INFO->BaroAltitudeAvailable) {

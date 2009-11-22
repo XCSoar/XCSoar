@@ -47,7 +47,6 @@ Copyright_License {
 #include "Device/Port.h"
 #include "Registry.hpp"
 #include "Device/devVega.h"
-#include "UtilsText.hpp"
 #include "DeviceBlackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "InputEvents.h"
@@ -55,6 +54,7 @@ Copyright_License {
 #include "McReady.h"
 
 #include <tchar.h>
+#include <stdlib.h>
 #include <math.h>
 
 #ifndef _MSC_VER
@@ -207,11 +207,11 @@ PDAAV(const TCHAR *String, NMEA_INFO *GPS_INFO)
   (void)GPS_INFO;
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-//  unsigned short beepfrequency = (unsigned short)StrToDouble(ctemp, NULL);
+//  unsigned short beepfrequency = (unsigned short)_tcstod(ctemp, NULL);
   NMEAParser::ExtractParameter(String,ctemp,1);
-//  unsigned short soundfrequency = (unsigned short)StrToDouble(ctemp, NULL);
+//  unsigned short soundfrequency = (unsigned short)_tcstod(ctemp, NULL);
   NMEAParser::ExtractParameter(String,ctemp,2);
-//  unsigned char soundtype = (unsigned char)StrToDouble(ctemp, NULL);
+//  unsigned char soundtype = (unsigned char)_tcstod(ctemp, NULL);
 
   // Temporarily commented out - function as yet undefined
   //  audio_setconfig(beepfrequency, soundfrequency, soundtype);
@@ -236,7 +236,7 @@ PDVSC(const TCHAR *String, NMEA_INFO *GPS_INFO)
   }
 
   NMEAParser::ExtractParameter(String,ctemp,2);
-  long value =  (long)StrToDouble(ctemp,NULL);
+  long value =  (long)_tcstod(ctemp, NULL);
   DWORD dwvalue;
 
   if (_tcscmp(name, _T("ToneDeadbandCruiseLow"))==0) {
@@ -266,13 +266,14 @@ PDVDV(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   double alt;
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->Vario = StrToDouble(ctemp,NULL)/10.0;
+  GPS_INFO->Vario = _tcstod(ctemp, NULL) / 10.0;
 
   NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->IndicatedAirspeed = StrToDouble(ctemp,NULL)/10.0;
+  GPS_INFO->IndicatedAirspeed = _tcstod(ctemp, NULL) / 10.0;
 
   NMEAParser::ExtractParameter(String,ctemp,2);
-  GPS_INFO->TrueAirspeed = StrToDouble(ctemp,NULL)*GPS_INFO->IndicatedAirspeed/1024.0;
+  GPS_INFO->TrueAirspeed = _tcstod(ctemp, NULL) *
+    GPS_INFO->IndicatedAirspeed / 1024.0;
 
   //hasVega = true;
   GPS_INFO->VarioAvailable = true;
@@ -280,7 +281,7 @@ PDVDV(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   if (enable_baro){
     NMEAParser::ExtractParameter(String,ctemp,3);
-    alt = StrToDouble(ctemp,NULL);
+    alt = _tcstod(ctemp, NULL);
     GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = // JMW 20080716 bug
       AltitudeToQNHAltitude(alt);
@@ -301,9 +302,9 @@ PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->AccelX = StrToDouble(ctemp,NULL)/100.0;
+  GPS_INFO->AccelX = _tcstod(ctemp, NULL) / 100.0;
   NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->AccelZ = StrToDouble(ctemp,NULL)/100.0;
+  GPS_INFO->AccelZ = _tcstod(ctemp, NULL) / 100.0;
 
   int mag = isqrt4((int)((GPS_INFO->AccelX*GPS_INFO->AccelX
 			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));
@@ -311,15 +312,15 @@ PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->AccelerationAvailable = true;
 
   NMEAParser::ExtractParameter(String,ctemp,2);
-  flap = StrToDouble(ctemp,NULL);
+  flap = _tcstod(ctemp, NULL);
 
   NMEAParser::ExtractParameter(String,ctemp,3);
-  GPS_INFO->StallRatio = StrToDouble(ctemp,NULL)/100.0;
+  GPS_INFO->StallRatio = _tcstod(ctemp, NULL) / 100.0;
 
   NMEAParser::ExtractParameter(String,ctemp,4);
   if (ctemp[0] != '\0') {
     GPS_INFO->NettoVarioAvailable = true;
-    GPS_INFO->NettoVario = StrToDouble(ctemp,NULL)/10.0;
+    GPS_INFO->NettoVario = _tcstod(ctemp, NULL) / 10.0;
   } else {
     GPS_INFO->NettoVarioAvailable = false;
   }
@@ -345,11 +346,11 @@ PDVVT(const TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->OutsideAirTemperature = StrToDouble(ctemp,NULL)/10.0-273.0;
+  GPS_INFO->OutsideAirTemperature = _tcstod(ctemp, NULL) / 10.0 - 273.0;
   GPS_INFO->TemperatureAvailable = true;
 
   NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->RelativeHumidity = StrToDouble(ctemp,NULL); // %
+  GPS_INFO->RelativeHumidity = _tcstod(ctemp, NULL); // %
   GPS_INFO->HumidityAvailable = true;
 
   return true;
@@ -362,7 +363,7 @@ PDTSM(const TCHAR *String, NMEA_INFO *GPS_INFO)
   int   duration;
   (void)GPS_INFO;
 
-  duration = (int)StrToDouble(String, NULL);
+  duration = (int)_tcstod(String, NULL);
 
   String = _tcschr(String, ',');
   if (String == NULL)

@@ -41,12 +41,12 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Math/Pressure.h"
-#include "UtilsText.hpp"
 #include "Device/Parser.h"
 #include "Device/Port.h"
 #include "NMEA/Info.h"
 
 #include <tchar.h>
+#include <stdlib.h>
 #include <math.h>
 
 class FlymasterF1Device : public AbstractDevice {
@@ -92,10 +92,10 @@ VARIO(const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   TCHAR ctemp[80];
   NMEAParser::ExtractParameter(String,ctemp,0);
-  double ps = StrToDouble(ctemp,NULL);
+  double ps = _tcstod(ctemp, NULL);
   GPS_INFO->BaroAltitude = (1 - pow(fabs(ps / QNH),  0.190284)) * 44307.69;
   NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->Vario = StrToDouble(ctemp,NULL)/10.0;
+  GPS_INFO->Vario = _tcstod(ctemp, NULL) / 10.0;
   // JMW vario is in dm/s
 
   GPS_INFO->VarioAvailable = true;

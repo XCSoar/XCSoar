@@ -49,7 +49,6 @@ Copyright_License {
 #include "WayPoint.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "UtilsText.hpp"
 #include "Device/Parser.h"
 #include "Device/Port.h"
 #include "Math/Units.h"
@@ -58,6 +57,8 @@ Copyright_License {
 #include "NMEA/Info.h"
 
 #include <tchar.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define  CtrlC  0x03
 #define  swap(x)      x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
@@ -551,9 +552,9 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
   NMEAParser::ExtractParameter(String,ctemp,1);
   GPS_INFO->ExternalWindAvailalbe = true;
-  GPS_INFO->ExternalWindSpeed = (StrToDouble(ctemp,NULL) / 10.0);
+  GPS_INFO->ExternalWindSpeed = _tcstod(ctemp, NULL) / 10.0;
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->ExternalWindDirection = StrToDouble(ctemp,NULL);
+  GPS_INFO->ExternalWindDirection = _tcstod(ctemp, NULL);
 
 
   NMEAParser::ExtractParameter(String,ctemp,4);
@@ -561,37 +562,37 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
   if (enable_baro){
 
     GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = StrToDouble(ctemp, NULL) - 1000;
+    GPS_INFO->BaroAltitude = _tcstod(ctemp, NULL) - 1000;
 
   }
 
 //  ExtractParameter(String,ctemp,5);
-//  GPS_INFO->QNH = StrToDouble(ctemp, NULL) - 1000;
+//  GPS_INFO->QNH = _tcstod(ctemp, NULL) - 1000;
 
   NMEAParser::ExtractParameter(String,ctemp,6);
   GPS_INFO->AirspeedAvailable = true;
-  GPS_INFO->TrueAirspeed = (StrToDouble(ctemp,NULL) / 100.0);
+  GPS_INFO->TrueAirspeed = _tcstod(ctemp, NULL) / 100.0;
 
   NMEAParser::ExtractParameter(String,ctemp,7);
   GPS_INFO->VarioAvailable = true;
-  GPS_INFO->Vario = ((StrToDouble(ctemp,NULL) - 200.0) / 10.0) * KNOTSTOMETRESSECONDS;
+  GPS_INFO->Vario = ((_tcstod(ctemp, NULL) - 200.0) / 10.0) * KNOTSTOMETRESSECONDS;
 
   NMEAParser::ExtractParameter(String,ctemp,10);
-  GPS_INFO->MacReady = (StrToDouble(ctemp,NULL) / 10.0) * KNOTSTOMETRESSECONDS;
+  GPS_INFO->MacReady = (_tcstod(ctemp, NULL) / 10.0) * KNOTSTOMETRESSECONDS;
   if (MacCreadyUpdateTimeout <= 0)
     GlidePolar::SetMacCready(GPS_INFO->MacReady);
   else
     MacCreadyUpdateTimeout--;
 
   NMEAParser::ExtractParameter(String,ctemp,11);
-  GPS_INFO->Ballast = StrToDouble(ctemp,NULL) / 100.0;
+  GPS_INFO->Ballast = _tcstod(ctemp, NULL) / 100.0;
   if (BugsUpdateTimeout <= 0) {
     GlidePolar::SetBallast(GPS_INFO->Ballast);
   } else
     BallastUpdateTimeout--;
 
   NMEAParser::ExtractParameter(String,ctemp,12);
-  GPS_INFO->Bugs = StrToDouble(ctemp,NULL) / 100.0;
+  GPS_INFO->Bugs = _tcstod(ctemp, NULL) / 100.0;
   if (BugsUpdateTimeout <= 0) {
     GlidePolar::SetBugs(GPS_INFO->Bugs);
   } else

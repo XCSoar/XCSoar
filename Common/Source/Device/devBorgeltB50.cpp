@@ -41,7 +41,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
-#include "UtilsText.hpp"
 #include "Device/Parser.h"
 #include "Device/Port.h"
 #include "Math/Units.h"
@@ -49,6 +48,7 @@ Copyright_License {
 #include "NMEA/Info.h"
 
 #include <tchar.h>
+#include <stdlib.h>
 #include <math.h>
 
 class B50Device : public AbstractDevice {
@@ -126,17 +126,17 @@ PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  vtas = StrToDouble(ctemp,NULL)/TOKNOTS;
+  vtas = _tcstod(ctemp, NULL) / TOKNOTS;
 
   NMEAParser::ExtractParameter(String,ctemp,1);
-  wnet = StrToDouble(ctemp,NULL)/TOKNOTS;
+  wnet = _tcstod(ctemp, NULL) / TOKNOTS;
 
   NMEAParser::ExtractParameter(String,ctemp,2);
-  GPS_INFO->MacReady = StrToDouble(ctemp,NULL)/TOKNOTS;
+  GPS_INFO->MacReady = _tcstod(ctemp, NULL) / TOKNOTS;
   GlidePolar::SetMacCready(GPS_INFO->MacReady);
 
   NMEAParser::ExtractParameter(String,ctemp,3);
-  vias = sqrt(StrToDouble(ctemp,NULL))/TOKNOTS;
+  vias = sqrt(_tcstod(ctemp, NULL)) / TOKNOTS;
 
   // RMN: Changed bugs-calculation, swapped ballast and bugs to suit
   // the B50-string for Borgelt, it's % degradation, for us, it is %
@@ -146,7 +146,7 @@ PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
   JMW disabled bugs/ballast due to problems with test b50
 
   NMEAParser::ExtractParameter(String,ctemp,4);
-  GPS_INFO->Bugs = 1.0-max(0,min(30,StrToDouble(ctemp,NULL)))/100.0;
+  GPS_INFO->Bugs = 1.0 - max(0, min(30, _tcstod(ctemp, NULL))) / 100.0;
   BUGS = GPS_INFO->Bugs;
 
   // for Borgelt it's % of empty weight,
@@ -154,7 +154,7 @@ PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
   // RMN: Borgelt ballast->XCSoar ballast
 
   NMEAParser::ExtractParameter(String,ctemp,5);
-  double bal = max(1.0,min(1.60,StrToDouble(ctemp,NULL)))-1.0;
+  double bal = max(1.0, min(1.60, _tcstod(ctemp, NULL))) - 1.0;
   if (WEIGHTS[2]>0) {
     GPS_INFO->Ballast = min(1.0, max(0.0,
                                      bal*(WEIGHTS[0]+WEIGHTS[1])/WEIGHTS[2]));
@@ -168,7 +168,7 @@ PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   // inclimb/incruise 1=cruise,0=climb, OAT
   NMEAParser::ExtractParameter(String,ctemp,6);
-  int climb = lround(StrToDouble(ctemp,NULL));
+  int climb = lround(_tcstod(ctemp, NULL));
 
   GPS_INFO->SwitchState.VarioCircling = (climb==1);
 

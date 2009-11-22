@@ -51,10 +51,10 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
-#include "UtilsText.hpp"
 #include "NMEA/Info.h"
 
 #include <tchar.h>
+#include <stdlib.h>
 
 class PGDevice : public AbstractDevice {
 public:
@@ -115,7 +115,7 @@ GPWIN(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   if (enable_baro) {
     GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(iround(StrToDouble(ctemp, NULL)/10));
+    GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(iround(_tcstod(ctemp, NULL) / 10));
   }
 
   return false;
