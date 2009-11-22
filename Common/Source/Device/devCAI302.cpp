@@ -57,7 +57,6 @@ Copyright_License {
 #include "McReady.h"
 #include "NMEA/Info.h"
 
-#include <windows.h>
 #include <tchar.h>
 
 #define  CtrlC  0x03
@@ -233,56 +232,9 @@ CAI302Device::PutBallast(double Ballast)
   return true;
 }
 
-void test(void){
-
-  DWORD KeyType;
-  TCHAR Buffer[MAX_PATH];
-  DWORD BufSize = MAX_PATH;
-  int   retries;
-  HKEY hKey = NULL;
-
-  Buffer[0] = '\0';
-
-  if (RegOpenKeyEx(HKEY_LOCAL_MACHINE ,
-      _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"),
-      0, 0, &hKey
-    ) == ERROR_SUCCESS){
-
-    if (RegQueryValueEx(hKey ,
-        _T("DLL"),
-        NULL,
-        &KeyType,
-        (unsigned char *)&Buffer,
-        &BufSize
-      ) == ERROR_SUCCESS){
-
-
-    }
-    else Buffer[0] = '\0';
-
-    RegCloseKey(hKey);
-
-    if (Buffer[0] != '\0'){
-
-      RegDeleteKey(HKEY_LOCAL_MACHINE,
-                   _T("\\Software\\Microsoft\\Today\\Items\\XCSoar"));
-
-      for (retries=0; retries < 10 && DeleteFile(Buffer) == 0; retries++){
-        SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
-        Sleep(250*retries);
-      }
-
-    }
-
-  }
-
-}
-
 bool
 CAI302Device::Open()
 {
-//test();
-
   port->WriteString(_T("\x03"));
   port->WriteString(_T("LOG 0\r"));
 
