@@ -128,9 +128,7 @@ typedef enum{
 }InfoBoxModelAppearance_t;
 #endif
 
-
-
-typedef struct{
+struct Appearance {
   MapScaleAppearance_t MapScale;
   MapScale2Appearance_t MapScale2;
   bool DontShowLoggerIndicator;
@@ -172,7 +170,7 @@ typedef struct{
   bool InverseAircraft;
   bool GaugeVarioGross;
   bool GaugeVarioAveNeedle;
-} Appearance_t;
+};
 
 // Specials
 

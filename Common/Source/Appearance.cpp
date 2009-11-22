@@ -82,7 +82,7 @@ Appearance_t Appearance = {
 };
 #else
 
-Appearance_t Appearance = {
+struct Appearance Appearance = {
   apMsAltA, // mapscale
   MapScale2,
   false, // don't show logger indicator
