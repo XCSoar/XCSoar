@@ -216,6 +216,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
                       sAltUnit);
           else
             Buffer[0]= '\0';
+          break;
         default:
           assert(0);
           break;
