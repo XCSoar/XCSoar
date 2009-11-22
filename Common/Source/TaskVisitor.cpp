@@ -40,9 +40,8 @@ Copyright_License {
 #include <stdio.h>
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
-#include <math.h>
+#include "Math/Constants.h"
 #include "Math/FastMath.h"
-#include "Units.hpp"
 #include "Components.hpp"
 #include "WayPointList.hpp"
 

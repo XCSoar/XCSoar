@@ -42,6 +42,7 @@ Copyright_License {
 */
 
 #include "Math/SunEphemeris.hpp"
+#include "Math/Constants.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
@@ -50,7 +51,6 @@ Copyright_License {
 #define AIR_REFRACTION 34.0/60.0 // athmospheric refraction degrees //
 
 #include <math.h>
-#include "Units.hpp"
 
 /**
  * Get the days to J2000

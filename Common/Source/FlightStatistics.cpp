@@ -43,6 +43,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
+#include "Math/Constants.h"
 #include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
@@ -54,7 +55,6 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
 #include "Task.h"
-#include "Units.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "options.h" /* for IBLSCALE() */

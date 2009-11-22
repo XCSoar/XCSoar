@@ -54,9 +54,10 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "windstore.h"
 #include "XCSoar.h"
-#include "Units.hpp"
+#include "Math/Constants.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 

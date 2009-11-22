@@ -45,6 +45,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
+#include "Math/Constants.h"
 #include "Logger.h"
 #include "Language.hpp"
 #include "McReady.h"
