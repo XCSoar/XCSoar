@@ -171,12 +171,14 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
  */
 void
 MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
-    const DERIVED_INFO &derived_info)
+                          const DERIVED_INFO &derived_info,
+                          const SETTINGS_COMPUTER &settings_computer,
+                          const SETTINGS_MAP &settings_map)
 {
   ScopeLock protect(mutexBlackboard);
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
-  ReadSettingsComputer(device_blackboard.SettingsComputer());
-  ReadSettingsMap(device_blackboard.SettingsMap());
+  ReadSettingsComputer(settings_computer);
+  ReadSettingsMap(settings_map);
 }
 
 void
@@ -288,7 +290,9 @@ MapWindow::Idle(const bool do_force)
 void
 MapWindow::ExchangeBlackboard(void)
 {
-  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
+  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
+                 device_blackboard.SettingsComputer(),
+                 device_blackboard.SettingsMap());
   ApplyScreenSize();
   SendBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
 }
