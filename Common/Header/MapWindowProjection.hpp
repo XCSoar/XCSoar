@@ -62,6 +62,8 @@ class MapWindowProjection {
 
   void    LonLat2Screen(const GEOPOINT &location,
                         POINT &sc) const;
+  void    LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
+                        unsigned n, unsigned skip) const;
   void    LonLat2Screen(const pointObj* const ptin, POINT *ptout,
                         const int n,
                         const int skip) const;

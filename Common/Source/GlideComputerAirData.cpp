@@ -1052,8 +1052,9 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
 			    mymaxrange*20,
 			    &loc);
     }
-    SetCalculated().GlideFootPrint[i].x = loc.Longitude;
-    SetCalculated().GlideFootPrint[i].y = loc.Latitude;
+
+    SetCalculated().GlideFootPrint[i].Longitude = loc.Longitude;
+    SetCalculated().GlideFootPrint[i].Latitude = loc.Latitude;
   }
   SetCalculated().Experimental = Calculated().TerrainBase;
 }

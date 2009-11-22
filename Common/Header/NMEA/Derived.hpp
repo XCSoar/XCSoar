@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_DERIVED_H
 #define XCSOAR_NMEA_DERIVED_H
 
-#include "Screen/shapelib/mapshape.h"
 #include "GeoPoint.hpp"
 
 #define NUMTHERMALBUCKETS 10
@@ -277,7 +276,7 @@ struct DERIVED_INFO
   THERMAL_SOURCE_INFO ThermalSources[MAX_THERMAL_SOURCES];
 
   /** Final glide ground line */
-  pointObj GlideFootPrint[NUMTERRAINSWEEPS+1];
+  GEOPOINT GlideFootPrint[NUMTERRAINSWEEPS+1];
 
   /** Team code */
   TCHAR OwnTeamCode[10];

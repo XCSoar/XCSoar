@@ -271,6 +271,48 @@ MapWindowProjection::LonLat2Screen(const GEOPOINT &g,
  * @param skip Number of corners to skip after a successful conversion
  */
 void
+MapWindowProjection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
+                                   unsigned n, unsigned skip) const
+{
+  static double lastangle = -1;
+  static int cost=1024, sint=0;
+  const double mDisplayAngle = DisplayAngle;
+
+  if(mDisplayAngle != lastangle) {
+    lastangle = mDisplayAngle;
+    int deg = DEG_TO_INT(AngleLimit360(mDisplayAngle));
+    cost = ICOSTABLE[deg];
+    sint = ISINETABLE[deg];
+  }
+  const int xxs = Orig_Screen.x*1024-512;
+  const int yys = Orig_Screen.y*1024+512;
+  const double mDrawScale = DrawScale;
+  const double mPanLongitude = PanLocation.Longitude;
+  const double mPanLatitude = PanLocation.Latitude;
+  const GEOPOINT *p = ptin;
+  const GEOPOINT *ptend = ptin + n;
+
+  while (p<ptend) {
+    int Y = Real2Int((mPanLatitude - p->Latitude) * mDrawScale);
+    int X = Real2Int((mPanLongitude - p->Longitude) *
+                     fastcosine(p->Latitude) * mDrawScale);
+    ptout->x = (xxs-X*cost + Y*sint)/1024;
+    ptout->y = (Y*cost + X*sint + yys)/1024;
+    ptout++;
+    p+= skip;
+  }
+}
+
+/**
+ * Converts a LatLon-based polygon to screen coordinates
+ *
+ * This one is optimised for long polygons.
+ * @param ptin Input polygon
+ * @param ptout Output polygon
+ * @param n Number of points in the polygon
+ * @param skip Number of corners to skip after a successful conversion
+ */
+void
 MapWindowProjection::LonLat2Screen(const pointObj* const ptin,
                                    POINT *ptout,
                                    const int n,

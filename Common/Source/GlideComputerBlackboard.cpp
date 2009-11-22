@@ -108,8 +108,8 @@ void GlideComputerBlackboard::ResetFlight(const bool full) {
   calculated_info.Circling = false;
   calculated_info.FinalGlide = false;
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
-    calculated_info.GlideFootPrint[i].x = 0;
-    calculated_info.GlideFootPrint[i].y = 0;
+    calculated_info.GlideFootPrint[i].Longitude = 0;
+    calculated_info.GlideFootPrint[i].Latitude = 0;
   }
   calculated_info.TerrainWarningLocation.Latitude = 0.0;
   calculated_info.TerrainWarningLocation.Longitude = 0.0;
