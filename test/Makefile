@@ -41,6 +41,7 @@ BUILDTESTS=\
 
 all: $(BUILDTESTS) RunWayPointParser-$(TARGET)$(TARGET_EXEEXT) \
 	RunCanvas-$(TARGET)$(TARGET_EXEEXT) \
+	RunMapWindow-$(TARGET)$(TARGET_EXEEXT) \
 	RunDialog-$(TARGET)$(TARGET_EXEEXT)
 
 test: .phony $(BUILDTESTS)
@@ -92,6 +93,105 @@ RunCanvas-$(TARGET)$(TARGET_EXEEXT): $(RUN_CANVAS_OBJS:.o=-$(TARGET).o)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
+RUN_MAP_WINDOW_OBJS = \
+	$(SRC)/Poco/RWLock.o \
+	$(SRC)/Airspace.o \
+	$(SRC)/AirspaceDatabase.o \
+	$(SRC)/AirspaceParser.o \
+	$(SRC)/Appearance.o \
+	$(SRC)/Globals.o \
+	$(SRC)/LocalPath.o \
+	$(SRC)/MapWindow.o \
+	$(SRC)/MapWindowAirspace.o \
+	$(SRC)/MapWindowBlackboard.o \
+	$(SRC)/MapWindowEvents.o \
+	$(SRC)/MapWindowGlideRange.o \
+	$(SRC)/MapWindowLabels.o \
+	$(SRC)/MapWindowProjection.o \
+	$(SRC)/MapWindowRender.o \
+	$(SRC)/MapWindowScale.o \
+	$(SRC)/MapWindowSymbols.o \
+	$(SRC)/MapWindowTask.o \
+	$(SRC)/MapWindowThermal.o \
+	$(SRC)/MapWindowTimer.o \
+	$(SRC)/MapWindowTraffic.o \
+	$(SRC)/MapWindowTrail.o \
+	$(SRC)/MapWindowWaypoints.o \
+	$(SRC)/Marks.o \
+	$(SRC)/Math/Earth.o \
+	$(SRC)/Math/FastMath.o \
+	$(SRC)/Math/Geometry.o \
+	$(SRC)/Math/Pressure.o \
+	$(SRC)/Math/Screen.o \
+	$(SRC)/McReady.o \
+	$(SRC)/OnLineContest.o \
+	$(SRC)/RasterMapJPG2000.o \
+	$(SRC)/RasterMapRaw.o \
+	$(SRC)/RasterMapCache.o \
+	$(SRC)/RasterMap.o \
+	$(SRC)/RasterTerrain.o \
+	$(SRC)/RasterWeather.o \
+	$(SRC)/Registry.o \
+	$(SRC)/Screen/Animation.o \
+	$(SRC)/Screen/Bitmap.o \
+	$(SRC)/Screen/BitmapCanvas.o \
+	$(SRC)/Screen/ContainerWindow.o \
+	$(SRC)/Screen/ButtonWindow.o \
+	$(SRC)/Screen/Canvas.o \
+	$(SRC)/Screen/VirtualCanvas.o \
+	$(SRC)/Screen/LabelBlock.o \
+	$(SRC)/Screen/BufferCanvas.o \
+	$(SRC)/Screen/Pen.o \
+	$(SRC)/Screen/Brush.o \
+	$(SRC)/Screen/Font.o \
+	$(SRC)/Screen/Fonts.o \
+	$(SRC)/Screen/Graphics.o \
+	$(SRC)/Screen/Util.o \
+	$(SRC)/Screen/MaskedPaintWindow.o \
+	$(SRC)/Screen/PaintWindow.o \
+	$(SRC)/Screen/Ramp.o \
+	$(SRC)/Screen/STScreenBuffer.o \
+	$(SRC)/Screen/TextWindow.o \
+	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/UnitSymbol.o \
+	$(SRC)/Screen/Window.o \
+	$(SRC)/Screen/shapelib/mapbits.o \
+	$(SRC)/Screen/shapelib/maperror.o \
+	$(SRC)/Screen/shapelib/mapprimitive.o \
+	$(SRC)/Screen/shapelib/mapsearch.o \
+	$(SRC)/Screen/shapelib/mapshape.o \
+	$(SRC)/Screen/shapelib/maptree.o \
+	$(SRC)/Screen/shapelib/mapxbase.o \
+	$(SRC)/SettingsMapBlackboard.o \
+	$(SRC)/SettingsComputerBlackboard.o \
+	$(SRC)/SnailTrail.o \
+	$(SRC)/StringUtil.o \
+	$(SRC)/Task.o \
+	$(SRC)/TaskImpl.o \
+	$(SRC)/TaskVisitor.o \
+	$(SRC)/TaskFile.o \
+	$(SRC)/TerrainRenderer.o \
+	$(SRC)/Topology.o \
+	$(SRC)/TopologyStore.o \
+	$(SRC)/Units.o \
+	$(SRC)/UtilsText.o \
+	$(SRC)/UtilsFont.o \
+	$(SRC)/WayPointList.o \
+	$(SRC)/Waypointparser.o \
+	$(SRC)/jasper-$(TARGET).a \
+	$(SRC)/zzip-$(TARGET).a \
+	$(SRC)/compat-$(TARGET).a \
+	src/RunMapWindow.o
+ifneq ($(ENABLE_SDL),y)
+RUN_MAP_WINDOW_OBJS += $(SRC)/Screen/PaintCanvas.o
+endif
+ifeq ($(HAVE_WIN32),y)
+RUN_MAP_WINDOW_OBJS += $(SRC)/XCSoar-$(TARGET).rsc
+endif
+RunMapWindow-$(TARGET)$(TARGET_EXEEXT): $(RUN_MAP_WINDOW_OBJS:.o=-$(TARGET).o)
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
 RUN_DIALOG_OBJS = \
 	$(SRC)/xmlParser.o \
 	$(SRC)/Dialogs/XML.o \
@@ -138,13 +238,25 @@ RunDialog-$(TARGET)$(TARGET_EXEEXT): $(RUN_DIALOG_OBJS:.o=-$(TARGET).o)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
+%-$(TARGET).rsc: %.rc
+	@sed -e 's,[Bb]itmaps\\\\,Bitmaps/,g' \
+	    -e 's,XCSoar.ICO,xcsoar.ico,g' \
+	    -e 's,\.\.\\\\Data\\\\Dialogs\\\\,../Data/Dialogs/,g' \
+	    -e 's,small\.bmp,Small.bmp,g' \
+		< $< > $<.tmp
+	@$(NQ)echo "  WINDRES $@"
+	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<.tmp
+	@$(RM) $<.tmp
+
 include $(topdir)/build/zzip.mk
+include $(topdir)/build/jasper.mk
 include $(topdir)/build/compat.mk
 
 clean:
 	rm -f $(BUILDTESTS) \
 		RunWayPointParser-$(TARGET)$(TARGET_EXEEXT) \
 		RunCanvas-$(TARGET)$(TARGET_EXEEXT) \
+		RunMapWindow-$(TARGET)$(TARGET_EXEEXT) \
 		RunDialog-$(TARGET)$(TARGET_EXEEXT)
 	rm -f $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(TARGET).o)
 	rm -f $(RUN_DIALOG_OBJS:.o=-$(TARGET).o)
