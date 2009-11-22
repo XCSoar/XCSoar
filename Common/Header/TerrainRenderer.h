@@ -39,8 +39,9 @@ Copyright_License {
 #ifndef TERRAIN_RENDERER_H
 #define TERRAIN_RENDERER_H
 
-#include "Screen/Ramp.hpp"
 #include "GeoPoint.hpp"
+
+#include <windef.h>
 
 class CSTScreenBuffer;
 class Canvas;
@@ -49,6 +50,7 @@ class RasterMap;
 class MapWindowProjection;
 class LabelBlock;
 class RasterRounding;
+struct COLORRAMP;
 
 class TerrainRenderer {
 public:
