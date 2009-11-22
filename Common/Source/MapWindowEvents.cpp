@@ -41,6 +41,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
+#include "Appearance.hpp"
 #include "Protection.hpp"
 #include "InputEvents.h"
 #include "Language.hpp"

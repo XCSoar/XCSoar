@@ -49,6 +49,7 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "LogFile.hpp"
 #include "SettingsComputer.hpp"
+#include "Appearance.hpp"
 #include "Language.hpp"
 #include "StatusMessage.hpp"
 

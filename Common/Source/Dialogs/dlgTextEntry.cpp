@@ -40,6 +40,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "SettingsUser.hpp"
+#include "Appearance.hpp"
 #include "Asset.hpp"
 
 #ifndef _MSC_VER

@@ -45,6 +45,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Task.h"
 #include "SettingsUser.hpp"
+#include "Appearance.hpp"
 #include "TerrainRenderer.h"
 #include "Gauge/GaugeFLARM.hpp"
 #include "LocalPath.hpp"

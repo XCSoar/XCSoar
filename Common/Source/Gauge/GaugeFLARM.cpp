@@ -50,9 +50,10 @@ Copyright_License {
 #include "Screen/BitmapCanvas.hpp"
 #include "options.h" /* for IBLSCALE() */
 #include "NMEA/Info.h"
+#include "SettingsUser.hpp"
+#include "Appearance.hpp"
 
 #include <stdlib.h>
-#include "SettingsUser.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>

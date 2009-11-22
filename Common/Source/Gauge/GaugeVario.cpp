@@ -55,6 +55,7 @@ Copyright_License {
 #include "options.h" /* for IBLSCALE() */
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
+#include "Appearance.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

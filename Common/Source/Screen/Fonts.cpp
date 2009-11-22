@@ -45,6 +45,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "SettingsUser.hpp"
+#include "Appearance.hpp"
 #include "options.h" /* for IBLSCALE() */
 
 // Display Gobals

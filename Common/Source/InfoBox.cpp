@@ -51,6 +51,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "SettingsUser.hpp"
+#include "Appearance.hpp"
 #include "Defines.h"
 #include "options.h" /* for IBLSCALE() */
 #include "InfoBoxManager.h"

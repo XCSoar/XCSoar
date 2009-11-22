@@ -56,6 +56,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
+#include "Appearance.hpp"
 #include "LogFile.hpp"
 #include "InfoBoxManager.h"
 #include "Asset.hpp"

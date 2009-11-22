@@ -35,6 +35,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "MapWindow.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
@@ -52,6 +53,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
+#include "Appearance.hpp"
 #include "options.h" /* for IBLSCALE() */
 
 #include <stdlib.h>
