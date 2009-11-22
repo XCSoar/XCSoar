@@ -37,20 +37,17 @@ Copyright_License {
 */
 
 #include "RasterWeather.h"
-#include "LogFile.hpp"
-#include "Dialogs.h"
 #include "Language.hpp"
+#include "Math/FastMath.h"
 #include "Units.hpp"
 #include "Math/FastMath.h"
-#include "Math/Earth.hpp"
-#include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
-#include <assert.h>
 #include "wcecompat/ts_string.h"
 #include "RasterMapJPG2000.hpp"
 #include "Interface.hpp"
 
+#include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
 

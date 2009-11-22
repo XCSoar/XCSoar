@@ -39,6 +39,7 @@ Copyright_License {
 #include "TerrainRenderer.h"
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
+#include "RasterMap.h"
 #include "Screen/LabelBlock.hpp"
 #include "Topology.h"
 #include "Screen/STScreenBuffer.h"

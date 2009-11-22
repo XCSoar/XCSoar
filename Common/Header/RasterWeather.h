@@ -39,10 +39,13 @@ Copyright_License {
 #ifndef RASTERWEATHER_H
 #define RASTERWEATHER_H
 
-#include "RasterMap.h"
-#include "Protection.hpp"
-#include "GeoPoint.hpp"
 #include "Poco/RWLock.h"
+#include "Sizes.h"
+
+#include <tchar.h>
+
+class RasterMap;
+struct GEOPOINT;
 
 class RasterWeather {
 public:

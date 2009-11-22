@@ -54,6 +54,7 @@ Copyright_License {
 #include "TerrainRenderer.h"
 #include "RasterWeather.h"
 #include "Gauge/GaugeCDI.hpp"
+#include "Protection.hpp"
 
 #ifdef PNA
 #include "Asset.hpp"
