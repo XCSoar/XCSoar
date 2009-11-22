@@ -575,9 +575,9 @@ void MapWindowProjection::ModifyMapScale
 }
 
 
-void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
-					 const DERIVED_INFO &DerivedDrawInfo,
-					 const SETTINGS_MAP &settings_map)
+void
+MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
+                                    const SETTINGS_MAP &settings_map)
 {
   static int AutoMapScaleWaypointIndex = -1;
   static double StartingAutoMapScale=0.0;
@@ -670,11 +670,10 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
 }
 
 
-void MapWindowProjection::ExchangeBlackboard(const NMEA_INFO &nmea_info,
-					     const DERIVED_INFO &derived_info,
+void MapWindowProjection::ExchangeBlackboard(const DERIVED_INFO &derived_info,
 					     const SETTINGS_MAP &settings_map)
 {
-  UpdateMapScale(nmea_info, derived_info, settings_map);
+  UpdateMapScale(derived_info, settings_map);
   // done here to avoid double latency due to locks
 }
 

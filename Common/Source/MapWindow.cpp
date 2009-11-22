@@ -182,11 +182,10 @@ MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
 }
 
 void
-MapWindow::SendBlackboard(const NMEA_INFO &nmea_info,
-    const DERIVED_INFO &derived_info)
+MapWindow::SendBlackboard(const DERIVED_INFO &derived_info)
 {
   ScopeLock protect(mutexBlackboard);
-  MapWindowProjection::ExchangeBlackboard(nmea_info, derived_info,
+  MapWindowProjection::ExchangeBlackboard(derived_info,
 					  SettingsMap());
   device_blackboard.ReadMapProjection(*this);
 }
@@ -294,7 +293,7 @@ MapWindow::ExchangeBlackboard(void)
                  device_blackboard.SettingsComputer(),
                  device_blackboard.SettingsMap());
   ApplyScreenSize();
-  SendBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
+  SendBlackboard(device_blackboard.Calculated());
 }
 
 /**

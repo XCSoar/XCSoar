@@ -123,8 +123,7 @@ class MapWindow
                           const SETTINGS_COMPUTER &settings_computer,
                           const SETTINGS_MAP &settings_map);
 
-  void     SendBlackboard(const NMEA_INFO &nmea_info,
-			  const DERIVED_INFO &derived_info);
+  void SendBlackboard(const DERIVED_INFO &derived_info);
 
   // display management
   void          RefreshMap();

@@ -105,9 +105,8 @@ class MapWindowProjection {
   }
 
   // called on receipt of new data, to trigger projection/scale change functions
-  void ExchangeBlackboard(const NMEA_INFO &nmea_info,
-			  const DERIVED_INFO &derived_info,
-			  const SETTINGS_MAP &settings_map);
+  void ExchangeBlackboard(const DERIVED_INFO &derived_info,
+                          const SETTINGS_MAP &settings_map);
 
   DisplayMode_t GetDisplayMode() const {
     return DisplayMode;
@@ -192,9 +191,9 @@ public:
 
   void   ModifyMapScale(const SETTINGS_MAP &settings_map);
 
-  void   UpdateMapScale(const NMEA_INFO &nmea_info,
-			const DERIVED_INFO &derived_info,
-			const SETTINGS_MAP &settings_map);
+  void UpdateMapScale(const DERIVED_INFO &derived_info,
+                      const SETTINGS_MAP &settings_map);
+
   void   CalculateOrientationTargetPan(const NMEA_INFO &nmea_info,
 				       const DERIVED_INFO &derived_info,
 				       const SETTINGS_MAP &settings);
