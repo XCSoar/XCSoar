@@ -42,7 +42,7 @@ Copyright_License {
 // not expected to be used by other threads
 
 #include "GeoPoint.hpp"
-#include "Airspace.h"
+#include "SettingsAirspace.hpp"
 
 extern struct Appearance Appearance;
 
