@@ -51,6 +51,9 @@ Copyright_License {
 #include "RasterMapJPG2000.hpp"
 #include "Interface.hpp"
 
+#include <tchar.h>
+#include <stdio.h>
+
 int RasterWeather::IndexToTime(int x) {
   if (x % 2 == 0) {
     return (x/2)*100;

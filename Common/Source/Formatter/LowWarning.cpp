@@ -42,6 +42,9 @@ Copyright_License {
 #include "Units.hpp"
 #include "Interface.hpp"
 
+#include <tchar.h>
+#include <stdio.h>
+
 void FormatterLowWarning::AssignValue(int i) {
   InfoBoxFormatter::AssignValue(i);
   switch (i) {
