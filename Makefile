@@ -69,22 +69,22 @@ ifeq ($(CONFIG_PC),n)
 endif
 
 DEVS	:=\
-	$(SRC)/Device/devAltairPro.o \
-	$(SRC)/Device/devBorgeltB50.o \
-	$(SRC)/Device/devCAI302.o \
-	$(SRC)/Device/devCaiGpsNav.o \
-	$(SRC)/Device/devCondor.o \
-	$(SRC)/Device/devEW.o \
-	$(SRC)/Device/devEWMicroRecorder.o \
-	$(SRC)/Device/devFlymasterF1.o \
-	$(SRC)/Device/devGeneric.o \
-	$(SRC)/Device/devLX.o \
-	$(SRC)/Device/devNmeaOut.o \
-	$(SRC)/Device/devPosiGraph.o \
-	$(SRC)/Device/devVega.o \
-	$(SRC)/Device/devVolkslogger.o \
-	$(SRC)/Device/devXCOM760.o \
-	$(SRC)/Device/devZander.o
+	$(SRC)/Device/Driver/AltairPro.o \
+	$(SRC)/Device/Driver/BorgeltB50.o \
+	$(SRC)/Device/Driver/CAI302.o \
+	$(SRC)/Device/Driver/CaiGpsNav.o \
+	$(SRC)/Device/Driver/Condor.o \
+	$(SRC)/Device/Driver/EW.o \
+	$(SRC)/Device/Driver/EWMicroRecorder.o \
+	$(SRC)/Device/Driver/FlymasterF1.o \
+	$(SRC)/Device/Driver/Generic.o \
+	$(SRC)/Device/Driver/LX.o \
+	$(SRC)/Device/Driver/NmeaOut.o \
+	$(SRC)/Device/Driver/PosiGraph.o \
+	$(SRC)/Device/Driver/Vega.o \
+	$(SRC)/Device/Driver/Volkslogger.o \
+	$(SRC)/Device/Driver/XCOM760.o \
+	$(SRC)/Device/Driver/Zander.o
 
 DLGS	:=\
 	$(SRC)/Dialogs/XML.o \
