@@ -40,7 +40,6 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_H
 
 #include "Sizes.h"
-#include "SettingsAirspace.hpp"
 #include "Screen/shapelib/mapshape.h"
 #include "GeoPoint.hpp"
 
