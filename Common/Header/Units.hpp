@@ -95,7 +95,12 @@ typedef enum {
   unFligthLevel,
   unKelvin,
   unGradCelcius,                    // K = C° + 273,15
-  unGradFahrenheit                  // K = (°F + 459,67) / 1,8
+  unGradFahrenheit, // K = (°F + 459,67) / 1,8
+
+  /**
+   * The sentinel: the number of units in this enum.
+   */
+  unCount
 }Units_t;
 
 
@@ -120,7 +125,7 @@ typedef struct{
 class Units {
 
 private:
-  static UnitDescriptor_t UnitDescriptors[unGradFahrenheit+1];
+  static UnitDescriptor_t UnitDescriptors[unCount];
   static Units_t UserDistanceUnit;
   static Units_t UserAltitudeUnit;
   static Units_t UserHorizontalSpeedUnit;
