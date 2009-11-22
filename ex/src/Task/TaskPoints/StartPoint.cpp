@@ -22,6 +22,7 @@ StartPoint::transition_exit(const AIRCRAFT_STATE & ref_now,
   if (exited) {
     clear_sample_all_but_last(ref_last);
     set_state_entered(ref_last);
+    set_state_exited(ref_now);
   }
   return exited;
 }

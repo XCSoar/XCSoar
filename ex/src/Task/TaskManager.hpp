@@ -83,7 +83,7 @@ public:
   };
 
   /** 
-   * Reset the ordered task (as if never flown)
+   * Reset the tasks (as if never flown)
    * 
    */
   void reset();

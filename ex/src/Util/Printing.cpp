@@ -239,18 +239,20 @@ AbstractTask::print(const AIRCRAFT_STATE &state)
     first = false;
     f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc\n";
   }
-  f6 << stats.Time
-     << " " << activeTaskPoint
-     << " " << stats.mc_best
-     << " " << stats.total.remaining_effective.get_distance()
-     << " " << stats.total.remaining.get_distance() 
-     << " " << stats.cruise_efficiency 
-     << " " << stats.total.remaining.get_speed() 
-     << " " << stats.total.remaining.get_speed_incremental() 
-     << " " << stats.total.remaining_effective.get_speed() 
-     << " " << stats.total.remaining_effective.get_speed_incremental() 
-     << "\n";
-  f6.flush();
+  if (stats.Time>0) {
+    f6 << stats.Time
+       << " " << activeTaskPoint
+       << " " << stats.mc_best
+       << " " << stats.total.remaining_effective.get_distance()
+       << " " << stats.total.remaining.get_distance() 
+       << " " << stats.cruise_efficiency 
+       << " " << stats.total.remaining.get_speed() 
+       << " " << stats.total.remaining.get_speed_incremental() 
+       << " " << stats.total.remaining_effective.get_speed() 
+       << " " << stats.total.remaining_effective.get_speed_incremental() 
+       << "\n";
+    f6.flush();
+  }
 }
 
 #include "Task/Tasks/GotoTask.hpp"

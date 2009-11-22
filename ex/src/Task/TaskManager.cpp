@@ -143,6 +143,8 @@ void
 TaskManager::reset()
 {
   task_ordered.reset();
+  task_goto.reset();
+  task_abort.reset();
 }
 
 TaskManager::Factory_t 

@@ -11,13 +11,20 @@ bool
 AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 {
   bool retval = false;
-  if (task_behaviour.auto_mc) {
-    stats.mc_best = mc_lpf.update(calc_mc_best(state));
+  if (task_started() && task_behaviour.auto_mc) {
+    double mc_found = calc_mc_best(state);
+    if (trigger_auto || (mc_found > stats.mc_best)) {
+      trigger_auto = true;
+      stats.mc_best = mc_lpf.update(mc_found);
+    } else {
+      stats.mc_best = mc_lpf.reset(glide_polar.get_mc());
+    }
     retval = true;
   } else {
+    trigger_auto = false;
     stats.mc_best = mc_lpf.reset(glide_polar.get_mc());
   }
-  if (task_behaviour.calc_cruise_efficiency) {
+  if (task_started() && task_behaviour.calc_cruise_efficiency) {
     stats.cruise_efficiency = ce_lpf.update(calc_cruise_efficiency(state));
     retval = true;
   } else {
@@ -107,9 +114,8 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
 
   update_stats_glide(state);
 
-  if (!has_finished()) {
-    update_stats_speeds(state, state_last); // JMW 1
-  }
+  update_stats_speeds(state, state_last);
+
   return retval;
 }
 
@@ -118,8 +124,15 @@ AbstractTask::update_stats_speeds(const AIRCRAFT_STATE &state,
                                   const AIRCRAFT_STATE &state_last)
 {
   const double dt = state.Time-state_last.Time;
-  stats.total.calc_speeds(dt);
-  stats.current_leg.calc_speeds(dt);
+  if (!task_finished()) {
+    if (task_started()) {
+      stats.total.calc_speeds(dt);
+      stats.current_leg.calc_speeds(dt);
+    } else {
+      stats.total.reset();
+      stats.current_leg.reset();
+    }
+  }
 }
 
 void
@@ -133,7 +146,7 @@ AbstractTask::update_stats_times(const AIRCRAFT_STATE &state)
 {
   // default for tasks with no start time...
   stats.Time = state.Time;
-  if (!has_finished()) {
+  if (!task_finished()) {
     stats.total.set_times(scan_total_start_time(state), state);
     stats.current_leg.set_times(scan_leg_start_time(state),state);
   }
@@ -281,3 +294,10 @@ AbstractTask::calc_gradient(const AIRCRAFT_STATE &state)
 {
   return leg_gradient(state);
 }
+
+void 
+AbstractTask::reset()
+{
+  trigger_auto = false;
+}
+

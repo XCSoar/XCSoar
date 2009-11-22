@@ -50,7 +50,7 @@ public:
    * Reset the task (as if never flown)
    * 
    */
-  void reset();
+  virtual void reset();
 
 /** 
  * Retrieves the active task point sequence.
@@ -151,6 +151,14 @@ public:
  * @return True if task is finished
  */
   virtual bool task_finished() const;
+
+/** 
+ * Test if task has started.  Used to determine whether
+ * or not update stats.
+ * 
+ * @return True if task has started
+ */
+  virtual bool task_started() const;
 
 /** 
  * Update internal states when aircraft state advances.

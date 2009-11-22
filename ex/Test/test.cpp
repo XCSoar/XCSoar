@@ -44,7 +44,9 @@ bool test_flight(TaskManager &task_manager,
 
   } while (ac.advance(task_manager, glide_polar));
 
-  distance_counts();
+  if (verbose) {
+    distance_counts();
+  }
   return true;
 }
 

@@ -8,7 +8,7 @@ class DiffFilter
 public:
 
   DiffFilter(double x_default=0.0) {
-    reset(x_default);
+    reset(x_default,0);
   }
 
 /** 
@@ -21,12 +21,12 @@ public:
   double update(const double x0);
 
 /** 
- * Resets filter as if fed static value
+ * Resets filter as if fed value to produce y0
  * 
  * @param x0 Steady state value of filter input
  * 
  */
-  void reset(const double x0);
+  void reset(const double x0, const double y0);
 
 private:
   double x[7];

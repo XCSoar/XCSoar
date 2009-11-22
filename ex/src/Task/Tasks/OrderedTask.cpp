@@ -247,9 +247,6 @@ bool
 OrderedTask::update_sample(const AIRCRAFT_STATE &state, 
                            const bool full_update)
 {
-  if (activeTaskPoint==0) {
-    stats.reset();
-  }
   return true;
 }
 
@@ -619,6 +616,15 @@ OrderedTask::task_finished() const
 {
   if (tf) {
     return (tf->has_entered());
+  }
+  return false;
+}
+
+bool 
+OrderedTask::task_started() const
+{
+  if (ts) {
+    return (ts->has_exited());
   }
   return false;
 }

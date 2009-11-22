@@ -15,6 +15,7 @@ char wait_prompt(const double time);
 extern int interactive;
 extern int verbose;
 extern int output_skip;
+extern double bearing_noise;
 bool parse_args(int argc, char** argv);
 
 #endif

@@ -55,6 +55,15 @@ public:
  * 
  * @return True if aircraft has exited the OZ
  */
+  bool has_exited() const {
+    return state_exited.Time>0;
+  }
+
+/** 
+ * Get entry state of aircraft
+ * 
+ * @return State on entry
+ */
   AIRCRAFT_STATE get_state_entered() const {
     return state_entered;
   }
@@ -124,6 +133,15 @@ protected:
  */
   void set_state_entered(const AIRCRAFT_STATE& state) {
     state_entered = state;
+  }
+
+/** 
+ * Set OZ exit state
+ * 
+ * @param state State at exit
+ */
+  void set_state_exited(const AIRCRAFT_STATE& state) {
+    state_exited = state;
   }
 
 private:

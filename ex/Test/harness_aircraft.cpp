@@ -78,7 +78,7 @@ bool AircraftSim::far(TaskManager &task_manager) {
 }
 
 double AircraftSim::small_rand() {
-  return heading_filt.update(-40.0+rand()*80.0/RAND_MAX);
+  return heading_filt.update(-bearing_noise+2*bearing_noise*rand()/(1.0*RAND_MAX));
 }
 
 void AircraftSim::update_bearing(TaskManager& task_manager) {

@@ -39,8 +39,15 @@ public:
     task_behaviour(tb),
     glide_polar(gp),
     mc_lpf(10.0),
-    ce_lpf(60.0)
+    ce_lpf(60.0),
+    trigger_auto(false)
   {};
+
+  /** 
+   * Reset the task (as if never flown)
+   * 
+   */
+  virtual void reset();
 
 /** 
  * Retrieves the active task point sequence.
@@ -64,8 +71,18 @@ public:
  * 
  * @return True if task is finished
  */
-  virtual bool has_finished() const {
+  virtual bool task_finished() const {
     return false;
+  }
+
+/** 
+ * Test if task has started.  Used to determine whether
+ * or not update stats.
+ * 
+ * @return True if task has started
+ */
+  virtual bool task_started() const {
+    return true;
   }
 
 /** 
@@ -327,6 +344,8 @@ private:
 
   Filter mc_lpf;
   Filter ce_lpf;
+
+  bool trigger_auto;
 
 public:
 #ifdef DO_PRINT

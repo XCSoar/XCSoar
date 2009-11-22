@@ -1,15 +1,15 @@
 #include "DiffFilter.hpp"
 
 void
-DiffFilter::reset(double x0) 
+DiffFilter::reset(const double x0, const double y0) 
 {
   for (unsigned i=0; i<7; i++) {
-    x[i]= x0;
+    x[i]= x0-y0*i;
   }
 }
 
 double
-DiffFilter::update(double x0)
+DiffFilter::update(const double x0)
 {
   x[6]= x[5];
   x[5]= x[4];
