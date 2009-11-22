@@ -123,7 +123,7 @@ class MapWindow
                           const SETTINGS_COMPUTER &settings_computer,
                           const SETTINGS_MAP &settings_map);
 
-  void SendBlackboard(const DERIVED_INFO &derived_info);
+  void SendBlackboard();
 
   // display management
   void          RefreshMap();
