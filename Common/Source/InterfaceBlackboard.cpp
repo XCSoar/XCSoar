@@ -40,19 +40,19 @@ Copyright_License {
 void
 InterfaceBlackboard::ReadBlackboardCalculated(const DERIVED_INFO &derived_info)
 {
-  memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
+  calculated_info = derived_info;
 }
 
 void
 InterfaceBlackboard::ReadBlackboardBasic(const NMEA_INFO &nmea_info)
 {
-  memcpy(&gps_info,&nmea_info,sizeof(NMEA_INFO));
+  gps_info = nmea_info;
 }
 
 void
 InterfaceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 					  &settings)
 {
-  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
+  settings_computer = settings;
 }
 

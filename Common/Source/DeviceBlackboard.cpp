@@ -278,7 +278,7 @@ DeviceBlackboard::SetAltitude(double val)
 void
 DeviceBlackboard::ReadBlackboard(const DERIVED_INFO &derived_info)
 {
-  memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
+  calculated_info = derived_info;
 }
 
 /**
@@ -291,7 +291,7 @@ void
 DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 					      &settings)
 {
-  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
+  settings_computer = settings;
 }
 
 /**
@@ -304,7 +304,7 @@ void
 DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
 				  &settings)
 {
-  memcpy(&settings_map,&settings,sizeof(SETTINGS_MAP));
+  settings_map = settings;
 }
 
 /**
