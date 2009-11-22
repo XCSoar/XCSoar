@@ -125,7 +125,7 @@ class InfoBox : public BufferWindow {
     void PaintFast(void);
     void PaintInto(Canvas &dest, int xoff, int yoff, int width, int height);
 
-    Units_t SetValueUnit(Units_t Value);
+    void SetValueUnit(Units_t Value);
     void SetTitle(const TCHAR *Value);
     void SetValue(const TCHAR *Value);
     void SetComment(const TCHAR *Value);

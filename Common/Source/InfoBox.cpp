@@ -214,8 +214,9 @@ bool InfoBox::SetVisible(bool Value){
   return(res);
 }
 
-Units_t InfoBox::SetValueUnit(Units_t Value){
-  Units_t res = mValueUnit;
+void
+InfoBox::SetValueUnit(Units_t Value)
+{
   if (mValueUnit != Value){
     mValueUnit = Value;
 
@@ -225,7 +226,6 @@ Units_t InfoBox::SetValueUnit(Units_t Value){
     //JMW    PaintValue();
 
   }
-  return(res);
 }
 
 int InfoBox::GetBorderKind(void){
