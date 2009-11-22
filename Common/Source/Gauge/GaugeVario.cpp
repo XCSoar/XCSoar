@@ -46,6 +46,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
+#include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
@@ -155,13 +156,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
   get_canvas().set_text_color(colText);
   get_canvas().set_background_color(colTextBackgnd);
 
-  if (Appearance.InverseInfoBox){
-    Units::GetUnitBitmap(Units::GetUserUnitByGroup(ugVerticalSpeed),
-      &hBitmapUnit, &BitmapUnitPos, &BitmapUnitSize, UNITBITMAPINVERS | UNITBITMAPGRAY);
-  } else {
-    Units::GetUnitBitmap(Units::GetUserUnitByGroup(ugVerticalSpeed),
-      &hBitmapUnit, &BitmapUnitPos, &BitmapUnitSize, UNITBITMAPGRAY);
-  }
+  unit_symbol = GetUnitSymbol(Units::GetUserUnitByGroup(ugVerticalSpeed));
 
   xoffset = get_width();
   yoffset = get_height() / 2;
@@ -604,7 +599,7 @@ void GaugeVario::RenderValue(Canvas &canvas, int x, int y,
 
     diValue->lastValue = -9999;
     diValue->lastText[0] = '\0';
-    diValue->lastBitMap = NULL;
+    diValue->last_unit_symbol = NULL;
     diValue->InitDone = true;
   }
 
@@ -625,7 +620,7 @@ void GaugeVario::RenderValue(Canvas &canvas, int x, int y,
 
     diLabel->lastValue = -9999;
     diLabel->lastText[0] = '\0';
-    diLabel->lastBitMap = NULL;
+    diLabel->last_unit_symbol = NULL;
     diLabel->InitDone = true;
   }
 
@@ -659,22 +654,29 @@ void GaugeVario::RenderValue(Canvas &canvas, int x, int y,
     diValue->lastValue = Value;
   }
 
-  if (dirty && (diLabel->lastBitMap != hBitmapUnit)) {
-    BitmapCanvas hdcTemp(canvas, *hBitmapUnit);
+  if (dirty && unit_symbol != NULL &&
+      diLabel->last_unit_symbol != unit_symbol) {
+    POINT BitmapUnitPos = unit_symbol->get_origin(Appearance.InverseInfoBox
+                                                  ? UnitSymbol::INVERSE_GRAY
+                                                  : UnitSymbol::GRAY);
+    SIZE BitmapUnitSize = unit_symbol->get_size();
+
+    BitmapCanvas hdcTemp(canvas, *unit_symbol);
     if (InfoBoxLayout::dscale>1) {
       canvas.stretch(x - IBLSCALE(5), diValue->recBkg.top,
-                     IBLSCALE(BitmapUnitSize.x),
-                     IBLSCALE(BitmapUnitSize.y),
+                     IBLSCALE(BitmapUnitSize.cx),
+                     IBLSCALE(BitmapUnitSize.cy),
                      hdcTemp,
                      BitmapUnitPos.x, BitmapUnitPos.y,
-                     BitmapUnitSize.x, BitmapUnitSize.y);
+                     BitmapUnitSize.cx, BitmapUnitSize.cy);
     } else {
       canvas.copy(x - 5, diValue->recBkg.top,
-                  BitmapUnitSize.x, BitmapUnitSize.y,
+                  BitmapUnitSize.cx, BitmapUnitSize.cy,
                   hdcTemp,
                   BitmapUnitPos.x, BitmapUnitPos.y);
     }
-    diLabel->lastBitMap = hBitmapUnit;
+
+    diLabel->last_unit_symbol = unit_symbol;
   }
 
 }

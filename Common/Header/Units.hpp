@@ -39,16 +39,7 @@ Copyright_License {
 #if !defined(__UNITS_H)
 #define __UNITS_H
 
-#include "Screen/Bitmap.hpp"
-
 #include <tchar.h>
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-#define UNITBITMAPNORMAL      0
-#define UNITBITMAPINVERS      1
-#define UNITBITMAPGRAY        2
 
 #ifndef __MINGW32__
 #define DEG "°"
@@ -118,8 +109,6 @@ typedef struct{
   const TCHAR   *Name;
   double  ToUserFact;
   double  ToUserOffset;
-  Bitmap bitmap;
-  POINT   BitMapSize;
 }UnitDescriptor_t;
 
 class Units {
@@ -132,8 +121,6 @@ private:
   static Units_t UserVerticalSpeedUnit;
   static Units_t UserWindSpeedUnit;
   static Units_t UserTaskSpeedUnit;
-
-  static void setupUnitBitmap(Units_t Unit, HINSTANCE hInst, WORD IDB, int Width, int Height);
 
 public:
 
@@ -198,11 +185,6 @@ public:
 
   static double ToUserDistance(double Distance);
   static double ToSysDistance(double Distance);
-
-  static bool GetUnitBitmap(Units_t Unit, const Bitmap **HBmp,
-                            POINT *Org, POINT *Size, int Kind);
-  static bool LoadUnitBitmap(HINSTANCE hInst);
-  static bool UnLoadUnitBitmap(void);
 
   static void TimeToText(TCHAR* text, int d);
 

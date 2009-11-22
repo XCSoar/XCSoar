@@ -52,7 +52,6 @@ Copyright_License {
 #define VALUESIZE    32
 #define COMMENTSIZE  32
 
-
 class InfoBox : public BufferWindow {
  public:
  private:
@@ -100,15 +99,11 @@ class InfoBox : public BufferWindow {
     RECT   recTitle;
     RECT   recValue;
     RECT   recComment;
-    const Bitmap *mhBitmapUnit;
-    POINT  mBitmapUnitPos;
-    POINT  mBitmapUnitSize;
 
     int color;
     int colorBottom;
     int colorTop;
     int mBorderSize;
-    int mUnitBitmapKind;
     bool mVisible;
     bool mSmallerFont;
 

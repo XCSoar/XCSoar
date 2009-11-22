@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Screen/Graphics.hpp"
+#include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Ramp.hpp"
 #include "Appearance.hpp"
@@ -134,7 +135,7 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance,
 
   StartupStore(TEXT("Initialise graphics\n"));
 
-  Units::LoadUnitBitmap(hInstance);
+  LoadUnitSymbols();
 
   infoSelectedBrush.set(MapGfx.ColorSelected);
   infoUnselectedBrush.set(MapGfx.ColorUnselected);
@@ -389,7 +390,7 @@ void ScreenGraphics::Destroy() {
   infoUnselectedBrush.reset();
   buttonBrush.reset();
 
-  Units::UnLoadUnitBitmap();
+  UnloadUnitSymbols();
 }
 
 

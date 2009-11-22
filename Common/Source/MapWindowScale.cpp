@@ -45,6 +45,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/UnitSymbol.hpp"
 #include "McReady.h"
 #include "Components.hpp"
 #include "options.h" /* for IBLSCALE() */
@@ -173,12 +174,15 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
 		6, 0, 8, 11, false);
 
     if (!ScaleChangeFeedback){
-      const Bitmap *Bmp;
-      POINT   BmpPos, BmpSize;
+      const UnitSymbol *symbol = GetUnitSymbol(Unit);
 
-      if (Units::GetUnitBitmap(Unit, &Bmp, &BmpPos, &BmpSize, 0)){
-	draw_bitmap(canvas, *Bmp, IBLSCALE(8) + TextSize.cx, rc.bottom - Height,
-		    BmpPos.x, BmpPos.y, BmpSize.x, BmpSize.y, false);
+      if (symbol != NULL) {
+        POINT origin = symbol->get_origin(UnitSymbol::NORMAL);
+        SIZE size = symbol->get_size();
+
+        draw_bitmap(canvas, *symbol,
+                    IBLSCALE(8) + TextSize.cx, rc.bottom - Height,
+                    origin.x, origin.y, size.cx, size.cy, false);
       }
     }
 

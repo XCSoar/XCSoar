@@ -638,50 +638,6 @@ double Units::ToSysDistance(double Distance){
   return(Distance);
 }
 
-
-void Units::setupUnitBitmap(Units_t Unit, HINSTANCE hInst, WORD IDB, int Width, int Height){
-
-  UnitDescriptors[Unit].bitmap.load(IDB);
-  UnitDescriptors[Unit].BitMapSize.x = Width;
-  UnitDescriptors[Unit].BitMapSize.y = Height;
-
-}
-
-
-bool Units::LoadUnitBitmap(HINSTANCE hInst){
-
-  UnitDescriptors[unUndef].BitMapSize.x = 0;
-  UnitDescriptors[unUndef].BitMapSize.y = 0;
-
-  setupUnitBitmap(unKiloMeter, hInst, IDB_UNIT_KM, 5, 11);
-  setupUnitBitmap(unNauticalMiles, hInst, IDB_UNIT_NM, 5, 11);
-  setupUnitBitmap(unStatuteMiles, hInst, IDB_UNIT_SM, 5, 11);
-  setupUnitBitmap(unKiloMeterPerHour, hInst, IDB_UNIT_KMH, 10, 11);
-  setupUnitBitmap(unKnots, hInst, IDB_UNIT_KT, 5, 11);
-  setupUnitBitmap(unStatuteMilesPerHour, hInst, IDB_UNIT_MPH, 10, 11);
-  setupUnitBitmap(unMeterPerSecond, hInst, IDB_UNIT_MS, 5, 11);
-  setupUnitBitmap(unFeetPerMinutes, hInst, IDB_UNIT_FPM, 5, 11);
-  setupUnitBitmap(unMeter, hInst, IDB_UNIT_M, 5, 11);
-  setupUnitBitmap(unFeet, hInst, IDB_UNIT_FT, 5, 11);
-  setupUnitBitmap(unFligthLevel, hInst, IDB_UNIT_FL, 5, 11);
-  setupUnitBitmap(unKelvin, hInst, IDB_UNIT_DegK, 5, 11);
-  setupUnitBitmap(unGradCelcius, hInst, IDB_UNIT_DegC, 5, 11);
-  setupUnitBitmap(unGradFahrenheit, hInst, IDB_UNIT_DegF, 5, 11);
-
-  return(true);
-
-}
-
-bool Units::UnLoadUnitBitmap(void){
-  for (unsigned i = 1; i <
-         sizeof(UnitDescriptors) / sizeof(UnitDescriptors[0]); i++) {
-    UnitDescriptors[unUndef].bitmap.reset();
-  }
-
-  return(true);
-
-}
-
 void Units::TimeToText(TCHAR* text, int d) {
   int hours, mins;
   bool negative = (d<0);
@@ -695,36 +651,3 @@ void Units::TimeToText(TCHAR* text, int d) {
     _stprintf(text, _T("%02d:%02d"), hours, mins);
   }
 }
-
-
-bool Units::GetUnitBitmap(Units_t Unit, const Bitmap **HBmp,
-                          POINT *Org, POINT *Size, int Kind){
-
-  UnitDescriptor_t *pU = &UnitDescriptors[Unit];
-
-  *HBmp = pU->bitmap.defined()
-    ? &pU->bitmap : NULL;
-
-  Size->x = pU->BitMapSize.x;
-  Size->y = pU->BitMapSize.y;
-
-  Org->y = 0;
-  switch (Kind){
-    case 1:  // inverse
-      Org->x = pU->BitMapSize.x;
-    break;
-    case 2:  // gray
-      Org->x = pU->BitMapSize.x * 2;
-    break;
-    case 3:  // inverse gray
-      Org->x = pU->BitMapSize.x * 3;
-    break;
-    default:
-      Org->x = 0;
-    break;
-  }
-
-  return pU->bitmap.defined();
-
-}
-

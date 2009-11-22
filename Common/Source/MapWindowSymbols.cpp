@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/UnitSymbol.hpp"
 #include "Math/Screen.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
@@ -652,9 +653,6 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
         // was ((rc.bottom - rc.top )/2)-rc.top-
         //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
         int x = GlideBar[2].x+IBLSCALE(1);
-        const Bitmap *Bmp;
-        POINT  BmpPos;
-        POINT  BmpSize;
 
         _stprintf(Value, TEXT("%1.0f"),
                   Units::ToUserAltitude(Calculated().TaskAltitudeDifference));
@@ -675,12 +673,16 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
                     IBLSCALE(1),
                     Value);
 
-        if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(),
-                                 &Bmp, &BmpPos, &BmpSize, 0)){
-          draw_bitmap(canvas, *Bmp,
+        const UnitSymbol *unit_symbol =
+          GetUnitSymbol(Units::GetUserAltitudeUnit());
+        if (unit_symbol != NULL) {
+          POINT BmpPos = unit_symbol->get_origin(UnitSymbol::NORMAL);
+          SIZE size = unit_symbol->get_size();
+
+          draw_bitmap(canvas, *unit_symbol,
                       x + TextSize.cx + IBLSCALE(1), y,
                       BmpPos.x, BmpPos.y,
-                      BmpSize.x, BmpSize.y, false);
+                      size.cx, size.cy, false);
         }
       }
   }

@@ -301,6 +301,7 @@ OBJS	:=\
 	$(SRC)/Screen/ButtonWindow.o \
 	$(SRC)/Screen/Chart.o 		\
 	$(SRC)/Screen/Fonts.o 		\
+	$(SRC)/Screen/UnitSymbol.o \
 	$(SRC)/Screen/Graphics.o 	\
 	$(SRC)/Screen/Ramp.o 		\
 	$(SRC)/Screen/STScreenBuffer.o 	\

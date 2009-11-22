@@ -44,6 +44,7 @@ Copyright_License {
 #include "InstrumentBlackboard.hpp"
 
 class ContainerWindow;
+class UnitSymbol;
 
 typedef struct{
   bool    InitDone;
@@ -52,7 +53,7 @@ typedef struct{
   POINT   orgText;
   double  lastValue;
   TCHAR   lastText[32];
-  const Bitmap *lastBitMap;
+  const UnitSymbol *last_unit_symbol;
 }DrawInfo_t;
 
 class GaugeVario:
@@ -91,9 +92,7 @@ private:
   DrawInfo_t diLabelTop;
   DrawInfo_t diLabelMiddle;
   DrawInfo_t diLabelBottom;
-  const Bitmap *hBitmapUnit;
-  POINT BitmapUnitPos;
-  POINT BitmapUnitSize;
+  const UnitSymbol *unit_symbol;
 
  public:
   GaugeVario(ContainerWindow &parent, const RECT rc);

@@ -47,6 +47,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "SettingsUser.hpp"
@@ -147,12 +148,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   mpFontHeightValue = &Appearance.InfoWindowFont;
   mpFontHeightComment = &Appearance.TitleWindowFont;
 
-  if (Appearance.InverseInfoBox){
-    mUnitBitmapKind = UNITBITMAPINVERS;
-  } else {
-    mUnitBitmapKind = UNITBITMAPNORMAL;
-  }
-
   mColorTitle   = fgColor;
   mColorValue   = fgColor;
   mColorComment = fgColor;
@@ -166,9 +161,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   _tcscpy(mTitle, TEXT(""));
   _tcscpy(mValue, TEXT(""));
   _tcscpy(mComment, TEXT(""));
-
-  mBitmapUnitSize.x = 0;
-  mBitmapUnitSize.y = 0;
 
   get_canvas().background_transparent();
 
@@ -217,15 +209,7 @@ bool InfoBox::SetVisible(bool Value){
 void
 InfoBox::SetValueUnit(Units_t Value)
 {
-  if (mValueUnit != Value){
-    mValueUnit = Value;
-
-    Units::GetUnitBitmap(mValueUnit, &mhBitmapUnit,
-                         &mBitmapUnitPos,
-                         &mBitmapUnitSize, mUnitBitmapKind);
-    //JMW    PaintValue();
-
-  }
+  mValueUnit = Value;
 }
 
 int InfoBox::GetBorderKind(void){
@@ -450,9 +434,18 @@ void InfoBox::PaintValue(Canvas &canvas){
 
   tsize = canvas.text_size(mValue);
 
+  SIZE unit_size;
+  const UnitSymbol *unit_symbol = GetUnitSymbol(mValueUnit);
+  if (unit_symbol != NULL) {
+    unit_size = unit_symbol->get_size();
+  } else {
+    unit_size.cx = 0;
+    unit_size.cy = 0;
+  }
+
   x = max(1, (int)recValue.left +
           (mWidth - (int)tsize.cx
-           - (int)mBitmapUnitSize.x * InfoBoxLayout::scale) / 2);
+           - (int)unit_size.cx * InfoBoxLayout::scale) / 2);
 
   if (mBorderKind & BORDERLEFT)
     x+= DEFAULTBORDERPENWIDTH;
@@ -462,18 +455,18 @@ void InfoBox::PaintValue(Canvas &canvas){
 
   canvas.text_opaque(x, y, &recValue, mValue);
 
-  if ((mValueUnit != unUndef) && (color>=0)){
-    if (mhBitmapUnit != NULL){
-      BitmapCanvas temp(canvas, *mhBitmapUnit);
-      canvas.scale_copy(x + tsize.cx,
-                        y + mpFontHeightValue->AscentHeight
-                        - mBitmapUnitSize.y * InfoBoxLayout::scale,
-                        temp,
-                        mBitmapUnitPos.x, mBitmapUnitPos.y,
-                        mBitmapUnitSize.x, mBitmapUnitSize.y);
-    }
+  if (unit_symbol != NULL && color >= 0) {
+    POINT origin = unit_symbol->get_origin(Appearance.InverseInfoBox
+                                           ? UnitSymbol::INVERSE
+                                           : UnitSymbol::NORMAL);
+    BitmapCanvas temp(canvas, *unit_symbol);
+    canvas.scale_copy(x + tsize.cx,
+                      y + mpFontHeightValue->AscentHeight
+                      - unit_size.cy * InfoBoxLayout::scale,
+                      temp,
+                      origin.x, origin.y,
+                      unit_size.cx, unit_size.cy);
   }
-
 }
 
 void InfoBox::PaintComment(Canvas &canvas){
