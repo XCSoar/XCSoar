@@ -41,7 +41,6 @@ Copyright_License {
 #define AATDISTANCE_H
 
 #include "Thread/Mutex.hpp"
-#include "Protection.hpp"
 #include "Sizes.h"
 #include "GeoPoint.hpp"
 

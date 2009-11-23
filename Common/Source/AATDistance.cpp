@@ -40,11 +40,8 @@ Copyright_License {
 #include "AATDistance.h"
 #include "Task.h"
 #include "Math/Geometry.hpp"
-#include "SettingsTask.hpp"
 #include "Math/Earth.hpp"
-#include "WayPoint.hpp"
-#include "Components.hpp"
-#include "WayPointList.hpp"
+#include "Protection.hpp"
 
 #include <math.h>
 
