@@ -92,7 +92,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
       TextDisplayMode.AsInt = 0;
 
-      irange = WaypointInScaleFilter(i);
+      irange = WaypointInScaleFilter(way_point);
 
       Bitmap *wp_bmp = &MapGfx.hSmall;
 

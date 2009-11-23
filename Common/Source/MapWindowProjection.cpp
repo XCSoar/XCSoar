@@ -48,12 +48,10 @@ Copyright_License {
 #include "InputEvents.h"
 #include "UtilsProfile.hpp"
 #include "options.h" /* for IBLSCALE() */
-#include <stdlib.h>
 #include "WayPoint.hpp"
-#include "WayPointList.hpp"
-#include "Components.hpp"
-#include <math.h>
 
+#include <stdlib.h>
+#include <math.h>
 
 MapWindowProjection::MapWindowProjection():
   _origin_centered(false),
@@ -80,10 +78,9 @@ MapWindowProjection::InitialiseScaleList
   _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
 }
 
-bool MapWindowProjection::WaypointInScaleFilter(int i) const
+bool
+MapWindowProjection::WaypointInScaleFilter(const WAYPOINT &way_point) const
 {
-  const WAYPOINT &way_point = way_points.get(i);
-
   return ((way_point.Zoom >= MapScale*10) || (way_point.Zoom == 0))
     && (MapScale <= 10);
 }

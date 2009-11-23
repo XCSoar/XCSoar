@@ -49,6 +49,7 @@ Copyright_License {
 struct NMEA_INFO;
 struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
+struct WAYPOINT;
 class Canvas;
 
 class MapWindowProjection {
@@ -94,7 +95,7 @@ class MapWindowProjection {
   }
 
   // used by waypoint nearest routine
-  bool WaypointInScaleFilter(int i) const;
+  bool WaypointInScaleFilter(const WAYPOINT &way_point) const;
 
   // drawing functions
   void DrawGreatCircle(Canvas &canvas,

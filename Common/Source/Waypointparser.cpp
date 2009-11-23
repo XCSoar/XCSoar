@@ -753,7 +753,7 @@ FindNearestWayPoint(const WayPointList &way_points,
 
     if (way_points.get_calc(i).Visible) {
 
-      if (map_projection.WaypointInScaleFilter(i)) {
+      if (map_projection.WaypointInScaleFilter(way_points.get(i))) {
 
         // only look for visible waypoints
         // feature added by Samuel Gisiger
