@@ -37,13 +37,18 @@ Copyright_License {
 */
 
 #include "LocalTime.hpp"
-#include "Device/Parser.h"
 #include "Interface.hpp"
-#include "WayPoint.hpp"
-#include <stdlib.h>
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 #include "Asset.hpp"
 
-#include "Formatter/WayPoint.hpp"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+#ifndef _MSC_VER
+#include <algorithm>
+using std::max;
+#endif
 
 int TimeLocal(int localtime) {
   localtime += GetUTCOffset();
