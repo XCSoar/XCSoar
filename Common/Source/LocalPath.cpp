@@ -40,7 +40,9 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Appearance.hpp"
 #include "Compatibility/path.h"
+#include "StringUtil.hpp"
 #include "Asset.hpp"
+
 #include <stdio.h>
 
 // Get local My Documents path - optionally include file to add and location
@@ -133,11 +135,9 @@ void ExpandLocalPath(TCHAR* filein) {
   TCHAR output[MAX_PATH];
   LocalPath(lpath);
 
-  TCHAR* ptr;
-  ptr = _tcsstr(filein, code);
+  const TCHAR *ptr = string_after_prefix(filein, code);
   if (!ptr) return;
 
-  ptr += _tcslen(code);
   if (_tcslen(ptr)>0) {
     _stprintf(output,TEXT("%s%s"),lpath, ptr);
     _tcscpy(filein, output);
@@ -159,11 +159,9 @@ void ContractLocalPath(TCHAR* filein) {
   TCHAR output[MAX_PATH];
   LocalPath(lpath);
 
-  TCHAR* ptr;
-  ptr = _tcsstr(filein, lpath);
+  const TCHAR *ptr = string_after_prefix(filein, lpath);
   if (!ptr) return;
 
-  ptr += _tcslen(lpath);
   if (_tcslen(ptr)>0) {
     _stprintf(output,TEXT("%s%s"),code, ptr);
     _tcscpy(filein, output);
