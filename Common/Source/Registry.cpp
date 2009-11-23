@@ -43,7 +43,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MapWindow.h"
 #include "Gauge/GaugeFLARM.hpp"
-#include "TerrainRenderer.h"
 #include "Audio/VegaVoice.h"
 #include "McReady.h"
 #include "WayPoint.hpp"

@@ -70,7 +70,6 @@ Copyright_License {
 #include "Device/device.h"
 #include "TopologyStore.h"
 #include "Topology.h"
-#include "TerrainRenderer.h"
 #include "Audio/VarioSound.h"
 #include "Screen/Graphics.hpp"
 #include "Calculations.h"
