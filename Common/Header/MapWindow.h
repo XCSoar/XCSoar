@@ -66,6 +66,8 @@ struct ZoomClimb_t {
 
 class GaugeCDI;
 class TerrainRenderer;
+class SnailTrail;
+class OLCOptimizer;
 
 class MapWindow
 : public MaskedPaintWindow,
@@ -178,9 +180,10 @@ class MapWindow
   void DrawWaypoints(Canvas &canvas);
   void DrawFlightMode(Canvas &canvas, const RECT rc);
   void DrawGPSStatus(Canvas &canvas, const RECT rc);
-  double DrawTrail(Canvas &canvas);
+  double DrawTrail(Canvas &canvas, const SnailTrail &snail_trail);
   void DrawTeammate(Canvas &canvas);
-  void DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime);
+  void DrawTrailFromTask(Canvas &canvas, const OLCOptimizer &olc,
+                         const double TrailFirstTime);
   void DrawOffTrackIndicator(Canvas &canvas);
   void DrawProjectedTrack(Canvas &canvas);
   void DrawTask(Canvas &canvas, RECT rc);

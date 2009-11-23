@@ -49,6 +49,7 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "Components.hpp"
 #include "RasterWeather.h"
+#include "GlideComputer.hpp"
 
 /**
  * Calculates the screen positions of all important features
@@ -188,8 +189,19 @@ void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
 {
-  double TrailFirstTime = DrawTrail(canvas);
-  DrawTrailFromTask(canvas, TrailFirstTime);
+  SnailTrail &snail_trail = glide_computer.GetSnailTrail();
+  snail_trail.ReadLock();
+  double TrailFirstTime = DrawTrail(canvas, snail_trail);
+  snail_trail.Unlock();
+
+  if (TrailFirstTime >= 0) {
+    OLCOptimizer &olc = glide_computer.GetOLC();
+    olc.Lock();
+    olc.SetLine();
+    DrawTrailFromTask(canvas, olc, TrailFirstTime);
+    olc.Unlock();
+  }
+
   DrawThermalEstimate(canvas);
 }
 

@@ -45,8 +45,6 @@ Copyright_License {
 #include "McReady.h"
 #include "OnLineContest.h"
 #include "Screen/Graphics.hpp"
-#include "GlideComputer.hpp"
-#include "Components.hpp"
 #include "options.h" /* for IBLSCALE() */
 
 #include <math.h>
@@ -60,7 +58,7 @@ using std::max;
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
 // This function is slow...
-double MapWindow::DrawTrail(Canvas &canvas)
+double MapWindow::DrawTrail(Canvas &canvas, const SnailTrail &snail_trail)
 {
   int i, snail_index;
   SNAIL_POINT P1;
@@ -70,8 +68,6 @@ double MapWindow::DrawTrail(Canvas &canvas)
 
   if(!SettingsMap().TrailActive)
     return -1;
-
-  glide_computer.GetSnailTrail().ReadLock();
 
   // Trail drift calculations
 
@@ -111,7 +107,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
   int skip_border = skip_divisor;
   int skip_level= 3; // TODO code: try lower level?
 
-  int snail_offset = TRAILSIZE+glide_computer.GetSnailTrail().getIndex()-num_trail_max;
+  int snail_offset = TRAILSIZE + snail_trail.getIndex() - num_trail_max;
   while (snail_offset>= TRAILSIZE) {
     snail_offset -= TRAILSIZE;
   }
@@ -188,7 +184,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
       snail_index-= TRAILSIZE;
     }
 
-    P1 = glide_computer.GetSnailTrail().getPoint(snail_index);
+    P1 = snail_trail.getPoint(snail_index);
 
     // Mark first time of display point
 
@@ -292,14 +288,13 @@ double MapWindow::DrawTrail(Canvas &canvas)
     canvas.line_to(Orig_Aircraft.x, Orig_Aircraft.y);
   }
 
-  glide_computer.GetSnailTrail().Unlock();
-
   return TrailFirstTime;
 }
 
 
 void
-MapWindow::DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime)
+MapWindow::DrawTrailFromTask(Canvas &canvas, const OLCOptimizer &olc,
+                             const double TrailFirstTime)
 {
   static POINT ptin[MAXCLIPPOLYGON];
 
@@ -311,18 +306,16 @@ MapWindow::DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime)
   const double mTrailFirstTime = TrailFirstTime - Calculated().TakeOffTime;
   // since.GetOLC() keeps track of time wrt takeoff
 
-  glide_computer.GetOLC().Lock();
-  glide_computer.GetOLC().SetLine();
-  int n = min((int)MAXCLIPPOLYGON, glide_computer.GetOLC().getN());
+  int n = min((int)MAXCLIPPOLYGON, olc.getN());
   int i, j=0;
   for (i=0; i<n; i++) {
-    if (glide_computer.GetOLC().getTime(i)>= mTrailFirstTime)
+    if (olc.getTime(i)>= mTrailFirstTime)
       break;
-    LonLat2Screen(glide_computer.GetOLC().getLocation(i),
+    LonLat2Screen(olc.getLocation(i),
                   ptin[j]);
     j++;
   }
-  glide_computer.GetOLC().Unlock();
+
   if (j>=2) {
     canvas.select(MapGfx.hSnailPens[NUMSNAILCOLORS / 2]);
     canvas.polyline(ptin, j);
