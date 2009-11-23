@@ -37,24 +37,19 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "XCSoar.h"
 #include "SnailTrail.hpp"
 #include "InfoBoxLayout.h"
-#include <math.h>
-#include <stdlib.h>
-#include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
 #include "McReady.h"
 #include "OnLineContest.h"
-#include "SettingsComputer.hpp"
-#include "SettingsUser.hpp"
 #include "Screen/Graphics.hpp"
 #include "GlideComputer.hpp"
-#include "Protection.hpp"
 #include "Components.hpp"
 #include "options.h" /* for IBLSCALE() */
+
+#include <math.h>
 
 #ifndef _MSC_VER
 #include <algorithm>
