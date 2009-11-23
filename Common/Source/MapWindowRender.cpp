@@ -133,7 +133,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
         // defer rendering until first draw because
         // the buffer size, smoothing etc is set by the
         // loaded terrain properties
-        terrain_renderer = new TerrainRenderer(MapRectBig);
+        terrain_renderer = new TerrainRenderer(terrain, RASP, MapRectBig);
       }
       terrain_renderer->SetSettings(SettingsMap().TerrainRamp,
                                     SettingsMap().TerrainContrast,

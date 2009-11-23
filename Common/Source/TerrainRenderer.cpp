@@ -55,7 +55,6 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
-#include "Components.hpp"
 #include "options.h" /* for IBLSCALE() */
 
 #include <assert.h>
@@ -296,8 +295,10 @@ inline void TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 //
 // this is for TerrainInfo.StepSize = 0.0025;
 
-TerrainRenderer::TerrainRenderer(RECT rc) {
-
+TerrainRenderer::TerrainRenderer(const RasterTerrain &_terrain,
+                                 RasterWeather &_weather, RECT rc)
+  :terrain(_terrain), RASP(_weather)
+{
   TerrainContrast = 150;
   TerrainBrightness = 36;
   TerrainRamp = 0;

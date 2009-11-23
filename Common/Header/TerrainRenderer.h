@@ -49,12 +49,15 @@ class BGRColor;
 class RasterMap;
 class MapWindowProjection;
 class LabelBlock;
+class RasterTerrain;
+class RasterWeather;
 class RasterRounding;
 struct COLORRAMP;
 
 class TerrainRenderer {
 public:
-  TerrainRenderer(RECT rc);
+  TerrainRenderer(const RasterTerrain &_terrain, RasterWeather &_weather,
+                  RECT rc);
   ~TerrainRenderer();
 
 public:
@@ -64,6 +67,8 @@ public:
   short spot_min_val;
 
 private:
+  const RasterTerrain &terrain;
+  RasterWeather &RASP;
 
   unsigned int ixs, iys; // screen dimensions in coarse pixels
   unsigned int dtquant;
