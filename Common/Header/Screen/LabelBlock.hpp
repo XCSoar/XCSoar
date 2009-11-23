@@ -39,11 +39,13 @@ Copyright_License {
 #ifndef SCREEN_LABELBLOCK_HPP
 #define SCREEN_LABELBLOCK_HPP
 
-#include "Sizes.h"
-
 #include <windef.h>
 
 class LabelBlock {
+  enum {
+    MAXLABELBLOCKS = 100
+  };
+
 public:
   LabelBlock():num_blocks(0) {};
   bool check(const RECT rc);
