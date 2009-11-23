@@ -1,3 +1,5 @@
+#include "test_debug.hpp"
+
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideState.hpp"
 #include "GlideSolvers/GlideResult.hpp"
@@ -72,7 +74,7 @@ void test_glide_alt(const double h, const double W,
 }
 
 
-void test_mc()
+bool test_mc()
 {
   for (double mc=0.0; mc<5.0; mc+= 0.1) {
     basic_polar(mc);
@@ -106,9 +108,13 @@ void test_mc()
       test_glide_alt(50.0,10.0,a,hfile);
     }
   }
-
+  return true;
 }
 
 int main() {
-  test_mc();
+
+  plan_tests(1);
+  ok(test_mc(),"mc output",0);
+  return exit_status();
+
 }

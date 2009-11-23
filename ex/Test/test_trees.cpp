@@ -58,18 +58,25 @@ int main(int argc, char** argv) {
 
   std::ofstream fw("results/res-tree-wp.txt");
 
+  plan_tests(2);
+
+  bool fine = true;
   fw << "# test waypoint tree\n";
   for (double i=10; i<=4000; i*= 1.1) {
-    test_wp((int)i,fw);
+    fine &= test_wp((int)i,fw);
   }
   fw << "\n";
+  ok(fine,"waypoint tree",0);
 
   std::ofstream fa("results/res-tree-as.txt");
 
+  fine = true;
   fa << "# test airspace tree\n";
   for (double i=10; i<=4000; i*= 1.1) {
-    test_as((int)i,fa);
+    fine &= test_as((int)i,fa);
   }
   fa << "\n";
-  return 0;
+  ok(fine,"airspace tree",0);
+
+  return exit_status();
 }

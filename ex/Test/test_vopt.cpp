@@ -17,14 +17,11 @@ int main(int argc, char** argv)
 
   int n_wind = 3;
 
-  plan_tests(5*n_wind);
+  plan_tests(n_wind);
 
+  // tests whether flying at VOpt for OR task is optimal
   for (int i=0; i<n_wind; i++) {
-    ok (test_flight(3,i), "flight or",0);
-    ok (test_flight(4,i), "flight dash",0);
-    ok (test_flight(1,i), "flight fai",0);
-    ok (test_flight(2,i), "flight aat",0);
-    ok (test_flight(0,i), "flight mixed",0);    
+    ok (test_speed_factor(3,i), "vopt or",0);
   }
   return exit_status();
 }

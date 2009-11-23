@@ -12,8 +12,11 @@ bool run_flight(TaskManager &task_manager,
                 int test_num,
                 bool goto_target,
                 double random_mag,
-                int n_wind);
+                int n_wind,
+                const double speed_factor=1.0);
 
-bool test_flight(int test_num, int n_wind);
+bool test_flight(int test_num, int n_wind, const double speed_factor=1.0);
+bool test_speed_factor(int test_num, int n_wind);
+bool test_cruise_efficiency(int test_num, int n_wind);
 
 #endif

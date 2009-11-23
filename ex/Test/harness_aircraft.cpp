@@ -23,7 +23,8 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
                          bool _goto_target):
   test_num(_test_num),
   heading_filt(8.0),
-  goto_target(_goto_target)
+  goto_target(_goto_target),
+  speed_factor(1.0)
 {
   for (unsigned i=0; i<task_manager.get_task_size(); i++) {
     if (i==0) {
@@ -109,23 +110,15 @@ void AircraftSim::update_state(TaskManager &task_manager,
   
   switch (acstate) {
   case Cruise:
-    state.Speed = stat.solution_remaining.VOpt;
-    sinkrate = glide_polar.SinkRate(state.Speed);        
-    update_bearing(task_manager);
-    break;
   case FinalGlide:
-    if ((task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)) {
-      state.Speed = stat.solution_remaining.VOpt;
-    } else {
-      state.Speed = stat.solution_remaining.VOpt*0.9;
-    }
-    sinkrate = glide_polar.SinkRate(state.Speed);
+    state.Speed = stat.solution_remaining.VOpt*speed_factor;
+    sinkrate = glide_polar.SinkRate(state.Speed)*sink_factor;
     update_bearing(task_manager);
     break;
   case Climb:
     state.Speed = turn_speed;
     bearing += 20+small_rand();
-    sinkrate = -glide_polar.get_mc();
+    sinkrate = -glide_polar.get_mc()*climb_factor;
     break;
   };
 }
@@ -149,7 +142,10 @@ void AircraftSim::update_mode(TaskManager &task_manager,
     }
     break;
   case FinalGlide:
-
+    if (task_manager.get_stats().total.solution_remaining.AltitudeDifference<-20) {
+      print_mode("# mode climb\n");
+      acstate = Climb;
+    }
     break;
   case Climb:
     if ((awp>0) && 

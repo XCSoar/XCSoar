@@ -157,40 +157,45 @@ TESTOBJS = Test/test_debug.o \
 	Test/harness_task.o \
 	Test/tap.o
 
-TESTS = Test/test_task \
-	Test/test_trees \
-	Test/test_mc \
-	Test/test_waypoints \
-	Test/test_flight
+TESTS = Test/test_task.exe \
+	Test/test_trees.exe \
+	Test/test_mc.exe \
+	Test/test_waypoints.exe \
+	Test/test_flight.exe \
+	Test/test_cruiseefficiency.exe \
+	Test/test_vopt.exe
 
-TARGETS = Test/test $(TESTS)
+TARGETS = Test/test.exe $(TESTS)
 
 all: $(TARGETS)
 	@echo "done"
 
-test:	$(TARGETS)
-	Test/test_task
-	Test/test_waypoints
-	Test/test_flight
+test:	$(TESTS)
+	perl Test/testall.pl $(TESTS)
 
+Test/test.exe: $(OBJS) $(TESTOBJS) Test/test.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test.cpp -o Test/test.exe
 
-Test/test: $(OBJS) $(TESTOBJS) Test/test.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test.cpp -o Test/test 
+Test/test_task.exe: $(OBJS) $(TESTOBJS) Test/test_task.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_task.cpp -o Test/test_task.exe
 
-Test/test_task: $(OBJS) $(TESTOBJS) Test/test_task.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_task.cpp -o Test/test_task
+Test/test_cruiseefficiency.exe: $(OBJS) $(TESTOBJS) Test/test_cruiseefficiency.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_cruiseefficiency.cpp -o Test/test_cruiseefficiency.exe
 
-Test/test_waypoints: $(OBJS) $(TESTOBJS) Test/test_waypoints.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_waypoints.cpp -o Test/test_waypoints
+Test/test_vopt.exe: $(OBJS) $(TESTOBJS) Test/test_vopt.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_vopt.cpp -o Test/test_vopt.exe
 
-Test/test_flight: $(OBJS) $(TESTOBJS) Test/test_flight.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_flight.cpp -o Test/test_flight
+Test/test_waypoints.exe: $(OBJS) $(TESTOBJS) Test/test_waypoints.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_waypoints.cpp -o Test/test_waypoints.exe
 
-Test/test_trees: $(OBJS) $(TESTOBJS) Test/test_trees.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_trees.cpp -o Test/test_trees 
+Test/test_flight.exe: $(OBJS) $(TESTOBJS) Test/test_flight.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_flight.cpp -o Test/test_flight.exe
 
-Test/test_mc: $(OBJS) $(TESTOBJS) Test/test_mc.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_mc.cpp -o Test/test_mc 
+Test/test_trees.exe: $(OBJS) $(TESTOBJS) Test/test_trees.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_trees.cpp -o Test/test_trees.exe
+
+Test/test_mc.exe: $(OBJS) $(TESTOBJS) Test/test_mc.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_mc.cpp -o Test/test_mc.exe
 
 doco: 
 	doxygen doxygen/Doxyfile

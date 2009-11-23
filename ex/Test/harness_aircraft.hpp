@@ -34,6 +34,10 @@ public:
 #endif
   double time();
 
+  void set_speed_factor(double f) {
+    speed_factor = f;
+  }
+
 private:
   GEOPOINT endpoint(const double bear) const;
   void update_bearing(TaskManager &task_manager);
@@ -46,6 +50,7 @@ private:
   unsigned awp;
   int test_num;
   Filter heading_filt;
+  double speed_factor;
 
   enum AcState {
     Climb = 0,

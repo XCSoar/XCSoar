@@ -65,8 +65,8 @@ void task_report(TaskManager& task_manager, const char* text)
     TaskVisitorPrint tv;
     printf("%s",text);
     task_manager.Accept(tv);
+    task_manager.print(ac);
   }
-  task_manager.print(ac);
   if (interactive>1) {
     wait_prompt(0);
   }

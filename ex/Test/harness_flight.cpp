@@ -3,17 +3,23 @@
 #include <fstream>
 #endif
 
+double time_elapsed=0.0;
+double time_planned=1.0;
+double cruise_efficiency=1.0;
+
 bool run_flight(TaskManager &task_manager,
                 GlidePolar &glide_polar,
                 int test_num,
                 bool goto_target,
                 double random_mag,
-                int n_wind) 
+                int n_wind,
+                const double speed_factor) 
 {
   AircraftSim ac(0, task_manager, random_mag, goto_target);
   unsigned print_counter=0;
 
   ac.set_wind(n_wind*5.0,0.0);
+  ac.set_speed_factor(speed_factor);
 
 #ifdef DO_PRINT
   std::ofstream f4("results/res-sample.txt");
@@ -56,18 +62,22 @@ bool run_flight(TaskManager &task_manager,
 
   } while (ac.advance(task_manager, glide_polar));
 
-  task_manager.print(ac.get_state());
-  ac.print(f4);
-  f4.flush();
+  if (verbose) {
+    task_manager.print(ac.get_state());
+    ac.print(f4);
+    f4.flush();
+  }
 
-  double time_elapsed = task_manager.get_stats().total.TimeElapsed;
-  double time_planned = task_manager.get_stats().total.TimePlanned;
+  time_elapsed = task_manager.get_stats().total.TimeElapsed;
+  time_planned = task_manager.get_stats().total.TimePlanned;
+  cruise_efficiency = task_manager.get_stats().cruise_efficiency;
 
   bool time_ok = fabs(time_elapsed/time_planned-1.0)<0.02;
-  if ((verbose>1) || !time_ok) {
+  if ((verbose) || !time_ok) {
     printf("# time remaining %g\n", time_remaining);
     printf("# time elapsed %g\n", time_elapsed);
     printf("# time planned %g\n", time_planned);
+    printf("# cruise efficiency %g\n", cruise_efficiency);
   }
   if (verbose) {
     distance_counts();
@@ -76,7 +86,7 @@ bool run_flight(TaskManager &task_manager,
 }
 
 
-bool test_flight(int test_num, int n_wind) 
+bool test_flight(int test_num, int n_wind, const double speed_factor) 
 {
   //// aircraft
   GlidePolar glide_polar(2.0,0.0,0.0);
@@ -124,5 +134,104 @@ bool test_flight(int test_num, int n_wind)
     break;
   };
 
-  return run_flight(task_manager, glide_polar, test_num, goto_target, target_noise, n_wind);
+  return run_flight(task_manager, glide_polar, test_num, goto_target, target_noise, n_wind,
+    speed_factor);
+}
+
+
+bool test_speed_factor(int test_num, int n_wind) 
+{
+  // flying at opt speed should be minimum time flight!
+
+  double te0, te1, te2;
+
+  srand(0);
+  test_flight(test_num, n_wind, 1.0);
+  te0 = time_elapsed;
+
+  srand(0);
+  test_flight(test_num, n_wind, 0.8);
+  te1 = time_elapsed;
+
+  srand(0);
+  test_flight(test_num, n_wind, 1.2);
+  te2 = time_elapsed;
+
+  bool retval = (te0<=te1) && (te0<=te2);
+  if (verbose || !retval) {
+    printf("# sf 0.8 time_elapsed_rat %g\n",te1/te0);
+    printf("# sf 1.2 time_elapsed_rat %g\n",te2/te0);
+  }
+  return retval;
+}
+
+
+bool test_cruise_efficiency(int test_num, int n_wind) 
+{
+  double ce0, ce1, ce2, ce3, ce4, ce5, ce6;
+
+  bearing_noise = 0.0;
+  target_noise = 0.1;
+
+  srand(0);
+  test_flight(test_num, n_wind);
+  ce0 = cruise_efficiency;
+
+  // wandering
+  bearing_noise = 40.0;
+  srand(0);
+  test_flight(test_num, n_wind);
+  ce1 = cruise_efficiency;
+  ok (ce0>ce1, "ce wandering",0);
+
+  // flying too slow
+  bearing_noise = 0.0;
+  srand(0);
+  test_flight(test_num, n_wind, 0.8);
+  ce2 = cruise_efficiency;
+  ok (ce0>ce2, "ce speed slow",0);
+
+  // flying too fast
+  bearing_noise = 0.0;
+  srand(0);
+  test_flight(test_num, n_wind, 1.2);
+  ce3 = cruise_efficiency;
+  ok (ce0>ce3, "ce speed fast",0);
+
+  // higher than expected cruise sink
+  sink_factor = 1.2;
+  srand(0);
+  test_flight(test_num, n_wind);
+  ce4 = cruise_efficiency;
+  ok (ce0>ce4, "ce high sink",0);
+  sink_factor = 1.0;
+
+  // slower than expected climb
+  climb_factor = 0.8;
+  srand(0);
+  test_flight(test_num, n_wind);
+  ce5 = cruise_efficiency;
+  ok (ce0>ce5, "ce slow climb",0);
+  climb_factor = 1.0;
+
+  // lower than expected cruise sink
+  sink_factor = 0.8;
+  srand(0);
+  test_flight(test_num, n_wind);
+  ce6 = cruise_efficiency;
+  ok (ce0<ce6, "ce low sink",0);
+  sink_factor = 1.0;
+
+  bool retval = (ce0>ce1) && (ce0>ce2) && (ce0>ce3) && (ce0>ce4) && (ce0>ce5)
+    && (ce0<ce6);
+  if (verbose || !retval) {
+    printf("# ce nominal %g\n",ce0);
+    printf("# ce wandering %g\n",ce1);
+    printf("# ce speed slow %g\n",ce2);
+    printf("# ce speed fast %g\n",ce3);
+    printf("# ce high sink %g\n",ce4);
+    printf("# ce slow climb %g\n",ce5);
+    printf("# ce low sink %g\n",ce6);
+  }
+  return retval;
 }

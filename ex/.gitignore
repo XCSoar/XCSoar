@@ -26,9 +26,11 @@
 res-*.txt
 gmon.out
 gprof.out
-Test/test
-Test/test_mc
-Test/test_trees
-Test/test_task
-Test/test_waypoints
-Test/test_flight
+Test/test.exe
+Test/test_mc.exe
+Test/test_trees.exe
+Test/test_task.exe
+Test/test_waypoints.exe
+Test/test_flight.exe
+Test/test_vopt.exe
+Test/test_cruiseefficiency.exe
