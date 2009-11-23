@@ -57,6 +57,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Registry.hpp"
 #include "Interface.hpp"
+#include "Asset.hpp"
 
 ProgressWindow *XCSoarInterface::progress_window = NULL;
 
@@ -73,9 +74,9 @@ void ActionInterface::StartHourglassCursor(void) {
 #else /* !ENABLE_SDL */
   HCURSOR newc = LoadCursor(NULL, IDC_WAIT);
   oldCursor = (HCURSOR)SetCursor(newc);
-#ifdef GNAV
-  SetCursorPos(160,120);
-#endif
+  if (is_altair()) {
+    SetCursorPos(160,120);
+  }
 #endif /* !ENABLE_SDL */
 }
 
@@ -87,9 +88,9 @@ void ActionInterface::StopHourglassCursor(void) {
   // XXX
 #else /* !ENABLE_SDL */
   SetCursor(oldCursor);
-#ifdef GNAV
-  SetCursorPos(640,480);
-#endif
+  if (is_altair()) {
+    SetCursorPos(640,480);
+  }
   oldCursor = NULL;
 #endif /* !ENABLE_SDL */
 }

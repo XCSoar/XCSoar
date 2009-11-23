@@ -1291,12 +1291,12 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-#ifdef _SIM_
   TCHAR deviceName1[MAX_PATH];
   TCHAR deviceName2[MAX_PATH];
-  ReadDeviceSettings(0, deviceName1);
-  ReadDeviceSettings(1, deviceName2);
-#endif
+  if (is_simulator()) {
+    ReadDeviceSettings(0, deviceName1);
+    ReadDeviceSettings(1, deviceName2);
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpComDevice1"));
   if (wp) {
@@ -1305,15 +1305,15 @@ static void setVariables(void) {
     for (int i = 0; DeviceRegister[i] != NULL; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
-#ifndef _SIM_
-      if (devA() != NULL){
-	if (_tcscmp(DeviceName, devA()->Name) == 0)
-	  dwDeviceIndex1 = i;
+      if (!is_simulator()) {
+        if (devA() != NULL){
+          if (_tcscmp(DeviceName, devA()->Name) == 0)
+            dwDeviceIndex1 = i;
+        }
+      } else {
+        if (_tcscmp(DeviceName, deviceName1) == 0)
+          dwDeviceIndex1 = i;
       }
-#else
-      if (_tcscmp(DeviceName, deviceName1) == 0)
-        dwDeviceIndex1 = i;
-#endif
     }
     dfe->Sort(1);
     dfe->Set(dwDeviceIndex1);
@@ -1352,15 +1352,15 @@ static void setVariables(void) {
     for (int i = 0; DeviceRegister[i] != NULL; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
-#ifndef _SIM_
-      if (devB() != NULL){
-	if (_tcscmp(DeviceName, devB()->Name) == 0)
-	  dwDeviceIndex2 = i;
+      if (!is_simulator()) {
+        if (devB() != NULL){
+          if (_tcscmp(DeviceName, devB()->Name) == 0)
+            dwDeviceIndex2 = i;
+        }
+      } else {
+        if (_tcscmp(DeviceName, deviceName2) == 0)
+          dwDeviceIndex2 = i;
       }
-#else
-      if (_tcscmp(DeviceName, deviceName2) == 0)
-        dwDeviceIndex2 = i;
-#endif
     }
     dfe->Sort(1);
     dfe->Set(dwDeviceIndex2);
