@@ -400,14 +400,6 @@ void DefaultRegistrySettingsAltair(void)
 #endif
 }
 
-
-void SaveRegistryAirspacePriority() {
-  for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
-    SetToRegistry(szRegistryAirspacePriority[i], AirspacePriority[i]);
-  }
-}
-
-
 void Profile::ReadRegistrySettings(void)
 {
   DWORD Speed = 0;
