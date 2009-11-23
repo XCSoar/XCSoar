@@ -47,6 +47,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "Components.hpp"
 #include "WayPointList.hpp"
+#include "Asset.hpp"
 
 #include <stdio.h>
 #include <assert.h>
@@ -257,11 +258,11 @@ void Task::SaveTask(const TCHAR *szFileName)
 void Task::SaveDefaultTask(void) {
   if (!isTaskAborted()) {
     TCHAR buffer[MAX_PATH];
-#ifdef GNAV
-    LocalPath(buffer, TEXT("persist/Default.tsk"));
-#else
-    LocalPath(buffer, TEXT("Default.tsk"));
-#endif
+    if (is_altair()) {
+      LocalPath(buffer, TEXT("persist/Default.tsk"));
+    } else {
+      LocalPath(buffer, TEXT("Default.tsk"));
+    }
     SaveTask(buffer);
   }
 }
