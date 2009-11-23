@@ -49,6 +49,7 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Components.hpp"
 #include "WayPointList.hpp"
+#include "Asset.hpp"
 
 InfoBoxFormatter::InfoBoxFormatter(const TCHAR *theformat) {
   _tcscpy(Format, theformat);
@@ -368,17 +369,17 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 65: // battery voltage
 #if !defined(WINDOWSPC) && !defined(HAVE_POSIX)
-#ifndef GNAV
-    Value = PDABatteryPercent;
-    Valid = true;
-#else
-    Value = Basic().SupplyBatteryVoltage;
-    if (Value>0.0) {
+    if (!is_altair()) {
+      Value = PDABatteryPercent;
       Valid = true;
     } else {
-      Valid = false;
+      Value = Basic().SupplyBatteryVoltage;
+      if (Value>0.0) {
+        Valid = true;
+      } else {
+        Valid = false;
+      }
     }
-#endif
 #else
     Value = 0.0;
     Valid = false;
