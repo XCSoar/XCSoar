@@ -57,7 +57,7 @@ class RasterMapRaw: public RasterMap {
   short *TerrainMem;
   virtual void SetFieldRounding(const double xr, const double yr,
     RasterRounding &rounding);
-  virtual bool Open(const char *path);
+  bool Open(const char *path);
 
   static RasterMapRaw *LoadFile(const char *path);
 
