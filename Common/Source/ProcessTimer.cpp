@@ -55,6 +55,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "PeriodClock.hpp"
 #include "MainWindow.hpp"
+#include "Asset.hpp"
 
 void
 ProcessTimer::HeapCompact()
@@ -150,11 +151,11 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
 
     // If GPS connected but no lock, must be in hangar
     if (InterfaceTimeoutCheck()) {
-#ifdef GNAV
-      // TODO feature: ask question about shutdown or give warning
-      // then shutdown if no activity.
-      // Shutdown();
-#endif
+      if (is_altair()) {
+        // TODO feature: ask question about shutdown or give warning
+        // then shutdown if no activity.
+        // Shutdown();
+      }
     }
   } else if (connected_now) { // !navwarning
     wait_connect = false;
@@ -181,10 +182,10 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
       // switched off and on again
       //
 #ifndef WINDOWSPC
-#ifndef GNAV
-      InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
-      devRestart();
-#endif
+      if (!is_altair()) {
+        InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
+        devRestart();
+      }
 #endif
     }
   }
@@ -198,39 +199,39 @@ void ProcessTimer::Process(void)
 {
   CommonProcessTimer();
 
-#ifndef _SIM_
-  // now check GPS status
-  devTick();
+  if (!is_simulator()) {
+    // now check GPS status
+    devTick();
 
-  static int itimeout = -1;
-  itimeout++;
+    static int itimeout = -1;
+    itimeout++;
 
-  // also service replay logger
-  if (ReplayLogger::Update()) {
-    if (Basic().MovementDetected) {
-      ReplayLogger::Stop();
+    // also service replay logger
+    if (ReplayLogger::Update()) {
+      if (Basic().MovementDetected) {
+        ReplayLogger::Stop();
+      }
+      device_blackboard.RaiseConnection();
+      device_blackboard.SetNAVWarning(false);
+      return;
     }
-    device_blackboard.RaiseConnection();
-    device_blackboard.SetNAVWarning(false);
-    return;
-  }
 
-  if (itimeout % 10 == 0) {
-    // check connection status every 5 seconds
-    itimeout = ConnectionProcessTimer(itimeout);
+    if (itimeout % 10 == 0) {
+      // check connection status every 5 seconds
+      itimeout = ConnectionProcessTimer(itimeout);
+    }
+  } else {
+    static PeriodClock m_clock;
+    if (m_clock.elapsed()<0) {
+      m_clock.update();
+    }
+    if (ReplayLogger::Update()) {
+      m_clock.update();
+    } else if (m_clock.elapsed()>=1000) {
+      m_clock.update();
+      device_blackboard.ProcessSimulation();
+      TriggerGPSUpdate();
+      device_blackboard.RaiseConnection();
+    }
   }
-#else /* _SIM_ */
-  static PeriodClock m_clock;
-  if (m_clock.elapsed()<0) {
-    m_clock.update();
-  }
-  if (ReplayLogger::Update()) {
-    m_clock.update();
-  } else if (m_clock.elapsed()>=1000) {
-    m_clock.update();
-    device_blackboard.ProcessSimulation();
-    TriggerGPSUpdate();
-    device_blackboard.RaiseConnection();
-  }
-#endif /* _SIM_ */
 }
