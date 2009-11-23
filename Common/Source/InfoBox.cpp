@@ -56,6 +56,7 @@ Copyright_License {
 #include "options.h" /* for IBLSCALE() */
 #include "InfoBoxManager.h"
 #include "UtilsSystem.hpp"
+#include "Asset.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -707,15 +708,15 @@ bool InfoBox::on_mouse_down(int x, int y)
 
 bool InfoBox::on_mouse_double(int x, int y)
 {
-#ifndef GNAV
-  // JMW capture double click, so infoboxes double clicked also bring up menu
-  // VENTA3: apparently this is working only on PC ! Disable it to let PC work
-  // with same timeout of PDA and PNA versions with synthetic DBLCLK
-#ifdef DEBUG_DBLCLK
-  DoStatusMessage(_T("DBLCLK InfoBox")); // VENTA3
-#endif
-  InputEvents::ShowMenu();
-#endif
+  if (!is_altair()) {
+    // JMW capture double click, so infoboxes double clicked also bring up menu
+    // VENTA3: apparently this is working only on PC ! Disable it to let PC work
+    // with same timeout of PDA and PNA versions with synthetic DBLCLK
+    #ifdef DEBUG_DBLCLK
+      DoStatusMessage(_T("DBLCLK InfoBox")); // VENTA3
+    #endif
+    InputEvents::ShowMenu();
+  }
   return true;
 }
 
