@@ -43,8 +43,7 @@ Copyright_License {
 #include "Screen/shapelib/mapshape.h"
 #include "GeoPoint.hpp"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <windef.h>
 #include <tchar.h>
 
 struct SETTINGS_COMPUTER;
