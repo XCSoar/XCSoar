@@ -100,9 +100,9 @@ Logger logger; // global
 
 void XCSoarInterface::PreloadInitialisation(bool ask) {
   if (ask) {
-#ifdef PNA
-    CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
-#endif
+    #ifdef PNA
+      CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
+    #endif
   }
 
   SetToRegistry(TEXT("XCV"), 1);
