@@ -47,8 +47,11 @@ Copyright_License {
  * check whether a specified time span has passed since then.
  */
 class PeriodClock {
+protected:
+  typedef DWORD stamp_t;
+
 private:
-  DWORD last;
+  stamp_t last;
 
 public:
   /**
@@ -59,6 +62,12 @@ public:
    */
   PeriodClock():last(0) {}
 
+protected:
+  static stamp_t get_now() {
+    return ::GetTickCount();
+  }
+
+public:
   /**
    * Resets the clock.
    */
@@ -74,7 +83,7 @@ public:
     if (last == 0)
       return -1;
 
-    return ::GetTickCount() - last;
+    return get_now() - last;
   }
 
   /**
@@ -84,15 +93,14 @@ public:
    * @param duration the duration in milliseconds
    */
   bool check(unsigned duration) const {
-    DWORD now = ::GetTickCount();
-    return now >= last + duration;
+    return get_now() >= last + duration;
   }
 
   /**
    * Updates the time stamp, setting it to the current clock.
    */
   void update() {
-    last = ::GetTickCount();
+    last = get_now();
   }
 
   /**
@@ -111,7 +119,7 @@ public:
    * @param duration the duration in milliseconds
    */
   bool check_update(unsigned duration) {
-    DWORD now = ::GetTickCount();
+    stamp_t now = get_now();
     if (now >= last + duration) {
       last = now;
       return true;
@@ -126,7 +134,7 @@ public:
    * @param duration the duration in milliseconds
    */
   bool check_always_update(unsigned duration) {
-    DWORD now = ::GetTickCount();
+    stamp_t now = get_now();
     bool ret = now > last + duration;
     last = now;
     return ret;
