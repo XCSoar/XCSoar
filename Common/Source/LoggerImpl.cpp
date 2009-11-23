@@ -51,6 +51,7 @@
 #include "Device/device.h"
 #include "Compatibility/string.h"
 #include "WayPointList.hpp"
+#include "SettingsComputer.hpp"
 
 LoggerImpl::LoggerImpl():
   LoggerActive(false),
