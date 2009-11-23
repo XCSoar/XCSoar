@@ -303,6 +303,7 @@ endif
 
 ifeq ($(HAVE_POSIX),y)
   TARGET_LDFLAGS += -lpthread
+  TARGET_LDFLAGS += -lrt # for clock_gettime()
 endif
 
 ifeq ($(HAVE_WIN32),y)

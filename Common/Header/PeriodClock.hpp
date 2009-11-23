@@ -39,8 +39,12 @@ Copyright_License {
 #ifndef XCSOAR_PERIOD_CLOCK_HPP
 #define XCSOAR_PERIOD_CLOCK_HPP
 
+#ifdef HAVE_POSIX
+#include <time.h>
+#else /* !HAVE_POSIX */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#endif /* !HAVE_POSIX */
 
 /**
  * This is a stopwatch which saves the timestamp of an even, and can
@@ -48,7 +52,11 @@ Copyright_License {
  */
 class PeriodClock {
 protected:
+#ifdef HAVE_POSIX
+  typedef unsigned stamp_t;
+#else /* !HAVE_POSIX */
   typedef DWORD stamp_t;
+#endif /* !HAVE_POSIX */
 
 private:
   stamp_t last;
@@ -64,7 +72,13 @@ public:
 
 protected:
   static stamp_t get_now() {
+#ifdef HAVE_POSIX
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
+#else /* !HAVE_POSIX */
     return ::GetTickCount();
+#endif /* !HAVE_POSIX */
   }
 
 public:
