@@ -71,7 +71,7 @@ class RasterMap {
     {}
   virtual ~RasterMap() {};
 
-  inline bool isMapLoaded() {
+  inline bool isMapLoaded() const {
     return terrain_valid;
   }
 
@@ -80,16 +80,16 @@ class RasterMap {
 
   virtual void SetViewCenter(const GEOPOINT &location) {};
 
-  bool GetMapCenter(GEOPOINT *loc);
+  bool GetMapCenter(GEOPOINT *loc) const;
 
-  float GetFieldStepSize();
+  float GetFieldStepSize() const;
 
   // inaccurate method
-  int GetEffectivePixelSize(double pixelsize);
+  int GetEffectivePixelSize(double pixelsize) const;
 
   // accurate method
   int GetEffectivePixelSize(double *pixel_D,
-                            const GEOPOINT &location);
+                            const GEOPOINT &location) const;
 
   virtual void SetFieldRounding(const double xr, const double yr,
     RasterRounding &rounding);
@@ -99,8 +99,14 @@ class RasterMap {
 
   virtual void ServiceCache() {};
   virtual void ServiceFullReload(const GEOPOINT &location) {};
-  bool IsDirectAccess(void) { return DirectAccess; };
-  bool IsPaged(void) { return Paged; };
+
+  bool IsDirectAccess(void) const {
+    return DirectAccess;
+  };
+
+  bool IsPaged(void) const {
+    return Paged;
+  };
 
   // export methods to global, take care!
   virtual void LockRead();

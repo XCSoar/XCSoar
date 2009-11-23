@@ -48,7 +48,9 @@ void RasterMap::Unlock() { lock.unlock(); };
 // Rounding control
 
 
-bool RasterMap::GetMapCenter(GEOPOINT *loc) {
+bool
+RasterMap::GetMapCenter(GEOPOINT *loc) const
+{
   if(!isMapLoaded())
     return false;
 
@@ -58,7 +60,7 @@ bool RasterMap::GetMapCenter(GEOPOINT *loc) {
 }
 
 
-float RasterMap::GetFieldStepSize() {
+float RasterMap::GetFieldStepSize() const {
   if (!isMapLoaded()) {
     return 0;
   }
@@ -69,8 +71,9 @@ float RasterMap::GetFieldStepSize() {
 
 
 // accurate method
-int RasterMap::GetEffectivePixelSize(double *pixel_D,
-                                     const GEOPOINT &location)
+int
+RasterMap::GetEffectivePixelSize(double *pixel_D,
+                                 const GEOPOINT &location) const
 {
   double terrain_step_x, terrain_step_y;
   double step_size = TerrainInfo.StepSize*sqrt(2.0);
@@ -97,7 +100,9 @@ int RasterMap::GetEffectivePixelSize(double *pixel_D,
 }
 
 
-int RasterMap::GetEffectivePixelSize(double dist) {
+int
+RasterMap::GetEffectivePixelSize(double dist) const
+{
   int grounding;
   grounding = iround(2.0*(GetFieldStepSize()/1000.0)/dist);
   if (grounding<1) {
