@@ -41,6 +41,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "WayPoint.hpp"
 #include <stdlib.h>
+#include "Asset.hpp"
 
 #include "Formatter/WayPoint.hpp"
 
@@ -100,27 +101,29 @@ DetectStartTime(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 }
 
 long GetUTCOffset(void) {
-#ifndef GNAV
-  long utcoffset=0;
-  // returns offset in seconds
-  TIME_ZONE_INFORMATION TimeZoneInformation;
-  DWORD tzi = GetTimeZoneInformation(&TimeZoneInformation);
+  if (!is_altair()) {
+    long utcoffset=0;
+    // returns offset in seconds
+    TIME_ZONE_INFORMATION TimeZoneInformation;
+    DWORD tzi = GetTimeZoneInformation(&TimeZoneInformation);
 
-  utcoffset = -TimeZoneInformation.Bias*60;
+    utcoffset = -TimeZoneInformation.Bias*60;
 
-  if (tzi==TIME_ZONE_ID_STANDARD) {
-    utcoffset -= TimeZoneInformation.StandardBias*60;
+    if (tzi==TIME_ZONE_ID_STANDARD) {
+      utcoffset -= TimeZoneInformation.StandardBias*60;
+    }
+
+    if (tzi==TIME_ZONE_ID_DAYLIGHT) {
+      utcoffset -= TimeZoneInformation.DaylightBias*60;
+    }
+
+    #ifdef WINDOWSPC
+      return XCSoarInterface::SettingsComputer().UTCOffset;
+    #else
+      return utcoffset;
+    #endif
+  } else {
+    return XCSoarInterface::SettingsComputer().UTCOffset;
   }
-  if (tzi==TIME_ZONE_ID_DAYLIGHT) {
-    utcoffset -= TimeZoneInformation.DaylightBias*60;
-  }
-#ifdef WINDOWSPC
-  return XCSoarInterface::SettingsComputer().UTCOffset;
-#else
-  return utcoffset;
-#endif
-#else
-  return XCSoarInterface::SettingsComputer().UTCOffset;
-#endif
 }
 
