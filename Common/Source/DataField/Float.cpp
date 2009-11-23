@@ -151,24 +151,24 @@ double DataFieldFloat::SpeedUp(bool keyup){
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;
     DataFieldKeyUp = keyup;
-    mTmLastStep = GetTickCount();
+    last_step.update();
     return 1.0;
   }
 
-  if ((long)(GetTickCount()-mTmLastStep) < 200){
+  if (!last_step.check(200)) {
     mSpeedup++;
 
     if (mSpeedup > 5){
       res = 10;
 
-      mTmLastStep = GetTickCount()+350;
+      last_step.update_offset(350);
       return(res);
 
     }
   } else
     mSpeedup = 0;
 
-  mTmLastStep = GetTickCount();
+  last_step.update();
 
   return(res);
 }

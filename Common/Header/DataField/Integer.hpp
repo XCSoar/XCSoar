@@ -40,9 +40,7 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_INTEGER_HPP
 
 #include "DataField/Base.hpp"
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "PeriodClock.hpp"
 
 class DataFieldInteger:public DataField{
 
@@ -51,7 +49,7 @@ class DataFieldInteger:public DataField{
     int mMin;
     int mMax;
     int mStep;
-    DWORD mTmLastStep;
+  PeriodClock last_step;
     int mSpeedup;
     TCHAR mOutBuf[OUTBUFFERSIZE+1];
 

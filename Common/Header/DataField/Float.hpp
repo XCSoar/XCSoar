@@ -40,9 +40,7 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_FLOAT_HPP
 
 #include "DataField/Base.hpp"
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "PeriodClock.hpp"
 
 class DataFieldFloat:public DataField{
 
@@ -51,7 +49,7 @@ class DataFieldFloat:public DataField{
     double mMin;
     double mMax;
     double mStep;
-    DWORD mTmLastStep;
+  PeriodClock last_step;
     int mSpeedup;
     int mFine;
     TCHAR mOutBuf[OUTBUFFERSIZE+1];
