@@ -96,6 +96,15 @@ public:
   }
 
   /**
+   * Updates the time stamp, setting it to the current clock plus the
+   * specified offset.
+   */
+  void update_offset(unsigned offset) {
+    update();
+    last += offset;
+  }
+
+  /**
    * Checks whether the specified duration has passed since the last
    * update.  If yes, it updates the time stamp.
    *
