@@ -57,6 +57,7 @@ Copyright_License {
 #include <stdlib.h>
 #include "FlarmCalculations.h"
 #include "Math/Pressure.h"
+#include "Asset.hpp"
 
 #define m_max(a,b)	(((a)>(b))?(a):(b))
 // JMW added key codes,
@@ -132,24 +133,22 @@ ActionInterface::on_key_TeamCode(int UpDown)
   }
 }
 
-#ifdef _SIM_
 #include "DeviceBlackboard.hpp"
-#endif
 
 void
 ActionInterface::on_key_Altitude(int UpDown)
 {
-#ifdef _SIM_
-  if(UpDown==1) {
-    device_blackboard.SetAltitude(Basic().Altitude+100/ALTITUDEMODIFY);
-  } else if (UpDown==-1) {
-    device_blackboard.SetAltitude(m_max(0,Basic().Altitude-100/ALTITUDEMODIFY));
-  } else if (UpDown==-2) {
-    on_key_Direction(-1);
-  } else if (UpDown==2) {
-    on_key_Direction(1);
+  if (is_simulator()) {
+    if(UpDown==1) {
+      device_blackboard.SetAltitude(Basic().Altitude+100/ALTITUDEMODIFY);
+    } else if (UpDown==-1) {
+      device_blackboard.SetAltitude(m_max(0,Basic().Altitude-100/ALTITUDEMODIFY));
+    } else if (UpDown==-2) {
+      on_key_Direction(-1);
+    } else if (UpDown==2) {
+      on_key_Direction(1);
+    }
   }
-#endif
   return;
 }
 
@@ -213,17 +212,17 @@ ActionInterface::on_key_BestAlternate(int UpDown)
 void
 ActionInterface::on_key_Speed(int UpDown)
 {
-#ifdef _SIM_
-  if(UpDown==1)
-    device_blackboard.SetSpeed(Basic().Speed+10/SPEEDMODIFY);
-  else if (UpDown==-1) {
-    device_blackboard.SetSpeed(m_max(0,Basic().Speed-10/SPEEDMODIFY));
-  } else if (UpDown==-2) {
-    on_key_Direction(-1);
-  } else if (UpDown==2) {
-    on_key_Direction(1);
+  if (is_simulator()) {
+    if(UpDown==1)
+      device_blackboard.SetSpeed(Basic().Speed+10/SPEEDMODIFY);
+    else if (UpDown==-1) {
+      device_blackboard.SetSpeed(m_max(0,Basic().Speed-10/SPEEDMODIFY));
+    } else if (UpDown==-2) {
+      on_key_Direction(-1);
+    } else if (UpDown==2) {
+      on_key_Direction(1);
+    }
   }
-#endif
   return;
 }
 
@@ -300,13 +299,13 @@ void	ActionInterface::on_key_WindSpeed(int UpDown)
 void
 ActionInterface::on_key_Direction(int UpDown)
 {
-#ifdef _SIM_
-  if(UpDown==1) {
-    device_blackboard.SetTrackBearing(Basic().TrackBearing+5);
-  } else if (UpDown==-1) {
-    device_blackboard.SetTrackBearing(Basic().TrackBearing-5);
+  if (is_simulator()) {
+    if(UpDown==1) {
+      device_blackboard.SetTrackBearing(Basic().TrackBearing+5);
+    } else if (UpDown==-1) {
+      device_blackboard.SetTrackBearing(Basic().TrackBearing-5);
+    }
   }
-#endif
   return;
 }
 
