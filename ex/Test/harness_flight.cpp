@@ -145,6 +145,10 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
 
 bool test_flight_times(int test_num, int n_wind) 
 {
+
+  // tests whether elapsed/planned times are consistent
+  // there will be small error due to start location
+
   bool fine = test_flight(test_num, n_wind);
   fine &= fabs(time_elapsed/time_planned-1.0)<0.02;
 
@@ -188,6 +192,9 @@ bool test_speed_factor(int test_num, int n_wind)
 
 bool test_cruise_efficiency(int test_num, int n_wind) 
 {
+
+  // tests functionality of cruise efficiency calculations
+
   double ce0, ce1, ce2, ce3, ce4, ce5, ce6;
 
   bearing_noise = 0.0;
@@ -276,6 +283,10 @@ bool test_aat(int test_num, int n_wind)
 
 bool test_automc(int test_num, int n_wind) 
 {
+
+  // test whether flying by automc (starting above final glide)
+  // arrives home faster than without
+
   test_flight(test_num, n_wind, 1.0, false);
   double t0 = time_elapsed;
 
