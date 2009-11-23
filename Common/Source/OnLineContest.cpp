@@ -455,21 +455,28 @@ bool OLCOptimizer::addPoint(const GEOPOINT &loc,
   // also detect task finish here?
 }
 
-
-int OLCOptimizer::getN() {
+int
+OLCOptimizer::getN() const
+{
   if (busy) return 0; // Inhibit display if busy optimising
   return pnts;
 }
 
-double OLCOptimizer::getAltitudeHigh(int i) {
+double
+OLCOptimizer::getAltitudeHigh(int i) const
+{
   return data.altpntshigh[i];
 }
 
-double OLCOptimizer::getTime(int i) {
+double
+OLCOptimizer::getTime(int i) const
+{
   return data.timepnts[i];
 }
 
-const GEOPOINT& OLCOptimizer::getLocation(int i) {
+const GEOPOINT &
+OLCOptimizer::getLocation(int i) const
+{
   return data.locpnts[i];
 }
 

@@ -136,10 +136,10 @@ public:
 public:
   void SetLine();
   bool Optimize(const SETTINGS_COMPUTER &settings, bool isflying);
-  int getN();
-  const GEOPOINT &getLocation(int i);
-  double getTime(int i);
-  double getAltitudeHigh(int i);
+  int getN() const;
+  const GEOPOINT &getLocation(int i) const;
+  double getTime(int i) const;
+  double getAltitudeHigh(int i) const;
 
 private:
 
