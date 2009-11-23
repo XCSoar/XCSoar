@@ -39,12 +39,10 @@ Copyright_License {
 #if !defined(XCSOAR_DIALOGS_H)
 #define XCSOAR_DIALOGS_H
 
-#include "WayPoint.hpp"
+#include <tchar.h>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include "GeoPoint.hpp"
-
+struct GEOPOINT;
+struct WAYPOINT;
 class ContainerWindow;
 class WndProperty;
 class WayPointList;
