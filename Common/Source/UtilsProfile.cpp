@@ -187,20 +187,6 @@ void SetProfileFiles(const TCHAR *override) {
   }
 }
 
-
-#ifdef FIVV
-BOOL DelRegistryKey(const TCHAR *szDelKey)
-{
-   HKEY tKey;
-   RegOpenKeyEx(HKEY_CURRENT_USER, _T(REGKEYNAME),0,0,&tKey);
-   if ( RegDeleteValue(tKey, szDelKey) != ERROR_SUCCESS ) {
-	return false;
-   }
-   RegCloseKey(tKey);
-   return true;
-}
-#endif
-
 #ifdef PNA
 void CleanRegistry()
 {

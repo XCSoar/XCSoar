@@ -41,10 +41,6 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 #include <windows.h>
 
-
-#ifdef FIVV
-BOOL DelRegistryKey(const TCHAR *szRegistryKey); // VENTA2-ADDON delregistrykey
-#endif
 #ifdef PNA
 void CleanRegistry(); // VENTA2-ADDON cleanregistrykeyA
 #endif
