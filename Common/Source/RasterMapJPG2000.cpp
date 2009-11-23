@@ -165,18 +165,6 @@ RasterMapJPG2000::Open(const char *zfilename)
   return terrain_valid;
 }
 
-void RasterMapJPG2000::Close(void) {
-  Poco::ScopedRWLock protect(lock, true);
-  _Close();
-}
-
-void RasterMapJPG2000::_Close(void) {
-  if (terrain_valid) {
-    raster_tile_cache.Reset();
-    terrain_valid = false;
-  }
-}
-
 RasterMapJPG2000 *
 RasterMapJPG2000::LoadFile(const char *path)
 {
@@ -185,7 +173,6 @@ RasterMapJPG2000::LoadFile(const char *path)
     return NULL;
 
   if (!map->Open(path)) {
-    map->Close();
     delete map;
     return NULL;
   }

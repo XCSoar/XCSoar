@@ -55,7 +55,6 @@ class RasterMapJPG2000: public RasterMap {
   virtual void SetFieldRounding(const double xr, const double yr,
     RasterRounding &rounding);
   virtual bool Open(const char *path);
-  virtual void Close();
   void ServiceFullReload(const GEOPOINT &location);
 
   static RasterMapJPG2000 *LoadFile(const char *path);
@@ -67,7 +66,6 @@ class RasterMapJPG2000: public RasterMap {
   bool TriggerJPGReload;
   static int ref_count;
   RasterTileCache raster_tile_cache;
-  virtual void _Close();
   virtual void _ReloadJPG2000(void);
 };
 

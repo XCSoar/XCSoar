@@ -51,13 +51,13 @@ class RasterMapRaw: public RasterMap {
   {
     DirectAccess = true;
   }
-  ~RasterMapRaw() {
-  }
+
+  virtual ~RasterMapRaw();
+
   short *TerrainMem;
   virtual void SetFieldRounding(const double xr, const double yr,
     RasterRounding &rounding);
   virtual bool Open(const char *path);
-  virtual void Close();
 
   static RasterMapRaw *LoadFile(const char *path);
 

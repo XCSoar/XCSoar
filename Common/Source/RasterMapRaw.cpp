@@ -41,6 +41,10 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "UtilsSystem.hpp"
 
+RasterMapRaw::~RasterMapRaw()
+{
+  _Close();
+}
 
 void RasterMapRaw::SetFieldRounding(const double xr,
                                     const double yr,
@@ -158,12 +162,6 @@ RasterMapRaw::Open(const char *zfilename)
   return terrain_valid;
 }
 
-
-void RasterMapRaw::Close(void) {
-  Poco::ScopedRWLock protect(lock, true);
-  _Close();
-}
-
 void RasterMapRaw::_Close(void) {
   terrain_valid = false;
   if (TerrainMem) {
@@ -179,7 +177,6 @@ RasterMapRaw::LoadFile(const char *path)
     return NULL;
 
   if (!map->Open(path)) {
-    map->Close();
     delete map;
     return NULL;
   }

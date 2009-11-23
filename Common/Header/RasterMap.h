@@ -98,7 +98,6 @@ class RasterMap {
     const RasterRounding &rounding);
 
   virtual bool Open(const char *path) = 0;
-  virtual void Close() = 0;
   virtual void ServiceCache() {};
   virtual void ServiceFullReload(const GEOPOINT &location) {};
   bool IsDirectAccess(void) { return DirectAccess; };

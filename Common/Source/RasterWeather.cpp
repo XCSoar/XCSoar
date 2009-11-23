@@ -210,7 +210,6 @@ void RasterWeather::_Close() {
   int i;
   for (i=0; i<MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
-      weather_map[i]->Close();
       delete weather_map[i];
       weather_map[i]=0;
     }

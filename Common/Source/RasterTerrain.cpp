@@ -113,7 +113,6 @@ void RasterTerrain::CloseTerrain(void)
 
   if (terrain_initialised) {
     if (TerrainMap) {
-      TerrainMap->Close();
       delete TerrainMap;
       TerrainMap = NULL;
     }

@@ -53,6 +53,12 @@ Copyright_License {
 #include "jasper/jpc_rtc.h"
 #include "wcecompat/ts_string.h"
 
+RasterMapCache::~RasterMapCache()
+{
+  _Close();
+
+  ref_count--;
+}
 
 short RasterMapCache::_GetFieldAtXY(unsigned int lx,
                                     unsigned int ly) {
@@ -272,12 +278,6 @@ RasterMapCache::Open(const char *zfilename)
   return terrain_valid;
 }
 
-// Close routines
-void RasterMapCache::Close(void) {
-  Poco::ScopedRWLock protect(lock, true);
-  _Close();
-}
-
 void RasterMapCache::_Close(void) {
   terrain_valid = false;
   if(fpTerrain) {
@@ -296,7 +296,6 @@ RasterMapCache::LoadFile(const char *path)
     return NULL;
 
   if (!map->Open(path)) {
-    map->Close();
     delete map;
     return NULL;
   }

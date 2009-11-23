@@ -63,9 +63,7 @@ class RasterMapCache: public RasterMap {
     ref_count++;
   }
 
-  ~RasterMapCache() {
-    ref_count--;
-  }
+  virtual ~RasterMapCache();
 
   // shared!
   static ZZIP_FILE *fpTerrain;
@@ -74,7 +72,6 @@ class RasterMapCache: public RasterMap {
   void ServiceCache();
 
   virtual bool Open(const char *path);
-  virtual void Close();
   virtual void LockRead();
 
   static RasterMapCache *LoadFile(const char *path);
