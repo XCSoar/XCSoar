@@ -713,11 +713,12 @@ void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
     }
   }
 
-#ifdef GNAV
-  // JMW: don't know why we need this in GNAV, but we do.
-  if (FontHeightInfo->CapitalHeight<y)
-    FontHeightInfo->CapitalHeight = bottom - top + 1;
-#endif
+  if (is_altair()) {
+    // JMW: don't know why we need this in GNAV, but we do.
+    if (FontHeightInfo->CapitalHeight < y)
+      FontHeightInfo->CapitalHeight = bottom - top + 1;
+  }
+
   // This works for PPC
   if (FontHeightInfo->CapitalHeight <= 0)
     FontHeightInfo->CapitalHeight = tm.tmAscent - 1 -(tm.tmHeight/10);
