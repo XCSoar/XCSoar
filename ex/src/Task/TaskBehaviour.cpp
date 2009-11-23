@@ -8,7 +8,7 @@ TaskBehaviour::all_off()
 {
   optimise_targets_range=false;
   optimise_targets_bearing=false;
-  auto_mc=false;
+  auto_mc= false;
   calc_cruise_efficiency=false;
 }
 
@@ -25,7 +25,7 @@ TaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state) const
 TaskBehaviour::TaskBehaviour():
     optimise_targets_range(true),
     optimise_targets_bearing(true),
-    auto_mc(true),
+    auto_mc(false),
     calc_cruise_efficiency(true),
     aat_min_time(3600*4.7),
     safety_height_terrain(150.0),

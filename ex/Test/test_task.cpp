@@ -10,7 +10,7 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(6);
+  plan_tests(NUM_TASKS+2);
 
   TaskBehaviour task_behaviour;
   TaskEvents default_events;
@@ -19,47 +19,13 @@ int main(int argc, char** argv)
   Waypoints waypoints;
   setup_waypoints(waypoints);
 
-  TaskManager task_manager1(default_events,
-                           task_behaviour,
-                           glide_polar,
-                           waypoints);
-
-  ok (test_task_mixed(task_manager1, waypoints),"mixed task",0);
-
-  TaskManager task_manager2(default_events,
-                           task_behaviour,
-                           glide_polar,
-                           waypoints);
-
-  ok (test_task_fai(task_manager2, waypoints),"fai task construction",0);
-
-  TaskManager task_manager3(default_events,
-                           task_behaviour,
-                           glide_polar,
-                           waypoints);
-
-  ok (test_task_aat(task_manager3, waypoints),"aat task construction",0);
-
-  TaskManager task_manager4(default_events,
-                           task_behaviour,
-                           glide_polar,
-                           waypoints);
-
-  ok (test_task_or(task_manager4, waypoints),"or task construction",0);
-
-  TaskManager task_manager5(default_events,
-                           task_behaviour,
-                           glide_polar,
-                           waypoints);
-
-  ok (test_task_dash(task_manager5, waypoints),"dash task construction",0);
-
-  TaskManager task_manager6(default_events,
-                           task_behaviour,
-                           glide_polar,
-                           waypoints);
-
-  ok (test_task_manip(task_manager6, waypoints),"task manipulation",0);
+  for (int i=0; i<NUM_TASKS+2; i++) {
+    TaskManager task_manager(default_events,
+                             task_behaviour,
+                             glide_polar,
+                             waypoints);
+    ok(test_task(task_manager, waypoints, i),test_name("construction",i),0);
+  }
 
   return exit_status();
 }

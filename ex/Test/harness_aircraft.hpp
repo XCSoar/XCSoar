@@ -22,8 +22,7 @@ public:
   double small_rand();
   void update_state(TaskManager &task_manager,
                     GlidePolar &glide_polar);
-  void update_mode(TaskManager &task_manager,
-                    GlidePolar &glide_polar);
+  void update_mode(TaskManager &task_manager);
   void integrate();
 
   bool advance(TaskManager &task_manager,
@@ -47,6 +46,7 @@ private:
   std::vector<GEOPOINT> w;
   double bearing;
   double sinkrate;
+  double climb_rate;
   unsigned awp;
   int test_num;
   Filter heading_filt;

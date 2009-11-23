@@ -160,8 +160,9 @@ TESTOBJS = Test/test_debug.o \
 TESTS = \
 	Test/test_waypoints.exe \
 	Test/test_task.exe \
-	Test/test_aat.exe \
+	Test/test_automc.exe \
 	Test/test_flight.exe \
+	Test/test_aat.exe \
 	Test/test_cruiseefficiency.exe \
 	Test/test_vopt.exe \
 	Test/test_trees.exe \
@@ -180,6 +181,9 @@ Test/test.exe: $(OBJS) $(TESTOBJS) Test/test.cpp
 
 Test/test_task.exe: $(OBJS) $(TESTOBJS) Test/test_task.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_task.cpp -o Test/test_task.exe
+
+Test/test_automc.exe: $(OBJS) $(TESTOBJS) Test/test_automc.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_automc.cpp -o Test/test_automc.exe
 
 Test/test_aat.exe: $(OBJS) $(TESTOBJS) Test/test_aat.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_aat.cpp -o Test/test_aat.exe

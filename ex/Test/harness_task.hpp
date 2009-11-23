@@ -3,8 +3,7 @@
 
 #include "Task/TaskManager.hpp"
 
-bool setup_task(TaskManager& task_manager, 
-                const Waypoints& waypoints);
+#define NUM_TASKS 5
 
 bool test_task_mixed(TaskManager& task_manager,
                      const Waypoints &waypoints);
@@ -23,6 +22,13 @@ bool test_task_dash(TaskManager& task_manager,
 
 bool test_task_manip(TaskManager& task_manager,
                      const Waypoints &waypoints);
+
+bool test_task_fg(TaskManager& task_manager,
+                  const Waypoints &waypoints);
+
+bool test_task(TaskManager& task_manager,
+               const Waypoints &waypoints,
+               int test_num);
 
 void task_report(TaskManager& task_manager, const char* text);
 

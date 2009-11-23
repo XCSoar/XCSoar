@@ -17,12 +17,10 @@ int main(int argc, char** argv)
 
   int n_wind = 3;
 
-  plan_tests(NUM_TASKS*n_wind);
+  plan_tests(n_wind);
 
   for (int i=0; i<n_wind; i++) {
-    for (int j=0; j<NUM_TASKS; j++) {
-      ok (test_flight_times(j,i), test_name("flight times",j),0);
-    }
+    test_automc(5,i);
   }
   return exit_status();
 }

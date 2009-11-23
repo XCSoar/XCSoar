@@ -76,7 +76,7 @@ void task_report(TaskManager& task_manager, const char* text)
 bool test_task_manip(TaskManager& task_manager,
                      const Waypoints &waypoints)
 {
-  if (!setup_task(task_manager, waypoints)) {
+  if (!test_task_mixed(task_manager, waypoints)) {
     return false;
   }
   AbstractTaskFactory *fact = task_manager.get_factory();
@@ -412,10 +412,72 @@ bool test_task_dash(TaskManager& task_manager,
 }
 
 
-bool setup_task(TaskManager& task_manager, const Waypoints& waypoints)
+bool test_task_fg(TaskManager& task_manager,
+                  const Waypoints &waypoints)
 {
-  return test_task_mixed(task_manager, waypoints);
+  AbstractTaskFactory *fact;
+  const Waypoint *wp;
+
+  task_manager.set_factory(TaskManager::FACTORY_MIXED);
+  fact = task_manager.get_factory();
+
+  task_report(task_manager, "# adding start\n");
+  wp = waypoints.lookup_id(1);
+  if (wp) {
+    if (!fact->append(fact->createStart(*wp))) {
+      return false;
+    }
+  }
+
+  task_manager.setActiveTaskPoint(0);
+  task_manager.resume();
+
+  task_report(task_manager, "# adding finish\n");
+  wp = waypoints.lookup_id(6);
+  if (wp) {
+    if (!fact->append(fact->createFinish(*wp))) {
+      return false;
+    }
+  }
+
+  task_report(task_manager, "# checking task..\n");
+  if (!fact->validate()) {
+    return false;
+  }
+
+  if (!task_manager.check_task()) {
+    return false;
+  }
+  return true;
+
 }
+
+
+bool test_task(TaskManager& task_manager,
+               const Waypoints &waypoints,
+               int test_num)
+{
+  switch (test_num) {
+  case 0:
+    return test_task_mixed(task_manager,waypoints);
+  case 1:
+    return test_task_fai(task_manager,waypoints);
+  case 2:
+    return test_task_aat(task_manager,waypoints);
+  case 3:
+    return test_task_or(task_manager,waypoints);
+  case 4:
+    return test_task_dash(task_manager,waypoints);
+  case 5:
+    return test_task_fg(task_manager,waypoints);
+  case 6:
+    return test_task_manip(task_manager,waypoints);
+  default:
+    return "unknown";
+    break;
+  };
+}
+
 
 const char* task_name(int test_num)
 {
@@ -430,6 +492,10 @@ const char* task_name(int test_num)
     return "or";
   case 4:
     return "dash";
+  case 5:
+    return "fg";
+  case 6:
+    return "manip";
   default:
     return "unknown";
     break;

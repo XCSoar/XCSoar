@@ -45,7 +45,13 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
   wp.Altitude=0.25;
   waypoints.insert(wp);
 
-  for (unsigned i=0; i<(unsigned)std::max((int)n-5,0); i++) {
+  wp.id++;
+  wp.Location.Longitude=0;
+  wp.Location.Latitude=0.23;
+  wp.Altitude=0.25;
+  waypoints.insert(wp);
+
+  for (unsigned i=0; i<(unsigned)std::max((int)n-6,0); i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
     wp.id++;

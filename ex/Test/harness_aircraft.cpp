@@ -24,7 +24,8 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   test_num(_test_num),
   heading_filt(8.0),
   goto_target(_goto_target),
-  speed_factor(1.0)
+  speed_factor(1.0),
+  climb_rate(2.0)
 {
   for (unsigned i=0; i<task_manager.get_task_size(); i++) {
     if (i==0) {
@@ -118,13 +119,13 @@ void AircraftSim::update_state(TaskManager &task_manager,
   case Climb:
     state.Speed = turn_speed;
     bearing += 20+small_rand();
-    sinkrate = -glide_polar.get_mc()*climb_factor;
+    sinkrate = -climb_rate*climb_factor;
     break;
   };
 }
 
-void AircraftSim::update_mode(TaskManager &task_manager,
-                               GlidePolar &glide_polar)  {
+void AircraftSim::update_mode(TaskManager &task_manager)  
+{
   
   const ElementStat stat = task_manager.get_stats().current_leg;
   
@@ -180,7 +181,7 @@ bool AircraftSim::advance(TaskManager &task_manager,
   
   integrate();
   
-  update_mode(task_manager, glide_polar);
+  update_mode(task_manager);
 
   task_manager.update(state, state_last);
   task_manager.update_idle(state);

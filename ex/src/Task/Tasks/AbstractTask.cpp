@@ -16,12 +16,10 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
     if (trigger_auto || (mc_found > stats.mc_best)) {
       trigger_auto = true;
       stats.mc_best = mc_lpf.update(mc_found);
+      glide_polar.set_mc(stats.mc_best);
     } else {
       stats.mc_best = mc_lpf.reset(glide_polar.get_mc());
     }
-
-    // testing engage best mc!
-    // glide_polar.set_mc(stats.mc_best);
 
     retval = true;
   } else {
@@ -103,8 +101,6 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
                      const AIRCRAFT_STATE &state_last)
 {
   bool retval;
-
-  glide_polar.set_mc(2.0);
 
   const bool full_update = check_transitions(state, state_last);
 
