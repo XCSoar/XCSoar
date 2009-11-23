@@ -96,22 +96,8 @@ Copyright_License {
 
 #if _WIN32_WCE == 300 /* Pocket PC 2000 (unsupported?) */
 #define OLDPPC
-#define NOCLEARTYPE
-#define NOLINETO
 #define NOTIME_H
 #endif /* _WIN32_WCE == 300 */
-
-#if WIN32_PLATFORM_PSPC == 310 /* Pocket PC 2002 */
-#define NOCLEARTYPE
-#define NOLINETO
-#endif /* WIN32_PLATFORM_PSPC == 310 */
-
-#if WIN32_PLATFORM_PSPC == 400 /* Pocket PC 2003 */
-#endif /* WIN32_PLATFORM_PSPC == 400 */
-
-#ifdef PNA
-#define NOLINETO
-#endif
 
 #endif /* WIN32_PLATFORM_PSPC */
 
