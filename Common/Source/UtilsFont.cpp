@@ -36,10 +36,11 @@ Copyright_License {
 }
 */
 
+#include "UtilsFont.hpp"
 #include "UtilsText.hpp"
-#include <assert.h>
 #include "Registry.hpp"
 
+#include <assert.h>
 #include <stdlib.h> /* for strtol() */
 
 void propGetFontSettingsFromString(const TCHAR *Buffer1, LOGFONT* lplf)

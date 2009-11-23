@@ -36,15 +36,14 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_UTILS_PROFILE_HPP)
-#define XCSOAR_UTILS_PROFILE_HPP
+#ifndef XCSOAR_UTILS_FONT_HPP
+#define XCSOAR_UTILS_FONT_HPP
 
-#ifdef PNA
-void CleanRegistry(); // VENTA2-ADDON cleanregistrykeyA
-#endif
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <tchar.h>
 
-void WriteProfile(const TCHAR *szFile);
-void ReadProfile(const TCHAR *szFile);
-int propGetScaleList(double *List, size_t Size);
+void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf);
+void propGetFontSettingsFromString(const TCHAR *Buffer, LOGFONT* lplf);
 
 #endif
