@@ -3,15 +3,14 @@
 #include <algorithm>
 #include <assert.h>
 
-#define N_AV 6
+#define N_AV 3
 
 DistanceStat::DistanceStat():
   distance(0.0),
   speed(0.0),
   av_dist(N_AV),
-  dist_lpf(60.0,false),
   df(0.0),
-  v_lpf(100.0,false)
+  v_lpf(600.0/N_AV,false)
 {
 
 }
@@ -49,19 +48,18 @@ DistanceTravelledStat::calc_speed(const ElementStat* es)
 void 
 DistanceStat::calc_incremental_speed(const double dt)
 {  
-  /// \todo handle case where dt>1
   if ((dt>0) && (distance>0)) {
     if (av_dist.update(distance)) {
-      double d_av = av_dist.average();
-      double d_lpf = dist_lpf.update(d_av);
-      double v = df.update(d_lpf)/(N_AV*dt);
-      double v_f = v_lpf.update(v);
-      speed_incremental = -v_f;
-      av_dist.reset();
+      for (unsigned i=0; i<(unsigned)(dt); i++) {
+        double d_av = av_dist.average();
+        double v = df.update(d_av)/(N_AV);
+        double v_f = v_lpf.update(v);
+        speed_incremental = -v_f;
+        av_dist.reset();
+      }
     }
   } else {    
     df.reset(distance,-speed*(N_AV));
-    dist_lpf.reset(distance);
     v_lpf.reset(-speed);
     speed_incremental = speed;
     av_dist.reset();
@@ -71,21 +69,19 @@ DistanceStat::calc_incremental_speed(const double dt)
 void 
 DistanceTravelledStat::calc_incremental_speed(const double dt)
 {
-  /// \todo handle case where dt>1
-
   // negative of normal
   if ((dt>0) && (distance>0)) {
-    if (av_dist.update(distance)) {
-      double d_av = av_dist.average();
-      double d_lpf = dist_lpf.update(d_av);
-      double v = df.update(d_lpf)/(N_AV*dt);
-      double v_f = v_lpf.update(v);
-      speed_incremental = v_f;
-      av_dist.reset();
+    for (unsigned i=0; i<(unsigned)(dt); i++) {
+      if (av_dist.update(distance)) {
+        double d_av = av_dist.average();
+        double v = df.update(d_av)/(N_AV);
+        double v_f = v_lpf.update(v);
+        speed_incremental = v_f;
+        av_dist.reset();
+      }
     }
   } else {
     df.reset(distance,speed*(N_AV));
-    dist_lpf.reset(distance);
     v_lpf.reset(speed);
     speed_incremental = speed;
     av_dist.reset();

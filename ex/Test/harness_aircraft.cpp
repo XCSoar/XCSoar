@@ -123,7 +123,7 @@ void AircraftSim::update_state(TaskManager &task_manager,
     update_bearing(task_manager);
     break;
   case Climb:
-    state.Speed = 25.0;
+    state.Speed = turn_speed;
     bearing += 20+small_rand();
     sinkrate = -glide_polar.get_mc();
     break;

@@ -124,7 +124,7 @@ bool test_flight(int test_num, int n_wind) {
     break;
   };
 
-  return run_flight(task_manager, glide_polar, test_num, goto_target, 0.2, n_wind);
+  return run_flight(task_manager, glide_polar, test_num, goto_target, target_noise, n_wind);
 }
 
 int main(int argc, char** argv) 

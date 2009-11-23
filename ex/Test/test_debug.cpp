@@ -10,6 +10,8 @@ int interactive = 0;
 int verbose = 0;
 int output_skip = 1;
 double bearing_noise = 40.0;
+double target_noise = 0.2;
+double turn_speed = 25.0;
 
 #ifdef INSTRUMENT_TASK
 extern long count_mc;
@@ -100,12 +102,14 @@ bool parse_args(int argc, char** argv)
 	{"interactive", optional_argument,   0, 'i'},
 	{"bearingnoise", required_argument,   0, 'n'},
 	{"outputskip", required_argument,       0, 's'},
+	{"targetnoise", required_argument,       0, 't'},
+	{"turnspeed", required_argument,       0, 'r'},
 	{0, 0, 0, 0}
       };
     /* getopt_long stores the option index here. */
     int option_index = 0;
     
-    int c = getopt_long (argc, argv, "s:v:i:n:",
+    int c = getopt_long (argc, argv, "s:v:i:n:t:r:",
                          long_options, &option_index);
     /* Detect the end of the options. */
     if (c == -1)
@@ -133,6 +137,12 @@ bool parse_args(int argc, char** argv)
       break;
     case 'n':
       bearing_noise = atof(optarg);
+      break;
+    case 't':
+      target_noise = atof(optarg);
+      break;
+    case 'r':
+      turn_speed = atof(optarg);
       break;
     case 'i':
       if (optarg) {

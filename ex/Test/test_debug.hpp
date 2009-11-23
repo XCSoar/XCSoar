@@ -16,6 +16,8 @@ extern int interactive;
 extern int verbose;
 extern int output_skip;
 extern double bearing_noise;
+extern double target_noise;
+extern double turn_speed;
 bool parse_args(int argc, char** argv);
 
 #endif

@@ -19,6 +19,10 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
     } else {
       stats.mc_best = mc_lpf.reset(glide_polar.get_mc());
     }
+
+    // testing engage best mc!
+    // glide_polar.set_mc(stats.mc_best);
+
     retval = true;
   } else {
     trigger_auto = false;

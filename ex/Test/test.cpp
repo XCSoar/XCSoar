@@ -17,7 +17,7 @@ bool test_flight(TaskManager &task_manager,
                  int test_num,
                  bool goto_target) 
 {
-  AircraftSim ac(test_num, task_manager, 1.0, goto_target);
+  AircraftSim ac(test_num, task_manager, target_noise, goto_target);
   unsigned print_counter=0;
 
 #ifdef DO_PRINT

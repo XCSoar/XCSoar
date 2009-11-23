@@ -81,7 +81,6 @@ protected:
   double speed;
   double speed_incremental;
   AvFilter av_dist;
-  Filter dist_lpf;
   DiffFilter df;
   Filter v_lpf;
 };
