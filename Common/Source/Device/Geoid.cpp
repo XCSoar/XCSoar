@@ -45,6 +45,9 @@ Copyright_License {
 #include "Device/Geoid.h"
 #include "Interface.hpp"
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #include <stdlib.h>
 #include <tchar.h>
 
