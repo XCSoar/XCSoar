@@ -42,7 +42,6 @@
 #include "Language.hpp"
 #include "Task.h"
 #include "Registry.hpp"
-#include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "UtilsText.hpp"
@@ -50,8 +49,8 @@
 #include "LocalPath.hpp"
 #include "Device/device.h"
 #include "Compatibility/string.h"
-#include "WayPointList.hpp"
 #include "SettingsComputer.hpp"
+#include "NMEA/Info.h"
 
 LoggerImpl::LoggerImpl():
   LoggerActive(false),

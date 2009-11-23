@@ -39,14 +39,14 @@ Copyright_License {
 #if !defined(XCSOAR_LOGGER_IMPL_HPP)
 #define XCSOAR_LOGGER_IMPL_HPP
 
-#include "NMEA/Info.h"
+#include "Sizes.h"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include <tchar.h>
+#include <windef.h>
 
 #define MAX_LOGGER_BUFFER 60
 
+struct NMEA_INFO;
 struct SETTINGS_COMPUTER;
 struct Declaration;
 
