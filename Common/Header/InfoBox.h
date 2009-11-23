@@ -39,7 +39,6 @@ Copyright_License {
 #define INFOBOX_H
 
 #include "Units.hpp"
-#include "Screen/Font.hpp"
 #include "Screen/BufferWindow.hpp"
 
 #define BORDERTOP    (1<<bkTop)
@@ -51,6 +50,9 @@ Copyright_License {
 #define TITLESIZE    32
 #define VALUESIZE    32
 #define COMMENTSIZE  32
+
+struct FontHeightInfo;
+class Font;
 
 class InfoBox : public BufferWindow {
  public:
