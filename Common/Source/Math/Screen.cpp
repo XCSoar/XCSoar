@@ -40,7 +40,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"
-#include "MapWindowProjection.hpp"
+#include "GeoPoint.hpp"
 
 #include <math.h>
 

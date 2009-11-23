@@ -43,10 +43,9 @@ Copyright_License {
 #ifndef XCSOAR_MATH_SCREEN_HPP
 #define XCSOAR_MATH_SCREEN_HPP
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <windef.h>
 
-#include "GeoPoint.hpp"
+struct GEOPOINT;
 
 void protate(POINT &pin, const double &angle);
 void protateshift(POINT &pin, const double &angle, const int &x, const int &y);
