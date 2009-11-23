@@ -15,13 +15,11 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  int n_wind = 3;
+  plan_tests(NUM_TASKS*NUM_WIND);
 
-  plan_tests(NUM_TASKS*n_wind);
-
-  for (int i=0; i<n_wind; i++) {
+  for (int i=0; i<NUM_WIND; i++) {
     for (int j=0; j<NUM_TASKS; j++) {
-      ok (test_flight_times(j,i), test_name("flight times",j),0);
+      ok (test_flight_times(j,i), test_name("flight times",j,i),0);
     }
   }
   return exit_status();

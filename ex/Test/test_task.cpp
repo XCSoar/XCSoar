@@ -24,7 +24,7 @@ int main(int argc, char** argv)
                              task_behaviour,
                              glide_polar,
                              waypoints);
-    ok(test_task(task_manager, waypoints, i),test_name("construction",i),0);
+    ok(test_task(task_manager, waypoints, i),test_name("construction",i,0),0);
   }
 
   return exit_status();

@@ -15,12 +15,10 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  int n_wind = 3;
-
-  plan_tests(n_wind*2);
+  plan_tests(NUM_WIND*2);
 
   // tests whether flying at VOpt for OR task is optimal
-  for (int i=0; i<n_wind; i++) {
+  for (int i=0; i<NUM_WIND; i++) {
     test_speed_factor(3,i);
   }
   return exit_status();

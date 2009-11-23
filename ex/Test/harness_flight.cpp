@@ -18,6 +18,26 @@ double aat_min_time(int test_num) {
   }
 }
 
+int wind_to_mag(int n_wind) {
+  if (n_wind) {
+    return ((n_wind-1)/4)*5;
+  }
+  return 0;
+}
+
+int wind_to_dir(int n_wind) {
+  if (n_wind) {
+    return 90*((n_wind-1)%4);
+  }
+  return 0;
+}
+
+const char* wind_name(int n_wind) {
+  static char buffer[80];
+  sprintf(buffer,"%d@%d",wind_to_mag(n_wind),wind_to_dir(n_wind));
+  return buffer;
+}
+
 bool run_flight(TaskManager &task_manager,
                 GlidePolar &glide_polar,
                 int test_num,
@@ -31,7 +51,9 @@ bool run_flight(TaskManager &task_manager,
   AircraftSim ac(0, task_manager, random_mag, goto_target);
   unsigned print_counter=0;
 
-  ac.set_wind(n_wind*5.0,0.0);
+  if (n_wind) {
+    ac.set_wind(wind_to_mag(n_wind),wind_to_dir(n_wind));
+  }
   ac.set_speed_factor(speed_factor);
 
 #ifdef DO_PRINT
@@ -174,12 +196,12 @@ bool test_speed_factor(int test_num, int n_wind)
   test_flight(test_num, n_wind, 0.8);
   te1 = time_elapsed;
   // time of this should be higher than nominal
-  ok(te0<te1, test_name("vopt slow or",test_num), 0);
+  ok(te0<te1, test_name("vopt slow or",test_num, n_wind), 0);
 
   test_flight(test_num, n_wind, 1.2);
   te2 = time_elapsed;
   // time of this should be higher than nominal
-  ok(te0<te2, test_name("vopt fast or",test_num), 0);
+  ok(te0<te2, test_name("vopt fast or",test_num, n_wind), 0);
 
   bool retval = (te0<te1) && (te0<te2);
   if (verbose || !retval) {
@@ -208,27 +230,27 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   test_flight(test_num, n_wind);
   ce1 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
-  ok (ce0>ce1, test_name("ce wandering",test_num),0);
+  ok (ce0>ce1, test_name("ce wandering",test_num, n_wind),0);
 
   // flying too slow
   bearing_noise = 0.0;
   test_flight(test_num, n_wind, 0.8);
   ce2 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
-  ok (ce0>ce2, test_name("ce speed slow",test_num),0);
+  ok (ce0>ce2, test_name("ce speed slow",test_num, n_wind),0);
 
   // flying too fast
   bearing_noise = 0.0;
   test_flight(test_num, n_wind, 1.2);
   ce3 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
-  ok (ce0>ce3, test_name("ce speed fast",test_num),0);
+  ok (ce0>ce3, test_name("ce speed fast",test_num, n_wind),0);
 
   // higher than expected cruise sink
   sink_factor = 1.2;
   test_flight(test_num, n_wind);
   ce4 = calc_cruise_efficiency;
-  ok (ce0>ce4, test_name("ce high sink",test_num),0);
+  ok (ce0>ce4, test_name("ce high sink",test_num, n_wind),0);
   // cruise efficiency of this should be lower than nominal
   sink_factor = 1.0;
 
@@ -236,7 +258,7 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   climb_factor = 0.8;
   test_flight(test_num, n_wind);
   ce5 = calc_cruise_efficiency;
-  ok (ce0>ce5, test_name("ce slow climb",test_num),0);
+  ok (ce0>ce5, test_name("ce slow climb",test_num, n_wind),0);
   // cruise efficiency of this should be lower than nominal
   climb_factor = 1.0;
 
@@ -244,7 +266,7 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   sink_factor = 0.8;
   test_flight(test_num, n_wind);
   ce6 = calc_cruise_efficiency;
-  ok (ce0<ce6, test_name("ce low sink",test_num),0);
+  ok (ce0<ce6, test_name("ce low sink",test_num, n_wind),0);
   // cruise efficiency of this should be greater than nominal
   sink_factor = 1.0;
 
@@ -294,7 +316,7 @@ bool test_automc(int test_num, int n_wind)
   double t1 = time_elapsed;
 
   bool fine = (t1<t0);
-  ok(fine,test_name("faster with auto mc on",test_num),0);
+  ok(fine,test_name("faster with auto mc on",test_num, n_wind),0);
   
   if (!fine || verbose) {
     printf("# time ratio %g\n", t1/t0);

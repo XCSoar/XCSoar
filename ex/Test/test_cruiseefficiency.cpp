@@ -14,12 +14,10 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  int n_wind = 2;
-
-  plan_tests(6*n_wind);
+  plan_tests(6*NUM_WIND);
 
   // tests whether cruise efficiency is calculated correctly
-  for (int i=0; i<n_wind; i++) {
+  for (int i=0; i<NUM_WIND; i++) {
     test_cruise_efficiency(3,i);
   }
 

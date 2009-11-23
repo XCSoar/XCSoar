@@ -15,11 +15,9 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  int n_wind = 3;
+  plan_tests(NUM_WIND);
 
-  plan_tests(n_wind);
-
-  for (int i=0; i<n_wind; i++) {
+  for (int i=0; i<NUM_WIND; i++) {
     test_automc(5,i);
   }
   return exit_status();

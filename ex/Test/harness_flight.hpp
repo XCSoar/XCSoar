@@ -18,6 +18,10 @@ bool run_flight(TaskManager &task_manager,
 bool test_flight(int test_num, int n_wind, const double speed_factor=1.0,
                  const bool auto_mc=false);
 
+#define NUM_WIND 9
+
+const char* wind_name(int n_wind);
+
 bool test_flight_times(int test_num, int n_wind);
 bool test_aat(int test_num, int n_wind);
 bool test_speed_factor(int test_num, int n_wind);
