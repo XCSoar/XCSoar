@@ -39,14 +39,11 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
+#include "Math/Constants.h"
 #include "InfoBoxLayout.h"
 #include "GeoPoint.hpp"
 
 #include <math.h>
-
-#ifndef RAD_TO_DEG
-#define RAD_TO_DEG 57.2957795131
-#endif
 
 // note these use static vars! not thread-safe
 
