@@ -132,7 +132,7 @@ short RasterTerrain::GetTerrainHeight(const GEOPOINT &Location,
   }
 }
 
-bool RasterTerrain::IsDirectAccess(void) {
+bool RasterTerrain::IsDirectAccess(void) const {
   if (TerrainMap) {
     return TerrainMap->IsDirectAccess();
   } else {
@@ -140,7 +140,7 @@ bool RasterTerrain::IsDirectAccess(void) {
   }
 }
 
-bool RasterTerrain::IsPaged(void) {
+bool RasterTerrain::IsPaged(void) const {
   if (TerrainMap) {
     return TerrainMap->IsPaged();
   } else {

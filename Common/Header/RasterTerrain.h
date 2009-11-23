@@ -60,7 +60,7 @@ public:
    void OpenTerrain();
    void CloseTerrain();
 
-   bool isTerrainLoaded() {
+  bool isTerrainLoaded() const {
     return TerrainMap != NULL;
   }
    RasterMap* TerrainMap;
@@ -75,8 +75,8 @@ public:
    }
    short GetTerrainHeight(const GEOPOINT &location,
      const RasterRounding &rounding);
-   bool IsDirectAccess(void);
-   bool IsPaged(void);
+   bool IsDirectAccess(void) const;
+   bool IsPaged(void) const;
    void ServiceCache();
    void ServiceTerrainCenter(const GEOPOINT &location);
    void ServiceFullReload(const GEOPOINT &location);
