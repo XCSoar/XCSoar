@@ -271,6 +271,7 @@ OBJS	:=\
 	$(SRC)/Interface.o		\
 	$(SRC)/LocalTime.o		\
 	$(SRC)/Units.o 			\
+	$(SRC)/StringUtil.o \
 	$(SRC)/UtilsAirspace.o		\
 	$(SRC)/UtilsFLARM.o		\
 	$(SRC)/UtilsFont.o		\
