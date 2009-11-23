@@ -98,7 +98,9 @@ short RasterMapRaw::_GetFieldAtXY(unsigned int lx,
 
 // Specialised open/close routines
 
-bool RasterMapRaw::Open(char* zfilename) {
+bool
+RasterMapRaw::Open(const char *zfilename)
+{
   Poco::ScopedRWLock protect(lock, true);
 
   ZZIP_FILE *fpTerrain;

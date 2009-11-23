@@ -54,7 +54,7 @@ class RasterMapJPG2000: public RasterMap {
   void SetViewCenter(const GEOPOINT &location);
   virtual void SetFieldRounding(const double xr, const double yr,
     RasterRounding &rounding);
-  virtual bool Open(char* filename);
+  virtual bool Open(const char *path);
   virtual void Close();
   void ServiceFullReload(const GEOPOINT &location);
 

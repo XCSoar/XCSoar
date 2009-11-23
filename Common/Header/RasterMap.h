@@ -97,7 +97,7 @@ class RasterMap {
   short GetField(const GEOPOINT &location,
     const RasterRounding &rounding);
 
-  virtual bool Open(char* filename) = 0;
+  virtual bool Open(const char *path) = 0;
   virtual void Close() = 0;
   virtual void ServiceCache() {};
   virtual void ServiceFullReload(const GEOPOINT &location) {};

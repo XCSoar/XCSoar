@@ -233,7 +233,9 @@ short RasterMapCache::LookupTerrainCache(const long &SeekPos) {
 }
 
 // Specialised open/close routines
-bool RasterMapCache::Open(char* zfilename) {
+bool
+RasterMapCache::Open(const char *zfilename)
+{
   Poco::ScopedRWLock protect(lock, true);
   terrain_valid = false;
   if (strlen(zfilename)<=0) {

@@ -65,7 +65,7 @@ public:
     return terrain_initialised;
   }
    RasterMap* TerrainMap;
-   bool CreateTerrainMap(char *zfilename);
+   bool CreateTerrainMap(const char *path);
 
  public:
    void Lock(void); // should be protected, friend of TerrainDataClient

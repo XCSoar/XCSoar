@@ -98,7 +98,9 @@ void RasterTerrain::OpenTerrain(void)
   }
 }
 
-bool RasterTerrain::CreateTerrainMap(char *zfilename) {
+bool
+RasterTerrain::CreateTerrainMap(const char *zfilename)
+{
   if (strstr(zfilename,".jp2")) {
     TerrainMap = new RasterMapJPG2000();
     if (!TerrainMap)

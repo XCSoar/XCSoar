@@ -73,7 +73,7 @@ class RasterMapCache: public RasterMap {
 
   void ServiceCache();
 
-  virtual bool Open(char* filename);
+  virtual bool Open(const char *path);
   virtual void Close();
   virtual void LockRead();
 

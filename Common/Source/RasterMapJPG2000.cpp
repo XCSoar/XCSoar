@@ -145,7 +145,9 @@ void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
   }
 }
 
-bool RasterMapJPG2000::Open(char* zfilename) {
+bool
+RasterMapJPG2000::Open(const char *zfilename)
+{
   Poco::ScopedRWLock protect(lock, true);
   strcpy(jp2_filename,zfilename);
 
