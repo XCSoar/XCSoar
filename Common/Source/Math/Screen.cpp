@@ -49,19 +49,19 @@ Copyright_License {
 
 void protate(POINT &pin, const double &angle)
 {
-  int x= pin.x;
-  int y= pin.y;
+  int x = pin.x;
+  int y = pin.y;
   static double lastangle = 0;
   static int cost=1024,sint=0;
 
-  if(angle != lastangle)
-    {
-      lastangle = angle;
-      cost = ifastcosine(angle);
-      sint = ifastsine(angle);
-    }
-  pin.x = (x*cost - y*sint + 512 )/1024;
-  pin.y = (y*cost + x*sint + 512 )/1024;
+  if (angle != lastangle) {
+    lastangle = angle;
+    cost = ifastcosine(angle);
+    sint = ifastsine(angle);
+  }
+
+  pin.x = (x * cost - y * sint + 512) / 1024;
+  pin.y = (y * cost + x * sint + 512) / 1024;
 
   // round (x/b) = (x+b/2)/b;
   // b = 2; x = 10 -> (10+1)/2=5
@@ -72,19 +72,19 @@ void protate(POINT &pin, const double &angle)
 void protateshift(POINT &pin, const double &angle,
                   const int &xs, const int &ys)
 {
-  int x= pin.x;
-  int y= pin.y;
+  int x = pin.x;
+  int y = pin.y;
   static double lastangle = 0;
   static int cost=1024,sint=0;
 
-  if(angle != lastangle)
-    {
-      lastangle = angle;
-      cost = ifastcosine(angle);
-      sint = ifastsine(angle);
-    }
-  pin.x = (x*cost - y*sint + 512 + (xs*1024))/1024;
-  pin.y = (y*cost + x*sint + 512 + (ys*1024))/1024;
+  if (angle != lastangle) {
+    lastangle = angle;
+    cost = ifastcosine(angle);
+    sint = ifastsine(angle);
+  }
+
+  pin.x = (x * cost - y * sint + 512 + xs * 1024) / 1024;
+  pin.y = (y * cost + x * sint + 512 + ys * 1024) / 1024;
 
 }
 
@@ -245,11 +245,11 @@ BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
 */
 
 bool CheckRectOverlap(RECT rc1, RECT rc2) {
-  if(rc1.left >= rc2.right) return(false);
-  if(rc1.right <= rc2.left) return(false);
-  if(rc1.top >= rc2.bottom) return(false);
-  if(rc1.bottom <= rc2.top) return(false);
-  return(true);
+  if (rc1.left >= rc2.right) return false;
+  if (rc1.right <= rc2.left) return false;
+  if (rc1.top >= rc2.bottom) return false;
+  if (rc1.bottom <= rc2.top) return false;
+  return true;
 }
 
 void LatLon2Flat(const GEOPOINT &location, POINT &screen)
