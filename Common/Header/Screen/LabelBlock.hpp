@@ -41,8 +41,7 @@ Copyright_License {
 
 #include "Sizes.h"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <windef.h>
 
 class LabelBlock {
 public:
