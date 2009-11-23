@@ -54,6 +54,8 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "Components.hpp"
 #include "Interface.hpp"
+#include "Language.hpp"
+#include "LogFile.hpp"
 #include "Asset.hpp"
 
 bool COMPORTCHANGED = false;
@@ -120,6 +122,9 @@ void SettingsLeave() {
 
   if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED) || (AIRFIELDFILECHANGED)) {
     task.ClearTask();
+
+    XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
+    XCSoarInterface::SetProgressStepSize(2);
 
     // re-load terrain
     terrain.CloseTerrain();

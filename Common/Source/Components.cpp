@@ -318,6 +318,9 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   topology->Open();
 
   // Read the terrain file
+  CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
+  SetProgressStepSize(2);
+  StartupStore(TEXT("OpenTerrain\n"));
   terrain.OpenTerrain();
 
   // Read the waypoint files
@@ -332,6 +335,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());
 
+  CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
   terrain.ServiceFullReload(Basic().Location);
 
   // Scan for weather forecast
@@ -507,6 +511,8 @@ void XCSoarInterface::Shutdown(void) {
   StartupStore(TEXT("CloseTerrainTopology\n"));
 
   RASP.Close();
+
+  StartupStore(TEXT("CloseTerrain\n"));
   terrain.CloseTerrain();
 
   delete topology;
