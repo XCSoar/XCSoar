@@ -54,14 +54,10 @@ void RasterTerrain::OpenTerrain(void)
 
   GetRegistryString(szRegistryTerrainFile, szFile, MAX_PATH);
 
-  TCHAR szOrigFile[MAX_PATH] = TEXT("\0");
   char zfilename[MAX_PATH];
 
   ExpandLocalPath(szFile);
-  _tcscpy(szOrigFile, szFile);
-  ContractLocalPath(szOrigFile);
 
-  SetRegistryString(szRegistryTerrainFile, TEXT("\0"));
   unicode2ascii(szFile, zfilename, MAX_PATH);
 
   if (strlen(zfilename)==0) {
@@ -76,8 +72,7 @@ void RasterTerrain::OpenTerrain(void)
   // TODO code: Check locking, especially when reloading a file.
   // TODO bug: Fix cache method
 
-  if (CreateTerrainMap(zfilename))
-    SetRegistryString(szRegistryTerrainFile, szOrigFile);
+  CreateTerrainMap(zfilename);
 }
 
 bool
