@@ -246,13 +246,14 @@ devInit(LPCTSTR CommandLine)
   pDevSecondaryBaroSource=NULL;
 
   DWORD PortIndex1, PortIndex2, SpeedIndex1, SpeedIndex2;
-#ifdef GNAV
-  PortIndex1 = 2; SpeedIndex1 = 5;
-  PortIndex2 = 0; SpeedIndex2 = 5;
-#else
-  PortIndex1 = 0; SpeedIndex1 = 2;
-  PortIndex2 = 0; SpeedIndex2 = 2;
-#endif
+  if (is_altair()) {
+    PortIndex1 = 2; SpeedIndex1 = 5;
+    PortIndex2 = 0; SpeedIndex2 = 5;
+  } else {
+    PortIndex1 = 0; SpeedIndex1 = 2;
+    PortIndex2 = 0; SpeedIndex2 = 2;
+  }
+
   ReadPort1Settings(&PortIndex1,&SpeedIndex1);
   ReadPort2Settings(&PortIndex2,&SpeedIndex2);
 
