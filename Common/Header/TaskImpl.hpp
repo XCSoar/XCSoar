@@ -39,14 +39,13 @@ Copyright_License {
 #if !defined(XCSOAR_TASK_IMPL_H)
 #define XCSOAR_TASK_IMPL_H
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include "Sizes.h"
 
 #include "GeoPoint.hpp"
 #include "SettingsTask.hpp"
 #include "WayPoint.hpp"
 
+#include <windef.h>
 #include <stdio.h>
 
 struct SETTINGS_COMPUTER;
