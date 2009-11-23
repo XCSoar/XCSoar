@@ -218,25 +218,24 @@ bool RotateScreen() {
   //
   // Change the orientation of the screen
   //
-#ifdef GNAV
-  DEVMODE DeviceMode;
+  if (is_altair()) {
+    DEVMODE DeviceMode;
 
-  memset(&DeviceMode, 0, sizeof(DeviceMode));
-  DeviceMode.dmSize=sizeof(DeviceMode);
-  DeviceMode.dmFields = DM_DISPLAYORIENTATION;
-  DeviceMode.dmDisplayOrientation = DMDO_90;
-  //Put your desired position right here.
+    memset(&DeviceMode, 0, sizeof(DeviceMode));
+    DeviceMode.dmSize=sizeof(DeviceMode);
+    DeviceMode.dmFields = DM_DISPLAYORIENTATION;
+    DeviceMode.dmDisplayOrientation = DMDO_90;
+    //Put your desired position right here.
 
-  if (DISP_CHANGE_SUCCESSFUL ==
-      ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL, CDS_RESET, NULL))
-    return true;
-  else
+    if (DISP_CHANGE_SUCCESSFUL ==
+        ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL, CDS_RESET, NULL))
+      return true;
+    else
+      return false;
+  } else {
     return false;
-#else
-  return false;
+  }
 #endif
-#endif
-
 }
 
 
