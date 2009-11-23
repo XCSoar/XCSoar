@@ -18,8 +18,8 @@ int main(int argc, char** argv)
   plan_tests(NUM_WIND*2);
 
   for (int i=0; i<NUM_WIND; i++) {
-    ok (test_aat(2,i), test_name("target aat",2,i),0);
-    ok (test_aat(0,i), test_name("target mixed",0,i),0);
+    ok (test_aat(2,i), test_name("target ",2,i),0);
+    ok (test_aat(0,i), test_name("target ",0,i),0);
   }
   return exit_status();
 }

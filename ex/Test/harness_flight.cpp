@@ -20,7 +20,7 @@ double aat_min_time(int test_num) {
 
 int wind_to_mag(int n_wind) {
   if (n_wind) {
-    return ((n_wind-1)/4)*5;
+    return ((n_wind-1)/4+1)*5;
   }
   return 0;
 }
@@ -34,7 +34,7 @@ int wind_to_dir(int n_wind) {
 
 const char* wind_name(int n_wind) {
   static char buffer[80];
-  sprintf(buffer,"%d@%d",wind_to_mag(n_wind),wind_to_dir(n_wind));
+  sprintf(buffer,"%d m/s @ %d",wind_to_mag(n_wind),wind_to_dir(n_wind));
   return buffer;
 }
 
@@ -57,7 +57,7 @@ bool run_flight(TaskManager &task_manager,
   ac.set_speed_factor(speed_factor);
 
 #ifdef DO_PRINT
-  std::ofstream f4("results/res-sample.txt");
+  static std::ofstream f4("results/res-sample.txt");
 #endif
 
   bool do_print = verbose;
@@ -103,6 +103,7 @@ bool run_flight(TaskManager &task_manager,
   if (verbose) {
     task_manager.print(ac.get_state());
     ac.print(f4);
+    f4 << "\n";
     f4.flush();
   }
 
@@ -172,13 +173,14 @@ bool test_flight_times(int test_num, int n_wind)
   // there will be small error due to start location
 
   bool fine = test_flight(test_num, n_wind);
-  fine &= fabs(time_elapsed/time_planned-1.0)<0.02;
+  const double t_rat = fabs(time_elapsed/time_planned-1.0);
+  fine &= t_rat<0.02;
 
   if ((verbose) || !fine) {
     printf("# time remaining %g\n", time_remaining);
     printf("# time elapsed %g\n", time_elapsed);
     printf("# time planned %g\n", time_planned);
-    printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
+    printf("# time ratio error (elapsed/planned) %g\n", t_rat);
   }
   return fine;
 }
@@ -231,6 +233,9 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   ce1 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
   ok (ce0>ce1, test_name("ce wandering",test_num, n_wind),0);
+  if (ce0<=ce1 || verbose) {
+    printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
+  }
 
   // flying too slow
   bearing_noise = 0.0;
@@ -238,6 +243,9 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   ce2 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
   ok (ce0>ce2, test_name("ce speed slow",test_num, n_wind),0);
+  if (ce0<=ce2 || verbose) {
+    printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
+  }
 
   // flying too fast
   bearing_noise = 0.0;
@@ -245,6 +253,9 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   ce3 = calc_cruise_efficiency;
   // cruise efficiency of this should be lower than nominal
   ok (ce0>ce3, test_name("ce speed fast",test_num, n_wind),0);
+  if (ce0<=ce3 || verbose) {
+    printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
+  }
 
   // higher than expected cruise sink
   sink_factor = 1.2;
@@ -253,6 +264,9 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   ok (ce0>ce4, test_name("ce high sink",test_num, n_wind),0);
   // cruise efficiency of this should be lower than nominal
   sink_factor = 1.0;
+  if (ce0<=ce4 || verbose) {
+    printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
+  }
 
   // slower than expected climb
   climb_factor = 0.8;
@@ -261,6 +275,9 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   ok (ce0>ce5, test_name("ce slow climb",test_num, n_wind),0);
   // cruise efficiency of this should be lower than nominal
   climb_factor = 1.0;
+  if (ce0<=ce5 || verbose) {
+    printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
+  }
 
   // lower than expected cruise sink; 
   sink_factor = 0.8;
@@ -269,6 +286,9 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   ok (ce0<ce6, test_name("ce low sink",test_num, n_wind),0);
   // cruise efficiency of this should be greater than nominal
   sink_factor = 1.0;
+  if (ce0>=ce6 || verbose) {
+    printf("# calc cruise efficiency %g\n", calc_cruise_efficiency);
+  }
 
   bool retval = (ce0>ce1) && (ce0>ce2) && (ce0>ce3) && (ce0>ce4) && (ce0>ce5)
     && (ce0<ce6);
@@ -289,15 +309,15 @@ bool test_aat(int test_num, int n_wind)
 {
 
   // test whether flying to targets in an AAT task produces
-  // elapsed (finish) times equal to desired time with 1% tolerance
+  // elapsed (finish) times equal to desired time with 1.5% tolerance
 
   bool fine = test_flight(test_num, n_wind);
   double min_time = aat_min_time(test_num);
 
   const double t_ratio = fabs(time_elapsed/min_time-1.0);
-  fine &= (t_ratio<0.01);
+  fine &= (t_ratio<0.015);
   if (!fine || verbose) {
-    printf("# time ratio (elapsed/target) %g\n", t_ratio);
+    printf("# time ratio error (elapsed/target) %g\n", t_ratio);
   }
   return fine;
 }
@@ -315,8 +335,35 @@ bool test_automc(int test_num, int n_wind)
   test_flight(test_num, n_wind, 1.0, true);
   double t1 = time_elapsed;
 
-  bool fine = (t1<t0);
+  bool fine = (t1/t0<1.015);
   ok(fine,test_name("faster with auto mc on",test_num, n_wind),0);
+  
+  if (!fine || verbose) {
+    printf("# time ratio %g\n", t1/t0);
+  }
+  return fine;
+}
+
+bool test_bestcruisetrack(int test_num, int n_wind)
+{
+
+  // tests whether following the cruise track which compensates for wind drift
+  // produces routes that are more on track than if the route is allowed to drift
+  // downwind during climbs
+
+  // this test allows for a small error margin
+
+  enable_bestcruisetrack = false;
+  test_flight(test_num, n_wind);
+  double t0 = time_elapsed;
+
+  enable_bestcruisetrack = true;
+  test_flight(test_num, n_wind);
+  double t1 = time_elapsed;
+  enable_bestcruisetrack = false;
+
+  bool fine = (t1/t0<1.01);
+  ok(fine,test_name("faster flying with bestcruisetrack",test_num, n_wind),0);
   
   if (!fine || verbose) {
     printf("# time ratio %g\n", t1/t0);

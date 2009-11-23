@@ -27,5 +27,6 @@ bool test_aat(int test_num, int n_wind);
 bool test_speed_factor(int test_num, int n_wind);
 bool test_cruise_efficiency(int test_num, int n_wind);
 bool test_automc(int test_num, int n_wind);
+bool test_bestcruisetrack(int test_num, int n_wind);
 
 #endif

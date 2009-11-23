@@ -164,47 +164,22 @@ TESTS = \
 	Test/test_flight.exe \
 	Test/test_aat.exe \
 	Test/test_cruiseefficiency.exe \
+	Test/test_bestcruisetrack.exe \
 	Test/test_vopt.exe \
 	Test/test_trees.exe \
-	Test/test_mc.exe
+	Test/test_mc.exe 
 
-TARGETS = Test/test.exe $(TESTS)
+TARGETS = $(TESTS) Test/test.exe
 
-all: $(TARGETS)
+all: $(OBJS) $(TESTOBJS) $(TARGETS)
 	@echo "done"
 
 test:	$(TESTS)
 	perl Test/testall.pl $(TESTS)
 
-Test/test.exe: $(OBJS) $(TESTOBJS) Test/test.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test.cpp -o Test/test.exe
-
-Test/test_task.exe: $(OBJS) $(TESTOBJS) Test/test_task.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_task.cpp -o Test/test_task.exe
-
-Test/test_automc.exe: $(OBJS) $(TESTOBJS) Test/test_automc.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_automc.cpp -o Test/test_automc.exe
-
-Test/test_aat.exe: $(OBJS) $(TESTOBJS) Test/test_aat.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_aat.cpp -o Test/test_aat.exe
-
-Test/test_cruiseefficiency.exe: $(OBJS) $(TESTOBJS) Test/test_cruiseefficiency.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_cruiseefficiency.cpp -o Test/test_cruiseefficiency.exe
-
-Test/test_vopt.exe: $(OBJS) $(TESTOBJS) Test/test_vopt.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_vopt.cpp -o Test/test_vopt.exe
-
-Test/test_waypoints.exe: $(OBJS) $(TESTOBJS) Test/test_waypoints.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_waypoints.cpp -o Test/test_waypoints.exe
-
-Test/test_flight.exe: $(OBJS) $(TESTOBJS) Test/test_flight.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_flight.cpp -o Test/test_flight.exe
-
-Test/test_trees.exe: $(OBJS) $(TESTOBJS) Test/test_trees.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_trees.cpp -o Test/test_trees.exe
-
-Test/test_mc.exe: $(OBJS) $(TESTOBJS) Test/test_mc.cpp
-	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_mc.cpp -o Test/test_mc.exe
+%.exe: %.cpp $(OBJS) $(TESTOBJS)
+	@$(NQ)echo "  CXX/LN      $@"
+	$(Q)g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) $< -o $@
 
 doco: 
 	doxygen doxygen/Doxyfile
@@ -251,6 +226,7 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 
 
 clean: cleani FORCE
+	@$(NQ)echo "cleaning "
 	find ./ $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' \
 		-o -name '.*.d' \
 		-o -name '*.bb' \
@@ -260,8 +236,8 @@ clean: cleani FORCE
 		-o -name '*.gcov' \
 		-o -name '*.*~' \) \
 	-type f -print | xargs -r $(RM)
-	$(RM) $(TARGETS) gprof.out 
-	$(RM) $(OBJS)
+	$(Q)$(RM) $(TARGETS) gprof.out 
+	$(Q)$(RM) $(OBJS)
 
 cleani: FORCE
 	find ./ $(IGNORE) \( -name '*.i' \) \

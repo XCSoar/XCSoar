@@ -239,6 +239,7 @@ AbstractTask::print(const AIRCRAFT_STATE &state)
     first = false;
     f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc\n";
   }
+
   if (stats.Time>0) {
     f6 << stats.Time
        << " " << activeTaskPoint
@@ -251,6 +252,9 @@ AbstractTask::print(const AIRCRAFT_STATE &state)
        << " " << stats.total.remaining_effective.get_speed() 
        << " " << stats.total.remaining_effective.get_speed_incremental() 
        << "\n";
+    f6.flush();
+  } else {
+    f6 << "\n";
     f6.flush();
   }
 }

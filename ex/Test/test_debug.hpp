@@ -20,6 +20,7 @@ extern double target_noise;
 extern double turn_speed;
 extern double sink_factor;
 extern double climb_factor;
+extern bool enable_bestcruisetrack;
 const char* test_name(const char* in, int task_num, int wind_num);
 
 bool parse_args(int argc, char** argv);

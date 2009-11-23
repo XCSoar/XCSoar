@@ -63,19 +63,20 @@ GEOPOINT AircraftSim::target(TaskManager &task_manager) {
 }
 
 bool AircraftSim::far(TaskManager &task_manager) {
+
+  AbstractTaskFactory *fact = task_manager.get_factory();
+  bool entered = fact->has_entered(awp);
+
   if (goto_target && (awp>0)) {
     const ElementStat stat = task_manager.get_stats().current_leg;
-    return stat.remaining.get_distance()>100.0;
+    return (stat.remaining.get_distance()>100.0) || !entered;
   } else {
-    if (awp>0) {
-      double d0s = w[awp-1].distance(state.Location);
-      double d01 = w[awp-1].distance(w[awp]); 
-      if (d0s> d01) {
-//        return false;
-      }
-    }
     double dc = w[awp].distance(state.Location);
-    return (dc>state.Speed);
+    if (awp==0) {
+      return (dc>state.Speed);
+    } else {
+      return (dc>state.Speed) || !entered;
+    }
   }
 }
 
@@ -84,9 +85,16 @@ double AircraftSim::small_rand() {
 }
 
 void AircraftSim::update_bearing(TaskManager& task_manager) {
+  const ElementStat stat = task_manager.get_stats().current_leg;
+  double bct = stat.solution_remaining.CruiseTrackBearing;
+
   if (goto_target && (awp>0)) {
-    const ElementStat stat = task_manager.get_stats().current_leg;
     bearing = stat.solution_remaining.Vector.Bearing;
+
+    if (enable_bestcruisetrack && (stat.solution_remaining.Vector.Distance>1000.0)) {
+      bearing = bct;      
+    }
+
   } else {
     bearing = state.Location.bearing(target(task_manager));
   }
@@ -201,6 +209,9 @@ bool AircraftSim::advance(TaskManager &task_manager,
     if (task_manager.getActiveTaskPointIndex() < awp) {
       // manual advance
       task_manager.setActiveTaskPoint(awp);
+      if (verbose>1) {
+        printf("# manual advance to %d\n",awp);
+      }
     }
   }
   if (task_manager.getActiveTaskPointIndex() > awp) {

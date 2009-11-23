@@ -16,6 +16,7 @@ double target_noise = 0.2;
 double turn_speed = 25.0;
 double sink_factor = 1.0;
 double climb_factor = 1.0;
+bool enable_bestcruisetrack = false;
 
 #ifdef INSTRUMENT_TASK
 extern long count_mc;

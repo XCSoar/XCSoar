@@ -46,19 +46,20 @@ SampledTaskPoint::get_boundary_points() const
 const SearchPointVector& 
 SampledTaskPoint::get_search_points(bool cheat)
 {
-  if (cheat && !sampled_points.size()) {
-    // this adds a point in case the waypoint was skipped
-    // this is a crude way of handling the situation --- may be best
-    // to de-rate the score in some way
-
-    SearchPoint sp(getLocation(), get_task_projection());
-    sampled_points.push_back(sp);
-    return sampled_points;
-  }
-  if (sampled_points.size()>0) {
-    return sampled_points;
+  if (sampled_points.empty()) {
+    if (cheat) {
+      // this adds a point in case the waypoint was skipped
+      // this is a crude way of handling the situation --- may be best
+      // to de-rate the score in some way
+      
+      SearchPoint sp(getLocation(), get_task_projection());
+      sampled_points.push_back(sp);
+      return sampled_points;
+    } else {
+      return boundary_points;
+    }
   } else {
-    return boundary_points;
+    return sampled_points;
   }
 }
 
@@ -118,7 +119,7 @@ SampledTaskPoint::update_projection()
 void 
 SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last) 
 {
-  if (sampled_points.size()) {
+  if (!sampled_points.empty()) {
     sampled_points.clear();
     SearchPoint sp(ref_last.Location, get_task_projection(), true);
     sampled_points.push_back(sp);

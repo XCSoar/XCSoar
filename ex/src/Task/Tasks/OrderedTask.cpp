@@ -223,6 +223,7 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
   if (ts 
       && task_behaviour.optimise_targets_range 
       && (task_behaviour.aat_min_time>0.0)) {
+
     if (activeTaskPoint>0) {
       double p = calc_min_target(state, task_behaviour.aat_min_time);
       (void)p;

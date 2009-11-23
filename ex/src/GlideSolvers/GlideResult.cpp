@@ -32,7 +32,7 @@ GlideResult::calc_cruise_bearing()
     }
     // Wn/sin(alpha) = V/sin(theta)
     //   (Wn/V)*sin(theta) = sin(alpha)
-    CruiseTrackBearing += RAD_TO_DEG*asin(sintheta*EffectiveWindSpeed/VOpt);
+    CruiseTrackBearing -= 0.5*RAD_TO_DEG*asin(sintheta*EffectiveWindSpeed/VOpt);
   }
 }
 

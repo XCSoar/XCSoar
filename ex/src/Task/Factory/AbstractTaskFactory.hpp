@@ -198,6 +198,11 @@ public:
  */
   virtual bool validate() = 0;
 
+  /**
+   *  FOR TESTING ONLY
+   */
+  bool has_entered(unsigned position) const;
+
 protected:
   virtual bool validType(OrderedTaskPoint *new_tp, unsigned position) const;
 

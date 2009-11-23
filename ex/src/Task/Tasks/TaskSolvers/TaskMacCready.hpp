@@ -114,6 +114,7 @@ public:
  * @return Glide solution of current leg
  */
   const GlideResult& get_active_solution() {
+    gs[activeTaskPoint].calc_cruise_bearing();
     return gs[activeTaskPoint];
   };
 
