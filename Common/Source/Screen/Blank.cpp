@@ -45,6 +45,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "LogFile.hpp"
 #include "Message.h"
+#include "Asset.hpp"
 
 // GDI Escapes for ExtEscape()
 #define QUERYESCSUPPORT    8
@@ -127,13 +128,11 @@ void BlankDisplay(bool doblank) {
       // we don't want the PDA to be completely depleted.
 
       if (BatteryInfo.acStatus==0) {
-#ifdef _SIM_
-        if ((PDABatteryPercent < BATTERY_EXIT)) {
+        if (is_simulator() && (PDABatteryPercent < BATTERY_EXIT)) {
           StartupStore(TEXT("Battery low exit...\n"));
           // TODO feature: Warning message on battery shutdown
-	  XCSoarInterface::SignalShutdown(true);
-        } else
-#endif
+          XCSoarInterface::SignalShutdown(true);
+        } else {
           if (PDABatteryPercent < BATTERY_WARNING) {
             DWORD LocalWarningTime = ::GetTickCount();
             if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
@@ -144,6 +143,7 @@ void BlankDisplay(bool doblank) {
           } else {
             BatteryWarningTime = 0;
           }
+        }
       }
 
       if (BatteryInfo.acStatus==0) {
