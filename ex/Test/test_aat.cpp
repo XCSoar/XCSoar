@@ -17,12 +17,11 @@ int main(int argc, char** argv)
 
   int n_wind = 3;
 
-  plan_tests(5*n_wind);
+  plan_tests(n_wind*2);
 
   for (int i=0; i<n_wind; i++) {
-    for (int j=0; j<5; j++) {
-      ok (test_flight(j,i), test_name("flight",j),0);
-    }
+    ok (test_aat(2,i), test_name("target aat",2),0);
+    ok (test_aat(0,i), test_name("target mixed",0),0);
   }
   return exit_status();
 }

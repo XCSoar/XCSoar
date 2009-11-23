@@ -26,4 +26,6 @@ bool test_task_manip(TaskManager& task_manager,
 
 void task_report(TaskManager& task_manager, const char* text);
 
+const char* task_name(int test_num);
+
 #endif

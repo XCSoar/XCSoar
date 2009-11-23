@@ -20,6 +20,7 @@ extern double target_noise;
 extern double turn_speed;
 extern double sink_factor;
 extern double climb_factor;
+const char* test_name(const char* in, int test_num);
 
 bool parse_args(int argc, char** argv);
 

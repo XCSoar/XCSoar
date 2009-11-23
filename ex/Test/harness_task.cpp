@@ -416,3 +416,22 @@ bool setup_task(TaskManager& task_manager, const Waypoints& waypoints)
 {
   return test_task_mixed(task_manager, waypoints);
 }
+
+const char* task_name(int test_num)
+{
+  switch (test_num) {
+  case 0:
+    return "mixed";
+  case 1:
+    return "fai";
+  case 2:
+    return "aat";
+  case 3:
+    return "or";
+  case 4:
+    return "dash";
+  default:
+    return "unknown";
+    break;
+  };
+}

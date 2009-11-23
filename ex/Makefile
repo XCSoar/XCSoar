@@ -157,13 +157,15 @@ TESTOBJS = Test/test_debug.o \
 	Test/harness_task.o \
 	Test/tap.o
 
-TESTS = Test/test_task.exe \
-	Test/test_trees.exe \
-	Test/test_mc.exe \
+TESTS = \
 	Test/test_waypoints.exe \
+	Test/test_task.exe \
+	Test/test_aat.exe \
 	Test/test_flight.exe \
 	Test/test_cruiseefficiency.exe \
-	Test/test_vopt.exe
+	Test/test_vopt.exe \
+	Test/test_trees.exe \
+	Test/test_mc.exe
 
 TARGETS = Test/test.exe $(TESTS)
 
@@ -178,6 +180,9 @@ Test/test.exe: $(OBJS) $(TESTOBJS) Test/test.cpp
 
 Test/test_task.exe: $(OBJS) $(TESTOBJS) Test/test_task.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_task.cpp -o Test/test_task.exe
+
+Test/test_aat.exe: $(OBJS) $(TESTOBJS) Test/test_aat.cpp
+	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_aat.cpp -o Test/test_aat.exe
 
 Test/test_cruiseefficiency.exe: $(OBJS) $(TESTOBJS) Test/test_cruiseefficiency.cpp
 	g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) Test/test_cruiseefficiency.cpp -o Test/test_cruiseefficiency.exe

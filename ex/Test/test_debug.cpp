@@ -1,4 +1,5 @@
 #include "test_debug.hpp"
+#include "harness_task.hpp"
 #include <stdlib.h>
 
 #ifdef DO_PRINT
@@ -167,4 +168,11 @@ bool parse_args(int argc, char** argv)
   }
 
   return true;
+}
+
+const char* test_name(const char* in, int test_num)
+{
+  static char buffer[80];
+  sprintf(buffer,"%s (task %s)", in, task_name(test_num));
+  return buffer;
 }
