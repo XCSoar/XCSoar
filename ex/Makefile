@@ -133,6 +133,8 @@ OBJS	:=\
 	src/Task/Tasks/TaskSolvers/TaskMinTarget.o \
 	src/Task/Tasks/TaskSolvers/TaskOptTarget.o \
 	src/Task/Tasks/TaskSolvers/TaskGlideRequired.o \
+	src/Task/TaskStats/DistanceStat.o \
+	src/Task/TaskStats/ElementStat.o \
 	src/Task/TaskStats/TaskStats.o \
 	src/Waypoint/Waypoint.o \
 	src/Waypoint/Waypoints.o \
@@ -150,6 +152,7 @@ OBJS	:=\
 TESTOBJS = Test/test_debug.o \
 	Test/harness_aircraft.o \
 	Test/harness_airspace.o \
+	Test/harness_flight.o \
 	Test/harness_waypoints.o \
 	Test/harness_task.o \
 	Test/tap.o
