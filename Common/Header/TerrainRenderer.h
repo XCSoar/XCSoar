@@ -55,7 +55,7 @@ struct COLORRAMP;
 
 class TerrainRenderer {
 public:
-  TerrainRenderer(const RasterTerrain &_terrain, RasterWeather &_weather,
+  TerrainRenderer(const RasterTerrain *_terrain, RasterWeather *_weather,
                   RECT rc);
   ~TerrainRenderer();
 
@@ -66,8 +66,8 @@ public:
   short spot_min_val;
 
 private:
-  const RasterTerrain &terrain;
-  RasterWeather &RASP;
+  const RasterTerrain *terrain;
+  RasterWeather *weather;
 
   unsigned int ixs, iys; // screen dimensions in coarse pixels
   unsigned int dtquant;

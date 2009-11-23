@@ -293,15 +293,15 @@ inline void TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 //
 // this is for TerrainInfo.StepSize = 0.0025;
 
-TerrainRenderer::TerrainRenderer(const RasterTerrain &_terrain,
-                                 RasterWeather &_weather, RECT rc)
-  :terrain(_terrain), RASP(_weather)
+TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
+                                 RasterWeather *_weather, RECT rc)
+  :terrain(_terrain), weather(_weather)
 {
   TerrainContrast = 150;
   TerrainBrightness = 36;
   TerrainRamp = 0;
 
-  if (!terrain.IsDirectAccess()) {
+  if (terrain == NULL || !terrain->IsDirectAccess()) {
     dtquant = 6;
   } else {
     // SAM: experiment with dtquant between 2 and 4
@@ -354,72 +354,72 @@ TerrainRenderer::~TerrainRenderer() {
 }
 
 bool TerrainRenderer::SetMap(const GEOPOINT &loc) {
-  if (RASP.GetParameter()) {
-    RASP.Reload(loc);
-  }
+  if (weather != NULL && weather->GetParameter())
+    weather->Reload(loc);
+
   interp_levels = 5;
-  switch (RASP.GetParameter()) {
+  switch (weather != NULL ? weather->GetParameter() : 0) {
   case 1: // wstar
     is_terrain = false;
     do_water = false;
     height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
-    DisplayMap = RASP.GetMap();
+    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[0][0];
     break;
   case 2: // bl wind spd
     is_terrain = false;
     do_water = false;
     height_scale = 3;
-    DisplayMap = RASP.GetMap();
+    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[1][0];
     break;
   case 3: // hbl
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.GetMap();
+    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[2][0];
     break;
   case 4: // dwcrit
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.GetMap();
+    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[2][0];
     break;
   case 5: // blcloudpct
     is_terrain = false;
     do_water = true;
     height_scale = 0;
-    DisplayMap = RASP.GetMap();
+    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[3][0];
     break;
   case 6: // sfctemp
     is_terrain = false;
     do_water = false;
     height_scale = 0;
-    DisplayMap = RASP.GetMap();
+    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[4][0];
     break;
   case 7: // hwcrit
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.GetMap();
+    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[2][0];
     break;
   case 8: // wblmaxmin
     is_terrain = false;
     do_water = false;
     height_scale = 1; // max range 256*(1**2) = 512 cm/s = 5.0 m/s
-    DisplayMap = RASP.GetMap();
+    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[5][0];
     break;
   case 9: // blcwbase
     is_terrain = false;
     do_water = false;
     height_scale = 4;
-    DisplayMap = RASP.GetMap();
+    DisplayMap = weather->GetMap();
     color_ramp = &weather_colors[2][0];
     break;
   default:
@@ -428,7 +428,7 @@ bool TerrainRenderer::SetMap(const GEOPOINT &loc) {
     is_terrain = true;
     do_water = true;
     height_scale = 4;
-    DisplayMap = terrain.TerrainMap;
+    DisplayMap = terrain != NULL ? terrain->TerrainMap : NULL;
     color_ramp = &terrain_colors[TerrainRamp][0];
     break;
   }
@@ -455,7 +455,7 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
 
   unsigned int rfact=1;
 
-  if (isBigZoom && !terrain.IsDirectAccess()) {
+  if (isBigZoom && terrain != NULL && !terrain->IsDirectAccess()) {
     // first time displaying this data, so do it at half resolution
     // to avoid too many cache misses
     rfact = 2;
@@ -518,9 +518,8 @@ void TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom
 
   DisplayMap->Unlock();
 
-  if (RASP.GetParameter()) {
+  if (weather != NULL && weather->GetParameter())
     ScanSpotHeights(X0-orig.x, Y0-orig.y, X1-orig.x, Y1-orig.y);
-  }
 }
 
 void TerrainRenderer::ScanSpotHeights(const int X0, const int Y0, const int X1, const int Y1) {
