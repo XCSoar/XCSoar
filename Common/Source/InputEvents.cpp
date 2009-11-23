@@ -60,9 +60,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 */
 
 #include "InputEvents.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
-#include "Interface.hpp"
 #include "LogFile.hpp"
 #include "Compatibility/vk.h"
 #include "InfoBoxLayout.h"
@@ -71,7 +69,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "LocalPath.hpp"
 #include "McReady.h"
 #include "UtilsText.hpp"
-#include "MainWindow.hpp"
 
 #include <assert.h>
 #include <ctype.h>
