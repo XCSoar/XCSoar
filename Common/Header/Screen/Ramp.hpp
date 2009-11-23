@@ -39,9 +39,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_RAMP_HPP
 #define XCSOAR_SCREEN_RAMP_HPP
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
 struct COLORRAMP {
   short h;
   unsigned char r;
@@ -49,9 +46,11 @@ struct COLORRAMP {
   unsigned char b;
 };
 
-void ColorRampLookup(short h, BYTE &r, BYTE &g, BYTE &b,
-                     const COLORRAMP* ramp_colors,
-                     const int numramp,
-                     const unsigned char interp_bits=6);
+void
+ColorRampLookup(short h,
+                unsigned char &r, unsigned char &g, unsigned char &b,
+                const COLORRAMP* ramp_colors,
+                const int numramp,
+                const unsigned char interp_bits=6);
 
 #endif

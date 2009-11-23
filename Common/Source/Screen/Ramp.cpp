@@ -38,12 +38,13 @@ Copyright_License {
 
 #include "Screen/Ramp.hpp"
 
-void ColorRampLookup(const short h,
-                     BYTE &r, BYTE &g, BYTE &b,
-                     const COLORRAMP* ramp_colors,
-                     const int numramp,
-                     const unsigned char interp_levels) {
-
+void
+ColorRampLookup(const short h,
+                unsigned char &r, unsigned char &g, unsigned char &b,
+                const COLORRAMP* ramp_colors,
+                const int numramp,
+                const unsigned char interp_levels)
+{
   unsigned short f, of;
   unsigned short is = 1<<interp_levels;
 
