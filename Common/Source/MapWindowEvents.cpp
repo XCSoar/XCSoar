@@ -59,9 +59,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
 
-#ifdef _SIM_
 #include "DeviceBlackboard.hpp"
-#endif
 #include <stdlib.h>
 
 #ifndef _MSC_VER
@@ -108,7 +106,6 @@ int MapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
     if (keytime>=VKTIMELONG)
       return 0xc2;
     else
-
       return 40;
   }
 
@@ -199,15 +196,15 @@ MapWindow::on_mouse_move(int x, int y, unsigned keys)
       Screen2LonLat((int)x, (int)y, mouseMove);
       unsigned index = SettingsMap().TargetPanIndex;
       if (task.InAATTurnSector(mouseMove, index)) {
-	// update waypoints so if we drag out of the cylinder, it
-	// will remain adjacent to the edge
+        // update waypoints so if we drag out of the cylinder, it
+        // will remain adjacent to the edge
 
         TASK_POINT tp = task.getTaskPoint(index);
         tp.AATTargetLocation = mouseMove;
         task.setTaskPoint(index, tp);
-	TargetDrag_Location = mouseMove;
+        TargetDrag_Location = mouseMove;
 
-	draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
+        draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
         return true;
       }
     }
@@ -236,21 +233,18 @@ bool MapWindow::on_mouse_down(int x, int y)
       LonLat2Screen(task.getTargetLocation(SettingsMap().TargetPanIndex),
 		    tscreen);
       double distance = isqrt4((long)((XstartScreen-tscreen.x)
-			       *(XstartScreen-tscreen.x)+
-			       (YstartScreen-tscreen.y)
-			       *(YstartScreen-tscreen.y)))
-	/InfoBoxLayout::scale;
+			       * (XstartScreen-tscreen.x)
+			       + (YstartScreen-tscreen.y)
+			       * (YstartScreen-tscreen.y)))
+			       / InfoBoxLayout::scale;
 
       if (distance<10) {
-	TargetDrag_State = 1;
+        TargetDrag_State = 1;
       }
     }
   }
   return true;
 }
-
-
-
 
 bool MapWindow::on_mouse_up(int x, int y)
 {
@@ -324,51 +318,51 @@ bool MapWindow::on_mouse_up(int x, int y)
     return true;
   }
 
-#ifdef _SIM_
-  if (!Basic().Replay && !my_target_pan && (distance>IBLSCALE(36))) {
-    // This drag moves the aircraft (changes speed and direction)
-    double oldbearing = XCSoarInterface::Basic().TrackBearing;
-    double minspeed = 1.1*GlidePolar::Vminsink;
-    double newbearing = Bearing(LLstart, G);
-    if ((fabs(AngleLimit180(newbearing-oldbearing))<30)
-	|| (XCSoarInterface::Basic().Speed<minspeed)) {
+  if (is_simulator()) {
+    if (!Basic().Replay && !my_target_pan && (distance>IBLSCALE(36))) {
+      // This drag moves the aircraft (changes speed and direction)
+      double oldbearing = XCSoarInterface::Basic().TrackBearing;
+      double minspeed = 1.1*GlidePolar::Vminsink;
+      double newbearing = Bearing(LLstart, G);
+      if ((fabs(AngleLimit180(newbearing - oldbearing)) < 30)
+          || (XCSoarInterface::Basic().Speed < minspeed)) {
 
-      device_blackboard.SetSpeed(min(100.0,max(minspeed,distance/3)));
+        device_blackboard.SetSpeed(min(100.0, max(minspeed, distance / 3)));
+      }
+      device_blackboard.SetTrackBearing(newbearing);
+      // change bearing without changing speed if direction change > 30
+      // 20080815 JMW prevent dragging to stop glider
+
+      // JMW trigger recalcs immediately
+      TriggerGPSUpdate();
+      return true;
     }
-    device_blackboard.SetTrackBearing(newbearing);
-    // change bearing without changing speed if direction change > 30
-    // 20080815 JMW prevent dragging to stop glider
-
-    // JMW trigger recalcs immediately
-    TriggerGPSUpdate();
-    return true;
   }
-#endif
 
   if (!my_target_pan) {
     if (CommonInterface::VirtualKeys==(VirtualKeys_t)vkEnabled) {
       if(dwInterval < VKSHORTCLICK) {
-	//100ms is NOT enough for a short click since GetTickCount
-	//is OEM custom!
+        //100ms is NOT enough for a short click since GetTickCount
+        //is OEM custom!
         if (PopupNearestWaypointDetails(way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
-	  return true;
-	}
+          return true;
+        }
       } else {
-	if (PopupInteriorAirspaceDetails(LLstart)) {
-	  return true;
-	}
+        if (PopupInteriorAirspaceDetails(LLstart)) {
+          return true;
+        }
       }
     } else {
       if(dwInterval < AIRSPACECLICK) { // original and untouched interval
         if (PopupNearestWaypointDetails(way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
-	  return true;
-	}
+          return true;
+        }
       } else {
-	if (PopupInteriorAirspaceDetails(LLstart)) {
-	  return true;
-	}
+        if (PopupInteriorAirspaceDetails(LLstart)) {
+          return true;
+        }
       }
     } // VK enabled
   } // !TargetPan
