@@ -48,7 +48,6 @@ class Canvas;
 class BGRColor;
 class RasterMap;
 class MapWindowProjection;
-class LabelBlock;
 class RasterTerrain;
 class RasterWeather;
 class RasterRounding;
