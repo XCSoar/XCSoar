@@ -284,15 +284,9 @@ double MapWindow::DrawTrail(Canvas &canvas)
     canvas.select(MapGfx.hSnailPens[colour_vario]);
 
     if (!last_visible) { // draw set cursor at P1
-#ifndef NOLINETO
       canvas.move_to(Screen.x, Screen.y);
-#endif
     } else {
-#ifndef NOLINETO
       canvas.line_to(Screen.x, Screen.y);
-#else
-      canvas.line(Screen, point_lastdrawn);
-#endif
     }
     point_lastdrawn = Screen;
     last_visible = this_visible;
@@ -300,11 +294,7 @@ double MapWindow::DrawTrail(Canvas &canvas)
 
   // draw final point to glider
   if (last_visible) {
-#ifndef NOLINETO
     canvas.line_to(Orig_Aircraft.x, Orig_Aircraft.y);
-#else
-    canvas.line(Orig_Aircraft, point_lastdrawn);
-#endif
   }
 
   glide_computer.GetSnailTrail().Unlock();

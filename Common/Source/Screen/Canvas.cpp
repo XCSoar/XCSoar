@@ -596,21 +596,27 @@ Canvas::two_lines(int ax, int ay, int bx, int by, int cx, int cy)
 #endif
 }
 
-#ifndef NOLINETO
-
 void
 Canvas::move_to(int x, int y)
 {
+#ifdef NOLINETO
+  cursor.x = x;
+  cursor.y = y;
+#else
   ::MoveToEx(dc, x, y, NULL);
+#endif
 }
 
 void
 Canvas::line_to(int x, int y)
 {
+#ifdef NOLINETO
+  line(cursor.x, cursor.y, x, y);
+  move_to(x, y);
+#else
   ::LineTo(dc, x, y);
+#endif
 }
-
-#endif /* !NOLINETO */
 
 void
 Canvas::circle(int x, int y, unsigned radius,

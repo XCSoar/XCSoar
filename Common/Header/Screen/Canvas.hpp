@@ -478,6 +478,10 @@ protected:
   HDC dc;
   unsigned width, height;
 
+#ifdef NOLINETO
+  POINT cursor;
+#endif
+
 private:
   /* copy constructor not allowed */
   Canvas(const Canvas &canvas) {}
