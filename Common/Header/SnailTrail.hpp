@@ -69,7 +69,7 @@ public:
   int getIndex() const {
     return indexNext;
   }
-  const SNAIL_POINT& getPoint(int index) {
+  const SNAIL_POINT& getPoint(int index) const {
     return TrailPoints[index];
   }
 
