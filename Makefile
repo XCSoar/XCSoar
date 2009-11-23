@@ -284,6 +284,7 @@ OBJS	:=\
 	$(SRC)/Audio/VegaVoice.o	\
 	$(SRC)/Compatibility/string.o 	\
 	$(SRC)/Registry.o 		\
+	$(SRC)/Profile.o \
 	$(SRC)/xmlParser.o 		\
 	$(SRC)/Thread/Thread.o \
 	\

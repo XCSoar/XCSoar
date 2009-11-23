@@ -40,6 +40,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Message.h"
 #include "InfoBoxLayout.h"
+#include "Profile.hpp"
 #include "Registry.hpp"
 #include "UtilsProfile.hpp"
 #include "Screen/Graphics.hpp"

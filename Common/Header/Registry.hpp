@@ -44,8 +44,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-#include "Interface.hpp"
-
 void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex);
@@ -54,6 +52,10 @@ void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex);
 void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex);
 
 extern const TCHAR szRegistryKey[];
+extern const TCHAR *szRegistryDisplayType[];
+extern const TCHAR *szRegistryColour[];
+extern const TCHAR *szRegistryBrush[];
+extern const TCHAR *szRegistryAirspaceMode[];
 extern const TCHAR szRegistrySpeedUnitsValue[];
 extern const TCHAR szRegistryDistanceUnitsValue[];
 extern const TCHAR szRegistryAltitudeUnitsValue[];
@@ -72,6 +74,8 @@ extern const TCHAR szRegistryWayPointFile[];
 extern const TCHAR szRegistryAdditionalWayPointFile[];
 extern const TCHAR szRegistryAirspaceFile[];
 extern const TCHAR szRegistryAdditionalAirspaceFile[];
+extern const TCHAR szRegistryWindSpeed[];
+extern const TCHAR szRegistryWindBearing[];
 extern const TCHAR szRegistryAirfieldFile[];
 extern const TCHAR szRegistryTopologyFile[];
 extern const TCHAR szRegistryPolarFile[];
@@ -92,6 +96,7 @@ extern const TCHAR szRegistryStartLine[];
 extern const TCHAR szRegistryStartRadius[];
 extern const TCHAR szRegistryFinishLine[];
 extern const TCHAR szRegistryFinishRadius[];
+extern const TCHAR *szRegistryAirspacePriority[];
 extern const TCHAR szRegistryAirspaceWarning[];
 extern const TCHAR szRegistryAirspaceBlackOutline[];
 extern const TCHAR szRegistryWarningTime[];
@@ -106,6 +111,11 @@ extern const TCHAR szRegistryAircraftType[];
 extern const TCHAR szRegistryAircraftRego[];
 extern const TCHAR szRegistryLoggerID[];
 extern const TCHAR szRegistryLoggerShort[];
+extern const TCHAR szRegistrySoundVolume[];
+extern const TCHAR szRegistrySoundDeadband[];
+extern const TCHAR szRegistrySoundAudioVario[];
+extern const TCHAR szRegistrySoundTask[];
+extern const TCHAR szRegistrySoundModes[];
 extern const TCHAR szRegistryNettoSpeed[];
 extern const TCHAR szRegistryCDICruise[];
 extern const TCHAR szRegistryCDICircling[];
@@ -217,6 +227,10 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal);	// JG
 HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal);	// JG
 BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
 HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
+
+void
+SetRegistryStringIfAbsent(const TCHAR *name, const TCHAR *value);
+
 void SetRegistryColour(int i, DWORD c);
 void SetRegistryBrush(int i, DWORD c);
 void SetRegistryAirspacePriority(int i);
@@ -229,18 +243,5 @@ void WriteDeviceSettings(const int devIdx, const TCHAR *Name);
 
 void SaveRegistryToFile(const TCHAR* szFile);
 void LoadRegistryFromFile(const TCHAR* szFile);
-
-class Profile: public XCSoarInterface {
-public:
-  static void ReadRegistrySettings(void);
-  static void RestoreRegistry(void);
-  static void StoreRegistry(void);
-  static void SaveSoundSettings();
-  static void SaveWindToRegistry();
-  static void LoadWindFromRegistry();
-  static void SetRegistryAirspaceMode(int i);
-private:
-  static int GetRegistryAirspaceMode(int i);
-};
 
 #endif

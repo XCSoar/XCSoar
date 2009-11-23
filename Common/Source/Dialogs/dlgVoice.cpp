@@ -39,6 +39,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Units.hpp"
 #include "UtilsProfile.hpp"
+#include "Profile.hpp"
 #include "Registry.hpp"
 #include "Audio/VegaVoice.h"
 #include "DataField/Base.hpp"

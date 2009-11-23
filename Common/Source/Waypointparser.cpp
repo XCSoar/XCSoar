@@ -48,6 +48,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Units.h"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"

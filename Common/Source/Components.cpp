@@ -35,8 +35,10 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "Components.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "Interface.hpp"
 #include "UtilsProfile.hpp"
 #include "Asset.hpp"

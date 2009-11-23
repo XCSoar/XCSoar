@@ -41,6 +41,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "SettingsTask.hpp"
 #include "UtilsProfile.hpp"
+#include "Profile.hpp"
 #include "Registry.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"

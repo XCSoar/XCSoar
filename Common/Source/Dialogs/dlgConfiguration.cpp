@@ -56,6 +56,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "MainWindow.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalTime.hpp"
 #include "McReady.h"
 #include "Math/FastMath.h"

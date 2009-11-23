@@ -38,12 +38,14 @@ Copyright_License {
 
 #include "UtilsText.hpp"
 #include "XCSoar.h"
-#include <assert.h>
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "Asset.hpp"
+
+#include <assert.h>
 
 #ifdef ENABLE_UNUSED_CODE
 void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
