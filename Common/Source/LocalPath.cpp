@@ -108,6 +108,18 @@ void LocalPathS(char *buffer, const TCHAR* file, int loc) {
   sprintf(buffer,"%S",wbuffer);
 }
 
+/**
+ * Convert backslashes to slashes on platforms where it matters.
+ */
+static void
+normalize_backslashes(TCHAR *p)
+{
+#if !defined(_WIN32) || defined(__WINE__)
+  /* convert backslash to slash */
+  while ((p = _tcschr(p, '\\')) != NULL)
+    *p++ = '/';
+#endif
+}
 
 void ExpandLocalPath(TCHAR* filein) {
   // Convert %LOCALPATH% to Local Path
@@ -131,12 +143,7 @@ void ExpandLocalPath(TCHAR* filein) {
     _tcscpy(filein, output);
   }
 
-#if !defined(_WIN32) || defined(__WINE__)
-  /* convert backslash to slash */
-  ptr = filein;
-  while ((ptr = _tcschr(ptr, '\\')) != NULL)
-    *ptr++ = '/';
-#endif
+  normalize_backslashes(filein);
 }
 
 
