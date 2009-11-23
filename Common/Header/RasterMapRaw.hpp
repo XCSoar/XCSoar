@@ -58,6 +58,9 @@ class RasterMapRaw: public RasterMap {
     RasterRounding &rounding);
   virtual bool Open(const char *path);
   virtual void Close();
+
+  static RasterMapRaw *LoadFile(const char *path);
+
  protected:
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly);

@@ -111,16 +111,8 @@ void RasterWeather::RASP_filename(char* rasp_filename,
 bool RasterWeather::LoadItem(int item, const TCHAR* name) {
   char rasp_filename[MAX_PATH];
   RASP_filename(rasp_filename, name);
-  weather_map[item] = new RasterMapJPG2000();
-  weather_map[item]->Open(rasp_filename);
-  if (!weather_map[item]->isMapLoaded()) {
-    weather_map[item]->Close();
-    delete weather_map[item];
-    weather_map[item]= 0;
-    return false;
-  } else {
-    return true;
-  }
+  weather_map[item] = RasterMapJPG2000::LoadFile(rasp_filename);
+  return weather_map[item] != NULL;
 }
 
 

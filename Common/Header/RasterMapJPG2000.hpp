@@ -58,6 +58,8 @@ class RasterMapJPG2000: public RasterMap {
   virtual void Close();
   void ServiceFullReload(const GEOPOINT &location);
 
+  static RasterMapJPG2000 *LoadFile(const char *path);
+
  protected:
   char jp2_filename[MAX_PATH];
   virtual short _GetFieldAtXY(unsigned int lx,

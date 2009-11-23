@@ -171,3 +171,18 @@ void RasterMapRaw::_Close(void) {
   }
 }
 
+RasterMapRaw *
+RasterMapRaw::LoadFile(const char *path)
+{
+  RasterMapRaw *map = new RasterMapRaw();
+  if (map == NULL)
+    return NULL;
+
+  if (!map->Open(path)) {
+    map->Close();
+    delete map;
+    return NULL;
+  }
+
+  return map;
+}

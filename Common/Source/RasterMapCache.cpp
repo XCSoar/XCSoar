@@ -288,4 +288,18 @@ void RasterMapCache::_Close(void) {
   }
 }
 
+RasterMapCache *
+RasterMapCache::LoadFile(const char *path)
+{
+  RasterMapCache *map = new RasterMapCache();
+  if (map == NULL)
+    return NULL;
 
+  if (!map->Open(path)) {
+    map->Close();
+    delete map;
+    return NULL;
+  }
+
+  return map;
+}

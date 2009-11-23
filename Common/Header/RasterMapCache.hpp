@@ -77,6 +77,8 @@ class RasterMapCache: public RasterMap {
   virtual void Close();
   virtual void LockRead();
 
+  static RasterMapCache *LoadFile(const char *path);
+
  protected:
   TERRAIN_CACHE TerrainCache[MAXTERRAINCACHE];
 

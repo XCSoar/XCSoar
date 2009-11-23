@@ -176,3 +176,19 @@ void RasterMapJPG2000::_Close(void) {
     terrain_valid = false;
   }
 }
+
+RasterMapJPG2000 *
+RasterMapJPG2000::LoadFile(const char *path)
+{
+  RasterMapJPG2000 *map = new RasterMapJPG2000();
+  if (map == NULL)
+    return NULL;
+
+  if (!map->Open(path)) {
+    map->Close();
+    delete map;
+    return NULL;
+  }
+
+  return map;
+}

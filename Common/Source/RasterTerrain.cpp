@@ -89,11 +89,6 @@ void RasterTerrain::OpenTerrain(void)
     SetRegistryString(szRegistryTerrainFile, szOrigFile);
     terrain_initialised = true;
   } else {
-    if (TerrainMap) {
-      TerrainMap->Close();
-      delete TerrainMap;
-      TerrainMap = NULL;
-    }
     terrain_initialised = false;
   }
 }
@@ -102,31 +97,14 @@ bool
 RasterTerrain::CreateTerrainMap(const char *zfilename)
 {
   if (strstr(zfilename,".jp2")) {
-    TerrainMap = new RasterMapJPG2000();
-    if (!TerrainMap)
-      return false;
-
-    return TerrainMap->Open(zfilename);
+    TerrainMap = RasterMapJPG2000::LoadFile(zfilename);
+  } else {
+    TerrainMap = RasterMapRaw::LoadFile(zfilename);
+    if (TerrainMap == NULL)
+      TerrainMap = RasterMapCache::LoadFile(zfilename);
   }
 
-  TerrainMap = new RasterMapRaw();
-  if (!TerrainMap)
-    return false;
-
-  if (TerrainMap->Open(zfilename))
-    return true;
-
-  TerrainMap->Close();
-  delete TerrainMap;
-
-  TerrainMap = new RasterMapCache();
-  if (!TerrainMap)
-    return false;
-
-  if (TerrainMap->Open(zfilename))
-    return true;
-
-  return false;
+  return TerrainMap != NULL;
 }
 
 void RasterTerrain::CloseTerrain(void)
