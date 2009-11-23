@@ -52,7 +52,6 @@ class RasterTerrain {
 public:
 
   RasterTerrain():
-    terrain_initialised(false),
     TerrainMap(NULL) {
   };
 
@@ -60,9 +59,9 @@ public:
                       const double &Longitude);
    void OpenTerrain();
    void CloseTerrain();
-   bool terrain_initialised;
+
    bool isTerrainLoaded() {
-    return terrain_initialised;
+    return TerrainMap != NULL;
   }
    RasterMap* TerrainMap;
    bool CreateTerrainMap(const char *path);

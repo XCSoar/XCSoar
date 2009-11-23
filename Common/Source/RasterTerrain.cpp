@@ -53,8 +53,6 @@ Copyright_License {
 
 void RasterTerrain::OpenTerrain(void)
 {
-  terrain_initialised = false;
-
   StartupStore(TEXT("OpenTerrain\n"));
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
   XCSoarInterface::SetProgressStepSize(2);
@@ -85,12 +83,8 @@ void RasterTerrain::OpenTerrain(void)
   // TODO code: Check locking, especially when reloading a file.
   // TODO bug: Fix cache method
 
-  if (CreateTerrainMap(zfilename)) {
+  if (CreateTerrainMap(zfilename))
     SetRegistryString(szRegistryTerrainFile, szOrigFile);
-    terrain_initialised = true;
-  } else {
-    terrain_initialised = false;
-  }
 }
 
 bool
@@ -111,12 +105,9 @@ void RasterTerrain::CloseTerrain(void)
 {
   StartupStore(TEXT("CloseTerrain\n"));
 
-  if (terrain_initialised) {
-    if (TerrainMap) {
-      delete TerrainMap;
-      TerrainMap = NULL;
-    }
-    terrain_initialised = false;
+  if (TerrainMap != NULL) {
+    delete TerrainMap;
+    TerrainMap = NULL;
   }
 }
 
