@@ -201,8 +201,6 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
     DrawTrailFromTask(canvas, olc, TrailFirstTime);
     olc.Unlock();
   }
-
-  DrawThermalEstimate(canvas);
 }
 
 /**
@@ -339,6 +337,8 @@ void MapWindow::Render(Canvas &canvas, const RECT rc)
 
   // Render the snail trail
   RenderTrail(canvas, rc);
+
+  DrawThermalEstimate(canvas);
 
   // Render task and waypoints
   RenderTask(canvas, rc);
