@@ -38,8 +38,7 @@ Copyright_License {
 #ifndef INFOBOXLAYOUT_H
 #define INFOBOXLAYOUT_H
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <windef.h>
 
 class InfoBoxLayout {
  public:

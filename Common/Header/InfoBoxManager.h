@@ -40,8 +40,7 @@ Copyright_License {
 
 #include "Screen/BufferWindow.hpp"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <windef.h>
 
 extern unsigned numInfoWindows;
 extern const unsigned NUMSELECTSTRINGS;
