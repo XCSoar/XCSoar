@@ -64,10 +64,16 @@ struct ZoomClimb_t {
   bool last_targetpan;
 };
 
-class GaugeCDI;
+class WayPointList;
+class TaskSafe;
+class TopologyStore;
+class RasterTerrain;
+class RasterWeather;
 class TerrainRenderer;
+class Marks;
 class SnailTrail;
 class OLCOptimizer;
+class GaugeCDI;
 
 class MapWindow
 : public MaskedPaintWindow,
@@ -77,8 +83,21 @@ class MapWindow
 {
   PeriodClock mouse_down_clock;
 
-  GaugeCDI *cdi;
+  WayPointList *way_points;
+  TaskSafe *task;
+
+  TopologyStore *topology;
+  RasterTerrain *terrain;
+  RasterWeather *weather;
   TerrainRenderer *terrain_renderer;
+
+  Marks *marks;
+
+  SnailTrail *snail_trail;
+
+  OLCOptimizer *olc;
+
+  GaugeCDI *cdi;
 
  public:
   MapWindow();
@@ -96,6 +115,30 @@ class MapWindow
 
   void set(ContainerWindow &parent,
            const RECT _MapRectSmall, const RECT _MapRectBig);
+
+  void set_way_points(WayPointList *_way_points) {
+    way_points = _way_points;
+  }
+
+  void set_task(TaskSafe *_task) {
+    task = _task;
+  }
+
+  void set_topology(TopologyStore *_topology);
+  void set_terrain(RasterTerrain *_terrain);
+  void set_weather(RasterWeather *_weather);
+
+  void set_marks(Marks *_marks) {
+    marks = _marks;
+  }
+
+  void set_snail_trail(SnailTrail *_snail_trail) {
+    snail_trail = _snail_trail;
+  }
+
+  void set_olc(OLCOptimizer *_olc) {
+    olc = _olc;
+  }
 
   // used by dlgTarget
   bool TargetDragged(double *longitude, double *latitude);

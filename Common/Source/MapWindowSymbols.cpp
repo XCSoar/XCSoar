@@ -256,7 +256,7 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
   if (Appearance.FlightModeIcon == apFlightModeIconDefault){
     Bitmap *bmp;
-    if (task.isTaskAborted()) {
+    if (task != NULL && task->isTaskAborted()) {
       bmp = &MapGfx.hAbort;
     } else if (DisplayMode == dmCircling) {
       bmp = &MapGfx.hClimb;
@@ -320,7 +320,7 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
     }
 
-    if (task.isTaskAborted())
+    if (task != NULL && task->isTaskAborted())
       canvas.select(MapGfx.hBrushFlyingModeAbort);
     else
       canvas.select(MapGfx.hbCompass);
@@ -510,7 +510,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
   int Offset0;
   int i;
 
-  if (task.Valid()){
+  if (task != NULL && task->Valid()){
 
     const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
 
@@ -759,7 +759,7 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
 
 void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
 {
-  if (!task.Valid()) {
+  if (task == NULL || !task->Valid()) {
     return;
   }
 

@@ -47,7 +47,6 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Task.h"
 #include "TopologyStore.h"
-#include "Components.hpp"
 #include "RasterWeather.h"
 #include "GlideComputer.hpp"
 
@@ -90,8 +89,8 @@ void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
 {
   // If (no other background chosen) create white background
-  if (!SettingsMap().EnableTerrain || !Calculated().TerrainValid
-      || !terrain.isTerrainLoaded() ) {
+  if (terrain == NULL || !SettingsMap().EnableTerrain ||
+      !Calculated().TerrainValid || !terrain->isTerrainLoaded()) {
     canvas.select(MapGfx.hBackgroundBrush);
     canvas.white_pen();
     canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
@@ -110,9 +109,9 @@ void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 {
-  if ((SettingsMap().EnableTerrain && (Calculated().TerrainValid)
-       && terrain.isTerrainLoaded())
-      || RASP.GetParameter()) {
+  if ((terrain != NULL && SettingsMap().EnableTerrain &&
+       Calculated().TerrainValid && terrain->isTerrainLoaded()) ||
+      (weather != NULL && weather->GetParameter() != 0)) {
     double sunelevation = 40.0;
     double sunazimuth = DisplayAngle-Calculated().WindBearing;
 
@@ -127,14 +126,14 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
     // }
     // TODO: implement a workaround
 
-    if (terrain.isTerrainLoaded()) {
+    if (terrain != NULL && terrain->isTerrainLoaded()) {
       // TODO feature: sun-based rendering option
 
       if (!terrain_renderer) {
         // defer rendering until first draw because
         // the buffer size, smoothing etc is set by the
         // loaded terrain properties
-        terrain_renderer = new TerrainRenderer(&terrain, &RASP, MapRectBig);
+        terrain_renderer = new TerrainRenderer(terrain, weather, MapRectBig);
       }
       terrain_renderer->SetSettings(SettingsMap().TerrainRamp,
                                     SettingsMap().TerrainContrast,
@@ -155,10 +154,9 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
     }
   }
 
-  if (SettingsMap().EnableTopology) {
+  if (topology != NULL && SettingsMap().EnableTopology)
     // Draw the topology
     topology->Draw(canvas, *this, rc);
-  }
 
   // reset label over-write preventer
   label_block.reset();
@@ -172,9 +170,8 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
 {
   // Draw AAT areas
-  if (!task.TaskIsTemporary()) {
+  if (task != NULL && !task->TaskIsTemporary())
     DrawTaskAAT(canvas, rc, buffer_canvas);
-  }
 
   // Draw airspace on top
   if (SettingsMap().OnAirSpace > 0) {
@@ -189,17 +186,18 @@ void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
 {
-  SnailTrail &snail_trail = glide_computer.GetSnailTrail();
-  snail_trail.ReadLock();
-  double TrailFirstTime = DrawTrail(canvas, snail_trail);
-  snail_trail.Unlock();
+  if (snail_trail == NULL)
+    return;
 
-  if (TrailFirstTime >= 0) {
-    OLCOptimizer &olc = glide_computer.GetOLC();
-    olc.Lock();
-    olc.SetLine();
-    DrawTrailFromTask(canvas, olc, TrailFirstTime);
-    olc.Unlock();
+  snail_trail->ReadLock();
+  double TrailFirstTime = DrawTrail(canvas, *snail_trail);
+  snail_trail->Unlock();
+
+  if (olc != NULL && TrailFirstTime >= 0) {
+    olc->Lock();
+    olc->SetLine();
+    DrawTrailFromTask(canvas, *olc, TrailFirstTime);
+    olc->Unlock();
   }
 }
 
@@ -210,11 +208,13 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
 {
-  if (task.isTaskAborted()) {
-    DrawAbortedTask(canvas);
-  } else {
-    DrawTask(canvas, rc);
+  if (task != NULL) {
+    if (task->isTaskAborted())
+      DrawAbortedTask(canvas);
+    else
+      DrawTask(canvas, rc);
   }
+
   DrawWaypoints(canvas);
   marks->Draw(canvas, *this, rc);
 }
@@ -235,8 +235,9 @@ void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
     DrawGlideCircle(canvas, rc);
   }
   */
-  if ((SettingsMap().EnableTerrain && (Calculated().TerrainValid))
-      || RASP.GetParameter()) {
+  if ((terrain != NULL && SettingsMap().EnableTerrain &&
+       Calculated().TerrainValid) ||
+      (weather != NULL && weather->GetParameter() != 0)) {
     DrawSpotHeights(canvas);
   }
 }
@@ -384,20 +385,19 @@ static void DrawSpotHeight_Internal(Canvas &canvas,
 
 void MapWindow::DrawSpotHeights(Canvas &canvas) {
   // JMW testing, display of spot max/min
-  if (!RASP.GetParameter())
-    return;
-  if (!terrain_renderer)
+  if (weather == NULL || weather->GetParameter() == 0 ||
+      terrain_renderer == NULL)
     return;
 
   canvas.select(TitleWindowFont);
 
   TCHAR Buffer[20];
 
-  RASP.ValueToText(Buffer, terrain_renderer->spot_max_val);
+  weather->ValueToText(Buffer, terrain_renderer->spot_max_val);
   DrawSpotHeight_Internal(canvas, *this, label_block,
 			  Buffer, terrain_renderer->spot_max_pt);
 
-  RASP.ValueToText(Buffer, terrain_renderer->spot_min_val);
+  weather->ValueToText(Buffer, terrain_renderer->spot_min_val);
   DrawSpotHeight_Internal(canvas, *this, label_block,
 			  Buffer, terrain_renderer->spot_min_pt);
 }

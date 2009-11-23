@@ -46,7 +46,6 @@ Copyright_License {
 #include "McReady.h"
 #include "Compatibility/gdi.h"
 #include "WayPointList.hpp"
-#include "Components.hpp"
 
 #include <assert.h>
 
@@ -63,6 +62,9 @@ void MapWaypointLabelClear();
 
 void MapWindow::DrawWaypoints(Canvas &canvas)
 {
+  if (way_points == NULL)
+    return;
+
   TCHAR Buffer[32];
   TCHAR Buffer2[32];
   TCHAR sAltUnit[4];
@@ -78,9 +80,9 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
   MapWaypointLabelClear();
 
-  for (unsigned i = 0; way_points.verify_index(i); ++i) {
-    const WAYPOINT &way_point = way_points.get(i);
-    const WPCALC &wpcalc = way_points.get_calc(i);
+  for (unsigned i = 0; way_points->verify_index(i); ++i) {
+    const WAYPOINT &way_point = way_points->get(i);
+    const WPCALC &wpcalc = way_points->get_calc(i);
 
     if (wpcalc.Visible) {
 
@@ -243,11 +245,15 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
   // boundary has changed.
   // This happens rarely, so it is good pre-filtering of what is visible.
   // (saves from having to do it every screen redraw)
+
+  if (way_points == NULL)
+    return;
+
   const rectObj bounds = *bounds_active;
 
-  for (unsigned i = 0; way_points.verify_index(i); ++i) {
-    const WAYPOINT &way_point = way_points.get(i);
-    WPCALC &wpcalc = way_points.set_calc(i);
+  for (unsigned i = 0; way_points->verify_index(i); ++i) {
+    const WAYPOINT &way_point = way_points->get(i);
+    WPCALC &wpcalc = way_points->set_calc(i);
 
     // TODO code: optimise waypoint visibility
     wpcalc.FarVisible =
@@ -261,13 +267,17 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
 
 void MapWindow::CalculateScreenPositionsWaypoints() {
   // only calculate screen coordinates for waypoints that are visible
-  for (unsigned i = 0; way_points.verify_index(i); ++i) {
-    WPCALC &wpcalc = way_points.set_calc(i);
+
+  if (way_points == NULL)
+    return;
+
+  for (unsigned i = 0; way_points->verify_index(i); ++i) {
+    WPCALC &wpcalc = way_points->set_calc(i);
     if (wpcalc.InTask) {
-      LonLat2Screen(way_points.get(i).Location, wpcalc.Screen);
+      LonLat2Screen(way_points->get(i).Location, wpcalc.Screen);
     } else {
       wpcalc.Visible = wpcalc.FarVisible &&
-        LonLat2ScreenIfVisible(way_points.get(i).Location, &wpcalc.Screen);
+        LonLat2ScreenIfVisible(way_points->get(i).Location, &wpcalc.Screen);
     }
   }
 }

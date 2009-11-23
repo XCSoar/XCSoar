@@ -47,9 +47,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "McReady.h"
-#include "Components.hpp"
 #include "options.h" /* for IBLSCALE() */
-#include "RasterTerrain.h"
 #include "RasterWeather.h"
 
 #include <math.h>
@@ -213,10 +211,12 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
 		  GlidePolar::GetBallastLitres());
         _tcscat(ScaleInfo, TEMP);
       }
-      TCHAR Buffer[20];
-      RASP.ItemLabel(RASP.GetParameter(), Buffer);
-      if (_tcslen(Buffer)) {
-        _tcscat(ScaleInfo, Buffer);
+
+      if (weather != NULL) {
+        TCHAR Buffer[20];
+        weather->ItemLabel(weather->GetParameter(), Buffer);
+        if (_tcslen(Buffer))
+          _tcscat(ScaleInfo, Buffer);
       }
 
       if (ScaleInfo[0]) {

@@ -46,7 +46,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Language.hpp"
 #include "Message.h"
-#include "Components.hpp"
 #include "Task.h"
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
@@ -188,20 +187,21 @@ bool MapWindow::on_mouse_double(int x, int y)
 bool
 MapWindow::on_mouse_move(int x, int y, unsigned keys)
 {
-  if (task.getSettings().AATEnabled && SettingsMap().TargetPan && (TargetDrag_State>0)) {
+  if (task != NULL && task->getSettings().AATEnabled &&
+      SettingsMap().TargetPan && (TargetDrag_State>0)) {
     // target follows "finger" so easier to drop near edge of
     // sector
     if (TargetDrag_State == 1) {
       GEOPOINT mouseMove;
       Screen2LonLat((int)x, (int)y, mouseMove);
       unsigned index = SettingsMap().TargetPanIndex;
-      if (task.InAATTurnSector(mouseMove, index)) {
+      if (task->InAATTurnSector(mouseMove, index)) {
         // update waypoints so if we drag out of the cylinder, it
         // will remain adjacent to the edge
 
-        TASK_POINT tp = task.getTaskPoint(index);
+        TASK_POINT tp = task->getTaskPoint(index);
         tp.AATTargetLocation = mouseMove;
-        task.setTaskPoint(index, tp);
+        task->setTaskPoint(index, tp);
         TargetDrag_Location = mouseMove;
 
         draw_masked_bitmap(get_canvas(), MapGfx.hBmpTarget, x, y, 10, 10, true);
@@ -227,10 +227,11 @@ bool MapWindow::on_mouse_down(int x, int y)
   XstartScreen = x;
   YstartScreen = y;
 
-  if (task.getSettings().AATEnabled && SettingsMap().TargetPan) {
-    if (task.ValidTaskPoint(SettingsMap().TargetPanIndex)) {
+  if (task != NULL && task->getSettings().AATEnabled &&
+      SettingsMap().TargetPan) {
+    if (task->ValidTaskPoint(SettingsMap().TargetPanIndex)) {
       POINT tscreen;
-      LonLat2Screen(task.getTargetLocation(SettingsMap().TargetPanIndex),
+      LonLat2Screen(task->getTargetLocation(SettingsMap().TargetPanIndex),
 		    tscreen);
       double distance = isqrt4((long)((XstartScreen-tscreen.x)
 			       * (XstartScreen-tscreen.x)
@@ -301,9 +302,10 @@ bool MapWindow::on_mouse_up(int x, int y)
   GEOPOINT G;
   Screen2LonLat(x, y, G);
 
-  if (task.getSettings().AATEnabled && my_target_pan && (TargetDrag_State>0)) {
+  if (task != NULL && task->getSettings().AATEnabled && my_target_pan &&
+      TargetDrag_State > 0) {
     TargetDrag_State = 2;
-    if (task.InAATTurnSector(G, SettingsMap().TargetPanIndex)) {
+    if (task->InAATTurnSector(G, SettingsMap().TargetPanIndex)) {
       // if release mouse out of sector, don't update w/ bad coords
       TargetDrag_Location = G;
     }
@@ -344,7 +346,8 @@ bool MapWindow::on_mouse_up(int x, int y)
       if(dwInterval < VKSHORTCLICK) {
         //100ms is NOT enough for a short click since GetTickCount
         //is OEM custom!
-        if (PopupNearestWaypointDetails(way_points, LLstart,
+        if (way_points != NULL &&
+            PopupNearestWaypointDetails(*way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }
@@ -355,7 +358,8 @@ bool MapWindow::on_mouse_up(int x, int y)
       }
     } else {
       if(dwInterval < AIRSPACECLICK) { // original and untouched interval
-        if (PopupNearestWaypointDetails(way_points, LLstart,
+        if (way_points != NULL &&
+            PopupNearestWaypointDetails(*way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }

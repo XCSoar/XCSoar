@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "Components.hpp"
 #include "Interface.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
@@ -55,6 +54,7 @@ Copyright_License {
 #include "RasterWeather.h"
 #include "Gauge/GaugeCDI.hpp"
 #include "Protection.hpp"
+#include "SnailTrail.hpp"
 
 #ifdef PNA
 #include "Asset.hpp"
@@ -78,6 +78,9 @@ ScreenGraphics MapGfx;
  */
 MapWindow::MapWindow()
   :MapWindowProjection(),
+   way_points(NULL), task(NULL),
+   topology(NULL), terrain(NULL), weather(NULL), terrain_renderer(NULL),
+   marks(NULL), snail_trail(NULL), olc(NULL),
    cdi(NULL),
    TargetDrag_State(0),
    BigZoom(true),
@@ -212,7 +215,9 @@ MapWindow::Idle(const bool do_force)
     terrain_idle.dirty = true;
     topology_idle.dirty = true;
     rasp_idle.dirty = true;
-    topology->TriggerUpdateCaches(*this);
+
+    if (topology != NULL)
+      topology->TriggerUpdateCaches(*this);
   }
 
   do {
@@ -234,7 +239,7 @@ MapWindow::Idle(const bool do_force)
         break;
       }
     case 1:
-      if (topology_idle.dirty) {
+      if (topology != NULL && topology_idle.dirty) {
         if (SettingsMap().EnableTopology) {
           topology_idle.dirty =
             topology->ScanVisibility(*this, *getSmartBounds(), do_force);
@@ -244,9 +249,9 @@ MapWindow::Idle(const bool do_force)
         break;
       }
     case 2:
-      if (terrain_idle.dirty) {
-        terrain.ServiceTerrainCenter(Basic().Location);
-        terrain.ServiceCache();
+      if (terrain != NULL && terrain_idle.dirty) {
+        terrain->ServiceTerrainCenter(Basic().Location);
+        terrain->ServiceCache();
 
         if (!do_force) {
           // JMW this currently isn't working with the smart bounds
@@ -255,8 +260,8 @@ MapWindow::Idle(const bool do_force)
         break;
       }
     case 3:
-      if (rasp_idle.dirty) {
-        RASP.SetViewCenter(Basic().Location);
+      if (weather != NULL && rasp_idle.dirty) {
+        weather->SetViewCenter(Basic().Location);
         if (!do_force) {
           // JMW this currently isn't working with the smart bounds
           rasp_idle.dirty = false;
@@ -346,12 +351,37 @@ MapWindow::identify(HWND hWnd)
 }
 #endif /* WIN32 */
 
+void
+MapWindow::set_topology(TopologyStore *_topology)
+{
+  topology = _topology;
+}
+
+void
+MapWindow::set_terrain(RasterTerrain *_terrain)
+{
+  terrain = _terrain;
+
+  if (terrain_renderer != NULL) {
+    delete terrain_renderer;
+    terrain_renderer = NULL;
+  }
+}
+
+void
+MapWindow::set_weather(RasterWeather *_weather)
+{
+  weather = _weather;
+
+  if (terrain_renderer != NULL) {
+    delete terrain_renderer;
+    terrain_renderer = NULL;
+  }
+}
+
 bool MapWindow::checkLabelBlock(const RECT brect) {
   return label_block.check(brect);
 }
-
-#include "Components.hpp"
-#include "GlideComputer.hpp"
 
 void MapWindow::ScanVisibility(rectObj *bounds_active) {
   // received when the SetTopoBounds determines the visibility
@@ -359,7 +389,8 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
   // This happens rarely, so it is good pre-filtering of what is visible.
   // (saves from having to do it every screen redraw)
 
-  glide_computer.GetSnailTrail().ScanVisibility(bounds_active);
+  if (snail_trail != NULL)
+    snail_trail->ScanVisibility(bounds_active);
 
   ScanVisibilityWaypoints(bounds_active);
   ScanVisibilityAirspace(bounds_active);

@@ -373,6 +373,15 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 
+  main_window.map.set_way_points(&way_points);
+  main_window.map.set_task(&task);
+  main_window.map.set_topology(topology);
+  main_window.map.set_terrain(&terrain);
+  main_window.map.set_weather(&RASP);
+  main_window.map.set_marks(marks);
+  main_window.map.set_snail_trail(&glide_computer.GetSnailTrail());
+  main_window.map.set_olc(&glide_computer.GetOLC());
+
   // Finally ready to go.. all structures must be present before this.
 
   // Create the drawing thread
