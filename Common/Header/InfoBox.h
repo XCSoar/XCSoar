@@ -87,9 +87,9 @@ class InfoBox : public BufferWindow {
     const Font *mphFontValue;
     const Font *mphFontComment;
     const Font *valueFont;
-    FontHeightInfo_t *mpFontHeightTitle;
-    FontHeightInfo_t *mpFontHeightValue;
-    FontHeightInfo_t *mpFontHeightComment;
+    struct FontHeightInfo *mpFontHeightTitle;
+    struct FontHeightInfo *mpFontHeightValue;
+    struct FontHeightInfo *mpFontHeightComment;
     bool   mHasFocus;
 
     /** a timer which returns keyboard focus back to the map window

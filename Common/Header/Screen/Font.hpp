@@ -46,11 +46,11 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-typedef struct{
+struct FontHeightInfo {
   int Height;
   int AscentHeight;
   int CapitalHeight;
-}FontHeightInfo_t;
+};
 
 /**
  * A font loaded from storage.  It is used by #Canvas to draw text.

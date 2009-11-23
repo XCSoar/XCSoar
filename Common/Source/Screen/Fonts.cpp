@@ -667,7 +667,9 @@ void DeleteFonts() {
 }
 
 
-void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
+void
+SetFontInfo(Canvas &canvas, struct FontHeightInfo *FontHeightInfo)
+{
 #ifdef ENABLE_SDL
   TTF_Font *font = canvas.get_font();
 
