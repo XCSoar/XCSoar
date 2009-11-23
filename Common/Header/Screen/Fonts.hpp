@@ -38,8 +38,11 @@ Copyright_License {
 #ifndef XCSOAR_FONTS_HPP
 #define XCSOAR_FONTS_HPP
 
-#include "Screen/Font.hpp"
-#include "Screen/Canvas.hpp"
+#include <windef.h>
+
+struct FontHeightInfo;
+class Font;
+class Canvas;
 
 void DeleteFonts();
 void InitialiseFonts(Canvas &canvas, RECT rc);
