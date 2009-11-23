@@ -46,6 +46,7 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
+struct SETTINGS_COMPUTER;
 
 // These messages are listed in order of priotity,
 // first message to be active is spoken.
