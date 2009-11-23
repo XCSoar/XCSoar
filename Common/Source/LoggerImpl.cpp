@@ -934,11 +934,11 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
   int numtries = 0;
 
   LocalPath(pathname);
-#ifdef GNAV
-  LocalPath(subpathname,TEXT("logs"));
-#else
-  LocalPath(subpathname);
-#endif
+  if (is_altair()) {
+    LocalPath(subpathname,TEXT("logs"));
+  } else {
+    LocalPath(subpathname);
+  }
 
 #ifdef DEBUG_IGCFILENAME
   bool retval;
