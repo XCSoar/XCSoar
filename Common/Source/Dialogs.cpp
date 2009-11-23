@@ -111,11 +111,13 @@ void XCSoarInterface::StepProgressDialog(void) {
     progress_window->step();
 }
 
-BOOL XCSoarInterface::SetProgressStepSize(int nSize) {
+bool
+XCSoarInterface::SetProgressStepSize(int nSize)
+{
   nSize = 5;
   if (nSize < 100 && progress_window != NULL)
     progress_window->set_step(nSize);
-  return(TRUE);
+  return true;
 }
 
 /**

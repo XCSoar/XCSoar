@@ -39,8 +39,6 @@ Copyright_License {
 #if !defined(XCSOAR_INTERFACE_HPP)
 #define XCSOAR_INTERFACE_HPP
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include "InterfaceBlackboard.hpp"
 
 class MainWindow;
@@ -181,7 +179,7 @@ public:
   static void CreateProgressDialog(const TCHAR *text);
   static void CloseProgressDialog();
   static void StepProgressDialog();
-  static BOOL SetProgressStepSize(int nSize);
+  static bool SetProgressStepSize(int nSize);
 
   static void ExchangeBlackboard();
   static void ReceiveMapProjection();
