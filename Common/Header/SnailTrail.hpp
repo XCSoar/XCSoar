@@ -42,7 +42,6 @@ Copyright_License {
 #include "Screen/shapelib/mapshape.h"
 #include "GPSClock.hpp"
 #include "Poco/RWLock.h"
-#include "Sizes.h"
 
 #include <windef.h>
 
@@ -62,6 +61,14 @@ typedef struct _SNAIL_POINT
 } SNAIL_POINT;
 
 class SnailTrail {
+public:
+  enum {
+    /** 1000 points at 3.6 seconds average = one hour */
+    TRAILSIZE = 1000,
+    /** short trail is 10 minutes approx */
+    TRAILSHRINK = 5,
+  };
+
 public:
   SnailTrail();
   void AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);

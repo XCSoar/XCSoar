@@ -93,12 +93,12 @@ double MapWindow::DrawTrail(Canvas &canvas, const SnailTrail &snail_trail)
 
   int num_trail_max;
   if (SettingsMap().TrailActive!=2) {
-    num_trail_max = TRAILSIZE;
+    num_trail_max = SnailTrail::TRAILSIZE;
   } else {
-    num_trail_max = TRAILSIZE/TRAILSHRINK;
+    num_trail_max = SnailTrail::TRAILSIZE / SnailTrail::TRAILSHRINK;
   }
   if ((DisplayMode == dmCircling)) {
-    num_trail_max /= TRAILSHRINK;
+    num_trail_max /= SnailTrail::TRAILSHRINK;
   }
 
   // Snail skipping
@@ -107,14 +107,15 @@ double MapWindow::DrawTrail(Canvas &canvas, const SnailTrail &snail_trail)
   int skip_border = skip_divisor;
   int skip_level= 3; // TODO code: try lower level?
 
-  int snail_offset = TRAILSIZE + snail_trail.getIndex() - num_trail_max;
-  while (snail_offset>= TRAILSIZE) {
-    snail_offset -= TRAILSIZE;
+  int snail_offset = SnailTrail::TRAILSIZE + snail_trail.getIndex()
+    - num_trail_max;
+  while (snail_offset>= SnailTrail::TRAILSIZE) {
+    snail_offset -= SnailTrail::TRAILSIZE;
   }
   while (snail_offset< 0) {
-    snail_offset += TRAILSIZE;
+    snail_offset += SnailTrail::TRAILSIZE;
   }
-  const int zero_offset = (TRAILSIZE-snail_offset);
+  const int zero_offset = SnailTrail::TRAILSIZE - snail_offset;
   skip_border += zero_offset % skip_level;
 
   int index_skip = ((int)Basic().Time)%skip_level;
@@ -180,9 +181,8 @@ double MapWindow::DrawTrail(Canvas &canvas, const SnailTrail &snail_trail)
     // Find the snail point
 
     snail_index = snail_offset+i;
-    while (snail_index>=TRAILSIZE) {
-      snail_index-= TRAILSIZE;
-    }
+    while (snail_index >= SnailTrail::TRAILSIZE)
+      snail_index -= SnailTrail::TRAILSIZE;
 
     P1 = snail_trail.getPoint(snail_index);
 
