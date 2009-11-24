@@ -43,12 +43,12 @@ Copyright_License {
 
 #include "GeoPoint.hpp"
 #include "SettingsTask.hpp"
-#include "WayPoint.hpp"
 
 #include <windef.h>
 #include <stdio.h>
 
 struct SETTINGS_COMPUTER;
+struct WAYPOINT;
 
 struct START_POINT {
   int Index;

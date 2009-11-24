@@ -1,7 +1,9 @@
 #ifndef TASK_VISITOR_HPP
 #define TASK_VISITOR_HPP
 
-#include "Task.h"
+struct START_POINT;
+struct TASK_POINT;
+class Task;
 
 class BaseTaskVisitor {
 public:

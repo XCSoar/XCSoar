@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "TaskVisitor.hpp"
-#include <stdio.h>
+#include "Task.h"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/Constants.h"
@@ -45,6 +45,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "WayPointList.hpp"
 
+#include <stdio.h>
 
 // note: if this calls any task member functions they will be locked
 // recursively
