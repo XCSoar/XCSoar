@@ -18,20 +18,96 @@
  */
 class TaskProjection {
 public:
+  /** 
+   * Constructor; initialises at default midpoint value
+   * 
+   * @param ref Default midpoint
+   */
   TaskProjection(const GEOPOINT &ref);
+
+  /** 
+   * Constructor; initialises at origin (0,0)
+   * 
+   */
   TaskProjection();
   
+/** 
+ * Reset search bounds
+ * 
+ * @param ref Default value for initial search bounds
+ */
   void reset(const GEOPOINT &ref);
+
+/** 
+ * Check a location against bounds and update them if outside.
+ * This does not update the projection itself.
+ * 
+ * @param ref Point to check against bounds
+ */
   void scan_location(const GEOPOINT &ref);
+
+/** 
+ * Update projection.
+ * 
+ */
   void update_fast();
 
+/** 
+ * Project a Geodetic point to an integer 2-d representation
+ * 
+ * @param tp Point to project
+ * 
+ * @return Projected point
+ */
   FLAT_GEOPOINT project(const GEOPOINT& tp) const;
+
+/** 
+ * Projects an integer 2-d representation to a Geodetic point
+ * 
+ * @param tp Point to project
+ * 
+ * @return Projected point
+ */
   GEOPOINT unproject(const FLAT_GEOPOINT& tp) const;
 
+/** 
+ * Project a Geodetic point to an floating point 2-d representation
+ * 
+ * @param tp Point to project
+ * 
+ * @return Projected point
+ */
   FlatPoint fproject(const GEOPOINT& tp) const;
+
+/** 
+ * Projects an integer 2-d representation to a Geodetic point
+ * 
+ * @param tp Point to project
+ * 
+ * @return Projected point
+ */
   GEOPOINT funproject(const FlatPoint& tp) const;
 
+/** 
+ * Calculates the integer flat earth distance from an actual distance
+ * from a Geodetic point.  Note this is approximate.
+ * 
+ * @param tp Point to project
+ * @param range Distance (m) from the Geodetic point
+ * 
+ * @return Distance in flat earth projected units
+ */
   unsigned project_range(const GEOPOINT &tp, const double range) const;
+
+/** 
+ * Calculates the floating point flat earth distance from an actual distance
+ * from a Geodetic point.  Note this is approximate.
+ * 
+ * @param tp Point to project
+ * @param range Distance (m) from the Geodetic point
+ * 
+ * @return Distance in flat earth projected units
+ */
   double fproject_range(const GEOPOINT &tp, const double range) const;
 
 #ifdef DO_PRINT
@@ -40,10 +116,10 @@ public:
 #endif
 
 private:
-  GEOPOINT location_min;
-  GEOPOINT location_max;
-  GEOPOINT location_mid;
-  double cos_midloc;
+  GEOPOINT location_min; /**< Lower left corner found in scan */
+  GEOPOINT location_max; /**< Upper right corner found in scan */
+  GEOPOINT location_mid; /**< Midpoint of boundary, used as projection center point */
+  double cos_midloc; /**< Cosine of the midpoint */
 };
 
 #endif //TASKPROJECTION_H

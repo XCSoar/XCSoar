@@ -27,7 +27,7 @@ template <class T, typename R = void>
 class Visitor
 {
 public:
-  typedef R ReturnType; // Available for clients
+  typedef R ReturnType; /**< Return type, available for clients */
 
 /** 
  * Abstract visit method; this prototype method is called
@@ -45,8 +45,8 @@ template <class T>
 class TreeVisitor: public BaseVisitor
 {
 public:
-  typedef std::vector< T > TVector;
-  typedef typename TVector::const_iterator TVectorIterator;
+  typedef std::vector< T > TVector; /**< Vector of tree items */
+  typedef typename TVector::const_iterator TVectorIterator; /**< Iterator for tree items */
 
 /** 
  * Utility function to call visitor on all items in a vector
@@ -75,7 +75,11 @@ template <typename R = void>
 class BaseVisitable
 {
 public:
-  typedef R ReturnType;
+  typedef R ReturnType; /**< Accessible to clients */
+
+/**
+ * Destructor
+ */
   virtual ~BaseVisitable() {}
 
 /** 

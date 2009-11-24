@@ -42,13 +42,13 @@ public:
   virtual double search(const double p);
 
 protected:
-  void set_target(const double p);
-  TaskMacCreadyRemaining tm;
-  GlideResult res;
-  const AIRCRAFT_STATE &aircraft;
-  StartPoint *tp_start;
-  AATPoint &tp_current;
-  AATIsolineSegment iso;
+  void set_target(const double p); /**< Sets target location along isoline */
+  TaskMacCreadyRemaining tm; /**< Object to calculate remaining task statistics */
+  GlideResult res; /**< Glide solution used in search */
+  const AIRCRAFT_STATE &aircraft; /**< Observer */
+  StartPoint *tp_start; /**< Start of task */
+  AATPoint &tp_current; /**< Active AATPoint */
+  AATIsolineSegment iso; /**< Isoline for active AATPoint target */
 };
 
 

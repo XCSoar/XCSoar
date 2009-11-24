@@ -82,8 +82,17 @@ public:
                                        task_behaviour(tb)
     { }
 
+/**
+ * Destructor.  Does nothing yet.
+ */
   virtual ~TaskPoint() {};
 
+/** 
+ * Clone this TaskPoint.  Note that the clone constructs a new object,
+ * so any local variables are not copied.
+ * 
+ * @return Copy of this object
+ */
   virtual TaskPoint* clone() { return new TaskPoint(waypoint,
                                                     task_behaviour); };
 
@@ -216,9 +225,9 @@ public:
 #endif
 
 protected:
-  const Waypoint waypoint; // local copy
-  const double Elevation;
-  const TaskBehaviour &task_behaviour;
+  const Waypoint waypoint; /**< local copy of waypoint */
+  const double Elevation; /**< Altitude (AMSL, m) of task point terrain */
+  const TaskBehaviour &task_behaviour; /**< Reference to task behaviour (for options) */
 public:
   DEFINE_VISITABLE()
 };

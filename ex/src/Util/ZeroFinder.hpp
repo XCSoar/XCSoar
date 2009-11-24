@@ -65,11 +65,11 @@ public:
   double find_min(const double xstart);
 
 protected:
-  const double xmin;
-  const double xmax;
-  const double tolerance;
-  static const double epsilon;
-  static const double sqrt_epsilon;
+  const double xmin; /**< min value of search range */
+  const double xmax; /**< max value of search range */
+  const double tolerance; /**< search tolerance */
+  static const double epsilon; /**< machine tolerance */
+  static const double sqrt_epsilon; /**< sqrt of machine tolerance */
 };
 
 #endif

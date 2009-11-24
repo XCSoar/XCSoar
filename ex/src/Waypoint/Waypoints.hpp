@@ -28,6 +28,9 @@ public:
  */
   Waypoints();
 
+  /**
+   * Type of KD-tree data structure for waypoint container
+   */
   typedef KDTree::KDTree<2, 
                          Waypoint, 
                          Waypoint::kd_get_location

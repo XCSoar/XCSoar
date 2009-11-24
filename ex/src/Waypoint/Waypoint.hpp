@@ -15,22 +15,26 @@ class TaskProjection;
  * Class for waypoints.  
  * This is small enough currently to be used with local copies (e.g. in a TaskPoint),
  * but this may change if we include airfield details inside.
+ *
+ * \todo
+ * - consider having a static factory method provide the ID automatically
+ *   so we know they will be unique.
  */
 class Waypoint:
   public BaseVisitable<>
 {
  public:
 
-  unsigned id;
-  GEOPOINT Location;
-  FLAT_GEOPOINT FlatLocation;
-  double Altitude;
+  unsigned id; /**< Unique id */
+  GEOPOINT Location; /**< Geodetic location */
+  FLAT_GEOPOINT FlatLocation; /**< Flat projected location */
+  double Altitude; /**< Height AMSL (m) of waypoint terrain */
 
   /**
    * Function object used to provide access to coordinate values by kd-tree
    */
-  struct kd_get_location {
-    typedef int result_type;
+  struct kd_get_location {    
+    typedef int result_type; /**< type of returned value */
     /**
      * Retrieve coordinate value from object given coordinate index
      * @param d Waypoint object
@@ -52,7 +56,7 @@ class Waypoint:
   /**
    * Equality operator (by id)
    * 
-   * @param d Waypoint object to match against
+   * @param wp Waypoint object to match against
    *
    * @return true if ids match
    */
