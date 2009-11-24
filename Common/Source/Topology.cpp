@@ -41,7 +41,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "wcecompat/ts_string.h"
 #include "Screen/Util.hpp"
-#include "UtilsText.hpp"
 #include "MapWindow.h"
 #include "MapWindowProjection.hpp"
 #include "Screen/Graphics.hpp"
@@ -367,7 +366,7 @@ void XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, 
       double dTemp;
 
       Temp[0]='0';
-      dTemp = StrToDouble(Temp,NULL);
+      dTemp = _tcstod(Temp, NULL);
       dTemp = ALTITUDEMODIFY*dTemp;
       if (dTemp > 999)
         _stprintf(Temp,TEXT("%.1f"),(dTemp/1000));

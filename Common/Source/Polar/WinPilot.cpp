@@ -144,25 +144,25 @@ bool ReadWinPilotPolar(void) {
           if(_tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
             {
               PExtractParameter(TempString, ctemp, 0);
-              ww[0] = StrToDouble(ctemp,NULL);
+              ww[0] = _tcstod(ctemp, NULL);
 
               PExtractParameter(TempString, ctemp, 1);
-              ww[1] = StrToDouble(ctemp,NULL);
+              ww[1] = _tcstod(ctemp, NULL);
 
               PExtractParameter(TempString, ctemp, 2);
-              POLARV[0] = StrToDouble(ctemp,NULL);
+              POLARV[0] = _tcstod(ctemp, NULL);
               PExtractParameter(TempString, ctemp, 3);
-              POLARW[0] = StrToDouble(ctemp,NULL);
+              POLARW[0] = _tcstod(ctemp, NULL);
 
               PExtractParameter(TempString, ctemp, 4);
-              POLARV[1] = StrToDouble(ctemp,NULL);
+              POLARV[1] = _tcstod(ctemp, NULL);
               PExtractParameter(TempString, ctemp, 5);
-              POLARW[1] = StrToDouble(ctemp,NULL);
+              POLARW[1] = _tcstod(ctemp, NULL);
 
               PExtractParameter(TempString, ctemp, 6);
-              POLARV[2] = StrToDouble(ctemp,NULL);
+              POLARV[2] = _tcstod(ctemp, NULL);
               PExtractParameter(TempString, ctemp, 7);
-              POLARW[2] = StrToDouble(ctemp,NULL);
+              POLARW[2] = _tcstod(ctemp, NULL);
 
               PolarWinPilot2XCSoar(POLARV, POLARW, ww);
 	      GlidePolar::WingArea = 0.0;

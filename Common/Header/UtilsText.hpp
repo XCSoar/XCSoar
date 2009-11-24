@@ -50,7 +50,6 @@ void StringChomp(TCHAR *p);
 bool ReadString(ZZIP_FILE* zFile, size_t Max, TCHAR *String);
 bool ReadStringX(FILE *fp, size_t Max, TCHAR *String);
 
-double StrToDouble(const TCHAR *Source, const TCHAR **Stop);
 void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
                        int DesiredFieldNumber);
 

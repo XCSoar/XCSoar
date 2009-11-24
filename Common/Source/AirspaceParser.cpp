@@ -62,6 +62,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 
 #include <assert.h>
+#include <stdlib.h>
 
 #define  BINFILEMAGICNUMBER     0x4ab199f0
 #define  BINFILEVERION          0x00000101
@@ -474,7 +475,7 @@ static bool ParseLine(int nLineType)
     case k_nLtDC:
       if (bFillMode)
         {
-          double Radius = StrToDouble(&TempString[2],NULL);
+          double Radius = _tcstod(&TempString[2], NULL);
           Radius = (Radius * NAUTICALMILESTOMETRES);
           AddAirspaceCircle(&TempArea, CenterX, CenterY, Radius);
         }
@@ -685,14 +686,14 @@ static bool ReadCoords(TCHAR *Text, double *X, double *Y)
 {
   double Ydeg=0, Ymin=0, Ysec=0;
   double Xdeg=0, Xmin=0, Xsec=0;
-  const TCHAR *Stop;
+  TCHAR *Stop;
 
   // ToDo, add more error checking and making it more tolerant/robust
 
-  Ydeg = (double)StrToDouble(Text, &Stop);
+  Ydeg = (double)_tcstod(Text, &Stop);
   if ((Text == Stop) || (*Stop =='\0')) goto OnError;
   Stop++;
-  Ymin = (double)StrToDouble(Stop, &Stop);
+  Ymin = (double)_tcstod(Stop, &Stop);
   if (Ymin<0 || Ymin >=60){
     // ToDo
   }
@@ -701,7 +702,7 @@ static bool ReadCoords(TCHAR *Text, double *X, double *Y)
     Stop++;
     if (*Stop =='\0')
       goto OnError;
-    Ysec = (double)StrToDouble(Stop, &Stop);
+    Ysec = (double)_tcstod(Stop, &Stop);
     if (Ysec<0 || Ysec >=60) {
       // ToDo
     }
@@ -720,14 +721,14 @@ static bool ReadCoords(TCHAR *Text, double *X, double *Y)
   Stop++;
   if (*Stop =='\0') goto OnError;
 
-  Xdeg = (double)StrToDouble(Stop, &Stop);
+  Xdeg = (double)_tcstod(Stop, &Stop);
   Stop++;
-  Xmin = (double)StrToDouble(Stop, &Stop);
+  Xmin = (double)_tcstod(Stop, &Stop);
   if(*Stop == ':'){
     Stop++;
     if (*Stop =='\0')
       goto OnError;
-    Xsec = (double)StrToDouble(Stop, &Stop);
+    Xsec = (double)_tcstod(Stop, &Stop);
   }
 
   *X = Xsec/3600 + Xmin/60 + Xdeg;
@@ -949,7 +950,7 @@ static void AddArea(AIRSPACE_AREA *Temp)
 
 static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
 {
-  const TCHAR *Stop;
+  TCHAR *Stop;
   TCHAR Text[128];
   TCHAR *pWClast = NULL;
   const TCHAR *pToken;
@@ -970,7 +971,7 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
   while((pToken != NULL) && (*pToken != '\0')){
 
     if (isdigit(*pToken)) {
-      double d = (double)StrToDouble(pToken, &Stop);
+      double d = (double)_tcstod(pToken, &Stop);
       if (Alt->Base == abFL){
         Alt->FL = d;
         Alt->Altitude = AltitudeToQNHAltitude((Alt->FL * 100)/TOFEET);
@@ -1079,11 +1080,11 @@ static void CalculateSector(TCHAR *Text)
   double Radius;
   double StartBearing;
   double EndBearing;
-  const TCHAR *Stop;
+  TCHAR *Stop;
 
-  Radius = NAUTICALMILESTOMETRES * (double)StrToDouble(&Text[2], &Stop);
-  StartBearing = (double)StrToDouble(&Stop[1], &Stop);
-  EndBearing = (double)StrToDouble(&Stop[1], &Stop);
+  Radius = NAUTICALMILESTOMETRES * (double)_tcstod(&Text[2], &Stop);
+  StartBearing = (double)_tcstod(&Stop[1], &Stop);
+  EndBearing = (double)_tcstod(&Stop[1], &Stop);
 
   GEOPOINT c; c.Longitude = CenterX; c.Latitude = CenterY;
 

@@ -231,7 +231,7 @@ void TopologyStore::Open() {
 
         // Shape range
         PExtractParameter(TempString, ctemp, 1);
-        ShapeRange = StrToDouble(ctemp,NULL);
+        ShapeRange = _tcstod(ctemp, NULL);
 
         // Shape icon
         PExtractParameter(TempString, ctemp, 2);
