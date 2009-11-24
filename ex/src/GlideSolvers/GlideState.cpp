@@ -4,6 +4,10 @@
 #include "Navigation/Aircraft.hpp"
 #include "Math/NavFunctions.hpp"
 
+/**
+ * Quadratic function solver for MacCready theory constraint equation
+ * \todo document this equation!
+ */
 class GlideQuadratic: public Quadratic
 {
 public:

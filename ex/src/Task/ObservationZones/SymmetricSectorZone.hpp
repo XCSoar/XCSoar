@@ -41,6 +41,9 @@
 #include "Task/Tasks/BaseTask/TaskPoint.hpp"
 #include "SectorZone.hpp"
 
+/**
+ * Segment centered on bisector of incoming/outgoing legs 
+ */
 class SymmetricSectorZone: 
   public SectorZone 
 {

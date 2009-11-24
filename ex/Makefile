@@ -22,8 +22,7 @@ OUTPUTS 	:= test
 SRC := src
 INCLUDES := -I$(SRC)
 
-PROFILE := 
-# --coverage
+PROFILE := --coverage
 
 OPTIMIZE := -g 
 
@@ -182,14 +181,19 @@ test:	$(TESTS)
 	@$(NQ)echo "  CXX/LN      $@"
 	$(Q)g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) $< -o $@
 
-doco: 
-	doxygen doxygen/Doxyfile
+doco: FORCE
+	tools/cloc --exclude-lang=D src > doc/cloc.txt
+	doxygen doc/doxygen/Doxyfile
 
 DEPFILE		=$(dir $@).$(notdir $@).d
 DEPFLAGS	=-Wp,-MM,-MF,$(DEPFILE)
 dirtarget	=$(subst \\,_,$(subst /,_,$(dir $@)))
 cc-flags	=$(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
 cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
+
+cov:	FORCE
+	geninfo -b . .
+	genhtml -o doc/lcov `find -iname '*\.gcda\.info'`
 
 #
 # Useful debugging targets - make preprocessed versions of the source
@@ -226,22 +230,30 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
 
-clean: cleani FORCE
-	@$(NQ)echo "cleaning "
-	find ./ $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' \
+clean: cleani cleancov FORCE
+	@$(NQ)echo "cleaning all"
+	$(Q)find ./ $(IGNORE) \( \
+		   -name '*.[oa]' \
+		-o -name '*.rsc' \
 		-o -name '.*.d' \
-		-o -name '*.bb' \
-		-o -name '*.bbg' \
-		-o -name '*.gcda' \
-		-o -name '*.gcno' \
-		-o -name '*.gcov' \
-		-o -name '*.*~' \) \
-	-type f -print | xargs -r $(RM)
+		-o -name '*.*~' \
+	\) -type f -print | xargs -r $(RM)
 	$(Q)$(RM) $(TARGETS) gprof.out 
 	$(Q)$(RM) $(OBJS)
 
+cleancov: FORCE
+	@$(NQ)echo "cleaning cov"
+	$(Q)find ./ $(IGNORE) \( \
+		   -name '*.bb' \
+		-o -name '*.bbg' \
+		-o -name '*.gcda' \
+		-o -name '*.gcda.info' \
+		-o -name '*.gcno' \
+	\) -type f -print | xargs -r $(RM)
+
 cleani: FORCE
-	find ./ $(IGNORE) \( -name '*.i' \) \
+	@$(NQ)echo "cleaning .i"
+	$(Q)find ./ $(IGNORE) \( -name '*.i' \) \
 		-type f -print | xargs -r $(RM)
 
 .PHONY: FORCE

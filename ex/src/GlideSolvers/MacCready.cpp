@@ -234,6 +234,9 @@ MacCready::solve(const GlideState &task) const
 #include "Util/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
 
+/**
+ * Class used to find VOpt for a MacCready setting
+ */
 class MacCreadyVopt: 
   public ZeroFinder
 {

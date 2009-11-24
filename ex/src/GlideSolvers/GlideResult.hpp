@@ -6,6 +6,9 @@
 
 struct GlideState;
 
+/**
+ * Class used to represent a solution to a glide task
+ */
 struct GlideResult {
 
   enum GlideResult_t {

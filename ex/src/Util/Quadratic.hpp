@@ -1,6 +1,9 @@
 #ifndef QUADRATIC_HPP
 #define QUADRATIC_HPP
 
+/**
+ * Utility class for efficient solution of quadratic equations
+ */
 class Quadratic {
 public:
 

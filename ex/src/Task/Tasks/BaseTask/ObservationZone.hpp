@@ -42,6 +42,10 @@
 struct GEOPOINT;
 #include "Navigation/Aircraft.hpp"
 
+/**
+ * Abstract class giving properties of a zone which is used to measure
+ * transitions in/out of and interior/exterior checking.
+ */
 class ObservationZone {
 public:
   ObservationZone() {

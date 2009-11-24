@@ -4,6 +4,9 @@
 class TaskPoint;
 struct AIRCRAFT_STATE;
 
+/**
+ * Class used to control advancement through an OrderedTask
+ */
 class TaskAdvance
 {
 public:

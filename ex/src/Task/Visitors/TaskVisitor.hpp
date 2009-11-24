@@ -6,6 +6,10 @@ class OrderedTask;
 class AbortTask;
 class GotoTask;
 
+/**
+ * Generic visitor to achieve double-dispatch of an AbstractTask
+ * (e.g. the active task in the TaskManager)
+ */
 class TaskVisitor:
   public BaseVisitor,
   public Visitor<OrderedTask>,

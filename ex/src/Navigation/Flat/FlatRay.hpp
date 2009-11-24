@@ -3,6 +3,9 @@
 
 #include "FlatGeoPoint.hpp"
 
+/**
+ * Projected ray (a point and vector) in 2-d cartesian integer coordinates
+ */
 class FlatRay {
 public:
   FlatRay(const FLAT_GEOPOINT& from,

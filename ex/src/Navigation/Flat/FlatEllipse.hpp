@@ -4,12 +4,30 @@
 #include "FlatPoint.hpp"
 #include "FlatLine.hpp"
 
+/**
+ * 2-d ellipse in real-valued projected coordinates, with methods for
+ * intersection tests etc.  The ellipse itself need not be axis-aligned.
+ */
 struct FlatEllipse 
 {
+  /** 
+   * Constructor.
+   * 
+   * @param _f1 Focus A
+   * @param _f2 Focus B
+   * @param _ap Any point on the ellipse
+   * 
+   * @return Initialised object
+   */
   FlatEllipse(const FlatPoint &_f1,
               const FlatPoint &_f2,
               const FlatPoint &_ap);
 
+/** 
+ * Dummy constructor for zero-sized ellipse
+ * 
+ * @return Initialised object
+ */
   FlatEllipse():f1(0.0,0.0),
                 f2(0.0,0.0),
                 ap(0.0,0.0), 

@@ -3,6 +3,9 @@
 
 #include "TaskProjection.hpp"
 
+/**
+ * Convenience class used by read-only clients of a TaskProjection
+ */
 class TaskProjectionClient {
 public:
   TaskProjectionClient(const TaskProjection& _task_projection):

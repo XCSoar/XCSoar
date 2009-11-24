@@ -5,10 +5,27 @@
 
 #include "Navigation/SearchPointVector.hpp"
 
+/**
+ * Class used to build convex hulls from vector.  This ensures
+ * the returned vector is closed, and may prune points.
+ */
 class GrahamScan
 {
 public :
+/** 
+ * Constructor.  Note that this class should be used temporarily only
+ * 
+ * @param sps Input vector of points (may be unordered)
+ */
   GrahamScan(const SearchPointVector& sps);
+
+/** 
+ * Perform convex hull transformation
+ * 
+ * @param changed If supplied, will return status as to whether input vector was altered (pruned) or not
+ * 
+ * @return Vector representing convex hull of input
+ */
   SearchPointVector prune_interior(bool *changed=NULL);
 private :
   void partition_points();

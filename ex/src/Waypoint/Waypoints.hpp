@@ -12,6 +12,10 @@
 
 class WaypointVisitor;
 
+/**
+ * Container for waypoints using kd-tree representation internally for fast 
+ * geospatial lookups.
+ */
 class Waypoints {
 public:
 /** 

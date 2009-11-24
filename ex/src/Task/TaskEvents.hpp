@@ -3,6 +3,11 @@
 
 class TaskPoint;
 
+/**
+ * Class used to provide feedback based on events that can be triggered
+ * by the task system.  Typically this would be specialised by the client
+ * to hook up to end-user code. 
+ */
 class TaskEvents 
 {
 public:

@@ -5,6 +5,10 @@
 #include <vector>
 #include "Waypoint/Waypoints.hpp"
 
+/**
+ * Abort task provides automatic management of a sorted list of task points
+ * that are reachable or close to reachable, and landable (with airfields preferred).
+ */
 class AbortTask : public AbstractTask 
 {
 public:
@@ -104,6 +108,17 @@ private:
   unsigned active_waypoint;
   const Waypoints &waypoints;
   GlidePolar polar_safety;
+
+  typedef std::pair<Waypoint,double> WP_ALT;
+
+  /**
+   * Function object used to rank waypoints by arrival altitude
+   */
+  struct Rank : public std::binary_function<WP_ALT, WP_ALT, bool> {
+    bool operator()(const WP_ALT& x, const WP_ALT& y) const {
+      return x.second > y.second;
+    }
+  };
 
 public:
 #ifdef DO_PRINT

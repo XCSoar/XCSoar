@@ -6,6 +6,9 @@
 struct AIRCRAFT_STATE;
 struct GEOPOINT;
 
+/**
+ * Class used to define a glide/navigation task
+ */
 struct GlideState 
 {
 

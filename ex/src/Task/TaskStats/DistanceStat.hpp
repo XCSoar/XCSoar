@@ -86,6 +86,9 @@ protected:
   const bool is_positive;
 };
 
+/**
+ * Specialisation of DistanceStat for remaining distances
+ */
 class DistanceRemainingStat:
   public DistanceStat
 {
@@ -98,6 +101,9 @@ public:
   virtual void calc_speed(const ElementStat* es);
 };
 
+/**
+ * Specialisation of DistanceStat for planned distances
+ */
 class DistancePlannedStat:
   public DistanceStat
 {
@@ -110,6 +116,9 @@ public:
   virtual void calc_speed(const ElementStat* es);
 };
 
+/**
+ * Specialisation of DistanceStat for travelled distances
+ */
 class DistanceTravelledStat:
   public DistanceStat
 {

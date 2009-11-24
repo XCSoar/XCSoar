@@ -40,6 +40,9 @@
 
 #include "CylinderZone.hpp"
 
+/**
+ * Sector of finite radius, defined by segment interior to supplied start/end radials 
+ */
 class SectorZone: 
   public CylinderZone 
 {

@@ -42,13 +42,6 @@ AbortTask::getActiveTaskPoint() const
 }
 
 
-typedef std::pair<Waypoint,double> WP_ALT;
-
-struct Rank : public std::binary_function<WP_ALT, WP_ALT, bool> {
-  bool operator()(const WP_ALT& x, const WP_ALT& y) const {
-    return x.second > y.second;
-  }
-};
 
 void 
 AbortTask::clear() {

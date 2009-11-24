@@ -18,6 +18,10 @@
 class Waypoints;
 class TaskVisitor;
 
+/**
+ *  Main interface exposed to clients for providing access to common types
+ *  of navigation tasks.  Hides details of these AbstractTasks behind a facade.
+ */
 class TaskManager: 
  public TaskInterface,
  public Serialisable

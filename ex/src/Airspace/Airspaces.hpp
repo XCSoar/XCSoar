@@ -8,6 +8,10 @@
 
 class AirspaceVisitor;
 
+/**
+ * Container for airspaces using kd-tree representation internally for fast 
+ * geospatial lookups.
+ */
 class Airspaces
 {
 public:

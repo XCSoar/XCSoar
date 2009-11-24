@@ -1,6 +1,9 @@
 #ifndef FLATPOINT_HPP
 #define FLATPOINT_HPP
 
+/**
+ * 2-d Cartesian projected real-valued point
+ */
 struct FlatPoint 
 {
   FlatPoint(const double _x, const double _y): x(_x),y(_y) {};

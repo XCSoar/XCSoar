@@ -1,6 +1,10 @@
 #ifndef TASK_BEHAVIOUR_HPP
 #define TASK_BEHAVIOUR_HPP
 
+/**
+ *  Class defining options for task system.
+ *  Typical uses might be default values, and simple aspects of task behaviour.
+ */
 class TaskBehaviour 
 {
 public:

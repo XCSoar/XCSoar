@@ -23,9 +23,15 @@
 *.dfPackage
 *.tpr
 *.tws
+*.gcno
+*.gcda
+*.gcda.info
 res-*.txt
 gmon.out
 gprof.out
+doc/lcov
+doc/cloc.txt
+doc/doxygen/html
 Test/test.exe
 Test/test_mc.exe
 Test/test_automc.exe

@@ -12,6 +12,11 @@ class TaskPoint;
 
 #include "Util/GenericVisitor.hpp"
 
+/**
+ *  Abstract interface for all tasks and task manager.  This defines
+ *  the functionality all tasks should have, and also provides some convenience
+ *  methods that will be common to all tasks.
+ */
 class TaskInterface:
   public BaseVisitable<> 
 {

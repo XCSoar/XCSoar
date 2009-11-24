@@ -5,6 +5,16 @@
 #include "AbstractAirspace.hpp"
 #include "Util/GenericVisitor.hpp"
 
+/**
+ * Single object container for actual airspaces, to be stored in Airspaces object
+ * This class manages the bounding box of the actual airspace.
+ *
+ * This follows envelope-letter
+ * idiom, in which the AbstractAirspace is the letter and this class
+ * Airspace is an envelope, containing bounding box information for
+ * use with high performance search structures.
+ * 
+ */
 class Airspace: 
   public FlatBoundingBox,
   public BaseVisitable<>
@@ -12,11 +22,8 @@ class Airspace:
 public:
 
   /** 
-   * Constructor for actual airspaces.  This follows envelope-letter
-   * idiom, in which the AbstractAirspace is the letter and this class
-   * Airspace is an envelope, containing bounding box information for
-   * use with high performance search structures.
-   * 
+   * Constructor for actual airspaces.  
+   *
    * @param airspace actual concrete airspace to create an envelope for
    * @param tp task projection to be used for flat-earth representation
    * 

@@ -3,6 +3,11 @@
 
 #include "AbstractTaskFactory.hpp"
 
+/**
+ * Factory for construction of legal FAI tasks
+ * Currently the validate() method will check 4-point tasks as to whether they
+ * satisfy short and long-distance FAI triangle rules.
+ */
 class FAITaskFactory: public AbstractTaskFactory 
 {
 public:

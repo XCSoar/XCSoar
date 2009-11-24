@@ -1,8 +1,10 @@
 #ifndef DIFF_FILTER_HPP
 #define DIFF_FILTER_HPP
 
-// adapted from http://www.dsprelated.com/showarticle/35.php
-
+/**
+ * Differentiating low-pass IIR filter
+ * adapted from http://www.dsprelated.com/showarticle/35.php
+ */
 class DiffFilter 
 {
 public:
@@ -24,6 +26,7 @@ public:
  * Resets filter as if fed value to produce y0
  * 
  * @param x0 Steady state value of filter input
+ * @param y0 Desired value of differentiated output
  * 
  */
   void reset(const double x0, const double y0);

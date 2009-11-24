@@ -6,6 +6,9 @@
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
+/**
+ * Abstract base class for airspace regions
+ */
 class AbstractAirspace:
   public BaseVisitable<>
 {

@@ -39,6 +39,10 @@ Copyright_License {
 #ifndef XCSOAR_GEOPOINT_HPP
 #define XCSOAR_GEOPOINT_HPP
 
+/**
+ * Geodetic coordinate expressed as Longitude and Latitude in degrees.
+ * \todo - support wrap-around at 0,360 degrees longitude
+ */
 struct GEOPOINT {
   GEOPOINT():Longitude(0.0),Latitude(0.0) {}
 

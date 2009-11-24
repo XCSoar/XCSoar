@@ -3,6 +3,9 @@
 
 #include "ElementStat.hpp"
 
+/**
+ * Container for common task statistics
+ */
 class TaskStats 
 {
 public:

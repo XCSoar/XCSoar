@@ -1,6 +1,9 @@
 #ifndef BOUNDINGBOXDISTANCE_HPP
 #define BOUNDINGBOXDISTANCE_HPP
 
+/**
+ * Class used for 2-d integer bounding box distance calculations by kd-tree
+ */
 class BBDist {
 public:
   BBDist(const size_t _dim, const int _val)

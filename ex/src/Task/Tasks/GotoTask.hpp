@@ -6,6 +6,9 @@
 #include "AbstractTask.hpp"
 class Waypoint;
 
+/**
+ * Class providing ability to go to a single task point
+ */
 class GotoTask : public AbstractTask {
 public:    
   GotoTask(const TaskEvents &te, 

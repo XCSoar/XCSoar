@@ -6,6 +6,11 @@
 
 class TaskProjection;
 
+/**
+ * Class used to hold a geodetic point, its projected integer form and
+ * whether or not the point is a virtual point or an actual search point.
+ * The 'virtuality' of this object is currently not used. 
+ */
 class SearchPoint {
 public:
 

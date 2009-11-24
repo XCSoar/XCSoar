@@ -17,6 +17,9 @@ public:
   virtual ~BaseVisitor() {}
 };
 
+/**
+ * Generic visitor
+ */
 template <class T, typename R = void>
 class Visitor
 {
@@ -32,6 +35,9 @@ public:
   virtual ReturnType Visit(const T&) = 0;
 };
 
+/**
+ * Special visitor that can visit items within a kd-tree
+ */
 template <class T>
 class TreeVisitor: public BaseVisitor
 {
@@ -59,6 +65,9 @@ public:
   }
 };
 
+/**
+ * Class from which to inherit for a class to be visitable
+ */
 template <typename R = void>
 class BaseVisitable
 {

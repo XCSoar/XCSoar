@@ -7,6 +7,9 @@ class AirspacePolygon;
 class AirspaceCircle;
 #include "Util/GenericVisitor.hpp"
 
+/**
+ * Generic visitor for airspaces
+ */
 class AirspaceVisitor:
   public TreeVisitor<Airspace>,
   public Visitor<AirspacePolygon>, 

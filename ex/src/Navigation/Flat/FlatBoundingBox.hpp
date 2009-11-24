@@ -24,9 +24,19 @@ public:
 
   unsigned distance(const FlatBoundingBox &f) const;
 
-  // used by KD
+  /** 
+   * Function object used by kd-tree to index coordinates 
+   */
   struct kd_get_bounds {
     typedef int result_type;
+/** 
+ * Retrieve coordinate value given coordinate index and object
+ *
+ * @param d Object being stored in kd-tree
+ * @param k Index of coordinate
+ * 
+ * @return Coordinate value
+ */
     int operator() ( const FlatBoundingBox &d, const unsigned k) const {
       switch(k) {
       case 0:
@@ -42,6 +52,11 @@ public:
     };
   };
 
+  /**
+   * Distance metric function object used by kd-tree.  This specialisation
+   * allows for overlap; distance is zero with overlap, otherwise the minimum
+   * distance between two regions.
+   */
   struct kd_distance {
     typedef BBDist distance_type;
     distance_type operator() (const int &a, const int &b, 

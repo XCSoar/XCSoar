@@ -3,6 +3,9 @@
 
 #include "AbstractAirspace.hpp"
 
+/**
+ * Airspace object defined by the area within a distance (radius) from a center point 
+ */
 class AirspaceCircle: 
     public AbstractAirspace 
 {

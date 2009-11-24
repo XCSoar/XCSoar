@@ -40,6 +40,10 @@
 
 #include "SymmetricSectorZone.hpp"
 
+/**
+ *  A 90 degree sector centered at the bisector of incoming/outgoing legs
+ * \todo This really should have infinite length
+ */
 class FAISectorZone: 
   public SymmetricSectorZone 
 {
