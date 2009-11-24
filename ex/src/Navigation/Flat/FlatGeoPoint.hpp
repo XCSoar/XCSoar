@@ -3,6 +3,9 @@
 
 #include "Math/FastMath.h"
 
+/**
+ * Integer projected (flat-earth) version of Geodetic coordinates
+ */
 struct FLAT_GEOPOINT {
   FLAT_GEOPOINT():Longitude(0),Latitude(0) {};
   FLAT_GEOPOINT(const int x,

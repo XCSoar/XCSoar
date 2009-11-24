@@ -8,7 +8,7 @@ class AirspaceCircle;
 #include "Util/GenericVisitor.hpp"
 
 /**
- * Generic visitor for airspaces
+ * Generic visitor for objects in the Airspaces container
  */
 class AirspaceVisitor:
   public TreeVisitor<Airspace>,

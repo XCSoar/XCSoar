@@ -4,6 +4,11 @@
 #include "Navigation/TaskProjection.hpp"
 #include "Navigation/Flat/FlatEllipse.hpp"
 
+/**
+ * Ellipse in geodesic coordinates, defined by two foci and
+ * a point on the ellipse.  Internally uses a flat-earth projection
+ * to avoid complex and expensive geodesic calculations.
+ */
 class GeoEllipse {
 public:
   GeoEllipse(const GEOPOINT &f1, const GEOPOINT &f2,
@@ -15,11 +20,29 @@ public:
                         task_projection.fproject(f2),
                         task_projection.fproject(p));
     }
+
+/** 
+ * Parametric form of ellipse border
+ * 
+ * @param t Parameter (0,1)
+ * 
+ * @return Location of point on ellipse
+ */
   GEOPOINT parametric(double t) const {
     FlatPoint fp = ell.parametric(t);
     return task_projection.funproject(fp);
   };
 
+/** 
+ * Calculate where a line from the first focus through a point p
+ * intersects with the ellipse. 
+ * 
+ * @param p Origin of point from which to search
+ * @param i1 Location of closest intersection point
+ * @param i2 Location of furthest intersection point
+ * 
+ * @return True if line intersects
+ */
   bool intersect_extended(const GEOPOINT &p,
                           GEOPOINT &i1,
                           GEOPOINT &i2) const {

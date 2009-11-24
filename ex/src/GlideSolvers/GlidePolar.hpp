@@ -17,6 +17,10 @@ struct GlideResult;
  * 
  * The MacCready class uses this GlidePolar data to calculate
  * specific GlideSolutions. 
+ *
+ * \todo
+ * - currently the polar itself is hard-coded
+ * - currently bugs/ballast are ignored
  */
 
 class GlidePolar

@@ -41,6 +41,10 @@
 #include "Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 #include <assert.h>
 
+/**
+ * Observation zone represented as a circular area with specified
+ * radius from a center point
+ */
 class CylinderZone : public ObservationZonePoint {
 public:
   CylinderZone(const GEOPOINT &loc, const double _radius=10000.0):

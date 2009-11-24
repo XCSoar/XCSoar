@@ -32,11 +32,14 @@ GlidePolar::MSinkRate(const double V) const
 double 
 GlidePolar::SinkRate(const double V) const
 {
+  /// \todo note this is hardcoded at present, will need proper polar management later
   const double dV = (V-25.0)*0.056;
   return 0.5+(dV*dV+V*0.01)/2.0;
 }
 
-
+/**
+ * Finds VOpt for a given MacCready setting
+ */
 class GlidePolarVopt: 
   public ZeroFinder
 {

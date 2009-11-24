@@ -4,6 +4,9 @@
 #include "Waypoint.hpp"
 #include "Util/GenericVisitor.hpp"
 
+/**
+ * Generic visitor for objects in the Waypoints container
+ */
 class WaypointVisitor:
   public TreeVisitor<Waypoint>,
   public Visitor<Waypoint> 

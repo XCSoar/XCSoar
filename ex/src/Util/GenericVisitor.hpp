@@ -11,6 +11,9 @@
 //  and for const-ness of visitable items.
 // Also added utility functions
 
+/**
+ * Base class for all visitors
+ */
 class BaseVisitor
 {
 public:

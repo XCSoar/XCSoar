@@ -12,6 +12,16 @@
 class AbortTask : public AbstractTask 
 {
 public:
+  /** 
+   * Base constructor.
+   * 
+   * @param te Task events callback class (shared among all tasks) 
+   * @param tb Global task behaviour settings
+   * @param ta Advance mechanism used for advancable tasks
+   * @param gp Global glide polar used for navigation calculations
+   * 
+   * @return Initialised object (with nothing in task)
+   */
   AbortTask(const TaskEvents &te, 
             const TaskBehaviour &tb,
             TaskAdvance &ta,

@@ -9,6 +9,9 @@ class AATPoint;
 
 #include "Util/GenericVisitor.hpp"
 
+/**
+ * Generic visitor for task points (for double-dispatch)
+ */
 class TaskPointVisitor:
   public BaseVisitor,
   public Visitor<TaskPoint>,

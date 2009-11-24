@@ -1,6 +1,9 @@
 #ifndef ZERO_FINDER_HPP
 #define ZERO_FINDER_HPP
 
+/**
+ * Zero finding and minimisation search algorithm
+ */
 class ZeroFinder {
 public:
 /** 

@@ -9,6 +9,10 @@
 
 struct AIRCRAFT_STATE;
 
+/**
+ * Common task element statistics.  Used because we separately want to
+ * track overall task statistics as well as that of the current leg.
+ */
 class ElementStat
 {
 public:

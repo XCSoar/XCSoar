@@ -11,6 +11,11 @@
 
 class ElementStat;
 
+/**
+ * Simple distance statistics with derived values (speed, incremental speed)
+ * Incremental speeds track the short-term variation of distance with time,
+ * whereas the overall speed is defined by the distance divided by a time value.
+ */
 class DistanceStat
 {
 public:

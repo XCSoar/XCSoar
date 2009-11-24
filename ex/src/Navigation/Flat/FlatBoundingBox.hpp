@@ -7,6 +7,11 @@
 #include "Navigation/Geometry/BoundingBoxDistance.hpp"
 #include <algorithm>
 
+/**
+ * Structure defining 2-d integer projected coordinates defining
+ * a lower left and upper right bounding box.
+ * For use in kd-tree storage of 2-d objects.
+ */
 class FlatBoundingBox {
 public:
   FlatBoundingBox(const FLAT_GEOPOINT &ll,

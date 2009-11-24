@@ -39,6 +39,13 @@
 #define LINESECTORZONE_HPP
 #include "SymmetricSectorZone.hpp"
 
+/**
+ * Observation zone represented as a line.
+ * Tests for inSector return true if the subject is behind the line
+ * (within a semi-circle of diameter equal to the line length).
+ * The constraint test ensures transitioning to exit only occurs if the
+ * line is crossed (rather than exiting from the back semi-circle).
+ */
 class LineSectorZone: 
   public SymmetricSectorZone 
 {
