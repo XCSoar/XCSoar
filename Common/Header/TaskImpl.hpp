@@ -50,29 +50,24 @@ Copyright_License {
 
 struct SETTINGS_COMPUTER;
 
-typedef struct _START_POINT
-{
+struct START_POINT {
   int Index;
   double OutBound;
   GEOPOINT SectorStart;
   GEOPOINT SectorEnd;
-} START_POINT;
+};
 
-typedef struct _START_POINT_STATS
-{
+struct START_POINT_STATS {
   bool Active;
   bool InSector;
-} START_POINT_STATS;
+};
 
-typedef struct _START_POINT_SCREEN
-{
+struct START_POINT_SCREEN {
   POINT	 SectorStart;
   POINT	 SectorEnd;
-} START_POINT_SCREEN;
+};
 
-
-typedef struct _TASK_POINT
-{
+struct TASK_POINT {
   int Index;
   double InBound;
   double OutBound;
@@ -97,19 +92,16 @@ typedef struct _TASK_POINT
   double LengthPercent;
   GEOPOINT IsoLine_Location[MAXISOLINES];
   bool IsoLine_valid[MAXISOLINES];
+};
 
-} TASK_POINT;
-
-typedef struct _TASK_POINT_SCREEN
-{
+struct TASK_POINT_SCREEN {
   POINT	 SectorStart;
   POINT	 SectorEnd;
   POINT	 Target;
   POINT	 AATStart;
   POINT	 AATFinish;
   POINT IsoLine_Screen[MAXISOLINES];
-} TASK_POINT_SCREEN;
-
+};
 
 typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
 typedef TASK_POINT_SCREEN TaskScreen_t[MAXTASKPOINTS +1];
