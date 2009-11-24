@@ -2,8 +2,6 @@
 
 #include "AATPoint.hpp"
 #include "Math/Geometry.hpp"
-#include "AATIsolineSegment.hpp"
-#include "AATIsolineIntercept.hpp"
 #include <math.h>
 
 GEOPOINT AATPoint::get_reference_scored() const
@@ -95,16 +93,18 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
 bool
 AATPoint::check_target_outside(const AIRCRAFT_STATE& state) 
 {
-  // this is optional, to be replaced!
   return false;
+/*
+  // this is optional, to be replaced!
+  
+  // now uses TaskOptTarget
 
   if (!get_previous()->isInSector(state)) {
     double b0s = get_previous()->get_reference_remaining()
       .bearing(state.Location);
     GeoVector vst(state.Location,TargetLocation);
     double da = ::AngleLimit180(b0s-vst.Bearing);
-    if ((fabs(da)>10.0) && (vst.Distance>1.0)) {
-
+    if ((fabs(da)>2.0) && (vst.Distance>1.0)) {
       AATIsolineIntercept ai(*this);
       AIRCRAFT_STATE si;
       if (ai.intercept(*this, state, 0.0, si.Location)
@@ -119,6 +119,7 @@ AATPoint::check_target_outside(const AIRCRAFT_STATE& state)
     }
   }
   return false;
+*/
 }
 
 

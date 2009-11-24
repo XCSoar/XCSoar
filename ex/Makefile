@@ -35,7 +35,7 @@ MAKEFLAGS	+=-r
 CXXFLAGS += -Wall -Wextra
 CXXFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
 CXXFLAGS += -Wmissing-noreturn -Wundef
-CXXFLAGS += -Wno-variadic-macros
+CXXFLAGS += -Wno-variadic-macros 
 
 # disable some warnings, we're not ready for them yet
 CXXFLAGS += -Wno-unused-parameter 
@@ -159,25 +159,34 @@ TESTOBJS = Test/test_debug.o \
 TESTS = \
 	Test/test_mc.exe \
 	Test/test_waypoints.exe \
-	Test/test_randomtask.exe \
-	Test/test_modes.exe \
 	Test/test_airspace.exe \
+	Test/test_modes.exe \
 	Test/test_task.exe \
+	Test/test_trees.exe \
+	Test/test_randomtask.exe \
 	Test/test_automc.exe \
-	Test/test_flight.exe \
-	Test/test_aat.exe \
 	Test/test_vopt.exe \
 	Test/test_cruiseefficiency.exe \
 	Test/test_bestcruisetrack.exe \
-	Test/test_trees.exe
+	Test/test_aat.exe \
+	Test/test_flight.exe 
 
 TARGETS = $(TESTS) Test/test.exe
 
 all: $(OBJS) $(TESTOBJS) $(TARGETS)
 	@echo "done"
 
+COVSTART = geninfo -q --no-checksum -b . -i .
+COVEND = geninfo -q --no-checksum -b . .
+
 test:	$(TESTS)
+	$(Q)$(COVSTART)
 	perl Test/testall.pl $(TESTS)
+
+basictest:	$(TESTS)
+	$(Q)$(COVSTART)
+	perl Test/testall.pl Test/test_task.exe
+
 
 %.exe: %.cpp $(OBJS) $(TESTOBJS)
 	@$(NQ)echo "  CXX/LN      $@"
@@ -194,8 +203,9 @@ cc-flags	=$(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_AR
 cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
 
 cov:	FORCE
-	geninfo -b . .
-	genhtml -o doc/lcov `find -iname '*\.gcda\.info'`
+	@$(NQ)echo "coverage report"
+	@$(Q)$(COVEND)
+	@$(Q)genhtml --frames -q -o doc/lcov `find -iname '*\.gcda\.info'`
 
 #
 # Useful debugging targets - make preprocessed versions of the source

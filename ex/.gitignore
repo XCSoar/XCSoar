@@ -24,6 +24,7 @@
 *.tpr
 *.tws
 *.gcno
+*.gcno.info
 *.gcda
 *.gcda.info
 res-*.txt

@@ -17,6 +17,6 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-//  test_flight(5,0,1.0,true);
+  test_flight(2,0,1.0,true);
 }
 

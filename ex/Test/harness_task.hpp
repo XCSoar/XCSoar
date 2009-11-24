@@ -34,6 +34,9 @@ bool test_task(TaskManager& task_manager,
                const Waypoints &waypoints,
                int test_num);
 
+bool test_task_bad(TaskManager& task_manager,
+                   const Waypoints &waypoints);
+
 void task_report(TaskManager& task_manager, const char* text);
 
 const char* task_name(int test_num);

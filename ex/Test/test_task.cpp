@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 
   #define NUM_RANDOM 50
 
-  plan_tests(NUM_TASKS+2+NUM_RANDOM);
+  plan_tests(NUM_TASKS+2+NUM_RANDOM+6);
 
   TaskBehaviour task_behaviour;
   TaskEvents default_events;
@@ -20,6 +20,14 @@ int main(int argc, char** argv)
 
   Waypoints waypoints;
   setup_waypoints(waypoints);
+
+  {
+    TaskManager task_manager(default_events,
+                             task_behaviour,
+                             glide_polar,
+                             waypoints);
+    test_task_bad(task_manager,waypoints);
+  }
 
   for (int i=0; i<NUM_TASKS+2; i++) {
     TaskManager task_manager(default_events,
