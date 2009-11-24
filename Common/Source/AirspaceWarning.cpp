@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "AirspaceWarning.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
@@ -62,18 +63,22 @@ static bool UpdateAirspaceAckBrush(AirspaceInfo_c *Item, int Force){
 
   if (Force == 0){
     if (Item->IsCircle){
-      if (AirspaceCircle) {
-        res = AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush;
-        AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush =
+      if (airspace_database.AirspaceCircle != NULL) {
+        AIRSPACE_CIRCLE &circle =
+          airspace_database.AirspaceCircle[Item->AirspaceIndex];
+        res = circle._NewWarnAckNoBrush;
+        circle._NewWarnAckNoBrush =
           ((Item->WarnLevel > 0) && (Item->WarnLevel <= Item->Acknowledge))
           || (Item->Acknowledge==4);
       } else {
         res = false;
       }
     } else {
-      if (AirspaceArea) {
-        res = AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush;
-        AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush =
+      if (airspace_database.AirspaceArea != NULL) {
+        AIRSPACE_AREA &area =
+          airspace_database.AirspaceArea[Item->AirspaceIndex];
+        res = area._NewWarnAckNoBrush;
+        area._NewWarnAckNoBrush =
           ((Item->WarnLevel > 0) && (Item->WarnLevel <= Item->Acknowledge))
           || (Item->Acknowledge==4);
       } else {
@@ -82,16 +87,20 @@ static bool UpdateAirspaceAckBrush(AirspaceInfo_c *Item, int Force){
     }
   } else {
     if (Item->IsCircle){
-      if (AirspaceCircle) {
-        res = AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush;
-        AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush = (Force == 1);
+      if (airspace_database.AirspaceCircle != NULL) {
+        AIRSPACE_CIRCLE &circle =
+          airspace_database.AirspaceCircle[Item->AirspaceIndex];
+        res = circle._NewWarnAckNoBrush;
+        circle._NewWarnAckNoBrush = (Force == 1);
       } else {
         res = false;
       }
     } else {
-      if (AirspaceArea) {
-        res = AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush;
-        AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush = (Force == 1);
+      if (airspace_database.AirspaceArea != NULL) {
+        AIRSPACE_AREA &area =
+          airspace_database.AirspaceArea[Item->AirspaceIndex];
+        res = area._NewWarnAckNoBrush;
+        area._NewWarnAckNoBrush = (Force == 1);
       } else {
         res = false;
       }
@@ -167,22 +176,26 @@ AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
   agl = (int)Calculated->AltitudeAGL;
 
   if (IsCircle){
+    const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[AsIdx];
+
     *hDistance = (int)RangeAirspaceCircle(Basic->Location,
                                           AsIdx);
     if (*hDistance < 0)
       *hDistance = 0;
-    if (AirspaceCircle[AsIdx].Base.Base != abAGL) {
-      vDistanceBase = alt - (int)AirspaceCircle[AsIdx].Base.Altitude;
+    if (circle.Base.Base != abAGL) {
+      vDistanceBase = alt - (int)circle.Base.Altitude;
     } else {
-      vDistanceBase = agl - (int)AirspaceCircle[AsIdx].Base.AGL;
+      vDistanceBase = agl - (int)circle.Base.AGL;
     }
-    if (AirspaceCircle[AsIdx].Top.Base != abAGL) {
-      vDistanceTop  = alt - (int)AirspaceCircle[AsIdx].Top.Altitude;
+    if (circle.Top.Base != abAGL) {
+      vDistanceTop  = alt - (int)circle.Top.Altitude;
     } else {
-      vDistanceTop  = agl - (int)AirspaceCircle[AsIdx].Top.AGL;
+      vDistanceTop  = agl - (int)circle.Top.AGL;
     }
     // EntryTime = ToDo
   } else {
+    const AIRSPACE_AREA &area = airspace_database.AirspaceArea[AsIdx];
+
     if (!InsideAirspaceArea(Basic->Location, AsIdx)){
       // WARNING: RangeAirspaceArea dont return negative values if
       // inside aera -> but RangeAirspaceCircle does!
@@ -194,15 +207,15 @@ AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
     } else {
       *hDistance = 0;
     }
-    if (AirspaceArea[AsIdx].Base.Base != abAGL) {
-      vDistanceBase = alt - (int)AirspaceArea[AsIdx].Base.Altitude;
+    if (area.Base.Base != abAGL) {
+      vDistanceBase = alt - (int)area.Base.Altitude;
     } else {
-      vDistanceBase = agl - (int)AirspaceArea[AsIdx].Base.AGL;
+      vDistanceBase = agl - (int)area.Base.AGL;
     }
-    if (AirspaceArea[AsIdx].Top.Base != abAGL) {
-      vDistanceTop  = alt - (int)AirspaceArea[AsIdx].Top.Altitude;
+    if (area.Top.Base != abAGL) {
+      vDistanceTop  = alt - (int)area.Top.Altitude;
     } else {
-      vDistanceTop  = agl - (int)AirspaceArea[AsIdx].Top.AGL;
+      vDistanceTop  = agl - (int)area.Top.AGL;
     }
     // EntryTime = ToDo
   }
@@ -565,8 +578,8 @@ bool ClearAirspaceWarnings(const bool acknowledge, const bool ack_all_day) {
     return false;
 
   GlobalClearAirspaceWarnings = true;
-  for (unsigned i = 0; i < NumberOfAirspaceCircles; i++) {
-    AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; i++) {
+    AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
     if (circle.WarningLevel > 0) {
       circle.Ack.AcknowledgementTime = XCSoarInterface::Basic().Time;
@@ -576,8 +589,8 @@ bool ClearAirspaceWarnings(const bool acknowledge, const bool ack_all_day) {
     }
   }
 
-  for (unsigned i = 0; i < NumberOfAirspaceAreas; i++) {
-    AIRSPACE_AREA &area = AirspaceArea[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; i++) {
+    AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
     if (area.WarningLevel > 0) {
       area.Ack.AcknowledgementTime = XCSoarInterface::Basic().Time;

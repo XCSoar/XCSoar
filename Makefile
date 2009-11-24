@@ -150,6 +150,7 @@ OBJS	:=\
 	$(SRC)/AATDistance.o 		\
 	$(SRC)/Abort.o 			\
 	$(SRC)/Airspace.o 		\
+	$(SRC)/AirspaceDatabase.o \
 	$(SRC)/AirspaceParser.o 	\
 	$(SRC)/AirspaceWarning.o 	\
 	$(SRC)/Atmosphere.o 		\

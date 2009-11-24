@@ -59,6 +59,4 @@ typedef enum {
 
 extern int    AirspacePriority[AIRSPACECLASSCOUNT];
 
-extern double airspace_QNH;
-
 #endif

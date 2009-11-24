@@ -39,6 +39,7 @@ Copyright_License {
 */
 
 #include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "Interface.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
@@ -80,14 +81,31 @@ void DumpAirspaceFile(void);
 
 static bool StartsWith(TCHAR *Text, const TCHAR *LookFor);
 static bool ReadCoords(TCHAR *Text, double *X, double *Y);
-static void AddAirspaceCircle(AIRSPACE_AREA *Temp, const double aCenterX, const double aCenterY, const double Radius);
-static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount);
-static void AddArea(AIRSPACE_AREA *Temp);
-static void ReadAltitude(TCHAR *Text, AIRSPACE_ALT *Alt);
-static void CalculateArc(TCHAR *Text);
-static void CalculateSector(TCHAR *Text);
-static bool ParseLine(int nLineType);
 
+static void
+AddAirspaceCircle(AIRSPACE_AREA *Temp, const double aCenterX,
+                  const double aCenterY, const double Radius,
+                  unsigned &NumberOfAirspaceCircles);
+
+static void
+AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount,
+         unsigned &NumberOfAirspacePoints);
+
+static void
+AddArea(AIRSPACE_AREA *Temp, unsigned &NumberOfAirspaceAreas);
+
+static void ReadAltitude(TCHAR *Text, AIRSPACE_ALT *Alt);
+
+static void
+CalculateArc(TCHAR *Text, unsigned &NumberOfAirspacePoints);
+
+static void
+CalculateSector(TCHAR *Text, unsigned &NumberOfAirspacePoints);
+
+static bool
+ParseLine(int nLineType,
+          unsigned &NumberOfAirspacePoints, unsigned &NumberOfAirspaceAreas,
+          unsigned &NumberOfAirspaceCircles);
 
 static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text);
 
@@ -145,7 +163,7 @@ static const int k_nAreaType[k_nAreaCount] = {
 					CLASSF};
 
 bool ValidAirspace(void) {
-  return (NumberOfAirspacePoints>0)||(NumberOfAirspaceAreas>0)||(NumberOfAirspaceCircles>0);
+  return airspace_database.Valid();
 }
 
 void CloseAirspace() {
@@ -163,26 +181,22 @@ void ReadAirspace(ZZIP_FILE *fp)
   DWORD	dwStep;
   DWORD	dwPos;
   DWORD	dwOldPos = 0L;
-  int	i;
   int	nLineType;
-  int	OldNumberOfAirspacePoints  = NumberOfAirspacePoints;
-  int	OldNumberOfAirspaceAreas   = NumberOfAirspaceAreas;
-  int	OldNumberOfAirspaceCircles = NumberOfAirspaceCircles;
 
-  int	NumberOfAirspacePointsPass[2];
-  int	NumberOfAirspaceAreasPass[2];
-  int	NumberOfAirspaceCirclesPass[2];
+  unsigned NumberOfAirspacePointsPass[2] = { 0, 0 };
+  unsigned NumberOfAirspaceAreasPass[2] = { 0, 0 };
+  unsigned NumberOfAirspaceCirclesPass[2] = { 0, 0 };
 
   LineCount = 0;
 
-  airspace_QNH = QNH;
+  airspace_database.SetQNH(QNH);
 
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
   // Need step size finer than default 10
   XCSoarInterface::SetProgressStepSize(5);
   dwStep = zzip_file_size(fp) / 10L;
 
-  TempArea.FirstPoint = NumberOfAirspacePoints;	// JG 10-Nov-2005
+  TempArea.FirstPoint = airspace_database.NumberOfAirspacePoints;
 
   bFillMode = false;
   bWaiting = true;
@@ -198,7 +212,9 @@ void ReadAirspace(ZZIP_FILE *fp)
       }
     }
 
-    if (!ParseLine(nLineType)){
+    if (!ParseLine(nLineType, NumberOfAirspacePointsPass[0],
+                   NumberOfAirspaceAreasPass[0],
+                   NumberOfAirspaceCirclesPass[0])) {
       CloseAirspace();
       return;
     }
@@ -206,92 +222,36 @@ void ReadAirspace(ZZIP_FILE *fp)
 
   // Process final area (if any). bFillMode is false.  JG 10-Nov-2005
   if (!bWaiting)
-    NumberOfAirspaceAreas++;    // ????
-
-  NumberOfAirspacePointsPass[0] = NumberOfAirspacePoints - OldNumberOfAirspacePoints;
-  NumberOfAirspaceAreasPass[0] = NumberOfAirspaceAreas - OldNumberOfAirspaceAreas;
-  NumberOfAirspaceCirclesPass[0] = NumberOfAirspaceCircles - OldNumberOfAirspaceCircles;
-
-  // initialise the areas
-
-  // old pointers, in case we have multiple airspace files
-  AIRSPACE_CIRCLE* OldAirspaceCircle = AirspaceCircle;
-  AIRSPACE_POINT*  OldAirspacePoint = AirspacePoint;
-  POINT*  OldAirspaceScreenPoint = AirspaceScreenPoint;
-  AIRSPACE_AREA*   OldAirspaceArea = AirspaceArea;
+    NumberOfAirspaceAreasPass[0]++; // ????
 
   // allocate new memory
-  AirspaceCircle = (AIRSPACE_CIRCLE *)LocalAlloc(LMEM_FIXED,
-                    NumberOfAirspaceCircles * sizeof(AIRSPACE_CIRCLE));
+  size_t screen_point_size = (airspace_database.NumberOfAirspacePoints +
+                              NumberOfAirspacePointsPass[0]) *
+    sizeof(AirspaceScreenPoint[0]);
+  POINT *new_points = AirspaceScreenPoint == NULL
+    ? (POINT *)LocalAlloc(LMEM_FIXED, screen_point_size)
+    : (POINT *)LocalReAlloc(AirspaceScreenPoint, LMEM_FIXED,
+                            screen_point_size);
+  if (new_points != NULL)
+    AirspaceScreenPoint = new_points;
 
-  AirspacePoint  = (AIRSPACE_POINT *)LocalAlloc(LMEM_FIXED,
-                                                (NumberOfAirspacePoints)
-                                                * sizeof(AIRSPACE_POINT));
+  if ((screen_point_size > 0 && new_points == NULL) ||
+      !airspace_database.GrowPoints(NumberOfAirspacePointsPass[0]) ||
+      !airspace_database.GrowAreas(NumberOfAirspaceAreasPass[0]) ||
+      !airspace_database.GrowCircles(NumberOfAirspaceCirclesPass[0])) {
+    // can't allocate memory, so delete everything
+    airspace_database.Clear();
 
-  AirspaceScreenPoint  = (POINT *)LocalAlloc(LMEM_FIXED,
-					     NumberOfAirspacePoints
-					     * sizeof(POINT));
-
-
-  AirspaceArea   = (AIRSPACE_AREA *)  LocalAlloc(LMEM_FIXED,
-                                                 NumberOfAirspaceAreas
-                                                 * sizeof(AIRSPACE_AREA));
-
-  // can't allocate memory, so delete everything
-  if(( AirspaceCircle == NULL) || (AirspacePoint == NULL)
-     || (AirspaceArea == NULL) || (AirspaceScreenPoint == NULL)) {
-    NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0;
-    NumberOfAirspaceCircles = 0;
-    if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
-    if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
-    if(AirspaceScreenPoint != NULL)  LocalFree((HLOCAL)AirspaceScreenPoint);
-    if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
-
-    if(OldAirspaceArea != NULL)   LocalFree((HLOCAL)OldAirspaceArea);
-    if(OldAirspacePoint != NULL)  LocalFree((HLOCAL)OldAirspacePoint);
-    if(OldAirspaceCircle != NULL) LocalFree((HLOCAL)OldAirspaceCircle);
-    if(OldAirspaceScreenPoint != NULL) LocalFree((HLOCAL)OldAirspaceScreenPoint);
+    if (AirspaceScreenPoint != NULL) {
+      LocalFree((HLOCAL)AirspaceScreenPoint);
+      AirspaceScreenPoint = NULL;
+    }
 
     return;
   }
 
-  if (OldAirspaceCircle != NULL) {
-    // copy old values into new
-    for (i=0; i<OldNumberOfAirspaceCircles; i++) {
-      memcpy(&AirspaceCircle[i],&OldAirspaceCircle[i],sizeof(AIRSPACE_CIRCLE));
-    }
-    // free the old values
-    LocalFree((HLOCAL)OldAirspaceCircle);
-  }
-
-  if (OldAirspaceArea != NULL) {
-    // copy old values into new
-    for (i=0; i<OldNumberOfAirspaceAreas; i++) {
-      memcpy(&AirspaceArea[i],&OldAirspaceArea[i],sizeof(AIRSPACE_AREA));
-    }
-    // free the old values
-    LocalFree((HLOCAL)OldAirspaceArea);
-  }
-
-  if (OldAirspacePoint != NULL) {
-    // copy old values into new
-    for (i=0; i<OldNumberOfAirspacePoints; i++) {
-      memcpy(&AirspacePoint[i],&OldAirspacePoint[i],sizeof(AIRSPACE_POINT));
-    }
-    // free the old values
-    LocalFree((HLOCAL)OldAirspacePoint);
-  }
-
-  if (OldAirspaceScreenPoint != NULL) {
-    LocalFree((HLOCAL)OldAirspaceScreenPoint);
-  }
-
   // ok, start the read
-  NumberOfAirspacePoints  = OldNumberOfAirspacePoints;
-  NumberOfAirspaceAreas	  = OldNumberOfAirspaceAreas;
-  NumberOfAirspaceCircles = OldNumberOfAirspaceCircles;
-
-  TempArea.FirstPoint = NumberOfAirspacePoints;	// JG 10-Nov-2005
+  TempArea.FirstPoint = airspace_database.NumberOfAirspacePoints;
   zzip_seek(fp, 0, SEEK_SET );
   LineCount = -1;
 
@@ -314,16 +274,14 @@ void ReadAirspace(ZZIP_FILE *fp)
       }
     }
 
-    ParseLine(nLineType);
+    ParseLine(nLineType, NumberOfAirspacePointsPass[1],
+              NumberOfAirspaceAreasPass[1],
+              NumberOfAirspaceCirclesPass[1]);
   }
 
   // Process final area (if any). bFillMode is true.  JG 10-Nov-2005
   if (!bWaiting)
-    AddArea(&TempArea);
-
-  NumberOfAirspacePointsPass[1] = NumberOfAirspacePoints - OldNumberOfAirspacePoints;
-  NumberOfAirspaceAreasPass[1] = NumberOfAirspaceAreas - OldNumberOfAirspaceAreas;
-  NumberOfAirspaceCirclesPass[1] = NumberOfAirspaceCircles - OldNumberOfAirspaceCircles;
+    AddArea(&TempArea, NumberOfAirspaceAreasPass[1]);
 
   if (NumberOfAirspacePointsPass[0] != NumberOfAirspacePointsPass[1]
       || NumberOfAirspaceAreasPass[0] != NumberOfAirspaceAreasPass[1]
@@ -344,7 +302,10 @@ void ReadAirspace(ZZIP_FILE *fp)
 
 }
 
-static bool ParseLine(int nLineType)
+static bool
+ParseLine(int nLineType,
+          unsigned &NumberOfAirspacePoints, unsigned &NumberOfAirspaceAreas,
+          unsigned &NumberOfAirspaceCircles)
 {
   int nIndex;
 
@@ -352,7 +313,7 @@ static bool ParseLine(int nLineType)
   case k_nLtAC:
     if (bFillMode) {
       if (!bWaiting)
-        AddArea(&TempArea);
+        AddArea(&TempArea, NumberOfAirspaceAreas);
       TempArea.NumPoints = 0;
       TempArea.Type = OTHER;
       for (nIndex = 0; nIndex < k_nAreaCount; nIndex++) {
@@ -432,23 +393,24 @@ static bool ParseLine(int nLineType)
     if (!ReadCoords(&TempString[3],&TempPoint.Longitude ,
                     &TempPoint.Latitude))
       goto OnError;
-    AddPoint(&TempPoint, &TempArea.NumPoints);
+    AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
     // TempArea.NumPoints++;
     break;
 
   case k_nLtDB:
-    CalculateArc(TempString);
+    CalculateArc(TempString, NumberOfAirspacePoints);
     break;
 
   case k_nLtDA:
-    CalculateSector(TempString);
+    CalculateSector(TempString, NumberOfAirspacePoints);
     break;
 
   case k_nLtDC:
     if (bFillMode) {
       double Radius = _tcstod(&TempString[2], NULL);
       Radius = (Radius * NAUTICALMILESTOMETRES);
-      AddAirspaceCircle(&TempArea, CenterX, CenterY, Radius);
+      AddAirspaceCircle(&TempArea, CenterX, CenterY, Radius,
+                        NumberOfAirspaceCircles);
     } else
       NumberOfAirspaceCircles++;
 
@@ -756,43 +718,46 @@ static void AirspaceAGLLookup(AIRSPACE_ALT *Top, AIRSPACE_ALT *Base,
 }
 
 
-static void AddAirspaceCircle(AIRSPACE_AREA *Temp,
-                              const double aCenterX,
-			      const double aCenterY,
-			      const double aRadius)
+static void
+AddAirspaceCircle(AIRSPACE_AREA *Temp,
+                  const double aCenterX,
+                  const double aCenterY,
+                  const double aRadius,
+                  unsigned &NumberOfAirspaceCircles)
 {
   AIRSPACE_CIRCLE *NewCircle = NULL;
 
-  if(!bFillMode)
-    NumberOfAirspaceCircles++;
-  else {
-    NewCircle =  &AirspaceCircle[NumberOfAirspaceCircles];
-    NumberOfAirspaceCircles++;
+  ++NumberOfAirspaceCircles;
+  if (!bFillMode)
+    return;
 
-    _tcscpy(NewCircle->Name , Temp->Name);
-    NewCircle->Location.Latitude = aCenterY;
-    NewCircle->Location.Longitude = aCenterX;
-    NewCircle->Radius = aRadius;
-    NewCircle->Type = Temp->Type;
-    NewCircle->Top.Altitude  = Temp->Top.Altitude ;
-    NewCircle->Top.FL   = Temp->Top.FL;
-    NewCircle->Top.Base   = Temp->Top.Base;
-    NewCircle->Top.AGL = Temp->Top.AGL;
-    NewCircle->Base.Altitude  = Temp->Base.Altitude;
-    NewCircle->Base.FL   = Temp->Base.FL;
-    NewCircle->Base.Base   = Temp->Base.Base;
-    NewCircle->Base.AGL = Temp->Base.AGL;
-    NewCircle->Ack.AcknowledgedToday = false;
-    NewCircle->Ack.AcknowledgementTime = 0;
-    NewCircle->_NewWarnAckNoBrush = false;
+  NewCircle = airspace_database.AppendCircle();
 
-    AirspaceAGLLookup(&NewCircle->Base, &NewCircle->Top,
-                      NewCircle->Location.Latitude,
-                      NewCircle->Location.Longitude);
-  }
+  _tcscpy(NewCircle->Name , Temp->Name);
+  NewCircle->Location.Latitude = aCenterY;
+  NewCircle->Location.Longitude = aCenterX;
+  NewCircle->Radius = aRadius;
+  NewCircle->Type = Temp->Type;
+  NewCircle->Top.Altitude  = Temp->Top.Altitude ;
+  NewCircle->Top.FL   = Temp->Top.FL;
+  NewCircle->Top.Base   = Temp->Top.Base;
+  NewCircle->Top.AGL = Temp->Top.AGL;
+  NewCircle->Base.Altitude  = Temp->Base.Altitude;
+  NewCircle->Base.FL   = Temp->Base.FL;
+  NewCircle->Base.Base   = Temp->Base.Base;
+  NewCircle->Base.AGL = Temp->Base.AGL;
+  NewCircle->Ack.AcknowledgedToday = false;
+  NewCircle->Ack.AcknowledgementTime = 0;
+  NewCircle->_NewWarnAckNoBrush = false;
+
+  AirspaceAGLLookup(&NewCircle->Base, &NewCircle->Top,
+                    NewCircle->Location.Latitude,
+                    NewCircle->Location.Longitude);
 }
 
-static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount)
+static void
+AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount,
+         unsigned &NumberOfAirspacePoints)
 {
   AIRSPACE_POINT *NewPoint = NULL;
 
@@ -811,85 +776,77 @@ static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount)
     }
   */
 
+  ++NumberOfAirspacePoints;
+  if (!bFillMode)
+    return;
+
   assert(Temp != NULL);
   assert(AreaPointCount != NULL);
 
-  if(bFillMode){
-    NewPoint = &AirspacePoint[NumberOfAirspacePoints];
+  NewPoint = airspace_database.AppendPoint();
+  NewPoint->Latitude = Temp->Latitude;
+  NewPoint->Longitude = Temp->Longitude;
 
-    NewPoint->Latitude  = Temp->Latitude;
-    NewPoint->Longitude = Temp->Longitude;
-
-    (*AreaPointCount)++;
-
-  }
-
-  NumberOfAirspacePoints++;
-
+  (*AreaPointCount)++;
 }
 
-static void AddArea(AIRSPACE_AREA *Temp)
+static void
+AddArea(AIRSPACE_AREA *Temp, unsigned &NumberOfAirspaceAreas)
 {
   AIRSPACE_AREA *NewArea = NULL;
-  AIRSPACE_POINT *PointList = NULL;
-  unsigned i;
 
+  ++NumberOfAirspaceAreas;
+  if (!bFillMode)
+    return;
 
-  if(!bFillMode)
-    NumberOfAirspaceAreas++;
-  else {
-    NewArea = &AirspaceArea[NumberOfAirspaceAreas];
-    NumberOfAirspaceAreas++;
+  NewArea = airspace_database.AppendArea();
 
-    _tcscpy(NewArea->Name , Temp->Name);
-    NewArea->Type = Temp->Type;
-    NewArea->Base.Altitude  = Temp->Base.Altitude ;
-    NewArea->Base.FL   = Temp->Base.FL  ;
-    NewArea->Base.Base   = Temp->Base.Base;
-    NewArea->Base.AGL   = Temp->Base.AGL  ;
-    NewArea->NumPoints = Temp->NumPoints;
-    NewArea->Top.Altitude  = Temp->Top.Altitude ;
-    NewArea->Top.FL = Temp->Top.FL;
-    NewArea->Top.Base   = Temp->Top.Base;
-    NewArea->Top.AGL  = Temp->Top.AGL ;
-    NewArea->FirstPoint = Temp->FirstPoint;
-    NewArea->Ack.AcknowledgedToday = false;
-    NewArea->Ack.AcknowledgementTime = 0;
-    NewArea->_NewWarnAckNoBrush = false;
+  _tcscpy(NewArea->Name , Temp->Name);
+  NewArea->Type = Temp->Type;
+  NewArea->Base.Altitude = Temp->Base.Altitude;
+  NewArea->Base.FL = Temp->Base.FL ;
+  NewArea->Base.Base = Temp->Base.Base;
+  NewArea->Base.AGL = Temp->Base.AGL ;
+  NewArea->NumPoints = Temp->NumPoints;
+  NewArea->Top.Altitude = Temp->Top.Altitude;
+  NewArea->Top.FL = Temp->Top.FL;
+  NewArea->Top.Base = Temp->Top.Base;
+  NewArea->Top.AGL = Temp->Top.AGL;
+  NewArea->FirstPoint = Temp->FirstPoint;
+  NewArea->Ack.AcknowledgedToday = false;
+  NewArea->Ack.AcknowledgementTime = 0;
+  NewArea->_NewWarnAckNoBrush = false;
 
-    Temp->FirstPoint = Temp->FirstPoint + Temp->NumPoints ;
+  Temp->FirstPoint = Temp->FirstPoint + Temp->NumPoints;
 
-    if (Temp->NumPoints > 0) {
-      PointList = &AirspacePoint[NewArea->FirstPoint];
-      NewArea->maxBound.Latitude = -90;
-      NewArea->minBound.Latitude = 90;
-      NewArea->maxBound.Longitude  = -180;
-      NewArea->minBound.Longitude  = 180;
+  if (Temp->NumPoints > 0) {
+    const AIRSPACE_POINT *PointList =
+      &airspace_database.AirspacePoint[NewArea->FirstPoint];
+    NewArea->maxBound.Latitude = -90;
+    NewArea->minBound.Latitude = 90;
+    NewArea->maxBound.Longitude = -180;
+    NewArea->minBound.Longitude = 180;
 
-      for(i=0;i<Temp->NumPoints; i++) {
-        if(PointList[i].Latitude > NewArea->maxBound.Latitude)
-          NewArea->maxBound.Latitude = PointList[i].Latitude ;
-        if(PointList[i].Latitude < NewArea->minBound.Latitude)
-          NewArea->minBound.Latitude = PointList[i].Latitude ;
+    for (unsigned i = 0; i < Temp->NumPoints; i++) {
+      if (PointList[i].Latitude > NewArea->maxBound.Latitude)
+        NewArea->maxBound.Latitude = PointList[i].Latitude;
+      if (PointList[i].Latitude < NewArea->minBound.Latitude)
+        NewArea->minBound.Latitude = PointList[i].Latitude;
 
-        if(PointList[i].Longitude  > NewArea->maxBound.Longitude)
-          NewArea->maxBound.Longitude  = PointList[i].Longitude ;
-        if(PointList[i].Longitude  < NewArea->minBound.Longitude)
-          NewArea->minBound.Longitude  = PointList[i].Longitude ;
-      }
-
-      AirspaceAGLLookup(&NewArea->Base, &NewArea->Top,
-                        (NewArea->maxBound.Latitude+NewArea->minBound.Latitude)/2,
-                        (NewArea->maxBound.Longitude+NewArea->minBound.Longitude)/2);
-
-    } else {
-
-      NewArea->maxBound.Latitude = 0;
-      NewArea->minBound.Latitude = 0;
-      NewArea->maxBound.Longitude  = 0;
-      NewArea->minBound.Longitude  = 0;
-
+      if (PointList[i].Longitude  > NewArea->maxBound.Longitude)
+        NewArea->maxBound.Longitude = PointList[i].Longitude;
+      if (PointList[i].Longitude  < NewArea->minBound.Longitude)
+        NewArea->minBound.Longitude = PointList[i].Longitude;
     }
+
+    AirspaceAGLLookup(&NewArea->Base, &NewArea->Top,
+                      (NewArea->maxBound.Latitude+NewArea->minBound.Latitude)/2,
+                      (NewArea->maxBound.Longitude+NewArea->minBound.Longitude)/2);
+  } else {
+    NewArea->maxBound.Latitude = 0;
+    NewArea->minBound.Latitude = 0;
+    NewArea->maxBound.Longitude = 0;
+    NewArea->minBound.Longitude = 0;
   }
 }
 
@@ -1020,7 +977,8 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
 
 }
 
-static void CalculateSector(TCHAR *Text)
+static void
+CalculateSector(TCHAR *Text, unsigned &NumberOfAirspacePoints)
 {
   double Radius;
   double StartBearing;
@@ -1045,7 +1003,7 @@ static void CalculateSector(TCHAR *Text)
                             StartBearing, Radius,
                             &TempPoint);
     }
-    AddPoint(&TempPoint, &TempArea.NumPoints);
+    AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
 
     StartBearing += Rotation *5 ;
   }
@@ -1055,10 +1013,11 @@ static void CalculateSector(TCHAR *Text)
     FindLatitudeLongitude(c, EndBearing, Radius,
                           &TempPoint);
   }
-  AddPoint(&TempPoint, &TempArea.NumPoints);
+  AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
 }
 
-static void CalculateArc(TCHAR *Text)
+static void
+CalculateArc(TCHAR *Text, unsigned &NumberOfAirspacePoints)
 {
   GEOPOINT Start;
   GEOPOINT End;
@@ -1082,7 +1041,7 @@ static void CalculateArc(TCHAR *Text)
   EndBearing = Bearing(c, End);
   TempPoint.Latitude  = Start.Latitude;
   TempPoint.Longitude = Start.Longitude;
-  AddPoint(&TempPoint, &TempArea.NumPoints);
+  AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
 
   while(fabs(EndBearing-StartBearing) > 7.5) {
     StartBearing += Rotation *5 ;
@@ -1098,88 +1057,89 @@ static void CalculateArc(TCHAR *Text)
                             &TempPoint);
     }
 
-    AddPoint(&TempPoint, &TempArea.NumPoints);
+    AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
   }
 
   TempPoint  = End;
-  AddPoint(&TempPoint, &TempArea.NumPoints);
+  AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
 }
 
 
 static void ScanAirspaceCircleBounds(int i, double bearing) {
+  AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
   GEOPOINT loc;
-  FindLatitudeLongitude(AirspaceCircle[i].Location,
-                        bearing, AirspaceCircle[i].Radius,
+
+  FindLatitudeLongitude(circle.Location,
+                        bearing, circle.Radius,
                         &loc);
 
-  AirspaceCircle[i].bounds.minx = min(loc.Longitude, AirspaceCircle[i].bounds.minx);
-  AirspaceCircle[i].bounds.maxx = max(loc.Longitude, AirspaceCircle[i].bounds.maxx);
-  AirspaceCircle[i].bounds.miny = min(loc.Latitude, AirspaceCircle[i].bounds.miny);
-  AirspaceCircle[i].bounds.maxy = max(loc.Latitude, AirspaceCircle[i].bounds.maxy);
+  circle.bounds.minx = min(loc.Longitude, circle.bounds.minx);
+  circle.bounds.maxx = max(loc.Longitude, circle.bounds.maxx);
+  circle.bounds.miny = min(loc.Latitude, circle.bounds.miny);
+  circle.bounds.maxy = max(loc.Latitude, circle.bounds.maxy);
 }
 
 
 static void FindAirspaceCircleBounds() {
-  unsigned int i;
-  for(i=0; i<NumberOfAirspaceCircles; i++) {
-    AirspaceCircle[i].bounds.minx = AirspaceCircle[i].Location.Longitude;
-    AirspaceCircle[i].bounds.maxx = AirspaceCircle[i].Location.Longitude;
-    AirspaceCircle[i].bounds.miny = AirspaceCircle[i].Location.Latitude;
-    AirspaceCircle[i].bounds.maxy = AirspaceCircle[i].Location.Latitude;
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
+    AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
+
+    circle.bounds.minx = circle.Location.Longitude;
+    circle.bounds.maxx = circle.Location.Longitude;
+    circle.bounds.miny = circle.Location.Latitude;
+    circle.bounds.maxy = circle.Location.Latitude;
     ScanAirspaceCircleBounds(i,0);
     ScanAirspaceCircleBounds(i,90);
     ScanAirspaceCircleBounds(i,180);
     ScanAirspaceCircleBounds(i,270);
-    AirspaceCircle[i].WarningLevel = 0; // clear warnings to initialise
+    circle.WarningLevel = 0; // clear warnings to initialise
 
     // JMW detect airspace that wraps across 180
-    if ((AirspaceCircle[i].bounds.minx< -90) && (AirspaceCircle[i].bounds.maxx>90)) {
-      double tmp = AirspaceCircle[i].bounds.minx;
-      AirspaceCircle[i].bounds.minx = AirspaceCircle[i].bounds.maxx;
-      AirspaceCircle[i].bounds.maxx = tmp;
+    if ((circle.bounds.minx< -90) && (circle.bounds.maxx>90)) {
+      double tmp = circle.bounds.minx;
+      circle.bounds.minx = circle.bounds.maxx;
+      circle.bounds.maxx = tmp;
     }
   }
 }
 
 static void FindAirspaceAreaBounds() {
-  unsigned i, j;
-  for(i=0; i<NumberOfAirspaceAreas; i++) {
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
+    AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
     bool first = true;
 
-    for(j= AirspaceArea[i].FirstPoint;
-        j< AirspaceArea[i].FirstPoint+AirspaceArea[i].NumPoints; j++) {
+    for (unsigned j = area.FirstPoint;
+         j < area.FirstPoint + area.NumPoints; j++) {
+      const AIRSPACE_POINT &point = airspace_database.AirspacePoint[j];
 
       if (first) {
-        AirspaceArea[i].bounds.minx = AirspacePoint[j].Longitude;
-        AirspaceArea[i].bounds.maxx = AirspacePoint[j].Longitude;
-        AirspaceArea[i].bounds.miny = AirspacePoint[j].Latitude;
-        AirspaceArea[i].bounds.maxy = AirspacePoint[j].Latitude;
+        area.bounds.minx = point.Longitude;
+        area.bounds.maxx = point.Longitude;
+        area.bounds.miny = point.Latitude;
+        area.bounds.maxy = point.Latitude;
         first = false;
       } else {
-        AirspaceArea[i].bounds.minx = min(AirspacePoint[j].Longitude,
-                                          AirspaceArea[i].bounds.minx);
-        AirspaceArea[i].bounds.maxx = max(AirspacePoint[j].Longitude,
-                                          AirspaceArea[i].bounds.maxx);
-        AirspaceArea[i].bounds.miny = min(AirspacePoint[j].Latitude,
-                                          AirspaceArea[i].bounds.miny);
-        AirspaceArea[i].bounds.maxy = max(AirspacePoint[j].Latitude,
-                                          AirspaceArea[i].bounds.maxy);
+        area.bounds.minx = min(point.Longitude, area.bounds.minx);
+        area.bounds.maxx = max(point.Longitude, area.bounds.maxx);
+        area.bounds.miny = min(point.Latitude, area.bounds.miny);
+        area.bounds.maxy = max(point.Latitude, area.bounds.maxy);
       }
     }
 
     // JMW detect airspace that wraps across 180
-    if ((AirspaceArea[i].bounds.minx< -90) && (AirspaceArea[i].bounds.maxx>90)) {
-      double tmp = AirspaceArea[i].bounds.minx;
-      AirspaceArea[i].bounds.minx = AirspaceArea[i].bounds.maxx;
-      AirspaceArea[i].bounds.maxx = tmp;
-      for(j= AirspaceArea[i].FirstPoint;
-          j< AirspaceArea[i].FirstPoint+AirspaceArea[i].NumPoints; j++) {
-        if (AirspacePoint[j].Longitude<0)
-          AirspacePoint[j].Longitude += 360;
+    if ((area.bounds.minx< -90) && (area.bounds.maxx>90)) {
+      double tmp = area.bounds.minx;
+      area.bounds.minx = area.bounds.maxx;
+      area.bounds.maxx = tmp;
+      for (unsigned j = area.FirstPoint;
+           j < area.FirstPoint + area.NumPoints; ++j) {
+        AIRSPACE_POINT &point = airspace_database.AirspacePoint[j];
+        if (point.Longitude < 0)
+          point.Longitude += 360;
       }
     }
 
-    AirspaceArea[i].WarningLevel = 0; // clear warnings to initialise
+    area.WarningLevel = 0; // clear warnings to initialise
   }
 }
 
@@ -1270,188 +1230,14 @@ void ReadAirspace(void)
 #ifndef NDEBUG
 void DumpAirspaceFile(void){
 
-  FILE * fp;
-  int i;
+  FILE *fp = _tfopen(TEXT("XCSoarAirspace.dmp"), TEXT("wt"));
+  if (fp == NULL)
+    return;
 
-  fp  = _tfopen(TEXT("XCSoarAirspace.dmp"), TEXT("wt"));
-
-  for (i=0; i < (int)NumberOfAirspaceAreas; i++){
-
-    _ftprintf(fp, TEXT("*** Aera id: %d %s "), i, AirspaceArea[i].Name);
-
-    switch (AirspaceArea[i].Type){
-      case RESTRICT:
-        _ftprintf(fp, TEXT("Restricted")); break;
-      case PROHIBITED:
-        _ftprintf(fp, TEXT("Prohibited")); break;
-      case DANGER:
-        _ftprintf(fp, TEXT("Danger Area")); break;
-      case CLASSA:
-        _ftprintf(fp, TEXT("Class A")); break;
-      case CLASSB:
-        _ftprintf(fp, TEXT("Class B")); break;
-      case CLASSC:
-        _ftprintf(fp, TEXT("Class C")); break;
-      case CLASSD:
-        _ftprintf(fp, TEXT("Class D")); break;
-      case CLASSE:
-        _ftprintf(fp, TEXT("Class E")); break;
-      case CLASSF:
-        _ftprintf(fp, TEXT("Class F")); break;
-      case NOGLIDER:
-        _ftprintf(fp, TEXT("No Glider")); break;
-      case CTR:
-        _ftprintf(fp, TEXT("CTR")); break;
-      case WAVE:
-        _ftprintf(fp, TEXT("Wave")); break;
-      default:
-        _ftprintf(fp, TEXT("Unknown"));
-    }
-
-    _ftprintf(fp, TEXT(")\r\n"));
-
-    switch (AirspaceArea[i].Top.Base){
-      case abUndef:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [?]\r\n"), AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
-      break;
-      case abMSL:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
-      break;
-      case abAGL:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceArea[i].Top.AGL, AirspaceArea[i].Top.AGL*TOFEET);
-      break;
-      case abFL:
-        _ftprintf(fp, TEXT("  Top  : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceArea[i].Top.FL, AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
-      break;
-    }
-
-    switch (AirspaceArea[i].Base.Base){
-      case abUndef:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [?]\r\n"), AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
-      break;
-      case abMSL:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
-      break;
-      case abAGL:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceArea[i].Base.AGL, AirspaceArea[i].Base.AGL*TOFEET);
-      break;
-      case abFL:
-        _ftprintf(fp, TEXT("  Base : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceArea[i].Base.FL, AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
-      break;
-    }
-
-    _ftprintf(fp, TEXT("\r\n"));
-  }
-
-  for (i=0; i < (int)NumberOfAirspaceCircles; i++){
-
-    _ftprintf(fp, TEXT("\r\n*** Circle id: %d %s ("), i, AirspaceCircle[i].Name);
-
-    switch (AirspaceArea[i].Type){
-      case RESTRICT:
-        _ftprintf(fp, TEXT("Restricted")); break;
-      case PROHIBITED:
-        _ftprintf(fp, TEXT("Prohibited")); break;
-      case DANGER:
-        _ftprintf(fp, TEXT("Danger Area")); break;
-      case CLASSA:
-        _ftprintf(fp, TEXT("Class A")); break;
-      case CLASSB:
-        _ftprintf(fp, TEXT("Class B")); break;
-      case CLASSC:
-        _ftprintf(fp, TEXT("Class C")); break;
-      case CLASSD:
-        _ftprintf(fp, TEXT("Class D")); break;
-      case CLASSE:
-        _ftprintf(fp, TEXT("Class E")); break;
-      case CLASSF:
-        _ftprintf(fp, TEXT("Class F")); break;
-      case NOGLIDER:
-        _ftprintf(fp, TEXT("No Glider")); break;
-      case CTR:
-        _ftprintf(fp, TEXT("CTR")); break;
-      case WAVE:
-        _ftprintf(fp, TEXT("Wave")); break;
-      default:
-        _ftprintf(fp, TEXT("Unknown"));
-    }
-
-    _ftprintf(fp, TEXT(")\r\n"));
-
-    switch (AirspaceCircle[i].Top.Base){
-      case abUndef:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [?]\r\n"), AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
-      break;
-      case abMSL:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
-      break;
-      case abAGL:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceCircle[i].Top.AGL, AirspaceCircle[i].Top.AGL*TOFEET);
-      break;
-      case abFL:
-        _ftprintf(fp, TEXT("  Top  : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceCircle[i].Top.FL, AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
-      break;
-    }
-
-    switch (AirspaceCircle[i].Base.Base){
-      case abUndef:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [?]\r\n"), AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);
-      break;
-      case abMSL:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);
-      break;
-      case abAGL:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceCircle[i].Base.AGL, AirspaceCircle[i].Base.AGL*TOFEET);
-      break;
-      case abFL:
-        _ftprintf(fp, TEXT("  Base : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceCircle[i].Base.FL, AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);
-      break;
-    }
-
-    _ftprintf(fp, TEXT("\r\n"));
-
-  }
-
+  airspace_database.Dump(fp);
   fclose(fp);
-
 }
 #endif
-
-/**
- * Compare function for AirspaceAreas (sorts by priority)
- * @param elem1 First AirspaceArea
- * @param elem2 Second AirspaceArea
- */
-static int _cdecl SortAirspaceAreaCompare(const void *elem1, const void *elem2 )
-{
-  if (AirspacePriority[((AIRSPACE_AREA *)elem1)->Type] >
-      AirspacePriority[((AIRSPACE_AREA *)elem2)->Type])
-    return (-1);
-  if (AirspacePriority[((AIRSPACE_AREA *)elem1)->Type] <
-      AirspacePriority[((AIRSPACE_AREA *)elem2)->Type])
-    return (+1);
-
-  // otherwise sort on height?
-  return (0);
-}
-
-/**
- * Compare function for AirspaceCircles (sorts by priority)
- * @param elem1 First AirspaceCircle
- * @param elem2 Second AirspaceCircle
- */
-static int _cdecl SortAirspaceCircleCompare(const void *elem1, const void *elem2 )
-{
-  if (AirspacePriority[((AIRSPACE_CIRCLE *)elem1)->Type] >
-      AirspacePriority[((AIRSPACE_CIRCLE *)elem2)->Type])
-    return (-1);
-  if (AirspacePriority[((AIRSPACE_CIRCLE *)elem1)->Type] <
-      AirspacePriority[((AIRSPACE_CIRCLE *)elem2)->Type])
-    return (+1);
-
-  // otherwise sort on height?
-  return (0);
-}
 
 /**
  * Sorts the airspaces by priority
@@ -1462,10 +1248,6 @@ void SortAirspace(void) {
   // force acknowledgement before sorting
   ClearAirspaceWarnings(true, false);
 
-  qsort(AirspaceArea, NumberOfAirspaceAreas, sizeof(AIRSPACE_AREA),
-      SortAirspaceAreaCompare);
-
-  qsort(AirspaceCircle, NumberOfAirspaceCircles, sizeof(AIRSPACE_CIRCLE),
-      SortAirspaceCircleCompare);
+  airspace_database.Sort();
 }
 

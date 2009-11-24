@@ -47,6 +47,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "SettingsTask.hpp"
 #include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "Screen/ProgressWindow.hpp"
 #include "Task.h"
 #include "UtilsText.hpp"
@@ -200,8 +201,8 @@ PopupNearestWaypointDetails(const WayPointList &way_points,
 bool PopupInteriorAirspaceDetails(const GEOPOINT &location) {
   bool found=false;
 
-  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
-    const AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
+    const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
     if (circle.Visible && InsideAirspaceCircle(location, i)) {
       dlgAirspaceDetails(i, -1);
@@ -209,8 +210,8 @@ bool PopupInteriorAirspaceDetails(const GEOPOINT &location) {
     }
   }
 
-  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
-    const AIRSPACE_AREA &area = AirspaceArea[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
+    const AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
     if (area.Visible && InsideAirspaceArea(location, i)) {
       dlgAirspaceDetails(-1, i);

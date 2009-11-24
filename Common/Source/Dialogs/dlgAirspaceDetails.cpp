@@ -41,6 +41,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "AirspaceWarning.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
@@ -60,9 +61,9 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
 
   TCHAR *Name = NULL;
   if (index_circle>=0) {
-    Name = AirspaceCircle[index_circle].Name;
+    Name = airspace_database.AirspaceCircle[index_circle].Name;
   } else if (index_area>=0) {
-    Name = AirspaceArea[index_area].Name;
+    Name = airspace_database.AirspaceArea[index_area].Name;
   }
   if (Name) {
     UINT answer;
@@ -134,7 +135,7 @@ static void SetValues(void) {
   double bearing;
 
   if (index_area >=0) {
-    AIRSPACE_AREA &area = AirspaceArea[index_area];
+    AIRSPACE_AREA &area = airspace_database.AirspaceArea[index_area];
     MapWindow &map_window = XCSoarInterface::main_window.map;
 
     atype = area.Type;
@@ -149,7 +150,7 @@ static void SetValues(void) {
   }
 
   if (index_circle >=0) {
-    AIRSPACE_CIRCLE &circle = AirspaceCircle[index_circle];
+    AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[index_circle];
 
     atype = circle.Type;
     top = &circle.Top;

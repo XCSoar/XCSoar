@@ -72,6 +72,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Message.h"
 #include "Marks.h"
 #include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "InfoBoxLayout.h"
 #include "InfoBoxManager.h"
 #include "Device/device.h"
@@ -1270,8 +1271,9 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   TCHAR DistanceText[MAX_PATH];
   Units::FormatUserDistance(nearestdistance, DistanceText, 10);
 
-  if (inside && (Calculated().NavAltitude <= AirspaceArea[i].Top.Altitude)
-      && (Calculated().NavAltitude >= AirspaceArea[i].Base.Altitude)) {
+  if (inside &&
+      Calculated().NavAltitude <= airspace_database.AirspaceArea[i].Top.Altitude &&
+      Calculated().NavAltitude >= airspace_database.AirspaceArea[i].Base.Altitude) {
 
     _stprintf(text,
               TEXT("Inside airspace: %s\r\n%s\r\nExit: %s\r\nBearing %d")

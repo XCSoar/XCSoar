@@ -40,6 +40,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Units.hpp"
 #include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Math/Units.h"
@@ -330,7 +331,8 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
     }
 
     if (pAS.IsCircle){
-      const AIRSPACE_CIRCLE &circle = AirspaceCircle[pAS.AirspaceIndex];
+      const AIRSPACE_CIRCLE &circle =
+        airspace_database.AirspaceCircle[pAS.AirspaceIndex];
 
       _tcsncpy(sName, circle.Name,
 	       sizeof(sName)/sizeof(sName[0]));
@@ -338,7 +340,8 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
       Top  = circle.Top;
       Type = circle.Type;
     } else {
-      const AIRSPACE_AREA &area = AirspaceArea[pAS.AirspaceIndex];
+      const AIRSPACE_AREA &area =
+        airspace_database.AirspaceArea[pAS.AirspaceIndex];
 
       _tcsncpy(sName, area.Name,
 	       sizeof(sName)/sizeof(sName[0]));

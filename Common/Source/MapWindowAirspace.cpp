@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Screen/Graphics.hpp"
+#include "AirspaceDatabase.hpp"
 
 void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
   circ.Visible = false;
@@ -102,7 +103,8 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
     if(CheckAirspaceAltitude(basealt, topalt, SettingsComputer())) {
       if (msRectOverlap(&area.bounds, &screenbounds_latlon)
           || msRectContained(&screenbounds_latlon, &area.bounds)) {
-        AIRSPACE_POINT *ap= AirspacePoint+area.FirstPoint;
+        const AIRSPACE_POINT *ap =
+          &airspace_database.AirspacePoint[area.FirstPoint];
         const AIRSPACE_POINT *ep= ap+area.NumPoints;
         POINT* sp= AirspaceScreenPoint+area.FirstPoint;
 
@@ -125,13 +127,13 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
 }
 
 void MapWindow::CalculateScreenPositionsAirspace() {
-  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
-    AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
+    AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
     CalculateScreenPositionsAirspaceCircle(circle);
   }
 
-  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
-    AIRSPACE_AREA &area = AirspaceArea[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
+    AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
     CalculateScreenPositionsAirspaceArea(area);
   }
 }
@@ -163,8 +165,8 @@ MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
   bool found = false;
 
   // draw without border
-  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
-    const AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
+    const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
     if (circle.Visible != 2)
       continue;
@@ -181,8 +183,8 @@ MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
     buffer.circle(circle.Screen.x, circle.Screen.y, circle.ScreenR);
   }
 
-  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
-    const AIRSPACE_AREA &area = AirspaceArea[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
+    const AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
     if (area.Visible != 2)
       continue;
@@ -206,8 +208,8 @@ MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
     buffer.white_pen();
   }
 
-  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
-    const AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
+    const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
     if (!circle.Visible)
       continue;
@@ -225,8 +227,8 @@ MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
     buffer.circle(circle.Screen.x, circle.Screen.y, circle.ScreenR);
   }
 
-  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
-    const AIRSPACE_AREA &area = AirspaceArea[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
+    const AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
     if (!area.Visible)
       continue;
@@ -275,8 +277,8 @@ void MapWindow::ScanVisibilityAirspace(rectObj *bounds_active) {
   // (saves from having to do it every screen redraw)
   const rectObj bounds = *bounds_active;
 
-  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
-    AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
+    AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
     circle.FarVisible =
       msRectOverlap(&circle.bounds, bounds_active) == MS_TRUE ||
@@ -284,8 +286,8 @@ void MapWindow::ScanVisibilityAirspace(rectObj *bounds_active) {
       msRectContained(&circle.bounds, bounds_active) == MS_TRUE;
   }
 
-  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
-    AIRSPACE_AREA &area = AirspaceArea[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
+    AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
     area.FarVisible =
       msRectOverlap(&area.bounds, bounds_active) == MS_TRUE ||

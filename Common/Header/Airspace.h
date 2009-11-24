@@ -47,6 +47,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct SETTINGS_COMPUTER;
+class AirspaceDatabase;
 
 struct AIRSPACE_ACK
 {
@@ -104,13 +105,9 @@ struct AIRSPACE_CIRCLE
 };
 
 // Airspace Database
-extern AIRSPACE_AREA *AirspaceArea;
-extern AIRSPACE_POINT *AirspacePoint;
+extern AirspaceDatabase airspace_database;
+
 extern POINT *AirspaceScreenPoint;
-extern AIRSPACE_CIRCLE *AirspaceCircle;
-extern unsigned int NumberOfAirspacePoints;
-extern unsigned int NumberOfAirspaceAreas;
-extern unsigned int NumberOfAirspaceCircles;
 
 void DeleteAirspace();
 

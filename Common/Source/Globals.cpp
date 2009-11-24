@@ -9,5 +9,3 @@ StartStats_t   task_start_stats;
 
 #include "SettingsAirspace.hpp"
 int AirspacePriority[AIRSPACECLASSCOUNT];
-
-double airspace_QNH;

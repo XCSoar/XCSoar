@@ -38,6 +38,7 @@ Copyright_License {
 */
 
 #include "GlideComputerAirData.hpp"
+#include "AirspaceDatabase.hpp"
 #include "McReady.h"
 #include "WindZigZag.h"
 #include "windanalyser.h"
@@ -957,8 +958,8 @@ GlideComputerAirData::AirspaceWarning()
   // JMW TODO enhancement: FindAirspaceCircle etc should sort results, return
   // the most critical or closest.
 
-  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
-    const AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
+    const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
     if (((circle.Base.Base != abAGL && alt >= circle.Base.Altitude) ||
          (circle.Base.Base == abAGL && agl >= circle.Base.AGL)) &&
@@ -974,8 +975,8 @@ GlideComputerAirData::AirspaceWarning()
 
   // repeat process for areas
 
-  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
-    const AIRSPACE_AREA &area = AirspaceArea[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
+    const AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
     if (((area.Base.Base != abAGL && alt >= area.Base.Altitude) ||
          (area.Base.Base == abAGL && agl >= area.Base.AGL)) &&

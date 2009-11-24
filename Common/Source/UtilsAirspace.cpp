@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "UtilsAirspace.hpp"
+#include "AirspaceDatabase.hpp"
 #include "SettingsAirspace.hpp"
 #include "LogFile.hpp"
 #include "Dialogs.h"
@@ -52,12 +53,10 @@ Copyright_License {
  * (Attention: Inaccurate!)
  */
 void ConvertFlightLevels(void) {
-  unsigned i;
-
   // TODO accuracy: ConvertFlightLevels is inaccurate!
 
-  for (i = 0; i < NumberOfAirspaceCircles; i++) {
-    AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
+    AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
     if (circle.Base.FL != 0) {
       circle.Base.Altitude = circle.Base.FL * 100 + (QNH - 1013) * 30;
@@ -69,8 +68,8 @@ void ConvertFlightLevels(void) {
     }
   }
 
-  for (i = 0; i < NumberOfAirspaceAreas; i++) {
-    AIRSPACE_AREA &area = AirspaceArea[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
+    AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
     if (area.Base.FL != 0) {
       area.Base.Altitude = area.Base.FL * 100 + (QNH - 1013) * 30;
