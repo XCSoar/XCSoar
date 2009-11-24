@@ -352,6 +352,12 @@ public:
   virtual void print(const AIRCRAFT_STATE&);
 #endif
 
+/** 
+ * Accept a task point visitor; makes the visitor visit
+ * all TaskPoint in the task
+ * 
+ * @param visitor Visitor to accept
+ */
   virtual void Accept(TaskPointVisitor& visitor) const = 0;
   DEFINE_VISITABLE()
 };

@@ -25,6 +25,12 @@
 class AbstractTaskFactory
 {
 public:
+/** 
+ * Constructor
+ * 
+ * @param _task Ordered task to be managed by this factory
+ * @param tb Behaviour (options)
+ */  
   AbstractTaskFactory(OrderedTask& _task,
                       const TaskBehaviour &tb):
     task(_task),

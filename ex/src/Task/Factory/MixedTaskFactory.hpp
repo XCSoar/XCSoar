@@ -10,9 +10,20 @@
 class MixedTaskFactory: public AbstractTaskFactory 
 {
 public:
+/** 
+ * Constructor
+ * 
+ * @param _task Ordered task to be managed by this factory
+ * @param tb Behaviour (options)
+ */  
   MixedTaskFactory(OrderedTask& _task,
                    const TaskBehaviour &tb);
 
+/** 
+ * Check whether task is complete and valid according to factory rules
+ * 
+ * @return True if task is valid according to factory rules
+ */
   bool validate();
 };
 

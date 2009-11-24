@@ -74,6 +74,15 @@ double Distance(GEOPOINT loc1,
 double Bearing(GEOPOINT loc1,
                GEOPOINT loc2);
 
+/** 
+ * Calculate and add distances between point 1 and 2, and point 2 and 3.
+ * 
+ * @param loc1 Location 1
+ * @param loc2 Location 2
+ * @param loc3 Location 3
+ * 
+ * @return Distance 12 plus 23 (m)
+ */
 double DoubleDistance(GEOPOINT loc1,
                       GEOPOINT loc2,
 		      GEOPOINT loc3);
