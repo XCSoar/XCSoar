@@ -78,6 +78,10 @@ public:
     delete oz;
   };
 
+  /**
+   * States each task point can be in (with respect to which OrderedTaskPoint is
+   * active/selected).
+   */
   enum ActiveState_t {
     NOTFOUND_ACTIVE = 0,        /**< Active task point was not found, ERROR! */
     BEFORE_ACTIVE,              /**< This taskpoint is before the active one */
@@ -273,7 +277,7 @@ public:
 
 
 protected:
-  ActiveState_t active_state;
+  ActiveState_t active_state; /**< ActiveState determined from scan_active() */
 
 protected:
 /** 

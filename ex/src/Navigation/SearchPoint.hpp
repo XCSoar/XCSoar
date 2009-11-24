@@ -14,29 +14,80 @@ class TaskProjection;
 class SearchPoint {
 public:
 
+/** 
+ * Copy constructor
+ * 
+ * @param sp SearchPoint to copy
+ */
   SearchPoint(const SearchPoint& sp):
     Location(sp.Location),
     flatLocation(sp.flatLocation),
     actual(sp.actual) {
   };
 
+/** 
+ * Constructor
+ * 
+ * @param loc Location of search point
+ * @param tp Projection used
+ * @param _actual Whether search point is real or virtual
+ */
   SearchPoint(const GEOPOINT &loc, const TaskProjection& tp,
     bool _actual=false);
 
+/** 
+ * Calculate projected value of geodetic coordinate
+ * 
+ * @param tp Projection used
+ */
   void project(const TaskProjection& tp);
 
+/** 
+ * Accessor for geodetic coordinate
+ * 
+ * 
+ * @return Geodetic coordinate
+ */
   const GEOPOINT& getLocation() const {
     return Location;
   };
 
-  bool equals(const SearchPoint& sp) const;
-  bool sort(const SearchPoint& sp) const;
-
-  unsigned flat_distance(const SearchPoint& sp) const;
-
+/** 
+ * Accessor for flat projected coordinate
+ * 
+ * 
+ * @return Flat projected coordinate
+ */
   const FLAT_GEOPOINT& get_flatLocation() const {
     return flatLocation;
   };
+
+/** 
+ * Test whether two points are coincident (by their geodetic coordinates)
+ * 
+ * @param sp Point to compare with
+ * 
+ * @return True if points coincident
+ */
+  bool equals(const SearchPoint& sp) const;
+
+/** 
+ * Rank two points according to longitude, then latitude
+ * 
+ * @param sp Point to compare to
+ * 
+ * @return True if this point is further left (or if equal, lower) than the other
+ */
+  bool sort(const SearchPoint& sp) const;
+
+/** 
+ * Calculate flat earth distance between two points
+ * 
+ * @param sp Point to measure distance from
+ * 
+ * @return Distance in projected units
+ */
+  unsigned flat_distance(const SearchPoint& sp) const;
 
 private:
   GEOPOINT Location;

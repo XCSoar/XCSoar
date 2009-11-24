@@ -28,7 +28,17 @@ typedef Dijkstra<ScanTaskPoint> DijkstraTaskPoint;
 class TaskDijkstra 
 {
 public:
+/**
+ * Constructor
+ *
+ * @param _task The task to find max/min distances for
+ * @param task_size Size of task (number of TaskPoints) 
+ */
   TaskDijkstra(OrderedTask* _task, unsigned task_size);
+
+/**
+ * Destructor, frees local variables
+ */
   ~TaskDijkstra();
 
 /** 

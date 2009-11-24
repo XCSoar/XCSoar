@@ -157,14 +157,14 @@ TESTOBJS = Test/test_debug.o \
 	Test/tap.o
 
 TESTS = \
-	Test/test.exe \
-	Test/test_mc.exe \
 	Test/test_waypoints.exe \
-	Test/test_airspace.exe \
-	Test/test_modes.exe \
+	Test/test_mc.exe \
 	Test/test_task.exe \
-	Test/test_trees.exe \
+	Test/test_modes.exe \
+	Test/test_airspace.exe \
 	Test/test_automc.exe \
+	Test/test_trees.exe \
+	Test/test.exe \
 	Test/test_vopt.exe \
 	Test/test_cruiseefficiency.exe \
 	Test/test_bestcruisetrack.exe \

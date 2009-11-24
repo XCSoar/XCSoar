@@ -73,6 +73,9 @@ public:
  */
   GEOPOINT random_point_in_task(const unsigned index, const double mag=1.0) const;
 
+  /**
+   * Enumeration of task modes
+   */
   enum TaskMode_t {
     MODE_NULL=0,
     MODE_ORDERED,
@@ -80,6 +83,10 @@ public:
     MODE_GOTO
   };
 
+  /**
+   * Enumeration of factory types.  This is the set of
+   * types of ordered task that can be created.
+   */
   enum Factory_t {
     FACTORY_FAI=0,
     FACTORY_AAT,

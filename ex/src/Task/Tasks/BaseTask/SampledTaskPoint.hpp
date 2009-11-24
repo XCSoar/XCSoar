@@ -161,7 +161,7 @@ public:
 #endif
 
 protected:
-  const bool boundary_scored;
+  const bool boundary_scored; /**< Whether boundaries are used in scoring distance, or just the reference point */
 
 /** 
  * Clear all sample points.

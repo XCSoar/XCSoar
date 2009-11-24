@@ -184,13 +184,13 @@ protected:
   void clearance_heights(const AIRCRAFT_STATE &state);
 
 
-  const std::vector<TaskPoint*> tps;
-  std::vector<GlideResult> gs;
-  std::vector<double> minHs;
-  const unsigned activeTaskPoint;
-  int start;
-  int end;
-  GlidePolar glide_polar;
+  const std::vector<TaskPoint*> tps; /**< The TaskPoints in the task */
+  std::vector<GlideResult> gs; /**< Glide solutions for each leg */
+  std::vector<double> minHs; /**< Minimum altitude for each taskpoint (m) */
+  const unsigned activeTaskPoint; /**< Active task point (local copy for speed) */
+  int start; /**< TaskPoint sequence index of first taskpoint included in scan */
+  int end; /**< TaskPoint sequence index of last taskpoint included in scan */
+  GlidePolar glide_polar; /**< Glide polar used for computations */
 };
 
 #endif

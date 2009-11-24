@@ -51,7 +51,13 @@ class ObservationZonePoint : public ReferencePoint,
                              public ObservationZone 
 {
 public:
-
+/** 
+ * Constructor
+ * 
+ * @param _location Location used as reference point for this OZ
+ * 
+ * @return Initialised object
+ */
   ObservationZonePoint(const GEOPOINT & _location) : 
     ReferencePoint(_location) {
 
@@ -67,6 +73,13 @@ public:
  */
   virtual ObservationZonePoint* clone(const GEOPOINT &_location) = 0;
 
+/** 
+ * Update geometry when previous/next legs are modified.
+ * 
+ * @param previous Previous task point (origin of inbound leg)
+ * @param current Taskpoint this is located at
+ * @param next Following task point (destination of outbound leg)
+ */
   virtual void set_legs(const TaskPoint *previous,
                         const TaskPoint *current,
                         const TaskPoint *next) {};

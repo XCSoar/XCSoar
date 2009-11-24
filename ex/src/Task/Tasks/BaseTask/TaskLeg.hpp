@@ -23,6 +23,9 @@ class OrderedTaskPoint;
  */
 class TaskLeg {
 public:
+/** 
+ * Constructor.  Takes local copy of taskpoint data used in internal computations
+ */
   TaskLeg(OrderedTaskPoint &_destination);
 
 /** 
@@ -93,9 +96,9 @@ public:
   double scan_distance_travelled(const GEOPOINT &ref);
 
 protected:
-  GeoVector vector_travelled;
-  GeoVector vector_remaining;
-  GeoVector vector_planned;
+  GeoVector vector_travelled; /**< Saved vector for current leg's travelled route */
+  GeoVector vector_remaining; /**< Saved vector for current leg's remaining route */
+  GeoVector vector_planned; /**< Saved vector for current leg's planned route */
 
 private:
 

@@ -41,9 +41,17 @@
 
 #include "GeoPoint.hpp"
 
-/** Entity for objects that may be used as reference points for navigation */
+/** 
+ * Entity for objects that may be used as reference points for navigation 
+ * \todo
+ * - consider eliminating this class (may not be useful)
+ */
 class ReferencePoint {
 public:
+/**
+ * Constructor
+ * @param _location Location of reference point
+ */
     ReferencePoint(const GEOPOINT & _location) : Location(_location) {
     };
 
@@ -62,7 +70,7 @@ public:
     };
 
 protected:
-    const GEOPOINT Location;
+  const GEOPOINT Location; /**< Local copy of reference point location */
 };
 
 #endif

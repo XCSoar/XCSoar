@@ -47,6 +47,16 @@ class SectorZone:
   public CylinderZone 
 {
 public:
+/** 
+ * Constructor
+ * 
+ * @param loc Location of tip of sector
+ * @param _radius Radius of sector (m)
+ * @param _startRadial Start radial (degrees), most counter-clockwise
+ * @param _endRadial End radial (degrees), most clockwise
+ * 
+ * @return Initialised object
+ */
   SectorZone(const GEOPOINT &loc, 
              const double _radius=10000.0,
              const double _startRadial=0.0, 
