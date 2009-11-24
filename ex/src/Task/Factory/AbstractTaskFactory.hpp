@@ -38,12 +38,18 @@ public:
     {
     }
 
+  /**
+   * Legal types of StartPoint observation zones
+   */
   enum LegalStartType_t {
     START_SECTOR = 0,
     START_LINE,
     START_CYLINDER
   };
 
+  /**
+   * Legal types of IntermediatePoint observation zones (and type AAT/AST)
+   */
   enum LegalIntermediateType_t {
     FAI_SECTOR = 0,
     AST_CYLINDER,
@@ -51,6 +57,9 @@ public:
     AAT_SEGMENT
   };
 
+  /**
+   * Legal types of FinishPoint observation zones
+   */
   enum LegalFinishType_t {
     FINISH_SECTOR = 0,
     FINISH_LINE,
@@ -206,17 +215,29 @@ public:
 
   /**
    *  FOR TESTING ONLY
+   * @param index index of task point sequence
+   * @return True if aircraft has previously entered the taskpoint
    */
-  bool has_entered(unsigned position) const;
+  bool has_entered(unsigned index) const;
 
 protected:
+/** 
+ * Test whether a candidate object is of correct type to be added/replaced/etc
+ * in the task.
+ * 
+ * @param new_tp Candidate object
+ * @param position Desired task sequence index of candidate
+ * 
+ * @return True if candidate is valid at the position
+ */
   virtual bool validType(OrderedTaskPoint *new_tp, unsigned position) const;
 
-  OrderedTask &task;
-  const TaskBehaviour &behaviour;
-  std::vector<LegalStartType_t> start_types;
-  std::vector<LegalIntermediateType_t> intermediate_types;
-  std::vector<LegalFinishType_t> finish_types;
+  OrderedTask &task; /**< task managed by this factory */
+  const TaskBehaviour &behaviour; /**< behaviour (settings) */
+
+  std::vector<LegalStartType_t> start_types; /**< list of valid start types, for specialisation */
+  std::vector<LegalIntermediateType_t> intermediate_types; /**< list of valid intermediate types, for specialisation */
+  std::vector<LegalFinishType_t> finish_types; /**< list of valid finish types, for specialisation */
 };
 
 #endif

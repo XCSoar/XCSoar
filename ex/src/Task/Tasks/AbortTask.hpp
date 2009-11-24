@@ -19,6 +19,7 @@ public:
    * @param tb Global task behaviour settings
    * @param ta Advance mechanism used for advancable tasks
    * @param gp Global glide polar used for navigation calculations
+   * @param wps Waypoints container to be scanned during updates
    * 
    * @return Initialised object (with nothing in task)
    */

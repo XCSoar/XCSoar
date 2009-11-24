@@ -51,6 +51,17 @@
 class ASTPoint : public IntermediatePoint 
 {
 public:
+/** 
+ * Constructor.
+ * Ownership of oz is transferred to this object.  Note that AST boundaries are not scored.
+ * 
+ * @param _oz Observation zone for this task point
+ * @param tp Projection used for internal representations
+ * @param wp Waypoint associated with this task point
+ * @param tb Task Behaviour defining options (esp safety heights)
+ * 
+ * @return Partially initialised object 
+ */
   ASTPoint(ObservationZonePoint* _oz,
            const TaskProjection&tp,
            const Waypoint & wp,

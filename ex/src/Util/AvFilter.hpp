@@ -9,7 +9,11 @@
 class AvFilter 
 {
 public:
-
+  /**
+   * Constructor, reserves fized size of bucket
+   *
+   * @param _n_max Number of elements in bucket
+   */
   AvFilter(const unsigned _n_max):n_max(_n_max)  {
     x.reserve(n_max);
     reset();

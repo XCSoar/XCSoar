@@ -22,7 +22,7 @@ public:
      */
   AATIsoline(const AATPoint& ap);
 protected:
-  const GeoEllipse ell;
+  const GeoEllipse ell; /**< ellipse representing the isoline segment */
   /** @link dependency */
   /*#  AATPoint lnkAATPoint; */
 };

@@ -325,13 +325,21 @@ protected:
 
 protected:
 
-  unsigned activeTaskPoint;
-  TaskStats stats;
-  TaskAdvance &task_advance;
-  GlidePolar glide_polar;
-  const TaskEvents &task_events;
-  const TaskBehaviour &task_behaviour;
+  unsigned activeTaskPoint; /**< task point sequence index */
+  TaskStats stats; /**< statistics of this task */
+  TaskAdvance &task_advance; /**< reference to global advance mechanism */
+  GlidePolar &glide_polar; /**< reference to global glide polar */
+  const TaskEvents &task_events; /**< reference to task events (feedback) */
+  const TaskBehaviour &task_behaviour; /**< reference to task behaviour (settings) */
 
+/** 
+ * Updates distance calculations and values in the statistics.
+ * This is protected rather than private so concrete tasks can 
+ * call this when they know the task has been modified.
+ * 
+ * @param location Location of observer
+ * @param full_update Whether all calculations or minimal ones to be performed
+ */
   void update_stats_distances(const GEOPOINT &location,
                               const bool full_update);
 
@@ -342,10 +350,10 @@ private:
   void update_stats_glide(const AIRCRAFT_STATE &state);
   double leg_gradient(const AIRCRAFT_STATE &state);
 
-  Filter mc_lpf;
-  Filter ce_lpf;
+  Filter mc_lpf; /**< low pass filter on best MC calculations */
+  Filter ce_lpf; /**< low pass filter on cruise efficiency calculations */
 
-  bool trigger_auto;
+  bool trigger_auto; /**< whether auto MC has been triggered (above final glide) */
 
 public:
 #ifdef DO_PRINT
