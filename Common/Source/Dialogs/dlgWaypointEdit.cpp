@@ -46,6 +46,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "Components.hpp"
+#include "WayPoint.hpp"
 
 static WndForm *wf=NULL;
 static WAYPOINT *global_wpt=NULL;

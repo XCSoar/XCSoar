@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Profile.hpp"
+#include "WayPoint.hpp"
 #include "Registry.hpp"
 #include "LogFile.hpp"
 #include "SettingsTask.hpp"
