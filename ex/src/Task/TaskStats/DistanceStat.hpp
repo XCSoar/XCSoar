@@ -82,9 +82,10 @@ public:
 #endif
 
 protected:
-  double distance;
-  double speed;
-  double speed_incremental;
+  double distance; /**< Distance (m) of metric */
+  double speed; /**< Speed (m/s) of metric */
+  double speed_incremental; /**< Incremental speed (m/s) of metric */
+private:
   AvFilter av_dist;
   DiffFilter df;
   Filter v_lpf;

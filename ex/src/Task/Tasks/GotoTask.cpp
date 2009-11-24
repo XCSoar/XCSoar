@@ -64,3 +64,13 @@ GotoTask::Accept(TaskPointVisitor& visitor) const
     tp->Accept(visitor);
   }
 }
+
+unsigned 
+GotoTask::task_size() const
+{
+  if (tp) {
+    return 1;
+  } else {
+    return 0;
+  }
+}

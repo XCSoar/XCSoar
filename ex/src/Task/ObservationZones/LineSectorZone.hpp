@@ -82,6 +82,11 @@ public:
 
   GEOPOINT get_boundary_parametric(double) const;  
 
+/** 
+ * Distance reduction for scoring when outside this OZ
+ * 
+ * @return Distance (m) to subtract from score
+ */
   virtual double score_adjustment();
 
 /** 

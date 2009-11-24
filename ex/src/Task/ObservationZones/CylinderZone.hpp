@@ -47,6 +47,14 @@
  */
 class CylinderZone : public ObservationZonePoint {
 public:
+/** 
+ * Constructor.
+ * 
+ * @param loc Location of center
+ * @param _radius Radius (m) of cylinder
+ * 
+ * @return Initialised object
+ */
   CylinderZone(const GEOPOINT &loc, const double _radius=10000.0):
     ObservationZonePoint(loc),
     Radius(_radius)
@@ -65,13 +73,30 @@ public:
     return new CylinderZone(_location, Radius);
   }
 
+  /** 
+   * Check whether observer is within OZ
+   *
+   * @return True if reference point is inside sector
+   */
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const
   {
     return distance(ref.Location)<=Radius;
   }  
 
+/** 
+ * Get point on boundary from parametric representation
+ * 
+ * @param t T value [0,1]
+ * 
+ * @return Point on boundary
+ */
   GEOPOINT get_boundary_parametric(double) const;
 
+/** 
+ * Distance reduction for scoring when outside this OZ
+ * 
+ * @return Distance (m) to subtract from score
+ */
   virtual double score_adjustment();
 
 /** 
@@ -126,7 +151,7 @@ public:
   virtual GEOPOINT randomPointInSector(const double mag) const;
 
 protected:
-  double Radius;
+  double Radius; /**< radius (m) of OZ */
 };
 
 #endif

@@ -44,38 +44,126 @@ Copyright_License {
  * \todo - support wrap-around at 0,360 degrees longitude
  */
 struct GEOPOINT {
+/** 
+ * Constructor (origin)
+ * 
+ * @return Point initialised at origin
+ */
   GEOPOINT():Longitude(0.0),Latitude(0.0) {}
 
-  double Longitude;
-  double Latitude;
+/** 
+ * Constructor (supplied location)
+ * 
+ * @param _Longitude Longitude of point
+ * @param _Latitude Latitude of point
+ * 
+ * @return Initialised object
+ */
+  GEOPOINT(const double _Longitude,
+           const double _Latitude):Longitude(_Longitude),Latitude(_Latitude) {}
 
+  double Longitude; /**< Longitude (deg) */
+  double Latitude; /**< Latitude (deg) */
+
+/** 
+ * Find location a parametric distance along a vector from this point
+ * 
+ * @param delta Vector to feed in
+ * @param t Parametric distance along delta to add [0,1]
+ * 
+ * @return Location of point
+ */
   GEOPOINT parametric(const GEOPOINT &delta, const double t) const;
+
+/** 
+ * Find location interpolated from this point towards end
+ * 
+ * @param end Endpoint of interpolation
+ * @param t Parametric distance along this to end [0,1]
+ * 
+ * @return Location of point
+ */
   GEOPOINT interpolate(const GEOPOINT &end, const double t) const;
 
+/** 
+ * Multiply a point by a factor (used for deltas)
+ * 
+ * @param x Factor to magnify
+ * 
+ * @return Modified point
+ */
   GEOPOINT operator* (const double x) const {
     GEOPOINT res = *this;
     res.Longitude *= x;
     res.Latitude *= x;
     return res;
   };
-  GEOPOINT operator+ (const GEOPOINT &other) const {
+
+/** 
+ * Add a delta to a point
+ * 
+ * @param delta Delta to add 
+ * 
+ * @return Modified point
+ */
+  GEOPOINT operator+ (const GEOPOINT &delta) const {
     GEOPOINT res = *this;
-    res.Longitude += other.Longitude;
-    res.Latitude += other.Latitude;
+    res.Longitude += delta.Longitude;
+    res.Latitude += delta.Latitude;
     return res;
   };
+
+/** 
+ * Subtracts a delta from a point
+ * 
+ * @param delta Delta to subtract 
+ * 
+ * @return Modified point
+ */
   GEOPOINT operator- (const GEOPOINT &other) const {
     GEOPOINT res = *this;
     res.Longitude -= other.Longitude;
     res.Latitude -= other.Latitude;
     return res;
   };
+
+/** 
+ * Calculate great circle distance from this to the other
+ * 
+ * @param other Other location
+ * 
+ * @return Distance (m)
+ */
   double distance(const GEOPOINT &other) const;
+
+/** 
+ * Calculate great circle initial bearing from this to the other
+ * 
+ * @param other Other location
+ * 
+ * @return Bearing (deg)
+ */
   double bearing(const GEOPOINT &other) const;
 
+/** 
+ * Find distance along a great-circle path that this point
+ * is projected to
+ * 
+ * @param from Start location
+ * @param to End location
+ * 
+ * @return Distance (m) along from-to line
+ */
   double projected_distance(const GEOPOINT &from,
                             const GEOPOINT &to) const;
 
+/** 
+ * Test whether two points are co-located
+ * 
+ * @param other Point to compare
+ * 
+ * @return True if coincident
+ */
   bool equals(const GEOPOINT &other) const;
 };
 

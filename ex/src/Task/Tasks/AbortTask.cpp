@@ -42,6 +42,11 @@ AbortTask::getActiveTaskPoint() const
 }
 
 
+unsigned
+AbortTask::task_size() const
+{
+  return tps.size();
+}
 
 void 
 AbortTask::clear() {

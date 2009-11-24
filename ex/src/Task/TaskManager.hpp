@@ -144,11 +144,11 @@ public:
   virtual const TaskStats& get_stats() const;
 
 /** 
- * Size of OrderedTask
+ * Size of active task
  * 
- * @return Number of taskpoints in OrderedTask
+ * @return Number of taskpoints in active task
  */
-  unsigned get_task_size() const;
+  unsigned task_size() const;
 
 /** 
  * Check whether ordered task is valid

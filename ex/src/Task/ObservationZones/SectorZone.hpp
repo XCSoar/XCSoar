@@ -111,12 +111,27 @@ public:
     updateSector();
   }
 
-  virtual bool angleInSector(double b) const;
-
+  /** 
+   * Check whether observer is within OZ
+   *
+   * @return True if reference point is inside sector
+   */
   virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
 
+/** 
+ * Get point on boundary from parametric representation
+ * 
+ * @param t T value [0,1]
+ * 
+ * @return Point on boundary
+ */
   GEOPOINT get_boundary_parametric(double) const;  
 
+/** 
+ * Distance reduction for scoring when outside this OZ
+ * 
+ * @return Distance (m) to subtract from score
+ */
   virtual double score_adjustment();
 
 /** 
@@ -131,10 +146,12 @@ public:
 
 protected:
   virtual void updateSector();
+  virtual bool angleInSector(double b) const;
 
   GEOPOINT SectorStart;
   GEOPOINT SectorEnd;
 private:
+
   double StartRadial;
   double EndRadial;
 };

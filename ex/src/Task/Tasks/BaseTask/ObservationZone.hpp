@@ -52,7 +52,10 @@ public:
 
     };
 
-  /** returns true if reference point is inside sector
+  /** 
+   * Check whether observer is within OZ
+   *
+   * @return True if reference point is inside sector
    */
     virtual bool isInSector(const AIRCRAFT_STATE & ref) const = 0;
 
@@ -94,8 +97,22 @@ public:
         return transition_enter(ref_last, ref_now);
     }  
 
+/** 
+ * Get point on boundary from parametric representation
+ * 
+ * @param t T value [0,1]
+ * 
+ * @return Point on boundary
+ */
   virtual GEOPOINT get_boundary_parametric(double t) const =0;
 
+/** 
+ * Distance reduction for scoring when outside this OZ
+ * (used because FAI cylinders, for example, have their
+ *  radius subtracted from scored distances)
+ * 
+ * @return Distance (m) to subtract from score
+ */
   virtual double score_adjustment() const;
 };
 

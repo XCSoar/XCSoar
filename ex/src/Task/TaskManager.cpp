@@ -173,18 +173,27 @@ TaskManager::set_factory(const Factory_t the_factory)
 
 
 unsigned 
-TaskManager::get_task_size() const
+TaskManager::task_size() const
 {
-  return task_ordered.task_size();
+  if (active_task) {
+    return active_task->task_size();
+  } else {
+    return 0;
+  }
 }
 
 GEOPOINT 
 TaskManager::random_point_in_task(const unsigned index, const double mag) const
 {
-  
-  if (index< get_task_size()) {
-    return task_ordered.getTaskPoint(index)->randomPointInSector(mag);
+  if (active_task == &task_ordered) {
+    if (index< task_size()) {
+      return task_ordered.getTaskPoint(index)->randomPointInSector(mag);
+    }
   }
-  GEOPOINT null_location;
-  return null_location;
+  if (index<= task_size()) {
+    return active_task->getActiveTaskPoint()->getLocation();
+  } else {
+    GEOPOINT null_location;
+    return null_location;
+  }
 }

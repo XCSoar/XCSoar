@@ -31,6 +31,13 @@ public:
   ~AbortTask();
 
 /** 
+ * Size of task
+ * 
+ * @return Number of taskpoints in task
+ */
+  unsigned task_size() const;
+
+/** 
  * Retrieves the active task point sequence.
  * 
  * @return Index of active task point sequence

@@ -23,6 +23,13 @@ class TaskInterface:
 public:
 
 /** 
+ * Size of task
+ * 
+ * @return Number of taskpoints in task
+ */
+  virtual unsigned task_size() const = 0;
+
+/** 
  * Set index in sequence of active task point.  Concrete classes providing
  * this method should ensure the index is valid.
  * 

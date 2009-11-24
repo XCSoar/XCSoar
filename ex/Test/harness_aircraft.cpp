@@ -27,11 +27,18 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   speed_factor(1.0),
   climb_rate(2.0)
 {
-  for (unsigned i=0; i<task_manager.get_task_size(); i++) {
-    if (i==0) {
-      w.push_back(task_manager.random_point_in_task(i, 1.0));
-    } else {
-      w.push_back(task_manager.random_point_in_task(i, random_mag));
+  if (task_manager.task_size()==1) {
+    // cheat for non-ordered tasks
+    w.push_back(GEOPOINT(-0.5,-0.5));
+    w.push_back(task_manager.random_point_in_task(0, random_mag));
+
+  } else {
+    for (unsigned i=0; i<task_manager.task_size(); i++) {
+      if (i==0) {
+        w.push_back(task_manager.random_point_in_task(i, 1.0));
+      } else {
+        w.push_back(task_manager.random_point_in_task(i, random_mag));
+      }
     }
   }
   
@@ -66,6 +73,11 @@ bool AircraftSim::far(TaskManager &task_manager) {
 
   AbstractTaskFactory *fact = task_manager.get_factory();
   bool entered = fact->has_entered(awp);
+
+  if (task_manager.task_size()==1) {
+    // cheat for non-ordered tasks
+    entered = true;
+  }
 
   if (goto_target && (awp>0)) {
     const ElementStat stat = task_manager.get_stats().current_leg;

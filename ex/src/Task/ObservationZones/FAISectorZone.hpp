@@ -48,6 +48,13 @@ class FAISectorZone:
   public SymmetricSectorZone 
 {
 public:  
+  /** 
+   * Constructor
+   * 
+   * @param loc Tip point of sector
+   * 
+   * @return Initialised object
+   */
   FAISectorZone(const GEOPOINT loc):
     SymmetricSectorZone(loc,10000.0,90.0)
     {}

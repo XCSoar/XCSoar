@@ -112,7 +112,7 @@ bool test_task_manip(TaskManager& task_manager,
   }
 
   task_report(task_manager, "# removing finish point\n");
-  if (!fact->remove(task_manager.get_task_size()-1)) {
+  if (!fact->remove(task_manager.task_size()-1)) {
     return false;
   }
 

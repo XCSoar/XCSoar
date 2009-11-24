@@ -11,6 +11,14 @@
  */
 class GeoEllipse {
 public:
+/** 
+ * Constructor
+ * 
+ * @param f1 Focus 1
+ * @param f2 Focus 2
+ * @param p Point on ellipse
+ * @param _task_projection Task projection used for internal representation
+ */
   GeoEllipse(const GEOPOINT &f1, const GEOPOINT &f2,
              const GEOPOINT &p,
              const TaskProjection &_task_projection): 

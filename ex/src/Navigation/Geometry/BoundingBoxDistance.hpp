@@ -3,29 +3,62 @@
 
 /**
  * Class used for 2-d integer bounding box distance calculations by kd-tree
+ * \todo better documentation for BBDist hack
  */
 class BBDist {
 public:
+/** 
+ * Constructor
+ * 
+ * @param _dim Dimension index
+ * @param _val Value of distance
+ */
   BBDist(const size_t _dim, const int _val)
     {
       set_vals(-1);
       val[_dim%2] = _val;
       calc_d();
     }
+/** 
+ * Constructor for set distance
+ * 
+ * @param _val Set distance (typically 0)
+ */
   BBDist(const double _val) {
     set_vals(-1);
     d = (int)_val;
   }
+
+/** 
+ * Constructor for set distance
+ * 
+ * @param _val Set distance (typically 0)
+ */
   BBDist(const int _val) {
     set_vals(-1);
     d = _val;
   }
+
+/** 
+ * Add distance measure
+ * 
+ * @param rhs BBDist to add
+ * 
+ * @return Updated distance
+ */
   BBDist& operator+=(const BBDist &rhs) {
     set_max(0, rhs);
     set_max(1, rhs);
     calc_d();
     return *this;
   }
+/** 
+ * Return accumulated distance.
+ * Typically this expects all dimensions to be added
+ * before calculating the distance.
+ * 
+ * @return Absolute value (accumulated) distance
+ */
   operator double () const {
     return d;
   }

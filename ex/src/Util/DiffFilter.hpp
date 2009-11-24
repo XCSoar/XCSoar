@@ -8,7 +8,11 @@
 class DiffFilter 
 {
 public:
-
+/** 
+ * Constructor.  Initialises as if fed x_default continuously.
+ * 
+ * @param x_default Default value of input
+ */
   DiffFilter(double x_default=0.0) {
     reset(x_default,0);
   }

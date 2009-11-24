@@ -30,20 +30,20 @@ public:
     {
     };
 
-  double TimeStarted;
-  double TimeElapsed;
-  double TimeRemaining;
-  double TimePlanned;
-  double gradient;
+  double TimeStarted; /**< Time (s) this element was started */
+  double TimeElapsed; /**< Time (s) since element was started */
+  double TimeRemaining; /**< Time (s) to element completion */
+  double TimePlanned; /**< Time (s) of overall element */
+  double gradient; /**< Gradient to element completion */
 
-  DistanceRemainingStat remaining_effective;
-  DistanceRemainingStat remaining;
-  DistancePlannedStat planned;
-  DistanceTravelledStat travelled;
+  DistanceRemainingStat remaining_effective; /**< Stats for effective remaining distance of element */
+  DistanceRemainingStat remaining; /**< Stats for actual remaining distance of element */
+  DistancePlannedStat planned; /**< Stats for overall element distance */
+  DistanceTravelledStat travelled; /**< Stats for travelled distance in this element */
 
-  GlideResult solution_planned;
-  GlideResult solution_travelled;
-  GlideResult solution_remaining;
+  GlideResult solution_planned; /**< Glide solution for planned element */
+  GlideResult solution_travelled; /**< Glide solution for travelled element */
+  GlideResult solution_remaining; /**< Glide solution for remaining element */
 
 /** 
  * Calculate element times
