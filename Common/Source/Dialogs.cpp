@@ -99,8 +99,10 @@ void ActionInterface::StopHourglassCursor(void) {
  * Closes the ProgressWindow
  */
 void XCSoarInterface::CloseProgressDialog() {
-  if (progress_window != NULL)
+  if (progress_window != NULL) {
     delete progress_window;
+    progress_window = NULL;
+  }
 }
 
 /**
