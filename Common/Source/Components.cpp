@@ -307,7 +307,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   Profile::LoadWindFromRegistry();
 
   // TODO TB: seems to be out of date?!
-  LoadPolarById(POLARID);
+  LoadPolarById(POLARID, polar);
 
   // Calculate polar-related data and saves it to the cache
   StartupStore(TEXT("GlidePolar::UpdatePolar\n"));

@@ -29,8 +29,6 @@
 
 #define REGKEYSIZE 64
 
-#define POLARSIZE 3
-
 #define FLARM_MAX_TRAFFIC 15
 #define MAXSATELLITES 12
 

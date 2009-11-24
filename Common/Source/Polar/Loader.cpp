@@ -45,28 +45,28 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 
 static bool
-LoadPolarById2(unsigned id)
+LoadPolarById2(unsigned id, Polar &polar)
 {
   if (id < POLARUSEWINPILOTFILE)
     // polar data from historical table
-    return LoadHistoricalPolar(id);
+    return LoadHistoricalPolar(id, polar);
   else if (id == POLARUSEWINPILOTFILE)
     // polar data from winpilot file
-    return ReadWinPilotPolar();
+    return ReadWinPilotPolar(polar);
   else
     // polar data from built-in table
-    return ReadWinPilotPolarInternal(id - POLARUSEWINPILOTFILE - 1);
+    return ReadWinPilotPolarInternal(id - POLARUSEWINPILOTFILE - 1, polar);
 }
 
 bool
-LoadPolarById(unsigned id)
+LoadPolarById(unsigned id, Polar &polar)
 {
   StartupStore(_T("Load polar\n"));
-  if (LoadPolarById2(id))
+  if (LoadPolarById2(id, polar))
     return true;
 
   MessageBoxX(gettext(_T("Error loading Polar file!\r\nUse LS8 Polar.")),
               gettext(_T("Warning")),
               MB_OK|MB_ICONERROR);
-  return LoadHistoricalPolar(2);
+  return LoadHistoricalPolar(2, polar);
 }

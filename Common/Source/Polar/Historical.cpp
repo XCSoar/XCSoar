@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Polar/Historical.hpp"
-#include "McReady.h"
+#include "Polar/Polar.hpp"
 
 #include <assert.h>
 
@@ -55,7 +55,7 @@ const TCHAR *PolarLabels[] = {
 };
 
 bool
-LoadHistoricalPolar(unsigned id)
+LoadHistoricalPolar(unsigned id, Polar &polar)
 {
   static PolarCoefficients_t Polars[7] =
     {
@@ -99,11 +99,11 @@ LoadHistoricalPolar(unsigned id)
   assert(id < sizeof(Polars) / sizeof(Polars[0]));
 
   for (i = 0; i < 3; i++) {
-    POLAR[i] = Polars[id][i];
-    WEIGHTS[i] = Weights[id][i];
+    polar.POLAR[i] = Polars[id][i];
+    polar.WEIGHTS[i] = Weights[id][i];
   }
 
-  GlidePolar::WingArea = WingAreas[id];
+  polar.WingArea = WingAreas[id];
 
   return true;
 }

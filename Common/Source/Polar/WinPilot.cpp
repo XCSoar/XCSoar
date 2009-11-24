@@ -37,10 +37,11 @@ Copyright_License {
 */
 
 #include "Polar/WinPilot.hpp"
-#include "McReady.h"
+#include "Polar/Polar.hpp"
 #include "UtilsText.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
+#include "Sizes.h"
 
 #include <math.h>
 
@@ -50,7 +51,10 @@ Copyright_License {
  * @param POLARW Sinkrate1, Sinkrate2 and Sinkrate3
  * @param ww dry mass, maximum takeoff weight
  */
-void PolarWinPilot2XCSoar(double POLARV[3], double POLARW[3], double ww[2]) {
+void
+PolarWinPilot2XCSoar(class Polar &polar,
+                     double POLARV[3], double POLARW[3], double ww[2])
+{
   double d;
   double v1,v2,v3;
   double w1,w2,w3;
@@ -63,32 +67,27 @@ void PolarWinPilot2XCSoar(double POLARV[3], double POLARW[3], double ww[2]) {
 
   d = v1*v1*(v2-v3)+v2*v2*(v3-v1)+v3*v3*(v1-v2);
   if (d == 0.0)
-    {
-      POLAR[0]=0;
-    }
+    polar.POLAR[0] = 0;
   else
-    {
-      POLAR[0]=((v2-v3)*(w1-w3)+(v3-v1)*(w2-w3))/d;
-    }
+    polar.POLAR[0] = ((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
+
   d = v2-v3;
   if (d == 0.0)
-    {
-      POLAR[1]=0;
-    }
+    polar.POLAR[1] = 0;
   else
-    {
-      POLAR[1] = (w2-w3-POLAR[0]*(v2*v2-v3*v3))/d;
-    }
+    polar.POLAR[1] = (w2 - w3 - polar.POLAR[0] * (v2 * v2 - v3 * v3)) / d;
 
-  WEIGHTS[0] = 70; // Pilot weight
-  WEIGHTS[1] = ww[0] - WEIGHTS[0]; // Glider empty weight
-  WEIGHTS[2] = ww[1]; // Ballast weight
+  polar.WEIGHTS[0] = 70; // Pilot weight
+  polar.WEIGHTS[1] = ww[0] - polar.WEIGHTS[0]; // Glider empty weight
+  polar.WEIGHTS[2] = ww[1]; // Ballast weight
 
-  POLAR[2] = (double)(w3 - POLAR[0] *v3*v3 - POLAR[1]*v3);
+  polar.POLAR[2] = w3 - polar.POLAR[0] * v3 * v3 - polar.POLAR[1] * v3;
 
   // now scale off weight
-  POLAR[0] = POLAR[0] * (double)sqrt(WEIGHTS[0] + WEIGHTS[1]);
-  POLAR[2] = POLAR[2] / (double)sqrt(WEIGHTS[0] + WEIGHTS[1]);
+  polar.POLAR[0] = polar.POLAR[0] * sqrt(polar.WEIGHTS[0] + polar.WEIGHTS[1]);
+  polar.POLAR[2] = polar.POLAR[2] / sqrt(polar.WEIGHTS[0] + polar.WEIGHTS[1]);
+
+  polar.WingArea = 0.0;
 }
 
 // Example:
@@ -98,7 +97,9 @@ void PolarWinPilot2XCSoar(double POLARV[3], double POLARW[3], double ww[2]) {
  * Reads the WinPilor polar file specified in the registry
  * @return True if parsing was successful, False otherwise
  */
-bool ReadWinPilotPolar(void) {
+bool
+ReadWinPilotPolar(Polar &polar)
+{
   TCHAR szFile[MAX_PATH] = TEXT("\0");
   TCHAR ctemp[80];
   TCHAR TempString[READLINE_LENGTH+1];
@@ -164,8 +165,7 @@ bool ReadWinPilotPolar(void) {
               PExtractParameter(TempString, ctemp, 7);
               POLARW[2] = _tcstod(ctemp, NULL);
 
-              PolarWinPilot2XCSoar(POLARV, POLARW, ww);
-	      GlidePolar::WingArea = 0.0;
+              PolarWinPilot2XCSoar(polar, POLARV, POLARW, ww);
 
               foundline = true;
             }

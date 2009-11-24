@@ -158,7 +158,7 @@ void SettingsLeave() {
   }
 
   if (POLARFILECHANGED) {
-    LoadPolarById(POLARID);
+    LoadPolarById(POLARID, polar);
     GlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
   }
 

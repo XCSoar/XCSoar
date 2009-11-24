@@ -336,6 +336,7 @@ OBJS	:=\
 	$(SRC)/Screen/shapelib/maptree.o 	\
 	$(SRC)/Screen/shapelib/mapxbase.o 	\
 	\
+	$(SRC)/Polar/Polar.o \
 	$(SRC)/Polar/Loader.o \
 	$(SRC)/Polar/WinPilot.o 	\
 	$(SRC)/Polar/BuiltIn.o 		\

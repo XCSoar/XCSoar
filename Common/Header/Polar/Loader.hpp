@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_LOADER_HPP
 #define XCSOAR_POLAR_LOADER_HPP
 
+class Polar;
+
 enum {
   /** if this polar is selected use the winpilot file */
   POLARUSEWINPILOTFILE = 6,
@@ -48,6 +50,6 @@ enum {
 };
 
 bool
-LoadPolarById(unsigned id);
+LoadPolarById(unsigned id, Polar &polar);
 
 #endif

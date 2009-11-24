@@ -41,8 +41,11 @@ Copyright_License {
 
 #include <tchar.h>
 
+class Polar;
+
 const TCHAR *GetWinPilotPolarInternalName(unsigned i);
 
-bool ReadWinPilotPolarInternal(unsigned i);
+bool
+ReadWinPilotPolarInternal(unsigned i, Polar &polar);
 
 #endif

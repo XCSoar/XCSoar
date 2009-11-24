@@ -44,11 +44,10 @@ Copyright_License {
 #include "Sizes.h"
 
 struct SETTINGS_COMPUTER;
+class Polar;
 
 extern unsigned POLARID;
-extern double POLAR[POLARSIZE];
-extern double WEIGHTS[POLARSIZE];
-
+extern Polar polar;
 
 class GlidePolar {
  public:
@@ -82,7 +81,6 @@ class GlidePolar {
   static int    Vbestld;
   static double bestld;
   static double minsink;
-  static double WingArea;
   static double WingLoading;
 
   static double sinkratecache[MAXSAFETYSPEED];

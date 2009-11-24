@@ -36,16 +36,4 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_POLAR_HISTORICAL_HPP
-#define XCSOAR_POLAR_HISTORICAL_HPP
-
-#include <tchar.h>
-
-class Polar;
-
-extern const TCHAR *PolarLabels[];
-
-bool
-LoadHistoricalPolar(unsigned id, Polar &polar);
-
-#endif
+#include "Polar/Polar.hpp"

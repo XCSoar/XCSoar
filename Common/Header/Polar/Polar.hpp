@@ -36,16 +36,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_POLAR_HISTORICAL_HPP
-#define XCSOAR_POLAR_HISTORICAL_HPP
+#ifndef XCSOAR_POLAR_POLAR_HPP
+#define XCSOAR_POLAR_POLAR_HPP
 
-#include <tchar.h>
+/**
+ * This class describes the performance of a glider.
+ */
+class Polar {
+public:
+  enum {
+    POLARSIZE = 3,
+  };
 
-class Polar;
+public:
+  double POLAR[POLARSIZE];
+  double WEIGHTS[POLARSIZE];
 
-extern const TCHAR *PolarLabels[];
-
-bool
-LoadHistoricalPolar(unsigned id, Polar &polar);
+  double WingArea;
+};
 
 #endif

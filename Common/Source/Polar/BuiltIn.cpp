@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Polar/BuiltIn.hpp"
 #include "Polar/WinPilot.hpp"
-#include "McReady.h"
 
 #include <windef.h>
 
@@ -183,7 +182,9 @@ const TCHAR* GetWinPilotPolarInternalName(unsigned i)
  * the converter
  * @param i Array id of the polar
  */
-bool ReadWinPilotPolarInternal(unsigned i) {
+bool
+ReadWinPilotPolarInternal(unsigned i, Polar &polar)
+{
   double POLARV[3];
   double POLARW[3];
   double ww[2];
@@ -199,8 +200,7 @@ bool ReadWinPilotPolarInternal(unsigned i) {
   POLARW[0] = WinPilotPolars[i].w0;
   POLARW[1] = WinPilotPolars[i].w1;
   POLARW[2] = WinPilotPolars[i].w2;
-  PolarWinPilot2XCSoar(POLARV, POLARW, ww);
-  GlidePolar::WingArea = WinPilotPolars[i].wing_area;
+  PolarWinPilot2XCSoar(polar, POLARV, POLARW, ww);
 
   return(TRUE);
 }
