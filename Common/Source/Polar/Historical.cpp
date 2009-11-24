@@ -48,18 +48,20 @@ Copyright_License {
 typedef double PolarCoefficients_t[3];
 typedef double WeightCoefficients_t[3];
 
-const TCHAR *PolarLabels[] = {TEXT("Vintage - Ka6"),
-			      TEXT("Club - ASW19"),
-			      TEXT("Standard - LS8"),
-			      TEXT("15M - ASW27"),
-			      TEXT("18M - LS6C"),
-			      TEXT("Open - ASW22"),
-			      TEXT("WinPilot File")};
+const TCHAR *PolarLabels[] = {
+  _T("Vintage - Ka6"),
+  _T("Club - ASW19"),
+  _T("Standard - LS8"),
+  _T("15M - ASW27"),
+  _T("18M - LS6C"),
+  _T("Open - ASW22"),
+  _T("WinPilot File"),
+};
 
 void CalculateNewPolarCoef(void)
 {
 
-  StartupStore(TEXT("Calculate New Polar Coef\n"));
+  StartupStore(_T("Calculate New Polar Coef\n"));
 
   static PolarCoefficients_t Polars[7] =
     {
@@ -126,8 +128,8 @@ void CalculateNewPolarCoef(void)
   POLARID = 2;              // do it again with default polar (LS8)
 
   CalculateNewPolarCoef();
-  MessageBoxX(gettext(TEXT("Error loading Polar file!\r\nUse LS8 Polar.")),
-              gettext(TEXT("Warning")),
+  MessageBoxX(gettext(_T("Error loading Polar file!\r\nUse LS8 Polar.")),
+              gettext(_T("Warning")),
               MB_OK|MB_ICONERROR);
 
 }
