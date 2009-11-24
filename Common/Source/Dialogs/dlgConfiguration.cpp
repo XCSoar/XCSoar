@@ -64,6 +64,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Polar/BuiltIn.hpp"
 #include "Polar/Historical.hpp"
+#include "Polar/Loader.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/FileReader.hpp"

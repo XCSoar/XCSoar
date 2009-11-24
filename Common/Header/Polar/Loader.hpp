@@ -36,14 +36,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_POLAR_HISTORICAL_HPP
-#define XCSOAR_POLAR_HISTORICAL_HPP
+#ifndef XCSOAR_POLAR_LOADER_HPP
+#define XCSOAR_POLAR_LOADER_HPP
 
-#include <tchar.h>
+enum {
+  /** if this polar is selected use the winpilot file */
+  POLARUSEWINPILOTFILE = 6,
 
-extern const TCHAR *PolarLabels[];
+  /** number of in-built polars */
+  NUMPOLARS = 7,
+};
 
 bool
-LoadHistoricalPolar(unsigned id);
+LoadPolarById(unsigned id);
 
 #endif

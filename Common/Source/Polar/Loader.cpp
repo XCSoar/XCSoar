@@ -36,14 +36,37 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_POLAR_HISTORICAL_HPP
-#define XCSOAR_POLAR_HISTORICAL_HPP
+#include "Polar/Loader.hpp"
+#include "Polar/Historical.hpp"
+#include "Polar/WinPilot.hpp"
+#include "Polar/BuiltIn.hpp"
+#include "LogFile.hpp"
+#include "Language.hpp"
+#include "Dialogs/Message.hpp"
 
-#include <tchar.h>
-
-extern const TCHAR *PolarLabels[];
+static bool
+LoadPolarById2(unsigned id)
+{
+  if (id < POLARUSEWINPILOTFILE)
+    // polar data from historical table
+    return LoadHistoricalPolar(id);
+  else if (id == POLARUSEWINPILOTFILE)
+    // polar data from winpilot file
+    return ReadWinPilotPolar();
+  else
+    // polar data from built-in table
+    return ReadWinPilotPolarInternal(id - POLARUSEWINPILOTFILE - 1);
+}
 
 bool
-LoadHistoricalPolar(unsigned id);
+LoadPolarById(unsigned id)
+{
+  StartupStore(_T("Load polar\n"));
+  if (LoadPolarById2(id))
+    return true;
 
-#endif
+  MessageBoxX(gettext(_T("Error loading Polar file!\r\nUse LS8 Polar.")),
+              gettext(_T("Warning")),
+              MB_OK|MB_ICONERROR);
+  return LoadHistoricalPolar(2);
+}

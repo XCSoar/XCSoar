@@ -75,7 +75,7 @@ Copyright_License {
 #include "Audio/VarioSound.h"
 #include "Screen/Graphics.hpp"
 #include "Calculations.h"
-#include "Polar/Historical.hpp"
+#include "Polar/Loader.hpp"
 #include "Persist.hpp"
 #include "Device/Parser.h"
 #include "MainWindow.hpp"
@@ -307,7 +307,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   Profile::LoadWindFromRegistry();
 
   // TODO TB: seems to be out of date?!
-  CalculateNewPolarCoef();
+  LoadPolarById(POLARID);
 
   // Calculate polar-related data and saves it to the cache
   StartupStore(TEXT("GlidePolar::UpdatePolar\n"));

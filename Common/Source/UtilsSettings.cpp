@@ -50,7 +50,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Device/device.h"
 #include "Message.h"
-#include "Polar/Historical.hpp"
+#include "Polar/Loader.hpp"
 #include "TopologyStore.h"
 #include "Components.hpp"
 #include "Interface.hpp"
@@ -158,7 +158,7 @@ void SettingsLeave() {
   }
 
   if (POLARFILECHANGED) {
-    CalculateNewPolarCoef();
+    LoadPolarById(POLARID);
     GlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
   }
 
