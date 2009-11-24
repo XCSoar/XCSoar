@@ -17,6 +17,10 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  test_flight(2,0,1.0,true);
+  plan_tests(1);
+
+  ok(test_flight(2,0,1.0,true),"basic flight test",0);
+
+  return exit_status();
 }
 

@@ -111,6 +111,34 @@ bool test_task_manip(TaskManager& task_manager,
     if (!fact->insert(tp,3)) return false;
   }
 
+  task_report(task_manager, "# auto-replacing at 2 (no morph)\n");
+  wp = waypoints.lookup_id(9);
+  if (wp) {
+    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
+    if (!fact->replace(tp,2)) return false;
+  }
+
+  task_report(task_manager, "# auto-replacing at 2 (morph)\n");
+  wp = waypoints.lookup_id(9);
+  if (wp) {
+    tp = fact->createStart(*wp);
+    if (!fact->replace(tp,2)) return false;
+  }
+
+  task_report(task_manager, "# auto-replacing at 0 (morph this)\n");
+  wp = waypoints.lookup_id(12);
+  if (wp) {
+    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
+    if (!fact->replace(tp,0)) return false;
+  }
+
+  task_report(task_manager, "# auto-replacing at end (morph this)\n");
+  wp = waypoints.lookup_id(14);
+  if (wp) {
+    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
+    if (!fact->replace(tp,task_manager.task_size()-1)) return false;
+  }
+
   task_report(task_manager, "# removing finish point\n");
   if (!fact->remove(task_manager.task_size()-1)) {
     return false;
@@ -121,6 +149,27 @@ bool test_task_manip(TaskManager& task_manager,
   if (wp) {
     tp = fact->createFinish(*wp);
     if (!fact->insert(tp,50)) return false;
+  }
+
+  task_report(task_manager, "# inserting at 0 (morph this)\n");
+  wp = waypoints.lookup_id(3);
+  if (wp) {
+    tp = fact->createFinish(*wp);
+    if (!fact->insert(tp,0)) return false;
+  }
+
+  task_report(task_manager, "# inserting at 2 (morph this)\n");
+  wp = waypoints.lookup_id(4);
+  if (wp) {
+    tp = fact->createStart(*wp);
+    if (!fact->insert(tp,2)) return false;
+  }
+
+  task_report(task_manager, "# inserting at 2 (direct)\n");
+  wp = waypoints.lookup_id(6);
+  if (wp) {
+    tp = fact->createIntermediate(*wp);
+    if (!fact->insert(tp,2,false)) return false;
   }
 
   task_report(task_manager, "# checking task\n");
@@ -591,7 +640,7 @@ const char* task_name(int test_num)
 bool test_task_bad(TaskManager& task_manager,
                    const Waypoints& waypoints)
 {
-  test_task_random(task_manager,waypoints,5);
+  test_task_random(task_manager,waypoints,2);
 
   task_manager.set_factory(TaskManager::FACTORY_FAI);
   AbstractTaskFactory* fact = task_manager.get_factory();
@@ -614,8 +663,13 @@ bool test_task_bad(TaskManager& task_manager,
 
   ok (!fact->createIntermediate(s,*wp),"bad intermediate type (after task change)",0);
 
-  ok (fact->remove(task_manager.task_size()-1,false),"remove finish manually",0);
+  fact->remove(1);
+  ok (fact->validate(),"ok with one tp",0);
 
+  fact->remove(1);
+  ok (!fact->validate(),"insufficient tps for aat",0);
+
+  ok (fact->remove(task_manager.task_size()-1,false),"remove finish manually",0);
   ok (!fact->validate(),"aat is invalid (no finish)",0);
 
   return true;

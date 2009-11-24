@@ -371,7 +371,9 @@ OrderedTask::insert(OrderedTaskPoint* new_tp,
   } else {
     return append(new_tp);
   }
-  set_neighbours(position-1);
+  if (position) {
+    set_neighbours(position-1);
+  }
   set_neighbours(position);
   set_neighbours(position+1);
   

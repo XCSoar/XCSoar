@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 
   #define NUM_RANDOM 50
 
-  plan_tests(NUM_TASKS+2+NUM_RANDOM+6);
+  plan_tests(NUM_TASKS+2+NUM_RANDOM+8);
 
   TaskBehaviour task_behaviour;
   TaskEvents default_events;

@@ -200,7 +200,7 @@ AbstractTaskFactory::replace(OrderedTaskPoint *new_tp, const unsigned position,
 
       } else {
 
-        // this point must be mutated into a finish
+        // this point must be mutated into an intermediate
         IntermediatePoint* sp = createIntermediate(new_tp->get_waypoint());
         // delete original since we own it now
         delete new_tp;

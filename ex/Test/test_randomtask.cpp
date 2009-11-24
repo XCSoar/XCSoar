@@ -15,7 +15,7 @@ int main(int argc, char** argv)
     return 0;
   }
 
-#define NUM_TESTS 50
+#define NUM_TESTS 10
 
   plan_tests(NUM_TESTS);
 
