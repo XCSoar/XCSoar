@@ -35,21 +35,12 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "MapWindow.h"
-#include "XCSoar.h"
-#include "SettingsComputer.hpp"
-#include "WayPoint.hpp"
-#include "InfoBoxLayout.h"
-#include "SettingsUser.hpp"
-#include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"
-#include "McReady.h"
-#include "Compatibility/gdi.h"
 #include "WayPointList.hpp"
 
 #include <assert.h>
-
-
 
 //FIX
 void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,

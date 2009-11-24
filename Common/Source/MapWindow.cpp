@@ -37,18 +37,8 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "Interface.hpp"
-#include "LogFile.hpp"
-#include "UtilsSystem.hpp"
-#include "Math/FastMath.h"
-#include "Dialogs.h"
-#include "Audio/VarioSound.h"
-#include "InputEvents.h"
 #include "Screen/Graphics.hpp"
-#include "Screen/LabelBlock.hpp"
-#include "Compatibility/gdi.h"
 #include "TopologyStore.h"
-#include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
 #include "TerrainRenderer.h"
 #include "RasterWeather.h"
@@ -56,18 +46,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "SnailTrail.hpp"
 
-#ifdef PNA
-#include "Asset.hpp"
-#endif
-
-#include <assert.h>
-#include <windows.h>
-#include <math.h>
 #include <tchar.h>
-
-#ifdef WINDOWSPC
-#include <wingdi.h>
-#endif
 
 // Initialization
 

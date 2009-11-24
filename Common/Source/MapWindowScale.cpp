@@ -37,12 +37,8 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "SettingsComputer.hpp"
-#include "SettingsUser.hpp"
-#include "SettingsTask.hpp"
 #include "Appearance.hpp"
 #include "InfoBoxLayout.h"
-#include "Math/FastMath.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/UnitSymbol.hpp"

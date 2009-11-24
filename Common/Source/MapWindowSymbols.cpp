@@ -37,22 +37,17 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "XCSoar.h"
-#include "Protection.hpp"
 #include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Math/Screen.hpp"
-#include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Constants.h"
 #include "Logger.h"
 #include "Language.hpp"
 #include "McReady.h"
-#include "SettingsTask.hpp"
-#include "SettingsUser.hpp"
-#include "SettingsComputer.hpp"
+#include "Task.h"
 #include "Appearance.hpp"
 #include "options.h" /* for IBLSCALE() */
 

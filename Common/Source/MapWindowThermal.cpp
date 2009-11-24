@@ -37,18 +37,12 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "SettingsUser.hpp"
-#include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
-#include "XCSoar.h"
+#include "Task.h"
 #include "InfoBoxLayout.h"
-#include "Math/FastMath.h"
-#include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include "McReady.h"
 #include "Screen/Graphics.hpp"
 #include "options.h" /* for IBLSCALE() */
-
 
 void MapWindow::CalculateScreenPositionsThermalSources() {
   for (int i=0; i<MAX_THERMAL_SOURCES; i++) {

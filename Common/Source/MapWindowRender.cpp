@@ -36,19 +36,16 @@ Copyright_License {
 }
 */
 #include "MapWindow.h"
-#include "SettingsUser.hpp"
-#include "SettingsTask.hpp"
-#include "SettingsComputer.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/LabelBlock.hpp"
 #include "Marks.h"
 #include "TerrainRenderer.h"
 #include "RasterTerrain.h"
 #include "Task.h"
 #include "TopologyStore.h"
 #include "RasterWeather.h"
-#include "GlideComputer.hpp"
+#include "SnailTrail.hpp"
+#include "OnLineContest.h"
 
 /**
  * Calculates the screen positions of all important features

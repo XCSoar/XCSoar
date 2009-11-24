@@ -35,27 +35,20 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "MapWindow.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Task.h"
-#include "SettingsTask.hpp"
-#include "WayPoint.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/LabelBlock.hpp"
 #include "InfoBoxLayout.h"
-#include "AATDistance.h"
-#include "Math/FastMath.h"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
-#include "Compatibility/gdi.h"
 #include "options.h" /* for IBLSCALE() */
 #include "WayPointList.hpp"
+#include "TaskVisitor.hpp"
 
 #include <math.h>
-
-#include "TaskVisitor.hpp"
 
 class DrawAbortedTaskVisitor:
   public AbsoluteTaskPointVisitor

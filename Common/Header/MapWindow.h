@@ -49,7 +49,7 @@ Copyright_License {
 #include "MapWindowBlackboard.hpp"
 #include "PeriodClock.hpp"
 #include "DrawThread.hpp"
-#include "Task.h"
+#include "TaskImpl.hpp"
 
 typedef struct _THERMAL_SOURCE_VIEW
 {

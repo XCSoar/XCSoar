@@ -37,12 +37,7 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "Airspace.h"
-#include "XCSoar.h"
-#include "Math/FastMath.h"
-#include "SettingsUser.hpp"
 #include "Screen/Graphics.hpp"
-#include "Compatibility/gdi.h"
 
 void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
   circ.Visible = false;

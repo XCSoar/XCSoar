@@ -37,12 +37,10 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "XCSoar.h"
-#include "SettingsTask.hpp"
-#include "SettingsUser.hpp"
-#include "SettingsComputer.hpp"
+#include "Task.h"
 #include "Screen/Graphics.hpp"
-#include "Compatibility/gdi.h"
+#include "McReady.h"
+#include "Screen/Fonts.hpp"
 #include "options.h" /* for IBLSCALE() */
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
@@ -107,11 +105,6 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
     }
   }
 }
-
-
-#include "McReady.h"
-#include "InfoBoxLayout.h"
-#include "Screen/Fonts.hpp"
 
 /*
  * The VisualGlide by Paolo Ventafridda

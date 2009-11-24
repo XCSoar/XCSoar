@@ -38,28 +38,22 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "UtilsSystem.hpp"
-#include "SettingsUser.hpp"
-#include "SettingsTask.hpp"
-#include "SettingsComputer.hpp"
 #include "Appearance.hpp"
 #include "Protection.hpp"
 #include "InputEvents.h"
-#include "Language.hpp"
 #include "Message.h"
 #include "Task.h"
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
 #include "Screen/Graphics.hpp"
-#include "XCSoar.h"
+#include "Defines.h"
 #include "options.h"
 #include "McReady.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
-
 #include "DeviceBlackboard.hpp"
-#include <stdlib.h>
 
 #ifndef _MSC_VER
 #include <algorithm>
