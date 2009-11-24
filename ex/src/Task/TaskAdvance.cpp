@@ -28,14 +28,8 @@ TaskAdvance::ready_to_advance(const TaskPoint &tp,
     }
   }
   if (const AATPoint* ap = dynamic_cast<const AATPoint*>(&tp)) {
-    /**
-     * \todo
-     * consider advancing only if close to target
-     *  (will then work with auto-advance)
-     */
-    // return ap->isInSector(state);
-    (void)ap;
-    return x_exit;
+    // advances if inside and has attained target range
+    return ap->isInSector(state) && ap->close_to_target(state);
   }
   if (const IntermediatePoint* ip = 
       dynamic_cast<const IntermediatePoint*>(&tp)) {

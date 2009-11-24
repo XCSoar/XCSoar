@@ -19,6 +19,8 @@ int main(int argc, char** argv)
 
   for (int i=0; i<NUM_WIND; i++) {
     ok (test_aat(2,i), test_name("target ",2,i),0);
+  }
+  for (int i=0; i<NUM_WIND; i++) {
     ok (test_aat(0,i), test_name("target ",0,i),0);
   }
   return exit_status();

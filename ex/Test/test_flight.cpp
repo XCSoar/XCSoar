@@ -17,8 +17,8 @@ int main(int argc, char** argv)
 
   plan_tests(NUM_TASKS*NUM_WIND);
 
-  for (int i=0; i<NUM_WIND; i++) {
-    for (int j=0; j<NUM_TASKS; j++) {
+  for (int j=0; j<NUM_TASKS; j++) {
+    for (int i=0; i<NUM_WIND; i++) {
       ok (test_flight_times(j,i), test_name("flight times",j,i),0);
     }
   }

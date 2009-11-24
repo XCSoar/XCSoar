@@ -58,6 +58,8 @@ public:
 
 private:
 
+  std::vector<unsigned> sp_sizes;
+
   unsigned distance_general(DijkstraTaskPoint &dijkstra);
 
   void add_edges(DijkstraTaskPoint &dijkstra,

@@ -145,7 +145,7 @@ Airspaces::optimise()
 void 
 Airspaces::insert(AbstractAirspace* asp)
 {
-  if (tmp_as.empty() && !airspace_tree.size()) {
+  if (tmp_as.empty() && airspace_tree.empty()) {
     task_projection.reset(asp->get_center());
   }
   task_projection.scan_location(asp->get_center());

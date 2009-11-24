@@ -176,6 +176,15 @@ public:
  */
   Factory_t set_factory(const Factory_t _factory);
 
+/** 
+ * Accessor for task advance system
+ * 
+ * @return Task advance mechanism
+ */
+  TaskAdvance& get_task_advance() {
+    return task_advance;
+  }
+
 private:
   const TaskStats null_stats;
 

@@ -16,8 +16,7 @@ int main(int argc, char** argv) {
   if (!parse_args(argc,argv)) {
     return 0;
   }
-//  test_bestcruisetrack(2,6);
-  test_aat(0,9);
+  test_aat(0,4);
 
 //  test_flight(5,0,1.0,true);
 }

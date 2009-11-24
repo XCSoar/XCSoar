@@ -65,15 +65,20 @@ AATPoint::check_target(const AIRCRAFT_STATE& state)
   return moved;
 }
 
+bool 
+AATPoint::close_to_target(const AIRCRAFT_STATE& state, const double threshold) const
+{
+  return (double_leg_distance(TargetLocation)-double_leg_distance(state.Location)
+          <= threshold);
+}
+
 bool
 AATPoint::check_target_inside(const AIRCRAFT_STATE& state) 
 {
   // target must be moved if d(p_last,t)+d(t,p_next) 
   //    < d(p_last,state)+d(state,p_next)
 
-  if (double_leg_distance(TargetLocation) 
-      < double_leg_distance(state.Location)) 
-  {
+  if (close_to_target(state)) {
     const double d_to_max = state.Location.distance(getMaxLocation());
     if (d_to_max<=0.0) {
       // no improvement available

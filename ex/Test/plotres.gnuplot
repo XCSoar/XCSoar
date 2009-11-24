@@ -1,4 +1,5 @@
 set size ratio -1
+set key outside right
 
 set style line 1 lt 2 lc rgb "black" lw 2
 set style line 2 lt 4 lc rgb "purple" lw 1

@@ -192,6 +192,10 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.lookup_id(5);
   if (wp) {
     tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
+    if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
+      cz->setRadius(30000.0);
+      tp->update_oz();
+    }
     if (!fact->append(tp,false)) return false;
   }
 
@@ -289,7 +293,12 @@ bool test_task_aat(TaskManager& task_manager,
   task_report(task_manager, "# adding intermediate\n");
   wp = waypoints.lookup_id(2);
   if (wp) {
-    if (!fact->append(fact->createIntermediate(*wp),false)) {
+    OrderedTaskPoint* tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
+    if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
+      cz->setRadius(30000.0);
+      tp->update_oz();
+    }
+    if (!fact->append(tp,false)) {
       return false;
     }
   }
@@ -299,7 +308,7 @@ bool test_task_aat(TaskManager& task_manager,
   if (wp) {
     OrderedTaskPoint* tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-      cz->setRadius(30000.0);
+      cz->setRadius(40000.0);
       tp->update_oz();
     }
     if (!fact->append(tp,false)) {

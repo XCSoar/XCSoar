@@ -158,16 +158,16 @@ TESTOBJS = Test/test_debug.o \
 	Test/tap.o
 
 TESTS = \
+	Test/test_mc.exe \
 	Test/test_waypoints.exe \
 	Test/test_task.exe \
 	Test/test_automc.exe \
 	Test/test_flight.exe \
 	Test/test_aat.exe \
+	Test/test_vopt.exe \
 	Test/test_cruiseefficiency.exe \
 	Test/test_bestcruisetrack.exe \
-	Test/test_vopt.exe \
-	Test/test_trees.exe \
-	Test/test_mc.exe 
+	Test/test_trees.exe
 
 TARGETS = $(TESTS) Test/test.exe
 

@@ -28,7 +28,12 @@ TaskDijkstra::TaskDijkstra(OrderedTask* _task, const unsigned task_size):
   num_taskpoints(task_size)
 {
   solution.reserve(num_taskpoints);
+  sp_sizes.reserve(num_taskpoints);
   activeStage = task->getActiveTaskPointIndex();
+
+  for (unsigned stage=0; stage<num_taskpoints; stage++) {
+    sp_sizes[stage]= task->get_tp_search_points(stage).size();
+  }
 }
 
 
@@ -60,7 +65,7 @@ unsigned TaskDijkstra::distance(const ScanTaskPoint &s1,
 unsigned 
 TaskDijkstra::get_size(unsigned stage) const
 {
-  return task->get_tp_search_points(stage).size();
+  return sp_sizes[stage];
 }
 
 void TaskDijkstra::add_edges(DijkstraTaskPoint &dijkstra,

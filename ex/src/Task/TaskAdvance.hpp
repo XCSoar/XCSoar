@@ -2,9 +2,6 @@
 #define TASKADVANCE_HPP
 
 class TaskPoint;
-class StartPoint;
-class IntermediatePoint;
-class AATPoint;
 struct AIRCRAFT_STATE;
 
 class TaskAdvance
@@ -69,6 +66,15 @@ public:
                         const AIRCRAFT_STATE &state,
                         const bool x_enter, 
                         const bool x_exit) const;
+
+/** 
+ * Set task advance mode
+ * 
+ * @param the_mode New task advance mode
+ */
+  void set_mode(TaskAdvanceMode_t the_mode) {
+    mode = the_mode;
+  }
  
 private:
 /** 

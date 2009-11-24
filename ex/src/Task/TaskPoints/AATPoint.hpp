@@ -153,6 +153,16 @@ public:
  */
   virtual void update_projection();
 
+/** 
+ * Test whether aircraft has travelled close to isoline of target within threshold
+ * 
+ * @param state Aircraft state
+ * @param threshold Threshold for distance comparision (m)
+ * 
+ * @return True if double leg distance from state is within threshold of target
+ */
+  bool close_to_target(const AIRCRAFT_STATE& state, const double threshold=0) const;
+
 #ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE&state, 
                      const int item=0) const;
