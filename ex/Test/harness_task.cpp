@@ -466,6 +466,16 @@ bool test_task_fg(TaskManager& task_manager,
 }
 
 
+const Waypoint* random_waypoint(const Waypoints &waypoints) {
+  static unsigned id_last = 0;
+  unsigned id = 0;
+  do {
+    id = rand() % waypoints.size()+1;
+  } while (id==id_last);
+  id_last = id;
+  return waypoints.lookup_id(id);  
+}
+
 bool test_task_random(TaskManager& task_manager,
                       const Waypoints &waypoints,
                       const unsigned num_points)
@@ -477,7 +487,7 @@ bool test_task_random(TaskManager& task_manager,
   fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
-  wp = waypoints.lookup_id(rand() % waypoints.size());
+  wp = random_waypoint(waypoints);
   if (wp) {
     if (!fact->append(fact->createStart(*wp))) {
       return false;
@@ -489,7 +499,7 @@ bool test_task_random(TaskManager& task_manager,
 
   for (unsigned i=0; i<num_points; i++) {
     task_report(task_manager, "# adding intermediate\n");
-    wp = waypoints.lookup_id(rand() % waypoints.size());
+    wp = random_waypoint(waypoints);
     if (wp) {
       if (!fact->append(fact->createIntermediate(*wp))) {
         return false;
@@ -498,18 +508,18 @@ bool test_task_random(TaskManager& task_manager,
   }
 
   task_report(task_manager, "# adding finish\n");
-  wp = waypoints.lookup_id(rand() % waypoints.size());
+  wp = random_waypoint(waypoints);
   if (wp) {
     if (!fact->append(fact->createFinish(*wp))) {
       return false;
     }
   }
 
-  task_report(task_manager, "# checking task..\n");
+  task_report(task_manager, "# validating task..\n");
   if (!fact->validate()) {
     return false;
   }
-
+  task_report(task_manager, "# checking task..\n");
   if (!task_manager.check_task()) {
     return false;
   }

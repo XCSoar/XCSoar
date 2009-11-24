@@ -10,7 +10,9 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(NUM_TASKS+2);
+  #define NUM_RANDOM 50
+
+  plan_tests(NUM_TASKS+2+NUM_RANDOM);
 
   TaskBehaviour task_behaviour;
   TaskEvents default_events;
@@ -25,6 +27,14 @@ int main(int argc, char** argv)
                              glide_polar,
                              waypoints);
     ok(test_task(task_manager, waypoints, i),test_name("construction",i,0),0);
+  }
+
+  for (int i=0; i<NUM_RANDOM; i++) {
+    TaskManager task_manager(default_events,
+                             task_behaviour,
+                             glide_polar,
+                             waypoints);
+    ok(test_task(task_manager, waypoints, 7),test_name("construction",7,0),0);
   }
 
   return exit_status();
