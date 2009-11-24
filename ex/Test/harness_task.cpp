@@ -406,7 +406,7 @@ bool test_task_dash(TaskManager& task_manager,
   task_manager.resume();
 
   task_report(task_manager, "# adding finish\n");
-  wp = waypoints.lookup_id(2);
+  wp = waypoints.lookup_id(3);
   if (wp) {
     if (!fact->append(fact->createFinish(*wp))) {
       return false;

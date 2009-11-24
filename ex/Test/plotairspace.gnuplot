@@ -12,7 +12,8 @@ set style line 8 lt 2 lc rgb "red" lw 2
 
 
 plot \
-     'results/res-task.txt' using 1:2 with lines ls 6 title "OZ", \
-     'results/res-bb-inside.txt' using 1:2 with lines ls 7 title "airspace", \
+     'results/res-bb-in.txt' using 1:2 with lines ls 3 title "all airspace", \
+     'results/res-bb-range.txt' using 1:2 with filledcurve ls 5 title "in range", \
+     'results/res-bb-inside.txt' using 1:2 with filledcurve ls 8 title "inside airspace", \
      'results/res-sample.txt' using 2:3 with lines ls 1 title "sample"
 pause -1
