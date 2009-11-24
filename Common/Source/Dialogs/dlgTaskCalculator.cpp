@@ -47,6 +47,7 @@ Copyright_License {
 #include "GlideSolvers.hpp"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
+#include "Task.h"
 
 #include <math.h>
 

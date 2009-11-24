@@ -51,6 +51,7 @@ Copyright_License {
 #include "Message.h"
 #include "Components.hpp"
 #include "WayPointList.hpp"
+#include "Task.h"
 
 int
 GlideComputerTask::CalculateWaypointApproxDistance(const POINT &screen,

@@ -56,6 +56,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language.hpp"
 #include "LogFile.hpp"
+#include "Task.h"
 #include "Asset.hpp"
 
 bool COMPORTCHANGED = false;

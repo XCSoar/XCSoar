@@ -47,6 +47,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "WayPointList.hpp"
 #include "Components.hpp"
+#include "Task.h"
 
 #include <assert.h>
 

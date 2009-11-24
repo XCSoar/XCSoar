@@ -48,7 +48,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "Airspace.h"
 #include "Screen/ProgressWindow.hpp"
-
+#include "Task.h"
 #include "UtilsText.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"

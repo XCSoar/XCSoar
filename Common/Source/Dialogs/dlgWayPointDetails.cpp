@@ -53,6 +53,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "WayPointList.hpp"
 #include "Components.hpp"
+#include "Task.h"
 
 #include <assert.h>
 

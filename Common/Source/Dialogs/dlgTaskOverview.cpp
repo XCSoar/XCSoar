@@ -51,6 +51,7 @@ Copyright_License {
 #include "DataField/FileReader.hpp"
 #include "WayPointList.hpp"
 #include "Components.hpp"
+#include "Task.h"
 
 #include <assert.h>
 

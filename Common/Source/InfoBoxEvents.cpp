@@ -54,6 +54,8 @@ Copyright_License {
 #include "McReady.h"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "Task.h"
+
 #include <stdlib.h>
 #include "FlarmCalculations.h"
 #include "Math/Pressure.h"

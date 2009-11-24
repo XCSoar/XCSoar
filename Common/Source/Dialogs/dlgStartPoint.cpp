@@ -39,6 +39,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "SettingsTask.hpp"
+#include "Task.h"
 #include "InfoBoxLayout.h"
 #include "MainWindow.hpp"
 #include "WayPointList.hpp"

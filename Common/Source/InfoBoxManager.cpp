@@ -70,6 +70,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "WayPointList.hpp"
 #include "XCSoar.h"
+#include "Task.h"
 
 #include <assert.h>
 
