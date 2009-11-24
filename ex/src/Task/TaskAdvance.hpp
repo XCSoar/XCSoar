@@ -15,6 +15,9 @@ public:
  */
   TaskAdvance();
 
+/**
+ * Advance mode
+ */
   enum TaskAdvanceMode_t {
     ADVANCE_MANUAL =0,          /**< No automatic advance */
     ADVANCE_AUTO,               /**< Automatic, triggers as soon as condition satisfied */

@@ -48,6 +48,15 @@ class SymmetricSectorZone:
   public SectorZone 
 {
 public:
+/** 
+ * Constructor.
+ * 
+ * @param loc Tip of sector location
+ * @param radius Radius (m) of sector
+ * @param angle Angle subtended by start/end radials
+ * 
+ * @return Initialised object
+ */
   SymmetricSectorZone(const GEOPOINT &loc,
                       const double radius=10000.0,
 		      const double angle=90.0):
@@ -66,6 +75,13 @@ public:
     return new SymmetricSectorZone(_location, getRadius(), SectorAngle);
   }
 
+/** 
+ * Update radials when previous/next legs are modified.
+ * 
+ * @param previous Previous task point (origin of inbound leg)
+ * @param current Taskpoint this is located at
+ * @param next Following task point (destination of outbound leg)
+ */
   virtual void set_legs(const TaskPoint *previous,
                         const TaskPoint *current,
                         const TaskPoint *next);
@@ -80,6 +96,11 @@ public:
 
   virtual bool equals(const ObservationZonePoint* other) const;
 
+  /** 
+   * Accessor for angle of sector (angle between start/end radials)
+   * 
+   * @return Angle (deg) of sector
+   */
   double getSectorAngle() const {
     return SectorAngle;
   }

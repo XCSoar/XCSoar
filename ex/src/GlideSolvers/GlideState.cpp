@@ -11,10 +11,24 @@
 class GlideQuadratic: public Quadratic
 {
 public:
+/** 
+ * Constructor.
+ * 
+ * @param task Task to initialse solver for
+ * @param V Speed (m/s)
+ * 
+ * @return Initialised object (not solved)
+ */
   GlideQuadratic(const GlideState &task, 
                  const double V):
     Quadratic(task.dwcostheta_, task.wsq_-V*V)
     {};
+
+/** 
+ * Find ground speed from task and wind
+ * 
+ * @return Ground speed during cruise (m/s)
+ */
   double solve() const {
     if (!check()) {
       return -1.0;

@@ -52,6 +52,7 @@
  *   allows any border crossing
  * - max start height, speed
  * - gate start time?
+ * - enabled/disabled for multiple start points
  */
 class StartPoint : public OrderedTaskPoint {
 public:
@@ -123,7 +124,7 @@ public:
   virtual bool equals(const OrderedTaskPoint* other) const;
 
 protected:
-    bool enabled;
+  bool enabled; /**< For future use with multiple start points, whether enabled */
 public:
   DEFINE_VISITABLE()
 };

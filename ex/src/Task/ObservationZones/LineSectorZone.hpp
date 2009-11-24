@@ -50,6 +50,14 @@ class LineSectorZone:
   public SymmetricSectorZone 
 {
 public:
+/** 
+ * Constructor
+ * 
+ * @param loc Location of center point of line
+ * @param radius Half-length of line (m)
+ * 
+ * @return Initialised object
+ */
   LineSectorZone(const GEOPOINT loc, const double radius=1000.0):
     SymmetricSectorZone(loc,radius,180.0)
   {};

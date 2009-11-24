@@ -39,21 +39,21 @@ SectorZone::isInSector(const AIRCRAFT_STATE &ref) const
 }
 
 void 
-SectorZone::setStartRadial(double x) 
+SectorZone::setStartRadial(const double x) 
 {
   StartRadial = x;
   updateSector();
 }
 
 void 
-SectorZone::setEndRadial(double x) 
+SectorZone::setEndRadial(const double x) 
 {
   EndRadial = x;
   updateSector();
 }  
 
 bool 
-SectorZone::angleInSector(double b) const
+SectorZone::angleInSector(const double b) const
 {
   if (StartRadial<EndRadial) {
     return ((b<=EndRadial) && (b>=StartRadial));

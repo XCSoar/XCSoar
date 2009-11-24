@@ -120,7 +120,7 @@ struct GEOPOINT {
  * 
  * @return Modified point
  */
-  GEOPOINT operator- (const GEOPOINT &other) const {
+  GEOPOINT operator- (const GEOPOINT &delta) const {
     GEOPOINT res = *this;
     res.Longitude -= other.Longitude;
     res.Latitude -= other.Latitude;

@@ -74,14 +74,14 @@ public:
  * 
  * @param x Angle (deg) of radial
  */
-  virtual void setStartRadial(double x); 
+  virtual void setStartRadial(const double x); 
 
 /** 
  * Set end angle (most clockwise) of sector
  * 
  * @param x Angle (deg) of radial
  */
-  virtual void setEndRadial(double x); 
+  virtual void setEndRadial(const double x); 
 
 /** 
  * Get start radial property value
@@ -145,11 +145,24 @@ public:
   virtual bool equals(const ObservationZonePoint* other) const;
 
 protected:
+/** 
+ * Updates sector parameters; call this if geometry changes to recalculate
+ * SectorStart and SectorEnd etc.
+ * 
+ */
   virtual void updateSector();
-  virtual bool angleInSector(double b) const;
 
-  GEOPOINT SectorStart;
-  GEOPOINT SectorEnd;
+/** 
+ * Test whether an angle is inside the sector limits
+ * 
+ * @param that Angle to test (deg)
+ * 
+ * @return True if that is within the start/end radials
+ */
+  virtual bool angleInSector(const double that) const;
+
+  GEOPOINT SectorStart; /**< Location of far end point of start radial */
+  GEOPOINT SectorEnd; /**< Location of far end point of end radial */
 private:
 
   double StartRadial;

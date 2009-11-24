@@ -11,6 +11,10 @@ struct GlideState;
  */
 struct GlideResult {
 
+  /**
+   * Results of glide calculations.  Used to provide feedback if
+   * fails due to insufficient MC value etc.
+   */
   enum GlideResult_t {
     RESULT_OK = 0,              /**< Solution is achievable */
     RESULT_PARTIAL,             /**< Solution is partially achievable */
@@ -116,13 +120,28 @@ struct GlideResult {
  */
   void add(const GlideResult &s2);
 
+/** 
+ * Calculate virtual speed of solution.  This is defined as
+ * the distance divided by the time elapsed plus the time required
+ * to recover the altitude expended in cruise.
+ * 
+ * @param mc MC value (m/s)
+ * 
+ * @return Virtual speed (m/s)
+ */
   double calc_vspeed(const double mc);
 
+/** 
+ * Find the gradient of this solution relative to ground
+ * 
+ * @return Glide gradient (positive down), or zero if no distance to travel.
+ */
   double glide_angle_ground() const;
 
+#ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
                                    const GlideResult& gl);
-
+#endif
 };
 
 #endif

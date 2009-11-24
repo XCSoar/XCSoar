@@ -39,20 +39,35 @@ GlidePolar::SinkRate(const double V) const
 
 /**
  * Finds VOpt for a given MacCready setting
+ * Intended to be used temporarily.
  */
 class GlidePolarVopt: 
   public ZeroFinder
 {
 public:
+/** 
+ * Constructor.
+ * 
+ * @param _polar Glide polar to optimise
+ * 
+ * @return Initialised object (no search yet)
+ */
   GlidePolarVopt(const GlidePolar &_polar):
     ZeroFinder(15.0, 75.0, TOLERANCE_POLAR_BESTLD),
     polar(_polar)
     {
     };
+/** 
+ * Glide ratio function (negative to minimise)
+ * 
+ * @param V Speed (m/s)
+ * 
+ * @return MacCready-adjusted glide ratio
+ */
   double f(const double V) {
     return -V/polar.MSinkRate(V);
   }
-protected:
+private:
   const GlidePolar &polar;
 };
 
