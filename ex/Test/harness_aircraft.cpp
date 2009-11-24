@@ -25,13 +25,18 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   heading_filt(8.0),
   goto_target(_goto_target),
   speed_factor(1.0),
-  climb_rate(2.0)
+  climb_rate(2.0),
+  short_flight(false)
 {
-  if (task_manager.task_size()==1) {
+  if (task_manager.task_size()<=1) {
+    short_flight = true;
     // cheat for non-ordered tasks
-    w.push_back(GEOPOINT(-0.5,-0.5));
-    w.push_back(task_manager.random_point_in_task(0, random_mag));
-
+    w.push_back(GEOPOINT(0.1,0.1));
+    if (task_manager.task_size()>0) {
+      w.push_back(task_manager.random_point_in_task(0, random_mag));
+    } else {
+      w.push_back(GEOPOINT(1.0,0.0));
+    }
   } else {
     for (unsigned i=0; i<task_manager.task_size(); i++) {
       if (i==0) {
@@ -76,9 +81,11 @@ bool AircraftSim::far(TaskManager &task_manager) {
 
   if (task_manager.task_size()==1) {
     // cheat for non-ordered tasks
-    entered = true;
+    const ElementStat stat = task_manager.get_stats().current_leg;
+    return (stat.remaining.get_distance()>100.0);
+  } else if (task_manager.task_size()==0) {
+    return w[1].distance(state.Location)>state.Speed;
   }
-
   if (goto_target && (awp>0)) {
     const ElementStat stat = task_manager.get_stats().current_leg;
     return (stat.remaining.get_distance()>100.0) || !entered;
@@ -232,6 +239,9 @@ bool AircraftSim::advance(TaskManager &task_manager,
   if (awp>= w.size()) {
     return false;
   } 
+  if (short_flight && awp>=1) {
+    return false;
+  }
   return true;
 }
 

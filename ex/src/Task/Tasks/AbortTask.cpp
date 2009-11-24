@@ -146,8 +146,8 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   // now try with fake height added
   AIRCRAFT_STATE fake = state;
   fake.Altitude += 10000.0;
-  fill_reachable(state, approx_waypoints, true);
-  fill_reachable(state, approx_waypoints, false);
+  fill_reachable(fake, approx_waypoints, true);
+  fill_reachable(fake, approx_waypoints, false);
 
   if (tps.size()) {
     active_waypoint = tps[activeTaskPoint]->get_waypoint().id;

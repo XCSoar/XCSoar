@@ -36,11 +36,12 @@ public:
   void set_speed_factor(double f) {
     speed_factor = f;
   }
+  GEOPOINT target(TaskManager &task_manager);
 
 private:
+  bool short_flight;
   GEOPOINT endpoint(const double bear) const;
   void update_bearing(TaskManager &task_manager);
-  GEOPOINT target(TaskManager &task_manager);
   bool goto_target;
   AIRCRAFT_STATE state, state_last;
   std::vector<GEOPOINT> w;

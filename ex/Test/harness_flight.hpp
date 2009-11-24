@@ -9,7 +9,6 @@
 
 bool run_flight(TaskManager &task_manager,
                 GlidePolar &glide_polar,
-                int test_num,
                 bool goto_target,
                 double random_mag,
                 int n_wind,
@@ -28,5 +27,8 @@ bool test_speed_factor(int test_num, int n_wind);
 bool test_cruise_efficiency(int test_num, int n_wind);
 bool test_automc(int test_num, int n_wind);
 bool test_bestcruisetrack(int test_num, int n_wind);
+bool test_abort(int n_wind);
+bool test_goto(int n_wind, unsigned id);
+bool test_airspace(const unsigned n_airspaces);
 
 #endif

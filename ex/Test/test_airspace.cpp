@@ -1,12 +1,10 @@
 #include "Math/FastMath.h"
 #include "harness_flight.hpp"
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv) 
+{
   ::InitSineTable();
 
-  // default arguments
-  verbose=1;  
-  
   // default arguments
   bearing_noise=0;
   target_noise=0.1;
@@ -17,6 +15,10 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-//  test_flight(5,0,1.0,true);
-}
+  plan_tests(2);
 
+  ok(test_airspace(10),"airspace 10",0);
+  ok(test_airspace(100),"airspace 100",0);
+
+  return exit_status();
+}

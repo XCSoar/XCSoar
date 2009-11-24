@@ -122,8 +122,8 @@ struct GEOPOINT {
  */
   GEOPOINT operator- (const GEOPOINT &delta) const {
     GEOPOINT res = *this;
-    res.Longitude -= other.Longitude;
-    res.Latitude -= other.Latitude;
+    res.Longitude -= delta.Longitude;
+    res.Latitude -= delta.Latitude;
     return res;
   };
 

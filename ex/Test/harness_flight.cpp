@@ -1,7 +1,10 @@
 #include "harness_flight.hpp"
+#include "harness_airspace.hpp"
 #ifdef DO_PRINT
 #include <fstream>
 #endif
+
+Airspaces *airspaces = NULL;
 
 double time_elapsed=0.0;
 double time_planned=1.0;
@@ -38,9 +41,9 @@ const char* wind_name(int n_wind) {
   return buffer;
 }
 
+
 bool run_flight(TaskManager &task_manager,
                 GlidePolar &glide_polar,
-                int test_num,
                 bool goto_target,
                 double random_mag,
                 int n_wind,
@@ -89,10 +92,10 @@ bool run_flight(TaskManager &task_manager,
       f4.flush();
     }
 
-/*
-    scan_airspaces(ac.get_state(), airspaces, do_print, 
-                   ac.get_next());
-*/
+    if (airspaces) {
+      scan_airspaces(ac.get_state(), *airspaces, do_print, 
+                     ac.target(task_manager));
+    }
 
     n_samples++;
 
@@ -123,14 +126,9 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
 {
   // multipurpose flight test
 
-  //// aircraft
   GlidePolar glide_polar(2.0,0.0,0.0);
-
-  ////////////////////////// Waypoints //////
   Waypoints waypoints;
   setup_waypoints(waypoints);
-
-  ////////////////////////// TASK //////
 
   if (verbose) {
     distance_counts();
@@ -165,8 +163,8 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
 
   test_task(task_manager, waypoints, test_num);
 
-  return run_flight(task_manager, glide_polar, test_num, goto_target, target_noise, n_wind,
-    speed_factor);
+  return run_flight(task_manager, glide_polar, goto_target, target_noise, n_wind,
+                    speed_factor);
 }
 
 bool test_flight_times(int test_num, int n_wind) 
@@ -371,5 +369,70 @@ bool test_bestcruisetrack(int test_num, int n_wind)
   if (!fine || verbose) {
     printf("# time ratio %g\n", t1/t0);
   }
+  return fine;
+}
+
+
+bool test_abort(int n_wind)
+{
+  GlidePolar glide_polar(2.0,0.0,0.0);
+  Waypoints waypoints;
+  setup_waypoints(waypoints);
+
+  if (verbose) {
+    distance_counts();
+  }
+
+  TaskBehaviour task_behaviour;
+//  task_behaviour.auto_mc = auto_mc;
+
+  TaskEvents default_events;  default_events.verbose = verbose;
+
+  TaskManager task_manager(default_events,
+                           task_behaviour,
+                           glide_polar,
+                           waypoints);
+
+  test_task(task_manager, waypoints, 2);
+  task_manager.abort();
+
+  return run_flight(task_manager, glide_polar, true, target_noise, n_wind);
+
+}
+
+bool test_goto(int n_wind, unsigned id)
+{
+  GlidePolar glide_polar(2.0,0.0,0.0);
+  Waypoints waypoints;
+  setup_waypoints(waypoints);
+
+  if (verbose) {
+    distance_counts();
+  }
+
+  TaskBehaviour task_behaviour;
+//  task_behaviour.auto_mc = auto_mc;
+
+  TaskEvents default_events;  default_events.verbose = verbose;
+
+  TaskManager task_manager(default_events,
+                           task_behaviour,
+                           glide_polar,
+                           waypoints);
+
+  test_task(task_manager, waypoints, 2);
+
+  task_manager.do_goto(*waypoints.lookup_id(id));
+
+  return run_flight(task_manager, glide_polar, true, target_noise, n_wind);
+}
+
+
+bool test_airspace(const unsigned n_airspaces)
+{
+  airspaces = new Airspaces;
+  setup_airspaces(*airspaces, n_airspaces);
+  bool fine = test_flight(4,0);
+  delete airspaces; airspaces = NULL;
   return fine;
 }

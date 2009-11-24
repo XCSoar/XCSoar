@@ -160,6 +160,8 @@ TESTS = \
 	Test/test_mc.exe \
 	Test/test_waypoints.exe \
 	Test/test_randomtask.exe \
+	Test/test_modes.exe \
+	Test/test_airspace.exe \
 	Test/test_task.exe \
 	Test/test_automc.exe \
 	Test/test_flight.exe \

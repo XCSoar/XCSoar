@@ -98,7 +98,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
 
   AirspaceVisitorPrint visitor("results/res-bb-range.txt",
                                do_report);
-  airspaces.visit_within_range(state.Location, 5000.0, visitor);
+  airspaces.visit_within_range(state.Location, 20000.0, visitor);
 
   const std::vector<Airspace> vi = airspaces.find_inside(state);
   AirspaceVisitorPrint pvi("results/res-bb-inside.txt",
