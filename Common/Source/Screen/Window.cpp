@@ -501,4 +501,13 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   return window->on_message(_hWnd, message, wParam, lParam);
 }
 
+void
+Window::install_wndproc()
+{
+  assert(prev_wndproc == NULL);
+
+  set_userdata(this);
+  prev_wndproc = set_wndproc(WndProc);
+}
+
 #endif /* !ENABLE_SDL */

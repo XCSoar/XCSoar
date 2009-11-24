@@ -476,10 +476,7 @@ public:
    * Installs Window::WndProc() has the WNDPROC.  This enables the
    * methods on_*() methods, which may be implemented by sub classes.
    */
-  void install_wndproc() {
-    set_userdata(this);
-    prev_wndproc = set_wndproc(WndProc);
-  }
+  void install_wndproc();
 #endif /* !ENABLE_SDL */
 };
 
