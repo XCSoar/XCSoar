@@ -143,7 +143,6 @@ void TopologyStore::Open() {
   Poco::ScopedRWLock protect(lock, true);
 
   // Start off by getting the names and paths
-  static TCHAR  szOrigFile[MAX_PATH] = TEXT("\0");
   static TCHAR  szFile[MAX_PATH] = TEXT("\0");
   static  TCHAR Directory[MAX_PATH] = TEXT("\0");
 
@@ -153,11 +152,6 @@ void TopologyStore::Open() {
 
   GetRegistryString(szRegistryTopologyFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
-  _tcscpy(szOrigFile,szFile); // make copy of original
-  ContractLocalPath(szOrigFile);
-
-  // remove it in case it causes a crash (will restore later)
-  SetRegistryString(szRegistryTopologyFile, TEXT("\0"));
 
   if (_tcslen(szFile)==0) {
 
@@ -290,8 +284,5 @@ void TopologyStore::Open() {
   }
 
   zzip_fclose(zFile);
-
-  // file was OK, so save it
-  SetRegistryString(szRegistryTopologyFile, szOrigFile);
 }
 
