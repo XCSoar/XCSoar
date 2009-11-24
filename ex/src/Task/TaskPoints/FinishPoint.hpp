@@ -86,6 +86,9 @@ public:
  * was previously outside.  Only triggers on first entry
  * since an aircraft may pass in/out of a finish zone multiple
  * times but only the first is required.
+ *
+ * Also requires previous point to have entered to prevent spurious crossing.
+ * \todo consider making all OTP's require previous tps to have entered for this to
  * 
  * @param ref_now State current
  * @param ref_last State at last sample

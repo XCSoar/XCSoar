@@ -160,6 +160,7 @@ TESTOBJS = Test/test_debug.o \
 TESTS = \
 	Test/test_mc.exe \
 	Test/test_waypoints.exe \
+	Test/test_randomtask.exe \
 	Test/test_task.exe \
 	Test/test_automc.exe \
 	Test/test_flight.exe \

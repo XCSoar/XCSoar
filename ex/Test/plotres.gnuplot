@@ -14,11 +14,9 @@ set style line 8 lt 2 lc rgb "red" lw 2
 plot \
      'results/res-task.txt' using 1:2 with lines ls 6 title "OZ", \
      'results/res-ssample.txt' using 1:2 with filledcurve ls 8 title "sect samples", \
-     'results/res-bb-inside.txt' using 1:2 with lines ls 7 title "airspace", \
      'results/res-min.txt' using 1:2 with linespoints ls 3 title "min", \
      'results/res-max.txt' using 1:2 with linespoints ls 2 title "max", \
      'results/res-rem.txt' using 1:2 with linespoints ls 5 title "remaining", \
-     'results/res-abort-task.txt' using 1:2 with linespoints ls 6 title "abort", \
      'results/res-sample.txt' using 2:3 with lines ls 1 title "sample", \
      'results/res-isolines.txt' using 1:2 with lines ls 4 title "isolines"
 pause -1

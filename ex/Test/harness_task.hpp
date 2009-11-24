@@ -26,6 +26,10 @@ bool test_task_manip(TaskManager& task_manager,
 bool test_task_fg(TaskManager& task_manager,
                   const Waypoints &waypoints);
 
+bool test_task_random(TaskManager& task_manager,
+                      const Waypoints &waypoints,
+                      const unsigned num_points);
+
 bool test_task(TaskManager& task_manager,
                const Waypoints &waypoints,
                int test_num);

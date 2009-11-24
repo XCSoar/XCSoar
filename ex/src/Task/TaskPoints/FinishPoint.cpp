@@ -9,7 +9,7 @@ FinishPoint::transition_enter(const AIRCRAFT_STATE & ref_now,
                               const AIRCRAFT_STATE & ref_last)
 {
   bool entered = ObservationZone::transition_enter(ref_now, ref_last);
-  if (entered && !has_entered()) {
+  if (entered && !has_entered() && get_previous()->has_entered()) {
     set_state_entered(ref_now);
     // only save first enter of finish
   }

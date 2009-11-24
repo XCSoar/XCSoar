@@ -463,7 +463,57 @@ bool test_task_fg(TaskManager& task_manager,
     return false;
   }
   return true;
+}
 
+
+bool test_task_random(TaskManager& task_manager,
+                      const Waypoints &waypoints,
+                      const unsigned num_points)
+{
+  AbstractTaskFactory *fact;
+  const Waypoint *wp;
+
+  task_manager.set_factory(TaskManager::FACTORY_MIXED);
+  fact = task_manager.get_factory();
+
+  task_report(task_manager, "# adding start\n");
+  wp = waypoints.lookup_id(rand() % waypoints.size());
+  if (wp) {
+    if (!fact->append(fact->createStart(*wp))) {
+      return false;
+    }
+  }
+
+  task_manager.setActiveTaskPoint(0);
+  task_manager.resume();
+
+  for (unsigned i=0; i<num_points; i++) {
+    task_report(task_manager, "# adding intermediate\n");
+    wp = waypoints.lookup_id(rand() % waypoints.size());
+    if (wp) {
+      if (!fact->append(fact->createIntermediate(*wp))) {
+        return false;
+      }
+    }
+  }
+
+  task_report(task_manager, "# adding finish\n");
+  wp = waypoints.lookup_id(rand() % waypoints.size());
+  if (wp) {
+    if (!fact->append(fact->createFinish(*wp))) {
+      return false;
+    }
+  }
+
+  task_report(task_manager, "# checking task..\n");
+  if (!fact->validate()) {
+    return false;
+  }
+
+  if (!task_manager.check_task()) {
+    return false;
+  }
+  return true;
 }
 
 
@@ -471,6 +521,7 @@ bool test_task(TaskManager& task_manager,
                const Waypoints &waypoints,
                int test_num)
 {
+  unsigned n_points = rand()%8;
   switch (test_num) {
   case 0:
     return test_task_mixed(task_manager,waypoints);
@@ -486,6 +537,8 @@ bool test_task(TaskManager& task_manager,
     return test_task_fg(task_manager,waypoints);
   case 6:
     return test_task_manip(task_manager,waypoints);
+  case 7:
+    return test_task_random(task_manager,waypoints,n_points);
   default:
     return "unknown";
     break;
@@ -510,6 +563,8 @@ const char* task_name(int test_num)
     return "fg";
   case 6:
     return "manip";
+  case 7:
+    return "random";
   default:
     return "unknown";
     break;

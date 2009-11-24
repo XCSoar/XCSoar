@@ -96,7 +96,7 @@ bool run_flight(TaskManager &task_manager,
 
     n_samples++;
 
-    do_print = (print_counter++ % output_skip ==0) && verbose;
+    do_print = (++print_counter % output_skip ==0) && verbose;
 
   } while (ac.advance(task_manager, glide_polar));
 
@@ -154,6 +154,9 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
     goto_target = true;
     break;
   case 2:
+    goto_target = true;
+    break;
+  case 7:
     goto_target = true;
     break;
   default:
