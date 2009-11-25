@@ -405,7 +405,7 @@ bool test_abort(int n_wind)
 
 }
 
-bool test_goto(int n_wind, unsigned id)
+bool test_goto(int n_wind, unsigned id, bool auto_mc)
 {
   GlidePolar glide_polar(2.0,0.0,0.0);
   Waypoints waypoints;
@@ -416,9 +416,9 @@ bool test_goto(int n_wind, unsigned id)
   }
 
   TaskBehaviour task_behaviour;
-//  task_behaviour.auto_mc = auto_mc;
 
   task_behaviour.all_off();
+  task_behaviour.auto_mc = auto_mc;
 
   TaskEvents default_events;  default_events.verbose = verbose;
 

@@ -154,7 +154,6 @@ TESTOBJS = Test/test_debug.o \
 	Test/tap.o
 
 TESTFAST = \
-	Test/test_highterrain.exe \
 	Test/test_waypoints.exe \
 	Test/test_mc.exe \
 	Test/test_task.exe \
@@ -162,7 +161,8 @@ TESTFAST = \
 	Test/test_airspace.exe \
 	Test/test_automc.exe \
 	Test/test_trees.exe \
-	Test/test.exe 
+	Test/test.exe \
+	Test/test_highterrain.exe
 
 TESTSLOW = \
 	Test/test_randomtask.exe \

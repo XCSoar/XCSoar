@@ -74,3 +74,4 @@ GotoTask::task_size() const
     return 0;
   }
 }
+
