@@ -20,7 +20,11 @@ AirspacePolygon::AirspacePolygon(const std::vector<GEOPOINT>& pts)
 const GEOPOINT 
 AirspacePolygon::get_center()
 {
-  return border[0].getLocation();
+  if (!border.empty()) {
+    return border[0].getLocation();
+  } else {
+    return GEOPOINT(0,0);
+  }
 }
 
 

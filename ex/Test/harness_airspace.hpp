@@ -13,4 +13,6 @@ void scan_airspaces(const AIRCRAFT_STATE state,
                     bool do_report,
                     const GEOPOINT &target);
 
+bool test_airspace_extra(Airspaces &airspaces);
+
 #endif

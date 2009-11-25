@@ -15,10 +15,14 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(2);
+  plan_tests(3);
 
   ok(test_airspace(10),"airspace 10",0);
   ok(test_airspace(100),"airspace 100",0);
+  
+  Airspaces airspaces;
+  setup_airspaces(airspaces, 20);
+  ok(test_airspace_extra(airspaces),"airspace extra",0);
 
   return exit_status();
 }

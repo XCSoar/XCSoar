@@ -3,6 +3,20 @@
 #include <fstream>
 #include <iostream>
 
+bool test_airspace_extra(Airspaces &airspaces) {
+  // try adding a null polygon
+
+  AbstractAirspace* as;
+  std::vector<GEOPOINT> pts;
+  as = new AirspacePolygon(pts);
+  airspaces.insert(as);
+
+  // try clearing now (we haven't called optimise())
+
+  airspaces.clear();
+  return true;
+}
+
 void setup_airspaces(Airspaces& airspaces, const unsigned n) {
 #ifdef DO_PRINT
   std::ofstream fin("results/res-bb-in.txt");
@@ -38,7 +52,12 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
     fin << *as;
 #endif
   }
+
+  // try inserting nothing
+  airspaces.insert(NULL);
+
   airspaces.optimise();
+
 }
 
 
