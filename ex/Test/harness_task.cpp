@@ -34,14 +34,14 @@ class TaskVisitorPrint: public TaskVisitor
 {
 public:
   virtual void Visit(const AbortTask& task) {
-    TaskPointVisitorPrint tpv;
     printf("# task is abort\n");
+    TaskPointVisitorPrint tpv;
     task.Accept(tpv);
     print_distances(task);
   };
   virtual void Visit(const OrderedTask& task) {
-    TaskPointVisitorPrint tpv;
     printf("# task is ordered\n");
+    TaskPointVisitorPrint tpv;
     task.Accept(tpv);
     print_distances(task);
     if (task.get_stats().distance_max>task.get_stats().distance_min) {
@@ -51,6 +51,8 @@ public:
   };
   virtual void Visit(const GotoTask& task) {
     printf("# task is goto\n");
+    TaskPointVisitorPrint tpv;
+    task.Accept(tpv);
     print_distances(task);
   };
   virtual void print_distances(const AbstractTask& task) {

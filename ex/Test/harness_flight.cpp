@@ -108,6 +108,7 @@ bool run_flight(TaskManager &task_manager,
     ac.print(f4);
     f4 << "\n";
     f4.flush();
+    task_report(task_manager, "end of task\n");
   }
 
   time_elapsed = task_manager.get_stats().total.TimeElapsed;
@@ -394,7 +395,9 @@ bool test_abort(int n_wind)
                            waypoints);
 
   test_task(task_manager, waypoints, 2);
+
   task_manager.abort();
+  task_report(task_manager, "abort");
 
   return run_flight(task_manager, glide_polar, true, target_noise, n_wind);
 
@@ -423,6 +426,7 @@ bool test_goto(int n_wind, unsigned id)
   test_task(task_manager, waypoints, 2);
 
   task_manager.do_goto(*waypoints.lookup_id(id));
+  task_report(task_manager, "goto");
 
   return run_flight(task_manager, glide_polar, true, target_noise, n_wind);
 }
@@ -447,6 +451,7 @@ bool test_null()
                            task_behaviour,
                            glide_polar,
                            waypoints);
+  task_report(task_manager, "null");
 
   return run_flight(task_manager, glide_polar, true, target_noise, 0);
 }
