@@ -54,9 +54,11 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
   for (unsigned i=0; i<(unsigned)std::max((int)n-6,0); i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
+    double z = rand()% std::max(terrain_height,1);
     wp.id++;
     wp.Location.Longitude = x/1000.0; 
     wp.Location.Latitude = y/1000.0;
+    wp.Altitude = z;
     waypoints.insert(wp);
   }
   waypoints.optimise();

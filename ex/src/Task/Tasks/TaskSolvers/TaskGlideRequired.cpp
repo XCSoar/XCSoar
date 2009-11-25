@@ -36,12 +36,6 @@ double TaskGlideRequired::f(const double S)
   }
 }
 
-bool TaskGlideRequired::valid(const double S) 
-{
-  double ff = f(S);
-  return (res.Solution== GlideResult::RESULT_OK) && (fabs(ff)>=-tolerance*2.0);
-}
-
 double TaskGlideRequired::search(const double S) 
 {
   double a = find_zero(S);

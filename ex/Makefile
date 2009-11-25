@@ -154,6 +154,7 @@ TESTOBJS = Test/test_debug.o \
 	Test/tap.o
 
 TESTFAST = \
+	Test/test_highterrain.exe \
 	Test/test_waypoints.exe \
 	Test/test_mc.exe \
 	Test/test_task.exe \
@@ -183,11 +184,11 @@ COVEND = geninfo -q --no-checksum -b . src
 
 testslow:	$(TESTSLOW)
 	$(Q)$(COVSTART)
-	perl Test/testall.pl $(TESTSLOW)
+	$(Q)perl Test/testall.pl $(TESTSLOW)
 
 testfast:	$(TESTFAST)
 	$(Q)$(COVSTART)
-	perl Test/testall.pl $(TESTFAST)
+	$(Q)perl Test/testall.pl $(TESTFAST)
 
 
 %.exe: %.cpp $(OBJS) $(TESTOBJS)

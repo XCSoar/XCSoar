@@ -44,15 +44,6 @@ public:
   virtual double f(const double mc);
 
 /** 
- * Test validity of a solution given search parameter
- * 
- * @param S Search parameter (virtual sink rate of glider (m/s))
- * 
- * @return True if solution is valid
- */
-  virtual bool valid(const double S);
-
-/** 
  * Search for sink rate to produce final glide solution
  * 
  * @param s Default sink rate value (m/s)

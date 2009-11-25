@@ -17,8 +17,12 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  plan_tests(5);
+  plan_tests(6);
 
+  terrain_height = 500;
+  ok(test_flight(3,0,1.0,true),"high terrain",0);
+
+  terrain_height = 1;
   ok(test_flight(0,0,1.0,true),"basic flight test",0);
   ok(test_flight(3,0,1.0,true),"basic flight test",0);
   ok(test_abort(0),"abort",0);

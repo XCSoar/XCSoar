@@ -32,15 +32,6 @@ public:
   virtual double f(const double ce);
 
 /** 
- * Test validity of a solution given search parameter
- * 
- * @param ce Search parameter (cruise efficiency ratio)
- * 
- * @return True if solution is valid
- */
-  virtual bool valid(const double ce);
-
-/** 
  * Search for cruise efficiency value.
  * 
  * @param ce Default cruise efficiency value

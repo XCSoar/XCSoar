@@ -27,13 +27,6 @@ double TaskCruiseEfficiency::f(const double ce)
   return d;
 }
 
-bool TaskCruiseEfficiency::valid(const double ce) 
-{
-  tm.set_cruise_efficiency(ce);
-  res = tm.glide_solution(aircraft);
-  return (res.Solution== GlideResult::RESULT_OK);
-}
-
 double TaskCruiseEfficiency::search(const double ce) 
 {
   return find_min(ce);
