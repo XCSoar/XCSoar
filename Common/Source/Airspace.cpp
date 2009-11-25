@@ -164,8 +164,10 @@ int FindAirspaceCircle(const GEOPOINT &location, bool visibleonly)
  * @param settings Pointer to the settings
  * @return True if airspace is supposed to be drawn, False otherwise
  */
-bool CheckAirspaceAltitude(const double &Base, const double &Top,
-    const SETTINGS_COMPUTER &settings) {
+bool
+CheckAirspaceAltitude(double Base, double Top,
+                      const SETTINGS_COMPUTER &settings)
+{
   double alt;
 
   // TODO remove dependency!

@@ -116,8 +116,11 @@ int FindAirspaceCircle(const GEOPOINT &location,
 		       bool visibleonly=true);
 int FindAirspaceArea(const GEOPOINT &location,
 		     bool visibleonly=true);
-bool CheckAirspaceAltitude(const double &Base, const double &Top,
-  const SETTINGS_COMPUTER &settings);
+
+bool
+CheckAirspaceAltitude(double Base, double Top,
+                      const SETTINGS_COMPUTER &settings);
+
 void CloseAirspace(void);
 
 void SortAirspace(void);
