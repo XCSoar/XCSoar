@@ -4,6 +4,7 @@
 #ifdef DO_PRINT
 #include <fstream>
 
+/*
 std::ostream& operator<< (std::ostream& o, 
                           const TaskProjection& tp)
 {
@@ -20,6 +21,7 @@ std::ostream& operator<< (std::ostream& o,
     << pur.Longitude << "," << pur.Latitude << "\n";
   return o;
 }
+*/
 
 #include "GlideSolvers/GlideResult.hpp"
 
@@ -154,17 +156,6 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
   f << "\n";
 }
 */
-
-#include "Airspace/Airspace.hpp"
-
-std::ostream& operator<< (std::ostream& f, 
-                          const Airspace& ts) 
-{
-  if (ts.pimpl_airspace) {
-    f << *(ts.pimpl_airspace);
-  } 
-  return f;
-}
 
 #include "Airspace/AirspaceCircle.hpp"
 

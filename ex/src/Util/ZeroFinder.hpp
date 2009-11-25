@@ -30,21 +30,6 @@ public:
   virtual double f(const double x) = 0;
 
 /** 
- * Check whether x is within search limits.  For use by sub-classes.
- * 
- * @param x Value of x
- * 
- * @return True if x is within search limits
- */
-  virtual bool valid(const double x) {
-    if ((x<=xmax)&&(x>=xmin)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-/** 
  * Find closest value of x that produces f(x)=0
  * Method used is a variant of a bisector search. 
  *

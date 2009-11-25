@@ -37,14 +37,6 @@ GeoVector::GeoVector(const GEOPOINT &source, const GEOPOINT &target,
 
 }
 
-bool operator != (const GEOPOINT&g1, const GEOPOINT &g2) {
-  return (g1.Latitude != g2.Latitude) || (g1.Longitude != g2.Longitude);
-}
-
-bool operator != (const GeoVector&g1, const GeoVector &g2) {
-  return (g1.Distance != g2.Distance) || (g1.Bearing != g2.Bearing);
-}
-
 GEOPOINT 
 GeoVector::end_point(const GEOPOINT &source) const
 {
@@ -61,4 +53,13 @@ GeoVector::mid_point(const GEOPOINT &source) const
   return p;
 }
 
+bool operator != (const GEOPOINT&g1, const GEOPOINT &g2) {
+  return (g1.Latitude != g2.Latitude) || (g1.Longitude != g2.Longitude);
+}
+
+/* unused
+bool operator != (const GeoVector&g1, const GeoVector &g2) {
+  return (g1.Distance != g2.Distance) || (g1.Bearing != g2.Bearing);
+}
+*/
 

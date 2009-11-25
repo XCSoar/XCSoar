@@ -46,16 +46,6 @@ public:
   virtual TaskPoint* getActiveTaskPoint() const = 0;
 
 /** 
- * Convenience function, calculates and returns a vector (distance and bearing)
- * to the active task point from the aircraft.
- * 
- * @param state Current aircraft state
- * 
- * @return Vector to target from aircraft
- */
-  GeoVector get_active_vector(const AIRCRAFT_STATE &state);
-
-/** 
  * Accessor for task statistics for this task
  * 
  * @return Task statistics reference
