@@ -387,6 +387,8 @@ bool test_abort(int n_wind)
   TaskBehaviour task_behaviour;
 //  task_behaviour.auto_mc = auto_mc;
 
+  task_behaviour.all_off();
+
   TaskEvents default_events;  default_events.verbose = verbose;
 
   TaskManager task_manager(default_events,
@@ -416,6 +418,8 @@ bool test_goto(int n_wind, unsigned id)
   TaskBehaviour task_behaviour;
 //  task_behaviour.auto_mc = auto_mc;
 
+  task_behaviour.all_off();
+
   TaskEvents default_events;  default_events.verbose = verbose;
 
   TaskManager task_manager(default_events,
@@ -444,6 +448,8 @@ bool test_null()
 
   TaskBehaviour task_behaviour;
 //  task_behaviour.auto_mc = auto_mc;
+
+  task_behaviour.all_off();
 
   TaskEvents default_events;  default_events.verbose = verbose;
 

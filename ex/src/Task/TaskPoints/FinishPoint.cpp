@@ -17,7 +17,7 @@ FinishPoint::transition_enter(const AIRCRAFT_STATE & ref_now,
 }
 
 double
-FinishPoint::getElevation()
+FinishPoint::getElevation() const
 {
   return Elevation+task_behaviour.safety_height_arrival;
 }

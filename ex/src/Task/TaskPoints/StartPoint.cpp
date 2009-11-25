@@ -29,7 +29,7 @@ StartPoint::transition_exit(const AIRCRAFT_STATE & ref_now,
 
 
 double
-StartPoint::getElevation()
+StartPoint::getElevation() const
 {
   // no need for safety height at start?
   return Elevation;

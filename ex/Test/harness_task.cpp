@@ -534,6 +534,8 @@ bool test_task_random(TaskManager& task_manager,
   AbstractTaskFactory *fact;
   const Waypoint *wp;
 
+  OrderedTaskPoint *tp;
+
   task_manager.set_factory(TaskManager::FACTORY_MIXED);
   fact = task_manager.get_factory();
 
@@ -542,7 +544,13 @@ bool test_task_random(TaskManager& task_manager,
   if (wp) {
     AbstractTaskFactory::LegalStartType_t s = 
       fact->getStartTypes()[(rand() % fact->getStartTypes().size())];
-    if (!fact->append(fact->createStart(s,*wp))) {
+
+    tp = fact->createStart(s,*wp);
+    if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
+      cz->setRadius(500.0);
+      tp->update_oz();
+    }
+    if (!fact->append(tp),false) {
       return false;
     }
   }
@@ -556,7 +564,13 @@ bool test_task_random(TaskManager& task_manager,
     if (wp) {
       AbstractTaskFactory::LegalIntermediateType_t s = 
         fact->getIntermediateTypes()[(rand() % fact->getIntermediateTypes().size())];
-      if (!fact->append(fact->createIntermediate(s,*wp))) {
+
+      tp = fact->createIntermediate(s,*wp);
+      if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
+        cz->setRadius(500.0);
+        tp->update_oz();
+      }
+      if (!fact->append(tp),false) {
         return false;
       }
     }
@@ -567,7 +581,13 @@ bool test_task_random(TaskManager& task_manager,
   if (wp) {
     AbstractTaskFactory::LegalFinishType_t s = 
       fact->getFinishTypes()[(rand() % fact->getFinishTypes().size())];
-    if (!fact->append(fact->createFinish(s,*wp))) {
+
+    tp = fact->createFinish(s,*wp);
+    if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
+      cz->setRadius(500.0);
+      tp->update_oz();
+    }
+    if (!fact->append(tp),false) {
       return false;
     }
   }

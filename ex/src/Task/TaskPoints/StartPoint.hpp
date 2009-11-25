@@ -112,7 +112,7 @@ public:
  * 
  * @return Minimum allowable elevation of start point
  */
-  virtual double getElevation();
+  virtual double getElevation() const;
 
 /** 
  * Test whether a taskpoint is equivalent to this one

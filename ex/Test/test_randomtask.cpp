@@ -15,12 +15,16 @@ int main(int argc, char** argv)
     return 0;
   }
 
-#define NUM_TESTS 10
+#define NUM_TESTS 20
 
   plan_tests(NUM_TESTS);
 
   for (int j=0; j<NUM_TESTS; j++) {
     unsigned i = rand()%NUM_WIND;
+
+    if (j+1==NUM_TESTS) {
+      verbose=1;
+    }
     ok (test_flight_times(7,i), test_name("flight times",7,i),0);
   }
   return exit_status();

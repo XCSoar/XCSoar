@@ -85,8 +85,8 @@ OBJS	:=\
 	src/Navigation/Flat/FlatGeoPoint.o \
 	src/Navigation/Flat/FlatRay.o \
 	src/Navigation/Flat/FlatPoint.o \
-	src/Navigation/Flat/FlatLine.o \
 	src/Navigation/Flat/FlatEllipse.o \
+	src/Navigation/Flat/FlatLine.o \
 	src/Task/TaskAdvance.o \
 	src/Task/TaskBehaviour.o \
 	src/Task/TaskEvents.o \
@@ -115,7 +115,6 @@ OBJS	:=\
 	src/Task/TaskPoints/AATIsoline.o \
 	src/Task/TaskPoints/AATIsolineSegment.o \
 	src/Task/ObservationZones/CylinderZone.o \
-	src/Task/ObservationZones/HeightLimitZone.o \
 	src/Task/ObservationZones/SectorZone.o \
 	src/Task/ObservationZones/LineSectorZone.o \
 	src/Task/ObservationZones/SymmetricSectorZone.o \
