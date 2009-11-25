@@ -37,6 +37,29 @@ struct FlatEllipse
     {
     };
 
+/** 
+ * Parametric representation of ellipse
+ * 
+ * @param t Parameter [0,1] 
+ * 
+ * @return Location on ellipse
+ */
+  FlatPoint parametric(const double t) const;
+
+/** 
+ * Find intersection of line from focus 1 to p, through the ellipse
+ * 
+ * @param p Reference point
+ * @param i1 Intersection point 1 if found
+ * @param i2 Intersection point 2 if found
+ * 
+ * @return True if line intersects
+ */
+  bool intersect_extended(const FlatPoint &p,
+                          FlatPoint &i1,
+                          FlatPoint &i2) const;
+
+private:
   FlatPoint f1, f2, ap;
   FlatPoint p;
   double a;
@@ -48,15 +71,10 @@ struct FlatEllipse
   double ab() const;
   double ba() const;
 
-  FlatPoint parametric(const double t) const;
-
   bool intersect(const FlatLine &line, 
                  FlatPoint &i1, 
                  FlatPoint &i2) const;
 
-  bool intersect_extended(const FlatPoint &p,
-                          FlatPoint &i1,
-                          FlatPoint &i2) const;
 };
 
 #endif

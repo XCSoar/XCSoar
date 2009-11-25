@@ -11,11 +11,10 @@ class HeightLimitZone {
     
 public:
 
-    bool isInLimit();
+  bool isInLimit(); /**< To check whether height is within limit */
 
-protected:
+private:
     double maxHeight;
     double minHeight;
-protected:
 };
 #endif //HEIGHTLIMITZONE_H

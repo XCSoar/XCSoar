@@ -30,6 +30,12 @@ public:
   TaskMacCreadyRemaining(TaskPoint* tp,
                          const GlidePolar gp);
 
+/** 
+ * Set ranges of all remaining task points
+ * 
+ * @param tp Range parameter [0,1]
+ * @param force_current If true, will force active AAT point (even if inside) to move
+ */
   void set_range(const double tp, const bool force_current);
 
 private:

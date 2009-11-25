@@ -21,8 +21,26 @@ public:
                      const unsigned _activeTaskPoint,
                      const GlidePolar &_gp);
 
+/** 
+ * Calculate effective distance remaining such that at the virtual
+ * point, the time remaining is the same as the reference time
+ * remaining (for whole task)
+ * 
+ * @param time_remaining Time remaining (s) 
+ * 
+ * @return Effective distance remaining (m)
+ */
   double effective_distance(const double time_remaining) const;
 
+/** 
+ * Calculate effective distance remaining such that at the virtual
+ * point, the time remaining is the same as the reference time
+ * remaining (for active leg)
+ * 
+ * @param time_remaining Time remaining (s) for active leg
+ * 
+ * @return Effective distance remaining (m) for active leg
+ */
   double effective_leg_distance(const double time_remaining) const;
 
 private:

@@ -236,12 +236,20 @@ MacCready::solve(const GlideState &task) const
 
 /**
  * Class used to find VOpt for a MacCready setting, for final glide
- * calculations
+ * calculations.  Intended to be used temporarily only.
  */
 class MacCreadyVopt: 
   public ZeroFinder
 {
 public:
+/** 
+ * Constructor
+ * 
+ * @param _task Task to solve for
+ * @param _mac MacCready object to use for search
+ * 
+ * @return Initialised object (not yet searched)
+ */
   MacCreadyVopt(const GlideState &_task,
                 const MacCready &_mac):
     ZeroFinder(15.0,75.0, TOLERANCE_MC_OPT_GLIDE),
@@ -250,16 +258,28 @@ public:
     mc(_mac.get_mc())
     {
     };
+
+  /**
+   * Function to optimise in search
+   *
+   * @param V cruise true air speed (m/s)
+   * @return Virtual speed (m/s) of flight
+   */
   double f(const double V) {
     res = mac.solve_glide(task, V);
     return res.calc_vspeed(mc);
   }
+  
+  /**
+   * Perform search for best cruise speed and return result 
+   * @return Glide solution (optimum)
+   */
   GlideResult result() {
     find_min(20.0);
     return res;
   }
+private:
   GlideResult res;
-protected:
   const GlideState &task;
   const MacCready &mac;
   const double mc;

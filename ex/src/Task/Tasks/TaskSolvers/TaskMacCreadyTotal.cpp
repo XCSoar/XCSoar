@@ -31,8 +31,6 @@ TaskMacCreadyTotal::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
 double 
 TaskMacCreadyTotal::effective_distance(const double time_remaining) const
 {
-  // returns effective distance remaining such that at the virtual
-  // point, the time remaining is the same as the reference time remaining 
 
   double t_total = 0.0;
   double d_total = 0.0;
