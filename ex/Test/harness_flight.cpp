@@ -428,6 +428,30 @@ bool test_goto(int n_wind, unsigned id)
 }
 
 
+bool test_null()
+{
+  GlidePolar glide_polar(2.0,0.0,0.0);
+  Waypoints waypoints;
+  setup_waypoints(waypoints);
+
+  if (verbose) {
+    distance_counts();
+  }
+
+  TaskBehaviour task_behaviour;
+//  task_behaviour.auto_mc = auto_mc;
+
+  TaskEvents default_events;  default_events.verbose = verbose;
+
+  TaskManager task_manager(default_events,
+                           task_behaviour,
+                           glide_polar,
+                           waypoints);
+
+  return run_flight(task_manager, glide_polar, true, target_noise, 0);
+}
+
+
 bool test_airspace(const unsigned n_airspaces)
 {
   airspaces = new Airspaces;

@@ -80,7 +80,10 @@ TaskManager::update(const AIRCRAFT_STATE &state,
   // always update ordered task so even if we are temporarily
   // in abort/goto mode, the task stats are still updated
 
-  bool retval = task_ordered.update(state, state_last);
+  bool retval = false;
+  if (task_ordered.task_size()>1) {
+    retval |= task_ordered.update(state, state_last);
+  }
   if (active_task && (active_task != &task_ordered)) {
     retval |= active_task->update(state, state_last);
   }

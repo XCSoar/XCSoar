@@ -292,5 +292,9 @@ AbstractTaskFactory::remove(const unsigned position,
 bool 
 AbstractTaskFactory::has_entered(unsigned position) const
 {
-  return task.getTaskPoint(position)->has_entered();
+  if (task.getTaskPoint(position)) {
+    return task.getTaskPoint(position)->has_entered();
+  } else {
+    return true;
+  }
 }

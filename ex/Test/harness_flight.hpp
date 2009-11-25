@@ -29,6 +29,7 @@ bool test_automc(int test_num, int n_wind);
 bool test_bestcruisetrack(int test_num, int n_wind);
 bool test_abort(int n_wind);
 bool test_goto(int n_wind, unsigned id);
+bool test_null();
 bool test_airspace(const unsigned n_airspaces);
 
 #endif

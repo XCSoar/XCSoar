@@ -15,10 +15,11 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(2);
+  plan_tests(3);
 
   ok(test_abort(0),"abort",0);
   ok(test_goto(0,5),"goto",0);
+  ok(test_null(),"null",0);
 
   return exit_status();
 }

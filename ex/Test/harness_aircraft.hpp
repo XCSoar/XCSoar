@@ -39,6 +39,8 @@ public:
   GEOPOINT target(TaskManager &task_manager);
 
 private:
+  double target_height(TaskManager &task_manager);
+
   bool short_flight;
   GEOPOINT endpoint(const double bear) const;
   void update_bearing(TaskManager &task_manager);

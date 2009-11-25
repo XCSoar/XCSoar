@@ -114,7 +114,6 @@ OBJS	:=\
 	src/Task/TaskPoints/AATPoint.o \
 	src/Task/TaskPoints/AATIsoline.o \
 	src/Task/TaskPoints/AATIsolineSegment.o \
-	src/Task/TaskPoints/AATIsolineIntercept.o \
 	src/Task/ObservationZones/CylinderZone.o \
 	src/Task/ObservationZones/HeightLimitZone.o \
 	src/Task/ObservationZones/SectorZone.o \
@@ -181,8 +180,8 @@ TARGETS = $(TESTS)
 all: $(OBJS) $(TESTOBJS) $(TARGETS)
 	@echo "done"
 
-COVSTART = geninfo -q --no-checksum -b . -i .
-COVEND = geninfo -q --no-checksum -b . .
+COVSTART = geninfo -q --no-checksum -b . -i src
+COVEND = geninfo -q --no-checksum -b . src
 
 testslow:	$(TESTSLOW)
 	$(Q)$(COVSTART)

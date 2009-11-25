@@ -13,16 +13,7 @@ public:
  * Constructor.  Initialises all to zero.
  * 
  */
-  TaskStats():
-    Time(0.0),
-    cruise_efficiency(1.0),
-    glide_required(0.0),
-    mc_best(0.0),
-    distance_nominal(0.0),
-    distance_max(0.0),
-    distance_min(0.0),
-    distance_scored(0.0)
-    {};
+  TaskStats();
 
   ElementStat total; /**< Total task statistics */
   ElementStat current_leg; /**< Current (active) leg statistics */

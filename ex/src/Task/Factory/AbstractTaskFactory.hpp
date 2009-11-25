@@ -216,7 +216,7 @@ public:
   /**
    *  FOR TESTING ONLY
    * @param index index of task point sequence
-   * @return True if aircraft has previously entered the taskpoint
+   * @return True if aircraft has previously entered the taskpoint or if index is invalid
    */
   bool has_entered(unsigned index) const;
 

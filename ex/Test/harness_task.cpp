@@ -128,7 +128,7 @@ bool test_task_manip(TaskManager& task_manager,
   task_report(task_manager, "# auto-replacing at 0 (morph this)\n");
   wp = waypoints.lookup_id(12);
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
+    tp = fact->createIntermediate(AbstractTaskFactory::FAI_SECTOR,*wp);
     if (!fact->replace(tp,0)) return false;
   }
 

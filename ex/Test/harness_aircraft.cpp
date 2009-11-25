@@ -139,7 +139,11 @@ void AircraftSim::update_state(TaskManager &task_manager,
   switch (acstate) {
   case Cruise:
   case FinalGlide:
-    state.Speed = stat.solution_remaining.VOpt*speed_factor;
+    if (stat.solution_remaining.VOpt>0) {
+      state.Speed = stat.solution_remaining.VOpt*speed_factor;
+    } else {
+      state.Speed = glide_polar.get_VbestLD();
+    }
     sinkrate = glide_polar.SinkRate(state.Speed)*sink_factor;
     update_bearing(task_manager);
     break;
@@ -149,6 +153,16 @@ void AircraftSim::update_state(TaskManager &task_manager,
     sinkrate = -climb_rate*climb_factor;
     break;
   };
+}
+
+double
+AircraftSim::target_height(TaskManager &task_manager)  
+{
+  if (task_manager.getActiveTaskPoint()) {
+    return std::max(300.0, task_manager.getActiveTaskPoint()->getElevation());
+  } else {
+    return 300.0;
+  }
 }
 
 void AircraftSim::update_mode(TaskManager &task_manager)  
@@ -163,7 +177,7 @@ void AircraftSim::update_mode(TaskManager &task_manager)
       print_mode("# mode fg\n");
       acstate = FinalGlide;
     } else {
-      if (state.Altitude<=300) {
+      if (state.Altitude<=target_height(task_manager)) {
         print_mode("# mode climb\n");
         acstate = Climb;
       }
