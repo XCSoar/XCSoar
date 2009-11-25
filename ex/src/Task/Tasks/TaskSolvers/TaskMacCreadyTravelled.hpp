@@ -10,11 +10,18 @@ class TaskMacCreadyTravelled:
   public TaskMacCready
 {
 public:
+/** 
+ * Constructor for ordered task points
+ * 
+ * @param _tps Vector of ordered task points comprising the task
+ * @param _activeTaskPoint Current active task point in sequence
+ * @param _gp Glide polar to copy for calculations
+ */
   TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
                          const unsigned _activeTaskPoint,
                          const GlidePolar &_gp);
 
-protected:
+private:
   virtual GlideResult tp_solution(const unsigned i,
                                    const AIRCRAFT_STATE &aircraft, 
                                    double minH) const;

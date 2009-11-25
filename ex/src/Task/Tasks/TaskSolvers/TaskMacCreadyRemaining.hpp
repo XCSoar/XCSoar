@@ -10,15 +10,30 @@ class TaskMacCreadyRemaining:
   public TaskMacCready
 {
 public:
+/** 
+ * Constructor for ordered task points
+ * 
+ * @param _tps Vector of ordered task points comprising the task
+ * @param _activeTaskPoint Current active task point in sequence
+ * @param _gp Glide polar to copy for calculations
+ */
   TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
                          const unsigned _activeTaskPoint,
                          const GlidePolar _gp);
+
+/** 
+ * Constructor for single task points (non-ordered ones)
+ * 
+ * @param tp Task point comprising the task
+ * @param gp Glide polar to copy for calculations
+ */
   TaskMacCreadyRemaining(TaskPoint* tp,
-                         const GlidePolar _gp);
+                         const GlidePolar gp);
 
   void set_range(const double tp, const bool force_current);
 
-protected:
+private:
+
   virtual GlideResult tp_solution(const unsigned i,
                                    const AIRCRAFT_STATE &aircraft, 
                                    double minH) const;

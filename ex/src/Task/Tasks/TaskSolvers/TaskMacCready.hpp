@@ -121,6 +121,22 @@ public:
 protected:
 
 /** 
+ * Calculate glide solution for specified index, given
+ * aircraft state and virtual sink rate.
+ * 
+ * @param index Index of task point
+ * @param state Aircraft state at origin
+ * @param S Sink rate (m/s, positive down)
+ * 
+ * @return Glide result for segment
+ */
+  GlideResult tp_sink(const unsigned index,
+                       const AIRCRAFT_STATE &state, 
+                       const double S) const;
+
+private:
+
+/** 
  * Pure virtual method to retrieve the absolute minimum height of
  * aircraft for entire task.
  * This is used to provide alternate methods for different perspectives
@@ -149,20 +165,6 @@ protected:
                                    double minH) const = 0;
 
 /** 
- * Calculate glide solution for specified index, given
- * aircraft state and virtual sink rate.
- * 
- * @param index Index of task point
- * @param state Aircraft state at origin
- * @param S Sink rate (m/s, positive down)
- * 
- * @return Glide result for segment
- */
-  GlideResult tp_sink(const unsigned index,
-                       const AIRCRAFT_STATE &state, 
-                       const double S) const;
-
-/** 
  * Pure virtual method to obtain aircraft state at start of task.
  * This is used to provide alternate methods for different perspectives
  * on the task, e.g. planned/remaining/travelled
@@ -183,7 +185,7 @@ protected:
  */
   void clearance_heights(const AIRCRAFT_STATE &state);
 
-
+protected:
   const std::vector<TaskPoint*> tps; /**< The TaskPoints in the task */
   std::vector<GlideResult> gs; /**< Glide solutions for each leg */
   std::vector<double> minHs; /**< Minimum altitude for each taskpoint (m) */

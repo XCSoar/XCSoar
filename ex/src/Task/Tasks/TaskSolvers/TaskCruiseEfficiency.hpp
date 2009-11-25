@@ -15,6 +15,14 @@ class TaskCruiseEfficiency:
   public ZeroFinder
 {
 public:
+/** 
+ * Constructor for ordered task points
+ * 
+ * @param tps Vector of ordered task points comprising the task
+ * @param activeTaskPoint Current active task point in sequence
+ * @param _aircraft Current aircraft state
+ * @param gp Glide polar to copy for calculations
+ */
   TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
                        const unsigned activeTaskPoint,
                        const AIRCRAFT_STATE &_aircraft,
@@ -22,6 +30,14 @@ public:
   virtual ~TaskCruiseEfficiency() {};
 
   virtual double f(const double ce);
+
+/** 
+ * Test validity of a solution given search parameter
+ * 
+ * @param ce Search parameter (cruise efficiency ratio)
+ * 
+ * @return True if solution is valid
+ */
   virtual bool valid(const double ce);
 
 /** 
@@ -33,7 +49,7 @@ public:
  */
   virtual double search(const double ce);
 
-protected:
+private:
   TaskMacCreadyTravelled tm;
   GlideResult res;
   const AIRCRAFT_STATE &aircraft;

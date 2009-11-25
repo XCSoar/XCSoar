@@ -61,7 +61,7 @@ public:
  */
   virtual void construction_error(const char* error) const;
 
-  bool verbose;
+  bool verbose; /**< Option to enable basic output on events (for testing) */
 };
 
 #endif

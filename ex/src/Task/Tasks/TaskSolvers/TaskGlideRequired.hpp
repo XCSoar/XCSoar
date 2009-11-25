@@ -17,17 +17,40 @@ class TaskGlideRequired:
   public ZeroFinder
 {
 public:
+/** 
+ * Constructor for ordered task points
+ * 
+ * @param tps Vector of ordered task points comprising the task
+ * @param activeTaskPoint Current active task point in sequence
+ * @param _aircraft Current aircraft state
+ * @param gp Glide polar to copy for calculations
+ */
   TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
                     const unsigned activeTaskPoint,
                     const AIRCRAFT_STATE &_aircraft,
                     const GlidePolar &gp);
+/** 
+ * Constructor for single task points (non-ordered ones)
+ * 
+ * @param tp Task point comprising the task
+ * @param _aircraft Current aircraft state
+ * @param gp Glide polar to copy for calculations
+ */
   TaskGlideRequired(TaskPoint* tp,
                     const AIRCRAFT_STATE &_aircraft,
                     const GlidePolar &gp);
   virtual ~TaskGlideRequired() {};
 
   virtual double f(const double mc);
-  virtual bool valid(const double mc);
+
+/** 
+ * Test validity of a solution given search parameter
+ * 
+ * @param S Search parameter (virtual sink rate of glider (m/s))
+ * 
+ * @return True if solution is valid
+ */
+  virtual bool valid(const double S);
 
 /** 
  * Search for sink rate to produce final glide solution
@@ -37,7 +60,7 @@ public:
  * @return Solution sink rate (m/s, down positive)
  */
   virtual double search(const double s);
-protected:
+private:
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AIRCRAFT_STATE &aircraft;
