@@ -992,25 +992,3 @@ WaypointWriteFiles(WayPointList &way_points,
   }
 
 }
-
-int
-FindMatchingWaypoint(const WayPointList &way_points, WAYPOINT *waypoint)
-{
-  // first scan, lookup by name
-  for (unsigned i = 0; way_points.verify_index(i); ++i) {
-    if (_tcscmp(waypoint->Name, way_points.get(i).Name)==0) {
-      return i;
-    }
-  }
-  // second scan, lookup by location
-  for (unsigned i = 0; way_points.verify_index(i); ++i) {
-    const WAYPOINT &wpi = way_points.get(i);
-
-    if ((fabs(waypoint->Location.Latitude - wpi.Location.Latitude)<1.0e-6)
-        && (fabs(waypoint->Location.Longitude - wpi.Location.Longitude)<1.0e-6)) {
-      return i;
-    }
-  }
-
-  return -1;
-}

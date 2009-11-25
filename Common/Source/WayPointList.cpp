@@ -40,6 +40,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdlib.h>
+#include <math.h>
 
 WayPointList::WayPointList()
   :list(NULL), calc_list(NULL), count(0) {}
@@ -131,4 +132,37 @@ WayPointList::pop()
   assert(count > 0);
 
   free(list[--count].Details);
+}
+
+int
+WayPointList::find_by_name(const TCHAR *name) const
+{
+  for (unsigned i = 0; verify_index(i); ++i)
+    if (_tcscmp(get(i).Name, name) == 0)
+      return i;
+
+  return -1;
+}
+
+int
+WayPointList::find_by_location(const GEOPOINT &location) const
+{
+  for (unsigned i = 0; verify_index(i); ++i)
+    if (fabs(get(i).Location.Latitude - location.Latitude) < 1.0e-6 &&
+        fabs(get(i).Location.Longitude - location.Longitude) < 1.0e-6)
+      return i;
+
+  return -1;
+}
+
+int
+WayPointList::find_match(const WAYPOINT &way_point) const
+{
+  /* first scan, lookup by name */
+  int i = find_by_name(way_point.Name);
+  if (i < 0)
+    /* second scan, lookup by location */
+    i = find_by_location(way_point.Location);
+
+  return i;
 }

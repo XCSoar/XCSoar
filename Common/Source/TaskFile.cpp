@@ -40,7 +40,6 @@ Copyright_License {
 #include "Task.h"
 #include "LocalPath.hpp"
 #include "WayPoint.hpp"
-#include "Waypointparser.h"
 #include "SettingsTask.hpp"
 #include "Protection.hpp"
 #include "Dialogs/Message.hpp"
@@ -70,7 +69,7 @@ static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
   read_waypoint->Details = 0;
   read_waypoint->Name[NAME_SIZE-1] = 0; // prevent overrun if data is bogus
 
-  int waypoint_index = FindMatchingWaypoint(way_points, read_waypoint);
+  int waypoint_index = way_points.find_match(*read_waypoint);
   if (waypoint_index == -1) {
     // waypoint not found, so add it!
 

@@ -88,6 +88,12 @@ public:
 
   void pop();
 
+  int find_by_name(const TCHAR *name) const;
+
+  int find_by_location(const GEOPOINT &location) const;
+
+  int find_match(const WAYPOINT &way_point) const;
+
 private:
   bool grow();
 };

@@ -85,7 +85,4 @@ WaypointWriteFiles(WayPointList &way_points,
 void
 WaypointAltitudeFromTerrain(WAYPOINT* wpt, RasterTerrain &terrain);
 
-int
-FindMatchingWaypoint(const WayPointList &way_points, WAYPOINT *waypoint);
-
 #endif
