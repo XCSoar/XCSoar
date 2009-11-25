@@ -12,10 +12,10 @@ TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
   }
   // set min heights (ensure clearance possible for latest glide)
   for (int i=start+1; i<=end; i++) {
-    AIRCRAFT_STATE aircraft_predict = aircraft;
-    aircraft_predict.Altitude = minHs[i-1];
-    GlideResult gr = tp_solution(i, aircraft_predict, minHs[i]);
-    if (minHs[i]<minHs[i-1]) {
+    if (minHs[i-1]>minHs[i]) {
+      AIRCRAFT_STATE aircraft_predict = aircraft;
+      aircraft_predict.Altitude = minHs[i-1];
+      GlideResult gr = tp_solution(i, aircraft_predict, minHs[i]);
       double dh = aircraft_predict.Altitude-gr.HeightGlide;
       if (minHs[i]+0.01<dh) {
         minHs[i] = dh;
