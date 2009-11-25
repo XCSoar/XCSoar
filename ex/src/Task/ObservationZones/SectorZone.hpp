@@ -68,18 +68,6 @@ public:
     };
 
 /** 
- * Clone with shift (for use when we want to create a new taskpoint
- * retaining the OZ type of another) 
- * 
- * @param _location Location of copy
- * 
- * @return New object
- */
-  virtual SectorZone* clone(const GEOPOINT &_location) {
-    return new SectorZone(_location, Radius, StartRadial, EndRadial);
-  }
-
-/** 
  * Set start angle (most counter-clockwise) of sector
  * 
  * @param x Angle (deg) of radial

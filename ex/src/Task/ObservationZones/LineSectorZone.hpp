@@ -63,18 +63,6 @@ public:
   {};
 
 /** 
- * Clone with shift (for use when we want to create a new taskpoint
- * retaining the OZ type of another) 
- * 
- * @param _location Location of copy
- * 
- * @return New object
- */
-  virtual LineSectorZone* clone(const GEOPOINT &_location) {
-    return new LineSectorZone(_location,getRadius());
-  }
-
-/** 
  * Check transition constraints -- for lines, both points have to
  * be within radius of OZ (otherwise it is a circumference border crossing)
  * 

@@ -88,15 +88,6 @@ public:
   virtual ~TaskPoint() {};
 
 /** 
- * Clone this TaskPoint.  Note that the clone constructs a new object,
- * so any local variables are not copied.
- * 
- * @return Copy of this object
- */
-  virtual TaskPoint* clone() { return new TaskPoint(waypoint,
-                                                    task_behaviour); };
-
-/** 
  * Retrieve elevation of taskpoint, taking into account
  * rules and safety margins.  
  * 

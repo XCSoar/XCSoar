@@ -60,18 +60,6 @@ public:
     {}
 
 /** 
- * Clone with shift (for use when we want to create a new taskpoint
- * retaining the OZ type of another) 
- * 
- * @param _location Location of copy
- * 
- * @return New object
- */
-  virtual FAISectorZone* clone(const GEOPOINT &_location) {
-    return new FAISectorZone(_location);
-  }
-
-/** 
  * Test whether an OZ is equivalent to this one
  * 
  * @param other OZ to compare to

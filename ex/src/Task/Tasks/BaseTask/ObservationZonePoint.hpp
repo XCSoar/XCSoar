@@ -64,16 +64,6 @@ public:
     };
 
 /** 
- * Clone with shift (for use when we want to create a new taskpoint
- * retaining the OZ type of another) 
- * 
- * @param _location Location of copy
- * 
- * @return New object
- */
-  virtual ObservationZonePoint* clone(const GEOPOINT &_location) = 0;
-
-/** 
  * Update geometry when previous/next legs are modified.
  * 
  * @param previous Previous task point (origin of inbound leg)

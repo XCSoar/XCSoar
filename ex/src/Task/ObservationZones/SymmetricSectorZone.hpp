@@ -64,18 +64,6 @@ public:
     SectorAngle(angle) {}
 
 /** 
- * Clone with shift (for use when we want to create a new taskpoint
- * retaining the OZ type of another) 
- * 
- * @param _location Location of copy
- * 
- * @return New object
- */
-  virtual SymmetricSectorZone* clone(const GEOPOINT &_location) {
-    return new SymmetricSectorZone(_location, getRadius(), SectorAngle);
-  }
-
-/** 
  * Update radials when previous/next legs are modified.
  * 
  * @param previous Previous task point (origin of inbound leg)
