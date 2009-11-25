@@ -118,7 +118,7 @@ int FindAirspaceArea(const GEOPOINT &location,
 		     bool visibleonly=true);
 
 bool
-CheckAirspaceAltitude(double Base, double Top,
+CheckAirspaceAltitude(double Base, double Top, double altitude,
                       const SETTINGS_COMPUTER &settings);
 
 void CloseAirspace(void);
@@ -196,14 +196,15 @@ double RangeAirspaceArea(const GEOPOINT &location,
 			 const int i, double *bearing,
 			 const MapWindowProjection &map_projection);
 
-void FindNearestAirspace(const GEOPOINT &location,
-                         const SETTINGS_COMPUTER &settings,
-                         const MapWindowProjection &map_projection,
-                         double *nearestdistance,
-			 double *nearestbearing,
-			 int *foundcircle,
-			 int *foundarea,
-			 double *height=NULL);
+void
+FindNearestAirspace(const GEOPOINT &location,
+                    double altitude, double terrain_altitude,
+                    const SETTINGS_COMPUTER &settings,
+                    const MapWindowProjection &map_projection,
+                    double *nearestdistance, double *nearestbearing,
+                    int *foundcircle,
+                    int *foundarea,
+                    double *height=NULL);
 
 
 #endif

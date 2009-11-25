@@ -43,7 +43,6 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Math/Screen.hpp"
 #include "Math/Units.h"
-#include "NMEA/Derived.hpp"
 #include "SettingsComputer.hpp"
 #include "MapWindowProjection.hpp"
 
@@ -249,7 +248,7 @@ AirspaceDatabase::InsideCircle(const GEOPOINT &location,
 
 int
 AirspaceDatabase::NearestCircle(const GEOPOINT &location,
-                                const DERIVED_INFO &derived,
+                                double altitude, double terrain_altitude,
                                 const SETTINGS_COMPUTER &settings,
                                 double *nearestdistance,
                                 double *nearestbearing,
@@ -282,19 +281,19 @@ AirspaceDatabase::NearestCircle(const GEOPOINT &location,
     if (AirspaceCircle[i].Base.Base != abAGL) {
       basealt = AirspaceCircle[i].Base.Altitude;
     } else {
-      basealt = AirspaceCircle[i].Base.AGL + derived.TerrainAlt;
+      basealt = AirspaceCircle[i].Base.AGL + terrain_altitude;
     }
     if (AirspaceCircle[i].Top.Base != abAGL) {
       topalt = AirspaceCircle[i].Top.Altitude;
     } else {
-      topalt = AirspaceCircle[i].Top.AGL + derived.TerrainAlt;
+      topalt = AirspaceCircle[i].Top.AGL + terrain_altitude;
     }
 
     bool altok;
     if (height) {
       altok = ((*height > basealt) && (*height < topalt));
     } else {
-      altok = CheckAirspaceAltitude(basealt, topalt, settings)==true;
+      altok = CheckAirspaceAltitude(basealt, topalt, altitude, settings);
     }
     if(altok) {
 
@@ -455,7 +454,7 @@ AirspaceDatabase::RangeArea(const GEOPOINT &location, const int i,
 
 int
 AirspaceDatabase::NearestArea(const GEOPOINT &location,
-                              const DERIVED_INFO &derived,
+                              double altitude, double terrain_altitude,
                               const SETTINGS_COMPUTER &settings,
                               const MapWindowProjection& map_projection,
                               double *nearestdistance, double *nearestbearing,
@@ -487,17 +486,17 @@ AirspaceDatabase::NearestArea(const GEOPOINT &location,
     if (AirspaceArea[i].Base.Base != abAGL) {
       basealt = AirspaceArea[i].Base.Altitude;
     } else {
-      basealt = AirspaceArea[i].Base.AGL + derived.TerrainAlt;
+      basealt = AirspaceArea[i].Base.AGL + terrain_altitude;
     }
     if (AirspaceArea[i].Top.Base != abAGL) {
       topalt = AirspaceArea[i].Top.Altitude;
     } else {
-      topalt = AirspaceArea[i].Top.AGL + derived.TerrainAlt;
+      topalt = AirspaceArea[i].Top.AGL + terrain_altitude;
     }
 
     bool altok;
     if (!height) {
-      altok = CheckAirspaceAltitude(basealt, topalt, settings)==true;
+      altok = CheckAirspaceAltitude(basealt, topalt, altitude, settings);
     } else {
       altok = ((*height < topalt) && (*height > basealt));
     }

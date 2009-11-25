@@ -48,7 +48,6 @@ Copyright_License {
 struct GEOPOINT;
 struct AIRSPACE_AREA;
 struct AIRSPACE_CIRCLE;
-struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
 class MapWindowProjection;
 
@@ -116,7 +115,7 @@ public:
    * @return Array id of the nearest AirspaceCircle
    */
   int NearestCircle(const GEOPOINT &location,
-                    const DERIVED_INFO &derived,
+                    double altitude, double terrain_altitude,
                     const SETTINGS_COMPUTER &settings,
                     double *nearestdistance,
                     double *nearestbearing,
@@ -151,7 +150,7 @@ public:
    * @return Array id of the nearest AirspaceArea
    */
   int NearestArea(const GEOPOINT &location,
-                  const DERIVED_INFO &derived,
+                  double altitude, double terrain_altitude,
                   const SETTINGS_COMPUTER &settings,
                   const MapWindowProjection& map_projection,
                   double *nearestdistance, double *nearestbearing,

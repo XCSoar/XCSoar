@@ -1226,8 +1226,8 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   }
 
   StartHourglassCursor();
-  FindNearestAirspace(Basic().Location,
-                      SettingsComputer(),
+  FindNearestAirspace(Basic().Location, Basic().GetAnyAltitude(),
+                      Calculated().TerrainAlt, SettingsComputer(),
                       MapProjection(),
                       &nearestdistance, &nearestbearing,
 		      &foundcircle, &foundarea);

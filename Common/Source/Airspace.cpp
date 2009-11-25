@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/Units.h"
 #include "Math/Pressure.h"
 #include "SettingsAirspace.hpp"
-#include "Interface.hpp" // JMW remove (need to separate out blackboard)
+#include "SettingsComputer.hpp"
 
 //#include <windows.h>
 //#include <commctrl.h>
@@ -165,18 +165,9 @@ int FindAirspaceCircle(const GEOPOINT &location, bool visibleonly)
  * @return True if airspace is supposed to be drawn, False otherwise
  */
 bool
-CheckAirspaceAltitude(double Base, double Top,
+CheckAirspaceAltitude(double Base, double Top, double alt,
                       const SETTINGS_COMPUTER &settings)
 {
-  double alt;
-
-  // TODO remove dependency!
-  if (XCSoarInterface::Basic().BaroAltitudeAvailable) {
-    alt = XCSoarInterface::Basic().BaroAltitude;
-  } else {
-    alt = XCSoarInterface::Basic().Altitude;
-  }
-
   switch (settings.AltitudeMode) {
   case ALLON:
     return true;
@@ -288,13 +279,13 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
  */
 static int
 FindNearestAirspaceCircle(const GEOPOINT &location,
+                          double altitude, double terrain_altitude,
                           const SETTINGS_COMPUTER &settings,
                           double *nearestdistance,
                           double *nearestbearing,
                           double *height=NULL)
 {
-  return airspace_database.NearestCircle(location,
-                                         XCSoarInterface::Calculated(),
+  return airspace_database.NearestCircle(location, altitude, terrain_altitude,
                                          settings,
                                          nearestdistance, nearestbearing,
                                          height);
@@ -332,12 +323,13 @@ double RangeAirspaceArea(const GEOPOINT &location,
  */
 static int
 FindNearestAirspaceArea(const GEOPOINT &location,
+                        double altitude, double terrain_altitude,
                         const SETTINGS_COMPUTER &settings,
                         const MapWindowProjection& map_projection,
                         double *nearestdistance, double *nearestbearing,
                         double *height=NULL)
 {
-  return airspace_database.NearestArea(location, XCSoarInterface::Calculated(),
+  return airspace_database.NearestArea(location, altitude, terrain_altitude,
                                        settings, map_projection,
                                        nearestdistance, nearestbearing,
                                        height);
@@ -371,6 +363,7 @@ FindNearestAirspaceArea(const GEOPOINT &location,
  * where the height is between base and top of the airspace
  */
 void FindNearestAirspace(const GEOPOINT &location,
+                         double altitude, double terrain_altitude,
     const SETTINGS_COMPUTER &settings,
     const MapWindowProjection& map_projection, double *nearestdistance,
     double *nearestbearing, int *foundcircle, int *foundarea, double *height) {
@@ -381,11 +374,13 @@ void FindNearestAirspace(const GEOPOINT &location,
   double nearestb1 = 0;
   double nearestb2 = 0;
 
-  *foundcircle = FindNearestAirspaceCircle(location, settings, &nearestd1,
-      &nearestb1, height);
+  *foundcircle = FindNearestAirspaceCircle(location, altitude,
+                                           terrain_altitude, settings,
+                                           &nearestd1, &nearestb1, height);
 
-  *foundarea = FindNearestAirspaceArea(location, settings, map_projection,
-      &nearestd2, &nearestb2, height);
+  *foundarea = FindNearestAirspaceArea(location, altitude, terrain_altitude,
+                                       settings, map_projection,
+                                       &nearestd2, &nearestb2, height);
 
   if ((*foundcircle >= 0) && (*foundarea < 0)) {
     *nearestdistance = nearestd1;
