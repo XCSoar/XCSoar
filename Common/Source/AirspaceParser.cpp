@@ -146,14 +146,6 @@ static const int k_nAreaType[k_nAreaCount] = {
 					CLASSE,
 					CLASSF};
 
-bool CheckAirspacePoint(int Idx){
-  if (Idx < 0 || Idx >= AirspacePointSize){
-    return false;
-    //throw "Airspace Parser: Memory access error!";
-  }
-  return true;
-}
-
 bool ValidAirspace(void) {
   return (NumberOfAirspacePoints>0)||(NumberOfAirspaceAreas>0)||(NumberOfAirspaceCircles>0);
 }
@@ -846,9 +838,6 @@ static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount)
     }
   else
     {
-
-      CheckAirspacePoint(NumberOfAirspacePoints);
-
       NewPoint = &AirspacePoint[NumberOfAirspacePoints];
       NumberOfAirspacePoints++;
 
@@ -861,9 +850,6 @@ static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount)
   assert(AreaPointCount != NULL);
 
   if(bFillMode){
-
-    CheckAirspacePoint(NumberOfAirspacePoints);
-
     NewPoint = &AirspacePoint[NumberOfAirspacePoints];
 
     NewPoint->Latitude  = Temp->Latitude;
@@ -912,9 +898,6 @@ static void AddArea(AIRSPACE_AREA *Temp)
       Temp->FirstPoint = Temp->FirstPoint + Temp->NumPoints ;
 
       if (Temp->NumPoints > 0) {
-
-        CheckAirspacePoint(NewArea->FirstPoint);
-
         PointList = &AirspacePoint[NewArea->FirstPoint];
         NewArea->maxBound.Latitude = -90;
         NewArea->minBound.Latitude = 90;
@@ -1206,9 +1189,6 @@ static void FindAirspaceAreaBounds() {
         j< AirspaceArea[i].FirstPoint+AirspaceArea[i].NumPoints; j++) {
 
       if (first) {
-
-        CheckAirspacePoint(j);
-
         AirspaceArea[i].bounds.minx = AirspacePoint[j].Longitude;
         AirspaceArea[i].bounds.maxx = AirspacePoint[j].Longitude;
         AirspaceArea[i].bounds.miny = AirspacePoint[j].Latitude;

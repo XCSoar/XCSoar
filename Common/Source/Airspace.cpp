@@ -352,8 +352,6 @@ bool InsideAirspaceArea(const GEOPOINT &location,
                            AirspaceArea[i].bounds.minx,
                            AirspaceArea[i].bounds.maxx)) {
 
-    CheckAirspacePoint(AirspaceArea[i].FirstPoint);
-
     // it is within, so now do detailed polygon test
     if (wn_PnPoly(thispoint,
 		  &AirspacePoint[AirspaceArea[i].FirstPoint],
@@ -549,8 +547,6 @@ double RangeAirspaceArea(const GEOPOINT &location,
 
     int p1 = AirspaceArea[i].FirstPoint+j;
     int p2 = AirspaceArea[i].FirstPoint+j+1;
-    CheckAirspacePoint(p1);
-    CheckAirspacePoint(p2);
 
     dist = ScreenCrossTrackError(AirspacePoint[p1],
 				 AirspacePoint[p2],
@@ -890,8 +886,6 @@ void ScanAirspaceLine(const GEOPOINT *locs, const double *heights,
               && CheckInsideLongitude(locs[i].Longitude,
                   AirspaceArea[k].bounds.minx, AirspaceArea[k].bounds.maxx)) {
             AIRSPACE_POINT thispoint = locs[i];
-
-            CheckAirspacePoint(AirspaceArea[k].FirstPoint);
 
             if (wn_PnPoly(thispoint,
                 &AirspacePoint[AirspaceArea[k].FirstPoint],

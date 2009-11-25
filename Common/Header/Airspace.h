@@ -196,8 +196,6 @@ double RangeAirspaceArea(const GEOPOINT &location,
 			 const int i, double *bearing,
 			 const MapWindowProjection &map_projection);
 
-bool CheckAirspacePoint(int Idx);
-
 void FindNearestAirspace(const GEOPOINT &location,
                          const SETTINGS_COMPUTER &settings,
                          const MapWindowProjection &map_projection,
