@@ -198,32 +198,23 @@ PopupNearestWaypointDetails(const WayPointList &way_points,
 }
 
 bool PopupInteriorAirspaceDetails(const GEOPOINT &location) {
-  unsigned int i;
   bool found=false;
-  bool inside;
 
-  if (AirspaceCircle) {
-    for (i=0; i<NumberOfAirspaceCircles; i++) {
-      inside = false;
-      if (AirspaceCircle[i].Visible) {
-        inside = InsideAirspaceCircle(location, i);
-      }
-      if (inside) {
-	dlgAirspaceDetails(i, -1);
-        found = true;
-      }
+  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
+    const AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+
+    if (circle.Visible && InsideAirspaceCircle(location, i)) {
+      dlgAirspaceDetails(i, -1);
+      found = true;
     }
   }
-  if (AirspaceArea) {
-    for (i=0; i<NumberOfAirspaceAreas; i++) {
-      inside = false;
-      if (AirspaceArea[i].Visible) {
-        inside = InsideAirspaceArea(location, i);
-      }
-      if (inside) {
-	dlgAirspaceDetails(-1, i);
-        found = true;
-      }
+
+  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
+    const AIRSPACE_AREA &area = AirspaceArea[i];
+
+    if (area.Visible && InsideAirspaceArea(location, i)) {
+      dlgAirspaceDetails(-1, i);
+      found = true;
     }
   }
 

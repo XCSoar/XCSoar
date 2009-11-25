@@ -925,8 +925,6 @@ bool GlobalClearAirspaceWarnings = false;
 void
 GlideComputerAirData::AirspaceWarning()
 {
-  unsigned int i;
-
   static bool position_is_predicted = false;
 
   if (GlobalClearAirspaceWarnings == true) {
@@ -959,54 +957,36 @@ GlideComputerAirData::AirspaceWarning()
   // JMW TODO enhancement: FindAirspaceCircle etc should sort results, return
   // the most critical or closest.
 
-  if (AirspaceCircle) {
-    for (i=0; i<NumberOfAirspaceCircles; i++) {
+  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
+    const AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
 
-      if ((((AirspaceCircle[i].Base.Base != abAGL)
-	    && (alt >= AirspaceCircle[i].Base.Altitude))
-           || ((AirspaceCircle[i].Base.Base == abAGL)
-	       && (agl >= AirspaceCircle[i].Base.AGL)))
-          && (((AirspaceCircle[i].Top.Base != abAGL)
-	       && (alt < AirspaceCircle[i].Top.Altitude))
-           || ((AirspaceCircle[i].Top.Base == abAGL)
-	       && (agl < AirspaceCircle[i].Top.AGL)))) {
-
-        if ((SettingsComputer().iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
-	    InsideAirspaceCircle(loc, i)) {
-
-          AirspaceWarnListAdd(&Basic(), &Calculated(),
-                              &SettingsComputer(),
-                              MapProjection(),
-                              position_is_predicted, 1, i, false);
-        }
-      }
-    }
+    if (((circle.Base.Base != abAGL && alt >= circle.Base.Altitude) ||
+         (circle.Base.Base == abAGL && agl >= circle.Base.AGL)) &&
+        ((circle.Top.Base != abAGL && alt < circle.Top.Altitude) ||
+         (circle.Top.Base == abAGL && agl < circle.Top.AGL)) &&
+        SettingsComputer().iAirspaceMode[circle.Type] >= 2 &&
+        InsideAirspaceCircle(loc, i))
+      AirspaceWarnListAdd(&Basic(), &Calculated(),
+                          &SettingsComputer(),
+                          MapProjection(),
+                          position_is_predicted, 1, i, false);
   }
 
   // repeat process for areas
 
-  if (AirspaceArea) {
-    for (i=0; i<NumberOfAirspaceAreas; i++) {
+  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
+    const AIRSPACE_AREA &area = AirspaceArea[i];
 
-      if ((((AirspaceArea[i].Base.Base != abAGL)
-	    && (alt >= AirspaceArea[i].Base.Altitude))
-           || ((AirspaceArea[i].Base.Base == abAGL)
-	       && (agl >= AirspaceArea[i].Base.AGL)))
-          && (((AirspaceArea[i].Top.Base != abAGL)
-	       && (alt < AirspaceArea[i].Top.Altitude))
-           || ((AirspaceArea[i].Top.Base == abAGL)
-	       && (agl < AirspaceArea[i].Top.AGL)))) {
-
-        if ((SettingsComputer().iAirspaceMode[AirspaceArea[i].Type] >= 2)
-            && InsideAirspaceArea(loc, i)){
-
-          AirspaceWarnListAdd(&Basic(), &Calculated(),
-                              &SettingsComputer(),
-                              map_projection,
-                              position_is_predicted, 0, i, false);
-        }
-      }
-    }
+    if (((area.Base.Base != abAGL && alt >= area.Base.Altitude) ||
+         (area.Base.Base == abAGL && agl >= area.Base.AGL)) &&
+        ((area.Top.Base != abAGL && alt < area.Top.Altitude) ||
+         (area.Top.Base == abAGL && agl < area.Top.AGL)) &&
+        SettingsComputer().iAirspaceMode[area.Type] >= 2 &&
+        InsideAirspaceArea(loc, i))
+      AirspaceWarnListAdd(&Basic(), &Calculated(),
+                          &SettingsComputer(),
+                          map_projection,
+                          position_is_predicted, 0, i, false);
   }
 
   AirspaceWarnListProcess(&Basic(), &Calculated(),

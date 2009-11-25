@@ -125,17 +125,14 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
 }
 
 void MapWindow::CalculateScreenPositionsAirspace() {
-  if (AirspaceCircle) {
-    for (AIRSPACE_CIRCLE* circ = AirspaceCircle;
-         circ < AirspaceCircle+NumberOfAirspaceCircles; circ++) {
-      CalculateScreenPositionsAirspaceCircle(*circ);
-    }
+  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
+    AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+    CalculateScreenPositionsAirspaceCircle(circle);
   }
-  if (AirspaceArea) {
-    for(AIRSPACE_AREA *area = AirspaceArea;
-        area < AirspaceArea+NumberOfAirspaceAreas; area++) {
-      CalculateScreenPositionsAirspaceArea(*area);
-    }
+
+  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
+    AIRSPACE_AREA &area = AirspaceArea[i];
+    CalculateScreenPositionsAirspaceArea(area);
   }
 }
 
@@ -163,43 +160,43 @@ void
 MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
   // TODO code: optimise airspace drawing
-  unsigned int i;
-
   bool found = false;
 
-  if (AirspaceCircle) {
-    // draw without border
-    for(i=0;i<NumberOfAirspaceCircles;i++) {
-      if (AirspaceCircle[i].Visible==2) {
-        if (!found) {
-          ClearAirSpace(buffer, true);
-          found = true;
-        }
-        // this color is used as the black bit
-        buffer.set_text_color(MapGfx.Colours[SettingsMap().iAirspaceColour[AirspaceCircle[i].Type]]);
-        // get brush, can be solid or a 1bpp bitmap
-        buffer.select(MapGfx.hAirspaceBrushes[SettingsMap().iAirspaceBrush[AirspaceCircle[i].Type]]);
-        buffer.circle(AirspaceCircle[i].Screen.x,
-                      AirspaceCircle[i].Screen.y,
-                      AirspaceCircle[i].ScreenR);
-      }
+  // draw without border
+  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
+    const AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+
+    if (circle.Visible != 2)
+      continue;
+
+    if (!found) {
+      ClearAirSpace(buffer, true);
+      found = true;
     }
+
+    // this color is used as the black bit
+    buffer.set_text_color(MapGfx.Colours[SettingsMap().iAirspaceColour[circle.Type]]);
+    // get brush, can be solid or a 1bpp bitmap
+    buffer.select(MapGfx.hAirspaceBrushes[SettingsMap().iAirspaceBrush[circle.Type]]);
+    buffer.circle(circle.Screen.x, circle.Screen.y, circle.ScreenR);
   }
 
-  if (AirspaceArea) {
-    for(i=0;i<NumberOfAirspaceAreas;i++) {
-      if(AirspaceArea[i].Visible ==2) {
-        if (!found) {
-          ClearAirSpace(buffer, true);
-          found = true;
-        }
-        // this color is used as the black bit
-        buffer.set_text_color(MapGfx.Colours[SettingsMap().iAirspaceColour[AirspaceArea[i].Type]]);
-        buffer.select(MapGfx.hAirspaceBrushes[SettingsMap().iAirspaceBrush[AirspaceArea[i].Type]]);
-        buffer.polygon(AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
-            AirspaceArea[i].NumPoints);
-      }
+  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
+    const AIRSPACE_AREA &area = AirspaceArea[i];
+
+    if (area.Visible != 2)
+      continue;
+
+    if (!found) {
+      ClearAirSpace(buffer, true);
+      found = true;
     }
+
+    // this color is used as the black bit
+    buffer.set_text_color(MapGfx.Colours[SettingsMap().iAirspaceColour[area.Type]]);
+    buffer.select(MapGfx.hAirspaceBrushes[SettingsMap().iAirspaceBrush[area.Type]]);
+    buffer.polygon(AirspaceScreenPoint + area.FirstPoint,
+                   area.NumPoints);
   }
 
   // draw it again, just the outlines
@@ -209,54 +206,52 @@ MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
     buffer.white_pen();
   }
 
-  if (AirspaceCircle) {
-    for(i=0;i<NumberOfAirspaceCircles;i++) {
-      if (AirspaceCircle[i].Visible) {
-        if (!found) {
-          ClearAirSpace(buffer, false);
-          found = true;
-        }
+  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
+    const AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
 
-        if (SettingsMap().bAirspaceBlackOutline) {
-          buffer.black_pen();
-        } else {
-          buffer.select(MapGfx.hAirspacePens[AirspaceCircle[i].Type]);
-        }
+    if (!circle.Visible)
+      continue;
 
-        buffer.circle(AirspaceCircle[i].Screen.x,
-                      AirspaceCircle[i].Screen.y,
-                      AirspaceCircle[i].ScreenR);
-      }
+    if (!found) {
+      ClearAirSpace(buffer, false);
+      found = true;
     }
+
+    if (SettingsMap().bAirspaceBlackOutline)
+      buffer.black_pen();
+    else
+      buffer.select(MapGfx.hAirspacePens[circle.Type]);
+
+    buffer.circle(circle.Screen.x, circle.Screen.y, circle.ScreenR);
   }
 
-  if (AirspaceArea) {
-    for(i=0;i<NumberOfAirspaceAreas;i++) {
-      if(AirspaceArea[i].Visible) {
-        if (!found) {
-          ClearAirSpace(buffer, false);
-          found = true;
-        }
+  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
+    const AIRSPACE_AREA &area = AirspaceArea[i];
 
-        if (SettingsMap().bAirspaceBlackOutline) {
-          buffer.black_pen();
-        } else {
-          buffer.select(MapGfx.hAirspacePens[AirspaceArea[i].Type]);
-        }
+    if (!area.Visible)
+      continue;
 
-        POINT *pstart = AirspaceScreenPoint+AirspaceArea[i].FirstPoint;
-        buffer.polyline(pstart, AirspaceArea[i].NumPoints);
+    if (!found) {
+      ClearAirSpace(buffer, false);
+      found = true;
+    }
 
-        if (AirspaceArea[i].NumPoints>2) {
-          // JMW close if open
-          if ((pstart[0].x != pstart[AirspaceArea[i].NumPoints-1].x) ||
-              (pstart[0].y != pstart[AirspaceArea[i].NumPoints-1].y)) {
-            POINT ps[2];
-            ps[0] = pstart[0];
-            ps[1] = pstart[AirspaceArea[i].NumPoints-1];
-            buffer.polyline(ps, 2);
-          }
-        }
+    if (SettingsMap().bAirspaceBlackOutline)
+      buffer.black_pen();
+    else
+      buffer.select(MapGfx.hAirspacePens[area.Type]);
+
+    POINT *pstart = AirspaceScreenPoint+area.FirstPoint;
+    buffer.polyline(pstart, area.NumPoints);
+
+    if (area.NumPoints > 2) {
+      // JMW close if open
+      if ((pstart[0].x != pstart[area.NumPoints-1].x) ||
+          (pstart[0].y != pstart[area.NumPoints-1].y)) {
+        POINT ps[2];
+        ps[0] = pstart[0];
+        ps[1] = pstart[area.NumPoints-1];
+        buffer.polyline(ps, 2);
       }
     }
   }
@@ -280,23 +275,21 @@ void MapWindow::ScanVisibilityAirspace(rectObj *bounds_active) {
   // (saves from having to do it every screen redraw)
   const rectObj bounds = *bounds_active;
 
-  if (AirspaceCircle) {
-    for (AIRSPACE_CIRCLE* circ = AirspaceCircle;
-         circ < AirspaceCircle+NumberOfAirspaceCircles; circ++) {
-      circ->FarVisible =
-        (msRectOverlap(&circ->bounds, bounds_active) == MS_TRUE) ||
-        (msRectContained(bounds_active, &circ->bounds) == MS_TRUE) ||
-        (msRectContained(&circ->bounds, bounds_active) == MS_TRUE);
-    }
+  for (unsigned i = 0; i < NumberOfAirspaceCircles; ++i) {
+    AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+
+    circle.FarVisible =
+      msRectOverlap(&circle.bounds, bounds_active) == MS_TRUE ||
+      msRectContained(bounds_active, &circle.bounds) == MS_TRUE ||
+      msRectContained(&circle.bounds, bounds_active) == MS_TRUE;
   }
 
-  if (AirspaceArea) {
-    for(AIRSPACE_AREA *area = AirspaceArea;
-        area < AirspaceArea+NumberOfAirspaceAreas; area++) {
-      area->FarVisible =
-        (msRectOverlap(&area->bounds, bounds_active) == MS_TRUE) ||
-        (msRectContained(bounds_active, &area->bounds) == MS_TRUE) ||
-        (msRectContained(&area->bounds, bounds_active) == MS_TRUE);
-    }
+  for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
+    AIRSPACE_AREA &area = AirspaceArea[i];
+
+    area.FarVisible =
+      msRectOverlap(&area.bounds, bounds_active) == MS_TRUE ||
+      msRectContained(bounds_active, &area.bounds) == MS_TRUE ||
+      msRectContained(&area.bounds, bounds_active) == MS_TRUE;
   }
 }

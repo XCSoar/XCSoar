@@ -561,32 +561,32 @@ extern bool GlobalClearAirspaceWarnings;
 // JMW this code needs a better home
 
 bool ClearAirspaceWarnings(const bool acknowledge, const bool ack_all_day) {
-  unsigned int i;
-  if (acknowledge) {
-    GlobalClearAirspaceWarnings = true;
-    if (AirspaceCircle) {
-      for (i=0; i<NumberOfAirspaceCircles; i++) {
-        if (AirspaceCircle[i].WarningLevel>0) {
-          AirspaceCircle[i].Ack.AcknowledgementTime = XCSoarInterface::Basic().Time;
-          if (ack_all_day) {
-            AirspaceCircle[i].Ack.AcknowledgedToday = true;
-          }
-          AirspaceCircle[i].WarningLevel = 0;
-        }
-      }
+  if (!acknowledge)
+    return false;
+
+  GlobalClearAirspaceWarnings = true;
+  for (unsigned i = 0; i < NumberOfAirspaceCircles; i++) {
+    AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+
+    if (circle.WarningLevel > 0) {
+      circle.Ack.AcknowledgementTime = XCSoarInterface::Basic().Time;
+      if (ack_all_day)
+        circle.Ack.AcknowledgedToday = true;
+      circle.WarningLevel = 0;
     }
-    if (AirspaceArea) {
-      for (i=0; i<NumberOfAirspaceAreas; i++) {
-        if (AirspaceArea[i].WarningLevel>0) {
-          AirspaceArea[i].Ack.AcknowledgementTime = XCSoarInterface::Basic().Time;
-          if (ack_all_day) {
-            AirspaceArea[i].Ack.AcknowledgedToday = true;
-          }
-          AirspaceArea[i].WarningLevel = 0;
-        }
-      }
-    }
-    return Message::Acknowledge(Message::MSG_AIRSPACE);
   }
-  return false;
+
+  for (unsigned i = 0; i < NumberOfAirspaceAreas; i++) {
+    AIRSPACE_AREA &area = AirspaceArea[i];
+
+    if (area.WarningLevel > 0) {
+      area.Ack.AcknowledgementTime = XCSoarInterface::Basic().Time;
+      if (ack_all_day)
+        area.Ack.AcknowledgedToday = true;
+
+      area.WarningLevel = 0;
+    }
+  }
+
+  return Message::Acknowledge(Message::MSG_AIRSPACE);
 }
