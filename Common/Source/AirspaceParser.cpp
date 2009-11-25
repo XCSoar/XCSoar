@@ -76,8 +76,6 @@ typedef struct{
   DWORD    CrcSourceFile;          // not used at the moment
 }BinFileHeader_t;
 
-static int AirspacePointSize;
-
 void DumpAirspaceFile(void);
 
 static bool StartsWith(TCHAR *Text, const TCHAR *LookFor);
@@ -232,8 +230,6 @@ void ReadAirspace(ZZIP_FILE *fp)
   AirspacePoint  = (AIRSPACE_POINT *)LocalAlloc(LMEM_FIXED,
                                                 (NumberOfAirspacePoints)
                                                 * sizeof(AIRSPACE_POINT));
-
-  AirspacePointSize = NumberOfAirspacePoints;//  * sizeof(AIRSPACE_POINT);
 
   AirspaceScreenPoint  = (POINT *)LocalAlloc(LMEM_FIXED,
 					     NumberOfAirspacePoints
