@@ -1,6 +1,7 @@
 #ifndef ABSTRACT_TASK_FACTORY_HPP
 #define ABSTRACT_TASK_FACTORY_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
@@ -22,7 +23,8 @@
  *   validity of task etc.  This can also be added to saved files.
  *
  */
-class AbstractTaskFactory
+class AbstractTaskFactory: 
+  private NonCopyable
 {
 public:
 /** 

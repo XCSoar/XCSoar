@@ -19,13 +19,6 @@
 class TaskProjection {
 public:
   /** 
-   * Constructor; initialises at default midpoint value
-   * 
-   * @param ref Default midpoint
-   */
-  TaskProjection(const GEOPOINT &ref);
-
-  /** 
    * Constructor; initialises at origin (0,0)
    * 
    */
@@ -60,15 +53,6 @@ public:
  * @return Projected point
  */
   FLAT_GEOPOINT project(const GEOPOINT& tp) const;
-
-/** 
- * Projects an integer 2-d representation to a Geodetic point
- * 
- * @param tp Point to project
- * 
- * @return Projected point
- */
-  GEOPOINT unproject(const FLAT_GEOPOINT& tp) const;
 
 /** 
  * Project a Geodetic point to an floating point 2-d representation

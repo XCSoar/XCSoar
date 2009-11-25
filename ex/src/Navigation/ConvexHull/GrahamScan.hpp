@@ -3,13 +3,14 @@
 
 #include <list>
 
+#include "Util/NonCopyable.hpp"
 #include "Navigation/SearchPointVector.hpp"
 
 /**
  * Class used to build convex hulls from vector.  This ensures
  * the returned vector is closed, and may prune points.
  */
-class GrahamScan
+class GrahamScan: private NonCopyable
 {
 public :
 /** 

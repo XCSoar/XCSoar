@@ -2,6 +2,7 @@
 #define TASKMANAGER_H
 
 #include "Util/Serialisable.hpp"
+#include "Util/NonCopyable.hpp"
 #include "Tasks/TaskInterface.hpp"
 #include "Tasks/AbortTask.hpp"
 #include "Tasks/GotoTask.hpp"
@@ -24,7 +25,8 @@ class TaskVisitor;
  */
 class TaskManager: 
  public TaskInterface,
- public Serialisable
+ public Serialisable,
+  private NonCopyable
 {
 public:
 /** 

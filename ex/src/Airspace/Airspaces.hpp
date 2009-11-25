@@ -1,6 +1,7 @@
 #ifndef AIRSPACES_HPP
 #define AIRSPACES_HPP
 
+#include "Util/NonCopyable.hpp"
 #include <kdtree++/kdtree.hpp>
 #include "Airspace.hpp"
 #include "Navigation/TaskProjection.hpp"
@@ -12,7 +13,8 @@ class AirspaceVisitor;
  * Container for airspaces using kd-tree representation internally for fast 
  * geospatial lookups.
  */
-class Airspaces
+class Airspaces:
+  private NonCopyable
 {
 public:
   /** 

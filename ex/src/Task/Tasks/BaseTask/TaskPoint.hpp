@@ -40,6 +40,7 @@
 #define TASKPOINT_HPP
 
 #include "Util/Serialisable.hpp"
+#include "Util/NonCopyable.hpp"
 #include "Navigation/ReferencePoint.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Navigation/Aircraft.hpp"
@@ -59,6 +60,7 @@ struct GeoVector;
  */
 
 class TaskPoint : 
+  private NonCopyable,
   public ReferencePoint, 
   public Serialisable,
   public BaseVisitable<>
@@ -86,14 +88,6 @@ public:
  * Destructor.  Does nothing yet.
  */
   virtual ~TaskPoint() {};
-
-/** 
- * Retrieve elevation of taskpoint, taking into account
- * rules and safety margins.  
- * 
- * @return Minimum allowable elevation of task point
- */
-  virtual double getElevation() const;
 
 /** 
  * Retrieve location to be used for remaining task
@@ -210,6 +204,14 @@ public:
   const Waypoint& get_waypoint() const {
     return waypoint;
   }
+
+/** 
+ * Retrieve elevation of taskpoint, taking into account
+ * rules and safety margins.  
+ * 
+ * @return Minimum allowable elevation of task point
+ */
+  virtual double getElevation() const;
 
 #ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE &state) const;

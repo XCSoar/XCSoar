@@ -1,6 +1,7 @@
 #ifndef WaypointS_HPP
 #define WaypointS_HPP
 
+#include "Util/NonCopyable.hpp"
 #include <kdtree++/kdtree.hpp>
 #include "Waypoint.hpp"
 #ifdef DO_PRINT
@@ -16,7 +17,8 @@ class WaypointVisitor;
  * Container for waypoints using kd-tree representation internally for fast 
  * geospatial lookups.
  */
-class Waypoints {
+class Waypoints: private NonCopyable 
+{
 public:
 /** 
  * Constructor.  Task projection is updated after call to optimise().

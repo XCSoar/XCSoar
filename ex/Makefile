@@ -22,13 +22,16 @@ OUTPUTS 	:= test
 SRC := src
 INCLUDES := -I$(SRC)
 
-PROFILE := --coverage
+PROFILE := 
+# -pg
+COVERAGE :=
+# --coverage
 
-OPTIMIZE := -g 
+OPTIMIZE := -g -O2
 
 CPPFLAGS := $(INCLUDES) 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
-CFLAGS		:=$(OPTIMIZE) $(PROFILE)
+CFLAGS		:=$(OPTIMIZE) $(PROFILE) $(COVERAGE)
 
 MAKEFLAGS	+=-r
 
@@ -183,11 +186,9 @@ COVSTART = geninfo -q --no-checksum -b . -i src
 COVEND = geninfo -q --no-checksum -b . src
 
 testslow:	$(TESTSLOW)
-	$(Q)$(COVSTART)
 	$(Q)perl Test/testall.pl $(TESTSLOW)
 
 testfast:	$(TESTFAST)
-	$(Q)$(COVSTART)
 	$(Q)perl Test/testall.pl $(TESTFAST)
 
 
@@ -264,6 +265,7 @@ cleancov: FORCE
 		-o -name '*.gcda' \
 		-o -name '*.gcda.info' \
 		-o -name '*.gcno' \
+		-o -name '*.gcno.info' \
 	\) -type f -print | xargs -r $(RM)
 
 cleani: FORCE

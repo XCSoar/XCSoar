@@ -1,6 +1,7 @@
 #ifndef TASK_MACCREADY_HPP
 #define TASK_MACCREADY_HPP
 
+#include "Util/NonCopyable.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
@@ -26,7 +27,9 @@
  * The class is not intended to be used directly, but to be specialised.
  *
  */
-class TaskMacCready {
+class TaskMacCready:
+  private NonCopyable 
+{
 public:
 /** 
  * Constructor for ordered task points

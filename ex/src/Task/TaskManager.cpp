@@ -13,10 +13,12 @@ TaskManager::TaskManager(const TaskEvents &te,
     task_behaviour(tb),
     factory_fai(task_ordered,tb),
     factory_aat(task_ordered,tb),
-    factory_mixed(task_ordered,tb)
+    factory_mixed(task_ordered,tb),
+    mode(MODE_NULL),
+    active_task(NULL),
+    factory_mode(FACTORY_FAI),
+    active_factory(&factory_fai)
 {
-    set_mode(MODE_ORDERED);
-    set_factory(FACTORY_FAI);
 }
 
 TaskManager::TaskMode_t 

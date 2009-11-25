@@ -6,11 +6,6 @@
 
 #define SCALE 1000.0
 
-TaskProjection::TaskProjection(const GEOPOINT &ref)
-{
-  reset(ref);
-}
-
 TaskProjection::TaskProjection()
 {
   GEOPOINT zero;
@@ -72,15 +67,6 @@ TaskProjection::project(const GEOPOINT& tp) const
   fp.Longitude = (int)(f.x+0.5);
   fp.Latitude = (int)(f.y+0.5);
   return fp;
-}
-
-GEOPOINT 
-TaskProjection::unproject(const FLAT_GEOPOINT& fp) const
-{
-  FlatPoint f(fp.Longitude-0.5,
-              fp.Latitude-0.5);
-  GEOPOINT tp = funproject(f);
-  return tp;
 }
 
 
