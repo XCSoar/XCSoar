@@ -550,7 +550,7 @@ bool test_task_random(TaskManager& task_manager,
       cz->setRadius(500.0);
       tp->update_oz();
     }
-    if (!fact->append(tp),false) {
+    if (!fact->append(tp,false)) {
       return false;
     }
   }
@@ -570,7 +570,7 @@ bool test_task_random(TaskManager& task_manager,
         cz->setRadius(500.0);
         tp->update_oz();
       }
-      if (!fact->append(tp),false) {
+      if (!fact->append(tp,false)) {
         return false;
       }
     }
@@ -587,7 +587,7 @@ bool test_task_random(TaskManager& task_manager,
       cz->setRadius(500.0);
       tp->update_oz();
     }
-    if (!fact->append(tp),false) {
+    if (!fact->append(tp,false)) {
       return false;
     }
   }
