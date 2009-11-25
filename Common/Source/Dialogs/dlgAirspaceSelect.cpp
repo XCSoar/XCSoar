@@ -251,6 +251,8 @@ static void PrepareData(void){
   unsigned i;
 
   for (i = 0; i < NumberOfAirspaceCircles; i++) {
+    const AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+
     AirspaceSelectInfo[index].Index_Circle = i;
     AirspaceSelectInfo[index].Index_Area = -1;
 
@@ -258,10 +260,10 @@ static void PrepareData(void){
       RangeAirspaceCircle(Location, i);
 
     DistanceBearing(Location,
-                    AirspaceCircle[i].Location,
+                    circle.Location,
                     NULL, &AirspaceSelectInfo[index].Direction);
 
-    _tcsncpy(sTmp, AirspaceCircle[i].Name, 4);
+    _tcsncpy(sTmp, circle.Name, 4);
     sTmp[4] = '\0';
     _tcsupr(sTmp);
 
@@ -271,12 +273,13 @@ static void PrepareData(void){
                   + (((DWORD)sTmp[2] & 0xff) << 8)
                   + (((DWORD)sTmp[3] & 0xff) );
 
-    AirspaceSelectInfo[index].Type = AirspaceCircle[i].Type;
+    AirspaceSelectInfo[index].Type = circle.Type;
 
     index++;
   }
 
   for (i = 0; i < NumberOfAirspaceAreas; i++) {
+    const AIRSPACE_AREA &area = AirspaceArea[i];
     MapWindow &map_window = XCSoarInterface::main_window.map;
 
     AirspaceSelectInfo[index].Index_Circle = -1;
@@ -287,7 +290,7 @@ static void PrepareData(void){
                         &AirspaceSelectInfo[index].Direction,
 			map_window);
 
-    _tcsncpy(sTmp, AirspaceArea[i].Name, 4);
+    _tcsncpy(sTmp, area.Name, 4);
     sTmp[4] = '\0';
     _tcsupr(sTmp);
 
@@ -297,7 +300,7 @@ static void PrepareData(void){
                   + (((DWORD)sTmp[2] & 0xff) << 8)
                   + (((DWORD)sTmp[3] & 0xff) );
 
-    AirspaceSelectInfo[index].Type = AirspaceArea[i].Type;
+    AirspaceSelectInfo[index].Type = area.Type;
 
     index++;
   }

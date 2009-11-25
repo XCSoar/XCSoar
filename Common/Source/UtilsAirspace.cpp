@@ -57,29 +57,28 @@ void ConvertFlightLevels(void) {
   // TODO accuracy: ConvertFlightLevels is inaccurate!
 
   for (i = 0; i < NumberOfAirspaceCircles; i++) {
-    if (AirspaceCircle[i].Base.FL != 0) {
-      AirspaceCircle[i].Base.Altitude = (AirspaceCircle[i].Base.FL * 100)
-          + ((QNH - 1013) * 30);
-      AirspaceCircle[i].Base.Altitude = AirspaceCircle[i].Base.Altitude
-          / TOFEET;
+    AIRSPACE_CIRCLE &circle = AirspaceCircle[i];
+
+    if (circle.Base.FL != 0) {
+      circle.Base.Altitude = circle.Base.FL * 100 + (QNH - 1013) * 30;
+      circle.Base.Altitude = circle.Base.Altitude / TOFEET;
     }
-    if (AirspaceCircle[i].Top.FL != 0) {
-      AirspaceCircle[i].Top.Altitude = (AirspaceCircle[i].Top.FL * 100) + ((QNH
-          - 1013) * 30);
-      AirspaceCircle[i].Top.Altitude = AirspaceCircle[i].Top.Altitude / TOFEET;
+    if (circle.Top.FL != 0) {
+      circle.Top.Altitude = circle.Top.FL * 100 + (QNH- 1013) * 30;
+      circle.Top.Altitude = circle.Top.Altitude / TOFEET;
     }
   }
 
   for (i = 0; i < NumberOfAirspaceAreas; i++) {
-    if (AirspaceArea[i].Base.FL != 0) {
-      AirspaceArea[i].Base.Altitude = (AirspaceArea[i].Base.FL * 100) + ((QNH
-          - 1013) * 30);
-      AirspaceArea[i].Base.Altitude = AirspaceArea[i].Base.Altitude / TOFEET;
+    AIRSPACE_AREA &area = AirspaceArea[i];
+
+    if (area.Base.FL != 0) {
+      area.Base.Altitude = area.Base.FL * 100 + (QNH - 1013) * 30;
+      area.Base.Altitude = area.Base.Altitude / TOFEET;
     }
-    if (AirspaceArea[i].Top.FL != 0) {
-      AirspaceArea[i].Top.Altitude = (AirspaceArea[i].Top.FL * 100) + ((QNH
-          - 1013) * 30);
-      AirspaceArea[i].Top.Altitude = AirspaceArea[i].Top.Altitude / TOFEET;
+    if (area.Top.FL != 0) {
+      area.Top.Altitude = area.Top.FL * 100 + (QNH - 1013) * 30;
+      area.Top.Altitude = area.Top.Altitude / TOFEET;
     }
   }
 }

@@ -134,31 +134,34 @@ static void SetValues(void) {
   double bearing;
 
   if (index_area >=0) {
+    AIRSPACE_AREA &area = AirspaceArea[index_area];
     MapWindow &map_window = XCSoarInterface::main_window.map;
 
-    atype = AirspaceArea[index_area].Type;
-    top = &AirspaceArea[index_area].Top;
-    base = &AirspaceArea[index_area].Base;
-    name = AirspaceArea[index_area].Name;
+    atype = area.Type;
+    top = &area.Top;
+    base = &area.Base;
+    name = area.Name;
     inside = InsideAirspaceArea(XCSoarInterface::Basic().Location,
 				index_area);
     range = RangeAirspaceArea(XCSoarInterface::Basic().Location,
                               index_area, &bearing,
                               map_window);
   }
+
   if (index_circle >=0) {
-    atype = AirspaceCircle[index_circle].Type;
-    top = &AirspaceCircle[index_circle].Top;
-    base = &AirspaceCircle[index_circle].Base;
-    name = AirspaceCircle[index_circle].Name;
+    AIRSPACE_CIRCLE &circle = AirspaceCircle[index_circle];
+
+    atype = circle.Type;
+    top = &circle.Top;
+    base = &circle.Base;
+    name = circle.Name;
     inside = InsideAirspaceCircle(XCSoarInterface::Basic().Location,
 				  index_circle);
     range =
       RangeAirspaceCircle(XCSoarInterface::Basic().Location,
 			  index_circle);
 
-    DistanceBearing(XCSoarInterface::Basic().Location,
-		    AirspaceCircle[index_circle].Location,
+    DistanceBearing(XCSoarInterface::Basic().Location, circle.Location,
 		    NULL, &bearing);
     if (inside) {
       bearing = AngleLimit360(bearing+180);

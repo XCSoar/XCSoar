@@ -330,17 +330,21 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
     }
 
     if (pAS.IsCircle){
-      _tcsncpy(sName, AirspaceCircle[pAS.AirspaceIndex].Name,
+      const AIRSPACE_CIRCLE &circle = AirspaceCircle[pAS.AirspaceIndex];
+
+      _tcsncpy(sName, circle.Name,
 	       sizeof(sName)/sizeof(sName[0]));
-      Base = AirspaceCircle[pAS.AirspaceIndex].Base;
-      Top  = AirspaceCircle[pAS.AirspaceIndex].Top;
-      Type = AirspaceCircle[pAS.AirspaceIndex].Type;
+      Base = circle.Base;
+      Top  = circle.Top;
+      Type = circle.Type;
     } else {
-      _tcsncpy(sName, AirspaceArea[pAS.AirspaceIndex].Name,
+      const AIRSPACE_AREA &area = AirspaceArea[pAS.AirspaceIndex];
+
+      _tcsncpy(sName, area.Name,
 	       sizeof(sName)/sizeof(sName[0]));
-      Base = AirspaceArea[pAS.AirspaceIndex].Base;
-      Top  = AirspaceArea[pAS.AirspaceIndex].Top;
-      Type = AirspaceArea[pAS.AirspaceIndex].Type;
+      Base = area.Base;
+      Top  = area.Top;
+      Type = area.Type;
     }
 
     sName[sizeof(sName)/sizeof(sName[0])-1] = '\0';
