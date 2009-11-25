@@ -156,7 +156,7 @@ TESTOBJS = Test/test_debug.o \
 	Test/harness_task.o \
 	Test/tap.o
 
-TESTS = \
+TESTFAST = \
 	Test/test_waypoints.exe \
 	Test/test_mc.exe \
 	Test/test_task.exe \
@@ -164,14 +164,17 @@ TESTS = \
 	Test/test_airspace.exe \
 	Test/test_automc.exe \
 	Test/test_trees.exe \
-	Test/test.exe \
+	Test/test.exe 
+
+TESTSLOW = \
 	Test/test_vopt.exe \
 	Test/test_cruiseefficiency.exe \
 	Test/test_bestcruisetrack.exe \
 	Test/test_aat.exe \
-	Test/test_flight.exe 
+	Test/test_flight.exe \
+	Test/test_randomtask.exe
 
-#	Test/test_randomtask.exe \
+TESTS = $(TESTFAST) $(TESTSLOW)
 
 TARGETS = $(TESTS) 
 
@@ -181,13 +184,13 @@ all: $(OBJS) $(TESTOBJS) $(TARGETS)
 COVSTART = geninfo -q --no-checksum -b . -i .
 COVEND = geninfo -q --no-checksum -b . .
 
-test:	$(TESTS)
+testslow:	$(TESTSLOW)
 	$(Q)$(COVSTART)
-	perl Test/testall.pl $(TESTS)
+	perl Test/testall.pl $(TESTSLOW)
 
-basictest:	$(TESTS)
+testfast:	$(TESTFAST)
 	$(Q)$(COVSTART)
-	perl Test/testall.pl Test/test_task.exe
+	perl Test/testall.pl $(TESTFAST)
 
 
 %.exe: %.cpp $(OBJS) $(TESTOBJS)
