@@ -1174,9 +1174,8 @@ static void FindAirspaceAreaBounds() {
       AirspaceArea[i].bounds.maxx = tmp;
       for(j= AirspaceArea[i].FirstPoint;
           j< AirspaceArea[i].FirstPoint+AirspaceArea[i].NumPoints; j++) {
-        if (AirspacePoint[i].Longitude<0) {
-          AirspacePoint[i].Longitude += 360;
-        }
+        if (AirspacePoint[j].Longitude<0)
+          AirspacePoint[j].Longitude += 360;
       }
     }
 
