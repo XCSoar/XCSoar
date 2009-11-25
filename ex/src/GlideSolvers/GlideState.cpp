@@ -79,16 +79,6 @@ void GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
   }
 }
 
-// from target to aircraft
-GlideState::GlideState(const GEOPOINT& target,
-                         const AIRCRAFT_STATE &aircraft,
-                         const double htarget):
-  Vector(target,aircraft.Location),
-  MinHeight(htarget)
-{
-  calc_speedups(aircraft);
-}
-
   // from aircraft to target
 GlideState::GlideState(const AIRCRAFT_STATE &aircraft,
                          const GEOPOINT& target,

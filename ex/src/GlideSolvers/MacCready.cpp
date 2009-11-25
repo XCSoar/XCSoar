@@ -175,26 +175,6 @@ MacCready::solve_sink(const GlideState &task,
 }
 
 
-GlideResult 
-MacCready::solve_glide_zerowind(const GlideState &task,
-                                const double Vset) const
-{
-  // spend a lot of time in this function, so it should be quick!
-
-  // this is ONLY used for finding Vopt for zero wind case, so makes assumptions
-  // about solution, and don't bother calculating things we don't need
-
-  const double Vn = Vset*cruise_efficiency;
-  GlideResult result(task,Vset);
-  const double t_cr = task.Vector.Distance/Vn;
-  result.Solution = GlideResult::RESULT_OK;
-  result.TimeElapsed = t_cr;
-  result.HeightGlide = t_cr*glide_polar.SinkRate(Vset);
-  result.AltitudeDifference -= result.HeightGlide;
-
-  return result;
-}
-
 
 GlideResult 
 MacCready::solve(const GlideState &task) const

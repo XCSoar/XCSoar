@@ -79,19 +79,6 @@ private:
 
   /**
    * Calculates the glide solution for a classical MacCready theory task
-   * with no climb component (pure glide), and no wind.
-   * This is used internally to determine the optimum speed for 
-   * cruise segments.
-   *
-   * @param task The task for which a solution is desired
-   * @param V The airspeed the glider will be travelling
-   * @return Returns the glide result containing data about the optimal solution
-   */
-  GlideResult solve_glide_zerowind(const GlideState &task,
-                                    const double V) const;
-
-  /**
-   * Calculates the glide solution for a classical MacCready theory task
    * with no climb component (pure glide).  This is used internally to
    * determine the optimum speed for this glide component.
    *
