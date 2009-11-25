@@ -75,7 +75,6 @@ OBJS	:=\
 	src/Navigation/ReferencePoint.o \
 	src/Navigation/SearchPoint.o \
 	src/Navigation/TaskProjection.o \
-	src/Navigation/TaskProjectionClient.o \
 	src/Navigation/ConvexHull/GrahamScan.o \
 	src/Navigation/ConvexHull/PolygonInterior.o \
 	src/Navigation/Memento/DistanceMemento.o \

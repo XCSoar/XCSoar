@@ -8,9 +8,9 @@ SampledTaskPoint::SampledTaskPoint(const TaskProjection& tp,
                                    const Waypoint & wp,
                                    const TaskBehaviour &tb,
                                    const bool b_scored):
-    TaskProjectionClient(tp),
     TaskPoint(wp,tb),
     boundary_scored(b_scored),
+    task_projection(tp),
     search_max(getLocation(),tp),
     search_min(getLocation(),tp)
 {
@@ -52,7 +52,7 @@ SampledTaskPoint::get_search_points(bool cheat)
       // this is a crude way of handling the situation --- may be best
       // to de-rate the score in some way
       
-      SearchPoint sp(getLocation(), get_task_projection());
+      SearchPoint sp(getLocation(), task_projection);
       sampled_points.push_back(sp);
       return sampled_points;
     } else {
@@ -70,11 +70,11 @@ SampledTaskPoint::initialise_boundary_points()
   clear_boundary_points();
   if (boundary_scored) {
     for (double t=0; t<=1.0; t+= 0.05) {
-      SearchPoint sp(get_boundary_parametric(t), get_task_projection());
+      SearchPoint sp(get_boundary_parametric(t), task_projection);
       boundary_points.push_back(sp);
     }
   } else {
-    SearchPoint sp(getLocation(), get_task_projection());
+    SearchPoint sp(getLocation(), task_projection);
     boundary_points.push_back(sp);
   }
   prune_boundary_points();
@@ -96,7 +96,7 @@ SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
       // do nothing
       return false;
     } else {
-      SearchPoint sp(state.Location, get_task_projection(), true);
+      SearchPoint sp(state.Location, task_projection, true);
       sampled_points.push_back(sp);
       // only return true if hull changed 
       return (prune_sample_points());
@@ -109,10 +109,10 @@ void
 SampledTaskPoint::update_projection()
 {
   for (unsigned i=0; i<sampled_points.size(); i++) {
-    sampled_points[i].project(get_task_projection());
+    sampled_points[i].project(task_projection);
   }
   for (unsigned i=0; i<boundary_points.size(); i++) {
-    boundary_points[i].project(get_task_projection());
+    boundary_points[i].project(task_projection);
   }
 }
 
@@ -121,7 +121,7 @@ SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last)
 {
   if (!sampled_points.empty()) {
     sampled_points.clear();
-    SearchPoint sp(ref_last.Location, get_task_projection(), true);
+    SearchPoint sp(ref_last.Location, task_projection, true);
     sampled_points.push_back(sp);
   }
 }
@@ -130,8 +130,8 @@ void
 SampledTaskPoint::clear_boundary_points()
 {
   boundary_points.clear();
-  search_max = SearchPoint(getLocation(), get_task_projection());
-  search_min = SearchPoint(getLocation(), get_task_projection());
+  search_max = SearchPoint(getLocation(), task_projection);
+  search_min = SearchPoint(getLocation(), task_projection);
 }
 
 void 

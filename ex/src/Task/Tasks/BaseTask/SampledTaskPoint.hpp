@@ -6,7 +6,7 @@
 #include "Navigation/SearchPointVector.hpp"
 #include "ObservationZone.hpp"
 #include "TaskPoint.hpp"
-#include "Navigation/TaskProjectionClient.hpp"
+#include "Navigation/TaskProjection.hpp"
 
 class TaskEvents;
 
@@ -22,8 +22,7 @@ class TaskEvents;
  */
 class SampledTaskPoint:
   public TaskPoint, 
-  public ObservationZone,
-  public TaskProjectionClient
+  public ObservationZone
 {
 public:  
 /** 
@@ -155,6 +154,15 @@ public:
   virtual bool update_sample(const AIRCRAFT_STATE& state,
                              const TaskEvents &task_events);
 
+/** 
+ * Accessor for task projection
+ * 
+ * @return Task projection used by this point
+ */
+  const TaskProjection &get_task_projection() const {
+    return task_projection;
+  };
+
 #ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE&state) const;
   virtual void print_samples(std::ostream& f, const AIRCRAFT_STATE&state);
@@ -177,6 +185,7 @@ protected:
   virtual void clear_sample_all_but_last(const AIRCRAFT_STATE& state);
 
 private:
+  const TaskProjection &task_projection;
 
 /** 
  * Convert interior sample points to convex hull
