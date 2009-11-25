@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <algorithm>
 
-double CylinderZone::score_adjustment()
+double CylinderZone::score_adjustment() const
 {
   return Radius;
 }

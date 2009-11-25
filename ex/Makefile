@@ -165,12 +165,12 @@ TESTFAST = \
 	Test/test.exe 
 
 TESTSLOW = \
+	Test/test_randomtask.exe \
 	Test/test_vopt.exe \
 	Test/test_cruiseefficiency.exe \
 	Test/test_bestcruisetrack.exe \
 	Test/test_aat.exe \
-	Test/test_flight.exe \
-	Test/test_randomtask.exe
+	Test/test_flight.exe 
 
 TESTS = $(TESTFAST) $(TESTSLOW)
 

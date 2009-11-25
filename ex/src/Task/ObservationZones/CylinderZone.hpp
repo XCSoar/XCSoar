@@ -97,7 +97,7 @@ public:
  * 
  * @return Distance (m) to subtract from score
  */
-  virtual double score_adjustment();
+  virtual double score_adjustment() const;
 
 /** 
  * Check transition constraints (always true for cylinders)

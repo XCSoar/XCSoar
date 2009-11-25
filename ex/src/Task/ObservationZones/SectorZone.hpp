@@ -142,7 +142,7 @@ public:
  * 
  * @return Distance (m) to subtract from score
  */
-  virtual double score_adjustment();
+  virtual double score_adjustment() const;
 
 /** 
  * Test whether an OZ is equivalent to this one

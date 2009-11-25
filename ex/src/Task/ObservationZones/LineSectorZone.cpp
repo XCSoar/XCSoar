@@ -9,7 +9,7 @@ GEOPOINT LineSectorZone::get_boundary_parametric(double t) const
 }
 
 double
-LineSectorZone::score_adjustment() 
+LineSectorZone::score_adjustment() const
 {
   return 0.0;
 }

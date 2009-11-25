@@ -95,7 +95,7 @@ public:
  * 
  * @return Distance (m) to subtract from score
  */
-  virtual double score_adjustment();
+  virtual double score_adjustment() const;
 
 /** 
  * Set length property
