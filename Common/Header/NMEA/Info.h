@@ -329,6 +329,16 @@ struct NMEA_INFO
   //  double WaypointBearing;
   //  double WaypointDistance;
   //  double WaypointSpeed; IGNORED NOW
+
+  /**
+   * Returns the barometric altitude, and falls back to the GPS
+   * altitude.
+   */
+  double GetAnyAltitude() const {
+    return BaroAltitudeAvailable
+      ? BaroAltitude
+      : Altitude;
+  }
 };
 
 #endif
