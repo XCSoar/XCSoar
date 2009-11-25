@@ -353,9 +353,11 @@ TerrainRenderer::~TerrainRenderer() {
   if (rounding) delete rounding;
 }
 
-bool TerrainRenderer::SetMap(const GEOPOINT &loc) {
+bool
+TerrainRenderer::SetMap(const GEOPOINT &loc, int day_time)
+{
   if (weather != NULL && weather->GetParameter())
-    weather->Reload(loc);
+    weather->Reload(loc, day_time);
 
   interp_levels = 5;
   switch (weather != NULL ? weather->GetParameter() : 0) {
@@ -817,10 +819,10 @@ void TerrainRenderer::Draw(Canvas &canvas, RECT rc) {
 bool TerrainRenderer::Draw(Canvas &canvas,
 			   MapWindowProjection &map_projection,
 			   const double sunazimuth, const double sunelevation,
-			   const GEOPOINT &loc,
+                           const GEOPOINT &loc, int day_time,
 			   const bool isBigZoom)
 {
-  if (!SetMap(loc)) {
+  if (!SetMap(loc, day_time)) {
     return false;
   }
 

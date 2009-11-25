@@ -45,7 +45,6 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "wcecompat/ts_string.h"
 #include "RasterMapJPG2000.hpp"
-#include "Interface.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -134,7 +133,9 @@ void RasterWeather::ScanAll(const GEOPOINT &location) {
 }
 
 
-void RasterWeather::Reload(const GEOPOINT &location) {
+void
+RasterWeather::Reload(const GEOPOINT &location, int day_time)
+{
   static unsigned last_weather_time;
   bool found = false;
   bool now = false;
@@ -146,7 +147,7 @@ void RasterWeather::Reload(const GEOPOINT &location) {
     Poco::ScopedRWLock protect(lock, true);
     if (_weather_time== 0) {
       // "Now" time, so find time in half hours
-      unsigned dsecs = (int)TimeLocal((long)XCSoarInterface::Basic().Time);
+      unsigned dsecs = (int)TimeLocal(day_time);
       unsigned half_hours = (dsecs/1800) % 48;
       _weather_time = max(_weather_time, half_hours);
       now = true;

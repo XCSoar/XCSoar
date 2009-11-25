@@ -72,7 +72,12 @@ public:
   RasterMap* GetMap();
   unsigned GetParameter();
   void SetParameter(unsigned i);
-  void Reload(const GEOPOINT &location);
+
+  /**
+   * @param day_time the UTC time, in seconds since midnight
+   */
+  void Reload(const GEOPOINT &location, int day_time);
+
   void ScanAll(const GEOPOINT &location);
   bool isWeatherAvailable(unsigned t);
   unsigned GetTime();

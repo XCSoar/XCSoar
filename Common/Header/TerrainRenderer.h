@@ -106,7 +106,11 @@ private:
   void Slope(const int sx, const int sy, const int sz);
   void ColorTable();
   void Draw(Canvas &canvas, RECT rc);
-  bool SetMap(const GEOPOINT &loc);
+
+  /**
+   * @param day_time the UTC time, in seconds since midnight
+   */
+  bool SetMap(const GEOPOINT &loc, int day_time);
 
  public:
   void SetSettings(short _TerrainRamp,
@@ -118,10 +122,13 @@ private:
   }
 
  public:
+  /**
+   * @param day_time the UTC time, in seconds since midnight
+   */
   bool Draw(Canvas &canvas,
 	    MapWindowProjection &map_projection,
 	    const double sunazimuth, const double sunelevation,
-	    const GEOPOINT &loc,
+            const GEOPOINT &loc, int day_time,
 	    const bool isBigZoom);
 };
 
