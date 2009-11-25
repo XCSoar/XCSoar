@@ -120,29 +120,40 @@ class Task {
 public:
   Task();
 public:
-  void RefreshTask(const SETTINGS_COMPUTER &settings_computer);
+  void RefreshTask(const SETTINGS_COMPUTER &settings_computer,
+                   const NMEA_INFO &nmea_info);
 
   void ReplaceWaypoint(const int index,
-                               const SETTINGS_COMPUTER &settings_computer);
+                       const SETTINGS_COMPUTER &settings_computer,
+                       const NMEA_INFO &nmea_info);
   void InsertWaypoint(const int index,
                               const SETTINGS_COMPUTER &settings_computer,
+                      const NMEA_INFO &nmea_info,
                               bool append=false);
   void SwapWaypoint(const int index,
-                            const SETTINGS_COMPUTER &settings_computer);
+                    const SETTINGS_COMPUTER &settings_computer,
+                    const NMEA_INFO &nmea_info);
   void RemoveWaypoint(const int index,
-                              const SETTINGS_COMPUTER &settings_computer);
+                      const SETTINGS_COMPUTER &settings_computer,
+                      const NMEA_INFO &nmea_info);
   void RemoveTaskPoint(const int index,
-                               const SETTINGS_COMPUTER &settings_computer);
+                       const SETTINGS_COMPUTER &settings_computer,
+                       const NMEA_INFO &nmea_info);
   void FlyDirectTo(const int index,
-                           const SETTINGS_COMPUTER &settings_computer);
+                   const SETTINGS_COMPUTER &settings_computer,
+                   const NMEA_INFO &nmea_info);
 
   void advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer);
-  void retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer);
+  void retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer,
+                        const NMEA_INFO &nmea_info);
 
   void ClearTask(void);
-  void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer);
-  void DefaultTask(const SETTINGS_COMPUTER &settings);
+  void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer,
+                         const NMEA_INFO &nmea_info);
+  void DefaultTask(const SETTINGS_COMPUTER &settings,
+                   const NMEA_INFO &nmea_info);
   void ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
+                       const NMEA_INFO &nmea_info,
                                const int set = 0);
   void CheckStartPointInTask(void);
   void ClearStartPoints(void);
@@ -180,7 +191,8 @@ public:
 
   // file load/save
   void LoadNewTask(const TCHAR *FileName,
-                   const SETTINGS_COMPUTER &settings_computer);
+                   const SETTINGS_COMPUTER &settings_computer,
+                   const NMEA_INFO &nmea_info);
   void SaveTask(const TCHAR *FileName);
   void SaveDefaultTask(void);
   const TCHAR* getTaskFilename() const;

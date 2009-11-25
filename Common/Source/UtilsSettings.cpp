@@ -143,7 +143,8 @@ void SettingsLeave() {
 
     terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
 
-    task.RefreshTask(XCSoarInterface::SetSettingsComputer());
+    task.RefreshTask(XCSoarInterface::SetSettingsComputer(),
+                     XCSoarInterface::Basic());
   }
 
   if (TOPOLOGYFILECHANGED) {

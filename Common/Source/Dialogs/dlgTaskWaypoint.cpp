@@ -442,14 +442,16 @@ static void OnStartPointClicked(WindowControl * Sender){
 
 static void OnMoveAfterClicked(WindowControl * Sender){
 	(void)Sender;
-  task.SwapWaypoint(twItemIndex, XCSoarInterface::SettingsComputer());
+  task.SwapWaypoint(twItemIndex, XCSoarInterface::SettingsComputer(),
+                     XCSoarInterface::Basic());
   SetWaypointValues();
   wf->SetModalResult(mrOK);
 }
 
 static void OnMoveBeforeClicked(WindowControl * Sender){
 	(void)Sender;
-  task.SwapWaypoint(twItemIndex-1,XCSoarInterface::SettingsComputer());
+  task.SwapWaypoint(twItemIndex - 1, XCSoarInterface::SettingsComputer(),
+                    XCSoarInterface::Basic());
   SetWaypointValues();
   wf->SetModalResult(mrOK);
 }
@@ -462,7 +464,8 @@ static void OnDetailsClicked(WindowControl * Sender){
 
 static void OnRemoveClicked(WindowControl * Sender) {
 	(void)Sender;
-  task.RemoveTaskPoint(twItemIndex,XCSoarInterface::SettingsComputer());
+  task.RemoveTaskPoint(twItemIndex, XCSoarInterface::SettingsComputer(),
+                       XCSoarInterface::Basic());
   SetWaypointValues();
   wf->SetModalResult(mrOK);
 }

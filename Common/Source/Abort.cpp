@@ -306,7 +306,7 @@ GlideComputerTask::SortLandableWaypoints()
   }
 
   task.setTaskIndices(SortedLandableIndex);
-  task.RefreshTask(SettingsComputer());
+  task.RefreshTask(SettingsComputer(), Basic());
 
   if (new_closest_waypoint) {
     if ((task.getWaypointIndex(0) != last_closest_waypoint)

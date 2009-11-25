@@ -555,7 +555,7 @@ bool GlideComputerTask::InStartSector(bool *CrossedStart)
           if (tp.Index != index) {
             tp.Index = index;
             task.setTaskPoint(0,tp);
-            task.RefreshTask(SettingsComputer());
+            task.RefreshTask(SettingsComputer(), Basic());
 
             LastInStartSector = false;
             SetCalculated().StartSectorWaypoint = index;

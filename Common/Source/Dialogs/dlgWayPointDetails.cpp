@@ -231,14 +231,17 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
 static void OnGotoClicked(WindowControl * Sender){
   (void)Sender;
-  task.FlyDirectTo(SelectedWaypoint,XCSoarInterface::SettingsComputer());
+  task.FlyDirectTo(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
   wf->SetModalResult(mrOK);
 }
 
 static void OnReplaceClicked(WindowControl * Sender){
   (void)Sender;
-  task.ReplaceWaypoint(SelectedWaypoint,XCSoarInterface::SettingsComputer());
-  task.RefreshTask(XCSoarInterface::SettingsComputer());
+  task.ReplaceWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
+                       XCSoarInterface::Basic());
+  task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
   wf->SetModalResult(mrOK);
 }
 
@@ -246,7 +249,8 @@ static void OnNewHomeClicked(WindowControl * Sender){
 	(void)Sender;
   XCSoarInterface::SetSettingsComputer().HomeWaypoint = SelectedWaypoint;
   SetToRegistry(szRegistryHomeWaypoint, XCSoarInterface::SettingsComputer().HomeWaypoint);
-  task.RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
   wf->SetModalResult(mrOK);
 }
 
@@ -255,7 +259,8 @@ static void OnSetAlternate1Clicked(WindowControl * Sender){
 	(void)Sender;
   XCSoarInterface::SetSettingsComputer().Alternate1 = SelectedWaypoint;
   SetToRegistry(szRegistryAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
-  task.RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
   wf->SetModalResult(mrOK);
 }
 
@@ -263,7 +268,8 @@ static void OnSetAlternate2Clicked(WindowControl * Sender){
 	(void)Sender;
   XCSoarInterface::SetSettingsComputer().Alternate2 = SelectedWaypoint;
   SetToRegistry(szRegistryAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
-  task.RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
   wf->SetModalResult(mrOK);
 }
 
@@ -275,7 +281,8 @@ static void OnClearAlternatesClicked(WindowControl * Sender){
   XCSoarInterface::SetSettingsComputer().EnableAlternate2=false;
   SetToRegistry(szRegistryAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
   SetToRegistry(szRegistryAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
-  task.RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
   wf->SetModalResult(mrOK);
 }
 
@@ -292,21 +299,25 @@ static void OnTeamCodeClicked(WindowControl * Sender){
 
 static void OnInsertInTaskClicked(WindowControl * Sender){
   (void)Sender;
-  task.InsertWaypoint(SelectedWaypoint,XCSoarInterface::SettingsComputer());
-  task.RefreshTask(XCSoarInterface::SettingsComputer());
+  task.InsertWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
+                      XCSoarInterface::Basic());
+  task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
   wf->SetModalResult(mrOK);
 }
 
 static void OnAppendInTaskClicked(WindowControl * Sender){
   (void)Sender;
-  task.InsertWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(), true);
+  task.InsertWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
+                      XCSoarInterface::Basic(), true);
   wf->SetModalResult(mrOK);
 }
 
 
 static void OnRemoveFromTaskClicked(WindowControl * Sender){
   (void)Sender;
-  task.RemoveWaypoint(SelectedWaypoint,XCSoarInterface::SettingsComputer());
+  task.RemoveWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
+                      XCSoarInterface::Basic());
   wf->SetModalResult(mrOK);
 }
 

@@ -162,7 +162,7 @@ void XCSoarInterface::AfterStartup() {
 
   // Create default task if none exists
   StartupStore(TEXT("Create default task\n"));
-  task.DefaultTask(SettingsComputer());
+  task.DefaultTask(SettingsComputer(), Basic());
 
   StartupStore(TEXT("CloseProgressDialog\n"));
   CloseProgressDialog();
@@ -506,7 +506,7 @@ void XCSoarInterface::Shutdown(void) {
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
   StartupStore(TEXT("Resume abort task\n"));
-  task.ResumeAbortTask(SettingsComputer(), -1); // turn off abort if it was on.
+  task.ResumeAbortTask(SettingsComputer(), Basic(), -1); // turn off abort if it was on.
   StartupStore(TEXT("Save default task\n"));
   task.SaveDefaultTask();
   StartupStore(TEXT("Clear task data\n"));

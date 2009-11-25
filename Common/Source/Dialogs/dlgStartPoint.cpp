@@ -188,7 +188,8 @@ void dlgStartPointShowModal(void) {
   // now retrieve back the properties...
   if (changed) {
     task.SetTaskModified();
-    task.RefreshTask(XCSoarInterface::SettingsComputer());
+    task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                     XCSoarInterface::Basic());
   };
 
   delete wf;

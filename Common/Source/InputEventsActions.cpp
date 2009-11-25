@@ -761,7 +761,7 @@ void InputEvents::eventGotoLookup(const TCHAR *misc) {
   ScopePopupBlock block(main_window.popup);
   int res = dlgWayPointSelect(Basic().Location);
   if (res != -1){
-    task.FlyDirectTo(res, SettingsComputer());
+    task.FlyDirectTo(res, SettingsComputer(), Basic());
   };
 }
 
@@ -1036,9 +1036,9 @@ void InputEvents::eventAdjustWaypoint(const TCHAR *misc) {
 // show: displays a status message showing the task abort status
 void InputEvents::eventAbortTask(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("abort")) == 0)
-    task.ResumeAbortTask(SettingsComputer(), 1);
+    task.ResumeAbortTask(SettingsComputer(), Basic(), 1);
   else if (_tcscmp(misc, TEXT("resume")) == 0)
-    task.ResumeAbortTask(SettingsComputer(), -1);
+    task.ResumeAbortTask(SettingsComputer(), Basic(), -1);
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (task.isTaskAborted())
       Message::AddMessage(TEXT("Task Aborted"));
@@ -1048,7 +1048,7 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
       Message::AddMessage(TEXT("Task Resume"));
     }
   } else {
-    task.ResumeAbortTask(SettingsComputer(), 0);
+    task.ResumeAbortTask(SettingsComputer(), Basic(), 0);
   }
 }
 
@@ -1331,7 +1331,7 @@ void InputEvents::eventTaskLoad(const TCHAR *misc) {
   TCHAR buffer[MAX_PATH];
   if (_tcslen(misc)>0) {
     LocalPath(buffer,misc);
-    task.LoadNewTask(buffer, SettingsComputer());
+    task.LoadNewTask(buffer, SettingsComputer(), Basic());
   }
 }
 

@@ -278,7 +278,8 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 static void RefreshCalculator(void) {
   WndProperty* wp;
 
-  task.RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
   RefreshTaskStatistics();
   target_point = max(target_point,task.getActiveIndex());
 

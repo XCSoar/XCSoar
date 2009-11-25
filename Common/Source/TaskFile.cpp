@@ -112,8 +112,10 @@ bool Task::LoadTaskWaypoints(FILE *file) {
 #define  BINFILEMAGICNUMBER     0x5c378fcf
 
 // loads a new task from scratch.
-void Task::LoadNewTask(const TCHAR *szFileName,
-                       const SETTINGS_COMPUTER &settings_computer)
+void
+Task::LoadNewTask(const TCHAR *szFileName,
+                  const SETTINGS_COMPUTER &settings_computer,
+                  const NMEA_INFO &nmea_info)
 {
   TASK_POINT Temp;
   START_POINT STemp;
@@ -195,7 +197,7 @@ void Task::LoadNewTask(const TCHAR *szFileName,
     ClearTask();
   }
 
-  RefreshTask(settings_computer);
+  RefreshTask(settings_computer, nmea_info);
 
   if (TaskInvalid && TaskLoaded) {
     MessageBoxX(

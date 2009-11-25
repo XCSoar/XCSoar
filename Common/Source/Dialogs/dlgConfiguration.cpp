@@ -3682,7 +3682,8 @@ void dlgConfigurationShowModal(void){
   if (taskchanged) {
     changed = true;
     task.setSettings(settings_task);
-    task.RefreshTask(XCSoarInterface::SettingsComputer());
+    task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                     XCSoarInterface::Basic());
   }
 
 #ifdef WINDOWSPC

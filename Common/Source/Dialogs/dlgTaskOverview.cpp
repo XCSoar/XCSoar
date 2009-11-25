@@ -223,7 +223,8 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
 
 
 static void OverviewRefreshTask(void) {
-  task.RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
 
   int i;
   // Only need to refresh info where the removal happened
@@ -412,7 +413,8 @@ static void OnAnalysisClicked(WindowControl * Sender,
 static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
 	(void)Sender;
 	(void)ListInfo;
-  task.RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
 
   logger.LoggerDeviceDeclare();
 
@@ -493,7 +495,8 @@ static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   int file_index = dfe->GetAsInteger();
 
   if (file_index>0) {
-    task.LoadNewTask(dfe->GetPathFile(),XCSoarInterface::SettingsComputer());
+    task.LoadNewTask(dfe->GetPathFile(), XCSoarInterface::SettingsComputer(),
+                     XCSoarInterface::Basic());
     OverviewRefreshTask();
     UpdateFilePointer();
     UpdateCaption();
@@ -589,7 +592,8 @@ void dlgTaskOverviewShowModal(void){
 
   // now retrieve back the properties...
 
-  task.RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
 
   delete wf;
 

@@ -396,7 +396,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
          Calculated().LegStartTime = Basic().Time ;
       */
   } else if (UpDown<0){
-    task.retreatTaskPoint(SettingsComputer());
+    task.retreatTaskPoint(SettingsComputer(), Basic());
   } else if (UpDown==0) {
     task.setSelected();
 
