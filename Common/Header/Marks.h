@@ -43,12 +43,13 @@ Copyright_License {
 #include "GeoPoint.hpp"
 #include "Poco/RWLock.h"
 
+struct SETTINGS_COMPUTER;
 class Canvas;
 class MapWindow;
 
 class Marks {
  public:
-  Marks(const char* name);
+  Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer);
   ~Marks();
   void Reset();
   void Initialise();
@@ -60,6 +61,7 @@ class Marks {
   }
  private:
    TopologyWriter topo_marks;
+   const SETTINGS_COMPUTER &settings_computer;
    Poco::RWLock lock;
 };
 
