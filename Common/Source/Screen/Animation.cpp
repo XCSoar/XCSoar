@@ -51,7 +51,9 @@ void SetSourceRectangle(RECT fromRect) {
 
 RECT WINAPI DrawWireRects(const bool enable, LPRECT lprcTo, UINT nMilliSecSpeed)
 {
-#ifndef ENABLE_SDL
+#ifdef ENABLE_SDL
+  return AnimationRectangle;
+#else /* !ENABLE_SDL */
   if (!enable)
     return AnimationRectangle;
 
