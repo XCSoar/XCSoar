@@ -42,13 +42,7 @@
 /* #undef HAVE_NDIR_H */
 
 /* Define to 1 if you have the <stdint.h> header file. */
-#ifdef WIN32
-#undef HAVE_STDINT_H
-#undef ZZIP_HAVE_STDINT_H
-#else
 #define ZZIP_HAVE_STDINT_H
-#endif
-// JMW undefed this
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #ifndef ZZIP_HAVE_STDLIB_H

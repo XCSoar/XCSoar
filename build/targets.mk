@@ -242,6 +242,7 @@ endif
 
 ifeq ($(HAVE_POSIX),y)
   TARGET_CPPFLAGS += -DHAVE_POSIX
+  TARGET_CPPFLAGS += -DHAVE_STDINT_H
 endif
 
 ifeq ($(HAVE_MSVCRT),y)

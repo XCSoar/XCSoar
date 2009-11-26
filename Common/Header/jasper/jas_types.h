@@ -135,7 +135,7 @@
  * The C language implementation does correctly provide the standard header
  * file "stdint.h".
  */
-// JMW #include <stdint.h>
+#include <stdint.h>
 #else
 /*
  * The C language implementation does not provide the standard header file
