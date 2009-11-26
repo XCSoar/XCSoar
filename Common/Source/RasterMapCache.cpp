@@ -53,6 +53,8 @@ Copyright_License {
 #include "jasper/jpc_rtc.h"
 #include "wcecompat/ts_string.h"
 
+#include <stdint.h>
+
 RasterMapCache::~RasterMapCache()
 {
   _Close();
@@ -149,7 +151,7 @@ void RasterMapCache::OptimiseCache(void){
 short RasterMapCache::LookupTerrainCacheFile(const long &SeekPos) {
   // put new value in slot tcpmin
 
-  __int16 NewAlt = 0;
+  int16_t NewAlt = 0;
   long SeekRes;
   short Alt;
 
@@ -161,7 +163,7 @@ short RasterMapCache::LookupTerrainCacheFile(const long &SeekPos) {
     // error, not found!
     Alt = TERRAIN_INVALID;
   } else {
-    if (zzip_fread(&NewAlt, 1, sizeof(__int16), fpTerrain) != sizeof(__int16))
+    if (zzip_fread(&NewAlt, 1, sizeof(NewAlt), fpTerrain) != sizeof(NewAlt))
       Alt = TERRAIN_INVALID;
     else {
       Alt = max(0,NewAlt);
