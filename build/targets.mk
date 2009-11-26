@@ -287,6 +287,10 @@ else
   endif
 endif # UNIX
 
+ifeq ($(TARGET),WINE)
+  TARGET_ARCH += -m32
+endif
+
 ####### linker configuration
 
 TARGET_LDFLAGS =
