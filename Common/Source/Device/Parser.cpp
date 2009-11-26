@@ -66,13 +66,6 @@ using std::max;
 FlarmCalculations flarmCalculations;
 #endif
 
-#ifdef __MINGW32__
-#ifndef max
-#define max(x, y)   (x > y ? x : y)
-#define min(x, y)   (x < y ? x : y)
-#endif
-#endif
-
 #define MAX_NMEA_LEN	90
 #define MAX_NMEA_PARAMS 18
 
@@ -815,7 +808,7 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!activeGPS)
     return true;
 
-  GPS_INFO->SatellitesUsed = (int)(min(16,_tcstod(params[6], NULL)));
+  GPS_INFO->SatellitesUsed = (int)(min(16.0, _tcstod(params[6], NULL)));
 
   double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
