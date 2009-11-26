@@ -451,7 +451,7 @@ include $(topdir)/build/compat.mk
 	    -e 's,small\.bmp,Small.bmp,g' \
 		< $< > $<.tmp
 	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) $(WINDRESFLAGS) $<.tmp $@
+	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<.tmp
 	@$(RM) $<.tmp
 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
