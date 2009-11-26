@@ -317,11 +317,11 @@ bool MapWindow::on_mouse_up(int x, int y)
   if (is_simulator()) {
     if (!Basic().Replay && !my_target_pan && (distance>IBLSCALE(36))) {
       // This drag moves the aircraft (changes speed and direction)
-      double oldbearing = XCSoarInterface::Basic().TrackBearing;
+      double oldbearing = Basic().TrackBearing;
       double minspeed = 1.1*GlidePolar::Vminsink;
       double newbearing = Bearing(LLstart, G);
       if ((fabs(AngleLimit180(newbearing - oldbearing)) < 30)
-          || (XCSoarInterface::Basic().Speed < minspeed)) {
+          || (Basic().Speed < minspeed)) {
 
         device_blackboard.SetSpeed(min(100.0, max(minspeed, distance / 3)));
       }
