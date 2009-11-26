@@ -44,7 +44,7 @@ Copyright_License {
 // static variables shared between rasterterrains because can only
 // have file opened by one reader
 
-#ifdef __MINGW32__
+#ifdef __GNUC__
 #define int_fast8_t jas_int_fast8_t
 #endif
 

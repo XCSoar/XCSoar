@@ -615,7 +615,7 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
   bool found = false;
   FILE *fp=NULL;
   if (_tcslen(szFile)>0)
-#ifndef __MINGW32__
+#ifndef __GNUC__
     if (wide) {
       fp = _tfopen(szFile, TEXT("rb"));
     } else {
@@ -633,7 +633,7 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
   TCHAR wvalue[nMaxValueValueSize];
   int j;
 
-#ifdef __MINGW32__
+#ifdef __GNUC__
   char inval[nMaxValueValueSize];
   char name [nMaxValueValueSize];
   char value [nMaxValueValueSize];
@@ -665,7 +665,7 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
         }
       }
 
-#ifdef __MINGW32__
+#ifdef __GNUC__
     } else {
       while (fgets(inval, nMaxValueValueSize, fp)) {
         if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
@@ -713,7 +713,7 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
 }
 
 void LoadRegistryFromFile(const TCHAR *szFile) {
-#ifndef __MINGW32__
+#ifndef __GNUC__
   if (!LoadRegistryFromFile_inner(szFile,true)) { // legacy, wide chars
     LoadRegistryFromFile_inner(szFile,false);       // new, non-wide chars
   }
@@ -728,7 +728,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
 {
   TCHAR lpstrName[nMaxKeyNameSize+1];
   //  TCHAR lpstrClass[nMaxClassSize+1];
-#ifdef __MINGW32__
+#ifdef __GNUC__
   union {
     BYTE pValue[nMaxValueValueSize+4];
     DWORD dValue;
@@ -764,7 +764,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
 
     LONG res = ::RegEnumValue(hkFrom, i, lpstrName,
 			      &nNameSize, 0,
-#ifdef __MINGW32__
+#ifdef __GNUC__
 			      &nType, uValue.pValue,
 #else
 			      &nType, pValue,
@@ -786,7 +786,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
       // type 4 integer (valuesize 4)
 
       if (nType==4) { // data
-#ifdef __MINGW32__
+#ifdef __GNUC__
 	fprintf(fp,"%S=%d\r\n", lpstrName, uValue.dValue);
 #else
 	wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
@@ -796,7 +796,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
       // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
       if (nType==1) { // text
 	if (nValueSize>0) {
-#ifdef __MINGW32__
+#ifdef __GNUC__
 	  uValue.pValue[nValueSize]= 0; // null terminate, just in case
 	  uValue.pValue[nValueSize+1]= 0; // null terminate, just in case
 	  if (_tcslen((TCHAR*)uValue.pValue)>0) {
@@ -817,7 +817,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
 	  }
 #endif
 	} else {
-#ifdef __MINGW32__
+#ifdef __GNUC__
 	  fprintf(fp,"%S=\"\"\r\n", lpstrName);
 #else
 	  fprintf(fp,"%s=\"\"\r\n", lpstrName);
@@ -827,12 +827,12 @@ void SaveRegistryToFile(const TCHAR *szFile)
     }
 
   }
-#ifdef __MINGW32__
+#ifdef __GNUC__
   // JMW why flush agressively?
   fflush(fp);
 #endif
 
-#ifdef __MINGW32__
+#ifdef __GNUC__
   fprintf(fp,"\r\n"); // end of file
 #endif
 

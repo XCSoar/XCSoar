@@ -74,7 +74,7 @@ extern double INVCOSINETABLE[4096];
 extern int ISINETABLE[4096];
 extern int ICOSTABLE[4096];
 
-#ifdef __MINGW32__
+#ifdef __GNUC__
 #define DEG_TO_INT(x) ((unsigned short)(int)((x)*(65536.0/360.0)))>>4
 #else
 #define DEG_TO_INT(x) ((unsigned short)((x)*(65536.0/360.0)))>>4

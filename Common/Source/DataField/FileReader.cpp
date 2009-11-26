@@ -79,7 +79,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   ScanDirectories(buffer,filter);
 #ifndef HAVE_POSIX
 #ifndef GNAV
-#if !defined(WINDOWSPC) && !defined(__MINGW32__)
+#if !defined(WINDOWSPC) && !defined(__GNUC__)
 #ifndef OLDPPC
 // non altair, (non windowspc e non mingw32) e non ppc2002
   static bool first = true;

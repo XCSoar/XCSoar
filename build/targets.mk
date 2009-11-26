@@ -224,7 +224,7 @@ ifeq ($(CONFIG_PC),y)
   TARGET_CPPFLAGS += -D_WINDOWS -DWIN32 -DCECORE -DUNDER_CE=300
 
   ifeq ($(CONFIG_WINE),y)
-    TARGET_CPPFLAGS += -D__MINGW32__ -D__WINE__
+    TARGET_CPPFLAGS += -D__WINE__
     # -mno-cygwin
   else
     TARGET_CPPFLAGS += -D_MBCS

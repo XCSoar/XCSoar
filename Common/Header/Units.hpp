@@ -41,7 +41,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-#ifndef __MINGW32__
+#ifndef __GNUC__
 #define DEG "°"
 #else
 #define DEG "Â°"

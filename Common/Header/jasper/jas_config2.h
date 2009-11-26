@@ -118,7 +118,7 @@
  * Try to compensate for this here, by specifying the preprocessor symbols
  * normally defined by configure.
  */
-#if !defined(UNDER_CE) || defined(__BORLANDC__) || defined(__MINGW32__)
+#if !defined(UNDER_CE) || defined(__BORLANDC__) || defined(__GNUC__)
  #define	uchar		unsigned char
  #define	longlong	long long
  #define	ulonglong	unsigned long long

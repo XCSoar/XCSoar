@@ -66,7 +66,7 @@ Copyright_License {
 #define DISABLEAUDIOVARIO
 // use exception handling
 #ifndef ALTAIRPROTOTYPE
-#ifndef __MINGW32__
+#ifndef __GNUC__
 #define HAVEEXCEPTIONS
 #endif
 #endif
@@ -86,7 +86,7 @@ Copyright_License {
 #define IBLSCALE(x) (x)
 #endif
 
-#ifdef __MINGW32__
+#ifdef __GNUC__
 #ifndef WINDOWSPC
 #define NEWFLARMDB
 #endif

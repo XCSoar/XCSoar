@@ -44,7 +44,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Sizes.h"
 
-#if defined(WIN32) && !(defined(__MINGW32__) && defined(WINDOWSPC))
+#if defined(WIN32) && !(defined(__GNUC__) && defined(WINDOWSPC))
 #include "uniqueid.h"
 #endif
 
@@ -149,7 +149,7 @@ ReadCompaqID(void)
 static void
 ReadUUID(void)
 {
-#if defined(WIN32) && !(defined(__MINGW32__) && defined(WINDOWSPC))
+#if defined(WIN32) && !(defined(__GNUC__) && defined(WINDOWSPC))
   BOOL fRes;
 
 #define GUIDBuffsize 100
@@ -241,7 +241,7 @@ ReadUUID(void)
 #if 0
 void ReadUUIDold(void)
 {
-#ifndef __MINGW32__
+#ifndef __GNUC__
   BOOL fRes;
   DWORD dwBytesReturned =0;
   DEVICE_ID DevID;

@@ -52,7 +52,7 @@ Copyright_License {
 #include "Audio/WaveThread.h"
 #endif
 
-#if defined(WIN32) && !defined(__MINGW32__)
+#if defined(WIN32) && !defined(__GNUC__)
 #if defined(CECORE)
 #include "winbase.h"
 #endif
@@ -122,7 +122,7 @@ void MemLeakCheck() {
 // automatic defragmentation.
 void MyCompactHeaps() {
 #ifdef WIN32
-#if defined(WINDOWSPC)||(defined(GNAV) && !defined(__MINGW32__))
+#if defined(WINDOWSPC)||(defined(GNAV) && !defined(__GNUC__))
   HeapCompact(GetProcessHeap(),0);
 #else
   typedef DWORD (_stdcall *CompactAllHeapsFn) (void);

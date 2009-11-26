@@ -59,7 +59,7 @@ Copyright_License {
 #endif
 
 #if !defined(ALTAIRSYNC) && !defined(GNAV) && !defined(WINDOWSPC) && \
-  !defined(__MINGW32__) && !defined(HAVE_POSIX)
+  !defined(__GNUC__)
 #include <projects.h>
 #endif
 
