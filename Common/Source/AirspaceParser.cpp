@@ -1094,6 +1094,18 @@ static void FindAirspaceAreaBounds() {
   }
 }
 
+static bool
+ReadAirspace(const char *path)
+{
+  ZZIP_FILE *fp = zzip_fopen(path, "rt");
+  if (fp == NULL)
+    return false;
+
+  ReadAirspace(fp);
+  zzip_fclose(fp);
+  return true;
+}
+
 /**
  * Reads the airspace files into the memory
  */
@@ -1102,9 +1114,6 @@ void ReadAirspace(void)
   TCHAR	szFile1[MAX_PATH] = TEXT("\0");
   TCHAR	szFile2[MAX_PATH] = TEXT("\0");
   char zfilename[MAX_PATH];
-
-  ZZIP_FILE *fp=NULL;
-  ZZIP_FILE *fp2=NULL;
 
 #if AIRSPACEUSEBINFILE > 0
   FILETIME LastWriteTime;
@@ -1116,14 +1125,12 @@ void ReadAirspace(void)
 
   // Read the airspace filenames from the registry
   GetRegistryString(szRegistryAirspaceFile, szFile1, MAX_PATH);
-  ExpandLocalPath(szFile1);
-  GetRegistryString(szRegistryAdditionalAirspaceFile, szFile2, MAX_PATH);
-  ExpandLocalPath(szFile2);
-
-  // If the first file is available try to open it
-  if (_tcslen(szFile1)>0) {
+  if (szFile1[0] != 0) {
+    ExpandLocalPath(szFile1);
     unicode2ascii(szFile1, zfilename, MAX_PATH);
-    fp  = zzip_fopen(zfilename, "rt");
+
+    if (!ReadAirspace(zfilename))
+      StartupStore(TEXT("No airspace file 1\n"));
   } else {
     // TODO feature: airspace in xcm files should be a feature
     /*
@@ -1137,26 +1144,13 @@ void ReadAirspace(void)
     */
   }
 
-  // If the second file is available try to open it
-  if (_tcslen(szFile2)>0) {
+  GetRegistryString(szRegistryAdditionalAirspaceFile, szFile2, MAX_PATH);
+  if (szFile2[0] != 0) {
+    ExpandLocalPath(szFile2);
     unicode2ascii(szFile2, zfilename, MAX_PATH);
-    fp2 = zzip_fopen(zfilename, "rt");
-  }
 
-  if (fp != NULL){
-    // Read the first file
-    ReadAirspace(fp);
-    zzip_fclose(fp);
-
-    // also read any additional airspace
-    if (fp2 != NULL) {
-      ReadAirspace(fp2);
-      zzip_fclose(fp2);
-    } else {
+    if (!ReadAirspace(zfilename))
       StartupStore(TEXT("No airspace file 2\n"));
-    }
-  } else {
-    StartupStore(TEXT("No airspace file 1\n"));
   }
 
   // Calculate the airspace boundaries
