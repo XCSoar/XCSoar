@@ -248,28 +248,29 @@ MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
   }
 }
 
+static bool
+IsFarVisible(const AirspaceMetadata &airspace, const rectObj &rect)
+{
+  return msRectOverlap(&airspace.bounds, &rect) ||
+    msRectContained(&rect, &airspace.bounds) ||
+    msRectContained(&airspace.bounds, &rect);
+}
+
 void MapWindow::ScanVisibilityAirspace(rectObj *bounds_active) {
   // received when the SetTopoBounds determines the visibility
   // boundary has changed.
   // This happens rarely, so it is good pre-filtering of what is visible.
   // (saves from having to do it every screen redraw)
-  const rectObj bounds = *bounds_active;
 
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
     AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
-    circle.FarVisible =
-      msRectOverlap(&circle.bounds, bounds_active) == MS_TRUE ||
-      msRectContained(bounds_active, &circle.bounds) == MS_TRUE ||
-      msRectContained(&circle.bounds, bounds_active) == MS_TRUE;
+    circle.FarVisible = IsFarVisible(circle, *bounds_active);
   }
 
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
     AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
-    area.FarVisible =
-      msRectOverlap(&area.bounds, bounds_active) == MS_TRUE ||
-      msRectContained(bounds_active, &area.bounds) == MS_TRUE ||
-      msRectContained(&area.bounds, bounds_active) == MS_TRUE;
+    area.FarVisible = IsFarVisible(area, *bounds_active);
   }
 }

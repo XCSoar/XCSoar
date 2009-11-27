@@ -234,15 +234,20 @@ CheckInsideLongitude(double longitude,
   }
 }
 
+static bool
+InsideBounds(const AirspaceMetadata &airspace, const GEOPOINT &location)
+{
+  return location.Latitude > airspace.bounds.miny &&
+    location.Latitude < airspace.bounds.maxy &&
+    CheckInsideLongitude(location.Longitude,
+                         airspace.bounds.minx, airspace.bounds.maxx);
+}
+
 bool
 AirspaceDatabase::InsideCircle(const GEOPOINT &location,
                                const unsigned i) const
 {
-  return location.Latitude > AirspaceCircle[i].bounds.miny &&
-    location.Latitude < AirspaceCircle[i].bounds.maxy &&
-    CheckInsideLongitude(location.Longitude,
-                         AirspaceCircle[i].bounds.minx,
-                         AirspaceCircle[i].bounds.maxx) &&
+  return InsideBounds(AirspaceCircle[i], location) &&
     CircleDistance(location, i) < 0.0;
 }
 
@@ -360,11 +365,7 @@ AirspaceDatabase::InsideArea(const GEOPOINT &location, const unsigned i) const
   thispoint.Latitude = location.Latitude;
 
   // first check if point is within bounding box
-  return location.Latitude > AirspaceArea[i].bounds.miny &&
-    location.Latitude < AirspaceArea[i].bounds.maxy &&
-    CheckInsideLongitude(location.Longitude,
-                         AirspaceArea[i].bounds.minx,
-                         AirspaceArea[i].bounds.maxx) &&
+  return InsideBounds(AirspaceArea[i], location) &&
     // it is within, so now do detailed polygon test
     wn_PnPoly(thispoint, &AirspacePoint[AirspaceArea[i].FirstPoint],
               AirspaceArea[i].NumPoints - 1) != 0;
@@ -631,11 +632,7 @@ AirspaceDatabase::ScanLine(const GEOPOINT *locs, const double *heights,
           && line_rect_intersection(x1, y1, dx, dy, &AirspaceCircle[k].bounds)) {
 
         for (i = 0; i < AIRSPACE_SCANSIZE_X; i++) {
-          if ((locs[i].Latitude > AirspaceCircle[k].bounds.miny)
-              && (locs[i].Latitude < AirspaceCircle[k].bounds.maxy)
-              && CheckInsideLongitude(locs[i].Longitude,
-                  AirspaceCircle[k].bounds.minx, AirspaceCircle[k].bounds.maxx)) {
-
+          if (InsideBounds(AirspaceCircle[k], locs[i])) {
             Dist = Distance(locs[i], AirspaceCircle[k].Location)
                 - AirspaceCircle[k].Radius;
 
@@ -665,10 +662,7 @@ AirspaceDatabase::ScanLine(const GEOPOINT *locs, const double *heights,
 
         for (i = 0; i < AIRSPACE_SCANSIZE_X; i++) {
 
-          if ((locs[i].Latitude > AirspaceArea[k].bounds.miny)
-              && (locs[i].Latitude < AirspaceArea[k].bounds.maxy)
-              && CheckInsideLongitude(locs[i].Longitude,
-                  AirspaceArea[k].bounds.minx, AirspaceArea[k].bounds.maxx)) {
+          if (InsideBounds(AirspaceArea[k], locs[i])) {
             AIRSPACE_POINT thispoint = locs[i];
 
             if (wn_PnPoly(thispoint,

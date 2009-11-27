@@ -57,6 +57,13 @@ ConvertFlightLevels(AIRSPACE_ALT &altitude)
     }
 }
 
+static void
+ConvertFlightLevels(AirspaceMetadata &airspace)
+{
+  ConvertFlightLevels(airspace.Base);
+  ConvertFlightLevels(airspace.Top);
+}
+
 /**
  * Converts all FlightLevel-based airspaces to MSL-based airspaces
  * (Attention: Inaccurate!)
@@ -64,19 +71,11 @@ ConvertFlightLevels(AIRSPACE_ALT &altitude)
 void ConvertFlightLevels(void) {
   // TODO accuracy: ConvertFlightLevels is inaccurate!
 
-  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
-    AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i)
+    ConvertFlightLevels(airspace_database.AirspaceCircle[i]);
 
-    ConvertFlightLevels(circle.Base);
-    ConvertFlightLevels(circle.Top);
-  }
-
-  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
-    AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
-
-    ConvertFlightLevels(area.Base);
-    ConvertFlightLevels(area.Top);
-  }
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i)
+    ConvertFlightLevels(airspace_database.AirspaceArea[i]);
 }
 
 /**

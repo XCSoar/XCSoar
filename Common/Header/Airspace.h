@@ -65,43 +65,39 @@ struct AIRSPACE_ALT
   AirspaceAltBase_t Base;
 };
 
-struct AIRSPACE_AREA
-{
+struct AirspaceMetadata {
   TCHAR Name[NAME_SIZE + 1];
   int Type;
   AIRSPACE_ALT Base;
   AIRSPACE_ALT Top;
-  unsigned FirstPoint;
-  unsigned NumPoints;
-  unsigned char Visible;
-  bool _NewWarnAckNoBrush;
-  GEOPOINT minBound;
-  GEOPOINT maxBound;
+
   rectObj bounds;
   AIRSPACE_ACK Ack;
   unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
   bool FarVisible;
 };
 
+struct AIRSPACE_AREA : public AirspaceMetadata
+{
+  unsigned FirstPoint;
+  unsigned NumPoints;
+  unsigned char Visible;
+  bool _NewWarnAckNoBrush;
+  GEOPOINT minBound;
+  GEOPOINT maxBound;
+};
+
 #define AIRSPACE_POINT GEOPOINT
 // quick hack...
 
-struct AIRSPACE_CIRCLE
+struct AIRSPACE_CIRCLE : public AirspaceMetadata
 {
-  TCHAR Name[NAME_SIZE + 1];
-  int Type;
-  AIRSPACE_ALT Base;
-  AIRSPACE_ALT Top;
   GEOPOINT Location;
   double Radius;
   POINT Screen;
   int ScreenR;
   unsigned char Visible;
   bool _NewWarnAckNoBrush;
-  AIRSPACE_ACK Ack;
-  rectObj bounds;
-  unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
-  bool FarVisible;
 };
 
 // Airspace Database

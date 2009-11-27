@@ -923,6 +923,15 @@ GlideComputerAirData::PredictNextPosition()
 
 bool GlobalClearAirspaceWarnings = false;
 
+static bool
+InsideAltitudeRange(const AirspaceMetadata &airspace, double alt, double agl)
+{
+  return ((airspace.Base.Base != abAGL && alt >= airspace.Base.Altitude) ||
+          (airspace.Base.Base == abAGL && agl >= airspace.Base.AGL)) &&
+    ((airspace.Top.Base != abAGL && alt < airspace.Top.Altitude) ||
+     (airspace.Top.Base == abAGL && agl < airspace.Top.AGL));
+}
+
 void
 GlideComputerAirData::AirspaceWarning()
 {
@@ -961,10 +970,7 @@ GlideComputerAirData::AirspaceWarning()
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
     const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
-    if (((circle.Base.Base != abAGL && alt >= circle.Base.Altitude) ||
-         (circle.Base.Base == abAGL && agl >= circle.Base.AGL)) &&
-        ((circle.Top.Base != abAGL && alt < circle.Top.Altitude) ||
-         (circle.Top.Base == abAGL && agl < circle.Top.AGL)) &&
+    if (InsideAltitudeRange(circle, alt, agl) &&
         SettingsComputer().iAirspaceMode[circle.Type] >= 2 &&
         InsideAirspaceCircle(loc, i))
       AirspaceWarnListAdd(&Basic(), &Calculated(),
@@ -978,10 +984,7 @@ GlideComputerAirData::AirspaceWarning()
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
     const AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
-    if (((area.Base.Base != abAGL && alt >= area.Base.Altitude) ||
-         (area.Base.Base == abAGL && agl >= area.Base.AGL)) &&
-        ((area.Top.Base != abAGL && alt < area.Top.Altitude) ||
-         (area.Top.Base == abAGL && agl < area.Top.AGL)) &&
+    if (InsideAltitudeRange(area, alt, agl) &&
         SettingsComputer().iAirspaceMode[area.Type] >= 2 &&
         InsideAirspaceArea(loc, i))
       AirspaceWarnListAdd(&Basic(), &Calculated(),
