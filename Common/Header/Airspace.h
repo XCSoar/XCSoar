@@ -48,6 +48,7 @@ Copyright_License {
 
 struct SETTINGS_COMPUTER;
 class AirspaceDatabase;
+class MapWindowProjection;
 
 struct AIRSPACE_ACK
 {
@@ -125,55 +126,6 @@ void CloseAirspace(void);
 
 void SortAirspace(void);
 
-//*******************************************************************************
-// experimental: new dialog based warning system
-
-class AirspaceInfo_c{
-
-public:
-
-  int    TimeOut;             // in systicks
-  int    InsideAckTimeOut;    // downgrade auto ACK timer
-  int    Sequence;            // Sequence nummer is equal for real and predicted calculation
-  int    hDistance;           // horizontal distance in m
-  int    vDistance;           // vertical distance in m
-  int    Bearing;             // in deg
-  DWORD  PredictedEntryTime;  // in ms
-  int    Acknowledge;         // 0=not Acked, 1=Acked til closer, 2=Acked til leave, 3= Acked whole day
-  bool   Inside;              // true if inside
-  bool   Predicted;           // true if predicted inside, menas close and entry expected
-  bool   IsCircle;            // true if Airspace is a circle
-  int    AirspaceIndex;       // index of airspace
-  int    SortKey;             // SortKey
-  int    LastListIndex;       // Last index in List, used to sort items with same sort criteria
-  int    ID;                  // Unique ID
-  int    WarnLevel;           // WarnLevel 0 far away, 1 prdicted entry, 2 predicted entry and close, 3 inside
-
-};
-
-typedef enum {asaNull,
-              asaItemAdded,
-              asaItemChanged,
-              asaClearAll,
-              asaItemRemoved,
-              asaWarnLevelIncreased,
-              asaProcessEnd,
-              asaProcessBegin} AirspaceWarningNotifyAction_t;
-
-typedef void (*AirspaceWarningNotifier_t)(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace) ;
-
-void AirspaceWarnListAddNotifier(AirspaceWarningNotifier_t Notifier);
-void AirspaceWarnListRemoveNotifier(AirspaceWarningNotifier_t Notifier);
-bool AirspaceWarnGetItem(int Index, AirspaceInfo_c &Item);
-int AirspaceWarnGetItemCount(void);
-int dlgAirspaceWarningInit(void);
-int dlgAirspaceWarningDeInit(void);
-void AirspaceWarnListClear(void);
-void AirspaceWarnDoAck(int ID, int Ack);
-int AirspaceWarnFindIndexByID(int ID);
-
-class MapWindowProjection;
-
 void
 FindNearestAirspace(const GEOPOINT &location,
                     double altitude, double terrain_altitude,
@@ -183,6 +135,5 @@ FindNearestAirspace(const GEOPOINT &location,
                     int *foundcircle,
                     int *foundarea,
                     double *height=NULL);
-
 
 #endif

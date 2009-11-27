@@ -386,8 +386,9 @@ static int _cdecl cmp(const void *a, const void *b){
 
 }
 
-void AirspaceWarnListSort(void){
-
+static void
+AirspaceWarnListSort(void)
+{
   unsigned i, idx=0;
   AirspaceInfo_c l[20];
   List<AirspaceInfo_c>::Node* it;

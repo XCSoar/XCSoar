@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "Airspace.h"
 #include "AirspaceDatabase.hpp"
-#include "SettingsAirspace.hpp"
+#include "AirspaceWarning.h"
 #include "Interface.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
@@ -54,7 +54,6 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "LocalPath.hpp"
 #include "Components.hpp"
-#include "Calculations.h" // TODO danger! ClearAirspaceWarnings
 #include "options.h"
 #include "wcecompat/ts_string.h"
 #include "Compatibility/string.h"

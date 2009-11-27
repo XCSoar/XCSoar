@@ -36,11 +36,11 @@ Copyright_License {
 }
 */
 
+#include "AirspaceWarning.h"
+#include "AirspaceDatabase.hpp"
 #include "Dialogs/Internal.hpp"
 #include "InfoBoxLayout.h"
 #include "Units.hpp"
-#include "Airspace.h"
-#include "AirspaceDatabase.hpp"
 #include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Math/Units.h"

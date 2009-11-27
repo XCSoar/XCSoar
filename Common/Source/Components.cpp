@@ -52,6 +52,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Waypointparser.h"
 #include "Airspace.h"
+#include "AirspaceWarning.h"
 #include "ButtonLabel.hpp"
 #include "SnailTrail.hpp"
 #include "Language.hpp"
