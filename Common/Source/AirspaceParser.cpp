@@ -1143,28 +1143,15 @@ void ReadAirspace(void)
     fp2 = zzip_fopen(zfilename, "rt");
   }
 
-  // Reset filenames in registry in case airspace
-  // loading crashes the application
-  SetRegistryString(szRegistryAirspaceFile, TEXT("\0"));
-  SetRegistryString(szRegistryAdditionalAirspaceFile, TEXT("\0"));
-
   if (fp != NULL){
     // Read the first file
     ReadAirspace(fp);
     zzip_fclose(fp);
 
-    // First file was OK, so save it
-    ContractLocalPath(szFile1);
-    SetRegistryString(szRegistryAirspaceFile, szFile1);
-
     // also read any additional airspace
     if (fp2 != NULL) {
       ReadAirspace(fp2);
       zzip_fclose(fp2);
-
-      // file 2 was OK, so save it
-      ContractLocalPath(szFile2);
-      SetRegistryString(szRegistryAdditionalAirspaceFile, szFile2);
     } else {
       StartupStore(TEXT("No airspace file 2\n"));
     }
