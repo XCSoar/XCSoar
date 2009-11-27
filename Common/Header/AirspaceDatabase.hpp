@@ -50,6 +50,7 @@ struct AIRSPACE_AREA;
 struct AIRSPACE_CIRCLE;
 struct SETTINGS_COMPUTER;
 class MapWindowProjection;
+class RasterTerrain;
 
 class AirspaceDatabase {
 public:
@@ -158,6 +159,14 @@ public:
 
   void ScanLine(const GEOPOINT *locs, const double *heights,
                 int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X]) const;
+
+  /**
+   * Recalculates the MSL values of all AGL specification based on
+   * terrain data.
+   *
+   * @param terrain the terrain data (must be locked)
+   */
+  void UpdateAGL(const RasterTerrain &terrain);
 
 #ifndef NDEBUG
   void Dump(FILE *file);

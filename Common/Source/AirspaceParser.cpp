@@ -677,46 +677,6 @@ OnError:
 
 }
 
-
-static void AirspaceAGLLookup(AIRSPACE_ALT *Top, AIRSPACE_ALT *Base,
-			      double av_lat, double av_lon) {
-  if (((Base->Base == abAGL) || (Top->Base == abAGL))) {
-
-    terrain.Lock();
-
-    GEOPOINT p; p.Longitude = av_lon; p.Latitude = av_lat;
-
-    double th = -1;
-    // want most accurate rounding here
-    if (terrain.GetMap()) {
-      RasterRounding rounding(*terrain.GetMap(),0,0);
-      th = terrain.GetTerrainHeight(p, rounding);
-    }
-
-    if (Base->Base == abAGL) {
-      if (Base->AGL>=0) {
-	Base->Altitude = Base->AGL+th;
-      } else {
-	// surface, set to zero
-	Base->AGL = 0;
-	Base->Altitude = 0;
-      }
-    }
-    if (Top->Base == abAGL) {
-      if (Top->AGL>=0) {
-	Top->Altitude = Top->AGL+th;
-      } else {
-	// surface, set to zero
-	Top->AGL = 0;
-	Top->Altitude = 0;
-      }
-    }
-    // JMW TODO enhancement: complain if out of terrain range (th<0)
-    terrain.Unlock();
-  }
-}
-
-
 static void
 AddAirspaceCircle(AIRSPACE_AREA *Temp,
                   const double aCenterX,
@@ -748,10 +708,6 @@ AddAirspaceCircle(AIRSPACE_AREA *Temp,
   NewCircle->Ack.AcknowledgedToday = false;
   NewCircle->Ack.AcknowledgementTime = 0;
   NewCircle->_NewWarnAckNoBrush = false;
-
-  AirspaceAGLLookup(&NewCircle->Base, &NewCircle->Top,
-                    NewCircle->Location.Latitude,
-                    NewCircle->Location.Longitude);
 }
 
 static void
@@ -837,10 +793,6 @@ AddArea(AIRSPACE_AREA *Temp, unsigned &NumberOfAirspaceAreas)
       if (PointList[i].Longitude  < NewArea->minBound.Longitude)
         NewArea->minBound.Longitude = PointList[i].Longitude;
     }
-
-    AirspaceAGLLookup(&NewArea->Base, &NewArea->Top,
-                      (NewArea->maxBound.Latitude+NewArea->minBound.Latitude)/2,
-                      (NewArea->maxBound.Longitude+NewArea->minBound.Longitude)/2);
   } else {
     NewArea->maxBound.Latitude = 0;
     NewArea->minBound.Latitude = 0;
@@ -1223,6 +1175,10 @@ void ReadAirspace(void)
   // Calculate the airspace boundaries
   FindAirspaceAreaBounds();
   FindAirspaceCircleBounds();
+
+  terrain.Lock();
+  airspace_database.UpdateAGL(terrain);
+  terrain.Unlock();
 }
 
 
