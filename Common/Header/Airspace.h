@@ -101,9 +101,6 @@ struct AIRSPACE_CIRCLE : public AirspaceMetadata
   bool _NewWarnAckNoBrush;
 };
 
-// Airspace Database
-extern AirspaceDatabase airspace_database;
-
 extern POINT *AirspaceScreenPoint;
 
 static inline double

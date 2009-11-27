@@ -45,6 +45,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Units.h"
 #include "MainWindow.hpp"
+#include "Components.hpp"
 #include "Compatibility/vk.h"
 #include "options.h" /* for IBLSCALE() */
 

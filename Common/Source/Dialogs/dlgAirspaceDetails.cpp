@@ -49,6 +49,7 @@ Copyright_License {
 #include "Math/Units.h"
 #include "MainWindow.hpp"
 #include "MapWindow.h"
+#include "Components.hpp"
 
 #include <assert.h>
 

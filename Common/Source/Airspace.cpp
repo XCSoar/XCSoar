@@ -45,8 +45,6 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-AirspaceDatabase airspace_database;
-
 POINT *AirspaceScreenPoint;
 
 /**

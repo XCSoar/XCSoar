@@ -48,6 +48,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "DataField/Base.hpp"
 #include "MapWindow.h"
+#include "Components.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

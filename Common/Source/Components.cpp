@@ -53,6 +53,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Airspace.h"
 #include "AirspaceWarning.h"
+#include "AirspaceDatabase.hpp"
 #include "ButtonLabel.hpp"
 #include "SnailTrail.hpp"
 #include "Language.hpp"
@@ -90,6 +91,7 @@ Copyright_License {
 #include "WayPointList.hpp"
 
 WayPointList way_points;
+AirspaceDatabase airspace_database;
 Marks *marks;
 TopologyStore *topology;
 RasterTerrain terrain;

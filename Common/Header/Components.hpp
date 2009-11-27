@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_COMPONENTS_HPP
 
 class WayPointList;
+class AirspaceDatabase;
 class Marks;
 class TopologyStore;
 class RasterTerrain;
@@ -51,6 +52,7 @@ class InstrumentThread;
 
 // other global objects
 extern WayPointList way_points;
+extern AirspaceDatabase airspace_database;
 extern Marks *marks;
 extern TopologyStore *topology;
 extern RasterTerrain terrain;

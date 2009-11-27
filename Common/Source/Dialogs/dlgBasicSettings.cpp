@@ -49,6 +49,7 @@ Copyright_License {
 #include "Airspace.h"
 #include "AirspaceDatabase.hpp"
 #include "MainWindow.hpp"
+#include "Components.hpp"
 
 #include <math.h>
 
