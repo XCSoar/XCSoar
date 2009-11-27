@@ -48,6 +48,15 @@ Copyright_License {
 #include <assert.h>
 #include "Units.hpp"
 
+static void
+ConvertFlightLevels(AIRSPACE_ALT &altitude)
+{
+    if (altitude.FL != 0) {
+      altitude.Altitude = altitude.FL * 100 + (QNH - 1013) * 30;
+      altitude.Altitude = altitude.Altitude / TOFEET;
+    }
+}
+
 /**
  * Converts all FlightLevel-based airspaces to MSL-based airspaces
  * (Attention: Inaccurate!)
@@ -58,27 +67,15 @@ void ConvertFlightLevels(void) {
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
     AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
-    if (circle.Base.FL != 0) {
-      circle.Base.Altitude = circle.Base.FL * 100 + (QNH - 1013) * 30;
-      circle.Base.Altitude = circle.Base.Altitude / TOFEET;
-    }
-    if (circle.Top.FL != 0) {
-      circle.Top.Altitude = circle.Top.FL * 100 + (QNH- 1013) * 30;
-      circle.Top.Altitude = circle.Top.Altitude / TOFEET;
-    }
+    ConvertFlightLevels(circle.Base);
+    ConvertFlightLevels(circle.Top);
   }
 
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
     AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
-    if (area.Base.FL != 0) {
-      area.Base.Altitude = area.Base.FL * 100 + (QNH - 1013) * 30;
-      area.Base.Altitude = area.Base.Altitude / TOFEET;
-    }
-    if (area.Top.FL != 0) {
-      area.Top.Altitude = area.Top.FL * 100 + (QNH - 1013) * 30;
-      area.Top.Altitude = area.Top.Altitude / TOFEET;
-    }
+    ConvertFlightLevels(area.Base);
+    ConvertFlightLevels(area.Top);
   }
 }
 

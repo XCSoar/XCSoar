@@ -266,8 +266,6 @@ AirspaceDatabase::NearestCircle(const GEOPOINT &location,
   for(i=0;i<NumberOfAirspaceCircles;i++) {
     bool iswarn;
     bool isdisplay;
-    double basealt;
-    double topalt;
 
     iswarn = (settings.iAirspaceMode[AirspaceCircle[i].Type]>=2);
     isdisplay = ((settings.iAirspaceMode[AirspaceCircle[i].Type]%2)>0);
@@ -278,16 +276,8 @@ AirspaceDatabase::NearestCircle(const GEOPOINT &location,
     }
 
     // QUESTION TB: Isn't there a function for that?! Not sure where I saw it...
-    if (AirspaceCircle[i].Base.Base != abAGL) {
-      basealt = AirspaceCircle[i].Base.Altitude;
-    } else {
-      basealt = AirspaceCircle[i].Base.AGL + terrain_altitude;
-    }
-    if (AirspaceCircle[i].Top.Base != abAGL) {
-      topalt = AirspaceCircle[i].Top.Altitude;
-    } else {
-      topalt = AirspaceCircle[i].Top.AGL + terrain_altitude;
-    }
+    double basealt = ToMSL(AirspaceCircle[i].Base, terrain_altitude);
+    double topalt = ToMSL(AirspaceCircle[i].Top, terrain_altitude);
 
     bool altok;
     if (height) {
@@ -472,8 +462,6 @@ AirspaceDatabase::NearestArea(const GEOPOINT &location,
   for (i = 0; i < NumberOfAirspaceAreas; i++) {
     bool iswarn;
     bool isdisplay;
-    double basealt;
-    double topalt;
 
     iswarn = (settings.iAirspaceMode[AirspaceArea[i].Type] >= 2);
     isdisplay = ((settings.iAirspaceMode[AirspaceArea[i].Type] % 2) > 0);
@@ -483,16 +471,8 @@ AirspaceDatabase::NearestArea(const GEOPOINT &location,
       continue;
     }
 
-    if (AirspaceArea[i].Base.Base != abAGL) {
-      basealt = AirspaceArea[i].Base.Altitude;
-    } else {
-      basealt = AirspaceArea[i].Base.AGL + terrain_altitude;
-    }
-    if (AirspaceArea[i].Top.Base != abAGL) {
-      topalt = AirspaceArea[i].Top.Altitude;
-    } else {
-      topalt = AirspaceArea[i].Top.AGL + terrain_altitude;
-    }
+    double basealt = ToMSL(AirspaceArea[i].Base, terrain_altitude);
+    double topalt = ToMSL(AirspaceArea[i].Top, terrain_altitude);
 
     bool altok;
     if (!height) {
@@ -709,6 +689,31 @@ AirspaceDatabase::ScanLine(const GEOPOINT *locs, const double *heights,
 }
 
 #ifndef NDEBUG
+
+static void
+Dump(FILE *fp, const TCHAR *label, const AIRSPACE_ALT &altitude)
+{
+    switch (altitude.Base){
+      case abUndef:
+        _ftprintf(fp, TEXT("  %s : %.0f[m] %.0f[ft] [?]\r\n"),
+                  label, altitude.Altitude, altitude.Altitude * TOFEET);
+      break;
+      case abMSL:
+        _ftprintf(fp, TEXT("  %s : %.0f[m] %.0f[ft] [MSL]\r\n"),
+                  label, altitude.Altitude, altitude.Altitude * TOFEET);
+      break;
+      case abAGL:
+        _ftprintf(fp, TEXT("  %s : %.0f[m] %.0f[ft] [AGL]\r\n"),
+                  label, altitude.AGL, altitude.AGL * TOFEET);
+      break;
+      case abFL:
+        _ftprintf(fp, TEXT("  %s : FL %.0f (%.0f[m] %.0f[ft])\r\n"),
+                  label, altitude.FL, altitude.Altitude,
+                  altitude.Altitude * TOFEET);
+      break;
+    }
+}
+
 void
 AirspaceDatabase::Dump(FILE *fp)
 {
@@ -747,35 +752,8 @@ AirspaceDatabase::Dump(FILE *fp)
 
     _ftprintf(fp, TEXT(")\r\n"));
 
-    switch (AirspaceArea[i].Top.Base){
-      case abUndef:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [?]\r\n"), AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
-      break;
-      case abMSL:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
-      break;
-      case abAGL:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceArea[i].Top.AGL, AirspaceArea[i].Top.AGL*TOFEET);
-      break;
-      case abFL:
-        _ftprintf(fp, TEXT("  Top  : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceArea[i].Top.FL, AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
-      break;
-    }
-
-    switch (AirspaceArea[i].Base.Base){
-      case abUndef:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [?]\r\n"), AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
-      break;
-      case abMSL:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
-      break;
-      case abAGL:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceArea[i].Base.AGL, AirspaceArea[i].Base.AGL*TOFEET);
-      break;
-      case abFL:
-        _ftprintf(fp, TEXT("  Base : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceArea[i].Base.FL, AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
-      break;
-    }
+    ::Dump(fp, _T("Top "), AirspaceArea[i].Top);
+    ::Dump(fp, _T("Base"), AirspaceArea[i].Base);
 
     _ftprintf(fp, TEXT("\r\n"));
   }
@@ -815,35 +793,8 @@ AirspaceDatabase::Dump(FILE *fp)
 
     _ftprintf(fp, TEXT(")\r\n"));
 
-    switch (AirspaceCircle[i].Top.Base){
-      case abUndef:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [?]\r\n"), AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
-      break;
-      case abMSL:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
-      break;
-      case abAGL:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceCircle[i].Top.AGL, AirspaceCircle[i].Top.AGL*TOFEET);
-      break;
-      case abFL:
-        _ftprintf(fp, TEXT("  Top  : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceCircle[i].Top.FL, AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
-      break;
-    }
-
-    switch (AirspaceCircle[i].Base.Base){
-      case abUndef:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [?]\r\n"), AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);
-      break;
-      case abMSL:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);
-      break;
-      case abAGL:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceCircle[i].Base.AGL, AirspaceCircle[i].Base.AGL*TOFEET);
-      break;
-      case abFL:
-        _ftprintf(fp, TEXT("  Base : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceCircle[i].Base.FL, AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);
-      break;
-    }
+    ::Dump(fp, _T("Top "), AirspaceCircle[i].Top);
+    ::Dump(fp, _T("Base"), AirspaceCircle[i].Base);
 
     _ftprintf(fp, TEXT("\r\n"));
 

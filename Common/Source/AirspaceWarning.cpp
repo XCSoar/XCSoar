@@ -153,6 +153,13 @@ static void AirspaceWarnListDoNotify(AirspaceWarningNotifyAction_t Action,
   }
 }
 
+static int
+Distance(const AIRSPACE_ALT &altitude, int alt, int agl)
+{
+  return altitude.Base != abAGL
+    ? alt - (int)altitude.Altitude
+    : agl - (int)altitude.AGL;
+}
 
 static void
 AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
@@ -180,16 +187,8 @@ AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
                                           AsIdx);
     if (*hDistance < 0)
       *hDistance = 0;
-    if (circle.Base.Base != abAGL) {
-      vDistanceBase = alt - (int)circle.Base.Altitude;
-    } else {
-      vDistanceBase = agl - (int)circle.Base.AGL;
-    }
-    if (circle.Top.Base != abAGL) {
-      vDistanceTop  = alt - (int)circle.Top.Altitude;
-    } else {
-      vDistanceTop  = agl - (int)circle.Top.AGL;
-    }
+    vDistanceBase = Distance(circle.Base, alt, agl);
+    vDistanceTop = Distance(circle.Top, alt, agl);
     // EntryTime = ToDo
   } else {
     const AIRSPACE_AREA &area = airspace_database.AirspaceArea[AsIdx];
@@ -205,16 +204,8 @@ AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
     } else {
       *hDistance = 0;
     }
-    if (area.Base.Base != abAGL) {
-      vDistanceBase = alt - (int)area.Base.Altitude;
-    } else {
-      vDistanceBase = agl - (int)area.Base.AGL;
-    }
-    if (area.Top.Base != abAGL) {
-      vDistanceTop  = alt - (int)area.Top.Altitude;
-    } else {
-      vDistanceTop  = agl - (int)area.Top.AGL;
-    }
+    vDistanceBase = Distance(area.Base, alt, agl);
+    vDistanceTop = Distance(area.Top, alt, agl);
     // EntryTime = ToDo
   }
 

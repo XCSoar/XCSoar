@@ -109,6 +109,14 @@ extern AirspaceDatabase airspace_database;
 
 extern POINT *AirspaceScreenPoint;
 
+static inline double
+ToMSL(const AIRSPACE_ALT &altitude, double terrain_altitude)
+{
+  return altitude.Base != abAGL
+    ? altitude.Altitude
+    : altitude.AGL + terrain_altitude;
+}
+
 void DeleteAirspace();
 
 void ReadAirspace(void);
