@@ -116,10 +116,6 @@ ToMSL(const AIRSPACE_ALT &altitude, double terrain_altitude)
 void DeleteAirspace();
 
 void ReadAirspace(void);
-int FindAirspaceCircle(const GEOPOINT &location,
-		       bool visibleonly=true);
-int FindAirspaceArea(const GEOPOINT &location,
-		     bool visibleonly=true);
 
 bool
 CheckAirspaceAltitude(double Base, double Top, double altitude,
@@ -128,19 +124,6 @@ CheckAirspaceAltitude(double Base, double Top, double altitude,
 void CloseAirspace(void);
 
 void SortAirspace(void);
-
-bool InsideAirspaceCircle(const GEOPOINT &location,
-			  const int i);
-
-bool InsideAirspaceArea(const GEOPOINT &location,
-			const int i);
-
-void ScanAirspaceLine(const GEOPOINT *locs,
-                      const double *heights,
-		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X]);
-
-
-void AirspaceQnhChangeNotify(double newQNH);
 
 //*******************************************************************************
 // experimental: new dialog based warning system
@@ -189,16 +172,7 @@ void AirspaceWarnListClear(void);
 void AirspaceWarnDoAck(int ID, int Ack);
 int AirspaceWarnFindIndexByID(int ID);
 
-bool ValidAirspace(void);
-
 class MapWindowProjection;
-
-double RangeAirspaceCircle(const GEOPOINT &location,
-			   const int i);
-
-double RangeAirspaceArea(const GEOPOINT &location,
-			 const int i, double *bearing,
-			 const MapWindowProjection &map_projection);
 
 void
 FindNearestAirspace(const GEOPOINT &location,

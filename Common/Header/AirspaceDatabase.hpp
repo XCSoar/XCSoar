@@ -100,7 +100,21 @@ public:
       NumberOfAirspaceCircles > 0;
   }
 
+  /**
+   * Returns distance between location and AirspaceCircle border
+   * @param location Location used for calculation
+   * @param i Array id of the AirspaceCircle
+   * @return Distance between location and airspace border
+   */
   double CircleDistance(const GEOPOINT &location, const unsigned i) const;
+
+  /**
+   * Checks whether the given location is inside
+   * of a certain AirspaceCircle defined by i
+   * @param location Location to be checked
+   * @param i Array id of the AirspaceCircle
+   * @return True if location is in AirspaceCircle, False otherwise
+   */
   bool InsideCircle(const GEOPOINT &location, const unsigned i) const;
 
   /**
@@ -122,6 +136,13 @@ public:
                     double *nearestbearing,
                     double *height=NULL) const;
 
+  /**
+   * Checks whether a given location is inside the
+   * AirspaceArea defined by i
+   * @param location Location to be checked
+   * @param i Array id of the AirspaceArea
+   * @return True if location is inside the AirspaceArea, False otherwise
+   */
   bool InsideArea(const GEOPOINT &location, const unsigned i) const;
 
   /**

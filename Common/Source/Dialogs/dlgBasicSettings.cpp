@@ -47,6 +47,7 @@ Copyright_License {
 #include "Device/device.h"
 #include "DataField/Base.hpp"
 #include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "MainWindow.hpp"
 
 #include <math.h>
@@ -84,7 +85,7 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
       INHg = INHg*29.91/1013.2;
 
       AllDevicesPutQNH(QNH);
-      AirspaceQnhChangeNotify(QNH);
+      airspace_database.SetQNH(QNH);
 
       // VarioWriteSettings();
 

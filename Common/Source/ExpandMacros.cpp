@@ -51,6 +51,8 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "InfoBoxManager.h"
 #include "SettingsUser.hpp"
+#include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "Task.h"
 #include "Asset.hpp"
 
@@ -215,9 +217,9 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckTask)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckAirspace)"))) {
-    if (!ValidAirspace()) {
+    if (!airspace_database.Valid())
       invalid = true;
-    }
+
     ReplaceInString(OutBuffer, TEXT("$(CheckAirspace)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckFLARM)"))) {

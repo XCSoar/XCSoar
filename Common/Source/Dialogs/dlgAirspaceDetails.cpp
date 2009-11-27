@@ -142,11 +142,11 @@ static void SetValues(void) {
     top = &area.Top;
     base = &area.Base;
     name = area.Name;
-    inside = InsideAirspaceArea(XCSoarInterface::Basic().Location,
-				index_area);
-    range = RangeAirspaceArea(XCSoarInterface::Basic().Location,
-                              index_area, &bearing,
-                              map_window);
+    inside = airspace_database.InsideArea(XCSoarInterface::Basic().Location,
+                                          index_area);
+    range = airspace_database.RangeArea(XCSoarInterface::Basic().Location,
+                                        index_area, &bearing,
+                                        map_window);
   }
 
   if (index_circle >=0) {
@@ -156,11 +156,10 @@ static void SetValues(void) {
     top = &circle.Top;
     base = &circle.Base;
     name = circle.Name;
-    inside = InsideAirspaceCircle(XCSoarInterface::Basic().Location,
-				  index_circle);
-    range =
-      RangeAirspaceCircle(XCSoarInterface::Basic().Location,
-			  index_circle);
+    inside = airspace_database.InsideCircle(XCSoarInterface::Basic().Location,
+                                            index_circle);
+    range = airspace_database.CircleDistance(XCSoarInterface::Basic().Location,
+                                             index_circle);
 
     DistanceBearing(XCSoarInterface::Basic().Location, circle.Location,
 		    NULL, &bearing);

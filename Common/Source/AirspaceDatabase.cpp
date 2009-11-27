@@ -292,7 +292,7 @@ AirspaceDatabase::NearestCircle(const GEOPOINT &location,
     }
     if(altok) {
 
-      Dist = RangeAirspaceCircle(location, i);
+      Dist = CircleDistance(location, i);
 
       if (Dist < *nearestdistance) {
         *nearestdistance = Dist;
@@ -482,10 +482,10 @@ AirspaceDatabase::NearestArea(const GEOPOINT &location,
       altok = ((*height < topalt) && (*height > basealt));
     }
     if(altok) {
-      inside = InsideAirspaceArea(location, i);
+      inside = InsideArea(location, i);
       double dist, bearing;
 
-      dist = RangeAirspaceArea(location, i, &bearing, map_projection);
+      dist = RangeArea(location, i, &bearing, map_projection);
 
       if (dist < *nearestdistance) {
         *nearestdistance = dist;

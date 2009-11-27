@@ -183,8 +183,7 @@ AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
   if (IsCircle){
     const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[AsIdx];
 
-    *hDistance = (int)RangeAirspaceCircle(Basic->Location,
-                                          AsIdx);
+    *hDistance = (int)airspace_database.CircleDistance(Basic->Location, AsIdx);
     if (*hDistance < 0)
       *hDistance = 0;
     vDistanceBase = Distance(circle.Base, alt, agl);
@@ -193,13 +192,12 @@ AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
   } else {
     const AIRSPACE_AREA &area = airspace_database.AirspaceArea[AsIdx];
 
-    if (!InsideAirspaceArea(Basic->Location, AsIdx)){
+    if (!airspace_database.InsideArea(Basic->Location, AsIdx)){
       // WARNING: RangeAirspaceArea dont return negative values if
       // inside aera -> but RangeAirspaceCircle does!
       double fBearing;
-      *hDistance = (int)RangeAirspaceArea(Basic->Location,
-                                          AsIdx, &fBearing,
-					  map_projection);
+      *hDistance = (int)airspace_database.RangeArea(Basic->Location, AsIdx,
+                                                    &fBearing, map_projection);
       *Bearing = (int)fBearing;
     } else {
       *hDistance = 0;

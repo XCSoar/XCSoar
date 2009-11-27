@@ -62,17 +62,6 @@ void DeleteAirspace() {
 }
 
 /**
- * Returns distance between location and AirspaceCircle border
- * @param location Location used for calculation
- * @param i Array id of the AirspaceCircle
- * @return Distance between location and airspace border
- */
-double RangeAirspaceCircle(const GEOPOINT &location,
-			   const int i) {
-  return airspace_database.CircleDistance(location, i);
-}
-
-/**
  * Checks whether a longitude is between a certain
  * minimum and maximum
  * @param longitude Longitude to be checked
@@ -89,18 +78,6 @@ bool CheckInsideLongitude(double longitude,
     // area goes across 180 degree boundary, so lon_min is +ve, lon_max is -ve (flipped)
     return ((longitude>lon_min) || (longitude<lon_max));
   }
-}
-
-/**
- * Checks whether the given location is inside
- * of a certain AirspaceCircle defined by i
- * @param location Location to be checked
- * @param i Array id of the AirspaceCircle
- * @return True if location is in AirspaceCircle, False otherwise
- */
-bool InsideAirspaceCircle(const GEOPOINT &location,
-                          const int i) {
-  return airspace_database.InsideCircle(location, i);
 }
 
 /* unused
@@ -192,27 +169,6 @@ CheckAirspaceAltitude(double Base, double Top, double alt,
   return true;
 }
 
-/**
- * Corrects the FL-based airspaces with the new QNH
- * @param newQNH
- */
-// TODO: hack, should be replaced with a data change notifier in the future...
-void AirspaceQnhChangeNotify(double newQNH) {
-  airspace_database.SetQNH(newQNH);
-}
-
-/**
- * Checks whether a given location is inside the
- * AirspaceArea defined by i
- * @param location Location to be checked
- * @param i Array id of the AirspaceArea
- * @return True if location is inside the AirspaceArea, False otherwise
- */
-bool InsideAirspaceArea(const GEOPOINT &location,
-                        const int i) {
-  return airspace_database.InsideArea(location, i);
-}
-
 /*
 int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 {
@@ -253,79 +209,6 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 }
 */
 
-/**
- * Finds the nearest AirspaceCircle
- * @param location Location where to check
- * @param settings Pointer to the settings object
- * @param nearestdistance Pointer in which the distance
- * to the nearest circle will be written in
- * @param nearestbearing Pointer in which the bearing
- * to the nearest circle will be written in
- * @param height If != NULL only airspaces are considered
- * where the height is between base and top of the airspace
- * @return Array id of the nearest AirspaceCircle
- */
-static int
-FindNearestAirspaceCircle(const GEOPOINT &location,
-                          double altitude, double terrain_altitude,
-                          const SETTINGS_COMPUTER &settings,
-                          double *nearestdistance,
-                          double *nearestbearing,
-                          double *height=NULL)
-{
-  return airspace_database.NearestCircle(location, altitude, terrain_altitude,
-                                         settings,
-                                         nearestdistance, nearestbearing,
-                                         height);
-}
-
-/**
- * Calculates the distance to the border of the
- * AirspaceArea defined by i
- * @param location Location used for calculation
- * @param i Array id of the AirspaceArea
- * @param bearing Bearing to the closest point of the
- * airspace (Pointer)
- * @param map_projection MapWindowProjection object
- * @return Distance to the closest point of the airspace
- */
-double RangeAirspaceArea(const GEOPOINT &location,
-			 const int i, double *bearing,
-			 const MapWindowProjection &map_projection)
-{
-  return airspace_database.RangeArea(location, i, bearing, map_projection);
-}
-
-/**
- * Finds the nearest AirspaceArea
- * @param location Location where to check
- * @param settings Pointer to the settings object
- * @param map_projection MapWindowProjection object
- * @param nearestdistance Pointer in which the distance
- * to the nearest area will be written in
- * @param nearestbearing Pointer in which the bearing
- * to the nearest area will be written in
- * @param height If != NULL only airspaces are considered
- * where the height is between base and top of the airspace
- * @return Array id of the nearest AirspaceArea
- */
-static int
-FindNearestAirspaceArea(const GEOPOINT &location,
-                        double altitude, double terrain_altitude,
-                        const SETTINGS_COMPUTER &settings,
-                        const MapWindowProjection& map_projection,
-                        double *nearestdistance, double *nearestbearing,
-                        double *height=NULL)
-{
-  return airspace_database.NearestArea(location, altitude, terrain_altitude,
-                                       settings, map_projection,
-                                       nearestdistance, nearestbearing,
-                                       height);
-}
-
-
-
-
 // Finds nearest airspace (whether circle or area) to the specified point. Returns -1 in foundcircle or foundarea if circle or area is not found. Otherwise, returns index of the circle or area that is closest to the specified point. Also returns the distance and bearing to the boundary of the airspace. Distance < 0 means interior. This only searches within a range of 100km of the target
 /**
  * Finds nearest airspace (whether circle or area)
@@ -362,13 +245,15 @@ void FindNearestAirspace(const GEOPOINT &location,
   double nearestb1 = 0;
   double nearestb2 = 0;
 
-  *foundcircle = FindNearestAirspaceCircle(location, altitude,
-                                           terrain_altitude, settings,
-                                           &nearestd1, &nearestb1, height);
+  *foundcircle = airspace_database.NearestCircle(location, altitude,
+                                                 terrain_altitude, settings,
+                                                 &nearestd1, &nearestb1,
+                                                 height);
 
-  *foundarea = FindNearestAirspaceArea(location, altitude, terrain_altitude,
-                                       settings, map_projection,
-                                       &nearestd2, &nearestb2, height);
+  *foundarea = airspace_database.NearestArea(location, altitude,
+                                             terrain_altitude, settings,
+                                             map_projection,
+                                             &nearestd2, &nearestb2, height);
 
   if ((*foundcircle >= 0) && (*foundarea < 0)) {
     *nearestdistance = nearestd1;
@@ -398,9 +283,4 @@ void FindNearestAirspace(const GEOPOINT &location,
   }
 
   return;
-}
-
-void ScanAirspaceLine(const GEOPOINT *locs, const double *heights,
-    int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X]) {
-  return airspace_database.ScanLine(locs, heights, airspacetype);
 }

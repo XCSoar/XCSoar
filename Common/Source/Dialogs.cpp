@@ -204,7 +204,7 @@ bool PopupInteriorAirspaceDetails(const GEOPOINT &location) {
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
     const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
-    if (circle.Visible && InsideAirspaceCircle(location, i)) {
+    if (circle.Visible && airspace_database.InsideCircle(location, i)) {
       dlgAirspaceDetails(i, -1);
       found = true;
     }
@@ -213,7 +213,7 @@ bool PopupInteriorAirspaceDetails(const GEOPOINT &location) {
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
     const AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
-    if (area.Visible && InsideAirspaceArea(location, i)) {
+    if (area.Visible && airspace_database.InsideArea(location, i)) {
       dlgAirspaceDetails(-1, i);
       found = true;
     }

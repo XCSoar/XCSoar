@@ -260,7 +260,7 @@ static void PrepareData(void){
     AirspaceSelectInfo[index].Index_Area = -1;
 
     AirspaceSelectInfo[index].Distance = DISTANCEMODIFY*
-      RangeAirspaceCircle(Location, i);
+      airspace_database.CircleDistance(Location, i);
 
     DistanceBearing(Location,
                     circle.Location,
@@ -289,9 +289,9 @@ static void PrepareData(void){
     AirspaceSelectInfo[index].Index_Area = i;
 
     AirspaceSelectInfo[index].Distance = DISTANCEMODIFY*
-      RangeAirspaceArea(Location, i,
-                        &AirspaceSelectInfo[index].Direction,
-			map_window);
+      airspace_database.RangeArea(Location, i,
+                                  &AirspaceSelectInfo[index].Direction,
+                                  map_window);
 
     _tcsncpy(sTmp, area.Name, 4);
     sTmp[4] = '\0';

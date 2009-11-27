@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "FlightStatistics.hpp"
+#include "AirspaceDatabase.hpp"
 #include "XCSoar.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
@@ -786,7 +787,8 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
       d_airspace[i][j]= -1; // no airspace
     }
   }
-  ScanAirspaceLine(d_loc, d_h, d_airspace);
+
+  airspace_database.ScanLine(d_loc, d_h, d_airspace);
 
   int type;
 

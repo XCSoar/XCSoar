@@ -972,7 +972,7 @@ GlideComputerAirData::AirspaceWarning()
 
     if (InsideAltitudeRange(circle, alt, agl) &&
         SettingsComputer().iAirspaceMode[circle.Type] >= 2 &&
-        InsideAirspaceCircle(loc, i))
+        airspace_database.InsideCircle(loc, i))
       AirspaceWarnListAdd(&Basic(), &Calculated(),
                           &SettingsComputer(),
                           MapProjection(),
@@ -986,7 +986,7 @@ GlideComputerAirData::AirspaceWarning()
 
     if (InsideAltitudeRange(area, alt, agl) &&
         SettingsComputer().iAirspaceMode[area.Type] >= 2 &&
-        InsideAirspaceArea(loc, i))
+        airspace_database.InsideArea(loc, i))
       AirspaceWarnListAdd(&Basic(), &Calculated(),
                           &SettingsComputer(),
                           map_projection,
@@ -1519,7 +1519,7 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
     double fixaltitude = Calculated->TerrainAlt;
 
     QNH = FindQNH(Basic->BaroAltitude, fixaltitude);
-    AirspaceQnhChangeNotify(QNH);
+    airspace_database.SetQNH(QNH);
   }
 }
 

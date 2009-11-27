@@ -161,10 +161,6 @@ static const int k_nAreaType[k_nAreaCount] = {
 					CLASSE,
 					CLASSF};
 
-bool ValidAirspace(void) {
-  return airspace_database.Valid();
-}
-
 void CloseAirspace() {
   AirspaceWarnListClear();
   DeleteAirspace();
