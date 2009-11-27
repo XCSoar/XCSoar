@@ -43,6 +43,8 @@ Copyright_License {
 void FormatWarningString(int Type, const TCHAR *Name,
                          AIRSPACE_ALT Base, AIRSPACE_ALT Top,
                          TCHAR *szMessageBuffer, TCHAR *TileBuffer);
-void ConvertFlightLevels(void);
+
+void
+ConvertFlightLevels(AirspaceDatabase &airspace_database);
 
 #endif

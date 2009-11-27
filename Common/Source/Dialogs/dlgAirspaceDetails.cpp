@@ -72,13 +72,13 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
 			 MB_YESNOCANCEL|MB_ICONQUESTION);
     if (answer == IDYES) {
       if (index_circle>=0) {
-	AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+        AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                             &XCSoarInterface::Calculated(),
                             &XCSoarInterface::SettingsComputer(),
                             XCSoarInterface::MapProjection(),
                             false, true, index_circle, true);
       } else if (index_area>=0) {
-	AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+        AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                             &XCSoarInterface::Calculated(),
                             &XCSoarInterface::SettingsComputer(),
                             XCSoarInterface::MapProjection(),
@@ -88,13 +88,13 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
     } else if (answer == IDNO) {
       // this will cancel a daily ack
       if (index_circle>=0) {
-	AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+        AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                             &XCSoarInterface::Calculated(),
                             &XCSoarInterface::SettingsComputer(),
                             XCSoarInterface::MapProjection(),
                             true, true, index_circle, true);
       } else if (index_area>=0) {
-	AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+        AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                             &XCSoarInterface::Calculated(),
                             &XCSoarInterface::SettingsComputer(),
                             XCSoarInterface::MapProjection(),

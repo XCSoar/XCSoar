@@ -52,7 +52,7 @@ POINT *AirspaceScreenPoint;
 /**
  * Deletes all airspaces in memory
  */
-void DeleteAirspace() {
+void DeleteAirspace(AirspaceDatabase &airspace_database) {
   if (AirspaceScreenPoint != NULL)  {
     LocalFree((HLOCAL)AirspaceScreenPoint);
     AirspaceScreenPoint = NULL;
@@ -233,12 +233,15 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
  * @param height If != NULL only airspaces are considered
  * where the height is between base and top of the airspace
  */
-void FindNearestAirspace(const GEOPOINT &location,
-                         double altitude, double terrain_altitude,
-    const SETTINGS_COMPUTER &settings,
-    const MapWindowProjection& map_projection, double *nearestdistance,
-    double *nearestbearing, int *foundcircle, int *foundarea, double *height) {
-
+void
+FindNearestAirspace(AirspaceDatabase &airspace_database,
+                    const GEOPOINT &location,
+                    double altitude, double terrain_altitude,
+                    const SETTINGS_COMPUTER &settings,
+                    const MapWindowProjection& map_projection,
+                    double *nearestdistance, double *nearestbearing,
+                    int *foundcircle, int *foundarea, double *height)
+{
   // TODO enhancement: return also the vertical separation
   double nearestd1 = 100000; // 100km
   double nearestd2 = 100000; // 100km

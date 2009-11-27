@@ -502,10 +502,10 @@ void InputEvents::eventTerrainTopology(const TCHAR *misc) {
 // Do clear warnings IF NONE Toggle Terrain/Topology
 void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
 	(void)misc;
-  if (ClearAirspaceWarnings(true,false)) {
+  if (ClearAirspaceWarnings(airspace_database, true, false))
     // airspace was active, enter was used to acknowledge
     return;
-  }
+
   // Else toggle TerrainTopology - and show the results
   sub_TerrainTopology(-1);
   sub_TerrainTopology(0);
@@ -519,11 +519,11 @@ void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
 void InputEvents::eventClearAirspaceWarnings(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("day")) == 0)
     // JMW clear airspace warnings for entire day (for selected airspace)
-    ClearAirspaceWarnings(true,true);
+    ClearAirspaceWarnings(airspace_database, true, true);
   else {
 
     // default, clear airspace for short acknowledgement time
-    if (ClearAirspaceWarnings(true,false)) {
+    if (ClearAirspaceWarnings(airspace_database, true, false)) {
 
     }
   }
@@ -1226,7 +1226,8 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   }
 
   StartHourglassCursor();
-  FindNearestAirspace(Basic().Location, Basic().GetAnyAltitude(),
+  FindNearestAirspace(airspace_database,
+                      Basic().Location, Basic().GetAnyAltitude(),
                       Calculated().TerrainAlt, SettingsComputer(),
                       MapProjection(),
                       &nearestdistance, &nearestbearing,

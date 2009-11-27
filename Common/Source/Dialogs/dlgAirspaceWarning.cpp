@@ -90,7 +90,7 @@ static void DoAck(int Ack){
     Idx = 0;
 
   if (AirspaceWarnGetItem(Idx, pAS)){
-    AirspaceWarnDoAck(pAS.ID, Ack);
+    AirspaceWarnDoAck(airspace_database, pAS.ID, Ack);
     wAirspaceList->Redraw();
   }
 

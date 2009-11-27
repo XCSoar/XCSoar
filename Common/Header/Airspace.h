@@ -114,20 +114,21 @@ ToMSL(const AIRSPACE_ALT &altitude, double terrain_altitude)
     : altitude.AGL + terrain_altitude;
 }
 
-void DeleteAirspace();
+void DeleteAirspace(AirspaceDatabase &airspace_database);
 
-void ReadAirspace(void);
+void ReadAirspace(AirspaceDatabase &airspace_database);
 
 bool
 CheckAirspaceAltitude(double Base, double Top, double altitude,
                       const SETTINGS_COMPUTER &settings);
 
-void CloseAirspace(void);
+void CloseAirspace(AirspaceDatabase &airspace_database);
 
-void SortAirspace(void);
+void SortAirspace(AirspaceDatabase &airspace_database);
 
 void
-FindNearestAirspace(const GEOPOINT &location,
+FindNearestAirspace(AirspaceDatabase &airspace_database,
+                    const GEOPOINT &location,
                     double altitude, double terrain_altitude,
                     const SETTINGS_COMPUTER &settings,
                     const MapWindowProjection &map_projection,

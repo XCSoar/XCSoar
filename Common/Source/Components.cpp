@@ -347,9 +347,9 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   RASP.ScanAll(Basic().Location);
 
   // Reads the airspace files
-  ReadAirspace();
+  ReadAirspace(airspace_database);
   // Sorts the airspaces by priority
-  SortAirspace();
+  SortAirspace(airspace_database);
 
   // Read the FLARM details file
   OpenFLARMDetails();
@@ -514,7 +514,7 @@ void XCSoarInterface::Shutdown(void) {
   StartupStore(TEXT("Clear task data\n"));
   task.ClearTask();
   StartupStore(TEXT("Close airspace\n"));
-  CloseAirspace();
+  CloseAirspace(airspace_database);
 
   StartupStore(TEXT("Close waypoints\n"));
   way_points.clear();
@@ -564,7 +564,7 @@ void XCSoarInterface::Shutdown(void) {
 
   DeleteFonts();
 
-  DeleteAirspace();
+  DeleteAirspace(airspace_database);
 
   StartupStore(TEXT("Close Progress Dialog\n"));
 

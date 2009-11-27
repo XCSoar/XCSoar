@@ -154,9 +154,9 @@ void SettingsLeave() {
   }
 
   if(AIRSPACEFILECHANGED) {
-    CloseAirspace();
-    ReadAirspace();
-    SortAirspace();
+    CloseAirspace(airspace_database);
+    ReadAirspace(airspace_database);
+    SortAirspace(airspace_database);
   }
 
   if (POLARFILECHANGED) {

@@ -68,7 +68,9 @@ ConvertFlightLevels(AirspaceMetadata &airspace)
  * Converts all FlightLevel-based airspaces to MSL-based airspaces
  * (Attention: Inaccurate!)
  */
-void ConvertFlightLevels(void) {
+void
+ConvertFlightLevels(AirspaceDatabase &airspace_database)
+{
   // TODO accuracy: ConvertFlightLevels is inaccurate!
 
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i)

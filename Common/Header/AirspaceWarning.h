@@ -44,6 +44,7 @@ struct NMEA_INFO;
 struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
 
+class AirspaceDatabase;
 class MapWindowProjection;
 
 class AirspaceInfo_c{
@@ -87,24 +88,30 @@ bool AirspaceWarnGetItem(int Index, AirspaceInfo_c &Item);
 int AirspaceWarnGetItemCount(void);
 
 extern void
-AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+AirspaceWarnListAdd(AirspaceDatabase &airspace_database,
+                    const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
                     const SETTINGS_COMPUTER *settings,
                     const MapWindowProjection &map_projection,
                     bool Predicted, bool IsCircle, int AsIdx,
                     bool ackDay=false);
 
 extern void
-AirspaceWarnListProcess(const NMEA_INFO *Basic,
-                        const DERIVED_INFO *Calculated,
+AirspaceWarnListProcess(AirspaceDatabase &airspace_database,
+                        const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
                         const SETTINGS_COMPUTER *settings,
                         const MapWindowProjection &map_projection);
 
-void AirspaceWarnDoAck(int ID, int Ack);
-void AirspaceWarnListClear(void);
+void
+AirspaceWarnDoAck(AirspaceDatabase &airspace_database, int ID, int Ack);
+
+void
+AirspaceWarnListClear(AirspaceDatabase &airspace_database);
+
 int AirspaceWarnFindIndexByID(int ID);
 
 bool
-ClearAirspaceWarnings(const bool ack, const bool allday=false);
+ClearAirspaceWarnings(AirspaceDatabase &airspace_database,
+                      bool ack, bool allday=false);
 
 int dlgAirspaceWarningInit(void);
 int dlgAirspaceWarningDeInit(void);

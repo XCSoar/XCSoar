@@ -75,33 +75,37 @@ typedef struct{
   DWORD    CrcSourceFile;          // not used at the moment
 }BinFileHeader_t;
 
-void DumpAirspaceFile(void);
+static void
+DumpAirspaceFile(const AirspaceDatabase &airspace_database);
 
 static bool StartsWith(TCHAR *Text, const TCHAR *LookFor);
 static bool ReadCoords(TCHAR *Text, double *X, double *Y);
 
 static void
-AddAirspaceCircle(AIRSPACE_AREA *Temp, const double aCenterX,
-                  const double aCenterY, const double Radius,
-                  unsigned &NumberOfAirspaceCircles);
+AddAirspaceCircle(AirspaceDatabase &airspace_database, AIRSPACE_AREA *Temp,
+                  const double aCenterX, const double aCenterY,
+                  const double Radius, unsigned &NumberOfAirspaceCircles);
 
 static void
-AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount,
-         unsigned &NumberOfAirspacePoints);
+AddPoint(AirspaceDatabase &airspace_database, AIRSPACE_POINT *Temp,
+         unsigned *AreaPointCount, unsigned &NumberOfAirspacePoints);
 
 static void
-AddArea(AIRSPACE_AREA *Temp, unsigned &NumberOfAirspaceAreas);
+AddArea(AirspaceDatabase &airspace_database, AIRSPACE_AREA *Temp,
+        unsigned &NumberOfAirspaceAreas);
 
 static void ReadAltitude(TCHAR *Text, AIRSPACE_ALT *Alt);
 
 static void
-CalculateArc(TCHAR *Text, unsigned &NumberOfAirspacePoints);
+CalculateArc(AirspaceDatabase &airspace_database, TCHAR *Text,
+             unsigned &NumberOfAirspacePoints);
 
 static void
-CalculateSector(TCHAR *Text, unsigned &NumberOfAirspacePoints);
+CalculateSector(AirspaceDatabase &airspace_database, TCHAR *Text,
+                unsigned &NumberOfAirspacePoints);
 
 static bool
-ParseLine(int nLineType,
+ParseLine(AirspaceDatabase &airspace_database, int nLineType,
           unsigned &NumberOfAirspacePoints, unsigned &NumberOfAirspaceAreas,
           unsigned &NumberOfAirspaceCircles);
 
@@ -160,15 +164,16 @@ static const int k_nAreaType[k_nAreaCount] = {
 					CLASSE,
 					CLASSF};
 
-void CloseAirspace() {
-  AirspaceWarnListClear();
-  DeleteAirspace();
+void CloseAirspace(AirspaceDatabase &airspace_database) {
+  AirspaceWarnListClear(airspace_database);
+  DeleteAirspace(airspace_database);
 }
 
 // this can now be called multiple times to load several airspaces.
 // to start afresh, call CloseAirspace()
 
-void ReadAirspace(ZZIP_FILE *fp)
+static void
+ReadAirspace(AirspaceDatabase &airspace_database, ZZIP_FILE *fp)
 {
   StartupStore(TEXT("ReadAirspace\n"));
   int	Tock = 0;
@@ -206,10 +211,10 @@ void ReadAirspace(ZZIP_FILE *fp)
       }
     }
 
-    if (!ParseLine(nLineType, NumberOfAirspacePointsPass[0],
+    if (!ParseLine(airspace_database, nLineType, NumberOfAirspacePointsPass[0],
                    NumberOfAirspaceAreasPass[0],
                    NumberOfAirspaceCirclesPass[0])) {
-      CloseAirspace();
+      CloseAirspace(airspace_database);
       return;
     }
   }
@@ -268,14 +273,14 @@ void ReadAirspace(ZZIP_FILE *fp)
       }
     }
 
-    ParseLine(nLineType, NumberOfAirspacePointsPass[1],
+    ParseLine(airspace_database, nLineType, NumberOfAirspacePointsPass[1],
               NumberOfAirspaceAreasPass[1],
               NumberOfAirspaceCirclesPass[1]);
   }
 
   // Process final area (if any). bFillMode is true.  JG 10-Nov-2005
   if (!bWaiting)
-    AddArea(&TempArea, NumberOfAirspaceAreasPass[1]);
+    AddArea(airspace_database, &TempArea, NumberOfAirspaceAreasPass[1]);
 
   if (NumberOfAirspacePointsPass[0] != NumberOfAirspacePointsPass[1]
       || NumberOfAirspaceAreasPass[0] != NumberOfAirspaceAreasPass[1]
@@ -289,7 +294,7 @@ void ReadAirspace(ZZIP_FILE *fp)
 
 #ifndef NDEBUG
   // only do this if debugging
-  DumpAirspaceFile();
+  DumpAirspaceFile(airspace_database);
 #endif
 
 //  if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
@@ -297,7 +302,7 @@ void ReadAirspace(ZZIP_FILE *fp)
 }
 
 static bool
-ParseLine(int nLineType,
+ParseLine(AirspaceDatabase &airspace_database, int nLineType,
           unsigned &NumberOfAirspacePoints, unsigned &NumberOfAirspaceAreas,
           unsigned &NumberOfAirspaceCircles)
 {
@@ -307,7 +312,7 @@ ParseLine(int nLineType,
   case k_nLtAC:
     if (bFillMode) {
       if (!bWaiting)
-        AddArea(&TempArea, NumberOfAirspaceAreas);
+        AddArea(airspace_database, &TempArea, NumberOfAirspaceAreas);
       TempArea.NumPoints = 0;
       TempArea.Type = OTHER;
       for (nIndex = 0; nIndex < k_nAreaCount; nIndex++) {
@@ -387,23 +392,24 @@ ParseLine(int nLineType,
     if (!ReadCoords(&TempString[3],&TempPoint.Longitude ,
                     &TempPoint.Latitude))
       goto OnError;
-    AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
+    AddPoint(airspace_database, &TempPoint, &TempArea.NumPoints,
+             NumberOfAirspacePoints);
     // TempArea.NumPoints++;
     break;
 
   case k_nLtDB:
-    CalculateArc(TempString, NumberOfAirspacePoints);
+    CalculateArc(airspace_database, TempString, NumberOfAirspacePoints);
     break;
 
   case k_nLtDA:
-    CalculateSector(TempString, NumberOfAirspacePoints);
+    CalculateSector(airspace_database, TempString, NumberOfAirspacePoints);
     break;
 
   case k_nLtDC:
     if (bFillMode) {
       double Radius = _tcstod(&TempString[2], NULL);
       Radius = (Radius * NAUTICALMILESTOMETRES);
-      AddAirspaceCircle(&TempArea, CenterX, CenterY, Radius,
+      AddAirspaceCircle(airspace_database, &TempArea, CenterX, CenterY, Radius,
                         NumberOfAirspaceCircles);
     } else
       NumberOfAirspaceCircles++;
@@ -673,7 +679,7 @@ OnError:
 }
 
 static void
-AddAirspaceCircle(AIRSPACE_AREA *Temp,
+AddAirspaceCircle(AirspaceDatabase &airspace_database, AIRSPACE_AREA *Temp,
                   const double aCenterX,
                   const double aCenterY,
                   const double aRadius,
@@ -706,8 +712,8 @@ AddAirspaceCircle(AIRSPACE_AREA *Temp,
 }
 
 static void
-AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount,
-         unsigned &NumberOfAirspacePoints)
+AddPoint(AirspaceDatabase &airspace_database, AIRSPACE_POINT *Temp,
+         unsigned *AreaPointCount, unsigned &NumberOfAirspacePoints)
 {
   AIRSPACE_POINT *NewPoint = NULL;
 
@@ -741,7 +747,8 @@ AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount,
 }
 
 static void
-AddArea(AIRSPACE_AREA *Temp, unsigned &NumberOfAirspaceAreas)
+AddArea(AirspaceDatabase &airspace_database, AIRSPACE_AREA *Temp,
+        unsigned &NumberOfAirspaceAreas)
 {
   AIRSPACE_AREA *NewArea = NULL;
 
@@ -924,7 +931,8 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
 }
 
 static void
-CalculateSector(TCHAR *Text, unsigned &NumberOfAirspacePoints)
+CalculateSector(AirspaceDatabase &airspace_database, TCHAR *Text,
+                unsigned &NumberOfAirspacePoints)
 {
   double Radius;
   double StartBearing;
@@ -949,7 +957,8 @@ CalculateSector(TCHAR *Text, unsigned &NumberOfAirspacePoints)
                             StartBearing, Radius,
                             &TempPoint);
     }
-    AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
+    AddPoint(airspace_database, &TempPoint, &TempArea.NumPoints,
+             NumberOfAirspacePoints);
 
     StartBearing += Rotation *5 ;
   }
@@ -959,11 +968,13 @@ CalculateSector(TCHAR *Text, unsigned &NumberOfAirspacePoints)
     FindLatitudeLongitude(c, EndBearing, Radius,
                           &TempPoint);
   }
-  AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
+  AddPoint(airspace_database, &TempPoint, &TempArea.NumPoints,
+           NumberOfAirspacePoints);
 }
 
 static void
-CalculateArc(TCHAR *Text, unsigned &NumberOfAirspacePoints)
+CalculateArc(AirspaceDatabase &airspace_database, TCHAR *Text,
+             unsigned &NumberOfAirspacePoints)
 {
   GEOPOINT Start;
   GEOPOINT End;
@@ -987,7 +998,8 @@ CalculateArc(TCHAR *Text, unsigned &NumberOfAirspacePoints)
   EndBearing = Bearing(c, End);
   TempPoint.Latitude  = Start.Latitude;
   TempPoint.Longitude = Start.Longitude;
-  AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
+  AddPoint(airspace_database, &TempPoint, &TempArea.NumPoints,
+           NumberOfAirspacePoints);
 
   while(fabs(EndBearing-StartBearing) > 7.5) {
     StartBearing += Rotation *5 ;
@@ -1003,15 +1015,20 @@ CalculateArc(TCHAR *Text, unsigned &NumberOfAirspacePoints)
                             &TempPoint);
     }
 
-    AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
+    AddPoint(airspace_database, &TempPoint, &TempArea.NumPoints,
+             NumberOfAirspacePoints);
   }
 
   TempPoint  = End;
-  AddPoint(&TempPoint, &TempArea.NumPoints, NumberOfAirspacePoints);
+  AddPoint(airspace_database, &TempPoint, &TempArea.NumPoints,
+           NumberOfAirspacePoints);
 }
 
 
-static void ScanAirspaceCircleBounds(int i, double bearing) {
+static void
+ScanAirspaceCircleBounds(AirspaceDatabase &airspace_database, int i,
+                         double bearing)
+{
   AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
   GEOPOINT loc;
 
@@ -1026,7 +1043,9 @@ static void ScanAirspaceCircleBounds(int i, double bearing) {
 }
 
 
-static void FindAirspaceCircleBounds() {
+static void
+FindAirspaceCircleBounds(AirspaceDatabase &airspace_database)
+{
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
     AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
@@ -1034,10 +1053,10 @@ static void FindAirspaceCircleBounds() {
     circle.bounds.maxx = circle.Location.Longitude;
     circle.bounds.miny = circle.Location.Latitude;
     circle.bounds.maxy = circle.Location.Latitude;
-    ScanAirspaceCircleBounds(i,0);
-    ScanAirspaceCircleBounds(i,90);
-    ScanAirspaceCircleBounds(i,180);
-    ScanAirspaceCircleBounds(i,270);
+    ScanAirspaceCircleBounds(airspace_database, i, 0);
+    ScanAirspaceCircleBounds(airspace_database, i, 90);
+    ScanAirspaceCircleBounds(airspace_database, i, 180);
+    ScanAirspaceCircleBounds(airspace_database, i, 270);
     circle.WarningLevel = 0; // clear warnings to initialise
 
     // JMW detect airspace that wraps across 180
@@ -1049,7 +1068,9 @@ static void FindAirspaceCircleBounds() {
   }
 }
 
-static void FindAirspaceAreaBounds() {
+static void
+FindAirspaceAreaBounds(AirspaceDatabase &airspace_database)
+{
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
     AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
     bool first = true;
@@ -1090,13 +1111,13 @@ static void FindAirspaceAreaBounds() {
 }
 
 static bool
-ReadAirspace(const char *path)
+ReadAirspace(AirspaceDatabase &airspace_database, const char *path)
 {
   ZZIP_FILE *fp = zzip_fopen(path, "rt");
   if (fp == NULL)
     return false;
 
-  ReadAirspace(fp);
+  ReadAirspace(airspace_database, fp);
   zzip_fclose(fp);
   return true;
 }
@@ -1104,7 +1125,7 @@ ReadAirspace(const char *path)
 /**
  * Reads the airspace files into the memory
  */
-void ReadAirspace(void)
+void ReadAirspace(AirspaceDatabase &airspace_database)
 {
   TCHAR	szFile1[MAX_PATH] = TEXT("\0");
   TCHAR	szFile2[MAX_PATH] = TEXT("\0");
@@ -1124,7 +1145,7 @@ void ReadAirspace(void)
     ExpandLocalPath(szFile1);
     unicode2ascii(szFile1, zfilename, MAX_PATH);
 
-    if (!ReadAirspace(zfilename))
+    if (!ReadAirspace(airspace_database, zfilename))
       StartupStore(TEXT("No airspace file 1\n"));
   } else {
     // TODO feature: airspace in xcm files should be a feature
@@ -1144,13 +1165,13 @@ void ReadAirspace(void)
     ExpandLocalPath(szFile2);
     unicode2ascii(szFile2, zfilename, MAX_PATH);
 
-    if (!ReadAirspace(zfilename))
+    if (!ReadAirspace(airspace_database, zfilename))
       StartupStore(TEXT("No airspace file 2\n"));
   }
 
   // Calculate the airspace boundaries
-  FindAirspaceAreaBounds();
-  FindAirspaceCircleBounds();
+  FindAirspaceAreaBounds(airspace_database);
+  FindAirspaceCircleBounds(airspace_database);
 
   terrain.Lock();
   airspace_database.UpdateAGL(terrain);
@@ -1159,8 +1180,9 @@ void ReadAirspace(void)
 
 
 #ifndef NDEBUG
-void DumpAirspaceFile(void){
-
+static void
+DumpAirspaceFile(const AirspaceDatabase &airspace_database)
+{
   FILE *fp = _tfopen(TEXT("XCSoarAirspace.dmp"), TEXT("wt"));
   if (fp == NULL)
     return;
@@ -1173,11 +1195,11 @@ void DumpAirspaceFile(void){
 /**
  * Sorts the airspaces by priority
  */
-void SortAirspace(void) {
+void SortAirspace(AirspaceDatabase &airspace_database) {
   StartupStore(TEXT("SortAirspace\n"));
 
   // force acknowledgement before sorting
-  ClearAirspaceWarnings(true, false);
+  ClearAirspaceWarnings(airspace_database, true, false);
 
   airspace_database.Sort();
 }

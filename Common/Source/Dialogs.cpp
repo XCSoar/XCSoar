@@ -198,7 +198,9 @@ PopupNearestWaypointDetails(const WayPointList &way_points,
   return false;
 }
 
-bool PopupInteriorAirspaceDetails(const GEOPOINT &location) {
+bool
+PopupInteriorAirspaceDetails(const AirspaceDatabase &airspace_database,
+                             const GEOPOINT &location) {
   bool found=false;
 
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {

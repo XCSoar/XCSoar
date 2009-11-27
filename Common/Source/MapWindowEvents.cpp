@@ -346,9 +346,9 @@ bool MapWindow::on_mouse_up(int x, int y)
           return true;
         }
       } else {
-        if (PopupInteriorAirspaceDetails(LLstart)) {
+        if (airspace_database != NULL &&
+            PopupInteriorAirspaceDetails(*airspace_database, LLstart))
           return true;
-        }
       }
     } else {
       if(dwInterval < AIRSPACECLICK) { // original and untouched interval
@@ -358,9 +358,9 @@ bool MapWindow::on_mouse_up(int x, int y)
           return true;
         }
       } else {
-        if (PopupInteriorAirspaceDetails(LLstart)) {
+        if (airspace_database != NULL &&
+            PopupInteriorAirspaceDetails(*airspace_database, LLstart))
           return true;
-        }
       }
     } // VK enabled
   } // !TargetPan

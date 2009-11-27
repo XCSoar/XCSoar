@@ -56,7 +56,10 @@ List<AirspaceWarningNotifier_t> AirspaceWarningNotifierList;
 
 List<AirspaceInfo_c> AirspaceWarnings;
 
-static bool UpdateAirspaceAckBrush(AirspaceInfo_c *Item, int Force){
+static bool
+UpdateAirspaceAckBrush(AirspaceDatabase &airspace_database,
+                       const AirspaceInfo_c *Item, int Force)
+{
   bool res=false;
 
   if (Force == 0){
@@ -162,7 +165,8 @@ Distance(const AIRSPACE_ALT &altitude, int alt, int agl)
 }
 
 static void
-AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
+AirspaceWarnListCalcDistance(AirspaceDatabase &airspace_database,
+                             const NMEA_INFO *Basic,
                              const DERIVED_INFO *Calculated,
                              bool IsCircle, int AsIdx,
                              int *hDistance, int *Bearing, int *vDistance,
@@ -216,8 +220,9 @@ AirspaceWarnListCalcDistance(const NMEA_INFO *Basic,
     *vDistance = vDistanceTop;
 }
 
-static bool calcWarnLevel(AirspaceInfo_c *asi){
-
+static bool
+calcWarnLevel(AirspaceDatabase &airspace_database, AirspaceInfo_c *asi)
+{
   int LastWarnLevel;
 
   if (asi == NULL)
@@ -240,7 +245,7 @@ static bool calcWarnLevel(AirspaceInfo_c *asi){
 
   asi->SortKey = dh + dv*20;
 
-  UpdateAirspaceAckBrush(asi, 0);
+  UpdateAirspaceAckBrush(airspace_database, asi, 0);
 
   return((asi->WarnLevel > asi->Acknowledge)
 	 && (asi->WarnLevel > LastWarnLevel));
@@ -248,7 +253,8 @@ static bool calcWarnLevel(AirspaceInfo_c *asi){
 }
 
 void
-AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+AirspaceWarnListAdd(AirspaceDatabase &airspace_database,
+                    const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
                     const SETTINGS_COMPUTER *settings,
                     const MapWindowProjection &map_projection,
                     bool Predicted, bool IsCircle, int AsIdx,
@@ -268,7 +274,8 @@ AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
   bool  FoundInList = false;
 
   if (Predicted){  // ToDo calculate predicted data
-    AirspaceWarnListCalcDistance(Basic, Calculated, IsCircle, AsIdx, &hDistance,
+    AirspaceWarnListCalcDistance(airspace_database, Basic, Calculated,
+                                 IsCircle, AsIdx, &hDistance,
 				 &Bearing, &vDistance,
                                  map_projection);
   }
@@ -309,7 +316,7 @@ AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
           it->data.Predicted = Predicted;
         }
 
-        if (calcWarnLevel(&it->data))
+        if (calcWarnLevel(airspace_database, &it->data))
           AirspaceWarnListDoNotify(asaWarnLevelIncreased, &it->data);
         else
           AirspaceWarnListDoNotify(asaItemChanged, &it->data);
@@ -356,12 +363,12 @@ AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
     asi.LastListIndex = 0; // JMW initialise
     asi.WarnLevel = 0; // JMW initialise
 
-    calcWarnLevel(&asi);
+    calcWarnLevel(airspace_database, &asi);
 
     asi.ID = AsIdx + (IsCircle ? 10000 : 0);
 
     AirspaceWarnings.push_front(asi);
-    UpdateAirspaceAckBrush(&asi, 0);
+    UpdateAirspaceAckBrush(airspace_database, &asi, 0);
 
     NewAirspaceWarnings = true;
 
@@ -417,8 +424,8 @@ AirspaceWarnListSort(void)
 
 
 void
-AirspaceWarnListProcess(const NMEA_INFO *Basic,
-                        const DERIVED_INFO *Calculated,
+AirspaceWarnListProcess(AirspaceDatabase &airspace_database,
+                        const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
                         const SETTINGS_COMPUTER *settings,
                         const MapWindowProjection &map_projection)
 {
@@ -438,7 +445,7 @@ AirspaceWarnListProcess(const NMEA_INFO *Basic,
       int vDistance = 0;
       int Bearing = 0;
 
-      AirspaceWarnListCalcDistance(Basic, Calculated,
+      AirspaceWarnListCalcDistance(airspace_database, Basic, Calculated,
                                    it->data.IsCircle,
                                    it->data.AirspaceIndex,
                                    &hDistance, &Bearing, &vDistance,
@@ -449,10 +456,10 @@ AirspaceWarnListProcess(const NMEA_INFO *Basic,
       it->data.Bearing = Bearing;
       it->data.TimeOut = OUTSIDE_CHECK_INTERVAL; // retrigger checktimeout
 
-      if (calcWarnLevel(&it->data))
+      if (calcWarnLevel(airspace_database, &it->data))
         AirspaceWarnListDoNotify(asaWarnLevelIncreased, &it->data);
 
-      UpdateAirspaceAckBrush(&it->data, 0);
+      UpdateAirspaceAckBrush(airspace_database, &it->data, 0);
 
       if (it->data.Acknowledge == 4){ // whole day achnowledged
         if (it->data.SortKey > 25000) {
@@ -466,7 +473,7 @@ AirspaceWarnListProcess(const NMEA_INFO *Basic,
         AirspaceInfo_c asi = it->data;
 
         it = AirspaceWarnings.erase(it);
-        UpdateAirspaceAckBrush(&asi, -1);
+        UpdateAirspaceAckBrush(airspace_database, &asi, -1);
         AirspaceWarnListDoNotify(asaItemRemoved, &asi);
 
         continue;
@@ -507,8 +514,9 @@ AirspaceWarnListProcess(const NMEA_INFO *Basic,
   AirspaceWarnListDoNotify(asaProcessEnd, NULL);
 }
 
-
-void AirspaceWarnDoAck(int ID, int Ack){
+void
+AirspaceWarnDoAck(AirspaceDatabase &airspace_database, int ID, int Ack)
+{
   ScopeLock protect(mutexAirspaceWarnings);
   for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin(); it; it = it->next ){
     if (it->data.ID == ID){
@@ -521,7 +529,7 @@ void AirspaceWarnDoAck(int ID, int Ack){
       else                              // ack defined warnlevel
         it->data.Acknowledge = Ack;
 
-      UpdateAirspaceAckBrush(&it->data, 0);
+      UpdateAirspaceAckBrush(airspace_database, &it->data, 0);
 
       AirspaceWarnListDoNotify(asaItemChanged, &it->data);
 
@@ -529,11 +537,12 @@ void AirspaceWarnDoAck(int ID, int Ack){
   }
 }
 
-
-void AirspaceWarnListClear(void){
+void
+AirspaceWarnListClear(AirspaceDatabase &airspace_database)
+{
   ScopeLock protect(mutexAirspaceWarnings);
   for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin(); it; it = it->next ){
-    UpdateAirspaceAckBrush(&it->data, -1);
+    UpdateAirspaceAckBrush(airspace_database, &it->data, -1);
   }
   AirspaceWarnings.clear();
   AirspaceWarnListDoNotify(asaClearAll ,NULL);
@@ -573,7 +582,9 @@ ClearAirspaceWarning(AirspaceMetadata &airspace, bool ack_all_day)
     airspace.WarningLevel = 0;
 }
 
-bool ClearAirspaceWarnings(const bool acknowledge, const bool ack_all_day) {
+bool
+ClearAirspaceWarnings(AirspaceDatabase &airspace_database,
+                      bool acknowledge, bool ack_all_day) {
   if (!acknowledge)
     return false;
 
