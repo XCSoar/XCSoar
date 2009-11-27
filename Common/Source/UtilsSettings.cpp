@@ -58,6 +58,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Task.h"
 #include "Asset.hpp"
+#include "DrawThread.hpp"
 
 bool COMPORTCHANGED = false;
 bool MAPFILECHANGED = false;
