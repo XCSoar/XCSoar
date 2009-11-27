@@ -46,16 +46,10 @@ Copyright_License {
 #include "Language.hpp"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
-#include "RasterTerrain.h"
-#include "RasterMap.h"
 #include "Math/Earth.hpp"
 #include "Math/Units.h"
-#include "Registry.hpp"
 #include "Math/Pressure.h"
-#include "LocalPath.hpp"
-#include "Components.hpp"
 #include "options.h"
-#include "wcecompat/ts_string.h"
 #include "Compatibility/string.h"
 
 #include <math.h>
@@ -1042,8 +1036,7 @@ ScanAirspaceCircleBounds(AirspaceDatabase &airspace_database, int i,
   circle.bounds.maxy = max(loc.Latitude, circle.bounds.maxy);
 }
 
-
-static void
+void
 FindAirspaceCircleBounds(AirspaceDatabase &airspace_database)
 {
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
@@ -1068,7 +1061,7 @@ FindAirspaceCircleBounds(AirspaceDatabase &airspace_database)
   }
 }
 
-static void
+void
 FindAirspaceAreaBounds(AirspaceDatabase &airspace_database)
 {
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
@@ -1110,7 +1103,7 @@ FindAirspaceAreaBounds(AirspaceDatabase &airspace_database)
   }
 }
 
-static bool
+bool
 ReadAirspace(AirspaceDatabase &airspace_database, const char *path)
 {
   ZZIP_FILE *fp = zzip_fopen(path, "rt");
@@ -1121,63 +1114,6 @@ ReadAirspace(AirspaceDatabase &airspace_database, const char *path)
   zzip_fclose(fp);
   return true;
 }
-
-/**
- * Reads the airspace files into the memory
- */
-void ReadAirspace(AirspaceDatabase &airspace_database)
-{
-  TCHAR	szFile1[MAX_PATH] = TEXT("\0");
-  TCHAR	szFile2[MAX_PATH] = TEXT("\0");
-  char zfilename[MAX_PATH];
-
-#if AIRSPACEUSEBINFILE > 0
-  FILETIME LastWriteTime;
-  FILETIME LastWriteTime2;
-#endif
-
-  // TODO bug: add exception handler to protect parser code against chrashes
-  // TODO bug: second file should be opened even if first was not okay
-
-  // Read the airspace filenames from the registry
-  GetRegistryString(szRegistryAirspaceFile, szFile1, MAX_PATH);
-  if (szFile1[0] != 0) {
-    ExpandLocalPath(szFile1);
-    unicode2ascii(szFile1, zfilename, MAX_PATH);
-
-    if (!ReadAirspace(airspace_database, zfilename))
-      StartupStore(TEXT("No airspace file 1\n"));
-  } else {
-    // TODO feature: airspace in xcm files should be a feature
-    /*
-    static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
-    GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
-    ExpandLocalPath(szMapFile);
-    wcscat(szMapFile,TEXT("/"));
-    wcscat(szMapFile,TEXT("airspace.txt"));
-    unicode2ascii(szMapFile, zfilename, MAX_PATH);
-    fp  = zzip_fopen(zfilename, "rt");
-    */
-  }
-
-  GetRegistryString(szRegistryAdditionalAirspaceFile, szFile2, MAX_PATH);
-  if (szFile2[0] != 0) {
-    ExpandLocalPath(szFile2);
-    unicode2ascii(szFile2, zfilename, MAX_PATH);
-
-    if (!ReadAirspace(airspace_database, zfilename))
-      StartupStore(TEXT("No airspace file 2\n"));
-  }
-
-  // Calculate the airspace boundaries
-  FindAirspaceAreaBounds(airspace_database);
-  FindAirspaceCircleBounds(airspace_database);
-
-  terrain.Lock();
-  airspace_database.UpdateAGL(terrain);
-  terrain.Unlock();
-}
-
 
 #ifndef NDEBUG
 static void

@@ -113,7 +113,14 @@ ToMSL(const AIRSPACE_ALT &altitude, double terrain_altitude)
 
 void DeleteAirspace(AirspaceDatabase &airspace_database);
 
-void ReadAirspace(AirspaceDatabase &airspace_database);
+void
+FindAirspaceCircleBounds(AirspaceDatabase &airspace_database);
+
+void
+FindAirspaceAreaBounds(AirspaceDatabase &airspace_database);
+
+bool
+ReadAirspace(AirspaceDatabase &airspace_database, const char *path);
 
 bool
 CheckAirspaceAltitude(double Base, double Top, double altitude,

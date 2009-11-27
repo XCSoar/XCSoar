@@ -151,6 +151,7 @@ OBJS	:=\
 	$(SRC)/Abort.o 			\
 	$(SRC)/Airspace.o 		\
 	$(SRC)/AirspaceDatabase.o \
+	$(SRC)/AirspaceGlue.o \
 	$(SRC)/AirspaceParser.o 	\
 	$(SRC)/AirspaceTerrain.o \
 	$(SRC)/AirspaceWarning.o 	\

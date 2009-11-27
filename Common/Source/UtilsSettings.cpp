@@ -44,7 +44,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Waypointparser.h"
 #include "AirfieldDetails.h"
-#include "Airspace.h"
+#include "AirspaceGlue.hpp"
 #include "TopologyStore.h"
 #include "McReady.h"
 #include "Dialogs.h"
@@ -155,7 +155,7 @@ void SettingsLeave() {
 
   if(AIRSPACEFILECHANGED) {
     CloseAirspace(airspace_database);
-    ReadAirspace(airspace_database);
+    ReadAirspace(airspace_database, &terrain);
     SortAirspace(airspace_database);
   }
 

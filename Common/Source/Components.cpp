@@ -51,7 +51,7 @@ Copyright_License {
 #include "Device/Geoid.h"
 #include "Dialogs.h"
 #include "Waypointparser.h"
-#include "Airspace.h"
+#include "AirspaceGlue.hpp"
 #include "AirspaceWarning.h"
 #include "AirspaceDatabase.hpp"
 #include "ButtonLabel.hpp"
@@ -349,7 +349,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   RASP.ScanAll(Basic().Location);
 
   // Reads the airspace files
-  ReadAirspace(airspace_database);
+  ReadAirspace(airspace_database, &terrain);
   // Sorts the airspaces by priority
   SortAirspace(airspace_database);
 
