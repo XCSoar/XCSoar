@@ -57,7 +57,7 @@ ScreenGraphics MapGfx;
  */
 MapWindow::MapWindow()
   :MapWindowProjection(),
-   way_points(NULL), task(NULL),
+   way_points(NULL), task(NULL), airspace_database(NULL),
    topology(NULL), terrain(NULL), weather(NULL), terrain_renderer(NULL),
    marks(NULL), snail_trail(NULL), olc(NULL),
    cdi(NULL),

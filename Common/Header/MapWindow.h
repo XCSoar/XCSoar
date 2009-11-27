@@ -65,6 +65,7 @@ struct ZoomClimb_t {
 
 class WayPointList;
 class TaskSafe;
+class AirspaceDatabase;
 class TopologyStore;
 class RasterTerrain;
 class RasterWeather;
@@ -84,6 +85,7 @@ class MapWindow
 
   WayPointList *way_points;
   TaskSafe *task;
+  const AirspaceDatabase *airspace_database;
 
   TopologyStore *topology;
   RasterTerrain *terrain;
@@ -121,6 +123,10 @@ class MapWindow
 
   void set_task(TaskSafe *_task) {
     task = _task;
+  }
+
+  void set_airspaces(AirspaceDatabase *_airspace_database) {
+    airspace_database = _airspace_database;
   }
 
   void set_topology(TopologyStore *_topology);

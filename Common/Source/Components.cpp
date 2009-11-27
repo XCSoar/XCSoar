@@ -376,6 +376,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   main_window.map.set_way_points(&way_points);
   main_window.map.set_task(&task);
+  main_window.map.set_airspaces(&airspace_database);
   main_window.map.set_topology(topology);
   main_window.map.set_terrain(&terrain);
   main_window.map.set_weather(&RASP);
