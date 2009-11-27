@@ -110,7 +110,7 @@ void msInitShape(shapeObj *shape)
   shape->tileindex = shape->index = -1;
 }
 
-int msCopyShape(shapeObj *from, shapeObj *to) {
+int msCopyShape(const shapeObj *from, shapeObj *to) {
   int i;
 
   if(!from || !to) return(-1);

@@ -48,7 +48,7 @@ Copyright_License {
 /*
 ** Returns MS_TRUE if rectangles a and b overlap
 */
-int msRectOverlap(rectObj *a, rectObj *b)
+int msRectOverlap(const rectObj *a, const rectObj *b)
 {
   if(a->minx > b->maxx) return(MS_FALSE);
   if(a->maxx < b->minx) return(MS_FALSE);
@@ -60,7 +60,7 @@ int msRectOverlap(rectObj *a, rectObj *b)
 /*
 ** Returns MS_TRUE if rectangle a is contained in rectangle b
 */
-int msRectContained(rectObj *a, rectObj *b)
+int msRectContained(const rectObj *a, const rectObj *b)
 {
   if(a->minx >= b->minx && a->maxx <= b->maxx)
     if(a->miny >= b->miny && a->maxy <= b->maxy)
@@ -71,7 +71,7 @@ int msRectContained(rectObj *a, rectObj *b)
 /*
 ** Merges rect b into rect a. Rect a changes, b does not.
 */
-void msMergeRect(rectObj *a, rectObj *b)
+void msMergeRect(rectObj *a, const rectObj *b)
 {
   a->minx = MS_MIN(a->minx, b->minx);
   a->maxx = MS_MAX(a->maxx, b->maxx);
@@ -79,7 +79,7 @@ void msMergeRect(rectObj *a, rectObj *b)
   a->maxy = MS_MAX(a->maxy, b->maxy);
 }
 
-int msPointInRect(pointObj *p, rectObj *rect)
+int msPointInRect(const pointObj *p, const rectObj *rect)
 {
   if(p->x < rect->minx) return(MS_FALSE);
   if(p->x > rect->maxx) return(MS_FALSE);
@@ -88,7 +88,7 @@ int msPointInRect(pointObj *p, rectObj *rect)
   return(MS_TRUE);
 }
 
-int msPolygonDirection(lineObj *c)
+static int msPolygonDirection(const lineObj *c)
 {
   double mx, my, area;
   int i, v=0, lv, nv;
@@ -118,7 +118,7 @@ int msPolygonDirection(lineObj *c)
       return(0); /* shouldn't happen unless the polygon is self intersecting */
 }
 
-int msPointInPolygon(pointObj *p, lineObj *c)
+int msPointInPolygon(const pointObj *p, const lineObj *c)
 {
   int i, j, status = MS_FALSE;
 
@@ -135,7 +135,10 @@ int msPointInPolygon(pointObj *p, lineObj *c)
 ** cases. In due time... -SDL-
 */
 
-int msIntersectSegments(pointObj *a, pointObj *b, pointObj *c, pointObj *d) { /* from comp.graphics.alogorithms FAQ */
+int msIntersectSegments(const pointObj *a, const pointObj *b,
+                        const pointObj *c, const pointObj *d)
+{
+  /* from comp.graphics.alogorithms FAQ */
 
   double r, s;
   double denominator, numerator;
@@ -179,7 +182,8 @@ int msIntersectSegments(pointObj *a, pointObj *b, pointObj *c, pointObj *d) { /*
 ** point falls in. If odd the point is in the polygon, if 0 or even
 ** then the point is in a hole or completely outside.
 */
-int msIntersectPointPolygon(pointObj *point, shapeObj *poly) {
+int msIntersectPointPolygon(const pointObj *point, const shapeObj *poly)
+{
   int i;
   int status=MS_FALSE;
 
@@ -191,7 +195,9 @@ int msIntersectPointPolygon(pointObj *point, shapeObj *poly) {
   return(status);
 }
 
-int msIntersectMultipointPolygon(multipointObj *points, shapeObj *poly) {
+int msIntersectMultipointPolygon(const multipointObj *points,
+                                 const shapeObj *poly)
+{
   int i;
 
   for(i=0; i<points->numpoints; i++) {
@@ -202,7 +208,8 @@ int msIntersectMultipointPolygon(multipointObj *points, shapeObj *poly) {
   return(MS_FALSE);
 }
 
-int msIntersectPolylines(shapeObj *line1, shapeObj *line2) {
+int msIntersectPolylines(const shapeObj *line1, const shapeObj *line2)
+{
   int c1,v1,c2,v2;
 
   for(c1=0; c1<line1->numlines; c1++)
@@ -215,7 +222,8 @@ int msIntersectPolylines(shapeObj *line1, shapeObj *line2) {
   return(MS_FALSE);
 }
 
-int msIntersectPolylinePolygon(shapeObj *line, shapeObj *poly) {
+int msIntersectPolylinePolygon(const shapeObj *line, const shapeObj *poly)
+{
   int c1,v1,c2,v2;
 
   // STEP 1: polygon might competely contain the polyline or one of it's parts (only need to check one point from each part)
@@ -236,7 +244,8 @@ int msIntersectPolylinePolygon(shapeObj *line, shapeObj *poly) {
   return(MS_FALSE);
 }
 
-int msIntersectPolygons(shapeObj *p1, shapeObj *p2) {
+int msIntersectPolygons(const shapeObj *p1, const shapeObj *p2)
+{
   int c1,v1,c2,v2;
 
   /* STEP 1: polygon 1 completely contains 2 (only need to check one point from each part) */
@@ -272,7 +281,7 @@ int msIntersectPolygons(shapeObj *p1, shapeObj *p2) {
 ** Distance computations
 */
 
-double msDistancePointToPoint(pointObj *a, pointObj *b)
+double msDistancePointToPoint(const pointObj *a, const pointObj *b)
 {
   double d;
   double dx, dy;
@@ -283,7 +292,8 @@ double msDistancePointToPoint(pointObj *a, pointObj *b)
   return(d);
 }
 
-double msDistancePointToSegment(pointObj *p, pointObj *a, pointObj *b)
+double msDistancePointToSegment(const pointObj *p, const pointObj *a,
+                                const pointObj *b)
 {
   double l; /* length of line ab */
   double r,s;
@@ -322,7 +332,8 @@ double msDistancePointToSegment(pointObj *p, pointObj *a, pointObj *b)
 // liable for any real or imagined damage resulting from its use.
 // Users of this code must verify correctness for their application.
 
-double msDistanceSegmentToSegment(pointObj *pa, pointObj *pb, pointObj *pc, pointObj *pd)
+double msDistanceSegmentToSegment(const pointObj *pa, const pointObj *pb,
+                                  const pointObj *pc, const pointObj *pd)
 {
   vectorObj dP;
   vectorObj u, v, w;
@@ -408,7 +419,7 @@ double msDistanceSegmentToSegment(pointObj *pa, pointObj *pb, pointObj *pc, poin
   return(norm(dP));
 }
 
-double msDistancePointToShape(pointObj *point, shapeObj *shape)
+double msDistancePointToShape(const pointObj *point, const shapeObj *shape)
 {
   int i, j;
   double dist, minDist=-1;
@@ -449,7 +460,7 @@ double msDistancePointToShape(pointObj *point, shapeObj *shape)
   return(minDist);
 }
 
-double msDistanceShapeToShape(shapeObj *shape1, shapeObj *shape2)
+double msDistanceShapeToShape(const shapeObj *shape1, const shapeObj *shape2)
 {
   int i,j,k,l;
   double dist, minDist=-1;
