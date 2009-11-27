@@ -46,9 +46,10 @@ RasterMapRaw::~RasterMapRaw()
   _Close();
 }
 
-void RasterMapRaw::SetFieldRounding(const double xr,
-                                    const double yr,
-                                    RasterRounding &rounding)
+void
+RasterMapRaw::SetFieldRounding(const double xr,
+                               const double yr,
+                               RasterRounding &rounding) const
 {
   RasterMap::SetFieldRounding(xr, yr, rounding);
   if (!isMapLoaded()) {

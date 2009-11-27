@@ -92,7 +92,7 @@ class RasterMap {
                             const GEOPOINT &location) const;
 
   virtual void SetFieldRounding(const double xr, const double yr,
-    RasterRounding &rounding);
+                                RasterRounding &rounding) const;
 
   short GetField(const GEOPOINT &location,
     const RasterRounding &rounding);
@@ -128,13 +128,13 @@ class RasterRounding {
 public:
   RasterRounding() {};
 
-  RasterRounding(RasterMap &map,
+  RasterRounding(const RasterMap &map,
     const double xr, const double yr):
     DirectFine(false)
   {
     Set(map, xr, yr);
   };
-  void Set(RasterMap &map,
+  void Set(const RasterMap &map,
            const double xr,
            const double yr)
   {

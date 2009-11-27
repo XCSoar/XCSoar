@@ -70,11 +70,11 @@ public:
    void Lock(void); // should be protected, friend of TerrainDataClient
    void Unlock(void); // should be protected, friend of TerrainDataClient
 
-   RasterMap* GetMap() {
+   const RasterMap* GetMap() const {
      return TerrainMap;
    }
    short GetTerrainHeight(const GEOPOINT &location,
-     const RasterRounding &rounding);
+                          const RasterRounding &rounding) const;
    bool IsDirectAccess(void) const;
    bool IsPaged(void) const;
    void ServiceCache();

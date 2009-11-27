@@ -50,9 +50,10 @@ Copyright_License {
 #include "jasper/jpc_rtc.h"
 #include "wcecompat/ts_string.h"
 
-void RasterMapJPG2000::SetFieldRounding(const double xr,
-                                        const double yr,
-                                        RasterRounding &rounding)
+void
+RasterMapJPG2000::SetFieldRounding(const double xr,
+                                   const double yr,
+                                   RasterRounding &rounding) const
 {
   RasterMap::SetFieldRounding(xr, yr, rounding);
   if (!isMapLoaded()) {
