@@ -59,12 +59,12 @@ WayPointList::clear()
   count = 0;
 
   if (list != NULL) {
-    ::LocalFree((HLOCAL)list);
+    free(list);
     list = NULL;
   }
 
   if (calc_list != NULL) {
-    ::LocalFree((HLOCAL)calc_list);
+    free(calc_list);
     calc_list = NULL;
   }
 }
