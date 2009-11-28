@@ -80,9 +80,9 @@ public:
    void ServiceCache();
    void ServiceTerrainCenter(const GEOPOINT &location);
    void ServiceFullReload(const GEOPOINT &location);
-   int GetEffectivePixelSize(double *pixel_D, const GEOPOINT &location);
-   bool WaypointIsInTerrainRange(const GEOPOINT &location);
-   bool GetTerrainCenter(GEOPOINT *location);
+   int GetEffectivePixelSize(double *pixel_D, const GEOPOINT &location) const;
+   bool WaypointIsInTerrainRange(const GEOPOINT &location) const;
+   bool GetTerrainCenter(GEOPOINT *location) const;
 };
 
 #endif

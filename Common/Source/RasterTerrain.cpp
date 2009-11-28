@@ -156,7 +156,7 @@ void RasterTerrain::ServiceFullReload(const GEOPOINT &location) {
 }
 
 int RasterTerrain::GetEffectivePixelSize(double *pixel_D,
-                                         const GEOPOINT &location) {
+                                         const GEOPOINT &location) const {
   if (TerrainMap) {
     return TerrainMap->GetEffectivePixelSize(pixel_D, location);
   } else {
@@ -164,7 +164,9 @@ int RasterTerrain::GetEffectivePixelSize(double *pixel_D,
   }
 }
 
-bool RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) {
+bool
+RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
+{
   if (TerrainMap) {
     if ((location.Latitude<= TerrainMap->TerrainInfo.Top)&&
         (location.Latitude>= TerrainMap->TerrainInfo.Bottom)&&
@@ -179,7 +181,9 @@ bool RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) {
   }
 }
 
-bool RasterTerrain::GetTerrainCenter(GEOPOINT *location) {
+bool
+RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
+{
   if (TerrainMap) {
     location->Latitude = (TerrainMap->TerrainInfo.Top+
                           TerrainMap->TerrainInfo.Bottom)/2.0;

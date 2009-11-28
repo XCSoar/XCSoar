@@ -66,7 +66,7 @@ void
 ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain);
 
 void
-SetHome(const WayPointList &way_points, RasterTerrain &terrain,
+SetHome(const WayPointList &way_points, const RasterTerrain &terrain,
         SETTINGS_COMPUTER &settings,
         const bool reset, const bool set_location=false);
 

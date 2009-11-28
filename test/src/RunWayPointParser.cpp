@@ -123,7 +123,9 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
 {
 }
 
-bool RasterTerrain::GetTerrainCenter(GEOPOINT *location) {
+bool
+RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
+{
   return false;
 }
 
@@ -135,7 +137,7 @@ RasterTerrain::GetTerrainHeight(const GEOPOINT &Location,
 }
 
 bool
-RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location)
+RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
 {
   return true;
 }

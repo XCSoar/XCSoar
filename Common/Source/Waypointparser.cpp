@@ -101,7 +101,7 @@ CloseWayPoints(WayPointList &way_points)
 
 
 static bool
-WaypointInTerrainRange(WAYPOINT *List, RasterTerrain &terrain)
+WaypointInTerrainRange(WAYPOINT *List, const RasterTerrain &terrain)
 {
   if (WaypointOutOfTerrainRangeDontAskAgain == 1){
     return(true);
@@ -665,7 +665,7 @@ ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
 
 
 void
-SetHome(const WayPointList &way_points, RasterTerrain &terrain,
+SetHome(const WayPointList &way_points, const RasterTerrain &terrain,
         SETTINGS_COMPUTER &settings,
         const bool reset, const bool set_location)
 {
