@@ -48,8 +48,8 @@ struct SETTINGS_COMPUTER;
 
 double
 FinalGlideThroughTerrain(const double bearing,
-			 const NMEA_INFO *Basic,
-                         const DERIVED_INFO *Calculated,
+                         const NMEA_INFO &basic,
+                         const DERIVED_INFO &calculated,
 			 const SETTINGS_COMPUTER &settings,
                          GEOPOINT *retlocation,
                          const double maxrange,
@@ -57,21 +57,21 @@ FinalGlideThroughTerrain(const double bearing,
                          double *TerrainBase = NULL);
 
 double
-PirkerAnalysis(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+PirkerAnalysis(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
                const double bearing,
                const double GlideSlope);
 
 double
-MacCreadyTimeLimit(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+MacCreadyTimeLimit(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
                    const double bearing,
                    const double timeremaining,
                    const double hfinal);
 
 double
-EffectiveCruiseEfficiency(const NMEA_INFO *Basic,
-                          const DERIVED_INFO *Calculated);
+EffectiveCruiseEfficiency(const NMEA_INFO &basic,
+                          const DERIVED_INFO &calculated);
 
 double
-EffectiveMacCready(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+EffectiveMacCready(const NMEA_INFO &basic, const DERIVED_INFO &calculated);
 
 #endif

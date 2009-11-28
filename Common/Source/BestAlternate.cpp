@@ -213,7 +213,7 @@ GlideComputerTask::SearchBestAlternate()
             bool out_of_range;
             double distance_soarable =
               FinalGlideThroughTerrain(wp_bearing,
-				       &Basic(), &Calculated(),
+                                       Basic(), Calculated(),
 				       SettingsComputer(),
                                        NULL,
                                        wp_distance,

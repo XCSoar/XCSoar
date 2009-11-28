@@ -1022,8 +1022,7 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
     bearing = (i*360.0)/NUMTERRAINSWEEPS;
     distance = FinalGlideThroughTerrain(bearing,
-					&Basic(),
-					&Calculated(),
+                                        Basic(), Calculated(),
 					SettingsComputer(),
 					&loc,
 					mymaxrange,

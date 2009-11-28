@@ -209,7 +209,7 @@ GlideComputerTask::SortLandableWaypoints()
 
             bool out_of_range;
             double distance_soarable =
-              FinalGlideThroughTerrain(wp_bearing, &Basic(), &Calculated(),
+              FinalGlideThroughTerrain(wp_bearing, Basic(), Calculated(),
 				       SettingsComputer(),
                                        NULL,
                                        wp_distance,

@@ -60,8 +60,8 @@ Copyright_License {
 
 double
 FinalGlideThroughTerrain(const double this_bearing,
-                         const NMEA_INFO *Basic,
-                         const DERIVED_INFO *Calculated,
+                         const NMEA_INFO &basic,
+                         const DERIVED_INFO &calculated,
                          const SETTINGS_COMPUTER &settings,
                          GEOPOINT *retloc,
                          const double max_range,
@@ -71,25 +71,24 @@ FinalGlideThroughTerrain(const double this_bearing,
   double mc = GlidePolar::GetMacCready();
   double irange = GlidePolar::MacCreadyAltitude(mc,
 						1.0, this_bearing,
-						Calculated->WindSpeed,
-						Calculated->WindBearing,
+                                                calculated.WindSpeed,
+                                                calculated.WindBearing,
 						0, 0, true, 0);
-  const GEOPOINT start_loc = Basic->Location;
+  const GEOPOINT start_loc = basic.Location;
   if (retloc) {
     *retloc = start_loc;
   }
   *out_of_range = false;
 
-  if ((irange <= 0.0) || (Calculated->NavAltitude <= 0)) {
+  if (irange <= 0.0 || calculated.NavAltitude <= 0)
     // can't make progress in this direction at the current windspeed/mc
     return 0;
-  }
 
   if (!terrain.GetMap()) {
     return 0;
   }
 
-  const double glide_max_range = Calculated->NavAltitude/irange;
+  const double glide_max_range = calculated.NavAltitude/irange;
 
   // returns distance one would arrive at altitude in straight glide
   // first estimate max range at this altitude
@@ -115,7 +114,7 @@ FinalGlideThroughTerrain(const double this_bearing,
 
   loc = last_loc = start_loc;
 
-  altitude = Calculated->NavAltitude;
+  altitude = calculated.NavAltitude;
   h =  max(0, terrain.GetTerrainHeight(loc,rounding));
   dh = altitude - h - settings.SAFETYALTITUDETERRAIN;
   last_dh = dh;
@@ -138,7 +137,7 @@ FinalGlideThroughTerrain(const double this_bearing,
     f_scale *= max_range/glide_max_range;
   }
 
-  double delta_alt = -f_scale*Calculated->NavAltitude;
+  double delta_alt = -f_scale * calculated.NavAltitude;
 
   dloc.Latitude *= f_scale;
   dloc.Longitude *= f_scale;
@@ -218,7 +217,7 @@ OnExit:
 }
 
 double
-PirkerAnalysis(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+PirkerAnalysis(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
                const double this_bearing,
                const double GlideSlope)
 {
@@ -232,15 +231,15 @@ PirkerAnalysis(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
   double last_dh = -1.0;
   double pirker_mc_zero = 0.0;
 
-  (void)Basic;
+  (void)basic;
 
   while (pirker_mc<10.0) {
 
     h = GlidePolar::MacCreadyAltitude(pirker_mc,
                                       1.0, // unit distance
 				      this_bearing,
-                                      Calculated->WindSpeed,
-                                      Calculated->WindBearing,
+                                      calculated.WindSpeed,
+                                      calculated.WindBearing,
                                       0, 0, true, 0);
 
     dh = (h_target-h);
@@ -278,21 +277,21 @@ PirkerAnalysis(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
 }
 
 double
-MacCreadyTimeLimit(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+MacCreadyTimeLimit(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
                    const double this_bearing,
                    const double time_remaining,
                    const double h_final)
 {
   // find highest Mc to achieve greatest distance in remaining time and height
-  (void)Basic;
+  (void)basic;
 
   double time_to_go;
   double mc;
   double mc_best = 0.0;
   double d_best = 0.0;
-  const double windspeed =   Calculated->WindSpeed;
-  const double windbearing = Calculated->WindBearing;
-  const double navaltitude = Calculated->NavAltitude;
+  const double windspeed = calculated.WindSpeed;
+  const double windbearing = calculated.WindBearing;
+  const double navaltitude = calculated.NavAltitude;
 
   for (mc=0; mc<10.0; mc+= 0.1) {
 
@@ -320,32 +319,32 @@ MacCreadyTimeLimit(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
 }
 
 static double
-EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+EffectiveMacCready_internal(const NMEA_INFO &basic,
+                            const DERIVED_INFO &calculated,
                             bool cruise_efficiency_mode)
 {
-  if (Calculated->ValidFinish) return 0;
+  if (calculated.ValidFinish) return 0;
   if (task.getActiveIndex()<=0) return 0; // no e mc before start
-  if (!Calculated->ValidStart) return 0;
-  if (Calculated->TaskStartTime<0) return 0;
+  if (!calculated.ValidStart) return 0;
+  if (calculated.TaskStartTime<0) return 0;
 
 
   if (!task.Valid()
       || !task.ValidTaskPoint(task.getActiveIndex()-1)) return 0;
-  if (Calculated->TaskDistanceToGo<=0) {
+  if (calculated.TaskDistanceToGo <= 0)
     return 0;
-  }
 
   double mc_setting = GlidePolar::GetMacCready();
 
-  double start_speed = Calculated->TaskStartSpeed;
+  double start_speed = calculated.TaskStartSpeed;
   double V_bestld = GlidePolar::Vbestld;
   double energy_height_start =
     max(0, start_speed*start_speed-V_bestld*V_bestld)/(9.81*2.0);
 
-  double telapsed = Basic->Time-Calculated->TaskStartTime;
+  double telapsed = basic.Time - calculated.TaskStartTime;
   double height_below_start =
-    Calculated->TaskStartAltitude + energy_height_start
-    - Calculated->NavAltitude - Calculated->EnergyHeight;
+    calculated.TaskStartAltitude + energy_height_start
+    - calculated.NavAltitude - calculated.EnergyHeight;
 
   double LegDistances[MAXTASKPOINTS];
   double LegBearings[MAXTASKPOINTS];
@@ -359,7 +358,7 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
                     &LegDistances[i], &LegBearings[i]);
 
     if (i+1==task.getActiveIndex()) {
-      LegDistances[i] = ProjectedDistance(w0, w1, Basic->Location);
+      LegDistances[i] = ProjectedDistance(w0, w1, basic.Location);
     }
     if ((task.getSettings().StartType==START_CIRCLE) && (i==0)) {
       // Correct speed calculations for radius
@@ -388,8 +387,8 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
 
     if (cruise_efficiency_mode) {
       mc_effective = mc_setting;
-      if (Calculated->FinalGlide && (Calculated->timeCircling>0)) {
-        mc_effective = Calculated->TotalHeightClimb / Calculated->timeCircling;
+      if (calculated.FinalGlide && calculated.timeCircling > 0) {
+        mc_effective = calculated.TotalHeightClimb / calculated.timeCircling;
       }
       cruise_efficiency = 0.5+value_scan;
     } else {
@@ -409,8 +408,8 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
         GlidePolar::MacCreadyAltitude(mc_effective,
                                       LegDistances[i],
                                       LegBearings[i],
-                                      Calculated->WindSpeed,
-                                      Calculated->WindBearing,
+                                      calculated.WindSpeed,
+                                      calculated.WindBearing,
                                       0, NULL,
                                       (height_remaining>0),
                                       &time_this,
@@ -457,10 +456,10 @@ EffectiveMacCready_internal(const NMEA_INFO *Basic, const DERIVED_INFO *Calculat
 }
 
 double
-EffectiveCruiseEfficiency(const NMEA_INFO *Basic,
-                          const DERIVED_INFO *Calculated)
+EffectiveCruiseEfficiency(const NMEA_INFO &basic,
+                          const DERIVED_INFO &calculated)
 {
-  double value = EffectiveMacCready_internal(Basic, Calculated, true);
+  double value = EffectiveMacCready_internal(basic, calculated, true);
   if (value<0.75) {
     return 0.75;
   }
@@ -468,7 +467,7 @@ EffectiveCruiseEfficiency(const NMEA_INFO *Basic,
 }
 
 double
-EffectiveMacCready(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+EffectiveMacCready(const NMEA_INFO &basic, const DERIVED_INFO &calculated)
 {
-  return EffectiveMacCready_internal(Basic, Calculated, false);
+  return EffectiveMacCready_internal(basic, calculated, false);
 }

@@ -1858,7 +1858,7 @@ GlideComputerTask::CheckFinalGlideThroughTerrain(double LegToGo, double LegBeari
     bool out_of_range;
     double distance_soarable =
       FinalGlideThroughTerrain(LegBearing,
-                               &Basic(), &Calculated(),
+                               Basic(), Calculated(),
 			       SettingsComputer(),
                                &loc,
                                LegToGo, &out_of_range, NULL);
@@ -1914,7 +1914,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 	&& (Calculated().NavAltitude>Calculated().TaskStartAltitude)
 	&& (time_remaining>0)) {
 
-      mc_new = MacCreadyTimeLimit(&Basic(), &Calculated(),
+      mc_new = MacCreadyTimeLimit(Basic(), Calculated(),
 				  Calculated().WaypointBearing,
 				  time_remaining,
 				  Calculated().TaskStartAltitude);
@@ -1930,7 +1930,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 	 - FAIFinishHeight(task.getActiveIndex()))/
 	(Calculated().WaypointDistance+1);
 
-      double mc_pirker = PirkerAnalysis(&Basic(), &Calculated(),
+      double mc_pirker = PirkerAnalysis(Basic(), Calculated(),
 					Calculated().WaypointBearing,
 					slope);
       mc_pirker = max(0.0, mc_pirker);
@@ -1974,8 +1974,8 @@ GlideComputerTask::SetLegStart()
 }
 
 // JMW this is slow way to do things...
-static bool CheckLandableReachableTerrain(const NMEA_INFO *Basic,
-                                          const DERIVED_INFO *Calculated,
+static bool CheckLandableReachableTerrain(const NMEA_INFO &Basic,
+                                          const DERIVED_INFO &Calculated,
 					  const SETTINGS_COMPUTER &settings,
                                           double LegToGo,
                                           double LegBearing) {
@@ -2053,8 +2053,7 @@ public:
       } else {
 	wpcalc.Reachable = true;
 	if (!reachable || wpcalc.InTask) {
-	  if (CheckLandableReachableTerrain(&gps_info,
-					    &calculated_info,
+          if (CheckLandableReachableTerrain(gps_info, calculated_info,
 					    settings,
 					    WaypointDistance,
 					    WaypointBearing)) {
