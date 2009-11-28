@@ -735,6 +735,10 @@ void SaveRegistryToFile(const TCHAR *szFile)
   } uValue;
 #else
   BYTE pValue[nMaxValueValueSize+1];
+
+  char sName[MAX_PATH];
+  char sValue[MAX_PATH];
+
 #endif
 
   HKEY hkFrom;
