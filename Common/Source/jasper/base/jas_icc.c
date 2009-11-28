@@ -59,8 +59,6 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-#include "Compatibility/string.h"
-
 #include <assert.h>
 #include <jasper/jas_config.h>
 #include <jasper/jas_types.h>
