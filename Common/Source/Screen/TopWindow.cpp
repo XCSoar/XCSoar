@@ -106,8 +106,16 @@ TopWindow::set(LPCTSTR cls, LPCTSTR text,
   unicode2ascii(text, text2);
   ::SDL_WM_SetCaption(text2, NULL);
 #else /* !ENABLE_SDL */
-  Window::set(NULL, cls, text, left, top, width, height,
-              (DWORD)(WS_SYSMENU|WS_CLIPCHILDREN|WS_CLIPSIBLINGS));
+
+  ContainerWindow * top_parent = NULL;
+  DWORD 			style = (DWORD)(WS_SYSMENU|WS_CLIPCHILDREN|WS_CLIPSIBLINGS);
+
+  #if defined(sim_top_window_override)
+	extern void sim_top_window_override(ContainerWindow * &parent, int &left, int &top, unsigned &width, unsigned &height, DWORD &style);
+	sim_top_window_override(top_parent, left, top, width, height, style);
+  #endif
+
+  Window::set(top_parent, cls, text, left, top, width, height, style);
 
 #if defined(GNAV) && !defined(PCGNAV)
   // TODO code: release the handle?
