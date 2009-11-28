@@ -53,9 +53,8 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "Components.hpp"
 #include "Interface.hpp"
+#include "Asset.hpp"
 
-
-///////////////////////////////////////
 bool COMPORTCHANGED = false;
 bool MAPFILECHANGED = false;
 bool AIRSPACEFILECHANGED = false;
@@ -67,7 +66,6 @@ bool POLARFILECHANGED = false;
 bool LANGUAGEFILECHANGED = false;
 bool STATUSFILECHANGED = false;
 bool INPUTFILECHANGED = false;
-
 
 void SettingsEnter() {
   draw_thread->suspend();
@@ -86,7 +84,6 @@ void SettingsEnter() {
   INPUTFILECHANGED = false;
   COMPORTCHANGED = false;
 }
-
 
 void SettingsLeave() {
   if (!globalRunningEvent.test()) return;
@@ -120,42 +117,38 @@ void SettingsLeave() {
     TOPOLOGYFILECHANGED = true;
   }
 
-  if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED) || (AIRFIELDFILECHANGED))
-    {
-      task.ClearTask();
+  if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED) || (AIRFIELDFILECHANGED)) {
+    task.ClearTask();
 
-      // re-load terrain
-      terrain.CloseTerrain();
-      terrain.OpenTerrain();
+    // re-load terrain
+    terrain.CloseTerrain();
+    terrain.OpenTerrain();
 
-      // re-load waypoints
-      ReadWayPoints(way_points, terrain);
-      ReadAirfieldFile();
+    // re-load waypoints
+    ReadWayPoints(way_points, terrain);
+    ReadAirfieldFile();
 
-      // re-set home
-      if (WAYPOINTFILECHANGED || TERRAINFILECHANGED) {
-        SetHome(way_points, terrain, XCSoarInterface::SetSettingsComputer(),
-		WAYPOINTFILECHANGED);
-      }
-
-      //
-      terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
-
-      task.RefreshTask(XCSoarInterface::SetSettingsComputer());
+    // re-set home
+    if (WAYPOINTFILECHANGED || TERRAINFILECHANGED) {
+      SetHome(way_points, terrain, XCSoarInterface::SetSettingsComputer(),
+          WAYPOINTFILECHANGED);
     }
 
-  if (TOPOLOGYFILECHANGED)
-    {
-      topology->Close();
-      topology->Open();
-    }
+    terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
 
-  if(AIRSPACEFILECHANGED)
-    {
-      CloseAirspace();
-      ReadAirspace();
-      SortAirspace();
-    }
+    task.RefreshTask(XCSoarInterface::SetSettingsComputer());
+  }
+
+  if (TOPOLOGYFILECHANGED) {
+    topology->Close();
+    topology->Open();
+  }
+
+  if(AIRSPACEFILECHANGED) {
+    CloseAirspace();
+    ReadAirspace();
+    SortAirspace();
+  }
 
   if (POLARFILECHANGED) {
     CalculateNewPolarCoef();
@@ -184,13 +177,12 @@ void SettingsLeave() {
 
 
 void SystemConfiguration(void) {
-#ifndef _SIM_
-  if (XCSoarInterface::LockSettingsInFlight
+  if (!is_simulator() && XCSoarInterface::LockSettingsInFlight
       && XCSoarInterface::Calculated().Flying) {
     Message::AddMessage(TEXT("Settings locked in flight"));
     return;
   }
-#endif
+
   SettingsEnter();
   dlgConfigurationShowModal();
   SettingsLeave();

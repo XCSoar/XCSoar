@@ -42,7 +42,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
-
+#include "Asset.hpp"
 
 #ifdef ENABLE_UNUSED_CODE
 void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
@@ -170,12 +170,11 @@ void Profile::StoreRegistry(void) {
 }
 
 void SetProfileFiles(const TCHAR *override) {
-#ifdef GNAV
-  LocalPath(defaultProfileFile,TEXT("config/xcsoar-registry.prf"));
-#else
-  //LocalPath(defaultProfileFile,TEXT("xcsoar-registry.prf"));
-  LocalPath(defaultProfileFile,TEXT(XCSPROFILE)); // VENTA4
-#endif
+  if (is_altair())
+    LocalPath(defaultProfileFile, TEXT("config/xcsoar-registry.prf"));
+  else
+    LocalPath(defaultProfileFile, TEXT(XCSPROFILE));
+
   // LocalPath(failsafeProfileFile,TEXT("xcsoar-registry.prf")); VENTA4
   LocalPath(failsafeProfileFile,TEXT(XCSPROFILE));
   _tcscpy(startProfileFile, defaultProfileFile);

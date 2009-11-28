@@ -57,8 +57,6 @@ Copyright_License {
 
 #include "TaskVisitor.hpp"
 
-//////////////////////
-
 class DrawAbortedTaskVisitor:
   public AbsoluteTaskPointVisitor
 {
@@ -66,23 +64,29 @@ public:
   DrawAbortedTaskVisitor(Canvas &_canvas, const POINT &_orig):
     canvas(&_canvas),orig(_orig) {}
 
-  void visit_task_point_start(TASK_POINT &point, const unsigned index)
+  void
+  visit_task_point_start(TASK_POINT &point, const unsigned index)
   {
     canvas->line(way_points.get_calc(point.Index).Screen, orig);
   };
-  void visit_task_point_intermediate(TASK_POINT &point, const unsigned index)
+
+  void
+  visit_task_point_intermediate(TASK_POINT &point, const unsigned index)
   {
     visit_task_point_start(point,index);
   };
-  void visit_task_point_final(TASK_POINT &point, const unsigned index) {
+
+  void
+  visit_task_point_final(TASK_POINT &point, const unsigned index)
+  {
     visit_task_point_start(point,index);
   };
+
 private:
   Canvas *canvas;
   POINT orig;
   Color whitecolor;
 };
-
 
 void
 MapWindow::DrawAbortedTask(Canvas &canvas)
@@ -92,10 +96,6 @@ MapWindow::DrawAbortedTask(Canvas &canvas)
   DrawAbortedTaskVisitor dv(canvas, Orig_Aircraft);
   task.scan_point_forward(dv, false); // read lock
 }
-
-//////////////////
-
-
 
 class DrawTaskVisitor:
   public AbsoluteTaskPointVisitor,
@@ -120,49 +120,52 @@ public:
     dash_pen2(Pen::DASH, IBLSCALE(2), Color(127, 127, 127)),
     activeIndex(_activeIndex)
   {
-
   }
 
-  void visit_start_point(START_POINT &point, const unsigned index)
+  void
+  visit_start_point(START_POINT &point, const unsigned index)
   {
     DrawStartSector((*start_screen)[index].SectorStart,
                     (*start_screen)[index].SectorEnd, point.Index);
   };
-  void visit_task_point_start(TASK_POINT &point, const unsigned index)
+
+  void
+  visit_task_point_start(TASK_POINT &point, const unsigned index)
   {
     DrawStartSector((*task_screen)[index].SectorStart,
                     (*task_screen)[index].SectorEnd, point.Index);
   };
 
-
-  void visit_task_point_intermediate_aat(TASK_POINT &point, const unsigned i)
+  void
+  visit_task_point_intermediate_aat(TASK_POINT &point, const unsigned i)
   {
     // JMW added iso lines
     if ((i==activeIndex)
-	|| (map_window->SettingsMap().TargetPan
-	    && ((int)i==map_window->SettingsMap().TargetPanIndex))) {
+        || (map_window->SettingsMap().TargetPan
+            && ((int)i==map_window->SettingsMap().TargetPanIndex))) {
       // JMW 20080616 flash arc line if very close to target
       static bool flip = false;
 
       if (map_window->Calculated().WaypointDistance<200.0) { // JMW hardcoded AATCloseDistance
-	flip = !flip;
+        flip = !flip;
       } else {
-	flip = true;
+        flip = true;
       }
+
       if (flip) {
-	for (int j=0; j<MAXISOLINES-1; j++) {
-	  if (point.IsoLine_valid[j]
-	      && point.IsoLine_valid[j+1]) {
-	    canvas->select(penb2);
-	    canvas->line((*task_screen)[i].IsoLine_Screen[j],
-			 (*task_screen)[i].IsoLine_Screen[j + 1]);
-	  }
-	}
+        for (int j=0; j<MAXISOLINES-1; j++) {
+          if (point.IsoLine_valid[j] && point.IsoLine_valid[j+1]) {
+            canvas->select(penb2);
+            canvas->line((*task_screen)[i].IsoLine_Screen[j],
+                         (*task_screen)[i].IsoLine_Screen[j + 1]);
+          }
+        }
       }
     }
   }
 
-  void visit_task_point_intermediate_non_aat(TASK_POINT &point, const unsigned i)
+  void
+  visit_task_point_intermediate_non_aat(TASK_POINT &point, const unsigned i)
   {
     const POINT &wp = way_points.get_calc(point.Index).Screen;
 
@@ -196,7 +199,8 @@ public:
   }
 
 
-  void visit_task_point_intermediate(TASK_POINT &point, const unsigned index)
+  void
+  visit_task_point_intermediate(TASK_POINT &point, const unsigned index)
   {
     if(_task->getSettings().AATEnabled) {
       visit_task_point_intermediate_aat(point, index);
@@ -205,47 +209,50 @@ public:
     }
   };
 
-  //////
-
-  void visit_task_point_final(TASK_POINT &point, const unsigned index) {
-
-    if (activeIndex>1) {
-      // only draw finish line when past the first
-      // waypoint.
+  void
+  visit_task_point_final(TASK_POINT &point, const unsigned index)
+  {
+    if (activeIndex > 1) {
+      // only draw finish line when past the first waypoint
       const POINT &wp = way_points.get_calc(point.Index).Screen;
 
       if(_task->getSettings().FinishType != FINISH_CIRCLE) {
-	canvas->select(dash_pen5);
-	canvas->two_lines((*task_screen)[index].SectorStart,
-			  wp,
-			  (*task_screen)[index].SectorEnd);
-	canvas->select(MapGfx.hpStartFinishThin);
-	canvas->two_lines((*task_screen)[index].SectorStart,
-			  wp,
-			  (*task_screen)[index].SectorEnd);
+        canvas->select(dash_pen5);
+        canvas->two_lines((*task_screen)[index].SectorStart, wp,
+            (*task_screen)[index].SectorEnd);
+        canvas->select(MapGfx.hpStartFinishThin);
+        canvas->two_lines((*task_screen)[index].SectorStart, wp,
+            (*task_screen)[index].SectorEnd);
       } else {
-	unsigned tmp = map_window->
-          DistanceMetersToScreen(_task->getSettings().FinishRadius);
-	canvas->hollow_brush();
-	canvas->select(MapGfx.hpStartFinishThick);
-	canvas->circle(wp.x, wp.y, tmp);
-	canvas->select(MapGfx.hpStartFinishThin);
-	canvas->circle(wp.x, wp.y, tmp);
+        unsigned tmp = map_window->
+            DistanceMetersToScreen(_task->getSettings().FinishRadius);
+
+        canvas->hollow_brush();
+        canvas->select(MapGfx.hpStartFinishThick);
+        canvas->circle(wp.x, wp.y, tmp);
+        canvas->select(MapGfx.hpStartFinishThin);
+        canvas->circle(wp.x, wp.y, tmp);
       }
     }
   };
 
-  void visit_leg_multistart(START_POINT &start, const unsigned index0, TASK_POINT &point)
+  void
+  visit_leg_multistart(START_POINT &start, const unsigned index0,
+                       TASK_POINT &point)
   {
     // nothing to draw
   };
-  void visit_leg_intermediate(TASK_POINT &point0, const unsigned index0,
-			      TASK_POINT &point1, const unsigned index1)
+
+  void
+  visit_leg_intermediate(TASK_POINT &point0, const unsigned index0,
+                         TASK_POINT &point1, const unsigned index1)
   {
     visit_leg_final(point0, index0, point1, index1);
   };
-  void visit_leg_final(TASK_POINT &point0, const unsigned index0,
-		       TASK_POINT &point1, const unsigned index1)
+
+  void
+  visit_leg_final(TASK_POINT &point0, const unsigned index0,
+                  TASK_POINT &point1, const unsigned index1)
   {
     bool is_first = (point0.Index < point1.Index);
     int imin = min(point0.Index,point1.Index);
@@ -301,8 +308,9 @@ private:
   const Pen dash_pen2;
   unsigned activeIndex;
 
-  void DrawStartSector(const POINT &Start,
-		       const POINT &End, const unsigned Index)
+  void
+  DrawStartSector(const POINT &Start,
+                  const POINT &End, const unsigned Index)
   {
     if (activeIndex>=2) {
       // don't draw if on second leg or beyond
@@ -311,7 +319,6 @@ private:
 
     const WPCALC &wpcalc = way_points.get_calc(Index);
     if(_task->getSettings().StartType != START_CIRCLE) {
-
       canvas->select(MapGfx.hpStartFinishThick);
       canvas->line(wpcalc.Screen, Start);
       canvas->line(wpcalc.Screen, End);
@@ -327,20 +334,16 @@ private:
       canvas->circle(wpcalc.Screen.x, wpcalc.Screen.y, tmp);
     }
   };
-
 };
 
-
-void MapWindow::DrawTask(Canvas &canvas, RECT rc)
+void
+MapWindow::DrawTask(Canvas &canvas, RECT rc)
 {
   DrawTaskVisitor dv(*this, canvas, Orig_Aircraft, task_screen, task_start_screen,
                      task.getActiveIndex());
   task.scan_leg_forward(dv, false);   // read lock
   task.scan_point_forward(dv, false); // read lock
 }
-
-///////
-
 
 class DrawTaskAATVisitor:
   public AbsoluteTaskPointVisitor
@@ -364,10 +367,13 @@ public:
     buffer.rectangle(rc.left, rc.top, rc.right, rc.bottom);
   }
 
-  void visit_task_point_start(TASK_POINT &point, const unsigned index)
+  void
+  visit_task_point_start(TASK_POINT &point, const unsigned index)
   {
   };
-  void visit_task_point_intermediate(TASK_POINT &point, const unsigned i)
+
+  void
+  visit_task_point_intermediate(TASK_POINT &point, const unsigned i)
   {
     const WPCALC &wpcalc = way_points.get_calc(point.Index);
     unsigned tmp;
@@ -415,8 +421,12 @@ public:
                        task_screen[i].AATFinish);
     }
   };
-  void visit_task_point_final(TASK_POINT &point, const unsigned index) {
+
+  void
+  visit_task_point_final(TASK_POINT &point, const unsigned index)
+  {
   };
+
 private:
   MapWindowProjection &map;
   unsigned activeIndex;
@@ -429,7 +439,8 @@ private:
 };
 
 
-void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
+void
+MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
   if (task.getSettings().AATEnabled) {
     DrawTaskAATVisitor dv(canvas, rc, buffer, task.getActiveIndex(),
@@ -439,9 +450,6 @@ void MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
     canvas.copy_transparent_white(buffer, rc);
   }
 }
-
-//////////////////////////////////////
-
 
 class DrawTargetVisitor:
   public RelativeTaskPointVisitor,
@@ -454,7 +462,9 @@ public:
     canvas(_canvas), map(_map), draw_bearing(_draw_bearing)
   {
   }
-  void visit_task_point_current(TASK_POINT &point, const unsigned i)
+
+  void
+  visit_task_point_current(TASK_POINT &point, const unsigned i)
   {
     if (i>0) {
       map.draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget,
@@ -462,15 +472,18 @@ public:
                                         10, 10);
     }
   };
-  void visit_task_point_after(TASK_POINT &point, const unsigned i) {
+
+  void
+  visit_task_point_after(TASK_POINT &point, const unsigned i) {
     // always draw all targets ahead if in pan mode
     if (map.SettingsMap().EnablePan || map.SettingsMap().TargetPan) {
       visit_task_point_current(point, i);
     }
   };
-  //
-  void visit_leg_current(TASK_POINT &point0, const unsigned index0,
-                         TASK_POINT &point1, const unsigned index1)
+
+  void
+  visit_leg_current(TASK_POINT &point0, const unsigned index0,
+                    TASK_POINT &point1, const unsigned index1)
   {
     if (draw_bearing) {
       GEOPOINT start = map.Basic().Location;
@@ -478,8 +491,10 @@ public:
       map.DrawGreatCircle(canvas, start, target);
     }
   };
-  void visit_leg_after(TASK_POINT &point0, const unsigned index0,
-                       TASK_POINT &point1, const unsigned index1)
+
+  void
+  visit_leg_after(TASK_POINT &point0, const unsigned index0,
+                  TASK_POINT &point1, const unsigned index1)
   {
     if (index0==0) {
       // before start
@@ -499,9 +514,10 @@ private:
   bool draw_bearing;
 };
 
-
-void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
-{ /* RLD bearing is invalid if GPS not connected and in non-sim mode,
+void
+MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
+{
+  /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
 
   DrawTargetVisitor tv(canvas, *this, bBearingValid);
@@ -510,8 +526,6 @@ void MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
     task.scan_point_forward(tv, false); // read lock
   }
 }
-
-
 
 void
 MapWindow::DrawOffTrackIndicator(Canvas &canvas)
@@ -577,8 +591,6 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
   }
 }
 
-
-
 void
 MapWindow::DrawProjectedTrack(Canvas &canvas)
 {
@@ -636,7 +648,6 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
   canvas.line(pt[0], pt[1]);
 }
 
-
 class ScreenPositionsTaskVisitor:
   public AbsoluteTaskPointVisitor {
 public:
@@ -649,7 +660,9 @@ public:
     start_screen(&_start_screen),
     activeIndex(_activeIndex)
   {}
-  void visit_start_point(START_POINT &point, const unsigned i)
+
+  void
+  visit_start_point(START_POINT &point, const unsigned i)
   {
     map->LonLat2Screen(point.SectorEnd,
 		       (*task_screen)[i].SectorEnd);
@@ -657,7 +670,9 @@ public:
 		       (*task_screen)[i].SectorStart);
 
   };
-  void visit_task_point_start(TASK_POINT &point, const unsigned i)
+
+  void
+  visit_task_point_start(TASK_POINT &point, const unsigned i)
   {
     if (_task->getSettings().AATEnabled) {
       map->LonLat2Screen(point.AATTargetLocation, (*task_screen)[i].Target);
@@ -674,7 +689,9 @@ public:
     }
 
   };
-  void visit_task_point_intermediate(TASK_POINT &point, const unsigned i)
+
+  void
+  visit_task_point_intermediate(TASK_POINT &point, const unsigned i)
   {
     visit_task_point_start(point, i);
     if (_task->getSettings().AATEnabled
@@ -683,17 +700,20 @@ public:
                 && ((int)i==map->SettingsMap().TargetPanIndex)))) {
 
       for (int j=0; j<MAXISOLINES; j++) {
-	if (point.IsoLine_valid[j]) {
-	  map->LonLat2Screen(point.IsoLine_Location[j],
-			     (*task_screen)[i].IsoLine_Screen[j]);
-	}
+        if (point.IsoLine_valid[j]) {
+          map->LonLat2Screen(point.IsoLine_Location[j],
+              (*task_screen)[i].IsoLine_Screen[j]);
+        }
       }
     }
   };
-  void visit_task_point_final(TASK_POINT &point, const unsigned i)
+
+  void
+  visit_task_point_final(TASK_POINT &point, const unsigned i)
   {
     visit_task_point_start(point, i);
   };
+
 private:
   MapWindow* map;
   TaskScreen_t *task_screen;
@@ -701,12 +721,11 @@ private:
   unsigned activeIndex;
 };
 
-
-
-void MapWindow::CalculateScreenPositionsTask() {
+void
+MapWindow::CalculateScreenPositionsTask()
+{
 
   ScreenPositionsTaskVisitor sv(*this, task_screen, task_start_screen,
     task.getActiveIndex());
   task.scan_point_forward(sv, false); // read lock
 }
-

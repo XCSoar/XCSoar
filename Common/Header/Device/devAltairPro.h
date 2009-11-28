@@ -38,6 +38,6 @@ Copyright_License {
 #ifndef	DEVALTAIR_H
 #define	DEVALTAIR_H
 
-bool atrRegister(void);
+extern const struct DeviceRegister atrDevice;
 
 #endif

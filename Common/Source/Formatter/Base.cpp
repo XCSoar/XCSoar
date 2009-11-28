@@ -366,7 +366,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 65: // battery voltage
-#ifndef WINDOWSPC
+#if !defined(WINDOWSPC) && !defined(HAVE_POSIX)
 #ifndef GNAV
     Value = PDABatteryPercent;
     Valid = true;

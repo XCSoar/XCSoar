@@ -92,10 +92,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Task.h"
 #include "Logger.h"
 #include "WayPointList.hpp"
-
-#ifdef PNA
 #include "Asset.hpp"
-#endif
 
 #include <assert.h>
 #include <ctype.h>
@@ -283,9 +280,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
   // VENTA-ADDON TOGGLE SCROLLWHEEL as INPUT on the HP31X
   //
 
-#ifdef PNA
-
-    if ( GlobalModelType == MODELTYPE_PNA_HP31X ) {
+    if (model_is_hp31x()) {
       // 1 normal > 2 aux > 3 biginfo > 4 fullscreen
       short pnascrollstatus;
       pnascrollstatus=1;
@@ -322,9 +317,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
       default:
 	break;
       } // switch pnascrollstatus
-    } // not a PNA_HP31X
-    else
-      {
+    } else if (is_pna()) {
 	if (SettingsMap().EnableAuxiliaryInfo) {
 	  if (SettingsComputer().EnableSoundModes)
             PlayResource(TEXT("IDR_WAV_CLICK"));
@@ -341,9 +334,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
             SetSettingsMap().EnableAuxiliaryInfo = true;
 	  }
 	}
-      } // fallback for other PNAs
-
-#else // UNDEFINED PNA
+    } else {
     if (SettingsMap().EnableAuxiliaryInfo) {
       if (SettingsComputer().EnableSoundModes)
 	PlayResource(TEXT("IDR_WAV_CLICK"));
@@ -356,7 +347,7 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 	SetSettingsMap().EnableAuxiliaryInfo = true;
       }
     }
-#endif // def/undef PNA
+    }
   }
 
   // refresh display

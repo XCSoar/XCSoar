@@ -43,6 +43,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "Version.hpp"
+#include "Asset.hpp"
 
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wSplash=NULL;
@@ -102,11 +103,10 @@ void dlgStartupShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-#ifdef GNAV
-    dfe->ScanDirectoryTop(TEXT("config/*.prf"));
-#else
-    dfe->ScanDirectoryTop(TEXT("*.prf"));
-#endif
+    if (is_altair())
+      dfe->ScanDirectoryTop(TEXT("config/*.prf"));
+    else
+      dfe->ScanDirectoryTop(TEXT("*.prf"));
     dfe->Lookup(startProfileFile);
     wp->RefreshDisplay();
     if (dfe->GetNumFiles()<=2) {

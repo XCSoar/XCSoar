@@ -258,14 +258,19 @@ public:
     polyline(lppt, cPoints);
   }
 
-  void clipped_line(const POINT a, const POINT b, const RECT rc) {
+  void autoclip_polygon(const POINT* lppt, unsigned cPoints, const RECT rc) {
     // XXX clip
-    line(a.x, a.y, b.x, b.y);
+    polygon(lppt, cPoints);
   }
 
-  void clipped_dashed_line(int width, const POINT a, const POINT b,
-                           const Color color, const RECT rc) {
-    // XXX width & clip & dash
+  void autoclip_polyline(const POINT* lppt, unsigned cPoints, const RECT rc) {
+    // XXX clip
+    polyline(lppt, cPoints);
+  }
+
+  void autoclip_dashed_line(int width, const POINT a, const POINT b,
+                            const Color color, const RECT rc) {
+    // XXX width & dash
     line(a.x, a.y, b.x, b.y);
   }
 
@@ -634,9 +639,18 @@ public:
   void clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc,
                        bool fill=true);
   void clipped_polyline(const POINT* lppt, unsigned cPoints, const RECT rc);
-  void clipped_line(const POINT a, const POINT b, const RECT rc);
+
+  void autoclip_polygon(const POINT *lppt, unsigned cPoints, const RECT rc);
+  void autoclip_polyline(const POINT *lppt, unsigned cPoints, const RECT rc);
+
+private:
   void clipped_dashed_line(int width, const POINT a, const POINT b,
                            const Color color, const RECT rc);
+  void dashed_line(int width, const POINT a, const POINT b, const Color color);
+
+public:
+  void autoclip_dashed_line(int width, const POINT a, const POINT b,
+                            const Color color, const RECT rc);
 
   void line(int ax, int ay, int bx, int by);
   void line(const POINT a, const POINT b) {

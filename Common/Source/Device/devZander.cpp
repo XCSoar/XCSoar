@@ -69,8 +69,7 @@ static BOOL ZanderParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
 
 }
 
-
-static const DeviceRegister_t zanderDevice = {
+const struct DeviceRegister zanderDevice = {
   TEXT("Zander"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
   ZanderParseNMEA,		// ParseNMEA
@@ -92,11 +91,6 @@ static const DeviceRegister_t zanderDevice = {
   NULL,				// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool zanderRegister(void){
-  return devRegister(&zanderDevice);
-}
-
 
 // *****************************************************************************
 // local stuff

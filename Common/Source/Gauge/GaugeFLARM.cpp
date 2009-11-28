@@ -59,20 +59,31 @@ using std::min;
 using std::max;
 #endif
 
+// TODO TB: use these?!
 static Color colTextGray;
 static Color colText;
 static Color colTextBackgnd;
 
 #define FLARMMAXRANGE 2000
 
+/**
+ * Returns the distance scaled at a quadratic(?) scale
+ * @param d Distance to the own plane
+ */
 int GaugeFLARM::RangeScale(double d) {
   double drad = max(0.0,1.0-d/FLARMMAXRANGE);
   return iround(radius*(1.0-drad*drad));
 }
 
+/**
+ * Draws the FLARM gauge background bitmap to the given canvas
+ * @param canvas Canvas for painting
+ */
 void GaugeFLARM::RenderBg(Canvas &canvas) {
+  // Load the background bitmap
   BitmapCanvas hdcTemp(canvas, hRoseBitMap);
 
+  // If it doesn't fit, make it fit
   if (hRoseBitMapSize.cx != IBLSCALE(InfoBoxLayout::ControlWidth * 2) ||
       hRoseBitMapSize.cy != IBLSCALE(InfoBoxLayout::ControlHeight * 2 - 1)) {
     canvas.stretch(0, 0,
@@ -80,41 +91,45 @@ void GaugeFLARM::RenderBg(Canvas &canvas) {
                    InfoBoxLayout::ControlHeight * 2 - 1,
                    hdcTemp,
                    0, 0, hRoseBitMapSize.cx, hRoseBitMapSize.cy);
-  }
-  else
-  {
+  } else {
     canvas.copy(0, 0, InfoBoxLayout::ControlWidth * 2,
                 InfoBoxLayout::ControlHeight * 2 - 1,
                 hdcTemp, 0, 0);
   }
-
 }
 
 #include "WindowControls.h" // just to get colors
 
+/**
+ * Renders the FLARM traffic to the given canvas
+ * @param canvas Canvas for drawing
+ * @param gps_info NMEA_INFO struct containing the FLARM targets
+ */
 void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 {
   // TODO enhancement: support red/green Color blind pilots
 
+  // Set font and colors
   canvas.select(TitleWindowFont);
   canvas.set_text_color(Color(0x0,0x0,0x0));
   canvas.set_background_color(Color(0xff,0xff,0xff));
 
+  // Cycle through FLARM targets
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (gps_info.FLARM_Traffic[i].ID>0) {
-
+      // Set the arrow color depending on alarm level
       switch (gps_info.FLARM_Traffic[i].AlarmLevel) {
       case 1:
         canvas.select(MapGfx.yellowBrush);
-	  break;
+        break;
       case 2:
       case 3:
         canvas.select(MapGfx.redBrush);
-	  break;
+        break;
       case 0:
       case 4:
         canvas.select(MapGfx.greenBrush);
-	  break;
+        break;
       }
 
       double x, y;
@@ -122,21 +137,24 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
       y = -gps_info.FLARM_Traffic[i].RelativeNorth;
       double d = sqrt(x*x+y*y);
       if (d>0) {
-	x/= d;
-	y/= d;
+        x /= d;
+        y /= d;
       } else {
-	x= 0;
-	y= 0;
+        x = 0;
+        y = 0;
       }
       double dh = gps_info.FLARM_Traffic[i].RelativeAltitude;
       double slope = atan2(dh,d)*2.0/3.14159; // (-1,1)
 
       slope = max(-1.0,min(1.0,slope*2)); // scale so 45 degrees or more=90
 
+      // QUESTION TB: what about north up mode???
       double DisplayAngle = -gps_info.TrackBearing;
       rotate(x, y, DisplayAngle); 	// or use .Heading?
+
       double scale = RangeScale(d);
 
+      // Calculate screen coordinates
       POINT sc;
       sc.x = center.x + iround(x*scale);
       sc.y = center.y + iround(y*scale);
@@ -148,8 +166,8 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
                     center.y + iround(radius*y));
       }
 
+      // Create an arrow polygon
       POINT Arrow[5];
-
       Arrow[0].x = -3;
       Arrow[0].y = 4;
       Arrow[1].x = 0;
@@ -161,60 +179,88 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
       Arrow[4].x = -3;
       Arrow[4].y = 4;
 
+      // Rotate and shift the arrow
       PolygonRotateShift(Arrow, 5, sc.x, sc.y,
                          gps_info.FLARM_Traffic[i].TrackBearing
                          + DisplayAngle);
+
+      // Draw the polygon
       canvas.polygon(Arrow, 5);
 
       short relalt =
-	iround(gps_info.FLARM_Traffic[i].RelativeAltitude*ALTITUDEMODIFY/100);
+          iround(gps_info.FLARM_Traffic[i].RelativeAltitude*ALTITUDEMODIFY/100);
 
+      // if (relative altitude is other than zero)
       if (relalt != 0) {
-	TCHAR Buffer[10];
-	_stprintf(Buffer, TEXT("%d"), abs(relalt));
-        SIZE tsize = canvas.text_size(Buffer);
-	tsize.cx = (tsize.cx+IBLSCALE(6))/2;
-        canvas.text(sc.x - tsize.cx + IBLSCALE(7),
-                    sc.y - tsize.cy - IBLSCALE(5),
-                    Buffer);
-        canvas.black_brush();
-	POINT triangle[4];
-	triangle[0].x = 3;  // was  2
-	triangle[0].y = -3; // was -2
-	triangle[1].x = 6;  // was 4
-	triangle[1].y = 1;
-	triangle[2].x = 0;
-	triangle[2].y = 1;
-	short flip = 1;
-	if (relalt<0) {
-	  flip = -1;
-	}
-	for (int j=0; j<3; j++) {
-	  triangle[j].x = sc.x+IBLSCALE(triangle[j].x)-tsize.cx;
-	  triangle[j].y = sc.y+flip*IBLSCALE(triangle[j].y)
-	    -tsize.cy/2-IBLSCALE(5);
-          }
-	triangle[3].x = triangle[0].x;
-	triangle[3].y = triangle[0].y;
-        canvas.polygon(triangle, 4);
+        // Write the relativ altitude devided by 100 to the Buffer
+        TCHAR Buffer[10];
+        _stprintf(Buffer, TEXT("%d"), abs(relalt));
 
+        // Calculate size of the output string
+        SIZE tsize = canvas.text_size(Buffer);
+        tsize.cx = (tsize.cx+IBLSCALE(6))/2;
+
+        // Draw string
+        canvas.text(sc.x - tsize.cx + IBLSCALE(7),
+            sc.y - tsize.cy - IBLSCALE(5),
+            Buffer);
+
+        // Set black brush for the up/down arrow
+        canvas.black_brush();
+
+        // Prepare the triangular polygon
+        POINT triangle[4];
+        triangle[0].x = 3;  // was  2
+        triangle[0].y = -3; // was -2
+        triangle[1].x = 6;  // was 4
+        triangle[1].y = 1;
+        triangle[2].x = 0;
+        triangle[2].y = 1;
+
+        // Flip = -1 for arrow pointing downwards
+        short flip = 1;
+        if (relalt<0) {
+          flip = -1;
+        }
+
+        // Shift the arrow to the right position
+        for (int j=0; j<3; j++) {
+          triangle[j].x = sc.x+IBLSCALE(triangle[j].x)-tsize.cx;
+          triangle[j].y = sc.y+flip*IBLSCALE(triangle[j].y)
+          -tsize.cy/2-IBLSCALE(5);
+        }
+        triangle[3].x = triangle[0].x;
+        triangle[3].y = triangle[0].y;
+
+        // Draw the arrow
+        canvas.polygon(triangle, 4);
       }
     }
   }
 }
 
-
+/**
+ * Render the FLARM gauge to the buffer canvas
+ * @param gps_info The NMEA_INFO struct containing the FLARM targets
+ */
 void GaugeFLARM::Render(const NMEA_INFO &gps_info)
 {
   if (Visible) {
+    // Render the background
     RenderBg(get_canvas());
+
+    // Render the traffic on top
     RenderTraffic(get_canvas(), gps_info);
 
+    // Draw buffer to the screen
     commit_buffer();
   }
 }
 
-
+/**
+ * Constructor of the GaugeFLARM class
+ * @param parent Parent window
+ */
 GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
   :Visible(false), ForceVisible(false), Suppress(false), Traffic(false)
 {
@@ -236,10 +282,13 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
   center.y = get_vmiddle();
   radius = min(get_right() - center.x, get_bottom() - center.y);
 
+  // Load the background bitmap
   hRoseBitMap.load(IDB_FLARMROSE);
 
+  // Save the size of the background bitmap
   hRoseBitMapSize = hRoseBitMap.get_size();
 
+  // Define colors
   if (Appearance.InverseInfoBox){
     colText = Color(0xff, 0xff, 0xff);
     colTextBackgnd = Color(0x00, 0x00, 0x00);
@@ -250,22 +299,31 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
     colTextGray = Color(~0xa0, ~0xa0, ~0xa0);
   }
 
+  // Set colors
   get_canvas().set_text_color(colText);
   get_canvas().set_background_color(colTextBackgnd);
 
   install_wndproc();
 
+  // Render Background for the first time
   RenderBg(get_canvas());
 
+  // Hide the gauge
   Show(false);
 }
 
-
+/**
+ * Sets the Traffic field of the class to present
+ * @param present New value for the Traffic field
+ */
 void GaugeFLARM::TrafficPresent(bool present) {
   Traffic = present;
 }
 
-
+/**
+ * Shows or hides the FLARM gauge depending on enable_gauge
+ * @param enable_gauge Enables the gauge if true, disables otherwise
+ */
 void GaugeFLARM::Show(const bool enable_gauge) {
   Visible = ForceVisible || (Traffic && enable_gauge && !Suppress);
   static bool lastvisible = true;

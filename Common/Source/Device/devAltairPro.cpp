@@ -120,7 +120,7 @@ BOOL atrOnSysTicker(DeviceDescriptor_t *d){
   return(TRUE);
 }
 
-static const DeviceRegister_t atrDevice = {
+const struct DeviceRegister atrDevice = {
   TEXT("Altair Pro"),
   drfGPS | drfBaroAlt, // drfLogger - ToDo
   atrParseNMEA,			// ParseNMEA
@@ -142,8 +142,3 @@ static const DeviceRegister_t atrDevice = {
   atrOnSysTicker,		// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool atrRegister(void){
-  return devRegister(&atrDevice);
-}
-

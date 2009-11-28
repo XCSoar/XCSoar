@@ -67,8 +67,7 @@ BOOL B50ParseNMEA(PDeviceDescriptor_t d, const TCHAR *String,
 
 }
 
-
-static const DeviceRegister_t b50Device = {
+const struct DeviceRegister b50Device = {
   TEXT("Borgelt B50"),
   drfGPS,
   B50ParseNMEA,			// ParseNMEA
@@ -90,11 +89,6 @@ static const DeviceRegister_t b50Device = {
   NULL,				// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool b50Register(void){
-  return devRegister(&b50Device);
-}
-
 
 // *****************************************************************************
 // local stuff

@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef DEVBLX_H
 #define DEVBLX_H
 
-bool lxRegister(void);
+extern const struct DeviceRegister lxDevice;
 
 #endif
 

@@ -48,7 +48,6 @@ struct NMEA_INFO;
 
 #define DEVNAMESIZE  32
 #define	NUMDEV		 2
-#define	NUMREGDEV	 20
 
 #define	devA()	    (&DeviceList[0])
 #define	devB()	    (&DeviceList[1])
@@ -83,7 +82,7 @@ typedef	struct DeviceDescriptor_t{
   ComPort *Com;
   TCHAR	Name[DEVNAMESIZE+1];
   DeviceDescriptor_t *pDevPipeTo;
-  struct DeviceRegister *Driver;
+  const struct DeviceRegister *Driver;
   bool ticker;
 }DeviceDescriptor_t;
 
@@ -127,15 +126,17 @@ typedef	struct DeviceRegister {
 
 
 extern DeviceDescriptor_t	DeviceList[NUMDEV];
-extern DeviceRegister_t   DeviceRegister[NUMREGDEV];
-extern int DeviceRegisterCount;
+
+/**
+ * NULL terminated array of available device drivers.
+ */
+extern const struct DeviceRegister *const DeviceRegister[];
+
 extern DeviceDescriptor_t *pDevPrimaryBaroSource;
 extern DeviceDescriptor_t *pDevSecondaryBaroSource;
 
-BOOL devRegister(const DeviceRegister_t *devReg);
 BOOL devRegisterGetName(int Index, TCHAR *Name);
 
-BOOL devInit(LPCTSTR CommandLine);
 BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token);
 BOOL devHasBaroSource(void);
 
@@ -150,8 +151,6 @@ BOOL devPutFreqStandby(PDeviceDescriptor_t d,	double Freq);
 BOOL devPutThermal(PDeviceDescriptor_t	d, bool active, 
                    double longitude, double latitude, double W,
                    double R);
-BOOL devOpen(PDeviceDescriptor_t d,	int	Port);
-BOOL devClose(PDeviceDescriptor_t	d);
 BOOL devLinkTimeout(PDeviceDescriptor_t	d);
 BOOL devDeclare(PDeviceDescriptor_t	d, Declaration_t *decl);
 BOOL devIsLogger(PDeviceDescriptor_t d);
@@ -159,8 +158,6 @@ BOOL devIsGPSSource(PDeviceDescriptor_t	d);
 BOOL devIsBaroSource(PDeviceDescriptor_t d);
 BOOL devIsRadio(PDeviceDescriptor_t d);
 BOOL devIsCondor(PDeviceDescriptor_t d);
-BOOL devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName);
-BOOL devCloseLog(PDeviceDescriptor_t d);
 
 BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH);
 void devTick(void);

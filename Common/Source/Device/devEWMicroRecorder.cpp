@@ -268,9 +268,7 @@ EWMicroRecorderDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
   return(nDeclErrorCode == 0);                    // return() TRUE on success
 }
 
-
-
-static const DeviceRegister_t ewMicroRecorderDevice = {
+const struct DeviceRegister ewMicroRecorderDevice = {
   TEXT("EW MicroRecorder"),
   drfGPS | drfLogger | drfBaroAlt,
   EWMicroRecorderParseNMEA,	// ParseNMEA
@@ -292,10 +290,3 @@ static const DeviceRegister_t ewMicroRecorderDevice = {
   NULL,				// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool ewMicroRecorderRegister(void){
-  return devRegister(&ewMicroRecorderDevice);
-}
-
-
-

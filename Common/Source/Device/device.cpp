@@ -67,6 +67,7 @@ Copyright_License {
 #include "Device/devXCOM760.h"
 #include "Device/devCondor.h"
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
+#include "Asset.hpp"
 
 static Mutex mutexComm;
 
@@ -86,14 +87,35 @@ static Mutex mutexComm;
 static  const TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:"),TEXT("COM0:")};
 static  const DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
+const struct DeviceRegister *const DeviceRegister[] = {
+  // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
+  &genDevice, // MUST BE FIRST
+  &cai302Device,
+  &ewDevice,
+  &atrDevice,
+  &vgaDevice,
+  &caiGpsNavDevice,
+  &nmoDevice,
+  &pgDevice,
+  &b50Device,
+  &vlDevice,
+  &ewMicroRecorderDevice,
+  &lxDevice,
+  &zanderDevice,
+  &flymasterf1Device,
+  &xcom760Device,
+  &condorDevice,
+  NULL
+};
 
-DeviceRegister_t   DeviceRegister[NUMREGDEV];
+enum {
+  DeviceRegisterCount = sizeof(DeviceRegister) / sizeof(DeviceRegister[0]) - 1
+};
+
 DeviceDescriptor_t DeviceList[NUMDEV];
 
 DeviceDescriptor_t *pDevPrimaryBaroSource=NULL;
 DeviceDescriptor_t *pDevSecondaryBaroSource=NULL;
-
-int DeviceRegisterCount = 0;
 
 static BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl);
 
@@ -154,20 +176,11 @@ BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token){
 
 }
 
-
-BOOL devRegister(const DeviceRegister_t *devReg) {
-  if (DeviceRegisterCount >= NUMREGDEV)
-    return(FALSE);
-  DeviceRegister[DeviceRegisterCount] = *devReg;
-  DeviceRegisterCount++;
-  return(TRUE);
-}
-
 BOOL devRegisterGetName(int Index, TCHAR *Name){
   Name[0] = '\0';
   if (Index < 0 || Index >= DeviceRegisterCount)
     return (FALSE);
-  _tcscpy(Name, DeviceRegister[Index].Name);
+  _tcscpy(Name, DeviceRegister[Index]->Name);
   return(TRUE);
 }
 
@@ -182,30 +195,36 @@ BOOL devIsTrueReturn(PDeviceDescriptor_t d){
   return TRUE;
 }
 
-
-DeviceRegister_t *devGetDriver(const TCHAR *DevName)
+static const struct DeviceRegister *
+devGetDriver(const TCHAR *DevName)
 {
   int i;
 
   for (i = DeviceRegisterCount - 1; i >= 0; i--)
-    if (_tcscmp(DeviceRegister[i].Name, DevName) == 0 || i == 0)
-      return &DeviceRegister[i];
+    if (_tcscmp(DeviceRegister[i]->Name, DevName) == 0 || i == 0)
+      return DeviceRegister[i];
 
   return NULL;
 }
 
-BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
-		DWORD speed, PDeviceDescriptor_t &nmeaout)
+static bool
+devOpen(PDeviceDescriptor_t d, int Port);
+
+static bool
+devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName);
+
+static bool
+devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
+           DWORD speed, PDeviceDescriptor_t &nmeaout)
 {
   TCHAR DeviceName[DEVNAMESIZE];
 
-#ifdef _SIM_
+  if (is_simulator())
     return FALSE;
-#endif
 
   ReadDeviceSettings(index, DeviceName);
 
-  DeviceRegister_t *Driver = devGetDriver(DeviceName);
+  const struct DeviceRegister *Driver = devGetDriver(DeviceName);
 
   if (Driver) {
     ComPort *Com = new ComPort(dev);
@@ -237,7 +256,9 @@ BOOL devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
   return TRUE;
 }
 
-BOOL devInit(LPCTSTR CommandLine){
+static BOOL
+devInit(LPCTSTR CommandLine)
+{
   int i;
   PDeviceDescriptor_t pDevNmeaOut = NULL;
 
@@ -415,9 +436,8 @@ BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutMacCready)
@@ -431,9 +451,8 @@ BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutBugs)
@@ -447,9 +466,8 @@ BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutBallast)
@@ -461,7 +479,9 @@ BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
 
 // Only called from devInit() above which
 // is in turn called with mutexComm.Lock
-BOOL devOpen(PDeviceDescriptor_t d, int Port){
+static bool
+devOpen(PDeviceDescriptor_t d, int Port)
+{
   BOOL res = TRUE;
 
   if (d && d->Driver && d->Driver->Open)
@@ -476,7 +496,8 @@ BOOL devOpen(PDeviceDescriptor_t d, int Port){
 // Tear down methods should always succeed.
 // Called from devInit() above under LockComm
 // Also called when shutting down via devShutdown()
-BOOL devClose(PDeviceDescriptor_t d)
+static bool
+devClose(PDeviceDescriptor_t d)
 {
   if (d != NULL) {
     if (d->Driver && d->Driver->Close)
@@ -498,9 +519,8 @@ BOOL devLinkTimeout(PDeviceDescriptor_t d)
 {
   BOOL result = FALSE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d == NULL){
@@ -524,9 +544,8 @@ BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence)
 {
   BOOL result = FALSE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d == NULL){
@@ -549,9 +568,8 @@ BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
 {
   BOOL result = FALSE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d) {
@@ -643,9 +661,9 @@ BOOL devIsCondor(PDeviceDescriptor_t d)
   return result;
 }
 
-
-
-BOOL devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName){
+static bool
+devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName)
+{
   if (d != NULL){
     d->fhLogFile = _tfopen(FileName, TEXT("a+b"));
     return(d->fhLogFile != NULL);
@@ -653,7 +671,9 @@ BOOL devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName){
     return(FALSE);
 }
 
-BOOL devCloseLog(PDeviceDescriptor_t d){
+static bool
+devCloseLog(PDeviceDescriptor_t d)
+{
   if (d != NULL && d->fhLogFile != NULL){
     fclose(d->fhLogFile);
     return(TRUE);
@@ -665,9 +685,8 @@ BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH)
 {
   BOOL result = FALSE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d == NULL){
@@ -755,9 +774,8 @@ BOOL devPutVolume(PDeviceDescriptor_t d, int Volume)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutVolume != NULL)
@@ -771,9 +789,8 @@ BOOL devPutFreqActive(PDeviceDescriptor_t d, double Freq)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutFreqActive != NULL)
@@ -787,9 +804,8 @@ BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
 {
   BOOL result = TRUE;
 
-#ifdef _SIM_
-  return TRUE;
-#endif
+  if (is_simulator())
+    return true;
 
   mutexComm.Lock();
   if (d && d->Driver && d->Driver->PutFreqStandby != NULL)
@@ -925,25 +941,6 @@ void devStartup(LPTSTR lpCmdLine)
 {
   StartupStore(TEXT("Register serial devices\n"));
 
-  // ... register all supported devices
-  // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
-  genRegister(); // MUST BE FIRST
-  cai302Register();
-  ewRegister();
-  atrRegister();
-  vgaRegister();
-  caiGpsNavRegister();
-  nmoRegister();
-  pgRegister();
-  b50Register();
-  vlRegister();
-  ewMicroRecorderRegister();
-  lxRegister();
-  zanderRegister();
-  flymasterf1Register();
-  xcom760Register();
-  condorRegister();
-
   devInit(lpCmdLine);
 }
 
@@ -963,7 +960,9 @@ void devShutdown()
 
 ////////////////////////////////////////////////////////////////////////
 void devRestart() {
-#ifndef _SIM_
+  if (is_simulator())
+    return;
+
   /*
 #ifdef WINDOWSPC
   static bool first = true;
@@ -984,7 +983,6 @@ void devRestart() {
   devInit(TEXT(""));
 
   mutexComm.Unlock();
-#endif
 }
 
 void devConnectionMonitor()

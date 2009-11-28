@@ -73,6 +73,7 @@ CalculationThread::run()
 
     // update and transfer master info to glide computer
     mutexBlackboard.Lock();
+
     // if (new GPS data available)
     if (gps_trigger.test()) {
       // check for timeout on FLARM objects
@@ -84,7 +85,8 @@ CalculationThread::run()
       // inform map new data is ready
       drawTriggerEvent.trigger();
     }
-    // Copy GPS data from DeviceBlackboard to GlideComputerBlackboard
+
+    // Copy data from DeviceBlackboard to GlideComputerBlackboard
     glide_computer->ReadBlackboard(device_blackboard.Basic());
     // Copy settings form SettingsComputerBlackboard to GlideComputerBlackboard
     glide_computer->ReadSettingsComputer(device_blackboard.SettingsComputer());
@@ -95,6 +97,7 @@ CalculationThread::run()
     bool calculations_updated = false;
 
     // Do vario first to reduce audio latency
+    // (called also when gps_trigger is not active!!)
     if (glide_computer->Basic().VarioAvailable) {
       glide_computer->ProcessVario();
       calculations_updated = true;

@@ -61,6 +61,9 @@ Trigger triggerClimbEvent(TEXT("triggerClimb"));
 Mutex mutexBlackboard;
 // protect GPS_INFO, mcready etc,
 
+/**
+ * Triggers a GPS update resulting in a run of the calculation thread
+ */
 void TriggerGPSUpdate()
 {
   calculation_thread->trigger_gps();

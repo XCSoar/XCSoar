@@ -49,23 +49,45 @@ Copyright_License {
 #include "Components.hpp"
 #include "RasterWeather.h"
 
+/**
+ * Calculates the screen positions of all important features
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ */
 void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 {
+  // Calculate screen position of the aircraft
   CalculateOrigin(rc, Basic(), Calculated(),
 		  SettingsComputer(),
 		  SettingsMap());
+
+  // Calculate screen positions of the visible waypoints
   CalculateScreenPositionsWaypoints();
+
   CalculateScreenPositionsTask();
+
+  // Calculate screen positions of the airspaces
   CalculateScreenPositionsAirspace();
+
+  // Calculate screen positions of the thermal sources
   CalculateScreenPositionsThermalSources();
+
+  // Calculate screen positions of the final glide groundline
   CalculateScreenPositionsGroundline();
+
   if (BigZoom) {
     BigZoom = false;
   }
 }
 
+/**
+ * Renders a white background (if no terrain) and resets brush, pen and font
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ */
 void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
 {
+  // If (no other background chosen) create white background
   if (!SettingsMap().EnableTerrain || !Calculated().TerrainValid
       || !terrain.isTerrainLoaded() ) {
     canvas.select(MapGfx.hBackgroundBrush);
@@ -73,11 +95,17 @@ void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
     canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
   }
 
+  // Select black brush/pen and the MapWindowFont
   canvas.black_brush();
   canvas.black_pen();
   canvas.select(MapWindowFont);
 }
 
+/**
+ * Renders the terrain background, the groundline and the topology
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ */
 void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 {
   if ((SettingsMap().EnableTerrain && (Calculated().TerrainValid)
@@ -91,10 +119,10 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
       sunazimuth = DisplayAngle + 45.0;
     }
 
-    //    if (dirtyEvent.test()) {
-    //      // map has been dirtied since we started drawing, so hurry up
-    //      BigZoom = true;
-    //    }
+    // if (dirtyEvent.test()) {
+    //   // map has been dirtied since we started drawing, so hurry up
+    //   BigZoom = true;
+    // }
     // TODO: implement a workaround
 
     if (terrain.isTerrainLoaded()) {
@@ -109,12 +137,14 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
       terrain_renderer->SetSettings(SettingsMap().TerrainRamp,
                                     SettingsMap().TerrainContrast,
                                     SettingsMap().TerrainBrightness);
+
+      // Draw the terrain
       terrain_renderer->Draw(canvas, *this, sunazimuth,
                              sunelevation, Basic().Location, BigZoom);
     }
 
-    if ((SettingsComputer().FinalGlideTerrain==2)
-	&& Calculated().TerrainValid) {
+    if ((SettingsComputer().FinalGlideTerrain==2) && Calculated().TerrainValid) {
+      // Draw the groundline (and shading)
       DrawTerrainAbove(canvas, rc, buffer_canvas);
     }
 
@@ -124,6 +154,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
   }
 
   if (SettingsMap().EnableTopology) {
+    // Draw the topology
     topology->Draw(canvas, *this, rc);
   }
 
@@ -131,18 +162,29 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
   label_block.reset();
 }
 
+/**
+ * Render the AAT areas and airspace
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ */
 void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
 {
+  // Draw AAT areas
   if (!task.TaskIsTemporary()) {
     DrawTaskAAT(canvas, rc, buffer_canvas);
   }
 
-  // then airspace..
+  // Draw airspace on top
   if (SettingsMap().OnAirSpace > 0) {
     DrawAirSpace(canvas, rc, buffer_canvas);
   }
 }
 
+/**
+ * Renders the snail trail feature
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ */
 void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
 {
   double TrailFirstTime = DrawTrail(canvas);
@@ -150,6 +192,11 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
   DrawThermalEstimate(canvas);
 }
 
+/**
+ * Renders the task, the waypoints and the marks
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ */
 void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
 {
   if (task.isTaskAborted()) {
@@ -161,6 +208,11 @@ void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
   marks->Draw(canvas, *this, rc);
 }
 
+/**
+ * Render final glide through terrain marker and RASP spot heights (?)
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ */
 void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
 {
   // draw red cross on glide through terrain marker
@@ -178,9 +230,14 @@ void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
   }
 }
 
+/**
+ * Renders the aircraft, the FLARM targets and the wind arrow
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ */
 void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
 {
-  // draw wind vector at aircraft
+  // Draw wind vector at aircraft
   if (!SettingsMap().EnablePan) {
     DrawWindAtAircraft2(canvas, Orig_Aircraft, rc);
   } else if (SettingsMap().TargetPan) {
@@ -191,17 +248,23 @@ void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
   DrawTeammate(canvas);
   DrawFLARMTraffic(canvas);
 
-  // finally, draw you!
-
+  // Draw center screen cross hair in pan mode
   if (SettingsMap().EnablePan && !SettingsMap().TargetPan) {
     DrawCrossHairs(canvas);
   }
 
+  // Finally, draw you!
   if (Basic().Connected) {
     DrawAircraft(canvas);
   }
 }
 
+/**
+ * Renders the upper symbology (compass, map scale, flight mode icon,
+ * thermal band, final glide bar and gps status)
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ */
 void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
 {
   // overlays
@@ -226,6 +289,11 @@ void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
   DrawGPSStatus(canvas, rc);
 }
 
+/**
+ * Renders lower symbology (track lines, bearing, etc)
+ * @param canvas
+ * @param rc
+ */
 void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
 {
   if (Basic().Connected) {
@@ -237,18 +305,40 @@ void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
   DrawBearing(canvas, Basic().Connected);
 }
 
+/**
+ * Renders all the components of the moving map
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ */
 void MapWindow::Render(Canvas &canvas, const RECT rc)
 {
+  // Calculate screen positions
   RenderStart(canvas, rc);
+
+  // Render a clean background and reset pen, brush and font
   RenderBackground(canvas, rc);
+
+  // Render terrain, groundline and topology
   RenderMapLayer(canvas, rc);
+
+  // Render the AAT areas and airspace
   RenderAreas(canvas, rc);
+
+  // Render the snail trail
   RenderTrail(canvas, rc);
+
+  // Render task and waypoints
   RenderTask(canvas, rc);
+
   RenderGlide(canvas, rc);
 
+  // Render lower symbology
   RenderSymbology_lower(canvas, rc);
+
+  // Render aircraft symbol (and FLARM traffic)
   RenderAirborne(canvas, rc);
+
+  // Render upper symbology
   RenderSymbology_upper(canvas, rc);
 }
 
@@ -298,4 +388,3 @@ void MapWindow::DrawSpotHeights(Canvas &canvas) {
   DrawSpotHeight_Internal(canvas, *this, label_block,
 			  Buffer, terrain_renderer->spot_min_pt);
 }
-

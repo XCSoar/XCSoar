@@ -60,6 +60,9 @@ struct SWITCH_INFO
   // bool Stall;
 };
 
+/**
+ * A struct that holds all the parsed data read from the connected devices
+ */
 struct NMEA_INFO
 {
   //############

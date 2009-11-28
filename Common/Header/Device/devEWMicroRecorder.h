@@ -38,6 +38,6 @@ Copyright_License {
 #ifndef	DEVEWMICRORECORDER_H
 #define	DEVEWMICRORECORDER_H
 
-bool ewMicroRecorderRegister(void);
+extern const struct DeviceRegister ewMicroRecorderDevice;
 
 #endif

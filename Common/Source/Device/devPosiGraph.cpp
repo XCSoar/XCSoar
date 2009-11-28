@@ -85,8 +85,7 @@ BOOL PGDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   return(TRUE);
 }
 
-
-static const DeviceRegister_t pgDevice = {
+const struct DeviceRegister pgDevice = {
   TEXT("PosiGraph Logger"),
   drfGPS | drfBaroAlt | drfLogger,
   PGParseNMEA,			// ParseNMEA
@@ -108,11 +107,6 @@ static const DeviceRegister_t pgDevice = {
   NULL,				// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool pgRegister(void){
-  return devRegister(&pgDevice);
-}
-
 
 // *****************************************************************************
 // local stuff

@@ -68,10 +68,13 @@ Copyright_License {
 #include <wingdi.h>
 #endif
 
-// Initialisation
+// Initialization
 
 ScreenGraphics MapGfx;
 
+/**
+ * Constructor of the MapWindow class
+ */
 MapWindow::MapWindow()
   :MapWindowProjection(),
    cdi(NULL),
@@ -87,6 +90,9 @@ MapWindow::MapWindow()
   zoomclimb.last_targetpan = false;
 }
 
+/**
+ * Destructor of the MapWindow class
+ */
 MapWindow::~MapWindow()
 {
   if (cdi != NULL)
@@ -96,8 +102,8 @@ MapWindow::~MapWindow()
 }
 
 void
-MapWindow::set(ContainerWindow &parent,
-               const RECT _MapRectSmall, const RECT _MapRectBig)
+MapWindow::set(ContainerWindow &parent, const RECT _MapRectSmall,
+    const RECT _MapRectBig)
 {
   MapRectSmall = _MapRectSmall;
   MapRect = MapRectBig = _MapRectBig;
@@ -106,7 +112,7 @@ MapWindow::set(ContainerWindow &parent,
                          MapRect.right - MapRect.left,
                          MapRect.bottom - MapRect.top);
 
-  // initialise other systems
+  // initialize other systems
   InitialiseScaleList(SettingsMap());
 
   // set initial display mode
@@ -120,14 +126,18 @@ MapWindow::set(ContainerWindow &parent,
   get_canvas().copy(draw_canvas);
 
   cdi = new GaugeCDI(parent); /* XXX better attach to "this"? */
-
 }
 
-void MapWindow::RefreshMap() {
+/**
+ * Triggers the drawTrigger and is called by
+ * the on_mouse_up event in case of panning
+ */
+void
+MapWindow::RefreshMap()
+{
   MapWindowTimer::InterruptTimer();
   drawTriggerEvent.trigger();
 }
-
 
 void MapWindow::StoreRestoreFullscreen(bool store) {
   /* JMW broken, will need new implementation
@@ -152,31 +162,43 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
 
 #include "DeviceBlackboard.hpp"
 
-void MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
-			       const DERIVED_INFO &derived_info) {
+/**
+ * Copies the given basic and calculated info to the MapWindowBlackboard
+ * and reads the Settings from the DeviceBlackboard.
+ * @param nmea_info Basic info
+ * @param derived_info Calculated info
+ */
+void
+MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
+    const DERIVED_INFO &derived_info)
+{
   ScopeLock protect(mutexBlackboard);
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
   ReadSettingsComputer(device_blackboard.SettingsComputer());
   ReadSettingsMap(device_blackboard.SettingsMap());
 }
 
-
-void MapWindow::SendBlackboard(const NMEA_INFO &nmea_info,
-			       const DERIVED_INFO &derived_info) {
+void
+MapWindow::SendBlackboard(const NMEA_INFO &nmea_info,
+    const DERIVED_INFO &derived_info)
+{
   ScopeLock protect(mutexBlackboard);
   MapWindowProjection::ExchangeBlackboard(nmea_info, derived_info,
 					  SettingsMap());
   device_blackboard.ReadMapProjection(*this);
 }
 
-
 typedef struct {
   DWORD time_last;
   bool dirty;
 } MapIdleTrigger;
 
-/** This idle function allows progressive scanning of visibility etc */
-bool MapWindow::Idle(const bool do_force) {
+/**
+ * This idle function allows progressive scanning of visibility etc
+ */
+bool
+MapWindow::Idle(const bool do_force)
+{
   bool still_dirty=false;
 
   StartTimer();
@@ -259,14 +281,24 @@ bool MapWindow::Idle(const bool do_force) {
   return still_dirty;
 }
 
-void MapWindow::ExchangeBlackboard(void)
+/**
+ * Exchanges blackboard data with the DeviceBlackboard
+ */
+void
+MapWindow::ExchangeBlackboard(void)
 {
   ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
   ApplyScreenSize();
   SendBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
 }
 
-void MapWindow::DrawThreadLoop(void) {
+/**
+ * Handles the drawing of the moving map and is called by the DrawThread
+ */
+void
+MapWindow::DrawThreadLoop(void)
+{
+  // Start the drawing timer (for drawing time calculation)
   StartTimer();
 
   //  static PeriodClock mclock;
@@ -278,11 +310,13 @@ void MapWindow::DrawThreadLoop(void) {
     DrawMapScale(get_canvas(), MapRect, true);
   }
 
+  // Render the moving map
   Render(draw_canvas, MapRect);
 
-  // copy to canvas
+  // Copy the rendered map to the drawing canvas
   invalidate();
 
+  // Stop the drawing timer and calculate drawing time
   StopTimer();
 }
 

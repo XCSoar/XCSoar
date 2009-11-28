@@ -112,6 +112,59 @@ extern void		ConvToUpper( TCHAR *);
 
 #endif
 
+static inline bool is_pna()
+{
+#if defined(PNA)
+  return true;
+#else
+  return false;
+#endif
+}
+
+static inline bool model_is_hp31x()
+{
+#if defined(PNA) || defined(FIVV)
+  return GlobalModelType == MODELTYPE_PNA_HP31X;
+#else
+  return false;
+#endif
+}
+
+static inline bool model_is_medion_p5()
+{
+#if defined(PNA) || defined(FIVV)
+  return GlobalModelType == MODELTYPE_PNA_MEDION_P5;
+#else
+  return false;
+#endif
+}
+
+static inline bool is_altair()
+{
+#if defined(GNAV)
+  return true;
+#else
+  return false;
+#endif
+}
+
+static inline bool is_simulator()
+{
+#ifdef _SIM_
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
+ * Flag to activate extra clipping for some PNAs.
+ */
+static inline bool need_clipping()
+{
+  return model_is_hp31x() || model_is_medion_p5();
+}
+
 // This could be also used for PDA in landscape..
 typedef enum{
   ssnone=0,
@@ -130,10 +183,6 @@ typedef enum{
 #ifdef WINDOWSPC
 extern int SCREENWIDTH;
 extern int SCREENHEIGHT;
-#endif
-
-#if defined(PNA) || defined(FIVV)
-extern bool needclipping;
 #endif
 
 void InitAsset();

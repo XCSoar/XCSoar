@@ -293,7 +293,7 @@ BOOL VLDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
 
 }
 
-static const DeviceRegister_t vlDevice = {
+const struct DeviceRegister vlDevice = {
   TEXT("Device/Volkslogger"),
   drfGPS | drfBaroAlt | drfLogger,
   VLParseNMEA,			// ParseNMEA
@@ -315,8 +315,3 @@ static const DeviceRegister_t vlDevice = {
   NULL,				// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool vlRegister(void){
-  return devRegister(&vlDevice);
-}
-

@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BLANK_HPP
 #define XCSOAR_SCREEN_BLANK_HPP
 
-#if !defined(WINDOWSPC) && !defined(GNAV)
+#if !defined(GNAV) && !defined(WINDOWSPC) && !defined(HAVE_POSIX)
 #define HAVE_BLANK
 
 extern int DisplayTimeOut;

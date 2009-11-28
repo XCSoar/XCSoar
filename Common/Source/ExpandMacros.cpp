@@ -50,6 +50,8 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "InfoBoxManager.h"
 #include "SettingsUser.hpp"
+#include "Asset.hpp"
+
 #include <stdlib.h>
 
 static void ReplaceInString(TCHAR *String, const TCHAR *ToReplace,
@@ -191,11 +193,10 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckWaypointFile)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckSettingsLockout)"))) {
-#ifndef _SIM_
-    if (XCSoarInterface::LockSettingsInFlight && Calculated().Flying) {
+    if (!is_simulator() && XCSoarInterface::LockSettingsInFlight &&
+        Calculated().Flying) {
       invalid = true;
     }
-#endif
     ReplaceInString(OutBuffer, TEXT("$(CheckSettingsLockout)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTaskResumed)"))) {

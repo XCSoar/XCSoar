@@ -55,6 +55,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"
+#include "Asset.hpp"
 
 #ifdef _SIM_
 #include "DeviceBlackboard.hpp"
@@ -394,12 +395,10 @@ bool MapWindow::on_key_down(unsigned key_code)
   // Forbidden usage of keypress timing.
 
   key_code = TranscodeKey(key_code);
-#if defined(GNAV)
-  if (key_code == 0xF5){
+  if (is_altair() && key_code == 0xF5){
     XCSoarInterface::SignalShutdown(false);
     return true;
   }
-#endif
 
   mouse_down_clock.reset();
   if (InputEvents::processKey(key_code)) {

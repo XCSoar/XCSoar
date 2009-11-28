@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef DEVXCOM760_H
 #define DEVXCOM760_H
 
-bool xcom760Register(void);
+extern const struct DeviceRegister xcom760Device;
 
 #endif
 

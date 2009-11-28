@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef DEVPG_H
 #define DEVPG_H
 
-bool pgRegister(void);
+extern const struct DeviceRegister pgDevice;
 
 #endif
 

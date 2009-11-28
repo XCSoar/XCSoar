@@ -42,6 +42,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "TeamCodeCalculation.h"
 #include "UtilsFLARM.hpp"
+#include "Asset.hpp"
 #if defined(_SIM_) && !defined(NDEBUG)
 #include "Device/Parser.h"
 #endif
@@ -347,7 +348,9 @@ DeviceBlackboard::FLARM_RefreshSlots() {
 void
 DeviceBlackboard::SetSystemTime() {
   // TODO JMW: this should be done outside the parser..
-#ifndef _SIM_
+  if (is_simulator())
+    return;
+
   // Altair doesn't have a battery-backed up realtime clock,
   // so as soon as we get a fix for the first time, set the
   // system clock to the GPS time.
@@ -385,7 +388,6 @@ DeviceBlackboard::SetSystemTime() {
 #endif
     sysTimeInitialised =true;
   }
-#endif
 }
 
 /**

@@ -306,12 +306,9 @@ static void OnSetupDeviceAClicked(WindowControl * Sender){
 
 // this is a hack, devices dont jet support device dependant setup dialogs
 
-#ifndef _SIM_
-    if ((devA() == NULL) ||
-	(_tcscmp(devA()->Name,TEXT("Vega")) != 0)) {
+    if (!is_simulator() && (devA() == NULL ||
+                            _tcscmp(devA()->Name,TEXT("Vega")) != 0))
       return;
-    }
-#endif
 
     changed = dlgConfigurationVarioShowModal();
 
@@ -332,12 +329,9 @@ static void OnSetupDeviceBClicked(WindowControl * Sender){
 
 // this is a hack, devices dont jet support device dependant setup dialogs
 
-#ifndef _SIM_
-    if ((devB() == NULL) ||
-	(_tcscmp(devB()->Name,TEXT("Vega")) != 0)) {
+    if (!is_simulator() && (devB() == NULL ||
+                            _tcscmp(devB()->Name,TEXT("Vega")) != 0))
       return;
-    }
-#endif
 
     changed = dlgConfigurationVarioShowModal();
 
@@ -1311,7 +1305,7 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (int i = 0; i < DeviceRegisterCount; i++) {
+    for (int i = 0; DeviceRegister[i] != NULL; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
 #ifndef _SIM_
@@ -1358,7 +1352,7 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (int i = 0; i < DeviceRegisterCount; i++) {
+    for (int i = 0; DeviceRegister[i] != NULL; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
 #ifndef _SIM_
@@ -2328,9 +2322,8 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBlank"));
   if (wp) {
-#ifdef GNAV
-    wp->SetVisible(false);
-#endif
+    if (is_altair())
+      wp->SetVisible(false);
 #ifdef WINDOWSPC
     wp->SetVisible(false);
 #endif
@@ -2341,10 +2334,8 @@ static void setVariables(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBacklight")); // VENTA4
   if (wp) {
     wp->SetVisible(false);
-#ifdef PNA
-    if (GlobalModelType == MODELTYPE_PNA_HP31X )
+    if (model_is_hp31x())
     	wp->SetVisible(true);
-#endif
     wp->GetDataField()->Set(CommonInterface::EnableAutoBacklight);
     wp->RefreshDisplay();
   }

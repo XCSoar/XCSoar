@@ -65,8 +65,7 @@ BOOL nmoPutQNH(DeviceDescriptor_t *d, double NewQNH){
   return(FALSE);
 }
 
-
-static const DeviceRegister_t nmoDevice = {
+const struct DeviceRegister nmoDevice = {
   TEXT("NmeaOut"),
   drfNmeaOut,
   nmoParseNMEA,			// ParseNMEA
@@ -88,8 +87,4 @@ static const DeviceRegister_t nmoDevice = {
   NULL,				// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool nmoRegister(void){
-  return devRegister(&nmoDevice);
-}
 

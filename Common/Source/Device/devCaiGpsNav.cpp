@@ -68,8 +68,7 @@ BOOL caiGpsNavOpen(PDeviceDescriptor_t d, int Port){
   return(TRUE);
 }
 
-
-static const DeviceRegister_t caiGpsNavDevice = {
+const struct DeviceRegister caiGpsNavDevice = {
   TEXT("CAI GPS-NAV"),
   drfGPS,
   NULL,				// ParseNMEA
@@ -91,8 +90,3 @@ static const DeviceRegister_t caiGpsNavDevice = {
   NULL,				// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool caiGpsNavRegister(void){
-  return devRegister(&caiGpsNavDevice);
-}
-

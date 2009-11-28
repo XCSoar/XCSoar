@@ -803,7 +803,6 @@ void Profile::ReadRegistrySettings(void)
   Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)Temp;
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
-    needclipping=true;
     // key transcoding for this one
     StartupStore(TEXT("Loading HP31X settings\n"));
   } else if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
@@ -817,7 +816,6 @@ void Profile::ReadRegistrySettings(void)
     // key transcoding is made
   } else if (GlobalModelType == MODELTYPE_PNA_MEDION_P5 ) {
     StartupStore(TEXT("Loading Medion settings\n"));
-    needclipping=true;
   } else if (GlobalModelType == MODELTYPE_PNA_PNA ) {
     StartupStore(TEXT("Loading default PNA settings\n"));
   } else {

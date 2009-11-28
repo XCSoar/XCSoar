@@ -36,10 +36,10 @@ Copyright_License {
 */
 
 #include "Screen/EditWindow.hpp"
+#include "Asset.hpp"
 
 #ifdef PNA
 #include "Appearance.hpp" // for GlobalModelType
-#include "Asset.hpp" // for MODELTYPE_*
 #endif
 
 void
@@ -63,10 +63,8 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
   else
     style |= ES_AUTOHSCROLL;
 
-#ifdef PNA // VENTA3 FIX
-  if (GlobalModelType == MODELTYPE_PNA_HP31X)
+  if (model_is_hp31x())
     ex_style |= WS_EX_CLIENTEDGE;
-#endif
 
   Window::set(&parent, TEXT("EDIT"), TEXT("\0"),
               left, top, width, height, style, ex_style);

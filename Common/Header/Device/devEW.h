@@ -38,6 +38,6 @@ Copyright_License {
 #ifndef	DEVEW_H
 #define	DEVEW_H
 
-bool ewRegister(void);
+extern const struct DeviceRegister ewDevice;
 
 #endif

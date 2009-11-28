@@ -75,7 +75,7 @@ LXParseNMEA(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
   return FALSE;
 }
 
-static const DeviceRegister_t lxDevice = {
+const struct DeviceRegister lxDevice = {
   TEXT("LX"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario,
   LXParseNMEA,			// ParseNMEA
@@ -97,10 +97,6 @@ static const DeviceRegister_t lxDevice = {
   NULL,				// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool lxRegister(void){
-  return devRegister(&lxDevice);
-}
 
 // local stuff
 

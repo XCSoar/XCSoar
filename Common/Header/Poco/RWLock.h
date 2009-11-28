@@ -41,11 +41,15 @@
 #include "Poco/Foundation.h"
 #include "Poco/Exception.h"
 
+#ifdef _WIN32_WCE
+#include "Poco/RWLock_Mutex.hpp"
+#else /* !_WIN32_WCE */
 #if defined(POCO_OS_FAMILY_WINDOWS)
 #include "Poco/RWLock_WIN32.h"
 #else
 #include "Poco/RWLock_POSIX.h"
 #endif
+#endif /* !_WIN32_WCE */
 
 namespace Poco {
 

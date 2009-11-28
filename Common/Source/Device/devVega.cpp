@@ -463,7 +463,6 @@ BOOL vgaOnSysTicker(DeviceDescriptor_t *d){
   return(TRUE);
 }
 
-
 BOOL vgaPutThermal(DeviceDescriptor_t *d, bool active, 
                    double longitude, double latitude, 
                    double W,
@@ -481,7 +480,7 @@ BOOL vgaPutThermal(DeviceDescriptor_t *d, bool active,
 }
 
 
-static const DeviceRegister_t vgaDevice = {
+const struct DeviceRegister vgaDevice = {
   TEXT("Vega"),
   drfGPS | drfBaroAlt | drfSpeed | drfVario, // drfLogger if FLARM connected
   vgaParseNMEA,			// ParseNMEA
@@ -503,8 +502,3 @@ static const DeviceRegister_t vgaDevice = {
   vgaOnSysTicker,		// OnSysTicker
   vgaPutThermal                  // OnThermal
 };
-
-bool vgaRegister(void){
-  return devRegister(&vgaDevice);
-}
-

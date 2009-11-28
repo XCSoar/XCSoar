@@ -38,7 +38,7 @@ Copyright_License {
 #ifndef DEVFLYMASTERF1_H
 #define DEVFLYMASTERF1_H
 
-bool flymasterf1Register(void);
+extern const struct DeviceRegister flymasterf1Device;
 
 #endif
 

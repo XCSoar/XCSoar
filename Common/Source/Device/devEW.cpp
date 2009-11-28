@@ -332,8 +332,7 @@ BOOL EWLinkTimeout(PDeviceDescriptor_t d){
   return(TRUE);
 }
 
-
-static const DeviceRegister_t ewDevice = {
+const struct DeviceRegister ewDevice = {
   TEXT("EW Logger"),
   drfGPS | drfLogger,
   EWParseNMEA,			// ParseNMEA
@@ -355,8 +354,3 @@ static const DeviceRegister_t ewDevice = {
   NULL,				// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool ewRegister(void){
-  return devRegister(&ewDevice);
-}
-

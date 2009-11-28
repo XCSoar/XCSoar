@@ -43,10 +43,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "options.h" /* for IBLSCALE() */
-
-#ifdef PNA
 #include "Asset.hpp"
-#endif
 
 #include <assert.h>
 
@@ -114,13 +111,14 @@ ButtonLabel::GetButtonPosition(unsigned i, RECT rc,
           *sizey = IBLSCALE(40);
           *x = rc.right-(*sizex);
           int k = rc.bottom-rc.top-IBLSCALE(46);
-#ifdef GNAV
-          k = rc.bottom-rc.top;
-          // JMW need upside down button order for rotated Altair
-          *y = rc.bottom-(i-5)*k/5-(*sizey)-IBLSCALE(20);
-#else
-          *y = (rc.top+(i-5)*k/6+(*sizey/2+IBLSCALE(3)));
-#endif
+
+          if (is_altair()) {
+            k = rc.bottom-rc.top;
+            // JMW need upside down button order for rotated Altair
+            *y = rc.bottom-(i-5)*k/5-(*sizey)-IBLSCALE(20);
+          } else {
+            *y = (rc.top+(i-5)*k/6+(*sizey/2+IBLSCALE(3)));
+          }
         }
       }
       break;
@@ -137,20 +135,14 @@ ButtonLabel::GetButtonPosition(unsigned i, RECT rc,
       } else {
 	if (i<5) {
 	  *sizex = IBLSCALE(52);
-#ifdef GNAV
-	  *sizey = IBLSCALE(20);
-#else
-	  *sizey = IBLSCALE(35);
-#endif
+          *sizey = is_altair()
+            ? IBLSCALE(20)
+            : IBLSCALE(35);
 	  *x = rc.left+3;
 	  *y = (rc.top+hheight*i-(*sizey)/2);
 	} else {
 	  *sizex = IBLSCALE(60);
-#ifdef GNAV
-	  *sizey = IBLSCALE(40);
-#else
-	  *sizey = IBLSCALE(35);
-#endif
+          *sizey = is_altair() ? IBLSCALE(40) : IBLSCALE(35);
 	  *x = rc.left+hwidth*(i-5);
 	  *y = (rc.bottom-(*sizey));
 	}

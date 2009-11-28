@@ -37,6 +37,11 @@ Copyright_License {
 
 #include "MapWindowTimer.hpp"
 
+/**
+ * Constructor of the MapWindowTimer class
+ *
+ * Resets all internal fields to the default values
+ */
 MapWindowTimer::MapWindowTimer():
   timestats_av(0),
   cpuload(0),
@@ -45,12 +50,26 @@ MapWindowTimer::MapWindowTimer():
 {
 }
 
-void MapWindowTimer::StartTimer() {
+/**
+ * "Starts" the timer by saving the start time in timestamp_newdata
+ */
+void
+MapWindowTimer::StartTimer()
+{
+  // Saves the current tick count (time) as start time
   timestamp_newdata = ::GetTickCount();
   timestats_dirty = false;
 }
 
-bool MapWindowTimer::RenderTimeAvailable() {
+/**
+ * Returns true if last call of StartTimer() is less
+ * then 700ms ago
+ * @return True if last call of StartTimer() is less
+ * then 700ms ago, False otherwise
+ */
+bool
+MapWindowTimer::RenderTimeAvailable()
+{
   DWORD fpsTime = ::GetTickCount();
   if (fpsTime-timestamp_newdata<700) {
     // it's been less than 700 ms since last data
@@ -61,18 +80,33 @@ bool MapWindowTimer::RenderTimeAvailable() {
   }
 }
 
-void MapWindowTimer::InterruptTimer() {
+/**
+ * Interrupts the timer (in case map was panned while drawing)
+ */
+void
+MapWindowTimer::InterruptTimer()
+{
   timestats_dirty = true;
   timestamp_newdata = ::GetTickCount()-700; // cause to expire
 }
 
-void MapWindowTimer::StopTimer() {
+/**
+ * "Stops" the timer by saving the stop time in timestamp_draw
+ * and calculating the total drawing time.
+ */
+void
+MapWindowTimer::StopTimer()
+{
+  // Saves the current tick count (time) as stop time
   timestamp_draw = ::GetTickCount();
+
   if (!timestats_dirty) {
+    // Calculates the drawing time
+    // QUESTION TB: why the weird formula and why is timestats_av = tottime?!
     tottime = (2*tottime+(timestamp_draw-timestamp_newdata))/3;
     timestats_av = tottime;
     cpuload=0;
   }
+
   timestats_dirty = false;
 }
-

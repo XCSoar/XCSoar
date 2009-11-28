@@ -508,8 +508,7 @@ BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
 
 }
 
-
-static const DeviceRegister_t cai302Device = {
+const struct DeviceRegister cai302Device = {
   TEXT("CAI 302"),
   drfGPS | drfLogger | drfSpeed | drfVario | drfBaroAlt | drfWind,
   cai302ParseNMEA,		// ParseNMEA
@@ -531,10 +530,6 @@ static const DeviceRegister_t cai302Device = {
   NULL,				// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool cai302Register(void){
-  return devRegister(&cai302Device);
-}
 
 // local stuff
 

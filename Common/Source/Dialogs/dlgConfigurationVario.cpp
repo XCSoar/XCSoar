@@ -43,6 +43,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
+#include "Asset.hpp"
 
 #include <assert.h>
 
@@ -103,9 +104,9 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
     // (do request here)
     _stprintf(requesttext,TEXT("PDVSC,R,%s"),name);
     VarioWriteNMEA(requesttext);
-#ifndef _SIM_
-    Sleep(250);
-#endif
+
+    if (!is_simulator())
+      Sleep(250);
   }
 
   if (setvalue) {
@@ -116,9 +117,10 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
     }
     _stprintf(requesttext,TEXT("PDVSC,S,%s,%d"),name, ext_setvalue);
     VarioWriteNMEA(requesttext);
-#ifndef _SIM_
-    Sleep(250);
-#endif
+
+    if (!is_simulator())
+      Sleep(250);
+
     return true;
   }
 
@@ -179,9 +181,9 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
 
 	  _stprintf(requesttext,TEXT("PDVSC,S,%s,%d"),name, newval);
 	  VarioWriteNMEA(requesttext);
-#ifndef _SIM_
-	  Sleep(250);
-#endif
+
+          if (!is_simulator())
+            Sleep(250);
 
 	  return true;
 	}
@@ -652,9 +654,9 @@ static void OnSaveClicked(WindowControl * Sender){
   UpdateParameters(false);  // 20060801:sgi make shure changes are
                             // sent to device
   VarioWriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
-#ifndef _SIM_
-  Sleep(500);
-#endif
+
+  if (!is_simulator())
+    Sleep(500);
 }
 
 static void OnDemoClicked(WindowControl * Sender){
@@ -996,16 +998,12 @@ bool dlgConfigurationVarioShowModal(void){
 
   changed = false;
 
-#ifdef _SIM_
-
-#else
-  if (devVarioFindVega() == NULL) {
+  if (!is_simulator() && devVarioFindVega() == NULL) {
     MessageBoxX (
 		 gettext(TEXT("No communication with Vega.")),
 		 gettext(TEXT("Vega error")), MB_OK);
     return false;
   }
-#endif
 
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,

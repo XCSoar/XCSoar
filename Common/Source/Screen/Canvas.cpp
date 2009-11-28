@@ -40,10 +40,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Compatibility/gdi.h"
 #include "options.h" /* for IBLSCALE() */
-
-#ifdef PNA
 #include "Asset.hpp" /* for needclipping */
-#endif
 
 #include <string.h>
 #include <stdlib.h> /* for abs() */
@@ -489,25 +486,25 @@ Canvas::clipped_polygon(const POINT* lppt, unsigned cPoints, const RECT rc,
 void
 Canvas::clipped_polyline(const POINT* lppt, unsigned cPoints, const RECT rc)
 {
-#ifdef BUG_IN_CLIPPING
-  ::ClipPolygon(dc, lppt, cPoints, rc, false);
-  //VENTA2
-#elif defined(PNA)
-  // if (GlobalModelType == MODELTYPE_PNA_HP31X)
-  if (needclipping)
-    ::ClipPolygon(*this, lppt, cPoints, rc, false);
-  else
-    polyline(lppt, cPoints);
-#else
-  polyline(lppt, cPoints);
-#endif
+  ::ClipPolygon(*this, lppt, cPoints, rc, false);
 }
 
 void
-Canvas::clipped_line(const POINT a, const POINT b, const RECT rc)
+Canvas::autoclip_polygon(const POINT* lppt, unsigned cPoints, const RECT rc)
 {
-  POINT p[2] = {{a.x, a.y}, {b.x, b.y}};
-  clipped_polyline(p, 2, rc);
+  if (need_clipping())
+    clipped_polygon(lppt, cPoints, rc, true);
+  else
+    polygon(lppt, cPoints);
+}
+
+void
+Canvas::autoclip_polyline(const POINT* lppt, unsigned cPoints, const RECT rc)
+{
+  if (need_clipping())
+    clipped_polyline(lppt, cPoints, rc);
+  else
+    polyline(lppt, cPoints);
 }
 
 void
@@ -544,6 +541,24 @@ Canvas::clipped_dashed_line(int width, const POINT a, const POINT b,
       clipped_polyline(pt, 2, rc);
     }
   }
+}
+
+void
+Canvas::dashed_line(int width, const POINT a, const POINT b, const Color color)
+{
+  Pen pen(Pen::DASH, width, color);
+  select(pen);
+  line(a, b);
+}
+
+void
+Canvas::autoclip_dashed_line(int width, const POINT a, const POINT b,
+                             const Color color, const RECT rc)
+{
+  if (need_clipping())
+    clipped_dashed_line(width, a, b, color, rc);
+  else
+    dashed_line(width, a, b, color);
 }
 
 void

@@ -38,7 +38,7 @@ Copyright_License {
 #include "Device/devGeneric.h"
 #include "Device/device.h"
 
-static const DeviceRegister_t genDevice = {
+const struct DeviceRegister genDevice = {
   TEXT("Generic"),
   drfGPS,
   NULL,				// ParseNMEA
@@ -60,7 +60,3 @@ static const DeviceRegister_t genDevice = {
   NULL,				// OnSysTicker
   NULL                          // OnThermal
 };
-
-bool genRegister(void){
-  return devRegister(&genDevice);
-}

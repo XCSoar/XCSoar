@@ -38,6 +38,6 @@ Copyright_License {
 #ifndef	DEVNMEAOUT_H
 #define	DEVNMEAOUT_H
 
-bool nmoRegister(void);
+extern const struct DeviceRegister nmoDevice;
 
 #endif

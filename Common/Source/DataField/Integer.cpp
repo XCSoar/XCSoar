@@ -38,6 +38,7 @@ Copyright_License {
 #include "DataField/Integer.hpp"
 #include "Math/FastMath.h"
 #include "Compatibility/string.h"
+#include "Asset.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -116,9 +117,8 @@ void DataFieldInteger::Dec(void){
 int DataFieldInteger::SpeedUp(bool keyup){
   int res=1;
 
-#ifdef GNAV
-  return res;
-#endif
+  if (is_altair())
+    return res;
 
   if (GetDisableSpeedUp() == true)
     return 1;
