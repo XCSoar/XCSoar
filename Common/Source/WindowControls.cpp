@@ -53,10 +53,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "DataField/Base.hpp"
 #include "resource.h"
-
-#ifdef PNA
 #include "Asset.hpp"
-#endif
 
 #if !defined(ALTAIRSYNC) && !defined(GNAV) && !defined(WINDOWSPC) && \
   !defined(__GNUC__)
@@ -897,6 +894,32 @@ int WndForm::ShowModal(void){
   return ShowModal(false);
 }
 
+#ifndef ENABLE_SDL
+
+static bool
+is_user_input(UINT message)
+{
+  return message == WM_KEYDOWN || message == WM_KEYUP ||
+    message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
+    message == WM_LBUTTONDBLCLK;
+}
+
+static bool
+is_allowed_map_message(UINT message)
+{
+  return message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
+    message == WM_MOUSEMOVE;
+}
+
+static bool
+is_allowed_map(HWND hWnd, UINT message, bool enable_map)
+{
+  return !is_altair() && enable_map && MapWindow::identify(hWnd) &&
+    is_allowed_map_message(message);
+}
+
+#endif /* !ENABLE_SDL */
+
 int WndForm::ShowModal(bool bEnableMap) {
 #define OPENCLOSESUPPRESSTIME 500
 #ifndef ENABLE_SDL
@@ -967,26 +990,9 @@ int WndForm::ShowModal(bool bEnableMap) {
     if ((msg.message == WM_KEYDOWN) && ((msg.wParam & 0xffff) == VK_ESCAPE))
       mModalResult = mrCancel;
 
-    if (
-        (msg.message == WM_KEYDOWN
-          || msg.message == WM_KEYUP
-	    || msg.message == WM_LBUTTONDOWN
-          || msg.message == WM_LBUTTONUP
-          || msg.message == WM_LBUTTONDBLCLK
-        )  // screen event
+    if (is_user_input(msg.message)
         && msg.hwnd != GetHandle() && !IsChild(GetHandle(), msg.hwnd)  // not current window or child
-#ifndef GNAV
-        &&  !( // exception
-              bEnableMap
-              && MapWindow::identify(msg.hwnd)
-              && (
-                msg.message == WM_LBUTTONDOWN
-                || msg.message == WM_LBUTTONUP
-                || msg.message == WM_MOUSEMOVE
-              )
-         )
-#endif
-    )
+        && !is_allowed_map(msg.hwnd, msg.message, bEnableMap))
       continue;   // make it modal
 
     if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
@@ -1085,6 +1091,7 @@ int WndForm::ShowModal(bool bEnableMap) {
         } // DispatchMessage
       } // timeMsg
   }
+
 
     // hack to stop exiting immediately
     // TODO code: maybe this should block all key handlers to avoid
