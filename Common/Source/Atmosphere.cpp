@@ -37,12 +37,19 @@ Copyright_License {
 */
 
 #include "Atmosphere.h"
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
-#include "Interface.hpp"
 #include "Components.hpp"
+
 #include <math.h>
 #include <stdlib.h> /* for abs() */
+
+#ifndef _MSC_VER
+#include <algorithm>
+using std::max;
+#endif
 
 unsigned short CuSonde::last_level=0;
 double CuSonde::thermalHeight = 0;
@@ -139,7 +146,7 @@ CuSonde::updateMeasurements(const NMEA_INFO *Basic,
   }
 
   // find appropriate level
-  unsigned short level = (unsigned short)(((int)(max(Basic->Altitude,0))) / CUSONDE_HEIGHTSTEP);
+  unsigned short level = (unsigned short)(((int)(max(Basic->Altitude, 0.0))) / CUSONDE_HEIGHTSTEP);
   // if (level out of range) cancel update
   if (level>=CUSONDE_NUMLEVELS) {
     return;
