@@ -27,6 +27,7 @@
 
 #include <zzip/file.h>
 #include <zzip/format.h>
+#include <zzip/_config.h>
 
 // #ifndef HAVE_MSVCRT
 #ifdef ZZIP_HAVE_UNISTD_H
