@@ -171,6 +171,7 @@ OBJS	:=\
 	$(SRC)/GlideComputerTask.o 	\
 	$(SRC)/GlideRatio.o 		\
 	$(SRC)/GlideSolvers.o 		\
+	$(SRC)/GlideTerrain.o \
 	$(SRC)/Logger.o 		\
 	$(SRC)/LoggerImpl.o 		\
 	$(SRC)/LoggerSign.o 		\

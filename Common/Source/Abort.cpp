@@ -47,7 +47,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Screen.hpp"
 #include "McReady.h"
-#include "GlideSolvers.hpp"
+#include "GlideTerrain.hpp"
 #include "Message.h"
 #include "Components.hpp"
 #include "WayPointList.hpp"

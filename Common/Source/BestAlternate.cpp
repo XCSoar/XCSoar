@@ -48,7 +48,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "McReady.h"
 #include "Message.h"
-#include "GlideSolvers.hpp"
+#include "GlideTerrain.hpp"
 #include "Audio/Sound.hpp"
 #include "Components.hpp"
 #include "WayPointList.hpp"

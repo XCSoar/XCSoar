@@ -56,7 +56,7 @@ Copyright_License {
 #include "Calibration.hpp"
 #include "Airspace.h"
 #include "AirspaceWarning.h"
-#include "GlideSolvers.hpp"
+#include "GlideTerrain.hpp"
 #include "Task.h" // only needed for check of activewaypoint
 #include "SettingsTask.hpp"
 #include "LocalTime.hpp"
