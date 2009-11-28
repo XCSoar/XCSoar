@@ -39,9 +39,6 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
-#include "RasterTerrain.h"
-#include "RasterMap.h"
-#include "Components.hpp"
 
 #include <math.h>
 #include <stdlib.h> /* for abs() */
@@ -164,13 +161,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic,
   }
 
   // calculate ground height
-  terrain.Lock();
-  if (terrain.GetMap()) {
-    RasterRounding rounding(*terrain.GetMap(),0,0);
-    hGround =
-      terrain.GetTerrainHeight(basic.Location, rounding);
-  }
-  terrain.Unlock();
+  hGround = calculated.AltitudeAGL;
 
   // if (going up)
   if (level>last_level) {
