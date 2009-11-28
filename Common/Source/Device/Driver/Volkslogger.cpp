@@ -135,7 +135,7 @@ static VLAPI vl;
 static int nturnpoints = 0;
 
 static bool
-VLDeclAddWayPoint(const WAYPOINT *wp);
+VLDeclAddWayPoint(const WAYPOINT &way_point);
 
 bool
 VolksloggerDevice::Declare(const struct Declaration *decl)
@@ -184,7 +184,7 @@ VolksloggerDevice::Declare(const struct Declaration *decl)
 
   int i;
   for (i = 0; i < decl->num_waypoints; i++)
-    VLDeclAddWayPoint(decl->waypoint[i]);
+    VLDeclAddWayPoint(*decl->waypoint[i]);
 
   vl.declaration.task.nturnpoints = max(min(nturnpoints-2, 12), 0);
 
@@ -273,31 +273,27 @@ VolksloggerDevice::Declare(const struct Declaration *decl)
 }
 
 static bool
-VLDeclAddWayPoint(const WAYPOINT *wp)
+VLDeclAddWayPoint(const WAYPOINT &way_point)
 {
   char temp[100];
-  sprintf(temp, "%S", wp->Name);
+  sprintf(temp, "%S", way_point.Name);
 
   if (nturnpoints == 0) {
     strncpy(vl.declaration.task.startpoint.name, temp, 6);
-    vl.declaration.task.startpoint.lon =
-      wp->Location.Longitude;
-    vl.declaration.task.startpoint.lat =
-      wp->Location.Latitude;
+    vl.declaration.task.startpoint.lon = way_point.Location.Longitude;
+    vl.declaration.task.startpoint.lat = way_point.Location.Latitude;
     nturnpoints++;
   } else {
     strncpy(vl.declaration.task.turnpoints[nturnpoints-1].name, temp, 6);
     vl.declaration.task.turnpoints[nturnpoints-1].lon =
-      wp->Location.Longitude;
+      way_point.Location.Longitude;
     vl.declaration.task.turnpoints[nturnpoints-1].lat =
-      wp->Location.Latitude;
+      way_point.Location.Latitude;
     nturnpoints++;
   }
   strncpy(vl.declaration.task.finishpoint.name, temp, 6);
-  vl.declaration.task.finishpoint.lon =
-    wp->Location.Longitude;
-  vl.declaration.task.finishpoint.lat =
-    wp->Location.Latitude;
+  vl.declaration.task.finishpoint.lon = way_point.Location.Longitude;
+  vl.declaration.task.finishpoint.lat = way_point.Location.Latitude;
 
   return true;
 

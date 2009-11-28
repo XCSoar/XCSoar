@@ -69,7 +69,7 @@ public:
 
 protected:
   bool TryConnect();
-  bool AddWayPoint(const WAYPOINT *wp);
+  bool AddWayPoint(const WAYPOINT &way_point);
 
 public:
   virtual void LinkTimeout();
@@ -203,7 +203,7 @@ EWDevice::Declare(const struct Declaration *decl)
   }
 
   for (int j = 0; j < decl->num_waypoints; j++)
-    AddWayPoint(decl->waypoint[j]);
+    AddWayPoint(*decl->waypoint[j]);
 
   port->WriteString(_T("NMEA\r\n"));         // switch to NMEA mode
 
@@ -219,7 +219,7 @@ EWDevice::Declare(const struct Declaration *decl)
 }
 
 bool
-EWDevice::AddWayPoint(const WAYPOINT *wp)
+EWDevice::AddWayPoint(const WAYPOINT &way_point)
 {
   TCHAR EWRecord[100];
   TCHAR IDString[12];
@@ -235,7 +235,7 @@ EWDevice::AddWayPoint(const WAYPOINT *wp)
     return false;
   }
 
-  _tcsncpy(IDString, wp->Name, 6);                // copy at least 6 chars
+  _tcsncpy(IDString, way_point.Name, 6); // copy at least 6 chars
 
   while (_tcslen(IDString) < 6)                   // fill up with spaces
     _tcscat(IDString, _T(" "));
@@ -245,7 +245,7 @@ EWDevice::AddWayPoint(const WAYPOINT *wp)
   #endif
 
   // prepare lat
-  tmp = wp->Location.Latitude;
+  tmp = way_point.Location.Latitude;
   NoS = 'N';
   if (tmp < 0)
     {
@@ -257,7 +257,7 @@ EWDevice::AddWayPoint(const WAYPOINT *wp)
 
 
   // prepare long
-  tmp = wp->Location.Longitude;
+  tmp = way_point.Location.Longitude;
   EoW = 'E';
   if (tmp < 0)
     {

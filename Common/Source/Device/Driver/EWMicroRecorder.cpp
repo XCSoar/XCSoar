@@ -186,14 +186,14 @@ EWMicroRecorderPrintf(ComPort *port, const TCHAR *fmt, ...)
 
 static void
 EWMicroRecorderWriteWayPoint(ComPort *port,
-                             const WAYPOINT *wp, const TCHAR *EWType)
+                             const WAYPOINT &way_point, const TCHAR *EWType)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
   TCHAR NoS, EoW;
 
   // prepare latitude
-  tmp = wp->Location.Latitude;
+  tmp = way_point.Location.Latitude;
   NoS = _T('N');
   if (tmp < 0)
     {
@@ -205,7 +205,7 @@ EWMicroRecorderWriteWayPoint(ComPort *port,
   MinLat = (tmp - DegLat) * 60 * 1000;
 
   // prepare long
-  tmp = wp->Location.Longitude;
+  tmp = way_point.Location.Longitude;
   EoW = _T('E');
   if (tmp < 0)
     {
@@ -221,13 +221,12 @@ EWMicroRecorderWriteWayPoint(ComPort *port,
             EWType,
             DegLat, (int)MinLat, NoS,
             DegLon, (int)MinLon, EoW,
-            wp->Name);
+            way_point.Name);
 }
 
 bool
 EWMicroRecorderDevice::Declare(const struct Declaration *decl)
 {
-  const WAYPOINT *wp;
   nDeclErrorCode = 0;
 
   // Must have at least two, max 12 waypoints
@@ -252,7 +251,7 @@ EWMicroRecorderDevice::Declare(const struct Declaration *decl)
   port->WriteString(_T("Description:      Declaration\r\n"));
 
   for (int i = 0; i < 11; i++) {
-    wp = decl->waypoint[i];
+    const WAYPOINT &wp = *decl->waypoint[i];
     if (i == 0) {
       EWMicroRecorderWriteWayPoint(port, wp, _T("Take Off LatLong:"));
       EWMicroRecorderWriteWayPoint(port, wp, _T("Start LatLon:"));
@@ -264,7 +263,7 @@ EWMicroRecorderDevice::Declare(const struct Declaration *decl)
     }
   }
 
-  wp = decl->waypoint[decl->num_waypoints - 1];
+  const WAYPOINT &wp = *decl->waypoint[decl->num_waypoints - 1];
   EWMicroRecorderWriteWayPoint(port, wp, _T("Finish LatLon:"));
   EWMicroRecorderWriteWayPoint(port, wp, _T("Land LatLon:"));
 
