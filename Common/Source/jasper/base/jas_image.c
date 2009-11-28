@@ -146,7 +146,7 @@ jas_image_t *jas_image_create(int numcmpts, jas_image_cmptparm_t *cmptparms,
 	image->inmem_ = true;
 
 	/* Allocate memory for the per-component information. */
-	if (!(image->cmpts_ = jas_malloc(image->maxcmpts_ *
+	if (!(image->cmpts_ = (jas_image_cmpt_t **)jas_malloc(image->maxcmpts_ *
 	  sizeof(jas_image_cmpt_t *)))) {
 		jas_image_destroy(image);
 		return 0;
@@ -191,7 +191,7 @@ jas_image_t *jas_image_create0()
 {
 	jas_image_t *image;
 
-	if (!(image = jas_malloc(sizeof(jas_image_t)))) {
+	if (!(image = (jas_image_t *)jas_malloc(sizeof(jas_image_t)))) {
 		return 0;
 	}
 
@@ -248,7 +248,7 @@ error:
 static jas_image_cmpt_t *jas_image_cmpt_create0()
 {
 	jas_image_cmpt_t *cmpt;
-	if (!(cmpt = jas_malloc(sizeof(jas_image_cmpt_t)))) {
+	if (!(cmpt = (jas_image_cmpt_t *)jas_malloc(sizeof(jas_image_cmpt_t)))) {
 		return 0;
 	}
 	memset(cmpt, 0, sizeof(jas_image_cmpt_t));
@@ -315,7 +315,7 @@ static jas_image_cmpt_t *jas_image_cmpt_create(uint_fast32_t tlx, uint_fast32_t 
 	jas_image_cmpt_t *cmpt;
 	long size;
 
-	if (!(cmpt = jas_malloc(sizeof(jas_image_cmpt_t)))) {
+	if (!(cmpt = (jas_image_cmpt_t *)jas_malloc(sizeof(jas_image_cmpt_t)))) {
 		return 0;
 	}
 
@@ -788,8 +788,8 @@ static int jas_image_growcmpts(jas_image_t *image, int maxcmpts)
 	jas_image_cmpt_t **newcmpts;
 	int cmptno;
 
-	newcmpts = (!image->cmpts_) ? jas_malloc(maxcmpts * sizeof(jas_image_cmpt_t *)) :
-	  jas_realloc(image->cmpts_, maxcmpts * sizeof(jas_image_cmpt_t *));
+	newcmpts = (jas_image_cmpt_t **) ((!image->cmpts_) ? jas_malloc(maxcmpts * sizeof(jas_image_cmpt_t *)) :
+	  jas_realloc(image->cmpts_, maxcmpts * sizeof(jas_image_cmpt_t *)));
 	if (!newcmpts) {
 		return -1;
 	}
@@ -1394,13 +1394,13 @@ jas_image_dump(image, stderr);
 		goto error;
 
 	inpixmap.numcmpts = numinclrchans;
-	incmptfmts = malloc(numinclrchans * sizeof(jas_cmcmptfmt_t));
+	incmptfmts = (jas_cmcmptfmt_t*) malloc(numinclrchans * sizeof(jas_cmcmptfmt_t));
 	assert(incmptfmts);
 	inpixmap.cmptfmts = incmptfmts;
 	for (i = 0; i < numinclrchans; ++i) {
 		j = jas_image_getcmptbytype(inimage, JAS_IMAGE_CT_COLOR(i));
 		assert(j >= 0);
-		if (!(incmptfmts[i].buf = malloc(width * sizeof(long))))
+		if (!(incmptfmts[i].buf = (long *)malloc(width * sizeof(long))))
 			goto error;
 		incmptfmts[i].prec = jas_image_cmptprec(inimage, j);
 		incmptfmts[i].sgnd = jas_image_cmptsgnd(inimage, j);
@@ -1409,14 +1409,14 @@ jas_image_dump(image, stderr);
 	}
 
 	outpixmap.numcmpts = numoutclrchans;
-	outcmptfmts = malloc(numoutclrchans * sizeof(jas_cmcmptfmt_t));
+	outcmptfmts = (jas_cmcmptfmt_t *) malloc(numoutclrchans * sizeof(jas_cmcmptfmt_t));
 	assert(outcmptfmts);
 	outpixmap.cmptfmts = outcmptfmts;
 
 	for (i = 0; i < numoutclrchans; ++i) {
 		j = jas_image_getcmptbytype(outimage, JAS_IMAGE_CT_COLOR(i));
 		assert(j >= 0);
-		if (!(outcmptfmts[i].buf = malloc(width * sizeof(long))))
+		if (!(outcmptfmts[i].buf = (long *)malloc(width * sizeof(long))))
 			goto error;
 		outcmptfmts[i].prec = jas_image_cmptprec(outimage, j);
 		outcmptfmts[i].sgnd = jas_image_cmptsgnd(outimage, j);

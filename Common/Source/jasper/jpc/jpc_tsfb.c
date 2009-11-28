@@ -164,7 +164,7 @@ jpc_tsfb_t *jpc_tsfb_wavelet(jpc_qmfb1d_t *hqmfb, jpc_qmfb1d_t *vqmfb, int numdl
 static jpc_tsfb_t *jpc_tsfb_create()
 {
 	jpc_tsfb_t *tsfb;
-	if (!(tsfb = jas_malloc(sizeof(jpc_tsfb_t)))) {
+	if (!(tsfb = (jpc_tsfb_t *)jas_malloc(sizeof(jpc_tsfb_t)))) {
 		return 0;
 	}
 	tsfb->root = 0;
@@ -398,7 +398,7 @@ assert(numnodebands == 4 || numnodebands == 3);
 static jpc_tsfbnode_t *jpc_tsfbnode_create()
 {
 	jpc_tsfbnode_t *node;
-	if (!(node = jas_malloc(sizeof(jpc_tsfbnode_t)))) {
+	if (!(node = (jpc_tsfbnode_t *) jas_malloc(sizeof(jpc_tsfbnode_t)))) {
 		return 0;
 	}
 	node->numhchans = 0;

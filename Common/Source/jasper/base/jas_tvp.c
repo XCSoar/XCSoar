@@ -93,7 +93,7 @@
 jas_tvparser_t *jas_tvparser_create(const char *s)
 {
 	jas_tvparser_t *tvp;
-	if (!(tvp = jas_malloc(sizeof(jas_tvparser_t)))) {
+	if (!(tvp = (jas_tvparser_t *)jas_malloc(sizeof(jas_tvparser_t)))) {
 		return 0;
 	}
 	if (!(tvp->buf = jas_strdup(s))) {
