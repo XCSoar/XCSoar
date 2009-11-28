@@ -324,7 +324,7 @@ ifeq ($(HAVE_WIN32),y)
     endif
   endif
 else
-  TARGET_LDLIBS := -lstdc++
+  TARGET_LDLIBS := -lstdc++ -lm
 endif
 
 ######## output files
