@@ -40,6 +40,8 @@ public:
     {
     }
 
+    virtual ~AbstractTaskFactory() {};
+
   /**
    * Legal types of StartPoint observation zones
    */

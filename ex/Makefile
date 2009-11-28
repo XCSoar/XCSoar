@@ -16,11 +16,10 @@ NQ		:=
 endif
 endif
 
-
-OUTPUTS 	:= test
-
 SRC := src
 INCLUDES := -I$(SRC)
+
+MAKEFLAGS	+=-r
 
 PROFILE := 
 # -pg
@@ -30,36 +29,34 @@ COVERAGE :=
 OPTIMIZE := -g -O2
 
 CPPFLAGS := $(INCLUDES) 
-CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE) $(COVERAGE)
 CFLAGS		:=$(OPTIMIZE) $(PROFILE) $(COVERAGE)
 
-MAKEFLAGS	+=-r
-
-CXXFLAGS += -Wall -Wextra
-CXXFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
-CXXFLAGS += -Wmissing-noreturn -Wundef
-CXXFLAGS += -Wno-variadic-macros 
+CFLAGS += -Wall -Wextra
+CFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
+CFLAGS += -Wmissing-noreturn -Wundef
 
 # disable some warnings, we're not ready for them yet
-CXXFLAGS += -Wno-unused-parameter 
-CXXFLAGS += -Wno-reorder 
-#CXXFLAGS += -Wno-format -Wno-switch
-#CXXFLAGS += -Wno-non-virtual-dtor 
-#CXXFLAGS += -Wno-missing-field-initializers 
+CFLAGS += -Wno-unused-parameter 
+CFLAGS += -Wno-reorder 
+#CFLAGS += -Wno-format -Wno-switch
+#CFLAGS += -Wno-non-virtual-dtor 
+#CFLAGS += -Wno-missing-field-initializers 
 # InputEvents_defaults.cpp should be fixed
-#CXXFLAGS += -Wno-char-subscripts
+#CFLAGS += -Wno-char-subscripts
 # FastMath.h does dirty aliasing tricks
-#CXXFLAGS += -Wno-strict-aliasing
+#CFLAGS += -Wno-strict-aliasing
 
 # make warnings fatal (for perfectionists)
-CXXFLAGS += -Werror
-CXXFLAGS += -pedantic
+#CFLAGS += -Werror
+CFLAGS += -pedantic
 
 # -Wdisabled-optimization
 # -Wunused -Wshadow -Wunreachable-code
 
-CXXFLAGS += -DDO_PRINT 
+CFLAGS += -DDO_PRINT 
 # -DINSTRUMENT_TASK
+
+CXXFLAGS	:=$(CFLAGS) -fno-exceptions 
 
 ####### sources
 
@@ -156,7 +153,7 @@ TESTOBJS = Test/test_debug.o \
 	Test/harness_flight.o \
 	Test/harness_waypoints.o \
 	Test/harness_task.o \
-	Test/tap.o
+#	Test/tap.o
 
 TESTFAST = \
 	Test/test_waypoints.exe \
@@ -197,7 +194,7 @@ testfast:	$(TESTFAST)
 
 %.exe: %.cpp $(OBJS) $(TESTOBJS)
 	@$(NQ)echo "  CXX/LN      $@"
-	$(Q)g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) $< -o $@
+	$(Q)g++ $(CXXFLAGS) $(INCLUDES) $(OBJS) $(TESTOBJS) $< -o $@ 
 
 doco: FORCE
 	tools/cloc --exclude-lang=D src > doc/cloc.txt
@@ -283,8 +280,8 @@ cleani: FORCE
 .PHONY: FORCE
 
 ifneq ($(wildcard $(SRC)/.*.d),)
-include $(wildcard $(SRC)/.*.d)
+#include $(wildcard $(SRC)/.*.d)
 endif
 ifneq ($(wildcard $(SRC)/*/.*.d),)
-include $(wildcard $(SRC)/*/.*.d)
+#include $(wildcard $(SRC)/*/.*.d)
 endif

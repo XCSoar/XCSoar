@@ -46,15 +46,16 @@ static int test_died = 0;
 
 /* Encapsulate the pthread code in a conditional.  In the absence of
    libpthread the code does nothing */
-#ifdef HAVE_LIBPTHREAD
-#include <pthread.h>
-static pthread_mutex_t M = PTHREAD_MUTEX_INITIALIZER;
-# define LOCK pthread_mutex_lock(&M);
-# define UNLOCK pthread_mutex_unlock(&M);
-#else
+
+//#ifdef HAVE_LIBPTHREAD
+//#include <pthread.h>
+//static pthread_mutex_t M = PTHREAD_MUTEX_INITIALIZER;
+//# define LOCK pthread_mutex_lock(&M);
+//# define UNLOCK pthread_mutex_unlock(&M);
+//#else
 # define LOCK
 # define UNLOCK
-#endif
+//#endif
 
 static void _expected_tests(unsigned int);
 static void _tap_init(void);
