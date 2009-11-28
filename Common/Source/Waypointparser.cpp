@@ -76,7 +76,7 @@ TCHAR *strtok_r(const TCHAR *s, TCHAR *delim, TCHAR **lasts);
 //static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 static bool
 ParseWayPointString(WAYPOINT &way_point, const TCHAR *input,
-                    RasterTerrain &terrain);
+                    const RasterTerrain &terrain);
 
 static bool
 ParseAngle(const TCHAR *input, double *value_r, TCHAR **endptr_r);
@@ -185,7 +185,7 @@ static int ParseWayPointError(int LineNumber, const TCHAR *FileName,
 }
 
 static bool
-FeedWayPointLine(WayPointList &way_points, RasterTerrain &terrain,
+FeedWayPointLine(WayPointList &way_points, const RasterTerrain &terrain,
                  const TCHAR *line)
 {
   if (TempString[0] == '\0' ||
@@ -216,7 +216,7 @@ FeedWayPointLine(WayPointList &way_points, RasterTerrain &terrain,
 
 static void
 ReadWayPointFile(FILE *fp, const TCHAR *CurrentWpFileName,
-                 WayPointList &way_points, RasterTerrain &terrain)
+                 WayPointList &way_points, const RasterTerrain &terrain)
 {
 //  TCHAR szTemp[100];
   int nTrigger=10;
@@ -255,7 +255,7 @@ ReadWayPointFile(FILE *fp, const TCHAR *CurrentWpFileName,
 
 static void
 ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName,
-                 WayPointList &way_points, RasterTerrain &terrain)
+                 WayPointList &way_points, const RasterTerrain &terrain)
 {
 //  TCHAR szTemp[100];
   int nTrigger=10;
@@ -292,7 +292,7 @@ ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName,
 
 
 void
-WaypointAltitudeFromTerrain(WAYPOINT &way_point, RasterTerrain &terrain)
+WaypointAltitudeFromTerrain(WAYPOINT &way_point, const RasterTerrain &terrain)
 {
   double myalt = -1;
   if (terrain.GetMap()) {
@@ -312,7 +312,7 @@ WaypointAltitudeFromTerrain(WAYPOINT &way_point, RasterTerrain &terrain)
 
 static bool
 ParseWayPointString(WAYPOINT &way_point, const TCHAR *input,
-                    RasterTerrain &terrain)
+                    const RasterTerrain &terrain)
 {
   TCHAR *endptr;
   size_t length;
@@ -567,7 +567,7 @@ ParseAltitude(const TCHAR *input, double *altitude_r, TCHAR **endptr_r)
 
 bool
 ReadWayPointZipFile(const TCHAR *path, WayPointList &way_points,
-                    RasterTerrain &terrain)
+                    const RasterTerrain &terrain)
 {
   char path_ascii[MAX_PATH];
   ZZIP_FILE *fp;
@@ -584,7 +584,7 @@ ReadWayPointZipFile(const TCHAR *path, WayPointList &way_points,
 
 bool
 ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
-                 RasterTerrain &terrain)
+                 const RasterTerrain &terrain)
 {
   char path_ascii[MAX_PATH];
   FILE *fp;
@@ -605,7 +605,7 @@ ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
 }
 
 void
-ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
+ReadWayPoints(WayPointList &way_points, const RasterTerrain &terrain)
 {
   StartupStore(TEXT("ReadWayPoints\n"));
 

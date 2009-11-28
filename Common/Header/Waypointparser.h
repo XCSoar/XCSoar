@@ -60,10 +60,10 @@ struct SETTINGS_COMPUTER;
  */
 bool
 ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
-                 RasterTerrain &terrain);
+                 const RasterTerrain &terrain);
 
 void
-ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain);
+ReadWayPoints(WayPointList &way_points, const RasterTerrain &terrain);
 
 void
 SetHome(const WayPointList &way_points, const RasterTerrain &terrain,
@@ -83,6 +83,6 @@ WaypointWriteFiles(WayPointList &way_points,
                    const SETTINGS_COMPUTER &settings_computer);
 
 void
-WaypointAltitudeFromTerrain(WAYPOINT &way_point, RasterTerrain &terrain);
+WaypointAltitudeFromTerrain(WAYPOINT &way_point, const RasterTerrain &terrain);
 
 #endif
