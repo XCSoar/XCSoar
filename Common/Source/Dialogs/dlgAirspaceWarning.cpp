@@ -589,6 +589,7 @@ void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action,
       wf->send_user(1);
     }
     else {
+      actListSizeChange = actListChange = false;
       airspaceWarningEvent.trigger();
       // JMW this was bad! PostMessage(hWndMapWindow, WM_USER+1, 0, 0);
       // (Makes it serviced by the main gui thread, much better)
@@ -638,6 +639,8 @@ bool dlgAirspaceWarningShowDlg(bool Force){
 
   if (!actShow && !Force)
     return false;
+
+  actShow = false;
 
   Count = AirspaceWarnGetItemCount();
 
