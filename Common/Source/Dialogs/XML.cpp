@@ -53,6 +53,7 @@ Copyright_License {
 #include "WindowControls.h"
 #include "Interface.hpp"
 
+#include <stdio.h>    // for _stprintf
 #include <tchar.h>
 #include <limits.h>
 
