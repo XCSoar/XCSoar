@@ -15,7 +15,10 @@ ScoredTaskPoint::transition_enter(const AIRCRAFT_STATE & ref_now,
 {
   bool entered = ObservationZone::transition_enter(ref_now, ref_last);
   if (entered) {
-    state_entered = ref_now;
+    if (!score_first_entry() || !has_entered()) {
+      m_state_entered = ref_now;
+      return true;
+    }
   }
   return entered;
 }
@@ -26,41 +29,41 @@ ScoredTaskPoint::transition_exit(const AIRCRAFT_STATE & ref_now,
 {
   bool exited = ObservationZone::transition_exit(ref_now, ref_last);
   if (exited) {
-    state_exited = ref_last;
+    if (score_last_exit()) {
+      clear_sample_all_but_last(ref_last);
+      m_state_entered = ref_last;
+      m_state_exited = ref_now;
+     } else {
+      m_state_exited = ref_last;
+    }
   }
   return exited;
 }
 
 
-GEOPOINT 
-ScoredTaskPoint::get_reference_travelled() const
+const GEOPOINT &
+ScoredTaskPoint::get_location_travelled() const
 {
   if (has_entered()) {
-    return getMaxLocation();
+    return get_location_max();
   } else {
-    return getLocation();
+    return get_location();
   }
 }
 
-GEOPOINT 
-ScoredTaskPoint::get_reference_scored() const
+const GEOPOINT &
+ScoredTaskPoint::get_location_scored() const
 {
-  return getLocation();
+  return get_location();
 }
 
-GEOPOINT 
-ScoredTaskPoint::get_reference_nominal() const
-{
-  return getLocation();
-}
-
-GEOPOINT 
-ScoredTaskPoint::get_reference_remaining() const
+const GEOPOINT &
+ScoredTaskPoint::get_location_remaining() const
 {
   if (has_entered()) {
-    return getMinLocation();
+    return get_location_min();
   } else {
-    return getLocation();
+    return get_location();
   }
 }
 
@@ -69,6 +72,6 @@ void
 ScoredTaskPoint::reset()
 {
   SampledTaskPoint::reset();
-  state_entered.Time = -1;
-  state_exited.Time = -1;
+  m_state_entered.Time = -1;
+  m_state_exited.Time = -1;
 }

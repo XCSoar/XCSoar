@@ -27,6 +27,8 @@ class OrderedTask:
   public Serialisable
 {
 public:
+  friend class TaskDijkstra;
+
   /** 
    * Constructor.
    *
@@ -192,6 +194,17 @@ public:
   }
 
 /** 
+ * Accessor for task projection, for use when creating task points
+ * 
+ * @return Task global projection
+ */
+  TaskProjection& get_task_projection() {
+    return task_projection;
+  }
+
+protected:
+
+/** 
  * Retrieve vector of search points to be used in max/min distance
  * scans (by TaskDijkstra).
  * 
@@ -222,17 +235,6 @@ public:
   void set_tp_search_max(unsigned tp, const SearchPoint &sol) {
     tps[tp]->set_search_max(sol);
   }
-
-/** 
- * Accessor for task projection, for use when creating task points
- * 
- * @return Task global projection
- */
-  TaskProjection& get_task_projection() {
-    return task_projection;
-  }
-
-protected:
 
 /** 
  * Scan task for valid start/finish points

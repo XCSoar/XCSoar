@@ -22,9 +22,11 @@ class TaskEvents;
  */
 class SampledTaskPoint:
   public TaskPoint, 
-  public ObservationZone
+  public virtual ObservationZone
 {
 public:  
+  friend class OrderedTask;
+
 /** 
  * Constructor.  Clears boundary and interior samples on instantiation.
  * Must be followed by default_boundary_points() and update_projection() after
@@ -51,60 +53,11 @@ public:
   virtual void reset();
 
 /** 
- * Retrieve interior sample polygon.
- * Because sometimes an OZ will be skipped (by accident, true miss, or
- * failure of electronics), but we still want rest of task to function,
- * the 'cheat' option allows non-achieved task points to be considered achieved
- * by assuming the aircraft appeared at the reference location.
- * 
- * @param cheat If true, adds reference point as a sampled point
- * @return Vector of boundary points representing a closed polygon
- */
-  const SearchPointVector& get_search_points(bool cheat=false);
-
-/** 
- * Retrieve boundary polygon
- * 
- * @return Vector of boundary points representing a closed polygon
- */
-  const SearchPointVector& get_boundary_points() const;
-
-/** 
  * Re-project boundary and interior sample polygons.
  * Must be called if task_projection changes.
  * 
  */
-  virtual void update_projection();
-
-/** 
- * Set the location of the sample/boundary polygon node
- * that produces the maximum task distance.
- * 
- * @param locmax Location of max distance node 
- */
-  void set_search_max(const SearchPoint &locmax) {
-    search_max = locmax;
-  }
-
-/** 
- * Set the location of the sample/boundary polygon node
- * that produces the minimum task distance.
- * 
- * @param locmin Location of min distance node 
- */
-  void set_search_min(const SearchPoint &locmin) {
-    search_min = locmin;
-  }
-
-/** 
- * Accessor to retrieve the sample/boundary polygon
- * node that produces the maximum task distance.
- * 
- * @return Max distance node
- */
-  const SearchPoint& get_search_max() const {
-    return search_max;
-  }
+  void update_projection();
 
 /** 
  * Accessor to retrieve location of the sample/boundary polygon
@@ -112,19 +65,9 @@ public:
  * 
  * @return Location of max distance node
  */
-  GEOPOINT getMaxLocation() const {
-    return search_max.getLocation();
+  const GEOPOINT& get_location_max() const {
+    return m_search_max.get_location();
   };
-
-/** 
- * Accessor to retrieve node of the sample/boundary polygon
- * that produces the minimum task distance.
- * 
- * @return Minimum distance node
- */
-  const SearchPoint& get_search_min() const {
-    return search_min;
-  }
 
 /** 
  * Accessor to retrieve location of the sample/boundary polygon
@@ -132,15 +75,15 @@ public:
  * 
  * @return Location of minimum distance node
  */
-  GEOPOINT getMinLocation() const {
-    return search_min.getLocation();
+  const GEOPOINT& get_location_min() const {
+    return m_search_min.get_location();
   };
 
 /** 
  * Construct boundary polygon from internal representation of observation zone.
  * 
  */
-  virtual void initialise_boundary_points();
+  virtual void update_oz();
 
 /** 
  * Check if aircraft is within observation zone, and if so,
@@ -160,56 +103,108 @@ public:
  * @return Task projection used by this point
  */
   const TaskProjection &get_task_projection() const {
-    return task_projection;
+    return m_task_projection;
   };
 
-#ifdef DO_PRINT
-  virtual void print(std::ostream& f, const AIRCRAFT_STATE&state) const;
-  virtual void print_samples(std::ostream& f, const AIRCRAFT_STATE&state);
-#endif
-
 protected:
-  const bool boundary_scored; /**< Whether boundaries are used in scoring distance, or just the reference point */
-
-/** 
- * Clear all sample points.
- * 
- */
-  virtual void clear_sample_points();
 
 /** 
  * Clear all sample points and add the current state as a sample.
  * This is used, for exmaple, for StartPoints to only remember the last sample
  * prior to crossing the start.
  */  
-  virtual void clear_sample_all_but_last(const AIRCRAFT_STATE& state);
+  void clear_sample_all_but_last(const AIRCRAFT_STATE& state);
 
 private:
-  const TaskProjection &task_projection;
+
+/** 
+ * Determines whether to 'cheat' a missed OZ prior to the current active task point. 
+ *
+ * @return Vector of boundary points representing a closed polygon
+ */
+  virtual bool search_nominal_if_unsampled() = 0;
+
+/** 
+ * Determines whether to return sampled or boundary points for max/min search
+ *
+ * @return Vector of boundary points representing a closed polygon
+ */
+  virtual bool search_boundary_points() = 0;
+
+/** 
+ * Retrieve interior sample polygon.
+ * Because sometimes an OZ will be skipped (by accident, true miss, or
+ * failure of electronics), but we still want rest of task to function,
+ * the 'cheat' option allows non-achieved task points to be considered achieved
+ * by assuming the aircraft appeared at the reference location.
+ * 
+ * @return Vector of boundary points representing a closed polygon
+ */
+    const SearchPointVector& get_search_points();
+
+/** 
+ * Set the location of the sample/boundary polygon node
+ * that produces the maximum task distance.
+ * 
+ * @param locmax Location of max distance node 
+ */
+    void set_search_max(const SearchPoint &locmax) {
+      m_search_max = locmax;
+    }
+
+/** 
+ * Set the location of the sample/boundary polygon node
+ * that produces the minimum task distance.
+ * 
+ * @param locmin Location of min distance node 
+ */
+    void set_search_min(const SearchPoint &locmin) {
+      m_search_min = locmin;
+    }
+
+private:
+
+  const bool m_boundary_scored; /**< Whether boundaries are used in scoring distance, or just the reference point */
+
+  const TaskProjection &m_task_projection;
 
 /** 
  * Convert interior sample points to convex hull
  * 
  * @return True if interior sample points were trimmed
  */
-  virtual bool prune_sample_points();
+  bool prune_sample_points();
 
 /** 
  * Convert boundary points to convex hull
  * 
  * @return True if boundary points were trimmed
  */
-  virtual bool prune_boundary_points();
+  bool prune_boundary_points();
+
+/** 
+ * Clear all sample points.
+ * 
+ */
+  void clear_sample_points();
 
 /** 
  * Clear all boundary points.
  * 
  */
-  virtual void clear_boundary_points();
+  void clear_boundary_points();
 
-  SearchPointVector sampled_points;
-  SearchPointVector boundary_points;
-  SearchPoint search_max;
-  SearchPoint search_min;
+  SearchPointVector m_sampled_points;
+  SearchPointVector m_boundary_points;
+  SearchPoint m_search_max;
+  SearchPoint m_search_min;
+  SearchPoint m_search_reference;
+
+public:
+#ifdef DO_PRINT
+  virtual void print(std::ostream& f, const AIRCRAFT_STATE&state) const;
+  virtual void print_samples(std::ostream& f, const AIRCRAFT_STATE&state);
+#endif
+
 };
 #endif //SAMPLEDOBSERVATIONZONE_H

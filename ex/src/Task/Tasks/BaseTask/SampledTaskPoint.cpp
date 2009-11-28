@@ -9,76 +9,27 @@ SampledTaskPoint::SampledTaskPoint(const TaskProjection& tp,
                                    const TaskBehaviour &tb,
                                    const bool b_scored):
     TaskPoint(wp,tb),
-    boundary_scored(b_scored),
-    task_projection(tp),
-    search_max(getLocation(),tp),
-    search_min(getLocation(),tp)
+    m_boundary_scored(b_scored),
+    m_task_projection(tp),
+    m_search_max(get_location(),tp),
+    m_search_min(get_location(),tp),
+    m_search_reference(get_location(),tp)
 {
     clear_boundary_points();
     clear_sample_points();
 }
 
+////////////// SAMPLES /////////////////////////
 
 bool 
 SampledTaskPoint::prune_sample_points()
 {
   bool changed=false;
-  GrahamScan gs(sampled_points);
-  sampled_points = gs.prune_interior(&changed);
+  GrahamScan gs(m_sampled_points);
+  m_sampled_points = gs.prune_interior(&changed);
   return changed;
 }
 
-bool 
-SampledTaskPoint::prune_boundary_points()
-{
-  bool changed=false;
-  GrahamScan gs(boundary_points);
-  boundary_points = gs.prune_interior(&changed);
-  return changed;
-}
-
-const SearchPointVector& 
-SampledTaskPoint::get_boundary_points() const
-{
-  return boundary_points;
-}
-
-const SearchPointVector& 
-SampledTaskPoint::get_search_points(bool cheat)
-{
-  if (sampled_points.empty()) {
-    if (cheat) {
-      // this adds a point in case the waypoint was skipped
-      // this is a crude way of handling the situation --- may be best
-      // to de-rate the score in some way
-      
-      SearchPoint sp(getLocation(), task_projection);
-      sampled_points.push_back(sp);
-      return sampled_points;
-    } else {
-      return boundary_points;
-    }
-  } else {
-    return sampled_points;
-  }
-}
-
-
-void 
-SampledTaskPoint::initialise_boundary_points() 
-{ 
-  clear_boundary_points();
-  if (boundary_scored) {
-    for (double t=0; t<=1.0; t+= 0.05) {
-      SearchPoint sp(get_boundary_parametric(t), task_projection);
-      boundary_points.push_back(sp);
-    }
-  } else {
-    SearchPoint sp(getLocation(), task_projection);
-    boundary_points.push_back(sp);
-  }
-  prune_boundary_points();
-}
 
 bool 
 SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
@@ -92,56 +43,115 @@ SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
     //   re-compute convex hull
     //   return true; (update required)
     //
-    if (PolygonInterior(state.Location, sampled_points)) {
+    if (PolygonInterior(state.Location, m_sampled_points)) {
       // do nothing
       return false;
     } else {
-      SearchPoint sp(state.Location, task_projection, true);
-      sampled_points.push_back(sp);
+      SearchPoint sp(state.Location, m_task_projection, true);
+      m_sampled_points.push_back(sp);
       // only return true if hull changed 
-      return (prune_sample_points());
+      return prune_sample_points();
     }
   }
   return false;
 }
 
-void 
-SampledTaskPoint::update_projection()
-{
-  for (unsigned i=0; i<sampled_points.size(); i++) {
-    sampled_points[i].project(task_projection);
-  }
-  for (unsigned i=0; i<boundary_points.size(); i++) {
-    boundary_points[i].project(task_projection);
-  }
-}
 
 void 
 SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last) 
 {
-  if (!sampled_points.empty()) {
-    sampled_points.clear();
-    SearchPoint sp(ref_last.Location, task_projection, true);
-    sampled_points.push_back(sp);
+  if (!m_sampled_points.empty()) {
+    m_sampled_points.clear();
+    SearchPoint sp(ref_last.Location, m_task_projection, true);
+    m_sampled_points.push_back(sp);
   }
 }
 
-void
-SampledTaskPoint::clear_boundary_points()
-{
-  boundary_points.clear();
-  search_max = SearchPoint(getLocation(), task_projection);
-  search_min = SearchPoint(getLocation(), task_projection);
-}
 
 void 
 SampledTaskPoint::clear_sample_points() 
 {
-  sampled_points.clear();
+  m_sampled_points.clear();
 }
+
+
+////////////// BOUNDARY
+
+
+bool 
+SampledTaskPoint::prune_boundary_points()
+{
+  bool changed=false;
+  GrahamScan gs(m_boundary_points);
+  m_boundary_points = gs.prune_interior(&changed);
+  return changed;
+}
+
+
+void 
+SampledTaskPoint::update_oz() 
+{ 
+  clear_boundary_points();
+  if (m_boundary_scored) {
+    for (double t=0; t<=1.0; t+= 0.05) {
+      SearchPoint sp(get_boundary_parametric(t), m_task_projection);
+      m_boundary_points.push_back(sp);
+    }
+  } else {
+    m_boundary_points.push_back(m_search_reference);
+  }
+  prune_boundary_points();
+}
+
+
+void
+SampledTaskPoint::clear_boundary_points()
+{
+  m_boundary_points.clear();
+  m_search_max = m_search_reference;
+  m_search_min = m_search_reference;
+}
+
+///////////// SAMPLES + BOUNDARY
+
+void 
+SampledTaskPoint::update_projection()
+{
+  for (unsigned i=0; i<m_sampled_points.size(); i++) {
+    m_sampled_points[i].project(m_task_projection);
+  }
+  for (unsigned i=0; i<m_boundary_points.size(); i++) {
+    m_boundary_points[i].project(m_task_projection);
+  }
+}
+
 
 void
 SampledTaskPoint::reset() 
 {
   clear_sample_points();
 }
+
+
+const SearchPointVector& 
+SampledTaskPoint::get_search_points()
+{
+  if (search_boundary_points()) {
+    return m_boundary_points;
+  } else {
+    if (m_sampled_points.empty()) {
+      if (search_nominal_if_unsampled()) {
+        // this adds a point in case the waypoint was skipped
+        // this is a crude way of handling the situation --- may be best
+        // to de-rate the score in some way
+        m_sampled_points.push_back(m_search_reference);
+        return m_sampled_points;
+      } else {
+        return m_boundary_points;
+      }
+    } else {
+      return m_sampled_points;
+    }
+  }
+}
+

@@ -66,7 +66,7 @@ public:
            const TaskProjection&tp,
            const Waypoint & wp,
            const TaskBehaviour &tb) 
-    : IntermediatePoint(_oz,tp,wp,tb,false)
+    : IntermediatePoint(_oz,tp,wp,tb)
     { };
 
 /** 

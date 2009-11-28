@@ -145,6 +145,12 @@ TaskManager::Accept(BaseVisitor& visitor) const
 }
 
 void
+TaskManager::ordered_Accept(BaseVisitor& visitor) const
+{
+  task_ordered.Accept(visitor);
+}
+
+void
 TaskManager::reset()
 {
   task_ordered.reset();
@@ -196,7 +202,7 @@ TaskManager::random_point_in_task(const unsigned index, const double mag) const
     }
   }
   if (index<= task_size()) {
-    return active_task->getActiveTaskPoint()->getLocation();
+    return active_task->getActiveTaskPoint()->get_location();
   } else {
     GEOPOINT null_location;
     return null_location;

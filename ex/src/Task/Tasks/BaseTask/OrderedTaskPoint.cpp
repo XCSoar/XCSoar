@@ -14,11 +14,11 @@ OrderedTaskPoint::OrderedTaskPoint(ObservationZonePoint* _oz,
                                    const Waypoint & wp, 
                                    const TaskBehaviour &tb,
                                    const bool b_scored): 
-  oz(_oz),
+  ObservationZoneClient(_oz),
   ScoredTaskPoint(tp, wp, tb, b_scored),
   tp_previous(NULL),
   tp_next(NULL),
-  active_state(NOTFOUND_ACTIVE),
+  m_active_state(NOTFOUND_ACTIVE),
   TaskLeg(*this)
 {
 }
@@ -44,53 +44,72 @@ OrderedTaskPoint::set_neighbours(OrderedTaskPoint* prev,
   tp_previous = prev;
   tp_next = next;
 
-  oz->set_legs(prev,this,next);
-
+  update_geometry();
 }
+
+
+/** 
+ * Update observation zone geometry (or other internal data) when
+ * previous/next turnpoint changes.
+ */
+void 
+OrderedTaskPoint::update_geometry() {
+  set_legs(tp_previous, this, tp_next);
+}
+
+
+void
+OrderedTaskPoint::update_oz()
+{
+  update_geometry();
+
+  /// \todo also clear search points?
+  SampledTaskPoint::update_oz();
+}
+
 
 bool 
 OrderedTaskPoint::scan_active(OrderedTaskPoint* atp) 
 {
   // reset
-  active_state = NOTFOUND_ACTIVE;
+  m_active_state = NOTFOUND_ACTIVE;
 
   if (atp == this) {
-    active_state = CURRENT_ACTIVE;
+    m_active_state = CURRENT_ACTIVE;
   } else if (tp_previous 
              && ((get_previous()->getActiveState() 
                   == CURRENT_ACTIVE) 
                  || (get_previous()->getActiveState() 
                      == AFTER_ACTIVE))) {
-    active_state = AFTER_ACTIVE;
+    m_active_state = AFTER_ACTIVE;
   } else {
-    active_state = BEFORE_ACTIVE;
+    m_active_state = BEFORE_ACTIVE;
   }
 
   if (tp_next) { 
     // propagate to remainder of task
     return get_next()->scan_active(atp);
-  } else if (active_state == BEFORE_ACTIVE) {
-    return false;
   } else {
-    return true;
+    return (m_active_state != BEFORE_ACTIVE) && (m_active_state != NOTFOUND_ACTIVE);
   }
 }
 
 
-const std::vector<SearchPoint>& 
-OrderedTaskPoint::get_search_points()
+bool
+OrderedTaskPoint::search_boundary_points()
 {
-  if (active_state== BEFORE_ACTIVE) {
-    return SampledTaskPoint::get_search_points(true);
-  } else if (active_state == CURRENT_ACTIVE) {
-    return SampledTaskPoint::get_search_points(false);
-  } else {
-    return get_boundary_points();
-  }
+  return m_active_state == AFTER_ACTIVE;
 }
 
+bool
+OrderedTaskPoint::search_nominal_if_unsampled()
+{
+  return m_active_state == BEFORE_ACTIVE;
+}
 
+#ifdef INSTRUMENT_TASK
 extern unsigned count_distbearing;
+#endif
 
 
 double 
@@ -98,10 +117,14 @@ OrderedTaskPoint::double_leg_distance(const GEOPOINT &ref) const
 {
   assert(tp_previous);
   assert(tp_next);
-  GEOPOINT p1 = get_previous()->get_reference_remaining();
-  GEOPOINT p2 = get_next()->get_reference_remaining();
+
+#ifdef INSTRUMENT_TASK
   count_distbearing++;
-  return ::DoubleDistance(p1, ref, p2);
+#endif
+
+  return ::DoubleDistance(get_previous()->get_location_remaining(), 
+                          ref, 
+                          get_next()->get_location_remaining());
 }
 
 
@@ -112,7 +135,7 @@ OrderedTaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac,
                                           const double minH) const
 {
   GlideState gs(get_vector_travelled(),
-                 std::max(minH,getElevation()),
+                 std::max(minH,get_elevation()),
                  ac);
   return polar.solve(gs);
 }
@@ -123,24 +146,15 @@ OrderedTaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac,
                                         const double minH) const
 {
   GlideState gs(get_vector_planned(),
-                 std::max(minH,getElevation()),
+                 std::max(minH,get_elevation()),
                  ac);
   return polar.solve(gs);
-}
-
-void
-OrderedTaskPoint::update_oz()
-{
-  /// \todo also clear search points?
-  update_geometry();
-  initialise_boundary_points();
-  update_projection();
 }
 
 bool 
 OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
 {
   return (get_waypoint() == other->get_waypoint()) &&
-    (oz->equals(other->get_oz()));
+    get_oz()->equals(other->get_oz());
 }
 

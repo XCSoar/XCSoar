@@ -83,19 +83,6 @@ public:
                               OrderedTaskPoint* next);
 
 /** 
- * Test whether aircraft has exited observation zone and
- * was previously inside; also tracks this transition and
- * clears samples inside except for last inside sample.
- * 
- * @param ref_now State current
- * @param ref_last State at last sample
- * 
- * @return True if observation zone is exited now
- */
-  virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
-                               const AIRCRAFT_STATE & ref_last);
-
-/** 
  * Update sample, specialisation to check start speed/height
  *
  * @param state Aircraft state
@@ -112,7 +99,7 @@ public:
  * 
  * @return Minimum allowable elevation of start point
  */
-  virtual double getElevation() const;
+  virtual double get_elevation() const;
 
 /** 
  * Test whether a taskpoint is equivalent to this one
@@ -123,8 +110,12 @@ public:
  */
   virtual bool equals(const OrderedTaskPoint* other) const;
 
-protected:
+private:
   bool enabled; /**< For future use with multiple start points, whether enabled */
+
+  bool score_last_exit() const {
+    return true;
+  }
 public:
   DEFINE_VISITABLE()
 };

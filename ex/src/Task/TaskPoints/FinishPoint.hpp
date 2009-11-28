@@ -47,10 +47,13 @@
  * but does not yet have an observation zone.
  * No taskpoints shall be present following a FinishPoint.
  *
+ * Entry requires previous point to have entered to prevent spurious crossing.
+ *
  * \todo
  * - currently we don't track crossing the actual line, rather it currently
  *   allows any border crossing
  * - adjustments in FAI finish for min finish height
+ * - consider making all OTP's require previous tps to have entered for this to
  */
 class FinishPoint : public OrderedTaskPoint {
 public:
@@ -69,7 +72,7 @@ public:
                 const TaskProjection& tp,
                 const Waypoint & wp,
                 const TaskBehaviour& tb) : 
-      OrderedTaskPoint(_oz,tp,wp,tb,false) { };
+      OrderedTaskPoint(_oz,tp,wp,tb) { };
 
 /** 
  * Set previous/next taskpoints in sequence.
@@ -82,29 +85,12 @@ public:
                               OrderedTaskPoint* next);
 
 /** 
- * Test whether aircraft has entered observation zone and
- * was previously outside.  Only triggers on first entry
- * since an aircraft may pass in/out of a finish zone multiple
- * times but only the first is required.
- *
- * Also requires previous point to have entered to prevent spurious crossing.
- * \todo consider making all OTP's require previous tps to have entered for this to
- * 
- * @param ref_now State current
- * @param ref_last State at last sample
- * 
- * @return True if observation zone is exited now
- */
-  virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
-                                const AIRCRAFT_STATE & ref_last);
-
-/** 
  * Retrieve elevation of taskpoint, taking into account
  * rules and safety margins.
  * 
  * @return Minimum allowable elevation of start point
  */
-  virtual double getElevation() const;
+  virtual double get_elevation() const;
 
 /** 
  * Test whether a taskpoint is equivalent to this one
@@ -114,6 +100,12 @@ public:
  * @return True if same WP, type and OZ
  */
   virtual bool equals(const OrderedTaskPoint* other) const;
+
+private:
+  bool score_first_entry() const {
+    return true;
+  }
+  bool entry_precondition() const;
 
 public:
   DEFINE_VISITABLE()

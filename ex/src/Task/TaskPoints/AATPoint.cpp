@@ -4,38 +4,34 @@
 #include "Math/Geometry.hpp"
 #include <math.h>
 
-GEOPOINT AATPoint::get_reference_scored() const
+const GEOPOINT&
+AATPoint::get_location_scored() const
 {
   if (getActiveState() == BEFORE_ACTIVE) {
-    return getMaxLocation();
+    return get_location_max();
   } else {
-    return getMinLocation();
+    return get_location_min();
   }
 }
 
-GEOPOINT AATPoint::get_reference_travelled() const
+const GEOPOINT&
+AATPoint::get_location_travelled() const
 {
   if (has_entered()) {
-    return getMaxLocation();
+    return get_location_max();
   } else {
-    return getMinLocation();
+    return get_location_min();
   }
 }
 
-GEOPOINT AATPoint::get_reference_remaining() const
+const GEOPOINT&
+AATPoint::get_location_remaining() const
 {
   if (getActiveState() == BEFORE_ACTIVE) {
-    return getMaxLocation();
+    return get_location_max();
   } else {
-    return TargetLocation;
+    return m_target_location;
   }
-}
-
-double 
-AATPoint::getElevation() const
-{
-  // for now, just use default value
-  return IntermediatePoint::getElevation();
 }
 
 bool 
@@ -43,7 +39,7 @@ AATPoint::update_sample(const AIRCRAFT_STATE& state,
                         const TaskEvents &task_events) 
 {
   bool retval = OrderedTaskPoint::update_sample(state,task_events);
-  if (active_state == CURRENT_ACTIVE) {
+  if (getActiveState() == CURRENT_ACTIVE) {
     retval |= check_target(state);
   }
 
@@ -66,7 +62,7 @@ AATPoint::check_target(const AIRCRAFT_STATE& state)
 bool 
 AATPoint::close_to_target(const AIRCRAFT_STATE& state, const double threshold) const
 {
-  return (double_leg_distance(TargetLocation)-double_leg_distance(state.Location)
+  return (double_leg_distance(m_target_location)-double_leg_distance(state.Location)
           <= threshold);
 }
 
@@ -77,12 +73,12 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
   //    < d(p_last,state)+d(state,p_next)
 
   if (close_to_target(state)) {
-    const double d_to_max = state.Location.distance(getMaxLocation());
+    const double d_to_max = state.Location.distance(get_location_max());
     if (d_to_max<=0.0) {
       // no improvement available
       return false;
     } else {
-      TargetLocation = state.Location;
+      m_target_location = state.Location;
       return true;
     }
   } else {
@@ -100,9 +96,9 @@ AATPoint::check_target_outside(const AIRCRAFT_STATE& state)
   // now uses TaskOptTarget
 
   if (!get_previous()->isInSector(state)) {
-    double b0s = get_previous()->get_reference_remaining()
+    double b0s = get_previous()->get_location_remaining()
       .bearing(state.Location);
-    GeoVector vst(state.Location,TargetLocation);
+    GeoVector vst(state.Location,m_target_location);
     double da = ::AngleLimit180(b0s-vst.Bearing);
     if ((fabs(da)>2.0) && (vst.Distance>1.0)) {
       AATIsolineIntercept ai(*this);
@@ -112,7 +108,7 @@ AATPoint::check_target_outside(const AIRCRAFT_STATE& state)
 
         // Note that this fights with auto-target
 
-        TargetLocation = si.Location;
+        m_target_location = si.Location;
 
         return true;
       }
@@ -129,13 +125,13 @@ AATPoint::set_range(const double p, const bool force_if_current)
   switch (getActiveState()) {
   case CURRENT_ACTIVE:
     if (!has_entered() || force_if_current) {
-      TargetLocation = getMinLocation().interpolate(getMaxLocation(),p);
+      m_target_location = get_location_min().interpolate(get_location_max(),p);
       return true;
     }
     return false;
   case AFTER_ACTIVE:
     if (getActiveState() == AFTER_ACTIVE) {
-      TargetLocation = getMinLocation().interpolate(getMaxLocation(),p);
+      m_target_location = get_location_min().interpolate(get_location_max(),p);
       return true;
     }
   default:
@@ -146,18 +142,9 @@ AATPoint::set_range(const double p, const bool force_if_current)
 
 
 void 
-AATPoint::update_projection()
-{
-  OrderedTaskPoint::update_projection();  
-
-  /// \todo update ellipse if we have one saved
-}
-
-
-void 
 AATPoint::set_target(const GEOPOINT &loc)
 {
-  TargetLocation = loc;
+  m_target_location = loc;
 }
 
 

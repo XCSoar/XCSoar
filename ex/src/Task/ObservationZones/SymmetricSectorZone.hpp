@@ -63,6 +63,14 @@ public:
     SectorZone(loc,radius),
     SectorAngle(angle) {}
 
+  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+    if (_location) {
+      return new SymmetricSectorZone(*_location, Radius, SectorAngle);
+    } else {
+      return new SymmetricSectorZone(get_location(), Radius, SectorAngle);
+    }
+  }
+
 /** 
  * Update radials when previous/next legs are modified.
  * 
@@ -92,6 +100,7 @@ public:
   double getSectorAngle() const {
     return SectorAngle;
   }
+
 private:
   const double SectorAngle;
 };

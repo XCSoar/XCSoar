@@ -5,8 +5,6 @@ TaskMacCreadyTotal::TaskMacCreadyTotal(const std::vector<OrderedTaskPoint*> &_tp
                                        const GlidePolar &_gp):
   TaskMacCready(_tps,_activeTaskPoint, _gp)
 {
-  start = 0;
-  end = tps.size()-1;
 }
 
 
@@ -15,14 +13,14 @@ TaskMacCreadyTotal::tp_solution(const unsigned i,
                                 const AIRCRAFT_STATE &aircraft, 
                                 double minH) const
 {
-  return tps[i]->glide_solution_planned(aircraft, glide_polar, minH);
+  return m_tps[i]->glide_solution_planned(aircraft, m_glide_polar, minH);
 }
 
 const AIRCRAFT_STATE 
 TaskMacCreadyTotal::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
 {
-  if (tps[0]->has_entered()) {
-    return tps[0]->get_state_entered();
+  if (m_tps[0]->has_entered()) {
+    return m_tps[0]->get_state_entered();
   } else {
     return aircraft;
   }
@@ -34,14 +32,14 @@ TaskMacCreadyTotal::effective_distance(const double time_remaining) const
 
   double t_total = 0.0;
   double d_total = 0.0;
-  for (int i=end; i>=start; i--) {
-    if (gs[i].TimeElapsed>0) {
-      double p = (time_remaining-t_total)/gs[i].TimeElapsed;
+  for (int i=m_end; i>=m_start; i--) {
+    if (m_gs[i].TimeElapsed>0) {
+      double p = (time_remaining-t_total)/m_gs[i].TimeElapsed;
       if ((p>=0.0) && (p<=1.0)) {
-        return d_total+p*gs[i].Vector.Distance;
+        return d_total+p*m_gs[i].Vector.Distance;
       }
-      d_total += gs[i].Vector.Distance;
-      t_total += gs[i].TimeElapsed;
+      d_total += m_gs[i].Vector.Distance;
+      t_total += m_gs[i].TimeElapsed;
     }
   }
   return d_total;
@@ -50,7 +48,7 @@ TaskMacCreadyTotal::effective_distance(const double time_remaining) const
 double 
 TaskMacCreadyTotal::effective_leg_distance(const double time_remaining) const
 {
-  double p = (time_remaining)/gs[activeTaskPoint].TimeElapsed;
-  return p*gs[activeTaskPoint].Vector.Distance;
+  double p = (time_remaining)/m_gs[m_activeTaskPoint].TimeElapsed;
+  return p*m_gs[m_activeTaskPoint].Vector.Distance;
 }
 

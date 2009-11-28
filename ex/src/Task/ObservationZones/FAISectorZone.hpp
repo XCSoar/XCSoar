@@ -59,6 +59,14 @@ public:
     SymmetricSectorZone(loc,10000.0,90.0)
     {}
 
+  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+    if (_location) {
+      return new FAISectorZone(*_location);
+    } else {
+      return new FAISectorZone(get_location());
+    }
+  }
+
 /** 
  * Test whether an OZ is equivalent to this one
  * 

@@ -5,21 +5,15 @@
 #include <assert.h>
 
 bool 
-FinishPoint::transition_enter(const AIRCRAFT_STATE & ref_now, 
-                              const AIRCRAFT_STATE & ref_last)
+FinishPoint::entry_precondition() const
 {
-  bool entered = ObservationZone::transition_enter(ref_now, ref_last);
-  if (entered && !has_entered() && get_previous()->has_entered()) {
-    set_state_entered(ref_now);
-    // only save first enter of finish
-  }
-  return entered;
+  return get_previous()->has_entered();
 }
 
 double
-FinishPoint::getElevation() const
+FinishPoint::get_elevation() const
 {
-  return Elevation+task_behaviour.safety_height_arrival;
+  return m_elevation+m_task_behaviour.safety_height_arrival;
 }
 
 

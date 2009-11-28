@@ -33,9 +33,8 @@ public:
  * Constructor
  *
  * @param _task The task to find max/min distances for
- * @param task_size Size of task (number of TaskPoints) 
  */
-  TaskDijkstra(OrderedTask* _task, unsigned task_size);
+  TaskDijkstra(OrderedTask& _task);
 
 /**
  * Destructor, frees local variables
@@ -93,25 +92,14 @@ private:
 
   unsigned extremal_distance(const unsigned d);
 
-  /**
-   * @clientCardinality 1
-   * @supplierCardinality 0..* 
-   */
   SearchPointVector solution;
 
   bool shortest;
 
-  /**
-   * @supplierCardinality 1 
-   */
-  OrderedTask* task;
-
-  /** @link dependency
-   *@associates <{Dijkstra}> */
-  /*# int lnkDijkstra; */
+  OrderedTask& task;
 
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
-  unsigned get_size(unsigned stage) const;
+  unsigned get_size(const unsigned stage) const;
 };
 
 #endif

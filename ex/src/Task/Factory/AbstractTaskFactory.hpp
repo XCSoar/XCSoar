@@ -30,13 +30,13 @@ public:
 /** 
  * Constructor
  * 
- * @param _task Ordered task to be managed by this factory
- * @param tb Behaviour (options)
+ * @param task Ordered task to be managed by this factory
+ * @param behaviour Behaviour (options)
  */  
-  AbstractTaskFactory(OrderedTask& _task,
-                      const TaskBehaviour &tb):
-    task(_task),
-    behaviour(tb) 
+  AbstractTaskFactory(OrderedTask& task,
+                      const TaskBehaviour &behaviour):
+    m_task(task),
+    m_behaviour(behaviour) 
     {
     }
 
@@ -127,7 +127,7 @@ public:
  * @return list of valid start types
  */
   const std::vector<LegalStartType_t>& getStartTypes() const {
-    return start_types;
+    return m_start_types;
   }
 
 /** 
@@ -136,7 +136,7 @@ public:
  * @return list of valid intermediate types
  */
   const std::vector<LegalIntermediateType_t>& getIntermediateTypes() const {
-    return intermediate_types;
+    return m_intermediate_types;
   }
 
 /** 
@@ -145,7 +145,7 @@ public:
  * @return list of valid finish types
  */
   const std::vector<LegalFinishType_t>& getFinishTypes() const {
-    return finish_types;
+    return m_finish_types;
   }
 
 /** 
@@ -222,6 +222,16 @@ public:
    */
   bool has_entered(unsigned index) const;
 
+/** 
+ * Clone an object with optional shift of waypoint
+ * 
+ * @param tp Object to clone
+ * @param wp New waypoint of clone.  If NULL, uses waypoint of object
+ * 
+ * @return Cloned object
+ */
+  OrderedTaskPoint* clone(const OrderedTaskPoint& tp, const Waypoint* wp) const;
+
 protected:
 /** 
  * Test whether a candidate object is of correct type to be added/replaced/etc
@@ -234,12 +244,12 @@ protected:
  */
   virtual bool validType(OrderedTaskPoint *new_tp, unsigned position) const;
 
-  OrderedTask &task; /**< task managed by this factory */
-  const TaskBehaviour &behaviour; /**< behaviour (settings) */
+  OrderedTask &m_task; /**< task managed by this factory */
+  const TaskBehaviour &m_behaviour; /**< behaviour (settings) */
 
-  std::vector<LegalStartType_t> start_types; /**< list of valid start types, for specialisation */
-  std::vector<LegalIntermediateType_t> intermediate_types; /**< list of valid intermediate types, for specialisation */
-  std::vector<LegalFinishType_t> finish_types; /**< list of valid finish types, for specialisation */
+  std::vector<LegalStartType_t> m_start_types; /**< list of valid start types, for specialisation */
+  std::vector<LegalIntermediateType_t> m_intermediate_types; /**< list of valid intermediate types, for specialisation */
+  std::vector<LegalFinishType_t> m_finish_types; /**< list of valid finish types, for specialisation */
 };
 
 #endif

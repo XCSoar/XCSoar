@@ -1,4 +1,4 @@
-
+#include <algorithm>
 #include "TaskMacCreadyRemaining.hpp"
 
 TaskMacCreadyRemaining::TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
@@ -6,8 +6,7 @@ TaskMacCreadyRemaining::TaskMacCreadyRemaining(const std::vector<OrderedTaskPoin
                                                const GlidePolar _gp):
   TaskMacCready(_tps,_activeTaskPoint, _gp)
 {
-  start = activeTaskPoint;
-  end = tps.size()-1;
+  m_start = m_activeTaskPoint;
 }
 
 TaskMacCreadyRemaining::TaskMacCreadyRemaining(TaskPoint* tp,
@@ -21,7 +20,7 @@ TaskMacCreadyRemaining::tp_solution(const unsigned i,
                                     const AIRCRAFT_STATE &aircraft, 
                                     double minH) const
 {
-  return tps[i]->glide_solution_remaining(aircraft, glide_polar, minH);
+  return m_tps[i]->glide_solution_remaining(aircraft, m_glide_polar, minH);
 }
 
 
@@ -36,13 +35,13 @@ TaskMacCreadyRemaining::set_range(const double tp, const bool force_current)
 {
   // first try to modify targets without regard to current inside (unless forced)
   bool modified = force_current;
-  for (int i=start; i<=end; i++) {
-    modified |= tps[i]->set_range(tp,false);
+  for (int i=m_start; i<=m_end; i++) {
+    modified |= m_tps[i]->set_range(tp,false);
   }
   if (!force_current && !modified) {
     // couldn't modify remaining targets, so force move even if inside
-    for (int i=start; i<=end; i++) {
-      if (tps[i]->set_range(tp,true)) {
+    for (int i=m_start; i<=m_end; i++) {
+      if (m_tps[i]->set_range(tp,true)) {
         // quick exit
         return;
       }

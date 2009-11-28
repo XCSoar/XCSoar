@@ -47,7 +47,7 @@ public:
  * @return True if aircraft has entered the OZ
  */
   bool has_entered() const {
-    return state_entered.Time>0;
+    return m_state_entered.Time>0;
   }
 
 /** 
@@ -56,7 +56,7 @@ public:
  * @return True if aircraft has exited the OZ
  */
   bool has_exited() const {
-    return state_exited.Time>0;
+    return m_state_exited.Time>0;
   }
 
 /** 
@@ -65,7 +65,7 @@ public:
  * @return State on entry
  */
   AIRCRAFT_STATE get_state_entered() const {
-    return state_entered;
+    return m_state_entered;
   }
 
 /** 
@@ -93,19 +93,11 @@ public:
                                const AIRCRAFT_STATE & ref_last);
 
 /** 
- * Retrieve location to be used for nominal task.
- * This is always the reference location for post-active
- * 
- * @return Location 
- */
-  virtual GEOPOINT get_reference_nominal() const;
-
-/** 
  * Retrieve location to be used for the scored task.
  * 
  * @return Location 
  */
-  virtual GEOPOINT get_reference_scored() const;
+  virtual const GEOPOINT& get_location_scored() const;
 
 /** 
  * Retrieve location to be used for the task already travelled.
@@ -113,7 +105,7 @@ public:
  * 
  * @return Location 
  */
-  virtual GEOPOINT get_reference_travelled() const;
+  virtual const GEOPOINT& get_location_travelled() const;
 
 /** 
  * Retrieve location to be used for remaining task.
@@ -122,17 +114,16 @@ public:
  * 
  * @return Location 
  */
-  virtual GEOPOINT get_reference_remaining() const;
+  virtual const GEOPOINT& get_location_remaining() const;
 
-protected:
-
+private:
 /** 
  * Set OZ entry state
  * 
  * @param state State at entry
  */
   void set_state_entered(const AIRCRAFT_STATE& state) {
-    state_entered = state;
+    m_state_entered = state;
   }
 
 /** 
@@ -141,12 +132,21 @@ protected:
  * @param state State at exit
  */
   void set_state_exited(const AIRCRAFT_STATE& state) {
-    state_exited = state;
+    m_state_exited = state;
   }
 
-private:
-  AIRCRAFT_STATE state_entered;
-  AIRCRAFT_STATE state_exited;
+  virtual bool entry_precondition() const {
+    return true;
+  }
+  virtual bool score_last_exit() const {
+    return false;
+  }
+  virtual bool score_first_entry() const {
+    return false;
+  }
+
+  AIRCRAFT_STATE m_state_entered;
+  AIRCRAFT_STATE m_state_exited;
 };
 
 #endif

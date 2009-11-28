@@ -7,6 +7,8 @@
 #include "Navigation/Memento/DistanceMemento.hpp"
 #include "Navigation/Memento/GeoVectorMemento.hpp"
 
+struct AIRCRAFT_STATE;
+
 class OrderedTaskPoint;
 
 /**

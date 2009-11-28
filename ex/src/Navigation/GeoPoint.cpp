@@ -37,3 +37,16 @@ GEOPOINT::equals(const GEOPOINT &other) const
 {
   return (Longitude == other.Longitude) && (Latitude == other.Latitude);
 }
+
+bool 
+GEOPOINT::sort(const GEOPOINT &sp) const
+{
+  if (Longitude<sp.Longitude) {
+    return false;
+  } else if (Longitude==sp.Longitude) {
+    return Latitude>sp.Latitude;
+  } else {
+    return true;
+  }
+}
+

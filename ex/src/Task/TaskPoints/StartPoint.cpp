@@ -8,31 +8,17 @@ StartPoint::StartPoint(ObservationZonePoint* _oz,
                        const TaskProjection& tp,
                        const Waypoint & wp,
                        const TaskBehaviour& tb) : 
-  OrderedTaskPoint(_oz,tp,wp,tb,false), 
+  OrderedTaskPoint(_oz,tp,wp,tb), 
   enabled(true) 
 {
 }
 
-bool 
-StartPoint::transition_exit(const AIRCRAFT_STATE & ref_now, 
-                            const AIRCRAFT_STATE & ref_last)
-{
-  // consider entry of start zone to be same as exit point
-  bool exited = OrderedTaskPoint::transition_exit(ref_now, ref_last);
-  if (exited) {
-    clear_sample_all_but_last(ref_last);
-    set_state_entered(ref_last);
-    set_state_exited(ref_now);
-  }
-  return exited;
-}
-
 
 double
-StartPoint::getElevation() const
+StartPoint::get_elevation() const
 {
   // no need for safety height at start?
-  return Elevation;
+  return m_elevation;
 }
 
 
@@ -51,7 +37,7 @@ StartPoint::update_sample(const AIRCRAFT_STATE& state,
                           const TaskEvents &task_events)
 {
   if (isInSector(state)) {
-    if (!task_behaviour.check_start_speed(state)) {
+    if (!m_task_behaviour.check_start_speed(state)) {
       task_events.warning_start_speed();
     }
   }

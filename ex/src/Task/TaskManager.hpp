@@ -234,5 +234,6 @@ private:
   
 public:
   void Accept(BaseVisitor& visitor) const;
+  void ordered_Accept(BaseVisitor& visitor) const;
 };
 #endif //TASKMANAGER_H

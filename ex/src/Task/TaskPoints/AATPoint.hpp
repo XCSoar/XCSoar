@@ -48,6 +48,7 @@
  * \todo
  * - Target locking is currently not implemented.
  * - TaskBehaviour is not yet used to define how targets float.
+ * - Elevation may vary with target shift
  */
 class AATPoint : public IntermediatePoint {
 public:
@@ -68,7 +69,7 @@ public:
            const TaskBehaviour &tb) : 
     IntermediatePoint(_oz,tp,wp,tb,true), 
     TargetLocked(false), 
-    TargetLocation(wp.Location)
+    m_target_location(wp.Location)
     {
     }
 
@@ -77,32 +78,21 @@ public:
  * 
  * @return Location 
  */
-  virtual GEOPOINT get_reference_remaining() const;
+  virtual const GEOPOINT& get_location_remaining() const;
   
 /** 
  * Retrieve location to be used for task travelled
  * 
  * @return Location 
  */
-  virtual GEOPOINT get_reference_travelled() const;
+  virtual const GEOPOINT& get_location_travelled() const;
   
 /** 
  * Retrieve location to be used for task scored
  * 
  * @return Location 
  */
-  virtual GEOPOINT get_reference_scored() const;
-
-/** 
- * Retrieve elevation of taskpoint, taking into account
- * rules and safety margins.  
- * 
- * \todo
- * - not implemented: elevation may vary with target shift
- *
- * @return Minimum allowable elevation of task point
- */
-  virtual double getElevation() const;
+  virtual const GEOPOINT& get_location_scored() const;
 
 /** 
  * Update sample, specialisation to move target for active
@@ -130,8 +120,8 @@ public:
  * 
  * @return Target location
  */
-  const GEOPOINT &getTargetLocation() const {
-    return TargetLocation;
+  const GEOPOINT &get_location_target() const {
+    return m_target_location;
   }
 
 /** 
@@ -145,13 +135,6 @@ public:
  * @return True if target was moved
  */
   virtual bool set_range(const double p, const bool force_if_current);
-
-/** 
- * Re-project internal data; must
- * be called when global task projection changes. 
- * 
- */
-  virtual void update_projection();
 
 /** 
  * Test whether aircraft has travelled close to isoline of target within threshold
@@ -169,7 +152,7 @@ public:
 #endif
 
 protected:
-  GEOPOINT TargetLocation;      /**< Location of target within OZ */
+  GEOPOINT m_target_location;      /**< Location of target within OZ */
   bool TargetLocked;            /**< Whether target can float */
 
 /** 

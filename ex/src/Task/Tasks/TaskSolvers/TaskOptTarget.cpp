@@ -37,8 +37,8 @@ bool TaskOptTarget::valid(const double tp)
 double TaskOptTarget::search(const double tp) 
 {
   if (iso.valid()) {
-    GEOPOINT loc = tp_current.getTargetLocation();
-    double t = find_min(tp);
+    const GEOPOINT loc = tp_current.get_location_target();
+    const double t = find_min(tp);
     if (!valid(t)) {
       // invalid, so restore old value
       tp_current.set_target(loc);
@@ -53,7 +53,7 @@ double TaskOptTarget::search(const double tp)
 
 void TaskOptTarget::set_target(const double p)
 {
-  GEOPOINT loc = iso.parametric(std::min(xmax,std::max(xmin,p)));
+  const GEOPOINT loc = iso.parametric(std::min(xmax,std::max(xmin,p)));
   tp_current.set_target(loc);
   tp_start->scan_distance_remaining(aircraft.Location);
 }

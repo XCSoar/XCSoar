@@ -3,12 +3,12 @@
 double
 ReferencePoint::bearing(const GEOPOINT & ref) const 
 {
-  return Location.bearing(ref);
+  return m_location.bearing(ref);
 }
 
 double 
 ReferencePoint::distance(const GEOPOINT & ref) const 
 {
-  return Location.distance(ref);
+  return m_location.distance(ref);
 }
 

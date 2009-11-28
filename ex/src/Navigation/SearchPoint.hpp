@@ -3,6 +3,7 @@
 
 #include "GeoPoint.hpp"
 #include "Navigation/Flat/FlatGeoPoint.hpp"
+#include "Navigation/ReferencePoint.hpp"
 
 class TaskProjection;
 
@@ -11,19 +12,8 @@ class TaskProjection;
  * whether or not the point is a virtual point or an actual search point.
  * The 'virtuality' of this object is currently not used. 
  */
-class SearchPoint {
+class SearchPoint: public ReferencePoint {
 public:
-
-/** 
- * Copy constructor
- * 
- * @param sp SearchPoint to copy
- */
-  SearchPoint(const SearchPoint& sp):
-    Location(sp.Location),
-    flatLocation(sp.flatLocation),
-    actual(sp.actual) {
-  };
 
 /** 
  * Constructor
@@ -41,16 +31,6 @@ public:
  * @param tp Projection used
  */
   void project(const TaskProjection& tp);
-
-/** 
- * Accessor for geodetic coordinate
- * 
- * 
- * @return Geodetic coordinate
- */
-  const GEOPOINT& getLocation() const {
-    return Location;
-  };
 
 /** 
  * Accessor for flat projected coordinate
@@ -72,15 +52,6 @@ public:
   bool equals(const SearchPoint& sp) const;
 
 /** 
- * Rank two points according to longitude, then latitude
- * 
- * @param sp Point to compare to
- * 
- * @return True if this point is further left (or if equal, lower) than the other
- */
-  bool sort(const SearchPoint& sp) const;
-
-/** 
  * Calculate flat earth distance between two points
  * 
  * @param sp Point to measure distance from
@@ -89,8 +60,16 @@ public:
  */
   unsigned flat_distance(const SearchPoint& sp) const;
 
+/** 
+ * Rank two points according to longitude, then latitude
+ * 
+ * @param sp Point to compare to
+ * 
+ * @return True if this point is further left (or if equal, lower) than the other
+ */
+  bool sort (const SearchPoint &other) const;
+
 private:
-  GEOPOINT Location;
   FLAT_GEOPOINT flatLocation;
   bool actual;
 //  double saved_rank;

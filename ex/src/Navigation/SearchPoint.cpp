@@ -3,9 +3,10 @@
 #include "Navigation/TaskProjection.hpp"
 #include <math.h>
 
-SearchPoint::SearchPoint(const GEOPOINT &loc, const TaskProjection& tp,
+SearchPoint::SearchPoint(const GEOPOINT &loc, 
+                         const TaskProjection& tp,
                          bool _actual):
-  Location(loc),
+  ReferencePoint(loc),
   flatLocation(tp.project(loc)),
   actual(_actual)
 {      
@@ -15,15 +16,14 @@ SearchPoint::SearchPoint(const GEOPOINT &loc, const TaskProjection& tp,
 void 
 SearchPoint::project(const TaskProjection& tp) 
 {
-  flatLocation = tp.project(Location);
+  flatLocation = tp.project(get_location());
 }
 
 
 bool 
 SearchPoint::equals(const SearchPoint& sp) const 
 {
-  if ((sp.Location.Longitude == Location.Longitude)
-      &&(sp.Location.Latitude == Location.Latitude)) {
+  if (sp.get_location() == get_location()) {
     return true;
   } else {
     return false;
@@ -33,13 +33,7 @@ SearchPoint::equals(const SearchPoint& sp) const
 bool 
 SearchPoint::sort(const SearchPoint& sp) const 
 {
-  if (Location.Longitude<sp.Location.Longitude) {
-    return false;
-  } else if (Location.Longitude==sp.Location.Longitude) {
-    return Location.Latitude>sp.Location.Latitude;
-  } else {
-    return true;
-  }
+  return get_location().sort(sp.get_location());
 }
 
 

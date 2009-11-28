@@ -12,6 +12,8 @@
 #include "TaskSolvers/TaskGlideRequired.hpp"
 #include "TaskSolvers/TaskOptTarget.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
+#include <algorithm>
+#include <functional>
 
 void
 OrderedTask::update_geometry() 
@@ -24,22 +26,20 @@ OrderedTask::update_geometry()
 
   for (unsigned i=0; i<tps.size(); i++) {
     if (i==0) {
-      task_projection.reset(tps[i]->getLocation());
+      task_projection.reset(tps[i]->get_location());
     } else {
-      task_projection.scan_location(tps[i]->getLocation());
+      task_projection.scan_location(tps[i]->get_location());
     }
   }
   task_projection.update_fast();
 
-  for (unsigned i=0; i<tps.size(); i++) {
-    tps[i]->update_oz();
-  }
+  std::for_each(tps.begin(), tps.end(), std::mem_fun(&OrderedTaskPoint::update_oz));
 
   if (has_start()) {
     // update stats so data can be used during task construction
     /// \todo this should only be done if not flying! (currently done with has_entered)
     if (!ts->has_entered()) {
-      GEOPOINT loc = ts->getLocation();
+      GEOPOINT loc = ts->get_location();
       update_stats_distances(loc, true);
     }
   }
@@ -60,7 +60,7 @@ OrderedTask::scan_total_start_time(const AIRCRAFT_STATE &)
 double 
 OrderedTask::scan_leg_start_time(const AIRCRAFT_STATE &)
 {
-  if (activeTaskPoint>0) {
+  if (activeTaskPoint) {
     return tps[activeTaskPoint-1]->get_state_entered().Time;
   } else {
     return -1;
@@ -86,14 +86,14 @@ OrderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
       activeTaskPoint--;
       ts->scan_active(tps[activeTaskPoint]);
     }
-    TaskDijkstra dijkstra_max(this, tps.size());
+    TaskDijkstra dijkstra_max(*this);
     dijkstra_max.distance_max();
 
     activeTaskPoint = atp;
     ts->scan_active(tps[activeTaskPoint]);
     *dmax = ts->scan_distance_max();
   }
-  TaskDijkstra dijkstra_min(this, tps.size());
+  TaskDijkstra dijkstra_min(*this);
   dijkstra_min.distance_min(ac);
   *dmin = ts->scan_distance_min();
 }
@@ -527,7 +527,7 @@ OrderedTask::calc_gradient(const AIRCRAFT_STATE &state)
     if (!d_acc) {
       continue;
     }
-    const double g_this = (h_this-tps[i]->getElevation())/d_acc;
+    const double g_this = (h_this-tps[i]->get_elevation())/d_acc;
     if (i==activeTaskPoint) {
       g_best = g_this;
     } else {
@@ -565,21 +565,16 @@ OrderedTask::OrderedTask(const TaskEvents &te,
 void 
 OrderedTask::Accept(TaskPointVisitor& visitor) const
 {
-  for (std::vector<OrderedTaskPoint*>::const_iterator 
-         i= tps.begin(); i!= tps.end(); i++) {
-    (*i)->Accept(visitor);
-  }
+  std::for_each(tps.begin(), tps.end(), 
+                std::bind2nd(std::mem_fun(&OrderedTaskPoint::Accept), visitor));
 }
 
 
 void
 OrderedTask::reset()
 {
-  /// \todo also reset data in this class
-  for (std::vector<OrderedTaskPoint*>::const_iterator 
-         i= tps.begin(); i!= tps.end(); i++) {
-    (*i)->reset();
-  }
+  /// \todo also reset data in this class e.g. stats?
+  std::for_each(tps.begin(), tps.end(), std::mem_fun(&OrderedTaskPoint::reset));
 }
 
 
@@ -588,29 +583,22 @@ OrderedTask::getTaskPoint(const unsigned index) const
 {
   if (index>=tps.size()) {
     return NULL;
+  } else {
+    return tps[index];
   }
-  return tps[index];
 }
 
 
 bool 
 OrderedTask::has_start() const
 {
-  if (ts==NULL) {
-    return false;
-  } else {
-    return true;
-  }
+  return (ts != NULL);
 }
 
 bool 
 OrderedTask::has_finish() const
 {
-  if (tf==NULL) {
-    return false;
-  } else {
-    return true;
-  }
+  return (tf != NULL);
 }
 
 

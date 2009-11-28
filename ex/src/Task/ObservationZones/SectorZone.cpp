@@ -6,12 +6,12 @@
 GEOPOINT SectorZone::get_boundary_parametric(double t) const
 { 
   AIRCRAFT_STATE state;
-  state.Location = GeoVector(Radius*0.999, t*360).end_point(getLocation());
+  state.Location = GeoVector(Radius*0.999, t*360).end_point(get_location());
 
   if (isInSector(state)) {
     return state.Location;
   } else {
-    return getLocation();
+    return get_location();
   }
 }
 
@@ -23,8 +23,8 @@ double SectorZone::score_adjustment() const
 void 
 SectorZone::updateSector() 
 {
-  SectorStart = GeoVector(Radius, StartRadial).end_point(getLocation());
-  SectorEnd = GeoVector(Radius, EndRadial).end_point(getLocation());
+  SectorStart = GeoVector(Radius, StartRadial).end_point(get_location());
+  SectorEnd = GeoVector(Radius, EndRadial).end_point(get_location());
 }
 
 

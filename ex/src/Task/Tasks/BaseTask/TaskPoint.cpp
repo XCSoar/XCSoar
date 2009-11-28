@@ -6,24 +6,24 @@
 #include "GlideSolvers/GlideResult.hpp"
 #include <algorithm>
 
-GEOPOINT 
-TaskPoint::get_reference_remaining() const
+const GEOPOINT &
+TaskPoint::get_location_remaining() const
 {
-  return getLocation();
+  return get_location();
 }
 
 
 const GeoVector 
 TaskPoint::get_vector_remaining(const AIRCRAFT_STATE &ref) const
 {
-  return GeoVector(ref.Location, get_reference_remaining());
+  return GeoVector(ref.Location, get_location_remaining());
 }
 
 
 double 
-TaskPoint::getElevation() const
+TaskPoint::get_elevation() const
 {
-  return Elevation+task_behaviour.safety_height_arrival;
+  return m_elevation+m_task_behaviour.safety_height_arrival;
 }
 
 
@@ -33,7 +33,7 @@ TaskPoint::glide_solution_remaining(const AIRCRAFT_STATE &ac,
                                     const double minH) const
 {
   GlideState gs(get_vector_remaining(ac),
-                 std::max(minH,getElevation()),
+                 std::max(minH,get_elevation()),
                  ac);
   return polar.solve(gs);
 }
@@ -60,7 +60,7 @@ TaskPoint::glide_solution_sink(const AIRCRAFT_STATE &ac,
                                const GlidePolar &polar,
                                const double S) const
 {
-  GlideState gs(ac, get_reference_remaining(), getElevation());
+  GlideState gs(ac, get_location_remaining(), get_elevation());
   return polar.solve_sink(gs,S);
 }
 

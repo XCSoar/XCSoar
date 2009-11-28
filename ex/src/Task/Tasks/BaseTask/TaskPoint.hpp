@@ -40,7 +40,6 @@
 #define TASKPOINT_HPP
 
 #include "Util/Serialisable.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Navigation/ReferencePoint.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Navigation/Aircraft.hpp"
@@ -60,7 +59,6 @@ struct GeoVector;
  */
 
 class TaskPoint : 
-  private NonCopyable,
   public ReferencePoint, 
   public Serialisable,
   public BaseVisitable<>
@@ -79,9 +77,9 @@ public:
  */
   TaskPoint(const Waypoint & wp,
             const TaskBehaviour &tb) : ReferencePoint(wp.Location),
-                                       Elevation(wp.Altitude),
-                                       waypoint(wp),
-                                       task_behaviour(tb)
+                                       m_elevation(wp.Altitude),
+                                       m_waypoint(wp),
+                                       m_task_behaviour(tb)
     { }
 
 /**
@@ -95,7 +93,7 @@ public:
  * 
  * @return Location 
  */
-  virtual GEOPOINT get_reference_remaining() const;
+  virtual const GEOPOINT& get_location_remaining() const;
 
 /** 
  * Calculate vector from aircraft to destination
@@ -202,7 +200,7 @@ public:
  * @return Copy of waypoint associated with this task point
  */
   const Waypoint& get_waypoint() const {
-    return waypoint;
+    return m_waypoint;
   }
 
 /** 
@@ -211,16 +209,16 @@ public:
  * 
  * @return Minimum allowable elevation of task point
  */
-  virtual double getElevation() const;
+  virtual double get_elevation() const;
 
 #ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE &state) const;
 #endif
 
 protected:
-  const Waypoint waypoint; /**< local copy of waypoint */
-  const double Elevation; /**< Altitude (AMSL, m) of task point terrain */
-  const TaskBehaviour &task_behaviour; /**< Reference to task behaviour (for options) */
+  const Waypoint m_waypoint; /**< local copy of waypoint */
+  const double m_elevation; /**< Altitude (AMSL, m) of task point terrain */
+  const TaskBehaviour &m_task_behaviour; /**< Reference to task behaviour (for options) */
 public:
   DEFINE_VISITABLE()
 };

@@ -40,7 +40,7 @@
 
 #include "TaskLeg.hpp"
 #include "ScoredTaskPoint.hpp"
-#include "ObservationZonePoint.hpp"
+#include "ObservationZoneClient.hpp"
 
 /**
  *  Abstract compound specialisation of TaskLeg and ScoredTaskPoint,
@@ -53,7 +53,8 @@
  */
 class OrderedTaskPoint : 
   public TaskLeg,
-  public ScoredTaskPoint
+  public ScoredTaskPoint,
+  public ObservationZoneClient
 {
 public:
 /** 
@@ -72,22 +73,9 @@ public:
                    const TaskProjection& tp,
                    const Waypoint & wp, 
                    const TaskBehaviour &tb,
-                   const bool b_scored);
+                   const bool b_scored=false);
 
-  virtual ~OrderedTaskPoint() {
-    delete oz;
-  };
-
-  /**
-   * States each task point can be in (with respect to which OrderedTaskPoint is
-   * active/selected).
-   */
-  enum ActiveState_t {
-    NOTFOUND_ACTIVE = 0,        /**< Active task point was not found, ERROR! */
-    BEFORE_ACTIVE,              /**< This taskpoint is before the active one */
-    CURRENT_ACTIVE,             /**< This taskpoint is currently the active one */
-    AFTER_ACTIVE                /**< This taskpoint is after the active one */
-  };
+  virtual ~OrderedTaskPoint() {}
 
   /** 
    * Call this when any geometry or OZ parameters are changed
@@ -95,22 +83,11 @@ public:
    */
   void update_oz();
 
-/** 
- * Accessor for OZ (for modifying parameters etc)
- *
- * @return Observation zone
- */
-  ObservationZonePoint* get_oz() const {
-    return oz;
-  }
-
-/** 
- * Update observation zone geometry (or other internal data) when
- * previous/next turnpoint changes.
- */
-  virtual void update_geometry() {
-    oz->set_legs(tp_previous, this, tp_next);
-  };
+  /** 
+   * Update observation zone geometry (or other internal data) when
+   * previous/next turnpoint changes.
+   */
+  void update_geometry();
 
 /** 
  * Set previous/next task points.
@@ -134,6 +111,17 @@ public:
  * @return Next task point
  */
   OrderedTaskPoint* get_next() const;
+
+  /**
+   * States each task point can be in (with respect to which OrderedTaskPoint is
+   * active/selected).
+   */
+  enum ActiveState_t {
+    NOTFOUND_ACTIVE = 0,        /**< Active task point was not found, ERROR! */
+    BEFORE_ACTIVE,              /**< This taskpoint is before the active one */
+    CURRENT_ACTIVE,             /**< This taskpoint is currently the active one */
+    AFTER_ACTIVE                /**< This taskpoint is after the active one */
+  };
   
 /** 
  * Accessor for activation state of this task point.
@@ -142,7 +130,7 @@ public:
  * @return Activation state of this task point
  */
   ActiveState_t getActiveState() const {
-    return active_state;
+    return m_active_state;
   }
 
 /** 
@@ -157,14 +145,6 @@ public:
   bool scan_active(OrderedTaskPoint* atp);
 
 /** 
- * Retrieve interior sample polygon.  Internally determines whether
- * to 'cheat' a missed OZ prior to the current active task point. 
- *
- * @return Vector of boundary points representing a closed polygon
- */
-  const SearchPointVector& get_search_points();
-
-/** 
  * Calculate vector remaining from aircraft state.
  * If this task point is after active, uses the planned reference points
  * 
@@ -173,7 +153,7 @@ public:
  * @param state Aircraft state
  * @return Vector remaining to this taskpoint (or next planned)
  */
-  virtual const GeoVector get_vector_remaining(const AIRCRAFT_STATE &state) const {
+  const GeoVector get_vector_remaining(const AIRCRAFT_STATE &state) const {
     return vector_remaining;
   }
 
@@ -187,7 +167,7 @@ public:
  * 
  * @return Vector from this taskpoint to aircraft (or next planned)
  */
-  virtual const GeoVector get_vector_travelled() const {
+  const GeoVector get_vector_travelled() const {
     return vector_travelled;
   }
 
@@ -196,7 +176,7 @@ public:
  * 
  * @return Vector planned to this taskpoint
  */
-  virtual const GeoVector get_vector_planned() const {
+  const GeoVector get_vector_planned() const {
     return vector_planned;
   }
 
@@ -225,39 +205,6 @@ public:
                                       const double minH=0) const;
 
 /** 
- * Test whether aircraft is inside observation zone.
- * 
- * @param ref Aircraft state to test
- * 
- * @return True if aircraft is inside observation zone
- */
-  virtual bool isInSector(const AIRCRAFT_STATE &ref) const
-  {
-    return oz->isInSector(ref);
-  }
-
-/** 
- * Generate a random location inside the OZ (to be used for testing)
- * 
- * @param mag proportional magnitude of error from center (0-1)
- *
- * @return Location of point
- */
-  GEOPOINT randomPointInSector(const double mag) const {
-    return oz->randomPointInSector(mag);
-  }
-
-/** 
- * Calculate distance reduction for achieved task point,
- * to calcuate scored distance.
- * 
- * @return Distance reduction once achieved
- */
-  virtual double score_adjustment() const {
-    return oz->score_adjustment();
-  }
-
-/** 
  * Test whether a taskpoint is equivalent to this one
  * 
  * For this abstract orderedtaskpoint, only compare OZ and WP
@@ -275,35 +222,7 @@ public:
 
 #endif
 
-
 protected:
-  ActiveState_t active_state; /**< ActiveState determined from scan_active() */
-
-protected:
-/** 
- * Calculate boundary point from parametric border
- * 
- * @param t t value (0,1) of parameter
- * 
- * @return Boundary point
- */
-  GEOPOINT get_boundary_parametric(double t) const
-  {
-    return oz->get_boundary_parametric(t);
-  }
-
-/** 
- * Check transition constraints 
- * 
- * @param ref_now Current aircraft state
- * @param ref_last Previous aircraft state
- * 
- * @return True if constraints are satisfied
- */
-  virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
-                                     const AIRCRAFT_STATE & ref_last) {
-    return oz->transition_constraint(ref_now, ref_last);
-  }
 
 /** 
  * Calculate distance from previous remaining/planned location to a point,
@@ -319,6 +238,11 @@ protected:
 
 private:
 
+  bool search_nominal_if_unsampled();
+  bool search_boundary_points();
+
+  ActiveState_t m_active_state; /**< ActiveState determined from scan_active() */
+
   /**
    * @supplierCardinality 0..1 
    */
@@ -329,7 +253,6 @@ private:
    */
   OrderedTaskPoint* tp_previous;
 
-  ObservationZonePoint* oz;
 };
 
 

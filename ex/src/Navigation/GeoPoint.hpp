@@ -165,6 +165,27 @@ struct GEOPOINT {
  * @return True if coincident
  */
   bool equals(const GEOPOINT &other) const;
+
+/** 
+ * Test whether two points are co-located
+ * 
+ * @param other Point to compare
+ * 
+ * @return True if coincident
+ */
+  bool operator== (const GEOPOINT &delta) const {
+    return equals(delta);
+  };
+
+/** 
+ * Rank two points according to longitude, then latitude
+ * 
+ * @param sp Point to compare to
+ * 
+ * @return True if this point is further left (or if equal, lower) than the other
+ */
+  bool sort (const GEOPOINT &other) const;
+
 };
 
 #endif

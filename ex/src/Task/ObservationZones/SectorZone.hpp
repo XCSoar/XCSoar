@@ -67,6 +67,14 @@ public:
     {
     };
 
+  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+    if (_location) {
+      return new SectorZone(*_location, Radius, StartRadial, EndRadial);
+    } else {
+      return new SectorZone(get_location(), Radius, StartRadial, EndRadial);
+    }
+  }
+
 /** 
  * Set start angle (most counter-clockwise) of sector
  * 
@@ -161,6 +169,7 @@ protected:
 
   GEOPOINT SectorStart; /**< Location of far end point of start radial */
   GEOPOINT SectorEnd; /**< Location of far end point of end radial */
+
 private:
 
   double StartRadial;

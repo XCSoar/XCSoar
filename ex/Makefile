@@ -58,7 +58,7 @@ CXXFLAGS += -pedantic
 # -Wdisabled-optimization
 # -Wunused -Wshadow -Wunreachable-code
 
-CXXFLAGS += -DDO_PRINT -DINSTRUMENT_TASK
+CXXFLAGS += -DDO_PRINT 
 # -DINSTRUMENT_TASK
 
 ####### sources
@@ -109,6 +109,7 @@ OBJS	:=\
 	src/Task/Tasks/BaseTask/TaskPoint.o \
 	src/Task/Tasks/BaseTask/IntermediatePoint.o \
 	src/Task/Tasks/BaseTask/ObservationZone.o \
+	src/Task/Tasks/BaseTask/ObservationZoneClient.o \
 	src/Task/Tasks/BaseTask/ObservationZonePoint.o \
 	src/Task/TaskPoints/StartPoint.o \
 	src/Task/TaskPoints/FinishPoint.o \
@@ -165,6 +166,7 @@ TESTFAST = \
 	Test/test_modes.exe \
 	Test/test_trees.exe \
 	Test/test.exe \
+	Test/test_edittp.exe \
 	Test/test_highterrain.exe
 
 TESTSLOW = \

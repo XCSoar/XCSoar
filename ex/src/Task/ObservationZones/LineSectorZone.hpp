@@ -62,6 +62,14 @@ public:
     SymmetricSectorZone(loc,radius,180.0)
   {};
 
+  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+    if (_location) {
+      return new LineSectorZone(*_location, Radius);
+    } else {
+      return new LineSectorZone(get_location(), Radius);
+    }
+  }
+
 /** 
  * Check transition constraints -- for lines, both points have to
  * be within radius of OZ (otherwise it is a circumference border crossing)

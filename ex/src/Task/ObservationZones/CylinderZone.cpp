@@ -12,7 +12,7 @@ double CylinderZone::score_adjustment() const
 
 GEOPOINT CylinderZone::get_boundary_parametric(double t) const
 { 
-  return GeoVector(Radius, t*360).end_point(getLocation());
+  return GeoVector(Radius, t*360).end_point(get_location());
 }
 
 bool
@@ -36,7 +36,7 @@ CylinderZone::randomPointInSector(const double mag) const
     double dmag = std::max(std::min(Radius,100.0), Radius*mag);
     double dis = (0.1+(rand()%90)/100.0)*dmag;
     GeoVector vec(dis,dir);
-    ac.Location = vec.end_point(Location);
+    ac.Location = vec.end_point(get_location());
   } while (!isInSector(ac));
-  return ac.Location;
+  return ac.get_location();
 }

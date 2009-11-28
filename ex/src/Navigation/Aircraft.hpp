@@ -20,6 +20,12 @@ struct AIRCRAFT_STATE {
   double Altitude; /**< GPS altitude AMSL (m) */
   double WindSpeed; /**< Wind speed (m/s); must be positive */
   double WindDirection; /**< Wind direction (degrees) */
+
+  /** Accessor for the aircraft location
+   */
+  const GEOPOINT& get_location() const {
+    return Location;
+  };
 };
 
 #endif

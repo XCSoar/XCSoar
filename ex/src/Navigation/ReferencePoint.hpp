@@ -48,12 +48,13 @@
  */
 class ReferencePoint {
 public:
+
 /**
  * Constructor
  * @param _location Location of reference point
  */
-    ReferencePoint(const GEOPOINT & _location) : Location(_location) {
-    };
+  ReferencePoint(const GEOPOINT & _location) : m_location(_location) {
+  };
 
   /** bearing from this to the reference
    */
@@ -65,12 +66,12 @@ public:
 
   /** The actual location
    */
-    const GEOPOINT & getLocation() const {
-        return Location;
-    };
+  const GEOPOINT & get_location() const {
+    return m_location;
+  };
 
-protected:
-  const GEOPOINT Location; /**< Local copy of reference point location */
+private:
+  GEOPOINT m_location; /**< Local copy of reference point location */
 };
 
 #endif

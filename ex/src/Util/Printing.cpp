@@ -147,11 +147,11 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
   f << "#  i alt  min  elev\n";
   f << start-0.5 << " " << aircraft_start.Altitude << " " <<
     minHs[start] << " " <<
-    tps[start]->getElevation() << "\n";
+    tps[start]->get_elevation() << "\n";
   for (int i=start; i<=end; i++) {
     aircraft_predict.Altitude -= gs[i].HeightGlide;
     f << i << " " << aircraft_predict.Altitude << " " << minHs[i]
-      << " " << tps[i]->getElevation() << "\n";
+      << " " << tps[i]->get_elevation() << "\n";
   }
   f << "\n";
 }
@@ -180,7 +180,7 @@ std::ostream& operator<< (std::ostream& f,
   f << "# polygon\n";
   for (std::vector<SearchPoint>::const_iterator v = as.border.begin();
        v != as.border.end(); v++) {
-    GEOPOINT l = v->getLocation();
+    GEOPOINT l = v->get_location();
     f << l.Longitude << " " << l.Latitude << "\n";
   }
   f << "\n";
@@ -210,8 +210,8 @@ void
 TaskPoint::print(std::ostream& f, const AIRCRAFT_STATE &state) const
 {
   f << "# Task point \n";
-  f << "#   Location " << getLocation().Longitude << "," <<
-    getLocation().Latitude << "\n";
+  f << "#   Location " << get_location().Longitude << "," <<
+    get_location().Latitude << "\n";
 }
 
 
@@ -296,24 +296,24 @@ void OrderedTask::print(const AIRCRAFT_STATE &state)
   f2 << "#### Max task\n";
   for (unsigned i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
-    f2 <<  tp->getMaxLocation().Longitude << " " 
-       <<  tp->getMaxLocation().Latitude << "\n";
+    f2 <<  tp->get_location_max().Longitude << " " 
+       <<  tp->get_location_max().Latitude << "\n";
   }
 
   std::ofstream f3("results/res-min.txt");
   f3 << "#### Min task\n";
   for (unsigned i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
-    f3 <<  tp->getMinLocation().Longitude << " " 
-       <<  tp->getMinLocation().Latitude << "\n";
+    f3 <<  tp->get_location_min().Longitude << " " 
+       <<  tp->get_location_min().Latitude << "\n";
   }
 
   std::ofstream f4("results/res-rem.txt");
   f4 << "#### Remaining task\n";
   for (unsigned i=0; i<tps.size(); i++) {
     OrderedTaskPoint *tp = tps[i];
-    f4 <<  tp->get_reference_remaining().Longitude << " " 
-       <<  tp->get_reference_remaining().Latitude << "\n";
+    f4 <<  tp->get_location_remaining().Longitude << " " 
+       <<  tp->get_location_remaining().Latitude << "\n";
   }
 
 }
@@ -327,7 +327,7 @@ void AbortTask::print(const AIRCRAFT_STATE &state)
   std::ofstream f1("results/res-abort-task.txt");
   f1 << "#### Task points\n";
   for (unsigned i=0; i<tps.size(); i++) {
-    GEOPOINT l = tps[i]->getLocation();
+    GEOPOINT l = tps[i]->get_location();
     f1 << "## point " << i << " ###################\n";
     if (i==activeTaskPoint) {
       f1 << state.Location.Longitude << " " << state.Location.Latitude << "\n";
@@ -354,8 +354,8 @@ void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
   switch(item) {
   case 0:
     OrderedTaskPoint::print(f, state, item);
-    f << "#   Target " << TargetLocation.Longitude << "," 
-      << TargetLocation.Latitude << "\n";
+    f << "#   Target " << m_target_location.Longitude << "," 
+      << m_target_location.Latitude << "\n";
     break;
 
   case 1:
@@ -366,16 +366,16 @@ void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
       // prev max or target changes
 
       AATIsolineSegment seg(*this);
-      double tdist = ::Distance(get_previous()->get_reference_remaining(),
-                                getMinLocation());
-      double rdist = ::Distance(get_previous()->get_reference_remaining(),
-                                getTargetLocation());
+      double tdist = ::Distance(get_previous()->get_location_remaining(),
+                                get_location_min());
+      double rdist = ::Distance(get_previous()->get_location_remaining(),
+                                get_location_target());
 
       bool filter_backtrack = true;
       if (seg.valid()) {
         for (double t = 0.0; t<=1.0; t+= 1.0/20) {
           GEOPOINT ga = seg.parametric(t);
-          double dthis = ::Distance(get_previous()->get_reference_remaining(),
+          double dthis = ::Distance(get_previous()->get_location_remaining(),
                                     ga);
           if (!filter_backtrack 
               || (dthis>=tdist)
@@ -444,7 +444,7 @@ SampledTaskPoint::print_samples(std::ostream& f,
   const unsigned n= get_search_points().size();
   f << "#   Search points\n";
   for (unsigned i=0; i<n; i++) {
-    const GEOPOINT loc = get_search_points()[i].getLocation();
+    const GEOPOINT loc = get_search_points()[i].get_location();
     f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
   }
   f << "\n";

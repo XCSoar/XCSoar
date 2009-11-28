@@ -50,17 +50,17 @@ void GrahamScan::partition_points()
   // Now put the remaining points in one of the two output sequences
   //
 
-  GEOPOINT loclast = left->getLocation();
+  GEOPOINT loclast = left->get_location();
 
   for (std::list<SearchPoint>::iterator i = raw_points.begin(); 
        i != raw_points.end(); ) {
 
-    if ((loclast.Longitude != (*i).getLocation().Longitude)
-        ||(loclast.Latitude != (*i).getLocation().Latitude)) {
-      loclast = (*i).getLocation();
+    if ((loclast.Longitude != (*i).get_location().Longitude)
+        ||(loclast.Latitude != (*i).get_location().Latitude)) {
+      loclast = (*i).get_location();
 
-      double dir = direction( left->getLocation(), right->getLocation(), 
-                              (*i).getLocation() );
+      double dir = direction( left->get_location(), right->get_location(), 
+                              (*i).get_location() );
       SearchPoint* sp = &(*i);
       if ( dir < 0 )
         upper_partition_points.push_back( sp );
@@ -125,9 +125,9 @@ void GrahamScan::build_half_hull( std::vector< SearchPoint* > input,
     while ( output.size() >= 3 ) {
       size_t end = output.size() - 1;
 
-      if ( factor * direction( output[ end - 2 ]->getLocation(), 
-                               output[ end ]->getLocation(), 
-                               output[ end - 1 ]->getLocation() ) <= 0 ) {
+      if ( factor * direction( output[ end - 2 ]->get_location(), 
+                               output[ end ]->get_location(), 
+                               output[ end - 1 ]->get_location() ) <= 0 ) {
         output.erase( output.begin() + end - 1 );
       }
       else

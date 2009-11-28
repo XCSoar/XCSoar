@@ -61,6 +61,14 @@ public:
   {
   };
 
+  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+    if (_location) {
+      return new CylinderZone(*_location, Radius);
+    } else {
+      return new CylinderZone(get_location(), Radius);
+    }
+  }
+
   /** 
    * Check whether observer is within OZ
    *

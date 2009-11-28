@@ -32,7 +32,7 @@ public:
                     const TaskProjection& tp,
                     const Waypoint & wp, 
                     const TaskBehaviour& tb,
-                    const bool b_scored): 
+                    const bool b_scored=false): 
     OrderedTaskPoint(_oz, tp, wp, tb, b_scored) 
     {};
 
@@ -42,7 +42,7 @@ public:
  * 
  * @return Minimum allowable elevation of task point
  */
-  virtual double getElevation() const;
+  virtual double get_elevation() const;
 
 };
 #endif //INTERMEDIATEPOINT_H

@@ -21,7 +21,7 @@ const GEOPOINT
 AirspacePolygon::get_center()
 {
   if (!border.empty()) {
-    return border[0].getLocation();
+    return border[0].get_location();
   } else {
     return GEOPOINT(0,0);
   }

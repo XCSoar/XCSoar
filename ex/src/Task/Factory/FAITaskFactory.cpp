@@ -4,12 +4,12 @@ FAITaskFactory::FAITaskFactory(OrderedTask& _task,
                                const TaskBehaviour &tb):
   AbstractTaskFactory(_task, tb)
 {
-  start_types.push_back(START_SECTOR);
-  start_types.push_back(START_CYLINDER);
-  intermediate_types.push_back(FAI_SECTOR);
-  intermediate_types.push_back(AST_CYLINDER);
-  finish_types.push_back(FINISH_SECTOR);
-  finish_types.push_back(FINISH_CYLINDER);
+  m_start_types.push_back(START_SECTOR);
+  m_start_types.push_back(START_CYLINDER);
+  m_intermediate_types.push_back(FAI_SECTOR);
+  m_intermediate_types.push_back(AST_CYLINDER);
+  m_finish_types.push_back(FINISH_SECTOR);
+  m_finish_types.push_back(FINISH_CYLINDER);
 }
 
 bool 
@@ -20,21 +20,21 @@ FAITaskFactory::validate()
    * - adjustment to finish height if FAI finish height is on
    */
 
-  if (!task.has_start() || !task.has_finish()) {
+  if (!m_task.has_start() || !m_task.has_finish()) {
     return false;
   }
 
-  if (task.task_size()==4) {
+  if (m_task.task_size()==4) {
 
     // start/finish must be co-located
-    if (! (task.getTaskPoint(0)->get_waypoint() == 
-           task.getTaskPoint(3)->get_waypoint())) {
+    if (! (m_task.getTaskPoint(0)->get_waypoint() == 
+           m_task.getTaskPoint(3)->get_waypoint())) {
       return false;
     }
 
-    const double d1 = task.getTaskPoint(1)->get_vector_planned().Distance/1000.0;
-    const double d2 = task.getTaskPoint(2)->get_vector_planned().Distance/1000.0;
-    const double d3 = task.getTaskPoint(3)->get_vector_planned().Distance/1000.0;
+    const double d1 = m_task.getTaskPoint(1)->get_vector_planned().Distance/1000.0;
+    const double d2 = m_task.getTaskPoint(2)->get_vector_planned().Distance/1000.0;
+    const double d3 = m_task.getTaskPoint(3)->get_vector_planned().Distance/1000.0;
     const double d_wp = d1+d2+d3;
 
 

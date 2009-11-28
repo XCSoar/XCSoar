@@ -22,17 +22,17 @@ TaskDijkstra::~TaskDijkstra() {
 }
 
 
-TaskDijkstra::TaskDijkstra(OrderedTask* _task, const unsigned task_size):
+TaskDijkstra::TaskDijkstra(OrderedTask& _task):
   task(_task),
   shortest(false),
-  num_taskpoints(task_size)
+  num_taskpoints(_task.task_size())
 {
   solution.reserve(num_taskpoints);
   sp_sizes.reserve(num_taskpoints);
-  activeStage = task->getActiveTaskPointIndex();
+  activeStage = task.getActiveTaskPointIndex();
 
   for (unsigned stage=0; stage<num_taskpoints; stage++) {
-    sp_sizes[stage]= task->get_tp_search_points(stage).size();
+    sp_sizes[stage]= task.get_tp_search_points(stage).size();
   }
 }
 
@@ -40,7 +40,7 @@ TaskDijkstra::TaskDijkstra(OrderedTask* _task, const unsigned task_size):
 const SearchPoint &
 TaskDijkstra::get_point(const ScanTaskPoint &sp) const
 {
-  return task->get_tp_search_points(sp.first)[sp.second];
+  return task.get_tp_search_points(sp.first)[sp.second];
 }
 
 
@@ -63,7 +63,7 @@ unsigned TaskDijkstra::distance(const ScanTaskPoint &s1,
 }
 
 unsigned 
-TaskDijkstra::get_size(unsigned stage) const
+TaskDijkstra::get_size(const unsigned stage) const
 {
   return sp_sizes[stage];
 }
@@ -79,8 +79,7 @@ void TaskDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
   for (destination.second=0; 
        destination.second< dsize; destination.second++) {
 
-    const unsigned dr = distance(curNode, destination);
-    dijkstra.link(destination, curNode, extremal_distance(dr));
+    dijkstra.link(destination, curNode, extremal_distance(distance(curNode, destination)));
   }
 }
 
@@ -97,8 +96,7 @@ void TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
   for (destination.second=0; 
        destination.second< dsize; destination.second++) {
 
-    const unsigned dr = distance(destination, currentLocation);
-    dijkstra.link(destination, destination, extremal_distance(dr));
+    dijkstra.link(destination, destination, extremal_distance(distance(destination, currentLocation)));
   }
 }
 
@@ -120,9 +118,9 @@ TaskDijkstra::distance_min(const SearchPoint &currentLocation)
 {
   shortest = true; 
 
-  const ScanTaskPoint start(std::max(0,(int)activeStage-1),0);
+  const ScanTaskPoint start(std::max(1,(int)activeStage)-1,0);
   DijkstraTaskPoint dijkstra(start);
-  if (activeStage>0) {
+  if (activeStage) {
     add_start_edges(dijkstra, currentLocation);
   }
   unsigned d = distance_general(dijkstra);
@@ -167,7 +165,7 @@ void
 TaskDijkstra::save_min()
 {
   for (unsigned j=activeStage; j<num_taskpoints; j++) {
-    task->set_tp_search_min(j, solution[j]);
+    task.set_tp_search_min(j, solution[j]);
   }
 }
 
@@ -176,9 +174,9 @@ void
 TaskDijkstra::save_max()
 {
   for (unsigned j=0; j<num_taskpoints; j++) {
-    task->set_tp_search_max(j, solution[j]);
+    task.set_tp_search_max(j, solution[j]);
     if (j<=activeStage) {
-      task->set_tp_search_min(j, solution[j]);
+      task.set_tp_search_min(j, solution[j]);
     }
   }
 }

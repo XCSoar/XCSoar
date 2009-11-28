@@ -40,16 +40,7 @@ public:
  */
   TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
                 const unsigned _activeTaskPoint,
-                const GlidePolar &gp):
-    tps(_tps.begin(),_tps.end()),
-    activeTaskPoint(_activeTaskPoint),
-    start(0),
-    end(_tps.size()-1),
-    gs(_tps.size()),
-    minHs(_tps.size(),0.0),
-    glide_polar(gp)
-    {
-    };
+                const GlidePolar &gp);
 
 /** 
  * Constructor for single task points (non-ordered ones)
@@ -58,16 +49,7 @@ public:
  * @param gp Glide polar to copy for calculations
  */
   TaskMacCready(TaskPoint* tp,
-                const GlidePolar &gp):
-    tps(1, tp),
-    activeTaskPoint(0),
-    start(0),
-    end(0),
-    gs(1),
-    minHs(1,0.0),
-    glide_polar(gp)
-    {
-    };
+                const GlidePolar &gp);
 
   virtual ~TaskMacCready() {};
 
@@ -97,7 +79,7 @@ public:
  * @param mc MacCready value (m/s)
  */
   void set_mc(double mc) {
-    glide_polar.set_mc(mc);
+    m_glide_polar.set_mc(mc);
   };
 
 /** 
@@ -106,7 +88,7 @@ public:
  * @param ce Cruise efficiency
  */
   void set_cruise_efficiency(double ce) {
-    glide_polar.set_cruise_efficiency(ce);
+    m_glide_polar.set_cruise_efficiency(ce);
   };
 
 /** 
@@ -117,8 +99,8 @@ public:
  * @return Glide solution of current leg
  */
   const GlideResult& get_active_solution() {
-    gs[activeTaskPoint].calc_cruise_bearing();
-    return gs[activeTaskPoint];
+    m_gs[m_activeTaskPoint].calc_cruise_bearing();
+    return m_gs[m_activeTaskPoint];
   };
 
 protected:
@@ -189,13 +171,13 @@ private:
   void clearance_heights(const AIRCRAFT_STATE &state);
 
 protected:
-  const std::vector<TaskPoint*> tps; /**< The TaskPoints in the task */
-  std::vector<GlideResult> gs; /**< Glide solutions for each leg */
-  std::vector<double> minHs; /**< Minimum altitude for each taskpoint (m) */
-  const unsigned activeTaskPoint; /**< Active task point (local copy for speed) */
-  int start; /**< TaskPoint sequence index of first taskpoint included in scan */
-  int end; /**< TaskPoint sequence index of last taskpoint included in scan */
-  GlidePolar glide_polar; /**< Glide polar used for computations */
+  const std::vector<TaskPoint*> m_tps; /**< The TaskPoints in the task */
+  std::vector<GlideResult> m_gs; /**< Glide solutions for each leg */
+  std::vector<double> m_minHs; /**< Minimum altitude for each taskpoint (m) */
+  const unsigned m_activeTaskPoint; /**< Active task point (local copy for speed) */
+  int m_start; /**< TaskPoint sequence index of first taskpoint included in scan */
+  int m_end; /**< TaskPoint sequence index of last taskpoint included in scan */
+  GlidePolar m_glide_polar; /**< Glide polar used for computations */
 };
 
 #endif

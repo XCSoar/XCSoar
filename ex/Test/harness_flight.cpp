@@ -110,6 +110,7 @@ bool run_flight(TaskManager &task_manager,
     f4.flush();
     task_report(task_manager, "end of task\n");
   }
+  wait_prompt(0);
 
   time_elapsed = task_manager.get_stats().total.TimeElapsed;
   time_planned = task_manager.get_stats().total.TimePlanned;

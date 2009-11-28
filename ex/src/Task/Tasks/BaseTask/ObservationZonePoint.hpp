@@ -48,8 +48,22 @@ class TaskPoint;
  * - add arc type for future use
  */
 class ObservationZonePoint : public ReferencePoint, 
-                             public ObservationZone 
+                             public ObservationZone
 {
+protected:
+/** 
+ * Non-copyable
+ * 
+ */
+  ObservationZonePoint(); 
+private:
+/** 
+ * Non-copyable
+ * 
+ * @return 
+ */
+  ObservationZonePoint & operator = (const ObservationZonePoint &);
+
 public:
 /** 
  * Constructor
@@ -93,6 +107,13 @@ public:
  */
   virtual GEOPOINT randomPointInSector(const double mag) const = 0;
 
+/** 
+ * Clone this object with optional shift
+ *
+ * @param _location New location, or if NULL, uses object's location 
+ * @return Cloned object
+ */
+  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const = 0;
 };
 
 #endif

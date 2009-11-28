@@ -43,14 +43,14 @@ PolygonInterior( const GEOPOINT &P, const std::vector<SearchPoint>& V)
 
   // loop through all edges of the polygon
   for (int i=0; i<n; i++) {   // edge from V[i] to V[i+1]
-    if (V[i].getLocation().Latitude <= P.Latitude) {         // start y <= P.Latitude
-      if (V[i+1].getLocation().Latitude > P.Latitude)      // an upward crossing
-        if (isLeft( V[i].getLocation(), V[i+1].getLocation(), P) > 0)  // P left of edge
+    if (V[i].get_location().Latitude <= P.Latitude) {         // start y <= P.Latitude
+      if (V[i+1].get_location().Latitude > P.Latitude)      // an upward crossing
+        if (isLeft( V[i].get_location(), V[i+1].get_location(), P) > 0)  // P left of edge
           ++wn;            // have a valid up intersect
     }
     else {                       // start y > P.Latitude (no test needed)
-      if (V[i+1].getLocation().Latitude <= P.Latitude)     // a downward crossing
-        if (isLeft( V[i].getLocation(), V[i+1].getLocation(), P) < 0)  // P right of edge
+      if (V[i+1].get_location().Latitude <= P.Latitude)     // a downward crossing
+        if (isLeft( V[i].get_location(), V[i+1].get_location(), P) < 0)  // P right of edge
           --wn;            // have a valid down intersect
     }
   }

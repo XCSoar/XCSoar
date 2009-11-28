@@ -4,10 +4,10 @@ AATTaskFactory::AATTaskFactory(OrderedTask& _task,
                                const TaskBehaviour &tb):
   AbstractTaskFactory(_task, tb)
 {
-  start_types.push_back(START_CYLINDER);
-  intermediate_types.push_back(AAT_CYLINDER);
-  intermediate_types.push_back(AAT_SEGMENT);
-  finish_types.push_back(FINISH_LINE);
+  m_start_types.push_back(START_CYLINDER);
+  m_intermediate_types.push_back(AAT_CYLINDER);
+  m_intermediate_types.push_back(AAT_SEGMENT);
+  m_finish_types.push_back(FINISH_LINE);
 }
 
 bool 
@@ -18,10 +18,10 @@ AATTaskFactory::validate()
    * maybe warn on overlap?
    */
 
-  if (!task.has_start() || !task.has_finish()) {
+  if (!m_task.has_start() || !m_task.has_finish()) {
     return false;
   }
-  if (task.task_size()<3) {
+  if (m_task.task_size()<3) {
     // not enough turnpoints!
     return false;
   }

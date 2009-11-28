@@ -64,7 +64,7 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
 
 GEOPOINT AircraftSim::target(TaskManager &task_manager) {
   if (goto_target && (awp>0)) {
-    return task_manager.getActiveTaskPoint()->getLocation();
+    return task_manager.getActiveTaskPoint()->get_location();
   } else {
     if (awp>0) {
       return w[awp];
@@ -159,7 +159,7 @@ double
 AircraftSim::target_height(TaskManager &task_manager)  
 {
   if (task_manager.getActiveTaskPoint()) {
-    return std::max(300.0, task_manager.getActiveTaskPoint()->getElevation());
+    return std::max(300.0, task_manager.getActiveTaskPoint()->get_elevation());
   } else {
     return 300.0;
   }

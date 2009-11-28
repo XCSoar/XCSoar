@@ -37,15 +37,16 @@ TaskMinTarget::f(const double p)
 bool 
 TaskMinTarget::valid(const double tp) 
 {
-  double ff = f(tp);
+  const double ff = f(tp);
   return (res.Solution== GlideResult::RESULT_OK) && (fabs(ff)>=-tolerance*2.0);
 }
 
 double 
 TaskMinTarget::search(const double tp) 
 {
+  force_current = false;
   /// \todo if search fails, force current
-  double p = find_zero(tp);
+  const double p = find_zero(tp);
   if (valid(p)) {
     return p;
   } else {

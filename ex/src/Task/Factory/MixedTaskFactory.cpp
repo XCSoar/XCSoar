@@ -4,16 +4,16 @@ MixedTaskFactory::MixedTaskFactory(OrderedTask& _task,
                                    const TaskBehaviour &tb):
   AbstractTaskFactory(_task, tb)
 {
-  start_types.push_back(START_SECTOR);
-  start_types.push_back(START_LINE);
-  start_types.push_back(START_CYLINDER);
-  intermediate_types.push_back(FAI_SECTOR);
-  intermediate_types.push_back(AST_CYLINDER);
-  intermediate_types.push_back(AAT_CYLINDER);
-  intermediate_types.push_back(AAT_SEGMENT);
-  finish_types.push_back(FINISH_SECTOR);
-  finish_types.push_back(FINISH_LINE);
-  finish_types.push_back(FINISH_CYLINDER);
+  m_start_types.push_back(START_SECTOR);
+  m_start_types.push_back(START_LINE);
+  m_start_types.push_back(START_CYLINDER);
+  m_intermediate_types.push_back(FAI_SECTOR);
+  m_intermediate_types.push_back(AST_CYLINDER);
+  m_intermediate_types.push_back(AAT_CYLINDER);
+  m_intermediate_types.push_back(AAT_SEGMENT);
+  m_finish_types.push_back(FINISH_SECTOR);
+  m_finish_types.push_back(FINISH_LINE);
+  m_finish_types.push_back(FINISH_CYLINDER);
 }
 
 bool 
@@ -24,7 +24,7 @@ MixedTaskFactory::validate()
    * maybe warn on overlap?
    */
 
-  if (!task.has_start() || !task.has_finish()) {
+  if (!m_task.has_start() || !m_task.has_finish()) {
     return false;
   }
 
