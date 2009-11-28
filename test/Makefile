@@ -7,7 +7,6 @@ topdir = ..
 SRC = $(topdir)/Common/Source
 HDR = $(topdir)/Common/Header
 
-include $(topdir)/build/sdl.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/verbose.mk
@@ -33,6 +32,7 @@ LDFLAGS = $(TARGET_LDFLAGS) $(PROFILE)
 LDLIBS = $(TARGET_LDLIBS)
 
 include $(topdir)/build/sdl.mk
+include $(topdir)/build/gconf.mk
 
 .phony:
 

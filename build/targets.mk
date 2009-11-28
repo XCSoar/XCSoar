@@ -264,6 +264,8 @@ endif
 
 ifeq ($(TARGET),UNIX)
   TARGET_CPPFLAGS += -DDISABLEAUDIO
+  TARGET_CPPFLAGS += $(shell pkg-config --cflags gconf-2.0)
+  TARGET_LDLIBS += $(shell pkg-config --libs gconf-2.0)
 endif
 
 ####### compiler target

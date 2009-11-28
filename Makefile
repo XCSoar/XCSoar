@@ -383,6 +383,7 @@ XCSOARLAUNCH_OBJS=\
 	$(SRC)/XCSoarLaunch.o
 
 include $(topdir)/build/sdl.mk
+include $(topdir)/build/gconf.mk
 
 all: all-$(TARGET)
 

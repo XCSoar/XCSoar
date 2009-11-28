@@ -44,7 +44,15 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
+#ifndef WIN32
+#include <gconf/gconf.h>
+#endif
+
+#ifdef WIN32
 #define CONF(key) _T(key)
+#else /* !WIN32 */
+#define CONF(key) ("/apps/XCSoar/" key)
+#endif
 
 const TCHAR szRegistryKey[] = CONF(REGKEYNAME);
 const TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] = {
@@ -308,6 +316,50 @@ const TCHAR szRegistryFontCDIWindowFont[] = CONF("CDIWindowFont");
 const TCHAR szRegistryFontMapLabelFont[] = CONF("MapLabelFont");
 const TCHAR szRegistryFontStatisticsFont[] = CONF("StatisticsFont");
 
+#ifndef WIN32
+
+class GConf {
+protected:
+  GConfEngine *engine;
+
+public:
+  GConf():engine(gconf_engine_get_default()) {}
+  ~GConf() {
+    gconf_engine_unref(engine);
+  }
+
+  bool get(const char *key, int &value) {
+    GError *error = NULL;
+    value = gconf_engine_get_int(engine, key, &error);
+    if (value == 0 && error != NULL) {
+      g_error_free(error);
+      return false;
+    }
+
+    return true;
+  }
+
+  bool get(const char *key, char *value, size_t max_length) {
+    gchar *buffer = gconf_engine_get_string(engine, key, NULL);
+    if (buffer == NULL)
+      return false;
+
+    g_strlcpy(value, buffer, max_length);
+    g_free(buffer);
+    return true;
+  }
+
+  bool set(const char *key, int value) {
+    return gconf_engine_set_int(engine, key, value, NULL);
+  }
+
+  bool set(const char *key, const char *value) {
+    return gconf_engine_set_string(engine, key, value, NULL);
+  }
+};
+
+#endif /* !WIN32 */
+
 void StoreType(int Index,int the_type)
 {
   SetToRegistry(szRegistryDisplayType[Index],(DWORD)the_type);
@@ -332,6 +384,7 @@ void SetRegistryStringIfAbsent(const TCHAR* name,
 //
 bool GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
 {  // returns 0 on SUCCESS, else the non-zero error code
+#ifdef WIN32
   HKEY    hKey;
   DWORD    dwSize, dwType;
   long    hRes;
@@ -352,6 +405,14 @@ bool GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
   }
   RegCloseKey(hKey);
   return hRes;
+#else /* !WIN32 */
+  int value;
+  if (!GConf().get(szRegValue, value))
+    return false;
+
+  pPos = (DWORD)value;
+  return true;
+#endif /* !WIN32 */
 }
 
 
@@ -411,6 +472,7 @@ bool GetFromRegistry(const TCHAR *szRegValue, double &pPos)
 
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 {
+#ifdef WIN32
   HKEY    hKey;
   DWORD    Disp;
   HRESULT hRes;
@@ -424,6 +486,11 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
   RegCloseKey(hKey);
 
   return hRes;
+#else /* !WIN32 */
+  GConf().set(szRegValue, (int)Pos);
+
+  return NULL;
+#endif /* !WIN32 */
 }
 
 // Set bool value to registry as 1 or 0 - JG
@@ -438,7 +505,7 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal)
 	return SetToRegistry(szRegValue, DWORD(nVal));
 }
 
-#ifndef __WINE__ /* DWORD==unsigned on WINE, would be duplicate */
+#ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
 HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
 {
 	return SetToRegistry(szRegValue, DWORD(nVal));
@@ -453,6 +520,7 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
  */
 BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
+#ifdef WIN32
   HKEY    hKey;
   DWORD   dwType = REG_SZ;
   long    hRes;
@@ -475,6 +543,9 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 
   RegCloseKey(hKey);
   return hRes;
+#else /* !WIN32 */
+  return GConf().get(szRegValue, pPos, dwSize);
+#endif /* !WIN32 */
 }
 
 /**
@@ -484,6 +555,7 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
  */
 HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
+#ifdef WIN32
   HKEY    hKey;
   DWORD    Disp;
   HRESULT hRes;
@@ -498,6 +570,9 @@ HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
   RegCloseKey(hKey);
 
   return hRes;
+#else /* !WIN32 */
+  return GConf().set(szRegValue, Pos);
+#endif /* !WIN32 */
 }
 
 void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex)
@@ -729,6 +804,7 @@ void LoadRegistryFromFile(const TCHAR *szFile) {
 
 void SaveRegistryToFile(const TCHAR *szFile)
 {
+#ifdef WIN32
   TCHAR lpstrName[nMaxKeyNameSize+1];
   //  TCHAR lpstrClass[nMaxClassSize+1];
 #ifdef __GNUC__
@@ -846,4 +922,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
   fclose(fp);
 
   ::RegCloseKey(hkFrom);
+#else /* !WIN32 */
+  // XXX implement
+#endif /* !WIN32 */
 }
