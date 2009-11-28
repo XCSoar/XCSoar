@@ -75,6 +75,7 @@ int  UseCustomFonts;
 static void
 ApplyClearType(LOGFONT *logfont)
 {
+#ifndef ENABLE_SDL
   logfont->lfQuality = ANTIALIASED_QUALITY;
 #ifdef CLEARTYPE_COMPAT_QUALITY
   if (0) {
@@ -86,6 +87,7 @@ ApplyClearType(LOGFONT *logfont)
 #endif
   }
 #endif
+#endif /* !ENABLE_SDL */
 }
 
 static bool
@@ -325,6 +327,7 @@ InitialiseFontsAuto(Canvas &canvas, RECT rc,
                     LOGFONT *ptrautoMapLabelLogFont,
                     LOGFONT *ptrautoStatisticsLogFont)
 {
+#ifndef ENABLE_SDL
   LOGFONT logfont;
   int FontHeight, FontWidth;
   int fontsz1 = (rc.bottom - rc.top );
@@ -516,6 +519,9 @@ InitialiseFontsAuto(Canvas &canvas, RECT rc,
   logfont.lfWeight = FW_MEDIUM;
 
   memcpy ((void *)ptrautoTitleSmallWindowLogFont, &logfont, sizeof (LOGFONT));
+#else /* !ENABLE_SDL */
+  // XXX implement
+#endif /* !ENABLE_SDL */
 }
 
 //  propGetFontSettings(TEXT("TeamCodeFont"), &logfont);
