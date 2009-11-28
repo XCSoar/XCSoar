@@ -43,11 +43,8 @@ Copyright_License {
  */
 
 #include "GlideSolvers.hpp"
-#include "XCSoar.h"
-#include "Protection.hpp"
 #include "McReady.h"
 #include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
 #include "Task.h"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
