@@ -987,7 +987,7 @@ static void OnWaypointNewClicked(WindowControl * Sender){
   edit_waypoint.Name[0] = 0;
   edit_waypoint.Details = 0;
   edit_waypoint.Number = 0;
-  dlgWaypointEditShowModal(&edit_waypoint);
+  dlgWaypointEditShowModal(edit_waypoint);
   if (_tcslen(edit_waypoint.Name)>0) {
     int i = way_points.append(edit_waypoint);
     if (i >= 0) {
@@ -1003,7 +1003,7 @@ static void OnWaypointEditClicked(WindowControl * Sender){
   int res;
   res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
-    dlgWaypointEditShowModal(&way_points.set(res));
+    dlgWaypointEditShowModal(way_points.set(res));
     waypointneedsave = true;
   }
 }

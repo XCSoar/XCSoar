@@ -81,7 +81,10 @@ void dlgWayPointDetailsShowModal(void);
 void dlgTextEntryShowModal(TCHAR *text, int width=0);
 void dlgTeamCodeShowModal(void);
 void dlgStartPointShowModal(void);
-void dlgWaypointEditShowModal(WAYPOINT *wpt);
+
+void
+dlgWaypointEditShowModal(WAYPOINT &way_point);
+
 void dlgWeatherShowModal(void);
 void dlgAirspaceSelect(void);
 void dlgTarget(void);

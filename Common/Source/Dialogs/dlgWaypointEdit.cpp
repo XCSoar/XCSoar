@@ -450,14 +450,10 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-
-void dlgWaypointEditShowModal(WAYPOINT *wpt) {
-  if (!wpt) {
-    return;
-  }
-
-  global_wpt = wpt;
+void
+dlgWaypointEditShowModal(WAYPOINT &way_point)
+{
+  global_wpt = &way_point;
 
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
