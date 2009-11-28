@@ -37,11 +37,11 @@ bool TaskOptTarget::valid(const double tp)
 double TaskOptTarget::search(const double tp) 
 {
   if (iso.valid()) {
-    const GEOPOINT loc = tp_current.get_location_target();
+    target_save();
     const double t = find_min(tp);
     if (!valid(t)) {
       // invalid, so restore old value
-      tp_current.set_target(loc);
+      target_restore();
       return -1.0;
     } else {
       return t;

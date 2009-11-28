@@ -5,26 +5,6 @@
 #include <math.h>
 
 const GEOPOINT&
-AATPoint::get_location_scored() const
-{
-  if (getActiveState() == BEFORE_ACTIVE) {
-    return get_location_max();
-  } else {
-    return get_location_min();
-  }
-}
-
-const GEOPOINT&
-AATPoint::get_location_travelled() const
-{
-  if (has_entered()) {
-    return get_location_max();
-  } else {
-    return get_location_min();
-  }
-}
-
-const GEOPOINT&
 AATPoint::get_location_remaining() const
 {
   if (getActiveState() == BEFORE_ACTIVE) {

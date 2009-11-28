@@ -38,6 +38,15 @@ public:
  */
   void set_range(const double tp, const bool force_current);
 
+/**
+ * Save targets in case optimisation fails
+ */
+    void target_save();
+/**
+ * Restore target from copy
+ */
+    void target_restore();
+
 private:
 
   virtual GlideResult tp_solution(const unsigned i,

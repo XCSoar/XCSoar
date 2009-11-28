@@ -69,7 +69,8 @@ public:
            const TaskBehaviour &tb) : 
     IntermediatePoint(_oz,tp,wp,tb,true), 
     TargetLocked(false), 
-    m_target_location(wp.Location)
+    m_target_location(wp.Location),
+    m_target_save(wp.Location)
     {
     }
 
@@ -78,22 +79,8 @@ public:
  * 
  * @return Location 
  */
-  virtual const GEOPOINT& get_location_remaining() const;
+  const GEOPOINT& get_location_remaining() const;
   
-/** 
- * Retrieve location to be used for task travelled
- * 
- * @return Location 
- */
-  virtual const GEOPOINT& get_location_travelled() const;
-  
-/** 
- * Retrieve location to be used for task scored
- * 
- * @return Location 
- */
-  virtual const GEOPOINT& get_location_scored() const;
-
 /** 
  * Update sample, specialisation to move target for active
  * task point based on task behaviour rules.
@@ -105,15 +92,28 @@ public:
  * 
  * @return True if internal state changed
  */
-  virtual bool update_sample(const AIRCRAFT_STATE& state,
-                             const TaskEvents &task_events);
+  bool update_sample(const AIRCRAFT_STATE& state,
+                     const TaskEvents &task_events);
+
+/**
+ * Save local copy of target in case optimisation fails
+ */
+    void target_save() {
+        m_target_save = m_target_location;
+    }
+/**
+ * Set target from local copy
+ */
+    void target_restore() {
+        m_target_location = m_target_save;
+    }
 
 /** 
  * Set target location explicitly
  * 
  * @param loc Location of new target
  */
-  virtual void set_target(const GEOPOINT &loc);
+  void set_target(const GEOPOINT &loc);
 
 /** 
  * Accessor to get target location
@@ -134,7 +134,7 @@ public:
  *
  * @return True if target was moved
  */
-  virtual bool set_range(const double p, const bool force_if_current);
+  bool set_range(const double p, const bool force_if_current);
 
 /** 
  * Test whether aircraft has travelled close to isoline of target within threshold
@@ -147,12 +147,13 @@ public:
   bool close_to_target(const AIRCRAFT_STATE& state, const double threshold=0) const;
 
 #ifdef DO_PRINT
-  virtual void print(std::ostream& f, const AIRCRAFT_STATE&state, 
-                     const int item=0) const;
+  void print(std::ostream& f, const AIRCRAFT_STATE&state, 
+             const int item=0) const;
 #endif
 
-protected:
+private:
   GEOPOINT m_target_location;      /**< Location of target within OZ */
+  GEOPOINT m_target_save;          /**< Saved location of target within OZ */
   bool TargetLocked;            /**< Whether target can float */
 
 /** 
@@ -195,7 +196,7 @@ protected:
  * 
  * @return True if same WP, type and OZ
  */
-  virtual bool equals(const OrderedTaskPoint* other) const;
+  bool equals(const OrderedTaskPoint* other) const;
 
 public:
   DEFINE_VISITABLE()

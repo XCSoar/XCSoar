@@ -48,3 +48,20 @@ TaskMacCreadyRemaining::set_range(const double tp, const bool force_current)
     }
   }
 }
+
+
+void 
+TaskMacCreadyRemaining::target_save()
+{
+  for (int i=m_start; i<=m_end; i++) {
+      m_tps[i]->target_save();
+  }
+}
+
+void 
+TaskMacCreadyRemaining::target_restore()
+{
+  for (int i=m_start; i<=m_end; i++) {
+      m_tps[i]->target_restore();
+  }
+}

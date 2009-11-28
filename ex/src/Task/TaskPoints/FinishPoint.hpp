@@ -81,8 +81,8 @@ public:
  * @param prev Previous task point 
  * @param next Next task point (must be null!)
  */
-  virtual void set_neighbours(OrderedTaskPoint* prev,
-                              OrderedTaskPoint* next);
+  void set_neighbours(OrderedTaskPoint* prev,
+                      OrderedTaskPoint* next);
 
 /** 
  * Retrieve elevation of taskpoint, taking into account
@@ -90,7 +90,7 @@ public:
  * 
  * @return Minimum allowable elevation of start point
  */
-  virtual double get_elevation() const;
+  double get_elevation() const;
 
 /** 
  * Test whether a taskpoint is equivalent to this one
@@ -99,7 +99,7 @@ public:
  * 
  * @return True if same WP, type and OZ
  */
-  virtual bool equals(const OrderedTaskPoint* other) const;
+  bool equals(const OrderedTaskPoint* other) const;
 
 private:
   bool score_first_entry() const {

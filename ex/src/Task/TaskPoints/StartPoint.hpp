@@ -79,8 +79,8 @@ public:
  * @param prev Previous task point (must be null!)
  * @param next Next task point in sequence
  */
-  virtual void set_neighbours(OrderedTaskPoint* prev,
-                              OrderedTaskPoint* next);
+    void set_neighbours(OrderedTaskPoint* prev,
+                        OrderedTaskPoint* next);
 
 /** 
  * Update sample, specialisation to check start speed/height
@@ -90,8 +90,8 @@ public:
  * 
  * @return True if internal state changed
  */
-  virtual bool update_sample(const AIRCRAFT_STATE& state,
-                             const TaskEvents &task_events);
+    bool update_sample(const AIRCRAFT_STATE& state,
+                       const TaskEvents &task_events);
 
 /** 
  * Retrieve elevation of taskpoint, taking into account
@@ -99,7 +99,7 @@ public:
  * 
  * @return Minimum allowable elevation of start point
  */
-  virtual double get_elevation() const;
+  double get_elevation() const;
 
 /** 
  * Test whether a taskpoint is equivalent to this one
@@ -108,7 +108,7 @@ public:
  * 
  * @return True if same WP, type and OZ
  */
-  virtual bool equals(const OrderedTaskPoint* other) const;
+  bool equals(const OrderedTaskPoint* other) const;
 
 private:
   bool enabled; /**< For future use with multiple start points, whether enabled */

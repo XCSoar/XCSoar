@@ -65,3 +65,10 @@ TaskPoint::glide_solution_sink(const AIRCRAFT_STATE &ac,
 }
 
 
+const AIRCRAFT_STATE& 
+TaskPoint::get_state_entered() const 
+{
+  // this should never get called
+  static const AIRCRAFT_STATE null_state;
+  return null_state;
+}

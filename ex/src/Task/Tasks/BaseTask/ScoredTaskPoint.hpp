@@ -64,7 +64,7 @@ public:
  * 
  * @return State on entry
  */
-  AIRCRAFT_STATE get_state_entered() const {
+  const AIRCRAFT_STATE& get_state_entered() const {
     return m_state_entered;
   }
 
@@ -97,7 +97,7 @@ public:
  * 
  * @return Location 
  */
-  virtual const GEOPOINT& get_location_scored() const;
+  const GEOPOINT& get_location_scored() const;
 
 /** 
  * Retrieve location to be used for the task already travelled.
@@ -105,7 +105,7 @@ public:
  * 
  * @return Location 
  */
-  virtual const GEOPOINT& get_location_travelled() const;
+  const GEOPOINT& get_location_travelled() const;
 
 /** 
  * Retrieve location to be used for remaining task.
