@@ -132,21 +132,19 @@ void CuSonde::adjustForecastTemperature(double delta) {
  * @param Calculated DERIVED_INFO for Flying status
  */
 void
-CuSonde::updateMeasurements(const NMEA_INFO *Basic,
-                            const DERIVED_INFO *Calculated)
+CuSonde::updateMeasurements(const NMEA_INFO &basic,
+                            const DERIVED_INFO &calculated)
 {
   // if (not flying) nothing to update...
-  if (!Calculated->Flying)
+  if (!calculated.Flying)
     return;
 
   // if (no temperature or humidity available) nothing to update...
-  if (!Basic->TemperatureAvailable ||
-      !Basic->HumidityAvailable) {
+  if (!basic.TemperatureAvailable || !basic.HumidityAvailable)
     return;
-  }
 
   // find appropriate level
-  unsigned short level = (unsigned short)(((int)(max(Basic->Altitude, 0.0))) / CUSONDE_HEIGHTSTEP);
+  unsigned short level = (unsigned short)((int)max(basic.Altitude, 0.0) / CUSONDE_HEIGHTSTEP);
   // if (level out of range) cancel update
   if (level>=CUSONDE_NUMLEVELS) {
     return;
@@ -170,14 +168,14 @@ CuSonde::updateMeasurements(const NMEA_INFO *Basic,
   if (terrain.GetMap()) {
     RasterRounding rounding(*terrain.GetMap(),0,0);
     hGround =
-      terrain.GetTerrainHeight(Basic->Location, rounding);
+      terrain.GetTerrainHeight(basic.Location, rounding);
   }
   terrain.Unlock();
 
   // if (going up)
   if (level>last_level) {
-    cslevels[level].updateTemps(Basic->RelativeHumidity,
-				Basic->OutsideAirTemperature);
+    cslevels[level].updateTemps(basic.RelativeHumidity,
+                                basic.OutsideAirTemperature);
     cslevels[level].updateThermalIndex(level);
 
     if (level>0) {
@@ -188,8 +186,8 @@ CuSonde::updateMeasurements(const NMEA_INFO *Basic,
   // if (going down)
   } else {
     // QUESTION TB: why level+1 and not level?
-    cslevels[level+1].updateTemps(Basic->RelativeHumidity,
-				Basic->OutsideAirTemperature);
+    cslevels[level+1].updateTemps(basic.RelativeHumidity,
+                                  basic.OutsideAirTemperature);
     cslevels[level+1].updateThermalIndex((unsigned short)(level+1));
 
     if (level<CUSONDE_NUMLEVELS-1) {

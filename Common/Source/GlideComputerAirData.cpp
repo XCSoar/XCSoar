@@ -133,7 +133,7 @@ void GlideComputerAirData::ProcessVertical() {
   Turning();
   Wind();
   ProcessThermalLocator();
-  CuSonde::updateMeasurements(&Basic(), &Calculated());
+  CuSonde::updateMeasurements(Basic(), Calculated());
   LastThermalStats();
   LD();
   CruiseLD();
