@@ -129,7 +129,7 @@ zzip_file_saveoffset(ZZIP_FILE * fp)
 static zzip_char_t*
 _dirsep_strrchr (zzip_char_t* name)
 {
-    char* n = strrchr ((char*)name, '/');
+    char* n = strrchr ((char *)name, '/');
     char* m = strrchr ((char *)name, '\\');
     if (m && n && m > n) n = m;
     return n;
