@@ -1189,7 +1189,7 @@ static int jas_icctxt_copy(jas_iccattrval_t *attrval,
 {
 	jas_icctxt_t *txt = &attrval->data.txt;
 	jas_icctxt_t *othtxt = &othattrval->data.txt;
-	if (!(txt->string = _strdup(othtxt->string)))
+        if (!(txt->string = strdup(othtxt->string)))
 		return -1;
 	return 0;
 }
