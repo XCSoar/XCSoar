@@ -150,17 +150,17 @@ TaskDijkstra::distance_general(DijkstraTaskPoint &dijkstra)
   unsigned lastStage = 0-1;
   while (!dijkstra.empty()) {
 
-    ScanTaskPoint curNode = dijkstra.pop();
+    const ScanTaskPoint curNode = dijkstra.pop();
 
     if (curNode.first != lastStage) {
       lastStage = curNode.first;
 
       if (curNode.first+1 == num_taskpoints) {
 
-        ScanTaskPoint p = curNode; p.first= curNode.first; p.second = curNode.second;
+        ScanTaskPoint p = curNode; 
         ScanTaskPoint p_last;
         do {
-          p_last.second = p.second; p_last.first = p.first;
+          p_last = p;
           solution[p_last.first] = get_point(p_last);
           p = dijkstra.get_predecessor(p_last);
         } while (!(p == p_last));
