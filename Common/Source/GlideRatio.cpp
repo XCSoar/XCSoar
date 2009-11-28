@@ -162,7 +162,9 @@ CalculateLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf )
 }
 
 // existing methods (moving average via low pass filter)
-double
+
+// limit to reasonable values
+static double
 LimitLD(double LD)
 {
   if (fabs(LD) > INVALID_GR) {

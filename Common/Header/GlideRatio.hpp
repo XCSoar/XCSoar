@@ -72,8 +72,6 @@ InsertLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf, int distance, in
 int
 CalculateLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf);
 
-// limit to reasonable values
-double LimitLD(double LD);
 // methods using low-pass filter
 
 double UpdateLD(double LD, double d, double h, double filter_factor);
