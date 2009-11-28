@@ -99,11 +99,6 @@ extern LOGFONT autoCDIWindowLogFont; // New
 extern LOGFONT autoMapLabelLogFont;
 extern LOGFONT autoStatisticsLogFont;
 
-extern void InitializeOneFont(Font *theFont,
-                               const TCHAR FontRegKey[] ,
-                               LOGFONT autoLogFont,
-                               LOGFONT * LogFontUsed);
-
 extern bool dlgFontEditShowModal(const TCHAR * FontDescription,
                           const TCHAR * FontRegKey,
                           LOGFONT autoLogFont);

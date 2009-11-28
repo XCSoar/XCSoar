@@ -44,10 +44,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "MainWindow.hpp"
 
-extern void InitializeOneFont(Font *theFont,
-                              const TCHAR FontRegKey[] ,
-                              LOGFONT autoLogFont,
-                              LOGFONT * LogFontUsed);
 extern Font InfoWindowFont;
 extern Font TitleWindowFont;
 extern Font MapWindowFont;

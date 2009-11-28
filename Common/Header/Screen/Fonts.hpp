@@ -38,13 +38,20 @@ Copyright_License {
 #ifndef XCSOAR_FONTS_HPP
 #define XCSOAR_FONTS_HPP
 
-#include <windef.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 struct FontHeightInfo;
 class Font;
 class Canvas;
 
 void DeleteFonts();
+
+void InitializeOneFont(Font *theFont,
+                       const TCHAR FontRegKey[] ,
+                       LOGFONT autoLogFont,
+                       LOGFONT *LogFontUsed);
+
 void InitialiseFonts(Canvas &canvas, RECT rc);
 
 extern Font InfoWindowFont;
