@@ -61,6 +61,7 @@ RUN_WAY_POINT_PARSER_OBJS = \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a \
 	$(SRC)/LocalPath.o \
+	$(SRC)/StringUtil.o \
 	src/RunWayPointParser.o
 RunWayPointParser-$(TARGET)$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(TARGET).o)
 	@$(NQ)echo "  LINK    $@"
