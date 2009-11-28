@@ -43,6 +43,7 @@ Copyright_License {
 #include "options.h" /* for IBLSCALE() */
 #include "Asset.hpp" /* for needclipping */
 
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h> /* for abs() */
 
@@ -198,6 +199,8 @@ Canvas::copy(int dest_x, int dest_y,
              unsigned dest_width, unsigned dest_height,
              const Canvas &src, int src_x, int src_y)
 {
+  assert(src.surface != NULL);
+
   SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
   SDL_Rect dest_rect = { dest_x, dest_y };
 
@@ -219,6 +222,8 @@ Canvas::copy(const Canvas &src)
 void
 Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
 {
+  assert(src.surface != NULL);
+
   ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY,
                     src.map(Color(0xff, 0xff, 0xff)));
   copy(src);
@@ -232,6 +237,8 @@ Canvas::stretch(int dest_x, int dest_y,
                 int src_x, int src_y,
                 unsigned src_width, unsigned src_height)
 {
+  assert(src.surface != NULL);
+
   SDL_Surface *zoomed =
     ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
                   (double)dest_height / (double)src_height,
@@ -411,6 +418,8 @@ Canvas::copy_or(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 const Canvas &src, int src_x, int src_y)
 {
+  assert(src.surface != NULL);
+
   ::blit_or(surface, dest_x, dest_y, dest_width, dest_height,
             src.surface, src_x, src_y);
 }
@@ -420,6 +429,8 @@ Canvas::copy_and(int dest_x, int dest_y,
                  unsigned dest_width, unsigned dest_height,
                  const Canvas &src, int src_x, int src_y)
 {
+  assert(src.surface != NULL);
+
   ::blit_and(surface, dest_x, dest_y, dest_width, dest_height,
              src.surface, src_x, src_y);
 }
@@ -431,6 +442,8 @@ Canvas::stretch_or(int dest_x, int dest_y,
                    int src_x, int src_y,
                    unsigned src_width, unsigned src_height)
 {
+  assert(src.surface != NULL);
+
   SDL_Surface *zoomed =
     ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
                   (double)dest_height / (double)src_height,
@@ -455,6 +468,8 @@ Canvas::stretch_and(int dest_x, int dest_y,
                     int src_x, int src_y,
                     unsigned src_width, unsigned src_height)
 {
+  assert(src.surface != NULL);
+
   SDL_Surface *zoomed =
     ::zoomSurface(src.surface, (double)dest_width / (double)src_width,
                   (double)dest_height / (double)src_height,
