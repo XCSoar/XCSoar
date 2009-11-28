@@ -83,6 +83,6 @@ WaypointWriteFiles(WayPointList &way_points,
                    const SETTINGS_COMPUTER &settings_computer);
 
 void
-WaypointAltitudeFromTerrain(WAYPOINT* wpt, RasterTerrain &terrain);
+WaypointAltitudeFromTerrain(WAYPOINT &way_point, RasterTerrain &terrain);
 
 #endif

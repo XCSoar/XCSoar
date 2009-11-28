@@ -413,7 +413,7 @@ static void GetValues(void) {
   if (wp) {
     ss = wp->GetDataField()->GetAsInteger();
     if (ss==0) {
-      WaypointAltitudeFromTerrain(global_wpt, terrain);
+      WaypointAltitudeFromTerrain(*global_wpt, terrain);
     } else {
       global_wpt->Altitude = ss/ALTITUDEMODIFY;
     }
