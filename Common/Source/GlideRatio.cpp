@@ -124,7 +124,7 @@ InsertLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf,
  * returns 0 if invalid, 999 if too high
  */
 int
-CalculateLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf )
+CalculateLDRotary(const DERIVED_INFO &calculated, const ldrotary_s &bc)
 {
   int altdiff, eff;
   short bcold;
@@ -132,11 +132,8 @@ CalculateLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf )
   if (calculated.Circling || calculated.OnGround)
     return 0;
 
-  if ( buf->start <0)
+  if (bc.start < 0)
     return 0;
-
-  ldrotary_s bc;
-  memcpy(&bc, buf, sizeof(ldrotary_s));
 
   if (bc.valid == false ) {
     if (bc.start == 0)

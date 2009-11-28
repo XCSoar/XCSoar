@@ -70,7 +70,7 @@ void
 InsertLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf, int distance, int altitude);
 
 int
-CalculateLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf);
+CalculateLDRotary(const DERIVED_INFO &calculated, const ldrotary_s &ld);
 
 // methods using low-pass filter
 
