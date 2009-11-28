@@ -1,7 +1,6 @@
 #include "AirspacePolygon.hpp"
 #include "Math/Earth.hpp"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
-#include "Navigation/ConvexHull/GrahamScan.hpp"
 
 AirspacePolygon::AirspacePolygon(const std::vector<GEOPOINT>& pts)
 {
@@ -12,18 +11,17 @@ AirspacePolygon::AirspacePolygon(const std::vector<GEOPOINT>& pts)
   }
 
   /// \todo remove this pruning
-  GrahamScan gs(border);
-  border = gs.prune_interior();
+  prune_interior(border);
 }
 
 
 const GEOPOINT 
 AirspacePolygon::get_center()
 {
-  if (!border.empty()) {
-    return border[0].get_location();
-  } else {
+  if (border.empty()) {
     return GEOPOINT(0,0);
+  } else {
+    return border[0].get_location();
   }
 }
 
@@ -33,11 +31,11 @@ AirspacePolygon::get_bounding_box(const TaskProjection& task_projection)
 {
   FLAT_GEOPOINT min;
   FLAT_GEOPOINT max;
-  bool empty=true;
 
   project(task_projection);
 
-  for (std::vector<SearchPoint>::const_iterator v = border.begin();
+  bool empty=true;
+  for (SearchPointVector::const_iterator v = border.begin();
        v != border.end(); v++) {
     FLAT_GEOPOINT f = v->get_flatLocation();
     if (empty) {
@@ -95,7 +93,5 @@ AirspacePolygon::intersects(const GEOPOINT& start,
 void
 AirspacePolygon::project(const TaskProjection &task_projection)
 {
-  for (unsigned i=0; i<border.size(); i++) {
-    border[i].project(task_projection);
-  }
+  ::project(border, task_projection);
 }

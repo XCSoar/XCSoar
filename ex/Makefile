@@ -24,13 +24,13 @@ INCLUDES := -I$(SRC)
 
 PROFILE := 
 # -pg
-COVERAGE :=
+COVERAGE := 
 # --coverage
 
 OPTIMIZE := -g -O2
 
 CPPFLAGS := $(INCLUDES) 
-CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
+CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE) $(COVERAGE)
 CFLAGS		:=$(OPTIMIZE) $(PROFILE) $(COVERAGE)
 
 MAKEFLAGS	+=-r
@@ -77,6 +77,7 @@ OBJS	:=\
 	src/Navigation/GeoPoint.o \
 	src/Navigation/ReferencePoint.o \
 	src/Navigation/SearchPoint.o \
+	src/Navigation/SearchPointVector.o \
 	src/Navigation/TaskProjection.o \
 	src/Navigation/ConvexHull/GrahamScan.o \
 	src/Navigation/ConvexHull/PolygonInterior.o \
@@ -207,6 +208,10 @@ DEPFLAGS	=-Wp,-MM,-MF,$(DEPFILE)
 dirtarget	=$(subst \\,_,$(subst /,_,$(dir $@)))
 cc-flags	=$(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
 cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
+
+covstart:	FORCE
+	@$(NQ)echo "coverage initialise"
+	@$(Q)$(COVSTART)
 
 cov:	FORCE
 	@$(NQ)echo "coverage report"

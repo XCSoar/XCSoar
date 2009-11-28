@@ -60,7 +60,7 @@ bool run_flight(TaskManager &task_manager,
   ac.set_speed_factor(speed_factor);
 
 #ifdef DO_PRINT
-  static std::ofstream f4("results/res-sample.txt");
+  std::ofstream f4("results/res-sample.txt");
 #endif
 
   bool do_print = verbose;

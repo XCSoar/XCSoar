@@ -10,6 +10,9 @@
 
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
+/**
+ * Experimental class for cloning task points
+ */
 class TaskPointCloneVisitor: 
   public BaseVisitor,
   public Visitor<StartPoint>,
@@ -18,6 +21,12 @@ class TaskPointCloneVisitor:
   public Visitor<FinishPoint>
 {
 public:
+  /**
+   * Constructor
+   * @param tb 
+   * @param tp
+   * @param _wp Waypoint to shift the task point to
+   */
   TaskPointCloneVisitor(const TaskBehaviour& tb,
                         const TaskProjection &tp,
                         const Waypoint *_wp):
@@ -26,6 +35,11 @@ public:
     m_retval(NULL),
     m_waypoint(_wp)
     {}
+  /**
+   * Visit a single taskpoint, making a copy
+   * @param taskpoint The TP to clone
+   * @return Clone of the TP, shifted to the new waypoint
+   */
   OrderedTaskPoint* Visit(const OrderedTaskPoint &taskpoint) {
     if (!m_waypoint) {
       m_waypoint = &taskpoint.get_waypoint();

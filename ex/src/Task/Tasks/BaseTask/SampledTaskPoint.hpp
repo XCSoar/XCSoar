@@ -169,30 +169,10 @@ private:
   const TaskProjection &m_task_projection;
 
 /** 
- * Convert interior sample points to convex hull
- * 
- * @return True if interior sample points were trimmed
- */
-  bool prune_sample_points();
-
-/** 
- * Convert boundary points to convex hull
- * 
- * @return True if boundary points were trimmed
- */
-  bool prune_boundary_points();
-
-/** 
  * Clear all sample points.
  * 
  */
   void clear_sample_points();
-
-/** 
- * Clear all boundary points.
- * 
- */
-  void clear_boundary_points();
 
   SearchPointVector m_sampled_points;
   SearchPointVector m_boundary_points;

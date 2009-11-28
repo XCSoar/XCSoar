@@ -233,7 +233,18 @@ private:
   const TaskBehaviour &task_behaviour;
   
 public:
+  /**
+   * Allow a visitor to visit the active task
+   *
+   * @param visitor Visitor to accept into the active task
+   */
   void Accept(BaseVisitor& visitor) const;
+
+  /**
+   * Allow a visitor to visit the ordered task
+   *
+   * @param visitor Visitor to accept into the ordered task
+   */
   void ordered_Accept(BaseVisitor& visitor) const;
 };
 #endif //TASKMANAGER_H

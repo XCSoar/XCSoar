@@ -3,9 +3,17 @@
 
 #include "ObservationZonePoint.hpp"
 
+/**
+ * Class holding an ObzervationZonePoint, directing calls to it
+ */
 class ObservationZoneClient: public virtual ObservationZone
 {
 public:
+  /**
+   * Constructor.  Transfers ownership of the OZ to this object.
+   *
+   * @param _oz The OZ to store
+   */
   ObservationZoneClient(ObservationZonePoint* _oz):m_oz(_oz) {};
 
   virtual ~ObservationZoneClient() {
@@ -81,6 +89,13 @@ protected:
     return m_oz->transition_constraint(ref_now, ref_last);
   }
 
+/**
+ * Set previous/next taskpoints to allow OZ to update its geometry
+ *
+ * @param previous Origin tp of inbound leg
+ * @param current Tp of this OZ
+ * @param next Destination of outbound leg
+ */
   virtual void set_legs(const TaskPoint *previous,
                         const TaskPoint *current,
                         const TaskPoint *next);

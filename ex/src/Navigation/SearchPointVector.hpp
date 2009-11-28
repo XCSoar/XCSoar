@@ -6,4 +6,7 @@
 
 typedef std::vector<SearchPoint> SearchPointVector;
 
+bool prune_interior(SearchPointVector& spv);
+void project(SearchPointVector& spv, const TaskProjection& tp);
+
 #endif

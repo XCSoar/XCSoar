@@ -90,7 +90,7 @@ private:
   const unsigned num_taskpoints;
   unsigned activeStage;
 
-  unsigned extremal_distance(const unsigned d);
+  unsigned extremal_distance(const unsigned d) const;
 
   SearchPointVector solution;
 

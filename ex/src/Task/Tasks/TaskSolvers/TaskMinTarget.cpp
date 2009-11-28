@@ -38,7 +38,7 @@ bool
 TaskMinTarget::valid(const double tp) 
 {
   const double ff = f(tp);
-  return (res.Solution== GlideResult::RESULT_OK) && (fabs(ff)>=-tolerance*2.0);
+  return (res.Solution== GlideResult::RESULT_OK) && (ff>= -tolerance*2.0);
 }
 
 double 

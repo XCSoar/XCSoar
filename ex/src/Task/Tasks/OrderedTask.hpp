@@ -436,6 +436,10 @@ protected:
   virtual double calc_gradient(const AIRCRAFT_STATE &state_now);
 
 private:
+
+  double scan_distance_min(const GEOPOINT &ref);
+  double scan_distance_max();
+
 /** 
  * Sets previous/next taskpoint pointers for task point at specified
  * index in sequence.

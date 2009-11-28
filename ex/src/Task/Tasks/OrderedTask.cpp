@@ -69,6 +69,36 @@ OrderedTask::scan_leg_start_time(const AIRCRAFT_STATE &)
 
 ////////// DISTANCES
 
+double
+OrderedTask::scan_distance_min(const GEOPOINT &location)
+{
+  SearchPoint ac(location, task_projection);
+  TaskDijkstra dijkstra_min(*this);
+  dijkstra_min.distance_min(ac);
+  return ts->scan_distance_min();
+}
+
+double
+OrderedTask::scan_distance_max()
+{
+  // for max calculations, since one can still travel further in the
+  // sector, we pretend we are on the previous turnpoint so the
+  // search samples will contain the full boundary
+  const unsigned atp = activeTaskPoint;
+  if (atp) {
+    activeTaskPoint--;
+    ts->scan_active(tps[activeTaskPoint]);
+  }
+  TaskDijkstra dijkstra_max(*this);
+  dijkstra_max.distance_max();
+
+  if (atp) {
+    activeTaskPoint = atp;
+    ts->scan_active(tps[activeTaskPoint]);
+  }
+  return ts->scan_distance_max();
+}
+
 void
 OrderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
                                   double *dmin, double *dmax)
@@ -76,26 +106,11 @@ OrderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
   if (!ts) {
     return;
   }
-  SearchPoint ac(location, task_projection);
   if (full) {
-    // for max calculations, since one can still travel further in the
-    // sector, we pretend we are on the previous turnpoint so the
-    // search samples will contain the full boundary
-    unsigned atp = activeTaskPoint;
-    if (activeTaskPoint>0) {
-      activeTaskPoint--;
-      ts->scan_active(tps[activeTaskPoint]);
-    }
-    TaskDijkstra dijkstra_max(*this);
-    dijkstra_max.distance_max();
-
-    activeTaskPoint = atp;
-    ts->scan_active(tps[activeTaskPoint]);
-    *dmax = ts->scan_distance_max();
+    *dmax = scan_distance_max();
   }
-  TaskDijkstra dijkstra_min(*this);
-  dijkstra_min.distance_min(ac);
-  *dmin = ts->scan_distance_min();
+
+  *dmin = scan_distance_min(location);
 }
 
 
@@ -220,8 +235,8 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 {
   bool retval = AbstractTask::update_idle(state);
 
-  if (ts 
-      && task_behaviour.optimise_targets_range 
+  if (has_start()
+      && (task_behaviour.optimise_targets_range)
       && (task_behaviour.aat_min_time>0.0)) {
 
     if (activeTaskPoint>0) {

@@ -31,6 +31,8 @@
 
 #include "tap.h"
 
+extern int verbose;
+
 static int no_plan = 0;
 static int skip_all = 0;
 static int have_plan = 0;
@@ -150,6 +152,10 @@ _gen_result(int ok, const char *func, const char *file, unsigned int line,
 
 		diag("    Failed %stest (%s:%s() at line %d)", 
 		     todo ? "(TODO) " : "", file, func, line);
+
+                if (verbose>1) {
+                  exit(1);
+                }
 	}
 	free(local_test_name);
 

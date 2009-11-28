@@ -9,7 +9,7 @@
 unsigned num_dijkstra = 0;
 #endif
 
-unsigned TaskDijkstra::extremal_distance(const unsigned d)
+unsigned TaskDijkstra::extremal_distance(const unsigned d) const
 {
   if (shortest) {
     return d;
@@ -50,7 +50,7 @@ unsigned TaskDijkstra::distance(const ScanTaskPoint &curNode,
 #ifdef INSTRUMENT_TASK
   num_dijkstra++;
 #endif
-  return get_point(curNode).flat_distance(currentLocation);
+  return extremal_distance(get_point(curNode).flat_distance(currentLocation));
 }
 
 unsigned TaskDijkstra::distance(const ScanTaskPoint &s1,
@@ -59,7 +59,7 @@ unsigned TaskDijkstra::distance(const ScanTaskPoint &s1,
 #ifdef INSTRUMENT_TASK
   num_dijkstra++;
 #endif
-  return get_point(s1).flat_distance(get_point(s2));
+  return extremal_distance(get_point(s1).flat_distance(get_point(s2)));
 }
 
 unsigned 
@@ -79,7 +79,7 @@ void TaskDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
   for (destination.second=0; 
        destination.second< dsize; destination.second++) {
 
-    dijkstra.link(destination, curNode, extremal_distance(distance(curNode, destination)));
+    dijkstra.link(destination, curNode, (distance(curNode, destination)));
   }
 }
 
@@ -96,7 +96,7 @@ void TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
   for (destination.second=0; 
        destination.second< dsize; destination.second++) {
 
-    dijkstra.link(destination, destination, extremal_distance(distance(destination, currentLocation)));
+    dijkstra.link(destination, destination, (distance(destination, currentLocation)));
   }
 }
 
