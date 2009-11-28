@@ -40,6 +40,7 @@ Copyright_License {
 
 #include "Airspace.h"
 #include "AirspaceDatabase.hpp"
+#include "SettingsAirspace.hpp"
 #include "Interface.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
@@ -55,15 +56,13 @@ Copyright_License {
 #include "Components.hpp"
 #include "Calculations.h" // TODO danger! ClearAirspaceWarnings
 #include "options.h"
-
-#include <windows.h>
-#include <math.h>
-
 #include "wcecompat/ts_string.h"
 #include "Compatibility/string.h"
 
+#include <math.h>
+#include <tchar.h>
+#include <ctype.h>
 #include <assert.h>
-#include <stdlib.h>
 
 #define  BINFILEMAGICNUMBER     0x4ab199f0
 #define  BINFILEVERION          0x00000101
@@ -455,7 +454,7 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
 
     LineCount++;
 
-    nSize = _tcsclen(Text);
+    nSize = _tcslen(Text);
 
     // Ignore lines less than 3 characters
     // or starting with comment char

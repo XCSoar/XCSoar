@@ -40,22 +40,10 @@ Copyright_License {
 
 #include "Airspace.h"
 #include "AirspaceDatabase.hpp"
-#include "MapWindowProjection.hpp"
-#include "Math/Earth.hpp"
-#include "Math/Screen.hpp"
-#include "Math/Units.h"
-#include "Math/Pressure.h"
-#include "SettingsAirspace.hpp"
 #include "SettingsComputer.hpp"
 
-//#include <windows.h>
-//#include <commctrl.h>
-//#include <math.h>
-
-#include "wcecompat/ts_string.h"
-#include "Compatibility/string.h"
-
-#include <assert.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 AirspaceDatabase airspace_database;
 

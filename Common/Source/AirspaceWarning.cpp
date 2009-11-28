@@ -36,17 +36,15 @@ Copyright_License {
 }
 */
 
+#include "AirspaceWarning.h"
 #include "Airspace.h"
 #include "AirspaceDatabase.hpp"
-#include "AirspaceWarning.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "SettingsComputer.hpp"
-#include "Dialogs.h"
-#include "Device/device.h"
-#include "SettingsAirspace.hpp"
 #include "simpleList.h"
 #include "Thread/Mutex.hpp"
+
 #include <stdlib.h>
 
 static bool NewAirspaceWarnings = false;
