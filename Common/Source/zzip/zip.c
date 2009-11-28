@@ -394,7 +394,7 @@ __zzip_parse_root_directory(int fd,
         uint16_t u_extras, u_comment, u_namlen, tmpd;
 
         if (fd_map)
-	{ d = (void*)(fd_map+zz_fd_gap+zz_offset); } /* fd_map+fd_gap==u_rootseek */
+	{ d = (struct zzip_disk_entry *)(void *)(fd_map+zz_fd_gap+zz_offset); } /* fd_map+fd_gap==u_rootseek */
         else
         {
             if (io->fd.seeks(fd, (long)(zz_rootseek+zz_offset), SEEK_SET) < 0) {

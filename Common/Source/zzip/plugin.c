@@ -28,8 +28,9 @@
 #include <zzip/file.h>
 #include <zzip/format.h>
 
-#ifndef HAVE_MSVCRT
-#include <unistd.h>
+// #ifndef HAVE_MSVCRT
+#ifdef ZZIP_HAVE_UNISTD_H
+  #include <unistd.h>
 #endif
 
 zzip_off_t

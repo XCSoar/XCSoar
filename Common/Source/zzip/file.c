@@ -129,8 +129,8 @@ zzip_file_saveoffset(ZZIP_FILE * fp)
 static zzip_char_t*
 _dirsep_strrchr (zzip_char_t* name)
 {
-    char* n = strrchr (name, '/');
-    char* m = strrchr (name, '\\');
+    char* n = strrchr ((char*)name, '/');
+    char* m = strrchr ((char *)name, '\\');
     if (m && n && m > n) n = m;
     return n;
 }
@@ -265,7 +265,7 @@ zzip_file_open(ZZIP_DIR * dir, zzip_char_t* name, int o_mode)
             {   /* skip local header - should test tons of other info,
 		 * but trust that those are correct */
                 zzip_ssize_t dataoff;
-                struct zzip_file_header * p = (void*) fp->buf32k;
+                struct zzip_file_header * p = (struct zzip_file_header *)(void*) fp->buf32k;
 
 		dataoff = dir->io->fd.read(dir->fd, (void*)p, sizeof(*p));
 		if (dataoff < (zzip_ssize_t)sizeof(*p))
@@ -749,7 +749,7 @@ zzip_open_shared_io (ZZIP_FILE* stream,
 #if !defined(WINDOWSPC) || defined(__MINGW32__)
             struct stat st; // JMW
 #endif
-            ZZIP_FILE* fp = calloc (1, sizeof(ZZIP_FILE));
+            ZZIP_FILE* fp = (ZZIP_FILE *)calloc (1, sizeof(ZZIP_FILE));
             if (! fp) {
 		os->fd.close(fd); return 0;
 	    } /* io->fd.close */

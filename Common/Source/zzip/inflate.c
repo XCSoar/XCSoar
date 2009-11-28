@@ -91,6 +91,8 @@
 #  endif
 #endif
 
+#define this THIS
+
 /* function prototypes */
 local void fixedtables OF((struct inflate_state FAR *state));
 local int updatewindow OF((z_streamp strm, unsigned out));
