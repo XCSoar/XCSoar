@@ -65,8 +65,12 @@ typedef struct {
 } ldrotary_s;
 
 void InitLDRotary(const SETTINGS_COMPUTER& settings, ldrotary_s *buf);
-void	InsertLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf, int distance, int altitude);
-int	CalculateLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf);
+
+void
+InsertLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf, int distance, int altitude);
+
+int
+CalculateLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf);
 
 // limit to reasonable values
 double LimitLD(double LD);

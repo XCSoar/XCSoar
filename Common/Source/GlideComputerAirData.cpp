@@ -138,7 +138,7 @@ void GlideComputerAirData::ProcessVertical() {
   LD();
   CruiseLD();
   SetCalculated().AverageLD=
-    CalculateLDRotary(&Calculated(), &rotaryLD); // AverageLD
+    CalculateLDRotary(Calculated(), &rotaryLD); // AverageLD
   Average30s();
   AverageClimbRate();
   AverageThermal();
@@ -409,7 +409,7 @@ void GlideComputerAirData::LD()
 	       DistanceFlown,
 	       LastCalculated().NavAltitude - Calculated().NavAltitude, 0.1);
 
-    InsertLDRotary(&Calculated(),
+    InsertLDRotary(Calculated(),
 		   &rotaryLD,(int)DistanceFlown,
 		   (int)Calculated().NavAltitude);
   }
