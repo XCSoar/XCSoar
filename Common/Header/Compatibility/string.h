@@ -59,7 +59,10 @@ _strupr(char *p)
   return p;
 }
 
-#define _istalnum isalnum
+#if !defined(_istalnum)
+  #define _istalnum isalnum
+#endif
+
 #define towupper toupper
 #define _strnicmp strncasecmp
 #define _strdup strdup
