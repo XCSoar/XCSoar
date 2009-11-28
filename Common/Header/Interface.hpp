@@ -186,7 +186,6 @@ public:
   static void ReceiveBlackboard();
 private:
   static void PreloadInitialisation(bool ask);
-  static void StartupInfo();
   static ProgressWindow *progress_window;
 };
 
