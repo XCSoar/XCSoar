@@ -64,7 +64,6 @@ static Brush hBrushInsideBk;
 static Brush hBrushNearBk;
 static Brush hBrushInsideAckBk;
 static Brush hBrushNearAckBk;
-//static HWND   hActiveWindow;
 
 static int Count=0;
 static int ItemIndex=-1;
@@ -679,50 +678,31 @@ int dlgAirspaceWarningInit(void){
 
   int res = 0;
 
-#ifdef HAVEEXCEPTIONS
-  __try{
-#endif
+  wf = dlgLoadFromXML(CallBackTable,
+                      TEXT("dlgAirspaceWarning.xml"),
+                      XCSoarInterface::main_window,
+                      TEXT("IDR_XML_AIRSPACEWARNING"));
+  if (wf == NULL)
+    return 0;
 
-//    hActiveWindow = GetActiveWindow();
+  wf->SetKeyDownNotify(OnKeyDown);
+  wf->SetUserMsgNotify(UserMsgNotify);
+  wf->SetTimerNotify(OnTimer);
 
-    wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgAirspaceWarning.xml"),
-		        XCSoarInterface::main_window,
-		        TEXT("IDR_XML_AIRSPACEWARNING"));
+  hBrushInsideBk.set(Color(254,50,50));
+  hBrushNearBk.set(Color(254,254,50));
+  hBrushInsideAckBk.set(Color(254,100,100));
+  hBrushNearAckBk.set(Color(254,254,100));
 
-    if (wf) {
+  wAirspaceList = (WndListFrame*)wf->FindByName(TEXT("frmAirspaceWarningList"));
+  wAirspaceListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmAirspaceWarningListEntry"));
+  wAirspaceListEntry->SetCanFocus(true);
 
-      wf->SetKeyDownNotify(OnKeyDown);
-      wf->SetUserMsgNotify(UserMsgNotify);
-      wf->SetTimerNotify(OnTimer);
+  AirspaceWarnListAddNotifier(AirspaceWarningNotify);
 
-      hBrushInsideBk.set(Color(254,50,50));
-      hBrushNearBk.set(Color(254,254,50));
-      hBrushInsideAckBk.set(Color(254,100,100));
-      hBrushNearAckBk.set(Color(254,254,100));
-
-      wAirspaceList = (WndListFrame*)wf->FindByName(TEXT("frmAirspaceWarningList"));
-      wAirspaceListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmAirspaceWarningListEntry"));
-      wAirspaceListEntry->SetCanFocus(true);
-
-      AirspaceWarnListAddNotifier(AirspaceWarningNotify);
-
-      wf->Close();  // hide the window
-
-    }
-
-
-#ifdef HAVEEXCEPTIONS
-  }__except(EXCEPTION_EXECUTE_HANDLER ){
-
-    res = 0;
-    // ToDo: log that problem
-
-  };
-#endif
+  wf->Close();  // hide the window
 
   return(res);
-
 }
 
 int dlgAirspaceWarningDeInit(void){

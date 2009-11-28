@@ -429,6 +429,8 @@ bool dlgFontEditShowModal(const TCHAR * FontDescription,
                       TEXT("dlgFontEdit.xml"),
 		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_FONTEDIT"));
+  if (wf == NULL)
+    return false;
 
   int UseCustomFonts_old = UseCustomFonts;
   UseCustomFonts=1;// global var
@@ -443,19 +445,15 @@ bool dlgFontEditShowModal(const TCHAR * FontDescription,
   NewLogFont=OriginalLogFont;
   resetLogFont = autoLogFont;
 
+  InitGUI(FontDescription);
+  LoadGUI();
 
-  if (wf) {
-
-    InitGUI(FontDescription);
-    LoadGUI();
-
-    if (wf->ShowModal()==mrOK) {
-      SaveValues(FontRegKey);
-      bRetVal=true;
-    }
-    delete wf;
+  if (wf->ShowModal()==mrOK) {
+    SaveValues(FontRegKey);
+    bRetVal=true;
   }
-  wf = NULL;
+
+  delete wf;
 
   return bRetVal;
 }

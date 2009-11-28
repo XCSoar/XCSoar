@@ -98,29 +98,26 @@ void dlgLoggerReplayShowModal(void){
                       TEXT("dlgLoggerReplay.xml"),
 		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_LOGGERREPLAY"));
+  if (wf == NULL)
+    return;
 
   WndProperty* wp;
 
-  if (wf) {
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpRate"));
-    if (wp) {
-      wp->GetDataField()->SetAsFloat(ReplayLogger::TimeScale);
-      wp->RefreshDisplay();
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpIGCFile"));
-    if (wp) {
-      DataFieldFileReader* dfe;
-      dfe = (DataFieldFileReader*)wp->GetDataField();
-      dfe->ScanDirectoryTop(TEXT("*.igc"));
-      dfe->Lookup(ReplayLogger::GetFilename());
-      wp->RefreshDisplay();
-    }
-
-    wf->ShowModal();
-    delete wf;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpRate"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(ReplayLogger::TimeScale);
+    wp->RefreshDisplay();
   }
-  wf = NULL;
-}
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpIGCFile"));
+  if (wp) {
+    DataFieldFileReader* dfe;
+    dfe = (DataFieldFileReader*)wp->GetDataField();
+    dfe->ScanDirectoryTop(TEXT("*.igc"));
+    dfe->Lookup(ReplayLogger::GetFilename());
+    wp->RefreshDisplay();
+  }
+
+  wf->ShowModal();
+  delete wf;
+}

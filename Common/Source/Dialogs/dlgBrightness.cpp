@@ -122,28 +122,24 @@ void dlgBrightnessShowModal(void){
                       TEXT("dlgBrightness.xml"),
 		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_BRIGHTNESS"));
+  if (wf == NULL)
+    return;
 
   WndProperty* wp;
 
-  if (wf) {
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpBrightness"));
-    if (wp) {
-      wp->GetDataField()->SetAsFloat(BrightnessValue);
-      wp->RefreshDisplay();
-    }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAuto"));
-    if (wp) {
-      wp->GetDataField()->Set(EnableAutoBrightness);
-      wp->RefreshDisplay();
-    }
-    wf->ShowModal();
-
-    UpdateValues();
-
-    delete wf;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpBrightness"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(BrightnessValue);
+    wp->RefreshDisplay();
   }
-  wf = NULL;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAuto"));
+  if (wp) {
+    wp->GetDataField()->Set(EnableAutoBrightness);
+    wp->RefreshDisplay();
+  }
+  wf->ShowModal();
 
+  UpdateValues();
+
+  delete wf;
 }
-

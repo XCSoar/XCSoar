@@ -185,62 +185,61 @@ void dlgWeatherShowModal(void){
                         TEXT("IDR_XML_WEATHER"));
   }
 
+  if (wf == NULL)
+    return;
+
   WndProperty* wp;
 
-  if (wf) {
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpTime"));
-    if (wp) {
-      DataFieldEnum* dfe;
-      dfe = (DataFieldEnum*)wp->GetDataField();
-      dfe->addEnumText(TEXT("Now"));
-      for (int i=1; i<MAX_WEATHER_TIMES; i++) {
-        if (RASP.isWeatherAvailable(i)) {
-          TCHAR timetext[10];
-          _stprintf(timetext,TEXT("%04d"), RASP.IndexToTime(i));
-          dfe->addEnumText(timetext);
-        }
-      }
-
-      RASPGetTime(dfe);
-
-      wp->RefreshDisplay();
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpDisplayItem"));
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTime"));
+  if (wp) {
     DataFieldEnum* dfe;
-    if (wp) {
-      dfe = (DataFieldEnum*)wp->GetDataField();
-      dfe->addEnumText(gettext(TEXT("Terrain")));
-
-      TCHAR Buffer[20];
-      for (int i=1; i<=15; i++) {
-        RASP.ItemLabel(i, Buffer);
-        if (_tcslen(Buffer)) {
-          dfe->addEnumText(Buffer);
-        }
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Now"));
+    for (int i=1; i<MAX_WEATHER_TIMES; i++) {
+      if (RASP.isWeatherAvailable(i)) {
+        TCHAR timetext[10];
+        _stprintf(timetext,TEXT("%04d"), RASP.IndexToTime(i));
+        dfe->addEnumText(timetext);
       }
-      dfe->Set(RASP.GetParameter());
-      wp->RefreshDisplay();
     }
 
-    wf->ShowModal();
+    RASPGetTime(dfe);
 
-    wp = (WndProperty*)wf->FindByName(TEXT("prpTime"));
-    if (wp) {
-      DataFieldEnum* dfe;
-      dfe = (DataFieldEnum*)wp->GetDataField();
-      RASPSetTime(dfe);
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpDisplayItem"));
-    if (wp) {
-      RASP.SetParameter(wp->GetDataField()->GetAsInteger());
-    }
-
-    delete wf;
+    wp->RefreshDisplay();
   }
-  wf = NULL;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpDisplayItem"));
+  DataFieldEnum* dfe;
+  if (wp) {
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("Terrain")));
+
+    TCHAR Buffer[20];
+    for (int i=1; i<=15; i++) {
+      RASP.ItemLabel(i, Buffer);
+      if (_tcslen(Buffer)) {
+        dfe->addEnumText(Buffer);
+      }
+    }
+    dfe->Set(RASP.GetParameter());
+    wp->RefreshDisplay();
+  }
+
+  wf->ShowModal();
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTime"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    RASPSetTime(dfe);
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpDisplayItem"));
+  if (wp) {
+    RASP.SetParameter(wp->GetDataField()->GetAsInteger());
+  }
+
+  delete wf;
 }
 
 

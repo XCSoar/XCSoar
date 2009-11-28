@@ -467,34 +467,30 @@ dlgWaypointEditShowModal(WAYPOINT &way_point)
                         TEXT("IDR_XML_WAYPOINTEDIT"));
   }
 
-  if (wf) {
+  if (wf == NULL)
+    return;
 
-    buttonName = ((WndButton *)wf->FindByName(TEXT("cmdName")));
-    if (buttonName) {
-      buttonName->SetOnClickNotify(OnNameClicked);
-    }
-
-    buttonComment = ((WndButton *)wf->FindByName(TEXT("cmdComment")));
-    if (buttonComment) {
-      buttonComment->SetOnClickNotify(OnCommentClicked);
-    }
-
-    UpdateButtons();
-
-    SetUnits();
-
-    SetValues();
-
-    wf->SetModalResult(mrCancel);
-
-    if (wf->ShowModal()==mrOK) {
-      GetValues();
-    }
-
-    delete wf;
+  buttonName = ((WndButton *)wf->FindByName(TEXT("cmdName")));
+  if (buttonName) {
+    buttonName->SetOnClickNotify(OnNameClicked);
   }
 
-  wf = NULL;
+  buttonComment = ((WndButton *)wf->FindByName(TEXT("cmdComment")));
+  if (buttonComment) {
+    buttonComment->SetOnClickNotify(OnCommentClicked);
+  }
+
+  UpdateButtons();
+
+  SetUnits();
+
+  SetValues();
+
+  wf->SetModalResult(mrCancel);
+
+  if (wf->ShowModal()==mrOK) {
+    GetValues();
+  }
+
+  delete wf;
 }
-
-

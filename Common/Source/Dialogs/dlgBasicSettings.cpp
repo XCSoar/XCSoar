@@ -273,46 +273,43 @@ void dlgBasicSettingsShowModal(void){
                       TEXT("dlgBasicSettings.xml"),
 		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_BASICSETTINGS"));
+  if (wf == NULL)
+    return;
 
   WndProperty* wp;
 
 //  BallastTimerActive = false;
 
-  if (wf) {
+  wf->SetTimerNotify(OnTimerNotify);
 
-    wf->SetTimerNotify(OnTimerNotify);
+  ((WndButton *)wf->FindByName(TEXT("buttonDumpBallast")))->SetVisible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
+  ((WndButton *)wf->FindByName(TEXT("buttonStopDump")))->SetVisible(XCSoarInterface::SettingsComputer().BallastTimerActive);
 
-    ((WndButton *)wf->FindByName(TEXT("buttonDumpBallast")))->SetVisible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
-    ((WndButton *)wf->FindByName(TEXT("buttonStopDump")))->SetVisible(XCSoarInterface::SettingsComputer().BallastTimerActive);
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
-    if (wp) {
-      wp->GetDataField()->SetAsFloat(
-	       Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
-      wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-      wp->RefreshDisplay();
-    }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
-    if (wp) {
-      wp->GetDataField()->
-	SetAsFloat(GlidePolar::GetBallastLitres());
-      wp->RefreshDisplay();
-    }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpWingLoading"));
-    if (wp) {
-      if (GlidePolar::WingLoading>0.1) {
-	wp->GetDataField()->
-	  SetAsFloat(GlidePolar::WingLoading);
-      } else {
-	wp->SetVisible(false);
-      }
-      wp->RefreshDisplay();
-    }
-
-    wf->ShowModal();
-    delete wf;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(
+                                   Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+    wp->RefreshDisplay();
   }
-  wf = NULL;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
+  if (wp) {
+    wp->GetDataField()->
+      SetAsFloat(GlidePolar::GetBallastLitres());
+    wp->RefreshDisplay();
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpWingLoading"));
+  if (wp) {
+    if (GlidePolar::WingLoading>0.1) {
+      wp->GetDataField()->
+        SetAsFloat(GlidePolar::WingLoading);
+    } else {
+      wp->SetVisible(false);
+    }
+    wp->RefreshDisplay();
+  }
 
+  wf->ShowModal();
+  delete wf;
 }
 
