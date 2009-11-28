@@ -62,20 +62,19 @@ const TCHAR* Task::getTaskFilename() const {
 }
 
 
-static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
-  // this is an invalid pointer!
-  assert(read_waypoint != NULL);
+static int
+FindOrAddWaypoint(WAYPOINT &read_waypoint)
+{
+  read_waypoint.Details = 0;
+  read_waypoint.Name[NAME_SIZE-1] = 0; // prevent overrun if data is bogus
 
-  read_waypoint->Details = 0;
-  read_waypoint->Name[NAME_SIZE-1] = 0; // prevent overrun if data is bogus
-
-  int waypoint_index = way_points.find_match(*read_waypoint);
+  int waypoint_index = way_points.find_match(read_waypoint);
   if (waypoint_index == -1) {
     // waypoint not found, so add it!
 
     // TODO bug: Set WAYPOINTFILECHANGED so waypoints get saved?
 
-    waypoint_index = way_points.append(*read_waypoint);
+    waypoint_index = way_points.append(read_waypoint);
     if (waypoint_index < 0) {
       // error, can't allocate!
       return false;
@@ -94,7 +93,7 @@ bool Task::LoadTaskWaypoints(FILE *file) {
       return false;
     }
     if (task_points[i].Index != -1) {
-      task_points[i].Index = FindOrAddWaypoint(&read_waypoint);
+      task_points[i].Index = FindOrAddWaypoint(read_waypoint);
     }
   }
   for(i=0;i<MAXSTARTPOINTS;i++) {
@@ -102,7 +101,7 @@ bool Task::LoadTaskWaypoints(FILE *file) {
       return false;
     }
     if (task_start_points[i].Index != -1) {
-      task_start_points[i].Index = FindOrAddWaypoint(&read_waypoint);
+      task_start_points[i].Index = FindOrAddWaypoint(read_waypoint);
     }
   }
   // managed to load everything
