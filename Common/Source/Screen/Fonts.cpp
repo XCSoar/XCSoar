@@ -70,8 +70,9 @@ LOGFONT                                   autoStatisticsLogFont;
 
 int  UseCustomFonts;
 
-
-void ApplyClearType(LOGFONT *logfont) {
+static void
+ApplyClearType(LOGFONT *logfont)
+{
   logfont->lfQuality = ANTIALIASED_QUALITY;
 #ifdef CLEARTYPE_COMPAT_QUALITY
   if (0) {
@@ -85,7 +86,9 @@ void ApplyClearType(LOGFONT *logfont) {
 #endif
 }
 
-bool IsNullLogFont(LOGFONT logfont) {
+static bool
+IsNullLogFont(LOGFONT logfont)
+{
   bool bRetVal=false;
 
   LOGFONT LogFontBlank;
@@ -131,16 +134,17 @@ void InitializeOneFont(Font *theFont,
 #endif /* !ENABLE_SDL */
 }
 
-void InitialiseFontsHardCoded(RECT rc,
-                        LOGFONT * ptrhardInfoWindowLogFont,
-                        LOGFONT * ptrhardTitleWindowLogFont,
-                        LOGFONT * ptrhardMapWindowLogFont,
-                        LOGFONT * ptrhardTitleSmallWindowLogFont,
-                        LOGFONT * ptrhardMapWindowBoldLogFont,
-                        LOGFONT * ptrhardCDIWindowLogFont, // New
-                        LOGFONT * ptrhardMapLabelLogFont,
-                        LOGFONT * ptrhardStatisticsLogFont) {
-
+static void
+InitialiseFontsHardCoded(RECT rc,
+                         LOGFONT *ptrhardInfoWindowLogFont,
+                         LOGFONT *ptrhardTitleWindowLogFont,
+                         LOGFONT *ptrhardMapWindowLogFont,
+                         LOGFONT *ptrhardTitleSmallWindowLogFont,
+                         LOGFONT *ptrhardMapWindowBoldLogFont,
+                         LOGFONT *ptrhardCDIWindowLogFont, // New
+                         LOGFONT *ptrhardMapLabelLogFont,
+                         LOGFONT *ptrhardStatisticsLogFont)
+{
 short   ScreenSize=0;
 
 
@@ -316,16 +320,17 @@ short   ScreenSize=0;
 
 }
 
-void InitialiseFontsAuto(Canvas &canvas,
-			 RECT rc,
-                        LOGFONT * ptrautoInfoWindowLogFont,
-                        LOGFONT * ptrautoTitleWindowLogFont,
-                        LOGFONT * ptrautoMapWindowLogFont,
-                        LOGFONT * ptrautoTitleSmallWindowLogFont,
-                        LOGFONT * ptrautoMapWindowBoldLogFont,
-                        LOGFONT * ptrautoCDIWindowLogFont, // New
-                        LOGFONT * ptrautoMapLabelLogFont,
-                        LOGFONT * ptrautoStatisticsLogFont) {
+static void
+InitialiseFontsAuto(Canvas &canvas, RECT rc,
+                    LOGFONT *ptrautoInfoWindowLogFont,
+                    LOGFONT *ptrautoTitleWindowLogFont,
+                    LOGFONT *ptrautoMapWindowLogFont,
+                    LOGFONT *ptrautoTitleSmallWindowLogFont,
+                    LOGFONT *ptrautoMapWindowBoldLogFont,
+                    LOGFONT *ptrautoCDIWindowLogFont, // New
+                    LOGFONT *ptrautoMapLabelLogFont,
+                    LOGFONT *ptrautoStatisticsLogFont)
+{
   LOGFONT logfont;
   int FontHeight, FontWidth;
   int fontsz1 = (rc.bottom - rc.top );
