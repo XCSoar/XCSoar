@@ -48,6 +48,8 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "options.h" /* for IBLSCALE() */
 
+#include <stdio.h>
+
 // Display Gobals
 Font InfoWindowFont;
 Font TitleWindowFont;
@@ -197,7 +199,8 @@ short   ScreenSize=0;
 
   TCHAR tbuf[80];
   if (ScreenSize==0) {
-	wsprintf(tbuf,_T("--- ERROR UNKNOWN RESOLUTION %dx%d !\r\n"),iWidth,iHeight);
+    _stprintf(tbuf, _T("--- ERROR UNKNOWN RESOLUTION %dx%d !\r\n"),
+              iWidth, iHeight);
 	StartupStore(tbuf);
   }
 
