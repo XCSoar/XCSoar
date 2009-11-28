@@ -45,12 +45,17 @@ struct NMEA_INFO;
 struct DERIVED_INFO;
 struct GEOPOINT;
 struct SETTINGS_COMPUTER;
+class RasterTerrain;
 
+/**
+ * @param terrain a locked RasterTerrain object
+ */
 double
 FinalGlideThroughTerrain(const double bearing,
                          const NMEA_INFO &basic,
                          const DERIVED_INFO &calculated,
                          const SETTINGS_COMPUTER &settings,
+                         const RasterTerrain &terrain,
                          GEOPOINT *retlocation,
                          const double maxrange,
                          bool *outofrange,

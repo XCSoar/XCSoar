@@ -48,6 +48,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "McReady.h"
 #include "Message.h"
+#include "RasterTerrain.h"
 #include "GlideTerrain.hpp"
 #include "Audio/Sound.hpp"
 #include "Components.hpp"
@@ -211,13 +212,17 @@ GlideComputerTask::SearchBestAlternate()
             wpcalc.Bearing = wp_bearing;
 
             bool out_of_range;
+
+            terrain.Lock();
             double distance_soarable =
               FinalGlideThroughTerrain(wp_bearing,
                                        Basic(), Calculated(),
 				       SettingsComputer(),
+                                       terrain,
                                        NULL,
                                        wp_distance,
                                        &out_of_range, NULL);
+            terrain.Unlock();
 
             if ((distance_soarable>= wp_distance)||(arrival_altitude<0)) {
               // only put this in the index if it is reachable

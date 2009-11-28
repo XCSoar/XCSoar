@@ -1021,13 +1021,17 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   GEOPOINT loc;
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
     bearing = (i*360.0)/NUMTERRAINSWEEPS;
+
+    terrain.Lock();
     distance = FinalGlideThroughTerrain(bearing,
                                         Basic(), Calculated(),
-					SettingsComputer(),
+                                        SettingsComputer(), terrain,
 					&loc,
 					mymaxrange,
                                         &out_of_range,
 					&SetCalculated().TerrainBase);
+    terrain.Unlock();
+
     if (out_of_range) {
       FindLatitudeLongitude(Basic().Location,
 			    bearing,

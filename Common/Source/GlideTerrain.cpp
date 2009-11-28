@@ -49,7 +49,6 @@ Copyright_License {
 #include "RasterMap.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "Components.hpp"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "GeoPoint.hpp"
@@ -59,6 +58,7 @@ FinalGlideThroughTerrain(const double this_bearing,
                          const NMEA_INFO &basic,
                          const DERIVED_INFO &calculated,
                          const SETTINGS_COMPUTER &settings,
+                         const RasterTerrain &terrain,
                          GEOPOINT *retloc,
                          const double max_range,
                          bool *out_of_range,
@@ -80,9 +80,9 @@ FinalGlideThroughTerrain(const double this_bearing,
     // can't make progress in this direction at the current windspeed/mc
     return 0;
 
-  if (!terrain.GetMap()) {
+  const RasterMap *map = terrain.GetMap();
+  if (map == NULL)
     return 0;
-  }
 
   const double glide_max_range = calculated.NavAltitude/irange;
 
@@ -94,7 +94,6 @@ FinalGlideThroughTerrain(const double this_bearing,
   double last_dh=0;
   double altitude;
 
-  terrain.Lock();
   double retval = 0;
   int i=0;
   bool start_under = false;
@@ -106,7 +105,7 @@ FinalGlideThroughTerrain(const double this_bearing,
 
   double Xrounding = fabs(loc.Longitude-start_loc.Longitude)/2;
   double Yrounding = fabs(loc.Latitude-start_loc.Latitude)/2;
-  RasterRounding rounding(*terrain.GetMap(),Xrounding,Yrounding);
+  const RasterRounding rounding(*map, Xrounding, Yrounding);
 
   loc = last_loc = start_loc;
 
@@ -147,8 +146,7 @@ FinalGlideThroughTerrain(const double this_bearing,
     if ((max_range>0)&&(fi>=1.0)) {
       // early exit
       *out_of_range = true;
-      retval = max_range;
-      goto OnExit;
+      return max_range;
     }
 
     if (start_under) {
@@ -197,8 +195,7 @@ FinalGlideThroughTerrain(const double this_bearing,
       if (retloc) {
         *retloc = loc;
       }
-      retval = Distance(start_loc, loc);
-      goto OnExit;
+      return Distance(start_loc, loc);
     }
     last_dh = dh;
     last_loc = loc;
@@ -207,7 +204,5 @@ FinalGlideThroughTerrain(const double this_bearing,
   *out_of_range = true;
   retval = glide_max_range;
 
-OnExit:
-  terrain.Unlock();
   return retval;
 }

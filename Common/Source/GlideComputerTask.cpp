@@ -47,6 +47,7 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Math/LowPassFilter.hpp"
 #include "McReady.h"
+#include "RasterTerrain.h"
 #include "GlideRatio.hpp"
 #include "GlideSolvers.hpp"
 #include "GlideTerrain.hpp"
@@ -1857,12 +1858,15 @@ GlideComputerTask::CheckFinalGlideThroughTerrain(double LegToGo, double LegBeari
 
     GEOPOINT loc;
     bool out_of_range;
+
+    terrain.Lock();
     double distance_soarable =
       FinalGlideThroughTerrain(LegBearing,
                                Basic(), Calculated(),
-			       SettingsComputer(),
+                               SettingsComputer(), terrain,
                                &loc,
                                LegToGo, &out_of_range, NULL);
+    terrain.Unlock();
 
     if ((!out_of_range)&&(distance_soarable< LegToGo)) {
       SetCalculated().TerrainWarningLocation = loc;
@@ -1981,12 +1985,15 @@ static bool CheckLandableReachableTerrain(const NMEA_INFO &Basic,
                                           double LegToGo,
                                           double LegBearing) {
   bool out_of_range;
+
+  terrain.Lock();
   double distance_soarable =
     FinalGlideThroughTerrain(LegBearing,
                              Basic, Calculated,
-			     settings,
+                             settings, terrain,
                              NULL,
                              LegToGo, &out_of_range, NULL);
+  terrain.Unlock();
 
   if ((out_of_range)||(distance_soarable> LegToGo)) {
     return true;
