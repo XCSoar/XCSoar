@@ -215,12 +215,11 @@ short   ScreenSize=0;
     propGetFontSettingsFromString(TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardStatisticsLogFont);//  (RLD is this used?)
     propGetFontSettingsFromString(TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
     propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
-    if (Appearance.InfoBoxGeom == 5) {
-      GlobalEllipse=1.32f; // We don't use vario gauge in landscape geo5 anymore.. but doesn't hurt.
-    }
-    else {
-      GlobalEllipse=1.1f;
-    }
+    if (Appearance.InfoBoxGeom == 5)
+      // We don't use vario gauge in landscape geo5 anymore.. but doesn't hurt.
+      SetGlobalEllipse(1.32f);
+    else
+      SetGlobalEllipse(1.1f);
   }
 
   else if (ScreenSize==(ScreenSize_t)ss480x234) { // e.g. Messada 2440
@@ -232,7 +231,7 @@ short   ScreenSize=0;
     propGetFontSettingsFromString(TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardStatisticsLogFont);//  (RLD is this used?)
     propGetFontSettingsFromString(TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
     propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
-    GlobalEllipse=1.1f; // to be checked, TODO
+    SetGlobalEllipse(1.1f); // to be checked, TODO
   }
 
   else if (ScreenSize==(ScreenSize_t)ss800x480) {// e.g. ipaq 31x {
@@ -245,13 +244,13 @@ short   ScreenSize=0;
       case 6: // standard landscape
             propGetFontSettingsFromString(TEXT("56,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
             propGetFontSettingsFromString(TEXT("20,0,0,0,200,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
-            GlobalEllipse=1.1f;	// standard VENTA2-addon
+            SetGlobalEllipse(1.1f);
             break;
       case 4:
       case 5:
             propGetFontSettingsFromString(TEXT("64,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
             propGetFontSettingsFromString(TEXT("26,0,0,0,600,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
-            GlobalEllipse=1.32f;	// VENTA2-addon
+            SetGlobalEllipse(1.32f);
             break;
       case 7:
             propGetFontSettingsFromString(TEXT("66,0,0,0,600,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
