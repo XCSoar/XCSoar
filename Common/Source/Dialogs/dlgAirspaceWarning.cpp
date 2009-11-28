@@ -651,11 +651,7 @@ bool dlgAirspaceWarningShowDlg(bool Force){
 
   if (!fDialogOpen) {
     fDialogOpen = true;
-    HWND oldFocusHwnd = GetFocus();
     wf->ShowModal();
-    if (oldFocusHwnd) {
-      SetFocus(oldFocusHwnd);
-    }
 
     fDialogOpen = false;
 
