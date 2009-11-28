@@ -291,6 +291,9 @@ clip_range(int &a, unsigned a_size, int &b, unsigned b_size, unsigned &size)
   if (a + size > a_size)
     size = a_size - a;
 
+  if ((int)size <= 0)
+    return false;
+
   if (b + size > b_size)
     size = b_size - b;
 
