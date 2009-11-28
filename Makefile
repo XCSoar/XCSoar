@@ -364,7 +364,6 @@ OBJS	:=\
 	\
 	$(DLGS:.cpp=.o) 		\
 	$(VOLKS:.cpp=.o) 		\
-	$(SRC)/XCSoar-$(TARGET).rsc \
 	$(SRC)/jasper-$(TARGET).a \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a
@@ -372,6 +371,10 @@ OBJS	:=\
 #	$(SRC)/VarioSound.o \
 #	$(SRC)/WaveThread.o \
 
+
+ifeq ($(HAVE_WIN32),y)
+OBJS += $(SRC)/XCSoar-$(TARGET).rsc
+endif
 
 XCSOARSETUP_OBJS=\
 	$(SRC)/XcSoarSetup.o
