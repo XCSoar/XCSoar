@@ -995,6 +995,17 @@ int WndForm::ShowModal(bool bEnableMap) {
         && !is_allowed_map(msg.hwnd, msg.message, bEnableMap))
       continue;   // make it modal
 
+#ifndef NOKEYDEBONCE
+    // hack to stop exiting immediately
+    if (!is_altair() && !hastimed && is_user_input(msg.message)) {
+      if (!enter_clock.check(1000))
+        /* ignore user input in the first 1000ms */
+        continue;
+      else
+        hastimed = true;
+    }
+#endif
+
     if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
 
       if (msg.message == WM_KEYUP){
@@ -1091,20 +1102,6 @@ int WndForm::ShowModal(bool bEnableMap) {
         } // DispatchMessage
       } // timeMsg
   }
-
-
-    // hack to stop exiting immediately
-    // TODO code: maybe this should block all key handlers to avoid
-    // accidental key presses
-    if (!hastimed) {
-#if !defined(GNAV) && !defined(NOKEYDEBONCE)
-      if (!enter_clock.check(1000)) {
-	mModalResult = 0;
-      } else {
-	hastimed = true;
-      }
-#endif
-    }
   } // End Modal Loop
 #endif /* !ENABLE_SDL */
 
