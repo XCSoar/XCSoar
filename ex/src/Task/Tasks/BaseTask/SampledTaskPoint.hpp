@@ -29,8 +29,7 @@ public:
 
 /** 
  * Constructor.  Clears boundary and interior samples on instantiation.
- * Must be followed by default_boundary_points() and update_projection() after
- * complete task is constructed.
+ * Must be followed by update_oz() after task geometry is modified.
  * 
  * @param tp Projection used for internal representations of borders and samples
  * @param wp Waypoint associated with this task point
@@ -51,13 +50,6 @@ public:
    * 
    */
   virtual void reset();
-
-/** 
- * Re-project boundary and interior sample polygons.
- * Must be called if task_projection changes.
- * 
- */
-  void update_projection();
 
 /** 
  * Accessor to retrieve location of the sample/boundary polygon
@@ -81,7 +73,7 @@ public:
 
 /** 
  * Construct boundary polygon from internal representation of observation zone.
- * 
+ * Also updates projection.
  */
   virtual void update_oz();
 
@@ -116,6 +108,13 @@ protected:
   void clear_sample_all_but_last(const AIRCRAFT_STATE& state);
 
 private:
+
+/** 
+ * Re-project boundary and interior sample polygons.
+ * Must be called if task_projection changes.
+ * 
+ */
+  void update_projection();
 
 /** 
  * Determines whether to 'cheat' a missed OZ prior to the current active task point. 

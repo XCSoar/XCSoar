@@ -27,7 +27,8 @@ PROFILE :=
 COVERAGE := 
 # --coverage
 
-OPTIMIZE := -g -O2
+OPTIMIZE := -g 
+# -O2
 
 CPPFLAGS := $(INCLUDES) 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE) $(COVERAGE)

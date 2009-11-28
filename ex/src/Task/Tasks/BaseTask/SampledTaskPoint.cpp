@@ -58,18 +58,19 @@ SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last)
 void 
 SampledTaskPoint::update_oz() 
 { 
-  m_boundary_points.clear();
   m_search_max = m_search_reference;
   m_search_min = m_search_reference;
+  m_boundary_points.clear();
   if (m_boundary_scored) {
     for (double t=0; t<=1.0; t+= 0.05) {
       SearchPoint sp(get_boundary_parametric(t), m_task_projection);
       m_boundary_points.push_back(sp);
     }
+    prune_interior(m_boundary_points);
   } else {
     m_boundary_points.push_back(m_search_reference);
   }
-  prune_interior(m_boundary_points);
+  update_projection();
 }
 
 
@@ -78,6 +79,9 @@ SampledTaskPoint::update_oz()
 void 
 SampledTaskPoint::update_projection()
 {
+  m_search_max.project(m_task_projection);
+  m_search_min.project(m_task_projection);
+  m_search_reference.project(m_task_projection);
   project(m_sampled_points, m_task_projection);
   project(m_boundary_points, m_task_projection);
 }

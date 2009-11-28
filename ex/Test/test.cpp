@@ -19,9 +19,6 @@ int main(int argc, char** argv) {
 
   plan_tests(6);
 
-  ok (test_aat(0,0), test_name("target ",0,0),0);
-  exit(0);
-
   terrain_height = 500;
   ok(test_flight(3,0,1.0,true),"high terrain",0);
 

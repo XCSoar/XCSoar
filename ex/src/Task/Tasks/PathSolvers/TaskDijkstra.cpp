@@ -9,12 +9,17 @@
 unsigned num_dijkstra = 0;
 #endif
 
+bool operator == (const ScanTaskPoint &p1, const ScanTaskPoint &p2) 
+{
+  return (p1.first == p2.first) && (p1.second == p2.second);
+}
+
 unsigned TaskDijkstra::extremal_distance(const unsigned d) const
 {
   if (shortest) {
     return d;
   } else {
-    return -d;
+    return 50000-d;
   }
 }
 
@@ -59,6 +64,10 @@ unsigned TaskDijkstra::distance(const ScanTaskPoint &s1,
 #ifdef INSTRUMENT_TASK
   num_dijkstra++;
 #endif
+/*
+  printf("p%d.%d p%d.%d = %d\n", s1.first, s1.second, s2.first, s2.second, 
+         get_point(s1).flat_distance(get_point(s2)));
+*/
   return extremal_distance(get_point(s1).flat_distance(get_point(s2)));
 }
 
@@ -103,6 +112,10 @@ void TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
 
 unsigned TaskDijkstra::distance_max()
 {
+  if (num_taskpoints<2) {
+    return 0;
+  }
+
   shortest = false;
 
   const ScanTaskPoint start(0,0);
@@ -116,6 +129,9 @@ unsigned TaskDijkstra::distance_max()
 unsigned 
 TaskDijkstra::distance_min(const SearchPoint &currentLocation)
 {
+  if (num_taskpoints<2) {
+    return 0;
+  }
   shortest = true; 
 
   const ScanTaskPoint start(std::max(1,(int)activeStage)-1,0);
@@ -134,22 +150,20 @@ TaskDijkstra::distance_general(DijkstraTaskPoint &dijkstra)
   unsigned lastStage = 0-1;
   while (!dijkstra.empty()) {
 
-    const ScanTaskPoint curNode = dijkstra.pop();
+    ScanTaskPoint curNode = dijkstra.pop();
 
     if (curNode.first != lastStage) {
       lastStage = curNode.first;
 
       if (curNode.first+1 == num_taskpoints) {
 
-        ScanTaskPoint p = curNode;
-        ScanTaskPoint pp;
-        bool ok = true;
+        ScanTaskPoint p = curNode; p.first= curNode.first; p.second = curNode.second;
+        ScanTaskPoint p_last;
         do {
-          pp = p;
-          solution[p.first] = get_point(p);
-          p = dijkstra.get_predecessor(p);
-          ok = (p.first != pp.first) || (p.second != pp.second);
-        } while (ok);
+          p_last.second = p.second; p_last.first = p.first;
+          solution[p_last.first] = get_point(p_last);
+          p = dijkstra.get_predecessor(p_last);
+        } while (!(p == p_last));
 
         return extremal_distance(dijkstra.dist());
       }
