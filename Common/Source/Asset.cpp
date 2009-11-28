@@ -149,7 +149,7 @@ ReadCompaqID(void)
 static void
 ReadUUID(void)
 {
-#if defined(WIN32) && !(defined(__GNUC__) && defined(WINDOWSPC))
+#if defined(WIN32) && !(defined(__GNUC__) && defined(WINDOWSPC)) && defined(IOCTL_HAL_GET_DEVICEID) && defined(FILE_DEVICE_HAL)
   BOOL fRes;
 
 #define GUIDBuffsize 100
