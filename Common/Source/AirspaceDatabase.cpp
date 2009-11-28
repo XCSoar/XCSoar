@@ -709,7 +709,7 @@ Dump(FILE *fp, const TCHAR *label, const AIRSPACE_ALT &altitude)
 }
 
 void
-AirspaceDatabase::Dump(FILE *fp)
+AirspaceDatabase::Dump(FILE *fp) const
 {
   for (unsigned i = 0; i < NumberOfAirspaceAreas; ++i) {
 

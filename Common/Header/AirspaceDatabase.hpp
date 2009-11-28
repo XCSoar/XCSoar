@@ -190,7 +190,7 @@ public:
   void UpdateAGL(const RasterTerrain &terrain);
 
 #ifndef NDEBUG
-  void Dump(FILE *file);
+  void Dump(FILE *file) const;
 #endif
 };
 
