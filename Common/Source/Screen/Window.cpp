@@ -61,6 +61,8 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
 
   if (parent != NULL)
     parent->add_child(*this);
+
+  on_create();
 #else /* !ENABLE_SDL */
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
                           left, top, width, height,
@@ -88,6 +90,8 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
 
   if (parent != NULL)
     parent->add_child(*this);
+
+  on_create();
 #else /* !ENABLE_SDL */
   DWORD ex_style = 0;
   DWORD style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
