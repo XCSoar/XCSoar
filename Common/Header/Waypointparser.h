@@ -60,13 +60,13 @@ struct SETTINGS_COMPUTER;
  */
 bool
 ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
-                 const RasterTerrain &terrain);
+                 const RasterTerrain *terrain);
 
 void
-ReadWayPoints(WayPointList &way_points, const RasterTerrain &terrain);
+ReadWayPoints(WayPointList &way_points, const RasterTerrain *terrain);
 
 void
-SetHome(const WayPointList &way_points, const RasterTerrain &terrain,
+SetHome(const WayPointList &way_points, const RasterTerrain *terrain,
         SETTINGS_COMPUTER &settings,
         const bool reset, const bool set_location=false);
 

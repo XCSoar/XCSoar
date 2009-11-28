@@ -329,13 +329,13 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   terrain.OpenTerrain();
 
   // Read the waypoint files
-  ReadWayPoints(way_points, terrain);
+  ReadWayPoints(way_points, &terrain);
 
   // Read and parse the airfield info file
   ReadAirfieldFile();
 
   // Set the home waypoint
-  SetHome(way_points, terrain, SetSettingsComputer(), false, true);
+  SetHome(way_points, &terrain, SetSettingsComputer(), false, true);
 
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());

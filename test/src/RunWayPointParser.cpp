@@ -172,9 +172,8 @@ int main(int argc, char **argv)
 
   TCHAR path[MAX_PATH];
   WayPointList way_points;
-  RasterTerrain terrain;
 
   ascii2unicode(argv[1], path);
-  ReadWayPointFile(path, way_points, terrain);
+  ReadWayPointFile(path, way_points, NULL);
   return 0;
 }

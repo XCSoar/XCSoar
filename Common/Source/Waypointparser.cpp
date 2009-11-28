@@ -76,7 +76,7 @@ TCHAR *strtok_r(const TCHAR *s, TCHAR *delim, TCHAR **lasts);
 //static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 static bool
 ParseWayPointString(WAYPOINT &way_point, const TCHAR *input,
-                    const RasterTerrain &terrain);
+                    const RasterTerrain *terrain);
 
 static bool
 ParseAngle(const TCHAR *input, double *value_r, TCHAR **endptr_r);
@@ -185,7 +185,7 @@ static int ParseWayPointError(int LineNumber, const TCHAR *FileName,
 }
 
 static bool
-FeedWayPointLine(WayPointList &way_points, const RasterTerrain &terrain,
+FeedWayPointLine(WayPointList &way_points, const RasterTerrain *terrain,
                  const TCHAR *line)
 {
   if (TempString[0] == '\0' ||
@@ -206,7 +206,7 @@ FeedWayPointLine(WayPointList &way_points, const RasterTerrain &terrain,
     return false;
   }
 
-  if (!WaypointInTerrainRange(*new_waypoint, terrain)) {
+  if (terrain != NULL && !WaypointInTerrainRange(*new_waypoint, *terrain)) {
     way_points.pop();
     return true;
   }
@@ -216,7 +216,7 @@ FeedWayPointLine(WayPointList &way_points, const RasterTerrain &terrain,
 
 static void
 ReadWayPointFile(FILE *fp, const TCHAR *CurrentWpFileName,
-                 WayPointList &way_points, const RasterTerrain &terrain)
+                 WayPointList &way_points, const RasterTerrain *terrain)
 {
 //  TCHAR szTemp[100];
   int nTrigger=10;
@@ -255,7 +255,7 @@ ReadWayPointFile(FILE *fp, const TCHAR *CurrentWpFileName,
 
 static void
 ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName,
-                 WayPointList &way_points, const RasterTerrain &terrain)
+                 WayPointList &way_points, const RasterTerrain *terrain)
 {
 //  TCHAR szTemp[100];
   int nTrigger=10;
@@ -312,7 +312,7 @@ WaypointAltitudeFromTerrain(WAYPOINT &way_point, const RasterTerrain &terrain)
 
 static bool
 ParseWayPointString(WAYPOINT &way_point, const TCHAR *input,
-                    const RasterTerrain &terrain)
+                    const RasterTerrain *terrain)
 {
   TCHAR *endptr;
   size_t length;
@@ -394,8 +394,8 @@ ParseWayPointString(WAYPOINT &way_point, const TCHAR *input,
     way_point.Zoom = 0;
   }
 
-  if (way_point.Altitude <= 0)
-    WaypointAltitudeFromTerrain(way_point, terrain);
+  if (way_point.Altitude <= 0 && terrain != NULL)
+    WaypointAltitudeFromTerrain(way_point, *terrain);
 
   if (way_point.Details) {
     free(way_point.Details);
@@ -567,7 +567,7 @@ ParseAltitude(const TCHAR *input, double *altitude_r, TCHAR **endptr_r)
 
 bool
 ReadWayPointZipFile(const TCHAR *path, WayPointList &way_points,
-                    const RasterTerrain &terrain)
+                    const RasterTerrain *terrain)
 {
   char path_ascii[MAX_PATH];
   ZZIP_FILE *fp;
@@ -584,7 +584,7 @@ ReadWayPointZipFile(const TCHAR *path, WayPointList &way_points,
 
 bool
 ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
-                 const RasterTerrain &terrain)
+                 const RasterTerrain *terrain)
 {
   char path_ascii[MAX_PATH];
   FILE *fp;
@@ -605,7 +605,7 @@ ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
 }
 
 void
-ReadWayPoints(WayPointList &way_points, const RasterTerrain &terrain)
+ReadWayPoints(WayPointList &way_points, const RasterTerrain *terrain)
 {
   StartupStore(TEXT("ReadWayPoints\n"));
 
@@ -664,7 +664,7 @@ ReadWayPoints(WayPointList &way_points, const RasterTerrain &terrain)
 
 
 void
-SetHome(const WayPointList &way_points, const RasterTerrain &terrain,
+SetHome(const WayPointList &way_points, const RasterTerrain *terrain,
         SETTINGS_COMPUTER &settings,
         const bool reset, const bool set_location)
 {
@@ -714,11 +714,11 @@ SetHome(const WayPointList &way_points, const RasterTerrain &terrain,
       StartupStore(TEXT("Start at home waypoint\n"));
       const WAYPOINT &home = way_points.get(settings.HomeWaypoint);
       device_blackboard.SetStartupLocation(home.Location, home.Altitude);
-    } else {
+    } else if (terrain != NULL) {
 
       // no home at all, so set it from center of terrain if available
       GEOPOINT loc;
-      if (terrain.GetTerrainCenter(&loc)) {
+      if (terrain->GetTerrainCenter(&loc)) {
 	StartupStore(TEXT("Start at terrain center\n"));
 	device_blackboard.SetStartupLocation(loc, 0);
       }
