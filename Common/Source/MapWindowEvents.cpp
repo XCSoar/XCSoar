@@ -158,6 +158,11 @@ MapWindow::on_setfocus()
 {
   MaskedPaintWindow::on_setfocus();
 
+  if (InputEvents::getModeID() == InputEvents::MODE_INFOBOX)
+    /* the focus comes from the info box; restore the "default"
+       mode */
+    InputEvents::setMode(InputEvents::MODE_DEFAULT);
+
   return true;
 }
 
