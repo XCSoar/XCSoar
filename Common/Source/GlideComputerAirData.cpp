@@ -973,8 +973,8 @@ GlideComputerAirData::AirspaceWarning()
     if (InsideAltitudeRange(circle, alt, agl) &&
         SettingsComputer().iAirspaceMode[circle.Type] >= 2 &&
         airspace_database.InsideCircle(loc, i))
-      AirspaceWarnListAdd(airspace_database, &Basic(), &Calculated(),
-                          &SettingsComputer(),
+      AirspaceWarnListAdd(airspace_database, Basic(), Calculated(),
+                          SettingsComputer(),
                           MapProjection(),
                           position_is_predicted, 1, i, false);
   }
@@ -987,14 +987,14 @@ GlideComputerAirData::AirspaceWarning()
     if (InsideAltitudeRange(area, alt, agl) &&
         SettingsComputer().iAirspaceMode[area.Type] >= 2 &&
         airspace_database.InsideArea(loc, i))
-      AirspaceWarnListAdd(airspace_database, &Basic(), &Calculated(),
-                          &SettingsComputer(),
+      AirspaceWarnListAdd(airspace_database, Basic(), Calculated(),
+                          SettingsComputer(),
                           map_projection,
                           position_is_predicted, 0, i, false);
   }
 
-  AirspaceWarnListProcess(airspace_database, &Basic(), &Calculated(),
-                          &SettingsComputer(),
+  AirspaceWarnListProcess(airspace_database, Basic(), Calculated(),
+                          SettingsComputer(),
                           map_projection);
 }
 
