@@ -24,8 +24,7 @@ INCLUDES := -I$(SRC)
 
 PROFILE := 
 # -pg
-COVERAGE := 
-# --coverage
+COVERAGE := --coverage
 
 OPTIMIZE := -g -O2
 
