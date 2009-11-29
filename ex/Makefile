@@ -21,8 +21,10 @@ INCLUDES := -I$(SRC)
 
 MAKEFLAGS	+=-r
 
-PROFILE := -pg
-#COVERAGE := --coverage
+PROFILE := 
+#-pg
+COVERAGE := 
+#--coverage
 
 OPTIMIZE := -g -O2
 
@@ -50,8 +52,7 @@ CXXFLAGS += -Wno-reorder
 # -Wdisabled-optimization
 # -Wunused -Wshadow -Wunreachable-code
 
-CFLAGS += -DDO_PRINT 
-# -DINSTRUMENT_TASK
+CFLAGS += -DDO_PRINT -DINSTRUMENT_TASK
 
 CXXFLAGS	:=$(CFLAGS) -fno-exceptions 
 CXXFLAGS += -Wno-non-virtual-dtor 
