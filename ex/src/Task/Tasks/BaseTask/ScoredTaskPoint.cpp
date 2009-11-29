@@ -44,29 +44,20 @@ ScoredTaskPoint::transition_exit(const AIRCRAFT_STATE & ref_now,
 const GEOPOINT &
 ScoredTaskPoint::get_location_travelled() const
 {
-  if (has_entered()) {
-    return get_location_max();
-  } else {
-    return get_location();
-  }
+  return get_location_min();
 }
 
 const GEOPOINT &
 ScoredTaskPoint::get_location_scored() const
 {
-  return get_location();
+  return get_location_min();
 }
 
 const GEOPOINT &
 ScoredTaskPoint::get_location_remaining() const
 {
-  if (has_entered()) {
-    return get_location_min();
-  } else {
-    return get_location();
-  }
+  return get_location_min();
 }
-
 
 void 
 ScoredTaskPoint::reset()

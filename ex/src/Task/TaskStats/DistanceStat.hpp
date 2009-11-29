@@ -25,6 +25,8 @@ public:
  */
   DistanceStat(const bool is_positive=true);
 
+    virtual ~DistanceStat() {};
+
 /** 
  * Setter for distance value
  * 
@@ -104,7 +106,7 @@ public:
  * 
  * @param es ElementStat (used for time access)
  */
-  virtual void calc_speed(const ElementStat* es);
+  void calc_speed(const ElementStat* es);
 };
 
 /**
@@ -119,7 +121,7 @@ public:
  * 
  * @param es ElementStat (used for time access)
  */
-  virtual void calc_speed(const ElementStat* es);
+  void calc_speed(const ElementStat* es);
 };
 
 /**
@@ -136,7 +138,7 @@ public:
  * 
  * @param es ElementStat (used for time access)
  */
-  virtual void calc_speed(const ElementStat* es);
+  void calc_speed(const ElementStat* es);
 };
 
 

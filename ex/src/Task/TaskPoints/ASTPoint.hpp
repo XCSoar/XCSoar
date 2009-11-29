@@ -76,7 +76,7 @@ public:
  * 
  * @return True if same WP, type and OZ
  */
-  virtual bool equals(const OrderedTaskPoint* other) const;
+  bool equals(const OrderedTaskPoint* other) const;
 
 public:
   DEFINE_VISITABLE()

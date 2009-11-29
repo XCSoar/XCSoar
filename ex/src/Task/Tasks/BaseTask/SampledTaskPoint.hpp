@@ -107,6 +107,8 @@ protected:
  */  
   void clear_sample_all_but_last(const AIRCRAFT_STATE& state);
 
+  const bool m_boundary_scored; /**< Whether boundaries are used in scoring distance, or just the reference point */
+
 private:
 
 /** 
@@ -160,10 +162,6 @@ private:
     void set_search_min(const SearchPoint &locmin) {
       m_search_min = locmin;
     }
-
-private:
-
-  const bool m_boundary_scored; /**< Whether boundaries are used in scoring distance, or just the reference point */
 
   const TaskProjection &m_task_projection;
 

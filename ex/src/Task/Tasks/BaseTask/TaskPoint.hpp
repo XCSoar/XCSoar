@@ -170,6 +170,15 @@ public:
     return false;
   };
 
+/**
+ * Save local copy of target in case optimisation fails
+ */
+    virtual void target_save() {};
+/**
+ * Restore target from local copy
+ */
+    virtual void target_restore() {};
+
 /** 
  * Dummy method (always false for pure TaskPoints)
  * Check whether aircraft has entered the observation zone.
@@ -186,11 +195,7 @@ public:
  * 
  * @return State at entry, or null if never entered
  */
-  virtual AIRCRAFT_STATE get_state_entered() const {
-    // this should never get called
-    AIRCRAFT_STATE null_state;
-    return null_state;
-  }
+  virtual const AIRCRAFT_STATE& get_state_entered() const;
 
 /** 
  * Recall waypoint associated with this task point.  

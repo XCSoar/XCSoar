@@ -42,7 +42,7 @@ public:
  * 
  * @return Minimum allowable elevation of task point
  */
-  virtual double get_elevation() const;
+  double get_elevation() const;
 
 };
 #endif //INTERMEDIATEPOINT_H

@@ -19,6 +19,8 @@ public:
   MixedTaskFactory(OrderedTask& _task,
                    const TaskBehaviour &tb);
 
+    virtual ~MixedTaskFactory() {};
+
 /** 
  * Check whether task is complete and valid according to factory rules
  * 
