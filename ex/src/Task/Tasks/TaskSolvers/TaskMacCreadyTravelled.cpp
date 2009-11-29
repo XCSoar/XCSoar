@@ -1,4 +1,5 @@
 #include "TaskMacCreadyTravelled.hpp"
+#include "TaskSolution.hpp"
 
 TaskMacCreadyTravelled::TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
                                                const unsigned _activeTaskPoint,
@@ -14,7 +15,7 @@ TaskMacCreadyTravelled::tp_solution(const unsigned i,
                                     const AIRCRAFT_STATE &aircraft, 
                                     double minH) const
 {
-  return m_tps[i]->glide_solution_travelled(aircraft, m_glide_polar, minH);
+  return TaskSolution::glide_solution_travelled(*m_tps[i],aircraft, m_glide_polar, minH);
 }
 
 const AIRCRAFT_STATE 

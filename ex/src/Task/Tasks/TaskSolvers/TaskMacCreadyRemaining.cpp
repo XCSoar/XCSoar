@@ -1,5 +1,5 @@
-#include <algorithm>
 #include "TaskMacCreadyRemaining.hpp"
+#include "TaskSolution.hpp"
 
 TaskMacCreadyRemaining::TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
                                                const unsigned _activeTaskPoint,
@@ -20,7 +20,7 @@ TaskMacCreadyRemaining::tp_solution(const unsigned i,
                                     const AIRCRAFT_STATE &aircraft, 
                                     double minH) const
 {
-  return m_tps[i]->glide_solution_remaining(aircraft, m_glide_polar, minH);
+  return TaskSolution::glide_solution_remaining(*m_tps[i],aircraft, m_glide_polar, minH);
 }
 
 

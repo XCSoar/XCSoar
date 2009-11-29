@@ -113,7 +113,7 @@ public:
  * 
  * @return Distance (m) to subtract from score
  */
-  virtual double score_adjustment() const;
+  virtual double score_adjustment() const = 0;
 };
 
 #endif

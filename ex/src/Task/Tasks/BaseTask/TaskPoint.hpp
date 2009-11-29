@@ -47,10 +47,6 @@
 #include "Util/GenericVisitor.hpp"
 #include "Task/TaskBehaviour.hpp"
 
-struct GlideResult;
-class GlidePolar;
-struct GeoVector;
-
 /**
  * Base class for all task points 
  *
@@ -78,8 +74,8 @@ public:
   TaskPoint(const Waypoint & wp,
             const TaskBehaviour &tb) : ReferencePoint(wp.Location),
                                        m_elevation(wp.Altitude),
-                                       m_waypoint(wp),
-                                       m_task_behaviour(tb)
+                                       m_task_behaviour(tb),
+                                       m_waypoint(wp)
     { }
 
 /**
@@ -103,57 +99,18 @@ public:
   virtual const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const;
 
 /** 
- * Compute optimal glide solution from aircraft to destination.
+ * Calculate vector from aircraft to destination
  * 
- * @param state Aircraft state at origin
- * @param polar Glide polar used for computations
- * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
- * @return GlideResult of task leg
- */
-  GlideResult glide_solution_remaining(const AIRCRAFT_STATE &state, 
-                                        const GlidePolar &polar,
-                                        const double minH=0) const;
+ * @return Vector for task leg
+ */  
+  virtual const GeoVector get_vector_planned() const;
 
 /** 
- * Compute optimal glide solution from aircraft to destination, with
- * externally supplied sink rate.  This is used to calculate the sink
- * rate required for glide-only solutions.
+ * Calculate vector travelled along this leg
  * 
- * @param state Aircraft state at origin
- * @param polar Glide polar used for computations
- * @param S Sink rate (m/s, positive down)
- * @return GlideResult of task leg
- */
-  GlideResult glide_solution_sink(const AIRCRAFT_STATE &state, 
-                                   const GlidePolar &polar,
-                                   const double S) const;
-
-
-/** 
- * Compute optimal glide solution from previous point to aircraft towards destination.
- * (For pure TaskPoints, this is null)
- * 
- * @param state Aircraft state
- * @param polar Glide polar used for computations
- * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
- * @return GlideResult of task leg
- */
-  virtual GlideResult glide_solution_travelled(const AIRCRAFT_STATE &state, 
-                                                const GlidePolar &polar,
-                                                const double minH=0) const;
-
-/** 
- * Compute optimal glide solution from aircraft to destination, or modified
- * destination (e.g. where specialised TaskPoint has a target)
- * 
- * @param state Aircraft state at origin
- * @param polar Glide polar used for computations
- * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
- * @return GlideResult of task leg
- */
-  virtual GlideResult glide_solution_planned(const AIRCRAFT_STATE &state, 
-                                              const GlidePolar &polar,
-                                              const double minH=0) const;
+ * @return Vector for task leg
+ */  
+  virtual const GeoVector get_vector_travelled(const AIRCRAFT_STATE &) const;
 
 /** 
  * Dummy null method.
@@ -221,9 +178,10 @@ public:
 #endif
 
 protected:
-  const Waypoint m_waypoint; /**< local copy of waypoint */
   const double m_elevation; /**< Altitude (AMSL, m) of task point terrain */
   const TaskBehaviour &m_task_behaviour; /**< Reference to task behaviour (for options) */
+private:
+  const Waypoint m_waypoint; /**< local copy of waypoint */
 public:
   DEFINE_VISITABLE()
 };

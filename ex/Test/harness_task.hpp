@@ -41,4 +41,6 @@ void task_report(TaskManager& task_manager, const char* text);
 
 const char* task_name(int test_num);
 
+const Waypoint* random_waypoint(const Waypoints &waypoints);
+
 #endif

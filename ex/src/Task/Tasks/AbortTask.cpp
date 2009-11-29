@@ -3,6 +3,7 @@
 #include "BaseTask/TaskPoint.hpp"
 #include <queue>
 #include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
 
 AbortTask::AbortTask(const TaskEvents &te, 
                      const TaskBehaviour &tb,
@@ -91,7 +92,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   for (std::vector < Waypoint >::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ) {
     TaskPoint t(*v, task_behaviour);
-    GlideResult r = t.glide_solution_remaining(state, polar_safety);
+    GlideResult r = TaskSolution::glide_solution_remaining(t, state, polar_safety);
     if (r.glide_reachable()) {
       q.push(std::make_pair(*v,r.TimeElapsed));
       // remove it since it's already in the list now      

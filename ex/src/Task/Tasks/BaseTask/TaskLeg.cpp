@@ -168,6 +168,7 @@ double TaskLeg::leg_distance_max() const
   }
 }
 
+
 double TaskLeg::leg_distance_min() const
 {
   if (!origin()) {

@@ -167,7 +167,7 @@ public:
  * 
  * @return Vector from this taskpoint to aircraft (or next planned)
  */
-  const GeoVector get_vector_travelled() const {
+  const GeoVector get_vector_travelled(const AIRCRAFT_STATE &) const {
     return vector_travelled;
   }
 
@@ -179,30 +179,6 @@ public:
   const GeoVector get_vector_planned() const {
     return vector_planned;
   }
-
-/** 
- * Compute optimal glide solution from task point to aircraft.
- * 
- * @param state Aircraft state
- * @param polar Glide polar used for computations
- * @param minH Minimum height at origin over-ride (max of this or the task points's elevation is used)
- * @return GlideResult of task leg
- */
-  GlideResult glide_solution_travelled(const AIRCRAFT_STATE &state, 
-                                        const GlidePolar &polar,
-                                        const double minH=0) const;
-
-/** 
- * Compute optimal glide solution from aircraft to planned destination.
- * 
- * @param state Aircraft state at origin
- * @param polar Glide polar used for computations
- * @param minH Minimum height at origin over-ride (max of this or the task points's elevation is used)
- * @return GlideResult of task leg
- */
-  GlideResult glide_solution_planned(const AIRCRAFT_STATE &state, 
-                                      const GlidePolar &polar,
-                                      const double minH=0) const;
 
 /** 
  * Test whether a taskpoint is equivalent to this one

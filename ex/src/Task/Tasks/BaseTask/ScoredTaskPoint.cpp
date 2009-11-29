@@ -14,7 +14,7 @@ ScoredTaskPoint::transition_enter(const AIRCRAFT_STATE & ref_now,
                                   const AIRCRAFT_STATE & ref_last)
 {
   bool entered = ObservationZone::transition_enter(ref_now, ref_last);
-  if (entered) {
+  if (entered && entry_precondition()) {
     if (!score_first_entry() || !has_entered()) {
       m_state_entered = ref_now;
       return true;

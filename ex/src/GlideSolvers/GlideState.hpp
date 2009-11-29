@@ -27,19 +27,6 @@ struct GlideState
               const double htarget,
               const AIRCRAFT_STATE &aircraft);
 
-/** 
- * Constructor for glide task from aircraft to a point.
- * 
- * @param aircraft State of aircraft at start
- * @param target Location of end point
- * @param htarget Height of end point (m above MSL)
- * 
- * @return Initialised glide task for task remaining
- */
-  GlideState(const AIRCRAFT_STATE &aircraft,
-              const GEOPOINT& target,
-              const double htarget);
-
   GeoVector Vector;             /**< Distance/bearing of task */
   double MinHeight;             /**< Height (m above MSL) of end */
   double WindDirection;         /**< Direction of wind (deg True) */

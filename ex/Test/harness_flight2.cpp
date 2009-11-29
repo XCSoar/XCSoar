@@ -1,8 +1,16 @@
 #include "harness_flight.hpp"
 #include "harness_airspace.hpp"
+#include "harness_waypoints.hpp"
 #ifdef DO_PRINT
 #include <fstream>
 #endif
+
+extern Airspaces *airspaces;
+
+extern double time_elapsed;
+extern double time_planned;
+extern double time_remaining;
+extern double calc_cruise_efficiency;
 
 
 bool test_speed_factor(int test_num, int n_wind) 

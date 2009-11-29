@@ -60,6 +60,7 @@ GlideState::GlideState(const GeoVector &vector,
   calc_speedups(aircraft);
 }
 
+
 void GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
 {
   AltitudeDifference = (aircraft.Altitude-MinHeight);
@@ -77,16 +78,6 @@ void GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
     wsq_ = 0.0;
     dwcostheta_ = 0.0;
   }
-}
-
-  // from aircraft to target
-GlideState::GlideState(const AIRCRAFT_STATE &aircraft,
-                         const GEOPOINT& target,
-                         const double htarget):
-  Vector(aircraft.Location, target),
-  MinHeight(htarget)
-{
-  calc_speedups(aircraft);
 }
 
 

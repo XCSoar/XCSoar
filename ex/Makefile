@@ -21,11 +21,11 @@ INCLUDES := -I$(SRC)
 
 MAKEFLAGS	+=-r
 
-PROFILE := 
-# -pg
+PROFILE := -pg
 COVERAGE := --coverage
 
-OPTIMIZE := -g -O2
+OPTIMIZE := -g 
+# -O2
 
 CPPFLAGS := $(INCLUDES) 
 CFLAGS		:=$(OPTIMIZE) $(PROFILE) $(COVERAGE)
@@ -33,13 +33,13 @@ CFLAGS		:=$(OPTIMIZE) $(PROFILE) $(COVERAGE)
 CFLAGS += -Wall -Wextra
 CFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
 CFLAGS += -Wmissing-noreturn -Wundef
+CFLAGS += -Wno-unused-parameter 
+CFLAGS += -Wno-missing-field-initializers 
+CXXFLAGS += -Wno-non-virtual-dtor 
+#CXXFLAGS += -Wno-reorder 
 
 # disable some warnings, we're not ready for them yet
-CFLAGS += -Wno-unused-parameter 
-CFLAGS += -Wno-reorder 
 #CFLAGS += -Wno-format -Wno-switch
-#CFLAGS += -Wno-non-virtual-dtor 
-#CFLAGS += -Wno-missing-field-initializers 
 # InputEvents_defaults.cpp should be fixed
 #CFLAGS += -Wno-char-subscripts
 # FastMath.h does dirty aliasing tricks
@@ -105,7 +105,6 @@ OBJS	:=\
 	src/Task/Tasks/BaseTask/TaskLeg.o \
 	src/Task/Tasks/BaseTask/TaskPoint.o \
 	src/Task/Tasks/BaseTask/IntermediatePoint.o \
-	src/Task/Tasks/BaseTask/ObservationZone.o \
 	src/Task/Tasks/BaseTask/ObservationZoneClient.o \
 	src/Task/Tasks/BaseTask/ObservationZonePoint.o \
 	src/Task/TaskPoints/StartPoint.o \
@@ -130,6 +129,7 @@ OBJS	:=\
 	src/Task/Tasks/TaskSolvers/TaskMinTarget.o \
 	src/Task/Tasks/TaskSolvers/TaskOptTarget.o \
 	src/Task/Tasks/TaskSolvers/TaskGlideRequired.o \
+	src/Task/Tasks/TaskSolvers/TaskSolution.o \
 	src/Task/TaskStats/DistanceStat.o \
 	src/Task/TaskStats/ElementStat.o \
 	src/Task/TaskStats/TaskStats.o \
@@ -150,9 +150,11 @@ TESTOBJS = Test/test_debug.o \
 	Test/harness_aircraft.o \
 	Test/harness_airspace.o \
 	Test/harness_flight.o \
+	Test/harness_flight2.o \
 	Test/harness_waypoints.o \
 	Test/harness_task.o \
-#	Test/tap.o
+	Test/harness_task2.o \
+	Test/tap.o
 
 TESTFAST = \
 	Test/test_waypoints.exe \

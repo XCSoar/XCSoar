@@ -33,10 +33,7 @@ OrderedTask::update_geometry()
   }
   task_projection.update_fast();
 
-  for (unsigned i=0; i<tps.size(); i++) {
-      tps[i]->update_oz();
-  }
-//  std::for_each(tps.begin(), tps.end(), std::mem_fun(&OrderedTaskPoint::update_oz));
+  std::for_each(tps.begin(), tps.end(), std::mem_fun(&OrderedTaskPoint::update_oz));
 
   if (has_start()) {
     // update stats so data can be used during task construction
@@ -583,14 +580,8 @@ OrderedTask::OrderedTask(const TaskEvents &te,
 void 
 OrderedTask::Accept(TaskPointVisitor& visitor) const
 {
-  for (unsigned i=0; i<tps.size(); i++) {
-      tps[i]->Accept(visitor);
-  }
-
-    /*
   std::for_each(tps.begin(), tps.end(), 
                 std::bind2nd(std::mem_fun(&OrderedTaskPoint::Accept), visitor));
-    */
 }
 
 
@@ -598,12 +589,7 @@ void
 OrderedTask::reset()
 {
   /// \todo also reset data in this class e.g. stats?
-//  std::for_each(tps.begin(), tps.end(), std::mem_fun(&OrderedTaskPoint::reset));
-
-  for (unsigned i=0; i<tps.size(); i++) {
-      tps[i]->reset();
-  }
-
+  std::for_each(tps.begin(), tps.end(), std::mem_fun(&OrderedTaskPoint::reset));
 }
 
 

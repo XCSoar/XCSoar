@@ -1,4 +1,5 @@
 #include "TaskMacCready.hpp"
+#include "TaskSolution.hpp"
 #include <algorithm>
 
 TaskMacCready::TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
@@ -132,5 +133,5 @@ TaskMacCready::tp_sink(const unsigned i,
                        const AIRCRAFT_STATE &aircraft, 
                        const double S) const
 {
-  return m_tps[i]->glide_solution_sink(aircraft, m_glide_polar, S);
+  return TaskSolution::glide_solution_sink(*m_tps[i], aircraft, m_glide_polar, S);
 }

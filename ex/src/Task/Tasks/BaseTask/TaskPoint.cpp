@@ -1,10 +1,4 @@
-
 #include "TaskPoint.hpp"
-#include "Math/Earth.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
-#include "GlideSolvers/GlideState.hpp"
-#include "GlideSolvers/GlideResult.hpp"
-#include <algorithm>
 
 const GEOPOINT &
 TaskPoint::get_location_remaining() const
@@ -26,44 +20,19 @@ TaskPoint::get_elevation() const
   return m_elevation+m_task_behaviour.safety_height_arrival;
 }
 
+//// These are dummies, never get called usually
 
-GlideResult 
-TaskPoint::glide_solution_remaining(const AIRCRAFT_STATE &ac, 
-                                    const GlidePolar &polar,
-                                    const double minH) const
+const GeoVector 
+TaskPoint::get_vector_planned() const
 {
-  GlideState gs(get_vector_remaining(ac),
-                 std::max(minH,get_elevation()),
-                 ac);
-  return polar.solve(gs);
+  return GeoVector(0,0);
 }
 
-GlideResult 
-TaskPoint::glide_solution_planned(const AIRCRAFT_STATE &ac, 
-                                  const GlidePolar &polar,
-                                  const double minH) const
+const GeoVector 
+TaskPoint::get_vector_travelled(const AIRCRAFT_STATE &ref) const
 {
-  return glide_solution_remaining(ac, polar, minH);
+  return GeoVector(0,0);
 }
-
-GlideResult 
-TaskPoint::glide_solution_travelled(const AIRCRAFT_STATE &ac, 
-                                  const GlidePolar &polar,
-                                  const double minH) const
-{
-  GlideResult null_res;
-  return null_res;
-}
-
-GlideResult 
-TaskPoint::glide_solution_sink(const AIRCRAFT_STATE &ac, 
-                               const GlidePolar &polar,
-                               const double S) const
-{
-  GlideState gs(ac, get_location_remaining(), get_elevation());
-  return polar.solve_sink(gs,S);
-}
-
 
 const AIRCRAFT_STATE& 
 TaskPoint::get_state_entered() const 

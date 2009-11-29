@@ -5,7 +5,9 @@
 #include "BaseTask/TaskPoint.hpp"
 #include "TaskSolvers/TaskBestMc.hpp"
 #include "TaskSolvers/TaskGlideRequired.hpp"
+#include "TaskSolvers/TaskSolution.hpp"
 #include "Util/Gradient.hpp"
+
 
 bool 
 AbstractTask::update_idle(const AIRCRAFT_STATE &state)
@@ -205,7 +207,7 @@ AbstractTask::glide_solution_remaining(const AIRCRAFT_STATE &state,
 
   TaskPoint* tp = getActiveTaskPoint();
   if (tp) {
-    res = tp->glide_solution_remaining(state, glide_polar, 0.0);
+    res = TaskSolution::glide_solution_remaining(*tp, state, glide_polar);
     res.calc_cruise_bearing();
   }
   total = res;

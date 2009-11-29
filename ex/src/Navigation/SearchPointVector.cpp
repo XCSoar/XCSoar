@@ -13,11 +13,6 @@ bool prune_interior(SearchPointVector& spv)
 
 void project(SearchPointVector& spv, const TaskProjection& tp)
 {
-/* OLDGCC
   std::for_each(spv.begin(), spv.end(), 
                 std::bind2nd(std::mem_fun_ref(&SearchPoint::project), tp));
-*/
-    for (unsigned i=0; i<spv.size(); i++) {
-        spv[i].project(tp);
-    }
 }

@@ -32,4 +32,6 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc=false);
 bool test_null();
 bool test_airspace(const unsigned n_airspaces);
 
+double aat_min_time(int test_num);
+
 #endif
