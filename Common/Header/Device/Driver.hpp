@@ -69,6 +69,10 @@ public:
   virtual bool PutBallast(double ballast) = 0;
   virtual bool PutQNH(double qnh) = 0;
   virtual bool PutVoice(const TCHAR *sentence) = 0;
+  virtual bool PutThermal(bool active, 
+                          double longitude, 
+                          double latitude, double W,
+                          double R) = 0;
   virtual bool PutVolume(int volume) = 0;
   virtual bool PutActiveFrequency(double frequency) = 0;
   virtual bool PutStandbyFrequency(double frequency) = 0;
@@ -99,6 +103,10 @@ class AbstractDevice : public Device {
   virtual bool PutBallast(double ballast);
   virtual bool PutQNH(double qnh);
   virtual bool PutVoice(const TCHAR *sentence);
+  virtual bool PutThermal(bool active, 
+                          double longitude, 
+                          double latitude, double W,
+                          double R);
   virtual bool PutVolume(int volume);
   virtual bool PutActiveFrequency(double frequency);
   virtual bool PutStandbyFrequency(double frequency);

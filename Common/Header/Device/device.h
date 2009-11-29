@@ -86,6 +86,9 @@ struct DeviceDescriptor {
   bool PutStandbyFrequency(double frequency);
   bool PutQNH(double qnh);
   bool PutVoice(const TCHAR *sentence);
+  bool PutThermal(bool active, 
+                  double longitude, double latitude, double W,
+                  double R);
 
   void LinkTimeout();
   bool Declare(const struct Declaration *declaration);
@@ -145,6 +148,10 @@ void AllDevicesPutActiveFrequency(double frequency);
 void AllDevicesPutStandbyFrequency(double frequency);
 void AllDevicesPutQNH(double qnh);
 void AllDevicesPutVoice(const TCHAR *sentence);
+void AllDevicesPutThermal(bool active, 
+                          double longitude, 
+                          double latitude, double W,
+                          double R);
 
 void AllDevicesLinkTimeout();
 

@@ -529,6 +529,17 @@ DeviceDescriptor::PutVoice(const TCHAR *sentence)
     : true;
 }
 
+bool
+DeviceDescriptor::PutThermal(bool active, 
+                           double longitude, 
+                           double latitude, double W,
+                           double R)
+{
+  return device != NULL
+    ? device->PutThermal(active,longitude,latitude,W,R)
+    : true;
+}
+
 void
 DeviceDescriptor::LinkTimeout()
 {
@@ -770,41 +781,6 @@ void AllDevicesPutVolume(int volume)
     DeviceList[i].PutVolume(volume);
 }
 
-/*
-BOOL devPutThermal(PDeviceDescriptor_t d, 
-                   bool active, 
-                   double longitude, double latitude, double W,
-                   double R)
-{
-  BOOL result = TRUE;
-
-#ifdef _SIM_
-  return TRUE;
-#endif
-
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutThermal != NULL)
-    result = d->Driver->PutThermal(d, active, longitude, latitude,
-                                   W, R);
-  mutexComm.Unlock();
-
-  return result;
-}
-
-static BOOL
-FlarmDeclareSetGet(PDeviceDescriptor_t d, TCHAR *Buffer) {
-  //devWriteNMEAString(d, Buffer);
-
-  TCHAR tmp[512];
-
-  _sntprintf(tmp, 512, TEXT("$%s\r\n"), Buffer);
-
-  if (d->Com)
-    d->Com->WriteString(tmp);
-
-}
-*/
-
 void AllDevicesPutActiveFrequency(double frequency)
 {
   if (is_simulator())
@@ -847,6 +823,20 @@ void AllDevicesPutVoice(const TCHAR *sentence)
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     DeviceList[i].PutVoice(sentence);
+}
+
+void AllDevicesPutThermal(bool active, 
+                          double longitude, 
+                          double latitude, double W,
+                          double R)
+{
+  if (is_simulator())
+    return;
+
+  ScopeLock protect(mutexComm);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutThermal(active, longitude, latitude, W, R);
 }
 
 void AllDevicesLinkTimeout()

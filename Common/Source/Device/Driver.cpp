@@ -107,6 +107,15 @@ AbstractDevice::PutVoice(const TCHAR *sentence)
 }
 
 bool
+AbstractDevice::PutThermal(bool active, 
+                          double longitude, 
+                          double latitude, double W,
+                          double R)
+{
+  return true;
+}
+
+bool
 AbstractDevice::PutVolume(int volume)
 {
   return true;

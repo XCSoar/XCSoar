@@ -85,6 +85,10 @@ public:
                          bool enable_baro);
   virtual bool PutQNH(double qnh);
   virtual bool PutVoice(const TCHAR *sentence);
+  virtual bool PutThermal(bool active, 
+                          double longitude, 
+                          double latitude, double W,
+                          double R);
   virtual bool Declare(const struct Declaration *declaration);
   virtual void OnSysTicker();
 };
@@ -431,6 +435,24 @@ VegaDevice::PutVoice(const TCHAR *Sentence)
   return true;
 }
 
+bool 
+VegaDevice::PutThermal(bool active, 
+                       double longitude, double latitude, 
+                       double W,
+                       double R)
+{
+  TCHAR tbuf[100];
+
+  wsprintf(tbuf, TEXT("PTLOC,%d,%g,%g,%g,%g"),
+           (int)active, longitude, latitude,
+           W, R);
+  
+  PortWriteNMEA(port, tbuf);
+
+  return true;
+}
+
+
 #include "Blackboard.hpp"
 
 static void
@@ -474,23 +496,6 @@ VegaCreateOnComPort(ComPort *com_port)
   return new VegaDevice(com_port);
 }
 
-/* JMW TODO
-BOOL vgaPutThermal(DeviceDescriptor_t *d, bool active, 
-                   double longitude, double latitude, 
-                   double W,
-                   double R)
-{
-  TCHAR tbuf[100];
-
-  wsprintf(tbuf, TEXT("PTLOC,%d,%g,%g,%g,%g"),
-           (int)active, longitude, latitude,
-           W, R);
-
-  devWriteNMEAString(d, tbuf);
-
-  return(TRUE);
-}
-*/
 
 
 const struct DeviceRegister vgaDevice = {

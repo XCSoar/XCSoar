@@ -1146,18 +1146,11 @@ GlideComputerAirData::ProcessThermalLocator()
     thermallocator.Reset();
   }
 
-/* JMW TODO
-  devPutThermal(devA(), active, 
-                Calculated().ThermalEstimate_Location.Longitude,
-                Calculated().ThermalEstimate_Location.Latitude,
-                Calculated().ThermalEstimate_W,
-                Calculated().ThermalEstimate_R);
-  devPutThermal(devB(), active, 
-                Calculated().ThermalEstimate_Location.Longitude,
-                Calculated().ThermalEstimate_Location.Latitude,
-                Calculated().ThermalEstimate_W,
-                Calculated().ThermalEstimate_R);
-*/
+  AllDevicesPutThermal(active,
+                       Calculated().ThermalEstimate_Location.Longitude,
+                       Calculated().ThermalEstimate_Location.Latitude,
+                       Calculated().ThermalEstimate_W,
+                       Calculated().ThermalEstimate_R);
 }
 
 /**
