@@ -29,8 +29,6 @@
 
 #define REGKEYSIZE 64
 
-#define POLARSIZE 3
-
 #define FLARM_MAX_TRAFFIC 15
 #define MAXSATELLITES 12
 
@@ -41,11 +39,6 @@
 #define MAXSTARTPOINTS 10
 
 #define MAX_LOADSTRING 100
-
-#define TRAILSIZE 1000
-// 1000 points at 3.6 seconds average = one hour
-#define TRAILSHRINK 5
-// short trail is 10 minutes approx
 
 #define GLOBALFONT "Tahoma"
 //#define GLOBALFONT "DejaVu Sans Condensed"
@@ -148,7 +141,6 @@ enum {
 };
 
 #define SCALELISTSIZE  30
-#define MAXLABELBLOCKS 100
 
 #define FLARM_NAME_SIZE 10
 

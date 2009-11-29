@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,12 +37,14 @@ Copyright_License {
 */
 
 #include "FlightStatistics.hpp"
+#include "AirspaceDatabase.hpp"
 #include "XCSoar.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
+#include "Math/Constants.h"
 #include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
@@ -53,7 +56,6 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
 #include "Task.h"
-#include "Units.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "options.h" /* for IBLSCALE() */
@@ -785,7 +787,8 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
       d_airspace[i][j]= -1; // no airspace
     }
   }
-  ScanAirspaceLine(d_loc, d_h, d_airspace);
+
+  airspace_database.ScanLine(d_loc, d_h, d_airspace);
 
   int type;
 
@@ -873,9 +876,6 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
   chart.DrawXLabel(TEXT("D"));
   chart.DrawYLabel(TEXT("h"));
 }
-
-
-//////
 
 void
 FlightStatistics::StartTask(double starttime)
@@ -981,9 +981,6 @@ FlightStatistics::AddThermalAverage(const double v)
   ThermalAverage.least_squares_update(v);
   Unlock();
 }
-
-
-///
 
 void
 FlightStatistics::CaptionBarograph(TCHAR *sTmp)

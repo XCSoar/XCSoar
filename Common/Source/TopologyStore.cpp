@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -52,8 +53,6 @@ Copyright_License {
 
 #include "wcecompat/ts_string.h"
 // TODO code: check ts_string does the right thing
-
-//////////////////////////////////////////////////
 
 void TopologyStore::TriggerUpdateCaches(MapWindowProjection &m_projection) {
   Poco::ScopedRWLock protect(lock, true);
@@ -144,7 +143,6 @@ void TopologyStore::Open() {
   Poco::ScopedRWLock protect(lock, true);
 
   // Start off by getting the names and paths
-  static TCHAR  szOrigFile[MAX_PATH] = TEXT("\0");
   static TCHAR  szFile[MAX_PATH] = TEXT("\0");
   static  TCHAR Directory[MAX_PATH] = TEXT("\0");
 
@@ -154,11 +152,6 @@ void TopologyStore::Open() {
 
   GetRegistryString(szRegistryTopologyFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
-  _tcscpy(szOrigFile,szFile); // make copy of original
-  ContractLocalPath(szOrigFile);
-
-  // remove it in case it causes a crash (will restore later)
-  SetRegistryString(szRegistryTopologyFile, TEXT("\0"));
 
   if (_tcslen(szFile)==0) {
 
@@ -232,7 +225,7 @@ void TopologyStore::Open() {
 
         // Shape range
         PExtractParameter(TempString, ctemp, 1);
-        ShapeRange = StrToDouble(ctemp,NULL);
+        ShapeRange = _tcstod(ctemp, NULL);
 
         // Shape icon
         PExtractParameter(TempString, ctemp, 2);
@@ -291,8 +284,5 @@ void TopologyStore::Open() {
   }
 
   zzip_fclose(zFile);
-
-  // file was OK, so save it
-  SetRegistryString(szRegistryTopologyFile, szOrigFile);
 }
 

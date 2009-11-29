@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -41,7 +42,6 @@
 #include "Language.hpp"
 #include "Task.h"
 #include "Registry.hpp"
-#include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "UtilsText.hpp"
@@ -49,7 +49,8 @@
 #include "LocalPath.hpp"
 #include "Device/device.h"
 #include "Compatibility/string.h"
-#include "WayPointList.hpp"
+#include "SettingsComputer.hpp"
+#include "NMEA/Info.h"
 
 LoggerImpl::LoggerImpl():
   LoggerActive(false),
@@ -708,7 +709,9 @@ LoggerImpl::LoggerNote(const TCHAR *text) {
 }
 
 
-bool LoggerImpl::LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl)
+bool
+LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev,
+                          const struct Declaration *decl)
 {
   if (!devIsLogger(dev))
     return FALSE;
@@ -731,7 +734,7 @@ bool LoggerImpl::LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl)
 void
 LoggerImpl::LoggerDeviceDeclare() {
   bool found_logger = false;
-  Declaration_t Decl;
+  struct Declaration Decl;
   int i;
 
   GetRegistryString(szRegistryPilotName, Decl.PilotName, 64);
@@ -931,11 +934,11 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
   int numtries = 0;
 
   LocalPath(pathname);
-#ifdef GNAV
-  LocalPath(subpathname,TEXT("logs"));
-#else
-  LocalPath(subpathname);
-#endif
+  if (is_altair()) {
+    LocalPath(subpathname,TEXT("logs"));
+  } else {
+    LocalPath(subpathname);
+  }
 
 #ifdef DEBUG_IGCFILENAME
   bool retval;

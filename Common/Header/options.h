@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -65,7 +66,7 @@ Copyright_License {
 #define DISABLEAUDIOVARIO
 // use exception handling
 #ifndef ALTAIRPROTOTYPE
-#ifndef __MINGW32__
+#ifndef __GNUC__
 #define HAVEEXCEPTIONS
 #endif
 #endif
@@ -85,7 +86,7 @@ Copyright_License {
 #define IBLSCALE(x) (x)
 #endif
 
-#ifdef __MINGW32__
+#ifdef __GNUC__
 #ifndef WINDOWSPC
 #define NEWFLARMDB
 #endif
@@ -95,22 +96,8 @@ Copyright_License {
 
 #if _WIN32_WCE == 300 /* Pocket PC 2000 (unsupported?) */
 #define OLDPPC
-#define NOCLEARTYPE
-#define NOLINETO
 #define NOTIME_H
 #endif /* _WIN32_WCE == 300 */
-
-#if WIN32_PLATFORM_PSPC == 310 /* Pocket PC 2002 */
-#define NOCLEARTYPE
-#define NOLINETO
-#endif /* WIN32_PLATFORM_PSPC == 310 */
-
-#if WIN32_PLATFORM_PSPC == 400 /* Pocket PC 2003 */
-#endif /* WIN32_PLATFORM_PSPC == 400 */
-
-#ifdef PNA
-#define NOLINETO
-#endif
 
 #endif /* WIN32_PLATFORM_PSPC */
 

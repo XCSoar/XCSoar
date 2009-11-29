@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -39,13 +40,13 @@ Copyright_License {
 #include "Task.h"
 #include "LocalPath.hpp"
 #include "WayPoint.hpp"
-#include "Waypointparser.h"
 #include "SettingsTask.hpp"
 #include "Protection.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Components.hpp"
 #include "WayPointList.hpp"
+#include "Asset.hpp"
 
 #include <stdio.h>
 #include <assert.h>
@@ -68,7 +69,7 @@ static int FindOrAddWaypoint(WAYPOINT *read_waypoint) {
   read_waypoint->Details = 0;
   read_waypoint->Name[NAME_SIZE-1] = 0; // prevent overrun if data is bogus
 
-  int waypoint_index = FindMatchingWaypoint(way_points, read_waypoint);
+  int waypoint_index = way_points.find_match(*read_waypoint);
   if (waypoint_index == -1) {
     // waypoint not found, so add it!
 
@@ -111,8 +112,10 @@ bool Task::LoadTaskWaypoints(FILE *file) {
 #define  BINFILEMAGICNUMBER     0x5c378fcf
 
 // loads a new task from scratch.
-void Task::LoadNewTask(const TCHAR *szFileName,
-                       const SETTINGS_COMPUTER &settings_computer)
+void
+Task::LoadNewTask(const TCHAR *szFileName,
+                  const SETTINGS_COMPUTER &settings_computer,
+                  const NMEA_INFO &nmea_info)
 {
   TASK_POINT Temp;
   START_POINT STemp;
@@ -172,7 +175,7 @@ void Task::LoadNewTask(const TCHAR *szFileName,
 	  }
         }
 
-        //// search for waypoints...
+        // search for waypoints...
         if (!TaskInvalid) {
           if (!LoadTaskWaypoints(file) && WaypointInvalid) {
             // couldn't lookup the waypoints in the file and we know
@@ -194,7 +197,7 @@ void Task::LoadNewTask(const TCHAR *szFileName,
     ClearTask();
   }
 
-  RefreshTask(settings_computer);
+  RefreshTask(settings_computer, nmea_info);
 
   if (TaskInvalid && TaskLoaded) {
     MessageBoxX(
@@ -256,11 +259,11 @@ void Task::SaveTask(const TCHAR *szFileName)
 void Task::SaveDefaultTask(void) {
   if (!isTaskAborted()) {
     TCHAR buffer[MAX_PATH];
-#ifdef GNAV
-    LocalPath(buffer, TEXT("persist/Default.tsk"));
-#else
-    LocalPath(buffer, TEXT("Default.tsk"));
-#endif
+    if (is_altair()) {
+      LocalPath(buffer, TEXT("persist/Default.tsk"));
+    } else {
+      LocalPath(buffer, TEXT("Default.tsk"));
+    }
     SaveTask(buffer);
   }
 }

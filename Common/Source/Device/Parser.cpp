@@ -3,7 +3,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -19,6 +19,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -41,7 +42,6 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include <math.h>
-#include "UtilsText.hpp"
 #include "Audio/VarioSound.h"
 #include "Device/device.h"
 #include "Device/Geoid.h"
@@ -50,6 +50,7 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Math/Units.h"
 #include "NMEA/Info.h"
+#include "NMEA/Checksum.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -63,13 +64,6 @@ using std::max;
 #ifdef FLARM_AVERAGE
 #include "FlarmCalculations.h"
 FlarmCalculations flarmCalculations;
-#endif
-
-#ifdef __MINGW32__
-#ifndef max
-#define max(x, y)   (x > y ? x : y)
-#define min(x, y)   (x < y ? x : y)
-#endif
 #endif
 
 #define MAX_NMEA_LEN	90
@@ -247,41 +241,41 @@ bool NMEAParser::ParseNMEAString_Internal(const TCHAR *String,
   // if (proprietary sentence) ...
   if (params[0][1] == 'P') {
     // Airspeed and vario sentence
-    if (_tcscmp(params[0] + 1, TEXT("PTAS1")) == 0) {
+    if (_tcscmp(params[0] + 1, _T("PTAS1")) == 0) {
       return PTAS1(&String[7], params + 1, n_params, GPS_INFO);
     }
 
     // FLARM sentences
-    if (_tcscmp(params[0] + 1, TEXT("PFLAA")) == 0) {
+    if (_tcscmp(params[0] + 1, _T("PFLAA")) == 0) {
       return PFLAA(&String[7], params + 1, n_params, GPS_INFO);
     }
 
-    if (_tcscmp(params[0] + 1, TEXT("PFLAU")) == 0) {
+    if (_tcscmp(params[0] + 1, _T("PFLAU")) == 0) {
       return PFLAU(&String[7], params + 1, n_params, GPS_INFO);
     }
 
     // Garmin altitude sentence
-    if (_tcscmp(params[0] + 1, TEXT("PGRMZ")) == 0) {
+    if (_tcscmp(params[0] + 1, _T("PGRMZ")) == 0) {
       return RMZ(&String[7], params + 1, n_params, GPS_INFO);
     }
     return false;
   }
 
-  if (_tcscmp(params[0] + 3, TEXT("GSA")) == 0) {
+  if (_tcscmp(params[0] + 3, _T("GSA")) == 0) {
     return GSA(&String[7], params + 1, n_params, GPS_INFO);
   }
-  if (_tcscmp(params[0] + 3, TEXT("GLL")) == 0) {
+  if (_tcscmp(params[0] + 3, _T("GLL")) == 0) {
     //    return GLL(&String[7], params + 1, n_params, GPS_INFO);
     return false;
   }
-  if (_tcscmp(params[0] + 3, TEXT("RMB")) == 0) {
+  if (_tcscmp(params[0] + 3, _T("RMB")) == 0) {
     //return RMB(&String[7], params + 1, n_params, GPS_INFO);
     return false;
   }
-  if (_tcscmp(params[0] + 3, TEXT("RMC")) == 0) {
+  if (_tcscmp(params[0] + 3, _T("RMC")) == 0) {
     return RMC(&String[7], params + 1, n_params, GPS_INFO);
   }
-  if (_tcscmp(params[0] + 3, TEXT("GGA")) == 0) {
+  if (_tcscmp(params[0] + 3, _T("GGA")) == 0) {
     return GGA(&String[7], params + 1, n_params, GPS_INFO);
   }
 
@@ -384,7 +378,7 @@ int NAVWarn(TCHAR c)
  */
 double NMEAParser::ParseAltitude(const TCHAR *value, const TCHAR *format)
 {
-  double alt = StrToDouble(value, NULL);
+  double alt = _tcstod(value, NULL);
 
   if (format[0] == _T('f') || format[0] == _T('F'))
     alt /= TOFEET;
@@ -515,7 +509,7 @@ bool NMEAParser::GSA(const TCHAR *String,
   for (int i = 0; i < MAXSATELLITES; i++)
   {
     if (3+i < (int) nparams) {
-      GPS_INFO->SatelliteIDs[i] = (int)(StrToDouble(params[2+i], NULL)); // 2 because params is 0-index
+      GPS_INFO->SatelliteIDs[i] = (int)(_tcstod(params[2+i], NULL)); // 2 because params is 0-index
       if (GPS_INFO->SatelliteIDs[i] > 0)
 	iSatelliteCount ++;
     }
@@ -561,17 +555,17 @@ bool NMEAParser::GLL(const TCHAR *String,
   GPS_INFO->NAVWarning = !gpsValid;
 
 
-  double ThisTime = TimeModify(StrToDouble(params[4],NULL), GPS_INFO);
+  double ThisTime = TimeModify(_tcstod(params[4], NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 
   double tmplat;
   double tmplon;
 
-  tmplat = MixedFormatToDegrees(StrToDouble(params[0], NULL));
+  tmplat = MixedFormatToDegrees(_tcstod(params[0], NULL));
   tmplat = NorthOrSouth(tmplat, params[1][0]);
 
-  tmplon = MixedFormatToDegrees(StrToDouble(params[2], NULL));
+  tmplon = MixedFormatToDegrees(_tcstod(params[2], NULL));
   tmplon = EastOrWest(tmplon,params[3][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
@@ -624,16 +618,16 @@ bool NMEAParser::RMB(const TCHAR *String,
 
   GPS_INFO->NAVWarning = NAVWarn(params[0][0]);
 
-  GPS_INFO->CrossTrackError = NAUTICALMILESTOMETRES * StrToDouble(params[1], NULL);
+  GPS_INFO->CrossTrackError = NAUTICALMILESTOMETRES * _tcstod(params[1], NULL);
   GPS_INFO->CrossTrackError = LeftOrRight(GPS_INFO->CrossTrackError,params[2][0]);
 
   _tcscpy(ctemp, params[4]);
   ctemp[WAY_POINT_ID_SIZE] = '\0';
   _tcscpy(GPS_INFO->WaypointID,ctemp);
 
-  GPS_INFO->WaypointDistance = NAUTICALMILESTOMETRES * StrToDouble(params[9], NULL);
-  GPS_INFO->WaypointBearing = StrToDouble(params[10], NULL);
-  GPS_INFO->WaypointSpeed = KNOTSTOMETRESSECONDS * StrToDouble(params[11], NULL);
+  GPS_INFO->WaypointDistance = NAUTICALMILESTOMETRES * _tcstod(params[9], NULL);
+  GPS_INFO->WaypointBearing = _tcstod(params[10], NULL);
+  GPS_INFO->WaypointSpeed = KNOTSTOMETRESSECONDS * _tcstod(params[11], NULL);
   */
 
   return true;
@@ -676,7 +670,7 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!activeGPS)
     return true;
 
-  double speed = StrToDouble(params[6], NULL);
+  double speed = _tcstod(params[6], NULL);
 
   if (speed>2.0) {
     GPS_INFO->MovementDetected = true;
@@ -704,17 +698,17 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   date_buffer[2] = '\0';
   GPS_INFO->Day = _tcstol(&date_buffer[0], &Stop, 10);
 
-  double ThisTime = TimeModify(StrToDouble(params[0],NULL), GPS_INFO);
+  double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 
   double tmplat;
   double tmplon;
 
-  tmplat = MixedFormatToDegrees(StrToDouble(params[2], NULL));
+  tmplat = MixedFormatToDegrees(_tcstod(params[2], NULL));
   tmplat = NorthOrSouth(tmplat, params[3][0]);
 
-  tmplon = MixedFormatToDegrees(StrToDouble(params[4], NULL));
+  tmplon = MixedFormatToDegrees(_tcstod(params[4], NULL));
   tmplon = EastOrWest(tmplon,params[5][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
@@ -726,7 +720,7 @@ bool NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   if (GPS_INFO->Speed>1.0) {
     // JMW don't update bearing unless we're moving
-    GPS_INFO->TrackBearing = AngleLimit360(StrToDouble(params[7], NULL));
+    GPS_INFO->TrackBearing = AngleLimit360(_tcstod(params[7], NULL));
   }
 
   if (!GPS_INFO->Replay) {
@@ -806,7 +800,7 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   GGAAvailable = true;
 
-  nSatellites = (int)(min(16.0, StrToDouble(params[6], NULL)));
+  nSatellites = (int)(min(16.0, _tcstod(params[6], NULL)));
   if (nSatellites==0) {
     gpsValid = false;
   }
@@ -814,19 +808,19 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!activeGPS)
     return true;
 
-  GPS_INFO->SatellitesUsed = (int)(min(16,StrToDouble(params[6], NULL)));
+  GPS_INFO->SatellitesUsed = (int)(min(16.0, _tcstod(params[6], NULL)));
 
-  double ThisTime = TimeModify(StrToDouble(params[0],NULL), GPS_INFO);
+  double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 
   double tmplat;
   double tmplon;
 
-  tmplat = MixedFormatToDegrees(StrToDouble(params[1], NULL));
+  tmplat = MixedFormatToDegrees(_tcstod(params[1], NULL));
   tmplat = NorthOrSouth(tmplat, params[2][0]);
 
-  tmplon = MixedFormatToDegrees(StrToDouble(params[3], NULL));
+  tmplon = MixedFormatToDegrees(_tcstod(params[3], NULL));
   tmplon = EastOrWest(tmplon,params[4][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
@@ -959,10 +953,7 @@ bool NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
  */
 bool NMEAParser::NMEAChecksum(const TCHAR *String)
 {
-  unsigned char CalcCheckSum = 0;
-  unsigned char ReadCheckSum;
-  int End;
-  int i;
+  unsigned char ReadCheckSum, CalcCheckSum;
   TCHAR c1,c2;
   unsigned char v1 = 0,v2 = 0;
   const TCHAR *pEnd;
@@ -988,13 +979,7 @@ bool NMEAParser::NMEAChecksum(const TCHAR *String)
     v2 = (unsigned char)(c2 - 'A' + 10);
 
   ReadCheckSum = (unsigned char)((v1<<4) + v2);
-
-  End =(int)( pEnd - String);
-
-  for(i=1;i<End;i++)
-    {
-      CalcCheckSum = (unsigned char)(CalcCheckSum ^ String[i]);
-    }
+  CalcCheckSum = ::NMEAChecksum(String + 1, pEnd - String - 1);
 
   if(CalcCheckSum == ReadCheckSum)
     return true;
@@ -1016,9 +1001,9 @@ bool NMEAParser::PTAS1(const TCHAR *String,
 {
   double wnet,baralt,vtas;
 
-  wnet = (StrToDouble(params[0],NULL)-200)/(10*TOKNOTS);
-  baralt = max(0.0, (StrToDouble(params[2],NULL)-2000)/TOFEET);
-  vtas = StrToDouble(params[3],NULL)/TOKNOTS;
+  wnet = (_tcstod(params[0], NULL) - 200) / (10 * TOKNOTS);
+  baralt = max(0.0, (_tcstod(params[2], NULL) - 2000) / TOFEET);
+  vtas = _tcstod(params[3], NULL) / TOKNOTS;
 
   GPS_INFO->AirspeedAvailable = true;
   GPS_INFO->TrueAirspeed = vtas;
@@ -1077,7 +1062,7 @@ bool NMEAParser::PFLAU(const TCHAR *String,
   }
 
   _stscanf(String,
-	  TEXT("%hu,%hu,%hu,%hu"),
+	  _T("%hu,%hu,%hu,%hu"),
 	  &GPS_INFO->FLARM_RX,
 	  &GPS_INFO->FLARM_TX,
 	  &GPS_INFO->FLARM_GPS,
@@ -1149,7 +1134,7 @@ bool NMEAParser::PFLAA(const TCHAR *String,
 
   // 5 id, 6 digit hex
   long ID;
-  _stscanf(params[5],TEXT("%lx"), &ID);
+  _stscanf(params[5], _T("%lx"), &ID);
   //  unsigned long uID = ID;
 
   flarm_slot = FLARM_FindSlot(GPS_INFO, ID);
@@ -1162,7 +1147,7 @@ bool NMEAParser::PFLAA(const TCHAR *String,
   GPS_INFO->FLARM_Traffic[flarm_slot].Time_Fix = GPS_INFO->Time;
 
   _stscanf(String,
-	  TEXT("%hu,%lf,%lf,%lf,%hu,%lx,%lf,%lf,%lf,%lf,%hu"),
+	  _T("%hu,%lf,%lf,%lf,%hu,%lx,%lf,%lf,%lf,%lf,%hu"),
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].AlarmLevel, // unsigned short 0
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth, // double?     1
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast, // double?      2
@@ -1207,15 +1192,15 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 #ifndef NDEBUG
 #ifndef GNAV
   static int i=90;
-  static TCHAR t1[] = TEXT("1,1,1,1");
-  static TCHAR t2[] = TEXT("1,300,500,220,2,DD927B,0,-4.5,30,-1.4,1");
-  static TCHAR t3[] = TEXT("0,0,1200,50,2,DD9146,270,-4.5,30,-1.4,1");
-  //  static TCHAR b50[] = TEXT("0,.1,.0,0,0,1.06,0,-222");
-  //  static TCHAR t4[] = TEXT("-3,500,1024,50");
+  static TCHAR t1[] = _T("1,1,1,1");
+  static TCHAR t2[] = _T("1,300,500,220,2,DD927B,0,-4.5,30,-1.4,1");
+  static TCHAR t3[] = _T("0,0,1200,50,2,DD9146,270,-4.5,30,-1.4,1");
+  //  static TCHAR b50[] = _T("0,.1,.0,0,0,1.06,0,-222");
+  //  static TCHAR t4[] = _T("-3,500,1024,50");
 
-  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$PTAS1,201,200,02583,000*2A"), GPS_INFO);
-  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$GPRMC,082430.00,A,3744.09096,S,14426.16069,E,0.520294.90,301207,,,A*77"), GPS_INFO);
-  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$GPGGA,082430.00,3744.09096,S,1426.16069,E,1,08,1.37,157.6,M,-4.9,M,,*5B"), GPS_INFO);
+  //  nmeaParser1.ParseNMEAString_Internal(_T("$PTAS1,201,200,02583,000*2A"), GPS_INFO);
+  //  nmeaParser1.ParseNMEAString_Internal(_T("$GPRMC,082430.00,A,3744.09096,S,14426.16069,E,0.520294.90,301207,,,A*77"), GPS_INFO);
+  //  nmeaParser1.ParseNMEAString_Internal(_T("$GPGGA,082430.00,3744.09096,S,1426.16069,E,1,08,1.37,157.6,M,-4.9,M,,*5B"), GPS_INFO);
 
   QNH=1013.25;
   double h;
@@ -1265,7 +1250,7 @@ void LogNMEA(const TCHAR* text) {
   DWORD dwBytesRead;
 
   if (nmeaLogFile == INVALID_HANDLE_VALUE) {
-    nmeaLogFile = CreateFile(TEXT("\\SD Card\\xcsoar-nmea.log"),
+    nmeaLogFile = CreateFile(_T("\\SD Card\\xcsoar-nmea.log"),
 			     GENERIC_WRITE, FILE_SHARE_WRITE,
 			     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
   }

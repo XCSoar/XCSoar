@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -112,6 +113,10 @@ extern void		ConvToUpper( TCHAR *);
 
 #endif
 
+/**
+ * Returns whether the application is running on a PNA
+ * @return True if host hardware is a PNA, False otherwise
+ */
 static inline bool is_pna()
 {
 #if defined(PNA)
@@ -121,6 +126,10 @@ static inline bool is_pna()
 #endif
 }
 
+/**
+ * Returns whether the application is running on a HP31x
+ * @return True if host hardware is a HP31x, False otherwise
+ */
 static inline bool model_is_hp31x()
 {
 #if defined(PNA) || defined(FIVV)
@@ -130,6 +139,10 @@ static inline bool model_is_hp31x()
 #endif
 }
 
+/**
+ * Returns whether the application is running on a Medion P5
+ * @return True if host hardware is a Medion P5, False otherwise
+ */
 static inline bool model_is_medion_p5()
 {
 #if defined(PNA) || defined(FIVV)
@@ -139,6 +152,10 @@ static inline bool model_is_medion_p5()
 #endif
 }
 
+/**
+ * Returns whether the application is running on an altair
+ * @return True if host hardware is altair, False otherwise
+ */
 static inline bool is_altair()
 {
 #if defined(GNAV)
@@ -148,6 +165,10 @@ static inline bool is_altair()
 #endif
 }
 
+/**
+ * Returns whether the simulator application is running
+ * @return True if simulator, False if fly application
+ */
 static inline bool is_simulator()
 {
 #ifdef _SIM_

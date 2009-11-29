@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -44,7 +45,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Task.h"
 #include "SettingsUser.hpp"
-#include "TerrainRenderer.h"
+#include "Appearance.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
@@ -55,6 +56,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "MainWindow.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalTime.hpp"
 #include "McReady.h"
 #include "Math/FastMath.h"
@@ -62,6 +64,7 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "Polar/BuiltIn.hpp"
 #include "Polar/Historical.hpp"
+#include "Polar/Loader.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/FileReader.hpp"
@@ -1234,7 +1237,6 @@ static void setVariables(void) {
 
   UpdateButtons();
 
-  //////////
   /*
   config_page = 0;
 
@@ -1249,8 +1251,6 @@ static void setVariables(void) {
   return;
   */
 
-  ///////////////////
-
   wp = (WndProperty*)wf->FindByName(TEXT("prpUserLevel"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1260,8 +1260,6 @@ static void setVariables(void) {
     dfe->Set(XCSoarInterface::UserLevel);
     wp->RefreshDisplay();
   }
-
-  ///////////////////
 
     const TCHAR *COMMPort[] = {TEXT("COM1"),TEXT("COM2"),TEXT("COM3"),TEXT("COM4"),
 			       TEXT("COM5"),TEXT("COM6"),TEXT("COM7"),TEXT("COM8"),
@@ -1294,12 +1292,12 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-#ifdef _SIM_
   TCHAR deviceName1[MAX_PATH];
   TCHAR deviceName2[MAX_PATH];
-  ReadDeviceSettings(0, deviceName1);
-  ReadDeviceSettings(1, deviceName2);
-#endif
+  if (is_simulator()) {
+    ReadDeviceSettings(0, deviceName1);
+    ReadDeviceSettings(1, deviceName2);
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpComDevice1"));
   if (wp) {
@@ -1308,15 +1306,15 @@ static void setVariables(void) {
     for (int i = 0; DeviceRegister[i] != NULL; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
-#ifndef _SIM_
-      if (devA() != NULL){
-	if (_tcscmp(DeviceName, devA()->Name) == 0)
-	  dwDeviceIndex1 = i;
+      if (!is_simulator()) {
+        if (devA() != NULL){
+          if (_tcscmp(DeviceName, devA()->Name) == 0)
+            dwDeviceIndex1 = i;
+        }
+      } else {
+        if (_tcscmp(DeviceName, deviceName1) == 0)
+          dwDeviceIndex1 = i;
       }
-#else
-      if (_tcscmp(DeviceName, deviceName1) == 0)
-        dwDeviceIndex1 = i;
-#endif
     }
     dfe->Sort(1);
     dfe->Set(dwDeviceIndex1);
@@ -1355,15 +1353,15 @@ static void setVariables(void) {
     for (int i = 0; DeviceRegister[i] != NULL; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
-#ifndef _SIM_
-      if (devB() != NULL){
-	if (_tcscmp(DeviceName, devB()->Name) == 0)
-	  dwDeviceIndex2 = i;
+      if (!is_simulator()) {
+        if (devB() != NULL){
+          if (_tcscmp(DeviceName, devB()->Name) == 0)
+            dwDeviceIndex2 = i;
+        }
+      } else {
+        if (_tcscmp(DeviceName, deviceName2) == 0)
+          dwDeviceIndex2 = i;
       }
-#else
-      if (_tcscmp(DeviceName, deviceName2) == 0)
-        dwDeviceIndex2 = i;
-#endif
     }
     dfe->Sort(1);
     dfe->Set(dwDeviceIndex2);
@@ -1614,8 +1612,6 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  ////
-
   wp = (WndProperty*)wf->FindByName(TEXT("prpFAIFinishHeight"));
   if (wp) {
     wp->GetDataField()->Set(settings_task.EnableFAIFinishHeight);
@@ -1638,8 +1634,6 @@ static void setVariables(void) {
     wp->GetDataField()->SetAsInteger(XCSoarInterface::SettingsComputer().Handicap);
     wp->RefreshDisplay();
   }
-
-  ////
 
   if(GetFromRegistryD(szRegistrySpeedUnitsValue,Speed)!=ERROR_SUCCESS) {
     SetToRegistry(szRegistrySpeedUnitsValue, Speed);
@@ -2488,8 +2482,6 @@ static void setVariables(void) {
   }
 #endif
 
-
-  ////
   for (unsigned i = 0; i < 4; i++) {
     for (unsigned j=0; j<numInfoWindows; j++) {
       SetInfoBoxSelector(j, i);
@@ -3690,7 +3682,8 @@ void dlgConfigurationShowModal(void){
   if (taskchanged) {
     changed = true;
     task.setSettings(settings_task);
-    task.RefreshTask(XCSoarInterface::SettingsComputer());
+    task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                     XCSoarInterface::Basic());
   }
 
 #ifdef WINDOWSPC

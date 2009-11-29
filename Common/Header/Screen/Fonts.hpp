@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -37,8 +38,11 @@ Copyright_License {
 #ifndef XCSOAR_FONTS_HPP
 #define XCSOAR_FONTS_HPP
 
-#include "Screen/Font.hpp"
-#include "Screen/Canvas.hpp"
+#include <windef.h>
+
+struct FontHeightInfo;
+class Font;
+class Canvas;
 
 void DeleteFonts();
 void InitialiseFonts(Canvas &canvas, RECT rc);
@@ -54,7 +58,7 @@ extern Font StatisticsFont;
 
 extern int UseCustomFonts;
 
-void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo);
+void SetFontInfo(Canvas &canvas, struct FontHeightInfo *FontHeightInfo);
 void SetFontInfoAll(const Canvas &real_canvas);
 
 #endif

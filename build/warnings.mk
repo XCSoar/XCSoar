@@ -3,8 +3,11 @@ CXXFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
 CXXFLAGS += -Wmissing-noreturn -Wundef
 
 # disable some warnings, we're not ready for them yet
-CXXFLAGS += -Wno-unused-parameter -Wno-format -Wno-reorder -Wno-missing-field-initializers -Wno-switch
-CXXFLAGS += -Wno-non-virtual-dtor
+CXXFLAGS += -Wno-unused-parameter -Wno-format -Wno-reorder -Wno-switch -Wno-non-virtual-dtor
+
+ifneq ($(WINHOST),y)
+	CXXFLAGS += -Wno-missing-field-initializers 
+endif
 
 # InputEvents_defaults.cpp should be fixed
 CXXFLAGS += -Wno-char-subscripts

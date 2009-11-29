@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,19 +37,16 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "SettingsComputer.hpp"
-#include "SettingsUser.hpp"
-#include "SettingsTask.hpp"
+#include "Appearance.hpp"
 #include "InfoBoxLayout.h"
-#include <math.h>
-#include "Math/FastMath.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/UnitSymbol.hpp"
 #include "McReady.h"
-#include "Components.hpp"
 #include "options.h" /* for IBLSCALE() */
-#include "RasterTerrain.h"
 #include "RasterWeather.h"
+
+#include <math.h>
 
 double MapWindow::findMapScaleBarSize(const RECT rc) {
   double pixelsize = DistanceScreenToUser(1); // units/pixel
@@ -172,12 +170,15 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
 		6, 0, 8, 11, false);
 
     if (!ScaleChangeFeedback){
-      const Bitmap *Bmp;
-      POINT   BmpPos, BmpSize;
+      const UnitSymbol *symbol = GetUnitSymbol(Unit);
 
-      if (Units::GetUnitBitmap(Unit, &Bmp, &BmpPos, &BmpSize, 0)){
-	draw_bitmap(canvas, *Bmp, IBLSCALE(8) + TextSize.cx, rc.bottom - Height,
-		    BmpPos.x, BmpPos.y, BmpSize.x, BmpSize.y, false);
+      if (symbol != NULL) {
+        POINT origin = symbol->get_origin(UnitSymbol::NORMAL);
+        SIZE size = symbol->get_size();
+
+        draw_bitmap(canvas, *symbol,
+                    IBLSCALE(8) + TextSize.cx, rc.bottom - Height,
+                    origin.x, origin.y, size.cx, size.cy, false);
       }
     }
 
@@ -206,10 +207,12 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
 		  GlidePolar::GetBallastLitres());
         _tcscat(ScaleInfo, TEMP);
       }
-      TCHAR Buffer[20];
-      RASP.ItemLabel(RASP.GetParameter(), Buffer);
-      if (_tcslen(Buffer)) {
-        _tcscat(ScaleInfo, Buffer);
+
+      if (weather != NULL) {
+        TCHAR Buffer[20];
+        weather->ItemLabel(weather->GetParameter(), Buffer);
+        if (_tcslen(Buffer))
+          _tcscat(ScaleInfo, Buffer);
       }
 
       if (ScaleInfo[0]) {

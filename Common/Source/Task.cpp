@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -42,59 +43,66 @@ TaskSafe task;
 
 
 void
-TaskSafe::RefreshTask(const SETTINGS_COMPUTER &settings_computer)
+TaskSafe::RefreshTask(const SETTINGS_COMPUTER &settings_computer,
+                      const NMEA_INFO &nmea_info)
 { // write
   Poco::ScopedRWLock protect(lock, true);
-  _task.RefreshTask(settings_computer);
+  _task.RefreshTask(settings_computer, nmea_info);
 };
 
 void
 TaskSafe::ReplaceWaypoint(const int index,
-                     const SETTINGS_COMPUTER &settings_computer)
+                          const SETTINGS_COMPUTER &settings_computer,
+                          const NMEA_INFO &nmea_info)
 { // write
   Poco::ScopedRWLock protect(lock, true);
-  _task.ReplaceWaypoint(index, settings_computer);
+  _task.ReplaceWaypoint(index, settings_computer, nmea_info);
 }
 
 void
 TaskSafe::InsertWaypoint(const int index,
                     const SETTINGS_COMPUTER &settings_computer,
+                         const NMEA_INFO &nmea_info,
                     bool append)
 { // write
   Poco::ScopedRWLock protect(lock, true);
-  _task.InsertWaypoint(index, settings_computer, append);
+  _task.InsertWaypoint(index, settings_computer, nmea_info, append);
 }
 
 void
 TaskSafe::SwapWaypoint(const int index,
-                  const SETTINGS_COMPUTER &settings_computer)
+                       const SETTINGS_COMPUTER &settings_computer,
+                       const NMEA_INFO &nmea_info)
 { // write
   Poco::ScopedRWLock protect(lock, true);
-  _task.SwapWaypoint(index, settings_computer);
+  _task.SwapWaypoint(index, settings_computer, nmea_info);
 }
 
 void
 TaskSafe::RemoveWaypoint(const int index,
-                    const SETTINGS_COMPUTER &settings_computer)
+                         const SETTINGS_COMPUTER &settings_computer,
+                         const NMEA_INFO &nmea_info)
 { // write
   Poco::ScopedRWLock protect(lock, true);
-  _task.RemoveWaypoint(index, settings_computer);
+  _task.RemoveWaypoint(index, settings_computer, nmea_info);
 }
 
 void
 TaskSafe::RemoveTaskPoint(const int index,
-                     const SETTINGS_COMPUTER &settings_computer)
+                          const SETTINGS_COMPUTER &settings_computer,
+                          const NMEA_INFO &nmea_info)
 { // write
   Poco::ScopedRWLock protect(lock, true);
-  _task.RemoveTaskPoint(index, settings_computer);
+  _task.RemoveTaskPoint(index, settings_computer, nmea_info);
 }
 
 void
 TaskSafe::FlyDirectTo(const int index,
-                 const SETTINGS_COMPUTER &settings_computer)
+                      const SETTINGS_COMPUTER &settings_computer,
+                      const NMEA_INFO &nmea_info)
 { // write
   Poco::ScopedRWLock protect(lock, true);
-  _task.FlyDirectTo(index, settings_computer);
+  _task.FlyDirectTo(index, settings_computer, nmea_info);
 }
 
 void
@@ -105,10 +113,11 @@ TaskSafe::advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer)
 }
 
 void
-TaskSafe::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
+TaskSafe::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer,
+                           const NMEA_INFO &nmea_info)
 { // write
   Poco::ScopedRWLock protect(lock, true);
-  _task.retreatTaskPoint(settings_computer);
+  _task.retreatTaskPoint(settings_computer, nmea_info);
 }
 
 
@@ -120,25 +129,28 @@ TaskSafe::ClearTask(void)
 }
 
 void
-TaskSafe::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
+TaskSafe::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer,
+                            const NMEA_INFO &nmea_info)
 { // write
   Poco::ScopedRWLock protect(lock, true);
-  _task.RotateStartPoints(settings_computer);
+  _task.RotateStartPoints(settings_computer, nmea_info);
 }
 
 void
-TaskSafe::DefaultTask(const SETTINGS_COMPUTER &settings)
+TaskSafe::DefaultTask(const SETTINGS_COMPUTER &settings,
+                      const NMEA_INFO &nmea_info)
 { // write
   Poco::ScopedRWLock protect(lock, true);
-  _task.DefaultTask(settings);
+  _task.DefaultTask(settings, nmea_info);
 }
 
 void
 TaskSafe::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
+                          const NMEA_INFO &nmea_info,
                      const int set)
 { // write
   Poco::ScopedRWLock protect(lock, true);
-  _task.ResumeAbortTask(settings_computer, set);
+  _task.ResumeAbortTask(settings_computer, nmea_info, set);
 }
 
 
@@ -171,7 +183,6 @@ TaskSafe::AdjustAATTargets(double desired) {
   return _task.AdjustAATTargets(desired);
 }
 
-//////
 double
 TaskSafe::FindInsideAATSectorRange(const GEOPOINT &location,
                                       const int taskwaypoint,
@@ -373,10 +384,11 @@ TaskSafe::getTargetLocation(const int v)
 // file load/save
 void
 TaskSafe::LoadNewTask(const TCHAR *FileName,
-                 const SETTINGS_COMPUTER &settings_computer) // write
+                      const SETTINGS_COMPUTER &settings_computer,
+                      const NMEA_INFO &nmea_info) // write
 {
   Poco::ScopedRWLock protect(lock, true);
-  _task.LoadNewTask(FileName, settings_computer);
+  _task.LoadNewTask(FileName, settings_computer, nmea_info);
 }
 
 void

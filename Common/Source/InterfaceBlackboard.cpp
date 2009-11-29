@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -39,19 +40,19 @@ Copyright_License {
 void
 InterfaceBlackboard::ReadBlackboardCalculated(const DERIVED_INFO &derived_info)
 {
-  memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
+  calculated_info = derived_info;
 }
 
 void
 InterfaceBlackboard::ReadBlackboardBasic(const NMEA_INFO &nmea_info)
 {
-  memcpy(&gps_info,&nmea_info,sizeof(NMEA_INFO));
+  gps_info = nmea_info;
 }
 
 void
 InterfaceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 					  &settings)
 {
-  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
+  settings_computer = settings;
 }
 

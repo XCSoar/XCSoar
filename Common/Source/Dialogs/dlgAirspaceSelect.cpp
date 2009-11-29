@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -39,6 +40,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "AirspaceWarning.h"
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
@@ -46,6 +48,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "DataField/Base.hpp"
 #include "MapWindow.h"
+#include "Components.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -126,9 +129,9 @@ static void OnAirspaceListEnter(WindowControl * Sender,
 
         TCHAR *Name = NULL;
         if (index_circle>=0) {
-          Name = AirspaceCircle[index_circle].Name;
+          Name = airspace_database.AirspaceCircle[index_circle].Name;
         } else if (index_area>=0) {
-          Name = AirspaceArea[index_area].Name;
+          Name = airspace_database.AirspaceArea[index_area].Name;
         }
         if (Name) {
 	  UINT answer;
@@ -137,13 +140,13 @@ static void OnAirspaceListEnter(WindowControl * Sender,
 			       MB_YESNOCANCEL|MB_ICONQUESTION);
 	  if (answer == IDYES) {
 	    if (index_circle>=0) {
-              AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+              AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                                   &XCSoarInterface::Calculated(),
                                   &XCSoarInterface::SettingsComputer(),
                                   XCSoarInterface::MapProjection(),
                                   false, true, index_circle, true);
             } else if (index_area>=0) {
-              AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+              AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                                   &XCSoarInterface::Calculated(),
                                   &XCSoarInterface::SettingsComputer(),
                                   XCSoarInterface::MapProjection(),
@@ -152,13 +155,13 @@ static void OnAirspaceListEnter(WindowControl * Sender,
           } else if (answer == IDNO) {
 	    // this will cancel a daily ack
 	    if (index_circle>=0) {
-              AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+              AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                                   &XCSoarInterface::Calculated(),
                                   &XCSoarInterface::SettingsComputer(),
                                   XCSoarInterface::MapProjection(),
                                   true, true, index_circle, true);
             } else if (index_area>=0) {
-              AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+              AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                                   &XCSoarInterface::Calculated(),
                                   &XCSoarInterface::SettingsComputer(),
                                   XCSoarInterface::MapProjection(),
@@ -241,7 +244,9 @@ static void PrepareData(void){
 
   TCHAR sTmp[5];
 
-  if (!AirspaceCircle && !AirspaceArea) return;
+  if (airspace_database.NumberOfAirspaceAreas == 0 &&
+      airspace_database.NumberOfAirspaceCircles == 0)
+    return;
 
   AirspaceSelectInfo = (AirspaceSelectInfo_t*)
     malloc(sizeof(AirspaceSelectInfo_t) * NumberOfAirspaces);
@@ -249,18 +254,20 @@ static void PrepareData(void){
   unsigned index=0;
   unsigned i;
 
-  for (i = 0; i < NumberOfAirspaceCircles; i++) {
+  for (i = 0; i < airspace_database.NumberOfAirspaceCircles; i++) {
+    const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
+
     AirspaceSelectInfo[index].Index_Circle = i;
     AirspaceSelectInfo[index].Index_Area = -1;
 
     AirspaceSelectInfo[index].Distance = DISTANCEMODIFY*
-      RangeAirspaceCircle(Location, i);
+      airspace_database.CircleDistance(Location, i);
 
     DistanceBearing(Location,
-                    AirspaceCircle[i].Location,
+                    circle.Location,
                     NULL, &AirspaceSelectInfo[index].Direction);
 
-    _tcsncpy(sTmp, AirspaceCircle[i].Name, 4);
+    _tcsncpy(sTmp, circle.Name, 4);
     sTmp[4] = '\0';
     _tcsupr(sTmp);
 
@@ -270,23 +277,24 @@ static void PrepareData(void){
                   + (((DWORD)sTmp[2] & 0xff) << 8)
                   + (((DWORD)sTmp[3] & 0xff) );
 
-    AirspaceSelectInfo[index].Type = AirspaceCircle[i].Type;
+    AirspaceSelectInfo[index].Type = circle.Type;
 
     index++;
   }
 
-  for (i = 0; i < NumberOfAirspaceAreas; i++) {
+  for (i = 0; i < airspace_database.NumberOfAirspaceAreas; i++) {
+    const AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
     MapWindow &map_window = XCSoarInterface::main_window.map;
 
     AirspaceSelectInfo[index].Index_Circle = -1;
     AirspaceSelectInfo[index].Index_Area = i;
 
     AirspaceSelectInfo[index].Distance = DISTANCEMODIFY*
-      RangeAirspaceArea(Location, i,
-                        &AirspaceSelectInfo[index].Direction,
-			map_window);
+      airspace_database.RangeArea(Location, i,
+                                  &AirspaceSelectInfo[index].Direction,
+                                  map_window);
 
-    _tcsncpy(sTmp, AirspaceArea[i].Name, 4);
+    _tcsncpy(sTmp, area.Name, 4);
     sTmp[4] = '\0';
     _tcsupr(sTmp);
 
@@ -296,7 +304,7 @@ static void PrepareData(void){
                   + (((DWORD)sTmp[2] & 0xff) << 8)
                   + (((DWORD)sTmp[3] & 0xff) );
 
-    AirspaceSelectInfo[index].Type = AirspaceArea[i].Type;
+    AirspaceSelectInfo[index].Type = area.Type;
 
     index++;
   }
@@ -601,10 +609,10 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 // Sleep(100);
     TCHAR *Name = 0;
     if (AirspaceSelectInfo[i].Index_Circle>=0) {
-      Name = AirspaceCircle[AirspaceSelectInfo[i].Index_Circle].Name;
+      Name = airspace_database.AirspaceCircle[AirspaceSelectInfo[i].Index_Circle].Name;
     }
     if (AirspaceSelectInfo[i].Index_Area>=0) {
-      Name = AirspaceArea[AirspaceSelectInfo[i].Index_Area].Name;
+      Name = airspace_database.AirspaceArea[AirspaceSelectInfo[i].Index_Area].Name;
     }
     if (Name) {
 
@@ -789,7 +797,8 @@ void dlgAirspaceSelect(void) {
   LowLimit = 0;
   ItemIndex = -1;
 
-  NumberOfAirspaces = NumberOfAirspaceCircles + NumberOfAirspaceAreas;
+  NumberOfAirspaces = airspace_database.NumberOfAirspaceCircles +
+    airspace_database.NumberOfAirspaceAreas;
 
   Location = XCSoarInterface::Basic().Location;
 

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -38,7 +39,6 @@ Copyright_License {
 #define INFOBOX_H
 
 #include "Units.hpp"
-#include "Screen/Font.hpp"
 #include "Screen/BufferWindow.hpp"
 
 #define BORDERTOP    (1<<bkTop)
@@ -51,6 +51,8 @@ Copyright_License {
 #define VALUESIZE    32
 #define COMMENTSIZE  32
 
+struct FontHeightInfo;
+class Font;
 
 class InfoBox : public BufferWindow {
  public:
@@ -87,9 +89,9 @@ class InfoBox : public BufferWindow {
     const Font *mphFontValue;
     const Font *mphFontComment;
     const Font *valueFont;
-    FontHeightInfo_t *mpFontHeightTitle;
-    FontHeightInfo_t *mpFontHeightValue;
-    FontHeightInfo_t *mpFontHeightComment;
+    struct FontHeightInfo *mpFontHeightTitle;
+    struct FontHeightInfo *mpFontHeightValue;
+    struct FontHeightInfo *mpFontHeightComment;
     bool   mHasFocus;
 
     /** a timer which returns keyboard focus back to the map window
@@ -99,16 +101,11 @@ class InfoBox : public BufferWindow {
     RECT   recTitle;
     RECT   recValue;
     RECT   recComment;
-    const Bitmap *mhBitmapUnit;
-    HBITMAP mBufBitMap;
-    POINT  mBitmapUnitPos;
-    POINT  mBitmapUnitSize;
 
     int color;
     int colorBottom;
     int colorTop;
     int mBorderSize;
-    int mUnitBitmapKind;
     bool mVisible;
     bool mSmallerFont;
 
@@ -125,7 +122,7 @@ class InfoBox : public BufferWindow {
     void PaintFast(void);
     void PaintInto(Canvas &dest, int xoff, int yoff, int width, int height);
 
-    Units_t SetValueUnit(Units_t Value);
+    void SetValueUnit(Units_t Value);
     void SetTitle(const TCHAR *Value);
     void SetValue(const TCHAR *Value);
     void SetComment(const TCHAR *Value);

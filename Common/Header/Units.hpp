@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -38,31 +39,13 @@ Copyright_License {
 #if !defined(__UNITS_H)
 #define __UNITS_H
 
-#include "Screen/Bitmap.hpp"
-
 #include <tchar.h>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-#define UNITBITMAPNORMAL      0
-#define UNITBITMAPINVERS      1
-#define UNITBITMAPGRAY        2
-
-#ifndef __MINGW32__
+#ifndef __GNUC__
 #define DEG "°"
 #else
 #define DEG "Â°"
 #endif
-
-
-#define DEG_TO_RAD .0174532925199432958
-#define RAD_TO_DEG 57.2957795131
-#if defined(M_PI)
-  #undef M_PI
-#endif
-#define M_PI 3.14159265359
-
 
 // units
 extern double SPEEDMODIFY;
@@ -94,7 +77,12 @@ typedef enum {
   unFligthLevel,
   unKelvin,
   unGradCelcius,                    // K = C° + 273,15
-  unGradFahrenheit                  // K = (°F + 459,67) / 1,8
+  unGradFahrenheit, // K = (°F + 459,67) / 1,8
+
+  /**
+   * The sentinel: the number of units in this enum.
+   */
+  unCount
 }Units_t;
 
 
@@ -112,22 +100,18 @@ typedef struct{
   const TCHAR   *Name;
   double  ToUserFact;
   double  ToUserOffset;
-  Bitmap bitmap;
-  POINT   BitMapSize;
 }UnitDescriptor_t;
 
 class Units {
 
 private:
-  static UnitDescriptor_t UnitDescriptors[unGradFahrenheit+1];
+  static UnitDescriptor_t UnitDescriptors[unCount];
   static Units_t UserDistanceUnit;
   static Units_t UserAltitudeUnit;
   static Units_t UserHorizontalSpeedUnit;
   static Units_t UserVerticalSpeedUnit;
   static Units_t UserWindSpeedUnit;
   static Units_t UserTaskSpeedUnit;
-
-  static void setupUnitBitmap(Units_t Unit, HINSTANCE hInst, WORD IDB, int Width, int Height);
 
 public:
 
@@ -192,11 +176,6 @@ public:
 
   static double ToUserDistance(double Distance);
   static double ToSysDistance(double Distance);
-
-  static bool GetUnitBitmap(Units_t Unit, const Bitmap **HBmp,
-                            POINT *Org, POINT *Size, int Kind);
-  static bool LoadUnitBitmap(HINSTANCE hInst);
-  static bool UnLoadUnitBitmap(void);
 
   static void TimeToText(TCHAR* text, int d);
 

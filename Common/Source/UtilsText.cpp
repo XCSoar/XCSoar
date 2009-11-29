@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -217,68 +218,6 @@ bool ReadStringX(FILE *fp, size_t Max, TCHAR *String){
 
   return false;
 }
-
-
-
-double StrToDouble(const TCHAR *Source, const TCHAR **Stop)
-{
-  int index = 0;
-  int StringLength        = 0;
-  double Sum = 0;
-  double Divisor = 10;
-  int neg = 0;
-
-  StringLength = _tcslen(Source);
-
-  while(((Source[index] == ' ')||(Source[index]=='+')||(Source[index]==9))
-        && (index<StringLength))
-    // JMW added skip for tab stop
-    // JMW added skip for "+"
-    {
-      index ++;
-    }
-  if (index>= StringLength) {
-    return 0.0; // error!
-  }
-  if (Source[index]=='-') {
-    neg=1;
-    index++;
-  }
-
-  while( (index < StringLength)
-	 &&
-	 (
-	  (Source[index]>= '0') && (Source [index] <= '9')
-          )
-	 )
-    {
-      Sum = (Sum*10) + (Source[ index ] - '0');
-      index ++;
-    }
-  if(Source[index] == '.')
-    {
-      index ++;
-      while( (index < StringLength)
-	     &&
-	     (
-	      (Source[index]>= '0') && (Source [index] <= '9')
-	      )
-	     )
-	{
-	  Sum = (Sum) + (double)(Source[ index ] - '0')/Divisor;
-	  index ++;Divisor = Divisor * 10;
-	}
-    }
-  if(Stop != NULL)
-    *Stop = &Source[index];
-
-  if (neg) {
-    return -Sum;
-  } else {
-    return Sum;
-  }
-}
-
 
 // RMN: Volkslogger outputs data in hex-strings.  Function copied from StrToDouble
 // Note: Decimal-point and decimals disregarded.  Assuming integer amounts only.

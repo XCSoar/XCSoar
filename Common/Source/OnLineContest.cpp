@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -38,12 +39,18 @@ Copyright_License {
 #include "OnLineContest.h"
 #include "Protection.hpp"
 #include "Math/FastMath.h"
+#include "Math/Constants.h"
 #include "McReady.h"
 #include "Math/Earth.hpp"
-#include "Units.hpp"
+#include "SettingsComputer.hpp"
 
 #include <math.h>
 
+#ifndef _MSC_VER
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
 
 #define CONST_D_FAK 6371000.0
 #define DISTANCETHRESHOLD 1000
@@ -448,21 +455,28 @@ bool OLCOptimizer::addPoint(const GEOPOINT &loc,
   // also detect task finish here?
 }
 
-
-int OLCOptimizer::getN() {
+int
+OLCOptimizer::getN() const
+{
   if (busy) return 0; // Inhibit display if busy optimising
   return pnts;
 }
 
-double OLCOptimizer::getAltitudeHigh(int i) {
+double
+OLCOptimizer::getAltitudeHigh(int i) const
+{
   return data.altpntshigh[i];
 }
 
-double OLCOptimizer::getTime(int i) {
+double
+OLCOptimizer::getTime(int i) const
+{
   return data.timepnts[i];
 }
 
-const GEOPOINT& OLCOptimizer::getLocation(int i) {
+const GEOPOINT &
+OLCOptimizer::getLocation(int i) const
+{
   return data.locpnts[i];
 }
 

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -35,14 +36,16 @@ Copyright_License {
 }
 */
 
+#include "AirspaceWarning.h"
+#include "AirspaceDatabase.hpp"
 #include "Dialogs/Internal.hpp"
 #include "InfoBoxLayout.h"
 #include "Units.hpp"
-#include "Airspace.h"
 #include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Math/Units.h"
 #include "MainWindow.hpp"
+#include "Components.hpp"
 #include "Compatibility/vk.h"
 #include "options.h" /* for IBLSCALE() */
 
@@ -88,7 +91,7 @@ static void DoAck(int Ack){
     Idx = 0;
 
   if (AirspaceWarnGetItem(Idx, pAS)){
-    AirspaceWarnDoAck(pAS.ID, Ack);
+    AirspaceWarnDoAck(airspace_database, pAS.ID, Ack);
     wAirspaceList->Redraw();
   }
 
@@ -329,17 +332,23 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
     }
 
     if (pAS.IsCircle){
-      _tcsncpy(sName, AirspaceCircle[pAS.AirspaceIndex].Name,
+      const AIRSPACE_CIRCLE &circle =
+        airspace_database.AirspaceCircle[pAS.AirspaceIndex];
+
+      _tcsncpy(sName, circle.Name,
 	       sizeof(sName)/sizeof(sName[0]));
-      Base = AirspaceCircle[pAS.AirspaceIndex].Base;
-      Top  = AirspaceCircle[pAS.AirspaceIndex].Top;
-      Type = AirspaceCircle[pAS.AirspaceIndex].Type;
+      Base = circle.Base;
+      Top  = circle.Top;
+      Type = circle.Type;
     } else {
-      _tcsncpy(sName, AirspaceArea[pAS.AirspaceIndex].Name,
+      const AIRSPACE_AREA &area =
+        airspace_database.AirspaceArea[pAS.AirspaceIndex];
+
+      _tcsncpy(sName, area.Name,
 	       sizeof(sName)/sizeof(sName[0]));
-      Base = AirspaceArea[pAS.AirspaceIndex].Base;
-      Top  = AirspaceArea[pAS.AirspaceIndex].Top;
-      Type = AirspaceArea[pAS.AirspaceIndex].Type;
+      Base = area.Base;
+      Top  = area.Top;
+      Type = area.Type;
     }
 
     sName[sizeof(sName)/sizeof(sName[0])-1] = '\0';

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -40,7 +41,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "UtilsSystem.hpp"
 
-#ifdef __MINGW32__
+#ifdef __GNUC__
 #define int_fast8_t jas_int_fast8_t
 #endif
 
@@ -49,10 +50,10 @@ Copyright_License {
 #include "jasper/jpc_rtc.h"
 #include "wcecompat/ts_string.h"
 
-
-void RasterMapJPG2000::SetFieldRounding(const double xr,
-                                        const double yr,
-                                        RasterRounding &rounding)
+void
+RasterMapJPG2000::SetFieldRounding(const double xr,
+                                   const double yr,
+                                   RasterRounding &rounding) const
 {
   RasterMap::SetFieldRounding(xr, yr, rounding);
   if (!isMapLoaded()) {
@@ -67,22 +68,16 @@ void RasterMapJPG2000::SetFieldRounding(const double xr,
   }
 }
 
-
-////// Field access ////////////////////////////////////////////////////
-
-
+// Field access
 short RasterMapJPG2000::_GetFieldAtXY(unsigned int lx,
                                       unsigned int ly) {
 
   return raster_tile_cache.GetField(lx,ly);
 }
 
-
-
 void RasterMapJPG2000::ServiceFullReload(const GEOPOINT &location) {
   ReloadJPG2000Full(location);
 }
-
 
 RasterMapJPG2000::RasterMapJPG2000() {
   TriggerJPGReload = false;
@@ -102,9 +97,7 @@ RasterMapJPG2000::~RasterMapJPG2000() {
   }
 }
 
-
 int RasterMapJPG2000::ref_count = 0;
-
 
 void RasterMapJPG2000::ReloadJPG2000Full(const GEOPOINT &location) {
   // load all 16 tiles...
@@ -133,12 +126,10 @@ void RasterMapJPG2000::_ReloadJPG2000(void) {
   }
 }
 
-
 void RasterMapJPG2000::ReloadJPG2000(void) {
   Poco::ScopedRWLock protect(lock, true);
   _ReloadJPG2000();
 }
-
 
 void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
 {
@@ -155,9 +146,9 @@ void RasterMapJPG2000::SetViewCenter(const GEOPOINT &location)
   }
 }
 
-
-
-bool RasterMapJPG2000::Open(char* zfilename) {
+bool
+RasterMapJPG2000::Open(const char *zfilename)
+{
   Poco::ScopedRWLock protect(lock, true);
   strcpy(jp2_filename,zfilename);
 
@@ -175,16 +166,17 @@ bool RasterMapJPG2000::Open(char* zfilename) {
   return terrain_valid;
 }
 
+RasterMapJPG2000 *
+RasterMapJPG2000::LoadFile(const char *path)
+{
+  RasterMapJPG2000 *map = new RasterMapJPG2000();
+  if (map == NULL)
+    return NULL;
 
-void RasterMapJPG2000::Close(void) {
-  Poco::ScopedRWLock protect(lock, true);
-  _Close();
-}
-
-void RasterMapJPG2000::_Close(void) {
-  if (terrain_valid) {
-    raster_tile_cache.Reset();
-    terrain_valid = false;
+  if (!map->Open(path)) {
+    delete map;
+    return NULL;
   }
-}
 
+  return map;
+}

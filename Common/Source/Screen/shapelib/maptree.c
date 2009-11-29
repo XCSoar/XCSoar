@@ -6,7 +6,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -22,6 +22,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -109,7 +110,7 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
   /*	Establish the byte order on this machine.			    */
   /* -------------------------------------------------------------------- */
     i = 1;
-    if( *((uchar *) &i) == 1 )
+    if( *((const uchar *) &i) == 1 )
       bBigEndian = MS_FALSE;
     else
       bBigEndian = MS_TRUE;
@@ -422,7 +423,7 @@ static void treeCollectShapeIds(treeNodeObj *node, rectObj aoi, char *status)
   }
 }
 
-char *msSearchTree(treeObj *tree, rectObj aoi)
+char *msSearchTree(const treeObj *tree, rectObj aoi)
 {
   char *status=NULL;
 
@@ -525,7 +526,7 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status
   return;
 }
 
-char *msSearchDiskTree(char *filename, rectObj aoi, int debug)
+char *msSearchDiskTree(const char *filename, rectObj aoi, int debug)
 {
   SHPTreeHandle	disktree;
   char *status=NULL;
@@ -589,7 +590,7 @@ treeNodeObj *readTreeNode( SHPTreeHandle disktree )
   return node;
 }
 
-treeObj *msReadTree(char *filename, int debug)
+treeObj *msReadTree(const char *filename, int debug)
 {
   treeObj *tree=NULL;
   SHPTreeHandle	disktree;
@@ -680,7 +681,7 @@ static void writeTreeNode(SHPTreeHandle disktree, treeNodeObj *node)
 
 }
 
-int msWriteTree(treeObj *tree, char *filename, int B_order)
+int msWriteTree(treeObj *tree, const char *filename, int B_order)
 {
   char		signature[3] = "SQT";
   char		version = 1;
@@ -781,7 +782,8 @@ int msWriteTree(treeObj *tree, char *filename, int B_order)
 }
 
 // Function to filter search results further against feature bboxes
-void msFilterTreeSearch(shapefileObj *shp, char *status, rectObj search_rect)
+void msFilterTreeSearch(const shapefileObj *shp, char *status,
+                        rectObj search_rect)
 {
   int i;
   rectObj shape_rect;

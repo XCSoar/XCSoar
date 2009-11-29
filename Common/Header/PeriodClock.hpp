@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -38,16 +39,27 @@ Copyright_License {
 #ifndef XCSOAR_PERIOD_CLOCK_HPP
 #define XCSOAR_PERIOD_CLOCK_HPP
 
+#ifdef HAVE_POSIX
+#include <time.h>
+#else /* !HAVE_POSIX */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#endif /* !HAVE_POSIX */
 
 /**
  * This is a stopwatch which saves the timestamp of an even, and can
  * check whether a specified time span has passed since then.
  */
 class PeriodClock {
+protected:
+#ifdef HAVE_POSIX
+  typedef unsigned stamp_t;
+#else /* !HAVE_POSIX */
+  typedef DWORD stamp_t;
+#endif /* !HAVE_POSIX */
+
 private:
-  DWORD last;
+  stamp_t last;
 
 public:
   /**
@@ -58,6 +70,18 @@ public:
    */
   PeriodClock():last(0) {}
 
+protected:
+  static stamp_t get_now() {
+#ifdef HAVE_POSIX
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
+#else /* !HAVE_POSIX */
+    return ::GetTickCount();
+#endif /* !HAVE_POSIX */
+  }
+
+public:
   /**
    * Resets the clock.
    */
@@ -73,7 +97,7 @@ public:
     if (last == 0)
       return -1;
 
-    return ::GetTickCount() - last;
+    return get_now() - last;
   }
 
   /**
@@ -83,15 +107,23 @@ public:
    * @param duration the duration in milliseconds
    */
   bool check(unsigned duration) const {
-    DWORD now = ::GetTickCount();
-    return now >= last + duration;
+    return get_now() >= last + duration;
   }
 
   /**
    * Updates the time stamp, setting it to the current clock.
    */
   void update() {
-    last = ::GetTickCount();
+    last = get_now();
+  }
+
+  /**
+   * Updates the time stamp, setting it to the current clock plus the
+   * specified offset.
+   */
+  void update_offset(unsigned offset) {
+    update();
+    last += offset;
   }
 
   /**
@@ -101,7 +133,7 @@ public:
    * @param duration the duration in milliseconds
    */
   bool check_update(unsigned duration) {
-    DWORD now = ::GetTickCount();
+    stamp_t now = get_now();
     if (now >= last + duration) {
       last = now;
       return true;
@@ -116,7 +148,7 @@ public:
    * @param duration the duration in milliseconds
    */
   bool check_always_update(unsigned duration) {
-    DWORD now = ::GetTickCount();
+    stamp_t now = get_now();
     bool ret = now > last + duration;
     last = now;
     return ret;

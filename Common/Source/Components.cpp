@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -34,8 +35,10 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "Components.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "Interface.hpp"
 #include "UtilsProfile.hpp"
 #include "Asset.hpp"
@@ -48,7 +51,9 @@ Copyright_License {
 #include "Device/Geoid.h"
 #include "Dialogs.h"
 #include "Waypointparser.h"
-#include "Airspace.h"
+#include "AirspaceGlue.hpp"
+#include "AirspaceWarning.h"
+#include "AirspaceDatabase.hpp"
 #include "ButtonLabel.hpp"
 #include "SnailTrail.hpp"
 #include "Language.hpp"
@@ -69,11 +74,10 @@ Copyright_License {
 #include "Device/device.h"
 #include "TopologyStore.h"
 #include "Topology.h"
-#include "TerrainRenderer.h"
 #include "Audio/VarioSound.h"
 #include "Screen/Graphics.hpp"
 #include "Calculations.h"
-#include "Polar/Historical.hpp"
+#include "Polar/Loader.hpp"
 #include "Persist.hpp"
 #include "Device/Parser.h"
 #include "MainWindow.hpp"
@@ -87,6 +91,7 @@ Copyright_License {
 #include "WayPointList.hpp"
 
 WayPointList way_points;
+AirspaceDatabase airspace_database;
 Marks *marks;
 TopologyStore *topology;
 RasterTerrain terrain;
@@ -99,9 +104,9 @@ Logger logger; // global
 
 void XCSoarInterface::PreloadInitialisation(bool ask) {
   if (ask) {
-#ifdef PNA
-    CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
-#endif
+    #ifdef PNA
+      CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
+    #endif
   }
 
   SetToRegistry(TEXT("XCV"), 1);
@@ -160,7 +165,7 @@ void XCSoarInterface::AfterStartup() {
 
   // Create default task if none exists
   StartupStore(TEXT("Create default task\n"));
-  task.DefaultTask(SettingsComputer());
+  task.DefaultTask(SettingsComputer(), Basic());
 
   StartupStore(TEXT("CloseProgressDialog\n"));
   CloseProgressDialog();
@@ -270,7 +275,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   device_blackboard.Initialise();
 
   // Initialize Marks
-  marks = new Marks("xcsoar-marks");
+  marks = new Marks("xcsoar-marks", SettingsComputer());
   topology = new TopologyStore(marks->GetTopology());
 
   // Show the main and map windows
@@ -305,7 +310,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   Profile::LoadWindFromRegistry();
 
   // TODO TB: seems to be out of date?!
-  CalculateNewPolarCoef();
+  LoadPolarById(POLARID, polar);
 
   // Calculate polar-related data and saves it to the cache
   StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
@@ -318,6 +323,9 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   topology->Open();
 
   // Read the terrain file
+  CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
+  SetProgressStepSize(2);
+  StartupStore(TEXT("OpenTerrain\n"));
   terrain.OpenTerrain();
 
   // Read the waypoint files
@@ -332,6 +340,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());
 
+  CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
   terrain.ServiceFullReload(Basic().Location);
 
   // Scan for weather forecast
@@ -340,9 +349,9 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   RASP.ScanAll(Basic().Location);
 
   // Reads the airspace files
-  ReadAirspace();
+  ReadAirspace(airspace_database, &terrain);
   // Sorts the airspaces by priority
-  SortAirspace();
+  SortAirspace(airspace_database);
 
   // Read the FLARM details file
   OpenFLARMDetails();
@@ -366,6 +375,16 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   GlidePolar::UpdatePolar(true, SettingsComputer());
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
+
+  main_window.map.set_way_points(&way_points);
+  main_window.map.set_task(&task);
+  main_window.map.set_airspaces(&airspace_database);
+  main_window.map.set_topology(topology);
+  main_window.map.set_terrain(&terrain);
+  main_window.map.set_weather(&RASP);
+  main_window.map.set_marks(marks);
+  main_window.map.set_snail_trail(&glide_computer.GetSnailTrail());
+  main_window.map.set_olc(&glide_computer.GetOLC());
 
   // Finally ready to go.. all structures must be present before this.
 
@@ -491,13 +510,13 @@ void XCSoarInterface::Shutdown(void) {
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
   StartupStore(TEXT("Resume abort task\n"));
-  task.ResumeAbortTask(SettingsComputer(), -1); // turn off abort if it was on.
+  task.ResumeAbortTask(SettingsComputer(), Basic(), -1); // turn off abort if it was on.
   StartupStore(TEXT("Save default task\n"));
   task.SaveDefaultTask();
   StartupStore(TEXT("Clear task data\n"));
   task.ClearTask();
   StartupStore(TEXT("Close airspace\n"));
-  CloseAirspace();
+  CloseAirspace(airspace_database);
 
   StartupStore(TEXT("Close waypoints\n"));
   way_points.clear();
@@ -507,6 +526,8 @@ void XCSoarInterface::Shutdown(void) {
   StartupStore(TEXT("CloseTerrainTopology\n"));
 
   RASP.Close();
+
+  StartupStore(TEXT("CloseTerrain\n"));
   terrain.CloseTerrain();
 
   delete topology;
@@ -545,7 +566,7 @@ void XCSoarInterface::Shutdown(void) {
 
   DeleteFonts();
 
-  DeleteAirspace();
+  DeleteAirspace(airspace_database);
 
   StartupStore(TEXT("Close Progress Dialog\n"));
 

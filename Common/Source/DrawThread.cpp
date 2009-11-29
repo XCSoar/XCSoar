@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -39,6 +40,26 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Protection.hpp"
+#include "DeviceBlackboard.hpp"
+
+void
+DrawThread::ExchangeBlackboard()
+{
+  /* send device data to the MapWindow */
+  mutexBlackboard.Lock();
+  map.ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated(),
+                     device_blackboard.SettingsComputer(),
+                     device_blackboard.SettingsMap());
+  mutexBlackboard.Unlock();
+
+  /* recalculate the MapWindow projection */
+  map.UpdateProjection();
+
+  /* return MapWindow projection to the device_blackboard */
+  mutexBlackboard.Lock();
+  device_blackboard.ReadMapProjection(map.MapProjection());
+  mutexBlackboard.Unlock();
+}
 
 /**
  * Main loop of the DrawThread
@@ -52,7 +73,7 @@ DrawThread::run()
   globalRunningEvent.wait();
 
   // Get data from the DeviceBlackboard
-  map.ExchangeBlackboard();
+  ExchangeBlackboard();
 
   // take control (or wait for the resume())
   mutexRun.Lock();
@@ -76,7 +97,7 @@ DrawThread::run()
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
       // Get data from the DeviceBlackboard
-      map.ExchangeBlackboard();
+      ExchangeBlackboard();
 
       // take control (or wait for the resume())
       mutexRun.Lock();

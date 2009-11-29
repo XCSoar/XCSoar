@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,12 +37,10 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "XCSoar.h"
-#include "SettingsTask.hpp"
-#include "SettingsUser.hpp"
-#include "SettingsComputer.hpp"
+#include "Task.h"
 #include "Screen/Graphics.hpp"
-#include "Compatibility/gdi.h"
+#include "McReady.h"
+#include "Screen/Fonts.hpp"
 #include "options.h" /* for IBLSCALE() */
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
@@ -51,7 +50,13 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
   }
 }
 
-
+/**
+ * Draw the final glide groundline (and shading) to the buffer
+ * and copy the transparent buffer to the canvas
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ * @param buffer The drawing buffer
+ */
 void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer) {
 
   if (!Calculated().Flying) return;
@@ -90,7 +95,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
     canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   }
 
-  if (Calculated().Flying && task.Valid()) {
+  if (Calculated().Flying && task != NULL && task->Valid()) {
     if ((Calculated().TerrainWarningLocation.Latitude != 0.0)
         &&(Calculated().TerrainWarningLocation.Longitude != 0.0)) {
 
@@ -100,11 +105,6 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
     }
   }
 }
-
-
-#include "McReady.h"
-#include "InfoBoxLayout.h"
-#include "Screen/Fonts.hpp"
 
 /*
  * The VisualGlide by Paolo Ventafridda

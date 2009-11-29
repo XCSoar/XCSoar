@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -47,6 +48,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Units.h"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
@@ -751,7 +753,7 @@ FindNearestWayPoint(const WayPointList &way_points,
 
     if (way_points.get_calc(i).Visible) {
 
-      if (map_projection.WaypointInScaleFilter(i)) {
+      if (map_projection.WaypointInScaleFilter(way_points.get(i))) {
 
         // only look for visible waypoints
         // feature added by Samuel Gisiger
@@ -781,19 +783,11 @@ FindNearestWayPoint(const WayPointList &way_points,
     return -1;
 }
 
-
-
-
-
-///////
-
-
-  // Number,Latitude,Longitude,Altitude,Flags,Name,Comment(,Zoom))
-  // Number starts at 1
-  // Lat/long expressed as D:M:S[N/S/E/W]
-  // Altitude as XXXM
-  // Flags: T,H,A,L
-
+// Number,Latitude,Longitude,Altitude,Flags,Name,Comment(,Zoom))
+// Number starts at 1
+// Lat/long expressed as D:M:S[N/S/E/W]
+// Altitude as XXXM
+// Flags: T,H,A,L
 
 static void
 WaypointFlagsToString(int FlagsNum, TCHAR *Flags)
@@ -997,26 +991,4 @@ WaypointWriteFiles(WayPointList &way_points,
     fp = NULL;
   }
 
-}
-
-int
-FindMatchingWaypoint(const WayPointList &way_points, WAYPOINT *waypoint)
-{
-  // first scan, lookup by name
-  for (unsigned i = 0; way_points.verify_index(i); ++i) {
-    if (_tcscmp(waypoint->Name, way_points.get(i).Name)==0) {
-      return i;
-    }
-  }
-  // second scan, lookup by location
-  for (unsigned i = 0; way_points.verify_index(i); ++i) {
-    const WAYPOINT &wpi = way_points.get(i);
-
-    if ((fabs(waypoint->Location.Latitude - wpi.Location.Latitude)<1.0e-6)
-        && (fabs(waypoint->Location.Longitude - wpi.Location.Longitude)<1.0e-6)) {
-      return i;
-    }
-  }
-
-  return -1;
 }

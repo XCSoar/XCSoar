@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,37 +37,16 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "Components.hpp"
-#include "Interface.hpp"
-#include "LogFile.hpp"
-#include "Protection.hpp"
-#include "UtilsSystem.hpp"
-#include "Math/FastMath.h"
-#include "Dialogs.h"
-#include "Audio/VarioSound.h"
-#include "InputEvents.h"
 #include "Screen/Graphics.hpp"
-#include "Screen/LabelBlock.hpp"
-#include "Compatibility/gdi.h"
 #include "TopologyStore.h"
-#include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
 #include "TerrainRenderer.h"
 #include "RasterWeather.h"
 #include "Gauge/GaugeCDI.hpp"
+#include "Protection.hpp"
+#include "SnailTrail.hpp"
 
-#ifdef PNA
-#include "Asset.hpp"
-#endif
-
-#include <assert.h>
-#include <windows.h>
-#include <math.h>
 #include <tchar.h>
-
-#ifdef WINDOWSPC
-#include <wingdi.h>
-#endif
 
 // Initialization
 
@@ -77,6 +57,9 @@ ScreenGraphics MapGfx;
  */
 MapWindow::MapWindow()
   :MapWindowProjection(),
+   way_points(NULL), task(NULL), airspace_database(NULL),
+   topology(NULL), terrain(NULL), weather(NULL), terrain_renderer(NULL),
+   marks(NULL), snail_trail(NULL), olc(NULL),
    cdi(NULL),
    TargetDrag_State(0),
    BigZoom(true),
@@ -160,8 +143,6 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
   */
 }
 
-#include "DeviceBlackboard.hpp"
-
 /**
  * Copies the given basic and calculated info to the MapWindowBlackboard
  * and reads the Settings from the DeviceBlackboard.
@@ -170,22 +151,20 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
  */
 void
 MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
-    const DERIVED_INFO &derived_info)
+                          const DERIVED_INFO &derived_info,
+                          const SETTINGS_COMPUTER &settings_computer,
+                          const SETTINGS_MAP &settings_map)
 {
-  ScopeLock protect(mutexBlackboard);
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
-  ReadSettingsComputer(device_blackboard.SettingsComputer());
-  ReadSettingsMap(device_blackboard.SettingsMap());
+  ReadSettingsComputer(settings_computer);
+  ReadSettingsMap(settings_map);
 }
 
 void
-MapWindow::SendBlackboard(const NMEA_INFO &nmea_info,
-    const DERIVED_INFO &derived_info)
+MapWindow::UpdateProjection()
 {
-  ScopeLock protect(mutexBlackboard);
-  MapWindowProjection::ExchangeBlackboard(nmea_info, derived_info,
-					  SettingsMap());
-  device_blackboard.ReadMapProjection(*this);
+  ApplyScreenSize();
+  MapWindowProjection::ExchangeBlackboard(Calculated(), SettingsMap());
 }
 
 typedef struct {
@@ -215,7 +194,9 @@ MapWindow::Idle(const bool do_force)
     terrain_idle.dirty = true;
     topology_idle.dirty = true;
     rasp_idle.dirty = true;
-    topology->TriggerUpdateCaches(*this);
+
+    if (topology != NULL)
+      topology->TriggerUpdateCaches(*this);
   }
 
   do {
@@ -237,7 +218,7 @@ MapWindow::Idle(const bool do_force)
         break;
       }
     case 1:
-      if (topology_idle.dirty) {
+      if (topology != NULL && topology_idle.dirty) {
         if (SettingsMap().EnableTopology) {
           topology_idle.dirty =
             topology->ScanVisibility(*this, *getSmartBounds(), do_force);
@@ -247,9 +228,9 @@ MapWindow::Idle(const bool do_force)
         break;
       }
     case 2:
-      if (terrain_idle.dirty) {
-        terrain.ServiceTerrainCenter(Basic().Location);
-        terrain.ServiceCache();
+      if (terrain != NULL && terrain_idle.dirty) {
+        terrain->ServiceTerrainCenter(Basic().Location);
+        terrain->ServiceCache();
 
         if (!do_force) {
           // JMW this currently isn't working with the smart bounds
@@ -258,8 +239,8 @@ MapWindow::Idle(const bool do_force)
         break;
       }
     case 3:
-      if (rasp_idle.dirty) {
-        RASP.SetViewCenter(Basic().Location);
+      if (weather != NULL && rasp_idle.dirty) {
+        weather->SetViewCenter(Basic().Location);
         if (!do_force) {
           // JMW this currently isn't working with the smart bounds
           rasp_idle.dirty = false;
@@ -279,17 +260,6 @@ MapWindow::Idle(const bool do_force)
 	    | rasp_idle.dirty));
 
   return still_dirty;
-}
-
-/**
- * Exchanges blackboard data with the DeviceBlackboard
- */
-void
-MapWindow::ExchangeBlackboard(void)
-{
-  ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
-  ApplyScreenSize();
-  SendBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
 }
 
 /**
@@ -360,12 +330,37 @@ MapWindow::identify(HWND hWnd)
 }
 #endif /* WIN32 */
 
+void
+MapWindow::set_topology(TopologyStore *_topology)
+{
+  topology = _topology;
+}
+
+void
+MapWindow::set_terrain(RasterTerrain *_terrain)
+{
+  terrain = _terrain;
+
+  if (terrain_renderer != NULL) {
+    delete terrain_renderer;
+    terrain_renderer = NULL;
+  }
+}
+
+void
+MapWindow::set_weather(RasterWeather *_weather)
+{
+  weather = _weather;
+
+  if (terrain_renderer != NULL) {
+    delete terrain_renderer;
+    terrain_renderer = NULL;
+  }
+}
+
 bool MapWindow::checkLabelBlock(const RECT brect) {
   return label_block.check(brect);
 }
-
-#include "Components.hpp"
-#include "GlideComputer.hpp"
 
 void MapWindow::ScanVisibility(rectObj *bounds_active) {
   // received when the SetTopoBounds determines the visibility
@@ -373,7 +368,8 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
   // This happens rarely, so it is good pre-filtering of what is visible.
   // (saves from having to do it every screen redraw)
 
-  glide_computer.GetSnailTrail().ScanVisibility(bounds_active);
+  if (snail_trail != NULL)
+    snail_trail->ScanVisibility(bounds_active);
 
   ScanVisibilityWaypoints(bounds_active);
   ScanVisibilityAirspace(bounds_active);

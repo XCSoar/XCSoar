@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -37,12 +38,14 @@ Copyright_License {
 
 #include "UtilsText.hpp"
 #include "XCSoar.h"
-#include <assert.h>
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "Asset.hpp"
+
+#include <assert.h>
 
 #ifdef ENABLE_UNUSED_CODE
 void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
@@ -183,20 +186,6 @@ void SetProfileFiles(const TCHAR *override) {
     _tcsncpy(startProfileFile, override, MAX_PATH-1);
   }
 }
-
-
-#ifdef FIVV
-BOOL DelRegistryKey(const TCHAR *szDelKey)
-{
-   HKEY tKey;
-   RegOpenKeyEx(HKEY_CURRENT_USER, _T(REGKEYNAME),0,0,&tKey);
-   if ( RegDeleteValue(tKey, szDelKey) != ERROR_SUCCESS ) {
-	return false;
-   }
-   RegCloseKey(tKey);
-   return true;
-}
-#endif
 
 #ifdef PNA
 void CleanRegistry()

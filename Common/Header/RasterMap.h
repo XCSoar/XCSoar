@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -70,7 +71,7 @@ class RasterMap {
     {}
   virtual ~RasterMap() {};
 
-  inline bool isMapLoaded() {
+  inline bool isMapLoaded() const {
     return terrain_valid;
   }
 
@@ -79,29 +80,33 @@ class RasterMap {
 
   virtual void SetViewCenter(const GEOPOINT &location) {};
 
-  bool GetMapCenter(GEOPOINT *loc);
+  bool GetMapCenter(GEOPOINT *loc) const;
 
-  float GetFieldStepSize();
+  float GetFieldStepSize() const;
 
   // inaccurate method
-  int GetEffectivePixelSize(double pixelsize);
+  int GetEffectivePixelSize(double pixelsize) const;
 
   // accurate method
   int GetEffectivePixelSize(double *pixel_D,
-                            const GEOPOINT &location);
+                            const GEOPOINT &location) const;
 
   virtual void SetFieldRounding(const double xr, const double yr,
-    RasterRounding &rounding);
+                                RasterRounding &rounding) const;
 
   short GetField(const GEOPOINT &location,
     const RasterRounding &rounding);
 
-  virtual bool Open(char* filename) = 0;
-  virtual void Close() = 0;
   virtual void ServiceCache() {};
   virtual void ServiceFullReload(const GEOPOINT &location) {};
-  bool IsDirectAccess(void) { return DirectAccess; };
-  bool IsPaged(void) { return Paged; };
+
+  bool IsDirectAccess(void) const {
+    return DirectAccess;
+  };
+
+  bool IsPaged(void) const {
+    return Paged;
+  };
 
   // export methods to global, take care!
   virtual void LockRead();
@@ -123,13 +128,13 @@ class RasterRounding {
 public:
   RasterRounding() {};
 
-  RasterRounding(RasterMap &map,
+  RasterRounding(const RasterMap &map,
     const double xr, const double yr):
     DirectFine(false)
   {
     Set(map, xr, yr);
   };
-  void Set(RasterMap &map,
+  void Set(const RasterMap &map,
            const double xr,
            const double yr)
   {

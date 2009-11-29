@@ -44,8 +44,14 @@ Copyright_License {
 #include "PopupMessage.hpp"
 #include "MapWindow.h"
 #include "StatusMessage.hpp"
+#include "Asset.hpp"
 
 #include <tchar.h>
+
+#if defined(PNA) || defined(FIVV)
+int GlobalModelType = MODELTYPE_UNKNOWN;
+bool needclipping = false;
+#endif
 
 bool
 FileExistsA(const char *FileName)

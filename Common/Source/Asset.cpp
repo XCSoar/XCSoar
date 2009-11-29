@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -43,7 +44,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Sizes.h"
 
-#if defined(WIN32) && !(defined(__MINGW32__) && defined(WINDOWSPC))
+#if defined(WIN32) && !(defined(__GNUC__) && defined(WINDOWSPC))
 #include "uniqueid.h"
 #endif
 
@@ -76,11 +77,11 @@ void ReadAssetNumber(void)
 #endif
 
   GetRegistryString(szRegistryLoggerID, val, 100);
-  int ifound=0;
+  int ifound = 0;
   int len = _tcslen(val);
-  for (int i=0; i< len; i++) {
-    if (((val[i] >= _T('A'))&&(val[i] <= _T('Z')))
-        ||((val[i] >= _T('0'))&&(val[i] <= _T('9')))) {
+  for (int i = 0; i < len; i++) {
+    if (((val[i] >= _T('A')) && (val[i] <= _T('Z')))
+        ||((val[i] >= _T('0')) && (val[i] <= _T('9')))) {
       strAssetNumber[ifound]= val[i];
       ifound++;
     }
@@ -91,28 +92,25 @@ void ReadAssetNumber(void)
     }
   }
 
-  if(strAssetNumber[0] != '\0')
-    {
-      StartupStore(strAssetNumber);
-      StartupStore(TEXT(" (?)\n"));
-      return;
-    }
+  if(strAssetNumber[0] != '\0') {
+    StartupStore(strAssetNumber);
+    StartupStore(TEXT(" (?)\n"));
+    return;
+  }
 
   ReadCompaqID();
-  if(strAssetNumber[0] != '\0')
-    {
-      StartupStore(strAssetNumber);
-      StartupStore(TEXT(" (compaq)\n"));
-      return;
-    }
+  if(strAssetNumber[0] != '\0') {
+    StartupStore(strAssetNumber);
+    StartupStore(TEXT(" (compaq)\n"));
+    return;
+  }
 
   ReadUUID();
-  if(strAssetNumber[0] != '\0')
-    {
-      StartupStore(strAssetNumber);
-      StartupStore(TEXT(" (uuid)\n"));
-      return;
-    }
+  if(strAssetNumber[0] != '\0') {
+    StartupStore(strAssetNumber);
+    StartupStore(TEXT(" (uuid)\n"));
+    return;
+  }
 
   strAssetNumber[0]= _T('A');
   strAssetNumber[1]= _T('A');
@@ -130,19 +128,17 @@ ReadCompaqID(void)
 #if defined(WIN32) && !defined(WINDOWSPC)
   PROCESS_INFORMATION pi;
 
-  if(strAssetNumber[0] != '\0')
-    {
-      return;
-    }
+  if(strAssetNumber[0] != '\0') {
+    return;
+  }
 
   CreateProcess(TEXT("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi);
 
   FILE *file = _tfopen(TEXT("\\windows\\cpqAssetData.dat"), TEXT("rb"));
-  if (file == NULL)
-    {
-      // MessageBoxX(hWnd, TEXT("Unable to open asset data file."), TEXT("Error!"), MB_OK);
-      return;
-    }
+  if (file == NULL) {
+    // MessageBoxX(hWnd, TEXT("Unable to open asset data file."), TEXT("Error!"), MB_OK);
+    return;
+  }
   fseek(file, 976, SEEK_SET);
   memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
   fread(&strAssetNumber, 64, 1, file);
@@ -150,11 +146,10 @@ ReadCompaqID(void)
 #endif
 }
 
-
 static void
 ReadUUID(void)
 {
-#if defined(WIN32) && !(defined(__MINGW32__) && defined(WINDOWSPC))
+#if defined(WIN32) && !(defined(__GNUC__) && defined(WINDOWSPC))
   BOOL fRes;
 
 #define GUIDBuffsize 100
@@ -243,11 +238,10 @@ ReadUUID(void)
   return;
 }
 
-
 #if 0
 void ReadUUIDold(void)
 {
-#ifndef __MINGW32__
+#ifndef __GNUC__
   BOOL fRes;
   DWORD dwBytesReturned =0;
   DEVICE_ID DevID;
@@ -316,37 +310,37 @@ void ReadUUIDold(void)
 }
 #endif
 
-
 void InitAsset() {
-#ifdef GNAV
-#ifdef FORCEPORTRAIT
-  // JMW testing only for portrait mode of Altair
-  RotateScreen();
-#endif
-#endif
+  if (is_altair()) {
+    #ifdef FORCEPORTRAIT
+    // JMW testing only for portrait mode of Altair
+    RotateScreen();
+    #endif
+  }
 
-// VENTA2- delete registries at startup, but not on PC!
-#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
-#ifndef PNA
-  RegDeleteKey(HKEY_CURRENT_USER, _T(REGKEYNAME));
-#endif
-#endif
+  // VENTA2- delete registries at startup, but not on PC!
+  #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
+  if (!is_pna()) {
+    RegDeleteKey(HKEY_CURRENT_USER, _T(REGKEYNAME));
+  }
+  #endif
 
-#ifdef PNA // VENTA2-ADDON MODEL TYPE
-/*
-  LocalPath is called for the very first time by CreateDirectoryIfAbsent.
-  In order to be able in the future to behave differently for each PNA device
-  and maybe also for common PDAs, we need to know the PNA/PDA Model Type
-  BEFORE calling LocalPath. This was critical.
-*/
+  #ifdef PNA
+    // VENTA2-ADDON MODEL TYPE
+    /*
+    LocalPath is called for the very first time by CreateDirectoryIfAbsent.
+    In order to be able in the future to behave differently for each PNA device
+    and maybe also for common PDAs, we need to know the PNA/PDA Model Type
+    BEFORE calling LocalPath. This was critical.
+     */
 
-  SmartGlobalModelType(); // First we check the exec filename, which
-			  // has priority over registry values
+    SmartGlobalModelType(); // First we check the exec filename, which
+                            // has priority over registry values
 
-  if (!_tcscmp(GlobalModelName, _T("UNKNOWN"))) // Then if there is no smart name...
-    SetModelType();                         // get the modeltype from
-					    // the registry as usual
-#endif
+    if (!_tcscmp(GlobalModelName, _T("UNKNOWN"))) // Then if there is no smart name...
+      SetModelType();                             // get the modeltype from
+                                                  // the registry as usual
+  #endif
 
 // VENTA2- TODO fix these directories are not used always!
   CreateDirectoryIfAbsent(TEXT(""));  // RLD make sure the LocalPath folder actually exists
@@ -355,22 +349,21 @@ void InitAsset() {
   CreateDirectoryIfAbsent(TEXT("config"));
 
 // VENTA2-ADDON install fonts on PDAs and check XCSoarData existance
-#if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
-//#ifndef PNA
+  #if defined(FIVV) && ( !defined(WINDOWSPC) || WINDOWSPC==0 )
+  //#ifndef PNA
 
-  bool datadir=CheckDataDir();
-  if (datadir) StartupStore(TEXT("XCSoarData directory found.\n"));
-  else StartupStore(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
+    bool datadir=CheckDataDir();
+    if (datadir) StartupStore(TEXT("XCSoarData directory found.\n"));
+    else StartupStore(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
 
-  StartupStore(TEXT("Check for installing fonts\n"));
-  short didfonts=InstallFonts();  // check if really did it, and maybe restart
-  TCHAR nTmp[100];
-  _stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)\n"), didfonts);
-  StartupStore(nTmp);
+    StartupStore(TEXT("Check for installing fonts\n"));
+    short didfonts=InstallFonts();  // check if really did it, and maybe restart
+    TCHAR nTmp[100];
+    _stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)\n"), didfonts);
+    StartupStore(nTmp);
 
-  //#endif
-#endif
+    //#endif
+  #endif
 
   StartupLogFreeRamAndStorage();
-
 }

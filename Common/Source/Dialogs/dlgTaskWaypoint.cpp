@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -46,6 +47,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "WayPointList.hpp"
 #include "Components.hpp"
+#include "Task.h"
 
 #include <assert.h>
 
@@ -440,14 +442,16 @@ static void OnStartPointClicked(WindowControl * Sender){
 
 static void OnMoveAfterClicked(WindowControl * Sender){
 	(void)Sender;
-  task.SwapWaypoint(twItemIndex, XCSoarInterface::SettingsComputer());
+  task.SwapWaypoint(twItemIndex, XCSoarInterface::SettingsComputer(),
+                     XCSoarInterface::Basic());
   SetWaypointValues();
   wf->SetModalResult(mrOK);
 }
 
 static void OnMoveBeforeClicked(WindowControl * Sender){
 	(void)Sender;
-  task.SwapWaypoint(twItemIndex-1,XCSoarInterface::SettingsComputer());
+  task.SwapWaypoint(twItemIndex - 1, XCSoarInterface::SettingsComputer(),
+                    XCSoarInterface::Basic());
   SetWaypointValues();
   wf->SetModalResult(mrOK);
 }
@@ -460,7 +464,8 @@ static void OnDetailsClicked(WindowControl * Sender){
 
 static void OnRemoveClicked(WindowControl * Sender) {
 	(void)Sender;
-  task.RemoveTaskPoint(twItemIndex,XCSoarInterface::SettingsComputer());
+  task.RemoveTaskPoint(twItemIndex, XCSoarInterface::SettingsComputer(),
+                       XCSoarInterface::Basic());
   SetWaypointValues();
   wf->SetModalResult(mrOK);
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -107,8 +108,8 @@ void GlideComputerBlackboard::ResetFlight(const bool full) {
   calculated_info.Circling = false;
   calculated_info.FinalGlide = false;
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
-    calculated_info.GlideFootPrint[i].x = 0;
-    calculated_info.GlideFootPrint[i].y = 0;
+    calculated_info.GlideFootPrint[i].Longitude = 0;
+    calculated_info.GlideFootPrint[i].Latitude = 0;
   }
   calculated_info.TerrainWarningLocation.Latitude = 0.0;
   calculated_info.TerrainWarningLocation.Longitude = 0.0;
@@ -153,14 +154,14 @@ void GlideComputerBlackboard::StartTask() {
 void GlideComputerBlackboard::SaveFinish()
 {
   // JMW save calculated data at finish
-  memcpy(&Finish_Derived_Info, &calculated_info, sizeof(DERIVED_INFO));
+  Finish_Derived_Info = calculated_info;
 }
 
 void GlideComputerBlackboard::RestoreFinish()
 {
   double flighttime = calculated_info.FlightTime;
   double takeofftime = calculated_info.TakeOffTime;
-  memcpy(&calculated_info, &Finish_Derived_Info, sizeof(DERIVED_INFO));
+  calculated_info = Finish_Derived_Info;
   calculated_info.FlightTime = flighttime;
   calculated_info.TakeOffTime = takeofftime;
 }
@@ -184,15 +185,17 @@ GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info)
   _time_retreated = false;
   if (nmea_info.Time< gps_info.Time) {
     // backwards in time, so reset last
-    memcpy(&last_gps_info,&nmea_info,sizeof(NMEA_INFO));
-    memcpy(&last_calculated_info,&calculated_info,sizeof(DERIVED_INFO));
+    last_gps_info = nmea_info;
+    last_calculated_info = calculated_info;
     _time_retreated = true;
   } else if (nmea_info.Time> gps_info.Time) {
     // forwards in time, so save state
-    memcpy(&last_gps_info,&gps_info,sizeof(NMEA_INFO));
-    memcpy(&last_calculated_info,&calculated_info,sizeof(DERIVED_INFO));
+    last_gps_info = gps_info;
+    last_calculated_info = calculated_info;
   }
-  memcpy(&gps_info,&nmea_info,sizeof(NMEA_INFO));
+
+  gps_info = nmea_info;
+
   // if time hasn't advanced, don't copy last calculated
 }
 
@@ -204,6 +207,6 @@ void
 GlideComputerBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 					      &settings)
 {
-  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
+  settings_computer = settings;
 }
 

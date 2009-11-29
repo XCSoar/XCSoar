@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -44,6 +45,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "LogFile.hpp"
 #include "Message.h"
+#include "Asset.hpp"
 
 // GDI Escapes for ExtEscape()
 #define QUERYESCSUPPORT    8
@@ -126,13 +128,11 @@ void BlankDisplay(bool doblank) {
       // we don't want the PDA to be completely depleted.
 
       if (BatteryInfo.acStatus==0) {
-#ifdef _SIM_
-        if ((PDABatteryPercent < BATTERY_EXIT)) {
+        if (is_simulator() && (PDABatteryPercent < BATTERY_EXIT)) {
           StartupStore(TEXT("Battery low exit...\n"));
           // TODO feature: Warning message on battery shutdown
-	  XCSoarInterface::SignalShutdown(true);
-        } else
-#endif
+          XCSoarInterface::SignalShutdown(true);
+        } else {
           if (PDABatteryPercent < BATTERY_WARNING) {
             DWORD LocalWarningTime = ::GetTickCount();
             if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
@@ -143,6 +143,7 @@ void BlankDisplay(bool doblank) {
           } else {
             BatteryWarningTime = 0;
           }
+        }
       }
 
       if (BatteryInfo.acStatus==0) {

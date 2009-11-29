@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,11 +37,13 @@ Copyright_License {
 */
 
 #include "McReady.h"
+#include "Polar/Polar.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
+#include "Math/Constants.h"
 #include "Thread/Mutex.hpp"
-#include "Units.hpp"
+
 #include <tchar.h>
 #include <math.h>
 #include <windows.h>
@@ -61,7 +64,6 @@ double GlidePolar::sinkratecache[MAXSAFETYSPEED];
 double GlidePolar::bestld = 0.0;
 double GlidePolar::minsink = 10000.0;
 double GlidePolar::BallastLitres = 0.0;
-double GlidePolar::WingArea = 0.0;
 double GlidePolar::WingLoading = 0.0;
 
 double GlidePolar::SafetyMacCready= 0.0;
@@ -79,9 +81,7 @@ double        GlidePolar::BALLAST = 0;
 double        GlidePolar::CRUISE_EFFICIENCY = 1.0;
 
 unsigned POLARID = 0;
-double        POLAR[POLARSIZE] = {0,0,0};
-double        WEIGHTS[POLARSIZE] = {250,70,100};
-bool          AutoMacCready = false;
+Polar polar;
 
 void GlidePolar::Lock() {
   mutexGlidePolar.Lock();
@@ -106,7 +106,7 @@ double GlidePolar::AbortSafetyMacCready() {
 double GlidePolar::GetAUW() {
   double retval;
   Lock();
-  retval = BallastLitres + WEIGHTS[0] + WEIGHTS[1];
+  retval = BallastLitres + polar.WEIGHTS[0] + polar.WEIGHTS[1];
   Unlock();
   return retval;
 }
@@ -224,12 +224,12 @@ void GlidePolar::UpdatePolar(bool send,
   double BallastWeight;
 
   // Calculate ballast in liters (=BallastLitres)
-  BallastLitres = WEIGHTS[2] * BALLAST;
+  BallastLitres = polar.WEIGHTS[2] * BALLAST;
   // Calculate total weight of the plane (=BallastWeight)
   BallastWeight = GetAUW();
   // Calculate WingLoading if possible
-  if (WingArea>0.1) {
-    WingLoading = BallastWeight/WingArea;
+  if (polar.WingArea > 0.1) {
+    WingLoading = BallastWeight / polar.WingArea;
   } else {
     WingLoading = 0;
   }
@@ -237,9 +237,9 @@ void GlidePolar::UpdatePolar(bool send,
   // Correct polar for BallastWeight and bugfactor
   BallastWeight = (double)sqrt(BallastWeight);
   double bugfactor = 1.0/BUGS;
-  polar_a = POLAR[0] / BallastWeight*bugfactor;
-  polar_b = POLAR[1] * bugfactor;
-  polar_c = POLAR[2] * BallastWeight*bugfactor;
+  polar_a = polar.POLAR[0] / BallastWeight*bugfactor;
+  polar_b = polar.POLAR[1] * bugfactor;
+  polar_c = polar.POLAR[2] * BallastWeight*bugfactor;
 
   // do preliminary scan to find min sink and best LD
   // this speeds up mccready calculations because we have a reduced range
@@ -296,8 +296,7 @@ void GlidePolar::UpdatePolar(bool send,
   Unlock();
   // TODO JMW: use this instead? etc
   /*
-  devPutBugs(devA(), BUGS);
-  devPutBugs(devB(), BUGS);
+  AllDevicesPutBugs(BUGS);
 
   if (GPS_INFO.VarioAvailable) {
 
@@ -317,10 +316,8 @@ void GlidePolar::UpdatePolar(bool send,
   // TODO JMW: should call GCE_POLAR_CHANGED
   /*
   if (send) {
-    devPutBallast(devA(), BALLAST);
-    devPutBallast(devB(), BALLAST);
-    devPutBugs(devA(), BUGS);
-    devPutBugs(devB(), BUGS);
+    AllDevicesPutBallast(BALLAST);
+    AllDevicesPutBugs(BUGS);
   }
   */
 }

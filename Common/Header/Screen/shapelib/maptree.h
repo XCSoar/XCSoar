@@ -60,13 +60,14 @@ treeObj *msCreateTree(shapefileObj *shapefile, int maxdepth);
 void msTreeTrim(treeObj *tree);
 void msDestroyTree(treeObj *tree);
 
-char *msSearchTree(treeObj *tree, rectObj aoi);
-char *msSearchDiskTree(char *filename, rectObj aoi, int debug);
+char *msSearchTree(const treeObj *tree, rectObj aoi);
+char *msSearchDiskTree(const char *filename, rectObj aoi, int debug);
 
-treeObj *msReadTree(char *filename, int debug);
-int msWriteTree(treeObj *tree, char *filename, int LSB_order);
+treeObj *msReadTree(const char *filename, int debug);
+int msWriteTree(treeObj *tree, const char *filename, int LSB_order);
 
-void msFilterTreeSearch(shapefileObj *shp, char *status, rectObj search_rect);
+void msFilterTreeSearch(const shapefileObj *shp, char *status,
+                        rectObj search_rect);
 
 #ifdef __cplusplus
 }

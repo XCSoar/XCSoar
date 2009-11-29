@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,9 +37,6 @@ Copyright_License {
 */
 
 #include "RasterTerrain.h"
-#include "LogFile.hpp"
-#include "Interface.hpp"
-#include "Language.hpp"
 #include "Math/FastMath.h"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
@@ -52,24 +50,14 @@ Copyright_License {
 
 void RasterTerrain::OpenTerrain(void)
 {
-  terrain_initialised = false;
-
-  StartupStore(TEXT("OpenTerrain\n"));
-  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
-  XCSoarInterface::SetProgressStepSize(2);
-
   TCHAR  szFile[MAX_PATH] = TEXT("\0");
 
   GetRegistryString(szRegistryTerrainFile, szFile, MAX_PATH);
 
-  TCHAR szOrigFile[MAX_PATH] = TEXT("\0");
   char zfilename[MAX_PATH];
 
   ExpandLocalPath(szFile);
-  _tcscpy(szOrigFile, szFile);
-  ContractLocalPath(szOrigFile);
 
-  SetRegistryString(szRegistryTerrainFile, TEXT("\0"));
   unicode2ascii(szFile, zfilename, MAX_PATH);
 
   if (strlen(zfilename)==0) {
@@ -84,59 +72,28 @@ void RasterTerrain::OpenTerrain(void)
   // TODO code: Check locking, especially when reloading a file.
   // TODO bug: Fix cache method
 
-  if (CreateTerrainMap(zfilename)) {
-    SetRegistryString(szRegistryTerrainFile, szOrigFile);
-    terrain_initialised = true;
-  } else {
-    if (TerrainMap) {
-      TerrainMap->Close();
-      delete TerrainMap;
-      TerrainMap = NULL;
-    }
-    terrain_initialised = false;
-  }
+  CreateTerrainMap(zfilename);
 }
 
-bool RasterTerrain::CreateTerrainMap(char *zfilename) {
+bool
+RasterTerrain::CreateTerrainMap(const char *zfilename)
+{
   if (strstr(zfilename,".jp2")) {
-    TerrainMap = new RasterMapJPG2000();
-    if (!TerrainMap)
-      return false;
-
-    return TerrainMap->Open(zfilename);
+    TerrainMap = RasterMapJPG2000::LoadFile(zfilename);
+  } else {
+    TerrainMap = RasterMapRaw::LoadFile(zfilename);
+    if (TerrainMap == NULL)
+      TerrainMap = RasterMapCache::LoadFile(zfilename);
   }
 
-  TerrainMap = new RasterMapRaw();
-  if (!TerrainMap)
-    return false;
-
-  if (TerrainMap->Open(zfilename))
-    return true;
-
-  TerrainMap->Close();
-  delete TerrainMap;
-
-  TerrainMap = new RasterMapCache();
-  if (!TerrainMap)
-    return false;
-
-  if (TerrainMap->Open(zfilename))
-    return true;
-
-  return false;
+  return TerrainMap != NULL;
 }
 
 void RasterTerrain::CloseTerrain(void)
 {
-  StartupStore(TEXT("CloseTerrain\n"));
-
-  if (terrain_initialised) {
-    if (TerrainMap) {
-      TerrainMap->Close();
-      delete TerrainMap;
-      TerrainMap = NULL;
-    }
-    terrain_initialised = false;
+  if (TerrainMap != NULL) {
+    delete TerrainMap;
+    TerrainMap = NULL;
   }
 }
 
@@ -152,8 +109,10 @@ void RasterTerrain::Unlock(void) {
   }
 }
 
-short RasterTerrain::GetTerrainHeight(const GEOPOINT &Location,
-  const RasterRounding &rounding) {
+short
+RasterTerrain::GetTerrainHeight(const GEOPOINT &Location,
+                                const RasterRounding &rounding) const
+{
   if (TerrainMap) {
     return TerrainMap->GetField(Location, rounding);
   } else {
@@ -161,7 +120,7 @@ short RasterTerrain::GetTerrainHeight(const GEOPOINT &Location,
   }
 }
 
-bool RasterTerrain::IsDirectAccess(void) {
+bool RasterTerrain::IsDirectAccess(void) const {
   if (TerrainMap) {
     return TerrainMap->IsDirectAccess();
   } else {
@@ -169,7 +128,7 @@ bool RasterTerrain::IsDirectAccess(void) {
   }
 }
 
-bool RasterTerrain::IsPaged(void) {
+bool RasterTerrain::IsPaged(void) const {
   if (TerrainMap) {
     return TerrainMap->IsPaged();
   } else {
@@ -192,7 +151,6 @@ void RasterTerrain::ServiceTerrainCenter(const GEOPOINT &location) {
 
 void RasterTerrain::ServiceFullReload(const GEOPOINT &location) {
   if (TerrainMap) {
-    XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading terrain tiles...")));
     TerrainMap->ServiceFullReload(location);
   }
 }

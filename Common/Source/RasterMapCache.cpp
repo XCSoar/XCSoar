@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -43,7 +44,7 @@ Copyright_License {
 // static variables shared between rasterterrains because can only
 // have file opened by one reader
 
-#ifdef __MINGW32__
+#ifdef __GNUC__
 #define int_fast8_t jas_int_fast8_t
 #endif
 
@@ -52,6 +53,14 @@ Copyright_License {
 #include "jasper/jpc_rtc.h"
 #include "wcecompat/ts_string.h"
 
+#include <stdint.h>
+
+RasterMapCache::~RasterMapCache()
+{
+  _Close();
+
+  ref_count--;
+}
 
 short RasterMapCache::_GetFieldAtXY(unsigned int lx,
                                     unsigned int ly) {
@@ -76,8 +85,8 @@ void RasterMapCache::LockRead()
 };
 
 
-//////////// Cached load on demand ////////////////////////////////
-//////////// Cache map ////////////////////////////////////////////////
+// Cached load on demand
+// Cache map
 int RasterMapCache::ref_count = 0;
 
 ZZIP_FILE *RasterMapCache::fpTerrain;
@@ -142,7 +151,7 @@ void RasterMapCache::OptimiseCache(void){
 short RasterMapCache::LookupTerrainCacheFile(const long &SeekPos) {
   // put new value in slot tcpmin
 
-  __int16 NewAlt = 0;
+  int16_t NewAlt = 0;
   long SeekRes;
   short Alt;
 
@@ -154,7 +163,7 @@ short RasterMapCache::LookupTerrainCacheFile(const long &SeekPos) {
     // error, not found!
     Alt = TERRAIN_INVALID;
   } else {
-    if (zzip_fread(&NewAlt, 1, sizeof(__int16), fpTerrain) != sizeof(__int16))
+    if (zzip_fread(&NewAlt, 1, sizeof(NewAlt), fpTerrain) != sizeof(NewAlt))
       Alt = TERRAIN_INVALID;
     else {
       Alt = max(0,NewAlt);
@@ -231,10 +240,10 @@ short RasterMapCache::LookupTerrainCache(const long &SeekPos) {
   return (Alt);
 }
 
-
-///////// Specialised open/close routines ///////////////////
-
-bool RasterMapCache::Open(char* zfilename) {
+// Specialised open/close routines
+bool
+RasterMapCache::Open(const char *zfilename)
+{
   Poco::ScopedRWLock protect(lock, true);
   terrain_valid = false;
   if (strlen(zfilename)<=0) {
@@ -271,13 +280,6 @@ bool RasterMapCache::Open(char* zfilename) {
   return terrain_valid;
 }
 
-///////////////// Close routines /////////////////////////////////////
-
-void RasterMapCache::Close(void) {
-  Poco::ScopedRWLock protect(lock, true);
-  _Close();
-}
-
 void RasterMapCache::_Close(void) {
   terrain_valid = false;
   if(fpTerrain) {
@@ -288,4 +290,17 @@ void RasterMapCache::_Close(void) {
   }
 }
 
+RasterMapCache *
+RasterMapCache::LoadFile(const char *path)
+{
+  RasterMapCache *map = new RasterMapCache();
+  if (map == NULL)
+    return NULL;
 
+  if (!map->Open(path)) {
+    delete map;
+    return NULL;
+  }
+
+  return map;
+}

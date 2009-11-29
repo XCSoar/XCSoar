@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -47,10 +48,12 @@ Copyright_License {
 #include "Units.hpp"
 #include <math.h>
 #include "Logger.h"
-#include "Interface.hpp"
 #include "Components.hpp"
 #include "WayPointList.hpp"
 #include "Protection.hpp"
+#include "SettingsComputer.hpp"
+#include "NMEA/Info.h"
+
 #include <stdio.h>
 #include <assert.h>
 
@@ -172,16 +175,18 @@ void Task::ResetTaskWaypoint(int j) {
 }
 
 
-void Task::FlyDirectTo(const int index,
-                       const SETTINGS_COMPUTER &settings_computer) {
-
+void
+Task::FlyDirectTo(const int index,
+                  const SETTINGS_COMPUTER &settings_computer,
+                  const NMEA_INFO &nmea_info)
+{
   // if (a Task is declared to the Logger) leave function
   if (!logger.CheckDeclaration())
     return;
 
   if (TaskAborted) {
     // in case we GOTO while already aborted
-    ResumeAbortTask(settings_computer, -1);
+    ResumeAbortTask(settings_computer, nmea_info, -1);
   }
 
   if (!TaskIsTemporary()) {
@@ -204,7 +209,8 @@ void Task::FlyDirectTo(const int index,
   for (int i=1; i<=MAXTASKPOINTS; i++) {
     task_points[i].Index = -1;
   }
-  RefreshTask(settings_computer);
+
+  RefreshTask(settings_computer, nmea_info);
 }
 
 /**
@@ -212,8 +218,11 @@ void Task::FlyDirectTo(const int index,
  * @param index Index of the first waypoint to be swaped
  * @param settings_computer SettingsComputer object
  */
-void Task::SwapWaypoint(const int index,
-                        const SETTINGS_COMPUTER &settings_computer) {
+void
+Task::SwapWaypoint(const int index,
+                   const SETTINGS_COMPUTER &settings_computer,
+                   const NMEA_INFO &nmea_info)
+{
   if (!logger.CheckDeclaration())
     return;
 
@@ -231,15 +240,19 @@ void Task::SwapWaypoint(const int index,
     task_points[index] = task_points[index+1];
     task_points[index+1] = tmpPoint;
   }
-  RefreshTask(settings_computer);
+
+  RefreshTask(settings_computer, nmea_info);
 }
 
 // Inserts a waypoint into the task, in the
 // position of the ActiveWaypoint.  If append=true, insert at end of the
 // task.
-void Task::InsertWaypoint(const int index,
-                          const SETTINGS_COMPUTER &settings_computer,
-                          bool append) {
+void
+Task::InsertWaypoint(const int index,
+                     const SETTINGS_COMPUTER &settings_computer,
+                     const NMEA_INFO &nmea_info,
+                     bool append)
+{
   if (!logger.CheckDeclaration())
     return;
 
@@ -251,7 +264,7 @@ void Task::InsertWaypoint(const int index,
     ActiveTaskPoint = 0;
     ResetTaskWaypoint(ActiveTaskPoint);
     task_points[ActiveTaskPoint].Index = index;
-    RefreshTask(settings_computer);
+    RefreshTask(settings_computer, nmea_info);
     return;
   }
 
@@ -284,18 +297,21 @@ void Task::InsertWaypoint(const int index,
     task_points[indexInsert].Index = index;
   }
 
-  RefreshTask(settings_computer);
+  RefreshTask(settings_computer, nmea_info);
 }
 
 // Create a default task to home at startup if no task is present
-void Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
+void
+Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer,
+                  const NMEA_INFO &nmea_info)
+{
   if (!ValidTaskPoint(0)) {
     if (settings_computer.HomeWaypoint != -1) {
       TaskModified = true;
       TargetModified = true;
       task_points[0].Index = settings_computer.HomeWaypoint;
       ActiveTaskPoint = 0;
-      RefreshTask(settings_computer);
+      RefreshTask(settings_computer, nmea_info);
     }
   }
 }
@@ -306,8 +322,11 @@ void Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer) {
 //
 // If you call this function, you MUST deal with
 // correctly setting ActiveTaskPoint yourself!
-void Task::RemoveTaskPoint(int index,
-                           const SETTINGS_COMPUTER &settings_computer) {
+void
+Task::RemoveTaskPoint(int index,
+                      const SETTINGS_COMPUTER &settings_computer,
+                      const NMEA_INFO &nmea_info)
+{
   if (!logger.CheckDeclaration())
     return;
 
@@ -336,14 +355,17 @@ void Task::RemoveTaskPoint(int index,
     ActiveTaskPoint--;
   }
 
-  RefreshTask(settings_computer);
+  RefreshTask(settings_computer, nmea_info);
 }
 
 // Index specifies a waypoint in the WP list
 // It won't necessarily be a waypoint that's
 // in the task
-void Task::RemoveWaypoint(const int index,
-                          const SETTINGS_COMPUTER &settings_computer) {
+void
+Task::RemoveWaypoint(const int index,
+                     const SETTINGS_COMPUTER &settings_computer,
+                     const NMEA_INFO &nmea_info)
+{
   int i;
 
   if (!logger.CheckDeclaration())
@@ -374,7 +396,7 @@ void Task::RemoveWaypoint(const int index,
 
   if (i < MAXTASKPOINTS) {
     // Found WP, so remove it
-    RemoveTaskPoint(i, settings_computer);
+    RemoveTaskPoint(i, settings_computer, nmea_info);
 
     if (task_points[ActiveTaskPoint].Index == -1) {
       // We've just removed the last task point and it was
@@ -394,7 +416,7 @@ void Task::RemoveWaypoint(const int index,
 
     if (i >= 0) {
       // Found WP, so remove it
-      RemoveTaskPoint(i, settings_computer);
+      RemoveTaskPoint(i, settings_computer, nmea_info);
       if (ActiveTaskPoint) {
         ActiveTaskPoint--;
       }
@@ -407,7 +429,7 @@ void Task::RemoveWaypoint(const int index,
         MB_YESNO|MB_ICONQUESTION);
 
       if (ret == IDYES) {
-        RemoveTaskPoint(ActiveTaskPoint, settings_computer);
+        RemoveTaskPoint(ActiveTaskPoint, settings_computer, nmea_info);
         if (task_points[ActiveTaskPoint].Index == -1) {
           // Active WayPoint was last in the list so is currently
           // invalid.
@@ -418,11 +440,14 @@ void Task::RemoveWaypoint(const int index,
       }
     }
   }
-  RefreshTask(settings_computer);
+  RefreshTask(settings_computer, nmea_info);
 }
 
-void Task::ReplaceWaypoint(const int index,
-                           const SETTINGS_COMPUTER &settings_computer) {
+void
+Task::ReplaceWaypoint(const int index,
+                      const SETTINGS_COMPUTER &settings_computer,
+                      const NMEA_INFO &nmea_info)
+{
   if (!logger.CheckDeclaration())
     return;
 
@@ -440,13 +465,15 @@ void Task::ReplaceWaypoint(const int index,
     ResetTaskWaypoint(ActiveTaskPoint);
     task_points[ActiveTaskPoint].Index = index;
   }
-  RefreshTask(settings_computer);
+  RefreshTask(settings_computer, nmea_info);
 }
 
-void Task::RefreshTask(const SETTINGS_COMPUTER &settings_computer)
+void
+Task::RefreshTask(const SETTINGS_COMPUTER &settings_computer,
+                  const NMEA_INFO &nmea_info)
 {
   RefreshTask_Visitor(settings_computer);
-  CalculateAATTaskSectors(XCSoarInterface::Basic());
+  CalculateAATTaskSectors(nmea_info);
 }
 
 const GEOPOINT&
@@ -523,7 +550,8 @@ Task::setTaskIndices(const int wpindex[MAXTASKPOINTS])
 }
 
 void
-Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
+Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer,
+                        const NMEA_INFO &nmea_info)
 {
   if (ActiveTaskPoint>0) return;
   if (!settings.EnableMultipleStartPoints) return;
@@ -547,7 +575,7 @@ Task::RotateStartPoints(const SETTINGS_COMPUTER &settings_computer)
     task_points[0].Index = task_start_points[found].Index;
   }
 
-  RefreshTask(settings_computer);
+  RefreshTask(settings_computer, nmea_info);
 }
 
 double Task::AdjustAATTargets(double desired)
@@ -904,6 +932,7 @@ void Task::BackupTask(void) {
 
 void
 Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
+                      const NMEA_INFO &nmea_info,
                       const int set)
 {
   int i;
@@ -951,7 +980,7 @@ Task::ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
       ActiveTaskPoint = active_waypoint_saved;
       settings.AATEnabled = aat_enabled_saved;
 
-      RefreshTask(settings_computer);
+      RefreshTask(settings_computer, nmea_info);
     }
   }
 
@@ -1089,7 +1118,8 @@ Task::advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer)
 
 
 void
-Task::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
+Task::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer,
+                       const NMEA_INFO &nmea_info)
 {
   if(ActiveTaskPoint >0) {
     ActiveTaskPoint --;
@@ -1101,7 +1131,7 @@ Task::retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer)
     */
   } else {
     if (ActiveTaskPoint==0) {
-      RotateStartPoints(settings_computer);
+      RotateStartPoints(settings_computer, nmea_info);
       // restarted task..
       //	TODO bug: not required? Calculated().TaskStartTime = 0;
       SelectedWaypoint = getWaypointIndex();

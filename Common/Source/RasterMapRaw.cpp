@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -40,10 +41,15 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "UtilsSystem.hpp"
 
+RasterMapRaw::~RasterMapRaw()
+{
+  _Close();
+}
 
-void RasterMapRaw::SetFieldRounding(const double xr,
-                                    const double yr,
-                                    RasterRounding &rounding)
+void
+RasterMapRaw::SetFieldRounding(const double xr,
+                               const double yr,
+                               RasterRounding &rounding) const
 {
   RasterMap::SetFieldRounding(xr, yr, rounding);
   if (!isMapLoaded()) {
@@ -95,11 +101,11 @@ short RasterMapRaw::_GetFieldAtXY(unsigned int lx,
   }
 }
 
+// Specialised open/close routines
 
-///////// Specialised open/close routines ///////////////////
-
-
-bool RasterMapRaw::Open(char* zfilename) {
+bool
+RasterMapRaw::Open(const char *zfilename)
+{
   Poco::ScopedRWLock protect(lock, true);
 
   ZZIP_FILE *fpTerrain;
@@ -157,12 +163,6 @@ bool RasterMapRaw::Open(char* zfilename) {
   return terrain_valid;
 }
 
-
-void RasterMapRaw::Close(void) {
-  Poco::ScopedRWLock protect(lock, true);
-  _Close();
-}
-
 void RasterMapRaw::_Close(void) {
   terrain_valid = false;
   if (TerrainMem) {
@@ -170,3 +170,17 @@ void RasterMapRaw::_Close(void) {
   }
 }
 
+RasterMapRaw *
+RasterMapRaw::LoadFile(const char *path)
+{
+  RasterMapRaw *map = new RasterMapRaw();
+  if (map == NULL)
+    return NULL;
+
+  if (!map->Open(path)) {
+    delete map;
+    return NULL;
+  }
+
+  return map;
+}

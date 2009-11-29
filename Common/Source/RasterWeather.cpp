@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,19 +37,18 @@ Copyright_License {
 */
 
 #include "RasterWeather.h"
-#include "LogFile.hpp"
-#include "Dialogs.h"
 #include "Language.hpp"
+#include "Math/FastMath.h"
 #include "Units.hpp"
 #include "Math/FastMath.h"
-#include "Math/Earth.hpp"
-#include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
-#include <assert.h>
 #include "wcecompat/ts_string.h"
 #include "RasterMapJPG2000.hpp"
-#include "Interface.hpp"
+
+#include <assert.h>
+#include <tchar.h>
+#include <stdio.h>
 
 int RasterWeather::IndexToTime(int x) {
   if (x % 2 == 0) {
@@ -110,16 +110,8 @@ void RasterWeather::RASP_filename(char* rasp_filename,
 bool RasterWeather::LoadItem(int item, const TCHAR* name) {
   char rasp_filename[MAX_PATH];
   RASP_filename(rasp_filename, name);
-  weather_map[item] = new RasterMapJPG2000();
-  weather_map[item]->Open(rasp_filename);
-  if (!weather_map[item]->isMapLoaded()) {
-    weather_map[item]->Close();
-    delete weather_map[item];
-    weather_map[item]= 0;
-    return false;
-  } else {
-    return true;
-  }
+  weather_map[item] = RasterMapJPG2000::LoadFile(rasp_filename);
+  return weather_map[item] != NULL;
 }
 
 
@@ -141,7 +133,9 @@ void RasterWeather::ScanAll(const GEOPOINT &location) {
 }
 
 
-void RasterWeather::Reload(const GEOPOINT &location) {
+void
+RasterWeather::Reload(const GEOPOINT &location, int day_time)
+{
   static unsigned last_weather_time;
   bool found = false;
   bool now = false;
@@ -153,7 +147,7 @@ void RasterWeather::Reload(const GEOPOINT &location) {
     Poco::ScopedRWLock protect(lock, true);
     if (_weather_time== 0) {
       // "Now" time, so find time in half hours
-      unsigned dsecs = (int)TimeLocal((long)XCSoarInterface::Basic().Time);
+      unsigned dsecs = (int)TimeLocal(day_time);
       unsigned half_hours = (dsecs/1800) % 48;
       _weather_time = max(_weather_time, half_hours);
       now = true;
@@ -217,7 +211,6 @@ void RasterWeather::_Close() {
   int i;
   for (i=0; i<MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
-      weather_map[i]->Close();
       delete weather_map[i];
       weather_map[i]=0;
     }

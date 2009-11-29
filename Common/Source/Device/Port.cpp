@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -35,15 +36,14 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#include "Protection.hpp"
-#include "Interface.hpp"
 #include "Device/Port.h"
+#include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Device/device.h"
 #include "Message.h"
+
 #include <windows.h>
 #include <tchar.h>
 
@@ -66,11 +66,11 @@ static void ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *
     Message::AddMessage(tmp);
 }
 
-ComPort::ComPort(struct DeviceDescriptor_t *d)
+ComPort::ComPort(struct DeviceDescriptor *d)
 {
   hReadThread = NULL;
   CloseThread = 0;
-  fRxThreadTerminated = TRUE;
+  fRxThreadTerminated = true;
   dwMask = 0;
   hPort = INVALID_HANDLE_VALUE;
   BuildingString[0] = 0;
@@ -78,7 +78,8 @@ ComPort::ComPort(struct DeviceDescriptor_t *d)
   dev = d;
 }
 
-BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
+bool
+ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 {
   DWORD dwError;
   DCB PortDCB;
@@ -98,16 +99,16 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
                       NULL);        // Handle to port with attribute
                                     // to copy
 
-  // If it fails to open the port, return FALSE.
+  // If it fails to open the port, return false.
   if (hPort == INVALID_HANDLE_VALUE) {
     dwError = GetLastError();
 
     // Could not open the port.
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
-    ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL, TEXT("%s %s"),
-              gettext(TEXT("Unable to open port")), sPortName);
-    return FALSE;
+    ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL, _T("%s %s"),
+              gettext(_T("Unable to open port")), sPortName);
+    return false;
   }
 
   PortDCB.DCBlength = sizeof(DCB);
@@ -117,23 +118,23 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 
   // Change the DCB structure settings.
   PortDCB.BaudRate = dwPortSpeed;       // Current baud
-  PortDCB.fBinary = TRUE;               // Binary mode; no EOF check
-  PortDCB.fParity = TRUE;               // Enable parity checking
-  PortDCB.fOutxCtsFlow = FALSE;         // No CTS output flow control
-  PortDCB.fOutxDsrFlow = FALSE;         // No DSR output flow control
+  PortDCB.fBinary = true;               // Binary mode; no EOF check
+  PortDCB.fParity = true;               // Enable parity checking
+  PortDCB.fOutxCtsFlow = false;         // No CTS output flow control
+  PortDCB.fOutxDsrFlow = false;         // No DSR output flow control
   PortDCB.fDtrControl = DTR_CONTROL_ENABLE;
                                         // DTR flow control type
-  PortDCB.fDsrSensitivity = FALSE;      // DSR sensitivity
-  PortDCB.fTXContinueOnXoff = TRUE;     // XOFF continues Tx
-  PortDCB.fOutX = FALSE;                // No XON/XOFF out flow control
-  PortDCB.fInX = FALSE;                 // No XON/XOFF in flow control
-  PortDCB.fErrorChar = FALSE;           // Disable error replacement
-  PortDCB.fNull = FALSE;                // Disable null removal
+  PortDCB.fDsrSensitivity = false;      // DSR sensitivity
+  PortDCB.fTXContinueOnXoff = true;     // XOFF continues Tx
+  PortDCB.fOutX = false;                // No XON/XOFF out flow control
+  PortDCB.fInX = false;                 // No XON/XOFF in flow control
+  PortDCB.fErrorChar = false;           // Disable error replacement
+  PortDCB.fNull = false;                // Disable null removal
   PortDCB.fRtsControl = RTS_CONTROL_ENABLE;
                                         // RTS flow control
 
-  PortDCB.fAbortOnError = TRUE;         // JMW abort reads/writes on
-                                        // error, was FALSE
+  PortDCB.fAbortOnError = true;         // JMW abort reads/writes on
+                                        // error, was false
 
   PortDCB.ByteSize = 8;                 // Number of bits/byte, 4-8
   PortDCB.Parity = NOPARITY;            // 0-4=no,odd,even,mark,space
@@ -152,10 +153,10 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 #endif
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
-    ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"),
-              gettext(TEXT("Unable to Change Settings on Port")), sPortName);
+    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
+              gettext(_T("Unable to Change Settings on Port")), sPortName);
     dwError = GetLastError();
-    return FALSE;
+    return false;
   }
 
   //  SetRxTimeout(10); // JMW20070515 wait a maximum of 10ms
@@ -175,10 +176,10 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 #ifdef WINDOWSPC
     Sleep(2000); // needed for windows bug
 #endif
-    return FALSE;
+    return false;
   }
 
-  return TRUE;
+  return true;
 }
 
 
@@ -241,10 +242,10 @@ DWORD ComPort::ReadThread()
   SetCommMask(hPort, dwMask);
 #endif
 
-  fRxThreadTerminated = FALSE;
+  fRxThreadTerminated = false;
 
   while ((hPort != INVALID_HANDLE_VALUE) &&
-	 (!closeTriggerEvent.test()) && (!CloseThread))
+         (!closeTriggerEvent.test()) && (!CloseThread))
   {
 
 #ifdef WINDOWSPC
@@ -271,11 +272,11 @@ DWORD ComPort::ReadThread()
         dwBytesTransferred = 0;
               // Read the data from the serial port.
         if (ReadFile(hPort, inbuf, 1024, &dwBytesTransferred,
-		     (OVERLAPPED *)NULL)) {
-	  if (globalRunningEvent.test())  // ignore everything until started
-	    for (unsigned int j = 0; j < dwBytesTransferred; j++) {
-	      ProcessChar(inbuf[j]);
-	    }
+                     (OVERLAPPED *)NULL)) {
+          if (globalRunningEvent.test())  // ignore everything until started
+            for (unsigned int j = 0; j < dwBytesTransferred; j++) {
+              ProcessChar(inbuf[j]);
+            }
         } else {
           dwBytesTransferred = 0;
         }
@@ -284,8 +285,8 @@ DWORD ComPort::ReadThread()
                    // fill... prevents ReadFile from causing the
                    // thread to take up too much CPU
 
-	if (CloseThread)
-	  dwBytesTransferred = 0;
+        if (CloseThread)
+          dwBytesTransferred = 0;
       } while (dwBytesTransferred != 0);
     }
 
@@ -298,7 +299,7 @@ DWORD ComPort::ReadThread()
 
   Flush();
 
-  fRxThreadTerminated = TRUE;
+  fRxThreadTerminated = true;
 
   return 0;
 }
@@ -309,7 +310,8 @@ DWORD ComPort::ReadThread()
   PortClose()
 
 ***********************************************************************/
-BOOL ComPort::Close()
+bool
+ComPort::Close()
 {
   DWORD dwError;
 
@@ -322,17 +324,17 @@ BOOL ComPort::Close()
     // Close the communication port.
     if (!CloseHandle(hPort)) {
       dwError = GetLastError();
-      return FALSE;
+      return false;
     } else {
 #ifdef WINDOWSPC
       Sleep(2000); // needed for windows bug
 #endif
       hPort = INVALID_HANDLE_VALUE;
-      return TRUE;
+      return true;
     }
   }
 
-  return FALSE;
+  return false;
 }
 
 
@@ -362,15 +364,16 @@ void ComPort::WriteString(const TCHAR *Text)
 
 
 // Stop Rx Thread
-// return: TRUE on success, FALSE on error
-BOOL ComPort::StopRxThread()
+// return: true on success, false on error
+bool
+ComPort::StopRxThread()
 {
   if (hPort == INVALID_HANDLE_VALUE)
-    return FALSE;
+    return false;
   if (fRxThreadTerminated)
-    return TRUE;
+    return true;
 
-  CloseThread = TRUE;
+  CloseThread = true;
 
   DWORD tm = GetTickCount()+20000l;
 #ifdef WINDOWSPC
@@ -395,8 +398,8 @@ BOOL ComPort::StopRxThread()
   }
   if (!fRxThreadTerminated) {
 //#if COMMDEBUG > 0
-    ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"), sPortName,
-		 gettext(TEXT("RX Thread not Terminated!")));
+    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"), sPortName,
+                          gettext(_T("RX Thread not Terminated!")));
 //#endif
   } else {
     CloseHandle(hReadThread);
@@ -407,15 +410,16 @@ BOOL ComPort::StopRxThread()
 }
 
 // Restart Rx Thread
-// return: TRUE on success, FALSE on error
-BOOL ComPort::StartRxThread(void)
+// return: true on success, false on error
+bool
+ComPort::StartRxThread(void)
 {
   DWORD dwThreadID, dwError;
 
   if (hPort == INVALID_HANDLE_VALUE)
-    return FALSE;
+    return false;
 
-  CloseThread = FALSE;
+  CloseThread = false;
 
   // Create a read thread for reading data from the communication port.
   if ((hReadThread = CreateThread
@@ -426,13 +430,13 @@ BOOL ComPort::StartRxThread(void)
     //???? JMW Why close it here?    CloseHandle(hReadThread);
   } else {
     // Could not create the read thread.
-    ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"),
-              gettext(TEXT("Unable to Start RX Thread on Port")), sPortName);
+    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
+              gettext(_T("Unable to Start RX Thread on Port")), sPortName);
     dwError = GetLastError();
-    return FALSE;
+    return false;
   }
 
-  return TRUE;
+  return true;
 }
 
                                         // Get a single Byte
@@ -496,8 +500,8 @@ int ComPort::SetRxTimeout(int Timeout)
 #ifdef WINDOWSPC
     Sleep(2000); // needed for windows bug
 #endif
-    ComPort_StatusMessage(MB_OK, TEXT("Error"), TEXT("%s %s"),
-                 gettext(TEXT("Unable to Set Serial Port Timers")), sPortName);
+    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
+                 gettext(_T("Unable to Set Serial Port Timers")), sPortName);
     dwError = GetLastError();
     return -1;
   }
@@ -556,7 +560,7 @@ void ComPort::ProcessChar(char c) {
     if(c=='\n') {
       BuildingString[bi] = '\0';
       mutexBlackboard.Lock();
-      devParseNMEA(dev, BuildingString, &device_blackboard.SetBasic());
+      dev->ParseNMEA(BuildingString, &device_blackboard.SetBasic());
       mutexBlackboard.Unlock();
     } else {
       return;

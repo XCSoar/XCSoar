@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -40,6 +41,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "AirspaceWarning.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
@@ -47,6 +49,7 @@ Copyright_License {
 #include "Math/Units.h"
 #include "MainWindow.hpp"
 #include "MapWindow.h"
+#include "Components.hpp"
 
 #include <assert.h>
 
@@ -59,9 +62,9 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
 
   TCHAR *Name = NULL;
   if (index_circle>=0) {
-    Name = AirspaceCircle[index_circle].Name;
+    Name = airspace_database.AirspaceCircle[index_circle].Name;
   } else if (index_area>=0) {
-    Name = AirspaceArea[index_area].Name;
+    Name = airspace_database.AirspaceArea[index_area].Name;
   }
   if (Name) {
     UINT answer;
@@ -70,13 +73,13 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
 			 MB_YESNOCANCEL|MB_ICONQUESTION);
     if (answer == IDYES) {
       if (index_circle>=0) {
-	AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+        AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                             &XCSoarInterface::Calculated(),
                             &XCSoarInterface::SettingsComputer(),
                             XCSoarInterface::MapProjection(),
                             false, true, index_circle, true);
       } else if (index_area>=0) {
-	AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+        AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                             &XCSoarInterface::Calculated(),
                             &XCSoarInterface::SettingsComputer(),
                             XCSoarInterface::MapProjection(),
@@ -86,13 +89,13 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
     } else if (answer == IDNO) {
       // this will cancel a daily ack
       if (index_circle>=0) {
-	AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+        AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                             &XCSoarInterface::Calculated(),
                             &XCSoarInterface::SettingsComputer(),
                             XCSoarInterface::MapProjection(),
                             true, true, index_circle, true);
       } else if (index_area>=0) {
-	AirspaceWarnListAdd(&XCSoarInterface::Basic(),
+        AirspaceWarnListAdd(airspace_database, &XCSoarInterface::Basic(),
                             &XCSoarInterface::Calculated(),
                             &XCSoarInterface::SettingsComputer(),
                             XCSoarInterface::MapProjection(),
@@ -133,31 +136,33 @@ static void SetValues(void) {
   double bearing;
 
   if (index_area >=0) {
+    AIRSPACE_AREA &area = airspace_database.AirspaceArea[index_area];
     MapWindow &map_window = XCSoarInterface::main_window.map;
 
-    atype = AirspaceArea[index_area].Type;
-    top = &AirspaceArea[index_area].Top;
-    base = &AirspaceArea[index_area].Base;
-    name = AirspaceArea[index_area].Name;
-    inside = InsideAirspaceArea(XCSoarInterface::Basic().Location,
-				index_area);
-    range = RangeAirspaceArea(XCSoarInterface::Basic().Location,
-                              index_area, &bearing,
-                              map_window);
+    atype = area.Type;
+    top = &area.Top;
+    base = &area.Base;
+    name = area.Name;
+    inside = airspace_database.InsideArea(XCSoarInterface::Basic().Location,
+                                          index_area);
+    range = airspace_database.RangeArea(XCSoarInterface::Basic().Location,
+                                        index_area, &bearing,
+                                        map_window);
   }
-  if (index_circle >=0) {
-    atype = AirspaceCircle[index_circle].Type;
-    top = &AirspaceCircle[index_circle].Top;
-    base = &AirspaceCircle[index_circle].Base;
-    name = AirspaceCircle[index_circle].Name;
-    inside = InsideAirspaceCircle(XCSoarInterface::Basic().Location,
-				  index_circle);
-    range =
-      RangeAirspaceCircle(XCSoarInterface::Basic().Location,
-			  index_circle);
 
-    DistanceBearing(XCSoarInterface::Basic().Location,
-		    AirspaceCircle[index_circle].Location,
+  if (index_circle >=0) {
+    AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[index_circle];
+
+    atype = circle.Type;
+    top = &circle.Top;
+    base = &circle.Base;
+    name = circle.Name;
+    inside = airspace_database.InsideCircle(XCSoarInterface::Basic().Location,
+                                            index_circle);
+    range = airspace_database.CircleDistance(XCSoarInterface::Basic().Location,
+                                             index_circle);
+
+    DistanceBearing(XCSoarInterface::Basic().Location, circle.Location,
 		    NULL, &bearing);
     if (inside) {
       bearing = AngleLimit360(bearing+180);

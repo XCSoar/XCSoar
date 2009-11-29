@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -43,9 +44,7 @@ Copyright_License {
 #include "TeamCodeCalculation.h"
 #include "UtilsFLARM.hpp"
 #include "Asset.hpp"
-#if defined(_SIM_) && !defined(NDEBUG)
 #include "Device/Parser.h"
-#endif
 #include "WayPoint.hpp"
 
 DeviceBlackboard device_blackboard;
@@ -90,14 +89,14 @@ DeviceBlackboard::Initialise()
   gps_info.Minute = pda_time.wMinute;
   gps_info.Second = pda_time.wSecond;
 
-#ifdef _SIM_
-  #ifdef _SIM_STARTUPSPEED
-  gps_info.Speed = _SIM_STARTUPSPEED;
-  #endif
-  #ifdef _SIM_STARTUPALTITUDE
-  gps_info.Altitude = _SIM_STARTUPALTITUDE;
-  #endif
-#endif
+  if (is_simulator()) {
+    #ifdef _SIM_STARTUPSPEED
+      gps_info.Speed = _SIM_STARTUPSPEED;
+    #endif
+    #ifdef _SIM_STARTUPALTITUDE
+      gps_info.Altitude = _SIM_STARTUPALTITUDE;
+    #endif
+  }
 }
 
 /**
@@ -202,30 +201,30 @@ DeviceBlackboard::RaiseConnection()
   SetBasic().Connected = 2;
 }
 
-#ifdef _SIM_
 void
 DeviceBlackboard::ProcessSimulation()
 {
-  ScopeLock protect(mutexBlackboard);
-  SetNAVWarning(false);
-  FindLatitudeLongitude(Basic().Location,
-			Basic().TrackBearing,
-			Basic().Speed*1.0,
-			&SetBasic().Location);
-  SetBasic().Time+= 1.0;
-  long tsec = (long)Basic().Time;
-  SetBasic().Hour = tsec/3600;
-  SetBasic().Minute = (tsec-Basic().Hour*3600)/60;
-  SetBasic().Second = (tsec-Basic().Hour*3600-Basic().Minute*60);
+  if (is_simulator()) {
+    ScopeLock protect(mutexBlackboard);
+    SetNAVWarning(false);
+    FindLatitudeLongitude(Basic().Location,
+        Basic().TrackBearing,
+        Basic().Speed*1.0,
+        &SetBasic().Location);
+    SetBasic().Time+= 1.0;
+    long tsec = (long)Basic().Time;
+    SetBasic().Hour = tsec/3600;
+    SetBasic().Minute = (tsec-Basic().Hour*3600)/60;
+    SetBasic().Second = (tsec-Basic().Hour*3600-Basic().Minute*60);
 
-#ifndef NDEBUG
-  // use this to test FLARM parsing/display
-#ifndef GNAV
-  NMEAParser::TestRoutine(&SetBasic());
-#endif
-#endif
+    #ifndef NDEBUG
+      // use this to test FLARM parsing/display
+      if (!is_altair()) {
+        NMEAParser::TestRoutine(&SetBasic());
+      }
+    #endif
+  }
 }
-#endif /* _SIM_ */
 
 /**
  * Sets the GPS speed and indicated airspeed to val
@@ -277,7 +276,7 @@ DeviceBlackboard::SetAltitude(double val)
 void
 DeviceBlackboard::ReadBlackboard(const DERIVED_INFO &derived_info)
 {
-  memcpy(&calculated_info,&derived_info,sizeof(DERIVED_INFO));
+  calculated_info = derived_info;
 }
 
 /**
@@ -290,7 +289,7 @@ void
 DeviceBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
 					      &settings)
 {
-  memcpy(&settings_computer,&settings,sizeof(SETTINGS_COMPUTER));
+  settings_computer = settings;
 }
 
 /**
@@ -303,7 +302,7 @@ void
 DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
 				  &settings)
 {
-  memcpy(&settings_map,&settings,sizeof(SETTINGS_MAP));
+  settings_map = settings;
 }
 
 /**

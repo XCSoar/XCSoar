@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -39,6 +40,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdlib.h>
+#include <math.h>
 
 WayPointList::WayPointList()
   :list(NULL), calc_list(NULL), count(0) {}
@@ -130,4 +132,37 @@ WayPointList::pop()
   assert(count > 0);
 
   free(list[--count].Details);
+}
+
+int
+WayPointList::find_by_name(const TCHAR *name) const
+{
+  for (unsigned i = 0; verify_index(i); ++i)
+    if (_tcscmp(get(i).Name, name) == 0)
+      return i;
+
+  return -1;
+}
+
+int
+WayPointList::find_by_location(const GEOPOINT &location) const
+{
+  for (unsigned i = 0; verify_index(i); ++i)
+    if (fabs(get(i).Location.Latitude - location.Latitude) < 1.0e-6 &&
+        fabs(get(i).Location.Longitude - location.Longitude) < 1.0e-6)
+      return i;
+
+  return -1;
+}
+
+int
+WayPointList::find_match(const WAYPOINT &way_point) const
+{
+  /* first scan, lookup by name */
+  int i = find_by_name(way_point.Name);
+  if (i < 0)
+    /* second scan, lookup by location */
+    i = find_by_location(way_point.Location);
+
+  return i;
 }

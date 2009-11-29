@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -73,7 +74,7 @@ extern double INVCOSINETABLE[4096];
 extern int ISINETABLE[4096];
 extern int ICOSTABLE[4096];
 
-#ifdef __MINGW32__
+#ifdef __GNUC__
 #define DEG_TO_INT(x) ((unsigned short)(int)((x)*(65536.0/360.0)))>>4
 #else
 #define DEG_TO_INT(x) ((unsigned short)((x)*(65536.0/360.0)))>>4

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -48,6 +49,7 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Components.hpp"
 #include "WayPointList.hpp"
+#include "Asset.hpp"
 
 InfoBoxFormatter::InfoBoxFormatter(const TCHAR *theformat) {
   _tcscpy(Format, theformat);
@@ -367,17 +369,17 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 65: // battery voltage
 #if !defined(WINDOWSPC) && !defined(HAVE_POSIX)
-#ifndef GNAV
-    Value = PDABatteryPercent;
-    Valid = true;
-#else
-    Value = Basic().SupplyBatteryVoltage;
-    if (Value>0.0) {
+    if (!is_altair()) {
+      Value = PDABatteryPercent;
       Valid = true;
     } else {
-      Valid = false;
+      Value = Basic().SupplyBatteryVoltage;
+      if (Value>0.0) {
+        Valid = true;
+      } else {
+        Valid = false;
+      }
     }
-#endif
 #else
     Value = 0.0;
     Valid = false;

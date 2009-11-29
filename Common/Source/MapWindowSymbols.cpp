@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -34,21 +35,20 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "MapWindow.h"
-#include "XCSoar.h"
-#include "Protection.hpp"
 #include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/UnitSymbol.hpp"
 #include "Math/Screen.hpp"
-#include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
+#include "Math/Constants.h"
 #include "Logger.h"
 #include "Language.hpp"
 #include "McReady.h"
-#include "SettingsTask.hpp"
-#include "SettingsUser.hpp"
-#include "SettingsComputer.hpp"
+#include "Task.h"
+#include "Appearance.hpp"
 #include "options.h" /* for IBLSCALE() */
 
 #include <stdlib.h>
@@ -251,7 +251,7 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
   if (Appearance.FlightModeIcon == apFlightModeIconDefault){
     Bitmap *bmp;
-    if (task.isTaskAborted()) {
+    if (task != NULL && task->isTaskAborted()) {
       bmp = &MapGfx.hAbort;
     } else if (DisplayMode == dmCircling) {
       bmp = &MapGfx.hClimb;
@@ -315,7 +315,7 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
     }
 
-    if (task.isTaskAborted())
+    if (task != NULL && task->isTaskAborted())
       canvas.select(MapGfx.hBrushFlyingModeAbort);
     else
       canvas.select(MapGfx.hbCompass);
@@ -409,10 +409,6 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
     TextInBox(canvas, sTmp, Arrow[6].x-kx, Arrow[6].y, TextInBoxMode, rc);
   }
 }
-
-
-/////////////////
-
 
 void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
 {
@@ -509,7 +505,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
   int Offset0;
   int i;
 
-  if (task.Valid()){
+  if (task != NULL && task->Valid()){
 
     const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
 
@@ -655,9 +651,6 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
         // was ((rc.bottom - rc.top )/2)-rc.top-
         //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
         int x = GlideBar[2].x+IBLSCALE(1);
-        const Bitmap *Bmp;
-        POINT  BmpPos;
-        POINT  BmpSize;
 
         _stprintf(Value, TEXT("%1.0f"),
                   Units::ToUserAltitude(Calculated().TaskAltitudeDifference));
@@ -678,12 +671,16 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
                     IBLSCALE(1),
                     Value);
 
-        if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(),
-                                 &Bmp, &BmpPos, &BmpSize, 0)){
-          draw_bitmap(canvas, *Bmp,
+        const UnitSymbol *unit_symbol =
+          GetUnitSymbol(Units::GetUserAltitudeUnit());
+        if (unit_symbol != NULL) {
+          POINT BmpPos = unit_symbol->get_origin(UnitSymbol::NORMAL);
+          SIZE size = unit_symbol->get_size();
+
+          draw_bitmap(canvas, *unit_symbol,
                       x + TextSize.cx + IBLSCALE(1), y,
                       BmpPos.x, BmpPos.y,
-                      BmpSize.x, BmpSize.y, false);
+                      size.cx, size.cy, false);
         }
       }
   }
@@ -757,7 +754,7 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
 
 void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
 {
-  if (!task.Valid()) {
+  if (task == NULL || !task->Valid()) {
     return;
   }
 

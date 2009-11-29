@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -37,13 +38,14 @@ Copyright_License {
 
 #include "Screen/Fonts.hpp"
 #include "LogFile.hpp"
-#include "UtilsProfile.hpp"
+#include "UtilsFont.hpp"
 #include "InfoBoxLayout.h"
 #include "ButtonLabel.hpp"
 #include "Registry.hpp"
 #include "Asset.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "SettingsUser.hpp"
+#include "Appearance.hpp"
 #include "options.h" /* for IBLSCALE() */
 
 // Display Gobals
@@ -609,8 +611,6 @@ void InitialiseFonts(Canvas &canvas, RECT rc)
   if (!IsNullLogFont(hardStatisticsLogFont))
     autoStatisticsLogFont = hardStatisticsLogFont;
 
-/////////////////////////////////////////////////////////
-
   InitializeOneFont (&InfoWindowFont,
                         szRegistryFontInfoWindowFont,
                         autoInfoWindowLogFont,
@@ -667,7 +667,9 @@ void DeleteFonts() {
 }
 
 
-void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
+void
+SetFontInfo(Canvas &canvas, struct FontHeightInfo *FontHeightInfo)
+{
 #ifdef ENABLE_SDL
   TTF_Font *font = canvas.get_font();
 
@@ -713,11 +715,12 @@ void SetFontInfo(Canvas &canvas, FontHeightInfo_t *FontHeightInfo){
     }
   }
 
-#ifdef GNAV
-  // JMW: don't know why we need this in GNAV, but we do.
-  if (FontHeightInfo->CapitalHeight<y)
-    FontHeightInfo->CapitalHeight = bottom - top + 1;
-#endif
+  if (is_altair()) {
+    // JMW: don't know why we need this in GNAV, but we do.
+    if (FontHeightInfo->CapitalHeight < y)
+      FontHeightInfo->CapitalHeight = bottom - top + 1;
+  }
+
   // This works for PPC
   if (FontHeightInfo->CapitalHeight <= 0)
     FontHeightInfo->CapitalHeight = tm.tmAscent - 1 -(tm.tmHeight/10);

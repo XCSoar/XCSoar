@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -71,6 +72,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Message.h"
 #include "Marks.h"
 #include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "InfoBoxLayout.h"
 #include "InfoBoxManager.h"
 #include "Device/device.h"
@@ -79,14 +81,14 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Atmosphere.h"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Waypointparser.h"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
 #include "Audio/Sound.hpp"
 #include "McReady.h"
 #include "Interface.hpp"
-#include "Calculations.h" // TODO danger! ClearAirspaceWarnings
+#include "AirspaceWarning.h"
 #include "Components.hpp"
 #include "Language.hpp"
 #include "Task.h"
@@ -500,10 +502,10 @@ void InputEvents::eventTerrainTopology(const TCHAR *misc) {
 // Do clear warnings IF NONE Toggle Terrain/Topology
 void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
 	(void)misc;
-  if (ClearAirspaceWarnings(true,false)) {
+  if (ClearAirspaceWarnings(airspace_database, true, false))
     // airspace was active, enter was used to acknowledge
     return;
-  }
+
   // Else toggle TerrainTopology - and show the results
   sub_TerrainTopology(-1);
   sub_TerrainTopology(0);
@@ -517,11 +519,11 @@ void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
 void InputEvents::eventClearAirspaceWarnings(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("day")) == 0)
     // JMW clear airspace warnings for entire day (for selected airspace)
-    ClearAirspaceWarnings(true,true);
+    ClearAirspaceWarnings(airspace_database, true, true);
   else {
 
     // default, clear airspace for short acknowledgement time
-    if (ClearAirspaceWarnings(true,false)) {
+    if (ClearAirspaceWarnings(airspace_database, true, false)) {
 
     }
   }
@@ -759,7 +761,7 @@ void InputEvents::eventGotoLookup(const TCHAR *misc) {
   ScopePopupBlock block(main_window.popup);
   int res = dlgWayPointSelect(Basic().Location);
   if (res != -1){
-    task.FlyDirectTo(res, SettingsComputer());
+    task.FlyDirectTo(res, SettingsComputer(), Basic());
   };
 }
 
@@ -1034,9 +1036,9 @@ void InputEvents::eventAdjustWaypoint(const TCHAR *misc) {
 // show: displays a status message showing the task abort status
 void InputEvents::eventAbortTask(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("abort")) == 0)
-    task.ResumeAbortTask(SettingsComputer(), 1);
+    task.ResumeAbortTask(SettingsComputer(), Basic(), 1);
   else if (_tcscmp(misc, TEXT("resume")) == 0)
-    task.ResumeAbortTask(SettingsComputer(), -1);
+    task.ResumeAbortTask(SettingsComputer(), Basic(), -1);
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (task.isTaskAborted())
       Message::AddMessage(TEXT("Task Aborted"));
@@ -1046,7 +1048,7 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
       Message::AddMessage(TEXT("Task Resume"));
     }
   } else {
-    task.ResumeAbortTask(SettingsComputer(), 0);
+    task.ResumeAbortTask(SettingsComputer(), Basic(), 0);
   }
 }
 
@@ -1224,8 +1226,9 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   }
 
   StartHourglassCursor();
-  FindNearestAirspace(Basic().Location,
-                      SettingsComputer(),
+  FindNearestAirspace(airspace_database,
+                      Basic().Location, Basic().GetAnyAltitude(),
+                      Calculated().TerrainAlt, SettingsComputer(),
                       MapProjection(),
                       &nearestdistance, &nearestbearing,
 		      &foundcircle, &foundarea);
@@ -1259,7 +1262,7 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
     */
   }
 
-  return; /// JMW testing only
+  return; // JMW testing only
 
   if (nearestdistance<0) {
     inside = true;
@@ -1269,8 +1272,9 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   TCHAR DistanceText[MAX_PATH];
   Units::FormatUserDistance(nearestdistance, DistanceText, 10);
 
-  if (inside && (Calculated().NavAltitude <= AirspaceArea[i].Top.Altitude)
-      && (Calculated().NavAltitude >= AirspaceArea[i].Base.Altitude)) {
+  if (inside &&
+      Calculated().NavAltitude <= airspace_database.AirspaceArea[i].Top.Altitude &&
+      Calculated().NavAltitude >= airspace_database.AirspaceArea[i].Base.Altitude) {
 
     _stprintf(text,
               TEXT("Inside airspace: %s\r\n%s\r\nExit: %s\r\nBearing %d")
@@ -1328,7 +1332,7 @@ void InputEvents::eventTaskLoad(const TCHAR *misc) {
   TCHAR buffer[MAX_PATH];
   if (_tcslen(misc)>0) {
     LocalPath(buffer,misc);
-    task.LoadNewTask(buffer, SettingsComputer());
+    task.LoadNewTask(buffer, SettingsComputer(), Basic());
   }
 }
 
@@ -1460,7 +1464,7 @@ void InputEvents::eventDLLExecute(const TCHAR *misc) {
   // Load library, find function, execute, unload library
   hinstLib = _loadDLL(dll_name);
   if (hinstLib != NULL) {
-#if !(defined(__MINGW32__) && defined(WINDOWSPC))
+#if !(defined(__GNUC__) && defined(WINDOWSPC))
     lpfnDLLProc = (DLLFUNC_INPUTEVENT)GetProcAddress(hinstLib, func_name);
 #endif
     if (lpfnDLLProc != NULL) {
@@ -1501,7 +1505,7 @@ _loadDLL(TCHAR *name)
 
       // First time setup... (should check version numbers etc...)
       DLLFUNC_SETHINST lpfnDLLProc = NULL;
-#if !(defined(__MINGW32__) && defined(WINDOWSPC))
+#if !(defined(__GNUC__) && defined(WINDOWSPC))
       lpfnDLLProc = (DLLFUNC_SETHINST)
 	GetProcAddress(DLLCache[DLLCache_Count - 1].hinstance,
 		       TEXT("XCSAPI_SetHInst"));
@@ -1723,7 +1727,7 @@ eventSounds			- Include Task and Modes sounds along with Vario
 
 
 
-////// helpers
+// helpers
 
 
 

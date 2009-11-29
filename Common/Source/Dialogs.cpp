@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -46,8 +47,9 @@ Copyright_License {
 #include "Waypointparser.h"
 #include "SettingsTask.hpp"
 #include "Airspace.h"
+#include "AirspaceDatabase.hpp"
 #include "Screen/ProgressWindow.hpp"
-
+#include "Task.h"
 #include "UtilsText.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
@@ -56,6 +58,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Registry.hpp"
 #include "Interface.hpp"
+#include "Asset.hpp"
 
 ProgressWindow *XCSoarInterface::progress_window = NULL;
 
@@ -72,9 +75,9 @@ void ActionInterface::StartHourglassCursor(void) {
 #else /* !ENABLE_SDL */
   HCURSOR newc = LoadCursor(NULL, IDC_WAIT);
   oldCursor = (HCURSOR)SetCursor(newc);
-#ifdef GNAV
-  SetCursorPos(160,120);
-#endif
+  if (is_altair()) {
+    SetCursorPos(160,120);
+  }
 #endif /* !ENABLE_SDL */
 }
 
@@ -86,9 +89,9 @@ void ActionInterface::StopHourglassCursor(void) {
   // XXX
 #else /* !ENABLE_SDL */
   SetCursor(oldCursor);
-#ifdef GNAV
-  SetCursorPos(640,480);
-#endif
+  if (is_altair()) {
+    SetCursorPos(640,480);
+  }
   oldCursor = NULL;
 #endif /* !ENABLE_SDL */
 }
@@ -97,8 +100,10 @@ void ActionInterface::StopHourglassCursor(void) {
  * Closes the ProgressWindow
  */
 void XCSoarInterface::CloseProgressDialog() {
-  if (progress_window != NULL)
+  if (progress_window != NULL) {
     delete progress_window;
+    progress_window = NULL;
+  }
 }
 
 /**
@@ -109,11 +114,13 @@ void XCSoarInterface::StepProgressDialog(void) {
     progress_window->step();
 }
 
-BOOL XCSoarInterface::SetProgressStepSize(int nSize) {
+bool
+XCSoarInterface::SetProgressStepSize(int nSize)
+{
   nSize = 5;
   if (nSize < 100 && progress_window != NULL)
     progress_window->set_step(nSize);
-  return(TRUE);
+  return true;
 }
 
 /**
@@ -191,33 +198,26 @@ PopupNearestWaypointDetails(const WayPointList &way_points,
   return false;
 }
 
-bool PopupInteriorAirspaceDetails(const GEOPOINT &location) {
-  unsigned int i;
+bool
+PopupInteriorAirspaceDetails(const AirspaceDatabase &airspace_database,
+                             const GEOPOINT &location) {
   bool found=false;
-  bool inside;
 
-  if (AirspaceCircle) {
-    for (i=0; i<NumberOfAirspaceCircles; i++) {
-      inside = false;
-      if (AirspaceCircle[i].Visible) {
-        inside = InsideAirspaceCircle(location, i);
-      }
-      if (inside) {
-	dlgAirspaceDetails(i, -1);
-        found = true;
-      }
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
+    const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
+
+    if (circle.Visible && airspace_database.InsideCircle(location, i)) {
+      dlgAirspaceDetails(i, -1);
+      found = true;
     }
   }
-  if (AirspaceArea) {
-    for (i=0; i<NumberOfAirspaceAreas; i++) {
-      inside = false;
-      if (AirspaceArea[i].Visible) {
-        inside = InsideAirspaceArea(location, i);
-      }
-      if (inside) {
-	dlgAirspaceDetails(-1, i);
-        found = true;
-      }
+
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
+    const AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
+
+    if (area.Visible && airspace_database.InsideArea(location, i)) {
+      dlgAirspaceDetails(-1, i);
+      found = true;
     }
   }
 

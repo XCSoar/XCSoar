@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -47,8 +48,7 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "MapWindowBlackboard.hpp"
 #include "PeriodClock.hpp"
-#include "DrawThread.hpp"
-#include "Task.h"
+#include "TaskImpl.hpp"
 
 typedef struct _THERMAL_SOURCE_VIEW
 {
@@ -63,8 +63,17 @@ struct ZoomClimb_t {
   bool last_targetpan;
 };
 
-class GaugeCDI;
+class WayPointList;
+class TaskSafe;
+class AirspaceDatabase;
+class TopologyStore;
+class RasterTerrain;
+class RasterWeather;
 class TerrainRenderer;
+class Marks;
+class SnailTrail;
+class OLCOptimizer;
+class GaugeCDI;
 
 class MapWindow
 : public MaskedPaintWindow,
@@ -74,8 +83,22 @@ class MapWindow
 {
   PeriodClock mouse_down_clock;
 
-  GaugeCDI *cdi;
+  WayPointList *way_points;
+  TaskSafe *task;
+  const AirspaceDatabase *airspace_database;
+
+  TopologyStore *topology;
+  RasterTerrain *terrain;
+  RasterWeather *weather;
   TerrainRenderer *terrain_renderer;
+
+  Marks *marks;
+
+  SnailTrail *snail_trail;
+
+  OLCOptimizer *olc;
+
+  GaugeCDI *cdi;
 
  public:
   MapWindow();
@@ -94,6 +117,34 @@ class MapWindow
   void set(ContainerWindow &parent,
            const RECT _MapRectSmall, const RECT _MapRectBig);
 
+  void set_way_points(WayPointList *_way_points) {
+    way_points = _way_points;
+  }
+
+  void set_task(TaskSafe *_task) {
+    task = _task;
+  }
+
+  void set_airspaces(AirspaceDatabase *_airspace_database) {
+    airspace_database = _airspace_database;
+  }
+
+  void set_topology(TopologyStore *_topology);
+  void set_terrain(RasterTerrain *_terrain);
+  void set_weather(RasterWeather *_weather);
+
+  void set_marks(Marks *_marks) {
+    marks = _marks;
+  }
+
+  void set_snail_trail(SnailTrail *_snail_trail) {
+    snail_trail = _snail_trail;
+  }
+
+  void set_olc(OLCOptimizer *_olc) {
+    olc = _olc;
+  }
+
   // used by dlgTarget
   bool TargetDragged(double *longitude, double *latitude);
 
@@ -103,10 +154,16 @@ class MapWindow
     SetRect(&MapRect, 0, 0, rc.right - rc.left, rc.bottom - rc.top);
   }
 
-  void ApplyScreenSize();
+  void ReadBlackboard(const NMEA_INFO &nmea_info,
+                      const DERIVED_INFO &derived_info,
+                      const SETTINGS_COMPUTER &settings_computer,
+                      const SETTINGS_MAP &settings_map);
 
-  // input events or reused code
-  void ExchangeBlackboard();
+  void UpdateProjection();
+
+  const MapWindowProjection &MapProjection() const {
+    return *this;
+  };
 
  private:
 
@@ -117,10 +174,7 @@ class MapWindow
   // state
   BOOL     Initialised;
 
-  void     ReadBlackboard(const NMEA_INFO &nmea_info,
-			  const DERIVED_INFO &derived_info);
-  void     SendBlackboard(const NMEA_INFO &nmea_info,
-			  const DERIVED_INFO &derived_info);
+  void ApplyScreenSize();
 
   // display management
   void          RefreshMap();
@@ -174,9 +228,10 @@ class MapWindow
   void DrawWaypoints(Canvas &canvas);
   void DrawFlightMode(Canvas &canvas, const RECT rc);
   void DrawGPSStatus(Canvas &canvas, const RECT rc);
-  double DrawTrail(Canvas &canvas);
+  double DrawTrail(Canvas &canvas, const SnailTrail &snail_trail);
   void DrawTeammate(Canvas &canvas);
-  void DrawTrailFromTask(Canvas &canvas, const double TrailFirstTime);
+  void DrawTrailFromTask(Canvas &canvas, const OLCOptimizer &olc,
+                         const double TrailFirstTime);
   void DrawOffTrackIndicator(Canvas &canvas);
   void DrawProjectedTrack(Canvas &canvas);
   void DrawTask(Canvas &canvas, RECT rc);

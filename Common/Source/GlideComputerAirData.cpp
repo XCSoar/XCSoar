@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -37,19 +38,19 @@ Copyright_License {
 */
 
 #include "GlideComputerAirData.hpp"
+#include "AirspaceDatabase.hpp"
 #include "McReady.h"
 #include "WindZigZag.h"
 #include "windanalyser.h"
-#include <math.h>
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
-#include "Units.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
+#include "Math/Constants.h"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
 #include "Calibration.hpp"
@@ -79,8 +80,6 @@ using std::max;
 
 void
 DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
-
-////
 
 #define MinTurnRate  4
 #define CruiseClimbSwitch 15
@@ -598,7 +597,7 @@ void GlideComputerAirData::Vario()
   }
 
   if (!Basic().VarioAvailable || Basic().Replay) {
-    /// TODO: why not TE?!
+    // TODO: why not TE?!
     SetCalculated().Vario = Calculated().GPSVario;
   } else {
     // get value from instrument
@@ -925,11 +924,18 @@ GlideComputerAirData::PredictNextPosition()
 
 bool GlobalClearAirspaceWarnings = false;
 
+static bool
+InsideAltitudeRange(const AirspaceMetadata &airspace, double alt, double agl)
+{
+  return ((airspace.Base.Base != abAGL && alt >= airspace.Base.Altitude) ||
+          (airspace.Base.Base == abAGL && agl >= airspace.Base.AGL)) &&
+    ((airspace.Top.Base != abAGL && alt < airspace.Top.Altitude) ||
+     (airspace.Top.Base == abAGL && agl < airspace.Top.AGL));
+}
+
 void
 GlideComputerAirData::AirspaceWarning()
 {
-  unsigned int i;
-
   static bool position_is_predicted = false;
 
   if (GlobalClearAirspaceWarnings == true) {
@@ -962,57 +968,33 @@ GlideComputerAirData::AirspaceWarning()
   // JMW TODO enhancement: FindAirspaceCircle etc should sort results, return
   // the most critical or closest.
 
-  if (AirspaceCircle) {
-    for (i=0; i<NumberOfAirspaceCircles; i++) {
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
+    const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
 
-      if ((((AirspaceCircle[i].Base.Base != abAGL)
-	    && (alt >= AirspaceCircle[i].Base.Altitude))
-           || ((AirspaceCircle[i].Base.Base == abAGL)
-	       && (agl >= AirspaceCircle[i].Base.AGL)))
-          && (((AirspaceCircle[i].Top.Base != abAGL)
-	       && (alt < AirspaceCircle[i].Top.Altitude))
-           || ((AirspaceCircle[i].Top.Base == abAGL)
-	       && (agl < AirspaceCircle[i].Top.AGL)))) {
-
-        if ((SettingsComputer().iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
-	    InsideAirspaceCircle(loc, i)) {
-
-          AirspaceWarnListAdd(&Basic(), &Calculated(),
-                              &SettingsComputer(),
-                              MapProjection(),
-                              position_is_predicted, 1, i, false);
-        }
-      }
-    }
+    if (InsideAltitudeRange(circle, alt, agl) &&
+        SettingsComputer().iAirspaceMode[circle.Type] >= 2 &&
+        airspace_database.InsideCircle(loc, i))
+      AirspaceWarnListAdd(airspace_database, &Basic(), &Calculated(),
+                          &SettingsComputer(),
+                          MapProjection(),
+                          position_is_predicted, 1, i, false);
   }
 
   // repeat process for areas
 
-  if (AirspaceArea) {
-    for (i=0; i<NumberOfAirspaceAreas; i++) {
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
+    const AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
 
-      if ((((AirspaceArea[i].Base.Base != abAGL)
-	    && (alt >= AirspaceArea[i].Base.Altitude))
-           || ((AirspaceArea[i].Base.Base == abAGL)
-	       && (agl >= AirspaceArea[i].Base.AGL)))
-          && (((AirspaceArea[i].Top.Base != abAGL)
-	       && (alt < AirspaceArea[i].Top.Altitude))
-           || ((AirspaceArea[i].Top.Base == abAGL)
-	       && (agl < AirspaceArea[i].Top.AGL)))) {
-
-        if ((SettingsComputer().iAirspaceMode[AirspaceArea[i].Type] >= 2)
-            && InsideAirspaceArea(loc, i)){
-
-          AirspaceWarnListAdd(&Basic(), &Calculated(),
-                              &SettingsComputer(),
-                              map_projection,
-                              position_is_predicted, 0, i, false);
-        }
-      }
-    }
+    if (InsideAltitudeRange(area, alt, agl) &&
+        SettingsComputer().iAirspaceMode[area.Type] >= 2 &&
+        airspace_database.InsideArea(loc, i))
+      AirspaceWarnListAdd(airspace_database, &Basic(), &Calculated(),
+                          &SettingsComputer(),
+                          map_projection,
+                          position_is_predicted, 0, i, false);
   }
 
-  AirspaceWarnListProcess(&Basic(), &Calculated(),
+  AirspaceWarnListProcess(airspace_database, &Basic(), &Calculated(),
                           &SettingsComputer(),
                           map_projection);
 }
@@ -1054,8 +1036,9 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
 			    mymaxrange*20,
 			    &loc);
     }
-    SetCalculated().GlideFootPrint[i].x = loc.Longitude;
-    SetCalculated().GlideFootPrint[i].y = loc.Latitude;
+
+    SetCalculated().GlideFootPrint[i].Longitude = loc.Longitude;
+    SetCalculated().GlideFootPrint[i].Latitude = loc.Latitude;
   }
   SetCalculated().Experimental = Calculated().TerrainBase;
 }
@@ -1160,6 +1143,7 @@ GlideComputerAirData::ProcessThermalLocator()
     thermallocator.Reset();
   }
 
+/* JMW TODO
   devPutThermal(devA(), active, 
                 Calculated().ThermalEstimate_Location.Longitude,
                 Calculated().ThermalEstimate_Location.Latitude,
@@ -1170,6 +1154,7 @@ GlideComputerAirData::ProcessThermalLocator()
                 Calculated().ThermalEstimate_Location.Latitude,
                 Calculated().ThermalEstimate_W,
                 Calculated().ThermalEstimate_R);
+*/
 }
 
 /**
@@ -1552,7 +1537,7 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
     double fixaltitude = Calculated->TerrainAlt;
 
     QNH = FindQNH(Basic->BaroAltitude, fixaltitude);
-    AirspaceQnhChangeNotify(QNH);
+    airspace_database.SetQNH(QNH);
   }
 }
 

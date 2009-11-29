@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -43,17 +44,21 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Waypointparser.h"
 #include "AirfieldDetails.h"
-#include "Airspace.h"
+#include "AirspaceGlue.hpp"
 #include "TopologyStore.h"
 #include "McReady.h"
 #include "Dialogs.h"
 #include "Device/device.h"
 #include "Message.h"
-#include "Polar/Historical.hpp"
+#include "Polar/Loader.hpp"
 #include "TopologyStore.h"
 #include "Components.hpp"
 #include "Interface.hpp"
+#include "Language.hpp"
+#include "LogFile.hpp"
+#include "Task.h"
 #include "Asset.hpp"
+#include "DrawThread.hpp"
 
 bool COMPORTCHANGED = false;
 bool MAPFILECHANGED = false;
@@ -120,6 +125,9 @@ void SettingsLeave() {
   if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED) || (AIRFIELDFILECHANGED)) {
     task.ClearTask();
 
+    XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
+    XCSoarInterface::SetProgressStepSize(2);
+
     // re-load terrain
     terrain.CloseTerrain();
     terrain.OpenTerrain();
@@ -136,7 +144,8 @@ void SettingsLeave() {
 
     terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
 
-    task.RefreshTask(XCSoarInterface::SetSettingsComputer());
+    task.RefreshTask(XCSoarInterface::SetSettingsComputer(),
+                     XCSoarInterface::Basic());
   }
 
   if (TOPOLOGYFILECHANGED) {
@@ -145,13 +154,13 @@ void SettingsLeave() {
   }
 
   if(AIRSPACEFILECHANGED) {
-    CloseAirspace();
-    ReadAirspace();
-    SortAirspace();
+    CloseAirspace(airspace_database);
+    ReadAirspace(airspace_database, &terrain);
+    SortAirspace(airspace_database);
   }
 
   if (POLARFILECHANGED) {
-    CalculateNewPolarCoef();
+    LoadPolarById(POLARID, polar);
     GlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
   }
 

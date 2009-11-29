@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,30 +37,26 @@ Copyright_License {
 */
 
 #include "Polar/Historical.hpp"
-#include "Polar/WinPilot.hpp"
-#include "Polar/BuiltIn.hpp"
-#include "LogFile.hpp"
-#include "Dialogs/Message.hpp"
-#include "Language.hpp"
-#include "McReady.h"
+#include "Polar/Polar.hpp"
+
 #include <assert.h>
 
 typedef double PolarCoefficients_t[3];
 typedef double WeightCoefficients_t[3];
 
-const TCHAR *PolarLabels[] = {TEXT("Vintage - Ka6"),
-			      TEXT("Club - ASW19"),
-			      TEXT("Standard - LS8"),
-			      TEXT("15M - ASW27"),
-			      TEXT("18M - LS6C"),
-			      TEXT("Open - ASW22"),
-			      TEXT("WinPilot File")};
+const TCHAR *PolarLabels[] = {
+  _T("Vintage - Ka6"),
+  _T("Club - ASW19"),
+  _T("Standard - LS8"),
+  _T("15M - ASW27"),
+  _T("18M - LS6C"),
+  _T("Open - ASW22"),
+  _T("WinPilot File"),
+};
 
-void CalculateNewPolarCoef(void)
+bool
+LoadHistoricalPolar(unsigned id, Polar &polar)
 {
-
-  StartupStore(TEXT("Calculate New Polar Coef\n"));
-
   static PolarCoefficients_t Polars[7] =
     {
       {-0.0538770500225782443497, 0.1323114348, -0.1273364037098239098543},
@@ -99,35 +96,15 @@ void CalculateNewPolarCoef(void)
 
   assert(sizeof(Polars)/sizeof(Polars[0]) == sizeof(Weights)/sizeof(Weights[0]));
 
-  if (POLARID < sizeof(Polars)/sizeof(Polars[0])){
-    for(i=0;i<3;i++){
-      POLAR[i] = Polars[POLARID][i];
-      WEIGHTS[i] = Weights[POLARID][i];
-    }
-    GlidePolar::WingArea = WingAreas[POLARID];
-  }
-  if (POLARID==POLARUSEWINPILOTFILE) {
-    if (ReadWinPilotPolar())
-    // polar data gets from winpilot file
-      return;
-  } else if (POLARID>POLARUSEWINPILOTFILE){
-    if (ReadWinPilotPolarInternal(POLARID-7))
-      // polar data get from build in table
-      return;
-  } else if (POLARID<POLARUSEWINPILOTFILE){
-    // polar data get from historical table
-    return;
+  assert(id < sizeof(Polars) / sizeof(Polars[0]));
+
+  for (i = 0; i < 3; i++) {
+    polar.POLAR[i] = Polars[id][i];
+    polar.WEIGHTS[i] = Weights[id][i];
   }
 
-  // ups
-  // error reading winpilot file
+  polar.WingArea = WingAreas[id];
 
-  POLARID = 2;              // do it again with default polar (LS8)
-
-  CalculateNewPolarCoef();
-  MessageBoxX(gettext(TEXT("Error loading Polar file!\r\nUse LS8 Polar.")),
-              gettext(TEXT("Warning")),
-              MB_OK|MB_ICONERROR);
-
+  return true;
 }
 

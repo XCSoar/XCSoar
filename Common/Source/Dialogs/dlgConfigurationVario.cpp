@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -691,13 +692,13 @@ static void OnSchemeZanderClicked(WindowControl * Sender){
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 	(void)lParam; (void)Sender;
   switch(wParam & 0xffff){
-    // JMW NO! This disables editing! ///   case VK_LEFT:
+    // JMW NO! This disables editing! //   case VK_LEFT:
     case '6':
       ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
       NextPage(-1);
       //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
     return(0);
-    // JMW NO! This disables editing!  ///  case VK_RIGHT:
+    // JMW NO! This disables editing!  //  case VK_RIGHT:
     case '7':
       ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
       NextPage(+1);
@@ -1065,11 +1066,9 @@ bool dlgConfigurationVarioShowModal(void){
   assert(wConfig18!=NULL);
   assert(wConfig19!=NULL);
 
-  //// populate enums
+  // populate enums
 
   FillEnums();
-
-  /////////
 
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Reading vario settings...")));
   // Need step size finer than default 10
@@ -1078,8 +1077,6 @@ bool dlgConfigurationVarioShowModal(void){
   UpdateParameters(true);
 
   XCSoarInterface::CloseProgressDialog();
-
-  /////////
 
   page = 0;
 

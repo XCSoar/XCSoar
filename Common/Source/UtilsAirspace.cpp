@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -34,7 +35,10 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "UtilsAirspace.hpp"
+#include "AirspaceDatabase.hpp"
+#include "SettingsAirspace.hpp"
 #include "LogFile.hpp"
 #include "Dialogs.h"
 #include "Language.hpp"
@@ -44,41 +48,36 @@ Copyright_License {
 #include <assert.h>
 #include "Units.hpp"
 
+static void
+ConvertFlightLevels(AIRSPACE_ALT &altitude)
+{
+    if (altitude.FL != 0) {
+      altitude.Altitude = altitude.FL * 100 + (QNH - 1013) * 30;
+      altitude.Altitude = altitude.Altitude / TOFEET;
+    }
+}
+
+static void
+ConvertFlightLevels(AirspaceMetadata &airspace)
+{
+  ConvertFlightLevels(airspace.Base);
+  ConvertFlightLevels(airspace.Top);
+}
+
 /**
  * Converts all FlightLevel-based airspaces to MSL-based airspaces
  * (Attention: Inaccurate!)
  */
-void ConvertFlightLevels(void) {
-  unsigned i;
-
+void
+ConvertFlightLevels(AirspaceDatabase &airspace_database)
+{
   // TODO accuracy: ConvertFlightLevels is inaccurate!
 
-  for (i = 0; i < NumberOfAirspaceCircles; i++) {
-    if (AirspaceCircle[i].Base.FL != 0) {
-      AirspaceCircle[i].Base.Altitude = (AirspaceCircle[i].Base.FL * 100)
-          + ((QNH - 1013) * 30);
-      AirspaceCircle[i].Base.Altitude = AirspaceCircle[i].Base.Altitude
-          / TOFEET;
-    }
-    if (AirspaceCircle[i].Top.FL != 0) {
-      AirspaceCircle[i].Top.Altitude = (AirspaceCircle[i].Top.FL * 100) + ((QNH
-          - 1013) * 30);
-      AirspaceCircle[i].Top.Altitude = AirspaceCircle[i].Top.Altitude / TOFEET;
-    }
-  }
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i)
+    ConvertFlightLevels(airspace_database.AirspaceCircle[i]);
 
-  for (i = 0; i < NumberOfAirspaceAreas; i++) {
-    if (AirspaceArea[i].Base.FL != 0) {
-      AirspaceArea[i].Base.Altitude = (AirspaceArea[i].Base.FL * 100) + ((QNH
-          - 1013) * 30);
-      AirspaceArea[i].Base.Altitude = AirspaceArea[i].Base.Altitude / TOFEET;
-    }
-    if (AirspaceArea[i].Top.FL != 0) {
-      AirspaceArea[i].Top.Altitude = (AirspaceArea[i].Top.FL * 100) + ((QNH
-          - 1013) * 30);
-      AirspaceArea[i].Top.Altitude = AirspaceArea[i].Top.Altitude / TOFEET;
-    }
-  }
+  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i)
+    ConvertFlightLevels(airspace_database.AirspaceArea[i]);
 }
 
 /**

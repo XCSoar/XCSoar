@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -38,36 +39,37 @@ Copyright_License {
 // 20070413:sgi add NmeaOut support, allow nmea chaining an double port platforms
 
 #include "Device/device.h"
-#include "XCSoar.h"
+#include "Device/Driver.hpp"
+#include "Device/FLARM.hpp"
 #include "Thread/Mutex.hpp"
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
-#include "Interface.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "Math/FastMath.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
 #include "Registry.hpp"
-#include "Math/Pressure.h"
-#include "Device/devCAI302.h"
-#include "Device/devCaiGpsNav.h"
-#include "Device/devEW.h"
-#include "Device/devAltairPro.h"
-#include "Device/devGeneric.h"
-#include "Device/devVega.h"
-#include "Device/devNmeaOut.h"
-#include "Device/devPosiGraph.h"
-#include "Device/devBorgeltB50.h"
-#include "Device/devVolkslogger.h"
-#include "Device/devEWMicroRecorder.h"
-#include "Device/devLX.h"
-#include "Device/devZander.h"
-#include "Device/devFlymasterF1.h"
-#include "Device/devXCOM760.h"
-#include "Device/devCondor.h"
+#include "Device/Driver/CAI302.hpp"
+#include "Device/Driver/CaiGpsNav.hpp"
+#include "Device/Driver/EW.hpp"
+#include "Device/Driver/AltairPro.hpp"
+#include "Device/Driver/Generic.hpp"
+#include "Device/Driver/Vega.hpp"
+#include "Device/Driver/NmeaOut.hpp"
+#include "Device/Driver/PosiGraph.hpp"
+#include "Device/Driver/BorgeltB50.hpp"
+#include "Device/Driver/Volkslogger.hpp"
+#include "Device/Driver/EWMicroRecorder.hpp"
+#include "Device/Driver/LX.hpp"
+#include "Device/Driver/Zander.hpp"
+#include "Device/Driver/FlymasterF1.hpp"
+#include "Device/Driver/XCOM760.hpp"
+#include "Device/Driver/Condor.hpp"
+#include "NMEA/Checksum.h"
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
 #include "Asset.hpp"
+
+#include <assert.h>
 
 static Mutex mutexComm;
 
@@ -82,9 +84,20 @@ static Mutex mutexComm;
 //  of deadlock.  So, FlightData must never be locked after Comm.  Ever.
 //  Thankfully WinCE "critical sections" are recursive locks.
 
-#define debugIGNORERESPONCE 0
+static const TCHAR *const COMMPort[] = {
+  _T("COM1:"),
+  _T("COM2:"),
+  _T("COM3:"),
+  _T("COM4:"),
+  _T("COM5:"),
+  _T("COM6:"),
+  _T("COM7:"),
+  _T("COM8:"),
+  _T("COM9:"),
+  _T("COM10:"),
+  _T("COM0:"),
+};
 
-static  const TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:"),TEXT("COM0:")};
 static  const DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
 const struct DeviceRegister *const DeviceRegister[] = {
@@ -112,33 +125,28 @@ enum {
   DeviceRegisterCount = sizeof(DeviceRegister) / sizeof(DeviceRegister[0]) - 1
 };
 
-DeviceDescriptor_t DeviceList[NUMDEV];
+struct DeviceDescriptor DeviceList[NUMDEV];
 
-DeviceDescriptor_t *pDevPrimaryBaroSource=NULL;
-DeviceDescriptor_t *pDevSecondaryBaroSource=NULL;
-
-static BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl);
-
+static struct DeviceDescriptor *pDevPrimaryBaroSource;
+static struct DeviceDescriptor *pDevSecondaryBaroSource;
 
 // This function is used to determine whether a generic
 // baro source needs to be used if available
-BOOL devHasBaroSource(void) {
-  if (pDevPrimaryBaroSource || pDevSecondaryBaroSource) {
-    return TRUE;
-  } else {
-    return FALSE;
-  }
+bool
+devHasBaroSource(void)
+{
+  return pDevPrimaryBaroSource || pDevSecondaryBaroSource;
 }
 
-
-
-BOOL devGetBaroAltitude(double *Value){
+bool
+devGetBaroAltitude(double *Value)
+{
   // hack, just return GPS_INFO->BaroAltitude
   if (Value == NULL)
-    return(FALSE);
+    return false;
   if (device_blackboard.Basic().BaroAltitudeAvailable)
     *Value = device_blackboard.Basic().BaroAltitude;
-  return(TRUE);
+  return true;
 
   // ToDo
   // more than one baro source may be available
@@ -150,49 +158,14 @@ BOOL devGetBaroAltitude(double *Value){
 
 }
 
-BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token){
-
-  int i=0, ch;
-
-  if (!d->Com)
-    return FALSE;
-
-  while ((ch = d->Com->GetChar()) != EOF){
-
-    if (token[i] == ch)
-      i++;
-    else
-      i=0;
-
-    if ((unsigned)i == _tcslen(token))
-      return(TRUE);
-
-  }
-
-  #if debugIGNORERESPONCE > 0
-  return(TRUE);
-  #endif
-  return(FALSE);
-
-}
-
-BOOL devRegisterGetName(int Index, TCHAR *Name){
+bool
+devRegisterGetName(int Index, TCHAR *Name)
+{
   Name[0] = '\0';
   if (Index < 0 || Index >= DeviceRegisterCount)
-    return (FALSE);
+    return false;
   _tcscpy(Name, DeviceRegister[Index]->Name);
-  return(TRUE);
-}
-
-
-BOOL devIsFalseReturn(PDeviceDescriptor_t d){
-  (void)d;
-  return FALSE;
-}
-
-BOOL devIsTrueReturn(PDeviceDescriptor_t d){
-  (void)d;
-  return TRUE;
+  return true;
 }
 
 static const struct DeviceRegister *
@@ -208,19 +181,18 @@ devGetDriver(const TCHAR *DevName)
 }
 
 static bool
-devOpen(PDeviceDescriptor_t d, int Port);
+devOpenLog(struct DeviceDescriptor *d, const TCHAR *FileName);
 
 static bool
-devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName);
-
-static bool
-devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
-           DWORD speed, PDeviceDescriptor_t &nmeaout)
+devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
+           DWORD speed, struct DeviceDescriptor *&nmeaout)
 {
   TCHAR DeviceName[DEVNAMESIZE];
 
+  assert(dev != NULL);
+
   if (is_simulator())
-    return FALSE;
+    return false;
 
   ReadDeviceSettings(index, DeviceName);
 
@@ -230,7 +202,7 @@ devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
     ComPort *Com = new ComPort(dev);
 
     if (!Com->Initialize(port, speed))
-      return FALSE;
+      return false;
 
     memset(dev->Name, 0, sizeof(dev->Name));
     _tcsncpy(dev->Name, Driver->Name, DEVNAMESIZE);
@@ -239,7 +211,7 @@ devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
 
     dev->Com = Com;
 
-    devOpen(dev, index);
+    dev->Open(index);
 
     if (devIsBaroSource(dev)) {
       if (pDevPrimaryBaroSource == NULL) {
@@ -253,14 +225,14 @@ devInitOne(PDeviceDescriptor_t dev, int index, const TCHAR *port,
       nmeaout = dev;
     }
   }
-  return TRUE;
+  return true;
 }
 
-static BOOL
+static bool
 devInit(LPCTSTR CommandLine)
 {
   int i;
-  PDeviceDescriptor_t pDevNmeaOut = NULL;
+  struct DeviceDescriptor *pDevNmeaOut = NULL;
 
   for (i=0; i<NUMDEV; i++){
     DeviceList[i].Port = -1;
@@ -274,13 +246,14 @@ devInit(LPCTSTR CommandLine)
   pDevSecondaryBaroSource=NULL;
 
   DWORD PortIndex1, PortIndex2, SpeedIndex1, SpeedIndex2;
-#ifdef GNAV
-  PortIndex1 = 2; SpeedIndex1 = 5;
-  PortIndex2 = 0; SpeedIndex2 = 5;
-#else
-  PortIndex1 = 0; SpeedIndex1 = 2;
-  PortIndex2 = 0; SpeedIndex2 = 2;
-#endif
+  if (is_altair()) {
+    PortIndex1 = 2; SpeedIndex1 = 5;
+    PortIndex2 = 0; SpeedIndex2 = 5;
+  } else {
+    PortIndex1 = 0; SpeedIndex1 = 2;
+    PortIndex2 = 0; SpeedIndex2 = 2;
+  }
+
   ReadPort1Settings(&PortIndex1,&SpeedIndex1);
   ReadPort2Settings(&PortIndex2,&SpeedIndex2);
 
@@ -296,7 +269,7 @@ devInit(LPCTSTR CommandLine)
     TCHAR wcLogFileName[MAX_PATH];
     TCHAR sTmp[128];
 
-    pC = _tcsstr(CommandLine, TEXT("-logA="));
+    pC = _tcsstr(CommandLine, _T("-logA="));
     if (pC != NULL){
       pC += strlen("-logA=");
       if (*pC == '"'){
@@ -313,15 +286,15 @@ devInit(LPCTSTR CommandLine)
         wcLogFileName[pCe-pC] = '\0';
 
         if (devOpenLog(devA(), wcLogFileName)){
-          _stprintf(sTmp, TEXT("Device A logs to\r\n%s"), wcLogFileName);
+          _stprintf(sTmp, _T("Device A logs to\r\n%s"), wcLogFileName);
           MessageBoxX (sTmp,
-                      gettext(TEXT("Information")),
+                      gettext(_T("Information")),
                       MB_OK|MB_ICONINFORMATION);
         } else {
           _stprintf(sTmp,
-                    TEXT("Unable to open log\r\non device A\r\n%s"), wcLogFileName);
+                    _T("Unable to open log\r\non device A\r\n%s"), wcLogFileName);
           MessageBoxX (sTmp,
-                      gettext(TEXT("Error")),
+                      gettext(_T("Error")),
                       MB_OK|MB_ICONWARNING);
         }
 
@@ -329,7 +302,7 @@ devInit(LPCTSTR CommandLine)
 
     }
 
-    pC = _tcsstr(CommandLine, TEXT("-logB="));
+    pC = _tcsstr(CommandLine, _T("-logB="));
     if (pC != NULL){
       pC += strlen("-logA=");
       if (*pC == '"'){
@@ -346,15 +319,15 @@ devInit(LPCTSTR CommandLine)
         wcLogFileName[pCe-pC] = '\0';
 
         if (devOpenLog(devB(), wcLogFileName)){
-          _stprintf(sTmp, TEXT("Device B logs to\r\n%s"), wcLogFileName);
+          _stprintf(sTmp, _T("Device B logs to\r\n%s"), wcLogFileName);
           MessageBoxX (sTmp,
-                      gettext(TEXT("Information")),
+                      gettext(_T("Information")),
                       MB_OK|MB_ICONINFORMATION);
         } else {
-          _stprintf(sTmp, TEXT("Unable to open log\r\non device B\r\n%s"),
+          _stprintf(sTmp, _T("Unable to open log\r\non device B\r\n%s"),
                     wcLogFileName);
           MessageBoxX (sTmp,
-                      gettext(TEXT("Error")),
+                      gettext(_T("Error")),
                       MB_OK|MB_ICONWARNING);
         }
 
@@ -373,15 +346,16 @@ devInit(LPCTSTR CommandLine)
     }
   }
 
-  return(TRUE);
+  return true;
 }
 
-
-BOOL
-devParseNMEA(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
+bool
+DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
+  assert(String != NULL);
+  assert(GPS_INFO != NULL);
 
-  if ((d->fhLogFile != NULL) &&
+  if (fhLogFile != NULL &&
       (String != NULL) && (_tcslen(String) > 0)) {
     char  sTmp[500];  // temp multibyte buffer
     const TCHAR *pWC = String;
@@ -403,306 +377,303 @@ devParseNMEA(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
     *pC++ = '\n';
     *pC++ = '\0';
 
-    fputs(sTmp, d->fhLogFile);
-
+    fputs(sTmp, fhLogFile);
   }
 
 
-  if (d->pDevPipeTo && d->pDevPipeTo->Com) {
+  if (pDevPipeTo && pDevPipeTo->Com) {
     // stream pipe, pass nmea to other device (NmeaOut)
     // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
-    d->pDevPipeTo->Com->WriteString(String);
+    pDevPipeTo->Com->WriteString(String);
   }
 
-  if (d->Driver && d->Driver->ParseNMEA)
-    if ((d->Driver->ParseNMEA)(d, String, GPS_INFO)) {
-      GPS_INFO->Connected = 2;
-      return(TRUE);
-    }
+  if (device != NULL && device->ParseNMEA(String, GPS_INFO,
+                                          this == pDevPrimaryBaroSource)) {
+    GPS_INFO->Connected = 2;
+    return true;
+  }
 
   if(String[0]=='$') {  // Additional "if" to find GPS strings
-    if(NMEAParser::ParseNMEAString(d->Port, String, GPS_INFO)) {
+    if(NMEAParser::ParseNMEAString(Port, String, GPS_INFO)) {
       GPS_INFO->Connected = 2;
-      return(TRUE);
+      return true;
     }
   }
 
-  return(FALSE);
-
+  return false;
 }
 
-
-BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready)
+bool
+DeviceDescriptor::Open(int _port)
 {
-  BOOL result = TRUE;
+  Port = _port;
 
-  if (is_simulator())
-    return true;
+  if (Driver == NULL)
+    return false;
 
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutMacCready)
-    result = d->Driver->PutMacCready(d, MacCready);
-  mutexComm.Unlock();
+  assert(Driver->CreateOnComPort != NULL);
+
+  device = Driver->CreateOnComPort(Com);
+  if (!device->Open()) {
+    delete device;
+    device = NULL;
+    return false;
+  }
+
+  return true;
+}
+
+void
+DeviceDescriptor::Close()
+{
+  if (device != NULL) {
+    delete device;
+    device = NULL;
+  }
+
+  ComPort *OldCom = Com;
+  Com = NULL;
+
+  if (OldCom != NULL) {
+    OldCom->Close();
+    delete OldCom;
+  }
+}
+
+bool
+DeviceDescriptor::IsLogger() const
+{
+  return Driver != NULL &&
+    ((Driver->Flags & drfLogger) != 0 ||
+     (device != NULL && device->IsLogger()) ||
+     NMEAParser::PortIsFlarm(Port));
+}
+
+bool
+DeviceDescriptor::IsGPSSource() const
+{
+  return Driver != NULL &&
+    ((Driver->Flags & drfGPS) != 0 ||
+     (device != NULL && device->IsGPSSource()));
+}
+
+bool
+DeviceDescriptor::IsBaroSource() const
+{
+  return Driver != NULL &&
+    ((Driver->Flags & drfBaroAlt) != 0 ||
+     (device != NULL && device->IsBaroSource()));
+}
+
+bool
+DeviceDescriptor::PutMcCready(double mc_cready)
+{
+  return device != NULL
+    ? device->PutMcCready(mc_cready)
+    : true;
+}
+
+bool
+DeviceDescriptor::PutBugs(double bugs)
+{
+  return device != NULL
+    ? device->PutBugs(bugs)
+    : true;
+}
+
+bool
+DeviceDescriptor::PutBallast(double ballast)
+{
+  return device != NULL
+    ? device->PutBallast(ballast)
+    : true;
+}
+
+bool
+DeviceDescriptor::PutVolume(int volume)
+{
+  return device != NULL
+    ? device->PutVolume(volume)
+    : true;
+}
+
+bool
+DeviceDescriptor::PutActiveFrequency(double frequency)
+{
+  return device != NULL
+    ? device->PutActiveFrequency(frequency)
+    : true;
+}
+
+bool
+DeviceDescriptor::PutStandbyFrequency(double frequency)
+{
+  return device != NULL
+    ? device->PutStandbyFrequency(frequency)
+    : true;
+}
+
+bool
+DeviceDescriptor::PutQNH(double qnh)
+{
+  return device != NULL
+    ? device->PutQNH(qnh)
+    : true;
+}
+
+bool
+DeviceDescriptor::PutVoice(const TCHAR *sentence)
+{
+  return device != NULL
+    ? device->PutVoice(sentence)
+    : true;
+}
+
+void
+DeviceDescriptor::LinkTimeout()
+{
+  if (device != NULL)
+    device->LinkTimeout();
+}
+
+bool
+DeviceDescriptor::Declare(const struct Declaration *declaration)
+{
+  bool result = device != NULL &&
+    device->Declare(declaration);
+
+  if (NMEAParser::PortIsFlarm(Port))
+    result = FlarmDeclare(Com, declaration) || result;
 
   return result;
 }
 
-BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs)
+void
+DeviceDescriptor::OnSysTicker()
 {
-  BOOL result = TRUE;
+  if (device == NULL)
+    return;
 
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutBugs)
-    result = d->Driver->PutBugs(d, Bugs);
-  mutexComm.Unlock();
-
-  return result;
+  ticker = !ticker;
+  if (ticker)
+    // write settings to vario every second
+    device->OnSysTicker();
 }
 
-BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
-{
-  BOOL result = TRUE;
-
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutBallast)
-    result = d->Driver->PutBallast(d, Ballast);
-  mutexComm.Unlock();
-
-  return result;
-}
-
-// Only called from devInit() above which
-// is in turn called with mutexComm.Lock
-static bool
-devOpen(PDeviceDescriptor_t d, int Port)
-{
-  BOOL res = TRUE;
-
-  if (d && d->Driver && d->Driver->Open)
-    res = d->Driver->Open(d, Port);
-
-  if (res == TRUE)
-    d->Port = Port;
-
-  return res;
-}
-
-// Tear down methods should always succeed.
-// Called from devInit() above under LockComm
-// Also called when shutting down via devShutdown()
-static bool
-devClose(PDeviceDescriptor_t d)
-{
-  if (d != NULL) {
-    if (d->Driver && d->Driver->Close)
-      d->Driver->Close(d);
-
-    ComPort *Com = d->Com;
-    d->Com = NULL;
-
-    if (Com) {
-      Com->Close();
-      delete Com;
-    }
-  }
-
-  return TRUE;
-}
-
-BOOL devLinkTimeout(PDeviceDescriptor_t d)
-{
-  BOOL result = FALSE;
-
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d == NULL){
-    for (int i=0; i<NUMDEV; i++){
-      d = &DeviceList[i];
-      if (d->Driver && d->Driver->LinkTimeout != NULL)
-        (d->Driver->LinkTimeout)(d);
-    }
-    result = TRUE;
-  } else {
-    if (d->Driver && d->Driver->LinkTimeout != NULL)
-      result = d->Driver->LinkTimeout(d);
-  }
-  mutexComm.Unlock();
-
-  return FALSE;
-}
-
-
-BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence)
-{
-  BOOL result = FALSE;
-
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d == NULL){
-    for (int i=0; i<NUMDEV; i++){
-      d = &DeviceList[i];
-      if (d->Driver && d->Driver->PutVoice)
-        d->Driver->PutVoice(d, Sentence);
-    }
-    result = TRUE;
-  } else {
-    if (d->Driver && d->Driver->PutVoice)
-      result = d->Driver->PutVoice(d, Sentence);
-  }
-  mutexComm.Unlock();
-
-  return FALSE;
-}
-
-BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
-{
-  BOOL result = FALSE;
-
-  if (is_simulator())
-    return true;
-
-  mutexComm.Lock();
-  if (d) {
-    if ((d->Driver) && (d->Driver->Declare != NULL))
-      result = d->Driver->Declare(d, decl);
-
-    if (NMEAParser::PortIsFlarm(d->Port))
-      result |= FlarmDeclare(d, decl);
-  }
-  mutexComm.Unlock();
-
-  return result;
-}
-
-BOOL devIsLogger(PDeviceDescriptor_t d)
+bool
+devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
   bool result = false;
 
-  mutexComm.Lock();
-  if (d && d->Driver) {
-    if (d->Driver->IsLogger)
-      result = d->Driver->IsLogger(d);
-    else
-      result = d->Driver->Flags & drfLogger ? TRUE : FALSE;
-    if (!result)
-      result |= NMEAParser::PortIsFlarm(d->Port);
-  }
-  mutexComm.Unlock();
-
-  return result;
-}
-
-BOOL devIsGPSSource(PDeviceDescriptor_t d)
-{
-  BOOL result = FALSE;
-
-  mutexComm.Lock();
-  if (d && d->Driver) {
-    if (d->Driver->IsGPSSource)
-      result = d->Driver->IsGPSSource(d);
-    else
-      result = d->Driver->Flags & drfGPS ? TRUE : FALSE;
-  }
-  mutexComm.Unlock();
-
-  return result;
-}
-
-BOOL devIsBaroSource(PDeviceDescriptor_t d)
-{
-  BOOL result = FALSE;
-
-  mutexComm.Lock();
-  if (d && d->Driver) {
-    if (d->Driver->IsBaroSource)
-      result = d->Driver->IsBaroSource(d);
-    else
-      result = d->Driver->Flags & drfBaroAlt ? TRUE : FALSE;
-  }
-  mutexComm.Unlock();
-
-  return result;
-}
-
-BOOL devIsRadio(PDeviceDescriptor_t d)
-{
-  BOOL result = FALSE;
-
-  mutexComm.Lock();
-  if (d && d->Driver) {
-    result = d->Driver->Flags & drfRadio ? TRUE : FALSE;
-  }
-  mutexComm.Unlock();
-
-  return result;
-}
-
-
-BOOL devIsCondor(PDeviceDescriptor_t d)
-{
-  BOOL result = FALSE;
-
-  mutexComm.Lock();
-  if (d && d->Driver) {
-    result = d->Driver->Flags & drfCondor ? TRUE : FALSE;
-  }
-  mutexComm.Unlock();
-
-  return result;
-}
-
-static bool
-devOpenLog(PDeviceDescriptor_t d, const TCHAR *FileName)
-{
-  if (d != NULL){
-    d->fhLogFile = _tfopen(FileName, TEXT("a+b"));
-    return(d->fhLogFile != NULL);
-  } else
-    return(FALSE);
-}
-
-static bool
-devCloseLog(PDeviceDescriptor_t d)
-{
-  if (d != NULL && d->fhLogFile != NULL){
-    fclose(d->fhLogFile);
-    return(TRUE);
-  } else
-    return(FALSE);
-}
-
-BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH)
-{
-  BOOL result = FALSE;
+  assert(d != NULL);
 
   if (is_simulator())
     return true;
 
   mutexComm.Lock();
-  if (d == NULL){
-    for (int i=0; i<NUMDEV; i++){
-      d = &DeviceList[i];
-      if (d->Driver && d->Driver->PutQNH)
-        d->Driver->PutQNH(d, NewQNH);
-    }
-    result = TRUE;
-  } else {
-    if (d->Driver && d->Driver->PutQNH)
-      result = d->Driver->PutQNH(d, NewQNH);
+  if (d != NULL)
+    d->Declare(decl);
+  mutexComm.Unlock();
+
+  return result;
+}
+
+bool
+devIsLogger(const struct DeviceDescriptor *d)
+{
+  bool result = false;
+
+  assert(d != NULL);
+
+  mutexComm.Lock();
+  if (d != NULL)
+    result = d->IsLogger();
+  mutexComm.Unlock();
+
+  return result;
+}
+
+bool
+devIsGPSSource(const struct DeviceDescriptor *d)
+{
+  bool result = false;
+
+  assert(d != NULL);
+
+  mutexComm.Lock();
+  if (d != NULL)
+    result = d->IsGPSSource();
+  mutexComm.Unlock();
+
+  return result;
+}
+
+bool
+devIsBaroSource(const struct DeviceDescriptor *d)
+{
+  bool result = false;
+
+  assert(d != NULL);
+
+  mutexComm.Lock();
+  if (d != NULL)
+    result = d->IsBaroSource();
+  mutexComm.Unlock();
+
+  return result;
+}
+
+bool
+devIsRadio(const struct DeviceDescriptor *d)
+{
+  bool result = false;
+
+  assert(d != NULL);
+
+  mutexComm.Lock();
+  if (d && d->Driver) {
+    result = (d->Driver->Flags & drfRadio) != 0;
   }
   mutexComm.Unlock();
 
-  return FALSE;
+  return result;
+}
+
+bool
+devIsCondor(const struct DeviceDescriptor *d)
+{
+  bool result = false;
+
+  assert(d != NULL);
+
+  mutexComm.Lock();
+  if (d && d->Driver) {
+    result = (d->Driver->Flags & drfCondor) != 0;
+  }
+  mutexComm.Unlock();
+
+  return result;
+}
+
+static bool
+devOpenLog(struct DeviceDescriptor *d, const TCHAR *FileName)
+{
+  assert(d != NULL);
+
+  d->fhLogFile = _tfopen(FileName, _T("a+b"));
+  return d->fhLogFile != NULL;
+}
+
+static bool
+devCloseLog(struct DeviceDescriptor *d)
+{
+  assert(d != NULL);
+
+  if (d->fhLogFile != NULL){
+    fclose(d->fhLogFile);
+    return true;
+  } else
+    return false;
 }
 
 void devTick()
@@ -711,33 +682,22 @@ void devTick()
 
   mutexComm.Lock();
   for (i = 0; i < NUMDEV; i++) {
-    DeviceDescriptor_t *d = &DeviceList[i];
-    if (!d->Driver)
-      continue;
-
-    d->ticker = !d->ticker;
-
-    // write settings to vario every second
-    if (d->ticker && d->Driver->OnSysTicker)
-      d->Driver->OnSysTicker(d);
+    struct DeviceDescriptor *d = &DeviceList[i];
+    d->OnSysTicker();
   }
   mutexComm.Unlock();
 }
 
 static void devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
 {
-  BYTE chk;
-  int i, len = _tcslen(text);
-
-  for (chk = i = 0; i < len; i++)
-    chk ^= (BYTE)text[i];
-
-  _sntprintf(dst, sz, TEXT("$%s*%02X\r\n"), text, chk);
+  _sntprintf(dst, sz, _T("$%s*%02X\r\n"), text, NMEAChecksum(text));
 }
 
-void devWriteNMEAString(PDeviceDescriptor_t d, const TCHAR *text)
+void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *text)
 {
   TCHAR tmp[512];
+
+  assert(d != NULL);
 
   devFormatNMEAString(tmp, 512, text);
 
@@ -755,67 +715,62 @@ void VarioWriteNMEA(const TCHAR *text)
 
   mutexComm.Lock();
   for (int i = 0; i < NUMDEV; i++)
-    if (_tcscmp(DeviceList[i].Name, TEXT("Vega")) == 0)
+    if (_tcscmp(DeviceList[i].Name, _T("Vega")) == 0)
       if (DeviceList[i].Com)
         DeviceList[i].Com->WriteString(tmp);
   mutexComm.Unlock();
 }
 
-PDeviceDescriptor_t devVarioFindVega(void)
+struct DeviceDescriptor *devVarioFindVega(void)
 {
   for (int i = 0; i < NUMDEV; i++)
-    if (_tcscmp(DeviceList[i].Name, TEXT("Vega")) == 0)
+    if (_tcscmp(DeviceList[i].Name, _T("Vega")) == 0)
       return &DeviceList[i];
   return NULL;
 }
 
-
-BOOL devPutVolume(PDeviceDescriptor_t d, int Volume)
+void AllDevicesPutMcCready(double mc_cready)
 {
-  BOOL result = TRUE;
-
   if (is_simulator())
-    return true;
+    return;
 
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutVolume != NULL)
-    result = d->Driver->PutVolume(d, Volume);
-  mutexComm.Unlock();
+  ScopeLock protect(mutexComm);
 
-  return result;
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutMcCready(mc_cready);
 }
 
-BOOL devPutFreqActive(PDeviceDescriptor_t d, double Freq)
+void AllDevicesPutBugs(double bugs)
 {
-  BOOL result = TRUE;
-
   if (is_simulator())
-    return true;
+    return;
 
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutFreqActive != NULL)
-    result = d->Driver->PutFreqActive(d, Freq);
-  mutexComm.Unlock();
+  ScopeLock protect(mutexComm);
 
-  return result;
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutBugs(bugs);
 }
 
-BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
+void AllDevicesPutBallast(double ballast)
 {
-  BOOL result = TRUE;
-
   if (is_simulator())
-    return true;
+    return;
 
-  mutexComm.Lock();
-  if (d && d->Driver && d->Driver->PutFreqStandby != NULL)
-    result = d->Driver->PutFreqStandby(d, Freq);
-  mutexComm.Unlock();
+  ScopeLock protect(mutexComm);
 
-  return result;
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutBallast(ballast);
 }
 
+void AllDevicesPutVolume(int volume)
+{
+  if (is_simulator())
+    return;
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutVolume(volume);
+}
 
+/*
 BOOL devPutThermal(PDeviceDescriptor_t d, 
                    bool active, 
                    double longitude, double latitude, double W,
@@ -836,7 +791,6 @@ BOOL devPutThermal(PDeviceDescriptor_t d,
   return result;
 }
 
-
 static BOOL
 FlarmDeclareSetGet(PDeviceDescriptor_t d, TCHAR *Buffer) {
   //devWriteNMEAString(d, Buffer);
@@ -848,98 +802,67 @@ FlarmDeclareSetGet(PDeviceDescriptor_t d, TCHAR *Buffer) {
   if (d->Com)
     d->Com->WriteString(tmp);
 
-  Buffer[6]= _T('A');
-  if (!ExpectString(d, Buffer)){
-    return FALSE;
-  } else {
-    return TRUE;
-  }
+}
+*/
+
+void AllDevicesPutActiveFrequency(double frequency)
+{
+  if (is_simulator())
+    return;
+
+  ScopeLock protect(mutexComm);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutActiveFrequency(frequency);
 }
 
+void AllDevicesPutStandbyFrequency(double frequency)
+{
+  if (is_simulator())
+    return;
 
-BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
-  BOOL result = TRUE;
+  ScopeLock protect(mutexComm);
 
-  TCHAR Buffer[256];
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutStandbyFrequency(frequency);
+}
 
-  d->Com->StopRxThread();
-  d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+void AllDevicesPutQNH(double qnh)
+{
+  if (is_simulator())
+    return;
 
-  _stprintf(Buffer,TEXT("PFLAC,S,PILOT,%s"),decl->PilotName);
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+  ScopeLock protect(mutexComm);
 
-  _stprintf(Buffer,TEXT("PFLAC,S,GLIDERID,%s"),decl->AircraftRego);
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutQNH(qnh);
+}
 
-  _stprintf(Buffer,TEXT("PFLAC,S,GLIDERTYPE,%s"),decl->AircraftType);
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+void AllDevicesPutVoice(const TCHAR *sentence)
+{
+  if (is_simulator())
+    return;
 
-  _stprintf(Buffer,TEXT("PFLAC,S,NEWTASK,Task"));
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+  ScopeLock protect(mutexComm);
 
-  _stprintf(Buffer,TEXT("PFLAC,S,ADDWP,0000000N,00000000E,TAKEOFF"));
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].PutVoice(sentence);
+}
 
-  for (int i = 0; i < decl->num_waypoints; i++) {
-    int DegLat, DegLon;
-    double tmp, MinLat, MinLon;
-    char NoS, EoW;
+void AllDevicesLinkTimeout()
+{
+  if (is_simulator())
+    return;
 
-    tmp = decl->waypoint[i]->Location.Latitude;
-    NoS = 'N';
-    if(tmp < 0)
-      {
-	NoS = 'S';
-	tmp = -tmp;
-      }
-    DegLat = (int)tmp;
-    MinLat = (tmp - DegLat) * 60 * 1000;
+  ScopeLock protect(mutexComm);
 
-    tmp = decl->waypoint[i]->Location.Longitude;
-    EoW = 'E';
-    if(tmp < 0)
-      {
-	EoW = 'W';
-	tmp = -tmp;
-      }
-    DegLon = (int)tmp;
-    MinLon = (tmp - DegLon) * 60 * 1000;
-
-    _stprintf(Buffer,
-	      TEXT("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"),
-	      DegLat, MinLat, NoS, DegLon, MinLon, EoW,
-	      decl->waypoint[i]->Name);
-    if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
-  }
-
-  _stprintf(Buffer,TEXT("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
-  if (!FlarmDeclareSetGet(d,Buffer)) result = FALSE;
-
-  // PFLAC,S,KEY,VALUE
-  // Expect
-  // PFLAC,A,blah
-  // PFLAC,,COPIL:
-  // PFLAC,,COMPID:
-  // PFLAC,,COMPCLASS:
-
-  // PFLAC,,NEWTASK:
-  // PFLAC,,ADDWP:
-
-  // TODO bug: JMW, FLARM Declaration checks
-  // Note: FLARM must be power cycled to activate a declaration!
-  // Only works on IGC approved devices
-  // Total data size must not surpass 183 bytes
-  // probably will issue PFLAC,ERROR if a problem?
-
-  d->Com->SetRxTimeout(0);                       // clear timeout
-  d->Com->StartRxThread();                       // restart RX thread
-
-  return result;
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    DeviceList[i].LinkTimeout();
 }
 
 void devStartup(LPTSTR lpCmdLine)
 {
-  StartupStore(TEXT("Register serial devices\n"));
+  StartupStore(_T("Register serial devices\n"));
 
   devInit(lpCmdLine);
 }
@@ -949,16 +872,14 @@ void devShutdown()
   int i;
 
   // Stop COM devices
-  StartupStore(TEXT("Stop COM devices\n"));
+  StartupStore(_T("Stop COM devices\n"));
 
   for (i=0; i<NUMDEV; i++){
-    devClose(&DeviceList[i]);
+    DeviceList[i].Close();
     devCloseLog(&DeviceList[i]);
   }
 }
 
-
-////////////////////////////////////////////////////////////////////////
 void devRestart() {
   if (is_simulator())
     return;
@@ -973,14 +894,14 @@ void devRestart() {
   first = false;
 #endif
   */
-  StartupStore(TEXT("RestartCommPorts\n"));
+  StartupStore(_T("RestartCommPorts\n"));
 
   mutexComm.Lock();
 
   devShutdown();
   NMEAParser::Reset();
 
-  devInit(TEXT(""));
+  devInit(_T(""));
 
   mutexComm.Unlock();
 }

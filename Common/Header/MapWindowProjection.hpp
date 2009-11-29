@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -39,7 +40,6 @@ Copyright_License {
 
 #include "Math/FastMath.h"
 #include "Units.hpp"
-#include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "Screen/shapelib/mapprimitive.h"
 #include "Sizes.h"
@@ -48,6 +48,8 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
+struct SETTINGS_COMPUTER;
+struct WAYPOINT;
 class Canvas;
 
 class MapWindowProjection {
@@ -61,6 +63,8 @@ class MapWindowProjection {
 
   void    LonLat2Screen(const GEOPOINT &location,
                         POINT &sc) const;
+  void    LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
+                        unsigned n, unsigned skip) const;
   void    LonLat2Screen(const pointObj* const ptin, POINT *ptout,
                         const int n,
                         const int skip) const;
@@ -91,7 +95,7 @@ class MapWindowProjection {
   }
 
   // used by waypoint nearest routine
-  bool WaypointInScaleFilter(int i) const;
+  bool WaypointInScaleFilter(const WAYPOINT &way_point) const;
 
   // drawing functions
   void DrawGreatCircle(Canvas &canvas,
@@ -102,9 +106,8 @@ class MapWindowProjection {
   }
 
   // called on receipt of new data, to trigger projection/scale change functions
-  void ExchangeBlackboard(const NMEA_INFO &nmea_info,
-			  const DERIVED_INFO &derived_info,
-			  const SETTINGS_MAP &settings_map);
+  void ExchangeBlackboard(const DERIVED_INFO &derived_info,
+                          const SETTINGS_MAP &settings_map);
 
   DisplayMode_t GetDisplayMode() const {
     return DisplayMode;
@@ -189,9 +192,9 @@ public:
 
   void   ModifyMapScale(const SETTINGS_MAP &settings_map);
 
-  void   UpdateMapScale(const NMEA_INFO &nmea_info,
-			const DERIVED_INFO &derived_info,
-			const SETTINGS_MAP &settings_map);
+  void UpdateMapScale(const DERIVED_INFO &derived_info,
+                      const SETTINGS_MAP &settings_map);
+
   void   CalculateOrientationTargetPan(const NMEA_INFO &nmea_info,
 				       const DERIVED_INFO &derived_info,
 				       const SETTINGS_MAP &settings);

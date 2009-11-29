@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -34,22 +35,12 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "MapWindow.h"
-#include "XCSoar.h"
-#include "SettingsComputer.hpp"
-#include "WayPoint.hpp"
-#include "InfoBoxLayout.h"
-#include "SettingsUser.hpp"
-#include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"
-#include "McReady.h"
-#include "Compatibility/gdi.h"
 #include "WayPointList.hpp"
-#include "Components.hpp"
 
 #include <assert.h>
-
-
 
 //FIX
 void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
@@ -62,6 +53,9 @@ void MapWaypointLabelClear();
 
 void MapWindow::DrawWaypoints(Canvas &canvas)
 {
+  if (way_points == NULL)
+    return;
+
   TCHAR Buffer[32];
   TCHAR Buffer2[32];
   TCHAR sAltUnit[4];
@@ -77,9 +71,9 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
   MapWaypointLabelClear();
 
-  for (unsigned i = 0; way_points.verify_index(i); ++i) {
-    const WAYPOINT &way_point = way_points.get(i);
-    const WPCALC &wpcalc = way_points.get_calc(i);
+  for (unsigned i = 0; way_points->verify_index(i); ++i) {
+    const WAYPOINT &way_point = way_points->get(i);
+    const WPCALC &wpcalc = way_points->get_calc(i);
 
     if (wpcalc.Visible) {
 
@@ -91,7 +85,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
       TextDisplayMode.AsInt = 0;
 
-      irange = WaypointInScaleFilter(i);
+      irange = WaypointInScaleFilter(way_point);
 
       Bitmap *wp_bmp = &MapGfx.hSmall;
 
@@ -215,6 +209,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
                       sAltUnit);
           else
             Buffer[0]= '\0';
+          break;
         default:
           assert(0);
           break;
@@ -241,11 +236,15 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
   // boundary has changed.
   // This happens rarely, so it is good pre-filtering of what is visible.
   // (saves from having to do it every screen redraw)
+
+  if (way_points == NULL)
+    return;
+
   const rectObj bounds = *bounds_active;
 
-  for (unsigned i = 0; way_points.verify_index(i); ++i) {
-    const WAYPOINT &way_point = way_points.get(i);
-    WPCALC &wpcalc = way_points.set_calc(i);
+  for (unsigned i = 0; way_points->verify_index(i); ++i) {
+    const WAYPOINT &way_point = way_points->get(i);
+    WPCALC &wpcalc = way_points->set_calc(i);
 
     // TODO code: optimise waypoint visibility
     wpcalc.FarVisible =
@@ -259,13 +258,17 @@ void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
 
 void MapWindow::CalculateScreenPositionsWaypoints() {
   // only calculate screen coordinates for waypoints that are visible
-  for (unsigned i = 0; way_points.verify_index(i); ++i) {
-    WPCALC &wpcalc = way_points.set_calc(i);
+
+  if (way_points == NULL)
+    return;
+
+  for (unsigned i = 0; way_points->verify_index(i); ++i) {
+    WPCALC &wpcalc = way_points->set_calc(i);
     if (wpcalc.InTask) {
-      LonLat2Screen(way_points.get(i).Location, wpcalc.Screen);
+      LonLat2Screen(way_points->get(i).Location, wpcalc.Screen);
     } else {
       wpcalc.Visible = wpcalc.FarVisible &&
-        LonLat2ScreenIfVisible(way_points.get(i).Location, &wpcalc.Screen);
+        LonLat2ScreenIfVisible(way_points->get(i).Location, &wpcalc.Screen);
     }
   }
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -38,40 +39,35 @@ Copyright_License {
 #if !defined(XCSOAR_TASK_IMPL_H)
 #define XCSOAR_TASK_IMPL_H
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include "Sizes.h"
 
 #include "GeoPoint.hpp"
-#include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
-#include "WayPoint.hpp"
 
+#include <windef.h>
 #include <stdio.h>
 
-typedef struct _START_POINT
-{
+struct SETTINGS_COMPUTER;
+struct WAYPOINT;
+
+struct START_POINT {
   int Index;
   double OutBound;
   GEOPOINT SectorStart;
   GEOPOINT SectorEnd;
-} START_POINT;
+};
 
-typedef struct _START_POINT_STATS
-{
+struct START_POINT_STATS {
   bool Active;
   bool InSector;
-} START_POINT_STATS;
+};
 
-typedef struct _START_POINT_SCREEN
-{
+struct START_POINT_SCREEN {
   POINT	 SectorStart;
   POINT	 SectorEnd;
-} START_POINT_SCREEN;
+};
 
-
-typedef struct _TASK_POINT
-{
+struct TASK_POINT {
   int Index;
   double InBound;
   double OutBound;
@@ -96,19 +92,16 @@ typedef struct _TASK_POINT
   double LengthPercent;
   GEOPOINT IsoLine_Location[MAXISOLINES];
   bool IsoLine_valid[MAXISOLINES];
+};
 
-} TASK_POINT;
-
-typedef struct _TASK_POINT_SCREEN
-{
+struct TASK_POINT_SCREEN {
   POINT	 SectorStart;
   POINT	 SectorEnd;
   POINT	 Target;
   POINT	 AATStart;
   POINT	 AATFinish;
   POINT IsoLine_Screen[MAXISOLINES];
-} TASK_POINT_SCREEN;
-
+};
 
 typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
 typedef TASK_POINT_SCREEN TaskScreen_t[MAXTASKPOINTS +1];
@@ -127,29 +120,40 @@ class Task {
 public:
   Task();
 public:
-  void RefreshTask(const SETTINGS_COMPUTER &settings_computer);
+  void RefreshTask(const SETTINGS_COMPUTER &settings_computer,
+                   const NMEA_INFO &nmea_info);
 
   void ReplaceWaypoint(const int index,
-                               const SETTINGS_COMPUTER &settings_computer);
+                       const SETTINGS_COMPUTER &settings_computer,
+                       const NMEA_INFO &nmea_info);
   void InsertWaypoint(const int index,
                               const SETTINGS_COMPUTER &settings_computer,
+                      const NMEA_INFO &nmea_info,
                               bool append=false);
   void SwapWaypoint(const int index,
-                            const SETTINGS_COMPUTER &settings_computer);
+                    const SETTINGS_COMPUTER &settings_computer,
+                    const NMEA_INFO &nmea_info);
   void RemoveWaypoint(const int index,
-                              const SETTINGS_COMPUTER &settings_computer);
+                      const SETTINGS_COMPUTER &settings_computer,
+                      const NMEA_INFO &nmea_info);
   void RemoveTaskPoint(const int index,
-                               const SETTINGS_COMPUTER &settings_computer);
+                       const SETTINGS_COMPUTER &settings_computer,
+                       const NMEA_INFO &nmea_info);
   void FlyDirectTo(const int index,
-                           const SETTINGS_COMPUTER &settings_computer);
+                   const SETTINGS_COMPUTER &settings_computer,
+                   const NMEA_INFO &nmea_info);
 
   void advanceTaskPoint(const SETTINGS_COMPUTER &settings_computer);
-  void retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer);
+  void retreatTaskPoint(const SETTINGS_COMPUTER &settings_computer,
+                        const NMEA_INFO &nmea_info);
 
   void ClearTask(void);
-  void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer);
-  void DefaultTask(const SETTINGS_COMPUTER &settings);
+  void RotateStartPoints(const SETTINGS_COMPUTER &settings_computer,
+                         const NMEA_INFO &nmea_info);
+  void DefaultTask(const SETTINGS_COMPUTER &settings,
+                   const NMEA_INFO &nmea_info);
   void ResumeAbortTask(const SETTINGS_COMPUTER &settings_computer,
+                       const NMEA_INFO &nmea_info,
                                const int set = 0);
   void CheckStartPointInTask(void);
   void ClearStartPoints(void);
@@ -187,7 +191,8 @@ public:
 
   // file load/save
   void LoadNewTask(const TCHAR *FileName,
-                   const SETTINGS_COMPUTER &settings_computer);
+                   const SETTINGS_COMPUTER &settings_computer,
+                   const NMEA_INFO &nmea_info);
   void SaveTask(const TCHAR *FileName);
   void SaveDefaultTask(void);
   const TCHAR* getTaskFilename() const;

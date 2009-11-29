@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -69,6 +70,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "WayPointList.hpp"
 #include "XCSoar.h"
+#include "Task.h"
 
 #include <assert.h>
 
@@ -349,9 +351,6 @@ void InfoBoxManager::Event_Select(int i) {
     InputEvents::setMode(InputEvents::MODE_INFOBOX);
   }
 }
-
-
-////////////////////////////////////
 
 int InfoBoxManager::getType(unsigned i, unsigned layer) {
   assert(i < MAXINFOWINDOWS);
@@ -930,13 +929,8 @@ const TCHAR *InfoBoxManager::GetTypeDescription(unsigned i) {
   return Data_Options[i].Description;
 }
 
-
-/////////////////////////////////////////////////////////////////////////////////
-//
 // TODO: this should go into the manager
-
 extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
-
 
 void InfoBoxManager::Paint(void) {
   unsigned i;

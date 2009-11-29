@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -53,7 +54,9 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 // TODO code: check ts_string does the right thing
 
-Marks::Marks(const char* name):topo_marks(name, Color(0xD0,0xD0,0xD0)) {
+Marks::Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer)
+  :topo_marks(name, Color(0xD0,0xD0,0xD0)),
+   settings_computer(_settings_computer) {
   StartupStore(TEXT("Initialise marks\n"));
   topo_marks.scaleThreshold = 30.0;
   topo_marks.loadBitmap(IDB_MARK);
@@ -84,9 +87,9 @@ void Marks::MarkLocation(const GEOPOINT &loc)
 {
   Poco::ScopedRWLock protect(lock, true);
 
-  if (XCSoarInterface::SettingsComputer().EnableSoundModes) {
+  if (settings_computer.EnableSoundModes)
     PlayResource(TEXT("IDR_WAV_CLEAR"));
-  }
+
   topo_marks.addPoint(loc.Longitude, loc.Latitude);
   topo_marks.triggerUpdateCache = true;
 

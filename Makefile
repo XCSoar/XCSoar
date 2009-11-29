@@ -69,22 +69,22 @@ ifeq ($(CONFIG_PC),n)
 endif
 
 DEVS	:=\
-	$(SRC)/Device/devAltairPro.o \
-	$(SRC)/Device/devBorgeltB50.o \
-	$(SRC)/Device/devCAI302.o \
-	$(SRC)/Device/devCaiGpsNav.o \
-	$(SRC)/Device/devCondor.o \
-	$(SRC)/Device/devEW.o \
-	$(SRC)/Device/devEWMicroRecorder.o \
-	$(SRC)/Device/devFlymasterF1.o \
-	$(SRC)/Device/devGeneric.o \
-	$(SRC)/Device/devLX.o \
-	$(SRC)/Device/devNmeaOut.o \
-	$(SRC)/Device/devPosiGraph.o \
-	$(SRC)/Device/devVega.o \
-	$(SRC)/Device/devVolkslogger.o \
-	$(SRC)/Device/devXCOM760.o \
-	$(SRC)/Device/devZander.o
+	$(SRC)/Device/Driver/AltairPro.o \
+	$(SRC)/Device/Driver/BorgeltB50.o \
+	$(SRC)/Device/Driver/CAI302.o \
+	$(SRC)/Device/Driver/CaiGpsNav.o \
+	$(SRC)/Device/Driver/Condor.o \
+	$(SRC)/Device/Driver/EW.o \
+	$(SRC)/Device/Driver/EWMicroRecorder.o \
+	$(SRC)/Device/Driver/FlymasterF1.o \
+	$(SRC)/Device/Driver/Generic.o \
+	$(SRC)/Device/Driver/LX.o \
+	$(SRC)/Device/Driver/NmeaOut.o \
+	$(SRC)/Device/Driver/PosiGraph.o \
+	$(SRC)/Device/Driver/Vega.o \
+	$(SRC)/Device/Driver/Volkslogger.o \
+	$(SRC)/Device/Driver/XCOM760.o \
+	$(SRC)/Device/Driver/Zander.o
 
 DLGS	:=\
 	$(SRC)/Dialogs/XML.o \
@@ -150,7 +150,10 @@ OBJS	:=\
 	$(SRC)/AATDistance.o 		\
 	$(SRC)/Abort.o 			\
 	$(SRC)/Airspace.o 		\
+	$(SRC)/AirspaceDatabase.o \
+	$(SRC)/AirspaceGlue.o \
 	$(SRC)/AirspaceParser.o 	\
+	$(SRC)/AirspaceTerrain.o \
 	$(SRC)/AirspaceWarning.o 	\
 	$(SRC)/Atmosphere.o 		\
 	$(SRC)/BestAlternate.o 		\
@@ -271,6 +274,7 @@ OBJS	:=\
 	$(SRC)/Interface.o		\
 	$(SRC)/LocalTime.o		\
 	$(SRC)/Units.o 			\
+	$(SRC)/StringUtil.o \
 	$(SRC)/UtilsAirspace.o		\
 	$(SRC)/UtilsFLARM.o		\
 	$(SRC)/UtilsFont.o		\
@@ -283,6 +287,7 @@ OBJS	:=\
 	$(SRC)/Audio/VegaVoice.o	\
 	$(SRC)/Compatibility/string.o 	\
 	$(SRC)/Registry.o 		\
+	$(SRC)/Profile.o \
 	$(SRC)/xmlParser.o 		\
 	$(SRC)/Thread/Thread.o \
 	\
@@ -301,6 +306,7 @@ OBJS	:=\
 	$(SRC)/Screen/ButtonWindow.o \
 	$(SRC)/Screen/Chart.o 		\
 	$(SRC)/Screen/Fonts.o 		\
+	$(SRC)/Screen/UnitSymbol.o \
 	$(SRC)/Screen/Graphics.o 	\
 	$(SRC)/Screen/Ramp.o 		\
 	$(SRC)/Screen/STScreenBuffer.o 	\
@@ -333,6 +339,8 @@ OBJS	:=\
 	$(SRC)/Screen/shapelib/maptree.o 	\
 	$(SRC)/Screen/shapelib/mapxbase.o 	\
 	\
+	$(SRC)/Polar/Polar.o \
+	$(SRC)/Polar/Loader.o \
 	$(SRC)/Polar/WinPilot.o 	\
 	$(SRC)/Polar/BuiltIn.o 		\
 	$(SRC)/Polar/Historical.o 	\
@@ -344,10 +352,13 @@ OBJS	:=\
 	$(SRC)/Components.o 		\
 	$(SRC)/XCSoar.o 		\
 	\
+	$(SRC)/Device/Driver.o \
 	$(SRC)/Device/device.o 		\
 	$(SRC)/Device/Geoid.o 		\
 	$(SRC)/Device/Parser.o		\
 	$(SRC)/Device/Port.o 		\
+	$(SRC)/Device/FLARM.o \
+	$(SRC)/Device/Internal.o \
 	$(DEVS) 			\
 	\
 	$(DLGS:.cpp=.o) 		\
@@ -442,7 +453,7 @@ include $(topdir)/build/compat.mk
 	    -e 's,small\.bmp,Small.bmp,g' \
 		< $< > $<.tmp
 	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) $(WINDRESFLAGS) $<.tmp $@
+	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<.tmp
 	@$(RM) $<.tmp
 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o

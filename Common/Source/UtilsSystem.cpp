@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -51,7 +52,7 @@ Copyright_License {
 #include "Audio/WaveThread.h"
 #endif
 
-#if defined(WIN32) && !defined(__MINGW32__)
+#if defined(WIN32) && !defined(__GNUC__)
 #if defined(CECORE)
 #include "winbase.h"
 #endif
@@ -121,7 +122,7 @@ void MemLeakCheck() {
 // automatic defragmentation.
 void MyCompactHeaps() {
 #ifdef WIN32
-#if defined(WINDOWSPC)||(defined(GNAV) && !defined(__MINGW32__))
+#if defined(WINDOWSPC)||(defined(GNAV) && !defined(__GNUC__))
   HeapCompact(GetProcessHeap(),0);
 #else
   typedef DWORD (_stdcall *CompactAllHeapsFn) (void);
@@ -217,25 +218,24 @@ bool RotateScreen() {
   //
   // Change the orientation of the screen
   //
-#ifdef GNAV
-  DEVMODE DeviceMode;
+  if (is_altair()) {
+    DEVMODE DeviceMode;
 
-  memset(&DeviceMode, 0, sizeof(DeviceMode));
-  DeviceMode.dmSize=sizeof(DeviceMode);
-  DeviceMode.dmFields = DM_DISPLAYORIENTATION;
-  DeviceMode.dmDisplayOrientation = DMDO_90;
-  //Put your desired position right here.
+    memset(&DeviceMode, 0, sizeof(DeviceMode));
+    DeviceMode.dmSize=sizeof(DeviceMode);
+    DeviceMode.dmFields = DM_DISPLAYORIENTATION;
+    DeviceMode.dmDisplayOrientation = DMDO_90;
+    //Put your desired position right here.
 
-  if (DISP_CHANGE_SUCCESSFUL ==
-      ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL, CDS_RESET, NULL))
-    return true;
-  else
+    if (DISP_CHANGE_SUCCESSFUL ==
+        ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL, CDS_RESET, NULL))
+      return true;
+    else
+      return false;
+  } else {
     return false;
-#else
-  return false;
+  }
 #endif
-#endif
-
 }
 
 

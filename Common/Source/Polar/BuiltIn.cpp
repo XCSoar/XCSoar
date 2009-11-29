@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -37,7 +38,6 @@ Copyright_License {
 
 #include "Polar/BuiltIn.hpp"
 #include "Polar/WinPilot.hpp"
-#include "McReady.h"
 
 #include <windef.h>
 
@@ -182,7 +182,9 @@ const TCHAR* GetWinPilotPolarInternalName(unsigned i)
  * the converter
  * @param i Array id of the polar
  */
-bool ReadWinPilotPolarInternal(unsigned i) {
+bool
+ReadWinPilotPolarInternal(unsigned i, Polar &polar)
+{
   double POLARV[3];
   double POLARW[3];
   double ww[2];
@@ -198,8 +200,7 @@ bool ReadWinPilotPolarInternal(unsigned i) {
   POLARW[0] = WinPilotPolars[i].w0;
   POLARW[1] = WinPilotPolars[i].w1;
   POLARW[2] = WinPilotPolars[i].w2;
-  PolarWinPilot2XCSoar(POLARV, POLARW, ww);
-  GlidePolar::WingArea = WinPilotPolars[i].wing_area;
+  PolarWinPilot2XCSoar(polar, POLARV, POLARW, ww);
 
   return(TRUE);
 }

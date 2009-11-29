@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -40,23 +41,22 @@ Copyright_License {
 #define VERSION "5.2.5"
 
 #ifdef GNAV
-#define TARGET "Altair"
+  #define TARGET "Altair"
 #elif defined(PNA)
-#define TARGET "PNA"
+  #define TARGET "PNA"
 #elif defined(WINDOWSPC)
-#define TARGET "PC"
+  #define TARGET "PC"
 #elif !defined(WIN32)
-#define TARGET "UNIX"
+  #define TARGET "UNIX"
 #else
-// TODO code: consider adding PPC, 2002, 2003 (not enough room now)
-#define TARGET "PPC"
+  // TODO code: consider adding PPC, 2002, 2003 (not enough room now)
+  #define TARGET "PPC"
 #endif
 
 #ifdef FIVV
-#define VERSION_SUFFIX "F"
+  #define VERSION_SUFFIX "F"
 #else
-#define VERSION_SUFFIX ""
+  #define VERSION_SUFFIX ""
 #endif
 
-const TCHAR XCSoar_Version[] = _T(TARGET " " VERSION VERSION_SUFFIX " "
-                                  __DATE__);
+const TCHAR XCSoar_Version[] = _T(TARGET " " VERSION VERSION_SUFFIX " " __DATE__);

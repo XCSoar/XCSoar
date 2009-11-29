@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -39,14 +40,15 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_H
 
 #include "Sizes.h"
-#include "SettingsAirspace.hpp"
-#include "SettingsComputer.hpp"
 #include "Screen/shapelib/mapshape.h"
 #include "GeoPoint.hpp"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <windef.h>
 #include <tchar.h>
+
+struct SETTINGS_COMPUTER;
+class AirspaceDatabase;
+class MapWindowProjection;
 
 struct AIRSPACE_ACK
 {
@@ -64,148 +66,79 @@ struct AIRSPACE_ALT
   AirspaceAltBase_t Base;
 };
 
-struct AIRSPACE_AREA
-{
+struct AirspaceMetadata {
   TCHAR Name[NAME_SIZE + 1];
   int Type;
   AIRSPACE_ALT Base;
   AIRSPACE_ALT Top;
+
+  rectObj bounds;
+  AIRSPACE_ACK Ack;
+  unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
+  bool FarVisible;
+};
+
+struct AIRSPACE_AREA : public AirspaceMetadata
+{
   unsigned FirstPoint;
   unsigned NumPoints;
   unsigned char Visible;
   bool _NewWarnAckNoBrush;
   GEOPOINT minBound;
   GEOPOINT maxBound;
-  rectObj bounds;
-  AIRSPACE_ACK Ack;
-  unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
-  bool FarVisible;
 };
 
 #define AIRSPACE_POINT GEOPOINT
 // quick hack...
 
-struct AIRSPACE_CIRCLE
+struct AIRSPACE_CIRCLE : public AirspaceMetadata
 {
-  TCHAR Name[NAME_SIZE + 1];
-  int Type;
-  AIRSPACE_ALT Base;
-  AIRSPACE_ALT Top;
   GEOPOINT Location;
   double Radius;
   POINT Screen;
   int ScreenR;
   unsigned char Visible;
   bool _NewWarnAckNoBrush;
-  AIRSPACE_ACK Ack;
-  rectObj bounds;
-  unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
-  bool FarVisible;
 };
 
-// Airspace Database
-extern AIRSPACE_AREA *AirspaceArea;
-extern AIRSPACE_POINT *AirspacePoint;
 extern POINT *AirspaceScreenPoint;
-extern AIRSPACE_CIRCLE *AirspaceCircle;
-extern unsigned int NumberOfAirspacePoints;
-extern unsigned int NumberOfAirspaceAreas;
-extern unsigned int NumberOfAirspaceCircles;
 
-void DeleteAirspace();
+static inline double
+ToMSL(const AIRSPACE_ALT &altitude, double terrain_altitude)
+{
+  return altitude.Base != abAGL
+    ? altitude.Altitude
+    : altitude.AGL + terrain_altitude;
+}
 
-void ReadAirspace(void);
-int FindAirspaceCircle(const GEOPOINT &location,
-		       bool visibleonly=true);
-int FindAirspaceArea(const GEOPOINT &location,
-		     bool visibleonly=true);
-bool CheckAirspaceAltitude(const double &Base, const double &Top,
-  const SETTINGS_COMPUTER &settings);
-void CloseAirspace(void);
+void DeleteAirspace(AirspaceDatabase &airspace_database);
 
-void SortAirspace(void);
+void
+FindAirspaceCircleBounds(AirspaceDatabase &airspace_database);
 
-bool InsideAirspaceCircle(const GEOPOINT &location,
-			  const int i);
+void
+FindAirspaceAreaBounds(AirspaceDatabase &airspace_database);
 
-bool InsideAirspaceArea(const GEOPOINT &location,
-			const int i);
+bool
+ReadAirspace(AirspaceDatabase &airspace_database, const char *path);
 
-void ScanAirspaceLine(const GEOPOINT *locs,
-                      const double *heights,
-		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X]);
+bool
+CheckAirspaceAltitude(double Base, double Top, double altitude,
+                      const SETTINGS_COMPUTER &settings);
 
+void CloseAirspace(AirspaceDatabase &airspace_database);
 
-void AirspaceQnhChangeNotify(double newQNH);
+void SortAirspace(AirspaceDatabase &airspace_database);
 
-//*******************************************************************************
-// experimental: new dialog based warning system
-
-class AirspaceInfo_c{
-
-public:
-
-  int    TimeOut;             // in systicks
-  int    InsideAckTimeOut;    // downgrade auto ACK timer
-  int    Sequence;            // Sequence nummer is equal for real and predicted calculation
-  int    hDistance;           // horizontal distance in m
-  int    vDistance;           // vertical distance in m
-  int    Bearing;             // in deg
-  DWORD  PredictedEntryTime;  // in ms
-  int    Acknowledge;         // 0=not Acked, 1=Acked til closer, 2=Acked til leave, 3= Acked whole day
-  bool   Inside;              // true if inside
-  bool   Predicted;           // true if predicted inside, menas close and entry expected
-  bool   IsCircle;            // true if Airspace is a circle
-  int    AirspaceIndex;       // index of airspace
-  int    SortKey;             // SortKey
-  int    LastListIndex;       // Last index in List, used to sort items with same sort criteria
-  int    ID;                  // Unique ID
-  int    WarnLevel;           // WarnLevel 0 far away, 1 prdicted entry, 2 predicted entry and close, 3 inside
-
-};
-
-typedef enum {asaNull,
-              asaItemAdded,
-              asaItemChanged,
-              asaClearAll,
-              asaItemRemoved,
-              asaWarnLevelIncreased,
-              asaProcessEnd,
-              asaProcessBegin} AirspaceWarningNotifyAction_t;
-
-typedef void (*AirspaceWarningNotifier_t)(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace) ;
-
-void AirspaceWarnListAddNotifier(AirspaceWarningNotifier_t Notifier);
-void AirspaceWarnListRemoveNotifier(AirspaceWarningNotifier_t Notifier);
-bool AirspaceWarnGetItem(int Index, AirspaceInfo_c &Item);
-int AirspaceWarnGetItemCount(void);
-int dlgAirspaceWarningInit(void);
-int dlgAirspaceWarningDeInit(void);
-void AirspaceWarnListClear(void);
-void AirspaceWarnDoAck(int ID, int Ack);
-int AirspaceWarnFindIndexByID(int ID);
-
-bool ValidAirspace(void);
-
-class MapWindowProjection;
-
-double RangeAirspaceCircle(const GEOPOINT &location,
-			   const int i);
-
-double RangeAirspaceArea(const GEOPOINT &location,
-			 const int i, double *bearing,
-			 const MapWindowProjection &map_projection);
-
-bool CheckAirspacePoint(int Idx);
-
-void FindNearestAirspace(const GEOPOINT &location,
-                         const SETTINGS_COMPUTER &settings,
-                         const MapWindowProjection &map_projection,
-                         double *nearestdistance,
-			 double *nearestbearing,
-			 int *foundcircle,
-			 int *foundarea,
-			 double *height=NULL);
-
+void
+FindNearestAirspace(AirspaceDatabase &airspace_database,
+                    const GEOPOINT &location,
+                    double altitude, double terrain_altitude,
+                    const SETTINGS_COMPUTER &settings,
+                    const MapWindowProjection &map_projection,
+                    double *nearestdistance, double *nearestbearing,
+                    int *foundcircle,
+                    int *foundarea,
+                    double *height=NULL);
 
 #endif

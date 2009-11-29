@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -43,6 +44,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "options.h" /* for IBLSCALE() */
+#include "Asset.hpp"
 
 #define BORDER_X 24
 #define BORDER_Y 19
@@ -162,9 +164,9 @@ void Chart::ScaleXFromValue(const double value)
 void Chart::StyleLine(const POINT l1, const POINT l2,
 		      const int Style) {
   int minwidth = 1;
-#ifndef GNAV
-  minwidth = 2;
-#endif
+  if (!is_altair())
+    minwidth = 2;
+
   Pen penThinSignal;
   POINT line[2];
   line[0] = l1;
@@ -190,11 +192,11 @@ void Chart::StyleLine(const POINT l1, const POINT l2,
                                Color(0,255,0), rc);
     break;
   case STYLE_MEDIUMBLACK:
-#ifndef GNAV
-    penThinSignal.set(2, Color(50, 243, 45));
-#else
-    penThinSignal.set(1, Color(50, 243, 45));
-#endif
+    if (!is_altair())
+      penThinSignal.set(2, Color(50, 243, 45));
+    else
+      penThinSignal.set(1, Color(50, 243, 45));
+
     canvas.select(penThinSignal);
     canvas.autoclip_polyline(line, 2, rc);
     break;

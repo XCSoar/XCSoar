@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -50,13 +51,16 @@ class RasterMapRaw: public RasterMap {
   {
     DirectAccess = true;
   }
-  ~RasterMapRaw() {
-  }
+
+  virtual ~RasterMapRaw();
+
   short *TerrainMem;
   virtual void SetFieldRounding(const double xr, const double yr,
-    RasterRounding &rounding);
-  virtual bool Open(char* filename);
-  virtual void Close();
+                                RasterRounding &rounding) const;
+  bool Open(const char *path);
+
+  static RasterMapRaw *LoadFile(const char *path);
+
  protected:
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly);

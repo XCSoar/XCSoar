@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -46,6 +47,7 @@ Copyright_License {
 #include "GlideSolvers.hpp"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
+#include "Task.h"
 
 #include <math.h>
 
@@ -88,7 +90,8 @@ static void GetCruiseEfficiency(void) {
 static void RefreshCalculator(void) {
   WndProperty* wp;
 
-  task.RefreshTask(XCSoarInterface::SettingsComputer());
+  task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                   XCSoarInterface::Basic());
   RefreshTaskStatistics();
 
   // update outputs
@@ -193,7 +196,8 @@ static void DoOptimise(void) {
   do {
     myrange = Range;
     task.AdjustAATTargets(Range);
-    task.RefreshTask(XCSoarInterface::SettingsComputer());
+    task.RefreshTask(XCSoarInterface::SettingsComputer(),
+                     XCSoarInterface::Basic());
     RefreshTaskStatistics();
     double deltaT = XCSoarInterface::Calculated().TaskTimeToGo;
     if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {

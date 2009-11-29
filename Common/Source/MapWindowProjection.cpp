@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,23 +37,18 @@ Copyright_License {
 */
 
 #include "MapWindowProjection.hpp"
-#include "Protection.hpp"
-#include "MapWindow.h"
-#include "Math/FastMath.h"
+#include "Task.h"
 #include "Math/Geometry.hpp"
 #include "InfoBoxLayout.h"
-#include "SettingsUser.hpp"
-#include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
-#include "InputEvents.h"
 #include "UtilsProfile.hpp"
 #include "options.h" /* for IBLSCALE() */
-#include <stdlib.h>
 #include "WayPoint.hpp"
-#include "WayPointList.hpp"
-#include "Components.hpp"
-#include <math.h>
+#include "NMEA/Info.h"
+#include "NMEA/Derived.hpp"
 
+#include <stdlib.h>
+#include <math.h>
 
 MapWindowProjection::MapWindowProjection():
   _origin_centered(false),
@@ -79,10 +75,9 @@ MapWindowProjection::InitialiseScaleList
   _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
 }
 
-bool MapWindowProjection::WaypointInScaleFilter(int i) const
+bool
+MapWindowProjection::WaypointInScaleFilter(const WAYPOINT &way_point) const
 {
-  const WAYPOINT &way_point = way_points.get(i);
-
   return ((way_point.Zoom >= MapScale*10) || (way_point.Zoom == 0))
     && (MapScale <= 10);
 }
@@ -258,6 +253,48 @@ MapWindowProjection::LonLat2Screen(const GEOPOINT &g,
 
   sc.x = Orig_Screen.x - X;
   sc.y = Orig_Screen.y + Y;
+}
+
+/**
+ * Converts a LatLon-based polygon to screen coordinates
+ *
+ * This one is optimised for long polygons.
+ * @param ptin Input polygon
+ * @param ptout Output polygon
+ * @param n Number of points in the polygon
+ * @param skip Number of corners to skip after a successful conversion
+ */
+void
+MapWindowProjection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
+                                   unsigned n, unsigned skip) const
+{
+  static double lastangle = -1;
+  static int cost=1024, sint=0;
+  const double mDisplayAngle = DisplayAngle;
+
+  if(mDisplayAngle != lastangle) {
+    lastangle = mDisplayAngle;
+    int deg = DEG_TO_INT(AngleLimit360(mDisplayAngle));
+    cost = ICOSTABLE[deg];
+    sint = ISINETABLE[deg];
+  }
+  const int xxs = Orig_Screen.x*1024-512;
+  const int yys = Orig_Screen.y*1024+512;
+  const double mDrawScale = DrawScale;
+  const double mPanLongitude = PanLocation.Longitude;
+  const double mPanLatitude = PanLocation.Latitude;
+  const GEOPOINT *p = ptin;
+  const GEOPOINT *ptend = ptin + n;
+
+  while (p<ptend) {
+    int Y = Real2Int((mPanLatitude - p->Latitude) * mDrawScale);
+    int X = Real2Int((mPanLongitude - p->Longitude) *
+                     fastcosine(p->Latitude) * mDrawScale);
+    ptout->x = (xxs-X*cost + Y*sint)/1024;
+    ptout->y = (Y*cost + X*sint + yys)/1024;
+    ptout++;
+    p+= skip;
+  }
 }
 
 /**
@@ -472,11 +509,11 @@ double MapWindowProjection::LimitMapScale(double value,
     }
   }
 
-  if (ScaleListCount>0) {
-    return FindMapScale(max(minreasonable,min(160.0,value)));
-  } else {
-    return max(minreasonable,min(160.0,value));
-  }
+  value = max(minreasonable, min(160.0, value));
+  if (ScaleListCount > 0)
+    value = FindMapScale(value);
+
+  return value;
 }
 
 
@@ -532,9 +569,9 @@ void MapWindowProjection::ModifyMapScale
 }
 
 
-void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
-					 const DERIVED_INFO &DerivedDrawInfo,
-					 const SETTINGS_MAP &settings_map)
+void
+MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
+                                    const SETTINGS_MAP &settings_map)
 {
   static int AutoMapScaleWaypointIndex = -1;
   static double StartingAutoMapScale=0.0;
@@ -627,11 +664,10 @@ void MapWindowProjection::UpdateMapScale(const NMEA_INFO &DrawInfo,
 }
 
 
-void MapWindowProjection::ExchangeBlackboard(const NMEA_INFO &nmea_info,
-					     const DERIVED_INFO &derived_info,
+void MapWindowProjection::ExchangeBlackboard(const DERIVED_INFO &derived_info,
 					     const SETTINGS_MAP &settings_map)
 {
-  UpdateMapScale(nmea_info, derived_info, settings_map);
+  UpdateMapScale(derived_info, settings_map);
   // done here to avoid double latency due to locks
 }
 

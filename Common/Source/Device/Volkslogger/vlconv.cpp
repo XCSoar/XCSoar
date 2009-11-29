@@ -183,7 +183,7 @@ class C_RECORD {
 	// Zeitzone draufrechnen
 	T_FDT.tm_min  += zz_min;
 	T_FDT.tm_isdst = -1;
-////JMW TODO	mktime(&T_FDT);
+  //JMW TODO	mktime(&T_FDT);
 	FDT[0] = T_FDT.tm_mday;
 	FDT[1] = T_FDT.tm_mon+1;
 	FDT[2] = T_FDT.tm_year % 100;
@@ -783,7 +783,7 @@ long convert_gcs(int igcfile_version, FILE *Ausgabedatei, lpb bin_puffer, int oo
       task.TDECL.tm_sec += decl_time %3600;
       task.TDECL.tm_hour += decl_time /3600;
 	  task.TDECL.tm_isdst = -1;
-          ////JMW TODO      mktime(&task.TDECL);
+          //JMW TODO      mktime(&task.TDECL);
       task.print(igcfile_version,Ausgabedatei);
     }
   }
@@ -818,7 +818,7 @@ long convert_gcs(int igcfile_version, FILE *Ausgabedatei, lpb bin_puffer, int oo
 			time_relative += p[2];
 			realtime.tm_sec += p[2];
 			realtime.tm_isdst = -1;
-                        ////JMW TODO			mktime(&realtime);
+                        //JMW TODO			mktime(&realtime);
 			igcfix.valid = ((p[0] & 0x10) >> 4) ? 'A' : 'V';
 			igcfix.press =  ((word)p[0] & 0x0f) << 8
 				       | p[1];
@@ -908,7 +908,7 @@ long convert_gcs(int igcfile_version, FILE *Ausgabedatei, lpb bin_puffer, int oo
 			  case rectyp_vrb : p2 = p+2; break;
 			  case rectyp_vrt : realtime.tm_sec += p[2];
 						realtime.tm_isdst = -1;
-                                                ////JMW TODO						mktime(&realtime);
+                                                //JMW TODO						mktime(&realtime);
 					    p2 = p+3; break;
 			  default	  : p2 = p; break;
 			}
@@ -1082,7 +1082,7 @@ int conv_dir(DIRENTRY* flights, lpb p, int countonly) {
 			if(timetm1.tm_year < 80)
 				timetm1.tm_year += 100;
 			timetm1.tm_isdst = -1;
-                        ////JMW TODO			mktime(&timetm1);
+                        //JMW TODO			mktime(&timetm1);
 			l =  8;
 			break;
 		case rectyp_end :
@@ -1094,7 +1094,7 @@ int conv_dir(DIRENTRY* flights, lpb p, int countonly) {
 
 				de.firsttime.tm_hour -= temptime / 3600;
 				de.firsttime.tm_isdst = -1;
-                                ////JMW TODO				mktime(&de.firsttime);
+                                //JMW TODO				mktime(&de.firsttime);
 				de.lasttime = de.firsttime;
 
 				temptime = 65536L * p[1] + 256L * p[2] + p[3]; // Aufzeichnungsdauer
@@ -1102,7 +1102,7 @@ int conv_dir(DIRENTRY* flights, lpb p, int countonly) {
 				de.lasttime.tm_sec += temptime % 3600;
 				de.lasttime.tm_hour += temptime / 3600;
 				de.lasttime.tm_isdst = -1;
-                                ////JMW TODO				mktime(&de.lasttime);
+                                //JMW TODO				mktime(&de.lasttime);
 
 				if (!olddate_flg) {
 					olddate = de.firsttime;

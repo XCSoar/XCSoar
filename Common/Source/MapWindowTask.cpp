@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -34,35 +35,30 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "MapWindow.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Task.h"
-#include "SettingsTask.hpp"
-#include "WayPoint.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/LabelBlock.hpp"
 #include "InfoBoxLayout.h"
-#include "AATDistance.h"
-#include "Math/FastMath.h"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
-#include "Compatibility/gdi.h"
 #include "options.h" /* for IBLSCALE() */
 #include "WayPointList.hpp"
-#include "Components.hpp"
+#include "TaskVisitor.hpp"
 
 #include <math.h>
-
-#include "TaskVisitor.hpp"
 
 class DrawAbortedTaskVisitor:
   public AbsoluteTaskPointVisitor
 {
+  const WayPointList &way_points;
+
 public:
-  DrawAbortedTaskVisitor(Canvas &_canvas, const POINT &_orig):
-    canvas(&_canvas),orig(_orig) {}
+  DrawAbortedTaskVisitor(Canvas &_canvas, const POINT &_orig,
+                         const WayPointList &_way_points)
+    :canvas(&_canvas), orig(_orig), way_points(_way_points) {}
 
   void
   visit_task_point_start(TASK_POINT &point, const unsigned index)
@@ -91,23 +87,29 @@ private:
 void
 MapWindow::DrawAbortedTask(Canvas &canvas)
 {
+  if (way_points == NULL || task == NULL)
+    return;
+
   Pen dash_pen(Pen::DASH, IBLSCALE(1), MapGfx.TaskColor);
   canvas.select(dash_pen);
-  DrawAbortedTaskVisitor dv(canvas, Orig_Aircraft);
-  task.scan_point_forward(dv, false); // read lock
+  DrawAbortedTaskVisitor dv(canvas, Orig_Aircraft, *way_points);
+  task->scan_point_forward(dv, false); // read lock
 }
 
 class DrawTaskVisitor:
   public AbsoluteTaskPointVisitor,
   public AbsoluteTaskLegVisitor
 {
+  const WayPointList &way_points;
+
 public:
   DrawTaskVisitor(MapWindow &_map_window,
 		  Canvas &_canvas,
 		  POINT &_orig,
 		  TaskScreen_t &_task_screen,
 		  StartScreen_t &_start_screen,
-                  unsigned _activeIndex):
+                  unsigned _activeIndex,
+                  const WayPointList &_way_points):
     map_window(&_map_window),
     canvas(&_canvas),
     orig(_orig),
@@ -118,7 +120,8 @@ public:
     dash_pen3(Pen::DASH, IBLSCALE(3), MapGfx.TaskColor),
     dash_pen5(Pen::DASH, IBLSCALE(5), MapGfx.TaskColor),
     dash_pen2(Pen::DASH, IBLSCALE(2), Color(127, 127, 127)),
-    activeIndex(_activeIndex)
+    activeIndex(_activeIndex),
+    way_points(_way_points)
   {
   }
 
@@ -339,15 +342,20 @@ private:
 void
 MapWindow::DrawTask(Canvas &canvas, RECT rc)
 {
+  if (way_points == NULL || task == NULL)
+    return;
+
   DrawTaskVisitor dv(*this, canvas, Orig_Aircraft, task_screen, task_start_screen,
-                     task.getActiveIndex());
-  task.scan_leg_forward(dv, false);   // read lock
-  task.scan_point_forward(dv, false); // read lock
+                     task->getActiveIndex(), *way_points);
+  task->scan_leg_forward(dv, false); // read lock
+  task->scan_point_forward(dv, false); // read lock
 }
 
 class DrawTaskAATVisitor:
   public AbsoluteTaskPointVisitor
 {
+  const WayPointList &way_points;
+
 public:
   DrawTaskAATVisitor(Canvas &_canvas,
                      const RECT _rc,
@@ -355,10 +363,12 @@ public:
                      const unsigned _activeIndex,
                      TaskScreen_t &_task_screen,
                      MapWindowProjection &_map,
-                     const SETTINGS_MAP &_settings
+                     const SETTINGS_MAP &_settings,
+                     const WayPointList &_way_points
     ):
     canvas(_canvas), rc(_rc), buffer(_buffer), activeIndex(_activeIndex),
-    task_screen(_task_screen), map(_map), settings(_settings)
+    task_screen(_task_screen), map(_map), settings(_settings),
+    way_points(_way_points)
   {
     whitecolor = Color(0xff,0xff, 0xff);
     buffer.set_text_color(whitecolor);
@@ -438,14 +448,22 @@ private:
   const SETTINGS_MAP &settings;
 };
 
-
+/**
+ * Draw the AAT areas to the buffer and copy the buffer to the drawing canvas
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ * @param buffer The drawing buffer
+ */
 void
 MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
-  if (task.getSettings().AATEnabled) {
-    DrawTaskAATVisitor dv(canvas, rc, buffer, task.getActiveIndex(),
-                          task_screen, *this, SettingsMap());
-    task.scan_point_forward(dv, false); // read lock
+  if (way_points == NULL || task == NULL)
+    return;
+
+  if (task->getSettings().AATEnabled) {
+    DrawTaskAATVisitor dv(canvas, rc, buffer, task->getActiveIndex(),
+                          task_screen, *this, SettingsMap(), *way_points);
+    task->scan_point_forward(dv, false); // read lock
     // TODO, reverse
     canvas.copy_transparent_white(buffer, rc);
   }
@@ -519,25 +537,27 @@ MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
 {
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
+  if (task == NULL)
+    return;
 
   DrawTargetVisitor tv(canvas, *this, bBearingValid);
-  task.scan_leg_forward(tv, false); // read lock
-  if (task.getSettings().AATEnabled) {
-    task.scan_point_forward(tv, false); // read lock
+  task->scan_leg_forward(tv, false); // read lock
+  if (task->getSettings().AATEnabled) {
+    task->scan_point_forward(tv, false); // read lock
   }
 }
 
 void
 MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 {
-  if ((task.getActiveIndex()<=0) || !task.Valid()) {
+  if (task == NULL || !task->Valid() || task->getActiveIndex() <= 0)
     return;
-  }
+
   if (fabs(Basic().TrackBearing-Calculated().WaypointBearing)<10) {
     // insignificant error
     return;
   }
-  if (Calculated().Circling || task.TaskIsTemporary() ||
+  if (Calculated().Circling || task->TaskIsTemporary() ||
       SettingsMap().TargetPan) {
     // don't display in various modes
     return;
@@ -551,7 +571,7 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
   }
 
   GEOPOINT start = Basic().Location;
-  GEOPOINT target = task.getTargetLocation();
+  GEOPOINT target = task->getTargetLocation();
 
   canvas.select(TitleWindowFont);
   canvas.set_text_color(Color(0x0, 0x0, 0x0));
@@ -594,10 +614,11 @@ MapWindow::DrawOffTrackIndicator(Canvas &canvas)
 void
 MapWindow::DrawProjectedTrack(Canvas &canvas)
 {
-  if ((task.getActiveIndex()==0) || !task.Valid() || !task.getSettings().AATEnabled) {
+  if (task == NULL || !task->Valid() || !task->getSettings().AATEnabled ||
+      task->getActiveIndex() ==0)
     return;
-  }
-  if (Calculated().Circling || task.TaskIsTemporary()) {
+
+  if (Calculated().Circling || task->TaskIsTemporary()) {
     // don't display in various modes
     return;
   }
@@ -606,7 +627,7 @@ MapWindow::DrawProjectedTrack(Canvas &canvas)
   // TODO feature: draw this also when in target pan mode
 
   GEOPOINT start = Basic().Location;
-  GEOPOINT previous_loc = task.getTargetLocation(task.getActiveIndex()-1);
+  GEOPOINT previous_loc = task->getTargetLocation(task->getActiveIndex() - 1);
 
   double distance_from_previous, bearing;
   DistanceBearing(previous_loc, start,
@@ -724,8 +745,10 @@ private:
 void
 MapWindow::CalculateScreenPositionsTask()
 {
+  if (task == NULL)
+    return;
 
   ScreenPositionsTaskVisitor sv(*this, task_screen, task_start_screen,
-    task.getActiveIndex());
-  task.scan_point_forward(sv, false); // read lock
+                                task->getActiveIndex());
+  task->scan_point_forward(sv, false); // read lock
 }

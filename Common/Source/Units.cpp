@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -80,19 +81,19 @@ double        TASKSPEEDMODIFY = TOKPH;
 
 UnitDescriptor_t Units::UnitDescriptors[] ={
   {NULL,         1,          0},
-  {TEXT("km"),   0.001,      0},
-  {TEXT("nm"),   0.00053996, 0},
-  {TEXT("sm"),   0.0006214,  0},
-  {TEXT("km/h"), 0.0036,     0},
-  {TEXT("kt"),   0.001944,   0},
-  {TEXT("mph"),  0.002237,   0},
-  {TEXT("m/s"),  1.0,        0},
-  {TEXT("fpm"),  3.281/60.0, 0},
-  {TEXT("m"),    1.0,        0},
-  {TEXT("ft"),   3.281,      0},
-  {TEXT("K"),    1,          0},
-  {TEXT(DEG)TEXT("C"),   1.0,       -273.15},
-  {TEXT(DEG)TEXT("F"),   1.8,       -459.67}
+  { _T("km"), 0.001, 0},
+  { _T("nm"), 0.00053996, 0},
+  { _T("sm"), 0.0006214, 0},
+  { _T("km/h"), 0.0036, 0},
+  { _T("kt"), 0.001944, 0},
+  { _T("mph"), 0.002237, 0},
+  { _T("m/s"), 1.0, 0},
+  { _T("fpm"), 3.281/60.0, 0},
+  { _T("m"), 1.0, 0},
+  { _T("ft"), 3.281, 0},
+  { _T("K"), 1, 0},
+  { _T(DEG)_T("C"), 1.0, -273.15},
+  { _T(DEG)_T("F"), 1.8, -459.67}
 };
 
 Units_t Units::UserDistanceUnit = unKiloMeter;
@@ -157,7 +158,7 @@ void Units::LatitudeToDMS(double Latitude,
 
 bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
   (void)size;
-  TCHAR EW[] = TEXT("WE");
+  TCHAR EW[] = _T("WE");
   int dd, mm, ss;
 
   int sign = Longitude<0 ? 0 : 1;
@@ -181,22 +182,22 @@ bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
           dd++;
           mm -= 60;
         }
-      _stprintf(Buffer, TEXT("%c%03d")TEXT(DEG)TEXT("%02d'%02d\""), EW[sign], dd, mm, ss);
+      _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%02d'%02d\""), EW[sign], dd, mm, ss);
     break;
     case cfDDMMSSss:
       dd = (int)Longitude;
       Longitude = (Longitude - dd) * 60.0;
       mm = (int)(Longitude);
       Longitude = (Longitude - mm) * 60.0;
-      _stprintf(Buffer, TEXT("%c%03d")TEXT(DEG)TEXT("%02d'%05.2f\""), EW[sign], dd, mm, Longitude);
+      _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%02d'%05.2f\""), EW[sign], dd, mm, Longitude);
     break;
     case cfDDMMmmm:
       dd = (int)Longitude;
       Longitude = (Longitude - dd) * 60.0;
-      _stprintf(Buffer, TEXT("%c%03d")TEXT(DEG)TEXT("%06.3f'"), EW[sign], dd, Longitude);
+      _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%06.3f'"), EW[sign], dd, Longitude);
     break;
     case cfDDdddd:
-      _stprintf(Buffer, TEXT("%c%08.4f")TEXT(DEG), EW[sign], Longitude);
+      _stprintf(Buffer, _T("%c%08.4f")_T(DEG), EW[sign], Longitude);
     break;
     default:
 //      assert(false /* undefined coordinateformat */);
@@ -210,7 +211,7 @@ bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
 
 bool Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size){
   (void)size;
-  TCHAR EW[] = TEXT("SN");
+  TCHAR EW[] = _T("SN");
   int dd, mm, ss;
 
   int sign = Latitude<0 ? 0 : 1;
@@ -231,22 +232,22 @@ bool Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size){
         dd++;
         mm -= 60;
       }
-      _stprintf(Buffer, TEXT("%c%02d")TEXT(DEG)TEXT("%02d'%02d\""), EW[sign], dd, mm, ss);
+      _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%02d'%02d\""), EW[sign], dd, mm, ss);
     break;
     case cfDDMMSSss:
       dd = (int)Latitude;
       Latitude = (Latitude - dd) * 60.0;
       mm = (int)(Latitude);
       Latitude = (Latitude - mm) * 60.0;
-      _stprintf(Buffer, TEXT("%c%02d")TEXT(DEG)TEXT("%02d'%05.2f\""), EW[sign], dd, mm, Latitude);
+      _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%02d'%05.2f\""), EW[sign], dd, mm, Latitude);
     break;
     case cfDDMMmmm:
       dd = (int)Latitude;
       Latitude = (Latitude - dd) * 60.0;
-      _stprintf(Buffer, TEXT("%c%02d")TEXT(DEG)TEXT("%06.3f'"), EW[sign], dd, Latitude);
+      _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%06.3f'"), EW[sign], dd, Latitude);
     break;
     case cfDDdddd:
-      _stprintf(Buffer, TEXT("%c%07.4f")TEXT(DEG), EW[sign], Latitude);
+      _stprintf(Buffer, _T("%c%07.4f")_T(DEG), EW[sign], Latitude);
     break;
     default:
 //      assert(false /* undefined coordinateformat */);
@@ -449,7 +450,7 @@ bool Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size){
 //  prec = max(prec, 0);
   prec = 0;
 
-  _stprintf(sTmp, TEXT("%.*f%s"), prec, Altitude, pU->Name);
+  _stprintf(sTmp, _T("%.*f%s"), prec, Altitude, pU->Name);
 
   if (_tcslen(sTmp) < size-1){
     _tcscpy(Buffer, sTmp);
@@ -492,7 +493,7 @@ bool Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size){
 //  prec = max(prec, 0);
   prec = 0;
 
-  _stprintf(sTmp, TEXT("%+.*f%s"), prec, Altitude, pU->Name);
+  _stprintf(sTmp, _T("%+.*f%s"), prec, Altitude, pU->Name);
 
   if (_tcslen(sTmp) < size-1){
     _tcscpy(Buffer, sTmp);
@@ -541,7 +542,7 @@ bool Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size){
     }
   }
 
-  _stprintf(sTmp, TEXT("%.*f%s"), prec, value, pU->Name);
+  _stprintf(sTmp, _T("%.*f%s"), prec, value, pU->Name);
 
   if (_tcslen(sTmp) < size-1){
     _tcscpy(Buffer, sTmp);
@@ -589,8 +590,8 @@ bool Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer, si
     }
   }
 
-//  _stprintf(sTmp, TEXT("%.*f%s"), prec, value, pU->Name);
-  _stprintf(sTmp, TEXT("%.*f"), prec, value);
+//  _stprintf(sTmp, _T("%.*f%s"), prec, value, pU->Name);
+  _stprintf(sTmp, _T("%.*f"), prec, value);
 
   if (_tcslen(sTmp) < size-1){
     _tcscpy(Buffer, sTmp);
@@ -637,50 +638,6 @@ double Units::ToSysDistance(double Distance){
   return(Distance);
 }
 
-
-void Units::setupUnitBitmap(Units_t Unit, HINSTANCE hInst, WORD IDB, int Width, int Height){
-
-  UnitDescriptors[Unit].bitmap.load(IDB);
-  UnitDescriptors[Unit].BitMapSize.x = Width;
-  UnitDescriptors[Unit].BitMapSize.y = Height;
-
-}
-
-
-bool Units::LoadUnitBitmap(HINSTANCE hInst){
-
-  UnitDescriptors[unUndef].BitMapSize.x = 0;
-  UnitDescriptors[unUndef].BitMapSize.y = 0;
-
-  setupUnitBitmap(unKiloMeter, hInst, IDB_UNIT_KM, 5, 11);
-  setupUnitBitmap(unNauticalMiles, hInst, IDB_UNIT_NM, 5, 11);
-  setupUnitBitmap(unStatuteMiles, hInst, IDB_UNIT_SM, 5, 11);
-  setupUnitBitmap(unKiloMeterPerHour, hInst, IDB_UNIT_KMH, 10, 11);
-  setupUnitBitmap(unKnots, hInst, IDB_UNIT_KT, 5, 11);
-  setupUnitBitmap(unStatuteMilesPerHour, hInst, IDB_UNIT_MPH, 10, 11);
-  setupUnitBitmap(unMeterPerSecond, hInst, IDB_UNIT_MS, 5, 11);
-  setupUnitBitmap(unFeetPerMinutes, hInst, IDB_UNIT_FPM, 5, 11);
-  setupUnitBitmap(unMeter, hInst, IDB_UNIT_M, 5, 11);
-  setupUnitBitmap(unFeet, hInst, IDB_UNIT_FT, 5, 11);
-  setupUnitBitmap(unFligthLevel, hInst, IDB_UNIT_FL, 5, 11);
-  setupUnitBitmap(unKelvin, hInst, IDB_UNIT_DegK, 5, 11);
-  setupUnitBitmap(unGradCelcius, hInst, IDB_UNIT_DegC, 5, 11);
-  setupUnitBitmap(unGradFahrenheit, hInst, IDB_UNIT_DegF, 5, 11);
-
-  return(true);
-
-}
-
-bool Units::UnLoadUnitBitmap(void){
-  for (unsigned i = 1; i <
-         sizeof(UnitDescriptors) / sizeof(UnitDescriptors[0]); i++) {
-    UnitDescriptors[unUndef].bitmap.reset();
-  }
-
-  return(true);
-
-}
-
 void Units::TimeToText(TCHAR* text, int d) {
   int hours, mins;
   bool negative = (d<0);
@@ -689,43 +646,8 @@ void Units::TimeToText(TCHAR* text, int d) {
   mins = (dd/60-hours*60);
   hours = hours % 24;
   if (negative) {
-    _stprintf(text, TEXT("-%02d:%02d"),
-              hours, mins);
+    _stprintf(text, _T("-%02d:%02d"), hours, mins);
   } else {
-    _stprintf(text, TEXT("%02d:%02d"),
-              hours, mins);
+    _stprintf(text, _T("%02d:%02d"), hours, mins);
   }
 }
-
-
-bool Units::GetUnitBitmap(Units_t Unit, const Bitmap **HBmp,
-                          POINT *Org, POINT *Size, int Kind){
-
-  UnitDescriptor_t *pU = &UnitDescriptors[Unit];
-
-  *HBmp = pU->bitmap.defined()
-    ? &pU->bitmap : NULL;
-
-  Size->x = pU->BitMapSize.x;
-  Size->y = pU->BitMapSize.y;
-
-  Org->y = 0;
-  switch (Kind){
-    case 1:  // inverse
-      Org->x = pU->BitMapSize.x;
-    break;
-    case 2:  // gray
-      Org->x = pU->BitMapSize.x * 2;
-    break;
-    case 3:  // inverse gray
-      Org->x = pU->BitMapSize.x * 3;
-    break;
-    default:
-      Org->x = 0;
-    break;
-  }
-
-  return pU->bitmap.defined();
-
-}
-

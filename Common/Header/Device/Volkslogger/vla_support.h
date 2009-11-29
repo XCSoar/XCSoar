@@ -19,10 +19,10 @@
 #ifndef VLA_SUPPORT
 #define VLA_SUPPORT
 
-#include "Device/device.h" // XCSoar
-
 #include "vlapityp.h"
 #include "vlapierr.h"
+
+class ComPort;
 
 /*
 	VLA_SYS contains target system dependent primitives upon which
@@ -74,7 +74,7 @@ protected:
   void showwait(VLS_TXT_ID);
 
   //
-  PDeviceDescriptor_t device;
+  ComPort *port;
 };
 
 

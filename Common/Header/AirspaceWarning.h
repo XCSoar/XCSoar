@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -37,23 +38,82 @@ Copyright_License {
 #ifndef AIRSPACE_WARNING_H
 #define AIRSPACE_WARNING_H
 
+#include <windef.h>
+
 struct NMEA_INFO;
 struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
 
+class AirspaceDatabase;
 class MapWindowProjection;
 
+class AirspaceInfo_c{
+
+public:
+
+  int    TimeOut;             // in systicks
+  int    InsideAckTimeOut;    // downgrade auto ACK timer
+  int    Sequence;            // Sequence nummer is equal for real and predicted calculation
+  int    hDistance;           // horizontal distance in m
+  int    vDistance;           // vertical distance in m
+  int    Bearing;             // in deg
+  DWORD  PredictedEntryTime;  // in ms
+  int    Acknowledge;         // 0=not Acked, 1=Acked til closer, 2=Acked til leave, 3= Acked whole day
+  bool   Inside;              // true if inside
+  bool   Predicted;           // true if predicted inside, menas close and entry expected
+  bool   IsCircle;            // true if Airspace is a circle
+  int    AirspaceIndex;       // index of airspace
+  int    SortKey;             // SortKey
+  int    LastListIndex;       // Last index in List, used to sort items with same sort criteria
+  int    ID;                  // Unique ID
+  int    WarnLevel;           // WarnLevel 0 far away, 1 prdicted entry, 2 predicted entry and close, 3 inside
+
+};
+
+typedef enum {asaNull,
+              asaItemAdded,
+              asaItemChanged,
+              asaClearAll,
+              asaItemRemoved,
+              asaWarnLevelIncreased,
+              asaProcessEnd,
+              asaProcessBegin} AirspaceWarningNotifyAction_t;
+
+typedef void (*AirspaceWarningNotifier_t)(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace) ;
+
+void AirspaceWarnListAddNotifier(AirspaceWarningNotifier_t Notifier);
+void AirspaceWarnListRemoveNotifier(AirspaceWarningNotifier_t Notifier);
+
+bool AirspaceWarnGetItem(int Index, AirspaceInfo_c &Item);
+int AirspaceWarnGetItemCount(void);
+
 extern void
-AirspaceWarnListAdd(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+AirspaceWarnListAdd(AirspaceDatabase &airspace_database,
+                    const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
                     const SETTINGS_COMPUTER *settings,
                     const MapWindowProjection &map_projection,
                     bool Predicted, bool IsCircle, int AsIdx,
                     bool ackDay=false);
 
 extern void
-AirspaceWarnListProcess(const NMEA_INFO *Basic,
-                        const DERIVED_INFO *Calculated,
+AirspaceWarnListProcess(AirspaceDatabase &airspace_database,
+                        const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
                         const SETTINGS_COMPUTER *settings,
                         const MapWindowProjection &map_projection);
+
+void
+AirspaceWarnDoAck(AirspaceDatabase &airspace_database, int ID, int Ack);
+
+void
+AirspaceWarnListClear(AirspaceDatabase &airspace_database);
+
+int AirspaceWarnFindIndexByID(int ID);
+
+bool
+ClearAirspaceWarnings(AirspaceDatabase &airspace_database,
+                      bool ack, bool allday=false);
+
+int dlgAirspaceWarningInit(void);
+int dlgAirspaceWarningDeInit(void);
 
 #endif

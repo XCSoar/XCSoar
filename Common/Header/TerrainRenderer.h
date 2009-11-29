@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -38,20 +39,24 @@ Copyright_License {
 #ifndef TERRAIN_RENDERER_H
 #define TERRAIN_RENDERER_H
 
-#include "Screen/Ramp.hpp"
 #include "GeoPoint.hpp"
+
+#include <windef.h>
 
 class CSTScreenBuffer;
 class Canvas;
 class BGRColor;
 class RasterMap;
 class MapWindowProjection;
-class LabelBlock;
+class RasterTerrain;
+class RasterWeather;
 class RasterRounding;
+struct COLORRAMP;
 
 class TerrainRenderer {
 public:
-  TerrainRenderer(RECT rc);
+  TerrainRenderer(const RasterTerrain *_terrain, RasterWeather *_weather,
+                  RECT rc);
   ~TerrainRenderer();
 
 public:
@@ -61,6 +66,8 @@ public:
   short spot_min_val;
 
 private:
+  const RasterTerrain *terrain;
+  RasterWeather *weather;
 
   unsigned int ixs, iys; // screen dimensions in coarse pixels
   unsigned int dtquant;
@@ -99,7 +106,11 @@ private:
   void Slope(const int sx, const int sy, const int sz);
   void ColorTable();
   void Draw(Canvas &canvas, RECT rc);
-  bool SetMap(const GEOPOINT &loc);
+
+  /**
+   * @param day_time the UTC time, in seconds since midnight
+   */
+  bool SetMap(const GEOPOINT &loc, int day_time);
 
  public:
   void SetSettings(short _TerrainRamp,
@@ -111,10 +122,13 @@ private:
   }
 
  public:
+  /**
+   * @param day_time the UTC time, in seconds since midnight
+   */
   bool Draw(Canvas &canvas,
 	    MapWindowProjection &map_projection,
 	    const double sunazimuth, const double sunelevation,
-	    const GEOPOINT &loc,
+            const GEOPOINT &loc, int day_time,
 	    const bool isBigZoom);
 };
 
