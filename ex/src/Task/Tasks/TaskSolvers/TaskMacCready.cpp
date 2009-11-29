@@ -6,11 +6,11 @@ TaskMacCready::TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
                              const unsigned _activeTaskPoint,
                              const GlidePolar &gp):
   m_tps(_tps.begin(),_tps.end()),
+  m_gs(_tps.size()),
+  m_minHs(_tps.size(),0.0),
   m_activeTaskPoint(_activeTaskPoint),
   m_start(0),
   m_end(std::max((int)_tps.size(),1)-1),
-  m_gs(_tps.size()),
-  m_minHs(_tps.size(),0.0),
   m_glide_polar(gp)
 {
 }
@@ -18,11 +18,11 @@ TaskMacCready::TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
 TaskMacCready::TaskMacCready(TaskPoint* tp,
                              const GlidePolar &gp):
   m_tps(1, tp),
+  m_gs(1),
+  m_minHs(1,0.0),
   m_activeTaskPoint(0),
   m_start(0),
   m_end(0),
-  m_gs(1),
-  m_minHs(1,0.0),
   m_glide_polar(gp)
 {
 }

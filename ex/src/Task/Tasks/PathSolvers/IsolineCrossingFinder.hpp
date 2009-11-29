@@ -38,8 +38,8 @@ public:
  */
   double solve();
 private:
-  const GeoEllipse &ell;
   const AATPoint &aap;
+  const GeoEllipse &ell;
 };
 
 #endif

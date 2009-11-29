@@ -68,9 +68,9 @@ public:
            const Waypoint & wp,
            const TaskBehaviour &tb) : 
     IntermediatePoint(_oz,tp,wp,tb,true), 
-    TargetLocked(false), 
     m_target_location(wp.Location),
-    m_target_save(wp.Location)
+    m_target_save(wp.Location),
+    m_target_locked(false)
     {
     }
 
@@ -154,7 +154,7 @@ public:
 private:
   GEOPOINT m_target_location;      /**< Location of target within OZ */
   GEOPOINT m_target_save;          /**< Saved location of target within OZ */
-  bool TargetLocked;            /**< Whether target can float */
+  bool m_target_locked;            /**< Whether target can float */
 
 /** 
  * Check whether target needs to be moved and if so, to

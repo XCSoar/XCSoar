@@ -327,10 +327,10 @@ protected:
 
   unsigned activeTaskPoint; /**< task point sequence index */
   TaskStats stats; /**< statistics of this task */
-  TaskAdvance &task_advance; /**< reference to global advance mechanism */
-  GlidePolar &glide_polar; /**< reference to global glide polar */
   const TaskEvents &task_events; /**< reference to task events (feedback) */
+  TaskAdvance &task_advance; /**< reference to global advance mechanism */
   const TaskBehaviour &task_behaviour; /**< reference to task behaviour (settings) */
+  GlidePolar &glide_polar; /**< reference to global glide polar */
 
 /** 
  * Updates distance calculations and values in the statistics.

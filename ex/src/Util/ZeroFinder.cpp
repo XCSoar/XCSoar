@@ -6,6 +6,7 @@
 
 const double ZeroFinder::epsilon = std::numeric_limits<double>::epsilon();
 const double ZeroFinder::sqrt_epsilon = sqrt(std::numeric_limits<double>::epsilon());
+const double ZeroFinder::r = (3.-sqrt(5.0))/2;	/* Gold section ratio		*/
 
 
 /*
@@ -63,36 +64,36 @@ double ZeroFinder::find_zero(const double xstart) {
   double fb;				/* f(b)				*/
   double fc;				/* f(c)				*/
 
-  a = xmin;  
-  fa = f(a);  
+  bool b_best = true; // b is best and last called
+
+  c = a = xmin;  
+  fc = fa = f(a);  
 
   b = xmax;  
   fb = f(b);
 
-  c = a; 
-  fc = fa;
-
   for(;;)		/* Main iteration loop	*/
   {
     double prev_step = b-a;		/* Distance from the last but one*/
-					/* to the last approximation	*/
-    double tol_act;			/* Actual toleranceerance		*/
-    double p;      			/* Interpolation step is calcu- */
-    double q;      			/* lated in the form p/q; divi- */
-  					/* sion operations is delayed   */
- 					/* until the last moment	*/
-    double new_step;      		/* Step at this iteration       */
+					/* to the last approximation	*/    
    
     if( fabs(fc) < fabs(fb) )
     {                         		/* Swap data for b to be the 	*/
-	a = b;  b = c;  c = a;          /* best approximation		*/
-	fa=fb;  fb=fc;  fc=fa;
+      a = b;  b = c;  c = a;          /* best approximation		*/
+      fa=fb;  fb=fc;  fc=fa;
+      b_best = false;
+    } else {
+      b_best = true;
     }
-    tol_act = 2*epsilon*fabs(b) + tolerance/2;
-    new_step = (c-b)/2;
+    const double tol_act = 		/* Actual tolerance	        */
+      2*epsilon*fabs(b) + tolerance/2;
+
+    double new_step = (c-b)*0.5;    /* Step at this iteration       */
 
     if( fabs(new_step) <= tol_act || fb == (double)0 ) {
-      fb = f(b); // call once more
+      if (!b_best) {
+        fb = f(b); // call once more
+      }
       return b;				/* Acceptable approx. is found	*/
     }
 
@@ -100,17 +101,24 @@ double ZeroFinder::find_zero(const double xstart) {
     if( fabs(prev_step) >= tol_act	/* If prev_step was large enough*/
 	&& fabs(fa) > fabs(fb) )	/* and was in true direction,	*/
     {					/* Interpolatiom may be tried	*/
-	double t1,cb,t2;
-	cb = c-b;
-	if( a==c )			/* If we have only two distinct	*/
+
+      double p;      			/* Interpolation step is calcu- */
+      double q;      			/* lated in the form p/q; divi- */
+  					/* sion operations is delayed   */
+ 					/* until the last moment	*/
+
+      const double cb = c-b;
+      if( a==c )			/* If we have only two distinct	*/
 	{				/* points linear interpolation 	*/
-	  t1 = fb/fa;			/* can only be applied		*/
+	  const double t1 = fb/fa;	/* can only be applied		*/
 	  p = cb*t1;
 	  q = 1.0 - t1;
  	}
 	else				/* Quadric inverse interpolation*/
 	{
-	  q = fa/fc;  t1 = fb/fc;  t2 = fb/fa;
+	  q = fa/fc;  
+          const double t1 = fb/fc;  
+          const double t2 = fb/fa;
 	  p = t2 * ( cb*q*(q-t1) - (b-a)*(t1-1.0) );
 	  q = (q-1.0) * (t1-1.0) * (t2-1.0);
 	}
@@ -137,8 +145,8 @@ double ZeroFinder::find_zero(const double xstart) {
 
     a = b;  fa = fb;			/* Save the previous approx.	*/
     b += new_step;                      /* Do step to a new approxim.	*/
-
     fb = f(b);
+
     if( (fb > 0 && fc > 0) || (fb < 0 && fc < 0) )
     {                 			/* Adjust c for it to have a sign*/
       c = a;  fc = fa;                  /* opposite to that of b	*/
@@ -206,34 +214,35 @@ double ZeroFinder::find_min(const double xstart)
   double fx;				/* f(x)				*/
   double fv;				/* f(v)				*/
   double fw;				/* f(w)				*/
-  const double r = (3.-sqrt(5.0))/2;	/* Gold section ratio		*/
   double a = xmin;
   double b = xmax;
+  bool x_best = true;
 
   assert( tolerance > 0 && b > a );
 
-  v = a + r*(b-a);  fv = f(v); /* First step - always gold section*/
-  x = v;  w = v;
-  fx=fv;  fw=fv;
-
+  /* First step - always gold section*/
+  x = w = v = a + r*(b-a);
+  fx= fw = fv = f(v);
 
   for(;;)		/* Main iteration loop	*/
   {
-    double range = b-a;      /* Range over which the minimum */
-                                       /* is seeked for		*/
-    double middle_range = (a+b)/2;
-    double tol_act =			/* Actual toleranceerance		*/
-      sqrt_epsilon*fabs(x) + tolerance/3;
-    double new_step;      		/* Step at this iteration       */
+    const double range = b-a;      /* Range over which the minimum */
+                                   /* is seeked for		*/
+    const double middle_range = (a+b)*0.5;
 
-    if( fabs(x-middle_range) + range/2 <= 2*tol_act ) {
-      fx = f(x); // call once more
+    const double tol_act =			/* Actual toleranceerance		*/
+      sqrt_epsilon*fabs(x) + tolerance/3;
+
+    if( fabs(x-middle_range) + range*0.5 <= 2*tol_act ) {
+      if (!x_best) {
+        fx = f(x); // call once more
+      }
       return x;				/* Acceptable approx. is found	*/
     }
 
+    double new_step      		/* Step at this iteration       */
 					/* Obtain the gold section step	*/
-    new_step = r * ( x<middle_range ? b-x : a-x );
-
+      = r * ( x<middle_range ? b-x : a-x );
 
     			/* Decide if the interpolation can be tried	*/
     if( fabs(x-w) >= tol_act  )		/* If x and w are distinct      */
@@ -282,9 +291,11 @@ double ZeroFinder::find_min(const double xstart)
       
 	v = w;  w = x;  x = t;		/* Assign the best approx to x	*/
 	fv=fw;  fw=fx;  fx=ft;
+        x_best = false;
       }
       else                              /* x remains the better approx  */
       {        		             
+        x_best = true;
 	if( t < x )			/* Reduce the range enclosing x	*/
 	  a = t;                   
 	else

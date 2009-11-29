@@ -9,12 +9,12 @@ OrderedTaskPoint::OrderedTaskPoint(ObservationZonePoint* _oz,
                                    const Waypoint & wp, 
                                    const TaskBehaviour &tb,
                                    const bool b_scored): 
-  ObservationZoneClient(_oz),
+  TaskLeg(*this),
   ScoredTaskPoint(tp, wp, tb, b_scored),
-  tp_previous(NULL),
-  tp_next(NULL),
+  ObservationZoneClient(_oz),
   m_active_state(NOTFOUND_ACTIVE),
-  TaskLeg(*this)
+  tp_next(NULL),
+  tp_previous(NULL)
 {
 }
 

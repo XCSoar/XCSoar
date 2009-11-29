@@ -41,19 +41,21 @@ public:
 private:
   double target_height(TaskManager &task_manager);
 
-  bool short_flight;
   GEOPOINT endpoint(const double bear) const;
   void update_bearing(TaskManager &task_manager);
+
+  int test_num;
+  Filter heading_filt;
   bool goto_target;
+  double speed_factor;
+  double climb_rate;
+  bool short_flight;
+
   AIRCRAFT_STATE state, state_last;
   std::vector<GEOPOINT> w;
   double bearing;
   double sinkrate;
-  double climb_rate;
   unsigned awp;
-  int test_num;
-  Filter heading_filt;
-  double speed_factor;
 
   enum AcState {
     Climb = 0,

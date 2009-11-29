@@ -55,6 +55,7 @@ protected:
   const double tolerance; /**< search tolerance */
   static const double epsilon; /**< machine tolerance */
   static const double sqrt_epsilon; /**< sqrt of machine tolerance */
+  static const double r;
 };
 
 #endif

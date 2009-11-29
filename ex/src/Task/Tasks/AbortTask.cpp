@@ -11,9 +11,9 @@ AbortTask::AbortTask(const TaskEvents &te,
                      GlidePolar &gp,
                      const Waypoints &wps):
   AbstractTask(te, tb, ta, gp), 
+  active_waypoint(0),
   waypoints(wps),
-  polar_safety(gp),
-  active_waypoint(0)
+  polar_safety(gp)
 {
 
 }

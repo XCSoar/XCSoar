@@ -22,21 +22,20 @@ INCLUDES := -I$(SRC)
 MAKEFLAGS	+=-r
 
 PROFILE := -pg
-COVERAGE := --coverage
+#COVERAGE := --coverage
 
-OPTIMIZE := -g 
-# -O2
+OPTIMIZE := -g -O2
 
 CPPFLAGS := $(INCLUDES) 
 CFLAGS		:=$(OPTIMIZE) $(PROFILE) $(COVERAGE)
 
+CFLAGS += -pedantic
 CFLAGS += -Wall -Wextra
 CFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
 CFLAGS += -Wmissing-noreturn -Wundef
 CFLAGS += -Wno-unused-parameter 
 CFLAGS += -Wno-missing-field-initializers 
-CXXFLAGS += -Wno-non-virtual-dtor 
-#CXXFLAGS += -Wno-reorder 
+CFLAGS += -Wno-variadic-macros
 
 # disable some warnings, we're not ready for them yet
 #CFLAGS += -Wno-format -Wno-switch
@@ -46,8 +45,7 @@ CXXFLAGS += -Wno-non-virtual-dtor
 #CFLAGS += -Wno-strict-aliasing
 
 # make warnings fatal (for perfectionists)
-#CFLAGS += -Werror
-CFLAGS += -pedantic
+CXXFLAGS += -Wno-reorder 
 
 # -Wdisabled-optimization
 # -Wunused -Wshadow -Wunreachable-code
@@ -56,6 +54,8 @@ CFLAGS += -DDO_PRINT
 # -DINSTRUMENT_TASK
 
 CXXFLAGS	:=$(CFLAGS) -fno-exceptions 
+CXXFLAGS += -Wno-non-virtual-dtor 
+CXXFLAGS += -Werror
 
 ####### sources
 

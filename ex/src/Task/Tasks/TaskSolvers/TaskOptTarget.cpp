@@ -11,8 +11,8 @@ TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
   ZeroFinder(0.02,0.98,TOLERANCE_OPT_TARGET),
   tm(tps,activeTaskPoint,_gp),
   aircraft(_aircraft),
-  tp_current(_tp_current),
   tp_start(_ts),
+  tp_current(_tp_current),
   iso(_tp_current)
 {
 

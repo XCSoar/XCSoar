@@ -87,16 +87,15 @@ private:
   void save_max();
   void save_min();
 
-  const unsigned num_taskpoints;
   unsigned activeStage;
 
   unsigned extremal_distance(const unsigned d) const;
 
   SearchPointVector solution;
 
-  bool shortest;
-
   OrderedTask& task;
+  bool shortest;
+  const unsigned num_taskpoints;
 
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
   unsigned get_size(const unsigned stage) const;

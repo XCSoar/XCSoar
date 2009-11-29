@@ -52,9 +52,9 @@ class SafeTaskEdit:
 public:
   SafeTaskEdit(TaskManager& tm, const Waypoints &_waypoints):
     task_mgr(tm),
-    waypoints(_waypoints),
+    counter(0),
     tp_to_edit(0),
-    counter(0)
+    waypoints(_waypoints)
     {
       //task_mgr.lock();
       fact = task_mgr.get_factory();
@@ -155,8 +155,8 @@ public:
     counter++;
   }
 
-  unsigned counter;
   TaskManager &task_mgr;
+  unsigned counter;
   unsigned tp_to_edit;
   OrderedTaskPoint *new_tp;
   AbstractTaskFactory *fact;

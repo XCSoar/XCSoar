@@ -199,15 +199,16 @@ public:
   }
 
 private:
-  const TaskStats null_stats;
+  /** @link aggregation */
+  OrderedTask task_ordered;
 
-  TaskMode_t set_mode(const TaskMode_t mode);
+  /** @link aggregation */
+  GotoTask task_goto;
+  
+  /** @link aggregation */
+  AbortTask task_abort;
 
-  AbstractTask* active_task;
-  AbstractTaskFactory* active_factory;
-
-  TaskMode_t mode;
-  Factory_t factory_mode;
+  const TaskBehaviour &task_behaviour;
 
   /** @link aggregation */
   FAITaskFactory factory_fai;
@@ -218,19 +219,17 @@ private:
   /** @link aggregation */
   MixedTaskFactory factory_mixed;
 
-  /** @link aggregation */
-  OrderedTask task_ordered;
+  TaskMode_t mode;
+  AbstractTask* active_task;
+  Factory_t factory_mode;
+  AbstractTaskFactory* active_factory;
+    
+  const TaskStats null_stats;
+
+  TaskMode_t set_mode(const TaskMode_t mode);
 
   /** @link aggregation */
-  GotoTask task_goto;
-  
-  /** @link aggregation */
-  AbortTask task_abort;
-  
-  /** @link aggregation */
   TaskAdvance task_advance;
-  
-  const TaskBehaviour &task_behaviour;
   
 public:
   /**
