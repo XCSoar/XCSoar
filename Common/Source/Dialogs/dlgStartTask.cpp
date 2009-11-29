@@ -73,38 +73,36 @@ void dlgStartTaskShowModal(bool *validStart, double Time, double Speed, double A
                       TEXT("dlgStartTask.xml"),
 		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_STARTTASK"));
+  if (wf == NULL)
+    return;
 
-  if (wf) {
-    WndProperty* wp;
+  WndProperty* wp;
 
-    TCHAR Temp[80];
+  TCHAR Temp[80];
 
-    wp = (WndProperty*)wf->FindByName(TEXT("prpTime"));
-    if (wp) {
-      Units::TimeToText(Temp, (int)TimeLocal((int)Time));
-      wp->SetText(Temp);
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpSpeed"));
-    if (wp) {
-      _stprintf(Temp, TEXT("%.0f %s"),
-                (double) TASKSPEEDMODIFY * Speed, Units::GetTaskSpeedName());
-      wp->SetText(Temp);
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
-    if (wp) {
-      _stprintf(Temp, TEXT("%.0f %s"),
-                (double) Altitude*ALTITUDEMODIFY, Units::GetAltitudeName());
-      wp->SetText(Temp);
-    }
-
-    wf->ShowModal();
-
-    delete wf;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTime"));
+  if (wp) {
+    Units::TimeToText(Temp, (int)TimeLocal((int)Time));
+    wp->SetText(Temp);
   }
-  wf = NULL;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeed"));
+  if (wp) {
+    _stprintf(Temp, TEXT("%.0f %s"),
+              (double) TASKSPEEDMODIFY * Speed, Units::GetTaskSpeedName());
+    wp->SetText(Temp);
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
+  if (wp) {
+    _stprintf(Temp, TEXT("%.0f %s"),
+              (double) Altitude*ALTITUDEMODIFY, Units::GetAltitudeName());
+    wp->SetText(Temp);
+  }
+
+  wf->ShowModal();
+
+  delete wf;
 
   *validStart = startIsValid;
 }
-

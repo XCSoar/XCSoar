@@ -42,6 +42,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "Interface.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "Dialogs.h"
 #include "DeviceBlackboard.hpp"
 #include "wcecompat/ts_string.h"
@@ -105,19 +106,13 @@ XCSoarInterface::CreateProgressDialog(const TCHAR* text)
   _ftprintf(stderr, _T("%s\n"), text);
 }
 
-BOOL
-XCSoarInterface::SetProgressStepSize(int nSize)
-{
-  return true;
-}
-
 void
 XCSoarInterface::StepProgressDialog(void)
 {
 }
 
 bool
-MapWindowProjection::WaypointInScaleFilter(int i) const
+MapWindowProjection::WaypointInScaleFilter(const WAYPOINT &way_point) const
 {
   return true;
 }
@@ -128,21 +123,21 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
 {
 }
 
-void RasterTerrain::Lock(void) {}
-void RasterTerrain::Unlock(void) {}
-bool RasterTerrain::GetTerrainCenter(GEOPOINT *location) {
+bool
+RasterTerrain::GetTerrainCenter(GEOPOINT *location) const
+{
   return false;
 }
 
 short
 RasterTerrain::GetTerrainHeight(const GEOPOINT &Location,
-                                      const RasterRounding &rounding)
+                                const RasterRounding &rounding) const
 {
   return 0;
 }
 
 bool
-RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location)
+RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
 {
   return true;
 }
@@ -177,9 +172,8 @@ int main(int argc, char **argv)
 
   TCHAR path[MAX_PATH];
   WayPointList way_points;
-  RasterTerrain terrain;
 
   ascii2unicode(argv[1], path);
-  ReadWayPointFile(path, way_points, terrain);
+  ReadWayPointFile(path, way_points, NULL);
   return 0;
 }

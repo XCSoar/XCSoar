@@ -166,8 +166,8 @@ Distance(const AIRSPACE_ALT &altitude, int alt, int agl)
 
 static void
 AirspaceWarnListCalcDistance(AirspaceDatabase &airspace_database,
-                             const NMEA_INFO *Basic,
-                             const DERIVED_INFO *Calculated,
+                             const NMEA_INFO &basic,
+                             const DERIVED_INFO &calculated,
                              bool IsCircle, int AsIdx,
                              int *hDistance, int *Bearing, int *vDistance,
                              const MapWindowProjection &map_projection)
@@ -177,17 +177,13 @@ AirspaceWarnListCalcDistance(AirspaceDatabase &airspace_database,
   int alt;
   int agl;
 
-  if (Basic->BaroAltitudeAvailable) {
-    alt = (int)Basic->BaroAltitude;
-  } else {
-    alt = (int)Basic->Altitude;
-  }
-  agl = (int)Calculated->AltitudeAGL;
+  alt = (int)basic.GetAnyAltitude();
+  agl = (int)calculated.AltitudeAGL;
 
   if (IsCircle){
     const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[AsIdx];
 
-    *hDistance = (int)airspace_database.CircleDistance(Basic->Location, AsIdx);
+    *hDistance = (int)airspace_database.CircleDistance(basic.Location, AsIdx);
     if (*hDistance < 0)
       *hDistance = 0;
     vDistanceBase = Distance(circle.Base, alt, agl);
@@ -196,11 +192,11 @@ AirspaceWarnListCalcDistance(AirspaceDatabase &airspace_database,
   } else {
     const AIRSPACE_AREA &area = airspace_database.AirspaceArea[AsIdx];
 
-    if (!airspace_database.InsideArea(Basic->Location, AsIdx)){
+    if (!airspace_database.InsideArea(basic.Location, AsIdx)){
       // WARNING: RangeAirspaceArea dont return negative values if
       // inside aera -> but RangeAirspaceCircle does!
       double fBearing;
-      *hDistance = (int)airspace_database.RangeArea(Basic->Location, AsIdx,
+      *hDistance = (int)airspace_database.RangeArea(basic.Location, AsIdx,
                                                     &fBearing, map_projection);
       *Bearing = (int)fBearing;
     } else {
@@ -254,8 +250,8 @@ calcWarnLevel(AirspaceDatabase &airspace_database, AirspaceInfo_c *asi)
 
 void
 AirspaceWarnListAdd(AirspaceDatabase &airspace_database,
-                    const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
-                    const SETTINGS_COMPUTER *settings,
+                    const NMEA_INFO &basic, const DERIVED_INFO &calculated,
+                    const SETTINGS_COMPUTER &settings,
                     const MapWindowProjection &map_projection,
                     bool Predicted, bool IsCircle, int AsIdx,
                     bool ackDay)
@@ -274,7 +270,7 @@ AirspaceWarnListAdd(AirspaceDatabase &airspace_database,
   bool  FoundInList = false;
 
   if (Predicted){  // ToDo calculate predicted data
-    AirspaceWarnListCalcDistance(airspace_database, Basic, Calculated,
+    AirspaceWarnListCalcDistance(airspace_database, basic, calculated,
                                  IsCircle, AsIdx, &hDistance,
 				 &Bearing, &vDistance,
                                  map_projection);
@@ -323,7 +319,7 @@ AirspaceWarnListAdd(AirspaceDatabase &airspace_database,
 
       }
 
-      it->data.InsideAckTimeOut = settings->AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
+      it->data.InsideAckTimeOut = settings.AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
       it->data.TimeOut = OUTSIDE_CHECK_INTERVAL;
 
       FoundInList = true;
@@ -339,7 +335,7 @@ AirspaceWarnListAdd(AirspaceDatabase &airspace_database,
 
     asi.TimeOut = OUTSIDE_CHECK_INTERVAL;
 
-    asi.InsideAckTimeOut = settings->AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
+    asi.InsideAckTimeOut = settings.AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
 
     asi.Sequence = Sequence;
 
@@ -425,8 +421,8 @@ AirspaceWarnListSort(void)
 
 void
 AirspaceWarnListProcess(AirspaceDatabase &airspace_database,
-                        const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
-                        const SETTINGS_COMPUTER *settings,
+                        const NMEA_INFO &basic, const DERIVED_INFO &calculated,
+                        const SETTINGS_COMPUTER &settings,
                         const MapWindowProjection &map_projection)
 {
 
@@ -445,7 +441,7 @@ AirspaceWarnListProcess(AirspaceDatabase &airspace_database,
       int vDistance = 0;
       int Bearing = 0;
 
-      AirspaceWarnListCalcDistance(airspace_database, Basic, Calculated,
+      AirspaceWarnListCalcDistance(airspace_database, basic, calculated,
                                    it->data.IsCircle,
                                    it->data.AirspaceIndex,
                                    &hDistance, &Bearing, &vDistance,
@@ -487,7 +483,7 @@ AirspaceWarnListProcess(AirspaceDatabase &airspace_database,
             }
 
         } else { // very close, just update ack timer
-          it->data.InsideAckTimeOut = settings->AcknowledgementTime
+          it->data.InsideAckTimeOut = settings.AcknowledgementTime
             / OUTSIDE_CHECK_INTERVAL;
           // 20sec outside check interval prevent down ACK on circling
         }

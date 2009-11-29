@@ -56,7 +56,7 @@ Copyright_License {
 #include "Calibration.hpp"
 #include "Airspace.h"
 #include "AirspaceWarning.h"
-#include "GlideSolvers.hpp"
+#include "GlideTerrain.hpp"
 #include "Task.h" // only needed for check of activewaypoint
 #include "SettingsTask.hpp"
 #include "LocalTime.hpp"
@@ -134,12 +134,12 @@ void GlideComputerAirData::ProcessVertical() {
   Turning();
   Wind();
   ProcessThermalLocator();
-  CuSonde::updateMeasurements(&Basic(), &Calculated());
+  CuSonde::updateMeasurements(Basic(), Calculated());
   LastThermalStats();
   LD();
   CruiseLD();
   SetCalculated().AverageLD=
-    CalculateLDRotary(&Calculated(), &rotaryLD); // AverageLD
+    CalculateLDRotary(Calculated(), rotaryLD); // AverageLD
   Average30s();
   AverageClimbRate();
   AverageThermal();
@@ -410,7 +410,7 @@ void GlideComputerAirData::LD()
 	       DistanceFlown,
 	       LastCalculated().NavAltitude - Calculated().NavAltitude, 0.1);
 
-    InsertLDRotary(&Calculated(),
+    InsertLDRotary(Calculated(),
 		   &rotaryLD,(int)DistanceFlown,
 		   (int)Calculated().NavAltitude);
   }
@@ -974,8 +974,8 @@ GlideComputerAirData::AirspaceWarning()
     if (InsideAltitudeRange(circle, alt, agl) &&
         SettingsComputer().iAirspaceMode[circle.Type] >= 2 &&
         airspace_database.InsideCircle(loc, i))
-      AirspaceWarnListAdd(airspace_database, &Basic(), &Calculated(),
-                          &SettingsComputer(),
+      AirspaceWarnListAdd(airspace_database, Basic(), Calculated(),
+                          SettingsComputer(),
                           MapProjection(),
                           position_is_predicted, 1, i, false);
   }
@@ -988,14 +988,14 @@ GlideComputerAirData::AirspaceWarning()
     if (InsideAltitudeRange(area, alt, agl) &&
         SettingsComputer().iAirspaceMode[area.Type] >= 2 &&
         airspace_database.InsideArea(loc, i))
-      AirspaceWarnListAdd(airspace_database, &Basic(), &Calculated(),
-                          &SettingsComputer(),
+      AirspaceWarnListAdd(airspace_database, Basic(), Calculated(),
+                          SettingsComputer(),
                           map_projection,
                           position_is_predicted, 0, i, false);
   }
 
-  AirspaceWarnListProcess(airspace_database, &Basic(), &Calculated(),
-                          &SettingsComputer(),
+  AirspaceWarnListProcess(airspace_database, Basic(), Calculated(),
+                          SettingsComputer(),
                           map_projection);
 }
 
@@ -1022,14 +1022,17 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   GEOPOINT loc;
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
     bearing = (i*360.0)/NUMTERRAINSWEEPS;
+
+    terrain.Lock();
     distance = FinalGlideThroughTerrain(bearing,
-					&Basic(),
-					&Calculated(),
-					SettingsComputer(),
+                                        Basic(), Calculated(),
+                                        SettingsComputer(), terrain,
 					&loc,
 					mymaxrange,
                                         &out_of_range,
 					&SetCalculated().TerrainBase);
+    terrain.Unlock();
+
     if (out_of_range) {
       FindLatitudeLongitude(Basic().Location,
 			    bearing,

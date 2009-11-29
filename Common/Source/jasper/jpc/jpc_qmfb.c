@@ -190,7 +190,7 @@ static void jpc_qmfb1d_split(jpc_fix_t *startptr, int startind, int endind,
 #if !defined(HAVE_VLA)
 	/* Get a buffer. */
 	if (bufsize > QMFB_SPLITBUFSIZE) {
-		if (!(buf = jas_malloc(bufsize * sizeof(jpc_fix_t)))) {
+		if (!(buf = (jpc_fix_t *)jas_malloc(bufsize * sizeof(jpc_fix_t)))) {
 			/* We have no choice but to commit suicide in this case. */
 			abort();
 		}
@@ -315,7 +315,7 @@ static void jpc_qmfb1d_split_batch(jpc_fix_t *startptr, int startind, int endind
 
 	/* Get a buffer. */
 	if (bufsize > QMFB_SPLITBUFSIZE_BATCH) {
-		if (!(buf = jas_malloc(bufsize * sizeof(jpc_batch_t)))) {
+		if (!(buf = (jpc_batch_t *)jas_malloc(bufsize * sizeof(jpc_batch_t)))) {
 			/* We have no choice but to commit suicide in this case. */
 			abort();
 		}
@@ -432,7 +432,7 @@ static void jpc_qmfb1d_join(jpc_fix_t *startptr, int startind, int endind,
 #if !defined(HAVE_VLA)
 	/* Allocate memory for the join buffer from the heap. */
 	if (bufsize > QMFB_JOINBUFSIZE) {
-		if (!(buf = jas_malloc(bufsize * sizeof(jpc_fix_t)))) {
+		if (!(buf = (jpc_fix_t *)jas_malloc(bufsize * sizeof(jpc_fix_t)))) {
 			/* We have no choice but to commit suicide. */
 			abort();
 		}
@@ -551,7 +551,7 @@ static void jpc_qmfb1d_join_batch(jpc_fix_t *startptr, int startind, int endind,
 
 	/* Allocate memory for the join buffer from the heap. */
 if (bufsize > QMFB_JOINBUFSIZE_BATCH) {
-		if (!(buf = jas_malloc(bufsize * sizeof(jpc_batch_t)))) {
+		if (!(buf = (jpc_batch_t *)jas_malloc(bufsize * sizeof(jpc_batch_t)))) {
 			/* We have no choice but to commit suicide. */
 			abort();
 		}
@@ -1547,7 +1547,7 @@ jpc_qmfb1d_t *jpc_qmfb1d_make(int qmfbid)
 static jpc_qmfb1d_t *jpc_qmfb1d_create()
 {
 	jpc_qmfb1d_t *qmfb;
-	if (!(qmfb = jas_malloc(sizeof(jpc_qmfb1d_t)))) {
+	if (!(qmfb = (jpc_qmfb1d_t *)jas_malloc(sizeof(jpc_qmfb1d_t)))) {
 		return 0;
 	}
 	qmfb->ops = 0;

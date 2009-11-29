@@ -413,7 +413,7 @@ static void GetValues(void) {
   if (wp) {
     ss = wp->GetDataField()->GetAsInteger();
     if (ss==0) {
-      WaypointAltitudeFromTerrain(global_wpt, terrain);
+      WaypointAltitudeFromTerrain(*global_wpt, terrain);
     } else {
       global_wpt->Altitude = ss/ALTITUDEMODIFY;
     }
@@ -450,14 +450,10 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-
-void dlgWaypointEditShowModal(WAYPOINT *wpt) {
-  if (!wpt) {
-    return;
-  }
-
-  global_wpt = wpt;
+void
+dlgWaypointEditShowModal(WAYPOINT &way_point)
+{
+  global_wpt = &way_point;
 
   if (!InfoBoxLayout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
@@ -471,34 +467,30 @@ void dlgWaypointEditShowModal(WAYPOINT *wpt) {
                         TEXT("IDR_XML_WAYPOINTEDIT"));
   }
 
-  if (wf) {
+  if (wf == NULL)
+    return;
 
-    buttonName = ((WndButton *)wf->FindByName(TEXT("cmdName")));
-    if (buttonName) {
-      buttonName->SetOnClickNotify(OnNameClicked);
-    }
-
-    buttonComment = ((WndButton *)wf->FindByName(TEXT("cmdComment")));
-    if (buttonComment) {
-      buttonComment->SetOnClickNotify(OnCommentClicked);
-    }
-
-    UpdateButtons();
-
-    SetUnits();
-
-    SetValues();
-
-    wf->SetModalResult(mrCancel);
-
-    if (wf->ShowModal()==mrOK) {
-      GetValues();
-    }
-
-    delete wf;
+  buttonName = ((WndButton *)wf->FindByName(TEXT("cmdName")));
+  if (buttonName) {
+    buttonName->SetOnClickNotify(OnNameClicked);
   }
 
-  wf = NULL;
+  buttonComment = ((WndButton *)wf->FindByName(TEXT("cmdComment")));
+  if (buttonComment) {
+    buttonComment->SetOnClickNotify(OnCommentClicked);
+  }
+
+  UpdateButtons();
+
+  SetUnits();
+
+  SetValues();
+
+  wf->SetModalResult(mrCancel);
+
+  if (wf->ShowModal()==mrOK) {
+    GetValues();
+  }
+
+  delete wf;
 }
-
-

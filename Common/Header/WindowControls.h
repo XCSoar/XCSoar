@@ -566,17 +566,17 @@ class WndProperty:public WindowControl{
 
     int (*mOnDataChangeNotify)(WindowControl * Sender, int Mode, int Value);
 
-    int CallSpecial(void);
     int IncValue(void);
     int DecValue(void);
 
     DataField *mDataField;
 
     void UpdateButtonData(int Value);
-    bool mDialogStyle;
 
   public:
 
+    int CallSpecial(void);
+    bool mDialogStyle;
 
     typedef int (*DataChangeCallback_t)(WindowControl * Sender, int Mode, int Value);
 

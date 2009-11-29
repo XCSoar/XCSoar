@@ -244,7 +244,7 @@ static int DeclIndex = 128;
 static int nDeclErrorCode;
 
 static bool
-cai302DeclAddWayPoint(ComPort *port, const WAYPOINT *wp);
+cai302DeclAddWayPoint(ComPort *port, const WAYPOINT &way_point);
 
 bool
 CAI302Device::Declare(const struct Declaration *decl)
@@ -391,7 +391,7 @@ CAI302Device::Declare(const struct Declaration *decl)
   DeclIndex = 128;
 
   for (int i = 0; i < decl->num_waypoints; i++)
-    cai302DeclAddWayPoint(port, decl->waypoint[i]);
+    cai302DeclAddWayPoint(port, *decl->waypoint[i]);
 
   if (nDeclErrorCode == 0){
 
@@ -422,7 +422,7 @@ CAI302Device::Declare(const struct Declaration *decl)
 }
 
 static bool
-cai302DeclAddWayPoint(ComPort *port, const WAYPOINT *wp)
+cai302DeclAddWayPoint(ComPort *port, const WAYPOINT &way_point)
 {
   TCHAR Name[13];
   TCHAR  szTmp[128];
@@ -433,10 +433,10 @@ cai302DeclAddWayPoint(ComPort *port, const WAYPOINT *wp)
   if (nDeclErrorCode != 0)
     return false;
 
-  _tcsncpy(Name, wp->Name, 12);
+  _tcsncpy(Name, way_point.Name, 12);
   Name[12] = '\0';
 
-  tmp = wp->Location.Latitude;
+  tmp = way_point.Location.Latitude;
   NoS = 'N';
   if (tmp < 0)
     {
@@ -447,7 +447,7 @@ cai302DeclAddWayPoint(ComPort *port, const WAYPOINT *wp)
   MinLat = (tmp - DegLat) * 60;
 
 
-  tmp = wp->Location.Longitude;
+  tmp = way_point.Location.Longitude;
   EoW = 'E';
   if (tmp < 0)
     {
@@ -462,7 +462,7 @@ cai302DeclAddWayPoint(ComPort *port, const WAYPOINT *wp)
     DegLat, MinLat, NoS,
     DegLon, MinLon, EoW,
     Name,
-    (int)wp->Altitude
+    (int)way_point.Altitude
   );
 
   DeclIndex++;

@@ -43,7 +43,7 @@ zzip_dir_stat(ZZIP_DIR * dir, zzip_char_t* name, ZZIP_STAT * zs, int flags)
 
     if (flags & ZZIP_IGNOREPATH)
     {
-        char* n = strrchr(name, '/');
+        char* n = strrchr((char *)name, '/');
         if (n)  name = n + 1;
     }
 

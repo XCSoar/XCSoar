@@ -264,6 +264,8 @@ endif
 
 ifeq ($(TARGET),UNIX)
   TARGET_CPPFLAGS += -DDISABLEAUDIO
+  TARGET_CPPFLAGS += $(shell pkg-config --cflags gconf-2.0)
+  TARGET_LDLIBS += $(shell pkg-config --libs gconf-2.0)
 endif
 
 ####### compiler target
@@ -324,7 +326,7 @@ ifeq ($(HAVE_WIN32),y)
     endif
   endif
 else
-  TARGET_LDLIBS := -lstdc++
+  TARGET_LDLIBS := -lstdc++ -lm
 endif
 
 ######## output files

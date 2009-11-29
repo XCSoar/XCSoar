@@ -61,6 +61,22 @@ extern bool		CheckDataDir();
 extern bool		CheckRegistryProfile();
 extern void		ConvToUpper( TCHAR *);
 
+static inline void
+SetGlobalEllipse(float value)
+{
+  GlobalEllipse = value;
+}
+
+#else
+
+#define GlobalEllipse 1.1f
+
+static inline void
+SetGlobalEllipse(float value)
+{
+  (void)value; // ignored on this platform
+}
+
 #endif
 
 /*

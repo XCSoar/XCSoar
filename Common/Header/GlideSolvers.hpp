@@ -39,39 +39,25 @@ Copyright_License {
 #ifndef GLIDE_SOLVERS_HPP
 #define GLIDE_SOLVERS_HPP
 
-#include <stddef.h>
-
 struct NMEA_INFO;
 struct DERIVED_INFO;
-struct GEOPOINT;
-struct SETTINGS_COMPUTER;
 
 double
-FinalGlideThroughTerrain(const double bearing,
-			 const NMEA_INFO *Basic,
-                         const DERIVED_INFO *Calculated,
-			 const SETTINGS_COMPUTER &settings,
-                         GEOPOINT *retlocation,
-                         const double maxrange,
-                         bool *outofrange,
-                         double *TerrainBase = NULL);
-
-double
-PirkerAnalysis(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+PirkerAnalysis(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
                const double bearing,
                const double GlideSlope);
 
 double
-MacCreadyTimeLimit(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+MacCreadyTimeLimit(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
                    const double bearing,
                    const double timeremaining,
                    const double hfinal);
 
 double
-EffectiveCruiseEfficiency(const NMEA_INFO *Basic,
-                          const DERIVED_INFO *Calculated);
+EffectiveCruiseEfficiency(const NMEA_INFO &basic,
+                          const DERIVED_INFO &calculated);
 
 double
-EffectiveMacCready(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+EffectiveMacCready(const NMEA_INFO &basic, const DERIVED_INFO &calculated);
 
 #endif

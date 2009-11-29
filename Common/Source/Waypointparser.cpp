@@ -75,8 +75,8 @@ TCHAR *strtok_r(const TCHAR *s, TCHAR *delim, TCHAR **lasts);
 
 //static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 static bool
-ParseWayPointString(WAYPOINT *Temp, const TCHAR *input,
-                    RasterTerrain &terrain);
+ParseWayPointString(WAYPOINT &way_point, const TCHAR *input,
+                    const RasterTerrain *terrain);
 
 static bool
 ParseAngle(const TCHAR *input, double *value_r, TCHAR **endptr_r);
@@ -101,7 +101,7 @@ CloseWayPoints(WayPointList &way_points)
 
 
 static bool
-WaypointInTerrainRange(WAYPOINT *List, RasterTerrain &terrain)
+WaypointInTerrainRange(const WAYPOINT &way_point, const RasterTerrain &terrain)
 {
   if (WaypointOutOfTerrainRangeDontAskAgain == 1){
     return(true);
@@ -111,7 +111,7 @@ WaypointInTerrainRange(WAYPOINT *List, RasterTerrain &terrain)
     return(true);
   }
 
-  if (terrain.WaypointIsInTerrainRange(List->Location)) {
+  if (terrain.WaypointIsInTerrainRange(way_point.Location)) {
     return true;
   } else {
     if (WaypointOutOfTerrainRangeDontAskAgain == 0){
@@ -120,7 +120,7 @@ WaypointInTerrainRange(WAYPOINT *List, RasterTerrain &terrain)
       int res;
 
       _stprintf(sTmp, gettext(TEXT("Waypoint #%d \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?")),
-                List->Number, List->Name);
+                way_point.Number, way_point.Name);
 
       res = dlgWaypointOutOfTerrain(sTmp);
 
@@ -185,7 +185,7 @@ static int ParseWayPointError(int LineNumber, const TCHAR *FileName,
 }
 
 static bool
-FeedWayPointLine(WayPointList &way_points, RasterTerrain &terrain,
+FeedWayPointLine(WayPointList &way_points, const RasterTerrain *terrain,
                  const TCHAR *line)
 {
   if (TempString[0] == '\0' ||
@@ -201,12 +201,12 @@ FeedWayPointLine(WayPointList &way_points, RasterTerrain &terrain,
 
   new_waypoint->Details = NULL;
 
-  if (!ParseWayPointString(new_waypoint, TempString, terrain)) {
+  if (!ParseWayPointString(*new_waypoint, TempString, terrain)) {
     way_points.pop();
     return false;
   }
 
-  if (!WaypointInTerrainRange(new_waypoint, terrain)) {
+  if (terrain != NULL && !WaypointInTerrainRange(*new_waypoint, *terrain)) {
     way_points.pop();
     return true;
   }
@@ -216,7 +216,7 @@ FeedWayPointLine(WayPointList &way_points, RasterTerrain &terrain,
 
 static void
 ReadWayPointFile(FILE *fp, const TCHAR *CurrentWpFileName,
-                 WayPointList &way_points, RasterTerrain &terrain)
+                 WayPointList &way_points, const RasterTerrain *terrain)
 {
 //  TCHAR szTemp[100];
   int nTrigger=10;
@@ -255,7 +255,7 @@ ReadWayPointFile(FILE *fp, const TCHAR *CurrentWpFileName,
 
 static void
 ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName,
-                 WayPointList &way_points, RasterTerrain &terrain)
+                 WayPointList &way_points, const RasterTerrain *terrain)
 {
 //  TCHAR szTemp[100];
   int nTrigger=10;
@@ -292,18 +292,18 @@ ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName,
 
 
 void
-WaypointAltitudeFromTerrain(WAYPOINT* Temp, RasterTerrain &terrain)
+WaypointAltitudeFromTerrain(WAYPOINT &way_point, const RasterTerrain &terrain)
 {
   double myalt = -1;
   if (terrain.GetMap()) {
     RasterRounding rounding(*terrain.GetMap(),0,0);
 
     myalt =
-      terrain.GetTerrainHeight(Temp->Location, rounding);
+      terrain.GetTerrainHeight(way_point.Location, rounding);
   }
 
   if (myalt>0) {
-    Temp->Altitude = myalt;
+    way_point.Altitude = myalt;
   } else {
     // error, can't find altitude for waypoint!
   }
@@ -311,42 +311,42 @@ WaypointAltitudeFromTerrain(WAYPOINT* Temp, RasterTerrain &terrain)
 
 
 static bool
-ParseWayPointString(WAYPOINT *Temp, const TCHAR *input,
-                    RasterTerrain &terrain)
+ParseWayPointString(WAYPOINT &way_point, const TCHAR *input,
+                    const RasterTerrain *terrain)
 {
   TCHAR *endptr;
   size_t length;
 
-  Temp->FileNum = globalFileNum;
+  way_point.FileNum = globalFileNum;
 
-  Temp->Number = _tcstol(input, &endptr, 10);
+  way_point.Number = _tcstol(input, &endptr, 10);
   if (endptr == input || *endptr != _T(','))
     return false;
 
   input = endptr + 1;
 
-  if (!ParseAngle(input, &Temp->Location.Latitude, &endptr) ||
-      Temp->Location.Latitude > 90 || Temp->Location.Latitude < -90 ||
+  if (!ParseAngle(input, &way_point.Location.Latitude, &endptr) ||
+      way_point.Location.Latitude > 90 || way_point.Location.Latitude < -90 ||
       *endptr != _T(','))
     return false;
 
   input = endptr + 1;
 
-  ParseAngle(input, &Temp->Location.Longitude, &endptr);
-  if (!ParseAngle(input, &Temp->Location.Longitude, &endptr) ||
-      Temp->Location.Longitude > 180 || Temp->Location.Longitude < -180 ||
+  ParseAngle(input, &way_point.Location.Longitude, &endptr);
+  if (!ParseAngle(input, &way_point.Location.Longitude, &endptr) ||
+      way_point.Location.Longitude > 180 || way_point.Location.Longitude < -180 ||
       *endptr != _T(','))
     return false;
 
   input = endptr + 1;
 
-  if (!ParseAltitude(input, &Temp->Altitude, &endptr) ||
+  if (!ParseAltitude(input, &way_point.Altitude, &endptr) ||
       *endptr != _T(','))
     return false;
 
   input = endptr + 1;
 
-  Temp->Flags = ParseFlags(input, &input);
+  way_point.Flags = ParseFlags(input, &input);
   if (*input != _T(','))
     return false;
 
@@ -358,14 +358,14 @@ ParseWayPointString(WAYPOINT *Temp, const TCHAR *input,
   else
     length = _tcslen(input);
 
-  if (length >= sizeof(Temp->Name))
-    length = sizeof(Temp->Name) - 1;
+  if (length >= sizeof(way_point.Name))
+    length = sizeof(way_point.Name) - 1;
 
   while (length > 0 && input[length - 1] == 0)
     --length;
 
-  memcpy(Temp->Name, input, length * sizeof(input[0]));
-  Temp->Name[length] = 0;
+  memcpy(way_point.Name, input, length * sizeof(input[0]));
+  way_point.Name[length] = 0;
 
   if (endptr != NULL) {
     input = endptr + 1;
@@ -375,31 +375,30 @@ ParseWayPointString(WAYPOINT *Temp, const TCHAR *input,
       length = endptr - input;
 
       // if it is a home waypoint raise zoom level
-      Temp->Zoom = _tcstol(endptr + 2, NULL, 10);
+      way_point.Zoom = _tcstol(endptr + 2, NULL, 10);
     } else {
       length = _tcslen(input);
-      Temp->Zoom = 0;
+      way_point.Zoom = 0;
     }
 
-    if (length >= sizeof(Temp->Comment))
-      length = sizeof(Temp->Comment) - 1;
+    if (length >= sizeof(way_point.Comment))
+      length = sizeof(way_point.Comment) - 1;
 
     while (length > 0 && input[length - 1] == 0)
       --length;
 
-    memcpy(Temp->Comment, input, length * sizeof(input[0]));
-    Temp->Comment[length] = 0;
+    memcpy(way_point.Comment, input, length * sizeof(input[0]));
+    way_point.Comment[length] = 0;
   } else {
-    Temp->Comment[0] = 0;
-    Temp->Zoom = 0;
+    way_point.Comment[0] = 0;
+    way_point.Zoom = 0;
   }
 
-  if(Temp->Altitude <= 0) {
-    WaypointAltitudeFromTerrain(Temp, terrain);
-  }
+  if (way_point.Altitude <= 0 && terrain != NULL)
+    WaypointAltitudeFromTerrain(way_point, *terrain);
 
-  if (Temp->Details) {
-    free(Temp->Details);
+  if (way_point.Details) {
+    free(way_point.Details);
   }
 
   return true;
@@ -568,7 +567,7 @@ ParseAltitude(const TCHAR *input, double *altitude_r, TCHAR **endptr_r)
 
 bool
 ReadWayPointZipFile(const TCHAR *path, WayPointList &way_points,
-                    RasterTerrain &terrain)
+                    const RasterTerrain *terrain)
 {
   char path_ascii[MAX_PATH];
   ZZIP_FILE *fp;
@@ -585,7 +584,7 @@ ReadWayPointZipFile(const TCHAR *path, WayPointList &way_points,
 
 bool
 ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
-                 RasterTerrain &terrain)
+                 const RasterTerrain *terrain)
 {
   char path_ascii[MAX_PATH];
   FILE *fp;
@@ -606,7 +605,7 @@ ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
 }
 
 void
-ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
+ReadWayPoints(WayPointList &way_points, const RasterTerrain *terrain)
 {
   StartupStore(TEXT("ReadWayPoints\n"));
 
@@ -665,7 +664,7 @@ ReadWayPoints(WayPointList &way_points, RasterTerrain &terrain)
 
 
 void
-SetHome(const WayPointList &way_points, RasterTerrain &terrain,
+SetHome(const WayPointList &way_points, const RasterTerrain *terrain,
         SETTINGS_COMPUTER &settings,
         const bool reset, const bool set_location)
 {
@@ -715,11 +714,11 @@ SetHome(const WayPointList &way_points, RasterTerrain &terrain,
       StartupStore(TEXT("Start at home waypoint\n"));
       const WAYPOINT &home = way_points.get(settings.HomeWaypoint);
       device_blackboard.SetStartupLocation(home.Location, home.Altitude);
-    } else {
+    } else if (terrain != NULL) {
 
       // no home at all, so set it from center of terrain if available
       GEOPOINT loc;
-      if (terrain.GetTerrainCenter(&loc)) {
+      if (terrain->GetTerrainCenter(&loc)) {
 	StartupStore(TEXT("Start at terrain center\n"));
 	device_blackboard.SetStartupLocation(loc, 0);
       }
@@ -874,7 +873,7 @@ WaypointLatitudeToString(double Latitude, TCHAR *Buffer)
 }
 
 static void
-WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt)
+WriteWayPointFileWayPoint(FILE *fp, const WAYPOINT &way_point)
 {
   TCHAR Flags[MAX_PATH];
   TCHAR Latitude[MAX_PATH];
@@ -883,14 +882,11 @@ WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt)
 
   Flags[0]=0;
 
-  WaypointLatitudeToString(wpt->Location.Latitude,
-                           Latitude);
-  WaypointLongitudeToString(wpt->Location.Longitude,
-                            Longitude);
-  WaypointFlagsToString(wpt->Flags,
-                        Flags);
+  WaypointLatitudeToString(way_point.Location.Latitude, Latitude);
+  WaypointLongitudeToString(way_point.Location.Longitude, Longitude);
+  WaypointFlagsToString(way_point.Flags, Flags);
 
-  _stprintf(Comment, wpt->Comment);
+  _stprintf(Comment, way_point.Comment);
   for (int j=0; j<(int)_tcslen(Comment); j++) {
     if (Comment[j]==_T('\r')) {
       Comment[j] = 0;
@@ -901,13 +897,13 @@ WriteWayPointFileWayPoint(FILE *fp, WAYPOINT* wpt)
   }
 
   fprintf(fp,"%d,%S,%S,%dM,%S,%S,%S\r\n",
-            wpt->Number,
+            way_point.Number,
             Latitude,
             Longitude,
-            iround(wpt->Altitude),
+            iround(way_point.Altitude),
             Flags,
-            wpt->Name,
-            wpt->Comment);
+            way_point.Name,
+            way_point.Comment);
 }
 
 
@@ -937,7 +933,7 @@ WriteWayPointFile(WayPointList &way_points, FILE *fp,
         }
       }
 
-      WriteWayPointFileWayPoint(fp, &way_point);
+      WriteWayPointFileWayPoint(fp, way_point);
     }
   }
 }

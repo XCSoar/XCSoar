@@ -69,6 +69,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
                         int       nCmdShow)
 {
   (void)hPrevInstance;
+  (void)nCmdShow;
 
   InitAsset();
 

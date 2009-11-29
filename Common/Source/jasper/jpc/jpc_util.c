@@ -109,7 +109,7 @@ int jpc_atoaf(char *s, int *numvalues, double **values)
 	}
 
 	if (n) {
-		if (!(vs = jas_malloc(n * sizeof(double)))) {
+		if (!(vs = (double *)jas_malloc(n * sizeof(double)))) {
 			return -1;
 		}
 

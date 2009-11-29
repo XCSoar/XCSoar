@@ -47,8 +47,10 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Math/LowPassFilter.hpp"
 #include "McReady.h"
+#include "RasterTerrain.h"
 #include "GlideRatio.hpp"
 #include "GlideSolvers.hpp"
+#include "GlideTerrain.hpp"
 #include "Logger.h"
 #include "InputEvents.h"
 #include "Components.hpp"
@@ -1856,12 +1858,15 @@ GlideComputerTask::CheckFinalGlideThroughTerrain(double LegToGo, double LegBeari
 
     GEOPOINT loc;
     bool out_of_range;
+
+    terrain.Lock();
     double distance_soarable =
       FinalGlideThroughTerrain(LegBearing,
-                               &Basic(), &Calculated(),
-			       SettingsComputer(),
+                               Basic(), Calculated(),
+                               SettingsComputer(), terrain,
                                &loc,
                                LegToGo, &out_of_range, NULL);
+    terrain.Unlock();
 
     if ((!out_of_range)&&(distance_soarable< LegToGo)) {
       SetCalculated().TerrainWarningLocation = loc;
@@ -1914,7 +1919,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 	&& (Calculated().NavAltitude>Calculated().TaskStartAltitude)
 	&& (time_remaining>0)) {
 
-      mc_new = MacCreadyTimeLimit(&Basic(), &Calculated(),
+      mc_new = MacCreadyTimeLimit(Basic(), Calculated(),
 				  Calculated().WaypointBearing,
 				  time_remaining,
 				  Calculated().TaskStartAltitude);
@@ -1930,7 +1935,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 	 - FAIFinishHeight(task.getActiveIndex()))/
 	(Calculated().WaypointDistance+1);
 
-      double mc_pirker = PirkerAnalysis(&Basic(), &Calculated(),
+      double mc_pirker = PirkerAnalysis(Basic(), Calculated(),
 					Calculated().WaypointBearing,
 					slope);
       mc_pirker = max(0.0, mc_pirker);
@@ -1974,18 +1979,21 @@ GlideComputerTask::SetLegStart()
 }
 
 // JMW this is slow way to do things...
-static bool CheckLandableReachableTerrain(const NMEA_INFO *Basic,
-                                          const DERIVED_INFO *Calculated,
+static bool CheckLandableReachableTerrain(const NMEA_INFO &Basic,
+                                          const DERIVED_INFO &Calculated,
 					  const SETTINGS_COMPUTER &settings,
                                           double LegToGo,
                                           double LegBearing) {
   bool out_of_range;
+
+  terrain.Lock();
   double distance_soarable =
     FinalGlideThroughTerrain(LegBearing,
                              Basic, Calculated,
-			     settings,
+                             settings, terrain,
                              NULL,
                              LegToGo, &out_of_range, NULL);
+  terrain.Unlock();
 
   if ((out_of_range)||(distance_soarable> LegToGo)) {
     return true;
@@ -2053,8 +2061,7 @@ public:
       } else {
 	wpcalc.Reachable = true;
 	if (!reachable || wpcalc.InTask) {
-	  if (CheckLandableReachableTerrain(&gps_info,
-					    &calculated_info,
+          if (CheckLandableReachableTerrain(gps_info, calculated_info,
 					    settings,
 					    WaypointDistance,
 					    WaypointBearing)) {

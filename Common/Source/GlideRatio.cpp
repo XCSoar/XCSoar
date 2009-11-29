@@ -88,12 +88,12 @@ InitLDRotary(const SETTINGS_COMPUTER& settings, ldrotary_s *buf)
 }
 
 void
-InsertLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf,
+InsertLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf,
     int distance, int altitude)
 {
   static short errs = 0;
 
-  if (Calculated->OnGround || Calculated->Circling)
+  if (calculated.OnGround || calculated.Circling)
     return;
 
   if (distance < 3 || distance > 150) { // just ignore, no need to reset rotary
@@ -124,19 +124,16 @@ InsertLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf,
  * returns 0 if invalid, 999 if too high
  */
 int
-CalculateLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf )
+CalculateLDRotary(const DERIVED_INFO &calculated, const ldrotary_s &bc)
 {
   int altdiff, eff;
   short bcold;
 
-  if (Calculated->Circling || Calculated->OnGround)
+  if (calculated.Circling || calculated.OnGround)
     return 0;
 
-  if ( buf->start <0)
+  if (bc.start < 0)
     return 0;
-
-  ldrotary_s bc;
-  memcpy(&bc, buf, sizeof(ldrotary_s));
 
   if (bc.valid == false ) {
     if (bc.start == 0)
@@ -162,7 +159,9 @@ CalculateLDRotary(const DERIVED_INFO *Calculated, ldrotary_s *buf )
 }
 
 // existing methods (moving average via low pass filter)
-double
+
+// limit to reasonable values
+static double
 LimitLD(double LD)
 {
   if (fabs(LD) > INVALID_GR) {

@@ -81,7 +81,8 @@ static void GetCruiseEfficiency(void) {
       !(XCSoarInterface::Calculated().FinalGlide &&
 	(XCSoarInterface::Calculated().TaskAltitudeDifference>0))) {
 
-    cruise_efficiency = EffectiveCruiseEfficiency(&XCSoarInterface::Basic(), &XCSoarInterface::Calculated());
+    cruise_efficiency = EffectiveCruiseEfficiency(XCSoarInterface::Basic(),
+                                                  XCSoarInterface::Calculated());
   } else {
     cruise_efficiency = GlidePolar::GetCruiseEfficiency();
   }
@@ -352,8 +353,8 @@ void dlgTaskCalculatorShowModal(void){
   double MACCREADY_enter = GlidePolar::GetMacCready();
   double CRUISE_EFFICIENCY_enter = GlidePolar::GetCruiseEfficiency();
 
-  emc = EffectiveMacCready(&XCSoarInterface::Basic(),
-			   &XCSoarInterface::Calculated());
+  emc = EffectiveMacCready(XCSoarInterface::Basic(),
+                           XCSoarInterface::Calculated());
 
   cruise_efficiency = CRUISE_EFFICIENCY_enter;
 

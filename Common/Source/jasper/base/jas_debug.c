@@ -123,7 +123,7 @@ int jas_memdump(FILE *out, void *data, size_t len)
 	size_t i;
 	size_t j;
 	uchar *dp;
-	dp = data;
+	dp = (uchar *)data;
 	for (i = 0; i < len; i += 16) {
 		fprintf(out, "%04x:", i);
 		for (j = 0; j < 16; ++j) {

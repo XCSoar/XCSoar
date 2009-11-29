@@ -43,7 +43,8 @@
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
-#undef ZZIP_HAVE_STDINT_H
+// #undef ZZIP_HAVE_STDINT_H
+#define ZZIP_HAVE_STDLIB_H  1
 // JMW undefed this
 
 /* Define to 1 if you have the <stdlib.h> header file. */

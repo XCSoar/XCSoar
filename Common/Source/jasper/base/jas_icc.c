@@ -59,8 +59,6 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-#include "Compatibility/string.h"
-
 #include <assert.h>
 #include <jasper/jas_config.h>
 #include <jasper/jas_types.h>
@@ -208,7 +206,7 @@ static jas_iccprof_t *jas_iccprof_create()
 {
 	jas_iccprof_t *prof;
 	prof = 0;
-	if (!(prof = jas_malloc(sizeof(jas_iccprof_t)))) {
+	if (!(prof = (jas_iccprof_t *)jas_malloc(sizeof(jas_iccprof_t)))) {
 		goto error;
 	}
 	if (!(prof->attrtab = jas_iccattrtab_create()))
@@ -375,7 +373,7 @@ int jas_iccprof_save(jas_iccprof_t *prof, jas_stream_t *out)
 	jas_icctagtab_t *tagtab;
 
 	tagtab = &prof->tagtab;
-	if (!(tagtab->ents = jas_malloc(prof->attrtab->numattrs *
+	if (!(tagtab->ents = (jas_icctagtabent_t *)jas_malloc(prof->attrtab->numattrs *
 	  sizeof(jas_icctagtabent_t))))
 		goto error;
 	tagtab->numents = prof->attrtab->numattrs;
@@ -524,7 +522,7 @@ static int jas_iccprof_gettagtab(jas_stream_t *in, jas_icctagtab_t *tagtab)
 	}
 	if (jas_iccgetuint32(in, &tagtab->numents))
 		goto error;
-	if (!(tagtab->ents = jas_malloc(tagtab->numents *
+	if (!(tagtab->ents = (jas_icctagtabent_t *)jas_malloc(tagtab->numents *
 	  sizeof(jas_icctagtabent_t))))
 		goto error;
 	tagtabent = tagtab->ents;
@@ -674,7 +672,7 @@ static jas_iccattrtab_t *jas_iccattrtab_create()
 {
 	jas_iccattrtab_t *tab;
 	tab = 0;
-	if (!(tab = jas_malloc(sizeof(jas_iccattrtab_t))))
+	if (!(tab = (jas_iccattrtab_t *)jas_malloc(sizeof(jas_iccattrtab_t))))
 		goto error;
 	tab->maxattrs = 0;
 	tab->numattrs = 0;
@@ -745,8 +743,8 @@ static int jas_iccattrtab_resize(jas_iccattrtab_t *tab, int maxents)
 {
 	jas_iccattr_t *newattrs;
 	assert(maxents >= tab->numattrs);
-	newattrs = tab->attrs ? jas_realloc(tab->attrs, maxents *
-	  sizeof(jas_iccattr_t)) : jas_malloc(maxents * sizeof(jas_iccattr_t));
+	newattrs = (jas_iccattr_t *) (tab->attrs ? jas_realloc(tab->attrs, maxents *
+	  sizeof(jas_iccattr_t)) : jas_malloc(maxents * sizeof(jas_iccattr_t)));
 	if (!newattrs)
 		return -1;
 	tab->attrs = newattrs;
@@ -923,7 +921,7 @@ error:
 static jas_iccattrval_t *jas_iccattrval_create0()
 {
 	jas_iccattrval_t *attrval;
-	if (!(attrval = jas_malloc(sizeof(jas_iccattrval_t))))
+	if (!(attrval = (jas_iccattrval_t *)jas_malloc(sizeof(jas_iccattrval_t))))
 		return 0;
 	memset(attrval, 0, sizeof(jas_iccattrval_t));
 	attrval->refcnt = 0;
@@ -1001,7 +999,7 @@ static int jas_icccurv_input(jas_iccattrval_t *attrval, jas_stream_t *in,
 
 	if (jas_iccgetuint32(in, &curv->numents))
 		goto error;
-	if (!(curv->ents = jas_malloc(curv->numents * sizeof(jas_iccuint16_t))))
+	if (!(curv->ents = (jas_iccuint16_t *)jas_malloc(curv->numents * sizeof(jas_iccuint16_t))))
 		goto error;
 	for (i = 0; i < curv->numents; ++i) {
 		if (jas_iccgetuint16(in, &curv->ents[i]))
@@ -1093,7 +1091,7 @@ static int jas_icctxtdesc_input(jas_iccattrval_t *attrval, jas_stream_t *in,
 	txtdesc->ucdata = 0;
 	if (jas_iccgetuint32(in, &txtdesc->asclen))
 		goto error;
-	if (!(txtdesc->ascdata = jas_malloc(txtdesc->asclen)))
+	if (!(txtdesc->ascdata = (char *)jas_malloc(txtdesc->asclen)))
 		goto error;
 	if (jas_stream_read(in, txtdesc->ascdata, txtdesc->asclen) !=
 	  JAS_CAST(int, txtdesc->asclen))
@@ -1102,7 +1100,7 @@ static int jas_icctxtdesc_input(jas_iccattrval_t *attrval, jas_stream_t *in,
 	if (jas_iccgetuint32(in, &txtdesc->uclangcode) ||
 	  jas_iccgetuint32(in, &txtdesc->uclen))
 		goto error;
-	if (!(txtdesc->ucdata = jas_malloc(txtdesc->uclen * 2)))
+	if (!(txtdesc->ucdata = (char *)jas_malloc(txtdesc->uclen * 2)))
 		goto error;
 	if (jas_stream_read(in, txtdesc->ucdata, txtdesc->uclen * 2) !=
 	  JAS_CAST(int, txtdesc->uclen * 2))
@@ -1191,7 +1189,7 @@ static int jas_icctxt_copy(jas_iccattrval_t *attrval,
 {
 	jas_icctxt_t *txt = &attrval->data.txt;
 	jas_icctxt_t *othtxt = &othattrval->data.txt;
-	if (!(txt->string = _strdup(othtxt->string)))
+        if (!(txt->string = strdup(othtxt->string)))
 		return -1;
 	return 0;
 }
@@ -1201,7 +1199,7 @@ static int jas_icctxt_input(jas_iccattrval_t *attrval, jas_stream_t *in,
 {
 	jas_icctxt_t *txt = &attrval->data.txt;
 	txt->string = 0;
-	if (!(txt->string = jas_malloc(cnt)))
+	if (!(txt->string = (char *)jas_malloc(cnt)))
 		goto error;
 	if (jas_stream_read(in, txt->string, cnt) != cnt)
 		goto error;
@@ -1294,17 +1292,17 @@ static int jas_icclut8_input(jas_iccattrval_t *attrval, jas_stream_t *in,
 	  jas_iccgetuint16(in, &lut8->numouttabents))
 		goto error;
 	clutsize = jas_iccpowi(lut8->clutlen, lut8->numinchans) * lut8->numoutchans;
-	if (!(lut8->clut = jas_malloc(clutsize * sizeof(jas_iccuint8_t))) ||
-	  !(lut8->intabsbuf = jas_malloc(lut8->numinchans *
+	if (!(lut8->clut = (jas_iccuint8_t *)jas_malloc(clutsize * sizeof(jas_iccuint8_t))) ||
+	  !(lut8->intabsbuf = (jas_iccuint8_t *)jas_malloc(lut8->numinchans *
 	  lut8->numintabents * sizeof(jas_iccuint8_t))) ||
-	  !(lut8->intabs = jas_malloc(lut8->numinchans *
+	  !(lut8->intabs = (jas_iccuint8_t **)jas_malloc(lut8->numinchans *
 	  sizeof(jas_iccuint8_t *))))
 		goto error;
 	for (i = 0; i < lut8->numinchans; ++i)
 		lut8->intabs[i] = &lut8->intabsbuf[i * lut8->numintabents];
-	if (!(lut8->outtabsbuf = jas_malloc(lut8->numoutchans *
+	if (!(lut8->outtabsbuf = (jas_iccuint8_t*) jas_malloc(lut8->numoutchans *
 	  lut8->numouttabents * sizeof(jas_iccuint8_t))) ||
-	  !(lut8->outtabs = jas_malloc(lut8->numoutchans *
+	  !(lut8->outtabs = (jas_iccuint8_t **)jas_malloc(lut8->numoutchans *
 	  sizeof(jas_iccuint8_t *))))
 		goto error;
 	for (i = 0; i < lut8->numoutchans; ++i)
@@ -1463,17 +1461,17 @@ static int jas_icclut16_input(jas_iccattrval_t *attrval, jas_stream_t *in,
 	  jas_iccgetuint16(in, &lut16->numouttabents))
 		goto error;
 	clutsize = jas_iccpowi(lut16->clutlen, lut16->numinchans) * lut16->numoutchans;
-	if (!(lut16->clut = jas_malloc(clutsize * sizeof(jas_iccuint16_t))) ||
-	  !(lut16->intabsbuf = jas_malloc(lut16->numinchans *
+	if (!(lut16->clut = (jas_iccuint16_t *)jas_malloc(clutsize * sizeof(jas_iccuint16_t))) ||
+	  !(lut16->intabsbuf = (jas_iccuint16_t *)jas_malloc(lut16->numinchans *
 	  lut16->numintabents * sizeof(jas_iccuint16_t))) ||
-	  !(lut16->intabs = jas_malloc(lut16->numinchans *
+	  !(lut16->intabs = (jas_iccuint16_t **)jas_malloc(lut16->numinchans *
 	  sizeof(jas_iccuint16_t *))))
 		goto error;
 	for (i = 0; i < lut16->numinchans; ++i)
 		lut16->intabs[i] = &lut16->intabsbuf[i * lut16->numintabents];
-	if (!(lut16->outtabsbuf = jas_malloc(lut16->numoutchans *
+	if (!(lut16->outtabsbuf = (jas_iccuint16_t *)jas_malloc(lut16->numoutchans *
 	  lut16->numouttabents * sizeof(jas_iccuint16_t))) ||
-	  !(lut16->outtabs = jas_malloc(lut16->numoutchans *
+	  !(lut16->outtabs = (jas_iccuint16_t **) jas_malloc(lut16->numoutchans *
 	  sizeof(jas_iccuint16_t *))))
 		goto error;
 	for (i = 0; i < lut16->numoutchans; ++i)

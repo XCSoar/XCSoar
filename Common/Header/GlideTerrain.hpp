@@ -36,53 +36,29 @@ Copyright_License {
 }
 */
 
-#ifndef RASTERTERRAIN_H
-#define RASTERTERRAIN_H
+#ifndef XCSOAR_GLIDE_TERRAIN_HPP
+#define XCSOAR_GLIDE_TERRAIN_HPP
 
-#include "Sizes.h"
-#include "GeoPoint.hpp"
+#include <stddef.h>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+struct NMEA_INFO;
+struct DERIVED_INFO;
+struct GEOPOINT;
+struct SETTINGS_COMPUTER;
+class RasterTerrain;
 
-class RasterMap;
-class RasterRounding;
-
-class RasterTerrain {
-public:
-
-  RasterTerrain():
-    TerrainMap(NULL) {
-  };
-
-   void SetViewCenter(const double &Latitude,
-                      const double &Longitude);
-   void OpenTerrain();
-   void CloseTerrain();
-
-  bool isTerrainLoaded() const {
-    return TerrainMap != NULL;
-  }
-   RasterMap* TerrainMap;
-   bool CreateTerrainMap(const char *path);
-
- public:
-   void Lock(void); // should be protected, friend of TerrainDataClient
-   void Unlock(void); // should be protected, friend of TerrainDataClient
-
-   const RasterMap* GetMap() const {
-     return TerrainMap;
-   }
-   short GetTerrainHeight(const GEOPOINT &location,
-                          const RasterRounding &rounding) const;
-   bool IsDirectAccess(void) const;
-   bool IsPaged(void) const;
-   void ServiceCache();
-   void ServiceTerrainCenter(const GEOPOINT &location);
-   void ServiceFullReload(const GEOPOINT &location);
-   int GetEffectivePixelSize(double *pixel_D, const GEOPOINT &location) const;
-   bool WaypointIsInTerrainRange(const GEOPOINT &location) const;
-   bool GetTerrainCenter(GEOPOINT *location) const;
-};
+/**
+ * @param terrain a locked RasterTerrain object
+ */
+double
+FinalGlideThroughTerrain(const double bearing,
+                         const NMEA_INFO &basic,
+                         const DERIVED_INFO &calculated,
+                         const SETTINGS_COMPUTER &settings,
+                         const RasterTerrain &terrain,
+                         GEOPOINT *retlocation,
+                         const double maxrange,
+                         bool *outofrange,
+                         double *TerrainBase = NULL);
 
 #endif

@@ -180,42 +180,6 @@ void XCSoarInterface::AfterStartup() {
 #endif
 }
 
-/**
- * Create special startup message for some devices
- */
-void XCSoarInterface::StartupInfo() {
-  // TODO speed: TB: this slows down the bootup process because of sleep()
-#ifdef CREDITS_FIVV
-  CreateProgressDialog(gettext(TEXT("Special ITA version")));
-  Sleep(1000);
-#endif
-#ifdef PNA // VENTA-ADDON
-  TCHAR sTmp[MAX_PATH];
-  _stprintf(sTmp, TEXT("PNA MODEL=%s (%d)"), GlobalModelName, GlobalModelType);
-  CreateProgressDialog(sTmp); Sleep(3000);
-#endif // non PNA
-
-  if (is_simulator()) {
-    CreateProgressDialog(TEXT("SIMULATION"));
-    Sleep(2000);
-  }
-
-#ifdef PNA
-  if ( SetBacklight() == true )
-    CreateProgressDialog(TEXT("AUTOMATIC BACKLIGHT CONTROL"));
-  else
-    CreateProgressDialog(TEXT("NO BACKLIGHT CONTROL"));
-  Sleep(3000);
-
-  // this should work ok for all pdas as well
-  if ( SetSoundVolume() == true )
-    CreateProgressDialog(TEXT("AUTOMATIC SOUND LEVEL CONTROL"));
-  else
-    CreateProgressDialog(TEXT("NO SOUND LEVEL CONTROL"));
-  Sleep(3000);
-#endif
-}
-
 // NEWTASK
 #ifdef NEWTASK
 extern int test_newtask(int test_num);
@@ -316,9 +280,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
   GlidePolar::UpdatePolar(false, SettingsComputer());
 
-  // Show startup info depending on device
-  StartupInfo();
-
   // Read the topology file(s)
   topology->Open();
 
@@ -329,13 +290,13 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   terrain.OpenTerrain();
 
   // Read the waypoint files
-  ReadWayPoints(way_points, terrain);
+  ReadWayPoints(way_points, &terrain);
 
   // Read and parse the airfield info file
   ReadAirfieldFile();
 
   // Set the home waypoint
-  SetHome(way_points, terrain, SetSettingsComputer(), false, true);
+  SetHome(way_points, &terrain, SetSettingsComputer(), false, true);
 
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());

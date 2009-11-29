@@ -75,7 +75,7 @@ struct map_obj;
 void msWriteErrorImage(struct map_obj *map, char *filename, int blank);
 
 void msDebug( const char * pszFormat, ... );
-void msWebDebug( const char * pszFormat, ... );
+
 #endif
 
 #ifdef __cplusplus

@@ -171,6 +171,7 @@ OBJS	:=\
 	$(SRC)/GlideComputerTask.o 	\
 	$(SRC)/GlideRatio.o 		\
 	$(SRC)/GlideSolvers.o 		\
+	$(SRC)/GlideTerrain.o \
 	$(SRC)/Logger.o 		\
 	$(SRC)/LoggerImpl.o 		\
 	$(SRC)/LoggerSign.o 		\
@@ -363,7 +364,6 @@ OBJS	:=\
 	\
 	$(DLGS:.cpp=.o) 		\
 	$(VOLKS:.cpp=.o) 		\
-	$(SRC)/XCSoar-$(TARGET).rsc \
 	$(SRC)/jasper-$(TARGET).a \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a
@@ -372,6 +372,10 @@ OBJS	:=\
 #	$(SRC)/WaveThread.o \
 
 
+ifeq ($(HAVE_WIN32),y)
+OBJS += $(SRC)/XCSoar-$(TARGET).rsc
+endif
+
 XCSOARSETUP_OBJS=\
 	$(SRC)/XcSoarSetup.o
 
@@ -379,6 +383,7 @@ XCSOARLAUNCH_OBJS=\
 	$(SRC)/XCSoarLaunch.o
 
 include $(topdir)/build/sdl.mk
+include $(topdir)/build/gconf.mk
 
 all: all-$(TARGET)
 

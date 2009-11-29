@@ -125,7 +125,7 @@ jpc_tagtree_t *jpc_tagtree_create(int numleafsh, int numleafsv)
 		++numlvls;
 	} while (n > 1);
 
-	if (!(tree->nodes_ = jas_malloc(tree->numnodes_ * sizeof(jpc_tagtreenode_t)))) {
+	if (!(tree->nodes_ = (jpc_tagtreenode_t *)jas_malloc(tree->numnodes_ * sizeof(jpc_tagtreenode_t)))) {
 		return 0;
 	}
 
@@ -178,7 +178,7 @@ static jpc_tagtree_t *jpc_tagtree_alloc()
 {
 	jpc_tagtree_t *tree;
 
-	if (!(tree = jas_malloc(sizeof(jpc_tagtree_t)))) {
+	if (!(tree = (jpc_tagtree_t *)jas_malloc(sizeof(jpc_tagtree_t)))) {
 		return 0;
 	}
 	tree->numleafsh_ = 0;

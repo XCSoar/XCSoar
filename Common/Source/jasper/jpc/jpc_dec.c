@@ -497,7 +497,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 
   if (dec->state == JPC_MH) {
 
-    compinfos = jas_malloc(dec->numcomps * sizeof(jas_image_cmptparm_t));
+	compinfos = (jas_image_cmptparm_t *)jas_malloc(dec->numcomps * sizeof(jas_image_cmptparm_t));
     assert(compinfos);
     for (cmptno = 0, cmpt = dec->cmpts, compinfo = compinfos;
 	 cmptno < dec->numcomps; ++cmptno, ++cmpt, ++compinfo) {
@@ -822,8 +822,8 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
     // JMW
     tcomp->numrlvls = ccp->numrlvls;
 
-    if (!(tcomp->rlvls = jas_malloc(tcomp->numrlvls *
-				    sizeof(jpc_dec_rlvl_t)))) {
+	if (!(tcomp->rlvls = (jpc_dec_rlvl_t *) jas_malloc(tcomp->numrlvls *
+					sizeof(jpc_dec_rlvl_t)))) {
       return -1;
     }
     // JMW
@@ -898,8 +898,8 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 				     rlvl->cbgheightexpn);
 
       rlvl->numbands = (!rlvlno) ? 1 : 3;
-      if (!(rlvl->bands = jas_malloc(rlvl->numbands *
-				     sizeof(jpc_dec_band_t)))) {
+	  if (!(rlvl->bands = (jpc_dec_band_t *) jas_malloc(rlvl->numbands *
+					 sizeof(jpc_dec_band_t)))) {
 	return -1;
       }
       for (bandno = 0, band = rlvl->bands;
@@ -935,7 +935,7 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 
 	assert(rlvl->numprcs);
 
-	if (!(band->prcs = jas_malloc(rlvl->numprcs * sizeof(jpc_dec_prc_t)))) {
+	if (!(band->prcs = (jpc_dec_prc_t *) jas_malloc(rlvl->numprcs * sizeof(jpc_dec_prc_t)))) {
 	  return -1;
 	}
 
@@ -975,7 +975,7 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	      return -1;
 	    }
 	    // JMW
-	    if (!(prc->cblks = jas_malloc(prc->numcblks * sizeof(jpc_dec_cblk_t)))) {
+		if (!(prc->cblks = (jpc_dec_cblk_t *) jas_malloc(prc->numcblks * sizeof(jpc_dec_cblk_t)))) {
 	      return -1;
 	    }
 
@@ -1398,7 +1398,7 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
     return -1;
   }
 
-  if (!(dec->cmpts = jas_malloc(dec->numcomps * sizeof(jpc_dec_cmpt_t)))) {
+  if (!(dec->cmpts = (jpc_dec_cmpt_t *) jas_malloc(dec->numcomps * sizeof(jpc_dec_cmpt_t)))) {
     return -1;
   }
 
@@ -1421,7 +1421,7 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
   dec->numhtiles = JPC_CEILDIV(dec->xend - dec->tilexoff, dec->tilewidth);
   dec->numvtiles = JPC_CEILDIV(dec->yend - dec->tileyoff, dec->tileheight);
   dec->numtiles = dec->numhtiles * dec->numvtiles;
-  if (!(dec->tiles = jas_malloc(dec->numtiles * sizeof(jpc_dec_tile_t)))) {
+  if (!(dec->tiles = (jpc_dec_tile_t *) jas_malloc(dec->numtiles * sizeof(jpc_dec_tile_t)))) {
     return -1;
   }
 
@@ -1447,8 +1447,8 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
     tile->cp = 0;
 
     // JMW, memory leak?
-    if (!(tile->tcomps = jas_malloc(dec->numcomps *
-				    sizeof(jpc_dec_tcomp_t)))) {
+	if (!(tile->tcomps = (jpc_dec_tcomp_t *) jas_malloc(dec->numcomps *
+					sizeof(jpc_dec_tcomp_t)))) {
       return -1;
     }
     for (compno = 0, cmpt = dec->cmpts, tcomp = tile->tcomps;
@@ -1732,7 +1732,7 @@ static jpc_dec_cp_t *jpc_dec_cp_create(uint_fast16_t numcomps)
   jpc_dec_ccp_t *ccp;
   int compno;
 
-  if (!(cp = jas_malloc(sizeof(jpc_dec_cp_t)))) {
+  if (!(cp = (jpc_dec_cp_t *) jas_malloc(sizeof(jpc_dec_cp_t)))) {
     return 0;
   }
   cp->flags = 0;
@@ -1741,7 +1741,7 @@ static jpc_dec_cp_t *jpc_dec_cp_create(uint_fast16_t numcomps)
   cp->numlyrs = 0;
   cp->mctid = 0;
   cp->csty = 0;
-  if (!(cp->ccps = jas_malloc(cp->numcomps * sizeof(jpc_dec_ccp_t)))) {
+  if (!(cp->ccps = (jpc_dec_ccp_t *) jas_malloc(cp->numcomps * sizeof(jpc_dec_ccp_t)))) {
     return 0;
   }
   if (!(cp->pchglist = jpc_pchglist_create())) {
@@ -2099,7 +2099,7 @@ static jpc_dec_t *jpc_dec_create(jpc_dec_importopts_t *impopts, jas_stream_t *in
 {
   jpc_dec_t *dec;
 
-  if (!(dec = jas_malloc(sizeof(jpc_dec_t)))) {
+  if (!(dec = (jpc_dec_t *) jas_malloc(sizeof(jpc_dec_t)))) {
     return 0;
   }
 
@@ -2213,8 +2213,8 @@ jpc_dec_seg_t *jpc_seg_alloc()
 {
   jpc_dec_seg_t *seg;
 
-  if (!(seg = jas_malloc(sizeof(jpc_dec_seg_t)))) {
-    return 0;
+  if (!(seg = (jpc_dec_seg_t *) jas_malloc(sizeof(jpc_dec_seg_t)))) {
+	return 0;
   }
   seg->prev = 0;
   seg->next = 0;
@@ -2300,12 +2300,12 @@ jpc_streamlist_t *jpc_streamlist_create()
   jpc_streamlist_t *streamlist;
   int i;
 
-  if (!(streamlist = jas_malloc(sizeof(jpc_streamlist_t)))) {
+  if (!(streamlist = (jpc_streamlist_t *) jas_malloc(sizeof(jpc_streamlist_t)))) {
     return 0;
   }
   streamlist->numstreams = 0;
   streamlist->maxstreams = 100;
-  if (!(streamlist->streams = jas_malloc(streamlist->maxstreams *
+  if (!(streamlist->streams = (jas_stream_t **) jas_malloc(streamlist->maxstreams *
 					 sizeof(jas_stream_t *)))) {
     jas_free(streamlist);
     return 0;
@@ -2325,7 +2325,7 @@ int jpc_streamlist_insert(jpc_streamlist_t *streamlist, int streamno,
   /* Grow the array of streams if necessary. */
   if (streamlist->numstreams >= streamlist->maxstreams) {
     newmaxstreams = streamlist->maxstreams + 1024;
-    if (!(newstreams = jas_realloc(streamlist->streams,
+	if (!(newstreams = (jas_stream_t **) jas_realloc(streamlist->streams,
 				   (newmaxstreams + 1024) * sizeof(jas_stream_t *)))) {
       return -1;
     }
@@ -2387,7 +2387,7 @@ jpc_ppxstab_t *jpc_ppxstab_create()
 {
   jpc_ppxstab_t *tab;
 
-  if (!(tab = jas_malloc(sizeof(jpc_ppxstab_t)))) {
+  if (!(tab = (jpc_ppxstab_t *) jas_malloc(sizeof(jpc_ppxstab_t)))) {
     return 0;
   }
   tab->numents = 0;
@@ -2412,8 +2412,8 @@ int jpc_ppxstab_grow(jpc_ppxstab_t *tab, int maxents)
 {
   jpc_ppxstabent_t **newents;
   if (tab->maxents < maxents) {
-    newents = (tab->ents) ? jas_realloc(tab->ents, maxents *
-					sizeof(jpc_ppxstabent_t *)) : jas_malloc(maxents * sizeof(jpc_ppxstabent_t *));
+	newents = (jpc_ppxstabent_t **) ((tab->ents) ? jas_realloc(tab->ents, maxents *
+					sizeof(jpc_ppxstabent_t *)) : jas_malloc(maxents * sizeof(jpc_ppxstabent_t *)));
     if (!newents) {
       return -1;
     }
@@ -2544,7 +2544,7 @@ int jpc_pptstabwrite(jas_stream_t *out, jpc_ppxstab_t *tab)
 jpc_ppxstabent_t *jpc_ppxstabent_create()
 {
   jpc_ppxstabent_t *ent;
-  if (!(ent = jas_malloc(sizeof(jpc_ppxstabent_t)))) {
+  if (!(ent = (jpc_ppxstabent_t *) jas_malloc(sizeof(jpc_ppxstabent_t)))) {
     return 0;
   }
   ent->data = 0;

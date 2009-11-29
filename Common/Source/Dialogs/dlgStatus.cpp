@@ -564,10 +564,15 @@ static void UpdateValuesTask(void) {
     wp->SetText(Temp);
   }
 
-  double d1 =
-    (XCSoarInterface::Calculated().TaskDistanceToGo
-     +XCSoarInterface::Calculated().TaskDistanceCovered)/dd;
-  // TODO bug: this fails for OLC
+  double d1;
+  if (abs(dd) > 0.001){
+    d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
+          + XCSoarInterface::Calculated().TaskDistanceCovered)/dd;
+    // TODO bug: this fails for OLC
+  } else {
+      d1 = 0;
+  }
+
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEstimatedSpeed"));
   if (wp) {

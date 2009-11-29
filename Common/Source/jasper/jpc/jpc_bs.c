@@ -148,7 +148,7 @@ static jpc_bitstream_t *jpc_bitstream_alloc()
 	jpc_bitstream_t *bitstream;
 
 	/* Allocate memory for the new bit stream object. */
-	if (!(bitstream = jas_malloc(sizeof(jpc_bitstream_t)))) {
+	if (!(bitstream = (jpc_bitstream_t *) jas_malloc(sizeof(jpc_bitstream_t)))) {
 		return 0;
 	}
 	/* Initialize all of the data members. */

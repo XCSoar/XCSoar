@@ -76,25 +76,22 @@ dlgHelpShowModal(ContainerWindow &parent,
                         parent,
                         TEXT("IDR_XML_HELP"));
   }
+
+  if (wf == NULL)
+    return;
+
   WndProperty* wp;
 
-  if (wf) {
+  TCHAR fullcaption[100];
+  _stprintf(fullcaption,TEXT("Help: %s"), Caption);
 
-    TCHAR fullcaption[100];
-    _stprintf(fullcaption,TEXT("Help: %s"), Caption);
+  wf->SetCaption(fullcaption);
 
-    wf->SetCaption(fullcaption);
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpHelpText"));
-    if (wp) {
-      wp->SetText(HelpText);
-      wp->RefreshDisplay();
-    }
-    wf->ShowModal();
-    delete wf;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpHelpText"));
+  if (wp) {
+    wp->SetText(HelpText);
+    wp->RefreshDisplay();
   }
-  wf = NULL;
-
+  wf->ShowModal();
+  delete wf;
 }
-
-

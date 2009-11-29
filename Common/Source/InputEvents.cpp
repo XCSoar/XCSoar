@@ -795,9 +795,8 @@ bool InputEvents::processKey(int dWord) {
       }
     }
 
-    if (ButtonLabel::hWndButtonWindow[bindex].is_enabled()) {
+    if (bindex < 0 || ButtonLabel::hWndButtonWindow[bindex].is_enabled())
       InputEvents::processGo(event_id);
-    }
 
     // experimental: update button text, macro may change the value
     if ((lastMode == getModeID()) && (bindex > 0) &&

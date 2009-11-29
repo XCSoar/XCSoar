@@ -178,17 +178,13 @@ void dlgSwitchesShowModal(void){
                       TEXT("dlgSwitches.xml"),
 		      XCSoarInterface::main_window,
 		      TEXT("IDR_XML_SWITCHES"));
+  if (wf == NULL)
+    return;
 
-  if (wf) {
+  wf->SetTimerNotify(OnTimerNotify);
 
-    wf->SetTimerNotify(OnTimerNotify);
+  UpdateValues();
+  wf->ShowModal();
 
-    UpdateValues();
-    wf->ShowModal();
-
-    delete wf;
-  }
-  wf = NULL;
-
+  delete wf;
 }
-

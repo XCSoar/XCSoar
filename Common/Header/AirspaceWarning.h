@@ -89,16 +89,16 @@ int AirspaceWarnGetItemCount(void);
 
 extern void
 AirspaceWarnListAdd(AirspaceDatabase &airspace_database,
-                    const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
-                    const SETTINGS_COMPUTER *settings,
+                    const NMEA_INFO &casic, const DERIVED_INFO &calculated,
+                    const SETTINGS_COMPUTER &settings,
                     const MapWindowProjection &map_projection,
                     bool Predicted, bool IsCircle, int AsIdx,
                     bool ackDay=false);
 
 extern void
 AirspaceWarnListProcess(AirspaceDatabase &airspace_database,
-                        const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
-                        const SETTINGS_COMPUTER *settings,
+                        const NMEA_INFO &casic, const DERIVED_INFO &calculated,
+                        const SETTINGS_COMPUTER &settings,
                         const MapWindowProjection &map_projection);
 
 void

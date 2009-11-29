@@ -534,7 +534,7 @@ void jpc_pi_destroy(jpc_pi_t *pi)
 jpc_pi_t *jpc_pi_create0()
 {
 	jpc_pi_t *pi;
-	if (!(pi = jas_malloc(sizeof(jpc_pi_t)))) {
+	if (!(pi = (jpc_pi_t *) jas_malloc(sizeof(jpc_pi_t)))) {
 		return 0;
 	}
 	pi->picomps = 0;
@@ -554,7 +554,7 @@ int jpc_pi_addpchg(jpc_pi_t *pi, jpc_pocpchg_t *pchg)
 jpc_pchglist_t *jpc_pchglist_create()
 {
 	jpc_pchglist_t *pchglist;
-	if (!(pchglist = jas_malloc(sizeof(jpc_pchglist_t)))) {
+	if (!(pchglist = (jpc_pchglist_t *) jas_malloc(sizeof(jpc_pchglist_t)))) {
 		return 0;
 	}
 	pchglist->numpchgs = 0;
@@ -573,7 +573,7 @@ int jpc_pchglist_insert(jpc_pchglist_t *pchglist, int pchgno, jpc_pchg_t *pchg)
 	}
 	if (pchglist->numpchgs >= pchglist->maxpchgs) {
 		newmaxpchgs = pchglist->maxpchgs + 128;
-		if (!(newpchgs = jas_realloc(pchglist->pchgs, newmaxpchgs * sizeof(jpc_pchg_t *)))) {
+		if (!(newpchgs = (jpc_pchg_t **) jas_realloc(pchglist->pchgs, newmaxpchgs * sizeof(jpc_pchg_t *)))) {
 			return -1;
 		}
 		pchglist->maxpchgs = newmaxpchgs;
@@ -603,7 +603,7 @@ jpc_pchg_t *jpc_pchglist_remove(jpc_pchglist_t *pchglist, int pchgno)
 jpc_pchg_t *jpc_pchg_copy(jpc_pchg_t *pchg)
 {
 	jpc_pchg_t *newpchg;
-	if (!(newpchg = jas_malloc(sizeof(jpc_pchg_t)))) {
+	if (!(newpchg = (jpc_pchg_t *) jas_malloc(sizeof(jpc_pchg_t)))) {
 		return 0;
 	}
 	*newpchg = *pchg;

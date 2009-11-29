@@ -47,7 +47,8 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Screen.hpp"
 #include "McReady.h"
-#include "GlideSolvers.hpp"
+#include "RasterTerrain.h"
+#include "GlideTerrain.hpp"
 #include "Message.h"
 #include "Components.hpp"
 #include "WayPointList.hpp"
@@ -208,12 +209,15 @@ GlideComputerTask::SortLandableWaypoints()
                             &wp_distance, &wp_bearing);
 
             bool out_of_range;
+
+            terrain.Lock();
             double distance_soarable =
-              FinalGlideThroughTerrain(wp_bearing, &Basic(), &Calculated(),
-				       SettingsComputer(),
+              FinalGlideThroughTerrain(wp_bearing, Basic(), Calculated(),
+                                       SettingsComputer(), terrain,
                                        NULL,
                                        wp_distance,
                                        &out_of_range, NULL);
+            terrain.Unlock();
 
             if ((distance_soarable>= wp_distance)||(arrival_altitude<0)) {
               // only put this in the index if it is reachable

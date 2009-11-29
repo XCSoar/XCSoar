@@ -356,9 +356,6 @@ void GaugeVario::MakePolygon(const int i) {
     InitDone = true;
   }
 
-// VENTA2 ELLIPSE for geometry 5= 1.32
-#ifdef PNA
-
   dx = -xoffset+nlength0; dy = nwidth;
   rotate(dx, dy, i);
   bit[0].x = lround(dx+xoffset); bit[0].y = lround(dy*GlobalEllipse+yoffset+1);
@@ -374,26 +371,6 @@ void GaugeVario::MakePolygon(const int i) {
   dx = -xoffset+nline; dy = 0;
   rotate(dx, dy, i);
   bline->x = lround(dx+xoffset); bline->y = lround(dy*GlobalEllipse+yoffset+1);
-
-#else
-#define ELLIPSE 1.1
-
-  dx = -xoffset+nlength0; dy = nwidth;
-  rotate(dx, dy, i);
-  bit[0].x = lround(dx+xoffset); bit[0].y = lround(dy*ELLIPSE+yoffset+1);
-
-  dx = -xoffset+nlength0; dy = -nwidth;
-  rotate(dx, dy, i);
-  bit[2].x = lround(dx+xoffset); bit[2].y = lround(dy*ELLIPSE+yoffset+1);
-
-  dx = -xoffset+nlength1; dy = 0;
-  rotate(dx, dy, i);
-  bit[1].x = lround(dx+xoffset); bit[1].y = lround(dy*ELLIPSE+yoffset+1);
-
-  dx = -xoffset+nline; dy = 0;
-  rotate(dx, dy, i);
-  bline->x = lround(dx+xoffset); bline->y = lround(dy*ELLIPSE+yoffset+1);
-#endif
 }
 
 

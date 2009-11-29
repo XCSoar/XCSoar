@@ -166,6 +166,10 @@ struct Appearance {
 #if defined(PNA) || defined(FIVV)
   InfoBoxGeomAppearance_t InfoBoxGeom; // VENTA-ADDON
   InfoBoxModelAppearance_t InfoBoxModel; // VENTA-ADDON model change
+#else
+  enum {
+    InfoBoxGeom = apIg6,
+  };
 #endif
   bool InverseAircraft;
   bool GaugeVarioGross;

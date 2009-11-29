@@ -39,6 +39,10 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Interface.hpp"
 
+#if defined(ENABLE_SDL) && !defined(WIN32)
+#include "LocalPath.hpp"
+#endif
+
 #include <assert.h>
 
 #ifndef ENABLE_SDL
@@ -119,10 +123,22 @@ void
 Bitmap::load(WORD id)
 {
   // XXX
+
+#ifdef WIN32
   TCHAR name[10];
 
   _stprintf(name, _T("%u"), (unsigned)id);
   load(name);
+#else
+  TCHAR name[32];
+
+  _stprintf(name, _T("resources/%u"), (unsigned)id);
+  load(name);
+
+  TCHAR path[MAX_PATH];
+  LocalPath(path, name);
+  load(path);
+#endif
 }
 #endif /* !ENABLE_SDL */
 
