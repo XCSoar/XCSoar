@@ -39,9 +39,9 @@
 
 #include "Util/NonCopyable.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
+#include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include <vector>
 
 /**

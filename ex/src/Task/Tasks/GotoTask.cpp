@@ -36,15 +36,14 @@
 */
 
 #include "GotoTask.hpp"
-#include "BaseTask/TaskPoint.hpp"
-#include <stdlib.h>
+#include "BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
 GotoTask::GotoTask(const TaskEvents &te, 
                    const TaskBehaviour &tb,
                    TaskAdvance &ta,
                    GlidePolar &gp): 
-  AbstractTask(te,tb,ta,gp),
+  UnorderedTask(te,tb,ta,gp),
   tp(NULL) 
 {
 }
@@ -89,7 +88,7 @@ GotoTask::do_goto(const Waypoint & wp)
   if (tp) {
     delete tp;
   }
-  tp = new TaskPoint(wp, task_behaviour);
+  tp = new UnorderedTaskPoint(wp, task_behaviour);
 }
 
 void 

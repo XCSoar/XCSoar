@@ -38,9 +38,6 @@
 #include "AbstractTask.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "BaseTask/TaskPoint.hpp"
-#include "TaskSolvers/TaskBestMc.hpp"
-#include "TaskSolvers/TaskGlideRequired.hpp"
-#include "TaskSolvers/TaskSolution.hpp"
 #include "Util/Gradient.hpp"
 
 
@@ -193,123 +190,10 @@ AbstractTask::update_stats_times(const AIRCRAFT_STATE &state)
 
 
 void 
-AbstractTask::scan_distance_minmax(const GEOPOINT &location, bool full,
-                                    double *dmin, double *dmax)
+AbstractTask::reset()
 {
-  *dmin = stats.total.remaining.get_distance();
-  *dmax = stats.total.remaining.get_distance();
-}
-
-double 
-AbstractTask::scan_distance_nominal()
-{
-  return stats.total.remaining.get_distance();
-}
-
-double 
-AbstractTask::scan_distance_planned()
-{
-  return stats.total.remaining.get_distance();
-}
-
-double 
-AbstractTask::scan_distance_scored(const GEOPOINT &location)
-{
-  return 0.0;
-}
-
-double 
-AbstractTask::scan_distance_travelled(const GEOPOINT &location)
-{
-  return 0.0;
-}
-
-double 
-AbstractTask::scan_distance_remaining(const GEOPOINT &location)
-{
-  TaskPoint *tp = getActiveTaskPoint();
-  if (!tp) {
-    return 0.0;
-  }
-  return tp->distance(location);
-}
-
-
-void
-AbstractTask::glide_solution_remaining(const AIRCRAFT_STATE &state, 
-                                       GlideResult &total,
-                                       GlideResult &leg)
-{
-  GlideResult res;
-
-  TaskPoint* tp = getActiveTaskPoint();
-  if (tp) {
-    res = TaskSolution::glide_solution_remaining(*tp, state, glide_polar);
-    res.calc_cruise_bearing();
-  }
-  total = res;
-  leg = res;
-}
-
-void 
-AbstractTask::glide_solution_travelled(const AIRCRAFT_STATE &state, 
-                                       GlideResult &total,
-                                       GlideResult &leg)
-{
-  GlideResult null_res;
-  total = null_res;
-  leg = null_res;
-}
-
-void 
-AbstractTask::glide_solution_planned(const AIRCRAFT_STATE &state, 
-                                     GlideResult &total,
-                                     GlideResult &leg,
-                                     DistanceRemainingStat &total_remaining_effective,
-                                     DistanceRemainingStat &leg_remaining_effective,
-                                     const double total_t_elapsed,
-                                     const double leg_t_elapsed)
-{
-  GlideResult res = stats.total.solution_remaining;
-  total = res;
-  leg = res;
-  total_remaining_effective.set_distance(res.Vector.Distance);
-  leg_remaining_effective.set_distance(res.Vector.Distance);
-}
-
-
-double 
-AbstractTask::scan_total_start_time(const AIRCRAFT_STATE &state)
-{
-  return state.Time;
-}
-
-double 
-AbstractTask::scan_leg_start_time(const AIRCRAFT_STATE &state)
-{
-  return state.Time;
-}
-
-double 
-AbstractTask::calc_mc_best(const AIRCRAFT_STATE &aircraft)
-{
-  TaskPoint *tp = getActiveTaskPoint();
-  if (!tp) {
-    return glide_polar.get_mc();
-  }
-  TaskBestMc bmc(tp, aircraft, glide_polar);
-  return bmc.search(glide_polar.get_mc());
-}
-
-double 
-AbstractTask::calc_glide_required(const AIRCRAFT_STATE &aircraft)
-{
-  TaskPoint *tp = getActiveTaskPoint();
-  if (!tp) {
-    return 0.0;
-  }
-  TaskGlideRequired bgr(tp, aircraft, glide_polar);
-  return bgr.search(0.0);
+  trigger_auto = false;
+  activeTaskPoint_last = -1;
 }
 
 
@@ -327,17 +211,3 @@ AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft)
     return 0.0;
   }
 }
-
-double 
-AbstractTask::calc_gradient(const AIRCRAFT_STATE &state) 
-{
-  return leg_gradient(state);
-}
-
-void 
-AbstractTask::reset()
-{
-  trigger_auto = false;
-  activeTaskPoint_last = -1;
-}
-

@@ -63,8 +63,15 @@ public:
                         const GeoEllipse &_ell,
                         const double xmin, 
                         const double xmax);
+
   double f(const double t);
-  bool valid(const double x);
+
+  /**
+   * Test validity of solution
+   * @param t parametric location of test point
+   * @return True if valid
+   */
+  bool valid(const double t);
 
 /** 
  * Search for parameter value of isoline intersecting the OZ boundary

@@ -38,13 +38,15 @@
 #ifndef GOTOTASK_H
 #define GOTOTASK_H
 
-#include "AbstractTask.hpp"
+#include "UnorderedTask.hpp"
 class Waypoint;
 
 /**
  * Class providing ability to go to a single task point
  */
-class GotoTask : public AbstractTask {
+class GotoTask : 
+  public UnorderedTask 
+{
 public:
   /** 
    * Base constructor.

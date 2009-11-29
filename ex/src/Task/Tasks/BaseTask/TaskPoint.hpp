@@ -97,21 +97,21 @@ public:
  * 
  * @return Vector for task leg
  */  
-  virtual const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const;
+  virtual const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const = 0;
 
 /** 
  * Calculate vector from aircraft to destination
  * 
  * @return Vector for task leg
  */  
-  virtual const GeoVector get_vector_planned() const;
+  virtual const GeoVector get_vector_planned() const = 0;
 
 /** 
  * Calculate vector travelled along this leg
  * 
  * @return Vector for task leg
  */  
-  virtual const GeoVector get_vector_travelled(const AIRCRAFT_STATE &) const;
+  virtual const GeoVector get_vector_travelled(const AIRCRAFT_STATE &) const = 0;
 
 /** 
  * Dummy null method.
@@ -131,29 +131,25 @@ public:
 /**
  * Save local copy of target in case optimisation fails
  */
-    virtual void target_save() {};
+  virtual void target_save() {};
 /**
  * Restore target from local copy
  */
-    virtual void target_restore() {};
+  virtual void target_restore() {};
 
 /** 
- * Dummy method (always false for pure TaskPoints)
  * Check whether aircraft has entered the observation zone.
  * 
  * @return True if observation zone has been entered
  */
-  virtual bool has_entered() const {
-    return false;
-  }
+  virtual bool has_entered() const = 0;
 
 /** 
- * Dummy method (always null for pure TaskPoints)
  * Recall aircraft state where it entered the observation zone.
  * 
  * @return State at entry, or null if never entered
  */
-  virtual const AIRCRAFT_STATE& get_state_entered() const;
+  virtual const AIRCRAFT_STATE& get_state_entered() const = 0;
 
 /** 
  * Recall waypoint associated with this task point.  
@@ -172,7 +168,7 @@ public:
  * 
  * @return Minimum allowable elevation of task point
  */
-  virtual double get_elevation() const;
+  virtual double get_elevation() const = 0;
 
 #ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE &state) const;

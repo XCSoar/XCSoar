@@ -181,7 +181,7 @@ protected:
  * 
  * @return Best MC value found (m/s)
  */
-  virtual double calc_mc_best(const AIRCRAFT_STATE &state_now);
+  virtual double calc_mc_best(const AIRCRAFT_STATE &state_now) = 0;
 
 /** 
  * Calculate virtual sink rate of aircraft that allows a pure glide solution
@@ -192,7 +192,7 @@ protected:
  * 
  * @return Sink rate of aircraft (m/s)
  */
-  virtual double calc_glide_required(const AIRCRAFT_STATE &state_now);
+  virtual double calc_glide_required(const AIRCRAFT_STATE &state_now) = 0;
 
 /** 
  * Calculate cruise efficiency for the travelled part of the task.
@@ -227,6 +227,16 @@ protected:
   };
 
 /** 
+ * Calculate angle from aircraft to destination of current leg (height above taskpoint divided
+ * by distance to go).  
+ * 
+ * @param state_now Aircraft state
+ * 
+ * @return Gradient angle of remainder of task
+ */
+  double leg_gradient(const AIRCRAFT_STATE &state_now);
+
+/** 
  * Calculate angle from aircraft to remainder of task (height above finish divided
  * by distance to go).  
  * 
@@ -234,7 +244,7 @@ protected:
  * 
  * @return Gradient angle of remainder of task
  */
-  virtual double calc_gradient(const AIRCRAFT_STATE &state_now);
+  virtual double calc_gradient(const AIRCRAFT_STATE &state_now) = 0;
 
 /** 
  * Calculate task start time.  Default behaviour is current time, to be used
@@ -244,7 +254,7 @@ protected:
  * 
  * @return Time (s) of start of task
  */
-  virtual double scan_total_start_time(const AIRCRAFT_STATE &state_now);
+  virtual double scan_total_start_time(const AIRCRAFT_STATE &state_now) = 0;
 
 /** 
  * Calculate leg start time.  Default behaviour is current time, to be used
@@ -254,7 +264,7 @@ protected:
  * 
  * @return Time (s) of start of leg
  */
-  virtual double scan_leg_start_time(const AIRCRAFT_STATE &state_now);
+  virtual double scan_leg_start_time(const AIRCRAFT_STATE &state_now) = 0;
 
 /** 
  * Calculate distance of nominal task (sum of distances from each
@@ -262,7 +272,7 @@ protected:
  * 
  * @return Distance (m) of nominal task
  */ 
-  virtual double scan_distance_nominal();
+  virtual double scan_distance_nominal() = 0;
 
 /** 
  * Calculate distance of planned task (sum of distances from each leg's
@@ -271,7 +281,7 @@ protected:
  * 
  * @return Distance (m) of planned task
  */
-  virtual double scan_distance_planned();
+  virtual double scan_distance_planned() = 0;
 
 /** 
  * Calculate distance of planned task (sum of distances from aircraft to
@@ -282,7 +292,7 @@ protected:
  * 
  * @return Distance (m) remaining in the planned task
  */ 
-  virtual double scan_distance_remaining(const GEOPOINT &ref);
+  virtual double scan_distance_remaining(const GEOPOINT &ref) = 0;
 
 /** 
  * Calculate scored distance of achieved part of task.
@@ -291,7 +301,7 @@ protected:
  * 
  * @return Distance (m) achieved adjusted for scoring
  */
-  virtual double scan_distance_scored(const GEOPOINT &ref);
+  virtual double scan_distance_scored(const GEOPOINT &ref) = 0;
 
 /** 
  * Calculate distance of achieved part of task.
@@ -303,7 +313,7 @@ protected:
  * 
  * @return Distance (m) achieved
  */
-  virtual double scan_distance_travelled(const GEOPOINT &ref);
+  virtual double scan_distance_travelled(const GEOPOINT &ref) = 0;
 
 /** 
  * Calculate maximum and minimum distances for task, achievable
@@ -316,7 +326,7 @@ protected:
  */
   virtual void scan_distance_minmax(const GEOPOINT &ref, 
                                     bool full,
-                                    double *dmin, double *dmax);
+                                    double *dmin, double *dmax) = 0;
 
 /** 
  * Calculate glide result for remainder of task
@@ -327,7 +337,7 @@ protected:
  */
   virtual void glide_solution_remaining(const AIRCRAFT_STATE &state_now, 
                                         GlideResult &total,
-                                        GlideResult &leg);
+                                        GlideResult &leg) = 0;
 
 /** 
  * Calculate glide result from start of task to current state
@@ -338,7 +348,7 @@ protected:
  */
   virtual void glide_solution_travelled(const AIRCRAFT_STATE &state_now, 
                                         GlideResult &total,
-                                        GlideResult &leg);
+                                        GlideResult &leg) = 0;
 
 /** 
  * Calculate glide result from start of task to finish, and from this
@@ -360,7 +370,7 @@ protected:
                                       DistanceRemainingStat &total_remaining_effective,
                                       DistanceRemainingStat &leg_remaining_effective,
                                       const double total_t_elapsed,
-                                      const double leg_t_elapsed);
+                                      const double leg_t_elapsed) = 0;
 
 protected:
 
@@ -388,7 +398,6 @@ private:
   void update_stats_times(const AIRCRAFT_STATE &);
   void update_stats_speeds(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   void update_stats_glide(const AIRCRAFT_STATE &state);
-  double leg_gradient(const AIRCRAFT_STATE &state);
 
   Filter mc_lpf; /**< low pass filter on best MC calculations */
   Filter ce_lpf; /**< low pass filter on cruise efficiency calculations */

@@ -36,17 +36,17 @@
  */
 #include "AbortTask.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "BaseTask/TaskPoint.hpp"
+#include "BaseTask/UnorderedTaskPoint.hpp"
 #include <queue>
 #include "Task/Visitors/TaskPointVisitor.hpp"
-#include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
+#include "TaskSolvers/TaskSolution.hpp"
 
 AbortTask::AbortTask(const TaskEvents &te, 
                      const TaskBehaviour &tb,
                      TaskAdvance &ta,
                      GlidePolar &gp,
                      const Waypoints &wps):
-  AbstractTask(te, tb, ta, gp), 
+  UnorderedTask(te, tb, ta, gp), 
   active_waypoint(0),
   waypoints(wps),
   polar_safety(gp)
@@ -127,7 +127,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   std::priority_queue<WP_ALT, std::vector<WP_ALT>, Rank> q;
   for (std::vector < Waypoint >::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ) {
-    TaskPoint t(*v, task_behaviour);
+    UnorderedTaskPoint t(*v, task_behaviour);
     GlideResult r = TaskSolution::glide_solution_remaining(t, state, polar_safety);
     if (r.glide_reachable()) {
       q.push(std::make_pair(*v,r.TimeElapsed));
@@ -138,7 +138,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
     }
   }
   while (!q.empty() && !task_full()) {
-    tps.push_back(new TaskPoint(q.top().first, task_behaviour));
+    tps.push_back(new UnorderedTaskPoint(q.top().first, task_behaviour));
 
     const int i = tps.size()-1;
     if (tps[i]->get_waypoint().id == active_waypoint) {

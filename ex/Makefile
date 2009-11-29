@@ -100,14 +100,16 @@ OBJS	:=\
 	src/Task/Tasks/AbstractTask.o \
 	src/Task/Tasks/GotoTask.o \
 	src/Task/Tasks/OrderedTask.o \
-	src/Task/Tasks/BaseTask/OrderedTaskPoint.o \
-	src/Task/Tasks/BaseTask/ScoredTaskPoint.o \
-	src/Task/Tasks/BaseTask/SampledTaskPoint.o \
-	src/Task/Tasks/BaseTask/TaskLeg.o \
-	src/Task/Tasks/BaseTask/TaskPoint.o \
+	src/Task/Tasks/UnorderedTask.o \
 	src/Task/Tasks/BaseTask/IntermediatePoint.o \
 	src/Task/Tasks/BaseTask/ObservationZoneClient.o \
 	src/Task/Tasks/BaseTask/ObservationZonePoint.o \
+	src/Task/Tasks/BaseTask/OrderedTaskPoint.o \
+	src/Task/Tasks/BaseTask/SampledTaskPoint.o \
+	src/Task/Tasks/BaseTask/ScoredTaskPoint.o \
+	src/Task/Tasks/BaseTask/TaskLeg.o \
+	src/Task/Tasks/BaseTask/TaskPoint.o \
+	src/Task/Tasks/BaseTask/UnorderedTaskPoint.o \
 	src/Task/TaskPoints/StartPoint.o \
 	src/Task/TaskPoints/FinishPoint.o \
 	src/Task/TaskPoints/ASTPoint.o \

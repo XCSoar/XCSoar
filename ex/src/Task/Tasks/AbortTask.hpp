@@ -37,7 +37,7 @@
 #ifndef ABORTTASK_H
 #define ABORTTASK_H
 
-#include "AbstractTask.hpp"
+#include "UnorderedTask.hpp"
 #include <vector>
 #include "Waypoint/Waypoints.hpp"
 
@@ -45,7 +45,8 @@
  * Abort task provides automatic management of a sorted list of task points
  * that are reachable or close to reachable, and landable (with airfields preferred).
  */
-class AbortTask : public AbstractTask 
+class AbortTask : 
+  public UnorderedTask 
 {
 public:
   /** 
