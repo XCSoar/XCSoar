@@ -178,7 +178,7 @@ TaskDijkstra::distance_min(const SearchPoint &currentLocation)
   }
   shortest = true; 
 
-  const ScanTaskPoint start(std::max(1,(int)activeStage)-1,0);
+  const ScanTaskPoint start(max(1,(int)activeStage)-1,0);
   DijkstraTaskPoint dijkstra(start);
   if (activeStage) {
     add_start_edges(dijkstra, currentLocation);

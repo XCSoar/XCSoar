@@ -41,7 +41,6 @@
 #include "FlatRay.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Navigation/Geometry/BoundingBoxDistance.hpp"
-#include <algorithm>
 
 /**
  * Structure defining 2-d integer projected coordinates defining
@@ -135,9 +134,9 @@ public:
       {
         int val = 0;
         if (dim<2) {
-          val= std::max(b-a,0);
+          val= max(b-a,0);
         } else {
-          val= std::max(a-b,0);
+          val= max(a-b,0);
         }
         return BBDist(dim,val);
       }

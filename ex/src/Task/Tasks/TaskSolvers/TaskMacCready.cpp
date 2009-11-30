@@ -46,7 +46,7 @@ TaskMacCready::TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
   m_minHs(_tps.size(),0.0),
   m_activeTaskPoint(_activeTaskPoint),
   m_start(0),
-  m_end(std::max((int)_tps.size(),1)-1),
+  m_end(max((int)_tps.size(),1)-1),
   m_glide_polar(gp)
 {
 }
@@ -70,7 +70,7 @@ TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
   // set min heights (earliest climb possible)
   double minH = get_min_height(aircraft);
   for (int i=m_end; i>=m_start; i--) {
-    minH = std::max(minH,m_tps[i]->get_elevation());
+    minH = max(minH,m_tps[i]->get_elevation());
     m_minHs[i] = minH;
   }
   // set min heights (ensure clearance possible for latest glide)
@@ -104,10 +104,10 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
 
   for (int i=m_end; i>=m_start; i--) {
     if (i>m_start) {
-      aircraft_predict.Altitude = m_minHs[i-1]+std::max(excess_height,0.0);
+      aircraft_predict.Altitude = m_minHs[i-1]+max(excess_height,0.0);
     } else {
-      aircraft_predict.Altitude = std::min(aircraft_start.Altitude,
-                                           m_minHs[i]+std::max(excess_height,0.0));
+      aircraft_predict.Altitude = min(aircraft_start.Altitude,
+                                           m_minHs[i]+max(excess_height,0.0));
     }
 
     // perform estimate, ensuring that alt is above previous taskpoint  
@@ -123,7 +123,7 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
     }
 
     if (gr.Solution != GlideResult::RESULT_OK) {
-      i = std::max(m_start,1)-1; // quick exit
+      i = max(m_start,1)-1; // quick exit
     }
 
   }
@@ -135,7 +135,7 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
   double alt_difference = aircraft_start.Altitude-m_minHs[m_start];
   for (int i=m_start; i<=m_end; i++) {
     aircraft_predict.Altitude -= m_gs[i].HeightGlide;
-    alt_difference = std::min(alt_difference, aircraft_predict.Altitude-m_minHs[i]);
+    alt_difference = min(alt_difference, aircraft_predict.Altitude-m_minHs[i]);
   }
   alt_difference -= gr.HeightClimb;
   gr.AltitudeDifference = alt_difference;
@@ -157,8 +157,8 @@ TaskMacCready::glide_sink(const AIRCRAFT_STATE &aircraft,
     if (i==m_start) {
       acc_gr = gr;
     } else {
-      acc_gr.AltitudeDifference = std::min(acc_gr.AltitudeDifference,
-                                           gr.AltitudeDifference);
+      acc_gr.AltitudeDifference = min(acc_gr.AltitudeDifference,
+                                      gr.AltitudeDifference);
     }
   }
   return acc_gr;

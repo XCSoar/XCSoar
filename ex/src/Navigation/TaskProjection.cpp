@@ -59,21 +59,21 @@ TaskProjection::reset(const GEOPOINT &ref)
 
 void TaskProjection::scan_location(const GEOPOINT &ref) 
 {
-  location_min.Longitude = std::min(ref.Longitude,
-                                    location_min.Longitude);
-  location_max.Longitude = std::max(ref.Longitude,
-                                    location_max.Longitude);
-  location_min.Latitude = std::min(ref.Latitude,
-                                   location_min.Latitude);
-  location_max.Latitude = std::max(ref.Latitude,
-                                   location_max.Latitude);
+  location_min.Longitude = min(ref.Longitude,
+                               location_min.Longitude);
+  location_max.Longitude = max(ref.Longitude,
+                               location_max.Longitude);
+  location_min.Latitude = min(ref.Latitude,
+                              location_min.Latitude);
+  location_max.Latitude = max(ref.Latitude,
+                              location_max.Latitude);
 }
 
 void
 TaskProjection::update_fast()
 {
-  location_mid.Longitude = (location_max.Longitude+location_min.Longitude)*0.5;
-  location_mid.Latitude = (location_max.Latitude+location_min.Latitude)*0.5;
+  location_mid.Longitude = (location_max.Longitude+location_min.Longitude)*fixed_half;
+  location_mid.Latitude = (location_max.Latitude+location_min.Latitude)*fixed_half;
   cos_midloc = fastcosine(location_mid.Latitude)*SCALE;
 }
 
@@ -100,8 +100,8 @@ TaskProjection::project(const GEOPOINT& tp) const
 {
   FlatPoint f = fproject(tp);
   FLAT_GEOPOINT fp;
-  fp.Longitude = (int)(f.x+0.5);
-  fp.Latitude = (int)(f.y+0.5);
+  fp.Longitude = (int)(f.x+fixed_half);
+  fp.Latitude = (int)(f.y+fixed_half);
   return fp;
 }
 

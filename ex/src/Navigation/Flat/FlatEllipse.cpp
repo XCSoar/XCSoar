@@ -43,6 +43,7 @@
 #include "Math/NavFunctions.hpp"
 #include "Math/Geometry.hpp"
 #include <algorithm>
+#include "Math/fixed.hpp"
 
 #define sqr(x) ((x)*(x))
 
@@ -125,7 +126,7 @@ bool FlatEllipse::intersect_extended(const FlatPoint &p,
   const FlatLine l_pf2(p,f2);
   const double ang = l_f1p.angle();
 
-  double d = l_pf2.d()+std::max(a,b); // max line length
+  double d = l_pf2.d()+max(a,b); // max line length
 
   FlatLine e_l(p,FlatPoint(p.x+d*fastcosine(ang),
                            p.y+d*fastsine(ang)));

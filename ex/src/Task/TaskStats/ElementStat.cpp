@@ -43,7 +43,7 @@ ElementStat::set_times(const double ts,
                        const AIRCRAFT_STATE& state)
 {
   TimeStarted = ts;
-  TimeElapsed = std::max(state.Time-ts,0.0);
+  TimeElapsed = max(state.Time-ts,0.0);
   TimeRemaining = solution_remaining.TimeElapsed;
   TimePlanned = TimeElapsed+TimeRemaining;
 }

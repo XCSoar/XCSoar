@@ -7,6 +7,10 @@
 //
 // Extensions and bug/compilation fixes by John Wharington 2009
 
+#include <algorithm>
+using std::max;
+using std::min;
+
 #ifndef FIXED_MATH
 #include <math.h>
 #define FIXED_DOUBLE(x) (x)
@@ -20,9 +24,7 @@ typedef double fixed;
 #define fixed_pi 3.1415926
 #define fixed_two_pi 2.0*3.1415926
 #define fixed_360 360
-#include <algorithm>
-#define min std::min
-#define max std::max
+#define fixed_180 180
 
 void sin_cos(const double&theta, double*s, double*c);
 
@@ -141,6 +143,10 @@ public:
     inline operator short() const
     {
         return as_short();
+    }
+    inline operator int() const
+    {
+        return as_int();
     }
     inline operator unsigned short() const
     {

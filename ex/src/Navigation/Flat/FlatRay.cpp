@@ -42,7 +42,7 @@
  * @see http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
  * adapted from line_line_intersection
  */
-double 
+double
 FlatRay::intersects (const FlatRay &oray) const
 {
   const int denom = vector.cross(oray.vector);
@@ -71,7 +71,7 @@ FLAT_GEOPOINT
 FlatRay::parametric(const double t) const
 {
   FLAT_GEOPOINT p = point;
-  p.Longitude += (int)(vector.Longitude*t);
-  p.Latitude += (int)(vector.Latitude*t);
+  p.Longitude += vector.Longitude*t;
+  p.Latitude += vector.Latitude*t;
   return p;
 }

@@ -61,7 +61,7 @@ TaskBestMc::TaskBestMc(TaskPoint* tp,
 
 double TaskBestMc::f(const double mc) 
 {
-  tm.set_mc(std::max(0.001,mc));
+  tm.set_mc(max(0.001,mc));
   res = tm.glide_solution(aircraft);
 
   if (res.Vector.Distance>0) {

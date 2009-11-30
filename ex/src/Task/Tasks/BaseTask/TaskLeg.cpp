@@ -149,32 +149,32 @@ double TaskLeg::leg_distance_scored(const GEOPOINT &ref) const
     // this leg totally included
     return 
       max(fixed_zero,
-          origin()->get_location_scored().distance(
-            destination.get_location_scored())
-          -origin()->score_adjustment()-destination.score_adjustment());
+               origin()->get_location_scored().distance(
+                 destination.get_location_scored())
+               -origin()->score_adjustment()-destination.score_adjustment());
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     if (destination.has_entered()) {
       max(fixed_zero,
-          origin()->get_location_scored().distance( 
-            destination.get_location_scored())
-          -origin()->score_adjustment()-destination.score_adjustment());
+               origin()->get_location_scored().distance( 
+                 destination.get_location_scored())
+               -origin()->score_adjustment()-destination.score_adjustment());
     } else {
       return 
         max(fixed_zero,
-            ref.projected_distance(origin()->get_location_scored(), 
-                                   destination.get_location_scored())
-            -origin()->score_adjustment());
+                 ref.projected_distance(origin()->get_location_scored(), 
+                                        destination.get_location_scored())
+                 -origin()->score_adjustment());
     }
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg may be partially included
     if (origin()->has_entered()) {
       return max(fixed_zero,
-                 memo_travelled.calc(origin()->get_location_scored(), 
-                                     ref).Distance
-                 -origin()->score_adjustment());
+                      memo_travelled.calc(origin()->get_location_scored(), 
+                                          ref).Distance
+                      -origin()->score_adjustment());
     }
   default:
     return 0;

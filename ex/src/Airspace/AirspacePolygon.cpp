@@ -65,8 +65,8 @@ AirspacePolygon::get_center()
 const FlatBoundingBox 
 AirspacePolygon::get_bounding_box(const TaskProjection& task_projection)
 {
-  FLAT_GEOPOINT min;
-  FLAT_GEOPOINT max;
+  FLAT_GEOPOINT fmin;
+  FLAT_GEOPOINT fmax;
 
   project(task_projection);
 
@@ -76,20 +76,20 @@ AirspacePolygon::get_bounding_box(const TaskProjection& task_projection)
     FLAT_GEOPOINT f = v->get_flatLocation();
     if (empty) {
       empty = false;
-      min = f; 
-      max = f; 
+      fmin = f; 
+      fmax = f; 
     } else {
-      min.Longitude = std::min(min.Longitude, f.Longitude);
-      min.Latitude = std::min(min.Latitude, f.Latitude);
-      max.Longitude = std::max(max.Longitude, f.Longitude);
-      max.Latitude = std::max(max.Latitude, f.Latitude);
+      fmin.Longitude = min(fmin.Longitude, f.Longitude);
+      fmin.Latitude = min(fmin.Latitude, f.Latitude);
+      fmax.Longitude = max(fmax.Longitude, f.Longitude);
+      fmax.Latitude = max(fmax.Latitude, f.Latitude);
     }
   }
   if (!empty) {
     // note +/- 1 to ensure rounding keeps bb valid 
-    min.Longitude-= 1; min.Latitude-= 1;
-    max.Longitude+= 1; max.Latitude+= 1;
-    return FlatBoundingBox(min,max);
+    fmin.Longitude-= 1; fmin.Latitude-= 1;
+    fmax.Longitude+= 1; fmax.Latitude+= 1;
+    return FlatBoundingBox(fmin,fmax);
   } else {
     return FlatBoundingBox(FLAT_GEOPOINT(0,0),FLAT_GEOPOINT(0,0));
   }

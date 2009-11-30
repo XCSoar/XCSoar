@@ -38,6 +38,7 @@
 #define FLATRAY_HPP
 
 #include "FlatGeoPoint.hpp"
+#include "Math/fixed.hpp"
 
 /**
  * Projected ray (a point and vector) in 2-d cartesian integer coordinates
@@ -58,8 +59,8 @@ public:
 
   const FLAT_GEOPOINT point; /**< Origin of ray */
   const FLAT_GEOPOINT vector; /**< Vector representing ray direction and length */
-  const double fx; /**< speedups for box intersection test */
-  const double fy; /**< speedups for box intersection test */
+  const fixed fx; /**< speedups for box intersection test */
+  const fixed fy; /**< speedups for box intersection test */
 
 /** 
  * Test whether two rays intersect

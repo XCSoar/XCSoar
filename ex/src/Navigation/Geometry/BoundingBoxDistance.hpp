@@ -100,7 +100,9 @@ public:
   }
 private:
   void set_max(const size_t _dim, const BBDist &rhs) {
-    val[_dim] = std::max(val[_dim],rhs.val[_dim]);
+    if (rhs.val[_dim]>val[_dim]) {
+      val[_dim] = rhs.val[_dim];
+    }
   }
   void calc_d() {
     d=0;

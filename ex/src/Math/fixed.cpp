@@ -27,6 +27,7 @@ extern fixed const fixed_rad_to_deg(180.0/3.1415926);
 extern fixed const fixed_360(360);
 extern fixed const fixed_180(180);
 
+
 fixed& fixed::operator%=(fixed const& other)
 {
     m_nVal = m_nVal%other.m_nVal;

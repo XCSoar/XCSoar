@@ -99,7 +99,7 @@ double
 AbortTask::abort_range(const AIRCRAFT_STATE &state)
 {
   // always scan at least 50km or approx glide range
-  return std::max(50000.0, state.Altitude*polar_safety.get_bestLD());
+  return max(50000.0, state.Altitude*polar_safety.get_bestLD());
 }
 
 void

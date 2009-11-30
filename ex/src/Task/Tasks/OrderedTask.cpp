@@ -222,8 +222,8 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
     return false;
   }
 
-  const int t_min = std::max(0,(int)activeTaskPoint-1);
-  const int t_max = std::min(n_task-1, (int)activeTaskPoint+1);
+  const int t_min = max(0,(int)activeTaskPoint-1);
+  const int t_max = min(n_task-1, (int)activeTaskPoint+1);
   bool full_update = false;
   
   for (int i=t_min; i<=t_max; i++) {
@@ -560,7 +560,7 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
 {
   if (stats.distance_max>stats.distance_min) {
     // only perform scan if modification is possible
-    const double t_rem = std::max(0.0, t_target-stats.total.TimeElapsed);
+    const double t_rem = max(0.0, t_target-stats.total.TimeElapsed);
     
     TaskMinTarget bmt(tps, activeTaskPoint, aircraft, glide_polar, t_rem, ts);
     double p= bmt.search(0.0);

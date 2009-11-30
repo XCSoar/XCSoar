@@ -138,7 +138,7 @@ private:
   GEOPOINT location_min; /**< Lower left corner found in scan */
   GEOPOINT location_max; /**< Upper right corner found in scan */
   GEOPOINT location_mid; /**< Midpoint of boundary, used as projection center point */
-  double cos_midloc; /**< Cosine of the midpoint */
+  fixed cos_midloc;      /**< Cosine of the midpoint */
 };
 
 #endif //TASKPROJECTION_H

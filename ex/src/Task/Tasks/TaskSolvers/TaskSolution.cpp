@@ -45,7 +45,7 @@ TaskSolution::glide_solution_remaining(const TaskPoint& taskpoint,
                                        const double minH)
 {
   GlideState gs(taskpoint.get_vector_remaining(ac),
-                std::max(minH,taskpoint.get_elevation()),
+                max(minH,taskpoint.get_elevation()),
                 ac);
   return polar.solve(gs);
 }
@@ -57,7 +57,7 @@ TaskSolution::glide_solution_planned(const TaskPoint& taskpoint,
                                      const double minH)
 {
   GlideState gs(taskpoint.get_vector_planned(),
-                std::max(minH,taskpoint.get_elevation()),
+                max(minH,taskpoint.get_elevation()),
                 ac);
   return polar.solve(gs);
 }
@@ -74,7 +74,7 @@ TaskSolution::glide_solution_travelled(const TaskPoint& taskpoint,
     return null_res;
   } else {
     GlideState gs(vec,
-                  std::max(minH,taskpoint.get_elevation()),
+                  max(minH,taskpoint.get_elevation()),
                   ac);
     return polar.solve(gs);
   }

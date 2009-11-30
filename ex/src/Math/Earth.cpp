@@ -83,18 +83,28 @@ void IntermediatePoint(GEOPOINT loc1,
     d = dtotal;
   } else {
     d = 1.0e-7;
-    f = 0.0;
+    f = fixed_zero;
   }
   f = min(fixed_one,max(fixed_zero,f));
 
-  fixed cosloc1Latitude = cos(loc1.Latitude);
-  fixed cosloc2Latitude = cos(loc2.Latitude);
-
-  A=sin((1-f)*d)/sin(d);
+  A=sin((fixed_one-f)*d)/sin(d);
   B=sin(f*d)/sin(d);
-  x = A*cosloc1Latitude*cos(loc1.Longitude) +  B*cosloc2Latitude*cos(loc2.Longitude);
-  y = A*cosloc1Latitude*sin(loc1.Longitude) +  B*cosloc2Latitude*sin(loc2.Longitude);
-  z = A*sin(loc1.Latitude)           +  B*sin(loc2.Latitude);
+
+  fixed AsinLoc1Latitude, AcosLoc1Latitude;
+  sin_cos(A*loc1.Latitude, &AsinLoc1Latitude, &AcosLoc1Latitude);
+  fixed BsinLoc2Latitude, BcosLoc2Latitude;
+  sin_cos(B*loc2.Latitude, &BsinLoc2Latitude, &BcosLoc2Latitude);
+
+  fixed sinLoc1Longitude, cosLoc1Longitude;
+  sin_cos(loc1.Longitude, &sinLoc1Longitude, &cosLoc1Longitude);
+
+  fixed sinLoc2Longitude, cosLoc2Longitude;
+  sin_cos(loc2.Longitude, &sinLoc2Longitude, &cosLoc2Longitude);
+
+  x = AcosLoc1Latitude*cosLoc1Longitude +  BcosLoc2Latitude*cosLoc2Longitude;
+  y = AcosLoc1Latitude*sinLoc1Longitude +  BcosLoc2Latitude*sinLoc2Longitude;
+  z = AsinLoc1Latitude                  +  BsinLoc2Latitude;
+
   loc3->Latitude=atan2(z,sqrt(x*x+y*y))*fixed_rad_to_deg;
   loc3->Longitude=atan2(y,x)*fixed_rad_to_deg;
 }

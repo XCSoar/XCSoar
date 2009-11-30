@@ -68,7 +68,7 @@ CylinderZone::randomPointInSector(const double mag) const
   do {
 
     double dir = rand()%360;
-    double dmag = std::max(std::min(Radius,100.0), Radius*mag);
+    double dmag = max(min(Radius,100.0), Radius*mag);
     double dis = (0.1+(rand()%90)/100.0)*dmag;
     GeoVector vec(dis,dir);
     ac.Location = vec.end_point(get_location());
