@@ -413,17 +413,18 @@ GlideComputerTask::InFinishSector(const int i)
 
 bool GlideComputerTask::ValidStartSpeed(const DWORD Margin) const
 {
-  bool valid = true;
-  if (task.getSettings().StartMaxSpeed != 0) {
-    if (Basic().AirspeedAvailable) {
-      if (Basic().IndicatedAirspeed > (task.getSettings().StartMaxSpeed + Margin))
-        valid = false;
-    } else {
-      if (Basic().Speed > (task.getSettings().StartMaxSpeed + Margin))
-        valid = false;
-    }
+  if (task.getSettings().StartMaxSpeed == 0)
+    return true;
+
+  if (Basic().AirspeedAvailable) {
+    if (Basic().IndicatedAirspeed > (task.getSettings().StartMaxSpeed + Margin))
+      return false;
+  } else {
+    if (Basic().Speed > (task.getSettings().StartMaxSpeed + Margin))
+      return false;
   }
-  return valid;
+
+  return true;
 }
 
 bool GlideComputerTask::InsideStartHeight(const DWORD Margin) const
