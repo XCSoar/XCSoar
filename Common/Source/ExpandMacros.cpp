@@ -68,12 +68,11 @@ Copyright_License {
 static void ReplaceInString(TCHAR *String, const TCHAR *ToReplace,
                             const TCHAR *ReplaceWith, size_t Size){
   TCHAR TmpBuf[MAX_PATH];
-  int   iR, iW;
+  size_t iR;
   TCHAR *pC;
 
   while((pC = _tcsstr(String, ToReplace)) != NULL){
     iR = _tcsclen(ToReplace);
-    iW = _tcsclen(ReplaceWith);
     _tcscpy(TmpBuf, pC + iR);
     _tcscpy(pC, ReplaceWith);
     _tcscat(pC, TmpBuf);
