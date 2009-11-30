@@ -58,6 +58,13 @@ Copyright_License {
 
 #include <stdlib.h>
 
+/**
+ * Replaces ToReplace with ReplaceWith in String
+ * @param String Buffer string
+ * @param ToReplace The string that will be replaced
+ * @param ReplaceWith The replacement
+ * @param Size (?)
+ */
 static void ReplaceInString(TCHAR *String, const TCHAR *ToReplace,
                             const TCHAR *ReplaceWith, size_t Size){
   TCHAR TmpBuf[MAX_PATH];
@@ -74,6 +81,16 @@ static void ReplaceInString(TCHAR *String, const TCHAR *ToReplace,
 
 }
 
+/**
+ * If Condition is true, Macro in Buffer will be replaced by TrueText,
+ * otherwise by FalseText.
+ * @param Condition Condition to be checked
+ * @param Buffer Buffer string
+ * @param Macro The string that will be replaced
+ * @param TrueText The replacement if Condition is true
+ * @param FalseText The replacement if Condition is false
+ * @param Size (?)
+ */
 static void CondReplaceInString(bool Condition, TCHAR *Buffer,
                                 const TCHAR *Macro, const TCHAR *TrueText,
                                 const TCHAR *FalseText, size_t Size){
