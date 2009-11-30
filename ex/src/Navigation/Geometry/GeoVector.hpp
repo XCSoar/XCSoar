@@ -37,6 +37,7 @@
 #ifndef GEO_VECTOR_HPP
 #define GEO_VECTOR_HPP
 
+#include "Math/fixed.hpp"
 struct GEOPOINT;
 
 bool operator != (const GEOPOINT&g1, const GEOPOINT &g2);
@@ -51,7 +52,7 @@ struct GeoVector {
   /**
    * Constructor given supplied distance/bearing 
    */
-  GeoVector(const double distance, const double bearing):
+  GeoVector(const fixed distance, const fixed bearing):
     Distance(distance),
     Bearing(bearing)
   {
@@ -61,9 +62,9 @@ struct GeoVector {
    * Dummy constructor given distance, 
    * used to allow GeoVector x=0 calls. 
    */
-  GeoVector(const double distance):
+  GeoVector(const fixed distance):
     Distance(distance),
-    Bearing(0.0)
+    Bearing(fixed_zero)
   {
   }
 
@@ -100,12 +101,12 @@ struct GeoVector {
   /**
    * Distance in meters 
    */
-  double Distance;
+  fixed Distance;
 
   /**
    * Bearing in degrees (true north) 
    */
-  double Bearing;
+  fixed Bearing;
 };
 
 //bool operator != (const GeoVector&g1, const GeoVector &g2);

@@ -39,10 +39,12 @@ Copyright_License {
 #ifndef XCSOAR_MATH_GEOMETRY_HPP
 #define XCSOAR_MATH_GEOMETRY_HPP
 
-double AngleLimit180(double theta);
-double AngleLimit360(double theta);
+#include "Math/fixed.hpp"
 
-double BiSector(double InBound, double OutBound);
-double Reciprocal(double InBound);
+fixed AngleLimit180(fixed theta);
+fixed AngleLimit360(fixed theta);
+
+fixed BiSector(fixed InBound, fixed OutBound);
+fixed Reciprocal(fixed InBound);
 
 #endif

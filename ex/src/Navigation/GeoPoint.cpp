@@ -38,30 +38,30 @@
 #include "Math/Earth.hpp"
 
 GEOPOINT 
-GEOPOINT::parametric(const GEOPOINT &delta, const double t) const
+GEOPOINT::parametric(const GEOPOINT &delta, const fixed t) const
 {
   return (*this)+delta*t;
 }
 
 GEOPOINT 
-GEOPOINT::interpolate(const GEOPOINT &end, const double t) const
+GEOPOINT::interpolate(const GEOPOINT &end, const fixed t) const
 {
   return (*this)+(end-(*this))*t;
 }
 
-double
+fixed
 GEOPOINT::distance(const GEOPOINT &other) const
 {
   return ::Distance(*this, other);
 }
 
-double
+fixed
 GEOPOINT::bearing(const GEOPOINT &other) const
 {
   return ::Bearing(*this, other);
 }
 
-double 
+fixed 
 GEOPOINT::projected_distance(const GEOPOINT &from,
                              const GEOPOINT &to) const
 {

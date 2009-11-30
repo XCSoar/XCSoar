@@ -40,6 +40,8 @@ Copyright_License {
 #ifndef XCSOAR_GEOPOINT_HPP
 #define XCSOAR_GEOPOINT_HPP
 
+#include "Math/fixed.hpp"
+
 /**
  * Geodetic coordinate expressed as Longitude and Latitude in degrees.
  * \todo - support wrap-around at 0,360 degrees longitude
@@ -63,8 +65,8 @@ struct GEOPOINT {
   GEOPOINT(const double _Longitude,
            const double _Latitude):Longitude(_Longitude),Latitude(_Latitude) {}
 
-  double Longitude; /**< Longitude (deg) */
-  double Latitude; /**< Latitude (deg) */
+  fixed Longitude; /**< Longitude (deg) */
+  fixed Latitude; /**< Latitude (deg) */
 
 /** 
  * Find location a parametric distance along a vector from this point
@@ -74,7 +76,7 @@ struct GEOPOINT {
  * 
  * @return Location of point
  */
-  GEOPOINT parametric(const GEOPOINT &delta, const double t) const;
+  GEOPOINT parametric(const GEOPOINT &delta, const fixed t) const;
 
 /** 
  * Find location interpolated from this point towards end
@@ -84,7 +86,7 @@ struct GEOPOINT {
  * 
  * @return Location of point
  */
-  GEOPOINT interpolate(const GEOPOINT &end, const double t) const;
+  GEOPOINT interpolate(const GEOPOINT &end, const fixed t) const;
 
 /** 
  * Multiply a point by a factor (used for deltas)
@@ -93,7 +95,7 @@ struct GEOPOINT {
  * 
  * @return Modified point
  */
-  GEOPOINT operator* (const double x) const {
+  GEOPOINT operator* (const fixed x) const {
     GEOPOINT res = *this;
     res.Longitude *= x;
     res.Latitude *= x;
@@ -135,7 +137,7 @@ struct GEOPOINT {
  * 
  * @return Distance (m)
  */
-  double distance(const GEOPOINT &other) const;
+  fixed distance(const GEOPOINT &other) const;
 
 /** 
  * Calculate great circle initial bearing from this to the other
@@ -144,7 +146,7 @@ struct GEOPOINT {
  * 
  * @return Bearing (deg)
  */
-  double bearing(const GEOPOINT &other) const;
+  fixed bearing(const GEOPOINT &other) const;
 
 /** 
  * Find distance along a great-circle path that this point
@@ -155,8 +157,8 @@ struct GEOPOINT {
  * 
  * @return Distance (m) along from-to line
  */
-  double projected_distance(const GEOPOINT &from,
-                            const GEOPOINT &to) const;
+  fixed projected_distance(const GEOPOINT &from,
+                           const GEOPOINT &to) const;
 
 /** 
  * Test whether two points are co-located

@@ -68,7 +68,7 @@ TaskMacCreadyTotal::effective_distance(const double time_remaining) const
 {
 
   double t_total = 0.0;
-  double d_total = 0.0;
+  fixed d_total = fixed_zero;
   for (int i=m_end; i>=m_start; i--) {
     if (m_gs[i].TimeElapsed>0) {
       double p = (time_remaining-t_total)/m_gs[i].TimeElapsed;

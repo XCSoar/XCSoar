@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -33,42 +34,46 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+*/
+
+
+#ifndef UNORDEREDTASKPOINT_HPP
+#define UNORDEREDTASKPOINT_HPP
+
+#include "TaskPoint.hpp"
+/**
+ * Class for unordered task points (e.g. goto and abort)
+ *
  */
-#include "GeoVector.hpp"
-#include "Math/Earth.hpp"
-#include "Math/NavFunctions.hpp"
-#include "Math/Geometry.hpp"
-
-unsigned count_distbearing = 0;
-
-GeoVector::GeoVector(const GEOPOINT &source, const GEOPOINT &target,
-                     const bool is_average)
+class UnorderedTaskPoint : 
+  public TaskPoint
 {
+public:
+  /**
+   * Constructor.
+   * 
+   * @param wp Waypoint to be used as task point origin
+   * @param tb Task Behaviour defining options (esp safety heights)
+   */
+  UnorderedTaskPoint(const Waypoint & wp,
+                     const TaskBehaviour &tb) : TaskPoint(wp,tb) {};
 
-  count_distbearing++;
+  const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const;
 
-  GEOPOINT loc1 = source;
-  GEOPOINT loc2 = target;
-  ::DistanceBearing(loc1, loc2, &Distance, &Bearing);
-}
+  const GeoVector get_vector_planned() const;
 
-GEOPOINT 
-GeoVector::end_point(const GEOPOINT &source) const
-{
-  GEOPOINT p;
-  ::FindLatitudeLongitude(source, Bearing, Distance, &p);
-  return p;
-}
+  const GeoVector get_vector_travelled(const AIRCRAFT_STATE &) const;
 
-GEOPOINT 
-GeoVector::mid_point(const GEOPOINT &source) const
-{
-  GEOPOINT p;
-  ::FindLatitudeLongitude(source, Bearing, Distance/2.0, &p);
-  return p;
-}
+  bool has_entered() const {
+    return false;
+  }
 
-bool operator != (const GEOPOINT&g1, const GEOPOINT &g2) {
-  return (g1.Latitude != g2.Latitude) || (g1.Longitude != g2.Longitude);
-}
+  const AIRCRAFT_STATE& get_state_entered() const;
 
+  double get_elevation() const;
+
+public:
+  DEFINE_VISITABLE()
+};
+
+#endif

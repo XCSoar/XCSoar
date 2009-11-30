@@ -46,12 +46,12 @@ Copyright_License {
  * @param theta Input angle
  * @return Output angle (0-360 degrees)
  */
-double AngleLimit360(double theta) {
-  while (theta>=360.0) {
-    theta-= 360.0;
+fixed AngleLimit360(fixed theta) {
+  while (theta<fixed_zero) {
+    theta+= fixed_360;
   }
-  while (theta<0.0) {
-    theta+= 360.0;
+  while (theta>fixed_360) {
+    theta-= fixed_360;
   }
   return theta;
 }
@@ -61,12 +61,12 @@ double AngleLimit360(double theta) {
  * @param theta Input angle
  * @return Output angle (-180 - +180 degrees)
  */
-double AngleLimit180(double theta) {
-  while (theta>180.0) {
-    theta-= 360.0;
+fixed AngleLimit180(fixed theta) {
+  while (theta<-fixed_180) {
+    theta+= fixed_360;
   }
-  while (theta<-180.0) {
-    theta+= 360.0;
+  while (theta>fixed_180) {
+    theta-= fixed_360;
   }
   return theta;
 }
@@ -76,14 +76,14 @@ double AngleLimit180(double theta) {
  * @param InBound Input angle
  * @return Output angle (0 - 360 degrees)
  */
-double Reciprocal(double InBound)
+fixed Reciprocal(fixed InBound)
 {
-  return AngleLimit360(InBound+180);
+  return AngleLimit360(InBound+fixed_180);
 }
 
-double BiSector(double InBound, double OutBound)
+fixed BiSector(fixed InBound, fixed OutBound)
 {
-  double result;
+  fixed result;
 
   InBound = Reciprocal(InBound);
 
@@ -94,24 +94,24 @@ double BiSector(double InBound, double OutBound)
 
   else if (InBound > OutBound)
     {
-      if( (InBound - OutBound) < 180)
+      if( (InBound - OutBound) < fixed_180)
 	{
-	  result = Reciprocal((InBound+OutBound)/2);
+	  result = Reciprocal((InBound+OutBound)*fixed_half);
 	}
       else
 	{
-	  result = (InBound+OutBound)/2;
+	  result = (InBound+OutBound)*fixed_half;
 	}
     }
   else
     {
-      if( (OutBound - InBound) < 180)
+      if( (OutBound - InBound) < fixed_180)
 	{
-	  result = Reciprocal((InBound+OutBound)/2);
+	  result = Reciprocal((InBound+OutBound)*fixed_half);
 	}
       else
 	{
-	  result = (InBound+OutBound)/2;
+	  result = (InBound+OutBound)*fixed_half;
 	}
     }
   return result;

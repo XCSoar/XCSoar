@@ -34,41 +34,40 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "GeoVector.hpp"
-#include "Math/Earth.hpp"
-#include "Math/NavFunctions.hpp"
-#include "Math/Geometry.hpp"
+#include "UnorderedTaskPoint.hpp"
 
-unsigned count_distbearing = 0;
 
-GeoVector::GeoVector(const GEOPOINT &source, const GEOPOINT &target,
-                     const bool is_average)
+const GeoVector 
+UnorderedTaskPoint::get_vector_remaining(const AIRCRAFT_STATE &ref) const
 {
-
-  count_distbearing++;
-
-  GEOPOINT loc1 = source;
-  GEOPOINT loc2 = target;
-  ::DistanceBearing(loc1, loc2, &Distance, &Bearing);
+  return GeoVector(ref.Location, get_location_remaining());
 }
 
-GEOPOINT 
-GeoVector::end_point(const GEOPOINT &source) const
+//// These are dummies, never get called usually
+
+const GeoVector 
+UnorderedTaskPoint::get_vector_planned() const
 {
-  GEOPOINT p;
-  ::FindLatitudeLongitude(source, Bearing, Distance, &p);
-  return p;
+  return GeoVector(0,0);
 }
 
-GEOPOINT 
-GeoVector::mid_point(const GEOPOINT &source) const
+const GeoVector 
+UnorderedTaskPoint::get_vector_travelled(const AIRCRAFT_STATE &ref) const
 {
-  GEOPOINT p;
-  ::FindLatitudeLongitude(source, Bearing, Distance/2.0, &p);
-  return p;
+  return GeoVector(0,0);
 }
 
-bool operator != (const GEOPOINT&g1, const GEOPOINT &g2) {
-  return (g1.Latitude != g2.Latitude) || (g1.Longitude != g2.Longitude);
+const AIRCRAFT_STATE& 
+UnorderedTaskPoint::get_state_entered() const 
+{
+  // this should never get called
+  static const AIRCRAFT_STATE null_state;
+  return null_state;
 }
 
+
+double 
+UnorderedTaskPoint::get_elevation() const
+{
+  return m_elevation+m_task_behaviour.safety_height_arrival;
+}

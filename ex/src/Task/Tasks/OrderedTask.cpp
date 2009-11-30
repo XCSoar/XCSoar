@@ -574,20 +574,20 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
 double 
 OrderedTask::calc_gradient(const AIRCRAFT_STATE &state) 
 {
-  double g_best = 0.0;
-  double d_acc = 0.0;
-  double h_this = state.Altitude;
+  fixed g_best = fixed_zero;
+  fixed d_acc = fixed_zero;
+  fixed h_this = state.Altitude;
 
   for (unsigned i=activeTaskPoint; i< tps.size(); i++) {
     d_acc += tps[i]->get_vector_remaining(state).Distance;
     if (!d_acc) {
       continue;
     }
-    const double g_this = (h_this-tps[i]->get_elevation())/d_acc;
+    const fixed g_this = (h_this-tps[i]->get_elevation())/d_acc;
     if (i==activeTaskPoint) {
       g_best = g_this;
     } else {
-      g_best = std::min(g_best, g_this);
+      g_best = min(g_best, g_this);
     }
   }
   return g_best;

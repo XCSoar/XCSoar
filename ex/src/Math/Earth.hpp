@@ -53,27 +53,27 @@ Copyright_License {
  * Finds cross track error in meters and closest point P4 between P3
  * and desired track P1-P2.  Very slow function!
  */
-double CrossTrackError(GEOPOINT loc1,
-                       GEOPOINT loc2,
-                       GEOPOINT loc3,
-                       GEOPOINT *loc4);
+fixed CrossTrackError(GEOPOINT loc1,
+                      GEOPOINT loc2,
+                      GEOPOINT loc3,
+                      GEOPOINT *loc4);
 
 /**
  * Calculates projected distance from P3 along line P1-P2.
  */
-double ProjectedDistance(GEOPOINT loc1,
-                         GEOPOINT loc2,
-                         GEOPOINT loc3);
+fixed ProjectedDistance(GEOPOINT loc1,
+                        GEOPOINT loc2,
+                        GEOPOINT loc3);
 
 void DistanceBearing(GEOPOINT loc1,
                      GEOPOINT loc2,
-                     double *Distance, double *Bearing);
+                     fixed *Distance, fixed *Bearing);
 
-double Distance(GEOPOINT loc1,
-                GEOPOINT loc2);
-
-double Bearing(GEOPOINT loc1,
+fixed Distance(GEOPOINT loc1,
                GEOPOINT loc2);
+
+fixed Bearing(GEOPOINT loc1,
+              GEOPOINT loc2);
 
 /** 
  * Calculate and add distances between point 1 and 2, and point 2 and 3.
@@ -84,12 +84,13 @@ double Bearing(GEOPOINT loc1,
  * 
  * @return Distance 12 plus 23 (m)
  */
-double DoubleDistance(GEOPOINT loc1,
-                      GEOPOINT loc2,
-		      GEOPOINT loc3);
+fixed DoubleDistance(GEOPOINT loc1,
+                     GEOPOINT loc2,
+                     GEOPOINT loc3);
 
 void FindLatitudeLongitude(GEOPOINT loc,
-                           double Bearing, double Distance,
+                           fixed Bearing, 
+                           fixed Distance,
                            GEOPOINT *loc_out);
 
 #endif

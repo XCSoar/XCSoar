@@ -30,7 +30,7 @@ OPTIMIZE := -g -O2
 CPPFLAGS := $(INCLUDES) 
 CFLAGS		:=$(OPTIMIZE) $(PROFILE) $(COVERAGE)
 
-CFLAGS += -pedantic
+CFLAGS += # -pedantic 
 CFLAGS += -Wall -Wextra
 CFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
 CFLAGS += -Wmissing-noreturn -Wundef
@@ -51,7 +51,7 @@ CXXFLAGS += -Wno-reorder
 # -Wdisabled-optimization
 # -Wunused -Wshadow -Wunreachable-code
 
-CFLAGS += -DDO_PRINT -DINSTRUMENT_TASK
+CFLAGS += -DDO_PRINT -DINSTRUMENT_TASK -DFIXED_MATH
 
 CXXFLAGS	:=$(CFLAGS) -fno-exceptions 
 CXXFLAGS += -Wno-non-virtual-dtor 
@@ -141,6 +141,7 @@ OBJS	:=\
 	src/Math/Geometry.o \
 	src/Math/FastMath.o \
 	src/Math/Earth.o \
+	src/Math/fixed.o \
 	src/Util/AvFilter.o \
 	src/Util/DiffFilter.o \
 	src/Util/Filter.o \
@@ -159,6 +160,7 @@ TESTOBJS = Test/test_debug.o \
 	Test/tap.o
 
 TESTFAST = \
+	Test/test_fixed.exe \
 	Test/test_waypoints.exe \
 	Test/test_task.exe \
 	Test/test_mc.exe \
