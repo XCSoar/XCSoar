@@ -207,7 +207,6 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 }
 */
 
-// Finds nearest airspace (whether circle or area) to the specified point. Returns -1 in foundcircle or foundarea if circle or area is not found. Otherwise, returns index of the circle or area that is closest to the specified point. Also returns the distance and bearing to the boundary of the airspace. Distance < 0 means interior. This only searches within a range of 100km of the target
 /**
  * Finds nearest airspace (whether circle or area)
  * to the specified point.
