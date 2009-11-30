@@ -52,7 +52,8 @@ CXXFLAGS += -Wno-reorder
 # -Wdisabled-optimization
 # -Wunused -Wshadow -Wunreachable-code
 
-CFLAGS += -DDO_PRINT -DINSTRUMENT_TASK -DFIXED_MATH
+CFLAGS += -DDO_PRINT -DINSTRUMENT_TASK 
+#-DFIXED_MATH
 
 CXXFLAGS	:=$(CFLAGS) -fno-exceptions 
 CXXFLAGS += -Wno-non-virtual-dtor 
