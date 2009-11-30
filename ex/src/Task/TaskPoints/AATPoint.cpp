@@ -54,7 +54,7 @@ AATPoint::update_sample(const AIRCRAFT_STATE& state,
                         const TaskEvents &task_events) 
 {
   bool retval = OrderedTaskPoint::update_sample(state,task_events);
-  if (getActiveState() == CURRENT_ACTIVE) {
+  if ((getActiveState() == CURRENT_ACTIVE) && (!m_target_locked)) {
     retval |= check_target(state);
   }
 
@@ -137,6 +137,10 @@ AATPoint::check_target_outside(const AIRCRAFT_STATE& state)
 bool
 AATPoint::set_range(const double p, const bool force_if_current)
 {
+  if (m_target_locked) {
+    return false;
+  }
+
   switch (getActiveState()) {
   case CURRENT_ACTIVE:
     if (!has_entered() || force_if_current) {
@@ -157,18 +161,22 @@ AATPoint::set_range(const double p, const bool force_if_current)
 
 
 void 
-AATPoint::set_target(const GEOPOINT &loc)
+AATPoint::set_target(const GEOPOINT &loc, const bool override_lock)
 {
-  m_target_location = loc;
+  if (override_lock || !m_target_locked) {
+    m_target_location = loc;
+  }
 }
 
 
 bool
 AATPoint::equals(const OrderedTaskPoint* other) const
 {
-  if (dynamic_cast<const AATPoint*>(other)) {
-    return OrderedTaskPoint::equals(other);
-  } else {
-    return false;
-  }
+  if (const AATPoint* tp = dynamic_cast<const AATPoint*>(other)) {
+    if ((m_target_locked == tp->m_target_locked)
+        && (m_target_location == tp->m_target_location)) {
+      return OrderedTaskPoint::equals(other);
+    }
+  } 
+  return false;
 }

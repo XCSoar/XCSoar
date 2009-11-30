@@ -47,7 +47,6 @@
  * but does not yet have an observation zone.
  *
  * \todo
- * - Target locking is currently not implemented.
  * - TaskBehaviour is not yet used to define how targets float.
  * - Elevation may vary with target shift
  */
@@ -96,6 +95,24 @@ public:
   bool update_sample(const AIRCRAFT_STATE& state,
                      const TaskEvents &task_events);
 
+/** 
+ * Lock/unlock the target from automatic shifts
+ * 
+ * @param do_lock Whether to lock the target
+ */
+  void target_lock(bool do_lock) {
+    m_target_locked = do_lock;
+  }
+
+/** 
+ * Accessor for locked state of target
+ * 
+ * @return True if target is locked
+ */
+  bool target_is_locked() const {
+    return m_target_locked;
+  }
+
 /**
  * Save local copy of target in case optimisation fails
  */
@@ -113,8 +130,9 @@ public:
  * Set target location explicitly
  * 
  * @param loc Location of new target
+ * @param override_lock If false, won't set the target if it is locked
  */
-  void set_target(const GEOPOINT &loc);
+  void set_target(const GEOPOINT &loc, const bool override_lock=false);
 
 /** 
  * Accessor to get target location

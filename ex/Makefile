@@ -23,8 +23,7 @@ MAKEFLAGS	+=-r
 
 PROFILE := 
 #-pg
-COVERAGE := 
-#--coverage
+COVERAGE := --coverage
 
 OPTIMIZE := -g -O2
 

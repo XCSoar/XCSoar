@@ -42,10 +42,3 @@ TaskPoint::get_location_remaining() const
   return get_location();
 }
 
-
-double 
-TaskPoint::get_elevation() const
-{
-  return m_elevation+m_task_behaviour.safety_height_arrival;
-}
-

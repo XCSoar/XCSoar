@@ -75,6 +75,10 @@ TaskOptTarget::valid(const double tp)
 double 
 TaskOptTarget::search(const double tp) 
 {
+  if (tp_current.target_is_locked()) {
+    // can't move, don't bother
+    return -1;
+  }
   if (iso.valid()) {
       tm.target_save();
     const double t = find_min(tp);
