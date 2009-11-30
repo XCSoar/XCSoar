@@ -43,7 +43,7 @@ TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,
                              const AIRCRAFT_STATE &_aircraft,
                              const GlidePolar &_gp,
-                             const double _t_remaining,
+                             const fixed _t_remaining,
                              StartPoint *_ts):
   ZeroFinder(0.0,1.0, TOLERANCE_MIN_TARGET),
   tm(tps,activeTaskPoint,_gp),
@@ -55,15 +55,15 @@ TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
 
 }
 
-double 
-TaskMinTarget::f(const double p) 
+fixed 
+TaskMinTarget::f(const fixed p) 
 {
   // set task targets
   set_range(p);
 
   res = tm.glide_solution(aircraft);
-  const double dt = res.TimeElapsed-t_remaining; 
-  if (t_remaining>0) {
+  const fixed dt = res.TimeElapsed-t_remaining; 
+  if (positive(t_remaining)) {
     return dt/t_remaining;
   } else {
     return dt;
@@ -71,18 +71,18 @@ TaskMinTarget::f(const double p)
 }
 
 bool 
-TaskMinTarget::valid(const double tp) 
+TaskMinTarget::valid(const fixed tp) 
 {
-  const double ff = f(tp);
-  return (res.Solution== GlideResult::RESULT_OK) && (ff>= -tolerance*2.0);
+  const fixed ff = f(tp);
+  return (res.Solution== GlideResult::RESULT_OK) && (ff>= -tolerance*fixed_two);
 }
 
-double 
-TaskMinTarget::search(const double tp) 
+fixed 
+TaskMinTarget::search(const fixed tp) 
 {
   force_current = false;
   /// \todo if search fails, force current
-  const double p = find_zero(tp);
+  const fixed p = find_zero(tp);
   if (valid(p)) {
     return p;
   } else {
@@ -92,7 +92,7 @@ TaskMinTarget::search(const double tp)
 }
 
 void 
-TaskMinTarget::set_range(const double p)
+TaskMinTarget::set_range(const fixed p)
 {
   tm.set_range(p, force_current);
   tp_start->scan_distance_remaining(aircraft.Location);

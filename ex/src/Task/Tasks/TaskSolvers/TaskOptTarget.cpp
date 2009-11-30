@@ -54,8 +54,8 @@ TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
 
 }
 
-double 
-TaskOptTarget::f(const double p) 
+fixed 
+TaskOptTarget::f(const fixed p) 
 {
   // set task targets
   set_target(p);
@@ -66,36 +66,36 @@ TaskOptTarget::f(const double p)
 }
 
 bool 
-TaskOptTarget::valid(const double tp) 
+TaskOptTarget::valid(const fixed tp) 
 {
   f(tp);
   return (res.Solution== GlideResult::RESULT_OK);
 }
 
-double 
-TaskOptTarget::search(const double tp) 
+fixed 
+TaskOptTarget::search(const fixed tp) 
 {
   if (tp_current.target_is_locked()) {
     // can't move, don't bother
-    return -1;
+    return -fixed_one;
   }
   if (iso.valid()) {
       tm.target_save();
-    const double t = find_min(tp);
+    const fixed t = find_min(tp);
     if (!valid(t)) {
       // invalid, so restore old value
       tm.target_restore();
-      return -1.0;
+      return -fixed_one;
     } else {
       return t;
     }
   } else {
-    return -1;
+    return -fixed_one;
   }
 }
 
 void 
-TaskOptTarget::set_target(const double p)
+TaskOptTarget::set_target(const fixed p)
 {
   const GEOPOINT loc = iso.parametric(min(xmax,max(xmin,p)));
   tp_current.set_target(loc);

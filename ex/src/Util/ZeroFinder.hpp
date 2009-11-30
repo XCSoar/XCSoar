@@ -38,6 +38,8 @@
 }
  */
 
+#include "Math/fixed.hpp"
+
 /**
  * Zero finding and minimisation search algorithm
  */
@@ -50,7 +52,7 @@ public:
  * @param _xmax Maximum allowable value of x
  * @param _tolerance Absolute tolerance of solution (in x)
  */
-  ZeroFinder(const double _xmin, const double _xmax, const double _tolerance): 
+  ZeroFinder(const fixed _xmin, const fixed _xmax, const fixed _tolerance): 
     xmin(_xmin),
     xmax(_xmax),
     tolerance(_tolerance)
@@ -64,7 +66,7 @@ public:
  * 
  * @return f(x)
  */
-  virtual double f(const double x) = 0;
+  virtual fixed f(const fixed x) = 0;
 
 /** 
  * Find closest value of x that produces f(x)=0
@@ -74,7 +76,7 @@ public:
  * 
  * @return x value of best solution
  */
-  double find_zero(const double xstart);
+  fixed find_zero(const fixed xstart);
 
 /** 
  * Find value of x that minimises f(x)
@@ -84,16 +86,16 @@ public:
  * 
  * @return x value of best solution
  */
-  double find_min(const double xstart);
+  fixed find_min(const fixed xstart);
 
 protected:
-  const double xmin; /**< min value of search range */
-  const double xmax; /**< max value of search range */
-  const double tolerance; /**< search tolerance */
+  const fixed xmin; /**< min value of search range */
+  const fixed xmax; /**< max value of search range */
+  const fixed tolerance; /**< search tolerance */
 private:
-  static const double epsilon; /**< machine tolerance */
-  static const double sqrt_epsilon; /**< sqrt of machine tolerance */
-  static const double r;
+  static const fixed epsilon; /**< machine tolerance */
+  static const fixed sqrt_epsilon; /**< sqrt of machine tolerance */
+  static const fixed r;
 };
 
 #endif

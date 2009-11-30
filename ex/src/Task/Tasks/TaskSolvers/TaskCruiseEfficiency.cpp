@@ -54,7 +54,8 @@ TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>&
   }
 }
 
-double TaskCruiseEfficiency::f(const double ce) 
+fixed 
+TaskCruiseEfficiency::f(const fixed ce) 
 {
   tm.set_cruise_efficiency(ce);
   res = tm.glide_solution(aircraft);
@@ -68,7 +69,8 @@ double TaskCruiseEfficiency::f(const double ce)
   return d;
 }
 
-double TaskCruiseEfficiency::search(const double ce) 
+fixed 
+TaskCruiseEfficiency::search(const fixed ce) 
 {
   return find_min(ce);
 }

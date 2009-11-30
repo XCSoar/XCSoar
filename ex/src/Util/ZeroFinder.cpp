@@ -40,9 +40,14 @@
 #include <algorithm>
 #include <limits>
 
-const double ZeroFinder::epsilon = std::numeric_limits<double>::epsilon();
-const double ZeroFinder::sqrt_epsilon = sqrt(std::numeric_limits<double>::epsilon());
-const double ZeroFinder::r = (3.-sqrt(5.0))/2;	/* Gold section ratio		*/
+#ifdef FIXED_MATH
+const fixed ZeroFinder::epsilon(fixed::internal(),2);
+const fixed ZeroFinder::sqrt_epsilon = sqrt(ZeroFinder::epsilon);
+#else
+const fixed ZeroFinder::epsilon = std::numeric_limits<double>::epsilon();
+const fixed ZeroFinder::sqrt_epsilon = sqrt(std::numeric_limits<double>::epsilon());
+#endif
+const fixed ZeroFinder::r = (3.-sqrt(5.0))/2;	/* Gold section ratio		*/
 
 
 /*
@@ -51,12 +56,12 @@ const double ZeroFinder::r = (3.-sqrt(5.0))/2;	/* Gold section ratio		*/
  * function ZEROIN - obtain a function zero within the given range
  *
  * Input
- *	double zeroin(ax,bx,f,tol)
- *	double ax; 			Root will be seeked for within
- *	double bx;  			a range [ax,bx]
- *	double (*f)(double x);		Name of the function whose zero
+ *	fixed zeroin(ax,bx,f,tol)
+ *	fixed ax; 			Root will be seeked for within
+ *	fixed bx;  			a range [ax,bx]
+ *	fixed (*f)(fixed x);		Name of the function whose zero
  *					will be seeked for
- *	double tol;			Acceptable tolerance for the root
+ *	fixed tol;			Acceptable tolerance for the root
  *					value.
  *					May be specified as 0.0 to cause
  *					the program to find the root as
@@ -94,11 +99,14 @@ const double ZeroFinder::r = (3.-sqrt(5.0))/2;	/* Gold section ratio		*/
 
 #include "math.h"
 
-double ZeroFinder::find_zero(const double xstart) {
-  double a,b,c;				/* Abscissae, descr. see above	*/
-  double fa;				/* f(a)				*/
-  double fb;				/* f(b)				*/
-  double fc;				/* f(c)				*/
+static const fixed fixed_threequaters = 0.75;
+static const fixed fixed_third = (1.0/3.0);
+
+fixed ZeroFinder::find_zero(const fixed xstart) {
+  fixed a,b,c;				/* Abscissae, descr. see above	*/
+  fixed fa;				/* f(a)				*/
+  fixed fb;				/* f(b)				*/
+  fixed fc;				/* f(c)				*/
 
   bool b_best = true; // b is best and last called
 
@@ -110,7 +118,7 @@ double ZeroFinder::find_zero(const double xstart) {
 
   for(;;)		/* Main iteration loop	*/
   {
-    double prev_step = b-a;		/* Distance from the last but one*/
+    fixed prev_step = b-a;		/* Distance from the last but one*/
 					/* to the last approximation	*/    
    
     if( fabs(fc) < fabs(fb) )
@@ -121,12 +129,12 @@ double ZeroFinder::find_zero(const double xstart) {
     } else {
       b_best = true;
     }
-    const double tol_act = 		/* Actual tolerance	        */
-      2*epsilon*fabs(b) + tolerance/2;
+    const fixed tol_act = 		/* Actual tolerance	        */
+      fixed_two*epsilon*fabs(b) + tolerance*fixed_half;
 
-    double new_step = (c-b)*0.5;    /* Step at this iteration       */
+    fixed new_step = (c-b)*fixed_half;    /* Step at this iteration       */
 
-    if( fabs(new_step) <= tol_act || fb == (double)0 ) {
+    if( fabs(new_step) <= tol_act || fb == (fixed)0 ) {
       if (!b_best) {
         fb = f(b); // call once more
       }
@@ -138,33 +146,33 @@ double ZeroFinder::find_zero(const double xstart) {
 	&& fabs(fa) > fabs(fb) )	/* and was in true direction,	*/
     {					/* Interpolatiom may be tried	*/
 
-      double p;      			/* Interpolation step is calcu- */
-      double q;      			/* lated in the form p/q; divi- */
+      fixed p;      			/* Interpolation step is calcu- */
+      fixed q;      			/* lated in the form p/q; divi- */
   					/* sion operations is delayed   */
  					/* until the last moment	*/
 
-      const double cb = c-b;
+      const fixed cb = c-b;
       if( a==c )			/* If we have only two distinct	*/
 	{				/* points linear interpolation 	*/
-	  const double t1 = fb/fa;	/* can only be applied		*/
+	  const fixed t1 = fb/fa;	/* can only be applied		*/
 	  p = cb*t1;
-	  q = 1.0 - t1;
+	  q = fixed_one - t1;
  	}
 	else				/* Quadric inverse interpolation*/
 	{
 	  q = fa/fc;  
-          const double t1 = fb/fc;  
-          const double t2 = fb/fa;
-	  p = t2 * ( cb*q*(q-t1) - (b-a)*(t1-1.0) );
-	  q = (q-1.0) * (t1-1.0) * (t2-1.0);
+          const fixed t1 = fb/fc;  
+          const fixed t2 = fb/fa;
+	  p = t2 * ( cb*q*(q-t1) - (b-a)*(t1-fixed_one) );
+	  q = (q-fixed_one) * (t1-fixed_one) * (t2-fixed_one);
 	}
-	if( p>(double)0 )		/* p was calculated with the op-*/
+      if( positive(p) )		/* p was calculated with the op-*/
 	  q = -q;			/* posite sign; make p positive	*/
 	else				/* and assign possible minus to	*/
 	  p = -p;			/* q				*/
 
-	if( p < (0.75*cb*q-fabs(tol_act*q)/2)	/* If b+p/q falls in [b,c]*/
-	    && p < fabs(prev_step*q/2) )	/* and isn't too large	*/
+	if( p < (fixed_threequaters*cb*q-fabs(tol_act*q)*fixed_half)	/* If b+p/q falls in [b,c]*/
+	    && p < fabs(prev_step*q*fixed_half) )	/* and isn't too large	*/
 	  new_step = p/q;			/* it is accepted	*/
 					/* If p/q is too large then the	*/
 					/* bissection procedure can 	*/
@@ -173,7 +181,7 @@ double ZeroFinder::find_zero(const double xstart) {
     }
 
     if( fabs(new_step) < tol_act ) {	/* Adjust the step to be not less*/
-      if( new_step > (double)0 )	/* than toleranceerance		*/
+      if( positive(new_step) )	        /* than toleranceerance		*/
 	new_step = tol_act;
       else
 	new_step = -tol_act;
@@ -183,7 +191,7 @@ double ZeroFinder::find_zero(const double xstart) {
     b += new_step;                      /* Do step to a new approxim.	*/
     fb = f(b);
 
-    if( (fb > 0 && fc > 0) || (fb < 0 && fc < 0) )
+    if( (positive(fb) && positive(fc)) || (negative(fb) && negative(fc)) )
     {                 			/* Adjust c for it to have a sign*/
       c = a;  fc = fa;                  /* opposite to that of b	*/
     }
@@ -201,12 +209,12 @@ double ZeroFinder::find_zero(const double xstart) {
  *			  over the given range
  *
  * Input
- *	double fminbr(a,b,f,tolerance)
- *	double a; 			Minimum will be seeked for over
- *	double b;  			a range [a,b], a being < b.
- *	double (*f)(double x);		Name of the function whose minimum
+ *	fixed fminbr(a,b,f,tolerance)
+ *	fixed a; 			Minimum will be seeked for over
+ *	fixed b;  			a range [a,b], a being < b.
+ *	fixed (*f)(fixed x);		Name of the function whose minimum
  *					will be seeked for
- *	double tolerance;			Acceptable toleranceerance for the minimum
+ *	fixed tolerance;			Acceptable toleranceerance for the minimum
  *					location. It have to be positive
  *					(e.g. may be specified as epsilon)
  *
@@ -244,14 +252,14 @@ double ZeroFinder::find_zero(const double xstart) {
  *
  ************************************************************************
  */
-double ZeroFinder::find_min(const double xstart)
+fixed ZeroFinder::find_min(const fixed xstart)
 {
-  double x,v,w;				/* Abscissae, descr. see above	*/
-  double fx;				/* f(x)				*/
-  double fv;				/* f(v)				*/
-  double fw;				/* f(w)				*/
-  double a = xmin;
-  double b = xmax;
+  fixed x,v,w;				/* Abscissae, descr. see above	*/
+  fixed fx;				/* f(x)				*/
+  fixed fv;				/* f(v)				*/
+  fixed fw;				/* f(w)				*/
+  fixed a = xmin;
+  fixed b = xmax;
   bool x_best = true;
 
   assert( tolerance > 0 && b > a );
@@ -262,44 +270,45 @@ double ZeroFinder::find_min(const double xstart)
 
   for(;;)		/* Main iteration loop	*/
   {
-    const double range = b-a;      /* Range over which the minimum */
+    const fixed range = b-a;      /* Range over which the minimum */
                                    /* is seeked for		*/
-    const double middle_range = (a+b)*0.5;
+    const fixed middle_range = (a+b)*fixed_half;
 
-    const double tol_act =			/* Actual toleranceerance		*/
-      sqrt_epsilon*fabs(x) + tolerance/3;
+    const fixed tol_act =			/* Actual toleranceerance		*/
+      sqrt_epsilon*fabs(x) + tolerance*fixed_third;
+    const fixed double_tol_act = fixed_two*tol_act;
 
-    if( fabs(x-middle_range) + range*0.5 <= 2*tol_act ) {
+    if( fabs(x-middle_range) + range*fixed_half <= double_tol_act ) {
       if (!x_best) {
         fx = f(x); // call once more
       }
       return x;				/* Acceptable approx. is found	*/
     }
 
-    double new_step      		/* Step at this iteration       */
+    fixed new_step      		/* Step at this iteration       */
 					/* Obtain the gold section step	*/
       = r * ( x<middle_range ? b-x : a-x );
 
     			/* Decide if the interpolation can be tried	*/
     if( fabs(x-w) >= tol_act  )		/* If x and w are distinct      */
     {					/* interpolatiom may be tried	*/
-	double p; 		/* Interpolation step is calcula-*/
-	double q;              /* ted as p/q; division operation*/
+	fixed p; 		/* Interpolation step is calcula-*/
+	fixed q;              /* ted as p/q; division operation*/
                                         /* is delayed until last moment	*/
 
-	const double t = (x-w) * (fx-fv);
+	const fixed t = (x-w) * (fx-fv);
 	q = (x-v) * (fx-fw);
 	p = (x-v)*q - (x-w)*t;
 	q = 2*(q-t);
 
-	if( q>(double)0 )		/* q was calculated with the op-*/
+	if( positive(q) )		/* q was calculated with the op-*/
 	  p = -p;			/* posite sign; make q positive	*/
 	else				/* and assign possible minus to	*/
 	  q = -q;			/* p				*/
 
 	if( fabs(p) < fabs(new_step*q) &&	/* If x+p/q falls in [a,b]*/
-	    p > q*(a-x+2*tol_act) &&		/* not too close to a and */
-	    p < q*(b-x-2*tol_act)  )            /* b, and isn't too large */
+	    p > q*(a-x+double_tol_act) &&		/* not too close to a and */
+	    p < q*(b-x-double_tol_act)  )            /* b, and isn't too large */
 	  new_step = p/q;			/* it is accepted         */
 					/* If p/q is too large then the	*/
 					/* gold section procedure can 	*/
@@ -308,7 +317,7 @@ double ZeroFinder::find_min(const double xstart)
     }
 
     if( fabs(new_step) < tol_act ) {	/* Adjust the step to be not less*/
-      if( new_step > (double)0 )	/* than toleranceerance		*/
+      if( positive(new_step) )	/* than toleranceerance		*/
 	new_step = tol_act;
       else
 	new_step = -tol_act;
@@ -316,8 +325,8 @@ double ZeroFinder::find_min(const double xstart)
 
 				/* Obtain the next approximation to min	*/
     {				/* and reduce the enveloping range	*/
-      const double t = x + new_step;	/* Tentative point for the min	*/
-      const double ft = f(t);
+      const fixed t = x + new_step;	/* Tentative point for the min	*/
+      const fixed ft = f(t);
       if( ft <= fx )
       {                                 /* t is a better approximation	*/
 	if( t < x )			/* Reduce the range so that	*/

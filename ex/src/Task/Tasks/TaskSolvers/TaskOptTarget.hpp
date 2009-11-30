@@ -73,7 +73,7 @@ public:
                 StartPoint *_ts);
   virtual ~TaskOptTarget() {};
 
-  virtual double f(const double p);
+  virtual fixed f(const fixed p);
 
 /** 
  * Test validity of a solution given search parameter
@@ -82,7 +82,7 @@ public:
  * 
  * @return True if solution is valid
  */
-  virtual bool valid(const double p);
+  virtual bool valid(const fixed p);
 
 /** 
  * Search for active task point's target isoline to minimise elapsed time
@@ -94,10 +94,10 @@ public:
  * 
  * @return Isoline value for solution
  */
-  virtual double search(const double p);
+  virtual fixed search(const fixed p);
 
 private:
-  void set_target(const double p); /**< Sets target location along isoline */
+  void set_target(const fixed p); /**< Sets target location along isoline */
   TaskMacCreadyRemaining tm; /**< Object to calculate remaining task statistics */
   GlideResult res; /**< Glide solution used in search */
   const AIRCRAFT_STATE &aircraft; /**< Observer */

@@ -92,18 +92,19 @@ GlideResult::add(const GlideResult &s2)
   }
 }
 
+static const fixed fixed_bignum = 1e6; // error condition
 
 fixed 
-GlideResult::calc_vspeed(const fixed mc) 
+GlideResult::calc_vspeed(const fixed inv_mc) 
 {
   if (!ok_or_partial()) {
     TimeVirtual = fixed_zero;
-    return 1.0e6;
+    return fixed_bignum;
   }
   if (positive(Vector.Distance)) {
-    if (positive(mc)) {
+    if (positive(inv_mc)) {
       // equivalent time to gain the height that was used
-      TimeVirtual = HeightGlide/mc;
+      TimeVirtual = HeightGlide*inv_mc;
       return (TimeElapsed+TimeVirtual)/Vector.Distance;
     } else {
       TimeVirtual = fixed_zero;

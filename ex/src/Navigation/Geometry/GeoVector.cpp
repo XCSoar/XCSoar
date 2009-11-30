@@ -44,7 +44,6 @@ unsigned count_distbearing = 0;
 GeoVector::GeoVector(const GEOPOINT &source, const GEOPOINT &target,
                      const bool is_average)
 {
-
   count_distbearing++;
 
   GEOPOINT loc1 = source;
@@ -64,7 +63,7 @@ GEOPOINT
 GeoVector::mid_point(const GEOPOINT &source) const
 {
   GEOPOINT p;
-  ::FindLatitudeLongitude(source, Bearing, Distance/2.0, &p);
+  ::FindLatitudeLongitude(source, Bearing, Distance*fixed_half, &p);
   return p;
 }
 

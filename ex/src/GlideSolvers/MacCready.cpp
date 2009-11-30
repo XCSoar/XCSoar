@@ -268,9 +268,14 @@ public:
                 const MacCready &_mac):
     ZeroFinder(15.0,75.0, TOLERANCE_MC_OPT_GLIDE),
     task(_task),
-    mac(_mac),
-    mc(_mac.get_mc())
+    mac(_mac)
     {
+      const fixed mc = _mac.get_mc();
+      if (positive(mc)) {
+        inv_mc = fixed_one/mc;
+      } else {
+        inv_mc = -fixed_one;
+      }
     };
 
   /**
@@ -279,9 +284,9 @@ public:
    * @param V cruise true air speed (m/s)
    * @return Virtual speed (m/s) of flight
    */
-  double f(const double V) {
+  fixed f(const fixed V) {
     res = mac.solve_glide(task, V);
-    return res.calc_vspeed(mc);
+    return res.calc_vspeed(inv_mc);
   }
   
   /**
@@ -296,7 +301,7 @@ private:
   GlideResult res;
   const GlideState &task;
   const MacCready &mac;
-  const fixed mc;
+  fixed inv_mc;
 };
 
 

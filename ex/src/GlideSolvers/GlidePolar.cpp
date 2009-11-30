@@ -107,7 +107,7 @@ public:
  * 
  * @return MacCready-adjusted glide ratio
  */
-  double f(const double V) {
+  fixed f(const fixed V) {
     return -V/polar.MSinkRate(V);
   }
 private:

@@ -48,7 +48,7 @@ TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
   aircraft(_aircraft) 
 {
   // Vopt at mc=0
-  tm.set_mc(0.0);
+  tm.set_mc(fixed_zero);
 }
 
 TaskGlideRequired::TaskGlideRequired(TaskPoint* tp,
@@ -58,10 +58,11 @@ TaskGlideRequired::TaskGlideRequired(TaskPoint* tp,
   tm(tp,_gp), // Vopt at mc=0
   aircraft(_aircraft) 
 {
-  tm.set_mc(0.0);
+  tm.set_mc(fixed_zero);
 }
 
-double TaskGlideRequired::f(const double S) 
+fixed 
+TaskGlideRequired::f(const fixed S) 
 {
   res = tm.glide_sink(aircraft, S);
   // && (fabs(res.AltitudeDifference)<tolerance)
@@ -72,8 +73,9 @@ double TaskGlideRequired::f(const double S)
   }
 }
 
-double TaskGlideRequired::search(const double S) 
+fixed 
+TaskGlideRequired::search(const fixed S) 
 {
-  double a = find_zero(S);
+  fixed a = find_zero(S);
   return a/res.VOpt;
 }

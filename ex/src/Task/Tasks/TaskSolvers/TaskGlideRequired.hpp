@@ -77,7 +77,7 @@ public:
                     const GlidePolar &gp);
   virtual ~TaskGlideRequired() {};
 
-  virtual double f(const double mc);
+  virtual fixed f(const fixed mc);
 
 /** 
  * Search for sink rate to produce final glide solution
@@ -86,7 +86,7 @@ public:
  * 
  * @return Solution sink rate (m/s, down positive)
  */
-  virtual double search(const double s);
+  virtual fixed search(const fixed s);
 private:
   TaskMacCreadyRemaining tm;
   GlideResult res;

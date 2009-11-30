@@ -65,7 +65,7 @@ public:
                        const GlidePolar &gp);
   virtual ~TaskCruiseEfficiency() {};
 
-  virtual double f(const double ce);
+  virtual fixed f(const fixed ce);
 
 /** 
  * Search for cruise efficiency value.
@@ -74,7 +74,7 @@ public:
  * 
  * @return Solution value of cruise efficiency
  */
-  virtual double search(const double ce);
+  virtual fixed search(const fixed ce);
 
 private:
   TaskMacCreadyTravelled tm;

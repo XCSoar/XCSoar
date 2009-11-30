@@ -161,11 +161,11 @@ struct GlideResult {
  * the distance divided by the time elapsed plus the time required
  * to recover the altitude expended in cruise.
  * 
- * @param mc MC value (m/s)
+ * @param inv_mc Inverse of MC value (s/m), negative if MC is zero
  * 
  * @return Virtual speed (m/s)
  */
-  fixed calc_vspeed(const fixed mc);
+  fixed calc_vspeed(const fixed inv_mc);
 
 /** 
  * Find the gradient of this solution relative to ground

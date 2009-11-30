@@ -61,17 +61,17 @@ public:
  */
   IsolineCrossingFinder(const AATPoint& _aap,
                         const GeoEllipse &_ell,
-                        const double xmin, 
-                        const double xmax);
+                        const fixed xmin, 
+                        const fixed xmax);
 
-  double f(const double t);
+  fixed f(const fixed t);
 
   /**
    * Test validity of solution
    * @param t parametric location of test point
    * @return True if valid
    */
-  bool valid(const double t);
+  bool valid(const fixed t);
 
 /** 
  * Search for parameter value of isoline intersecting the OZ boundary
@@ -79,7 +79,7 @@ public:
  * 
  * @return Parameter value of isoline intersection
  */
-  double solve();
+  fixed solve();
 private:
   const AATPoint &aap;
   const GeoEllipse &ell;

@@ -41,8 +41,8 @@
 
 IsolineCrossingFinder::IsolineCrossingFinder(const AATPoint& _aap,
                                              const GeoEllipse &_ell,
-                                             const double xmin, 
-                                             const double xmax):
+                                             const fixed xmin, 
+                                             const fixed xmax):
   ZeroFinder(xmin, xmax, TOLERANCE_ISOLINE_CROSSING),
   aap(_aap),
   ell(_ell)
@@ -51,8 +51,8 @@ IsolineCrossingFinder::IsolineCrossingFinder(const AATPoint& _aap,
 }
 
 
-double 
-IsolineCrossingFinder::f(const double t) 
+fixed 
+IsolineCrossingFinder::f(const fixed t) 
 {
   const GEOPOINT a = ell.parametric(t);
   AIRCRAFT_STATE s;
@@ -60,25 +60,25 @@ IsolineCrossingFinder::f(const double t)
   
   // note: use of isInSector is slow!
   if (aap.isInSector(s)) {
-    return 1.0;
+    return fixed_one;
   } else {
-    return -1.0;
+    return -fixed_one;
   }
 }
 
 bool 
-IsolineCrossingFinder::valid(const double x) 
+IsolineCrossingFinder::valid(const fixed x) 
 {
-  return (f(x)>0) || (f(x+tolerance)>0) || (f(x-tolerance)>0);
+  return positive(f(x)) || positive(f(x+tolerance)) || positive(f(x-tolerance));
 }
 
-double 
+fixed 
 IsolineCrossingFinder::solve() 
 {
-  const double sol = find_zero((xmax+xmin)/2);
+  const fixed sol = find_zero((xmax+xmin)/2);
   if (valid(sol)) {
     return sol;
   } else {
-    return -1.0;
+    return -fixed_one;
   }
 }

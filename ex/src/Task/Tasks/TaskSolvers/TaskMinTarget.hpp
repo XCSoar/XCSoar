@@ -70,11 +70,11 @@ public:
                 const unsigned activeTaskPoint,
                 const AIRCRAFT_STATE &_aircraft,
                 const GlidePolar &_gp,
-                const double _t_remaining,
+                const fixed _t_remaining,
                 StartPoint *_ts);
   virtual ~TaskMinTarget() {};
 
-  virtual double f(const double p);
+  virtual fixed f(const fixed p);
 
 /** 
  * Test validity of a solution given search parameter
@@ -83,7 +83,7 @@ public:
  * 
  * @return True if solution is valid
  */
-  virtual bool valid(const double p);
+  virtual bool valid(const fixed p);
 
 /** 
  * Search for target range to produce remaining time equal to
@@ -95,13 +95,13 @@ public:
  * 
  * @return Range value for solution
  */
-  virtual double search(const double p);
+  virtual fixed search(const fixed p);
 private:
-  void set_range(const double p);
+  void set_range(const fixed p);
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AIRCRAFT_STATE &aircraft;
-  const double t_remaining;
+  const fixed t_remaining;
   StartPoint *tp_start;
   bool force_current;
 };

@@ -65,7 +65,7 @@ public:
              const unsigned activeTaskPoint,
              const AIRCRAFT_STATE &_aircraft,
              const GlidePolar &_gp,
-             const double _mc_min=0.0);
+             const fixed _mc_min=0.0);
 /** 
  * Constructor for single task points (non-ordered ones)
  * 
@@ -78,7 +78,7 @@ public:
              const GlidePolar &_gp);
   virtual ~TaskBestMc() {};
 
-  virtual double f(const double mc);
+  virtual fixed f(const fixed mc);
 
 /** 
  * Test validity of a solution given search parameter
@@ -87,7 +87,7 @@ public:
  * 
  * @return True if solution is valid
  */
-  virtual bool valid(const double mc);
+  virtual bool valid(const fixed mc);
 
 /** 
  * Search for best MC.  If fails (MC=0 is below final glide), returns
@@ -97,7 +97,7 @@ public:
  * 
  * @return Best MC value found or default value if no solution
  */
-  virtual double search(const double mc);
+  virtual fixed search(const fixed mc);
 private:
   TaskMacCreadyRemaining tm;
   GlideResult res;
