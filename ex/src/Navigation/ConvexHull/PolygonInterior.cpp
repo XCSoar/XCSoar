@@ -54,7 +54,7 @@
 //            =0 for P2 on the line
 //            <0 for P2 right of the line
 //    See: the January 2001 Algorithm "Area of 2D and 3D Triangles and Polygons"
-inline static double
+inline static fixed
 isLeft( const GEOPOINT &P0, const GEOPOINT &P1, const GEOPOINT &P2 )
 {
     return ( (P1.Longitude - P0.Longitude) * (P2.Latitude - P0.Latitude)

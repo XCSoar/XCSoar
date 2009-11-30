@@ -40,7 +40,6 @@
 #ifndef OBSERVATIONZONE_HPP
 #define OBSERVATIONZONE_HPP
 
-struct GEOPOINT;
 #include "Navigation/Aircraft.hpp"
 
 /**
@@ -105,7 +104,7 @@ public:
  * 
  * @return Point on boundary
  */
-  virtual GEOPOINT get_boundary_parametric(double t) const =0;
+  virtual GEOPOINT get_boundary_parametric(fixed t) const =0;
 
 /** 
  * Distance reduction for scoring when outside this OZ
@@ -114,7 +113,7 @@ public:
  * 
  * @return Distance (m) to subtract from score
  */
-  virtual double score_adjustment() const = 0;
+  virtual fixed score_adjustment() const = 0;
 };
 
 #endif

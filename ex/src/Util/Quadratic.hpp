@@ -37,6 +37,8 @@
 #ifndef QUADRATIC_HPP
 #define QUADRATIC_HPP
 
+#include "Math/fixed.hpp"
+
 /**
  * Utility class for efficient solution of quadratic equations
  */
@@ -49,10 +51,10 @@ public:
  * @param _b Value of b
  * @param _c Value of c
  */
-  Quadratic(const double _b, const double _c):
-    da(2),
+  Quadratic(const fixed _b, const fixed _c):
+    da(fixed_two),
     b(_b),
-    denom(b*b-4.0*_c)
+    denom(b*b-fixed_four*_c)
     {};
 
 /** 
@@ -62,10 +64,10 @@ public:
  * @param _b Value of b
  * @param _c Value of c
  */
-  Quadratic(const double _a, const double _b, const double _c):
-    da(2*_a),
+  Quadratic(const fixed _a, const fixed _b, const fixed _c):
+    da(fixed_two*_a),
     b(_b),
-    denom(b*b-2*da*_c)
+    denom(b*b-fixed_two*da*_c)
     {};
 
 /** 
@@ -74,10 +76,10 @@ public:
  * @return True if quadratic has at least one real solution
  */
   bool check() const {
-    if (denom<0) {
+    if (negative(denom)) {
       return false;
     }
-    if (da==0.0) {
+    if (da==fixed_zero) {
       return false;
     }
     return true;
@@ -88,7 +90,7 @@ public:
  * 
  * @return greater x value of solutions 
  */
-  double solution_max() const {
+  fixed solution_max() const {
     return (da>0? solution(true):solution(false));
   }
 
@@ -97,7 +99,7 @@ public:
  * 
  * @return smallest x value of solutions 
  */
-  double solution_min() const {
+  fixed solution_min() const {
     return (da>0? solution(false):solution(true));
   }
 
@@ -111,12 +113,12 @@ private:
  * 
  * @return x value of solution
  */
-  double solution(const bool positive) const {
-    return (-b+(positive?sqrt(denom):-sqrt(denom)))/da;
+  fixed solution(const bool positiv) const {
+    return (-b+(positiv?sqrt(denom):-sqrt(denom)))/da;
   }
-  const double da;
-  const double b;
-  const double denom;
+  const fixed da;
+  const fixed b;
+  const fixed denom;
 };
 
 

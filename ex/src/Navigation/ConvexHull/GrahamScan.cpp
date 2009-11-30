@@ -95,8 +95,8 @@ void GrahamScan::partition_points()
         ||(loclast.Latitude != (*i).get_location().Latitude)) {
       loclast = (*i).get_location();
 
-      double dir = direction( left->get_location(), right->get_location(), 
-                              (*i).get_location() );
+      fixed dir = direction( left->get_location(), right->get_location(), 
+                             (*i).get_location() );
       SearchPoint* sp = &(*i);
       if ( dir < 0 )
         upper_partition_points.push_back( sp );
@@ -183,9 +183,9 @@ void GrahamScan::build_half_hull( std::vector< SearchPoint* > input,
 // is on a straight line.
 //
 
-double GrahamScan::direction( const GEOPOINT& p0,
-                              const GEOPOINT& p1,
-                              const GEOPOINT& p2 )
+fixed GrahamScan::direction( const GEOPOINT& p0,
+                             const GEOPOINT& p1,
+                             const GEOPOINT& p2 )
 {
   return ( (p0.Longitude - p1.Longitude ) * (p2.Latitude - p1.Latitude ) )
     - ( (p2.Longitude - p1.Longitude ) * (p0.Latitude - p1.Latitude ) );

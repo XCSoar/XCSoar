@@ -60,8 +60,8 @@ public:
 private:
   virtual GlideResult tp_solution(const unsigned i,
                                    const AIRCRAFT_STATE &aircraft, 
-                                   double minH) const;
-  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const {
+                                   fixed minH) const;
+  virtual fixed get_min_height(const AIRCRAFT_STATE &aircraft) const {
     return aircraft.Altitude;
   }
   virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft) const;

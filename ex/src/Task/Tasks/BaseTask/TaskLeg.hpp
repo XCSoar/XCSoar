@@ -71,7 +71,7 @@ public:
  * 
  * @return Distance (m) of nominal task
  */
-  double scan_distance_nominal();
+  fixed scan_distance_nominal();
 
 /** 
  * Calculate distance of planned task (sum of distances from each leg's
@@ -80,7 +80,7 @@ public:
  * 
  * @return Distance (m) of planned task
  */
-  double scan_distance_planned();
+  fixed scan_distance_planned();
 
 /** 
  * Calculate distance of maximum achievable task (sum of distances from
@@ -89,7 +89,7 @@ public:
  * 
  * @return Distance (m) of maximum achievable task
  */
-  double scan_distance_max();
+  fixed scan_distance_max();
 
 /** 
  * Calculate distance of minimum achievable task (sum of distances from
@@ -98,7 +98,7 @@ public:
  *
  * @return Distance (m) of minimum achievable task
  */
-  double scan_distance_min();
+  fixed scan_distance_min();
 
 /** 
  * Calculate distance of planned task (sum of distances from aircraft to
@@ -109,7 +109,7 @@ public:
  * 
  * @return Distance (m) remaining in the planned task
  */
-  double scan_distance_remaining(const GEOPOINT &ref);
+  fixed scan_distance_remaining(const GEOPOINT &ref);
 
 /** 
  * Calculate scored distance of achieved part of task.
@@ -118,7 +118,7 @@ public:
  * 
  * @return Distance (m) achieved adjusted for scoring
  */
-  double scan_distance_scored(const GEOPOINT &ref);
+  fixed scan_distance_scored(const GEOPOINT &ref);
 
 /** 
  * Calculate distance of achieved part of task.
@@ -130,7 +130,7 @@ public:
  * 
  * @return Distance (m) achieved
  */
-  double scan_distance_travelled(const GEOPOINT &ref);
+  fixed scan_distance_travelled(const GEOPOINT &ref);
 
 protected:
   GeoVector vector_travelled; /**< Saved vector for current leg's travelled route */
@@ -152,13 +152,13 @@ private:
   
   GeoVector leg_vector_remaining(const GEOPOINT &ref) const;
   
-  double leg_distance_max() const;
+  fixed leg_distance_max() const;
   
-  double leg_distance_min() const;
+  fixed leg_distance_min() const;
 
-  double leg_distance_nominal() const;
+  fixed leg_distance_nominal() const;
 
-  double leg_distance_scored(const GEOPOINT &ref) const;
+  fixed leg_distance_scored(const GEOPOINT &ref) const;
 
   const OrderedTaskPoint* origin() const;
   OrderedTaskPoint* next() const;

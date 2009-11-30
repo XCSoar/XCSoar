@@ -272,7 +272,7 @@ protected:
  * 
  * @return Distance (m) of nominal task
  */ 
-  virtual double scan_distance_nominal() = 0;
+  virtual fixed scan_distance_nominal() = 0;
 
 /** 
  * Calculate distance of planned task (sum of distances from each leg's
@@ -281,7 +281,7 @@ protected:
  * 
  * @return Distance (m) of planned task
  */
-  virtual double scan_distance_planned() = 0;
+  virtual fixed scan_distance_planned() = 0;
 
 /** 
  * Calculate distance of planned task (sum of distances from aircraft to
@@ -292,7 +292,7 @@ protected:
  * 
  * @return Distance (m) remaining in the planned task
  */ 
-  virtual double scan_distance_remaining(const GEOPOINT &ref) = 0;
+  virtual fixed scan_distance_remaining(const GEOPOINT &ref) = 0;
 
 /** 
  * Calculate scored distance of achieved part of task.
@@ -301,7 +301,7 @@ protected:
  * 
  * @return Distance (m) achieved adjusted for scoring
  */
-  virtual double scan_distance_scored(const GEOPOINT &ref) = 0;
+  virtual fixed scan_distance_scored(const GEOPOINT &ref) = 0;
 
 /** 
  * Calculate distance of achieved part of task.
@@ -313,7 +313,7 @@ protected:
  * 
  * @return Distance (m) achieved
  */
-  virtual double scan_distance_travelled(const GEOPOINT &ref) = 0;
+  virtual fixed scan_distance_travelled(const GEOPOINT &ref) = 0;
 
 /** 
  * Calculate maximum and minimum distances for task, achievable

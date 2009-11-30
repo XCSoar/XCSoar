@@ -55,7 +55,7 @@ public:
    * 
    * @return Initialised airspace object
    */
-  AirspaceCircle(const GEOPOINT &loc, const double _radius);
+  AirspaceCircle(const GEOPOINT &loc, const fixed _radius);
 
   /** 
    * Compute bounding box enclosing the airspace.  Rounds up/down
@@ -101,7 +101,7 @@ public:
 
 private:
   const GEOPOINT center;
-  const double radius;
+  const fixed radius;
 public:
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& f, 

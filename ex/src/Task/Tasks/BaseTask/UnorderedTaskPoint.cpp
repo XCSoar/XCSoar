@@ -66,7 +66,7 @@ UnorderedTaskPoint::get_state_entered() const
 }
 
 
-double 
+fixed 
 UnorderedTaskPoint::get_elevation() const
 {
   return m_elevation+m_task_behaviour.safety_height_arrival;

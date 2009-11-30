@@ -45,7 +45,7 @@ FinishPoint::entry_precondition() const
   return get_previous()->has_entered();
 }
 
-double
+fixed
 FinishPoint::get_elevation() const
 {
   return m_elevation+m_task_behaviour.safety_height_arrival;

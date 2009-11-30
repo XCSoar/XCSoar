@@ -41,7 +41,7 @@ void SymmetricSectorZone::set_legs(const TaskPoint *previous,
                                    const TaskPoint *current,
                                    const TaskPoint *next) 
 {
-  double biSector;
+  fixed biSector;
   if (!next && previous) { 
     // final
     biSector = previous->bearing(current->get_location());

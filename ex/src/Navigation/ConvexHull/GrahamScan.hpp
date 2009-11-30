@@ -70,9 +70,9 @@ private :
   void build_half_hull( std::vector< SearchPoint* > input,
                         std::vector< SearchPoint* > &output,
                         int factor );
-  double direction( const GEOPOINT& p0,
-                    const GEOPOINT& p1,
-                    const GEOPOINT& p2 );
+  fixed direction( const GEOPOINT& p0,
+                   const GEOPOINT& p1,
+                   const GEOPOINT& p2 );
   std::list< SearchPoint > raw_points;
   SearchPoint *left;
   SearchPoint *right;

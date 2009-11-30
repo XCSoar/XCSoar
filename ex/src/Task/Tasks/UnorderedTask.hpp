@@ -85,15 +85,15 @@ protected:
 
   double scan_leg_start_time(const AIRCRAFT_STATE &state_now);
 
-  double scan_distance_nominal();
+  fixed scan_distance_nominal();
   
-  double scan_distance_planned();
+  fixed scan_distance_planned();
 
-  double scan_distance_remaining(const GEOPOINT &ref);
+  fixed scan_distance_remaining(const GEOPOINT &ref);
 
-  double scan_distance_scored(const GEOPOINT &ref);
+  fixed scan_distance_scored(const GEOPOINT &ref);
 
-  double scan_distance_travelled(const GEOPOINT &ref);
+  fixed scan_distance_travelled(const GEOPOINT &ref);
 
   void scan_distance_minmax(const GEOPOINT &ref, 
                             bool full,

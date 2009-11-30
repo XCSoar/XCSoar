@@ -133,7 +133,7 @@ Waypoints::find_id(const unsigned id) const
 
 std::vector< Waypoint >
 Waypoints::find_within_range(const GEOPOINT &loc, 
-                             const double range) const
+                             const fixed range) const
 {
   FLAT_GEOPOINT floc = task_projection.project(loc);
   Waypoint bb_target; bb_target.FlatLocation = floc;
@@ -151,7 +151,7 @@ Waypoints::find_within_range(const GEOPOINT &loc,
 
 void 
 Waypoints::visit_within_range(const GEOPOINT &loc, 
-                              const double range,
+                              const fixed range,
                               WaypointVisitor& visitor) const
 {
   FLAT_GEOPOINT floc = task_projection.project(loc);
@@ -168,7 +168,7 @@ Waypoints::visit_within_range(const GEOPOINT &loc,
 
 std::vector< Waypoint >
 Waypoints::find_within_range_circle(const GEOPOINT &loc, 
-                                    const double range) const
+                                    const fixed range) const
 {
   const unsigned mrange = task_projection.project_range(loc, range);
   std::vector < Waypoint > vectors = find_within_range(loc, range);

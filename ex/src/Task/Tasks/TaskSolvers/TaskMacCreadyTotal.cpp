@@ -48,7 +48,7 @@ TaskMacCreadyTotal::TaskMacCreadyTotal(const std::vector<OrderedTaskPoint*> &_tp
 GlideResult 
 TaskMacCreadyTotal::tp_solution(const unsigned i,
                                 const AIRCRAFT_STATE &aircraft, 
-                                double minH) const
+                                fixed minH) const
 {
   return TaskSolution::glide_solution_planned(*m_tps[i],aircraft, m_glide_polar, minH);
 }
@@ -63,16 +63,16 @@ TaskMacCreadyTotal::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
   }
 }
 
-double 
-TaskMacCreadyTotal::effective_distance(const double time_remaining) const
+fixed 
+TaskMacCreadyTotal::effective_distance(const fixed time_remaining) const
 {
 
-  double t_total = 0.0;
+  fixed t_total = fixed_zero;
   fixed d_total = fixed_zero;
   for (int i=m_end; i>=m_start; i--) {
-    if (m_gs[i].TimeElapsed>0) {
-      double p = (time_remaining-t_total)/m_gs[i].TimeElapsed;
-      if ((p>=0.0) && (p<=1.0)) {
+    if (positive(m_gs[i].TimeElapsed)) {
+      fixed p = (time_remaining-t_total)/m_gs[i].TimeElapsed;
+      if ((p>=fixed_zero) && (p<=fixed_one)) {
         return d_total+p*m_gs[i].Vector.Distance;
       }
       d_total += m_gs[i].Vector.Distance;
@@ -82,10 +82,10 @@ TaskMacCreadyTotal::effective_distance(const double time_remaining) const
   return d_total;
 }
 
-double 
-TaskMacCreadyTotal::effective_leg_distance(const double time_remaining) const
+fixed 
+TaskMacCreadyTotal::effective_leg_distance(const fixed time_remaining) const
 {
-  double p = (time_remaining)/m_gs[m_activeTaskPoint].TimeElapsed;
+  fixed p = (time_remaining)/m_gs[m_activeTaskPoint].TimeElapsed;
   return p*m_gs[m_activeTaskPoint].Vector.Distance;
 }
 

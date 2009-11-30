@@ -297,7 +297,7 @@ protected:
  * 
  * @return Distance (m) of nominal task
  */ 
-  double scan_distance_nominal();
+  fixed scan_distance_nominal();
 
 /** 
  * Calculate distance of planned task (sum of distances from each leg's
@@ -306,7 +306,7 @@ protected:
  * 
  * @return Distance (m) of planned task
  */
-  double scan_distance_planned();
+  fixed scan_distance_planned();
 
 /** 
  * Calculate distance of planned task (sum of distances from aircraft to
@@ -317,7 +317,7 @@ protected:
  * 
  * @return Distance (m) remaining in the planned task
  */ 
-  double scan_distance_remaining(const GEOPOINT &ref);
+  fixed scan_distance_remaining(const GEOPOINT &ref);
 
 /** 
  * Calculate scored distance of achieved part of task.
@@ -326,7 +326,7 @@ protected:
  * 
  * @return Distance (m) achieved adjusted for scoring
  */
-  double scan_distance_scored(const GEOPOINT &ref);
+  fixed scan_distance_scored(const GEOPOINT &ref);
 
 /** 
  * Calculate distance of achieved part of task.
@@ -338,7 +338,7 @@ protected:
  * 
  * @return Distance (m) achieved
  */
-  double scan_distance_travelled(const GEOPOINT &ref);
+  fixed scan_distance_travelled(const GEOPOINT &ref);
 
 /** 
  * Calculate maximum and minimum distances for task, achievable
@@ -473,8 +473,8 @@ protected:
 
 private:
 
-  double scan_distance_min(const GEOPOINT &ref, bool full);
-  double scan_distance_max();
+  fixed scan_distance_min(const GEOPOINT &ref, bool full);
+  fixed scan_distance_max();
 
 /** 
  * Sets previous/next taskpoint pointers for task point at specified

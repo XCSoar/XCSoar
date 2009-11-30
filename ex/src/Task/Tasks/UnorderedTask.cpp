@@ -136,36 +136,36 @@ UnorderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
   *dmax = stats.total.remaining.get_distance();
 }
 
-double 
+fixed 
 UnorderedTask::scan_distance_nominal()
 {
   return stats.total.remaining.get_distance();
 }
 
-double 
+fixed
 UnorderedTask::scan_distance_planned()
 {
   return stats.total.remaining.get_distance();
 }
 
-double 
+fixed 
 UnorderedTask::scan_distance_scored(const GEOPOINT &location)
 {
-  return 0.0;
+  return fixed_zero;
 }
 
-double 
+fixed 
 UnorderedTask::scan_distance_travelled(const GEOPOINT &location)
 {
-  return 0.0;
+  return fixed_zero;
 }
 
-double 
+fixed 
 UnorderedTask::scan_distance_remaining(const GEOPOINT &location)
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
-    return 0.0;
+    return fixed_zero;
   }
   return tp->distance(location);
 }
@@ -175,5 +175,4 @@ UnorderedTask::calc_gradient(const AIRCRAFT_STATE &state)
 {
   return leg_gradient(state);
 }
-
 

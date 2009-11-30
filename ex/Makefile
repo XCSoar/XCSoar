@@ -21,12 +21,12 @@ INCLUDES := -I$(SRC)
 
 MAKEFLAGS	+=-r
 
-PROFILE := 
-#-pg
+PROFILE := -pg
 COVERAGE := 
 # --coverage
 
-OPTIMIZE := -g -O2
+OPTIMIZE := -g 
+# -O2
 
 CPPFLAGS := $(INCLUDES) 
 CFLAGS		:=$(OPTIMIZE) $(PROFILE) $(COVERAGE)

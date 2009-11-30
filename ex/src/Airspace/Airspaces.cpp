@@ -70,7 +70,7 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state) const
 
 void 
 Airspaces::visit_within_range(const GEOPOINT &loc, 
-                              const double range,
+                              const fixed range,
                               AirspaceVisitor& visitor) const
 {
   Airspace bb_target(loc, task_projection);
@@ -111,7 +111,7 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
 
 const std::vector<Airspace>
 Airspaces::scan_range(const AIRCRAFT_STATE &state, 
-                      const double range) const
+                      const fixed range) const
 {
   Airspace bb_target(state.Location, task_projection);
   int mrange = task_projection.project_range(state.Location, range);

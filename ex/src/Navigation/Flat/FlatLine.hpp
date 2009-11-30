@@ -73,7 +73,7 @@ struct FlatLine
    * 
    * @return True if more than one intersection is found
    */
-  bool intersect_czero(const double r,
+  bool intersect_czero(const fixed r,
                        FlatPoint &i1, FlatPoint &i2) const;
 
 /** 
@@ -88,21 +88,21 @@ struct FlatLine
  * 
  * @return Angle (deg)
  */
-  double angle() const;
+  fixed angle() const;
 
 /** 
  * Calculate squared length of line
  * 
  * @return Squared length
  */
-  double dsq() const;
+  fixed dsq() const;
 
 /** 
  * Calculate length of line
  * 
  * @return Length
  */
-  double d() const;
+  fixed d() const;
 
 /** 
  * Subtract a delta from the line (both start and end points)
@@ -123,22 +123,22 @@ struct FlatLine
  * 
  * @param angle Angle (deg) to rotate line clockwise
  */
-  void rotate(const double angle);
+  void rotate(const fixed angle);
 
 /** 
  * Scale line in Y direction
  * 
  * @param a Scale ratio
  */
-  void mul_y(const double a);
+  void mul_y(const fixed a);
 
 private:
   FlatPoint p1;
   FlatPoint p2;
 
-  double dx() const;
-  double dy() const;
-  double cross() const;
+  fixed dx() const;
+  fixed dy() const;
+  fixed cross() const;
 };
 
 #endif

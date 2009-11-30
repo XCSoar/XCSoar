@@ -138,10 +138,11 @@ TaskLeg::leg_vector_travelled(const GEOPOINT &ref) const
 }
 
 
-double TaskLeg::leg_distance_scored(const GEOPOINT &ref) const
+fixed 
+TaskLeg::leg_distance_scored(const GEOPOINT &ref) const
 {
   if (!origin()) {
-    return 0.0;
+    return fixed_zero;
   }
 
   switch (destination.getActiveState()) {
@@ -177,100 +178,103 @@ double TaskLeg::leg_distance_scored(const GEOPOINT &ref) const
                       -origin()->score_adjustment());
     }
   default:
-    return 0;
+    return fixed_zero;
     break;
   };
-  return 0;
+  return fixed_zero;
 }
 
 
-double TaskLeg::leg_distance_nominal() const
+fixed 
+TaskLeg::leg_distance_nominal() const
 {
-  if (!origin()) {
-    return 0.0; 
-  } else {
+  if (origin()) {
     return memo_nominal.Distance(origin()->get_location(), 
                                  destination.get_location());
+  } else {
+    return fixed_zero; 
   }
 }
 
 
-double TaskLeg::leg_distance_max() const
+fixed 
+TaskLeg::leg_distance_max() const
 {
-  if (!origin()) {
-    return 0.0; 
-  } else {
+  if (origin()) {
     return memo_max.Distance(origin()->get_location_max(), 
                              destination.get_location_max());
+  } else {
+    return fixed_zero; 
   }
 }
 
 
-double TaskLeg::leg_distance_min() const
+fixed 
+TaskLeg::leg_distance_min() const
 {
-  if (!origin()) {
-    return 0.0; 
-  } else {
+  if (origin()) {
     return memo_min.Distance(origin()->get_location_min(), 
                              destination.get_location_min());
+  } else {
+    return fixed_zero; 
   }
 }
 
 /////////////////
 
-double 
+fixed 
 TaskLeg::scan_distance_travelled(const GEOPOINT &ref) 
 {
   vector_travelled = leg_vector_travelled(ref);
   return vector_travelled.Distance 
-    +(next()? next()->scan_distance_travelled(ref):0);
+    +(next()? next()->scan_distance_travelled(ref):fixed_zero);
 }
 
 
-double 
+fixed 
 TaskLeg::scan_distance_remaining(const GEOPOINT &ref) 
 {
   vector_remaining = leg_vector_remaining(ref);
   return vector_remaining.Distance 
-    +(next()? next()->scan_distance_remaining(ref):0);
+    +(next()? next()->scan_distance_remaining(ref):fixed_zero);
 }
 
 
-double 
+fixed 
 TaskLeg::scan_distance_planned() 
 {
   vector_planned = leg_vector_planned();
   return vector_planned.Distance 
-    +(next()? next()->scan_distance_planned():0);
+    +(next()? next()->scan_distance_planned():fixed_zero);
 }
 
 
-double 
+fixed 
 TaskLeg::scan_distance_max() 
 {
   return leg_distance_max()
-    +(next()? next()->scan_distance_max():0);
+    +(next()? next()->scan_distance_max():fixed_zero);
 }
 
 
-double 
+fixed 
 TaskLeg::scan_distance_min() 
 {
   return leg_distance_min()
-    +(next()? next()->scan_distance_min():0);
+    +(next()? next()->scan_distance_min():fixed_zero);
 }
 
 
-double 
+fixed 
 TaskLeg::scan_distance_nominal() 
 {
   return leg_distance_nominal()
-    +(next()? next()->scan_distance_nominal():0);
+    +(next()? next()->scan_distance_nominal():fixed_zero);
 }
 
-double 
+fixed 
 TaskLeg::scan_distance_scored(const GEOPOINT &ref) 
 {
   return leg_distance_scored(ref)
-    +(next()? next()->scan_distance_scored(ref):0);
+    +(next()? next()->scan_distance_scored(ref):fixed_zero);
 }

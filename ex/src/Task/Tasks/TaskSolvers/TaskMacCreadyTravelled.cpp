@@ -49,7 +49,7 @@ TaskMacCreadyTravelled::TaskMacCreadyTravelled(const std::vector<OrderedTaskPoin
 GlideResult 
 TaskMacCreadyTravelled::tp_solution(const unsigned i,
                                     const AIRCRAFT_STATE &aircraft, 
-                                    double minH) const
+                                    fixed minH) const
 {
   return TaskSolution::glide_solution_travelled(*m_tps[i],aircraft, m_glide_polar, minH);
 }

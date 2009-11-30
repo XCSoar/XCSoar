@@ -41,6 +41,8 @@
 #include <iostream>
 #endif
 
+#include "Math/fixed.hpp"
+
 struct GlideState;
 struct GlideResult;
 class GlidePolar;
@@ -67,7 +69,7 @@ public:
    * @param _cruise_efficiency The efficiency ratio for calculations 
    */
   MacCready(const GlidePolar &_glide_polar,
-            const double _cruise_efficiency);
+            const fixed _cruise_efficiency);
 
   /** 
    * Calculates the glide solution with a specified sink rate (or lift rate)
@@ -81,7 +83,7 @@ public:
    * @return Returns the glide result containing data about the optimal solution
    */
   GlideResult solve_sink(const GlideState &task,
-                          const double S) const;
+                          const fixed S) const;
 
   /** 
    * Calculates the glide solution for a classical MacCready theory task.
@@ -104,12 +106,12 @@ public:
    * @return Returns the glide result containing data about the optimal solution
    */
   GlideResult solve_glide(const GlideState &task,
-			   const double V) const;
+			   const fixed V) const;
 
   /**
    * Returns current MacCready setting of the glide polar (convenience function)
    */
-  double get_mc() const;
+  fixed get_mc() const;
 
 private:
 
@@ -124,8 +126,8 @@ private:
    * @return Returns the glide result containing data about the optimal solution
    */
   GlideResult solve_glide(const GlideState &task,
-			   const double V,
-                           const double S) const;
+			   const fixed V,
+                           const fixed S) const;
 
 /** 
  * Solve a task which is known to be pure glide,
@@ -161,7 +163,7 @@ private:
   GlideResult solve_cruise(const GlideState &task) const;
 
   const GlidePolar &glide_polar;
-  const double cruise_efficiency;
+  const fixed cruise_efficiency;
 
   /** @link dependency */
   /*#  MacCreadyVopt lnkMacCreadyVopt; */

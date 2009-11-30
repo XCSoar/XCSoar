@@ -47,18 +47,23 @@ TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>&
   aircraft(_aircraft) 
 {
   dt = aircraft.Time-tps[0]->get_state_entered().Time;
+  if (positive(dt)) {
+    inv_dt = fixed_one/dt;
+  } else {
+    inv_dt = fixed_zero; // error!
+  }
 }
 
 double TaskCruiseEfficiency::f(const double ce) 
 {
   tm.set_cruise_efficiency(ce);
   res = tm.glide_solution(aircraft);
-  double d = fabs(res.TimeElapsed-dt);
+  fixed d = fabs(res.TimeElapsed-dt);
   if (!res.Solution==GlideResult::RESULT_OK) {
     d += res.TimeVirtual;
   }
-  if (dt>0) {
-    d/= dt;
+  if (positive(dt)) {
+    d*= inv_dt;
   }
   return d;
 }

@@ -80,7 +80,7 @@ struct FlatEllipse
  * 
  * @return Location on ellipse
  */
-  FlatPoint parametric(const double t) const;
+  FlatPoint parametric(const fixed t) const;
 
 /** 
  * Find intersection of line from focus 1 to p, through the ellipse
@@ -98,14 +98,14 @@ struct FlatEllipse
 private:
   FlatPoint f1, f2, ap;
   FlatPoint p;
-  double a;
-  double b;
-  double theta;
+  fixed a;
+  fixed b;
+  fixed theta;
 
-  double theta_initial;
+  fixed theta_initial;
 
-  double ab() const;
-  double ba() const;
+  fixed ab() const;
+  fixed ba() const;
 
   bool intersect(const FlatLine &line, 
                  FlatPoint &i1, 

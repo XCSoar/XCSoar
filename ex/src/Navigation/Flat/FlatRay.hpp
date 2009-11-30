@@ -69,7 +69,7 @@ public:
  * 
  * @return Parameter [0,1] of vector on this ray that intersection occurs (or -1 if fail)
  */
-  double intersects(const FlatRay &oray) const;
+  fixed intersects(const FlatRay &oray) const;
 
 /** 
  * Parametric form of ray
@@ -78,7 +78,7 @@ public:
  * 
  * @return Location of end point
  */
-  FLAT_GEOPOINT parametric(const double t) const;
+  FLAT_GEOPOINT parametric(const fixed t) const;
 };
 
 #endif

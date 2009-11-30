@@ -100,7 +100,7 @@ public:
  * 
  * @return Minimum allowable elevation of start point
  */
-  double get_elevation() const;
+  fixed get_elevation() const;
 
 /** 
  * Test whether a taskpoint is equivalent to this one

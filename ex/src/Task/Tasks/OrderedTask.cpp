@@ -104,7 +104,7 @@ OrderedTask::scan_leg_start_time(const AIRCRAFT_STATE &)
 
 ////////// DISTANCES
 
-double
+fixed
 OrderedTask::scan_distance_min(const GEOPOINT &location, bool full)
 {
   if (full) {
@@ -116,7 +116,7 @@ OrderedTask::scan_distance_min(const GEOPOINT &location, bool full)
   return ts->scan_distance_min();
 }
 
-double
+fixed
 OrderedTask::scan_distance_max()
 {
   // for max calculations, since one can still travel further in the
@@ -155,53 +155,53 @@ OrderedTask::scan_distance_minmax(const GEOPOINT &location,
 }
 
 
-double
+fixed
 OrderedTask::scan_distance_nominal()
 {
   if (ts) {
     return ts->scan_distance_nominal();
   } else {
-    return 0;
+    return fixed_zero;
   }
 }
 
-double
+fixed
 OrderedTask::scan_distance_scored(const GEOPOINT &location)
 {
   if (ts) {
     return ts->scan_distance_scored(location);
   } else {
-    return 0;
+    return fixed_zero;
   }
 }
 
-double
+fixed
 OrderedTask::scan_distance_remaining(const GEOPOINT &location)
 {
   if (ts) {
     return ts->scan_distance_remaining(location);
   } else {
-    return 0;
+    return fixed_zero;
   }
 }
 
-double
+fixed
 OrderedTask::scan_distance_travelled(const GEOPOINT &location)
 {
   if (ts) {
     return ts->scan_distance_travelled(location);
   } else {
-    return 0;
+    return fixed_zero;
   }
 }
 
-double
+fixed
 OrderedTask::scan_distance_planned()
 {
   if (ts) {
     return ts->scan_distance_planned();
   } else {
-    return 0;
+    return fixed_zero;
   }
 }
 

@@ -39,7 +39,7 @@
 #include "Math/Earth.hpp"
 
 AirspaceCircle::AirspaceCircle(const GEOPOINT &loc, 
-                               const double _radius):
+                               const fixed _radius):
   center(loc), 
   radius(_radius)
 {

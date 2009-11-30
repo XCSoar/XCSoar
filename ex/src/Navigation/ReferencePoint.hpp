@@ -59,11 +59,11 @@ public:
 
   /** bearing from this to the reference
    */
-  double bearing(const GEOPOINT & ref) const;
+  fixed bearing(const GEOPOINT & ref) const;
 
   /** distance from this to the reference
    */
-  double distance(const GEOPOINT & ref) const;
+  fixed distance(const GEOPOINT & ref) const;
 
   /** The actual location
    */

@@ -55,10 +55,10 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1,
   const FlatLine f12(f1,f2);
   p = f12.ave();
   theta = f12.angle();
-  const double csq = f12.dsq();
+  const fixed csq = f12.dsq();
   a = (f1.d(ap)+f2.d(ap));
-  b = sqrt(a*a-csq)*0.5;
-  a *= 0.5;
+  b = sqrt(a*a-csq)*fixed_half;
+  a *= fixed_half;
 
   // a.sin(t)=ap.x
   // b.cos(t)=ap.y
@@ -66,23 +66,26 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1,
   FlatPoint op = ap;
   op.sub(p);
   op.rotate(-theta);
-  theta_initial = RAD_TO_DEG*atan2(op.y*a, op.x*b);
+  theta_initial = fixed_rad_to_deg*atan2(op.y*a, op.x*b);
 }
 
-double 
+fixed 
 FlatEllipse::ab() const {
   return a/b;
 }
 
-double 
+fixed 
 FlatEllipse::ba() const {
   return b/a;
 }
 
 FlatPoint 
-FlatEllipse::parametric(const double t) const {
-  const double at = 360.0*t+theta_initial;
-  FlatPoint res(a*fastcosine(at),b*fastsine(at));
+FlatEllipse::parametric(const fixed t) const {
+  const fixed at = fixed_360*t+theta_initial;
+  fixed cat, sat;
+  sin_cos(fixed_rad_to_deg*at,&sat,&cat);
+
+  FlatPoint res(a*cat,b*sat);
   res.rotate(theta);
   res.add(p);
   return res;
@@ -93,8 +96,8 @@ FlatEllipse::intersect(const FlatLine &line,
                        FlatPoint &i1, 
                        FlatPoint &i2) const 
 {
-  const double er = ab();
-  const double ier = ba();
+  const fixed er = ab();
+  const fixed ier = ba();
   FlatLine s_line = line;  
   
   s_line.sub(p);
@@ -124,12 +127,15 @@ bool FlatEllipse::intersect_extended(const FlatPoint &p,
 {
   const FlatLine l_f1p(f1,p);
   const FlatLine l_pf2(p,f2);
-  const double ang = l_f1p.angle();
+  const fixed ang = l_f1p.angle();
 
-  double d = l_pf2.d()+max(a,b); // max line length
+  const fixed d = l_pf2.d()+max(a,b); // max line length
 
-  FlatLine e_l(p,FlatPoint(p.x+d*fastcosine(ang),
-                           p.y+d*fastsine(ang)));
+  fixed can,san;
+  sin_cos(ang*fixed_deg_to_rad,&san,&can);
+
+  FlatLine e_l(p,FlatPoint(p.x+d*can,
+                           p.y+d*san));
   // e_l is the line extended from p in direction of f1-p 
   
   return intersect(e_l, i1, i2);

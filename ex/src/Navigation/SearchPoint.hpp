@@ -108,7 +108,6 @@ public:
 private:
   FLAT_GEOPOINT flatLocation;
   bool actual;
-//  double saved_rank;
 };
 
 

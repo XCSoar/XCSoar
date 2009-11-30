@@ -41,36 +41,43 @@
 #include "Util/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
 
-GlidePolar::GlidePolar(const double _mc,
-                       const double _bugs,
-                       const double _ballast):
+static const fixed fixed_75 = 75.0;
+static const fixed fixed_15 = 15.0;
+static const fixed fixed_20 = 20.0;
+
+GlidePolar::GlidePolar(const fixed _mc,
+                       const fixed _bugs,
+                       const fixed _ballast):
   mc(_mc),
   bugs(_bugs),
   ballast(_ballast),
-  cruise_efficiency(1.0)
+  cruise_efficiency(fixed_one)
 {
   solve();
 }
 
 void
-GlidePolar::set_mc(const double _mc)
+GlidePolar::set_mc(const fixed _mc)
 {
   mc = _mc;
   solve();
 }
 
-double
-GlidePolar::MSinkRate(const double V) const
+fixed
+GlidePolar::MSinkRate(const fixed V) const
 {
   return SinkRate(V)+mc;
 }
 
-double 
-GlidePolar::SinkRate(const double V) const
+fixed 
+GlidePolar::SinkRate(const fixed V) const
 {
   /// \todo note this is hardcoded at present, will need proper polar management later
-  const double dV = (V-25.0)*0.056;
-  return 0.5+(dV*dV+V*0.01)/2.0;
+  static const fixed v0 = 1.48;
+  static const fixed v1 = -0.0734;
+  static const fixed v2 = 0.00157;
+
+  return v0+v1*V+v2*V*V;
 }
 
 /**
@@ -89,7 +96,7 @@ public:
  * @return Initialised object (no search yet)
  */
   GlidePolarVopt(const GlidePolar &_polar):
-    ZeroFinder(15.0, 75.0, TOLERANCE_POLAR_BESTLD),
+    ZeroFinder(15, 75, TOLERANCE_POLAR_BESTLD),
     polar(_polar)
     {
     };
@@ -112,7 +119,7 @@ void
 GlidePolar::solve()
 {
   GlidePolarVopt gpvopt(*this);
-  VbestLD = gpvopt.find_min(20.0);
+  VbestLD = gpvopt.find_min(fixed_20);
   SbestLD = SinkRate(VbestLD);
 }
 
@@ -133,7 +140,7 @@ GlidePolar::solve(const GlideState &task) const
 
 GlideResult 
 GlidePolar::solve_sink(const GlideState &task,
-                       const double S) const
+                       const fixed S) const
 {
 #ifdef INSTRUMENT_TASK
   count_mc++;

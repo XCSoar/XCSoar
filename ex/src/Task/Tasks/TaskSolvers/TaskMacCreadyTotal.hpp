@@ -66,7 +66,7 @@ public:
  * 
  * @return Effective distance remaining (m)
  */
-  double effective_distance(const double time_remaining) const;
+  fixed effective_distance(const fixed time_remaining) const;
 
 /** 
  * Calculate effective distance remaining such that at the virtual
@@ -77,14 +77,14 @@ public:
  * 
  * @return Effective distance remaining (m) for active leg
  */
-  double effective_leg_distance(const double time_remaining) const;
+  fixed effective_leg_distance(const fixed time_remaining) const;
 
 private:
   virtual GlideResult tp_solution(const unsigned i,
-                                   const AIRCRAFT_STATE &aircraft, 
-                                   double minH) const;
-  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const {
-    return 0.0;
+                                  const AIRCRAFT_STATE &aircraft, 
+                                  fixed minH) const;
+  virtual fixed get_min_height(const AIRCRAFT_STATE &aircraft) const {
+    return fixed_zero;
   }
   virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft) const;
 

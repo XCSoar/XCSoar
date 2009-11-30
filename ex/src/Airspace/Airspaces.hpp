@@ -91,7 +91,7 @@ public:
    * @return vector of airspaces intersecting search radius
    */
   const std::vector<Airspace> scan_range(const AIRCRAFT_STATE &state, 
-                                         const double range) const;
+                                         const fixed range) const;
 
   /** 
    * Call visitor class on airspaces within range of location.
@@ -103,7 +103,7 @@ public:
    * @param visitor visitor class to call on airspaces within range
    */
   void visit_within_range(const GEOPOINT &loc, 
-                          const double range,
+                          const fixed range,
                           AirspaceVisitor& visitor) const;
 
   /** 

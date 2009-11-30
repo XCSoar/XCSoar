@@ -114,7 +114,7 @@ public:
  * @return Vector of waypoints within square range
  */
   std::vector< Waypoint >
-    find_within_range(const GEOPOINT &loc, const double range) const;
+    find_within_range(const GEOPOINT &loc, const fixed range) const;
 
 /** 
  * Call visitor function on waypoints within approximate range
@@ -125,7 +125,7 @@ public:
  * @param range Distance in meters of search radius
  * @param visitor Visitor to be called on waypoints within range
  */
-  void visit_within_range(const GEOPOINT &loc, const double range,
+  void visit_within_range(const GEOPOINT &loc, const fixed range,
                           WaypointVisitor& visitor) const;
 
 /** 
@@ -138,7 +138,7 @@ public:
  * @return Vector of waypoints within circular range
  */
   std::vector< Waypoint >
-    find_within_range_circle(const GEOPOINT &loc, const double range) const;
+    find_within_range_circle(const GEOPOINT &loc, const fixed range) const;
 
 /** 
  * Add waypoint to internal store.  Internal copy is made.

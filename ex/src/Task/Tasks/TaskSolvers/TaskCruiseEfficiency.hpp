@@ -80,7 +80,8 @@ private:
   TaskMacCreadyTravelled tm;
   GlideResult res;
   const AIRCRAFT_STATE &aircraft;
-  double dt;
+  fixed inv_dt;
+  fixed dt;
 };
 
 #endif

@@ -84,7 +84,7 @@ public:
  *
  * @return Location of point
  */
-  GEOPOINT randomPointInSector(const double mag) const {
+  GEOPOINT randomPointInSector(const fixed mag) const {
     return m_oz->randomPointInSector(mag);
   }
 
@@ -94,7 +94,7 @@ public:
  * 
  * @return Distance reduction once achieved
  */
-  virtual double score_adjustment() const {
+  virtual fixed score_adjustment() const {
     return m_oz->score_adjustment();
   }
 
@@ -107,7 +107,7 @@ protected:
  * 
  * @return Boundary point
  */
-  GEOPOINT get_boundary_parametric(double t) const
+  GEOPOINT get_boundary_parametric(fixed t) const
   {
     return m_oz->get_boundary_parametric(t);
   }

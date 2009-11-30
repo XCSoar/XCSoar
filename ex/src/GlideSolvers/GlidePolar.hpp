@@ -40,6 +40,8 @@
 struct GlideState;
 struct GlideResult;
 
+#include "Math/fixed.hpp"
+
 /**
  * Class implementing basic glide polar performance model
  * 
@@ -69,16 +71,16 @@ public:
  * @param _bugs Bugs value at construction (currently unimplemented)
  * @param _ballast Ballast value at construction (currently unimplemented)
  */
-  GlidePolar(const double _mc,
-             const double _bugs,
-             const double _ballast);
+  GlidePolar(const fixed _mc,
+             const fixed _bugs,
+             const fixed _ballast);
 
 /** 
  * Accesses best L/D speed
  * 
  * @return Speed of best LD (m/s)
  */
-  double get_VbestLD() const {
+  fixed get_VbestLD() const {
     return VbestLD;
   }
 
@@ -87,7 +89,7 @@ public:
  * 
  * @return Sink rate at best L/D (m/s)
  */
-  double get_SbestLD() const {
+  fixed get_SbestLD() const {
     return SbestLD;
   }
 
@@ -96,7 +98,7 @@ public:
  * 
  * @return Best L/D ratio
  */
-  double get_bestLD() const {
+  fixed get_bestLD() const {
     return VbestLD/SbestLD;
   }
 
@@ -105,7 +107,7 @@ public:
  * 
  * @param _ce The new cruise efficiency value
  */
-  void set_cruise_efficiency(const double _ce) {
+  void set_cruise_efficiency(const fixed _ce) {
     cruise_efficiency = _ce;
   }
 
@@ -115,14 +117,14 @@ public:
  * 
  * @param _mc The new MacCready ring setting (m/s)
  */
-  void set_mc(const double _mc);
+  void set_mc(const fixed _mc);
 
 /** 
  * Accessor for MC setting
  * 
  * @return The current MacCready ring setting (m/s)
  */
-  double get_mc() const {
+  fixed get_mc() const {
     return mc;
   }
 
@@ -133,7 +135,7 @@ public:
  * 
  * @return Sink rate (m/s, positive down)
  */
-  double SinkRate(const double V) const;
+  fixed SinkRate(const fixed V) const;
 
 /** 
  * Sink rate model adjusted by MC setting.  This is used
@@ -144,7 +146,7 @@ public:
  * 
  * @return Sink rate plus MC setting (m/s, positive down)
  */
-  double MSinkRate(const double V) const;
+  fixed MSinkRate(const fixed V) const;
 
 /** 
  * Use classical MC theory to compute the optimal glide solution
@@ -169,7 +171,7 @@ public:
  * @return Glide solution for the virtual task
  */
   GlideResult solve_sink(const GlideState &task,
-                          const double S) const;
+                          const fixed S) const;
 
 /** 
  * Quickly determine whether a task is achievable without 
@@ -189,12 +191,12 @@ private:
  */
   void solve();
 
-  double mc;                  
-  double bugs;
-  double ballast;
-  double cruise_efficiency;
-  double VbestLD;
-  double SbestLD;
+  fixed mc;                  
+  fixed bugs;
+  fixed ballast;
+  fixed cruise_efficiency;
+  fixed VbestLD;
+  fixed SbestLD;
 
   /** @link dependency */
   /*#  MacCready lnkMacCready; */

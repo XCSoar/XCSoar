@@ -46,6 +46,8 @@ Copyright_License {
 static const fixed fixed_earth_r = 6371000;
 static const fixed fixed_double_earth_r = 6371000*2;
 static const fixed fixed_inv_earth_r = (1.0/6371000);
+static const fixed fixed_xtd_fact = (fixed_rad_to_deg*111194.9267);
+static const fixed fixed_xte_fact = 1.0/(fixed_rad_to_deg * fixed_xtd_fact); 
 
 #ifdef FIXED_MATH
   // need to expand range for meter accuracy
@@ -68,7 +70,6 @@ void IntermediatePoint(GEOPOINT loc1,
                        fixed dthis,
                        fixed dtotal,
                        GEOPOINT *loc3) {
-  fixed A, B, x, y, z, d, f;
 
   assert(loc3 != NULL);
 
@@ -78,17 +79,19 @@ void IntermediatePoint(GEOPOINT loc1,
     return;
   }
 
-  if (dtotal>0) {
-    f = dthis/dtotal;
-    d = dtotal;
-  } else {
-    d = 1.0e-7;
-    f = fixed_zero;
+  if (!positive(dtotal)) {
+    *loc3 = loc1;
+    return;
   }
-  f = min(fixed_one,max(fixed_zero,f));
+  
+  const fixed f = dthis/dtotal;
+  assert((f<=fixed_one) && (f>=fixed_zero));
 
-  A=sin((fixed_one-f)*d)/sin(d);
-  B=sin(f*d)/sin(d);
+  const fixed d = dtotal;
+  const fixed inv_sind = fixed_one/sin(d);
+
+  const fixed A=sin((fixed_one-f)*d)*inv_sind;
+  const fixed B=sin(f*d)*inv_sind;
 
   fixed AsinLoc1Latitude, AcosLoc1Latitude;
   sin_cos(A*loc1.Latitude, &AsinLoc1Latitude, &AcosLoc1Latitude);
@@ -101,63 +104,77 @@ void IntermediatePoint(GEOPOINT loc1,
   fixed sinLoc2Longitude, cosLoc2Longitude;
   sin_cos(loc2.Longitude, &sinLoc2Longitude, &cosLoc2Longitude);
 
-  x = AcosLoc1Latitude*cosLoc1Longitude +  BcosLoc2Latitude*cosLoc2Longitude;
-  y = AcosLoc1Latitude*sinLoc1Longitude +  BcosLoc2Latitude*sinLoc2Longitude;
-  z = AsinLoc1Latitude                  +  BsinLoc2Latitude;
+  const fixed x = AcosLoc1Latitude*cosLoc1Longitude +  BcosLoc2Latitude*cosLoc2Longitude;
+  const fixed y = AcosLoc1Latitude*sinLoc1Longitude +  BcosLoc2Latitude*sinLoc2Longitude;
+  const fixed z = AsinLoc1Latitude                  +  BsinLoc2Latitude;
 
-  loc3->Latitude=atan2(z,sqrt(x*x+y*y))*fixed_rad_to_deg;
-  loc3->Longitude=atan2(y,x)*fixed_rad_to_deg;
+  loc3->Latitude= atan2(z,sqrt(x*x+y*y))*fixed_rad_to_deg;
+  loc3->Longitude= atan2(y,x)*fixed_rad_to_deg;
 }
 
 fixed CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3,
                       GEOPOINT *loc4)
 {
-
   fixed dist_AD, crs_AD;
   DistanceBearing(loc1, loc3, &dist_AD, &crs_AD);
-  dist_AD/= (fixed_rad_to_deg * 111194.9267); crs_AD*= fixed_deg_to_rad;
+  dist_AD*= fixed_xte_fact;
+  crs_AD*= fixed_deg_to_rad;
 
   fixed dist_AB, crs_AB;
   DistanceBearing(loc1, loc2, &dist_AB, &crs_AB);
-  dist_AB/= (fixed_rad_to_deg * 111194.9267); crs_AB*= fixed_deg_to_rad;
+  dist_AB*= fixed_xte_fact;
+  crs_AB*= fixed_deg_to_rad;
 
-  loc1.Latitude *= fixed_deg_to_rad;
-  loc2.Latitude *= fixed_deg_to_rad;
-  loc3.Latitude *= fixed_deg_to_rad;
-  loc1.Longitude *= fixed_deg_to_rad;
-  loc2.Longitude *= fixed_deg_to_rad;
-  loc3.Longitude *= fixed_deg_to_rad;
-
-  fixed XTD; // cross track distance
-  fixed ATD; // along track distance
   //  The "along track distance", ATD, the distance from A along the
   //  course towards B to the point abeam D
 
-  fixed sindist_AD = sin(dist_AD);
-
-  XTD = asin(sindist_AD*sin(crs_AD-crs_AB));
-
-  fixed sinXTD = sin(XTD);
-  ATD = asin(sqrt( sindist_AD*sindist_AD - sinXTD*sinXTD )/cos(XTD));
+  const fixed sindist_AD = sin(dist_AD);
+  const fixed XTD = asin(sindist_AD*sin(crs_AD-crs_AB)); // cross track distance
 
   if (loc4) {
+    fixed sinXTD, cosXTD;
+    sin_cos(XTD,&sinXTD,&cosXTD);
+
+    const fixed ATD // along track distance
+      = asin(sqrt( sindist_AD*sindist_AD - sinXTD*sinXTD )/cosXTD);
+
+    loc1.Latitude *= fixed_deg_to_rad;
+    loc2.Latitude *= fixed_deg_to_rad;
+    loc1.Longitude *= fixed_deg_to_rad;
+    loc2.Longitude *= fixed_deg_to_rad;
+
     IntermediatePoint(loc1, loc2, ATD, dist_AB, loc4);
   }
 
   // units
-  XTD *= (fixed_rad_to_deg * 111194.9267);
-
-  return XTD;
+  return XTD*fixed_xtd_fact;
 }
 
 fixed ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
 {
-  GEOPOINT loc4;
+  fixed dist_AD, crs_AD;
+  DistanceBearing(loc1, loc3, &dist_AD, &crs_AD);
+  dist_AD*= fixed_xte_fact;
+  crs_AD*= fixed_deg_to_rad;
 
-  CrossTrackError(loc1, loc2, loc3, &loc4);
-  fixed tmpd;
-  DistanceBearing(loc1, loc4, &tmpd, NULL);
-  return tmpd;
+  fixed dist_AB, crs_AB;
+  DistanceBearing(loc1, loc2, &dist_AB, &crs_AB);
+  dist_AB*= fixed_xte_fact;
+  crs_AB*= fixed_deg_to_rad;
+
+  //  The "along track distance", ATD, the distance from A along the
+  //  course towards B to the point abeam D
+
+  const fixed sindist_AD = sin(dist_AD);
+  const fixed XTD = asin(sindist_AD*sin(crs_AD-crs_AB)); // cross track distance
+
+  fixed sinXTD, cosXTD;
+  sin_cos(XTD,&sinXTD,&cosXTD);
+
+  const fixed ATD // along track distance
+    = asin(sqrt( sindist_AD*sindist_AD - sinXTD*sinXTD )/cosXTD);
+
+  return ATD*fixed_xtd_fact;
 }
 
 
@@ -176,8 +193,11 @@ void DistanceBearing(GEOPOINT loc1, GEOPOINT loc2,
   loc1.Longitude *= fixed_deg_to_rad;
   loc2.Longitude *= fixed_deg_to_rad;
 
-  const fixed cloc1Latitude = cos(loc1.Latitude);
-  const fixed cloc2Latitude = cos(loc2.Latitude);
+  fixed cloc1Latitude, sloc1Latitude;
+  sin_cos(loc1.Latitude, &sloc1Latitude, &cloc1Latitude);
+  fixed cloc2Latitude, sloc2Latitude;
+  sin_cos(loc2.Latitude, &sloc2Latitude, &cloc2Latitude);
+
   const fixed dlon = loc2.Longitude-loc1.Longitude;
 
   if (Distance) {
@@ -194,7 +214,7 @@ void DistanceBearing(GEOPOINT loc1, GEOPOINT loc2,
     sin_cos(dlon, &sindlon, &cosdlon);
 
     const fixed y = sindlon*cloc2Latitude;
-    const fixed x = cloc1Latitude*sin(loc2.Latitude)-sin(loc1.Latitude)*cloc2Latitude*cosdlon;
+    const fixed x = cloc1Latitude*sloc2Latitude-sloc1Latitude*cloc2Latitude*cosdlon;
     *Bearing = (x==fixed_zero && y==fixed_zero) ? fixed_zero:AngleLimit360(atan2(y,x)*fixed_rad_to_deg);
   }
 }
@@ -245,7 +265,7 @@ void FindLatitudeLongitude(GEOPOINT loc, fixed Bearing, fixed Distance,
   loc.Latitude *= fixed_deg_to_rad;
   loc.Longitude *= fixed_deg_to_rad;
   Bearing *= fixed_deg_to_rad;
-  Distance = Distance*fixed_inv_earth_r;
+  Distance *= fixed_inv_earth_r;
 
   fixed sinDistance, cosDistance;
   sin_cos(Distance, &sinDistance, &cosDistance);
@@ -262,6 +282,7 @@ void FindLatitudeLongitude(GEOPOINT loc, fixed Bearing, fixed Distance,
   if (cosLatitude==0)
     result = loc.Longitude;
   else {
+    // note that asin is not supported by fixed.hpp!
     result = loc.Longitude+(fixed)asin(sinBearing*sinDistance/cosLatitude);
     result = (fixed)fmod((result+fixed_pi), fixed_two_pi)-fixed_pi;
   }

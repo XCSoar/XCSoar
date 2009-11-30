@@ -143,7 +143,7 @@ extern unsigned count_distbearing;
 #endif
 
 
-double 
+fixed 
 OrderedTaskPoint::double_leg_distance(const GEOPOINT &ref) const
 {
   assert(tp_previous);

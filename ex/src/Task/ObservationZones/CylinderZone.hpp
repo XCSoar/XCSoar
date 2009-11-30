@@ -56,7 +56,7 @@ public:
  * 
  * @return Initialised object
  */
-  CylinderZone(const GEOPOINT &loc, const double _radius=10000.0):
+  CylinderZone(const GEOPOINT &loc, const fixed _radius=10000.0):
     ObservationZonePoint(loc),
     Radius(_radius)
   {
@@ -87,14 +87,14 @@ public:
  * 
  * @return Point on boundary
  */
-  GEOPOINT get_boundary_parametric(double) const;
+  GEOPOINT get_boundary_parametric(fixed t) const;
 
 /** 
  * Distance reduction for scoring when outside this OZ
  * 
  * @return Distance (m) to subtract from score
  */
-  virtual double score_adjustment() const;
+  virtual fixed score_adjustment() const;
 
 /** 
  * Check transition constraints (always true for cylinders)
@@ -114,7 +114,7 @@ public:
  * 
  * @param new_radius Radius (m) of cylinder
  */
-  virtual void setRadius(double new_radius) {
+  virtual void setRadius(fixed new_radius) {
     assert(new_radius>0);
     Radius = new_radius;
   }
@@ -124,7 +124,7 @@ public:
  * 
  * @return Radius (m) of cylinder
  */
-  double getRadius() const {
+  fixed getRadius() const {
     return Radius;
   }
 
@@ -145,10 +145,10 @@ public:
  *
  * @return Location of point
  */
-  virtual GEOPOINT randomPointInSector(const double mag) const;
+  virtual GEOPOINT randomPointInSector(const fixed mag) const;
 
 protected:
-  double Radius; /**< radius (m) of OZ */
+  fixed Radius; /**< radius (m) of OZ */
 };
 
 #endif

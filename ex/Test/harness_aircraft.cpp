@@ -159,9 +159,9 @@ double
 AircraftSim::target_height(TaskManager &task_manager)  
 {
   if (task_manager.getActiveTaskPoint()) {
-    return std::max(300.0, task_manager.getActiveTaskPoint()->get_elevation());
+    return max(300, task_manager.getActiveTaskPoint()->get_elevation());
   } else {
-    return 300.0;
+    return 300;
   }
 }
 

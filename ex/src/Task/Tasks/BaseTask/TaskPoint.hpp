@@ -168,14 +168,14 @@ public:
  * 
  * @return Minimum allowable elevation of task point
  */
-  virtual double get_elevation() const = 0;
+  virtual fixed get_elevation() const = 0;
 
 #ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE &state) const;
 #endif
 
 protected:
-  const double m_elevation; /**< Altitude (AMSL, m) of task point terrain */
+  const fixed m_elevation; /**< Altitude (AMSL, m) of task point terrain */
   const TaskBehaviour &m_task_behaviour; /**< Reference to task behaviour (for options) */
 private:
   const Waypoint m_waypoint; /**< local copy of waypoint */

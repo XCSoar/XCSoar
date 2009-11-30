@@ -54,7 +54,7 @@ TaskMacCreadyRemaining::TaskMacCreadyRemaining(TaskPoint* tp,
 GlideResult 
 TaskMacCreadyRemaining::tp_solution(const unsigned i,
                                     const AIRCRAFT_STATE &aircraft, 
-                                    double minH) const
+                                    fixed minH) const
 {
   return TaskSolution::glide_solution_remaining(*m_tps[i],aircraft, m_glide_polar, minH);
 }
@@ -67,7 +67,7 @@ TaskMacCreadyRemaining::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
 }
 
 void 
-TaskMacCreadyRemaining::set_range(const double tp, const bool force_current)
+TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
 {
   // first try to modify targets without regard to current inside (unless forced)
   bool modified = force_current;

@@ -40,15 +40,15 @@
 #include "Math/NavFunctions.hpp"
 
 GlideResult::GlideResult(const GlideState &task, 
-                           const double V):
+                         const fixed V):
     Vector(task.Vector),
     DistanceToFinal(task.Vector.Distance),
     CruiseTrackBearing(task.Vector.Bearing),
     VOpt(V),
-    HeightClimb(0.0),
-    HeightGlide(0.0),
-    TimeElapsed(0.0),
-    TimeVirtual(0.0),
+    HeightClimb(fixed_zero),
+    HeightGlide(fixed_zero),
+    TimeElapsed(fixed_zero),
+    TimeVirtual(fixed_zero),
     AltitudeDifference(task.AltitudeDifference),
     EffectiveWindSpeed(task.EffectiveWindSpeed),
     EffectiveWindAngle(task.EffectiveWindAngle),
@@ -61,14 +61,14 @@ void
 GlideResult::calc_cruise_bearing()
 {
   CruiseTrackBearing= Vector.Bearing;
-  if (EffectiveWindSpeed>0.0) {
-    const double sintheta = sin(DEG_TO_RAD*EffectiveWindAngle);
-    if (sintheta==0.0) {
+  if (positive(EffectiveWindSpeed)) {
+    const fixed sintheta = sin(fixed_deg_to_rad*EffectiveWindAngle);
+    if (sintheta==fixed_zero) {
       return;
     }
     // Wn/sin(alpha) = V/sin(theta)
     //   (Wn/V)*sin(theta) = sin(alpha)
-    CruiseTrackBearing -= 0.5*RAD_TO_DEG*asin(sintheta*EffectiveWindSpeed/VOpt);
+    CruiseTrackBearing -= fixed_half*fixed_rad_to_deg*asin(sintheta*EffectiveWindSpeed/VOpt);
   }
 }
 
@@ -84,45 +84,45 @@ GlideResult::add(const GlideResult &s2)
   DistanceToFinal += s2.DistanceToFinal;
   TimeVirtual += s2.TimeVirtual;
 
-  if ((AltitudeDifference<0) || (s2.AltitudeDifference<0)) {
-    AltitudeDifference= std::min(s2.AltitudeDifference+AltitudeDifference,
+  if (negative(AltitudeDifference) || negative(s2.AltitudeDifference)) {
+    AltitudeDifference= min(s2.AltitudeDifference+AltitudeDifference,
       AltitudeDifference);
   } else {
-    AltitudeDifference= std::min(s2.AltitudeDifference, AltitudeDifference);
+    AltitudeDifference= min(s2.AltitudeDifference, AltitudeDifference);
   }
 }
 
 
-double 
-GlideResult::calc_vspeed(const double mc) 
+fixed 
+GlideResult::calc_vspeed(const fixed mc) 
 {
   if (!ok_or_partial()) {
-    TimeVirtual = 0.0;
+    TimeVirtual = fixed_zero;
     return 1.0e6;
   }
-  if (Vector.Distance>0.0) {
-    if (mc>0.0) {
+  if (positive(Vector.Distance)) {
+    if (positive(mc)) {
       // equivalent time to gain the height that was used
       TimeVirtual = HeightGlide/mc;
       return (TimeElapsed+TimeVirtual)/Vector.Distance;
     } else {
-      TimeVirtual = 0.0;
+      TimeVirtual = fixed_zero;
       // minimise 1.0/LD over ground 
       return -HeightGlide/Vector.Distance;
     }
   } else {
-    TimeVirtual = 0.0;
-    return 0.0;
+    TimeVirtual = fixed_zero;
+    return fixed_zero;
   }
 }
 
-double 
+fixed 
 GlideResult::glide_angle_ground() const
 {
   if (Vector.Distance>0) {
     return HeightGlide/Vector.Distance;
   } else {
-    return 100.0;
+    return 100;
   }
 }
 

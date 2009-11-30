@@ -62,8 +62,8 @@ struct GEOPOINT {
  * 
  * @return Initialised object
  */
-  GEOPOINT(const double _Longitude,
-           const double _Latitude):Longitude(_Longitude),Latitude(_Latitude) {}
+  GEOPOINT(const fixed _Longitude,
+           const fixed _Latitude):Longitude(_Longitude),Latitude(_Latitude) {}
 
   fixed Longitude; /**< Longitude (deg) */
   fixed Latitude; /**< Latitude (deg) */

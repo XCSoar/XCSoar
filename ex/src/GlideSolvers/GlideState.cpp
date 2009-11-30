@@ -56,7 +56,7 @@ public:
  * @return Initialised object (not solved)
  */
   GlideQuadratic(const GlideState &task, 
-                 const double V):
+                 const fixed V):
     Quadratic(task.dwcostheta_, task.wsq_-V*V)
     {};
 
@@ -65,19 +65,19 @@ public:
  * 
  * @return Ground speed during cruise (m/s)
  */
-  double solve() const {
-    if (!check()) {
-      return -1.0;
+  fixed solve() const {
+    if (check()) {
+      return solution_max();
+    } else {
+      return -fixed_one;
     }
-    const double V = solution_max();
-    return V;
   }
 };
 
-double
-GlideState::calc_ave_speed(const double Veff) const
+fixed
+GlideState::calc_ave_speed(const fixed Veff) const
 {
-  if (EffectiveWindSpeed>0.0) {
+  if (positive(EffectiveWindSpeed)) {
     // only need to solve if positive wind speed
     GlideQuadratic q(*this, Veff);
     return q.solve();
@@ -88,7 +88,7 @@ GlideState::calc_ave_speed(const double Veff) const
 
 // dummy task
 GlideState::GlideState(const GeoVector &vector,
-                         const double htarget,
+                         const fixed htarget,
                          const AIRCRAFT_STATE &aircraft):
   Vector(vector),
   MinHeight(htarget)
@@ -100,32 +100,36 @@ GlideState::GlideState(const GeoVector &vector,
 void GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
 {
   AltitudeDifference = (aircraft.Altitude-MinHeight);
-  if (aircraft.WindSpeed>0.0) {
+  if (aircraft.WindSpeed>fixed_zero) {
     WindDirection = aircraft.WindDirection;
-    EffectiveWindSpeed = (aircraft.WindSpeed);
-    const double theta = aircraft.WindDirection-Vector.Bearing;
+    EffectiveWindSpeed = aircraft.WindSpeed;
+    const fixed theta = aircraft.WindDirection-Vector.Bearing;
     EffectiveWindAngle = theta;
     wsq_ = aircraft.WindSpeed*aircraft.WindSpeed;
-    dwcostheta_ = -2.0*aircraft.WindSpeed*cos(DEG_TO_RAD*theta);
+    dwcostheta_ = -fixed_two*aircraft.WindSpeed*cos(fixed_deg_to_rad*theta);
   } else {
-    WindDirection = 0.0;
-    EffectiveWindSpeed = 0.0;
-    EffectiveWindAngle = 0.0;
-    wsq_ = 0.0;
-    dwcostheta_ = 0.0;
+    WindDirection = fixed_zero;
+    EffectiveWindSpeed = fixed_zero;
+    EffectiveWindAngle = fixed_zero;
+    wsq_ = fixed_zero;
+    dwcostheta_ = fixed_zero;
   }
 }
 
 
-double
-GlideState::drifted_distance(const double t_cl) const
+fixed
+GlideState::drifted_distance(const fixed t_cl) const
 {
-  if (EffectiveWindSpeed>0) {
-    const double aw = EffectiveWindSpeed*t_cl;
-    const double wd = DEG_TO_RAD*(WindDirection);
-    const double tb = DEG_TO_RAD*(Vector.Bearing);
-    const double dx= aw*sin(wd)-Vector.Distance*sin(tb);
-    const double dy= aw*cos(wd)-Vector.Distance*cos(tb);
+  if (positive(EffectiveWindSpeed)) {
+    const fixed wd = fixed_deg_to_rad*(WindDirection);
+    fixed sinwd, coswd;  sin_cos(wd,&sinwd,&coswd);
+
+    const fixed tb = fixed_deg_to_rad*(Vector.Bearing);
+    fixed sintb, costb;  sin_cos(tb,&sintb,&costb);
+
+    const fixed aw = EffectiveWindSpeed*t_cl;
+    const fixed dx= aw*sinwd-Vector.Distance*sintb;
+    const fixed dy= aw*coswd-Vector.Distance*costb;
     return sqrt(dx*dx+dy*dy);
   } else {
     return Vector.Distance;

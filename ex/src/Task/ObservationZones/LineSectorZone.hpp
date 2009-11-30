@@ -59,7 +59,7 @@ public:
  * 
  * @return Initialised object
  */
-  LineSectorZone(const GEOPOINT loc, const double radius=1000.0):
+  LineSectorZone(const GEOPOINT loc, const fixed radius=1000.0):
     SymmetricSectorZone(loc,radius,180.0)
   {};
 
@@ -85,22 +85,22 @@ public:
     return CylinderZone::isInSector(ref_now) && CylinderZone::isInSector(ref_last);
   }
 
-  GEOPOINT get_boundary_parametric(double) const;  
+  GEOPOINT get_boundary_parametric(fixed t) const;  
 
 /** 
  * Distance reduction for scoring when outside this OZ
  * 
  * @return Distance (m) to subtract from score
  */
-  virtual double score_adjustment() const;
+  virtual fixed score_adjustment() const;
 
 /** 
  * Set length property
  * 
  * @param new_length Length (m) of line
  */
-  virtual void setLength(double new_length) {
-    setRadius(new_length/2.0);
+  virtual void setLength(const fixed new_length) {
+    setRadius(new_length*fixed_half);
   }
   
 /** 
@@ -108,8 +108,8 @@ public:
  * 
  * @return Length (m) of line
  */
-  double getLength() const {
-    return getRadius()*2.0;
+  fixed getLength() const {
+    return getRadius()*fixed_two;
   }
 
 /** 

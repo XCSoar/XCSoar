@@ -36,13 +36,13 @@
  */
 #include "ReferencePoint.hpp"
 
-double
+fixed
 ReferencePoint::bearing(const GEOPOINT & ref) const 
 {
   return m_location.bearing(ref);
 }
 
-double 
+fixed 
 ReferencePoint::distance(const GEOPOINT & ref) const 
 {
   return m_location.distance(ref);

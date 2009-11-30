@@ -79,7 +79,7 @@ public:
    * @return dummy airspace envelope
    */
   Airspace(const GEOPOINT&loc, const TaskProjection& task_projection, const
-    double range=0.0):
+    fixed range=fixed_zero):
     FlatBoundingBox(task_projection.project(loc),
                     task_projection.project_range(loc,range)),
     pimpl_airspace(NULL)

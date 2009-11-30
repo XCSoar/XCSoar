@@ -211,7 +211,7 @@ protected:
  * 
  * @return Distance (m)
  */
-  double double_leg_distance(const GEOPOINT &ref) const;
+  fixed double_leg_distance(const GEOPOINT &ref) const;
 
 private:
 

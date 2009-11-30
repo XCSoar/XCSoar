@@ -64,7 +64,7 @@ class Waypoint:
   unsigned id; /**< Unique id */
   GEOPOINT Location; /**< Geodetic location */
   FLAT_GEOPOINT FlatLocation; /**< Flat projected location */
-  double Altitude; /**< Height AMSL (m) of waypoint terrain */
+  fixed Altitude; /**< Height AMSL (m) of waypoint terrain */
 
   /**
    * Function object used to provide access to coordinate values by kd-tree

@@ -55,8 +55,8 @@ public:
    * Returns the distance from the origin to destination in meters, 
    * from previously saved value if input arguments are identical. 
    */
-  double Distance(const GEOPOINT& _origin,
-                  const GEOPOINT& _destination) const;
+  fixed Distance(const GEOPOINT& _origin,
+                 const GEOPOINT& _destination) const;
 private:
 
   /**
@@ -72,7 +72,7 @@ private:
   /**
    * Distance in meters saved from previous query 
    */
-  mutable double value;
+  mutable fixed value;
 };
 
 

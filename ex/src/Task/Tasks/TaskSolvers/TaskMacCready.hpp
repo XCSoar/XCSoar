@@ -107,14 +107,14 @@ public:
  * @return Glide result for entire task with virtual sink rate
  */
   GlideResult glide_sink(const AIRCRAFT_STATE &aircraft,
-                          const double S);
+                         const fixed S);
 
 /** 
  * Adjust MacCready value of internal glide polar
  * 
  * @param mc MacCready value (m/s)
  */
-  void set_mc(double mc) {
+  void set_mc(fixed mc) {
     m_glide_polar.set_mc(mc);
   };
 
@@ -123,7 +123,7 @@ public:
  * 
  * @param ce Cruise efficiency
  */
-  void set_cruise_efficiency(double ce) {
+  void set_cruise_efficiency(fixed ce) {
     m_glide_polar.set_cruise_efficiency(ce);
   };
 
@@ -153,7 +153,7 @@ protected:
  */
   GlideResult tp_sink(const unsigned index,
                        const AIRCRAFT_STATE &state, 
-                       const double S) const;
+                       const fixed S) const;
 
 private:
 
@@ -167,7 +167,7 @@ private:
  * 
  * @return Min height (m) of entire task
  */
-  virtual double get_min_height(const AIRCRAFT_STATE &state) const = 0;
+  virtual fixed get_min_height(const AIRCRAFT_STATE &state) const = 0;
 
 /** 
  * Pure virtual method to calculate glide solution for specified index, given
@@ -182,8 +182,8 @@ private:
  * @return Glide result for segment
  */
   virtual GlideResult tp_solution(const unsigned index,
-                                   const AIRCRAFT_STATE& state, 
-                                   double minH) const = 0;
+                                  const AIRCRAFT_STATE& state, 
+                                  fixed minH) const = 0;
 
 /** 
  * Pure virtual method to obtain aircraft state at start of task.
@@ -209,7 +209,7 @@ private:
 protected:
   const std::vector<TaskPoint*> m_tps; /**< The TaskPoints in the task */
   std::vector<GlideResult> m_gs; /**< Glide solutions for each leg */
-  std::vector<double> m_minHs; /**< Minimum altitude for each taskpoint (m) */
+  std::vector<fixed> m_minHs; /**< Minimum altitude for each taskpoint (m) */
   const unsigned m_activeTaskPoint; /**< Active task point (local copy for speed) */
   int m_start; /**< TaskPoint sequence index of first taskpoint included in scan */
   int m_end; /**< TaskPoint sequence index of last taskpoint included in scan */

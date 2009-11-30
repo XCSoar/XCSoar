@@ -116,7 +116,7 @@ public:
  * 
  * @return Distance in flat earth projected units
  */
-  unsigned project_range(const GEOPOINT &tp, const double range) const;
+  unsigned project_range(const GEOPOINT &tp, const fixed range) const;
 
 /** 
  * Calculates the floating point flat earth distance from an actual distance
@@ -127,7 +127,7 @@ public:
  * 
  * @return Distance in flat earth projected units
  */
-  double fproject_range(const GEOPOINT &tp, const double range) const;
+  fixed fproject_range(const GEOPOINT &tp, const fixed range) const;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 

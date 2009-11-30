@@ -37,6 +37,8 @@
 #ifndef FLATPOINT_HPP
 #define FLATPOINT_HPP
 
+#include "Math/fixed.hpp"
+
 /**
  * 2-d Cartesian projected real-valued point
  */
@@ -50,17 +52,17 @@ struct FlatPoint
  * 
  * @return Initialised object
  */
-  FlatPoint(const double _x, const double _y): x(_x),y(_y) {};
+  FlatPoint(const fixed _x, const fixed _y): x(_x),y(_y) {};
 
 /** 
  * Constructor at origin
  * 
  * @return Initialised object
  */
-  FlatPoint(): x(0.0),y(0.0) {};
+  FlatPoint(): x(fixed_zero),y(fixed_zero) {};
 
-  double x; /**< X location */
-  double y; /**< Y location */
+  fixed x; /**< X location */
+  fixed y; /**< Y location */
 
 /** 
  * Calculate cross product of two points
@@ -69,14 +71,14 @@ struct FlatPoint
  * 
  * @return Cross product
  */
-  double cross(const FlatPoint& p2) const;
+  fixed cross(const FlatPoint& p2) const;
 
 /** 
  * Multiply Y value of point
  * 
  * @param a Value to multiply
  */
-  void mul_y(const double a);
+  void mul_y(const fixed a);
 
 /** 
  * Subtract delta from this point
@@ -96,7 +98,7 @@ struct FlatPoint
  * 
  * @param angle Angle (deg) to rotate point clockwise
  */
-  void rotate(const double angle);
+  void rotate(const fixed angle);
 
 /** 
  * Calculate distance between two points
@@ -105,7 +107,7 @@ struct FlatPoint
  * 
  * @return Distance
  */
-  double d(const FlatPoint &p) const;
+  fixed d(const FlatPoint &p) const;
 };
 
 #endif

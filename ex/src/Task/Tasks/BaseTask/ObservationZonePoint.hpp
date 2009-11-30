@@ -106,7 +106,7 @@ public:
  *
  * @return Location of point
  */
-  virtual GEOPOINT randomPointInSector(const double mag) const = 0;
+  virtual GEOPOINT randomPointInSector(const fixed mag) const = 0;
 
 /** 
  * Clone this object with optional shift

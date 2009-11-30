@@ -59,9 +59,9 @@ public:
  * @return Initialised object
  */
   SectorZone(const GEOPOINT &loc, 
-             const double _radius=10000.0,
-             const double _startRadial=0.0, 
-             const double _endRadial=360.0):
+             const fixed _radius=10000.0,
+             const fixed _startRadial=0.0, 
+             const fixed _endRadial=360.0):
     CylinderZone(loc,_radius),
     StartRadial(_startRadial),
     EndRadial(_endRadial) 
@@ -81,21 +81,21 @@ public:
  * 
  * @param x Angle (deg) of radial
  */
-  virtual void setStartRadial(const double x); 
+  virtual void setStartRadial(const fixed x); 
 
 /** 
  * Set end angle (most clockwise) of sector
  * 
  * @param x Angle (deg) of radial
  */
-  virtual void setEndRadial(const double x); 
+  virtual void setEndRadial(const fixed x); 
 
 /** 
  * Get start radial property value
  * 
  * @return Angle (deg) of radial
  */
-  double getStartRadial() const {
+  fixed getStartRadial() const {
     return StartRadial;
   }
 
@@ -104,7 +104,7 @@ public:
  * 
  * @return Angle (deg) of radial
  */
-  double getEndRadial() const {
+  fixed getEndRadial() const {
     return EndRadial;
   }
 
@@ -113,7 +113,7 @@ public:
  * 
  * @param new_radius Radius (m) of cylinder
  */
-  virtual void setRadius(double new_radius) {
+  virtual void setRadius(fixed new_radius) {
     CylinderZone::setRadius(new_radius);
     updateSector();
   }
@@ -132,14 +132,14 @@ public:
  * 
  * @return Point on boundary
  */
-  GEOPOINT get_boundary_parametric(double) const;  
+  GEOPOINT get_boundary_parametric(fixed t) const;  
 
 /** 
  * Distance reduction for scoring when outside this OZ
  * 
  * @return Distance (m) to subtract from score
  */
-  virtual double score_adjustment() const;
+  virtual fixed score_adjustment() const;
 
 /** 
  * Test whether an OZ is equivalent to this one
@@ -166,15 +166,15 @@ protected:
  * 
  * @return True if that is within the start/end radials
  */
-  virtual bool angleInSector(const double that) const;
+  virtual bool angleInSector(const fixed that) const;
 
   GEOPOINT SectorStart; /**< Location of far end point of start radial */
   GEOPOINT SectorEnd; /**< Location of far end point of end radial */
 
 private:
 
-  double StartRadial;
-  double EndRadial;
+  fixed StartRadial;
+  fixed EndRadial;
 };
 
 #endif

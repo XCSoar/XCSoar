@@ -49,7 +49,7 @@ StartPoint::StartPoint(ObservationZonePoint* _oz,
 }
 
 
-double
+fixed
 StartPoint::get_elevation() const
 {
   // no need for safety height at start?

@@ -38,7 +38,7 @@
 
 extern unsigned count_distbearing;
 
-double 
+fixed 
 DistanceMemento::Distance(const GEOPOINT& _origin,
                           const GEOPOINT& _destination) const
 {

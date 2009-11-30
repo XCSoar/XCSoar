@@ -91,6 +91,8 @@ SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last)
 
 ////////////// BOUNDARY
 
+static const fixed fixed_steps = 0.05;
+
 void 
 SampledTaskPoint::update_oz() 
 { 
@@ -98,7 +100,7 @@ SampledTaskPoint::update_oz()
   m_search_min = m_search_reference;
   m_boundary_points.clear();
   if (m_boundary_scored) {
-    for (double t=0; t<=1.0; t+= 0.05) {
+    for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps) {
       SearchPoint sp(get_boundary_parametric(t), m_task_projection);
       m_boundary_points.push_back(sp);
     }

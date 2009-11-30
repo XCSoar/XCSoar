@@ -38,9 +38,7 @@
 #define GLIDESTATE_HPP
 
 #include "Navigation/Geometry/GeoVector.hpp"
-
 struct AIRCRAFT_STATE;
-struct GEOPOINT;
 
 /**
  * Class used to define a glide/navigation task
@@ -60,13 +58,13 @@ struct GlideState
  * @return Initialised glide task
  */
   GlideState(const GeoVector &vector,
-              const double htarget,
+              const fixed htarget,
               const AIRCRAFT_STATE &aircraft);
 
   GeoVector Vector;             /**< Distance/bearing of task */
-  double MinHeight;             /**< Height (m above MSL) of end */
-  double WindDirection;         /**< Direction of wind (deg True) */
-  double AltitudeDifference;    /**< Aircraft height less target height */
+  fixed MinHeight;             /**< Height (m above MSL) of end */
+  fixed WindDirection;         /**< Direction of wind (deg True) */
+  fixed AltitudeDifference;    /**< Aircraft height less target height */
 
 /** 
  * Calculate internal quantities to reduce computation time
@@ -84,7 +82,7 @@ struct GlideState
  * 
  * @return Average cross-country speed (m/s)
  */
-  double calc_ave_speed(const double Veff) const;
+  fixed calc_ave_speed(const fixed Veff) const;
 
 /** 
  * Calculate distance a circling aircraft will drift
@@ -94,12 +92,12 @@ struct GlideState
  * 
  * @return Distance (m) of drift
  */
-  double drifted_distance(const double t_climb) const;
+  fixed drifted_distance(const fixed t_climb) const;
 
-  double EffectiveWindSpeed;    /**< (internal use) */
-  double EffectiveWindAngle;    /**< (internal use) */
-  double wsq_;                  /**< (internal use) */
-  double dwcostheta_;           /**< (internal use) */
+  fixed EffectiveWindSpeed;    /**< (internal use) */
+  fixed EffectiveWindAngle;    /**< (internal use) */
+  fixed wsq_;                  /**< (internal use) */
+  fixed dwcostheta_;           /**< (internal use) */
 };
 
 #endif

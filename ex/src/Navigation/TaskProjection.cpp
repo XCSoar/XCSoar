@@ -106,8 +106,8 @@ TaskProjection::project(const GEOPOINT& tp) const
 }
 
 
-double
-TaskProjection::fproject_range(const GEOPOINT &tp, const double range) const
+fixed
+TaskProjection::fproject_range(const GEOPOINT &tp, const fixed range) const
 {
   GEOPOINT fr;
   ::FindLatitudeLongitude(tp,0,range,&fr);
@@ -117,8 +117,8 @@ TaskProjection::fproject_range(const GEOPOINT &tp, const double range) const
 }
 
 unsigned
-TaskProjection::project_range(const GEOPOINT &tp, const double range) const
+TaskProjection::project_range(const GEOPOINT &tp, const fixed range) const
 {
-  return (unsigned)(fproject_range(tp,range)+0.5);
+  return (int)(fproject_range(tp,range)+fixed_half);
 }
 

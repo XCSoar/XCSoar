@@ -72,7 +72,7 @@ public:
  * @param tp Range parameter [0,1]
  * @param force_current If true, will force active AAT point (even if inside) to move
  */
-  void set_range(const double tp, const bool force_current);
+  void set_range(const fixed tp, const bool force_current);
 
 /**
  * Save targets in case optimisation fails
@@ -87,9 +87,9 @@ private:
 
   virtual GlideResult tp_solution(const unsigned i,
                                    const AIRCRAFT_STATE &aircraft, 
-                                   double minH) const;
-  virtual double get_min_height(const AIRCRAFT_STATE &aircraft) const {
-    return 0.0;
+                                   fixed minH) const;
+  virtual fixed get_min_height(const AIRCRAFT_STATE &aircraft) const {
+    return fixed_zero;
   }
   virtual const AIRCRAFT_STATE get_aircraft_start(const AIRCRAFT_STATE &aircraft) const;
 

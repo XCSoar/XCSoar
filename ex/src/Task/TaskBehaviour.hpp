@@ -37,6 +37,8 @@
 #ifndef TASK_BEHAVIOUR_HPP
 #define TASK_BEHAVIOUR_HPP
 
+#include "Math/fixed.hpp"
+
 /**
  *  Class defining options for task system.
  *  Typical uses might be default values, and simple aspects of task behaviour.
@@ -70,10 +72,11 @@ public:
   bool optimise_targets_bearing; /**< Option to enable positioning of AAT targets at optimal point on isoline */
   bool auto_mc; /**< Option to enable calculation and setting of auto MacCready */
   bool calc_cruise_efficiency; /**< Option to enable calculation of cruise efficiency */
+
   double aat_min_time; /**< Desired AAT minimum task time (s) */
-  double safety_height_terrain; /**< Minimum height above terrain for arrival height at non-landable waypoint (m) */
-  double safety_height_arrival; /**< Minimum height above terrain for arrival height at landable waypoint (m) */
-  double start_max_speed; /**< Maximum ground speed (m/s) allowed in start sector */
+  fixed safety_height_terrain; /**< Minimum height above terrain for arrival height at non-landable waypoint (m) */
+  fixed safety_height_arrival; /**< Minimum height above terrain for arrival height at landable waypoint (m) */
+  fixed start_max_speed; /**< Maximum ground speed (m/s) allowed in start sector */
 
 };
 

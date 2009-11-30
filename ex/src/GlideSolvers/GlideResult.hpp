@@ -94,19 +94,19 @@ struct GlideResult {
  * @return Blank glide result
  */
   GlideResult(const GlideState &task, 
-               const double V);
+               const fixed V);
 
   GeoVector Vector;             /**< Distance/bearing of task achievable */
-  double DistanceToFinal;       /**< Distance to go before final glide (m) */
-  double CruiseTrackBearing;    /**< Track bearing in cruise for optimal drift compensation (deg true) */
-  double VOpt;                  /**< Optimal speed to fly in cruise (m/s) */
-  double HeightClimb;           /**< Height to be climbed (m) */
-  double HeightGlide;           /**< Height that will be glided (m) */
-  double TimeElapsed;           /**< Time to complete task (s) */
-  double TimeVirtual;           /**< Equivalent time to recover glided height (s) at MC */
-  double AltitudeDifference;    /**< Height above/below final glide for this task (m) */
-  double EffectiveWindSpeed;    /**< (internal) */
-  double EffectiveWindAngle;    /**< (internal) */
+  fixed DistanceToFinal;       /**< Distance to go before final glide (m) */
+  fixed CruiseTrackBearing;    /**< Track bearing in cruise for optimal drift compensation (deg true) */
+  fixed VOpt;                  /**< Optimal speed to fly in cruise (m/s) */
+  fixed HeightClimb;           /**< Height to be climbed (m) */
+  fixed HeightGlide;           /**< Height that will be glided (m) */
+  fixed TimeElapsed;           /**< Time to complete task (s) */
+  fixed TimeVirtual;           /**< Equivalent time to recover glided height (s) at MC */
+  fixed AltitudeDifference;    /**< Height above/below final glide for this task (m) */
+  fixed EffectiveWindSpeed;    /**< (internal) */
+  fixed EffectiveWindAngle;    /**< (internal) */
   GlideResult_t Solution;       /**< Solution validity */
 
 /** 
@@ -165,14 +165,14 @@ struct GlideResult {
  * 
  * @return Virtual speed (m/s)
  */
-  double calc_vspeed(const double mc);
+  fixed calc_vspeed(const fixed mc);
 
 /** 
  * Find the gradient of this solution relative to ground
  * 
  * @return Glide gradient (positive down), or zero if no distance to travel.
  */
-  double glide_angle_ground() const;
+  fixed glide_angle_ground() const;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 

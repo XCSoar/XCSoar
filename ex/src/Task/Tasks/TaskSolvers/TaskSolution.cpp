@@ -42,7 +42,7 @@ GlideResult
 TaskSolution::glide_solution_remaining(const TaskPoint& taskpoint,
                                        const AIRCRAFT_STATE &ac, 
                                        const GlidePolar &polar,
-                                       const double minH)
+                                       const fixed minH)
 {
   GlideState gs(taskpoint.get_vector_remaining(ac),
                 max(minH,taskpoint.get_elevation()),
@@ -54,7 +54,7 @@ GlideResult
 TaskSolution::glide_solution_planned(const TaskPoint& taskpoint,
                                      const AIRCRAFT_STATE &ac, 
                                      const GlidePolar &polar,
-                                     const double minH)
+                                     const fixed minH)
 {
   GlideState gs(taskpoint.get_vector_planned(),
                 max(minH,taskpoint.get_elevation()),
@@ -66,7 +66,7 @@ GlideResult
 TaskSolution::glide_solution_travelled(const TaskPoint& taskpoint,
                                        const AIRCRAFT_STATE &ac, 
                                        const GlidePolar &polar,
-                                       const double minH)
+                                       const fixed minH)
 {
   GeoVector vec = taskpoint.get_vector_travelled(ac);
   if (vec.Distance==0) {
@@ -84,7 +84,7 @@ GlideResult
 TaskSolution::glide_solution_sink(const TaskPoint& taskpoint,
                                   const AIRCRAFT_STATE &ac, 
                                   const GlidePolar &polar,
-                                  const double S)
+                                  const fixed S)
 {
   GlideState gs(taskpoint.get_vector_remaining(ac),
                 taskpoint.get_elevation(),

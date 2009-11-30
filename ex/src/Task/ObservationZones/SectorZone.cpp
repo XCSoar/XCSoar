@@ -38,10 +38,12 @@
 #include "SectorZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-GEOPOINT SectorZone::get_boundary_parametric(double t) const
+static const fixed fixed_nearlyone = 0.999;
+
+GEOPOINT SectorZone::get_boundary_parametric(fixed t) const
 { 
   AIRCRAFT_STATE state;
-  state.Location = GeoVector(Radius*0.999, t*360).end_point(get_location());
+  state.Location = GeoVector(Radius*fixed_nearlyone, t*fixed_360).end_point(get_location());
 
   if (isInSector(state)) {
     return state.Location;
@@ -50,9 +52,9 @@ GEOPOINT SectorZone::get_boundary_parametric(double t) const
   }
 }
 
-double SectorZone::score_adjustment() const
+fixed SectorZone::score_adjustment() const
 {
-  return 0.0;
+  return fixed_zero;
 }
 
 void 
@@ -74,21 +76,21 @@ SectorZone::isInSector(const AIRCRAFT_STATE &ref) const
 }
 
 void 
-SectorZone::setStartRadial(const double x) 
+SectorZone::setStartRadial(const fixed x) 
 {
   StartRadial = x;
   updateSector();
 }
 
 void 
-SectorZone::setEndRadial(const double x) 
+SectorZone::setEndRadial(const fixed x) 
 {
   EndRadial = x;
   updateSector();
 }  
 
 bool 
-SectorZone::angleInSector(const double b) const
+SectorZone::angleInSector(const fixed b) const
 {
   if (StartRadial<EndRadial) {
     return ((b<=EndRadial) && (b>=StartRadial));
