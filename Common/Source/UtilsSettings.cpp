@@ -59,6 +59,11 @@ Copyright_License {
 #include "Task.h"
 #include "Asset.hpp"
 #include "DrawThread.hpp"
+#if defined(__BORLANDC__)  // due to compiler bug
+  #include "WayPointList.hpp"
+  #include "AirspaceDatabase.hpp"
+  #include "Polar/Polar.hpp"
+#endif
 
 bool COMPORTCHANGED = false;
 bool MAPFILECHANGED = false;

@@ -47,6 +47,9 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Components.hpp"
 #include "WayPoint.hpp"
+#if defined(__BORLANDC__)  // due to compiler bug
+  #include "RasterTerrain.h"
+#endif
 
 static WndForm *wf=NULL;
 static WAYPOINT *global_wpt=NULL;
