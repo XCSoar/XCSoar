@@ -458,7 +458,6 @@ bool GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
 
 bool GetFromRegistry(const TCHAR *szRegValue, double &pPos)
 {
-  return 0;
   DWORD Temp = pPos;
   long res;
   if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
