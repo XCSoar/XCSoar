@@ -489,7 +489,7 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 #else /* !WIN32 */
   GConf().set(szRegValue, (int)Pos);
 
-  return NULL;
+  return 0;
 #endif /* !WIN32 */
 }
 
