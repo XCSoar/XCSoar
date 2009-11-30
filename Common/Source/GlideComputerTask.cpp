@@ -429,17 +429,21 @@ bool GlideComputerTask::ValidStartSpeed(const DWORD Margin) const
 
 bool GlideComputerTask::InsideStartHeight(const DWORD Margin) const
 {
-  bool valid = true;
-  if ((task.getSettings().StartMaxHeight!=0)&&(Calculated().TerrainValid)) {
-    if (task.getSettings().StartHeightRef == 0) {
-      if (Calculated().AltitudeAGL>(task.getSettings().StartMaxHeight+Margin))
-	valid = false;
-    } else {
-      if (Calculated().NavAltitude>(task.getSettings().StartMaxHeight+Margin))
-	valid = false;
-    }
+  if (task.getSettings().StartMaxHeight == 0)
+    return true;
+
+  if (Calculated().TerrainValid)
+    return true;
+
+  if (task.getSettings().StartHeightRef == 0) {
+    if (Calculated().AltitudeAGL > (task.getSettings().StartMaxHeight + Margin))
+      return false;
+  } else {
+    if (Calculated().NavAltitude > (task.getSettings().StartMaxHeight + Margin))
+      return false;
   }
-  return valid;
+
+  return true;
 }
 
 bool GlideComputerTask::InStartSector_Internal(int Index,
