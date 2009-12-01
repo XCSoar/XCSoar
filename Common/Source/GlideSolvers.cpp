@@ -240,31 +240,31 @@ EffectiveMacCready_internal(const NMEA_INFO &basic,
 
       height_remaining -= height_used_this;
 
-      if (time_this>=0) {
+      if (time_this >= 0) {
         time_total += time_this;
       } else {
         // invalid! break out of loop early
-        time_total= time_this;
-        i= -1;
+        time_total = time_this;
+        i = -1;
         continue;
       }
     }
 
-    if (time_total<0) {
+    if (time_total < 0) {
       // invalid
       continue;
     }
-    if (time_total>telapsed) {
+    if (time_total > telapsed) {
       // already too slow
       continue;
     }
 
     // add time for climb from start height to height above start
-    if (height_below_start<0) {
-      time_total -= height_below_start/mc_effective;
+    if (height_below_start < 0) {
+      time_total -= height_below_start / mc_effective;
     }
     // now check time..
-    if (time_total<telapsed) {
+    if (time_total < telapsed) {
       if (cruise_efficiency_mode) {
         value_found = cruise_efficiency;
       } else {
@@ -282,7 +282,7 @@ EffectiveCruiseEfficiency(const NMEA_INFO &basic,
                           const DERIVED_INFO &calculated)
 {
   double value = EffectiveMacCready_internal(basic, calculated, true);
-  if (value<0.75) {
+  if (value < 0.75) {
     return 0.75;
   }
   return value;
