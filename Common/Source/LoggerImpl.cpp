@@ -823,7 +823,6 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
 
 	  StartLogger(gps_info, settings, strAssetNumber);
 	  LoggerHeader(gps_info);
-	  LoggerActive = true; // start logger after Header is completed.  Concurrency
 
           if (task.Valid()) {
             int ntp = task.getFinalWaypoint();
@@ -836,6 +835,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
             }
             EndDeclaration();
           }
+    LoggerActive = true; // start logger after Header is completed.  Concurrency
 	} else {
 
 	  MessageBoxX(
