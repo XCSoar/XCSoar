@@ -66,6 +66,18 @@ TaskMacCreadyRemaining::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
   return aircraft;
 }
 
+bool
+TaskMacCreadyRemaining::has_targets() const
+{
+  for (int i=m_start; i<=m_end; i++) {
+    if (m_tps[i]->has_target()) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
 void 
 TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
 {

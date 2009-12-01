@@ -156,6 +156,16 @@ public:
   bool set_range(const double p, const bool force_if_current);
 
 /** 
+ * Capability of this TaskPoint to have adjustable range (true for AAT unless it
+ * is locked)
+ * 
+ * @return True if task point has a target (can have range set)
+ */
+  virtual bool has_target() const {
+    return !m_target_locked;
+  };
+
+/** 
  * Test whether aircraft has travelled close to isoline of target within threshold
  * 
  * @param state Aircraft state

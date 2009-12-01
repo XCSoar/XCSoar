@@ -71,10 +71,12 @@ bool run_flight(TaskManager &task_manager,
   time_remaining=0;
   calc_cruise_efficiency=1.0;
 
+  static const fixed fixed_10 =10;
+
   do {
 
     if ((task_manager.getActiveTaskPointIndex()==1) && first 
-        && (task_manager.get_stats().total.TimeElapsed>10)) {
+        && (task_manager.get_stats().total.TimeElapsed>fixed_10)) {
       time_remaining = task_manager.get_stats().total.TimeRemaining;
       first = false;
 
@@ -139,6 +141,7 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
   TaskBehaviour task_behaviour;
   task_behaviour.auto_mc = auto_mc;
   task_behaviour.aat_min_time = aat_min_time(test_num);
+  task_behaviour.calc_glide_required = false;
 
   TaskEvents default_events;  default_events.verbose = verbose;
 

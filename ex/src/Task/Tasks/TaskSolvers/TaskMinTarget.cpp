@@ -76,6 +76,11 @@ TaskMinTarget::valid(const fixed tp)
 fixed 
 TaskMinTarget::search(const fixed tp) 
 {
+  if (!tm.has_targets()) {
+    // don't bother if nothing to adjust
+    return tp;
+  }
+
   force_current = false;
   /// \todo if search fails, force current
   const fixed p = find_zero(tp);

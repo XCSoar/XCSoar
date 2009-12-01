@@ -37,8 +37,6 @@
 #include "Navigation/Aircraft.hpp"
 #include "TaskBehaviour.hpp"
 
-#include <stdio.h>
-
 void
 TaskBehaviour::all_off()
 {

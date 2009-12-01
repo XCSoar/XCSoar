@@ -128,6 +128,15 @@ public:
     return false;
   };
 
+/** 
+ * Capability of this TaskPoint to have adjustable range/target
+ * 
+ * @return True if task point has a target (can have range set)
+ */
+  virtual bool has_target() const {
+    return false;
+  };
+
 /**
  * Save local copy of target in case optimisation fails
  */

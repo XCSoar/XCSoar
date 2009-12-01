@@ -39,11 +39,7 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
     }
   } else {
     for (unsigned i=0; i<task_manager.task_size(); i++) {
-      if (i==0) {
-        w.push_back(task_manager.random_point_in_task(i, 1.0));
-      } else {
-        w.push_back(task_manager.random_point_in_task(i, random_mag));
-      }
+      w.push_back(task_manager.random_point_in_task(i, random_mag));
     }
   }
   
@@ -160,6 +156,7 @@ void AircraftSim::update_state(TaskManager &task_manager,
 }
 
 static const fixed fixed_300 = 300;
+static const fixed fixed_1500 = 1500;
 
 fixed
 AircraftSim::target_height(TaskManager &task_manager)  
@@ -190,7 +187,7 @@ void AircraftSim::update_mode(TaskManager &task_manager)
     }
     break;
   case FinalGlide:
-    if (task_manager.get_stats().total.solution_remaining.AltitudeDifference<-20) {
+    if (task_manager.get_stats().total.solution_remaining.AltitudeDifference<-fixed_20) {
       print_mode("# mode climb\n");
       acstate = Climb;
     }
@@ -200,7 +197,7 @@ void AircraftSim::update_mode(TaskManager &task_manager)
         (task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)) {
       print_mode("# mode fg\n");
       acstate = FinalGlide;
-    } else if (state.Altitude>=1500) {
+    } else if (state.Altitude>=fixed_1500) {
       acstate = Cruise;
       print_mode("# mode cruise\n");
     }

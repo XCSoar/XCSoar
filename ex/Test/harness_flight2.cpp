@@ -152,6 +152,7 @@ bool test_aat(int test_num, int n_wind)
 
 bool test_automc(int test_num, int n_wind) 
 {
+  target_noise = 0.1;
 
   // test whether flying by automc (starting above final glide)
   // arrives home faster than without

@@ -74,6 +74,13 @@ public:
  */
   void set_range(const fixed tp, const bool force_current);
 
+/** 
+ * Determine if any of the remaining TaskPoints have an adjustable target
+ * 
+ * @return True if adjustable targets
+ */
+  bool has_targets() const;
+
 /**
  * Save targets in case optimisation fails
  */
