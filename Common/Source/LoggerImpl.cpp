@@ -446,9 +446,8 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   HANDLE hFile;
   int i;
   TCHAR path[MAX_PATH];
-  TCHAR cAsset[3];
   for (i=0; i < 3; i++) { // chars must be legal in file names
-    cAsset[i] = IsAlphaNum(strAssetNumber[i]) ? strAssetNumber[i] : _T('A');
+    strAssetNumber[i] = IsAlphaNum(strAssetNumber[i]) ? strAssetNumber[i] : _T('A');
   }
 
 // VENTA3 use logs subdirectory when not in main memory (true for FIVV and PNA)
@@ -485,9 +484,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
                  gps_info.Year,
                  gps_info.Month,
                  gps_info.Day,
-                 cAsset[0],
-                 cAsset[1],
-                 cAsset[2],
+                 strAssetNumber[0],
+                 strAssetNumber[1],
+                 strAssetNumber[2],
                  i);
 
         _stprintf(szFLoggerFileNameRoot,
@@ -496,9 +495,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
                  gps_info.Year,
                  gps_info.Month,
                  gps_info.Day,
-                 cAsset[0],
-                 cAsset[1],
-                 cAsset[2],
+                 strAssetNumber[0],
+                 strAssetNumber[1],
+                 strAssetNumber[2],
                  i);
       } else {
         // Short file name
@@ -513,9 +512,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
                  cyear,
                  cmonth,
                  cday,
-                 cAsset[0],
-                 cAsset[1],
-                 cAsset[2],
+                 strAssetNumber[0],
+                 strAssetNumber[1],
+                 strAssetNumber[2],
                  cflight);
 
         _stprintf(szFLoggerFileNameRoot,
@@ -524,9 +523,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
                  cyear,
                  cmonth,
                  cday,
-                 cAsset[0],
-                 cAsset[1],
-                 cAsset[2],
+                 strAssetNumber[0],
+                 strAssetNumber[1],
+                 strAssetNumber[2],
                  cflight);
       } // end if
 
