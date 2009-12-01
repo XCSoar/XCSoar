@@ -72,7 +72,9 @@ bool CommonInterface::EnableAnimation = false;
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 
-void XCSoarInterface::ExchangeBlackboard() {
+void
+XCSoarInterface::ExchangeBlackboard()
+{
   ScopeLock protect(mutexBlackboard);
   ReceiveBlackboard();
   ReceiveMapProjection();
@@ -80,17 +82,21 @@ void XCSoarInterface::ExchangeBlackboard() {
   SendSettingsMap();
 }
 
-void XCSoarInterface::ReceiveBlackboard() {
+void
+XCSoarInterface::ReceiveBlackboard()
+{
   ScopeLock protect(mutexBlackboard);
   ReadBlackboardBasic(device_blackboard.Basic());
   ReadBlackboardCalculated(device_blackboard.Calculated());
 
   if (Calculated().TeammateCodeValid) {
-    SetSettingsComputer().TeammateCodeValid= true;
+    SetSettingsComputer().TeammateCodeValid = true;
   }
 }
 
-void ActionInterface::SendSettingsComputer() {
+void
+ActionInterface::SendSettingsComputer()
+{
   ScopeLock protect(mutexBlackboard);
   // send computer settings to the device because we know
   // that it won't be reading from them if we lock it, and
@@ -99,7 +105,8 @@ void ActionInterface::SendSettingsComputer() {
   // TODO: trigger refresh if the settings are changed
 }
 
-void XCSoarInterface::ReceiveMapProjection()
+void
+XCSoarInterface::ReceiveMapProjection()
 {
   ScopeLock protect(mutexBlackboard);
   ReadMapProjection(device_blackboard.MapProjection());
@@ -109,7 +116,9 @@ void XCSoarInterface::ReceiveMapProjection()
  * Send the own SettingsMap to the DeviceBlackboard
  * @param trigger_draw Triggers the draw event after sending if true
  */
-void ActionInterface::SendSettingsMap(const bool trigger_draw) {
+void
+ActionInterface::SendSettingsMap(const bool trigger_draw)
+{
   // QUESTION TB: what is trigger_draw?
   ScopeLock protect(mutexBlackboard);
 
@@ -127,25 +136,31 @@ void ActionInterface::SendSettingsMap(const bool trigger_draw) {
   // TODO: trigger refresh if the settings are changed
 }
 
-bool XCSoarInterface::InterfaceTimeoutZero(void) {
+bool
+XCSoarInterface::InterfaceTimeoutZero(void)
+{
   ScopeLock protect(mutexInterfaceTimeout);
   return (interface_timeout==0);
 }
 
-void XCSoarInterface::InterfaceTimeoutReset(void) {
+void
+XCSoarInterface::InterfaceTimeoutReset(void)
+{
   ScopeLock protect(mutexInterfaceTimeout);
   interface_timeout = 0;
 }
 
-bool XCSoarInterface::InterfaceTimeoutCheck(void) {
+bool
+XCSoarInterface::InterfaceTimeoutCheck(void)
+{
   ScopeLock protect(mutexInterfaceTimeout);
-  if (interface_timeout > 60*10) {
+  if (interface_timeout > 60 * 10) {
     interface_timeout = 0;
     return true;
-  } else {
-    interface_timeout++;
-    return false;
   }
+
+  interface_timeout++;
+  return false;
 }
 
 void ActionInterface::SignalShutdown(bool force) {
@@ -161,8 +176,8 @@ bool XCSoarInterface::CheckShutdown(void) {
   if (ShutdownRequested) {
     if(doForceShutdown ||
        (MessageBoxX(gettext(TEXT("Quit program?")),
-		    gettext(TEXT("XCSoar")),
-		    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
+                    gettext(TEXT("XCSoar")),
+                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
       retval = true;
     } else {
       retval = false;
@@ -180,7 +195,9 @@ bool XCSoarInterface::CheckShutdown(void) {
 #include "PeriodClock.hpp"
 #include "Screen/Blank.hpp"
 
-bool XCSoarInterface::Debounce(void) {
+bool
+XCSoarInterface::Debounce(void)
+{
   static PeriodClock fps_last;
 
   ResetDisplayTimeOut();
@@ -224,11 +241,12 @@ bool vario_visible() {
  // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
  // the right
   if ((InfoBoxLayout::landscape == true)
-      && (InfoBoxLayout::InfoBoxGeometry == 5)) return false; // VENTA3
+      && (InfoBoxLayout::InfoBoxGeometry == 5))
+    return false; // VENTA3
 
-  if (gaugeVarioInPortrait || InfoBoxLayout::landscape) {
+  if (gaugeVarioInPortrait || InfoBoxLayout::landscape)
     return enable_gauge;
-  }
+
   return false;
 }
 
@@ -242,8 +260,7 @@ void
 ActionInterface::DisplayModes()
 {
   // Determine whether the vario gauge should be drawn
-  SetSettingsMap().EnableVarioGauge =
-    vario_visible() && !SettingsMap().FullScreen;
+  SetSettingsMap().EnableVarioGauge = vario_visible() && !SettingsMap().FullScreen;
 
   if (main_window.vario) {
     if (!SettingsMap().ScreenBlanked && SettingsMap().EnableVarioGauge) {
