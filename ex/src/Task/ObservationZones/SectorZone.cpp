@@ -68,11 +68,9 @@ SectorZone::updateSector()
 bool 
 SectorZone::isInSector(const AIRCRAFT_STATE &ref) const
 {
-  if (!CylinderZone::isInSector(ref)) {
-    return false;
-  } else {
-    return angleInSector(bearing(ref.Location));
-  }
+  GeoVector f(get_location(), ref.Location);
+
+  return (f.Distance<=Radius) && angleInSector(f.Bearing);
 }
 
 void 

@@ -159,7 +159,7 @@ void
 AbstractTask::update_stats_speeds(const AIRCRAFT_STATE &state, 
                                   const AIRCRAFT_STATE &state_last)
 {
-  const double dt = state.Time-state_last.Time;
+  const fixed dt = state.Time-state_last.Time;
   if (!task_finished()) {
     if (task_started()) {
       stats.total.calc_speeds(dt);
@@ -204,7 +204,7 @@ AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft)
   if (!tp) {
     return 0.0;
   }
-  const double d = tp->get_vector_remaining(aircraft).Distance;
+  const fixed d = tp->get_vector_remaining(aircraft).Distance;
   if (d) {
     return (aircraft.Altitude-tp->get_elevation())/d;
   } else {

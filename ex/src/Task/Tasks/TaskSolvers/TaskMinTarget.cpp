@@ -62,19 +62,15 @@ TaskMinTarget::f(const fixed p)
   set_range(p);
 
   res = tm.glide_solution(aircraft);
-  const fixed dt = res.TimeElapsed-t_remaining; 
-  if (positive(t_remaining)) {
-    return dt/t_remaining;
-  } else {
-    return dt;
-  }
+  return res.TimeElapsed-t_remaining;
 }
+
 
 bool 
 TaskMinTarget::valid(const fixed tp) 
 {
-  const fixed ff = f(tp);
-  return (res.Solution== GlideResult::RESULT_OK) && (ff>= -tolerance*fixed_two);
+  //  const fixed ff = f(tp);
+  return (res.Solution== GlideResult::RESULT_OK); // && (ff>= -tolerance*fixed_two);
 }
 
 fixed 

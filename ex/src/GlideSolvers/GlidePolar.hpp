@@ -129,6 +129,15 @@ public:
   }
 
 /** 
+ * Accessor for inverse of MC setting
+ * 
+ * @return The inverse of current MacCready ring setting (s/m)
+ */
+  fixed get_inv_mc() const {
+    return inv_mc;
+  }
+
+/** 
  * Sink rate model (actual glide polar) function.
  * 
  * @param V Speed at which sink rate is to be evaluated
@@ -192,6 +201,7 @@ private:
   void solve();
 
   fixed mc;                  
+  fixed inv_mc;                  
   fixed bugs;
   fixed ballast;
   fixed cruise_efficiency;

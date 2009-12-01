@@ -29,6 +29,8 @@ typedef double fixed;
 #define fixed_180 180
 
 void sin_cos(const double&theta, double*s, double*c);
+#define positive(x) (x>0)
+#define negative(x) (x<0)
 
 #else
 #define FIXED_DOUBLE(x) x.as_double()
@@ -215,6 +217,9 @@ public:
         return *this;
     }
 
+  bool positive() const;
+  bool negative() const;
+
     fixed floor() const;
     fixed ceil() const;
     fixed sqrt() const;
@@ -382,6 +387,16 @@ public:
 inline std::ostream& operator<<(std::ostream& os,fixed const& value)
 {
     return os<<value.as_double();
+}
+
+inline bool fixed::positive() const
+{
+  return (m_nVal>0);
+}
+
+inline bool fixed::negative() const
+{
+  return (m_nVal<0);
 }
 
 inline fixed operator-(double a, fixed const& b)
@@ -1585,6 +1600,11 @@ inline fixed abs(fixed const& x)
     return x.abs();
 }
 
+inline fixed fabs(fixed const& x)
+{
+    return x.abs();
+}
+
 inline fixed modf(fixed const& x,fixed*integral_part)
 {
     return x.modf(integral_part);
@@ -1700,9 +1720,29 @@ extern fixed const fixed_rad_to_deg;
 extern fixed const fixed_360;
 extern fixed const fixed_180;
 
+inline bool positive(const fixed&f) {
+  return f.positive();
+};
+
+inline bool negative(const fixed&f) {
+  return f.negative();
+};
+
 #endif
 
-#define positive(x) (x>fixed_zero)
-#define negative(x) (x<fixed_zero)
+inline void limit_tolerance(fixed& f, const fixed tol_act) {
+  if (positive(f)) {
+    if (f<tol_act) {
+      f= tol_act;
+    }
+    return;
+  }
+  if (negative(f)) {
+    if (f>-tol_act) {
+      f= -tol_act;
+    }
+    return;
+  }
+}
 
 #endif

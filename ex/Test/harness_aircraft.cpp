@@ -90,8 +90,8 @@ bool AircraftSim::far(TaskManager &task_manager) {
     const ElementStat stat = task_manager.get_stats().current_leg;
     return (stat.remaining.get_distance()>100.0) || !entered;
   } else {
-    double dc = w[awp].distance(state.Location);
-    if (awp==0) {
+    fixed dc = w[awp].distance(state.Location);
+    if (!positive(awp)) {
       return (dc>state.Speed);
     } else {
       return (dc>state.Speed) || !entered;
@@ -99,18 +99,20 @@ bool AircraftSim::far(TaskManager &task_manager) {
   }
 }
 
-double AircraftSim::small_rand() {
-  return heading_filt.update(-bearing_noise+2*bearing_noise*rand()/(1.0*RAND_MAX));
+static const fixed fixed_1000 = 1000;
+
+fixed AircraftSim::small_rand() {
+  return heading_filt.update(2.0*bearing_noise*rand()/(1.0*RAND_MAX)-bearing_noise);
 }
 
 void AircraftSim::update_bearing(TaskManager& task_manager) {
   const ElementStat stat = task_manager.get_stats().current_leg;
-  double bct = stat.solution_remaining.CruiseTrackBearing;
+  fixed bct = stat.solution_remaining.CruiseTrackBearing;
 
   if (goto_target && (awp>0)) {
     bearing = stat.solution_remaining.Vector.Bearing;
 
-    if (enable_bestcruisetrack && (stat.solution_remaining.Vector.Distance>1000.0)) {
+    if (enable_bestcruisetrack && (stat.solution_remaining.Vector.Distance>fixed_1000)) {
       bearing = bct;      
     }
 
@@ -118,11 +120,11 @@ void AircraftSim::update_bearing(TaskManager& task_manager) {
     bearing = state.Location.bearing(target(task_manager));
   }
 
-  double b_best = bearing;
-  double e_best = 370;
-  for (double bear=0; bear<360; bear+= 2.0) {
-    double b_this = state.Location.bearing(endpoint(bear));
-    double e_this = fabs(::AngleLimit180(b_this-bearing));
+  fixed b_best = bearing;
+  fixed e_best = fixed_360;
+  for (fixed bear= fixed_zero; bear<fixed_360; bear+= fixed_two) {
+    fixed b_this = state.Location.bearing(endpoint(bear));
+    fixed e_this = fabs(::AngleLimit180(b_this-bearing));
     if (e_this<e_best) {
       e_best = e_this;
       b_best = bear;
@@ -155,13 +157,15 @@ void AircraftSim::update_state(TaskManager &task_manager,
   };
 }
 
-double
+static const fixed fixed_300 = 300;
+
+fixed
 AircraftSim::target_height(TaskManager &task_manager)  
 {
   if (task_manager.getActiveTaskPoint()) {
-    return max(300.0, task_manager.getActiveTaskPoint()->get_elevation());
+    return max(fixed_300, task_manager.getActiveTaskPoint()->get_elevation());
   } else {
-    return 300;
+    return fixed_300;
   }
 }
 
@@ -202,7 +206,7 @@ void AircraftSim::update_mode(TaskManager &task_manager)
   };
 }
 
-GEOPOINT AircraftSim::endpoint(const double bear) const
+GEOPOINT AircraftSim::endpoint(const fixed bear) const
 {
   GEOPOINT ref;
   ref = GeoVector(state.Speed,bear).end_point(state.Location);
@@ -212,7 +216,7 @@ GEOPOINT AircraftSim::endpoint(const double bear) const
 void AircraftSim::integrate() {
   state.Location = endpoint(bearing);
   state.Altitude -= sinkrate;
-  state.Time += 1.0;
+  state.Time += fixed_one;
 }
 
 bool AircraftSim::advance(TaskManager &task_manager,
@@ -268,7 +272,7 @@ void AircraftSim::print(std::ostream &f4) {
 }
 #endif
 
-double AircraftSim::time() {
+fixed AircraftSim::time() {
   return state.Time;
 }
 

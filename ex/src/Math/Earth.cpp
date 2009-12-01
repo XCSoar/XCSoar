@@ -41,7 +41,10 @@ Copyright_License {
 #include "Math/NavFunctions.hpp"
 
 #include <assert.h>
-#include <algorithm>
+
+#ifdef INSTRUMENT_TASK
+unsigned count_distbearing = 0;
+#endif
 
 static const fixed fixed_earth_r = 6371000;
 static const fixed fixed_double_earth_r = 6371000*2;
@@ -110,6 +113,10 @@ void IntermediatePoint(GEOPOINT loc1,
 
   loc3->Latitude= atan2(z,sqrt(x*x+y*y))*fixed_rad_to_deg;
   loc3->Longitude= atan2(y,x)*fixed_rad_to_deg;
+
+#ifdef INSTRUMENT_TASK
+  count_distbearing++;
+#endif
 }
 
 fixed CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3,
@@ -146,6 +153,10 @@ fixed CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3,
     IntermediatePoint(loc1, loc2, ATD, dist_AB, loc4);
   }
 
+#ifdef INSTRUMENT_TASK
+  count_distbearing++;
+#endif
+
   // units
   return XTD*fixed_xtd_fact;
 }
@@ -173,6 +184,10 @@ fixed ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
 
   const fixed ATD // along track distance
     = asin(sqrt( sindist_AD*sindist_AD - sinXTD*sinXTD )/cosXTD);
+
+#ifdef INSTRUMENT_TASK
+  count_distbearing++;
+#endif
 
   return ATD*fixed_xtd_fact;
 }
@@ -217,6 +232,10 @@ void DistanceBearing(GEOPOINT loc1, GEOPOINT loc2,
     const fixed x = cloc1Latitude*sloc2Latitude-sloc1Latitude*cloc2Latitude*cosdlon;
     *Bearing = (x==fixed_zero && y==fixed_zero) ? fixed_zero:AngleLimit360(atan2(y,x)*fixed_rad_to_deg);
   }
+
+#ifdef INSTRUMENT_TASK
+  count_distbearing++;
+#endif
 }
 
 
@@ -242,6 +261,11 @@ fixed DoubleDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
 
   const fixed a12 = max(fixed_zero, min(fixed_expand_xsq,s21*s21+cloc1Latitude*cloc2Latitude*sl21*sl21));
   const fixed a23 = max(fixed_zero, min(fixed_expand_xsq,s32*s32+cloc2Latitude*cloc3Latitude*sl32*sl32));
+
+#ifdef INSTRUMENT_TASK
+  count_distbearing++;
+#endif
+
   return fixed_double_earth_r*(atan2(sqrt(a12),sqrt(fixed_expand_xsq-a12))
                                +atan2(sqrt(a23),sqrt(fixed_expand_xsq-a23)));
 
@@ -287,6 +311,10 @@ void FindLatitudeLongitude(GEOPOINT loc, fixed Bearing, fixed Distance,
     result = (fixed)fmod((result+fixed_pi), fixed_two_pi)-fixed_pi;
   }
   loc_out->Longitude = result*fixed_rad_to_deg;
+
+#ifdef INSTRUMENT_TASK
+  count_distbearing++;
+#endif
 }
 
 /**

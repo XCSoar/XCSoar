@@ -39,6 +39,8 @@
 #include "Util/Tolerances.hpp"
 #include <algorithm>
 
+/// \todo only engage this class if above final glide at mc=0
+
 TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
                        const unsigned activeTaskPoint,
                        const AIRCRAFT_STATE &_aircraft,
@@ -67,17 +69,13 @@ TaskBestMc::f(const fixed mc)
   tm.set_mc(max(fixed_tiny, mc));
   res = tm.glide_solution(aircraft);
 
-  if (res.Vector.Distance>0) {
-    return res.AltitudeDifference/res.Vector.Distance;
-  } else {
-    return res.AltitudeDifference;
-  }
+  return res.AltitudeDifference;
 }
 
 bool TaskBestMc::valid(const fixed mc) 
 {
-  fixed ff = f(mc);
-  return (res.Solution== GlideResult::RESULT_OK) && (ff>=-tolerance*fixed_two);
+  return (res.Solution == GlideResult::RESULT_OK) 
+    && (res.AltitudeDifference >= -tolerance*fixed_two*res.Vector.Distance);
 }
 
 fixed 

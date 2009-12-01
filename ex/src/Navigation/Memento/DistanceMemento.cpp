@@ -36,8 +36,6 @@
  */
 #include "DistanceMemento.hpp"
 
-extern unsigned count_distbearing;
-
 fixed 
 DistanceMemento::Distance(const GEOPOINT& _origin,
                           const GEOPOINT& _destination) const
@@ -45,7 +43,6 @@ DistanceMemento::Distance(const GEOPOINT& _origin,
   if ((_origin != origin)||(_destination != destination)) {
     origin = _origin;
     destination = _destination;
-    count_distbearing++;
     value = origin.distance(destination);
   };
   return value;

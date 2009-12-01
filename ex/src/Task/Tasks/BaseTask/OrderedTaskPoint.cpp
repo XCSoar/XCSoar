@@ -138,20 +138,11 @@ OrderedTaskPoint::search_nominal_if_unsampled()
   return m_active_state == BEFORE_ACTIVE;
 }
 
-#ifdef INSTRUMENT_TASK
-extern unsigned count_distbearing;
-#endif
-
-
 fixed 
 OrderedTaskPoint::double_leg_distance(const GEOPOINT &ref) const
 {
   assert(tp_previous);
   assert(tp_next);
-
-#ifdef INSTRUMENT_TASK
-  count_distbearing++;
-#endif
 
   return ::DoubleDistance(get_previous()->get_location_remaining(), 
                           ref, 

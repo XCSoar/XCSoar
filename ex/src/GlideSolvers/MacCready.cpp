@@ -89,7 +89,7 @@ MacCready::solve_vertical(const GlideState &task) const
   } 
 
   const fixed t_cl = -task.AltitudeDifference*denom1/denom2; // from (2)
-  const fixed t_cr = (task.EffectiveWindSpeed*t_cl)/denom1; // from (1)
+  const fixed t_cr = task.EffectiveWindSpeed*t_cl/denom1; // from (1)
 
   result.TimeElapsed = t_cr+t_cl;
   result.HeightClimb = -task.AltitudeDifference;
@@ -108,7 +108,8 @@ MacCready::solve_cruise(const GlideState &task) const
 
   const fixed S = glide_polar.get_SbestLD();
   const fixed mc = glide_polar.get_mc();
-  const fixed rho = S/mc;
+  const fixed inv_mc = glide_polar.get_inv_mc();
+  const fixed rho = S*inv_mc;
   const fixed rhoplusone = fixed_one+rho;
   const fixed invrhoplusone = fixed_one/rhoplusone;
   const fixed Vn = task.calc_ave_speed(VOpt*cruise_efficiency*invrhoplusone);
@@ -121,7 +122,7 @@ MacCready::solve_cruise(const GlideState &task) const
   fixed t_cl1 = fixed_zero;
   fixed distance = task.Vector.Distance;
   if (negative(task.AltitudeDifference)) {
-    t_cl1 = -task.AltitudeDifference/mc;
+    t_cl1 = -task.AltitudeDifference*inv_mc;
     distance = task.drifted_distance(t_cl1);
   }
 
@@ -248,6 +249,10 @@ MacCready::solve(const GlideState &task) const
 #include "Util/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
 
+static const fixed fixed_75 = 75.0;
+static const fixed fixed_15 = 15.0;
+static const fixed fixed_20 = 20.0;
+
 /**
  * Class used to find VOpt for a MacCready setting, for final glide
  * calculations.  Intended to be used temporarily only.
@@ -266,16 +271,11 @@ public:
  */
   MacCreadyVopt(const GlideState &_task,
                 const MacCready &_mac):
-    ZeroFinder(15.0,75.0, TOLERANCE_MC_OPT_GLIDE),
+    ZeroFinder(fixed_15,fixed_75, TOLERANCE_MC_OPT_GLIDE),
     task(_task),
-    mac(_mac)
+    mac(_mac),
+    inv_mc(_mac.get_inv_mc())
     {
-      const fixed mc = _mac.get_mc();
-      if (positive(mc)) {
-        inv_mc = fixed_one/mc;
-      } else {
-        inv_mc = -fixed_one;
-      }
     };
 
   /**
@@ -294,14 +294,14 @@ public:
    * @return Glide solution (optimum)
    */
   GlideResult result() {
-    find_min(20.0);
+    find_min(fixed_20);
     return res;
   }
 private:
   GlideResult res;
   const GlideState &task;
   const MacCready &mac;
-  fixed inv_mc;
+  const fixed inv_mc;
 };
 
 
@@ -327,4 +327,8 @@ subs rho=(gamma*Vn+S)/mc
 
 fixed MacCready::get_mc() const {
   return glide_polar.get_mc();
+}
+
+fixed MacCready::get_inv_mc() const {
+  return glide_polar.get_inv_mc();
 }

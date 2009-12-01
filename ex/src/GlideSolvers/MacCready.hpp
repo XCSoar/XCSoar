@@ -113,6 +113,11 @@ public:
    */
   fixed get_mc() const;
 
+  /**
+   * Returns inverse of current MacCready setting of the glide polar (convenience function)
+   */
+  fixed get_inv_mc() const;
+
 private:
 
   /**

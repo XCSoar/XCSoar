@@ -180,12 +180,8 @@ fixed ZeroFinder::find_zero(const fixed xstart) {
 					/* extent			*/
     }
 
-    if( fabs(new_step) < tol_act ) {	/* Adjust the step to be not less*/
-      if( positive(new_step) )	        /* than toleranceerance		*/
-	new_step = tol_act;
-      else
-	new_step = -tol_act;
-    }
+    limit_tolerance(new_step, tol_act);
+    /* Adjust the step to be not less than toleranceerance */
 
     a = b;  fa = fb;			/* Save the previous approx.	*/
     b += new_step;                      /* Do step to a new approxim.	*/
@@ -316,12 +312,7 @@ fixed ZeroFinder::find_min(const fixed xstart)
 					/* extent			*/
     }
 
-    if( fabs(new_step) < tol_act ) {	/* Adjust the step to be not less*/
-      if( positive(new_step) )	/* than toleranceerance		*/
-	new_step = tol_act;
-      else
-	new_step = -tol_act;
-    }
+    limit_tolerance(new_step, tol_act); /* Adjust the step to be not less than tolerance */
 
 				/* Obtain the next approximation to min	*/
     {				/* and reduce the enveloping range	*/

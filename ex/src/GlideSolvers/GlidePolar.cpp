@@ -48,18 +48,22 @@ static const fixed fixed_20 = 20.0;
 GlidePolar::GlidePolar(const fixed _mc,
                        const fixed _bugs,
                        const fixed _ballast):
-  mc(_mc),
   bugs(_bugs),
   ballast(_ballast),
   cruise_efficiency(fixed_one)
 {
-  solve();
+  set_mc(_mc);
 }
 
 void
 GlidePolar::set_mc(const fixed _mc)
 {
   mc = _mc;
+  if (positive(mc)) {
+    inv_mc = fixed_one/mc;
+  } else {
+    inv_mc = fixed_zero;
+  }
   solve();
 }
 
@@ -96,7 +100,7 @@ public:
  * @return Initialised object (no search yet)
  */
   GlidePolarVopt(const GlidePolar &_polar):
-    ZeroFinder(15, 75, TOLERANCE_POLAR_BESTLD),
+    ZeroFinder(fixed_15, fixed_75, TOLERANCE_POLAR_BESTLD),
     polar(_polar)
     {
     };

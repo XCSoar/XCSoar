@@ -65,12 +65,7 @@ fixed
 TaskGlideRequired::f(const fixed S) 
 {
   res = tm.glide_sink(aircraft, S);
-  // && (fabs(res.AltitudeDifference)<tolerance)
-  if (res.Vector.Distance>0) {
-    return res.AltitudeDifference/res.Vector.Distance;
-  } else {
-    return res.AltitudeDifference;
-  }
+  return res.AltitudeDifference;
 }
 
 fixed 

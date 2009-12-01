@@ -76,11 +76,11 @@ public:
  * 
  * @return Location of point on isoline segment
  */
-  GEOPOINT parametric(const double t) const;
+  GEOPOINT parametric(const fixed t) const;
 
 private:
-  double t_up;
-  double t_down;
+  fixed t_up;
+  fixed t_down;
 };
 
 #endif

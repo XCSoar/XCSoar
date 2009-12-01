@@ -39,13 +39,9 @@
 #include "Math/NavFunctions.hpp"
 #include "Math/Geometry.hpp"
 
-unsigned count_distbearing = 0;
-
 GeoVector::GeoVector(const GEOPOINT &source, const GEOPOINT &target,
                      const bool is_average)
 {
-  count_distbearing++;
-
   GEOPOINT loc1 = source;
   GEOPOINT loc2 = target;
   ::DistanceBearing(loc1, loc2, &Distance, &Bearing);
