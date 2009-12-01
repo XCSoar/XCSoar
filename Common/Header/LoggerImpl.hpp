@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Sizes.h"
 #include "GPSClock.hpp"
+#include "Poco/RWLock.h"
 
 #include <tchar.h>
 #include <windef.h>
@@ -92,6 +93,15 @@ public:
   void LoggerDeviceDeclare();
   void LoggerNote(const TCHAR *text);
   void clearBuffer();
+
+private:
+  void WriteLock() {
+    lock.writeLock();
+  }
+  void Unlock() {
+    lock.unlock();
+  }
+  Poco::RWLock lock;
 
 private:
   void StartLogger(const NMEA_INFO &gps_info,

@@ -120,7 +120,9 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info) {
     LoggerActive = false;
     if (LoggerClearFreeSpace(gps_info)) {
 
+      WriteLock();
       DiskBufferFlush();
+      Unlock();
       
       if (!is_simulator() && LoggerGActive())
         LoggerGStop(szLoggerFileName);
@@ -285,7 +287,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     task.SaveDefaultTask();
   }
 
+  WriteLock();
   DiskBufferReset();
+  Unlock();
 
   LoggerGInit();
   ResetFRecord(); 

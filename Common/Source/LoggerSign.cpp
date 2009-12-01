@@ -123,6 +123,8 @@ char * CleanIGCRecord (char * szIn)
 bool
 LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
 {
+  Poco::ScopedRWLock protect(lock, true);
+
   char charbuffer[MAX_IGC_BUFF];
 
   strcpy(charbuffer, szIn);
