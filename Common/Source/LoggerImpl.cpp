@@ -252,7 +252,9 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   LogFRecordToFile(gps_info.SatelliteIDs, gps_info.Hour, gps_info.Minute,
       gps_info.Second, gps_info.Time, gps_info.NAVWarning);
 
-  if ((gps_info.Altitude<0) || (gps_info.BaroAltitude<0)) return;
+  if ((gps_info.Altitude < -100) || (gps_info.BaroAltitude < -100) || gps_info.NAVWarning) { 
+    return;
+  }
 
   DegLat = (int)gps_info.Location.Latitude;
   MinLat = gps_info.Location.Latitude - DegLat;
