@@ -39,50 +39,38 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Bitmap.hpp"
 
-#ifdef ENABLE_SDL
-
 void
 Brush::set(const Color c)
 {
+#ifdef ENABLE_SDL
   hollow = false;
   color = c;
-}
-
-void
-Brush::set(const Bitmap &bitmap)
-{
-  // XXX
-}
-
-void
-Brush::reset()
-{
-  hollow = true;
-}
-
-#else /* !ENABLE_SDL */
-
-void
-Brush::set(const Color c)
-{
+#else
   reset();
   brush = ::CreateSolidBrush(c);
+#endif
 }
 
 void
 Brush::set(const Bitmap &bitmap)
 {
+#ifdef ENABLE_SDL
+  // TODO
+#else
   reset();
   brush = ::CreatePatternBrush(bitmap.native());
+#endif
 }
 
 void
 Brush::reset()
 {
+#ifdef ENABLE_SDL
+  hollow = true;
+#else
   if (brush != NULL) {
     ::DeleteObject(brush);
     brush = NULL;
   }
+#endif
 }
-
-#endif /* !ENABLE_SDL */
