@@ -80,7 +80,7 @@ LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
                          double Time,
                          int NAVWarning)
 { 
-  if (false && is_simulator())
+  if (is_simulator())
     return;
 
   char szFRecord[MAX_IGC_BUFF];
