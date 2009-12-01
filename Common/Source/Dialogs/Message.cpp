@@ -47,27 +47,29 @@ Copyright_License {
 #include <assert.h>
 #include <limits.h>
 
-static void OnButtonClick(WindowControl * Sender){
-  ((WndForm *)Sender->GetOwner()->GetOwner())->SetModalResult(Sender->GetTag());
+static void
+OnButtonClick(WindowControl * Sender)
+{
+  ((WndForm *) Sender->GetOwner()->GetOwner())->SetModalResult(Sender->GetTag());
 }
 
 // Message Box Replacement
-int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
-
-  WndForm *wf=NULL;
-  WndFrame *wText=NULL;
+int WINAPI
+MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
+{
+  WndForm *wf = NULL;
+  WndFrame *wText = NULL;
   int X, Y, Width, Height;
   WndButton *wButtons[10];
   int ButtonCount = 0;
-  int i,x,y,d,w,h,res,dY;
+  int i, x, y, d, w, h, res, dY;
   RECT rc;
-
-  // todo
 
   assert(lpText != NULL);
   assert(lpCaption != NULL);
 
   // JMW this makes the first key if pressed quickly, ignored
+  // TODO bug: doesn't work sometimes. buttons have to be pressed multiple times (TB)
   XCSoarInterface::Debounce();
 
   rc = XCSoarInterface::main_window.get_position();
@@ -80,8 +82,8 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
   Height = DLGSCALE(160);
 #endif
 
-  X = ((rc.right-rc.left) - Width)/2;
-  Y = ((rc.bottom-rc.top) - Height)/2;
+  X = ((rc.right - rc.left) - Width) / 2;
+  Y = ((rc.bottom - rc.top) - Height) / 2;
 
   y = DLGSCALE(100);
   w = DLGSCALE(60);
@@ -120,68 +122,62 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
 
   uType = uType & 0x000f;
 
-  if (uType == MB_OK
-      || uType == MB_OKCANCEL
+  if (uType == MB_OK || uType == MB_OKCANCEL) {
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("OK")), 0, y, w, h, OnButtonClick);
 
-  ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("OK")),
-                                          0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDOK);
     ButtonCount++;
   }
 
-  if (uType == MB_YESNO
-      || uType == MB_YESNOCANCEL
-  ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("Yes")),
-                                          0, y, w, h, OnButtonClick);
+  if (uType == MB_YESNO || uType == MB_YESNOCANCEL) {
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("Yes")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDYES);
     ButtonCount++;
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("No")),
-                                          0, y, w, h, OnButtonClick);
+
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("No")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDNO);
     ButtonCount++;
   }
 
-  if (uType == MB_ABORTRETRYIGNORE
-      || uType == MB_RETRYCANCEL
-  ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-                                          gettext(TEXT("Retry")),
-                                          0, y, w, h, OnButtonClick);
+  if (uType == MB_ABORTRETRYIGNORE || uType == MB_RETRYCANCEL) {
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("Retry")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDRETRY);
     ButtonCount++;
   }
 
-  if (uType == MB_OKCANCEL
-      || uType == MB_RETRYCANCEL
-      || uType == MB_YESNOCANCEL
-  ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-                                          gettext(TEXT("Cancel")),
-                                          0, y, w, h, OnButtonClick);
+  if (uType == MB_OKCANCEL || uType == MB_RETRYCANCEL || uType == MB_YESNOCANCEL) {
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("Cancel")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDCANCEL);
     ButtonCount++;
   }
 
-  if (uType == MB_ABORTRETRYIGNORE
-  ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-                                          gettext(TEXT("Abort")),
-                                          0, y, w, h, OnButtonClick);
+  if (uType == MB_ABORTRETRYIGNORE) {
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("Abort")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDABORT);
     ButtonCount++;
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-                                          gettext(TEXT("Ignore")),
-                                          0, y, w, h, OnButtonClick);
+
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("Ignore")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDIGNORE);
     ButtonCount++;
   }
 
   d = Width / (ButtonCount);
-  x = d/2-w/2;
+  x = d / 2 - w / 2;
 
-  for (i=0; i<ButtonCount; i++){
+  for (i = 0; i < ButtonCount; i++) {
     wButtons[i]->SetLeft(x);
     x += d;
   }
