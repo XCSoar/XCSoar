@@ -589,7 +589,19 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
 
   sprintf(temp,"HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_Version);
   IGCWriteRecord(temp, szLoggerFileName);
+  
+  TCHAR DeviceName[DEVNAMESIZE];
+  if (is_simulator()) {
+    _tcscpy(DeviceName,TEXT("Simulator"));
+  }
+  else {
+    ReadDeviceSettings(0, DeviceName);  
+  }
+  sprintf(temp,"HFGPS: %S\r\n", DeviceName);
+  IGCWriteRecord(temp, szLoggerFileName);
+   
 
+  
   IGCWriteRecord(datum, szLoggerFileName);
 
 }
