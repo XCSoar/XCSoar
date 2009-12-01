@@ -47,6 +47,9 @@ Copyright_License {
 #include <assert.h>
 #include <limits.h>
 
+/**
+ * This event is triggered when a button of the MessageBox is pressed
+ */
 static void
 OnButtonClick(WindowControl * Sender)
 {
@@ -54,6 +57,13 @@ OnButtonClick(WindowControl * Sender)
 }
 
 // Message Box Replacement
+/**
+ * Displays a MessageBox and returns the pressed button
+ * @param lpText Text displayed inside the MessageBox
+ * @param lpCaption Text displayed in the Caption of the MessageBox
+ * @param uType Type of MessageBox to display (OK+Cancel, Yes+No, etc.)
+ * @return
+ */
 int WINAPI
 MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 {
@@ -89,27 +99,21 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   w = DLGSCALE(60);
   h = DLGSCALE(32);
 
+  // Create dialog
   wf = new WndForm(&XCSoarInterface::main_window, TEXT("frmXcSoarMessageDlg"),
                    lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);
   wf->SetBackColor(Color(0xDA, 0xDB, 0xAB));
 
-  wText = new WndFrame(wf,
-                       TEXT("frmMessageDlgText"),
-                       0,
-                       DLGSCALE(5),
-                       Width,
-                       Height);
+  // Create text element
+  wText =
+      new WndFrame(wf, TEXT("frmMessageDlgText"), 0, DLGSCALE(5), Width, Height);
+
   wText->SetCaption(lpText);
   wText->SetFont(MapWindowBoldFont);
-  wText->SetCaptionStyle(
-        DT_EXPANDTABS
-      | DT_CENTER
-      | DT_NOCLIP
-      | DT_WORDBREAK
-        //      | DT_VCENTER
-  );
+  wText->SetCaptionStyle(DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
+  // | DT_VCENTER
 
   /* TODO code: this doesnt work to set font height
   dY = wText->GetLastDrawTextHeight() - Height;
@@ -120,8 +124,8 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   y += dY;
 
+  // Create buttons
   uType = uType & 0x000f;
-
   if (uType == MB_OK || uType == MB_OKCANCEL) {
     wButtons[ButtonCount] =
         new WndButton(wf, TEXT(""), gettext(TEXT("OK")), 0, y, w, h, OnButtonClick);
@@ -177,11 +181,13 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   d = Width / (ButtonCount);
   x = d / 2 - w / 2;
 
+  // Move buttons to the right positions
   for (i = 0; i < ButtonCount; i++) {
     wButtons[i]->SetLeft(x);
     x += d;
   }
 
+  // Show MessageBox and save result
   res = wf->ShowModal();
 
   delete wf;
@@ -191,6 +197,6 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   InvalidateRect(hWnd,NULL,true);
   UpdateWindow(hWnd);
 #endif
-  return(res);
 
+  return(res);
 }
