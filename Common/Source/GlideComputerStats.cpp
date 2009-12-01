@@ -48,24 +48,24 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "GPSClock.hpp"
 
-
-GlideComputerStats::GlideComputerStats():
- log_clock(5.0),
- stats_clock(60.0)
+GlideComputerStats::GlideComputerStats() :
+  log_clock(5.0),
+  stats_clock(60.0)
 {
 
 }
 
-
-void GlideComputerStats::ResetFlight(const bool full)
+void
+GlideComputerStats::ResetFlight(const bool full)
 {
   FastLogNum = 0;
-  if (full) {
+  if (full)
     flightstats.Reset();
-  }
 }
 
-void GlideComputerStats::StartTask() {
+void
+GlideComputerStats::StartTask()
+{
   flightstats.StartTask(Basic().Time);
 }
 
@@ -73,12 +73,13 @@ void GlideComputerStats::StartTask() {
  * Logs GPS fixes for snail trail and stats
  * @return True if valid fix (fix distance <= 200m), False otherwise
  */
-bool GlideComputerStats::DoLogging() {
+bool
+GlideComputerStats::DoLogging()
+{
   // QUESTION TB: put that in seperate function?!
   // prevent bad fixes from being logged or added to OLC store
-  if (Distance(Basic().Location, LastBasic().Location)>200.0) {
+  if (Distance(Basic().Location, LastBasic().Location) > 200.0)
     return false;
-  }
 
   // draw snail points more often in circling mode
   if (Calculated().Circling) {
@@ -88,6 +89,7 @@ bool GlideComputerStats::DoLogging() {
     log_clock.set_dt(SettingsComputer().LoggerTimeStepCruise);
     snail_trail.clock.set_dt(5.0);
   }
+
   if (FastLogNum) {
     log_clock.set_dt(1.0);
     FastLogNum--;
@@ -121,31 +123,35 @@ bool GlideComputerStats::DoLogging() {
     if (snail_trail.clock.check_advance(Basic().Time)) {
       snail_trail.AddPoint(&Basic(), &Calculated());
     }
+
     if (stats_clock.check_advance(Basic().Time)) {
-      flightstats.AddAltitudeTerrain(Basic().Time-Calculated().TakeOffTime,
-				     Calculated().TerrainAlt);
-      flightstats.AddAltitude(Basic().Time-Calculated().TakeOffTime,
-			      Calculated().NavAltitude);
+      flightstats.AddAltitudeTerrain(Basic().Time - Calculated().TakeOffTime,
+          Calculated().TerrainAlt);
+      flightstats.AddAltitude(Basic().Time - Calculated().TakeOffTime,
+          Calculated().NavAltitude);
     }
   }
+
   return true;
 }
 
-double GlideComputerStats::GetAverageThermal()
+double
+GlideComputerStats::GetAverageThermal()
 {
   double mc_current;
 
   mc_current = GlideComputerBlackboard::GetAverageThermal();
-  return flightstats.AverageThermalAdjusted(mc_current,
-					    Calculated().Circling);
+  return flightstats.AverageThermalAdjusted(mc_current, Calculated().Circling);
 }
 
-void GlideComputerStats::SaveTaskSpeed(double val)
+void
+GlideComputerStats::SaveTaskSpeed(double val)
 {
   flightstats.SaveTaskSpeed(val);
 }
 
-void GlideComputerStats::SetLegStart()
+void
+GlideComputerStats::SetLegStart()
 {
   flightstats.SetLegStart(task.getActiveIndex(), Basic().Time);
 }
@@ -154,15 +160,14 @@ void
 GlideComputerStats::OnClimbBase(double StartAlt)
 {
   flightstats.AddClimbBase(Calculated().ClimbStartTime
-			   - Calculated().TakeOffTime, StartAlt);
+      - Calculated().TakeOffTime, StartAlt);
 }
 
 void
 GlideComputerStats::OnClimbCeiling()
 {
   flightstats.AddClimbCeiling(Calculated().CruiseStartTime
-			      -Calculated().TakeOffTime,
-			      Calculated().CruiseStartAlt);
+      - Calculated().TakeOffTime, Calculated().CruiseStartAlt);
 }
 
 void
