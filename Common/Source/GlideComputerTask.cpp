@@ -1920,11 +1920,16 @@ GlideComputerTask::ResetEnter()
   aatdistance.ResetEnterTrigger(task.getActiveIndex());
 }
 
+/**
+ * Does the AutoMcCready calculations
+ * @param mc_setting The old McCready setting
+ */
 void
 GlideComputerTask::DoAutoMacCready(double mc_setting)
 {
   bool is_final_glide = false;
 
+  // if (AutoMcCready disabled) cancel calculation
   if (!SettingsComputer().AutoMacCready)
     return;
 
@@ -1941,6 +1946,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
   // if (not on Task)
   if (!task.Valid()) {
     if (Calculated().AdjustedAverageThermal>0) {
+      // use the average climb speed of the last thermal
       mc_new = Calculated().AdjustedAverageThermal;
     }
 
@@ -1948,7 +1954,9 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
   } else if (((SettingsComputer().AutoMcMode == 0)
       || (SettingsComputer().AutoMcMode == 2)) && is_final_glide) {
 
-    double time_remaining = Basic().Time-Calculated().TaskStartTime-9000;
+    // QUESTION TB: time_remaining until what? and why 9000???
+    double time_remaining = Basic().Time - Calculated().TaskStartTime - 9000;
+
     if (SettingsComputer().EnableOLC && (SettingsComputer().OLCRules == 0)
         && (Calculated().NavAltitude > Calculated().TaskStartAltitude)
         && (time_remaining > 0)) {
@@ -1957,7 +1965,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
           Calculated().WaypointBearing, time_remaining,
           Calculated().TaskStartAltitude);
 
-    } else if (Calculated().TaskAltitudeDifference0>0) {
+    } else if (Calculated().TaskAltitudeDifference0 > 0) {
 
       // only change if above final glide with zero Mc
       // otherwise when we are well below, it will wind Mc back to
@@ -1997,9 +2005,11 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
   } else if ((SettingsComputer().AutoMcMode == 1)
       || ((SettingsComputer().AutoMcMode == 2) && !is_final_glide)) {
     if (Calculated().AdjustedAverageThermal > 0)
+      // use the average climb speed of the last thermal
       mc_new = Calculated().AdjustedAverageThermal;
   }
 
+  // use a filter to prevent jumping of the McCready setting
   GlidePolar::SetMacCready(LowPassFilter(mc_setting, mc_new, 0.15));
 }
 
