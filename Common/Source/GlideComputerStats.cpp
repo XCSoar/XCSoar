@@ -97,25 +97,6 @@ bool GlideComputerStats::DoLogging() {
     logger.LogPoint(Basic());
   }
 
-  /* JMW TODO update this code incomplete
-
-  static GPSClock frecord_clock(270.0); // 4.5 minutes (required
-					// minimum every 5)
-
-  if (Basic().Time - GetFRecordLastTime() >= dtFRecord)
-  {
-    if (LogFRecord(Basic().SatelliteIDs,false))
-    {  // need F record every 5 minutes so if write fails or
-       // constellation is invalid, don't update timer and try again
-       // next cycle
-      SetFRecordLastTime(GetFRecordLastTime() + dtFRecord);
-      // the FRecordLastTime is reset when the logger restarts so it
-      // is always at the start of the file
-      if (GetFRecordLastTime() < Basic().Time-dtFRecord)
-        SetFRecordLastTime(Basic().Time-dtFRecord);
-    }
-  }
-  */
 
   if (Calculated().Flying) {
     if (snail_trail.clock.check_advance(Basic().Time)) {

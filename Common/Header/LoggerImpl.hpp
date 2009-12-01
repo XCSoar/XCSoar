@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_LOGGER_IMPL_HPP
 
 #include "Sizes.h"
+#include "GPSClock.hpp"
 
 #include <tchar.h>
 #include <windef.h>
@@ -62,6 +63,8 @@ typedef struct LoggerBuffer {
   short Minute;
   short Second;
   int SatelliteIDs[MAXSATELLITES];
+  double Time;
+  int NAVWarning;
 } LoggerBuffer_T;
 
 class LoggerImpl {
@@ -102,31 +105,32 @@ private:
   void StopLogger(const NMEA_INFO &gps_info);
   bool IGCWriteRecord(const char *szIn, const TCHAR *);
 
-  bool LogFRecordToFile(const int SatelliteIDs[], short Hour, short Minute,
-                        short Second, bool bAlways);
-
-  bool LogFRecord(const NMEA_INFO &gps_info, bool bAlways);
-
-  void SetFRecordLastTime(double dTime);
-  double GetFRecordLastTime(void);
-  void ResetFRecord(void);
-
   bool LoggerDeclare(struct DeviceDescriptor *dev,
                      const struct Declaration *decl);
   void LoggerGInit();
 private:
   void LogPointToFile(const NMEA_INFO& gps_info);
-  void ResetFRecord_Internal(void);
   void LogPointToBuffer(const NMEA_INFO &gps_info);
   void LoggerGStop(TCHAR* szLoggerFileName);
 private:
+  void LogFRecordToFile(const int SatelliteIDs[], 
+                        short Hour, 
+                        short Minute,
+                        short Second, 
+                        double Time, 
+                        int NAVWarning);
+    void ResetFRecord(void);
+    int LastFRecordValid;
+    char szLastFRecord[MAX_IGC_BUFF];
+    bool DetectFRecordChange;
+    GPSClock frecord_clock;
+
+private:
   bool LoggerActive;
   bool DeclaredToDevice;
-  double FRecordLastTime;
   TCHAR szLoggerFileName[MAX_PATH];
   TCHAR szFLoggerFileName[MAX_PATH];
   TCHAR szFLoggerFileNameRoot[MAX_PATH];
-  char szLastFRecord[MAX_IGC_BUFF];
   int NumLoggerBuffered;
   LoggerBuffer_T FirstPoint;
   LoggerBuffer_T LoggerBuffer[MAX_LOGGER_BUFFER];

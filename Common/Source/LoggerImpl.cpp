@@ -55,13 +55,13 @@
 LoggerImpl::LoggerImpl():
   LoggerActive(false),
   DeclaredToDevice(false),
-  FRecordLastTime(0),
-  NumLoggerBuffered(0)
+  NumLoggerBuffered(0),
+  frecord_clock(270.0) // 4.5 minutes)
 {
+  ResetFRecord();
   szLoggerFileName[0]=0;
   szFLoggerFileName[0]=0;
   szFLoggerFileNameRoot[0]=0;
-  szLastFRecord[0]=0;
 }
 
 
@@ -114,29 +114,6 @@ int IGCCharToNum(TCHAR c)  {
  HFCIDCOMPETITIONID:WUE
  HFCCLCOMPETITIONCLASS:15M
  */
-
-void
-LoggerImpl::SetFRecordLastTime(double dTime)
-{ FRecordLastTime=dTime; }
-
-double
-LoggerImpl::GetFRecordLastTime(void)
-{ return FRecordLastTime; }
-
-void
-LoggerImpl::ResetFRecord_Internal(void)
-{
-  for (int iFirst = 0; iFirst < MAX_IGC_BUFF; iFirst++)
-    szLastFRecord[iFirst]=0;
-}
-
-void
-LoggerImpl::ResetFRecord(void)
-{
-  SetFRecordLastTime(0);
-  ResetFRecord_Internal();
-}
-
 
 void
 LoggerImpl::StopLogger(const NMEA_INFO &gps_info) {
@@ -250,6 +227,8 @@ LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
   LoggerBuffer[NumLoggerBuffered-1].Year = gps_info.Year;
   LoggerBuffer[NumLoggerBuffered-1].Month = gps_info.Month;
   LoggerBuffer[NumLoggerBuffered-1].Day = gps_info.Day;
+  LoggerBuffer[NumLoggerBuffered-1].Time = gps_info.Time;
+  LoggerBuffer[NumLoggerBuffered-1].NAVWarning = gps_info.NAVWarning;
 
   for (int iSat=0; iSat < MAXSATELLITES; iSat++)
     LoggerBuffer[NumLoggerBuffered-1].SatelliteIDs[iSat]=
@@ -269,6 +248,9 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   int DegLat, DegLon;
   double MinLat, MinLon;
   char NoS, EoW;
+
+  LogFRecordToFile(gps_info.SatelliteIDs, gps_info.Hour, gps_info.Minute,
+      gps_info.Second, gps_info.Time, gps_info.NAVWarning);
 
   if ((gps_info.Altitude<0) || (gps_info.BaroAltitude<0)) return;
 
@@ -312,12 +294,6 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
     }
   } else if (NumLoggerBuffered) {
 
-    LogFRecordToFile(LoggerBuffer[0].SatelliteIDs,  // write FRec before cached BRecs
-                   LoggerBuffer[0].Hour,
-                   LoggerBuffer[0].Minute,
-                   LoggerBuffer[0].Second,
-                   true);
-
     for (int i=0; i<NumLoggerBuffered; i++) {
       NMEA_INFO tmp_info;
       tmp_info.Location.Latitude = LoggerBuffer[i].Latitude;
@@ -330,6 +306,8 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
       tmp_info.Year = LoggerBuffer[i].Year;
       tmp_info.Month = LoggerBuffer[i].Month;
       tmp_info.Day = LoggerBuffer[i].Day;
+      tmp_info.Time=LoggerBuffer[i].Time;
+      tmp_info.NAVWarning=LoggerBuffer[i].NAVWarning;
 
       for (int iSat=0; iSat < MAXSATELLITES; iSat++)
 	tmp_info.SatelliteIDs[iSat] = LoggerBuffer[i].SatelliteIDs[iSat];
@@ -343,90 +321,6 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
   }
 }
 
-bool
-LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
-                         short Hour, short Minute,
-                         short Second, bool bAlways)
-{ // bAlways forces write when completing header for restart
-  // only writes record if constallation has changed unless bAlways set
-
-  if (is_simulator())
-    return true;
-
-  char szFRecord[MAX_IGC_BUFF];
-  static bool bFirst = true;
-  int eof=0;
-  int iNumberSatellites=0;
-  bool bRetVal = false;
-
-  if (bFirst)
-  {
-    bFirst = false;
-    ResetFRecord_Internal();
-  }
-
-
-  sprintf(szFRecord,"F%02d%02d%02d", Hour, Minute, Second);
-  eof=7;
-
-  for (int i=0; i < MAXSATELLITES; i++)
-  {
-    if (SatelliteIDs[i] > 0)
-    {
-      sprintf(szFRecord+eof, "%02d",SatelliteIDs[i]);
-      eof +=2;
-      iNumberSatellites++;
-    }
-  }
-  sprintf(szFRecord+ eof,"\r\n");
-
-  // only write F Record if it has changed since last time
-  // check every 4.5 minutes to see if it's changed.  Transient changes are not tracked.
-  if (!bAlways
-        && strcmp(szFRecord + 7, szLastFRecord + 7) == 0
-        && strlen(szFRecord) == strlen(szLastFRecord) )
-  { // constellation has not changed
-      if (iNumberSatellites >=3)
-        bRetVal=true;  // if the last FRecord had 3+ sats, then return true
-                      //  and this causes 5-minute counter to reset
-      else
-        bRetVal=false;  // non-2d fix, don't reset 5-minute counter so
-                        // we keep looking for changed constellations
-  }
-  else
-  { // constellation has changed
-    if (IGCWriteRecord(szFRecord, szLoggerFileName))
-    {
-      strcpy(szLastFRecord, szFRecord);
-      if (iNumberSatellites >=3)
-        bRetVal=true;  // if we log an FRecord with a 3+ sats, then return true
-                      //  and this causes 5-minute counter to reset
-      else
-        bRetVal=false;  // non-2d fix, log it, and don't reset 5-minute counter so
-                        // we keep looking for changed constellations
-    }
-    else
-    {  // IGCwrite failed
-      bRetVal = false;
-    }
-
-  }
-  return bRetVal;
-}
-
-bool
-LoggerImpl::LogFRecord(const NMEA_INFO &gps_info, bool bAlways)
-{
-  if (LoggerActive || bAlways)
-    {
-      return LogFRecordToFile(gps_info.SatelliteIDs,
-			      gps_info.Hour,
-			      gps_info.Minute,
-			      gps_info.Second, bAlways);
-    }
-  else
-    return false;  // track whether we succussfully write it, else we retry
-}
 
 bool IsAlphaNum (TCHAR c) {
   if (((c >= _T('A'))&&(c <= _T('Z')))
@@ -469,6 +363,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   DeleteFile(szLoggerFileName);
 
   LoggerGInit();
+  ResetFRecord(); 
 
   for(i=1;i<99;i++)
     {
@@ -1032,9 +927,6 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
             }
             EndDeclaration();
           }
-	  ResetFRecord(); // reset timer & lastRecord string so if
-			  // logger is restarted, FRec appears at top
-			  // of file
 	} else {
 
 	  MessageBoxX(
