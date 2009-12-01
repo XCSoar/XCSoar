@@ -56,6 +56,7 @@ LoggerImpl::LoggerImpl():
   LoggerActive(false),
   DeclaredToDevice(false),
   NumLoggerBuffered(0),
+  LoggerDiskBufferCount(0),
   frecord_clock(270.0) // 4.5 minutes)
 {
   ResetFRecord();
@@ -119,6 +120,8 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info) {
     LoggerActive = false;
     if (LoggerClearFreeSpace(gps_info)) {
 
+      DiskBufferFlush();
+      
       if (!is_simulator() && LoggerGActive())
         LoggerGStop(szLoggerFileName);
 
@@ -281,6 +284,8 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   if (task.isTaskModified()) {
     task.SaveDefaultTask();
   }
+
+  DiskBufferReset();
 
   LoggerGInit();
   ResetFRecord(); 

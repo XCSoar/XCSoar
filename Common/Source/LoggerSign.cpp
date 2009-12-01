@@ -123,46 +123,73 @@ char * CleanIGCRecord (char * szIn)
 bool
 LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
 {
+  char charbuffer[MAX_IGC_BUFF];
+
+  strcpy(charbuffer, szIn);
+  CleanIGCRecord(charbuffer);
+  return DiskBufferAdd(charbuffer);
+}
+
+void
+LoggerImpl::DiskBufferFlush()
+{
   HANDLE hFile;
   DWORD dwBytesRead;
-  char charbuffer[MAX_IGC_BUFF];
-  TCHAR buffer[MAX_IGC_BUFF];
-  TCHAR * pbuffer;
-  pbuffer = buffer;
-  bool bRetVal = false;
+  bool bWriteSuccess = true;
+  TCHAR buffer_G[MAX_IGC_BUFF];
+  TCHAR * pbuffer_G;
+  pbuffer_G = buffer_G;
 
-  int i=0, iLen=0;
-  static BOOL bWriting = false;
+  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
+   NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
-  if ( !bWriting )
-    {
-      bWriting = true;
+  if (hFile) {
+    SetFilePointer(hFile, 0, NULL, FILE_END);
+    for (int i = 0; i < LoggerDiskBufferCount; i++){
 
-      hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
-			 NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-      SetFilePointer(hFile, 0, NULL, FILE_END);
-
-      strcpy(charbuffer, szIn);
-      CleanIGCRecord(charbuffer);
-
-      WriteFile(hFile, charbuffer, strlen(charbuffer), &dwBytesRead,
-		(OVERLAPPED *)NULL);
-
-      iLen = strlen(charbuffer);
-      for (i = 0; (i <= iLen) && (i < MAX_IGC_BUFF); i++)
-	buffer[i] = (TCHAR)charbuffer[i];
-
-      if (!is_simulator() && LoggerGActive())
-	GRecordAppendRecordToBuffer(pbuffer);
-
-      FlushFileBuffers(hFile);
-      CloseHandle(hFile);
-      bWriting = false;
-      bRetVal = true;
+      if (WriteFile(hFile, LoggerDiskBuffer[i], strlen(LoggerDiskBuffer[i]), &dwBytesRead,
+        (OVERLAPPED *)NULL) == 0) { // Zero indicates failure.
+        bWriteSuccess=false; 
+      }
+    
+      if (bWriteSuccess) {
+        int iLen = strlen(LoggerDiskBuffer[i]);
+        for (int j = 0; (j <= iLen) && (j < MAX_IGC_BUFF); j++) {
+          buffer_G[j] = (TCHAR)LoggerDiskBuffer[i][j];
+        }
+        if (!is_simulator()&& LoggerGActive()) {
+          GRecordAppendRecordToBuffer(pbuffer_G);
+        }
+      }
     }
-
+  
+    FlushFileBuffers(hFile);
+    CloseHandle(hFile);
+    DiskBufferReset();
+  }
+}
+bool
+LoggerImpl::DiskBufferAdd(char *sIn)
+{
+  bool bRetVal = false;
+  
+  if (LoggerDiskBufferCount == LOGGER_DISK_BUFFER_NUM_RECS){
+    DiskBufferFlush();
+  }
+  if (LoggerDiskBufferCount < LOGGER_DISK_BUFFER_NUM_RECS) { 
+    strncpy(LoggerDiskBuffer[LoggerDiskBufferCount], sIn, LOGGER_DISK_BUFFER_REC_SIZE);
+    LoggerDiskBufferCount++;
+    bRetVal=true;
+  }
   return bRetVal;
-
+}
+void
+LoggerImpl::DiskBufferReset()
+{
+  for (int i=0; i < LOGGER_DISK_BUFFER_NUM_RECS; i++) {
+    LoggerDiskBuffer[i][0]='\0';
+  }
+  LoggerDiskBufferCount=0;
 }
 
 // VENTA3 TODO: if ifdef PPC2002 load correct dll. Put the dll inside

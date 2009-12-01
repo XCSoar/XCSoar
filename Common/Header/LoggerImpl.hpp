@@ -46,6 +46,8 @@ Copyright_License {
 #include <windef.h>
 
 #define MAX_LOGGER_BUFFER 60
+#define LOGGER_DISK_BUFFER_REC_SIZE 512
+#define LOGGER_DISK_BUFFER_NUM_RECS 10
 
 struct NMEA_INFO;
 struct SETTINGS_COMPUTER;
@@ -132,6 +134,22 @@ private:
   int NumLoggerBuffered;
   LoggerBuffer_T FirstPoint;
   LoggerBuffer_T LoggerBuffer[MAX_LOGGER_BUFFER];
+
+
+  /* stdio buffering is bad on wince3.0:
+   * it appends up to 1024 NULLs at the end of the file if PDA power fails
+   * This does not cause SeeYou to crash (today - but it may in the future)
+   * NULLs are invalid IGC characters
+   * So, we're creating our manual disk buffering system for the IGC files
+   */
+private:
+  int LoggerDiskBufferCount;
+  char LoggerDiskBuffer[LOGGER_DISK_BUFFER_NUM_RECS][LOGGER_DISK_BUFFER_REC_SIZE];
+  void DiskBufferFlush();
+  bool DiskBufferAdd(char *sIn);
+  void DiskBufferReset();
+
+
 };
 
 #endif
