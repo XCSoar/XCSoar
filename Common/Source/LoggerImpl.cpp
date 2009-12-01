@@ -60,8 +60,6 @@ LoggerImpl::LoggerImpl():
 {
   ResetFRecord();
   szLoggerFileName[0]=0;
-  szFLoggerFileName[0]=0;
-  szFLoggerFileNameRoot[0]=0;
 }
 
 
@@ -117,8 +115,6 @@ int IGCCharToNum(TCHAR c)  {
 
 void
 LoggerImpl::StopLogger(const NMEA_INFO &gps_info) {
-  TCHAR szMessage[MAX_PATH] = TEXT("\0");
-  int iLoggerError=0;  // see switch statement for error handler
   if (LoggerActive) {
     LoggerActive = false;
     if (LoggerClearFreeSpace(gps_info)) {
@@ -126,79 +122,8 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info) {
       if (!is_simulator() && LoggerGActive())
         LoggerGStop(szLoggerFileName);
 
-      int imCount=0;
-      const int imMax=3;
-      for (imCount=0; imCount < imMax; imCount++) {
-        // MoveFile() nonzero==Success
-        if (0 != MoveFile( szLoggerFileName, szFLoggerFileName)) {
-          iLoggerError=0;
-          break; // success
-        }
-        Sleep(750); // wait for file system cache to fix itself?
-      }
-      if (imCount == imMax) { // MoveFile() failed all attempts
-
-        if (0 == MoveFile( szLoggerFileName, szFLoggerFileNameRoot)) { // try rename it and leave in root
-          iLoggerError=1; //Fail.  NoMoveNoRename
-        }
-        else {
-          iLoggerError=2; //NoMoveYesRename
-        }
-      }
-    } else { // Insufficient disk space.  // MoveFile() nonzero==Success
-      if (0 == MoveFile( szLoggerFileName, szFLoggerFileNameRoot)) { // try rename it and leave in root
-        iLoggerError=3; //Fail.  Insufficient Disk Space, NoRename
-      }
-      else {
-        iLoggerError=4; //Success.  Insufficient Disk Space, YesRename
-      }
-    }
-
-    switch (iLoggerError) { //0=Success 1=NoMoveNoRename 2=NoMoveYesRename 3=NoSpaceNoRename 4=NoSpaceYesRename
-    case 0:
-      StartupStore(TEXT("Logger file successfully moved\r\n"));
-      break;
-
-    case 1: // NoMoveNoRename
-      _tcsncpy(szMessage,TEXT("Logger file not copied.  It is in the root folder of your device and called "),MAX_PATH);
-      _tcsncat(szMessage,szLoggerFileName,MAX_PATH);
-
-      MessageBoxX(gettext(szMessage),
-		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
-      StartupStore(szMessage);
-      break;
-
-    case 2: // NoMoveYesRename
-      _tcsncpy(szMessage,TEXT("Logger file not copied.  It is in the root folder of your device"),MAX_PATH);
-
-      MessageBoxX(gettext(szMessage),
-		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
-      StartupStore(szMessage);
-      break;
-
-    case 3: // Insufficient Storage.  NoRename
-      _tcsncpy(szMessage,TEXT("Insuff. storage. Logger file in device's root folder, called "),MAX_PATH);
-      _tcsncat(szMessage,szLoggerFileName,MAX_PATH);
-
-      MessageBoxX(gettext(szMessage),
-		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
-      StartupStore(szMessage);
-      break;
-
-    case 4: // Insufficient Storage.  YesRename
-      _tcsncpy(szMessage,TEXT("Insufficient storage.  Logger file is in the root folder of your device"),MAX_PATH);
-
-      MessageBoxX(gettext(szMessage),
-		gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-      _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
-      StartupStore(szMessage);
-      break;
-} // error handler
-
     NumLoggerBuffered = 0;
+    }
   }
 }
 
@@ -357,13 +282,6 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     task.SaveDefaultTask();
   }
 
-#ifdef WINDOWSPC
-  _stprintf(szLoggerFileName, TEXT("/tmp/tmp.IGC"));
-#else
-  _stprintf(szLoggerFileName, TEXT("\\tmp.IGC"));
-#endif
-  DeleteFile(szLoggerFileName);
-
   LoggerGInit();
   ResetFRecord(); 
 
@@ -375,7 +293,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 
       if (!settings.LoggerShortName) {
         // Long file name
-        _stprintf(szFLoggerFileName,
+        _stprintf(szLoggerFileName,
                  TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
                  path,
                  gps_info.Year,
@@ -386,16 +304,6 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
                  strAssetNumber[2],
                  i);
 
-        _stprintf(szFLoggerFileNameRoot,
-                 TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
-                 TEXT(""), // this creates it in root if MoveFile() fails
-                 gps_info.Year,
-                 gps_info.Month,
-                 gps_info.Day,
-                 strAssetNumber[0],
-                 strAssetNumber[1],
-                 strAssetNumber[2],
-                 i);
       } else {
         // Short file name
         TCHAR cyear, cmonth, cday, cflight;
@@ -403,7 +311,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
         cmonth = NumToIGCChar(gps_info.Month);
         cday = NumToIGCChar(gps_info.Day);
         cflight = NumToIGCChar(i);
-        _stprintf(szFLoggerFileName,
+        _stprintf(szLoggerFileName,
                  TEXT("%s\\%c%c%cX%c%c%c%c.IGC"),
                  path,
                  cyear,
@@ -414,34 +322,24 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
                  strAssetNumber[2],
                  cflight);
 
-        _stprintf(szFLoggerFileNameRoot,
-                 TEXT("%s\\%c%c%cX%c%c%c%c.IGC"),
-                 TEXT(""), // this creates it in root if MoveFile() fails
-                 cyear,
-                 cmonth,
-                 cday,
-                 strAssetNumber[0],
-                 strAssetNumber[1],
-                 strAssetNumber[2],
-                 cflight);
       } // end if
 
-      hFile = CreateFile(szFLoggerFileName, GENERIC_WRITE,
-			 FILE_SHARE_WRITE, NULL, CREATE_NEW,
-			 FILE_ATTRIBUTE_NORMAL, 0);
+      hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
+       FILE_SHARE_WRITE, NULL, CREATE_NEW,
+       FILE_ATTRIBUTE_NORMAL, 0);
       if(hFile!=INVALID_HANDLE_VALUE )
-	{
-          // file already exists
+  {
+        // file did not already exist, and could be created
       CloseHandle(hFile);
-      DeleteFile(szFLoggerFileName);
+      DeleteFile(szLoggerFileName);
       break;
-	}
+  }
   } // end while
 
   TCHAR szMessage[MAX_PATH] = TEXT("\0");
 
   _tcsncpy(szMessage,TEXT("Logger Started: "),MAX_PATH);
-  _tcsncat(szMessage,szFLoggerFileName,MAX_PATH);
+  _tcsncat(szMessage,szLoggerFileName,MAX_PATH);
   _tcsncat(szMessage,TEXT("\r\n"),MAX_PATH);
   StartupStore(szMessage);
 

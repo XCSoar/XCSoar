@@ -129,8 +129,6 @@ private:
   bool LoggerActive;
   bool DeclaredToDevice;
   TCHAR szLoggerFileName[MAX_PATH];
-  TCHAR szFLoggerFileName[MAX_PATH];
-  TCHAR szFLoggerFileNameRoot[MAX_PATH];
   int NumLoggerBuffered;
   LoggerBuffer_T FirstPoint;
   LoggerBuffer_T LoggerBuffer[MAX_LOGGER_BUFFER];
