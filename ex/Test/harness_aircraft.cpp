@@ -100,9 +100,11 @@ bool AircraftSim::far(TaskManager &task_manager) {
 }
 
 static const fixed fixed_1000 = 1000;
+static const fixed fixed_20 = 20;
+static const fixed fixed_rand_scale = 2.0/RAND_MAX;
 
 fixed AircraftSim::small_rand() {
-  return heading_filt.update(2.0*bearing_noise*rand()/(1.0*RAND_MAX)-bearing_noise);
+  return heading_filt.update(bearing_noise*fixed_rand_scale*rand()-bearing_noise);
 }
 
 void AircraftSim::update_bearing(TaskManager& task_manager) {
@@ -141,7 +143,7 @@ void AircraftSim::update_state(TaskManager &task_manager,
   switch (acstate) {
   case Cruise:
   case FinalGlide:
-    if (stat.solution_remaining.VOpt>0) {
+    if (positive(stat.solution_remaining.VOpt)) {
       state.Speed = stat.solution_remaining.VOpt*speed_factor;
     } else {
       state.Speed = glide_polar.get_VbestLD();
@@ -151,7 +153,7 @@ void AircraftSim::update_state(TaskManager &task_manager,
     break;
   case Climb:
     state.Speed = turn_speed;
-    bearing += 20+small_rand();
+    bearing += fixed_20+small_rand();
     sinkrate = -climb_rate*climb_factor;
     break;
   };

@@ -38,12 +38,13 @@
 #include <math.h>
 #include "Util/Tolerances.hpp"
 
+static const fixed fixed_ten;
 
 TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
                                      const unsigned activeTaskPoint,
                                      const AIRCRAFT_STATE &_aircraft,
                                      const GlidePolar &_gp):
-  ZeroFinder(-10.0,10.0,TOLERANCE_GLIDE_REQUIRED),
+  ZeroFinder(-fixed_ten, fixed_ten,TOLERANCE_GLIDE_REQUIRED),
   tm(tps,activeTaskPoint,_gp), 
   aircraft(_aircraft) 
 {
@@ -54,7 +55,7 @@ TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
 TaskGlideRequired::TaskGlideRequired(TaskPoint* tp,
                                      const AIRCRAFT_STATE &_aircraft,
                                      const GlidePolar &_gp):
-  ZeroFinder(-10.0,10.0,0.001),
+  ZeroFinder(-fixed_ten,fixed_ten,TOLERANCE_GLIDE_REQUIRED),
   tm(tp,_gp), // Vopt at mc=0
   aircraft(_aircraft) 
 {

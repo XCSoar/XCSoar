@@ -303,7 +303,7 @@ void FindLatitudeLongitude(GEOPOINT loc, fixed Bearing, fixed Distance,
   loc_out->Latitude = (fixed)asin(sinLatitude*cosDistance
                                   +cosLatitude*sinDistance*cosBearing)*fixed_rad_to_deg;
 
-  if (cosLatitude==0)
+  if (cosLatitude==fixed_zero)
     result = loc.Longitude;
   else {
     // note that asin is not supported by fixed.hpp!

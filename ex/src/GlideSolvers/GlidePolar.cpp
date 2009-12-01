@@ -157,7 +157,7 @@ GlidePolar::solve_sink(const GlideState &task,
 bool 
 GlidePolar::possible_glide(const GlideState &task) const
 {
-  if (task.AltitudeDifference<=0) {
+  if (!positive(task.AltitudeDifference)) {
     return false;
   }
   // broad test assuming tailwind (best case)

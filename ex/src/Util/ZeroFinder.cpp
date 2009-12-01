@@ -181,7 +181,7 @@ fixed ZeroFinder::find_zero(const fixed xstart) {
     }
 
     limit_tolerance(new_step, tol_act);
-    /* Adjust the step to be not less than toleranceerance */
+    /* Adjust the step to be not less than tolerance */
 
     a = b;  fa = fb;			/* Save the previous approx.	*/
     b += new_step;                      /* Do step to a new approxim.	*/
@@ -210,7 +210,7 @@ fixed ZeroFinder::find_zero(const fixed xstart) {
  *	fixed b;  			a range [a,b], a being < b.
  *	fixed (*f)(fixed x);		Name of the function whose minimum
  *					will be seeked for
- *	fixed tolerance;			Acceptable toleranceerance for the minimum
+ *	fixed tolerance;			Acceptable tolerance for the minimum
  *					location. It have to be positive
  *					(e.g. may be specified as epsilon)
  *
@@ -270,7 +270,7 @@ fixed ZeroFinder::find_min(const fixed xstart)
                                    /* is seeked for		*/
     const fixed middle_range = (a+b)*fixed_half;
 
-    const fixed tol_act =			/* Actual toleranceerance		*/
+    const fixed tol_act =			/* Actual tolerance		*/
       sqrt_epsilon*fabs(x) + tolerance*fixed_third;
     const fixed double_tol_act = fixed_two*tol_act;
 

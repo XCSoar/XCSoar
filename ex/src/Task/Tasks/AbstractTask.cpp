@@ -67,6 +67,12 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
     stats.cruise_efficiency = ce_lpf.reset(1.0);
   }
 
+  if (task_behaviour.calc_glide_required) {
+    update_stats_glide(state);
+  } else {
+    stats.glide_required = fixed_zero; // error
+  }
+
   return false;
 }
 
@@ -145,8 +151,6 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
   update_glide_solutions(state);
 
   bool sample_updated = update_sample(state, full_update);
-
-  update_stats_glide(state);
 
   update_stats_speeds(state, state_last);
 

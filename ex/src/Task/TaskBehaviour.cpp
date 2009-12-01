@@ -46,6 +46,7 @@ TaskBehaviour::all_off()
   optimise_targets_bearing=false;
   auto_mc= false;
   calc_cruise_efficiency=false;
+  calc_glide_required=false;
 }
 
 bool 
@@ -63,6 +64,7 @@ TaskBehaviour::TaskBehaviour():
     optimise_targets_bearing(true),
     auto_mc(false),
     calc_cruise_efficiency(true),
+    calc_glide_required(true),
     aat_min_time(3600*5.35),
     safety_height_terrain(150.0),
     safety_height_arrival(300.0),

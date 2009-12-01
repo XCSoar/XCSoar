@@ -79,17 +79,20 @@ TaskLeg::leg_vector_planned() const
 GeoVector 
 TaskLeg::leg_vector_remaining(const GEOPOINT &ref) const
 {
-  if (!origin()) {
-    return GeoVector(fixed_zero, 
-                     ref.bearing(destination.get_location_remaining()));
-  }
   switch (destination.getActiveState()) {
   case OrderedTaskPoint::AFTER_ACTIVE:
+    if (!origin()) {
+      return GeoVector(fixed_zero);
+    }
     // this leg totally included
     return memo_remaining.calc(origin()->get_location_remaining(), 
                                destination.get_location_remaining());
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
+    if (!origin()) {
+      return GeoVector(fixed_zero, 
+                       ref.bearing(destination.get_location_remaining()));
+    }
     // this leg partially included
     return memo_remaining.calc(ref, 
                                destination.get_location_remaining());
@@ -106,18 +109,21 @@ TaskLeg::leg_vector_remaining(const GEOPOINT &ref) const
 GeoVector
 TaskLeg::leg_vector_travelled(const GEOPOINT &ref) const
 {
-  if (!origin()) {
-    return GeoVector(fixed_zero, 
-                     ref.bearing(destination.get_location_remaining()));
-  }
   switch (destination.getActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
+    if (!origin()) {
+      return GeoVector(fixed_zero);
+    }
     // this leg totally included
     return memo_travelled.calc(origin()->get_location_travelled(), 
                                destination.get_location_travelled());
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
+    if (!origin()) {
+      return GeoVector(fixed_zero, 
+                       ref.bearing(destination.get_location_remaining()));
+    }
     if (destination.has_entered()) {
       return memo_travelled.calc(origin()->get_location_travelled(), 
                                  destination.get_location_travelled());
@@ -127,6 +133,9 @@ TaskLeg::leg_vector_travelled(const GEOPOINT &ref) const
     }
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
+    if (!origin()) {
+      return GeoVector(fixed_zero);
+    }
     // this leg may be partially included
     if (origin()->has_entered()) {
       return memo_travelled.calc(origin()->get_location_travelled(), 

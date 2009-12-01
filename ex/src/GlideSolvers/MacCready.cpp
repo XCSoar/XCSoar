@@ -45,6 +45,14 @@
 #include "Navigation/Aircraft.hpp"
 
 
+
+static const fixed fixed_75 = 75.0;
+static const fixed fixed_15 = 15.0;
+static const fixed fixed_20 = 20.0;
+static const fixed fixed_1mil=1.0e6;
+
+
+
 MacCready::MacCready(const GlidePolar &_glide_polar,
                      const fixed _cruise_efficiency):
   glide_polar(_glide_polar),
@@ -195,8 +203,6 @@ MacCready::solve_glide(const GlideState &task,
   return solve_glide(task, Vset, S);
 }
 
-static const fixed fixed_1mil=1.0e6;
-
 GlideResult 
 MacCready::solve_sink(const GlideState &task,
                       const fixed S) const
@@ -248,10 +254,6 @@ MacCready::solve(const GlideState &task) const
 
 #include "Util/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
-
-static const fixed fixed_75 = 75.0;
-static const fixed fixed_15 = 15.0;
-static const fixed fixed_20 = 20.0;
 
 /**
  * Class used to find VOpt for a MacCready setting, for final glide

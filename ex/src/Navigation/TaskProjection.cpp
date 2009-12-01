@@ -39,8 +39,7 @@
 #include "Math/Earth.hpp"
 #include <algorithm>
 
-
-#define SCALE 1000.0
+static const fixed fixed_scale = 1000.0;
 
 TaskProjection::TaskProjection()
 {
@@ -74,7 +73,7 @@ TaskProjection::update_fast()
 {
   location_mid.Longitude = (location_max.Longitude+location_min.Longitude)*fixed_half;
   location_mid.Latitude = (location_max.Latitude+location_min.Latitude)*fixed_half;
-  cos_midloc = fastcosine(location_mid.Latitude)*SCALE;
+  cos_midloc = fastcosine(location_mid.Latitude)*fixed_scale;
 }
 
 
@@ -82,7 +81,7 @@ FlatPoint
 TaskProjection::fproject(const GEOPOINT& tp) const
 {
   FlatPoint fp((tp.Longitude-location_mid.Longitude)*cos_midloc,
-               (tp.Latitude-location_mid.Latitude)*SCALE);
+               (tp.Latitude-location_mid.Latitude)*fixed_scale);
   return fp;
 }
 
@@ -91,7 +90,7 @@ TaskProjection::funproject(const FlatPoint& fp) const
 {
   GEOPOINT tp;
   tp.Longitude = fp.x/cos_midloc+location_mid.Longitude;
-  tp.Latitude = fp.y/SCALE+location_mid.Latitude;
+  tp.Latitude = fp.y/fixed_scale+location_mid.Latitude;
   return tp;
 }
 
@@ -110,7 +109,7 @@ fixed
 TaskProjection::fproject_range(const GEOPOINT &tp, const fixed range) const
 {
   GEOPOINT fr;
-  ::FindLatitudeLongitude(tp,0,range,&fr);
+  ::FindLatitudeLongitude(tp,fixed_zero,range,&fr);
   FlatPoint f = fproject(fr);
   FlatPoint p = fproject(tp);
   return fabs(f.y-p.y);

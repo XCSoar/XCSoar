@@ -73,6 +73,8 @@ public:
   bool auto_mc; /**< Option to enable calculation and setting of auto MacCready */
   bool calc_cruise_efficiency; /**< Option to enable calculation of cruise efficiency */
 
+  bool calc_glide_required; /**< Option to enable calculation of required sink rate for final glide */
+
   double aat_min_time; /**< Desired AAT minimum task time (s) */
   fixed safety_height_terrain; /**< Minimum height above terrain for arrival height at non-landable waypoint (m) */
   fixed safety_height_arrival; /**< Minimum height above terrain for arrival height at landable waypoint (m) */
