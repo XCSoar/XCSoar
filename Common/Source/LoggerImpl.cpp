@@ -55,7 +55,7 @@
 LoggerImpl::LoggerImpl():
   LoggerActive(false),
   DeclaredToDevice(false),
-  NumLoggerBuffered(0),
+  NumLoggerPreTakeoffBuffered(0),
   LoggerDiskBufferCount(0),
   frecord_clock(270.0) // 4.5 minutes)
 {
@@ -127,7 +127,7 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info) {
       if (!is_simulator() && LoggerGActive())
         LoggerGStop(szLoggerFileName);
 
-    NumLoggerBuffered = 0;
+    NumLoggerPreTakeoffBuffered = 0;
     }
   }
 }
@@ -136,37 +136,37 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info) {
 void
 LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
 {
-  if (NumLoggerBuffered== MAX_LOGGER_BUFFER) {
-    for (int i= 0; i< NumLoggerBuffered-1; i++) {
-      LoggerBuffer[i]= LoggerBuffer[i+1];
+  if (NumLoggerPreTakeoffBuffered== LOGGER_PRETAKEOFF_BUFFER_MAX) {
+    for (int i= 0; i< NumLoggerPreTakeoffBuffered-1; i++) {
+      LoggerPreTakeoffBuffer[i]= LoggerPreTakeoffBuffer[i+1];
     }
   } else {
-    NumLoggerBuffered++;
+    NumLoggerPreTakeoffBuffered++;
   }
 
-  LoggerBuffer[NumLoggerBuffered-1].Latitude = gps_info.Location.Latitude;
-  LoggerBuffer[NumLoggerBuffered-1].Longitude = gps_info.Location.Longitude;
-  LoggerBuffer[NumLoggerBuffered-1].Altitude = gps_info.Altitude;
-  LoggerBuffer[NumLoggerBuffered-1].BaroAltitude = gps_info.BaroAltitude;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Latitude = gps_info.Location.Latitude;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Longitude = gps_info.Location.Longitude;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Altitude = gps_info.Altitude;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].BaroAltitude = gps_info.BaroAltitude;
   if (!gps_info.BaroAltitudeAvailable) {
-    LoggerBuffer[NumLoggerBuffered-1].BaroAltitude = gps_info.Altitude;
+    LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].BaroAltitude = gps_info.Altitude;
   }
-  LoggerBuffer[NumLoggerBuffered-1].Hour = gps_info.Hour;
-  LoggerBuffer[NumLoggerBuffered-1].Minute = gps_info.Minute;
-  LoggerBuffer[NumLoggerBuffered-1].Second = gps_info.Second;
-  LoggerBuffer[NumLoggerBuffered-1].Year = gps_info.Year;
-  LoggerBuffer[NumLoggerBuffered-1].Month = gps_info.Month;
-  LoggerBuffer[NumLoggerBuffered-1].Day = gps_info.Day;
-  LoggerBuffer[NumLoggerBuffered-1].Time = gps_info.Time;
-  LoggerBuffer[NumLoggerBuffered-1].NAVWarning = gps_info.NAVWarning;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Hour = gps_info.Hour;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Minute = gps_info.Minute;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Second = gps_info.Second;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Year = gps_info.Year;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Month = gps_info.Month;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Day = gps_info.Day;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Time = gps_info.Time;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].NAVWarning = gps_info.NAVWarning;
 
   for (int iSat=0; iSat < MAXSATELLITES; iSat++)
-    LoggerBuffer[NumLoggerBuffered-1].SatelliteIDs[iSat]=
+    LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].SatelliteIDs[iSat]=
       gps_info.SatelliteIDs[iSat];
 
   // This is the first point that will be output to file.
   // Declaration must happen before this, so must save this time.
-  FirstPoint = LoggerBuffer[0];
+  FirstPoint = LoggerPreTakeoffBuffer[0];
 }
 
 
@@ -224,29 +224,29 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
     if (!gps_info.NAVWarning) {
       LogPointToBuffer(gps_info);
     }
-  } else if (NumLoggerBuffered) {
+  } else if (NumLoggerPreTakeoffBuffered) {
 
-    for (int i=0; i<NumLoggerBuffered; i++) {
+    for (int i=0; i<NumLoggerPreTakeoffBuffered; i++) {
       NMEA_INFO tmp_info;
-      tmp_info.Location.Latitude = LoggerBuffer[i].Latitude;
-      tmp_info.Location.Longitude = LoggerBuffer[i].Longitude;
-      tmp_info.Altitude = LoggerBuffer[i].Altitude;
-      tmp_info.BaroAltitude = LoggerBuffer[i].BaroAltitude;
-      tmp_info.Hour = LoggerBuffer[i].Hour;
-      tmp_info.Minute = LoggerBuffer[i].Minute;
-      tmp_info.Second = LoggerBuffer[i].Second;
-      tmp_info.Year = LoggerBuffer[i].Year;
-      tmp_info.Month = LoggerBuffer[i].Month;
-      tmp_info.Day = LoggerBuffer[i].Day;
-      tmp_info.Time=LoggerBuffer[i].Time;
-      tmp_info.NAVWarning=LoggerBuffer[i].NAVWarning;
+      tmp_info.Location.Latitude = LoggerPreTakeoffBuffer[i].Latitude;
+      tmp_info.Location.Longitude = LoggerPreTakeoffBuffer[i].Longitude;
+      tmp_info.Altitude = LoggerPreTakeoffBuffer[i].Altitude;
+      tmp_info.BaroAltitude = LoggerPreTakeoffBuffer[i].BaroAltitude;
+      tmp_info.Hour = LoggerPreTakeoffBuffer[i].Hour;
+      tmp_info.Minute = LoggerPreTakeoffBuffer[i].Minute;
+      tmp_info.Second = LoggerPreTakeoffBuffer[i].Second;
+      tmp_info.Year = LoggerPreTakeoffBuffer[i].Year;
+      tmp_info.Month = LoggerPreTakeoffBuffer[i].Month;
+      tmp_info.Day = LoggerPreTakeoffBuffer[i].Day;
+      tmp_info.Time=LoggerPreTakeoffBuffer[i].Time;
+      tmp_info.NAVWarning=LoggerPreTakeoffBuffer[i].NAVWarning;
 
       for (int iSat=0; iSat < MAXSATELLITES; iSat++)
-	tmp_info.SatelliteIDs[iSat] = LoggerBuffer[i].SatelliteIDs[iSat];
+        tmp_info.SatelliteIDs[iSat] = LoggerPreTakeoffBuffer[i].SatelliteIDs[iSat];
 
       LogPointToFile(tmp_info);
     }
-    NumLoggerBuffered = 0;
+    NumLoggerPreTakeoffBuffered = 0;
   }
   if (LoggerActive) {
     LogPointToFile(gps_info);
@@ -420,7 +420,7 @@ LoggerImpl::StartDeclaration(const NMEA_INFO &gps_info,
   char start[] = "C0000000N00000000ETAKEOFF\r\n";
   char temp[100];
 
-  if (NumLoggerBuffered==0) {
+  if (NumLoggerPreTakeoffBuffered==0) {
     FirstPoint.Year = gps_info.Year;
     FirstPoint.Month = gps_info.Month;
     FirstPoint.Day = gps_info.Day;
@@ -874,5 +874,5 @@ LoggerImpl::guiToggleLogger(const NMEA_INFO& gps_info,
 void
 LoggerImpl::clearBuffer()
 {
-  NumLoggerBuffered = 0;
+  NumLoggerPreTakeoffBuffered = 0;
 }

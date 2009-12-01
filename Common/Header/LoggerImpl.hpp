@@ -46,7 +46,7 @@ Copyright_License {
 #include <tchar.h>
 #include <windef.h>
 
-#define MAX_LOGGER_BUFFER 60
+#define LOGGER_PRETAKEOFF_BUFFER_MAX 60
 #define LOGGER_DISK_BUFFER_REC_SIZE 512
 #define LOGGER_DISK_BUFFER_NUM_RECS 10
 
@@ -54,7 +54,7 @@ struct NMEA_INFO;
 struct SETTINGS_COMPUTER;
 struct Declaration;
 
-typedef struct LoggerBuffer {
+typedef struct LoggerPreTakeoffBuffer {
   double Latitude;
   double Longitude;
   double Altitude;
@@ -68,7 +68,7 @@ typedef struct LoggerBuffer {
   int SatelliteIDs[MAXSATELLITES];
   double Time;
   int NAVWarning;
-} LoggerBuffer_T;
+} LoggerPreTakeoffBuffer_T;
 
 class LoggerImpl {
 public:
@@ -141,9 +141,9 @@ private:
   bool LoggerActive;
   bool DeclaredToDevice;
   TCHAR szLoggerFileName[MAX_PATH];
-  int NumLoggerBuffered;
-  LoggerBuffer_T FirstPoint;
-  LoggerBuffer_T LoggerBuffer[MAX_LOGGER_BUFFER];
+  int NumLoggerPreTakeoffBuffered;
+  LoggerPreTakeoffBuffer_T FirstPoint;
+  LoggerPreTakeoffBuffer_T LoggerPreTakeoffBuffer[LOGGER_PRETAKEOFF_BUFFER_MAX];
 
 
   /* stdio buffering is bad on wince3.0:
