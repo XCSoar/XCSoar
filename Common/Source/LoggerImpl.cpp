@@ -677,8 +677,8 @@ bool LogFileIsOlder(const NMEA_INFO &gps_info,
 }
 
 
-bool DeleteOldIGCFile(const NMEA_INFO &gps_info,
-		     TCHAR *pathname) {
+bool DeleteOldestIGCFile(const NMEA_INFO &gps_info,
+         TCHAR *pathname) {
   HANDLE hFind;  // file handle
   WIN32_FIND_DATA FindFileData;
   TCHAR oldestname[MAX_PATH];
@@ -771,9 +771,9 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
     */
 
     // search for IGC files, and delete the oldest one
-    found = DeleteOldIGCFile(gps_info, pathname);
+    found = DeleteOldestIGCFile(gps_info, pathname);
     if (!found) {
-      found = DeleteOldIGCFile(gps_info, subpathname);
+      found = DeleteOldestIGCFile(gps_info, subpathname);
     }
   }
   if (kbfree>=LOGGER_MINFREESTORAGE) {
