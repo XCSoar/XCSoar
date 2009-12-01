@@ -221,9 +221,7 @@ void
 LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
 {
   if (!LoggerActive) {
-    if (!gps_info.NAVWarning) {
-      LogPointToBuffer(gps_info);
-    }
+    LogPointToBuffer(gps_info);
   } else if (NumLoggerPreTakeoffBuffered) {
 
     for (int i=0; i<NumLoggerPreTakeoffBuffered; i++) {
