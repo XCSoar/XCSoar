@@ -53,12 +53,12 @@ FinishPoint::get_elevation() const
 
 
 void 
-FinishPoint::set_neighbours(OrderedTaskPoint* prev,
-                           OrderedTaskPoint* next)
+FinishPoint::set_neighbours(OrderedTaskPoint* _prev,
+                           OrderedTaskPoint* _next)
 {
-  assert(next==NULL);
+  assert(_next==NULL);
   // should not ever have an outbound leg
-  OrderedTaskPoint::set_neighbours(prev, next);
+  OrderedTaskPoint::set_neighbours(_prev, _next);
 }
 
 bool 

@@ -69,11 +69,11 @@ OrderedTaskPoint::get_next() const
 
 
 void 
-OrderedTaskPoint::set_neighbours(OrderedTaskPoint* prev,
-                                 OrderedTaskPoint* next) 
+OrderedTaskPoint::set_neighbours(OrderedTaskPoint* _prev,
+                                 OrderedTaskPoint* _next) 
 {
-  tp_previous = prev;
-  tp_next = next;
+  tp_previous = _prev;
+  tp_next = _next;
 
   update_geometry();
 }

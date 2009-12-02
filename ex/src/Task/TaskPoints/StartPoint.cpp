@@ -58,12 +58,12 @@ StartPoint::get_elevation() const
 
 
 void 
-StartPoint::set_neighbours(OrderedTaskPoint* prev,
-                           OrderedTaskPoint* next)
+StartPoint::set_neighbours(OrderedTaskPoint* _prev,
+                           OrderedTaskPoint* _next)
 {
-  assert(prev==NULL);
+  assert(_prev==NULL);
   // should not ever have an inbound leg
-  OrderedTaskPoint::set_neighbours(prev, next);
+  OrderedTaskPoint::set_neighbours(_prev, _next);
 }
 
 

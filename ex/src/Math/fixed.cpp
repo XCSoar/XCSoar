@@ -290,7 +290,7 @@ fixed fixed::log() const
     }
     __uint64 temp=m_nVal;
     int left_shift=0;
-    __uint64 const scale_position=0x8000000000000000;
+    __uint64 const scale_position=0x8000000000000000LL;
     while(temp<scale_position)
     {
         ++left_shift;
@@ -459,7 +459,7 @@ void fixed::to_polar(fixed const& x,fixed const& y,fixed* r,fixed* theta)
     long xtemp=(long)a;
     long ytemp=(long)b;
     perform_cordic_polarization(xtemp,ytemp);
-    r->m_nVal=__int64(xtemp)<<right_shift;
+    r->m_nVal=(__int64)(xtemp)<<right_shift;
     theta->m_nVal=ytemp;
 
     if(negative_x && negative_y)

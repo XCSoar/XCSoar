@@ -121,12 +121,12 @@ FlatEllipse::intersect(const FlatLine &line,
 }
 
 
-bool FlatEllipse::intersect_extended(const FlatPoint &p,
+bool FlatEllipse::intersect_extended(const FlatPoint &pe,
                                      FlatPoint &i1,
                                      FlatPoint &i2) const
 {
-  const FlatLine l_f1p(f1,p);
-  const FlatLine l_pf2(p,f2);
+  const FlatLine l_f1p(f1,pe);
+  const FlatLine l_pf2(pe,f2);
   const fixed ang = l_f1p.angle();
 
   const fixed d = l_pf2.d()+max(a,b); // max line length
@@ -134,8 +134,8 @@ bool FlatEllipse::intersect_extended(const FlatPoint &p,
   fixed can,san;
   sin_cos(ang*fixed_deg_to_rad,&san,&can);
 
-  FlatLine e_l(p,FlatPoint(p.x+d*can,
-                           p.y+d*san));
+  FlatLine e_l(pe,FlatPoint(pe.x+d*can,
+                            pe.y+d*san));
   // e_l is the line extended from p in direction of f1-p 
   
   return intersect(e_l, i1, i2);

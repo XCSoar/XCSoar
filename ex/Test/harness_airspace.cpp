@@ -39,7 +39,7 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
       c.Latitude = (rand()%1200-600)/1000.0+0.5;
       
       std::vector<GEOPOINT> pts;
-      for (unsigned i=0; i<num; i++) {
+      for (unsigned j=0; j<num; j++) {
         GEOPOINT p=c;
         p.Longitude += (rand()%200)/1000.0;
         p.Latitude += (rand()%200)/1000.0;

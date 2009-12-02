@@ -38,11 +38,16 @@ void sin_cos(const double&theta, double*s, double*c);
 
 #include <ostream>
 #include <complex>
-#include <boost/cstdint.hpp>
 #include <climits>
 
+#ifdef HAVE_BOOST
+#include <boost/cstdint.hpp>
 typedef boost::int64_t __int64;
 typedef boost::uint64_t __uint64;
+#else
+#include <stdint.h>
+typedef unsigned __int64    __uint64;
+#endif
 
 unsigned const fixed_resolution_shift=28;
 __int64 const fixed_resolution=1<<fixed_resolution_shift; // JMW was LL
@@ -69,15 +74,15 @@ public:
 //    {}
     
     fixed(long nVal):
-        m_nVal(__int64(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
     {}
     
     fixed(int nVal):
-        m_nVal(__int64(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
     {}
     
     fixed(short nVal):
-        m_nVal(__int64(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
     {}
 
 /*    
@@ -86,13 +91,13 @@ public:
     {}
 */  
     fixed(unsigned long nVal):
-        m_nVal(__int64(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
     {}
     fixed(unsigned int nVal):
-        m_nVal(__int64(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
     {}
     fixed(unsigned short nVal):
-        m_nVal(__int64(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
     {}
     fixed(double nVal):
         m_nVal(static_cast<__int64>(nVal*static_cast<double>(fixed_resolution)))
@@ -1705,7 +1710,7 @@ namespace std
     }
 }
 
-fixed const fixed_max(fixed::internal(),0x7fffffffffffffff);
+fixed const fixed_max(fixed::internal(),0x7fffffffffffffffLL);
 fixed const fixed_one(fixed::internal(),1<<(fixed_resolution_shift));
 fixed const fixed_two(fixed::internal(),1<<(fixed_resolution_shift+1));
 fixed const fixed_four(fixed::internal(),1<<(fixed_resolution_shift+2));
