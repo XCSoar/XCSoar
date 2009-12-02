@@ -81,18 +81,23 @@ bool run_flight(TaskManager &task_manager,
       first = false;
 
       time_planned = task_manager.get_stats().total.TimePlanned;
+
+#ifdef DO_PRINT
       if (verbose>1) {
         printf("# time remaining %g\n", time_remaining);
         printf("# time planned %g\n", time_planned);
       }
+#endif
 
     }
 
+#ifdef DO_PRINT
     if (do_print) {
       task_manager.print(ac.get_state());
       ac.print(f4);
       f4.flush();
     }
+#endif
 
     if (airspaces) {
       scan_airspaces(ac.get_state(), *airspaces, do_print, 
@@ -105,6 +110,7 @@ bool run_flight(TaskManager &task_manager,
 
   } while (ac.advance(task_manager, glide_polar));
 
+#ifdef DO_PRINT
   if (verbose) {
     task_manager.print(ac.get_state());
     ac.print(f4);
@@ -113,6 +119,7 @@ bool run_flight(TaskManager &task_manager,
     task_report(task_manager, "end of task\n");
   }
   wait_prompt(0);
+#endif
 
   time_elapsed = task_manager.get_stats().total.TimeElapsed;
   time_planned = task_manager.get_stats().total.TimePlanned;

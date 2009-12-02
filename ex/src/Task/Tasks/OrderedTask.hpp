@@ -65,6 +65,7 @@ class OrderedTask:
 public:
   friend class TaskDijkstra;
 
+  typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector;
   /** 
    * Constructor.
    *
@@ -512,7 +513,7 @@ private:
  */
   void erase(unsigned i);
 
-  std::vector<OrderedTaskPoint*> tps;
+  OrderedTaskPointVector tps;
 
   /**
    * @supplierCardinality 1 

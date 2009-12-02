@@ -24,6 +24,8 @@
  * SUCH DAMAGE.
  */
 
+#ifdef HAVE_TAP
+
 /* '## __VA_ARGS__' is a gcc'ism. C99 doesn't allow the token pasting
    and requires the caller to add the final comma if they've ommitted
    the optional arguments */
@@ -88,3 +90,11 @@ void todo_start(char *, ...);
 void todo_end(void);
 
 int exit_status(void);
+
+#else
+
+void ok(int, const char*, unsigned int);
+int plan_tests(unsigned int);
+int exit_status(void);
+
+#endif

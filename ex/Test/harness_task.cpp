@@ -64,10 +64,12 @@ void task_report(TaskManager& task_manager, const char* text)
 {
   AIRCRAFT_STATE ac;
   if (verbose) {
+#ifdef DO_PRINT
     TaskVisitorPrint tv;
     printf("%s",text);
     task_manager.Accept(tv);
     task_manager.print(ac);
+#endif
   }
   if (interactive>1) {
     wait_prompt(0);

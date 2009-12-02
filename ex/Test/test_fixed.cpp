@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
   GEOPOINT l1; l1.Longitude = 0.0; l1.Latitude=0.0;
   GEOPOINT l2; l2.Longitude = -0.3; l2.Latitude=1.0;
   fixed d, b;
-  DistanceBearing(l1,l2,&d,&b);
+  ::DistanceBearing(l1,l2,&d,&b);
   printf("Dist %g bearing %d\n",FIXED_DOUBLE(d),FIXED_INT(b));
 
   return exit_status();

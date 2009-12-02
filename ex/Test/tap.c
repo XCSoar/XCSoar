@@ -24,6 +24,8 @@
  * SUCH DAMAGE.
  */
 
+#ifdef HAVE_TAP
+
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -431,3 +433,19 @@ _cleanup(void)
 
 	UNLOCK;
 }
+
+#else
+
+void ok(int a, const char* b, unsigned int c) {
+
+}
+
+int plan_tests(unsigned int a) {
+  return 0;
+}
+
+int exit_status(void) {
+  return 0;
+}
+
+#endif

@@ -47,8 +47,6 @@
 #include "TaskSolvers/TaskGlideRequired.hpp"
 #include "TaskSolvers/TaskOptTarget.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
-#include <algorithm>
-#include <functional>
 
 void
 OrderedTask::update_geometry() 
@@ -68,7 +66,9 @@ OrderedTask::update_geometry()
   }
   task_projection.update_fast();
 
-  std::for_each(tps.begin(), tps.end(), std::mem_fun(&OrderedTaskPoint::update_oz));
+  for (OrderedTaskPointVector::iterator it = tps.begin(); it!= tps.end(); it++) {
+    (*it)->update_oz();
+  }
 
   if (has_start()) {
     // update stats so data can be used during task construction
@@ -598,7 +598,7 @@ OrderedTask::calc_gradient(const AIRCRAFT_STATE &state)
 
 OrderedTask::~OrderedTask()
 {
-  for (std::vector<OrderedTaskPoint*>::iterator v=tps.begin();
+  for (OrderedTaskPointVector::iterator v=tps.begin();
        v != tps.end(); ) {
     delete *v;
     tps.erase(v);
@@ -621,8 +621,9 @@ OrderedTask::OrderedTask(const TaskEvents &te,
 void 
 OrderedTask::Accept(TaskPointVisitor& visitor) const
 {
-  std::for_each(tps.begin(), tps.end(), 
-                std::bind2nd(std::mem_fun(&OrderedTaskPoint::Accept), visitor));
+  for (OrderedTaskPointVector::const_iterator it = tps.begin(); it!= tps.end(); it++) {
+    (*it)->Accept(visitor);
+  }
 }
 
 
@@ -630,7 +631,9 @@ void
 OrderedTask::reset()
 {
   /// \todo also reset data in this class e.g. stats?
-  std::for_each(tps.begin(), tps.end(), std::mem_fun(&OrderedTaskPoint::reset));
+  for (OrderedTaskPointVector::iterator it = tps.begin(); it!= tps.end(); it++) {
+    (*it)->reset();
+  }
 }
 
 

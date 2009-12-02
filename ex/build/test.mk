@@ -27,7 +27,8 @@ testslow:	$(TESTSLOW)
 testfast:	$(TESTFAST)
 	$(Q)perl Test/testall.pl $(TESTFAST)
 
-Test/%.exe: Test/%.cpp src/task.a src/harness.a
+Test/%.exe: Test/%.cpp src/task.a Test/harness.a
 	@$(NQ)echo "  CXX/LN      $@"
-	$(Q)$(CXX) $(CXXFLAGS) $(INCLUDES) $< -o $@ src/harness.a src/task.a 
+	$(Q)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) $< -o $@ Test/harness.a src/task.a 
+
 

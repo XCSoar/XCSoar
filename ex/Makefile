@@ -1,41 +1,28 @@
-####### build verbosity
-
-# Internal - Control verbosity
-#  make V=0 - quiet
-#  make V=1 - terse (default)
-#  make V=2 - show commands
-ifeq ($(V),2)
-Q		:=
-NQ		:=\#
-else
-Q		:=@
-ifeq ($(V),0)
-NQ		:=\#
-else
-NQ		:=
-endif
-endif
-
 topdir = .
 SRC := $(topdir)/src
 
+include $(topdir)/build/verbose.mk
+include $(topdir)/build/targets.mk
+include $(topdir)/build/debug.mk
 include $(topdir)/build/warnings.mk
+include $(topdir)/build/compile.mk
 
 MAKEFLAGS	+=-r
 
-PROFILE := 
-# -pg
-COVERAGE := 
-# --coverage
-OPTIMIZE := -O2 
-DEBUG :=
-# -g
-
-INCLUDES := -I$(SRC)
+INCLUDES := $(TARGET_INCLUDES) -I$(SRC)
 CPPFLAGS := $(INCLUDES) 
-CPPFLAGS += -DDO_PRINT  -DINSTRUMENT_TASK -DFIXED_MATH -DHAVE_BOOST
+CPPFLAGS += -DFIXED_MATH 
 
-CFLAGS := $(DEBUG) $(OPTIMIZE) $(PROFILE) $(COVERAGE) $(C_WARNINGS)
+ifeq ($(HAVE_WIN32),n)
+ifeq ($(DEBUG),y)
+CPPFLAGS += -DDO_PRINT 
+CPPFLAGS += -DINSTRUMENT_TASK 
+endif
+#CPPFLAGS += -DHAVE_TAP
+CPPFLAGS += -DHAVE_BOOST
+endif
+
+CFLAGS := $(OPTIMIZE) $(PROFILE) $(COVERAGE) $(C_WARNINGS)
 CXXFLAGS := $(CFLAGS) -fno-exceptions $(CXX_WARNINGS)
 
 #######
@@ -49,9 +36,9 @@ include $(topdir)/build/test.mk
 
 ####### sources
 
-TARGETS = src/task.a src/harness.a $(TESTS) 
+OUTPUTS = src/task.a Test/harness.a $(TESTS) 
 
-all: $(TARGETS)
+all: $(OUTPUTS)
 	@echo "done"
 
 include $(topdir)/build/rules.mk

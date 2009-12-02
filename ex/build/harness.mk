@@ -9,6 +9,6 @@ TEST_OBJS = \
 	Test/harness_task2.o \
 	Test/tap.o
 
-src/harness.a: $(TEST_OBJS)
+Test/harness.a: $(TEST_OBJS)
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^

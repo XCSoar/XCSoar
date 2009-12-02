@@ -31,7 +31,7 @@ extern unsigned num_dijkstra;
 
 void distance_counts() {
   if (n_samples) {
-#ifndef NEWTASK
+#ifdef DO_PRINT
     printf("# Instrumentation\n");
 #ifdef INSTRUMENT_TASK
     printf("#     dist+bearing calcs/c %d\n",count_distbearing/n_samples); 
@@ -58,7 +58,9 @@ void distance_counts() {
 void print_queries(unsigned n, std::ostream &fout) {
 #ifdef INSTRUMENT_TASK
   if (n_queries>0) {
+#ifdef DO_PRINT
     fout << n << " " << count_intersections/n_queries << "\n";
+#endif
   }
   count_intersections = 0;
   n_queries = 0;
@@ -73,14 +75,13 @@ void print_queries(unsigned n, std::ostream &fout) {
  * @return character received by keyboard
  */
 char wait_prompt(const double time) {
-  if (interactive) {
 #ifdef DO_PRINT
+  if (interactive) {
     printf("# %g [enter to continue]\n",time);
-#endif
     return getchar();
-  } else {
-    return 0;
   }
+#endif
+  return 0;
 }
 
 
