@@ -175,7 +175,7 @@ Window::get_root_owner()
 #else
   HWND hRoot = hWnd;
   while (true) {
-    HWND hParent = ::GetParent(hWnd);
+    HWND hParent = ::GetParent(hRoot);
     if (hParent == NULL)
       break;
     hRoot = hParent;
