@@ -47,7 +47,6 @@ Copyright_License {
 #include <windef.h>
 
 #define LOGGER_PRETAKEOFF_BUFFER_MAX 60
-#define LOGGER_DISK_BUFFER_REC_SIZE 512
 #define LOGGER_DISK_BUFFER_NUM_RECS 10
 
 struct NMEA_INFO;
@@ -141,6 +140,7 @@ private:
   bool LoggerActive;
   bool DeclaredToDevice;
   TCHAR szLoggerFileName[MAX_PATH];
+  char szLoggerFileName_c[MAX_PATH];
   int NumLoggerPreTakeoffBuffered;
   LoggerPreTakeoffBuffer_T FirstPoint;
   LoggerPreTakeoffBuffer_T LoggerPreTakeoffBuffer[LOGGER_PRETAKEOFF_BUFFER_MAX];
@@ -154,7 +154,7 @@ private:
    */
 private:
   int LoggerDiskBufferCount;
-  char LoggerDiskBuffer[LOGGER_DISK_BUFFER_NUM_RECS][LOGGER_DISK_BUFFER_REC_SIZE];
+  char LoggerDiskBuffer[LOGGER_DISK_BUFFER_NUM_RECS][MAX_IGC_BUFF];
   void DiskBufferFlush();
   bool DiskBufferAdd(char *sIn);
   void DiskBufferReset();

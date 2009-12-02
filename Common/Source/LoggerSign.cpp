@@ -51,6 +51,10 @@
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "UtilsSystem.hpp" // for FileExistsW()
+#include "UtilsText.hpp" // for ConvertToC()
+
+
+#include <assert.h>
 
 HINSTANCE GRecordDLLHandle = NULL;
 
@@ -132,25 +136,27 @@ LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
   return DiskBufferAdd(charbuffer);
 }
 
+
+
 void
 LoggerImpl::DiskBufferFlush()
 {
-  HANDLE hFile;
-  DWORD dwBytesRead;
+  FILE * LoggerFILE;
+
+  ConvertTToC(szLoggerFileName_c, szLoggerFileName);
+  szLoggerFileName_c[_tcslen(szLoggerFileName)]=0;
+  LoggerFILE = fopen (szLoggerFileName_c,"ab"); // stays open for buffered io
+
   bool bWriteSuccess = true;
   TCHAR buffer_G[MAX_IGC_BUFF];
   TCHAR * pbuffer_G;
   pbuffer_G = buffer_G;
 
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
-   NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-
-  if (hFile) {
-    SetFilePointer(hFile, 0, NULL, FILE_END);
+  if (LoggerFILE) {
     for (int i = 0; i < LoggerDiskBufferCount; i++){
 
-      if (WriteFile(hFile, LoggerDiskBuffer[i], strlen(LoggerDiskBuffer[i]), &dwBytesRead,
-        (OVERLAPPED *)NULL) == 0) { // Zero indicates failure.
+      unsigned int ilen = strlen(LoggerDiskBuffer[i]);
+      if (fwrite(LoggerDiskBuffer[i], (size_t)ilen, (size_t)1, LoggerFILE) != (size_t)ilen) {
         bWriteSuccess=false; 
       }
     
@@ -164,12 +170,12 @@ LoggerImpl::DiskBufferFlush()
         }
       }
     }
-  
-    FlushFileBuffers(hFile);
-    CloseHandle(hFile);
+
+    fclose(LoggerFILE);
     DiskBufferReset();
   }
 }
+
 bool
 LoggerImpl::DiskBufferAdd(char *sIn)
 {
@@ -178,8 +184,9 @@ LoggerImpl::DiskBufferAdd(char *sIn)
   if (LoggerDiskBufferCount == LOGGER_DISK_BUFFER_NUM_RECS){
     DiskBufferFlush();
   }
-  if (LoggerDiskBufferCount < LOGGER_DISK_BUFFER_NUM_RECS) { 
-    strncpy(LoggerDiskBuffer[LoggerDiskBufferCount], sIn, LOGGER_DISK_BUFFER_REC_SIZE);
+  if (LoggerDiskBufferCount < LOGGER_DISK_BUFFER_NUM_RECS) {
+    strcpy(LoggerDiskBuffer[LoggerDiskBufferCount], sIn);
+    LoggerDiskBuffer[LoggerDiskBufferCount][MAX_IGC_BUFF-1]='\0';
     LoggerDiskBufferCount++;
     bRetVal=true;
   }
