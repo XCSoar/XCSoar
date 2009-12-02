@@ -9,6 +9,10 @@ TEST_OBJS = \
 	Test/harness_task2.o \
 	Test/tap.o
 
+ifeq ($(HAVE_WIN32),y)
+TEST_OBJS += Test/winmain.o
+endif
+
 Test/harness.a: $(TEST_OBJS)
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^

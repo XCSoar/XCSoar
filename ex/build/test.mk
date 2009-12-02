@@ -21,6 +21,10 @@ TESTSLOW = \
 
 TESTS = $(TESTFAST) $(TESTSLOW)
 
+ifeq ($(HAVE_WIN32),y)
+TESTS += Test/test_win32.exe
+endif
+
 testslow:	$(TESTSLOW)
 	$(Q)perl Test/testall.pl $(TESTSLOW)
 
@@ -30,5 +34,3 @@ testfast:	$(TESTFAST)
 Test/%.exe: Test/%.cpp src/task.a Test/harness.a
 	@$(NQ)echo "  CXX/LN      $@"
 	$(Q)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) $< -o $@ Test/harness.a src/task.a 
-
-

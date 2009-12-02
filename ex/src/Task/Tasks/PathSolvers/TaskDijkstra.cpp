@@ -108,10 +108,6 @@ unsigned TaskDijkstra::distance(const ScanTaskPoint &s1,
 #ifdef INSTRUMENT_TASK
   num_dijkstra++;
 #endif
-/*
-  printf("p%d.%d p%d.%d = %d\n", s1.first, s1.second, s2.first, s2.second, 
-         get_point(s1).flat_distance(get_point(s2)));
-*/
   return extremal_distance(get_point(s1).flat_distance(get_point(s2)));
 }
 

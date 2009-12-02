@@ -1,6 +1,13 @@
+#if 0
 #include <windows.h>
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
+
+int main(int argc, char**argv)
 {
-  MessageBox(0, L"Hello!", L"CeGCC says...", MB_OK);
-  
+  MessageBox(0, L"Start", L"ex_xcsoar", MB_OK);
+  int retval = main(0,0);
+  MessageBox(0, L"Finish", L"ex_xcsoar", MB_OK);
+  return retval;
 }
+
+#endif
+
