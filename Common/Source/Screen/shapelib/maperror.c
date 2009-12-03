@@ -47,39 +47,6 @@ Copyright_License {
 #include <fcntl.h>
 #endif
 
-static char *ms_errorCodes[MS_NUMERRORCODES] = {"",
-						"Unable to access file.",
-						"Memory allocation error.",
-						"Incorrect data type.",
-						"Symbol definition error.",
-						"Regular expression error.",
-						"TrueType Font error.",
-						"DBASE file error.",
-						"GD library error.",
-						"Unknown identifier.",
-						"Premature End-of-File.",
-						"Projection library error.",
-						"General error message.",
-						"CGI error.",
-						"Web application error.",
-						"Image handling error.",
-						"Hash table error.",
-						"Join error.",
-						"Search returned no results.",
-						"Shapefile error.",
-						"Expression parser error.",
-						"SDE error.",
-						"OGR error.",
-						"Query error.",
-						"WMS server error.",
-						"WMS connection error.",
-						"OracleSpatial error.",
-						"WFS server error.",
-						"WFS connection error.",
-						"WMS Map Context error.",
-						"HTTP request error."
-};
-
 #ifndef USE_THREAD
 
 errorObj *msGetErrorObj()
@@ -230,54 +197,8 @@ void msResetErrorList()
   ms_error->message[0] = '\0';
 }
 
-char *msGetErrorCodeString(int code) {
-
-  if(code<0 || code>MS_NUMERRORCODES-1)
-    return("Invalid error code.");
-
-  return(ms_errorCodes[code]);
-}
-
-char *msGetErrorString(char *delimiter)
-{
-#if defined(_WIN32) && !defined(__CYGWIN__)
-  char  errbuf[512];
-#else
-  char errbuf[256];
-#endif
-  char *errstr=NULL;
-
-  errorObj *error = msGetErrorObj();
-
-  if(!delimiter || !error) return(NULL);
-
-  if((errstr = strdup("")) == NULL) return(NULL); // empty at first
-  while(error && error->code != MS_NOERR) {
-    if(error->next && error->next->code != MS_NOERR) // (peek ahead) more errors, use delimiter
-#if defined(_WIN32) && !defined(__CYGWIN__)
-      sprintf(errbuf,  "%s: %s %s%s", error->routine, ms_errorCodes[error->code], error->message, delimiter);
-    else
-      sprintf(errbuf, "%s: %s %s", error->routine, ms_errorCodes[error->code], error->message);
-#else
-      snprintf(errbuf, 255, "%s: %s %s%s", error->routine, ms_errorCodes[error->code], error->message, delimiter);
-    else
-      snprintf(errbuf, 255, "%s: %s %s", error->routine, ms_errorCodes[error->code], error->message);
-#endif
-
-    if((errstr = (char *) realloc(errstr, sizeof(char)*(strlen(errstr)+strlen(errbuf)+1))) == NULL) return(NULL);
-    strcat(errstr, errbuf);
-
-    error = error->next;
-  }
-
-  return(errstr);
-}
-
 void msSetError(int code, const char *message_fmt, const char *routine, ...)
 {
-//  char *errfile=NULL;
-//  FILE *errstream;
-//  time_t errtime;
   errorObj *ms_error = msInsertErrorObj();
   va_list args;
 
@@ -295,31 +216,6 @@ void msSetError(int code, const char *message_fmt, const char *routine, ...)
     va_start(args, routine);
     vsprintf( ms_error->message, message_fmt, args );
     va_end(args);
-  }
-/*
-  errfile = getenv("MS_ERRORFILE");
-  if(errfile) {
-    if(strcmp(errfile, "stderr") == 0)
-      errstream = stderr;
-    else if(strcmp(errfile, "stdout") == 0)
-      errstream = stdout;
-    else
-      errstream = fopen(errfile, "a");
-    if(!errstream) return;
-    errtime = time(NULL);
-    fprintf(errstream, "%s - %s: %s %s\n", chop(ctime(&errtime)), ms_error->routine, ms_errorCodes[ms_error->code], ms_error->message);
-    fclose(errstream);
-  }*/
-}
-
-void msWriteError(FILE *stream)
-{
-  errorObj *ms_error = msGetErrorObj();
-
-  while (ms_error && ms_error->code != MS_NOERR)
-  {
-      fprintf(stream, "%s: %s %s <br>\n", ms_error->routine, ms_errorCodes[ms_error->code], ms_error->message);
-      ms_error = ms_error->next;
   }
 }
 

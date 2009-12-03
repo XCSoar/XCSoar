@@ -1,8 +1,6 @@
 #ifndef MAPERROR_H
 #define MAPERROR_H
 
-#include <stdio.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -68,11 +66,6 @@ char *msGetErrorString(char *delimiter);
 
 #ifndef SWIG
 void msSetError(int code, const char *message, const char *routine, ...);
-void msWriteError(FILE *stream);
-char *msGetErrorCodeString(int code);
-
-struct map_obj;
-void msWriteErrorImage(struct map_obj *map, char *filename, int blank);
 
 void msDebug( const char * pszFormat, ... );
 
