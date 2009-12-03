@@ -34,4 +34,72 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "TaskEvents.hpp"
+#include "TaskEventsPrint.hpp"
+#include "Task/Tasks/BaseTask/TaskPoint.hpp"
+
+#ifdef DO_PRINT
+#include <stdio.h>
+#endif
+
+void 
+TaskEventsPrint::transition_enter(const TaskPoint& tp) const
+{
+  if (verbose) {
+#ifdef DO_PRINT
+    printf("#- entered sector\n");
+#endif
+  }
+}
+
+void 
+TaskEventsPrint::transition_exit(const TaskPoint &tp) const
+{
+  if (verbose) {
+#ifdef DO_PRINT
+    printf("#- exited sector\n");
+#endif
+  }
+}
+
+
+void 
+TaskEventsPrint::active_advanced(const TaskPoint &tp, const int i) const
+{
+  if (verbose) {
+#ifdef DO_PRINT
+    printf("#- advance to sector %d\n", i);
+#endif
+  }
+}
+
+void 
+TaskEventsPrint::active_changed(const TaskPoint &tp) const
+{
+  if (verbose) {
+#ifdef DO_PRINT
+    printf("#- active changed to wp %d\n", tp.get_waypoint().id);
+#endif
+  }
+}
+
+void 
+TaskEventsPrint::construction_error(const char* error) const
+{
+  if (verbose) {
+#ifdef DO_PRINT
+    printf("#Task construction error: ");
+    printf("#%s",error);
+    printf("\n");
+#endif
+  }
+}
+
+void 
+TaskEventsPrint::warning_start_speed() const
+{
+  if (verbose) {
+#ifdef DO_PRINT
+    printf("#- warning speed excessive\n");
+#endif
+  }
+}

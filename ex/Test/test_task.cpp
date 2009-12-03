@@ -1,6 +1,7 @@
 #include "harness_task.hpp"
 #include "harness_waypoints.hpp"
 #include "test_debug.hpp"
+#include "TaskEventsPrint.hpp"
 
 int main(int argc, char** argv)
 {
@@ -15,7 +16,7 @@ int main(int argc, char** argv)
   plan_tests(NUM_TASKS+2+NUM_RANDOM+8);
 
   TaskBehaviour task_behaviour;
-  TaskEvents default_events;
+  TaskEventsPrint default_events(verbose);
   GlidePolar glide_polar(2.0,0.0,0.0);
 
   Waypoints waypoints;

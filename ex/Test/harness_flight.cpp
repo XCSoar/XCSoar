@@ -1,5 +1,6 @@
 #include "harness_flight.hpp"
 #include "harness_airspace.hpp"
+#include "TaskEventsPrint.hpp"
 #ifdef DO_PRINT
 #include <fstream>
 #endif
@@ -150,7 +151,7 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
   task_behaviour.aat_min_time = aat_min_time(test_num);
   task_behaviour.calc_glide_required = false;
 
-  TaskEvents default_events;  default_events.verbose = verbose;
+  TaskEventsPrint default_events(verbose);
 
   TaskManager task_manager(default_events,
                            task_behaviour,

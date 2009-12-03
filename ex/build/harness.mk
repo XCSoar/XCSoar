@@ -7,6 +7,7 @@ TEST_OBJS = \
 	Test/harness_waypoints.o \
 	Test/harness_task.o \
 	Test/harness_task2.o \
+	Test/TaskEventsPrint.o \
 	Test/tap.o
 
 ifeq ($(HAVE_WIN32),y)

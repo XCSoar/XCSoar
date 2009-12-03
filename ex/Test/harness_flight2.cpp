@@ -1,6 +1,7 @@
 #include "harness_flight.hpp"
 #include "harness_airspace.hpp"
 #include "harness_waypoints.hpp"
+#include "TaskEventsPrint.hpp"
 #ifdef DO_PRINT
 #include <fstream>
 #endif
@@ -215,7 +216,7 @@ bool test_abort(int n_wind)
 
   task_behaviour.all_off();
 
-  TaskEvents default_events;  default_events.verbose = verbose;
+  TaskEventsPrint default_events(verbose);
 
   TaskManager task_manager(default_events,
                            task_behaviour,
@@ -246,7 +247,7 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
   task_behaviour.all_off();
   task_behaviour.auto_mc = auto_mc;
 
-  TaskEvents default_events;  default_events.verbose = verbose;
+  TaskEventsPrint default_events(verbose);
 
   TaskManager task_manager(default_events,
                            task_behaviour,
@@ -277,7 +278,7 @@ bool test_null()
 
   task_behaviour.all_off();
 
-  TaskEvents default_events;  default_events.verbose = verbose;
+  TaskEventsPrint default_events(verbose);
 
   TaskManager task_manager(default_events,
                            task_behaviour,

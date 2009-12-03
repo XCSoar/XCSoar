@@ -34,4 +34,35 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "TaskEvents.hpp"
+#ifndef TASKEVENTSPRINT_HPP
+#define TASKEVENTSPRINT_HPP
+
+#include "Task/TaskEvents.hpp"
+
+/**
+ * TaskEvents to produce simple text output of events for testing
+ */
+class TaskEventsPrint:
+  public TaskEvents
+{
+public:
+  TaskEventsPrint(const bool _verbose): 
+    TaskEvents(),
+    verbose(_verbose) {};
+
+  void transition_enter(const TaskPoint& tp) const;
+
+  void transition_exit(const TaskPoint &tp) const;
+
+  void active_advanced(const TaskPoint &tp, const int i) const;
+
+  void active_changed(const TaskPoint &tp) const;
+
+  void warning_start_speed() const;
+  
+  void construction_error(const char* error) const;
+
+  bool verbose; /**< Option to enable basic output on events (for testing) */
+};
+
+#endif
