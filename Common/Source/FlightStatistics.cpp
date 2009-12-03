@@ -85,7 +85,8 @@ void FlightStatistics::Reset() {
 
 #include "Screen/Chart.hpp"
 
-void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
+void
+FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc) const
 {
   Chart chart(canvas, rc);
 
@@ -133,8 +134,8 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
   chart.DrawYLabel(TEXT("h"));
 }
 
-
-void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
+void
+FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc) const
 {
   Chart chart(canvas, rc);
 
@@ -174,9 +175,8 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
 
 }
 
-
-
-void FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc)
+void
+FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc) const
 {
   Chart chart(canvas, rc);
 
@@ -208,8 +208,8 @@ void FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc)
   chart.DrawYLabel(TEXT("w"));
 }
 
-
-void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
+void
+FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc) const
 {
   int i;
   Chart chart(canvas, rc);
@@ -284,8 +284,9 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
   canvas.background_transparent();
 }
 
-
-void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcmode)
+void
+FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
+                             const bool olcmode) const
 {
   int i;
   Chart chart(canvas, rc);
@@ -562,8 +563,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   glide_computer.GetOLC().Unlock();
 }
 
-
-void FlightStatistics::RenderTemperature(Canvas &canvas, const RECT rc)
+void
+FlightStatistics::RenderTemperature(Canvas &canvas, const RECT rc) const
 {
   Chart chart(canvas, rc);
 
@@ -647,8 +648,8 @@ void FlightStatistics::RenderTemperature(Canvas &canvas, const RECT rc)
   chart.DrawYLabel(TEXT("h"));
 }
 
-
-void FlightStatistics::RenderWind(Canvas &canvas, const RECT rc)
+void
+FlightStatistics::RenderWind(Canvas &canvas, const RECT rc) const
 {
   int numsteps=10;
   int i;
@@ -726,7 +727,9 @@ void FlightStatistics::RenderWind(Canvas &canvas, const RECT rc)
 }
 
 
-void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
+void
+FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) const
+{
   double range = 50.0*1000; // km
   double ach, acb;
   double fj;
@@ -1033,7 +1036,7 @@ FlightStatistics::CaptionClimb( TCHAR* sTmp)
 
 
 void
-FlightStatistics::CaptionPolar(TCHAR *sTmp)
+FlightStatistics::CaptionPolar(TCHAR *sTmp) const
 {
   if (InfoBoxLayout::landscape) {
     _stprintf(sTmp, TEXT("%s:\r\n  %3.0f\r\n  at %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %3.0f %s"),
@@ -1063,7 +1066,7 @@ FlightStatistics::CaptionPolar(TCHAR *sTmp)
 
 
 void
-FlightStatistics::CaptionTempTrace(TCHAR *sTmp)
+FlightStatistics::CaptionTempTrace(TCHAR *sTmp) const
 {
   _stprintf(sTmp, TEXT("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
 	    gettext(TEXT("Thermal height")),
@@ -1075,7 +1078,7 @@ FlightStatistics::CaptionTempTrace(TCHAR *sTmp)
 }
 
 void
-FlightStatistics::CaptionTask(TCHAR *sTmp)
+FlightStatistics::CaptionTask(TCHAR *sTmp) const
 {
   if (!task.Valid()) {
     _stprintf(sTmp, gettext(TEXT("No task")));

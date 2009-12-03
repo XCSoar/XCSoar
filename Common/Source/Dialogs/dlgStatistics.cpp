@@ -90,7 +90,7 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   canvas.background_transparent();
   canvas.set_text_color(Sender->GetForeColor());
 
-  FlightStatistics &fs = glide_computer.GetFlightStats();
+  const FlightStatistics &fs = glide_computer.GetFlightStats();
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:

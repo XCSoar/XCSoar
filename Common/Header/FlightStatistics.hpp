@@ -65,19 +65,19 @@ public:
   void AddThermalAverage(const double v);
 public:
   void Reset();
-  void RenderAirspace(Canvas &canvas, const RECT rc);
-  void RenderBarograph(Canvas &canvas, const RECT rc);
-  void RenderClimb(Canvas &canvas, const RECT rc);
-  void RenderGlidePolar(Canvas &canvas, const RECT rc);
-  void RenderWind(Canvas &canvas, const RECT rc);
-  void RenderTemperature(Canvas &canvas, const RECT rc);
-  void RenderTask(Canvas &canvas, const RECT rc, const bool olcmode);
-  void RenderSpeed(Canvas &canvas, const RECT rc);
+  void RenderAirspace(Canvas &canvas, const RECT rc) const;
+  void RenderBarograph(Canvas &canvas, const RECT rc) const;
+  void RenderClimb(Canvas &canvas, const RECT rc) const;
+  void RenderGlidePolar(Canvas &canvas, const RECT rc) const;
+  void RenderWind(Canvas &canvas, const RECT rc) const;
+  void RenderTemperature(Canvas &canvas, const RECT rc) const;
+  void RenderTask(Canvas &canvas, const RECT rc, const bool olcmode) const;
+  void RenderSpeed(Canvas &canvas, const RECT rc) const;
   void CaptionBarograph( TCHAR *sTmp);
   void CaptionClimb( TCHAR* sTmp);
-  void CaptionPolar( TCHAR *sTmp);
-  void CaptionTempTrace( TCHAR *sTmp);
-  void CaptionTask( TCHAR *sTmp);
+  void CaptionPolar(TCHAR * sTmp) const;
+  void CaptionTempTrace(TCHAR *sTmp) const;
+  void CaptionTask(TCHAR *sTmp) const;
 private:
   LeastSquares ThermalAverage;
   LeastSquares Wind_x;
