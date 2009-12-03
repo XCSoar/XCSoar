@@ -43,12 +43,12 @@ endif
 
 ######## paths
 
-INCLUDES := $(TARGET_INCLUDES) -I$(HDR) -I$(SRC) 
+INCLUDES := $(TARGET_INCLUDES) -I$(HDR) -I$(SRC) -Isrc
 
 ######## compiler flags
 
 CPPFLAGS := $(INCLUDES) $(TARGET_CPPFLAGS)
-CPPFLAGS	+= -DFLARM_AVERAGE 
+CPPFLAGS	+= -DFLARM_AVERAGE -DFIXED_MATH
 
 CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
 CFLAGS		:=$(OPTIMIZE) $(PROFILE)
@@ -62,11 +62,13 @@ LDLIBS = $(TARGET_LDLIBS)
 
 MAKEFLAGS	+=-r
 
-####### sources
-
 ifeq ($(CONFIG_PC),n)
 #CPPFLAGS_Common_Source_ :=-Werror
 endif
+
+####### sources
+
+include $(topdir)/build/task.mk
 
 DEVS	:=\
 	$(SRC)/Device/Driver/AltairPro.o \
@@ -258,9 +260,7 @@ OBJS	:=\
 	$(SRC)/xmlParser.o 		\
 	$(SRC)/Thread/Thread.o \
 	\
-	$(SRC)/Math/Earth.o 		\
-	$(SRC)/Math/FastMath.o 		\
-	$(SRC)/Math/Geometry.o 		\
+	$(SRC)/Math/FastRotation.o	\
 	$(SRC)/Math/leastsqs.o 		\
 	$(SRC)/Math/LowPassFilter.o 	\
 	$(SRC)/Math/NavFunctions.o	\
@@ -330,6 +330,7 @@ OBJS	:=\
 	\
 	$(DLGS:.cpp=.o) 		\
 	$(VOLKS:.cpp=.o) 		\
+	src/task-$(TARGET).a \
 	$(SRC)/jasper-$(TARGET).a \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a
@@ -442,11 +443,11 @@ $(addprefix clean-,$(filter-out WINE,$(TARGETS))): clean-%:
 clean-: $(addprefix clean-,$(TARGETS))
 
 clean: clean-$(TARGET) cleani FORCE
-	find Common $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
+	find Common src $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
 	-type f -print | xargs -r $(RM)
 
 cleani: FORCE
-	find Common $(IGNORE) \( -name '*.i' \) \
+	find Common src $(IGNORE) \( -name '*.i' \) \
 		-type f -print | xargs -r $(RM)
 
 .PHONY: FORCE

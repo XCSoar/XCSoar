@@ -45,7 +45,7 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
-#include "GeoPoint.hpp"
+#include "Navigation/GeoPoint.hpp"
 
 typedef struct _TERRAIN_INFO
 {

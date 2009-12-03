@@ -40,7 +40,7 @@ Copyright_License {
 #define RASTERTERRAIN_H
 
 #include "Sizes.h"
-#include "GeoPoint.hpp"
+#include "Navigation/GeoPoint.hpp"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

@@ -226,7 +226,7 @@ public:
       return 0.0;
     }
   }
-  void Interpolate(double time, double *lon, double *lat, double *alt) {
+  void Interpolate(double time, fixed *lon, fixed *lat, double *alt) {
     if (!Ready()) {
       *lon = p[num].loc.Longitude;
       *lat = p[num].loc.Latitude;

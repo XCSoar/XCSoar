@@ -50,7 +50,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
-#include "Math/Geometry.hpp"
+#include "Math/FastRotation.hpp"
 #include "McReady.h"
 #include "options.h" /* for IBLSCALE() */
 #include "SettingsUser.hpp"

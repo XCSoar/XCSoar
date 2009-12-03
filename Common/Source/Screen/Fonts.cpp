@@ -149,7 +149,8 @@ InitialiseFontsHardCoded(RECT rc,
                          LOGFONT *ptrhardMapLabelLogFont,
                          LOGFONT *ptrhardStatisticsLogFont)
 {
-short   ScreenSize=0;
+
+  int   ScreenSize=0;
 
 
   memset ((char *)ptrhardInfoWindowLogFont, 0, sizeof (LOGFONT));

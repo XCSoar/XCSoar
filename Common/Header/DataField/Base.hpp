@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_BASE_HPP
 #define XCSOAR_DATA_FIELD_BASE_HPP
 
+// JMW OLD_TASK todo; continue with fixed vars here
+#include "Math/fixed.hpp"
 #include "DataField/ComboList.hpp"
 
 #include <tchar.h>
@@ -76,16 +78,19 @@ class DataField{
 
   virtual bool GetAsBoolean(void){return(false);};
   virtual int GetAsInteger(void){return(0);};
+  virtual fixed GetAsFixed(void){return(0);};
   virtual double GetAsFloat(void){return(0);};
   virtual TCHAR *GetAsString(void){return(NULL);};
   virtual TCHAR *GetAsDisplayString(void){return(NULL);};
 
   virtual bool SetAsBoolean(bool Value){ (void)Value;
-	  return(false);};
-	  virtual int SetAsInteger(int Value){ (void)Value;
-	  return(0);};
-	  virtual double SetAsFloat(double Value){ (void) Value;
-	  return(0.0);};
+    return(false);};
+  virtual int SetAsInteger(int Value){ (void)Value;
+    return(0);};
+  virtual double SetAsFloat(double Value){ (void) Value;
+    return(0.0);};
+  virtual double SetAsFixed(fixed Value){ (void) Value;
+    return(fixed_zero);};
   virtual TCHAR *SetAsString(const TCHAR *Value){(void)Value; return(NULL);};
 
   virtual void Set(bool Value){ (void)Value; };

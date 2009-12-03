@@ -39,7 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_DERIVED_H
 #define XCSOAR_NMEA_DERIVED_H
 
-#include "GeoPoint.hpp"
+#include "Math/fixed.hpp"
+#include "Navigation/GeoPoint.hpp"
 
 #define NUMTHERMALBUCKETS 10
 #define MAX_THERMAL_SOURCES 20
@@ -47,9 +48,9 @@ Copyright_License {
 struct THERMAL_SOURCE_INFO
 {
   GEOPOINT Location;
-  double GroundHeight;
-  double LiftRate;
-  double Time;
+  fixed GroundHeight;
+  fixed LiftRate;
+  fixed Time;
 };
 
 typedef enum {
@@ -66,89 +67,89 @@ typedef enum {
 struct DERIVED_INFO
 {
   /** Vertical speed */
-  double Vario;
+  fixed Vario;
   /** Vertical speed of the airmass */
-  double NettoVario;
+  fixed NettoVario;
   /** GPS-based vario */
-  double GPSVario;
+  fixed GPSVario;
   /** GPS-based vario including energy height */
-  double GPSVarioTE;
+  fixed GPSVarioTE;
 
   /** Average vertical speed based on 30s */
-  double Average30s;
+  fixed Average30s;
   /** Average vertical speed of the airmass based on 30s */
-  double NettoAverage30s;
+  fixed NettoAverage30s;
 
   /** Instant glide ratio */
-  double LD;
+  fixed LD;
   /** Glide ratio while in Cruise mode */
-  double CruiseLD;
+  fixed CruiseLD;
   /** Average glide ratio */
   int	 AverageLD;
 
   /** MacCready speed */
-  double VMacCready;
+  fixed VMacCready;
 
-  double BestCruiseTrack;
+  fixed BestCruiseTrack;
 
   /** Average vertical speed in the thermal */
-  double AverageThermal;
+  fixed AverageThermal;
   /** Average vertical speed in the thermal (minimum 0.0) */
-  double AdjustedAverageThermal;
+  fixed AdjustedAverageThermal;
 
   /** Altitude gained while in the thermal */
-  double ThermalGain;
+  fixed ThermalGain;
 
   /** Average vertical speed in the last thermal */
-  double LastThermalAverage;
+  fixed LastThermalAverage;
   /** Altitude gained while in the last thermal */
-  double LastThermalGain;
+  fixed LastThermalGain;
   /** Time spend in the last thermal */
-  double LastThermalTime;
+  fixed LastThermalTime;
 
   /** StartLocation of the current/last climb */
   GEOPOINT ClimbStartLocation;
   /** StartAltitude of the current/last climb */
-  double ClimbStartAlt;
+  fixed ClimbStartAlt;
   /** StartTime of the current/last climb */
-  double ClimbStartTime;
+  fixed ClimbStartTime;
 
   /** StartLocation of the current/last cruise */
   GEOPOINT CruiseStartLocation;
   /** StartAltitude of the current/last cruise */
-  double CruiseStartAlt;
+  fixed CruiseStartAlt;
   /** StartTime of the current/last cruise */
-  double CruiseStartTime;
+  fixed CruiseStartTime;
 
   /** Start/End time of the turn (used for flight mode determination) */
-  double TurnStartTime;
+  fixed TurnStartTime;
   /** Start/End location of the turn (used for flight mode determination) */
   GEOPOINT TurnStartLocation;
   /** Start/End altitude of the turn (used for flight mode determination) */
-  double TurnStartAltitude;
+  fixed TurnStartAltitude;
   /** Start/End energy height of the turn (used for flight mode determination) */
-  double TurnStartEnergyHeight;
+  fixed TurnStartEnergyHeight;
 
   /** Current TurnMode (Cruise, Climb or somewhere between) */
   CirclingMode_t TurnMode;
 
   /** Wind speed */
-  double WindSpeed;
+  fixed WindSpeed;
   /** Wind bearing */
-  double WindBearing;
+  fixed WindBearing;
 
   /** Bearing (not used) */
-  double Bearing;
+  fixed Bearing;
   /** Bearing including wind factor */
-  double Heading;
+  fixed Heading;
 
   /** Terrain altitude */
-  double TerrainAlt;
+  fixed TerrainAlt;
   /** True if terrain is valid, False otherwise */
   bool   TerrainValid;
 
   /** Altitude over terrain */
-  double AltitudeAGL;
+  fixed AltitudeAGL;
 
   /** True if airborne, False otherwise */
   int    Flying;
@@ -162,84 +163,84 @@ struct DERIVED_INFO
   int    TimeInFlight;
   bool   LandableReachable;
 
-  double NextAltitudeRequired;
-  double NextAltitudeRequired0; // mc=0
-  double NextAltitudeDifference;
-  double NextAltitudeDifference0; // difference with mc=0
+  fixed NextAltitudeRequired;
+  fixed NextAltitudeRequired0; // mc=0
+  fixed NextAltitudeDifference;
+  fixed NextAltitudeDifference0; // difference with mc=0
 
-  double FinalAltitudeRequired;
-  double FinalAltitudeDifference;
+  fixed FinalAltitudeRequired;
+  fixed FinalAltitudeDifference;
 
   /** Remaining distance of the task */
-  double TaskDistanceToGo;
+  fixed TaskDistanceToGo;
   /** Distance that is already flown of the task */
-  double TaskDistanceCovered;
+  fixed TaskDistanceCovered;
   /** Estimated time that is required to complete the task */
-  double TaskTimeToGo;
+  fixed TaskTimeToGo;
   /** StartTime of the task */
-  double TaskStartTime;
-  double TaskSpeed;
-  double TaskSpeedInstantaneous;
-  double TaskAltitudeRequired;
-  double TaskAltitudeDifference;
-  double TaskAltitudeDifference0; // difference with mc=0
-  double TaskAltitudeRequiredFromStart;
+  fixed TaskStartTime;
+  fixed TaskSpeed;
+  fixed TaskSpeedInstantaneous;
+  fixed TaskAltitudeRequired;
+  fixed TaskAltitudeDifference;
+  fixed TaskAltitudeDifference0; // difference with mc=0
+  fixed TaskAltitudeRequiredFromStart;
 
-  double LDFinish;
-  double LDNext;
+  fixed LDFinish;
+  fixed LDNext;
 
-  double LegDistanceToGo;
-  double LegDistanceCovered;
-  double LegTimeToGo;
-  double LegStartTime;
-  double LegSpeed;
+  fixed LegDistanceToGo;
+  fixed LegDistanceCovered;
+  fixed LegTimeToGo;
+  fixed LegStartTime;
+  fixed LegSpeed;
 
   /** Predicted position after airspace warning time */
   GEOPOINT NextLocation;
   /** Predicted altitude after airspace warning time */
-  double NextAltitude;
+  fixed NextAltitude;
   /** Predicted altitude over terrain after airspace warning time */
-  double NextAltitudeAGL;
+  fixed NextAltitudeAGL;
 
-  double AATMaxDistance;
-  double AATMinDistance;
-  double AATTargetDistance;
-  double AATTimeToGo;
-  double AATMaxSpeed;
-  double AATTargetSpeed;
-  double AATMinSpeed;
+  fixed AATMaxDistance;
+  fixed AATMinDistance;
+  fixed AATTargetDistance;
+  fixed AATTimeToGo;
+  fixed AATMaxSpeed;
+  fixed AATTargetSpeed;
+  fixed AATMinSpeed;
 
   /** Circling/Cruise ratio in percent */
-  double PercentCircling;
+  fixed PercentCircling;
 
   GEOPOINT TerrainWarningLocation;
 
   // JMW moved calculated waypoint info here
-  double WaypointBearing;
-  double WaypointDistance;
-  double WaypointSpeed;
+  fixed WaypointBearing;
+  fixed WaypointDistance;
+  fixed WaypointSpeed;
 
   // JMW thermal band data
-  double MaxThermalHeight;
+  fixed MaxThermalHeight;
   int    ThermalProfileN[NUMTHERMALBUCKETS];
-  double ThermalProfileW[NUMTHERMALBUCKETS];
+  fixed ThermalProfileW[NUMTHERMALBUCKETS];
 
   /** Optimum speed to fly instantaneously */
-  double VOpt;
+  fixed VOpt;
 
   /** Estimated track bearing at next time step @author JMW */
-  double NextTrackBearing;
+  fixed NextTrackBearing;
 
   /** Whether Speed-To-Fly audio are valid or not */
   bool STFMode;
 
   /** Energy height excess to slow to best glide speed @author JMW */
-  double EnergyHeight;
+  fixed EnergyHeight;
 
   /** Turn rate */
-  double TurnRate;
+  fixed TurnRate;
   /** Turn rate after low pass filter */
-  double SmoothedTurnRate;
+  fixed SmoothedTurnRate;
 
   // reflects whether aircraft is in a start/finish/aat/turn sector
   bool IsInSector;
@@ -255,22 +256,22 @@ struct DERIVED_INFO
   bool OnGround;
 
   /** Altitude used for navigation (GPS or Baro) */
-  double NavAltitude;
+  fixed NavAltitude;
 
   /** True if task was started valid, False otherwise */
   bool ValidStart;
   /** Airspeed of the moment the task was started */
-  double TaskStartSpeed;
+  fixed TaskStartSpeed;
   /** Altitude of the moment the task was started */
-  double TaskStartAltitude;
+  fixed TaskStartAltitude;
   /** True if task was finished valid, False otherwise */
   bool ValidFinish;
 
-  double LDvario;
+  fixed LDvario;
 
   GEOPOINT ThermalEstimate_Location;
-  double ThermalEstimate_W;
-  double ThermalEstimate_R;
+  fixed ThermalEstimate_W;
+  fixed ThermalEstimate_R;
 
   /** Position and data of the last thermal sources */
   THERMAL_SOURCE_INFO ThermalSources[MAX_THERMAL_SOURCES];
@@ -281,9 +282,9 @@ struct DERIVED_INFO
   /** Team code */
   TCHAR OwnTeamCode[10];
   /** Bearing to the chosen team mate */
-  double TeammateBearing;
+  fixed TeammateBearing;
   /** Distance to the chosen team mate */
-  double TeammateRange;
+  fixed TeammateRange;
   /** Position of the chosen team mate */
   GEOPOINT TeammateLocation;
   /** Team code of the chosen team mate */
@@ -291,46 +292,46 @@ struct DERIVED_INFO
   bool   TeammateCodeValid;
 
   /** Time of flight */
-  double FlightTime;
+  fixed FlightTime;
   /** Time of takeoff */
-  double TakeOffTime;
+  fixed TakeOffTime;
 
-  double AverageClimbRate[200];
+  fixed AverageClimbRate[200];
   long AverageClimbRateN[200];
 
   /** Distance to home airport */
-  double HomeDistance;
+  fixed HomeDistance;
   /** Direction to home airport */
-  double HomeRadial;
+  fixed HomeRadial;
 
-  double ZoomDistance;
-  double TaskSpeedAchieved;
-  double TrueAirspeedEstimated;
+  fixed ZoomDistance;
+  fixed TaskSpeedAchieved;
+  fixed TrueAirspeedEstimated;
 
   /** Time spent in cruise mode */
-  double timeCruising;
+  fixed timeCruising;
   /** Time spent in circling mode */
-  double timeCircling;
+  fixed timeCircling;
 
-  double MinAltitude;
-  double MaxHeightGain;
+  fixed MinAltitude;
+  fixed MaxHeightGain;
 
   /** Turn rate based on heading (including wind) */
-  double TurnRateWind;
+  fixed TurnRateWind;
 
   /** Estimated bank angle */
-  double BankAngle;
+  fixed BankAngle;
   /** Estimated pitch angle */
-  double PitchAngle;
+  fixed PitchAngle;
 
-  double MacCreadyRisk;
-  double TaskTimeToGoTurningNow;
-  double TotalHeightClimb;
-  double DistanceVario;
-  double GliderSinkRate;
+  fixed MacCreadyRisk;
+  fixed TaskTimeToGoTurningNow;
+  fixed TotalHeightClimb;
+  fixed DistanceVario;
+  fixed GliderSinkRate;
 
   /** Calculated Gload (assuming balanced turn) */
-  double Gload;
+  fixed Gload;
 
   /**
    * Average turn rate over 60 calculations multiplied by 100 and
@@ -338,11 +339,11 @@ struct DERIVED_INFO
    *
    * not used right now.
    */
-  double Essing;
+  fixed Essing;
 
   /** Lowest height within glide range */
-  double TerrainBase;
-  double TermikLigaPoints;
+  fixed TerrainBase;
+  fixed TermikLigaPoints;
 
   /**
    * GRadient to final destination
@@ -350,13 +351,13 @@ struct DERIVED_INFO
    * Note: we don't need GRNext since this value is used when going to a landing
    * point, which is always a final glide.
    */
-  double GRFinish;
+  fixed GRFinish;
 
   int    BestAlternate;
-  double TimeSunset;
+  fixed TimeSunset;
 
   // JMW note, new items should go at the bottom of this struct before experimental!
-  double Experimental;
+  fixed Experimental;
 };
 
 #endif

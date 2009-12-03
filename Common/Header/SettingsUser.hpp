@@ -41,7 +41,7 @@ Copyright_License {
 // changed only in config or by user interface
 // not expected to be used by other threads
 
-#include "GeoPoint.hpp"
+#include "Navigation/GeoPoint.hpp"
 #include "SettingsAirspace.hpp"
 
 extern struct Appearance Appearance;

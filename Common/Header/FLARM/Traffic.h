@@ -41,7 +41,7 @@ Copyright_License {
 
 #include "Sizes.h"
 #include <tchar.h>
-#include "GeoPoint.hpp"
+#include "Navigation/GeoPoint.hpp"
 
 typedef struct _FLARM_TRAFFIC
 {

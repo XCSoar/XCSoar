@@ -40,7 +40,7 @@ Copyright_License {
 #define MARKS_H
 
 #include "Topology.h"
-#include "GeoPoint.hpp"
+#include "Navigation/GeoPoint.hpp"
 #include "Poco/RWLock.h"
 
 struct SETTINGS_COMPUTER;

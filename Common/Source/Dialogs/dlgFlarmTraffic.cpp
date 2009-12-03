@@ -76,8 +76,8 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
     TCHAR tmp[100];
     TCHAR text[100];
 
-    double range;
-    double bear;
+    fixed range;
+    fixed bear;
 
     DistanceBearing(XCSoarInterface::Basic().Location,
 		    XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Location,
@@ -96,8 +96,8 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
 	     );
     wsprintf(text, TEXT("%s %3.0lf %2.1lf"),
 	     tmp,
-	     bear,
-	     (DISTANCEMODIFY * range));
+	     FIXED_DOUBLE(bear),
+	     FIXED_DOUBLE((DISTANCEMODIFY * range)));
 
     if (XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID != 0)
       canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,

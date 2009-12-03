@@ -312,7 +312,7 @@ static void UpdateValuesTimes(void) {
   if (wp) {
     if (XCSoarInterface::Calculated().FlightTime>0) {
       Units::TimeToText(Temp,
-                        (int)TimeLocal((long)XCSoarInterface::Calculated().TakeOffTime));
+                        (int)TimeLocal((long)XCSoarInterface::Calculated().TakeOffTime.as_long()));
       wp->SetText(Temp);
     } else {
       wp->SetText(TEXT(""));
@@ -324,7 +324,7 @@ static void UpdateValuesTimes(void) {
     if (!XCSoarInterface::Calculated().Flying) {
       Units::TimeToText(Temp,
                         (int)TimeLocal((long)(XCSoarInterface::Calculated().TakeOffTime
-                                              +XCSoarInterface::Calculated().FlightTime)));
+                                              +XCSoarInterface::Calculated().FlightTime).as_long()));
       wp->SetText(Temp);
     } else {
       wp->SetText(TEXT(""));
@@ -379,8 +379,8 @@ static void UpdateValuesFlight(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMaxHeightGain"));
   if (wp) {
-    _stprintf(Temp, TEXT("%.0f %s"),
-              XCSoarInterface::Calculated().MaxHeightGain*ALTITUDEMODIFY,
+    _stprintf(Temp, TEXT("%d %s"),
+              (XCSoarInterface::Calculated().MaxHeightGain*ALTITUDEMODIFY).as_int(),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
@@ -462,8 +462,8 @@ static void UpdateValuesRules(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartSpeed"));
   if (wp) {
     if (XCSoarInterface::Calculated().TaskStartTime>0) {
-      _stprintf(Temp, TEXT("%.0f %s"),
-                TASKSPEEDMODIFY*XCSoarInterface::Calculated().TaskStartSpeed,
+      _stprintf(Temp, TEXT("%d %s"),
+                (TASKSPEEDMODIFY*XCSoarInterface::Calculated().TaskStartSpeed).as_int(),
                 Units::GetTaskSpeedName());
       wp->SetText(Temp);
     } else {

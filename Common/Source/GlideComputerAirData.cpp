@@ -450,8 +450,8 @@ void GlideComputerAirData::Heading()
 {
   if ((Basic().Speed>0)||(Calculated().WindSpeed>0)) {
 
-    double x0 = fastsine(Basic().TrackBearing)*Basic().Speed;
-    double y0 = fastcosine(Basic().TrackBearing)*Basic().Speed;
+    fixed x0 = fastsine(Basic().TrackBearing)*Basic().Speed;
+    fixed y0 = fastcosine(Basic().TrackBearing)*Basic().Speed;
     x0 += fastsine(Calculated().WindBearing)*Calculated().WindSpeed;
     y0 += fastcosine(Calculated().WindBearing)*Calculated().WindSpeed;
 
@@ -472,7 +472,7 @@ void GlideComputerAirData::Heading()
 
     // calculate estimated true airspeed
     SetCalculated().TrueAirspeedEstimated =
-      isqrt4((unsigned long)(x0*x0*100+y0*y0*100))/10.0;
+      sqrt(x0*x0+y0*y0);
 
     // estimate bank angle (assuming balanced turn)
     double angle = atan(DEG_TO_RAD*Calculated().TurnRateWind*
@@ -1350,7 +1350,7 @@ void
 GlideComputerAirData::ThermalSources()
 {
   GEOPOINT ground_location;
-  double ground_altitude;
+  fixed ground_altitude;
 
   // QUESTION TB: why the braces?!
   {
@@ -1447,13 +1447,13 @@ GlideComputerAirData::ThermalBand()
   if (dheight > Calculated().MaxThermalHeight) {
 
     // moved beyond ceiling, so redistribute buckets
-    double max_thermal_height_new;
-    double tmpW[NUMTHERMALBUCKETS];
+    fixed max_thermal_height_new;
+    fixed tmpW[NUMTHERMALBUCKETS];
     int tmpN[NUMTHERMALBUCKETS];
-    double h;
+    fixed h;
 
     // calculate new buckets so glider is below max
-    double hbuk = Calculated().MaxThermalHeight/NUMTHERMALBUCKETS;
+    fixed hbuk = Calculated().MaxThermalHeight/NUMTHERMALBUCKETS;
 
     max_thermal_height_new = max(1.0, Calculated().MaxThermalHeight);
     while (max_thermal_height_new<dheight) {

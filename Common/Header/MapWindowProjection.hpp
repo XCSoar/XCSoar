@@ -43,7 +43,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Screen/shapelib/mapprimitive.h"
 #include "Sizes.h"
-#include "GeoPoint.hpp"
+#include "Navigation/GeoPoint.hpp"
 #include <windef.h>
 
 struct NMEA_INFO;

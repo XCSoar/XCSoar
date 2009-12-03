@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "MapWindowProjection.hpp"
+#include "Math/FastRotation.hpp"
 #include "Math/Geometry.hpp"
 #include "InfoBoxLayout.h"
 #include "SettingsComputer.hpp"

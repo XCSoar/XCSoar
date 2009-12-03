@@ -41,7 +41,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Constants.h"
 #include "InfoBoxLayout.h"
-#include "GeoPoint.hpp"
+#include "Navigation/GeoPoint.hpp"
 
 #include <math.h>
 
@@ -254,8 +254,9 @@ bool CheckRectOverlap(RECT rc1, RECT rc2) {
 
 void LatLon2Flat(const GEOPOINT &location, POINT &screen)
 {
-  screen.x = (LONG)(location.Longitude*fastcosine(location.Latitude)*100);
-  screen.y = (LONG)(location.Latitude*100);
+  static const fixed fixed_100 = 100;
+  screen.x = (location.Longitude*fastcosine(location.Latitude)*fixed_100).as_long();
+  screen.y = (location.Latitude*fixed_100).as_long();
 }
 
 unsigned Distance(const POINT &p1, const POINT &p2)

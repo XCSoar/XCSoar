@@ -297,6 +297,12 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 #ifdef OLD_TASK
   // Set the home waypoint
   SetHome(way_points, &terrain, SetSettingsComputer(), false, true);
+#else
+  GEOPOINT loc;
+  if (terrain.GetTerrainCenter(&loc)) {
+    StartupStore(TEXT("Start at terrain center\n"));
+    device_blackboard.SetStartupLocation(loc, 0);
+  }
 #endif
 
   // ReSynchronise the blackboards here since SetHome touches them

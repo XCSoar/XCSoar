@@ -125,7 +125,7 @@ CalibrationUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
     return;
 
   calibration_tevario_val[index_speed][index_te_vario] +=
-    Basic->Vario*ias_to_tas;
+    (double)Basic->Vario*ias_to_tas;
   calibration_tevario_num[index_speed][index_te_vario] ++;
 
   // ASI calibration info
@@ -135,7 +135,7 @@ CalibrationUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   if (index_vspeed>= NUM_CAL_VSPEED)
     return;
 
-  calibration_speed_val[index_vspeed] += Calculated->TrueAirspeedEstimated;
+  calibration_speed_val[index_vspeed] += (double)Calculated->TrueAirspeedEstimated;
   calibration_speed_num[index_vspeed] ++;
 
 }

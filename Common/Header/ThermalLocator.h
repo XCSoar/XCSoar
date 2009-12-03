@@ -42,29 +42,30 @@ Copyright_License {
 #define TLOCATOR_NMIN 5
 #define TLOCATOR_NMAX 60
 
+#include "Math/fixed.hpp"
 #include "Math/leastsqs.h"
 #include "Thread/Mutex.hpp"
-#include "GeoPoint.hpp"
+#include "Navigation/GeoPoint.hpp"
 
 class ThermalLocator_Point {
  public:
   ThermalLocator_Point() {
     valid = false;
   }
-  double latitude;
-  double longitude;
-  double t;
-  double w;
-  //  double logw;
-  double d;
+  fixed latitude;
+  fixed longitude;
+  fixed t;
+  fixed w;
+  //  fixed logw;
+  fixed d;
   bool valid;
-  double weight;
+  fixed weight;
 
-  void Drift(double t_0,
-	     double longitude_0, double latitude_0,
-	     double wind_lon, double wind_lat, double decay);
-  double x;
-  double y;
+  void Drift(fixed t_0,
+	     fixed longitude_0, fixed latitude_0,
+	     fixed wind_lon, fixed wind_lat, fixed decay);
+  fixed x;
+  fixed y;
   int xiw;
   int yiw;
   int iweight;
@@ -76,46 +77,46 @@ class ThermalLocator {
   ThermalLocator();
 
   void Reset();
-  void AddPoint(const double t, const GEOPOINT &location, const double w);
-  void Update(const double t_0,
+  void AddPoint(const fixed t, const GEOPOINT &location, const fixed w);
+  void Update(const fixed t_0,
 	      const GEOPOINT &location_0,
-	      const double wind_speed, const double wind_bearing,
-	      const double trackbearing,
+	      const fixed wind_speed, const fixed wind_bearing,
+	      const fixed trackbearing,
 	      GEOPOINT *Thermal_Location,
-	      double *Thermal_W,
-	      double *Thermal_R);
+	      fixed *Thermal_W,
+	      fixed *Thermal_R);
 
-  //  double Estimate(double t_x, double t_y);
+  //  fixed Estimate(fixed t_x, fixed t_y);
 
   void EstimateThermalBase(const GEOPOINT Thermal_Location,
-			   const double altitude,
-			   const double wthermal,
-			   const double wind_speed,
-			   const double wind_bearing,
+			   const fixed altitude,
+			   const fixed wthermal,
+			   const fixed wind_speed,
+			   const fixed wind_bearing,
                            GEOPOINT *ground_location,
-			   double *ground_alt);
-  double est_x;
-  double est_y;
-  double est_w;
-  double est_r;
-  double est_t;
-  double est_latitude;
-  double est_longitude;
+			   fixed *ground_alt);
+  fixed est_x;
+  fixed est_y;
+  fixed est_w;
+  fixed est_r;
+  fixed est_t;
+  fixed est_latitude;
+  fixed est_longitude;
  private:
 
-  void Update_Internal(double t_0,
-                       double longitude_0, double latitude_0,
-                       double traildrift_lon, double traildrift_lat,
-                       double trackbearing,
-                       double decay,
-                       double *Thermal_Longitude,
-                       double *Thermal_Latitude,
-                       double *Thermal_W,
-                       double *Thermal_R);
+  void Update_Internal(fixed t_0,
+                       fixed longitude_0, fixed latitude_0,
+                       fixed traildrift_lon, fixed traildrift_lat,
+                       fixed trackbearing,
+                       fixed decay,
+                       fixed *Thermal_Longitude,
+                       fixed *Thermal_Latitude,
+                       fixed *Thermal_W,
+                       fixed *Thermal_R);
 
-  void Drift(double t_0,
-	     double longitude_0, double latitude_0,
-	     double wind_lon, double wind_lat, double decay);
+  void Drift(fixed t_0,
+	     fixed longitude_0, fixed latitude_0,
+	     fixed wind_lon, fixed wind_lat, fixed decay);
   ThermalLocator_Point points[TLOCATOR_NMAX];
   LeastSquares ols;
   bool initialised;

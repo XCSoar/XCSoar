@@ -154,7 +154,7 @@ RasterWeather::Reload(const GEOPOINT &location, int day_time)
     }
 
     // limit values, for safety
-    _weather_time = min(MAX_WEATHER_TIMES-1, _weather_time);
+    _weather_time = min((unsigned)(MAX_WEATHER_TIMES-1), _weather_time);
 
     if (_weather_time == last_weather_time) {
       // no change, quick exit.
@@ -295,7 +295,7 @@ void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
     _stprintf(Buffer, TEXT("%.0f%s"), val*ALTITUDEMODIFY, Units::GetAltitudeName());
     return;
   case 5: // blcloudpct
-    _stprintf(Buffer, TEXT("%d%%"), max(0,min(100,val)));
+    _stprintf(Buffer, TEXT("%d%%"), (int)max(0,min(100,val)));
     return;
   case 6: // sfctemp
     _stprintf(Buffer, TEXT("%d")TEXT(DEG), iround(val*0.5-20.0));

@@ -94,8 +94,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       // If Scaled mode is chosen, recalculate the
       // targets virtual position using the scale factor
       if ((SettingsMap().EnableFLARMMap == 2) && (scalefact > 1.0)) {
-        double distance;
-        double bearing;
+        fixed distance;
+        fixed bearing;
 
         DistanceBearing(Basic().Location, target_loc, &distance, &bearing);
 

@@ -95,7 +95,7 @@ void Marks::MarkLocation(const GEOPOINT &loc)
 
   char message[160];
 
-  sprintf(message,"Lon:%f Lat:%f\r\n", loc.Longitude, loc.Latitude);
+  sprintf(message,"Lon:%f Lat:%f\r\n", FIXED_DOUBLE(loc.Longitude), FIXED_DOUBLE(loc.Latitude));
 
   FILE *stream;
   TCHAR fname[MAX_PATH];

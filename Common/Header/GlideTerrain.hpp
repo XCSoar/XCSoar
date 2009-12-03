@@ -50,15 +50,15 @@ class RasterTerrain;
 /**
  * @param terrain a locked RasterTerrain object
  */
-double
-FinalGlideThroughTerrain(const double bearing,
+fixed
+FinalGlideThroughTerrain(const fixed bearing,
                          const NMEA_INFO &basic,
                          const DERIVED_INFO &calculated,
                          const SETTINGS_COMPUTER &settings,
                          const RasterTerrain &terrain,
                          GEOPOINT *retlocation,
-                         const double maxrange,
+                         const fixed maxrange,
                          bool *outofrange,
-                         double *TerrainBase = NULL);
+                         fixed *TerrainBase = NULL);
 
 #endif

@@ -42,7 +42,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Language.hpp"
 #include "Math/FastMath.h"
-#include "Math/Geometry.hpp"
+#include "Math/FastRotation.hpp"
 #include "options.h" /* for IBLSCALE() */
 #include "Asset.hpp"
 

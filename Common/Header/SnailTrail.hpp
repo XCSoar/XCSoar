@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_SNAIL_TRAIL_HPP
 #define XCSOAR_SNAIL_TRAIL_HPP
 
+#include "Math/fixed.hpp"
 #include "Screen/shapelib/mapshape.h"
 #include "GPSClock.hpp"
 #include "Poco/RWLock.h"
@@ -50,14 +51,14 @@ struct DERIVED_INFO;
 
 typedef struct _SNAIL_POINT
 {
-  float Latitude;
-  float Longitude;
-  float Vario;
-  double Time;
+  fixed Latitude;
+  fixed Longitude;
+  fixed Vario;
+  fixed Time;
   short Colour;
   BOOL Circling;
   bool FarVisible;
-  double DriftFactor;
+  fixed DriftFactor;
 } SNAIL_POINT;
 
 class SnailTrail {

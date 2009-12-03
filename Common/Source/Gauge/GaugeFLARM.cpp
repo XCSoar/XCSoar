@@ -41,7 +41,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "Math/FastMath.h"
-#include "Math/Geometry.hpp"
+#include "Math/FastRotation.hpp"
 #include "Math/Screen.hpp"
 #include "Compatibility/string.h"
 #include "InfoBoxLayout.h"

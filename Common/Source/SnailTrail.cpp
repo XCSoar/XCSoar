@@ -60,28 +60,28 @@ SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   Poco::ScopedRWLock protect(lock, true);
 
   SNAIL_POINT &pt = TrailPoints[indexNext];
-  pt.Latitude = (float)(Basic->Location.Latitude);
-  pt.Longitude = (float)(Basic->Location.Longitude);
+  pt.Latitude = Basic->Location.Latitude;
+  pt.Longitude = Basic->Location.Longitude;
   pt.Time = Basic->Time;
   pt.FarVisible = true; // hasn't been filtered out yet.
   if (Calculated->TerrainValid) {
-    double hr = max(0,Calculated->AltitudeAGL)/100.0;
+    fixed hr = max(0,Calculated->AltitudeAGL)/100.0;
     pt.DriftFactor = 2.0/(1.0+exp(-hr))-1.0;
   } else {
     pt.DriftFactor = 1.0;
   }
 
   if (Calculated->Circling) {
-    pt.Vario = (float)(Calculated->NettoVario) ;
+    pt.Vario = (fixed)(Calculated->NettoVario) ;
   } else {
-    pt.Vario = (float)(Calculated->NettoVario) ;
+    pt.Vario = (fixed)(Calculated->NettoVario) ;
   }
 
-  float scale = Calculated->AdjustedAverageThermal; // just for now.. TODO replace
+  fixed scale = Calculated->AdjustedAverageThermal; // just for now.. TODO replace
   // with mc or something more consistent
-  float vario_max = (float)(1.5*min(5.0, max(scale,0.5)));
-  float vario_min = (float)(-1.5*min(5.0, max(scale,2.0)));
-  double colour_vario = pt.Vario;
+  fixed vario_max = (fixed)(1.5*min(5.0, max(scale,0.5)));
+  fixed vario_min = (fixed)(-1.5*min(5.0, max(scale,2.0)));
+  fixed colour_vario = pt.Vario;
   if (pt.Vario<0) {
     colour_vario /= (-vario_min); // JMW fixed bug here
   } else {

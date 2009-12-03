@@ -144,10 +144,11 @@ double MapWindow::DrawTrail(Canvas &canvas, const SnailTrail &snail_trail)
   // this expands them by one minute
 
   rectObj bounds_thermal = screenbounds_latlon;
-  screenbounds_latlon.minx -= fabs(60.0*traildrift.Longitude);
-  screenbounds_latlon.maxx += fabs(60.0*traildrift.Longitude);
-  screenbounds_latlon.miny -= fabs(60.0*traildrift.Latitude);
-  screenbounds_latlon.maxy += fabs(60.0*traildrift.Latitude);
+  const static fixed fixed_60=60.0;
+  screenbounds_latlon.minx -= (double)fabs(fixed_60*traildrift.Longitude);
+  screenbounds_latlon.maxx += (double)fabs(fixed_60*traildrift.Longitude);
+  screenbounds_latlon.miny -= (double)fabs(fixed_60*traildrift.Latitude);
+  screenbounds_latlon.maxy += (double)fabs(fixed_60*traildrift.Latitude);
 
   const rectObj bounds = bounds_thermal;
 

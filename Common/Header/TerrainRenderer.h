@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef TERRAIN_RENDERER_H
 #define TERRAIN_RENDERER_H
 
-#include "GeoPoint.hpp"
+#include "Navigation/GeoPoint.hpp"
 
 #include <windef.h>
 
