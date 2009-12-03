@@ -40,9 +40,12 @@ Copyright_License {
 #define FLIGHT_STATISTICS_HPP
 
 #include "Math/leastsqs.h"
-#include "Task.h"
-#include "Screen/Canvas.hpp"
 #include "Thread/Mutex.hpp"
+#include "Sizes.h"
+
+#include <windef.h>
+
+class Canvas;
 
 class FlightStatistics {
 public:
