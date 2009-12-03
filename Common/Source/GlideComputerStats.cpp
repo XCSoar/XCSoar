@@ -47,6 +47,7 @@ Copyright_License {
 #include "Logger.h"
 #include "Math/Earth.hpp"
 #include "GPSClock.hpp"
+#include "Task.h"
 
 GlideComputerStats::GlideComputerStats() :
   log_clock(5.0),

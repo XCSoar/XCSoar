@@ -47,6 +47,7 @@ Copyright_License {
 #include "TeamCodeCalculation.h"
 #include "Components.hpp"
 #include "WayPointList.hpp"
+#include "Task.h"
 
 /**
  * Constructor of the GlideComputer class

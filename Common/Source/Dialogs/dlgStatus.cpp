@@ -53,6 +53,7 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "WayPointList.hpp"
 #include "Components.hpp"
+#include "Task.h"
 
 #include <assert.h>
 
