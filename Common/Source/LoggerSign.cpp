@@ -131,7 +131,8 @@ LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
 
   char charbuffer[MAX_IGC_BUFF];
 
-  strcpy(charbuffer, szIn);
+  strncpy(charbuffer, szIn, MAX_IGC_BUFF);
+  charbuffer[MAX_IGC_BUFF-1] = '\0';  // just to be safe
   CleanIGCRecord(charbuffer);
   return DiskBufferAdd(charbuffer);
 }
@@ -185,7 +186,7 @@ LoggerImpl::DiskBufferAdd(char *sIn)
     DiskBufferFlush();
   }
   if (LoggerDiskBufferCount < LOGGER_DISK_BUFFER_NUM_RECS) {
-    strcpy(LoggerDiskBuffer[LoggerDiskBufferCount], sIn);
+    strncpy(LoggerDiskBuffer[LoggerDiskBufferCount], sIn, MAX_IGC_BUFF);
     LoggerDiskBuffer[LoggerDiskBufferCount][MAX_IGC_BUFF-1]='\0';
     LoggerDiskBufferCount++;
     bRetVal=true;
