@@ -45,6 +45,7 @@ TaskBehaviour::all_off()
   auto_mc= false;
   calc_cruise_efficiency=false;
   calc_glide_required=false;
+  task_scored = false;
 }
 
 bool 
@@ -63,6 +64,7 @@ TaskBehaviour::TaskBehaviour():
     auto_mc(false),
     calc_cruise_efficiency(true),
     calc_glide_required(true),
+    task_scored(true),
     aat_min_time(3600*5.35),
     safety_height_terrain(150.0),
     safety_height_arrival(300.0),

@@ -102,8 +102,11 @@ AbstractTask::update_stats_distances(const GEOPOINT &location,
   stats.total.travelled.set_distance(scan_distance_travelled(location));
   stats.total.planned.set_distance(scan_distance_planned());
 
-  stats.distance_scored = scan_distance_scored(location);
-
+  if (task_behaviour.task_scored) {
+    stats.distance_scored = scan_distance_scored(location);
+  } else {
+    stats.distance_scored = 0;
+  }
 }
 
 void

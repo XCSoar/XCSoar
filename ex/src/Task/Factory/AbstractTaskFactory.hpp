@@ -57,7 +57,7 @@
  * \todo 
  * - add descriptor field so validate() methods can return feedback about
  *   validity of task etc.  This can also be added to saved files.
- *
+ * - check TaskBehaviour.task_scored and ask if changes are ok if task/flight is started
  */
 class AbstractTaskFactory: 
   private NonCopyable

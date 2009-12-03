@@ -75,6 +75,9 @@ public:
 
   bool calc_glide_required; /**< Option to enable calculation of required sink rate for final glide */
 
+  bool task_scored; /**< Option to enable calculation of scores, and protect against task changes
+                       if flight/task has started */
+
   double aat_min_time; /**< Desired AAT minimum task time (s) */
   fixed safety_height_terrain; /**< Minimum height above terrain for arrival height at non-landable waypoint (m) */
   fixed safety_height_arrival; /**< Minimum height above terrain for arrival height at landable waypoint (m) */
