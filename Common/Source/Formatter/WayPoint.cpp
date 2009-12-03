@@ -38,18 +38,16 @@ Copyright_License {
 
 #include "Formatter/WayPoint.hpp"
 #include "XCSoar.h"
-#include "WayPoint.hpp"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp" // for auto-setting of alternates.  Dangerous!
-#include "Task.h"
 #include "SettingsUser.hpp"
 #include "Components.hpp"
-#include "WayPointList.hpp"
 
 #include <stdio.h>
 #include "Interface.hpp"
 
 const TCHAR *FormatterWaypoint::Render(int *color) {
+#ifdef OLD_TASK
   int index = task.getWaypointIndex();
   if (index>=0) {
     const WAYPOINT &way_point = way_points.get(index);
@@ -81,12 +79,13 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
     Valid = false;
     RenderInvalid(color);
   }
-
+#endif
   return(Text);
 }
 
 // VENTA3 Alternate destinations
 const TCHAR *FormatterAlternate::RenderTitle(int *color) {
+#ifdef OLD_TASK
   if(way_points.verify_index(ActiveAlternate)) {
     const WAYPOINT &way_point = way_points.get(ActiveAlternate);
 
@@ -105,7 +104,7 @@ const TCHAR *FormatterAlternate::RenderTitle(int *color) {
     Valid = false;
     RenderInvalid(color);
   }
-
+#endif
   return(Text);
 }
 
@@ -116,6 +115,7 @@ const TCHAR *FormatterAlternate::RenderTitle(int *color) {
 const TCHAR *
 FormatterAlternate::Render(int *color)
 {
+#ifdef OLD_TASK
   if(Valid && way_points.verify_index(ActiveAlternate)) {
     const WPCALC &wpcalc = way_points.get_calc(ActiveAlternate);
 
@@ -154,6 +154,7 @@ FormatterAlternate::Render(int *color)
     Valid = false;
     RenderInvalid(color);
   }
+#endif
   return(Text);
 }
 
@@ -166,10 +167,12 @@ void FormatterAlternate::AssignValue(int i) {
       SetSettingsComputer().EnableAlternate1 = true;
       Value=INVALID_GR;
     } else {
+#ifdef OLD_TASK
       if ( way_points.verify_index(SettingsComputer().Alternate1) )
         Value = way_points.get_calc(SettingsComputer().Alternate1).GR;
       else
         Value=INVALID_GR;
+#endif
     }
     break;
     /*
@@ -182,9 +185,11 @@ void FormatterAlternate::AssignValue(int i) {
       SetSettingsComputer().EnableAlternate2 = true;
       Value=INVALID_GR;
     } else {
+#ifdef OLD_TASK
       if ( way_points.verify_index(SettingsComputer().Alternate2) )
         Value = way_points.get_calc(SettingsComputer().Alternate2).GR;
       else Value=INVALID_GR;
+#endif
      }
     break;
   case 69:
@@ -193,10 +198,12 @@ void FormatterAlternate::AssignValue(int i) {
       SetSettingsComputer().EnableBestAlternate = true;	  // activate it
       Value=INVALID_GR;
     } else {
+#ifdef OLD_TASK
       if ( way_points.verify_index(Calculated().BestAlternate))
         Value = way_points.get_calc(Calculated().BestAlternate).GR;
       else
         Value=INVALID_GR;
+#endif
     }
     break;
   default:
@@ -220,6 +227,7 @@ void FormatterAlternate::AssignValue(int i) {
 
 const TCHAR *FormatterDiffBearing::Render(int *color) {
 
+#ifdef OLD_TASK
   if (task.Valid()
       && (Calculated().WaypointDistance > 10.0)) {
     Valid = true;
@@ -252,7 +260,7 @@ const TCHAR *FormatterDiffBearing::Render(int *color) {
     Valid = false;
     RenderInvalid(color);
   }
-
+#endif
   return(Text);
 }
 

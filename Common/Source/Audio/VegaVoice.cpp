@@ -40,9 +40,7 @@ Copyright_License {
 #include "Audio/VegaVoice.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
-#include "AirspaceWarning.h"
 #include "InputEvents.h"  // used for altair beep hack
-#include "Task.h"
 #include "Device/device.h"
 #include "Units.hpp"
 #include <tchar.h>
@@ -362,6 +360,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     // CAUTION TERRAIN
     break;
   case VV_WAYPOINTDISTANCE:
+#ifdef OLD_TASK
     if ((!Calculated->Circling)
         && (task.Valid())) {
 
@@ -406,6 +405,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
 
       }
     }
+#endif
     break;
   case VV_MACCREADY:
     if (!settings.EnableVoiceMacCready) return false;
@@ -418,6 +418,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     break;
   case VV_NEWWAYPOINT:
     if (!settings.EnableVoiceNewWaypoint) return false;
+#ifdef OLD_TASK
     if (task.getActiveIndex() != LastWayPoint) {
       LastWayPoint = task.getActiveIndex();
       // Reports that a new waypoint is active
@@ -428,6 +429,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       DoSend(Basic->Time, text);
       return true;
     }
+#endif
     break;
   case VV_INSECTOR:
     if (!settings.EnableVoiceInSector) return false;
@@ -464,6 +466,8 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
 
 int VegaVoiceMessage::id_active = -1;
 TCHAR VegaVoiceMessage::last_messageText[80];
+
+#ifdef OLD_TASK
 
 static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace){
   (void)AirSpace;
@@ -512,6 +516,7 @@ static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, Airspace
 
 }
 
+#endif
 
 VegaVoice::VegaVoice() {
   for (int i=0; i<VV_MESSAGE_COUNT; i++) {
@@ -522,11 +527,12 @@ VegaVoice::VegaVoice() {
 bool VegaVoice::AirspaceNotifierInstalled = false;
 
 VegaVoice::~VegaVoice() {
+#ifdef OLD_TASK
   if (AirspaceNotifierInstalled) {
     AirspaceNotifierInstalled = false;
     AirspaceWarnListRemoveNotifier(AirspaceWarningNotify);
   }
-
+#endif
 }
 
 void VegaVoice::Lock() {
@@ -543,11 +549,13 @@ VegaVoice::Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
 {
 
   if (!AirspaceNotifierInstalled){
+#ifdef OLD_TASK
     AirspaceNotifierInstalled = true;
 
     // note this isn't removed yet on destruction, so it is a very small
     // memory leak
     AirspaceWarnListAddNotifier(AirspaceWarningNotify);
+#endif
   }
 
   Lock();

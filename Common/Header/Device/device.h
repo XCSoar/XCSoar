@@ -40,7 +40,9 @@ Copyright_License {
 #define	DEVICE_H
 
 #include "Port.h"
+#ifdef OLD_TASK
 #include "WayPoint.hpp"
+#endif
 #include "Device/Declaration.hpp"
 
 #include <stdio.h>

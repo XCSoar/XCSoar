@@ -57,7 +57,6 @@ ScreenGraphics MapGfx;
  */
 MapWindow::MapWindow()
   :MapWindowProjection(),
-   way_points(NULL), task(NULL), airspace_database(NULL),
    topology(NULL), terrain(NULL), weather(NULL), terrain_renderer(NULL),
    marks(NULL), snail_trail(NULL), olc(NULL),
    cdi(NULL),
@@ -371,8 +370,10 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
   if (snail_trail != NULL)
     snail_trail->ScanVisibility(bounds_active);
 
+#ifdef OLD_TASK
   ScanVisibilityWaypoints(bounds_active);
   ScanVisibilityAirspace(bounds_active);
+#endif
 }
 
 void MapWindow::SwitchZoomClimb(void) {

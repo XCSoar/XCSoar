@@ -91,6 +91,8 @@ FlarmDeclare(ComPort *port, const struct Declaration *decl)
   if (!FlarmDeclareSetGet(port, Buffer))
     result = false;
 
+#ifdef OLD_TASK
+
   for (int i = 0; i < decl->num_waypoints; i++) {
     int DegLat, DegLon;
     double tmp, MinLat, MinLon;
@@ -123,6 +125,7 @@ FlarmDeclare(ComPort *port, const struct Declaration *decl)
     if (!FlarmDeclareSetGet(port, Buffer))
       result = false;
   }
+#endif
 
   _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
   if (!FlarmDeclareSetGet(port, Buffer))

@@ -38,17 +38,17 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Protection.hpp"
-#include "Task.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "InfoBoxLayout.h"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include "options.h" /* for IBLSCALE() */
-#include "WayPointList.hpp"
-#include "TaskVisitor.hpp"
+
 
 #include <math.h>
+
+#ifdef OLD_TASK
 
 class DrawAbortedTaskVisitor:
   public AbsoluteTaskPointVisitor
@@ -752,3 +752,5 @@ MapWindow::CalculateScreenPositionsTask()
                                 task->getActiveIndex());
   task->scan_point_forward(sv, false); // read lock
 }
+
+#endif

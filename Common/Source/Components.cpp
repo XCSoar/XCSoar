@@ -50,14 +50,9 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
 #include "Dialogs.h"
-#include "Waypointparser.h"
-#include "AirspaceGlue.hpp"
-#include "AirspaceWarning.h"
-#include "AirspaceDatabase.hpp"
 #include "ButtonLabel.hpp"
 #include "SnailTrail.hpp"
 #include "Language.hpp"
-#include "Task.h"
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "Math/FastMath.h"
@@ -88,10 +83,7 @@ Copyright_License {
 #include "options.h"
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
-#include "WayPointList.hpp"
 
-WayPointList way_points;
-AirspaceDatabase airspace_database;
 Marks *marks;
 TopologyStore *topology;
 RasterTerrain terrain;
@@ -163,9 +155,11 @@ void XCSoarInterface::AfterStartup() {
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
+#ifdef OLD_TASK
   // Create default task if none exists
   StartupStore(TEXT("Create default task\n"));
   task.DefaultTask(SettingsComputer(), Basic());
+#endif
 
   StartupStore(TEXT("CloseProgressDialog\n"));
   CloseProgressDialog();
@@ -262,7 +256,10 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 #endif
 
   // Initialize main blackboard data
+#ifdef OLD_TASK
   task.ClearTask();
+#endif
+
   glide_computer.Initialise();
   logger.LinkGRecordDLL(); // try to link DLL if it exists
 
@@ -289,14 +286,18 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   StartupStore(TEXT("OpenTerrain\n"));
   terrain.OpenTerrain();
 
+#ifdef OLD_TASK
   // Read the waypoint files
   ReadWayPoints(way_points, &terrain);
+#endif
 
   // Read and parse the airfield info file
   ReadAirfieldFile();
 
+#ifdef OLD_TASK
   // Set the home waypoint
   SetHome(way_points, &terrain, SetSettingsComputer(), false, true);
+#endif
 
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());
@@ -309,10 +310,12 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   StartupStore(TEXT("RASP load\n"));
   RASP.ScanAll(Basic().Location);
 
+#ifdef OLD_TASK
   // Reads the airspace files
   ReadAirspace(airspace_database, &terrain);
   // Sorts the airspaces by priority
   SortAirspace(airspace_database);
+#endif
 
   // Read the FLARM details file
   OpenFLARMDetails();
@@ -337,9 +340,12 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 
+#ifdef OLD_TASK
   main_window.map.set_way_points(&way_points);
   main_window.map.set_task(&task);
   main_window.map.set_airspaces(&airspace_database);
+#endif
+
   main_window.map.set_topology(topology);
   main_window.map.set_terrain(&terrain);
   main_window.map.set_weather(&RASP);
@@ -395,9 +401,11 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   }
 #endif
 
+#ifdef OLD_TASK
   // Initialise the airspace warning dialog
   StartupStore(TEXT("dlgAirspaceWarningInit\n"));
   dlgAirspaceWarningInit();
+#endif
 
   // Find unique ID of this PDA
   ReadAssetNumber();
@@ -430,7 +438,9 @@ void XCSoarInterface::Shutdown(void) {
   globalRunningEvent.reset();
 
   StartupStore(TEXT("dlgAirspaceWarningDeInit\n"));
+#ifdef OLD_TASK
   dlgAirspaceWarningDeInit();
+#endif
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving logs...")));
   // stop logger
@@ -470,6 +480,7 @@ void XCSoarInterface::Shutdown(void) {
   // Clear data
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
+#ifdef OLD_TASK
   StartupStore(TEXT("Resume abort task\n"));
   task.ResumeAbortTask(SettingsComputer(), Basic(), -1); // turn off abort if it was on.
   StartupStore(TEXT("Save default task\n"));
@@ -481,6 +492,7 @@ void XCSoarInterface::Shutdown(void) {
 
   StartupStore(TEXT("Close waypoints\n"));
   way_points.clear();
+#endif
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 
@@ -527,7 +539,9 @@ void XCSoarInterface::Shutdown(void) {
 
   DeleteFonts();
 
+#ifdef OLD_TASK
   DeleteAirspace(airspace_database);
+#endif
 
   StartupStore(TEXT("Close Progress Dialog\n"));
 

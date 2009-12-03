@@ -99,7 +99,9 @@ private:
   void NettoVario();
   void TakeoffLanding();
   void PredictNextPosition();
+#ifdef OLD_TASK
   void AirspaceWarning();
+#endif
   void TerrainFootprint(const double max_dist);
   void BallastDump();
   void ThermalSources();

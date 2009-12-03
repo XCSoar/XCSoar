@@ -38,9 +38,10 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Screen/Graphics.hpp"
-#include "AirspaceDatabase.hpp"
 
 #include <assert.h>
+
+#ifdef OLD_TASK
 
 void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
   assert(airspace_database != NULL);
@@ -291,3 +292,5 @@ void MapWindow::ScanVisibilityAirspace(rectObj *bounds_active) {
     area.FarVisible = IsFarVisible(area, *bounds_active);
   }
 }
+
+#endif

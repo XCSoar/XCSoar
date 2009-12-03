@@ -44,12 +44,8 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
 #include "MainWindow.hpp"
-#include "Waypointparser.h"
 #include "SettingsTask.hpp"
-#include "Airspace.h"
-#include "AirspaceDatabase.hpp"
 #include "Screen/ProgressWindow.hpp"
-#include "Task.h"
 #include "UtilsText.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
@@ -149,7 +145,9 @@ void PopupAnalysis()
  */
 void PopupWaypointDetails()
 {
+#ifdef OLD_TASK
   dlgWayPointDetailsShowModal();
+#endif
 }
 
 
@@ -180,6 +178,7 @@ PopupNearestWaypointDetails(const WayPointList &way_points,
   */
   MapWindowProjection &map_window = XCSoarInterface::main_window.map;
 
+#ifdef OLD_TASK
   int i;
   if (!pan || !XCSoarInterface::SettingsMap().EnablePan) {
     i = FindNearestWayPoint(way_points, map_window, location, range);
@@ -194,10 +193,11 @@ PopupNearestWaypointDetails(const WayPointList &way_points,
     PopupWaypointDetails();
     return true;
   }
-
+#endif
   return false;
 }
 
+#ifdef OLD_TASK
 bool
 PopupInteriorAirspaceDetails(const AirspaceDatabase &airspace_database,
                              const GEOPOINT &location) {
@@ -223,3 +223,4 @@ PopupInteriorAirspaceDetails(const AirspaceDatabase &airspace_database,
 
   return found; // nothing found..
 }
+#endif

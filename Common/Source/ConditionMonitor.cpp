@@ -44,18 +44,20 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Units.h"
 #include "Message.h"
-#include "Task.h"
 #include "Device/device.h"
 #include "SettingsTask.hpp"
 #include "Protection.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "LocalTime.hpp"
 #include "InputEvents.h"
-#include "WayPoint.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "GlideComputer.hpp"
 #include "Components.hpp"
+
+#ifdef OLD_TASK
+#include "WayPoint.hpp"
 #include "WayPointList.hpp"
+#endif
 
 // TODO: JMW: make this use GPSClock (code re-use)
 
@@ -187,6 +189,7 @@ public:
 
 protected:
   bool CheckCondition(const GlideComputer& cmp) {
+#ifdef OLD_TASK    
     if (!cmp.Calculated().Flying || !task.Valid()) {
       return false;
     }
@@ -219,6 +222,7 @@ protected:
         }
       }
     }
+#endif
     return false;
   };
 
@@ -250,6 +254,7 @@ protected:
   SunEphemeris sun;
 
   bool CheckCondition(const GlideComputer& cmp) {
+#ifdef OLD_TASK
     if (!task.Valid() || !cmp.Calculated().Flying) {
       return false;
     }
@@ -269,6 +274,9 @@ protected:
     } else {
       return false;
     }
+#else
+    return false;
+#endif
   };
 
   void Notify(void) {
@@ -290,6 +298,7 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
+#ifdef OLD_TASK
     if (!task.getSettings().AATEnabled || !task.Valid() || task.TaskIsTemporary()
         || !(cmp.Calculated().ValidStart && !cmp.Calculated().ValidFinish)
         || !cmp.Calculated().Flying) {
@@ -305,6 +314,9 @@ protected:
     } else {
       return false;
     }
+#else
+    return false;
+#endif
   };
 
   void Notify(void) {
@@ -327,6 +339,7 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
+#ifdef OLD_TASK
     if (!task.Valid() || !cmp.Calculated().Flying
         || (task.getActiveIndex()>0) || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
       return false;
@@ -343,6 +356,9 @@ protected:
     }
     return !(cmp.ValidStartSpeed()
 	     && cmp.InsideStartHeight());
+#else
+    return false;
+#endif
   };
 
   void Notify(void) {
@@ -371,6 +387,7 @@ public:
 protected:
 
   bool CheckCondition(const GlideComputer& cmp) {
+#ifdef OLD_TASK
     if (!cmp.Calculated().Flying || !task.Valid()) {
       return false;
     }
@@ -385,6 +402,7 @@ protected:
       // just reached final glide, previously well below
       return true;
     }
+#endif
     return false;
   };
 

@@ -42,7 +42,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InputEvents.h"
 #include "Message.h"
-#include "Task.h"
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
 #include "Screen/Graphics.hpp"
@@ -186,6 +185,7 @@ bool MapWindow::on_mouse_double(int x, int y)
 bool
 MapWindow::on_mouse_move(int x, int y, unsigned keys)
 {
+#ifdef OLD_TASK
   if (task != NULL && task->getSettings().AATEnabled &&
       SettingsMap().TargetPan && (TargetDrag_State>0)) {
     // target follows "finger" so easier to drop near edge of
@@ -208,7 +208,7 @@ MapWindow::on_mouse_move(int x, int y, unsigned keys)
       }
     }
   }
-
+#endif
   return MaskedPaintWindow::on_mouse_move(x, y, keys);
 }
 
@@ -225,6 +225,8 @@ bool MapWindow::on_mouse_down(int x, int y)
   Screen2LonLat(x, y, LLstart);
   XstartScreen = x;
   YstartScreen = y;
+
+#ifdef OLD_TASK
 
   if (task != NULL && task->getSettings().AATEnabled &&
       SettingsMap().TargetPan) {
@@ -243,6 +245,7 @@ bool MapWindow::on_mouse_down(int x, int y)
       }
     }
   }
+#endif
   return true;
 }
 
@@ -301,6 +304,8 @@ bool MapWindow::on_mouse_up(int x, int y)
   GEOPOINT G;
   Screen2LonLat(x, y, G);
 
+#ifdef OLD_TASK
+
   if (task != NULL && task->getSettings().AATEnabled && my_target_pan &&
       TargetDrag_State > 0) {
     TargetDrag_State = 2;
@@ -310,6 +315,7 @@ bool MapWindow::on_mouse_up(int x, int y)
     }
     return true;
   }
+#endif
 
   if (!my_target_pan && SettingsMap().EnablePan && (distance>IBLSCALE(36))) {
     // JMW broken!
@@ -345,27 +351,39 @@ bool MapWindow::on_mouse_up(int x, int y)
       if(dwInterval < VKSHORTCLICK) {
         //100ms is NOT enough for a short click since GetTickCount
         //is OEM custom!
+
+#ifdef OLD_TASK
+
         if (way_points != NULL &&
             PopupNearestWaypointDetails(*way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }
+#endif
+
       } else {
+#ifdef OLD_TASK
         if (airspace_database != NULL &&
             PopupInteriorAirspaceDetails(*airspace_database, LLstart))
           return true;
+#endif
       }
+
     } else {
       if(dwInterval < AIRSPACECLICK) { // original and untouched interval
+#ifdef OLD_TASK
         if (way_points != NULL &&
             PopupNearestWaypointDetails(*way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }
+#endif
       } else {
+#ifdef OLD_TASK
         if (airspace_database != NULL &&
             PopupInteriorAirspaceDetails(*airspace_database, LLstart))
           return true;
+#endif
       }
     } // VK enabled
   } // !TargetPan

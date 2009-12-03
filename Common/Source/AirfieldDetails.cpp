@@ -45,7 +45,6 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
-#include "WayPoint.hpp"
 #include "Interface.hpp"
 
 #include <zzip/lib.h>
@@ -115,6 +114,7 @@ CloseAirfieldDetails()
  * Paolo Ventafridda
  */
 
+#ifdef OLD_TASK
 
 class WaypointNameLookup: public WaypointVisitor {
 public:
@@ -190,14 +190,16 @@ private:
   const TCHAR* Name;
   const TCHAR* Details;
 };
-
+#endif
 
 static void
 LookupAirfieldDetail(TCHAR *Name, const TCHAR *Details)
 {
   CharUpper(Name);  // AIR name
+#ifdef OLD_TASK
   WaypointNameLookup wnl(Name, Details);
   WaypointScan::scan_forward(wnl);
+#endif
 }
 
 

@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "Task.h"
 #include "InfoBoxLayout.h"
 #include "Math/Earth.hpp"
 #include "McReady.h"
@@ -120,10 +119,15 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
     +Calculated().TerrainBase;
   h = Calculated().NavAltitude-hoffset;
 
-  bool draw_start_height = task != NULL && task->getActiveIndex() == 0 &&
+  bool draw_start_height = 
+#ifdef OLD_TASK
+    task != NULL && task->getActiveIndex() == 0 &&
     task->ValidTaskPoint(0) && task->getSettings().StartMaxHeight != 0 &&
+#endif
     Calculated().TerrainValid;
   double hstart=0;
+
+#ifdef OLD_TASK
   if (task != NULL && draw_start_height) {
     if (task->getSettings().StartHeightRef == 0) {
       hstart = task->getSettings().StartMaxHeight+Calculated().TerrainAlt;
@@ -132,6 +136,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
     }
     hstart -= hoffset;
   }
+#endif
 
   // calculate top/bottom height
   maxh = max(h, mth);

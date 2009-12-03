@@ -48,13 +48,11 @@ Copyright_License {
 #include "Device/Port.h"
 #include "Atmosphere.h"
 #include "Battery.h"
-#include "WayPoint.hpp"
 #include "Registry.hpp"
 #include "MapWindow.h"
 #include "McReady.h"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "Task.h"
 
 #include <stdlib.h>
 #include "FlarmCalculations.h"
@@ -176,6 +174,7 @@ ActionInterface::on_key_QFEAltitude(int UpDown)
 void
 ActionInterface::on_key_Alternate1(int UpDown)
 {
+#ifdef OLD_TASK
    if (UpDown==0) {
      if ( SettingsComputer().Alternate1 <0 ) return;
      task.setSelected(SettingsComputer().Alternate1);
@@ -183,11 +182,13 @@ ActionInterface::on_key_Alternate1(int UpDown)
      ScopePopupBlock block(main_window.popup);
      PopupWaypointDetails();
   }
+#endif
 }
 
 void
 ActionInterface::on_key_Alternate2(int UpDown)
 {
+#ifdef OLD_TASK
    if (UpDown==0) {
      if ( SettingsComputer().Alternate2 <0 )
        return;
@@ -196,11 +197,13 @@ ActionInterface::on_key_Alternate2(int UpDown)
      ScopePopupBlock block(main_window.popup);
      PopupWaypointDetails();
   }
+#endif
 }
 
 void
 ActionInterface::on_key_BestAlternate(int UpDown)
 {
+#ifdef OLD_TASK
    if (UpDown==0) {
      if ( Calculated().BestAlternate <0 )
        return;
@@ -209,6 +212,7 @@ ActionInterface::on_key_BestAlternate(int UpDown)
      ScopePopupBlock block(main_window.popup);
      PopupWaypointDetails();
   }
+#endif
 }
 
 void
@@ -373,6 +377,7 @@ void
 ActionInterface::on_key_Waypoint(int UpDown)
 {
 
+#ifdef OLD_TASK
   if (UpDown>0) {
     task.advanceTaskPoint(SettingsComputer());
   } else if ((UpDown == 2) && (task.ValidTaskPoint(0))) {
@@ -403,6 +408,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
     ScopePopupBlock block(main_window.popup);
     PopupWaypointDetails();
   }
+#endif
 }
 
 

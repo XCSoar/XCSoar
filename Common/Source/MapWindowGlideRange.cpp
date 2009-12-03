@@ -37,11 +37,11 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "Task.h"
 #include "Screen/Graphics.hpp"
 #include "McReady.h"
 #include "Screen/Fonts.hpp"
 #include "options.h" /* for IBLSCALE() */
+#include <stdio.h>
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
   if (SettingsComputer().FinalGlideTerrain) {
@@ -95,6 +95,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
     canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   }
 
+#ifdef OLD_TASK
   if (Calculated().Flying && task != NULL && task->Valid()) {
     if ((Calculated().TerrainWarningLocation.Latitude != 0.0)
         &&(Calculated().TerrainWarningLocation.Longitude != 0.0)) {
@@ -104,6 +105,8 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
 				    10, 10);
     }
   }
+#endif
+
 }
 
 /*

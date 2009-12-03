@@ -40,7 +40,6 @@ Copyright_License {
 #define FLIGHT_STATISTICS_HPP
 
 #include "Math/leastsqs.h"
-#include "Task.h"
 #include "Screen/Canvas.hpp"
 #include "Thread/Mutex.hpp"
 
@@ -83,7 +82,9 @@ private:
   LeastSquares Altitude_Base;
   LeastSquares Altitude_Ceiling;
   LeastSquares Task_Speed;
+#ifdef OLD_TASK
   double       LegStartTime[MAXTASKPOINTS];
+#endif
   LeastSquares Altitude_Terrain;
   Mutex mutexStats;
   void Lock() {

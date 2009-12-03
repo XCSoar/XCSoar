@@ -43,7 +43,6 @@ Copyright_License {
 
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Internal.hpp"
-#include "WayPoint.hpp"
 #include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
@@ -74,7 +73,9 @@ protected:
 public:
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
                          bool enable_baro);
+#ifdef OLD_TASK
   virtual bool Declare(const struct Declaration *declaration);
+#endif
 };
 
 static bool
@@ -184,6 +185,7 @@ EWMicroRecorderPrintf(ComPort *port, const TCHAR *fmt, ...)
   port->WriteString(EWStr);
 }
 
+#ifdef OLD_TASK
 static void
 EWMicroRecorderWriteWayPoint(ComPort *port,
                              const WAYPOINT &way_point, const TCHAR *EWType)
@@ -280,6 +282,8 @@ EWMicroRecorderDevice::Declare(const struct Declaration *decl)
 
   return nDeclErrorCode == 0; // return true on success
 }
+
+#endif
 
 static Device *
 EWMicroRecorderCreateOnComPort(ComPort *com_port)

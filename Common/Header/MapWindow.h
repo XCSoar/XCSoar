@@ -40,7 +40,6 @@ Copyright_License {
 
 #include "MapWindowProjection.hpp"
 #include "MapWindowTimer.hpp"
-#include "Airspace.h"
 #include "Thread/Trigger.hpp"
 #include "Thread/Mutex.hpp"
 #include "Screen/BufferCanvas.hpp"
@@ -48,7 +47,6 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "MapWindowBlackboard.hpp"
 #include "PeriodClock.hpp"
-#include "TaskImpl.hpp"
 
 typedef struct _THERMAL_SOURCE_VIEW
 {
@@ -63,9 +61,6 @@ struct ZoomClimb_t {
   bool last_targetpan;
 };
 
-class WayPointList;
-class TaskSafe;
-class AirspaceDatabase;
 class TopologyStore;
 class RasterTerrain;
 class RasterWeather;
@@ -82,10 +77,6 @@ class MapWindow
   public MapWindowTimer
 {
   PeriodClock mouse_down_clock;
-
-  WayPointList *way_points;
-  TaskSafe *task;
-  const AirspaceDatabase *airspace_database;
 
   TopologyStore *topology;
   RasterTerrain *terrain;
@@ -117,6 +108,7 @@ class MapWindow
   void set(ContainerWindow &parent,
            const RECT _MapRectSmall, const RECT _MapRectBig);
 
+/*
   void set_way_points(WayPointList *_way_points) {
     way_points = _way_points;
   }
@@ -128,6 +120,7 @@ class MapWindow
   void set_airspaces(AirspaceDatabase *_airspace_database) {
     airspace_database = _airspace_database;
   }
+*/
 
   void set_topology(TopologyStore *_topology);
   void set_terrain(RasterTerrain *_terrain);
@@ -185,8 +178,12 @@ class MapWindow
   int           TargetDrag_State;
 
   POINT         Groundline[NUMTERRAINSWEEPS+1];
+
+#ifdef OLD_TASK
   TaskScreen_t   task_screen;
   StartScreen_t  task_start_screen;
+#endif
+
   ZoomClimb_t    zoomclimb;
 
   THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
@@ -211,8 +208,12 @@ class MapWindow
   void CalculateScreenPositionsWaypoints();
   void CalculateScreenPositionsGroundline();
   void CalculateScreenPositionsAirspace();
+
+#ifdef OLD_TASK
   void CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE& circ);
   void CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA& area);
+#endif
+
   void CalculateScreenPositionsThermalSources();
   void MapWaypointLabelSortAndRender(Canvas &canvas);
 

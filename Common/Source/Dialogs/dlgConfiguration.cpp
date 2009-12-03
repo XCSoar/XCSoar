@@ -43,7 +43,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsAirspace.hpp"
 #include "SettingsComputer.hpp"
-#include "Task.h"
+#include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "Appearance.hpp"
 #include "Gauge/GaugeFLARM.hpp"
@@ -61,7 +61,6 @@ Copyright_License {
 #include "McReady.h"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"
-#include "Waypointparser.h"
 #include "Polar/BuiltIn.hpp"
 #include "Polar/Historical.hpp"
 #include "Polar/Loader.hpp"
@@ -71,7 +70,6 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Screen/Fonts.hpp"
 #include "GlideRatio.hpp"
-#include "WayPointList.hpp"
 #include "Components.hpp"
 
 extern ldrotary_s rotaryLD;
@@ -765,12 +763,16 @@ static void OnLoggerIDClicked(WindowControl *Sender) {
 
 static void OnAirspaceColoursClicked(WindowControl * Sender){
 	(void)Sender;
+#ifdef OLD_TASK
   dlgAirspaceShowModal(true);
+#endif
 }
 
 static void OnAirspaceModeClicked(WindowControl * Sender){
 	(void)Sender;
+#ifdef OLD_TASK
   dlgAirspaceShowModal(false);
+#endif
 }
 
 static void OnNextClicked(WindowControl * Sender){
@@ -973,7 +975,7 @@ extern void OnInfoBoxHelp(WindowControl * Sender);
 
 static void OnWaypointNewClicked(WindowControl * Sender){
   (void)Sender;
-
+#ifdef OLD_TASK
   WAYPOINT edit_waypoint;
   edit_waypoint.Location = XCSoarInterface::Basic().Location;
   edit_waypoint.FileNum = 0; // default, put into primary waypoint file
@@ -990,20 +992,24 @@ static void OnWaypointNewClicked(WindowControl * Sender){
       waypointneedsave = true;
     }
   }
+#endif
 }
 
 
 static void OnWaypointEditClicked(WindowControl * Sender){
 	(void)Sender;
   int res;
+#ifdef OLD_TASK
   res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
     dlgWaypointEditShowModal(way_points.set(res));
     waypointneedsave = true;
   }
+#endif
 }
 
 static void AskWaypointSave(void) {
+#ifdef OLD_TASK
   if (WaypointsOutOfRange==2) {
 
     if(MessageBoxX(gettext(TEXT("Waypoints excluded, save anyway?")),
@@ -1024,6 +1030,7 @@ static void AskWaypointSave(void) {
     changed = true;
   }
   waypointneedsave = false;
+#endif
 }
 
 
@@ -1037,6 +1044,7 @@ static void OnWaypointSaveClicked(WindowControl * Sender){
 static void OnWaypointDeleteClicked(WindowControl * Sender){
 	(void)Sender;
   int res;
+#ifdef OLD_TASK
   res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
     if(MessageBoxX(way_points.get(res).Name,
@@ -1047,6 +1055,7 @@ static void OnWaypointDeleteClicked(WindowControl * Sender){
       waypointneedsave = true;
     }
   }
+#endif
 }
 
 
@@ -1584,6 +1593,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+#ifdef OLD_TASK
   wp = (WndProperty*)wf->FindByName(TEXT("prpWaypointsOutOfRange"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1594,6 +1604,7 @@ static void setVariables(void) {
     wp->GetDataField()->Set(WaypointsOutOfRange);
     wp->RefreshDisplay();
   }
+#endif
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoForceFinalGlide"));
   if (wp) {
@@ -2578,7 +2589,9 @@ void dlgConfigurationShowModal(void){
     cpyInfoBox[item] = -1;
   }
 
+#ifdef OLD_TASK
   settings_task = task.getSettings();
+#endif
 
   setVariables();
 
@@ -2825,6 +2838,7 @@ void dlgConfigurationShowModal(void){
 				      szRegistryAutoMcMode,
 				      XCSoarInterface::SetSettingsComputer().AutoMcMode);
 
+#ifdef OLD_TASK
   wp = (WndProperty*)wf->FindByName(TEXT("prpWaypointsOutOfRange"));
   if (wp) {
     if (WaypointsOutOfRange != wp->GetDataField()->GetAsInteger()) {
@@ -2834,6 +2848,7 @@ void dlgConfigurationShowModal(void){
       changed = true;
     }
   }
+#endif
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpAutoForceFinalGlide"),
 				      szRegistryAutoForceFinalGlide,
@@ -3676,9 +3691,11 @@ void dlgConfigurationShowModal(void){
 
   if (taskchanged) {
     changed = true;
+#ifdef OLD_TASK
     task.setSettings(settings_task);
     task.RefreshTask(XCSoarInterface::SettingsComputer(),
                      XCSoarInterface::Basic());
+#endif
   }
 
 #ifdef WINDOWSPC

@@ -41,7 +41,6 @@ Copyright_License {
 #include "Marks.h"
 #include "TerrainRenderer.h"
 #include "RasterTerrain.h"
-#include "Task.h"
 #include "TopologyStore.h"
 #include "RasterWeather.h"
 #include "SnailTrail.hpp"
@@ -59,6 +58,7 @@ void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 		  SettingsComputer(),
 		  SettingsMap());
 
+#ifdef OLD_TASK
   // Calculate screen positions of the visible waypoints
   CalculateScreenPositionsWaypoints();
 
@@ -66,7 +66,7 @@ void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 
   // Calculate screen positions of the airspaces
   CalculateScreenPositionsAirspace();
-
+#endif
   // Calculate screen positions of the thermal sources
   CalculateScreenPositionsThermalSources();
 
@@ -169,6 +169,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
 {
   // Draw AAT areas
+#ifdef OLD_TASK
   if (task != NULL && !task->TaskIsTemporary())
     DrawTaskAAT(canvas, rc, buffer_canvas);
 
@@ -176,6 +177,7 @@ void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
   if (SettingsMap().OnAirSpace > 0) {
     DrawAirSpace(canvas, rc, buffer_canvas);
   }
+#endif
 }
 
 /**
@@ -207,6 +209,7 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
 {
+#ifdef OLD_TASK
   if (task != NULL) {
     if (task->isTaskAborted())
       DrawAbortedTask(canvas);
@@ -215,6 +218,7 @@ void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
   }
 
   DrawWaypoints(canvas);
+#endif
 
   if (marks != NULL)
     marks->Draw(canvas, *this, rc);
@@ -309,6 +313,7 @@ void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
 {
+#ifdef OLD_TASK
   if (Basic().Connected) {
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
     DrawProjectedTrack(canvas);
@@ -316,6 +321,7 @@ void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
     DrawBestCruiseTrack(canvas);
   }
   DrawBearing(canvas, Basic().Connected);
+#endif
 }
 
 /**

@@ -43,7 +43,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Battery.h"
 #include "Units.hpp"
-#include "Waypointparser.h"
 #include "Logger.h"
 #include "Math/FastMath.h"
 #include "LocalTime.hpp"
@@ -51,7 +50,6 @@ Copyright_License {
 #include "Calculations.h" // TODO danger! FAIFinishHeight
 #include "MapWindow.h"
 #include "GlideComputer.hpp"
-#include "WayPointList.hpp"
 #include "Components.hpp"
 
 #include <assert.h>
@@ -387,6 +385,7 @@ static void UpdateValuesFlight(void) {
     wp->SetText(Temp);
   }
 
+#ifdef OLD_TASK
   if (nearest_waypoint>=0) {
 
     DistanceBearing(XCSoarInterface::Basic().Location,
@@ -398,20 +397,17 @@ static void UpdateValuesFlight(void) {
     if (wp) {
       wp->SetText(way_points.get(nearest_waypoint).Name);
     }
-
     wp = (WndProperty*)wf->FindByName(TEXT("prpBearing"));
     if (wp) {
       _stprintf(Temp, TEXT("%d")TEXT(DEG), iround(bearing));
       wp->SetText(Temp);
     }
-
     wp = (WndProperty*)wf->FindByName(TEXT("prpDistance"));
     if (wp) {
       TCHAR DistanceText[MAX_PATH];
       Units::FormatUserDistance(distance,DistanceText, 10);
       wp->SetText(DistanceText);
     }
-
   } else {
     wp = (WndProperty*)wf->FindByName(TEXT("prpNear"));
     if (wp) {
@@ -426,6 +422,8 @@ static void UpdateValuesFlight(void) {
       wp->SetText(TEXT("-"));
     }
   }
+#endif
+
 
 }
 
@@ -474,6 +472,8 @@ static void UpdateValuesRules(void) {
   }
   // StartMaxHeight, StartMaxSpeed;
 
+#ifdef OLD_TASK
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartPoint"));
   if (wp) {
     int wp_index = task.getWaypointIndex(0);
@@ -506,6 +506,7 @@ static void UpdateValuesRules(void) {
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
+#endif
 
 }
 
@@ -514,6 +515,7 @@ static void UpdateValuesTask(void) {
   WndProperty *wp;
   TCHAR Temp[80];
 
+#ifdef OLD_TASK
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskTime"));
   Units::TimeToText(Temp, (int)task.getSettings().AATTaskLength*60);
   if (wp) {
@@ -588,6 +590,8 @@ static void UpdateValuesTask(void) {
               Units::GetTaskSpeedName());
     wp->SetText(Temp);
   }
+#endif
+
 }
 
 
@@ -648,10 +652,12 @@ void dlgStatusShowModal(int start_page){
     }
   }
 
+#ifdef OLD_TASK
   nearest_waypoint = FindNearestWayPoint(way_points,
                                          XCSoarInterface::main_window.map,
 					 XCSoarInterface::Basic().Location,
                                          100000.0, true); // big range limit
+#endif
 
   UpdateValuesSystem();
   UpdateValuesFlight();

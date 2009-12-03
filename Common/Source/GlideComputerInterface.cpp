@@ -40,7 +40,6 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "Units.hpp"
 #include "InputEvents.h"
-#include "Task.h"
 #include "Message.h"
 #include "SettingsTask.hpp"
 #include "LocalTime.hpp"
@@ -49,6 +48,7 @@ Copyright_License {
  * Calls waypoint change events. Is called when waypoint is switched.
  */
 void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
+#ifdef OLD_TASK
   if (task.getActiveIndex() == 0) {
     // InputEvents::processGlideComputer(GCE_TASK_START);
     // QUESTION JMW: why commented out?
@@ -86,5 +86,6 @@ void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
   }
   // set waypoint detail to active task WP
 
+#endif
   GlideComputerStats::SetFastLogging();
 }

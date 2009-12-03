@@ -46,7 +46,6 @@ Copyright_License {
 
 #include "Device/Driver/CAI302.hpp"
 #include "Device/Internal.hpp"
-#include "WayPoint.hpp"
 #include "Protection.hpp"
 #include "Device/Parser.h"
 #include "Device/Port.h"
@@ -143,7 +142,9 @@ public:
   virtual bool PutMcCready(double mc_cready);
   virtual bool PutBugs(double bugs);
   virtual bool PutBallast(double ballast);
+#ifdef OLD_TASK
   virtual bool Declare(const struct Declaration *declaration);
+#endif
 };
 
 //static cai302_Wdata_t cai302_Wdata;
@@ -243,6 +244,7 @@ CAI302Device::Open()
 static int DeclIndex = 128;
 static int nDeclErrorCode;
 
+#ifdef OLD_TASK
 static bool
 cai302DeclAddWayPoint(ComPort *port, const WAYPOINT &way_point);
 
@@ -476,6 +478,8 @@ cai302DeclAddWayPoint(ComPort *port, const WAYPOINT &way_point)
 
   return true;
 }
+
+#endif
 
 static Device *
 CAI302CreateOnComPort(ComPort *com_port)

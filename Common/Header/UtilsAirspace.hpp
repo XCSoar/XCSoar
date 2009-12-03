@@ -38,6 +38,8 @@ Copyright_License {
 #if !defined(XCSOAR_UTILS_AIRSPACE_H)
 #define XCSOAR_UTILS_AIRSPACE_H
 
+#ifdef OLD_TASK
+
 #include "Airspace.h"
 
 void FormatWarningString(int Type, const TCHAR *Name,
@@ -47,4 +49,5 @@ void FormatWarningString(int Type, const TCHAR *Name,
 void
 ConvertFlightLevels(AirspaceDatabase &airspace_database);
 
+#endif
 #endif

@@ -38,7 +38,6 @@ Copyright_License {
 */
 
 #include "GlideComputerAirData.hpp"
-#include "AirspaceDatabase.hpp"
 #include "McReady.h"
 #include "WindZigZag.h"
 #include "windanalyser.h"
@@ -54,10 +53,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "RasterMap.h"
 #include "Calibration.hpp"
-#include "Airspace.h"
-#include "AirspaceWarning.h"
 #include "GlideTerrain.hpp"
-#include "Task.h" // only needed for check of activewaypoint
 #include "SettingsTask.hpp"
 #include "LocalTime.hpp"
 #include "MapWindowProjection.hpp"
@@ -613,6 +609,7 @@ void
 GlideComputerAirData::SpeedToFly(const double mc_setting,
 				 const double cruise_efficiency)
 {
+
   double n;
   // get load factor
   if (Basic().AccelerationAvailable) {
@@ -649,6 +646,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
     delta_mc = risk_mc-Calculated().NettoVario;
   }
 
+#ifdef OLD_TASK
   if (1 || (Calculated().Vario <= risk_mc)) {
     // thermal is worse than mc threshold, so find opt cruise speed
 
@@ -676,7 +674,6 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
                                     true,
                                     NULL, 1.0e6, cruise_efficiency);
     }
-
     // put low pass filter on VOpt so display doesn't jump around
     // too much
     if (Calculated().Vario <= risk_mc) {
@@ -694,6 +691,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
     // calculate speed of min sink adjusted for load factor
     SetCalculated().VOpt = GlidePolar::Vminsink*sqrt(n);
   }
+#endif
 
   SetCalculated().STFMode = !Calculated().Circling;
 }
@@ -788,7 +786,9 @@ GlideComputerAirData::ProcessIdle()
   TerrainFootprint(MapProjection().GetScreenDistanceMeters());
   if (airspace_clock.check_advance(Basic().Time)
       && SettingsComputer().EnableAirspaceWarnings) {
+#ifdef OLD_TASK
     AirspaceWarning();
+#endif
   }
 }
 
@@ -923,6 +923,7 @@ GlideComputerAirData::PredictNextPosition()
 
 bool GlobalClearAirspaceWarnings = false;
 
+#ifdef OLD_TASK
 static bool
 InsideAltitudeRange(const AirspaceMetadata &airspace, double alt, double agl)
 {
@@ -998,6 +999,7 @@ GlideComputerAirData::AirspaceWarning()
                           map_projection);
 }
 
+#endif
 
 
 void
@@ -1522,7 +1524,9 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
     double fixaltitude = Calculated->TerrainAlt;
 
     QNH = FindQNH(Basic->BaroAltitude, fixaltitude);
+#ifdef OLD_TASK
     airspace_database.SetQNH(QNH);
+#endif
   }
 }
 

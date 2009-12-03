@@ -38,10 +38,11 @@ Copyright_License {
 */
 
 #include "Calculations.h"
-#include "Task.h"
 
 void RefreshTaskStatistics(void) {
+#ifdef OLD_TASK
   task.SetTargetModified(false);
+#endif
   /* JMW incomplete
   const double mc = GlidePolar::GetMacCready();
   const double ce = GlidePolar::GetCruiseEfficiency();

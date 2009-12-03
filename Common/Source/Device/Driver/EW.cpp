@@ -45,7 +45,6 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Device/Port.h"
 #include "NMEA/Checksum.h"
-#include "WayPoint.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -69,7 +68,9 @@ public:
 
 protected:
   bool TryConnect();
+#ifdef OLD_TASK
   bool AddWayPoint(const WAYPOINT &way_point);
+#endif
 
 public:
   virtual void LinkTimeout();
@@ -201,9 +202,10 @@ EWDevice::Declare(const struct Declaration *decl)
       return false;
     };
   }
-
+#ifdef OLD_TASK
   for (int j = 0; j < decl->num_waypoints; j++)
     AddWayPoint(*decl->waypoint[j]);
+#endif
 
   port->WriteString(_T("NMEA\r\n"));         // switch to NMEA mode
 
@@ -217,6 +219,8 @@ EWDevice::Declare(const struct Declaration *decl)
   return nDeclErrorCode == 0; // return true on success
 
 }
+
+#ifdef OLD_TASK
 
 bool
 EWDevice::AddWayPoint(const WAYPOINT &way_point)
@@ -319,6 +323,8 @@ EWDevice::AddWayPoint(const WAYPOINT &way_point)
 
   return true;
 }
+
+#endif
 
 void
 EWDevice::LinkTimeout()

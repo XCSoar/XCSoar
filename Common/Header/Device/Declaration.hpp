@@ -48,7 +48,9 @@ struct Declaration {
   TCHAR AircraftType[32];
   TCHAR AircraftRego[32];
   int num_waypoints;
+#ifdef OLD_TASK
   const struct WAYPOINT *waypoint[MAXTASKPOINTS];
+#endif
 };
 
 #endif

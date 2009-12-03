@@ -45,7 +45,6 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Interface.hpp"
 #include "Language.hpp"
-#include "Task.h"
 #include "SettingsTask.hpp"
 #include "UtilsText.hpp"
 #include "Math/Pressure.h"
@@ -53,7 +52,6 @@ Copyright_License {
 #include "Device/Volkslogger/vlapi2.h"
 #include "Device/Volkslogger/vlapihlp.h"
 #include "Components.hpp"
-#include "WayPointList.hpp"
 #include "NMEA/Info.h"
 
 class VolksloggerDevice : public AbstractDevice {
@@ -66,7 +64,9 @@ public:
 public:
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
                          bool enable_baro);
+#ifdef OLD_TASK
   virtual bool Declare(const struct Declaration *declaration);
+#endif
 };
 
 // RMN: Volkslogger
@@ -136,6 +136,8 @@ static int nturnpoints = 0;
 
 static bool
 VLDeclAddWayPoint(const WAYPOINT &way_point);
+
+#ifdef OLD_TASK
 
 bool
 VolksloggerDevice::Declare(const struct Declaration *decl)
@@ -272,6 +274,7 @@ VolksloggerDevice::Declare(const struct Declaration *decl)
   return ok;
 }
 
+
 static bool
 VLDeclAddWayPoint(const WAYPOINT &way_point)
 {
@@ -298,6 +301,8 @@ VLDeclAddWayPoint(const WAYPOINT &way_point)
   return true;
 
 }
+
+#endif
 
 static Device *
 VolksloggerCreateOnComPort(ComPort *com_port)

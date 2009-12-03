@@ -46,7 +46,6 @@ Copyright_License {
 #include "ConditionMonitor.hpp"
 #include "TeamCodeCalculation.h"
 #include "Components.hpp"
-#include "WayPointList.hpp"
 
 /**
  * Constructor of the GlideComputer class
@@ -196,6 +195,7 @@ GlideComputer::ProcessIdle()
 
   CalculateWaypointReachable();
 
+#ifdef OLD_TASK
   // if (Task is not aborted and Task consists of more than one waypoint)
   if (!task.TaskIsTemporary()) {
     double mc = GlidePolar::GetMacCready();
@@ -203,6 +203,7 @@ GlideComputer::ProcessIdle()
     DoAutoMacCready(mc);
     IterateEffectiveMacCready();
   }
+#endif
 
   GlideComputerAirData::ProcessIdle();
 }
@@ -235,7 +236,6 @@ GlideComputer::SetLegStart()
 #include "Math/NavFunctions.hpp" // used for team code
 #include "InputEvents.h"
 #include "SettingsComputer.hpp"
-#include "WayPoint.hpp"
 #include "PeriodClock.hpp"
 #include "Math/Earth.hpp"
 
@@ -244,6 +244,7 @@ static PeriodClock last_team_code_update;
 void
 GlideComputer::CalculateOwnTeamCode()
 {
+#ifdef OLD_TASK
   if (SettingsComputer().TeamCodeRefWaypoint < 0) return;
 
   if (!last_team_code_update.check_update(10000))
@@ -266,11 +267,15 @@ GlideComputer::CalculateOwnTeamCode()
   SetCalculated().TeammateRange = distance;
 
   _tcsncpy(SetCalculated().OwnTeamCode, code, 5);
+#else
+  return;
+#endif
 }
 
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
+#ifdef OLD_TASK
   static bool InTeamSector = false;
 
   if (SettingsComputer().TeamCodeRefWaypoint < 0) return;
@@ -317,6 +322,9 @@ GlideComputer::CalculateTeammateBearingRange()
     SetCalculated().TeammateBearing = 0;
     SetCalculated().TeammateRange = 0;
   }
+#else
+  return;
+#endif
 }
 
 void
@@ -354,6 +362,7 @@ GlideComputer::OnDepartedThermal()
 void
 GlideComputer::FLARM_ScanTraffic()
 {
+#ifdef OLD_TASK
   if (Basic().FLARM_Available) {
 
     for (int flarm_slot=0; flarm_slot<FLARM_MAX_TRAFFIC; flarm_slot++) {
@@ -378,4 +387,5 @@ GlideComputer::FLARM_ScanTraffic()
       }
     }
   }
+#endif
 }

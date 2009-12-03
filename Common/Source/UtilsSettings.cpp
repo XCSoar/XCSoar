@@ -42,9 +42,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "SettingsTask.hpp"
 #include "RasterTerrain.h"
-#include "Waypointparser.h"
 #include "AirfieldDetails.h"
-#include "AirspaceGlue.hpp"
 #include "TopologyStore.h"
 #include "McReady.h"
 #include "Dialogs.h"
@@ -56,7 +54,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language.hpp"
 #include "LogFile.hpp"
-#include "Task.h"
 #include "Asset.hpp"
 #include "DrawThread.hpp"
 
@@ -123,7 +120,9 @@ void SettingsLeave() {
   }
 
   if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED) || (AIRFIELDFILECHANGED)) {
+#ifdef OLD_TASK
     task.ClearTask();
+#endif
 
     XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
     XCSoarInterface::SetProgressStepSize(2);
@@ -132,6 +131,7 @@ void SettingsLeave() {
     terrain.CloseTerrain();
     terrain.OpenTerrain();
 
+#ifdef OLD_TASK
     // re-load waypoints
     ReadWayPoints(way_points, &terrain);
     ReadAirfieldFile();
@@ -141,11 +141,14 @@ void SettingsLeave() {
       SetHome(way_points, &terrain, XCSoarInterface::SetSettingsComputer(),
           WAYPOINTFILECHANGED);
     }
+#endif
 
     terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
 
+#ifdef OLD_TASK
     task.RefreshTask(XCSoarInterface::SetSettingsComputer(),
                      XCSoarInterface::Basic());
+#endif
   }
 
   if (TOPOLOGYFILECHANGED) {
@@ -153,11 +156,13 @@ void SettingsLeave() {
     topology->Open();
   }
 
+#ifdef OLD_TASK
   if(AIRSPACEFILECHANGED) {
     CloseAirspace(airspace_database);
     ReadAirspace(airspace_database, &terrain);
     SortAirspace(airspace_database);
   }
+#endif
 
   if (POLARFILECHANGED) {
     LoadPolarById(POLARID, polar);

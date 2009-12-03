@@ -89,12 +89,6 @@ DEVS	:=\
 DLGS	:=\
 	$(SRC)/Dialogs/XML.o \
 	$(SRC)/Dialogs/Message.o \
-	$(SRC)/Dialogs/dlgAirspace.o \
-	$(SRC)/Dialogs/dlgAirspaceColours.o \
-	$(SRC)/Dialogs/dlgAirspaceDetails.o \
-	$(SRC)/Dialogs/dlgAirspacePatterns.o \
-	$(SRC)/Dialogs/dlgAirspaceSelect.o \
-	$(SRC)/Dialogs/dlgAirspaceWarning.o \
 	$(SRC)/Dialogs/dlgBasicSettings.o \
 	$(SRC)/Dialogs/dlgBrightness.o \
 	$(SRC)/Dialogs/dlgChecklist.o \
@@ -105,16 +99,10 @@ DLGS	:=\
 	$(SRC)/Dialogs/dlgFlarmTraffic.o \
 	$(SRC)/Dialogs/dlgHelp.o \
 	$(SRC)/Dialogs/dlgLoggerReplay.o \
-	$(SRC)/Dialogs/dlgStartPoint.o \
 	$(SRC)/Dialogs/dlgStartup.o \
 	$(SRC)/Dialogs/dlgStatistics.o \
 	$(SRC)/Dialogs/dlgStatus.o \
 	$(SRC)/Dialogs/dlgSwitches.o \
-	$(SRC)/Dialogs/dlgTarget.o \
-	$(SRC)/Dialogs/dlgTaskCalculator.o \
-	$(SRC)/Dialogs/dlgTaskOverview.o \
-	$(SRC)/Dialogs/dlgTaskRules.o \
-	$(SRC)/Dialogs/dlgTaskWaypoint.o \
 	$(SRC)/Dialogs/dlgTeamCode.o \
 	$(SRC)/Dialogs/dlgTextEntry.o \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.o \
@@ -122,13 +110,8 @@ DLGS	:=\
 	$(SRC)/Dialogs/dlgHelpers.o \
 	$(SRC)/Dialogs/dlgVegaDemo.o \
 	$(SRC)/Dialogs/dlgVoice.o \
-	$(SRC)/Dialogs/dlgWayPointDetails.o \
-	$(SRC)/Dialogs/dlgWaypointEdit.o \
-	$(SRC)/Dialogs/dlgWayPointSelect.o \
-	$(SRC)/Dialogs/dlgWaypointOutOfTerrain.o \
 	$(SRC)/Dialogs/dlgWeather.o \
 	$(SRC)/Dialogs/dlgWindSettings.o \
-	$(SRC)/Dialogs/dlgStartTask.o \
 	$(SRC)/Dialogs/dlgFontEdit.o \
 
 VOLKS	:=\
@@ -147,16 +130,7 @@ OBJS	:=\
 	\
 	$(SRC)/Poco/RWLock.o		\
 	\
-	$(SRC)/AATDistance.o 		\
-	$(SRC)/Abort.o 			\
-	$(SRC)/Airspace.o 		\
-	$(SRC)/AirspaceDatabase.o \
-	$(SRC)/AirspaceGlue.o \
-	$(SRC)/AirspaceParser.o 	\
-	$(SRC)/AirspaceTerrain.o \
-	$(SRC)/AirspaceWarning.o 	\
 	$(SRC)/Atmosphere.o 		\
-	$(SRC)/BestAlternate.o 		\
 	$(SRC)/ClimbAverageCalculator.o \
 	$(SRC)/ConditionMonitor.o 	\
 	$(SRC)/Calibration.o 		\
@@ -170,7 +144,6 @@ OBJS	:=\
 	$(SRC)/GlideComputerStats.o 	\
 	$(SRC)/GlideComputerTask.o 	\
 	$(SRC)/GlideRatio.o 		\
-	$(SRC)/GlideSolvers.o 		\
 	$(SRC)/GlideTerrain.o \
 	$(SRC)/Logger.o 		\
 	$(SRC)/LoggerImpl.o 		\
@@ -179,15 +152,8 @@ OBJS	:=\
 	$(SRC)/McReady.o 		\
 	$(SRC)/OnLineContest.o 		\
 	$(SRC)/SnailTrail.o 		\
-	$(SRC)/Task.o			\
-	$(SRC)/TaskImpl.o		\
-	$(SRC)/TaskFile.o		\
-	$(SRC)/TaskVisitor.o		\
 	$(SRC)/TeamCodeCalculation.o 	\
 	$(SRC)/ThermalLocator.o 	\
-	$(SRC)/Waypointparser.o 	\
-	$(SRC)/WayPoint.o 		\
-	$(SRC)/WayPointList.o 		\
 	$(SRC)/windanalyser.o 		\
 	$(SRC)/windmeasurementlist.o 	\
 	$(SRC)/windstore.o 		\

@@ -47,13 +47,9 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "Components.hpp"
-#include "WayPointList.hpp"
 #include "Compatibility/string.h"
 #include "InfoBoxManager.h"
 #include "SettingsUser.hpp"
-#include "Airspace.h"
-#include "AirspaceDatabase.hpp"
-#include "Task.h"
 #include "Asset.hpp"
 
 #include <stdlib.h>
@@ -92,6 +88,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
   if (_tcsstr(OutBuffer, TEXT("$(")) == NULL) return false;
 
+#ifdef OLD_TASK
   if (task.isTaskAborted()) {
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
@@ -182,6 +179,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
       break;
     }
   }
+#endif
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckReplay)"))) {
     if (!Basic().Replay && Basic().MovementDetected) {
@@ -190,12 +188,15 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckReplay)"), TEXT(""), Size);
   }
 
+#ifdef OLD_TASK
   if (_tcsstr(OutBuffer, TEXT("$(CheckWaypointFile)"))) {
     if (!way_points.verify_index(0)) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckWaypointFile)"), TEXT(""), Size);
   }
+#endif
+
   if (_tcsstr(OutBuffer, TEXT("$(CheckSettingsLockout)"))) {
     if (!is_simulator() && XCSoarInterface::LockSettingsInFlight &&
         Calculated().Flying) {
@@ -203,6 +204,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckSettingsLockout)"), TEXT(""), Size);
   }
+
+#ifdef OLD_TASK
   if (_tcsstr(OutBuffer, TEXT("$(CheckTaskResumed)"))) {
     if (task.isTaskAborted()) {
       // TODO code: check, does this need to be set with temporary task?
@@ -222,6 +225,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
     ReplaceInString(OutBuffer, TEXT("$(CheckAirspace)"), TEXT(""), Size);
   }
+#endif
+
   if (_tcsstr(OutBuffer, TEXT("$(CheckFLARM)"))) {
     if (!Basic().FLARM_Available) {
       invalid = true;
@@ -234,6 +239,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTerrain)"), TEXT(""), Size);
   }
+#ifdef OLD_TASK
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
     if (!task.Valid()
         && ((SettingsComputer().AutoMcMode==0)
@@ -242,6 +248,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);
   }
+#endif
 
   CondReplaceInString(logger.isLoggerActive(), OutBuffer,
                       TEXT("$(LoggerActive)"), TEXT("Stop"), TEXT("Start"), Size);
@@ -317,9 +324,11 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     }
   }
 
+#ifdef OLD_TASK
   CondReplaceInString(task.TaskIsTemporary(),
 		      OutBuffer, TEXT("$(TaskAbortToggleActionName)"),
 		      TEXT("Resume"), TEXT("Abort"), Size);
+#endif
 
   CondReplaceInString(SettingsMap().FullScreen, OutBuffer,
                       TEXT("$(FullScreenToggleActionName)"),

@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "FlightStatistics.hpp"
-#include "AirspaceDatabase.hpp"
 #include "XCSoar.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
@@ -55,7 +54,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
-#include "Task.h"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "options.h" /* for IBLSCALE() */
@@ -77,9 +75,11 @@ void FlightStatistics::Reset() {
   Altitude_Ceiling.Reset();
   Task_Speed.Reset();
   Altitude_Terrain.Reset();
+#ifdef OLD_TASK
   for(int j=0;j<MAXTASKPOINTS;j++) {
     LegStartTime[j] = -1;
   }
+#endif
   Unlock();
 }
 
@@ -100,6 +100,7 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
   chart.ScaleXFromValue(Altitude.x_min+1.0); // in case no data
   chart.ScaleXFromValue(Altitude.x_min);
 
+#ifdef OLD_TASK
   for(int j=1; task.ValidTaskPoint(j) ;j++) {
     if (LegStartTime[j]>=0) {
       double xx =
@@ -131,6 +132,7 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
 
   chart.DrawXLabel(TEXT("t"));
   chart.DrawYLabel(TEXT("h"));
+#endif
 }
 
 
@@ -138,6 +140,7 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
 {
   Chart chart(canvas, rc);
 
+#ifdef OLD_TASK
   if ((Task_Speed.sum_n<2)
       || !task.Valid()) {
     chart.DrawNoData();
@@ -171,7 +174,7 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
 
   chart.DrawXLabel(TEXT("t"));
   chart.DrawYLabel(TEXT("V"));
-
+#endif
 }
 
 
@@ -287,6 +290,7 @@ void FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc)
 
 void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcmode)
 {
+#ifdef OLD_TASK
   int i;
   Chart chart(canvas, rc);
 
@@ -394,6 +398,7 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
       }
     }
   }
+
   for (i=0; i< nolc; i++) {
     lat1 = glide_computer.GetOLC().getLocation(i).Latitude;
     lon1 = glide_computer.GetOLC().getLocation(i).Longitude;
@@ -561,6 +566,8 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   y1 = (lat1-lat_c);
   chart.DrawLabel(TEXT("+"), x1, y1);
   glide_computer.GetOLC().Unlock();
+#endif
+
 }
 
 
@@ -728,6 +735,7 @@ void FlightStatistics::RenderWind(Canvas &canvas, const RECT rc)
 
 
 void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
+#ifdef OLD_TASK
   double range = 50.0*1000; // km
   double ach, acb;
   double fj;
@@ -875,11 +883,13 @@ void FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc) {
 
   chart.DrawXLabel(TEXT("D"));
   chart.DrawYLabel(TEXT("h"));
+#endif
 }
 
 void
 FlightStatistics::StartTask(double starttime)
 {
+#ifdef OLD_TASK
   Lock();
   LegStartTime[0] = starttime;
   LegStartTime[1] = starttime;
@@ -887,6 +897,7 @@ FlightStatistics::StartTask(double starttime)
   ThermalAverage.Reset();
   Task_Speed.Reset();
   Unlock();
+#endif
 }
 
 
@@ -941,11 +952,13 @@ void
 FlightStatistics::SetLegStart(const int activewaypoint,
 			      const double time)
 {
+#ifdef OLD_TASK
   Lock();
   if (LegStartTime[task.getActiveIndex()]<0) {
     LegStartTime[task.getActiveIndex()] = time;
   }
   Unlock();
+#endif
 }
 
 void
@@ -1078,6 +1091,7 @@ FlightStatistics::CaptionTempTrace(TCHAR *sTmp)
 void
 FlightStatistics::CaptionTask(TCHAR *sTmp)
 {
+#ifdef OLD_TASK
   if (!task.Valid()) {
     _stprintf(sTmp, gettext(TEXT("No task")));
   } else {
@@ -1128,4 +1142,7 @@ FlightStatistics::CaptionTask(TCHAR *sTmp)
 		Units::GetDistanceName());
     }
   }
+#else
+    _stprintf(sTmp, gettext(TEXT("No task")));
+#endif
 }

@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Formatter/Time.hpp"
 #include "LocalTime.hpp"
-#include "Task.h"
 #include <stdlib.h>
 #include "Interface.hpp"
 
@@ -80,8 +79,10 @@ void FormatterTime::AssignValue(int i) {
     break;
   case 46:
     SecsToDisplayTime((int)(Calculated().LegTimeToGo+DetectCurrentTime(&Basic())));
+#ifdef OLD_TASK
     Valid = task.ValidTaskPoint(task.getActiveIndex()) &&
       (Calculated().LegTimeToGo< 0.9*ERROR_TIME);
+#endif
     break;
   default:
     break;
@@ -91,6 +92,7 @@ void FormatterTime::AssignValue(int i) {
 
 void FormatterAATTime::AssignValue(int i) {
   double dd;
+#ifdef OLD_TASK
   if (task.getSettings().AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
     dd = Calculated().TaskTimeToGo;
     if ((Calculated().TaskStartTime>0.0) && (Calculated().Flying)
@@ -145,6 +147,7 @@ void FormatterAATTime::AssignValue(int i) {
   default:
     break;
   }
+#endif
 }
 
 const TCHAR *FormatterTime::Render(int *color) {

@@ -40,7 +40,6 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_TASK_HPP
 
 #include "GlideComputerBlackboard.hpp"
-#include "AATDistance.h"
 #include "OnLineContest.h"
 #include "GPSClock.hpp"
 
@@ -55,7 +54,6 @@ struct WPCALC;
 class GlideComputerTask: virtual public GlideComputerBlackboard {
 public:
   GlideComputerTask(): olc_clock(5.0) {};
-  AATDistance          aatdistance;
   OLCOptimizer         olc;
   void DoAutoMacCready(double mc_setting);
   virtual bool InsideStartHeight(const DWORD Margin=0) const;

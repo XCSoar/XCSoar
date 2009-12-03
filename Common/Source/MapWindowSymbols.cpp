@@ -47,7 +47,6 @@ Copyright_License {
 #include "Logger.h"
 #include "Language.hpp"
 #include "McReady.h"
-#include "Task.h"
 #include "Appearance.hpp"
 #include "options.h" /* for IBLSCALE() */
 
@@ -251,6 +250,7 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
   if (Appearance.FlightModeIcon == apFlightModeIconDefault){
     Bitmap *bmp;
+#ifdef OLD_TASK
     if (task != NULL && task->isTaskAborted()) {
       bmp = &MapGfx.hAbort;
     } else if (DisplayMode == dmCircling) {
@@ -260,6 +260,9 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
     } else {
       bmp = &MapGfx.hCruise;
     }
+#else
+    bmp = &MapGfx.hCruise;
+#endif
 
     offset -= 24;
 
@@ -315,10 +318,14 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
     }
 
+#ifdef OLD_TASK
     if (task != NULL && task->isTaskAborted())
       canvas.select(MapGfx.hBrushFlyingModeAbort);
     else
       canvas.select(MapGfx.hbCompass);
+#else
+    canvas.select(MapGfx.hbCompass);
+#endif
 
     canvas.select(MapGfx.hpCompassBorder);
     canvas.polygon(Arrow, 3);
@@ -505,6 +512,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
   int Offset0;
   int i;
 
+#ifdef OLD_TASK
   if (task != NULL && task->Valid()){
 
     const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
@@ -683,7 +691,9 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
                       size.cx, size.cy, false);
         }
       }
+
   }
+#endif
 }
 
 
@@ -754,9 +764,13 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
 
 void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
 {
+#ifdef OLD_TASK
   if (task == NULL || !task->Valid()) {
     return;
   }
+#else
+  return;
+#endif
 
   if (Calculated().WaypointDistance < 0.010)
     return;

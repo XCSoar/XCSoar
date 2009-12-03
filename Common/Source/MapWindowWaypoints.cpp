@@ -38,10 +38,10 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Screen/Graphics.hpp"
-#include "WayPointList.hpp"
 
 #include <assert.h>
 
+#ifdef OLD_TASK
 //FIX
 void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 			 TextInBoxMode_t Mode, int AltArivalAGL,
@@ -272,3 +272,5 @@ void MapWindow::CalculateScreenPositionsWaypoints() {
     }
   }
 }
+
+#endif

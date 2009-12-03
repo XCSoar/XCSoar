@@ -37,12 +37,10 @@ Copyright_License {
 */
 
 #include "Profile.hpp"
-#include "WayPoint.hpp"
 #include "Registry.hpp"
 #include "LogFile.hpp"
 #include "SettingsTask.hpp"
 #include "Math/Units.h"
-#include "Task.h"
 #include "Appearance.hpp"
 #include "InfoBoxManager.h"
 #include "McReady.h"
@@ -126,6 +124,7 @@ void Profile::ReadRegistrySettings(void)
   DefaultRegistrySettingsAltair();
 #endif
 
+#ifdef OLD_TASK
   SETTINGS_TASK settings_task = task.getSettings();
   GetFromRegistry(szRegistryFinishMinHeight,
 		  settings_task.FinishMinHeight );
@@ -172,6 +171,7 @@ void Profile::ReadRegistrySettings(void)
   for (i=0; i<AIRSPACECLASSCOUNT; i++) {
     GetFromRegistry(szRegistryAirspacePriority[i], AirspacePriority[i]);
   }
+#endif
 
   Temp = 0;
   GetFromRegistryD(szRegistryLatLonUnits, Temp);
@@ -560,8 +560,10 @@ void Profile::ReadRegistrySettings(void)
 
   GetFromRegistry(szRegistryAutoMcMode,
 		  SetSettingsComputer().AutoMcMode );
+#ifdef OLD_TASK
   GetFromRegistry(szRegistryWaypointsOutOfRange,
 		  WaypointsOutOfRange );
+#endif
   GetFromRegistry(szRegistryOLCRules,
 		  SetSettingsComputer().OLCRules );
   GetFromRegistry(szRegistryHandicap,

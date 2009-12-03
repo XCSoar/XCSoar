@@ -37,15 +37,14 @@ Copyright_License {
 */
 
 #include "Formatter/TeamCode.hpp"
-#include "Task.h"
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "WayPointList.hpp"
 
 const TCHAR *FormatterTeamCode::Render(int *color) {
 
+#ifdef OLD_TASK
   if(way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint))
     {
       *color = 0; // black text
@@ -56,13 +55,16 @@ const TCHAR *FormatterTeamCode::Render(int *color) {
     {
       RenderInvalid(color);
     }
-
+#else
+      RenderInvalid(color);
+#endif
   return(Text);
 }
 
 
 const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 
+#ifdef OLD_TASK
   if(way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)
      && SettingsComputer().TeammateCodeValid) {
     Valid = true;
@@ -96,7 +98,9 @@ const TCHAR *FormatterDiffTeamBearing::Render(int *color) {
     Valid = false;
     RenderInvalid(color);
   }
-
+#else
+  RenderInvalid(color);
+#endif
   return(Text);
 }
 

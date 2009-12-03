@@ -71,8 +71,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs.h"
 #include "Message.h"
 #include "Marks.h"
-#include "Airspace.h"
-#include "AirspaceDatabase.hpp"
 #include "InfoBoxLayout.h"
 #include "InfoBoxManager.h"
 #include "Device/device.h"
@@ -80,7 +78,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MainWindow.hpp"
 #include "Atmosphere.h"
 #include "Gauge/GaugeFLARM.hpp"
-#include "Waypointparser.h"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
@@ -88,12 +85,9 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Audio/Sound.hpp"
 #include "McReady.h"
 #include "Interface.hpp"
-#include "AirspaceWarning.h"
 #include "Components.hpp"
 #include "Language.hpp"
-#include "Task.h"
 #include "Logger.h"
-#include "WayPointList.hpp"
 #include "Asset.hpp"
 
 #include <assert.h>
@@ -502,10 +496,11 @@ void InputEvents::eventTerrainTopology(const TCHAR *misc) {
 // Do clear warnings IF NONE Toggle Terrain/Topology
 void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
 	(void)misc;
+#ifdef OLD_TASK
   if (ClearAirspaceWarnings(airspace_database, true, false))
     // airspace was active, enter was used to acknowledge
     return;
-
+#endif
   // Else toggle TerrainTopology - and show the results
   sub_TerrainTopology(-1);
   sub_TerrainTopology(0);
@@ -517,6 +512,7 @@ void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
 //     day: clears the warnings for the entire day
 //     ack: clears the warnings for the acknowledgement time
 void InputEvents::eventClearAirspaceWarnings(const TCHAR *misc) {
+#ifdef OLD_TASK
   if (_tcscmp(misc, TEXT("day")) == 0)
     // JMW clear airspace warnings for entire day (for selected airspace)
     ClearAirspaceWarnings(airspace_database, true, true);
@@ -527,6 +523,7 @@ void InputEvents::eventClearAirspaceWarnings(const TCHAR *misc) {
 
     }
   }
+#endif
 }
 
 // ClearStatusMessages
@@ -584,6 +581,7 @@ void InputEvents::eventChangeInfoBoxType(const TCHAR *misc) {
 //   toggle: Toggles between armed and disarmed.
 //   show: Shows current armed state
 void InputEvents::eventArmAdvance(const TCHAR *misc) {
+#ifdef OLD_TASK
   if (task.getSettings().AutoAdvance>=2) {
     if (_tcscmp(misc, TEXT("on")) == 0) {
       task.setAdvanceArmed(true);
@@ -625,6 +623,7 @@ void InputEvents::eventArmAdvance(const TCHAR *misc) {
       break;
     }
   }
+#endif
 }
 
 // DoInfoKey
@@ -692,7 +691,9 @@ void InputEvents::eventFlarmTraffic(const TCHAR *misc) {
 void InputEvents::eventCalculator(const TCHAR *misc) {
 	(void)misc;
   ScopePopupBlock block(main_window.popup);
+#ifdef OLD_TASK
   dlgTaskCalculatorShowModal();
+#endif
 }
 
 // Status
@@ -733,6 +734,7 @@ void InputEvents::eventAnalysis(const TCHAR *misc) {
 // for more info.
 void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
+#ifdef OLD_TASK
   if (_tcscmp(misc, TEXT("current")) == 0) {
     if (task.Valid()) {
       task.setSelected();
@@ -754,15 +756,18 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
       };
 
     }
+#endif
 }
 
 
 void InputEvents::eventGotoLookup(const TCHAR *misc) {
+#ifdef OLD_TASK
   ScopePopupBlock block(main_window.popup);
   int res = dlgWayPointSelect(Basic().Location);
   if (res != -1){
     task.FlyDirectTo(res, SettingsComputer(), Basic());
   };
+#endif
 }
 
 
@@ -1035,6 +1040,7 @@ void InputEvents::eventAdjustWaypoint(const TCHAR *misc) {
 // toggle: toggles between abort and resume
 // show: displays a status message showing the task abort status
 void InputEvents::eventAbortTask(const TCHAR *misc) {
+#ifdef OLD_TASK
   if (_tcscmp(misc, TEXT("abort")) == 0)
     task.ResumeAbortTask(SettingsComputer(), Basic(), 1);
   else if (_tcscmp(misc, TEXT("resume")) == 0)
@@ -1050,6 +1056,7 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
   } else {
     task.ResumeAbortTask(SettingsComputer(), Basic(), 0);
   }
+#endif
 }
 
 #include "Device/device.h"
@@ -1204,7 +1211,6 @@ void InputEvents::eventRepeatStatusMessage(const TCHAR *misc) {
 // to the nearest exit to the airspace.
 
 
-bool dlgAirspaceWarningIsEmpty(void);
 
 void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   (void)misc;
@@ -1218,6 +1224,8 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   TCHAR szMessageBuffer[MAX_PATH];
   TCHAR szTitleBuffer[MAX_PATH];
   TCHAR text[MAX_PATH];
+
+#ifdef OLD_TASK
 
   if (!dlgAirspaceWarningIsEmpty()) {
     RequestAirspaceWarningForce = true;
@@ -1299,6 +1307,7 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   // TODO code: No control via status data (ala DoStatusMEssage)
   // - can we change this?
   Message::AddMessage(5000, Message::MSG_AIRSPACE, text);
+#endif
 }
 
 // NearestWaypointDetails
@@ -1306,6 +1315,7 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
 //  aircraft: the waypoint nearest the aircraft
 //  pan: the waypoint nearest to the pan cursor
 void InputEvents::eventNearestWaypointDetails(const TCHAR *misc) {
+#ifdef OLD_TASK
   if (_tcscmp(misc, TEXT("aircraft")) == 0) {
     PopupNearestWaypointDetails(way_points, Basic().Location,
 				1.0e5, // big range..
@@ -1316,6 +1326,7 @@ void InputEvents::eventNearestWaypointDetails(const TCHAR *misc) {
 				1.0e5, // big range..
 				true);
   }
+#endif
 }
 
 // Null
@@ -1332,7 +1343,9 @@ void InputEvents::eventTaskLoad(const TCHAR *misc) {
   TCHAR buffer[MAX_PATH];
   if (_tcslen(misc)>0) {
     LocalPath(buffer,misc);
+#ifdef OLD_TASK
     task.LoadNewTask(buffer, SettingsComputer(), Basic());
+#endif
   }
 }
 
@@ -1342,7 +1355,9 @@ void InputEvents::eventTaskSave(const TCHAR *misc) {
   TCHAR buffer[MAX_PATH];
   if (_tcslen(misc)>0) {
     LocalPath(buffer, misc);
+#ifdef OLD_TASK
     task.SaveTask(buffer);
+#endif
   }
 }
 
@@ -1390,10 +1405,12 @@ void InputEvents::eventSetup(const TCHAR *misc) {
     dlgWindSettingsShowModal();
   } else if (_tcscmp(misc,TEXT("System"))==0){
     SystemConfiguration();
+#ifdef OLD_TASK
   } else if (_tcscmp(misc,TEXT("Task"))==0){
     dlgTaskOverviewShowModal();
   } else if (_tcscmp(misc,TEXT("Airspace"))==0){
     dlgAirspaceShowModal(false);
+#endif
   } else if (_tcscmp(misc,TEXT("Weather"))==0){
     dlgWeatherShowModal();
   } else if (_tcscmp(misc,TEXT("Replay"))==0){
@@ -1406,8 +1423,10 @@ void InputEvents::eventSetup(const TCHAR *misc) {
     dlgVoiceShowModal();
   } else if (_tcscmp(misc,TEXT("Teamcode"))==0){
     dlgTeamCodeShowModal();
+#ifdef OLD_TASK
   } else if (_tcscmp(misc,TEXT("Target"))==0){
     dlgTarget();
+#endif
   }
 
 }
@@ -1640,6 +1659,7 @@ void InputEvents::eventAirspaceDisplayMode(const TCHAR *misc){
 
 
 void InputEvents::eventAddWaypoint(const TCHAR *misc) {
+#ifdef OLD_TASK
   static int tmpWaypointNum = 0;
   WAYPOINT edit_waypoint;
   edit_waypoint.Location = Basic().Location;
@@ -1658,7 +1678,7 @@ void InputEvents::eventAddWaypoint(const TCHAR *misc) {
   int i = way_points.append(edit_waypoint);
   if (i >= 0)
     _stprintf(way_points.set(i).Name, TEXT("_%d"), ++tmpWaypointNum);
-
+#endif
 }
 
 

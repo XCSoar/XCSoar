@@ -37,13 +37,11 @@ Copyright_License {
 */
 
 #include "MapWindowProjection.hpp"
-#include "Task.h"
 #include "Math/Geometry.hpp"
 #include "InfoBoxLayout.h"
 #include "SettingsComputer.hpp"
 #include "UtilsProfile.hpp"
 #include "options.h" /* for IBLSCALE() */
-#include "WayPoint.hpp"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
@@ -75,12 +73,14 @@ MapWindowProjection::InitialiseScaleList
   _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
 }
 
+#ifdef OLD_TASK
 bool
 MapWindowProjection::WaypointInScaleFilter(const WAYPOINT &way_point) const
 {
   return ((way_point.Zoom >= MapScale*10) || (way_point.Zoom == 0))
     && (MapScale <= 10);
 }
+#endif
 
 
 bool MapWindowProjection::PointInRect(const double &x,
@@ -389,6 +389,8 @@ MapWindowProjection::CalculateOrientationTargetPan
   // Target pan mode, show track up when looking at current task point,
   // otherwise north up.  If circling, orient towards target.
 
+#ifdef OLD_TASK
+
   _origin_centered = true;
   if (((int)task.getActiveIndex()==settings.TargetPanIndex)
       &&(settings.DisplayOrientation != NORTHUP)
@@ -409,6 +411,10 @@ MapWindowProjection::CalculateOrientationTargetPan
     DisplayAngle = 0.0;
     DisplayAircraftAngle = DrawInfo.TrackBearing;
   }
+#else
+    DisplayAngle = 0.0;
+    DisplayAircraftAngle = DrawInfo.TrackBearing;
+#endif
 }
 
 
@@ -502,11 +508,15 @@ double MapWindowProjection::LimitMapScale(double value,
   minreasonable = 0.05;
 
   if (settings_map.AutoZoom && DisplayMode != dmCircling) {
+#ifdef OLD_TASK
     if (task.getSettings().AATEnabled && (task.getActiveIndex()>0)) {
       minreasonable = 0.88;
     } else {
       minreasonable = 0.44;
     }
+#else
+    minreasonable = 0.44;
+#endif
   }
 
   value = max(minreasonable, min(160.0, value));
@@ -642,6 +652,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   }
 
   // if there is an active waypoint
+#ifdef OLD_TASK
   if (task.Valid()) {
     int task_index = task.getWaypointIndex();
 
@@ -661,6 +672,9 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   } else {
     AutoMapScaleWaypointIndex = -1;
   }
+#else
+    AutoMapScaleWaypointIndex = -1;
+#endif
 }
 
 

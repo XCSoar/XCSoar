@@ -68,9 +68,7 @@ Copyright_License {
 #include "Defines.h"
 #include "options.h" /* for IBLSCALE() */
 #include "Components.hpp"
-#include "WayPointList.hpp"
 #include "XCSoar.h"
-#include "Task.h"
 
 #include <assert.h>
 
@@ -501,10 +499,12 @@ void InfoBoxManager::DisplayInfoBox(void)
 
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i])||first);
 
+#ifdef OLD_TASK
     int theactive = task.getActiveIndex();
     if (!task.ValidTaskPoint(theactive)) {
       theactive = -1;
     }
+#endif
 
     //
     // Set Infobox title and middle value. Bottom line comes next
@@ -562,6 +562,7 @@ void InfoBoxManager::DisplayInfoBox(void)
       break;
     case 14: // Next waypoint
       InfoBoxes[i]->SetSmallerFont(false);
+#ifdef OLD_TASK
       if (theactive != -1){
 	InfoBoxes[i]->
 	  SetTitle(Data_Options[DisplayType[i]].Formatter->
@@ -578,6 +579,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 	InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
           Data_Options[DisplayType[i]].UnitGroup)
       );
+#endif
       break;
     default:
       InfoBoxes[i]->SetSmallerFont(false);
@@ -603,6 +605,7 @@ void InfoBoxManager::DisplayInfoBox(void)
     switch (DisplayType[i]) {
     case 14: // Next waypoint
 
+#ifdef OLD_TASK
       if (theactive != -1){
         int index = task.getWaypointIndex();
         if ((index>=0)&& way_points.verify_index(index)) {
@@ -610,6 +613,7 @@ void InfoBoxManager::DisplayInfoBox(void)
             SetComment(way_points.get(index).Comment);
         }
       }
+#endif
       InfoBoxes[i]->SetComment(TEXT(""));
       break;
     case 10:
@@ -801,6 +805,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 	case 67:
 	case 68:
 	case 69:
+#ifdef OLD_TASK
 	  if ( ActiveAlternate == -1 ) {  // should be redundant
 	    InfoBoxes[i]->SetComment(TEXT(""));
 	    break;
@@ -814,6 +819,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 				     sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
 	    InfoBoxes[i]->SetComment(sTmp);
 	  }
+#endif
 	  break;
 	case 70: // QFE
 	  /*

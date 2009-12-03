@@ -39,12 +39,12 @@ Copyright_License {
 #ifndef SCREEN_GRAPHICS_HPP
 #define SCREEN_GRAPHICS_HPP
 
+#include "Sizes.h"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Canvas.hpp"
-#include "Airspace.h"
 #include "LabelBlock.hpp"
 #include "SettingsUser.hpp"
 
@@ -76,21 +76,24 @@ public:
 		  const SETTINGS_MAP &settings_map);
   void Destroy();
 
+#ifdef OLD_TASK
   // airspace brushes/colours
   const Color GetAirspaceColour(const int i);
   const Brush &GetAirspaceBrush(const int i);
   const Color GetAirspaceColourByClass(const int i,  const SETTINGS_MAP &settings);
   const Brush &GetAirspaceBrushByClass(const int i,  const SETTINGS_MAP &settings);
+  Pen hAirspacePens[AIRSPACECLASSCOUNT];
+  Brush hAirspaceBrushes[NUMAIRSPACEBRUSHES];
+  Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+#endif
 
   Brush infoSelectedBrush;
   Brush infoUnselectedBrush;
   Brush buttonBrush;
 
-  Pen hAirspacePens[AIRSPACECLASSCOUNT];
   Pen hSnailPens[NUMSNAILCOLORS];
   Color hSnailColours[NUMSNAILCOLORS];
-  Brush hAirspaceBrushes[NUMAIRSPACEBRUSHES];
-  Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+
   Bitmap hAboveTerrainBitmap;
   Brush hAboveTerrainBrush;
 

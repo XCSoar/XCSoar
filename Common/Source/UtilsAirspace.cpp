@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "UtilsAirspace.hpp"
-#include "AirspaceDatabase.hpp"
 #include "SettingsAirspace.hpp"
 #include "LogFile.hpp"
 #include "Dialogs.h"
@@ -47,6 +46,8 @@ Copyright_License {
 #include "Math/Units.h"
 #include <assert.h>
 #include "Units.hpp"
+
+#ifdef OLD_TASK
 
 static void
 ConvertFlightLevels(AIRSPACE_ALT &altitude)
@@ -169,3 +170,4 @@ void FormatWarningString(int Type, const TCHAR *Name, AIRSPACE_ALT Base,
       szTitleBuffer, Name, gettext(TEXT("Top")), TopStr, gettext(TEXT("Base")),
       BaseStr);
 }
+#endif

@@ -336,7 +336,9 @@ static void OnCalcClicked(WindowControl * Sender,
   }
   if (page==ANALYSIS_PAGE_CLIMB) {
     wf->SetVisible(false);
+#ifdef OLD_TASK
     dlgTaskCalculatorShowModal();
+#endif
     wf->SetVisible(true);
   }
   if (page==ANALYSIS_PAGE_WIND) {
@@ -350,7 +352,9 @@ static void OnCalcClicked(WindowControl * Sender,
   }
   if ((page==ANALYSIS_PAGE_TASK) || (page==ANALYSIS_PAGE_TASK_SPEED)) {
     wf->SetVisible(false);
+#ifdef OLD_TASK
     dlgTaskCalculatorShowModal();
+#endif
     wf->SetVisible(true);
   }
   if (page==ANALYSIS_PAGE_OLC) {
@@ -359,7 +363,9 @@ static void OnCalcClicked(WindowControl * Sender,
     XCSoarInterface::StopHourglassCursor();
   }
   if (page==ANALYSIS_PAGE_AIRSPACE) {
+#ifdef OLD_TASK
     dlgAirspaceWarningShowDlg(true);
+#endif
   }
   Update();
 }

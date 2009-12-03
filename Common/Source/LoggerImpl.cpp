@@ -40,7 +40,6 @@
 #include "Version.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "Task.h"
 #include "Registry.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
@@ -458,9 +457,11 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   LocalPath(path);
 #endif
 
+#ifdef OLD_TASK
   if (task.isTaskModified()) {
     task.SaveDefaultTask();
   }
+#endif
 
 #ifdef WINDOWSPC
   _stprintf(szLoggerFileName, TEXT("/tmp/tmp.IGC"));
@@ -741,10 +742,12 @@ LoggerImpl::LoggerDeviceDeclare() {
   GetRegistryString(szRegistryAircraftType, Decl.AircraftType, 32);
   GetRegistryString(szRegistryAircraftRego, Decl.AircraftRego, 32);
 
+#ifdef OLD_TASK
   for (i = 0; task.ValidTaskPoint(i); i++) {
     Decl.waypoint[i] = &task.getWaypoint(i);
   }
   Decl.num_waypoints = i;
+#endif
 
   DeclaredToDevice = false;
 
@@ -990,6 +993,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
     }
     TCHAR TaskMessage[1024];
     _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
+#ifdef OLD_TASK
     if (task.Valid()) {
       for (i = 0; task.ValidTaskPoint(i); i++) {
         _tcscat(TaskMessage, task.getWaypoint(i).Name);
@@ -998,6 +1002,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
     } else {
       _tcscat(TaskMessage,TEXT("None"));
     }
+#endif
 
     if(noAsk ||
        (MessageBoxX(TaskMessage,gettext(TEXT("Start Logger")),
@@ -1010,6 +1015,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
 	  LoggerHeader(gps_info);
 	  LoggerActive = true; // start logger after Header is completed.  Concurrency
 
+#ifdef OLD_TASK
           if (task.Valid()) {
             int ntp = task.getFinalWaypoint();
             StartDeclaration(gps_info,ntp);
@@ -1021,6 +1027,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
             }
             EndDeclaration();
           }
+#endif
 	  ResetFRecord(); // reset timer & lastRecord string so if
 			  // logger is restarted, FRec appears at top
 			  // of file

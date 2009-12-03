@@ -45,7 +45,6 @@ Copyright_License {
 #include "UtilsFLARM.hpp"
 #include "Asset.hpp"
 #include "Device/Parser.h"
-#include "WayPoint.hpp"
 
 DeviceBlackboard device_blackboard;
 
