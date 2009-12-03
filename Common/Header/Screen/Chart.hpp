@@ -61,15 +61,15 @@ class Chart {
 
   void Reset();
 
-  void DrawBarChart(LeastSquares* lsdata);
+  void DrawBarChart(const LeastSquares &lsdata);
 
-  void DrawFilledLineGraph(LeastSquares* lsdata, const Color thecolor);
+  void DrawFilledLineGraph(const LeastSquares &lsdata, const Color thecolor);
 
-  void DrawLineGraph(LeastSquares* lsdata,
+  void DrawLineGraph(const LeastSquares &lsdata,
 		     const int Style);
-  void DrawTrend(LeastSquares* lsdata,
+  void DrawTrend(const LeastSquares &lsdata,
                         const int Style);
-  void DrawTrendN(LeastSquares* lsdata,
+  void DrawTrendN(const LeastSquares &lsdata,
                          const int Style);
 
   void DrawLine(const double xmin,
@@ -77,8 +77,8 @@ class Chart {
 		const double xmax,
 		const double ymax, const int Style);
 
-  void ScaleYFromData(LeastSquares* lsdata);
-  void ScaleXFromData(LeastSquares* lsdata);
+  void ScaleYFromData(const LeastSquares &lsdata);
+  void ScaleXFromData(const LeastSquares &lsdata);
   void ScaleYFromValue(const double val);
   void ScaleXFromValue(const double val);
   void ScaleMakeSquare();

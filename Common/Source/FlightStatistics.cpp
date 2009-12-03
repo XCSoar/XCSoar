@@ -94,8 +94,8 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
     return;
   }
 
-  chart.ScaleXFromData(&Altitude);
-  chart.ScaleYFromData(&Altitude);
+  chart.ScaleXFromData(Altitude);
+  chart.ScaleYFromData(Altitude);
   chart.ScaleYFromValue(0);
   chart.ScaleXFromValue(Altitude.x_min+1.0); // in case no data
   chart.ScaleXFromValue(Altitude.x_min);
@@ -118,16 +118,16 @@ void FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc)
   canvas.select(hpHorizonGround);
   canvas.select(hbHorizonGround);
 
-  chart.DrawFilledLineGraph(&Altitude_Terrain, Chart::GROUND_COLOUR);
+  chart.DrawFilledLineGraph(Altitude_Terrain, Chart::GROUND_COLOUR);
   canvas.white_pen();
   canvas.white_brush();
 
   chart.DrawXGrid(0.5, Altitude.x_min, Chart::STYLE_THINDASHPAPER, 0.5, true);
   chart.DrawYGrid(1000/ALTITUDEMODIFY, 0, Chart::STYLE_THINDASHPAPER, 1000, true);
-  chart.DrawLineGraph(&Altitude, Chart::STYLE_MEDIUMBLACK);
+  chart.DrawLineGraph(Altitude, Chart::STYLE_MEDIUMBLACK);
 
-  chart.DrawTrend(&Altitude_Base, Chart::STYLE_BLUETHIN);
-  chart.DrawTrend(&Altitude_Ceiling, Chart::STYLE_BLUETHIN);
+  chart.DrawTrend(Altitude_Base, Chart::STYLE_BLUETHIN);
+  chart.DrawTrend(Altitude_Ceiling, Chart::STYLE_BLUETHIN);
 
   chart.DrawXLabel(TEXT("t"));
   chart.DrawYLabel(TEXT("h"));
@@ -144,8 +144,8 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
     return;
   }
 
-  chart.ScaleXFromData(&Task_Speed);
-  chart.ScaleYFromData( &Task_Speed);
+  chart.ScaleXFromData(Task_Speed);
+  chart.ScaleYFromData(Task_Speed);
   chart.ScaleYFromValue( 0);
   chart.ScaleXFromValue(Task_Speed.x_min+1.0); // in case no data
   chart.ScaleXFromValue(Task_Speed.x_min);
@@ -166,8 +166,8 @@ void FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc)
 		  Chart::STYLE_THINDASHPAPER, 0.5, true);
   chart.DrawYGrid(10/TASKSPEEDMODIFY, 0, Chart::STYLE_THINDASHPAPER,
 		  10, true);
-  chart.DrawLineGraph(&Task_Speed, Chart::STYLE_MEDIUMBLACK);
-  chart.DrawTrend(&Task_Speed, Chart::STYLE_BLUETHIN);
+  chart.DrawLineGraph(Task_Speed, Chart::STYLE_MEDIUMBLACK);
+  chart.DrawTrend(Task_Speed, Chart::STYLE_BLUETHIN);
 
   chart.DrawXLabel(TEXT("t"));
   chart.DrawYLabel(TEXT("V"));
@@ -186,7 +186,7 @@ void FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc)
   }
   double MACCREADY = GlidePolar::GetMacCready();
 
-  chart.ScaleYFromData( &ThermalAverage);
+  chart.ScaleYFromData(ThermalAverage);
   chart.ScaleYFromValue( (MACCREADY+0.5));
   chart.ScaleYFromValue( 0);
 
@@ -194,7 +194,7 @@ void FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc)
   chart.ScaleXFromValue(ThermalAverage.sum_n);
 
   chart.DrawYGrid(1.0/LIFTMODIFY, 0, Chart::STYLE_THINDASHPAPER, 1.0, true);
-  chart.DrawBarChart(&ThermalAverage);
+  chart.DrawBarChart(ThermalAverage);
 
   chart.DrawLine(0, MACCREADY, ThermalAverage.sum_n,
 		 MACCREADY, Chart::STYLE_REDTHICK);
@@ -202,7 +202,7 @@ void FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc)
   chart.DrawLabel(TEXT("MC"), max(0.5, (double)ThermalAverage.sum_n - 1.0),
                   MACCREADY);
 
-  chart.DrawTrendN(&ThermalAverage, Chart::STYLE_BLUETHIN);
+  chart.DrawTrendN(ThermalAverage, Chart::STYLE_BLUETHIN);
 
   chart.DrawXLabel(TEXT("n"));
   chart.DrawYLabel(TEXT("w"));
@@ -681,16 +681,16 @@ void FlightStatistics::RenderWind(Canvas &canvas, const RECT rc)
 
   //
 
-  chart.ScaleXFromData(&windstats_mag);
+  chart.ScaleXFromData(windstats_mag);
   chart.ScaleXFromValue(0);
   chart.ScaleXFromValue(10.0);
 
-  chart.ScaleYFromData( &windstats_mag);
+  chart.ScaleYFromData(windstats_mag);
 
   chart.DrawXGrid(5/SPEEDMODIFY, 0, Chart::STYLE_THINDASHPAPER, 5.0, true);
   chart.DrawYGrid(1000/ALTITUDEMODIFY, 0, Chart::STYLE_THINDASHPAPER,
 		  1000.0, true);
-  chart.DrawLineGraph(&windstats_mag, Chart::STYLE_MEDIUMBLACK);
+  chart.DrawLineGraph(windstats_mag, Chart::STYLE_MEDIUMBLACK);
 
 #define WINDVECTORMAG 25
 
