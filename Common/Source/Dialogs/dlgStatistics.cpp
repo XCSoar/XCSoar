@@ -90,42 +90,44 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   canvas.background_transparent();
   canvas.set_text_color(Sender->GetForeColor());
 
+  FlightStatistics &fs = glide_computer.GetFlightStats();
+
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
     SetCalcCaption(TEXT("Settings"));
-    glide_computer.GetFlightStats().RenderBarograph(canvas, rcgfx);
+    fs.RenderBarograph(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(TEXT("Task calc"));
-    glide_computer.GetFlightStats().RenderClimb(canvas, rcgfx);
+    fs.RenderClimb(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_WIND:
     SetCalcCaption(TEXT("Set wind"));
-    glide_computer.GetFlightStats().RenderWind(canvas, rcgfx);
+    fs.RenderWind(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_POLAR:
     SetCalcCaption(TEXT("Settings"));
-    glide_computer.GetFlightStats().RenderGlidePolar(canvas, rcgfx);
+    fs.RenderGlidePolar(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     SetCalcCaption(TEXT("Settings"));
-    glide_computer.GetFlightStats().RenderTemperature(canvas, rcgfx);
+    fs.RenderTemperature(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(TEXT("Task calc"));
-    glide_computer.GetFlightStats().RenderTask(canvas, rcgfx, false);
+    fs.RenderTask(canvas, rcgfx, false);
     break;
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(TEXT("Optimise"));
-    glide_computer.GetFlightStats().RenderTask(canvas, rcgfx, true);
+    fs.RenderTask(canvas, rcgfx, true);
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(TEXT("Warnings"));
-    glide_computer.GetFlightStats().RenderAirspace(canvas, rcgfx);
+    fs.RenderAirspace(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     SetCalcCaption(TEXT("Task calc"));
-    glide_computer.GetFlightStats().RenderSpeed(canvas, rcgfx);
+    fs.RenderSpeed(canvas, rcgfx);
     break;
   default:
     // should never get here!
@@ -140,13 +142,15 @@ static void Update(void){
   //  WndProperty *wp;
   double d=0;
 
+  FlightStatistics &fs = glide_computer.GetFlightStats();
+
   switch(page){
     case ANALYSIS_PAGE_BAROGRAPH:
       _stprintf(sTmp, TEXT("%s: %s"),
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Barograph")));
       wf->SetCaption(sTmp);
-      glide_computer.GetFlightStats().CaptionBarograph(sTmp);
+      fs.CaptionBarograph(sTmp);
       wInfo->SetCaption(sTmp);
 
     break;
@@ -155,7 +159,7 @@ static void Update(void){
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Climb")));
       wf->SetCaption(sTmp);
-      glide_computer.GetFlightStats().CaptionClimb(sTmp);
+      fs.CaptionClimb(sTmp);
       wInfo->SetCaption(sTmp);
 
     break;
@@ -173,7 +177,7 @@ static void Update(void){
                 gettext(TEXT("Glide Polar")),
                 GlidePolar::GetAUW());
       wf->SetCaption(sTmp);
-      glide_computer.GetFlightStats().CaptionPolar(sTmp);
+      fs.CaptionPolar(sTmp);
       wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
@@ -181,7 +185,7 @@ static void Update(void){
               gettext(TEXT("Analysis")),
               gettext(TEXT("Temp trace")));
     wf->SetCaption(sTmp);
-    glide_computer.GetFlightStats().CaptionTempTrace(sTmp);
+    fs.CaptionTempTrace(sTmp);
     wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
@@ -197,7 +201,7 @@ static void Update(void){
               gettext(TEXT("Task")));
     wf->SetCaption(sTmp);
     RefreshTaskStatistics();
-    glide_computer.GetFlightStats().CaptionTask(sTmp);
+    fs.CaptionTask(sTmp);
     wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_OLC:
