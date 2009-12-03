@@ -228,6 +228,7 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/Dialogs/dlgHelp.o \
 	$(SRC)/zzip-$(TARGET).a \
 	src/RunDialog.o \
+	$(SRC)/Compatibility/string.o \
 	$(SRC)/compat-$(TARGET).a
 ifeq ($(ENABLE_SDL),y)
 RUN_DIALOG_OBJS += $(SRC)/Screen/Timer.o
