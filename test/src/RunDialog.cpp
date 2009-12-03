@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/Blank.hpp"
 #include "Screen/TopWindow.hpp"
 #include "wcecompat/ts_string.h"
 #include "InfoBoxLayout.h"
@@ -51,6 +52,10 @@ Copyright_License {
 #if defined(PNA) || defined(FIVV)
 int GlobalModelType = MODELTYPE_UNKNOWN;
 bool needclipping = false;
+#endif
+
+#ifdef HAVE_BLANK
+int DisplayTimeOut = 0;
 #endif
 
 bool
