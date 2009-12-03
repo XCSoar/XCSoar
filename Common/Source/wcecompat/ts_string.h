@@ -22,17 +22,14 @@
 #ifndef __wcecompat__ts_string_h__
 #define __wcecompat__ts_string_h__
 
-
-#include <string.h>
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
-#include <windows.h>
+#include <tchar.h>
 
 #ifdef _UNICODE
 
-void ascii2unicode(const char* ascii, WCHAR* unicode);
-void unicode2ascii(const WCHAR* unicode, char* ascii);
-void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars);
-void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars);
+void ascii2unicode(const char* ascii, TCHAR* unicode);
+void unicode2ascii(const TCHAR* unicode, char* ascii);
+void ascii2unicode(const char* ascii, TCHAR* unicode, int maxChars);
+void unicode2ascii(const TCHAR* unicode, char* ascii, int maxChars);
 
 #else
 

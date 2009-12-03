@@ -28,10 +28,10 @@
 static bool
 check_wchar_align(const void *p)
 {
-  return ((long)p & (sizeof(WCHAR) - 1)) == 0;
+  return ((long)p & (sizeof(TCHAR) - 1)) == 0;
 }
 
-void ascii2unicode(const char* ascii, WCHAR* unicode)
+void ascii2unicode(const char *ascii, TCHAR *unicode)
 {
   if (strlen(ascii)==0) {
     unicode[0]=0;
@@ -58,7 +58,7 @@ void ascii2unicode(const char* ascii, WCHAR* unicode)
 	}
 }
 
-void unicode2ascii(const WCHAR* unicode, char* ascii)
+void unicode2ascii(const TCHAR *unicode, char *ascii)
 {
   if (wcslen(unicode)==0) {
     ascii[0] = 0;
@@ -79,7 +79,7 @@ void unicode2ascii(const WCHAR* unicode, char* ascii)
 	}
 }
 
-void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars)
+void ascii2unicode(const char *ascii, TCHAR *unicode, int maxChars)
 {
   if (strlen(ascii)==0) {
     unicode[0]=0;
@@ -108,7 +108,7 @@ void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars)
 	}
 }
 
-void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars)
+void unicode2ascii(const TCHAR *unicode, char *ascii, int maxChars)
 {
   if (wcslen(unicode)==0) {
     ascii[0] = 0;
