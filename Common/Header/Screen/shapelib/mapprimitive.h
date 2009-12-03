@@ -1,6 +1,8 @@
 #ifndef MAPPRIMITIVE_H
 #define MAPPRIMITIVE_H
 
+#include <stddef.h> /* for size_t */
+
 #define MS_VERSION "4.0.1"
 
 #define MS_FALSE 0

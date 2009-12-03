@@ -1,8 +1,9 @@
 #ifndef MAPSHAPE_H
 #define MAPSHAPE_H
 
-#include <stdio.h>
 #include "Screen/shapelib/mapprimitive.h"
+
+#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {

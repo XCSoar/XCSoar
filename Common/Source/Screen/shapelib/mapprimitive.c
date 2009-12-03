@@ -36,12 +36,11 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "StdAfx.h"
 
 #include "Screen/shapelib/mapprimitive.h"
 #include "Screen/shapelib/maperror.h"
-#include "Compatibility/string.h"
 
+#include <string.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -125,7 +124,8 @@ int msCopyShape(const shapeObj *from, shapeObj *to) {
   to->bounds.maxx = from->bounds.maxx;
   to->bounds.maxy = from->bounds.maxy;
 
-  if(from->text) to->text = strdup(from->text);
+  if (from->text)
+    to->text = strdup(from->text);
 
   to->classindex = from->classindex;
   to->index = from->index;

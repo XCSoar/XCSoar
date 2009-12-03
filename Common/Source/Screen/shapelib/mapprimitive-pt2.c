@@ -36,12 +36,10 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "StdAfx.h"
+
 #include "Screen/shapelib/mapprimitive.h"
 #include "Screen/shapelib/maperror.h"
 #include <string.h>
-
-#include <windows.h>
 
 typedef enum {CLIP_LEFT, CLIP_MIDDLE, CLIP_RIGHT} CLIP_STATE;
 

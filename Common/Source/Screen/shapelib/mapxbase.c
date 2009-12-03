@@ -42,14 +42,12 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
 #include "Screen/shapelib/mapprimitive.h"
 #include "Screen/shapelib/mapshape.h"
 #include "Screen/shapelib/maperror.h"
-#include "Compatibility/string.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 /************************************************************************/
 /*                             SfRealloc()                              */

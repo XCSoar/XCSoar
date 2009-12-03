@@ -36,13 +36,12 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
 #include "Screen/shapelib/maperror.h"
 #include "Screen/shapelib/mapprimitive.h"
-#include "Compatibility/string.h"
 
+#include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #ifdef NEED_NONBLOCKING_STDERR
 #include <fcntl.h>
