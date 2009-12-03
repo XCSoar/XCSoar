@@ -75,7 +75,7 @@ typedef enum {
 // where using these from Calculations or MapWindow thread, should
 // protect
 
-typedef struct SETTINGS_MAP_ {
+struct SETTINGS_MAP {
   /** Map zooms in on circling */
   bool  CircleZoom;
   bool  ExtendedVisualGlide;
@@ -133,7 +133,6 @@ typedef struct SETTINGS_MAP_ {
 
   int    iAirspaceBrush[AIRSPACECLASSCOUNT];
   int    iAirspaceColour[AIRSPACECLASSCOUNT];
-
-} SETTINGS_MAP;
+};
 
 #endif
