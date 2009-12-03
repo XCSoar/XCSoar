@@ -97,7 +97,6 @@ private:
 
   //  int sindex(int y, int x);
 
-  int pnts;
   unsigned short dmval[MATSIZE];
   int indexval[MAX_OLC_POINTS];
   int maxdist; /* maximale Distanz in Metern zwischen zwei Punkten */
@@ -134,7 +133,6 @@ public:
 		const SETTINGS_COMPUTER &settings);
 
 public:
-  void SetLine();
   bool Optimize(const SETTINGS_COMPUTER &settings, bool isflying);
   int getN() const;
   const GEOPOINT &getLocation(int i) const;

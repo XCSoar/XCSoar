@@ -319,7 +319,6 @@ void FlightStatistics::RenderTask(Canvas &canvas, const RECT rc, const bool olcm
   }
 
   glide_computer.GetOLC().Lock();
-  glide_computer.GetOLC().SetLine();
   int nolc = glide_computer.GetOLC().getN();
   bool olcvalid = glide_computer.GetOLC().getValid(XCSoarInterface::SettingsComputer());
   bool olcfinished = glide_computer.GetOLC().getFinished(XCSoarInterface::SettingsComputer());

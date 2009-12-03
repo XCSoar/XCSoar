@@ -70,8 +70,6 @@ memory requirements N*N*(int+int+int+int)
 
 
 OLCOptimizer::OLCOptimizer() {
-
-  pnts = 0;
   data.pnts_in = 0;
 
   busy = false;
@@ -93,7 +91,6 @@ OLCOptimizer::~OLCOptimizer() {
 
 void OLCOptimizer::ResetFlight() {
   data.pnts_in = 0;
-  pnts = 0;
   data.distancethreshold = DISTANCETHRESHOLD/2.0; // 500 meters
   maxdist = 0;
   data.altminimum = 100000;
@@ -145,6 +142,7 @@ int OLCOptimizer::initdmval() {
 
   double latrad, sli, cli, lri;
   int i, j, dist, cmp;
+  const int pnts = data.pnts_in;
 
   i=0;
   for (j=0; j<pnts; j++) {
@@ -191,6 +189,7 @@ int OLCOptimizer::initdmval() {
 // find point k between i and j to give greatest distance ik and kj
 // k = isplit(i,j)
 int OLCOptimizer::initisplit() {
+  const int pnts = data.pnts_in;
   int maxab, i, j, k, d, ibest;
 
   for(i=0;i<pnts-1;i++) {
@@ -219,7 +218,7 @@ int OLCOptimizer::initisplit() {
 int OLCOptimizer::initistartsprint() {
 
   int i, j, altend, tend, ibest, alt, t, altmin;
-  for (i=pnts-1; i>=0; i--) {
+  for (i = data.pnts_in - 1; i >= 0; i--) {
     // end point
     altend = data.altpntslow[i];
     tend = data.timepnts[i];
@@ -246,7 +245,7 @@ int OLCOptimizer::initistartsprint() {
                         from start height i
 */
 int OLCOptimizer::initibestend() {
-
+  const int pnts = data.pnts_in;
   int i,j,k, maxclassic, dh, ibestclassic, d;
 
   for(i=0;i<pnts;i++) { // for all start points
@@ -459,7 +458,7 @@ int
 OLCOptimizer::getN() const
 {
   if (busy) return 0; // Inhibit display if busy optimising
-  return pnts;
+  return data.pnts_in;
 }
 
 double
@@ -480,20 +479,7 @@ OLCOptimizer::getLocation(int i) const
   return data.locpnts[i];
 }
 
-
-void OLCOptimizer::SetLine() {
-
-  Lock();
-  pnts = data.pnts_in; // save value in case we get new data while
-                       // performing the analysis/display
-  Unlock();
-
-}
-
-
 bool OLCOptimizer::Optimize(const SETTINGS_COMPUTER &settings, bool isflying) {
-  SetLine();
-
   flying = isflying;
 
 #ifdef DEBUG_OLC
@@ -543,6 +529,7 @@ void OLCOptimizer::UpdateSolution(int dbest, int tbest,
 
 
 int OLCOptimizer::optimize_internal(const SETTINGS_COMPUTER &settings) {
+  const int pnts = data.pnts_in;
 
   busy = true;
 
@@ -652,6 +639,7 @@ int OLCOptimizer::triangle_legal(int i1, int i2, int i3, int i4) {
 
 
 int OLCOptimizer::scan_triangle(const SETTINGS_COMPUTER &settings) {
+  const int pnts = data.pnts_in;
   int i2, i3, i4, i5;
   int dh, d;
 
@@ -738,6 +726,7 @@ int OLCOptimizer::scan_triangle(const SETTINGS_COMPUTER &settings) {
 
 
 int OLCOptimizer::scan_sprint_finished(const SETTINGS_COMPUTER &settings) {
+  const int pnts = data.pnts_in;
   int i1,i2,i3,i4,i5, d, bestdist;
   int i1best=0, i2best=0, i3best=0, i4best=0, i5best=0;
 
@@ -800,6 +789,7 @@ int OLCOptimizer::scan_sprint(const SETTINGS_COMPUTER &settings) {
 
 
 int OLCOptimizer::scan_sprint_inprogress(const SETTINGS_COMPUTER &settings) {
+  const int pnts = data.pnts_in;
   int i1,i2,i3,i4,i5, d, bestdist;
   int i1best=0, i2best=0, i3best=0, i4best=0, i5best=0;
 
@@ -927,6 +917,7 @@ int OLCOptimizer::scan_sprint_inprogress(const SETTINGS_COMPUTER &settings) {
 
 
 int OLCOptimizer::scan_classic(const SETTINGS_COMPUTER &settings) {
+  const int pnts = data.pnts_in;
   int i1,i2,i3,i4,i5,i6,i7, d, bestdist, dh;
   int i1best=0, i2best=0, i3best=0, i4best=0, i5best=0, i6best=0, i7best=0;
 
