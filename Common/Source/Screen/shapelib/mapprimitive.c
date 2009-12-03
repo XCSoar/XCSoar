@@ -125,7 +125,7 @@ int msCopyShape(const shapeObj *from, shapeObj *to) {
   to->bounds.maxx = from->bounds.maxx;
   to->bounds.maxy = from->bounds.maxy;
 
-  if(from->text) to->text = _strdup(from->text);
+  if(from->text) to->text = strdup(from->text);
 
   to->classindex = from->classindex;
   to->index = from->index;
@@ -134,7 +134,7 @@ int msCopyShape(const shapeObj *from, shapeObj *to) {
   if(from->values) {
     to->values = (char **)malloc(sizeof(char *)*from->numvalues);
     for(i=0; i<from->numvalues; i++)
-      to->values[i] = _strdup(from->values[i]);
+      to->values[i] = strdup(from->values[i]);
     to->numvalues = from->numvalues;
   }
 

@@ -252,7 +252,7 @@ char *msGetErrorString(char *delimiter)
 
   if(!delimiter || !error) return(NULL);
 
-  if((errstr = _strdup("")) == NULL) return(NULL); // empty at first
+  if((errstr = strdup("")) == NULL) return(NULL); // empty at first
   while(error && error->code != MS_NOERR) {
     if(error->next && error->next->code != MS_NOERR) // (peek ahead) more errors, use delimiter
 #if defined(_WIN32) && !defined(__CYGWIN__)
