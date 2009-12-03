@@ -83,11 +83,11 @@ public:
   virtual ~OLCOptimizer();
   void ResetFlight();
 
-  double getDt(const SETTINGS_COMPUTER &settings);
-  double getD(const SETTINGS_COMPUTER &settings);
-  double getValid(const SETTINGS_COMPUTER &settings);
-  double getScore(const SETTINGS_COMPUTER &settings);
-  double getFinished(const SETTINGS_COMPUTER &settings);
+  double getDt(const SETTINGS_COMPUTER &settings) const;
+  double getD(const SETTINGS_COMPUTER &settings) const;
+  double getValid(const SETTINGS_COMPUTER &settings) const;
+  double getScore(const SETTINGS_COMPUTER &settings) const;
+  double getFinished(const SETTINGS_COMPUTER &settings) const;
 
 private:
 

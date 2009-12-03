@@ -1013,7 +1013,9 @@ int OLCOptimizer::scan_classic(const SETTINGS_COMPUTER &settings) {
 // Symbol on screen "ADV+" if valid for arm
 
 
-double OLCOptimizer::getDt(const SETTINGS_COMPUTER &settings) {
+double
+OLCOptimizer::getDt(const SETTINGS_COMPUTER &settings) const
+{
   switch(settings.OLCRules) {
   case 0:
     return data.solution_FAI_sprint.time;
@@ -1029,7 +1031,9 @@ double OLCOptimizer::getDt(const SETTINGS_COMPUTER &settings) {
   }
 }
 
-double OLCOptimizer::getD(const SETTINGS_COMPUTER &settings) {
+double
+OLCOptimizer::getD(const SETTINGS_COMPUTER &settings) const
+{
   switch(settings.OLCRules) {
   case 0:
     return data.solution_FAI_sprint.distance;
@@ -1045,7 +1049,9 @@ double OLCOptimizer::getD(const SETTINGS_COMPUTER &settings) {
   }
 }
 
-double OLCOptimizer::getValid(const SETTINGS_COMPUTER &settings) {
+double
+OLCOptimizer::getValid(const SETTINGS_COMPUTER &settings) const
+{
   switch(settings.OLCRules) {
   case 0:
     return data.solution_FAI_sprint.valid;
@@ -1061,7 +1067,9 @@ double OLCOptimizer::getValid(const SETTINGS_COMPUTER &settings) {
   }
 }
 
-double OLCOptimizer::getScore(const SETTINGS_COMPUTER &settings) {
+double
+OLCOptimizer::getScore(const SETTINGS_COMPUTER &settings) const
+{
   switch(settings.OLCRules) {
   case 0:
     return data.solution_FAI_sprint.score;
@@ -1077,7 +1085,9 @@ double OLCOptimizer::getScore(const SETTINGS_COMPUTER &settings) {
   }
 }
 
-double OLCOptimizer::getFinished(const SETTINGS_COMPUTER &settings) {
+double
+OLCOptimizer::getFinished(const SETTINGS_COMPUTER &settings) const
+{
   switch(settings.OLCRules) {
   case 0:
     return data.solution_FAI_sprint.finished;
