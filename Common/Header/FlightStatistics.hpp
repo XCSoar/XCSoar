@@ -45,7 +45,15 @@ Copyright_License {
 
 #include <windef.h>
 
+struct NMEA_INFO;
+struct DERIVED_INFO;
+struct SETTINGS_COMPUTER;
+struct SETTINGS_MAP;
 class Canvas;
+class OLCOptimizer;
+class WindStore;
+class AirspaceDatabase;
+class RasterTerrain;
 
 class FlightStatistics {
 public:
@@ -65,19 +73,34 @@ public:
   void AddThermalAverage(const double v);
 public:
   void Reset();
-  void RenderAirspace(Canvas &canvas, const RECT rc) const;
-  void RenderBarograph(Canvas &canvas, const RECT rc) const;
+  void RenderAirspace(Canvas &canvas, const RECT rc,
+                      const NMEA_INFO &nmea_info, const DERIVED_INFO &derived,
+                      const SETTINGS_MAP &settings_map,
+                      const AirspaceDatabase &airspace_database,
+                      RasterTerrain &terrain) const;
+  void RenderBarograph(Canvas &canvas, const RECT rc,
+                       const DERIVED_INFO &derived) const;
   void RenderClimb(Canvas &canvas, const RECT rc) const;
-  void RenderGlidePolar(Canvas &canvas, const RECT rc) const;
-  void RenderWind(Canvas &canvas, const RECT rc) const;
+  void RenderGlidePolar(Canvas &canvas, const RECT rc,
+                        const DERIVED_INFO &derived,
+                        const SETTINGS_COMPUTER &settings_computer) const;
+  void RenderWind(Canvas &canvas, const RECT rc,
+                  const NMEA_INFO &nmea_info,
+                  const WindStore &wind_store) const;
   void RenderTemperature(Canvas &canvas, const RECT rc) const;
-  void RenderTask(Canvas &canvas, const RECT rc, const bool olcmode) const;
-  void RenderSpeed(Canvas &canvas, const RECT rc) const;
+  void RenderTask(Canvas &canvas, const RECT rc,
+                  const NMEA_INFO &nmea_info,
+                  const SETTINGS_COMPUTER &settings_computer,
+                  const SETTINGS_MAP &settings_map,
+                  const OLCOptimizer &olc, bool olcmode) const;
+  void RenderSpeed(Canvas &canvas, const RECT rc,
+                   const DERIVED_INFO &derived) const;
   void CaptionBarograph( TCHAR *sTmp);
   void CaptionClimb( TCHAR* sTmp);
   void CaptionPolar(TCHAR * sTmp) const;
   void CaptionTempTrace(TCHAR *sTmp) const;
-  void CaptionTask(TCHAR *sTmp) const;
+  void CaptionTask(TCHAR *sTmp,
+                   const DERIVED_INFO &derived) const;
 private:
   LeastSquares ThermalAverage;
   LeastSquares Wind_x;

@@ -91,11 +91,13 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   canvas.set_text_color(Sender->GetForeColor());
 
   const FlightStatistics &fs = glide_computer.GetFlightStats();
+  OLCOptimizer &olc = glide_computer.GetOLC();
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
     SetCalcCaption(TEXT("Settings"));
-    fs.RenderBarograph(canvas, rcgfx);
+    fs.RenderBarograph(canvas, rcgfx,
+                       XCSoarInterface::Calculated());
     break;
   case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(TEXT("Task calc"));
@@ -103,11 +105,15 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_WIND:
     SetCalcCaption(TEXT("Set wind"));
-    fs.RenderWind(canvas, rcgfx);
+    fs.RenderWind(canvas, rcgfx,
+                  XCSoarInterface::Basic(),
+                  glide_computer.windanalyser.windstore);
     break;
   case ANALYSIS_PAGE_POLAR:
     SetCalcCaption(TEXT("Settings"));
-    fs.RenderGlidePolar(canvas, rcgfx);
+    fs.RenderGlidePolar(canvas, rcgfx,
+                        XCSoarInterface::Calculated(),
+                        XCSoarInterface::SettingsComputer());
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     SetCalcCaption(TEXT("Settings"));
@@ -115,19 +121,36 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(TEXT("Task calc"));
-    fs.RenderTask(canvas, rcgfx, false);
+    olc.Lock();
+    fs.RenderTask(canvas, rcgfx,
+                  XCSoarInterface::Basic(),
+                  XCSoarInterface::SettingsComputer(),
+                  XCSoarInterface::SettingsMap(),
+                  olc, false);
+    olc.Unlock();
     break;
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(TEXT("Optimise"));
-    fs.RenderTask(canvas, rcgfx, true);
+    olc.Lock();
+    fs.RenderTask(canvas, rcgfx,
+                  XCSoarInterface::Basic(),
+                  XCSoarInterface::SettingsComputer(),
+                  XCSoarInterface::SettingsMap(),
+                  olc, true);
+    olc.Unlock();
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(TEXT("Warnings"));
-    fs.RenderAirspace(canvas, rcgfx);
+    fs.RenderAirspace(canvas, rcgfx,
+                      XCSoarInterface::Basic(),
+                      XCSoarInterface::Calculated(),
+                      XCSoarInterface::SettingsMap(),
+                      airspace_database, terrain);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     SetCalcCaption(TEXT("Task calc"));
-    fs.RenderSpeed(canvas, rcgfx);
+    fs.RenderSpeed(canvas, rcgfx,
+                   XCSoarInterface::Calculated());
     break;
   default:
     // should never get here!
@@ -201,7 +224,7 @@ static void Update(void){
               gettext(TEXT("Task")));
     wf->SetCaption(sTmp);
     RefreshTaskStatistics();
-    fs.CaptionTask(sTmp);
+    fs.CaptionTask(sTmp, XCSoarInterface::Calculated());
     wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_OLC:
