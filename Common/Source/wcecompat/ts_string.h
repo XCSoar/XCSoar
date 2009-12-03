@@ -27,16 +27,19 @@
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 #include <windows.h>
 
+#ifdef _UNICODE
 
 void ascii2unicode(const char* ascii, WCHAR* unicode);
 void unicode2ascii(const WCHAR* unicode, char* ascii);
 void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars);
 void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars);
 
-#ifndef _UNICODE
+#else
+
 void unicode2ascii(const char *unicode, char *ascii, int maxChars);
 void unicode2ascii(const char *unicode, char *ascii);
 void ascii2unicode(const char *ascii, char *unicode);
+
 #endif
 
 #endif /* __wcecompat__ts_string_h__ */

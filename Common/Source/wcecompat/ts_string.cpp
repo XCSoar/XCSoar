@@ -23,6 +23,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef _UNICODE
+
 static bool
 check_wchar_align(const void *p)
 {
@@ -56,8 +58,6 @@ void ascii2unicode(const char* ascii, WCHAR* unicode)
 	}
 }
 
-#ifdef _UNICODE
-
 void unicode2ascii(const WCHAR* unicode, char* ascii)
 {
   if (wcslen(unicode)==0) {
@@ -78,8 +78,6 @@ void unicode2ascii(const WCHAR* unicode, char* ascii)
 		*ascii = '\0';
 	}
 }
-
-#endif /* _UNICODE */
 
 void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars)
 {
@@ -110,8 +108,6 @@ void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars)
 	}
 }
 
-#ifdef _UNICODE
-
 void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars)
 {
   if (wcslen(unicode)==0) {
@@ -135,9 +131,8 @@ void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars)
 	}
 }
 
-#endif /* _UNICODE */
+#else /* !_UNICODE */
 
-#ifndef _UNICODE
 void unicode2ascii(const char *unicode, char *ascii, int maxChars)
 {
   strncpy(ascii, unicode, maxChars - 1);
@@ -153,4 +148,5 @@ void ascii2unicode(const char *ascii, char *unicode)
 {
   strcpy(unicode, ascii);
 }
+
 #endif /* _UNICODE */
