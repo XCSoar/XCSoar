@@ -85,447 +85,446 @@ typedef enum{
   bkRight,
   bkBottom,
   bkLeft
-}BorderKind_t;
+} BorderKind_t;
 
 class WindowControl : public ContainerWindow {
- public:
-    typedef void (*OnHelpCallback_t)(WindowControl * Sender);
+public:
+  typedef void (*OnHelpCallback_t)(WindowControl *Sender);
 
-  private:
+private:
+  int mX;
+  int mY;
+  int mWidth;
+  int mHeight;
 
-    int mX;
-    int mY;
-    int mWidth;
-    int mHeight;
+  WindowControl *mOwner;
+  WindowControl *mTopOwner;
+  int  mBorderKind;
+  Color mColorBack;
+  Color mColorFore;
+  Brush mhBrushBk;
+  Pen mhPenBorder;
+  Pen mhPenSelector;
+  const Font *mhFont;
+  TCHAR mName[64];
+  TCHAR *mHelpText;
 
-    WindowControl *mOwner;
-    WindowControl *mTopOwner;
-    int  mBorderKind;
-    Color mColorBack;
-    Color mColorFore;
-    Brush mhBrushBk;
-    Pen mhPenBorder;
-    Pen mhPenSelector;
-    const Font *mhFont;
-    TCHAR mName[64];
-    TCHAR *mHelpText;
+  OnHelpCallback_t mOnHelpCallback;
 
-    OnHelpCallback_t mOnHelpCallback;
+  int mTag;
+  bool mReadOnly;
+  bool mHasFocus;
 
-    int mTag;
-    bool mReadOnly;
-    bool mHasFocus;
+  int  mBorderSize;
+  bool mVisible;
 
-    int  mBorderSize;
-    bool mVisible;
+  WindowControl *mActiveClient;
 
-    WindowControl *mActiveClient;
+  static int InstCount;
+  static Brush hBrushDefaultBk;
+  static Pen hPenDefaultBorder;
+  static Pen hPenDefaultSelector;
 
-    static int InstCount;
-    static Brush hBrushDefaultBk;
-    static Pen hPenDefaultBorder;
-    static Pen hPenDefaultSelector;
+protected:
 
-  protected:
+  bool mCanFocus;
+  TCHAR mCaption[254];
+  bool mDontPaintSelector;
 
-    bool mCanFocus;
-    TCHAR mCaption[254];
-    bool mDontPaintSelector;
+  WindowControl *mClients[50];
+  int mClientCount;
 
-    WindowControl *mClients[50];
-    int mClientCount;
+  virtual void PaintSelector(Canvas &canvas);
+  virtual WindowControl *SetOwner(WindowControl *Value);
+  void UpdatePosSize(void);
+  bool HasFocus(void) { return mHasFocus; }
 
-    virtual void PaintSelector(Canvas &canvas);
-    virtual WindowControl *SetOwner(WindowControl *Value);
-    void UpdatePosSize(void);
-    bool HasFocus(void) { return mHasFocus; };
+public:
+  TCHAR *GetCaption(void) { return mCaption; }
 
-  public:
-    TCHAR* GetCaption(void) { return mCaption; };
-
-    virtual bool on_setfocus();
-    virtual bool on_killfocus();
+  virtual bool on_setfocus();
+  virtual bool on_killfocus();
 
 #ifndef ENABLE_SDL
-    virtual LRESULT on_message(HWND hWnd, UINT message,
-                               WPARAM wParam, LPARAM lParam);
+  virtual LRESULT on_message(HWND hWnd, UINT message,
+                             WPARAM wParam, LPARAM lParam);
 #endif /* !ENABLE_SDL */
 
-    virtual void AddClient(WindowControl *Client);
+  virtual void AddClient(WindowControl *Client);
 
-    virtual bool on_close(void);
+  virtual bool on_close(void);
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
 
-    /** from class PaintWindow */
-    virtual void on_paint(Canvas &canvas);
+  /** from class PaintWindow */
+  virtual void on_paint(Canvas &canvas);
 
-    virtual int OnHelp();
+  virtual int OnHelp();
 
-    virtual int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
-		(void)hwnd; (void)uMsg; (void)wParam; (void)lParam;
-      return(1);
-    };
-    virtual void Close(void){
-      SetVisible(false);
-    };
-    virtual void Show(void){
-      SetVisible(true);
-    };
+  virtual int OnUnhandledMessage(HWND hwnd, UINT uMsg,
+                                 WPARAM wParam, LPARAM lParam) {
+    (void)hwnd; (void)uMsg; (void)wParam; (void)lParam;
+    return 1;
+  }
+  virtual void Close(void) {
+    SetVisible(false);
+  }
+  virtual void Show(void) {
+    SetVisible(true);
+  }
 
-    void SetOnHelpCallback(void(*Function)(WindowControl * Sender)){
-      mOnHelpCallback = Function;
-    }
+  void SetOnHelpCallback(void(*Function)(WindowControl *Sender)) {
+    mOnHelpCallback = Function;
+  }
 
-    int GetWidth(void){return(mWidth);};
-    int GetHeight(void){return(mHeight);};
+  int GetWidth(void) { return mWidth; }
+  int GetHeight(void) { return mHeight; }
 
-    bool SetFocused(bool Value);
-    bool GetFocused(void);
-    WindowControl *GetCanFocus(void);
-    bool SetCanFocus(bool Value);
+  bool SetFocused(bool Value);
+  bool GetFocused(void);
+  WindowControl *GetCanFocus(void);
+  bool SetCanFocus(bool Value);
 
-    bool GetReadOnly(void){return(mReadOnly);};
-    bool SetReadOnly(bool Value);
+  bool GetReadOnly(void) { return mReadOnly; }
+  bool SetReadOnly(bool Value);
 
-    void SetVisible(bool Value);
-    bool GetVisible(void);
+  void SetVisible(bool Value);
+  bool GetVisible(void);
 
-    int  GetBorderKind(void);
-    int  SetBorderKind(int Value);
+  int  GetBorderKind(void);
+  int  SetBorderKind(int Value);
 
-    const Font *GetFont(void) { return(mhFont); };
-    virtual const Font *SetFont(const Font &font);
+  const Font *GetFont(void) { return mhFont; }
+  virtual const Font *SetFont(const Font &font);
 
-    const Font *SetFont(const Font *font) {
-      return SetFont(*font);
-    }
+  const Font *SetFont(const Font *font) {
+    return SetFont(*font);
+  }
 
-    virtual Color SetForeColor(Color Value);
-    Color GetForeColor(void){return(mColorFore);};
+  virtual Color SetForeColor(Color Value);
+  Color GetForeColor(void) { return mColorFore; }
 
-    virtual Color SetBackColor(Color Value);
-    Color GetBackColor(void){return(mColorBack);};
+  virtual Color SetBackColor(Color Value);
+  Color GetBackColor(void) { return mColorBack; }
 
-    Brush &GetBackBrush(void) {
-      return mhBrushBk.defined()
-        ? mhBrushBk
-        : hBrushDefaultBk;
-    }
-    Pen &GetBorderPen(void) {
-      return mhPenBorder.defined()
-        ? mhPenBorder
-        : hPenDefaultBorder;
-    }
-    Pen &GetSelectorPen(void) {
-      return mhPenSelector.defined()
-        ? mhPenSelector
-        : hPenDefaultSelector;
-    }
+  Brush &GetBackBrush(void) {
+    return mhBrushBk.defined()
+      ? mhBrushBk
+      : hBrushDefaultBk;
+  }
+  Pen &GetBorderPen(void) {
+    return mhPenBorder.defined()
+      ? mhPenBorder
+      : hPenDefaultBorder;
+  }
+  Pen &GetSelectorPen(void) {
+    return mhPenSelector.defined()
+      ? mhPenSelector
+      : hPenDefaultSelector;
+  }
 
-    virtual void SetCaption(const TCHAR *Value);
-    void SetHelpText(const TCHAR *Value);
+  virtual void SetCaption(const TCHAR *Value);
+  void SetHelpText(const TCHAR *Value);
 
 #ifndef ENABLE_SDL
-    HWND GetHandle(void) { return *this; }
+  HWND GetHandle(void) { return *this; }
 #endif /* !ENABLE_SDL */
 
-    virtual ContainerWindow &GetClientAreaWindow(void) { return *this; }
-    Canvas &GetCanvas(void) { return get_canvas(); }
-    WindowControl *GetOwner(void){return(mOwner);};
+  virtual ContainerWindow &GetClientAreaWindow(void) { return *this; }
+  Canvas &GetCanvas(void) { return get_canvas(); }
+  WindowControl *GetOwner(void) { return mOwner; }
 
-    int GetTag(void){return(mTag);};
-    int SetTag(int Value){mTag = Value; return(mTag);};
+  int GetTag(void) { return mTag; }
+  int SetTag(int Value) {
+    mTag = Value; return mTag;
+  }
 
-    void SetTop(int Value);
-    void SetLeft(int Value);
-    void SetWidth(int Value);
-    void SetHeight(int Value);
+  void SetTop(int Value);
+  void SetLeft(int Value);
+  void SetWidth(int Value);
+  void SetHeight(int Value);
 
-    int GetTop(void){return(mY);};
-    int GetLeft(void){return(mX);};
+  int GetTop(void) { return mY; }
+  int GetLeft(void) { return mX; }
 
-    WindowControl *FocusNext(WindowControl *Sender);
-    WindowControl *FocusPrev(WindowControl *Sender);
+  WindowControl *FocusNext(WindowControl *Sender);
+  WindowControl *FocusPrev(WindowControl *Sender);
 
-    WindowControl(WindowControl *Owner, ContainerWindow *Parent,
-                  const TCHAR *Name, int X, int Y, int Width, int Height,
-                  bool Visible=true);
-    virtual ~WindowControl(void);
+  WindowControl(WindowControl *Owner, ContainerWindow *Parent,
+                const TCHAR *Name, int X, int Y, int Width, int Height,
+                bool Visible=true);
+  virtual ~WindowControl(void);
 
-    virtual void Destroy(void);
+  virtual void Destroy(void);
 
-    virtual void Redraw(void);
+  virtual void Redraw(void);
 
-    void PaintSelector(bool Value){mDontPaintSelector = Value;};
+  void PaintSelector(bool Value) {mDontPaintSelector = Value;}
 
-    WindowControl *FindByName(const TCHAR *Name);
+  WindowControl *FindByName(const TCHAR *Name);
 
-    void FilterAdvanced(bool advanced);
+  void FilterAdvanced(bool advanced);
 
 };
 
-class WndFrame:public WindowControl{
+class WndFrame : public WindowControl {
+public:
+  WndFrame(WindowControl *Owner, const TCHAR *Name,
+           int X, int Y, int Width, int Height)
+    :WindowControl(Owner, NULL, Name, X, Y, Width, Height) {
+    mIsListItem = false;
 
-  public:
-
-    WndFrame(WindowControl *Owner, const TCHAR *Name,
-             int X, int Y, int Width, int Height):
-      WindowControl(Owner, NULL, Name, X, Y, Width, Height)
-    {
-      mIsListItem = false;
-
-      SetForeColor(GetOwner()->GetForeColor());
-      SetBackColor(GetOwner()->GetBackColor());
-      mCaptionStyle = DT_EXPANDTABS
+    SetForeColor(GetOwner()->GetForeColor());
+    SetBackColor(GetOwner()->GetBackColor());
+    mCaptionStyle = DT_EXPANDTABS
       | DT_LEFT
       | DT_NOCLIP
       | DT_WORDBREAK;
-    };
+  }
 
-    virtual void Destroy(void);
+  virtual void Destroy(void);
 
-    void SetCaption(const TCHAR *Value);
+  void SetCaption(const TCHAR *Value);
 
-    UINT GetCaptionStyle(void){return(mCaptionStyle);};
-    UINT SetCaptionStyle(UINT Value);
+  UINT GetCaptionStyle(void) { return mCaptionStyle; }
+  UINT SetCaptionStyle(UINT Value);
 
-    unsigned GetTextHeight();
+  unsigned GetTextHeight();
 
-    void SetIsListItem(bool Value){mIsListItem = Value;};
+  void SetIsListItem(bool Value) { mIsListItem = Value; }
 
-    /* events from class Window */
-    virtual bool on_mouse_down(int x, int y);
+  /* events from class Window */
+  virtual bool on_mouse_down(int x, int y);
 
-  protected:
+protected:
 
-    virtual bool on_key_down(unsigned key_code);
+  virtual bool on_key_down(unsigned key_code);
 
-    bool mIsListItem;
+  bool mIsListItem;
 
-    UINT mCaptionStyle;
+  UINT mCaptionStyle;
 
-    /** from class PaintWindow */
-    virtual void on_paint(Canvas &canvas);
-
+  /** from class PaintWindow */
+  virtual void on_paint(Canvas &canvas);
 };
 
-class WndListFrame:public WndFrame{
+class WndListFrame : public WndFrame {
+public:
 
-  public:
+  typedef struct{
+    int TopIndex;
+    int BottomIndex;
+    int ItemIndex;
+    int DrawIndex;
+    //      int SelectedIndex;
+    int ScrollIndex;
+    int ItemCount;
+    int ItemInViewCount;
+    int ItemInPageCount;
+  }ListInfo_t;
 
-    typedef struct{
-      int TopIndex;
-      int BottomIndex;
-      int ItemIndex;
-      int DrawIndex;
-//      int SelectedIndex;
-      int ScrollIndex;
-      int ItemCount;
-      int ItemInViewCount;
-      int ItemInPageCount;
-    }ListInfo_t;
+  typedef void (*OnListCallback_t)(WindowControl *Sender, ListInfo_t *ListInfo);
 
-    typedef void (*OnListCallback_t)(WindowControl * Sender, ListInfo_t *ListInfo);
+  WndListFrame(WindowControl *Owner, const TCHAR *Name,
+               int X, int Y, int Width, int Height,
+               void (*OnListCallback)(WindowControl *Sender,
+                                      ListInfo_t *ListInfo));
 
-    WndListFrame(WindowControl *Owner, const TCHAR *Name,
-                 int X, int Y, int Width, int Height,
-                 void (*OnListCallback)(WindowControl * Sender,
-                                        ListInfo_t *ListInfo));
+  virtual void Destroy(void);
 
-    virtual void Destroy(void);
+  bool on_mouse_move(int x, int y, unsigned keys);
+  int OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
+  int PrepareItemDraw(void);
+  void ResetList(void);
+  void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
+  void RedrawScrolled(bool all);
+  void DrawScrollBar(Canvas &canvas);
+  int RecalculateIndices(bool bigscroll);
+  void Redraw(void);
+  int GetItemIndex(void) { return mListInfo.ItemIndex; }
+  void SetItemIndex(int iValue);
+  void SelectItemFromScreen(int xPos, int yPos, RECT *rect);
+  int GetScrollBarHeight (void);
+  int GetScrollIndexFromScrollBarTop(int iScrollBarTop);
+  int GetScrollBarTopFromScrollIndex();
 
-    bool on_mouse_move(int x, int y, unsigned keys);
-    int OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
-    int PrepareItemDraw(void);
-    void ResetList(void);
-    void SetEnterCallback(void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo));
-    void RedrawScrolled(bool all);
-    void DrawScrollBar(Canvas &canvas);
-    int RecalculateIndices(bool bigscroll);
-    void Redraw(void);
-    int GetItemIndex(void){return(mListInfo.ItemIndex);}
-    void SetItemIndex(int iValue);
-    void SelectItemFromScreen(int xPos, int yPos, RECT *rect);
-    int GetScrollBarHeight (void);
-    int GetScrollIndexFromScrollBarTop(int iScrollBarTop);
-    int GetScrollBarTopFromScrollIndex();
-
-  protected:
+protected:
 #define SCROLLBARWIDTH_INITIAL 32
-    int ScrollbarTop;
-    int ScrollbarWidth;
+  int ScrollbarTop;
+  int ScrollbarWidth;
 
-    virtual bool on_mouse_down(int x, int y);
-    virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_up(int x, int y);
 
-    OnListCallback_t mOnListCallback;
-    OnListCallback_t mOnListEnterCallback;
-    ListInfo_t mListInfo;
+  OnListCallback_t mOnListCallback;
+  OnListCallback_t mOnListEnterCallback;
+  ListInfo_t mListInfo;
 
-    /** from class PaintWindow */
-    virtual void on_paint(Canvas &canvas);
+  /** from class PaintWindow */
+  virtual void on_paint(Canvas &canvas);
 
-	  RECT rcScrollBarButton;
-	  RECT rcScrollBar;
-    int mMouseScrollBarYOffset; // where in the scrollbar button was mouse down at
-    bool mMouseDown;
+  RECT rcScrollBarButton;
+  RECT rcScrollBar;
+  int mMouseScrollBarYOffset; // where in the scrollbar button was mouse down at
+  bool mMouseDown;
 };
 
-class WndOwnerDrawFrame:public WndFrame{
+class WndOwnerDrawFrame : public WndFrame {
+public:
 
-  public:
+  typedef void (*OnPaintCallback_t)(WindowControl *Sender, Canvas &canvas);
 
-    typedef void (*OnPaintCallback_t)(WindowControl *Sender, Canvas &canvas);
+  WndOwnerDrawFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
+                    int Width, int Height,
+                    OnPaintCallback_t OnPaintCallback):
+    WndFrame(Owner, Name, X, Y, Width, Height)
+  {
+    mCaption[0] = '\0';
+    mOnPaintCallback = OnPaintCallback;
+    SetForeColor(GetOwner()->GetForeColor());
+    SetBackColor(GetOwner()->GetBackColor());
 
-    WndOwnerDrawFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
-                      int Width, int Height,
-                      OnPaintCallback_t OnPaintCallback):
-      WndFrame(Owner, Name, X, Y, Width, Height)
-    {
-      mCaption[0] = '\0';
-      mOnPaintCallback = OnPaintCallback;
-      SetForeColor(GetOwner()->GetForeColor());
-      SetBackColor(GetOwner()->GetBackColor());
+  }
 
-    };
+  virtual void Destroy(void);
 
-    virtual void Destroy(void);
+  void SetOnPaintNotify(OnPaintCallback_t OnPaintCallback) {
+    mOnPaintCallback = OnPaintCallback;
+  }
 
-    void SetOnPaintNotify(OnPaintCallback_t OnPaintCallback){
-      mOnPaintCallback = OnPaintCallback;
-    }
+protected:
 
-  protected:
+  OnPaintCallback_t mOnPaintCallback;
 
-    OnPaintCallback_t mOnPaintCallback;
-
-    /** from class PaintWindow */
-    virtual void on_paint(Canvas &canvas);
+  /** from class PaintWindow */
+  virtual void on_paint(Canvas &canvas);
 };
 
 extern WindowControl *ActiveControl;
 extern WindowControl *LastFocusControl;
 
-class WndForm:public WindowControl{
+class WndForm : public WindowControl {
+protected:
 
-  protected:
+  static ACCEL  mAccel[];
 
-    static ACCEL  mAccel[];
+  int mModalResult;
+  HACCEL mhAccelTable;
+  Color mColorTitle;
+  const Font *mhTitleFont;
+  WindowControl *mClientWindow;
+  RECT mClientRect;
+  RECT mTitleRect;
 
-    int mModalResult;
-    HACCEL mhAccelTable;
-    Color mColorTitle;
-    const Font *mhTitleFont;
-    WindowControl *mClientWindow;
-    RECT mClientRect;
-    RECT mTitleRect;
-
-    int (*mOnTimerNotify)(WindowControl * Sender);
-    int (*mOnKeyDownNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
-    int (*mOnKeyUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
-    int (*mOnLButtonUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
-    bool (*mOnUserMsgNotify)(WindowControl *Sender, unsigned id);
+  int (*mOnTimerNotify)(WindowControl *Sender);
+  int (*mOnKeyDownNotify)(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
+  int (*mOnKeyUpNotify)(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
+  int (*mOnLButtonUpNotify)(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
+  bool (*mOnUserMsgNotify)(WindowControl *Sender, unsigned id);
 
 
-    int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+  int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    /** from class PaintWindow */
-    virtual void on_paint(Canvas &canvas);
+  /** from class PaintWindow */
+  virtual void on_paint(Canvas &canvas);
 
-    timer_t cbTimerID;
+  timer_t cbTimerID;
 
-  public:
+public:
 
-    WndForm(ContainerWindow *Parent,
-            const TCHAR *Name, const TCHAR *Caption,
-            int X, int Y, int Width, int Height);
-    ~WndForm(void);
-    virtual void Destroy(void);
+  WndForm(ContainerWindow *Parent,
+          const TCHAR *Name, const TCHAR *Caption,
+          int X, int Y, int Width, int Height);
+  ~WndForm(void);
+  virtual void Destroy(void);
 
-    bool bLButtonDown; //RLD
-    ContainerWindow &GetClientAreaWindow(void);
-    void AddClient(WindowControl *Client);
+  bool bLButtonDown; //RLD
+  ContainerWindow &GetClientAreaWindow(void);
+  void AddClient(WindowControl *Client);
 
-    int OnLButtonUp(WPARAM wParam, LPARAM lParam){
-		(void)wParam; (void)lParam;
-      return(0);
-    };
+  int OnLButtonUp(WPARAM wParam, LPARAM lParam) {
+    (void)wParam; (void)lParam;
+    return 0;
+  }
 
-    void Close(void){
-      WindowControl::Close();
-      mModalResult = mrCancel;
-    }
+  void Close(void) {
+    WindowControl::Close();
+    mModalResult = mrCancel;
+  }
 
-    DWORD enterTime;
+  DWORD enterTime;
 
-    int GetModalResult(void){return(mModalResult);};
-    int SetModalResult(int Value){mModalResult = Value;return(Value);};
+  int GetModalResult(void) { return mModalResult; }
+  int SetModalResult(int Value) {
+    mModalResult = Value;
+    return Value;
+  }
 
-    const Font *SetTitleFont(const Font &font);
+  const Font *SetTitleFont(const Font &font);
 
-    int ShowModal(bool bEnableMap);
-    int ShowModal(void);
-    void Show(void);
+  int ShowModal(bool bEnableMap);
+  int ShowModal(void);
+  void Show(void);
 
-    void SetCaption(const TCHAR *Value);
+  void SetCaption(const TCHAR *Value);
 
-    /** from class Window */
-    virtual bool on_command(unsigned id, unsigned code);
-    virtual bool on_timer(timer_t id);
-    virtual bool on_user(unsigned id);
+  /** from class Window */
+  virtual bool on_command(unsigned id, unsigned code);
+  virtual bool on_timer(timer_t id);
+  virtual bool on_user(unsigned id);
 
-    Color SetForeColor(Color Value);
-    Color SetBackColor(Color Value);
-    const Font *SetFont(const Font &Value);
+  Color SetForeColor(Color Value);
+  Color SetBackColor(Color Value);
+  const Font *SetFont(const Font &Value);
 
-    void SetKeyDownNotify(int (*KeyDownNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam));
-    void SetKeyUpNotify(int (*KeyUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam));
-    void SetLButtonUpNotify(int (*LButtonUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam));
+  void SetKeyDownNotify(int (*KeyDownNotify)(WindowControl *Sender,
+                                             WPARAM wParam, LPARAM lParam));
+  void SetKeyUpNotify(int (*KeyUpNotify)(WindowControl *Sender,
+                                         WPARAM wParam, LPARAM lParam));
+  void SetLButtonUpNotify(int (*LButtonUpNotify)(WindowControl *Sender,
+                                                 WPARAM wParam, LPARAM lParam));
 
-    void SetTimerNotify(int (*OnTimerNotify)(WindowControl * Sender));
+  void SetTimerNotify(int (*OnTimerNotify)(WindowControl *Sender));
 
-    void SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigned id));
+  void SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender,
+                                                unsigned id));
 private:
-    static PeriodClock timeAnyOpenClose; // when any dlg opens or child closes
-
+  static PeriodClock timeAnyOpenClose; // when any dlg opens or child closes
 };
 
-class WndButton:public WindowControl{
+class WndButton : public WindowControl {
+private:
 
-  private:
+  /** from class PaintWindow */
+  virtual void on_paint(Canvas &canvas);
 
-    /** from class PaintWindow */
-    virtual void on_paint(Canvas &canvas);
+  bool mDown;
+  bool mDefault;
+  int mLastDrawTextHeight;
+  void (*mOnClickNotify)(WindowControl *Sender);
 
-    bool mDown;
-    bool mDefault;
-    int mLastDrawTextHeight;
-    void (*mOnClickNotify)(WindowControl * Sender);
+public:
 
-  public:
+  typedef void (*ClickNotifyCallback_t)(WindowControl *Sender);
 
-    typedef void (*ClickNotifyCallback_t)(WindowControl * Sender);
+  WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption,
+            int X, int Y, int Width, int Height,
+            void (*Function)(WindowControl *Sender) = NULL);
+  virtual void Destroy(void);
 
-    WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption, int X, int Y, int Width, int Height, void(*Function)(WindowControl * Sender) = NULL);
-    virtual void Destroy(void);
+  /* override event methods from class Window */
+  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_double(int x, int y);
+  virtual bool on_key_down(unsigned key_code);
+  virtual bool on_key_up(unsigned key_code);
 
-    /* override event methods from class Window */
-    virtual bool on_mouse_up(int x, int y);
-    virtual bool on_mouse_down(int x, int y);
-    virtual bool on_mouse_double(int x, int y);
-    virtual bool on_key_down(unsigned key_code);
-    virtual bool on_key_up(unsigned key_code);
-
-    void SetOnClickNotify(void(*Function)(WindowControl * Sender)){
-      mOnClickNotify = Function;
-    }
-
-
+  void SetOnClickNotify(void(*Function)(WindowControl *Sender)) {
+    mOnClickNotify = Function;
+  }
 };
 
-
-class WndProperty:public WindowControl{
+class WndProperty : public WindowControl {
   class Editor : public EditWindow {
   private:
     WndProperty *parent;
@@ -540,98 +539,99 @@ class WndProperty:public WindowControl{
     virtual bool on_killfocus();
   };
 
-  private:
+private:
 
-    static Bitmap hBmpLeft32;
-    static Bitmap hBmpRight32;
-    static int InstCount;
+  static Bitmap hBmpLeft32;
+  static Bitmap hBmpRight32;
+  static int InstCount;
 
-    Editor edit;
-    POINT mEditSize;
-    POINT mEditPos;
-    const Font *mhCaptionFont;
-    const Font *mhValueFont;
-    int  mBitmapSize;
-    int  mCaptionWidth;
-    RECT mHitRectUp;
-    RECT mHitRectDown;
-    bool mDownDown;
-    bool mUpDown;
+  Editor edit;
+  POINT mEditSize;
+  POINT mEditPos;
+  const Font *mhCaptionFont;
+  const Font *mhValueFont;
+  int  mBitmapSize;
+  int  mCaptionWidth;
+  RECT mHitRectUp;
+  RECT mHitRectDown;
+  bool mDownDown;
+  bool mUpDown;
 
-    /** from class PaintWindow */
-    virtual void on_paint(Canvas &canvas);
+  /** from class PaintWindow */
+  virtual void on_paint(Canvas &canvas);
 
-    void (*mOnClickUpNotify)(WindowControl * Sender);
-    void (*mOnClickDownNotify)(WindowControl * Sender);
+  void (*mOnClickUpNotify)(WindowControl *Sender);
+  void (*mOnClickDownNotify)(WindowControl *Sender);
 
-    int (*mOnDataChangeNotify)(WindowControl * Sender, int Mode, int Value);
+  int (*mOnDataChangeNotify)(WindowControl *Sender, int Mode, int Value);
 
-    int IncValue(void);
-    int DecValue(void);
+  int IncValue(void);
+  int DecValue(void);
 
-    DataField *mDataField;
+  DataField *mDataField;
 
-    void UpdateButtonData(int Value);
+  void UpdateButtonData(int Value);
 
-  public:
+public:
 
-    int CallSpecial(void);
-    bool mDialogStyle;
+  int CallSpecial(void);
+  bool mDialogStyle;
 
-    typedef int (*DataChangeCallback_t)(WindowControl * Sender, int Mode, int Value);
+  typedef int (*DataChangeCallback_t)(WindowControl *Sender, int Mode, int Value);
 
-    WndProperty(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height, int CaptionWidth, int (*DataChangeNotify)(WindowControl * Sender, int Mode, int Value), int MultiLine=false);
-    ~WndProperty(void);
-    virtual void Destroy(void);
+  WndProperty(WindowControl *Parent, TCHAR *Name, TCHAR *Caption,
+              int X, int Y, int Width, int Height, int CaptionWidth,
+              int (*DataChangeNotify)(WindowControl *Sender,
+                                      int Mode, int Value),
+              int MultiLine=false);
+  ~WndProperty(void);
+  virtual void Destroy(void);
 
-    virtual bool on_setfocus();
-    virtual bool on_killfocus();
+  virtual bool on_setfocus();
+  virtual bool on_killfocus();
 
-    void on_editor_setfocus();
-    void on_editor_killfocus();
+  void on_editor_setfocus();
+  void on_editor_killfocus();
 
-    bool SetReadOnly(bool Value);
+  bool SetReadOnly(bool Value);
 
-    void RefreshDisplay(void);
+  void RefreshDisplay(void);
 
-    const Font *SetFont(const Font &font);
+  const Font *SetFont(const Font &font);
 
-    virtual bool on_key_down(unsigned key_code);
-    bool OnEditKeyDown(unsigned key_code);
-    virtual bool on_mouse_down(int x, int y);
-    virtual bool on_mouse_up(int x, int y);
-    virtual bool on_mouse_double(int x, int y);
+  virtual bool on_key_down(unsigned key_code);
+  bool OnEditKeyDown(unsigned key_code);
+  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_double(int x, int y);
 
-//    int GetAsInteger(void){return(mValue);};
-//    int SetAsInteger(int Value);
+  DataField *GetDataField(void) {
+    return mDataField;
+  }
 
-    DataField *GetDataField(void){return(mDataField);};
-    DataField *SetDataField(DataField *Value);
-    void SetText(const TCHAR *Value);
-    int SetButtonSize(int Value);
-
+  DataField *SetDataField(DataField *Value);
+  void SetText(const TCHAR *Value);
+  int SetButtonSize(int Value);
 };
 
 #ifndef ALTAIRSYNC
 
 typedef void (*webpt2Event)(const TCHAR *);
 
-class WndEventButton:public WndButton {
- public:
+class WndEventButton : public WndButton {
+public:
   WndEventButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption,
-		 int X, int Y, int Width, int Height,
-		 const TCHAR *ename,
-		 const TCHAR *eparameters);
+                 int X, int Y, int Width, int Height,
+                 const TCHAR *ename,
+                 const TCHAR *eparameters);
   ~WndEventButton();
- public:
+public:
   void CallEvent(void);
- private:
+private:
   webpt2Event inputEvent;
   TCHAR *parameters;
 };
 
-
 #endif
 
 #endif
-

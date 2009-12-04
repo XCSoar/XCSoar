@@ -131,11 +131,11 @@ Pen WindowControl::hPenDefaultSelector;
 
 WindowControl::WindowControl(WindowControl *Owner,
                              ContainerWindow *Parent,
-			     const TCHAR *Name,
-			     int X, int Y,
-			     int Width, int Height,
-			     bool Visible){
-
+                             const TCHAR *Name,
+                             int X, int Y,
+                             int Width, int Height,
+                             bool Visible)
+{
   mHelpText = NULL;
 
   mHasFocus = false;
@@ -273,18 +273,18 @@ void WindowControl::SetWidth(int Value){
 
 WindowControl *WindowControl::GetCanFocus(void){
   if (mVisible && mCanFocus && !mReadOnly)
-    return(this);
+    return this;
 
   if (!mVisible)
-    return(NULL);
+    return NULL;
 
   for (int idx=0; idx<mClientCount; idx++){
     WindowControl *w;
     if ((w = mClients[idx]->GetCanFocus()) != NULL){
-      return(w);
+      return w;
     }
   }
-  return(NULL);
+  return NULL;
 }
 
 void WindowControl::AddClient(WindowControl *Client){
@@ -297,8 +297,8 @@ void WindowControl::AddClient(WindowControl *Client){
   if (Client->mY == -1){
     if (mClientCount > 1){
       Client->mY =
-	mClients[mClientCount-2]->mY
-	+ mClients[mClientCount-2]->mHeight;
+        mClients[mClientCount-2]->mY
+        + mClients[mClientCount-2]->mHeight;
       Client->move(Client->mX, Client->mY);
     }
   }
@@ -310,10 +310,10 @@ void WindowControl::AddClient(WindowControl *Client){
     // maximum height
     Client->mHeight = mHeight - Client->mY;
     SetWindowPos(Client->GetHandle(), 0,
-		 Client->mX, Client->mY,
-		 Client->mWidth, Client->mHeight,
-		 SWP_NOSIZE | SWP_NOZORDER
-		 | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+                 Client->mX, Client->mY,
+                 Client->mWidth, Client->mHeight,
+                 SWP_NOSIZE | SWP_NOZORDER
+                 | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
   }
   */
 }
@@ -333,13 +333,13 @@ void WindowControl::FilterAdvanced(bool advanced){
 
 WindowControl *WindowControl::FindByName(const TCHAR *Name) {
   if (_tcscmp(mName, Name)==0)
-    return(this);
+    return this;
   for (int i=0; i<mClientCount; i++){
     WindowControl *W = mClients[i]->FindByName(Name);
     if (W != NULL)
-      return(W);
+      return W;
   }
-  return(NULL);
+  return NULL;
 }
 
 
@@ -348,7 +348,7 @@ WindowControl *WindowControl::SetOwner(WindowControl *Value){
   if (mOwner != Value){
     mOwner = Value;
   }
-  return(res);
+  return res;
 }
 
 
@@ -408,18 +408,18 @@ bool WindowControl::SetFocused(bool Value){
     */
   }
 
-  return(res);
+  return res;
 
 }
 
 bool WindowControl::SetCanFocus(bool Value){
   bool res = mCanFocus;
   mCanFocus = Value;
-  return(res);
+  return res;
 }
 
 bool WindowControl::GetFocused(void){
-  return(mHasFocus);
+  return mHasFocus;
 }
 
 void
@@ -445,11 +445,11 @@ WindowControl::SetVisible(bool Value)
 }
 
 bool WindowControl::GetVisible(void){
-  return(mVisible);
+  return mVisible;
 }
 
 int WindowControl::GetBorderKind(void){
-  return(mBorderKind);
+  return mBorderKind;
 }
 
 int WindowControl::SetBorderKind(int Value){
@@ -458,7 +458,7 @@ int WindowControl::SetBorderKind(int Value){
     mBorderKind = Value;
     invalidate();
   }
-  return(res);
+  return res;
 }
 
 const Font *WindowControl::SetFont(const Font &Value){
@@ -467,7 +467,7 @@ const Font *WindowControl::SetFont(const Font &Value){
     // todo
     mhFont = &Value;
   }
-  return(res);
+  return res;
 }
 
 bool WindowControl::SetReadOnly(bool Value){
@@ -476,7 +476,7 @@ bool WindowControl::SetReadOnly(bool Value){
     mReadOnly = Value;
     on_paint(GetCanvas());
   }
-  return(res);
+  return res;
 }
 
 Color WindowControl::SetForeColor(Color Value)
@@ -487,7 +487,7 @@ Color WindowControl::SetForeColor(Color Value)
     if (mVisible)
       on_paint(GetCanvas());
   }
-  return(res);
+  return res;
 }
 
 Color WindowControl::SetBackColor(Color Value)
@@ -499,7 +499,7 @@ Color WindowControl::SetBackColor(Color Value)
     if (mVisible)
       on_paint(GetCanvas());
   }
-  return(res);
+  return res;
 }
 
 
@@ -535,17 +535,17 @@ void WindowControl::Redraw(void){
 
 int WindowControl::OnHelp() {
 #ifdef ALTAIRSYNC
-    return(0); // undefined. return 1 if defined
+    return 0; // undefined. return 1 if defined
 #else
     if (mHelpText) {
       dlgHelpShowModal(*get_root_owner(), mCaption, mHelpText);
-      return(1);
+      return 1;
     } else {
       if (mOnHelpCallback) {
-	(mOnHelpCallback)(this);
-	return(1);
+        (mOnHelpCallback)(this);
+        return 1;
       } else {
-	return(0);
+        return 0;
       }
     }
 #endif
@@ -643,15 +643,15 @@ WindowControl *WindowControl::FocusNext(WindowControl *Sender){
   for (; idx<mClientCount; idx++){
     if ((W = mClients[idx]->GetCanFocus()) != NULL){
       W->set_focus();
-      return(W);
+      return W;
     }
   }
 
   if (GetOwner() != NULL){
-    return(GetOwner()->FocusNext(this));
+    return GetOwner()->FocusNext(this);
   }
 
-  return(NULL);
+  return NULL;
 
 }
 
@@ -669,14 +669,14 @@ WindowControl *WindowControl::FocusPrev(WindowControl *Sender){
   for (; idx>=0; idx--)
     if ((W=mClients[idx]->GetCanFocus()) != NULL){
       W->set_focus();
-      return(W);
+      return W;
     }
 
   if (GetOwner() != NULL){
-    return(GetOwner()->FocusPrev(this));
+    return GetOwner()->FocusPrev(this);
   }
 
-  return(NULL);
+  return NULL;
 }
 
 bool
@@ -715,10 +715,10 @@ WindowControl::on_message(HWND hwnd, UINT uMsg,
 
   if (mTopOwner != NULL){
     if (!mTopOwner->OnUnhandledMessage(hwnd, uMsg, wParam, lParam))
-     return(0);
+     return 0;
   } else {
     if (OnUnhandledMessage(hwnd, uMsg, wParam, lParam))
-     return(0);
+     return 0;
   }
 
   return ContainerWindow::on_message(hwnd, uMsg, wParam, lParam);
@@ -834,9 +834,9 @@ WndForm::on_command(unsigned id, unsigned code)
 {
    // VENTA- DEBUG HARDWARE KEY PRESSED
 #ifdef VENTA_DEBUG_KEY
-	TCHAR ventabuffer[80];
+        TCHAR ventabuffer[80];
         wsprintf(ventabuffer, TEXT("ONCKEY id=%d code=%d"), id, code);
-	DoStatusMessage(ventabuffer);
+        DoStatusMessage(ventabuffer);
 #endif
    if (id == VK_ESCAPE){
      mModalResult = mrCancel;
@@ -879,7 +879,7 @@ WndForm::SetTitleFont(const Font &font)
 
   }
 
-  return(res);
+  return res;
 
 }
 
@@ -971,7 +971,7 @@ int WndForm::ShowModal(bool bEnableMap) {
     /*
     if (msg.message == WM_KEYDOWN) {
       if (!Debounce()) {
-	continue;
+        continue;
       }
     }
     */
@@ -1002,21 +1002,21 @@ int WndForm::ShowModal(bool bEnableMap) {
     if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
 
       if (msg.message == WM_KEYUP){
-	/*
-	if (KeyTimer(false,msg.wParam & 0xffff)) {
-	  // activate tool tips
-	  1;
-	} else {
-	  // behave as if it was a key down event
-	  if (mOnKeyDownNotify != NULL)
-	    if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
-	      continue;
-	}
-	*/
+        /*
+        if (KeyTimer(false,msg.wParam & 0xffff)) {
+          // activate tool tips
+          1;
+        } else {
+          // behave as if it was a key down event
+          if (mOnKeyDownNotify != NULL)
+            if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
+              continue;
+        }
+        */
       }
 
       if (msg.message == WM_KEYDOWN){
-	//	KeyTimer(true,msg.wParam & 0xffff);
+        //        KeyTimer(true,msg.wParam & 0xffff);
 
 /*
         if (ActiveControl != NULL){
@@ -1117,7 +1117,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   SetFocus(oldFocusHwnd);
 #endif /* !ENABLE_SDL */
 
-  return(mModalResult);
+  return mModalResult;
 }
 
 void
@@ -1173,36 +1173,46 @@ Color WndForm::SetForeColor(Color Value)
 {
   if (mClientWindow)
     mClientWindow->SetForeColor(Value);
-  return(WindowControl::SetForeColor(Value));
+  return WindowControl::SetForeColor(Value);
 }
 
 Color WndForm::SetBackColor(Color Value)
 {
   if (mClientWindow)
   mClientWindow->SetBackColor(Value);
-  return(WindowControl::SetBackColor(Value));
+  return WindowControl::SetBackColor(Value);
 }
 
 const Font *WndForm::SetFont(const Font &Value){
   if (mClientWindow)
     mClientWindow->SetFont(Value);
-  return(WindowControl::SetFont(Value));
+  return WindowControl::SetFont(Value);
 }
 
-
-void WndForm::SetKeyDownNotify(int (*KeyDownNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam)){
+void
+WndForm::SetKeyDownNotify(int (*KeyDownNotify)(WindowControl *Sender,
+                                               WPARAM wParam, LPARAM lParam))
+{
   mOnKeyDownNotify = KeyDownNotify;
 }
 
-void WndForm::SetKeyUpNotify(int (*KeyUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam)){
+void
+WndForm::SetKeyUpNotify(int (*KeyUpNotify)(WindowControl *Sender,
+                                           WPARAM wParam, LPARAM lParam))
+{
   mOnKeyUpNotify = KeyUpNotify;
 }
 
-void WndForm::SetLButtonUpNotify( int (*LButtonUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam)){
+void
+WndForm::SetLButtonUpNotify( int (*LButtonUpNotify)(WindowControl *Sender,
+                                                    WPARAM wParam, LPARAM lParam))
+{
   mOnLButtonUpNotify = LButtonUpNotify;
 }
 
-void WndForm::SetTimerNotify(int (*OnTimerNotify)(WindowControl * Sender)) {
+void
+WndForm::SetTimerNotify(int (*OnTimerNotify)(WindowControl *Sender))
+{
   mOnTimerNotify = OnTimerNotify;
 }
 
@@ -1234,19 +1244,19 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   if (msg.message == WM_KEYDOWN){
     if (mOnKeyDownNotify != NULL)
       if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
-        return(0);
+        return 0;
 
   }
   if (msg.message == WM_KEYUP){
     if (mOnKeyUpNotify != NULL)
       if (!(mOnKeyUpNotify)(this, msg.wParam, msg.lParam))
-        return(0);
+        return 0;
   }
   if (msg.message == WM_LBUTTONUP){
     bLButtonDown=false;
     if (mOnLButtonUpNotify != NULL)
       if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
-        return(0);
+        return 0;
 
   }
 
@@ -1256,11 +1266,11 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         case VK_UP:
           if (ActiveControl->GetOwner() != NULL)
             ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-        return(0);
+        return 0;
         case VK_DOWN:
           if (ActiveControl->GetOwner() != NULL)
             ActiveControl->GetOwner()->FocusNext(ActiveControl);
-        return(0);
+        return 0;
       }
     }
   }
@@ -1279,7 +1289,7 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     */
   }
 
-  return(1);
+  return 1;
 
 }
 
@@ -1299,9 +1309,12 @@ void WndForm::Show(void){
 // WndButton
 //-----------------------------------------------------------
 
-WndButton::WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption, int X, int Y, int Width, int Height, void(*Function)(WindowControl * Sender)):
-      WindowControl(Parent, NULL /*Parent->GetHandle()*/, Name, X, Y, Width, Height){
-
+WndButton::WndButton(WindowControl *Parent,
+                     const TCHAR *Name, const TCHAR *Caption,
+                     int X, int Y, int Width, int Height,
+                     void (*Function)(WindowControl *Sender))
+      :WindowControl(Parent, NULL /*Parent->GetHandle()*/, Name, X, Y, Width, Height)
+{
   mOnClickNotify = Function;
   mDown = false;
   mDefault = false;
@@ -1316,12 +1329,11 @@ WndButton::WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Capt
 
 }
 
-void WndButton::Destroy(void){
-
+void
+WndButton::Destroy(void)
+{
   WindowControl::Destroy();
-
 }
-
 
 bool
 WndButton::on_mouse_up(int x, int y)
@@ -1354,9 +1366,9 @@ bool
 WndButton::on_key_down(unsigned key_code)
 {
 #ifdef VENTA_DEBUG_EVENT
-	TCHAR ventabuffer[80];
-	wsprintf(ventabuffer,TEXT("ONKEYDOWN key_code=%d"), key_code); // VENTA-
-	DoStatusMessage(ventabuffer);
+  TCHAR ventabuffer[80];
+  wsprintf(ventabuffer,TEXT("ONKEYDOWN key_code=%d"), key_code); // VENTA-
+  DoStatusMessage(ventabuffer);
 #endif
   switch (key_code){
 #ifdef GNAV
@@ -1385,7 +1397,8 @@ WndButton::on_key_up(unsigned key_code)
 #endif
     case VK_RETURN:
     case VK_SPACE:
-      if (!XCSoarInterface::Debounce()) return(1); // prevent false trigger
+      if (!XCSoarInterface::Debounce())
+        return 1; // prevent false trigger
       if (mDown){
         mDown = false;
         on_paint(get_canvas());
@@ -1593,22 +1606,22 @@ WndProperty::Editor::on_killfocus()
 Bitmap WndProperty::hBmpLeft32;
 Bitmap WndProperty::hBmpRight32;
 
-int     WndProperty::InstCount=0;
+int WndProperty::InstCount = 0;
 
 WndProperty::WndProperty(WindowControl *Parent,
-			 TCHAR *Name,
-			 TCHAR *Caption,
-			 int X, int Y,
-			 int Width, int Height,
-			 int CaptionWidth,
-			 int (*DataChangeNotify)(WindowControl * Sender,
-						 int Mode, int Value),
-			 int MultiLine):
-  WindowControl(Parent,
-		NULL /*Parent->GetHandle()*/,
-		Name, X, Y, Width, Height),
-  edit(this) {
-
+                         TCHAR *Name,
+                         TCHAR *Caption,
+                         int X, int Y,
+                         int Width, int Height,
+                         int CaptionWidth,
+                         int (*DataChangeNotify)(WindowControl *Sender,
+                                                 int Mode, int Value),
+                         int MultiLine)
+  :WindowControl(Parent,
+                 NULL /*Parent->GetHandle()*/,
+                 Name, X, Y, Width, Height),
+  edit(this)
+{
   mOnClickUpNotify = NULL;
   mOnClickDownNotify = NULL;
   mOnDataChangeNotify = DataChangeNotify;
@@ -1695,7 +1708,7 @@ const Font *WndProperty::SetFont(const Font &Value){
     mhValueFont = &Value;
     edit.set_font(Value);
   }
-  return(res);
+  return res;
 }
 
 void WndProperty::UpdateButtonData(int Value){
@@ -1740,7 +1753,7 @@ int WndProperty::SetButtonSize(int Value){
 
     invalidate();
   }
-  return(res);
+  return res;
 }
 
 bool WndProperty::SetReadOnly(bool Value){
@@ -1753,7 +1766,7 @@ bool WndProperty::SetReadOnly(bool Value){
     edit.set_read_only(Value);
   }
 
-  return(res);
+  return res;
 }
 
 bool
@@ -1910,7 +1923,7 @@ int WndProperty::CallSpecial(void){
     mDataField->Special();
     edit.set_text(mDataField->GetAsString());
   }
-  return(0);
+  return 0;
 }
 
 int WndProperty::IncValue(void){
@@ -1918,7 +1931,7 @@ int WndProperty::IncValue(void){
     mDataField->Inc();
     edit.set_text(mDataField->GetAsString());
   }
-  return(0);
+  return 0;
 }
 
 int WndProperty::DecValue(void){
@@ -1926,7 +1939,7 @@ int WndProperty::DecValue(void){
     mDataField->Dec();
     edit.set_text(mDataField->GetAsString());
   }
-  return(0);
+  return 0;
 }
 
 
@@ -1974,27 +1987,22 @@ WndProperty::on_paint(Canvas &canvas)
 
   canvas.text_opaque(org.x, org.y, mCaption);
 
-    if (mDialogStyle) // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
-    {     // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
-    }
-    else
-    {
+  // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
+  // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
+  if (!mDialogStyle && GetFocused() && !GetReadOnly()) {
+    BitmapCanvas bitmap_canvas(canvas);
 
-      if (GetFocused() && !GetReadOnly()){
-      BitmapCanvas bitmap_canvas(canvas);
+    bitmap_canvas.select(hBmpLeft32);
+    canvas.stretch(mHitRectDown.left, mHitRectDown.top,
+                   mBitmapSize, mBitmapSize,
+                   bitmap_canvas,
+                   mDownDown ? 32 : 0, 0, 32, 32);
 
-      bitmap_canvas.select(hBmpLeft32);
-      canvas.stretch(mHitRectDown.left, mHitRectDown.top,
-                     mBitmapSize, mBitmapSize,
-                     bitmap_canvas,
-                     mDownDown ? 32 : 0, 0, 32, 32);
-
-      bitmap_canvas.select(hBmpRight32);
-      canvas.stretch(mHitRectUp.left, mHitRectUp.top,
-                     mBitmapSize, mBitmapSize,
-                     bitmap_canvas,
-                     mUpDown ? 32 : 0, 0, 32, 32);
-    }
+    bitmap_canvas.select(hBmpRight32);
+    canvas.stretch(mHitRectUp.left, mHitRectUp.top,
+                   mBitmapSize, mBitmapSize,
+                   bitmap_canvas,
+                   mUpDown ? 32 : 0, 0, 32, 32);
   }
 }
 
@@ -2051,7 +2059,7 @@ DataField *WndProperty::SetDataField(DataField *Value){
 
   }
 
-  return(res);
+  return res;
 
 }
 
@@ -2087,7 +2095,7 @@ WndFrame::on_key_down(unsigned key_code)
   if (mIsListItem && GetOwner()!=NULL){
     RECT mRc = get_position();
     SetSourceRectangle(mRc);
-    return(((WndListFrame*)GetOwner())->OnItemKeyDown(this, key_code, 0));
+    return ((WndListFrame*)GetOwner())->OnItemKeyDown(this, key_code, 0);
   }
 
   return WindowControl::on_key_down(key_code);
@@ -2136,7 +2144,7 @@ UINT WndFrame::SetCaptionStyle(UINT Value){
     mCaptionStyle = Value;
     invalidate();
   }
-  return(res);
+  return res;
 }
 
 unsigned
@@ -2154,7 +2162,7 @@ WndFrame::GetTextHeight()
 
 WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
                            int X, int Y, int Width, int Height,
-                           void (*OnListCallback)(WindowControl * Sender,
+                           void (*OnListCallback)(WindowControl *Sender,
                                                   ListInfo_t *ListInfo)):
   WndFrame(Owner, Name, X, Y, Width, Height)
 {
@@ -2468,7 +2476,7 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
     mListInfo.ScrollIndex = max(0,
 			      min(mListInfo.ScrollIndex,
 				  mListInfo.ItemCount-mListInfo.ItemIndex-1));
-    return(1);
+    return 1;
   }
 
 // again, check to see if we're too far off end of list
@@ -2483,10 +2491,10 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
       mListInfo.ItemIndex = mListInfo.BottomIndex-1;
       // JMW scroll
       RedrawScrolled(true);
-      return(0);
+      return 0;
     } else {
       mListInfo.ItemIndex = mListInfo.BottomIndex-1;
-      return(1);
+      return 1;
     }
   }
   if (mListInfo.ItemIndex < 0){
@@ -2496,10 +2504,10 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
     if (mListInfo.ScrollIndex>0) {
       mListInfo.ScrollIndex--;
       RedrawScrolled(true);
-      return(0);
+      return 0;
     } else {
       // only return if no more scrolling left to do
-      return(1);
+      return 1;
     }
   }
   RedrawScrolled(bigscroll);
@@ -2519,9 +2527,9 @@ int WndListFrame::OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lPa
     if (mOnListEnterCallback) {
       mOnListEnterCallback(this, &mListInfo);
       RedrawScrolled(false);
-      return(0);
+      return 0;
     } else
-      return(1);
+      return 1;
     //#ifndef GNAV
   case VK_LEFT:
     if ((mListInfo.ScrollIndex>0)
@@ -2547,7 +2555,7 @@ int WndListFrame::OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lPa
     return RecalculateIndices(false);
   }
   mMouseDown=false;
-  return(1);
+  return 1;
 
 }
 
@@ -2586,7 +2594,7 @@ void WndListFrame::ResetList(void){
 int WndListFrame::PrepareItemDraw(void){
   if (mOnListCallback)
     mOnListCallback(this, &mListInfo);
-  return(1);
+  return 1;
 }
 
 bool
@@ -2606,7 +2614,7 @@ WndFrame::on_mouse_down(int xPos, int yPos)
 
     if (!GetFocused()) {
       set_focus();
-      //return(1);
+      //return 1;
     }
     //else {  // always doing this allows selected item in list to remain selected.
       invalidate();
