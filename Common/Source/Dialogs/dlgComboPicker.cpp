@@ -58,23 +58,11 @@ static int iSavedInitialDataIndex=-1;
 static void
 OnPaintComboPopupListItem(WindowControl *Sender, Canvas &canvas)
 {
-
-  (void)Sender;
-
   if ( ComboListPopup->ComboPopupDrawListIndex >= 0 &&
         ComboListPopup->ComboPopupDrawListIndex < ComboListPopup->ComboPopupItemCount )
   {
-
-    int w;
-    if (InfoBoxLayout::landscape) {
-      w = 202*InfoBoxLayout::scale;
-    } else {
-      w = 225*InfoBoxLayout::scale;  // was 225.  xml was 226
-    }
-    w=Sender->GetWidth();
-
     canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                        w - InfoBoxLayout::scale * 5,
+                        Sender->GetWidth() - InfoBoxLayout::scale * 5,
                         ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupDrawListIndex]->StringValueFormatted);
   }
 }
