@@ -48,11 +48,9 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 
-WndProperty * wComboPopupWndProperty;
-WindowControl * wComboPopupListEntry;//RLD DEBUG
-WndListFrame *wComboPopupListFrame; // RLD used to iterate datafield options
-DataField * ComboPopupDataField = NULL;
-ComboList * ComboListPopup=NULL;
+static WndProperty *wComboPopupWndProperty;
+static DataField *ComboPopupDataField;
+static ComboList *ComboListPopup;
 
 static TCHAR sSavedInitialValue[ComboPopupITEMMAX];
 static int iSavedInitialDataIndex=-1;
@@ -175,13 +173,15 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
 
     wf->SetCaption(theProperty->GetCaption());
 
-    wComboPopupListFrame = (WndListFrame*)wf->FindByName(TEXT("frmComboPopupList"));
+    WndListFrame *wComboPopupListFrame =
+      (WndListFrame*)wf->FindByName(_T("frmComboPopupList"));
     assert(wComboPopupListFrame!=NULL);
     wComboPopupListFrame->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERRIGHT|BORDERBOTTOM);
     wComboPopupListFrame->SetEnterCallback(OnComboPopupListEnter);
 
     // allow item to be focused / hightlighted
-    wComboPopupListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmComboPopupListEntry"));
+    WindowControl *wComboPopupListEntry =
+      wf->FindByName(_T("frmComboPopupListEntry"));
     assert(wComboPopupListEntry!=NULL);
     wComboPopupListEntry->SetCanFocus(true);
 #ifdef ENABLE_SDL
