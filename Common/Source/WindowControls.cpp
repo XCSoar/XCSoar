@@ -2161,8 +2161,8 @@ WndFrame::GetTextHeight()
   return rc.bottom - rc.top;
 }
 
-WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
-                           int Width, int Height,
+WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
+                           int X, int Y, int Width, int Height,
                            void (*OnListCallback)(WindowControl * Sender,
                                                   ListInfo_t *ListInfo)):
   WndFrame(Owner, Name, X, Y, Width, Height)

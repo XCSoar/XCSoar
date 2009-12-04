@@ -328,8 +328,8 @@ class WndListFrame:public WndFrame{
 
     typedef void (*OnListCallback_t)(WindowControl * Sender, ListInfo_t *ListInfo);
 
-    WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
-                 int Width, int Height,
+    WndListFrame(WindowControl *Owner, const TCHAR *Name,
+                 int X, int Y, int Width, int Height,
                  void (*OnListCallback)(WindowControl * Sender,
                                         ListInfo_t *ListInfo));
 
