@@ -574,8 +574,6 @@ WindowControl::on_paint(Canvas &canvas)
 {
   const RECT rc = get_client_rect();
 
-  canvas.fill_rectangle(rc, GetBackBrush());
-
   // JMW added highlighting, useful for lists
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
     Color ff = GetBackColor().highlight();
@@ -586,7 +584,8 @@ WindowControl::on_paint(Canvas &canvas)
   // JMW make it look nice on wine
     canvas.set_background_color(ff);
 #endif
-  }
+  } else
+    canvas.fill_rectangle(rc, GetBackBrush());
 
   if (mBorderKind != 0){
     canvas.select(GetBorderPen());
