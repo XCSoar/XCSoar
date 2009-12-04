@@ -49,7 +49,6 @@ Copyright_License {
 #include "Units.hpp"
 
 #include <tchar.h>
-#define IsEmptyString(x)        ((x==NULL) || (x[0]=='\0'))
 
 #define BORDERTOP    (1<<bkTop)
 #define BORDERRIGHT  (1<<bkRight)
