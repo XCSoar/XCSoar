@@ -115,6 +115,7 @@ void PopupMessage::Resize() {
     hidden = true;
   } else {
     set_text(msgText);
+
     SIZE tsize = parent.get_canvas().text_size(msgText);
 
     int linecount = max((unsigned)nvisible, max((unsigned)1, get_row_count()));
@@ -185,7 +186,11 @@ bool PopupMessage::Render() {
   if (!globalRunningEvent.test()) return false;
 
   Lock();
-  if (block_ref) return false;
+  if (block_ref) {
+    Unlock();
+    return false;
+  }
+
   DWORD	fpsTime = ::GetTickCount() - startTime;
 
   // this has to be done quickly, since it happens in GUI thread
