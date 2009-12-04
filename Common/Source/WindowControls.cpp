@@ -2095,7 +2095,7 @@ WndFrame::on_key_down(unsigned key_code)
   if (mIsListItem && GetOwner()!=NULL){
     RECT mRc = get_position();
     SetSourceRectangle(mRc);
-    return ((WndListFrame*)GetOwner())->OnItemKeyDown(this, key_code, 0);
+    return ((WndListFrame*)GetOwner())->OnItemKeyDown(key_code);
   }
 
   return WindowControl::on_key_down(key_code);
@@ -2514,49 +2514,61 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
   return (0);
 }
 
-
-int WndListFrame::OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam){
-	(void)Sender;
-	(void)lParam;
-  switch (wParam){
+bool
+WndListFrame::OnItemKeyDown(unsigned key_code)
+{
+  switch (key_code){
 #ifdef GNAV
     // JMW added this to make data entry easier
-    case VK_F4:
+  case VK_F4:
 #endif
   case VK_RETURN:
-    if (mOnListEnterCallback) {
-      mOnListEnterCallback(this, &mListInfo);
-      RedrawScrolled(false);
-      return 0;
-    } else
-      return 1;
+    if (mOnListEnterCallback == NULL)
+      break;
+
+    mOnListEnterCallback(this, &mListInfo);
+    RedrawScrolled(false);
+    return true;
     //#ifndef GNAV
+
   case VK_LEFT:
-    if ((mListInfo.ScrollIndex>0)
-	&&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
-      mListInfo.ScrollIndex -= mListInfo.ItemInPageCount;
-    }
-    return RecalculateIndices(true);
+    if (mListInfo.ScrollIndex <= 0 ||
+        mListInfo.ItemCount <= mListInfo.ItemInPageCount)
+      break;
+
+    mListInfo.ScrollIndex -= mListInfo.ItemInPageCount;
+    RecalculateIndices(true);
+    return true;
+
   case VK_RIGHT:
-    if ((mListInfo.ItemIndex+mListInfo.ScrollIndex<
-	 mListInfo.ItemCount)
-	&&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
-      mListInfo.ScrollIndex += mListInfo.ItemInPageCount;
-    }
-    return RecalculateIndices(true);
+    if (mListInfo.ItemIndex + mListInfo.ScrollIndex >= mListInfo.ItemCount ||
+        mListInfo.ItemCount <= mListInfo.ItemInPageCount)
+      break;
+
+    mListInfo.ScrollIndex += mListInfo.ItemInPageCount;
+    RecalculateIndices(true);
+    return true;
+
     //#endif
   case VK_DOWN:
-
+    if (mListInfo.ItemIndex + mListInfo.ScrollIndex >= mListInfo.ItemCount)
+      break;
 
     mListInfo.ItemIndex++;
-    return RecalculateIndices(false);
-  case VK_UP:
-    mListInfo.ItemIndex--;
-    return RecalculateIndices(false);
-  }
-  mMouseDown=false;
-  return 1;
+    RecalculateIndices(false);
+    return true;
 
+  case VK_UP:
+    if (mListInfo.ItemIndex + mListInfo.ScrollIndex <= 0)
+      break;
+
+    mListInfo.ItemIndex--;
+    RecalculateIndices(false);
+    return true;
+  }
+
+  mMouseDown=false;
+  return false;
 }
 
 void WndListFrame::ResetList(void){

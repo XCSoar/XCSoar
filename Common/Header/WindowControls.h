@@ -332,7 +332,7 @@ public:
   virtual void Destroy(void);
 
   bool on_mouse_move(int x, int y, unsigned keys);
-  int OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
+  bool OnItemKeyDown(unsigned key_code);
   int PrepareItemDraw(void);
   void ResetList(void);
   void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
