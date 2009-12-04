@@ -118,7 +118,6 @@ static bool KeyTimer(bool isdown, DWORD thekey) {
 //----------------------------------------------------------
 
 WindowControl *ActiveControl = NULL;
-WindowControl *LastFocusControl = NULL;
 
 void InitWindowControlModule(void);
 
@@ -216,9 +215,6 @@ void WindowControl::Destroy(void){
     mClients[i]->Destroy();
     delete mClients[i];
   }
-
-  if (LastFocusControl == this)
-    LastFocusControl = NULL;
 
   if (ActiveControl == this)
     ActiveControl = NULL;
@@ -395,10 +391,8 @@ bool WindowControl::SetFocused(bool Value){
   }
 
   if (Value){
-    if (mCanFocus){
+    if (mCanFocus)
       ActiveControl = this;
-      LastFocusControl = this;
-    }
   } else {
     ActiveControl = NULL;
     /*

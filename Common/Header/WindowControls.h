@@ -401,7 +401,6 @@ protected:
 };
 
 extern WindowControl *ActiveControl;
-extern WindowControl *LastFocusControl;
 
 class WndForm : public WindowControl {
 protected:
