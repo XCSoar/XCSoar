@@ -89,13 +89,6 @@ void DrawLine(Canvas &canvas, int x1, int y1, int x2, int y2) {
   canvas.line(x1, y1, x2, y2);
 }
 
-#ifdef GNAV
-#define ENABLECOMBO false // master on/off for combo popup
-#else
-#define ENABLECOMBO true // master on/off for combo popup
-// Must be off if no touchscreen
-#endif
-
 // returns true if it is a long press,
 // otherwise returns false
 static bool KeyTimer(bool isdown, DWORD thekey) {
@@ -2038,9 +2031,7 @@ DataField *WndProperty::SetDataField(DataField *Value){
 
     mDataField->GetData();
 
-
-
-    mDialogStyle=ENABLECOMBO;
+    mDialogStyle = has_pointer();
 
     if (mDataField->SupportCombo == false )
       mDialogStyle=false;
