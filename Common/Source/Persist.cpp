@@ -55,46 +55,56 @@ Copyright_License {
 #include "Asset.hpp"
 
 #ifndef _MSC_VER
-#include <algorithm>
-using std::min;
-using std::max;
+  #include <algorithm>
+  using std::min;
+  using std::max;
 #endif
 
 static TCHAR szCalculationsPersistFileName[MAX_PATH]= TEXT("\0");
 static TCHAR szCalculationsPersistDirectory[MAX_PATH]= TEXT("\0");
 
-void DeleteCalculationsPersist(void) {
+/**
+ * Deletes the persistent memory file
+ */
+void
+DeleteCalculationsPersist(void)
+{
   DeleteFile(szCalculationsPersistFileName);
 }
 
-void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
-
-  if (szCalculationsPersistFileName[0]==0) {
+/**
+ * Loads calculated values from the persistent memory file
+ * @param Calculated DERIVED_INFO the values should be loaded into
+ */
+void
+LoadCalculationsPersist(DERIVED_INFO *Calculated)
+{
+  // Get the persistent memory filename
+  if (szCalculationsPersistFileName[0] == 0) {
     if (is_altair()) {
-      LocalPath(szCalculationsPersistFileName,
-                TEXT("persist/xcsoar-persist.log"));
-      LocalPath(szCalculationsPersistDirectory,
-                TEXT("persist"));
+      LocalPath(szCalculationsPersistFileName, TEXT("persist/xcsoar-persist.log"));
+      LocalPath(szCalculationsPersistDirectory, TEXT("persist"));
     } else {
-      LocalPath(szCalculationsPersistFileName,
-                TEXT("xcsoar-persist.log"));
+      LocalPath(szCalculationsPersistFileName, TEXT("xcsoar-persist.log"));
       LocalPath(szCalculationsPersistDirectory);
     }
   }
 
+  // Debug Log
   StartupStore(TEXT("LoadCalculationsPersist\n"));
 
   DWORD sizein;
 
+  // Read the persistent memory file
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("rb"));
   if (file != NULL) {
-
     fread(&sizein, sizeof(sizein), 1, file);
     if (sizein != sizeof(*Calculated)) {
       fclose(file);
       return;
     }
 
+    // Read persistent memory into Calculated
     fread(Calculated, sizeof(*Calculated), 1, file);
     Calculated->Flying = false;
     Calculated->TimeInFlight = 0;
@@ -102,12 +112,12 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
     fread(&sizein, sizeof(sizein), 1, file);
     if (sizein != sizeof(glide_computer.GetFlightStats())) {
-
       glide_computer.ResetFlight();
       fclose(file);
       return;
     }
 
+    // Read persistent memory into FlightStats
     fread(&glide_computer.GetFlightStats(), sizeof(glide_computer.GetFlightStats()), 1, file);
 
     fread(&sizein, sizeof(sizein), 1, file);
@@ -117,6 +127,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
       return;
     }
 
+    // Read persistent memory into OLC.data
     fread(&glide_computer.GetOLC().data, sizeof(glide_computer.GetOLC().data), 1, file);
 
     fread(&sizein, sizeof(sizein), 1, file);
@@ -129,6 +140,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     double BUGS = GlidePolar::GetBugs();
     double BALLAST = GlidePolar::GetBallast();
 
+    // Read persistent memory into McCready, QNH, bugs, ballast and temperature
     fread(&MACCREADY, sizeof(double), 1, file);
     fread(&QNH, sizeof(QNH), 1, file);
     fread(&BUGS, sizeof(double), 1, file);
@@ -139,10 +151,10 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     //    ReadFile(hFile,&CRUISE_EFFICIENCY,
     //             size,&dwBytesWritten,(OVERLAPPED*)NULL);
 
-    QNH = min(1113.2, max(QNH,913.2));
+    QNH = min(1113.2, max(QNH, 913.2));
     MACCREADY = min(10.0, max(MACCREADY, 0.0));
-    BUGS = min(1.0, max(BUGS,0.0));
-    BALLAST = min(1.0, max(BALLAST,0.0));
+    BUGS = min(1.0, max(BUGS, 0.0));
+    BALLAST = min(1.0, max(BALLAST, 0.0));
     //   CRUISE_EFFICIENCY = min(1.5, max(CRUISE_EFFICIENCY,0.75));
 
     GlidePolar::SetMacCready(MACCREADY);
@@ -157,14 +169,20 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
   }
 }
 
-
-void SaveCalculationsPersist(const NMEA_INFO &gps_info,
-			     const DERIVED_INFO &Calculated) {
+/**
+ * Saves the calculated values to the persistent memory file
+ * @param gps_info The basic data
+ * @param Calculated The calculated data
+ */
+void
+SaveCalculationsPersist(const NMEA_INFO &gps_info,
+    const DERIVED_INFO &Calculated)
+{
   DWORD size;
 
   logger.LoggerClearFreeSpace(gps_info);
 
-  if (FindFreeSpace(szCalculationsPersistDirectory)<MINFREESTORAGE) {
+  if (FindFreeSpace(szCalculationsPersistDirectory) < MINFREESTORAGE) {
     if (!logger.LoggerClearFreeSpace(gps_info)) {
       StartupStore(TEXT("SaveCalculationsPersist insufficient storage\n"));
       return;
@@ -211,6 +229,4 @@ void SaveCalculationsPersist(const NMEA_INFO &gps_info,
   } else {
     StartupStore(TEXT("SaveCalculationsPersist can't create file\n"));
   }
-
 }
-
