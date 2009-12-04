@@ -154,6 +154,24 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   }
 }
 
+
+#include "Waypoint/WaypointVisitor.hpp"
+
+class WaypointVisitorVector: 
+  public WaypointVisitor 
+{
+public:
+
+  WaypointVisitorVector(AbortTask::WaypointVector& wpv):vector(wpv) {};
+
+  void Visit(const Waypoint& wp) {
+    vector.push_back(wp);
+  }
+private:
+  AbortTask::WaypointVector &vector;
+};
+
+
 bool 
 AbortTask::update_sample(const AIRCRAFT_STATE &state, 
                               const bool full_update)
@@ -164,8 +182,10 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   const unsigned active_waypoint_on_entry = active_waypoint;
   activeTaskPoint = 0; // default to best result if can't find user-set one 
 
-  WaypointVector approx_waypoints = 
-    waypoints.find_within_range_circle(state.Location, abort_range(state));
+  WaypointVector approx_waypoints; 
+
+  WaypointVisitorVector wvv(approx_waypoints);
+  waypoints.visit_within_radius(state.Location, abort_range(state), wvv);
 
   remove_unlandable(approx_waypoints);
 

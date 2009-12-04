@@ -34,12 +34,12 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef WaypointS_HPP
-#define WaypointS_HPP
+#ifndef WAYPOINTS_HPP
+#define WAYPOINTS_HPP
 
 #include "Util/NonCopyable.hpp"
 #include <kdtree++/kdtree.hpp>
-#include "Waypoint.hpp"
+#include "WaypointEnvelope.hpp"
 #ifdef DO_PRINT
 #include <iostream>
 #endif
@@ -70,8 +70,8 @@ public:
    * Type of KD-tree data structure for waypoint container
    */
   typedef KDTree::KDTree<2, 
-                         Waypoint, 
-                         Waypoint::kd_get_location
+                         WaypointEnvelope, 
+                         WaypointEnvelope::kd_get_location
                          > WaypointTree;
 
 /** 
@@ -94,7 +94,6 @@ public:
  */
   WaypointTree::const_iterator find_id(const unsigned id) const;
 
-
 /** 
  * Look up waypoint by ID.
  * 
@@ -103,18 +102,6 @@ public:
  * @return Pointer to waypoint if found (or NULL if not)
  */
   const Waypoint* lookup_id(const unsigned id) const;
-
-/** 
- * Find waypoints within approximate range (square range box)
- * to search location.  Possible use by screen display functions.
- * 
- * @param loc Location from which to search
- * @param range Distance in meters of search radius
- * 
- * @return Vector of waypoints within square range
- */
-  std::vector< Waypoint >
-    find_within_range(const GEOPOINT &loc, const fixed range) const;
 
 /** 
  * Call visitor function on waypoints within approximate range
@@ -129,16 +116,15 @@ public:
                           WaypointVisitor& visitor) const;
 
 /** 
- * Find waypoints within specified flat-earth distance to
- * search location.
+ * Call visitor function on waypoints within radius
+ * to search location.
  * 
  * @param loc Location from which to search
  * @param range Distance in meters of search radius
- * 
- * @return Vector of waypoints within circular range
+ * @param visitor Visitor to be called on waypoints within range
  */
-  std::vector< Waypoint >
-    find_within_range_circle(const GEOPOINT &loc, const fixed range) const;
+  void visit_within_radius(const GEOPOINT &loc, const fixed range,
+                           WaypointVisitor& visitor) const;
 
 /** 
  * Add waypoint to internal store.  Internal copy is made.
@@ -161,6 +147,20 @@ public:
   void optimise();
 
 /** 
+ * Clear the waypoint store
+ * 
+ */
+  void clear();
+
+/** 
+ * Size of waypoints (in tree, not in temporary store) ---
+ * must call optimise() before this for it to be accurate.
+ * 
+ * @return Number of waypoints in tree
+ */
+  unsigned size() const;
+
+/** 
  * Access first waypoint in store, for use in iterators.
  * 
  * @return First waypoint in store
@@ -174,27 +174,25 @@ public:
  */
   WaypointTree::const_iterator end() const;
 
-/** 
- * Clear the waypoint store
- * 
- */
-  void clear();
+private:
 
 /** 
- * Size of waypoints (in tree, not in temporary store) ---
- * must call optimise() before this for it to be accurate.
+ * Find waypoints within approximate range (square range box)
+ * to search location.  Possible use by screen display functions.
  * 
- * @return Number of waypoints in tree
+ * @param loc Location from which to search
+ * @param range Distance in meters of search radius
+ * 
+ * @return Vector of waypoints within square range
  */
-  unsigned size() const;
-private:
+  std::vector< WaypointEnvelope >
+    find_within_range(const GEOPOINT &loc, const fixed range) const;
+
   WaypointTree waypoint_tree;
   TaskProjection task_projection;
 
-  std::deque< Waypoint > tmp_wps;
+  std::deque< WaypointEnvelope > tmp_wps;
 
-  /** @link dependency */
-  /*#  Waypoint lnkWaypoint; */
 };
 
 #endif

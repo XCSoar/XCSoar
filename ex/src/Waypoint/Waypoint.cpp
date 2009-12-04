@@ -35,16 +35,3 @@
 }
  */
 #include "Waypoint.hpp"
-#include "Navigation/TaskProjection.hpp"
-
-void 
-Waypoint::project(const TaskProjection& task_projection)
-{
-  FlatLocation = task_projection.project(Location);
-}
-
-Waypoint::Waypoint(const GEOPOINT &location,
-                   const TaskProjection &task_projection): Location(location) 
-{
-  project(task_projection);
-}

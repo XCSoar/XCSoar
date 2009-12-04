@@ -76,6 +76,7 @@ TASK_OBJS	:=\
 	src/Task/TaskStats/ElementStat.o \
 	src/Task/TaskStats/TaskStats.o \
 	src/Waypoint/Waypoint.o \
+	src/Waypoint/WaypointEnvelope.o \
 	src/Waypoint/Waypoints.o \
 	src/Waypoint/WaypointVisitor.o \
 	src/Math/Geometry.o \

@@ -49,6 +49,9 @@ class AbortTask :
   public UnorderedTask 
 {
 public:
+
+  typedef std::vector < Waypoint > WaypointVector;
+
   /** 
    * Base constructor.
    * 
@@ -118,9 +121,6 @@ protected:
  */
   virtual bool check_transitions(const AIRCRAFT_STATE& state_now, 
                                  const AIRCRAFT_STATE& state_last);
-
-private:
-  typedef std::vector < Waypoint > WaypointVector;
 
 /** 
  * Clears task points in list

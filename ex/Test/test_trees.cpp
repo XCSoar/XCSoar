@@ -4,6 +4,18 @@
 
 #define n_test 500
 
+#include "Waypoint/WaypointVisitor.hpp"
+
+class WaypointVisitorPrint: public WaypointVisitor {
+public:
+  WaypointVisitorPrint():count(0) {};
+
+  virtual void Visit(const Waypoint& wp) {
+    count++;
+  }
+  unsigned count;
+};
+
 bool test_wp(const unsigned n, std::ostream &fo) {
   Waypoints waypoints;
   setup_waypoints(waypoints,n);
@@ -17,10 +29,9 @@ bool test_wp(const unsigned n, std::ostream &fo) {
     int y = rand()%1200-100;
     state.Location.Longitude = x/1000.0; 
     state.Location.Latitude = y/1000.0;
-    std::vector < Waypoint > approx_waypoints = 
-      waypoints.find_within_range_circle(state.Location, 50000.0);
-//    printf("s %d\n",(int)approx_waypoints.size());
-    (void)approx_waypoints.size();
+
+    WaypointVisitorPrint wvp;
+    waypoints.visit_within_radius(state.Location, 50000.0, wvp);
   }
   print_queries(n, fo);
   fo.flush();

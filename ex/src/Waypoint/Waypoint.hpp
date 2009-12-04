@@ -39,7 +39,6 @@
 
 #include "Util/tstring.hpp"
 #include "Navigation/GeoPoint.hpp"
-#include "Navigation/Flat/FlatGeoPoint.hpp"
 #ifdef DO_PRINT
 #include <iostream>
 #endif
@@ -85,17 +84,6 @@ public:
  */
   Waypoint() {};
 
-/** 
- * Constructor for virtual waypoint (used for lookups by kd-tree)
- * 
- * @param location Location of virtual waypoint
- * @param task_projection Projection to apply to flat location
- *
- * @return Initialised (virtual) object.  Don't add this to
- */
-  Waypoint(const GEOPOINT &location,
-    const TaskProjection &task_projection);
-
   unsigned id; /**< Unique id */
   GEOPOINT Location; /**< Geodetic location */
   fixed Altitude; /**< Height AMSL (m) of waypoint terrain */
@@ -106,51 +94,9 @@ public:
   tstring Comment; /**< Additional comment text for waypoint */
   tstring Details; /**< Airfield or additional (long) details */
 
-  /** 
-   * Project geolocation to flat location
-   * 
-   * @param task_projection Projection to apply
-   */
-  void project(const TaskProjection& task_projection);
-
-/** 
- * Get distance in internal flat projected units (fast)
- * 
- * @param f Point to get distance to
- * 
- * @return Distance in flat units
- */
-  unsigned flat_distance_to(const FLAT_GEOPOINT &f) {
-    return FlatLocation.distance_to(f);
-  }
-
   bool is_landable() const {
     return Flags.LandPoint || Flags.Airport;
   }
-
-public:
-  /**
-   * Function object used to provide access to coordinate values by kd-tree
-   */
-  struct kd_get_location {    
-    typedef int result_type; /**< type of returned value */
-    /**
-     * Retrieve coordinate value from object given coordinate index
-     * @param d Waypoint object
-     * @param k index of coordinate
-     *
-     * @return Coordinate value
-     */
-    int operator() ( const Waypoint &d, const unsigned k) const {
-      switch(k) {
-      case 0:
-        return d.FlatLocation.Longitude;
-      case 1:
-        return d.FlatLocation.Latitude;
-      };
-      return 0; 
-    };
-  };
 
   /**
    * Equality operator (by id)
@@ -162,9 +108,6 @@ public:
   bool operator==(const Waypoint&wp) const {
     return id == wp.id;
   }
-
-private:
-  FLAT_GEOPOINT FlatLocation; /**< Flat projected location */
 
 public:
   DEFINE_VISITABLE()

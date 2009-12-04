@@ -33,21 +33,13 @@ unsigned test_range(const Waypoints& waypoints, const double range)
   }
 }
 
-unsigned test_find_range(const Waypoints& waypoints, const double range)
+unsigned test_radius(const Waypoints& waypoints, const double range)
 {
   const Waypoint *r = waypoints.lookup_id(3);
   if (r) {
-    return (waypoints.find_within_range(r->Location, range).size());
-  } else {
-    return 0;
-  }
-}
-
-unsigned test_find_range_circle(const Waypoints& waypoints, const double range)
-{
-  const Waypoint *r = waypoints.lookup_id(3);
-  if (r) {
-    return (waypoints.find_within_range_circle(r->Location, range).size());
+    WaypointVisitorPrint v;
+    waypoints.visit_within_radius(r->Location, range, v);
+    return v.count;
   } else {
     return 0;
   }
@@ -111,9 +103,9 @@ int main(int argc, char** argv)
   ok(!test_lookup(waypoints,5000),"waypoint bad lookup",0);
   ok(test_nearest(waypoints),"waypoint nearest",0);
   ok(test_range(waypoints,100)==1,"waypoint visit range 100m",0);
-  ok(test_find_range(waypoints,100)==1,"waypoint find range 100m",0);
-  ok(test_find_range_circle(waypoints,100)==1,"waypoint find range 100m",0);
+  ok(test_radius(waypoints,100)==1,"waypoint radius 100m",0);
   ok(test_range(waypoints,500000)== waypoints.size(),"waypoint range 500000m",0);
+  ok(test_radius(waypoints,25000)<= test_range(waypoints,25000),"waypoint radius<range",0);
 
   // test clear
   waypoints.clear();

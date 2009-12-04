@@ -34,6 +34,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "Waypoints.hpp"
 #include "WaypointVisitor.hpp"
 #include "Navigation/TaskProjection.hpp"
@@ -43,6 +44,23 @@
 unsigned n_queries = 0;
 extern long count_intersections;
 #endif
+
+class WaypointEnvelopeVisitor:
+  public Visitor<WaypointEnvelope> 
+{
+public:
+  WaypointEnvelopeVisitor(WaypointVisitor* wve):waypoint_visitor(wve) {};
+
+  void operator()(const WaypointEnvelope& as) {
+    Visit(as);
+  }
+  void Visit(const WaypointEnvelope& as) {
+    as.get_waypoint().Accept(*waypoint_visitor);
+  };
+private:
+  WaypointVisitor *waypoint_visitor;
+};
+
 
 Waypoints::Waypoints()
 {
@@ -54,7 +72,7 @@ Waypoints::optimise()
   task_projection.update_fast();
 
   while (!tmp_wps.empty()) {
-    Waypoint w = (tmp_wps.front());
+    WaypointEnvelope w = (tmp_wps.front());
     w.project(task_projection);
     waypoint_tree.insert(w);
     tmp_wps.pop_front();
@@ -71,7 +89,7 @@ Waypoints::insert(const Waypoint& wp)
   }
   task_projection.scan_location(wp.Location);
 
-  tmp_wps.push_back(wp);
+  tmp_wps.push_back(WaypointEnvelope(wp));
 
   /**
    * \todo
@@ -87,7 +105,7 @@ Waypoints::insert(const Waypoint& wp)
 Waypoints::WaypointTree::const_iterator 
 Waypoints::find_nearest(const GEOPOINT &loc) const 
 {
-  Waypoint bb_target(loc, task_projection);
+  WaypointEnvelope bb_target(loc, task_projection);
   std::pair<WaypointTree::const_iterator, double> 
     found = waypoint_tree.find_nearest(bb_target);
 
@@ -103,8 +121,8 @@ Waypoints::lookup_id(const unsigned id) const
 {
   WaypointTree::const_iterator found = waypoint_tree.begin();
   while (found != waypoint_tree.end()) {
-    if ((*found).id == id) {
-      return &(*found);
+    if ((*found).get_waypoint().id == id) {
+      return &(*found).get_waypoint();
     }
     found++;
   }
@@ -117,7 +135,7 @@ Waypoints::find_id(const unsigned id) const
 {
   WaypointTree::const_iterator found = waypoint_tree.begin();
   while (found != waypoint_tree.end()) {
-    if ((*found).id == id) {
+    if (found->get_waypoint().id == id) {
       break;
     }
     found++;
@@ -130,14 +148,14 @@ Waypoints::find_id(const unsigned id) const
 }
 
 
-std::vector< Waypoint >
+std::vector< WaypointEnvelope >
 Waypoints::find_within_range(const GEOPOINT &loc, 
                              const fixed range) const
 {
-  Waypoint bb_target(loc, task_projection);
+  WaypointEnvelope bb_target(loc, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
 
-  std::vector< Waypoint > vectors;
+  std::vector< WaypointEnvelope > vectors;
   waypoint_tree.find_within_range(bb_target, mrange, 
                                   std::back_inserter(vectors));
 #ifdef INSTRUMENT_TASK
@@ -152,10 +170,12 @@ Waypoints::visit_within_range(const GEOPOINT &loc,
                               const fixed range,
                               WaypointVisitor& visitor) const
 {
-  Waypoint bb_target(loc, task_projection);
+  WaypointEnvelope bb_target(loc, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
-  
-  waypoint_tree.visit_within_range(bb_target, mrange, visitor);
+
+  WaypointEnvelopeVisitor wve(&visitor);  
+
+  waypoint_tree.visit_within_range(bb_target, mrange, wve);
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -163,15 +183,17 @@ Waypoints::visit_within_range(const GEOPOINT &loc,
 }
 
 
-std::vector< Waypoint >
-Waypoints::find_within_range_circle(const GEOPOINT &loc, 
-                                    const fixed range) const
+void
+Waypoints::visit_within_radius(const GEOPOINT &loc, 
+                               const fixed range,
+                               WaypointVisitor& visitor) const
 {
   const unsigned mrange = task_projection.project_range(loc, range);
-  std::vector < Waypoint > vectors = find_within_range(loc, range);
   FLAT_GEOPOINT floc = task_projection.project(loc);
 
-  for (std::vector< Waypoint >::iterator v=vectors.begin();
+  std::vector < WaypointEnvelope > vectors = find_within_range(loc, range);
+
+  for (std::vector< WaypointEnvelope >::iterator v=vectors.begin();
        v != vectors.end(); ) {
 
 #ifdef INSTRUMENT_TASK
@@ -181,10 +203,10 @@ Waypoints::find_within_range_circle(const GEOPOINT &loc,
     if ((*v).flat_distance_to(floc)> mrange) {
       vectors.erase(v);
     } else {
+      visitor(v->get_waypoint());
       v++;
     }
   }
-  return vectors;
 }
 
 

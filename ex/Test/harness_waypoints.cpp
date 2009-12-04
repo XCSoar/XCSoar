@@ -78,7 +78,7 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
       Waypoints::WaypointTree::const_iterator it = waypoints.find_id(i);
       if (it != waypoints.end()) {
 #ifdef DO_PRINT
-        fin << *it;
+        fin << it->get_waypoint();
 #endif
       }
     }
