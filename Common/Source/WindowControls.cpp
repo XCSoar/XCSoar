@@ -993,38 +993,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 #endif
 
     if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
-
-      if (msg.message == WM_KEYUP){
-        /*
-        if (KeyTimer(false,msg.wParam & 0xffff)) {
-          // activate tool tips
-          1;
-        } else {
-          // behave as if it was a key down event
-          if (mOnKeyDownNotify != NULL)
-            if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
-              continue;
-        }
-        */
-      }
-
       if (msg.message == WM_KEYDOWN){
-        //        KeyTimer(true,msg.wParam & 0xffff);
-
-/*
-        if (ActiveControl != NULL){
-          switch(msg.wParam & 0xffff){
-            case VK_UP:
-              if (ActiveControl->GetOwner() != NULL)
-                ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-            continue;
-            case VK_DOWN:
-              if (ActiveControl->GetOwner() != NULL)
-                ActiveControl->GetOwner()->FocusNext(ActiveControl);
-            continue;
-          }
-        }
-*/
         if (mOnKeyDownNotify != NULL)
           if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
             continue;
@@ -1039,44 +1008,7 @@ int WndForm::ShowModal(bool bEnableMap) {
       {
         assert_none_locked();
 
-        if (DispatchMessage(&msg)){
-
-          /*
-          // navigation messages are moved to unhandled messages, duto nav events handling changes in event loop
-          if (msg.message == WM_KEYDOWN){
-            if (ActiveControl != NULL){
-              switch(msg.wParam & 0xffff){
-                case VK_UP:
-                  if (ActiveControl->GetOwner() != NULL)
-                    ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-                continue;
-                case VK_DOWN:
-                  if (ActiveControl->GetOwner() != NULL)
-                    ActiveControl->GetOwner()->FocusNext(ActiveControl);
-                continue;
-              }
-            }
-          } */
-
-        } else {
-
-          /*
-          if (msg.message == WM_KEYDOWN){
-            if (ActiveControl != NULL){
-              switch(msg.wParam & 0xffff){
-                case VK_UP:
-                  if (ActiveControl->GetOwner() != NULL)
-                    ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-                continue;
-                case VK_DOWN:
-                  if (ActiveControl->GetOwner() != NULL)
-                    ActiveControl->GetOwner()->FocusNext(ActiveControl);
-                continue;
-              }
-            }
-          }
-          */
-        } // DispatchMessage
+        DispatchMessage(&msg);
 
         assert_none_locked();
       } // timeMsg
