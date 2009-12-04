@@ -437,7 +437,6 @@ public:
   ~WndForm(void);
   virtual void Destroy(void);
 
-  bool bLButtonDown; //RLD
   ContainerWindow &GetClientAreaWindow(void);
   void AddClient(WindowControl *Client);
 

@@ -752,7 +752,6 @@ WndForm::WndForm(ContainerWindow *Parent,
   mOnKeyUpNotify = NULL;
   mOnLButtonUpNotify = NULL;
   mOnTimerNotify = NULL;
-  bLButtonDown= false;
 
 #ifndef ENABLE_SDL
   mhAccelTable = CreateAcceleratorTable(mAccel, sizeof(mAccel)/sizeof(mAccel[0]));
@@ -1253,7 +1252,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         return 0;
   }
   if (msg.message == WM_LBUTTONUP){
-    bLButtonDown=false;
     if (mOnLButtonUpNotify != NULL)
       if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
         return 0;
@@ -1273,20 +1271,6 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         return 0;
       }
     }
-  }
-  else if (uMsg == WM_LBUTTONDOWN){
-    bLButtonDown=true;
-
-    /*
-
-    SetActiveWindow(hwnd);
-    SetFocus(hwnd);
-
-    if (!IsChild(GetHandle(), GetTopWindow(GetHandle()))){
-      Show();
-    }
-
-    */
   }
 
   return 1;
