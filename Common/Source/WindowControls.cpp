@@ -2267,50 +2267,6 @@ void WndListFrame::Redraw(void){
 
 
 void WndListFrame::DrawScrollBar(Canvas &canvas) {
-#ifdef GNAVxxx  // Johnny, I think this GNAVxxx section can be removed entirely in place of the adjustment to the width below. - RLD
-
-  RECT rc;
-  int w = 1+GetWidth()- 2*SELECTORWIDTH;
-  int h = GetHeight()- SELECTORWIDTH;
-
-  rc.left = w;
-  rc.top = 0;
-  rc.right = w + 2*SELECTORWIDTH - 2;
-  rc.bottom = h;
-
-  if (mListInfo.ItemCount <= mListInfo.ItemInViewCount){
-    Brush brush(GetBackColor());
-    canvas.fill_rectangle(rc, brush);
-    return;
-  }
-
-  hP = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH, GetForeColor());
-
-  SelectObject(hDC, hP);
-  SelectObject(hDC, GetBackBrush());
-
-  Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
-
-  DeleteObject(hP);
-
-  Brush brush(GetForeColor());
-
-  rc.left = 1+w;
-  rc.top = 1+(h * mListInfo.ScrollIndex) / mListInfo.ItemCount;
-  rc.right = w + 2*SELECTORWIDTH - 1;
-  rc.bottom = rc.top + iround((h * mListInfo.ItemInViewCount)
-			      / mListInfo.ItemCount)-1;
-
-  if (rc.bottom >= h){
-    int d;
-    d= (h - rc.bottom) - 1;
-    rc.bottom += d;
-    rc.top += d;
-  }
-
-  canvas.fill_rectangle(rc, brush);
-#else   // GNAVxxx
-
   static Bitmap hScrollBarBitmapTop;
   static Bitmap hScrollBarBitmapMid;
   static Bitmap hScrollBarBitmapBot;
@@ -2471,7 +2427,6 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
   rcScrollBarButton.right=rc.right;
   rcScrollBarButton.top=rc.top;
   rcScrollBarButton.bottom=rc.bottom;
-#endif // GNAVxxx
 }
 
 
