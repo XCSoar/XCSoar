@@ -66,7 +66,6 @@ Copyright_License {
 static int page=0;
 static WndForm *wf=NULL;
 static WndListFrame *wDetails=NULL;
-static WndOwnerDrawFrame *wDetailsEntry = NULL;
 static WndFrame *wInfo=NULL;
 static WndFrame *wCommand=NULL;
 static WndFrame *wSpecial=NULL; // VENTA3
@@ -506,11 +505,6 @@ void dlgWayPointDetailsShowModal(void){
   assert(wSpecial!=NULL); // VENTA3
   assert(wImage!=NULL);
   assert(wDetails!=NULL);
-
-  wDetailsEntry =
-    (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmDetailsEntry"));
-  assert(wDetailsEntry!=NULL);
-  wDetailsEntry->SetCanFocus(true);
 
   nTextLines = TextToLineOffsets(way_point.Details,
 				 LineOffsets,

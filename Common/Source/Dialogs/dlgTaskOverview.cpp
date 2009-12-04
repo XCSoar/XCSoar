@@ -58,7 +58,6 @@ Copyright_License {
 static WndForm *wf=NULL;
 static WndFrame *wfAdvanced=NULL;
 static WndListFrame *wTaskList=NULL;
-static WndOwnerDrawFrame *wTaskListEntry = NULL;
 static bool showAdvanced= false;
 
 static int UpLimit=0;
@@ -560,12 +559,6 @@ void dlgTaskOverviewShowModal(void){
   assert(wTaskList!=NULL);
   wTaskList->SetBorderKind(BORDERLEFT);
   wTaskList->SetEnterCallback(OnTaskListEnter);
-
-  wTaskListEntry = (WndOwnerDrawFrame*)wf->
-    FindByName(TEXT("frmTaskListEntry"));
-
-  assert(wTaskListEntry!=NULL);
-  wTaskListEntry->SetCanFocus(true);
 
   WndProperty* wp;
 

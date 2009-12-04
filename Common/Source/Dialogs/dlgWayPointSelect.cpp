@@ -64,7 +64,6 @@ static GEOPOINT Location;
 
 static WndForm *wf=NULL;
 static WndListFrame *wWayPointList=NULL;
-static WndOwnerDrawFrame *wWayPointListEntry = NULL;
 
 static const TCHAR NameFilter[] = TEXT("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 static unsigned NameFilterIdx=0;
@@ -728,10 +727,6 @@ int dlgWayPointSelect(const GEOPOINT &location, const int type, const int Filter
   assert(wWayPointList!=NULL);
   wWayPointList->SetBorderKind(BORDERLEFT);
   wWayPointList->SetEnterCallback(OnWaypointListEnter);
-
-  wWayPointListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmWayPointListEntry"));
-  assert(wWayPointListEntry!=NULL);
-  wWayPointListEntry->SetCanFocus(true);
 
   wpName = (WndProperty*)wf->FindByName(TEXT("prpFltName"));
   wpDistance = (WndProperty*)wf->FindByName(TEXT("prpFltDistance"));

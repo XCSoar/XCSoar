@@ -53,7 +53,6 @@
 static int page=0;
 static WndForm *wf=NULL;
 static WndListFrame *wDetails=NULL;
-static WndOwnerDrawFrame *wDetailsEntry = NULL;
 
 #define MAXLINES 100
 #define MAXLISTS 20
@@ -289,12 +288,6 @@ void dlgFlarmTrafficShowModal(void){
   wDetails = (WndListFrame*)wf->FindByName(TEXT("frmDetails"));
   wDetails->SetEnterCallback(OnListEnter);
   assert(wDetails!=NULL);
-
-  wDetailsEntry =
-    (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmDetailsEntry"));
-  assert(wDetailsEntry!=NULL);
-  wDetailsEntry->SetCanFocus(true);
-
 
   wDetails->SetBorderKind(BORDERLEFT);
 

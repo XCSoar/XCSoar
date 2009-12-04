@@ -59,7 +59,6 @@ using std::max;
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
-static WndOwnerDrawFrame *wAirspaceListEntry = NULL;
 static Brush hBrushInsideBk;
 static Brush hBrushNearBk;
 static Brush hBrushInsideAckBk;
@@ -694,8 +693,6 @@ int dlgAirspaceWarningInit(void){
   hBrushNearAckBk.set(Color(254,254,100));
 
   wAirspaceList = (WndListFrame*)wf->FindByName(TEXT("frmAirspaceWarningList"));
-  wAirspaceListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmAirspaceWarningListEntry"));
-  wAirspaceListEntry->SetCanFocus(true);
 
   AirspaceWarnListAddNotifier(AirspaceWarningNotify);
 

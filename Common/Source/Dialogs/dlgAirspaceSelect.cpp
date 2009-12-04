@@ -67,7 +67,6 @@ static GEOPOINT Location;
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
-static WndOwnerDrawFrame *wAirspaceListEntry = NULL;
 
 static TCHAR NameFilter[] = TEXT("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 static unsigned NameFilterIdx=0;
@@ -828,10 +827,6 @@ void dlgAirspaceSelect(void) {
   assert(wAirspaceList!=NULL);
   wAirspaceList->SetBorderKind(BORDERLEFT);
   wAirspaceList->SetEnterCallback(OnAirspaceListEnter);
-
-  wAirspaceListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmAirspaceListEntry"));
-  assert(wAirspaceListEntry!=NULL);
-  wAirspaceListEntry->SetCanFocus(true);
 
   wpName = (WndProperty*)wf->FindByName(TEXT("prpFltName"));
   wpDistance = (WndProperty*)wf->FindByName(TEXT("prpFltDistance"));

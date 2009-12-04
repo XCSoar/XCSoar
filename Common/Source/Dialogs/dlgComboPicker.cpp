@@ -167,18 +167,6 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
     wComboPopupListFrame->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERRIGHT|BORDERBOTTOM);
     wComboPopupListFrame->SetEnterCallback(OnComboPopupListEnter);
 
-    // allow item to be focused / hightlighted
-    WindowControl *wComboPopupListEntry =
-      wf->FindByName(_T("frmComboPopupListEntry"));
-    assert(wComboPopupListEntry!=NULL);
-    wComboPopupListEntry->SetCanFocus(true);
-#ifdef ENABLE_SDL
-    wComboPopupListEntry->set_focus(); // XXX
-#else /* !ENABLE_SDL */
-    wComboPopupListEntry->SetFocused(true);
-#endif /* !ENABLE_SDL */
-
-
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();
     ComboListPopup = ComboPopupDataField->GetCombo();
     assert(ComboPopupDataField!=NULL);

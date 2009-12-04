@@ -49,7 +49,6 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 static WndListFrame *wStartPointList=NULL;
-static WndOwnerDrawFrame *wStartPointListEntry = NULL;
 
 static int ItemIndex = -1;
 
@@ -173,11 +172,6 @@ void dlgStartPointShowModal(void) {
   assert(wStartPointList!=NULL);
   wStartPointList->SetBorderKind(BORDERLEFT);
   wStartPointList->SetEnterCallback(OnStartPointListEnter);
-
-  wStartPointListEntry = (WndOwnerDrawFrame*)wf->
-    FindByName(TEXT("frmStartPointListEntry"));
-  assert(wStartPointListEntry!=NULL);
-  wStartPointListEntry->SetCanFocus(true);
 
   UpdateList();
 

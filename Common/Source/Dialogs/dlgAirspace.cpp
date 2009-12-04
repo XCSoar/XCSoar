@@ -51,7 +51,6 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
-static WndOwnerDrawFrame *wAirspaceListEntry = NULL;
 
 static int ItemIndex = -1;
 static bool colormode = false;
@@ -259,11 +258,6 @@ void dlgAirspaceShowModal(bool coloredit){
   assert(wAirspaceList!=NULL);
   wAirspaceList->SetBorderKind(BORDERLEFT);
   wAirspaceList->SetEnterCallback(OnAirspaceListEnter);
-
-  wAirspaceListEntry = (WndOwnerDrawFrame*)wf->
-    FindByName(TEXT("frmAirspaceListEntry"));
-  assert(wAirspaceListEntry!=NULL);
-  wAirspaceListEntry->SetCanFocus(true);
 
   UpdateList();
 
