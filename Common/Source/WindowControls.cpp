@@ -749,8 +749,6 @@ WndForm::WndForm(ContainerWindow *Parent,
 
   mClientWindow = NULL;
   mOnKeyDownNotify = NULL;
-  mOnKeyUpNotify = NULL;
-  mOnLButtonUpNotify = NULL;
   mOnTimerNotify = NULL;
 
 #ifndef ENABLE_SDL
@@ -1032,17 +1030,6 @@ int WndForm::ShowModal(bool bEnableMap) {
             continue;
 
       }
-      if (msg.message == WM_KEYUP){
-        if (mOnKeyUpNotify != NULL)
-          if (!(mOnKeyUpNotify)(this, msg.wParam, msg.lParam))
-            continue;
-      }
-      if (msg.message == WM_LBUTTONUP){
-        if (mOnLButtonUpNotify != NULL)
-          if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
-            continue;
-
-      }
 
       TranslateMessage(&msg);
       if (msg.message != WM_LBUTTONUP ||
@@ -1196,20 +1183,6 @@ WndForm::SetKeyDownNotify(int (*KeyDownNotify)(WindowControl *Sender,
 }
 
 void
-WndForm::SetKeyUpNotify(int (*KeyUpNotify)(WindowControl *Sender,
-                                           WPARAM wParam, LPARAM lParam))
-{
-  mOnKeyUpNotify = KeyUpNotify;
-}
-
-void
-WndForm::SetLButtonUpNotify( int (*LButtonUpNotify)(WindowControl *Sender,
-                                                    WPARAM wParam, LPARAM lParam))
-{
-  mOnLButtonUpNotify = LButtonUpNotify;
-}
-
-void
 WndForm::SetTimerNotify(int (*OnTimerNotify)(WindowControl *Sender))
 {
   mOnTimerNotify = OnTimerNotify;
@@ -1234,26 +1207,9 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   msg.pt.x = 0;
   msg.pt.y = 0;
 
-  /*if (msg.message == WM_ACTIVATE){
-    msg.wParam = WA_ACTIVE;
-  }*/
-
-  if (msg.message == WM_KEYUP){
-  }
   if (msg.message == WM_KEYDOWN){
     if (mOnKeyDownNotify != NULL)
       if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
-        return 0;
-
-  }
-  if (msg.message == WM_KEYUP){
-    if (mOnKeyUpNotify != NULL)
-      if (!(mOnKeyUpNotify)(this, msg.wParam, msg.lParam))
-        return 0;
-  }
-  if (msg.message == WM_LBUTTONUP){
-    if (mOnLButtonUpNotify != NULL)
-      if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
         return 0;
 
   }

@@ -417,8 +417,6 @@ protected:
 
   int (*mOnTimerNotify)(WindowControl *Sender);
   int (*mOnKeyDownNotify)(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
-  int (*mOnKeyUpNotify)(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
-  int (*mOnLButtonUpNotify)(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
   bool (*mOnUserMsgNotify)(WindowControl *Sender, unsigned id);
 
 
@@ -477,8 +475,6 @@ public:
 
   void SetKeyDownNotify(int (*KeyDownNotify)(WindowControl *Sender,
                                              WPARAM wParam, LPARAM lParam));
-  void SetKeyUpNotify(int (*KeyUpNotify)(WindowControl *Sender,
-                                         WPARAM wParam, LPARAM lParam));
   void SetLButtonUpNotify(int (*LButtonUpNotify)(WindowControl *Sender,
                                                  WPARAM wParam, LPARAM lParam));
 
