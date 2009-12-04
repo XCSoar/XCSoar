@@ -2265,25 +2265,20 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
   RECT rc;
 
   if ( ScrollbarWidth == -1) {  // resize height for each dialog so top button is below 1st item (to avoid initial highlighted overlap)
-#ifdef GNAV
-    ScrollbarWidth = (int) (SELECTORWIDTH * 2);  // thin for GNAV b/c no touch screen
-    ScrollbarTop = 1;
-#else
+    if (has_pointer()) {
+      // shrink width factor.  Range .1 to 1 where 1 is very "fat"
+      double SHRINKSBFACTOR = is_pna() ? 1.0 : 0.75;
 
-#if defined (PNA)
-  #define SHRINKSBFACTOR 1.0 // shrink width factor.  Range .1 to 1 where 1 is very "fat"
-#else
-  #define SHRINKSBFACTOR 0.75  // shrink width factor.  Range .1 to 1 where 1 is very "fat"
-#endif
-    ScrollbarWidth = (int) (SCROLLBARWIDTH_INITIAL * InfoBoxLayout::dscale * SHRINKSBFACTOR);
-    if (mClientCount > 0) {
-      ScrollbarTop = mClients[0]->GetHeight() + 2;
+      ScrollbarWidth = (int) (SCROLLBARWIDTH_INITIAL * InfoBoxLayout::dscale * SHRINKSBFACTOR);
+      if (mClientCount > 0)
+        ScrollbarTop = mClients[0]->GetHeight() + 2;
+      else
+        ScrollbarTop = (int)(18.0 * InfoBoxLayout::dscale + 2);
+    } else {
+      // thin for ALTAIR b/c no touch screen
+      ScrollbarWidth = (int) (SELECTORWIDTH * 2);
+      ScrollbarTop = 1;
     }
-    else {
-      ScrollbarTop = (int)(18.0 * InfoBoxLayout::dscale + 2);
-    }
-
-#endif
   }
 
 
