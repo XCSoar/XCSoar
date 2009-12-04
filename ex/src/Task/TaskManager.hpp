@@ -154,8 +154,9 @@ public:
  * Sets active task to go to mode, to specified waypoint
  * 
  * @param wp Waypoint to go to
+ * @return True if successful
  */
-  void do_goto(const Waypoint & wp);
+  bool do_goto(const Waypoint & wp);
 
 /** 
  * Updates internal state of task given new aircraft.
@@ -200,8 +201,14 @@ public:
  * 
  * @return True if task is valid
  */
-  bool check_task() const;
+  bool check_ordered_task() const;
 
+/** 
+ * Check whether active task is valid
+ * 
+ * @return True if task is valid
+ */
+  bool check_task() const;
 
 #ifdef DO_PRINT
   virtual void print(const AIRCRAFT_STATE &location);

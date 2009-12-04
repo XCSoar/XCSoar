@@ -92,8 +92,9 @@ public:
  * if destination is not landable.
  * 
  * @param wp Waypoint to Go To
+ * @return True if successful
  */
-  void do_goto(const Waypoint& wp);
+  bool do_goto(const Waypoint& wp);
 
 /** 
  * Resets (clears) the goto task

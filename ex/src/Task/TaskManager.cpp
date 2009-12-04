@@ -161,15 +161,28 @@ TaskManager::resume()
   set_mode(MODE_ORDERED);
 }
 
-void
+bool
 TaskManager::do_goto(const Waypoint & wp)
 {
-  task_goto.do_goto(wp);
-  set_mode(MODE_GOTO);
+  if (task_goto.do_goto(wp)) {
+    set_mode(MODE_GOTO);
+    return true;
+  } else {
+    return false;
+  }
 }
 
 bool 
 TaskManager::check_task() const
+{
+  if (active_task) 
+    return active_task->check_task();
+  else
+    return false;  
+}
+
+bool 
+TaskManager::check_ordered_task() const
 {
   return task_ordered.check_task();
 }

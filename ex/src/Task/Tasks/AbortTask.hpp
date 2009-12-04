@@ -103,6 +103,8 @@ public:
   virtual bool update_sample(const AIRCRAFT_STATE &state_now, 
                              const bool full_update);
 
+  void reset();
+
 protected:
 
 /** 
@@ -184,8 +186,6 @@ private:
       return x.second > y.second;
     }
   };
-
-  void reset();
 
 public:
 #ifdef DO_PRINT

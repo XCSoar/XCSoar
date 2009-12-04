@@ -145,8 +145,6 @@ public:
  * @return True if internal state changed
  */
   virtual bool update_idle(const AIRCRAFT_STATE& state_now);
-    
-protected:
 
 /** 
  * Check if task is valid.  Calls task_event methods on failure.
@@ -154,6 +152,8 @@ protected:
  * @return True if task is valid
  */
   virtual bool check_task() const = 0;
+    
+protected:
 
 /** 
  * Pure abstract method to be defined for concrete task classes to update internal

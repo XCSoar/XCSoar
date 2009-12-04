@@ -178,7 +178,7 @@ bool test_task_manip(TaskManager& task_manager,
 
   task_report(task_manager, "# checking task\n");
 
-  if (task_manager.check_task()) {
+  if (task_manager.check_ordered_task()) {
     task_manager.reset();
     task_manager.setActiveTaskPoint(0);
     task_manager.resume();
@@ -264,7 +264,7 @@ bool test_task_mixed(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_task()) {
+  if (!task_manager.check_ordered_task()) {
     return false;
   }
   return true;
@@ -318,7 +318,7 @@ bool test_task_fai(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_task()) {
+  if (!task_manager.check_ordered_task()) {
     return false;
   }
   return true;
@@ -382,7 +382,7 @@ bool test_task_aat(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_task()) {
+  if (!task_manager.check_ordered_task()) {
     return false;
   }
   return true;
@@ -430,7 +430,7 @@ bool test_task_or(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_task()) {
+  if (!task_manager.check_ordered_task()) {
     return false;
   }
   return true;
@@ -471,7 +471,7 @@ bool test_task_dash(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_task()) {
+  if (!task_manager.check_ordered_task()) {
     return false;
   }
   return true;
@@ -512,7 +512,7 @@ bool test_task_fg(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_task()) {
+  if (!task_manager.check_ordered_task()) {
     return false;
   }
   return true;
@@ -599,7 +599,7 @@ bool test_task_random(TaskManager& task_manager,
     return false;
   }
   task_report(task_manager, "# checking task..\n");
-  if (!task_manager.check_task()) {
+  if (!task_manager.check_ordered_task()) {
     return false;
   }
   return true;
