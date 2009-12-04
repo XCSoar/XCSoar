@@ -1129,19 +1129,9 @@ WndForm::SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigne
 // normal form stuff (nonmodal)
 
 int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
-
-  MSG msg;
-  msg.hwnd = hwnd;
-  msg.message = uMsg;
-  msg.wParam = wParam;
-  msg.lParam = lParam;
-  msg.time = 0;
-  msg.pt.x = 0;
-  msg.pt.y = 0;
-
-  if (msg.message == WM_KEYDOWN){
+  if (uMsg == WM_KEYDOWN){
     if (mOnKeyDownNotify != NULL)
-      if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
+      if (!(mOnKeyDownNotify)(this, wParam, lParam))
         return 0;
 
   }
