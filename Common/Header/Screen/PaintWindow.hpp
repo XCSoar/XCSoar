@@ -170,7 +170,7 @@ public:
   }
 
   void update() {
-    assert_none_locked();
+    //assert_none_locked();
 
 #ifdef ENABLE_SDL
     // XXX
