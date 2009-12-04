@@ -486,6 +486,8 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #endif
   };
 
+  assert_none_locked();
+
   if (message == WM_GETMINMAXINFO)
     /* WM_GETMINMAXINFO is called before WM_CREATE, and we havn't set
        a Window pointer yet - let DefWindowProc() handle it */
@@ -502,7 +504,10 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     window = get_unchecked(_hWnd);
   }
 
-  return window->on_message(_hWnd, message, wParam, lParam);
+  LRESULT result = window->on_message(_hWnd, message, wParam, lParam);
+  assert_none_locked();
+
+  return result;
 }
 
 void

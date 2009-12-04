@@ -908,6 +908,8 @@ is_allowed_map(HWND hWnd, UINT message, bool enable_map)
 #endif /* !ENABLE_SDL */
 
 int WndForm::ShowModal(bool bEnableMap) {
+  assert_none_locked();
+
 #define OPENCLOSESUPPRESSTIME 500
 #ifndef ENABLE_SDL
   MSG msg;
@@ -1049,6 +1051,8 @@ int WndForm::ShowModal(bool bEnableMap) {
           // if buttons overlap
           WndForm::timeAnyOpenClose.elapsed() > OPENCLOSESUPPRESSTIME)
       {
+        assert_none_locked();
+
         if (DispatchMessage(&msg)){
 
           /*
@@ -1087,6 +1091,8 @@ int WndForm::ShowModal(bool bEnableMap) {
           }
           */
         } // DispatchMessage
+
+        assert_none_locked();
       } // timeMsg
   }
   } // End Modal Loop
