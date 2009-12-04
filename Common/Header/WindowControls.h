@@ -342,7 +342,7 @@ public:
   void Redraw(void);
   int GetItemIndex(void) { return mListInfo.ItemIndex; }
   void SetItemIndex(int iValue);
-  void SelectItemFromScreen(int xPos, int yPos, RECT *rect);
+  void SelectItemFromScreen(int xPos, int yPos);
   int GetScrollBarHeight (void);
   int GetScrollIndexFromScrollBarTop(int iScrollBarTop);
   int GetScrollBarTopFromScrollIndex();

@@ -2621,8 +2621,7 @@ WndFrame::on_mouse_down(int xPos, int yPos)
     //}
 
     WndListFrame* wlf = ((WndListFrame*)GetOwner());
-    RECT mRc = get_position();
-    wlf->SelectItemFromScreen(xPos, yPos, &mRc);
+    wlf->SelectItemFromScreen(xPos, yPos);
   }
   isselect = false;
   return false;
@@ -2648,8 +2647,9 @@ void WndListFrame::SetItemIndex(int iValue){
   RecalculateIndices(false);
 }
 
-void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
-                                        RECT *rect) {
+void
+WndListFrame::SelectItemFromScreen(int xPos, int yPos)
+{
   (void)xPos;
 /*  int w = GetWidth()- 4*SELECTORWIDTH;
   int h = GetHeight()- SELECTORWIDTH;
@@ -2665,7 +2665,6 @@ void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
   }
 */
   int index;
-  *rect = get_position();
   index = yPos/mClients[0]->GetHeight(); // yPos is offset within ListEntry item!
 
   if ((index>=0)&&(index<mListInfo.BottomIndex)) {
