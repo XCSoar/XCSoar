@@ -145,8 +145,8 @@ public:
   virtual bool on_killfocus();
 
 #ifndef ENABLE_SDL
-  virtual LRESULT on_message(HWND hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
+  virtual LRESULT on_unhandled_message(HWND hWnd, UINT message,
+                                       WPARAM wParam, LPARAM lParam);
 #endif /* !ENABLE_SDL */
 
   virtual void AddClient(WindowControl *Client);

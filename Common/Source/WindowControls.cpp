@@ -692,8 +692,8 @@ WindowControl::on_killfocus()
 #ifndef ENABLE_SDL
 
 LRESULT
-WindowControl::on_message(HWND hwnd, UINT uMsg,
-                          WPARAM wParam, LPARAM lParam)
+WindowControl::on_unhandled_message(HWND hwnd, UINT uMsg,
+                                    WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg){
   case WM_ERASEBKGND:
@@ -704,7 +704,7 @@ WindowControl::on_message(HWND hwnd, UINT uMsg,
   case WM_ACTIVATE:
   case WM_CLOSE:
     /* exclude these from OnUnhandledMessage() */
-    return ContainerWindow::on_message(hwnd, uMsg, wParam, lParam);
+    return ContainerWindow::on_unhandled_message(hwnd, uMsg, wParam, lParam);
   }
 
   if (mTopOwner != NULL){
@@ -715,7 +715,7 @@ WindowControl::on_message(HWND hwnd, UINT uMsg,
      return 0;
   }
 
-  return ContainerWindow::on_message(hwnd, uMsg, wParam, lParam);
+  return ContainerWindow::on_unhandled_message(hwnd, uMsg, wParam, lParam);
 }
 
 #endif /* !ENABLE_SDL */
