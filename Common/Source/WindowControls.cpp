@@ -117,7 +117,7 @@ static bool KeyTimer(bool isdown, DWORD thekey) {
 // WindowControl Classes
 //----------------------------------------------------------
 
-WindowControl *ActiveControl = NULL;
+static WindowControl *ActiveControl = NULL;
 
 void InitWindowControlModule(void);
 

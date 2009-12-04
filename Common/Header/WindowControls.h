@@ -400,8 +400,6 @@ protected:
   virtual void on_paint(Canvas &canvas);
 };
 
-extern WindowControl *ActiveControl;
-
 class WndForm : public WindowControl {
 protected:
 
