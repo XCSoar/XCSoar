@@ -2088,26 +2088,9 @@ void WndFrame::Destroy(void){
 
 }
 
-
-bool
-WndFrame::on_key_down(unsigned key_code)
-{
-  if (mIsListItem && GetOwner()!=NULL){
-    RECT mRc = get_position();
-    SetSourceRectangle(mRc);
-    return ((WndListFrame*)GetOwner())->OnItemKeyDown(key_code);
-  }
-
-  return WindowControl::on_key_down(key_code);
-}
-
 void
 WndFrame::on_paint(Canvas &canvas)
 {
-  if (mIsListItem && GetOwner()!=NULL) {
-    ((WndListFrame*)GetOwner())->PrepareItemDraw();
-  }
-
   WindowControl::on_paint(canvas);
 
   if (mCaption != 0){
@@ -2166,6 +2149,8 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
                                                   ListInfo_t *ListInfo)):
   WndFrame(Owner, Name, X, Y, Width, Height)
 {
+  SetCanFocus(true);
+  PaintSelector(true);
 
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
@@ -2236,16 +2221,11 @@ WndListFrame::on_paint(Canvas &canvas)
 
       if (mOnListCallback != NULL){
         mListInfo.DrawIndex = mListInfo.TopIndex + i;
-        if (mListInfo.DrawIndex == mListInfo.ItemIndex) {
-          viewport.move(0, mClients[0]->GetHeight());
-          continue;
-        }
         mOnListCallback(this, &mListInfo);
       }
 
-      mClients[0]->PaintSelector(true);
+      mClients[0]->PaintSelector(mListInfo.DrawIndex != mListInfo.ItemIndex);
       mClients[0]->on_paint(canvas2);
-      mClients[0]->PaintSelector(false);
 
       viewport.commit();
       viewport.move(0, mClients[0]->GetHeight());
@@ -2253,17 +2233,9 @@ WndListFrame::on_paint(Canvas &canvas)
 
     viewport.restore();
 
-    mListInfo.DrawIndex = mListInfo.ItemIndex;
-
     DrawScrollBar(canvas);
   }
 }
-
-void WndListFrame::Redraw(void){
-  WindowControl::Redraw();  // redraw all but not the current
-  mClients[0]->Redraw();    // redraw the current
-}
-
 
 void WndListFrame::DrawScrollBar(Canvas &canvas) {
   static Bitmap hScrollBarBitmapTop;
@@ -2433,34 +2405,7 @@ void WndListFrame::SetEnterCallback(void
 
 
 void WndListFrame::RedrawScrolled(bool all) {
-
-  int newTop;
-
-  /*       -> inefficient and flickering draws the list twice
-  if (all) {
-    int i;
-    for (i=0; i<= mListInfo.ItemInViewCount; i++) {
-      mListInfo.DrawIndex = mListInfo.TopIndex+i;
-      mOnListCallback(this, &mListInfo);
-      mClients[0]->SetTop(mClients[0]->GetHeight() * (i));
-      mClients[0]->Redraw();
-    }
-  }
-  */
-
-  mListInfo.DrawIndex = mListInfo.ItemIndex;
-  mOnListCallback(this, &mListInfo);
-  newTop = mClients[0]->GetHeight() * (mListInfo.ItemIndex - mListInfo.TopIndex);
-  if (newTop == mClients[0]->GetTop()){
-    Redraw();                     // non moving the helper window force redraw
-  } else {
-    mClients[0]->SetTop(newTop);  // moving the helper window invalidate the list window
-    mClients[0]->Redraw();
-
-    // to be optimized: after SetTop Paint redraw all list items
-
-  }
-
+  Redraw();
 }
 
 
@@ -2515,9 +2460,11 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
 }
 
 bool
-WndListFrame::OnItemKeyDown(unsigned key_code)
+WndListFrame::on_key_down(unsigned key_code)
 {
-  switch (key_code){
+  // XXX SetSourceRectangle(mRc);
+
+  switch (key_code) {
 #ifdef GNAV
     // JMW added this to make data entry easier
   case VK_F4:
@@ -2528,7 +2475,6 @@ WndListFrame::OnItemKeyDown(unsigned key_code)
 
     mOnListEnterCallback(this, &mListInfo);
     RedrawScrolled(false);
-    return true;
     //#ifndef GNAV
 
   case VK_LEFT:
@@ -2598,15 +2544,6 @@ void WndListFrame::ResetList(void){
       mListInfo.BottomIndex = mListInfo.ItemInViewCount;
     }
   }
-
-  mClients[0]->SetTop(0);     // move item window to the top
-  mClients[0]->Redraw();
-}
-
-int WndListFrame::PrepareItemDraw(void){
-  if (mOnListCallback)
-    mOnListCallback(this, &mListInfo);
-  return 1;
 }
 
 bool
@@ -2615,30 +2552,6 @@ WndListFrame::on_mouse_up(int x, int y)
     mMouseDown=false;
     return false;
 }
-
-static bool isselect = false;
-
-// JMW needed to support mouse/touchscreen
-bool
-WndFrame::on_mouse_down(int xPos, int yPos)
-{
-  if (mIsListItem && GetOwner()!=NULL) {
-
-    if (!GetFocused()) {
-      set_focus();
-      //return 1;
-    }
-    //else {  // always doing this allows selected item in list to remain selected.
-      invalidate();
-    //}
-
-    WndListFrame* wlf = ((WndListFrame*)GetOwner());
-    wlf->SelectItemFromScreen(xPos, yPos);
-  }
-  isselect = false;
-  return false;
-}
-
 
 void WndListFrame::SetItemIndex(int iValue){
 
@@ -2680,7 +2593,7 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
   index = yPos/mClients[0]->GetHeight(); // yPos is offset within ListEntry item!
 
   if ((index>=0)&&(index<mListInfo.BottomIndex)) {
-    if (!isselect) {
+    if (index == mListInfo.ItemIndex) {
       if (mOnListEnterCallback) {
         mOnListEnterCallback(this, &mListInfo);
       }
@@ -2736,6 +2649,9 @@ WndListFrame::on_mouse_down(int x, int y)
   Pos.y = y;
   mMouseDown=false;
 
+  if (!GetFocused())
+    set_focus();
+
   if (PtInRect(&rcScrollBarButton, Pos))  // see if click is on scrollbar handle
   {
     // start mouse drag
@@ -2764,8 +2680,7 @@ WndListFrame::on_mouse_down(int x, int y)
   else
   if (mClientCount > 0)
   {
-    isselect = true;
-    ((WndFrame *)mClients[0])->on_mouse_down(x, y);
+    SelectItemFromScreen(x, y);
   }
 
   return false;

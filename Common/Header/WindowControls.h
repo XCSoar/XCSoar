@@ -290,15 +290,20 @@ public:
 
   unsigned GetTextHeight();
 
-  void SetIsListItem(bool Value) { mIsListItem = Value; }
+  void SetIsListItem(bool Value) {
+    if (Value == mIsListItem)
+      return;
 
-  /* events from class Window */
-  virtual bool on_mouse_down(int x, int y);
+    mIsListItem = Value;
+
+    if (mIsListItem) {
+      hide();
+      SetCanFocus(true);
+      SetFocused(true);
+    }
+  }
 
 protected:
-
-  virtual bool on_key_down(unsigned key_code);
-
   bool mIsListItem;
 
   UINT mCaptionStyle;
@@ -332,14 +337,11 @@ public:
   virtual void Destroy(void);
 
   bool on_mouse_move(int x, int y, unsigned keys);
-  bool OnItemKeyDown(unsigned key_code);
-  int PrepareItemDraw(void);
   void ResetList(void);
   void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
   void RedrawScrolled(bool all);
   void DrawScrollBar(Canvas &canvas);
   int RecalculateIndices(bool bigscroll);
-  void Redraw(void);
   int GetItemIndex(void) { return mListInfo.ItemIndex; }
   void SetItemIndex(int iValue);
   void SelectItemFromScreen(int xPos, int yPos);
@@ -354,6 +356,7 @@ protected:
 
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
+  virtual bool on_key_down(unsigned key_code);
 
   OnListCallback_t mOnListCallback;
   OnListCallback_t mOnListEnterCallback;

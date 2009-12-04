@@ -81,7 +81,7 @@ static void DoAck(int Ack){
   AirspaceInfo_c pAS;
   int Idx;
 
-  if (!wAirspaceListEntry->GetFocused())
+  if (!wAirspaceList->GetFocused())
     Idx = SelectedIdx;
   else
     Idx = ItemIndex;
@@ -135,7 +135,7 @@ static int OnKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
   (void)lParam;
 	switch(wParam){
     case VK_RETURN:
-      if (wAirspaceListEntry->GetFocused()){
+      if (wAirspaceList->GetFocused()){
         SelectedID = FocusedID;
         SelectedIdx = FocusedIdx;
         wAirspaceList->Redraw();
@@ -492,7 +492,7 @@ static bool FindFocus() {
     FocusedIdx = 0;
     FocusedID = -1; // JMW bug fix
 
-    if (wAirspaceListEntry->GetFocused()) {
+    if (wAirspaceList->GetFocused()) {
       // JMW attempt to find fix...
       do_refocus = true;
     }
@@ -558,7 +558,7 @@ UserMsgNotify(WindowControl *Sender, unsigned id){
   }
 
   if (do_refocus) {
-    wAirspaceListEntry->set_focus();
+    wAirspaceList->set_focus();
   }
 
   // this is our message, we have handled it.
