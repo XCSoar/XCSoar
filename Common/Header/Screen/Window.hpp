@@ -225,8 +225,6 @@ public:
   }
 
   void show() {
-    assert_none_locked();
-
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -235,8 +233,6 @@ public:
   }
 
   void hide() {
-    assert_none_locked();
-
 #ifdef ENABLE_SDL
     // XXX
 #else
