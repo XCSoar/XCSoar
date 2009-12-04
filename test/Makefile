@@ -246,14 +246,8 @@ RunDialog-$(TARGET)$(TARGET_EXEEXT): $(RUN_DIALOG_OBJS:.o=-$(TARGET).o)
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 %-$(TARGET).rsc: %.rc
-	@sed -e 's,[Bb]itmaps\\\\,Bitmaps/,g' \
-	    -e 's,XCSoar.ICO,xcsoar.ico,g' \
-	    -e 's,\.\.\\\\Data\\\\Dialogs\\\\,../Data/Dialogs/,g' \
-	    -e 's,small\.bmp,Small.bmp,g' \
-		< $< > $<.tmp
 	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<.tmp
-	@$(RM) $<.tmp
+	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<
 
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk

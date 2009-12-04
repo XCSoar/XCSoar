@@ -454,14 +454,8 @@ include $(topdir)/build/compat.mk
 # Tell make how to create a compiled resource object (rsc)
 #
 %-$(TARGET).rsc: %.rc
-	@sed -e 's,[Bb]itmaps\\\\,Bitmaps/,g' \
-	    -e 's,XCSoar.ICO,xcsoar.ico,g' \
-	    -e 's,\.\.\\\\Data\\\\Dialogs\\\\,../Data/Dialogs/,g' \
-	    -e 's,small\.bmp,Small.bmp,g' \
-		< $< > $<.tmp
 	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<.tmp
-	@$(RM) $<.tmp
+	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<
 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
