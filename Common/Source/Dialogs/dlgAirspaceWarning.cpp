@@ -130,42 +130,50 @@ static int OnTimer(WindowControl * Sender){
 	return(0);
 }
 
-static int OnKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-  (void)lParam;
-	switch(wParam){
+static bool
+OnKeyDown(WindowControl *Sender, unsigned key_code)
+{
+  switch(key_code){
     case VK_RETURN:
       if (wAirspaceList->GetFocused()){
         SelectedID = FocusedID;
         SelectedIdx = FocusedIdx;
         wAirspaceList->Redraw();
-        return(0);
+        return true;
       }
-      return(1);
+
+    return false;
+
     case VK_ESCAPE:
       OnCloseClicked(Sender);
-      return(0);
+    return true;
+
 #ifdef GNAV
     case VK_APP1:
     case '6':
       OnAckClicked(Sender);
-      return(0);
+    return true;
+
     case VK_APP2:
     case '7':
       OnAck1Clicked(Sender);
-      return(0);
+    return true;
+
     case VK_APP3:
     case '8':
       OnAck2Clicked(Sender);
-      return(0);
+    return true;
+
     case VK_APP4:
     case '9':
       OnEnableClicked(Sender);
-      return(0);
+    return true;
+
 #endif
+
+  default:
+    return false;
   }
-
-  return(1);
-
 }
 
 /*

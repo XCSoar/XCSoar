@@ -143,35 +143,43 @@ static void MoveCursor(void) {
   UpdateCursor();
 }
 
+static bool
+FormKeyDown(WindowControl *Sender, unsigned key_code)
+{
+  (void)Sender;
 
-static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam) {
-	(void)lParam; (void)Sender;
-  switch(wParam & 0xffff){
+  switch (key_code) {
     case VK_LEFT:
       if (cursor<1)
-        return(0); // min width
+        return true; // min width
       cursor--;
       MoveCursor();
-      return(0);
+    return true;
+
     case VK_RIGHT:
       if ((int)cursor>=(max_width-2))
-        return(0); // max width
+        return true; // max width
       cursor++;
       MoveCursor();
-      return(0);
+    return true;
+
     case VK_UP:
       lettercursor--;
       UpdateCursor();
-      return(0);
+    return true;
+
     case VK_DOWN:
       lettercursor++;
       UpdateCursor();
-      return(0);
+    return true;
+
     case VK_RETURN:
       wf->SetModalResult(mrOK);
-      return(0);
+    return true;
+
+  default:
+    return false;
   }
-  return(1);
 }
 
 
@@ -184,22 +192,22 @@ static CallBackTableEntry_t CallBackTable[]={
 
 static void OnLeftClicked(WindowControl * Sender){
   (void)Sender;
-  FormKeyDown(Sender, VK_LEFT, 0);
+  FormKeyDown(Sender, VK_LEFT);
 }
 
 static void OnRightClicked(WindowControl * Sender){
   (void)Sender;
-  FormKeyDown(Sender, VK_RIGHT, 0);
+  FormKeyDown(Sender, VK_RIGHT);
 }
 
 static void OnUpClicked(WindowControl * Sender){
   (void)Sender;
-  FormKeyDown(Sender, VK_UP, 0);
+  FormKeyDown(Sender, VK_UP);
 }
 
 static void OnDownClicked(WindowControl * Sender){
   (void)Sender;
-  FormKeyDown(Sender, VK_DOWN, 0);
+  FormKeyDown(Sender, VK_DOWN);
 }
 
 

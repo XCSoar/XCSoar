@@ -744,17 +744,15 @@ static int OnTimerNotify(WindowControl * Sender) {
   return 0;
 }
 
-static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
+static bool
+FormKeyDown(WindowControl *Sender, unsigned key_code){
 
   WndProperty* wp;
   unsigned NewIndex = TypeFilterIdx;
 
-  (void)lParam;
-  (void)Sender;
-
   wp = ((WndProperty *)wf->FindByName(TEXT("prpFltType")));
 
-  switch(wParam & 0xffff){
+  switch(key_code) {
     case VK_F1:
       NewIndex = 0;
     break;
@@ -764,6 +762,9 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
     case VK_F3:
       NewIndex = 3;
     break;
+
+  default:
+    return false;
   }
 
   if (TypeFilterIdx != NewIndex){
@@ -774,7 +775,7 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
     wp->RefreshDisplay();
   }
 
-  return(1);
+  return true;
 }
 
 static CallBackTableEntry_t CallBackTable[]={

@@ -160,10 +160,9 @@ public:
 
   virtual int OnHelp();
 
-  virtual int OnUnhandledMessage(HWND hwnd, UINT uMsg,
-                                 WPARAM wParam, LPARAM lParam) {
+  virtual bool OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     (void)hwnd; (void)uMsg; (void)wParam; (void)lParam;
-    return 1;
+    return false;
   }
   virtual void Close(void) {
     SetVisible(false);
@@ -416,11 +415,11 @@ protected:
   RECT mTitleRect;
 
   int (*mOnTimerNotify)(WindowControl *Sender);
-  int (*mOnKeyDownNotify)(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
+  bool (*mOnKeyDownNotify)(WindowControl *Sender, unsigned key_code);
   bool (*mOnUserMsgNotify)(WindowControl *Sender, unsigned id);
 
-
-  int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+  virtual bool OnUnhandledMessage(HWND hwnd, UINT uMsg,
+                                  WPARAM wParam, LPARAM lParam);
 
   /** from class PaintWindow */
   virtual void on_paint(Canvas &canvas);
@@ -473,8 +472,8 @@ public:
   Color SetBackColor(Color Value);
   const Font *SetFont(const Font &Value);
 
-  void SetKeyDownNotify(int (*KeyDownNotify)(WindowControl *Sender,
-                                             WPARAM wParam, LPARAM lParam));
+  void SetKeyDownNotify(bool (*KeyDownNotify)(WindowControl *Sender,
+                                              unsigned key_code));
   void SetLButtonUpNotify(int (*LButtonUpNotify)(WindowControl *Sender,
                                                  WPARAM wParam, LPARAM lParam));
 

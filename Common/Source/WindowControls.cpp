@@ -708,7 +708,7 @@ WindowControl::on_unhandled_message(HWND hwnd, UINT uMsg,
   }
 
   if (mTopOwner != NULL){
-    if (!mTopOwner->OnUnhandledMessage(hwnd, uMsg, wParam, lParam))
+    if (mTopOwner->OnUnhandledMessage(hwnd, uMsg, wParam, lParam))
      return 0;
   } else {
     if (OnUnhandledMessage(hwnd, uMsg, wParam, lParam))
@@ -993,12 +993,9 @@ int WndForm::ShowModal(bool bEnableMap) {
 #endif
 
     if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
-      if (msg.message == WM_KEYDOWN){
-        if (mOnKeyDownNotify != NULL)
-          if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
-            continue;
-
-      }
+      if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
+          mOnKeyDownNotify(this, msg.wParam))
+          continue;
 
       TranslateMessage(&msg);
       if (msg.message != WM_LBUTTONUP ||
@@ -1108,8 +1105,8 @@ const Font *WndForm::SetFont(const Font &Value){
 }
 
 void
-WndForm::SetKeyDownNotify(int (*KeyDownNotify)(WindowControl *Sender,
-                                               WPARAM wParam, LPARAM lParam))
+WndForm::SetKeyDownNotify(bool (*KeyDownNotify)(WindowControl *Sender,
+                                                unsigned key_code))
 {
   mOnKeyDownNotify = KeyDownNotify;
 }
@@ -1128,31 +1125,28 @@ WndForm::SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigne
 
 // normal form stuff (nonmodal)
 
-int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
+bool
+WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
   if (uMsg == WM_KEYDOWN){
-    if (mOnKeyDownNotify != NULL)
-      if (!(mOnKeyDownNotify)(this, wParam, lParam))
-        return 0;
+    if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, wParam))
+      return true;
 
-  }
-
-  if (uMsg == WM_KEYDOWN){
     if (ActiveControl != NULL){
       switch(wParam & 0xffff){
         case VK_UP:
           if (ActiveControl->GetOwner() != NULL)
             ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-        return 0;
+        return true;
         case VK_DOWN:
           if (ActiveControl->GetOwner() != NULL)
             ActiveControl->GetOwner()->FocusNext(ActiveControl);
-        return 0;
+        return true;
       }
     }
   }
 
-  return 1;
-
+  return false;
 }
 
 void WndForm::Show(void){
