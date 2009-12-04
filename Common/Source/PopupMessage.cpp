@@ -114,6 +114,8 @@ void PopupMessage::Resize() {
     }
     hidden = true;
   } else {
+    Unlock();
+
     set_text(msgText);
 
     SIZE tsize = parent.get_canvas().text_size(msgText);
@@ -152,8 +154,6 @@ void PopupMessage::Resize() {
       DrawWireRects(&mRc, 10);
     }
     */
-
-    Unlock();
 
     move(rthis.left, rthis.top,
          rthis.right - rthis.left,
