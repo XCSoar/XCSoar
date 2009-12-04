@@ -572,12 +572,7 @@ WindowControl::on_key_up(unsigned key_code)
 void
 WindowControl::on_paint(Canvas &canvas)
 {
-  RECT rc;
-
-  rc.left = 0;
-  rc.top = 0;
-  rc.right = 0 + mWidth+2;
-  rc.bottom = 0 + mHeight+2;
+  const RECT rc = get_client_rect();
 
   canvas.fill_rectangle(rc, GetBackBrush());
 
@@ -585,10 +580,6 @@ WindowControl::on_paint(Canvas &canvas)
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
     Color ff = GetBackColor().highlight();
     Brush brush(ff);
-    rc.left += 0;
-    rc.right -= 2;
-    rc.top += 0;
-    rc.bottom -= 2;
     canvas.fill_rectangle(rc, brush);
 
 #ifdef WINDOWSPC
