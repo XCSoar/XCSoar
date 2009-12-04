@@ -878,31 +878,31 @@ DeleteOldIGCFile(const NMEA_INFO &gps_info, TCHAR *pathname)
   TCHAR oldestname[MAX_PATH];
   TCHAR searchpath[MAX_PATH];
   TCHAR fullname[MAX_PATH];
-  _stprintf(searchpath, TEXT("%s*"),pathname);
+  _stprintf(searchpath, TEXT("%s*"), pathname);
 
   hFind = FindFirstFile(searchpath, &FindFileData); // find the first file
-  if(hFind == INVALID_HANDLE_VALUE) {
+  if(hFind == INVALID_HANDLE_VALUE)
     return false;
-  }
+
   if(!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-    if (MatchesExtension(FindFileData.cFileName, TEXT(".igc")) ||
-	MatchesExtension(FindFileData.cFileName, TEXT(".IGC"))) {
+    if (!MatchesExtension(FindFileData.cFileName, TEXT(".igc"))
+        && !MatchesExtension(FindFileData.cFileName, TEXT(".IGC")))
+      return false;
+
       // do something...
       _tcscpy(oldestname, FindFileData.cFileName);
-    } else {
-      return false;
-    }
   }
   bool bSearch = true;
-  while(bSearch) { // until we finds an entry
-    if(FindNextFile(hFind,&FindFileData)) {
-      if(!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
-	 (MatchesExtension(FindFileData.cFileName, TEXT(".igc")) ||
-	  (MatchesExtension(FindFileData.cFileName, TEXT(".IGC"))))) {
-	if (LogFileIsOlder(gps_info,oldestname,FindFileData.cFileName)) {
-	  _tcscpy(oldestname, FindFileData.cFileName);
-	  // we have a new oldest name
-	}
+  // until we scanned all files
+  while (bSearch) {
+    if (FindNextFile(hFind, &FindFileData)) {
+      if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+          && (MatchesExtension(FindFileData.cFileName, TEXT(".igc"))
+              || (MatchesExtension(FindFileData.cFileName, TEXT(".IGC"))))) {
+        if (LogFileIsOlder(gps_info, oldestname, FindFileData.cFileName)) {
+          _tcscpy(oldestname, FindFileData.cFileName);
+          // we have a new oldest name
+        }
       }
     } else {
       bSearch = false;
@@ -911,9 +911,11 @@ DeleteOldIGCFile(const NMEA_INFO &gps_info, TCHAR *pathname)
   FindClose(hFind);  // closing file handle
 
   // now, delete the file...
-  _stprintf(fullname, TEXT("%s%s"),pathname,oldestname);
+  _stprintf(fullname, TEXT("%s%s"), pathname, oldestname);
   DeleteFile(fullname);
-  return true; // did delete one
+
+  // did delete one
+  return true;
 }
 
 #define LOGGER_MINFREESTORAGE (250+MINFREESTORAGE)
