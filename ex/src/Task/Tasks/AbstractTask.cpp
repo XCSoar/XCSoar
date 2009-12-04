@@ -143,6 +143,8 @@ bool
 AbstractTask::update(const AIRCRAFT_STATE &state, 
                      const AIRCRAFT_STATE &state_last)
 {
+  stats.task_valid = check_task();
+
   const bool full_update = 
     check_transitions(state, state_last) ||
     (activeTaskPoint != activeTaskPoint_last);
@@ -199,8 +201,11 @@ AbstractTask::update_stats_times(const AIRCRAFT_STATE &state)
 void 
 AbstractTask::reset()
 {
+  mc_lpf.reset(glide_polar.get_mc());
   trigger_auto = false;
   activeTaskPoint_last = -1;
+  ce_lpf.reset(1.0);
+  stats.reset();
 }
 
 

@@ -37,6 +37,7 @@
 #ifndef WAYPOINT_HPP
 #define WAYPOINT_HPP
 
+#include "Util/tstring.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #ifdef DO_PRINT
@@ -46,6 +47,22 @@
 #include "Util/GenericVisitor.hpp"
 
 class TaskProjection;
+
+/** 
+ * Bitfield structure for Waypoint capabilities
+ * 
+ */
+struct WaypointFlags {
+  unsigned int Airport:1;
+  unsigned int TurnPoint:1;
+  unsigned int LandPoint:1;
+  unsigned int Home:1;
+  unsigned int StartPoint:1;
+  unsigned int FinishPoint:1;
+  unsigned int Restricted:1;
+  unsigned int WaypointFlag:1;
+};
+
 
 /**
  * Class for waypoints.  
@@ -59,13 +76,59 @@ class TaskProjection;
 class Waypoint:
   public BaseVisitable<>
 {
- public:
+public:
+
+/** 
+ * Constructor for real waypoints
+ * 
+ * @return Uninitialised object
+ */
+  Waypoint() {};
+
+/** 
+ * Constructor for virtual waypoint (used for lookups by kd-tree)
+ * 
+ * @param location Location of virtual waypoint
+ * @param task_projection Projection to apply to flat location
+ *
+ * @return Initialised (virtual) object.  Don't add this to
+ */
+  Waypoint(const GEOPOINT &location,
+    const TaskProjection &task_projection);
 
   unsigned id; /**< Unique id */
   GEOPOINT Location; /**< Geodetic location */
-  FLAT_GEOPOINT FlatLocation; /**< Flat projected location */
   fixed Altitude; /**< Height AMSL (m) of waypoint terrain */
+  WaypointFlags Flags; /**< Flag types of this waypoint */
+  int Zoom; /**< Minimum zoom level this waypoint is visible at */
+  int FileNum; /**< File number to store waypoint in (0,1), -1 to delete/ignore */
+  tstring Name; /**< Name of waypoint */
+  tstring Comment; /**< Additional comment text for waypoint */
+  tstring Details; /**< Airfield or additional (long) details */
 
+  /** 
+   * Project geolocation to flat location
+   * 
+   * @param task_projection Projection to apply
+   */
+  void project(const TaskProjection& task_projection);
+
+/** 
+ * Get distance in internal flat projected units (fast)
+ * 
+ * @param f Point to get distance to
+ * 
+ * @return Distance in flat units
+ */
+  unsigned flat_distance_to(const FLAT_GEOPOINT &f) {
+    return FlatLocation.distance_to(f);
+  }
+
+  bool is_landable() const {
+    return Flags.LandPoint || Flags.Airport;
+  }
+
+public:
   /**
    * Function object used to provide access to coordinate values by kd-tree
    */
@@ -99,6 +162,9 @@ class Waypoint:
   bool operator==(const Waypoint&wp) const {
     return id == wp.id;
   }
+
+private:
+  FLAT_GEOPOINT FlatLocation; /**< Flat projected location */
 
 public:
   DEFINE_VISITABLE()

@@ -100,9 +100,9 @@ public:
  * 
  * @return Task statistics reference
  */
-    virtual const TaskStats& get_stats() const {
-      return stats;
-    }
+  virtual const TaskStats& get_stats() const {
+    return stats;
+  }
 
 /** 
  * Test if task has finished.  Used to determine whether
@@ -147,6 +147,13 @@ public:
   virtual bool update_idle(const AIRCRAFT_STATE& state_now);
     
 protected:
+
+/** 
+ * Check if task is valid.  Calls task_event methods on failure.
+ * 
+ * @return True if task is valid
+ */
+  virtual bool check_task() const = 0;
 
 /** 
  * Pure abstract method to be defined for concrete task classes to update internal

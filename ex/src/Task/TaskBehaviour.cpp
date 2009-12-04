@@ -64,6 +64,7 @@ TaskBehaviour::TaskBehaviour():
     auto_mc(false),
     calc_cruise_efficiency(true),
     calc_glide_required(true),
+    goto_nonlandable(true),
     task_scored(true),
     aat_min_time(3600*5.35),
     safety_height_terrain(150.0),

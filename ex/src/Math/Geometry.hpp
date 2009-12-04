@@ -41,10 +41,27 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
+/**
+ * Limits the angle (theta) to 0 - 360 degrees
+ * @param theta Input angle
+ * @return Output angle (0-360 degrees)
+ */
 fixed AngleLimit180(fixed theta);
+
+/**
+ * Limits the angle (theta) to -180 - +180 degrees
+ * @param theta Input angle
+ * @return Output angle (-180 - +180 degrees)
+ */
 fixed AngleLimit360(fixed theta);
 
 fixed BiSector(fixed InBound, fixed OutBound);
+
+/**
+ * Rotate angle by 180 degrees and limit to 0 - 360 degrees
+ * @param InBound Input angle
+ * @return Output angle (0 - 360 degrees)
+ */
 fixed Reciprocal(fixed InBound);
 
 #endif

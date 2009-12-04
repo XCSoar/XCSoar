@@ -60,6 +60,12 @@ UnorderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft)
   return bmc.search(glide_polar.get_mc());
 }
 
+bool
+UnorderedTask::check_task() const
+{
+  return (getActiveTaskPoint()!=NULL);
+}
+
 double 
 UnorderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft)
 {

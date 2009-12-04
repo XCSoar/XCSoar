@@ -66,6 +66,8 @@ public:
   double distance_min; /**< Minimum achievable task distance (m) */
   double distance_scored; /**< Scored distance (m) */
 
+  bool task_valid; /**< Whether the task is navigable */
+
 /** 
  * Reset each element (for incremental speeds).
  * 

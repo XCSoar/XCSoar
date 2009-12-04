@@ -629,11 +629,12 @@ OrderedTask::Accept(TaskPointVisitor& visitor) const
 
 void
 OrderedTask::reset()
-{
+{  
   /// \todo also reset data in this class e.g. stats?
   for (OrderedTaskPointVector::iterator it = tps.begin(); it!= tps.end(); it++) {
     (*it)->reset();
   }
+  AbstractTask::reset();
 }
 
 

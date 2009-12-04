@@ -160,7 +160,7 @@ GlidePolar::possible_glide(const GlideState &task) const
   if (!positive(task.AltitudeDifference)) {
     return false;
   }
-  // broad test assuming tailwind (best case)
+  // broad test assuming tailwind at best LD (best case)
   if ((VbestLD+task.EffectiveWindSpeed)*task.AltitudeDifference 
       < task.Vector.Distance*SbestLD) {
     return false;

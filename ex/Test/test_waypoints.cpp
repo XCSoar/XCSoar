@@ -8,7 +8,11 @@ public:
   WaypointVisitorPrint():count(0) {};
 
   virtual void Visit(const Waypoint& wp) {
-//    printf("# visiting wp %d\n", wp.id);
+    if (verbose) {
+#ifdef DO_PRINT
+      printf("# visiting wp %d, '%s'\n", wp.id, wp.Name.c_str());
+#endif
+    }
     count++;
   }
   unsigned count;
@@ -63,11 +67,28 @@ unsigned test_nearest(const Waypoints& waypoints)
   return false;
 }
 
+unsigned test_copy(Waypoints& waypoints)
+{
+  const Waypoint *r = waypoints.lookup_id(3);
+  if (!r) {
+    return false;
+  }
+  unsigned size_old = waypoints.size();
+  Waypoint wp = *r;
+  waypoints.insert(wp);
+  waypoints.optimise();
+  unsigned size_new = waypoints.size();
+  return (size_new == size_old+1);
+}
+
 bool test_lookup(const Waypoints& waypoints, unsigned id)
 {
   const Waypoint* wp;
   wp = waypoints.lookup_id(id);
-  return (wp!= NULL);
+  if (wp== NULL) {
+    return false;
+  }
+  return true;
 }
 
 int main(int argc, char** argv)
@@ -78,7 +99,7 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(10);
+  plan_tests(11);
 
   Waypoints waypoints;
 
@@ -99,6 +120,8 @@ int main(int argc, char** argv)
   ok(waypoints.size()==0,"waypoint clear",0);
   setup_waypoints(waypoints);
   ok(size == waypoints.size(),"waypoint setup after clear",0);
+
+  ok(test_copy(waypoints),"waypoint copy",0);
 
   return exit_status();
 }

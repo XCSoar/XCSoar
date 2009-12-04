@@ -118,6 +118,8 @@ protected:
                                  const AIRCRAFT_STATE& state_last);
 
 private:
+  typedef std::vector < Waypoint > WaypointVector;
+
 /** 
  * Clears task points in list
  * 
@@ -147,6 +149,14 @@ private:
   void update_polar();
 
 /** 
+ * Prune out non-landable (landable or airport flagged) waypoints from
+ * candidates 
+ *
+ * @param approx_waypoints Waypoint list to prune
+ */
+  void remove_unlandable(WaypointVector &approx_waypoints);
+
+/** 
  * Fill abort task list with candidate waypoints given a list of
  * waypoints satisfying approximate range queries.  Can be used
  * to add airfields only, or landpoints.
@@ -156,7 +166,7 @@ private:
  * @param only_airfield If true, only add waypoints that are airfields.
  */
   void fill_reachable(const AIRCRAFT_STATE &state,
-                      std::vector < Waypoint > &approx_waypoints,
+                      WaypointVector &approx_waypoints,
                       const bool only_airfield);
 
   std::vector<TaskPoint*> tps;
@@ -174,6 +184,8 @@ private:
       return x.second > y.second;
     }
   };
+
+  void reset();
 
 public:
 #ifdef DO_PRINT

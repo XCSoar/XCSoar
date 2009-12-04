@@ -85,10 +85,12 @@ GotoTask::check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&)
 void 
 GotoTask::do_goto(const Waypoint & wp)
 {
-  if (tp) {
-    delete tp;
+  if (!task_behaviour.goto_nonlandable || wp.is_landable()) {
+    if (tp) {
+      delete tp;
+    }
+    tp = new UnorderedTaskPoint(wp, task_behaviour);
   }
-  tp = new UnorderedTaskPoint(wp, task_behaviour);
 }
 
 void 
@@ -109,3 +111,11 @@ GotoTask::task_size() const
   }
 }
 
+void
+GotoTask::reset()
+{
+  if (tp) {
+    delete tp;
+  }
+  UnorderedTask::reset();
+}

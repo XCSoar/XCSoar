@@ -88,10 +88,17 @@ public:
 
 /** 
  * Sets go to task point to specified waypoint. 
+ * Obeys TaskBehaviour.goto_nonlandable, won't do anything
+ * if destination is not landable.
  * 
  * @param wp Waypoint to Go To
  */
   void do_goto(const Waypoint& wp);
+
+/** 
+ * Resets (clears) the goto task
+ */
+  void reset();
 
 /** 
  * Update internal states when aircraft state advances.

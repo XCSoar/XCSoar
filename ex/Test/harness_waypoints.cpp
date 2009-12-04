@@ -16,36 +16,44 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
   Waypoint wp;
 
   wp.id = 1;
+  wp.Flags.Airport = true;
   wp.Location.Longitude=0;
   wp.Location.Latitude=0;
   wp.Altitude=0.25;
   waypoints.insert(wp);
 
   wp.id++;
+  wp.Flags.Airport = true;
   wp.Location.Longitude=0;
   wp.Location.Latitude=1.0;
   wp.Altitude=0.25;
   waypoints.insert(wp);
 
   wp.id++;
+  wp.Name = "Hello";
+  wp.Flags.Airport = true;
   wp.Location.Longitude=1.0;
   wp.Location.Latitude=1.0;
   wp.Altitude=0.5;
   waypoints.insert(wp);
 
   wp.id++;
+  wp.Name = "Unk";
+  wp.Flags.Airport = true;
   wp.Location.Longitude=0.8;
   wp.Location.Latitude=0.5;
   wp.Altitude=0.25;
   waypoints.insert(wp);
 
   wp.id++;
+  wp.Flags.Airport = true;
   wp.Location.Longitude=1.0;
   wp.Location.Latitude=0;
   wp.Altitude=0.25;
   waypoints.insert(wp);
 
   wp.id++;
+  wp.Flags.Airport = true;
   wp.Location.Longitude=0;
   wp.Location.Latitude=0.23;
   wp.Altitude=0.25;
@@ -56,6 +64,7 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
     int y = rand()%1200-100;
     double z = rand()% std::max(terrain_height,1);
     wp.id++;
+    wp.Flags.Airport = false;
     wp.Location.Longitude = x/1000.0; 
     wp.Location.Latitude = y/1000.0;
     wp.Altitude = z;

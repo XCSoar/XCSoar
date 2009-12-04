@@ -55,7 +55,7 @@ Waypoints::optimise()
 
   while (!tmp_wps.empty()) {
     Waypoint w = (tmp_wps.front());
-    w.FlatLocation = task_projection.project(w.Location);
+    w.project(task_projection);
     waypoint_tree.insert(w);
     tmp_wps.pop_front();
   }
@@ -87,8 +87,7 @@ Waypoints::insert(const Waypoint& wp)
 Waypoints::WaypointTree::const_iterator 
 Waypoints::find_nearest(const GEOPOINT &loc) const 
 {
-  FLAT_GEOPOINT floc = task_projection.project(loc);
-  Waypoint bb_target; bb_target.FlatLocation = floc;
+  Waypoint bb_target(loc, task_projection);
   std::pair<WaypointTree::const_iterator, double> 
     found = waypoint_tree.find_nearest(bb_target);
 
@@ -135,8 +134,7 @@ std::vector< Waypoint >
 Waypoints::find_within_range(const GEOPOINT &loc, 
                              const fixed range) const
 {
-  FLAT_GEOPOINT floc = task_projection.project(loc);
-  Waypoint bb_target; bb_target.FlatLocation = floc;
+  Waypoint bb_target(loc, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
 
   std::vector< Waypoint > vectors;
@@ -154,8 +152,7 @@ Waypoints::visit_within_range(const GEOPOINT &loc,
                               const fixed range,
                               WaypointVisitor& visitor) const
 {
-  FLAT_GEOPOINT floc = task_projection.project(loc);
-  Waypoint bb_target; bb_target.FlatLocation = floc;
+  Waypoint bb_target(loc, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
   
   waypoint_tree.visit_within_range(bb_target, mrange, visitor);
@@ -181,7 +178,7 @@ Waypoints::find_within_range_circle(const GEOPOINT &loc,
         count_intersections++;
 #endif
 
-    if ((*v).FlatLocation.distance_to(floc)> mrange) {
+    if ((*v).flat_distance_to(floc)> mrange) {
       vectors.erase(v);
     } else {
       v++;

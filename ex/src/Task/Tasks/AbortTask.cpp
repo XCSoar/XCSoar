@@ -118,15 +118,20 @@ AbortTask::task_full() const
 
 void
 AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
-                          std::vector < Waypoint > &approx_waypoints,
+                          WaypointVector &approx_waypoints,
                           const bool only_airfield)
 {  
   if (task_full()) {
     return;
   }
   std::priority_queue<WP_ALT, std::vector<WP_ALT>, Rank> q;
-  for (std::vector < Waypoint >::iterator v = approx_waypoints.begin();
+  for (WaypointVector::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ) {
+
+    if (only_airfield && !v->Flags.Airport) {
+      continue;
+    }
+
     UnorderedTaskPoint t(*v, task_behaviour);
     GlideResult r = TaskSolution::glide_solution_remaining(t, state, polar_safety);
     if (r.glide_reachable()) {
@@ -159,8 +164,10 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   const unsigned active_waypoint_on_entry = active_waypoint;
   activeTaskPoint = 0; // default to best result if can't find user-set one 
 
-  std::vector < Waypoint > approx_waypoints = 
+  WaypointVector approx_waypoints = 
     waypoints.find_within_range_circle(state.Location, abort_range(state));
+
+  remove_unlandable(approx_waypoints);
 
   if (!approx_waypoints.size()) {
     /**
@@ -210,4 +217,25 @@ AbortTask::Accept(TaskPointVisitor& visitor) const
          i= tps.begin(); i!= tps.end(); i++) {
     (*i)->Accept(visitor);
   }
+}
+
+void 
+AbortTask::remove_unlandable(WaypointVector &approx_waypoints)
+{
+  for (WaypointVector::iterator v = approx_waypoints.begin();
+       v!=approx_waypoints.end(); ) {
+
+    if (!v->is_landable()) {
+      approx_waypoints.erase(v);
+    } else {
+      v++;
+    }
+  }
+}
+
+void
+AbortTask::reset()
+{
+  clear();
+  UnorderedTask::reset();
 }
