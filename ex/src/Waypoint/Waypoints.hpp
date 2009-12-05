@@ -66,33 +66,62 @@ public:
  */
   Waypoints();
 
-  /**
-   * Type of KD-tree data structure for waypoint container
-   */
-  typedef KDTree::KDTree<2, 
-                         WaypointEnvelope, 
-                         WaypointEnvelope::kd_get_location
-                         > WaypointTree;
 
 /** 
- * Looks up nearest waypoint to the search location.
- * Performs search according to flat-earth internal representation,
- * so is approximate.
+ * Add waypoint to internal store.  Internal copy is made.
+ * optimise() must be called after inserting waypoints prior to
+ * performing any queries, but can be done in batches.
  * 
- * @param loc Location from which to search
- * 
- * @return Iterator to absolute nearest waypoint 
+ * @param wp Waypoint to add to internal store
  */
-  WaypointTree::const_iterator find_nearest(const GEOPOINT &loc) const;
+  void append(const Waypoint& wp);
 
 /** 
- * Look up waypoint by ID.
+ * Optimise the internal search tree after adding/removing elements.
+ * Also performs projection to flat earth for new elements.
+ * This updates the task_projection.
  * 
- * @param id Id of waypoint to find in internal tree
- * 
- * @return Iterator to matching waypoint (or end if not found)
+ * Note: currently this code doesn't check for task projections
+ * being modified from multiple calls to optimise() so it should
+ * only be called once (until this is fixed).
  */
-  WaypointTree::const_iterator find_id(const unsigned id) const;
+  void optimise();
+
+/** 
+ * Clear the waypoint store
+ * 
+ */
+  void clear();
+
+/** 
+ * Size of waypoints (in tree, not in temporary store) ---
+ * must call optimise() before this for it to be accurate.
+ * 
+ * @return Number of waypoints in tree
+ */
+  unsigned size() const;
+
+/** 
+ * Whether waypoints store is empty
+ * 
+ * @return True if no waypoints stored
+ */
+  bool empty() const;
+
+/** 
+ * Find first home waypoint
+ * 
+ * @return Pointer to waypoint if found (or NULL if not)
+ */
+  const Waypoint* find_home() const;
+
+/** 
+ * Set single home waypoint (clearing all others as home)
+ * 
+ * @param id Id of waypoint to set as home
+ * @return True on success (id was found)
+ */
+  bool set_home(const unsigned id);
 
 /** 
  * Look up waypoint by ID.
@@ -144,39 +173,33 @@ public:
   void visit_within_radius(const GEOPOINT &loc, const fixed range,
                            WaypointVisitor& visitor) const;
 
-/** 
- * Add waypoint to internal store.  Internal copy is made.
- * optimise() must be called after inserting waypoints prior to
- * performing any queries, but can be done in batches.
- * 
- * @param wp Waypoint to add to internal store
- */
-  void insert(const Waypoint& wp);
+  /**
+   * Type of KD-tree data structure for waypoint container
+   */
+  typedef KDTree::KDTree<2, 
+                         WaypointEnvelope, 
+                         WaypointEnvelope::kd_get_location
+                         > WaypointTree;
 
 /** 
- * Optimise the internal search tree after adding/removing elements.
- * Also performs projection to flat earth for new elements.
- * This updates the task_projection.
+ * Looks up nearest waypoint to the search location.
+ * Performs search according to flat-earth internal representation,
+ * so is approximate.
  * 
- * Note: currently this code doesn't check for task projections
- * being modified from multiple calls to optimise() so it should
- * only be called once (until this is fixed).
+ * @param loc Location from which to search
+ * 
+ * @return Iterator to absolute nearest waypoint 
  */
-  void optimise();
+  WaypointTree::const_iterator find_nearest(const GEOPOINT &loc) const;
 
 /** 
- * Clear the waypoint store
+ * Look up waypoint by ID.
  * 
- */
-  void clear();
-
-/** 
- * Size of waypoints (in tree, not in temporary store) ---
- * must call optimise() before this for it to be accurate.
+ * @param id Id of waypoint to find in internal tree
  * 
- * @return Number of waypoints in tree
+ * @return Iterator to matching waypoint (or end if not found)
  */
-  unsigned size() const;
+  WaypointTree::const_iterator find_id(const unsigned id) const;
 
 /** 
  * Access first waypoint in store, for use in iterators.

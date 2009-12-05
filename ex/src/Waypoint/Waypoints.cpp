@@ -87,9 +87,9 @@ Waypoints::optimise()
 }
 
 void
-Waypoints::insert(const Waypoint& wp)
+Waypoints::append(const Waypoint& wp)
 {
-  if (tmp_wps.empty() && waypoint_tree.empty()) {
+  if (empty()) {
     task_projection.reset(wp.Location);
   }
   task_projection.scan_location(wp.Location);
@@ -146,13 +146,40 @@ Waypoints::lookup_location(const GEOPOINT &loc) const
 }
 
 
+const Waypoint* 
+Waypoints::find_home() const
+{
+  WaypointTree::const_iterator found = waypoint_tree.begin();
+  while (found != waypoint_tree.end()) {
+    const Waypoint* wp = &(*found).get_waypoint();
+    if (wp->Flags.Home) {
+      return wp;
+    }
+    found++;
+  }
+  return NULL;
+}
+
+bool
+Waypoints::set_home(const unsigned id) 
+{
+  bool ok = false;
+  WaypointTree::iterator found = waypoint_tree.begin();
+  while (found != waypoint_tree.end()) {
+    const WaypointEnvelope* wp = &(*found);
+    wp->set_home(wp->get_waypoint().id == id);
+    found++;
+  }
+  return ok;
+}
+
 const Waypoint*
 Waypoints::lookup_id(const unsigned id) const
 {
   WaypointTree::const_iterator found = waypoint_tree.begin();
   while (found != waypoint_tree.end()) {
-    if ((*found).get_waypoint().id == id) {
-      return &(*found).get_waypoint();
+    if (found->get_waypoint().id == id) {
+      return &found->get_waypoint();
     }
     found++;
   }
@@ -264,4 +291,10 @@ unsigned
 Waypoints::size() const
 {
   return waypoint_tree.size();
+}
+
+bool
+Waypoints::empty() const
+{
+  return waypoint_tree.empty() && tmp_wps.empty();
 }

@@ -50,10 +50,36 @@
  *
  */
 struct AIRCRAFT_STATE {
-  GEOPOINT Location; /**< location of aircraft */
+  //##########
+  //   Time
+  //##########
+
   fixed Time; /**< global time (seconds UTC) */
-  fixed Speed; /**< track speed (m/s) */
+
+  //################
+  //   Navigation
+  //################
+
+  GEOPOINT Location; /**< location of aircraft */
+  fixed TrackBearing; /**< track angle in degrees true */
+
+  //############
+  //   Speeds
+  //############
+
+  /**
+   * Speed over ground in m/s
+   * @see TrueAirspeed
+   * @see IndicatedAirspeed
+   */
+  fixed Speed; 
+
+  //##############
+  //   Altitude
+  //##############
+
   fixed Altitude; /**< GPS altitude AMSL (m) */
+
   fixed WindSpeed; /**< Wind speed (m/s); must be positive */
   fixed WindDirection; /**< Wind direction (degrees) */
 

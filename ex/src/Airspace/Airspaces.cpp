@@ -199,7 +199,7 @@ Airspaces::insert(AbstractAirspace* asp)
     // nothing to add
     return;
   }
-  if (tmp_as.empty() && airspace_tree.empty()) {
+  if (empty()) {
     task_projection.reset(asp->get_center());
   }
   task_projection.scan_location(asp->get_center());
@@ -234,4 +234,16 @@ Airspaces::clear()
 
   // then delete the tree
   airspace_tree.clear();
+}
+
+unsigned
+Airspaces::size() const
+{
+  return airspace_tree.size();
+}
+
+bool
+Airspaces::empty() const
+{
+  return airspace_tree.empty() && tmp_as.empty();
 }

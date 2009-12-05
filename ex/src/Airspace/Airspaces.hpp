@@ -72,26 +72,40 @@ public:
   ~Airspaces();
 
   /** 
-   * Search for airspaces nearest to the aircraft.
-   * Note: altitude not used yet
+   * Add airspace to the internal airspace tree.  
+   * The airspace is not copied; ownership is transferred to this class.
    * 
-   * @param state state of aircraft, from which to search
-   * 
-   * @return single nearest airspace if external, or all airspaces enclosing the aircraft
+   * @param asp New airspace to be added.
    */
-  const std::vector<Airspace> scan_nearest(const AIRCRAFT_STATE &state) const;
+  void insert(AbstractAirspace* asp);
 
   /** 
-   * Search for airspaces within range of the aircraft.
-   * Note: altitude not used yet
-   * 
-   * @param state state of aircraft, from which to search
-   * @param range distance in meters of search radius
-   * 
-   * @return vector of airspaces intersecting search radius
+   * Re-organise the internal airspace tree after inserting/deleting.
+   * Should be called after inserting/deleting airspaces prior to performing
+   * any searches, but can be done once after a batch insert/delete.
    */
-  const std::vector<Airspace> scan_range(const AIRCRAFT_STATE &state, 
-                                         const fixed range) const;
+  void optimise();
+
+/** 
+ * Clear the airspace store
+ * 
+ */
+  void clear();
+
+/** 
+ * Size of airspace (in tree, not in temporary store) ---
+ * must call optimise() before this for it to be accurate.
+ * 
+ * @return Number of airspaces in tree
+ */
+  unsigned size() const;
+
+/** 
+ * Whether airspace store is empty
+ * 
+ * @return True if no airspace stored
+ */
+  bool empty() const;
 
   /** 
    * Call visitor class on airspaces within range of location.
@@ -120,6 +134,28 @@ public:
                           AirspaceVisitor& visitor) const;
 
   /** 
+   * Search for airspaces nearest to the aircraft.
+   * Note: altitude not used yet
+   * 
+   * @param state state of aircraft, from which to search
+   * 
+   * @return single nearest airspace if external, or all airspaces enclosing the aircraft
+   */
+  const std::vector<Airspace> scan_nearest(const AIRCRAFT_STATE &state) const;
+
+  /** 
+   * Search for airspaces within range of the aircraft.
+   * Note: altitude not used yet
+   * 
+   * @param state state of aircraft, from which to search
+   * @param range distance in meters of search radius
+   * 
+   * @return vector of airspaces intersecting search radius
+   */
+  const std::vector<Airspace> scan_range(const AIRCRAFT_STATE &state, 
+                                         const fixed range) const;
+
+  /** 
    * Find airspaces the aircraft is inside.
    * Note: altitude not used yet
    * 
@@ -128,27 +164,6 @@ public:
    * @return airspaces enclosing the aircraft
    */
   std::vector<Airspace> find_inside(const AIRCRAFT_STATE &state) const;
-
-  /** 
-   * Re-organise the internal airspace tree after inserting/deleting.
-   * Should be called after inserting/deleting airspaces prior to performing
-   * any searches, but can be done once after a batch insert/delete.
-   */
-  void optimise();
-
-  /** 
-   * Add airspace to the internal airspace tree.  
-   * The airspace is not copied; ownership is transferred to this class.
-   * 
-   * @param asp New airspace to be added.
-   */
-  void insert(AbstractAirspace* asp);
-
-/** 
- * Clear the airspace store
- * 
- */
-  void clear();
 
 private:
 
