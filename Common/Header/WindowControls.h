@@ -215,7 +215,6 @@ public:
 #endif /* !ENABLE_SDL */
 
   virtual ContainerWindow &GetClientAreaWindow(void) { return *this; }
-  Canvas &GetCanvas(void) { return get_canvas(); }
   WindowControl *GetOwner(void) { return mOwner; }
 
   int GetTag(void) { return mTag; }

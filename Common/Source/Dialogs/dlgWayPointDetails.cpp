@@ -576,8 +576,8 @@ void dlgWayPointDetailsShowModal(void){
 
 #ifndef CECORE
 #ifndef GNAV
-  hasimage1 = jpgimage1.Load(wImage->GetCanvas() ,path_modis );
-  hasimage2 = jpgimage2.Load(wImage->GetCanvas() ,path_google );
+  hasimage1 = jpgimage1.Load(wImage->get_canvas(), path_modis );
+  hasimage2 = jpgimage2.Load(wImage->get_canvas(), path_google );
 #endif
 #endif
 
