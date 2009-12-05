@@ -71,7 +71,6 @@ GlideComputer::ResetFlight(const bool full)
   GlideComputerStats::ResetFlight(full);
 }
 
-
 void
 GlideComputer::StartTask(const bool do_advance, const bool do_announce)
 {
@@ -261,11 +260,12 @@ GlideComputer::CalculateOwnTeamCode()
   double bearing = 0;
   TCHAR code[10];
 
-  LL_to_BearRange(way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Latitude,
-                  way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Longitude,
-                  Basic().Location.Latitude,
-                  Basic().Location.Longitude,
-                  &bearing, &distance);
+  LL_to_BearRange(
+      way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Latitude,
+      way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Longitude,
+      Basic().Location.Latitude,
+      Basic().Location.Longitude,
+      &bearing, &distance);
 
   GetTeamCode(code, bearing, distance);
 
@@ -288,17 +288,16 @@ GlideComputer::CalculateTeammateBearingRange()
   double mateDistance = 0;
   double mateBearing = 0;
 
-  LL_to_BearRange(way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Latitude,
-                  way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Longitude,
-                  Basic().Location.Latitude,
-                  Basic().Location.Longitude,
-                  &ownBearing, &ownDistance);
+  LL_to_BearRange(
+      way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Latitude,
+      way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Longitude,
+      Basic().Location.Latitude,
+      Basic().Location.Longitude,
+      &ownBearing, &ownDistance);
 
   if (SettingsComputer().TeammateCodeValid) {
-
     CalcTeammateBearingRange(ownBearing, ownDistance,
-			     Calculated().TeammateCode,
-			     &mateBearing, &mateDistance);
+        Calculated().TeammateCode, &mateBearing, &mateDistance);
 
     // TODO code ....change the result of CalcTeammateBearingRange to do this !
     if (mateBearing > 180) {
@@ -310,13 +309,11 @@ GlideComputer::CalculateTeammateBearingRange()
     SetCalculated().TeammateBearing = mateBearing;
     SetCalculated().TeammateRange = mateDistance;
 
-    FindLatitudeLongitude(Basic().Location,
-			  mateBearing,
-			  mateDistance,
-			  &SetCalculated().TeammateLocation);
+    FindLatitudeLongitude(Basic().Location, mateBearing, mateDistance,
+        &SetCalculated().TeammateLocation);
 
     if (mateDistance < 100 && InTeamSector == false) {
-      InTeamSector=true;
+      InTeamSector = true;
       InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
     } else if (mateDistance > 300) {
       InTeamSector = false;

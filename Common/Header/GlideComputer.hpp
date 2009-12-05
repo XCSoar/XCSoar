@@ -50,10 +50,8 @@ Copyright_License {
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
 
-class GlideComputer: public
-  GlideComputerAirData,
-  GlideComputerTask,
-  GlideComputerStats
+class GlideComputer:
+    public GlideComputerAirData, GlideComputerTask, GlideComputerStats
 {
 public:
   GlideComputer();
@@ -70,15 +68,14 @@ public:
     GlideComputerTask::ResetEnter();
   }
 
-  // TODO: make these consts
-  SnailTrail &GetSnailTrail() { return snail_trail; };
-  OLCOptimizer &GetOLC() { return olc; };
-  FlightStatistics &GetFlightStats() { return flightstats; };
+  // TODO: make these const
+  SnailTrail &GetSnailTrail() { return snail_trail; }
+  OLCOptimizer &GetOLC() { return olc; }
+  FlightStatistics &GetFlightStats() { return flightstats; }
 
 protected:
   VegaVoice    vegavoice;
-  virtual void StartTask(const bool do_advance,
-			 const bool do_announce);
+  virtual void StartTask(const bool do_advance, const bool do_announce);
   void DoLogging();
   virtual void SaveTaskSpeed(double val);
   virtual void SetLegStart();
@@ -95,6 +92,6 @@ private:
 };
 
 double FAIFinishHeight(const SETTINGS_COMPUTER &settings,
-		       const DERIVED_INFO& Calculated, int wp);
+    const DERIVED_INFO& Calculated, int wp);
 
 #endif
