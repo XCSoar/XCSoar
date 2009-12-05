@@ -202,23 +202,25 @@ CalcTeamMatePos(double ownBear, double ownDist, double mateBear,
 	double range = sqrt((Xs * Xs) + (Ys * Ys));
 	*distToMate = range;
 
-	// Calculate bearing
-	double bearing;
+	// Trivial solutions for bearing calculation
+	if (Xs == 0) {
+    if (Ys >= 0)
+      *bearToMate = 180;
+    else
+      *bearToMate = 0;
 
-	if (Xs != 0) {
-		bearing = (atan(Ys / Xs) * toDeg);
-    if (Xs < 0)
-      bearing = bearing + 180;
-
-    *bearToMate = 90.0 - bearing;
-    if (*bearToMate < 0)
-      *bearToMate += 360;
-	} else {
-		if (Ys >= 0)
-			*bearToMate = 180;
-		else
-			*bearToMate = 0;
+	  return;
 	}
+
+  // Calculate bearing
+  double bearing;
+	bearing = atan(Ys / Xs) * toDeg;
+	if (Xs < 0)
+	  bearing = bearing + 180;
+
+	*bearToMate = 90.0 - bearing;
+	if (*bearToMate < 0)
+	  *bearToMate += 360;
 }
 
 void
