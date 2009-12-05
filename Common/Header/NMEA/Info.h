@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_NMEA_INFO_H
 
 #include "Navigation/GeoPoint.hpp"
+#include "Navigation/Aircraft.hpp"
 #include "FLARM/Traffic.h"
 #include "Sizes.h"
 
@@ -64,7 +65,7 @@ struct SWITCH_INFO
 /**
  * A struct that holds all the parsed data read from the connected devices
  */
-struct NMEA_INFO
+struct NMEA_INFO: public AIRCRAFT_STATE
 {
   //############
   //   Status
@@ -91,29 +92,9 @@ struct NMEA_INFO
   /** Is the GPS unit moving? (Speed > 2.0) */
   bool MovementDetected;
 
-  //################
-  //   Navigation
-  //################
-
-  /** Current Location (lat/lon) */
-  GEOPOINT Location;
-
-  /** Track angle in degrees */
-  double TrackBearing;
-
-  /** not in use(?) */
-  double CrossTrackError;
-
   //############
   //   Speeds
   //############
-
-  /**
-   * Speed over ground in m/s
-   * @see TrueAirspeed
-   * @see IndicatedAirspeed
-   */
-  double Speed;
 
   /**
    * Is air speed information available?
@@ -138,9 +119,6 @@ struct NMEA_INFO
   //   Altitude
   //##############
 
-  /** GPS Altitude */
-  double Altitude;
-
   /**
    * Is a barometric altitude available?
    * @see BaroAltitude
@@ -151,14 +129,12 @@ struct NMEA_INFO
    * @see BaroAltitudeAvailable
    * @see Altitude
    */
-  double BaroAltitude;
+  fixed BaroAltitude;
 
   //##########
   //   Time
   //##########
 
-  /** GPS time */
-  double Time;
   /** GPS time (hours) */
   int Hour;
   /** GPS time (minutes) */
@@ -334,7 +310,7 @@ struct NMEA_INFO
    * Returns the barometric altitude, and falls back to the GPS
    * altitude.
    */
-  double GetAnyAltitude() const {
+  fixed GetAnyAltitude() const {
     return BaroAltitudeAvailable
       ? BaroAltitude
       : Altitude;

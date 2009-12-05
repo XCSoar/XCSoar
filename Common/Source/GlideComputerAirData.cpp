@@ -316,10 +316,10 @@ void GlideComputerAirData::Average30s()
     }
 
     if (!Basic().VarioAvailable) {
-      index = ((long)Basic().Time - 1)%30;
+      index = (Basic().Time.as_long() - 1)%30;
       Gain = Altitude[index];
 
-      index = ((long)Basic().Time)%30;
+      index = Basic().Time.as_long()%30;
       Gain = Gain - Altitude[index];
 
       Vave = Gain/30;

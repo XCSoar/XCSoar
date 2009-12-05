@@ -73,13 +73,13 @@ public:
   void FLARM_RefreshSlots();
   void FLARM_ScanTraffic();
   void SetSystemTime();
-  void SetBaroAlt(double x) {
+  void SetBaroAlt(fixed x) {
     SetBasic().BaroAltitude = x;
   }
   void SetNAVWarning(bool val);
-  void SetTrackBearing(double val);
-  void SetSpeed(double val);
-  void SetAltitude(double alt);
+  void SetTrackBearing(fixed val);
+  void SetSpeed(fixed val);
+  void SetAltitude(fixed alt);
 };
 
 extern DeviceBlackboard device_blackboard;

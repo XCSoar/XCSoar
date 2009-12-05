@@ -138,11 +138,12 @@ ActionInterface::on_key_TeamCode(int UpDown)
 void
 ActionInterface::on_key_Altitude(int UpDown)
 {
+  fixed fixed_step = 100/ALTITUDEMODIFY;
   if (is_simulator()) {
     if(UpDown==1) {
-      device_blackboard.SetAltitude(Basic().Altitude+100/ALTITUDEMODIFY);
+      device_blackboard.SetAltitude(Basic().Altitude+fixed_step);
     } else if (UpDown==-1) {
-      device_blackboard.SetAltitude(m_max(0,Basic().Altitude-100/ALTITUDEMODIFY));
+      device_blackboard.SetAltitude(m_max(fixed_zero,Basic().Altitude-fixed_step));
     } else if (UpDown==-2) {
       on_key_Direction(-1);
     } else if (UpDown==2) {
@@ -218,11 +219,13 @@ ActionInterface::on_key_BestAlternate(int UpDown)
 void
 ActionInterface::on_key_Speed(int UpDown)
 {
+  fixed fixed_step = 10/SPEEDMODIFY;
+
   if (is_simulator()) {
     if(UpDown==1)
-      device_blackboard.SetSpeed(Basic().Speed+10/SPEEDMODIFY);
+      device_blackboard.SetSpeed(Basic().Speed+fixed_step);
     else if (UpDown==-1) {
-      device_blackboard.SetSpeed(m_max(0,Basic().Speed-10/SPEEDMODIFY));
+      device_blackboard.SetSpeed(m_max(fixed_zero,Basic().Speed-fixed_step));
     } else if (UpDown==-2) {
       on_key_Direction(-1);
     } else if (UpDown==2) {

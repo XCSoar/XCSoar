@@ -208,10 +208,10 @@ DeviceBlackboard::ProcessSimulation()
     SetNAVWarning(false);
     FindLatitudeLongitude(Basic().Location,
         Basic().TrackBearing,
-        Basic().Speed*1.0,
+        Basic().Speed,
         &SetBasic().Location);
-    SetBasic().Time+= 1.0;
-    long tsec = (long)Basic().Time;
+    SetBasic().Time+= fixed_one;
+    long tsec = Basic().Time.as_long();
     SetBasic().Hour = tsec/3600;
     SetBasic().Minute = (tsec-Basic().Hour*3600)/60;
     SetBasic().Second = (tsec-Basic().Hour*3600-Basic().Minute*60);
@@ -232,7 +232,7 @@ DeviceBlackboard::ProcessSimulation()
  * @param val New speed
  */
 void
-DeviceBlackboard::SetSpeed(double val)
+DeviceBlackboard::SetSpeed(fixed val)
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().Speed = val;
@@ -246,7 +246,7 @@ DeviceBlackboard::SetSpeed(double val)
  * @param val New TrackBearing
  */
 void
-DeviceBlackboard::SetTrackBearing(double val)
+DeviceBlackboard::SetTrackBearing(fixed val)
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().TrackBearing = AngleLimit360(val);
@@ -259,7 +259,7 @@ DeviceBlackboard::SetTrackBearing(double val)
  * @param val New altitude
  */
 void
-DeviceBlackboard::SetAltitude(double val)
+DeviceBlackboard::SetAltitude(fixed val)
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().Altitude = val;
