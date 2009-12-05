@@ -50,6 +50,12 @@ int GetValueFromTeamCode(const TCHAR *code, int maxCount);
 
 #define TEAMCODE_COMBINAIONS 1296
 
+/**
+ * Calculates the teamcode of the given bearing and distance
+ * @param code The teamcode (pointer)
+ * @param bearing Bearing to the reference waypoint
+ * @param range Distance to the reference waypoint
+ */
 void
 GetTeamCode(TCHAR *code, double bearing, double range)
 {
@@ -62,10 +68,17 @@ GetTeamCode(TCHAR *code, double bearing, double range)
 	// if (bearing > 360)
 	//	bearing -= 360;
 
+	// Calculate bearing part of the teamcode
 	ConvertHeadingToTeamCode(bearing, code);
+	// Calculate distance part of the teamcode
 	NumberToTeamCode(range / 100.0, &code[2], 0);
 }
 
+/**
+ * Converts a given bearing to the bearing part of the teamcode
+ * @param heading Bearing to the reference waypoint
+ * @param code The teamcode (pointer)
+ */
 void
 ConvertHeadingToTeamCode(double heading, TCHAR *code)
 {
