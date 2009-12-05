@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "TeamCodeCalculation.h"
+#include "Math/Constants.h"
 
 #include <math.h>
 #include <string.h>
@@ -48,7 +49,6 @@ double GetRange(const TCHAR *code);
 int GetValueFromTeamCode(const TCHAR *code, int maxCount);
 
 #define TEAMCODE_COMBINAIONS 1296
-#define DEG_TO_RAD .0174532925199432958
 
 void
 GetTeamCode(TCHAR *code, double bearing, double range)
@@ -63,7 +63,7 @@ GetTeamCode(TCHAR *code, double bearing, double range)
 	//	bearing -= 360;
 
 	ConvertHeadingToTeamCode(bearing, code);
-	NumberToTeamCode(range/100.0, &code[2],0);
+	NumberToTeamCode(range / 100.0, &code[2], 0);
 }
 
 void
@@ -85,8 +85,7 @@ NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 	int maxCif = 0;
 	int curCif = 0;
 
-	if (minCiffers > 0)
-	{
+	if (minCiffers > 0)	{
 		maxCif = minCiffers - 1;
 		curCif = maxCif;
 	}
@@ -187,14 +186,9 @@ void
 CalcTeamMatePos(double ownBear, double ownDist, double mateBear,
     double mateDist, double *bearToMate, double *distToMate)
 {
-	// define constants
-	double PI = 3.14159265358979;
-	double toRad = PI / 180.0;
-	double toDeg = 180.0 / PI;
-
-	// convert bearings to radians
-	ownBear = ownBear * toRad;
-	mateBear = mateBear * toRad;
+	// Convert bearings to radians
+	ownBear = ownBear * DEG_TO_RAD;
+	mateBear = mateBear * DEG_TO_RAD;
 
 	// Calculate range
 	double Xs = ownDist * sin(ownBear) - mateDist * sin(mateBear);
@@ -214,7 +208,7 @@ CalcTeamMatePos(double ownBear, double ownDist, double mateBear,
 
   // Calculate bearing
   double bearing;
-	bearing = atan(Ys / Xs) * toDeg;
+	bearing = atan(Ys / Xs) * RAD_TO_DEG;
 	if (Xs < 0)
 	  bearing = bearing + 180;
 
