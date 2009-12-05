@@ -700,7 +700,6 @@ WndForm::WndForm(ContainerWindow *Parent,
   mClientWindow = new WindowControl(this, this,
                                     TEXT(""), 20, 20, Width, Height);
   mClientWindow->SetBackColor(GetBackColor());
-  mClientWindow->SetCanFocus(false);
 
   mClientRect.top=0;
   mClientRect.left=0;
@@ -1115,10 +1114,11 @@ WndButton::WndButton(WindowControl *Parent,
                      void (*Function)(WindowControl *Sender))
       :WindowControl(Parent, NULL /*Parent->GetHandle()*/, Name, X, Y, Width, Height)
 {
+  SetCanFocus(true);
+
   mOnClickNotify = Function;
   mDown = false;
   mDefault = false;
-  mCanFocus = true;
 
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
@@ -1423,6 +1423,8 @@ WndProperty::WndProperty(WindowControl *Parent,
                  Name, X, Y, Width, Height),
   edit(this)
 {
+  SetCanFocus(true);
+
   mOnClickUpNotify = NULL;
   mOnClickDownNotify = NULL;
   mOnDataChangeNotify = DataChangeNotify;
@@ -1823,7 +1825,6 @@ DataField *WndProperty::SetDataField(DataField *Value){
     if (mDialogStyle)
     {
       this->SetButtonSize(0);
-      this->SetCanFocus(true);
     }
     else
     {
