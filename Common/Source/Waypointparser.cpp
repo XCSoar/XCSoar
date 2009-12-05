@@ -68,7 +68,7 @@ Copyright_License {
 
 #include "wcecompat/ts_string.h"
 
-extern int WaypointsOutOfRange;
+int WaypointsOutOfRange = 1; // include all
 
 static int globalFileNum = 0;
 
@@ -346,8 +346,6 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
 
   ++input;
 
-  endptr = _tcschr(input, _T(','));
-
   {
     tstring text = input;
     size_t end = text.find_first_of(TEXT(",")); 
@@ -357,6 +355,7 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
     way_point.Name = text.substr(0, end);
   }
 
+  endptr = _tcschr(input, _T(','));
   if (endptr != NULL) {
     input = endptr + 1;
     endptr = _tcschr(input, '*');
@@ -366,11 +365,11 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
     } else {
       way_point.Zoom = 0;
     }
-    tstring text = input;
     if (endptr>input) {
+      tstring text = input;
       way_point.Comment = text.substr(0,endptr-input);
     } else {
-      way_point.Comment = text;
+      way_point.Comment = input;
     }
   } else {
     way_point.Comment = TEXT("");
@@ -383,44 +382,6 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
   return true;
 }
 
-/*
-void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber)
-{
-  int index = 0;
-  int dest_index = 0;
-  int CurrentFieldNumber = 0;
-  int StringLength        = 0;
-
-  StringLength = _tcslen(Source);
-
-  while( (CurrentFieldNumber < DesiredFieldNumber) && (index < StringLength) )
-    {
-      if ( Source[ index ] == ',' )
-        {
-          CurrentFieldNumber++;
-        }
-      index++;
-    }
-
-  if ( CurrentFieldNumber == DesiredFieldNumber )
-    {
-      while( (index < StringLength)    &&
-             (Source[ index ] != ',') &&
-             (Source[ index ] != 0x00) )
-        {
-          Destination[dest_index] = Source[ index ];
-          index++; dest_index++;
-        }
-      Destination[dest_index] = '\0';
-    }
-  // strip trailing spaces
-  for (int i=dest_index-1; i>0; i--) {
-    if (Destination[i]==' ') {
-      Destination[i]= '\0';
-    } else return;
-  }
-}
-*/
 
 static bool
 ParseAngle(const TCHAR *input, fixed *value_r, TCHAR **endptr_r)

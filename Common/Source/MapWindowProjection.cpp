@@ -45,6 +45,7 @@ Copyright_License {
 #include "options.h" /* for IBLSCALE() */
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
+#include "Waypoint/Waypoint.hpp"
 
 #include <stdlib.h>
 #include <math.h>
@@ -74,14 +75,12 @@ MapWindowProjection::InitialiseScaleList
   _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
 }
 
-#ifdef OLD_TASK
 bool
-MapWindowProjection::WaypointInScaleFilter(const WAYPOINT &way_point) const
+MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 {
   return ((way_point.Zoom >= MapScale*10) || (way_point.Zoom == 0))
     && (MapScale <= 10);
 }
-#endif
 
 
 bool MapWindowProjection::PointInRect(const double &x,

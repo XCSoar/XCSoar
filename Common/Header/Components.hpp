@@ -47,8 +47,10 @@ class GlideComputer;
 class DrawThread;
 class CalculationThread;
 class InstrumentThread;
+class Waypoints;
 
 // other global objects
+extern Waypoints way_points;
 extern Marks *marks;
 extern TopologyStore *topology;
 extern RasterTerrain terrain;

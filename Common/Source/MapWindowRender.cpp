@@ -216,9 +216,8 @@ void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
     else
       DrawTask(canvas, rc);
   }
-
-  DrawWaypoints(canvas);
 #endif
+  DrawWaypoints(canvas);
 
   if (marks != NULL)
     marks->Draw(canvas, *this, rc);

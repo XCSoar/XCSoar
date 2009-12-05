@@ -64,7 +64,6 @@ const TCHAR szRegistryAlternate1[] = _T("");
 const TCHAR szRegistryAlternate2[] = _T("");
 const TCHAR szRegistryHomeWaypoint[] = _T("");
 const TCHAR szRegistryTeamcodeRefWaypoint[] = _T("");
-int WaypointsOutOfRange;
 DeviceBlackboard device_blackboard;
 
 int WINAPI

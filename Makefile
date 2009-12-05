@@ -113,6 +113,7 @@ DLGS	:=\
 	$(SRC)/Dialogs/dlgVegaDemo.o \
 	$(SRC)/Dialogs/dlgVoice.o \
 	$(SRC)/Dialogs/dlgWeather.o \
+	$(SRC)/Dialogs/dlgWaypointOutOfTerrain.o \
 	$(SRC)/Dialogs/dlgWindSettings.o \
 	$(SRC)/Dialogs/dlgFontEdit.o \
 
@@ -156,6 +157,7 @@ OBJS	:=\
 	$(SRC)/SnailTrail.o 		\
 	$(SRC)/TeamCodeCalculation.o 	\
 	$(SRC)/ThermalLocator.o 	\
+	$(SRC)/Waypointparser.o 	\
 	$(SRC)/windanalyser.o 		\
 	$(SRC)/windmeasurementlist.o 	\
 	$(SRC)/windstore.o 		\

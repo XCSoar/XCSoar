@@ -38,10 +38,11 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Screen/Graphics.hpp"
+#include "Waypoint/Waypoints.hpp"
+#include "Waypoint/WaypointVisitor.hpp"
 
 #include <assert.h>
 
-#ifdef OLD_TASK
 //FIX
 void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 			 TextInBoxMode_t Mode, int AltArivalAGL,
@@ -51,161 +52,154 @@ void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 void MapWaypointLabelClear();
 
 
-void MapWindow::DrawWaypoints(Canvas &canvas)
-{
-  if (way_points == NULL)
-    return;
+class WaypointVisitorMap: public WaypointVisitor {
+public:
+  WaypointVisitorMap(MapWindow &_map,
+                     Canvas& _canvas):map(_map),
+                                     canvas(_canvas) 
+    {
+      // if pan mode, show full names
+      pDisplayTextType = map.SettingsMap().DisplayTextType;
+      if (map.SettingsMap().EnablePan) {
+        pDisplayTextType = DISPLAYNAME;
+      }
+      _tcscpy(sAltUnit, Units::GetAltitudeName());
+    };
 
-  TCHAR Buffer[32];
-  TCHAR Buffer2[32];
-  TCHAR sAltUnit[4];
-  TextInBoxMode_t TextDisplayMode;
+  void DrawWaypoint(const Waypoint& way_point, bool intask=false) {
 
-  // if pan mode, show full names
-  int pDisplayTextType = SettingsMap().DisplayTextType;
-  if (SettingsMap().EnablePan) {
-    pDisplayTextType = DISPLAYNAME;
-  }
+    POINT sc;
+    if (map.LonLat2ScreenIfVisible(way_point.Location, &sc)) {
 
-  _tcscpy(sAltUnit, Units::GetAltitudeName());
-
-  MapWaypointLabelClear();
-
-  for (unsigned i = 0; way_points->verify_index(i); ++i) {
-    const WAYPOINT &way_point = way_points->get(i);
-    const WPCALC &wpcalc = way_points->get_calc(i);
-
-    if (wpcalc.Visible) {
-
+      TextInBoxMode_t TextDisplayMode;
       bool irange = false;
       bool islandable = false;
-      bool dowrite;
+      bool dowrite = intask || (map.SettingsMap().DeclutterLabels<2);
 
-      dowrite = wpcalc.InTask;
-
+      bool reachable = true; // XXXXX TODO, calculate with glide polar!!
+      int AltArrivalAGL = 234*ALTITUDEMODIFY;
+      
       TextDisplayMode.AsInt = 0;
-
-      irange = WaypointInScaleFilter(way_point);
-
+      
+      irange = map.WaypointInScaleFilter(way_point);
+      
       Bitmap *wp_bmp = &MapGfx.hSmall;
-
-      if(GetMapScaleKM() > 20) {
+      
+      if (map.GetMapScaleKM() > 20) {
         wp_bmp = &MapGfx.hSmall;
-      } else if( ((way_point.Flags & AIRPORT) == AIRPORT)
-                 || ((way_point.Flags & LANDPOINT) == LANDPOINT) ) {
+      } else if(way_point.is_landable()) {
         islandable = true; // so we can always draw them
-        if (wpcalc.Reachable) {
-
+        if (reachable) {
+          
           TextDisplayMode.AsFlag.Reachable = 1;
-
-          if ((SettingsMap().DeclutterLabels<2)||wpcalc.InTask) {
-
-            if (wpcalc.InTask || (SettingsMap().DeclutterLabels<1)) {
+          
+          if ((map.SettingsMap().DeclutterLabels<2)||intask) {
+            
+            if (intask || (map.SettingsMap().DeclutterLabels<1)) {
               TextDisplayMode.AsFlag.Border = 1;
             }
             // show all reachable landing fields unless we want a decluttered
             // screen.
             dowrite = true;
           }
-
-          if ((way_point.Flags & AIRPORT) == AIRPORT)
+          
+          if (way_point.Flags.Airport)
             wp_bmp = &MapGfx.hBmpAirportReachable;
           else
             wp_bmp = &MapGfx.hBmpFieldReachable;
         } else {
-          if ((way_point.Flags & AIRPORT) == AIRPORT)
+          if (way_point.Flags.Airport)
             wp_bmp = &MapGfx.hBmpAirportUnReachable;
           else
             wp_bmp = &MapGfx.hBmpFieldUnReachable;
         }
       } else {
-        if (GetMapScaleKM()>4) {
+        if (map.GetMapScaleKM()>4) {
           wp_bmp = &MapGfx.hTurnPoint;
         } else {
           wp_bmp = &MapGfx.hSmall;
         }
       }
-
-      if (wpcalc.InTask) { // VNT
+      
+      if (intask) { // VNT
         TextDisplayMode.AsFlag.WhiteBold = 1;
       }
-
-      if(irange || wpcalc.InTask || islandable || dowrite) {
-        draw_masked_bitmap(canvas, *wp_bmp,
-                           wpcalc.Screen.x, wpcalc.Screen.y,
-                           20, 20);
+      
+      if(irange || intask || islandable || dowrite) {
+        map.draw_masked_bitmap(canvas, *wp_bmp,
+                               sc.x, sc.y,
+                               20, 20);
       }
-
-      if(wpcalc.InTask || irange || dowrite) {
+      
+      if (intask || irange || dowrite) {
+        
+        TCHAR Buffer[32];
+        TCHAR Buffer2[32];
+        
         bool draw_alt = TextDisplayMode.AsFlag.Reachable
-          && ((SettingsMap().DeclutterLabels<1) || wpcalc.InTask);
-
+          && ((map.SettingsMap().DeclutterLabels<1) || intask);
+        
         switch(pDisplayTextType) {
         case DISPLAYNAMEIFINTASK:
-          dowrite = wpcalc.InTask;
-          if (wpcalc.InTask) {
+          dowrite = intask;
+          if (intask) {
             if (draw_alt)
               _stprintf(Buffer, TEXT("%s:%d%s"),
-                        way_point.Name,
-                        (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
+                        way_point.Name.c_str(),
+                        AltArrivalAGL,
                         sAltUnit);
             else
-              _stprintf(Buffer, TEXT("%s"),way_point.Name);
+              _stprintf(Buffer, TEXT("%s"),way_point.Name.c_str());
           }
           break;
         case DISPLAYNAME:
-          dowrite = (SettingsMap().DeclutterLabels<2) || wpcalc.InTask;
           if (draw_alt)
             _stprintf(Buffer, TEXT("%s:%d%s"),
-                      way_point.Name,
-                      (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
+                      way_point.Name.c_str(),
+                      AltArrivalAGL,
                       sAltUnit);
           else
-            _stprintf(Buffer, TEXT("%s"),way_point.Name);
-
+            _stprintf(Buffer, TEXT("%s"),way_point.Name.c_str());
+          
           break;
         case DISPLAYNUMBER:
-          dowrite = (SettingsMap().DeclutterLabels<2) || wpcalc.InTask;
           if (draw_alt)
             _stprintf(Buffer, TEXT("%d:%d%s"),
-                      way_point.Number,
-                      (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
+                      way_point.id,
+                      AltArrivalAGL,
                       sAltUnit);
           else
-            _stprintf(Buffer, TEXT("%d"),way_point.Number);
-
+            _stprintf(Buffer, TEXT("%d"),way_point.id);
+          
           break;
         case DISPLAYFIRSTFIVE:
-          dowrite = (SettingsMap().DeclutterLabels<2) || wpcalc.InTask;
-          _tcsncpy(Buffer2, way_point.Name, 5);
+          _tcsncpy(Buffer2, way_point.Name.c_str(), 5);
           Buffer2[5] = '\0';
           if (draw_alt)
             _stprintf(Buffer, TEXT("%s:%d%s"),
                       Buffer2,
-                      (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
+                      AltArrivalAGL,
                       sAltUnit);
           else
             _stprintf(Buffer, TEXT("%s"),Buffer2);
-
+          
           break;
         case DISPLAYFIRSTTHREE:
-          dowrite = (SettingsMap().DeclutterLabels<2) || wpcalc.InTask;
-          _tcsncpy(Buffer2, way_point.Name, 3);
+          _tcsncpy(Buffer2, way_point.Name.c_str(), 3);
           Buffer2[3] = '\0';
           if (draw_alt)
             _stprintf(Buffer, TEXT("%s:%d%s"),
                       Buffer2,
-                      (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
+                      AltArrivalAGL,
                       sAltUnit);
           else
             _stprintf(Buffer, TEXT("%s"),Buffer2);
-
+          
           break;
         case DISPLAYNONE:
-          dowrite = (SettingsMap().DeclutterLabels<2) || wpcalc.InTask;
           if (draw_alt)
             _stprintf(Buffer, TEXT("%d%s"),
-                      (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
+                      AltArrivalAGL,
                       sAltUnit);
           else
             Buffer[0]= '\0';
@@ -218,59 +212,39 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
         if (dowrite) {
           MapWaypointLabelAdd(
             Buffer,
-            wpcalc.Screen.x + 5, wpcalc.Screen.y,
+            sc.x + 5, sc.y,
             TextDisplayMode,
-            (int)(wpcalc.AltArrivalAGL*ALTITUDEMODIFY),
-            wpcalc.InTask,false,false,false,
-            MapRect);
+            AltArrivalAGL,
+            intask,false,false,false,
+            map.GetMapRect());
         }
       }
     }
   }
+
+  void Visit(const Waypoint& way_point) {
+    DrawWaypoint(way_point);
+  }
+private:
+  MapWindow &map;
+  Canvas &canvas;
+  int pDisplayTextType;
+  TCHAR sAltUnit[4];
+};
+
+
+
+void MapWindow::DrawWaypoints(Canvas &canvas)
+{
+  if (way_points == NULL)
+    return;
+
+  MapWaypointLabelClear();
+
+  WaypointVisitorMap v(*this, canvas);
+  way_points->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
+
+  // OLD_TASK -> new TODO, also draw waypoints in task 
+
   MapWaypointLabelSortAndRender(canvas);
 }
-
-
-void MapWindow::ScanVisibilityWaypoints(rectObj *bounds_active) {
-  // received when the SetTopoBounds determines the visibility
-  // boundary has changed.
-  // This happens rarely, so it is good pre-filtering of what is visible.
-  // (saves from having to do it every screen redraw)
-
-  if (way_points == NULL)
-    return;
-
-  const rectObj bounds = *bounds_active;
-
-  for (unsigned i = 0; way_points->verify_index(i); ++i) {
-    const WAYPOINT &way_point = way_points->get(i);
-    WPCALC &wpcalc = way_points->set_calc(i);
-
-    // TODO code: optimise waypoint visibility
-    wpcalc.FarVisible =
-      way_point.Location.Longitude > bounds.minx &&
-      way_point.Location.Longitude < bounds.maxx &&
-      way_point.Location.Latitude > bounds.miny &&
-      way_point.Location.Latitude < bounds.maxy;
-  }
-}
-
-
-void MapWindow::CalculateScreenPositionsWaypoints() {
-  // only calculate screen coordinates for waypoints that are visible
-
-  if (way_points == NULL)
-    return;
-
-  for (unsigned i = 0; way_points->verify_index(i); ++i) {
-    WPCALC &wpcalc = way_points->set_calc(i);
-    if (wpcalc.InTask) {
-      LonLat2Screen(way_points->get(i).Location, wpcalc.Screen);
-    } else {
-      wpcalc.Visible = wpcalc.FarVisible &&
-        LonLat2ScreenIfVisible(way_points->get(i).Location, &wpcalc.Screen);
-    }
-  }
-}
-
-#endif

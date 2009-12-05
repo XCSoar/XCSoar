@@ -62,7 +62,7 @@ ReadWayPointFile(const TCHAR *path, Waypoints &way_points,
                  const RasterTerrain *terrain);
 
 void
-ReadWayPoints(Waypoints &way_points, const RasterTerrain *terrain);
+ReadWaypoints(Waypoints &way_points, const RasterTerrain *terrain);
 
 void
 SetHome(const Waypoints &way_points, const RasterTerrain *terrain,

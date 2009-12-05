@@ -83,6 +83,8 @@ Copyright_License {
 #include "options.h"
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
+#include "Waypoint/Waypoints.hpp"
+#include "Waypointparser.h"
 
 Marks *marks;
 TopologyStore *topology;
@@ -93,6 +95,7 @@ DrawThread *draw_thread;
 CalculationThread *calculation_thread;
 InstrumentThread *instrument_thread;
 Logger logger; // global
+Waypoints way_points;
 
 void XCSoarInterface::PreloadInitialisation(bool ask) {
   if (ask) {
@@ -286,24 +289,14 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   StartupStore(TEXT("OpenTerrain\n"));
   terrain.OpenTerrain();
 
-#ifdef OLD_TASK
   // Read the waypoint files
-  ReadWayPoints(way_points, &terrain);
-#endif
+  ReadWaypoints(way_points, &terrain);
 
   // Read and parse the airfield info file
   ReadAirfieldFile();
 
-#ifdef OLD_TASK
   // Set the home waypoint
   SetHome(way_points, &terrain, SetSettingsComputer(), false, true);
-#else
-  GEOPOINT loc;
-  if (terrain.GetTerrainCenter(&loc)) {
-    StartupStore(TEXT("Start at terrain center\n"));
-    device_blackboard.SetStartupLocation(loc, 0);
-  }
-#endif
 
   // ReSynchronise the blackboards here since SetHome touches them
   ReadBlackboardBasic(device_blackboard.Basic());
@@ -346,8 +339,8 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 
-#ifdef OLD_TASK
   main_window.map.set_way_points(&way_points);
+#ifdef OLD_TASK
   main_window.map.set_task(&task);
   main_window.map.set_airspaces(&airspace_database);
 #endif
@@ -496,9 +489,9 @@ void XCSoarInterface::Shutdown(void) {
   StartupStore(TEXT("Close airspace\n"));
   CloseAirspace(airspace_database);
 
+#endif
   StartupStore(TEXT("Close waypoints\n"));
   way_points.clear();
-#endif
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 

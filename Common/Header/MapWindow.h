@@ -69,6 +69,8 @@ class Marks;
 class SnailTrail;
 class OLCOptimizer;
 class GaugeCDI;
+class Waypoints;
+class Waypoint;
 
 class MapWindow
 : public MaskedPaintWindow,
@@ -78,6 +80,7 @@ class MapWindow
 {
   PeriodClock mouse_down_clock;
 
+  Waypoints *way_points;
   TopologyStore *topology;
   RasterTerrain *terrain;
   RasterWeather *weather;
@@ -108,11 +111,11 @@ class MapWindow
   void set(ContainerWindow &parent,
            const RECT _MapRectSmall, const RECT _MapRectBig);
 
-/*
-  void set_way_points(WayPointList *_way_points) {
+  void set_way_points(Waypoints *_way_points) {
     way_points = _way_points;
   }
 
+/*
   void set_task(TaskSafe *_task) {
     task = _task;
   }
@@ -198,14 +201,12 @@ class MapWindow
 
   // display element functions
 
-  void ScanVisibilityWaypoints(rectObj *bounds_active);
   void ScanVisibilityAirspace(rectObj *bounds_active);
   void ScanVisibility(rectObj *bounds_active);
 
   void CalculateScreenPositions(POINT Orig, RECT rc,
                                        POINT *Orig_Aircraft);
   void CalculateScreenPositionsTask();
-  void CalculateScreenPositionsWaypoints();
   void CalculateScreenPositionsGroundline();
   void CalculateScreenPositionsAirspace();
 
@@ -227,6 +228,7 @@ class MapWindow
   void DrawWindAtAircraft2(Canvas &canvas, POINT Orig, RECT rc);
   void DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer);
   void DrawWaypoints(Canvas &canvas);
+
   void DrawFlightMode(Canvas &canvas, const RECT rc);
   void DrawGPSStatus(Canvas &canvas, const RECT rc);
   double DrawTrail(Canvas &canvas, const SnailTrail &snail_trail);

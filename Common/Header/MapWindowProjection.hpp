@@ -49,7 +49,7 @@ Copyright_License {
 struct NMEA_INFO;
 struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
-struct WAYPOINT;
+class Waypoint;
 class Canvas;
 
 class MapWindowProjection {
@@ -95,7 +95,7 @@ class MapWindowProjection {
   }
 
   // used by waypoint nearest routine
-  bool WaypointInScaleFilter(const WAYPOINT &way_point) const;
+  bool WaypointInScaleFilter(const Waypoint &way_point) const;
 
   // drawing functions
   void DrawGreatCircle(Canvas &canvas,
@@ -117,6 +117,9 @@ class MapWindowProjection {
     return iround(_scale_meters_to_screen*x);
   }
 
+  bool LonLat2ScreenIfVisible(const GEOPOINT &loc,
+			      POINT *sc) const;
+
  protected:
   DisplayMode_t DisplayMode;
 
@@ -125,9 +128,6 @@ class MapWindowProjection {
   bool LonLatVisible(const GEOPOINT &loc) const;
   bool PointInRect(const double &x, const double &y,
 		   const rectObj &bounds) const;
-
-  bool LonLat2ScreenIfVisible(const GEOPOINT &loc,
-			      POINT *sc) const;
 
   rectObj   screenbounds_latlon;
   RECT   MapRectSmall;
