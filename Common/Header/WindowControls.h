@@ -166,7 +166,7 @@ public:
 
   bool SetFocused(bool Value);
   bool GetFocused(void);
-  Window *GetCanFocus();
+  virtual Window *GetCanFocus();
   bool SetCanFocus(bool Value);
 
   bool GetReadOnly(void) { return mReadOnly; }
@@ -557,8 +557,7 @@ public:
   ~WndProperty(void);
   virtual void Destroy(void);
 
-  virtual bool on_setfocus();
-  virtual bool on_killfocus();
+  virtual Window *GetCanFocus();
 
   void on_editor_setfocus();
   void on_editor_killfocus();
@@ -569,7 +568,6 @@ public:
 
   const Font *SetFont(const Font &font);
 
-  virtual bool on_key_down(unsigned key_code);
   bool OnEditKeyDown(unsigned key_code);
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);

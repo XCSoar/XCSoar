@@ -1391,6 +1391,7 @@ WndProperty::Editor::on_setfocus()
   KeyTimer(true, 0);
   EditWindow::on_setfocus();
   parent->on_editor_setfocus();
+  set_selection();
   return true;
 }
 
@@ -1491,7 +1492,15 @@ void WndProperty::Destroy(void){
 
 }
 
+Window *
+WndProperty::GetCanFocus()
+{
+  Window *w = WindowControl::GetCanFocus();
+  if (w == this)
+    return &edit;
 
+  return w;
+}
 
 void WndProperty::SetText(const TCHAR *Value){
   edit.set_text(Value);
@@ -1571,20 +1580,6 @@ bool WndProperty::SetReadOnly(bool Value){
   return res;
 }
 
-bool
-WndProperty::on_setfocus()
-{
-  edit.set_focus();
-  edit.set_selection();
-  return true;
-}
-
-bool
-WndProperty::on_killfocus()
-{
-  return true;
-}
-
 void
 WndProperty::on_editor_setfocus()
 {
@@ -1628,21 +1623,6 @@ WndProperty::OnEditKeyDown(unsigned key_code)
 }
 
 bool
-WndProperty::on_key_down(unsigned key_code)
-{
-  switch (key_code){
-    case VK_RIGHT:
-      IncValue();
-      return true;
-    case VK_LEFT:
-      DecValue();
-      return true;
-  }
-
-  return WindowControl::on_key_down(key_code);
-}
-
-bool
 WndProperty::on_mouse_down(int x, int y)
 {
   POINT Pos;
@@ -1663,7 +1643,7 @@ WndProperty::on_mouse_down(int x, int y)
 
     if (!GetFocused()){
       if (!GetReadOnly())
-        set_focus();
+        edit.set_focus();
       return true;
     }
 
