@@ -46,6 +46,12 @@ Copyright_License {
 #include <stdio.h>
 #include "Interface.hpp"
 
+/*
+JMW OLD_TASK 
+Note: it will be slow to look up waypoint each time it is rendered, 
+  we should keep a local copy
+*/
+
 const TCHAR *FormatterWaypoint::Render(int *color) {
 #ifdef OLD_TASK
   int index = task.getWaypointIndex();

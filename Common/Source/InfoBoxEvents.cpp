@@ -181,7 +181,7 @@ ActionInterface::on_key_Alternate1(int UpDown)
      task.setSelected(SettingsComputer().Alternate1);
 
      ScopePopupBlock block(main_window.popup);
-     PopupWaypointDetails();
+     dlgWayPointDetailsShowModal(way_point);
   }
 #endif
 }
@@ -196,7 +196,7 @@ ActionInterface::on_key_Alternate2(int UpDown)
      task.setSelected(SettingsComputer().Alternate2);
 
      ScopePopupBlock block(main_window.popup);
-     PopupWaypointDetails();
+     dlgWayPointDetailsShowModal(way_point);
   }
 #endif
 }
@@ -211,7 +211,7 @@ ActionInterface::on_key_BestAlternate(int UpDown)
      task.setSelected(Calculated().BestAlternate);
 
      ScopePopupBlock block(main_window.popup);
-     PopupWaypointDetails();
+     dlgWayPointDetailsShowModal(way_point);
   }
 #endif
 }
@@ -409,7 +409,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
     task.setSelected();
 
     ScopePopupBlock block(main_window.popup);
-    PopupWaypointDetails();
+    dlgWayPointDetailsShowModal(way_point);
   }
 #endif
 }

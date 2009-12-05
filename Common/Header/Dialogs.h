@@ -42,10 +42,10 @@ Copyright_License {
 #include <tchar.h>
 
 struct GEOPOINT;
-struct WAYPOINT;
 class ContainerWindow;
 class WndProperty;
-class WayPointList;
+class Waypoint;
+class Waypoints;
 class AirspaceDatabase;
 
 void StartupScreen();
@@ -77,13 +77,13 @@ void dlgSwitchesShowModal(void);
 void dlgTaskWaypointShowModal(int itemindex, int type, bool addonly=false);
 void dlgTaskOverviewShowModal(void);
 void dlgVoiceShowModal(void);
-void dlgWayPointDetailsShowModal(void);
+void dlgWayPointDetailsShowModal(const Waypoint& waypoint);
 void dlgTextEntryShowModal(TCHAR *text, int width=0);
 void dlgTeamCodeShowModal(void);
 void dlgStartPointShowModal(void);
 
 void
-dlgWaypointEditShowModal(WAYPOINT &way_point);
+dlgWaypointEditShowModal(Waypoint &way_point);
 
 void dlgWeatherShowModal(void);
 void dlgAirspaceSelect(void);
@@ -98,11 +98,10 @@ void dlgNumberEntryKeyboardShowModal(int *value, int width=0);
 int
 dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty);
 
-void PopupWaypointDetails();
 void PopupAnalysis();
 
 bool
-PopupNearestWaypointDetails(const WayPointList &way_points,
+PopupNearestWaypointDetails(const Waypoints &way_points,
                             const GEOPOINT &location,
                             double range, bool pan);
 

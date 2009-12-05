@@ -140,24 +140,16 @@ void PopupAnalysis()
   dlgAnalysisShowModal();
 }
 
-/**
- * Opens the WaypointDetails window
- */
-void PopupWaypointDetails()
-{
-#ifdef OLD_TASK
-  dlgWayPointDetailsShowModal();
-#endif
-}
 
 
 #include "Interface.hpp"
 #include "MapWindow.h"
+#include "Waypoint/Waypoints.hpp"
 
 /**
  * Opens up the WaypointDetails window of the nearest
  * waypoint to location
- * @param way_points WayPointList including all possible
+ * @param way_points Waypoints including all possible
  * waypoints for the calculation
  * @param location Location where to search
  * @param range Maximum range to search
@@ -165,35 +157,23 @@ void PopupWaypointDetails()
  * @return True if a waypoint was found
  */
 bool
-PopupNearestWaypointDetails(const WayPointList &way_points,
+PopupNearestWaypointDetails(const Waypoints &way_points,
                             const GEOPOINT &location,
                             double range, bool pan)
 {
-  /*
-    if (!pan) {
-    dlgWayPointSelect(lon, lat, 0, 1);
-    } else {
-    dlgWayPointSelect(PanLongitude, PanLatitude, 0, 1);
-    }
-  */
   MapWindowProjection &map_window = XCSoarInterface::main_window.map;
 
-#ifdef OLD_TASK
-  int i;
+  const Waypoint *way_point;
   if (!pan || !XCSoarInterface::SettingsMap().EnablePan) {
-    i = FindNearestWayPoint(way_points, map_window, location, range);
+    way_point = way_points.lookup_location(location, range);
   } else {
     // nearest to center of screen if in pan mode
-    i = FindNearestWayPoint(way_points, map_window,
-			  map_window.GetPanLocation(),
-			  range);
+    way_point = way_points.lookup_location(map_window.GetPanLocation(), range);
   }
-  if(i != -1) {
-    task.setSelected(i);
-    PopupWaypointDetails();
+  if (way_point) {
+    dlgWayPointDetailsShowModal(*way_point);
     return true;
   }
-#endif
   return false;
 }
 

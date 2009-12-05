@@ -51,6 +51,7 @@ Copyright_License {
 #include "InfoBoxManager.h"
 #include "SettingsUser.hpp"
 #include "Asset.hpp"
+#include "Waypoint/Waypoints.hpp"
 
 #include <stdlib.h>
 
@@ -188,14 +189,12 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     ReplaceInString(OutBuffer, TEXT("$(CheckReplay)"), TEXT(""), Size);
   }
 
-#ifdef OLD_TASK
   if (_tcsstr(OutBuffer, TEXT("$(CheckWaypointFile)"))) {
-    if (!way_points.verify_index(0)) {
+    if (way_points.empty()) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckWaypointFile)"), TEXT(""), Size);
   }
-#endif
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckSettingsLockout)"))) {
     if (!is_simulator() && XCSoarInterface::LockSettingsInFlight &&

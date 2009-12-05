@@ -53,7 +53,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
 #include "DeviceBlackboard.hpp"
-
+#include "Waypoint/Waypoints.hpp"
 #ifndef _MSC_VER
 #include <algorithm>
 using std::min;
@@ -352,14 +352,11 @@ bool MapWindow::on_mouse_up(int x, int y)
         //100ms is NOT enough for a short click since GetTickCount
         //is OEM custom!
 
-#ifdef OLD_TASK
-
         if (way_points != NULL &&
             PopupNearestWaypointDetails(*way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }
-#endif
 
       } else {
 #ifdef OLD_TASK
@@ -371,13 +368,13 @@ bool MapWindow::on_mouse_up(int x, int y)
 
     } else {
       if(dwInterval < AIRSPACECLICK) { // original and untouched interval
-#ifdef OLD_TASK
+
         if (way_points != NULL &&
             PopupNearestWaypointDetails(*way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }
-#endif
+
       } else {
 #ifdef OLD_TASK
         if (airspace_database != NULL &&

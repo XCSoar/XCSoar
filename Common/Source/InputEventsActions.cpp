@@ -745,16 +745,15 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
     }
 
     ScopePopupBlock block(main_window.popup);
-    PopupWaypointDetails();
+    dlgWayPointDetailsShowModal(way_point);
   } else
     if (_tcscmp(misc, TEXT("select")) == 0) {
       ScopePopupBlock block(main_window.popup);
       int res = dlgWayPointSelect(Basic().Location);
       if (res != -1){
 	task.setSelected(res);
-	PopupWaypointDetails();
+        dlgWayPointDetailsShowModal(way_point);
       };
-
     }
 #endif
 }

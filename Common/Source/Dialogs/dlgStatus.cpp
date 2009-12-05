@@ -372,7 +372,7 @@ static void UpdateValuesFlight(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
   if (wp) {
     _stprintf(Temp, TEXT("%.0f %s"),
-              XCSoarInterface::Basic().Altitude*ALTITUDEMODIFY,
+              (double)(XCSoarInterface::Basic().Altitude*ALTITUDEMODIFY),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }

@@ -51,9 +51,8 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
-#include "WayPointList.hpp"
 #include "Components.hpp"
-#include "Task.h"
+#include "Waypoint/Waypoints.hpp"
 
 #include <assert.h>
 
@@ -73,7 +72,7 @@ static WndFrame *wSpecial=NULL; // VENTA3
 static WndOwnerDrawFrame *wImage=NULL;
 static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
-static int SelectedWaypoint = -1;
+static const Waypoint *selected_waypoint = NULL;
 
 #ifndef CECORE
 #ifndef GNAV
@@ -93,6 +92,9 @@ static int DrawListIndex=0;
 static int nTextLines=0;
 
 static void NextPage(int Step){
+
+  assert(selected_waypoint);
+
   bool page_ok=false;
   page += Step;
   do {
@@ -107,7 +109,7 @@ static void NextPage(int Step){
       page_ok = true;
       break;
     case 1:
-      if (!way_points.get(SelectedWaypoint).Details) {
+      if (selected_waypoint->Details.empty()) {
         page += Step;
       } else {
         page_ok = true;
@@ -159,8 +161,10 @@ static void
 OnPaintDetailsListItem(WindowControl * Sender, Canvas &canvas)
 {
   (void)Sender;
+  assert(selected_waypoint);
+
   if (DrawListIndex < nTextLines){
-    TCHAR* text = way_points.get(SelectedWaypoint).Details;
+    const TCHAR* text = selected_waypoint->Details.c_str();
     int nstart = LineOffsets[DrawListIndex];
     int nlen;
     if (DrawListIndex<nTextLines-1) {
@@ -231,45 +235,55 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
 static void OnGotoClicked(WindowControl * Sender){
   (void)Sender;
+#ifdef OLD_TASK
   task.FlyDirectTo(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
+#endif
   wf->SetModalResult(mrOK);
 }
 
 static void OnReplaceClicked(WindowControl * Sender){
   (void)Sender;
+#ifdef OLD_TASK
   task.ReplaceWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
                        XCSoarInterface::Basic());
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
+#endif
   wf->SetModalResult(mrOK);
 }
 
 static void OnNewHomeClicked(WindowControl * Sender){
 	(void)Sender;
-  XCSoarInterface::SetSettingsComputer().HomeWaypoint = SelectedWaypoint;
+  XCSoarInterface::SetSettingsComputer().HomeWaypoint = selected_waypoint->id;
   SetToRegistry(szRegistryHomeWaypoint, XCSoarInterface::SettingsComputer().HomeWaypoint);
+#ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
+#endif
   wf->SetModalResult(mrOK);
 }
 
 // VENTA3
 static void OnSetAlternate1Clicked(WindowControl * Sender){
 	(void)Sender;
-  XCSoarInterface::SetSettingsComputer().Alternate1 = SelectedWaypoint;
+  XCSoarInterface::SetSettingsComputer().Alternate1 = selected_waypoint->id;
   SetToRegistry(szRegistryAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
+#ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
+#endif
   wf->SetModalResult(mrOK);
 }
 
 static void OnSetAlternate2Clicked(WindowControl * Sender){
 	(void)Sender;
-  XCSoarInterface::SetSettingsComputer().Alternate2 = SelectedWaypoint;
+  XCSoarInterface::SetSettingsComputer().Alternate2 = selected_waypoint->id;
   SetToRegistry(szRegistryAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
+#ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
+#endif
   wf->SetModalResult(mrOK);
 }
 
@@ -281,8 +295,10 @@ static void OnClearAlternatesClicked(WindowControl * Sender){
   XCSoarInterface::SetSettingsComputer().EnableAlternate2=false;
   SetToRegistry(szRegistryAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
   SetToRegistry(szRegistryAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
+#ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
+#endif
   wf->SetModalResult(mrOK);
 }
 
@@ -290,7 +306,7 @@ static void OnClearAlternatesClicked(WindowControl * Sender){
 static void OnTeamCodeClicked(WindowControl * Sender){
 	(void)Sender;
   XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint =
-    SelectedWaypoint;
+    selected_waypoint->id;
   SetToRegistry(szRegistryTeamcodeRefWaypoint,
 		XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint);
   wf->SetModalResult(mrOK);
@@ -299,25 +315,31 @@ static void OnTeamCodeClicked(WindowControl * Sender){
 
 static void OnInsertInTaskClicked(WindowControl * Sender){
   (void)Sender;
+#ifdef OLD_TASK
   task.InsertWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
                       XCSoarInterface::Basic());
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
+#endif
   wf->SetModalResult(mrOK);
 }
 
 static void OnAppendInTaskClicked(WindowControl * Sender){
   (void)Sender;
+#ifdef OLD_TASK
   task.InsertWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
                       XCSoarInterface::Basic(), true);
+#endif
   wf->SetModalResult(mrOK);
 }
 
 
 static void OnRemoveFromTaskClicked(WindowControl * Sender){
   (void)Sender;
+#ifdef OLD_TASK
   task.RemoveWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
                       XCSoarInterface::Basic());
+#endif
   wf->SetModalResult(mrOK);
 }
 
@@ -349,7 +371,9 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 
-void dlgWayPointDetailsShowModal(void){
+void dlgWayPointDetailsShowModal(const Waypoint& waypoint)
+{
+  selected_waypoint = &waypoint;
 
   TCHAR sTmp[128];
   double sunsettime;
@@ -373,7 +397,8 @@ void dlgWayPointDetailsShowModal(void){
 
   if (!wf) return;
 
-  SelectedWaypoint = task.getSelected();
+#ifdef OLD_TASK
+#endif
 
   GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
   ExpandLocalPath(szWaypointFile);
@@ -381,36 +406,34 @@ void dlgWayPointDetailsShowModal(void){
 
   _stprintf(path_modis,TEXT("%s\\modis-%03d.jpg"),
            Directory,
-           SelectedWaypoint+1);
+           selected_waypoint->id+1);
   _stprintf(path_google,TEXT("%s\\google-%03d.jpg"),
            Directory,
-           SelectedWaypoint+1);
-
-  const WAYPOINT &way_point = way_points.get(SelectedWaypoint);
+           selected_waypoint->id+1);
 
   _stprintf(sTmp, TEXT("%s: "), wf->GetCaption());
-  _tcscat(sTmp, way_point.Name);
+  _tcscat(sTmp, selected_waypoint->Name.c_str());
   wf->SetCaption(sTmp);
 
   wp = ((WndProperty *)wf->FindByName(TEXT("prpWpComment")));
-  wp->SetText(way_point.Comment);
+  wp->SetText(selected_waypoint->Comment.c_str());
   wp->SetButtonSize(16);
 
-  Units::LongitudeToString(way_point.Location.Longitude, sTmp, sizeof(sTmp)-1);
+  Units::LongitudeToString(selected_waypoint->Location.Longitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(TEXT("prpLongitude")))
     ->SetText(sTmp);
 
-  Units::LatitudeToString(way_point.Location.Latitude, sTmp, sizeof(sTmp)-1);
+  Units::LatitudeToString(selected_waypoint->Location.Latitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(TEXT("prpLatitude")))
     ->SetText(sTmp);
 
-  Units::FormatUserAltitude(way_point.Altitude, sTmp, sizeof(sTmp)-1);
+  Units::FormatUserAltitude(selected_waypoint->Altitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(TEXT("prpAltitude")))
     ->SetText(sTmp);
 
   SunEphemeris sun;
   sunsettime = sun.CalcSunTimes
-    (way_point.Location,
+    (selected_waypoint->Location,
      XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
      GetUTCOffset()/3600);
   sunsethours = (int)sunsettime;
@@ -420,9 +443,9 @@ void dlgWayPointDetailsShowModal(void){
   ((WndProperty *)wf->FindByName(TEXT("prpSunset")))
     ->SetText(sTmp);
 
-  double distance, bearing;
+  fixed distance, bearing;
   DistanceBearing(XCSoarInterface::Basic().Location,
-                  way_point.Location,
+                  selected_waypoint->Location,
                   &distance,
                   &bearing);
 
@@ -448,7 +471,7 @@ void dlgWayPointDetailsShowModal(void){
 				  0, 0, true,
 				  0)
     -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
-    -way_point.Altitude;
+    -selected_waypoint->Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
 	    Units::GetAltitudeName());
@@ -467,7 +490,7 @@ void dlgWayPointDetailsShowModal(void){
 				  0, 0, true,
 				  0)
     -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
-    -way_point.Altitude;
+    -selected_waypoint->Altitude;
 
   wp = ((WndProperty *)wf->FindByName(TEXT("prpMc1")));
   if (wp) wp->SetText(sTmp);
@@ -483,7 +506,7 @@ void dlgWayPointDetailsShowModal(void){
 				  0, 0, true,
 				  0)
     -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
-    -way_point.Altitude;
+    -selected_waypoint->Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
 	    Units::GetAltitudeName());
@@ -512,7 +535,7 @@ void dlgWayPointDetailsShowModal(void){
   assert(wDetailsEntry!=NULL);
   wDetailsEntry->SetCanFocus(true);
 
-  nTextLines = TextToLineOffsets(way_point.Details,
+  nTextLines = TextToLineOffsets(selected_waypoint->Details.c_str(),
 				 LineOffsets,
 				 MAXLINES);
 

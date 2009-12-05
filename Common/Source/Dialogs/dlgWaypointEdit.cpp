@@ -46,10 +46,10 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "Components.hpp"
-#include "WayPoint.hpp"
+#include "Waypoint/Waypoint.hpp"
 
 static WndForm *wf=NULL;
-static WAYPOINT *global_wpt=NULL;
+static Waypoint *global_wpt=NULL;
 
 static WndButton *buttonName = NULL;
 static WndButton *buttonComment = NULL;
@@ -57,22 +57,22 @@ static WndButton *buttonComment = NULL;
 static void UpdateButtons(void) {
   TCHAR text[MAX_PATH];
   if (buttonName) {
-    if (_tcslen(global_wpt->Name)<=0) {
+    if (!global_wpt->Name.size()) {
       _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Name")),
                 gettext(TEXT("(blank)")));
     } else {
       _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Name")),
-                global_wpt->Name);
+                global_wpt->Name.c_str());
     }
     buttonName->SetCaption(text);
   }
   if (buttonComment) {
-    if (_tcslen(global_wpt->Comment)<=0) {
+    if (!global_wpt->Comment.size()) {
       _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Comment")),
                 gettext(TEXT("(blank)")));
     } else {
       _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Comment")),
-                global_wpt->Comment);
+                global_wpt->Comment.c_str());
     }
     buttonComment->SetCaption(text);
   }
@@ -82,7 +82,10 @@ static void UpdateButtons(void) {
 static void OnNameClicked(WindowControl *Sender) {
 	(void)Sender;
   if (buttonName) {
-    dlgTextEntryShowModal(global_wpt->Name, NAME_SIZE);
+    TCHAR buff[NAME_SIZE+1];
+    _stprintf(buff, TEXT("%s"), global_wpt->Name.c_str());
+    dlgTextEntryShowModal(buff, NAME_SIZE);
+    global_wpt->Name = buff;
   }
   UpdateButtons();
 }
@@ -91,13 +94,13 @@ static void OnNameClicked(WindowControl *Sender) {
 static void OnCommentClicked(WindowControl *Sender) {
 	(void)Sender;
   if (buttonComment) {
-    dlgTextEntryShowModal(global_wpt->Comment, COMMENT_SIZE);
+    TCHAR buff[COMMENT_SIZE+1];
+    _stprintf(buff, TEXT("%s"), global_wpt->Comment.c_str());
+    dlgTextEntryShowModal(buff, COMMENT_SIZE);
+    global_wpt->Comment = buff;
   }
   UpdateButtons();
 }
-
-//
-//
 
 static void SetUnits(void) {
   WndProperty* wp;
@@ -296,12 +299,13 @@ static void SetValues(void) {
     dfe->addEnumText(TEXT("Turnpoint"));
     dfe->addEnumText(TEXT("Airport"));
     dfe->addEnumText(TEXT("Landpoint"));
-    dfe->Set(0);
-    if ((global_wpt->Flags & LANDPOINT)==LANDPOINT) {
-      dfe->Set(2);
-    }
-    if ((global_wpt->Flags & AIRPORT)==AIRPORT) {
+
+    if (global_wpt->Flags.Airport) {
       dfe->Set(1);
+    } else if (global_wpt->Flags.LandPoint) {
+      dfe->Set(2);
+    } else {
+      dfe->Set(0);
     }
 
     wp->RefreshDisplay();
@@ -423,17 +427,17 @@ static void GetValues(void) {
   if (wp) {
     int myflag = wp->GetDataField()->GetAsInteger();
     switch(myflag) {
-    case 0:
-      global_wpt->Flags = TURNPOINT;
-      break;
     case 1:
-      global_wpt->Flags = AIRPORT | TURNPOINT;
+      global_wpt->Flags.TurnPoint = true;
+      global_wpt->Flags.Airport = true;
       break;
     case 2:
-      global_wpt->Flags = LANDPOINT;
+      global_wpt->Flags.LandPoint = true;
       break;
     default:
-      global_wpt->Flags = 0;
+      global_wpt->Flags.TurnPoint = true;
+      global_wpt->Flags.Airport = false;
+      global_wpt->Flags.LandPoint = false;
     };
   }
 }
@@ -451,7 +455,7 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 void
-dlgWaypointEditShowModal(WAYPOINT &way_point)
+dlgWaypointEditShowModal(Waypoint &way_point)
 {
   global_wpt = &way_point;
 

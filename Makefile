@@ -114,6 +114,8 @@ DLGS	:=\
 	$(SRC)/Dialogs/dlgVoice.o \
 	$(SRC)/Dialogs/dlgWeather.o \
 	$(SRC)/Dialogs/dlgWaypointOutOfTerrain.o \
+	$(SRC)/Dialogs/dlgWayPointDetails.o \
+	$(SRC)/Dialogs/dlgWaypointEdit.o \
 	$(SRC)/Dialogs/dlgWindSettings.o \
 	$(SRC)/Dialogs/dlgFontEdit.o \
 

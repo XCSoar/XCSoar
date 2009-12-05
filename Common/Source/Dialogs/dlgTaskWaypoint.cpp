@@ -458,8 +458,8 @@ static void OnMoveBeforeClicked(WindowControl * Sender){
 
 static void OnDetailsClicked(WindowControl * Sender){
   (void)Sender;
-  task.setSelected(task.getWaypointIndex(twItemIndex));
-  PopupWaypointDetails();
+//  task.setSelected(task.getWaypointIndex(twItemIndex));
+  dlgWayPointDetailsShowModal(way_point);
 }
 
 static void OnRemoveClicked(WindowControl * Sender) {
