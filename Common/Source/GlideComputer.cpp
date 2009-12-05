@@ -246,12 +246,17 @@ GlideComputer::SetLegStart()
 
 static PeriodClock last_team_code_update;
 
+/**
+ * Calculates the own TeamCode and saves it to Calculated
+ */
 void
 GlideComputer::CalculateOwnTeamCode()
 {
+  // No reference waypoint for teamcode calculation chosen -> cancel
   if (SettingsComputer().TeamCodeRefWaypoint < 0)
     return;
 
+  // Only calculate every 10sec otherwise cancel calculation
   if (!last_team_code_update.check_update(10000))
     return;
 
@@ -260,6 +265,7 @@ GlideComputer::CalculateOwnTeamCode()
   double bearing = 0;
   TCHAR code[10];
 
+  // Get bearing and distance to the reference waypoint
   LL_to_BearRange(
       way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Latitude,
       way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Longitude,
@@ -267,11 +273,14 @@ GlideComputer::CalculateOwnTeamCode()
       Basic().Location.Longitude,
       &bearing, &distance);
 
+  // Calculate teamcode from bearing and distance
   GetTeamCode(code, bearing, distance);
 
+  // QUESTION TB: why save the own bearing/distance as TeammateBearing/Range ??
   SetCalculated().TeammateBearing = bearing;
   SetCalculated().TeammateRange = distance;
 
+  // Save teamcode to Calculated
   _tcsncpy(SetCalculated().OwnTeamCode, code, 5);
 }
 
@@ -280,6 +289,7 @@ GlideComputer::CalculateTeammateBearingRange()
 {
   static bool InTeamSector = false;
 
+  // No reference waypoint for teamcode calculation chosen -> cancel
   if (SettingsComputer().TeamCodeRefWaypoint < 0)
     return;
 
@@ -288,6 +298,7 @@ GlideComputer::CalculateTeammateBearingRange()
   double mateDistance = 0;
   double mateBearing = 0;
 
+  // Get own bearing and distance to the reference waypoint
   LL_to_BearRange(
       way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Latitude,
       way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location.Longitude,
@@ -295,7 +306,9 @@ GlideComputer::CalculateTeammateBearingRange()
       Basic().Location.Longitude,
       &ownBearing, &ownDistance);
 
+  // If (TeamCode exists and is valid)
   if (SettingsComputer().TeammateCodeValid) {
+    // Calculate bearing and distance to teammate
     CalcTeammateBearingRange(ownBearing, ownDistance,
         Calculated().TeammateCode, &mateBearing, &mateDistance);
 
@@ -306,16 +319,22 @@ GlideComputer::CalculateTeammateBearingRange()
       mateBearing += 180;
     }
 
+    // Save bearing and distance to teammate in Calculated
     SetCalculated().TeammateBearing = mateBearing;
     SetCalculated().TeammateRange = mateDistance;
 
+    // Calculate GPS position of the teammate and save it in Calculated
     FindLatitudeLongitude(Basic().Location, mateBearing, mateDistance,
         &SetCalculated().TeammateLocation);
 
+    // Hysteresis for GlideComputerEvent
+    // If (closer than 100m to the teammates last position and "event" not reset)
     if (mateDistance < 100 && InTeamSector == false) {
       InTeamSector = true;
+      // Raise GCE_TEAM_POS_REACHED event
       InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
     } else if (mateDistance > 300) {
+      // Reset "event" when distance is greater than 300m again
       InTeamSector = false;
     }
   } else {
@@ -357,28 +376,40 @@ GlideComputer::OnDepartedThermal()
   GlideComputerStats::OnDepartedThermal();
 }
 
+/**
+ * Searches the FLARM_Traffic array for the TeamMate and updates TeamMate
+ * position and TeamCode if found.
+ */
 void
 GlideComputer::FLARM_ScanTraffic()
 {
+  // If (not FLARM available) cancel
   if (!Basic().FLARM_Available)
     return;
 
+  // Iterate through all FLARM contacts
   for (int flarm_slot = 0; flarm_slot < FLARM_MAX_TRAFFIC; flarm_slot++) {
+    // If (FLARM contact found)
     if (Basic().FLARM_Traffic[flarm_slot].ID > 0) {
       // JMW TODO: this is dangerous, it uses the task!
       // it should be done outside the parser/comms thread
+
+      // If (FLARM contact == TeamMate)
       if ((Basic().FLARM_Traffic[flarm_slot].ID == SettingsComputer().TeamFlarmIdTarget)
           && way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)) {
         double bearing;
         double distance;
 
+        // Set Teammate location to FLARM contact location
         SetCalculated().TeammateLocation
             = Basic().FLARM_Traffic[flarm_slot].Location;
 
+        // Calculate distance and bearing from teammate to reference waypoint
         DistanceBearing(
             way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location,
             Basic().FLARM_Traffic[flarm_slot].Location, &distance, &bearing);
 
+        // Calculate TeamCode and save it in Calculated
         GetTeamCode(SetCalculated().TeammateCode, bearing, distance);
         SetCalculated().TeammateCodeValid = true;
       }
