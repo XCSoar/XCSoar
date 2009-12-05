@@ -42,7 +42,7 @@ Copyright_License {
 #include <math.h>
 #include <string.h>
 
-void ConvertHeadingToTeamCode(double heading, TCHAR *code);
+void ConvertBearingToTeamCode(double bearing, TCHAR *code);
 void NumberToTeamCode(double value, TCHAR *code, int minCiffers);
 double GetBearing(const TCHAR *code);
 double GetRange(const TCHAR *code);
@@ -69,7 +69,7 @@ GetTeamCode(TCHAR *code, double bearing, double range)
 	//	bearing -= 360;
 
 	// Calculate bearing part of the teamcode
-	ConvertHeadingToTeamCode(bearing, code);
+	ConvertBearingToTeamCode(bearing, code);
 	// Calculate distance part of the teamcode
 	NumberToTeamCode(range / 100.0, &code[2], 0);
 }
@@ -80,15 +80,15 @@ GetTeamCode(TCHAR *code, double bearing, double range)
  * @param code The teamcode (pointer)
  */
 void
-ConvertHeadingToTeamCode(double heading, TCHAR *code)
+ConvertBearingToTeamCode(double bearing, TCHAR *code)
 {
-	if (heading >= 360) {
+	if (bearing >= 360) {
 		code[0] = '-';
 		code[1] = '-';
 		return;
 	}
 
-	double bamValue = (heading * TEAMCODE_COMBINAIONS) / 360.0;
+	double bamValue = (bearing * TEAMCODE_COMBINAIONS) / 360.0;
 	NumberToTeamCode(bamValue, code, 2);
 }
 
