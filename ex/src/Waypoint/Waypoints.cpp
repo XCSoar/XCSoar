@@ -127,7 +127,7 @@ Waypoints::lookup_name(const tstring &name) const
 }
 
 const Waypoint*
-Waypoints::lookup_location(const GEOPOINT &loc) const
+Waypoints::lookup_location(const GEOPOINT &loc, const fixed range) const
 {
   WaypointEnvelope bb_target(loc, task_projection);
   std::pair<WaypointTree::const_iterator, double> 
@@ -141,6 +141,9 @@ Waypoints::lookup_location(const GEOPOINT &loc) const
     const Waypoint* wp = &(found.first)->get_waypoint();
     if (wp->Location == loc)
       return wp;
+    else if (positive(range) && (wp->Location.distance(loc)<=range)) {
+      return wp;
+    }
   } 
   return NULL;
 }

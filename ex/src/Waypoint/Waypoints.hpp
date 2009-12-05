@@ -136,10 +136,12 @@ public:
  * Look up waypoint by location (returns first match)
  * 
  * @param loc Location of waypoint to find in internal tree
+ * @param range Threshold for range
  * 
- * @return Pointer to waypoint if found (or NULL if not)
+ * @return Pointer to waypoint if found (or NULL if none found)
  */
-  const Waypoint* lookup_location(const GEOPOINT &loc) const;
+  const Waypoint* lookup_location(const GEOPOINT &loc,
+                                  const fixed range= fixed_zero) const;
 
 /** 
  * Look up waypoint by name (returns first match)

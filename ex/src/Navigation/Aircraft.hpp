@@ -80,6 +80,10 @@ struct AIRCRAFT_STATE {
 
   fixed Altitude; /**< GPS altitude AMSL (m) */
 
+  //##############
+  //   Wind
+  //##############
+
   fixed WindSpeed; /**< Wind speed (m/s); must be positive */
   fixed WindDirection; /**< Wind direction (degrees) */
 
