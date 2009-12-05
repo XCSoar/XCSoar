@@ -34,7 +34,7 @@ WaypointSorter::WaypointSorter(const Waypoints &way_points,
 
     m_waypoints_all.push_back(info);
   }
-  sort_name(m_waypoints);
+  sort_name(m_waypoints_all);
 }
 
 const WaypointSelectInfoVector& 
