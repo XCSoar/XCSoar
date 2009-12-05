@@ -173,6 +173,16 @@ GetValueFromTeamCode(const TCHAR *code, int maxCount)
 	return val;
 }
 
+/**
+ * Calculates distance and bearing to the teammate by comparing the
+ * distances and bearings to the shared reference waypoint
+ * @param ownBear Own bearing to the reference waypoint
+ * @param ownDist Own distance to the reference waypoint
+ * @param mateBear Teammate bearing to the reference waypoint
+ * @param mateDist Teammate distance to the reference waypoint
+ * @param bearToMate Bearing to the teammate (pointer)
+ * @param distToMate Distance to the teammate (pointer)
+ */
 void
 CalcTeamMatePos(double ownBear, double ownDist, double mateBear,
     double mateDist, double *bearToMate, double *distToMate)
