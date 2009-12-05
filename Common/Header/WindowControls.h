@@ -166,7 +166,7 @@ public:
 
   bool SetFocused(bool Value);
   bool GetFocused(void);
-  WindowControl *GetCanFocus(void);
+  Window *GetCanFocus();
   bool SetCanFocus(bool Value);
 
   bool GetReadOnly(void) { return mReadOnly; }
@@ -223,8 +223,8 @@ public:
     mTag = Value; return mTag;
   }
 
-  WindowControl *FocusNext(WindowControl *Sender);
-  WindowControl *FocusPrev(WindowControl *Sender);
+  Window *FocusNext(WindowControl *Sender);
+  Window *FocusPrev(WindowControl *Sender);
 
   WindowControl(WindowControl *Owner, ContainerWindow *Parent,
                 const TCHAR *Name, int X, int Y, int Width, int Height,

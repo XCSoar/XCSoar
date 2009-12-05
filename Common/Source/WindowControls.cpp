@@ -227,7 +227,9 @@ void WindowControl::Destroy(void){
 
 }
 
-WindowControl *WindowControl::GetCanFocus(void){
+Window *
+WindowControl::GetCanFocus()
+{
   if (mVisible && mCanFocus && !mReadOnly)
     return this;
 
@@ -235,7 +237,7 @@ WindowControl *WindowControl::GetCanFocus(void){
     return NULL;
 
   for (int idx=0; idx<mClientCount; idx++){
-    WindowControl *w;
+    Window *w;
     if ((w = mClients[idx]->GetCanFocus()) != NULL){
       return w;
     }
@@ -568,9 +570,11 @@ WindowControl::on_paint(Canvas &canvas)
   ContainerWindow::on_paint(canvas);
 }
 
-WindowControl *WindowControl::FocusNext(WindowControl *Sender){
+Window *
+WindowControl::FocusNext(WindowControl *Sender)
+{
   int idx;
-  WindowControl *W;
+  Window *W;
 
   if (Sender != NULL){
     for (idx=0; idx<mClientCount; idx++)
@@ -594,9 +598,11 @@ WindowControl *WindowControl::FocusNext(WindowControl *Sender){
 
 }
 
-WindowControl *WindowControl::FocusPrev(WindowControl *Sender){
+Window *
+WindowControl::FocusPrev(WindowControl *Sender)
+{
   int idx;
-  WindowControl *W;
+  Window *W;
 
   if (Sender != NULL){
     for (idx=0; idx<mClientCount; idx++)
