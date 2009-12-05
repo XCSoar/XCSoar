@@ -76,9 +76,10 @@ public:
 
 /** 
  * Update projection.
- * 
+ *
+ * @return True if projection changed
  */
-  void update_fast();
+  bool update_fast();
 
 /** 
  * Project a Geodetic point to an integer 2-d representation

@@ -148,6 +148,14 @@ public:
    */
   void destroy();
 
+/** 
+ * Accessor for contained AbstractAirspace 
+ * 
+ * @return Airspace letter
+ */
+  AbstractAirspace *get_airspace() const {
+    return pimpl_airspace;
+  };
 private:
 
   /**

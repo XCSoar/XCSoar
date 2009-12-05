@@ -168,14 +168,28 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state) const
 void 
 Airspaces::optimise()
 {
-  task_projection.update_fast();
+  if (task_projection.update_fast()) {
 
-  while (!tmp_as.empty()) {
-    Airspace as(*tmp_as.front(), task_projection);
-    airspace_tree.insert(as);
-    tmp_as.pop_front();
+    // task projection changed, so need to push items back onto stack
+    // to re-build airspace envelopes
+
+    for (AirspaceTree::iterator it = airspace_tree.begin();
+         it != airspace_tree.end(); it++) {
+      tmp_as.push_back(it->get_airspace());
+    }
+    airspace_tree.clear();
   }
-  airspace_tree.optimise();
+
+  if (!tmp_as.empty()) {
+
+    while (!tmp_as.empty()) {
+      Airspace as(*tmp_as.front(), task_projection);
+      airspace_tree.insert(as);
+      tmp_as.pop_front();
+    }
+    airspace_tree.optimise();
+
+  }
 }
 
 void 
@@ -191,14 +205,6 @@ Airspaces::insert(AbstractAirspace* asp)
   task_projection.scan_location(asp->get_center());
 
   tmp_as.push_back(asp);
-
-  /**
-   * \todo
-   * if range changed, need to re-pack airspace
-   * will have to remove all from the list, recalculate projections,
-   * then add them again!
-   * (can just insert() them all, then clear the tree, then run optimise()
-   */
 }
 
 

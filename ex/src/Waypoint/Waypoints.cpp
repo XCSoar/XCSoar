@@ -69,16 +69,21 @@ Waypoints::Waypoints()
 void
 Waypoints::optimise()
 {
-  task_projection.update_fast();
-
-  while (!tmp_wps.empty()) {
-    WaypointEnvelope w = (tmp_wps.front());
-    w.project(task_projection);
-    waypoint_tree.insert(w);
-    tmp_wps.pop_front();
+  if (task_projection.update_fast()) {
+    // task projection changed, so need to push items back onto stack
+    std::copy(begin(),end(),std::back_inserter(tmp_wps));
+    waypoint_tree.clear();
   }
 
-  waypoint_tree.optimize();
+  if (!tmp_wps.empty()) {
+    while (!tmp_wps.empty()) {
+      WaypointEnvelope w = (tmp_wps.front());
+      w.project(task_projection);
+      waypoint_tree.insert(w);
+      tmp_wps.pop_front();
+    }
+    waypoint_tree.optimize();
+  } 
 }
 
 void
@@ -90,14 +95,6 @@ Waypoints::insert(const Waypoint& wp)
   task_projection.scan_location(wp.Location);
 
   tmp_wps.push_back(WaypointEnvelope(wp));
-
-  /**
-   * \todo
-   * if range changed, need to re-pack waypoints
-   * will have to remove all from the list, recalculate projections,
-   * then add them again!
-   * (can just insert() them all, then clear the tree, then run optimise()
-   */
 }
 
 

@@ -163,8 +163,6 @@ private:
 
   std::deque< AbstractAirspace* > tmp_as;
 
-  /** @link dependency */
-  /*#  Airspace lnkAirspace; */
 };
 
 #endif
