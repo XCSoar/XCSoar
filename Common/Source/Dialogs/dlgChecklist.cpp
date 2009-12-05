@@ -86,8 +86,7 @@ static void NextPage(int Step){
   wf->SetCaption(buffer);
 
   wDetails->ResetList();
-  wDetails->Redraw();
-
+  wDetails->invalidate();
 }
 
 

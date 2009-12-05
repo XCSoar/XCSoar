@@ -51,7 +51,7 @@ static int ItemIndex = -1;
 
 static void UpdateList(void){
   wAirspacePatternsList->ResetList();
-  wAirspacePatternsList->Redraw();
+  wAirspacePatternsList->invalidate();
 }
 
 static int DrawListIndex=0;

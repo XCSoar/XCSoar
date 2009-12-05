@@ -250,8 +250,6 @@ public:
 
   virtual void Destroy(void);
 
-  virtual void Redraw(void);
-
   void PaintSelector(bool Value) {mDontPaintSelector = Value;}
 
   WindowControl *FindByName(const TCHAR *Name);
@@ -333,7 +331,6 @@ public:
   bool on_mouse_move(int x, int y, unsigned keys);
   void ResetList(void);
   void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
-  void RedrawScrolled(bool all);
   void DrawScrollBar(Canvas &canvas);
   int RecalculateIndices(bool bigscroll);
   int GetItemIndex(void) { return mListInfo.ItemIndex; }

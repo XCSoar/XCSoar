@@ -519,10 +519,6 @@ WindowControl::PaintSelector(Canvas &canvas)
 
 }
 
-void WindowControl::Redraw(void){
-  invalidate();
-}
-
 int WindowControl::OnHelp() {
 #ifdef ALTAIRSYNC
     return 0; // undefined. return 1 if defined
@@ -2238,12 +2234,6 @@ void WndListFrame::SetEnterCallback(void
   mOnListEnterCallback = OnListCallback;
 }
 
-
-void WndListFrame::RedrawScrolled(bool all) {
-  Redraw();
-}
-
-
 int WndListFrame::RecalculateIndices(bool bigscroll) {
 
 // scroll to smaller of current scroll or to last page
@@ -2269,8 +2259,8 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
 	&& (mListInfo.ItemIndex+mListInfo.ScrollIndex < mListInfo.ItemCount)) {
       mListInfo.ScrollIndex++;
       mListInfo.ItemIndex = mListInfo.BottomIndex-1;
-      // JMW scroll
-      RedrawScrolled(true);
+
+      invalidate();
       return 0;
     } else {
       mListInfo.ItemIndex = mListInfo.BottomIndex-1;
@@ -2283,14 +2273,15 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
     // JMW scroll
     if (mListInfo.ScrollIndex>0) {
       mListInfo.ScrollIndex--;
-      RedrawScrolled(true);
+      invalidate();
       return 0;
     } else {
       // only return if no more scrolling left to do
       return 1;
     }
   }
-  RedrawScrolled(bigscroll);
+
+  invalidate();
   return (0);
 }
 
@@ -2309,7 +2300,7 @@ WndListFrame::on_key_down(unsigned key_code)
       break;
 
     mOnListEnterCallback(this, &mListInfo);
-    RedrawScrolled(false);
+    invalidate();
     //#ifndef GNAV
 
   case VK_LEFT:
@@ -2432,7 +2423,8 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
       if (mOnListEnterCallback) {
         mOnListEnterCallback(this, &mListInfo);
       }
-      RedrawScrolled(false);
+
+      invalidate();
     } else {
       mListInfo.ItemIndex = index;
       RecalculateIndices(false);
@@ -2464,7 +2456,7 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
       {
         int iScrollAmount = iScrollIndex - mListInfo.ScrollIndex;
         mListInfo.ScrollIndex = mListInfo.ScrollIndex + iScrollAmount;
-        Redraw();
+        invalidate();
       }
     }
     else //not in scrollbar
@@ -2509,8 +2501,7 @@ WndListFrame::on_mouse_down(int x, int y)
       if (mListInfo.ItemCount > mListInfo.ScrollIndex+ mListInfo.ItemInViewCount)
           mListInfo.ScrollIndex = min ( mListInfo.ItemCount- mListInfo.ItemInViewCount, mListInfo.ScrollIndex +mListInfo.ItemInViewCount);
 
-    Redraw();
-
+    invalidate();
   }
   else
   if (mClientCount > 0)

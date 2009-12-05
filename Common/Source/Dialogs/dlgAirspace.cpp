@@ -60,7 +60,7 @@ int dlgAirspacePatternsShowModal(void);
 
 static void UpdateList(void){
   wAirspaceList->ResetList();
-  wAirspaceList->Redraw();
+  wAirspaceList->invalidate();
 }
 
 static int DrawListIndex=0;
@@ -193,7 +193,6 @@ static void OnAirspaceListEnter(WindowControl * Sender,
     } else {
       int v = (XCSoarInterface::SettingsComputer().iAirspaceMode[ItemIndex]+1)%4;
       XCSoarInterface::SetSettingsComputer().iAirspaceMode[ItemIndex] = v;
-      //  wAirspaceList->Redraw();
       Profile::SetRegistryAirspaceMode(ItemIndex);
       changed = true;
     }

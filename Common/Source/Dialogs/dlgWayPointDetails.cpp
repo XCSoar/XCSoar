@@ -148,7 +148,7 @@ static void NextPage(int Step){
 
   if (page==1) {
     wDetails->ResetList();
-    wDetails->Redraw();
+    wDetails->invalidate();
   }
 
 }

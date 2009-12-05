@@ -90,7 +90,7 @@ static void DoAck(int Ack){
 
   if (AirspaceWarnGetItem(Idx, pAS)){
     AirspaceWarnDoAck(airspace_database, pAS.ID, Ack);
-    wAirspaceList->Redraw();
+    wAirspaceList->invalidate();
   }
 
 }
@@ -138,7 +138,7 @@ OnKeyDown(WindowControl *Sender, unsigned key_code)
       if (wAirspaceList->GetFocused()){
         SelectedID = FocusedID;
         SelectedIdx = FocusedIdx;
-        wAirspaceList->Redraw();
+        wAirspaceList->invalidate();
         return true;
       }
 
@@ -561,7 +561,7 @@ UserMsgNotify(WindowControl *Sender, unsigned id){
 
   if (actListChange) {
     actListChange = false;
-    wAirspaceList->Redraw();
+    wAirspaceList->invalidate();
   }
 
   if (do_refocus) {

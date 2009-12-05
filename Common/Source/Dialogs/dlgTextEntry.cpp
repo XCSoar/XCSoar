@@ -120,7 +120,7 @@ static void UpdateCursor(void) {
   edittext[cursor] = EntryLetters[lettercursor];
 
   if (wGrid != NULL)
-    wGrid->Redraw();
+    wGrid->invalidate();
 
 }
 

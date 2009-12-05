@@ -264,7 +264,7 @@ static void OverviewRefreshTask(void) {
 
   LowLimit =0;
   wTaskList->ResetList();
-  wTaskList->Redraw();
+  wTaskList->invalidate();
 
   UpdateCaption();
 }

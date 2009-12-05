@@ -394,8 +394,7 @@ static void UpdateList(void){
   }
 
   wAirspaceList->ResetList();
-  wAirspaceList->Redraw();
-
+  wAirspaceList->invalidate();
 }
 
 

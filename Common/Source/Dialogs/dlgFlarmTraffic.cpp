@@ -62,8 +62,7 @@ static int nTextLines=0;
 static void Update(){
 
   //wDetails->ResetList();
-  wDetails->Redraw();
-
+  wDetails->invalidate();
 }
 
 

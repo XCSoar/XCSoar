@@ -301,7 +301,7 @@ static void Update(void){
   wGrid->SetVisible(page<MAXPAGE+1);
 
   if (wGrid != NULL)
-    wGrid->Redraw();
+    wGrid->invalidate();
 
 }
 

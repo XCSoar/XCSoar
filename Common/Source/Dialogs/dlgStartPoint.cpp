@@ -54,7 +54,7 @@ static int ItemIndex = -1;
 
 static void UpdateList(void){
   wStartPointList->ResetList();
-  wStartPointList->Redraw();
+  wStartPointList->invalidate();
 }
 
 static int DrawListIndex=0;

@@ -336,8 +336,7 @@ static void UpdateList(void){
   }
 
   wWayPointList->ResetList();
-  wWayPointList->Redraw();
-
+  wWayPointList->invalidate();
 }
 
 

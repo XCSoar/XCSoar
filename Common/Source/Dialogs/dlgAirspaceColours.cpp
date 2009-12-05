@@ -51,7 +51,7 @@ static int ItemIndex = -1;
 
 static void UpdateList(void){
   wAirspaceColoursList->ResetList();
-  wAirspaceColoursList->Redraw();
+  wAirspaceColoursList->invalidate();
 }
 
 static int DrawListIndex=0;
