@@ -286,11 +286,9 @@ void WindowControl::AddClient(WindowControl *Client){
   Client->SetOwner(this);
   Client->SetFont(GetFont());
 
-  if (Client->mY == -1){
+  if (Client->get_position().top == -1){
     if (mClientCount > 1){
-      Client->mY =
-        mClients[mClientCount-2]->mY
-        + mClients[mClientCount-2]->mHeight;
+      Client->mY = mClients[mClientCount - 2]->get_position().bottom;
       Client->move(Client->mX, Client->mY);
     }
   }
@@ -498,23 +496,25 @@ WindowControl::PaintSelector(Canvas &canvas)
 {
 
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
+    const RECT rc = get_client_rect();
+
     canvas.select(hPenDefaultSelector);
 
-    canvas.two_lines(mWidth - SELECTORWIDTH - 1, 0,
-                     mWidth - 1, 0,
-                     mWidth - 1, SELECTORWIDTH + 1);
+    canvas.two_lines(rc.right - SELECTORWIDTH - 1, rc.top,
+                     rc.right - 1, rc.top,
+                     rc.right - 1, SELECTORWIDTH + 1);
 
-    canvas.two_lines(mWidth - 1, mHeight - SELECTORWIDTH - 2,
-                     mWidth - 1, mHeight - 1,
-                     mWidth - SELECTORWIDTH - 1, mHeight - 1);
+    canvas.two_lines(rc.right - 1, rc.bottom - SELECTORWIDTH - 2,
+                     rc.right - 1, rc.bottom - 1,
+                     rc.right - SELECTORWIDTH - 1, rc.bottom - 1);
 
-    canvas.two_lines(SELECTORWIDTH + 1, mHeight - 1,
-                     0, mHeight - 1,
-                     0, mHeight - SELECTORWIDTH - 2);
+    canvas.two_lines(SELECTORWIDTH + 1, rc.bottom - 1,
+                     rc.left, rc.bottom - 1,
+                     rc.left, rc.bottom - SELECTORWIDTH - 2);
 
-    canvas.two_lines(0, SELECTORWIDTH + 1,
-                     0, 0,
-                     SELECTORWIDTH + 1, 0);
+    canvas.two_lines(rc.left, SELECTORWIDTH + 1,
+                     rc.left, rc.top,
+                     SELECTORWIDTH + 1, rc.top);
   }
 
 }
@@ -584,19 +584,21 @@ WindowControl::on_paint(Canvas &canvas)
     canvas.fill_rectangle(rc, GetBackBrush());
 
   if (mBorderKind != 0){
+    const RECT rc = get_client_rect();
+
     canvas.select(GetBorderPen());
 
     if (mBorderKind & BORDERTOP){
-      canvas.line(0, 0, mWidth, 0);
+      canvas.line(rc.left, rc.top, rc.right, rc.top);
     }
     if (mBorderKind & BORDERRIGHT){
-      canvas.line(mWidth - 1, 0, mWidth - 1, mHeight);
+      canvas.line(rc.right - 1, rc.top, rc.right - 1, rc.bottom);
     }
     if (mBorderKind & BORDERBOTTOM){
-      canvas.line(mWidth - 1, mHeight - 1, -1, mHeight - 1);
+      canvas.line(rc.right - 1, rc.bottom - 1, rc.left - 1, rc.bottom - 1);
     }
     if (mBorderKind & BORDERLEFT){
-      canvas.line(0, mHeight - 1, 0, -1);
+      canvas.line(rc.left, rc.bottom - 1, rc.left, rc.top - 1);
     }
   }
 
@@ -1313,7 +1315,7 @@ WndButton::on_paint(Canvas &canvas)
 
     }
 
-    rc.top += ((GetHeight()-4-mLastDrawTextHeight)/2);
+    rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
 
     canvas.formatted_text(&rc, mCaption,
         DT_EXPANDTABS
@@ -1549,16 +1551,18 @@ void WndProperty::UpdateButtonData(int Value){
   else
     mBitmapSize = DLGSCALE(32)/2;
 
+  const SIZE size = get_size();
+
   if (mCaptionWidth != 0){
-    mEditSize.x = GetWidth()- mCaptionWidth - (DEFAULTBORDERPENWIDTH+1) - mBitmapSize;
-    mEditSize.y = GetHeight()-2*(DEFAULTBORDERPENWIDTH+1);
+    mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1) - mBitmapSize;
+    mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);
     mEditPos.x = mCaptionWidth;
     mEditPos.y = (DEFAULTBORDERPENWIDTH+1);
   } else {
-    mEditSize.x = GetWidth()- 2*((DEFAULTBORDERPENWIDTH+1)+mBitmapSize);
-    mEditSize.y = (GetHeight()/2);
+    mEditSize.x = size.cx - 2 * (DEFAULTBORDERPENWIDTH + 1 + mBitmapSize);
+    mEditSize.y = size.cy / 2;
     mEditPos.x = mBitmapSize + (DEFAULTBORDERPENWIDTH+2);
-    mEditPos.y = (GetHeight()/2)-2*(DEFAULTBORDERPENWIDTH+1);
+    mEditPos.y = size.cy / 2 - 2 * (DEFAULTBORDERPENWIDTH + 1);
   }
 
   mHitRectDown.left = mEditPos.x-mBitmapSize;
@@ -1566,7 +1570,7 @@ void WndProperty::UpdateButtonData(int Value){
   mHitRectDown.right = mHitRectDown.left + mBitmapSize;
   mHitRectDown.bottom = mHitRectDown.top + mBitmapSize;
 
-  mHitRectUp.left = GetWidth()-(mBitmapSize+2);
+  mHitRectUp.left = size.cx - (mBitmapSize + 2);
   mHitRectUp.top = mHitRectDown.top;
   mHitRectUp.right = mHitRectUp.left + mBitmapSize;
   mHitRectUp.bottom = mHitRectUp.top + mBitmapSize;
@@ -1777,17 +1781,10 @@ int WndProperty::DecValue(void){
 void
 WndProperty::on_paint(Canvas &canvas)
 {
-
-  RECT r;
   SIZE tsize;
   POINT org;
 
   WindowControl::on_paint(canvas);
-
-  r.left = 0;
-  r.top = 0;
-  r.right = GetWidth();
-  r.bottom = GetHeight();
 
   canvas.set_text_color(GetForeColor());
 
@@ -1808,7 +1805,7 @@ WndProperty::on_paint(Canvas &canvas)
     org.y = mEditPos.y - tsize.cy;
   } else {
     org.x = mCaptionWidth - mBitmapSize - (tsize.cx + 1);
-    org.y = (GetHeight() - tsize.cy)/2;
+    org.y = (get_size().cy - tsize.cy) / 2;
   }
 
   if (org.x < 1)
@@ -2083,7 +2080,7 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
 
       ScrollbarWidth = (int) (SCROLLBARWIDTH_INITIAL * InfoBoxLayout::dscale * SHRINKSBFACTOR);
       if (mClientCount > 0)
-        ScrollbarTop = mClients[0]->GetHeight() + 2;
+        ScrollbarTop = mClients[0]->get_size().cy + 2;
       else
         ScrollbarTop = (int)(18.0 * InfoBoxLayout::dscale + 2);
     } else {
@@ -2093,9 +2090,9 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
     }
   }
 
-
-  int w = GetWidth()- (ScrollbarWidth);
-  int h = GetHeight() - ScrollbarTop;
+  const SIZE size = get_size();
+  int w = size.cx - ScrollbarWidth;
+  int h = size.cy - ScrollbarTop;
 
   if (!hScrollBarBitmapTop.defined())
     hScrollBarBitmapTop.load(IDB_SCROLLBARTOP);
@@ -2136,9 +2133,9 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
   rc.right = w + (ScrollbarWidth) - 1; // -2 if use 3x pen.  -1 if 2x pen
   rc.bottom = rc.top + GetScrollBarHeight()+2;  // +2 for 3x pen, +1 for 2x pen
 
-  if (rc.bottom >= GetHeight() - ScrollbarWidth){
+  if (rc.bottom >= size.cy - ScrollbarWidth){
     int d;
-    d= (GetHeight() - ScrollbarWidth - rc.bottom) - 1;
+    d = size.cy - ScrollbarWidth - rc.bottom - 1;
     rc.bottom += d;
     rc.top += d;
   }
@@ -2345,18 +2342,20 @@ WndListFrame::on_key_down(unsigned key_code)
 }
 
 void WndListFrame::ResetList(void){
+  unsigned height = get_size().cy;
+  unsigned client_height = mClients[0]->get_size().cy;
 
   mListInfo.ScrollIndex = 0;
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
-  mListInfo.ItemInPageCount = ((GetHeight()+mClients[0]->GetHeight()-1)
-			       /mClients[0]->GetHeight())-1;
+  mListInfo.ItemInPageCount = (height + client_height - 1)
+    / client_height - 1;
   mListInfo.TopIndex = 0;
   mListInfo.BottomIndex = 0;
 //  mListInfo.SelectedIndex = 0;
   mListInfo.ItemCount = 0;
-  mListInfo.ItemInViewCount = (GetHeight()+mClients[0]->GetHeight()-1)
-    /mClients[0]->GetHeight()-1;
+  mListInfo.ItemInViewCount = (height + client_height - 1)
+    / client_height - 1;
 
   if (mOnListCallback != NULL){
     mListInfo.DrawIndex = -1;                               // -1 -> initialize data
@@ -2416,8 +2415,7 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
     return;
   }
 */
-  int index;
-  index = yPos/mClients[0]->GetHeight(); // yPos is offset within ListEntry item!
+  int index = yPos / mClients[0]->get_size().cy; // yPos is offset within ListEntry item!
 
   if ((index>=0)&&(index<mListInfo.BottomIndex)) {
     if (index == mListInfo.ItemIndex) {
@@ -2515,7 +2513,7 @@ WndListFrame::on_mouse_down(int x, int y)
 
 inline int WndListFrame::GetScrollBarHeight (void)
 {
-  int h = GetHeight() - ScrollbarTop;
+  int h = get_size().cy - ScrollbarTop;
   if(mListInfo.ItemCount ==0)
     return h-2*ScrollbarWidth;
   else
@@ -2524,7 +2522,7 @@ inline int WndListFrame::GetScrollBarHeight (void)
 
 inline int WndListFrame::GetScrollIndexFromScrollBarTop(int iScrollBarTop)
 {
-  int h = GetHeight() - ScrollbarTop;
+  int h = get_size().cy - ScrollbarTop;
   if (h-2*(ScrollbarWidth) - GetScrollBarHeight() == 0)
     return 0;
   else
@@ -2544,7 +2542,7 @@ inline int WndListFrame::GetScrollIndexFromScrollBarTop(int iScrollBarTop)
 inline int WndListFrame::GetScrollBarTopFromScrollIndex()
 {
   int iRetVal=0;
-  int h = GetHeight() - ScrollbarTop;
+  int h = get_size().cy - ScrollbarTop;
   if (mListInfo.ItemCount - mListInfo.ItemInViewCount ==0) {
     iRetVal= h + (ScrollbarWidth);
   }

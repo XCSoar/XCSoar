@@ -62,7 +62,7 @@ OnPaintComboPopupListItem(WindowControl *Sender, Canvas &canvas)
         ComboListPopup->ComboPopupDrawListIndex < ComboListPopup->ComboPopupItemCount )
   {
     canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                        Sender->GetWidth() - InfoBoxLayout::scale * 5,
+                        canvas.get_width() - InfoBoxLayout::scale * 5,
                         ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupDrawListIndex]->StringValueFormatted);
   }
 }
