@@ -378,6 +378,15 @@ public:
     return rc;
   }
 
+  const SIZE get_size() const
+  {
+    RECT rc = get_client_rect();
+    SIZE s;
+    s.cx = rc.right;
+    s.cy = rc.bottom;
+    return s;
+  }
+
 #ifdef ENABLE_SDL
   void paint() {
     on_paint(canvas);
