@@ -43,7 +43,6 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
-#include "Math/Geometry.hpp"
 #include "DataField/Base.hpp"
 #include "Waypoint/WaypointSorter.hpp"
 #include "Components.hpp"
@@ -87,14 +86,10 @@ static void OnWaypointListEnter(WindowControl * Sender,
 static WaypointSelectInfoVector WayPointSelectInfo;
 
 WaypointSorter* waypoint_sorter;
-int UpLimit = 0;
+unsigned int UpLimit = 0;
 
 static void UpdateList(void)
 {
-
-//  TCHAR sTmp[128];
-  bool distancemode = false;
-
   ItemIndex = 0;
 
   WayPointSelectInfo = waypoint_sorter->get_list();
@@ -117,94 +112,26 @@ static void UpdateList(void)
     break;
   }
   
-  /*
+  bool sort_distance = false;
   if (DistanceFilterIdx != 0) {
-    distancemode = true;
-    
-    std::sort(WayPointSelectInfo.begin(),
-              WayPointSelectInfo.end(),
-              WaypointDistanceCompare);
-    
-    int i=0;
-    for (WaypointSelectInfoVector::const_iterator it = WayPointSelectInfo.begin();
-         it != WayPointSelectInfo.end(); it++, i++) {
-      
-      if (it->Distance > DistanceFilter[DistanceFilterIdx]) {
-        UpLimit = i;
-        break;
-      }
-      i++;
-    }
-  }
-  
-  if (DirectionFilterIdx != 0){
-    distancemode = true;
-    
+    sort_distance = true;
+    waypoint_sorter->filter_distance(WayPointSelectInfo, DistanceFilter[DistanceFilterIdx]);
+  } 
+  if (DirectionFilterIdx != 0) {
+    sort_distance = true;
     int a = DirectionFilter[DirectionFilterIdx];
     if (a == DirHDG) {
       a = iround(XCSoarInterface::Calculated().Heading);
       lastHeading = a;
     }
-    
-    for (WaypointSelectInfoVector::iterator it = WayPointSelectInfo.begin();
-         it != WayPointSelectInfo.end(); it++) {
-      it->DirectionErr = fabs(AngleLimit180(it->Direction-a));
-    }
-    
-    std::sort(WayPointSelectInfo.begin(),
-              WayPointSelectInfo.end(),
-              WaypointDirectionCompare);
-    
-    int i=0;
-    for (WaypointSelectInfoVector::const_iterator it = WayPointSelectInfo.begin();
-         it != WayPointSelectInfo.end(); it++, i++) {
-      
-      if (it->DirectionErr > 18) {
-        UpLimit = i;
-        break;
-      }
-    }
+    waypoint_sorter->filter_direction(WayPointSelectInfo, a);
   }
-
+  if (sort_distance) {
+    waypoint_sorter->sort_distance(WayPointSelectInfo);
+  }
   if (NameFilterIdx != 0) {
-    TCHAR sTmp[8];
-
-    std::sort(WayPointSelectInfo.begin(),
-              WayPointSelectInfo.begin()+UpLimit,
-              WaypointNameCompare);
-
-    sTmp[0] = NameFilter[NameFilterIdx];
-    sTmp[1] = '\0';
-    sTmp[2] = '\0';
-    _tcsupr(sTmp);
-
-    unsigned i;
-    LowLimit = UpLimit;
-    for (i = 0; i < UpLimit; i++){
-      if ((BYTE)(WayPointSelectInfo[i].FourChars >> 24) >= (sTmp[0]&0xff)){
-        LowLimit = i;
-        break;
-      }
-    }
-    for (; i<UpLimit; i++){
-      if ((BYTE)(WayPointSelectInfo[i].FourChars >> 24) != (sTmp[0]&0xff)){
-        UpLimit = i;
-        break;
-      }
-    }
+    waypoint_sorter->filter_name(WayPointSelectInfo, (NameFilter[NameFilterIdx])&0xff);
   }
-
-  if (!distancemode) {
-    std::sort(WayPointSelectInfo.begin()+LowLimit,
-              WayPointSelectInfo.end()+UpLimit-LowLimit,
-              WaypointNameCompare);
-  } else {
-    std::sort(WayPointSelectInfo.begin()+LowLimit,
-              WayPointSelectInfo.end()+UpLimit-LowLimit,
-              WaypointDistanceCompare);
-  }
-
-  */
 
   UpLimit = WayPointSelectInfo.size();
   wWayPointList->ResetList();
