@@ -2041,11 +2041,12 @@ WndListFrame::on_paint(Canvas &canvas)
   WndFrame::on_paint(canvas);
 
   if (mClientCount > 0){
-    Viewport viewport(canvas, mClients[0]->GetWidth(),
-                      mClients[0]->GetHeight());
+    const RECT rc = mClients[0]->get_position();
+
+    Viewport viewport(canvas, rc.right - rc.left, rc.bottom - rc.top);
     Canvas &canvas2 = viewport;
 
-    viewport.move(mClients[0]->GetLeft(), 0);
+    viewport.move(rc.left, rc.top);
 
     for (i=0; i<mListInfo.ItemInViewCount; i++){
       canvas2.select(*mClients[0]->GetFont());
@@ -2059,7 +2060,7 @@ WndListFrame::on_paint(Canvas &canvas)
       mClients[0]->on_paint(canvas2);
 
       viewport.commit();
-      viewport.move(0, mClients[0]->GetHeight());
+      viewport.move(0, rc.bottom - rc.top);
     }
 
     viewport.restore();
