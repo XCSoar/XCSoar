@@ -348,25 +348,30 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
 
   endptr = _tcschr(input, _T(','));
 
-  tstring text = input;
-  size_t end = text.find_first_of(TEXT(",")); 
-  if (!end) {
-    return false;
+  {
+    tstring text = input;
+    size_t end = text.find_first_of(TEXT(",")); 
+    if (!end) {
+      return false;
+    }
+    way_point.Name = text.substr(0, end);
   }
-
-  way_point.Name = text.substr(0, end);
-  endptr += end;
 
   if (endptr != NULL) {
     input = endptr + 1;
     endptr = _tcschr(input, '*');
     if (endptr != NULL) {
       // if it is a home waypoint raise zoom level
-      way_point.Zoom = _tcstol(endptr + 2, NULL, 10);
+      way_point.Zoom = _tcstol(endptr + 1, NULL, 10);
     } else {
       way_point.Zoom = 0;
     }
-    way_point.Comment = input;
+    tstring text = input;
+    if (endptr>input) {
+      way_point.Comment = text.substr(0,endptr-input);
+    } else {
+      way_point.Comment = text;
+    }
   } else {
     way_point.Comment = TEXT("");
     way_point.Zoom = 0;
