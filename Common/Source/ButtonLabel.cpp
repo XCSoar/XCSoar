@@ -241,7 +241,7 @@ ButtonLabel::AnimateButton(unsigned i)
   assert(i < NUMBUTTONLABELS);
 
   RECT mRc, aniRect;
-  mRc = hWndButtonWindow[i].get_position();
+  mRc = hWndButtonWindow[i].get_screen_position();
 
   if (ButtonVisible[i]) {
     aniRect.top = (mRc.top*5+mRc.bottom)/6;

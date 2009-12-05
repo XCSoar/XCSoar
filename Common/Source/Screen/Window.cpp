@@ -192,6 +192,17 @@ Window::get_root_owner()
 
 #ifdef ENABLE_SDL
 
+void
+Window::to_screen(RECT &rc) const
+{
+  for (const Window *p = parent; p != NULL; p = p->parent) {
+    rc.left += p->left;
+    rc.top += p->top;
+    rc.right += p->left;
+    rc.bottom += p->top;
+  }
+}
+
 Window *
 Window::get_focused_window()
 {

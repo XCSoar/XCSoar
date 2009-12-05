@@ -889,7 +889,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   PeriodClock enter_clock;
   enter_clock.update();
 
-  RECT mRc = get_position();
+  RECT mRc = get_screen_position();
   DrawWireRects(XCSoarInterface::EnableAnimation,&mRc, 5);
 
   SetVisible(true);
@@ -1187,7 +1187,7 @@ WndButton::on_mouse_up(int x, int y)
   const RECT client_rect = get_client_rect();
   if (PtInRect(&client_rect, Pos)){
     if (mOnClickNotify != NULL) {
-      RECT mRc = get_position();
+      RECT mRc = get_screen_position();
       SetSourceRectangle(mRc);
       (mOnClickNotify)(this);
     }
@@ -1238,7 +1238,7 @@ WndButton::on_key_up(unsigned key_code)
         mDown = false;
         on_paint(get_canvas());
         if (mOnClickNotify != NULL) {
-          RECT mRc = get_position();
+          RECT mRc = get_screen_position();
           SetSourceRectangle(mRc);
           (mOnClickNotify)(this);
         }

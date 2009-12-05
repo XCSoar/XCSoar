@@ -82,7 +82,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   // TODO bug: doesn't work sometimes. buttons have to be pressed multiple times (TB)
   XCSoarInterface::Debounce();
 
-  rc = XCSoarInterface::main_window.get_position();
+  rc = XCSoarInterface::main_window.get_screen_position();
 
 #ifdef ALTAIRSYNC
   Width = DLGSCALE(220);

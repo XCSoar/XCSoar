@@ -350,6 +350,28 @@ public:
 #endif
   }
 
+#ifdef ENABLE_SDL
+  void to_screen(RECT &rc) const;
+#endif
+
+  /**
+   * Returns the position on the screen.
+   */
+  const RECT get_screen_position() const
+  {
+    RECT rc;
+#ifdef ENABLE_SDL
+    rc = get_position();
+    to_screen(rc);
+#else
+    ::GetWindowRect(hWnd, &rc);
+#endif
+    return rc;
+  }
+
+  /**
+   * Returns the position within the parent window.
+   */
   const RECT get_position() const
   {
     RECT rc;
@@ -359,7 +381,24 @@ public:
     rc.right = get_width();
     rc.bottom = get_height();
 #else
-    ::GetWindowRect(hWnd, &rc);
+    rc = get_screen_position();
+
+    HWND parent = ::GetParent(hWnd);
+    if (parent != NULL) {
+      POINT pt;
+
+      pt.x = rc.left;
+      pt.y = rc.top;
+      ::ScreenToClient(parent, &pt);
+      rc.left = pt.x;
+      rc.top = pt.y;
+
+      pt.x = rc.right;
+      pt.y = rc.bottom;
+      ::ScreenToClient(parent, &pt);
+      rc.right = pt.x;
+      rc.bottom = pt.y;
+    }
 #endif
     return rc;
   }
