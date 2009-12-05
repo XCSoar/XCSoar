@@ -128,6 +128,11 @@ NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 	}
 }
 
+/**
+ * Calculates the bearing from the given teamcode
+ * @param code The teamcode
+ * @return Bearing to the reference waypoint
+ */
 double
 GetBearing(const TCHAR *code)
 {
@@ -142,11 +147,16 @@ GetBearing(const TCHAR *code)
 	return bearing;
 }
 
+/**
+ * Calculates the distance from the given teamcode
+ * @param code The teamcode
+ * @return Distance to the reference waypoint
+ */
 double
 GetRange(const TCHAR *code)
 {
 	int val = GetValueFromTeamCode(&code[2], 3);
-	return val*100.0;
+	return val * 100.0;
 }
 
 double
