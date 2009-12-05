@@ -119,8 +119,8 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   dY = wText->GetLastDrawTextHeight() - Height;
   */
   dY = DLGSCALE(-40);
-  wText->SetHeight(wText->GetTextHeight() + 5);
-  wf->SetHeight(wf->GetHeight() + dY);
+  wText->resize(Width, wText->GetTextHeight() + 5);
+  wf->resize(Width, wf->get_size().cy + dY);
 
   y += dY;
 
@@ -183,7 +183,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   // Move buttons to the right positions
   for (i = 0; i < ButtonCount; i++) {
-    wButtons[i]->SetLeft(x);
+    wButtons[i]->move(x, y);
     x += d;
   }
 

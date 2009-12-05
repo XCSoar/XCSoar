@@ -591,7 +591,7 @@ void dlgTarget(void) {
     if (wf2)
     {
       RECT MapRectBig = XCSoarInterface::main_window.map.GetMapRectBig();
-      wf->SetLeft(MapRectBig.right- wf2->GetWidth());
+      wf->move(MapRectBig.top, MapRectBig.right - wf2->get_size().cx);
     }
   }
 
