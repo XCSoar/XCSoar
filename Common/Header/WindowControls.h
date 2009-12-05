@@ -97,7 +97,6 @@ private:
   int mHeight;
 
   WindowControl *mOwner;
-  WindowControl *mTopOwner;
   int  mBorderKind;
   Color mColorBack;
   Color mColorFore;
@@ -160,10 +159,6 @@ public:
 
   virtual int OnHelp();
 
-  virtual bool OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    (void)hwnd; (void)uMsg; (void)wParam; (void)lParam;
-    return false;
-  }
   virtual void Close(void) {
     SetVisible(false);
   }
@@ -418,9 +413,6 @@ protected:
   bool (*mOnKeyDownNotify)(WindowControl *Sender, unsigned key_code);
   bool (*mOnUserMsgNotify)(WindowControl *Sender, unsigned id);
 
-  virtual bool OnUnhandledMessage(HWND hwnd, UINT uMsg,
-                                  WPARAM wParam, LPARAM lParam);
-
   /** from class PaintWindow */
   virtual void on_paint(Canvas &canvas);
 
@@ -467,6 +459,11 @@ public:
   virtual bool on_command(unsigned id, unsigned code);
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
+
+#ifndef ENABLE_SDL
+  virtual LRESULT on_unhandled_message(HWND hwnd, UINT uMsg,
+                                       WPARAM wParam, LPARAM lParam);
+#endif
 
   Color SetForeColor(Color Value);
   Color SetBackColor(Color Value);

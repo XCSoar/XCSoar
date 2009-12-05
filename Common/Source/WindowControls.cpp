@@ -153,10 +153,6 @@ WindowControl::WindowControl(WindowControl *Owner,
   mWidth = Width;
   mHeight = Height;
   mOwner = Owner;
-  // setup Master Window (the owner of all)
-  mTopOwner = Owner;
-  while (Owner != NULL && mTopOwner->GetOwner() != NULL)
-    mTopOwner = mTopOwner->GetOwner();
 
   // todo
   mhFont = &MapWindowFont;
@@ -696,23 +692,10 @@ WindowControl::on_unhandled_message(HWND hwnd, UINT uMsg,
                                     WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg){
-  case WM_ERASEBKGND:
-  case WM_PAINT:
-  case WM_WINDOWPOSCHANGED:
-  case WM_CREATE:
-  case WM_DESTROY:
-  case WM_ACTIVATE:
-  case WM_CLOSE:
-    /* exclude these from OnUnhandledMessage() */
-    return ContainerWindow::on_unhandled_message(hwnd, uMsg, wParam, lParam);
-  }
-
-  if (mTopOwner != NULL){
-    if (mTopOwner->OnUnhandledMessage(hwnd, uMsg, wParam, lParam))
-     return 0;
-  } else {
-    if (OnUnhandledMessage(hwnd, uMsg, wParam, lParam))
-     return 0;
+  case WM_KEYDOWN:
+    if (mOwner != NULL &&
+        mOwner->on_unhandled_message(hwnd, uMsg, wParam, lParam))
+      return 0;
   }
 
   return ContainerWindow::on_unhandled_message(hwnd, uMsg, wParam, lParam);
@@ -1125,29 +1108,35 @@ WndForm::SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigne
 
 // normal form stuff (nonmodal)
 
-bool
-WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+#ifndef ENABLE_SDL
+
+LRESULT
+WndForm::on_unhandled_message(HWND hwnd, UINT uMsg,
+                              WPARAM wParam, LPARAM lParam)
 {
   if (uMsg == WM_KEYDOWN){
     if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, wParam))
-      return true;
+      return 0;
 
     if (ActiveControl != NULL){
       switch(wParam & 0xffff){
         case VK_UP:
           if (ActiveControl->GetOwner() != NULL)
             ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-        return true;
+        return 0;
+
         case VK_DOWN:
           if (ActiveControl->GetOwner() != NULL)
             ActiveControl->GetOwner()->FocusNext(ActiveControl);
-        return true;
+        return 0;
       }
     }
   }
 
-  return false;
+  return WindowControl::on_unhandled_message(hwnd, uMsg, wParam, lParam);
 }
+
+#endif /* !ENABLE_SDL */
 
 void WndForm::Show(void){
 
