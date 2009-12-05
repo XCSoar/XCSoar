@@ -39,6 +39,7 @@ Copyright_License {
 #if !defined(__WINDOWSCONTROL_H)
 #define __WINDOWSCONTROL_H
 
+#include "Screen/Bitmap.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/EditWindow.hpp"
@@ -287,6 +288,84 @@ protected:
 };
 
 class WndListFrame : public WndFrame {
+  class ScrollBar {
+    Bitmap hScrollBarBitmapTop;
+    Bitmap hScrollBarBitmapMid;
+    Bitmap hScrollBarBitmapBot;
+    Bitmap hScrollBarBitmapFill;
+
+  protected:
+    bool dragging;
+    int drag_offset;
+    RECT rc, button;
+
+  public:
+    enum {
+      SCROLLBARWIDTH_INITIAL = 32,
+    };
+
+    ScrollBar();
+
+    int get_width() const {
+      return rc.right - rc.left;
+    }
+
+    int get_height() const {
+      return rc.bottom - rc.top;
+    }
+
+    int get_button_height() const {
+      return button.bottom - button.top;
+    }
+
+    int get_netto_height() const {
+      return get_height() - 2 * get_width();
+    }
+
+    int get_scroll_height() const {
+      return get_netto_height() - get_button_height();
+    }
+
+    bool defined() const {
+      return get_width() > 0;
+    }
+
+    bool in(const POINT pt) const {
+      return ::PtInRect(&rc, pt);
+    }
+
+    bool in_button(const POINT pt) const {
+      return ::PtInRect(&button, pt);
+    }
+
+    bool in_up_arrow(int y) const {
+      return y < rc.top + get_width();
+    }
+
+    bool in_down_arrow(int y) const {
+      return y >= rc.bottom - get_width();
+    }
+
+    bool above_button(int y) const {
+      return y < button.top;
+    }
+
+    bool below_button(int y) const {
+      return y >= button.bottom;
+    }
+
+    void set(const SIZE size, unsigned top);
+    void set_button(unsigned size, unsigned view_size, unsigned origin);
+    unsigned to_origin(unsigned size, unsigned view_size, int y) const;
+
+    void paint(Canvas &canvas, Color fore_color) const;
+
+    bool is_dragging() const { return dragging; }
+    void drag_begin(unsigned y);
+    void drag_end();
+    unsigned drag_move(unsigned size, unsigned view_size, int y) const;
+  };
+
 public:
 
   typedef struct{
@@ -318,14 +397,9 @@ public:
   int GetItemIndex(void) { return mListInfo.ItemIndex; }
   void SetItemIndex(int iValue);
   void SelectItemFromScreen(int xPos, int yPos);
-  int GetScrollBarHeight (void);
-  int GetScrollIndexFromScrollBarTop(int iScrollBarTop);
-  int GetScrollBarTopFromScrollIndex();
 
 protected:
-#define SCROLLBARWIDTH_INITIAL 32
-  int ScrollbarTop;
-  int ScrollbarWidth;
+  ScrollBar scroll_bar;
 
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
@@ -337,11 +411,6 @@ protected:
 
   /** from class PaintWindow */
   virtual void on_paint(Canvas &canvas);
-
-  RECT rcScrollBarButton;
-  RECT rcScrollBar;
-  int mMouseScrollBarYOffset; // where in the scrollbar button was mouse down at
-  bool mMouseDown;
 };
 
 class WndOwnerDrawFrame : public WndFrame {
