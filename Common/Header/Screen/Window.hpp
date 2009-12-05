@@ -185,9 +185,23 @@ public:
     assert_none_locked();
 
 #ifdef ENABLE_SDL
+    // XXX
 #else /* !ENABLE_SDL */
     ::SetWindowPos(hWnd, NULL, left, top, width, height,
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+    // XXX store new size?
+#endif
+  }
+
+  void resize(unsigned width, unsigned height) {
+    assert_none_locked();
+
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
+    ::SetWindowPos(hWnd, NULL, 0, 0, width, height,
+                   SWP_NOMOVE | SWP_NOZORDER |
+                   SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     // XXX store new size?
 #endif
   }
