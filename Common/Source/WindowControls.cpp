@@ -425,7 +425,7 @@ bool WindowControl::SetReadOnly(bool Value){
   bool res = mReadOnly;
   if (mReadOnly != Value){
     mReadOnly = Value;
-    on_paint(GetCanvas());
+    invalidate();
   }
   return res;
 }
@@ -435,8 +435,7 @@ Color WindowControl::SetForeColor(Color Value)
   Color res = mColorFore;
   if (mColorFore != Value){
     mColorFore = Value;
-    if (mVisible)
-      on_paint(GetCanvas());
+    invalidate();
   }
   return res;
 }
@@ -447,8 +446,7 @@ Color WindowControl::SetBackColor(Color Value)
   if (mColorBack != Value){
     mColorBack = Value;
     mhBrushBk.set(mColorBack);
-    if (mVisible)
-      on_paint(GetCanvas());
+    invalidate();
   }
   return res;
 }
