@@ -114,6 +114,25 @@ Waypoints::find_nearest(const GEOPOINT &loc) const
 }
 
 const Waypoint*
+Waypoints::lookup_location(const GEOPOINT &loc) const
+{
+  WaypointEnvelope bb_target(loc, task_projection);
+  std::pair<WaypointTree::const_iterator, double> 
+    found = waypoint_tree.find_nearest(bb_target);
+
+#ifdef INSTRUMENT_TASK
+  n_queries++;
+#endif
+
+  if (found.first != waypoint_tree.end()) {
+    return &((found.first)->get_waypoint());
+  } else {
+    return NULL;
+  }
+}
+
+
+const Waypoint*
 Waypoints::lookup_id(const unsigned id) const
 {
   WaypointTree::const_iterator found = waypoint_tree.begin();

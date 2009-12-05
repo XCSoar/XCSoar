@@ -21,6 +21,20 @@ public:
   }
 };
 
+unsigned test_location(const Waypoints& waypoints)
+{
+  GEOPOINT loc; // at 0,0
+  const Waypoint *r = waypoints.lookup_location(loc);
+  if (r) {
+    WaypointVisitorPrint v;
+    v.Visit(*r);
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+
 unsigned test_range(const Waypoints& waypoints, const double range)
 {
   const Waypoint *r = waypoints.lookup_id(3);
@@ -91,7 +105,7 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(11);
+  plan_tests(12);
 
   Waypoints waypoints;
 
@@ -102,6 +116,7 @@ int main(int argc, char** argv)
   ok(test_lookup(waypoints,3),"waypoint lookup",0);
   ok(!test_lookup(waypoints,5000),"waypoint bad lookup",0);
   ok(test_nearest(waypoints),"waypoint nearest",0);
+  ok(test_location(waypoints),"waypoint location",0);
   ok(test_range(waypoints,100)==1,"waypoint visit range 100m",0);
   ok(test_radius(waypoints,100)==1,"waypoint radius 100m",0);
   ok(test_range(waypoints,500000)== waypoints.size(),"waypoint range 500000m",0);
