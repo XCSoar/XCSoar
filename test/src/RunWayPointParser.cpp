@@ -36,7 +36,7 @@ Copyright_License {
 */
 
 #include "Waypointparser.h"
-#include "WayPointList.hpp"
+#include "Waypoint/Waypoints.hpp"
 #include "RasterTerrain.h"
 #include "Thread/Mutex.hpp"
 #include "Language.hpp"
@@ -171,9 +171,13 @@ int main(int argc, char **argv)
   }
 
   TCHAR path[MAX_PATH];
-  WayPointList way_points;
+  Waypoints way_points;
 
   ascii2unicode(argv[1], path);
   ReadWayPointFile(path, way_points, NULL);
+
+  way_points.optimise();
+  printf("Size %d\n", way_points.size());
+
   return 0;
 }
