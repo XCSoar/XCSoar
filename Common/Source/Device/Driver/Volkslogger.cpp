@@ -135,7 +135,7 @@ static VLAPI vl;
 static int nturnpoints = 0;
 
 static bool
-VLDeclAddWayPoint(const WAYPOINT &way_point);
+VLDeclAddWayPoint(const Waypoint &way_point);
 
 #ifdef OLD_TASK
 

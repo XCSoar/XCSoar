@@ -51,7 +51,11 @@ class AirspaceDatabase;
 void StartupScreen();
 
 bool dlgAirspaceWarningShowDlg(bool force);
-int dlgWayPointSelect(const GEOPOINT &location, const int type=-1, const int FilterNear=0);
+
+const Waypoint* dlgWayPointSelect(const GEOPOINT &location, 
+                                  const int type=-1, 
+                                  const int FilterNear=0);
+
 int dlgAirspaceColoursShowModal(void);
 int dlgAirspacePatternsShowModal(void);
 void dlgAirspaceShowModal(bool colored);

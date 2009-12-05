@@ -734,8 +734,8 @@ void InputEvents::eventAnalysis(const TCHAR *misc) {
 // for more info.
 void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
-#ifdef OLD_TASK
   if (_tcscmp(misc, TEXT("current")) == 0) {
+#ifdef OLD_TASK
     if (task.Valid()) {
       task.setSelected();
     }
@@ -746,26 +746,25 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
     ScopePopupBlock block(main_window.popup);
     dlgWayPointDetailsShowModal(way_point);
-  } else
-    if (_tcscmp(misc, TEXT("select")) == 0) {
-      ScopePopupBlock block(main_window.popup);
-      int res = dlgWayPointSelect(Basic().Location);
-      if (res != -1){
-	task.setSelected(res);
-        dlgWayPointDetailsShowModal(way_point);
-      };
-    }
 #endif
+  } else if (_tcscmp(misc, TEXT("select")) == 0) {
+    ScopePopupBlock block(main_window.popup);
+    const Waypoint* wp = dlgWayPointSelect(Basic().Location);
+    if (wp) {
+//      task.setSelected(res);
+      dlgWayPointDetailsShowModal(*wp);
+    };
+  }
 }
 
 
 void InputEvents::eventGotoLookup(const TCHAR *misc) {
-#ifdef OLD_TASK
   ScopePopupBlock block(main_window.popup);
-  int res = dlgWayPointSelect(Basic().Location);
-  if (res != -1){
+  const Waypoint* wp = dlgWayPointSelect(Basic().Location);
+#ifdef OLD_TASK
+  if (wp) {
     task.FlyDirectTo(res, SettingsComputer(), Basic());
-  };
+  }
 #endif
 }
 

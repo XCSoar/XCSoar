@@ -997,13 +997,16 @@ static void OnWaypointNewClicked(WindowControl * Sender){
 
 
 static void OnWaypointEditClicked(WindowControl * Sender){
-	(void)Sender;
-  int res;
+  (void)Sender;
 #ifdef OLD_TASK
-  res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
-  if (res != -1){
-    dlgWaypointEditShowModal(way_points.set(res));
-    waypointneedsave = true;
+  const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::Basic().Location);
+  if (way_point){
+    Waypoint wp_copy = *way_point;
+    dlgWaypointEditShowModal(wp_copy);
+    if (wp_copy != *way_point) {
+      waypointneedsave = true;
+      waypoints.replace(*way_point, wp_copy);
+    }
   }
 #endif
 }

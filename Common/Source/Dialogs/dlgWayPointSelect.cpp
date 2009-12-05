@@ -43,22 +43,13 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
+#include "Math/Geometry.hpp"
 #include "DataField/Base.hpp"
-#include "WayPointList.hpp"
+#include "Waypoint/WaypointSorter.hpp"
 #include "Components.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
-
-typedef struct{
-  int Index;
-  double Distance;
-  double Direction;
-  int    DirectionErr;
-  int    Type;
-  int    FileIdx;
-  unsigned int FourChars;
-} WayPointSelectInfo_t;
 
 static GEOPOINT Location;
 
@@ -68,258 +59,133 @@ static WndOwnerDrawFrame *wWayPointListEntry = NULL;
 
 static const TCHAR NameFilter[] = TEXT("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 static unsigned NameFilterIdx=0;
-
 static double DistanceFilter[] = {0.0, 25.0, 50.0, 75.0, 100.0, 150.0, 250.0, 500.0, 1000.0};
 static unsigned DistanceFilterIdx=0;
-
 #define DirHDG -1
-
 static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330};
 static unsigned DirectionFilterIdx=0;
+
 static int lastHeading=0;
 
 static const TCHAR *TypeFilter[] = {TEXT("*"), TEXT("Airport"), TEXT("Landable"),
 				    TEXT("Turnpoint"), TEXT("File 1"), TEXT("File 2")};
 static unsigned TypeFilterIdx=0;
 
-static unsigned UpLimit=0;
-static unsigned LowLimit=0;
-
 static int ItemIndex = -1;
 
-static int SelectedWayPointFileIdx = 0;
-
-
 static void OnWaypointListEnter(WindowControl * Sender,
-				WndListFrame::ListInfo_t *ListInfo){
-	(void)Sender; (void)ListInfo;
+				WndListFrame::ListInfo_t *ListInfo)
+{
+  (void)Sender; (void)ListInfo;
+
   if (ItemIndex != -1) {
     wf->SetModalResult(mrOK);
-  }
-  else
+  } else
     wf->SetModalResult(mrCancel);
 }
 
+static WaypointSelectInfoVector WayPointSelectInfo;
 
-static WayPointSelectInfo_t *WayPointSelectInfo=NULL;
+WaypointSorter* waypoint_sorter;
+int UpLimit = 0;
 
-static int _cdecl WaypointNameCompare(const void *elem1, const void *elem2 ){
-  if (((WayPointSelectInfo_t *)elem1)->FourChars < ((WayPointSelectInfo_t *)elem2)->FourChars)
-    return (-1);
-  if (((WayPointSelectInfo_t *)elem1)->FourChars > ((WayPointSelectInfo_t *)elem2)->FourChars)
-    return (+1);
-  return (0);
-}
-
-static int _cdecl WaypointDistanceCompare(const void *elem1, const void *elem2 ){
-  if (((WayPointSelectInfo_t *)elem1)->Distance < ((WayPointSelectInfo_t *)elem2)->Distance)
-    return (-1);
-  if (((WayPointSelectInfo_t *)elem1)->Distance > ((WayPointSelectInfo_t *)elem2)->Distance)
-    return (+1);
-  return (0);
-}
-
-static int _cdecl WaypointAirportCompare(const void *elem1, const void *elem2 ){
-  if (((WayPointSelectInfo_t *)elem1)->Type & (AIRPORT))
-    return (-1);
-  return (+1);
-}
-
-static int _cdecl WaypointLandableCompare(const void *elem1, const void *elem2 ){
-  if (((WayPointSelectInfo_t *)elem1)->Type & (AIRPORT | LANDPOINT))
-    return (-1);
-  return (+1);
-}
-
-static int _cdecl WaypointWayPointCompare(const void *elem1, const void *elem2 ){
-  if (((WayPointSelectInfo_t *)elem1)->Type & (TURNPOINT))
-    return (-1);
-  return (+1);
-}
-
-static int _cdecl WaypointFileIdxCompare(const void *elem1, const void *elem2 ){
-  if (((WayPointSelectInfo_t *)elem1)->FileIdx != SelectedWayPointFileIdx)
-    return (+1);
-  return (-1);
-}
-
-static int _cdecl WaypointDirectionCompare(const void *elem1, const void *elem2 ){
-
-  int a, a1, a2;
-
-  a = DirectionFilter[DirectionFilterIdx];
-  if (a == DirHDG){
-    a = iround(XCSoarInterface::Calculated().Heading);
-    lastHeading = a;
-  }
-
-  a1 = (int)(((WayPointSelectInfo_t *)elem1)->Direction - a);
-  a2 = (int)(((WayPointSelectInfo_t *)elem2)->Direction - a);
-
-  if (a1 > 180)
-    a1 -=360;
-
-  if (a1 < -180)
-    a1 +=360;
-
-  if (a2 > 180)
-    a2 -=360;
-
-  if (a2 < -180)
-    a2 +=360;
-
-  a1 = abs(a1);
-  a2 = abs(a2);
-
-  ((WayPointSelectInfo_t *)elem1)->DirectionErr = a1;
-  ((WayPointSelectInfo_t *)elem2)->DirectionErr = a2;
-
-  if (a1 < a2)
-    return (-1);
-  if (a1 > a2)
-    return (+1);
-
-  return (0);
-}
-
-static void PrepareData(void){
-
-  TCHAR sTmp[5];
-
-  WayPointSelectInfo = (WayPointSelectInfo_t*)malloc(sizeof(WayPointSelectInfo_t) *
-                                                     way_points.get_count());
-
-  for (unsigned i = 0; way_points.verify_index(i); ++i) {
-    const WAYPOINT &way_point = way_points.get(i);
-
-    WayPointSelectInfo[i].Index = i;
-
-    DistanceBearing(Location,
-                    way_point.Location,
-                    &(WayPointSelectInfo[i].Distance),
-                    &(WayPointSelectInfo[i].Direction));
-    WayPointSelectInfo[i].Distance *= DISTANCEMODIFY;
-
-    _tcsncpy(sTmp, way_point.Name, 4);
-    sTmp[4] = '\0';
-    _tcsupr(sTmp);
-
-    WayPointSelectInfo[i].FourChars =
-                    (((DWORD)sTmp[0] & 0xff) << 24)
-                  + (((DWORD)sTmp[1] & 0xff) << 16)
-                  + (((DWORD)sTmp[2] & 0xff) << 8)
-                  + (((DWORD)sTmp[3] & 0xff) );
-
-    WayPointSelectInfo[i].Type = way_point.Flags;
-
-    WayPointSelectInfo[i].FileIdx = way_point.FileNum;
-
-  }
-
-  qsort(WayPointSelectInfo, UpLimit,
-      sizeof(WayPointSelectInfo_t), WaypointNameCompare);
-
-}
-
-
-static void UpdateList(void){
+static void UpdateList(void)
+{
 
 //  TCHAR sTmp[128];
   bool distancemode = false;
 
   ItemIndex = 0;
 
-  UpLimit = way_points.get_count();
-  LowLimit =0;
+  WayPointSelectInfo = waypoint_sorter->get_list();
 
-  if (TypeFilterIdx == 1){
-    qsort(WayPointSelectInfo, way_points.get_count(),
-        sizeof(WayPointSelectInfo_t), WaypointAirportCompare);
-    for (unsigned i = 0; way_points.verify_index(i); ++i) {
-      if (!(WayPointSelectInfo[i].Type & (AIRPORT))){
-        UpLimit = i;
-        break;
-      }
-    }
+  switch(TypeFilterIdx) {
+  case 1: 
+    waypoint_sorter->filter_airport(WayPointSelectInfo);
+    break;
+  case 2:
+    waypoint_sorter->filter_landable(WayPointSelectInfo);
+    break;
+  case 3: 
+    waypoint_sorter->filter_turnpoint(WayPointSelectInfo);
+    break;
+  case 4:
+  case 5:
+    waypoint_sorter->filter_file(WayPointSelectInfo, TypeFilterIdx-4);
+    break;
+  default:
+    break;
   }
-
-  if (TypeFilterIdx == 2){
-    qsort(WayPointSelectInfo, way_points.get_count(),
-        sizeof(WayPointSelectInfo_t), WaypointLandableCompare);
-    for (unsigned i = 0; way_points.verify_index(i); ++i) {
-      if (!(WayPointSelectInfo[i].Type & (AIRPORT | LANDPOINT))){
-        UpLimit = i;
-        break;
-      }
-    }
-  }
-
-  if (TypeFilterIdx == 3){
-    qsort(WayPointSelectInfo, way_points.get_count(),
-        sizeof(WayPointSelectInfo_t), WaypointWayPointCompare);
-    for (unsigned i = 0; way_points.verify_index(i); ++i) {
-      if (!(WayPointSelectInfo[i].Type & (TURNPOINT))){
-        UpLimit = i;
-        break;
-      }
-    }
-  }
-
-  if (TypeFilterIdx == 4 || TypeFilterIdx == 5){
-    // distancemode = true;
-    SelectedWayPointFileIdx = TypeFilterIdx-4;
-    qsort(WayPointSelectInfo, way_points.get_count(),
-        sizeof(WayPointSelectInfo_t), WaypointFileIdxCompare);
-    for (unsigned i = 0; way_points.verify_index(i); ++i) {
-      if (WayPointSelectInfo[i].FileIdx != SelectedWayPointFileIdx){
-        UpLimit = i;
-        break;
-      }
-    }
-  }
-
-  if (DistanceFilterIdx != 0){
+  
+  /*
+  if (DistanceFilterIdx != 0) {
     distancemode = true;
-    qsort(WayPointSelectInfo, UpLimit,
-        sizeof(WayPointSelectInfo_t), WaypointDistanceCompare);
-    for (unsigned i = 0; i < UpLimit; i++){
-      if (WayPointSelectInfo[i].Distance > DistanceFilter[DistanceFilterIdx]){
+    
+    std::sort(WayPointSelectInfo.begin(),
+              WayPointSelectInfo.end(),
+              WaypointDistanceCompare);
+    
+    int i=0;
+    for (WaypointSelectInfoVector::const_iterator it = WayPointSelectInfo.begin();
+         it != WayPointSelectInfo.end(); it++, i++) {
+      
+      if (it->Distance > DistanceFilter[DistanceFilterIdx]) {
         UpLimit = i;
         break;
       }
+      i++;
     }
   }
-
+  
   if (DirectionFilterIdx != 0){
     distancemode = true;
-    qsort(WayPointSelectInfo, UpLimit,
-        sizeof(WayPointSelectInfo_t), WaypointDirectionCompare);
-    for (unsigned i = 0; i < UpLimit; i++){
-      if (WayPointSelectInfo[i].DirectionErr > 18){
+    
+    int a = DirectionFilter[DirectionFilterIdx];
+    if (a == DirHDG) {
+      a = iround(XCSoarInterface::Calculated().Heading);
+      lastHeading = a;
+    }
+    
+    for (WaypointSelectInfoVector::iterator it = WayPointSelectInfo.begin();
+         it != WayPointSelectInfo.end(); it++) {
+      it->DirectionErr = fabs(AngleLimit180(it->Direction-a));
+    }
+    
+    std::sort(WayPointSelectInfo.begin(),
+              WayPointSelectInfo.end(),
+              WaypointDirectionCompare);
+    
+    int i=0;
+    for (WaypointSelectInfoVector::const_iterator it = WayPointSelectInfo.begin();
+         it != WayPointSelectInfo.end(); it++, i++) {
+      
+      if (it->DirectionErr > 18) {
         UpLimit = i;
         break;
       }
     }
   }
 
-  if (NameFilterIdx != 0){
+  if (NameFilterIdx != 0) {
     TCHAR sTmp[8];
-    LowLimit = UpLimit;
-    qsort(WayPointSelectInfo, UpLimit,
-        sizeof(WayPointSelectInfo_t), WaypointNameCompare);
+
+    std::sort(WayPointSelectInfo.begin(),
+              WayPointSelectInfo.begin()+UpLimit,
+              WaypointNameCompare);
+
     sTmp[0] = NameFilter[NameFilterIdx];
     sTmp[1] = '\0';
     sTmp[2] = '\0';
     _tcsupr(sTmp);
 
     unsigned i;
+    LowLimit = UpLimit;
     for (i = 0; i < UpLimit; i++){
       if ((BYTE)(WayPointSelectInfo[i].FourChars >> 24) >= (sTmp[0]&0xff)){
         LowLimit = i;
         break;
       }
     }
-
     for (; i<UpLimit; i++){
       if ((BYTE)(WayPointSelectInfo[i].FourChars >> 24) != (sTmp[0]&0xff)){
         UpLimit = i;
@@ -329,16 +195,20 @@ static void UpdateList(void){
   }
 
   if (!distancemode) {
-    qsort(&WayPointSelectInfo[LowLimit], UpLimit-LowLimit,
-	  sizeof(WayPointSelectInfo_t), WaypointNameCompare);
+    std::sort(WayPointSelectInfo.begin()+LowLimit,
+              WayPointSelectInfo.end()+UpLimit-LowLimit,
+              WaypointNameCompare);
   } else {
-    qsort(&WayPointSelectInfo[LowLimit], UpLimit-LowLimit,
-	  sizeof(WayPointSelectInfo_t), WaypointDistanceCompare);
+    std::sort(WayPointSelectInfo.begin()+LowLimit,
+              WayPointSelectInfo.end()+UpLimit-LowLimit,
+              WaypointDistanceCompare);
   }
 
+  */
+
+  UpLimit = WayPointSelectInfo.size();
   wWayPointList->ResetList();
   wWayPointList->Redraw();
-
 }
 
 
@@ -537,15 +407,12 @@ static void
 OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 {
   (void)Sender;
-  int n = UpLimit - LowLimit;
   TCHAR sTmp[12];
 
-  if (DrawListIndex < n){
+  if (DrawListIndex < UpLimit) {
 
-    int i = LowLimit + DrawListIndex;
-    const WAYPOINT &way_point = way_points.get(WayPointSelectInfo[i].Index);
-
-// Sleep(100);
+    int i = DrawListIndex;
+    const Waypoint &way_point = *WayPointSelectInfo[i].way_point;
 
     int w0, w1, w2, w3, x1, x2, x3;
     if (InfoBoxLayout::landscape) {
@@ -561,23 +428,23 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
     canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
                         x1 - InfoBoxLayout::scale * 5,
-                        way_point.Name);
+                        way_point.Name.c_str());
 
     sTmp[0] = '\0';
     sTmp[1] = '\0';
     sTmp[2] = '\0';
 
-    if (way_point.Flags & HOME){
+    if (way_point.Flags.Home){
       sTmp[0] = 'H';
     }else
-    if (way_point.Flags & AIRPORT){
+    if (way_point.Flags.Airport){
       sTmp[0] = 'A';
     }else
-    if (way_point.Flags & LANDPOINT){
+    if (way_point.Flags.LandPoint){
       sTmp[0] = 'L';
     }
 
-    if (way_point.Flags & TURNPOINT){
+    if (way_point.Flags.TurnPoint) {
       if (sTmp[0] == '\0')
         sTmp[0] = 'T';
       else
@@ -589,7 +456,7 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
     // right justified after waypoint flags
     _stprintf(sTmp, TEXT("%.0f%s"),
-              WayPointSelectInfo[i].Distance,
+              WayPointSelectInfo[i].Distance.as_double(),
               Units::GetDistanceName());
     x2 = w0-w3-canvas.text_width(sTmp);
     canvas.text_opaque(x2, 2 * InfoBoxLayout::scale, sTmp);
@@ -616,7 +483,7 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 static void OnWpListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   (void)Sender;
 	if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = UpLimit-LowLimit;
+    ListInfo->ItemCount = UpLimit;
   } else {
     DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
     ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
@@ -687,10 +554,11 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-int dlgWayPointSelect(const GEOPOINT &location, const int type, const int FilterNear){
-
+const Waypoint* 
+dlgWayPointSelect(const GEOPOINT &location, 
+                  const int type, const int FilterNear)
+{
   UpLimit = 0;
-  LowLimit = 0;
   ItemIndex = -1;
 
   Location = location;
@@ -714,7 +582,7 @@ int dlgWayPointSelect(const GEOPOINT &location, const int type, const int Filter
                         TEXT("IDR_XML_WAYPOINTSELECT"));
   }
 
-  if (!wf) return -1;
+  if (!wf) return NULL;
 
   assert(wf!=NULL);
 
@@ -737,24 +605,26 @@ int dlgWayPointSelect(const GEOPOINT &location, const int type, const int Filter
   wpDistance = (WndProperty*)wf->FindByName(TEXT("prpFltDistance"));
   wpDirection = (WndProperty*)wf->FindByName(TEXT("prpFltDirection"));
 
-  PrepareData();
+  WaypointSorter g_waypoint_sorter(way_points, location, DISTANCEMODIFY);
+  waypoint_sorter = &g_waypoint_sorter;
+  
   UpdateList();
 
   wf->SetTimerNotify(OnTimerNotify);
 
-  if ((wf->ShowModal() == mrOK) && (UpLimit > LowLimit) &&
-      (ItemIndex >= 0)  // JMW fixed bug, was >0
-      && ((unsigned)ItemIndex < (UpLimit - LowLimit))) {
-    ItemIndex = WayPointSelectInfo[LowLimit + ItemIndex].Index;
-  }else
-    ItemIndex = -1;
+  const Waypoint* wp_selected = NULL;
 
-  free(WayPointSelectInfo);
+  if ((wf->ShowModal() == mrOK) && UpLimit &&
+      (ItemIndex >= 0)  // JMW fixed bug, was >0
+      && ((unsigned)ItemIndex < UpLimit)) {
+
+    printf("selected\n");
+    wp_selected = WayPointSelectInfo[ItemIndex].way_point;
+  }
 
   delete wf;
 
   wf = NULL;
 
-  return(ItemIndex);
-
+  return wp_selected;
 }
