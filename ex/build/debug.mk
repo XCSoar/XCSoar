@@ -1,5 +1,5 @@
 ifeq ($(DEBUG),y)
-OPTIMIZE := -O0 -ggdb
+OPTIMIZE := -O0 -ggdb -funit-at-a-time
   ifneq ($(TARGET),UNIX)
     # WINE works best with stabs debug symbols
     OPTIMIZE += -gstabs

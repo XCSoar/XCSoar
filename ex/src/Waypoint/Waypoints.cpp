@@ -125,10 +125,11 @@ Waypoints::lookup_location(const GEOPOINT &loc) const
 #endif
 
   if (found.first != waypoint_tree.end()) {
-    return &((found.first)->get_waypoint());
-  } else {
-    return NULL;
-  }
+    const Waypoint* wp = &(found.first)->get_waypoint();
+    if (wp->Location == loc)
+      return wp;
+  } 
+  return NULL;
 }
 
 
