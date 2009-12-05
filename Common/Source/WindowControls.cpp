@@ -148,10 +148,6 @@ WindowControl::WindowControl(WindowControl *Owner,
 
   // todo
 
-  mX = X;
-  mY = Y;
-  mWidth = Width;
-  mHeight = Height;
   mOwner = Owner;
 
   // todo
@@ -180,7 +176,7 @@ WindowControl::WindowControl(WindowControl *Owner,
   }
   InstCount++;
 
-  set(Parent, mX, mY, mWidth, mHeight,
+  set(Parent, X, Y, Width, Height,
       false, false, false, false, false);
 
   if (mOwner != NULL)
@@ -231,38 +227,6 @@ void WindowControl::Destroy(void){
 
 }
 
-void WindowControl::UpdatePosSize(void){
-  move(mX, mY, mWidth, mHeight);
-}
-
-void WindowControl::SetTop(int Value){
-  if (mY != Value){
-    mY = Value;
-    UpdatePosSize();
-  }
-}
-
-void WindowControl::SetLeft(int Value){
-  if (mX != Value){
-    mX = Value;
-    UpdatePosSize();
-  }
-}
-
-void WindowControl::SetHeight(int Value){
-  if (mHeight != Value){
-    mHeight = Value;
-    UpdatePosSize();
-  }
-}
-
-void WindowControl::SetWidth(int Value){
-  if (mWidth != Value){
-    mWidth = Value;
-    UpdatePosSize();
-  }
-}
-
 WindowControl *WindowControl::GetCanFocus(void){
   if (mVisible && mCanFocus && !mReadOnly)
     return this;
@@ -286,12 +250,9 @@ void WindowControl::AddClient(WindowControl *Client){
   Client->SetOwner(this);
   Client->SetFont(GetFont());
 
-  if (Client->get_position().top == -1){
-    if (mClientCount > 1){
-      Client->mY = mClients[mClientCount - 2]->get_position().bottom;
-      Client->move(Client->mX, Client->mY);
-    }
-  }
+  if (Client->get_position().top == -1 && mClientCount > 1)
+    Client->move(Client->get_position().left,
+                 mClients[mClientCount - 2]->get_position().bottom);
 
   /*
   // TODO code: also allow autosizing of height/width to maximum of parent

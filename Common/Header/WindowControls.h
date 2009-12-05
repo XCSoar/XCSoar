@@ -91,11 +91,6 @@ public:
   typedef void (*OnHelpCallback_t)(WindowControl *Sender);
 
 private:
-  int mX;
-  int mY;
-  int mWidth;
-  int mHeight;
-
   WindowControl *mOwner;
   int  mBorderKind;
   Color mColorBack;
@@ -134,7 +129,6 @@ protected:
 
   virtual void PaintSelector(Canvas &canvas);
   virtual WindowControl *SetOwner(WindowControl *Value);
-  void UpdatePosSize(void);
   bool HasFocus(void) { return mHasFocus; }
 
 public:
@@ -169,9 +163,6 @@ public:
   void SetOnHelpCallback(void(*Function)(WindowControl *Sender)) {
     mOnHelpCallback = Function;
   }
-
-  int GetWidth(void) { return mWidth; }
-  int GetHeight(void) { return mHeight; }
 
   bool SetFocused(bool Value);
   bool GetFocused(void);
@@ -231,14 +222,6 @@ public:
   int SetTag(int Value) {
     mTag = Value; return mTag;
   }
-
-  void SetTop(int Value);
-  void SetLeft(int Value);
-  void SetWidth(int Value);
-  void SetHeight(int Value);
-
-  int GetTop(void) { return mY; }
-  int GetLeft(void) { return mX; }
 
   WindowControl *FocusNext(WindowControl *Sender);
   WindowControl *FocusPrev(WindowControl *Sender);
