@@ -230,11 +230,11 @@ void WindowControl::Destroy(void){
 Window *
 WindowControl::GetCanFocus()
 {
-  if (mVisible && mCanFocus && !mReadOnly)
-    return this;
-
   if (!mVisible)
     return NULL;
+
+  if (mCanFocus && !mReadOnly)
+    return this;
 
   for (int idx=0; idx<mClientCount; idx++){
     Window *w;
