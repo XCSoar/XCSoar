@@ -114,6 +114,19 @@ Waypoints::find_nearest(const GEOPOINT &loc) const
 }
 
 const Waypoint*
+Waypoints::lookup_name(const tstring &name) const
+{
+  WaypointTree::const_iterator found = waypoint_tree.begin();
+  while (found != waypoint_tree.end()) {
+    if ((*found).get_waypoint().Name == name) {
+      return &(*found).get_waypoint();
+    }
+    found++;
+  }
+  return NULL;
+}
+
+const Waypoint*
 Waypoints::lookup_location(const GEOPOINT &loc) const
 {
   WaypointEnvelope bb_target(loc, task_projection);

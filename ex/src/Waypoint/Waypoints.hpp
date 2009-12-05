@@ -113,6 +113,15 @@ public:
   const Waypoint* lookup_location(const GEOPOINT &loc) const;
 
 /** 
+ * Look up waypoint by name (returns first match)
+ * 
+ * @param loc Name of waypoint to find in internal tree
+ * 
+ * @return Pointer to waypoint if found (or NULL if not)
+ */
+  const Waypoint* lookup_name(const tstring &name) const;
+
+/** 
  * Call visitor function on waypoints within approximate range
  * (square range box) to search location.  Possible use by screen display
  * functions.
