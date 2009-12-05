@@ -1,27 +1,10 @@
 #include "WaypointSorter.hpp"
 #include <algorithm>
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "Math/Geometry.hpp"
 
 static int SelectedWayPointFileIdx=0;
 
-static bool WaypointNameCompare(const WayPointSelectInfo& elem1, 
-                                const WayPointSelectInfo& elem2 ) 
-{
-  return (elem1.FourChars < elem2.FourChars);
-}
-
-static bool WaypointDistanceCompare(const WayPointSelectInfo& elem1, 
-                                    const WayPointSelectInfo& elem2 ) 
-{
-  return (elem1.Distance < elem2.Distance);
-}
-
-
-static bool WaypointDirectionCompare(const WayPointSelectInfo& elem1, 
-                                     const WayPointSelectInfo& elem2 ) 
-{
-  return (elem1.DirectionErr < elem2.DirectionErr);
-}
 
 WaypointSorter::WaypointSorter(const Waypoints &way_points,
                                const GEOPOINT &Location,
@@ -51,10 +34,7 @@ WaypointSorter::WaypointSorter(const Waypoints &way_points,
 
     m_waypoints_all.push_back(info);
   }
-
-  std::sort(m_waypoints_all.begin(),
-            m_waypoints_all.end(),
-            WaypointNameCompare); // TODO UpLimit
+  sort_name(m_waypoints);
 }
 
 const WaypointSelectInfoVector& 
@@ -69,10 +49,10 @@ static bool WaypointAirportFilter(const WayPointSelectInfo& elem1)
 }
 
 void
-WaypointSorter::filter_airport(WaypointSelectInfoVector& inv) const
+WaypointSorter::filter_airport(WaypointSelectInfoVector& vec) const
 {
 
-  inv.erase(std::remove_if(inv.begin(), inv.end(), WaypointAirportFilter), inv.end());
+  vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointAirportFilter), vec.end());
 }
 
 static bool WaypointLandableFilter(const WayPointSelectInfo& elem1) 
@@ -81,9 +61,9 @@ static bool WaypointLandableFilter(const WayPointSelectInfo& elem1)
 }
 
 void
-WaypointSorter::filter_landable(WaypointSelectInfoVector& inv) const
+WaypointSorter::filter_landable(WaypointSelectInfoVector& vec) const
 {
-  inv.erase(std::remove_if(inv.begin(), inv.end(), WaypointLandableFilter), inv.end());
+  vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointLandableFilter), vec.end());
 }
 
 static bool WaypointTurnPointFilter(const WayPointSelectInfo& elem1) 
@@ -92,9 +72,9 @@ static bool WaypointTurnPointFilter(const WayPointSelectInfo& elem1)
 }
 
 void
-WaypointSorter::filter_turnpoint(WaypointSelectInfoVector& inv) const
+WaypointSorter::filter_turnpoint(WaypointSelectInfoVector& vec) const
 {
-  inv.erase(std::remove_if(inv.begin(), inv.end(), WaypointTurnPointFilter), inv.end());
+  vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointTurnPointFilter), vec.end());
 }
 
 static bool WaypointFileIdxFilter(const WayPointSelectInfo& elem1) 
@@ -103,10 +83,85 @@ static bool WaypointFileIdxFilter(const WayPointSelectInfo& elem1)
 }
 
 void
-WaypointSorter::filter_file(WaypointSelectInfoVector& inv,
+WaypointSorter::filter_file(WaypointSelectInfoVector& vec,
                             const int file_idx) const
 {
   SelectedWayPointFileIdx = file_idx;
-  inv.erase(std::remove_if(inv.begin(), inv.end(), WaypointFileIdxFilter), inv.end());
+  vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointFileIdxFilter), vec.end());
 }
 
+static unsigned char MatchChar = 0;
+
+static bool WaypointNameFilter(const WayPointSelectInfo& elem1)
+{
+  return (((elem1.FourChars & 0xff000000) >> 24) != MatchChar);
+}
+
+void
+WaypointSorter::filter_name(WaypointSelectInfoVector& vec,
+                            const unsigned char c) const
+{
+  MatchChar = c;
+  vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointNameFilter), vec.end());
+}
+
+static const fixed fixed_18 = 18;
+static fixed Direction;
+
+static bool WaypointDirectionFilter(const WayPointSelectInfo& elem1) 
+{
+  fixed DirectionErr = fabs(AngleLimit180(elem1.Direction-Direction));
+  return (DirectionErr > fixed_18);
+}
+
+void 
+WaypointSorter::filter_direction(WaypointSelectInfoVector& vec, const fixed direction) const
+{
+  Direction = direction;
+  vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointDirectionFilter), vec.end());
+}
+
+static fixed MaxDistance;
+
+static bool WaypointDistanceFilter(const WayPointSelectInfo& elem1)
+{
+  return (elem1.Distance > MaxDistance);
+}
+
+void 
+WaypointSorter::filter_distance(WaypointSelectInfoVector& vec, const fixed distance) const
+{
+  MaxDistance = distance;
+  vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointDistanceFilter), vec.end());
+}
+
+
+static bool WaypointDistanceCompare(const WayPointSelectInfo& elem1, 
+                                    const WayPointSelectInfo& elem2 ) 
+{
+  return (elem1.Distance < elem2.Distance);
+}
+
+void 
+WaypointSorter::sort_distance(WaypointSelectInfoVector& vec) const
+{
+  std::sort(vec.begin(),
+            vec.end(),
+            WaypointDistanceCompare);
+}
+
+
+static bool WaypointNameCompare(const WayPointSelectInfo& elem1, 
+                                const WayPointSelectInfo& elem2 ) 
+{
+  return (elem1.FourChars < elem2.FourChars);
+}
+
+
+void 
+WaypointSorter::sort_name(WaypointSelectInfoVector& vec) const
+{
+  std::sort(vec.begin(),
+            vec.end(),
+            WaypointNameCompare);
+}
