@@ -545,7 +545,6 @@ dlgWayPointSelect(const GEOPOINT &location,
       (ItemIndex >= 0)  // JMW fixed bug, was >0
       && ((unsigned)ItemIndex < UpLimit)) {
 
-    printf("selected\n");
     wp_selected = WayPointSelectInfo[ItemIndex].way_point;
   }
 
