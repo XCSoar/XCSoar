@@ -77,6 +77,7 @@ TASK_SRC	:=\
 	$(topdir)/src/Task/TaskStats/TaskStats.cpp \
 	$(topdir)/src/Waypoint/Waypoint.cpp \
 	$(topdir)/src/Waypoint/WaypointEnvelope.cpp \
+	$(topdir)/src/Waypoint/WaypointSorter.cpp \
 	$(topdir)/src/Waypoint/Waypoints.cpp \
 	$(topdir)/src/Waypoint/WaypointVisitor.cpp \
 	$(topdir)/src/Math/Geometry.cpp \
