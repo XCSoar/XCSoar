@@ -446,11 +446,7 @@ protected:
 
 class WndForm : public WindowControl {
 protected:
-
-  static ACCEL  mAccel[];
-
   int mModalResult;
-  HACCEL mhAccelTable;
   Color mColorTitle;
   const Font *mhTitleFont;
   WindowControl *mClientWindow;
@@ -503,7 +499,6 @@ public:
   void SetCaption(const TCHAR *Value);
 
   /** from class Window */
-  virtual bool on_command(unsigned id, unsigned code);
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
 

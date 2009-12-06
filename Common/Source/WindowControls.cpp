@@ -664,13 +664,6 @@ void InitWindowControlModule(void){
 
 PeriodClock WndForm::timeAnyOpenClose;
 
-#ifndef ENABLE_SDL
-ACCEL  WndForm::mAccel[] = {
-  {0, VK_ESCAPE,  VK_ESCAPE},
-  {0, VK_RETURN,  VK_RETURN},
-};
-#endif /* !ENABLE_SDL */
-
 WndForm::WndForm(ContainerWindow *Parent,
                  const TCHAR *Name, const TCHAR *Caption,
                  int X, int Y, int Width, int Height):
@@ -679,10 +672,6 @@ WndForm::WndForm(ContainerWindow *Parent,
   mClientWindow = NULL;
   mOnKeyDownNotify = NULL;
   mOnTimerNotify = NULL;
-
-#ifndef ENABLE_SDL
-  mhAccelTable = CreateAcceleratorTable(mAccel, sizeof(mAccel)/sizeof(mAccel[0]));
-#endif /* !ENABLE_SDL */
 
   mColorTitle = clAqua;
 
@@ -712,10 +701,6 @@ WndForm::~WndForm(void){
     mClientWindow->SetVisible(false);
 
   kill_timer(cbTimerID);
-
-#ifdef WIN32
-  DestroyAcceleratorTable(mhAccelTable);
-#endif /* WIN32 */
 }
 
 
@@ -735,24 +720,6 @@ void WndForm::AddClient(WindowControl *Client){      // add client window
     mClientWindow->AddClient(Client); // add it to the clientarea window
   } else
     WindowControl::AddClient(Client);
-}
-
-
-bool
-WndForm::on_command(unsigned id, unsigned code)
-{
-   // VENTA- DEBUG HARDWARE KEY PRESSED
-#ifdef VENTA_DEBUG_KEY
-        TCHAR ventabuffer[80];
-        wsprintf(ventabuffer, TEXT("ONCKEY id=%d code=%d"), id, code);
-        DoStatusMessage(ventabuffer);
-#endif
-   if (id == VK_ESCAPE){
-     mModalResult = mrCancel;
-     return true;
-   }
-
-   return WindowControl::on_command(id, code);
 }
 
 bool
@@ -910,24 +877,21 @@ int WndForm::ShowModal(bool bEnableMap) {
     }
 #endif
 
-    if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
-      if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
-          mOnKeyDownNotify(this, msg.wParam))
-          continue;
+    if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
+        mOnKeyDownNotify(this, msg.wParam))
+      continue;
 
-      TranslateMessage(&msg);
-      if (msg.message != WM_LBUTTONUP ||
-          // prevents child click from being repeat-handled by parent
-          // if buttons overlap
-          WndForm::timeAnyOpenClose.elapsed() > OPENCLOSESUPPRESSTIME)
-      {
-        assert_none_locked();
+    TranslateMessage(&msg);
+    if (msg.message != WM_LBUTTONUP ||
+        // prevents child click from being repeat-handled by parent
+        // if buttons overlap
+        WndForm::timeAnyOpenClose.elapsed() > OPENCLOSESUPPRESSTIME) {
+      assert_none_locked();
 
-        DispatchMessage(&msg);
+      DispatchMessage(&msg);
 
-        assert_none_locked();
-      } // timeMsg
-  }
+      assert_none_locked();
+    }
   } // End Modal Loop
 #endif /* !ENABLE_SDL */
 
