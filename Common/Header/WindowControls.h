@@ -561,6 +561,7 @@ public:
   /* override event methods from class Window */
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
   virtual bool on_mouse_double(int x, int y);
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);

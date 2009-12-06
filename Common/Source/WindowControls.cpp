@@ -1136,27 +1136,24 @@ WndButton::Destroy(void)
 bool
 WndButton::on_mouse_up(int x, int y)
 {
-  POINT Pos;
+  if (has_capture()) {
+    release_capture();
 
-  mDown = false;
-  invalidate();
-  release_capture();
+    if (!mDown)
+      return true;
 
-  Pos.x = x;
-  Pos.y = y;
+    mDown = false;
+    invalidate();
 
-  //POINTSTOPOINT(Pos, MAKEPOINTS(lParam));
-
-  const RECT client_rect = get_client_rect();
-  if (PtInRect(&client_rect, Pos)){
     if (mOnClickNotify != NULL) {
       RECT mRc = get_screen_position();
       SetSourceRectangle(mRc);
       (mOnClickNotify)(this);
     }
-  }
 
-  return true;
+    return true;
+  } else
+    return WindowControl::on_mouse_up(x, y);
 }
 
 
@@ -1225,6 +1222,21 @@ WndButton::on_mouse_down(int x, int y)
 
   set_capture();
   return true;
+}
+
+bool
+WndButton::on_mouse_move(int x, int y, unsigned keys)
+{
+  if (has_capture()) {
+    bool in = in_client_rect(x, y);
+    if (in != mDown) {
+      mDown = in;
+      invalidate();
+    }
+
+    return true;
+  } else
+    return WindowControl::on_mouse_move(x, y, keys);
 }
 
 bool
