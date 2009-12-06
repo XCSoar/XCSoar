@@ -829,47 +829,47 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
 {
   int i;
 
-  if (!LoggerActive) {
-    if (gps_info.Replay) {
-      if (LoggerActive)
-        guiStopLogger(gps_info, true);
-      return;
+  if (LoggerActive)
+    return;
+
+  if (gps_info.Replay) {
+    guiStopLogger(gps_info, true);
+    return;
+  }
+
+  TCHAR TaskMessage[1024];
+  _tcscpy(TaskMessage, TEXT("Start Logger With Declaration\r\n"));
+
+  if (task.Valid()) {
+    for (i = 0; task.ValidTaskPoint(i); i++) {
+      _tcscat(TaskMessage, task.getWaypoint(i).Name);
+      _tcscat(TaskMessage, TEXT("\r\n"));
     }
+  } else {
+    _tcscat(TaskMessage, TEXT("None"));
+  }
 
-    TCHAR TaskMessage[1024];
-    _tcscpy(TaskMessage, TEXT("Start Logger With Declaration\r\n"));
+  if(noAsk || (MessageBoxX(TaskMessage,gettext(TEXT("Start Logger")),
+                           MB_YESNO | MB_ICONQUESTION) == IDYES)) {
+    if (LoggerClearFreeSpace(gps_info)) {
+      StartLogger(gps_info, settings, strAssetNumber);
+      LoggerHeader(gps_info);
 
-    if (task.Valid()) {
-      for (i = 0; task.ValidTaskPoint(i); i++) {
-        _tcscat(TaskMessage, task.getWaypoint(i).Name);
-        _tcscat(TaskMessage, TEXT("\r\n"));
-      }
-    } else {
-      _tcscat(TaskMessage, TEXT("None"));
-    }
-
-    if(noAsk || (MessageBoxX(TaskMessage,gettext(TEXT("Start Logger")),
-                             MB_YESNO | MB_ICONQUESTION) == IDYES)) {
-      if (LoggerClearFreeSpace(gps_info)) {
-        StartLogger(gps_info, settings, strAssetNumber);
-        LoggerHeader(gps_info);
-
-        if (task.Valid()) {
-          int ntp = task.getFinalWaypoint();
-          StartDeclaration(gps_info, ntp);
-          for (i = 0; task.ValidTaskPoint(i); i++) {
-            const WAYPOINT &way_point = task.getWaypoint(i);
-            AddDeclaration(way_point.Location.Latitude,
-                way_point.Location.Longitude, way_point.Name);
-          }
-          EndDeclaration();
+      if (task.Valid()) {
+        int ntp = task.getFinalWaypoint();
+        StartDeclaration(gps_info, ntp);
+        for (i = 0; task.ValidTaskPoint(i); i++) {
+          const WAYPOINT &way_point = task.getWaypoint(i);
+          AddDeclaration(way_point.Location.Latitude,
+              way_point.Location.Longitude, way_point.Name);
         }
-        LoggerActive = true; // start logger after Header is completed.  Concurrency
-      } else {
-        MessageBoxX(gettext(TEXT("Logger inactive, insufficient storage!")),
-                    gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-        StartupStore(TEXT("Logger not started: Insufficient Storage\r\n"));
+        EndDeclaration();
       }
+      LoggerActive = true; // start logger after Header is completed.  Concurrency
+    } else {
+      MessageBoxX(gettext(TEXT("Logger inactive, insufficient storage!")),
+                  gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
+      StartupStore(TEXT("Logger not started: Insufficient Storage\r\n"));
     }
   }
 }
