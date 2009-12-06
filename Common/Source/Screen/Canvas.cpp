@@ -640,7 +640,7 @@ void
 Canvas::autoclip_circle(int x, int y, unsigned radius, const RECT rc)
 {
   if (need_clipping())
-    ::Circle(*this, x, y, radius, rc, false, true);
+    ::ClippedCircle(*this, x, y, radius, rc, true);
   else
     circle(x, y, radius);
 }

@@ -468,8 +468,7 @@ void StartArc(HDC hdc,
  * @return
  */
 int
-Circle(Canvas &canvas, long x, long y, int radius, RECT rc,
-       bool clip, bool fill)
+ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc, bool fill)
 {
   POINT pt[65];
   unsigned int i;
@@ -502,16 +501,7 @@ Circle(Canvas &canvas, long x, long y, int radius, RECT rc,
   pt[step].x = x + (long)(radius * xcoords[0]);
   pt[step].y = y + (long)(radius * ycoords[0]);
 
-  if (clip) {
-    canvas.clipped_polygon(pt, step + 1, rc, fill);
-  } else {
-    if (fill) {
-      canvas.autoclip_polygon(pt, step + 1, rc);
-    } else {
-      canvas.autoclip_polyline(pt, step + 1, rc);
-    }
-  }
-
+  ClipPolygon(canvas, pt, step + 1, rc, fill);
   return TRUE;
 }
 
