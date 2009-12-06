@@ -1139,7 +1139,7 @@ WndButton::on_mouse_up(int x, int y)
   POINT Pos;
 
   mDown = false;
-  on_paint(get_canvas());
+  invalidate();
   release_capture();
 
   Pos.x = x;
@@ -1177,7 +1177,7 @@ WndButton::on_key_down(unsigned key_code)
     case VK_SPACE:
       if (!mDown){
         mDown = true;
-        on_paint(get_canvas());
+        invalidate();
       }
       return true;
   }
@@ -1199,7 +1199,8 @@ WndButton::on_key_up(unsigned key_code)
         return 1; // prevent false trigger
       if (mDown){
         mDown = false;
-        on_paint(get_canvas());
+        invalidate();
+
         if (mOnClickNotify != NULL) {
           RECT mRc = get_screen_position();
           SetSourceRectangle(mRc);
