@@ -100,7 +100,7 @@ public:
  * 
  * @return Blank object at given location, with id set
  */
-  Waypoint create(const GEOPOINT& location) const;
+  Waypoint create(const GEOPOINT& location);
 
 /** 
  * Optimise the internal search tree after adding/removing elements.
@@ -133,6 +133,25 @@ public:
  * @return True if no waypoints stored
  */
   bool empty() const;
+
+/** 
+ * Set whether first waypoint file will be writable
+ * (this is used for create() method of waypoints not
+ *  generated from the Waypointparser)
+ *
+ * @param set Set/unset writable
+ */
+  void set_file0_writable(const bool set);
+
+/** 
+ * Determine whether a waypoint can be edited
+ * based on the writability of the file it is assigned to 
+ *
+ * @param wp Waypoint to check
+ * 
+ * @return True if waypoint can be edited
+ */
+  bool get_writable(const Waypoint& wp) const;
 
 /** 
  * Find first home waypoint
@@ -262,6 +281,7 @@ private:
 
   std::deque< WaypointEnvelope > tmp_wps;
 
+  bool m_file0_writable;
 };
 
 #endif

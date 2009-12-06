@@ -62,7 +62,8 @@ private:
 };
 
 
-Waypoints::Waypoints()
+Waypoints::Waypoints():
+  m_file0_writable(false)
 {
 }
 
@@ -288,6 +289,7 @@ void
 Waypoints::clear()
 {
   waypoint_tree.clear();
+  m_file0_writable = false;
 }
 
 unsigned
@@ -319,11 +321,37 @@ Waypoints::replace(const Waypoint& orig, const Waypoint& replacement)
 }
 
 Waypoint
-Waypoints::create(const GEOPOINT &location) const
+Waypoints::create(const GEOPOINT &location) 
 {
   Waypoint edit_waypoint;
   edit_waypoint.Location = location;
-  edit_waypoint.FileNum = 0; // default, put into primary waypoint file
   edit_waypoint.id = size()+tmp_wps.size()+1;
+  
+  if (edit_waypoint.id == 1) {
+    // first waypoint, put into primary file (this will be auto-generated)
+    edit_waypoint.FileNum = 0;
+    m_file0_writable = true;
+  } else if (m_file0_writable) {
+    edit_waypoint.FileNum = 0; 
+  } else {
+    edit_waypoint.FileNum = 1; 
+  }
+
   return edit_waypoint;
+}
+
+void
+Waypoints::set_file0_writable(const bool set)
+{
+  m_file0_writable = set;
+}
+
+bool
+Waypoints::get_writable(const Waypoint& wp) const
+{
+  if (wp.FileNum == 0) {
+    return m_file0_writable || empty();
+  } else {
+    return true;
+  }
 }
