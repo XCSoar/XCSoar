@@ -171,6 +171,10 @@ GlideComputerStats::OnClimbCeiling()
       - Calculated().TakeOffTime, Calculated().CruiseStartAlt);
 }
 
+/**
+ * This function is called when leaving a thermal and handles the
+ * calculation of all related statistics
+ */
 void
 GlideComputerStats::OnDepartedThermal()
 {
