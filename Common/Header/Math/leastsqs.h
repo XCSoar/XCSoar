@@ -28,17 +28,15 @@
 #ifndef _LEASTSQS_H
 #define _LEASTSQS_H
 
-
 #ifndef __cplusplus
 # error This library requires C++
 #endif
 
 #define MAX_STATISTICS 1000
 
-class LeastSquares {
-
- public:
-
+class LeastSquares
+{
+public:
   double sum_xi, sum_yi, sum_xi_2, sum_xi_yi;
   int sum_n;
   double m;
@@ -59,7 +57,8 @@ class LeastSquares {
   float ystore[MAX_STATISTICS];
   float weightstore[MAX_STATISTICS];
 
-  LeastSquares() {
+  LeastSquares()
+  {
     Reset();
   }
 
@@ -118,5 +117,3 @@ Classical least squares fit:
 };
 
 #endif // _LEASTSQS_H
-
-
