@@ -71,6 +71,7 @@ class OLCOptimizer;
 class GaugeCDI;
 class Waypoints;
 class Waypoint;
+class Airspaces;
 
 class MapWindow
 : public MaskedPaintWindow,
@@ -85,6 +86,7 @@ class MapWindow
   RasterTerrain *terrain;
   RasterWeather *weather;
   TerrainRenderer *terrain_renderer;
+  Airspaces *airspace_database;
 
   Marks *marks;
 
@@ -119,11 +121,11 @@ class MapWindow
   void set_task(TaskSafe *_task) {
     task = _task;
   }
+*/
 
-  void set_airspaces(AirspaceDatabase *_airspace_database) {
+  void set_airspaces(Airspaces *_airspace_database) {
     airspace_database = _airspace_database;
   }
-*/
 
   void set_topology(TopologyStore *_topology);
   void set_terrain(RasterTerrain *_terrain);
@@ -201,20 +203,12 @@ class MapWindow
 
   // display element functions
 
-  void ScanVisibilityAirspace(rectObj *bounds_active);
   void ScanVisibility(rectObj *bounds_active);
 
   void CalculateScreenPositions(POINT Orig, RECT rc,
                                        POINT *Orig_Aircraft);
   void CalculateScreenPositionsTask();
   void CalculateScreenPositionsGroundline();
-  void CalculateScreenPositionsAirspace();
-
-#ifdef OLD_TASK
-  void CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE& circ);
-  void CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA& area);
-#endif
-
   void CalculateScreenPositionsThermalSources();
   void MapWaypointLabelSortAndRender(Canvas &canvas);
 
@@ -226,7 +220,7 @@ class MapWindow
   void DrawCompass(Canvas &canvas, const RECT rc);
   void DrawHorizon(Canvas &canvas, const RECT rc);
   void DrawWindAtAircraft2(Canvas &canvas, POINT Orig, RECT rc);
-  void DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer);
+  void DrawAirspace(Canvas &canvas, Canvas &buffer);
   void DrawWaypoints(Canvas &canvas);
 
   void DrawFlightMode(Canvas &canvas, const RECT rc);
@@ -255,7 +249,6 @@ class MapWindow
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas);
   double    findMapScaleBarSize(const RECT rc);
-  void ClearAirSpace(Canvas &dc, bool fill);
 
   // thread, main functions
   void Render(Canvas &canvas, const RECT rc);

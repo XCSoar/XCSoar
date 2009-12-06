@@ -58,15 +58,6 @@ void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
 		  SettingsComputer(),
 		  SettingsMap());
 
-#ifdef OLD_TASK
-  // Calculate screen positions of the visible waypoints
-  CalculateScreenPositionsWaypoints();
-
-  CalculateScreenPositionsTask();
-
-  // Calculate screen positions of the airspaces
-  CalculateScreenPositionsAirspace();
-#endif
   // Calculate screen positions of the thermal sources
   CalculateScreenPositionsThermalSources();
 
@@ -172,12 +163,11 @@ void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
 #ifdef OLD_TASK
   if (task != NULL && !task->TaskIsTemporary())
     DrawTaskAAT(canvas, rc, buffer_canvas);
-
+#endif
   // Draw airspace on top
   if (SettingsMap().OnAirSpace > 0) {
-    DrawAirSpace(canvas, rc, buffer_canvas);
+    DrawAirspace(canvas, buffer_canvas);
   }
-#endif
 }
 
 /**

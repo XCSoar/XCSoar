@@ -160,7 +160,6 @@ void SettingsLeave() {
   if(AIRSPACEFILECHANGED) {
     CloseAirspace(airspace_database);
     ReadAirspace(airspace_database, &terrain);
-    SortAirspace(airspace_database);
   }
 #endif
 

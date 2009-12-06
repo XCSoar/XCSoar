@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Screen/Graphics.hpp"
+#include "Airspace/Airspaces.hpp"
 
 #include <assert.h>
 
@@ -126,21 +127,108 @@ void MapWindow::CalculateScreenPositionsAirspace() {
   }
 }
 
-void MapWindow::ClearAirSpace(Canvas &canvas, bool fill) {
-  assert(airspace_database != NULL);
+#endif
 
-  Color whitecolor(0xff,0xff,0xff);
+#include "Airspace/AirspacePolygon.hpp"
+#include "Airspace/AirspaceCircle.hpp"
+#include "Airspace/AirspaceVisitor.hpp"
 
-  canvas.set_text_color(whitecolor);
-  canvas.background_transparent();
-  canvas.set_background_color(whitecolor);
-  canvas.white_pen();
-  canvas.white_brush();
-  canvas.rectangle(MapRect.left, MapRect.top, MapRect.right, MapRect.bottom);
-  if (fill) {
-    canvas.white_pen();
+
+class AirspaceVisitorMap: public AirspaceVisitor 
+{
+public:
+  AirspaceVisitorMap(MapWindow &_map,
+                     Canvas& _canvas,
+                     Canvas& _buffer):map(_map),
+                                      canvas(_canvas),
+                                      buffer(_buffer),
+                                      found(false),
+                                      border(true)
+    {
+
+    };
+  void Visit(const AirspaceCircle& airspace) {
+    if (!check_visible(airspace)) 
+      return;
+
+    start_render(airspace);
+    POINT center;
+    map.LonLat2Screen(airspace.get_center(),center);
+    unsigned radius = map.DistanceMetersToScreen(airspace.get_radius());
+    buffer.circle(center.x, center.y, radius);
   }
-}
+  void Visit(const AirspacePolygon& airspace) {
+    if (!check_visible(airspace)) 
+      return;
+    start_render(airspace);
+  }
+  void set_fill() {
+    border = false;
+    if (found) {
+      buffer.hollow_brush();
+      buffer.white_pen();
+    }
+  }
+  void finish() {
+    if (found) {
+      // need to do this to prevent drawing of colored outline
+      buffer.white_pen();
+      canvas.copy_transparent_white(buffer, map.GetMapRect());
+
+      // restore original color
+      //    SetTextColor(hDCTemp, origcolor);
+      buffer.background_opaque();
+    }
+  }
+private:
+  bool check_visible(const AbstractAirspace& airspace) {
+    return true;
+  }
+  void start_render(const AbstractAirspace &airspace) {
+    if (!found) {
+      found = true;
+      ClearAirspace();
+      if (!border) {
+        buffer.hollow_brush();
+        buffer.white_pen();
+      }
+    }
+    if (border) {
+      // this color is used as the black bit
+      buffer.set_text_color(MapGfx.Colours[map.SettingsMap().
+                                           iAirspaceColour[airspace.get_type()]]);
+      // get brush, can be solid or a 1bpp bitmap
+      buffer.select(MapGfx.hAirspaceBrushes[map.SettingsMap().
+                                            iAirspaceBrush[airspace.get_type()]]);
+    } else {
+      if (map.SettingsMap().bAirspaceBlackOutline)
+        buffer.black_pen();
+      else
+        buffer.select(MapGfx.hAirspacePens[airspace.get_type()]);
+    }
+  }
+
+  void ClearAirspace() {
+    Color whitecolor(0xff,0xff,0xff);
+    buffer.set_text_color(whitecolor);
+    buffer.background_transparent();
+    buffer.set_background_color(whitecolor);
+    buffer.white_pen();
+    buffer.white_brush();
+    const RECT &MapRect = map.GetMapRect();
+    buffer.rectangle(MapRect.left, MapRect.top, MapRect.right, MapRect.bottom);
+    if (!border) {
+      buffer.white_pen();
+    }
+  }
+
+  bool found;
+  bool border;
+  Canvas &canvas;
+  Canvas &buffer;
+  MapWindow &map;
+};
+
 
 /**
  * Draws the airspace to the given canvas
@@ -149,14 +237,18 @@ void MapWindow::ClearAirSpace(Canvas &canvas, bool fill) {
  * @param buffer The drawing buffer
  */
 void
-MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
+MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
 {
   if (airspace_database == NULL)
     return;
 
-  // TODO code: optimise airspace drawing
-  bool found = false;
+  AirspaceVisitorMap v(*this, canvas, buffer);
+  airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
+  v.set_fill();
+  airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
+  v.finish();
 
+#ifdef OLD_TASK
   // draw without border
   for (unsigned i = 0; i < airspace_database->NumberOfAirspaceCircles; ++i) {
     const AIRSPACE_CIRCLE &circle = airspace_database->AirspaceCircle[i];
@@ -165,7 +257,7 @@ MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
       continue;
 
     if (!found) {
-      ClearAirSpace(buffer, true);
+      ClearAirspace(buffer, true);
       found = true;
     }
 
@@ -250,47 +342,5 @@ MapWindow::DrawAirSpace(Canvas &canvas, const RECT rc, Canvas &buffer)
       }
     }
   }
-
-  if (found) {
-    // need to do this to prevent drawing of colored outline
-    buffer.white_pen();
-
-    canvas.copy_transparent_white(buffer, rc);
-
-    // restore original color
-    //    SetTextColor(hDCTemp, origcolor);
-    buffer.background_opaque();
-  }
-}
-
-static bool
-IsFarVisible(const AirspaceMetadata &airspace, const rectObj &rect)
-{
-  return msRectOverlap(&airspace.bounds, &rect) ||
-    msRectContained(&rect, &airspace.bounds) ||
-    msRectContained(&airspace.bounds, &rect);
-}
-
-void MapWindow::ScanVisibilityAirspace(rectObj *bounds_active) {
-  if (airspace_database == NULL)
-    return;
-
-  // received when the SetTopoBounds determines the visibility
-  // boundary has changed.
-  // This happens rarely, so it is good pre-filtering of what is visible.
-  // (saves from having to do it every screen redraw)
-
-  for (unsigned i = 0; i < airspace_database->NumberOfAirspaceCircles; ++i) {
-    AIRSPACE_CIRCLE &circle = airspace_database->AirspaceCircle[i];
-
-    circle.FarVisible = IsFarVisible(circle, *bounds_active);
-  }
-
-  for (unsigned i = 0; i < airspace_database->NumberOfAirspaceAreas; ++i) {
-    AIRSPACE_AREA &area = airspace_database->AirspaceArea[i];
-
-    area.FarVisible = IsFarVisible(area, *bounds_active);
-  }
-}
-
 #endif
+}

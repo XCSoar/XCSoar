@@ -60,6 +60,7 @@ MapWindow::MapWindow()
   :MapWindowProjection(),
    way_points(NULL),
    topology(NULL), terrain(NULL), weather(NULL), terrain_renderer(NULL),
+   airspace_database(NULL),
    marks(NULL), snail_trail(NULL), olc(NULL),
    cdi(NULL),
    TargetDrag_State(0),

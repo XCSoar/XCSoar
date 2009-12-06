@@ -341,8 +341,8 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   main_window.map.set_way_points(&way_points);
 #ifdef OLD_TASK
   main_window.map.set_task(&task);
-  main_window.map.set_airspaces(&airspace_database);
 #endif
+  main_window.map.set_airspaces(&airspace_database);
 
   main_window.map.set_topology(topology);
   main_window.map.set_terrain(&terrain);
@@ -537,10 +537,6 @@ void XCSoarInterface::Shutdown(void) {
   // Kill graphics objects
 
   DeleteFonts();
-
-#ifdef OLD_TASK
-  DeleteAirspace(airspace_database);
-#endif
 
   StartupStore(TEXT("Close Progress Dialog\n"));
 

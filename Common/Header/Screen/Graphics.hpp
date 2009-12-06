@@ -76,7 +76,6 @@ public:
 		  const SETTINGS_MAP &settings_map);
   void Destroy();
 
-#ifdef OLD_TASK
   // airspace brushes/colours
   const Color GetAirspaceColour(const int i);
   const Brush &GetAirspaceBrush(const int i);
@@ -85,7 +84,6 @@ public:
   Pen hAirspacePens[AIRSPACECLASSCOUNT];
   Brush hAirspaceBrushes[NUMAIRSPACEBRUSHES];
   Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
-#endif
 
   Brush infoSelectedBrush;
   Brush infoUnselectedBrush;

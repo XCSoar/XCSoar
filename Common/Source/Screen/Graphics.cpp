@@ -65,7 +65,6 @@ const COLORRAMP snail_colors[] = {
 };
 
 
-#ifdef OLD_TASK
 // airspace brushes/colours
 const Color ScreenGraphics::GetAirspaceColour(const int i) {
   return Colours[i];
@@ -84,7 +83,6 @@ const Brush &ScreenGraphics::GetAirspaceBrushByClass(const int i,
   const SETTINGS_MAP &settings) {
   return hAirspaceBrushes[settings.iAirspaceBrush[i]];
 }
-#endif
 
 const Color ScreenGraphics::ColorSelected = Color(0xC0,0xC0,0xC0);
 const Color ScreenGraphics::ColorUnselected = Color(0xFF,0xFF,0xFF);
@@ -163,23 +161,6 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance,
   hClimb.load(IDB_CLIMB);
   hFinalGlide.load(IDB_FINALGLIDE);
   hAbort.load(IDB_ABORT);
-
-#ifdef OLD_TASK
-  // airspace brushes and colours
-
-  hAirspaceBitmap[0].load(IDB_AIRSPACE0);
-  hAirspaceBitmap[1].load(IDB_AIRSPACE1);
-  hAirspaceBitmap[2].load(IDB_AIRSPACE2);
-  hAirspaceBitmap[3].load(IDB_AIRSPACE3);
-  hAirspaceBitmap[4].load(IDB_AIRSPACE4);
-  hAirspaceBitmap[5].load(IDB_AIRSPACE5);
-  hAirspaceBitmap[6].load(IDB_AIRSPACE6);
-  hAirspaceBitmap[7].load(IDB_AIRSPACE7);
-
-  for (i=0; i<NUMAIRSPACEBRUSHES; i++) {
-    hAirspaceBrushes[i].set(hAirspaceBitmap[i]);
-  }
-#endif
 
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
   hAboveTerrainBrush.set(hAboveTerrainBitmap);
@@ -294,12 +275,26 @@ void ScreenGraphics::Initialise(HINSTANCE hInstance,
     hBmpFieldUnReachable.load(IDB_OUTFILED_UNREACHABLE);
   }
 
-#ifdef OLD_TASK
+  // airspace
+  // airspace brushes and colours
+
+  hAirspaceBitmap[0].load(IDB_AIRSPACE0);
+  hAirspaceBitmap[1].load(IDB_AIRSPACE1);
+  hAirspaceBitmap[2].load(IDB_AIRSPACE2);
+  hAirspaceBitmap[3].load(IDB_AIRSPACE3);
+  hAirspaceBitmap[4].load(IDB_AIRSPACE4);
+  hAirspaceBitmap[5].load(IDB_AIRSPACE5);
+  hAirspaceBitmap[6].load(IDB_AIRSPACE6);
+  hAirspaceBitmap[7].load(IDB_AIRSPACE7);
+
+  for (i=0; i<NUMAIRSPACEBRUSHES; i++) {
+    hAirspaceBrushes[i].set(hAirspaceBitmap[i]);
+  }
+
   for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
     hAirspacePens[i].set(IBLSCALE(2),
                          GetAirspaceColourByClass(i,settings_map));
   }
-#endif
 
 }
 
@@ -370,7 +365,13 @@ void ScreenGraphics::Destroy() {
   hBmpTarget.reset();
   hBmpTeammatePosition.reset();
 
-#ifdef OLD_TASK
+  hAboveTerrainBitmap.reset();
+  hAboveTerrainBrush.reset();
+
+  for (i=0; i<NUMSNAILCOLORS; i++) {
+    hSnailPens[i].reset();
+  }
+
   for(i=0;i<NUMAIRSPACEBRUSHES;i++)
     {
       hAirspaceBrushes[i].reset();
@@ -378,14 +379,6 @@ void ScreenGraphics::Destroy() {
     }
   for (i=0; i<AIRSPACECLASSCOUNT; i++) {
     hAirspacePens[i].reset();
-  }
-#endif
-
-  hAboveTerrainBitmap.reset();
-  hAboveTerrainBrush.reset();
-
-  for (i=0; i<NUMSNAILCOLORS; i++) {
-    hSnailPens[i].reset();
   }
 
   greenBrush.reset();
