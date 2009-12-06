@@ -634,7 +634,22 @@ WindowControl::on_killfocus()
 bool
 WindowControl::on_unhandled_key(unsigned key_code)
 {
-  return mOwner != NULL && mOwner->on_unhandled_key(key_code);
+  if (mOwner != NULL && mOwner->on_unhandled_key(key_code))
+    return true;
+
+  if (mOwner != NULL && mHasFocus) {
+    switch (key_code) {
+    case VK_UP:
+      mOwner->FocusPrev(this);
+      return true;
+
+    case VK_DOWN:
+      mOwner->FocusNext(this);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 void InitWindowControlModule(void){
@@ -1002,20 +1017,6 @@ WndForm::on_unhandled_key(unsigned key_code)
 {
   if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, key_code))
     return 0;
-
-  if (ActiveControl != NULL){
-    switch (key_code) {
-    case VK_UP:
-      if (ActiveControl->GetOwner() != NULL)
-        ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-      return true;
-
-    case VK_DOWN:
-      if (ActiveControl->GetOwner() != NULL)
-        ActiveControl->GetOwner()->FocusNext(ActiveControl);
-      return true;
-    }
-  }
 
   return WindowControl::on_unhandled_key(key_code);
 }
