@@ -173,6 +173,7 @@ OBJS	:=\
 	$(SRC)/GlideSolvers.o 		\
 	$(SRC)/GlideTerrain.o \
 	$(SRC)/Logger.o 		\
+	$(SRC)/LoggerFRecord.o 		\
 	$(SRC)/LoggerImpl.o 		\
 	$(SRC)/LoggerSign.o 		\
 	$(SRC)/ReplayLogger.o 		\

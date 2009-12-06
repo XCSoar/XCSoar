@@ -95,78 +95,79 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
 
   DWORD sizein;
 
-  // Read the persistent memory file
+  // Try to open the persistent memory file
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("rb"));
-  if (file != NULL) {
-    fread(&sizein, sizeof(sizein), 1, file);
-    if (sizein != sizeof(*Calculated)) {
-      fclose(file);
-      return;
-    }
-
-    // Read persistent memory into Calculated
-    fread(Calculated, sizeof(*Calculated), 1, file);
-    Calculated->Flying = false;
-    Calculated->TimeInFlight = 0;
-    Calculated->TimeOnGround = 60;
-
-    fread(&sizein, sizeof(sizein), 1, file);
-    if (sizein != sizeof(glide_computer.GetFlightStats())) {
-      glide_computer.ResetFlight();
-      fclose(file);
-      return;
-    }
-
-    // Read persistent memory into FlightStats
-    fread(&glide_computer.GetFlightStats(), sizeof(glide_computer.GetFlightStats()), 1, file);
-
-    fread(&sizein, sizeof(sizein), 1, file);
-    if (sizein != sizeof(glide_computer.GetOLC().data)) {
-      glide_computer.GetOLC().ResetFlight();
-      fclose(file);
-      return;
-    }
-
-    // Read persistent memory into OLC.data
-    fread(&glide_computer.GetOLC().data, sizeof(glide_computer.GetOLC().data), 1, file);
-
-    fread(&sizein, sizeof(sizein), 1, file);
-    if (sizein != 5 * sizeof(double)) {
-      fclose(file);
-      return;
-    }
-
-    double MACCREADY = GlidePolar::GetMacCready();
-    double BUGS = GlidePolar::GetBugs();
-    double BALLAST = GlidePolar::GetBallast();
-
-    // Read persistent memory into McCready, QNH, bugs, ballast and temperature
-    fread(&MACCREADY, sizeof(double), 1, file);
-    fread(&QNH, sizeof(QNH), 1, file);
-    fread(&BUGS, sizeof(double), 1, file);
-    fread(&BALLAST, sizeof(double), 1, file);
-    fread(&CuSonde::maxGroundTemperature,
-          sizeof(CuSonde::maxGroundTemperature), 1, file);
-
-    //    ReadFile(hFile,&CRUISE_EFFICIENCY,
-    //             size,&dwBytesWritten,(OVERLAPPED*)NULL);
-
-    QNH = min(1113.2, max(QNH, 913.2));
-    MACCREADY = min(10.0, max(MACCREADY, 0.0));
-    BUGS = min(1.0, max(BUGS, 0.0));
-    BALLAST = min(1.0, max(BALLAST, 0.0));
-    //   CRUISE_EFFICIENCY = min(1.5, max(CRUISE_EFFICIENCY,0.75));
-
-    GlidePolar::SetMacCready(MACCREADY);
-    GlidePolar::SetBugs(BUGS);
-    GlidePolar::SetBallast(BALLAST);
-
-    StartupStore(TEXT("LoadCalculationsPersist OK\n"));
-
-    fclose(file);
-  } else {
+  if (file == NULL) {
     StartupStore(TEXT("LoadCalculationsPersist file not found\n"));
+    return;
   }
+
+  fread(&sizein, sizeof(sizein), 1, file);
+  if (sizein != sizeof(*Calculated)) {
+    fclose(file);
+    return;
+  }
+
+  // Read persistent memory into Calculated
+  fread(Calculated, sizeof(*Calculated), 1, file);
+  Calculated->Flying = false;
+  Calculated->TimeInFlight = 0;
+  Calculated->TimeOnGround = 60;
+
+  fread(&sizein, sizeof(sizein), 1, file);
+  if (sizein != sizeof(glide_computer.GetFlightStats())) {
+    glide_computer.ResetFlight();
+    fclose(file);
+    return;
+  }
+
+  // Read persistent memory into FlightStats
+  fread(&glide_computer.GetFlightStats(), sizeof(glide_computer.GetFlightStats()), 1, file);
+
+  fread(&sizein, sizeof(sizein), 1, file);
+  if (sizein != sizeof(glide_computer.GetOLC().data)) {
+    glide_computer.GetOLC().ResetFlight();
+    fclose(file);
+    return;
+  }
+
+  // Read persistent memory into OLC.data
+  fread(&glide_computer.GetOLC().data, sizeof(glide_computer.GetOLC().data), 1, file);
+
+  fread(&sizein, sizeof(sizein), 1, file);
+  if (sizein != 5 * sizeof(double)) {
+    fclose(file);
+    return;
+  }
+
+  double MACCREADY = GlidePolar::GetMacCready();
+  double BUGS = GlidePolar::GetBugs();
+  double BALLAST = GlidePolar::GetBallast();
+
+  // Read persistent memory into McCready, QNH, bugs, ballast and temperature
+  fread(&MACCREADY, sizeof(double), 1, file);
+  fread(&QNH, sizeof(QNH), 1, file);
+  fread(&BUGS, sizeof(double), 1, file);
+  fread(&BALLAST, sizeof(double), 1, file);
+  fread(&CuSonde::maxGroundTemperature,
+      sizeof(CuSonde::maxGroundTemperature), 1, file);
+
+  //    ReadFile(hFile,&CRUISE_EFFICIENCY,
+  //             size,&dwBytesWritten,(OVERLAPPED*)NULL);
+
+  QNH = min(1113.2, max(QNH, 913.2));
+  MACCREADY = min(10.0, max(MACCREADY, 0.0));
+  BUGS = min(1.0, max(BUGS, 0.0));
+  BALLAST = min(1.0, max(BALLAST, 0.0));
+  //   CRUISE_EFFICIENCY = min(1.5, max(CRUISE_EFFICIENCY,0.75));
+
+  GlidePolar::SetMacCready(MACCREADY);
+  GlidePolar::SetBugs(BUGS);
+  GlidePolar::SetBallast(BALLAST);
+
+  StartupStore(TEXT("LoadCalculationsPersist OK\n"));
+
+  fclose(file);
 }
 
 /**
@@ -194,39 +195,41 @@ SaveCalculationsPersist(const NMEA_INFO &gps_info,
   StartupStore(TEXT("SaveCalculationsPersist\n"));
 
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("wb"));
-  if (file != NULL) {
-    size = sizeof(DERIVED_INFO);
-    fwrite(&size, sizeof(size), 1, file);
-    fwrite(&Calculated, size, 1, file);
 
-    size = sizeof(FlightStatistics);
-    fwrite(&size, sizeof(size), 1, file);
-    fwrite(&glide_computer.GetFlightStats(), size, 1, file);
-
-    size = sizeof(OLCData);
-    fwrite(&size, sizeof(size), 1, file);
-    fwrite(&glide_computer.GetOLC().data, size, 1, file);
-
-    double MACCREADY = GlidePolar::GetMacCready();
-    double BUGS = GlidePolar::GetBugs();
-    double BALLAST = GlidePolar::GetBallast();
-
-    size = sizeof(double)*5;
-    fwrite(&size, sizeof(size), 1, file);
-    fwrite(&MACCREADY, sizeof(MACCREADY), 1, file);
-    fwrite(&QNH, sizeof(QNH), 1, file);
-    fwrite(&BUGS, sizeof(BUGS), 1, file);
-    fwrite(&BALLAST, sizeof(BALLAST), 1, file);
-    fwrite(&CuSonde::maxGroundTemperature,
-           sizeof(CuSonde::maxGroundTemperature), 1, file);
-
-    //    WriteFile(hFile,&CRUISE_EFFICIENCY,
-    //              size,&dwBytesWritten,(OVERLAPPED*)NULL);
-
-    StartupStore(TEXT("SaveCalculationsPersist ok\n"));
-
-    fclose(file);
-  } else {
+  if (file == NULL) {
     StartupStore(TEXT("SaveCalculationsPersist can't create file\n"));
+    return;
   }
+
+  size = sizeof(DERIVED_INFO);
+  fwrite(&size, sizeof(size), 1, file);
+  fwrite(&Calculated, size, 1, file);
+
+  size = sizeof(FlightStatistics);
+  fwrite(&size, sizeof(size), 1, file);
+  fwrite(&glide_computer.GetFlightStats(), size, 1, file);
+
+  size = sizeof(OLCData);
+  fwrite(&size, sizeof(size), 1, file);
+  fwrite(&glide_computer.GetOLC().data, size, 1, file);
+
+  double MACCREADY = GlidePolar::GetMacCready();
+  double BUGS = GlidePolar::GetBugs();
+  double BALLAST = GlidePolar::GetBallast();
+
+  size = sizeof(double)*5;
+  fwrite(&size, sizeof(size), 1, file);
+  fwrite(&MACCREADY, sizeof(MACCREADY), 1, file);
+  fwrite(&QNH, sizeof(QNH), 1, file);
+  fwrite(&BUGS, sizeof(BUGS), 1, file);
+  fwrite(&BALLAST, sizeof(BALLAST), 1, file);
+  fwrite(&CuSonde::maxGroundTemperature,
+      sizeof(CuSonde::maxGroundTemperature), 1, file);
+
+  //    WriteFile(hFile,&CRUISE_EFFICIENCY,
+  //              size,&dwBytesWritten,(OVERLAPPED*)NULL);
+
+  StartupStore(TEXT("SaveCalculationsPersist ok\n"));
+
+  fclose(file);
 }
