@@ -48,6 +48,10 @@ Copyright_License {
 
 #include <assert.h>
 
+#ifndef ENABLE_SDL
+#include <windowsx.h>
+#endif
+
 void
 Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
             int left, int top, unsigned width, unsigned height,
@@ -395,13 +399,13 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_MOUSEMOVE:
-    if (on_mouse_move(LOWORD(lParam), HIWORD(lParam), wParam))
+    if (on_mouse_move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), wParam))
       return 0;
     break;
 
   case WM_LBUTTONDOWN:
     XCSoarInterface::InterfaceTimeoutReset();
-    if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) {
+    if (on_mouse_down(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -410,7 +414,7 @@ Window::on_message(HWND _hWnd, UINT message,
 
   case WM_LBUTTONUP:
     XCSoarInterface::InterfaceTimeoutReset();
-    if (on_mouse_up(LOWORD(lParam), HIWORD(lParam))) {
+    if (on_mouse_up(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -419,7 +423,7 @@ Window::on_message(HWND _hWnd, UINT message,
 
   case WM_LBUTTONDBLCLK:
     XCSoarInterface::InterfaceTimeoutReset();
-    if (on_mouse_double(LOWORD(lParam), HIWORD(lParam))) {
+    if (on_mouse_double(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
