@@ -136,8 +136,10 @@ NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 double
 GetBearing(const TCHAR *code)
 {
+  // Get the first two values from teamcode (1-2)
 	int val = GetValueFromTeamCode(code, 2);
 
+	// Calculate bearing
 	double bearing = (val * 360.0 / TEAMCODE_COMBINATIONS);
   bearing -= 0;
   if (bearing < 0) {
@@ -155,16 +157,23 @@ GetBearing(const TCHAR *code)
 double
 GetRange(const TCHAR *code)
 {
+  // Get last three values from teamcode (3-5)
 	int val = GetValueFromTeamCode(&code[2], 3);
 	return val * 100.0;
 }
 
+/**
+ * @see GetBearing()
+ */
 double
 GetTeammateBearingFromRef(const TCHAR *code)
 {
 	return GetBearing(code);
 }
 
+/**
+ * @see GetRange()
+ */
 double
 GetTeammateRangeFromRef(const TCHAR *code)
 {
