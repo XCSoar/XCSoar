@@ -40,6 +40,10 @@ Copyright_License {
 #define XCSOAR_ATMOSPHERE_PRESSURE_H
 #include "Math/fixed.hpp"
 
+/**
+ * ICAO Standard Atmosphere calculations (valid in Troposphere, alt<11000m)
+ *
+ */
 class AtmosphericPressure 
 {
 public:
@@ -89,19 +93,6 @@ public:
   fixed AltitudeToQNHAltitude(const fixed alt) const;
 
 /**
- * Converts a pressure value to the corresponding QNH-based altitude
- *
- * See http://wahiduddin.net/calc/density_altitude.htm
- *
- * Example:
- * QNH=1014, ps=100203 => alt = 100
- * @see QNHAltitudeToStaticPressure
- * @param ps Air pressure (Pa)
- * @return Altitude over QNH-based zero (m)
- */
-  fixed StaticPressureToAltitude(const fixed ps) const;
-
-/**
  * Calculates the air density from a given QNH-based altitude
  * @param altitude QNH-based altitude (m)
  * @return Air density (kg/m^3)
@@ -114,6 +105,19 @@ public:
  * @return Ratio of TAS to IAS
  */
   fixed AirDensityRatio(const fixed altitude) const;
+
+/**
+ * Converts a pressure value to the corresponding QNH-based altitude
+ *
+ * See http://wahiduddin.net/calc/density_altitude.htm
+ *
+ * Example:
+ * QNH=1014, ps=100203 => alt = 100
+ * @see QNHAltitudeToStaticPressure
+ * @param ps Air pressure (Pa)
+ * @return Altitude over QNH-based zero (m)
+ */
+  fixed StaticPressureToQNHAltitude(const fixed ps) const;
 
 /**
  * Converts a QNH-based altitude to the corresponding pressure
