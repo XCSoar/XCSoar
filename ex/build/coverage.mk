@@ -5,8 +5,9 @@ FLAGS_COVERAGE :=
 endif
 
 # uses lcov
-COVSTART = geninfo -q --no-checksum -b . -i src
-COVEND = geninfo -q --no-checksum -b . src
+COVSTART = geninfo -q --no-checksum -b . -i $(topdir)/src
+COVEND = geninfo -q --no-checksum -b . $(topdir)/src
+COVPROC = genhtml --frames -q -o doc/lcov `find -iname '*\.gcda\.info'`
 
 covstart:	FORCE
 	@$(NQ)echo "coverage initialise"
@@ -15,4 +16,4 @@ covstart:	FORCE
 cov:	FORCE
 	@$(NQ)echo "coverage report"
 	@$(Q)$(COVEND)
-	@$(Q)genhtml --frames -q -o doc/lcov `find -iname '*\.gcda\.info'`
+	@$(Q)$(COVPROC)
