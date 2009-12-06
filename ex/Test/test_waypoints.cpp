@@ -78,12 +78,13 @@ unsigned test_nearest(const Waypoints& waypoints)
 
 unsigned test_copy(Waypoints& waypoints)
 {
-  const Waypoint *r = waypoints.lookup_id(3);
+  const Waypoint *r = waypoints.lookup_id(5);
   if (!r) {
     return false;
   }
   unsigned size_old = waypoints.size();
   Waypoint wp = *r;
+  wp.id = waypoints.size()+1;
   waypoints.append(wp);
   waypoints.optimise();
   unsigned size_new = waypoints.size();
@@ -100,6 +101,45 @@ bool test_lookup(const Waypoints& waypoints, unsigned id)
   return true;
 }
 
+bool test_erase(Waypoints& waypoints, unsigned id)
+{
+  waypoints.optimise();
+  const Waypoint* wp;
+  wp = waypoints.lookup_id(id);
+  if (wp== NULL) {
+    return false;
+  }
+  waypoints.erase(*wp);
+  waypoints.optimise();
+
+  wp = waypoints.lookup_id(id);
+  if (wp!= NULL) {
+    return false;
+  }
+  return true;
+}
+
+bool test_replace(Waypoints& waypoints, unsigned id)
+{
+  const Waypoint* wp;
+  wp = waypoints.lookup_id(id);
+  if (wp== NULL) {
+    return false;
+  }
+  tstring oldName = wp->Name;
+
+  Waypoint copy = *wp;
+  copy.Name= "Fred";
+  waypoints.replace(*wp,copy);
+  waypoints.optimise();
+
+  wp = waypoints.lookup_id(id);
+  if (wp== NULL) {
+    return false;
+  }
+  return (wp->Name != oldName) && (wp->Name == "Fred");
+}
+
 int main(int argc, char** argv)
 {
   ::InitSineTable();
@@ -108,7 +148,7 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(13);
+  plan_tests(15);
 
   Waypoints waypoints;
 
@@ -133,6 +173,9 @@ int main(int argc, char** argv)
   ok(size == waypoints.size(),"waypoint setup after clear",0);
 
   ok(test_copy(waypoints),"waypoint copy",0);
+
+  ok(test_erase(waypoints,3),"waypoint erase",0);
+  ok(test_replace(waypoints,4),"waypoint replace",0);
 
   return exit_status();
 }
