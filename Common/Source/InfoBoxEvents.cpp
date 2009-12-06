@@ -56,7 +56,6 @@ Copyright_License {
 
 #include <stdlib.h>
 #include "FlarmCalculations.h"
-#include "Math/Pressure.h"
 #include "Asset.hpp"
 
 #define m_max(a,b)	(((a)>(b))?(a):(b))
@@ -149,24 +148,6 @@ ActionInterface::on_key_Altitude(int UpDown)
     } else if (UpDown==2) {
       on_key_Direction(1);
     }
-  }
-  return;
-}
-
-// VENTA3 QFE
-void
-ActionInterface::on_key_QFEAltitude(int UpDown)
-{
-  short step;
-  if ( ( Basic().Altitude - QFEAltitudeOffset ) <10 ) step=1; else step=10;
-  if(UpDown==1) {
-    QFEAltitudeOffset -= (step/ALTITUDEMODIFY);
-  } else if (UpDown==-1) {
-    QFEAltitudeOffset += (step/ALTITUDEMODIFY);
-  } else if (UpDown==-2) {
-    on_key_Direction(-1);
-  } else if (UpDown==2) {
-    on_key_Direction(1);
   }
   return;
 }

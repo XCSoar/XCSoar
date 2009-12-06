@@ -49,6 +49,7 @@ Copyright_License {
 
 struct NMEA_INFO;
 class Device;
+struct AtmosphericPressure;
 
 #define DEVNAMESIZE  32
 #define	NUMDEV		 2
@@ -86,7 +87,7 @@ struct DeviceDescriptor {
   bool PutVolume(int volume);
   bool PutActiveFrequency(double frequency);
   bool PutStandbyFrequency(double frequency);
-  bool PutQNH(double qnh);
+  bool PutQNH(const AtmosphericPressure& pres);
   bool PutVoice(const TCHAR *sentence);
 
   void LinkTimeout();
@@ -144,7 +145,7 @@ void AllDevicesPutBallast(double ballast);
 void AllDevicesPutVolume(int volume);
 void AllDevicesPutActiveFrequency(double frequency);
 void AllDevicesPutStandbyFrequency(double frequency);
-void AllDevicesPutQNH(double qnh);
+void AllDevicesPutQNH(const AtmosphericPressure& pres);
 void AllDevicesPutVoice(const TCHAR *sentence);
 
 void AllDevicesLinkTimeout();

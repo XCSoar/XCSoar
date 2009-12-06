@@ -95,7 +95,7 @@ AbstractDevice::PutBallast(double ballast)
 }
 
 bool
-AbstractDevice::PutQNH(double qnh)
+AbstractDevice::PutQNH(const AtmosphericPressure& pres)
 {
   return true;
 }

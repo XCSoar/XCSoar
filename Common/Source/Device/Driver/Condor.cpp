@@ -39,12 +39,10 @@ Copyright_License {
 #include "Device/Driver/Condor.hpp"
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
-#include "Math/Pressure.h"
 #include "Math/Units.h"
 #include "Device/Parser.h"
 #include "McReady.h"
 #include "NMEA/Info.h"
-
 #include <tchar.h>
 #include <stdlib.h>
 
@@ -146,7 +144,7 @@ cLXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   NMEAParser::ExtractParameter(String,ctemp,2);
   alt = _tcstod(ctemp, NULL);
 
-  GPS_INFO->IndicatedAirspeed = airspeed/AirDensityRatio(alt);
+  GPS_INFO->IndicatedAirspeed = airspeed/GPS_INFO->pressure.AirDensityRatio(alt);
   GPS_INFO->TrueAirspeed = airspeed;
 
   if (enable_baro) {

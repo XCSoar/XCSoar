@@ -44,7 +44,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "OnLineContest.h"
 #include "McReady.h"
-#include "Math/Pressure.h"
 #include "Atmosphere.h"
 #include "UtilsSystem.hpp"
 #include "Logger.h"
@@ -120,7 +119,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     fread(&glide_computer.GetOLC().data, sizeof(glide_computer.GetOLC().data), 1, file);
 
     fread(&sizein, sizeof(sizein), 1, file);
-    if (sizein != 5 * sizeof(double)) {
+    if (sizein != 4 * sizeof(double)) {
       fclose(file);
       return;
     }
@@ -130,7 +129,6 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     double BALLAST = GlidePolar::GetBallast();
 
     fread(&MACCREADY, sizeof(double), 1, file);
-    fread(&QNH, sizeof(QNH), 1, file);
     fread(&BUGS, sizeof(double), 1, file);
     fread(&BALLAST, sizeof(double), 1, file);
     fread(&CuSonde::maxGroundTemperature,
@@ -139,7 +137,6 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     //    ReadFile(hFile,&CRUISE_EFFICIENCY,
     //             size,&dwBytesWritten,(OVERLAPPED*)NULL);
 
-    QNH = min(1113.2, max(QNH,913.2));
     MACCREADY = min(10.0, max(MACCREADY, 0.0));
     BUGS = min(1.0, max(BUGS,0.0));
     BALLAST = min(1.0, max(BALLAST,0.0));
@@ -193,10 +190,9 @@ void SaveCalculationsPersist(const NMEA_INFO &gps_info,
     double BUGS = GlidePolar::GetBugs();
     double BALLAST = GlidePolar::GetBallast();
 
-    size = sizeof(double)*5;
+    size = sizeof(double)*4;
     fwrite(&size, sizeof(size), 1, file);
     fwrite(&MACCREADY, sizeof(MACCREADY), 1, file);
-    fwrite(&QNH, sizeof(QNH), 1, file);
     fwrite(&BUGS, sizeof(BUGS), 1, file);
     fwrite(&BALLAST, sizeof(BALLAST), 1, file);
     fwrite(&CuSonde::maxGroundTemperature,
@@ -213,4 +209,3 @@ void SaveCalculationsPersist(const NMEA_INFO &gps_info,
   }
 
 }
-

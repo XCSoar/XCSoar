@@ -39,7 +39,6 @@ Copyright_License {
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
-#include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "NMEA/Info.h"
 
@@ -91,7 +90,7 @@ VARIO(const TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
   NMEAParser::ExtractParameter(String,ctemp,0);
   double ps = _tcstod(ctemp, NULL);
-  GPS_INFO->BaroAltitude = (1 - pow(fabs(ps / QNH),  0.190284)) * 44307.69;
+  GPS_INFO->BaroAltitude = GPS_INFO->pressure.StaticPressureToQNHAltitude(ps*100);
   NMEAParser::ExtractParameter(String,ctemp,1);
   GPS_INFO->Vario = _tcstod(ctemp, NULL) / 10.0;
   // JMW vario is in dm/s

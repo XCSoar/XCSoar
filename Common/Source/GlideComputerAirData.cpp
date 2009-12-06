@@ -65,8 +65,6 @@ Copyright_License {
 
 #define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
 
-#include "Math/Pressure.h"
-
 #ifndef _MSC_VER
 #include <algorithm>
 using std::min;
@@ -846,10 +844,6 @@ GlideComputerAirData::TakeoffLanding()
     if (Calculated().TimeOnGround>10) {
       SetCalculated().OnGround = true;
       DoAutoQNH(&Basic(), &Calculated());
-      // Do not reset QFE after landing.
-      if (!WasFlying) {
-	QFEAltitudeOffset=Basic().Altitude; // VENTA3 Automatic QFE
-      }
     }
   } else {
     // detect landing
@@ -1523,9 +1517,10 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   if (done_autoqnh==10) {
     double fixaltitude = Calculated->TerrainAlt;
 
-    QNH = FindQNH(Basic->BaroAltitude, fixaltitude);
 #ifdef OLD_TASK
-    airspace_database.SetQNH(QNH);
+    Basic->pressure.FindQNH(Basic->BaroAltitude, fixaltitude);
+    AllDevicesPutQNH(Basic->pressure);
+    airspace_database.SetQNH(Basic->pressure);
 #endif
   }
 }

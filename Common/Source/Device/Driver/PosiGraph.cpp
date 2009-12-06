@@ -48,9 +48,9 @@ Copyright_License {
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Internal.hpp"
 #include "Math/FastMath.h"
-#include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "NMEA/Info.h"
+
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -114,7 +114,7 @@ GPWIN(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   if (enable_baro) {
     GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(iround(_tcstod(ctemp, NULL) / 10));
+    GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(_tcstod(ctemp, NULL) / 10);
   }
 
   return false;

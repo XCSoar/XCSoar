@@ -47,7 +47,6 @@ Copyright_License {
 #include "Device/Geoid.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
-#include "Math/Pressure.h"
 #include "Math/Units.h"
 #include "NMEA/Info.h"
 #include "NMEA/Checksum.h"
@@ -882,10 +881,8 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
 bool NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
                      NMEA_INFO *GPS_INFO)
 {
-  (void)GPS_INFO;
-
   RMZAltitude = ParseAltitude(params[0], params[1]);
-  //JMW?  RMZAltitude = AltitudeToQNHAltitude(RMZAltitude);
+  //JMW?  RMZAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMZAltitude);
   RMZAvailable = true;
 
   if (!devHasBaroSource()) {
@@ -930,7 +927,7 @@ bool NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
   (void)GPS_INFO;
 
   RMAAltitude = ParseAltitude(params[0], params[1]);
-  //JMW?  RMAAltitude = AltitudeToQNHAltitude(RMAAltitude);
+  //JMW?  RMAAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(RMAAltitude);
   RMAAvailable = true;
   GPS_INFO->BaroAltitudeAvailable = true;
 
@@ -1010,8 +1007,8 @@ bool NMEAParser::PTAS1(const TCHAR *String,
   GPS_INFO->VarioAvailable = true;
   GPS_INFO->Vario = wnet;
   GPS_INFO->BaroAltitudeAvailable = true;
-  GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(baralt);
-  GPS_INFO->IndicatedAirspeed = vtas/AirDensityRatio(baralt);
+  GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(baralt);
+  GPS_INFO->IndicatedAirspeed = vtas/GPS_INFO->pressure.AirDensityRatio(baralt);
 
   TriggerVarioUpdate();
 
@@ -1201,13 +1198,6 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   //  nmeaParser1.ParseNMEAString_Internal(_T("$PTAS1,201,200,02583,000*2A"), GPS_INFO);
   //  nmeaParser1.ParseNMEAString_Internal(_T("$GPRMC,082430.00,A,3744.09096,S,14426.16069,E,0.520294.90,301207,,,A*77"), GPS_INFO);
   //  nmeaParser1.ParseNMEAString_Internal(_T("$GPGGA,082430.00,3744.09096,S,1426.16069,E,1,08,1.37,157.6,M,-4.9,M,,*5B"), GPS_INFO);
-
-  QNH=1013.25;
-  double h;
-  double altraw= 5.0;
-  h = AltitudeToQNHAltitude(altraw);
-  QNH = FindQNH(altraw, 50.0);
-  h = AltitudeToQNHAltitude(altraw);
 
   i++;
 

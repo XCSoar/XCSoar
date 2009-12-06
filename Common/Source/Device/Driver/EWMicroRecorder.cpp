@@ -43,7 +43,6 @@ Copyright_License {
 
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Internal.hpp"
-#include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "Device/Port.h"
 #include "NMEA/Info.h"
@@ -121,7 +120,7 @@ EWMicroRecorderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
     if (enable_baro) {
       double altitude = NMEAParser::ParseAltitude(params[1], params[2]);
 
-      GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(altitude);
+      GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(altitude);
       GPS_INFO->BaroAltitudeAvailable = true;
     }
 

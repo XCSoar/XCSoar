@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
-#include "Math/Pressure.h"
 #include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
@@ -68,23 +67,20 @@ static void OnBallastDump(WindowControl *Sender){
 }
 
 
-static double INHg=0;
-
 static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
   WndProperty* wp;
 
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(QNH);
+      Sender->Set(FIXED_DOUBLE(XCSoarInterface::Basic().pressure.get_QNH()));
     break;
     case DataField::daPut:
     case DataField::daChange:
-      QNH = Sender->GetAsFloat();
-      INHg = (int)QNH;
-      INHg = INHg*29.91/1013.2;
+      fixed QNH = Sender->GetAsFloat();
 
-      AllDevicesPutQNH(QNH);
 #ifdef OLD_TASK
+      XCSoarInterface::Basic().pressure.set_QNH(QNH);
+      AllDevicesPutQNH(XCSoarInterface::Basic().pressure);
       airspace_database.SetQNH(QNH);
 #endif
 

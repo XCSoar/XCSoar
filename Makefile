@@ -269,7 +269,6 @@ OBJS	:=\
 	$(SRC)/Math/leastsqs.o 		\
 	$(SRC)/Math/LowPassFilter.o 	\
 	$(SRC)/Math/NavFunctions.o	\
-	$(SRC)/Math/Pressure.o 		\
 	$(SRC)/Math/Screen.o 		\
 	$(SRC)/Math/SunEphemeris.o 	\
 	\

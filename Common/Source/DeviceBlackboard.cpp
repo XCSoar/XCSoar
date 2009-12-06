@@ -57,8 +57,12 @@ DeviceBlackboard::Initialise()
   ScopeLock protect(mutexBlackboard);
 
   // Clear the gps_info and calculated_info
+  // JMW OLD_TASK TODO: make a reset() method that does this
+
+#ifdef OLD_TASK
   memset( &gps_info, 0, sizeof(NMEA_INFO));
   memset( &calculated_info, 0, sizeof(DERIVED_INFO));
+#endif
 
   // Set the NAVWarning positive (assume not gps found yet)
   gps_info.NAVWarning = true;

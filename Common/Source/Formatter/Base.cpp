@@ -45,7 +45,6 @@ Copyright_License {
 #include "Units.hpp"
 #include "Interface.hpp"
 #include <stdio.h>
-#include "Math/Pressure.h"
 #include "Components.hpp"
 #include "Asset.hpp"
 
@@ -444,8 +443,11 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 70:	// VENTA3 QFE
-//    Valid = Basic().Altitude;
+#ifdef OLD_TASK
     Value = ALTITUDEMODIFY* (Basic().Altitude-QFEAltitudeOffset);
+#else
+    Value = ALTITUDEMODIFY* Basic().Altitude;
+#endif
     break;
   case 71:
     if ( Calculated().AverageLD == 0) {

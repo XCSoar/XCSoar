@@ -45,6 +45,7 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct ComPort;
+struct AtmosphericPressure;
 
 /**
  * This is the interface for a device driver.
@@ -67,7 +68,7 @@ public:
   virtual bool PutMcCready(double mc_cready) = 0;
   virtual bool PutBugs(double bugs) = 0;
   virtual bool PutBallast(double ballast) = 0;
-  virtual bool PutQNH(double qnh) = 0;
+  virtual bool PutQNH(const AtmosphericPressure& pres) = 0;
   virtual bool PutVoice(const TCHAR *sentence) = 0;
   virtual bool PutVolume(int volume) = 0;
   virtual bool PutActiveFrequency(double frequency) = 0;
@@ -97,7 +98,7 @@ class AbstractDevice : public Device {
   virtual bool PutMcCready(double mc_cready);
   virtual bool PutBugs(double bugs);
   virtual bool PutBallast(double ballast);
-  virtual bool PutQNH(double qnh);
+  virtual bool PutQNH(const AtmosphericPressure& pres);
   virtual bool PutVoice(const TCHAR *sentence);
   virtual bool PutVolume(int volume);
   virtual bool PutActiveFrequency(double frequency);

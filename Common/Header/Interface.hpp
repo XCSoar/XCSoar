@@ -142,7 +142,6 @@ public:
   static void on_key_Speed(int UpDown);
   static void on_key_Direction(int UpDown);
   static void on_key_Altitude(int UpDown);
-  static void on_key_QFEAltitude(int UpDown); // VENTA3
   static void on_key_Alternate1(int UpDown); // VENTA3
   static void on_key_Alternate2(int UpDown); // VENTA3
   static void on_key_BestAlternate(int UpDown); // VENTA3

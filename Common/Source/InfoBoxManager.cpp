@@ -290,7 +290,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 69 BestAlternate aka BestLanding
 	  {ugNone,            TEXT("Best Alternate"), TEXT("BestAltn"), new FormatterAlternate(TEXT("\0")), ActionInterface::on_key_BestAlternate, 36, 46},
           // 70
-	  {ugAltitude,        TEXT("QFE GPS"), TEXT("QFE GPS"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_QFEAltitude, 1, 33},
+	  {ugAltitude,        TEXT("QFE GPS"), TEXT("QFE GPS"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 1, 33},
           // 71 TODO FIX those 19,4 values
 	  {ugNone,            TEXT("L/D Average"), TEXT("L/D Avg"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 19, 4},
 	  // 72 //

@@ -514,10 +514,10 @@ DeviceDescriptor::PutStandbyFrequency(double frequency)
 }
 
 bool
-DeviceDescriptor::PutQNH(double qnh)
+DeviceDescriptor::PutQNH(const AtmosphericPressure& pres)
 {
   return device != NULL
-    ? device->PutQNH(qnh)
+    ? device->PutQNH(pres)
     : true;
 }
 
@@ -795,7 +795,7 @@ void AllDevicesPutStandbyFrequency(double frequency)
     DeviceList[i].PutStandbyFrequency(frequency);
 }
 
-void AllDevicesPutQNH(double qnh)
+void AllDevicesPutQNH(const AtmosphericPressure& pres)
 {
   if (is_simulator())
     return;
@@ -803,7 +803,7 @@ void AllDevicesPutQNH(double qnh)
   ScopeLock protect(mutexComm);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutQNH(qnh);
+    DeviceList[i].PutQNH(pres);
 }
 
 void AllDevicesPutVoice(const TCHAR *sentence)

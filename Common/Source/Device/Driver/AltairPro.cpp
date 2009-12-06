@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Device/Driver/AltairPro.hpp"
 #include "Device/Internal.hpp"
-#include "Math/Pressure.h"
 #include "Math/Units.h"
 #include "NMEA/Info.h"
 
@@ -56,7 +55,7 @@ public:
 public:
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
                          bool enable_baro);
-  virtual bool PutQNH(double qnh);
+  virtual bool PutQNH(const AtmosphericPressure& pres);
   virtual bool Declare(const struct Declaration *declaration);
   virtual void OnSysTicker();
 };
@@ -94,7 +93,7 @@ AltairProDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
     if (enable_baro) {
       GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(lastAlt);
+      GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(lastAlt);
     }
 
     last_enable_baro = enable_baro;
@@ -119,11 +118,11 @@ AltairProDevice::Declare(const struct Declaration *decl)
 #include "DeviceBlackboard.hpp"
 
 bool
-AltairProDevice::PutQNH(double NewQNH)
+AltairProDevice::PutQNH(const AtmosphericPressure &pres)
 {
-  (void)NewQNH; // TODO code: JMW check sending QNH to Altair
+  // TODO code: JMW check sending QNH to Altair
   if (last_enable_baro)
-    device_blackboard.SetBaroAlt(AltitudeToQNHAltitude(lastAlt));
+    device_blackboard.SetBaroAlt(pres.AltitudeToQNHAltitude(lastAlt));
 
   return true;
 }

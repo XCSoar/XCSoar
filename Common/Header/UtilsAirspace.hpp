@@ -42,12 +42,14 @@ Copyright_License {
 
 #include "Airspace.h"
 
+class AtmosphericPressure;
+
 void FormatWarningString(int Type, const TCHAR *Name,
                          AIRSPACE_ALT Base, AIRSPACE_ALT Top,
                          TCHAR *szMessageBuffer, TCHAR *TileBuffer);
 
 void
-ConvertFlightLevels(AirspaceDatabase &airspace_database);
+ConvertFlightLevels(AirspaceDatabase &airspace_database, const AtmosphericPressure &pres);
 
 #endif
 #endif

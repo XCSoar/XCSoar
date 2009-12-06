@@ -42,7 +42,6 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Geometry.hpp"
-#include "Math/Pressure.h"
 #include "Math/LowPassFilter.hpp"
 #include "McReady.h"
 #include "RasterTerrain.h"

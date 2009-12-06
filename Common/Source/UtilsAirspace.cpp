@@ -42,7 +42,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Units.hpp"
-#include "Math/Pressure.h"
+#include "Atmosphere/Pressure.hpp"
 #include "Math/Units.h"
 #include <assert.h>
 #include "Units.hpp"
@@ -50,19 +50,19 @@ Copyright_License {
 #ifdef OLD_TASK
 
 static void
-ConvertFlightLevels(AIRSPACE_ALT &altitude)
+ConvertFlightLevels(AIRSPACE_ALT &altitude, const AtmosphericPressure &pres)
 {
     if (altitude.FL != 0) {
-      altitude.Altitude = altitude.FL * 100 + (QNH - 1013) * 30;
+      altitude.Altitude = altitude.FL * 100 + (pres.get_QNH() - 1013) * 30;
       altitude.Altitude = altitude.Altitude / TOFEET;
     }
 }
 
 static void
-ConvertFlightLevels(AirspaceMetadata &airspace)
+ConvertFlightLevels(AirspaceMetadata &airspace, const AtmosphericPressure &pres)
 {
-  ConvertFlightLevels(airspace.Base);
-  ConvertFlightLevels(airspace.Top);
+  ConvertFlightLevels(airspace.Base, pres);
+  ConvertFlightLevels(airspace.Top, pres);
 }
 
 /**
@@ -70,15 +70,15 @@ ConvertFlightLevels(AirspaceMetadata &airspace)
  * (Attention: Inaccurate!)
  */
 void
-ConvertFlightLevels(AirspaceDatabase &airspace_database)
+ConvertFlightLevels(AirspaceDatabase &airspace_database, const AtmosphericPressure &pres)
 {
   // TODO accuracy: ConvertFlightLevels is inaccurate!
 
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i)
-    ConvertFlightLevels(airspace_database.AirspaceCircle[i]);
+    ConvertFlightLevels(airspace_database.AirspaceCircle[i], pres);
 
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i)
-    ConvertFlightLevels(airspace_database.AirspaceArea[i]);
+    ConvertFlightLevels(airspace_database.AirspaceArea[i], pres);
 }
 
 /**

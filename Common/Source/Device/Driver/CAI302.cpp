@@ -1,4 +1,3 @@
-
 /*
 Copyright_License {
 
@@ -568,8 +567,8 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
   }
 
-//  ExtractParameter(String,ctemp,5);
-//  GPS_INFO->QNH = _tcstod(ctemp, NULL) - 1000;
+  // ExtractParameter(String,ctemp,5);
+  // GPS_INFO->pressure.set_QNH(_tcstod(ctemp, NULL) - 1000); ?
 
   NMEAParser::ExtractParameter(String,ctemp,6);
   GPS_INFO->AirspeedAvailable = true;

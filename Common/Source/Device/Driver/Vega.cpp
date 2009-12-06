@@ -40,7 +40,6 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
 #include "Message.h"
-#include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "Registry.hpp"
 #include "DeviceBlackboard.hpp"
@@ -83,7 +82,7 @@ public:
 public:
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
                          bool enable_baro);
-  virtual bool PutQNH(double qnh);
+  virtual bool PutQNH(const AtmosphericPressure& pres);
   virtual bool PutVoice(const TCHAR *sentence);
   virtual bool Declare(const struct Declaration *declaration);
   virtual void OnSysTicker();
@@ -278,8 +277,9 @@ PDVDV(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
     NMEAParser::ExtractParameter(String,ctemp,3);
     alt = _tcstod(ctemp, NULL);
     GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = // JMW 20080716 bug
+    GPS_INFO->BaroAltitude = GPS_INFO->pressure.
       AltitudeToQNHAltitude(alt);
+    // JMW 20080716 bug
       // was alt;    // ToDo check if QNH correction is needed!
   }
 
@@ -451,10 +451,9 @@ _VarioWriteSettings(ComPort *port)
 }
 
 bool
-VegaDevice::PutQNH(double NewQNH)
+VegaDevice::PutQNH(const AtmosphericPressure& pres)
 {
-  (void)NewQNH;
-  // NewQNH is already stored in QNH
+  (void)pres;
 
   _VarioWriteSettings(port);
 

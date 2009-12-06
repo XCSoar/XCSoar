@@ -39,17 +39,16 @@ Copyright_License {
 #include "Device/Driver/Zander.hpp"
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
-#include "Math/Pressure.h"
 #include "Device/Parser.h"
 #include "NMEA/Info.h"
 
 #include <stdlib.h>
 
 static bool
-PZAN1(const TCHAR *String, NMEA_INFO *aGPS_INFO, bool enable_baro);
+PZAN1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
 
 static bool
-PZAN2(const TCHAR *String, NMEA_INFO *aGPS_INFO);
+PZAN2(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
 class ZanderDevice : public AbstractDevice {
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
@@ -57,14 +56,14 @@ class ZanderDevice : public AbstractDevice {
 };
 
 bool
-ZanderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *aGPS_INFO,
+ZanderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
                         bool enable_baro)
 {
   if(_tcsncmp(_T("$PZAN1"), String, 6)==0)
-    return PZAN1(&String[7], aGPS_INFO, enable_baro);
+    return PZAN1(&String[7], GPS_INFO, enable_baro);
   if(_tcsncmp(_T("$PZAN2"), String, 6)==0)
     {
-      return PZAN2(&String[7], aGPS_INFO);
+      return PZAN2(&String[7], GPS_INFO);
     }
 
   return false;
@@ -87,21 +86,22 @@ const struct DeviceRegister zanderDevice = {
 // local stuff
 
 static bool
-PZAN1(const TCHAR *String, NMEA_INFO *aGPS_INFO, bool enable_baro)
+PZAN1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   if (!enable_baro)
     return true;
 
   TCHAR ctemp[80];
-  aGPS_INFO->BaroAltitudeAvailable = true;
+  GPS_INFO->BaroAltitudeAvailable = true;
   NMEAParser::ExtractParameter(String,ctemp,0);
-  aGPS_INFO->BaroAltitude = AltitudeToQNHAltitude(_tcstod(ctemp, NULL));
+  GPS_INFO->BaroAltitude = 
+    GPS_INFO->pressure.AltitudeToQNHAltitude(_tcstod(ctemp, NULL));
   return true;
 }
 
 
 static bool
-PZAN2(const TCHAR *String, NMEA_INFO *aGPS_INFO)
+PZAN2(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   double vtas, wnet, vias;
@@ -112,18 +112,18 @@ PZAN2(const TCHAR *String, NMEA_INFO *aGPS_INFO)
 
   NMEAParser::ExtractParameter(String,ctemp,1);
   wnet = (_tcstod(ctemp, NULL) - 10000) / 100; // cm/s
-  aGPS_INFO->Vario = wnet;
+  GPS_INFO->Vario = wnet;
 
-  if (aGPS_INFO->BaroAltitudeAvailable) {
-    vias = vtas/AirDensityRatio(aGPS_INFO->BaroAltitude);
+  if (GPS_INFO->BaroAltitudeAvailable) {
+    vias = vtas/GPS_INFO->pressure.AirDensityRatio(GPS_INFO->BaroAltitude);
   } else {
     vias = 0.0;
   }
 
-  aGPS_INFO->AirspeedAvailable = true;
-  aGPS_INFO->TrueAirspeed = vtas;
-  aGPS_INFO->IndicatedAirspeed = vias;
-  aGPS_INFO->VarioAvailable = true;
+  GPS_INFO->AirspeedAvailable = true;
+  GPS_INFO->TrueAirspeed = vtas;
+  GPS_INFO->IndicatedAirspeed = vias;
+  GPS_INFO->VarioAvailable = true;
 
   TriggerVarioUpdate();
 

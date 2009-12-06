@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include "FLARM/Traffic.h"
 #include "Sizes.h"
 
@@ -130,6 +131,11 @@ struct NMEA_INFO: public AIRCRAFT_STATE
    * @see Altitude
    */
   fixed BaroAltitude;
+
+  /**
+   * Troposhere atmosphere model for QNH corrections
+   */
+  AtmosphericPressure pressure;
 
   //##########
   //   Time
