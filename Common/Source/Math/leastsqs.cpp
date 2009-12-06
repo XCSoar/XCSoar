@@ -92,6 +92,13 @@ return the maximum least squares error:
 
 */
 
+/**
+ * Constructor of the LeastSquares class
+ */
+LeastSquares::LeastSquares() {
+  Reset();
+}
+
 void
 LeastSquares::Reset()
 {

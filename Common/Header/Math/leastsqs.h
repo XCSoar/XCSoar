@@ -87,10 +87,7 @@ public:
   float ystore[MAX_STATISTICS];
   float weightstore[MAX_STATISTICS];
 
-  LeastSquares()
-  {
-    Reset();
-  }
+  LeastSquares();
 
   void Reset();
 /**
