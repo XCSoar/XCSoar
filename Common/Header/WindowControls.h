@@ -138,10 +138,7 @@ public:
   virtual bool on_setfocus();
   virtual bool on_killfocus();
 
-#ifndef ENABLE_SDL
-  virtual LRESULT on_unhandled_message(HWND hWnd, UINT message,
-                                       WPARAM wParam, LPARAM lParam);
-#endif /* !ENABLE_SDL */
+  virtual bool on_unhandled_key(unsigned key_code);
 
   virtual void AddClient(WindowControl *Client);
 
@@ -494,14 +491,11 @@ public:
 
   void SetCaption(const TCHAR *Value);
 
+  virtual bool on_unhandled_key(unsigned key_code);
+
   /** from class Window */
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
-
-#ifndef ENABLE_SDL
-  virtual LRESULT on_unhandled_message(HWND hwnd, UINT uMsg,
-                                       WPARAM wParam, LPARAM lParam);
-#endif
 
   Color SetForeColor(Color Value);
   Color SetBackColor(Color Value);
@@ -625,7 +619,8 @@ public:
 
   const Font *SetFont(const Font &font);
 
-  bool OnEditKeyDown(unsigned key_code);
+  virtual bool on_unhandled_key(unsigned key_code);
+
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_mouse_double(int x, int y);

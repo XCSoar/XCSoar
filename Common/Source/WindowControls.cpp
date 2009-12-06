@@ -503,7 +503,8 @@ WindowControl::on_key_down(unsigned key_code)
   // JMW: HELP
   KeyTimer(true, key_code);
 
-  return ContainerWindow::on_key_down(key_code);
+  return ContainerWindow::on_key_down(key_code) ||
+    on_unhandled_key(key_code);
 }
 
 bool
@@ -630,23 +631,11 @@ WindowControl::on_killfocus()
   return true;
 }
 
-#ifndef ENABLE_SDL
-
-LRESULT
-WindowControl::on_unhandled_message(HWND hwnd, UINT uMsg,
-                                    WPARAM wParam, LPARAM lParam)
+bool
+WindowControl::on_unhandled_key(unsigned key_code)
 {
-  switch (uMsg){
-  case WM_KEYDOWN:
-    if (mOwner != NULL &&
-        mOwner->on_unhandled_message(hwnd, uMsg, wParam, lParam))
-      return 0;
-  }
-
-  return ContainerWindow::on_unhandled_message(hwnd, uMsg, wParam, lParam);
+  return mOwner != NULL && mOwner->on_unhandled_key(key_code);
 }
-
-#endif /* !ENABLE_SDL */
 
 void InitWindowControlModule(void){
 
@@ -1008,30 +997,27 @@ WndForm::SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigne
 
 #ifndef ENABLE_SDL
 
-LRESULT
-WndForm::on_unhandled_message(HWND hwnd, UINT uMsg,
-                              WPARAM wParam, LPARAM lParam)
+bool
+WndForm::on_unhandled_key(unsigned key_code)
 {
-  if (uMsg == WM_KEYDOWN){
-    if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, wParam))
-      return 0;
+  if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, key_code))
+    return 0;
 
-    if (ActiveControl != NULL){
-      switch(wParam & 0xffff){
-        case VK_UP:
-          if (ActiveControl->GetOwner() != NULL)
-            ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-        return 0;
+  if (ActiveControl != NULL){
+    switch (key_code) {
+    case VK_UP:
+      if (ActiveControl->GetOwner() != NULL)
+        ActiveControl->GetOwner()->FocusPrev(ActiveControl);
+      return true;
 
-        case VK_DOWN:
-          if (ActiveControl->GetOwner() != NULL)
-            ActiveControl->GetOwner()->FocusNext(ActiveControl);
-        return 0;
-      }
+    case VK_DOWN:
+      if (ActiveControl->GetOwner() != NULL)
+        ActiveControl->GetOwner()->FocusNext(ActiveControl);
+      return true;
     }
   }
 
-  return WindowControl::on_unhandled_message(hwnd, uMsg, wParam, lParam);
+  return WindowControl::on_unhandled_key(key_code);
 }
 
 #endif /* !ENABLE_SDL */
@@ -1299,24 +1285,8 @@ WndProperty::Editor::on_key_down(unsigned key_code)
     }
   }
 
-  if (key_code == VK_UP || key_code == VK_DOWN){
-#ifdef ENABLE_SDL
-    // XXX
-#else /* !ENABLE_SDL */
-    WindowControl *owner = parent->GetOwner();
-    if (owner != NULL)
-      // XXX what's the correct lParam value here?
-      PostMessage(owner->GetClientAreaWindow(),
-                  WM_KEYDOWN, key_code, 0);
-#endif /* !ENABLE_SDL */
-    // pass the message to the parent window;
-    return true;
-  }
-
-  if (parent->OnEditKeyDown(key_code))
-    return true;
-
-  return false;
+  return EditWindow::on_key_down(key_code) ||
+    parent->on_unhandled_key(key_code);
 }
 
 bool
@@ -1552,7 +1522,7 @@ WndProperty::on_editor_killfocus()
 }
 
 bool
-WndProperty::OnEditKeyDown(unsigned key_code)
+WndProperty::on_unhandled_key(unsigned key_code)
 {
   switch (key_code){
     case VK_RIGHT:
@@ -1563,7 +1533,7 @@ WndProperty::OnEditKeyDown(unsigned key_code)
       return true;
   }
 
-  return false;
+  return WindowControl::on_unhandled_key(key_code);
 }
 
 bool
@@ -2263,7 +2233,7 @@ WndListFrame::on_key_down(unsigned key_code)
     return true;
   }
 
-  return false;
+  return WndFrame::on_key_down(key_code);
 }
 
 void WndListFrame::ResetList(void){
