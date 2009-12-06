@@ -45,6 +45,7 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
+#include <tchar.h>
 
 /**
  * This class wraps an OS specific trigger.  It is an object which one
@@ -69,13 +70,13 @@ public:
    * @param name an application specific name for this trigger
    */
 #ifdef HAVE_POSIX
-  Trigger(const void *name, bool _manual_reset = true)
+  Trigger(const TCHAR *name, bool _manual_reset = true)
     :manual_reset(_manual_reset), value(false) {
     pthread_mutex_init(&mutex, NULL);
     pthread_cond_init(&cond, NULL);
   }
 #else
-  Trigger(LPCTSTR name, bool manual_reset = true)
+  Trigger(const TCHAR *name, bool manual_reset = true)
     :handle(::CreateEvent(NULL, manual_reset, false, name)) {}
 #endif
 
