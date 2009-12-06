@@ -48,7 +48,7 @@ double GetBearing(const TCHAR *code);
 double GetRange(const TCHAR *code);
 int GetValueFromTeamCode(const TCHAR *code, int maxCount);
 
-#define TEAMCODE_COMBINAIONS 1296
+#define TEAMCODE_COMBINATIONS 1296
 
 /**
  * Calculates the teamcode of the given bearing and distance
@@ -88,7 +88,7 @@ ConvertBearingToTeamCode(double bearing, TCHAR *code)
 		return;
 	}
 
-	double bamValue = (bearing * TEAMCODE_COMBINAIONS) / 360.0;
+	double bamValue = (bearing * TEAMCODE_COMBINATIONS) / 360.0;
 	NumberToTeamCode(bamValue, code, 2);
 }
 
@@ -138,7 +138,7 @@ GetBearing(const TCHAR *code)
 {
 	int val = GetValueFromTeamCode(code, 2);
 
-	double bearing = (val * 360.0 / TEAMCODE_COMBINAIONS);
+	double bearing = (val * 360.0 / TEAMCODE_COMBINATIONS);
   bearing -= 0;
   if (bearing < 0) {
 		bearing += 360;
