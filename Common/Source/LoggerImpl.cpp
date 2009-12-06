@@ -511,9 +511,6 @@ LoggerImpl::AddDeclaration(double Latitude, double Longitude, const TCHAR *ID)
   IGCWriteRecord(szCRecord, szLoggerFileName);
 }
 
-// TODO code: make this thread-safe, since it could happen in the middle
-// of the calculations doing LogPoint or something else!
-
 void
 LoggerImpl::LoggerNote(const TCHAR *text) {
   if (LoggerActive) {
