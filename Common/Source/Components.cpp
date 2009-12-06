@@ -417,6 +417,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   instrument_thread->start();
 
   globalRunningEvent.trigger();
+  draw_thread->resume();
 
   return true;
 }
