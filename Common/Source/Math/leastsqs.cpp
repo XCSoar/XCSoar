@@ -77,7 +77,9 @@ Least squares fit:
 
 */
 
-void LeastSquares::Reset() {
+void
+LeastSquares::Reset()
+{
   sum_n = 0;
   sum_xi = 0;
   sum_yi = 0;
@@ -94,75 +96,75 @@ void LeastSquares::Reset() {
   y_ave = 0;
 }
 
-
-void LeastSquares::least_squares_update(double y) {
+void
+LeastSquares::least_squares_update(double y)
+{
   least_squares_update((double)(sum_n+1), y);
 }
 
+void
+LeastSquares::least_squares_add(double x, double y, double weight)
+{
+  if ((y > y_max) || (!sum_n)) {
+    y_max = y;
+  }
+  if ((y < y_min) || (!sum_n)) {
+    y_min = y;
+  }
 
-void LeastSquares::least_squares_add(double x, double y, double weight) {
+  if ((x > x_max) || (!sum_n)) {
+    x_max = x;
+  }
+  if ((x < x_min) || (!sum_n)) {
+    x_min = x;
+  }
 
-    if ((y>y_max) || (!sum_n)) {
-      y_max = y;
-    }
-    if ((y<y_min) || (!sum_n)) {
-      y_min = y;
-    }
+  // TODO code: really should have a circular buffer here
+  if (sum_n < MAX_STATISTICS) {
+    xstore[sum_n] = (float)x;
+    ystore[sum_n] = (float)y;
+    weightstore[sum_n] = (float)weight;
+  }
 
-    if ((x>x_max) || (!sum_n)) {
-      x_max = x;
-    }
-    if ((x<x_min) || (!sum_n)) {
-      x_min = x;
-    }
+  ++sum_n;
 
-    // TODO code: really should have a circular buffer here
-    if (sum_n<MAX_STATISTICS) {
-      xstore[sum_n] = (float)x;
-      ystore[sum_n] = (float)y;
-      weightstore[sum_n] = (float)weight;
-    }
+  sum_weights += weight;
 
-    ++sum_n;
+  double xw = x * weight;
+  double yw = y * weight;
 
-    sum_weights += weight;
-
-    double xw = x*weight;
-    double yw = y*weight;
-
-    sum_xi += xw;
-    sum_yi += yw;
-    sum_xi_2 += xw * xw;
-    sum_xi_yi += xw * yw;
-
+  sum_xi += xw;
+  sum_yi += yw;
+  sum_xi_2 += xw * xw;
+  sum_xi_yi += xw * yw;
 }
 
-void LeastSquares::least_squares_update() {
-
+void
+LeastSquares::least_squares_update()
+{
   double denom = (sum_weights * sum_xi_2 - sum_xi * sum_xi);
 
-  if (fabs(denom)>0.0) {
-    m = ( sum_weights * sum_xi_yi - sum_xi * sum_yi ) /
-      denom;
+  if (fabs(denom) > 0.0) {
+    m = (sum_weights * sum_xi_yi - sum_xi * sum_yi) / denom;
   } else {
     m = 0.0;
   }
-  b = (sum_yi - m*sum_xi) / sum_weights;
+  b = (sum_yi - m * sum_xi) / sum_weights;
 
-  y_ave = m*(x_max+x_min)/2.0+b;
-
+  y_ave = m * (x_max + x_min) / 2.0 + b;
 }
 
-
 /* incrementally update existing values with a new data point */
-void LeastSquares::least_squares_update(double x, double y, double weight) {
+void
+LeastSquares::least_squares_update(double x, double y, double weight)
+{
   least_squares_add(x, y, weight);
   least_squares_update();
 
   double error;
   error = y - (m * x + b);
   sum_error += error * error * weight;
-  if (fabs(error)>max_error) {
+  if (fabs(error) > max_error) {
     max_error = error;
   }
 }
@@ -170,7 +172,6 @@ void LeastSquares::least_squares_update(double x, double y, double weight) {
 void LeastSquares::least_squares_error_update() {
   rms_error = sqrt(sum_error/sum_weights);
 }
-
 
 /*
 return the least squares error:
