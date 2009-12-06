@@ -112,13 +112,13 @@ LeastSquares::Reset()
 }
 
 void
-LeastSquares::least_squares_update(double y)
+LeastSquares::LeastSquaresUpdate(double y)
 {
-  least_squares_update((double)(sum_n+1), y);
+  LeastSquaresUpdate((double)(sum_n+1), y);
 }
 
 void
-LeastSquares::least_squares_add(double x, double y, double weight)
+LeastSquares::LeastSquaresAdd(double x, double y, double weight)
 {
   if ((y > y_max) || (!sum_n)) {
     y_max = y;
@@ -155,7 +155,7 @@ LeastSquares::least_squares_add(double x, double y, double weight)
 }
 
 void
-LeastSquares::least_squares_update()
+LeastSquares::LeastSquaresUpdate()
 {
   double denom = (sum_weights * sum_xi_2 - sum_xi * sum_xi);
 
@@ -171,10 +171,10 @@ LeastSquares::least_squares_update()
 
 /* incrementally update existing values with a new data point */
 void
-LeastSquares::least_squares_update(double x, double y, double weight)
+LeastSquares::LeastSquaresUpdate(double x, double y, double weight)
 {
-  least_squares_add(x, y, weight);
-  least_squares_update();
+  LeastSquaresAdd(x, y, weight);
+  LeastSquaresUpdate();
 
   double error;
   error = y - (m * x + b);
@@ -184,6 +184,6 @@ LeastSquares::least_squares_update(double x, double y, double weight)
   }
 }
 
-void LeastSquares::least_squares_error_update() {
+void LeastSquares::LeastSquaresErrorUpdate() {
   rms_error = sqrt(sum_error/sum_weights);
 }

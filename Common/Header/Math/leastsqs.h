@@ -96,17 +96,17 @@ public:
 /**
  * Incrementally update existing values with a new data point.
  */
-  void least_squares_update(double x, double y, double weight=1.0);
+  void LeastSquaresUpdate(double x, double y, double weight=1.0);
 
   // assume x is the sample number
-  void least_squares_update(double y);
+  void LeastSquaresUpdate(double y);
 
-  void least_squares_error_update();
+  void LeastSquaresErrorUpdate();
 
   // add one point, for single update later
-  void least_squares_add(double x, double y, double weight=1.0);
+  void LeastSquaresAdd(double x, double y, double weight=1.0);
   // global update
-  void least_squares_update();
+  void LeastSquaresUpdate();
 };
 
 #endif // _LEASTSQS_H
