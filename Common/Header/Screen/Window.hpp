@@ -417,6 +417,14 @@ public:
     return rc;
   }
 
+  bool in_client_rect(int x, int y) const {
+    if (x < 0 || y < 0)
+      return false;
+
+    RECT rc = get_client_rect();
+    return x < rc.right && y < rc.bottom;
+  }
+
   const SIZE get_size() const
   {
     RECT rc = get_client_rect();
