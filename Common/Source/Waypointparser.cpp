@@ -586,6 +586,9 @@ ReadWaypoints(Waypoints &way_points, const RasterTerrain *terrain)
       ContractLocalPath(szFile1);
       SetRegistryString(szRegistryWayPointFile, szFile1);
     }
+
+    // inform Waypoints whether it is ok to write to this file
+    way_points.set_file0_writable(!file_embedded);
   } else {
     StartupStore(TEXT("No waypoint file 1\n"));
   }
