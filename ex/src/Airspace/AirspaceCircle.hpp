@@ -99,6 +99,12 @@ public:
                   const GeoVector &vec,
                   const TaskProjection& tp) const;
 
+  const GEOPOINT& get_center() const {
+    return center;
+  }
+  const fixed& get_radius() const {
+    return radius;
+  }
 private:
   const GEOPOINT center;
   const fixed radius;
@@ -107,7 +113,6 @@ public:
   friend std::ostream& operator<< (std::ostream& f, 
                                    const AirspaceCircle& as);
 #endif
-
   DEFINE_VISITABLE()
 };
 

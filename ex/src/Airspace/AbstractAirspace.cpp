@@ -50,3 +50,10 @@ AbstractAirspace::set_flight_level(const AtmosphericPressure &press)
   m_base.set_flight_level(press);
   m_top.set_flight_level(press);
 }
+
+
+/*
+  NewCircle->Ack.AcknowledgedToday = false;
+  NewCircle->Ack.AcknowledgementTime = 0;
+  NewCircle->_NewWarnAckNoBrush = false;
+*/

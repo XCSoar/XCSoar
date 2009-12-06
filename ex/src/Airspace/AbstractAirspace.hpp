@@ -111,6 +111,33 @@ public:
    */
   void set_flight_level(const AtmosphericPressure &press);
 
+  /**
+   * Set fundamental properties of airspace
+   *
+   * @param _Name Name of airspace
+   * @param _Type Type/class
+   * @param _base Lower limit
+   * @param _top Upper limit
+   */
+  void set_properties(const tstring &_Name,
+                      const int _Type,
+                      const AIRSPACE_ALT &_base,
+                      const AIRSPACE_ALT &_top) {
+    Name = _Name;
+    Type = _Type;
+    m_base = _base;
+    m_top = _top;
+  }
+
+  /** 
+   * Get type of airspace
+   * 
+   * @return Type/class of airspace
+   */
+  const int get_type() const {
+    return Type;
+  }
+
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& f, 
                                    const AbstractAirspace& as);

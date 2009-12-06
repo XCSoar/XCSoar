@@ -45,7 +45,8 @@
  * General polygon form airspace
  *
  */
-class AirspacePolygon: public AbstractAirspace 
+class AirspacePolygon: 
+  public AbstractAirspace 
 {
 public:
   /** 
@@ -54,10 +55,12 @@ public:
    * \todo remove convex hack for testing
    *
    * @param pts Vector representing border
+   * @param prune If true, converts border to convex hull of points
    *
    * @return Initialised airspace object
    */
-  AirspacePolygon(const std::vector<GEOPOINT>& pts);
+  AirspacePolygon(const std::vector<GEOPOINT>& pts,
+    const bool prune = false);
 
   /** 
    * Compute bounding box enclosing the airspace.  Rounds up/down
@@ -101,8 +104,16 @@ public:
                   const GeoVector &vec,
                   const TaskProjection& tp) const;
 
+  /**
+   * Accessor for airspace shape
+   * @return border of airspace
+   */
+  const SearchPointVector& get_points() const {
+    return m_border;
+  }
+
 private:
-  SearchPointVector border;
+  SearchPointVector m_border;
 
 /** 
  * Project border.
@@ -114,6 +125,7 @@ public:
   friend std::ostream& operator<< (std::ostream& f, 
                                    const AirspacePolygon& as);
 #endif
+
   DEFINE_VISITABLE()
 };
 
