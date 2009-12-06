@@ -38,9 +38,20 @@ Copyright_License {
 
 #include "Screen/BufferWindow.hpp"
 
+#ifndef ENABLE_SDL
+
+bool
+BufferWindow::on_resize(unsigned width, unsigned height)
+{
+  buffer.resize(width, height);
+  PaintWindow::on_resize(width, height);
+  return true;
+}
+
+#endif /* !ENABLE_SDL */
+
 void
 BufferWindow::on_paint(Canvas &canvas)
 {
   commit_buffer(canvas);
 }
-

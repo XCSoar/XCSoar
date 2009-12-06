@@ -154,7 +154,8 @@ PaintWindow::on_create()
 bool
 PaintWindow::on_resize(unsigned width, unsigned height)
 {
-  resize(width, height);
+  Window::on_resize(width, height);
+  canvas.resize(width, height);
   return true;
 }
 
