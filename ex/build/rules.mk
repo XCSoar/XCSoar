@@ -20,13 +20,13 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 #
 # Provide our own rules for building...
 #
-%.o: %.c
+%-$(TARGET).o: %.c
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) $(cc-flags) -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 #	@etags -a --declarations $<
 
-%.o: %.cpp
+%-$(TARGET).o: %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)

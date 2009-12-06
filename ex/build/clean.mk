@@ -8,7 +8,6 @@ clean: cleani cleancov FORCE
 		-o -name '*.*~' \
 	\) -type f -print | xargs -r $(RM)
 	$(Q)$(RM) $(OUTPUTS) gprof.out 
-	$(Q)$(RM) src/task.a Test/harness.a
 
 cleancov: FORCE
 	@$(NQ)echo "cleaning cov"

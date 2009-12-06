@@ -11,6 +11,10 @@ TESTFAST = \
 	Test/test_edittp.exe \
 	Test/test_highterrain.exe
 
+ifeq ($(HAVE_WIN32),y)
+TESTFAST += Test/test_win32.exe
+endif
+
 TESTSLOW = \
 	Test/test_randomtask.exe \
 	Test/test_vopt.exe \
@@ -19,18 +23,17 @@ TESTSLOW = \
 	Test/test_aat.exe \
 	Test/test_flight.exe 
 
-TESTS = $(TESTFAST) $(TESTSLOW)
+TESTS = $(TESTFAST:.exe=-$(TARGET).exe) $(TESTSLOW:.exe=-$(TARGET).exe) 
 
-ifeq ($(HAVE_WIN32),y)
-TESTS += Test/test_win32.exe
-endif
+testslow:	$(TESTSLOW:.exe=-$(TARGET).exe)
+	$(Q)perl Test/testall.pl $(TESTSLOW:.exe=-$(TARGET).exe)
 
-testslow:	$(TESTSLOW)
-	$(Q)perl Test/testall.pl $(TESTSLOW)
+testfast:	$(TESTFAST:.exe=-$(TARGET).exe)
+	$(Q)perl Test/testall.pl $(TESTFAST:.exe=-$(TARGET).exe)
 
-testfast:	$(TESTFAST)
-	$(Q)perl Test/testall.pl $(TESTFAST)
-
-Test/%.exe: Test/%.cpp src/task.a Test/harness.a
+Test/%-$(TARGET).exe: Test/%.cpp src/task-$(TARGET).a Test/harness-$(TARGET).a
 	@$(NQ)echo "  CXX/LN      $@"
-	$(Q)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) $< -o $@ Test/harness.a src/task.a 
+	$(Q)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) $< -o $@ \
+		Test/harness-$(TARGET).a \
+		src/task-$(TARGET).a 
+

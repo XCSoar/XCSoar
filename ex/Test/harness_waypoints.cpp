@@ -15,60 +15,46 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
 
   Waypoint wp;
 
-  wp.id = 1;
+  wp = waypoints.create(GEOPOINT(0,0));
   wp.Flags.Airport = true;
-  wp.Location.Longitude=0;
-  wp.Location.Latitude=0;
   wp.Altitude=0.25;
-  waypoints.insert(wp);
+  waypoints.append(wp);
 
-  wp.id++;
+  wp = waypoints.create(GEOPOINT(0.0,1.0));
   wp.Flags.Airport = true;
-  wp.Location.Longitude=0;
-  wp.Location.Latitude=1.0;
   wp.Altitude=0.25;
-  waypoints.insert(wp);
+  waypoints.append(wp);
 
-  wp.id++;
+  wp = waypoints.create(GEOPOINT(1.0,1.0));
   wp.Name = "Hello";
   wp.Flags.Airport = true;
-  wp.Location.Longitude=1.0;
-  wp.Location.Latitude=1.0;
   wp.Altitude=0.5;
-  waypoints.insert(wp);
+  waypoints.append(wp);
 
-  wp.id++;
+  wp = waypoints.create(GEOPOINT(0.8,0.5));
   wp.Name = "Unk";
   wp.Flags.Airport = true;
-  wp.Location.Longitude=0.8;
-  wp.Location.Latitude=0.5;
   wp.Altitude=0.25;
-  waypoints.insert(wp);
+  waypoints.append(wp);
 
-  wp.id++;
+  wp = waypoints.create(GEOPOINT(1.0,0.0));
   wp.Flags.Airport = true;
-  wp.Location.Longitude=1.0;
-  wp.Location.Latitude=0;
   wp.Altitude=0.25;
-  waypoints.insert(wp);
+  waypoints.append(wp);
 
-  wp.id++;
+  wp = waypoints.create(GEOPOINT(0.0,0.23));
   wp.Flags.Airport = true;
-  wp.Location.Longitude=0;
-  wp.Location.Latitude=0.23;
   wp.Altitude=0.25;
-  waypoints.insert(wp);
+  waypoints.append(wp);
 
   for (unsigned i=0; i<(unsigned)std::max((int)n-6,0); i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
     double z = rand()% std::max(terrain_height,1);
-    wp.id++;
+    wp = waypoints.create(GEOPOINT(x/1000.0,y/1000.0));
     wp.Flags.Airport = false;
-    wp.Location.Longitude = x/1000.0; 
-    wp.Location.Latitude = y/1000.0;
     wp.Altitude = z;
-    waypoints.insert(wp);
+    waypoints.append(wp);
   }
   waypoints.optimise();
 

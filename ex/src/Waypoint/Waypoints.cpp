@@ -314,7 +314,7 @@ Waypoints::erase(const Waypoint& wp)
 }
 
 void
-Waypoints::replace(const Waypoint& orig, const Waypoint& replacement)
+Waypoints::replace(const Waypoint& orig, Waypoint& replacement)
 {
   erase(orig);
   append(replacement);

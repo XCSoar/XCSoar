@@ -84,7 +84,7 @@ unsigned test_copy(Waypoints& waypoints)
   }
   unsigned size_old = waypoints.size();
   Waypoint wp = *r;
-  waypoints.insert(wp);
+  waypoints.append(wp);
   waypoints.optimise();
   unsigned size_new = waypoints.size();
   return (size_new == size_old+1);

@@ -86,11 +86,11 @@ public:
 
 /** 
  * Replace waypoint from the internal store.  Requires optimise() to
- * be called afterwards
+ * be called afterwards.
  * 
  * @param wp Waypoint to erase from internal store
  */
-  void replace(const Waypoint& orig, const Waypoint& replacement);
+  void replace(const Waypoint& orig, Waypoint& replacement);
 
 /** 
  * Create new waypoint (without appending it to the store),

@@ -8,8 +8,9 @@ else
 OPTIMIZE := -O2 -DNDEBUG -Wuninitialized
 endif
 
-PROFILE :=
-# -pg
+ifeq ($(PROFILE),y)
+FLAGS_PROFILE := -pg
+else
+FLAGS_PROFILE :=
+endif
 
-COVERAGE := 
-# --coverage

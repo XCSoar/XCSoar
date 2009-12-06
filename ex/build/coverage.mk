@@ -1,6 +1,10 @@
+ifeq ($(COVERAGE),y)
+FLAGS_COVERAGE := --coverage -g
+else
+FLAGS_COVERAGE :=
+endif
 
 # uses lcov
-
 COVSTART = geninfo -q --no-checksum -b . -i src
 COVEND = geninfo -q --no-checksum -b . src
 
