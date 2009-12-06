@@ -91,18 +91,12 @@ public:
 
   void Reset();
 
-  // global update
   void LeastSquaresUpdate();
-  // assume x is the sample number
   void LeastSquaresUpdate(double y);
-/**
- * Incrementally update existing values with a new data point.
- */
   void LeastSquaresUpdate(double x, double y, double weight = 1.0);
 
   void LeastSquaresErrorUpdate();
 
-  // add one point, for single update later
   void LeastSquaresAdd(double x, double y, double weight = 1.0);
 };
 
