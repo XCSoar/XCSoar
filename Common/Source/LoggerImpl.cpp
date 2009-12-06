@@ -117,23 +117,34 @@ IGCCharToNum(TCHAR c)
  HFCCLCOMPETITIONCLASS:15M
 */
 
+/**
+ * Stops the logger
+ * @param gps_info NMEA_INFO struct holding the current date
+ */
 void
 LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
 {
-  if (LoggerActive) {
-    LoggerActive = false;
+  // Logger can't be switched off if already off -> cancel
+  if (!LoggerActive)
+    return;
 
-    if (LoggerClearFreeSpace(gps_info)) {
-      WriteLock();
-      DiskBufferFlush();
-      Unlock();
+  // Logger off
+  LoggerActive = false;
 
-      if (!is_simulator() && LoggerGActive())
-        LoggerGStop(szLoggerFileName);
+  // Make space for logger file, if unsuccessful -> cancel
+  if (!LoggerClearFreeSpace(gps_info))
+    return;
 
-      NumLoggerPreTakeoffBuffered = 0;
-    }
-  }
+  // Write IGC File
+  WriteLock();
+  DiskBufferFlush();
+  Unlock();
+
+  // Write GRecord
+  if (!is_simulator() && LoggerGActive())
+    LoggerGStop(szLoggerFileName);
+
+  NumLoggerPreTakeoffBuffered = 0;
 }
 
 void
