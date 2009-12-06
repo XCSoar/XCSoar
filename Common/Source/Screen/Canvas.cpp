@@ -637,9 +637,12 @@ Canvas::line_to(int x, int y)
 }
 
 void
-Canvas::circle(int x, int y, unsigned radius, const RECT rc)
+Canvas::autoclip_circle(int x, int y, unsigned radius, const RECT rc)
 {
-  ::Circle(*this, x, y, radius, rc, false, true);
+  if (need_clipping())
+    ::Circle(*this, x, y, radius, rc, false, true);
+  else
+    circle(x, y, radius);
 }
 
 void

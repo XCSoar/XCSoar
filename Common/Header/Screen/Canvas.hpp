@@ -670,7 +670,7 @@ public:
     ::Ellipse(dc, x - radius, y - radius, x + radius, y + radius);
   }
 
-  void circle(int x, int y, unsigned radius, const RECT rc);
+  void autoclip_circle(int x, int y, unsigned radius, const RECT rc);
 
   void arc(int x, int y, unsigned radius, const RECT rc,
            double start, double end);
