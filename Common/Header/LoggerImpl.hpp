@@ -1,5 +1,5 @@
 /*
- Copyright_License {
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,7 +34,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
 #if !defined(XCSOAR_LOGGER_IMPL_HPP)
 #define XCSOAR_LOGGER_IMPL_HPP
@@ -82,10 +82,13 @@ public:
   void LinkGRecordDLL(void);
   bool LoggerGActive() const;
   void guiStartLogger(const NMEA_INFO& gps_info,
-      const SETTINGS_COMPUTER& settings, bool noAsk = false);
+                      const SETTINGS_COMPUTER& settings,
+                      bool noAsk = false);
   void guiToggleLogger(const NMEA_INFO& gps_info,
-      const SETTINGS_COMPUTER& settings, bool noAsk = false);
-  void guiStopLogger(const NMEA_INFO &gps_info, bool noAsk = false);
+                       const SETTINGS_COMPUTER& settings,
+                       bool noAsk = false);
+  void guiStopLogger(const NMEA_INFO &gps_info,
+                     bool noAsk = false);
   void LoggerDeviceDeclare();
   void LoggerNote(const TCHAR *text);
   void clearBuffer();
@@ -101,10 +104,12 @@ private:
 
 private:
   void StartLogger(const NMEA_INFO &gps_info,
-      const SETTINGS_COMPUTER &settings, const TCHAR *strAssetNumber);
+                   const SETTINGS_COMPUTER &settings,
+                   const TCHAR *strAssetNumber);
 
   void AddDeclaration(double Lattitude, double Longditude, const TCHAR *ID);
-  void StartDeclaration(const NMEA_INFO &gps_info, const int numturnpoints);
+  void StartDeclaration(const NMEA_INFO &gps_info,
+                        const int numturnpoints);
   void EndDeclaration(void);
   void LoggerHeader(const NMEA_INFO &gps_info);
 
@@ -112,15 +117,21 @@ private:
   bool IGCWriteRecord(const char *szIn, const TCHAR *);
 
   bool LoggerDeclare(struct DeviceDescriptor *dev,
-      const struct Declaration *decl);
+                     const struct Declaration *decl);
   void LoggerGInit();
+  
 private:
   void LogPointToFile(const NMEA_INFO& gps_info);
   void LogPointToBuffer(const NMEA_INFO &gps_info);
   void LoggerGStop(TCHAR* szLoggerFileName);
+  
 private:
-  void LogFRecordToFile(const int SatelliteIDs[], short Hour, short Minute,
-      short Second, double Time, int NAVWarning);
+  void LogFRecordToFile(const int SatelliteIDs[],
+                        short Hour,
+                        short Minute,
+                        short Second,
+                        double Time,
+                        int NAVWarning);
   void ResetFRecord(void);
   int LastFRecordValid;
   char szLastFRecord[MAX_IGC_BUFF];
@@ -142,15 +153,13 @@ private:
    * NULLs are invalid IGC characters
    * So, we're creating our manual disk buffering system for the IGC files
    */
+   
 private:
   int LoggerDiskBufferCount;
   char LoggerDiskBuffer[LOGGER_DISK_BUFFER_NUM_RECS][MAX_IGC_BUFF];
   void DiskBufferFlush();
   bool DiskBufferAdd(char *sIn);
   void DiskBufferReset();
-
 };
 
 #endif
-
-
