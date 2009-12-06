@@ -151,6 +151,13 @@ public:
  */
   bool intersects(const FlatRay& ray) const;
 
+/**
+ * Get center of bounding box
+ *
+ * @return Center in flat coordinates
+ */
+  FLAT_GEOPOINT get_center() const;
+
 private:
   FLAT_GEOPOINT bb_ll;
   FLAT_GEOPOINT bb_ur;

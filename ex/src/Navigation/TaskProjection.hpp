@@ -91,6 +91,15 @@ public:
   FLAT_GEOPOINT project(const GEOPOINT& tp) const;
 
 /** 
+ * Projects an integer 2-d representation to a Geodetic point
+ * 
+ * @param tp Point to project
+ * 
+ * @return Projected point
+ */
+  GEOPOINT unproject(const FLAT_GEOPOINT& tp) const;
+
+/** 
  * Project a Geodetic point to an floating point 2-d representation
  * 
  * @param tp Point to project

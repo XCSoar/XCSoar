@@ -45,6 +45,9 @@
 
 class AirspaceVisitor;
 
+class RasterTerrain;
+class AtmosphericPressure;
+
 /**
  * Container for airspaces using kd-tree representation internally for fast 
  * geospatial lookups.
@@ -60,7 +63,7 @@ public:
    * 
    * @return empty Airspaces class.
    */
-  Airspaces()
+  Airspaces():m_QNH(0)
     {
     };
 
@@ -165,7 +168,24 @@ public:
    */
   std::vector<Airspace> find_inside(const AIRCRAFT_STATE &state) const;
 
+  /** 
+   * Set terrain altitude for AGL-referenced airspace altitudes 
+   * 
+   * @param terrain Terrain model for lookup
+   */
+  void set_ground_levels(const RasterTerrain &terrain);
+
+  /** 
+   * Set QNH pressure for FL-referenced airspace altitudes.
+   * Doesn't do anything if QNH is unchanged
+   * 
+   * @param press Atmospheric pressure model and QNH
+   */
+  void set_flight_levels(const AtmosphericPressure &press);
+
 private:
+
+  fixed m_QNH;
 
   typedef KDTree::KDTree<4, 
                          Airspace, 

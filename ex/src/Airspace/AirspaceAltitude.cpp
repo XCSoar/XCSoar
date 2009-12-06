@@ -34,19 +34,20 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "AbstractAirspace.hpp"
+#include "AirspaceAltitude.hpp"
+#include "Atmosphere/Pressure.hpp"
 
 void 
-AbstractAirspace::set_ground_level(const fixed alt) 
+AIRSPACE_ALT::set_flight_level(const AtmosphericPressure &press)
 {
-  m_base.set_ground_level(alt);
-  m_top.set_ground_level(alt);
+  static const fixed fl_feet_to_m = 30.48;
+  if (Base == abFL)
+    Altitude = press.AltitudeToQNHAltitude(FL * fl_feet_to_m);
 }
 
-
 void 
-AbstractAirspace::set_flight_level(const AtmosphericPressure &press) 
+AIRSPACE_ALT::set_ground_level(const fixed alt)
 {
-  m_base.set_flight_level(press);
-  m_top.set_flight_level(press);
+  if (Base == abAGL)
+    Altitude = AGL+alt;
 }

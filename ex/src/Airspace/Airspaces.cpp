@@ -36,6 +36,7 @@
  */
 #include "Airspaces.hpp"
 #include "AirspaceVisitor.hpp"
+#include "Atmosphere/Pressure.hpp"
 #include <deque>
 
 #ifdef INSTRUMENT_TASK
@@ -246,4 +247,30 @@ bool
 Airspaces::empty() const
 {
   return airspace_tree.empty() && tmp_as.empty();
+}
+
+
+void 
+Airspaces::set_ground_levels(const RasterTerrain &terrain)
+{
+  for (AirspaceTree::iterator v = airspace_tree.begin();
+       v != airspace_tree.end(); ++v) {
+    FLAT_GEOPOINT c_flat = v->get_center();
+    GEOPOINT g = task_projection.unproject(c_flat);
+    fixed h; // = terrain.lookup(g);
+    v->set_ground_level(h);
+  }
+}
+
+void 
+Airspaces::set_flight_levels(const AtmosphericPressure &press)
+{
+  if (press.get_QNH() != m_QNH) {
+    m_QNH = press.get_QNH();
+
+    for (AirspaceTree::iterator v = airspace_tree.begin();
+         v != airspace_tree.end(); ++v) {
+      v->set_flight_level(press);
+    }
+  }
 }

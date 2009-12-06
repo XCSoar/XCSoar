@@ -41,6 +41,8 @@
 #include "AbstractAirspace.hpp"
 #include "Util/GenericVisitor.hpp"
 
+class AtmosphericPressure;
+
 /**
  * Single object container for actual airspaces, to be stored in Airspaces object
  * This class manages the bounding box of the actual airspace.
@@ -156,12 +158,27 @@ public:
   AbstractAirspace *get_airspace() const {
     return pimpl_airspace;
   };
+
+  /** 
+   * Set terrain altitude for AGL-referenced airspace altitudes 
+   * 
+   * @param alt Height above MSL of terrain (m) at center
+   */
+  void set_ground_level(const fixed alt) const;
+
+  /** 
+   * Set QNH pressure for FL-referenced airspace altitudes 
+   * 
+   * @param press Atmospheric pressure model and QNH
+   */
+  void set_flight_level(const AtmosphericPressure &press) const;
+
 private:
 
   /**
    * @supplierCardinality 0..1 
    */
-  AbstractAirspace *pimpl_airspace;
+  mutable AbstractAirspace *pimpl_airspace;
 
 public:
 #ifdef DO_PRINT

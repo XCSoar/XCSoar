@@ -110,6 +110,16 @@ TaskProjection::project(const GEOPOINT& tp) const
 }
 
 
+GEOPOINT 
+TaskProjection::unproject(const FLAT_GEOPOINT& fp) const
+{
+  GEOPOINT tp;
+  tp.Longitude = fp.Longitude/cos_midloc+location_mid.Longitude;
+  tp.Latitude = fp.Latitude/fixed_scale+location_mid.Latitude;
+  return tp;
+}
+
+
 fixed
 TaskProjection::fproject_range(const GEOPOINT &tp, const fixed range) const
 {

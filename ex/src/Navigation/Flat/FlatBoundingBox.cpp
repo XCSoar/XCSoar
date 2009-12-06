@@ -100,3 +100,13 @@ FlatBoundingBox::intersects(const FlatRay& ray) const
   }
   return true;
 }
+
+FLAT_GEOPOINT
+FlatBoundingBox::get_center() const
+{
+  /// \todo This will break if overlaps 360/0
+  FLAT_GEOPOINT c;
+  c.Longitude = (bb_ll.Longitude+bb_ur.Longitude)/2;
+  c.Latitude = (bb_ll.Latitude+bb_ur.Latitude)/2;
+  return c;
+}

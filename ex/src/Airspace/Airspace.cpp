@@ -91,3 +91,17 @@ Airspace::Accept(BaseVisitor &visitor) const
   }
 }
 
+void 
+Airspace::set_ground_level(const fixed alt) const
+{
+  if (pimpl_airspace) 
+    pimpl_airspace->set_ground_level(alt);
+}
+
+void 
+Airspace::set_flight_level(const AtmosphericPressure &press) const
+{
+  if (pimpl_airspace) 
+    pimpl_airspace->set_flight_level(press);
+}
+

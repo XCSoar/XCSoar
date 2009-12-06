@@ -41,6 +41,10 @@
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "AirspaceAltitude.hpp"
+#include "Util/tstring.hpp"
+
+class AtmosphericPressure;
 
 /**
  * Abstract base class for airspace regions
@@ -49,6 +53,7 @@ class AbstractAirspace:
   public BaseVisitable<>
 {
 public:
+
   /** 
    * Compute bounding box enclosing the airspace.  Rounds up/down
    * so discretisation ensures bounding box is indeed enclosing.
@@ -92,10 +97,36 @@ public:
                           const GeoVector &vec,
                           const TaskProjection& tp) const = 0;
 
+  /** 
+   * Set terrain altitude for AGL-referenced airspace altitudes 
+   * 
+   * @param alt Height above MSL of terrain (m) at center
+   */
+  void set_ground_level(const fixed alt);
+
+  /** 
+   * Set QNH pressure for FL-referenced airspace altitudes 
+   * 
+   * @param press Atmospheric pressure model and QNH
+   */
+  void set_flight_level(const AtmosphericPressure &press);
+
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& f, 
                                    const AbstractAirspace& as);
 #endif
+
+protected:
+  AIRSPACE_ALT m_base;
+  AIRSPACE_ALT m_top;
+  tstring Name;
+  int Type;
+
+#ifdef OLD_TASK
+  AIRSPACE_ACK Ack;
+  unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
+#endif
+
 public:
   DEFINE_VISITABLE()
 };
