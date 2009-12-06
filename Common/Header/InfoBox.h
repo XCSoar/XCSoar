@@ -141,8 +141,6 @@ class InfoBox : public BufferWindow {
     InfoBox(ContainerWindow &Parent, int X, int Y, int Width, int Height);
     ~InfoBox(void);
 
-    Canvas &GetCanvas(void);
-
 protected:
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_mouse_down(int x, int y);

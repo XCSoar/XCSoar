@@ -624,10 +624,6 @@ InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
                get_canvas(), 0, 0, mWidth, mHeight);
 }
 
-Canvas &InfoBox::GetCanvas(void) {
-  return get_canvas();
-}
-
 void InfoBox::InitializeDrawHelpers(void){
 
   recTitle.left = 0;
