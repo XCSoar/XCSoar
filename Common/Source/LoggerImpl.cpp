@@ -150,9 +150,9 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
 void
 LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
 {
-  if (NumLoggerPreTakeoffBuffered== LOGGER_PRETAKEOFF_BUFFER_MAX) {
-    for (int i= 0; i< NumLoggerPreTakeoffBuffered-1; i++) {
-      LoggerPreTakeoffBuffer[i]= LoggerPreTakeoffBuffer[i+1];
+  if (NumLoggerPreTakeoffBuffered == LOGGER_PRETAKEOFF_BUFFER_MAX) {
+    for (int i = 0; i < NumLoggerPreTakeoffBuffered - 1; i++) {
+      LoggerPreTakeoffBuffer[i] = LoggerPreTakeoffBuffer[i+1];
     }
   } else {
     NumLoggerPreTakeoffBuffered++;
@@ -530,11 +530,12 @@ LoggerImpl::AddDeclaration(double Latitude, double Longitude, const TCHAR *ID)
 void
 LoggerImpl::LoggerNote(const TCHAR *text)
 {
-  if (LoggerActive) {
-    char fulltext[500];
-    sprintf(fulltext, "LPLT%S\r\n", text);
-    IGCWriteRecord(fulltext, szLoggerFileName);
-  }
+  if (!LoggerActive)
+    return;
+
+  char fulltext[500];
+  sprintf(fulltext, "LPLT%S\r\n", text);
+  IGCWriteRecord(fulltext, szLoggerFileName);
 }
 
 bool
@@ -589,7 +590,6 @@ LoggerImpl::LoggerDeviceDeclare()
                 devB()->Name, MB_OK | MB_ICONINFORMATION);
     DeclaredToDevice = true; // testing only
   }
-
 }
 
 /**
