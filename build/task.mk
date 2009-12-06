@@ -1,6 +1,8 @@
 
 TASK_SRC	:=\
 	$(topdir)/src/Airspace/Airspace.cpp \
+	$(topdir)/src/Airspace/AirspaceAltitude.cpp \
+	$(topdir)/src/Airspace/AbstractAirspace.cpp \
 	$(topdir)/src/Airspace/AirspaceCircle.cpp \
 	$(topdir)/src/Airspace/AirspacePolygon.cpp \
 	$(topdir)/src/Airspace/Airspaces.cpp \

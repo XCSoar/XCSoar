@@ -136,6 +136,8 @@ OBJS	:=\
 	\
 	$(SRC)/Poco/RWLock.o		\
 	\
+	$(SRC)/AirspaceGlue.o 		\
+	\
 	$(SRC)/Atmosphere.o 		\
 	$(SRC)/ClimbAverageCalculator.o \
 	$(SRC)/ConditionMonitor.o 	\

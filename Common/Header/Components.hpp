@@ -48,9 +48,11 @@ class DrawThread;
 class CalculationThread;
 class InstrumentThread;
 class Waypoints;
+class Airspaces;
 
 // other global objects
 extern Waypoints way_points;
+extern Airspaces airspace_database;
 extern Marks *marks;
 extern TopologyStore *topology;
 extern RasterTerrain terrain;

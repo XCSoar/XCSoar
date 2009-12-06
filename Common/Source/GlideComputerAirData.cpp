@@ -1520,7 +1520,7 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 #ifdef OLD_TASK
     Basic->pressure.FindQNH(Basic->BaroAltitude, fixaltitude);
     AllDevicesPutQNH(Basic->pressure);
-    airspace_database.SetQNH(Basic->pressure);
+    airspace_database.set_flight_levels(Basic->pressure);
 #endif
   }
 }

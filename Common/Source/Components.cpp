@@ -85,6 +85,8 @@ Copyright_License {
 #include "InstrumentThread.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypointparser.h"
+#include "Airspace/Airspaces.hpp"
+#include "AirspaceGlue.hpp"
 
 Marks *marks;
 TopologyStore *topology;
@@ -96,6 +98,7 @@ CalculationThread *calculation_thread;
 InstrumentThread *instrument_thread;
 Logger logger; // global
 Waypoints way_points;
+Airspaces airspace_database;
 
 void XCSoarInterface::PreloadInitialisation(bool ask) {
   if (ask) {
@@ -309,12 +312,8 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   StartupStore(TEXT("RASP load\n"));
   RASP.ScanAll(Basic().Location);
 
-#ifdef OLD_TASK
   // Reads the airspace files
-  ReadAirspace(airspace_database, &terrain);
-  // Sorts the airspaces by priority
-  SortAirspace(airspace_database);
-#endif
+  ReadAirspace(airspace_database, &terrain, Basic().pressure);
 
   // Read the FLARM details file
   OpenFLARMDetails();
@@ -486,10 +485,11 @@ void XCSoarInterface::Shutdown(void) {
   task.SaveDefaultTask();
   StartupStore(TEXT("Clear task data\n"));
   task.ClearTask();
+#endif
+
   StartupStore(TEXT("Close airspace\n"));
   CloseAirspace(airspace_database);
 
-#endif
   StartupStore(TEXT("Close waypoints\n"));
   way_points.clear();
 
