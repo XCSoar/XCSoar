@@ -42,93 +42,6 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef OLD_TASK
-
-void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
-  assert(airspace_database != NULL);
-
-  circ.Visible = false;
-  if (!circ.FarVisible)
-    return;
-
-  if (SettingsComputer().iAirspaceMode[circ.Type]%2 == 1) {
-    double basealt = ToMSL(circ.Base, Calculated().TerrainAlt);
-    double topalt = ToMSL(circ.Top, Calculated().TerrainAlt);
-
-    if (CheckAirspaceAltitude(basealt, topalt, Basic().GetAnyAltitude(),
-                              SettingsComputer())) {
-      if (msRectOverlap(&circ.bounds, &screenbounds_latlon)
-          || msRectContained(&screenbounds_latlon, &circ.bounds)) {
-        if (!circ._NewWarnAckNoBrush &&
-            !(SettingsMap().iAirspaceBrush[circ.Type] == NUMAIRSPACEBRUSHES-1)) {
-          circ.Visible = 2;
-        } else {
-          circ.Visible = 1;
-        }
-
-        LonLat2Screen(circ.Location, circ.Screen);
-
-        circ.ScreenR = DistanceMetersToScreen(circ.Radius);
-      }
-    }
-  }
-}
-
-void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
-  assert(airspace_database != NULL);
-
-  area.Visible = false;
-  if (!area.FarVisible)
-    return;
-
-  if (SettingsComputer().iAirspaceMode[area.Type]%2 == 1) {
-    double basealt = ToMSL(area.Base, Calculated().TerrainAlt);
-    double topalt = ToMSL(area.Top, Calculated().TerrainAlt);
-
-    if (CheckAirspaceAltitude(basealt, topalt, Basic().GetAnyAltitude(),
-                              SettingsComputer())) {
-      if (msRectOverlap(&area.bounds, &screenbounds_latlon)
-          || msRectContained(&screenbounds_latlon, &area.bounds)) {
-        const AIRSPACE_POINT *ap =
-          &airspace_database->AirspacePoint[area.FirstPoint];
-        const AIRSPACE_POINT *ep= ap+area.NumPoints;
-        POINT* sp= AirspaceScreenPoint+area.FirstPoint;
-
-        while (ap < ep) {
-          // JMW optimise!
-          LonLat2Screen(*ap, *sp);
-          ap++;
-          sp++;
-        }
-
-        if (!area._NewWarnAckNoBrush &&
-            !(SettingsMap().iAirspaceBrush[area.Type] == NUMAIRSPACEBRUSHES-1)) {
-          area.Visible = 2;
-        } else {
-          area.Visible = 1;
-        }
-      }
-    }
-  }
-}
-
-void MapWindow::CalculateScreenPositionsAirspace() {
-  if (airspace_database == NULL)
-    return;
-
-  for (unsigned i = 0; i < airspace_database->NumberOfAirspaceCircles; ++i) {
-    AIRSPACE_CIRCLE &circle = airspace_database->AirspaceCircle[i];
-    CalculateScreenPositionsAirspaceCircle(circle);
-  }
-
-  for (unsigned i = 0; i < airspace_database->NumberOfAirspaceAreas; ++i) {
-    AIRSPACE_AREA &area = airspace_database->AirspaceArea[i];
-    CalculateScreenPositionsAirspaceArea(area);
-  }
-}
-
-#endif
-
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
@@ -147,6 +60,7 @@ public:
     {
 
     };
+
   void Visit(const AirspaceCircle& airspace) {
     if (!check_visible(airspace)) 
       return;
@@ -157,11 +71,25 @@ public:
     unsigned radius = map.DistanceMetersToScreen(airspace.get_radius());
     buffer.circle(center.x, center.y, radius);
   }
+
   void Visit(const AirspacePolygon& airspace) {
     if (!check_visible(airspace)) 
       return;
     start_render(airspace);
+
+    const SearchPointVector& points = airspace.get_points();
+    const size_t size = points.size();
+    std::vector<POINT> screen; 
+    screen.reserve(size);
+    for (SearchPointVector::const_iterator it = points.begin();
+         it!= points.end(); ++it) {
+      POINT sc;
+      map.LonLat2Screen(it->get_location(), sc);
+      screen.push_back(sc);
+    }
+    buffer.polyline(&screen[0], size);
   }
+
   void set_fill() {
     border = false;
     if (found) {
@@ -169,6 +97,7 @@ public:
       buffer.white_pen();
     }
   }
+
   void finish() {
     if (found) {
       // need to do this to prevent drawing of colored outline
@@ -180,14 +109,45 @@ public:
       buffer.background_opaque();
     }
   }
+
 private:
   bool check_visible(const AbstractAirspace& airspace) {
+    int Visible = 0;
+
+    if (map.SettingsComputer().iAirspaceMode[airspace.get_type()]%2 == 1) {
+      /* OLD_TASK
+      double basealt = ToMSL(airspace.get_base(), map.Calculated().TerrainAlt);
+      double topalt = ToMSL(airspace.get_top(), map.Calculated().TerrainAlt);
+       
+      if (CheckAirspaceAltitude(basealt, topalt, map.Basic().GetAnyAltitude(),
+                                map.SettingsComputer())) {
+        
+        if (!airspace._NewWarnAckNoBrush &&
+            !(map.SettingsMap().iAirspaceBrush[circ.Type] == NUMAIRSPACEBRUSHES-1)) {
+          Visible = 2;
+        } else {
+          Visible = 1;
+        }
+      }
+      */
+      Visible = 1;
+      // Testing
+    }
+
+    if (border) {
+      if (Visible != 2)
+        return false;
+    } else {
+      if (Visible != 1)
+        return false;
+    }
     return true;
   }
+
   void start_render(const AbstractAirspace &airspace) {
     if (!found) {
       found = true;
-      ClearAirspace();
+      clear();
       if (!border) {
         buffer.hollow_brush();
         buffer.white_pen();
@@ -208,8 +168,8 @@ private:
     }
   }
 
-  void ClearAirspace() {
-    Color whitecolor(0xff,0xff,0xff);
+  void clear() {
+    static const Color whitecolor(0xff,0xff,0xff);
     buffer.set_text_color(whitecolor);
     buffer.background_transparent();
     buffer.set_background_color(whitecolor);
@@ -217,9 +177,6 @@ private:
     buffer.white_brush();
     const RECT &MapRect = map.GetMapRect();
     buffer.rectangle(MapRect.left, MapRect.top, MapRect.right, MapRect.bottom);
-    if (!border) {
-      buffer.white_pen();
-    }
   }
 
   bool found;
@@ -247,100 +204,4 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   v.set_fill();
   airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
   v.finish();
-
-#ifdef OLD_TASK
-  // draw without border
-  for (unsigned i = 0; i < airspace_database->NumberOfAirspaceCircles; ++i) {
-    const AIRSPACE_CIRCLE &circle = airspace_database->AirspaceCircle[i];
-
-    if (circle.Visible != 2)
-      continue;
-
-    if (!found) {
-      ClearAirspace(buffer, true);
-      found = true;
-    }
-
-    // this color is used as the black bit
-    buffer.set_text_color(MapGfx.Colours[SettingsMap().iAirspaceColour[circle.Type]]);
-    // get brush, can be solid or a 1bpp bitmap
-    buffer.select(MapGfx.hAirspaceBrushes[SettingsMap().iAirspaceBrush[circle.Type]]);
-    buffer.circle(circle.Screen.x, circle.Screen.y, circle.ScreenR);
-  }
-
-  for (unsigned i = 0; i < airspace_database->NumberOfAirspaceAreas; ++i) {
-    const AIRSPACE_AREA &area = airspace_database->AirspaceArea[i];
-
-    if (area.Visible != 2)
-      continue;
-
-    if (!found) {
-      ClearAirSpace(buffer, true);
-      found = true;
-    }
-
-    // this color is used as the black bit
-    buffer.set_text_color(MapGfx.Colours[SettingsMap().iAirspaceColour[area.Type]]);
-    buffer.select(MapGfx.hAirspaceBrushes[SettingsMap().iAirspaceBrush[area.Type]]);
-    buffer.polygon(AirspaceScreenPoint + area.FirstPoint,
-                   area.NumPoints);
-  }
-
-  // draw it again, just the outlines
-
-  if (found) {
-    buffer.hollow_brush();
-    buffer.white_pen();
-  }
-
-  for (unsigned i = 0; i < airspace_database->NumberOfAirspaceCircles; ++i) {
-    const AIRSPACE_CIRCLE &circle = airspace_database->AirspaceCircle[i];
-
-    if (!circle.Visible)
-      continue;
-
-    if (!found) {
-      ClearAirSpace(buffer, false);
-      found = true;
-    }
-
-    if (SettingsMap().bAirspaceBlackOutline)
-      buffer.black_pen();
-    else
-      buffer.select(MapGfx.hAirspacePens[circle.Type]);
-
-    buffer.circle(circle.Screen.x, circle.Screen.y, circle.ScreenR);
-  }
-
-  for (unsigned i = 0; i < airspace_database->NumberOfAirspaceAreas; ++i) {
-    const AIRSPACE_AREA &area = airspace_database->AirspaceArea[i];
-
-    if (!area.Visible)
-      continue;
-
-    if (!found) {
-      ClearAirSpace(buffer, false);
-      found = true;
-    }
-
-    if (SettingsMap().bAirspaceBlackOutline)
-      buffer.black_pen();
-    else
-      buffer.select(MapGfx.hAirspacePens[area.Type]);
-
-    POINT *pstart = AirspaceScreenPoint+area.FirstPoint;
-    buffer.polyline(pstart, area.NumPoints);
-
-    if (area.NumPoints > 2) {
-      // JMW close if open
-      if ((pstart[0].x != pstart[area.NumPoints-1].x) ||
-          (pstart[0].y != pstart[area.NumPoints-1].y)) {
-        POINT ps[2];
-        ps[0] = pstart[0];
-        ps[1] = pstart[area.NumPoints-1];
-        buffer.polyline(ps, 2);
-      }
-    }
-  }
-#endif
 }
