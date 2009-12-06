@@ -5,6 +5,7 @@ TASK_SRC	:=\
 	$(topdir)/src/Airspace/AirspacePolygon.cpp \
 	$(topdir)/src/Airspace/Airspaces.cpp \
 	$(topdir)/src/Airspace/AirspaceVisitor.cpp \
+	$(topdir)/src/Atmosphere/Pressure.cpp \
 	$(topdir)/src/GlideSolvers/GlideState.cpp \
 	$(topdir)/src/GlideSolvers/GlidePolar.cpp \
 	$(topdir)/src/GlideSolvers/GlideResult.cpp \
@@ -80,7 +81,6 @@ TASK_SRC	:=\
 	$(topdir)/src/Waypoint/WaypointSorter.cpp \
 	$(topdir)/src/Waypoint/Waypoints.cpp \
 	$(topdir)/src/Waypoint/WaypointVisitor.cpp \
-	$(topdir)/src/Atmosphere/Pressure.cpp \
 	$(topdir)/src/Math/Geometry.cpp \
 	$(topdir)/src/Math/FastMath.cpp \
 	$(topdir)/src/Math/Earth.cpp \
