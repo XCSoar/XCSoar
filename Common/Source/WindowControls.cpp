@@ -117,8 +117,6 @@ static bool KeyTimer(bool isdown, DWORD thekey) {
 // WindowControl Classes
 //----------------------------------------------------------
 
-static WindowControl *ActiveControl = NULL;
-
 void InitWindowControlModule(void);
 
 static Color bkColor = clWhite;
@@ -204,9 +202,6 @@ WindowControl::~WindowControl(void){
   for (i=mClientCount-1; i>=0; i--){
     delete mClients[i];
   }
-
-  if (ActiveControl == this)
-    ActiveControl = NULL;
 
   reset();
 
@@ -337,18 +332,6 @@ bool WindowControl::SetFocused(bool Value){
     if (mCanFocus)
       // todo, only paint the selector edges
       invalidate();
-  }
-
-  if (Value){
-    if (mCanFocus)
-      ActiveControl = this;
-  } else {
-    ActiveControl = NULL;
-    /*
-    if (FromTo == NULL){
-      SetFocus(GetParent());
-    }
-    */
   }
 
   return res;
@@ -658,8 +641,6 @@ void InitWindowControlModule(void){
 
   if (InitDone)
     return;
-
-  ActiveControl = NULL;
 
   InitDone = true;
 
