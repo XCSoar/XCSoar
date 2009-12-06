@@ -138,6 +138,7 @@ OBJS	:=\
 	\
 	$(SRC)/AirspaceGlue.o 		\
 	$(SRC)/AirspaceParser.o 	\
+	$(SRC)/AirspaceVisibility.o 	\
 	\
 	$(SRC)/Atmosphere.o 		\
 	$(SRC)/ClimbAverageCalculator.o \

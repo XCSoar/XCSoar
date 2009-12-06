@@ -46,6 +46,13 @@ Copyright_License {
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
 
+/**
+ * Class to render airspaces onto map in two passes,
+ * one for border, one for area.
+ * This is a bit slow because projections are performed twice.
+ * The old way of doing it was possibly faster but required a lot
+ * of code overhead.
+ */
 
 class AirspaceVisitorMap: public AirspaceVisitor 
 {
@@ -115,23 +122,21 @@ private:
     int Visible = 0;
 
     if (map.SettingsComputer().iAirspaceMode[airspace.get_type()]%2 == 1) {
-      /* OLD_TASK
-      double basealt = ToMSL(airspace.get_base(), map.Calculated().TerrainAlt);
-      double topalt = ToMSL(airspace.get_top(), map.Calculated().TerrainAlt);
+      // NOTE: did use ToMSL(..., map.Calculated().TerrainAlt);
        
-      if (CheckAirspaceAltitude(basealt, topalt, map.Basic().GetAnyAltitude(),
-                                map.SettingsComputer())) {
-        
+      if (airspace.altitude_visible(map.Basic().GetAnyAltitude(),
+                                    map.SettingsComputer())) {
+#ifdef OLD_TASK        
         if (!airspace._NewWarnAckNoBrush &&
             !(map.SettingsMap().iAirspaceBrush[circ.Type] == NUMAIRSPACEBRUSHES-1)) {
           Visible = 2;
         } else {
           Visible = 1;
         }
-      }
-      */
+#else
       Visible = 1;
-      // Testing
+#endif
+      }
     }
 
     if (border) {
