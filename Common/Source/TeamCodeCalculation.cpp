@@ -141,7 +141,6 @@ GetBearing(const TCHAR *code)
 
 	// Calculate bearing
 	double bearing = (val * 360.0 / TEAMCODE_COMBINATIONS);
-  bearing -= 0;
   if (bearing < 0) {
 		bearing += 360;
 	}
