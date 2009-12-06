@@ -199,21 +199,14 @@ WindowControl::~WindowControl(void){
     free(mHelpText);
     mHelpText = NULL;
   }
-}
 
-void WindowControl::Destroy(void){
   int i;
   for (i=mClientCount-1; i>=0; i--){
-    mClients[i]->Destroy();
     delete mClients[i];
   }
 
   if (ActiveControl == this)
     ActiveControl = NULL;
-
-  mhBrushBk.reset();
-  mhPenBorder.reset();
-  mhPenSelector.reset();
 
   // ShowWindow(GetHandle(), SW_SHOW);
   reset();
@@ -713,13 +706,6 @@ WndForm::WndForm(ContainerWindow *Parent,
 }
 
 WndForm::~WndForm(void){
-  Destroy();
-}
-
-
-
-void WndForm::Destroy(void){
-
   // animation
 
   if (mClientWindow)
@@ -730,9 +716,6 @@ void WndForm::Destroy(void){
 #ifdef WIN32
   DestroyAcceleratorTable(mhAccelTable);
 #endif /* WIN32 */
-
-  WindowControl::Destroy();  // delete all childs
-
 }
 
 
@@ -1127,12 +1110,6 @@ WndButton::WndButton(WindowControl *Parent,
 
 }
 
-void
-WndButton::Destroy(void)
-{
-  WindowControl::Destroy();
-}
-
 bool
 WndButton::on_mouse_up(int x, int y)
 {
@@ -1480,10 +1457,6 @@ WndProperty::WndProperty(WindowControl *Parent,
 
 
 WndProperty::~WndProperty(void){
-}
-
-void WndProperty::Destroy(void){
-
   InstCount--;
   if (InstCount == 0){
     hBmpLeft32.reset();
@@ -1498,11 +1471,6 @@ void WndProperty::Destroy(void){
       assert(0);
     }
   }
-
-  edit.reset();
-
-  WindowControl::Destroy();
-
 }
 
 Window *
@@ -1862,19 +1830,6 @@ WndOwnerDrawFrame::on_paint(Canvas &canvas)
     (mOnPaintCallback)(this, canvas);
 }
 
-void WndOwnerDrawFrame::Destroy(void){
-
-  WndFrame::Destroy();
-
-}
-
-
-void WndFrame::Destroy(void){
-
-  WindowControl::Destroy();
-
-}
-
 void
 WndFrame::on_paint(Canvas &canvas)
 {
@@ -2138,13 +2093,6 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
   mOnListEnterCallback = NULL;
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
-}
-
-
-void WndListFrame::Destroy(void){
-
-  WndFrame::Destroy();
-
 }
 
 void

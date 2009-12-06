@@ -231,8 +231,6 @@ public:
                 bool Visible=true);
   virtual ~WindowControl(void);
 
-  virtual void Destroy(void);
-
   void PaintSelector(bool Value) {mDontPaintSelector = Value;}
 
   WindowControl *FindByName(const TCHAR *Name);
@@ -255,8 +253,6 @@ public:
       | DT_NOCLIP
       | DT_WORDBREAK;
   }
-
-  virtual void Destroy(void);
 
   void SetCaption(const TCHAR *Value);
 
@@ -392,8 +388,6 @@ public:
                void (*OnListCallback)(WindowControl *Sender,
                                       ListInfo_t *ListInfo));
 
-  virtual void Destroy(void);
-
   bool on_mouse_move(int x, int y, unsigned keys);
   void ResetList(void);
   void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
@@ -438,8 +432,6 @@ public:
 
   }
 
-  virtual void Destroy(void);
-
   void SetOnPaintNotify(OnPaintCallback_t OnPaintCallback) {
     mOnPaintCallback = OnPaintCallback;
   }
@@ -480,7 +472,6 @@ public:
           const TCHAR *Name, const TCHAR *Caption,
           int X, int Y, int Width, int Height);
   ~WndForm(void);
-  virtual void Destroy(void);
 
   ContainerWindow &GetClientAreaWindow(void);
   void AddClient(WindowControl *Client);
@@ -556,7 +547,6 @@ public:
   WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption,
             int X, int Y, int Width, int Height,
             void (*Function)(WindowControl *Sender) = NULL);
-  virtual void Destroy(void);
 
   /* override event methods from class Window */
   virtual bool on_mouse_up(int x, int y);
@@ -632,7 +622,6 @@ public:
                                       int Mode, int Value),
               int MultiLine=false);
   ~WndProperty(void);
-  virtual void Destroy(void);
 
   virtual Window *GetCanFocus();
 
