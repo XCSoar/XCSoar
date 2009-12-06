@@ -354,7 +354,7 @@ class WndListFrame : public WndFrame {
       return y >= button.bottom;
     }
 
-    void set(const SIZE size, unsigned top);
+    void set(const SIZE size);
     void set_button(unsigned size, unsigned view_size, unsigned origin);
     unsigned to_origin(unsigned size, unsigned view_size, int y) const;
 

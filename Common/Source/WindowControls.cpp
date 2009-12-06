@@ -1925,7 +1925,7 @@ WndListFrame::ScrollBar::ScrollBar()
 }
 
 void
-WndListFrame::ScrollBar::set(const SIZE size, unsigned top)
+WndListFrame::ScrollBar::set(const SIZE size)
 {
   unsigned width;
 
@@ -1939,11 +1939,10 @@ WndListFrame::ScrollBar::set(const SIZE size, unsigned top)
   } else {
     // thin for ALTAIR b/c no touch screen
     width = SELECTORWIDTH * 2;
-    top = 1;
   }
 
   rc.left = size.cx - width;
-  rc.top = top;
+  rc.top = 0;
   rc.right = size.cx;
   rc.bottom = size.cy;
 
@@ -2179,10 +2178,7 @@ WndListFrame::on_paint(Canvas &canvas)
 
 void WndListFrame::DrawScrollBar(Canvas &canvas) {
   if (!scroll_bar.defined()) {
-    scroll_bar.set(get_size(),
-                   mClientCount > 0
-                   ? mClients[0]->get_size().cy + 2
-                   : (int)(18.0 * InfoBoxLayout::dscale + 2));
+    scroll_bar.set(get_size());
   }
 
   if (mListInfo.BottomIndex == mListInfo.ItemCount) { // don't need scroll bar if one page only
