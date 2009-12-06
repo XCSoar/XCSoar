@@ -305,13 +305,9 @@ public:
       ::circleColor(surface, x, y, radius, pen.get_color().gfx_color());
   }
 
-  void circle(int x, int y, unsigned radius,
-              const RECT rc, bool clip=false, bool fill=true)
+  void circle(int x, int y, unsigned radius, const RECT rc)
   {
-    if (fill)
-      ::filledCircleColor(surface, x, y, radius, brush.get_color().gfx_color());
-    else
-      ::circleColor(surface, x, y, radius, pen.get_color().gfx_color());
+    circle(x, y, radius);
   }
 
   void arc(int x, int y, unsigned radius, const RECT rc,
@@ -674,8 +670,7 @@ public:
     ::Ellipse(dc, x - radius, y - radius, x + radius, y + radius);
   }
 
-  void circle(int x, int y, unsigned radius,
-              const RECT rc, bool clip=false, bool fill=true);
+  void circle(int x, int y, unsigned radius, const RECT rc);
 
   void arc(int x, int y, unsigned radius, const RECT rc,
            double start, double end);

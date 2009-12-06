@@ -637,10 +637,9 @@ Canvas::line_to(int x, int y)
 }
 
 void
-Canvas::circle(int x, int y, unsigned radius,
-               const RECT rc, bool clip, bool fill)
+Canvas::circle(int x, int y, unsigned radius, const RECT rc)
 {
-  ::Circle(*this, x, y, radius, rc, clip, fill);
+  ::Circle(*this, x, y, radius, rc, false, true);
 }
 
 void
