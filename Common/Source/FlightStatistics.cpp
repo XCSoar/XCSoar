@@ -979,6 +979,10 @@ FlightStatistics::AddClimbCeiling(const double tflight,
   Unlock();
 }
 
+/**
+ * Adds a thermal to the ThermalAverage calculator
+ * @param v Average climb speed of the last thermal
+ */
 void
 FlightStatistics::AddThermalAverage(const double v)
 {
