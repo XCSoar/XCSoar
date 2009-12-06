@@ -862,7 +862,7 @@ int WndForm::ShowModal(bool bEnableMap) {
       mModalResult = mrCancel;
 
     if (is_user_input(msg.message)
-        && msg.hwnd != GetHandle() && !IsChild(GetHandle(), msg.hwnd)  // not current window or child
+        && !identify_descendant(msg.hwnd) // not current window or child
         && !is_allowed_map(msg.hwnd, msg.message, bEnableMap))
       continue;   // make it modal
 
