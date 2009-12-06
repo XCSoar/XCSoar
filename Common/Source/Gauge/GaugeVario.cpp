@@ -328,7 +328,7 @@ void GaugeVario::Render() {
   }
   RenderZero(hdcDrawWindow);
 
-  commit_buffer();
+  invalidate();
 }
 
 void GaugeVario::RenderBg(Canvas &canvas) {

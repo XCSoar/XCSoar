@@ -989,8 +989,8 @@ void InfoBoxManager::Paint(void) {
                               IBLSCALE(x), IBLSCALE(y), IBLSCALE(rw), IBLSCALE(rh));
     }
 
+    full_window.invalidate();
     full_window.show();
-    full_window.commit_buffer();
   }
 }
 

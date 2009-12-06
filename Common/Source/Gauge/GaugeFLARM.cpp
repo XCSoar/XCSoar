@@ -255,7 +255,7 @@ void GaugeFLARM::Render(const NMEA_INFO &gps_info)
     RenderTraffic(get_canvas(), gps_info);
 
     // Draw buffer to the screen
-    commit_buffer();
+    invalidate();
   }
 }
 
