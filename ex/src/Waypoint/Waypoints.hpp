@@ -77,6 +77,32 @@ public:
   void append(const Waypoint& wp);
 
 /** 
+ * Erase waypoint from the internal store.  Requires optimise() to
+ * be called afterwards
+ * 
+ * @param wp Waypoint to erase from internal store
+ */
+  void erase(const Waypoint& wp);
+
+/** 
+ * Replace waypoint from the internal store.  Requires optimise() to
+ * be called afterwards
+ * 
+ * @param wp Waypoint to erase from internal store
+ */
+  void replace(const Waypoint& orig, const Waypoint& replacement);
+
+/** 
+ * Create new waypoint (without appending it to the store),
+ * with set id.  This is like a factory method.
+ * 
+ * @param location Location of waypoint
+ * 
+ * @return Blank object at given location, with id set
+ */
+  Waypoint create(const GEOPOINT& location) const;
+
+/** 
  * Optimise the internal search tree after adding/removing elements.
  * Also performs projection to flat earth for new elements.
  * This updates the task_projection.

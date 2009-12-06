@@ -301,3 +301,29 @@ Waypoints::empty() const
 {
   return waypoint_tree.empty() && tmp_wps.empty();
 }
+
+
+void
+Waypoints::erase(const Waypoint& wp)
+{
+  WaypointEnvelope w(wp);
+  w.project(task_projection);
+  waypoint_tree.erase_exact(w);
+}
+
+void
+Waypoints::replace(const Waypoint& orig, const Waypoint& replacement)
+{
+  erase(orig);
+  append(replacement);
+}
+
+Waypoint
+Waypoints::create(const GEOPOINT &location) const
+{
+  Waypoint edit_waypoint;
+  edit_waypoint.Location = location;
+  edit_waypoint.FileNum = 0; // default, put into primary waypoint file
+  edit_waypoint.id = size()+tmp_wps.size()+1;
+  return edit_waypoint;
+}
