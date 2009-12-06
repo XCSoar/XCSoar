@@ -877,12 +877,13 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
 void
 LoggerImpl::guiStopLogger(const NMEA_INFO& gps_info, bool noAsk)
 {
-  if (LoggerActive) {
-    if(noAsk || (MessageBoxX(gettext(TEXT("Stop Logger")),
-                             gettext(TEXT("Stop Logger")),
-                             MB_YESNO | MB_ICONQUESTION) == IDYES)) {
-      StopLogger(gps_info);
-    }
+  if (!LoggerActive)
+    return;
+
+  if(noAsk || (MessageBoxX(gettext(TEXT("Stop Logger")),
+                           gettext(TEXT("Stop Logger")),
+                           MB_YESNO | MB_ICONQUESTION) == IDYES)) {
+    StopLogger(gps_info);
   }
 }
 
