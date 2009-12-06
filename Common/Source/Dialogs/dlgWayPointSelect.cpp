@@ -336,7 +336,7 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
   (void)Sender;
   TCHAR sTmp[12];
 
-  if (DrawListIndex < UpLimit) {
+  if (DrawListIndex < (int)UpLimit) {
 
     int i = DrawListIndex;
     const Waypoint &way_point = *WayPointSelectInfo[i].way_point;
@@ -409,7 +409,7 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
 static void OnWpListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   (void)Sender;
-	if (ListInfo->DrawIndex == -1){
+  if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = UpLimit;
   } else {
     DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
@@ -419,7 +419,7 @@ static void OnWpListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListI
 
 
 static void OnWPSCloseClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   ItemIndex = -1;
   wf->SetModalResult(mrCancel);
 }

@@ -86,7 +86,7 @@ void dlgTextEntryShowModal(TCHAR *text, int width=0);
 void dlgTeamCodeShowModal(void);
 void dlgStartPointShowModal(void);
 
-void
+bool
 dlgWaypointEditShowModal(Waypoint &way_point);
 
 void dlgWeatherShowModal(void);

@@ -196,7 +196,7 @@ FeedWayPointLine(Waypoints &way_points, const RasterTerrain *terrain,
     /* nothing was parsed, return without error condition */
     return true;
 
-  Waypoint new_waypoint;
+  Waypoint new_waypoint = way_points.create(GEOPOINT(0,0));
   if (!ParseWayPointString(new_waypoint, TempString, terrain)) {
     return false;
   }
@@ -313,9 +313,11 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
 
   way_point.FileNum = globalFileNum;
 
-  way_point.id = _tcstol(input, &endptr, 10);
+  unsigned ignore_id = _tcstol(input, &endptr, 10);
   if (endptr == input || *endptr != _T(','))
     return false;
+  //  way_point.id;
+  // JMW note: we use internal ids now, so ignore file ids
 
   input = endptr + 1;
 

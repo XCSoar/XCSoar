@@ -88,9 +88,7 @@ public:
       
       Bitmap *wp_bmp = &MapGfx.hSmall;
       
-      if (map.GetMapScaleKM() > 20) {
-        wp_bmp = &MapGfx.hSmall;
-      } else if(way_point.is_landable()) {
+      if(way_point.is_landable()) {
         islandable = true; // so we can always draw them
         if (reachable) {
           
@@ -118,9 +116,9 @@ public:
         }
       } else {
         if (map.GetMapScaleKM()>4) {
-          wp_bmp = &MapGfx.hTurnPoint;
-        } else {
           wp_bmp = &MapGfx.hSmall;
+        } else {
+          wp_bmp = &MapGfx.hTurnPoint;
         }
       }
       

@@ -454,7 +454,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-void
+bool
 dlgWaypointEditShowModal(Waypoint &way_point)
 {
   global_wpt = &way_point;
@@ -472,7 +472,7 @@ dlgWaypointEditShowModal(Waypoint &way_point)
   }
 
   if (wf == NULL)
-    return;
+    return false;
 
   buttonName = ((WndButton *)wf->FindByName(TEXT("cmdName")));
   if (buttonName) {
@@ -492,9 +492,12 @@ dlgWaypointEditShowModal(Waypoint &way_point)
 
   wf->SetModalResult(mrCancel);
 
+  bool retval = false;
   if (wf->ShowModal()==mrOK) {
     GetValues();
+    retval = true;
   }
 
   delete wf;
+  return retval;
 }

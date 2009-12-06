@@ -71,6 +71,8 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "GlideRatio.hpp"
 #include "Components.hpp"
+#include "Waypoint/Waypoints.hpp"
+#include "Waypointparser.h"
 
 extern ldrotary_s rotaryLD;
 
@@ -975,44 +977,31 @@ extern void OnInfoBoxHelp(WindowControl * Sender);
 
 static void OnWaypointNewClicked(WindowControl * Sender){
   (void)Sender;
-#ifdef OLD_TASK
-  WAYPOINT edit_waypoint;
-  edit_waypoint.Location = XCSoarInterface::Basic().Location;
-  edit_waypoint.FileNum = 0; // default, put into primary waypoint file
-  edit_waypoint.Flags = 0;
-  edit_waypoint.Comment[0] = 0;
-  edit_waypoint.Name[0] = 0;
-  edit_waypoint.Details = 0;
-  edit_waypoint.Number = 0;
-  dlgWaypointEditShowModal(edit_waypoint);
-  if (_tcslen(edit_waypoint.Name)>0) {
-    int i = way_points.append(edit_waypoint);
-    if (i >= 0) {
-      way_points.set(i).Details = 0;
+
+  Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
+  if (dlgWaypointEditShowModal(edit_waypoint)) {
+    if (edit_waypoint.Name.size()) {
+      way_points.append(edit_waypoint);
       waypointneedsave = true;
     }
   }
-#endif
 }
 
 
 static void OnWaypointEditClicked(WindowControl * Sender){
   (void)Sender;
-#ifdef OLD_TASK
+
   const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (way_point){
     Waypoint wp_copy = *way_point;
-    dlgWaypointEditShowModal(wp_copy);
-    if (wp_copy != *way_point) {
+    if (dlgWaypointEditShowModal(wp_copy)) {
       waypointneedsave = true;
-      waypoints.replace(*way_point, wp_copy);
+      way_points.replace(*way_point, wp_copy);
     }
   }
-#endif
 }
 
 static void AskWaypointSave(void) {
-#ifdef OLD_TASK
   if (WaypointsOutOfRange==2) {
 
     if(MessageBoxX(gettext(TEXT("Waypoints excluded, save anyway?")),
@@ -1033,7 +1022,6 @@ static void AskWaypointSave(void) {
     changed = true;
   }
   waypointneedsave = false;
-#endif
 }
 
 
@@ -3683,6 +3671,7 @@ void dlgConfigurationShowModal(void){
   }
 
   if (waypointneedsave) {
+    way_points.optimise();
     if(MessageBoxX(gettext(TEXT("Save changes to waypoint file?")),
                    gettext(TEXT("Waypoints edited")),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {

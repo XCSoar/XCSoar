@@ -78,4 +78,6 @@ WaypointWriteFiles(Waypoints &way_points,
 void
 WaypointAltitudeFromTerrain(Waypoint &way_point, const RasterTerrain &terrain);
 
+extern int WaypointsOutOfRange;
+
 #endif
