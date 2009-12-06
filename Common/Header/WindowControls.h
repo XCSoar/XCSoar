@@ -211,10 +211,6 @@ public:
   virtual void SetCaption(const TCHAR *Value);
   void SetHelpText(const TCHAR *Value);
 
-#ifndef ENABLE_SDL
-  HWND GetHandle(void) { return *this; }
-#endif /* !ENABLE_SDL */
-
   virtual ContainerWindow &GetClientAreaWindow(void) { return *this; }
   WindowControl *GetOwner(void) { return mOwner; }
 

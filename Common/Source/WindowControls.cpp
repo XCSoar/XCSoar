@@ -208,7 +208,6 @@ WindowControl::~WindowControl(void){
   if (ActiveControl == this)
     ActiveControl = NULL;
 
-  // ShowWindow(GetHandle(), SW_SHOW);
   reset();
 
   InstCount--;
