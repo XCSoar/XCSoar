@@ -2068,18 +2068,23 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
 }
 
 void
-WndListFrame::ScrollBar::drag_begin(unsigned y)
+WndListFrame::ScrollBar::drag_begin(Window *w, unsigned y)
 {
   assert(!dragging);
 
   drag_offset = y - button.top;
   dragging = true;
+  w->set_capture();
 }
 
 void
-WndListFrame::ScrollBar::drag_end()
+WndListFrame::ScrollBar::drag_end(Window *w)
 {
+  if (!dragging)
+    return;
+
   dragging = false;
+  w->release_capture();
 }
 
 unsigned
@@ -2253,7 +2258,7 @@ WndListFrame::on_key_down(unsigned key_code)
 {
   // XXX SetSourceRectangle(mRc);
 
-  scroll_bar.drag_end();
+  scroll_bar.drag_end(this);
 
   switch (key_code) {
 #ifdef GNAV
@@ -2341,7 +2346,7 @@ void WndListFrame::ResetList(void){
 bool
 WndListFrame::on_mouse_up(int x, int y)
 {
-  scroll_bar.drag_end();
+  scroll_bar.drag_end(this);
     return false;
 }
 
@@ -2407,12 +2412,7 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
   {
     bMoving=true;
 
-    POINT Pos;
-    Pos.x = x;
-    Pos.y = y;
-
-    if (scroll_bar.is_dragging() && scroll_bar.in(Pos))
-    {
+    if (scroll_bar.is_dragging()) {
       int iScrollIndex = scroll_bar.drag_move(mListInfo.ItemCount,
                                               mListInfo.ItemInViewCount,
                                               y);
@@ -2424,10 +2424,7 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
         invalidate();
       }
     }
-    else //not in scrollbar
-    {
-      scroll_bar.drag_end(); // force re-click of scroll bar
-    }
+
     bMoving=false;
   } // Tickcount
   return false;
@@ -2436,7 +2433,7 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
 bool
 WndListFrame::on_mouse_down(int x, int y)
 {
-  scroll_bar.drag_end();
+  scroll_bar.drag_end(this);
 
   POINT Pos;
   Pos.x = x;
@@ -2448,7 +2445,7 @@ WndListFrame::on_mouse_down(int x, int y)
   if (scroll_bar.in_button(Pos)) // see if click is on scrollbar handle
   {
     // start mouse drag
-    scroll_bar.drag_begin(Pos.y);
+    scroll_bar.drag_begin(this, Pos.y);
   }
   else if (scroll_bar.in(Pos)) // clicked in scroll bar up/down/pgup/pgdn
   {

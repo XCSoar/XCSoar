@@ -361,8 +361,8 @@ class WndListFrame : public WndFrame {
     void paint(Canvas &canvas, Color fore_color) const;
 
     bool is_dragging() const { return dragging; }
-    void drag_begin(unsigned y);
-    void drag_end();
+    void drag_begin(Window *w, unsigned y);
+    void drag_end(Window *w);
     unsigned drag_move(unsigned size, unsigned view_size, int y) const;
   };
 
