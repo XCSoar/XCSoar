@@ -77,6 +77,21 @@ Least squares fit:
 
 */
 
+/*
+return the least squares error:
+
+   (y[i] - y_hat[i])^2
+  ---------------------
+          n
+*/
+
+/*
+return the maximum least squares error:
+
+  (y[i] - y_hat[i])^2
+
+*/
+
 void
 LeastSquares::Reset()
 {
@@ -172,18 +187,3 @@ LeastSquares::least_squares_update(double x, double y, double weight)
 void LeastSquares::least_squares_error_update() {
   rms_error = sqrt(sum_error/sum_weights);
 }
-
-/*
-return the least squares error:
-
-   (y[i] - y_hat[i])^2
-  ---------------------
-          n
-*/
-
-/*
-return the maximum least squares error:
-
-  (y[i] - y_hat[i])^2
-
-*/
