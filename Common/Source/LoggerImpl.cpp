@@ -600,20 +600,17 @@ LoggerImpl::LoggerDeviceDeclare()
 bool
 LoggerImpl::CheckDeclaration(void)
 {
-  // if (Task is not declared)
-  if (!isTaskDeclared()) {
+  // if (Task is not declared) -> return true;
+  if (!isTaskDeclared())
     return true;
 
-  // else (Task is declared)
+  if(MessageBoxX(gettext(TEXT("OK to invalidate declaration?")),
+     gettext(TEXT("Task declared")),
+     MB_YESNO| MB_ICONQUESTION) == IDYES){
+    DeclaredToDevice = false;
+    return true;
   } else {
-    if(MessageBoxX(gettext(TEXT("OK to invalidate declaration?")),
-		   gettext(TEXT("Task declared")),
-		   MB_YESNO| MB_ICONQUESTION) == IDYES){
-      DeclaredToDevice = false;
-      return true;
-    } else {
-      return false;
-    }
+    return false;
   }
 }
 
