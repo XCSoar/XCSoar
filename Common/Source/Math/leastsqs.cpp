@@ -63,20 +63,19 @@ Copyright_License {
 #include <stdio.h>
 #include <math.h>
 
-
 /*
 Least squares fit:
 
-y = b0 + b1x
+  y = b0 + b1x
 
-     n*sum(xi*yi) - (sum(xi)*sum(yi))
-b1 = --------------------------------
-     n*sum(xi^2) - (sum(xi))^2
+        n * sum(xi * yi) - (sum(xi) * sum(yi))
+  b1 = ----------------------------------------
+             n * sum(xi^2) - sum(xi)^2
 
 
-b0 = sum(yi)/n - b1*(sum(xi)/n)
+  b0 = sum(yi) / n - b1 * (sum(xi) / n)
+
 */
-
 
 void LeastSquares::Reset() {
   sum_n = 0;
@@ -174,17 +173,16 @@ void LeastSquares::least_squares_error_update() {
 
 
 /*
-  return the least squares error:
+return the least squares error:
 
-              (y[i] - y_hat[i])^2
-              -------------------
-                      n
- */
+   (y[i] - y_hat[i])^2
+  ---------------------
+          n
+*/
 
 /*
-  return the maximum least squares error:
+return the maximum least squares error:
 
-              (y[i] - y_hat[i])^2
- */
+  (y[i] - y_hat[i])^2
 
-
+*/
