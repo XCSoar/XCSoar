@@ -2223,6 +2223,8 @@ WndListFrame::on_key_down(unsigned key_code)
 
     mOnListEnterCallback(this, &mListInfo);
     invalidate();
+    return true;
+
     //#ifndef GNAV
 
   case VK_LEFT:
