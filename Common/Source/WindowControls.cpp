@@ -1957,6 +1957,13 @@ WndListFrame::ScrollBar::set(const SIZE size)
 }
 
 void
+WndListFrame::ScrollBar::reset()
+{
+  SetRectEmpty(&rc);
+  SetRectEmpty(&button);
+}
+
+void
 WndListFrame::ScrollBar::set_button(unsigned size, unsigned view_size,
                                     unsigned origin)
 {
@@ -2127,6 +2134,36 @@ void WndListFrame::Destroy(void){
 
 }
 
+void
+WndListFrame::show_or_hide_scroll_bar()
+{
+  if (mClientCount == 0)
+    return;
+
+  const SIZE size = get_size();
+
+  if (mListInfo.ItemCount > mListInfo.ItemInViewCount)
+    /* enable the scroll bar */
+    scroll_bar.set(size);
+  else
+    /* all items are visible - hide the scroll bar */
+    scroll_bar.reset();
+
+  /* now resize the item renderer, according to the width of the
+     scroll bar */
+
+  const RECT rc = mClients[0]->get_position();
+  mClients[0]->resize(scroll_bar.get_left(size) - rc.left * 2,
+                      rc.bottom - rc.top);
+}
+
+bool
+WndListFrame::on_resize(unsigned width, unsigned height)
+{
+  WndFrame::on_resize(width, height);
+  show_or_hide_scroll_bar();
+  return true;
+}
 
 void
 WndListFrame::on_paint(Canvas &canvas)
@@ -2177,13 +2214,8 @@ WndListFrame::on_paint(Canvas &canvas)
 }
 
 void WndListFrame::DrawScrollBar(Canvas &canvas) {
-  if (!scroll_bar.defined()) {
-    scroll_bar.set(get_size());
-  }
-
-  if (mListInfo.BottomIndex == mListInfo.ItemCount) { // don't need scroll bar if one page only
+  if (!scroll_bar.defined())
     return;
-  }
 
   scroll_bar.set_button(mListInfo.ItemCount, mListInfo.ItemInViewCount,
                         mListInfo.ScrollIndex);
@@ -2337,6 +2369,8 @@ void WndListFrame::ResetList(void){
       mListInfo.BottomIndex = mListInfo.ItemInViewCount;
     }
   }
+
+  show_or_hide_scroll_bar();
 }
 
 bool

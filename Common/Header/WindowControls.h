@@ -330,6 +330,10 @@ class WndListFrame : public WndFrame {
       return get_width() > 0;
     }
 
+    unsigned get_left(const SIZE size) const {
+      return defined() ? rc.left : size.cx;
+    }
+
     bool in(const POINT pt) const {
       return ::PtInRect(&rc, pt);
     }
@@ -355,6 +359,7 @@ class WndListFrame : public WndFrame {
     }
 
     void set(const SIZE size);
+    void reset();
     void set_button(unsigned size, unsigned view_size, unsigned origin);
     unsigned to_origin(unsigned size, unsigned view_size, int y) const;
 
@@ -401,6 +406,9 @@ public:
 protected:
   ScrollBar scroll_bar;
 
+  void show_or_hide_scroll_bar();
+
+  virtual bool on_resize(unsigned width, unsigned height);
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_key_down(unsigned key_code);
