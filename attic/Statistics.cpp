@@ -599,7 +599,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
     wind = windanalyser->windstore.getWind(h, &found);
     mag = sqrt(wind.x*wind.x+wind.y*wind.y);
 
-    windstats_mag.least_squares_update(mag, h);
+    windstats_mag.LeastSquaresUpdate(mag, h);
   }
 
   ResetScale();

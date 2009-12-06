@@ -48,7 +48,7 @@ double GetBearing(const TCHAR *code);
 double GetRange(const TCHAR *code);
 int GetValueFromTeamCode(const TCHAR *code, int maxCount);
 
-#define TEAMCODE_COMBINAIONS 1296
+#define TEAMCODE_COMBINATIONS 1296
 
 /**
  * Calculates the teamcode of the given bearing and distance
@@ -88,10 +88,16 @@ ConvertBearingToTeamCode(double bearing, TCHAR *code)
 		return;
 	}
 
-	double bamValue = (bearing * TEAMCODE_COMBINAIONS) / 360.0;
+	double bamValue = (bearing * TEAMCODE_COMBINATIONS) / 360.0;
 	NumberToTeamCode(bamValue, code, 2);
 }
 
+/**
+ * Encodes a value to teamcode
+ * @param value The value to encode
+ * @param code The teamcode (pointer)
+ * @param minCiffers Number of chars for the teamcode
+ */
 void
 NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 {
@@ -136,10 +142,11 @@ NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 double
 GetBearing(const TCHAR *code)
 {
+  // Get the first two values from teamcode (1-2)
 	int val = GetValueFromTeamCode(code, 2);
 
-	double bearing = (val * 360.0 / TEAMCODE_COMBINAIONS);
-  bearing -= 0;
+	// Calculate bearing
+	double bearing = (val * 360.0 / TEAMCODE_COMBINATIONS);
   if (bearing < 0) {
 		bearing += 360;
 	}
@@ -155,22 +162,35 @@ GetBearing(const TCHAR *code)
 double
 GetRange(const TCHAR *code)
 {
+  // Get last three values from teamcode (3-5)
 	int val = GetValueFromTeamCode(&code[2], 3);
 	return val * 100.0;
 }
 
+/**
+ * @see GetBearing()
+ */
 double
 GetTeammateBearingFromRef(const TCHAR *code)
 {
 	return GetBearing(code);
 }
 
+/**
+ * @see GetRange()
+ */
 double
 GetTeammateRangeFromRef(const TCHAR *code)
 {
 	return GetRange(code);
 }
 
+/**
+ * Decodes the TeamCode
+ * @param code The teamcode (or part of it)
+ * @param maxCount Maximum chars to decode
+ * @return The decoded value
+ */
 int
 GetValueFromTeamCode(const TCHAR *code, int maxCount)
 {
@@ -240,6 +260,16 @@ CalcTeamMatePos(double ownBear, double ownDist, double mateBear,
 	  *bearToMate += 360;
 }
 
+/**
+ * Calculates distance and bearing to the teammate by decoding the given
+ * teamcode and comparing the value with own bearing and distance to
+ * the reference waypoint
+ * @param ownBear Own bearing to the reference waypoint
+ * @param ownDist Own distance to the reference waypoint
+ * @param TeamMateCode The teamcode
+ * @param bearToMate Bearing to the teammate (pointer)
+ * @param distToMate Distance to the teammate (pointer)
+ */
 void
 CalcTeammateBearingRange(double ownBear, double ownDist,
     const TCHAR *TeamMateCode, double *bearToMate, double *distToMate)

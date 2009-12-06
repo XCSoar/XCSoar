@@ -675,7 +675,7 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
     wind = wind_store.getWind(nmea_info.Time, h, &found);
     mag = sqrt(wind.x*wind.x+wind.y*wind.y);
 
-    windstats_mag.least_squares_update(mag, h);
+    windstats_mag.LeastSquaresUpdate(mag, h);
 
   }
 
@@ -900,7 +900,7 @@ FlightStatistics::AddAltitudeTerrain(const double tflight,
 				     const double terrainalt)
 {
   Lock();
-  Altitude_Terrain.least_squares_update(max(0.0, tflight / 3600.0),
+  Altitude_Terrain.LeastSquaresUpdate(max(0.0, tflight / 3600.0),
                                         terrainalt);
   Unlock();
 }
@@ -910,7 +910,7 @@ FlightStatistics::AddAltitude(const double tflight,
 			      const double alt)
 {
   Lock();
-  Altitude.least_squares_update(max(0.0, tflight / 3600.0), alt);
+  Altitude.LeastSquaresUpdate(max(0.0, tflight / 3600.0), alt);
   Unlock();
 }
 
@@ -938,7 +938,7 @@ FlightStatistics::AverageThermalAdjusted
 void
 FlightStatistics::SaveTaskSpeed(const double val)
 {
-  Task_Speed.least_squares_update(val);
+  Task_Speed.LeastSquaresUpdate(val);
 }
 
 
@@ -962,7 +962,7 @@ FlightStatistics::AddClimbBase(const double tflight,
     // only update base if have already climbed, otherwise
     // we will catch the takeoff height as the base.
 
-    Altitude_Base.least_squares_update(max(0.0, tflight) / 3600.0,
+    Altitude_Base.LeastSquaresUpdate(max(0.0, tflight) / 3600.0,
 				       alt);
   }
   Unlock();
@@ -974,16 +974,20 @@ FlightStatistics::AddClimbCeiling(const double tflight,
 			       const double alt)
 {
   Lock();
-  Altitude_Ceiling.least_squares_update(max(0.0, tflight) / 3600.0,
+  Altitude_Ceiling.LeastSquaresUpdate(max(0.0, tflight) / 3600.0,
 					alt);
   Unlock();
 }
 
+/**
+ * Adds a thermal to the ThermalAverage calculator
+ * @param v Average climb speed of the last thermal
+ */
 void
 FlightStatistics::AddThermalAverage(const double v)
 {
   Lock();
-  ThermalAverage.least_squares_update(v);
+  ThermalAverage.LeastSquaresUpdate(v);
   Unlock();
 }
 
