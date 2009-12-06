@@ -195,7 +195,7 @@ void GaugeVario::Render() {
 
   double vval;
 
-  Canvas &hdcDrawWindow = get_canvas();
+  Canvas &canvas = get_canvas();
 
 //  HKEY Key;
 
@@ -213,19 +213,19 @@ void GaugeVario::Render() {
     orgBottom.y = orgMiddle.y + ValueHeight;
     orgBottom.x = get_right();
 
-    BitmapCanvas hdcTemp(hdcDrawWindow, hDrawBitMap);
+    BitmapCanvas hdcTemp(canvas, hDrawBitMap);
     // copy scale bitmap to memory DC
     if (InfoBoxLayout::dscale>1) {
       if (Appearance.InverseInfoBox)
-        hdcDrawWindow.stretch(hdcTemp, 58, 0, 58, 120);
+        canvas.stretch(hdcTemp, 58, 0, 58, 120);
       else
-        hdcDrawWindow.stretch(hdcTemp, 0, 0, 58, 120);
+        canvas.stretch(hdcTemp, 0, 0, 58, 120);
     } else {
 
       if (Appearance.InverseInfoBox)
-        hdcDrawWindow.copy(hdcTemp, 58, 0);
+        canvas.copy(hdcTemp, 58, 0);
       else
-        hdcDrawWindow.copy(hdcTemp, 0, 0);
+        canvas.copy(hdcTemp, 0, 0);
 
     }
 
@@ -243,10 +243,10 @@ void GaugeVario::Render() {
   if (Appearance.GaugeVarioAvgText) {
     // JMW averager now displays netto average if not circling
     if (!Calculated().Circling) {
-      RenderValue(hdcDrawWindow, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
+      RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
 		  Calculated().NettoAverage30s*LIFTMODIFY, TEXT("NetAvg"));
     } else {
-      RenderValue(hdcDrawWindow, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
+      RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
 		  Calculated().Average30s*LIFTMODIFY, TEXT("Avg"));
     }
   }
@@ -254,28 +254,28 @@ void GaugeVario::Render() {
   if (Appearance.GaugeVarioMc) {
     double mc = GlidePolar::GetMacCready()*LIFTMODIFY;
     if (SettingsComputer().AutoMacCready)
-      RenderValue(hdcDrawWindow, orgBottom.x, orgBottom.y,
+      RenderValue(canvas, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
 		  mc, TEXT("Auto Mc"));
     else
-      RenderValue(hdcDrawWindow, orgBottom.x, orgBottom.y,
+      RenderValue(canvas, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
 		  mc, TEXT("Mc"));
   }
 
   if (Appearance.GaugeVarioSpeedToFly) {
-    RenderSpeedToFly(hdcDrawWindow,
+    RenderSpeedToFly(canvas,
                      get_right() - 11, get_height() / 2);
   } else {
-    RenderClimb(hdcDrawWindow);
+    RenderClimb(canvas);
   }
 
   if (Appearance.GaugeVarioBallast) {
-    RenderBallast(hdcDrawWindow);
+    RenderBallast(canvas);
   }
 
   if (Appearance.GaugeVarioBugs) {
-    RenderBugs(hdcDrawWindow);
+    RenderBugs(canvas);
   }
 
   dirty = false;
@@ -298,35 +298,35 @@ void GaugeVario::Render() {
 
   if (Appearance.GaugeVarioAveNeedle) {
     if (ival_av != ival_last) {
-      RenderNeedle(hdcDrawWindow, ival_last, true, true);
+      RenderNeedle(canvas, ival_last, true, true);
     }
     ival_last = ival_av;
   }
 
   if ((sval != sval_last) || (ival != vval_last)) {
-    RenderVarioLine(hdcDrawWindow, vval_last, sval_last, true);
+    RenderVarioLine(canvas, vval_last, sval_last, true);
   }
   sval_last = sval;
 
   if (ival != vval_last) {
-    RenderNeedle(hdcDrawWindow, vval_last, false, true);
+    RenderNeedle(canvas, vval_last, false, true);
   }
   vval_last = ival;
 
   // now draw items
-  RenderVarioLine(hdcDrawWindow, ival, sval, false);
+  RenderVarioLine(canvas, ival, sval, false);
   if (Appearance.GaugeVarioAveNeedle) {
-    RenderNeedle(hdcDrawWindow, ival_av, true, false);
+    RenderNeedle(canvas, ival_av, true, false);
   }
-  RenderNeedle(hdcDrawWindow, ival, false, false);
+  RenderNeedle(canvas, ival, false, false);
 
   if (Appearance.GaugeVarioGross) {
-    RenderValue(hdcDrawWindow, orgMiddle.x, orgMiddle.y,
+    RenderValue(canvas, orgMiddle.x, orgMiddle.y,
                 &diValueMiddle, &diLabelMiddle,
                 vvaldisplay,
                 TEXT("Gross"));
   }
-  RenderZero(hdcDrawWindow);
+  RenderZero(canvas);
 
   invalidate();
 }
