@@ -34,6 +34,36 @@
 
 #define MAX_STATISTICS 1000
 
+/**
+ * A solver for least squares problems
+ *
+ * Classical least squares fit:
+ *
+ * \f[
+ *     y = b_0 + b_1 * x
+ * \f]
+ *
+ * \f[
+ *     b_1 = \frac{n * \sum_0^{i-1} (x_i*y_i) - \sum_0^{i-1} x_i* \sum_0^{i-1} y_i}
+ *           {n*\sum_0^{i-1} x_i^2 - (\sum_0^{i-1} x_i)^2}
+ * \f]
+ *
+ * \f[
+ *     b_0 = \frac{\sum_0^{i-1} y_i}{n} - b_1 * \frac{\sum_0^{i-1} x_i}{n}
+ * \f]
+ *
+ * the least squares error:
+ *
+ * \f[
+ *     \frac{(y_i - \hat{y}_i)^2}{n}
+ * \f]
+ *
+ * the maximum least squares error:
+ *
+ * \f[
+ *     (y_i - \hat{y}_i)^2
+ * \f]
+ */
 class LeastSquares
 {
 public:
@@ -63,25 +93,6 @@ public:
   }
 
   void Reset();
-
-/**
-Classical least squares fit:
-
-\f[
-    y = b_0 + b_1 * x
-\f]
-
-\f[
-    b_1 = \frac{n * \sum_0^{i-1} (x_i*y_i) - \sum_0^{i-1} x_i* \sum_0^{i-1} y_i}
-          {n*\sum_0^{i-1} x_i^2 - (\sum_0^{i-1} x_i)^2}
-\f]
-
-\f[
-    b_0 = \frac{\sum_0^{i-1} y_i}{n} - b_1 * \frac{\sum_0^{i-1} x_i}{n}
-\f]
-*/
-
-
 /**
  * Incrementally update existing values with a new data point.
  */
@@ -96,24 +107,6 @@ Classical least squares fit:
   void least_squares_add(double x, double y, double weight=1.0);
   // global update
   void least_squares_update();
-
-/**
-  @return the least squares error:.
-\f[
-
-    \frac{(y_i - \hat{y}_i)^2}{n}
-\f]
-*/
-
-
-/**
-  @return the maximum least squares error.
-
-\f[
-    (y_i - \hat{y}_i)^2
-\f]
-*/
-
 };
 
 #endif // _LEASTSQS_H
