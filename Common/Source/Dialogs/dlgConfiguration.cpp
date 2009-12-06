@@ -1590,7 +1590,6 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-#ifdef OLD_TASK
   wp = (WndProperty*)wf->FindByName(TEXT("prpWaypointsOutOfRange"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1601,7 +1600,6 @@ static void setVariables(void) {
     wp->GetDataField()->Set(WaypointsOutOfRange);
     wp->RefreshDisplay();
   }
-#endif
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoForceFinalGlide"));
   if (wp) {
@@ -2835,7 +2833,6 @@ void dlgConfigurationShowModal(void){
 				      szRegistryAutoMcMode,
 				      XCSoarInterface::SetSettingsComputer().AutoMcMode);
 
-#ifdef OLD_TASK
   wp = (WndProperty*)wf->FindByName(TEXT("prpWaypointsOutOfRange"));
   if (wp) {
     if (WaypointsOutOfRange != wp->GetDataField()->GetAsInteger()) {
@@ -2845,7 +2842,6 @@ void dlgConfigurationShowModal(void){
       changed = true;
     }
   }
-#endif
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpAutoForceFinalGlide"),
 				      szRegistryAutoForceFinalGlide,
