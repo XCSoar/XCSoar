@@ -5,8 +5,8 @@ FLAGS_COVERAGE :=
 endif
 
 # uses lcov
-COVSTART = geninfo -q --no-checksum -b . -i $(topdir)/src
-COVEND = geninfo -q --no-checksum -b . $(topdir)/src
+COVSTART = geninfo -q --no-checksum -b $(topdir) -i $(topdir)/src
+COVEND = geninfo -q --no-checksum -b $(topdir) $(topdir)/src
 COVPROC = genhtml --frames -q -o doc/lcov `find -iname '*\.gcda\.info'`
 
 covstart:	FORCE

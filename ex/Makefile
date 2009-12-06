@@ -35,7 +35,7 @@ include $(topdir)/build/test.mk
 
 ####### sources
 
-OUTPUTS = src/task-$(TARGET).a Test/harness-$(TARGET).a $(TESTS) 
+OUTPUTS = $(topdir)/src/task-$(TARGET).a $(topdir)/Test/harness-$(TARGET).a $(TESTS) 
 
 all: $(OUTPUTS)
 	@echo "done"
