@@ -106,8 +106,6 @@ MapWindow::set(ContainerWindow &parent, const RECT _MapRectSmall,
   draw_canvas.rectangle(MapRectBig.left, MapRectBig.top,
                         MapRectBig.right, MapRectBig.bottom);
 
-  get_canvas().copy(draw_canvas);
-
   cdi = new GaugeCDI(parent); /* XXX better attach to "this"? */
 }
 
