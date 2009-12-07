@@ -402,9 +402,6 @@ void dlgWayPointDetailsShowModal(const Waypoint& waypoint)
 
   if (!wf) return;
 
-#ifdef OLD_TASK
-#endif
-
   GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
   ExpandLocalPath(szWaypointFile);
   ExtractDirectory(Directory, szWaypointFile);
@@ -535,7 +532,7 @@ void dlgWayPointDetailsShowModal(const Waypoint& waypoint)
   assert(wImage!=NULL);
   assert(wDetails!=NULL);
 
-  nTextLines = TextToLineOffsets(way_point.Details,
+  nTextLines = TextToLineOffsets(waypoint.Details.c_str(),
 				 LineOffsets,
 				 MAXLINES);
 

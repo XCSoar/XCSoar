@@ -51,7 +51,9 @@ Copyright_License {
 #include "MapWindow.h"
 #include "GlideComputer.hpp"
 #include "Components.hpp"
+#ifdef OLD_TASK
 #include "Task.h"
+#endif
 
 #include <assert.h>
 
