@@ -125,11 +125,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   mhPenBorder = hPenDefaultBorder;
   mhPenSelector = hPenSelector;
 
-  RECT rc;
-  rc.left = 0;
-  rc.top = 0;
-  rc.right = 0 + mWidth;
-  rc.bottom = 0 + mHeight;
   get_canvas().fill_rectangle(0, 0, mWidth, mHeight, mhBrushBk);
 
   mBorderSize = 1;
