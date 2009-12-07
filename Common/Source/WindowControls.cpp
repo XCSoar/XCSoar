@@ -991,8 +991,6 @@ WndForm::SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigne
 
 // normal form stuff (nonmodal)
 
-#ifndef ENABLE_SDL
-
 bool
 WndForm::on_unhandled_key(unsigned key_code)
 {
@@ -1001,8 +999,6 @@ WndForm::on_unhandled_key(unsigned key_code)
 
   return WindowControl::on_unhandled_key(key_code);
 }
-
-#endif /* !ENABLE_SDL */
 
 void WndForm::Show(void){
 
