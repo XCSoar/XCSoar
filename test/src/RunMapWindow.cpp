@@ -175,6 +175,12 @@ TimeLocal(int d)
 class TestWindow : public SingleWindow {
 public:
   MapWindow map;
+  ButtonWindow close_button;
+
+  enum {
+    ID_START = 100,
+    ID_CLOSE,
+  };
 
 public:
   TestWindow() {}
@@ -210,6 +216,20 @@ public:
     map.set_airspaces(&airspace_ui);
     map.set_topology(topology);
     map.set_terrain(&terrain);
+
+    close_button.set(*this, _T("Close"), ID_CLOSE, 5, 5, 65, 25);
+    close_button.bring_to_top();
+  }
+
+protected:
+  virtual bool on_command(unsigned id, unsigned code) {
+    switch (id) {
+    case ID_CLOSE:
+      close();
+      return true;
+    }
+
+    return TopWindow::on_command(id, code);
   }
 };
 
