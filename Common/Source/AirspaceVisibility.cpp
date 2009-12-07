@@ -40,9 +40,17 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 
 bool
+AbstractAirspace::type_visible(const SETTINGS_COMPUTER &settings) const
+{
+  return settings.iAirspaceMode[Type]%2==1;
+}
+
+bool
 AbstractAirspace::altitude_visible(const fixed alt,
                                    const SETTINGS_COMPUTER &settings) const
 {
+  /// \todo airspace visibility did use ToMSL(..., map.Calculated().TerrainAlt); 
+
   switch (settings.AltitudeMode) {
 
   case ALLON:

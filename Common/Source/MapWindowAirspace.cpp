@@ -58,12 +58,10 @@ class AirspaceVisitorMap: public AirspaceVisitor
 {
 public:
   AirspaceVisitorMap(MapWindow &_map,
-                     Canvas& _canvas,
                      Canvas& _buffer):map(_map),
-                                      canvas(_canvas),
                                       buffer(_buffer),
-                                      found(false),
-                                      border(true)
+                                      m_found(false),
+                                      m_border(true)
     {
 
     };
@@ -98,15 +96,15 @@ public:
   }
 
   void set_fill() {
-    border = false;
-    if (found) {
+    m_border = false;
+    if (m_found) {
       buffer.hollow_brush();
       buffer.white_pen();
     }
   }
 
-  void finish() {
-    if (found) {
+  void finish(Canvas& canvas) {
+    if (m_found) {
       // need to do this to prevent drawing of colored outline
       buffer.white_pen();
       canvas.copy_transparent_white(buffer, map.GetMapRect());
@@ -119,46 +117,33 @@ public:
 
 private:
   bool check_visible(const AbstractAirspace& airspace) {
-    int Visible = 0;
-
-    if (map.SettingsComputer().iAirspaceMode[airspace.get_type()]%2 == 1) {
-      // NOTE: did use ToMSL(..., map.Calculated().TerrainAlt);
-       
-      if (airspace.altitude_visible(map.Basic().GetAnyAltitude(),
-                                    map.SettingsComputer())) {
+    if (!airspace.type_visible(map.SettingsComputer()) ||
+        !airspace.altitude_visible(map.Basic().GetAnyAltitude(),
+                                   map.SettingsComputer())) {
+      return false;
+    }
 #ifdef OLD_TASK        
-        if (!airspace._NewWarnAckNoBrush &&
-            !(map.SettingsMap().iAirspaceBrush[circ.Type] == NUMAIRSPACEBRUSHES-1)) {
-          Visible = 2;
-        } else {
-          Visible = 1;
-        }
-#else
-      Visible = 1;
-#endif
-      }
-    }
-
-    if (border) {
-      if (Visible != 2)
-        return false;
+    if (airspace._NewWarnAckNoBrush ||
+        (map.SettingsMap().iAirspaceBrush[airspace.Type] == NUMAIRSPACEBRUSHES-1)) {
+      return m_border;
     } else {
-      if (Visible != 1)
-        return false;
+      return true;
     }
+#else
     return true;
+#endif
   }
 
   void start_render(const AbstractAirspace &airspace) {
-    if (!found) {
-      found = true;
+    if (!m_found) {
+      m_found = true;
       clear();
-      if (!border) {
+      if (!m_border) {
         buffer.hollow_brush();
         buffer.white_pen();
       }
     }
-    if (border) {
+    if (m_border) {
       // this color is used as the black bit
       buffer.set_text_color(MapGfx.Colours[map.SettingsMap().
                                            iAirspaceColour[airspace.get_type()]]);
@@ -175,18 +160,17 @@ private:
 
   void clear() {
     static const Color whitecolor(0xff,0xff,0xff);
-    buffer.set_text_color(whitecolor);
     buffer.background_transparent();
     buffer.set_background_color(whitecolor);
+    buffer.set_text_color(whitecolor);
     buffer.white_pen();
     buffer.white_brush();
     const RECT &MapRect = map.GetMapRect();
     buffer.rectangle(MapRect.left, MapRect.top, MapRect.right, MapRect.bottom);
   }
 
-  bool found;
-  bool border;
-  Canvas &canvas;
+  bool m_found;
+  bool m_border;
   Canvas &buffer;
   MapWindow &map;
 };
@@ -204,9 +188,9 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   if (airspace_database == NULL)
     return;
 
-  AirspaceVisitorMap v(*this, canvas, buffer);
+  AirspaceVisitorMap v(*this, buffer);
   airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
   v.set_fill();
   airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
-  v.finish();
+  v.finish(canvas);
 }
