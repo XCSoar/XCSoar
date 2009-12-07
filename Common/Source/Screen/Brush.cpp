@@ -42,35 +42,35 @@ Copyright_License {
 void
 Brush::set(const Color c)
 {
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   hollow = false;
   color = c;
-#else
+  #else
   reset();
   brush = ::CreateSolidBrush(c);
-#endif
+  #endif
 }
 
 void
 Brush::set(const Bitmap &bitmap)
 {
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   // TODO
-#else
+  #else
   reset();
   brush = ::CreatePatternBrush(bitmap.native());
-#endif
+  #endif
 }
 
 void
 Brush::reset()
 {
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   hollow = true;
-#else
+  #else
   if (brush != NULL) {
     ::DeleteObject(brush);
     brush = NULL;
   }
-#endif
+  #endif
 }
