@@ -145,6 +145,9 @@ LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
   return DiskBufferAdd(charbuffer);
 }
 
+/**
+ * Flushes the data in the DiskBuffer to the disk
+ */
 void
 LoggerImpl::DiskBufferFlush()
 {
@@ -205,6 +208,9 @@ LoggerImpl::DiskBufferAdd(char *sIn)
   return true;
 }
 
+/**
+ * Resets the DiskBuffer
+ */
 void
 LoggerImpl::DiskBufferReset()
 {
@@ -344,6 +350,10 @@ LoggerImpl::LinkGRecordDLL()
   }
 }
 
+/**
+ * Returns whether the GRecord DLL has been found
+ * @return True if the GRecord DLL has been found, False otherwise
+ */
 bool
 LoggerImpl::LoggerGActive() const
 {
@@ -379,6 +389,11 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
   GRecordAppendGRecordToFile(bFileValid);
 }
 
+/**
+ * Initialize the GRecord part of the Logger
+ * -> Link the DLL
+ * -> Call external GRecordInit()
+ */
 void
 LoggerImpl::LoggerGInit()
 {
