@@ -155,34 +155,32 @@ LoggerImpl::DiskBufferFlush()
   // stays open for buffered io
   LoggerFILE = fopen (szLoggerFileName_c,"ab");
 
-  bool bWriteSuccess = true;
+  if (!LoggerFILE)
+    return;
+
   TCHAR buffer_G[MAX_IGC_BUFF];
   TCHAR * pbuffer_G;
   pbuffer_G = buffer_G;
 
-  if (LoggerFILE) {
-    for (int i = 0; i < LoggerDiskBufferCount; i++) {
+  for (int i = 0; i < LoggerDiskBufferCount; i++) {
+    unsigned int iLen = strlen(LoggerDiskBuffer[i]);
 
-      unsigned int ilen = strlen(LoggerDiskBuffer[i]);
-      if (fwrite(LoggerDiskBuffer[i], (size_t)ilen, (size_t)1, LoggerFILE)
-          != (size_t)ilen) {
-        bWriteSuccess = false;
+    // if (file write successful)
+    if (fwrite(LoggerDiskBuffer[i], (size_t)iLen, (size_t)1, LoggerFILE) == (size_t)iLen) {
+      int iBufLen = strlen(LoggerDiskBuffer[i]);
+
+      for (int j = 0; (j <= iBufLen) && (j < MAX_IGC_BUFF); j++) {
+        buffer_G[j] = (TCHAR)LoggerDiskBuffer[i][j];
       }
 
-      if (bWriteSuccess) {
-        int iLen = strlen(LoggerDiskBuffer[i]);
-        for (int j = 0; (j <= iLen) && (j < MAX_IGC_BUFF); j++) {
-          buffer_G[j] = (TCHAR)LoggerDiskBuffer[i][j];
-        }
-        if (!is_simulator() && LoggerGActive()) {
-          GRecordAppendRecordToBuffer(pbuffer_G);
-        }
+      if (!is_simulator() && LoggerGActive()) {
+        GRecordAppendRecordToBuffer(pbuffer_G);
       }
     }
-
-    fclose(LoggerFILE);
-    DiskBufferReset();
   }
+
+  fclose(LoggerFILE);
+  DiskBufferReset();
 }
 
 /**
