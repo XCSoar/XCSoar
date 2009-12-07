@@ -118,10 +118,9 @@ IsValidIGCChar(char c) //returns 1 if valid char for IGC files
 
 /**
  * Checks a string for invalid characters and replaces them with 0x20 (space)
- * @param szIn Input and Output string (pointer)
- * @return Output string
+ * @param szIn Input/Output string (pointer)
  */
-char * 
+void
 CleanIGCRecord(char * szIn)
 {  
   // don't clean terminating \r\n!
@@ -130,8 +129,6 @@ CleanIGCRecord(char * szIn)
     if (!IsValidIGCChar(szIn[i]))
       szIn[i] = ' ';
   }
-
-  return szIn;
 }
 
 bool
