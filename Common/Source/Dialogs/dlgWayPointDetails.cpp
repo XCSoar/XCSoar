@@ -65,7 +65,6 @@ Copyright_License {
 static int page=0;
 static WndForm *wf=NULL;
 static WndListFrame *wDetails=NULL;
-static WndOwnerDrawFrame *wDetailsEntry = NULL;
 static WndFrame *wInfo=NULL;
 static WndFrame *wCommand=NULL;
 static WndFrame *wSpecial=NULL; // VENTA3
@@ -151,7 +150,7 @@ static void NextPage(int Step){
 
   if (page==1) {
     wDetails->ResetList();
-    wDetails->Redraw();
+    wDetails->invalidate();
   }
 
 }
@@ -213,23 +212,29 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
-static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-  (void)lParam; (void)Sender;
-  switch(wParam & 0xffff){
+static bool
+FormKeyDown(WindowControl *Sender, unsigned key_code)
+{
+  (void)Sender;
+
+  switch (key_code) {
     case VK_LEFT:
     case '6':
       ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
       NextPage(-1);
       //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
-    return(0);
+    return true;
+
     case VK_RIGHT:
     case '7':
       ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
       NextPage(+1);
       //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
-    return(0);
+    return true;
+
+  default:
+    return false;
   }
-  return(1);
 }
 
 
@@ -530,12 +535,7 @@ void dlgWayPointDetailsShowModal(const Waypoint& waypoint)
   assert(wImage!=NULL);
   assert(wDetails!=NULL);
 
-  wDetailsEntry =
-    (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmDetailsEntry"));
-  assert(wDetailsEntry!=NULL);
-  wDetailsEntry->SetCanFocus(true);
-
-  nTextLines = TextToLineOffsets(selected_waypoint->Details.c_str(),
+  nTextLines = TextToLineOffsets(way_point.Details,
 				 LineOffsets,
 				 MAXLINES);
 
@@ -599,8 +599,8 @@ void dlgWayPointDetailsShowModal(const Waypoint& waypoint)
 
 #ifndef CECORE
 #ifndef GNAV
-  hasimage1 = jpgimage1.Load(wImage->GetCanvas() ,path_modis );
-  hasimage2 = jpgimage2.Load(wImage->GetCanvas() ,path_google );
+  hasimage1 = jpgimage1.Load(wImage->get_canvas(), path_modis );
+  hasimage2 = jpgimage2.Load(wImage->get_canvas(), path_google );
 #endif
 #endif
 

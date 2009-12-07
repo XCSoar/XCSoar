@@ -63,10 +63,6 @@ public:
 
   void reset();
 
-#ifndef ENABLE_SDL
-  void resize(unsigned width, unsigned height);
-#endif /* !ENABLE_SDL */
-
   void draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
 			  const int x, const int y,
 			  const unsigned src_width,
@@ -82,6 +78,10 @@ public:
 		   bool centered=true);
 
 protected:
+#ifndef ENABLE_SDL
+  virtual bool on_resize(unsigned width, unsigned height);
+#endif /* !ENABLE_SDL */
+
   virtual bool on_create();
 };
 

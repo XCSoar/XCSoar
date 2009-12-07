@@ -186,7 +186,6 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
 
   if (olc != NULL && TrailFirstTime >= 0) {
     olc->Lock();
-    olc->SetLine();
     DrawTrailFromTask(canvas, *olc, TrailFirstTime);
     olc->Unlock();
   }

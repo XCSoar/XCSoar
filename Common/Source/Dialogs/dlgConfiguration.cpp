@@ -863,22 +863,27 @@ static void OnPaste(WindowControl *Sender) {
   }
 }
 
-static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-	(void)lParam;
+static bool
+FormKeyDown(WindowControl *Sender, unsigned key_code)
+{
 	(void)Sender;
-  switch(wParam & 0xffff){
+
+  switch (key_code) {
     case '6':
       ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
       NextPage(-1);
       //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
-    return(0);
+    return true;
+
     case '7':
       ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
       NextPage(+1);
       //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
-    return(0);
+    return true;
+
+  default:
+    return false;
   }
-  return(1);
 }
 
 static void SetLocalTime(void) {

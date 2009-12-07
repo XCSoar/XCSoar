@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+  Copyright (C) 2000 - 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,7 +18,6 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
-	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,30 +35,25 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_TEXT_WINDOW_HXX
-#define XCSOAR_SCREEN_TEXT_WINDOW_HXX
+#ifndef XCSOAR_THREAD_DEBUG_HXX
+#define XCSOAR_THREAD_DEBUG_HXX
 
-#include "Screen/Window.hpp"
+#ifdef NDEBUG
+
+static inline void
+assert_none_locked()
+{
+}
+
+#else /* !NDEBUG */
 
 /**
- * A window which renders static text.
+ * Abort the program if the current thread holds at least one mutex.
+ * Add a call to this function before invoking blocking system calls.
  */
-class TextWindow : public Window {
-public:
-  void set(ContainerWindow &parent,
-           int left, int top, unsigned width, unsigned height,
-           bool center = false, bool notify = false, bool show = true,
-           bool tabstop = false, bool border = false);
+void
+assert_none_locked();
 
-  void set_text(const TCHAR *text) {
-    assert_none_locked();
-
-#ifdef ENABLE_SDL
-    // XXX
-#else /* !ENABLE_SDL */
-    ::SetWindowText(hWnd, text);
-#endif /* !ENABLE_SDL */
-  }
-};
+#endif /* !NDEBUG */
 
 #endif

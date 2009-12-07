@@ -458,11 +458,10 @@ bool GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
 
 bool GetFromRegistry(const TCHAR *szRegValue, double &pPos)
 {
-  return 0;
-  DWORD Temp = pPos;
+  DWORD Temp = (DWORD)pPos;
   long res;
   if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
-    pPos = Temp;
+    pPos = (double)Temp;
   }
   return res;
 }
@@ -489,7 +488,7 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 #else /* !WIN32 */
   GConf().set(szRegValue, (int)Pos);
 
-  return NULL;
+  return 0;
 #endif /* !WIN32 */
 }
 

@@ -56,6 +56,13 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "DrawThread.hpp"
+#include "CalculationThread.hpp"
+
+#if defined(__BORLANDC__)  // due to compiler bug
+  #include "WayPointList.hpp"
+  #include "AirspaceDatabase.hpp"
+  #include "Polar/Polar.hpp"
+#endif
 
 bool COMPORTCHANGED = false;
 bool MAPFILECHANGED = false;
@@ -92,10 +99,7 @@ void SettingsLeave() {
 
   XCSoarInterface::main_window.map.set_focus();
 
-  // mutexing.Lock everything here prevents the calculation thread
-  // from running, while shared data is potentially reloaded.
-
-  mutexBlackboard.Lock();
+  calculation_thread->suspend();
 
 /*
   if (MAPFILECHANGED) { printf("MAPFILECHANGED\n"); }
@@ -178,7 +182,7 @@ void SettingsLeave() {
     XCSoarInterface::main_window.map.set_focus();
   }
 
-  mutexBlackboard.Unlock();
+  calculation_thread->resume();
 
   if(COMPORTCHANGED) {
     devRestart();

@@ -116,7 +116,7 @@ zzip_file_saveoffset(ZZIP_FILE * fp)
 # endif
 #endif
 
-# if ! defined strcasecmp && ! defined ZZIP_HAVE_STRCASECMP
+# if ! defined strcasecmp && ! defined ZZIP_CHECK_BACKSLASH_DIRSEPARATOR
 # define ZZIP_CHECK_BACKSLASH_DIRSEPARATOR 1
 # endif
 

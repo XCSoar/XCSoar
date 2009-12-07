@@ -82,11 +82,6 @@ public:
     PaintWindow::reset();
   }
 
-  void resize(unsigned width, unsigned height) {
-    buffer.resize(width, height);
-    PaintWindow::resize(width, height);
-  }
-
   Canvas &get_canvas() {
     return buffer;
   }
@@ -111,6 +106,10 @@ public:
   }
 
 protected:
+#ifndef ENABLE_SDL
+  virtual bool on_resize(unsigned width, unsigned height);
+#endif /* !ENABLE_SDL */
+
   virtual void on_paint(Canvas &canvas);
 };
 

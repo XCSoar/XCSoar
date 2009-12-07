@@ -37,199 +37,248 @@ Copyright_License {
 */
 
 #include "TeamCodeCalculation.h"
+#include "Math/Constants.h"
 
 #include <math.h>
 #include <string.h>
 
-void ConvertHeadingToTeamCode(double heading, TCHAR *code);
+void ConvertBearingToTeamCode(double bearing, TCHAR *code);
 void NumberToTeamCode(double value, TCHAR *code, int minCiffers);
-double GetBearing(const TCHAR *code );
-double GetRange(const TCHAR *code );
+double GetBearing(const TCHAR *code);
+double GetRange(const TCHAR *code);
 int GetValueFromTeamCode(const TCHAR *code, int maxCount);
 
-#define TEAMCODE_COMBINAIONS 1296
-#define DEG_TO_RAD .0174532925199432958
+#define TEAMCODE_COMBINATIONS 1296
 
-void GetTeamCode(TCHAR *code, double bearing, double range)
+/**
+ * Calculates the teamcode of the given bearing and distance
+ * @param code The teamcode (pointer)
+ * @param bearing Bearing to the reference waypoint
+ * @param range Distance to the reference waypoint
+ */
+void
+GetTeamCode(TCHAR *code, double bearing, double range)
 {
 	memset(code, 0, sizeof(TCHAR) * 10);
 
-		// trim to seeyou
-	//double trim = cos(bearing*DEG_TO_RAD)*range/8500;
-		//bearing+= 1.2;
+	// trim to seeyou
+	// double trim = cos(bearing*DEG_TO_RAD)*range/8500;
+	// bearing+= 1.2;
 
-	 //   if (bearing > 360)
-		//{
-		//	bearing -= 360;
-		//}
+	// if (bearing > 360)
+	//	bearing -= 360;
 
-
-
-	ConvertHeadingToTeamCode(bearing, code);
-	NumberToTeamCode(range/100.0, &code[2],0);
+	// Calculate bearing part of the teamcode
+	ConvertBearingToTeamCode(bearing, code);
+	// Calculate distance part of the teamcode
+	NumberToTeamCode(range / 100.0, &code[2], 0);
 }
 
-void ConvertHeadingToTeamCode(double heading, TCHAR *code)
+/**
+ * Converts a given bearing to the bearing part of the teamcode
+ * @param heading Bearing to the reference waypoint
+ * @param code The teamcode (pointer)
+ */
+void
+ConvertBearingToTeamCode(double bearing, TCHAR *code)
 {
-	if (heading >= 360)
-	{
+	if (bearing >= 360) {
 		code[0] = '-';
 		code[1] = '-';
 		return;
 	}
 
-	double bamValue = (heading * TEAMCODE_COMBINAIONS) / 360.0;
+	double bamValue = (bearing * TEAMCODE_COMBINATIONS) / 360.0;
 	NumberToTeamCode(bamValue, code, 2);
 }
 
-void NumberToTeamCode(double value, TCHAR *code, int minCiffers)
+/**
+ * Encodes a value to teamcode
+ * @param value The value to encode
+ * @param code The teamcode (pointer)
+ * @param minCiffers Number of chars for the teamcode
+ */
+void
+NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 {
-
 	int maxCif = 0;
 	int curCif = 0;
 
-	if (minCiffers > 0)
-	{
+	if (minCiffers > 0)	{
 		maxCif = minCiffers - 1;
 		curCif = maxCif;
 	}
 
 	double rest = value;
-	while(rest > 0 || curCif >= 0 )
-	{
+	while (rest > 0 || curCif >= 0) {
 		int cifVal = (int)pow(36.0, curCif);
 		int partSize = (int)(rest / cifVal);
 		int partVal = partSize * cifVal;
 		int txtPos = maxCif - curCif;
 
-		if (partSize < 10)
-		{
-			rest -= partVal;
-			code[txtPos] = (unsigned char)('0' + partSize);
-			curCif--;
-		}
-		else if (partSize < 36)
-		{
-			rest -= partVal;
-			code[txtPos] = (unsigned char)('A' + partSize - 10);
-			curCif--;
-		}
-		else
-		{
-			curCif++;
-			maxCif = curCif;
-		}
+		if (partSize < 10) {
+      rest -= partVal;
+      code[txtPos] = (unsigned char)('0' + partSize);
+      curCif--;
+    } else if (partSize < 36) {
+      rest -= partVal;
+      code[txtPos] = (unsigned char)('A' + partSize - 10);
+      curCif--;
+    } else {
+      curCif++;
+      maxCif = curCif;
+    }
 
-		if (rest < 1) rest = 0;
+		if (rest < 1)
+      rest = 0;
 	}
 }
 
-double GetBearing(const TCHAR *code )
+/**
+ * Calculates the bearing from the given teamcode
+ * @param code The teamcode
+ * @return Bearing to the reference waypoint
+ */
+double
+GetBearing(const TCHAR *code)
 {
+  // Get the first two values from teamcode (1-2)
 	int val = GetValueFromTeamCode(code, 2);
 
-	double bearing = (val * 360.0/TEAMCODE_COMBINAIONS);
-	 bearing -= 0;
-	if (bearing < 0)
-	{
+	// Calculate bearing
+	double bearing = (val * 360.0 / TEAMCODE_COMBINATIONS);
+  if (bearing < 0) {
 		bearing += 360;
 	}
 
 	return bearing;
 }
 
-double GetRange(const TCHAR *code )
+/**
+ * Calculates the distance from the given teamcode
+ * @param code The teamcode
+ * @return Distance to the reference waypoint
+ */
+double
+GetRange(const TCHAR *code)
 {
+  // Get last three values from teamcode (3-5)
 	int val = GetValueFromTeamCode(&code[2], 3);
-	return val*100.0;
+	return val * 100.0;
 }
 
-double GetTeammateBearingFromRef(const TCHAR *code )
+/**
+ * @see GetBearing()
+ */
+double
+GetTeammateBearingFromRef(const TCHAR *code)
 {
 	return GetBearing(code);
 }
 
-double GetTeammateRangeFromRef(const TCHAR *code )
+/**
+ * @see GetRange()
+ */
+double
+GetTeammateRangeFromRef(const TCHAR *code)
 {
 	return GetRange(code);
 }
 
-int GetValueFromTeamCode(const TCHAR *code, int maxCount)
+/**
+ * Decodes the TeamCode
+ * @param code The teamcode (or part of it)
+ * @param maxCount Maximum chars to decode
+ * @return The decoded value
+ */
+int
+GetValueFromTeamCode(const TCHAR *code, int maxCount)
 {
 	int val = 0;
 	int charPos = 0;
-	while (code[charPos] != 0 && charPos < maxCount)
-	{
+
+	while (code[charPos] != 0 && charPos < maxCount) {
 		int cifferVal = 0;
-		if (code[charPos] >= '0' && code[charPos] <= '9')
-		{
-			cifferVal = (int) (code[charPos] - '0');
-		}
-		else if (code[charPos] >= 'A' && code[charPos] <= 'Z')
-		{
-			cifferVal = (int) (code[charPos]+ - 'A')+10;
-		}
+
+		if (code[charPos] >= '0' && code[charPos] <= '9') {
+      cifferVal = (int)(code[charPos] - '0');
+    } else if (code[charPos] >= 'A' && code[charPos] <= 'Z') {
+      cifferVal = (int)(code[charPos] + -'A') + 10;
+    }
 
 		val = val * 36;
 		val += (int)cifferVal;
 
 		charPos++;
 	}
+
 	return val;
 }
 
-void CalcTeamMatePos(double ownBear, double ownDist, double mateBear, double mateDist, double *bearToMate, double *distToMate)
+/**
+ * Calculates distance and bearing to the teammate by comparing the
+ * distances and bearings to the shared reference waypoint
+ * @param ownBear Own bearing to the reference waypoint
+ * @param ownDist Own distance to the reference waypoint
+ * @param mateBear Teammate bearing to the reference waypoint
+ * @param mateDist Teammate distance to the reference waypoint
+ * @param bearToMate Bearing to the teammate (pointer)
+ * @param distToMate Distance to the teammate (pointer)
+ */
+void
+CalcTeamMatePos(double ownBear, double ownDist, double mateBear,
+    double mateDist, double *bearToMate, double *distToMate)
 {
-	// define constants
-	double PI = 3.14159265358979;
-	double toRad = PI / 180.0;
-	double toDeg = 180.0 / PI;
-
-	// convert bearings to radians
-	ownBear = ownBear * toRad;
-	mateBear = mateBear * toRad;
+	// Convert bearings to radians
+	ownBear = ownBear * DEG_TO_RAD;
+	mateBear = mateBear * DEG_TO_RAD;
 
 	// Calculate range
-	double Xs = ownDist*sin(ownBear) - mateDist*sin(mateBear);
-	double Ys = ownDist*cos(ownBear) - mateDist*cos(mateBear);
-	double range = sqrt((Xs*Xs)+(Ys*Ys));
+	double Xs = ownDist * sin(ownBear) - mateDist * sin(mateBear);
+  double Ys = ownDist * cos(ownBear) - mateDist * cos(mateBear);
+	double range = sqrt((Xs * Xs) + (Ys * Ys));
 	*distToMate = range;
 
-	// Calculate bearing
-	double bearing;
+	// Trivial solutions for bearing calculation
+	if (Xs == 0) {
+    if (Ys >= 0)
+      *bearToMate = 180;
+    else
+      *bearToMate = 0;
 
-	if (Xs != 0)
-	{
-		bearing = (atan(Ys/Xs) * toDeg);
-		if (Xs < 0) bearing =  bearing + 180;
-		*bearToMate = 90.0 - bearing;
-		if (*bearToMate < 0) *bearToMate += 360;
+	  return;
 	}
-	else
-	{
-		if (Ys >= 0)
-		{
-			*bearToMate = 180;
-		}
-		else
-		{
-			*bearToMate = 0;
-		}
-	}
+
+  // Calculate bearing
+  double bearing;
+	bearing = atan(Ys / Xs) * RAD_TO_DEG;
+	if (Xs < 0)
+	  bearing = bearing + 180;
+
+	*bearToMate = 90.0 - bearing;
+	if (*bearToMate < 0)
+	  *bearToMate += 360;
 }
 
-void CalcTeammateBearingRange(double ownBear, double ownDist, const TCHAR *TeamMateCode,  double *bearToMate, double *distToMate)
+/**
+ * Calculates distance and bearing to the teammate by decoding the given
+ * teamcode and comparing the value with own bearing and distance to
+ * the reference waypoint
+ * @param ownBear Own bearing to the reference waypoint
+ * @param ownDist Own distance to the reference waypoint
+ * @param TeamMateCode The teamcode
+ * @param bearToMate Bearing to the teammate (pointer)
+ * @param distToMate Distance to the teammate (pointer)
+ */
+void
+CalcTeammateBearingRange(double ownBear, double ownDist,
+    const TCHAR *TeamMateCode, double *bearToMate, double *distToMate)
 {
-	double calcBearing = GetBearing(TeamMateCode)/*+ 180*/;
+	double calcBearing = GetBearing(TeamMateCode); // + 180
 	double calcRange = GetRange(TeamMateCode);
 
-
 	//if (calcBearing > 360)
-	//{
 	//	calcBearing -= 360;
-	//}
-
 
 	CalcTeamMatePos(ownBear, ownDist, calcBearing, calcRange, bearToMate, distToMate);
 }
-

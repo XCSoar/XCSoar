@@ -58,7 +58,7 @@ public: // Public slots
   void newWind(const NMEA_INFO *basic, DERIVED_INFO *derived,
                Vector& wind);
 
-  Vector getWind(double Time, double h, bool *found);
+  const Vector getWind(double Time, double h, bool *found) const;
 
 private:
 

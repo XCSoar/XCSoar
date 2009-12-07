@@ -53,7 +53,6 @@
 static int page=0;
 static WndForm *wf=NULL;
 static WndListFrame *wDetails=NULL;
-static WndOwnerDrawFrame *wDetailsEntry = NULL;
 
 #define MAXLINES 100
 #define MAXLISTS 20
@@ -63,8 +62,7 @@ static int nTextLines=0;
 static void Update(){
 
   //wDetails->ResetList();
-  wDetails->Redraw();
-
+  wDetails->invalidate();
 }
 
 
@@ -213,24 +211,28 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
-static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-  (void)lParam;
+static bool
+FormKeyDown(WindowControl *Sender, unsigned key_code)
+{
   (void)Sender;
-  switch(wParam & 0xffff){
+
+  switch(key_code) {
   case VK_LEFT:
   case '6':
     ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
     //      NextPage(-1);
     //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
-    return(0);
+    return true;
   case VK_RIGHT:
   case '7':
     ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
     //      NextPage(+1);
     //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
-    return(0);
+    return true;
+
+  default:
+    return false;
   }
-  return(1);
 }
 
 static int OnTimerNotify(WindowControl * Sender) {
@@ -289,12 +291,6 @@ void dlgFlarmTrafficShowModal(void){
   wDetails = (WndListFrame*)wf->FindByName(TEXT("frmDetails"));
   wDetails->SetEnterCallback(OnListEnter);
   assert(wDetails!=NULL);
-
-  wDetailsEntry =
-    (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmDetailsEntry"));
-  assert(wDetailsEntry!=NULL);
-  wDetailsEntry->SetCanFocus(true);
-
 
   wDetails->SetBorderKind(BORDERLEFT);
 

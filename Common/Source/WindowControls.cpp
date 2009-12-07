@@ -89,13 +89,6 @@ void DrawLine(Canvas &canvas, int x1, int y1, int x2, int y2) {
   canvas.line(x1, y1, x2, y2);
 }
 
-#ifdef GNAV
-#define ENABLECOMBO false // master on/off for combo popup
-#else
-#define ENABLECOMBO true // master on/off for combo popup
-// Must be off if no touchscreen
-#endif
-
 // returns true if it is a long press,
 // otherwise returns false
 static bool KeyTimer(bool isdown, DWORD thekey) {
@@ -124,8 +117,7 @@ static bool KeyTimer(bool isdown, DWORD thekey) {
 // WindowControl Classes
 //----------------------------------------------------------
 
-WindowControl *ActiveControl = NULL;
-WindowControl *LastFocusControl = NULL;
+static WindowControl *ActiveControl = NULL;
 
 void InitWindowControlModule(void);
 
@@ -138,11 +130,11 @@ Pen WindowControl::hPenDefaultSelector;
 
 WindowControl::WindowControl(WindowControl *Owner,
                              ContainerWindow *Parent,
-			     const TCHAR *Name,
-			     int X, int Y,
-			     int Width, int Height,
-			     bool Visible){
-
+                             const TCHAR *Name,
+                             int X, int Y,
+                             int Width, int Height,
+                             bool Visible)
+{
   mHelpText = NULL;
 
   mHasFocus = false;
@@ -156,15 +148,7 @@ WindowControl::WindowControl(WindowControl *Owner,
 
   // todo
 
-  mX = X;
-  mY = Y;
-  mWidth = Width;
-  mHeight = Height;
   mOwner = Owner;
-  // setup Master Window (the owner of all)
-  mTopOwner = Owner;
-  while (Owner != NULL && mTopOwner->GetOwner() != NULL)
-    mTopOwner = mTopOwner->GetOwner();
 
   // todo
   mhFont = &MapWindowFont;
@@ -192,7 +176,7 @@ WindowControl::WindowControl(WindowControl *Owner,
   }
   InstCount++;
 
-  set(Parent, mX, mY, mWidth, mHeight,
+  set(Parent, X, Y, Width, Height,
       false, false, false, false, false);
 
   if (mOwner != NULL)
@@ -224,9 +208,6 @@ void WindowControl::Destroy(void){
     delete mClients[i];
   }
 
-  if (LastFocusControl == this)
-    LastFocusControl = NULL;
-
   if (ActiveControl == this)
     ActiveControl = NULL;
 
@@ -246,52 +227,22 @@ void WindowControl::Destroy(void){
 
 }
 
-void WindowControl::UpdatePosSize(void){
-  move(mX, mY, mWidth, mHeight);
-}
-
-void WindowControl::SetTop(int Value){
-  if (mY != Value){
-    mY = Value;
-    UpdatePosSize();
-  }
-}
-
-void WindowControl::SetLeft(int Value){
-  if (mX != Value){
-    mX = Value;
-    UpdatePosSize();
-  }
-}
-
-void WindowControl::SetHeight(int Value){
-  if (mHeight != Value){
-    mHeight = Value;
-    UpdatePosSize();
-  }
-}
-
-void WindowControl::SetWidth(int Value){
-  if (mWidth != Value){
-    mWidth = Value;
-    UpdatePosSize();
-  }
-}
-
-WindowControl *WindowControl::GetCanFocus(void){
-  if (mVisible && mCanFocus && !mReadOnly)
-    return(this);
-
+Window *
+WindowControl::GetCanFocus()
+{
   if (!mVisible)
-    return(NULL);
+    return NULL;
+
+  if (mCanFocus && !mReadOnly)
+    return this;
 
   for (int idx=0; idx<mClientCount; idx++){
-    WindowControl *w;
+    Window *w;
     if ((w = mClients[idx]->GetCanFocus()) != NULL){
-      return(w);
+      return w;
     }
   }
-  return(NULL);
+  return NULL;
 }
 
 void WindowControl::AddClient(WindowControl *Client){
@@ -301,14 +252,9 @@ void WindowControl::AddClient(WindowControl *Client){
   Client->SetOwner(this);
   Client->SetFont(GetFont());
 
-  if (Client->mY == -1){
-    if (mClientCount > 1){
-      Client->mY =
-	mClients[mClientCount-2]->mY
-	+ mClients[mClientCount-2]->mHeight;
-      Client->move(Client->mX, Client->mY);
-    }
-  }
+  if (Client->get_position().top == -1 && mClientCount > 1)
+    Client->move(Client->get_position().left,
+                 mClients[mClientCount - 2]->get_position().bottom);
 
   /*
   // TODO code: also allow autosizing of height/width to maximum of parent
@@ -317,10 +263,10 @@ void WindowControl::AddClient(WindowControl *Client){
     // maximum height
     Client->mHeight = mHeight - Client->mY;
     SetWindowPos(Client->GetHandle(), 0,
-		 Client->mX, Client->mY,
-		 Client->mWidth, Client->mHeight,
-		 SWP_NOSIZE | SWP_NOZORDER
-		 | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+                 Client->mX, Client->mY,
+                 Client->mWidth, Client->mHeight,
+                 SWP_NOSIZE | SWP_NOZORDER
+                 | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
   }
   */
 }
@@ -340,13 +286,13 @@ void WindowControl::FilterAdvanced(bool advanced){
 
 WindowControl *WindowControl::FindByName(const TCHAR *Name) {
   if (_tcscmp(mName, Name)==0)
-    return(this);
+    return this;
   for (int i=0; i<mClientCount; i++){
     WindowControl *W = mClients[i]->FindByName(Name);
     if (W != NULL)
-      return(W);
+      return W;
   }
-  return(NULL);
+  return NULL;
 }
 
 
@@ -355,7 +301,7 @@ WindowControl *WindowControl::SetOwner(WindowControl *Value){
   if (mOwner != Value){
     mOwner = Value;
   }
-  return(res);
+  return res;
 }
 
 
@@ -402,10 +348,8 @@ bool WindowControl::SetFocused(bool Value){
   }
 
   if (Value){
-    if (mCanFocus){
+    if (mCanFocus)
       ActiveControl = this;
-      LastFocusControl = this;
-    }
   } else {
     ActiveControl = NULL;
     /*
@@ -415,18 +359,18 @@ bool WindowControl::SetFocused(bool Value){
     */
   }
 
-  return(res);
+  return res;
 
 }
 
 bool WindowControl::SetCanFocus(bool Value){
   bool res = mCanFocus;
   mCanFocus = Value;
-  return(res);
+  return res;
 }
 
 bool WindowControl::GetFocused(void){
-  return(mHasFocus);
+  return mHasFocus;
 }
 
 void
@@ -452,11 +396,11 @@ WindowControl::SetVisible(bool Value)
 }
 
 bool WindowControl::GetVisible(void){
-  return(mVisible);
+  return mVisible;
 }
 
 int WindowControl::GetBorderKind(void){
-  return(mBorderKind);
+  return mBorderKind;
 }
 
 int WindowControl::SetBorderKind(int Value){
@@ -465,7 +409,7 @@ int WindowControl::SetBorderKind(int Value){
     mBorderKind = Value;
     invalidate();
   }
-  return(res);
+  return res;
 }
 
 const Font *WindowControl::SetFont(const Font &Value){
@@ -474,16 +418,16 @@ const Font *WindowControl::SetFont(const Font &Value){
     // todo
     mhFont = &Value;
   }
-  return(res);
+  return res;
 }
 
 bool WindowControl::SetReadOnly(bool Value){
   bool res = mReadOnly;
   if (mReadOnly != Value){
     mReadOnly = Value;
-    on_paint(GetCanvas());
+    invalidate();
   }
-  return(res);
+  return res;
 }
 
 Color WindowControl::SetForeColor(Color Value)
@@ -491,10 +435,9 @@ Color WindowControl::SetForeColor(Color Value)
   Color res = mColorFore;
   if (mColorFore != Value){
     mColorFore = Value;
-    if (mVisible)
-      on_paint(GetCanvas());
+    invalidate();
   }
-  return(res);
+  return res;
 }
 
 Color WindowControl::SetBackColor(Color Value)
@@ -503,10 +446,9 @@ Color WindowControl::SetBackColor(Color Value)
   if (mColorBack != Value){
     mColorBack = Value;
     mhBrushBk.set(mColorBack);
-    if (mVisible)
-      on_paint(GetCanvas());
+    invalidate();
   }
-  return(res);
+  return res;
 }
 
 
@@ -515,44 +457,42 @@ WindowControl::PaintSelector(Canvas &canvas)
 {
 
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
+    const RECT rc = get_client_rect();
+
     canvas.select(hPenDefaultSelector);
 
-    canvas.two_lines(mWidth - SELECTORWIDTH - 1, 0,
-                     mWidth - 1, 0,
-                     mWidth - 1, SELECTORWIDTH + 1);
+    canvas.two_lines(rc.right - SELECTORWIDTH - 1, rc.top,
+                     rc.right - 1, rc.top,
+                     rc.right - 1, SELECTORWIDTH + 1);
 
-    canvas.two_lines(mWidth - 1, mHeight - SELECTORWIDTH - 2,
-                     mWidth - 1, mHeight - 1,
-                     mWidth - SELECTORWIDTH - 1, mHeight - 1);
+    canvas.two_lines(rc.right - 1, rc.bottom - SELECTORWIDTH - 2,
+                     rc.right - 1, rc.bottom - 1,
+                     rc.right - SELECTORWIDTH - 1, rc.bottom - 1);
 
-    canvas.two_lines(SELECTORWIDTH + 1, mHeight - 1,
-                     0, mHeight - 1,
-                     0, mHeight - SELECTORWIDTH - 2);
+    canvas.two_lines(SELECTORWIDTH + 1, rc.bottom - 1,
+                     rc.left, rc.bottom - 1,
+                     rc.left, rc.bottom - SELECTORWIDTH - 2);
 
-    canvas.two_lines(0, SELECTORWIDTH + 1,
-                     0, 0,
-                     SELECTORWIDTH + 1, 0);
+    canvas.two_lines(rc.left, SELECTORWIDTH + 1,
+                     rc.left, rc.top,
+                     SELECTORWIDTH + 1, rc.top);
   }
 
 }
 
-void WindowControl::Redraw(void){
-  invalidate();
-}
-
 int WindowControl::OnHelp() {
 #ifdef ALTAIRSYNC
-    return(0); // undefined. return 1 if defined
+    return 0; // undefined. return 1 if defined
 #else
     if (mHelpText) {
       dlgHelpShowModal(*get_root_owner(), mCaption, mHelpText);
-      return(1);
+      return 1;
     } else {
       if (mOnHelpCallback) {
-	(mOnHelpCallback)(this);
-	return(1);
+        (mOnHelpCallback)(this);
+        return 1;
       } else {
-	return(0);
+        return 0;
       }
     }
 #endif
@@ -589,45 +529,37 @@ WindowControl::on_key_up(unsigned key_code)
 void
 WindowControl::on_paint(Canvas &canvas)
 {
-  RECT rc;
-
-  rc.left = 0;
-  rc.top = 0;
-  rc.right = 0 + mWidth+2;
-  rc.bottom = 0 + mHeight+2;
-
-  canvas.fill_rectangle(rc, GetBackBrush());
+  const RECT rc = get_client_rect();
 
   // JMW added highlighting, useful for lists
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
     Color ff = GetBackColor().highlight();
     Brush brush(ff);
-    rc.left += 0;
-    rc.right -= 2;
-    rc.top += 0;
-    rc.bottom -= 2;
     canvas.fill_rectangle(rc, brush);
 
 #ifdef WINDOWSPC
   // JMW make it look nice on wine
     canvas.set_background_color(ff);
 #endif
-  }
+  } else
+    canvas.fill_rectangle(rc, GetBackBrush());
 
   if (mBorderKind != 0){
+    const RECT rc = get_client_rect();
+
     canvas.select(GetBorderPen());
 
     if (mBorderKind & BORDERTOP){
-      canvas.line(0, 0, mWidth, 0);
+      canvas.line(rc.left, rc.top, rc.right, rc.top);
     }
     if (mBorderKind & BORDERRIGHT){
-      canvas.line(mWidth - 1, 0, mWidth - 1, mHeight);
+      canvas.line(rc.right - 1, rc.top, rc.right - 1, rc.bottom);
     }
     if (mBorderKind & BORDERBOTTOM){
-      canvas.line(mWidth - 1, mHeight - 1, -1, mHeight - 1);
+      canvas.line(rc.right - 1, rc.bottom - 1, rc.left - 1, rc.bottom - 1);
     }
     if (mBorderKind & BORDERLEFT){
-      canvas.line(0, mHeight - 1, 0, -1);
+      canvas.line(rc.left, rc.bottom - 1, rc.left, rc.top - 1);
     }
   }
 
@@ -636,9 +568,11 @@ WindowControl::on_paint(Canvas &canvas)
   ContainerWindow::on_paint(canvas);
 }
 
-WindowControl *WindowControl::FocusNext(WindowControl *Sender){
+Window *
+WindowControl::FocusNext(WindowControl *Sender)
+{
   int idx;
-  WindowControl *W;
+  Window *W;
 
   if (Sender != NULL){
     for (idx=0; idx<mClientCount; idx++)
@@ -650,21 +584,23 @@ WindowControl *WindowControl::FocusNext(WindowControl *Sender){
   for (; idx<mClientCount; idx++){
     if ((W = mClients[idx]->GetCanFocus()) != NULL){
       W->set_focus();
-      return(W);
+      return W;
     }
   }
 
   if (GetOwner() != NULL){
-    return(GetOwner()->FocusNext(this));
+    return GetOwner()->FocusNext(this);
   }
 
-  return(NULL);
+  return NULL;
 
 }
 
-WindowControl *WindowControl::FocusPrev(WindowControl *Sender){
+Window *
+WindowControl::FocusPrev(WindowControl *Sender)
+{
   int idx;
-  WindowControl *W;
+  Window *W;
 
   if (Sender != NULL){
     for (idx=0; idx<mClientCount; idx++)
@@ -676,14 +612,14 @@ WindowControl *WindowControl::FocusPrev(WindowControl *Sender){
   for (; idx>=0; idx--)
     if ((W=mClients[idx]->GetCanFocus()) != NULL){
       W->set_focus();
-      return(W);
+      return W;
     }
 
   if (GetOwner() != NULL){
-    return(GetOwner()->FocusPrev(this));
+    return GetOwner()->FocusPrev(this);
   }
 
-  return(NULL);
+  return NULL;
 }
 
 bool
@@ -705,30 +641,17 @@ WindowControl::on_killfocus()
 #ifndef ENABLE_SDL
 
 LRESULT
-WindowControl::on_message(HWND hwnd, UINT uMsg,
-                          WPARAM wParam, LPARAM lParam)
+WindowControl::on_unhandled_message(HWND hwnd, UINT uMsg,
+                                    WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg){
-  case WM_ERASEBKGND:
-  case WM_PAINT:
-  case WM_WINDOWPOSCHANGED:
-  case WM_CREATE:
-  case WM_DESTROY:
-  case WM_ACTIVATE:
-  case WM_CLOSE:
-    /* exclude these from OnUnhandledMessage() */
-    return ContainerWindow::on_message(hwnd, uMsg, wParam, lParam);
+  case WM_KEYDOWN:
+    if (mOwner != NULL &&
+        mOwner->on_unhandled_message(hwnd, uMsg, wParam, lParam))
+      return 0;
   }
 
-  if (mTopOwner != NULL){
-    if (!mTopOwner->OnUnhandledMessage(hwnd, uMsg, wParam, lParam))
-     return(0);
-  } else {
-    if (OnUnhandledMessage(hwnd, uMsg, wParam, lParam))
-     return(0);
-  }
-
-  return ContainerWindow::on_message(hwnd, uMsg, wParam, lParam);
+  return ContainerWindow::on_unhandled_message(hwnd, uMsg, wParam, lParam);
 }
 
 #endif /* !ENABLE_SDL */
@@ -762,10 +685,7 @@ WndForm::WndForm(ContainerWindow *Parent,
 
   mClientWindow = NULL;
   mOnKeyDownNotify = NULL;
-  mOnKeyUpNotify = NULL;
-  mOnLButtonUpNotify = NULL;
   mOnTimerNotify = NULL;
-  bLButtonDown= false;
 
 #ifndef ENABLE_SDL
   mhAccelTable = CreateAcceleratorTable(mAccel, sizeof(mAccel)/sizeof(mAccel[0]));
@@ -778,7 +698,6 @@ WndForm::WndForm(ContainerWindow *Parent,
   mClientWindow = new WindowControl(this, this,
                                     TEXT(""), 20, 20, Width, Height);
   mClientWindow->SetBackColor(GetBackColor());
-  mClientWindow->SetCanFocus(false);
 
   mClientRect.top=0;
   mClientRect.left=0;
@@ -841,9 +760,9 @@ WndForm::on_command(unsigned id, unsigned code)
 {
    // VENTA- DEBUG HARDWARE KEY PRESSED
 #ifdef VENTA_DEBUG_KEY
-	TCHAR ventabuffer[80];
+        TCHAR ventabuffer[80];
         wsprintf(ventabuffer, TEXT("ONCKEY id=%d code=%d"), id, code);
-	DoStatusMessage(ventabuffer);
+        DoStatusMessage(ventabuffer);
 #endif
    if (id == VK_ESCAPE){
      mModalResult = mrCancel;
@@ -886,7 +805,7 @@ WndForm::SetTitleFont(const Font &font)
 
   }
 
-  return(res);
+  return res;
 
 }
 
@@ -921,6 +840,8 @@ is_allowed_map(HWND hWnd, UINT message, bool enable_map)
 #endif /* !ENABLE_SDL */
 
 int WndForm::ShowModal(bool bEnableMap) {
+  assert_none_locked();
+
 #define OPENCLOSESUPPRESSTIME 500
 #ifndef ENABLE_SDL
   MSG msg;
@@ -930,7 +851,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   PeriodClock enter_clock;
   enter_clock.update();
 
-  RECT mRc = get_position();
+  RECT mRc = get_screen_position();
   DrawWireRects(XCSoarInterface::EnableAnimation,&mRc, 5);
 
   SetVisible(true);
@@ -978,7 +899,7 @@ int WndForm::ShowModal(bool bEnableMap) {
     /*
     if (msg.message == WM_KEYDOWN) {
       if (!Debounce()) {
-	continue;
+        continue;
       }
     }
     */
@@ -1007,54 +928,9 @@ int WndForm::ShowModal(bool bEnableMap) {
 #endif
 
     if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
-
-      if (msg.message == WM_KEYUP){
-	/*
-	if (KeyTimer(false,msg.wParam & 0xffff)) {
-	  // activate tool tips
-	  1;
-	} else {
-	  // behave as if it was a key down event
-	  if (mOnKeyDownNotify != NULL)
-	    if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
-	      continue;
-	}
-	*/
-      }
-
-      if (msg.message == WM_KEYDOWN){
-	//	KeyTimer(true,msg.wParam & 0xffff);
-
-/*
-        if (ActiveControl != NULL){
-          switch(msg.wParam & 0xffff){
-            case VK_UP:
-              if (ActiveControl->GetOwner() != NULL)
-                ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-            continue;
-            case VK_DOWN:
-              if (ActiveControl->GetOwner() != NULL)
-                ActiveControl->GetOwner()->FocusNext(ActiveControl);
-            continue;
-          }
-        }
-*/
-        if (mOnKeyDownNotify != NULL)
-          if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
-            continue;
-
-      }
-      if (msg.message == WM_KEYUP){
-        if (mOnKeyUpNotify != NULL)
-          if (!(mOnKeyUpNotify)(this, msg.wParam, msg.lParam))
-            continue;
-      }
-      if (msg.message == WM_LBUTTONUP){
-        if (mOnLButtonUpNotify != NULL)
-          if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
-            continue;
-
-      }
+      if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
+          mOnKeyDownNotify(this, msg.wParam))
+          continue;
 
       TranslateMessage(&msg);
       if (msg.message != WM_LBUTTONUP ||
@@ -1062,44 +938,11 @@ int WndForm::ShowModal(bool bEnableMap) {
           // if buttons overlap
           WndForm::timeAnyOpenClose.elapsed() > OPENCLOSESUPPRESSTIME)
       {
-        if (DispatchMessage(&msg)){
+        assert_none_locked();
 
-          /*
-          // navigation messages are moved to unhandled messages, duto nav events handling changes in event loop
-          if (msg.message == WM_KEYDOWN){
-            if (ActiveControl != NULL){
-              switch(msg.wParam & 0xffff){
-                case VK_UP:
-                  if (ActiveControl->GetOwner() != NULL)
-                    ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-                continue;
-                case VK_DOWN:
-                  if (ActiveControl->GetOwner() != NULL)
-                    ActiveControl->GetOwner()->FocusNext(ActiveControl);
-                continue;
-              }
-            }
-          } */
+        DispatchMessage(&msg);
 
-        } else {
-
-          /*
-          if (msg.message == WM_KEYDOWN){
-            if (ActiveControl != NULL){
-              switch(msg.wParam & 0xffff){
-                case VK_UP:
-                  if (ActiveControl->GetOwner() != NULL)
-                    ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-                continue;
-                case VK_DOWN:
-                  if (ActiveControl->GetOwner() != NULL)
-                    ActiveControl->GetOwner()->FocusNext(ActiveControl);
-                continue;
-              }
-            }
-          }
-          */
-        } // DispatchMessage
+        assert_none_locked();
       } // timeMsg
   }
   } // End Modal Loop
@@ -1124,7 +967,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   SetFocus(oldFocusHwnd);
 #endif /* !ENABLE_SDL */
 
-  return(mModalResult);
+  return mModalResult;
 }
 
 void
@@ -1180,36 +1023,32 @@ Color WndForm::SetForeColor(Color Value)
 {
   if (mClientWindow)
     mClientWindow->SetForeColor(Value);
-  return(WindowControl::SetForeColor(Value));
+  return WindowControl::SetForeColor(Value);
 }
 
 Color WndForm::SetBackColor(Color Value)
 {
   if (mClientWindow)
   mClientWindow->SetBackColor(Value);
-  return(WindowControl::SetBackColor(Value));
+  return WindowControl::SetBackColor(Value);
 }
 
 const Font *WndForm::SetFont(const Font &Value){
   if (mClientWindow)
     mClientWindow->SetFont(Value);
-  return(WindowControl::SetFont(Value));
+  return WindowControl::SetFont(Value);
 }
 
-
-void WndForm::SetKeyDownNotify(int (*KeyDownNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam)){
+void
+WndForm::SetKeyDownNotify(bool (*KeyDownNotify)(WindowControl *Sender,
+                                                unsigned key_code))
+{
   mOnKeyDownNotify = KeyDownNotify;
 }
 
-void WndForm::SetKeyUpNotify(int (*KeyUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam)){
-  mOnKeyUpNotify = KeyUpNotify;
-}
-
-void WndForm::SetLButtonUpNotify( int (*LButtonUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam)){
-  mOnLButtonUpNotify = LButtonUpNotify;
-}
-
-void WndForm::SetTimerNotify(int (*OnTimerNotify)(WindowControl * Sender)) {
+void
+WndForm::SetTimerNotify(int (*OnTimerNotify)(WindowControl *Sender))
+{
   mOnTimerNotify = OnTimerNotify;
 }
 
@@ -1221,74 +1060,35 @@ WndForm::SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigne
 
 // normal form stuff (nonmodal)
 
-int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
+#ifndef ENABLE_SDL
 
-  MSG msg;
-  msg.hwnd = hwnd;
-  msg.message = uMsg;
-  msg.wParam = wParam;
-  msg.lParam = lParam;
-  msg.time = 0;
-  msg.pt.x = 0;
-  msg.pt.y = 0;
-
-  /*if (msg.message == WM_ACTIVATE){
-    msg.wParam = WA_ACTIVE;
-  }*/
-
-  if (msg.message == WM_KEYUP){
-  }
-  if (msg.message == WM_KEYDOWN){
-    if (mOnKeyDownNotify != NULL)
-      if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
-        return(0);
-
-  }
-  if (msg.message == WM_KEYUP){
-    if (mOnKeyUpNotify != NULL)
-      if (!(mOnKeyUpNotify)(this, msg.wParam, msg.lParam))
-        return(0);
-  }
-  if (msg.message == WM_LBUTTONUP){
-    bLButtonDown=false;
-    if (mOnLButtonUpNotify != NULL)
-      if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
-        return(0);
-
-  }
-
+LRESULT
+WndForm::on_unhandled_message(HWND hwnd, UINT uMsg,
+                              WPARAM wParam, LPARAM lParam)
+{
   if (uMsg == WM_KEYDOWN){
+    if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, wParam))
+      return 0;
+
     if (ActiveControl != NULL){
       switch(wParam & 0xffff){
         case VK_UP:
           if (ActiveControl->GetOwner() != NULL)
             ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-        return(0);
+        return 0;
+
         case VK_DOWN:
           if (ActiveControl->GetOwner() != NULL)
             ActiveControl->GetOwner()->FocusNext(ActiveControl);
-        return(0);
+        return 0;
       }
     }
   }
-  else if (uMsg == WM_LBUTTONDOWN){
-    bLButtonDown=true;
 
-    /*
-
-    SetActiveWindow(hwnd);
-    SetFocus(hwnd);
-
-    if (!IsChild(GetHandle(), GetTopWindow(GetHandle()))){
-      Show();
-    }
-
-    */
-  }
-
-  return(1);
-
+  return WindowControl::on_unhandled_message(hwnd, uMsg, wParam, lParam);
 }
+
+#endif /* !ENABLE_SDL */
 
 void WndForm::Show(void){
 
@@ -1306,13 +1106,17 @@ void WndForm::Show(void){
 // WndButton
 //-----------------------------------------------------------
 
-WndButton::WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption, int X, int Y, int Width, int Height, void(*Function)(WindowControl * Sender)):
-      WindowControl(Parent, NULL /*Parent->GetHandle()*/, Name, X, Y, Width, Height){
+WndButton::WndButton(WindowControl *Parent,
+                     const TCHAR *Name, const TCHAR *Caption,
+                     int X, int Y, int Width, int Height,
+                     void (*Function)(WindowControl *Sender))
+      :WindowControl(Parent, NULL /*Parent->GetHandle()*/, Name, X, Y, Width, Height)
+{
+  SetCanFocus(true);
 
   mOnClickNotify = Function;
   mDown = false;
   mDefault = false;
-  mCanFocus = true;
 
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
@@ -1323,37 +1127,33 @@ WndButton::WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Capt
 
 }
 
-void WndButton::Destroy(void){
-
+void
+WndButton::Destroy(void)
+{
   WindowControl::Destroy();
-
 }
-
 
 bool
 WndButton::on_mouse_up(int x, int y)
 {
-  POINT Pos;
+  if (has_capture()) {
+    release_capture();
 
-  mDown = false;
-  on_paint(get_canvas());
-  release_capture();
+    if (!mDown)
+      return true;
 
-  Pos.x = x;
-  Pos.y = y;
+    mDown = false;
+    invalidate();
 
-  //POINTSTOPOINT(Pos, MAKEPOINTS(lParam));
-
-  const RECT client_rect = get_client_rect();
-  if (PtInRect(&client_rect, Pos)){
     if (mOnClickNotify != NULL) {
-      RECT mRc = get_position();
+      RECT mRc = get_screen_position();
       SetSourceRectangle(mRc);
       (mOnClickNotify)(this);
     }
-  }
 
-  return true;
+    return true;
+  } else
+    return WindowControl::on_mouse_up(x, y);
 }
 
 
@@ -1361,9 +1161,9 @@ bool
 WndButton::on_key_down(unsigned key_code)
 {
 #ifdef VENTA_DEBUG_EVENT
-	TCHAR ventabuffer[80];
-	wsprintf(ventabuffer,TEXT("ONKEYDOWN key_code=%d"), key_code); // VENTA-
-	DoStatusMessage(ventabuffer);
+  TCHAR ventabuffer[80];
+  wsprintf(ventabuffer,TEXT("ONKEYDOWN key_code=%d"), key_code); // VENTA-
+  DoStatusMessage(ventabuffer);
 #endif
   switch (key_code){
 #ifdef GNAV
@@ -1374,7 +1174,7 @@ WndButton::on_key_down(unsigned key_code)
     case VK_SPACE:
       if (!mDown){
         mDown = true;
-        on_paint(get_canvas());
+        invalidate();
       }
       return true;
   }
@@ -1392,12 +1192,14 @@ WndButton::on_key_up(unsigned key_code)
 #endif
     case VK_RETURN:
     case VK_SPACE:
-      if (!XCSoarInterface::Debounce()) return(1); // prevent false trigger
+      if (!XCSoarInterface::Debounce())
+        return 1; // prevent false trigger
       if (mDown){
         mDown = false;
-        on_paint(get_canvas());
+        invalidate();
+
         if (mOnClickNotify != NULL) {
-          RECT mRc = get_position();
+          RECT mRc = get_screen_position();
           SetSourceRectangle(mRc);
           (mOnClickNotify)(this);
         }
@@ -1420,6 +1222,21 @@ WndButton::on_mouse_down(int x, int y)
 
   set_capture();
   return true;
+}
+
+bool
+WndButton::on_mouse_move(int x, int y, unsigned keys)
+{
+  if (has_capture()) {
+    bool in = in_client_rect(x, y);
+    if (in != mDown) {
+      mDown = in;
+      invalidate();
+    }
+
+    return true;
+  } else
+    return WindowControl::on_mouse_move(x, y, keys);
 }
 
 bool
@@ -1476,7 +1293,7 @@ WndButton::on_paint(Canvas &canvas)
 
     }
 
-    rc.top += ((GetHeight()-4-mLastDrawTextHeight)/2);
+    rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
 
     canvas.formatted_text(&rc, mCaption,
         DT_EXPANDTABS
@@ -1585,6 +1402,7 @@ WndProperty::Editor::on_setfocus()
   KeyTimer(true, 0);
   EditWindow::on_setfocus();
   parent->on_editor_setfocus();
+  set_selection();
   return true;
 }
 
@@ -1600,21 +1418,23 @@ WndProperty::Editor::on_killfocus()
 Bitmap WndProperty::hBmpLeft32;
 Bitmap WndProperty::hBmpRight32;
 
-int     WndProperty::InstCount=0;
+int WndProperty::InstCount = 0;
 
 WndProperty::WndProperty(WindowControl *Parent,
-			 TCHAR *Name,
-			 TCHAR *Caption,
-			 int X, int Y,
-			 int Width, int Height,
-			 int CaptionWidth,
-			 int (*DataChangeNotify)(WindowControl * Sender,
-						 int Mode, int Value),
-			 int MultiLine):
-  WindowControl(Parent,
-		NULL /*Parent->GetHandle()*/,
-		Name, X, Y, Width, Height),
-  edit(this) {
+                         TCHAR *Name,
+                         TCHAR *Caption,
+                         int X, int Y,
+                         int Width, int Height,
+                         int CaptionWidth,
+                         int (*DataChangeNotify)(WindowControl *Sender,
+                                                 int Mode, int Value),
+                         int MultiLine)
+  :WindowControl(Parent,
+                 NULL /*Parent->GetHandle()*/,
+                 Name, X, Y, Width, Height),
+  edit(this)
+{
+  SetCanFocus(true);
 
   mOnClickUpNotify = NULL;
   mOnClickDownNotify = NULL;
@@ -1685,7 +1505,15 @@ void WndProperty::Destroy(void){
 
 }
 
+Window *
+WndProperty::GetCanFocus()
+{
+  Window *w = WindowControl::GetCanFocus();
+  if (w == this)
+    return &edit;
 
+  return w;
+}
 
 void WndProperty::SetText(const TCHAR *Value){
   edit.set_text(Value);
@@ -1702,7 +1530,7 @@ const Font *WndProperty::SetFont(const Font &Value){
     mhValueFont = &Value;
     edit.set_font(Value);
   }
-  return(res);
+  return res;
 }
 
 void WndProperty::UpdateButtonData(int Value){
@@ -1712,16 +1540,18 @@ void WndProperty::UpdateButtonData(int Value){
   else
     mBitmapSize = DLGSCALE(32)/2;
 
+  const SIZE size = get_size();
+
   if (mCaptionWidth != 0){
-    mEditSize.x = GetWidth()- mCaptionWidth - (DEFAULTBORDERPENWIDTH+1) - mBitmapSize;
-    mEditSize.y = GetHeight()-2*(DEFAULTBORDERPENWIDTH+1);
+    mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1) - mBitmapSize;
+    mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);
     mEditPos.x = mCaptionWidth;
     mEditPos.y = (DEFAULTBORDERPENWIDTH+1);
   } else {
-    mEditSize.x = GetWidth()- 2*((DEFAULTBORDERPENWIDTH+1)+mBitmapSize);
-    mEditSize.y = (GetHeight()/2);
+    mEditSize.x = size.cx - 2 * (DEFAULTBORDERPENWIDTH + 1 + mBitmapSize);
+    mEditSize.y = size.cy / 2;
     mEditPos.x = mBitmapSize + (DEFAULTBORDERPENWIDTH+2);
-    mEditPos.y = (GetHeight()/2)-2*(DEFAULTBORDERPENWIDTH+1);
+    mEditPos.y = size.cy / 2 - 2 * (DEFAULTBORDERPENWIDTH + 1);
   }
 
   mHitRectDown.left = mEditPos.x-mBitmapSize;
@@ -1729,7 +1559,7 @@ void WndProperty::UpdateButtonData(int Value){
   mHitRectDown.right = mHitRectDown.left + mBitmapSize;
   mHitRectDown.bottom = mHitRectDown.top + mBitmapSize;
 
-  mHitRectUp.left = GetWidth()-(mBitmapSize+2);
+  mHitRectUp.left = size.cx - (mBitmapSize + 2);
   mHitRectUp.top = mHitRectDown.top;
   mHitRectUp.right = mHitRectUp.left + mBitmapSize;
   mHitRectUp.bottom = mHitRectUp.top + mBitmapSize;
@@ -1747,7 +1577,7 @@ int WndProperty::SetButtonSize(int Value){
 
     invalidate();
   }
-  return(res);
+  return res;
 }
 
 bool WndProperty::SetReadOnly(bool Value){
@@ -1760,21 +1590,7 @@ bool WndProperty::SetReadOnly(bool Value){
     edit.set_read_only(Value);
   }
 
-  return(res);
-}
-
-bool
-WndProperty::on_setfocus()
-{
-  edit.set_focus();
-  edit.set_selection();
-  return true;
-}
-
-bool
-WndProperty::on_killfocus()
-{
-  return true;
+  return res;
 }
 
 void
@@ -1820,21 +1636,6 @@ WndProperty::OnEditKeyDown(unsigned key_code)
 }
 
 bool
-WndProperty::on_key_down(unsigned key_code)
-{
-  switch (key_code){
-    case VK_RIGHT:
-      IncValue();
-      return true;
-    case VK_LEFT:
-      DecValue();
-      return true;
-  }
-
-  return WindowControl::on_key_down(key_code);
-}
-
-bool
 WndProperty::on_mouse_down(int x, int y)
 {
   POINT Pos;
@@ -1855,7 +1656,7 @@ WndProperty::on_mouse_down(int x, int y)
 
     if (!GetFocused()){
       if (!GetReadOnly())
-        set_focus();
+        edit.set_focus();
       return true;
     }
 
@@ -1917,7 +1718,7 @@ int WndProperty::CallSpecial(void){
     mDataField->Special();
     edit.set_text(mDataField->GetAsString());
   }
-  return(0);
+  return 0;
 }
 
 int WndProperty::IncValue(void){
@@ -1925,7 +1726,7 @@ int WndProperty::IncValue(void){
     mDataField->Inc();
     edit.set_text(mDataField->GetAsString());
   }
-  return(0);
+  return 0;
 }
 
 int WndProperty::DecValue(void){
@@ -1933,24 +1734,17 @@ int WndProperty::DecValue(void){
     mDataField->Dec();
     edit.set_text(mDataField->GetAsString());
   }
-  return(0);
+  return 0;
 }
 
 
 void
 WndProperty::on_paint(Canvas &canvas)
 {
-
-  RECT r;
   SIZE tsize;
   POINT org;
 
   WindowControl::on_paint(canvas);
-
-  r.left = 0;
-  r.top = 0;
-  r.right = GetWidth();
-  r.bottom = GetHeight();
 
   canvas.set_text_color(GetForeColor());
 
@@ -1971,7 +1765,7 @@ WndProperty::on_paint(Canvas &canvas)
     org.y = mEditPos.y - tsize.cy;
   } else {
     org.x = mCaptionWidth - mBitmapSize - (tsize.cx + 1);
-    org.y = (GetHeight() - tsize.cy)/2;
+    org.y = (get_size().cy - tsize.cy) / 2;
   }
 
   if (org.x < 1)
@@ -1981,27 +1775,22 @@ WndProperty::on_paint(Canvas &canvas)
 
   canvas.text_opaque(org.x, org.y, mCaption);
 
-    if (mDialogStyle) // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
-    {     // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
-    }
-    else
-    {
+  // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
+  // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
+  if (!mDialogStyle && GetFocused() && !GetReadOnly()) {
+    BitmapCanvas bitmap_canvas(canvas);
 
-      if (GetFocused() && !GetReadOnly()){
-      BitmapCanvas bitmap_canvas(canvas);
+    bitmap_canvas.select(hBmpLeft32);
+    canvas.stretch(mHitRectDown.left, mHitRectDown.top,
+                   mBitmapSize, mBitmapSize,
+                   bitmap_canvas,
+                   mDownDown ? 32 : 0, 0, 32, 32);
 
-      bitmap_canvas.select(hBmpLeft32);
-      canvas.stretch(mHitRectDown.left, mHitRectDown.top,
-                     mBitmapSize, mBitmapSize,
-                     bitmap_canvas,
-                     mDownDown ? 32 : 0, 0, 32, 32);
-
-      bitmap_canvas.select(hBmpRight32);
-      canvas.stretch(mHitRectUp.left, mHitRectUp.top,
-                     mBitmapSize, mBitmapSize,
-                     bitmap_canvas,
-                     mUpDown ? 32 : 0, 0, 32, 32);
-    }
+    bitmap_canvas.select(hBmpRight32);
+    canvas.stretch(mHitRectUp.left, mHitRectUp.top,
+                   mBitmapSize, mBitmapSize,
+                   bitmap_canvas,
+                   mUpDown ? 32 : 0, 0, 32, 32);
   }
 }
 
@@ -2038,9 +1827,7 @@ DataField *WndProperty::SetDataField(DataField *Value){
 
     mDataField->GetData();
 
-
-
-    mDialogStyle=ENABLECOMBO;
+    mDialogStyle = has_pointer();
 
     if (mDataField->SupportCombo == false )
       mDialogStyle=false;
@@ -2049,7 +1836,6 @@ DataField *WndProperty::SetDataField(DataField *Value){
     if (mDialogStyle)
     {
       this->SetButtonSize(0);
-      this->SetCanFocus(true);
     }
     else
     {
@@ -2060,7 +1846,7 @@ DataField *WndProperty::SetDataField(DataField *Value){
 
   }
 
-  return(res);
+  return res;
 
 }
 
@@ -2089,26 +1875,9 @@ void WndFrame::Destroy(void){
 
 }
 
-
-bool
-WndFrame::on_key_down(unsigned key_code)
-{
-  if (mIsListItem && GetOwner()!=NULL){
-    RECT mRc = get_position();
-    SetSourceRectangle(mRc);
-    return(((WndListFrame*)GetOwner())->OnItemKeyDown(this, key_code, 0));
-  }
-
-  return WindowControl::on_key_down(key_code);
-}
-
 void
 WndFrame::on_paint(Canvas &canvas)
 {
-  if (mIsListItem && GetOwner()!=NULL) {
-    ((WndListFrame*)GetOwner())->PrepareItemDraw();
-  }
-
   WindowControl::on_paint(canvas);
 
   if (mCaption != 0){
@@ -2145,7 +1914,7 @@ UINT WndFrame::SetCaptionStyle(UINT Value){
     mCaptionStyle = Value;
     invalidate();
   }
-  return(res);
+  return res;
 }
 
 unsigned
@@ -2154,19 +1923,206 @@ WndFrame::GetTextHeight()
   RECT rc = get_client_rect();
   ::InflateRect(&rc, -2, -2); // todo border width
 
-  Canvas &canvas = GetCanvas();
+  Canvas &canvas = get_canvas();
   canvas.select(*GetFont());
   canvas.formatted_text(&rc, mCaption, mCaptionStyle | DT_CALCRECT);
 
   return rc.bottom - rc.top;
 }
 
-WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
-                           int Width, int Height,
-                           void (*OnListCallback)(WindowControl * Sender,
+WndListFrame::ScrollBar::ScrollBar()
+  :dragging(false)
+{
+  SetRectEmpty(&rc);
+  SetRectEmpty(&button);
+}
+
+void
+WndListFrame::ScrollBar::set(const SIZE size)
+{
+  unsigned width;
+
+  if (has_pointer()) {
+    // shrink width factor.  Range .1 to 1 where 1 is very "fat"
+    double SHRINKSBFACTOR = is_pna() ? 1.0 : 0.75;
+
+    width = (unsigned) (SCROLLBARWIDTH_INITIAL * InfoBoxLayout::dscale * SHRINKSBFACTOR);
+
+    // resize height for each dialog so top button is below 1st item (to avoid initial highlighted overlap)
+  } else {
+    // thin for ALTAIR b/c no touch screen
+    width = SELECTORWIDTH * 2;
+  }
+
+  rc.left = size.cx - width;
+  rc.top = 0;
+  rc.right = size.cx;
+  rc.bottom = size.cy;
+
+  if (!hScrollBarBitmapTop.defined())
+    hScrollBarBitmapTop.load(IDB_SCROLLBARTOP);
+  if (!hScrollBarBitmapMid.defined())
+    hScrollBarBitmapMid.load(IDB_SCROLLBARMID);
+  if (!hScrollBarBitmapBot.defined())
+    hScrollBarBitmapBot.load(IDB_SCROLLBARBOT);
+  if (!hScrollBarBitmapFill.defined())
+    hScrollBarBitmapFill.load(IDB_SCROLLBARFILL);
+}
+
+void
+WndListFrame::ScrollBar::reset()
+{
+  SetRectEmpty(&rc);
+  SetRectEmpty(&button);
+}
+
+void
+WndListFrame::ScrollBar::set_button(unsigned size, unsigned view_size,
+                                    unsigned origin)
+{
+  const int netto_height = get_netto_height();
+
+  int height = size > 0 ? netto_height * view_size / size : netto_height;
+  if (height < get_width())
+    height = get_width();
+
+  int max_origin = size - view_size;
+  int top = max_origin > 0
+    ? (netto_height - height) * origin / max_origin
+    : 0;
+
+  if (top + height > netto_height)
+    height = netto_height - top;
+
+  button.left = rc.left;
+  button.top = rc.top + get_width() + top - 1;
+  button.right = rc.right - 1; // -2 if use 3x pen.  -1 if 2x pen
+  button.bottom = button.top + height + 2; // +2 for 3x pen, +1 for 2x pen
+}
+
+unsigned
+WndListFrame::ScrollBar::to_origin(unsigned size, unsigned view_size,
+                                   int y) const
+{
+  int max_origin = size - view_size;
+  if (max_origin <= 0)
+    return 0;
+
+  y -= rc.top + get_width();
+  if (y < 0)
+    return 0;
+
+  unsigned origin = y * max_origin / get_scroll_height();
+  return min(origin, (unsigned)max_origin);
+}
+
+void
+WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
+{
+  Brush brush(Color(0xff, 0xff, 0xff));
+  Pen pen(DEFAULTBORDERPENWIDTH, fore_color);
+  canvas.select(pen);
+
+  // draw rectangle around entire scrollbar area
+  canvas.two_lines(rc.left, rc.top, rc.left, rc.bottom,
+                   rc.right, rc.bottom);
+  canvas.two_lines(rc.right, rc.bottom, rc.right, rc.top,
+                   rc.left, rc.top);
+
+  // Just Scroll Bar Slider button
+
+  bool bTransparentUpDown = true;
+
+  BitmapCanvas bitmap_canvas(canvas);
+
+  // TOP Dn Button 32x32
+  // BOT Up Button 32x32
+  if (get_width() == SCROLLBARWIDTH_INITIAL) {
+    bitmap_canvas.select(hScrollBarBitmapTop);
+    canvas.copy(rc.left, rc.top,
+                SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
+                bitmap_canvas, 0, 0,
+                bTransparentUpDown);
+
+    bitmap_canvas.select(hScrollBarBitmapBot);
+    canvas.copy(rc.left, rc.bottom - SCROLLBARWIDTH_INITIAL,
+                SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
+                bitmap_canvas, 0, 0,
+                bTransparentUpDown);
+  } else {
+    bitmap_canvas.select(hScrollBarBitmapTop);
+    canvas.stretch(rc.left, rc.top, get_width(), get_width(),
+                   bitmap_canvas,
+                   0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
+                   bTransparentUpDown);
+
+    // BOT Up Button 32x32
+    bitmap_canvas.select(hScrollBarBitmapBot);
+    canvas.stretch(rc.left, rc.bottom - get_width(), get_width(), get_width(),
+                   bitmap_canvas,
+                   0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
+                   bTransparentUpDown);
+  }
+
+  // Middle Slider Button 30x28
+
+  // handle on slider
+  bitmap_canvas.select(hScrollBarBitmapMid);
+  // always SRCAND b/c on top of scrollbutton texture
+  canvas.stretch_and(button.left + 1, button.top + 1,
+                     button.right - button.left - 2,
+                     button.bottom - button.top - 2,
+                     bitmap_canvas, 0, 0, 30, 28);
+
+  // box around slider rect
+  Pen pen3(DEFAULTBORDERPENWIDTH * 2, fore_color);
+  int iBorderOffset = 1;  // set to 1 if BORDERWIDTH >2, else 0
+  canvas.select(pen3);
+  canvas.two_lines(button.left + iBorderOffset, button.top,
+                   button.left + iBorderOffset, button.bottom,
+                   button.right, button.bottom); // just left line of scrollbar
+  canvas.two_lines(button.right, button.bottom,
+                   button.right, button.top,
+                   button.left + iBorderOffset, button.top); // just left line of scrollbar
+}
+
+void
+WndListFrame::ScrollBar::drag_begin(Window *w, unsigned y)
+{
+  assert(!dragging);
+
+  drag_offset = y - button.top;
+  dragging = true;
+  w->set_capture();
+}
+
+void
+WndListFrame::ScrollBar::drag_end(Window *w)
+{
+  if (!dragging)
+    return;
+
+  dragging = false;
+  w->release_capture();
+}
+
+unsigned
+WndListFrame::ScrollBar::drag_move(unsigned size, unsigned view_size,
+                                   int y) const
+{
+  assert(dragging);
+
+  return to_origin(size, view_size, y - drag_offset);
+}
+
+WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
+                           int X, int Y, int Width, int Height,
+                           void (*OnListCallback)(WindowControl *Sender,
                                                   ListInfo_t *ListInfo)):
   WndFrame(Owner, Name, X, Y, Width, Height)
 {
+  SetCanFocus(true);
+  PaintSelector(true);
 
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
@@ -2182,20 +2138,6 @@ WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
   mOnListEnterCallback = NULL;
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
-  mMouseDown = false;
-  ScrollbarWidth=-1;
-  ScrollbarTop=-1;
-
-  rcScrollBarButton.top=0; // make sure this rect is initialized so we don't "loose" random lbuttondown events if scrollbar not drawn
-  rcScrollBarButton.bottom=0;
-  rcScrollBarButton.left=0;
-  rcScrollBarButton.right=0;
-
-  rcScrollBar.left=0;  // don't need to initialize this rect, but it's good practice
-  rcScrollBar.right=0;
-  rcScrollBar.top=0;
-  rcScrollBar.bottom=0;
-
 }
 
 
@@ -2205,6 +2147,36 @@ void WndListFrame::Destroy(void){
 
 }
 
+void
+WndListFrame::show_or_hide_scroll_bar()
+{
+  if (mClientCount == 0)
+    return;
+
+  const SIZE size = get_size();
+
+  if (mListInfo.ItemCount > mListInfo.ItemInViewCount)
+    /* enable the scroll bar */
+    scroll_bar.set(size);
+  else
+    /* all items are visible - hide the scroll bar */
+    scroll_bar.reset();
+
+  /* now resize the item renderer, according to the width of the
+     scroll bar */
+
+  const RECT rc = mClients[0]->get_position();
+  mClients[0]->resize(scroll_bar.get_left(size) - rc.left * 2,
+                      rc.bottom - rc.top);
+}
+
+bool
+WndListFrame::on_resize(unsigned width, unsigned height)
+{
+  WndFrame::on_resize(width, height);
+  show_or_hide_scroll_bar();
+  return true;
+}
 
 void
 WndListFrame::on_paint(Canvas &canvas)
@@ -2226,252 +2198,41 @@ WndListFrame::on_paint(Canvas &canvas)
   WndFrame::on_paint(canvas);
 
   if (mClientCount > 0){
-    Viewport viewport(canvas, mClients[0]->GetWidth(),
-                      mClients[0]->GetHeight());
+    const RECT rc = mClients[0]->get_position();
+
+    Viewport viewport(canvas, rc.right - rc.left, rc.bottom - rc.top);
     Canvas &canvas2 = viewport;
 
-    viewport.move(mClients[0]->GetLeft(), 0);
+    viewport.move(rc.left, rc.top);
 
     for (i=0; i<mListInfo.ItemInViewCount; i++){
       canvas2.select(*mClients[0]->GetFont());
 
       if (mOnListCallback != NULL){
         mListInfo.DrawIndex = mListInfo.TopIndex + i;
-        if (mListInfo.DrawIndex == mListInfo.ItemIndex) {
-          viewport.move(0, mClients[0]->GetHeight());
-          continue;
-        }
         mOnListCallback(this, &mListInfo);
       }
 
-      mClients[0]->PaintSelector(true);
+      mClients[0]->PaintSelector(mListInfo.DrawIndex != mListInfo.ItemIndex);
       mClients[0]->on_paint(canvas2);
-      mClients[0]->PaintSelector(false);
 
       viewport.commit();
-      viewport.move(0, mClients[0]->GetHeight());
+      viewport.move(0, rc.bottom - rc.top);
     }
 
     viewport.restore();
-
-    mListInfo.DrawIndex = mListInfo.ItemIndex;
 
     DrawScrollBar(canvas);
   }
 }
 
-void WndListFrame::Redraw(void){
-  WindowControl::Redraw();  // redraw all but not the current
-  mClients[0]->Redraw();    // redraw the current
-}
-
-
 void WndListFrame::DrawScrollBar(Canvas &canvas) {
-#ifdef GNAVxxx  // Johnny, I think this GNAVxxx section can be removed entirely in place of the adjustment to the width below. - RLD
-
-  RECT rc;
-  int w = 1+GetWidth()- 2*SELECTORWIDTH;
-  int h = GetHeight()- SELECTORWIDTH;
-
-  rc.left = w;
-  rc.top = 0;
-  rc.right = w + 2*SELECTORWIDTH - 2;
-  rc.bottom = h;
-
-  if (mListInfo.ItemCount <= mListInfo.ItemInViewCount){
-    Brush brush(GetBackColor());
-    canvas.fill_rectangle(rc, brush);
+  if (!scroll_bar.defined())
     return;
-  }
 
-  hP = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH, GetForeColor());
-
-  SelectObject(hDC, hP);
-  SelectObject(hDC, GetBackBrush());
-
-  Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
-
-  DeleteObject(hP);
-
-  Brush brush(GetForeColor());
-
-  rc.left = 1+w;
-  rc.top = 1+(h * mListInfo.ScrollIndex) / mListInfo.ItemCount;
-  rc.right = w + 2*SELECTORWIDTH - 1;
-  rc.bottom = rc.top + iround((h * mListInfo.ItemInViewCount)
-			      / mListInfo.ItemCount)-1;
-
-  if (rc.bottom >= h){
-    int d;
-    d= (h - rc.bottom) - 1;
-    rc.bottom += d;
-    rc.top += d;
-  }
-
-  canvas.fill_rectangle(rc, brush);
-#else   // GNAVxxx
-
-  static Bitmap hScrollBarBitmapTop;
-  static Bitmap hScrollBarBitmapMid;
-  static Bitmap hScrollBarBitmapBot;
-  static Bitmap hScrollBarBitmapFill;
-  RECT rc;
-
-  if ( ScrollbarWidth == -1) {  // resize height for each dialog so top button is below 1st item (to avoid initial highlighted overlap)
-#ifdef GNAV
-    ScrollbarWidth = (int) (SELECTORWIDTH * 2);  // thin for GNAV b/c no touch screen
-    ScrollbarTop = 1;
-#else
-
-#if defined (PNA)
-  #define SHRINKSBFACTOR 1.0 // shrink width factor.  Range .1 to 1 where 1 is very "fat"
-#else
-  #define SHRINKSBFACTOR 0.75  // shrink width factor.  Range .1 to 1 where 1 is very "fat"
-#endif
-    ScrollbarWidth = (int) (SCROLLBARWIDTH_INITIAL * InfoBoxLayout::dscale * SHRINKSBFACTOR);
-    if (mClientCount > 0) {
-      ScrollbarTop = mClients[0]->GetHeight() + 2;
-    }
-    else {
-      ScrollbarTop = (int)(18.0 * InfoBoxLayout::dscale + 2);
-    }
-
-#endif
-  }
-
-
-  int w = GetWidth()- (ScrollbarWidth);
-  int h = GetHeight() - ScrollbarTop;
-
-  if (!hScrollBarBitmapTop.defined())
-    hScrollBarBitmapTop.load(IDB_SCROLLBARTOP);
-  if (!hScrollBarBitmapMid.defined())
-    hScrollBarBitmapMid.load(IDB_SCROLLBARMID);
-  if (!hScrollBarBitmapBot.defined())
-    hScrollBarBitmapBot.load(IDB_SCROLLBARBOT);
-  if (!hScrollBarBitmapFill.defined())
-    hScrollBarBitmapFill.load(IDB_SCROLLBARFILL);
-
-  Brush brush(Color(0xff, 0xff, 0xff));
-  Pen pen(DEFAULTBORDERPENWIDTH, GetForeColor());
-  canvas.select(pen);
-
-  // ENTIRE SCROLLBAR AREA
-  rc.left = w;
-  rc.top = ScrollbarTop;
-  rc.right = w + (ScrollbarWidth) - 1;
-  rc.bottom = h + ScrollbarTop;
-
-  // save scrollbar size for mouse events
-  rcScrollBar.left=rc.left;
-  rcScrollBar.right=rc.right;
-  rcScrollBar.top=rc.top;
-  rcScrollBar.bottom=rc.bottom;
-
-  if (mListInfo.BottomIndex == mListInfo.ItemCount) { // don't need scroll bar if one page only
-    return;
-  }
-
-  // draw rectangle around entire scrollbar area
-  canvas.two_lines(rc.left, rc.top, rc.left, rc.bottom, rc.right, rc.bottom);
-  canvas.two_lines(rc.right, rc.bottom, rc.right, rc.top, rc.left, rc.top);
-
-  // Just Scroll Bar Slider button
-  rc.left = w;
-  rc.top = GetScrollBarTopFromScrollIndex()-1;
-  rc.right = w + (ScrollbarWidth) - 1; // -2 if use 3x pen.  -1 if 2x pen
-  rc.bottom = rc.top + GetScrollBarHeight()+2;  // +2 for 3x pen, +1 for 2x pen
-
-  if (rc.bottom >= GetHeight() - ScrollbarWidth){
-    int d;
-    d= (GetHeight() - ScrollbarWidth - rc.bottom) - 1;
-    rc.bottom += d;
-    rc.top += d;
-  }
-
-  bool bTransparentUpDown = true;
-
-  BitmapCanvas bitmap_canvas(canvas);
-
-  // TOP Dn Button 32x32
-  // BOT Up Button 32x32
-  if (ScrollbarWidth == SCROLLBARWIDTH_INITIAL)
-    {
-      bitmap_canvas.select(hScrollBarBitmapTop);
-      canvas.copy(w, ScrollbarTop,
-                  SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-                  bitmap_canvas, 0, 0,
-                  bTransparentUpDown);
-
-      bitmap_canvas.select(hScrollBarBitmapBot);
-      canvas.copy(w, h - SCROLLBARWIDTH_INITIAL + ScrollbarTop,
-                  SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-                  bitmap_canvas, 0, 0,
-                  bTransparentUpDown);
-    }
-  else
-    {
-      bitmap_canvas.select(hScrollBarBitmapTop);
-      canvas.stretch(w, ScrollbarTop,
-                     ScrollbarWidth, ScrollbarWidth,
-                     bitmap_canvas,
-                     0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-                     bTransparentUpDown);
-
-      // BOT Up Button 32x32
-      bitmap_canvas.select(hScrollBarBitmapBot);
-      canvas.stretch(w, h - ScrollbarWidth + ScrollbarTop,
-                     ScrollbarWidth, ScrollbarWidth,
-                     bitmap_canvas,
-                     0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
-                     bTransparentUpDown);
-    }
-
-  // Middle Slider Button 30x28
-  if (mListInfo.ItemCount > mListInfo.ItemInViewCount){
-
-    // handle on slider
-    bitmap_canvas.select(hScrollBarBitmapMid);
-    if (ScrollbarWidth == SCROLLBARWIDTH_INITIAL)
-      {
-        canvas.copy_and(w + 1, rc.top + GetScrollBarHeight() / 2 - 14, 30, 28,
-                        bitmap_canvas, 0, 0);
-        // always SRCAND b/c on top of scrollbutton texture
-      }
-    else
-      {
-        static int SCButtonW = -1;
-        static int SCButtonH = -1;
-        static int SCButtonY = -1;
-        if (SCButtonW == -1) {
-          SCButtonW = (int) (30.0 * (float)ScrollbarWidth / (float)SCROLLBARWIDTH_INITIAL);
-          SCButtonH = (int) (28.0 * (float)ScrollbarWidth / (float)SCROLLBARWIDTH_INITIAL);
-          SCButtonY = (int) (14.0 * (float)ScrollbarWidth / (float)SCROLLBARWIDTH_INITIAL);
-        }
-
-        canvas.stretch_and(w + 1, rc.top + GetScrollBarHeight() / 2 - SCButtonY,
-                           SCButtonW, SCButtonH,
-                           bitmap_canvas, 0, 0, 30, 28);
-        // always SRCAND b/c on top of scrollbutton texture
-      }
-
-    // box around slider rect
-    Pen pen3(DEFAULTBORDERPENWIDTH * 2, GetForeColor());
-    int iBorderOffset = 1;  // set to 1 if BORDERWIDTH >2, else 0
-    canvas.select(pen3);
-    canvas.two_lines(rc.left + iBorderOffset, rc.top,
-                     rc.left + iBorderOffset, rc.bottom,
-                     rc.right, rc.bottom); // just left line of scrollbar
-    canvas.two_lines(rc.right, rc.bottom,
-                     rc.right, rc.top,
-                     rc.left + iBorderOffset, rc.top); // just left line of scrollbar
-  } // more items than fit on screen
-
-  rcScrollBarButton.left=rc.left;
-  rcScrollBarButton.right=rc.right;
-  rcScrollBarButton.top=rc.top;
-  rcScrollBarButton.bottom=rc.bottom;
-#endif // GNAVxxx
+  scroll_bar.set_button(mListInfo.ItemCount, mListInfo.ItemInViewCount,
+                        mListInfo.ScrollIndex);
+  scroll_bar.paint(canvas, GetForeColor());
 }
 
 
@@ -2481,39 +2242,6 @@ void WndListFrame::SetEnterCallback(void
 {
   mOnListEnterCallback = OnListCallback;
 }
-
-
-void WndListFrame::RedrawScrolled(bool all) {
-
-  int newTop;
-
-  /*       -> inefficient and flickering draws the list twice
-  if (all) {
-    int i;
-    for (i=0; i<= mListInfo.ItemInViewCount; i++) {
-      mListInfo.DrawIndex = mListInfo.TopIndex+i;
-      mOnListCallback(this, &mListInfo);
-      mClients[0]->SetTop(mClients[0]->GetHeight() * (i));
-      mClients[0]->Redraw();
-    }
-  }
-  */
-
-  mListInfo.DrawIndex = mListInfo.ItemIndex;
-  mOnListCallback(this, &mListInfo);
-  newTop = mClients[0]->GetHeight() * (mListInfo.ItemIndex - mListInfo.TopIndex);
-  if (newTop == mClients[0]->GetTop()){
-    Redraw();                     // non moving the helper window force redraw
-  } else {
-    mClients[0]->SetTop(newTop);  // moving the helper window invalidate the list window
-    mClients[0]->Redraw();
-
-    // to be optimized: after SetTop Paint redraw all list items
-
-  }
-
-}
-
 
 int WndListFrame::RecalculateIndices(bool bigscroll) {
 
@@ -2527,7 +2255,7 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
     mListInfo.ScrollIndex = max(0,
 			      min(mListInfo.ScrollIndex,
 				  mListInfo.ItemCount-mListInfo.ItemIndex-1));
-    return(1);
+    return 1;
   }
 
 // again, check to see if we're too far off end of list
@@ -2540,12 +2268,12 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
 	&& (mListInfo.ItemIndex+mListInfo.ScrollIndex < mListInfo.ItemCount)) {
       mListInfo.ScrollIndex++;
       mListInfo.ItemIndex = mListInfo.BottomIndex-1;
-      // JMW scroll
-      RedrawScrolled(true);
-      return(0);
+
+      invalidate();
+      return 0;
     } else {
       mListInfo.ItemIndex = mListInfo.BottomIndex-1;
-      return(1);
+      return 1;
     }
   }
   if (mListInfo.ItemIndex < 0){
@@ -2554,75 +2282,92 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
     // JMW scroll
     if (mListInfo.ScrollIndex>0) {
       mListInfo.ScrollIndex--;
-      RedrawScrolled(true);
-      return(0);
+      invalidate();
+      return 0;
     } else {
       // only return if no more scrolling left to do
-      return(1);
+      return 1;
     }
   }
-  RedrawScrolled(bigscroll);
+
+  invalidate();
   return (0);
 }
 
+bool
+WndListFrame::on_key_down(unsigned key_code)
+{
+  // XXX SetSourceRectangle(mRc);
 
-int WndListFrame::OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam){
-	(void)Sender;
-	(void)lParam;
-  switch (wParam){
+  scroll_bar.drag_end(this);
+
+  switch (key_code) {
 #ifdef GNAV
     // JMW added this to make data entry easier
-    case VK_F4:
+  case VK_F4:
 #endif
   case VK_RETURN:
-    if (mOnListEnterCallback) {
-      mOnListEnterCallback(this, &mListInfo);
-      RedrawScrolled(false);
-      return(0);
-    } else
-      return(1);
+    if (mOnListEnterCallback == NULL)
+      break;
+
+    mOnListEnterCallback(this, &mListInfo);
+    invalidate();
     //#ifndef GNAV
+
   case VK_LEFT:
-    if ((mListInfo.ScrollIndex>0)
-	&&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
-      mListInfo.ScrollIndex -= mListInfo.ItemInPageCount;
-    }
-    return RecalculateIndices(true);
+    if (mListInfo.ScrollIndex <= 0 ||
+        mListInfo.ItemCount <= mListInfo.ItemInPageCount)
+      break;
+
+    mListInfo.ScrollIndex -= mListInfo.ItemInPageCount;
+    RecalculateIndices(true);
+    return true;
+
   case VK_RIGHT:
-    if ((mListInfo.ItemIndex+mListInfo.ScrollIndex<
-	 mListInfo.ItemCount)
-	&&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
-      mListInfo.ScrollIndex += mListInfo.ItemInPageCount;
-    }
-    return RecalculateIndices(true);
+    if (mListInfo.ItemIndex + mListInfo.ScrollIndex >= mListInfo.ItemCount ||
+        mListInfo.ItemCount <= mListInfo.ItemInPageCount)
+      break;
+
+    mListInfo.ScrollIndex += mListInfo.ItemInPageCount;
+    RecalculateIndices(true);
+    return true;
+
     //#endif
   case VK_DOWN:
-
+    if (mListInfo.ItemIndex + mListInfo.ScrollIndex >= mListInfo.ItemCount)
+      break;
 
     mListInfo.ItemIndex++;
-    return RecalculateIndices(false);
-  case VK_UP:
-    mListInfo.ItemIndex--;
-    return RecalculateIndices(false);
-  }
-  mMouseDown=false;
-  return(1);
+    RecalculateIndices(false);
+    return true;
 
+  case VK_UP:
+    if (mListInfo.ItemIndex + mListInfo.ScrollIndex <= 0)
+      break;
+
+    mListInfo.ItemIndex--;
+    RecalculateIndices(false);
+    return true;
+  }
+
+  return false;
 }
 
 void WndListFrame::ResetList(void){
+  unsigned height = get_size().cy;
+  unsigned client_height = mClients[0]->get_size().cy;
 
   mListInfo.ScrollIndex = 0;
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
-  mListInfo.ItemInPageCount = ((GetHeight()+mClients[0]->GetHeight()-1)
-			       /mClients[0]->GetHeight())-1;
+  mListInfo.ItemInPageCount = (height + client_height - 1)
+    / client_height - 1;
   mListInfo.TopIndex = 0;
   mListInfo.BottomIndex = 0;
 //  mListInfo.SelectedIndex = 0;
   mListInfo.ItemCount = 0;
-  mListInfo.ItemInViewCount = (GetHeight()+mClients[0]->GetHeight()-1)
-    /mClients[0]->GetHeight()-1;
+  mListInfo.ItemInViewCount = (height + client_height - 1)
+    / client_height - 1;
 
   if (mOnListCallback != NULL){
     mListInfo.DrawIndex = -1;                               // -1 -> initialize data
@@ -2638,47 +2383,15 @@ void WndListFrame::ResetList(void){
     }
   }
 
-  mClients[0]->SetTop(0);     // move item window to the top
-  mClients[0]->Redraw();
-}
-
-int WndListFrame::PrepareItemDraw(void){
-  if (mOnListCallback)
-    mOnListCallback(this, &mListInfo);
-  return(1);
+  show_or_hide_scroll_bar();
 }
 
 bool
 WndListFrame::on_mouse_up(int x, int y)
 {
-    mMouseDown=false;
+  scroll_bar.drag_end(this);
     return false;
 }
-
-static bool isselect = false;
-
-// JMW needed to support mouse/touchscreen
-bool
-WndFrame::on_mouse_down(int xPos, int yPos)
-{
-  if (mIsListItem && GetOwner()!=NULL) {
-
-    if (!GetFocused()) {
-      set_focus();
-      //return(1);
-    }
-    //else {  // always doing this allows selected item in list to remain selected.
-      invalidate();
-    //}
-
-    WndListFrame* wlf = ((WndListFrame*)GetOwner());
-    RECT mRc = get_position();
-    wlf->SelectItemFromScreen(xPos, yPos, &mRc);
-  }
-  isselect = false;
-  return false;
-}
-
 
 void WndListFrame::SetItemIndex(int iValue){
 
@@ -2699,8 +2412,9 @@ void WndListFrame::SetItemIndex(int iValue){
   RecalculateIndices(false);
 }
 
-void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
-                                        RECT *rect) {
+void
+WndListFrame::SelectItemFromScreen(int xPos, int yPos)
+{
   (void)xPos;
 /*  int w = GetWidth()- 4*SELECTORWIDTH;
   int h = GetHeight()- SELECTORWIDTH;
@@ -2715,16 +2429,15 @@ void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
     return;
   }
 */
-  int index;
-  *rect = get_position();
-  index = yPos/mClients[0]->GetHeight(); // yPos is offset within ListEntry item!
+  int index = yPos / mClients[0]->get_size().cy; // yPos is offset within ListEntry item!
 
   if ((index>=0)&&(index<mListInfo.BottomIndex)) {
-    if (!isselect) {
+    if (index == mListInfo.ItemIndex) {
       if (mOnListEnterCallback) {
         mOnListEnterCallback(this, &mListInfo);
       }
-      RedrawScrolled(false);
+
+      invalidate();
     } else {
       mListInfo.ItemIndex = index;
       RecalculateIndices(false);
@@ -2742,27 +2455,19 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
   {
     bMoving=true;
 
-    POINT Pos;
-    Pos.x = x;
-    Pos.y = y;
-
-    if (mMouseDown && PtInRect(&rcScrollBar, Pos))
-    {
-      int iScrollBarTop = max(1, (int)Pos.y - mMouseScrollBarYOffset);
-
-      int iScrollIndex = GetScrollIndexFromScrollBarTop(iScrollBarTop);
+    if (scroll_bar.is_dragging()) {
+      int iScrollIndex = scroll_bar.drag_move(mListInfo.ItemCount,
+                                              mListInfo.ItemInViewCount,
+                                              y);
 
       if(iScrollIndex !=mListInfo.ScrollIndex)
       {
         int iScrollAmount = iScrollIndex - mListInfo.ScrollIndex;
         mListInfo.ScrollIndex = mListInfo.ScrollIndex + iScrollAmount;
-        Redraw();
+        invalidate();
       }
     }
-    else //not in scrollbar
-    {
-      mMouseDown = false; // force re-click of scroll bar
-    }
+
     bMoving=false;
   } // Tickcount
   return false;
@@ -2771,91 +2476,42 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
 bool
 WndListFrame::on_mouse_down(int x, int y)
 {
+  scroll_bar.drag_end(this);
+
   POINT Pos;
   Pos.x = x;
   Pos.y = y;
-  mMouseDown=false;
 
-  if (PtInRect(&rcScrollBarButton, Pos))  // see if click is on scrollbar handle
+  if (!GetFocused())
+    set_focus();
+
+  if (scroll_bar.in_button(Pos)) // see if click is on scrollbar handle
   {
     // start mouse drag
-    mMouseScrollBarYOffset = max(0, (int)(Pos.y - rcScrollBarButton.top));
-    mMouseDown=true;
-
+    scroll_bar.drag_begin(this, Pos.y);
   }
-  else if (PtInRect(&rcScrollBar, Pos)) // clicked in scroll bar up/down/pgup/pgdn
+  else if (scroll_bar.in(Pos)) // clicked in scroll bar up/down/pgup/pgdn
   {
-    if (Pos.y - rcScrollBar.top < (ScrollbarWidth)) // up arrow
+    if (scroll_bar.in_up_arrow(Pos.y))
       mListInfo.ScrollIndex = max(0, mListInfo.ScrollIndex- 1);
-
-    else if (rcScrollBar.bottom -Pos.y < (ScrollbarWidth)  ) //down arrow
+    else if (scroll_bar.in_down_arrow(Pos.y))
       mListInfo.ScrollIndex = max(0,min(mListInfo.ItemCount- mListInfo.ItemInViewCount, mListInfo.ScrollIndex+ 1));
-
-    else if (Pos.y < rcScrollBarButton.top) // page up
+    else if (scroll_bar.above_button(Pos.y)) // page up
       mListInfo.ScrollIndex = max(0, mListInfo.ScrollIndex- mListInfo.ItemInViewCount);
-
-    else // page down
+    else if (scroll_bar.below_button(Pos.y)) // page up
       if (mListInfo.ItemCount > mListInfo.ScrollIndex+ mListInfo.ItemInViewCount)
           mListInfo.ScrollIndex = min ( mListInfo.ItemCount- mListInfo.ItemInViewCount, mListInfo.ScrollIndex +mListInfo.ItemInViewCount);
 
-    Redraw();
-
+    invalidate();
   }
   else
   if (mClientCount > 0)
   {
-    isselect = true;
-    ((WndFrame *)mClients[0])->on_mouse_down(x, y);
+    SelectItemFromScreen(x, y);
   }
 
   return false;
 }
-
-inline int WndListFrame::GetScrollBarHeight (void)
-{
-  int h = GetHeight() - ScrollbarTop;
-  if(mListInfo.ItemCount ==0)
-    return h-2*ScrollbarWidth;
-  else
-    return max(ScrollbarWidth,((h-2*ScrollbarWidth)*mListInfo.ItemInViewCount)/mListInfo.ItemCount);
-}
-
-inline int WndListFrame::GetScrollIndexFromScrollBarTop(int iScrollBarTop)
-{
-  int h = GetHeight() - ScrollbarTop;
-  if (h-2*(ScrollbarWidth) - GetScrollBarHeight() == 0)
-    return 0;
-  else
-
-    return max(0,
-              min(mListInfo.ItemCount - mListInfo.ItemInPageCount,
-              max(0,
-                  ( 0 +
-                    (mListInfo.ItemCount-mListInfo.ItemInViewCount)
-                    * (iScrollBarTop - (ScrollbarWidth)-ScrollbarTop)
-                  )
-                    / ( h-2*(ScrollbarWidth) - GetScrollBarHeight() ) /*-ScrollbarTop(*/
-              )
-           ));
-}
-
-inline int WndListFrame::GetScrollBarTopFromScrollIndex()
-{
-  int iRetVal=0;
-  int h = GetHeight() - ScrollbarTop;
-  if (mListInfo.ItemCount - mListInfo.ItemInViewCount ==0) {
-    iRetVal= h + (ScrollbarWidth);
-  }
-  else {
-    iRetVal =
-      ( (ScrollbarWidth)+ScrollbarTop +
-        (mListInfo.ScrollIndex) *(h-2*(ScrollbarWidth)-GetScrollBarHeight() ) /*-ScrollbarTop*/
-      /(mListInfo.ItemCount - mListInfo.ItemInViewCount)
-      );
-  }
-  return iRetVal;
-}
-
 
 #ifndef ALTAIRSYNC
 #include "InputEvents.h"

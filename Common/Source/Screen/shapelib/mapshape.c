@@ -42,13 +42,12 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
 #include "Screen/shapelib/mapshape.h"
 #include "Screen/shapelib/maperror.h"
 #include "Screen/shapelib/maptree.h"
 
 #include <limits.h>
+#include <string.h>
 #include <stdlib.h>
 
 #if UINT_MAX == 65535

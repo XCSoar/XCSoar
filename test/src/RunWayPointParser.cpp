@@ -90,13 +90,13 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 
 HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal)
 {
-  return NULL;
+  return 0;
 }
 
 HRESULT
 SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
-  return NULL;
+  return 0;
 }
 
 void

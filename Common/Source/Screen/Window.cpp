@@ -48,6 +48,10 @@ Copyright_License {
 
 #include <assert.h>
 
+#ifndef ENABLE_SDL
+#include <windowsx.h>
+#endif
+
 void
 Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
             int left, int top, unsigned width, unsigned height,
@@ -175,7 +179,7 @@ Window::get_root_owner()
 #else
   HWND hRoot = hWnd;
   while (true) {
-    HWND hParent = ::GetParent(hWnd);
+    HWND hParent = ::GetParent(hRoot);
     if (hParent == NULL)
       break;
     hRoot = hParent;
@@ -187,6 +191,17 @@ Window::get_root_owner()
 }
 
 #ifdef ENABLE_SDL
+
+void
+Window::to_screen(RECT &rc) const
+{
+  for (const Window *p = parent; p != NULL; p = p->parent) {
+    rc.left += p->left;
+    rc.top += p->top;
+    rc.right += p->left;
+    rc.bottom += p->top;
+  }
+}
 
 Window *
 Window::get_focused_window()
@@ -395,13 +410,13 @@ Window::on_message(HWND _hWnd, UINT message,
     break;
 
   case WM_MOUSEMOVE:
-    if (on_mouse_move(LOWORD(lParam), HIWORD(lParam), wParam))
+    if (on_mouse_move(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), wParam))
       return 0;
     break;
 
   case WM_LBUTTONDOWN:
     XCSoarInterface::InterfaceTimeoutReset();
-    if (on_mouse_down(LOWORD(lParam), HIWORD(lParam))) {
+    if (on_mouse_down(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -410,7 +425,7 @@ Window::on_message(HWND _hWnd, UINT message,
 
   case WM_LBUTTONUP:
     XCSoarInterface::InterfaceTimeoutReset();
-    if (on_mouse_up(LOWORD(lParam), HIWORD(lParam))) {
+    if (on_mouse_up(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -419,7 +434,7 @@ Window::on_message(HWND _hWnd, UINT message,
 
   case WM_LBUTTONDBLCLK:
     XCSoarInterface::InterfaceTimeoutReset();
-    if (on_mouse_double(LOWORD(lParam), HIWORD(lParam))) {
+    if (on_mouse_double(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;
@@ -486,6 +501,8 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #endif
   };
 
+  assert_none_locked();
+
   if (message == WM_GETMINMAXINFO)
     /* WM_GETMINMAXINFO is called before WM_CREATE, and we havn't set
        a Window pointer yet - let DefWindowProc() handle it */
@@ -502,7 +519,10 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     window = get_unchecked(_hWnd);
   }
 
-  return window->on_message(_hWnd, message, wParam, lParam);
+  LRESULT result = window->on_message(_hWnd, message, wParam, lParam);
+  assert_none_locked();
+
+  return result;
 }
 
 void

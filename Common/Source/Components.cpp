@@ -83,10 +83,14 @@ Copyright_License {
 #include "options.h"
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
+
 #include "Waypoint/Waypoints.hpp"
 #include "Waypointparser.h"
 #include "Airspace/Airspaces.hpp"
 #include "AirspaceGlue.hpp"
+#if defined(__BORLANDC__)  // due to compiler bug
+  #include "Polar/Polar.hpp"
+#endif
 
 Marks *marks;
 TopologyStore *topology;
@@ -420,6 +424,8 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   instrument_thread->start();
 
   globalRunningEvent.trigger();
+  calculation_thread->resume();
+  draw_thread->resume();
 
   return true;
 }

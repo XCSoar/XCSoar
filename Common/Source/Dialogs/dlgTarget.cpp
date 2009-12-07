@@ -229,48 +229,56 @@ static void DragTarget(const GEOPOINT target_location) {
   }
 }
 
-
-static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-	(void)lParam;
+static bool
+FormKeyDown(WindowControl *Sender, unsigned key_code)
+{
 	(void)Sender;
-  switch(wParam & 0xffff){
+  switch(key_code){
     case '2':
 #ifdef GNAV
     case VK_F2:
 #endif
       MoveTarget(0);
-    return(0);
+    return true;
+
     case '3':
 #ifdef GNAV
     case VK_F3:
 #endif
       MoveTarget(180);
-    return(0);
+    return true;
+
     case '6':
       MoveTarget(270);
-    return(0);
+    return true;
+
     case '7':
       MoveTarget(90);
-    return(0);
+    return true;
   }
+
   if (TargetMoveMode) {
     StartupStore(TEXT("moving\n"));
-    switch(wParam & 0xffff){
+    switch (key_code) {
     case VK_UP:
       MoveTarget(0);
-      return(0);
+      return true;
+
     case VK_DOWN:
       MoveTarget(180);
-      return(0);
+      return true;
+
     case VK_LEFT:
       MoveTarget(270);
-      return(0);
+      return true;
+
     case VK_RIGHT:
       MoveTarget(90);
-      return(0);
+      return true;
     }
   }
-  return(1);
+
+  return false;
 }
 
 
@@ -583,7 +591,7 @@ void dlgTarget(void) {
     if (wf2)
     {
       RECT MapRectBig = XCSoarInterface::main_window.map.GetMapRectBig();
-      wf->SetLeft(MapRectBig.right- wf2->GetWidth());
+      wf->move(MapRectBig.top, MapRectBig.right - wf2->get_size().cx);
     }
   }
 

@@ -142,9 +142,12 @@ void MyCompactHeaps() {
 #endif /* WIN32 */
 }
 
-
+/**
+ * Calculates the free disk space for the given path
+ * @param path The path defining the "drive" to look on
+ * @return Number of KiB free on the destination drive
+ */
 unsigned long FindFreeSpace(const TCHAR *path) {
-  // returns number of kb free on destination drive
 #ifdef HAVE_POSIX
   struct statvfs s;
   if (statvfs(path, &s) < 0)

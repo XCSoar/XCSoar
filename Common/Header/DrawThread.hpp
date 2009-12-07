@@ -40,7 +40,6 @@ Copyright_License {
 #define XCSOAR_DRAW_THREAD_HPP
 
 #include "Thread/Thread.hpp"
-#include "Thread/Mutex.hpp"
 #include "Thread/Trigger.hpp"
 
 class MapWindow;
@@ -53,10 +52,9 @@ class GaugeFLARM;
  */
 class DrawThread : public Thread {
   /**
-   * The Mutex gets locked externally the drawing
-   * is hold until release of the Mutex
+   * The drawing thread runs while this trigger is set.
    */
-  Mutex mutexRun;
+  Trigger running;
 
   /** Pointer to the MapWindow */
   MapWindow &map;
@@ -66,16 +64,18 @@ class DrawThread : public Thread {
 
 public:
   DrawThread(MapWindow &_map, GaugeFLARM *_flarm)
-    :map(_map), flarm(_flarm) {}
+    :running(_T("DrawThread::running"), true),
+     map(_map), flarm(_flarm) {
+  }
 
   /** Locks the Mutex and "pauses" the drawing thread */
   void suspend() {
-    mutexRun.Lock();
+    running.reset();
   }
 
   /** Releases the Mutex and "continues" the drawing thread */
   void resume() {
-    mutexRun.Unlock();
+    running.trigger();
   }
 
 private:

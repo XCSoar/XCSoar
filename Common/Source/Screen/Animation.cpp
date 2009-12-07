@@ -42,14 +42,16 @@ Copyright_License {
 #define GdiFlush() do { } while (0)
 #endif
 
-
 static RECT AnimationRectangle = {0,0,0,0};
 
-void SetSourceRectangle(RECT fromRect) {
+void
+SetSourceRectangle(RECT fromRect)
+{
   AnimationRectangle = fromRect;
 }
 
-RECT WINAPI DrawWireRects(const bool enable, LPRECT lprcTo, UINT nMilliSecSpeed)
+RECT WINAPI
+DrawWireRects(const bool enable, LPRECT lprcTo, UINT nMilliSecSpeed)
 {
 #ifdef ENABLE_SDL
   return AnimationRectangle;
@@ -72,40 +74,47 @@ RECT WINAPI DrawWireRects(const bool enable, LPRECT lprcTo, UINT nMilliSecSpeed)
   int nMode = ::SetROP2(hDC, R2_NOT);
   HPEN hOldPen = (HPEN) ::SelectObject(hDC, hPen);
 
-  for (int i = 0; i < nNumSteps; i++)
-    {
-      double dFraction = (double) i / (double) nNumSteps;
+  for (int i = 0; i < nNumSteps; i++) {
+    double dFraction = (double) i / (double) nNumSteps;
 
-      RECT transition;
-      transition.left   = lprcFrom->left +
-	(int)((lprcTo->left - lprcFrom->left) * dFraction);
-      transition.right  = lprcFrom->right +
-	(int)((lprcTo->right - lprcFrom->right) * dFraction);
-      transition.top    = lprcFrom->top +
-	(int)((lprcTo->top - lprcFrom->top) * dFraction);
-      transition.bottom = lprcFrom->bottom +
-	(int)((lprcTo->bottom - lprcFrom->bottom) * dFraction);
+    RECT transition;
+    transition.left = lprcFrom->left
+                      + (int)((lprcTo->left - lprcFrom->left) * dFraction);
 
-      POINT pt[5];
-      pt[0].x = transition.left; pt[0].y= transition.top;
-      pt[1].x = transition.right; pt[1].y= transition.top;
-      pt[2].x = transition.right; pt[2].y= transition.bottom;
-      pt[3].x = transition.left; pt[3].y= transition.bottom;
-      pt[4].x = transition.left; pt[4].y= transition.top;
+    transition.right = lprcFrom->right
+                       + (int)((lprcTo->right - lprcFrom->right) * dFraction);
 
-      // We use Polyline because we can determine our own pen size
-      // Draw Sides
-      ::Polyline(hDC,pt,5);
+    transition.top = lprcFrom->top
+                     + (int)((lprcTo->top - lprcFrom->top) * dFraction);
 
-      GdiFlush();
+    transition.bottom = lprcFrom->bottom
+                        + (int)((lprcTo->bottom - lprcFrom->bottom) * dFraction);
 
-      Sleep(nMilliSecSpeed);
+    POINT pt[5];
+    pt[0].x = transition.left;
+    pt[0].y = transition.top;
+    pt[1].x = transition.right;
+    pt[1].y = transition.top;
+    pt[2].x = transition.right;
+    pt[2].y = transition.bottom;
+    pt[3].x = transition.left;
+    pt[3].y = transition.bottom;
+    pt[4].x = transition.left;
+    pt[4].y = transition.top;
 
-      // UnDraw Sides
-      ::Polyline(hDC,pt,5);
+    // We use Polyline because we can determine our own pen size
+    // Draw Sides
+    ::Polyline(hDC, pt, 5);
 
-      GdiFlush();
-    }
+    GdiFlush();
+
+    Sleep(nMilliSecSpeed);
+
+    // UnDraw Sides
+    ::Polyline(hDC, pt, 5);
+
+    GdiFlush();
+  }
 
   ::SetROP2(hDC, nMode);
   ::SelectObject(hDC, hOldPen);

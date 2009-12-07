@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_WINDOW_HPP
 
 #include "Screen/Font.hpp"
+#include "Thread/Debug.hpp"
 
 #ifdef ENABLE_SDL
 #include "Screen/BufferCanvas.hpp"
@@ -168,6 +169,8 @@ public:
   ContainerWindow *get_root_owner();
 
   void move(int left, int top) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     this->left = left;
     this->top = top;
@@ -179,7 +182,10 @@ public:
   }
 
   void move(int left, int top, unsigned width, unsigned height) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
+    // XXX
 #else /* !ENABLE_SDL */
     ::SetWindowPos(hWnd, NULL, left, top, width, height,
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
@@ -187,7 +193,22 @@ public:
 #endif
   }
 
+  void resize(unsigned width, unsigned height) {
+    assert_none_locked();
+
+#ifdef ENABLE_SDL
+    // XXX
+#else /* !ENABLE_SDL */
+    ::SetWindowPos(hWnd, NULL, 0, 0, width, height,
+                   SWP_NOMOVE | SWP_NOZORDER |
+                   SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+    // XXX store new size?
+#endif
+  }
+
   void insert_after(HWND hWnd2, bool show=true) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -197,6 +218,8 @@ public:
   }
 
   void bring_to_top() {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -205,6 +228,8 @@ public:
   }
 
   void set_font(const Font &font) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -259,6 +284,8 @@ public:
 #else /* !ENABLE_SDL */
 
   void set_focus() {
+    assert_none_locked();
+
     ::SetFocus(hWnd);
   }
 
@@ -272,7 +299,17 @@ public:
 #endif
   }
 
+  bool has_capture() const {
+#ifdef ENABLE_SDL
+    return false; // XXX
+#else
+    return ::GetCapture() == hWnd;
+#endif
+  }
+
   void set_capture() {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -281,6 +318,8 @@ public:
   }
 
   void release_capture() {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else
@@ -319,6 +358,28 @@ public:
 #endif
   }
 
+#ifdef ENABLE_SDL
+  void to_screen(RECT &rc) const;
+#endif
+
+  /**
+   * Returns the position on the screen.
+   */
+  const RECT get_screen_position() const
+  {
+    RECT rc;
+#ifdef ENABLE_SDL
+    rc = get_position();
+    to_screen(rc);
+#else
+    ::GetWindowRect(hWnd, &rc);
+#endif
+    return rc;
+  }
+
+  /**
+   * Returns the position within the parent window.
+   */
   const RECT get_position() const
   {
     RECT rc;
@@ -328,7 +389,24 @@ public:
     rc.right = get_width();
     rc.bottom = get_height();
 #else
-    ::GetWindowRect(hWnd, &rc);
+    rc = get_screen_position();
+
+    HWND parent = ::GetParent(hWnd);
+    if (parent != NULL) {
+      POINT pt;
+
+      pt.x = rc.left;
+      pt.y = rc.top;
+      ::ScreenToClient(parent, &pt);
+      rc.left = pt.x;
+      rc.top = pt.y;
+
+      pt.x = rc.right;
+      pt.y = rc.bottom;
+      ::ScreenToClient(parent, &pt);
+      rc.right = pt.x;
+      rc.bottom = pt.y;
+    }
 #endif
     return rc;
   }
@@ -345,6 +423,23 @@ public:
     ::GetClientRect(hWnd, &rc);
 #endif
     return rc;
+  }
+
+  bool in_client_rect(int x, int y) const {
+    if (x < 0 || y < 0)
+      return false;
+
+    RECT rc = get_client_rect();
+    return x < rc.right && y < rc.bottom;
+  }
+
+  const SIZE get_size() const
+  {
+    RECT rc = get_client_rect();
+    SIZE s;
+    s.cx = rc.right;
+    s.cy = rc.bottom;
+    return s;
   }
 
 #ifdef ENABLE_SDL
@@ -394,6 +489,8 @@ public:
 #endif
 
   void send_command(const Window &from) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else /* !ENABLE_SDL */

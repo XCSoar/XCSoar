@@ -202,6 +202,14 @@ static inline bool need_clipping()
   return model_is_hp31x() || model_is_medion_p5();
 }
 
+/**
+ * Does this device have a pointer device? (mouse or touch screen)
+ */
+static inline bool has_pointer()
+{
+  return !is_altair();
+}
+
 // This could be also used for PDA in landscape..
 typedef enum{
   ssnone=0,

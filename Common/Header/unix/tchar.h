@@ -141,18 +141,4 @@ CharUpper(LPTSTR s)
   return s;
 }
 
-typedef wchar_t WCHAR;
-typedef WCHAR *LPWSTR;
-typedef const WCHAR *LPCWSTR;
-
-/*
-static inline void
-wsprintf(LPWSTR buffer, LPCWSTR format, ...)
-{
-  va_list ap;
-  va_start(ap, format);
-  vswprintf(buffer, 65536, format, ap);
-}
-*/
-
 #endif
