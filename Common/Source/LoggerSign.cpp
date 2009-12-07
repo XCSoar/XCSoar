@@ -193,21 +193,20 @@ LoggerImpl::DiskBufferFlush()
 bool
 LoggerImpl::DiskBufferAdd(char *sIn)
 {
-  bool bRetVal = false;
-
-  if (LoggerDiskBufferCount == LOGGER_DISK_BUFFER_NUM_RECS) {
+  if (LoggerDiskBufferCount >= LOGGER_DISK_BUFFER_NUM_RECS) {
     DiskBufferFlush();
   }
 
-  if (LoggerDiskBufferCount < LOGGER_DISK_BUFFER_NUM_RECS) {
-    strncpy(LoggerDiskBuffer[LoggerDiskBufferCount], sIn, MAX_IGC_BUFF);
-    LoggerDiskBuffer[LoggerDiskBufferCount][MAX_IGC_BUFF - 1] = '\0';
-    LoggerDiskBufferCount++;
-    bRetVal = true;
-  }
+  if (LoggerDiskBufferCount >= LOGGER_DISK_BUFFER_NUM_RECS)
+    return false;
 
-  return bRetVal;
+  strncpy(LoggerDiskBuffer[LoggerDiskBufferCount], sIn, MAX_IGC_BUFF);
+  LoggerDiskBuffer[LoggerDiskBufferCount][MAX_IGC_BUFF - 1] = '\0';
+  LoggerDiskBufferCount++;
+
+  return true;
 }
+
 void
 LoggerImpl::DiskBufferReset()
 {
