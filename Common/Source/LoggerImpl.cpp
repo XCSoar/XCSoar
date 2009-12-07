@@ -417,7 +417,7 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
   sprintf(temp, "HFGIDGLIDERID:%S\r\n", AircraftRego);
   IGCWriteRecord(temp, szLoggerFileName);
 
-  sprintf(temp, "HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_Version);
+  sprintf(temp, "HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_VersionStringOld);
   IGCWriteRecord(temp, szLoggerFileName);
 
   TCHAR DeviceName[DEVNAMESIZE];

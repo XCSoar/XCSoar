@@ -35,11 +35,21 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #ifndef XCSOAR_VERSION_HPP
 #define XCSOAR_VERSION_HPP
 
 #include <tchar.h>
 
+/** 5.2.5 */
 extern const TCHAR XCSoar_Version[];
+/** 5.2.5F */
+extern const TCHAR XCSoar_VersionLong[];
+/** 5.2.5F-PC */
+extern const TCHAR XCSoar_VersionString[];
+/** PC 5.2.5F 7. Oct 09 */
+extern const TCHAR XCSoar_VersionStringOld[];
+/** XCSoar v5.2.5F-PC */
+extern const TCHAR XCSoar_ProductToken[];
 
 #endif
