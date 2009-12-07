@@ -65,7 +65,7 @@ GeoVector::mid_point(const GEOPOINT &source) const
 
 fixed
 GeoVector::minimum_distance(const GEOPOINT &source,
-                            const GEOPOINT &ref)
+                            const GEOPOINT &ref) const
 {
   const GEOPOINT end = end_point(source);
   return (::CrossTrackError(source, end, ref, NULL));
@@ -75,10 +75,7 @@ GEOPOINT
 GeoVector::intermediate_point(const GEOPOINT &source, 
                               const fixed distance) const
 {
-  GEOPOINT end = end_point(source);
-  GEOPOINT p;
-  ::IntermediatePoint(source, end, distance, Distance, &p);
-  return p;
+  return ::IntermediatePoint(source, end_point(source), distance, Distance);
 }
 
 bool operator != (const GEOPOINT&g1, const GEOPOINT &g2) {

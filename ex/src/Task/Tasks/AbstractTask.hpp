@@ -72,7 +72,7 @@ public:
                TaskAdvance &ta,
                GlidePolar &gp): 
     activeTaskPoint(0),
-    activeTaskPoint_last(-1),
+    activeTaskPoint_last(0-1),
     task_events(te),
     task_advance(ta),
     task_behaviour(tb),

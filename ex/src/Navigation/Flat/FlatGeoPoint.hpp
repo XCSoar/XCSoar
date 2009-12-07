@@ -84,6 +84,20 @@ struct FLAT_GEOPOINT {
   unsigned distance_sq_to(const FLAT_GEOPOINT &sp) const;
 
 /** 
+ * Add one point to another
+ * 
+ * @param p2 Point to add
+ * 
+ * @return Added value
+ */
+  FLAT_GEOPOINT operator+ (const FLAT_GEOPOINT &p2) const {
+    FLAT_GEOPOINT res= *this;
+    res.Longitude += p2.Longitude;
+    res.Latitude += p2.Latitude;
+    return res;
+  };
+
+/** 
  * Subtract one point from another
  * 
  * @param p2 Point to subtract
@@ -106,8 +120,8 @@ struct FLAT_GEOPOINT {
  */
   FLAT_GEOPOINT operator* (const double t) const {
     FLAT_GEOPOINT res= *this;
-    res.Longitude *= t;
-    res.Latitude *= t;
+    res.Longitude = (int)(res.Longitude*t);
+    res.Latitude = (int)(res.Latitude*t);
     return res;
   };
 

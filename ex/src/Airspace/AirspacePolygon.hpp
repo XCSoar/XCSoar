@@ -78,7 +78,7 @@ public:
  * 
  * @return Location of reference point
  */
-  const GEOPOINT get_center();
+  const GEOPOINT get_center() const;
 
   /** 
    * Checks whether an aircraft is inside the airspace.

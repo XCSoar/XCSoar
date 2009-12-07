@@ -122,6 +122,8 @@ namespace KDTree
       typedef size_t size_type;
       typedef ptrdiff_t difference_type;
 
+      always_true<value_type> always;
+
       KDTree(_Acc const& __acc = _Acc(), _Dist const& __dist = _Dist(),
 	     _Cmp const& __cmp = _Cmp(), const allocator_type& __a = allocator_type())
         : _Base(__a), _M_header(),
@@ -510,13 +512,13 @@ namespace KDTree
 	  {
 	    std::pair<const _Node<_Val>*,
 	      std::pair<size_type, typename _Dist::distance_type> > // JMW bugfix
-              // JMW dist, sqrt
+              // JMW dist, sqrt, predicate
 	      best = _S_node_nearest (__K, 0, __val,
 				      _M_get_root(), &_M_header, _M_get_root(),
 				      (_S_accumulate_node_distance
 				      (__K, _M_dist, _M_acc, _M_get_root()->_M_value, __val)),
 				      _M_cmp, _M_acc, _M_dist,
-				      always_true<value_type>());
+				      always);
 	    return std::pair<const_iterator, distance_type>
 	      (best.first, best.second.second);
 	  }
@@ -545,7 +547,7 @@ namespace KDTree
 	      std::pair<size_type, typename _Acc::result_type> >
 	      best = _S_node_nearest (__K, 0, __val, _M_get_root(), &_M_header,
 				      node, __max, _M_cmp, _M_acc, _M_dist,
-				      always_true<value_type>());
+				      always);
        // make sure we didn't just get stuck with the root node...
        if (root_is_candidate || best.first != _M_get_root())
           return std::pair<const_iterator, distance_type>

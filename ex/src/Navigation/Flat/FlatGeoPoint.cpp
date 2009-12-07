@@ -41,7 +41,7 @@
 unsigned 
 FLAT_GEOPOINT::distance_to(const FLAT_GEOPOINT &sp) const
 {
-  return isqrt4(distance_sq_to(sp);
+  return isqrt4(distance_sq_to(sp));
 }
 
 unsigned 
