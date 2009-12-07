@@ -185,6 +185,11 @@ LoggerImpl::DiskBufferFlush()
   }
 }
 
+/**
+ * Adds the given string to the DiskBuffer
+ * @param sIn Input string
+ * @return True if adding was successful, False otherwise (Buffer full)
+ */
 bool
 LoggerImpl::DiskBufferAdd(char *sIn)
 {
