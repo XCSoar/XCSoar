@@ -203,7 +203,7 @@ AbstractTask::reset()
 {
   mc_lpf.reset(glide_polar.get_mc());
   trigger_auto = false;
-  activeTaskPoint_last = -1;
+  activeTaskPoint_last = 0-1;
   ce_lpf.reset(1.0);
   stats.reset();
 }
