@@ -92,6 +92,11 @@ GRECORDREADGRECORDFROMFILE GRecordReadGRecordFromFile;
 typedef int (*GRECORDVERIFYGRECORDINFILE)(void);
 GRECORDVERIFYGRECORDINFILE GRecordVerifyGRecordInFile;
 
+/**
+ * Checks whether the character c is a valid IGC character
+ * @param c Character to check
+ * @return True if valid character, False otherwise
+ */
 bool
 IsValidIGCChar(char c) //returns 1 if valid char for IGC files
 {
@@ -111,13 +116,17 @@ IsValidIGCChar(char c) //returns 1 if valid char for IGC files
     return false;
 }
 
+/**
+ * Checks a string for invalid characters and replaces them with 0x20 (space)
+ * @param szIn Input and Output string (pointer)
+ * @return Output string
+ */
 char * 
 CleanIGCRecord(char * szIn)
 {  
-  // replace invalid chars w/ 0x20
-  int iLen = strlen(szIn);
   // don't clean terminating \r\n!
-  for (int i = 0; i < iLen - 2; i++) {
+  int iLen = strlen(szIn) - 2;
+  for (int i = 0; i < iLen; i++) {
     if (!IsValidIGCChar(szIn[i]))
       szIn[i] = ' ';
   }
