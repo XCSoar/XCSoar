@@ -947,7 +947,7 @@ void InfoBoxManager::Paint(void) {
 
     canvas.white_brush();
     canvas.white_pen();
-    canvas.rectangle(0, 0, canvas.get_width(), canvas.get_height());
+    canvas.clear();
 
     for (i=0; i<numInfoWindows; i++) {
 
