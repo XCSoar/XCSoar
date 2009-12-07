@@ -72,7 +72,7 @@ public:
 class ButtonLabel: public ActionInterface {
  public:
   enum {
-    NUMBUTTONLABELS = 16
+    NUMBUTTONLABELS = 32
   };
 
   static unsigned ButtonLabelGeometry;
