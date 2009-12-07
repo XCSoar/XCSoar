@@ -40,10 +40,10 @@ Copyright_License {
 #define XCSOAR_SCREEN_FONT_HPP
 
 #ifdef ENABLE_SDL
-#include <SDL/SDL_ttf.h>
+  #include <SDL/SDL_ttf.h>
 #else
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+  #define WIN32_LEAN_AND_MEAN
+  #include <windows.h>
 #endif
 
 struct FontHeightInfo {
@@ -57,37 +57,41 @@ struct FontHeightInfo {
  */
 class Font {
 protected:
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   TTF_Font *font;
-#else
+  #else
   HFONT font;
-#endif
+  #endif
 
 public:
   Font():font(NULL) {}
   ~Font() { reset(); }
 
 public:
-  bool defined() const {
+  bool
+  defined() const
+  {
     return font != NULL;
   }
 
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   bool set(const char *file, int ptsize);
-#else
+  #else
   bool set(const LOGFONT *lplf);
-#endif
+  #endif
   void reset();
 
-#ifdef ENABLE_SDL
-  TTF_Font *native() const {
+  #ifdef ENABLE_SDL
+  TTF_Font*
+  native() const {
     return font;
   }
-#else
-  HFONT native() const {
+  #else
+  HFONT
+  native() const {
     return font;
   }
-#endif
+  #endif
 };
 
 #endif
