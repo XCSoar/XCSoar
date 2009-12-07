@@ -97,6 +97,18 @@ public:
                           const GeoVector &vec,
                           const TaskProjection& tp) const = 0;
 
+/** 
+ * Find location of closest point on boundary to a reference
+ * 
+ * @param loc Reference location of observer
+ * @param task_projection Projection (for use with internal speedups)
+ * 
+ * @return Location of closest point of boundary to reference 
+ */
+  virtual GEOPOINT closest_point(const GEOPOINT& loc, 
+                                 const TaskProjection& task_projection) const
+    = 0;
+
   /** 
    * Set terrain altitude for AGL-referenced airspace altitudes 
    * 

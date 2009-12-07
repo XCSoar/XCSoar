@@ -134,3 +134,17 @@ AirspacePolygon::project(const TaskProjection &task_projection)
 {
   ::project(m_border, task_projection);
 }
+
+
+/*
+
+*/
+
+GEOPOINT 
+AirspacePolygon::closest_point(const GEOPOINT& loc, 
+                               const TaskProjection& task_projection) const
+{
+  const FLAT_GEOPOINT p = task_projection.project(loc);
+  const FLAT_GEOPOINT pb = nearest_point(m_border, p); 
+  return task_projection.unproject(pb);
+}

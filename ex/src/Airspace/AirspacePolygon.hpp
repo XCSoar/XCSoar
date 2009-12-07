@@ -104,6 +104,9 @@ public:
                   const GeoVector &vec,
                   const TaskProjection& tp) const;
 
+  GEOPOINT closest_point(const GEOPOINT& loc, 
+                         const TaskProjection& task_projection) const;
+
   /**
    * Accessor for airspace shape
    * @return border of airspace

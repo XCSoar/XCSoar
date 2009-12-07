@@ -95,8 +95,30 @@ struct GeoVector {
   /**
    * Returns the end point of the geovector projected from the start point.  
    * Assumes constand Bearing. 
+   *
+   * @param source start of vector
+   * @return location of end point
    */
   GEOPOINT mid_point(const GEOPOINT &source) const;
+  
+  /**
+   * Returns the location of a point from source along vector at distance
+   *
+   * @param source start of vector
+   * @return location of point
+   */
+  GEOPOINT intermediate_point(const GEOPOINT &source, const fixed distance) const;
+
+/** 
+ * Minimum distance from a point on the vector to the reference
+ * 
+ * @param source Start of vector
+ * @param ref Point to test
+ * 
+ * @return Distance (m)
+ */
+  fixed minimum_distance(const GEOPOINT &source,
+                         const GEOPOINT &ref) const;
 
   /**
    * Distance in meters 

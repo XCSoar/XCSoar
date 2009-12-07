@@ -45,4 +45,7 @@ typedef std::vector<SearchPoint> SearchPointVector;
 bool prune_interior(SearchPointVector& spv);
 void project(SearchPointVector& spv, const TaskProjection& tp);
 
+FLAT_GEOPOINT nearest_point(const SearchPointVector& spv, 
+                            const FLAT_GEOPOINT &p);
+
 #endif

@@ -205,7 +205,7 @@ namespace KDTree
 		   const NodeType* __node, const _Node_base* __end,
 		   const NodeType* __best, typename _Dist::distance_type __max,
 		   const _Cmp& __cmp, const _Acc& __acc, const _Dist& __dist,
-		   _Predicate __p)
+		   _Predicate& __p)
   {
      typedef const NodeType* NodePtr;
     NodePtr pcur = __node;

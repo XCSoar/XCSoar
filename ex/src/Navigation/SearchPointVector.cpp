@@ -39,7 +39,8 @@
 #include <algorithm>
 #include <functional>
 
-bool prune_interior(SearchPointVector& spv)
+bool 
+prune_interior(SearchPointVector& spv)
 {
   bool changed=false;
   GrahamScan gs(spv);
@@ -47,9 +48,100 @@ bool prune_interior(SearchPointVector& spv)
   return changed;
 }
 
-void project(SearchPointVector& spv, const TaskProjection& tp)
+void 
+project(SearchPointVector& spv, const TaskProjection& tp)
 {
-  for (SearchPointVector::iterator i = spv.begin(); i!= spv.end(); i++) {
+  for (SearchPointVector::iterator i = spv.begin(); i!= spv.end(); ++i) {
     i->project(tp);
   }
 }
+
+FLAT_GEOPOINT nearest_point(const FLAT_GEOPOINT &p1,
+                            const FLAT_GEOPOINT &p2,
+                            const FLAT_GEOPOINT &p3)
+{
+  const FLAT_GEOPOINT p12 = p2-p1;
+  unsigned rsq = p12.dot(p12);
+  if (!rsq) {
+    return p1;
+  }
+  const FLAT_GEOPOINT p13 = p3-p1;
+  const unsigned numerator = p13.dot(p12);
+  
+  if (numerator<=0) {
+    return p1;
+  } else if (numerator>=rsq) {
+    return p2;
+  } else {
+    double t = ((double)numerator)/rsq;
+    return p1+p2*t;
+  }
+}
+
+FLAT_GEOPOINT segment_nearest_point(const SearchPointVector& spv, 
+                                    const SearchPointVector::const_iterator i1,
+                                    const FLAT_GEOPOINT &p3)
+{
+  if (i1+1 == spv.end()) {
+    return nearest_point(*i1,*spv.begin(),p3);
+  } else {
+    return nearest_point(*i1,*(i1+1),p3);
+  }
+}
+
+FLAT_GEOPOINT nearest_point(const SearchPointVector& spv, 
+                            const FLAT_GEOPOINT &p3)
+{
+  unsigned distance_min = -1;
+
+  // special case
+  if (spv.empty()) {
+    return p3; // really should be error
+  } else if (spv.size()==1) {
+    return spv[0].get_flatLocation();
+  }
+
+  SearchPointVector::const_iterator i_best = spv.end();
+
+  // find nearest point in vector
+  for (SearchPointVector::const_iterator i = spv.begin(); 
+       i!= spv.end(); ++i) {
+
+    unsigned d_this = p3.distance_sq_to(i->get_flatLocation());
+    if (d_this<distance_min) {
+      distance_min = d_this;
+      i_best = i;
+    }
+  }
+
+  FLAT_GEOPOINT pc = i_best->get_flatLocation();
+
+  // find nearest point on this segment
+  FLAT_GEOPOINT pa = segment_nearest_point(spv,i_best,p3);
+  if (!(pa == pc)) {
+    unsigned d_seg = pa.distance_sq_to(p3);
+    if (d_seg < distance_best) {
+      distance_best = d_seg;
+      pc = pa;
+    }
+  }
+
+  // find nearest point on previous segment
+  if (i_best == spv.first()) {
+    i_prev = spv.end()-1;
+  } else {
+    i_prev = i_best-1;
+  }
+
+  FLAT_GEOPOINT pb = segment_nearest_point(spv,i_prev,p3);
+  if (!(pb == pc)) {
+    unsigned d_seg = pb.distance_sq_to(p3);
+    if (d_seg < distance_best) {
+      distance_best = d_seg;
+      pc = pb;
+    }
+  }
+
+  return pc;
+}
+

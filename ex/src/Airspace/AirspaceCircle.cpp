@@ -89,6 +89,14 @@ bool
 AirspaceCircle::intersects(const GEOPOINT& start, const GeoVector &vec,
                            const TaskProjection& task_projection) const
 {
-  const GEOPOINT end = vec.end_point(start);
-  return (::CrossTrackError(start, end, center, NULL)<=radius);
+  return vec.minimum_distance(start, center) <= radius;
+}
+
+
+GEOPOINT 
+AirspaceCircle::closest_point(const GEOPOINT& loc, 
+                              const TaskProjection& task_projection) const
+{
+  GeoVector vec(center, loc);
+  return vec.intermediate_point(center, Radius);
 }
