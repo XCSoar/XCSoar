@@ -95,8 +95,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
 
   set(parent, mX, mY, mWidth, mHeight, true, true);
 
-  mVisible = false;
-
   Color fgColor, bkColor, bkColorSel;
 
   if (Appearance.InverseInfoBox){
@@ -166,8 +164,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
 
   get_canvas().background_transparent();
 
-  SetVisible(true);
-
   mHasFocus = false;
 
   Count++;
@@ -194,18 +190,6 @@ void InfoBox::SetFocus(bool Value){
     mHasFocus = Value;
     Paint();
   }
-}
-
-bool InfoBox::SetVisible(bool Value){
-  bool res = mVisible;
-  if (mVisible != Value){
-    mVisible = Value;
-    if (mVisible)
-      show();
-    else
-      hide();
-  }
-  return(res);
 }
 
 void

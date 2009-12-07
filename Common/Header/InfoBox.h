@@ -106,7 +106,6 @@ class InfoBox : public BufferWindow {
     int colorBottom;
     int colorTop;
     int mBorderSize;
-    bool mVisible;
     bool mSmallerFont;
 
     void InitializeDrawHelpers(void);
@@ -129,7 +128,6 @@ class InfoBox : public BufferWindow {
     void SetSmallerFont(bool smallerFont);
 
     void SetFocus(bool Value);
-    bool SetVisible(bool Value);
 
     int GetBorderKind(void);
     int SetBorderKind(int Value);

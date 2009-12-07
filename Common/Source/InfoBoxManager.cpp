@@ -307,7 +307,7 @@ const unsigned NUMSELECTSTRINGS = 74;
 void InfoBoxManager::Hide() {
   InfoBoxesHidden = true;
   for (unsigned i = 0; i < numInfoWindows; i++) {
-    InfoBoxes[i]->SetVisible(false);
+    InfoBoxes[i]->hide();
   }
 
   full_window.hide();
@@ -317,7 +317,7 @@ void InfoBoxManager::Hide() {
 void InfoBoxManager::Show() {
   InfoBoxesHidden = false;
   for (unsigned i = 0; i < numInfoWindows; i++) {
-    InfoBoxes[i]->SetVisible(true);
+    InfoBoxes[i]->show();
   }
 }
 
