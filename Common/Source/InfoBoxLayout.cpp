@@ -44,7 +44,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Registry.hpp"
 #include "InfoBox.h"
-#include "WindowControls.h"
+
 #include <stdio.h>
 
 // Layouts:

@@ -36,26 +36,59 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
- *
- */
+#include "Form/Frame.hpp"
 
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
+void WndFrame::SetCaption(const TCHAR *Value){
+  if (Value == NULL)
+    Value = TEXT("");
 
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgHelpers.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/List.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Button.hpp"
-#include "Form/Draw.hpp"
-#include "Language.hpp"
-#include "Interface.hpp"
+  if (_tcscmp(mCaption, Value) != 0){
+    _tcscpy(mCaption, Value);  // todo size check
+    invalidate();
+  }
+}
 
-#endif
+UINT WndFrame::SetCaptionStyle(UINT Value){
+  UINT res = mCaptionStyle;
+  if (res != Value){
+    mCaptionStyle = Value;
+    invalidate();
+  }
+  return res;
+}
+
+unsigned
+WndFrame::GetTextHeight()
+{
+  RECT rc = get_client_rect();
+  ::InflateRect(&rc, -2, -2); // todo border width
+
+  Canvas &canvas = get_canvas();
+  canvas.select(*GetFont());
+  canvas.formatted_text(&rc, mCaption, mCaptionStyle | DT_CALCRECT);
+
+  return rc.bottom - rc.top;
+}
+
+void
+WndFrame::on_paint(Canvas &canvas)
+{
+  WindowControl::on_paint(canvas);
+
+  if (mCaption != 0){
+    canvas.set_text_color(GetForeColor());
+    canvas.set_background_color(GetBackColor());
+    canvas.background_transparent();
+
+    canvas.select(*GetFont());
+
+    RECT rc = get_client_rect();
+    InflateRect(&rc, -2, -2); // todo border width
+
+//    h = rc.bottom - rc.top;
+
+    canvas.formatted_text(&rc, mCaption,
+      mCaptionStyle // | DT_CALCRECT
+    );
+  }
+}

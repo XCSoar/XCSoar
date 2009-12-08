@@ -38,7 +38,8 @@ Copyright_License {
 
 #include "Dialogs/dlgHelpers.hpp"
 #include "Registry.hpp"
-#include "WindowControls.h"
+#include "Form/Edit.hpp"
+#include "Form/Form.hpp"
 #include "DataField/Base.hpp"
 
 bool SetValueRegistryOnChange(WndForm* wfm,

@@ -42,7 +42,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
-#include "WindowControls.h"
+#include "Form/Control.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Screen/Graphics.hpp"

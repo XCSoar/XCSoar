@@ -36,26 +36,53 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
- *
- */
+#ifndef XCSOAR_FORM_FRAME_HPP
+#define XCSOAR_FORM_FRAME_HPP
 
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
+#include "Form/Control.hpp"
 
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgHelpers.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/List.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Button.hpp"
-#include "Form/Draw.hpp"
-#include "Language.hpp"
-#include "Interface.hpp"
+class WndFrame : public WindowControl {
+public:
+  WndFrame(WindowControl *Owner, const TCHAR *Name,
+           int X, int Y, int Width, int Height)
+    :WindowControl(Owner, NULL, Name, X, Y, Width, Height) {
+    mIsListItem = false;
+
+    SetForeColor(GetOwner()->GetForeColor());
+    SetBackColor(GetOwner()->GetBackColor());
+    mCaptionStyle = DT_EXPANDTABS
+      | DT_LEFT
+      | DT_NOCLIP
+      | DT_WORDBREAK;
+  }
+
+  void SetCaption(const TCHAR *Value);
+
+  UINT GetCaptionStyle(void) { return mCaptionStyle; }
+  UINT SetCaptionStyle(UINT Value);
+
+  unsigned GetTextHeight();
+
+  void SetIsListItem(bool Value) {
+    if (Value == mIsListItem)
+      return;
+
+    mIsListItem = Value;
+
+    if (mIsListItem) {
+      hide();
+      SetCanFocus(true);
+      SetFocused(true);
+    }
+  }
+
+protected:
+  bool mIsListItem;
+
+  UINT mCaptionStyle;
+
+  /** from class PaintWindow */
+  virtual void on_paint(Canvas &canvas);
+};
 
 #endif

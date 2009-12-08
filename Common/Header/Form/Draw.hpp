@@ -36,26 +36,38 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
- *
- */
+#ifndef XCSOAR_FORM_DRAW_HPP
+#define XCSOAR_FORM_DRAW_HPP
 
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
+#include "Form/Frame.hpp"
 
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgHelpers.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/List.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Button.hpp"
-#include "Form/Draw.hpp"
-#include "Language.hpp"
-#include "Interface.hpp"
+class WndOwnerDrawFrame : public WndFrame {
+public:
+
+  typedef void (*OnPaintCallback_t)(WindowControl *Sender, Canvas &canvas);
+
+  WndOwnerDrawFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
+                    int Width, int Height,
+                    OnPaintCallback_t OnPaintCallback):
+    WndFrame(Owner, Name, X, Y, Width, Height)
+  {
+    mCaption[0] = '\0';
+    mOnPaintCallback = OnPaintCallback;
+    SetForeColor(GetOwner()->GetForeColor());
+    SetBackColor(GetOwner()->GetBackColor());
+
+  }
+
+  void SetOnPaintNotify(OnPaintCallback_t OnPaintCallback) {
+    mOnPaintCallback = OnPaintCallback;
+  }
+
+protected:
+
+  OnPaintCallback_t mOnPaintCallback;
+
+  /** from class PaintWindow */
+  virtual void on_paint(Canvas &canvas);
+};
 
 #endif

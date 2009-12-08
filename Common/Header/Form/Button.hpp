@@ -36,26 +36,41 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
- *
- */
+#ifndef XCSOAR_FORM_BUTTON_HPP
+#define XCSOAR_FORM_BUTTON_HPP
 
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
+#include "Form/Control.hpp"
 
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgHelpers.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/List.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Button.hpp"
-#include "Form/Draw.hpp"
-#include "Language.hpp"
-#include "Interface.hpp"
+class WndButton : public WindowControl {
+private:
+
+  /** from class PaintWindow */
+  virtual void on_paint(Canvas &canvas);
+
+  bool mDown;
+  bool mDefault;
+  int mLastDrawTextHeight;
+  void (*mOnClickNotify)(WindowControl *Sender);
+
+public:
+
+  typedef void (*ClickNotifyCallback_t)(WindowControl *Sender);
+
+  WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption,
+            int X, int Y, int Width, int Height,
+            void (*Function)(WindowControl *Sender) = NULL);
+
+  /* override event methods from class Window */
+  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_double(int x, int y);
+  virtual bool on_key_down(unsigned key_code);
+  virtual bool on_key_up(unsigned key_code);
+
+  void SetOnClickNotify(void(*Function)(WindowControl *Sender)) {
+    mOnClickNotify = Function;
+  }
+};
 
 #endif

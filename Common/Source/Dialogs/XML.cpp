@@ -50,8 +50,12 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
-#include "WindowControls.h"
 #include "Interface.hpp"
+#include "Form/Form.hpp"
+#include "Form/Edit.hpp"
+#include "Form/EventButton.hpp"
+#include "Form/Draw.hpp"
+#include "Form/List.hpp"
 
 #include <stdio.h>    // for _stprintf
 #include <tchar.h>

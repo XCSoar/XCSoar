@@ -236,7 +236,15 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/DataField/Float.o \
 	$(SRC)/DataField/Integer.o \
 	$(SRC)/DataField/String.o \
-	$(SRC)/WindowControls.o \
+	$(SRC)/Form/Control.o \
+	$(SRC)/Form/Form.o \
+	$(SRC)/Form/Button.o \
+	$(SRC)/Form/EventButton.o \
+	$(SRC)/Form/Frame.o \
+	$(SRC)/Form/Draw.o \
+	$(SRC)/Form/List.o \
+	$(SRC)/Form/ScrollBar.o \
+	$(SRC)/Form/Edit.o \
 	$(SRC)/UtilsText.o \
 	$(SRC)/Dialogs/dlgHelp.o \
 	$(SRC)/zzip-$(TARGET).a \

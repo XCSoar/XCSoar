@@ -36,26 +36,29 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
- *
- */
+#ifndef XCSOAR_FORM_EVENT_BUTTON_HPP
+#define XCSOAR_FORM_EVENT_BUTTON_HPP
 
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
-
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgHelpers.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/List.hpp"
-#include "Form/Edit.hpp"
 #include "Form/Button.hpp"
-#include "Form/Draw.hpp"
-#include "Language.hpp"
-#include "Interface.hpp"
+
+#ifndef ALTAIRSYNC
+
+typedef void (*webpt2Event)(const TCHAR *);
+
+class WndEventButton : public WndButton {
+public:
+  WndEventButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption,
+                 int X, int Y, int Width, int Height,
+                 const TCHAR *ename,
+                 const TCHAR *eparameters);
+  ~WndEventButton();
+public:
+  void CallEvent(void);
+private:
+  webpt2Event inputEvent;
+  TCHAR *parameters;
+};
+
+#endif
 
 #endif

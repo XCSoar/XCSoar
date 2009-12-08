@@ -222,7 +222,15 @@ OBJS	:=\
 	$(SRC)/InputEventsActions.o 	\
 	$(SRC)/StatusMessage.o \
 	$(SRC)/PopupMessage.o \
-	$(SRC)/WindowControls.o 	\
+	$(SRC)/Form/Control.o \
+	$(SRC)/Form/Form.o \
+	$(SRC)/Form/Button.o \
+	$(SRC)/Form/EventButton.o \
+	$(SRC)/Form/Frame.o \
+	$(SRC)/Form/Draw.o \
+	$(SRC)/Form/List.o \
+	$(SRC)/Form/ScrollBar.o \
+	$(SRC)/Form/Edit.o \
 	$(SRC)/LogFile.o 		\
 	\
 	$(SRC)/MapWindow.o 		\

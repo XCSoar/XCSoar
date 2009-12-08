@@ -39,7 +39,7 @@ Copyright_License {
 
 #include "InfoBoxManager.h"
 #include "InfoBox.h"
-#include "WindowControls.h"
+#include "Form/Control.hpp"
 #include "Protection.hpp"
 #include "InfoBox.h"
 #include "InfoBoxLayout.h"

@@ -36,26 +36,47 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
- *
- */
+#include "Form/EventButton.hpp"
+#include "InputEvents.h"
 
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
+#include <stdlib.h>
 
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgHelpers.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/List.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Button.hpp"
-#include "Form/Draw.hpp"
-#include "Language.hpp"
-#include "Interface.hpp"
+#ifndef ALTAIRSYNC
+
+void WndEventButton_OnClickNotify(WindowControl *Sender) {
+  WndEventButton *wb = (WndEventButton*)Sender;
+  wb->CallEvent();
+}
+
+void WndEventButton::CallEvent() {
+  if (inputEvent) {
+    inputEvent(parameters);
+  }
+}
+
+WndEventButton::~WndEventButton() {
+  if (parameters) {
+    free(parameters);
+    parameters=NULL;
+  }
+}
+
+
+WndEventButton::WndEventButton(WindowControl *Parent, const TCHAR *Name,
+			       const TCHAR *Caption,
+			       int X, int Y, int Width, int Height,
+			       const TCHAR* ename,
+			       const TCHAR* theparameters):
+  WndButton(Parent,Name,Caption,X,Y,Width,Height,
+	    WndEventButton_OnClickNotify)
+{
+  inputEvent = InputEvents::findEvent(ename);
+  if (theparameters) {
+    parameters = _tcsdup(theparameters);
+  } else {
+    parameters = NULL;
+  }
+
+}
 
 #endif
