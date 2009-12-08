@@ -76,7 +76,7 @@ Copyright_License {
 
 BufferWindow InfoBoxManager::full_window;
 
-static bool InfoBoxesDirty= false;
+static bool InfoBoxesDirty = false;
 static bool InfoBoxesHidden = false;
 static double LastFlipBoxTime = 0; // VENTA3
 unsigned numInfoWindows = 8;
@@ -97,14 +97,16 @@ static int InfoType[MAXINFOWINDOWS] =
     439168301
   };
 #else
-  {921102,
-   725525,
-   262144,
-   74518,
-   657930,
-   2236963,
-   394758,
-   1644825};
+  {
+    921102,
+    725525,
+    262144,
+    74518,
+    657930,
+    2236963,
+    394758,
+    1644825
+  };
 #endif
 
 typedef struct _SCREEN_INFO
@@ -304,8 +306,11 @@ SCREEN_INFO Data_Options[] = {
 const unsigned NUMSELECTSTRINGS = 74;
 
 // TODO locking
-void InfoBoxManager::Hide() {
+void
+InfoBoxManager::Hide()
+{
   InfoBoxesHidden = true;
+
   for (unsigned i = 0; i < numInfoWindows; i++) {
     InfoBoxes[i]->hide();
   }
@@ -314,8 +319,11 @@ void InfoBoxManager::Hide() {
 }
 
 
-void InfoBoxManager::Show() {
+void
+InfoBoxManager::Show()
+{
   InfoBoxesHidden = false;
+
   for (unsigned i = 0; i < numInfoWindows; i++) {
     InfoBoxes[i]->show();
   }
@@ -331,11 +339,13 @@ InfoBoxManager::GetFocused()
   return -1;
 }
 
-void InfoBoxManager::Event_Select(int i) {
+void
+InfoBoxManager::Event_Select(int i)
+{
   int InfoFocus = GetFocused();
 
   if (InfoFocus < 0) {
-    InfoFocus = i >= 0 ? 0 : numInfoWindows - 1;
+    InfoFocus = (i >= 0 ? 0 : numInfoWindows - 1);
   } else {
     InfoFocus += i;
 
@@ -352,84 +362,93 @@ void InfoBoxManager::Event_Select(int i) {
   }
 }
 
-int InfoBoxManager::getType(unsigned i, unsigned layer) {
+int
+InfoBoxManager::getType(unsigned i, unsigned layer)
+{
   assert(i < MAXINFOWINDOWS);
   assert(layer < 4);
 
-  switch(layer) {
+  switch (layer) {
   case 0:
-    return InfoType[i] & 0xff;         // climb
+    return InfoType[i] & 0xff; // climb
   case 1:
-    return (InfoType[i] >> 8) & 0xff;  // cruise
+    return (InfoType[i] >> 8) & 0xff; // cruise
   case 2:
     return (InfoType[i] >> 16) & 0xff; // final glide
   case 3:
     return (InfoType[i] >> 24) & 0xff; // auxiliary
-  };
+  }
 
   return 0xdeadbeef; /* not reachable */
 }
 
-int InfoBoxManager::getTypeAll(unsigned i) {
+int
+InfoBoxManager::getTypeAll(unsigned i)
+{
   assert(i < MAXINFOWINDOWS);
 
   return InfoType[i];
 }
 
-void InfoBoxManager::setTypeAll(unsigned i, unsigned j) {
+void
+InfoBoxManager::setTypeAll(unsigned i, unsigned j)
+{
   assert(i < MAXINFOWINDOWS);
 
   InfoType[i] = j;
   // TODO: check it's within range
 }
 
-#define m_min(a,b)     (((a)<(b))?(a):(b))
-#define m_max(a,b)	(((a)>(b))?(a):(b))
+#define m_min(a,b) (((a) < (b)) ? (a) : (b))
+#define m_max(a,b) (((a) > (b)) ? (a) : (b))
 
-
-int InfoBoxManager::getType(unsigned i) {
+int
+InfoBoxManager::getType(unsigned i)
+{
   unsigned retval = 0;
 
   if (SettingsMap().EnableAuxiliaryInfo) {
-    retval = getType(i,3);
+    retval = getType(i, 3);
   } else {
     if (MapProjection().GetDisplayMode() == dmCircling)
-      retval = getType(i,0);
+      retval = getType(i, 0);
     else if (MapProjection().GetDisplayMode() == dmFinalGlide) {
-      retval = getType(i,2);
+      retval = getType(i, 2);
     } else {
-      retval = getType(i,1); // cruise
+      retval = getType(i, 1); // cruise
     }
   }
+
   return m_min(NUMSELECTSTRINGS - 1, retval);
 }
 
-
-void InfoBoxManager::setType(unsigned i, char j, unsigned layer)
+void
+InfoBoxManager::setType(unsigned i, char j, unsigned layer)
 {
   assert(i < MAXINFOWINDOWS);
 
-  switch(layer) {
+  switch (layer) {
   case 0:
     InfoType[i] &= 0xffffff00;
-    InfoType[i] += (j);
+    InfoType[i] += j;
     break;
   case 1:
     InfoType[i] &= 0xffff00ff;
-    InfoType[i] += (j<<8);
+    InfoType[i] += (j << 8);
     break;
   case 2:
     InfoType[i] &= 0xff00ffff;
-    InfoType[i] += (j<<16);
+    InfoType[i] += (j << 16);
     break;
   case 3:
     InfoType[i] &= 0x00ffffff;
-    InfoType[i] += (j<<24);
+    InfoType[i] += (j << 24);
     break;
-  };
+  }
 }
 
-void InfoBoxManager::setType(unsigned i, char j)
+void
+InfoBoxManager::setType(unsigned i, char j)
 {
   if (SettingsMap().EnableAuxiliaryInfo) {
     setType(i, 3, j);
@@ -444,50 +463,47 @@ void InfoBoxManager::setType(unsigned i, char j)
   }
 }
 
-
-void InfoBoxManager::Event_Change(int i) {
-  int j=0, k;
+void
+InfoBoxManager::Event_Change(int i)
+{
+  int j = 0, k;
 
   int InfoFocus = GetFocused();
-  if (InfoFocus<0) {
+  if (InfoFocus < 0)
     return;
-  }
 
   k = getType(InfoFocus);
-  if (i>0) {
+  if (i > 0)
     j = Data_Options[k].next_screen;
-  }
-  if (i<0) {
+  else if (i < 0)
     j = Data_Options[k].prev_screen;
-  }
 
   // TODO code: if i==0, go to default or reset
 
   setType(InfoFocus, j);
   DisplayInfoBox();
-
 }
 
-void InfoBoxManager::DisplayInfoBox(void)
+void
+InfoBoxManager::DisplayInfoBox(void)
 {
   if (InfoBoxesHidden)
     return;
 
   static int DisplayType[MAXINFOWINDOWS];
-  static bool first=true;
+  static bool first = true;
   static int DisplayTypeLast[MAXINFOWINDOWS];
   static bool FlipBoxValue = false;
 
   // VENTA3 - Dynamic box values
-  if (LastFlipBoxTime > DYNABOXTIME ) {
-    FlipBoxValue = ( FlipBoxValue == false );
+  if (LastFlipBoxTime > DYNABOXTIME) {
+    FlipBoxValue = (FlipBoxValue == false);
     LastFlipBoxTime = 0;
   }
 
   // JMW note: this is updated every GPS time step
 
   for (unsigned i = 0; i < numInfoWindows; i++) {
-
     // VENTA3
     // All calculations are made in a separate thread. Slow calculations should apply to
     // the function DoCalculationsSlow() . Do not put calculations here!
@@ -499,7 +515,7 @@ void InfoBoxManager::DisplayInfoBox(void)
 
     int color = 0;
 
-    bool needupdate = ((DisplayType[i] != DisplayTypeLast[i])||first);
+    bool needupdate = ((DisplayType[i] != DisplayTypeLast[i]) || first);
 
     int theactive = task.getActiveIndex();
     if (!task.ValidTaskPoint(theactive)) {
@@ -514,125 +530,129 @@ void InfoBoxManager::DisplayInfoBox(void)
     case 67: // VENTA3 alternate1 and 2
     case 68:
     case 69:
+      if (DisplayType[i] == 67)
+        ActiveAlternate = SettingsComputer().Alternate1;
+      else if (DisplayType[i] == 68)
+        ActiveAlternate = SettingsComputer().Alternate2;
+      else
+        ActiveAlternate = Calculated().BestAlternate;
 
-	if (DisplayType[i]==67)
-	  ActiveAlternate=SettingsComputer().Alternate1;
-	else
-	  if (DisplayType[i]==68)
-	    ActiveAlternate=SettingsComputer().Alternate2;
-	  else
-	    ActiveAlternate=Calculated().BestAlternate;
+      InfoBoxes[i]->SetSmallerFont(false);
 
-	InfoBoxes[i]->SetSmallerFont(false);
-	if ( ActiveAlternate != -1 ) {
-		InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Formatter->
-			   RenderTitle(&color));
-		InfoBoxes[i]->SetColor(color);
-		InfoBoxes[i]->SetValue(Data_Options[DisplayType[i]].Formatter->
-			   Render(&color));
-		InfoBoxes[i]->SetColor(color);
-	} else {
-		if ( DisplayType[i]==67 )
-			InfoBoxes[i]->SetTitle(TEXT("Altern1"));
-		else if ( DisplayType[i]==68 )
-			InfoBoxes[i]->SetTitle(TEXT("Altern2"));
-		else	InfoBoxes[i]->SetTitle(TEXT("BestAltr"));
-		InfoBoxes[i]->SetValue(TEXT("---"));
-		InfoBoxes[i]->SetColor(-1);
-	}
+      if (ActiveAlternate != -1) {
+        InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Formatter-> RenderTitle(&color));
+        InfoBoxes[i]->SetColor(color);
+        InfoBoxes[i]->SetValue(Data_Options[DisplayType[i]].Formatter-> Render(&color));
+        InfoBoxes[i]->SetColor(color);
+      } else {
+        if (DisplayType[i] == 67)
+          InfoBoxes[i]->SetTitle(TEXT("Altern1"));
+        else if (DisplayType[i] == 68)
+          InfoBoxes[i]->SetTitle(TEXT("Altern2"));
+        else
+          InfoBoxes[i]->SetTitle(TEXT("BestAltr"));
+
+        InfoBoxes[i]->SetValue(TEXT("---"));
+        InfoBoxes[i]->SetColor(-1);
+      }
+
       if (needupdate)
-	InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
-          Data_Options[DisplayType[i]].UnitGroup));
-	break;
+        InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
+            Data_Options[DisplayType[i]].UnitGroup));
+
+      break;
+
     case 55:
       InfoBoxes[i]->SetSmallerFont(true);
-      if (needupdate)
-	InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
 
-      InfoBoxes[i]->
-	SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
+      if (needupdate)
+        InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
+
+      InfoBoxes[i]-> SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
 
       // to be optimized!
       if (needupdate)
-	InfoBoxes[i]->
-	  SetValueUnit(Units::GetUserUnitByGroup(
-              Data_Options[DisplayType[i]].UnitGroup)
-	  );
+        InfoBoxes[i]-> SetValueUnit(Units::GetUserUnitByGroup(
+            Data_Options[DisplayType[i]].UnitGroup));
+
       InfoBoxes[i]->SetColor(color);
+
       break;
+
     case 14: // Next waypoint
       InfoBoxes[i]->SetSmallerFont(false);
-      if (theactive != -1){
-	InfoBoxes[i]->
-	  SetTitle(Data_Options[DisplayType[i]].Formatter->
-		   Render(&color));
-	InfoBoxes[i]->SetColor(color);
-	InfoBoxes[i]->
-	  SetValue(Data_Options[47].Formatter->Render(&color));
-      }else{
-	InfoBoxes[i]->SetTitle(TEXT("Next"));
-	InfoBoxes[i]->SetValue(TEXT("---"));
-	InfoBoxes[i]->SetColor(-1);
+
+      if (theactive != -1) {
+        InfoBoxes[i]-> SetTitle(
+            Data_Options[DisplayType[i]].Formatter-> Render(&color));
+        InfoBoxes[i]->SetColor(color);
+        InfoBoxes[i]-> SetValue(Data_Options[47].Formatter->Render(&color));
+      } else {
+        InfoBoxes[i]->SetTitle(TEXT("Next"));
+        InfoBoxes[i]->SetValue(TEXT("---"));
+        InfoBoxes[i]->SetColor(-1);
       }
+
       if (needupdate)
-	InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
-          Data_Options[DisplayType[i]].UnitGroup)
-      );
+        InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
+            Data_Options[DisplayType[i]].UnitGroup));
+
       break;
+
     default:
       InfoBoxes[i]->SetSmallerFont(false);
-      if (needupdate)
-	InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
 
-      InfoBoxes[i]->
-          SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
+      if (needupdate)
+        InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
+
+      InfoBoxes[i]-> SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
 
       // to be optimized!
       if (needupdate)
-	InfoBoxes[i]->
-	  SetValueUnit(Units::GetUserUnitByGroup(
-            Data_Options[DisplayType[i]].UnitGroup)
-	  );
+        InfoBoxes[i]-> SetValueUnit(Units::GetUserUnitByGroup(
+            Data_Options[DisplayType[i]].UnitGroup));
 
       InfoBoxes[i]->SetColor(color);
-    };
+    }
 
     //
     // Infobox bottom line
     //
     switch (DisplayType[i]) {
     case 14: // Next waypoint
-
-      if (theactive != -1){
+      if (theactive != -1) {
         int index = task.getWaypointIndex();
-        if ((index>=0)&& way_points.verify_index(index)) {
-          InfoBoxes[i]->
-            SetComment(way_points.get(index).Comment);
-        }
+        if ((index >= 0) && way_points.verify_index(index))
+          InfoBoxes[i]-> SetComment(way_points.get(index).Comment);
       }
       InfoBoxes[i]->SetComment(TEXT(""));
       break;
+
     case 10:
       if (SettingsComputer().AutoMacCready)
-	InfoBoxes[i]->SetComment(TEXT("AUTO"));
+        InfoBoxes[i]->SetComment(TEXT("AUTO"));
       else
-	InfoBoxes[i]->SetComment(TEXT("MANUAL"));
+        InfoBoxes[i]->SetComment(TEXT("MANUAL"));
       break;
+
     case 0: // GPS Alt
-      Units::FormatAlternateUserAltitude(Basic().Altitude,
-					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+      Units::FormatAlternateUserAltitude(Basic().Altitude, sTmp, sizeof(sTmp)
+          / sizeof(sTmp[0]));
       InfoBoxes[i]->SetComment(sTmp);
       break;
+
     case 1: // AGL
-      Units::FormatAlternateUserAltitude(Calculated().AltitudeAGL,
-					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+      Units::FormatAlternateUserAltitude(Calculated().AltitudeAGL, sTmp,
+          sizeof(sTmp) / sizeof(sTmp[0]));
       InfoBoxes[i]->SetComment(sTmp);
       break;
+
     case 33:
-      Units::FormatAlternateUserAltitude(Basic().BaroAltitude,
-					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+      Units::FormatAlternateUserAltitude(Basic().BaroAltitude, sTmp,
+          sizeof(sTmp) / sizeof(sTmp[0]));
       InfoBoxes[i]->SetComment(sTmp);
       break;
+
     case 27: // AAT time to go
     case 36: // flight time
     case 39: // current time
@@ -643,212 +663,191 @@ void InfoBoxManager::DisplayInfoBox(void)
     case 46: // leg ete
     case 62: // ete
       if (Data_Options[DisplayType[i]].Formatter->isValid()) {
-        InfoBoxes[i]->
-          SetComment(Data_Options[DisplayType[i]].Formatter->GetCommentText());
+        InfoBoxes[i]-> SetComment(
+            Data_Options[DisplayType[i]].Formatter->GetCommentText());
       } else {
-        InfoBoxes[i]->
-          SetComment(TEXT(""));
+        InfoBoxes[i]-> SetComment(TEXT(""));
       }
       break;
+
     case 43:
       if (SettingsComputer().EnableBlockSTF) {
-	InfoBoxes[i]->SetComment(TEXT("BLOCK"));
+        InfoBoxes[i]->SetComment(TEXT("BLOCK"));
       } else {
-	InfoBoxes[i]->SetComment(TEXT("DOLPHIN"));
+        InfoBoxes[i]->SetComment(TEXT("DOLPHIN"));
       }
       break;
+
     case 55: // own team code
       InfoBoxes[i]->SetComment(Calculated().TeammateCode);
-      if (SettingsComputer().TeamFlarmTracking)
-	{
-	  if (IsFlarmTargetCNInRange(Basic(),SettingsComputer().TeamFlarmIdTarget))
-	    {
-	      InfoBoxes[i]->SetColorBottom(2);
-	    }
-	  else
-	    {
-	      InfoBoxes[i]->SetColorBottom(1);
-	    }
-	}
-      else
-	{
-	  InfoBoxes[i]->SetColorBottom(0);
-	}
+
+      if (SettingsComputer().TeamFlarmTracking) {
+        if (IsFlarmTargetCNInRange(Basic(),
+            SettingsComputer().TeamFlarmIdTarget)) {
+          InfoBoxes[i]->SetColorBottom(2);
+        } else {
+          InfoBoxes[i]->SetColorBottom(1);
+        }
+      } else {
+        InfoBoxes[i]->SetColorBottom(0);
+      }
       break;
+
     case 56: // team bearing
+      if (SettingsComputer().TeamFlarmIdTarget != 0) {
+        if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0) {
+          InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
+        } else {
+          InfoBoxes[i]->SetComment(TEXT("???"));
+        }
+      } else {
+        InfoBoxes[i]->SetComment(TEXT("---"));
+      }
 
-      if (SettingsComputer().TeamFlarmIdTarget != 0)
-	{
-	  if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0)
-	    {
-	      InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
-	    }
-	  else
-	    {
-	      InfoBoxes[i]->SetComment(TEXT("???"));
-	    }
-	}
-      else
-	{
-	  InfoBoxes[i]->SetComment(TEXT("---"));
-	}
-
-      if (IsFlarmTargetCNInRange(Basic(),SettingsComputer().TeamFlarmIdTarget))
-	{
-	  InfoBoxes[i]->SetColorBottom(2);
-	}
-      else
-	{
-	  InfoBoxes[i]->SetColorBottom(1);
-	}
-
+      if (IsFlarmTargetCNInRange(Basic(), SettingsComputer().TeamFlarmIdTarget)) {
+        InfoBoxes[i]->SetColorBottom(2);
+      } else {
+        InfoBoxes[i]->SetColorBottom(1);
+      }
       break;
+
     case 57: // team bearing dif
+      if (SettingsComputer().TeamFlarmIdTarget != 0) {
+        if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0) {
+          InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
+        } else {
+          InfoBoxes[i]->SetComment(TEXT("???"));
+        }
+      } else {
+        InfoBoxes[i]->SetComment(TEXT("---"));
+      }
 
-      if (SettingsComputer().TeamFlarmIdTarget != 0)
-	{
-	  if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0)
-	    {
-	      InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
-	    }
-	  else
-	    {
-	      InfoBoxes[i]->SetComment(TEXT("???"));
-	    }
-	}
-      else
-	{
-	  InfoBoxes[i]->SetComment(TEXT("---"));
-	}
-      if (IsFlarmTargetCNInRange(Basic(),SettingsComputer().TeamFlarmIdTarget))
-	{
-	  InfoBoxes[i]->SetColorBottom(2);
-	}
-      else
-	{
-	  InfoBoxes[i]->SetColorBottom(1);
-	}
-
+      if (IsFlarmTargetCNInRange(Basic(), SettingsComputer().TeamFlarmIdTarget)) {
+        InfoBoxes[i]->SetColorBottom(2);
+      } else {
+        InfoBoxes[i]->SetColorBottom(1);
+      }
       break;
+
     case 58: // team range
+      if (SettingsComputer().TeamFlarmIdTarget != 0) {
+        if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0) {
+          InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
+        } else {
+          InfoBoxes[i]->SetComment(TEXT("???"));
+        }
+      } else {
+        InfoBoxes[i]->SetComment(TEXT("---"));
+      }
 
-      if (SettingsComputer().TeamFlarmIdTarget != 0)
-	{
-	  if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0)
-	    {
-	      InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
-	    }
-	  else
-	    {
-	      InfoBoxes[i]->SetComment(TEXT("???"));
-	    }
-	}
-      else
-	{
-	  InfoBoxes[i]->SetComment(TEXT("---"));
-	}
-      if (IsFlarmTargetCNInRange(Basic(),SettingsComputer().TeamFlarmIdTarget))
-	{
-	  InfoBoxes[i]->SetColorBottom(2);
-	}
-      else
-	{
-	  InfoBoxes[i]->SetColorBottom(1);
-	}
-
+      if (IsFlarmTargetCNInRange(Basic(), SettingsComputer().TeamFlarmIdTarget)) {
+        InfoBoxes[i]->SetColorBottom(2);
+      } else {
+        InfoBoxes[i]->SetColorBottom(1);
+      }
       break;
-	// VENTA3 wind speed + bearing bottom line
-	case 25:
-	  if (Calculated().WindBearing == 0 )
-	    _stprintf(sTmp,_T("0%s"),_T(DEG)); else
-	    _stprintf(sTmp,_T("%1.0d%s"),(int)Calculated().WindBearing,_T(DEG));
-	  InfoBoxes[i]->SetComment(sTmp);
-	  break;
 
-	// VENTA3 radial
-	case 60:
-	  if ( SettingsComputer().HomeWaypoint == -1 ) {  // should be redundant
-	    InfoBoxes[i]->SetComment(TEXT(""));
-	    break;
-	  }
-	  if ( Calculated().HomeRadial == 0 ) {
-	    _stprintf(sTmp,_T("0%s"),_T(DEG));
-	  } else {
-	    _stprintf(sTmp,_T("%1.0d%s"),(int)Calculated().HomeRadial,_T(DEG));
-	  }
-	  InfoBoxes[i]->SetComment(sTmp);
-	  break;
+    // VENTA3 wind speed + bearing bottom line
+    case 25:
+      if (Calculated().WindBearing == 0)
+        _stprintf(sTmp, _T("0%s"), _T(DEG));
+      else
+        _stprintf(sTmp, _T("%1.0d%s"), (int)Calculated().WindBearing, _T(DEG));
+      InfoBoxes[i]->SetComment(sTmp);
+      break;
 
-	// VENTA3 battery temperature under voltage. There is a good
-	// reason to see the temperature, if available: many PNA/PDA
-	// will switch OFF during flight under direct sunlight for
-	// several hours due to battery temperature too high!! The 314
-	// does!
+    // VENTA3 radial
+    case 60:
+      if (SettingsComputer().HomeWaypoint == -1) { // should be redundant
+        InfoBoxes[i]->SetComment(TEXT(""));
+        break;
+      }
 
-	// TODO: check temperature too high and set a warning flag to
-	// be used by an event or something
-#if !defined(GNAV) && !defined(WINDOWSPC) && !defined(HAVE_POSIX)
-	case 65:
-	  if ( PDABatteryTemperature >0 ) {
-	    _stprintf(sTmp,_T("%1.0d%SC"),(int)PDABatteryTemperature,_T(DEG));
-	    InfoBoxes[i]->SetComment(sTmp);
-	  } else
-	    InfoBoxes[i]->SetComment(TEXT(""));
-	  break;
-	#endif
+      if (Calculated().HomeRadial == 0) {
+        _stprintf(sTmp, _T("0%s"), _T(DEG));
+      } else {
+        _stprintf(sTmp, _T("%1.0d%s"), (int)Calculated().HomeRadial, _T(DEG));
+      }
+      InfoBoxes[i]->SetComment(sTmp);
+      break;
 
-	// VENTA3 alternates
-	case 67:
-	case 68:
-	case 69:
-	  if ( ActiveAlternate == -1 ) {  // should be redundant
-	    InfoBoxes[i]->SetComment(TEXT(""));
-	    break;
-	  }
-	  if (FlipBoxValue == true) {
-            Units::FormatUserDistance(way_points.get_calc(ActiveAlternate).Distance,
-				      sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-	    InfoBoxes[i]->SetComment(sTmp);
-	  } else {
-            Units::FormatUserArrival(way_points.get_calc(ActiveAlternate).AltArrival,
-				     sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-	    InfoBoxes[i]->SetComment(sTmp);
-	  }
-	  break;
-	case 70: // QFE
-	  /*
-		 // Showing the diff value offset was just interesting ;-)
-		if (FlipBoxValue == true) {
-			//Units::FormatUserArrival(QFEAltitudeOffset,
-			Units::FormatUserAltitude(QFEAltitudeOffset,
-				 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-			InfoBoxes[i]->SetComment(sTmp);
-		} else {
-		*/
-		//Units::FormatUserArrival(Basic().Altitude,
-		Units::FormatUserAltitude(Basic().Altitude,
-			 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-		InfoBoxes[i]->SetComment(sTmp);
-		break;
+    // VENTA3 battery temperature under voltage. There is a good
+    // reason to see the temperature, if available: many PNA/PDA
+    // will switch OFF during flight under direct sunlight for
+    // several hours due to battery temperature too high!! The 314
+    // does!
+
+    // TODO: check temperature too high and set a warning flag to
+    // be used by an event or something
+    #if !defined(GNAV) && !defined(WINDOWSPC) && !defined(HAVE_POSIX)
+    case 65:
+      if (PDABatteryTemperature > 0) {
+        _stprintf(sTmp, _T("%1.0d%SC"), (int)PDABatteryTemperature, _T(DEG));
+        InfoBoxes[i]->SetComment(sTmp);
+      } else
+        InfoBoxes[i]->SetComment(TEXT(""));
+      break;
+    #endif
+
+      // VENTA3 alternates
+    case 67:
+    case 68:
+    case 69:
+      if (ActiveAlternate == -1) {
+        // should be redundant
+        InfoBoxes[i]->SetComment(TEXT(""));
+        break;
+      }
+      if (FlipBoxValue == true) {
+        Units::FormatUserDistance(
+            way_points.get_calc(ActiveAlternate).Distance, sTmp, sizeof(sTmp)
+                / sizeof(sTmp[0]));
+        InfoBoxes[i]->SetComment(sTmp);
+      } else {
+        Units::FormatUserArrival(
+            way_points.get_calc(ActiveAlternate).AltArrival, sTmp, sizeof(sTmp)
+                / sizeof(sTmp[0]));
+        InfoBoxes[i]->SetComment(sTmp);
+      }
+      break;
+
+    case 70: // QFE
+      /*
+       // Showing the diff value offset was just interesting ;-)
+       if (FlipBoxValue == true) {
+       //Units::FormatUserArrival(QFEAltitudeOffset,
+       Units::FormatUserAltitude(QFEAltitudeOffset,
+       sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+       InfoBoxes[i]->SetComment(sTmp);
+       } else {
+       */
+
+      //Units::FormatUserArrival(Basic().Altitude,
+
+      Units::FormatUserAltitude(Basic().Altitude, sTmp, sizeof(sTmp)
+          / sizeof(sTmp[0]));
+      InfoBoxes[i]->SetComment(sTmp);
+      break;
 
     default:
       InfoBoxes[i]->SetComment(TEXT(""));
-    };
+    }
 
     DisplayTypeLast[i] = DisplayType[i];
-
   }
   Paint();
 
   first = false;
 }
 
-
-void InfoBoxManager::ProcessKey(int keycode) {
+void
+InfoBoxManager::ProcessKey(int keycode)
+{
   unsigned i;
 
   int InfoFocus = GetFocused();
-  if (InfoFocus<0) return; // paranoid
+  if (InfoFocus < 0)
+    return; // paranoid
 
   InputEvents::HideMenu();
 
@@ -860,21 +859,26 @@ void InfoBoxManager::ProcessKey(int keycode) {
   TriggerGPSUpdate(); // emulate update to trigger calculations
 
   ResetDisplayTimeOut();
-
 }
 
-void InfoBoxManager::DestroyInfoBoxFormatters() {
+void
+InfoBoxManager::DestroyInfoBoxFormatters()
+{
   //  CommandBar_Destroy(hWndCB);
   for (unsigned i = 0; i < NUMSELECTSTRINGS; i++) {
     delete Data_Options[i].Formatter;
   }
 }
 
-bool InfoBoxManager::IsFocus() {
+bool
+InfoBoxManager::IsFocus()
+{
   return GetFocused() >= 0;
 }
 
-void InfoBoxManager::InfoBoxDrawIfDirty(void) {
+void
+InfoBoxManager::InfoBoxDrawIfDirty(void)
+{
   // No need to redraw map or infoboxes if screen is blanked.
   // This should save lots of battery power due to CPU usage
   // of drawing the screen
@@ -885,12 +889,15 @@ void InfoBoxManager::InfoBoxDrawIfDirty(void) {
   }
 }
 
-void InfoBoxManager::SetDirty(bool is_dirty) {
+void
+InfoBoxManager::SetDirty(bool is_dirty)
+{
   InfoBoxesDirty = is_dirty;
 }
 
-
-void InfoBoxManager::ProcessTimer(void) {
+void
+InfoBoxManager::ProcessTimer(void)
+{
   static double lasttime;
 
   if (Basic().Time != lasttime) {
@@ -901,9 +908,8 @@ void InfoBoxManager::ProcessTimer(void) {
   LastFlipBoxTime++;
 }
 
-
 void InfoBoxManager::ResetInfoBoxes(void) {
-#ifdef GNAV
+  #ifdef GNAV
   InfoType[0]=873336334;
   InfoType[1]=856820491;
   InfoType[2]=822280982;
@@ -913,7 +919,7 @@ void InfoBoxManager::ResetInfoBoxes(void) {
   InfoType[6]=657002759;
   InfoType[7]=621743887;
   InfoType[8]=439168301;
-#else
+  #else
   InfoType[0] = 921102;
   InfoType[1] = 725525;
   InfoType[2] = 262144;
@@ -922,17 +928,21 @@ void InfoBoxManager::ResetInfoBoxes(void) {
   InfoType[5] = 2236963;
   InfoType[6] = 394758;
   InfoType[7] = 1644825;
-#endif
+  #endif
 }
 
-const TCHAR *InfoBoxManager::GetTypeDescription(unsigned i) {
+const TCHAR *
+InfoBoxManager::GetTypeDescription(unsigned i)
+{
   return Data_Options[i].Description;
 }
 
 // TODO: this should go into the manager
 extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
 
-void InfoBoxManager::Paint(void) {
+void
+InfoBoxManager::Paint(void)
+{
   unsigned i;
   for (i = 0; i < numInfoWindows; i++)
     InfoBoxes[i]->Paint();
@@ -940,7 +950,7 @@ void InfoBoxManager::Paint(void) {
   if (!InfoBoxLayout::fullscreen) {
     full_window.hide();
 
-    for (i=0; i<numInfoWindows; i++)
+    for (i = 0; i < numInfoWindows; i++)
       InfoBoxes[i]->PaintFast();
   } else {
     Canvas &canvas = full_window.get_canvas();
@@ -949,44 +959,44 @@ void InfoBoxManager::Paint(void) {
     canvas.white_pen();
     canvas.clear();
 
-    for (i=0; i<numInfoWindows; i++) {
-
+    for (i = 0; i < numInfoWindows; i++) {
       // JMW TODO: make these calculated once only.
       int x, y;
       int rx, ry;
       int rw;
       int rh;
       double fw, fh;
+
       if (InfoBoxLayout::landscape) {
         rw = 84;
         rh = 68;
       } else {
         rw = 120;
         rh = 80;
+
       }
-      fw = rw/(double)InfoBoxLayout::ControlWidth;
-      fh = rh/(double)InfoBoxLayout::ControlHeight;
+      fw = rw / (double)InfoBoxLayout::ControlWidth;
+      fh = rh / (double)InfoBoxLayout::ControlHeight;
       double f = m_min(fw, fh);
-      rw = (int)(f*InfoBoxLayout::ControlWidth);
-      rh = (int)(f*InfoBoxLayout::ControlHeight);
+      rw = (int)(f * InfoBoxLayout::ControlWidth);
+      rh = (int)(f * InfoBoxLayout::ControlHeight);
 
       if (InfoBoxLayout::landscape) {
         rx = i % 3;
         ry = i / 3;
 
-        x = (rw+4)*rx;
-        y = (rh+3)*ry;
-
+        x = (rw + 4) * rx;
+        y = (rh + 3) * ry;
       } else {
         rx = i % 2;
         ry = i / 4;
 
-        x = (rw)*rx;
-        y = (rh)*ry;
-
+        x = (rw) * rx;
+        y = (rh) * ry;
       }
-      InfoBoxes[i]->PaintInto(canvas,
-                              IBLSCALE(x), IBLSCALE(y), IBLSCALE(rw), IBLSCALE(rh));
+
+      InfoBoxes[i]->PaintInto(canvas, IBLSCALE(x), IBLSCALE(y),
+                              IBLSCALE(rw), IBLSCALE(rh));
     }
 
     full_window.invalidate();
@@ -994,8 +1004,9 @@ void InfoBoxManager::Paint(void) {
   }
 }
 
-
-RECT InfoBoxManager::Create(RECT rc) {
+RECT
+InfoBoxManager::Create(RECT rc)
+{
   int xoff, yoff, sizex, sizey;
 
   RECT retval = InfoBoxLayout::GetInfoBoxSizes(rc);
@@ -1006,43 +1017,41 @@ RECT InfoBoxManager::Create(RECT rc) {
   sizex=rc.right-rc.left;
   sizey=rc.bottom-rc.top;
 
-  full_window.set(main_window, xoff, yoff, sizex, sizey,
-                  false, false, false);
+  full_window.set(main_window, xoff, yoff, sizex, sizey, false, false, false);
 
   // create infobox windows
+  for (unsigned i = 0; i < numInfoWindows; i++) {
+    InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
-  for (unsigned i = 0; i < numInfoWindows; i++)
-    {
-      InfoBoxLayout::GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
+    InfoBoxes[i] = new InfoBox(main_window, xoff, yoff, sizex, sizey);
 
-      InfoBoxes[i] = new InfoBox(main_window,
-				 xoff, yoff, sizex, sizey);
-
-      int Border=0;
-      if (InfoBoxLayout::gnav){
-        if (i>0)
-          Border |= BORDERTOP;
-        if (i<6)
-          Border |= BORDERRIGHT;
-        InfoBoxes[i]->SetBorderKind(Border);
-      } else
-      if (!InfoBoxLayout::landscape) {
-        Border = 0;
-        if (i<4) {
-          Border |= BORDERBOTTOM;
-        } else {
-          Border |= BORDERTOP;
-        }
+    int Border = 0;
+    if (InfoBoxLayout::gnav) {
+      if (i > 0)
+        Border |= BORDERTOP;
+      if (i < 6)
         Border |= BORDERRIGHT;
-        InfoBoxes[i]->SetBorderKind(Border);
-      }
+
+      InfoBoxes[i]->SetBorderKind(Border);
+    } else if (!InfoBoxLayout::landscape) {
+      Border = 0;
+      if (i < 4)
+        Border |= BORDERBOTTOM;
+      else
+        Border |= BORDERTOP;
+
+      Border |= BORDERRIGHT;
+      InfoBoxes[i]->SetBorderKind(Border);
     }
+  }
 
   return retval; // for use in setting MapWindow
 }
 
-void InfoBoxManager::Destroy(void){
-  for (unsigned i = 0; i < numInfoWindows; i++){
+void
+InfoBoxManager::Destroy(void)
+{
+  for (unsigned i = 0; i < numInfoWindows; i++) {
     delete (InfoBoxes[i]);
   }
 
@@ -1050,4 +1059,3 @@ void InfoBoxManager::Destroy(void){
 
   DestroyInfoBoxFormatters();
 }
-
