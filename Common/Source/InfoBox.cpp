@@ -71,8 +71,7 @@ static Brush hBrushDefaultBackGround;
 static Brush hBrushDefaultBackGroundSel;
 static Pen hPenDefaultBorder;
 static Pen hPenSelector;
-static int Count=0;
-
+static int Count = 0;
 
 // infobox
 #define DEFAULTBORDERPENWIDTH IBLSCALE(1)
@@ -97,7 +96,7 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
 
   Color fgColor, bkColor, bkColorSel;
 
-  if (Appearance.InverseInfoBox){
+  if (Appearance.InverseInfoBox) {
     fgColor = Color(0xff, 0xff, 0xff);
     bkColor = Color(0x00, 0x00, 0x00);
   } else {
@@ -111,7 +110,7 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   mColorBack = bkColor;
   mColorFore = fgColor;
 
-  if (Count == 0){
+  if (Count == 0) {
     hBrushDefaultBackGround.set(bkColor);
     hBrushDefaultBackGroundSel.set(bkColorSel);
     hPenDefaultBorder.set(DEFAULTBORDERPENWIDTH, bdColor);
@@ -134,21 +133,21 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
     mBorderKind = BORDERRIGHT | BORDERBOTTOM;
   }
 
-  mphFontTitle   = &TitleWindowFont;
-  mphFontValue   = &InfoWindowFont;
+  mphFontTitle = &TitleWindowFont;
+  mphFontValue = &InfoWindowFont;
   mphFontComment = &TitleWindowFont;
-  valueFont	     = &TitleSmallWindowFont;
+  valueFont = &TitleSmallWindowFont;
 
   mpFontHeightTitle = &Appearance.TitleWindowFont;
   mpFontHeightValue = &Appearance.InfoWindowFont;
   mpFontHeightComment = &Appearance.TitleWindowFont;
 
-  mColorTitle   = fgColor;
-  mColorValue   = fgColor;
+  mColorTitle = fgColor;
+  mColorValue = fgColor;
   mColorComment = fgColor;
 
-  mColorTitleBk   = bkColor;
-  mColorValueBk   = bkColor;
+  mColorTitleBk = bkColor;
+  mColorValueBk = bkColor;
   mColorCommentBk = bkColor;
 
   mValueUnit = unUndef;
@@ -162,26 +161,23 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   mHasFocus = false;
 
   Count++;
-
 }
 
 InfoBox::~InfoBox(void){
-
   Count--;
 
-  if (Count==0){
-
+  if (Count == 0) {
     hBrushDefaultBackGround.reset();
     hBrushDefaultBackGroundSel.reset();
     hPenDefaultBorder.reset();
     hPenSelector.reset();
-
   }
 }
 
-void InfoBox::SetFocus(bool Value){
-
-  if (mHasFocus != Value){
+void
+InfoBox::SetFocus(bool Value)
+{
+  if (mHasFocus != Value) {
     mHasFocus = Value;
     Paint();
   }
@@ -193,13 +189,18 @@ InfoBox::SetValueUnit(Units_t Value)
   mValueUnit = Value;
 }
 
-int InfoBox::GetBorderKind(void){
-  return(mBorderKind);
+int
+InfoBox::GetBorderKind(void)
+{
+  return mBorderKind;
 }
 
-int InfoBox::SetBorderKind(int Value){
+int
+InfoBox::SetBorderKind(int Value)
+{
   int res = mBorderKind;
-  if (mBorderKind != Value){
+
+  if (mBorderKind != Value) {
     mBorderKind = Value;
 
     if (Appearance.InfoBoxBorder == apIbTab) {
@@ -209,12 +210,14 @@ int InfoBox::SetBorderKind(int Value){
     }
     //JMW    Paint();
   }
-  return(res);
+
+  return res;
 }
 
-
-void InfoBox::SetTitle(const TCHAR *Value){
-  TCHAR sTmp[TITLESIZE+1];
+void
+InfoBox::SetTitle(const TCHAR *Value)
+{
+  TCHAR sTmp[TITLESIZE + 1];
 
   _tcsncpy(sTmp, Value, TITLESIZE);
   sTmp[TITLESIZE] = '\0';
@@ -222,7 +225,7 @@ void InfoBox::SetTitle(const TCHAR *Value){
   if (Appearance.InfoTitelCapital)
     _tcsupr(sTmp);
 
-  if (_tcscmp(mTitle, sTmp) != 0){
+  if (_tcscmp(mTitle, sTmp) != 0) {
     _tcscpy(mTitle, sTmp);
     mTitleChanged = true;
     //JMW    PaintTitle();
@@ -230,40 +233,47 @@ void InfoBox::SetTitle(const TCHAR *Value){
   }
 }
 
-void InfoBox::SetValue(const TCHAR *Value){
-  if (_tcscmp(mValue, Value) != 0){
+void
+InfoBox::SetValue(const TCHAR *Value)
+{
+  if (_tcscmp(mValue, Value) != 0) {
     _tcsncpy(mValue, Value, VALUESIZE);
     mValue[VALUESIZE] = '\0';
     //JMW    PaintValue();
   }
 }
 
-
-void InfoBox::SetColor(int value) {
-  if (Appearance.InfoBoxColors) {
+void
+InfoBox::SetColor(int value)
+{
+  if (Appearance.InfoBoxColors)
     color = value;
-  } else {
+  else
     color = 0;
-  }
 }
 
-void InfoBox::SetColorBottom(int value) {
-  if (Appearance.InfoBoxColors) {
+void
+InfoBox::SetColorBottom(int value)
+{
+  if (Appearance.InfoBoxColors)
     colorBottom = value;
-  } else {
+  else
     colorBottom = 0;
-  }
 }
 
-void InfoBox::SetColorTop(int value) {
-  if (Appearance.InfoBoxColors) {
+void
+InfoBox::SetColorTop(int value)
+{
+  if (Appearance.InfoBoxColors)
     colorTop = value;
-  } else {
+  else
     colorTop = 0;
-  }
 }
-void InfoBox::SetComment(const TCHAR *Value){
-  if (_tcscmp(mComment, Value) != 0){
+
+void
+InfoBox::SetComment(const TCHAR *Value)
+{
+  if (_tcscmp(mComment, Value) != 0) {
     _tcsncpy(mComment, Value, COMMENTSIZE);
     mComment[COMMENTSIZE] = '\0';
     //JMW    PaintComment();
@@ -271,21 +281,25 @@ void InfoBox::SetComment(const TCHAR *Value){
   }
 }
 
-void InfoBox::SetSmallerFont(bool smallerFont)
+void
+InfoBox::SetSmallerFont(bool smallerFont)
 {
-	this->mSmallerFont = smallerFont;
+  this->mSmallerFont = smallerFont;
 }
 
-void InfoBox::PaintTitle(Canvas &canvas){
+void
+InfoBox::PaintTitle(Canvas &canvas)
+{
 
-  if (!mTitleChanged) return;
+  if (!mTitleChanged)
+    return;
 
   SIZE tsize;
-  int x,y;
+  int x, y;
   int halftextwidth;
 
   canvas.set_background_color(mColorTitleBk);
- // SetTextColor(mHdcBuf, mColorTitle);
+  // SetTextColor(mHdcBuf, mColorTitle);
   switch (colorTop) {
   case -1:
     canvas.set_text_color(bdColor);
@@ -294,25 +308,25 @@ void InfoBox::PaintTitle(Canvas &canvas){
     canvas.set_text_color(mColorValue);
     break;
   case 1:
-    canvas.set_text_color(Appearance.InverseInfoBox
-                          ? MapGfx.inv_redColor : MapGfx.redColor);
+    canvas.set_text_color(Appearance.InverseInfoBox ?
+        MapGfx.inv_redColor : MapGfx.redColor);
     break;
   case 2:
-    canvas.set_text_color(Appearance.InverseInfoBox
-                          ? MapGfx.inv_blueColor : MapGfx.blueColor);
+    canvas.set_text_color(Appearance.InverseInfoBox ?
+        MapGfx.inv_blueColor : MapGfx.blueColor);
     break;
-// VENTA3 added colors
+    // VENTA3 added colors
   case 3:
-    canvas.set_text_color(Appearance.InverseInfoBox
-                          ? MapGfx.inv_greenColor : MapGfx.greenColor);
+    canvas.set_text_color(Appearance.InverseInfoBox ?
+        MapGfx.inv_greenColor : MapGfx.greenColor);
     break;
   case 4:
-    canvas.set_text_color(Appearance.InverseInfoBox
-                          ? MapGfx.inv_yellowColor : MapGfx.yellowColor);
+    canvas.set_text_color(Appearance.InverseInfoBox ?
+        MapGfx.inv_yellowColor : MapGfx.yellowColor);
     break;
   case 5:
-    canvas.set_text_color(Appearance.InverseInfoBox
-                          ? MapGfx.inv_magentaColor : MapGfx.magentaColor);
+    canvas.set_text_color(Appearance.InverseInfoBox ?
+        MapGfx.inv_magentaColor : MapGfx.magentaColor);
     break;
   }
 
@@ -320,49 +334,48 @@ void InfoBox::PaintTitle(Canvas &canvas){
 
   tsize = canvas.text_size(mTitle);
 
-  halftextwidth = (mWidth - tsize.cx)>>1;
+  halftextwidth = (mWidth - tsize.cx) >> 1;
 
   x = max(1, (int)recTitle.left + halftextwidth);
 
   y = recTitle.top + 1 + mpFontHeightTitle->CapitalHeight
-    - mpFontHeightTitle->AscentHeight;
+      - mpFontHeightTitle->AscentHeight;
 
   if (mBorderKind & BORDERLEFT)
-    x+= DEFAULTBORDERPENWIDTH;
+    x += DEFAULTBORDERPENWIDTH;
 
   canvas.text_opaque(x, y, &recTitle, mTitle);
 
-  if ((mBorderKind & BORDERTAB) && (halftextwidth>IBLSCALE(3))) {
-
-    int ytop = recTitle.top + (mpFontHeightTitle->CapitalHeight)/2;
-    int ytopedge = ytop+IBLSCALE(2);
+  if ((mBorderKind & BORDERTAB) && (halftextwidth > IBLSCALE(3))) {
+    int ytop = recTitle.top + (mpFontHeightTitle->CapitalHeight) / 2;
+    int ytopedge = ytop + IBLSCALE(2);
     int ybottom = recTitle.top + IBLSCALE(6) + mpFontHeightTitle->CapitalHeight;
 
     canvas.select(mhPenBorder);
 
     POINT tab[8];
-    tab[0].x = tab[1].x = recTitle.left+IBLSCALE(1);
+    tab[0].x = tab[1].x = recTitle.left + IBLSCALE(1);
     tab[0].y = tab[7].y = ybottom;
-    tab[2].x = recTitle.left+IBLSCALE(3);
+    tab[2].x = recTitle.left + IBLSCALE(3);
     tab[2].y = tab[5].y = tab[3].y = tab[4].y = ytop;
     tab[1].y = tab[6].y = ytopedge;
-    tab[5].x = recTitle.right-IBLSCALE(4);
-    tab[6].x = tab[7].x = recTitle.right-IBLSCALE(2);
-    tab[3].x = recTitle.left+halftextwidth-IBLSCALE(1);
-    tab[4].x = recTitle.right-halftextwidth+IBLSCALE(1);
+    tab[5].x = recTitle.right - IBLSCALE(4);
+    tab[6].x = tab[7].x = recTitle.right - IBLSCALE(2);
+    tab[3].x = recTitle.left + halftextwidth - IBLSCALE(1);
+    tab[4].x = recTitle.right - halftextwidth + IBLSCALE(1);
 
     canvas.polyline(tab, 4);
     canvas.polyline(tab + 4, 4);
   }
 
   mTitleChanged = false;
-
 }
 
-void InfoBox::PaintValue(Canvas &canvas){
-
+void
+InfoBox::PaintValue(Canvas &canvas)
+{
   SIZE tsize;
-  int x,y;
+  int x, y;
 
   canvas.set_background_color(mColorValueBk);
 
@@ -374,40 +387,40 @@ void InfoBox::PaintValue(Canvas &canvas){
     canvas.set_text_color(mColorValue);
     break;
   case 1:
-    if (Appearance.InverseInfoBox){
+    if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_redColor);
-    } else {
+     else
       canvas.set_text_color(MapGfx.redColor);
-    }
+
     break;
   case 2:
-    if (Appearance.InverseInfoBox){
+    if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_blueColor);
-    } else {
+    else
       canvas.set_text_color(MapGfx.blueColor);
-    }
+
     break;
 // VENTA3 more colors
   case 3:
-    if (Appearance.InverseInfoBox){
+    if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_greenColor);
-    } else {
+    else
       canvas.set_text_color(MapGfx.greenColor);
-    }
+
     break;
   case 4:
-    if (Appearance.InverseInfoBox){
+    if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_yellowColor);
-    } else {
+    else
       canvas.set_text_color(MapGfx.yellowColor);
-    }
+
     break;
   case 5:
-    if (Appearance.InverseInfoBox){
+    if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_magentaColor);
-    } else {
+    else
       canvas.set_text_color(MapGfx.magentaColor);
-    }
+
     break;
   }
 
@@ -425,14 +438,13 @@ void InfoBox::PaintValue(Canvas &canvas){
   }
 
   x = max(1, (int)recValue.left +
-          (mWidth - (int)tsize.cx
-           - (int)unit_size.cx * InfoBoxLayout::scale) / 2);
+          (mWidth - (int)tsize.cx - (int)unit_size.cx * InfoBoxLayout::scale) / 2);
 
   if (mBorderKind & BORDERLEFT)
-    x+= DEFAULTBORDERPENWIDTH;
+    x += DEFAULTBORDERPENWIDTH;
 
-  y = recValue.top + 1 - mpFontHeightValue->AscentHeight +
-    (recValue.bottom - recValue.top + mpFontHeightValue->CapitalHeight)/2;
+  y = recValue.top + 1 - mpFontHeightValue->AscentHeight + (recValue.bottom
+      - recValue.top + mpFontHeightValue->CapitalHeight) / 2;
 
   canvas.text_opaque(x, y, &recValue, mValue);
 
@@ -440,7 +452,9 @@ void InfoBox::PaintValue(Canvas &canvas){
     POINT origin = unit_symbol->get_origin(Appearance.InverseInfoBox
                                            ? UnitSymbol::INVERSE
                                            : UnitSymbol::NORMAL);
+
     BitmapCanvas temp(canvas, *unit_symbol);
+
     canvas.scale_copy(x + tsize.cx,
                       y + mpFontHeightValue->AscentHeight
                       - unit_size.cy * InfoBoxLayout::scale,
@@ -450,14 +464,16 @@ void InfoBox::PaintValue(Canvas &canvas){
   }
 }
 
-void InfoBox::PaintComment(Canvas &canvas){
-
+void
+InfoBox::PaintComment(Canvas &canvas)
+{
   SIZE tsize;
-  int x,y;
+  int x, y;
   unsigned int len = _tcslen(mComment);
 
-  if (len==0) return; // nothing to paint
-
+  // nothing to paint
+  if (len == 0)
+    return;
 
   switch (colorBottom) {
   case -1:
@@ -467,47 +483,46 @@ void InfoBox::PaintComment(Canvas &canvas){
     canvas.set_text_color(mColorValue);
     break;
   case 1:
-    if (Appearance.InverseInfoBox){
+    if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_redColor);
-    } else {
+    else
       canvas.set_text_color(MapGfx.redColor);
-    }
+
     break;
   case 2:
-    if (Appearance.InverseInfoBox){
+    if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_blueColor);
-    } else {
+    else
       canvas.set_text_color(MapGfx.blueColor);
-    }
+
     break;
-// VENTA3 more colors
+    // VENTA3 more colors
   case 3:
-    if (Appearance.InverseInfoBox){
+    if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_greenColor);
-    } else {
+    else
       canvas.set_text_color(MapGfx.greenColor);
-    }
+
     break;
   case 4:
-    if (Appearance.InverseInfoBox){
+    if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_yellowColor);
-    } else {
+    else
       canvas.set_text_color(MapGfx.yellowColor);
-    }
+
     break;
   case 5:
-    if (Appearance.InverseInfoBox){
+    if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_magentaColor);
-    } else {
+    else
       canvas.set_text_color(MapGfx.magentaColor);
-    }
+
     break;
   }
 
-
   canvas.set_background_color(mColorCommentBk);
 
- // SetTextColor(mHdcBuf, mColorComment);
+  // SetTextColor(mHdcBuf, mColorComment);
 
   canvas.select(*mphFontComment);
 
@@ -515,20 +530,18 @@ void InfoBox::PaintComment(Canvas &canvas){
 
   x = max(1, (int)recComment.left + (mWidth - (int)tsize.cx) / 2);
   if (mBorderKind & BORDERLEFT)
-    x+= DEFAULTBORDERPENWIDTH;
+    x += DEFAULTBORDERPENWIDTH;
 
-  y = recComment.top + 1
-    + mpFontHeightComment->CapitalHeight
-    - mpFontHeightComment->AscentHeight;
+  y = recComment.top + 1 + mpFontHeightComment->CapitalHeight
+      - mpFontHeightComment->AscentHeight;
 
   canvas.text_opaque(x, y, &recComment, mComment);
-
 }
 
-
-void InfoBox::PaintSelector(Canvas &canvas){
-
-  if (mHasFocus){
+void
+InfoBox::PaintSelector(Canvas &canvas)
+{
+  if (mHasFocus) {
     canvas.select(hPenSelector);
 
     canvas.two_lines(mWidth - SELECTORWIDTH - 1, 0,
@@ -547,43 +560,48 @@ void InfoBox::PaintSelector(Canvas &canvas){
                      0, 0,
                      SELECTORWIDTH + 1, 0);
   }
-
 }
 
-void InfoBox::Paint(){
-
-  if (!globalRunningEvent.test()) return; // safety
+void
+InfoBox::Paint()
+{
+  // safety
+  if (!globalRunningEvent.test())
+    return;
 
   static bool InitDone = false;
 
-  if (!InitDone){
+  if (!InitDone) {
     InitializeDrawHelpers();
     InitDone = false;
   }
 
   Canvas &buffer = get_canvas();
 
-  buffer.fill_rectangle(0, mTitleChanged ? 0 : recTitle.bottom,
-                        mWidth, mHeight, mhBrushBk);
+  buffer.fill_rectangle(0, mTitleChanged ? 0 : recTitle.bottom, mWidth,
+      mHeight, mhBrushBk);
 
-  if (mBorderKind != 0){
+  if (mBorderKind != 0) {
     buffer.select(mhPenBorder);
 
-    if (mBorderKind & BORDERTOP){
+    if (mBorderKind & BORDERTOP) {
       buffer.line(0, 0, mWidth, 0);
     }
-    if (mBorderKind & BORDERRIGHT){
+
+    if (mBorderKind & BORDERRIGHT) {
       buffer.line(mWidth - DEFAULTBORDERPENWIDTH, 0,
                   mWidth - DEFAULTBORDERPENWIDTH, mHeight);
     }
-    if (mBorderKind & BORDERBOTTOM){
+
+    if (mBorderKind & BORDERBOTTOM) {
       buffer.line(mWidth - DEFAULTBORDERPENWIDTH,
                   mHeight - DEFAULTBORDERPENWIDTH,
-                  -DEFAULTBORDERPENWIDTH, mHeight - DEFAULTBORDERPENWIDTH);
+                  -DEFAULTBORDERPENWIDTH,
+                  mHeight - DEFAULTBORDERPENWIDTH);
     }
-    if (mBorderKind & BORDERLEFT){
-      buffer.line(0, mHeight - DEFAULTBORDERPENWIDTH,
-                  0, -DEFAULTBORDERPENWIDTH);
+
+    if (mBorderKind & BORDERLEFT) {
+      buffer.line(0, mHeight - DEFAULTBORDERPENWIDTH, 0, -DEFAULTBORDERPENWIDTH);
     }
   }
 
@@ -592,19 +610,21 @@ void InfoBox::Paint(){
   PaintValue(buffer);
 }
 
-void InfoBox::PaintFast(void) {
+void
+InfoBox::PaintFast(void)
+{
   on_paint(PaintWindow::get_canvas());
 }
 
 void
 InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
 {
-  dest.stretch(xoff, yoff, width, height,
-               get_canvas(), 0, 0, mWidth, mHeight);
+  dest.stretch(xoff, yoff, width, height, get_canvas(), 0, 0, mWidth, mHeight);
 }
 
-void InfoBox::InitializeDrawHelpers(void){
-
+void
+InfoBox::InitializeDrawHelpers(void)
+{
   recTitle.left = 0;
   recTitle.right = mWidth;
   recTitle.top = 0;
@@ -620,39 +640,39 @@ void InfoBox::InitializeDrawHelpers(void){
   recValue.top = recTitle.bottom;
   recValue.bottom = recComment.top;
 
-  if (mBorderKind & BORDERLEFT){
+  if (mBorderKind & BORDERLEFT) {
     recTitle.left += mBorderSize;
     recValue.left += mBorderSize;
     recComment.left += mBorderSize;
   }
 
-  if (mBorderKind & BORDERRIGHT){
+  if (mBorderKind & BORDERRIGHT) {
     recTitle.right -= mBorderSize;
     recValue.right -= mBorderSize;
     recComment.right -= mBorderSize;
   }
 
-  if (mBorderKind & BORDERTOP){
+  if (mBorderKind & BORDERTOP) {
     recTitle.top += mBorderSize;
     recTitle.bottom += mBorderSize;
     recValue.top += mBorderSize;
   }
 
-  if (mBorderKind & BORDERBOTTOM){
+  if (mBorderKind & BORDERBOTTOM) {
     recValue.bottom -= mBorderSize;
     recComment.top -= mBorderSize;
     recComment.bottom -= mBorderSize;
   }
-
 }
 
 bool
 InfoBox::on_key_down(unsigned key_code)
 {
   if (InputEvents::processKey(TranscodeKey(key_code))) {
-    /* restart focus timer if not idle */
+    // restart focus timer if not idle
     if (focus_timer != 0)
       kill_timer(focus_timer);
+
     focus_timer = set_timer(100, FOCUSTIMEOUTMAX * 500);
     return true;
   }
@@ -660,38 +680,42 @@ InfoBox::on_key_down(unsigned key_code)
   return BufferWindow::on_key_down(key_code);
 }
 
-bool InfoBox::on_mouse_down(int x, int y)
+bool
+InfoBox::on_mouse_down(int x, int y)
 {
-  /* synthetic double click detection with no proximity , good for
-     infoboxes */
+  // synthetic double click detection with no proximity , good for infoboxes
   static PeriodClock double_click;
 
   if (!double_click.check_always_update(DOUBLECLICKINTERVAL)) {
-#ifdef DEBUG_DBLCLK
+    #ifdef DEBUG_DBLCLK
     DoStatusMessage(_T("synth DBLCLK InfoBox!")); // VENTA3
-#endif
+    #endif
+
     InputEvents::ShowMenu();
     return true;
   }
 
-#ifdef DEBUG_DBLCLK
+  #ifdef DEBUG_DBLCLK
   DoStatusMessage(_T("BDOWN InfoBox")); // VENTA3
-#endif
+  #endif
+
   set_focus();
   return true;
 }
 
-bool InfoBox::on_mouse_double(int x, int y)
+bool
+InfoBox::on_mouse_double(int x, int y)
 {
   if (!is_altair()) {
     // JMW capture double click, so infoboxes double clicked also bring up menu
     // VENTA3: apparently this is working only on PC ! Disable it to let PC work
     // with same timeout of PDA and PNA versions with synthetic DBLCLK
     #ifdef DEBUG_DBLCLK
-      DoStatusMessage(_T("DBLCLK InfoBox")); // VENTA3
+    DoStatusMessage(_T("DBLCLK InfoBox")); // VENTA3
     #endif
     InputEvents::ShowMenu();
   }
+
   return true;
 }
 
@@ -715,6 +739,7 @@ InfoBox::on_setfocus()
   InputEvents::setMode(InputEvents::MODE_INFOBOX);
 
   PaintFast();
+
   return true;
 }
 
@@ -729,6 +754,7 @@ InfoBox::on_killfocus()
   }
 
   PaintFast();
+
   return true;
 }
 
@@ -742,5 +768,6 @@ InfoBox::on_timer(timer_t id)
   focus_timer = 0;
 
   CommonInterface::main_window.map.set_focus();
+
   return true;
 }
