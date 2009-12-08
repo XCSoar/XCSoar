@@ -87,7 +87,6 @@ typedef HANDLE HPEN;
 typedef HANDLE HBITMAP;
 typedef HANDLE HFONT;
 typedef HANDLE HCURSOR;
-typedef HANDLE HACCEL;
 typedef HANDLE HICON;
 typedef HANDLE ATOM;
 typedef struct w32_wnd *HWND;
@@ -152,12 +151,6 @@ typedef struct tagLOGFONT {
 	BYTE lfPitchAndFamily;
 	TCHAR lfFaceName[LF_FACESIZE];
 } LOGFONT;
-
-typedef struct tagACCEL {
-	BYTE fVirt;
-	WORD key;
-	WORD cmd;
-} ACCEL, *LPACCEL;
 
 typedef struct {
 	HWND hwnd;

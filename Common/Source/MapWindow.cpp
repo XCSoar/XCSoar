@@ -100,16 +100,6 @@ MapWindow::set(ContainerWindow &parent, const RECT _MapRectSmall,
   // initialize other systems
   InitialiseScaleList(SettingsMap());
 
-  // set initial display mode
-  draw_canvas.background_transparent();
-
-  // paint draw window black to start
-  draw_canvas.black_pen();
-  draw_canvas.rectangle(MapRectBig.left, MapRectBig.top,
-                        MapRectBig.right, MapRectBig.bottom);
-
-  get_canvas().copy(draw_canvas);
-
   cdi = new GaugeCDI(parent); /* XXX better attach to "this"? */
 }
 

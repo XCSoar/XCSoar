@@ -75,6 +75,9 @@ void BufferCanvas::reset()
 
 void BufferCanvas::resize(unsigned _width, unsigned _height)
 {
+  if (_width == width && _height == height)
+    return;
+
   ::DeleteObject(bitmap);
   Canvas::resize(_width, _height);
   bitmap = ::CreateCompatibleBitmap(dc, width, height);

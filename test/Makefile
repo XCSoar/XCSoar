@@ -208,6 +208,7 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/Screen/Pen.o \
 	$(SRC)/Screen/Window.o \
 	$(SRC)/Screen/BufferWindow.o \
+	$(SRC)/Screen/BufferCanvas.o \
 	$(SRC)/Screen/PaintWindow.o \
 	$(SRC)/Screen/ContainerWindow.o \
 	$(SRC)/Screen/TextWindow.o \

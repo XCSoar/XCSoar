@@ -94,6 +94,13 @@ public:
   operator HWND() const {
     return hWnd;
   };
+
+  /**
+   * Is it this window or one of its descendants?
+   */
+  bool identify_descendant(HWND h) const {
+    return h == hWnd || ::IsChild(hWnd, h);
+  }
 #endif
 
 public:

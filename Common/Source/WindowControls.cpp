@@ -117,8 +117,6 @@ static bool KeyTimer(bool isdown, DWORD thekey) {
 // WindowControl Classes
 //----------------------------------------------------------
 
-static WindowControl *ActiveControl = NULL;
-
 void InitWindowControlModule(void);
 
 static Color bkColor = clWhite;
@@ -199,23 +197,12 @@ WindowControl::~WindowControl(void){
     free(mHelpText);
     mHelpText = NULL;
   }
-}
 
-void WindowControl::Destroy(void){
   int i;
   for (i=mClientCount-1; i>=0; i--){
-    mClients[i]->Destroy();
     delete mClients[i];
   }
 
-  if (ActiveControl == this)
-    ActiveControl = NULL;
-
-  mhBrushBk.reset();
-  mhPenBorder.reset();
-  mhPenSelector.reset();
-
-  // ShowWindow(GetHandle(), SW_SHOW);
   reset();
 
   InstCount--;
@@ -345,18 +332,6 @@ bool WindowControl::SetFocused(bool Value){
     if (mCanFocus)
       // todo, only paint the selector edges
       invalidate();
-  }
-
-  if (Value){
-    if (mCanFocus)
-      ActiveControl = this;
-  } else {
-    ActiveControl = NULL;
-    /*
-    if (FromTo == NULL){
-      SetFocus(GetParent());
-    }
-    */
   }
 
   return res;
@@ -511,7 +486,8 @@ WindowControl::on_key_down(unsigned key_code)
   // JMW: HELP
   KeyTimer(true, key_code);
 
-  return ContainerWindow::on_key_down(key_code);
+  return ContainerWindow::on_key_down(key_code) ||
+    on_unhandled_key(key_code);
 }
 
 bool
@@ -638,23 +614,26 @@ WindowControl::on_killfocus()
   return true;
 }
 
-#ifndef ENABLE_SDL
-
-LRESULT
-WindowControl::on_unhandled_message(HWND hwnd, UINT uMsg,
-                                    WPARAM wParam, LPARAM lParam)
+bool
+WindowControl::on_unhandled_key(unsigned key_code)
 {
-  switch (uMsg){
-  case WM_KEYDOWN:
-    if (mOwner != NULL &&
-        mOwner->on_unhandled_message(hwnd, uMsg, wParam, lParam))
-      return 0;
+  if (mOwner != NULL && mOwner->on_unhandled_key(key_code))
+    return true;
+
+  if (mOwner != NULL && mHasFocus) {
+    switch (key_code) {
+    case VK_UP:
+      mOwner->FocusPrev(this);
+      return true;
+
+    case VK_DOWN:
+      mOwner->FocusNext(this);
+      return true;
+    }
   }
 
-  return ContainerWindow::on_unhandled_message(hwnd, uMsg, wParam, lParam);
+  return false;
 }
-
-#endif /* !ENABLE_SDL */
 
 void InitWindowControlModule(void){
 
@@ -663,20 +642,11 @@ void InitWindowControlModule(void){
   if (InitDone)
     return;
 
-  ActiveControl = NULL;
-
   InitDone = true;
 
 }
 
 PeriodClock WndForm::timeAnyOpenClose;
-
-#ifndef ENABLE_SDL
-ACCEL  WndForm::mAccel[] = {
-  {0, VK_ESCAPE,  VK_ESCAPE},
-  {0, VK_RETURN,  VK_RETURN},
-};
-#endif /* !ENABLE_SDL */
 
 WndForm::WndForm(ContainerWindow *Parent,
                  const TCHAR *Name, const TCHAR *Caption,
@@ -686,10 +656,6 @@ WndForm::WndForm(ContainerWindow *Parent,
   mClientWindow = NULL;
   mOnKeyDownNotify = NULL;
   mOnTimerNotify = NULL;
-
-#ifndef ENABLE_SDL
-  mhAccelTable = CreateAcceleratorTable(mAccel, sizeof(mAccel)/sizeof(mAccel[0]));
-#endif /* !ENABLE_SDL */
 
   mColorTitle = clAqua;
 
@@ -713,26 +679,12 @@ WndForm::WndForm(ContainerWindow *Parent,
 }
 
 WndForm::~WndForm(void){
-  Destroy();
-}
-
-
-
-void WndForm::Destroy(void){
-
   // animation
 
   if (mClientWindow)
     mClientWindow->SetVisible(false);
 
   kill_timer(cbTimerID);
-
-#ifdef WIN32
-  DestroyAcceleratorTable(mhAccelTable);
-#endif /* WIN32 */
-
-  WindowControl::Destroy();  // delete all childs
-
 }
 
 
@@ -752,24 +704,6 @@ void WndForm::AddClient(WindowControl *Client){      // add client window
     mClientWindow->AddClient(Client); // add it to the clientarea window
   } else
     WindowControl::AddClient(Client);
-}
-
-
-bool
-WndForm::on_command(unsigned id, unsigned code)
-{
-   // VENTA- DEBUG HARDWARE KEY PRESSED
-#ifdef VENTA_DEBUG_KEY
-        TCHAR ventabuffer[80];
-        wsprintf(ventabuffer, TEXT("ONCKEY id=%d code=%d"), id, code);
-        DoStatusMessage(ventabuffer);
-#endif
-   if (id == VK_ESCAPE){
-     mModalResult = mrCancel;
-     return true;
-   }
-
-   return WindowControl::on_command(id, code);
 }
 
 bool
@@ -912,7 +846,7 @@ int WndForm::ShowModal(bool bEnableMap) {
       mModalResult = mrCancel;
 
     if (is_user_input(msg.message)
-        && msg.hwnd != GetHandle() && !IsChild(GetHandle(), msg.hwnd)  // not current window or child
+        && !identify_descendant(msg.hwnd) // not current window or child
         && !is_allowed_map(msg.hwnd, msg.message, bEnableMap))
       continue;   // make it modal
 
@@ -927,24 +861,21 @@ int WndForm::ShowModal(bool bEnableMap) {
     }
 #endif
 
-    if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
-      if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
-          mOnKeyDownNotify(this, msg.wParam))
-          continue;
+    if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
+        mOnKeyDownNotify(this, msg.wParam))
+      continue;
 
-      TranslateMessage(&msg);
-      if (msg.message != WM_LBUTTONUP ||
-          // prevents child click from being repeat-handled by parent
-          // if buttons overlap
-          WndForm::timeAnyOpenClose.elapsed() > OPENCLOSESUPPRESSTIME)
-      {
-        assert_none_locked();
+    TranslateMessage(&msg);
+    if (msg.message != WM_LBUTTONUP ||
+        // prevents child click from being repeat-handled by parent
+        // if buttons overlap
+        WndForm::timeAnyOpenClose.elapsed() > OPENCLOSESUPPRESSTIME) {
+      assert_none_locked();
 
-        DispatchMessage(&msg);
+      DispatchMessage(&msg);
 
-        assert_none_locked();
-      } // timeMsg
-  }
+      assert_none_locked();
+    }
   } // End Modal Loop
 #endif /* !ENABLE_SDL */
 
@@ -1060,35 +991,14 @@ WndForm::SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigne
 
 // normal form stuff (nonmodal)
 
-#ifndef ENABLE_SDL
-
-LRESULT
-WndForm::on_unhandled_message(HWND hwnd, UINT uMsg,
-                              WPARAM wParam, LPARAM lParam)
+bool
+WndForm::on_unhandled_key(unsigned key_code)
 {
-  if (uMsg == WM_KEYDOWN){
-    if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, wParam))
-      return 0;
+  if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, key_code))
+    return 0;
 
-    if (ActiveControl != NULL){
-      switch(wParam & 0xffff){
-        case VK_UP:
-          if (ActiveControl->GetOwner() != NULL)
-            ActiveControl->GetOwner()->FocusPrev(ActiveControl);
-        return 0;
-
-        case VK_DOWN:
-          if (ActiveControl->GetOwner() != NULL)
-            ActiveControl->GetOwner()->FocusNext(ActiveControl);
-        return 0;
-      }
-    }
-  }
-
-  return WindowControl::on_unhandled_message(hwnd, uMsg, wParam, lParam);
+  return WindowControl::on_unhandled_key(key_code);
 }
-
-#endif /* !ENABLE_SDL */
 
 void WndForm::Show(void){
 
@@ -1125,12 +1035,6 @@ WndButton::WndButton(WindowControl *Parent,
 
   mLastDrawTextHeight = -1;
 
-}
-
-void
-WndButton::Destroy(void)
-{
-  WindowControl::Destroy();
 }
 
 bool
@@ -1359,24 +1263,8 @@ WndProperty::Editor::on_key_down(unsigned key_code)
     }
   }
 
-  if (key_code == VK_UP || key_code == VK_DOWN){
-#ifdef ENABLE_SDL
-    // XXX
-#else /* !ENABLE_SDL */
-    WindowControl *owner = parent->GetOwner();
-    if (owner != NULL)
-      // XXX what's the correct lParam value here?
-      PostMessage(owner->GetClientAreaWindow(),
-                  WM_KEYDOWN, key_code, 0);
-#endif /* !ENABLE_SDL */
-    // pass the message to the parent window;
-    return true;
-  }
-
-  if (parent->OnEditKeyDown(key_code))
-    return true;
-
-  return false;
+  return EditWindow::on_key_down(key_code) ||
+    parent->on_unhandled_key(key_code);
 }
 
 bool
@@ -1480,10 +1368,6 @@ WndProperty::WndProperty(WindowControl *Parent,
 
 
 WndProperty::~WndProperty(void){
-}
-
-void WndProperty::Destroy(void){
-
   InstCount--;
   if (InstCount == 0){
     hBmpLeft32.reset();
@@ -1498,11 +1382,6 @@ void WndProperty::Destroy(void){
       assert(0);
     }
   }
-
-  edit.reset();
-
-  WindowControl::Destroy();
-
 }
 
 Window *
@@ -1621,7 +1500,7 @@ WndProperty::on_editor_killfocus()
 }
 
 bool
-WndProperty::OnEditKeyDown(unsigned key_code)
+WndProperty::on_unhandled_key(unsigned key_code)
 {
   switch (key_code){
     case VK_RIGHT:
@@ -1632,7 +1511,7 @@ WndProperty::OnEditKeyDown(unsigned key_code)
       return true;
   }
 
-  return false;
+  return WindowControl::on_unhandled_key(key_code);
 }
 
 bool
@@ -1860,19 +1739,6 @@ WndOwnerDrawFrame::on_paint(Canvas &canvas)
 
   if (mOnPaintCallback != NULL)
     (mOnPaintCallback)(this, canvas);
-}
-
-void WndOwnerDrawFrame::Destroy(void){
-
-  WndFrame::Destroy();
-
-}
-
-
-void WndFrame::Destroy(void){
-
-  WindowControl::Destroy();
-
 }
 
 void
@@ -2140,13 +2006,6 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
   SetBackColor(GetOwner()->GetBackColor());
 }
 
-
-void WndListFrame::Destroy(void){
-
-  WndFrame::Destroy();
-
-}
-
 void
 WndListFrame::show_or_hide_scroll_bar()
 {
@@ -2312,6 +2171,8 @@ WndListFrame::on_key_down(unsigned key_code)
 
     mOnListEnterCallback(this, &mListInfo);
     invalidate();
+    return true;
+
     //#ifndef GNAV
 
   case VK_LEFT:
@@ -2350,7 +2211,7 @@ WndListFrame::on_key_down(unsigned key_code)
     return true;
   }
 
-  return false;
+  return WndFrame::on_key_down(key_code);
 }
 
 void WndListFrame::ResetList(void){

@@ -40,10 +40,10 @@ Copyright_License {
 #define XCSOAR_SCREEN_COLOR_HPP
 
 #ifdef ENABLE_SDL
-#include <SDL/SDL_video.h>
+  #include <SDL/SDL_video.h>
 #else
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+  #define WIN32_LEAN_AND_MEAN
+  #include <windows.h>
 #endif
 
 /**
@@ -52,54 +52,62 @@ Copyright_License {
  * configuration.
  */
 struct Color {
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   SDL_Color value;
-#else
+  #else
   COLORREF value;
-#endif
+  #endif
 
-#ifdef ENABLE_SDL
-  Color() {
+  #ifdef ENABLE_SDL
+  Color()
+  {
     value.r = 0; value.g = 0; value.b = 0;
     value.unused = SDL_ALPHA_OPAQUE;
   }
-  Color(int r, int g, int b) {
+  Color(int r, int g, int b)
+  {
     value.r = r;
     value.g = g;
     value.b = b;
     value.unused = SDL_ALPHA_OPAQUE; // alpha for SDL_gfx, see gfx_color()
   }
-#else
+  #else
   Color():value(RGB(0, 0, 0)) {}
   Color(COLORREF c):value(c) {}
   Color(int r, int g, int b):value(RGB(r, g, b)) {}
-#endif
+  #endif
 
-  unsigned char red() const {
-#ifdef ENABLE_SDL
+  unsigned char
+  red() const
+  {
+    #ifdef ENABLE_SDL
     return value.r;
-#else
+    #else
     return GetRValue(value);
-#endif
+    #endif
   }
 
-  unsigned char green() const {
-#ifdef ENABLE_SDL
+  unsigned char
+  green() const
+  {
+    #ifdef ENABLE_SDL
     return value.g;
-#else
+    #else
     return GetGValue(value);
-#endif
+    #endif
   }
 
-  unsigned char blue() const {
-#ifdef ENABLE_SDL
+  unsigned char
+  blue() const
+  {
+    #ifdef ENABLE_SDL
     return value.b;
-#else
+    #else
     return GetBValue(value);
-#endif
+    #endif
   }
 
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   operator const SDL_Color() const {
     return value;
   }
@@ -108,8 +116,10 @@ struct Color {
     return ((Uint32)value.r << 24) | ((Uint32)value.g << 16) |
       ((Uint32)value.b << 8) | (Uint32)value.unused;
   }
-#else
-  Color &operator =(COLORREF c) {
+  #else
+  Color
+  &operator =(COLORREF c)
+  {
     value = c;
     return *this;
   }
@@ -117,31 +127,34 @@ struct Color {
   operator COLORREF() const {
     return value;
   }
-#endif
+  #endif
 
   /**
    * Returns the highlighted version of this color.
    */
-  Color highlight() const {
-#ifdef ENABLE_SDL
+  Color
+  highlight() const
+  {
+    #ifdef ENABLE_SDL
     return Color((value.r + 0xff * 3) / 4,
                  (value.g + 0xff * 3) / 4,
                  (value.b + 0xff * 3) / 4);
-#else
+    #else
     return Color((value + 0x00ffffff * 3) / 4);
-#endif
+    #endif
   }
 };
 
 static inline bool
 operator ==(const Color a, const Color b)
 {
-#ifdef ENABLE_SDL
-  return a.value.r == b.value.r && a.value.g == b.value.g &&
-    a.value.b == b.value.b;
-#else
+  #ifdef ENABLE_SDL
+  return a.value.r == b.value.r
+         && a.value.g == b.value.g
+         && a.value.b == b.value.b;
+  #else
   return a.value == b.value;
-#endif
+  #endif
 }
 
 static inline bool
@@ -157,28 +170,28 @@ operator !=(const Color a, const Color b)
  * bit RGB colors.
  */
 struct HWColor {
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   Uint32 value;
-#else
+  #else
   COLORREF value;
-#endif
+  #endif
 
   HWColor():value(0) {}
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   HWColor(Uint32 c):value(c) {}
-#else
+  #else
   HWColor(COLORREF c):value(c) {}
-#endif
+  #endif
 
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   operator Uint32() const {
     return value;
   }
-#else
+  #else
   operator COLORREF() const {
     return value;
   }
-#endif
+  #endif
 };
 
 #endif
