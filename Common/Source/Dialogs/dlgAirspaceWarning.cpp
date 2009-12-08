@@ -387,7 +387,7 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
     }
 
     if ((pAS.Acknowledge > 0) && (pAS.Acknowledge >= pAS.WarnLevel)){
-      canvas.set_text_color(clGray);
+      canvas.set_text_color(Color::GRAY);
     }
 
     #ifndef NDEBUG

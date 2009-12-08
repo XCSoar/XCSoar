@@ -117,8 +117,6 @@ static bool KeyTimer(bool isdown, DWORD thekey) {
 // WindowControl Classes
 //----------------------------------------------------------
 
-static Color bkColor = clWhite;
-static Color fgColor = clBlack;
 int WindowControl::InstCount=0;
 Brush WindowControl::hBrushDefaultBk;
 Pen WindowControl::hPenDefaultBorder;
@@ -160,8 +158,8 @@ WindowControl::WindowControl(WindowControl *Owner,
   else
     mName[0] = '\0';
 
-  mColorBack = bkColor;
-  mColorFore = fgColor;
+  mColorBack = Color::WHITE;
+  mColorFore = Color::BLACK;
 
   if (InstCount == 0){
     hBrushDefaultBk.set(mColorBack);
@@ -642,7 +640,7 @@ WndForm::WndForm(ContainerWindow *Parent,
   mOnKeyDownNotify = NULL;
   mOnTimerNotify = NULL;
 
-  mColorTitle = clAqua;
+  mColorTitle = Color::YELLOW;
 
   mhTitleFont = GetFont();
 

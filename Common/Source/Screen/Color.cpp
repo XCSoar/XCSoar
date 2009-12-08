@@ -39,6 +39,7 @@ Copyright_License {
 #include "Screen/Color.hpp"
 
 const Color Color::WHITE(0xff, 0xff, 0xff), Color::BLACK(0, 0, 0),
+  Color::GRAY(0x80, 0x80, 0x80),
   Color::RED(0xff, 0, 0), Color::GREEN(0, 0xff, 0), Color::BLUE(0, 0, 0xff),
   Color::YELLOW(0xff, 0xff, 0), Color::CYAN(0, 0xff, 0xff),
   Color::MAGENTA(0xff, 0, 0xff);
