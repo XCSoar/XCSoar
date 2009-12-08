@@ -1,5 +1,5 @@
 /*
-  Copyright_License {
+ Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,7 +34,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
 #include "LoggerImpl.hpp"
 #include "XCSoar.h"
@@ -51,6 +51,9 @@
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "UtilsSystem.hpp" // for FileExistsW()
+#include "UtilsText.hpp" // for ConvertToC()
+
+#include <assert.h>
 
 HINSTANCE GRecordDLLHandle = NULL;
 
@@ -82,87 +85,98 @@ GRECORDLOADFILETOBUFFER GRecordLoadFileToBuffer;
 typedef int (*GRECORDAPPENDGRECORDTOFILE)(BOOL bValid);
 GRECORDAPPENDGRECORDTOFILE GRecordAppendGRecordToFile;
 
-typedef int (*GRECORDREADGRECORDFROMFILE)(TCHAR szOutput []);
+typedef int (*GRECORDREADGRECORDFROMFILE)(TCHAR szOutput[]);
 GRECORDREADGRECORDFROMFILE GRecordReadGRecordFromFile;
 
 typedef int (*GRECORDVERIFYGRECORDINFILE)(void);
 GRECORDVERIFYGRECORDINFILE GRecordVerifyGRecordInFile;
 
-
 bool IsValidIGCChar(char c) //returns 1 if valid char for IGC files
 {//
-  if ( c >=0x20  && c <= 0x7E &&
-       c != 0x0D &&
-       c != 0x0A &&
-       c != 0x24 &&
-       c != 0x2A &&
-       c != 0x2C &&
-       c != 0x21 &&
-       c != 0x5C &&
-       c != 0x5E &&
-       c != 0x7E
-       )
+  if (c >= 0x20 && c <= 0x7E && c != 0x0D && c != 0x0A && c != 0x24 && c
+      != 0x2A && c != 0x2C && c != 0x21 && c != 0x5C && c != 0x5E && c != 0x7E)
     return true;
   else
     return false;
 }
 
-
-
-char * CleanIGCRecord (char * szIn)
-{  // replace invalid chars w/ 0x20
+char * CleanIGCRecord(char * szIn) { // replace invalid chars w/ 0x20
 
   int iLen = strlen(szIn);
-  for (int i = 0; i < iLen -2; i++)  // don't clean terminating \r\n!
+  for (int i = 0; i < iLen - 2; i++) // don't clean terminating \r\n!
     if (!IsValidIGCChar(szIn[i]))
-      szIn[i]=' ';
+      szIn[i] = ' ';
 
   return szIn;
 }
 
-bool
-LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
-{
-  HANDLE hFile;
-  DWORD dwBytesRead;
+bool LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName) {
+  Poco::ScopedRWLock protect(lock, true);
+
   char charbuffer[MAX_IGC_BUFF];
-  TCHAR buffer[MAX_IGC_BUFF];
-  TCHAR * pbuffer;
-  pbuffer = buffer;
-  bool bRetVal = false;
 
-  int i=0, iLen=0;
-  static BOOL bWriting = false;
+  strncpy(charbuffer, szIn, MAX_IGC_BUFF);
+  charbuffer[MAX_IGC_BUFF - 1] = '\0'; // just to be safe
+  CleanIGCRecord(charbuffer);
+  return DiskBufferAdd(charbuffer);
+}
 
-  if ( !bWriting )
-    {
-      bWriting = true;
+void LoggerImpl::DiskBufferFlush() {
+  FILE * LoggerFILE;
 
-      hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
-			 NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-      SetFilePointer(hFile, 0, NULL, FILE_END);
+  ConvertTToC(szLoggerFileName_c, szLoggerFileName);
+  szLoggerFileName_c[_tcslen(szLoggerFileName)] = 0;
+  LoggerFILE = fopen(szLoggerFileName_c, "ab"); // stays open for buffered io
 
-      strcpy(charbuffer, szIn);
-      CleanIGCRecord(charbuffer);
+  bool bWriteSuccess = true;
+  TCHAR buffer_G[MAX_IGC_BUFF];
+  TCHAR * pbuffer_G;
+  pbuffer_G = buffer_G;
 
-      WriteFile(hFile, charbuffer, strlen(charbuffer), &dwBytesRead,
-		(OVERLAPPED *)NULL);
+  if (LoggerFILE) {
+    for (int i = 0; i < LoggerDiskBufferCount; i++) {
 
-      iLen = strlen(charbuffer);
-      for (i = 0; (i <= iLen) && (i < MAX_IGC_BUFF); i++)
-	buffer[i] = (TCHAR)charbuffer[i];
+      unsigned int ilen = strlen(LoggerDiskBuffer[i]);
+      if (fwrite(LoggerDiskBuffer[i], (size_t) ilen, (size_t) 1, LoggerFILE)
+          != (size_t) ilen) {
+        bWriteSuccess = false;
+      }
 
-      if (!is_simulator() && LoggerGActive())
-	GRecordAppendRecordToBuffer(pbuffer);
-
-      FlushFileBuffers(hFile);
-      CloseHandle(hFile);
-      bWriting = false;
-      bRetVal = true;
+      if (bWriteSuccess) {
+        int iLen = strlen(LoggerDiskBuffer[i]);
+        for (int j = 0; (j <= iLen) && (j < MAX_IGC_BUFF); j++) {
+          buffer_G[j] = (TCHAR) LoggerDiskBuffer[i][j];
+        }
+        if (!is_simulator() && LoggerGActive()) {
+          GRecordAppendRecordToBuffer(pbuffer_G);
+        }
+      }
     }
 
-  return bRetVal;
+    fclose(LoggerFILE);
+    DiskBufferReset();
+  }
+}
 
+bool LoggerImpl::DiskBufferAdd(char *sIn) {
+  bool bRetVal = false;
+
+  if (LoggerDiskBufferCount == LOGGER_DISK_BUFFER_NUM_RECS) {
+    DiskBufferFlush();
+  }
+  if (LoggerDiskBufferCount < LOGGER_DISK_BUFFER_NUM_RECS) {
+    strncpy(LoggerDiskBuffer[LoggerDiskBufferCount], sIn, MAX_IGC_BUFF);
+    LoggerDiskBuffer[LoggerDiskBufferCount][MAX_IGC_BUFF - 1] = '\0';
+    LoggerDiskBufferCount++;
+    bRetVal = true;
+  }
+  return bRetVal;
+}
+void LoggerImpl::DiskBufferReset() {
+  for (int i = 0; i < LOGGER_DISK_BUFFER_NUM_RECS; i++) {
+    LoggerDiskBuffer[i][0] = '\0';
+  }
+  LoggerDiskBufferCount = 0;
 }
 
 // VENTA3 TODO: if ifdef PPC2002 load correct dll. Put the dll inside
@@ -172,177 +186,161 @@ LoggerImpl::IGCWriteRecord(const char *szIn, const TCHAR* szLoggerFileName)
 // JMW: not sure that would work, I think dll has to be in OS
 // directory or same directory as exe
 
-void LoggerImpl::LinkGRecordDLL(void)
-{
+void LoggerImpl::LinkGRecordDLL(void) {
   static bool bFirstTime = true;
-  TCHAR szLoadResults [100];
+  TCHAR szLoadResults[100];
   TCHAR szGRecordVersion[100];
 
   if ((GRecordDLLHandle == NULL) && bFirstTime) // only try to load DLL once per session
-    {
-      bFirstTime=false;
+  {
+    bFirstTime = false;
 
-      StartupStore(TEXT("Searching for GRecordDLL\n"));
-      if (is_altair()) {
-        if (FileExistsW(TEXT("\\NOR Flash\\GRecordDLL.dat"))) {
-          StartupStore(TEXT("Updating GRecordDLL.DLL\n"));
-          DeleteFile(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
-          MoveFile(TEXT("\\NOR Flash\\GRecordDLL.dat"),
-                   TEXT("\\NOR Flash\\GRecordDLL.DLL"));
-        }
+    StartupStore(TEXT("Searching for GRecordDLL\n"));
+    if (is_altair()) {
+      if (FileExistsW(TEXT("\\NOR Flash\\GRecordDLL.dat"))) {
+        StartupStore(TEXT("Updating GRecordDLL.DLL\n"));
+        DeleteFile(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
+        MoveFile(TEXT("\\NOR Flash\\GRecordDLL.dat"),
+            TEXT("\\NOR Flash\\GRecordDLL.DLL"));
+      }
 
-        GRecordDLLHandle = LoadLibrary(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
-      } else
-        GRecordDLLHandle = LoadLibrary(TEXT("GRecordDLL.DLL"));
+      GRecordDLLHandle = LoadLibrary(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
+    } else
+      GRecordDLLHandle = LoadLibrary(TEXT("GRecordDLL.DLL"));
 
-      if (GRecordDLLHandle != NULL)
-        {
-	  BOOL bLoadOK = true;  // if any pointers don't link, disable entire library
+    if (GRecordDLLHandle != NULL) {
+      BOOL bLoadOK = true; // if any pointers don't link, disable entire library
 
 #ifndef WINDOWSPC
-	  GRecordGetVersion =
-	    (GRRECORDGETVERSION)
-	    GetProcAddress(GRecordDLLHandle,
-			   TEXT("GRecordGetVersion"));
+      GRecordGetVersion =
+      (GRRECORDGETVERSION)
+      GetProcAddress(GRecordDLLHandle,
+          TEXT("GRecordGetVersion"));
 
-	  if (!GRecordGetVersion) // read version for log
-            {
-	      bLoadOK=false;
-	      _tcscpy(szGRecordVersion, TEXT("version unknown"));
-            }
-	  else
-            {
-	      GRecordGetVersion(szGRecordVersion);
-            }
+      if (!GRecordGetVersion) // read version for log
+      {
+        bLoadOK=false;
+        _tcscpy(szGRecordVersion, TEXT("version unknown"));
+      }
+      else
+      {
+        GRecordGetVersion(szGRecordVersion);
+      }
 
+      GRecordInit =
+      (GRECORDINIT)
+      GetProcAddress(GRecordDLLHandle,
+          TEXT("GRecordInit"));
 
-	  GRecordInit =
-	    (GRECORDINIT)
-	    GetProcAddress(GRecordDLLHandle,
-			   TEXT("GRecordInit"));
+      if (!GRecordInit)
+      bLoadOK=false;
 
-	  if (!GRecordInit)
-	    bLoadOK=false;
+      GRecordGetDigestMaxLen =
+      (GRECORDGETDIGESTMAXLEN)
+      GetProcAddress(GRecordDLLHandle,
+          TEXT("GRecordGetDigestMaxLen"));
 
-	  GRecordGetDigestMaxLen =
-	    (GRECORDGETDIGESTMAXLEN)
-	    GetProcAddress(GRecordDLLHandle,
-			   TEXT("GRecordGetDigestMaxLen"));
+      if (!GRecordGetDigestMaxLen)
+      bLoadOK=false;
 
-	  if (!GRecordGetDigestMaxLen)
-	    bLoadOK=false;
+      GRecordAppendRecordToBuffer =
+      (GRECORDAPPENDRECORDTOBUFFER)
+      GetProcAddress(GRecordDLLHandle,
+          TEXT("GRecordAppendRecordToBuffer"));
 
+      if (!GRecordAppendRecordToBuffer)
+      bLoadOK=false;
 
-	  GRecordAppendRecordToBuffer =
-	    (GRECORDAPPENDRECORDTOBUFFER)
-	    GetProcAddress(GRecordDLLHandle,
-			   TEXT("GRecordAppendRecordToBuffer"));
+      GRecordFinalizeBuffer =
+      (GRECORDFINALIZEBUFFER)
+      GetProcAddress(GRecordDLLHandle,
+          TEXT("GRecordFinalizeBuffer"));
 
-	  if (!GRecordAppendRecordToBuffer)
-	    bLoadOK=false;
+      if (!GRecordFinalizeBuffer)
+      bLoadOK=false;
 
+      GRecordGetDigest =
+      (GRECORDGETDIGEST)
+      GetProcAddress(GRecordDLLHandle,
+          TEXT("GRecordGetDigest"));
 
-	  GRecordFinalizeBuffer =
-	    (GRECORDFINALIZEBUFFER)
-	    GetProcAddress(GRecordDLLHandle,
-			   TEXT("GRecordFinalizeBuffer"));
+      if (!GRecordGetDigest)
+      bLoadOK=false;
 
-	  if (!GRecordFinalizeBuffer)
-	    bLoadOK=false;
+      GRecordSetFileName =
+      (GRECORDSETFILENAME)
+      GetProcAddress(GRecordDLLHandle,
+          TEXT("GRecordSetFileName"));
 
+      if (!GRecordSetFileName)
+      bLoadOK=false;
 
-	  GRecordGetDigest =
-	    (GRECORDGETDIGEST)
-	    GetProcAddress(GRecordDLLHandle,
-			   TEXT("GRecordGetDigest"));
+      GRecordLoadFileToBuffer =
+      (GRECORDLOADFILETOBUFFER)
+      GetProcAddress(GRecordDLLHandle,
+          TEXT("GRecordLoadFileToBuffer"));
 
-	  if (!GRecordGetDigest)
-	    bLoadOK=false;
+      if (!GRecordLoadFileToBuffer)
+      bLoadOK=false;
 
+      GRecordAppendGRecordToFile =
+      (GRECORDAPPENDGRECORDTOFILE)
+      GetProcAddress(GRecordDLLHandle,
+          TEXT("GRecordAppendGRecordToFile"));
 
-	  GRecordSetFileName =
-	    (GRECORDSETFILENAME)
-	    GetProcAddress(GRecordDLLHandle,
-			   TEXT("GRecordSetFileName"));
+      if (!GRecordAppendGRecordToFile)
+      bLoadOK=false;
 
-	  if (!GRecordSetFileName)
-	    bLoadOK=false;
+      GRecordReadGRecordFromFile =
+      (GRECORDREADGRECORDFROMFILE)
+      GetProcAddress(GRecordDLLHandle,
+          TEXT("GRecordReadGRecordFromFile"));
 
+      if (!GRecordReadGRecordFromFile)
+      bLoadOK=false;
 
-	  GRecordLoadFileToBuffer =
-	    (GRECORDLOADFILETOBUFFER)
-	    GetProcAddress(GRecordDLLHandle,
-			   TEXT("GRecordLoadFileToBuffer"));
-
-	  if (!GRecordLoadFileToBuffer)
-	    bLoadOK=false;
-
-
-	  GRecordAppendGRecordToFile =
-	    (GRECORDAPPENDGRECORDTOFILE)
-	    GetProcAddress(GRecordDLLHandle,
-			   TEXT("GRecordAppendGRecordToFile"));
-
-	  if (!GRecordAppendGRecordToFile)
-	    bLoadOK=false;
-
-
-	  GRecordReadGRecordFromFile =
-	    (GRECORDREADGRECORDFROMFILE)
-	    GetProcAddress(GRecordDLLHandle,
-			   TEXT("GRecordReadGRecordFromFile"));
-
-	  if (!GRecordReadGRecordFromFile)
-	    bLoadOK=false;
-
-
-	  GRecordVerifyGRecordInFile =
-	    (GRECORDVERIFYGRECORDINFILE)
-	    GetProcAddress(GRecordDLLHandle,
-			   TEXT("GRecordVerifyGRecordInFile"));
+      GRecordVerifyGRecordInFile =
+      (GRECORDVERIFYGRECORDINFILE)
+      GetProcAddress(GRecordDLLHandle,
+          TEXT("GRecordVerifyGRecordInFile"));
 #else
-	  GRecordVerifyGRecordInFile = NULL;
+      GRecordVerifyGRecordInFile = NULL;
 #endif
 
-	  if (!GRecordVerifyGRecordInFile)
-	    bLoadOK=false;
+      if (!GRecordVerifyGRecordInFile)
+        bLoadOK = false;
 
-	  if (!bLoadOK) // all need to link, or disable entire library.
-            {
-              _stprintf(szLoadResults,TEXT("Found GRecordDLL %s but incomplete\n"), szGRecordVersion);
-	      FreeLibrary(GRecordDLLHandle);
-	      GRecordDLLHandle = NULL;
-            }
-	  else {
-            _stprintf(szLoadResults,TEXT("Loaded GRecordDLL %s \n"), szGRecordVersion);
-	  }
-	}
-      else {
-	_tcscpy(szLoadResults,TEXT("Can't load GRecordDLL\n"));
+      if (!bLoadOK) // all need to link, or disable entire library.
+      {
+        _stprintf(szLoadResults, TEXT("Found GRecordDLL %s but incomplete\n"),
+            szGRecordVersion);
+        FreeLibrary(GRecordDLLHandle);
+        GRecordDLLHandle = NULL;
+      } else {
+        _stprintf(szLoadResults, TEXT("Loaded GRecordDLL %s \n"),
+            szGRecordVersion);
       }
-      StartupStore(szLoadResults);
-
+    } else {
+      _tcscpy(szLoadResults, TEXT("Can't load GRecordDLL\n"));
     }
+    StartupStore(szLoadResults);
+
+  }
 }
 
-bool
-LoggerImpl::LoggerGActive() const
-{
+bool LoggerImpl::LoggerGActive() const {
   if (GRecordDLLHandle)
     return true;
   else
     return false;
 }
 
-
-
-void
-LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName) {
+void LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName) {
   BOOL bFileValid = true;
   TCHAR OldGRecordBuff[MAX_IGC_BUFF];
   TCHAR NewGRecordBuff[MAX_IGC_BUFF];
 
-  GRecordFinalizeBuffer();  // buffer is appended w/ each igc file write
+  GRecordFinalizeBuffer(); // buffer is appended w/ each igc file write
   GRecordGetDigest(OldGRecordBuff); // read record built by individual file writes
 
   // now calc from whats in the igc file on disk
@@ -353,14 +351,13 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName) {
   GRecordGetDigest(NewGRecordBuff);
 
   for (unsigned int i = 0; i < 128; i++)
-    if (OldGRecordBuff[i] != NewGRecordBuff[i] )
+    if (OldGRecordBuff[i] != NewGRecordBuff[i])
       bFileValid = false;
 
   GRecordAppendGRecordToFile(bFileValid);
 }
 
-void
-LoggerImpl::LoggerGInit() {
+void LoggerImpl::LoggerGInit() {
   if (is_simulator())
     return;
 
@@ -368,3 +365,4 @@ LoggerImpl::LoggerGInit() {
   if (LoggerGActive())
     GRecordInit();
 }
+

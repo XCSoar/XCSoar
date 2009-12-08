@@ -48,11 +48,9 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 
-WndProperty * wComboPopupWndProperty;
-WindowControl * wComboPopupListEntry;//RLD DEBUG
-WndListFrame *wComboPopupListFrame; // RLD used to iterate datafield options
-DataField * ComboPopupDataField = NULL;
-ComboList * ComboListPopup=NULL;
+static WndProperty *wComboPopupWndProperty;
+static DataField *ComboPopupDataField;
+static ComboList *ComboListPopup;
 
 static TCHAR sSavedInitialValue[ComboPopupITEMMAX];
 static int iSavedInitialDataIndex=-1;
@@ -60,23 +58,11 @@ static int iSavedInitialDataIndex=-1;
 static void
 OnPaintComboPopupListItem(WindowControl *Sender, Canvas &canvas)
 {
-
-  (void)Sender;
-
   if ( ComboListPopup->ComboPopupDrawListIndex >= 0 &&
         ComboListPopup->ComboPopupDrawListIndex < ComboListPopup->ComboPopupItemCount )
   {
-
-    int w;
-    if (InfoBoxLayout::landscape) {
-      w = 202*InfoBoxLayout::scale;
-    } else {
-      w = 225*InfoBoxLayout::scale;  // was 225.  xml was 226
-    }
-    w=Sender->GetWidth();
-
     canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                        w - InfoBoxLayout::scale * 5,
+                        canvas.get_width() - InfoBoxLayout::scale * 5,
                         ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupDrawListIndex]->StringValueFormatted);
   }
 }
@@ -175,21 +161,11 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
 
     wf->SetCaption(theProperty->GetCaption());
 
-    wComboPopupListFrame = (WndListFrame*)wf->FindByName(TEXT("frmComboPopupList"));
+    WndListFrame *wComboPopupListFrame =
+      (WndListFrame*)wf->FindByName(_T("frmComboPopupList"));
     assert(wComboPopupListFrame!=NULL);
     wComboPopupListFrame->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERRIGHT|BORDERBOTTOM);
     wComboPopupListFrame->SetEnterCallback(OnComboPopupListEnter);
-
-    // allow item to be focused / hightlighted
-    wComboPopupListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmComboPopupListEntry"));
-    assert(wComboPopupListEntry!=NULL);
-    wComboPopupListEntry->SetCanFocus(true);
-#ifdef ENABLE_SDL
-    wComboPopupListEntry->set_focus(); // XXX
-#else /* !ENABLE_SDL */
-    wComboPopupListEntry->SetFocused(true);
-#endif /* !ENABLE_SDL */
-
 
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();
     ComboListPopup = ComboPopupDataField->GetCombo();

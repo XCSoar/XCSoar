@@ -58,8 +58,11 @@ void GlideComputerBlackboard::Initialise()
  * Resets the GlideComputerBlackboard
  * @param full Reset all data?
  */
-void GlideComputerBlackboard::ResetFlight(const bool full) {
+void
+GlideComputerBlackboard::ResetFlight(const bool full)
+{
   unsigned i;
+
   if (full) {
     calculated_info.FlightTime = 0;
     calculated_info.TakeOffTime = 0;
@@ -79,7 +82,7 @@ void GlideComputerBlackboard::ResetFlight(const bool full) {
     calculated_info.LDvario = INVALID_GR;
     calculated_info.AverageThermal = 0;
 
-    for (i=0; i<200; i++) {
+    for (i = 0; i < 200; i++) {
       calculated_info.AverageClimbRate[i]= 0;
       calculated_info.AverageClimbRateN[i]= 0;
     }
@@ -95,19 +98,19 @@ void GlideComputerBlackboard::ResetFlight(const bool full) {
   }
 
   calculated_info.MaxThermalHeight = 0;
-  for (i=0; i<NUMTHERMALBUCKETS; i++) {
+  for (i = 0; i < NUMTHERMALBUCKETS; i++) {
     calculated_info.ThermalProfileN[i]=0;
     calculated_info.ThermalProfileW[i]=0;
   }
   // clear thermal sources for first time.
-  for (i=0; i<MAX_THERMAL_SOURCES; i++) {
+  for (i = 0; i < MAX_THERMAL_SOURCES; i++) {
     calculated_info.ThermalSources[i].LiftRate= -1.0;
   }
 
   calculated_info.Flying = false;
   calculated_info.Circling = false;
   calculated_info.FinalGlide = false;
-  for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
+  for (int i = 0; i <= NUMTERRAINSWEEPS; i++) {
     calculated_info.GlideFootPrint[i].Longitude = 0;
     calculated_info.GlideFootPrint[i].Latitude = 0;
   }
@@ -123,7 +126,9 @@ void GlideComputerBlackboard::ResetFlight(const bool full) {
 /**
  * Starts the task on the GlideComputerBlackboard
  */
-void GlideComputerBlackboard::StartTask() {
+void
+GlideComputerBlackboard::StartTask()
+{
   calculated_info.ValidFinish = false;
   calculated_info.TaskStartTime = gps_info.Time ;
   calculated_info.TaskStartSpeed = gps_info.Speed;
@@ -151,13 +156,15 @@ void GlideComputerBlackboard::StartTask() {
 }
 
 
-void GlideComputerBlackboard::SaveFinish()
+void
+GlideComputerBlackboard::SaveFinish()
 {
   // JMW save calculated data at finish
   Finish_Derived_Info = calculated_info;
 }
 
-void GlideComputerBlackboard::RestoreFinish()
+void
+GlideComputerBlackboard::RestoreFinish()
 {
   double flighttime = calculated_info.FlightTime;
   double takeofftime = calculated_info.TakeOffTime;
@@ -170,9 +177,10 @@ void GlideComputerBlackboard::RestoreFinish()
  * Returns the average vertical speed in the current thermal
  * @return Average vertical speed in the current thermal
  */
-double GlideComputerBlackboard::GetAverageThermal() const
+double
+GlideComputerBlackboard::GetAverageThermal() const
 {
-  return max(0.0,calculated_info.AverageThermal);
+  return max(0.0, calculated_info.AverageThermal);
 }
 
 /**
@@ -183,12 +191,13 @@ void
 GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info)
 {
   _time_retreated = false;
-  if (nmea_info.Time< gps_info.Time) {
+
+  if (nmea_info.Time < gps_info.Time) {
     // backwards in time, so reset last
     last_gps_info = nmea_info;
     last_calculated_info = calculated_info;
     _time_retreated = true;
-  } else if (nmea_info.Time> gps_info.Time) {
+  } else if (nmea_info.Time > gps_info.Time) {
     // forwards in time, so save state
     last_gps_info = gps_info;
     last_calculated_info = calculated_info;
@@ -204,9 +213,7 @@ GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info)
  * @param settings New settings
  */
 void
-GlideComputerBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER
-					      &settings)
+GlideComputerBlackboard::ReadSettingsComputer(const SETTINGS_COMPUTER &settings)
 {
   settings_computer = settings;
 }
-

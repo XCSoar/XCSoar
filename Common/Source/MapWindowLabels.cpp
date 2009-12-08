@@ -54,44 +54,48 @@ typedef struct{
 } MapWaypointLabel_t;
 
 
-int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 );
+int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2);
+
 MapWaypointLabel_t MapWaypointLabelList[50];
 unsigned MapWaypointLabelListCount = 0;
 
-
 //static int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 ){
-int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 ){
 
+int _cdecl
+MapWaypointLabelListCompare(const void *elem1, const void *elem2)
+{
   // Now sorts elements in task preferentially.
   /*
-    if (((MapWaypointLabel_t *)elem1)->inTask && ! ((MapWaypointLabel_t *)elem2)->inTask)
+  if (((MapWaypointLabel_t *)elem1)->inTask && ! ((MapWaypointLabel_t *)elem2)->inTask)
     return (-1);
   */
+
   if (((MapWaypointLabel_t *)elem1)->AltArivalAGL > ((MapWaypointLabel_t *)elem2)->AltArivalAGL)
-    return (-1);
+    return -1;
+
   if (((MapWaypointLabel_t *)elem1)->AltArivalAGL < ((MapWaypointLabel_t *)elem2)->AltArivalAGL)
-    return (+1);
-  return (0);
+    return 1;
+
+  return 0;
 }
 
-void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
-			 TextInBoxMode_t Mode,
-			 int AltArivalAGL, bool inTask,
-			 bool isLandable, bool isAirport, bool isExcluded,
-			 RECT MapRect) {
+void
+MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
+    int AltArivalAGL, bool inTask, bool isLandable, bool isAirport,
+    bool isExcluded, RECT MapRect)
+{
   MapWaypointLabel_t *E;
 
-  if ((X<MapRect.left-WPCIRCLESIZE)
-      || (X>MapRect.right+(WPCIRCLESIZE*3))
-      || (Y<MapRect.top-WPCIRCLESIZE)
-      || (Y>MapRect.bottom+WPCIRCLESIZE)){
+  if ((X < MapRect.left - WPCIRCLESIZE)
+      || (X > MapRect.right + (WPCIRCLESIZE * 3))
+      || (Y < MapRect.top - WPCIRCLESIZE)
+      || (Y > MapRect.bottom + WPCIRCLESIZE))
     return;
-  }
+
 
   if (MapWaypointLabelListCount >=
-      (sizeof(MapWaypointLabelList)/sizeof(MapWaypointLabel_t))-1){
+      (sizeof(MapWaypointLabelList) / sizeof(MapWaypointLabel_t)) - 1)
     return;
-  }
 
   E = &MapWaypointLabelList[MapWaypointLabelListCount];
 
@@ -106,9 +110,7 @@ void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
   E->isExcluded = isExcluded;
 
   MapWaypointLabelListCount++;
-
 }
-
 
 void MapWindow::MapWaypointLabelSortAndRender(Canvas &canvas) {
   qsort(&MapWaypointLabelList,
@@ -118,14 +120,12 @@ void MapWindow::MapWaypointLabelSortAndRender(Canvas &canvas) {
 
   // now draw task/landable waypoints in order of range (closest last)
   // writing unconditionally
-  for (int j = MapWaypointLabelListCount - 1; j >= 0; j--){
+  for (int j = MapWaypointLabelListCount - 1; j >= 0; j--) {
     MapWaypointLabel_t *E = &MapWaypointLabelList[j];
     // draws if they are in task unconditionally,
     // otherwise, does comparison
     if (E->inTask) {
-      TextInBox(canvas, E->Name, E->Pos.x,
-                E->Pos.y, E->Mode, MapRect,
-                NULL);
+      TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, NULL);
     }
   }
 
@@ -134,16 +134,11 @@ void MapWindow::MapWaypointLabelSortAndRender(Canvas &canvas) {
   for (unsigned i = 0; i < MapWaypointLabelListCount; i++) {
     MapWaypointLabel_t *E = &MapWaypointLabelList[i];
     if (!E->inTask) {
-      TextInBox(canvas, E->Name, E->Pos.x,
-                E->Pos.y, E->Mode, MapRect, &label_block);
+      TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode, MapRect, &label_block);
     }
   }
 }
 
-
-
 void MapWaypointLabelClear() {
   MapWaypointLabelListCount= 0;
 }
-
-

@@ -60,11 +60,12 @@ MaskedPaintWindow::set(ContainerWindow *parent,
 }
 
 #ifndef ENABLE_SDL
-void
-MaskedPaintWindow::resize(unsigned width, unsigned height)
+bool
+MaskedPaintWindow::on_resize(unsigned width, unsigned height)
 {
-  PaintWindow::resize(width, height);
   mask_canvas.resize(width, height);
+  PaintWindow::on_resize(width, height);
+  return true;
 }
 #endif /* !ENABLE_SDL */
 

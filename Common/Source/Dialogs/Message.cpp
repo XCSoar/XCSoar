@@ -47,30 +47,42 @@ Copyright_License {
 #include <assert.h>
 #include <limits.h>
 
-static void OnButtonClick(WindowControl * Sender){
-  ((WndForm *)Sender->GetOwner()->GetOwner())->SetModalResult(Sender->GetTag());
+/**
+ * This event is triggered when a button of the MessageBox is pressed
+ */
+static void
+OnButtonClick(WindowControl * Sender)
+{
+  ((WndForm *) Sender->GetOwner()->GetOwner())->SetModalResult(Sender->GetTag());
 }
 
 // Message Box Replacement
-int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
-
-  WndForm *wf=NULL;
-  WndFrame *wText=NULL;
+/**
+ * Displays a MessageBox and returns the pressed button
+ * @param lpText Text displayed inside the MessageBox
+ * @param lpCaption Text displayed in the Caption of the MessageBox
+ * @param uType Type of MessageBox to display (OK+Cancel, Yes+No, etc.)
+ * @return
+ */
+int WINAPI
+MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
+{
+  WndForm *wf = NULL;
+  WndFrame *wText = NULL;
   int X, Y, Width, Height;
   WndButton *wButtons[10];
   int ButtonCount = 0;
-  int i,x,y,d,w,h,res,dY;
+  int i, x, y, d, w, h, res, dY;
   RECT rc;
-
-  // todo
 
   assert(lpText != NULL);
   assert(lpCaption != NULL);
 
   // JMW this makes the first key if pressed quickly, ignored
+  // TODO bug: doesn't work sometimes. buttons have to be pressed multiple times (TB)
   XCSoarInterface::Debounce();
 
-  rc = XCSoarInterface::main_window.get_position();
+  rc = XCSoarInterface::main_window.get_screen_position();
 
 #ifdef ALTAIRSYNC
   Width = DLGSCALE(220);
@@ -80,112 +92,102 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
   Height = DLGSCALE(160);
 #endif
 
-  X = ((rc.right-rc.left) - Width)/2;
-  Y = ((rc.bottom-rc.top) - Height)/2;
+  X = ((rc.right - rc.left) - Width) / 2;
+  Y = ((rc.bottom - rc.top) - Height) / 2;
 
   y = DLGSCALE(100);
   w = DLGSCALE(60);
   h = DLGSCALE(32);
 
+  // Create dialog
   wf = new WndForm(&XCSoarInterface::main_window, TEXT("frmXcSoarMessageDlg"),
                    lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);
   wf->SetBackColor(Color(0xDA, 0xDB, 0xAB));
 
-  wText = new WndFrame(wf,
-                       TEXT("frmMessageDlgText"),
-                       0,
-                       DLGSCALE(5),
-                       Width,
-                       Height);
+  // Create text element
+  wText =
+      new WndFrame(wf, TEXT("frmMessageDlgText"), 0, DLGSCALE(5), Width, Height);
+
   wText->SetCaption(lpText);
   wText->SetFont(MapWindowBoldFont);
-  wText->SetCaptionStyle(
-        DT_EXPANDTABS
-      | DT_CENTER
-      | DT_NOCLIP
-      | DT_WORDBREAK
-        //      | DT_VCENTER
-  );
+  wText->SetCaptionStyle(DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
+  // | DT_VCENTER
 
   /* TODO code: this doesnt work to set font height
   dY = wText->GetLastDrawTextHeight() - Height;
   */
   dY = DLGSCALE(-40);
-  wText->SetHeight(wText->GetTextHeight() + 5);
-  wf->SetHeight(wf->GetHeight() + dY);
+  wText->resize(Width, wText->GetTextHeight() + 5);
+  wf->resize(Width, wf->get_size().cy + dY);
 
   y += dY;
 
+  // Create buttons
   uType = uType & 0x000f;
+  if (uType == MB_OK || uType == MB_OKCANCEL) {
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("OK")), 0, y, w, h, OnButtonClick);
 
-  if (uType == MB_OK
-      || uType == MB_OKCANCEL
-
-  ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("OK")),
-                                          0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDOK);
     ButtonCount++;
   }
 
-  if (uType == MB_YESNO
-      || uType == MB_YESNOCANCEL
-  ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("Yes")),
-                                          0, y, w, h, OnButtonClick);
+  if (uType == MB_YESNO || uType == MB_YESNOCANCEL) {
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("Yes")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDYES);
     ButtonCount++;
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("No")),
-                                          0, y, w, h, OnButtonClick);
+
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("No")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDNO);
     ButtonCount++;
   }
 
-  if (uType == MB_ABORTRETRYIGNORE
-      || uType == MB_RETRYCANCEL
-  ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-                                          gettext(TEXT("Retry")),
-                                          0, y, w, h, OnButtonClick);
+  if (uType == MB_ABORTRETRYIGNORE || uType == MB_RETRYCANCEL) {
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("Retry")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDRETRY);
     ButtonCount++;
   }
 
-  if (uType == MB_OKCANCEL
-      || uType == MB_RETRYCANCEL
-      || uType == MB_YESNOCANCEL
-  ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-                                          gettext(TEXT("Cancel")),
-                                          0, y, w, h, OnButtonClick);
+  if (uType == MB_OKCANCEL || uType == MB_RETRYCANCEL || uType == MB_YESNOCANCEL) {
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("Cancel")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDCANCEL);
     ButtonCount++;
   }
 
-  if (uType == MB_ABORTRETRYIGNORE
-  ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-                                          gettext(TEXT("Abort")),
-                                          0, y, w, h, OnButtonClick);
+  if (uType == MB_ABORTRETRYIGNORE) {
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("Abort")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDABORT);
     ButtonCount++;
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-                                          gettext(TEXT("Ignore")),
-                                          0, y, w, h, OnButtonClick);
+
+    wButtons[ButtonCount] =
+        new WndButton(wf, TEXT(""), gettext(TEXT("Ignore")), 0, y, w, h, OnButtonClick);
+
     wButtons[ButtonCount]->SetTag(IDIGNORE);
     ButtonCount++;
   }
 
   d = Width / (ButtonCount);
-  x = d/2-w/2;
+  x = d / 2 - w / 2;
 
-  for (i=0; i<ButtonCount; i++){
-    wButtons[i]->SetLeft(x);
+  // Move buttons to the right positions
+  for (i = 0; i < ButtonCount; i++) {
+    wButtons[i]->move(x, y);
     x += d;
   }
 
+  // Show MessageBox and save result
   res = wf->ShowModal();
 
   delete wf;
@@ -195,6 +197,6 @@ int WINAPI MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType){
   InvalidateRect(hWnd,NULL,true);
   UpdateWindow(hWnd);
 #endif
-  return(res);
 
+  return(res);
 }

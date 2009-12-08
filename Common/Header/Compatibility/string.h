@@ -69,8 +69,6 @@ _strupr(char *p)
 
 #else /* !HAVE_MSVCRT */
 
-#define _tcsclen(x) _tcslen(x)
-
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -49,6 +49,9 @@ Copyright_License {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+/**
+ * Constructor of the AirspaceDatabase
+ */
 AirspaceDatabase::AirspaceDatabase()
   :AirspacePoint(NULL), NumberOfAirspacePoints(0),
    AirspaceArea(NULL), NumberOfAirspaceAreas(0),
@@ -57,6 +60,9 @@ AirspaceDatabase::AirspaceDatabase()
 {
 }
 
+/**
+ * Clear the AirspaceDatabase
+ */
 void
 AirspaceDatabase::Clear()
 {
@@ -205,6 +211,13 @@ AirspaceDatabase::SetQNH(double _qnh)
   qnh = _qnh;
 }
 
+/**
+ * Calculate the distance to the border of the AirspaceCircle
+ * @param location Location of the point to be calculated
+ * @param i Array id of the AirspaceCircle
+ * @return The distance between the given location and the border of the
+ * specified AirspaceCircle
+ */
 double
 AirspaceDatabase::CircleDistance(const GEOPOINT &location,
                                  const unsigned i) const
@@ -234,6 +247,13 @@ CheckInsideLongitude(double longitude,
   }
 }
 
+/**
+ * Checks whether the given location is inside the bounds of
+ * the given airspace
+ * @param airspace AirspaceMetadata to be checked
+ * @param location Location to be checked
+ * @return True if location is inside the bounds, False otherwise
+ */
 static bool
 InsideBounds(const AirspaceMetadata &airspace, const GEOPOINT &location)
 {
@@ -243,14 +263,33 @@ InsideBounds(const AirspaceMetadata &airspace, const GEOPOINT &location)
                          airspace.bounds.minx, airspace.bounds.maxx);
 }
 
+/**
+ * Checks whether the given location is inside the specified AirspaceCircle
+ * @param location Location to be checked
+ * @param i Array id of the AirspaceCircle
+ * @return True if location is inside the AirspaceCircle, False otherwise
+ */
 bool
 AirspaceDatabase::InsideCircle(const GEOPOINT &location,
                                const unsigned i) const
 {
+  // First check bounds and if necessary check distance to the border
   return InsideBounds(AirspaceCircle[i], location) &&
     CircleDistance(location, i) < 0.0;
 }
 
+/**
+ * Calculates the nearest AirspaceCircle and writes the distance and bearing
+ * into the given variables
+ * @param location Location to be checked
+ * @param altitude (?)
+ * @param terrain_altitude (?)
+ * @param settings Settings object
+ * @param nearestdistance Distance to the nearest AirspaceCircle (Pointer)
+ * @param nearestbearing Bearing to the nearest AirspaceCircle (Pointer)
+ * @param height (?)
+ * @return Array id of the nearest AirspaceCircle
+ */
 int
 AirspaceDatabase::NearestCircle(const GEOPOINT &location,
                                 double altitude, double terrain_altitude,
@@ -264,16 +303,16 @@ AirspaceDatabase::NearestCircle(const GEOPOINT &location,
   double Dist;
   int ifound = -1;
 
-  if(NumberOfAirspaceCircles == 0) {
-      return -1;
+  if (NumberOfAirspaceCircles == 0) {
+    return -1;
   }
 
-  for(i=0;i<NumberOfAirspaceCircles;i++) {
+  for (i = 0; i < NumberOfAirspaceCircles; i++) {
     bool iswarn;
     bool isdisplay;
 
-    iswarn = (settings.iAirspaceMode[AirspaceCircle[i].Type]>=2);
-    isdisplay = ((settings.iAirspaceMode[AirspaceCircle[i].Type]%2)>0);
+    iswarn = (settings.iAirspaceMode[AirspaceCircle[i].Type] >= 2);
+    isdisplay = ((settings.iAirspaceMode[AirspaceCircle[i].Type] % 2) > 0);
 
     if (!isdisplay || !iswarn) {
       // don't want warnings for this one
@@ -290,15 +329,15 @@ AirspaceDatabase::NearestCircle(const GEOPOINT &location,
     } else {
       altok = CheckAirspaceAltitude(basealt, topalt, altitude, settings);
     }
-    if(altok) {
 
+    if (altok) {
       Dist = CircleDistance(location, i);
 
       if (Dist < *nearestdistance) {
         *nearestdistance = Dist;
         *nearestbearing = Bearing(location, AirspaceCircle[i].Location);
         if (Dist < 0) {
-          // no need to continue search, inside
+          // no need to continue search, the location is inside the circle
           return i;
         }
         ifound = i;
@@ -357,6 +396,12 @@ static int wn_PnPoly(AIRSPACE_POINT P, AIRSPACE_POINT* V, int n) {
   return wn;
 }
 
+/**
+ * Checks whether the given location is inside the specified AirspaceArea
+ * @param location Location to be checked
+ * @param i Array id of the AirspaceArea
+ * @return True if location is inside the AirspaceArea, False otherwise
+ */
 bool
 AirspaceDatabase::InsideArea(const GEOPOINT &location, const unsigned i) const
 {
@@ -504,24 +549,15 @@ AirspaceDatabase::NearestArea(const GEOPOINT &location,
 }
 
 /**
- * Checks whether two lines defined by four points
- * intersect or not
- * @param x1 x-Coordinate of the first point of the
- * first line
- * @param y1 y-Coordinate of the first point of the
- * first line
- * @param dx x-Distance between first and second point
- * of the first line
- * @param dy y-Distance between first and second point
- * of the first line
- * @param x3 x-Coordinate of the first point of the
- * second line
- * @param y3 y-Coordinate of the first point of the
- * second line
- * @param x4 x-Coordinate of the second point of the
- * second line
- * @param y4 y-Coordinate of the second point of the
- * second line
+ * Checks whether two lines defined by four points intersect or not
+ * @param x1 x-Coordinate of the first point of the first line
+ * @param y1 y-Coordinate of the first point of the first line
+ * @param dx x-Distance between first and second point of the first line
+ * @param dy y-Distance between first and second point of the first line
+ * @param x3 x-Coordinate of the first point of the second line
+ * @param y3 y-Coordinate of the first point of the second line
+ * @param x4 x-Coordinate of the second point of the second line
+ * @param y4 y-Coordinate of the second point of the second line
  * @param u ?
  * @return 1 if lines intersect within bounds, 0 otherwise
  * @see http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
@@ -562,14 +598,10 @@ int line_line_intersection (const double x1, const double y1,
 /**
  * Checks whether a line defined by two points
  * intersects with a rect defined by its bounds
- * @param x1 x-Coordinate of the first point of the
- * line
- * @param y1 y-Coordinate of the first point of the
- * line
- * @param dx x-Distance between first and second point
- * of the line
- * @param dy y-Distance between first and second point
- * of the line
+ * @param x1 x-Coordinate of the first point of the line
+ * @param y1 y-Coordinate of the first point of the line
+ * @param dx x-Distance between first and second point of the line
+ * @param dy y-Distance between first and second point of the line
  * @param bounds Pointer to the bounds of the rect
  * @return True if line intersects with rect, False otherwise
  */

@@ -52,7 +52,6 @@ UnitSymbol::get_origin(enum kind kind) const
   return origin;
 }
 
-
 static UnitSymbol unit_symbols[unCount];
 
 void
@@ -86,8 +85,5 @@ GetUnitSymbol(Units_t unit)
 {
   assert(unit <= unCount);
 
-  return unit_symbols[unit].defined()
-    ? &unit_symbols[unit]
-    : NULL;
+  return unit_symbols[unit].defined() ? &unit_symbols[unit] : NULL;
 }
-

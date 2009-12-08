@@ -39,17 +39,13 @@ Copyright_License {
 #include "jasper/jasper.h"
 #include "jasper/RasterTile.h"
 #include "Sizes.h"
+
+#include <algorithm>
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifndef __MINGW32__
-#define min(x, y) \
-        (((x) < (y)) ? (x) : (y))
-
-/* Compute the maximum of two values. */
-#define max(x, y) \
-        (((x) > (y)) ? (x) : (y))
-#endif
+using std::min;
+using std::max;
 
 inline unsigned int CombinedDivAndMod(unsigned int &lx) {
   unsigned int ox = lx & 0xff;

@@ -51,7 +51,6 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
-static WndOwnerDrawFrame *wAirspaceListEntry = NULL;
 
 static int ItemIndex = -1;
 static bool colormode = false;
@@ -61,7 +60,7 @@ int dlgAirspacePatternsShowModal(void);
 
 static void UpdateList(void){
   wAirspaceList->ResetList();
-  wAirspaceList->Redraw();
+  wAirspaceList->invalidate();
 }
 
 static int DrawListIndex=0;
@@ -194,7 +193,6 @@ static void OnAirspaceListEnter(WindowControl * Sender,
     } else {
       int v = (XCSoarInterface::SettingsComputer().iAirspaceMode[ItemIndex]+1)%4;
       XCSoarInterface::SetSettingsComputer().iAirspaceMode[ItemIndex] = v;
-      //  wAirspaceList->Redraw();
       Profile::SetRegistryAirspaceMode(ItemIndex);
       changed = true;
     }
@@ -259,11 +257,6 @@ void dlgAirspaceShowModal(bool coloredit){
   assert(wAirspaceList!=NULL);
   wAirspaceList->SetBorderKind(BORDERLEFT);
   wAirspaceList->SetEnterCallback(OnAirspaceListEnter);
-
-  wAirspaceListEntry = (WndOwnerDrawFrame*)wf->
-    FindByName(TEXT("frmAirspaceListEntry"));
-  assert(wAirspaceListEntry!=NULL);
-  wAirspaceListEntry->SetCanFocus(true);
 
   UpdateList();
 

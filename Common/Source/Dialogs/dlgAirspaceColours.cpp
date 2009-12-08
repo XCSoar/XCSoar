@@ -45,14 +45,13 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceColoursList=NULL;
-static WndOwnerDrawFrame *wAirspaceColoursListEntry = NULL;
 
 static int ItemIndex = -1;
 
 
 static void UpdateList(void){
   wAirspaceColoursList->ResetList();
-  wAirspaceColoursList->Redraw();
+  wAirspaceColoursList->invalidate();
 }
 
 static int DrawListIndex=0;
@@ -139,11 +138,6 @@ int dlgAirspaceColoursShowModal(void){
   assert(wAirspaceColoursList!=NULL);
   wAirspaceColoursList->SetBorderKind(BORDERLEFT);
   wAirspaceColoursList->SetEnterCallback(OnAirspaceColoursListEnter);
-
-  wAirspaceColoursListEntry = (WndOwnerDrawFrame*)wf->
-    FindByName(TEXT("frmAirspaceColoursListEntry"));
-  assert(wAirspaceColoursListEntry!=NULL);
-  wAirspaceColoursListEntry->SetCanFocus(true);
 
   UpdateList();
 

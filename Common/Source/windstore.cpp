@@ -111,8 +111,9 @@ WindStore::slot_Altitude(const NMEA_INFO *nmeaInfo,
   }
 }
 
-
-Vector WindStore::getWind(double Time, double h, bool *found) {
+const Vector
+WindStore::getWind(double Time, double h, bool *found) const
+{
   return windlist->getWind(Time, h, found);
 }
 

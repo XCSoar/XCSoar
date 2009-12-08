@@ -64,7 +64,6 @@ static GEOPOINT Location;
 
 static WndForm *wf=NULL;
 static WndListFrame *wWayPointList=NULL;
-static WndOwnerDrawFrame *wWayPointListEntry = NULL;
 
 static const TCHAR NameFilter[] = TEXT("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 static unsigned NameFilterIdx=0;
@@ -337,8 +336,7 @@ static void UpdateList(void){
   }
 
   wWayPointList->ResetList();
-  wWayPointList->Redraw();
-
+  wWayPointList->invalidate();
 }
 
 
@@ -644,17 +642,15 @@ static int OnTimerNotify(WindowControl * Sender) {
   return 0;
 }
 
-static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-
+static bool
+FormKeyDown(WindowControl *Sender, unsigned key_code)
+{
   WndProperty* wp;
   unsigned NewIndex = TypeFilterIdx;
 
-  (void)lParam;
-  (void)Sender;
-
   wp = ((WndProperty *)wf->FindByName(TEXT("prpFltType")));
 
-  switch(wParam & 0xffff){
+  switch(key_code){
     case VK_F1:
       NewIndex = 0;
     break;
@@ -664,6 +660,9 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
     case VK_F3:
       NewIndex = 3;
     break;
+
+  default:
+    return false;
   }
 
   if (TypeFilterIdx != NewIndex){
@@ -674,7 +673,7 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
     wp->RefreshDisplay();
   }
 
-  return(1);
+  return true;
 }
 
 static CallBackTableEntry_t CallBackTable[]={
@@ -728,10 +727,6 @@ int dlgWayPointSelect(const GEOPOINT &location, const int type, const int Filter
   assert(wWayPointList!=NULL);
   wWayPointList->SetBorderKind(BORDERLEFT);
   wWayPointList->SetEnterCallback(OnWaypointListEnter);
-
-  wWayPointListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmWayPointListEntry"));
-  assert(wWayPointListEntry!=NULL);
-  wWayPointListEntry->SetCanFocus(true);
 
   wpName = (WndProperty*)wf->FindByName(TEXT("prpFltName"));
   wpDistance = (WndProperty*)wf->FindByName(TEXT("prpFltDistance"));

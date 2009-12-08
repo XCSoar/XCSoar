@@ -70,13 +70,10 @@ DrawThread::run()
   bool bounds_dirty = false;
 
   // wait until the startup is finished
-  globalRunningEvent.wait();
+  running.wait();
 
   // Get data from the DeviceBlackboard
   ExchangeBlackboard();
-
-  // take control (or wait for the resume())
-  mutexRun.Lock();
 
   // first time draw
   map.DrawThreadLoop();
@@ -89,18 +86,15 @@ DrawThread::run()
   // second time draw
   map.DrawThreadLoop();
 
-  // release control
-  mutexRun.Unlock();
-
   // QUESTION TB: any reason for the do-loop here instead of while?
   // circle until application is closed
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
+      // take control (or wait for the resume())
+      running.wait();
+
       // Get data from the DeviceBlackboard
       ExchangeBlackboard();
-
-      // take control (or wait for the resume())
-      mutexRun.Lock();
 
       if (flarm != NULL) {
         // If FLARM alarm level higher then 0
@@ -124,20 +118,14 @@ DrawThread::run()
         bounds_dirty = map.Idle(true);
       }
 
-      // release control
-      mutexRun.Unlock();
-
       continue;
 
     // QUESTION TB: what's the point of bounds_dirty?!
     } else if (bounds_dirty) {
       // take control (or wait for the resume())
-      mutexRun.Lock();
+      running.wait();
 
       bounds_dirty = map.Idle(false);
-
-      // release control
-      mutexRun.Unlock();
 
       continue;
     }

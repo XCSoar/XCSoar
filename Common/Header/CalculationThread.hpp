@@ -50,6 +50,11 @@ class GlideComputer;
  * Data transfer is handled by a blackboard system.
  */
 class CalculationThread : public Thread {
+  /**
+   * The thread runs while this trigger is set.
+   */
+  Trigger running;
+
   /** The data_trigger is used when new data is available (Vario + GPS) */
   Trigger data_trigger;
   /** The gps_trigger is used only when new GPS data is available */
@@ -60,6 +65,14 @@ class CalculationThread : public Thread {
 
 public:
   CalculationThread(GlideComputer *_glide_computer);
+
+  void suspend() {
+    running.reset();
+  }
+
+  void resume() {
+    running.trigger();
+  }
 
   /** Triggers the data_trigger */
   void trigger_data() {

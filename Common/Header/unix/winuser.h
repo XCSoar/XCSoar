@@ -111,6 +111,15 @@ SetRect(RECT *rc, int left, int top, int right, int bottom)
 }
 
 static inline void
+SetRectEmpty(RECT *rc)
+{
+  rc->left = 0;
+  rc->top = 0;
+  rc->right = 0;
+  rc->bottom = 0;
+}
+
+static inline void
 CopyRect(RECT *dest, const RECT *src)
 {
   *dest = *src;

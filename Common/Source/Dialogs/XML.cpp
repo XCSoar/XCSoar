@@ -57,11 +57,9 @@ Copyright_License {
 #include <tchar.h>
 #include <limits.h>
 
-static inline int
-mmin(const int t1, const int t2)
-{
-  return t1 < t2 ? t1 : t2;
-}
+#include <algorithm>
+
+using std::min;
 
 static long
 StringToIntDflt(const TCHAR *String, long Default)
@@ -195,7 +193,7 @@ xmlLoadFromResource(const TCHAR* lpName, LPCTSTR tag, XMLResults *pResults)
 #if defined(WIN32) || defined(UNDER_CE)
 #ifdef _UNICODE
 #if !defined(UNDER_CE) && !defined(WINDOWSPC)
-      if (!IsTextUnicode(buf,mmin(l,10000),NULL))
+      if (!IsTextUnicode(buf, min(l, 10000), NULL))
         {
 #endif
           LPTSTR b2=(LPTSTR)malloc(l*2+2);
@@ -213,7 +211,7 @@ xmlLoadFromResource(const TCHAR* lpName, LPCTSTR tag, XMLResults *pResults)
         }
 #endif
 #else
-      if (IsTextUnicode(buf,mmin(l,10000),NULL))
+      if (IsTextUnicode(buf, min(l, 10000), NULL))
         {
           l>>=1;
           LPTSTR b2=(LPTSTR)malloc(l+2);

@@ -89,6 +89,9 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "InstrumentThread.hpp"
 #include "WayPointList.hpp"
+#if defined(__BORLANDC__)  // due to compiler bug
+  #include "Polar/Polar.hpp"
+#endif
 
 WayPointList way_points;
 AirspaceDatabase airspace_database;
@@ -414,6 +417,8 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   instrument_thread->start();
 
   globalRunningEvent.trigger();
+  calculation_thread->resume();
+  draw_thread->resume();
 
   return true;
 }

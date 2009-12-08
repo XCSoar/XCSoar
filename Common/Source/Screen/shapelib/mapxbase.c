@@ -42,14 +42,12 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
 #include "Screen/shapelib/mapprimitive.h"
 #include "Screen/shapelib/mapshape.h"
 #include "Screen/shapelib/maperror.h"
-#include "Compatibility/string.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 /************************************************************************/
 /*                             SfRealloc()                              */
@@ -844,7 +842,7 @@ char **msDBFGetItems(DBFHandle dbffile)
 
   for(i=0;i<nFields;i++) {
     msDBFGetFieldInfo(dbffile, i, fName, NULL, NULL);
-    items[i] = _strdup(fName);
+    items[i] = strdup(fName);
   }
 
   return(items);
@@ -869,7 +867,7 @@ char **msDBFGetValues(DBFHandle dbffile, int record)
   }
 
   for(i=0;i<nFields;i++)
-    values[i] = _strdup(msDBFReadStringAttribute(dbffile, record, i));
+    values[i] = strdup(msDBFReadStringAttribute(dbffile, record, i));
 
   return(values);
 }
@@ -914,7 +912,7 @@ char **msDBFGetValueList(DBFHandle dbffile, int record, int *itemindexes, int nu
     value = msDBFReadStringAttribute(dbffile, record, itemindexes[i]);
     if (value == NULL)
       return NULL; /* Error already reported by msDBFReadStringAttribute() */
-    values[i] = _strdup(value);
+    values[i] = strdup(value);
   }
 
   return(values);

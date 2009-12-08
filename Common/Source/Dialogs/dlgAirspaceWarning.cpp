@@ -59,7 +59,6 @@ using std::max;
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
-static WndOwnerDrawFrame *wAirspaceListEntry = NULL;
 static Brush hBrushInsideBk;
 static Brush hBrushNearBk;
 static Brush hBrushInsideAckBk;
@@ -81,7 +80,7 @@ static void DoAck(int Ack){
   AirspaceInfo_c pAS;
   int Idx;
 
-  if (!wAirspaceListEntry->GetFocused())
+  if (!wAirspaceList->GetFocused())
     Idx = SelectedIdx;
   else
     Idx = ItemIndex;
@@ -91,7 +90,7 @@ static void DoAck(int Ack){
 
   if (AirspaceWarnGetItem(Idx, pAS)){
     AirspaceWarnDoAck(airspace_database, pAS.ID, Ack);
-    wAirspaceList->Redraw();
+    wAirspaceList->invalidate();
   }
 
 }
@@ -131,42 +130,50 @@ static int OnTimer(WindowControl * Sender){
 	return(0);
 }
 
-static int OnKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-  (void)lParam;
-	switch(wParam){
+static bool
+OnKeyDown(WindowControl *Sender, unsigned key_code)
+{
+  switch(key_code){
     case VK_RETURN:
-      if (wAirspaceListEntry->GetFocused()){
+      if (wAirspaceList->GetFocused()){
         SelectedID = FocusedID;
         SelectedIdx = FocusedIdx;
-        wAirspaceList->Redraw();
-        return(0);
+        wAirspaceList->invalidate();
+        return true;
       }
-      return(1);
+
+    return false;
+
     case VK_ESCAPE:
       OnCloseClicked(Sender);
-      return(0);
+    return true;
+
 #ifdef GNAV
     case VK_APP1:
     case '6':
       OnAckClicked(Sender);
-      return(0);
+    return true;
+
     case VK_APP2:
     case '7':
       OnAck1Clicked(Sender);
-      return(0);
+    return true;
+
     case VK_APP3:
     case '8':
       OnAck2Clicked(Sender);
-      return(0);
+    return true;
+
     case VK_APP4:
     case '9':
       OnEnableClicked(Sender);
-      return(0);
+    return true;
+
 #endif
+
+  default:
+    return false;
   }
-
-  return(1);
-
 }
 
 /*
@@ -492,7 +499,7 @@ static bool FindFocus() {
     FocusedIdx = 0;
     FocusedID = -1; // JMW bug fix
 
-    if (wAirspaceListEntry->GetFocused()) {
+    if (wAirspaceList->GetFocused()) {
       // JMW attempt to find fix...
       do_refocus = true;
     }
@@ -554,11 +561,11 @@ UserMsgNotify(WindowControl *Sender, unsigned id){
 
   if (actListChange) {
     actListChange = false;
-    wAirspaceList->Redraw();
+    wAirspaceList->invalidate();
   }
 
   if (do_refocus) {
-    wAirspaceListEntry->set_focus();
+    wAirspaceList->set_focus();
   }
 
   // this is our message, we have handled it.
@@ -694,8 +701,6 @@ int dlgAirspaceWarningInit(void){
   hBrushNearAckBk.set(Color(254,254,100));
 
   wAirspaceList = (WndListFrame*)wf->FindByName(TEXT("frmAirspaceWarningList"));
-  wAirspaceListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmAirspaceWarningListEntry"));
-  wAirspaceListEntry->SetCanFocus(true);
 
   AirspaceWarnListAddNotifier(AirspaceWarningNotify);
 

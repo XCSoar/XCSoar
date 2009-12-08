@@ -58,6 +58,11 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+#ifndef NDEBUG
+#include "Thread/Local.hpp"
+extern ThreadLocalInteger thread_locks_held;
+#endif
+
 /**
  * This class wraps an OS specific mutex.  It is an object which one
  * thread can wait for, and another thread can wake it up.
@@ -108,6 +113,10 @@ public:
 #else
     EnterCriticalSection(&handle);
 #endif
+
+#ifndef NDEBUG
+    ++thread_locks_held;
+#endif
   };
 
   /**
@@ -118,6 +127,10 @@ public:
     pthread_mutex_unlock(&mutex);
 #else
     LeaveCriticalSection(&handle);
+#endif
+
+#ifndef NDEBUG
+    --thread_locks_held;
 #endif
   }
 };

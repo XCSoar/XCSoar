@@ -36,50 +36,16 @@ Copyright_License {
 }
 */
 
-#include "StdAfx.h"
-
 #include "Screen/shapelib/maperror.h"
 #include "Screen/shapelib/mapprimitive.h"
-#include "Compatibility/string.h"
 
+#include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #ifdef NEED_NONBLOCKING_STDERR
 #include <fcntl.h>
 #endif
-
-static char *ms_errorCodes[MS_NUMERRORCODES] = {"",
-						"Unable to access file.",
-						"Memory allocation error.",
-						"Incorrect data type.",
-						"Symbol definition error.",
-						"Regular expression error.",
-						"TrueType Font error.",
-						"DBASE file error.",
-						"GD library error.",
-						"Unknown identifier.",
-						"Premature End-of-File.",
-						"Projection library error.",
-						"General error message.",
-						"CGI error.",
-						"Web application error.",
-						"Image handling error.",
-						"Hash table error.",
-						"Join error.",
-						"Search returned no results.",
-						"Shapefile error.",
-						"Expression parser error.",
-						"SDE error.",
-						"OGR error.",
-						"Query error.",
-						"WMS server error.",
-						"WMS connection error.",
-						"OracleSpatial error.",
-						"WFS server error.",
-						"WFS connection error.",
-						"WMS Map Context error.",
-						"HTTP request error."
-};
 
 #ifndef USE_THREAD
 
@@ -231,54 +197,8 @@ void msResetErrorList()
   ms_error->message[0] = '\0';
 }
 
-char *msGetErrorCodeString(int code) {
-
-  if(code<0 || code>MS_NUMERRORCODES-1)
-    return("Invalid error code.");
-
-  return(ms_errorCodes[code]);
-}
-
-char *msGetErrorString(char *delimiter)
-{
-#if defined(_WIN32) && !defined(__CYGWIN__)
-  char  errbuf[512];
-#else
-  char errbuf[256];
-#endif
-  char *errstr=NULL;
-
-  errorObj *error = msGetErrorObj();
-
-  if(!delimiter || !error) return(NULL);
-
-  if((errstr = _strdup("")) == NULL) return(NULL); // empty at first
-  while(error && error->code != MS_NOERR) {
-    if(error->next && error->next->code != MS_NOERR) // (peek ahead) more errors, use delimiter
-#if defined(_WIN32) && !defined(__CYGWIN__)
-      sprintf(errbuf,  "%s: %s %s%s", error->routine, ms_errorCodes[error->code], error->message, delimiter);
-    else
-      sprintf(errbuf, "%s: %s %s", error->routine, ms_errorCodes[error->code], error->message);
-#else
-      snprintf(errbuf, 255, "%s: %s %s%s", error->routine, ms_errorCodes[error->code], error->message, delimiter);
-    else
-      snprintf(errbuf, 255, "%s: %s %s", error->routine, ms_errorCodes[error->code], error->message);
-#endif
-
-    if((errstr = (char *) realloc(errstr, sizeof(char)*(strlen(errstr)+strlen(errbuf)+1))) == NULL) return(NULL);
-    strcat(errstr, errbuf);
-
-    error = error->next;
-  }
-
-  return(errstr);
-}
-
 void msSetError(int code, const char *message_fmt, const char *routine, ...)
 {
-//  char *errfile=NULL;
-//  FILE *errstream;
-//  time_t errtime;
   errorObj *ms_error = msInsertErrorObj();
   va_list args;
 
@@ -297,102 +217,6 @@ void msSetError(int code, const char *message_fmt, const char *routine, ...)
     vsprintf( ms_error->message, message_fmt, args );
     va_end(args);
   }
-/*
-  errfile = getenv("MS_ERRORFILE");
-  if(errfile) {
-    if(strcmp(errfile, "stderr") == 0)
-      errstream = stderr;
-    else if(strcmp(errfile, "stdout") == 0)
-      errstream = stdout;
-    else
-      errstream = fopen(errfile, "a");
-    if(!errstream) return;
-    errtime = time(NULL);
-    fprintf(errstream, "%s - %s: %s %s\n", chop(ctime(&errtime)), ms_error->routine, ms_errorCodes[ms_error->code], ms_error->message);
-    fclose(errstream);
-  }*/
-}
-
-void msWriteError(FILE *stream)
-{
-  errorObj *ms_error = msGetErrorObj();
-
-  while (ms_error && ms_error->code != MS_NOERR)
-  {
-      fprintf(stream, "%s: %s %s <br>\n", ms_error->routine, ms_errorCodes[ms_error->code], ms_error->message);
-      ms_error = ms_error->next;
-  }
-}
-
-
-char *msGetVersion() {
-  static char version[384];
-
-  sprintf(version, "MapServer version %s", MS_VERSION);
-
-#ifdef USE_GD_GIF
-  strcat(version, " OUTPUT=GIF");
-#endif
-#ifdef USE_GD_PNG
-  strcat(version, " OUTPUT=PNG");
-#endif
-#ifdef USE_GD_JPEG
-  strcat(version, " OUTPUT=JPEG");
-#endif
-#ifdef USE_GD_WBMP
-  strcat(version, " OUTPUT=WBMP");
-#endif
-#ifdef USE_PDF
-  strcat(version, " OUTPUT=PDF");
-#endif
-#ifdef USE_MING_FLASH
-  strcat(version, " OUTPUT=SWF");
-#endif
-#ifdef USE_PROJ
-  strcat(version, " SUPPORTS=PROJ");
-#endif
-#ifdef USE_GD_FT
-  strcat(version, " SUPPORTS=FREETYPE");
-#endif
-#ifdef USE_WMS_SVR
-  strcat(version, " SUPPORTS=WMS_SERVER");
-#endif
-#ifdef USE_WMS_LYR
-  strcat(version, " SUPPORTS=WMS_CLIENT");
-#endif
-#ifdef USE_WFS_SVR
-  strcat(version, " SUPPORTS=WFS_SERVER");
-#endif
-#ifdef USE_WFS_LYR
-  strcat(version, " SUPPORTS=WFS_CLIENT");
-#endif
-#ifdef USE_TIFF
-  strcat(version, " INPUT=TIFF");
-#endif
-#ifdef USE_EPPL
-  strcat(version, " INPUT=EPPL7");
-#endif
-#ifdef USE_JPEG
-  strcat(version, " INPUT=JPEG");
-#endif
-#ifdef USE_SDE
-  strcat(version, " INPUT=SDE");
-#endif
-#ifdef USE_POSTGIS
-  strcat(version, " INPUT=POSTGIS");
-#endif
-#ifdef USE_ORACLESPATIAL
-  strcat(version, " INPUT=ORACLESPATIAL");
-#endif
-#ifdef USE_OGR
-  strcat(version, " INPUT=OGR");
-#endif
-#ifdef USE_GDAL
-  strcat(version, " INPUT=GDAL");
-#endif
-  strcat(version, " INPUT=SHAPEFILE");
-
-  return(version);
 }
 
 void msDebug( const char * pszFormat, ... )

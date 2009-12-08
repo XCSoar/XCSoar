@@ -45,14 +45,13 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspacePatternsList=NULL;
-static WndOwnerDrawFrame *wAirspacePatternsListEntry = NULL;
 
 static int ItemIndex = -1;
 
 
 static void UpdateList(void){
   wAirspacePatternsList->ResetList();
-  wAirspacePatternsList->Redraw();
+  wAirspacePatternsList->invalidate();
 }
 
 static int DrawListIndex=0;
@@ -139,11 +138,6 @@ int dlgAirspacePatternsShowModal(void){
   assert(wAirspacePatternsList!=NULL);
   wAirspacePatternsList->SetBorderKind(BORDERLEFT);
   wAirspacePatternsList->SetEnterCallback(OnAirspacePatternsListEnter);
-
-  wAirspacePatternsListEntry = (WndOwnerDrawFrame*)wf->
-    FindByName(TEXT("frmAirspacePatternsListEntry"));
-  assert(wAirspacePatternsListEntry!=NULL);
-  wAirspacePatternsListEntry->SetCanFocus(true);
 
   UpdateList();
 

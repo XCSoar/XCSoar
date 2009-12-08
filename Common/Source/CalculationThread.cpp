@@ -47,7 +47,8 @@ Copyright_License {
  * @param _glide_computer The GlideComputer used for the CalculationThread
  */
 CalculationThread::CalculationThread(GlideComputer *_glide_computer)
-  :data_trigger(TEXT("dataTriggerEvent")),
+  :running(_T("CalculationThread::running"), true),
+   data_trigger(_T("dataTriggerEvent")),
    gps_trigger(TEXT("gpsUpdatedTriggerEvent")),
    glide_computer(_glide_computer) {}
 
@@ -61,11 +62,9 @@ CalculationThread::run()
 
   need_calculations_slow = false;
 
-  // wait for proper startup signal
-  globalRunningEvent.wait();
-
   // main loop until stop signal is tested
   while (!closeTriggerEvent.test()) {
+    running.wait();
 
     // wait until the data_trigger is triggered
     // or MIN_WAIT_TIME has passed

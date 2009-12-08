@@ -64,23 +64,27 @@ static void UpdateTextboxProp(void)
   }
 }
 
-
-static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam) {
-  switch(wParam & 0xffff){
+static bool
+FormKeyDown(WindowControl *Sender, unsigned key_code)
+{
+  switch (key_code) {
     case VK_LEFT:
       if (cursor<1)
-        return(0); // min width
+        return true; // min width
       cursor--;
       edittext[cursor] = 0;
       UpdateTextboxProp();
-      return(0);
+    return true;
+
       /* JMW this prevents cursor buttons from being used to enter
     case VK_RETURN:
       wf->SetModalResult(mrOK);
-      return(0);
+    return true;
       */
+
+  default:
+    return false;
   }
-  return(1);
 }
 
 static void OnKey(WindowControl * Sender)

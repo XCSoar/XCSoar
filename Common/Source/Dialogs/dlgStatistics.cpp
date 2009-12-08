@@ -90,42 +90,67 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   canvas.background_transparent();
   canvas.set_text_color(Sender->GetForeColor());
 
+  const FlightStatistics &fs = glide_computer.GetFlightStats();
+  OLCOptimizer &olc = glide_computer.GetOLC();
+
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
     SetCalcCaption(TEXT("Settings"));
-    glide_computer.GetFlightStats().RenderBarograph(canvas, rcgfx);
+    fs.RenderBarograph(canvas, rcgfx,
+                       XCSoarInterface::Calculated());
     break;
   case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(TEXT("Task calc"));
-    glide_computer.GetFlightStats().RenderClimb(canvas, rcgfx);
+    fs.RenderClimb(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_WIND:
     SetCalcCaption(TEXT("Set wind"));
-    glide_computer.GetFlightStats().RenderWind(canvas, rcgfx);
+    fs.RenderWind(canvas, rcgfx,
+                  XCSoarInterface::Basic(),
+                  glide_computer.windanalyser.windstore);
     break;
   case ANALYSIS_PAGE_POLAR:
     SetCalcCaption(TEXT("Settings"));
-    glide_computer.GetFlightStats().RenderGlidePolar(canvas, rcgfx);
+    fs.RenderGlidePolar(canvas, rcgfx,
+                        XCSoarInterface::Calculated(),
+                        XCSoarInterface::SettingsComputer());
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     SetCalcCaption(TEXT("Settings"));
-    glide_computer.GetFlightStats().RenderTemperature(canvas, rcgfx);
+    fs.RenderTemperature(canvas, rcgfx);
     break;
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(TEXT("Task calc"));
-    glide_computer.GetFlightStats().RenderTask(canvas, rcgfx, false);
+    olc.Lock();
+    fs.RenderTask(canvas, rcgfx,
+                  XCSoarInterface::Basic(),
+                  XCSoarInterface::SettingsComputer(),
+                  XCSoarInterface::SettingsMap(),
+                  olc, false);
+    olc.Unlock();
     break;
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(TEXT("Optimise"));
-    glide_computer.GetFlightStats().RenderTask(canvas, rcgfx, true);
+    olc.Lock();
+    fs.RenderTask(canvas, rcgfx,
+                  XCSoarInterface::Basic(),
+                  XCSoarInterface::SettingsComputer(),
+                  XCSoarInterface::SettingsMap(),
+                  olc, true);
+    olc.Unlock();
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(TEXT("Warnings"));
-    glide_computer.GetFlightStats().RenderAirspace(canvas, rcgfx);
+    fs.RenderAirspace(canvas, rcgfx,
+                      XCSoarInterface::Basic(),
+                      XCSoarInterface::Calculated(),
+                      XCSoarInterface::SettingsMap(),
+                      airspace_database, terrain);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     SetCalcCaption(TEXT("Task calc"));
-    glide_computer.GetFlightStats().RenderSpeed(canvas, rcgfx);
+    fs.RenderSpeed(canvas, rcgfx,
+                   XCSoarInterface::Calculated());
     break;
   default:
     // should never get here!
@@ -140,13 +165,15 @@ static void Update(void){
   //  WndProperty *wp;
   double d=0;
 
+  FlightStatistics &fs = glide_computer.GetFlightStats();
+
   switch(page){
     case ANALYSIS_PAGE_BAROGRAPH:
       _stprintf(sTmp, TEXT("%s: %s"),
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Barograph")));
       wf->SetCaption(sTmp);
-      glide_computer.GetFlightStats().CaptionBarograph(sTmp);
+      fs.CaptionBarograph(sTmp);
       wInfo->SetCaption(sTmp);
 
     break;
@@ -155,7 +182,7 @@ static void Update(void){
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Climb")));
       wf->SetCaption(sTmp);
-      glide_computer.GetFlightStats().CaptionClimb(sTmp);
+      fs.CaptionClimb(sTmp);
       wInfo->SetCaption(sTmp);
 
     break;
@@ -173,7 +200,7 @@ static void Update(void){
                 gettext(TEXT("Glide Polar")),
                 GlidePolar::GetAUW());
       wf->SetCaption(sTmp);
-      glide_computer.GetFlightStats().CaptionPolar(sTmp);
+      fs.CaptionPolar(sTmp);
       wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
@@ -181,7 +208,7 @@ static void Update(void){
               gettext(TEXT("Analysis")),
               gettext(TEXT("Temp trace")));
     wf->SetCaption(sTmp);
-    glide_computer.GetFlightStats().CaptionTempTrace(sTmp);
+    fs.CaptionTempTrace(sTmp);
     wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
@@ -197,7 +224,7 @@ static void Update(void){
               gettext(TEXT("Task")));
     wf->SetCaption(sTmp);
     RefreshTaskStatistics();
-    glide_computer.GetFlightStats().CaptionTask(sTmp);
+    fs.CaptionTask(sTmp, XCSoarInterface::Calculated());
     wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_OLC:
@@ -274,7 +301,7 @@ static void Update(void){
   wGrid->SetVisible(page<MAXPAGE+1);
 
   if (wGrid != NULL)
-    wGrid->Redraw();
+    wGrid->invalidate();
 
 }
 
@@ -304,27 +331,32 @@ static void OnCloseClicked(WindowControl * Sender){
 }
 
 
-static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-  (void)Sender; (void)lParam;
+static bool
+FormKeyDown(WindowControl *Sender, unsigned key_code)
+{
+  (void)Sender;
 
   if (wGrid->GetFocused())
-    return(0);
+    return false;
 
-  switch(wParam & 0xffff){
+  switch (key_code) {
     case VK_LEFT:
     case '6':
       ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
       NextPage(-1);
       //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
-    return(0);
+    return true;
+
     case VK_RIGHT:
     case '7':
       ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
       NextPage(+1);
       //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
-    return(0);
+    return true;
+
+  default:
+    return false;
   }
-  return(1);
 }
 
 static void OnCalcClicked(WindowControl * Sender,

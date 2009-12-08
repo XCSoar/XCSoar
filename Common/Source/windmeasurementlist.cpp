@@ -78,8 +78,9 @@ WindMeasurementList::~WindMeasurementList(){
   * too low quality data).
   */
 
-
-Vector WindMeasurementList::getWind(double Time, double alt, bool *found){
+const Vector
+WindMeasurementList::getWind(double Time, double alt, bool *found) const
+{
   //relative weight for each factor
   #define REL_FACTOR_QUALITY 100
   #define REL_FACTOR_ALTITUDE 100

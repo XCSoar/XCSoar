@@ -57,6 +57,8 @@ public:
                  unsigned width, unsigned height);
 
   unsigned get_row_count() const {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     return 1; // XXX
 #else /* !ENABLE_SDL */
@@ -65,6 +67,8 @@ public:
   }
 
   void set_text(const TCHAR *text) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else /* !ENABLE_SDL */
@@ -82,6 +86,8 @@ public:
   }
 
   void set_read_only(bool value) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else /* !ENABLE_SDL */
@@ -90,6 +96,8 @@ public:
   }
 
   void set_selection(int start, int end) {
+    assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
 #else /* !ENABLE_SDL */

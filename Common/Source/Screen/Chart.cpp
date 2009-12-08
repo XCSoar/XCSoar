@@ -68,25 +68,25 @@ Chart::Chart(Canvas &the_canvas, const RECT the_rc)
   ResetScale();
 }
 
-void Chart::ScaleYFromData(LeastSquares* lsdata)
+void Chart::ScaleYFromData(const LeastSquares &lsdata)
 {
-  if (!lsdata->sum_n) {
+  if (!lsdata.sum_n) {
     return;
   }
 
   if (unscaled_y) {
-    y_min = lsdata->y_min;
-    y_max = lsdata->y_max;
+    y_min = lsdata.y_min;
+    y_max = lsdata.y_max;
     unscaled_y = false;
   } else {
-    y_min = min(y_min,lsdata->y_min);
-    y_max = max(y_max,lsdata->y_max);
+    y_min = min(y_min,lsdata.y_min);
+    y_max = max(y_max,lsdata.y_max);
   }
 
-  if (lsdata->sum_n>1) {
+  if (lsdata.sum_n>1) {
     double y0, y1;
-    y0 = lsdata->x_min*lsdata->m+lsdata->b;
-    y1 = lsdata->x_max*lsdata->m+lsdata->b;
+    y0 = lsdata.x_min*lsdata.m+lsdata.b;
+    y1 = lsdata.x_max*lsdata.m+lsdata.b;
     y_min = min(y_min,min(y0,y1));
     y_max = max(y_max,max(y0,y1));
   }
@@ -103,18 +103,18 @@ void Chart::ScaleYFromData(LeastSquares* lsdata)
 }
 
 
-void Chart::ScaleXFromData(LeastSquares* lsdata)
+void Chart::ScaleXFromData(const LeastSquares &lsdata)
 {
-  if (!lsdata->sum_n) {
+  if (!lsdata.sum_n) {
     return;
   }
   if (unscaled_x) {
-    x_min = lsdata->x_min;
-    x_max = lsdata->x_max;
+    x_min = lsdata.x_min;
+    x_max = lsdata.x_max;
     unscaled_x = false;
   } else {
-    x_min = min(x_min,lsdata->x_min);
-    x_max = max(x_max,lsdata->x_max);
+    x_min = min(x_min,lsdata.x_min);
+    x_max = max(x_max,lsdata.x_max);
   }
 
   xscale = (x_max-x_min);
@@ -257,9 +257,9 @@ void Chart::DrawYLabel(const TCHAR *text) {
 }
 
 
-void Chart::DrawTrend(LeastSquares* lsdata, const int Style)
+void Chart::DrawTrend(const LeastSquares &lsdata, const int Style)
 {
-  if (lsdata->sum_n<2) {
+  if (lsdata.sum_n<2) {
     return;
   }
 
@@ -268,10 +268,10 @@ void Chart::DrawTrend(LeastSquares* lsdata, const int Style)
   }
 
   double xmin, xmax, ymin, ymax;
-  xmin = lsdata->x_min;
-  xmax = lsdata->x_max;
-  ymin = lsdata->x_min*lsdata->m+lsdata->b;
-  ymax = lsdata->x_max*lsdata->m+lsdata->b;
+  xmin = lsdata.x_min;
+  xmax = lsdata.x_max;
+  ymin = lsdata.x_min*lsdata.m+lsdata.b;
+  ymax = lsdata.x_max*lsdata.m+lsdata.b;
 
   xmin = (int)((xmin-x_min)*xscale)+rc.left+BORDER_X;
   xmax = (int)((xmax-x_min)*xscale)+rc.left+BORDER_X;
@@ -287,9 +287,9 @@ void Chart::DrawTrend(LeastSquares* lsdata, const int Style)
 }
 
 
-void Chart::DrawTrendN(LeastSquares* lsdata, const int Style)
+void Chart::DrawTrendN(const LeastSquares &lsdata, const int Style)
 {
-  if (lsdata->sum_n<2) {
+  if (lsdata.sum_n<2) {
     return;
   }
 
@@ -299,9 +299,9 @@ void Chart::DrawTrendN(LeastSquares* lsdata, const int Style)
 
   double xmin, xmax, ymin, ymax;
   xmin = 0.5;
-  xmax = lsdata->sum_n+0.5;
-  ymin = lsdata->x_min*lsdata->m+lsdata->b;
-  ymax = lsdata->x_max*lsdata->m+lsdata->b;
+  xmax = lsdata.sum_n+0.5;
+  ymin = lsdata.x_min*lsdata.m+lsdata.b;
+  ymax = lsdata.x_max*lsdata.m+lsdata.b;
 
   xmin = (int)((xmin)*xscale)+rc.left+BORDER_X;
   xmax = (int)((xmax)*xscale)+rc.left+BORDER_X;
@@ -336,7 +336,7 @@ void Chart::DrawLine(const double xmin, const double ymin,
 }
 
 
-void Chart::DrawBarChart(LeastSquares* lsdata) {
+void Chart::DrawBarChart(const LeastSquares &lsdata) {
   int i;
 
   if (unscaled_x || unscaled_y) {
@@ -348,26 +348,26 @@ void Chart::DrawBarChart(LeastSquares* lsdata) {
 
   int xmin, ymin, xmax, ymax;
 
-  for (i= 0; i<lsdata->sum_n; i++) {
+  for (i= 0; i<lsdata.sum_n; i++) {
     xmin = (int)((i+1+0.2)*xscale)+rc.left+BORDER_X;
     ymin = (int)((y_max-y_min)*yscale)+rc.top;
     xmax = (int)((i+1+0.8)*xscale)+rc.left+BORDER_X;
-    ymax = (int)((y_max-lsdata->ystore[i])*yscale)+rc.top;
+    ymax = (int)((y_max-lsdata.ystore[i])*yscale)+rc.top;
     canvas.rectangle(xmin, ymin, xmax, ymax);
   }
 }
 
 
 void
-Chart::DrawFilledLineGraph(LeastSquares* lsdata, const Color color)
+Chart::DrawFilledLineGraph(const LeastSquares &lsdata, const Color color)
 {
   POINT line[4];
 
-  for (int i=0; i<lsdata->sum_n-1; i++) {
-    line[0].x = (int)((lsdata->xstore[i]-x_min)*xscale)+rc.left+BORDER_X;
-    line[0].y = (int)((y_max-lsdata->ystore[i])*yscale)+rc.top;
-    line[1].x = (int)((lsdata->xstore[i+1]-x_min)*xscale)+rc.left+BORDER_X;
-    line[1].y = (int)((y_max-lsdata->ystore[i+1])*yscale)+rc.top;
+  for (int i=0; i<lsdata.sum_n-1; i++) {
+    line[0].x = (int)((lsdata.xstore[i]-x_min)*xscale)+rc.left+BORDER_X;
+    line[0].y = (int)((y_max-lsdata.ystore[i])*yscale)+rc.top;
+    line[1].x = (int)((lsdata.xstore[i+1]-x_min)*xscale)+rc.left+BORDER_X;
+    line[1].y = (int)((y_max-lsdata.ystore[i+1])*yscale)+rc.top;
     line[2].x = line[1].x;
     line[2].y = rc.bottom-BORDER_Y;
     line[3].x = line[0].x;
@@ -378,16 +378,16 @@ Chart::DrawFilledLineGraph(LeastSquares* lsdata, const Color color)
 
 
 
-void Chart::DrawLineGraph(LeastSquares* lsdata,
+void Chart::DrawLineGraph(const LeastSquares &lsdata,
 			  int Style) {
 
   POINT line[2];
 
-  for (int i=0; i<lsdata->sum_n-1; i++) {
-    line[0].x = (int)((lsdata->xstore[i]-x_min)*xscale)+rc.left+BORDER_X;
-    line[0].y = (int)((y_max-lsdata->ystore[i])*yscale)+rc.top;
-    line[1].x = (int)((lsdata->xstore[i+1]-x_min)*xscale)+rc.left+BORDER_X;
-    line[1].y = (int)((y_max-lsdata->ystore[i+1])*yscale)+rc.top;
+  for (int i=0; i<lsdata.sum_n-1; i++) {
+    line[0].x = (int)((lsdata.xstore[i]-x_min)*xscale)+rc.left+BORDER_X;
+    line[0].y = (int)((y_max-lsdata.ystore[i])*yscale)+rc.top;
+    line[1].x = (int)((lsdata.xstore[i+1]-x_min)*xscale)+rc.left+BORDER_X;
+    line[1].y = (int)((y_max-lsdata.ystore[i+1])*yscale)+rc.top;
 
     // STYLE_DASHGREEN
     // STYLE_MEDIUMBLACK

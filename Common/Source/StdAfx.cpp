@@ -35,9 +35,14 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-// stdafx.cpp : source file that includes just the standard includes
-//	XCSoar.pch will be the pre-compiled header
-//	stdafx.obj will contain the pre-compiled type information
+
+/**
+ * Source file that includes just the standard includes
+ *
+ * - XCSoar.pch will be the pre-compiled header
+ * - stdafx.obj will contain the pre-compiled type information
+ * @file stdafx.cpp
+ */
 
 #include "StdAfx.h"
 

@@ -97,12 +97,6 @@ public:
 
   void reset();
 
-#ifndef ENABLE_SDL
-  void resize(unsigned width, unsigned height) {
-    canvas.resize(width, height);
-  }
-#endif /* !ENABLE_SDL */
-
   Canvas &get_canvas() {
     return canvas;
   }
@@ -170,6 +164,8 @@ public:
   }
 
   void update() {
+    //assert_none_locked();
+
 #ifdef ENABLE_SDL
     // XXX
     on_paint(get_canvas());

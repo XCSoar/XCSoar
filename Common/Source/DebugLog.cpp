@@ -1,7 +1,4 @@
 /*
-
-	DebugLog
-
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
@@ -37,9 +34,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-
 */
-
 
 // Log Level
 enum {
@@ -58,7 +53,6 @@ enum {
 
 };
 
-
 // What level do we want to compile in
 #define DL_COMPILE_LEVEL DL_LOW
 
@@ -66,12 +60,9 @@ enum {
 #define DL_COMPILE_TYPE DL_GENERAl & DL_CONFIG & DL_LOG & DL_INPUT
 
 /*
-
 	Check level and type before calling real event, thus removing those
 
 	Then call real function
 */
 
-
 #define DEBUGLOG(type, level, string)
-
