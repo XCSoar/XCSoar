@@ -117,8 +117,6 @@ static bool KeyTimer(bool isdown, DWORD thekey) {
 // WindowControl Classes
 //----------------------------------------------------------
 
-void InitWindowControlModule(void);
-
 static Color bkColor = clWhite;
 static Color fgColor = clBlack;
 int WindowControl::InstCount=0;
@@ -161,8 +159,6 @@ WindowControl::WindowControl(WindowControl *Owner,
     _tcscpy(mName, Name);  // todo size check
   else
     mName[0] = '\0';
-
-  InitWindowControlModule();
 
   mColorBack = bkColor;
   mColorFore = fgColor;
@@ -633,17 +629,6 @@ WindowControl::on_unhandled_key(unsigned key_code)
   }
 
   return false;
-}
-
-void InitWindowControlModule(void){
-
-  static bool InitDone = false;
-
-  if (InitDone)
-    return;
-
-  InitDone = true;
-
 }
 
 PeriodClock WndForm::timeAnyOpenClose;
