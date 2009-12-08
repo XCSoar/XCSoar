@@ -79,9 +79,22 @@ AirspaceCircle::inside(const AIRCRAFT_STATE &loc) const
 }
 
 bool 
-AirspaceCircle::intersects(const GEOPOINT& start, const GeoVector &vec) const
+AirspaceCircle::intersects(const GEOPOINT& start, 
+                           const GeoVector &vec,
+                           GEOPOINT &p) const
 {
-  return vec.minimum_distance(start, m_center) <= m_radius;
+  if (m_center.distance(start)<= m_radius) {
+    // starts inside!
+    p = start;
+    return true;
+
+  } else if (vec.minimum_distance(start, m_center) <= m_radius) {
+    /// \todo find closest intersection point p
+    return true;
+
+  } else {
+    return false;
+  }
 }
 
 

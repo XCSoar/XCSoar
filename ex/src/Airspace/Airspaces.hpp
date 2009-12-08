@@ -44,6 +44,7 @@
 #include <deque>
 
 class AirspaceVisitor;
+class AirspaceIntersectionVisitor;
 
 class RasterTerrain;
 class AtmosphericPressure;
@@ -134,7 +135,7 @@ public:
    */
   void visit_intersecting(const GEOPOINT &loc, 
                           const GeoVector &vec,
-                          AirspaceVisitor& visitor) const;
+                          AirspaceIntersectionVisitor& visitor) const;
 
   /** 
    * Search for airspaces nearest to the aircraft.

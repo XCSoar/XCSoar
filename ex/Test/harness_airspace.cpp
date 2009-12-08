@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include <iostream>
+#include "Airspace/AirspaceIntersectionVisitor.hpp"
 
 bool test_airspace_extra(Airspaces &airspaces) {
   // try adding a null polygon
@@ -61,7 +62,8 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
 }
 
 
-class AirspaceVisitorPrint: public AirspaceVisitor {
+class AirspaceVisitorPrint: 
+  public AirspaceVisitor {
 public:
   AirspaceVisitorPrint(const char* fname,
                        const bool _do_report):
@@ -99,6 +101,65 @@ private:
   std::ofstream *fout;
 #endif
   const bool do_report;
+};
+
+
+class AirspaceIntersectionVisitorPrint: 
+  public AirspaceIntersectionVisitor {
+public:
+  AirspaceIntersectionVisitorPrint(const char* fname,
+                                   const char* yname,
+                                   const bool _do_report,
+                                   const GEOPOINT &loc):
+    do_report(_do_report),
+    location(loc)
+    {      
+      if (do_report) {
+#ifdef DO_PRINT
+        fout = new std::ofstream(fname);
+        yout = new std::ofstream(yname);
+#endif
+      }
+    };
+  ~AirspaceIntersectionVisitorPrint() {
+#ifdef DO_PRINT
+    if (do_report) {
+      delete fout;
+      delete yout;
+    }
+#endif    
+  }
+  virtual void intersection(const AbstractAirspace& as) {
+#ifdef DO_PRINT
+    GEOPOINT c = m_point_intersect;
+    *fout << "# intersection point\n";
+    *fout << c.Longitude << " " << c.Latitude << " " << "\n";
+    *fout << location.Longitude << " " << location.Latitude << " " << "\n\n";
+#endif
+  }
+  virtual void Visit(const AirspaceCircle& as) {
+    if (do_report) {
+#ifdef DO_PRINT
+      *yout << as;
+#endif
+      intersection(as);
+    }
+  }
+  virtual void Visit(const AirspacePolygon& as) {
+    if (do_report) {
+#ifdef DO_PRINT
+      *yout << as;
+#endif
+      intersection(as);
+    }
+  }
+private:
+#ifdef DO_PRINT
+  std::ofstream *fout;
+  std::ofstream *yout;
+#endif
+  const bool do_report;
+  const GEOPOINT location;
 };
 
 
@@ -164,14 +225,18 @@ void scan_airspaces(const AIRCRAFT_STATE state,
     airspaces.visit_within_range(state.Location, 20000.0, pvisitor);
   }
 
-  const std::vector<Airspace> vi = airspaces.find_inside(state);
-  AirspaceVisitorPrint pvi("results/res-bb-inside.txt",
-                           do_report);
-  pvi.for_each(vi);
+  {
+    const std::vector<Airspace> vi = airspaces.find_inside(state);
+    AirspaceVisitorPrint pvi("results/res-bb-inside.txt",
+                             do_report);
+    pvi.for_each(vi);
+  }
   
   {
-    AirspaceVisitorPrint ivisitor("results/res-bb-intersects.txt",
-                                  true);
+    AirspaceIntersectionVisitorPrint ivisitor("results/res-bb-intersects.txt",
+                                              "results/res-bb-intersected.txt",
+                                              do_report,
+                                              state.Location);
     GeoVector vec(state.Location, target);
     airspaces.visit_intersecting(state.Location, vec, ivisitor);
   }

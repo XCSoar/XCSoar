@@ -100,11 +100,13 @@ public:
    * @param g1 Location of origin of search vector
    * @param vec Line from origin
    * @param tp Projection used by flat-earth representation
+   * @param p Point written to of first intersection point (if any)
    * 
    * @return true if the line intersects the airspace
    */
   virtual bool intersects(const GEOPOINT& g1, 
-                          const GeoVector &vec) const = 0;
+                          const GeoVector &vec,
+                          GEOPOINT& p) const = 0;
 
 /** 
  * Find location of closest point on boundary to a reference

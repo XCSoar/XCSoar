@@ -36,6 +36,7 @@
  */
 #include "Airspaces.hpp"
 #include "AirspaceVisitor.hpp"
+#include "AirspaceIntersectionVisitor.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include <deque>
 
@@ -82,7 +83,7 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
 void 
 Airspaces::visit_intersecting(const GEOPOINT &loc, 
                               const GeoVector &vec,
-                              AirspaceVisitor& visitor) const
+                              AirspaceIntersectionVisitor& visitor) const
 {
   FlatRay ray(task_projection.project(loc), 
               task_projection.project(vec.end_point(loc)));
@@ -102,7 +103,9 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
   for (std::deque<Airspace>::iterator v=vectors.begin();
        v != vectors.end(); v++) {
     if (v->intersects(ray)) {
-      if (v->intersects(loc, vec)) {
+      GEOPOINT p;
+      if (v->intersects(loc, vec, p)) {
+        visitor.set_point_intersect(p);
         visitor(*v);
       }
     }

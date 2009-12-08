@@ -36,6 +36,8 @@
  */
 #include "FlatRay.hpp"
 
+#define sgn(x) (x>0? 1:-1)
+
 /**
  * Checks whether two lines 
  * intersect or not
@@ -43,27 +45,27 @@
  * adapted from line_line_intersection
  */
 fixed
-FlatRay::intersects (const FlatRay &oray) const
+FlatRay::intersects (const FlatRay &that) const
 {
-  const int denom = vector.cross(oray.vector);
+  const int denom = vector.cross(that.vector);
   if (denom == 0) {
     // lines are parallel
     return -fixed_one;
   }
-  const FLAT_GEOPOINT delta = point-oray.point;
-  const int ua = vector.cross(delta);
-  if (negative(ua) || (ua>denom)) {
+  const FLAT_GEOPOINT delta = that.point-point;
+  const int ua = delta.cross(that.vector);
+  if ((sgn(ua)*sgn(denom)<0) || (abs(ua)>abs(denom))) {
     // outside first line
     return -fixed_one;
   } 
-  const int ub = oray.vector.cross(delta);
-  if (negative(ub) || (ub>denom)) {
+  const int ub = delta.cross(vector);
+  if ((sgn(ub)*sgn(denom)<0) || (abs(ub)>abs(denom))) {
     // outside second line
     return -fixed_one;
   }  
 
   // inside both lines
-  return ((double)ua)/denom;
+  return ((fixed)ua)/denom;
 }
 
 

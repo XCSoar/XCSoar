@@ -72,10 +72,11 @@ Airspace::intersects(const FlatRay& ray) const
 
 
 bool 
-Airspace::intersects(const GEOPOINT& g1, const GeoVector &vec) const
+Airspace::intersects(const GEOPOINT& g1, const GeoVector &vec,
+                     GEOPOINT &p) const
 {
   if (pimpl_airspace) {
-    return pimpl_airspace->intersects(g1, vec);
+    return pimpl_airspace->intersects(g1, vec, p);
   } else {
     return false;
   }

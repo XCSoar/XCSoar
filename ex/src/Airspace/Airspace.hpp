@@ -134,10 +134,12 @@ public:
    * 
    * @param g1 Location of origin of search vector
    * @param vec Line from origin
+   * @param p Point written to of first intersection point (if any)
    * 
    * @return true if the line intersects the airspace
    */
-  bool intersects(const GEOPOINT& g1, const GeoVector &vec) const;
+  bool intersects(const GEOPOINT& g1, const GeoVector &vec,
+                  GEOPOINT &p) const;
 
   /** 
    * Destroys concrete airspace enclosed by this instance if present.

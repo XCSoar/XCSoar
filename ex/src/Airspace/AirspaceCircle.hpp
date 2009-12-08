@@ -93,12 +93,13 @@ public:
    * 
    * @param g1 Location of origin of search vector
    * @param vec Line from origin
-   * @param tp Projection used by flat-earth representation
+   * @param p Point written to of first intersection point (if any)
    * 
    * @return true if the line intersects the airspace
    */
   bool intersects(const GEOPOINT& g1, 
-                  const GeoVector &vec) const;
+                  const GeoVector &vec,
+                  GEOPOINT &p) const;
 
   GEOPOINT closest_point(const GEOPOINT& loc) const;
 

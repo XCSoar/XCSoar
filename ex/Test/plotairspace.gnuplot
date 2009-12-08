@@ -20,5 +20,12 @@ pause -1
 
 plot \
      'results/res-bb-range.txt' using 1:2 with filledcurve ls 5 title "in range", \
+     'results/res-bb-range.txt' using 1:2 with lines ls 4 title "", \
         'results/res-bb-closest.txt' using 1:2 with lines ls 3 title "closest"
+pause -1
+
+plot \
+        'results/res-bb-intersected.txt' using 1:2 with filledcurve ls 3 title "airspace", \
+        'results/res-bb-intersected.txt' using 1:2 with lines ls 5 title "airspace", \
+        'results/res-bb-intersects.txt' using 1:2 with linespoints ls 4 title "intersects"
 pause -1
