@@ -58,39 +58,38 @@ Copyright_License {
  * @param outLength Length of the outVertexArray
  * @param outVertexArray
  */
-static void OutputToInput(unsigned int *inLength,
-			  POINT *inVertexArray,
-			  unsigned int *outLength,
-			  POINT *outVertexArray )
+static void
+OutputToInput(unsigned int *inLength, POINT *inVertexArray,
+    unsigned int *outLength, POINT *outVertexArray)
 {
-  if ((*inLength==2) && (*outLength==3)) //linefix
-    {
-      inVertexArray[0].x=outVertexArray [0].x;
-      inVertexArray[0].y=outVertexArray [0].y;
-      if ((outVertexArray[0].x==outVertexArray[1].x)
-          && (outVertexArray[0].y==outVertexArray[1].y)) /*First two vertices
-                                                      are same*/
-        {
-          inVertexArray[1].x=outVertexArray [2].x;
-          inVertexArray[1].y=outVertexArray [2].y;
-        }
-      else                    /*First vertex is same as third vertex*/
-        {
-          inVertexArray[1].x=outVertexArray [1].x;
-          inVertexArray[1].y=outVertexArray [1].y;
-        }
+  // linefix
+  if ((*inLength == 2) && (*outLength == 3)) {
+    inVertexArray[0].x = outVertexArray[0].x;
+    inVertexArray[0].y = outVertexArray[0].y;
 
-      *inLength=2;
+    // First two vertices are same
+    if ((outVertexArray[0].x == outVertexArray[1].x)
+        && (outVertexArray[0].y == outVertexArray[1].y)) {
+      inVertexArray[1].x = outVertexArray[2].x;
+      inVertexArray[1].y = outVertexArray[2].y;
 
+    // First vertex is same as third vertex
+    } else {
+      inVertexArray[1].x = outVertexArray[1].x;
+      inVertexArray[1].y = outVertexArray[1].y;
     }
-  else  /* set the outVertexArray as inVertexArray for next step*/
-    {
-      *inLength= *outLength;
-      memcpy((void*)inVertexArray, (void*)outVertexArray,
-             (*outLength)*sizeof(POINT));
-    }
+
+    *inLength = 2;
+
+  // set the outVertexArray as inVertexArray for next step*/
+  } else {
+    *inLength = *outLength;
+    memcpy((void*)inVertexArray, (void*)outVertexArray,
+           (*outLength) * sizeof(POINT));
+  }
 }
 
+/*
 /**
  * The "Inside" function returns TRUE if the vertex tested is on the
  * inside of the clipping boundary. "Inside" is defined as "to the
@@ -131,57 +130,65 @@ static bool Inside (const POINT *testVertex, const POINT *clipBoundary)
  * and the polygon edge
  * @return True if intersection occurs, False otherwise
  */
-static bool Intersect (const POINT &first, const POINT &second,
-                       const POINT *clipBoundary,
-                       POINT *intersectPt)
+static bool
+Intersect (const POINT &first, const POINT &second,
+           const POINT *clipBoundary, POINT *intersectPt)
 {
   float f;
-  if (clipBoundary[0].y==clipBoundary[1].y)     /*horizontal*/
-    {
-      intersectPt->y=clipBoundary[0].y;
-      if (second.y != first.y) {
-        f = ((float)(second.x-first.x))/((float)(second.y-first.y));
-        intersectPt->x= first.x + (long)(((clipBoundary[0].y-first.y)*f));
-        return true;
-      }
-    } else { /*Vertical*/
-    intersectPt->x=clipBoundary[0].x;
+
+  // Horizontal
+  if (clipBoundary[0].y == clipBoundary[1].y) {
+    intersectPt->y = clipBoundary[0].y;
+    if (second.y != first.y) {
+      f = ((float)(second.x - first.x)) / ((float)(second.y - first.y));
+      intersectPt->x = first.x + (long)(((clipBoundary[0].y - first.y) * f));
+      return true;
+    }
+
+  // Vertical
+  } else {
+    intersectPt->x = clipBoundary[0].x;
     if (second.x != first.x) {
-      f = ((float)(second.y-first.y))/((float)(second.x-first.x));
-      intersectPt->y=first.y + (long)(((clipBoundary[0].x-first.x)*f));
+      f = ((float)(second.y - first.y)) / ((float)(second.x - first.x));
+      intersectPt->y = first.y + (long)(((clipBoundary[0].x - first.x) * f));
       return true;
     }
   }
-  return false; // no need to add point!
+
+  // no need to add point!
+  return false;
 }
 
 
 // The "Output" function moves "newVertex" to "outVertexArray" and
 // updates "outLength".
 
-static void Output(const POINT *newVertex,
-                   unsigned int *outLength, POINT *outVertexArray)
+static void
+Output(const POINT *newVertex, unsigned int *outLength,
+    POINT *outVertexArray)
 {
   if (*outLength) {
-    if ((newVertex->x == outVertexArray[*outLength-1].x)
-        &&(newVertex->y == outVertexArray[*outLength-1].y)) {
+    if ((newVertex->x == outVertexArray[*outLength - 1].x)
+        && (newVertex->y == outVertexArray[*outLength - 1].y)) {
       // no need for duplicates
       return;
     }
   }
+
   outVertexArray[*outLength].x= newVertex->x;
   outVertexArray[*outLength].y= newVertex->y;
   (*outLength)++;
 }
 
-static bool ClipEdge(const bool &s_inside,
-                     const bool &p_inside,
-                     const POINT *clipBoundary,
-                     POINT *outVertexArray,
-                     const POINT *s,
-                     const POINT *p,
-                     unsigned int *outLength,
-                     const bool fill)
+static bool
+ClipEdge(const bool &s_inside,
+         const bool &p_inside,
+         const POINT *clipBoundary,
+         POINT *outVertexArray,
+         const POINT *s,
+         const POINT *p,
+         unsigned int *outLength,
+         const bool fill)
 {
   if (fill) {
     if (p_inside && s_inside) {
@@ -219,15 +226,18 @@ static bool ClipEdge(const bool &s_inside,
  * @return
  * @see http://en.wikipedia.org/wiki/Sutherland-Hodgman_clipping_algorithm
  */
-static unsigned int SutherlandHodgmanPolygoClip (POINT* inVertexArray,
-                                                 POINT* outVertexArray,
-                                                 const unsigned int inLength,
-                                                 const POINT *clipBoundary,
-                                                 const bool fill,
-                                                 const int mode)
+static unsigned int
+SutherlandHodgmanPolygoClip (POINT* inVertexArray,
+                             POINT* outVertexArray,
+                             const unsigned int inLength,
+                             const POINT *clipBoundary,
+                             const bool fill,
+                             const int mode)
 {
-  POINT *s, *p; /*Start, end point of current polygon edge*/
-  unsigned int j;       /*Vertex loop counter*/
+  // Start, end point of current polygon edge
+  POINT *s, *p;
+  // Vertex loop counter
+  unsigned int j;
   unsigned int outLength = 0;
 
   if (inLength<1) return 0;
@@ -237,57 +247,60 @@ static unsigned int SutherlandHodgmanPolygoClip (POINT* inVertexArray,
 
   bool s_inside, p_inside;
 
-  /*Start with the last vertex in inVertexArray*/
+  // Start with the last vertex in inVertexArray
   switch (mode) {
   case 0:
-    for (j=inLength; j--; ) {
+    for (j = inLength; j--;) {
       s_inside = INSIDE_LEFT_EDGE(s,clipBoundary);
       p_inside = INSIDE_LEFT_EDGE(p,clipBoundary);
-      /*Now s and p correspond to the vertices*/
-      if (ClipEdge(s_inside,
-                   p_inside,
-                   clipBoundary, outVertexArray, s, p,
-                   &outLength, fill || (p != inVertexArray))) {
+      // Now s and p correspond to the vertices
+      if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
+          &outLength, fill || (p != inVertexArray))) {
         Output(p, &outLength, outVertexArray);
       }
-      /*Advance to next pair of vertices*/
-      s = p; p++;
+      // Advance to next pair of vertices
+      s = p;
+      p++;
     }
     break;
   case 1:
-    for (j=inLength; j--; ) {
+    for (j = inLength; j--;) {
       s_inside = INSIDE_BOTTOM_EDGE(s,clipBoundary);
       p_inside = INSIDE_BOTTOM_EDGE(p,clipBoundary);
       if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
-                   &outLength, fill || (p != inVertexArray))) {
+          &outLength, fill || (p != inVertexArray))) {
         Output(p, &outLength, outVertexArray);
       }
-      s = p; p++;
+      s = p;
+      p++;
     }
     break;
   case 2:
-    for (j=inLength; j--; ) {
+    for (j = inLength; j--;) {
       s_inside = INSIDE_RIGHT_EDGE(s,clipBoundary);
       p_inside = INSIDE_RIGHT_EDGE(p,clipBoundary);
       if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
-                   &outLength, fill || (p != inVertexArray))) {
+          &outLength, fill || (p != inVertexArray))) {
         Output(p, &outLength, outVertexArray);
       }
-      s = p; p++;
+      s = p;
+      p++;
     }
     break;
   case 3:
-    for (j=inLength; j--; ) {
+    for (j = inLength; j--;) {
       s_inside = INSIDE_TOP_EDGE(s,clipBoundary);
       p_inside = INSIDE_TOP_EDGE(p,clipBoundary);
       if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
-                   &outLength, fill || (p != inVertexArray))) {
+          &outLength, fill || (p != inVertexArray))) {
         Output(p, &outLength, outVertexArray);
       }
-      s = p; p++;
+      s = p;
+      p++;
     }
     break;
   }
+
   return outLength;
 }
 
@@ -302,26 +315,27 @@ static POINT clip_ptin[MAXCLIPPOLYGON];
  * @param rc
  * @param fill
  */
-void ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
-                 RECT rc, bool fill)
+void
+ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
+    RECT rc, bool fill)
 {
   unsigned int outLength = 0;
 
-  if (inLength>=MAXCLIPPOLYGON-1) {
-    inLength=MAXCLIPPOLYGON-2;
+  if (inLength >= MAXCLIPPOLYGON - 1) {
+    inLength = MAXCLIPPOLYGON - 2;
   }
-  if (inLength<2) {
+  if (inLength < 2) {
     return;
   }
 
-  memcpy((void*)clip_ptin, (void*)m_ptin, inLength*sizeof(POINT));
+  memcpy((void*)clip_ptin, (void*)m_ptin, inLength * sizeof(POINT));
 
   // add extra point for final point if it doesn't equal the first
   // this is required to close some airspace areas that have missing
   // final point
   if (fill) {
-    if ((m_ptin[inLength-1].x != m_ptin[0].x) &&
-        (m_ptin[inLength-1].y != m_ptin[0].y)) {
+    if ((m_ptin[inLength - 1].x != m_ptin[0].x)
+        && (m_ptin[inLength - 1].y != m_ptin[0].y)) {
       clip_ptin[inLength] = clip_ptin[0];
       inLength++;
     }
@@ -341,19 +355,18 @@ void ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
                    {rc.right, rc.top},
                    {rc.left, rc.top}};
   //steps left_edge, bottom_edge, right_edge, top_edge
-  for (int step=0; step<4; step++) {
-    outLength = SutherlandHodgmanPolygoClip (clip_ptin, clip_ptout,
-                                             inLength,
-                                             edge+step, fill, step);
+  for (int step = 0; step < 4; step++) {
+    outLength = SutherlandHodgmanPolygoClip(clip_ptin, clip_ptout, inLength,
+        edge + step, fill, step);
     OutputToInput(&inLength, clip_ptin, &outLength, clip_ptout);
   }
 
   if (fill) {
-    if (outLength>2) {
+    if (outLength > 2) {
       canvas.polygon(clip_ptout, outLength);
     }
   } else {
-    if (outLength>1) {
+    if (outLength > 1) {
       canvas.polyline(clip_ptout, outLength);
     }
   }
@@ -455,8 +468,7 @@ void StartArc(HDC hdc,
  * @return
  */
 int
-Circle(Canvas &canvas, long x, long y, int radius, RECT rc,
-       bool clip, bool fill)
+ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc, bool fill)
 {
   POINT pt[65];
   unsigned int i;
@@ -472,39 +484,30 @@ Circle(Canvas &canvas, long x, long y, int radius, RECT rc,
   rcrect.miny = rc.top;
   rcrect.maxy = rc.bottom;
 
-  if (msRectOverlap(&rect, &rcrect)!=MS_TRUE) {
+  if (msRectOverlap(&rect, &rcrect) != MS_TRUE) {
     return FALSE;
   }
   // JMW added faster checking...
 
   unsigned int step = 1;
-  if (radius<20) {
+  if (radius < 20) {
     step = 2;
   }
-  for(i=64/step;i--;) {
-    pt[i].x = x + (long) (radius * xcoords[i*step]);
-    pt[i].y = y + (long) (radius * ycoords[i*step]);
+  for (i = 64 / step; i--;) {
+    pt[i].x = x + (long)(radius * xcoords[i * step]);
+    pt[i].y = y + (long)(radius * ycoords[i * step]);
   }
-  step = 64/step;
-  pt[step].x = x + (long) (radius * xcoords[0]);
-  pt[step].y = y + (long) (radius * ycoords[0]);
+  step = 64 / step;
+  pt[step].x = x + (long)(radius * xcoords[0]);
+  pt[step].y = y + (long)(radius * ycoords[0]);
 
-  if (clip) {
-    canvas.clipped_polygon(pt, step + 1, rc, fill);
-  } else {
-    if (fill) {
-      canvas.autoclip_polygon(pt, step + 1, rc);
-    } else {
-      canvas.autoclip_polyline(pt, step + 1, rc);
-    }
-  }
+  ClipPolygon(canvas, pt, step + 1, rc, fill);
   return TRUE;
 }
 
-int Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
-	    double start,
-	    double end,
-            bool horizon)
+int
+Segment(Canvas &canvas, long x, long y, int radius, RECT rc, double start,
+    double end, bool horizon)
 {
   POINT pt[66];
   int i;
@@ -512,17 +515,17 @@ int Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
   int iend;
 
   rectObj rect;
-  rect.minx = x-radius;
-  rect.maxx = x+radius;
-  rect.miny = y-radius;
-  rect.maxy = y+radius;
+  rect.minx = x - radius;
+  rect.maxx = x + radius;
+  rect.miny = y - radius;
+  rect.maxy = y + radius;
   rectObj rcrect;
   rcrect.minx = rc.left;
   rcrect.maxx = rc.right;
   rcrect.miny = rc.top;
   rcrect.maxy = rc.bottom;
 
-  if (msRectOverlap(&rect, &rcrect)!=MS_TRUE) {
+  if (msRectOverlap(&rect, &rcrect) != MS_TRUE) {
     return FALSE;
   }
 
@@ -531,38 +534,41 @@ int Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
   start = AngleLimit360(start);
   end = AngleLimit360(end);
 
-  istart = iround(start/360.0*64);
-  iend = iround(end/360.0*64);
+  istart = iround(start / 360.0 * 64);
+  iend = iround(end / 360.0 * 64);
 
   int npoly = 0;
 
-  if (istart>iend) {
+  if (istart > iend) {
     iend+= 64;
   }
   istart++;
   iend--;
 
   if (!horizon) {
-    pt[0].x = x; pt[0].y = y; npoly=1;
+    pt[0].x = x;
+    pt[0].y = y;
+    npoly = 1;
   }
-  pt[npoly].x = x + (long) (radius * fastsine(start));
-  pt[npoly].y = y - (long) (radius * fastcosine(start));
+  pt[npoly].x = x + (long)(radius * fastsine(start));
+  pt[npoly].y = y - (long)(radius * fastcosine(start));
   npoly++;
 
-  for(i=0;i<64;i++) {
-    if (i<=iend-istart) {
-      pt[npoly].x = x + (long) (radius * xcoords[(i+istart)%64]);
-      pt[npoly].y = y - (long) (radius * ycoords[(i+istart)%64]);
+  for (i = 0; i < 64; i++) {
+    if (i <= iend - istart) {
+      pt[npoly].x = x + (long)(radius * xcoords[(i + istart) % 64]);
+      pt[npoly].y = y - (long)(radius * ycoords[(i + istart) % 64]);
       npoly++;
     }
   }
-  pt[npoly].x = x + (long) (radius * fastsine(end));
-  pt[npoly].y = y - (long) (radius * fastcosine(end));
+  pt[npoly].x = x + (long)(radius * fastsine(end));
+  pt[npoly].y = y - (long)(radius * fastcosine(end));
   npoly++;
 
   if (!horizon) {
     pt[npoly].x = x;
-    pt[npoly].y = y; npoly++;
+    pt[npoly].y = y;
+    npoly++;
   } else {
     pt[npoly].x = pt[0].x;
     pt[npoly].y = pt[0].y;
@@ -578,9 +584,9 @@ int Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
 /*
  * VENTA3 This is a modified Segment()
  */
-int DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
-	    double start,
-	    double end)
+int
+DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
+    double start, double end)
 {
   POINT pt[66];
   int i;
@@ -588,17 +594,17 @@ int DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
   int iend;
 
   rectObj rect;
-  rect.minx = x-radius;
-  rect.maxx = x+radius;
-  rect.miny = y-radius;
-  rect.maxy = y+radius;
+  rect.minx = x - radius;
+  rect.maxx = x + radius;
+  rect.miny = y - radius;
+  rect.maxy = y + radius;
   rectObj rcrect;
   rcrect.minx = rc.left;
   rcrect.maxx = rc.right;
   rcrect.miny = rc.top;
   rcrect.maxy = rc.bottom;
 
-  if (msRectOverlap(&rect, &rcrect)!=MS_TRUE) {
+  if (msRectOverlap(&rect, &rcrect) != MS_TRUE) {
     return FALSE;
   }
 
@@ -607,30 +613,30 @@ int DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
   start = AngleLimit360(start);
   end = AngleLimit360(end);
 
-  istart = iround(start/360.0*64);
-  iend = iround(end/360.0*64);
+  istart = iround(start / 360.0 * 64);
+  iend = iround(end / 360.0 * 64);
 
   int npoly = 0;
 
-  if (istart>iend) {
-    iend+= 64;
+  if (istart > iend) {
+    iend += 64;
   }
   istart++;
   iend--;
 
-  pt[npoly].x = x + (long) (radius * fastsine(start));
-  pt[npoly].y = y - (long) (radius * fastcosine(start));
+  pt[npoly].x = x + (long)(radius * fastsine(start));
+  pt[npoly].y = y - (long)(radius * fastcosine(start));
   npoly++;
 
-  for(i=0;i<64;i++) {
-    if (i<=iend-istart) {
-      pt[npoly].x = x + (long) (radius * xcoords[(i+istart)%64]);
-      pt[npoly].y = y - (long) (radius * ycoords[(i+istart)%64]);
+  for (i = 0; i < 64; i++) {
+    if (i <= iend - istart) {
+      pt[npoly].x = x + (long)(radius * xcoords[(i + istart) % 64]);
+      pt[npoly].y = y - (long)(radius * ycoords[(i + istart) % 64]);
       npoly++;
     }
   }
-  pt[npoly].x = x + (long) (radius * fastsine(end));
-  pt[npoly].y = y - (long) (radius * fastcosine(end));
+  pt[npoly].x = x + (long)(radius * fastsine(end));
+  pt[npoly].y = y - (long)(radius * fastcosine(end));
   npoly++;
   if (npoly) {
     canvas.polyline(pt, npoly); // TODO check ClipPolygon for HP31X

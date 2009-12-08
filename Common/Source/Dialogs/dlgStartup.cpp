@@ -94,7 +94,7 @@ void dlgStartupShowModal(void){
 
   TCHAR temp[MAX_PATH];
 
-  _stprintf(temp,TEXT("XCSoar: Version %s"), XCSoar_Version);
+  _stprintf(temp,TEXT("XCSoar: Version %s"), XCSoar_VersionString);
   wf->SetCaption(temp);
 
   wp = ((WndProperty *)wf->FindByName(TEXT("prpDisclaimer")));

@@ -46,36 +46,36 @@ Copyright_License {
  */
 class Pen {
 public:
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   enum style {
     SOLID,
     DASH,
     BLANK
   };
-#else
+  #else
   enum style {
     SOLID = PS_SOLID,
     DASH = PS_DASH,
     BLANK = PS_NULL
   };
-#endif
+  #endif
 
 protected:
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   unsigned width;
   Color color;
-#else
+  #else
   HPEN pen;
-#endif
+  #endif
 
 public:
-#ifdef ENABLE_SDL
+  #ifdef ENABLE_SDL
   Pen():width(0) {}
   Pen(enum style style, unsigned _width, const Color _color)
     :width(_width), color(_color) {} // XXX style
   Pen(unsigned _width, const Color _color)
     :width(_width), color(_color) {}
-#else /* !ENABLE_SDL */
+  #else /* !ENABLE_SDL */
   Pen():pen(NULL) {}
   Pen(enum style style, unsigned width, const Color c):pen(NULL) {
     set(style, width, c);
@@ -83,7 +83,7 @@ public:
   Pen(unsigned width, Color c):pen(NULL) {
     set(width, c);
   }
-#endif /* !ENABLE_SDL */
+  #endif /* !ENABLE_SDL */
 
   ~Pen() { reset(); }
 
@@ -92,22 +92,35 @@ public:
   void set(unsigned width, const Color c);
   void reset();
 
-  bool defined() const {
-#ifdef ENABLE_SDL
+  bool
+  defined() const
+  {
+    #ifdef ENABLE_SDL
     return width > 0;
-#else
+    #else
     return pen != NULL;
-#endif
+    #endif
   }
 
-#ifdef ENABLE_SDL
-  unsigned get_width() const { return width; }
-  const Color get_color() const { return color; }
-#else
-  HPEN native() const {
+  #ifdef ENABLE_SDL
+  unsigned
+  get_width() const
+  {
+    return width;
+  }
+
+  const Color
+  get_color() const
+  {
+    return color;
+  }
+  #else
+  HPEN
+  native() const
+  {
     return pen;
   }
-#endif
+  #endif
 };
 
 #endif

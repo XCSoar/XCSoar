@@ -429,9 +429,8 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
                            task.getTaskPoint(i).AATStartRadial,
                            task.getTaskPoint(i).AATFinishRadial);
 	  } else {
-	    canvas.circle(chart.screenX(x2), chart.screenY(y2),
-			  chart.screenS(aatradius[i]),
-                          rc);
+            canvas.autoclip_circle(chart.screenX(x2), chart.screenY(y2),
+                                   chart.screenS(aatradius[i]), rc);
 	  }
 	}
       }

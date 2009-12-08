@@ -58,7 +58,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
       : (LPCTSTR)IDD_PROGRESS);
 
   TCHAR Temp[1024];
-  _stprintf(Temp, _T("%s %s"), gettext(_T("Version")), XCSoar_Version);
+  _stprintf(Temp, _T("%s %s"), gettext(_T("Version")), XCSoar_VersionString);
   set_item_text(IDC_VERSION, Temp);
 
 #ifdef WINDOWSPC

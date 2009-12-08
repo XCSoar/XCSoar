@@ -7,7 +7,7 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmChecklist" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Waypoint Info" Font=2  BackColor=0xDADBAB>
+<WndForm Name="frmChecklist" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Checklist" Font=2  BackColor=0xDADBAB>
 
   <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
   <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>

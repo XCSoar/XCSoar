@@ -307,7 +307,7 @@ const unsigned NUMSELECTSTRINGS = 74;
 void InfoBoxManager::Hide() {
   InfoBoxesHidden = true;
   for (unsigned i = 0; i < numInfoWindows; i++) {
-    InfoBoxes[i]->SetVisible(false);
+    InfoBoxes[i]->hide();
   }
 
   full_window.hide();
@@ -317,7 +317,7 @@ void InfoBoxManager::Hide() {
 void InfoBoxManager::Show() {
   InfoBoxesHidden = false;
   for (unsigned i = 0; i < numInfoWindows; i++) {
-    InfoBoxes[i]->SetVisible(true);
+    InfoBoxes[i]->show();
   }
 }
 
@@ -947,7 +947,7 @@ void InfoBoxManager::Paint(void) {
 
     canvas.white_brush();
     canvas.white_pen();
-    canvas.rectangle(0, 0, canvas.get_width(), canvas.get_height());
+    canvas.clear();
 
     for (i=0; i<numInfoWindows; i++) {
 
@@ -989,8 +989,8 @@ void InfoBoxManager::Paint(void) {
                               IBLSCALE(x), IBLSCALE(y), IBLSCALE(rw), IBLSCALE(rh));
     }
 
+    full_window.invalidate();
     full_window.show();
-    full_window.commit_buffer();
   }
 }
 

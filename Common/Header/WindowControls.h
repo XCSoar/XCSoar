@@ -138,10 +138,7 @@ public:
   virtual bool on_setfocus();
   virtual bool on_killfocus();
 
-#ifndef ENABLE_SDL
-  virtual LRESULT on_unhandled_message(HWND hWnd, UINT message,
-                                       WPARAM wParam, LPARAM lParam);
-#endif /* !ENABLE_SDL */
+  virtual bool on_unhandled_key(unsigned key_code);
 
   virtual void AddClient(WindowControl *Client);
 
@@ -211,10 +208,6 @@ public:
   virtual void SetCaption(const TCHAR *Value);
   void SetHelpText(const TCHAR *Value);
 
-#ifndef ENABLE_SDL
-  HWND GetHandle(void) { return *this; }
-#endif /* !ENABLE_SDL */
-
   virtual ContainerWindow &GetClientAreaWindow(void) { return *this; }
   WindowControl *GetOwner(void) { return mOwner; }
 
@@ -230,8 +223,6 @@ public:
                 const TCHAR *Name, int X, int Y, int Width, int Height,
                 bool Visible=true);
   virtual ~WindowControl(void);
-
-  virtual void Destroy(void);
 
   void PaintSelector(bool Value) {mDontPaintSelector = Value;}
 
@@ -255,8 +246,6 @@ public:
       | DT_NOCLIP
       | DT_WORDBREAK;
   }
-
-  virtual void Destroy(void);
 
   void SetCaption(const TCHAR *Value);
 
@@ -392,8 +381,6 @@ public:
                void (*OnListCallback)(WindowControl *Sender,
                                       ListInfo_t *ListInfo));
 
-  virtual void Destroy(void);
-
   bool on_mouse_move(int x, int y, unsigned keys);
   void ResetList(void);
   void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
@@ -438,8 +425,6 @@ public:
 
   }
 
-  virtual void Destroy(void);
-
   void SetOnPaintNotify(OnPaintCallback_t OnPaintCallback) {
     mOnPaintCallback = OnPaintCallback;
   }
@@ -454,11 +439,7 @@ protected:
 
 class WndForm : public WindowControl {
 protected:
-
-  static ACCEL  mAccel[];
-
   int mModalResult;
-  HACCEL mhAccelTable;
   Color mColorTitle;
   const Font *mhTitleFont;
   WindowControl *mClientWindow;
@@ -480,7 +461,6 @@ public:
           const TCHAR *Name, const TCHAR *Caption,
           int X, int Y, int Width, int Height);
   ~WndForm(void);
-  virtual void Destroy(void);
 
   ContainerWindow &GetClientAreaWindow(void);
   void AddClient(WindowControl *Client);
@@ -511,15 +491,11 @@ public:
 
   void SetCaption(const TCHAR *Value);
 
+  virtual bool on_unhandled_key(unsigned key_code);
+
   /** from class Window */
-  virtual bool on_command(unsigned id, unsigned code);
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
-
-#ifndef ENABLE_SDL
-  virtual LRESULT on_unhandled_message(HWND hwnd, UINT uMsg,
-                                       WPARAM wParam, LPARAM lParam);
-#endif
 
   Color SetForeColor(Color Value);
   Color SetBackColor(Color Value);
@@ -556,7 +532,6 @@ public:
   WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption,
             int X, int Y, int Width, int Height,
             void (*Function)(WindowControl *Sender) = NULL);
-  virtual void Destroy(void);
 
   /* override event methods from class Window */
   virtual bool on_mouse_up(int x, int y);
@@ -632,7 +607,6 @@ public:
                                       int Mode, int Value),
               int MultiLine=false);
   ~WndProperty(void);
-  virtual void Destroy(void);
 
   virtual Window *GetCanFocus();
 
@@ -645,7 +619,8 @@ public:
 
   const Font *SetFont(const Font &font);
 
-  bool OnEditKeyDown(unsigned key_code);
+  virtual bool on_unhandled_key(unsigned key_code);
+
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_mouse_double(int x, int y);

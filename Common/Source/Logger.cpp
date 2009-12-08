@@ -45,7 +45,7 @@
 Logger::Logger()
 {
   _logger = new LoggerImpl();
-};
+}
 
 /**
  * Destructor of the Logger class
@@ -54,7 +54,7 @@ Logger::~Logger()
 {
   Poco::ScopedRWLock protect(lock, true);
   delete _logger;
-};
+}
 
 void
 Logger::LogPoint(const NMEA_INFO &gps_info)
@@ -66,7 +66,7 @@ Logger::LogPoint(const NMEA_INFO &gps_info)
     _logger->LogPoint(gps_info);
     lock.unlock();
   }
-};
+}
 
 /**
  * Checks whether a Task is declared to the Logger.
@@ -78,42 +78,42 @@ Logger::CheckDeclaration(void)
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->CheckDeclaration();
-};
+}
 
 bool
 Logger::isTaskDeclared()
 {
   Poco::ScopedRWLock protect(lock, false);
   return _logger->isTaskDeclared();
-};
+}
 
 bool
 Logger::isLoggerActive()
 {
   Poco::ScopedRWLock protect(lock, false);
   return _logger->isLoggerActive();
-};
+}
 
 bool
 Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->LoggerClearFreeSpace(gps_info);
-};
+}
 
 void
 Logger::LinkGRecordDLL(void)
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->LinkGRecordDLL();
-};
+}
 
 bool
 Logger::LoggerGActive()
 {
   Poco::ScopedRWLock protect(lock, false);
   return _logger->LoggerGActive();
-};
+}
 
 void
 Logger::guiStartLogger(const NMEA_INFO& gps_info,
@@ -123,7 +123,7 @@ Logger::guiStartLogger(const NMEA_INFO& gps_info,
   Poco::ScopedRWLock protect(lock, true);
   return _logger->guiStartLogger(gps_info,
                                  settings, noAsk);
-};
+}
 
 void
 Logger::guiToggleLogger(const NMEA_INFO& gps_info,
@@ -132,7 +132,7 @@ Logger::guiToggleLogger(const NMEA_INFO& gps_info,
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->guiToggleLogger(gps_info, settings, noAsk);
-};
+}
 
 void
 Logger::guiStopLogger(const NMEA_INFO &gps_info,
@@ -140,25 +140,25 @@ Logger::guiStopLogger(const NMEA_INFO &gps_info,
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->guiStopLogger(gps_info, noAsk);
-};
+}
 
 void
 Logger::LoggerDeviceDeclare()
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->LoggerDeviceDeclare();
-};
+}
 
 void
 Logger::LoggerNote(const TCHAR *text)
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->LoggerNote(text);
-};
+}
 
 void
 Logger::clearBuffer()
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger->clearBuffer();
-};
+}

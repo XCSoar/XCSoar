@@ -90,6 +90,7 @@ void MapWindow::RenderBackground(Canvas &canvas, const RECT rc)
       !Calculated().TerrainValid || !terrain->isTerrainLoaded()) {
     canvas.select(MapGfx.hBackgroundBrush);
     canvas.white_pen();
+    canvas.white_brush();
     canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
   }
 

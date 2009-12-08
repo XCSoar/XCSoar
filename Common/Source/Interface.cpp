@@ -120,14 +120,13 @@ void
 ActionInterface::SendSettingsMap(const bool trigger_draw)
 {
   // QUESTION TB: what is trigger_draw?
-  ScopeLock protect(mutexBlackboard);
-
   if (trigger_draw) {
     DisplayModes();
     InfoBoxManager::ProcessTimer();
   }
 
   // Copy InterfaceBlackboard.SettingsMap to the DeviceBlackboard
+  ScopeLock protect(mutexBlackboard);
   device_blackboard.ReadSettingsMap(SettingsMap());
 
   if (trigger_draw) {
