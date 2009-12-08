@@ -38,12 +38,11 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Appearance.hpp"
-#include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "McCready.h"
-#include "options.h" /* for IBLSCALE() */
 #include "RasterWeather.h"
 
 #include <math.h>

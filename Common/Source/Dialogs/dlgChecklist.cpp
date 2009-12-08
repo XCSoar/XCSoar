@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "MainWindow.hpp"
@@ -112,7 +112,7 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
       nlen--;
     }
     if (nlen>0) {
-      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+      canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale,
                          text + nstart, nlen);
     }
   }
@@ -277,7 +277,7 @@ void dlgChecklistShowModal(void){
 
   //  WndProperty *wp;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgChecklist_L.xml"),
                         XCSoarInterface::main_window,

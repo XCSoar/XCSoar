@@ -40,7 +40,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
 #include "Math/Constants.h"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "GeoPoint.hpp"
 
 #include <math.h>
@@ -143,8 +143,8 @@ void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
     lastangle = angle;
     // TODO TB: use ifastsine() here or does DEG_TO_INT take to long?
     int deg = DEG_TO_INT(AngleLimit360(angle));
-    cost = ICOSTABLE[deg]*InfoBoxLayout::scale;
-    sint = ISINETABLE[deg]*InfoBoxLayout::scale;
+    cost = ICOSTABLE[deg] * Layout::scale;
+    sint = ISINETABLE[deg] * Layout::scale;
   }
 
   const int xxs = xs*1024+512;

@@ -41,6 +41,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "SettingsUser.hpp"
 #include "Screen/Animation.hpp"
+#include "Screen/Layout.hpp"
 #include "Registry.hpp"
 #include "InfoBox.h"
 #include "WindowControls.h"
@@ -88,16 +89,11 @@ unsigned InfoBoxLayout::InfoBoxGeometry = 0;
 int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
-int InfoBoxLayout::scale = 1;
-double InfoBoxLayout::dscale=1.0;
-bool InfoBoxLayout::IntScaleFlag=false;
 
 bool InfoBoxLayout::gnav = false;
 
 bool geometrychanged = false;
 
-bool InfoBoxLayout::landscape = false;
-bool InfoBoxLayout::square = false;
 bool InfoBoxLayout::fullscreen = false;
 
 void InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc,
@@ -244,6 +240,8 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   int minsize=0;
   maxsize = max(rc.right-rc.left,rc.bottom-rc.top);
   minsize = min(rc.right-rc.left,rc.bottom-rc.top);
+
+  using namespace Layout;
 
   dscale = max(1.0, minsize / 240.0); // always start w/ shortest dimension
 

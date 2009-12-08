@@ -75,16 +75,6 @@ Copyright_License {
 
   // disable internally generated sounds
   #define DISABLEAUDIO
-#else
-  #ifndef BIGDISPLAY
-    #define BIGDISPLAY
-  #endif
-#endif
-
-#ifdef BIGDISPLAY
-  #define IBLSCALE(x) ((InfoBoxLayout::IntScaleFlag) ? ((x)*InfoBoxLayout::scale) : ((int)((x)*InfoBoxLayout::dscale)))
-#else
-  #define IBLSCALE(x) (x)
 #endif
 
 #ifdef __GNUC__

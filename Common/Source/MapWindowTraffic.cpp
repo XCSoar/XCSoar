@@ -37,13 +37,12 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "InfoBoxLayout.h"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "McCready.h"
-#include "options.h" /* for IBLSCALE() */
+#include "Screen/Layout.hpp"
 
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 

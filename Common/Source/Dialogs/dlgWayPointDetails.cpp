@@ -48,7 +48,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "McCready.h"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "WayPointList.hpp"
@@ -175,7 +175,7 @@ OnPaintDetailsListItem(WindowControl * Sender, Canvas &canvas)
       nlen--;
     }
     if (nlen>0) {
-      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+      canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale,
                          text + nstart, nlen);
     }
   }
@@ -362,7 +362,7 @@ void dlgWayPointDetailsShowModal(void){
   int sunsetmins;
   WndProperty *wp;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWayPointDetails_L.xml"),
                         XCSoarInterface::main_window,

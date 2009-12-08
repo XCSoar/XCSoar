@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/Layout.hpp"
 #include "Protection.hpp"
 #include "Calculations.h" // for RefreshTaskStatistics()
 #include "Blackboard.hpp"
@@ -44,7 +45,6 @@ Copyright_License {
 #include "TaskFile.hpp"
 #include "Logger.h"
 #include "McCready.h"
-#include "InfoBoxLayout.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "LocalPath.hpp"
@@ -129,17 +129,12 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
   int n = UpLimit - LowLimit;
   TCHAR sTmp[120];
 
-  int w0;
-  if (InfoBoxLayout::landscape) {
-    w0 = 200*InfoBoxLayout::scale;
-  } else {
-    w0 = 210*InfoBoxLayout::scale;
-  }
+  int w0 = (Layout::landscape ? 200 : 210) * Layout::scale;
   int w1 = canvas.text_width(TEXT(" 000km"));
   int w2 = canvas.text_width(TEXT("  000")TEXT(DEG));
 
-  int p1 = w0-w1-w2; // 125*InfoBoxLayout::scale;
-  int p2 = w0-w2;    // 175*InfoBoxLayout::scale;
+  int p1 = w0-w1-w2; // 125*Layout::scale;
+  int p2 = w0-w2;    // 175*Layout::scale;
 
   if (DrawListIndex < n){
     int i = LowLimit + DrawListIndex;
@@ -147,7 +142,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
     if (task.ValidTaskPoint(i)) {
       TASK_POINT tp = task.getTaskPoint(i);
 
-      if (InfoBoxLayout::landscape &&
+      if (Layout::landscape &&
           task.getSettings().AATEnabled && task.ValidTaskPoint(i+1) && (i>0)) {
         if (tp.AATType==0) {
           _stprintf(sTmp, TEXT("%s %.1f"),
@@ -163,30 +158,30 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
                   way_points.get(tp.Index).Name);
       }
 
-      canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                          p1 - 4 * InfoBoxLayout::scale, sTmp);
+      canvas.text_clipped(2 * Layout::scale, 2 * Layout::scale,
+                          p1 - 4 * Layout::scale, sTmp);
 
       _stprintf(sTmp, TEXT("%.0f %s"),
 		tp.LegDistance*DISTANCEMODIFY,
 		Units::GetDistanceName());
       canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
-                         2 * InfoBoxLayout::scale, sTmp);
+                         2 * Layout::scale, sTmp);
 
       _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(tp.InBound));
       canvas.text_opaque(p2 + w2 - canvas.text_width(sTmp),
-                         2 * InfoBoxLayout::scale, sTmp);
+                         2 * Layout::scale, sTmp);
     }
 
   } else {
     if (DrawListIndex==n) {
       _stprintf(sTmp, TEXT("  (%s)"), gettext(TEXT("add waypoint")));
-      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+      canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale,
                          sTmp);
     } else if ((DrawListIndex==n+1) && task.ValidTaskPoint(0)) {
 
       if (!task.getSettings().AATEnabled) {
 	_stprintf(sTmp, gettext(TEXT("Total:")));
-        canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+        canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale,
                            sTmp);
 
 	if (fai_ok) {
@@ -197,7 +192,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
 		    Units::GetDistanceName());
 	}
         canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
-                           2 * InfoBoxLayout::scale, sTmp);
+                           2 * Layout::scale, sTmp);
 
       } else {
 
@@ -213,8 +208,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
 		  DISTANCEMODIFY*lengthtotal,
 		  DISTANCEMODIFY*d1,
 		  Units::GetDistanceName());
-        canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                           sTmp);
+        canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale, sTmp);
       }
     }
   }
@@ -534,7 +528,7 @@ void dlgTaskOverviewShowModal(void){
 
   wf = NULL;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTaskOverview_L.xml"),
                         XCSoarInterface::main_window,

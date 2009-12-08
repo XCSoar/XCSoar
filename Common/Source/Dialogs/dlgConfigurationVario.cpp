@@ -38,9 +38,9 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
+#include "Screen/Layout.hpp"
 #include "McCready.h"
 #include "Device/device.h"
-#include "InfoBoxLayout.h"
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
@@ -1009,7 +1009,7 @@ bool dlgConfigurationVarioShowModal(void){
     return false;
   }
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgVario_L.xml"),
                         XCSoarInterface::main_window,

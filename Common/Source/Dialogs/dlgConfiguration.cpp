@@ -54,12 +54,12 @@ Copyright_License {
 #include "Device/device.h"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
+#include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Registry.hpp"
 #include "Profile.hpp"
 #include "LocalTime.hpp"
 #include "Math/FastMath.h"
-#include "InfoBoxLayout.h"
 #include "WayPointParser.h"
 #include "Polar/BuiltIn.hpp"
 #include "Polar/Historical.hpp"
@@ -2024,7 +2024,7 @@ static void setVariables(void) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
 
-    if (InfoBoxLayout::landscape) {
+    if (Layout::landscape) {
 
 
 	dfe->addEnumText(gettext(TEXT("vario+9box"))); // 0
@@ -2496,7 +2496,7 @@ void dlgConfigurationShowModal(void){
   WndProperty *wp;
   XCSoarInterface::StartHourglassCursor();
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgConfiguration_L.xml"),
                         XCSoarInterface::main_window,

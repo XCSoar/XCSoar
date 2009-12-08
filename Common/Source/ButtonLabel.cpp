@@ -40,10 +40,10 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Language.hpp"
 #include "Screen/Animation.hpp"
+#include "Screen/Layout.hpp"
 #include "Registry.hpp"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
-#include "options.h" /* for IBLSCALE() */
 #include "Asset.hpp"
 
 #include <assert.h>

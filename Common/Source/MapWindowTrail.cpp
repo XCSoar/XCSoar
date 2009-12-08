@@ -38,14 +38,13 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "SnailTrail.hpp"
-#include "InfoBoxLayout.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/Util.hpp"
 #include "McCready.h"
 #include "OnLineContest.h"
 #include "Screen/Graphics.hpp"
-#include "options.h" /* for IBLSCALE() */
 
 #include <math.h>
 

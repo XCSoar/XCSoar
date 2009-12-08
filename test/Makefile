@@ -82,6 +82,7 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Screen/Brush.o \
 	$(SRC)/Screen/Font.o \
 	$(SRC)/Screen/Util.o \
+	$(SRC)/Screen/Layout.o \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
@@ -150,6 +151,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/Screen/Font.o \
 	$(SRC)/Screen/Fonts.o \
 	$(SRC)/Screen/Graphics.o \
+	$(SRC)/Screen/Layout.o \
 	$(SRC)/Screen/Util.o \
 	$(SRC)/Screen/MaskedPaintWindow.o \
 	$(SRC)/Screen/PaintWindow.o \
@@ -222,6 +224,7 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/TopWindow.o \
 	$(SRC)/Screen/Util.o \
+	$(SRC)/Screen/Layout.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
 	$(SRC)/Thread/Debug.o \
 	$(SRC)/Thread/Mutex.o \

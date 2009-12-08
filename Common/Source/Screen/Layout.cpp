@@ -36,14 +36,12 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/dlgTools.h"
 #include "Screen/Layout.hpp"
 
-int DLGSCALE(int x) {
-  int iRetVal = x;
-
-#ifndef ALTAIRSYNC
-    iRetVal = (int) ((x) * Layout::dscale);
-#endif
-  return iRetVal;
+namespace Layout {
+  bool landscape = false;
+  bool square = false;
+  int scale = 1;
+  double dscale = 1.0;
+  bool IntScaleFlag = false;
 }

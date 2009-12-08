@@ -48,6 +48,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "options.h" /* for IBLSCALE() */
 #include "NMEA/Info.h"

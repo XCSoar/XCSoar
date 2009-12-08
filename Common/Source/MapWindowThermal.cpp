@@ -38,11 +38,10 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Task.h"
-#include "InfoBoxLayout.h"
 #include "Math/Earth.hpp"
 #include "McCready.h"
 #include "Screen/Graphics.hpp"
-#include "options.h" /* for IBLSCALE() */
+#include "Screen/Layout.hpp"
 
 void MapWindow::CalculateScreenPositionsThermalSources() {
   for (int i=0; i<MAX_THERMAL_SOURCES; i++) {

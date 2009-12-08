@@ -40,6 +40,7 @@ Copyright_License {
 #include "AirspaceDatabase.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
@@ -47,7 +48,6 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "Units.hpp"
-#include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
 #include "OnLineContest.h"
@@ -57,7 +57,6 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "SettingsComputer.hpp"
 #include "Task.h"
-#include "options.h" /* for IBLSCALE() */
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -1044,7 +1043,7 @@ FlightStatistics::CaptionClimb( TCHAR* sTmp)
 void
 FlightStatistics::CaptionPolar(TCHAR *sTmp) const
 {
-  if (InfoBoxLayout::landscape) {
+  if (Layout::landscape) {
     _stprintf(sTmp, TEXT("%s:\r\n  %3.0f\r\n  at %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %3.0f %s"),
 	      gettext(TEXT("Best LD")),
 	      GlidePolar::bestld,
@@ -1096,7 +1095,7 @@ FlightStatistics::CaptionTask(TCHAR *sTmp,
       Units::TimeToText(timetext1, (int)derived.TaskTimeToGo);
       Units::TimeToText(timetext2, (int)derived.AATTimeToGo);
 
-      if (InfoBoxLayout::landscape) {
+      if (Layout::landscape) {
 	_stprintf(sTmp,
 		  TEXT("%s:\r\n  %s\r\n%s:\r\n  %s\r\n%s:\r\n  %5.0f %s\r\n%s:\r\n  %5.0f %s\r\n"),
 		  gettext(TEXT("Task to go")),

@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/Layout.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
@@ -45,7 +46,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Calculations.h"
 #include "MapWindow.h"
-#include "InfoBoxLayout.h"
 #include "Math/Geometry.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
@@ -568,7 +568,7 @@ void dlgTarget(void) {
   }
   ActiveTaskPointOnEntry = task.getActiveIndex();
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTarget_L.xml"),
                         XCSoarInterface::main_window,
@@ -585,7 +585,7 @@ void dlgTarget(void) {
   targetManipEvent.trigger();
   TargetMoveMode = false;
 
-  if (InfoBoxLayout::landscape)
+  if (Layout::landscape)
   {// make flush right in landscape mode (at top in portrait mode)
     WndFrame *wf2 = (WndFrame*)wf->FindByName(TEXT("frmTarget"));
     if (wf2)

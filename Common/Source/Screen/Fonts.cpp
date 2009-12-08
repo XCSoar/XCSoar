@@ -43,10 +43,10 @@ Copyright_License {
 #include "ButtonLabel.hpp"
 #include "Registry.hpp"
 #include "Asset.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "SettingsUser.hpp"
 #include "Appearance.hpp"
-#include "options.h" /* for IBLSCALE() */
 
 #include <stdio.h>
 
@@ -81,7 +81,7 @@ ApplyClearType(LOGFONT *logfont)
   if (0) {
     logfont->lfQuality = CLEARTYPE_COMPAT_QUALITY; // VENTA TODO FIX HERE. WHY NOT LANDSCAPE? cleartype is not native, but better than nothing!
 #ifndef NOCLEARTYPE
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     logfont->lfQuality = CLEARTYPE_COMPAT_QUALITY; // VENTA TODO FIX HERE. WHY NOT LANDSCAPE? cleartype is not native, but better than nothing!
   }
 #endif
@@ -278,7 +278,7 @@ short   ScreenSize=0;
 
 /* VENTA5 TEST automatic fallback for 320x240,640x480 and unusual resolutions
   // Fallback for any other resolution
-  else if (InfoBoxLayout::landscape) {
+  else if (Layout::landscape) {
 
     propGetFontSettingsFromString(TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
     propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);

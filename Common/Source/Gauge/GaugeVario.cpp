@@ -48,6 +48,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Math/Geometry.hpp"
@@ -92,7 +93,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
   StartupStore(TEXT("Create Vario\n"));
 
   set(parent,
-      InfoBoxLayout::landscape
+      Layout::landscape
       ? (MapRectBig.right + InfoBoxLayout::ControlWidth)
       : (MapRectBig.right - GAUGEXSIZE),
       MapRectBig.top,
@@ -215,7 +216,7 @@ void GaugeVario::Render() {
 
     BitmapCanvas hdcTemp(canvas, hDrawBitMap);
     // copy scale bitmap to memory DC
-    if (InfoBoxLayout::dscale>1) {
+    if (Layout::dscale > 1) {
       if (Appearance.InverseInfoBox)
         canvas.stretch(hdcTemp, 58, 0, 58, 120);
       else
@@ -413,7 +414,7 @@ void GaugeVario::RenderClimb(Canvas &canvas)
     canvas.rectangle(x, y, x + IBLSCALE(12), y + IBLSCALE(12));
   } else {
     BitmapCanvas hdcTemp(canvas, hBitmapClimb);
-    if (InfoBoxLayout::dscale>1) {
+    if (Layout::dscale > 1) {
       canvas.stretch(x, y, IBLSCALE(12), IBLSCALE(12), hdcTemp, 12, 0, 12, 12);
     } else {
       canvas.copy(x, y, 12, 12, hdcTemp, 12, 0);
@@ -640,7 +641,7 @@ void GaugeVario::RenderValue(Canvas &canvas, int x, int y,
     SIZE BitmapUnitSize = unit_symbol->get_size();
 
     BitmapCanvas hdcTemp(canvas, *unit_symbol);
-    if (InfoBoxLayout::dscale>1) {
+    if (Layout::dscale > 1) {
       canvas.stretch(x - IBLSCALE(5), diValue->recBkg.top,
                      IBLSCALE(BitmapUnitSize.cx),
                      IBLSCALE(BitmapUnitSize.cy),
@@ -677,7 +678,7 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
   int nary = NARROWS*ARROWYSIZE;
   int ytop = get_top() + YOFFSET + nary; // JMW
   int ybottom = get_bottom()
-    -YOFFSET-nary-InfoBoxLayout::scale; // JMW
+    -YOFFSET - nary - Layout::scale;
 
   ytop += IBLSCALE(14);
   ybottom -= IBLSCALE(14);
@@ -715,13 +716,13 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
     canvas.rectangle(x, ybottom + YOFFSET,
                      x + ARROWXSIZE * 2 + 1,
                      ybottom + YOFFSET + nary + ARROWYSIZE +
-                     InfoBoxLayout::scale * 2);
+                     Layout::scale * 2);
 
     // top (too fast)
     canvas.rectangle(x, ytop - YOFFSET + 1,
                      x + ARROWXSIZE * 2  +1,
                      ytop - YOFFSET - nary + 1 - ARROWYSIZE -
-                     InfoBoxLayout::scale * 2);
+                     Layout::scale * 2);
 
     RenderClimb(canvas);
 

@@ -37,10 +37,9 @@ Copyright_License {
 */
 
 #include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/Util.hpp"
-#include "InfoBoxLayout.h"
 #include "Compatibility/gdi.h"
-#include "options.h" /* for IBLSCALE() */
 #include "Asset.hpp" /* for needclipping */
 
 #include <assert.h>
@@ -831,7 +830,7 @@ Canvas::scale_copy(int dest_x, int dest_y,
                    int src_x, int src_y,
                    unsigned src_width, unsigned src_height)
 {
-  if (InfoBoxLayout::scale > 1)
+  if (Layout::scale > 1)
     stretch(dest_x, dest_y, IBLSCALE(src_width), IBLSCALE(src_height),
             src, src_x, src_y, src_width, src_height);
   else
@@ -845,7 +844,7 @@ Canvas::scale_or(int dest_x, int dest_y,
                  int src_x, int src_y,
                  unsigned src_width, unsigned src_height)
 {
-  if (InfoBoxLayout::scale > 1)
+  if (Layout::scale > 1)
     stretch_or(dest_x, dest_y, IBLSCALE(src_width), IBLSCALE(src_height),
                src, src_x, src_y, src_width, src_height);
   else
@@ -859,7 +858,7 @@ Canvas::scale_and(int dest_x, int dest_y,
                   int src_x, int src_y,
                   unsigned src_width, unsigned src_height)
 {
-  if (InfoBoxLayout::scale > 1)
+  if (Layout::scale > 1)
     stretch_and(dest_x, dest_y, IBLSCALE(src_width), IBLSCALE(src_height),
                 src, src_x, src_y, src_width, src_height);
   else

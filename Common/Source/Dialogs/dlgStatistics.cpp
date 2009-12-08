@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "InfoBoxLayout.h"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "McCready.h"
@@ -46,6 +45,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "GlideComputer.hpp"
 #include "Atmosphere.h"
@@ -253,7 +253,7 @@ static void Update(void){
     if (olcvalid) {
       TCHAR timetext1[100];
       Units::TimeToText(timetext1, (int)dt);
-      if (InfoBoxLayout::landscape) {
+      if (Layout::landscape) {
         _stprintf(sTmp,
                   TEXT("%s\r\n%s:\r\n  %5.0f %s\r\n%s: %s\r\n%s: %3.0f %s\r\n%s: %.2f\r\n"),
                   sFinished,
@@ -414,7 +414,7 @@ void dlgAnalysisShowModal(void){
   wInfo=NULL;
   wCalc=NULL;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAnalysis_L.xml"),
                         XCSoarInterface::main_window,

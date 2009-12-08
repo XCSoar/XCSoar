@@ -43,12 +43,7 @@ Copyright_License {
 class InfoBoxLayout {
  public:
   static bool fullscreen;
-  static bool landscape;
   static bool gnav;
-  static bool square;
-  static double dscale;
-  static bool IntScaleFlag;
-  static int scale;
   static unsigned InfoBoxGeometry;
   static int ControlWidth, ControlHeight, TitleHeight;
   static void ScreenGeometry(RECT rc);

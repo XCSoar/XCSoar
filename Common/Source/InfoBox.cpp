@@ -39,7 +39,6 @@ Copyright_License {
 #include "InfoBox.h"
 #include "Protection.hpp"
 #include "Dialogs.h"
-#include "InfoBoxLayout.h"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "PeriodClock.hpp"
@@ -50,10 +49,10 @@ Copyright_License {
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/BitmapCanvas.hpp"
+#include "Screen/Layout.hpp"
 #include "SettingsUser.hpp"
 #include "Appearance.hpp"
 #include "Defines.h"
-#include "options.h" /* for IBLSCALE() */
 #include "InfoBoxManager.h"
 #include "UtilsSystem.hpp"
 #include "Asset.hpp"
@@ -438,7 +437,7 @@ InfoBox::PaintValue(Canvas &canvas)
   }
 
   x = max(1, (int)recValue.left +
-          (mWidth - (int)tsize.cx - (int)unit_size.cx * InfoBoxLayout::scale) / 2);
+          (mWidth - (int)tsize.cx - (int)unit_size.cx * Layout::scale) / 2);
 
   if (mBorderKind & BORDERLEFT)
     x += DEFAULTBORDERPENWIDTH;
@@ -457,7 +456,7 @@ InfoBox::PaintValue(Canvas &canvas)
 
     canvas.scale_copy(x + tsize.cx,
                       y + mpFontHeightValue->AscentHeight
-                      - unit_size.cy * InfoBoxLayout::scale,
+                      - unit_size.cy * Layout::scale,
                       temp,
                       origin.x, origin.y,
                       unit_size.cx, unit_size.cy);

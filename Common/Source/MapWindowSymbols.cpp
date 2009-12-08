@@ -40,6 +40,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Math/Screen.hpp"
 #include "Math/Geometry.hpp"
@@ -49,7 +50,6 @@ Copyright_License {
 #include "McCready.h"
 #include "Task.h"
 #include "Appearance.hpp"
-#include "options.h" /* for IBLSCALE() */
 
 #include <stdlib.h>
 
@@ -368,7 +368,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
   Start.y = Orig.y;
   Start.x = Orig.x;
 
-  int kx = tsize.cx/InfoBoxLayout::scale/2;
+  int kx = tsize.cx / Layout::scale / 2;
 
   POINT Arrow[7] = { {0,-20}, {-6,-26}, {0,-20},
                      {6,-26}, {0,-20},
@@ -386,9 +386,9 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
     POINT Tail[2] = {{0,-20}, {0,-26-min(20,wmag)*3}};
     double angle = AngleLimit360(Calculated().WindBearing-DisplayAngle);
     for(i=0; i<2; i++) {
-      if (InfoBoxLayout::scale>1) {
-        Tail[i].x *= InfoBoxLayout::scale;
-        Tail[i].y *= InfoBoxLayout::scale;
+      if (Layout::scale > 1) {
+        Tail[i].x *= Layout::scale;
+        Tail[i].y *= Layout::scale;
       }
       protateshift(Tail[i], angle, Start.x, Start.y);
     }

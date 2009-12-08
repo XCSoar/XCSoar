@@ -40,7 +40,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"
 #include "Blackboard.hpp"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
@@ -546,10 +546,10 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 // Sleep(100);
 
     int w0, w1, w2, w3, x1, x2, x3;
-    if (InfoBoxLayout::landscape) {
-      w0 = 202*InfoBoxLayout::scale;
+    if (Layout::landscape) {
+      w0 = 202 * Layout::scale;
     } else {
-      w0 = 225*InfoBoxLayout::scale;
+      w0 = 225 * Layout::scale;
     }
     w1 = canvas.text_width(TEXT("XXX"));
     w2 = canvas.text_width(TEXT(" 000km"));
@@ -557,8 +557,8 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
     x1 = w0-w1-w2-w3;
 
-    canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                        x1 - InfoBoxLayout::scale * 5,
+    canvas.text_clipped(2 * Layout::scale, 2 * Layout::scale,
+                        x1 - Layout::scale * 5,
                         way_point.Name);
 
     sTmp[0] = '\0';
@@ -583,24 +583,24 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
     }
 
     // left justified
-    canvas.text_opaque(x1, 2 * InfoBoxLayout::scale, sTmp);
+    canvas.text_opaque(x1, 2 * Layout::scale, sTmp);
 
     // right justified after waypoint flags
     _stprintf(sTmp, TEXT("%.0f%s"),
               WayPointSelectInfo[i].Distance,
               Units::GetDistanceName());
     x2 = w0-w3-canvas.text_width(sTmp);
-    canvas.text_opaque(x2, 2 * InfoBoxLayout::scale, sTmp);
+    canvas.text_opaque(x2, 2 * Layout::scale, sTmp);
 
     // right justified after distance
     _stprintf(sTmp, TEXT("%d")TEXT(DEG),
 	      iround(WayPointSelectInfo[i].Direction));
     x3 = w0-canvas.text_width(sTmp);
-    canvas.text_opaque(x3, 2 * InfoBoxLayout::scale, sTmp);
+    canvas.text_opaque(x3, 2 * Layout::scale, sTmp);
   } else {
     if (DrawListIndex == 0){
       _stprintf(sTmp, TEXT("%s"), gettext(TEXT("No Match!")));
-      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+      canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale,
                          sTmp);
     }
   }
@@ -701,7 +701,7 @@ int dlgWayPointSelect(const GEOPOINT &location, const int type, const int Filter
     DistanceFilterIdx = 1;
   }
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWayPointSelect_L.xml"),
                         XCSoarInterface::main_window,

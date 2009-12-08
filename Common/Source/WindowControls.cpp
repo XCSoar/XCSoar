@@ -41,7 +41,6 @@ Copyright_License {
 #include "Dialogs/dlgTools.h"
 #ifndef ALTAIRSYNC
 #include "Protection.hpp"
-#include "InfoBoxLayout.h"
 #include "MainWindow.hpp"
 #endif
 #include "Math/FastMath.h"
@@ -51,6 +50,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Viewport.hpp"
 #include "Screen/Bitmap.hpp"
+#include "Screen/Layout.hpp"
 #include "DataField/Base.hpp"
 #include "resource.h"
 #include "Asset.hpp"
@@ -77,7 +77,7 @@ RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed) {
 }
 
 #else
-#define ISCALE InfoBoxLayout::scale
+#define ISCALE Layout::scale
 #endif
 
 #define DEFAULTBORDERPENWIDTH 1*ISCALE
@@ -1795,7 +1795,7 @@ WndListFrame::ScrollBar::set(const SIZE size)
     // shrink width factor.  Range .1 to 1 where 1 is very "fat"
     double SHRINKSBFACTOR = is_pna() ? 1.0 : 0.75;
 
-    width = (unsigned) (SCROLLBARWIDTH_INITIAL * InfoBoxLayout::dscale * SHRINKSBFACTOR);
+    width = (unsigned) (SCROLLBARWIDTH_INITIAL * Layout::dscale * SHRINKSBFACTOR);
 
     // resize height for each dialog so top button is below 1st item (to avoid initial highlighted overlap)
   } else {

@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Blackboard.hpp"
-#include "InfoBoxLayout.h"
 #include "Airspace.h"
 #include "AirspaceDatabase.hpp"
 #include "AirspaceWarning.h"
@@ -49,6 +48,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "MapWindow.h"
 #include "Components.hpp"
+#include "Screen/Layout.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -615,10 +615,10 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
     if (Name) {
 
       int w0, w1, w2, w3, x1, x2, x3;
-      if (InfoBoxLayout::landscape) {
-        w0 = 202*InfoBoxLayout::scale;
+      if (Layout::landscape) {
+        w0 = 202 * Layout::scale;
       } else {
-        w0 = 225*InfoBoxLayout::scale;
+        w0 = 225 * Layout::scale;
       }
       w1 = canvas.text_width(TEXT("XXX"));
       w2 = canvas.text_width(TEXT(" 000km"));
@@ -626,8 +626,8 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
       x1 = w0-w1-w2-w3;
 
-      canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                          x1 - InfoBoxLayout::scale * 5, Name);
+      canvas.text_clipped(2 * Layout::scale, 2 * Layout::scale,
+                          x1 - Layout::scale * 5, Name);
 
       sTmp[0] = '\0';
       sTmp[1] = '\0';
@@ -682,26 +682,26 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
       // left justified
 
-      canvas.text_opaque(x1, 2 * InfoBoxLayout::scale, sTmp);
+      canvas.text_opaque(x1, 2 * Layout::scale, sTmp);
 
       // right justified after airspace type
       _stprintf(sTmp, TEXT("%.0f%s"),
                 AirspaceSelectInfo[i].Distance,
                 Units::GetDistanceName());
       x2 = w0 - w3 - canvas.text_width(sTmp);
-      canvas.text_opaque(x2, 2 * InfoBoxLayout::scale, sTmp);
+      canvas.text_opaque(x2, 2 * Layout::scale, sTmp);
 
       // right justified after distance
       _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(AirspaceSelectInfo[i].Direction));
       x3 = w0 - canvas.text_width(sTmp);
-      canvas.text_opaque(x3, 2 * InfoBoxLayout::scale, sTmp);
+      canvas.text_opaque(x3, 2 * Layout::scale, sTmp);
     } else {
       // should never get here!
     }
   } else {
     if (DrawListIndex == 0){
       _stprintf(sTmp, TEXT("%s"), gettext(TEXT("No Match!")));
-      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+      canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale,
                          sTmp);
     }
   }
@@ -801,7 +801,7 @@ void dlgAirspaceSelect(void) {
 
   Location = XCSoarInterface::Basic().Location;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspaceSelect_L.xml"),
                         XCSoarInterface::main_window,

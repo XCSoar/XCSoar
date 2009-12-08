@@ -39,10 +39,10 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/Ramp.hpp"
 #include "Appearance.hpp"
 #include "MapWindowProjection.hpp"
-#include "InfoBoxLayout.h"
 #include "Math/Screen.hpp"
 #include <stdlib.h>
 #include "SettingsUser.hpp"

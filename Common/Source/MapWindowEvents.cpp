@@ -43,11 +43,10 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Message.h"
 #include "Task.h"
-#include "InfoBoxLayout.h"
 #include "Dialogs.h"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "Defines.h"
-#include "options.h"
 #include "McCready.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
@@ -236,7 +235,7 @@ bool MapWindow::on_mouse_down(int x, int y)
 			       * (XstartScreen-tscreen.x)
 			       + (YstartScreen-tscreen.y)
 			       * (YstartScreen-tscreen.y)))
-			       / InfoBoxLayout::scale;
+        / Layout::scale;
 
       if (distance<10) {
         TargetDrag_State = 1;
@@ -270,7 +269,7 @@ bool MapWindow::on_mouse_up(int x, int y)
 
   double distance = isqrt4((long)((XstartScreen-x)*(XstartScreen-x)+
 			   (YstartScreen-y)*(YstartScreen-y)))
-    /InfoBoxLayout::scale;
+    / Layout::scale;
 
 #ifdef DEBUG_VIRTUALKEYS
   TCHAR buf[80]; char sbuf[80];

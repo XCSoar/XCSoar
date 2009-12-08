@@ -56,6 +56,7 @@ Copyright_License {
 #include "Math/Units.h"
 #include "Registry.hpp"
 #include "Screen/Blank.hpp"
+#include "Screen/Layout.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
@@ -66,7 +67,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow.h"
 #include "Defines.h"
-#include "options.h" /* for IBLSCALE() */
 #include "Components.hpp"
 #include "WayPointList.hpp"
 #include "XCSoar.h"
@@ -967,7 +967,7 @@ InfoBoxManager::Paint(void)
       int rh;
       double fw, fh;
 
-      if (InfoBoxLayout::landscape) {
+      if (Layout::landscape) {
         rw = 84;
         rh = 68;
       } else {
@@ -981,7 +981,7 @@ InfoBoxManager::Paint(void)
       rw = (int)(f * InfoBoxLayout::ControlWidth);
       rh = (int)(f * InfoBoxLayout::ControlHeight);
 
-      if (InfoBoxLayout::landscape) {
+      if (Layout::landscape) {
         rx = i % 3;
         ry = i / 3;
 
@@ -1033,7 +1033,7 @@ InfoBoxManager::Create(RECT rc)
         Border |= BORDERRIGHT;
 
       InfoBoxes[i]->SetBorderKind(Border);
-    } else if (!InfoBoxLayout::landscape) {
+    } else if (!Layout::landscape) {
       Border = 0;
       if (i < 4)
         Border |= BORDERBOTTOM;

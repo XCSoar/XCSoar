@@ -45,15 +45,14 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "InfoBoxLayout.h"
 #include "Compatibility/string.h"
 #include "Registry.hpp"
 #include "Screen/Ramp.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
-#include "options.h" /* for IBLSCALE() */
 
 #include <assert.h>
 
@@ -329,7 +328,7 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   */
 
   // scale dtquant so resolution is not too high on large displays
-  dtquant *= InfoBoxLayout::scale;
+  dtquant *= Layout::scale;
 
   int res_x = iround((rc.right-rc.left)*oversampling/dtquant);
   int res_y = iround((rc.bottom-rc.top)*oversampling/dtquant);

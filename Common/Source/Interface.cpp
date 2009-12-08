@@ -44,6 +44,7 @@ Copyright_License {
 #include "StatusMessage.hpp"
 #include "InfoBoxManager.h"
 #include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "Asset.hpp"
 
 static Mutex mutexInterfaceTimeout;
@@ -228,7 +229,7 @@ bool vario_visible() {
   // requiring a restyle!
 
   if (InfoBoxLayout::gnav) {
-    if ((InfoBoxLayout::landscape == true) &&
+    if (Layout::landscape &&
         (InfoBoxLayout::InfoBoxGeometry == 5))
       enable_gauge = false;
     else
@@ -239,11 +240,11 @@ bool vario_visible() {
 
  // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
  // the right
-  if ((InfoBoxLayout::landscape == true)
+  if (Layout::landscape
       && (InfoBoxLayout::InfoBoxGeometry == 5))
     return false; // VENTA3
 
-  if (gaugeVarioInPortrait || InfoBoxLayout::landscape)
+  if (gaugeVarioInPortrait || Layout::landscape)
     return enable_gauge;
 
   return false;

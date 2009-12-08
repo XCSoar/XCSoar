@@ -42,6 +42,7 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "InfoBoxLayout.h"
 #include "Asset.hpp"
@@ -59,7 +60,6 @@ Copyright_License {
 #include "Logger.h"
 #include "wcecompat/ts_string.h"
 #include "Device/device.h"
-#include "InfoBoxLayout.h"
 #include "InputEvents.h"
 #include "TopologyStore.h"
 #include "Dialogs.h"
@@ -120,10 +120,6 @@ static TopologyStore *topology;
 static RasterTerrain terrain;
 Logger logger;
 
-int InfoBoxLayout::scale = 1;
-double InfoBoxLayout::dscale = 1.0;
-bool InfoBoxLayout::IntScaleFlag;
-bool InfoBoxLayout::landscape = true;
 int InfoBoxLayout::ControlWidth;
 
 bool CommonInterface::VirtualKeys=false;

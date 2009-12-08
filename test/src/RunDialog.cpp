@@ -39,7 +39,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "Screen/TopWindow.hpp"
 #include "wcecompat/ts_string.h"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "UtilsSystem.hpp"
 #include "InputEvents.h"
 #include "PopupMessage.hpp"
@@ -97,11 +97,6 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText)
 {
 }
-
-bool InfoBoxLayout::landscape = false;
-int InfoBoxLayout::scale = 1;
-double InfoBoxLayout::dscale = 1.0;
-bool InfoBoxLayout::IntScaleFlag;
 
 int DLGSCALE(int x)
 {

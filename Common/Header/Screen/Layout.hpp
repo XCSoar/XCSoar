@@ -36,14 +36,25 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/dlgTools.h"
-#include "Screen/Layout.hpp"
+#ifndef XCSOAR_SCREEN_LAYOUT_HPP
+#define XCSOAR_SCREEN_LAYOUT_HPP
 
-int DLGSCALE(int x) {
-  int iRetVal = x;
-
-#ifndef ALTAIRSYNC
-    iRetVal = (int) ((x) * Layout::dscale);
+#ifndef GNAV
+  #define BIGDISPLAY
 #endif
-  return iRetVal;
+
+namespace Layout {
+  extern bool landscape;
+  extern bool square;
+  extern double dscale;
+  extern bool IntScaleFlag;
+  extern int scale;
 }
+
+#ifdef BIGDISPLAY
+#define IBLSCALE(x) (Layout::IntScaleFlag ? (x) * Layout::scale : (int)((x) * Layout::dscale))
+#else
+#define IBLSCALE(x) (x)
+#endif
+
+#endif
