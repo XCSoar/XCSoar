@@ -67,6 +67,15 @@ public:
     get_bounding_box(const TaskProjection& task_projection) = 0;
 
 /** 
+ * Set task projection for internal use
+ * 
+ * @param task_projection Global task projection (owned by Airspaces)
+ */
+  void set_task_projection(const TaskProjection& task_projection) {
+    m_task_projection = &task_projection;
+  };
+
+/** 
  * Get arbitrary center or reference point for use in determining
  * overall center location of all airspaces
  * 
@@ -95,19 +104,16 @@ public:
    * @return true if the line intersects the airspace
    */
   virtual bool intersects(const GEOPOINT& g1, 
-                          const GeoVector &vec,
-                          const TaskProjection& tp) const = 0;
+                          const GeoVector &vec) const = 0;
 
 /** 
  * Find location of closest point on boundary to a reference
  * 
  * @param loc Reference location of observer
- * @param task_projection Projection (for use with internal speedups)
  * 
  * @return Location of closest point of boundary to reference 
  */
-  virtual GEOPOINT closest_point(const GEOPOINT& loc, 
-                                 const TaskProjection& task_projection) const
+  virtual GEOPOINT closest_point(const GEOPOINT& loc) const
     = 0;
 
   /** 
@@ -147,7 +153,7 @@ public:
    * 
    * @return Type/class of airspace
    */
-  const int get_type() const {
+  int get_type() const {
     return Type;
   }
 
@@ -181,6 +187,7 @@ protected:
   AIRSPACE_ALT m_top;
   tstring Name;
   int Type;
+  const TaskProjection* m_task_projection;
 
 #ifdef OLD_TASK
   AIRSPACE_ACK Ack;

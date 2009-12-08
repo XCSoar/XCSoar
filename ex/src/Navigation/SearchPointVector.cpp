@@ -48,6 +48,17 @@ prune_interior(SearchPointVector& spv)
   return changed;
 }
 
+bool 
+is_convex(const SearchPointVector& spv)
+{
+  bool changed=false;
+  GrahamScan gs(spv);
+  size_t size_before = spv.size();
+  SearchPointVector res;
+  res = gs.prune_interior(&changed);
+  return res.size() != size_before;
+}
+
 void 
 project(SearchPointVector& spv, const TaskProjection& tp)
 {
@@ -93,17 +104,31 @@ FLAT_GEOPOINT segment_nearest_point(const SearchPointVector& spv,
   }
 }
 
-FLAT_GEOPOINT nearest_point(const SearchPointVector& spv, 
-                            const FLAT_GEOPOINT &p3)
+
+FLAT_GEOPOINT nearest_point_nonconvex(const SearchPointVector& spv, 
+                                      const FLAT_GEOPOINT &p3)
 {
   unsigned distance_min = 0-1;
+  SearchPointVector::const_iterator i_best = spv.end();
+  for (SearchPointVector::const_iterator i = spv.begin(); 
+       i!= spv.end(); ++i) {
 
-  // special case
-  if (spv.empty()) {
-    return p3; // really should be error
-  } else if (spv.size()==1) {
-    return spv[0].get_flatLocation();
+    FLAT_GEOPOINT pa = segment_nearest_point(spv,i,p3);
+    unsigned d_this = p3.distance_sq_to(pa);
+    if (d_this<distance_min) {
+      distance_min = d_this;
+      i_best = i;
+    }
   }
+  return i_best->get_flatLocation();
+}
+
+
+
+FLAT_GEOPOINT nearest_point_convex(const SearchPointVector& spv, 
+                                   const FLAT_GEOPOINT &p3)
+{
+  unsigned distance_min = 0-1;
 
   SearchPointVector::const_iterator i_best = spv.end();
 
@@ -150,3 +175,22 @@ FLAT_GEOPOINT nearest_point(const SearchPointVector& spv,
   return pc;
 }
 
+FLAT_GEOPOINT nearest_point(const SearchPointVector& spv, 
+                            const FLAT_GEOPOINT &p3,
+                            const bool is_convex)
+{
+  // special case
+  if (spv.empty()) {
+    return p3; // really should be error
+  } else if (spv.size()==1) {
+    return spv[0].get_flatLocation();
+  }
+
+  if (is_convex) {
+    /** \todo Strictly speaking it isn't correct to use this function
+     */
+    return nearest_point_convex(spv,p3);
+  } else {
+    return nearest_point_nonconvex(spv,p3);
+  }
+}

@@ -17,3 +17,8 @@ plot \
      'results/res-bb-inside.txt' using 1:2 with filledcurve ls 8 title "inside airspace", \
      'results/res-sample.txt' using 2:3 with lines ls 1 title "sample"
 pause -1
+
+plot \
+     'results/res-bb-range.txt' using 1:2 with filledcurve ls 5 title "in range", \
+        'results/res-bb-closest.txt' using 1:2 with lines ls 3 title "closest"
+pause -1

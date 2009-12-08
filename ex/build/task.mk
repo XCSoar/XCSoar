@@ -91,7 +91,6 @@ TASK_SRC	:=\
 	$(topdir)/src/Util/DiffFilter.cpp \
 	$(topdir)/src/Util/Filter.cpp \
 	$(topdir)/src/Util/Gradient.cpp \
-	$(topdir)/src/Util/Printing.cpp \
 	$(topdir)/src/Util/ZeroFinder.cpp 
 
 $(topdir)/src/task-$(TARGET).a: $(patsubst %.cpp,%-$(TARGET).o,$(TASK_SRC:.c=-$(TARGET).o))

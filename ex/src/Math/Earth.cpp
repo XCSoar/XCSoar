@@ -61,6 +61,8 @@ static const fixed fixed_xte_fact = 1.0/(fixed_rad_to_deg * fixed_xtd_fact);
 #define fixed_expand_x 1.0
 #endif
 
+
+
 GEOPOINT IntermediatePoint(GEOPOINT loc1,
                            GEOPOINT loc2,
                            fixed dthis,
@@ -83,20 +85,19 @@ GEOPOINT IntermediatePoint(GEOPOINT loc1,
   const fixed A=sin((fixed_one-f)*d)*inv_sind;
   const fixed B=sin(f*d)*inv_sind;
 
-  fixed AsinLoc1Latitude, AcosLoc1Latitude;
-  sin_cos(A*loc1.Latitude, &AsinLoc1Latitude, &AcosLoc1Latitude);
-  fixed BsinLoc2Latitude, BcosLoc2Latitude;
-  sin_cos(B*loc2.Latitude, &BsinLoc2Latitude, &BcosLoc2Latitude);
+  fixed sinLoc1Latitude, cosLoc1Latitude;
+  sin_cos(loc1.Latitude, &sinLoc1Latitude, &cosLoc1Latitude);
+  fixed sinLoc2Latitude, cosLoc2Latitude;
+  sin_cos(loc2.Latitude, &sinLoc2Latitude, &cosLoc2Latitude);
 
   fixed sinLoc1Longitude, cosLoc1Longitude;
   sin_cos(loc1.Longitude, &sinLoc1Longitude, &cosLoc1Longitude);
-
   fixed sinLoc2Longitude, cosLoc2Longitude;
   sin_cos(loc2.Longitude, &sinLoc2Longitude, &cosLoc2Longitude);
 
-  const fixed x = AcosLoc1Latitude*cosLoc1Longitude +  BcosLoc2Latitude*cosLoc2Longitude;
-  const fixed y = AcosLoc1Latitude*sinLoc1Longitude +  BcosLoc2Latitude*sinLoc2Longitude;
-  const fixed z = AsinLoc1Latitude                  +  BsinLoc2Latitude;
+  const fixed x = A*cosLoc1Latitude*cosLoc1Longitude +  B*cosLoc2Latitude*cosLoc2Longitude;
+  const fixed y = A*cosLoc1Latitude*sinLoc1Longitude +  B*cosLoc2Latitude*sinLoc2Longitude;
+  const fixed z = A*sinLoc1Latitude                  +  B*sinLoc2Latitude;
 
   GEOPOINT loc3;
   loc3.Latitude= atan2(z,sqrt(x*x+y*y))*fixed_rad_to_deg;
@@ -106,6 +107,25 @@ GEOPOINT IntermediatePoint(GEOPOINT loc1,
   count_distbearing++;
 #endif
   return loc3;
+}
+
+
+GEOPOINT IntermediatePoint(GEOPOINT loc1,
+                           GEOPOINT loc2,
+                           const fixed dthis) 
+{
+  fixed ff = fixed_one/fixed_xtd_fact; // was fixed_xte_fact;
+  fixed dtotal = ::Distance(loc1, loc2); 
+
+  if (dthis>=dtotal) {
+    return loc2;
+  } else {
+    loc1.Latitude *= fixed_deg_to_rad;
+    loc2.Latitude *= fixed_deg_to_rad;
+    loc1.Longitude *= fixed_deg_to_rad;
+    loc2.Longitude *= fixed_deg_to_rad;
+    return IntermediatePoint(loc1, loc2, dthis*ff, dtotal*ff);
+  }
 }
 
 fixed CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3,

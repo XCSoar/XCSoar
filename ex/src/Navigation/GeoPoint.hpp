@@ -160,6 +160,18 @@ struct GEOPOINT {
   fixed projected_distance(const GEOPOINT &from,
                            const GEOPOINT &to) const;
 
+/**
+ * Find point a set distance along a great-circle path towards
+ * a destination
+ *
+ * @param destination End location
+ * @param distance distance (m)
+ *
+ * @return Location of point
+ */
+  GEOPOINT intermediate_point(const GEOPOINT &destination, 
+                              const fixed distance) const;
+
 /** 
  * Test whether two points are co-located
  * 

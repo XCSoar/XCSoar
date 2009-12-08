@@ -206,7 +206,7 @@ public:
  * @return Initialised IntermediatePoint if valid, otherwise NULL
  */
   virtual IntermediatePoint* createIntermediate(const LegalIntermediateType_t type,
-                                 const Waypoint &wp) const;
+                                                const Waypoint &wp) const;
 
 /** 
  * Create finish point of specified type

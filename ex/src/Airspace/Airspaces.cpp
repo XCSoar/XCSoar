@@ -102,7 +102,7 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
   for (std::deque<Airspace>::iterator v=vectors.begin();
        v != vectors.end(); v++) {
     if (v->intersects(ray)) {
-      if (v->intersects(loc, vec, task_projection)) {
+      if (v->intersects(loc, vec)) {
         visitor(*v);
       }
     }

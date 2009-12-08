@@ -79,17 +79,14 @@ AirspaceCircle::inside(const AIRCRAFT_STATE &loc) const
 }
 
 bool 
-AirspaceCircle::intersects(const GEOPOINT& start, const GeoVector &vec,
-                           const TaskProjection& task_projection) const
+AirspaceCircle::intersects(const GEOPOINT& start, const GeoVector &vec) const
 {
   return vec.minimum_distance(start, m_center) <= m_radius;
 }
 
 
 GEOPOINT 
-AirspaceCircle::closest_point(const GEOPOINT& loc, 
-                              const TaskProjection& task_projection) const
+AirspaceCircle::closest_point(const GEOPOINT& loc) const
 {
-  GeoVector vec(m_center, loc);
-  return vec.intermediate_point(m_center, m_radius);
+  return m_center.intermediate_point(loc, m_radius);
 }

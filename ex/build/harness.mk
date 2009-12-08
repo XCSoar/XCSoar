@@ -1,4 +1,5 @@
 TEST_SRC = \
+	Test/Printing.cpp \
 	Test/test_debug.cpp \
 	Test/harness_aircraft.cpp \
 	Test/harness_airspace.cpp \

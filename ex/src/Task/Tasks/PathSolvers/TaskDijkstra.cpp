@@ -46,7 +46,7 @@ unsigned num_dijkstra = 0;
 
 bool operator == (const ScanTaskPoint &p1, const ScanTaskPoint &p2) 
 {
-  return (p1.first == p2.first) && (p1.second == p2.second);
+  return (p1.second == p2.second) && (p1.first == p2.first);
 }
 
 
@@ -55,7 +55,7 @@ unsigned TaskDijkstra::extremal_distance(const unsigned d) const
   if (shortest) {
     return d;
   } else {
-    return 50000-d;
+    return -d;
   }
 }
 
@@ -72,7 +72,7 @@ TaskDijkstra::TaskDijkstra(OrderedTask& _task):
   sp_sizes.reserve(num_taskpoints);
   activeStage = task.getActiveTaskPointIndex();
 
-  for (unsigned stage=0; stage<num_taskpoints; stage++) {
+  for (unsigned stage=0; stage<num_taskpoints; ++stage) {
     sp_sizes[stage]= task.get_tp_search_points(stage).size();
   }
 }
@@ -126,7 +126,7 @@ void TaskDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
   const unsigned dsize = get_size(destination.first);
 
   for (destination.second=0; 
-       destination.second< dsize; destination.second++) {
+       destination.second!= dsize; ++destination.second) {
 
     dijkstra.link(destination, curNode, (distance(curNode, destination)));
   }
@@ -143,7 +143,7 @@ void TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
   const unsigned dsize = get_size(destination.first);
 
   for (destination.second=0; 
-       destination.second< dsize; destination.second++) {
+       destination.second!= dsize; ++destination.second) {
 
     dijkstra.link(destination, destination, (distance(destination, currentLocation)));
   }
@@ -218,7 +218,7 @@ TaskDijkstra::distance_general(DijkstraTaskPoint &dijkstra)
 void 
 TaskDijkstra::save_min()
 {
-  for (unsigned j=activeStage; j<num_taskpoints; j++) {
+  for (unsigned j=activeStage; j!=num_taskpoints; ++j) {
     task.set_tp_search_min(j, solution[j]);
   }
 }
@@ -227,7 +227,7 @@ TaskDijkstra::save_min()
 void 
 TaskDijkstra::save_max()
 {
-  for (unsigned j=0; j<num_taskpoints; j++) {
+  for (unsigned j=0; j!=num_taskpoints; ++j) {
     task.set_tp_search_max(j, solution[j]);
     if (j<=activeStage) {
       task.set_tp_search_min(j, solution[j]);

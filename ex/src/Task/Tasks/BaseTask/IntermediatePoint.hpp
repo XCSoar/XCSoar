@@ -47,6 +47,7 @@
  * taskpoint.
  *
  */
+
 class IntermediatePoint: 
   public OrderedTaskPoint 
 {

@@ -76,15 +76,14 @@ fixed Bearing(GEOPOINT loc1,
               GEOPOINT loc2);
 
 /**
- * Finds the point along a distance dthis between p1 and p2, which are
+ * Finds the point along a distance dthis (m) between p1 and p2, which are
  * separated by dtotal.
  *
  * This is a slow function.  Adapted from The Aviation Formulary 1.42.
  */
 GEOPOINT IntermediatePoint(GEOPOINT loc1,
                            GEOPOINT loc2,
-                           fixed dthis,
-                           fixed dtotal);
+                           const fixed dthis);
 
 /** 
  * Calculate and add distances between point 1 and 2, and point 2 and 3.

@@ -86,3 +86,20 @@ GEOPOINT::sort(const GEOPOINT &sp) const
   }
 }
 
+
+GEOPOINT 
+GEOPOINT::intermediate_point(const GEOPOINT &destination, 
+                             const fixed distance) const
+{
+/* slow way */
+  return ::IntermediatePoint(*this, destination, distance);
+/* fast way (linear interpolation)
+  GEOPOINT end = end_point(source);
+  if (Distance>fixed_zero) {
+    fixed t = distance/Distance;
+    return source+(end-source)*t;
+  } else {
+    return source;
+  }
+*/
+}

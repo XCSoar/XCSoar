@@ -96,16 +96,13 @@ public:
    * 
    * @param g1 Location of origin of search vector
    * @param vec Line from origin
-   * @param tp Projection used by flat-earth representation
    * 
    * @return true if the line intersects the airspace
    */
   bool intersects(const GEOPOINT& g1, 
-                  const GeoVector &vec,
-                  const TaskProjection& tp) const;
+                  const GeoVector &vec) const;
 
-  GEOPOINT closest_point(const GEOPOINT& loc, 
-                         const TaskProjection& task_projection) const;
+  GEOPOINT closest_point(const GEOPOINT& loc) const;
 
   /**
    * Accessor for airspace shape
@@ -117,6 +114,7 @@ public:
 
 private:
   SearchPointVector m_border;
+  bool m_is_convex;
 
 /** 
  * Project border.

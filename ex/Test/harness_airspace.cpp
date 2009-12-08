@@ -45,7 +45,7 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
         p.Latitude += (rand()%200)/1000.0;
         pts.push_back(p);
       }
-      as = new AirspacePolygon(pts);
+      as = new AirspacePolygon(pts,true);
     }
     airspaces.insert(as);
 #ifdef DO_PRINT
@@ -102,6 +102,43 @@ private:
 };
 
 
+class AirspaceVisitorClosest: public AirspaceVisitor {
+public:
+  AirspaceVisitorClosest(const char* fname,
+                         const GEOPOINT &loc):
+    location(loc)
+    {      
+#ifdef DO_PRINT
+      fout = new std::ofstream(fname);
+#endif
+    };
+  ~AirspaceVisitorClosest() {
+#ifdef DO_PRINT
+    delete fout;
+#endif    
+  }
+  virtual void closest(const AbstractAirspace& as) {
+    GEOPOINT c = as.closest_point(location);
+#ifdef DO_PRINT
+    *fout << "# closest point\n";
+    *fout << c.Longitude << " " << c.Latitude << " " << "\n";
+    *fout << location.Longitude << " " << location.Latitude << " " << "\n\n";
+#endif
+  }
+  virtual void Visit(const AirspaceCircle& as) {
+    closest(as);
+  }
+  virtual void Visit(const AirspacePolygon& as) {
+    closest(as);
+  }
+private:
+#ifdef DO_PRINT
+  std::ofstream *fout;
+#endif
+  const GEOPOINT& location;
+};
+
+
 void scan_airspaces(const AIRCRAFT_STATE state, 
                     const Airspaces& airspaces,
                     bool do_report,
@@ -115,9 +152,17 @@ void scan_airspaces(const AIRCRAFT_STATE state,
 //  std::for_each(vn.begin(), vn.end(), pvn);
 // (will work for simple cases where visitor is stateless)
 
-  AirspaceVisitorPrint visitor("results/res-bb-range.txt",
-                               do_report);
-  airspaces.visit_within_range(state.Location, 20000.0, visitor);
+  {
+    AirspaceVisitorPrint pvisitor("results/res-bb-range.txt",
+                                  do_report);
+    airspaces.visit_within_range(state.Location, 20000.0, pvisitor);
+  }
+
+  {
+    AirspaceVisitorClosest pvisitor("results/res-bb-closest.txt",
+                                    state.Location);
+    airspaces.visit_within_range(state.Location, 20000.0, pvisitor);
+  }
 
   const std::vector<Airspace> vi = airspaces.find_inside(state);
   AirspaceVisitorPrint pvi("results/res-bb-inside.txt",

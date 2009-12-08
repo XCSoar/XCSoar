@@ -33,12 +33,22 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
-#include "Math/Earth.hpp"
-#include "Navigation/TaskProjection.hpp"
+*/
 
 #ifdef DO_PRINT
 #include <fstream>
+
+#include "Task/TaskManager.hpp"
+
+void TaskManager::print(const AIRCRAFT_STATE &state)
+{
+  if (active_task) 
+    return active_task->print(state);
+}
+
+#include "Math/Earth.hpp"
+#include "Navigation/TaskProjection.hpp"
+
 
 /*
 std::ostream& operator<< (std::ostream& o, 
@@ -201,7 +211,7 @@ std::ostream& operator<< (std::ostream& f,
   f << "# circle\n";
   for (double t=0; t<=360; t+= 30) {
     GEOPOINT l;
-    FindLatitudeLongitude(as.center, t, as.radius, &l);
+    FindLatitudeLongitude(as.m_center, t, as.m_radius, &l);
     f << l.Longitude << " " << l.Latitude << "\n";
   }
   f << "\n";
@@ -214,8 +224,8 @@ std::ostream& operator<< (std::ostream& f,
                           const AirspacePolygon& as)
 {
   f << "# polygon\n";
-  for (std::vector<SearchPoint>::const_iterator v = as.border.begin();
-       v != as.border.end(); v++) {
+  for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
+       v != as.m_border.end(); ++v) {
     GEOPOINT l = v->get_location();
     f << l.Longitude << " " << l.Latitude << "\n";
   }
@@ -373,13 +383,6 @@ void AbortTask::print(const AIRCRAFT_STATE &state)
   }
 }
 
-#include "Task/TaskManager.hpp"
-
-void TaskManager::print(const AIRCRAFT_STATE &state)
-{
-  if (active_task) 
-    return active_task->print(state);
-}
 
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/AATIsolineSegment.hpp"
