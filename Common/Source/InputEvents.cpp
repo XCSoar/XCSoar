@@ -122,13 +122,17 @@ static int N2Event[MAX_MODE][NE_COUNT];
 
 // Events - What do you want to DO
 typedef struct {
-  pt2Event event; // Which function to call (can be any, but should be here)
-  const TCHAR *misc; // Parameters
-  int next;       // Next in event list - eg: Macros
+  // Which function to call (can be any, but should be here)
+  pt2Event event;
+  // Parameters
+  const TCHAR *misc;
+  // Next in event list - eg: Macros
+  int next;
 } EventSTRUCT;
 
 static EventSTRUCT Events[MAX_EVENTS];
-static int Events_count;				// How many have we defined
+// How many have we defined
+static int Events_count;
 
 // Labels - defined per mode
 typedef struct {
@@ -136,15 +140,14 @@ typedef struct {
   int location;
   int event;
 } ModeLabelSTRUCT;
+
 static ModeLabelSTRUCT ModeLabel[MAX_MODE][MAX_LABEL];
 static int ModeLabel_count[MAX_MODE];	       // Where are we up to in this mode...
-
 
 #define MAX_GCE_QUEUE 10
 static int GCE_Queue[MAX_GCE_QUEUE];
 #define MAX_NMEA_QUEUE 10
 static int NMEA_Queue[MAX_NMEA_QUEUE];
-
 
 // -----------------------------------------------------------------------
 // Initialisation and Defaults
@@ -157,6 +160,7 @@ typedef struct {
   const TCHAR *text;
   pt2Event event;
 } Text2EventSTRUCT;
+
 Text2EventSTRUCT Text2Event[256];  // why 256?
 int Text2Event_count;
 
@@ -169,62 +173,70 @@ const TCHAR *Text2NE[NE_COUNT+1];
 Mutex InputEvents::mutexEventQueue;
 
 // Read the data files
-void InputEvents::readFile() {
+void
+InputEvents::readFile()
+{
   StartupStore(TEXT("Loading input events file\n"));
 
   // clear the GCE and NMEA queues
   mutexEventQueue.Lock();
   int i;
-  for (i=0; i<MAX_GCE_QUEUE; i++) {
-    GCE_Queue[i]= -1;
+  for (i = 0; i < MAX_GCE_QUEUE; i++) {
+    GCE_Queue[i] = -1;
   }
-  for (i=0; i<MAX_NMEA_QUEUE; i++) {
-    NMEA_Queue[i]= -1;
+  for (i = 0; i < MAX_NMEA_QUEUE; i++) {
+    NMEA_Queue[i] = -1;
   }
   mutexEventQueue.Unlock();
 
   // Get defaults
   if (!InitONCE) {
-#ifdef FIVV
-#include "InputEvents_fivv.cpp"   // VENTA3
-#elif defined(WINDOWSPC)
-#include "InputEvents_pc.cpp"
-#elif defined(GNAV)
-#include "InputEvents_altair.cpp"
-#else
-#include "InputEvents_defaults.cpp"
-#endif
+    #ifdef FIVV
+    #include "InputEvents_fivv.cpp"   // VENTA3
+    #elif defined(WINDOWSPC)
+    #include "InputEvents_pc.cpp"
+    #elif defined(GNAV)
+    #include "InputEvents_altair.cpp"
+    #else
+    #include "InputEvents_defaults.cpp"
+    #endif
 
-#include "InputEvents_Text2Event.cpp"
+    #include "InputEvents_Text2Event.cpp"
     InitONCE = true;
   }
 
   // Read in user defined configuration file
-
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
-  FILE *fp=NULL;
+  FILE *fp = NULL;
 
   // Open file from registry
   GetRegistryString(szRegistryInputFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
   SetRegistryString(szRegistryInputFile, TEXT("\0"));
 
-  if (_tcslen(szFile1)>0)
-    fp  = _tfopen(szFile1, TEXT("rt"));
+  if (_tcslen(szFile1) > 0)
+    fp = _tfopen(szFile1, TEXT("rt"));
 
   if (fp == NULL)
     return;
 
   // TODO code - Safer sizes, strings etc - use C++ (can scanf restrict length?)
-  TCHAR buffer[2049];	// Buffer for all
-  TCHAR key[2049];	// key from scanf
-  TCHAR value[2049];	// value from scanf
+
+  // Buffer for all
+  TCHAR buffer[2049];
+  // key from scanf
+  TCHAR key[2049];
+  // value from scanf
+  TCHAR value[2049];
   TCHAR *new_label = NULL;
   int found;
 
   // Init first entry
-  bool some_data = false;		// Did we fin some in the last loop...
-  TCHAR d_mode[1024] = TEXT("");			// Multiple modes (so large string)
+
+  // Did we find some in the last loop...
+  bool some_data = false;
+  // Multiple modes (so large string)
+  TCHAR d_mode[1024] = TEXT("");
   TCHAR d_type[256] = TEXT("");
   TCHAR d_data[256] = TEXT("");
   int event_id = 0;
@@ -235,19 +247,18 @@ void InputEvents::readFile() {
 
   int line = 0;
 
-  /* Read from the file */
-  while (
-	 _fgetts(buffer, 2048, fp)
-	 // TODO code: What about \r - as in \r\n ?
-	 // TODO code: Note that ^# does not allow # in key - might be required (probably not)
-	 //		Better way is to separate the check for # and the scanf
-	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
-	 ) {
+  // Read from the file
+  // TODO code: What about \r - as in \r\n ?
+  // TODO code: Note that ^# does not allow # in key - might be required (probably not)
+  //   Better way is to separate the check for # and the scanf
+  while (_fgetts(buffer, 2048, fp)
+         && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)) {
+
     line++;
 
     // experimental: if the first line is "#CLEAR" then the whole default config is cleared
     //               and can be overwritten by file
-    if ((line == 1) && (_tcsstr(buffer, TEXT("#CLEAR")))){
+    if ((line == 1) && (_tcsstr(buffer, TEXT("#CLEAR")))) {
       memset(&Key2Event, 0, sizeof(Key2Event));
       memset(&GC2Event, 0, sizeof(GC2Event));
       memset(&Events, 0, sizeof(Events));
@@ -259,90 +270,94 @@ void InputEvents::readFile() {
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if ((buffer[0] == '\r') || (buffer[0] == '\n') || (buffer[0] == '\0')) {
       // General checks before continue...
-      if (
-	  some_data
-	  && (d_mode != NULL)						// We have a mode
-	  && (_tcscmp(d_mode, TEXT("")) != 0)		//
-	  ) {
+      if (some_data && (d_mode != NULL) && (_tcscmp(d_mode, TEXT("")) != 0)) {
 
-	TCHAR *token;
+        TCHAR *token;
 
-	// For each mode
-	token = _tcstok(d_mode, TEXT(" "));
+        // For each mode
+        token = _tcstok(d_mode, TEXT(" "));
 
-	// General errors - these should be true
-	assert(d_location >= 0);
-	assert(d_location < 1024);	// Scott arbitrary limit
-	assert(event_id >= 0);
-	assert(d_mode != NULL);
-	assert(d_type != NULL);
-	assert(d_label != NULL);
+        // General errors - these should be true
+        assert(d_location >= 0);
+        assert(d_location < 1024); // Scott arbitrary limit
+        assert(event_id >= 0);
+        assert(d_mode != NULL);
+        assert(d_type != NULL);
+        assert(d_label != NULL);
 
-	// These could indicate bad data - thus not an ASSERT (debug only)
-	// assert(_tcslen(d_mode) < 1024);
-	// assert(_tcslen(d_type) < 1024);
-	// assert(_tcslen(d_label) < 1024);
+        // These could indicate bad data - thus not an ASSERT (debug only)
+        // assert(_tcslen(d_mode) < 1024);
+        // assert(_tcslen(d_type) < 1024);
+        // assert(_tcslen(d_label) < 1024);
 
-	while( token != NULL ) {
+        while (token != NULL) {
 
-	  // All modes are valid at this point
+          // All modes are valid at this point
           mode mode_id = mode2int(token, true);
           assert(mode_id != MODE_INVALID);
 
-	  // Make label event
-	  // TODO code: Consider Reuse existing entries...
-	  if (d_location > 0) {
-	    // Only copy this once per object - save string space
-	    if (!new_label) {
-	      new_label = StringMallocParse(d_label);
-	    }
-	    InputEvents::makeLabel(mode_id, new_label, d_location, event_id);
-	  }
+          // Make label event
+          // TODO code: Consider Reuse existing entries...
+          if (d_location > 0) {
+            // Only copy this once per object - save string space
+            if (!new_label) {
+              new_label = StringMallocParse(d_label);
+            }
+            InputEvents::makeLabel(mode_id, new_label, d_location, event_id);
+          }
 
-	  // Make key (Keyboard input)
-	  if (_tcscmp(d_type, TEXT("key")) == 0)	{	// key - Hardware key or keyboard
-	    int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
-	    if (key > 0)
-	      Key2Event[mode_id][key] = event_id;
-#ifdef _INPUTDEBUG_
-	    else if (input_errors_count < MAX_INPUT_ERRORS)
-	      _stprintf(input_errors[input_errors_count++], TEXT("Invalid key data: %s at %i"), d_data, line);
-#endif
+          // Make key (Keyboard input)
+          // key - Hardware key or keyboard
+          if (_tcscmp(d_type, TEXT("key")) == 0) {
+            // Get the int key (eg: APP1 vs 'a')
+            int key = findKey(d_data);
+            if (key > 0)
+              Key2Event[mode_id][key] = event_id;
 
+            #ifdef _INPUTDEBUG_
+            else if (input_errors_count < MAX_INPUT_ERRORS)
+            _stprintf(input_errors[input_errors_count++], TEXT("Invalid key data: %s at %i"), d_data, line);
+            #endif
 
-	    // Make gce (Glide Computer Event)
-	  } else if (_tcscmp(d_type, TEXT("gce")) == 0) {		// GCE - Glide Computer Event
-	    int key = findGCE(d_data);				// Get the int key (eg: APP1 vs 'a')
-	    if (key >= 0)
-	      GC2Event[mode_id][key] = event_id;
-#ifdef _INPUTDEBUG_
-	    else if (input_errors_count < MAX_INPUT_ERRORS)
-	      _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
-#endif
+          // Make gce (Glide Computer Event)
+          // GCE - Glide Computer Event
+          } else if (_tcscmp(d_type, TEXT("gce")) == 0) {
+            // Get the int key (eg: APP1 vs 'a')
+            int key = findGCE(d_data);
+            if (key >= 0)
+              GC2Event[mode_id][key] = event_id;
 
-	    // Make ne (NMEA Event)
-	  } else if (_tcscmp(d_type, TEXT("ne")) == 0) { 		// NE - NMEA Event
-	    int key = findNE(d_data);			// Get the int key (eg: APP1 vs 'a')
-	    if (key >= 0)
-	      N2Event[mode_id][key] = event_id;
-#ifdef _INPUTDEBUG_
-	    else if (input_errors_count < MAX_INPUT_ERRORS)
-	      _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
-#endif
+            #ifdef _INPUTDEBUG_
+            else if (input_errors_count < MAX_INPUT_ERRORS)
+            _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
+            #endif
 
-	  } else if (_tcscmp(d_type, TEXT("label")) == 0)	{	// label only - no key associated (label can still be touch screen)
-	    // Nothing to do here...
+          // Make ne (NMEA Event)
+          // NE - NMEA Event
+          } else if (_tcscmp(d_type, TEXT("ne")) == 0) {
+            // Get the int key (eg: APP1 vs 'a')
+            int key = findNE(d_data);
+            if (key >= 0)
+              N2Event[mode_id][key] = event_id;
 
-#ifdef _INPUTDEBUG_
-	  } else if (input_errors_count < MAX_INPUT_ERRORS) {
-	    _stprintf(input_errors[input_errors_count++], TEXT("Invalid type: %s at %i"), d_type, line);
-#endif
+            #ifdef _INPUTDEBUG_
+            else if (input_errors_count < MAX_INPUT_ERRORS)
+            _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
+            #endif
 
-	  }
+          // label only - no key associated (label can still be touch screen)
+          } else if (_tcscmp(d_type, TEXT("label")) == 0) {
+            // Nothing to do here...
 
-	  token = _tcstok( NULL, TEXT(" "));
-	}
+          #ifdef _INPUTDEBUG_
+          } else if (input_errors_count < MAX_INPUT_ERRORS) {
+            _stprintf(input_errors[input_errors_count++], TEXT("Invalid type: %s at %i"), d_type, line);
+          #endif
 
+          }
+
+          token = _tcstok(NULL, TEXT(" "));
+        }
       }
 
       // Clear all data.
@@ -362,72 +377,80 @@ void InputEvents::readFile() {
 
     } else {
       if (_tcscmp(key, TEXT("mode")) == 0) {
-	if (_tcslen(value) < 1024) {
-	  some_data = true;	// Success, we have a real entry
-	  _tcscpy(d_mode, value);
-	}
+        if (_tcslen(value) < 1024) {
+          some_data = true; // Success, we have a real entry
+          _tcscpy(d_mode, value);
+        }
       } else if (_tcscmp(key, TEXT("type")) == 0) {
-	if (_tcslen(value) < 256)
-	  _tcscpy(d_type, value);
+        if (_tcslen(value) < 256)
+          _tcscpy(d_type, value);
       } else if (_tcscmp(key, TEXT("data")) == 0) {
-	if (_tcslen(value) < 256)
-	  _tcscpy(d_data, value);
+        if (_tcslen(value) < 256)
+          _tcscpy(d_data, value);
       } else if (_tcscmp(key, TEXT("event")) == 0) {
-	if (_tcslen(value) < 256) {
-	  _tcscpy(d_event, TEXT(""));
-	  _tcscpy(d_misc, TEXT(""));
-	  int ef;
-#if defined(__BORLANDC__	)
-	  memset(d_event, 0, sizeof(d_event));
-	  memset(d_misc, 0, sizeof(d_event));
-	  if (_tcschr(value, ' ') == NULL){
-	    _tcscpy(d_event, value);
-	  } else {
-#endif
-	    ef = _stscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().,]"), d_event, d_misc);
-#if defined(__BORLANDC__	)
-	  }
-#endif
+        if (_tcslen(value) < 256) {
+          _tcscpy(d_event, TEXT(""));
+          _tcscpy(d_misc, TEXT(""));
+          int ef;
 
-	  // TODO code: Can't use token here - breaks
-	  // other token - damn C - how about
-	  // C++ String class ?
+          #if defined(__BORLANDC__)
+          memset(d_event, 0, sizeof(d_event));
+          memset(d_misc, 0, sizeof(d_event));
+          if (_tcschr(value, ' ') == NULL) {
+            _tcscpy(d_event, value);
+          } else {
+          #endif
 
-	  // TCHAR *eventtoken;
-	  // eventtoken = _tcstok(value, TEXT(" "));
-	  // d_event = token;
-	  // eventtoken = _tcstok(value, TEXT(" "));
+          ef = _stscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().,]"), d_event,
+              d_misc);
 
-	  if ((ef == 1) || (ef == 2)) {
+          #if defined(__BORLANDC__)
+          }
+          #endif
 
-	    // TODO code: Consider reusing existing identical events
+          // TODO code: Can't use token here - breaks
+          // other token - damn C - how about
+          // C++ String class ?
 
-	    pt2Event event = findEvent(d_event);
-	    if (event) {
-	      event_id = makeEvent(event,
-                                   StringMallocParse(d_misc), event_id);
-#ifdef _INPUTDEBUG_
-	    } else  if (input_errors_count < MAX_INPUT_ERRORS) {
-	      _stprintf(input_errors[input_errors_count++],
-                        TEXT("Invalid event type: %s at %i"), d_event, line);
-#endif
-	    }
-#ifdef _INPUTDEBUG_
-	  } else  if (input_errors_count < MAX_INPUT_ERRORS) {
-	    _stprintf(input_errors[input_errors_count++],
-                      TEXT("Invalid event type at %i"), line);
-#endif
-	  }
-	}
+          // TCHAR *eventtoken;
+          // eventtoken = _tcstok(value, TEXT(" "));
+          // d_event = token;
+          // eventtoken = _tcstok(value, TEXT(" "));
+
+          if ((ef == 1) || (ef == 2)) {
+
+            // TODO code: Consider reusing existing identical events
+
+            pt2Event event = findEvent(d_event);
+            if (event) {
+              event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
+
+            #ifdef _INPUTDEBUG_
+            } else if (input_errors_count < MAX_INPUT_ERRORS) {
+              _stprintf(input_errors[input_errors_count++],
+                  TEXT("Invalid event type: %s at %i"), d_event, line);
+            #endif
+
+            }
+
+          #ifdef _INPUTDEBUG_
+          } else if (input_errors_count < MAX_INPUT_ERRORS) {
+            _stprintf(input_errors[input_errors_count++],
+                TEXT("Invalid event type at %i"), line);
+          #endif
+
+          }
+        }
       } else if (_tcscmp(key, TEXT("label")) == 0) {
-	_tcscpy(d_label, value);
+        _tcscpy(d_label, value);
       } else if (_tcscmp(key, TEXT("location")) == 0) {
-	_stscanf(value, TEXT("%d"), &d_location);
+        _stscanf(value, TEXT("%d"), &d_location);
 
-#ifdef _INPUTDEBUG_
+      #ifdef _INPUTDEBUG_
       } else if (input_errors_count < MAX_INPUT_ERRORS) {
-	_stprintf(input_errors[input_errors_count++], TEXT("Invalid key/value pair %s=%s at %i"), key, value, line);
-#endif
+        _stprintf(input_errors[input_errors_count++], TEXT("Invalid key/value pair %s=%s at %i"), key, value, line);
+      #endif
+
       }
     }
 
@@ -438,11 +461,12 @@ void InputEvents::readFile() {
   SetRegistryString(szRegistryInputFile, szFile1);
 
   fclose(fp);
-
 }
 
 #ifdef _INPUTDEBUG_
-void InputEvents::showErrors() {
+void
+InputEvents::showErrors()
+{
   TCHAR buffer[2048];
   int i;
   for (i = 0; i < input_errors_count; i++) {
@@ -453,8 +477,9 @@ void InputEvents::showErrors() {
 }
 #endif
 
-int InputEvents::findKey(const TCHAR *data) {
-
+int
+InputEvents::findKey(const TCHAR *data)
+{
   if (_tcscmp(data, TEXT("APP1")) == 0)
     return VK_APP1;
   else if (_tcscmp(data, TEXT("APP2")) == 0)
@@ -467,6 +492,7 @@ int InputEvents::findKey(const TCHAR *data) {
     return VK_APP5;
   else if (_tcscmp(data, TEXT("APP6")) == 0)
     return VK_APP6;
+
   else if (_tcscmp(data, TEXT("F1")) == 0)
     return VK_F1;
   else if (_tcscmp(data, TEXT("F2")) == 0)
@@ -488,19 +514,20 @@ int InputEvents::findKey(const TCHAR *data) {
   else if (_tcscmp(data, TEXT("F10")) == 0)
     return VK_F10;
 // VENTA-TEST HANDLING EXTRA HW KEYS ON HX4700 and HP31X
-//  else if (_tcscmp(data, TEXT("F11")) == 0)
+// else if (_tcscmp(data, TEXT("F11")) == 0)
 //  return VK_F11;
 // else if (_tcscmp(data, TEXT("F12")) == 0)
 //    return VK_F12;
+
   else if (_tcscmp(data, TEXT("LEFT")) == 0)
     return VK_LEFT;
   else if (_tcscmp(data, TEXT("RIGHT")) == 0)
     return VK_RIGHT;
   else if (_tcscmp(data, TEXT("UP")) == 0)
     return VK_UP;
-  else if (_tcscmp(data, TEXT("DOWN")) == 0) {
+  else if (_tcscmp(data, TEXT("DOWN")) == 0)
     return VK_DOWN;
-		}
+
   else if (_tcscmp(data, TEXT("RETURN")) == 0)
     return VK_RETURN;
   else if (_tcscmp(data, TEXT("ESCAPE")) == 0)
@@ -508,46 +535,59 @@ int InputEvents::findKey(const TCHAR *data) {
 
   else if (_tcslen(data) == 1)
     return _totupper(data[0]);
+
   else
     return 0;
 
 }
 
-pt2Event InputEvents::findEvent(const TCHAR *data) {
+pt2Event
+InputEvents::findEvent(const TCHAR *data)
+{
   int i;
   for (i = 0; i < Text2Event_count; i++) {
     if (_tcscmp(data, Text2Event[i].text) == 0)
       return Text2Event[i].event;
   }
+
   return NULL;
 }
 
-int InputEvents::findGCE(const TCHAR *data) {
+int
+InputEvents::findGCE(const TCHAR *data)
+{
   int i;
   for (i = 0; i < GCE_COUNT; i++) {
     if (_tcscmp(data, Text2GCE[i]) == 0)
       return i;
   }
+
   return -1;
 }
 
-int InputEvents::findNE(const TCHAR *data) {
+int
+InputEvents::findNE(const TCHAR *data)
+{
   int i;
   for (i = 0; i < NE_COUNT; i++) {
     if (_tcscmp(data, Text2NE[i]) == 0)
       return i;
   }
+
   return -1;
 }
 
 // Create EVENT Entry
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
-int InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next) {
-  if (Events_count >= MAX_EVENTS){
+int
+InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next)
+{
+  if (Events_count >= MAX_EVENTS) {
     assert(0);
     return 0;
   }
+
   Events_count++;	// NOTE - Starts at 1 - 0 is a noop
   Events[Events_count].event = event;
   Events[Events_count].misc = misc;
@@ -560,12 +600,14 @@ int InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int 
 // Make a new label (add to the end each time)
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
-void InputEvents::makeLabel(int mode_id, const TCHAR* label, int location, int event_id) {
+void
+InputEvents::makeLabel(int mode_id, const TCHAR* label, int location, int event_id)
+{
 
-//  int i;
+  // int i;
 
-/*
-  // experimental, dont work becuase after loaded default strings are static, after laoding
+  /*
+  // experimental, dont work because after loaded default strings are static, after loading
   //               from file some strings are static some not
   // add code for overwrite existing mode,location label
   for (i=0; i<ModeLabel_count[mode_id]; i++){
@@ -579,7 +621,8 @@ void InputEvents::makeLabel(int mode_id, const TCHAR* label, int location, int e
       return;
     }
   }
-*/
+  */
+
   if ((mode_id >= 0) && (mode_id < MAX_MODE) && (ModeLabel_count[mode_id] < MAX_LABEL)) {
     ModeLabel[mode_id][ModeLabel_count[mode_id]].label = label;
     ModeLabel[mode_id][ModeLabel_count[mode_id]].location = location;
@@ -616,8 +659,8 @@ InputEvents::mode2int(const TCHAR *mode, bool create)
   return MODE_INVALID;
 }
 
-
-void InputEvents::setMode(mode mode)
+void
+InputEvents::setMode(mode mode)
 {
   assert(mode < mode_map_count);
 
@@ -629,13 +672,13 @@ void InputEvents::setMode(mode mode)
   // TODO code: Enable this in debug modes
   // for debugging at least, set mode indicator on screen
   /*
-     if (thismode==0) {
-     ButtonLabel::SetLabelText(0,NULL);
-     } else {
-     ButtonLabel::SetLabelText(0,mode);
-     }
+  if (thismode == 0) {
+    ButtonLabel::SetLabelText(0, NULL);
+  } else {
+    ButtonLabel::SetLabelText(0, mode);
+  }
   */
-  ButtonLabel::SetLabelText(0,NULL);
+  ButtonLabel::SetLabelText(0, NULL);
 
   drawButtons(current_mode);
   /*
@@ -655,16 +698,19 @@ void InputEvents::setMode(mode mode)
   */
 }
 
-void InputEvents::setMode(const TCHAR *mode) {
+void
+InputEvents::setMode(const TCHAR *mode)
+{
   InputEvents::mode thismode;
 
   assert(mode != NULL);
 
   // Mode must already exist to use it here...
-  thismode = mode2int(mode,false);
-  if (thismode == MODE_INVALID) // Technically an error in config (eg
-			// event=Mode DoesNotExist)
-    return;	// TODO enhancement: Add debugging here
+  thismode = mode2int(mode, false);
+  // Technically an error in config (eg event=Mode DoesNotExist)
+  if (thismode == MODE_INVALID)
+    // TODO enhancement: Add debugging here
+    return;
 
   setMode(thismode);
 }
@@ -674,21 +720,20 @@ InputEvents::drawButtons(mode Mode)
 {
   int i;
 
-  if (!globalRunningEvent.test()) return;
+  if (!globalRunningEvent.test())
+    return;
 
   for (i = 0; i < ModeLabel_count[Mode]; i++) {
     if ((ModeLabel[Mode][i].location > 0)) {
-
-      ButtonLabel::SetLabelText(
-        ModeLabel[Mode][i].location,
-        ModeLabel[Mode][i].label
-      );
-
+      ButtonLabel::SetLabelText(ModeLabel[Mode][i].location,
+          ModeLabel[Mode][i].label);
     }
   }
 }
 
-InputEvents::mode InputEvents::getModeID() {
+InputEvents::mode
+InputEvents::getModeID()
+{
   return current_mode;
 }
 
@@ -696,20 +741,21 @@ InputEvents::mode InputEvents::getModeID() {
 // Processing functions - which one to do
 // -----------------------------------------------------------------------
 
-
 // Input is a via the user touching the label on a touch screen / mouse
-bool InputEvents::processButton(int bindex) {
-  if (!globalRunningEvent.test()) return false;
+bool
+InputEvents::processButton(int bindex)
+{
+  if (!globalRunningEvent.test())
+    return false;
 
   mode thismode = getModeID();
 
   int i;
   // Note - reverse order - last one wins
   for (i = ModeLabel_count[thismode]; i >= 0; i--) {
-    if ((ModeLabel[thismode][i].location == bindex)
-	// && (ModeLabel[thismode][i].label != NULL)
-	// JMW removed requirement of having a label!
-	) {
+    if ((ModeLabel[thismode][i].location == bindex)) {
+      // && (ModeLabel[thismode][i].label != NULL)
+      // JMW removed requirement of having a label!
 
       mode lastMode = thismode;
 
@@ -724,9 +770,8 @@ bool InputEvents::processButton(int bindex) {
       }
 
       // experimental: update button text, macro may change the label
-      if ((lastMode == getModeID())
-          && (ModeLabel[thismode][i].label != NULL)
-          && (ButtonLabel::ButtonVisible[bindex])){
+      if ((lastMode == getModeID()) && (ModeLabel[thismode][i].label != NULL)
+          && (ButtonLabel::ButtonVisible[bindex])) {
         drawButtons(thismode);
       }
 
@@ -743,8 +788,11 @@ bool InputEvents::processButton(int bindex) {
   Future will also allow for long and double click presses...
   Return = We had a valid key (even if nothing happens because of Bounce)
 */
-bool InputEvents::processKey(int dWord) {
-  if (!globalRunningEvent.test()) return false;
+bool
+InputEvents::processKey(int dWord)
+{
+  if (!globalRunningEvent.test())
+    return false;
 
   /* JMW illegal, should be done by gui handler loop
   InterfaceTimeoutReset();
@@ -759,24 +807,22 @@ bool InputEvents::processKey(int dWord) {
   // get current mode
   InputEvents::mode mode = InputEvents::getModeID();
 
-
-
   // Which key - can be defined locally or at default (fall back to default)
   event_id = Key2Event[mode][dWord];
 
-// VENTA- DEBUG HARDWARE KEY PRESSED
-#ifdef VENTA_DEBUG_KEY
-	TCHAR ventabuffer[80];
-	_stprintf(ventabuffer,TEXT("PRCKEY %d MODE %d EVENT %d"), dWord, mode,event_id);
-	DoStatusMessage(ventabuffer);
-#endif
+  #ifdef VENTA_DEBUG_KEY
+  // VENTA- DEBUG HARDWARE KEY PRESSED
+  TCHAR ventabuffer[80];
+  _stprintf(ventabuffer,TEXT("PRCKEY %d MODE %d EVENT %d"), dWord, mode,event_id);
+  DoStatusMessage(ventabuffer);
+  #endif
+
   if (event_id == 0) {
     // go with default key..
     event_id = Key2Event[0][dWord];
   }
 
   if (event_id > 0) {
-
     int bindex = -1;
     InputEvents::mode lastMode = mode;
     const TCHAR *pLabelText = NULL;
@@ -789,7 +835,7 @@ bool InputEvents::processKey(int dWord) {
       if ((ModeLabel[mode][i].event == event_id)) {
         bindex = ModeLabel[mode][i].location;
         pLabelText = ModeLabel[mode][i].label;
-        if (bindex>0) {
+        if (bindex > 0) {
           ButtonLabel::AnimateButton(bindex);
         }
       }
@@ -799,8 +845,8 @@ bool InputEvents::processKey(int dWord) {
       InputEvents::processGo(event_id);
 
     // experimental: update button text, macro may change the value
-    if ((lastMode == getModeID()) && (bindex > 0) &&
-	(pLabelText != NULL) && ButtonLabel::ButtonVisible[bindex]) {
+    if ((lastMode == getModeID()) && (bindex > 0) && (pLabelText != NULL)
+        && ButtonLabel::ButtonVisible[bindex]) {
       drawButtons(lastMode);
     }
 
@@ -810,13 +856,14 @@ bool InputEvents::processKey(int dWord) {
   return false;
 }
 
-
-bool InputEvents::processNmea(int ne_id) {
+bool
+InputEvents::processNmea(int ne_id)
+{
   // add an event to the bottom of the queue
   mutexEventQueue.Lock();
-  for (int i=0; i< MAX_NMEA_QUEUE; i++) {
-    if (NMEA_Queue[i]== -1) {
-      NMEA_Queue[i]= ne_id;
+  for (int i = 0; i < MAX_NMEA_QUEUE; i++) {
+    if (NMEA_Queue[i] == -1) {
+      NMEA_Queue[i] = ne_id;
       break;
     }
   }
@@ -829,8 +876,12 @@ bool InputEvents::processNmea(int ne_id) {
   Take hard coded inputs from NMEA processor.
   Return = TRUE if we have a valid key match
 */
-bool InputEvents::processNmea_real(int ne_id) {
-  if (!globalRunningEvent.test()) return false;
+bool
+InputEvents::processNmea_real(int ne_id)
+{
+  if (!globalRunningEvent.test())
+    return false;
+
   int event_id = 0;
 
   // JMW not required
@@ -860,65 +911,70 @@ bool InputEvents::processNmea_real(int ne_id) {
 
 
 // This should be called ONLY by the GUI thread.
-void InputEvents::DoQueuedEvents(void) {
+void
+InputEvents::DoQueuedEvents(void)
+{
   int GCE_Queue_copy[MAX_GCE_QUEUE];
   int NMEA_Queue_copy[MAX_NMEA_QUEUE];
   int i;
 
   // copy the queue first, blocking
   mutexEventQueue.Lock();
-  for (i=0; i<MAX_GCE_QUEUE; i++) {
-    GCE_Queue_copy[i]= GCE_Queue[i];
+  for (i = 0; i < MAX_GCE_QUEUE; i++) {
+    GCE_Queue_copy[i] = GCE_Queue[i];
   }
-  for (i=0; i<MAX_NMEA_QUEUE; i++) {
-    NMEA_Queue_copy[i]= NMEA_Queue[i];
+  for (i = 0; i < MAX_NMEA_QUEUE; i++) {
+    NMEA_Queue_copy[i] = NMEA_Queue[i];
   }
   mutexEventQueue.Unlock();
 
   // process each item in the queue
-  for (i=0; i< MAX_GCE_QUEUE; i++) {
-    if (GCE_Queue_copy[i]!= -1) {
+  for (i = 0; i < MAX_GCE_QUEUE; i++) {
+    if (GCE_Queue_copy[i] != -1) {
       processGlideComputer_real(GCE_Queue_copy[i]);
     }
   }
-  for (i=0; i< MAX_NMEA_QUEUE; i++) {
-    if (NMEA_Queue_copy[i]!= -1) {
+  for (i = 0; i < MAX_NMEA_QUEUE; i++) {
+    if (NMEA_Queue_copy[i] != -1) {
       processNmea_real(NMEA_Queue_copy[i]);
     }
   }
 
   // now flush the queue, again blocking
   mutexEventQueue.Lock();
-  for (i=0; i<MAX_GCE_QUEUE; i++) {
-    GCE_Queue[i]= -1;
+  for (i = 0; i < MAX_GCE_QUEUE; i++) {
+    GCE_Queue[i] = -1;
   }
-  for (i=0; i<MAX_NMEA_QUEUE; i++) {
-    NMEA_Queue[i]= -1;
+  for (i = 0; i < MAX_NMEA_QUEUE; i++) {
+    NMEA_Queue[i] = -1;
   }
   mutexEventQueue.Unlock();
-
 }
 
-
-bool InputEvents::processGlideComputer(int gce_id) {
+bool
+InputEvents::processGlideComputer(int gce_id)
+{
   // add an event to the bottom of the queue
   mutexEventQueue.Lock();
-  for (int i=0; i< MAX_GCE_QUEUE; i++) {
-    if (GCE_Queue[i]== -1) {
-      GCE_Queue[i]= gce_id;
+  for (int i = 0; i < MAX_GCE_QUEUE; i++) {
+    if (GCE_Queue[i] == -1) {
+      GCE_Queue[i] = gce_id;
       break;
     }
   }
   mutexEventQueue.Unlock();
-  return true; // ok.
+  return true;
 }
 
 /*
   InputEvents::processGlideComputer
   Take virtual inputs from a Glide Computer to do special events
 */
-bool InputEvents::processGlideComputer_real(int gce_id) {
-  if (!globalRunningEvent.test()) return false;
+bool
+InputEvents::processGlideComputer_real(int gce_id)
+{
+  if (!globalRunningEvent.test())
+    return false;
   int event_id = 0;
 
   // TODO feature: Log glide computer events to IGC file
@@ -945,17 +1001,18 @@ bool InputEvents::processGlideComputer_real(int gce_id) {
   return false;
 }
 
-
 // EXECUTE an Event - lookup event handler and call back - no return
-void InputEvents::processGo(int eventid) {
-  if (!globalRunningEvent.test()) return;
+void
+InputEvents::processGo(int eventid)
+{
+  if (!globalRunningEvent.test())
+    return;
 
-  //
   // TODO feature: event/macro recorder
   /*
-    if (LoggerActive) {
+  if (LoggerActive) {
     LoggerNoteEvent(Events[eventid].);
-    }
+  }
   */
 
   // evnentid 0 is special for "noop" - otherwise check event
@@ -968,7 +1025,6 @@ void InputEvents::processGo(int eventid) {
     if (Events[eventid].next > 0)
       InputEvents::processGo(Events[eventid].next);
   }
-  return;
 }
 
 #include "SettingsUser.hpp"
@@ -976,23 +1032,30 @@ void InputEvents::processGo(int eventid) {
 
 int InputEvents::MenuTimeOut = 0;
 
-void InputEvents::HideMenu() {
+void
+InputEvents::HideMenu()
+{
   MenuTimeOut = MenuTimeoutMax;
   ProcessMenuTimer();
   ResetDisplayTimeOut();
 }
 
-void InputEvents::ResetMenuTimeOut() {
+void
+InputEvents::ResetMenuTimeOut()
+{
   ResetDisplayTimeOut();
   MenuTimeOut = 0;
 }
 
-void InputEvents::ShowMenu() {
-#if !defined(GNAV) && !defined(PCGNAV)
+void
+InputEvents::ShowMenu()
+{
+  #if !defined(GNAV) && !defined(PCGNAV)
   // Popup exit button if in .xci
   // setMode(TEXT("Exit"));
   setMode(MODE_MENU); // VENTA3
-#endif
+  #endif
+
   ResetDisplayTimeOut();
   MenuTimeOut = 0;
   ProcessMenuTimer();
@@ -1001,24 +1064,27 @@ void InputEvents::ShowMenu() {
 #include "MapWindowProjection.hpp"
 #include "InfoBoxManager.h"
 
-void InputEvents::ProcessMenuTimer() {
+void
+InputEvents::ProcessMenuTimer()
+{
   if (InfoBoxManager::IsFocus()) {
     setMode(MODE_INFOBOX);
   } else {
-    if(MenuTimeOut==MenuTimeoutMax) {
-      if (SettingsMap().EnablePan
-	  && !SettingsMap().TargetPan) {
+    if (MenuTimeOut == MenuTimeoutMax) {
+      if (SettingsMap().EnablePan && !SettingsMap().TargetPan) {
         setMode(MODE_PAN);
       } else {
         setMode(MODE_DEFAULT);
       }
     }
+
     MenuTimeOut++;
   }
 }
 
 void
-InputEvents::ProcessTimer() {
+InputEvents::ProcessTimer()
+{
   if (globalRunningEvent.test()) {
     DoQueuedEvents();
   }
