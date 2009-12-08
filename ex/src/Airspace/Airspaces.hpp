@@ -132,10 +132,12 @@ public:
    * @param loc location of origin of search
    * @param vec vector of line along with to search for intersections
    * @param visitor visitor class to call on airspaces intersected by line
+   * @param fill_end whether to create fake point for orphaned entry point
    */
   void visit_intersecting(const GEOPOINT &loc, 
                           const GeoVector &vec,
-                          AirspaceIntersectionVisitor& visitor) const;
+                          AirspaceIntersectionVisitor& visitor,
+                          const bool fill_end=false) const;
 
   /** 
    * Search for airspaces nearest to the aircraft.

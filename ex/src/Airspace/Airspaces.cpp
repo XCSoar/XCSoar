@@ -83,7 +83,8 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
 void 
 Airspaces::visit_intersecting(const GEOPOINT &loc, 
                               const GeoVector &vec,
-                              AirspaceIntersectionVisitor& visitor) const
+                              AirspaceIntersectionVisitor& visitor,
+                              const bool fill_end) const
 {
   FlatRay ray(task_projection.project(loc), 
               task_projection.project(vec.end_point(loc)));
@@ -103,9 +104,7 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
   for (std::deque<Airspace>::iterator v=vectors.begin();
        v != vectors.end(); v++) {
     if (v->intersects(ray)) {
-      GEOPOINT p;
-      if (v->intersects(loc, vec, p)) {
-        visitor.set_point_intersect(p);
+      if (visitor.set_intersections(v->intersects(loc, vec, fill_end))) {
         visitor(*v);
       }
     }
@@ -132,7 +131,7 @@ Airspaces::scan_range(const AIRCRAFT_STATE &state,
   for (std::deque<Airspace>::iterator v=vectors.begin();
        v != vectors.end(); v++) {
     if ((*v).distance(bb_target)<= range) {
-      if ((*v).inside(state) || (range>0)) {
+      if ((*v).inside(state.Location) || (range>0)) {
         res.push_back(*v);
       }
     }        
@@ -160,7 +159,7 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state) const
         count_intersections++;
 #endif
 
-    if (!(*v).inside(state)) {
+    if (!(*v).inside(state.Location)) {
       vectors.erase(v);
     } else {
       v++;

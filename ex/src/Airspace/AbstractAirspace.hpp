@@ -47,6 +47,9 @@
 class AtmosphericPressure;
 class SETTINGS_COMPUTER;
 
+#include <vector>
+typedef std::vector< std::pair<GEOPOINT,GEOPOINT> > AirspaceIntersectionVector;
+
 /**
  * Abstract base class for airspace regions
  */
@@ -84,14 +87,14 @@ public:
   virtual const GEOPOINT get_center() const = 0;
 
   /** 
-   * Checks whether an aircraft is inside the airspace.
+   * Checks whether an observer is inside the airspace.
    * This is slow because it uses geodesic calculations
    * 
    * @param loc State about which to test inclusion
    * 
    * @return true if aircraft is inside airspace boundary
    */
-  virtual bool inside(const AIRCRAFT_STATE &loc) const = 0;
+  virtual bool inside(const GEOPOINT &loc) const = 0;
 
   /** 
    * Checks whether a line intersects with the airspace.
@@ -99,14 +102,13 @@ public:
    * 
    * @param g1 Location of origin of search vector
    * @param vec Line from origin
-   * @param tp Projection used by flat-earth representation
-   * @param p Point written to of first intersection point (if any)
+   * @param fill_end whether to create fake point for orphaned entry point
    * 
-   * @return true if the line intersects the airspace
+   * @return Vector of intersection pairs if the line intersects the airspace
    */
-  virtual bool intersects(const GEOPOINT& g1, 
-                          const GeoVector &vec,
-                          GEOPOINT& p) const = 0;
+  virtual AirspaceIntersectionVector intersects(const GEOPOINT& g1, 
+                                                const GeoVector &vec,
+                                                const bool fill_end=false) const = 0;
 
 /** 
  * Find location of closest point on boundary to a reference

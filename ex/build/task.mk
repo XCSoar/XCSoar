@@ -6,6 +6,7 @@ TASK_SRC	:=\
 	$(topdir)/src/Airspace/AirspaceCircle.cpp \
 	$(topdir)/src/Airspace/AirspacePolygon.cpp \
 	$(topdir)/src/Airspace/Airspaces.cpp \
+	$(topdir)/src/Airspace/AirspaceIntersectSort.cpp \
 	$(topdir)/src/Airspace/AirspaceVisitor.cpp \
 	$(topdir)/src/Atmosphere/Pressure.cpp \
 	$(topdir)/src/GlideSolvers/GlideState.cpp \

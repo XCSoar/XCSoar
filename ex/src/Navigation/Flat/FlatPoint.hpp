@@ -115,6 +115,34 @@ struct FlatPoint
  * @return Magnitude squared
  */
   fixed mag_sq() const;
+
+/** 
+ * Find sqrt(dx*dx+dy*dy)
+ * @return Magnitude 
+ */
+  fixed mag() const;
+
+/** 
+ * Test whether two points are co-located
+ * 
+ * @param other Point to compare
+ * 
+ * @return True if coincident
+ */
+  bool operator== (const FlatPoint &other) const {
+    return (x == other.x) && (y == other.y);
+  };
+
+/** 
+ * Calculate dot product of one point with another
+ * 
+ * @param other That point
+ * 
+ * @return Dot product
+ */
+  fixed dot(const FlatPoint &other) const {
+    return x*other.x+y*other.y;
+  }
 };
 
 #endif

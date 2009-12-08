@@ -37,13 +37,12 @@
 #include "AirspacePolygon.hpp"
 #include "Math/Earth.hpp"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
+#include "AirspaceIntersectSort.hpp"
 #include <assert.h>
 
 AirspacePolygon::AirspacePolygon(const std::vector<GEOPOINT>& pts,
   const bool prune)
 {
-  assert(pts.size()>1);
-
   if (pts.size()<2) {
     m_is_convex = true;
   } else {
@@ -122,28 +121,22 @@ AirspacePolygon::get_bounding_box(const TaskProjection& task_projection)
 }
 
 bool 
-AirspacePolygon::inside(const AIRCRAFT_STATE &loc) const
+AirspacePolygon::inside(const GEOPOINT &loc) const
 {
-  return PolygonInterior(loc.Location, m_border);
+  return PolygonInterior(loc, m_border);
 }
 
 
-bool 
+AirspaceIntersectionVector
 AirspacePolygon::intersects(const GEOPOINT& start, 
                             const GeoVector &vec,
-                            GEOPOINT &p) const
+                            const bool fill_end) const
 {
-  if (PolygonInterior(start, m_border)) {
-    // starts inside!
-    p = start;
-    return true;
-  }
-
   const GEOPOINT end = vec.end_point(start);
   const FlatRay ray(m_task_projection->project(start),
                     m_task_projection->project(end));
 
-  fixed t_best = fixed_two;
+  AirspaceIntersectSort sorter(start, end, *this);
 
   for (SearchPointVector::const_iterator it= m_border.begin();
        it+1 != m_border.end(); ++it) {
@@ -152,18 +145,14 @@ AirspacePolygon::intersects(const GEOPOINT& start,
                         (it+1)->get_flatLocation());
 
     const fixed t = ray.intersects(r_seg);
-    if (positive(t) && (t<t_best)) {
-      FLAT_GEOPOINT x = ray.parametric(t);
-      t_best = t;
+    
+    if ((t>=fixed_zero) && (t<fixed_one)) {
+      sorter.add(t, m_task_projection->unproject(ray.parametric(t)));
     }
   }
-  if (positive(t_best) && (t_best<fixed_one)) {
-    FLAT_GEOPOINT fp = ray.parametric(t_best);
-    p = m_task_projection->unproject(fp);
-    return true;
-  }
-  return false;
+  return sorter.all(fill_end);
 }
+
 
 GEOPOINT 
 AirspacePolygon::closest_point(const GEOPOINT& loc) const

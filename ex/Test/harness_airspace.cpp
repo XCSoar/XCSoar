@@ -131,10 +131,14 @@ public:
   }
   virtual void intersection(const AbstractAirspace& as) {
 #ifdef DO_PRINT
-    GEOPOINT c = m_point_intersect;
     *fout << "# intersection point\n";
-    *fout << c.Longitude << " " << c.Latitude << " " << "\n";
-    *fout << location.Longitude << " " << location.Latitude << " " << "\n\n";
+    for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();
+         it != m_intersections.end(); ++it) {
+      const GEOPOINT start = (it->first);
+      const GEOPOINT end = (it->second);
+      *fout << start.Longitude << " " << start.Latitude << " " << "\n";
+      *fout << end.Longitude << " " << end.Latitude << " " << "\n\n";
+    }
 #endif
   }
   virtual void Visit(const AirspaceCircle& as) {
@@ -238,7 +242,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
                                               do_report,
                                               state.Location);
     GeoVector vec(state.Location, target);
-    airspaces.visit_intersecting(state.Location, vec, ivisitor);
+    airspaces.visit_intersecting(state.Location, vec, ivisitor, true);
   }
 
 }

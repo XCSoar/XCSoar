@@ -85,7 +85,7 @@ public:
    * 
    * @return true if aircraft is inside airspace boundary
    */
-  bool inside(const AIRCRAFT_STATE &loc) const;
+  bool inside(const GEOPOINT &loc) const;
 
   /** 
    * Checks whether a line intersects with the airspace.
@@ -93,13 +93,13 @@ public:
    * 
    * @param g1 Location of origin of search vector
    * @param vec Line from origin
-   * @param p Point written to of first intersection point (if any)
+   * @param fill_end whether to create fake point for orphaned entry point
    * 
-   * @return true if the line intersects the airspace
+   * @return Vector of intersection pairs if the line intersects the airspace
    */
-  bool intersects(const GEOPOINT& g1, 
-                  const GeoVector &vec,
-                  GEOPOINT &p) const;
+  AirspaceIntersectionVector intersects(const GEOPOINT& g1, 
+                                        const GeoVector &vec,
+                                        const bool fill_end=false) const;
 
   GEOPOINT closest_point(const GEOPOINT& loc) const;
 

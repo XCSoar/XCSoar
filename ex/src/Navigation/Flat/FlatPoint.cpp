@@ -80,3 +80,8 @@ fixed
 FlatPoint::mag_sq() const {
   return x*x+y*y;
 }
+
+fixed
+FlatPoint::mag() const {
+  return sqrt(mag_sq());
+}

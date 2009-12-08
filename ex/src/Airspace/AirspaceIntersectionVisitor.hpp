@@ -38,7 +38,7 @@
 #define AIRSPACE_INTERSECTION_VISITOR_HPP
 
 #include "AirspaceVisitor.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "AbstractAirspace.hpp"
 
 /**
  * Generic visitor for objects in the Airspaces container,
@@ -52,13 +52,16 @@ public:
  * Called by Airspaces prior to visiting the airspace to
  * make available the point to the visitor.
  * 
- * @param p Point of first intercept
+ * @param p Sorted vector of intercepts
+ *
+ * @return True if more than one intersection pair
  */
-  void set_point_intersect(const GEOPOINT& p) {
-    m_point_intersect = p;
+  bool set_intersections(const AirspaceIntersectionVector& p) {
+    m_intersections = p;
+    return !m_intersections.empty();
   }
 protected:
-  GEOPOINT m_point_intersect;
+  AirspaceIntersectionVector m_intersections;
 };
 
 #endif

@@ -38,6 +38,7 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Math/Earth.hpp"
 #include "Navigation/Flat/FlatLine.hpp"
+#include "AirspaceIntersectSort.hpp"
 
 AirspaceCircle::AirspaceCircle(const GEOPOINT &loc, 
                                const fixed _radius):
@@ -74,46 +75,49 @@ AirspaceCircle::get_bounding_box(const TaskProjection& task_projection)
 }
 
 bool 
-AirspaceCircle::inside(const AIRCRAFT_STATE &loc) const
+AirspaceCircle::inside(const GEOPOINT &loc) const
 {
-  return (loc.Location.distance(m_center)<=m_radius);
+  return (loc.distance(m_center)<=m_radius);
 }
 
-bool 
+AirspaceIntersectionVector
 AirspaceCircle::intersects(const GEOPOINT& start, 
                            const GeoVector &vec,
-                           GEOPOINT &p) const
+                           const bool fill_end) const
 {
-  if (m_center.distance(start)<= m_radius) {
-    // starts inside!
-    p = start;
-    return true;
+  const GEOPOINT end = vec.end_point(start);
+  AirspaceIntersectSort sorter(start, end, *this);
 
-  } else if (vec.minimum_distance(start, m_center) <= m_radius) {
-    /// \todo find closest intersection point p
+  const fixed f_radius = m_task_projection->fproject_range(m_center, m_radius);
+  const FlatPoint f_center = m_task_projection->fproject(m_center);
+  FlatPoint f_start = m_task_projection->fproject(start);
+  FlatPoint f_end = m_task_projection->fproject(end);
 
-    const fixed f_radius = m_task_projection->fproject_range(m_center, m_radius);
-    const FlatPoint f_center = m_task_projection->fproject(m_center);
-    FlatPoint f_start = m_task_projection->fproject(start);
-    FlatPoint f_end = m_task_projection->fproject(vec.end_point(start));
+  f_start.sub(f_center);
+  f_end.sub(f_center);
 
-    f_start.sub(f_center);
-    f_end.sub(f_center);
-    const FlatLine line(f_start, f_end);
-    FlatPoint p1, p2;
-    if (line.intersect_czero(f_radius, p1, p2)) {
-      if (p1.mag_sq()<p2.mag_sq()) {
-        // closest is p1;
-        p1.add(f_center);
-        p = m_task_projection->funproject(p1);
-      } else {
-        p2.add(f_center);
-        p = m_task_projection->funproject(p2);
+  const FlatLine line(f_start, f_end);
+  FlatPoint f_p1, f_p2;
+
+  if (line.intersect_czero(f_radius, f_p1, f_p2)) {
+
+    FlatPoint f_vec = f_end;  f_vec.sub(f_start);
+
+    f_p1.add(f_center);
+    const fixed t1 = f_p1.dot(f_vec)/f_vec.mag();
+    if ((t1>=fixed_zero) && (t1<fixed_one)) {
+      sorter.add(t1, m_task_projection->funproject(f_p1));
+    }
+
+    if (!(f_p1 == f_p2)) {
+      f_p2.add(f_center);
+      const fixed t2 = f_p2.dot(f_vec)/f_vec.mag();
+      if ((t2>=fixed_zero) && (t2<fixed_one)) {
+        sorter.add(t2, m_task_projection->funproject(f_p2));
       }
-      return true;
     }
   }
-  return false;
+  return sorter.all(fill_end);
 }
 
 
@@ -122,3 +126,5 @@ AirspaceCircle::closest_point(const GEOPOINT& loc) const
 {
   return m_center.intermediate_point(loc, m_radius);
 }
+
+
