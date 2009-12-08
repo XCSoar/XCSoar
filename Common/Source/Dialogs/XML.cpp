@@ -403,9 +403,64 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
   return(theForm);
 }
 
+static DataField *
+LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable)
+{
+  TCHAR DataType[32];
+  TCHAR DisplayFmt[32];
+  TCHAR EditFormat[32];
+  TCHAR OnDataAccess[64];
+  double Min, Max, Step;
+  int Fine;
+
+  _tcscpy(DataType,
+          StringToStringDflt(node.getAttribute(TEXT("DataType")),
+                             TEXT("")));
+  _tcscpy(DisplayFmt,
+          StringToStringDflt(node. getAttribute(TEXT("DisplayFormat")),
+                             TEXT("")));
+  _tcscpy(EditFormat,
+          StringToStringDflt(node.getAttribute(TEXT("EditFormat")),
+                             TEXT("")));
+  _tcscpy(OnDataAccess,
+          StringToStringDflt(node.getAttribute(TEXT("OnDataAccess")),
+                             TEXT("")));
+
+  Min = StringToIntDflt(node.getAttribute(TEXT("Min")), INT_MIN);
+  Max = StringToIntDflt(node.getAttribute(TEXT("Max")), INT_MAX);
+  Step = StringToFloatDflt(node.getAttribute(TEXT("Step")), 1);
+  Fine = StringToIntDflt(node.getAttribute(TEXT("Fine")), 0);
+
+  DataField::DataAccessCallback_t callback = (DataField::DataAccessCallback_t)
+    CallBackLookup(LookUpTable, OnDataAccess);
+
+  if (_tcsicmp(DataType, TEXT("enum")) == 0)
+    return new DataFieldEnum(EditFormat, DisplayFmt, false, callback);
+
+  if (_tcsicmp(DataType, TEXT("filereader")) == 0)
+    return new DataFieldFileReader(EditFormat, DisplayFmt, callback);
+
+  if (_tcsicmp(DataType, TEXT("boolean")) == 0)
+    return new DataFieldBoolean(EditFormat, DisplayFmt, false,
+                                TEXT("ON"), TEXT("OFF"), callback);
+
+  if (_tcsicmp(DataType, TEXT("double")) == 0)
+    return new DataFieldFloat(EditFormat, DisplayFmt, Min, Max, 0, Step, Fine,
+                              callback);
+
+  if (_tcsicmp(DataType, TEXT("integer")) == 0)
+    return new DataFieldInteger(EditFormat, DisplayFmt, (int)Min, (int)Max,
+                                (int)0, (int)Step, callback);
+
+  if (_tcsicmp(DataType, TEXT("string")) == 0)
+    return new DataFieldString(EditFormat, DisplayFmt, TEXT(""), callback);
+
+  return NULL;
+}
+
 static void
-LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
-                  XMLNode *Node, int ParentFont)
+LoadChild(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
+          XMLNode node, int ParentFont)
 {
   int X,Y,Width,Height,Font;
   TCHAR Caption[128];
@@ -413,224 +468,148 @@ LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
   bool Visible;
   int Border;
 
+  WindowControl *WC=NULL;
+
+  GetDefaultWindowControlProps(&node,
+                               Name,
+                               &X, &Y,
+                               &Width, &Height,
+                               &Font, Caption);
+
+  Visible = StringToIntDflt(node.getAttribute(TEXT("Visible")), 1) == 1;
+
+  Font = StringToIntDflt(node.getAttribute(TEXT("Font")), ParentFont);
+  Border = StringToIntDflt(node.getAttribute(TEXT("Border")), 0);
+
+  if (_tcscmp(node.getName(), TEXT("WndProperty")) == 0) {
+    WndProperty *W;
+    int CaptionWidth;
+    TCHAR DataNotifyCallback[128];
+    TCHAR OnHelpCallback[128];
+    int ReadOnly;
+    int MultiLine;
+
+    CaptionWidth =
+      DLGSCALE(StringToIntDflt(node.getAttribute(TEXT("CaptionWidth")),
+                               0));
+    MultiLine = StringToIntDflt(node.getAttribute(TEXT("MultiLine")), 0);
+    ReadOnly = StringToIntDflt(node.getAttribute(TEXT("ReadOnly")), 0);
+
+    _tcscpy(DataNotifyCallback,
+            StringToStringDflt(node.getAttribute(TEXT("OnDataNotify")),
+                               TEXT("")));
+
+    _tcscpy(OnHelpCallback,
+            StringToStringDflt(node.getAttribute(TEXT("OnHelp")),
+                               TEXT("")));
+
+    _tcscpy(Caption,
+            StringToStringDflt(node.getAttribute(TEXT("Caption")),
+                               TEXT("")));
+
+    // TODO code: Temporary double handling to fix "const unsigned
+    // short *" to "unsigned short *" problem
+    _tcscpy(Caption, gettext(Caption));
+
+    WC = W =
+      new WndProperty(Parent, Name, Caption, X, Y,
+                      Width, Height, CaptionWidth,
+                      (WndProperty::DataChangeCallback_t)
+                      CallBackLookup(LookUpTable, DataNotifyCallback),
+                      MultiLine);
+
+    W->SetOnHelpCallback((WindowControl::OnHelpCallback_t)
+                         CallBackLookup(LookUpTable, OnHelpCallback));
+
+    W->SetHelpText(StringToStringDflt(node.getAttribute(TEXT("Help")),
+                                      TEXT("")));
+
+    Caption[0] = '\0';
+    W->SetReadOnly(ReadOnly != 0);
+
+    if (node.nChildNode(TEXT("DataField")) > 0){
+      DataField *data_field =
+        LoadDataField(node.getChildNode(TEXT("DataField"), 0),
+                      LookUpTable);
+      if (data_field != NULL)
+        W->SetDataField(data_field);
+    }
+  } else if (_tcscmp(node.getName(), TEXT("WndButton")) == 0){
+    TCHAR ClickCallback[128];
+    _tcscpy(ClickCallback, StringToStringDflt(node.getAttribute(TEXT("OnClickNotify")), TEXT("")));
+
+    WC = new WndButton(Parent, Name, Caption, X, Y, Width, Height,
+                       (WndButton::ClickNotifyCallback_t)
+                       CallBackLookup(LookUpTable, ClickCallback));
+
+    Caption[0] = '\0';
+#ifndef ALTAIRSYNC
+  } else if (_tcscmp(node.getName(), TEXT("WndEventButton")) == 0){
+    TCHAR iename[100];
+    TCHAR ieparameters[100];
+    _tcscpy(iename,
+            StringToStringDflt(node.
+                               getAttribute(TEXT("InputEvent")),
+                               TEXT("")));
+    _tcscpy(ieparameters,
+            StringToStringDflt(node.
+                               getAttribute(TEXT("Parameters")),
+                               TEXT("")));
+
+    WC = new WndEventButton(Parent, Name, Caption, X, Y, Width, Height,
+                            iename, ieparameters);
+
+    Caption[0] = '\0';
+#endif
+  } else if (_tcscmp(node.getName(), TEXT("WndOwnerDrawFrame")) == 0){
+    TCHAR PaintCallback[128];
+    _tcscpy(PaintCallback,
+            StringToStringDflt(node.getAttribute(TEXT("OnPaint")), TEXT("")));
+    WC = new WndOwnerDrawFrame(Parent, Name, X, Y, Width, Height,
+                               (WndOwnerDrawFrame::OnPaintCallback_t)
+                               CallBackLookup(LookUpTable, PaintCallback));
+  } else if (_tcscmp(node.getName(), TEXT("WndFrame")) == 0){
+    WC = new WndFrame(Parent, Name, X, Y, Width, Height);
+
+    // recursivly create dialog
+    LoadChildsFromXML(WC, LookUpTable, &node, ParentFont);
+  } else if (_tcscmp(node.getName(), TEXT("WndListFrame")) == 0){
+    TCHAR ListCallback[128];
+    _tcscpy(ListCallback,
+            StringToStringDflt(node.getAttribute(TEXT("OnListInfo")),
+                               TEXT("")));
+    WC = new WndListFrame(Parent, Name, X, Y, Width, Height,
+                          (WndListFrame::OnListCallback_t)
+                          CallBackLookup(LookUpTable, ListCallback));
+
+    // recursivly create dialog
+    LoadChildsFromXML(WC, LookUpTable, &node, ParentFont);
+  }
+
+  if (WC != NULL){
+    if (Font != -1)
+      WC->SetFont(FontMap[Font]);
+
+    LoadColors(*WC, node);
+
+    if (!Visible)
+      WC->SetVisible(Visible);
+
+    if (Caption[0] != '\0')
+      WC->SetCaption(Caption);
+
+    if (Border != 0)
+      WC->SetBorderKind(Border);
+  }
+}
+
+static void
+LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
+                  XMLNode *Node, int ParentFont)
+{
   int Count = Node->nChildNode();
 
-  for (int i=0; i<Count; i++){
-
-    WindowControl *WC=NULL;
-
-    XMLNode childNode = Node->getChildNode(i);
-
-    GetDefaultWindowControlProps(&childNode,
-                                 Name,
-                                 &X, &Y,
-                                 &Width, &Height,
-                                 &Font, Caption);
-
-    Visible = StringToIntDflt(childNode.getAttribute(TEXT("Visible")), 1) == 1;
-
-    Font = StringToIntDflt(childNode.getAttribute(TEXT("Font")), ParentFont);
-    Border = StringToIntDflt(childNode.getAttribute(TEXT("Border")), 0);
-
-    if (_tcscmp(childNode.getName(), TEXT("WndProperty")) == 0) {
-
-      WndProperty *W;
-      int CaptionWidth;
-      TCHAR DataNotifyCallback[128];
-      TCHAR OnHelpCallback[128];
-      int ReadOnly;
-      int MultiLine;
-
-      CaptionWidth =
-        DLGSCALE(StringToIntDflt(childNode.getAttribute(TEXT("CaptionWidth")),
-                        0));
-      MultiLine =
-        StringToIntDflt(childNode.getAttribute(TEXT("MultiLine")),
-                        0);
-      ReadOnly = \
-        StringToIntDflt(childNode.getAttribute(TEXT("ReadOnly")),
-                        0);
-
-      _tcscpy(DataNotifyCallback,
-              StringToStringDflt(childNode.getAttribute(TEXT("OnDataNotify")),
-                                 TEXT("")));
-
-      _tcscpy(OnHelpCallback,
-              StringToStringDflt(childNode.getAttribute(TEXT("OnHelp")),
-                                 TEXT("")));
-
-      _tcscpy(
-		  Caption,
-			StringToStringDflt(childNode.getAttribute(TEXT("Caption")), TEXT(""))
-		);
-      // TODO code: Temporary double handling to fix "const unsigned
-      // short *" to "unsigned short *" problem
-	  _tcscpy(Caption, gettext(Caption));
-
-      WC = W =
-        new WndProperty(Parent, Name, Caption, X, Y,
-                        Width, Height, CaptionWidth,
-                        (WndProperty::DataChangeCallback_t)
-                        CallBackLookup(LookUpTable, DataNotifyCallback),
-                        MultiLine);
-
-      W->SetOnHelpCallback((WindowControl::OnHelpCallback_t)
-                           CallBackLookup(LookUpTable, OnHelpCallback));
-
-      W->SetHelpText(StringToStringDflt(
-                     childNode.getAttribute(TEXT("Help")),
-                     TEXT("")));
-
-      Caption[0] = '\0';
-      W->SetReadOnly(ReadOnly != 0);
-
-      if (childNode.nChildNode(TEXT("DataField")) > 0){
-        TCHAR DataType[32];
-        TCHAR DisplayFmt[32];
-        TCHAR EditFormat[32];
-        TCHAR OnDataAccess[64];
-        double Min, Max, Step;
-        int Fine;
-
-        XMLNode dataFieldNode =
-          childNode.getChildNode(TEXT("DataField"), 0);
-
-        _tcscpy(DataType,
-                StringToStringDflt(dataFieldNode.
-                                   getAttribute(TEXT("DataType")),
-                                   TEXT("")));
-        _tcscpy(DisplayFmt,
-                StringToStringDflt(dataFieldNode.
-                                   getAttribute(TEXT("DisplayFormat")),
-                                   TEXT("")));
-        _tcscpy(EditFormat,
-                StringToStringDflt(dataFieldNode.
-                                   getAttribute(TEXT("EditFormat")),
-                                   TEXT("")));
-        _tcscpy(OnDataAccess,
-                StringToStringDflt(dataFieldNode.
-                                   getAttribute(TEXT("OnDataAccess")),
-                                   TEXT("")));
-        ReadOnly = StringToIntDflt(dataFieldNode.
-                                   getAttribute(TEXT("ReadOnly")), 0);
-        Min = StringToIntDflt(dataFieldNode.
-                              getAttribute(TEXT("Min")), INT_MIN);
-        Max = StringToIntDflt(dataFieldNode.
-                              getAttribute(TEXT("Max")), INT_MAX);
-        Step = StringToFloatDflt(dataFieldNode.
-                                 getAttribute(TEXT("Step")), 1);
-
-	Fine = StringToIntDflt(dataFieldNode.
-			       getAttribute(TEXT("Fine")), 0);
-
-        if (_tcsicmp(DataType, TEXT("enum"))==0){
-          W->SetDataField(
-                          new DataFieldEnum(EditFormat, DisplayFmt, false,
-                                            (DataField::DataAccessCallback_t)
-                                            CallBackLookup(LookUpTable,
-                                                           OnDataAccess))
-          );
-        }
-        if (_tcsicmp(DataType, TEXT("filereader"))==0){
-          W->SetDataField(
-                          new DataFieldFileReader(EditFormat,
-                                                  DisplayFmt,
-                                                  (DataField::DataAccessCallback_t)
-                                                  CallBackLookup(LookUpTable, OnDataAccess))
-          );
-        }
-        if (_tcsicmp(DataType, TEXT("boolean"))==0){
-          W->SetDataField(
-            new DataFieldBoolean(EditFormat, DisplayFmt, false, TEXT("ON"), TEXT("OFF"),
-              (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
-          );
-        }
-        if (_tcsicmp(DataType, TEXT("double"))==0){
-          W->SetDataField(
-			  new DataFieldFloat(EditFormat, DisplayFmt, Min, Max, 0, Step, Fine,
-              (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
-          );
-        }
-        if (_tcsicmp(DataType, TEXT("integer"))==0){
-          W->SetDataField(
-                          new DataFieldInteger(EditFormat, DisplayFmt, (int)Min, (int)Max, (int)0, (int)Step,
-              (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
-          );
-        }
-        if (_tcsicmp(DataType, TEXT("string"))==0){
-          W->SetDataField(
-            new DataFieldString(EditFormat, DisplayFmt, TEXT(""),
-              (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
-          );
-        }
-      }
-    } else if (_tcscmp(childNode.getName(), TEXT("WndButton")) == 0){
-      TCHAR ClickCallback[128];
-       _tcscpy(ClickCallback, StringToStringDflt(childNode.getAttribute(TEXT("OnClickNotify")), TEXT("")));
-
-      WC = new WndButton(Parent, Name, Caption, X, Y, Width, Height,
-               (WndButton::ClickNotifyCallback_t)
-                         CallBackLookup(LookUpTable, ClickCallback));
-
-      Caption[0] = '\0';
-    } else
-
-#ifndef ALTAIRSYNC
-
-    if (_tcscmp(childNode.getName(), TEXT("WndEventButton")) == 0){
-      TCHAR iename[100];
-      TCHAR ieparameters[100];
-      _tcscpy(iename,
-              StringToStringDflt(childNode.
-                                 getAttribute(TEXT("InputEvent")),
-                                 TEXT("")));
-      _tcscpy(ieparameters,
-              StringToStringDflt(childNode.
-                                 getAttribute(TEXT("Parameters")),
-                                 TEXT("")));
-
-      WC = new WndEventButton(Parent, Name, Caption, X, Y, Width, Height,
-                              iename, ieparameters);
-
-      Caption[0] = '\0';
-    } else
-
-#endif
-
-    if (_tcscmp(childNode.getName(), TEXT("WndOwnerDrawFrame")) == 0){
-      TCHAR PaintCallback[128];
-      _tcscpy(PaintCallback, StringToStringDflt(childNode.getAttribute(TEXT("OnPaint")), TEXT("")));
-      WC = new WndOwnerDrawFrame(Parent, Name, X, Y, Width, Height,
-               (WndOwnerDrawFrame::OnPaintCallback_t) CallBackLookup(LookUpTable, PaintCallback));
-    } else if (_tcscmp(childNode.getName(), TEXT("WndFrame")) == 0){
-      WndFrame *W;
-      WC = W = new WndFrame(Parent, Name, X, Y, Width, Height);
-      LoadChildsFromXML(W, LookUpTable, &childNode, ParentFont);  // recursivly create dialog
-    } else if (_tcscmp(childNode.getName(), TEXT("WndListFrame")) == 0){
-      TCHAR ListCallback[128];
-      _tcscpy(ListCallback, StringToStringDflt(childNode.getAttribute(TEXT("OnListInfo")), TEXT("")));
-      WC = new WndListFrame(Parent, Name, X, Y, Width, Height,
-               (WndListFrame::OnListCallback_t) CallBackLookup(LookUpTable, ListCallback));
-      LoadChildsFromXML(WC, LookUpTable, &childNode, ParentFont);  // recursivly create dialog
-    }
-
-    if (WC != NULL){
-      if (Font != -1)
-        WC->SetFont(FontMap[Font]);
-
-      LoadColors(*WC, childNode);
-
-      if (!Visible){
-        WC->SetVisible(Visible);
-      }
-
-      if (Caption[0] != '\0'){
-        WC->SetCaption(Caption);
-      }
-
-      if (Border != 0){
-        WC->SetBorderKind(Border);
-      }
-    }
-  }
+  for (int i = 0; i < Count; i++)
+    LoadChild(Parent, LookUpTable,
+              Node->getChildNode(i), ParentFont);
 }
