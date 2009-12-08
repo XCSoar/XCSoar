@@ -73,7 +73,7 @@ struct Color {
   }
   #else
   Color():value(RGB(0, 0, 0)) {}
-  Color(COLORREF c):value(c) {}
+  explicit Color(COLORREF c):value(c) {}
   Color(int r, int g, int b):value(RGB(r, g, b)) {}
   #endif
 
@@ -182,9 +182,9 @@ struct HWColor {
 
   HWColor():value(0) {}
   #ifdef ENABLE_SDL
-  HWColor(Uint32 c):value(c) {}
+  explicit HWColor(Uint32 c):value(c) {}
   #else
-  HWColor(COLORREF c):value(c) {}
+  explicit HWColor(COLORREF c):value(c) {}
   #endif
 
   #ifdef ENABLE_SDL
