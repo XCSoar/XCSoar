@@ -559,7 +559,7 @@ namespace KDTree
       template <class SearchVal, class _Predicate>
       std::pair<const_iterator, distance_type>
       find_nearest_if (SearchVal const& __val, distance_type __max,
-		       _Predicate& __p) const
+		       _Predicate const &__p) const
       {
 	if (_M_get_root())
 	  {

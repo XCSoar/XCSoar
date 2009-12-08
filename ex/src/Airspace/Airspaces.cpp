@@ -45,30 +45,7 @@ extern unsigned n_queries;
 extern long count_intersections;
 #endif
 
-const std::vector<Airspace>
-Airspaces::scan_nearest(const AIRCRAFT_STATE &state) const 
-{
-  Airspace bb_target(state.Location, task_projection);
-
-  std::pair<AirspaceTree::const_iterator, double> 
-    found = airspace_tree.find_nearest(bb_target);
-
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
-
-  std::vector<Airspace> res;
-  if (found.first != airspace_tree.end()) {
-    // also should do scan_range with range = 0 since there
-    // could be more than one with zero dist
-    if (found.second==0) {
-      return scan_range(state, 0);
-    } else {
-      res.push_back(*found.first);
-    }
-  }
-  return res;
-}
+// TODO: allow for sort criterion
 
 void 
 Airspaces::visit_within_range(const GEOPOINT &loc, 
@@ -77,8 +54,22 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
 {
   Airspace bb_target(loc, task_projection);
   int mrange = task_projection.project_range(loc, range);
-  airspace_tree.visit_within_range(bb_target, -mrange, visitor);
+
+  std::deque< Airspace > vectors;
+  airspace_tree.find_within_range(bb_target, -mrange, 
+                                  std::back_inserter(vectors));
+#ifdef INSTRUMENT_TASK
+  n_queries++;
+#endif
+
+  for (std::deque<Airspace>::iterator v=vectors.begin();
+       v != vectors.end(); ++v) {
+    if (visitor.condition(*v)) {
+      visitor(*v);
+    }
+  }
 }
+
 
 void 
 Airspaces::visit_intersecting(const GEOPOINT &loc, 
@@ -101,20 +92,55 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
+
   for (std::deque<Airspace>::iterator v=vectors.begin();
-       v != vectors.end(); v++) {
-    if (v->intersects(ray)) {
-      if (visitor.set_intersections(v->intersects(loc, vec, fill_end))) {
-        visitor(*v);
+       v != vectors.end(); ++v) {
+    if (visitor.condition(*v)) {
+      if (v->intersects(ray)) {
+        if (visitor.set_intersections(v->intersects(loc, vec, fill_end))) {
+          visitor(*v);
+        }
       }
     }
   }
 }
 
 
+////////////// SCAN METHODS
+
+const std::vector<Airspace>
+Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
+                        const AirspacePredicate &condition) const 
+{
+  Airspace bb_target(state.Location, task_projection);
+
+  std::pair<AirspaceTree::const_iterator, double> 
+    found = airspace_tree.find_nearest(bb_target);
+
+#ifdef INSTRUMENT_TASK
+  n_queries++;
+#endif
+
+  std::vector<Airspace> res;
+  if (found.first != airspace_tree.end()) {
+    // also should do scan_range with range = 0 since there
+    // could be more than one with zero dist
+    if (found.second==0) {
+      return scan_range(state, 0, condition);
+    } else {
+      if (condition(*found.first->get_airspace())) {
+        res.push_back(*found.first);
+      }
+    }
+  }
+  return res;
+}
+
+
 const std::vector<Airspace>
 Airspaces::scan_range(const AIRCRAFT_STATE &state, 
-                      const fixed range) const
+                      const fixed range,
+                      const AirspacePredicate &condition) const
 {
   Airspace bb_target(state.Location, task_projection);
   int mrange = task_projection.project_range(state.Location, range);
@@ -129,8 +155,8 @@ Airspaces::scan_range(const AIRCRAFT_STATE &state,
   std::vector<Airspace> res;
 
   for (std::deque<Airspace>::iterator v=vectors.begin();
-       v != vectors.end(); v++) {
-    if ((*v).distance(bb_target)<= range) {
+       v != vectors.end(); ++v) {
+    if (condition(*v->get_airspace()) && ((*v).distance(bb_target)<= range)) {
       if ((*v).inside(state.Location) || (range>0)) {
         res.push_back(*v);
       }
@@ -141,7 +167,8 @@ Airspaces::scan_range(const AIRCRAFT_STATE &state,
 
 
 std::vector< Airspace >
-Airspaces::find_inside(const AIRCRAFT_STATE &state) const
+Airspaces::find_inside(const AIRCRAFT_STATE &state,
+                       const AirspacePredicate &condition) const
 {
   Airspace bb_target(state.Location, task_projection);
 
@@ -156,17 +183,21 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state) const
        v != vectors.end(); ) {
 
 #ifdef INSTRUMENT_TASK
-        count_intersections++;
+    count_intersections++;
 #endif
-
-    if (!(*v).inside(state.Location)) {
+    
+    if (!condition(*v->get_airspace()) || !(*v).inside(state.Location)) {
       vectors.erase(v);
     } else {
-      v++;
+      ++v;
     }
   }
   return vectors;
 }
+
+
+//////////////////
+
 
 void 
 Airspaces::optimise()
@@ -177,7 +208,7 @@ Airspaces::optimise()
     // to re-build airspace envelopes
 
     for (AirspaceTree::iterator it = airspace_tree.begin();
-         it != airspace_tree.end(); it++) {
+         it != airspace_tree.end(); ++it) {
       tmp_as.push_back(it->get_airspace());
     }
     airspace_tree.clear();
@@ -211,12 +242,6 @@ Airspaces::insert(AbstractAirspace* asp)
 }
 
 
-Airspaces::~Airspaces()
-{
-  clear();
-}
-
-
 void
 Airspaces::clear()
 {
@@ -230,7 +255,7 @@ Airspaces::clear()
 
   // delete items in the tree
   for (AirspaceTree::iterator v = airspace_tree.begin();
-       v != airspace_tree.end(); v++) {
+       v != airspace_tree.end(); ++v) {
     Airspace a = *v;
     a.destroy();
   }
@@ -251,6 +276,12 @@ Airspaces::empty() const
   return airspace_tree.empty() && tmp_as.empty();
 }
 
+Airspaces::~Airspaces()
+{
+  clear();
+}
+
+////////////////////////////////////
 
 void 
 Airspaces::set_ground_levels(const RasterTerrain &terrain)
@@ -276,3 +307,5 @@ Airspaces::set_flight_levels(const AtmosphericPressure &press)
     }
   }
 }
+
+///////////////////

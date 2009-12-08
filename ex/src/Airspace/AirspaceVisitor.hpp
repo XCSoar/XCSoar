@@ -37,11 +37,13 @@
 #ifndef AIRSPACE_VISITOR_HPP
 #define AIRSPACE_VISITOR_HPP
 
+#include "Util/GenericVisitor.hpp"
 #include "Airspace.hpp"
+#include "AirspacePredicate.hpp"
+
 class AbstractAirspace;
 class AirspacePolygon;
 class AirspaceCircle;
-#include "Util/GenericVisitor.hpp"
 
 /**
  * Generic visitor for objects in the Airspaces container
@@ -51,7 +53,16 @@ class AirspaceVisitor:
   public Visitor<AirspacePolygon>, 
   public Visitor<AirspaceCircle>
 {
-private:    
+public:
+  AirspaceVisitor(const AirspacePredicate &pred= AirspacePredicateTrue()):
+    m_predicate(&pred) {};
+
+// Predicate adaptor (forwards to visit_condition)
+  bool condition (const Airspace& as) const;
+
+protected:
+  const AirspacePredicate* m_predicate;
+private:
 };
 
 #endif

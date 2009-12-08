@@ -49,6 +49,8 @@ class AirspaceIntersectionVisitor;
 class RasterTerrain;
 class AtmosphericPressure;
 
+#include "AirspacePredicate.hpp"
+
 /**
  * Container for airspaces using kd-tree representation internally for fast 
  * geospatial lookups.
@@ -147,7 +149,9 @@ public:
    * 
    * @return single nearest airspace if external, or all airspaces enclosing the aircraft
    */
-  const std::vector<Airspace> scan_nearest(const AIRCRAFT_STATE &state) const;
+  const std::vector<Airspace> scan_nearest(const AIRCRAFT_STATE &state,
+                                           const AirspacePredicate &condition
+                                           =AirspacePredicateTrue()) const;
 
   /** 
    * Search for airspaces within range of the aircraft.
@@ -159,7 +163,9 @@ public:
    * @return vector of airspaces intersecting search radius
    */
   const std::vector<Airspace> scan_range(const AIRCRAFT_STATE &state, 
-                                         const fixed range) const;
+                                         const fixed range,
+                                         const AirspacePredicate &condition
+                                         =AirspacePredicateTrue()) const;
 
   /** 
    * Find airspaces the aircraft is inside.
@@ -169,7 +175,9 @@ public:
    * 
    * @return airspaces enclosing the aircraft
    */
-  std::vector<Airspace> find_inside(const AIRCRAFT_STATE &state) const;
+  std::vector<Airspace> find_inside(const AIRCRAFT_STATE &state,
+                                    const AirspacePredicate &condition
+                                    =AirspacePredicateTrue()) const;
 
   /** 
    * Set terrain altitude for AGL-referenced airspace altitudes 
