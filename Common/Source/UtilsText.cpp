@@ -522,10 +522,9 @@ int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
         if (newline == NULL)
           break;
 
-        LineOffsets[++nTextLines] = p - text;
+        LineOffsets[nTextLines++] = p - text;
         p = newline + 1;
       }
-      nTextLines++;
     }
   }
 
