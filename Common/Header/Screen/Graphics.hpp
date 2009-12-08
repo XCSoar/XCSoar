@@ -166,14 +166,9 @@ public:
   static const Color Colours[NUMAIRSPACECOLORS];
 
   // used by infobox and gauges
-  static const Color redColor;
-  static const Color blueColor;
   static const Color inv_redColor;
   static const Color inv_blueColor;
 // Not really used, tested and dropped. But useful for the future
-  static const Color yellowColor;
-  static const Color greenColor;
-  static const Color magentaColor;
   static const Color inv_yellowColor;
   static const Color inv_greenColor;
   static const Color inv_magentaColor;

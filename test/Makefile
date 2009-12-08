@@ -75,6 +75,7 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Screen/TopWindow.o \
 	$(SRC)/Screen/ButtonWindow.o \
 	$(SRC)/Screen/Canvas.o \
+	$(SRC)/Screen/Color.o \
 	$(SRC)/Screen/VirtualCanvas.o \
 	$(SRC)/Screen/BufferCanvas.o \
 	$(SRC)/Screen/Pen.o \
@@ -140,6 +141,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/Screen/ContainerWindow.o \
 	$(SRC)/Screen/ButtonWindow.o \
 	$(SRC)/Screen/Canvas.o \
+	$(SRC)/Screen/Color.o \
 	$(SRC)/Screen/VirtualCanvas.o \
 	$(SRC)/Screen/LabelBlock.o \
 	$(SRC)/Screen/BufferCanvas.o \
@@ -206,6 +208,7 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/Screen/Bitmap.o \
 	$(SRC)/Screen/Brush.o \
 	$(SRC)/Screen/Canvas.o \
+	$(SRC)/Screen/Color.o \
 	$(SRC)/Screen/VirtualCanvas.o \
 	$(SRC)/Screen/BitmapCanvas.o \
 	$(SRC)/Screen/Font.o \

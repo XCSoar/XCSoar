@@ -120,11 +120,11 @@ GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
     thegreenColor = MapGfx.inv_greenColor;
     themagentaColor = MapGfx.inv_magentaColor;
   } else {
-    theredColor = MapGfx.redColor;
-    theblueColor = MapGfx.blueColor;
-    theyellowColor = MapGfx.yellowColor;
-    thegreenColor = MapGfx.greenColor;
-    themagentaColor = MapGfx.magentaColor;
+    theredColor = Color::RED;
+    theblueColor = Color::BLUE;
+    theyellowColor = Color::YELLOW;
+    thegreenColor = Color::GREEN;
+    themagentaColor = Color::MAGENTA;
   }
 
   redBrush.set(theredColor);

@@ -309,24 +309,24 @@ InfoBox::PaintTitle(Canvas &canvas)
     break;
   case 1:
     canvas.set_text_color(Appearance.InverseInfoBox ?
-        MapGfx.inv_redColor : MapGfx.redColor);
+                          MapGfx.inv_redColor : Color::RED);
     break;
   case 2:
     canvas.set_text_color(Appearance.InverseInfoBox ?
-        MapGfx.inv_blueColor : MapGfx.blueColor);
+                          MapGfx.inv_blueColor : Color::BLUE);
     break;
     // VENTA3 added colors
   case 3:
     canvas.set_text_color(Appearance.InverseInfoBox ?
-        MapGfx.inv_greenColor : MapGfx.greenColor);
+                          MapGfx.inv_greenColor : Color::GREEN);
     break;
   case 4:
     canvas.set_text_color(Appearance.InverseInfoBox ?
-        MapGfx.inv_yellowColor : MapGfx.yellowColor);
+                          MapGfx.inv_yellowColor : Color::YELLOW);
     break;
   case 5:
     canvas.set_text_color(Appearance.InverseInfoBox ?
-        MapGfx.inv_magentaColor : MapGfx.magentaColor);
+                          MapGfx.inv_magentaColor : Color::MAGENTA);
     break;
   }
 
@@ -390,14 +390,14 @@ InfoBox::PaintValue(Canvas &canvas)
     if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_redColor);
      else
-      canvas.set_text_color(MapGfx.redColor);
+      canvas.set_text_color(Color::RED);
 
     break;
   case 2:
     if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_blueColor);
     else
-      canvas.set_text_color(MapGfx.blueColor);
+      canvas.set_text_color(Color::BLUE);
 
     break;
 // VENTA3 more colors
@@ -405,21 +405,21 @@ InfoBox::PaintValue(Canvas &canvas)
     if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_greenColor);
     else
-      canvas.set_text_color(MapGfx.greenColor);
+      canvas.set_text_color(Color::GREEN);
 
     break;
   case 4:
     if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_yellowColor);
     else
-      canvas.set_text_color(MapGfx.yellowColor);
+      canvas.set_text_color(Color::YELLOW);
 
     break;
   case 5:
     if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_magentaColor);
     else
-      canvas.set_text_color(MapGfx.magentaColor);
+      canvas.set_text_color(Color::MAGENTA);
 
     break;
   }
@@ -486,14 +486,14 @@ InfoBox::PaintComment(Canvas &canvas)
     if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_redColor);
     else
-      canvas.set_text_color(MapGfx.redColor);
+      canvas.set_text_color(Color::RED);
 
     break;
   case 2:
     if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_blueColor);
     else
-      canvas.set_text_color(MapGfx.blueColor);
+      canvas.set_text_color(Color::BLUE);
 
     break;
     // VENTA3 more colors
@@ -501,21 +501,21 @@ InfoBox::PaintComment(Canvas &canvas)
     if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_greenColor);
     else
-      canvas.set_text_color(MapGfx.greenColor);
+      canvas.set_text_color(Color::GREEN);
 
     break;
   case 4:
     if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_yellowColor);
     else
-      canvas.set_text_color(MapGfx.yellowColor);
+      canvas.set_text_color(Color::YELLOW);
 
     break;
   case 5:
     if (Appearance.InverseInfoBox)
       canvas.set_text_color(MapGfx.inv_magentaColor);
     else
-      canvas.set_text_color(MapGfx.magentaColor);
+      canvas.set_text_color(Color::MAGENTA);
 
     break;
   }

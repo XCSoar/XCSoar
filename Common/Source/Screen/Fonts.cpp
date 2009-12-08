@@ -695,8 +695,8 @@ SetFontInfo(Canvas &canvas, struct FontHeightInfo *FontHeightInfo)
   FontHeightInfo->CapitalHeight = 0;
 
   canvas.background_opaque();
-  canvas.set_background_color(Color(0xff,0xff,0xff));
-  canvas.set_text_color(Color(0x00,0x00,0x00));
+  canvas.set_background_color(Color::WHITE);
+  canvas.set_text_color(Color::BLACK);
   rec.left = 0;
   rec.top = 0;
   rec.right = tm.tmAveCharWidth;
@@ -706,10 +706,12 @@ SetFontInfo(Canvas &canvas, struct FontHeightInfo *FontHeightInfo)
   top = tm.tmHeight;
   bottom = 0;
 
+  const HWColor white = canvas.map(Color::WHITE);
+
   FontHeightInfo->CapitalHeight = 0;
   for (x=0; x<tm.tmAveCharWidth; x++){
     for (y=0; y<tm.tmHeight; y++){
-      if (canvas.get_pixel(x, y) != canvas.map(Color(0xff,0xff,0xff))) {
+      if (canvas.get_pixel(x, y) != white) {
         if (top > y)
           top = y;
         if (bottom < y)

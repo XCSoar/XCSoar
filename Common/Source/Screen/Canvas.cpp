@@ -224,8 +224,7 @@ Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
 {
   assert(src.surface != NULL);
 
-  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY,
-                    src.map(Color(0xff, 0xff, 0xff)));
+  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(Color::WHITE));
   copy(src);
   ::SDL_SetColorKey(src.surface, 0, 0);
 }
@@ -743,8 +742,6 @@ Canvas::copy(const Canvas &src)
 void
 Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
 {
-  static COLORREF whitecolor = RGB(0xff,0xff,0xff);
-
 #if !defined(WINDOWSPC)
   ::TransparentImage(dc,
                      rc.left, rc.top,
@@ -752,7 +749,7 @@ Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
                      src.dc,
                      rc.left, rc.top,
                      rc.right - rc.left, rc.bottom - rc.top,
-                     whitecolor);
+                     Color::WHITE);
 #else
   ::TransparentBlt(dc,
                    rc.left, rc.top,
@@ -760,7 +757,7 @@ Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
                    src.dc,
                    rc.left, rc.top,
                    rc.right - rc.left, rc.bottom - rc.top,
-                   whitecolor);
+                   Color::WHITE);
 #endif
 }
 

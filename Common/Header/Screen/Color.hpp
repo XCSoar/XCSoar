@@ -143,6 +143,10 @@ struct Color {
     return Color((value + 0x00ffffff * 3) / 4);
     #endif
   }
+
+  static const Color WHITE, BLACK,
+    RED, GREEN, BLUE,
+    YELLOW, CYAN, MAGENTA;
 };
 
 static inline bool

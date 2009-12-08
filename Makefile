@@ -319,6 +319,7 @@ OBJS	:=\
 	$(SRC)/Screen/Bitmap.o \
 	$(SRC)/Screen/Brush.o \
 	$(SRC)/Screen/Canvas.o \
+	$(SRC)/Screen/Color.o \
 	$(SRC)/Screen/VirtualCanvas.o \
 	$(SRC)/Screen/BitmapCanvas.o \
 	$(SRC)/Screen/Font.o \
