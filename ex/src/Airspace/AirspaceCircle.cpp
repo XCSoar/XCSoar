@@ -40,27 +40,20 @@
 
 AirspaceCircle::AirspaceCircle(const GEOPOINT &loc, 
                                const fixed _radius):
-  center(loc), 
-  radius(_radius)
+  m_center(loc), 
+  m_radius(_radius)
 {
 
 }
-
-const GEOPOINT 
-AirspaceCircle::get_center()
-{
-  return center;
-}
-
 
 const FlatBoundingBox 
 AirspaceCircle::get_bounding_box(const TaskProjection& task_projection) 
 {
-  const double eradius = radius*1.42;
-  const GEOPOINT ll = GeoVector(eradius,225).end_point(center);
-  const GEOPOINT lr = GeoVector(eradius,135).end_point(center);
-  const GEOPOINT ur = GeoVector(eradius,45).end_point(center);
-  const GEOPOINT ul = GeoVector(eradius,315).end_point(center);
+  const double eradius = m_radius*1.42;
+  const GEOPOINT ll = GeoVector(eradius,225).end_point(m_center);
+  const GEOPOINT lr = GeoVector(eradius,135).end_point(m_center);
+  const GEOPOINT ur = GeoVector(eradius,45).end_point(m_center);
+  const GEOPOINT ul = GeoVector(eradius,315).end_point(m_center);
 
   FLAT_GEOPOINT fll = task_projection.project(ll);
   FLAT_GEOPOINT flr = task_projection.project(lr);
@@ -82,13 +75,21 @@ AirspaceCircle::get_bounding_box(const TaskProjection& task_projection)
 bool 
 AirspaceCircle::inside(const AIRCRAFT_STATE &loc) const
 {
-  return (loc.Location.distance(center)<=radius);
+  return (loc.Location.distance(m_center)<=m_radius);
 }
 
 bool 
 AirspaceCircle::intersects(const GEOPOINT& start, const GeoVector &vec,
                            const TaskProjection& task_projection) const
 {
-  const GEOPOINT end = vec.end_point(start);
-  return (::CrossTrackError(start, end, center, NULL)<=radius);
+  return vec.minimum_distance(start, m_center) <= m_radius;
+}
+
+
+GEOPOINT 
+AirspaceCircle::closest_point(const GEOPOINT& loc, 
+                              const TaskProjection& task_projection) const
+{
+  GeoVector vec(m_center, loc);
+  return vec.intermediate_point(m_center, m_radius);
 }

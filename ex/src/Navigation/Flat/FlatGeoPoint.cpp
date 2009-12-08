@@ -41,8 +41,13 @@
 unsigned 
 FLAT_GEOPOINT::distance_to(const FLAT_GEOPOINT &sp) const
 {
-  const int dx = (Longitude-sp.Longitude);
-  const int dy = (Latitude-sp.Latitude);
-  return isqrt4(dx*dx+dy*dy);
+  return isqrt4(distance_sq_to(sp));
+}
+
+unsigned 
+FLAT_GEOPOINT::distance_sq_to(const FLAT_GEOPOINT &sp) const
+{
+  const FLAT_GEOPOINT delta = *this - sp;
+  return delta.dot(delta);
 }
 

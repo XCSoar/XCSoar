@@ -73,7 +73,9 @@ public:
  * 
  * @return Location of reference point
  */
-  const GEOPOINT get_center();
+  const GEOPOINT get_center() const {
+    return m_center;
+  }
 
   /** 
    * Checks whether an aircraft is inside the airspace.
@@ -99,15 +101,15 @@ public:
                   const GeoVector &vec,
                   const TaskProjection& tp) const;
 
-  const GEOPOINT& get_center() const {
-    return center;
-  }
+  GEOPOINT closest_point(const GEOPOINT& loc, 
+                         const TaskProjection& task_projection) const;
+
   const fixed& get_radius() const {
-    return radius;
+    return m_radius;
   }
 private:
-  const GEOPOINT center;
-  const fixed radius;
+  const GEOPOINT m_center;
+  const fixed m_radius;
 public:
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& f, 

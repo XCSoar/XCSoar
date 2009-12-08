@@ -96,7 +96,7 @@ bool test_task_manip(TaskManager& task_manager,
   }
 
   task_report(task_manager, "# removing tp -1 (illegal)\n");
-  if (fact->remove(-1)) {
+  if (fact->remove(0-1)) {
     return false;
   }
 

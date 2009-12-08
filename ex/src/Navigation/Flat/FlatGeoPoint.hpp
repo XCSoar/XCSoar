@@ -75,6 +75,29 @@ struct FLAT_GEOPOINT {
   unsigned distance_to(const FLAT_GEOPOINT &sp) const;
 
 /** 
+ * Find squared distance from one point to another
+ * 
+ * @param sp That point
+ * 
+ * @return Squared distance in projected units
+ */
+  unsigned distance_sq_to(const FLAT_GEOPOINT &sp) const;
+
+/** 
+ * Add one point to another
+ * 
+ * @param p2 Point to add
+ * 
+ * @return Added value
+ */
+  FLAT_GEOPOINT operator+ (const FLAT_GEOPOINT &p2) const {
+    FLAT_GEOPOINT res= *this;
+    res.Longitude += p2.Longitude;
+    res.Latitude += p2.Latitude;
+    return res;
+  };
+
+/** 
  * Subtract one point from another
  * 
  * @param p2 Point to subtract
@@ -89,6 +112,20 @@ struct FLAT_GEOPOINT {
   };
 
 /** 
+ * Multiply point by a constant
+ * 
+ * @param t Value to multiply
+ * 
+ * @return Scaled value
+ */
+  FLAT_GEOPOINT operator* (const double t) const {
+    FLAT_GEOPOINT res= *this;
+    res.Longitude = (int)(res.Longitude*t);
+    res.Latitude = (int)(res.Latitude*t);
+    return res;
+  };
+
+/** 
  * Calculate cross product of one point with another
  * 
  * @param other That point
@@ -98,6 +135,28 @@ struct FLAT_GEOPOINT {
   int cross(const FLAT_GEOPOINT &other) const {
     return Longitude*other.Latitude-Latitude*other.Longitude;
   }
+
+/** 
+ * Calculate dot product of one point with another
+ * 
+ * @param other That point
+ * 
+ * @return Dot product
+ */
+  int dot(const FLAT_GEOPOINT &other) const {
+    return Longitude*other.Longitude+Latitude*other.Latitude;
+  }
+
+/** 
+ * Test whether two points are co-located
+ * 
+ * @param other Point to compare
+ * 
+ * @return True if coincident
+ */
+  bool operator== (const FLAT_GEOPOINT &other) const {
+    return (Longitude == other.Longitude) && (Latitude == other.Latitude);
+  };
 };
 
 #endif

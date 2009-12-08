@@ -78,7 +78,7 @@ public:
  * 
  * @return Location of reference point
  */
-  const GEOPOINT get_center();
+  const GEOPOINT get_center() const;
 
   /** 
    * Checks whether an aircraft is inside the airspace.
@@ -103,6 +103,9 @@ public:
   bool intersects(const GEOPOINT& g1, 
                   const GeoVector &vec,
                   const TaskProjection& tp) const;
+
+  GEOPOINT closest_point(const GEOPOINT& loc, 
+                         const TaskProjection& task_projection) const;
 
   /**
    * Accessor for airspace shape

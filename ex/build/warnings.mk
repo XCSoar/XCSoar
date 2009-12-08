@@ -9,8 +9,8 @@ C_WARNINGS := \
 	-Wmissing-noreturn \
 	-Wundef \
 	-Wno-unused-parameter \
-	-Wno-missing-field-initializers \
-	-Wno-variadic-macros \
+#	-Wno-missing-field-initializers \
+#	-Wno-variadic-macros \
 	-Wdisabled-optimization \
 	-Wshadow 
 

@@ -55,7 +55,7 @@ AirspacePolygon::AirspacePolygon(const std::vector<GEOPOINT>& pts,
 
 
 const GEOPOINT 
-AirspacePolygon::get_center()
+AirspacePolygon::get_center() const
 {
   if (m_border.empty()) {
     return GEOPOINT(0,0);
@@ -133,4 +133,18 @@ void
 AirspacePolygon::project(const TaskProjection &task_projection)
 {
   ::project(m_border, task_projection);
+}
+
+
+/*
+
+*/
+
+GEOPOINT 
+AirspacePolygon::closest_point(const GEOPOINT& loc, 
+                               const TaskProjection& task_projection) const
+{
+  const FLAT_GEOPOINT p = task_projection.project(loc);
+  const FLAT_GEOPOINT pb = nearest_point(m_border, p); 
+  return task_projection.unproject(pb);
 }

@@ -72,7 +72,7 @@ public:
  * 
  * @return Location of reference point
  */
-  virtual const GEOPOINT get_center() = 0;
+  virtual const GEOPOINT get_center() const = 0;
 
   /** 
    * Checks whether an aircraft is inside the airspace.
@@ -97,6 +97,18 @@ public:
   virtual bool intersects(const GEOPOINT& g1, 
                           const GeoVector &vec,
                           const TaskProjection& tp) const = 0;
+
+/** 
+ * Find location of closest point on boundary to a reference
+ * 
+ * @param loc Reference location of observer
+ * @param task_projection Projection (for use with internal speedups)
+ * 
+ * @return Location of closest point of boundary to reference 
+ */
+  virtual GEOPOINT closest_point(const GEOPOINT& loc, 
+                                 const TaskProjection& task_projection) const
+    = 0;
 
   /** 
    * Set terrain altitude for AGL-referenced airspace altitudes 

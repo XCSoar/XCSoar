@@ -61,30 +61,17 @@ static const fixed fixed_xte_fact = 1.0/(fixed_rad_to_deg * fixed_xtd_fact);
 #define fixed_expand_x 1.0
 #endif
 
-
-/**
- * Finds the point along a distance dthis between p1 and p2, which are
- * separated by dtotal.
- *
- * This is a slow function.  Adapted from The Aviation Formulary 1.42.
- */
-void IntermediatePoint(GEOPOINT loc1,
-                       GEOPOINT loc2,
-                       fixed dthis,
-                       fixed dtotal,
-                       GEOPOINT *loc3) {
-
-  assert(loc3 != NULL);
-
+GEOPOINT IntermediatePoint(GEOPOINT loc1,
+                           GEOPOINT loc2,
+                           fixed dthis,
+                           fixed dtotal) 
+{
   if ((loc1.Longitude == loc2.Longitude) && (loc1.Latitude == loc2.Latitude)){
-    loc3->Latitude = loc1.Latitude;
-    loc3->Longitude = loc1.Longitude;
-    return;
+    return loc1;
   }
 
   if (!positive(dtotal)) {
-    *loc3 = loc1;
-    return;
+    return loc1;
   }
   
   const fixed f = dthis/dtotal;
@@ -111,12 +98,14 @@ void IntermediatePoint(GEOPOINT loc1,
   const fixed y = AcosLoc1Latitude*sinLoc1Longitude +  BcosLoc2Latitude*sinLoc2Longitude;
   const fixed z = AsinLoc1Latitude                  +  BsinLoc2Latitude;
 
-  loc3->Latitude= atan2(z,sqrt(x*x+y*y))*fixed_rad_to_deg;
-  loc3->Longitude= atan2(y,x)*fixed_rad_to_deg;
+  GEOPOINT loc3;
+  loc3.Latitude= atan2(z,sqrt(x*x+y*y))*fixed_rad_to_deg;
+  loc3.Longitude= atan2(y,x)*fixed_rad_to_deg;
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
 #endif
+  return loc3;
 }
 
 fixed CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3,
@@ -150,7 +139,7 @@ fixed CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3,
     loc1.Longitude *= fixed_deg_to_rad;
     loc2.Longitude *= fixed_deg_to_rad;
 
-    IntermediatePoint(loc1, loc2, ATD, dist_AB, loc4);
+    *loc4 = IntermediatePoint(loc1, loc2, ATD, dist_AB);
   }
 
 #ifdef INSTRUMENT_TASK
