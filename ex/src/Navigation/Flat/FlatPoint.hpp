@@ -86,6 +86,7 @@ struct FlatPoint
  * @param p2 Point to subtract
  */
   void sub(const FlatPoint&p2);
+
 /** 
  * Add delta to this point
  * 
@@ -108,6 +109,12 @@ struct FlatPoint
  * @return Distance
  */
   fixed d(const FlatPoint &p) const;
+
+/** 
+ * Find dx*dx+dy*dy
+ * @return Magnitude squared
+ */
+  fixed mag_sq() const;
 };
 
 #endif

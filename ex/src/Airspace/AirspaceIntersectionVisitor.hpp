@@ -34,49 +34,31 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "FlatPoint.hpp"
-#include <algorithm>
-#include <math.h>
-#define sqr(x) ((x)*(x))
+#ifndef AIRSPACE_INTERSECTION_VISITOR_HPP
+#define AIRSPACE_INTERSECTION_VISITOR_HPP
 
-fixed 
-FlatPoint::cross(const FlatPoint& p2) const {
-  return x*p2.y-p2.x*y;
-}
+#include "AirspaceVisitor.hpp"
+#include "Navigation/GeoPoint.hpp"
 
-void 
-FlatPoint::mul_y(const fixed a) {
-  y*= a;
-}
- 
-void 
-FlatPoint::sub(const FlatPoint&p2) {
-  x -= p2.x;
-  y -= p2.y;
-}
+/**
+ * Generic visitor for objects in the Airspaces container,
+ * for intersection queries.  Sets m_point_intersect by caller
+ */
+class AirspaceIntersectionVisitor:
+  public AirspaceVisitor
+{
+public:
+/** 
+ * Called by Airspaces prior to visiting the airspace to
+ * make available the point to the visitor.
+ * 
+ * @param p Point of first intercept
+ */
+  void set_point_intersect(const GEOPOINT& p) {
+    m_point_intersect = p;
+  }
+protected:
+  GEOPOINT m_point_intersect;
+};
 
-void 
-FlatPoint::add(const FlatPoint&p2) {
-  x += p2.x;
-  y += p2.y;
-}
-
-void 
-FlatPoint::rotate(const fixed angle) {
-  const fixed _x = x;
-  const fixed _y = y;
-  fixed sa, ca;
-  sin_cos(angle*fixed_deg_to_rad, &sa, &ca);
-  x = _x*ca-_y*sa;
-  y = _x*sa+_y*ca;
-}
-
-fixed 
-FlatPoint::d(const FlatPoint &p) const {
-  return sqrt(sqr(p.x-x)+sqr(p.y-y));
-}
-
-fixed
-FlatPoint::mag_sq() const {
-  return x*x+y*y;
-}
+#endif

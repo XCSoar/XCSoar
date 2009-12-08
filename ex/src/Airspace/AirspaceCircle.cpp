@@ -37,6 +37,7 @@
 #include "AirspaceCircle.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Math/Earth.hpp"
+#include "Navigation/Flat/FlatLine.hpp"
 
 AirspaceCircle::AirspaceCircle(const GEOPOINT &loc, 
                                const fixed _radius):
@@ -90,11 +91,29 @@ AirspaceCircle::intersects(const GEOPOINT& start,
 
   } else if (vec.minimum_distance(start, m_center) <= m_radius) {
     /// \todo find closest intersection point p
-    return true;
 
-  } else {
-    return false;
+    const fixed f_radius = m_task_projection->fproject_range(m_center, m_radius);
+    const FlatPoint f_center = m_task_projection->fproject(m_center);
+    FlatPoint f_start = m_task_projection->fproject(start);
+    FlatPoint f_end = m_task_projection->fproject(vec.end_point(start));
+
+    f_start.sub(f_center);
+    f_end.sub(f_center);
+    const FlatLine line(f_start, f_end);
+    FlatPoint p1, p2;
+    if (line.intersect_czero(f_radius, p1, p2)) {
+      if (p1.mag_sq()<p2.mag_sq()) {
+        // closest is p1;
+        p1.add(f_center);
+        p = m_task_projection->funproject(p1);
+      } else {
+        p2.add(f_center);
+        p = m_task_projection->funproject(p2);
+      }
+      return true;
+    }
   }
+  return false;
 }
 
 
