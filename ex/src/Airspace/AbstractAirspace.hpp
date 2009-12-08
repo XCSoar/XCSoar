@@ -45,6 +45,7 @@
 #include "Util/tstring.hpp"
 
 class AtmosphericPressure;
+class SETTINGS_COMPUTER;
 
 /**
  * Abstract base class for airspace regions
@@ -137,6 +138,26 @@ public:
   const int get_type() const {
     return Type;
   }
+
+/** 
+ * Determine if airspace is visible based on observers' altitude
+ * 
+ * @param alt Altitude of observer
+ * @param settings Airspace altitude visibility settings
+ * 
+ * @return True if visible
+ */
+  bool altitude_visible(const fixed alt,
+                        const SETTINGS_COMPUTER &settings) const;
+
+/** 
+ * Determine if airspace is visible based on type
+ * 
+ * @param settings Airspace visibility settings
+ * 
+ * @return True if visible
+ */
+  bool type_visible(const SETTINGS_COMPUTER &settings) const;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& f, 
