@@ -45,7 +45,8 @@ Copyright_License {
 #include <string.h>
 #include <windef.h>
 
-void StringChomp(TCHAR *p)
+void
+StringChomp(TCHAR *p)
 {
   size_t length = _tcslen(p);
 
@@ -55,53 +56,51 @@ void StringChomp(TCHAR *p)
   p[length] = 0;
 }
 
-void PExtractParameter(const TCHAR *Source, TCHAR *Destination,
-                       int DesiredFieldNumber)
+void
+PExtractParameter(const TCHAR *Source, TCHAR *Destination,
+    int DesiredFieldNumber)
 {
   int index = 0;
   int dest_index = 0;
   int CurrentFieldNumber = 0;
-  int StringLength        = 0;
+  int StringLength = 0;
 
   StringLength = _tcslen(Source);
 
-  while( (CurrentFieldNumber < DesiredFieldNumber) && (index < StringLength) )
-    {
-      if ( Source[ index ] == ',' )
-	{
-	  CurrentFieldNumber++;
-	}
+  while ((CurrentFieldNumber < DesiredFieldNumber) && (index < StringLength)) {
+    if (Source[index] == ',')
+      CurrentFieldNumber++;
+
+    index++;
+  }
+
+  if (CurrentFieldNumber == DesiredFieldNumber) {
+    while ((index < StringLength) && (Source[index] != ',')
+           && (Source[index] != 0x00)) {
+      Destination[dest_index] = Source[index];
       index++;
+      dest_index++;
     }
 
-  if ( CurrentFieldNumber == DesiredFieldNumber )
-    {
-      while( (index < StringLength)    &&
-	     (Source[ index ] != ',') &&
-	     (Source[ index ] != 0x00) )
-	{
-	  Destination[dest_index] = Source[ index ];
-	  index++; dest_index++;
-	}
-      Destination[dest_index] = '\0';
-    }
+    Destination[dest_index] = '\0';
+  }
 }
-
 
 // JMW added support for zzip files
 
-bool ReadString(ZZIP_FILE *zFile, size_t Max, TCHAR *String)
+bool
+ReadString(ZZIP_FILE *zFile, size_t Max, TCHAR *String)
 {
-  char sTmp[READLINE_LENGTH+1];
-  char FileBuffer[READLINE_LENGTH+1];
+  char sTmp[READLINE_LENGTH + 1];
+  char FileBuffer[READLINE_LENGTH + 1];
   zzip_size_t dwNumBytesRead;
-  size_t dwTotalNumBytesRead=0;
+  size_t dwTotalNumBytesRead = 0;
   zzip_off_t dwFilePos;
 
   String[0] = '\0';
   sTmp[0] = 0;
 
-  assert(Max<sizeof(sTmp));
+  assert(Max < sizeof(sTmp));
 
   if (Max >= sizeof(sTmp))
     return false;
@@ -121,7 +120,7 @@ bool ReadString(ZZIP_FILE *zFile, size_t Max, TCHAR *String)
     j++;
     dwTotalNumBytesRead++;
 
-    if((c == '\n')){
+    if ((c == '\n')) {
       break;
     }
 
@@ -130,13 +129,15 @@ bool ReadString(ZZIP_FILE *zFile, size_t Max, TCHAR *String)
   }
 
   sTmp[i] = 0;
-  zzip_seek(zFile, dwFilePos+j, SEEK_SET);
-  sTmp[Max-1] = '\0';
+  zzip_seek(zFile, dwFilePos + j, SEEK_SET);
+  sTmp[Max - 1] = '\0';
+
 #ifdef _UNICODE
   mbstowcs(String, sTmp, strlen(sTmp)+1);
 #else
   strcpy(String, sTmp);
 #endif
+
   return (dwTotalNumBytesRead>0);
 }
 
@@ -203,15 +204,17 @@ bool ReadString(HANDLE hFile, int Max, TCHAR *String)
 }
 #endif /* ENABLE_UNUSED_CODE */
 
-bool ReadStringX(FILE *fp, size_t Max, TCHAR *String){
+bool
+ReadStringX(FILE *fp, size_t Max, TCHAR *String)
+{
   if (fp == NULL || Max < 1 || String == NULL) {
-    if (String) {
-      String[0]= '\0';
-    }
-    return (0);
+    if (String)
+      String[0] = '\0';
+
+    return false;
   }
 
-  if (_fgetts(String, Max, fp) != NULL){     // 20060512/sgi change 200 to max
+  if (_fgetts(String, Max, fp) != NULL) { // 20060512/sgi change 200 to max
     StringChomp(String);
     return true;
   }
@@ -221,48 +224,48 @@ bool ReadStringX(FILE *fp, size_t Max, TCHAR *String){
 
 // RMN: Volkslogger outputs data in hex-strings.  Function copied from StrToDouble
 // Note: Decimal-point and decimals disregarded.  Assuming integer amounts only.
-double HexStrToDouble(TCHAR *Source, TCHAR **Stop)
+double
+HexStrToDouble(TCHAR *Source, TCHAR **Stop)
 {
   int index = 0;
-  int StringLength        = 0;
+  int StringLength = 0;
   double Sum = 0;
   int neg = 0;
 
   StringLength = _tcslen(Source);
 
-  while((Source[index] == ' ')||(Source[index]==9))
-    // JMW added skip for tab stop
-    {
-      index ++;
-    }
-  if (Source[index]=='-') {
-    neg=1;
+  // JMW added skip for tab stop
+  while ((Source[index] == ' ') || (Source[index] == 9)) {
     index++;
   }
 
-  while(
-  (index < StringLength)	 &&
-	(	( (Source[index]>= '0') && (Source [index] <= '9')  ) ||
-		( (Source[index]>= 'A') && (Source [index] <= 'F')  ) ||
-		( (Source[index]>= 'a') && (Source [index] <= 'f')  )
-		)
-	)
-    {
-      if((Source[index]>= '0') && (Source [index] <= '9'))	  {
-		Sum = (Sum*16) + (Source[ index ] - '0');
-		index ++;
-	  }
-	  if((Source[index]>= 'A') && (Source [index] <= 'F'))	  {
-		Sum = (Sum*16) + (Source[ index ] - 'A' + 10);
-		index ++;
-	  }
-	  if((Source[index]>= 'a') && (Source [index] <= 'f'))	  {
-		Sum = (Sum*16) + (Source[ index ] - 'a' + 10);
-		index ++;
-	  }
+  if (Source[index] == '-') {
+    neg = 1;
+    index++;
+  }
+
+  while ((index < StringLength)
+         && (((Source[index] >= '0') && (Source[index] <= '9'))
+             || ((Source[index] >= 'A') && (Source[index] <= 'F'))
+             || ((Source[index] >= 'a') && (Source[index] <= 'f')))) {
+
+    if ((Source[index] >= '0') && (Source[index] <= '9')) {
+      Sum = (Sum * 16) + (Source[index] - '0');
+      index++;
     }
 
-  if(Stop != NULL)
+    if ((Source[index] >= 'A') && (Source[index] <= 'F')) {
+      Sum = (Sum * 16) + (Source[index] - 'A' + 10);
+      index++;
+    }
+
+    if ((Source[index] >= 'a') && (Source[index] <= 'f')) {
+      Sum = (Sum * 16) + (Source[index] - 'a' + 10);
+      index++;
+    }
+  }
+
+  if (Stop != NULL)
     *Stop = &Source[index];
 
   if (neg) {
@@ -271,7 +274,6 @@ double HexStrToDouble(TCHAR *Source, TCHAR **Stop)
     return Sum;
   }
 }
-
 
 #ifdef ENABLE_UNUSED_CODE
 static int ByteCRC16(int value, int crcin)
@@ -305,26 +307,29 @@ WORD crcCalc(void *Buffer, size_t size){
 }
 #endif /* ENABLE_UNUSED_CODE */
 
-
-void ExtractDirectory(TCHAR *Dest, const TCHAR *Source) {
+void
+ExtractDirectory(TCHAR *Dest, const TCHAR *Source)
+{
   int len = _tcslen(Source);
   int found = -1;
   int i;
-  if (len==0) {
-    Dest[0]= 0;
+
+  if (len == 0) {
+    Dest[0] = 0;
     return;
   }
-  for (i=0; i<len; i++) {
-    if ((Source[i]=='/')||(Source[i]=='\\')) {
+
+  for (i = 0; i < len; i++) {
+    if ((Source[i] == '/') || (Source[i] == '\\')) {
       found = i;
     }
   }
-  for (i=0; i<=found; i++) {
-    Dest[i]= Source[i];
-  }
-  Dest[i]= 0;
-}
 
+  for (i = 0; i <= found; i++) {
+    Dest[i] = Source[i];
+  }
+  Dest[i] = 0;
+}
 
 /*
  * Copyright (c) 1990 Regents of the University of California.
@@ -373,53 +378,56 @@ void ExtractDirectory(TCHAR *Dest, const TCHAR *Source) {
  * look at item 3.
  */
 
-void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2)){
-	void *base = base0;
-	int lim, cmp;
-	void *p;
+void *
+bsearch(void *key, void *base0, size_t nmemb, size_t size, int
+(*compar)(const void *elem1, const void *elem2))
+{
+  void *base = base0;
+  int lim, cmp;
+  void *p;
 
-	for (lim = nmemb; lim != 0; lim >>= 1) {
-		p = (char *)base + (lim >> 1) * size;
-		cmp = (*compar)(key, p);
-		if (cmp == 0)
-			return (p);
-		if (cmp > 0) {	/* key > p: move right */
-			base = (char *)p + size;
-			lim--;
-		} /* else move left */
-	}
-	return (NULL);
+  for (lim = nmemb; lim != 0; lim >>= 1) {
+    p = (char *)base + (lim >> 1) * size;
+    cmp = (*compar)(key, p);
+    if (cmp == 0)
+      return p;
+
+    if (cmp > 0) { /* key > p: move right */
+      base = (char *)p + size;
+      lim--;
+    } /* else move left */
+  }
+  return NULL;
 }
 
-
-
-TCHAR *strtok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts){
-// "s" MUST be a pointer to an array, not to a string!!!
-// (ARM92, Win emulator cause access violation if not)
+TCHAR *
+strtok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts)
+{
+  // "s" MUST be a pointer to an array, not to a string!!!
+  // (ARM92, Win emulator cause access violation if not)
 
   const TCHAR *spanp;
-	int   c, sc;
-	TCHAR *tok;
+  int c, sc;
+  TCHAR *tok;
 
+  if (s == NULL && (s = *lasts) == NULL)
+    return NULL;
 
-	if (s == NULL && (s = *lasts) == NULL)
-		return (NULL);
-
-	/*
+  /*
 	 * Skip (span) leading delimiters (s += strspn(s, delim), sort of).
 	 */
 
 cont:
 	c = *s++;
-	for (spanp = delim; (sc = *spanp++) != 0;) {
-		if (c == sc)
-			goto cont;
-	}
+  for (spanp = delim; (sc = *spanp++) != 0;) {
+    if (c == sc)
+      goto cont;
+  }
 
-	if (c == 0) {		/* no non-delimiter characters */
-		*lasts = NULL;
-		return (NULL);
-	}
+  if (c == 0) { /* no non-delimiter characters */
+    *lasts = NULL;
+    return NULL;
+  }
 	tok = s - 1;
 
 	/*
@@ -427,19 +435,19 @@ cont:
 	 * Note that delim must have one NUL; we stop if we see that, too.
 	 */
 	for (;;) {
-		c = *s++;
-		spanp = delim;
-		do {
-			if ((sc = *spanp++) == c) {
-				if (c == 0)
-					s = NULL;
-				else
-					s[-1] = 0;  // causes access violation in some configs if s is a pointer instead of an array
-				*lasts = s;
-				return (tok);
-			}
-		} while (sc != 0);
-	}
+    c = *s++;
+    spanp = delim;
+    do {
+      if ((sc = *spanp++) == c) {
+        if (c == 0)
+          s = NULL;
+        else
+          s[-1] = 0; // causes access violation in some configs if s is a pointer instead of an array
+        *lasts = s;
+        return tok;
+      }
+    } while (sc != 0);
+  }
 	/* NOTREACHED */
 }
 
@@ -452,14 +460,14 @@ cont:
 TCHAR *
 StringMallocParse(const TCHAR* old_string)
 {
-  TCHAR buffer[2048];	// Note - max size of any string we cope with here !
+  TCHAR buffer[2048]; // Note - max size of any string we cope with here !
   TCHAR* new_string;
 
   unsigned int used = 0;
 
   for (unsigned int i = 0; i < _tcslen(old_string); i++) {
     if (used < 2045) {
-      if (old_string[i] == '\\' ) {
+      if (old_string[i] == '\\') {
         if (old_string[i + 1] == 'r') {
           buffer[used++] = '\r';
           i++;
@@ -476,11 +484,11 @@ StringMallocParse(const TCHAR* old_string)
         buffer[used++] = old_string[i];
       }
     }
-  };
+  }
 
-  buffer[used++] =_T('\0');
+  buffer[used++] = _T('\0');
 
-  new_string = (TCHAR *)malloc((_tcslen(buffer)+1)*sizeof(TCHAR));
+  new_string = (TCHAR *)malloc((_tcslen(buffer) + 1) * sizeof(TCHAR));
   _tcscpy(new_string, buffer);
 
   return new_string;
@@ -491,10 +499,11 @@ StringMallocParse(const TCHAR* old_string)
  * @param pszDest char array (Output)
  * @param pszSrc TCHAR array (Input)
  */
-void ConvertTToC(char *pszDest, const TCHAR *pszSrc)
+void
+ConvertTToC(char *pszDest, const TCHAR *pszSrc)
 {
-	for(unsigned int i = 0; i < _tcslen(pszSrc); i++)
-		pszDest[i] = (char) pszSrc[i];
+  for (unsigned int i = 0; i < _tcslen(pszSrc); i++)
+    pszDest[i] = (char)pszSrc[i];
 }
 
 /**
@@ -502,13 +511,15 @@ void ConvertTToC(char *pszDest, const TCHAR *pszSrc)
  * @param pszDest TCHAR array (Output)
  * @param pszSrc char array (Input)
  */
-void ConvertCToT(TCHAR *pszDest, const char *pszSrc)
+void
+ConvertCToT(TCHAR *pszDest, const char *pszSrc)
 {
-	for(unsigned int i = 0; i < strlen(pszSrc); i++)
-		pszDest[i] = (TCHAR) pszSrc[i];
+  for (unsigned int i = 0; i < strlen(pszSrc); i++)
+    pszDest[i] = (TCHAR)pszSrc[i];
 }
 
-int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
+int
+TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
 {
   assert(LineOffsets != NULL);
   assert(maxLines > 0);
@@ -518,6 +529,7 @@ int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
 
   int nTextLines = 0;
   const TCHAR *p = text;
+
   do {
     const TCHAR *newline = _tcschr(p, _T('\n'));
     if (newline == NULL)
@@ -535,7 +547,7 @@ int TextToLineOffsets(const TCHAR *text, int *LineOffsets, int maxLines)
  * @param str String (TCHAR array) to convert
  */
 void
-ConvToUpper( TCHAR *str )
+ConvToUpper(TCHAR *str)
 {
   if (!str)
     return;
@@ -544,7 +556,9 @@ ConvToUpper( TCHAR *str )
     *str = towupper(*str);
 }
 
-bool MatchesExtension(const TCHAR *filename, const TCHAR* extension) {
+bool
+MatchesExtension(const TCHAR *filename, const TCHAR* extension)
+{
   const TCHAR *ptr;
 
   ptr = _tcsstr(filename, extension);
