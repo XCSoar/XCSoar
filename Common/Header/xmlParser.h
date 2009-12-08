@@ -153,25 +153,25 @@ typedef struct XMLNode
   static bool GlobalError;
     static LPCTSTR getError(XMLError error);
 
-    LPCTSTR getName();                                // name of the node
-    LPCTSTR getText(int i=0);                         // return ith text field
-    int nText();                                      // nbr of text field
+    LPCTSTR getName() const;                          // name of the node
+    LPCTSTR getText(int i=0) const;                   // return ith text field
+    int nText() const;                                // nbr of text field
     XMLNode getChildNode(int i);                      // return ith child node
     XMLNode getChildNode(LPCTSTR name, int i);        // return ith child node with specific name
                                                       //     (return an empty node if failing)
     XMLNode getChildNode(LPCTSTR name, int *i=NULL);  // return next child node with specific name
                                                       //     (return an empty node if failing)
-    int nChildNode(LPCTSTR name);                     // return the number of child node with specific name
-    int nChildNode();                                 // nbr of child node
+    int nChildNode(LPCTSTR name) const;               // return the number of child node with specific name
+    int nChildNode() const;                           // nbr of child node
     XMLAttribute getAttribute(int i);                 // return ith attribute
-    char isAttributeSet(LPCTSTR name);                // test if an attribute with a specific name is given
-    LPCTSTR getAttribute(LPCTSTR name, int i);        // return ith attribute content with specific name
+    char isAttributeSet(LPCTSTR name) const;          // test if an attribute with a specific name is given
+    LPCTSTR getAttribute(LPCTSTR name, int i) const;  // return ith attribute content with specific name
                                                       //     (return a NULL if failing)
-    LPCTSTR getAttribute(LPCTSTR name, int *i=NULL);  // return next attribute content with specific name
+    LPCTSTR getAttribute(LPCTSTR name, int *i=NULL) const; // return next attribute content with specific name
                                                       //     (return a NULL if failing)
-    int nAttribute();                                 // nbr of attribute
+    int nAttribute() const;                           // nbr of attribute
     XMLClear getClear(int i);                         // return ith clear field (comment)
-    int nClear();                                     // nbr of clear field
+    int nClear() const;                               // nbr of clear field
     LPTSTR createXMLString(int nFormat, int *pnSize); // create XML string starting from current XMLNode
     XMLNodeContents enumContents(int i);              // enumerate all the different contents (child,text,
                                                       //     clear,attribute) of the current XMLNode. The order
