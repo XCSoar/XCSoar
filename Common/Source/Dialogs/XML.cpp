@@ -85,6 +85,17 @@ StringToStringDflt(const TCHAR *String, const TCHAR *Default)
   return(String);
 }
 
+static bool
+StringToColor(const TCHAR *String, Color &color)
+{
+  long value = StringToIntDflt(String, -1);
+  if (value & ~0xffffff)
+    return false;
+
+  color = Color((value >> 16) & 0xff, (value >> 8) & 0xff, value & 0xff);
+  return true;
+}
+
 static void
 GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
                              int *Width, int *Height, int *Font,
@@ -305,6 +316,18 @@ load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
   return xMainNode;
 }
 
+static void
+LoadColors(WindowControl &wc, const XMLNode &node)
+{
+    Color color;
+
+    if (StringToColor(node.getAttribute(TEXT("BackColor")), color))
+      wc.SetBackColor(color);
+
+    if (StringToColor(node.getAttribute(TEXT("ForeColor")), color))
+      wc.SetForeColor(color);
+}
+
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
                         const TCHAR *FileName,
                         ContainerWindow &Parent,
@@ -344,15 +367,8 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
     TCHAR sTmp[128];
     TCHAR Name[64];
 
-    COLORREF BackColor;
-    COLORREF ForeColor;
-
     GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height,
                                  &Font, sTmp);
-    BackColor = StringToIntDflt(xNode.getAttribute(TEXT("BackColor")),
-                                0xffffffff);
-    ForeColor = StringToIntDflt(xNode.getAttribute(TEXT("ForeColor")),
-                                0xffffffff);
 
     theForm = new WndForm(&Parent, Name, sTmp, X, Y, Width, Height);
 
@@ -361,22 +377,8 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
 
     if (Font != -1)
       theForm->SetFont(*FontMap[Font]);
-#ifdef ENABLE_SDL
-    // XXX
-#else /* !ENABLE_SDL */
-    if (BackColor != 0xffffffff){
-      BackColor = Color((BackColor>>16)&0xff,
-                      (BackColor>>8)&0xff,
-                      (BackColor>>0)&0xff);
-      theForm->SetBackColor(BackColor);
-    }
-    if (ForeColor != 0xffffffff){
-      ForeColor = Color((ForeColor>>16)&0xff,
-                      (ForeColor>>8)&0xff,
-                      (ForeColor>>0)&0xff);
-      theForm->SetForeColor(ForeColor);
-    }
-#endif /* !ENABLE_SDL */
+
+    LoadColors(*theForm, xNode);
 
     LoadChildsFromXML(theForm, LookUpTable, &xNode, Font);
 
@@ -408,8 +410,6 @@ LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
   int X,Y,Width,Height,Font;
   TCHAR Caption[128];
   TCHAR Name[64];
-  COLORREF BackColor;
-  COLORREF ForeColor;
   bool Visible;
   int Border;
 
@@ -427,25 +427,7 @@ LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
                                  &Width, &Height,
                                  &Font, Caption);
 
-    BackColor = StringToIntDflt(childNode.getAttribute(TEXT("BackColor")),
-                                0xffffffff);
-    ForeColor = StringToIntDflt(childNode.getAttribute(TEXT("ForeColor")),
-                                0xffffffff);
     Visible = StringToIntDflt(childNode.getAttribute(TEXT("Visible")), 1) == 1;
-#ifdef ENABLE_SDL
-    // XXX
-#else /* !ENABLE_SDL */
-    if (BackColor != 0xffffffff){
-      BackColor = Color((BackColor>>16)&0xff,
-                      (BackColor>>8)&0xff,
-                      (BackColor>>0)&0xff);
-    }
-    if (ForeColor != 0xffffffff){
-      ForeColor = Color((ForeColor>>16)&0xff,
-                      (ForeColor>>8)&0xff,
-                      (ForeColor>>0)&0xff);
-    }
-#endif /* !ENABLE_SDL */
 
     Font = StringToIntDflt(childNode.getAttribute(TEXT("Font")), ParentFont);
     Border = StringToIntDflt(childNode.getAttribute(TEXT("Border")), 0);
@@ -636,17 +618,7 @@ LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
       if (Font != -1)
         WC->SetFont(FontMap[Font]);
 
-#ifdef ENABLE_SDL
-      // XXX
-#else /* !ENABLE_SDL */
-      if (BackColor != 0xffffffff){
-        WC->SetBackColor(BackColor);
-      }
-
-      if (ForeColor != 0xffffffff){
-        WC->SetForeColor(ForeColor);
-      }
-#endif /* !ENABLE_SDL */
+      LoadColors(*WC, childNode);
 
       if (!Visible){
         WC->SetVisible(Visible);
