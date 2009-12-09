@@ -177,7 +177,7 @@ SunEphemeris::FNsun(double d)
  * @param TimeZone The timezone
  * @return Always 0
  */
-int
+double
 SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
     const DERIVED_INFO &Calculated, const double TimeZone)
 {
@@ -290,5 +290,5 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
   */
   // QUESTION TB: why not just void?
 
-  return 0;
+  return TimeOfSunSet;
 }
