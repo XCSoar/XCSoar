@@ -273,15 +273,14 @@ CuSonde::findCloudBase(unsigned short level)
 
   double dlevel = -(cslevels[level].tempDry - cslevels[level].dewpoint) / dti;
   double dcloudbase = (level + dlevel) * CUSONDE_HEIGHTSTEP;
-  if (dlevel > 0.0) {
-    if (dlevel > 1.0) {
-      if ((level + 2 < CUSONDE_NUMLEVELS) && (cslevels[level + 2].nmeasurements
-          > 0)) {
-        // estimated point should be in next level.
-        return;
-      }
-    }
 
+  if ((dlevel > 1.0)
+      && (level + 2 < CUSONDE_NUMLEVELS)
+      && (cslevels[level + 2].nmeasurements > 0))
+    // estimated point should be in next level.
+    return;
+
+  if (dlevel > 0.0) {
     // set the level cloudbase to the calculated value
     cslevels[level].cloudBase = dcloudbase;
 
