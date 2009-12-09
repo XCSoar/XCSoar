@@ -67,7 +67,7 @@ InitSineTable(void)
     ISINETABLE[i] = iround(sina * 1024);
     ICOSTABLE[i] = iround(cosa * 1024);
 
-    if ((cosa > 0) && (cosa < 1.0e-8))
+    if ((cosa >= 0) && (cosa < 1.0e-8))
       cosa = 1.0e-8;
 
     if ((cosa < 0) && (cosa > -1.0e-8))
