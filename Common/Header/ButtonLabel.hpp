@@ -44,34 +44,41 @@ Copyright_License {
 
 class ContainerWindow;
 
-class MenuButton : public TextWindow {
+class MenuButton: public TextWindow
+{
   bool enabled;
 
 public:
-  void set(ContainerWindow &parent,
-           int left, int top, unsigned width, unsigned height,
-           bool visible) {
-    TextWindow::set(parent, left, top, width, height,
-                    true, true, visible, true, true);
+  void
+  set(ContainerWindow &parent, int left, int top, unsigned width,
+      unsigned height, bool visible)
+  {
+    TextWindow::set(parent, left, top, width, height, true, true, visible, true, true);
     Window::set_enabled(true);
     set_enabled(false);
     install_wndproc();
   }
 
-  bool is_enabled() const {
+  bool
+  is_enabled() const
+  {
     return enabled;
   }
 
-  void set_enabled(bool _enabled) {
+  void
+  set_enabled(bool _enabled)
+  {
     enabled = _enabled;
   }
 
   virtual bool on_mouse_down(int x, int y);
 };
 
-class ButtonLabel: public ActionInterface {
- public:
-  enum {
+class ButtonLabel: public ActionInterface
+{
+public:
+  enum
+  {
     NUMBUTTONLABELS = 32
   };
 
@@ -80,9 +87,8 @@ class ButtonLabel: public ActionInterface {
   static bool ButtonVisible[NUMBUTTONLABELS];
 
 protected:
-  static void GetButtonPosition(unsigned i, RECT rc,
-				int *x, int *y,
-				int *sizex, int *sizey);
+  static void GetButtonPosition(unsigned i, RECT rc, int *x, int *y,
+      int *sizex, int *sizey);
 
 public:
   static void CreateButtonLabels(ContainerWindow &parent, const RECT rc);
