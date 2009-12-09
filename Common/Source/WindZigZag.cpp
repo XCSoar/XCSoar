@@ -418,14 +418,14 @@ private:
 
     // search for minimum error
     // (this is not monotonous)
-    if (verr < error_best) {
-      error_best = verr;
-      V_west_best = V_west;
-      theta_west_best = theta_best;
-      return true;
-    } else {
+    if (verr >= error_best)
       return false;
-    }
+
+    error_best = verr;
+    V_west_best = V_west;
+    theta_west_best = theta_best;
+
+    return true;
   }
 
   bool
