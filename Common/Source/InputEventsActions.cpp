@@ -1403,10 +1403,10 @@ InputEvents::eventSetup(const TCHAR *misc)
     dlgAirspaceShowModal(false);
   else if (_tcscmp(misc, TEXT("Weather")) == 0)
     dlgWeatherShowModal();
-  else if (_tcscmp(misc, TEXT("Replay")) == 0)
+  else if (_tcscmp(misc, TEXT("Replay")) == 0) {
     if (!Basic().MovementDetected)
       dlgLoggerReplayShowModal();
-  else if (_tcscmp(misc, TEXT("Switches")) == 0)
+  } else if (_tcscmp(misc, TEXT("Switches")) == 0)
     dlgSwitchesShowModal();
   else if (_tcscmp(misc, TEXT("Voice")) == 0)
     dlgVoiceShowModal();
