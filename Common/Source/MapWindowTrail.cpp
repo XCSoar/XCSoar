@@ -42,7 +42,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Util.hpp"
-#include "McCready.h"
+#include "MacCready.h"
 #include "OnLineContest.h"
 #include "Screen/Graphics.hpp"
 

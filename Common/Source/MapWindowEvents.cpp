@@ -47,7 +47,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Defines.h"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"

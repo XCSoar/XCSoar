@@ -51,7 +51,7 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "Device/Port.h"
 #include "Math/Units.h"
-#include "McCready.h"
+#include "MacCready.h"
 #include "NMEA/Info.h"
 
 #include <tchar.h>

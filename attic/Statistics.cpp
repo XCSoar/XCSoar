@@ -39,7 +39,7 @@ Copyright_License {
 #include "Statistics.h"
 #include "XCSoar.h"
 #include "externs.h"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Units.h"
 #include "InfoBoxLayout.h"
 #include "Atmosphere.h"

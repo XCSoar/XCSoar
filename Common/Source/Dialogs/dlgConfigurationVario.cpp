@@ -39,7 +39,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
 #include "Screen/Layout.hpp"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Device/device.h"
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"

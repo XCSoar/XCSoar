@@ -65,7 +65,7 @@ Copyright_License {
 #include "UtilsFLARM.hpp"
 #include "SettingsUser.hpp"
 #include "Logger.h"
-#include "McCready.h"
+#include "MacCready.h"
 #include "AirfieldDetails.h"
 #include "Screen/Fonts.hpp"
 #include "DeviceBlackboard.hpp"

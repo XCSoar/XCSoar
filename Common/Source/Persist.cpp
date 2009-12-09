@@ -43,7 +43,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "SettingsComputer.hpp"
 #include "OnLineContest.h"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Math/Pressure.h"
 #include "Atmosphere.h"
 #include "UtilsSystem.hpp"

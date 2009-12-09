@@ -39,7 +39,7 @@ Copyright_License {
 
 #include "GlideComputerAirData.hpp"
 #include "AirspaceDatabase.hpp"
-#include "McCready.h"
+#include "MacCready.h"
 #include "WindZigZag.h"
 #include "WindAnalyser.h"
 #include "GlideComputer.hpp"

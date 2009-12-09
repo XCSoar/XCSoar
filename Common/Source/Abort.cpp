@@ -46,7 +46,7 @@ Copyright_License {
 #include "WayPoint.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Screen.hpp"
-#include "McCready.h"
+#include "MacCready.h"
 #include "RasterTerrain.h"
 #include "GlideTerrain.hpp"
 #include "Message.h"

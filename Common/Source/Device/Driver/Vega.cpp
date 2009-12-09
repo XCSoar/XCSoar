@@ -46,7 +46,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "InputEvents.h"
 #include "LogFile.hpp"
-#include "McCready.h"
+#include "MacCready.h"
 
 #include <tchar.h>
 #include <stdlib.h>

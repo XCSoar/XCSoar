@@ -177,7 +177,7 @@ OBJS	:=\
 	$(SRC)/LoggerImpl.o 		\
 	$(SRC)/LoggerSign.o 		\
 	$(SRC)/ReplayLogger.o 		\
-	$(SRC)/McCready.o 		\
+	$(SRC)/MacCready.o 		\
 	$(SRC)/OnLineContest.o 		\
 	$(SRC)/SnailTrail.o 		\
 	$(SRC)/Task.o			\

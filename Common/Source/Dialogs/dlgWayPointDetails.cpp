@@ -47,7 +47,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"

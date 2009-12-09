@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "GlideComputer.hpp"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.h"

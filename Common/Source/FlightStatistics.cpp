@@ -53,7 +53,7 @@ Copyright_License {
 #include "OnLineContest.h"
 #include "WindStore.h"
 #include "Language.hpp"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Atmosphere.h"
 #include "SettingsComputer.hpp"
 #include "Task.h"

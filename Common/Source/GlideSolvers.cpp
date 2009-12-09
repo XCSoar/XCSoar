@@ -43,7 +43,7 @@ Copyright_License {
  */
 
 #include "GlideSolvers.hpp"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Task.h"
 #include "Math/Earth.hpp"
 #include "Components.hpp"

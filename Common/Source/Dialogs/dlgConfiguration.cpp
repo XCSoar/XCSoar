@@ -50,7 +50,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "Logger.h"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Device/device.h"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"

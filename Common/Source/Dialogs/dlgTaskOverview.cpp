@@ -44,7 +44,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "TaskFile.hpp"
 #include "Logger.h"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "LocalPath.hpp"

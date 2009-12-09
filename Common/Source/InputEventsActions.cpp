@@ -86,7 +86,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
 #include "Audio/Sound.hpp"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Interface.hpp"
 #include "AirspaceWarning.h"
 #include "Components.hpp"

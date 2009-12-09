@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "McCready.h"
+#include "MacCready.h"
 #include "Polar/Polar.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/FastMath.h"

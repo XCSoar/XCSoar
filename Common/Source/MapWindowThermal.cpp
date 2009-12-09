@@ -39,7 +39,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Task.h"
 #include "Math/Earth.hpp"
-#include "McCready.h"
+#include "MacCready.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 

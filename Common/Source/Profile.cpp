@@ -45,7 +45,7 @@ Copyright_License {
 #include "Task.h"
 #include "Appearance.hpp"
 #include "InfoBoxManager.h"
-#include "McCready.h"
+#include "MacCready.h"
 #include "GlideRatio.hpp"
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
