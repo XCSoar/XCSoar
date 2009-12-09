@@ -739,9 +739,9 @@ FRiskFunction(double x, double k)
 
 double
 GlidePolar::MacCreadyRisk(double HeightAboveTerrain, double MaxThermalHeight,
-    double MC)
+    double MacCready)
 {
-  double riskmc = MC;
+  double RiskMC = MacCready;
 
   double hthis = max(1.0, HeightAboveTerrain);
   double hmax = max(hthis, MaxThermalHeight);
@@ -749,7 +749,7 @@ GlidePolar::MacCreadyRisk(double HeightAboveTerrain, double MaxThermalHeight,
   double f;
 
   if (RiskGamma < 0.1)
-    return MC;
+    return MacCready;
   else if (RiskGamma > 0.9)
     f = x;
   else {
@@ -758,8 +758,8 @@ GlidePolar::MacCreadyRisk(double HeightAboveTerrain, double MaxThermalHeight,
     f = FRiskFunction(x, k) / FRiskFunction(1.0, k);
   }
 
-  double mmin = 0; // min(MC,AbortSafetyMacCready());
-  riskmc = f * riskmc + (1 - f) * mmin;
+  double mmin = 0; // min(MacCready, AbortSafetyMacCready());
+  RiskMC = f * RiskMC + (1 - f) * mmin;
 
-  return riskmc;
+  return RiskMC;
 }
