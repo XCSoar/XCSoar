@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_VIEWPORT_HPP
 
 #include "Screen/Canvas.hpp"
+#include "Screen/BufferCanvas.hpp"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
