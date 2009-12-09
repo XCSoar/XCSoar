@@ -42,7 +42,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "SettingsTask.hpp"
 #include "WayPointParser.h"
-#include "McReady.h"
+#include "McCready.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Units.hpp"

@@ -39,7 +39,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Task.h"
 #include "Screen/Graphics.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "Screen/Fonts.hpp"
 #include "options.h" /* for IBLSCALE() */
 

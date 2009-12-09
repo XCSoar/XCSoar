@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Pressure.h"
 #include "Math/LowPassFilter.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "RasterTerrain.h"
 #include "GlideRatio.hpp"
 #include "GlideSolvers.hpp"

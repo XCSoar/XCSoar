@@ -42,7 +42,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/UnitSymbol.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "options.h" /* for IBLSCALE() */
 #include "RasterWeather.h"
 

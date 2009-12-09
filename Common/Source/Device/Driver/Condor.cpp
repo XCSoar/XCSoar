@@ -42,7 +42,7 @@ Copyright_License {
 #include "Math/Pressure.h"
 #include "Math/Units.h"
 #include "Device/Parser.h"
-#include "McReady.h"
+#include "McCready.h"
 #include "NMEA/Info.h"
 
 #include <tchar.h>

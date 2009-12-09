@@ -51,7 +51,7 @@ Copyright_License {
 #include "WayPoint.hpp"
 #include "Registry.hpp"
 #include "MapWindow.h"
-#include "McReady.h"
+#include "McCready.h"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task.h"

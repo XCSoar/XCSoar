@@ -43,7 +43,7 @@ Copyright_License {
  */
 
 #include "GlideSolvers.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "SettingsComputer.hpp"
 #include "RasterTerrain.h"
 #include "RasterMap.h"

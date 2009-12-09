@@ -126,7 +126,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/Math/Geometry.o \
 	$(SRC)/Math/Pressure.o \
 	$(SRC)/Math/Screen.o \
-	$(SRC)/McReady.o \
+	$(SRC)/McCready.o \
 	$(SRC)/OnLineContest.o \
 	$(SRC)/RasterMapJPG2000.o \
 	$(SRC)/RasterMapRaw.o \

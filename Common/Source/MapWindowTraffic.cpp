@@ -42,7 +42,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "options.h" /* for IBLSCALE() */
 
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))

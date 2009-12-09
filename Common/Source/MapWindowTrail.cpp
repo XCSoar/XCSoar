@@ -42,7 +42,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Util.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "OnLineContest.h"
 #include "Screen/Graphics.hpp"
 #include "options.h" /* for IBLSCALE() */

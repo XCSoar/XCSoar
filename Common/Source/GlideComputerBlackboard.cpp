@@ -38,7 +38,7 @@ Copyright_License {
 */
 
 #include "GlideComputerBlackboard.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.h"

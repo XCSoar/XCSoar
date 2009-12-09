@@ -40,7 +40,7 @@ Copyright_License {
 #include "Task.h"
 #include "InfoBoxLayout.h"
 #include "Math/Earth.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "Screen/Graphics.hpp"
 #include "options.h" /* for IBLSCALE() */
 

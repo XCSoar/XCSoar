@@ -51,7 +51,7 @@ Copyright_License {
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Math/Geometry.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "options.h" /* for IBLSCALE() */
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"

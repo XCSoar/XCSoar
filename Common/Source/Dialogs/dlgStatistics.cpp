@@ -40,7 +40,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"

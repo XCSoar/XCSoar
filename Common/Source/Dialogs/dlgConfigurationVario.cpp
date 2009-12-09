@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "Device/device.h"
 #include "InfoBoxLayout.h"
 #include "Registry.hpp"

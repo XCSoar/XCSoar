@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
-#include "McReady.h"
+#include "McCready.h"
 #include "Message.h"
 #include "RasterTerrain.h"
 #include "GlideTerrain.hpp"
