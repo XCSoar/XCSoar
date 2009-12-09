@@ -167,19 +167,6 @@ SunEphemeris::FNsun(double d)
 }
 
 /**
- * Display decimal hours in hours and minutes
- * @param dhr Decimal hours
- */
-void
-SunEphemeris::showhrmn(double dhr)
-{
-  int hr, mn;
-  hr = (int)dhr;
-  mn = (int)(dhr - (double)hr) * 60;
-  // QUESTION TB: no return?! any sense??
-}
-
-/**
  * Calculates all sun-related important times
  * depending on time of year and location
  * @param location Location to be used in calculation
