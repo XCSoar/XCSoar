@@ -24,54 +24,56 @@ struct NMEA_INFO;
 struct DERIVED_INFO;
 
 /**
-  * WindStore receives single windmeasurements and stores these. It uses
-  * single measurements to provide a mean value, differentiated for altitude.
-  *
-  * @author André Somers
-  */
-
-
-class WindStore  {
+ * WindStore receives single windmeasurements and stores these. It uses
+ * single measurements to provide a mean value, differentiated for altitude.
+ *
+ * @author André Somers
+ */
+class WindStore
+{
 
 public:
   WindStore();
   ~WindStore();
 
-public: // Public slots
+public:
+  // Public slots
   /**
-    * Called with new measurements. The quality is a measure for how good the
-    * measurement is. Higher quality measurements are more important in the
-    * end result and stay in the store longer.
-    */
+   * Called with new measurements. The quality is a measure for how good the
+   * measurement is. Higher quality measurements are more important in the
+   * end result and stay in the store longer.
+   */
   void slot_measurement(const NMEA_INFO *basic, DERIVED_INFO *derived,
-                        Vector windvector, int quality);
-  /** Called if the altitude changes.
-    * Determines where measurements are stored and may result in a newWind
-    * signal. */
+      Vector windvector, int quality);
+
+  /**
+   * Called if the altitude changes.
+   * Determines where measurements are stored and may result in a newWind
+   * signal.
+   */
   void slot_Altitude(const NMEA_INFO *basic, DERIVED_INFO *derived);
 
   // signals
   /**
-    * Send if a new wind vector has been established. This may happen as
-    * new measurements flow in, but also if the altitude changes.
-    */
-  void newWind(const NMEA_INFO *basic, DERIVED_INFO *derived,
-               Vector& wind);
+   * Send if a new wind vector has been established. This may happen as
+   * new measurements flow in, but also if the altitude changes.
+   */
+  void newWind(const NMEA_INFO *basic, DERIVED_INFO *derived, Vector& wind);
 
   const Vector getWind(double Time, double h, bool *found) const;
 
 private:
-
   Vector _lastWind;
   double _lastAltitude;
-  WindMeasurementList * windlist ;
+  WindMeasurementList * windlist;
 
-  /** Recalculates the wind from the stored measurements.
-    * May result in a newWind signal. */
+  /**
+   * Recalculates the wind from the stored measurements.
+   * May result in a newWind signal.
+   */
   void recalculateWind(const NMEA_INFO *basic, DERIVED_INFO *derived);
 
   bool updated;
-
 };
 
 #endif
