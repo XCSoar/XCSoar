@@ -285,7 +285,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
   {
     AirspaceAircraftPerformance perf;
     AirspaceSoonestSort ans(state, perf);
-    const AbstractAirspace* as = ans.find_nearest(airspaces, range);
+    const AbstractAirspace* as = ans.find_nearest(airspaces);
     std::ofstream fout("results/res-bb-sortedsoonest.txt");
     if (as) {
       fout << *as << "\n";

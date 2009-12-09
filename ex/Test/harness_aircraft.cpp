@@ -213,6 +213,7 @@ GEOPOINT AircraftSim::endpoint(const fixed bear) const
 }
 
 void AircraftSim::integrate() {
+  state.TrackBearing = bearing;
   state.Location = endpoint(bearing);
   state.Altitude -= sinkrate;
   state.Time += fixed_one;

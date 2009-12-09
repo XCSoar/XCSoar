@@ -92,6 +92,7 @@ TASK_SRC	:=\
 	$(topdir)/src/Math/FastMath.cpp \
 	$(topdir)/src/Math/Earth.cpp \
 	$(topdir)/src/Math/fixed.cpp \
+	$(topdir)/src/Util/AircraftStateFilter.cpp \
 	$(topdir)/src/Util/AvFilter.cpp \
 	$(topdir)/src/Util/DiffFilter.cpp \
 	$(topdir)/src/Util/Filter.cpp \

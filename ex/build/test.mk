@@ -1,5 +1,6 @@
 TESTFAST = \
 	Test/test_fixed.exe \
+	Test/test_acfilter.exe \
 	Test/test_pressure.exe \
 	Test/test_waypoints.exe \
 	Test/test_task.exe \

@@ -33,7 +33,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
+
 #include "Filter.hpp"
 #include <math.h>
 #include <assert.h>
@@ -43,7 +44,13 @@
 
 
 Filter::Filter(const double cutoff_wavelength,
-               const bool bessel)
+               const bool bessel): m_bessel(bessel)
+{
+  design(cutoff_wavelength);
+}
+
+bool
+Filter::design(const double cutoff_wavelength) 
 {
   double sample_freq = 1.0;
   double n= 1.0;
@@ -51,7 +58,7 @@ Filter::Filter(const double cutoff_wavelength,
   double g;
   double p;
 
-  if (bessel) {
+  if (m_bessel) {
     // Bessel
     c= pow((sqrt(pow(2.0,1.0/n)-0.75)-0.5),-0.5)/sqrt(3.0);
     g= 3;
@@ -64,7 +71,14 @@ Filter::Filter(const double cutoff_wavelength,
   }
 
   double f_star = c/(sample_freq*cutoff_wavelength);
+
   assert(f_star<1.0/8.0);
+
+  if (f_star>=1.0/8.0) {
+    ok = false;
+    return false;
+  }
+
   double omega0 = tan(3.1415926*f_star);
   double K1 = p*omega0;
   double K2 = g*omega0*omega0;
@@ -76,6 +90,8 @@ Filter::Filter(const double cutoff_wavelength,
   b[1] = 1.0-(a[0]+a[1]+a[2]+b[0]);
 
   reset(0.0);
+  ok = true;
+  return true;
 }
 
 double
@@ -90,8 +106,12 @@ Filter::reset(const double _x)
 double
 Filter::update(const double _x)
 {
-  x[2]= x[1]; x[1]=x[0]; x[0]= _x;
-  double _y = a[0]*x[0]+a[1]*x[1]+a[2]*x[2]+b[0]*y[0]+b[1]*y[1];
-  y[1]= y[0]; y[0]= _y;
-  return _y;
+  if (ok) {
+    x[2]= x[1]; x[1]=x[0]; x[0]= _x;
+    double _y = a[0]*x[0]+a[1]*x[1]+a[2]*x[2]+b[0]*y[0]+b[1]*y[1];
+    y[1]= y[0]; y[0]= _y;
+    return _y;
+  } else {
+    return _x;
+  }
 }

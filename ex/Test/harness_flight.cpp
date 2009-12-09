@@ -1,11 +1,13 @@
 #include "harness_flight.hpp"
 #include "harness_airspace.hpp"
 #include "TaskEventsPrint.hpp"
+#include "Util/AircraftStateFilter.hpp"
 #ifdef DO_PRINT
 #include <fstream>
 #endif
 
 Airspaces *airspaces = NULL;
+AircraftStateFilter *aircraft_filter = NULL;
 
 double time_elapsed=0.0;
 double time_planned=1.0;
@@ -62,6 +64,7 @@ bool run_flight(TaskManager &task_manager,
 
 #ifdef DO_PRINT
   std::ofstream f4("results/res-sample.txt");
+  std::ofstream f5("results/res-sample-filtered.txt");
 #endif
 
   bool do_print = verbose;
@@ -73,6 +76,10 @@ bool run_flight(TaskManager &task_manager,
   calc_cruise_efficiency=1.0;
 
   static const fixed fixed_10 =10;
+
+  if (aircraft_filter) {
+    aircraft_filter->reset(ac.get_state());
+  }
 
   do {
 
@@ -97,6 +104,12 @@ bool run_flight(TaskManager &task_manager,
       task_manager.print(ac.get_state());
       ac.print(f4);
       f4.flush();
+      if (aircraft_filter) {
+        f5 << aircraft_filter->get_speed() << " " 
+           << aircraft_filter->get_bearing() << " " 
+           << aircraft_filter->get_climb_rate() << "\n"; 
+        f5.flush();
+      }
     }
 #endif
 
@@ -108,6 +121,10 @@ bool run_flight(TaskManager &task_manager,
     n_samples++;
 
     do_print = (++print_counter % output_skip ==0) && verbose;
+
+    if (aircraft_filter) {
+      aircraft_filter->update(ac.get_state());
+    }
 
   } while (ac.advance(task_manager, glide_polar));
 
