@@ -40,6 +40,7 @@ Copyright_License {
 #include "Gauge/GaugeFLARM.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
+#include "Math/Constants.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Screen.hpp"
@@ -146,7 +147,7 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
         y = 0;
       }
       double dh = gps_info.FLARM_Traffic[i].RelativeAltitude;
-      double slope = atan2(dh,d)*2.0/3.14159; // (-1,1)
+      double slope = atan2(dh,d)*2.0/M_PI; // (-1,1)
 
       slope = max(-1.0,min(1.0,slope*2)); // scale so 45 degrees or more=90
 

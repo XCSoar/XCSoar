@@ -41,6 +41,7 @@ Copyright_License {
 #include "VarioSound.h"
 #include "XCSoar.h"
 #include <math.h>
+#include "Math/Constants.h"
 
 BOOL APIENTRY DllMain( HANDLE hModule,
                        DWORD  ul_reason_for_call,
@@ -73,7 +74,7 @@ double randomgaussian() {
     k1 = rand()*1.0/RAND_MAX;
   } while (k1==0);
 
-  rval = sqrt(-2*log(k1))*cos(2.0*3.1415926*k2);
+  rval = sqrt(-2*log(k1))*cos(2.0*M_PI*k2);
   return rval;
 #else
   return 0.0;

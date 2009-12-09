@@ -46,9 +46,8 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-#define PI 3.1415926
 #define SUN_DIAMETER 0.53     // Sunradius degrees
-#define AIR_REFRACTION 34.0/60.0 // athmospheric refraction degrees //
+#define AIR_REFRACTION 34.0/60.0 // athmospheric refraction degrees
 
 #include <math.h>
 
@@ -80,9 +79,9 @@ SunEphemeris::FNrange (double x)
 {
   // QUESTION TB: DEG_TO_RAD?!
 
-  double b = 0.5*x / PI;
-  double a = 2.0*PI * (b - (long)(b));
-  if (a < 0) a = 2.0*PI + a;
+  double b = 0.5*x / M_PI;
+  double a = 2.0*M_PI * (b - (long)(b));
+  if (a < 0) a = 2.0*M_PI + a;
   return a;
 };
 
@@ -100,7 +99,7 @@ double SunEphemeris::f0(double lat, double declin) {
   if (lat < 0.0) dfo = -dfo;
   fo = tan(declin + dfo) * tan(lat*DEG_TO_RAD);
   if (fo>0.99999) fo=1.0; // to avoid overflow //
-  fo = asin(fo) + PI/2.0;
+  fo = asin(fo) + M_PI/2.0;
   return fo;
 };
 
@@ -119,7 +118,7 @@ double SunEphemeris::f1(double lat, double declin) {
   fi = tan(declin + df1) * tan(lat * DEG_TO_RAD);
   if (fi > 0.99999)
     fi = 1.0; // to avoid overflow //
-  fi = asin(fi) + PI / 2.0;
+  fi = asin(fi) + M_PI / 2.0;
   return fi;
 };
 
@@ -194,12 +193,12 @@ int SunEphemeris::CalcSunTimes(const GEOPOINT &location,
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
   LL = L - alpha;
-  if (L < PI) LL += 2.0*PI;
-  equation = 1440.0 * (1.0 - LL / PI/2.0);
+  if (L < M_PI) LL += 2.0*M_PI;
+  equation = 1440.0 * (1.0 - LL / M_PI/2.0);
   ha = f0(location.Latitude,delta);
   hb = f1(location.Latitude,delta);
   twx = hb - ha;  // length of twilight in radians
-  twx = 12.0*twx/PI;              // length of twilight in hours
+  twx = 12.0*twx/M_PI;              // length of twilight in hours
 
   //  printf("ha= %.2f   hb= %.2f \n",ha,hb);
 
@@ -208,9 +207,9 @@ int SunEphemeris::CalcSunTimes(const GEOPOINT &location,
   if (daylen<0.0001) {daylen = 0.0;}
   // arctic winter     //
 
-  riset = 12.0 - 12.0 * ha/PI + tzone - location.Longitude/15.0 + equation/60.0;
-  settm = 12.0 + 12.0 * ha/PI + tzone - location.Longitude/15.0 + equation/60.0;
-  noont = riset + 12.0 * ha/PI;
+  riset = 12.0 - 12.0 * ha/M_PI + tzone - location.Longitude/15.0 + equation/60.0;
+  settm = 12.0 + 12.0 * ha/M_PI + tzone - location.Longitude/15.0 + equation/60.0;
+  noont = riset + 12.0 * ha/M_PI;
   altmax = 90.0 + delta * RAD_TO_DEG - location.Latitude;
 
   // Correction for S HS suggested by David Smith

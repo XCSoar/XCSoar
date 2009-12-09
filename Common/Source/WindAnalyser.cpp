@@ -55,6 +55,7 @@ Copyright_License {
 */
 
 #include "WindAnalyser.h"
+#include "Math/Constants.h"
 #include "Math/FastMath.h"
 #include "LogFile.hpp"
 #include "NMEA/Info.h"
@@ -164,8 +165,8 @@ WindAnalyser::slot_newSample(const NMEA_INFO *nmeaInfo,
     //to determine the quality)
   }
 
-  curVector.x = nmeaInfo->Speed * cos(nmeaInfo->TrackBearing * 3.14159 / 180.0);
-  curVector.y = nmeaInfo->Speed * sin(nmeaInfo->TrackBearing * 3.14159 / 180.0);
+  curVector.x = nmeaInfo->Speed * cos(nmeaInfo->TrackBearing * M_PI / 180.0);
+  curVector.y = nmeaInfo->Speed * sin(nmeaInfo->TrackBearing * M_PI / 180.0);
 
   windsamples[numwindsamples].v = curVector;
   windsamples[numwindsamples].t = nmeaInfo->Time;
@@ -285,8 +286,8 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO *nmeaInfo,
 double
 angleDiff(Vector a, Vector b)
 {
-  double a1 = atan2(a.y, a.x) * 180.0 / 3.141592;
-  double a2 = atan2(b.y, b.x) * 180.0 / 3.141592;
+  double a1 = atan2(a.y, a.x) * 180.0 / M_PI;
+  double a2 = atan2(b.y, b.x) * 180.0 / M_PI;
   double c = a1 - a2;
 
   while (c < -180)
@@ -372,7 +373,7 @@ WindAnalyser::_calcWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
   double rthis = 0;
 
   for (i = 0; i < numwindsamples; i++) {
-    phase = ((i + jmax) % numwindsamples) * 3.141592 * 2.0 / numwindsamples;
+    phase = ((i + jmax) % numwindsamples) * M_PI * 2.0 / numwindsamples;
     wx = cos(phase) * av + mag;
     wy = sin(phase) * av;
     cmag = sqrt(wx * wx + wy * wy) - windsamples[i].mag;

@@ -45,7 +45,7 @@ Copyright_License {
 #define RAD_TO_DEG 57.2957795131
 
 #ifndef M_PI
-#define M_PI 3.14159265359
+#define M_PI 3.14159265358979323846
 #endif
 
 #endif
