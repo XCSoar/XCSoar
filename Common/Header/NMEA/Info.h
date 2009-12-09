@@ -203,7 +203,7 @@ struct NMEA_INFO
   //##############
 
   /** MacCready value of external device (if available) */
-  double MacReady;
+  double MacCready;
 
   /** Ballast information of external device (if available) */
   double Ballast;

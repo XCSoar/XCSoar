@@ -640,7 +640,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
 
   // calculate optimum cruise speed in current track direction
   // this still makes use of mode, so it should agree with
-  // Vmcready if the track bearing is the best cruise track
+  // Vmaccready if the track bearing is the best cruise track
   // this does assume g loading of 1.0
 
   // this is basically a dolphin soaring calculator

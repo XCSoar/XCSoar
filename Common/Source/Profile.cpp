@@ -578,7 +578,7 @@ Profile::ReadRegistrySettings()
   // IndLandable
 
   GetFromRegistry(szRegistryAutoMcMode,
-		  SetSettingsComputer().AutoMcMode);
+		  SetSettingsComputer().AutoMacCreadyMode);
   GetFromRegistry(szRegistryWaypointsOutOfRange,
 		  WaypointsOutOfRange);
   GetFromRegistry(szRegistryOLCRules,

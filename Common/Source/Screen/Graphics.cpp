@@ -151,7 +151,7 @@ ScreenGraphics::Initialise(HINSTANCE hInstance, const SETTINGS_MAP &settings_map
   hTerrainWarning.load(IDB_TERRAINWARNING);
   hTurnPoint.load(IDB_TURNPOINT);
   hSmall.load(IDB_SMALL);
-  hAutoMacCready.load(IDB_AUTOMCREADY);
+  hAutoMacCready.load(IDB_AUTOMACCREADY);
   hGPSStatus1.load(IDB_GPSSTATUS1);
   hGPSStatus2.load(IDB_GPSSTATUS2);
   hLogger.load(IDB_LOGGER);

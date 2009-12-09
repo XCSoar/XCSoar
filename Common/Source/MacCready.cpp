@@ -172,8 +172,8 @@ double GlidePolar::GetBallastLitres() {
 }
 
 /**
- * Sets the McCready value to val
- * @param val The new McCready value
+ * Sets the MacCready value to val
+ * @param val The new MacCready value
  */
 void GlidePolar::SetMacCready(double val) {
   Lock();
@@ -242,7 +242,7 @@ void GlidePolar::UpdatePolar(bool send,
   polar_c = polar.POLAR[2] * BallastWeight*bugfactor;
 
   // do preliminary scan to find min sink and best LD
-  // this speeds up mccready calculations because we have a reduced range
+  // this speeds up maccready calculations because we have a reduced range
   // to search across.
   // this also limits speed to fly to logical values (will never try
   // to fly slower than min sink speed)
@@ -265,7 +265,7 @@ void GlidePolar::UpdatePolar(bool send,
       // vtrack = TAS along bearing in cruise
       double vtrack = (double)i;
       // saves the sinkrate for the current speed (vtrack) without
-      // any wind or mccready
+      // any wind or maccready
       double thesinkrate
         =  -SinkRate(polar_a,polar_b,polar_c,0,0,vtrack);
 
@@ -324,8 +324,8 @@ void GlidePolar::UpdatePolar(bool send,
 
 /**
  * Fetches the corresponding sinkrate from the sinkratecache
- * and corrects it for the McCready value
- * @param MC McCready value
+ * and corrects it for the MacCready value
+ * @param MC MacCready value
  * @param v The speed used for calculation
  * @return The corresponding sinkrate
  */
@@ -336,7 +336,7 @@ inline double GlidePolar::_SinkRateFast(const double &MC, const int &v) {
 
 /**
  * Calls _SinkRateFast with corrected speed
- * @param MC McCready value
+ * @param MC MacCready value
  * @param v The speed used for calculation
  * @return The corresponding sinkrate
  */
@@ -377,12 +377,12 @@ double GlidePolar::SinkRate(double V, double n) {
  * @param a Polar factor A
  * @param b Polar factor
  * @param c Polar factor
- * @param MC McCready value
+ * @param MC MacCready value
  * @param HW Head wind speed
  * @param V Plane speed
  * @return The corresponding sinkrate
  */
-double GlidePolar::MacCreadyAltitude_internal(double emcready,
+double GlidePolar::MacCreadyAltitude_internal(double eMacCready,
                                               double Distance,
                                               double Bearing,
                                               const double WindSpeed,
@@ -423,7 +423,7 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   // TODO accuracy: extensions to Mc to incorporate real-life issues
   // - [done] best cruise track and bearing (final glide and for waypoint)
   // - climb before or after turning waypoints.
-  // - mcready ring changes with height allowing for risk and decreased rate
+  // - maccready ring changes with height allowing for risk and decreased rate
   // - cloud streets
   // - sink rate between thermals
   // - modify Vtrack for IAS
@@ -456,13 +456,13 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
     // SinkRate function returns negative value for sink
 
     if (isFinalGlide) {
-      sinkrate = -_SinkRateFast(max(0.0,emcready), i);
+      sinkrate = -_SinkRateFast(max(0.0,eMacCready), i);
       tc = 1.0; // assume no circling, e.g. final glide at best LD
       // with no climbs
     } else {
-      emcready = max(MIN_MACCREADY,emcready);
+      eMacCready = max(MIN_MACCREADY,eMacCready);
       sinkrate = -_SinkRateFast(0.0, i);
-      tc = max(0.0,min(1.0,emcready/(sinkrate+emcready)));
+      tc = max(0.0,min(1.0,eMacCready/(sinkrate+eMacCready)));
     }
 
     // calculate average speed along track relative to wind
@@ -498,7 +498,7 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
     } else {
       // time spent in cruise
       double Time_cruise = (tc/vtot)*Distance;
-      double Time_climb = sinkrate*(Time_cruise/emcready);
+      double Time_climb = sinkrate*(Time_cruise/eMacCready);
 
       // total time to destination
       TimeToDestTotal = max(Time_cruise+Time_climb,0.0001);
@@ -572,7 +572,7 @@ double GlidePolar::FindSpeedForSinkRate(double w) {
   return vbest;
 }
 
-double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
+double GlidePolar::MacCreadyAltitude_heightadjust(double eMacCready,
 						  double Distance,
 						  double Bearing,
 						  const double WindSpeed,
@@ -592,7 +592,7 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
     // if not in final glide or below target altitude, need to
     // climb-cruise the whole way
 
-    Altitude = MacCreadyAltitude_internal(emcready,
+    Altitude = MacCreadyAltitude_internal(eMacCready,
                                           Distance, Bearing,
                                           WindSpeed, WindBearing,
                                           BestCruiseTrack,
@@ -605,7 +605,7 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
     // if final glide mode and can final glide part way
 
     double t_t = ERROR_TIME;
-    double h_t = MacCreadyAltitude_internal(emcready,
+    double h_t = MacCreadyAltitude_internal(eMacCready,
                                             Distance, Bearing,
                                             WindSpeed, WindBearing,
                                             BestCruiseTrack,
@@ -630,7 +630,7 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
 	double d_c = Distance*(1.0 - f);
 
 	double t_c;
-	double h_c = MacCreadyAltitude_internal(emcready,
+	double h_c = MacCreadyAltitude_internal(eMacCready,
 						d_c, Bearing,
 						WindSpeed, WindBearing,
 						BestCruiseTrack,
@@ -666,7 +666,7 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
 
 }
 
-double GlidePolar::MacCreadyAltitude(double emcready,
+double GlidePolar::MacCreadyAltitude(double eMacCready,
                                      double Distance,
 				     const double Bearing,
                                      const double WindSpeed,
@@ -680,11 +680,11 @@ double GlidePolar::MacCreadyAltitude(double emcready,
 
   double TTG = ERROR_TIME;
   double Altitude = -1;
-  bool invalidMc = (emcready<MIN_MACCREADY);
+  bool invalidMc = (eMacCready<MIN_MACCREADY);
   bool invalidAltitude = false;
 
   if (!invalidMc || isFinalGlide) {
-    Altitude = MacCreadyAltitude_heightadjust(emcready,
+    Altitude = MacCreadyAltitude_heightadjust(eMacCready,
                                               Distance, Bearing,
                                               WindSpeed, WindBearing,
                                               BestCruiseTrack,
@@ -708,7 +708,7 @@ double GlidePolar::MacCreadyAltitude(double emcready,
   // This can occur if can't make progress against headwind,
   // or if Mc is too small
 
-  Altitude = MacCreadyAltitude_heightadjust(emcready,
+  Altitude = MacCreadyAltitude_heightadjust(eMacCready,
                                             Distance, Bearing,
                                             WindSpeed, WindBearing,
                                             BestCruiseTrack,

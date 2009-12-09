@@ -1584,7 +1584,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Final glide")));
     dfe->addEnumText(gettext(TEXT("Average climb")));
     dfe->addEnumText(gettext(TEXT("Both")));
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoMcMode);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoMacCreadyMode);
     wp->RefreshDisplay();
   }
 
@@ -2827,7 +2827,7 @@ void dlgConfigurationShowModal(void){
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpAutoMcMode"),
 				      szRegistryAutoMcMode,
-				      XCSoarInterface::SetSettingsComputer().AutoMcMode);
+				      XCSoarInterface::SetSettingsComputer().AutoMacCreadyMode);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpWaypointsOutOfRange"));
   if (wp) {

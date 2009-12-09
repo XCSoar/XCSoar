@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#if !defined(AFX_MCREADY_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_MCREADY_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#if !defined(AFX_MACCREADY_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
+#define AFX_MACCREADY_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
 #define MAXSAFETYSPEED 200
 
@@ -52,7 +52,7 @@ extern Polar polar;
 class GlidePolar {
  public:
 
-  static double MacCreadyAltitude(double MCREADY, double Distance,
+  static double MacCreadyAltitude(double MacCready, double Distance,
                                   const double Bearing,
 				  const double WindSpeed,
                                   const double WindBearing,
@@ -64,7 +64,7 @@ class GlidePolar {
 				  double cruise_efficiency=1.0);
 
   static double MacCreadyRisk(double HeightAboveTerrain, double MaxThermalHeight,
-                              double MCREADY);
+                              double MacCready);
 
   static double GetAUW();
 
@@ -94,7 +94,7 @@ class GlidePolar {
   static double SinkRateFast(const double &MC, const int &v);
  private:
   static double _SinkRateFast(const double &MC, const int &v);
-  static double MacCreadyAltitude_internal(double MCREADY,
+  static double MacCreadyAltitude_internal(double MacCready,
                                            double Distance,
                                            const double Bearing,
                                            const double WindSpeed,
@@ -105,7 +105,7 @@ class GlidePolar {
                                            double *timetogo,
 					   const double cruise_efficiency);
 
-  static double MacCreadyAltitude_heightadjust(double MCREADY,
+  static double MacCreadyAltitude_heightadjust(double MacCready,
                                                double Distance,
                                                const double Bearing,
                                                const double WindSpeed,

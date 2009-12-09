@@ -127,7 +127,7 @@ typedef struct _SCREEN_INFO
 //   LD 4,5,19,38,53, 66    VENTA-ADDON added 66 for GR final
 //   Vario 2,7,8,9,21,22,24,44
 //   Wind 25,26,48,49,50
-//   Mcready 10,34,35,43
+//   MacCready 10,34,35,43
 //   Nav 11,12,13,15,16,17,18,27,28,29,30,31
 //   Waypoint 14,36,39,40,41,42,45,46
 SCREEN_INFO Data_Options[] = {
@@ -212,7 +212,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 33
 	  {ugAltitude,        TEXT("Pressure Altitude"), TEXT("H Baro"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 0, 20},
 	  // 34
-	  {ugHorizontalSpeed, TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 35, 10},
+	  {ugHorizontalSpeed, TEXT("Speed MacCready"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 35, 10},
 	  // 35
 	  {ugNone,            TEXT("Percentage climb"), TEXT("% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 43, 34},
 	  // 36

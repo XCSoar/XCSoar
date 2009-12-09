@@ -346,7 +346,7 @@ ActionInterface::on_key_MacCready(int UpDown)
     }
 
   // JMW TODO check scope
-  AllDevicesPutMcCready(MACCREADY);
+  AllDevicesPutMacCready(MACCREADY);
 }
 
 

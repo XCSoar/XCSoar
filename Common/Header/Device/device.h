@@ -78,7 +78,7 @@ struct DeviceDescriptor {
 
   bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info);
 
-  bool PutMcCready(double mc_cready);
+  bool PutMacCready(double mc_cready);
   bool PutBugs(double bugs);
   bool PutBallast(double ballast);
   bool PutVolume(int volume);
@@ -136,7 +136,7 @@ void devTick(void);
 bool
 devGetBaroAltitude(double *Value);
 
-void AllDevicesPutMcCready(double mc_cready);
+void AllDevicesPutMacCready(double mc_cready);
 void AllDevicesPutBugs(double bugs);
 void AllDevicesPutBallast(double ballast);
 void AllDevicesPutVolume(int volume);

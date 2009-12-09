@@ -95,7 +95,7 @@ AAA = TAS 0 to 150 knots
 
 BBB.B = Vario, -10 to +15 knots, negative sign for sink
 
-C.C = Macready 0 to 8.0 knots
+C.C = MacCready 0 to 8.0 knots
 
 DDDDD = IAS squared 0 to 22500
 
@@ -129,8 +129,8 @@ PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
   wnet = _tcstod(ctemp, NULL) / TOKNOTS;
 
   NMEAParser::ExtractParameter(String,ctemp,2);
-  GPS_INFO->MacReady = _tcstod(ctemp, NULL) / TOKNOTS;
-  GlidePolar::SetMacCready(GPS_INFO->MacReady);
+  GPS_INFO->MacCready = _tcstod(ctemp, NULL) / TOKNOTS;
+  GlidePolar::SetMacCready(GPS_INFO->MacCready);
 
   NMEAParser::ExtractParameter(String,ctemp,3);
   vias = sqrt(_tcstod(ctemp, NULL)) / TOKNOTS;

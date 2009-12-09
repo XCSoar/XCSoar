@@ -74,17 +74,17 @@ typedef enum
 
 struct SETTINGS_COMPUTER
 {
-  /** AutoMcCready feature enable (true/false) */
+  /** AutoMacCready feature enable (true/false) */
   bool AutoMacCready;
   int FinalGlideTerrain;
 
   /**
-   * AutoMcCready calculation mode
+   * AutoMacCready calculation mode
    * 0: Final glide only
    * 1: Set to average if in climb mode
    * 2: Average if in climb mode, final glide in final glide mode
    */
-  int AutoMcMode;
+  int AutoMacCreadyMode;
   bool EnableCalibration;
   bool AutoForceFinalGlide;
 

@@ -466,10 +466,10 @@ DeviceDescriptor::IsBaroSource() const
 }
 
 bool
-DeviceDescriptor::PutMcCready(double mc_cready)
+DeviceDescriptor::PutMacCready(double mc_cready)
 {
   return device != NULL
-    ? device->PutMcCready(mc_cready)
+    ? device->PutMacCready(mc_cready)
     : true;
 }
 
@@ -729,7 +729,7 @@ struct DeviceDescriptor *devVarioFindVega(void)
   return NULL;
 }
 
-void AllDevicesPutMcCready(double mc_cready)
+void AllDevicesPutMacCready(double mc_cready)
 {
   if (is_simulator())
     return;
@@ -737,7 +737,7 @@ void AllDevicesPutMcCready(double mc_cready)
   ScopeLock protect(mutexComm);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutMcCready(mc_cready);
+    DeviceList[i].PutMacCready(mc_cready);
 }
 
 void AllDevicesPutBugs(double bugs)

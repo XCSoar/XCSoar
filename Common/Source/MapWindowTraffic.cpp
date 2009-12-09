@@ -79,7 +79,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   Brush yellowBrush(Color(0xFF,0xFF,0x00));
   Brush greenBrush(Color(0x00,0xFF,0x00));
 
-  // Saves the McCready value
+  // Saves the MacCready value
   const double MACCREADY = GlidePolar::GetMacCready();
 
   // Circle through the FLARM targets

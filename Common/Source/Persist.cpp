@@ -144,7 +144,7 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   double BUGS = GlidePolar::GetBugs();
   double BALLAST = GlidePolar::GetBallast();
 
-  // Read persistent memory into McCready, QNH, bugs, ballast and temperature
+  // Read persistent memory into MacCready, QNH, bugs, ballast and temperature
   fread(&MACCREADY, sizeof(double), 1, file);
   fread(&QNH, sizeof(QNH), 1, file);
   fread(&BUGS, sizeof(double), 1, file);
