@@ -43,7 +43,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Battery.h"
 #include "Units.hpp"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "Logger.h"
 #include "Math/FastMath.h"
 #include "LocalTime.hpp"

@@ -80,7 +80,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MainWindow.hpp"
 #include "Atmosphere.h"
 #include "Gauge/GaugeFLARM.hpp"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"

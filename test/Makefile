@@ -53,7 +53,7 @@ t/01_test_tap.exe: src/01_test_tap.c
 	gcc -o $@ $<
 
 RUN_WAY_POINT_PARSER_OBJS = \
-	$(SRC)/Waypointparser.o \
+	$(SRC)/WayPointParser.o \
 	$(SRC)/WayPointList.o \
 	$(SRC)/Math/Earth.o \
 	$(SRC)/Math/FastMath.o \
@@ -183,7 +183,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/UtilsText.o \
 	$(SRC)/UtilsFont.o \
 	$(SRC)/WayPointList.o \
-	$(SRC)/Waypointparser.o \
+	$(SRC)/WayPointParser.o \
 	$(SRC)/jasper-$(TARGET).a \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a \

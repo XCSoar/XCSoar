@@ -186,7 +186,7 @@ OBJS	:=\
 	$(SRC)/TaskVisitor.o		\
 	$(SRC)/TeamCodeCalculation.o 	\
 	$(SRC)/ThermalLocator.o 	\
-	$(SRC)/Waypointparser.o 	\
+	$(SRC)/WayPointParser.o 	\
 	$(SRC)/WayPoint.o 		\
 	$(SRC)/WayPointList.o 		\
 	$(SRC)/windanalyser.o 		\

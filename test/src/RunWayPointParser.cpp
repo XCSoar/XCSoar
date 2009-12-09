@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "WayPointList.hpp"
 #include "RasterTerrain.h"
 #include "Thread/Mutex.hpp"

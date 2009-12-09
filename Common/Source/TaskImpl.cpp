@@ -41,7 +41,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "SettingsTask.hpp"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "McReady.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"

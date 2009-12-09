@@ -42,7 +42,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "SettingsTask.hpp"
 #include "RasterTerrain.h"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "AirfieldDetails.h"
 #include "AirspaceGlue.hpp"
 #include "TopologyStore.h"

@@ -54,7 +54,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "LocalPath.hpp"
 #include "WayPointList.hpp"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "Task.h"
 #include "Logger.h"
 #include "wcecompat/ts_string.h"

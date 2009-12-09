@@ -50,7 +50,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
 #include "Dialogs.h"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "AirspaceGlue.hpp"
 #include "AirspaceWarning.h"
 #include "AirspaceDatabase.hpp"

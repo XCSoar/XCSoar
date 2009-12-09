@@ -61,7 +61,7 @@ Copyright_License {
 #include "McReady.h"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "Polar/BuiltIn.hpp"
 #include "Polar/Historical.hpp"
 #include "Polar/Loader.hpp"

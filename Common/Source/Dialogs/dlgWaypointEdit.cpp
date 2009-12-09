@@ -40,7 +40,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "InputEvents.h"
 #include "InfoBoxLayout.h"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
