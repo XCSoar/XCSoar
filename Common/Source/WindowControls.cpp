@@ -68,21 +68,8 @@ using std::min;
 using std::max;
 #endif
 
-#ifdef ALTAIRSYNC
-void SetSourceRectangle(RECT fromRect) {};
-RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed) {
-  return *lprcTo;
-}
-#endif
-
 #define DEFAULTBORDERPENWIDTH Layout::FastScale(1)
 #define SELECTORWIDTH Layout::FastScale(4)
-
-// utility functions
-
-void DrawLine(Canvas &canvas, int x1, int y1, int x2, int y2) {
-  canvas.line(x1, y1, x2, y2);
-}
 
 // returns true if it is a long press,
 // otherwise returns false
