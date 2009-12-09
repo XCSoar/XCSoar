@@ -37,11 +37,7 @@ Copyright_License {
 */
 
 #include "Math/FastMath.h"
-
-#ifndef DEG_TO_RAD
-#define DEG_TO_RAD 0.0174532925199432958
-#define RAD_TO_DEG 57.2957795131
-#endif
+#include "Math/Constants.h"
 
 double COSTABLE[4096];
 double SINETABLE[4096];
