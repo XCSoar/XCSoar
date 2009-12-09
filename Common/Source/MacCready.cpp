@@ -56,9 +56,9 @@ Copyright_License {
 
 //double GlidePolar::BallastFactor;
 double GlidePolar::RiskGamma = 0.0;
-double GlidePolar::polar_a;
-double GlidePolar::polar_b;
-double GlidePolar::polar_c;
+double GlidePolar::PolarCoefA;
+double GlidePolar::PolarCoefB;
+double GlidePolar::PolarCoefC;
 int GlidePolar::Vminsink = 2;
 int GlidePolar::Vbestld = 2;
 double GlidePolar::sinkratecache[MAXSAFETYSPEED];
@@ -76,10 +76,10 @@ static int iSAFETYSPEED = 0;
 static Mutex mutexGlidePolar;
 
 //Flight Data Globals
-double GlidePolar::MACCREADY = 0; // JMW now in SI units (m/s) for consistency
-double GlidePolar::BUGS = 1;
-double GlidePolar::BALLAST = 0;
-double GlidePolar::CRUISE_EFFICIENCY = 1.0;
+double GlidePolar::_MacCready = 0; // JMW now in SI units (m/s) for consistency
+double GlidePolar::_Bugs = 1;
+double GlidePolar::_Ballast = 0;
+double GlidePolar::_CruiseEfficiency = 1.0;
 
 unsigned POLARID = 0;
 Polar polar;
@@ -104,7 +104,7 @@ GlidePolar::AbortSafetyMacCready()
   Lock();
 
   if (AbortSafetyUseCurrent)
-    retval = MACCREADY;
+    retval = _MacCready;
   else
     retval = SafetyMacCready;
 
@@ -135,7 +135,7 @@ GlidePolar::GetMacCready()
   double retval;
 
   Lock();
-  retval = MACCREADY;
+  retval = _MacCready;
   Unlock();
 
   return retval;
@@ -151,7 +151,7 @@ GlidePolar::GetBugs()
   double retval;
 
   Lock();
-  retval = BUGS;
+  retval = _Bugs;
   Unlock();
 
   return retval;
@@ -167,7 +167,7 @@ GlidePolar::GetBallast()
   double retval;
 
   Lock();
-  retval = BALLAST;
+  retval = _Ballast;
   Unlock();
 
   return retval;
@@ -183,7 +183,7 @@ GlidePolar::GetCruiseEfficiency()
   double retval;
 
   Lock();
-  retval = CRUISE_EFFICIENCY;
+  retval = _CruiseEfficiency;
   Unlock();
 
   return retval;
@@ -213,7 +213,7 @@ void
 GlidePolar::SetMacCready(double val)
 {
   Lock();
-  MACCREADY = val;
+  _MacCready = val;
   Unlock();
 }
 
@@ -225,7 +225,7 @@ void
 GlidePolar::SetBugs(double val)
 {
   Lock();
-  BUGS = val;
+  _Bugs = val;
   Unlock();
 }
 
@@ -237,7 +237,7 @@ void
 GlidePolar::SetCruiseEfficiency(double val)
 {
   Lock();
-  CRUISE_EFFICIENCY = val;
+  _CruiseEfficiency = val;
   Unlock();
 }
 
@@ -249,7 +249,7 @@ void
 GlidePolar::SetBallast(double val)
 {
   Lock();
-  BALLAST = val;
+  _Ballast = val;
   Unlock();
 }
 
@@ -266,7 +266,7 @@ GlidePolar::UpdatePolar(bool send, const SETTINGS_COMPUTER &settings)
 
   double BallastWeight;
   // Calculate ballast in liters (=BallastLitres)
-  BallastLitres = polar.WEIGHTS[2] * BALLAST;
+  BallastLitres = polar.WEIGHTS[2] * _Ballast;
   // Calculate total weight of the plane (=BallastWeight)
   BallastWeight = GetAUW();
   // Calculate WingLoading if possible
@@ -277,10 +277,10 @@ GlidePolar::UpdatePolar(bool send, const SETTINGS_COMPUTER &settings)
 
   // Correct polar for BallastWeight and bugfactor
   BallastWeight = (double)sqrt(BallastWeight);
-  double bugfactor = 1.0 / BUGS;
-  polar_a = polar.POLAR[0] / BallastWeight * bugfactor;
-  polar_b = polar.POLAR[1] * bugfactor;
-  polar_c = polar.POLAR[2] * BallastWeight * bugfactor;
+  double bugfactor = 1.0 / _Bugs;
+  PolarCoefA = polar.POLAR[0] / BallastWeight * bugfactor;
+  PolarCoefB = polar.POLAR[1] * bugfactor;
+  PolarCoefC = polar.POLAR[2] * BallastWeight * bugfactor;
 
   // do preliminary scan to find min sink and best LD
   // this speeds up maccready calculations because we have a reduced range
@@ -307,7 +307,7 @@ GlidePolar::UpdatePolar(bool send, const SETTINGS_COMPUTER &settings)
 
     // saves the sinkrate for the current speed (vtrack) without
     // any wind or maccready
-    double thesinkrate = -SinkRate(polar_a, polar_b, polar_c, 0, 0, vtrack);
+    double thesinkrate = -SinkRate(PolarCoefA, PolarCoefB, PolarCoefC, 0, 0, vtrack);
 
     // calculate the LD
     double ld = vtrack / thesinkrate;
@@ -329,9 +329,9 @@ GlidePolar::UpdatePolar(bool send, const SETTINGS_COMPUTER &settings)
   }
 
   /*
-  int polar_ai = iround((polar_a*10)*4096);
-  int polar_bi = iround((polar_b)*4096);
-  int polar_ci = iround((polar_c/10)*4096);
+  int polar_ai = iround((PolarCoefA*10)*4096);
+  int polar_bi = iround((PolarCoefB)*4096);
+  int polar_ci = iround((PolarCoefC/10)*4096);
   int minsinki = -iround(minsink*10);
   int vbestldi = iround(Vbestld*10);
   int bestldi = iround(bestld*10);
@@ -341,7 +341,7 @@ GlidePolar::UpdatePolar(bool send, const SETTINGS_COMPUTER &settings)
 
   // TODO JMW: use this instead? etc
   /*
-  AllDevicesPutBugs(BUGS);
+  AllDevicesPutBugs(_Bugs);
 
   if (GPS_INFO.VarioAvailable) {
 
@@ -361,8 +361,8 @@ GlidePolar::UpdatePolar(bool send, const SETTINGS_COMPUTER &settings)
   // TODO JMW: should call GCE_POLAR_CHANGED
   /*
   if (send) {
-    AllDevicesPutBallast(BALLAST);
-    AllDevicesPutBugs(BUGS);
+    AllDevicesPutBallast(_Ballast);
+    AllDevicesPutBugs(_Bugs);
   }
   */
 }
@@ -401,7 +401,7 @@ GlidePolar::SinkRateFast(const double &MC, const int &v)
 double
 GlidePolar::SinkRate(double V)
 {
-  return SinkRate(polar_a, polar_b, polar_c, 0.0, 0.0, V);
+  return SinkRate(PolarCoefA, PolarCoefB, PolarCoefC, 0.0, 0.0, V);
 }
 
 #define MIN_MACCREADY 0.000000000001
@@ -417,7 +417,7 @@ GlidePolar::SinkRate(double V, double n)
 {
   n = max(0.1, fabs(n));
 
-  double w0 = SinkRate(polar_a, polar_b, polar_c, 0.0, 0.0, V);
+  double w0 = SinkRate(PolarCoefA, PolarCoefB, PolarCoefC, 0.0, 0.0, V);
   //double v1 = V / max(1, Vbestld);
   double v2 = Vbestld / max(Vbestld/2,V);
   return w0 - (V / (2 * bestld)) * (n * n - 1) * (v2 * v2);

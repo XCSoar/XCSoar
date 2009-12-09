@@ -69,9 +69,9 @@ public:
 
   //  static double BallastFactor;
   static double RiskGamma;
-  static double polar_a;
-  static double polar_b;
-  static double polar_c;
+  static double PolarCoefA;
+  static double PolarCoefB;
+  static double PolarCoefC;
   static int Vminsink;
   static int Vbestld;
   static double bestld;
@@ -102,13 +102,13 @@ private:
       const double AltitudeAboveTarget, const double cruise_efficiency);
 
 private:
-  static double MACCREADY; // m/s
-  static double BUGS;
-  static double BALLAST;
+  static double _MacCready; // m/s
+  static double _Bugs;
+  static double _Ballast;
   static void Lock();
   static void Unlock();
   static double BallastLitres;
-  static double CRUISE_EFFICIENCY;
+  static double _CruiseEfficiency;
   static int MAXSPEED;
 
 public:
