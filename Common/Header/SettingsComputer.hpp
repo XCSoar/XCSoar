@@ -49,24 +49,18 @@ Copyright_License {
 // from outside calculation thread; calculation thread should not set
 // these values
 
-// AutoWindMode
+/** AutoWindMode */
 typedef enum {
-  D_AUTOWIND_NONE=0,
+  /** 0: Manual */
+  D_AUTOWIND_NONE = 0,
+  /** 1: Circling */
   D_AUTOWIND_CIRCLING,
+  /** 2: ZigZag */
   D_AUTOWIND_ZIGZAG
+  /** 3: Both */
 } AutoWindModeBits_t;
-// 0: Manual
-// 1: Circling
-// 2: ZigZag
-// 3: Both
 
-// AutoMcMode
-// 0: Final glide only
-// 1: Set to average if in climb mode
-// 2: Average if in climb mode, final glide in final glide mode
-
-// airspace display modes
-
+/** Airspace display modes */
 typedef enum {
   ALLON=0,
   CLIP,
@@ -77,17 +71,37 @@ typedef enum {
 } AirspaceDisplayMode_t;
 
 struct SETTINGS_COMPUTER {
+  /** AutoMcCready feature enable (true/false) */
   bool AutoMacCready;
   int    FinalGlideTerrain;
+
+  /**
+   * AutoMcCready calculation mode
+   * 0: Final glide only
+   * 1: Set to average if in climb mode
+   * 2: Average if in climb mode, final glide in final glide mode
+   */
   int    AutoMcMode;
   bool   EnableCalibration;
   bool   AutoForceFinalGlide;
+
+  /**
+   * AutoWind calculation mode
+   * 0: Manual
+   * 1: Circling
+   * 2: ZigZag
+   * 3: Both
+   */
   int    AutoWindMode;
   bool   EnableNavBaroAltitude;
-  bool   EnableBlockSTF; // block speed to fly instead of dolphin
+  /** block speed to fly instead of dolphin */
+  bool   EnableBlockSTF;
   int    EnableThermalLocator;
+  /** Logger interval in cruise mode */
   int    LoggerTimeStepCruise;
+  /** Logger interval in circling mode */
   int    LoggerTimeStepCircling;
+  /** Use short IGC filenames for the logger files */
   bool   LoggerShortName;
   bool   DisableAutoLogger;
   double SAFETYALTITUDEARRIVAL;
@@ -106,7 +120,8 @@ struct SETTINGS_COMPUTER {
 
   int    TeamCodeRefWaypoint;
   bool   TeamFlarmTracking;
-  TCHAR  TeamFlarmCNTarget[4]; // CN of the glider to track
+  /** CN of the glider to track */
+  TCHAR  TeamFlarmCNTarget[4];
 
   // sound stuff not used?
   bool   EnableSoundVario;
@@ -115,16 +130,18 @@ struct SETTINGS_COMPUTER {
   int    SoundVolume;
   int    SoundDeadband;
 
-  // local time adjustment
+  /** local time adjustment */
   int UTCOffset;
 
   unsigned OLCRules;
   unsigned Handicap;
   bool EnableOLC;
 
-  TCHAR  TeammateCode[10]; // auto-detected, see also in Info.h
+  /** auto-detected, see also in Info.h */
+  TCHAR  TeammateCode[10];
   bool   TeammateCodeValid;
-  int TeamFlarmIdTarget;    // FlarmId of the glider to track
+  /** FlarmId of the glider to track */
+  int TeamFlarmIdTarget;
 
   int  Alternate1; // VENTA3
   int  Alternate2;
@@ -140,8 +157,10 @@ struct SETTINGS_COMPUTER {
   bool EnableVoiceInSector;
   bool EnableVoiceAirspace;
 
-  bool EnableAirspaceWarnings; /* true if airspace warnings are enabled */
-  unsigned WarningTime; /** warning time before airspace entry */
+  /** Airspace warnings enabled (true/false) */
+  bool EnableAirspaceWarnings;
+  /** Warning time before airspace entry */
+  unsigned WarningTime;
   unsigned AcknowledgementTime;
 
   // airspace
