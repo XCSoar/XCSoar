@@ -225,15 +225,14 @@ CuSonde::findThermalHeight(unsigned short level)
 
   double dlevel = (TITHRESHOLD - cslevels[level].thermalIndex) / dti;
   double dthermalheight = (level + dlevel) * CUSONDE_HEIGHTSTEP;
-  if (dlevel > 0.0) {
-    if (dlevel > 1.0) {
-      if ((level + 2 < CUSONDE_NUMLEVELS) && (cslevels[level + 2].nmeasurements
-          > 0)) {
-        // estimated point should be in next level.
-        return;
-      }
-    }
 
+  if ((dlevel > 1.0)
+      && (level + 2 < CUSONDE_NUMLEVELS)
+      && (cslevels[level + 2].nmeasurements > 0))
+      // estimated point should be in next level.
+      return;
+
+  if (dlevel > 0.0) {
     // set the level thermal height to the calculated value
     cslevels[level].thermalHeight = dthermalheight;
 
