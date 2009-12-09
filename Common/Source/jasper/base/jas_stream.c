@@ -79,9 +79,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <ctype.h>
-#if defined(HAVE_UNISTD_H)
-//JMW#include <unistd.h>
-#endif
+#include <unistd.h>
 
 #include "jasper/jas_types.h"
 #include "jasper/jas_stream.h"

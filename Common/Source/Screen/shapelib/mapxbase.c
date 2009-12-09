@@ -48,6 +48,7 @@ Copyright_License {
 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 /************************************************************************/
 /*                             SfRealloc()                              */
