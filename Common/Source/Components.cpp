@@ -506,7 +506,7 @@ void XCSoarInterface::Shutdown(void) {
   //  CalibrationSave();
 #endif
 
-  #if defined(GNAV) && !defined(PCGNAV)
+  if (is_altair()) {
     StartupStore(TEXT("Altair shutdown\n"));
     Sleep(2500);
     StopHourglassCursor();
@@ -514,7 +514,7 @@ void XCSoarInterface::Shutdown(void) {
     while(1) {
       Sleep(100); // free time up for processor to perform shutdown
     }
-  #endif
+  }
 
   CloseFLARMDetails();
 
