@@ -51,11 +51,11 @@ Copyright_License {
  *
  * This is a slow function.  Adapted from The Aviation Formulary 1.42.
  */
-void IntermediatePoint(GEOPOINT loc1,
-                       GEOPOINT loc2,
-                       double dthis,
-                       double dtotal,
-                       GEOPOINT *loc3) {
+static void
+IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2,
+                  double dthis, double dtotal,
+                  GEOPOINT *loc3)
+{
   double A, B, x, y, z, d, f;
 
   assert(loc3 != NULL);
