@@ -58,7 +58,6 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Profile.hpp"
 #include "LocalTime.hpp"
-#include "McCready.h"
 #include "Math/FastMath.h"
 #include "InfoBoxLayout.h"
 #include "WayPointParser.h"

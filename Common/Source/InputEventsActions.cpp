@@ -1059,7 +1059,6 @@ InputEvents::eventAbortTask(const TCHAR *misc)
 }
 
 #include "Device/device.h"
-#include "McCready.h"
 
 // Bugs
 // Adjusts the degradation of glider performance due to bugs
