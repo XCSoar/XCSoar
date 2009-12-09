@@ -72,10 +72,11 @@ LOGFONT                                   autoStatisticsLogFont;
 
 int  UseCustomFonts;
 
+#ifndef ENABLE_SDL
+
 static void
 ApplyClearType(LOGFONT *logfont)
 {
-#ifndef ENABLE_SDL
   logfont->lfQuality = ANTIALIASED_QUALITY;
 #ifdef CLEARTYPE_COMPAT_QUALITY
   if (0) {
@@ -87,8 +88,9 @@ ApplyClearType(LOGFONT *logfont)
 #endif
   }
 #endif
-#endif /* !ENABLE_SDL */
 }
+
+#endif /* !ENABLE_SDL */
 
 static bool
 IsNullLogFont(LOGFONT logfont)
@@ -384,9 +386,6 @@ InitialiseFontsAuto(Canvas &canvas, RECT rc,
 
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
-#ifdef ENABLE_SDL
-  // XXX
-#else /* !ENABLE_SDL */
   SIZE tsize;
   do {
     HFONT TempWindowFont;
@@ -406,7 +405,6 @@ InitialiseFontsAuto(Canvas &canvas, RECT rc,
     DeleteObject(TempWindowFont);
 
   } while (tsize.cx>InfoBoxLayout::ControlWidth);
-#endif /* !ENABLE_SDL */
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
