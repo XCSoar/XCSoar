@@ -1,6 +1,6 @@
 /***********************************************************************
 **
-**   windmeasurementlist.cpp
+**   WindMeasurementList.cpp
 **
 **   This file is part of Cumulus
 **
@@ -54,7 +54,7 @@ Copyright_License {
 }
 */
 
-#include "windmeasurementlist.h"
+#include "WindMeasurementList.h"
 #include "XCSoar.h"
 #include "Math/FastMath.h"
 #include <stdlib.h>

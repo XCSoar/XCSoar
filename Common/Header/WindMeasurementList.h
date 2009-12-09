@@ -1,6 +1,6 @@
 /***********************************************************************
 **
-**   windmeasurementlist.h
+**   WindMeasurementList.h
 **
 **   This file is part of Cumulus.
 **
