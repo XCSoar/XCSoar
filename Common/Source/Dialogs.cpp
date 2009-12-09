@@ -192,23 +192,23 @@ PopupNearestWaypointDetails(const WayPointList &way_points,
 
   MapWindowProjection &map_window = XCSoarInterface::main_window.map;
 
-  int i;
+  int NearestIndex;
 
   if (!pan || !XCSoarInterface::SettingsMap().EnablePan) {
-    i = FindNearestWayPoint(way_points, map_window, location, range);
+    NearestIndex = FindNearestWayPoint(way_points, map_window, location, range);
   } else {
     // nearest to center of screen if in pan mode
-    i = FindNearestWayPoint(way_points, map_window,
+    NearestIndex = FindNearestWayPoint(way_points, map_window,
         map_window.GetPanLocation(), range);
   }
 
-  if (i != -1) {
-    task.setSelected(i);
-    PopupWaypointDetails();
-    return true;
-  }
+  if (NearestIndex == -1)
+    return false;
 
-  return false;
+  task.setSelected(NearestIndex);
+  PopupWaypointDetails();
+
+  return true;
 }
 
 bool
