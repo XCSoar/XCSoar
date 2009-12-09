@@ -56,24 +56,28 @@ Copyright_License {
 //#define RAD_TO_BAM 6.835652757e+8          // Radians to BAM
 //#define RAD_TO_BAM_DIV_2  0.5*RAD_TO_BAM
 
+/** Diameter of earth in meters */
+#define EARTH_DIAMETER 12733426.0
+/** Diameter of earth in meters (squared) (EARTH_DIAMETER * EARTH_DIAMETER) */
+#define SQUARED_EARTH_DIAMETER 162140137697476.0
 
-#define EARTH_DIAMETER				12733426.0				// Diameter of earth in meters
-#define SQUARED_EARTH_DIAMETER		162140137697476.0		// Diameter of earth in meters (EARTH_DIAMETER*EARTH_DIAMETER)
+void xXY_to_LL(double Lat_TP, double Lon_TP, double X_int, double Y_int,
+    double *Lat, double *Lon);
 
-void xXY_to_LL(double Lat_TP, double Lon_TP,
-               double X_int, double Y_int,
-               double *Lat, double *Lon);
-void xLL_to_XY(double Lat_TP, double Lon_TP,
-               double Lat_Pnt, double Lon_Pnt,
-               double *X, double *Y);
-void xXY_Brg_Rng(double X_1, double Y_1,
-                 double X_2, double Y_2,
-                 double *Bearing, double *Range);
-void xBrg_Rng_XY(double X_RefPos, double Y_RefPos,
-                 double Bearing, double Range,
-                 double *X, double *Y);
-void xCrs_Spd_to_VxVy(double Crs, double Spd,
-                      double *Vx, double *Vy);
+void xLL_to_XY(double Lat_TP, double Lon_TP, double Lat_Pnt, double Lon_Pnt,
+    double *X, double *Y);
+
+void xXY_Brg_Rng(double X_1, double Y_1, double X_2, double Y_2,
+    double *Bearing, double *Range);
+
+void xBrg_Rng_XY(double X_RefPos, double Y_RefPos, double Bearing, double Range,
+    double *X, double *Y);
+
+void xCrs_Spd_to_VxVy(double Crs, double Spd, double *Vx, double *Vy);
+
 void xVxVy_to_Crs_Spd(double Vx, double Vy, double *Crs, double *Spd);
-void LL_to_BearRange(double Lat_TP, double Long_TP, double Lat_Pnt, double Long_Pnt, double *Bearing, double *Range);
+
+void LL_to_BearRange(double Lat_TP, double Long_TP, double Lat_Pnt,
+    double Long_Pnt, double *Bearing, double *Range);
+
 #endif
