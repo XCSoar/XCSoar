@@ -18,7 +18,7 @@
 #ifndef WINDANALYSER_H
 #define WINDANALYSER_H
 
-#include "vector.h"
+#include "Vector.h"
 
 #include "WindStore.h"
 
