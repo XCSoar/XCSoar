@@ -140,7 +140,7 @@ public:
   virtual bool Open();
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
                          bool enable_baro);
-  virtual bool PutMacCready(double mc_cready);
+  virtual bool PutMacCready(double MacCready);
   virtual bool PutBugs(double bugs);
   virtual bool PutBallast(double ballast);
   virtual bool Declare(const struct Declaration *declaration);
