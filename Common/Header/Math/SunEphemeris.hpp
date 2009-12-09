@@ -35,7 +35,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(SUN_EPHEMERIS_HPP)
+#ifndef SUN_EPHEMERIS_HPP
 #define SUN_EPHEMERIS_HPP
 
 struct NMEA_INFO;
@@ -43,7 +43,7 @@ struct DERIVED_INFO;
 struct GEOPOINT;
 
 class SunEphemeris {
-  double L,g,daylen;
+  double L, g, daylen;
 
   double FNday (int y, int m, int d, float h);
   double FNrange (double x);
