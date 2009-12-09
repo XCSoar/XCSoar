@@ -50,7 +50,8 @@ Copyright_License {
 // these values
 
 /** AutoWindMode */
-typedef enum {
+typedef enum
+{
   /** 0: Manual */
   D_AUTOWIND_NONE = 0,
   /** 1: Circling */
@@ -61,8 +62,9 @@ typedef enum {
 } AutoWindModeBits_t;
 
 /** Airspace display modes */
-typedef enum {
-  ALLON=0,
+typedef enum
+{
+  ALLON = 0,
   CLIP,
   AUTO,
   ALLBELOW,
@@ -70,10 +72,11 @@ typedef enum {
   ALLOFF
 } AirspaceDisplayMode_t;
 
-struct SETTINGS_COMPUTER {
+struct SETTINGS_COMPUTER
+{
   /** AutoMcCready feature enable (true/false) */
   bool AutoMacCready;
-  int    FinalGlideTerrain;
+  int FinalGlideTerrain;
 
   /**
    * AutoMcCready calculation mode
@@ -81,9 +84,9 @@ struct SETTINGS_COMPUTER {
    * 1: Set to average if in climb mode
    * 2: Average if in climb mode, final glide in final glide mode
    */
-  int    AutoMcMode;
-  bool   EnableCalibration;
-  bool   AutoForceFinalGlide;
+  int AutoMcMode;
+  bool EnableCalibration;
+  bool AutoForceFinalGlide;
 
   /**
    * AutoWind calculation mode
@@ -92,43 +95,43 @@ struct SETTINGS_COMPUTER {
    * 2: ZigZag
    * 3: Both
    */
-  int    AutoWindMode;
-  bool   EnableNavBaroAltitude;
+  int AutoWindMode;
+  bool EnableNavBaroAltitude;
   /** block speed to fly instead of dolphin */
-  bool   EnableBlockSTF;
-  int    EnableThermalLocator;
+  bool EnableBlockSTF;
+  int EnableThermalLocator;
   /** Logger interval in cruise mode */
-  int    LoggerTimeStepCruise;
+  int LoggerTimeStepCruise;
   /** Logger interval in circling mode */
-  int    LoggerTimeStepCircling;
+  int LoggerTimeStepCircling;
   /** Use short IGC filenames for the logger files */
-  bool   LoggerShortName;
-  bool   DisableAutoLogger;
+  bool LoggerShortName;
+  bool DisableAutoLogger;
   double SafetyAltitudeArrival;
   double SafetyAltitudeBreakoff;
   double SafetyAltitudeTerrain;
   /** ManoeuveringSpeed */
   double SAFTEYSPEED;
-  int    EnableExternalTriggerCruise;
-  short  AverEffTime;
-  bool   EnableBestAlternate;
-  bool   EnableAlternate1;
-  bool   EnableAlternate2;
+  int EnableExternalTriggerCruise;
+  short AverEffTime;
+  bool EnableBestAlternate;
+  bool EnableAlternate1;
+  bool EnableAlternate2;
   // polar info
-  int    BallastSecsToEmpty;
-  bool   BallastTimerActive;
+  int BallastSecsToEmpty;
+  bool BallastTimerActive;
 
-  int    TeamCodeRefWaypoint;
-  bool   TeamFlarmTracking;
+  int TeamCodeRefWaypoint;
+  bool TeamFlarmTracking;
   /** CN of the glider to track */
-  TCHAR  TeamFlarmCNTarget[4];
+  TCHAR TeamFlarmCNTarget[4];
 
   // sound stuff not used?
-  bool   EnableSoundVario;
-  bool   EnableSoundTask;
-  bool   EnableSoundModes;
-  int    SoundVolume;
-  int    SoundDeadband;
+  bool EnableSoundVario;
+  bool EnableSoundTask;
+  bool EnableSoundModes;
+  int SoundVolume;
+  int SoundDeadband;
 
   /** local time adjustment */
   int UTCOffset;
@@ -138,13 +141,13 @@ struct SETTINGS_COMPUTER {
   bool EnableOLC;
 
   /** auto-detected, see also in Info.h */
-  TCHAR  TeammateCode[10];
-  bool   TeammateCodeValid;
+  TCHAR TeammateCode[10];
+  bool TeammateCodeValid;
   /** FlarmId of the glider to track */
   int TeamFlarmIdTarget;
 
-  int  Alternate1; // VENTA3
-  int  Alternate2;
+  int Alternate1; // VENTA3
+  int Alternate2;
   int HomeWaypoint;
 
   // vegavoice stuff
