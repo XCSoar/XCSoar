@@ -47,57 +47,79 @@ Copyright_License {
 #include <math.h>
 
 #ifndef _MSC_VER
-#include <algorithm>
-using std::min;
-using std::max;
+  #include <algorithm>
+  using std::min;
+  using std::max;
 #endif
 
-#define NUM_SAMPLES 20      // number of points required, should be
-                            // equivalent to a circle to prevent
-                            // zigzag from dominating when used in
-                            // conjunction with circling drift
-                            // calculation.
+/*
+ * number of points required, should be
+ * equivalent to a circle to prevent
+ * zigzag from dominating when used in
+ * conjunction with circling drift
+ * calculation.
+ */
+#define NUM_SAMPLES 20
 
-#define SAMPLE_RATE 4.0     // number of seconds between samples, if
-                            // not turning much
+/*
+ * equivalent to a circle to prevent
+ * zigzag from dominating when used in
+ * conjunction with circling drift
+ * calculation.
+ */
+#define SAMPLE_RATE 4.0
 
-#define UPDATE_RATE 20      // minimum number of seconds between
-                            // recalculating estimate
+/*
+ * minimum number of seconds between
+ * recalculating estimate
+ */
+#define UPDATE_RATE 20
 
-#define V_SCALE 20.0            // 15 m/s = 30 knots max approx
-#define NUM_V_POINTS 41         // resolution on V search
-#define NUM_THETA_POINTS (36)   // resolution on theta search
+// 15 m/s = 30 knots max approx
+#define V_SCALE 20.0
+// resolution on V search
+#define NUM_V_POINTS 41
+// resolution on theta search
+#define NUM_THETA_POINTS (36)
 
 #define DEGTORAD (M_PI/180.0)
 
 #ifndef NDEBUG
-#define DEBUG_ZIGZAG
+  #define DEBUG_ZIGZAG
 #endif
 
-static double anglelimit(double ang) {
-  while (ang<-M_PI) {
-    ang+= 2.0*M_PI;
-  }
-  while (ang>M_PI) {
-    ang-= 2.0*M_PI;
-  }
+static double
+anglelimit(double ang)
+{
+  while (ang < -M_PI)
+    ang += 2.0 * M_PI;
+
+  while (ang > M_PI)
+    ang -= 2.0 * M_PI;
+
   return ang;
 }
 
-static  int VtoI(double V) {
-    return min(NUM_V_POINTS-1, iround(V*(NUM_V_POINTS-1)/V_SCALE));
-  }
+static int
+VtoI(double V)
+{
+  return min(NUM_V_POINTS - 1, iround(V * (NUM_V_POINTS - 1) / V_SCALE));
+}
 
-static  double ItoV(int i) {
-    return max(0,min(i,NUM_V_POINTS-1))*V_SCALE/(NUM_V_POINTS-1);
-  }
+static double
+ItoV(int i)
+{
+  return max(0, min(i, NUM_V_POINTS - 1)) * V_SCALE / (NUM_V_POINTS - 1);
+}
 
-
-class ZigZagPoint {
+class ZigZagPoint
+{
 public:
-  ZigZagPoint() {
+  ZigZagPoint()
+  {
     time = -1;
-    for (int i=0; i<NUM_V_POINTS; i++) {
+
+    for (int i = 0; i < NUM_V_POINTS; i++) {
       theta_west_ok[i] = false;
     }
   }
@@ -107,7 +129,9 @@ public:
   double theta_gps;
   double time;
 
-  void Set(double t, double aV_tas, double aV_gps, double atheta_gps) {
+  void
+  Set(double t, double aV_tas, double aV_gps, double atheta_gps)
+  {
     V_tas = aV_tas;
     V_gps = aV_gps;
     time = t;
@@ -127,50 +151,58 @@ private:
   int V_gps_y;
   int V_tas_l;
 
-
-  void CalculateThetaWEst() {
+  void
+  CalculateThetaWEst()
+  {
     int i;
-    for (i=0; i<NUM_V_POINTS; i++) {
+    for (i = 0; i < NUM_V_POINTS; i++) {
       double Vwest = ItoV(i);
-      theta_west_ok[i] = EstimateW0(Vwest,i);
+      theta_west_ok[i] = EstimateW0(Vwest, i);
     }
+
     cos_theta_gps = cos(theta_gps);
     sin_theta_gps = sin(theta_gps);
-    V_gps_x = iround(100*V_gps*cos_theta_gps);
-    V_gps_y = iround(100*V_gps*sin_theta_gps);
-    V_tas_l = iround(100*V_tas);
 
+    V_gps_x = iround(100 * V_gps * cos_theta_gps);
+    V_gps_y = iround(100 * V_gps * sin_theta_gps);
+    V_tas_l = iround(100 * V_tas);
   }
 
-  bool EstimateW0(double Vwest, int i) {
-    double west_rat = Vwest/V_tas;
-    double gps_rat = V_gps/V_tas;
+  bool
+  EstimateW0(double Vwest, int i)
+  {
+    double west_rat = Vwest / V_tas;
+    double gps_rat = V_gps / V_tas;
 
-    if (gps_rat<0.001) {
+    if (gps_rat < 0.001) {
       // speed too small
       return false;
     }
-    if (gps_rat+west_rat<1.0) {
+
+    if (gps_rat + west_rat < 1.0) {
       // wind too weak
       return false;
     }
-    if ((Vwest>V_gps)&&(Vwest>V_tas)) {
+
+    if ((Vwest > V_gps) && (Vwest > V_tas)) {
       // wind too strong
       return false;
     }
-    if (west_rat<0.001) {
+
+    if (west_rat < 0.001) {
       // wind speed too small
-      theta_west_1[i]= 0;
-      theta_west_2[i]= 0;
+      theta_west_1[i] = 0;
+      theta_west_2[i] = 0;
       return true;
     }
 
-    double cosgamma = (west_rat*west_rat+gps_rat*gps_rat-1.0)/
-      (2.0*west_rat*gps_rat);
-    if (fabs(cosgamma)<=1.0) {
+    double cosgamma = (west_rat * west_rat + gps_rat * gps_rat - 1.0)
+                      / (2.0 * west_rat * gps_rat);
+
+    if (fabs(cosgamma) <= 1.0) {
       double gamma = acos(cosgamma);
-      theta_west_1[i]= -anglelimit(M_PI-theta_gps-gamma);
-      theta_west_2[i]= -anglelimit(M_PI-theta_gps+gamma);
+      theta_west_1[i] = -anglelimit(M_PI - theta_gps - gamma);
+      theta_west_2[i] = -anglelimit(M_PI - theta_gps + gamma);
 
       return true;
     } else {
@@ -179,115 +211,130 @@ private:
   }
 
 public:
-  int EstimateW1(int V_west_x, int V_west_y) {
-    int v_tas_x = V_gps_x+V_west_x;
-    int v_tas_y = V_gps_y+V_west_y;
-    long vv = isqrt4(v_tas_x*v_tas_x+v_tas_y*v_tas_y);
-    long vdiff = (long)V_tas_l-vv;
-    int err = (1000*max(vdiff, -vdiff))/V_tas_l;
+  int
+  EstimateW1(int V_west_x, int V_west_y)
+  {
+    int v_tas_x = V_gps_x + V_west_x;
+    int v_tas_y = V_gps_y + V_west_y;
+    long vv = isqrt4(v_tas_x * v_tas_x + v_tas_y * v_tas_y);
+    long vdiff = (long)V_tas_l - vv;
+    int err = (1000 * max(vdiff, -vdiff)) / V_tas_l;
     // returns error in tenths of percent
     return err;
   }
-
 };
 
-class ZigZag {
+class ZigZag
+{
 public:
 
   ZigZagPoint points[NUM_SAMPLES];
 
-  ZigZag() {
-    for (int i=0; i<NUM_SAMPLES; i++) {
+  ZigZag()
+  {
+    for (int i = 0; i < NUM_SAMPLES; i++) {
       points[i].time = -1;
     }
-    for (int k=0; k<NUM_THETA_POINTS; k++) {
-      double theta = anglelimit(k*2.0*M_PI/NUM_THETA_POINTS);
-      thetalist[k]= theta;
-    }
 
+    for (int k = 0; k < NUM_THETA_POINTS; k++) {
+      double theta = anglelimit(k * 2.0 * M_PI / NUM_THETA_POINTS);
+      thetalist[k] = theta;
+    }
   }
 
-  void AddPoint(double t, double V_tas, double V_gps, double theta_gps) {
+  void
+  AddPoint(double t, double V_tas, double V_gps, double theta_gps)
+  {
     // find oldest point
     double toldest = 0;
-    int ioldest=0;
+    int ioldest = 0;
     int i;
-    for (i=0; i<NUM_SAMPLES; i++) {
-      if (t<points[i].time) {
-	points[i].time = -1;
+
+    for (i = 0; i < NUM_SAMPLES; i++) {
+      if (t < points[i].time) {
+        points[i].time = -1;
       }
     }
-    for (i=0; i<NUM_SAMPLES; i++) {
-      if ((points[i].time<toldest)||(i==0)||(t<points[i].time)) {
-	toldest = points[i].time;
-	ioldest=i;
+
+    for (i = 0; i < NUM_SAMPLES; i++) {
+      if ((points[i].time < toldest) || (i == 0) || (t < points[i].time)) {
+        toldest = points[i].time;
+        ioldest = i;
       }
     }
 
     i = ioldest;
-    points[i].Set(t,V_tas,V_gps,theta_gps);
+    points[i].Set(t, V_tas, V_gps, theta_gps);
   }
 
-  double CheckValidity(double t) {
+  double
+  CheckValidity(double t)
+  {
     // requires:
     // -- all points to be initialised
     // -- all points to be within last 10 minutes
-    int nf=0;
-    double ctg=0.0;
-    double stg=0.0;
+    int nf = 0;
+    double ctg = 0.0;
+    double stg = 0.0;
     int i;
 
-    for (i=0; i<NUM_SAMPLES; i++) {
-      if (points[i].time>0) {
-	nf++;
-	if (t-points[i].time>10*60) {
-	  // clear point so it gets filled next time
-	  points[i].time = -1;
-	  return -1;
-	}
-	ctg += points[i].cos_theta_gps;
-	stg += points[i].sin_theta_gps;
+    for (i = 0; i < NUM_SAMPLES; i++) {
+      if (points[i].time > 0) {
+        nf++;
+        if (t - points[i].time > 10 * 60) {
+          // clear point so it gets filled next time
+          points[i].time = -1;
+          return -1;
+        }
+        ctg += points[i].cos_theta_gps;
+        stg += points[i].sin_theta_gps;
       }
     }
-    if (nf<NUM_SAMPLES) {
+
+    if (nf < NUM_SAMPLES) {
       return -1;
     } else {
-      double theta_av = atan2(stg,ctg);
+      double theta_av = atan2(stg, ctg);
       double dtheta_max = 0;
       double dtheta_min = 0;
-      for (i=0; i<NUM_SAMPLES; i++) {
-	double da = anglelimit(points[i].theta_gps-theta_av);
-	if (da>dtheta_max) {
-	  dtheta_max = da;
-	}
-	if (da<dtheta_min) {
-	  dtheta_min = da;
-	}
+      for (i = 0; i < NUM_SAMPLES; i++) {
+        double da = anglelimit(points[i].theta_gps - theta_av);
+        if (da > dtheta_max) {
+          dtheta_max = da;
+        }
+        if (da < dtheta_min) {
+          dtheta_min = da;
+        }
       }
-      return dtheta_max-dtheta_min;
+      return dtheta_max - dtheta_min;
     }
   }
 
-  bool CheckSpread(double time, double error) {
+  bool
+  CheckSpread(double time, double error)
+  {
     double spread = CheckValidity(time);
-    if (spread<0) {
-#ifdef DEBUG_ZIGZAG_A
-        DebugStore("zigzag time invalid\n");
-#endif
-        return false;
+    if (spread < 0) {
+      #ifdef DEBUG_ZIGZAG_A
+      DebugStore("zigzag time invalid\n");
+      #endif
+
+      return false;
     }
     spread /= DEGTORAD;
     double minspread;
 
-    minspread = 10.0+30.0/(1.0+error*error/30.0);
+    minspread = 10.0 + 30.0 / (1.0 + error * error / 30.0);
     // nominal spread required is 40 degrees, smaller if large
     // error is detected
 
-    if ((spread>360.0)||(spread< minspread)) {
+    if ((spread > 360.0) || (spread < minspread)) {
       // invalid if really circling or if not enough zig-zag
-#ifdef DEBUG_ZIGZAG_A
+
+      #ifdef DEBUG_ZIGZAG_A
       DebugStore("zigzag spread invalid %03.1f\n", spread);
-#endif
+      #endif
+
       return false;
     }
     return true;
@@ -297,73 +344,84 @@ private:
   double thetalist[NUM_THETA_POINTS];
 
   // search all points for error against theta at wind speed index j
-  double AngleError(double theta, int j) {
-    double de=0;
-    int nf=0;
-    for (int i=0; i<NUM_SAMPLES; i++) {
+  double
+  AngleError(double theta, int j)
+  {
+    double de = 0;
+    int nf = 0;
+
+    for (int i = 0; i < NUM_SAMPLES; i++) {
       if (points[i].theta_west_ok[j]) {
-	double e1 = fabs(anglelimit(theta-points[i].theta_west_1[j]));
-	double e2 = fabs(anglelimit(theta-points[i].theta_west_2[j]));
-	if (e1<=e2) {
-	  de += e1*e1;
-	} else {
-	  de += e2*e2;
-	}
-	nf++;
+        double e1 = fabs(anglelimit(theta - points[i].theta_west_1[j]));
+        double e2 = fabs(anglelimit(theta - points[i].theta_west_2[j]));
+        if (e1 <= e2)
+          de += e1 * e1;
+        else
+          de += e2 * e2;
+
+        nf++;
       }
     }
-    if (nf>0) {
-      return de/nf;
-    } else {
+
+    if (nf > 0)
+      return de / nf;
+    else
       return -1;
-    }
   }
 
   // search for theta to give best match at wind speed index i
-  double FindBestAngle(int i, double *theta_best) {
+  double
+  FindBestAngle(int i, double *theta_best)
+  {
     double debest = 1000000;
-    bool ok=false;
-    for (int k=0; k<NUM_THETA_POINTS; k++) {
-      double ae=AngleError(thetalist[k], i);
-      if (ae<0) {
-	continue;
-      }
+    bool ok = false;
+
+    for (int k = 0; k < NUM_THETA_POINTS; k++) {
+      double ae = AngleError(thetalist[k], i);
+      if (ae < 0)
+        continue;
+
       ok = true;
-      if (ae<debest) {
-	debest = ae;
-	*theta_best = thetalist[k];
+      if (ae < debest) {
+        debest = ae;
+        *theta_best = thetalist[k];
       }
     }
+
     return ok;
   }
 
   // find average error in true airspeed given wind estimate
-  int VError(int V_west_x, int V_west_y) {
+  int
+  VError(int V_west_x, int V_west_y)
+  {
     int verr = 0;
-    int nf=0;
-    for (int j=0; j<NUM_SAMPLES; j++) {
-      if (points[j].time>=0) {
-	verr+= points[j].EstimateW1(V_west_x,
-				    V_west_y);
-	nf++;
+    int nf = 0;
+
+    for (int j = 0; j < NUM_SAMPLES; j++) {
+      if (points[j].time >= 0) {
+        verr += points[j].EstimateW1(V_west_x, V_west_y);
+        nf++;
       }
     }
-    if (nf>0) {
-      return verr/nf;
-    } else {
+
+    if (nf > 0)
+      return verr / nf;
+    else
       return 1000;
-    }
   }
 
-  bool UpdateSearch_Inner(double V_west, double theta_best) {
+  bool
+  UpdateSearch_Inner(double V_west, double theta_best)
+  {
     // given wind speed and direction, find TAS error
-    int V_west_x = iround(100*V_west*cos(theta_best));
-    int V_west_y = iround(100*V_west*sin(theta_best));
+    int V_west_x = iround(100 * V_west * cos(theta_best));
+    int V_west_y = iround(100 * V_west * sin(theta_best));
     int verr = VError(V_west_x, V_west_y);
 
     // search for minimum error
     // (this is not monotonous)
-    if (verr<error_best) {
+    if (verr < error_best) {
       error_best = verr;
       V_west_best = V_west;
       theta_west_best = theta_best;
@@ -373,42 +431,46 @@ private:
     }
   }
 
-  bool UpdateSearch(double V_west) {
-
+  bool
+  UpdateSearch(double V_west)
+  {
     int i = VtoI(V_west);
 
     // find best angle estimate for this assumed wind speed i
-    double theta=0.0;
+    double theta = 0.0;
     if (!FindBestAngle(i, &theta)) {
       theta = theta_west_best;
     }
-    return UpdateSearch_Inner(V_west, theta) ||
-      UpdateSearch_Inner(V_west, theta_west_best);
+
+    return (UpdateSearch_Inner(V_west, theta)
+            || UpdateSearch_Inner(V_west, theta_west_best));
   }
 
-
 public:
-
   int error_best;
   double V_west_best;
   double theta_west_best;
 
-  double StartSearch(double V_start, double theta_start) {
+  double
+  StartSearch(double V_start, double theta_start)
+  {
     V_west_best = V_start;
     theta_west_best = theta_start;
     error_best = 10000;
     UpdateSearch(V_start);
     V_west_best = V_start;
     theta_west_best = theta_start;
-    return error_best/10.0;
+    return error_best / 10.0;
   }
 
-  bool Estimate(double *V_westb, double *theta_westb, double *error) {
+  bool
+  Estimate(double *V_westb, double *theta_westb, double *error)
+  {
     int i;
 
     bool scanned[NUM_V_POINTS];
-    for (i=0; i<NUM_V_POINTS; i++) {
-      scanned[i]=false;
+    for (i = 0; i < NUM_V_POINTS; i++) {
+      scanned[i] = false;
     }
 
     // scan for 6 points around current best estimate.
@@ -418,22 +480,24 @@ public:
     bool improved = false;
     bool continue_search = true;
     bool full_search = false;
+
     while (continue_search) {
       continue_search = false;
+
       int ib = VtoI(V_west_best);
       int il, ih;
       if (full_search) {
         il = 0;
-        ih = NUM_V_POINTS-1;
+        ih = NUM_V_POINTS - 1;
       } else {
-        il = min(NUM_V_POINTS-1,max(0,ib-3));
-        ih = min(NUM_V_POINTS-1,max(0,ib+3));
+        il = min(NUM_V_POINTS - 1, max(0, ib - 3));
+        ih = min(NUM_V_POINTS - 1, max(0, ib + 3));
       }
-      for (i=il; i<=ih; i++) {
-	if (scanned[i]) {
+      for (i = il; i <= ih; i++) {
+        if (scanned[i]) {
           continue;
         } else {
-          scanned[i]= true;
+          scanned[i] = true;
           // see if we can find a better estimate
           double V_west = ItoV(i);
           if (UpdateSearch(V_west)) {
@@ -443,7 +507,7 @@ public:
         }
       }
 
-      if (!continue_search && !full_search && (error_best>100)) {
+      if (!continue_search && !full_search && (error_best > 100)) {
         full_search = true;
         continue_search = true;
         // if no improvement and still large error,
@@ -454,17 +518,15 @@ public:
     // return true if estimate was improved
     *V_westb = V_west_best;
     *theta_westb = theta_west_best;
-    while (*theta_westb<0) {
-      *theta_westb += 2.0*M_PI;
+    while (*theta_westb < 0) {
+      *theta_westb += 2.0 * M_PI;
     }
-    *error = error_best/10.0;
+    *error = error_best / 10.0;
     return improved;
-  };
-
+  }
 };
 
 ZigZag myzigzag;
-
 
 #ifdef DEBUG_ZIGZAG
 #ifdef WINDOWSPC
@@ -523,118 +585,112 @@ static bool
 WindZigZagCheckAirData(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 {
   static double tLast = -1;
-  static double bearingLast=0;
+  static double bearingLast = 0;
 
   bool airdata_invalid = false;
   if (!Calculated->Flying) {
     airdata_invalid = true;
-  } else if (fabs(Calculated->TurnRate)>20.0) {
+  } else if (fabs(Calculated->TurnRate) > 20.0) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - turn rate\n");
 #endif
-  } else if (fabs(Basic->TrueAirspeed)<GlidePolar::Vminsink*0.8) {
+  } else if (fabs(Basic->TrueAirspeed) < GlidePolar::Vminsink * 0.8) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - true airspeed\n");
 #endif
-  } else if (fabs(Basic->Speed)<2.5) {
+  } else if (fabs(Basic->Speed) < 2.5) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - ground speed\n");
 #endif
-  } else if (Basic->AccelerationAvailable && (fabs(Basic->Gload-1.0)>0.3)) {
+  } else if (Basic->AccelerationAvailable && (fabs(Basic->Gload - 1.0) > 0.3)) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - acceleration\n");
 #endif
   }
+
   if (airdata_invalid) {
     tLast = Basic->Time; // blackout for SAMPLE_RATE seconds
     return false;
   }
-  if ((Basic->Time<tLast+SAMPLE_RATE) &&
-      (fabs(bearingLast-Basic->TrackBearing)<10.0)) {
+
+  if ((Basic->Time < tLast + SAMPLE_RATE) && (fabs(bearingLast
+      - Basic->TrackBearing) < 10.0)) {
     return false;
   } else {
     tLast = Basic->Time;
     bearingLast = Basic->TrackBearing;
   }
+
   return true;
 }
 
 int
 WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
-                 double *zzwindspeed, double *zzwindbearing)
+    double *zzwindspeed, double *zzwindbearing)
 {
   static double tLastEstimate = -1;
 
-  if (!Basic->AirspeedAvailable) {
+  if (!Basic->AirspeedAvailable)
     return 0;
-  }
 
-#ifdef WINDOWSPC
-#ifdef DEBUG_ZIGZAG
+  #ifdef WINDOWSPC
+  #ifdef DEBUG_ZIGZAG
   TestZigZagLoop();
-#endif
-#endif
+  #endif
+  #endif
 
   // TODO accuracy: correct TAS for vertical speed if dynamic pullup
 
-  if ((Basic->Time<= tLastEstimate)||(tLastEstimate==-1)) {
-    tLastEstimate = Basic->Time-UPDATE_RATE;
-  }
+  if ((Basic->Time <= tLastEstimate) || (tLastEstimate == -1))
+    tLastEstimate = Basic->Time - UPDATE_RATE;
 
-  if (!WindZigZagCheckAirData(Basic, Calculated)) {
+  if (!WindZigZagCheckAirData(Basic, Calculated))
     return 0;
-  }
 
   // ok to add a point
 
-  myzigzag.AddPoint(Basic->Time, Basic->TrueAirspeed,
-		    Basic->Speed, Basic->TrackBearing*DEGTORAD);
+  myzigzag.AddPoint(Basic->Time, Basic->TrueAirspeed, Basic->Speed,
+      Basic->TrackBearing * DEGTORAD);
 
-#ifdef DEBUG_ZIGZAG_A
-    DebugStore("%f %03.0f %03.0f %03.0f # zigpoint\n",
-            Basic->Time,
-            Basic->TrueAirspeed,
-            Basic->Speed,
-            Basic->TrackBearing);
-#endif
+  #ifdef DEBUG_ZIGZAG_A
+  DebugStore("%f %03.0f %03.0f %03.0f # zigpoint\n",
+      Basic->Time,
+      Basic->TrueAirspeed,
+      Basic->Speed,
+      Basic->TrackBearing);
+  #endif
 
   // don't update wind from zigzag more often than
   // every UPDATE_RATE seconds, so it is balanced with respect
   // to circling
-  if (Basic->Time<tLastEstimate+UPDATE_RATE) {
+  if (Basic->Time < tLastEstimate + UPDATE_RATE)
     return 0;
-  }
 
   double V_wind_estimate = Calculated->WindSpeed;
-  double theta_wind_estimate = Calculated->WindBearing*DEGTORAD;
-  double percent_error =
-    myzigzag.StartSearch(V_wind_estimate, theta_wind_estimate);
+  double theta_wind_estimate = Calculated->WindBearing * DEGTORAD;
+  double percent_error = myzigzag.StartSearch(V_wind_estimate, theta_wind_estimate);
 
   // Check spread of zig-zag manoeuver
-  if (!myzigzag.CheckSpread(Basic->Time, percent_error)) {
+  if (!myzigzag.CheckSpread(Basic->Time, percent_error))
     return 0;
-  }
 
-  double v_error = percent_error*Basic->TrueAirspeed/100.0;
+  double v_error = percent_error * Basic->TrueAirspeed / 100.0;
 
-  if (v_error<0.5) {
+  if (v_error < 0.5) {
     // don't refine search if error is small
 
-#ifdef DEBUG_ZIGZAG
-    DebugStore("zigzag error small %02.0f %03.1f\n",
-            percent_error, v_error);
-#endif
+    #ifdef DEBUG_ZIGZAG
+    DebugStore("zigzag error small %02.0f %03.1f\n", percent_error, v_error);
+    #endif
+
     return 0;
   }
 
-  if (myzigzag.Estimate(&V_wind_estimate,
-                        &theta_wind_estimate,
-                        &percent_error)) {
-
+  if (myzigzag.Estimate(&V_wind_estimate, &theta_wind_estimate, &percent_error)) {
     // ok, we have made an update
     tLastEstimate = Basic->Time;
 
@@ -645,14 +701,16 @@ WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
 
     // calculate error quality
     int quality;
-    //    double pes = v_error/(V_SCALE/NUM_V_POINTS);
+
+    //double pes = v_error/(V_SCALE/NUM_V_POINTS);
     //quality = iround(0.5+4.5/(1.0+percent_error*percent_error/30.0));
-    quality = max(1,5-iround(percent_error/2));
+
+    quality = max(1, 5 - iround(percent_error / 2));
     if (Calculated->Circling) {
-      quality = max(1,quality/2); // de-value updates in circling mode
+      quality = max(1, quality / 2); // de-value updates in circling mode
     }
 
-#ifdef DEBUG_ZIGZAG
+    #ifdef DEBUG_ZIGZAG
     DebugStore("%f %3.1f %03.0f %3.1f %03.0f %f %d # zigzag\n",
             Basic->Time,
             V_wind_estimate,
@@ -661,13 +719,15 @@ WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
             Calculated->WindBearing,
             percent_error,
             quality);
-#endif
+    #endif
+
     return quality;
   } else {
-#ifdef DEBUG_ZIGZAG
+    #ifdef DEBUG_ZIGZAG
     DebugStore("zigzag estimate failed to improve\n");
-#endif
+    #endif
   }
+
   return 0;
 }
 
