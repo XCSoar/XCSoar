@@ -125,9 +125,8 @@ Profile::ReadRegistrySettings()
 
   StartupStore(TEXT("Read registry settings\n"));
 
-#if defined(GNAV) || defined(PCGNAV) || defined(GNAV_FONTEST)
-  DefaultRegistrySettingsAltair();
-#endif
+  if (is_altair())
+    DefaultRegistrySettingsAltair();
 
   SETTINGS_TASK settings_task = task.getSettings();
   GetFromRegistry(szRegistryFinishMinHeight,
