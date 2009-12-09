@@ -164,7 +164,7 @@ bool MainWindow::on_destroy(void) {
 
   TopWindow::on_destroy();
 
-  PostQuitMessage(0);
+  post_quit();
   return true;
 }
 
