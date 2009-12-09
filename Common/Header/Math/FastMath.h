@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FASTMATH_H
 #define XCSOAR_MATH_FASTMATH_H
 
+#include "Compiler.h"
+
 #include <math.h>
 
 //2^36 * 1.5,  (52-_shiftamt=36) uses limited precisicion to floor
@@ -47,6 +49,7 @@ Copyright_License {
 // =================================================================================
 // Real2Int
 // =================================================================================
+gcc_const
 static inline int Real2Int(double val)
 {
 #if defined(WINDOWSPC) && defined(BROKEN)
@@ -58,6 +61,7 @@ static inline int Real2Int(double val)
 #endif
 }
 
+gcc_const
 static inline int iround(double i) {
     return Real2Int(floor(i+0.5));
 }
@@ -102,6 +106,7 @@ extern "C" {
 // Fast trig functions
 void InitSineTable(void);
 
+gcc_const
 unsigned int isqrt4(unsigned long val);
 
 #ifdef __cplusplus

@@ -36,28 +36,63 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MATH_GEOMETRY_HPP
-#define XCSOAR_MATH_GEOMETRY_HPP
+#ifndef XCSOAR_COMPILER_H
+#define XCSOAR_COMPILER_H
 
-#include "Compiler.h"
+#ifdef __GNUC__
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+#else
+#define GCC_VERSION 0
+#endif
 
-void irotate(int &xin, int &yin, const double &angle);
-void irotatescale(int &xin, int &yin, const double &angle, const double &scale,
-                  double &x, double &y);
-void rotate(double &xin, double &yin, const double &angle);
-void frotate(float &xin, float &yin, const float &angle);
-void rotatescale(double &xin, double &yin,
-                 const double &angle, const double &scale);
-void frotatescale(float &xin, float &yin,
-                  const float &angle, const float &scale);
+#if GCC_VERSION >= 30000
 
-gcc_const
-bool AngleInRange(double Angle0, double Angle1, double x, bool is_signed=false);
-double AngleLimit180(double theta);
-double AngleLimit360(double theta);
+/* GCC 4.x */
 
-double Reciprocal(double InBound);
-double BiSector(double InBound, double OutBound);
-double HalfAngle(double Angle0, double Angle1);
+#define gcc_const __attribute__((const))
+#define gcc_deprecated __attribute__((deprecated))
+#define gcc_may_alias __attribute__((may_alias))
+#define gcc_malloc __attribute__((malloc))
+#define gcc_noreturn __attribute__((noreturn))
+#define gcc_packed __attribute__((packed))
+#define gcc_printf(a,b) __attribute__((format(printf, a, b)))
+#define gcc_pure __attribute__((pure))
+#define gcc_sentinel __attribute__((sentinel))
+#define gcc_unused __attribute__((unused))
+#define gcc_warn_unused_result __attribute__((warn_unused_result))
+
+#else /* ! GCC_VERSION >= 30000 */
+
+/* generic C compiler */
+
+#define gcc_const
+#define gcc_deprecated
+#define gcc_may_alias
+#define gcc_malloc
+#define gcc_noreturn
+#define gcc_packed
+#define gcc_printf(a,b)
+#define gcc_pure
+#define gcc_sentinel
+#define gcc_unused
+#define gcc_warn_unused_result
+
+#endif /* ! GCC_VERSION >= 30000 */
+
+#if GCC_VERSION >= 40300
+
+#define gcc_hot __attribute__((hot))
+#define gcc_cold __attribute__((cold))
+
+#else /* ! GCC_UNUSED >= 40300 */
+
+#define gcc_hot
+#define gcc_cold
+
+#endif /* ! GCC_UNUSED >= 40300 */
+
+#undef GCC_VERSION
 
 #endif

@@ -43,6 +43,8 @@ Copyright_License {
 #ifndef XCSOAR_MATH_SCREEN_HPP
 #define XCSOAR_MATH_SCREEN_HPP
 
+#include "Compiler.h"
+
 #include <windef.h>
 
 struct GEOPOINT;
@@ -50,6 +52,7 @@ struct GEOPOINT;
 void protate(POINT &pin, const double &angle);
 void protateshift(POINT &pin, const double &angle, const int &x, const int &y);
 
+gcc_const
 double ScreenAngle(int x1, int y1, int x2, int y2);
 
 void ScreenClosestPoint(const POINT &p1, const POINT &p2,
@@ -60,12 +63,14 @@ void PolygonRotateShift(POINT* poly, int n, int x, int y,
 
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
 
+gcc_const
 bool CheckRectOverlap(RECT rc1, RECT rc2);
 
 
 void
 LatLon2Flat(const GEOPOINT &location, POINT &screen);
 
+gcc_const
 unsigned Distance(const POINT &p1, const POINT &p2);
 
 #endif

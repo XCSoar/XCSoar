@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_LAYOUT_HPP
 
 #include "Asset.hpp"
+#include "Compiler.h"
 
 namespace Layout {
   extern bool landscape;
@@ -60,6 +61,7 @@ namespace Layout {
   /**
    * Is scaling supported by this platform?
    */
+  gcc_const
   static inline bool ScaleSupported() {
     return !is_altair();
   }
@@ -67,10 +69,12 @@ namespace Layout {
   /**
    * Is scaling enabled currently?
    */
+  gcc_const
   static inline bool ScaleEnabled() {
     return ScaleSupported() && dscale > 1;
   }
 
+  gcc_const
   static inline int Scale(int x) {
     if (!ScaleSupported())
       return x;
@@ -80,14 +84,17 @@ namespace Layout {
       : (int)(x * dscale);
   }
 
+  gcc_const
   static inline unsigned Scale(unsigned x) {
     return Scale((int)x);
   }
 
+  gcc_const
   static inline long Scale(long x) {
     return Scale((int)x);
   }
 
+  gcc_const
   static inline double Scale(double x) {
     if (!ScaleSupported())
       return x;
@@ -95,6 +102,7 @@ namespace Layout {
     return x * dscale;
   }
 
+  gcc_const
   static inline int FastScale(int x) {
     if (!ScaleSupported())
       return x;
