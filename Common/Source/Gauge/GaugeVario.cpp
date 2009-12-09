@@ -216,19 +216,8 @@ void GaugeVario::Render() {
 
     BitmapCanvas hdcTemp(canvas, hDrawBitMap);
     // copy scale bitmap to memory DC
-    if (Layout::dscale > 1) {
-      if (Appearance.InverseInfoBox)
-        canvas.stretch(hdcTemp, 58, 0, 58, 120);
-      else
-        canvas.stretch(hdcTemp, 0, 0, 58, 120);
-    } else {
-
-      if (Appearance.InverseInfoBox)
-        canvas.copy(hdcTemp, 58, 0);
-      else
-        canvas.copy(hdcTemp, 0, 0);
-
-    }
+    canvas.scale_copy(0, 0, hdcTemp,
+                      Appearance.InverseInfoBox ? 58 : 0, 0, 58, 120);
 
     InitDone = true;
   }
@@ -414,11 +403,7 @@ void GaugeVario::RenderClimb(Canvas &canvas)
     canvas.rectangle(x, y, x + IBLSCALE(12), y + IBLSCALE(12));
   } else {
     BitmapCanvas hdcTemp(canvas, hBitmapClimb);
-    if (Layout::dscale > 1) {
-      canvas.stretch(x, y, IBLSCALE(12), IBLSCALE(12), hdcTemp, 12, 0, 12, 12);
-    } else {
-      canvas.copy(x, y, 12, 12, hdcTemp, 12, 0);
-    }
+    canvas.scale_copy(x, y, hdcTemp, 12, 0, 12, 12);
   }
 }
 
@@ -641,19 +626,10 @@ void GaugeVario::RenderValue(Canvas &canvas, int x, int y,
     SIZE BitmapUnitSize = unit_symbol->get_size();
 
     BitmapCanvas hdcTemp(canvas, *unit_symbol);
-    if (Layout::dscale > 1) {
-      canvas.stretch(x - IBLSCALE(5), diValue->recBkg.top,
-                     IBLSCALE(BitmapUnitSize.cx),
-                     IBLSCALE(BitmapUnitSize.cy),
-                     hdcTemp,
-                     BitmapUnitPos.x, BitmapUnitPos.y,
-                     BitmapUnitSize.cx, BitmapUnitSize.cy);
-    } else {
-      canvas.copy(x - 5, diValue->recBkg.top,
-                  BitmapUnitSize.cx, BitmapUnitSize.cy,
-                  hdcTemp,
-                  BitmapUnitPos.x, BitmapUnitPos.y);
-    }
+    canvas.scale_copy(x - IBLSCALE(5), diValue->recBkg.top,
+                      hdcTemp,
+                      BitmapUnitPos.x, BitmapUnitPos.y,
+                      BitmapUnitSize.cx, BitmapUnitSize.cy);
 
     diLabel->last_unit_symbol = unit_symbol;
   }
