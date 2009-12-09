@@ -191,7 +191,7 @@ OBJS	:=\
 	$(SRC)/WayPointList.o 		\
 	$(SRC)/WindAnalyser.o 		\
 	$(SRC)/WindMeasurementList.o 	\
-	$(SRC)/windstore.o 		\
+	$(SRC)/WindStore.o 		\
 	$(SRC)/WindZigZag.o 		\
 	\
 	$(SRC)/Gauge/GaugeCDI.o \

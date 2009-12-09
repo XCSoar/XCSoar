@@ -1,6 +1,6 @@
 /***********************************************************************
 **
-**   windstore.cpp
+**   WindStore.cpp
 **
 **   This file is part of Cumulus
 **
@@ -55,7 +55,7 @@ Copyright_License {
 }
 */
 
-#include "windstore.h"
+#include "WindStore.h"
 #include "XCSoar.h"
 #include "Math/Constants.h"
 #include "NMEA/Info.h"

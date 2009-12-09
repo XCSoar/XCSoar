@@ -20,7 +20,7 @@
 
 #include "vector.h"
 
-#include "windstore.h"
+#include "WindStore.h"
 
 /**The windanalyser analyses the list of flightsamples looking for windspeed and direction.
   *@author André Somers
