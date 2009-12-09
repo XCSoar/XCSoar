@@ -48,29 +48,33 @@ int ICOSTABLE[4096];
 /**
  * Fills the FastSine/FastCosine table
  */
-void InitSineTable(void)
+void
+InitSineTable(void)
 {
   int i;
   double angle;
   double cosa, sina;
 
-  for(i=0;i<4096; i++)
-    {
-      angle = DEG_TO_RAD*((double)i*360)/4096;
-      cosa = cos(angle);
-      sina = sin(angle);
-      SINETABLE[i] = sina;
-      COSTABLE[i] = cosa;
-      ISINETABLE[i] = iround(sina*1024);
-      ICOSTABLE[i] = iround(cosa*1024);
-      if ((cosa>0) && (cosa<1.0e-8)) {
-        cosa = 1.0e-8;
-      }
-      if ((cosa<0) && (cosa>-1.0e-8)) {
-        cosa = -1.0e-8;
-      }
-      INVCOSINETABLE[i] = 1.0/cosa;
-    }
+  for (i = 0; i < 4096; i++) {
+    angle = DEG_TO_RAD * ((double)i * 360) / 4096;
+
+    cosa = cos(angle);
+    sina = sin(angle);
+
+    SINETABLE[i] = sina;
+    COSTABLE[i] = cosa;
+
+    ISINETABLE[i] = iround(sina * 1024);
+    ICOSTABLE[i] = iround(cosa * 1024);
+
+    if ((cosa > 0) && (cosa < 1.0e-8))
+      cosa = 1.0e-8;
+
+    if ((cosa < 0) && (cosa > -1.0e-8))
+      cosa = -1.0e-8;
+
+    INVCOSINETABLE[i] = 1.0 / cosa;
+  }
 }
 
 /**
@@ -80,15 +84,17 @@ void InitSineTable(void)
  * @param val Value
  * @return Rounded square root of val
  */
-unsigned int isqrt4(unsigned long val) {
-  unsigned int temp, g=0;
+unsigned int
+isqrt4(unsigned long val)
+{
+  unsigned int temp, g = 0;
 
   if (val >= 0x40000000) {
     g = 0x8000;
     val -= 0x40000000;
   }
 
-#define INNER_MBGSQRT(s)                      \
+  #define INNER_MBGSQRT(s)                    \
   temp = (g << (s)) + (1 << ((s) * 2 - 2));   \
   if (val >= temp) {                          \
     g += 1 << ((s)-1);                        \
@@ -110,9 +116,11 @@ unsigned int isqrt4(unsigned long val) {
   INNER_MBGSQRT ( 3)
   INNER_MBGSQRT ( 2)
 
-#undef INNER_MBGSQRT
+  #undef INNER_MBGSQRT
 
-  temp = g+g+1;
-  if (val >= temp) g++;
+  temp = g + g + 1;
+  if (val >= temp)
+    g++;
+
   return g;
 }

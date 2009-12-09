@@ -43,27 +43,28 @@ Copyright_License {
 
 #include <math.h>
 
-//2^36 * 1.5,  (52-_shiftamt=36) uses limited precisicion to floor
-//16.16 fixed point representation,
-
 // =================================================================================
 // Real2Int
 // =================================================================================
-gcc_const
-static inline int Real2Int(double val)
+// 2^36 * 1.5,  (52-_shiftamt=36) uses limited precisicion to floor
+// 16.16 fixed point representation,
+
+gcc_const static inline int
+Real2Int(double val)
 {
-#if defined(WINDOWSPC) && defined(BROKEN)
+  #if defined(WINDOWSPC) && defined(BROKEN)
   // JMW this is broken?
   val += 68719476736.0*1.5;
   return *((long*)&val) >> 16;
-#else
+  #else
   return (int)val;
-#endif
+  #endif
 }
 
-gcc_const
-static inline int iround(double i) {
-    return Real2Int(floor(i+0.5));
+gcc_const static inline int
+iround(double i)
+{
+  return Real2Int(floor(i + 0.5));
 }
 
 /*
@@ -79,9 +80,9 @@ extern int ISINETABLE[4096];
 extern int ICOSTABLE[4096];
 
 #ifdef __GNUC__
-#define DEG_TO_INT(x) ((unsigned short)(int)((x)*(65536.0/360.0)))>>4
+  #define DEG_TO_INT(x) ((unsigned short)(int)((x)*(65536.0/360.0)))>>4
 #else
-#define DEG_TO_INT(x) ((unsigned short)((x)*(65536.0/360.0)))>>4
+  #define DEG_TO_INT(x) ((unsigned short)((x)*(65536.0/360.0)))>>4
 #endif
 
 #define invfastcosine(x) INVCOSINETABLE[DEG_TO_INT(x)]
@@ -91,16 +92,18 @@ extern int ICOSTABLE[4096];
 #define fastsine(x) SINETABLE[DEG_TO_INT(x)]
 
 #ifdef __cplusplus
-
-inline unsigned int CombinedDivAndMod(unsigned int &lx) {
+inline unsigned int
+CombinedDivAndMod(unsigned int &lx)
+{
   unsigned int ox = lx & 0xff;
   // JMW no need to check max since overflow will result in
   // beyond max dimensions
-  lx = lx>>8;
+  lx = lx >> 8;
   return ox;
 }
 
-extern "C" {
+extern "C"
+{
 #endif
 
 // Fast trig functions
