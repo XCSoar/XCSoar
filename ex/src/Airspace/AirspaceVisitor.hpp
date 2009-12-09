@@ -54,14 +54,19 @@ class AirspaceVisitor:
   public Visitor<AirspaceCircle>
 {
 public:
-  AirspaceVisitor(const AirspacePredicate &pred= AirspacePredicateTrue()):
+
+  AirspaceVisitor(const AirspacePredicate &pred):
     m_predicate(&pred) {};
 
+  AirspaceVisitor() {
+    m_predicate = &always;
+  }
 // Predicate adaptor (forwards to visit_condition)
   bool condition (const Airspace& as) const;
 
 protected:
   const AirspacePredicate* m_predicate;
+  AirspacePredicateTrue always;
 private:
 };
 

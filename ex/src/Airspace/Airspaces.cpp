@@ -45,7 +45,6 @@ extern unsigned n_queries;
 extern long count_intersections;
 #endif
 
-// TODO: allow for sort criterion
 
 void 
 Airspaces::visit_within_range(const GEOPOINT &loc, 
@@ -54,19 +53,17 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
 {
   Airspace bb_target(loc, task_projection);
   int mrange = task_projection.project_range(loc, range);
-
   std::deque< Airspace > vectors;
-  airspace_tree.find_within_range(bb_target, -mrange, 
-                                  std::back_inserter(vectors));
+  airspace_tree.find_within_range(bb_target, -mrange, std::back_inserter(vectors));
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
-
   for (std::deque<Airspace>::iterator v=vectors.begin();
        v != vectors.end(); ++v) {
-    if (visitor.condition(*v)) {
-      visitor(*v);
-    }
+    if (!visitor.condition(*v)) {
+      continue;
+    } 
+    v->Accept(visitor);
   }
 }
 
@@ -80,14 +77,11 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
   FlatRay ray(task_projection.project(loc), 
               task_projection.project(vec.end_point(loc)));
 
+  GEOPOINT c = vec.mid_point(loc);
+  Airspace bb_target(c, task_projection);
+  int mrange = task_projection.project_range(c, vec.Distance/2.0);
   std::deque< Airspace > vectors;
-  {
-    GEOPOINT c = vec.mid_point(loc);
-    Airspace bb_target(c, task_projection);
-    int mrange = task_projection.project_range(c, vec.Distance/2.0);
-    airspace_tree.find_within_range(bb_target, -mrange, 
-                                    std::back_inserter(vectors));
-  }
+  airspace_tree.find_within_range(bb_target, -mrange, std::back_inserter(vectors));
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -95,20 +89,23 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
 
   for (std::deque<Airspace>::iterator v=vectors.begin();
        v != vectors.end(); ++v) {
-    if (visitor.condition(*v)) {
-      if (v->intersects(ray)) {
-        if (visitor.set_intersections(v->intersects(loc, vec, fill_end))) {
-          visitor(*v);
-        }
-      }
+
+    if (!visitor.condition(*v)) {
+      continue;
     }
+    if (!v->intersects(ray)) {
+      continue;
+    }
+    if (visitor.set_intersections(v->intersects(loc, vec, fill_end))) {
+      v->Accept(visitor);
+    } 
   }
 }
 
 
 ////////////// SCAN METHODS
 
-const std::vector<Airspace>
+const Airspaces::AirspaceVector
 Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
                         const AirspacePredicate &condition) const 
 {
@@ -121,7 +118,7 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
   n_queries++;
 #endif
 
-  std::vector<Airspace> res;
+  AirspaceVector res;
   if (found.first != airspace_tree.end()) {
     // also should do scan_range with range = 0 since there
     // could be more than one with zero dist
@@ -137,7 +134,7 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
 }
 
 
-const std::vector<Airspace>
+const Airspaces::AirspaceVector
 Airspaces::scan_range(const AIRCRAFT_STATE &state, 
                       const fixed range,
                       const AirspacePredicate &condition) const
@@ -152,34 +149,38 @@ Airspaces::scan_range(const AIRCRAFT_STATE &state,
   n_queries++;
 #endif
 
-  std::vector<Airspace> res;
+  AirspaceVector res;
 
   for (std::deque<Airspace>::iterator v=vectors.begin();
        v != vectors.end(); ++v) {
-    if (condition(*v->get_airspace()) && ((*v).distance(bb_target)<= range)) {
-      if ((*v).inside(state.Location) || (range>0)) {
-        res.push_back(*v);
-      }
+    if (!condition(*v->get_airspace())) {
+      continue;
+    } 
+    if ((*v).distance(bb_target)> range) {
+      continue;
+    }
+    if ((*v).inside(state.Location) || (range>0)) {
+      res.push_back(*v);
     }        
   }
   return res;
 }
 
 
-std::vector< Airspace >
+const Airspaces::AirspaceVector
 Airspaces::find_inside(const AIRCRAFT_STATE &state,
                        const AirspacePredicate &condition) const
 {
   Airspace bb_target(state.Location, task_projection);
 
-  std::vector< Airspace > vectors;
+  AirspaceVector vectors;
   airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
 
-  for (std::vector<Airspace>::iterator v=vectors.begin();
+  for (AirspaceVector::iterator v=vectors.begin();
        v != vectors.end(); ) {
 
 #ifdef INSTRUMENT_TASK

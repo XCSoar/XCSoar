@@ -43,9 +43,9 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "AirspaceAltitude.hpp"
 #include "Util/tstring.hpp"
+#include "AirspaceAircraftPerformance.hpp"
 
 class AtmosphericPressure;
-class SETTINGS_COMPUTER;
 
 #include <vector>
 typedef std::vector< std::pair<GEOPOINT,GEOPOINT> > AirspaceIntersectionVector;
@@ -120,6 +120,25 @@ public:
   virtual GEOPOINT closest_point(const GEOPOINT& loc) const
     = 0;
 
+/**
+ * Find time/distance to specified point on the boundary from an observer
+ * given a simplified performance model.  If inside the airspace, this will
+ * give the time etc to exit
+ *
+ * @param state Aircraft state
+ * @param loc Location of point on/in airspace to query
+ * @param perf Aircraft performance model
+ * @param time_to_intercept On entry, maximum time, on exit, 
+ *                          time of this intercept (if within range)
+ * @param intercept_height Height of intercept (m), if within time limit
+ * @return True if intercept possible
+ */
+  bool intercept_vertical(const AIRCRAFT_STATE &state,
+                          const GEOPOINT& loc,
+                          const AirspaceAircraftPerformance& perf,
+                          fixed &time_to_intercept,
+                          fixed &intercept_height) const;
+
   /** 
    * Set terrain altitude for AGL-referenced airspace altitudes 
    * 
@@ -162,24 +181,22 @@ public:
   }
 
 /** 
- * Determine if airspace is visible based on observers' altitude
+ * Get base altitude
  * 
- * @param alt Altitude of observer
- * @param settings Airspace altitude visibility settings
- * 
- * @return True if visible
+ * @return Altitude AMSL (m) of base
  */
-  bool altitude_visible(const fixed alt,
-                        const SETTINGS_COMPUTER &settings) const;
+  fixed get_base_altitude() const {
+    return m_base.Altitude;
+  }
 
 /** 
- * Determine if airspace is visible based on type
+ * Get top altitude
  * 
- * @param settings Airspace visibility settings
- * 
- * @return True if visible
+ * @return Altitude AMSL (m) of top
  */
-  bool type_visible(const SETTINGS_COMPUTER &settings) const;
+  fixed get_top_altitude() const {
+    return m_top.Altitude;
+  }
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& f, 

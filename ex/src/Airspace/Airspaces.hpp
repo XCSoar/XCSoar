@@ -59,6 +59,8 @@ class Airspaces:
   private NonCopyable
 {
 public:
+  typedef std::vector<Airspace> AirspaceVector;
+
   /** 
    * Constructor.
    * Note this class can't safely be copied (yet)
@@ -149,9 +151,9 @@ public:
    * 
    * @return single nearest airspace if external, or all airspaces enclosing the aircraft
    */
-  const std::vector<Airspace> scan_nearest(const AIRCRAFT_STATE &state,
-                                           const AirspacePredicate &condition
-                                           =AirspacePredicateTrue()) const;
+  const AirspaceVector scan_nearest(const AIRCRAFT_STATE &state,
+                                    const AirspacePredicate &condition
+                                    =AirspacePredicate::always_true) const;
 
   /** 
    * Search for airspaces within range of the aircraft.
@@ -162,10 +164,10 @@ public:
    * 
    * @return vector of airspaces intersecting search radius
    */
-  const std::vector<Airspace> scan_range(const AIRCRAFT_STATE &state, 
-                                         const fixed range,
-                                         const AirspacePredicate &condition
-                                         =AirspacePredicateTrue()) const;
+  const AirspaceVector scan_range(const AIRCRAFT_STATE &state, 
+                                  const fixed range,
+                                  const AirspacePredicate &condition
+                                  =AirspacePredicate::always_true) const;
 
   /** 
    * Find airspaces the aircraft is inside.
@@ -175,9 +177,9 @@ public:
    * 
    * @return airspaces enclosing the aircraft
    */
-  std::vector<Airspace> find_inside(const AIRCRAFT_STATE &state,
-                                    const AirspacePredicate &condition
-                                    =AirspacePredicateTrue()) const;
+  const AirspaceVector find_inside(const AIRCRAFT_STATE &state,
+                                   const AirspacePredicate &condition
+                                   =AirspacePredicate::always_true) const;
 
   /** 
    * Set terrain altitude for AGL-referenced airspace altitudes 

@@ -20,8 +20,10 @@ pause -1
 
 plot \
      'results/res-bb-range.txt' using 1:2 with filledcurve ls 5 title "in range", \
+     'results/res-bb-sortednearest.txt' using 1:2 with filledcurve ls 2 title "sorted nearest", \
      'results/res-bb-range.txt' using 1:2 with lines ls 4 title "", \
-        'results/res-bb-closest.txt' using 1:2 with lines ls 3 title "closest"
+     'results/res-bb-sortedsoonest.txt' using 1:2 with lines ls 8 title "sorted soonest", \
+     'results/res-bb-closest.txt' using 1:2 with lines ls 3 title "closest"
 pause -1
 
 plot \
