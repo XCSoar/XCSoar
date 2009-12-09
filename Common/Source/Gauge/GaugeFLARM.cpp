@@ -50,10 +50,12 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/BitmapCanvas.hpp"
+#include "Screen/ContainerWindow.hpp"
 #include "options.h" /* for IBLSCALE() */
 #include "NMEA/Info.h"
 #include "SettingsUser.hpp"
 #include "Appearance.hpp"
+#include "Units.hpp"
 
 #include <stdlib.h>
 
@@ -101,8 +103,6 @@ void GaugeFLARM::RenderBg(Canvas &canvas) {
                 hdcTemp, 0, 0);
   }
 }
-
-#include "WindowControls.h" // just to get colors
 
 /**
  * Renders the FLARM traffic to the given canvas
