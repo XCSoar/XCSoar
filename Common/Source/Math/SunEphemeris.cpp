@@ -185,7 +185,7 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
 
   //float intz;
   double d, lambda;
-  double obliq, alpha, delta, LL, equation, ha, hb, twx;
+  double obliq, alpha, delta, LL, equation, HourAngle, HourAngleTwilight, twx;
   int Year, Month, Day, Hour;
 
   // testing
@@ -216,30 +216,32 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
   LL = L - alpha;
   if (L < M_PI)
     LL += 2.0 * M_PI;
+
   equation = 1440.0 * (1.0 - LL / M_PI / 2.0);
-  ha = f0(Location.Latitude, delta);
-  hb = f1(Location.Latitude, delta);
+
+  HourAngle = f0(Location.Latitude, delta);
+  HourAngleTwilight = f1(Location.Latitude, delta);
   // length of twilight in radians
-  twx = hb - ha;
+  twx = HourAngleTwilight - HourAngle;
   // length of twilight in hours
   twx = 12.0 * twx / M_PI;
 
   //printf("ha= %.2f   hb= %.2f \n",ha,hb);
 
   // Conversion of angle to hours and minutes
-  daylen = RAD_TO_DEG * ha / 7.5;
+  daylen = RAD_TO_DEG * HourAngle / 7.5;
 
   if (daylen < 0.0001)
     // arctic winter
     daylen = 0.0;
 
-  riset = 12.0 - 12.0 * ha / M_PI + TimeZone - Location.Longitude / 15.0
+  riset = 12.0 - 12.0 * HourAngle / M_PI + TimeZone - Location.Longitude / 15.0
       + equation / 60.0;
 
-  settm = 12.0 + 12.0 * ha / M_PI + TimeZone - Location.Longitude / 15.0
+  settm = 12.0 + 12.0 * HourAngle / M_PI + TimeZone - Location.Longitude / 15.0
       + equation / 60.0;
 
-  noont = riset + 12.0 * ha / M_PI;
+  noont = riset + 12.0 * HourAngle / M_PI;
   altmax = 90.0 + delta * RAD_TO_DEG - Location.Latitude;
 
   // Correction for S HS suggested by David Smith
