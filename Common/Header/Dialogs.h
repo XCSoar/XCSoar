@@ -51,64 +51,61 @@ class AirspaceDatabase;
 void StartupScreen();
 
 bool dlgAirspaceWarningShowDlg(bool force);
-int dlgWayPointSelect(const GEOPOINT &location, const int type=-1, const int FilterNear=0);
-int dlgAirspaceColoursShowModal(void);
-int dlgAirspacePatternsShowModal(void);
+int dlgWayPointSelect(const GEOPOINT &location, const int type = -1,
+    const int FilterNear = 0);
+
+int dlgAirspaceColoursShowModal();
+int dlgAirspacePatternsShowModal();
 void dlgAirspaceShowModal(bool colored);
-void dlgBasicSettingsShowModal(void);
-void dlgBrightnessShowModal(void);
+void dlgBasicSettingsShowModal();
+void dlgBrightnessShowModal();
+void dlgHelpShowModal(ContainerWindow &parent, const TCHAR* Caption,
+    const TCHAR* HelpText);
 
-void
-dlgHelpShowModal(ContainerWindow &parent,
-                 const TCHAR* Caption, const TCHAR* HelpText);
+void dlgChecklistShowModal();
+void dlgConfigurationShowModal();
+void dlgVegaDemoShowModal();
+bool dlgConfigurationVarioShowModal();
+void dlgLoggerReplayShowModal();
+void dlgStartupShowModal();
+void dlgTaskCalculatorShowModal();
+void dlgWindSettingsShowModal();
+void dlgStartTaskShowModal(bool *validStart, double Time, double Speed,
+    double Altitude);
 
-void dlgChecklistShowModal(void);
-void dlgConfigurationShowModal(void);
-void dlgVegaDemoShowModal(void);
-bool dlgConfigurationVarioShowModal(void);
-void dlgLoggerReplayShowModal(void);
-void dlgStartupShowModal(void);
-void dlgTaskCalculatorShowModal(void);
-void dlgWindSettingsShowModal(void);
-void dlgStartTaskShowModal(bool *validStart, double Time, double Speed, double Altitude);
-void dlgAnalysisShowModal(void);
+void dlgAnalysisShowModal();
 void dlgStatusShowModal(int page);
-void dlgSwitchesShowModal(void);
-void dlgTaskWaypointShowModal(int itemindex, int type, bool addonly=false);
-void dlgTaskOverviewShowModal(void);
-void dlgVoiceShowModal(void);
-void dlgWayPointDetailsShowModal(void);
-void dlgTextEntryShowModal(TCHAR *text, int width=0);
-void dlgTeamCodeShowModal(void);
-void dlgStartPointShowModal(void);
+void dlgSwitchesShowModal();
+void dlgTaskWaypointShowModal(int itemindex, int type, bool addonly = false);
+void dlgTaskOverviewShowModal();
+void dlgVoiceShowModal();
+void dlgWayPointDetailsShowModal();
+void dlgTextEntryShowModal(TCHAR *text, int width = 0);
+void dlgTeamCodeShowModal();
+void dlgStartPointShowModal();
 
-void
-dlgWaypointEditShowModal(WAYPOINT &way_point);
+void dlgWaypointEditShowModal(WAYPOINT &way_point);
 
-void dlgWeatherShowModal(void);
-void dlgAirspaceSelect(void);
-void dlgTarget(void);
-bool dlgTaskRules(void);
+void dlgWeatherShowModal();
+void dlgAirspaceSelect();
+void dlgTarget();
+bool dlgTaskRules();
 void dlgAirspaceDetails(int the_circle, int the_area);
-bool dlgAirspaceWarningVisible(void);
-void dlgFlarmTrafficShowModal(void);
-void dlgTextEntryKeyboardShowModal(TCHAR *text, int width=0);
-void dlgNumberEntryKeyboardShowModal(int *value, int width=0);
+bool dlgAirspaceWarningVisible();
+void dlgFlarmTrafficShowModal();
+void dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0);
+void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
 
-int
-dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty);
+int dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty);
 
 void PopupWaypointDetails();
 void PopupAnalysis();
 
-bool
-PopupNearestWaypointDetails(const WayPointList &way_points,
-                            const GEOPOINT &location,
-                            double range, bool pan);
+bool PopupNearestWaypointDetails(const WayPointList &way_points,
+    const GEOPOINT &location, double range, bool pan);
 
-bool
-PopupInteriorAirspaceDetails(const AirspaceDatabase &airspace_database,
-                             const GEOPOINT &location);
+bool PopupInteriorAirspaceDetails(const AirspaceDatabase &airspace_database,
+    const GEOPOINT &location);
 
 #define mrOK             2
 #define mrCancel         3
