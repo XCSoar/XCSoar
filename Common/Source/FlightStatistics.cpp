@@ -216,9 +216,9 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
 
   chart.ScaleYFromValue( 0);
   chart.ScaleYFromValue(GlidePolar::SinkRateFast(0,
-       (int)(settings_computer.SAFTEYSPEED - 1)) * 1.1);
+       (int)(settings_computer.SafetySpeed - 1)) * 1.1);
   chart.ScaleXFromValue(GlidePolar::Vminsink*0.8);
-  chart.ScaleXFromValue(settings_computer.SAFTEYSPEED + 2);
+  chart.ScaleXFromValue(settings_computer.SafetySpeed + 2);
 
   chart.DrawXGrid(10.0/SPEEDMODIFY, 0,
 		  Chart::STYLE_THINDASHPAPER, 10.0, true);
@@ -230,7 +230,7 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   bool v0valid = false;
   int i0=0;
 
-  for (i= GlidePolar::Vminsink; i < settings_computer.SAFTEYSPEED - 1;
+  for (i= GlidePolar::Vminsink; i < settings_computer.SafetySpeed - 1;
        i++) {
 
     sinkrate0 = GlidePolar::SinkRateFast(0,i);
@@ -255,13 +255,13 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
 
   double MACCREADY = GlidePolar::GetMacCready();
 
-  double ff = settings_computer.SAFTEYSPEED
+  double ff = settings_computer.SafetySpeed
     / max(1.0, derived.VMacCready);
   double sb = GlidePolar::SinkRate(derived.VMacCready);
   ff = (sb - MACCREADY) / max(1.0, derived.VMacCready);
 
-  chart.DrawLine(0, MACCREADY, settings_computer.SAFTEYSPEED,
-                 MACCREADY + ff * settings_computer.SAFTEYSPEED,
+  chart.DrawLine(0, MACCREADY, settings_computer.SafetySpeed,
+                 MACCREADY + ff * settings_computer.SafetySpeed,
 		 Chart::STYLE_REDTHICK);
 
   chart.DrawXLabel(TEXT("V"));

@@ -237,7 +237,7 @@ GlideComputerAirData::AverageClimbRate()
 
     int vi = iround(Basic().IndicatedAirspeed);
 
-    if ((vi <= 0) || (vi >= SettingsComputer().SAFTEYSPEED)) {
+    if ((vi <= 0) || (vi >= SettingsComputer().SafetySpeed)) {
       // out of range
       return;
     }

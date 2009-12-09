@@ -492,9 +492,9 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 {
   ResetScale();
   ScaleYFromValue(rc, 0);
-  ScaleYFromValue(rc, GlidePolar::SinkRateFast(0,(int)(SAFTEYSPEED-1)));
+  ScaleYFromValue(rc, GlidePolar::SinkRateFast(0,(int)(SafetySpeed-1)));
   ScaleXFromValue(rc, 0); // GlidePolar::Vminsink);
-  ScaleXFromValue(rc, SAFTEYSPEED);
+  ScaleXFromValue(rc, SafetySpeed);
 
   DrawXGrid(hdc, rc,
             10.0/SPEEDMODIFY, 0,
@@ -505,7 +505,7 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 
   int i;
   double sinkrate0, sinkrate1;
-  for (i= GlidePolar::Vminsink; i< SAFTEYSPEED-1;
+  for (i= GlidePolar::Vminsink; i< SafetySpeed-1;
        i++) {
 
     sinkrate0 = GlidePolar::SinkRateFast(0,i);

@@ -1802,7 +1802,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMaxManoeuveringSpeed"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(SPEEDMODIFY*XCSoarInterface::SettingsComputer().SAFTEYSPEED));
+    wp->GetDataField()->SetAsFloat(iround(SPEEDMODIFY*XCSoarInterface::SettingsComputer().SafetySpeed));
     wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
     wp->RefreshDisplay();
   }
@@ -3105,9 +3105,9 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpMaxManoeuveringSpeed"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
-    if (XCSoarInterface::SettingsComputer().SAFTEYSPEED != ival) {
-      XCSoarInterface::SetSettingsComputer().SAFTEYSPEED = ival;
-      SetToRegistry(szRegistrySafteySpeed,(DWORD)XCSoarInterface::SettingsComputer().SAFTEYSPEED);
+    if (XCSoarInterface::SettingsComputer().SafetySpeed != ival) {
+      XCSoarInterface::SetSettingsComputer().SafetySpeed = ival;
+      SetToRegistry(szRegistrySafteySpeed,(DWORD)XCSoarInterface::SettingsComputer().SafetySpeed);
       GlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
       changed = true;
     }

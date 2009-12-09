@@ -49,7 +49,7 @@ Copyright_License {
 // from outside calculation thread; calculation thread should not set
 // these values
 
-/** AutoWindMode */
+/** AutoWindMode (not in use) */
 typedef enum
 {
   /** 0: Manual */
@@ -111,7 +111,7 @@ struct SETTINGS_COMPUTER
   double SafetyAltitudeBreakoff;
   double SafetyAltitudeTerrain;
   /** ManoeuveringSpeed */
-  double SAFTEYSPEED;
+  double SafetySpeed;
   int EnableExternalTriggerCruise;
   short AverEffTime;
   bool EnableBestAlternate;
@@ -146,8 +146,11 @@ struct SETTINGS_COMPUTER
   /** FlarmId of the glider to track */
   int TeamFlarmIdTarget;
 
+  /** Array index of the first alternate waypoint */
   int Alternate1; // VENTA3
+  /** Array index of the second alternate waypoint */
   int Alternate2;
+  /** Array index of the home waypoint */
   int HomeWaypoint;
 
   // vegavoice stuff

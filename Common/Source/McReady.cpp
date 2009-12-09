@@ -252,10 +252,10 @@ void GlidePolar::UpdatePolar(bool send,
   int i;
 
   // Limit the processed speed to the user-specified safety speed
-  if ((settings.SAFTEYSPEED==0)||(settings.SAFTEYSPEED>=MAXSAFETYSPEED)) {
+  if ((settings.SafetySpeed==0)||(settings.SafetySpeed>=MAXSAFETYSPEED)) {
     iSAFETYSPEED=MAXSAFETYSPEED-1;
   } else {
-    iSAFETYSPEED=(int)settings.SAFTEYSPEED;
+    iSAFETYSPEED=(int)settings.SafetySpeed;
   }
   MAXSPEED = iSAFETYSPEED;
 

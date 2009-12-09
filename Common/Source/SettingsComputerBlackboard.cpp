@@ -46,7 +46,7 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.SafetyAltitudeArrival = 500;
   settings_computer.SafetyAltitudeBreakoff = 700;
   settings_computer.SafetyAltitudeTerrain = 200;
-  settings_computer.SAFTEYSPEED = 50.0;
+  settings_computer.SafetySpeed = 50.0;
   settings_computer.EnableBlockSTF = false;
 
   settings_computer.TeamCodeRefWaypoint = -1;

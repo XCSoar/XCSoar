@@ -1832,7 +1832,7 @@ GlideComputerTask::TaskSpeed(const double this_maccready,
       double w_comp = min(10.0, max(-10.0, Calculated().Vario / mc_safe));
       double vdiff = vthis / Vstar + w_comp * rho_cruise + rho_climb;
 
-      if (vthis > SettingsComputer().SAFTEYSPEED * 2) {
+      if (vthis > SettingsComputer().SafetySpeed * 2) {
         vdiff = 1.0;
         // prevent funny numbers when starting mid-track
       }
