@@ -9,8 +9,8 @@
 
 <WndForm Name="frmChecklist" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Checklist" Font=2  BackColor=0xDADBAB>
 
-  <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=2 OnClickNotify="OnNextClicked" Tag=1 />
   <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=2 OnClickNotify="OnPrevClicked" Tag=0/>
+  <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=2 OnClickNotify="OnNextClicked" Tag=1 />
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 Tag=3 />
 
   <WndListFrame Name=frmDetails X=70 Y=0 Width=246 Height=222 Font=3
