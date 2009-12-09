@@ -185,7 +185,7 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
 
   //float intz;
   double d, lambda;
-  double obliq, alpha, delta, LL, equation, HourAngle, HourAngleTwilight, twx;
+  double obliq, alpha, delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
   int Year, Month, Day, Hour;
 
   // testing
@@ -221,27 +221,28 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
 
   HourAngle = f0(Location.Latitude, delta);
   HourAngleTwilight = f1(Location.Latitude, delta);
+
   // length of twilight in radians
-  twx = HourAngleTwilight - HourAngle;
+  TwilightHours = HourAngleTwilight - HourAngle;
   // length of twilight in hours
-  twx = 12.0 * twx / M_PI;
+  TwilightHours = 12.0 * TwilightHours / M_PI;
 
   //printf("ha= %.2f   hb= %.2f \n",ha,hb);
 
   // Conversion of angle to hours and minutes
-  daylen = RAD_TO_DEG * HourAngle / 7.5;
+  DayLength = RAD_TO_DEG * HourAngle / 7.5;
 
-  if (daylen < 0.0001)
+  if (DayLength < 0.0001)
     // arctic winter
-    daylen = 0.0;
+    DayLength = 0.0;
 
-  riset = 12.0 - 12.0 * HourAngle / M_PI + TimeZone - Location.Longitude / 15.0
-      + equation / 60.0;
+  TimeOfSunRise = 12.0 - 12.0 * HourAngle / M_PI + TimeZone
+      - Location.Longitude / 15.0 + equation / 60.0;
 
-  settm = 12.0 + 12.0 * HourAngle / M_PI + TimeZone - Location.Longitude / 15.0
-      + equation / 60.0;
+  TimeOfSunSet = 12.0 + 12.0 * HourAngle / M_PI + TimeZone
+      - Location.Longitude / 15.0 + equation / 60.0;
 
-  noont = riset + 12.0 * HourAngle / M_PI;
+  TimeOfNoon = TimeOfSunRise + 12.0 * HourAngle / M_PI;
   altmax = 90.0 + delta * RAD_TO_DEG - Location.Latitude;
 
   // Correction for S HS suggested by David Smith
@@ -250,15 +251,15 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
     altmax = 180.0 - altmax;
 
   // morning twilight begin
-  twam = riset - twx;
+  MorningTwilight = TimeOfSunRise - TwilightHours;
   // evening twilight end
-  twpm = settm + twx;
+  EveningTwilight = TimeOfSunSet + TwilightHours;
 
-  if (riset > 24.0)
-    riset -= 24.0;
+  if (TimeOfSunRise > 24.0)
+    TimeOfSunRise -= 24.0;
 
-  if (settm > 24.0)
-    settm -= 24.0;
+  if (TimeOfSunSet > 24.0)
+    TimeOfSunSet -= 24.0;
 
   /*
       puts("\n Sunrise and set");
@@ -271,21 +272,21 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
 
       printf("Latitude :  %3.1f, longitude: %3.1f, timezone: %3.1f \n",(float)latit,(float)longit,(float)tzone);
       printf("Declination   :  %.2f \n",delta * RAD_TO_DEG);
-      printf("Daylength     : "); showhrmn(daylen); puts(" hours \n");
+      printf("Daylength     : "); showhrmn(DayLength); puts(" hours \n");
       printf("Civil twilight: ");
-      showhrmn(twam); puts("");
+      showhrmn(MorningTwilight); puts("");
       printf("Sunrise       : ");
-      showhrmn(riset); puts("");
+      showhrmn(TimeOfSunRise); puts("");
 
       printf("Sun altitude ");
       // Amendment by D. Smith
       printf(" %.2f degr",altmax);
       printf(latit>=0.0 ? " South" : " North");
-      printf(" at noontime "); showhrmn(noont); puts("");
+      printf(" at noontime "); showhrmn(TimeOfNoon); puts("");
       printf("Sunset        : ");
-      showhrmn(settm);  puts("");
+      showhrmn(TimeOfSunSet);  puts("");
       printf("Civil twilight: ");
-      showhrmn(twpm);  puts("\n");
+      showhrmn(EveningTwilight);  puts("\n");
   */
   // QUESTION TB: why not just void?
 

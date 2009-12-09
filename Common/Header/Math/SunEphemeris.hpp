@@ -43,7 +43,7 @@ struct DERIVED_INFO;
 struct GEOPOINT;
 
 class SunEphemeris {
-  double L, g, daylen;
+  double L, g, DayLength;
 
   double FNday (int y, int m, int d, float h);
   double FNrange (double x);
@@ -53,7 +53,7 @@ class SunEphemeris {
   void showhrmn(double dhr);
 
  public:
-  double twam, altmax, noont, settm, riset, twpm;
+  double MorningTwilight, altmax, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;
 
   int CalcSunTimes(const GEOPOINT &location, const NMEA_INFO &GPS_INFO,
       const DERIVED_INFO &CALCULATED_INFO, double tzone);
