@@ -42,8 +42,9 @@ Copyright_License {
 #include <tchar.h>
 
 void GetTeamCode(TCHAR *code, double bearing, double range);
-void CalcTeammateBearingRange(double ownDist, double ownBear, const TCHAR *TeamMateCode,  double *distToMate, double *bearToMate);
-double GetTeammateBearingFromRef(const TCHAR *code );
-double GetTeammateRangeFromRef(const TCHAR *code );
+void CalcTeammateBearingRange(double ownDist, double ownBear,
+    const TCHAR *TeamMateCode,  double *distToMate, double *bearToMate);
+double GetTeammateBearingFromRef(const TCHAR *code);
+double GetTeammateRangeFromRef(const TCHAR *code);
 
 #endif
