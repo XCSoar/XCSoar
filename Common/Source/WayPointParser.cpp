@@ -158,9 +158,9 @@ ParseWayPointError(int LineNumber, const TCHAR *FileName, const TCHAR *String)
               gettext(TEXT("Line")), LineNumber, String);
   } else {
     _stprintf(szTemp, TEXT("%s\r\n%s %s %d\r\n%s"),
-        gettext(TEXT("Waypointfile Parse Error")),
-        gettext(TEXT("(Map file)")),
-        gettext(TEXT("Line")), LineNumber, String);
+              gettext(TEXT("Waypointfile Parse Error")),
+              gettext(TEXT("(Map file)")),
+              gettext(TEXT("Line")), LineNumber, String);
   }
 
   MessageBoxX(szTemp, gettext(TEXT("Error")), MB_OK | MB_ICONWARNING);
