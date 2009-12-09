@@ -49,6 +49,15 @@ namespace Layout {
   extern double dscale;
   extern bool IntScaleFlag;
   extern int scale;
+
+  /**
+   * Initializes the screen layout information provided by this
+   * namespace.
+   *
+   * @param width the width of the screen in pixels
+   * @param height the width of the screen in pixels
+   */
+  void Initalize(unsigned width, unsigned height);
 }
 
 #ifdef BIGDISPLAY

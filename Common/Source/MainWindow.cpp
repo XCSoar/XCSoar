@@ -5,6 +5,7 @@
 #include "Interface.hpp"
 #include "ButtonLabel.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "Components.hpp"
 #include "ProcessTimer.hpp"
 #include "LogFile.hpp"
@@ -78,6 +79,8 @@ MainWindow::set(LPCTSTR text,
 #else
   rc = get_client_rect();
 #endif
+
+  Layout::Initalize(rc.right - rc.left, rc.bottom - rc.top);
 
   StartupStore(TEXT("InfoBox geometry\n"));
   InfoBoxLayout::ScreenGeometry(rc);

@@ -38,10 +38,38 @@ Copyright_License {
 
 #include "Screen/Layout.hpp"
 
+#include <algorithm>
+
+using std::min;
+using std::max;
+
 namespace Layout {
   bool landscape = false;
   bool square = false;
   int scale = 1;
   double dscale = 1.0;
   bool IntScaleFlag = false;
+}
+
+void
+Layout::Initalize(unsigned width, unsigned height)
+{
+  unsigned maxsize = max(width, height);
+  unsigned minsize = min(width, height);
+
+  dscale = max(1.0, minsize / 240.0); // always start w/ shortest dimension
+
+  if (maxsize == minsize)  // square should be shrunk
+    {
+      dscale *= 240.0 / 320.0;
+    }
+
+  scale = (int)dscale;
+  if ( ((double)scale) == dscale)
+    IntScaleFlag=true;
+  else
+    IntScaleFlag=false;
+
+  landscape = width > height;
+  square = width == height;
 }

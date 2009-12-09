@@ -47,12 +47,6 @@ Copyright_License {
 #include "WindowControls.h"
 #include <stdio.h>
 
-#ifndef _MSC_VER
-#include <algorithm>
-using std::min;
-using std::max;
-#endif
-
 // Layouts:
 // 0: default, infoboxes along top and bottom, map in middle
 // 1: both infoboxes along bottom
@@ -236,29 +230,8 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   // JMW testing only
   geometrychanged = true;
 
-  int maxsize=0;
-  int minsize=0;
-  maxsize = max(rc.right-rc.left,rc.bottom-rc.top);
-  minsize = min(rc.right-rc.left,rc.bottom-rc.top);
-
-  using namespace Layout;
-
-  dscale = max(1.0, minsize / 240.0); // always start w/ shortest dimension
-
-  if (maxsize == minsize)  // square should be shrunk
-  {
-    dscale *= 240.0 / 320.0;
-  }
-
-  scale = (int)dscale;
-  if ( ((double)scale) == dscale)
-    IntScaleFlag=true;
-  else
-    IntScaleFlag=false;
-
   if (rc.bottom<rc.right) {
     // landscape mode
-    landscape = true;
     if (InfoBoxGeometry<4) {
       geometrychanged = true;
 
@@ -271,15 +244,12 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
     }
 
   } else if (rc.bottom==rc.right) {
-    landscape = false;
-    square = true;
     if (InfoBoxGeometry<7) {
       geometrychanged = true;
     }
     InfoBoxGeometry = 7;
 
   } else {
-    landscape = false;
     // portrait mode
     gnav = false;
     if (InfoBoxGeometry>=3) {
@@ -298,7 +268,7 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
 
   if (gnav) {
     numInfoWindows = 9;
-  } else if (square) {
+  } else if (Layout::square) {
     numInfoWindows = 5;
   } else {
     numInfoWindows = 8;
