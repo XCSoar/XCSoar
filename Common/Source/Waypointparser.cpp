@@ -102,47 +102,48 @@ WaypointInTerrainRange(const WAYPOINT &way_point, const RasterTerrain &terrain)
 
   if (terrain.WaypointIsInTerrainRange(way_point.Location))
     return true;
-  else {
-    if (WaypointOutOfTerrainRangeDontAskAgain == 0) {
-      TCHAR sTmp[250];
-      int res;
 
-      _stprintf(
-          sTmp,
-          gettext(
-              TEXT("Waypoint #%d \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?")),
-          way_point.Number, way_point.Name);
+  if (WaypointOutOfTerrainRangeDontAskAgain == 2)
+    return false;
+  if (WaypointOutOfTerrainRangeDontAskAgain == 1)
+    return true;
 
-      res = dlgWaypointOutOfTerrain(sTmp);
+  if (WaypointOutOfTerrainRangeDontAskAgain != 0)
+    return false;
 
-      switch (res) {
-      case wpTerrainBoundsYes:
-        return true;
-      case wpTerrainBoundsNo:
-        return false;
-      case wpTerrainBoundsYesAll:
-        WaypointOutOfTerrainRangeDontAskAgain = 1;
-        WaypointsOutOfRange = 1;
-        SetToRegistry(szRegistryWaypointsOutOfRange, WaypointsOutOfRange);
-        Profile::StoreRegistry();
-        return true;
-      case mrCancel:
-      case wpTerrainBoundsNoAll:
-        WaypointOutOfTerrainRangeDontAskAgain = 2;
-        WaypointsOutOfRange = 2;
-        SetToRegistry(szRegistryWaypointsOutOfRange, WaypointsOutOfRange);
-        Profile::StoreRegistry();
-        return false;
-      }
-    } else {
-      if (WaypointOutOfTerrainRangeDontAskAgain == 2)
-        return (false);
-      if (WaypointOutOfTerrainRangeDontAskAgain == 1)
-        return (true);
-    }
+  TCHAR sTmp[250];
+  int res;
 
+  _stprintf(sTmp,gettext(
+      TEXT("Waypoint #%d \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?")),
+      way_point.Number, way_point.Name);
+
+  res = dlgWaypointOutOfTerrain(sTmp);
+
+  switch (res) {
+  case wpTerrainBoundsYes:
+    return true;
+
+  case wpTerrainBoundsNo:
+    return false;
+
+  case wpTerrainBoundsYesAll:
+    WaypointOutOfTerrainRangeDontAskAgain = 1;
+    WaypointsOutOfRange = 1;
+    SetToRegistry(szRegistryWaypointsOutOfRange, WaypointsOutOfRange);
+    Profile::StoreRegistry();
+    return true;
+
+  case mrCancel:
+  case wpTerrainBoundsNoAll:
+    WaypointOutOfTerrainRangeDontAskAgain = 2;
+    WaypointsOutOfRange = 2;
+    SetToRegistry(szRegistryWaypointsOutOfRange, WaypointsOutOfRange);
+    Profile::StoreRegistry();
     return false;
   }
+
+  return false;
 }
 
 static int
