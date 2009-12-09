@@ -58,31 +58,25 @@ struct SETTINGS_COMPUTER;
  * Reads a text file, and appends its way points to the specified
  * WayPointList.
  */
-bool
-ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
-                 const RasterTerrain *terrain);
+bool ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
+    const RasterTerrain *terrain);
 
-void
-ReadWayPoints(WayPointList &way_points, const RasterTerrain *terrain);
+void ReadWayPoints(WayPointList &way_points, const RasterTerrain *terrain);
 
-void
-SetHome(const WayPointList &way_points, const RasterTerrain *terrain,
-        SETTINGS_COMPUTER &settings,
-        const bool reset, const bool set_location=false);
+void SetHome(const WayPointList &way_points, const RasterTerrain *terrain,
+    SETTINGS_COMPUTER &settings, const bool reset,
+    const bool set_location = false);
 
-int
-FindNearestWayPoint(const WayPointList &way_points,
-                    MapWindowProjection &map_projection,
-                    const GEOPOINT &location,
-                    double MaxRange, bool exhaustive=false);
+int FindNearestWayPoint(const WayPointList &way_points,
+    MapWindowProjection &map_projection, const GEOPOINT &location,
+    double MaxRange, bool exhaustive = false);
 
 int dlgWaypointOutOfTerrain(const TCHAR *Message);
 
-void
-WaypointWriteFiles(WayPointList &way_points,
-                   const SETTINGS_COMPUTER &settings_computer);
+void WaypointWriteFiles(WayPointList &way_points,
+    const SETTINGS_COMPUTER &settings_computer);
 
-void
-WaypointAltitudeFromTerrain(WAYPOINT &way_point, const RasterTerrain &terrain);
+void WaypointAltitudeFromTerrain(WAYPOINT &way_point,
+    const RasterTerrain &terrain);
 
 #endif
