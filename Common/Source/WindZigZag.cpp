@@ -174,20 +174,17 @@ private:
     double west_rat = Vwest / V_tas;
     double gps_rat = V_gps / V_tas;
 
-    if (gps_rat < 0.001) {
+    if (gps_rat < 0.001)
       // speed too small
       return false;
-    }
 
-    if (gps_rat + west_rat < 1.0) {
+    if (gps_rat + west_rat < 1.0)
       // wind too weak
       return false;
-    }
 
-    if ((Vwest > V_gps) && (Vwest > V_tas)) {
+    if ((Vwest > V_gps) && (Vwest > V_tas))
       // wind too strong
       return false;
-    }
 
     if (west_rat < 0.001) {
       // wind speed too small
@@ -199,15 +196,14 @@ private:
     double cosgamma = (west_rat * west_rat + gps_rat * gps_rat - 1.0)
                       / (2.0 * west_rat * gps_rat);
 
-    if (fabs(cosgamma) <= 1.0) {
-      double gamma = acos(cosgamma);
-      theta_west_1[i] = -anglelimit(M_PI - theta_gps - gamma);
-      theta_west_2[i] = -anglelimit(M_PI - theta_gps + gamma);
-
-      return true;
-    } else {
+    if (fabs(cosgamma) > 1.0)
       return false;
-    }
+
+    double gamma = acos(cosgamma);
+    theta_west_1[i] = -anglelimit(M_PI - theta_gps - gamma);
+    theta_west_2[i] = -anglelimit(M_PI - theta_gps + gamma);
+
+    return true;
   }
 
 public:
