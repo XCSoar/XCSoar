@@ -596,7 +596,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
     h = (flightstats.Altitude_Ceiling.y_max-flightstats.Altitude_Base.y_min)*
       i/(double)(numsteps-1)+flightstats.Altitude_Base.y_min;
 
-    wind = windanalyser->windstore.getWind(h, &found);
+    wind = windanalyser->windstore.GetWind(h, &found);
     mag = sqrt(wind.x*wind.x+wind.y*wind.y);
 
     windstats_mag.LeastSquaresUpdate(mag, h);
@@ -629,7 +629,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
     h = (flightstats.Altitude_Ceiling.y_max-flightstats.Altitude_Base.y_min)*
       hfact+flightstats.Altitude_Base.y_min;
 
-    wind = windanalyser->windstore.getWind(h, &found);
+    wind = windanalyser->windstore.GetWind(h, &found);
     if (windstats_mag.x_max == 0)
       windstats_mag.x_max=1;  // prevent /0 problems
     wind.x /= windstats_mag.x_max;

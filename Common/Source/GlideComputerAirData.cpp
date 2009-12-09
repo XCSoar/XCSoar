@@ -209,7 +209,7 @@ GlideComputerAirData::DoWindCirclingSample()
 }
 
 /**
- * Passes data to the windanalyser.slot_Altitude method
+ * Passes data to the windanalyser.SlotAltitude method
  */
 void
 GlideComputerAirData::DoWindCirclingAltitude()

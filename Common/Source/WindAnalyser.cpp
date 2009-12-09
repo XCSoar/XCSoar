@@ -226,14 +226,14 @@ WindAnalyser::slot_newSample(const NMEA_INFO *nmeaInfo,
   }
 
   first = false;
-  windstore.slot_Altitude(nmeaInfo, derivedInfo);
+  windstore.SlotAltitude(nmeaInfo, derivedInfo);
 }
 
 void
 WindAnalyser::slot_Altitude(const NMEA_INFO *nmeaInfo,
     DERIVED_INFO *derivedInfo)
 {
-  windstore.slot_Altitude(nmeaInfo, derivedInfo);
+  windstore.SlotAltitude(nmeaInfo, derivedInfo);
 }
 
 /**
@@ -428,5 +428,5 @@ WindAnalyser::slot_newEstimate(const NMEA_INFO *nmeaInfo,
   DebugStore("%f %f %d # %s\n", a.x, a.y, quality, type);
   #endif
 
-  windstore.slot_measurement(nmeaInfo, derivedInfo, a, quality);
+  windstore.SlotMeasurement(nmeaInfo, derivedInfo, a, quality);
 }

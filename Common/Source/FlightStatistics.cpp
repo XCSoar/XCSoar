@@ -671,7 +671,7 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 	 -Altitude_Base.y_min)*
       i/(double)(numsteps-1)+Altitude_Base.y_min;
 
-    wind = wind_store.getWind(nmea_info.Time, h, &found);
+    wind = wind_store.GetWind(nmea_info.Time, h, &found);
     mag = sqrt(wind.x*wind.x+wind.y*wind.y);
 
     windstats_mag.LeastSquaresUpdate(mag, h);
@@ -705,7 +705,7 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 	 -Altitude_Base.y_min)*
       hfact+Altitude_Base.y_min;
 
-    wind = wind_store.getWind(nmea_info.Time, h, &found);
+    wind = wind_store.GetWind(nmea_info.Time, h, &found);
     if (windstats_mag.x_max == 0)
       windstats_mag.x_max=1;  // prevent /0 problems
     wind.x /= windstats_mag.x_max;

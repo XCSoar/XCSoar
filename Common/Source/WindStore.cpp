@@ -81,7 +81,7 @@ WindStore::~WindStore()
  * important in the end result and stay in the store longer.
  */
 void
-WindStore::slot_measurement(const NMEA_INFO *nmeaInfo,
+WindStore::SlotMeasurement(const NMEA_INFO *nmeaInfo,
     DERIVED_INFO *derivedInfo, Vector windvector, int quality)
 {
   updated = true;
@@ -93,10 +93,10 @@ WindStore::slot_measurement(const NMEA_INFO *nmeaInfo,
 /**
  * Called if the altitude changes.
  * Determines where measurements are stored and may result in a
- * newWind signal.
+ * NewWind signal.
  */
 void
-WindStore::slot_Altitude(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
+WindStore::SlotAltitude(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
 {
   if ((fabs(nmeaInfo->Altitude - _lastAltitude) > 100.0) || (updated)) {
     //only recalculate if there is a significant change
@@ -108,13 +108,13 @@ WindStore::slot_Altitude(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
 }
 
 const Vector
-WindStore::getWind(double Time, double h, bool *found) const
+WindStore::GetWind(double Time, double h, bool *found) const
 {
   return windlist->getWind(Time, h, found);
 }
 
 /** Recalculates the wind from the stored measurements.
-  * May result in a newWind signal. */
+  * May result in a NewWind signal. */
 
 void
 WindStore::recalculateWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
@@ -132,13 +132,13 @@ WindStore::recalculateWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
       updated = false;
       _lastAltitude = nmeaInfo->Altitude;
 
-      newWind(nmeaInfo, derivedInfo, CurWind);
+      NewWind(nmeaInfo, derivedInfo, CurWind);
     }
   } // otherwise, don't change anything
 }
 
 void
-WindStore::newWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
+WindStore::NewWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
     Vector &wind)
 {
   double mag = sqrt(wind.x * wind.x + wind.y * wind.y);
