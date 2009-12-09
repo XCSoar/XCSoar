@@ -1520,21 +1520,21 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeArrival"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL));
+    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SafetyAltitudeArrival));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeBreakoff"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SAFETYALTITUDEBREAKOFF));
+    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeTerrain"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SAFETYALTITUDETERRAIN));
+    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -2788,10 +2788,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeArrival"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if (XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL != ival) {
-      XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEARRIVAL = ival;
+    if (XCSoarInterface::SettingsComputer().SafetyAltitudeArrival != ival) {
+      XCSoarInterface::SetSettingsComputer().SafetyAltitudeArrival = ival;
       SetToRegistry(szRegistrySafetyAltitudeArrival,
-		    (DWORD)XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL);
+		    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeArrival);
       changed = true;
     }
   }
@@ -2799,10 +2799,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeBreakoff"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if (XCSoarInterface::SettingsComputer().SAFETYALTITUDEBREAKOFF != ival) {
-      XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEBREAKOFF = ival;
+    if (XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff != ival) {
+      XCSoarInterface::SetSettingsComputer().SafetyAltitudeBreakoff = ival;
       SetToRegistry(szRegistrySafetyAltitudeBreakOff,
-		    (DWORD)XCSoarInterface::SettingsComputer().SAFETYALTITUDEBREAKOFF);
+		    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff);
       changed = true;
     }
   }
@@ -2810,10 +2810,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeTerrain"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if (XCSoarInterface::SettingsComputer().SAFETYALTITUDETERRAIN != ival) {
-      XCSoarInterface::SetSettingsComputer().SAFETYALTITUDETERRAIN = ival;
+    if (XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain != ival) {
+      XCSoarInterface::SetSettingsComputer().SafetyAltitudeTerrain = ival;
       SetToRegistry(szRegistrySafetyAltitudeTerrain,
-		    (DWORD)XCSoarInterface::SettingsComputer().SAFETYALTITUDETERRAIN);
+		    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain);
       changed = true;
     }
   }

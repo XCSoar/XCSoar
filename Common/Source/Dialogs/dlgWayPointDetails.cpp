@@ -452,7 +452,7 @@ void dlgWayPointDetailsShowModal(void){
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)
-    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -way_point.Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
@@ -471,7 +471,7 @@ void dlgWayPointDetailsShowModal(void){
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)
-    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -way_point.Altitude;
 
   wp = ((WndProperty *)wf->FindByName(TEXT("prpMc1")));
@@ -487,7 +487,7 @@ void dlgWayPointDetailsShowModal(void){
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)
-    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -way_point.Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,

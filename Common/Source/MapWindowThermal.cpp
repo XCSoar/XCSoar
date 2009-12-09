@@ -116,7 +116,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 #define TBSCALEX 20
 
   // calculate height above safety altitude
-  double hoffset = SettingsComputer().SAFETYALTITUDEBREAKOFF
+  double hoffset = SettingsComputer().SafetyAltitudeBreakoff
     +Calculated().TerrainBase;
   h = Calculated().NavAltitude-hoffset;
 

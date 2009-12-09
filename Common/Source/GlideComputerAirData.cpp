@@ -652,7 +652,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
   } else {
     risk_mc =
       GlidePolar::MacCreadyRisk(Calculated().NavAltitude
-        + Calculated().EnergyHeight - SettingsComputer().SAFETYALTITUDEBREAKOFF
+        + Calculated().EnergyHeight - SettingsComputer().SafetyAltitudeBreakoff
         - Calculated().TerrainBase, Calculated().MaxThermalHeight, mc_setting);
   }
   SetCalculated().MacCreadyRisk = risk_mc;
@@ -1422,7 +1422,7 @@ GlideComputerAirData::ThermalBand()
   // JMW TODO accuracy: Should really work out dt here,
   //           but i'm assuming constant time steps
   double dheight = Calculated().NavAltitude
-      - SettingsComputer().SAFETYALTITUDEBREAKOFF
+      - SettingsComputer().SafetyAltitudeBreakoff
       - Calculated().TerrainBase; // JMW EXPERIMENTAL
 
   int index, i, j;

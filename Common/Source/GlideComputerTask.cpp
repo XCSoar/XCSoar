@@ -263,14 +263,14 @@ FAIFinishHeight(const SETTINGS_COMPUTER &settings,
     if (task.getSettings().EnableFAIFinishHeight
         && !task.getSettings().AATEnabled) {
       return max(max((double)task.getSettings().FinishMinHeight,
-          settings.SAFETYALTITUDEARRIVAL) + wp_alt,
+          settings.SafetyAltitudeArrival) + wp_alt,
           Calculated.TaskStartAltitude-1000.0);
     } else {
       return max((double)task.getSettings().FinishMinHeight,
-          settings.SAFETYALTITUDEARRIVAL) + wp_alt;
+          settings.SafetyAltitudeArrival) + wp_alt;
     }
   } else {
-    return wp_alt + settings.SAFETYALTITUDEARRIVAL;
+    return wp_alt + settings.SafetyAltitudeArrival;
   }
 }
 
@@ -2086,7 +2086,7 @@ public:
         calculated_info.WindSpeed, calculated_info.WindBearing, 0, 0, true, 0);
 
     AltitudeRequired = AltitudeRequired
-                       + settings.SAFETYALTITUDEARRIVAL
+                       + settings.SafetyAltitudeArrival
                        + waypoint.Altitude;
 
     AltitudeDifference = calculated_info.NavAltitude - AltitudeRequired;

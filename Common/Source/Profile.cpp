@@ -303,11 +303,11 @@ Profile::ReadRegistrySettings()
       SetSettingsComputer().AltWarningMargin);
 
   GetFromRegistry(szRegistrySafetyAltitudeArrival,
-		  SetSettingsComputer().SAFETYALTITUDEARRIVAL);
+		  SetSettingsComputer().SafetyAltitudeArrival);
   GetFromRegistry(szRegistrySafetyAltitudeBreakOff,
-		  SetSettingsComputer().SAFETYALTITUDEBREAKOFF);
+		  SetSettingsComputer().SafetyAltitudeBreakoff);
   GetFromRegistry(szRegistrySafetyAltitudeTerrain,
-		  SetSettingsComputer().SAFETYALTITUDETERRAIN);
+		  SetSettingsComputer().SafetyAltitudeTerrain);
   GetFromRegistry(szRegistrySafteySpeed,
 		  SetSettingsComputer().SAFTEYSPEED);
   GetFromRegistry(szRegistryPolarID, POLARID);

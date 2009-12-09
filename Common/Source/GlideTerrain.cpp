@@ -111,7 +111,7 @@ FinalGlideThroughTerrain(const double this_bearing,
 
   altitude = calculated.NavAltitude;
   h =  max(0, terrain.GetTerrainHeight(loc,rounding));
-  dh = altitude - h - settings.SAFETYALTITUDETERRAIN;
+  dh = altitude - h - settings.SafetyAltitudeTerrain;
   last_dh = dh;
   if (dh<0) {
     start_under = true;
@@ -163,7 +163,7 @@ FinalGlideThroughTerrain(const double this_bearing,
     // find height over terrain
     h =  max(0,terrain.GetTerrainHeight(loc, rounding));
 
-    dh = altitude - h - settings.SAFETYALTITUDETERRAIN;
+    dh = altitude - h - settings.SafetyAltitudeTerrain;
 
     if (TerrainBase && (dh>0) && (h>0)) {
       *TerrainBase = min(*TerrainBase, h);

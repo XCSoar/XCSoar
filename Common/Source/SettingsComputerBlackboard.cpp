@@ -43,9 +43,9 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.AutoMacCready = false;
   settings_computer.AutoWindMode= D_AUTOWIND_CIRCLING;
   settings_computer.AutoMcMode = 0;
-  settings_computer.SAFETYALTITUDEARRIVAL = 500;
-  settings_computer.SAFETYALTITUDEBREAKOFF = 700;
-  settings_computer.SAFETYALTITUDETERRAIN = 200;
+  settings_computer.SafetyAltitudeArrival = 500;
+  settings_computer.SafetyAltitudeBreakoff = 700;
+  settings_computer.SafetyAltitudeTerrain = 200;
   settings_computer.SAFTEYSPEED = 50.0;
   settings_computer.EnableBlockSTF = false;
 

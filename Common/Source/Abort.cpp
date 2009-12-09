@@ -90,7 +90,7 @@ GlideComputerTask::CalculateWaypointArrivalAltitude(const WAYPOINT &way_point,
   calc.AltReqd = AltReqd;
 
   return ((Calculated().NavAltitude) - AltReqd - way_point.Altitude -
-	  SettingsComputer().SAFETYALTITUDEARRIVAL);
+	  SettingsComputer().SafetyAltitudeArrival);
 }
 
 void

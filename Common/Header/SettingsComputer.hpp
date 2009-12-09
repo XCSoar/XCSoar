@@ -104,9 +104,9 @@ struct SETTINGS_COMPUTER {
   /** Use short IGC filenames for the logger files */
   bool   LoggerShortName;
   bool   DisableAutoLogger;
-  double SAFETYALTITUDEARRIVAL;
-  double SAFETYALTITUDEBREAKOFF;
-  double SAFETYALTITUDETERRAIN;
+  double SafetyAltitudeArrival;
+  double SafetyAltitudeBreakoff;
+  double SafetyAltitudeTerrain;
   /** ManoeuveringSpeed */
   double SAFTEYSPEED;
   int    EnableExternalTriggerCruise;
