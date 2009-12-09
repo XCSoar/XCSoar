@@ -37,7 +37,7 @@ Copyright_License {
 */
 /**
  * Defines the entry point for the DLL application.
- * @file XcSoarSetup.cpp
+ * @file XCSoarSetup.cpp
  * @see http://www.codeguru.com/Cpp/W-P/ce/networking/article.php/c9269/
  */
 

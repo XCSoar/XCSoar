@@ -381,7 +381,7 @@ OBJS += $(SRC)/XCSoar-$(TARGET).rsc
 endif
 
 XCSOARSETUP_OBJS=\
-	$(SRC)/XcSoarSetup.o
+	$(SRC)/XCSoarSetup.o
 
 XCSOARLAUNCH_OBJS=\
 	$(SRC)/XCSoarLaunch.o
