@@ -55,7 +55,12 @@ Copyright_License {
 extern "C" {
 #endif
 
-void __cdecl	TransparentImage(HDC, ...);
+BOOL
+TransparentImage(HDC hdcDest,
+                 LONG DstX, LONG DstY, LONG DstCx, LONG DstCy,
+                 HANDLE hSrc,
+                 LONG SrcX, LONG SrcY, LONG SrcCx, LONG SrcCy,
+                 COLORREF TransparentColor);
 
 #ifdef __cplusplus
 }
