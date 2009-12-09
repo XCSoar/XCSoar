@@ -61,6 +61,7 @@ Copyright_License {
  * @param d Day
  * @param h UT in decimal hours
  * @return days to J2000
+ * @see http://www.sci.fi/~benefon/azimalt.cpp
  */
 double
 SunEphemeris::FNday(int y, int m, int d, float h)
@@ -76,6 +77,7 @@ SunEphemeris::FNday(int y, int m, int d, float h)
  * The function below returns an angle in the range 0 to 2*PI
  * @param x Angle to be converted
  * @return an angle in the range 0 to 2*PI
+ * @see http://www.sci.fi/~benefon/azimalt.cpp
  */
 double
 SunEphemeris::FNrange(double x)
