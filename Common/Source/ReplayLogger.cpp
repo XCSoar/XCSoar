@@ -305,12 +305,12 @@ public:
   double
   GetAverageTime()
   {
-    double tav = 0;
+    if (num <= 0)
+      return 0;
 
-    if (num > 0) {
-      for (int i = 0; i < num; i++) {
-        tav += p[i].t / num;
-      }
+    double tav = 0;
+    for (int i = 0; i < num; i++) {
+      tav += p[i].t / num;
     }
 
     return tav;
