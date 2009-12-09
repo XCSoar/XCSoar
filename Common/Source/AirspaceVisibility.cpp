@@ -36,47 +36,49 @@ Copyright_License {
 }
 
 */
+
+#include "AirspaceVisibility.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "SettingsComputer.hpp"
 
 bool
-AbstractAirspace::type_visible(const SETTINGS_COMPUTER &settings) const
+AirspaceVisible::type_visible(const AbstractAirspace& airspace) const
 {
-  return settings.iAirspaceMode[Type]%2==1;
+  return m_settings.iAirspaceMode[airspace.get_type()]%2==1;
 }
 
 bool
-AbstractAirspace::altitude_visible(const fixed alt,
-                                   const SETTINGS_COMPUTER &settings) const
+AirspaceVisible::altitude_visible(const AbstractAirspace& airspace) const
 {
   /// \todo airspace visibility did use ToMSL(..., map.Calculated().TerrainAlt); 
 
-  switch (settings.AltitudeMode) {
+  switch (m_settings.AltitudeMode) {
 
   case ALLON:
     return true;
 
   case CLIP:
-    if (m_base.Altitude <= settings.ClipAltitude)
+    if (airspace.get_base_altitude() <= m_settings.ClipAltitude)
       return true;
     else
       return false;
 
   case AUTO:
-    if ((alt >= (m_base.Altitude - settings.AltWarningMargin)) 
-        && (alt <= (m_top.Altitude + settings.AltWarningMargin)))
+    if ((m_altitude >= (airspace.get_base_altitude() - m_settings.AltWarningMargin)) 
+        && (m_altitude <= (airspace.get_top_altitude() + m_settings.AltWarningMargin)))
       return true;
     else
       return false;
 
   case ALLBELOW:
-    if (alt >= (m_base.Altitude - settings.AltWarningMargin))
+    if (m_altitude >= (airspace.get_base_altitude() - m_settings.AltWarningMargin))
       return true;
     else
       return false;
 
   case INSIDE:
-    if ((alt >= m_base.Altitude) && (alt <= m_top.Altitude))
+    if ((m_altitude >= airspace.get_base_altitude()) 
+        && (m_altitude <= airspace.get_top_altitude()))
       return true;
     else
       return false;
@@ -84,6 +86,5 @@ AbstractAirspace::altitude_visible(const fixed alt,
   case ALLOFF:
     return false;
   }
-
   return true;
 }

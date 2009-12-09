@@ -2,10 +2,12 @@
 TASK_SRC	:=\
 	$(topdir)/src/Airspace/Airspace.cpp \
 	$(topdir)/src/Airspace/AirspaceAltitude.cpp \
+	$(topdir)/src/Airspace/AirspaceAircraftPerformance.cpp \
 	$(topdir)/src/Airspace/AbstractAirspace.cpp \
 	$(topdir)/src/Airspace/AirspaceCircle.cpp \
 	$(topdir)/src/Airspace/AirspacePolygon.cpp \
 	$(topdir)/src/Airspace/Airspaces.cpp \
+	$(topdir)/src/Airspace/AirspaceIntersectSort.cpp \
 	$(topdir)/src/Airspace/AirspaceVisitor.cpp \
 	$(topdir)/src/Atmosphere/Pressure.cpp \
 	$(topdir)/src/GlideSolvers/GlideState.cpp \
@@ -91,7 +93,6 @@ TASK_SRC	:=\
 	$(topdir)/src/Util/DiffFilter.cpp \
 	$(topdir)/src/Util/Filter.cpp \
 	$(topdir)/src/Util/Gradient.cpp \
-	$(topdir)/src/Util/Printing.cpp \
 	$(topdir)/src/Util/ZeroFinder.cpp 
 
 $(topdir)/src/task-$(TARGET).a: $(patsubst %.cpp,%-$(TARGET).o,$(TASK_SRC:.c=-$(TARGET).o))

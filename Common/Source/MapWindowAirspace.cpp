@@ -46,6 +46,37 @@ Copyright_License {
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
 
+#include "AirspaceVisibility.hpp"
+
+class AirspaceMapVisible: public AirspaceVisible
+{
+public:
+  AirspaceMapVisible(const SETTINGS_COMPUTER& _settings, 
+                     const fixed& _altitude, const bool& _border):
+    m_border(_border),
+    AirspaceVisible(_settings, _altitude)
+    {};
+
+  virtual bool operator()( const AbstractAirspace& airspace ) const { 
+    if (!parent_condition(airspace)) {
+      return false;
+    }
+#ifdef OLD_TASK        
+    if (airspace._NewWarnAckNoBrush ||
+        (m_settings.iAirspaceBrush[airspace.Type] == NUMAIRSPACEBRUSHES-1)) {
+      return m_border;
+    } else {
+      return true;
+    }
+#else
+    return true;
+#endif
+  }
+private:
+  const bool &m_border;
+};
+
+
 /**
  * Class to render airspaces onto map in two passes,
  * one for border, one for area.
@@ -53,7 +84,6 @@ Copyright_License {
  * The old way of doing it was possibly faster but required a lot
  * of code overhead.
  */
-
 class AirspaceVisitorMap: public AirspaceVisitor 
 {
 public:
@@ -61,15 +91,15 @@ public:
                      Canvas& _buffer):map(_map),
                                       buffer(_buffer),
                                       m_found(false),
-                                      m_border(true)
+                                      m_border(true),
+                                      visible(_map.SettingsComputer(),
+                                              _map.Basic().GetAnyAltitude(),
+                                              m_border)
     {
-
+      m_predicate = &visible;
     };
 
   void Visit(const AirspaceCircle& airspace) {
-    if (!check_visible(airspace)) 
-      return;
-
     start_render(airspace);
     POINT center;
     map.LonLat2Screen(airspace.get_center(),center);
@@ -78,8 +108,6 @@ public:
   }
 
   void Visit(const AirspacePolygon& airspace) {
-    if (!check_visible(airspace)) 
-      return;
     start_render(airspace);
 
     const SearchPointVector& points = airspace.get_points();
@@ -92,7 +120,11 @@ public:
       map.LonLat2Screen(it->get_location(), sc);
       screen.push_back(sc);
     }
-    buffer.polyline(&screen[0], size);
+    if (!m_border) {
+      buffer.polyline(&screen[0], size);
+    } else {
+      buffer.polygon(&screen[0], size);
+    }
   }
 
   void set_fill() {
@@ -116,23 +148,6 @@ public:
   }
 
 private:
-  bool check_visible(const AbstractAirspace& airspace) {
-    if (!airspace.type_visible(map.SettingsComputer()) ||
-        !airspace.altitude_visible(map.Basic().GetAnyAltitude(),
-                                   map.SettingsComputer())) {
-      return false;
-    }
-#ifdef OLD_TASK        
-    if (airspace._NewWarnAckNoBrush ||
-        (map.SettingsMap().iAirspaceBrush[airspace.Type] == NUMAIRSPACEBRUSHES-1)) {
-      return m_border;
-    } else {
-      return true;
-    }
-#else
-    return true;
-#endif
-  }
 
   void start_render(const AbstractAirspace &airspace) {
     if (!m_found) {
@@ -143,18 +158,18 @@ private:
         buffer.white_pen();
       }
     }
-    if (m_border) {
+    if (!m_border) {
+      if (map.SettingsMap().bAirspaceBlackOutline)
+        buffer.black_pen();
+      else
+        buffer.select(MapGfx.hAirspacePens[airspace.get_type()]);
+    } else {
       // this color is used as the black bit
       buffer.set_text_color(MapGfx.Colours[map.SettingsMap().
                                            iAirspaceColour[airspace.get_type()]]);
       // get brush, can be solid or a 1bpp bitmap
       buffer.select(MapGfx.hAirspaceBrushes[map.SettingsMap().
                                             iAirspaceBrush[airspace.get_type()]]);
-    } else {
-      if (map.SettingsMap().bAirspaceBlackOutline)
-        buffer.black_pen();
-      else
-        buffer.select(MapGfx.hAirspacePens[airspace.get_type()]);
     }
   }
 
@@ -169,6 +184,7 @@ private:
     buffer.rectangle(MapRect.left, MapRect.top, MapRect.right, MapRect.bottom);
   }
 
+  AirspaceMapVisible visible;
   bool m_found;
   bool m_border;
   Canvas &buffer;

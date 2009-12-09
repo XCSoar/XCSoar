@@ -862,6 +862,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
       StartLogger(gps_info, settings, strAssetNumber);
       LoggerHeader(gps_info);
 
+#ifdef OLD_TASK
       if (task.Valid()) {
         int ntp = task.getFinalWaypoint();
         StartDeclaration(gps_info, ntp);
@@ -872,6 +873,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
         }
         EndDeclaration();
       }
+#endif
       LoggerActive = true; // start logger after Header is completed.  Concurrency
     } else {
       MessageBoxX(gettext(TEXT("Logger inactive, insufficient storage!")),
