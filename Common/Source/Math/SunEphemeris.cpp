@@ -172,18 +172,18 @@ SunEphemeris::FNsun(double d)
  * Calculates all sun-related important times
  * depending on time of year and location
  * @param location Location to be used in calculation
- * @param GPS_INFO GPS_INFO for current date
- * @param CALCULATED_INFO CALCULATED_INFO (not yet used)
- * @param tzone Timezone
+ * @param Basic NMEA_INFO for current date
+ * @param Calculated DERIVED_INFO (not yet used)
+ * @param TimeZone The timezone
  * @return Always 0
  */
 int
-SunEphemeris::CalcSunTimes(const GEOPOINT &location, const NMEA_INFO &GPS_INFO,
-    const DERIVED_INFO &CALCULATED_INFO, const double tzone)
+SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
+    const DERIVED_INFO &Calculated, const double TimeZone)
 {
   //float intz;
   double d, lambda;
-  double obliq,alpha,delta,LL,equation,ha,hb,twx;
+  double obliq, alpha, delta, LL, equation, ha, hb, twx;
   int y, m, day, h;
 
   // testing
@@ -191,10 +191,10 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &location, const NMEA_INFO &GPS_INFO,
   // JG Removed simulator conditional code, since GPS_INFO now set up
   // from system time.
 
-  m = GPS_INFO.Month;
-  y = GPS_INFO.Year;
-  day = GPS_INFO.Day;
-  h = ((int)GPS_INFO.Time) / 3600;
+  m = Basic.Month;
+  y = Basic.Year;
+  day = Basic.Day;
+  h = ((int)Basic.Time) / 3600;
   h = (h % 24);
 
   d = FNday(y, m, day, (float)h);
@@ -215,8 +215,8 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &location, const NMEA_INFO &GPS_INFO,
   if (L < M_PI)
     LL += 2.0 * M_PI;
   equation = 1440.0 * (1.0 - LL / M_PI / 2.0);
-  ha = f0(location.Latitude, delta);
-  hb = f1(location.Latitude, delta);
+  ha = f0(Location.Latitude, delta);
+  hb = f1(Location.Latitude, delta);
   // length of twilight in radians
   twx = hb - ha;
   // length of twilight in hours
@@ -231,18 +231,18 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &location, const NMEA_INFO &GPS_INFO,
     // arctic winter
     daylen = 0.0;
 
-  riset = 12.0 - 12.0 * ha / M_PI + tzone - location.Longitude / 15.0
+  riset = 12.0 - 12.0 * ha / M_PI + TimeZone - Location.Longitude / 15.0
       + equation / 60.0;
 
-  settm = 12.0 + 12.0 * ha / M_PI + tzone - location.Longitude / 15.0
+  settm = 12.0 + 12.0 * ha / M_PI + TimeZone - Location.Longitude / 15.0
       + equation / 60.0;
 
   noont = riset + 12.0 * ha / M_PI;
-  altmax = 90.0 + delta * RAD_TO_DEG - location.Latitude;
+  altmax = 90.0 + delta * RAD_TO_DEG - Location.Latitude;
 
   // Correction for S HS suggested by David Smith
   // to express altitude as degrees from the N horizon
-  if (location.Latitude < delta * RAD_TO_DEG)
+  if (Location.Latitude < delta * RAD_TO_DEG)
     altmax = 180.0 - altmax;
 
   // morning twilight begin
