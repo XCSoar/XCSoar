@@ -105,7 +105,7 @@ SunEphemeris::f0(double lat, double declin)
 {
   double fo, dfo;
 
-  // Correction: different sign at S HS
+  // Correction: different sign at southern hemisphere
   dfo = DEG_TO_RAD * (0.5 * SUN_DIAMETER + AIR_REFRACTION);
 
   if (lat < 0.0)
@@ -133,7 +133,7 @@ SunEphemeris::f1(double lat, double declin)
 {
   double fi, df1;
 
-  // Correction: different sign at S HS
+  // Correction: different sign at southern hemisphere
   df1 = DEG_TO_RAD * 6.0;
 
   if (lat < 0.0)
@@ -207,7 +207,7 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
   // Obliquity of the ecliptic
   obliq = 23.439 * DEG_TO_RAD - .0000004 * DEG_TO_RAD * d;
 
-  //   Find the RA and DEC of the Sun
+  // Find the RA and DEC of the Sun
   alpha = atan2(cos(obliq) * sin(lambda), cos(lambda));
   delta = asin(sin(obliq) * sin(lambda));
 
@@ -245,7 +245,7 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
   TimeOfNoon = TimeOfSunRise + 12.0 * HourAngle / M_PI;
   altmax = 90.0 + delta * RAD_TO_DEG - Location.Latitude;
 
-  // Correction for S HS suggested by David Smith
+  // Correction for southern hemisphere suggested by David Smith
   // to express altitude as degrees from the N horizon
   if (Location.Latitude < delta * RAD_TO_DEG)
     altmax = 180.0 - altmax;
