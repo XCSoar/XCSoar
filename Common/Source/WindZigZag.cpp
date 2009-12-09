@@ -287,23 +287,24 @@ public:
       }
     }
 
-    if (nf < NUM_SAMPLES) {
+    if (nf < NUM_SAMPLES)
       return -1;
-    } else {
-      double theta_av = atan2(stg, ctg);
-      double dtheta_max = 0;
-      double dtheta_min = 0;
-      for (i = 0; i < NUM_SAMPLES; i++) {
-        double da = anglelimit(points[i].theta_gps - theta_av);
-        if (da > dtheta_max) {
-          dtheta_max = da;
-        }
-        if (da < dtheta_min) {
-          dtheta_min = da;
-        }
-      }
-      return dtheta_max - dtheta_min;
+
+    double theta_av = atan2(stg, ctg);
+    double dtheta_max = 0;
+    double dtheta_min = 0;
+
+    for (i = 0; i < NUM_SAMPLES; i++) {
+      double da = anglelimit(points[i].theta_gps - theta_av);
+
+      if (da > dtheta_max)
+        dtheta_max = da;
+
+      if (da < dtheta_min)
+        dtheta_min = da;
     }
+
+    return dtheta_max - dtheta_min;
   }
 
   bool
