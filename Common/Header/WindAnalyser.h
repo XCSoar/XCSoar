@@ -19,91 +19,88 @@
 #define WINDANALYSER_H
 
 #include "Vector.h"
-
 #include "WindStore.h"
 
-/**The windanalyser analyses the list of flightsamples looking for windspeed and direction.
-  *@author André Somers
-  */
-
-
-class WindSample {
- public:
+/**
+ * The windanalyser analyses the list of flightsamples looking
+ * for windspeed and direction.
+ * @author André Somers
+ */
+class WindSample
+{
+public:
   Vector v;
   double t;
   double mag;
 };
 
-
 #define MAXWINDSAMPLES 50
 
-
-class WindAnalyser  {
-
+class WindAnalyser
+{
 public:
-    WindAnalyser();
-    ~WindAnalyser();
+  WindAnalyser();
+  ~WindAnalyser();
 
-    WindStore windstore;
+  WindStore windstore;
 
-// Signals
-    /**
-      * Send if a new windmeasurement has been made. The result is included in wind,
-      * the quality of the measurement (1-5; 1 is bad, 5 is excellent) in quality.
-      */
-    void newMeasurement(Vector wind, int quality);
+  // Signals
+  /**
+   * Send if a new windmeasurement has been made. The result is included in wind,
+   * the quality of the measurement (1-5; 1 is bad, 5 is excellent) in quality.
+   */
+  void newMeasurement(Vector wind, int quality);
 
-// Public slots
-    /**
-     * Called if the flightmode changes
-     */
-    void slot_newFlightMode(const NMEA_INFO *nmeaInfo,
-                            const DERIVED_INFO *derivedInfo,
-                            bool left, int);
-    /**
-     * Called if a new sample is available in the samplelist.
-     */
-    void slot_newSample(const NMEA_INFO *nmeaInfo,
-                        DERIVED_INFO *derivedInfo);
+  // Public slots
+  /**
+   * Called if the flightmode changes
+   */
+  void slot_newFlightMode(const NMEA_INFO *nmeaInfo,
+      const DERIVED_INFO *derivedInfo, bool left, int);
 
-    // used to update output if altitude changes
-    void slot_Altitude(const NMEA_INFO *nmeaInfo,
-                       DERIVED_INFO *derivedInfo);
+  /**
+   * Called if a new sample is available in the samplelist.
+   */
+  void slot_newSample(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo);
 
-    void slot_newEstimate(const NMEA_INFO *nmeaInfo,
-                          DERIVED_INFO *derivedInfo,
-                          Vector v, int quality);
+  // used to update output if altitude changes
+  void slot_Altitude(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo);
 
-    //    void calcThermalDrift();
-private: // Private attributes
-    int circleCount; //we are counting the number of circles, the first onces are probably not very round
-    bool circleLeft; //true=left, false=right
-    bool active;     //active is set to true or false by the slot_newFlightMode slot
-    int startmarker;
-    int startheading;
-    int circleDeg;
-    int lastHeading;
-    bool pastHalfway;
-    Vector minVector;
-    Vector maxVector;
-    int satCnt;
-    int minSatCnt;
-    bool curModeOK;
-    bool first;
-    int startcircle;
+  void slot_newEstimate(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
+      Vector v, int quality);
 
-    Vector climbstartpos;
-    Vector climbendpos;
-    double climbstarttime;
-    double climbendtime;
+  //void calcThermalDrift();
 
-    WindSample windsamples[MAXWINDSAMPLES];
-    int numwindsamples;
+private:
+  //we are counting the number of circles, the first onces are probably not very round
+  int circleCount;
+  //true=left, false=right
+  bool circleLeft;
+  //active is set to true or false by the slot_newFlightMode slot
+  bool active;
+  int startmarker;
+  int startheading;
+  int circleDeg;
+  int lastHeading;
+  bool pastHalfway;
+  Vector minVector;
+  Vector maxVector;
+  int satCnt;
+  int minSatCnt;
+  bool curModeOK;
+  bool first;
+  int startcircle;
 
-private: // Private memberfunctions
-    void _calcWind(const NMEA_INFO *nmeaInfo,
-                   DERIVED_INFO *derivedInfo);
+  Vector climbstartpos;
+  Vector climbendpos;
+  double climbstarttime;
+  double climbendtime;
 
+  WindSample windsamples[MAXWINDSAMPLES];
+  int numwindsamples;
+
+private:
+  void _calcWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo);
 };
 
 #endif
