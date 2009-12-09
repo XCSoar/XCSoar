@@ -18,13 +18,10 @@ INCLUDES := $(TARGET_INCLUDES) -I$(HDR) -I$(SRC)
 
 ######## compiler flags
 
-CPPFLAGS := $(INCLUDES) $(TARGET_CPPFLAGS)
-CPPFLAGS	+= -DFLARM_AVERAGE
-
-CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
-CFLAGS		:=$(OPTIMIZE) $(PROFILE)
-
+include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
+
+CPPFLAGS += -DFLARM_AVERAGE
 
 ####### linker configuration
 
