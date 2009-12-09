@@ -383,13 +383,13 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
   canvas.polygon(Arrow, 5);
 
   if (SettingsMap().WindArrowStyle==1) {
-    POINT Tail[2] = {{0,-20}, {0,-26-min(20,wmag)*3}};
+    POINT Tail[2] = {
+      { 0, Layout::FastScale(-20) },
+      { 0, Layout::FastScale(-26 - min(20, wmag) * 3) },
+    };
+
     double angle = AngleLimit360(Calculated().WindBearing-DisplayAngle);
     for(i=0; i<2; i++) {
-      if (Layout::scale > 1) {
-        Tail[i].x *= Layout::scale;
-        Tail[i].y *= Layout::scale;
-      }
       protateshift(Tail[i], angle, Start.x, Start.y);
     }
 

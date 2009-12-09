@@ -546,19 +546,15 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 // Sleep(100);
 
     int w0, w1, w2, w3, x1, x2, x3;
-    if (Layout::landscape) {
-      w0 = 202 * Layout::scale;
-    } else {
-      w0 = 225 * Layout::scale;
-    }
+    w0 = Layout::FastScale(Layout::landscape ? 202 : 225);
     w1 = canvas.text_width(TEXT("XXX"));
     w2 = canvas.text_width(TEXT(" 000km"));
     w3 = canvas.text_width(TEXT(" 000")TEXT(DEG));
 
     x1 = w0-w1-w2-w3;
 
-    canvas.text_clipped(2 * Layout::scale, 2 * Layout::scale,
-                        x1 - Layout::scale * 5,
+    canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+                        x1 - Layout::FastScale(5),
                         way_point.Name);
 
     sTmp[0] = '\0';
@@ -583,24 +579,24 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
     }
 
     // left justified
-    canvas.text_opaque(x1, 2 * Layout::scale, sTmp);
+    canvas.text_opaque(x1, Layout::FastScale(2), sTmp);
 
     // right justified after waypoint flags
     _stprintf(sTmp, TEXT("%.0f%s"),
               WayPointSelectInfo[i].Distance,
               Units::GetDistanceName());
     x2 = w0-w3-canvas.text_width(sTmp);
-    canvas.text_opaque(x2, 2 * Layout::scale, sTmp);
+    canvas.text_opaque(x2, Layout::FastScale(2), sTmp);
 
     // right justified after distance
     _stprintf(sTmp, TEXT("%d")TEXT(DEG),
 	      iround(WayPointSelectInfo[i].Direction));
     x3 = w0-canvas.text_width(sTmp);
-    canvas.text_opaque(x3, 2 * Layout::scale, sTmp);
+    canvas.text_opaque(x3, Layout::FastScale(2), sTmp);
   } else {
     if (DrawListIndex == 0){
       _stprintf(sTmp, TEXT("%s"), gettext(TEXT("No Match!")));
-      canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale,
+      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
                          sTmp);
     }
   }

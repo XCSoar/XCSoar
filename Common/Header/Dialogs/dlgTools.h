@@ -40,6 +40,5 @@ Copyright_License {
 #define __DLGTOOLS_H
 
 #define DeclareCallBackEntry(x)        {TEXT(#x), (void *)x}
-int DLGSCALE(int x);
 
 #endif

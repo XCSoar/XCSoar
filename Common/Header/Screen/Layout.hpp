@@ -39,9 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_LAYOUT_HPP
 #define XCSOAR_SCREEN_LAYOUT_HPP
 
-#ifndef GNAV
-  #define BIGDISPLAY
-#endif
+#include "Asset.hpp"
 
 namespace Layout {
   extern bool landscape;
@@ -58,12 +56,53 @@ namespace Layout {
    * @param height the width of the screen in pixels
    */
   void Initalize(unsigned width, unsigned height);
+
+  /**
+   * Is scaling supported by this platform?
+   */
+  static inline bool ScaleSupported() {
+    return !is_altair();
+  }
+
+  /**
+   * Is scaling enabled currently?
+   */
+  static inline bool ScaleEnabled() {
+    return ScaleSupported() && dscale > 1;
+  }
+
+  static inline int Scale(int x) {
+    if (!ScaleSupported())
+      return x;
+
+    return IntScaleFlag
+      ? x * scale
+      : (int)(x * dscale);
+  }
+
+  static inline unsigned Scale(unsigned x) {
+    return Scale((int)x);
+  }
+
+  static inline long Scale(long x) {
+    return Scale((int)x);
+  }
+
+  static inline double Scale(double x) {
+    if (!ScaleSupported())
+      return x;
+
+    return x * dscale;
+  }
+
+  static inline int FastScale(int x) {
+    if (!ScaleSupported())
+      return x;
+
+    return x * scale;
+  }
 }
 
-#ifdef BIGDISPLAY
-#define IBLSCALE(x) (Layout::IntScaleFlag ? (x) * Layout::scale : (int)((x) * Layout::dscale))
-#else
-#define IBLSCALE(x) (x)
-#endif
+#define IBLSCALE(x) Layout::Scale(x)
 
 #endif

@@ -328,7 +328,7 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain,
   */
 
   // scale dtquant so resolution is not too high on large displays
-  dtquant *= Layout::scale;
+  dtquant = Layout::FastScale(dtquant);
 
   int res_x = iround((rc.right-rc.left)*oversampling/dtquant);
   int res_y = iround((rc.bottom-rc.top)*oversampling/dtquant);

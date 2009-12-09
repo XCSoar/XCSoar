@@ -67,10 +67,8 @@ OnAirspacePatternsPaintListItem(WindowControl *Sender, Canvas &canvas)
     canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
     canvas.select(MapGfx.GetAirspaceBrush(i));
     canvas.set_text_color(Color(0x00,0x00, 0x00));
-    canvas.rectangle(100 * Layout::scale,
-                     2 * Layout::scale,
-                     180 * Layout::scale,
-                     22 * Layout::scale);
+    canvas.rectangle(Layout::FastScale(100), Layout::FastScale(2),
+                     Layout::FastScale(180), Layout::FastScale(22));
   }
 }
 

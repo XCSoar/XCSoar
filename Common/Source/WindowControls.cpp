@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "WindowControls.h"
 #include "Interface.hpp"
-#include "Dialogs/dlgTools.h"
 #ifndef ALTAIRSYNC
 #include "Protection.hpp"
 #include "MainWindow.hpp"
@@ -70,18 +69,14 @@ using std::max;
 #endif
 
 #ifdef ALTAIRSYNC
-#define ISCALE 1
 void SetSourceRectangle(RECT fromRect) {};
 RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed) {
   return *lprcTo;
 }
-
-#else
-#define ISCALE Layout::scale
 #endif
 
-#define DEFAULTBORDERPENWIDTH 1*ISCALE
-#define SELECTORWIDTH         4*ISCALE
+#define DEFAULTBORDERPENWIDTH Layout::FastScale(1)
+#define SELECTORWIDTH Layout::FastScale(4)
 
 // utility functions
 
@@ -1318,9 +1313,9 @@ WndProperty::WndProperty(WindowControl *Parent,
   mCaptionWidth = CaptionWidth;
 
   if (mCaptionWidth != 0){
-    mBitmapSize = DLGSCALE(32)/2;
+    mBitmapSize = Layout::Scale(32) / 2;
   } else {
-    mBitmapSize = DLGSCALE(32)/2;
+    mBitmapSize = Layout::Scale(32) / 2;
   }
   if (mDialogStyle)
     mBitmapSize = 0;
@@ -1400,7 +1395,7 @@ void WndProperty::UpdateButtonData(int Value){
   if (Value == 0) // if combo is enabled
     mBitmapSize = 0;
   else
-    mBitmapSize = DLGSCALE(32)/2;
+    mBitmapSize = Layout::Scale(32) / 2;
 
   const SIZE size = get_size();
 
@@ -1795,7 +1790,7 @@ WndListFrame::ScrollBar::set(const SIZE size)
     // shrink width factor.  Range .1 to 1 where 1 is very "fat"
     double SHRINKSBFACTOR = is_pna() ? 1.0 : 0.75;
 
-    width = (unsigned) (SCROLLBARWIDTH_INITIAL * Layout::dscale * SHRINKSBFACTOR);
+    width = (unsigned)Layout::Scale(SCROLLBARWIDTH_INITIAL * SHRINKSBFACTOR);
 
     // resize height for each dialog so top button is below 1st item (to avoid initial highlighted overlap)
   } else {

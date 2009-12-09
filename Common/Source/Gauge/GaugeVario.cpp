@@ -654,7 +654,7 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
   int nary = NARROWS*ARROWYSIZE;
   int ytop = get_top() + YOFFSET + nary; // JMW
   int ybottom = get_bottom()
-    -YOFFSET - nary - Layout::scale;
+    -YOFFSET - nary - Layout::FastScale(1);
 
   ytop += IBLSCALE(14);
   ybottom -= IBLSCALE(14);
@@ -692,13 +692,13 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
     canvas.rectangle(x, ybottom + YOFFSET,
                      x + ARROWXSIZE * 2 + 1,
                      ybottom + YOFFSET + nary + ARROWYSIZE +
-                     Layout::scale * 2);
+                     Layout::FastScale(2));
 
     // top (too fast)
     canvas.rectangle(x, ytop - YOFFSET + 1,
                      x + ARROWXSIZE * 2  +1,
                      ytop - YOFFSET - nary + 1 - ARROWYSIZE -
-                     Layout::scale * 2);
+                     Layout::FastScale(2));
 
     RenderClimb(canvas);
 

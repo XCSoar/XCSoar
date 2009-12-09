@@ -88,8 +88,7 @@ OnStartPointPaintListItem(WindowControl * Sender, Canvas &canvas)
       }
     }
 
-    canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale,
-                       label);
+    canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), label);
   }
 }
 

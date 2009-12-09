@@ -61,8 +61,8 @@ OnPaintComboPopupListItem(WindowControl *Sender, Canvas &canvas)
   if ( ComboListPopup->ComboPopupDrawListIndex >= 0 &&
         ComboListPopup->ComboPopupDrawListIndex < ComboListPopup->ComboPopupItemCount )
   {
-    canvas.text_clipped(2 * Layout::scale, 2 * Layout::scale,
-                        canvas.get_width() - Layout::scale * 5,
+    canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+                        canvas.get_width() - Layout::FastScale(5),
                         ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupDrawListIndex]->StringValueFormatted);
   }
 }

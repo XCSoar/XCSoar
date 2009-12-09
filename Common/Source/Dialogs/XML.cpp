@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Dialogs/XML.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "xmlParser.h"
@@ -50,6 +49,7 @@ Copyright_License {
 #include "DataField/String.hpp"
 #include "UtilsSystem.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Layout.hpp"
 #include "WindowControls.h"
 #include "Interface.hpp"
 
@@ -101,15 +101,15 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
                              int *Width, int *Height, int *Font,
                              TCHAR *Caption)
 {
-  *X = DLGSCALE(StringToIntDflt(Node->getAttribute(TEXT("X")), 0));
+  *X = Layout::Scale(StringToIntDflt(Node->getAttribute(TEXT("X")), 0));
   *Y = StringToIntDflt(Node->getAttribute(TEXT("Y")), 0);
   if (*Y>=0) { // not -1
-    (*Y) = DLGSCALE(*Y);
+    (*Y) = Layout::Scale(*Y);
   }
-  *Width = DLGSCALE(StringToIntDflt(Node->getAttribute(TEXT("Width")), 50));
+  *Width = Layout::Scale(StringToIntDflt(Node->getAttribute(TEXT("Width")), 50));
   *Height = StringToIntDflt(Node->getAttribute(TEXT("Height")), 50);
   if (*Height>=0) {
-    (*Height) = DLGSCALE(*Height);
+    (*Height) = Layout::Scale(*Height);
   }
   *Font = StringToIntDflt(Node->getAttribute(TEXT("Font")), -1);
   _tcscpy(Name, StringToStringDflt(Node->getAttribute(TEXT("Name")), TEXT("")));
@@ -490,8 +490,8 @@ LoadChild(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
     int MultiLine;
 
     CaptionWidth =
-      DLGSCALE(StringToIntDflt(node.getAttribute(TEXT("CaptionWidth")),
-                               0));
+      Layout::Scale(StringToIntDflt(node.getAttribute(TEXT("CaptionWidth")),
+                                    0));
     MultiLine = StringToIntDflt(node.getAttribute(TEXT("MultiLine")), 0);
     ReadOnly = StringToIntDflt(node.getAttribute(TEXT("ReadOnly")), 0);
 

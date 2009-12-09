@@ -437,7 +437,7 @@ InfoBox::PaintValue(Canvas &canvas)
   }
 
   x = max(1, (int)recValue.left +
-          (mWidth - (int)tsize.cx - (int)unit_size.cx * Layout::scale) / 2);
+          (mWidth - (int)tsize.cx - Layout::FastScale(unit_size.cx)) / 2);
 
   if (mBorderKind & BORDERLEFT)
     x += DEFAULTBORDERPENWIDTH;
@@ -456,7 +456,7 @@ InfoBox::PaintValue(Canvas &canvas)
 
     canvas.scale_copy(x + tsize.cx,
                       y + mpFontHeightValue->AscentHeight
-                      - unit_size.cy * Layout::scale,
+                      - Layout::FastScale(unit_size.cy),
                       temp,
                       origin.x, origin.y,
                       unit_size.cx, unit_size.cy);

@@ -98,11 +98,6 @@ void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText)
 {
 }
 
-int DLGSCALE(int x)
-{
-  return x;
-}
-
 pt2Event
 InputEvents::findEvent(const TCHAR *)
 {

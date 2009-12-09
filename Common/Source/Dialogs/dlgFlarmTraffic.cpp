@@ -98,8 +98,7 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
 	     (DISTANCEMODIFY * range));
 
     if (XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID != 0)
-      canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale,
-                         text);
+      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), text);
   }
 }
 

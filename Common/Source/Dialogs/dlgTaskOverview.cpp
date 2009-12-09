@@ -129,12 +129,12 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
   int n = UpLimit - LowLimit;
   TCHAR sTmp[120];
 
-  int w0 = (Layout::landscape ? 200 : 210) * Layout::scale;
+  int w0 = Layout::FastScale(Layout::landscape ? 200 : 210);
   int w1 = canvas.text_width(TEXT(" 000km"));
   int w2 = canvas.text_width(TEXT("  000")TEXT(DEG));
 
-  int p1 = w0-w1-w2; // 125*Layout::scale;
-  int p2 = w0-w2;    // 175*Layout::scale;
+  int p1 = w0-w1-w2; // Layout::FastScale(125)
+  int p2 = w0-w2; // Layout::FastScale(175)
 
   if (DrawListIndex < n){
     int i = LowLimit + DrawListIndex;
@@ -158,30 +158,30 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
                   way_points.get(tp.Index).Name);
       }
 
-      canvas.text_clipped(2 * Layout::scale, 2 * Layout::scale,
-                          p1 - 4 * Layout::scale, sTmp);
+      canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+                          p1 - Layout::FastScale(4), sTmp);
 
       _stprintf(sTmp, TEXT("%.0f %s"),
 		tp.LegDistance*DISTANCEMODIFY,
 		Units::GetDistanceName());
       canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
-                         2 * Layout::scale, sTmp);
+                         Layout::FastScale(2), sTmp);
 
       _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(tp.InBound));
       canvas.text_opaque(p2 + w2 - canvas.text_width(sTmp),
-                         2 * Layout::scale, sTmp);
+                         Layout::FastScale(2), sTmp);
     }
 
   } else {
     if (DrawListIndex==n) {
       _stprintf(sTmp, TEXT("  (%s)"), gettext(TEXT("add waypoint")));
-      canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale,
+      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
                          sTmp);
     } else if ((DrawListIndex==n+1) && task.ValidTaskPoint(0)) {
 
       if (!task.getSettings().AATEnabled) {
 	_stprintf(sTmp, gettext(TEXT("Total:")));
-        canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale,
+        canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
                            sTmp);
 
 	if (fai_ok) {
@@ -192,7 +192,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
 		    Units::GetDistanceName());
 	}
         canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
-                           2 * Layout::scale, sTmp);
+                           Layout::FastScale(2), sTmp);
 
       } else {
 
@@ -208,7 +208,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
 		  DISTANCEMODIFY*lengthtotal,
 		  DISTANCEMODIFY*d1,
 		  Units::GetDistanceName());
-        canvas.text_opaque(2 * Layout::scale, 2 * Layout::scale, sTmp);
+        canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), sTmp);
       }
     }
   }
