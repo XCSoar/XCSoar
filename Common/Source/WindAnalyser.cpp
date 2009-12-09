@@ -1,6 +1,6 @@
 /***********************************************************************
 **
-**   windanalyser.cpp
+**   WindAnalyser.cpp
 **
 **   This file is part of Cumulus
 **
@@ -54,7 +54,7 @@ Copyright_License {
 }
 */
 
-#include "windanalyser.h"
+#include "WindAnalyser.h"
 #include "Math/FastMath.h"
 #include "LogFile.hpp"
 #include "NMEA/Info.h"

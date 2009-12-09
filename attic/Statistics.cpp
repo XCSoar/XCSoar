@@ -575,7 +575,7 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 }
 
 // from Calculations.cpp
-#include "windanalyser.h"
+#include "WindAnalyser.h"
 extern WindAnalyser *windanalyser;
 
 void Statistics::RenderWind(HDC hdc, RECT rc)

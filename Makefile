@@ -189,7 +189,7 @@ OBJS	:=\
 	$(SRC)/WayPointParser.o 	\
 	$(SRC)/WayPoint.o 		\
 	$(SRC)/WayPointList.o 		\
-	$(SRC)/windanalyser.o 		\
+	$(SRC)/WindAnalyser.o 		\
 	$(SRC)/windmeasurementlist.o 	\
 	$(SRC)/windstore.o 		\
 	$(SRC)/WindZigZag.o 		\

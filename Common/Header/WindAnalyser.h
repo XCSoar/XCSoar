@@ -1,6 +1,6 @@
 /***********************************************************************
 **
-**   windanalyser.h
+**   WindAnalyser.h
 **
 **   This file is part of Cumulus.
 **
