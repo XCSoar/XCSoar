@@ -1,4 +1,4 @@
-CXX_FEATURES = -fno-exceptions
+CXX_FEATURES = -fno-exceptions -fno-rtti
 C_FEATURES =
 
 CPPFLAGS := $(INCLUDES) $(TARGET_CPPFLAGS)
