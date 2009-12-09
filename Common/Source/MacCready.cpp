@@ -750,7 +750,8 @@ GlidePolar::MacCreadyRisk(double HeightAboveTerrain, double MaxThermalHeight,
 
   if (RiskGamma < 0.1)
     return MacCready;
-  else if (RiskGamma > 0.9)
+
+  if (RiskGamma > 0.9)
     f = x;
   else {
     double k;
