@@ -181,23 +181,25 @@ int
 SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
     const DERIVED_INFO &Calculated, const double TimeZone)
 {
+  (void)Calculated;
+
   //float intz;
   double d, lambda;
   double obliq, alpha, delta, LL, equation, ha, hb, twx;
-  int y, m, day, h;
+  int Year, Month, Day, Hour;
 
   // testing
 
   // JG Removed simulator conditional code, since GPS_INFO now set up
   // from system time.
 
-  m = Basic.Month;
-  y = Basic.Year;
-  day = Basic.Day;
-  h = ((int)Basic.Time) / 3600;
-  h = (h % 24);
+  Month = Basic.Month;
+  Year = Basic.Year;
+  Day = Basic.Day;
+  Hour = ((int)Basic.Time) / 3600;
+  Hour = (Hour % 24);
 
-  d = FNday(y, m, day, (float)h);
+  d = FNday(Year, Month, Day, (float)Hour);
 
   // Use FNsun to find the ecliptic longitude of the Sun
   lambda = FNsun(d);
