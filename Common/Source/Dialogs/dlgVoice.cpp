@@ -109,7 +109,9 @@ static void LoadIntoForm(WndForm &form, const SETTINGS_COMPUTER &settings){
   }
 }
 
-static bool SaveFromForm(WndForm &form, SETTINGS_COMPUTER &settings){
+static bool
+SaveFromForm(const WndForm &form, SETTINGS_COMPUTER &settings)
+{
   const WndProperty* wp;
   bool changed = false;
   wp = (const WndProperty*)form.FindByName(_T("prpVoiceClimbRate"));

@@ -200,6 +200,10 @@ public:
 
   WindowControl *FindByName(const TCHAR *Name);
 
+  const WindowControl *FindByName(const TCHAR *Name) const {
+    return const_cast<WindowControl *>(this)->FindByName(Name);
+  }
+
   void FilterAdvanced(bool advanced);
 
 };
