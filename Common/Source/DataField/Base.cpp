@@ -62,6 +62,64 @@ void DataField::SetData(void){
   (mOnDataAccess)(this, daPut);
 }
 
+bool
+DataField::GetAsBoolean()
+{
+  return false;
+}
+
+int
+DataField::GetAsInteger()
+{
+  return 0;
+}
+
+double
+DataField::GetAsFloat()
+{
+  return 0;
+}
+
+TCHAR *
+DataField::GetAsString()
+{
+  return NULL;
+}
+
+TCHAR *
+DataField::GetAsDisplayString()
+{
+  return NULL;
+}
+
+bool
+DataField::SetAsBoolean(bool Value)
+{
+  (void)Value;
+  return false;
+}
+
+int
+DataField::SetAsInteger(int Value)
+{
+  (void)Value;
+  return 0;
+}
+
+double
+DataField::SetAsFloat(double Value)
+{
+  (void)Value;
+  return 0.0;
+}
+
+TCHAR *
+DataField::SetAsString(const TCHAR *Value)
+{
+  (void)Value;
+  return NULL;
+}
+
   void __Dummy(DataField *Sender, DataField::DataAccessKind_t Mode){
     (void) Sender;
     (void) Mode;
