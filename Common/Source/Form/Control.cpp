@@ -421,13 +421,6 @@ int WindowControl::OnHelp() {
 }
 
 bool
-WindowControl::on_close(void)
-{
-  Close();
-  return true;
-}
-
-bool
 WindowControl::on_key_down(unsigned key_code)
 {
   // JMW: HELP

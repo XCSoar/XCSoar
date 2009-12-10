@@ -76,11 +76,6 @@ public:
     return 0;
   }
 
-  void Close(void) {
-    WindowControl::Close();
-    mModalResult = mrCancel;
-  }
-
   DWORD enterTime;
 
   int GetModalResult(void) { return mModalResult; }

@@ -114,7 +114,6 @@ public:
 
   virtual void AddClient(WindowControl *Client);
 
-  virtual bool on_close(void);
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
 
@@ -123,9 +122,6 @@ public:
 
   virtual int OnHelp();
 
-  virtual void Close(void) {
-    SetVisible(false);
-  }
   virtual void Show(void) {
     SetVisible(true);
   }
