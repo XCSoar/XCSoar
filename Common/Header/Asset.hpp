@@ -130,6 +130,18 @@ SetGlobalEllipse(float value)
 #endif
 
 /**
+ * Returns whether the application is running on an embedded platform.
+ */
+static inline bool is_embedded()
+{
+#if defined(WINDOWSPC) || !defined(WIN32)
+  return false;
+#else
+  return true;
+#endif
+}
+
+/**
  * Returns whether the application is running on a PNA
  * @return True if host hardware is a PNA, False otherwise
  */
@@ -188,6 +200,19 @@ static inline bool is_altair()
 static inline bool is_simulator()
 {
 #ifdef _SIM_
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
+ * Returns whether the application is compiled in "FIIV" mode (enables
+ * old experimental code).
+ */
+static inline bool is_fivv()
+{
+#if defined(FIVV)
   return true;
 #else
   return false;
