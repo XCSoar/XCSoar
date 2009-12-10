@@ -123,7 +123,8 @@ public:
 /**
  * Find time/distance to specified point on the boundary from an observer
  * given a simplified performance model.  If inside the airspace, this will
- * give the time etc to exit
+ * give the time etc to exit (it cares not about interior/exterior, only minimum
+ * time to reach the specified location)
  *
  * @param state Aircraft state
  * @param loc Location of point on/in airspace to query
@@ -204,11 +205,11 @@ public:
 #endif
 
 protected:
-  AIRSPACE_ALT m_base;
-  AIRSPACE_ALT m_top;
-  tstring Name;
-  int Type;
-  const TaskProjection* m_task_projection;
+  AIRSPACE_ALT m_base; /**< Base of airspace */
+  AIRSPACE_ALT m_top; /**< Top of airspace */
+  tstring Name; /**< Airspace name (identifier) */
+  int Type; /**< Airspace class */
+  const TaskProjection* m_task_projection; /**< Task projection (owned by container) that can be used for query speedups */
 
 #ifdef OLD_TASK
   AIRSPACE_ACK Ack;

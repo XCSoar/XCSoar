@@ -45,15 +45,34 @@ unsigned n_queries = 0;
 extern long count_intersections;
 #endif
 
+/**
+ * Container accessor to allow a WaypointVisitor to visit WaypointEnvelopes 
+ */
 class WaypointEnvelopeVisitor:
   public Visitor<WaypointEnvelope> 
 {
 public:
+/** 
+ * Constructor
+ * 
+ * @param wve Contained visitor
+ * 
+ * @return Initialised object
+ */
   WaypointEnvelopeVisitor(WaypointVisitor* wve):waypoint_visitor(wve) {};
 
+/** 
+ * Accessor operator to perform visit
+ * 
+ */
   void operator()(const WaypointEnvelope& as) {
     Visit(as);
   }
+
+/** 
+ * Visit item inside envelope
+ * 
+ */
   void Visit(const WaypointEnvelope& as) {
     as.get_waypoint().Accept(*waypoint_visitor);
   };

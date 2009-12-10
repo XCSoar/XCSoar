@@ -7,17 +7,25 @@ class AtmosphericPressure;
 
 typedef enum {abUndef, abMSL, abAGL, abFL} AirspaceAltBase_t;
 
+/**
+ *  Structure to hold airspace altitude boundary data
+ */
 struct AIRSPACE_ALT
 {
+  /** 
+   * Constructor.  Initialises to zero.
+   * 
+   * @return Initialised blank object
+   */
   AIRSPACE_ALT():Altitude(fixed_zero),
                  FL(fixed_zero),
                  AGL(fixed_zero),
                  Base(abUndef) {};
 
-  fixed Altitude;
-  fixed FL;
-  fixed AGL;
-  AirspaceAltBase_t Base;
+  fixed Altitude; /**< Altitude AMSL (m) resolved from type */
+  fixed FL; /**< Flight level (100ft) for FL-referenced boundary */
+  fixed AGL; /**< Height above terrain (m) for ground-referenced boundary */
+  AirspaceAltBase_t Base; /**< Type of airspace boundary */
 
 /** 
  * Set height of terrain for AGL-referenced airspace;
@@ -33,7 +41,7 @@ struct AIRSPACE_ALT
  * airspace.  This sets Altitude and must be called before FL-referenced
  * airspace is considered initialised.
  * 
- * @param alt Height of terrain at airspace center
+ * @param press Atmospheric pressure model (to obtain QNH)
  */
   void set_flight_level(const AtmosphericPressure &press);
 };

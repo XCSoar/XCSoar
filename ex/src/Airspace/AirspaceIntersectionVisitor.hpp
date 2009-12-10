@@ -42,7 +42,7 @@
 
 /**
  * Generic visitor for objects in the Airspaces container,
- * for intersection queries.  Sets m_point_intersect by caller
+ * for intersection queries.  Sets m_point_intersect by caller.
  */
 class AirspaceIntersectionVisitor:
   public AirspaceVisitor
@@ -61,7 +61,7 @@ public:
     return !m_intersections.empty();
   }
 protected:
-  AirspaceIntersectionVector m_intersections;
+  AirspaceIntersectionVector m_intersections; /**< Vector of accumulated intersection pairs */ 
 };
 
 #endif

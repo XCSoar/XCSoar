@@ -55,18 +55,22 @@ class AirspaceVisitor:
 {
 public:
 
-  AirspaceVisitor(const AirspacePredicate &pred):
+  /** 
+   * Default constructor, sets predicate to always true condition
+   */
+  AirspaceVisitor(const AirspacePredicate &pred= AirspacePredicate::always_true):
     m_predicate(&pred) {};
 
-  AirspaceVisitor() {
-    m_predicate = &always;
-  }
-// Predicate adaptor (forwards to visit_condition)
+  /**
+   * Predicate adaptor (forwards to predicate condition)
+   *
+   * @param as Airspace containing item to test
+   * @return True if condition satisfied
+   */
   bool condition (const Airspace& as) const;
 
 protected:
-  const AirspacePredicate* m_predicate;
-  AirspacePredicateTrue always;
+  const AirspacePredicate* m_predicate; /**< Predicate to be used by callers */
 private:
 };
 

@@ -103,6 +103,11 @@ public:
 
   GEOPOINT closest_point(const GEOPOINT& loc) const;
 
+/** 
+ * Accessor for radius
+ * 
+ * @return Radius of circle (m)
+ */
   const fixed& get_radius() const {
     return m_radius;
   }

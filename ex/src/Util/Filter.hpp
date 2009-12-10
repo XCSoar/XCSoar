@@ -79,6 +79,10 @@ public:
  */
   double update(const double x0);
 
+  /**
+   * Test whether filter design was successful
+   * @return True if design ok
+   */
   bool valid() const {
     return ok;
   }

@@ -50,7 +50,7 @@ class AbortTask :
 {
 public:
 
-  typedef std::vector < Waypoint > WaypointVector;
+  typedef std::vector < Waypoint > WaypointVector; /**< Vector of waypoints used to store candidates */
 
   /** 
    * Base constructor.
@@ -163,7 +163,7 @@ protected:
  * waypoints satisfying approximate range queries.  Can be used
  * to add airfields only, or landpoints.
  *
- * @param state_now Aircraft state
+ * @param state Aircraft state
  * @param approx_waypoints List of candidate waypoints
  * @param only_airfield If true, only add waypoints that are airfields.
  */
@@ -171,21 +171,25 @@ protected:
                       WaypointVector &approx_waypoints,
                       const bool only_airfield);
 
-  std::vector<TaskPoint*> tps;
-  unsigned active_waypoint;
-  const Waypoints &waypoints;
-  GlidePolar polar_safety;
-
-  typedef std::pair<Waypoint,double> WP_ALT;
+  typedef std::pair<Waypoint,double> WP_ALT; /**< Class used to hold sorting data, second item is arival altitude */
 
   /**
    * Function object used to rank waypoints by arrival altitude
    */
   struct Rank : public std::binary_function<WP_ALT, WP_ALT, bool> {
+    /**
+     * Condition, ranks by arrival altitude 
+     */
     bool operator()(const WP_ALT& x, const WP_ALT& y) const {
       return x.second > y.second;
     }
   };
+
+private:
+  std::vector<TaskPoint*> tps;
+  unsigned active_waypoint;
+  const Waypoints &waypoints;
+  GlidePolar polar_safety;
 
 public:
 #ifdef DO_PRINT

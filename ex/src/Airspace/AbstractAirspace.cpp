@@ -59,42 +59,16 @@ AbstractAirspace::intercept_vertical(const AIRCRAFT_STATE &state,
                                      fixed &time_to_intercept,
                                      fixed &intercept_height) const
 {
-  // convenience accessors
-  const fixed &h_aircraft = state.Altitude;
-  const fixed &h_base = m_base.Altitude;
-  const fixed &h_top = m_top.Altitude;
-
   const fixed distance = state.Location.distance(loc);
-  fixed dh;
-
-  if (h_aircraft > h_top) {
-    dh = h_aircraft-h_top;
-  } else {
-    dh = h_aircraft-h_base;
-  }
-
-  bool found = false;
-  fixed t_this = perf.solution(distance, dh);
-
-  // try normal glide
+  const fixed t_this = perf.solution_vertical(distance, state.Altitude,
+                                              m_base.Altitude, m_top.Altitude,
+                                              intercept_height);
+  
   if (!negative(t_this) && (t_this<=time_to_intercept)) {
     time_to_intercept = t_this;
-    intercept_height = h_aircraft-dh;
-    found = true;
+    return true;
   }
-
-  // in case normal glide didn't work, try straight-line
-  if (!negative(dh) && (h_aircraft<h_top)) {
-    dh = fixed_zero;
-    t_this = perf.solution(distance, dh);
-
-    if (!negative(t_this) && (t_this<=time_to_intercept)) {
-      time_to_intercept = t_this;
-      intercept_height = h_aircraft-dh;
-      found = true;
-    }
-  }
-  return found;
+  return false;
 }
 
 

@@ -11,12 +11,12 @@
  */
 class AirspaceIntersectSort {
 public:
-
 /** 
  * Constructor
  * 
  * @param start Location of start point
  * @param end Location of end point
+ * @param the_airspace Airspace to test for intersections
  */
   AirspaceIntersectSort(const GEOPOINT &start,
                         const GEOPOINT &end,

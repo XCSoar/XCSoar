@@ -157,13 +157,28 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
 
 #include "Waypoint/WaypointVisitor.hpp"
 
+/**
+ * Class to build vector from visited waypoints.
+ * Intended to be used temporarily.
+ */
 class WaypointVisitorVector: 
   public WaypointVisitor 
 {
 public:
-
+/** 
+ * Constructor
+ * 
+ * @param wpv Vector to add to
+ * 
+ * @return Initialised object
+ */
   WaypointVisitorVector(AbortTask::WaypointVector& wpv):vector(wpv) {};
 
+/** 
+ * Visit method, adds result to vector
+ * 
+ * @param wp Waypoint that is visited
+ */
   void Visit(const Waypoint& wp) {
     vector.push_back(wp);
   }

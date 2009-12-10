@@ -10,9 +10,20 @@
 class AirspaceVisitor;
 class Airspaces;
 
+/**
+ *  Class to sort nearest airspaces by distance to closest point.
+ */
 class AirspaceNearestSort
 {
 public:
+/** 
+ * Constructor
+ * 
+ * @param state State of aircraft
+ * @param condition Additional condition to be placed on queries (default always true)
+ * 
+ * @return Initialised object
+ */
   AirspaceNearestSort(const AIRCRAFT_STATE &state,
                       const AirspacePredicate &condition=AirspacePredicate::always_true):
     m_state(state),
@@ -63,9 +74,9 @@ public:
 
 protected:
 
-  const AIRCRAFT_STATE &m_state;
-  const GEOPOINT &m_location;
-  const AirspacePredicate &m_condition;
+  const AIRCRAFT_STATE &m_state; /**< State of observer for queries */
+  const GEOPOINT &m_location; /**< Location of observer for queries */
+  const AirspacePredicate &m_condition; /**< Condition to be applied to queries */
 
 private:
 

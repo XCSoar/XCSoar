@@ -59,7 +59,7 @@ class Airspaces:
   private NonCopyable
 {
 public:
-  typedef std::vector<Airspace> AirspaceVector;
+  typedef std::vector<Airspace> AirspaceVector; /**< Vector of airspaces (used internally) */
 
   /** 
    * Constructor.
@@ -148,6 +148,7 @@ public:
    * Note: altitude not used yet
    * 
    * @param state state of aircraft, from which to search
+   * @param condition condition to be applied to matches
    * 
    * @return single nearest airspace if external, or all airspaces enclosing the aircraft
    */
@@ -161,6 +162,7 @@ public:
    * 
    * @param state state of aircraft, from which to search
    * @param range distance in meters of search radius
+   * @param condition condition to be applied to matches
    * 
    * @return vector of airspaces intersecting search radius
    */
@@ -174,6 +176,7 @@ public:
    * Note: altitude not used yet
    * 
    * @param state state of aircraft for which to search
+   * @param condition condition to be applied to matches
    * 
    * @return airspaces enclosing the aircraft
    */

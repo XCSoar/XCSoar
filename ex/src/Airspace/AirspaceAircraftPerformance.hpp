@@ -31,16 +31,56 @@ public:
   };
 
 /** 
- * Find time to reach target
+ * Find minimum intercept time to a point
+ * 
+ * @param distance Distance to point (m)
+ * @param dh Height of observer from point (m)
+ * 
+ * @return Time to intercept (s) or -1 if failed
+ */
+  virtual fixed solution_general(const fixed& distance,
+                                 const fixed& dh) const;
+
+/** 
+ * Find time to intercept a target with a height band, set distance
  * 
  * @param distance Lateral distance to travel (m)
- * @param dh Height difference (positive means aircraft is above target), m
+ * @param altitude Altitude of observer (m)
+ * @param base Height of base (m)
+ * @param top  Height of top (m)
+ * @param intercept_alt If intercept possible, this is the soonest height
  * 
  * @return Time of intercept (s)
  */
-  fixed solution(const fixed& distance,
-                 const fixed& dh) const;
+  fixed solution_vertical(const fixed& distance,
+                          const fixed& altitude,
+                          const fixed& base,
+                          const fixed& top,
+                          fixed& intercept_alt) const;
+
+/** 
+ * Find time to intercept a target with a distance band, set height 
+ * 
+ * @param distance_min Min distance to travel (m)
+ * @param distance_max Max distance to travel (m)
+ * @param altitude Altitude of observer (m)
+ * @param h  Height of target (m)
+ * @param intercept_distance If intercept possible, this is the distance to the soonest point
+ * 
+ * @return Time of intercept (s)
+ */
+  fixed solution_horizontal(const fixed& distance_min,
+                            const fixed& distance_max,
+                            const fixed& altitude,
+                            const fixed& h,
+                            fixed& intercept_distance) const;
+
 private:
+  virtual bool solution_exists(const fixed& distance_min,
+                               const fixed& distance_max,
+                               const fixed& h_min,
+                               const fixed& h_max) const;
+
   fixed v_ld;
   fixed s_ld;
   fixed climb_rate;
