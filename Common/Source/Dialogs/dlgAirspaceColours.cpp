@@ -118,21 +118,21 @@ int dlgAirspaceColoursShowModal(void){
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgAirspaceColours_L.xml"),
+                        _T("dlgAirspaceColours_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_AIRSPACECOLOURS_L"));
+                        _T("IDR_XML_AIRSPACECOLOURS_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgAirspaceColours.xml"),
+                        _T("dlgAirspaceColours.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_AIRSPACECOLOURS"));
+                        _T("IDR_XML_AIRSPACECOLOURS"));
   }
 
   if (!wf) return -1;
 
   assert(wf!=NULL);
 
-  wAirspaceColoursList = (WndListFrame*)wf->FindByName(TEXT("frmAirspaceColoursList"));
+  wAirspaceColoursList = (WndListFrame*)wf->FindByName(_T("frmAirspaceColoursList"));
   assert(wAirspaceColoursList!=NULL);
   wAirspaceColoursList->SetBorderKind(BORDERLEFT);
   wAirspaceColoursList->SetEnterCallback(OnAirspaceColoursListEnter);

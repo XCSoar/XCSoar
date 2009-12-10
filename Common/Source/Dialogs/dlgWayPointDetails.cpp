@@ -83,7 +83,7 @@ static CVOImage jpgimage2;
 
 static TCHAR path_modis[MAX_PATH];
 static TCHAR path_google[MAX_PATH];
-static TCHAR szWaypointFile[MAX_PATH] = TEXT("\0");
+static TCHAR szWaypointFile[MAX_PATH] = _T("\0");
 static TCHAR Directory[MAX_PATH];
 
 #define MAXLINES 100
@@ -168,10 +168,10 @@ OnPaintDetailsListItem(WindowControl * Sender, Canvas &canvas)
     } else {
       nlen = _tcslen(text+nstart);
     }
-    while (_tcscmp(text+nstart+nlen-1,TEXT("\r"))==0) {
+    while (_tcscmp(text+nstart+nlen-1,_T("\r"))==0) {
       nlen--;
     }
-    while (_tcscmp(text+nstart+nlen-1,TEXT("\n"))==0) {
+    while (_tcscmp(text+nstart+nlen-1,_T("\n"))==0) {
       nlen--;
     }
     if (nlen>0) {
@@ -216,16 +216,16 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   switch (key_code) {
     case VK_LEFT:
     case '6':
-      ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
+      ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
       NextPage(-1);
-      //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
+      //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
     case VK_RIGHT:
     case '7':
-      ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
+      ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
       NextPage(+1);
-      //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
+      //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
@@ -364,15 +364,15 @@ void dlgWayPointDetailsShowModal(void){
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgWayPointDetails_L.xml"),
+                        _T("dlgWayPointDetails_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_WAYPOINTDETAILS_L"));
+                        _T("IDR_XML_WAYPOINTDETAILS_L"));
 
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgWayPointDetails.xml"),
+                        _T("dlgWayPointDetails.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_WAYPOINTDETAILS"));
+                        _T("IDR_XML_WAYPOINTDETAILS"));
   }
   nTextLines = 0;
 
@@ -384,33 +384,33 @@ void dlgWayPointDetailsShowModal(void){
   ExpandLocalPath(szWaypointFile);
   ExtractDirectory(Directory, szWaypointFile);
 
-  _stprintf(path_modis,TEXT("%s\\modis-%03d.jpg"),
+  _stprintf(path_modis,_T("%s\\modis-%03d.jpg"),
            Directory,
            SelectedWaypoint+1);
-  _stprintf(path_google,TEXT("%s\\google-%03d.jpg"),
+  _stprintf(path_google,_T("%s\\google-%03d.jpg"),
            Directory,
            SelectedWaypoint+1);
 
   const WAYPOINT &way_point = way_points.get(SelectedWaypoint);
 
-  _stprintf(sTmp, TEXT("%s: "), wf->GetCaption());
+  _stprintf(sTmp, _T("%s: "), wf->GetCaption());
   _tcscat(sTmp, way_point.Name);
   wf->SetCaption(sTmp);
 
-  wp = ((WndProperty *)wf->FindByName(TEXT("prpWpComment")));
+  wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
   wp->SetText(way_point.Comment);
   wp->SetButtonSize(16);
 
   Units::LongitudeToString(way_point.Location.Longitude, sTmp, sizeof(sTmp)-1);
-  ((WndProperty *)wf->FindByName(TEXT("prpLongitude")))
+  ((WndProperty *)wf->FindByName(_T("prpLongitude")))
     ->SetText(sTmp);
 
   Units::LatitudeToString(way_point.Location.Latitude, sTmp, sizeof(sTmp)-1);
-  ((WndProperty *)wf->FindByName(TEXT("prpLatitude")))
+  ((WndProperty *)wf->FindByName(_T("prpLatitude")))
     ->SetText(sTmp);
 
   Units::FormatUserAltitude(way_point.Altitude, sTmp, sizeof(sTmp)-1);
-  ((WndProperty *)wf->FindByName(TEXT("prpAltitude")))
+  ((WndProperty *)wf->FindByName(_T("prpAltitude")))
     ->SetText(sTmp);
 
   SunEphemeris sun;
@@ -421,8 +421,8 @@ void dlgWayPointDetailsShowModal(void){
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime-sunsethours)*60);
 
-  _stprintf(sTmp, TEXT("%02d:%02d"), sunsethours, sunsetmins);
-  ((WndProperty *)wf->FindByName(TEXT("prpSunset")))
+  _stprintf(sTmp, _T("%02d:%02d"), sunsethours, sunsetmins);
+  ((WndProperty *)wf->FindByName(_T("prpSunset")))
     ->SetText(sTmp);
 
   double distance, bearing;
@@ -433,11 +433,11 @@ void dlgWayPointDetailsShowModal(void){
 
   TCHAR DistanceText[MAX_PATH];
   Units::FormatUserDistance(distance, DistanceText, 10);
-  ((WndProperty *)wf->FindByName(TEXT("prpDistance")))
+  ((WndProperty *)wf->FindByName(_T("prpDistance")))
     ->SetText(DistanceText);
 
-  _stprintf(sTmp, TEXT("%d")TEXT(DEG), iround(bearing));
-  ((WndProperty *)wf->FindByName(TEXT("prpBearing")))
+  _stprintf(sTmp, _T("%d")_T(DEG), iround(bearing));
+  ((WndProperty *)wf->FindByName(_T("prpBearing")))
     ->SetText(sTmp);
 
   double alt=0;
@@ -455,10 +455,10 @@ void dlgWayPointDetailsShowModal(void){
     -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -way_point.Altitude;
 
-  _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
+  _stprintf(sTmp, _T("%.0f %s"), alt*ALTITUDEMODIFY,
 	    Units::GetAltitudeName());
 
-  wp = ((WndProperty *)wf->FindByName(TEXT("prpMc0")));
+  wp = ((WndProperty *)wf->FindByName(_T("prpMc0")));
   if (wp) wp->SetText(sTmp);
 
   // alt reqd at safety mc
@@ -474,7 +474,7 @@ void dlgWayPointDetailsShowModal(void){
     -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -way_point.Altitude;
 
-  wp = ((WndProperty *)wf->FindByName(TEXT("prpMc1")));
+  wp = ((WndProperty *)wf->FindByName(_T("prpMc1")));
   if (wp) wp->SetText(sTmp);
 
   // alt reqd at current mc
@@ -490,21 +490,21 @@ void dlgWayPointDetailsShowModal(void){
     -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -way_point.Altitude;
 
-  _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
+  _stprintf(sTmp, _T("%.0f %s"), alt*ALTITUDEMODIFY,
 	    Units::GetAltitudeName());
 
-  wp = ((WndProperty *)wf->FindByName(TEXT("prpMc2")));
+  wp = ((WndProperty *)wf->FindByName(_T("prpMc2")));
   if (wp) wp->SetText(sTmp);
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  wInfo    = ((WndFrame *)wf->FindByName(TEXT("frmInfos")));
-  wCommand = ((WndFrame *)wf->FindByName(TEXT("frmCommands")));
-  wSpecial = ((WndFrame *)wf->FindByName(TEXT("frmSpecial"))); // VENTA3
-  wImage   = ((WndOwnerDrawFrame *)wf->FindByName(TEXT("frmImage")));
-  wDetails = (WndListFrame*)wf->FindByName(TEXT("frmDetails"));
+  wInfo    = ((WndFrame *)wf->FindByName(_T("frmInfos")));
+  wCommand = ((WndFrame *)wf->FindByName(_T("frmCommands")));
+  wSpecial = ((WndFrame *)wf->FindByName(_T("frmSpecial"))); // VENTA3
+  wImage   = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmImage")));
+  wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
 
   assert(wInfo!=NULL);
   assert(wCommand!=NULL);
@@ -517,7 +517,7 @@ void dlgWayPointDetailsShowModal(void){
 				 MAXLINES);
 
   /* TODO enhancement: wpdetails
-  wp = ((WndProperty *)wf->FindByName(TEXT("prpWpDetails")));
+  wp = ((WndProperty *)wf->FindByName(_T("prpWpDetails")));
   wp->SetText(way_point.Details);
   */
 
@@ -529,48 +529,48 @@ void dlgWayPointDetailsShowModal(void){
 
   wCommand->SetVisible(false);
   wSpecial->SetVisible(false);
-  wImage->SetCaption(gettext(TEXT("Blank!")));
+  wImage->SetCaption(gettext(_T("Blank!")));
   wImage->SetOnPaintNotify(OnImagePaint);
 
   WndButton *wb;
 
-  wb = ((WndButton *)wf->FindByName(TEXT("cmdGoto")));
+  wb = ((WndButton *)wf->FindByName(_T("cmdGoto")));
   if (wb)
     wb->SetOnClickNotify(OnGotoClicked);
 
-  wb = ((WndButton *)wf->FindByName(TEXT("cmdReplace")));
+  wb = ((WndButton *)wf->FindByName(_T("cmdReplace")));
   if (wb)
     wb->SetOnClickNotify(OnReplaceClicked);
 
-  wb = ((WndButton *)wf->FindByName(TEXT("cmdNewHome")));
+  wb = ((WndButton *)wf->FindByName(_T("cmdNewHome")));
   if (wb)
     wb->SetOnClickNotify(OnNewHomeClicked);
 
-  wb = ((WndButton *)wf->FindByName(TEXT("cmdSetAlternate1")));
+  wb = ((WndButton *)wf->FindByName(_T("cmdSetAlternate1")));
   if (wb)
     wb->SetOnClickNotify(OnSetAlternate1Clicked);
 
-  wb = ((WndButton *)wf->FindByName(TEXT("cmdSetAlternate2")));
+  wb = ((WndButton *)wf->FindByName(_T("cmdSetAlternate2")));
   if (wb)
     wb->SetOnClickNotify(OnSetAlternate2Clicked);
 
-  wb = ((WndButton *)wf->FindByName(TEXT("cmdClearAlternates")));
+  wb = ((WndButton *)wf->FindByName(_T("cmdClearAlternates")));
   if (wb)
     wb->SetOnClickNotify(OnClearAlternatesClicked);
 
-  wb = ((WndButton *)wf->FindByName(TEXT("cmdTeamCode")));
+  wb = ((WndButton *)wf->FindByName(_T("cmdTeamCode")));
   if (wb)
     wb->SetOnClickNotify(OnTeamCodeClicked);
 
-  wb = ((WndButton *)wf->FindByName(TEXT("cmdInserInTask")));
+  wb = ((WndButton *)wf->FindByName(_T("cmdInserInTask")));
   if (wb)
     wb->SetOnClickNotify(OnInsertInTaskClicked);
 
-  wb = ((WndButton *)wf->FindByName(TEXT("cmdAppendInTask")));
+  wb = ((WndButton *)wf->FindByName(_T("cmdAppendInTask")));
   if (wb)
     wb->SetOnClickNotify(OnAppendInTaskClicked);
 
-  wb = ((WndButton *)wf->FindByName(TEXT("cmdRemoveFromTask")));
+  wb = ((WndButton *)wf->FindByName(_T("cmdRemoveFromTask")));
   if (wb)
     wb->SetOnClickNotify(OnRemoveFromTaskClicked);
 

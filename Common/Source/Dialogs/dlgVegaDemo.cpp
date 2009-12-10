@@ -66,7 +66,7 @@ static void VegaWriteDemo(void) {
   }
 
   TCHAR dbuf[100];
-  wsprintf(dbuf, TEXT("PDVDD,%d,%d"),
+  wsprintf(dbuf, _T("PDVDD,%d,%d"),
 	   iround(VegaDemoW*10),
 	   iround(VegaDemoV*10));
   VarioWriteNMEA(dbuf);
@@ -127,32 +127,32 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgVegaDemoShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgVegaDemo.xml"),
+                      _T("dlgVegaDemo.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_VEGADEMO"));
+		      _T("IDR_XML_VEGADEMO"));
 
   WndProperty* wp;
 
   if (!wf) return;
 
-  VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,0"));
-  VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,3"));
+  VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
+  VarioWriteNMEA(_T("PDVSC,S,DemoMode,3"));
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVegaDemoW"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoW"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(VegaDemoW*LIFTMODIFY);
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVegaDemoV"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoV"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(VegaDemoV*SPEEDMODIFY);
     wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVegaDemoAudioClimb"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoAudioClimb"));
   if (wp) {
     wp->GetDataField()->Set(VegaDemoAudioClimb);
     wp->RefreshDisplay();
@@ -161,7 +161,7 @@ void dlgVegaDemoShowModal(void){
   wf->ShowModal();
 
   // deactivate demo.
-  VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,0"));
+  VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
 
   delete wf;
 

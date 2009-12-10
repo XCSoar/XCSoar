@@ -66,13 +66,13 @@ static void UpdateValues() {
   TCHAR text[100];
   if (EnableAutoBrightness) {
     InputEvents::eventDLLExecute(
-				 TEXT("altairplatform.dll SetAutoMode on"));
-    _stprintf(text,TEXT("altairplatform.dll SetAutoBrightness %03d"),
+				 _T("altairplatform.dll SetAutoMode on"));
+    _stprintf(text,_T("altairplatform.dll SetAutoBrightness %03d"),
 	      BrightnessValue);
   } else {
     InputEvents::eventDLLExecute(
-				 TEXT("altairplatform.dll SetAutoMode off"));
-    _stprintf(text,TEXT("altairplatform.dll SetManualBrightness %03d"),
+				 _T("altairplatform.dll SetAutoMode off"));
+    _stprintf(text,_T("altairplatform.dll SetManualBrightness %03d"),
 	      BrightnessValue);
   }
   InputEvents::eventDLLExecute(text);
@@ -119,20 +119,20 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgBrightnessShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgBrightness.xml"),
+                      _T("dlgBrightness.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_BRIGHTNESS"));
+		      _T("IDR_XML_BRIGHTNESS"));
   if (wf == NULL)
     return;
 
   WndProperty* wp;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpBrightness"));
+  wp = (WndProperty*)wf->FindByName(_T("prpBrightness"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(BrightnessValue);
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAuto"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAuto"));
   if (wp) {
     wp->GetDataField()->Set(EnableAutoBrightness);
     wp->RefreshDisplay();

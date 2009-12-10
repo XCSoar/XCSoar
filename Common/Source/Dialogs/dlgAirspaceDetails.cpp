@@ -69,7 +69,7 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
   if (Name) {
     UINT answer;
     answer = MessageBoxX(Name,
-			 gettext(TEXT("Acknowledge for day?")),
+			 gettext(_T("Acknowledge for day?")),
 			 MB_YESNOCANCEL|MB_ICONQUESTION);
     if (answer == IDYES) {
       if (index_circle>=0) {
@@ -173,83 +173,83 @@ static void SetValues(void) {
     range = -range;
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpName"));
+  wp = (WndProperty*)wf->FindByName(_T("prpName"));
   if (wp) {
     wp->SetText(name);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpType"));
+  wp = (WndProperty*)wf->FindByName(_T("prpType"));
   if (wp) {
     switch (atype) {
     case RESTRICT:
-      wp->SetText(gettext(TEXT("Restricted"))); break;
+      wp->SetText(gettext(_T("Restricted"))); break;
     case PROHIBITED:
-      wp->SetText(gettext(TEXT("Prohibited"))); break;
+      wp->SetText(gettext(_T("Prohibited"))); break;
     case DANGER:
-      wp->SetText(gettext(TEXT("Danger Area"))); break;
+      wp->SetText(gettext(_T("Danger Area"))); break;
     case CLASSA:
-      wp->SetText(gettext(TEXT("Class A"))); break;
+      wp->SetText(gettext(_T("Class A"))); break;
     case CLASSB:
-      wp->SetText(gettext(TEXT("Class B"))); break;
+      wp->SetText(gettext(_T("Class B"))); break;
     case CLASSC:
-      wp->SetText(gettext(TEXT("Class C"))); break;
+      wp->SetText(gettext(_T("Class C"))); break;
     case CLASSD:
-      wp->SetText(gettext(TEXT("Class D"))); break;
+      wp->SetText(gettext(_T("Class D"))); break;
     case CLASSE:
-      wp->SetText(gettext(TEXT("Class E"))); break;
+      wp->SetText(gettext(_T("Class E"))); break;
     case CLASSF:
-      wp->SetText(gettext(TEXT("Class F"))); break;
+      wp->SetText(gettext(_T("Class F"))); break;
     case NOGLIDER:
-      wp->SetText(gettext(TEXT("No Glider"))); break;
+      wp->SetText(gettext(_T("No Glider"))); break;
     case CTR:
-      wp->SetText(gettext(TEXT("CTR"))); break;
+      wp->SetText(gettext(_T("CTR"))); break;
     case WAVE:
-      wp->SetText(gettext(TEXT("Wave"))); break;
+      wp->SetText(gettext(_T("Wave"))); break;
     default:
-      wp->SetText(gettext(TEXT("Unknown")));
+      wp->SetText(gettext(_T("Unknown")));
     }
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpTop"));
+  wp = (WndProperty*)wf->FindByName(_T("prpTop"));
   if (wp) {
     switch (top->Base){
     case abUndef:
       if (Units::GetUserAltitudeUnit() == unMeter) {
-	_stprintf(buffer, TEXT("%.0f[m] %.0f[ft] [?]"),
+	_stprintf(buffer, _T("%.0f[m] %.0f[ft] [?]"),
 		  (top->Altitude),
 		  (top->Altitude*TOFEET));
       } else {
-	_stprintf(buffer, TEXT("%.0f ft [?]"),
+	_stprintf(buffer, _T("%.0f ft [?]"),
 		  (top->Altitude*TOFEET));
       }
       break;
     case abMSL:
       if (Units::GetUserAltitudeUnit() == unMeter) {
-	_stprintf(buffer, TEXT("%.0f[m] %.0f[ft] MSL"),
+	_stprintf(buffer, _T("%.0f[m] %.0f[ft] MSL"),
 		  top->Altitude, top->Altitude*TOFEET);
       } else {
-	_stprintf(buffer, TEXT("%.0f ft MSL"),
+	_stprintf(buffer, _T("%.0f ft MSL"),
 		  top->Altitude*TOFEET);
       }
       break;
     case abAGL:
       if (Units::GetUserAltitudeUnit() == unMeter) {
-	_stprintf(buffer, TEXT("%.0f[m] %.0f[ft] AGL"),
+	_stprintf(buffer, _T("%.0f[m] %.0f[ft] AGL"),
 		  top->AGL, top->AGL*TOFEET);
       } else {
-	_stprintf(buffer, TEXT("%.0f ft AGL"),
+	_stprintf(buffer, _T("%.0f ft AGL"),
 		  top->AGL*TOFEET);
       }
       break;
     case abFL:
       if (Units::GetUserAltitudeUnit() == unMeter) {
-	_stprintf(buffer, TEXT("FL%.0f (%.0f[m] %.0f[ft])"),
+	_stprintf(buffer, _T("FL%.0f (%.0f[m] %.0f[ft])"),
 		  top->FL, FLAltRounded(top->Altitude),
 		  FLAltRounded(top->Altitude*TOFEET));
       } else {
-	_stprintf(buffer, TEXT("FL%.0f (%.0f ft)"),
+	_stprintf(buffer, _T("FL%.0f (%.0f ft)"),
 		  top->FL, FLAltRounded(top->Altitude*TOFEET));
       }
       break;
@@ -258,47 +258,47 @@ static void SetValues(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpBase"));
+  wp = (WndProperty*)wf->FindByName(_T("prpBase"));
   if (wp) {
     switch (base->Base){
     case abUndef:
       if (Units::GetUserAltitudeUnit() == unMeter) {
-	_stprintf(buffer, TEXT("%.0f[m] %.0f[ft] [?]"),
+	_stprintf(buffer, _T("%.0f[m] %.0f[ft] [?]"),
 		  base->Altitude, base->Altitude*TOFEET);
       } else {
-	_stprintf(buffer, TEXT("%.0f ft [?]"),
+	_stprintf(buffer, _T("%.0f ft [?]"),
 		  base->Altitude*TOFEET);
       }
       break;
     case abMSL:
       if (Units::GetUserAltitudeUnit() == unMeter) {
-	_stprintf(buffer, TEXT("%.0f[m] %.0f[ft] MSL"),
+	_stprintf(buffer, _T("%.0f[m] %.0f[ft] MSL"),
 		  base->Altitude, base->Altitude*TOFEET);
       } else {
-	_stprintf(buffer, TEXT("%.0f ft MSL"),
+	_stprintf(buffer, _T("%.0f ft MSL"),
 		  base->Altitude*TOFEET);
       }
       break;
     case abAGL:
       if (base->Altitude == 0) {
-        _stprintf(buffer, TEXT("SFC"));
+        _stprintf(buffer, _T("SFC"));
       } else {
 	if (Units::GetUserAltitudeUnit() == unMeter) {
-	  _stprintf(buffer, TEXT("%.0f[m] %.0f[ft] AGL"),
+	  _stprintf(buffer, _T("%.0f[m] %.0f[ft] AGL"),
 		    base->AGL, base->AGL*TOFEET);
 	} else {
-	  _stprintf(buffer, TEXT("%.0f ft AGL"),
+	  _stprintf(buffer, _T("%.0f ft AGL"),
 		    base->AGL*TOFEET);
 	}
       }
       break;
     case abFL:
       if (Units::GetUserAltitudeUnit() == unMeter) {
-	_stprintf(buffer, TEXT("FL %.0f (%.0f[m] %.0f[ft])"),
+	_stprintf(buffer, _T("FL %.0f (%.0f[m] %.0f[ft])"),
 		  base->FL, FLAltRounded(base->Altitude),
 		  FLAltRounded(base->Altitude*TOFEET));
       } else {
-	_stprintf(buffer, TEXT("FL%.0f (%.0f ft)"),
+	_stprintf(buffer, _T("FL%.0f (%.0f ft)"),
 		  base->FL, FLAltRounded(base->Altitude*TOFEET));
       }
       break;
@@ -307,13 +307,13 @@ static void SetValues(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
+  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
     if (inside) {
-      wp->SetCaption(gettext(TEXT("Inside")));
+      wp->SetCaption(gettext(_T("Inside")));
     }
     Units::FormatUserDistance(range, buffer, 20);
-    _stprintf(buffer2, TEXT(" %d")TEXT(DEG), iround(bearing));
+    _stprintf(buffer2, _T(" %d")_T(DEG), iround(bearing));
     _tcscat(buffer, buffer2);
     wp->SetText(buffer);
     wp->RefreshDisplay();
@@ -329,9 +329,9 @@ void dlgAirspaceDetails(int the_circle, int the_area) {
   }
 
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgAirspaceDetails.xml"),
+                      _T("dlgAirspaceDetails.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_AIRSPACEDETAILS"));
+		      _T("IDR_XML_AIRSPACEDETAILS"));
 
   if (!wf) return;
 
@@ -353,7 +353,7 @@ void dlgAirspaceDetails(int the_circle, int the_area) {
 			distance,
                     Units::GetDistanceName()
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpDistance"));
+  wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(distance);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());

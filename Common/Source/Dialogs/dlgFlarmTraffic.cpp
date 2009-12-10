@@ -82,7 +82,7 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
 		    &range,
 		    &bear);
 
-    wsprintf(tmp, TEXT("%3s %3ld %+3.1lf %5ld"),
+    wsprintf(tmp, _T("%3s %3ld %+3.1lf %5ld"),
 	     XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Name,
 	     (int)(SPEEDMODIFY * XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Speed),
 #ifdef FLARM_AVERAGE
@@ -92,7 +92,7 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
 #endif
 	     (int)(ALTITUDEMODIFY * XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Altitude)
 	     );
-    wsprintf(text, TEXT("%s %3.0lf %2.1lf"),
+    wsprintf(text, _T("%s %3.0lf %2.1lf"),
 	     tmp,
 	     bear,
 	     (DISTANCEMODIFY * range));
@@ -128,8 +128,8 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
 	    if (LookupFLARMDetails(XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID) == NULL)
 	      {
 		// not existing en primary or secondary flarm id list
-		((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetCaption(TEXT("Set CN"));
-		((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetVisible(true);
+		((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetCaption(_T("Set CN"));
+		((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetVisible(true);
 	      }
 	    else
 	      {
@@ -138,20 +138,20 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
 
 		if (index != -1)
 		  {
-		    ((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetCaption(TEXT("Edit CN"));
-		    ((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetVisible(true);
+		    ((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetCaption(_T("Edit CN"));
+		    ((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetVisible(true);
 		  }
 		else
 		  {
-		    ((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetVisible(false);
+		    ((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetVisible(false);
 		  }
 	      }
-	    ((WndButton *)wf->FindByName(TEXT("cmdTrack")))->SetVisible(true);
+	    ((WndButton *)wf->FindByName(_T("cmdTrack")))->SetVisible(true);
 	  }
 	else
 	  {
-	    ((WndButton *)wf->FindByName(TEXT("cmdTrack")))->SetVisible(false);
-	    ((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetVisible(false);
+	    ((WndButton *)wf->FindByName(_T("cmdTrack")))->SetVisible(false);
+	    ((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetVisible(false);
 	  }
       }
   }
@@ -218,15 +218,15 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   switch(key_code) {
   case VK_LEFT:
   case '6':
-    ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
+    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
     //      NextPage(-1);
-    //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
+    //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
   case VK_RIGHT:
   case '7':
-    ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
+    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
     //      NextPage(+1);
-    //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
+    //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
@@ -269,14 +269,14 @@ void dlgFlarmTrafficShowModal(void){
 
   if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgFlarmTraffic_L.xml"),
+                        _T("dlgFlarmTraffic_L.xml"),
 			XCSoarInterface::main_window,
-			TEXT("IDR_XML_FLARMTRAFFIC_L"));
+			_T("IDR_XML_FLARMTRAFFIC_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgFlarmTraffic.xml"),
+                        _T("dlgFlarmTraffic.xml"),
 			XCSoarInterface::main_window,
-			TEXT("IDR_XML_FLARMTRAFFIC"));
+			_T("IDR_XML_FLARMTRAFFIC"));
   }
 
   nTextLines = 0;
@@ -285,9 +285,9 @@ void dlgFlarmTrafficShowModal(void){
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  wDetails = (WndListFrame*)wf->FindByName(TEXT("frmDetails"));
+  wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
   wDetails->SetEnterCallback(OnListEnter);
   assert(wDetails!=NULL);
 

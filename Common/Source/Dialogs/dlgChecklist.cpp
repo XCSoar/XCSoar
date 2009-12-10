@@ -75,12 +75,12 @@ static void NextPage(int Step){
 				 LineOffsets,
 				 MAXLINES);
 
-  _stprintf(buffer, gettext(TEXT("Checklist")));
+  _stprintf(buffer, gettext(_T("Checklist")));
 
   if (ChecklistTitle[page] &&
       (_tcslen(ChecklistTitle[page])>0)
       && (_tcslen(ChecklistTitle[page])<60)) {
-    _tcscat(buffer, TEXT(": "));
+    _tcscat(buffer, _T(": "));
     _tcscat(buffer, ChecklistTitle[page]);
   }
   wf->SetCaption(buffer);
@@ -105,10 +105,10 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
     } else {
       nlen = _tcslen(text+nstart);
     }
-    while (_tcscmp(text+nstart+nlen-1,TEXT("\r"))==0) {
+    while (_tcscmp(text+nstart+nlen-1,_T("\r"))==0) {
       nlen--;
     }
-    while (_tcscmp(text+nstart+nlen-1,TEXT("\n"))==0) {
+    while (_tcscmp(text+nstart+nlen-1,_T("\n"))==0) {
       nlen--;
     }
     if (nlen>0) {
@@ -153,16 +153,16 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   switch (key_code) {
     case VK_LEFT:
     case '6':
-      ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
+      ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
       NextPage(-1);
-      //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
+      //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
     case VK_RIGHT:
     case '7':
-      ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
+      ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
       NextPage(+1);
-      //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
+      //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
@@ -202,9 +202,9 @@ void LoadChecklist(void) {
   }
 
   TCHAR filename[MAX_PATH];
-  LocalPath(filename, TEXT(XCSCHKLIST));
+  LocalPath(filename, _T(XCSCHKLIST));
 
-  FILE *file = _tfopen(filename, TEXT("rt"));
+  FILE *file = _tfopen(filename, _T("rt"));
   if (file == NULL)
     {
       return;
@@ -234,7 +234,7 @@ void LoadChecklist(void) {
       if(TempString[0]=='[') { // Look for start
 
 	if (inDetails) {
-	  _tcscat(Details,TEXT("\r\n"));
+	  _tcscat(Details,_T("\r\n"));
 	  addChecklist(Name, Details);
 	  Details[0]= 0;
 	  Name[0]= 0;
@@ -254,13 +254,13 @@ void LoadChecklist(void) {
       } else {
 	// append text to details string
 	_tcsncat(Details,TempString,MAXDETAILS-2);
-	_tcscat(Details,TEXT("\r\n"));
+	_tcscat(Details,_T("\r\n"));
 	// TODO code: check the string is not too long
       }
     }
 
   if (inDetails) {
-    _tcscat(Details,TEXT("\r\n"));
+    _tcscat(Details,_T("\r\n"));
     addChecklist(Name, Details);
   }
 
@@ -279,14 +279,14 @@ void dlgChecklistShowModal(void){
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgChecklist_L.xml"),
+                        _T("dlgChecklist_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_CHECKLIST_L"));
+                        _T("IDR_XML_CHECKLIST_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgChecklist.xml"),
+                        _T("dlgChecklist.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_CHECKLIST"));
+                        _T("IDR_XML_CHECKLIST"));
   }
 
   nTextLines = 0;
@@ -295,9 +295,9 @@ void dlgChecklistShowModal(void){
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  wDetails = (WndListFrame*)wf->FindByName(TEXT("frmDetails"));
+  wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
   assert(wDetails!=NULL);
 
   wDetails->SetBorderKind(BORDERLEFT);

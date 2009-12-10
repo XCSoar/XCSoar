@@ -103,14 +103,14 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   h = Layout::Scale(32);
 
   // Create dialog
-  wf = new WndForm(&XCSoarInterface::main_window, TEXT("frmXcSoarMessageDlg"),
+  wf = new WndForm(&XCSoarInterface::main_window, _T("frmXcSoarMessageDlg"),
                    lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);
   wf->SetBackColor(Color(0xDA, 0xDB, 0xAB));
 
   // Create text element
-  wText = new WndFrame(wf, TEXT("frmMessageDlgText"),
+  wText = new WndFrame(wf, _T("frmMessageDlgText"),
                        0, Layout::Scale(5), Width, Height);
 
   wText->SetCaption(lpText);
@@ -131,7 +131,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   uType = uType & 0x000f;
   if (uType == MB_OK || uType == MB_OKCANCEL) {
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("OK")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("OK")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDOK);
     ButtonCount++;
@@ -139,13 +139,13 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_YESNO || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("Yes")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("Yes")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDYES);
     ButtonCount++;
 
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("No")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("No")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDNO);
     ButtonCount++;
@@ -153,7 +153,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_ABORTRETRYIGNORE || uType == MB_RETRYCANCEL) {
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("Retry")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("Retry")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDRETRY);
     ButtonCount++;
@@ -161,7 +161,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_OKCANCEL || uType == MB_RETRYCANCEL || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("Cancel")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("Cancel")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDCANCEL);
     ButtonCount++;
@@ -169,13 +169,13 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_ABORTRETRYIGNORE) {
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("Abort")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("Abort")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDABORT);
     ButtonCount++;
 
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("Ignore")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("Ignore")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDIGNORE);
     ButtonCount++;

@@ -118,21 +118,21 @@ int dlgAirspacePatternsShowModal(void){
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgAirspacePatterns_L.xml"),
+                        _T("dlgAirspacePatterns_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_AIRSPACEPATTERNS_L"));
+                        _T("IDR_XML_AIRSPACEPATTERNS_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgAirspacePatterns.xml"),
+                        _T("dlgAirspacePatterns.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_AIRSPACEPATTERNS"));
+                        _T("IDR_XML_AIRSPACEPATTERNS"));
   }
 
   if (!wf) return -1;
 
   assert(wf!=NULL);
 
-  wAirspacePatternsList = (WndListFrame*)wf->FindByName(TEXT("frmAirspacePatternsList"));
+  wAirspacePatternsList = (WndListFrame*)wf->FindByName(_T("frmAirspacePatternsList"));
   assert(wAirspacePatternsList!=NULL);
   wAirspacePatternsList->SetBorderKind(BORDERLEFT);
   wAirspacePatternsList->SetEnterCallback(OnAirspacePatternsListEnter);

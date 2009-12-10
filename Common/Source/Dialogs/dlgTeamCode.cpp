@@ -66,34 +66,34 @@ static void Update()
           Value -= 360.0;
 
       if (Value > 1)
-        _stprintf(Text, TEXT("%2.0f")TEXT(DEG)TEXT(">"), Value);
+        _stprintf(Text, _T("%2.0f")_T(DEG)_T(">"), Value);
       else if (Value < -1)
-        _stprintf(Text, TEXT("<%2.0f")TEXT(DEG), -Value);
+        _stprintf(Text, _T("<%2.0f")_T(DEG), -Value);
       else
-        _tcscpy(Text, TEXT("<>"));
+        _tcscpy(Text, _T("<>"));
 
     } else {
-    _tcscpy(Text, TEXT("---"));
+    _tcscpy(Text, _T("---"));
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpRelBearing"));
+  wp = (WndProperty*)wf->FindByName(_T("prpRelBearing"));
   if (wp) {
     wp->SetText(Text);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpBearing"));
+  wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(teammateBearing);
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
+  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(teammateRange*DISTANCEMODIFY);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpOwnCode"));
+  wp = (WndProperty*)wf->FindByName(_T("prpOwnCode"));
   if (wp) {
     _tcsncpy(Text,XCSoarInterface::Calculated().OwnTeamCode,5);
     Text[5] = '\0';
@@ -101,7 +101,7 @@ static void Update()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpMateCode"));
+  wp = (WndProperty*)wf->FindByName(_T("prpMateCode"));
   if (wp) {
     wp->SetText(XCSoarInterface::SettingsComputer().TeammateCode);
     wp->RefreshDisplay();
@@ -143,8 +143,8 @@ static void OnFlarmLockClicked(WindowControl * Sender)
 
   if (flarmId == 0)
     {
-      MessageBoxX(gettext(TEXT("Unknown Competition Number")),
-		  gettext(TEXT("Not Found")),
+      MessageBoxX(gettext(_T("Unknown Competition Number")),
+		  gettext(_T("Not Found")),
 		  MB_OK|MB_ICONINFORMATION);
 
       XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
@@ -187,28 +187,28 @@ void dlgTeamCodeShowModal(void)
   if (Layout::landscape)
     {
       wf = dlgLoadFromXML(CallBackTable,
-                          TEXT("dlgTeamCode_L.xml"),
+                          _T("dlgTeamCode_L.xml"),
 			  XCSoarInterface::main_window,
-			  TEXT("IDR_XML_TEAMCODE_L"));
+			  _T("IDR_XML_TEAMCODE_L"));
       if (!wf) return;
     }
   else
     {
       wf = dlgLoadFromXML(CallBackTable,
-                          TEXT("dlgTeamCode.xml"),
+                          _T("dlgTeamCode.xml"),
 			  XCSoarInterface::main_window,
-			  TEXT("IDR_XML_TEAMCODE"));
+			  _T("IDR_XML_TEAMCODE"));
       if (!wf) return;
     }
 
   // set event for button
-  buttonCode = ((WndButton *)wf->FindByName(TEXT("cmdSetCode")));
+  buttonCode = ((WndButton *)wf->FindByName(_T("cmdSetCode")));
   if (buttonCode) {
     buttonCode->SetOnClickNotify(OnCodeClicked);
   }
 
   // Set unit for range
-  wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
+  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
   }

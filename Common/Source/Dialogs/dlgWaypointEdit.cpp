@@ -61,20 +61,20 @@ static void UpdateButtons(void) {
   TCHAR text[MAX_PATH];
   if (buttonName) {
     if (_tcslen(global_wpt->Name)<=0) {
-      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Name")),
-                gettext(TEXT("(blank)")));
+      _stprintf(text,_T("%s: %s"), gettext(_T("Name")),
+                gettext(_T("(blank)")));
     } else {
-      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Name")),
+      _stprintf(text,_T("%s: %s"), gettext(_T("Name")),
                 global_wpt->Name);
     }
     buttonName->SetCaption(text);
   }
   if (buttonComment) {
     if (_tcslen(global_wpt->Comment)<=0) {
-      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Comment")),
-                gettext(TEXT("(blank)")));
+      _stprintf(text,_T("%s: %s"), gettext(_T("Comment")),
+                gettext(_T("(blank)")));
     } else {
-      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Comment")),
+      _stprintf(text,_T("%s: %s"), gettext(_T("Comment")),
                 global_wpt->Comment);
     }
     buttonComment->SetCaption(text);
@@ -107,64 +107,64 @@ static void SetUnits(void) {
   switch (Units::CoordinateFormat) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeDDDD"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeDDDD"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudemmm"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudemmm"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
     if (wp) {
       wp->SetVisible(false);
     }
     break;
   case 2: // ("DDMM.mmm");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeDDDD"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeDDDD"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeS"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeS"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
     if (wp) {
       wp->SetVisible(false);
     }
     break;
   case 3: // ("DD.dddd");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeM"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeM"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeS"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeS"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudemmm"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
     // hide this field for DD.dddd format
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudemmm"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
     if (wp) {
       wp->SetVisible(false);
     }
@@ -180,16 +180,16 @@ static void SetValues(void) {
   Units::LongitudeToDMS(global_wpt->Location.Longitude,
 			&dd, &mm, &ss, &sign);
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeSign"));
+  wp = (WndProperty*)wf->FindByName(_T("prpLongitudeSign"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText((TEXT("W")));
-    dfe->addEnumText((TEXT("E")));
+    dfe->addEnumText((_T("W")));
+    dfe->addEnumText((_T("E")));
     dfe->Set(sign);
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeD"));
+  wp = (WndProperty*)wf->FindByName(_T("prpLongitudeD"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(dd);
     wp->RefreshDisplay();
@@ -198,31 +198,31 @@ static void SetValues(void) {
   switch (Units::CoordinateFormat) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeM"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(mm);
       wp->RefreshDisplay();
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeS"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(ss);
       wp->RefreshDisplay();
     }
     break;
   case 2: // ("DDMM.mmm");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeM"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(mm);
       wp->RefreshDisplay();
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudemmm"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(1000.0*ss/60.0);
       wp->RefreshDisplay();
     }
     break;
   case 3: // ("DD.dddd");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeDDDD"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(10000.0*(mm+ss/60.0)/60.0);
       wp->RefreshDisplay();
@@ -233,16 +233,16 @@ static void SetValues(void) {
   Units::LatitudeToDMS(global_wpt->Location.Latitude,
 		       &dd, &mm, &ss, &sign);
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeSign"));
+  wp = (WndProperty*)wf->FindByName(_T("prpLatitudeSign"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText((TEXT("S")));
-    dfe->addEnumText((TEXT("N")));
+    dfe->addEnumText((_T("S")));
+    dfe->addEnumText((_T("N")));
     dfe->Set(sign);
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeD"));
+  wp = (WndProperty*)wf->FindByName(_T("prpLatitudeD"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(dd);
     wp->RefreshDisplay();
@@ -251,31 +251,31 @@ static void SetValues(void) {
   switch (Units::CoordinateFormat) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeM"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(mm);
       wp->RefreshDisplay();
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeS"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(ss);
       wp->RefreshDisplay();
     }
     break;
   case 2: // ("DDMM.mmm");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeM"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(mm);
       wp->RefreshDisplay();
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudemmm"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(1000.0*ss/60.0);
       wp->RefreshDisplay();
     }
     break;
   case 3: // ("DD.dddd");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeDDDD"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(10000.0*(mm+ss/60.0)/60.0);
       wp->RefreshDisplay();
@@ -283,7 +283,7 @@ static void SetValues(void) {
     break;
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(
 				   iround(global_wpt->Altitude
@@ -292,13 +292,13 @@ static void SetValues(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFlags"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Turnpoint"));
-    dfe->addEnumText(TEXT("Airport"));
-    dfe->addEnumText(TEXT("Landpoint"));
+    dfe->addEnumText(_T("Turnpoint"));
+    dfe->addEnumText(_T("Airport"));
+    dfe->addEnumText(_T("Landpoint"));
     dfe->Set(0);
     if ((global_wpt->Flags & LANDPOINT)==LANDPOINT) {
       dfe->Set(2);
@@ -318,11 +318,11 @@ static void GetValues(void) {
   int dd = 0;
   double num=0, mm = 0, ss = 0; // mm,ss are numerators (division) so don't want to lose decimals
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeSign"));
+  wp = (WndProperty*)wf->FindByName(_T("prpLongitudeSign"));
   if (wp) {
     sign = (wp->GetDataField()->GetAsInteger()==1);
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeD"));
+  wp = (WndProperty*)wf->FindByName(_T("prpLongitudeD"));
   if (wp) {
     dd = wp->GetDataField()->GetAsInteger();
   }
@@ -330,29 +330,29 @@ static void GetValues(void) {
   switch (Units::CoordinateFormat) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeM"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
     if (wp) {
       mm = wp->GetDataField()->GetAsInteger();
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeS"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
     if (wp) {
       ss = wp->GetDataField()->GetAsInteger();
     }
     num = dd+mm/60.0+ss/3600.0;
     break;
   case 2: // ("DDMM.mmm");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeM"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
     if (wp) {
       mm = wp->GetDataField()->GetAsInteger();
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudemmm"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
     if (wp) {
       ss = wp->GetDataField()->GetAsInteger();
     }
     num = dd+(mm+ss/1000.0)/60.0;
     break;
   case 3: // ("DD.dddd");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeDDDD"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
     if (wp) {
       mm = wp->GetDataField()->GetAsInteger();
     }
@@ -365,11 +365,11 @@ static void GetValues(void) {
 
   global_wpt->Location.Longitude = num;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeSign"));
+  wp = (WndProperty*)wf->FindByName(_T("prpLatitudeSign"));
   if (wp) {
     sign = (wp->GetDataField()->GetAsInteger()==1);
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeD"));
+  wp = (WndProperty*)wf->FindByName(_T("prpLatitudeD"));
   if (wp) {
     dd = wp->GetDataField()->GetAsInteger();
   }
@@ -377,29 +377,29 @@ static void GetValues(void) {
   switch (Units::CoordinateFormat) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeM"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
     if (wp) {
       mm = wp->GetDataField()->GetAsInteger();
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeS"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
     if (wp) {
       ss = wp->GetDataField()->GetAsInteger();
     }
     num = dd+mm/60.0+ss/3600.0;
     break;
   case 2: // ("DDMM.mmm");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeM"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
     if (wp) {
       mm = wp->GetDataField()->GetAsInteger();
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudemmm"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
     if (wp) {
       ss = wp->GetDataField()->GetAsInteger();
     }
     num = dd+(mm+ss/1000.0)/60.0;
     break;
   case 3: // ("DD.dddd");
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeDDDD"));
+    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
     if (wp) {
       mm = wp->GetDataField()->GetAsInteger();
     }
@@ -412,7 +412,7 @@ static void GetValues(void) {
 
   global_wpt->Location.Latitude = num;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
     ss = wp->GetDataField()->GetAsInteger();
     if (ss==0) {
@@ -422,7 +422,7 @@ static void GetValues(void) {
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFlags"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
   if (wp) {
     int myflag = wp->GetDataField()->GetAsInteger();
     switch(myflag) {
@@ -460,25 +460,25 @@ dlgWaypointEditShowModal(WAYPOINT &way_point)
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgWaypointEdit_L.xml"),
+                        _T("dlgWaypointEdit_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_WAYPOINTEDIT_L"));
+                        _T("IDR_XML_WAYPOINTEDIT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgWaypointEdit.xml"),
+                        _T("dlgWaypointEdit.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_WAYPOINTEDIT"));
+                        _T("IDR_XML_WAYPOINTEDIT"));
   }
 
   if (wf == NULL)
     return;
 
-  buttonName = ((WndButton *)wf->FindByName(TEXT("cmdName")));
+  buttonName = ((WndButton *)wf->FindByName(_T("cmdName")));
   if (buttonName) {
     buttonName->SetOnClickNotify(OnNameClicked);
   }
 
-  buttonComment = ((WndButton *)wf->FindByName(TEXT("cmdComment")));
+  buttonComment = ((WndButton *)wf->FindByName(_T("cmdComment")));
   if (buttonComment) {
     buttonComment->SetOnClickNotify(OnCommentClicked);
   }

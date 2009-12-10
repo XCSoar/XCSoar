@@ -62,57 +62,57 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgVoiceShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgVoice.xml"),
+                      _T("dlgVoice.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_VOICE"));
+		      _T("IDR_XML_VOICE"));
 
   WndProperty* wp;
 
   if (!wf) return;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceClimbRate"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceClimbRate"));
   if (wp) {
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceClimbRate);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceTerrain"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceTerrain"));
   if (wp) {
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceTerrain);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceWaypointDistance"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceWaypointDistance"));
   if (wp) {
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceWaypointDistance);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceTaskAltitudeDifference"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceTaskAltitudeDifference"));
   if (wp) {
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceTaskAltitudeDifference);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceMacCready"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceMacCready"));
   if (wp) {
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceMacCready);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceNewWaypoint"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceNewWaypoint"));
   if (wp) {
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceNewWaypoint);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceInSector"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceInSector"));
   if (wp) {
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceInSector);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceAirspace"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceAirspace"));
   if (wp) {
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceAirspace);
     wp->RefreshDisplay();
@@ -122,7 +122,7 @@ void dlgVoiceShowModal(void){
 
   bool changed = false;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceClimbRate"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceClimbRate"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceClimbRate) {
       XCSoarInterface::SetSettingsComputer().EnableVoiceClimbRate = wp->GetDataField()->GetAsBoolean();
@@ -131,7 +131,7 @@ void dlgVoiceShowModal(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceTerrain"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceTerrain"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceTerrain) {
       XCSoarInterface::SetSettingsComputer().EnableVoiceTerrain = wp->GetDataField()->GetAsBoolean();
@@ -140,7 +140,7 @@ void dlgVoiceShowModal(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceWaypointDistance"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceWaypointDistance"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceWaypointDistance) {
       XCSoarInterface::SetSettingsComputer().EnableVoiceWaypointDistance = wp->GetDataField()->GetAsBoolean();
@@ -150,7 +150,7 @@ void dlgVoiceShowModal(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceTaskAltitudeDifference"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceTaskAltitudeDifference"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceTaskAltitudeDifference) {
       XCSoarInterface::SetSettingsComputer().EnableVoiceTaskAltitudeDifference = wp->GetDataField()->GetAsBoolean();
@@ -160,7 +160,7 @@ void dlgVoiceShowModal(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceMacCready"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceMacCready"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceMacCready) {
       XCSoarInterface::SetSettingsComputer().EnableVoiceMacCready = wp->GetDataField()->GetAsBoolean();
@@ -170,7 +170,7 @@ void dlgVoiceShowModal(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceNewWaypoint"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceNewWaypoint"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceNewWaypoint) {
       XCSoarInterface::SetSettingsComputer().EnableVoiceNewWaypoint = wp->GetDataField()->GetAsBoolean();
@@ -180,7 +180,7 @@ void dlgVoiceShowModal(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceInSector"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceInSector"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceInSector) {
       XCSoarInterface::SetSettingsComputer().EnableVoiceInSector = wp->GetDataField()->GetAsBoolean();
@@ -190,7 +190,7 @@ void dlgVoiceShowModal(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceAirspace"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVoiceAirspace"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceAirspace) {
       XCSoarInterface::SetSettingsComputer().EnableVoiceAirspace = wp->GetDataField()->GetAsBoolean();
@@ -203,8 +203,8 @@ void dlgVoiceShowModal(void){
   if (changed) {
     Profile::StoreRegistry();
 
-    MessageBoxX(gettext(TEXT("Changes to configuration saved.")),
-		 TEXT(""), MB_OK);
+    MessageBoxX(gettext(_T("Changes to configuration saved.")),
+		 _T(""), MB_OK);
   }
 
   delete wf;

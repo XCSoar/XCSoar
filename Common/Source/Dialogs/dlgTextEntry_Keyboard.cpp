@@ -58,7 +58,7 @@ static TCHAR edittext[MAX_TEXTENTRY];
 static void UpdateTextboxProp(void)
 {
   WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(TEXT("prpText"));
+  wp = (WndProperty*)wf->FindByName(_T("prpText"));
   if (wp) {
     wp->SetText(edittext);
   }
@@ -134,19 +134,19 @@ void dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
   if (Layout::landscape)
   {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("frmTextEntry_Keyboard_L.xml"),
+                        _T("frmTextEntry_Keyboard_L.xml"),
 			XCSoarInterface::main_window,
-			TEXT("IDR_XML_TEXTENTRY_KEYBOARD_L"));
+			_T("IDR_XML_TEXTENTRY_KEYBOARD_L"));
     if (!wf) return;
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("frmTextEntry_Keyboard.xml"),
+                        _T("frmTextEntry_Keyboard.xml"),
 			XCSoarInterface::main_window,
-			TEXT("IDR_XML_TEXTENTRY_KEYBOARD"));
+			_T("IDR_XML_TEXTENTRY_KEYBOARD"));
     if (!wf) return;
   }
 
-  wGrid = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmGrid"));
+  wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
 
   cursor = 0;
   ClearText();

@@ -88,21 +88,21 @@ static void RedrawSampleFont(void)
 
   WndProperty* wp;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontName"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if(wp) {
     _tcsncpy(NewLogFont.lfFaceName,wp->GetDataField()->GetAsString(), LF_FACESIZE-1);
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontHeight"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontHeight"));
   if(wp) {
     NewLogFont.lfHeight = wp->GetDataField()->GetAsInteger();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontWeight"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontWeight"));
 
   if(wp) {
     NewLogFont.lfWeight= wp->GetDataField()->GetAsInteger();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontItalic"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontItalic"));
   if(wp) {
     if ( wp->GetDataField()->GetAsInteger() ) {
       NewLogFont.lfItalic=1;
@@ -111,12 +111,12 @@ static void RedrawSampleFont(void)
       NewLogFont.lfItalic=0;
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontPitchAndFamily"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontPitchAndFamily"));
   if (wp) {
     NewLogFont.lfPitchAndFamily=wp->GetDataField()->GetAsInteger();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontTrueType"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontTrueType"));
   if(wp) {
     if ( wp->GetDataField()->GetAsBoolean() ) {
       NewLogFont.lfQuality = ANTIALIASED_QUALITY;
@@ -139,18 +139,18 @@ static void RedrawSampleFont(void)
     wf->SetVisible(true);
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontSample"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontSample"));
 
   if(wp) {
     if (NewFont.defined()) {
       wp->SetFont(NewFont);
-      wp->SetCaption(TEXT("Sample Text 123"));
+      wp->SetCaption(_T("Sample Text 123"));
       wp->SetVisible(false);
       wp->SetVisible(true);
       wp->RefreshDisplay();
     }
     else {
-      wp->SetCaption(TEXT("Error Creating Font!"));
+      wp->SetCaption(_T("Error Creating Font!"));
       wp->RefreshDisplay();
     }
   }
@@ -268,7 +268,7 @@ void SaveValues(const TCHAR * FontRegKey )
 {
   // update reg key for font
   TCHAR sValue [256];
-  wsprintf(sValue,TEXT("%d,%d,0,0,%d,%d,0,0,0,0,0,%d,%d,%s"),
+  wsprintf(sValue,_T("%d,%d,0,0,%d,%d,0,0,0,0,0,%d,%d,%s"),
                         NewLogFont.lfHeight,
                         NewLogFont.lfWidth,
                         NewLogFont.lfWeight,
@@ -286,30 +286,30 @@ void InitGUI(const TCHAR * FontDescription)
   WndProperty* wp;
 
   TCHAR sTitle[FONTEDIT_GUI_MAX_TITLE];
-  TCHAR sTitlePrefix[]=TEXT("Edit Font: ");
+  TCHAR sTitlePrefix[]=_T("Edit Font: ");
 
   _tcscpy(sTitle, sTitlePrefix);
   _tcsncpy(sTitle + _tcslen(sTitlePrefix), FontDescription,FONTEDIT_GUI_MAX_TITLE - _tcslen(sTitlePrefix) -1);
 
   wf->SetCaption(sTitle);
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontName"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("Tahoma")));
-    dfe->addEnumText(gettext(TEXT("TahomaBD")));
-    dfe->addEnumText(gettext(TEXT("DejaVu Sans Condensed")));
+    dfe->addEnumText(gettext(_T("Tahoma")));
+    dfe->addEnumText(gettext(_T("TahomaBD")));
+    dfe->addEnumText(gettext(_T("DejaVu Sans Condensed")));
     // RLD ToDo code: add more font faces, and validate their availabiliy
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontPitchAndFamily"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontPitchAndFamily"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("Default")));
-    dfe->addEnumText(gettext(TEXT("Fixed")));
-    dfe->addEnumText(gettext(TEXT("Variable")));
+    dfe->addEnumText(gettext(_T("Default")));
+    dfe->addEnumText(gettext(_T("Fixed")));
+    dfe->addEnumText(gettext(_T("Variable")));
   }
 }
 
@@ -321,7 +321,7 @@ void LoadGUI()
   int i=0;
   WndProperty* wp;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontName"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
@@ -355,7 +355,7 @@ void LoadGUI()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontHeight"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontHeight"));
   if (wp) {
     DataFieldInteger * dfi;
     dfi = (DataFieldInteger*)wp->GetDataField();
@@ -365,7 +365,7 @@ void LoadGUI()
     }
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontWeight"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontWeight"));
   if (wp) {
     DataFieldInteger* dfi;
     dfi = (DataFieldInteger*)wp->GetDataField();
@@ -375,7 +375,7 @@ void LoadGUI()
     }
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontItalic"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontItalic"));
   if (wp) {
     DataFieldBoolean* dfb;
     dfb = (DataFieldBoolean*)wp->GetDataField();
@@ -385,7 +385,7 @@ void LoadGUI()
     }
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontPitchAndFamily"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontPitchAndFamily"));
   if (wp) {
     DataFieldEnum * dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
@@ -396,7 +396,7 @@ void LoadGUI()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFontTrueType"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFontTrueType"));
   if (wp) {
     DataFieldBoolean* dfb;
     dfb = (DataFieldBoolean*)wp->GetDataField();
@@ -422,9 +422,9 @@ bool dlgFontEditShowModal(const TCHAR * FontDescription,
   IsInitialized=false;
 
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgFontEdit.xml"),
+                      _T("dlgFontEdit.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_FONTEDIT"));
+		      _T("IDR_XML_FONTEDIT"));
   if (wf == NULL)
     return false;
 

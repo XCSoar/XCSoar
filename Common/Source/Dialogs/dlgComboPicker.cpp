@@ -144,14 +144,14 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
 
     if (!Layout::landscape) {
       wf = dlgLoadFromXML(CallBackTable,
-                          TEXT("dlgComboPicker_L.xml"),
+                          _T("dlgComboPicker_L.xml"),
                           parent,
-                          TEXT("IDR_XML_COMBOPICKER_L"));
+                          _T("IDR_XML_COMBOPICKER_L"));
     } else {
       wf = dlgLoadFromXML(CallBackTable,
-                          TEXT("dlgWayComboPicker.xml"),
+                          _T("dlgWayComboPicker.xml"),
                           parent,
-                          TEXT("IDR_XML_COMBOPICKER"));
+                          _T("IDR_XML_COMBOPICKER"));
     }
 
     if (!wf) return -1;
