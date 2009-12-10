@@ -63,7 +63,7 @@ static void UpdateList(void){
   wAirspaceList->invalidate();
 }
 
-static int DrawListIndex=0;
+static unsigned DrawListIndex;
 
 static void
 OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
@@ -71,90 +71,91 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
 
   TCHAR label[40];
   (void)Sender;
-  if (DrawListIndex < AIRSPACECLASSCOUNT){
-    int i = DrawListIndex;
-    switch (i) {
-    case CLASSA:
-      _tcscpy(label, gettext(_T("Class A")));
-      break;
-    case CLASSB:
-      _tcscpy(label, gettext(_T("Class B")));
-      break;
-    case CLASSC:
-      _tcscpy(label, gettext(_T("Class C")));
-      break;
-    case CLASSD:
-      _tcscpy(label, gettext(_T("Class D")));
-      break;
-    case CLASSE:
-      _tcscpy(label, gettext(_T("Class E")));
-      break;
-    case CLASSF:
-      _tcscpy(label, gettext(_T("Class F")));
-      break;
-    case PROHIBITED:
-      _tcscpy(label, gettext(_T("Prohibited areas")));
-      break;
-    case DANGER:
-      _tcscpy(label, gettext(_T("Danger areas")));
-      break;
-    case RESTRICT:
-      _tcscpy(label, gettext(_T("Restricted areas")));
-      break;
-    case CTR:
-      _tcscpy(label, gettext(_T("CTR")));
-      break;
-    case NOGLIDER:
-      _tcscpy(label, gettext(_T("No gliders")));
-      break;
-    case WAVE:
-      _tcscpy(label, gettext(_T("Wave")));
-      break;
-    case OTHER:
-      _tcscpy(label, gettext(_T("Other")));
-      break;
-    case AATASK:
-      _tcscpy(label, gettext(_T("AAT")));
-      break;
-    };
 
-    int w1, w2, x0;
-    int w0 = Layout::FastScale(Layout::landscape ? 202 : 225);
+  if (DrawListIndex >= AIRSPACECLASSCOUNT)
+    return;
 
-    w1 = canvas.text_width(gettext(_T("Warn"))) + Layout::FastScale(10);
-    w2 = canvas.text_width(gettext(_T("Display"))) + Layout::FastScale(10);
-    x0 = w0-w1-w2;
+  int i = DrawListIndex;
+  switch (i) {
+  case CLASSA:
+    _tcscpy(label, gettext(_T("Class A")));
+    break;
+  case CLASSB:
+    _tcscpy(label, gettext(_T("Class B")));
+    break;
+  case CLASSC:
+    _tcscpy(label, gettext(_T("Class C")));
+    break;
+  case CLASSD:
+    _tcscpy(label, gettext(_T("Class D")));
+    break;
+  case CLASSE:
+    _tcscpy(label, gettext(_T("Class E")));
+    break;
+  case CLASSF:
+    _tcscpy(label, gettext(_T("Class F")));
+    break;
+  case PROHIBITED:
+    _tcscpy(label, gettext(_T("Prohibited areas")));
+    break;
+  case DANGER:
+    _tcscpy(label, gettext(_T("Danger areas")));
+    break;
+  case RESTRICT:
+    _tcscpy(label, gettext(_T("Restricted areas")));
+    break;
+  case CTR:
+    _tcscpy(label, gettext(_T("CTR")));
+    break;
+  case NOGLIDER:
+    _tcscpy(label, gettext(_T("No gliders")));
+    break;
+  case WAVE:
+    _tcscpy(label, gettext(_T("Wave")));
+    break;
+  case OTHER:
+    _tcscpy(label, gettext(_T("Other")));
+    break;
+  case AATASK:
+    _tcscpy(label, gettext(_T("AAT")));
+    break;
+  };
 
-    canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
-                        x0 - Layout::FastScale(10), label);
+  int w1, w2, x0;
+  int w0 = Layout::FastScale(Layout::landscape ? 202 : 225);
 
-    if (colormode) {
+  w1 = canvas.text_width(gettext(_T("Warn"))) + Layout::FastScale(10);
+  w2 = canvas.text_width(gettext(_T("Display"))) + Layout::FastScale(10);
+  x0 = w0-w1-w2;
 
-      canvas.white_pen();
-      canvas.set_text_color(MapGfx.GetAirspaceColourByClass(i,
-                              XCSoarInterface::SettingsMap()));
-      canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
-      canvas.select(MapGfx.GetAirspaceBrushByClass(i,
-                      XCSoarInterface::SettingsMap()));
-      canvas.rectangle(x0, Layout::FastScale(2),
-                       w0, Layout::FastScale(22));
+  canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+                      x0 - Layout::FastScale(10), label);
 
-    } else {
+  if (colormode) {
 
-      bool iswarn;
-      bool isdisplay;
+    canvas.white_pen();
+    canvas.set_text_color(MapGfx.GetAirspaceColourByClass(i,
+                                                          XCSoarInterface::SettingsMap()));
+    canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
+    canvas.select(MapGfx.GetAirspaceBrushByClass(i,
+                                                 XCSoarInterface::SettingsMap()));
+    canvas.rectangle(x0, Layout::FastScale(2),
+                     w0, Layout::FastScale(22));
 
-      iswarn = (XCSoarInterface::SettingsComputer().iAirspaceMode[i]>=2);
-      isdisplay = ((XCSoarInterface::SettingsComputer().iAirspaceMode[i]%2)>0);
-      if (iswarn) {
-        _tcscpy(label, gettext(_T("Warn")));
-        canvas.text_opaque(w0 - w1 - w2, Layout::FastScale(2), label);
-      }
-      if (isdisplay) {
-        _tcscpy(label, gettext(_T("Display")));
-        canvas.text_opaque(w0 - w2, Layout::FastScale(2), label);
-      }
+  } else {
 
+    bool iswarn;
+    bool isdisplay;
+
+    iswarn = (XCSoarInterface::SettingsComputer().iAirspaceMode[i]>=2);
+    isdisplay = ((XCSoarInterface::SettingsComputer().iAirspaceMode[i]%2)>0);
+    if (iswarn) {
+      _tcscpy(label, gettext(_T("Warn")));
+      canvas.text_opaque(w0 - w1 - w2, Layout::FastScale(2), label);
+    }
+    if (isdisplay) {
+      _tcscpy(label, gettext(_T("Display")));
+      canvas.text_opaque(w0 - w2, Layout::FastScale(2), label);
     }
 
   }

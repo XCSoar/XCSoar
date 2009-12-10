@@ -54,22 +54,25 @@ static void UpdateList(void){
   wAirspaceColoursList->invalidate();
 }
 
-static int DrawListIndex=0;
+static unsigned DrawListIndex;
 
 static void
 OnAirspaceColoursPaintListItem(WindowControl * Sender, Canvas &canvas)
 {
   (void)Sender;
-  if ((DrawListIndex < NUMAIRSPACECOLORS) &&(DrawListIndex>=0)) {
-    int i = DrawListIndex;
-    canvas.white_brush();
-    canvas.black_pen();
-    canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
-    canvas.select(MapGfx.GetAirspaceBrush(1)); // this is the solid brush
-    canvas.set_text_color(MapGfx.GetAirspaceColour(i));
-    canvas.rectangle(Layout::FastScale(100), Layout::FastScale(2),
-                     Layout::FastScale(180), Layout::FastScale(22));
-  }
+
+  if (DrawListIndex >= NUMAIRSPACECOLORS)
+    return;
+
+  const int i = DrawListIndex;
+
+  canvas.white_brush();
+  canvas.black_pen();
+  canvas.set_background_color(Color::WHITE);
+  canvas.select(MapGfx.GetAirspaceBrush(1)); // this is the solid brush
+  canvas.set_text_color(MapGfx.GetAirspaceColour(i));
+  canvas.rectangle(Layout::FastScale(100), Layout::FastScale(2),
+                   Layout::FastScale(180), Layout::FastScale(22));
 }
 
 

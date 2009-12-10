@@ -54,22 +54,24 @@ static void UpdateList(void){
   wAirspacePatternsList->invalidate();
 }
 
-static int DrawListIndex=0;
+static unsigned DrawListIndex;
 
 static void
 OnAirspacePatternsPaintListItem(WindowControl *Sender, Canvas &canvas)
 {
   (void)Sender;
-  if ((DrawListIndex < NUMAIRSPACEBRUSHES) &&(DrawListIndex>=0)) {
-    int i = DrawListIndex;
 
-    canvas.black_pen();
-    canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
-    canvas.select(MapGfx.GetAirspaceBrush(i));
-    canvas.set_text_color(Color(0x00,0x00, 0x00));
-    canvas.rectangle(Layout::FastScale(100), Layout::FastScale(2),
-                     Layout::FastScale(180), Layout::FastScale(22));
-  }
+  if (DrawListIndex >= NUMAIRSPACEBRUSHES)
+    return;
+
+  const int i = DrawListIndex;
+
+  canvas.black_pen();
+  canvas.set_background_color(Color::WHITE);
+  canvas.select(MapGfx.GetAirspaceBrush(i));
+  canvas.set_text_color(Color::BLACK);
+  canvas.rectangle(Layout::FastScale(100), Layout::FastScale(2),
+                   Layout::FastScale(180), Layout::FastScale(22));
 }
 
 
