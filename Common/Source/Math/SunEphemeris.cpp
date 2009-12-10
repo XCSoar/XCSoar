@@ -184,8 +184,8 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
   (void)Calculated;
 
   //float intz;
-  double d, lambda;
-  double obliq, alpha, delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
+  double DaysToJ2000, Lambda;
+  double Obliquity, Alpha, Delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
   int Year, Month, Day, Hour;
 
   // testing
@@ -199,28 +199,28 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
   Hour = ((int)Basic.Time) / 3600;
   Hour = (Hour % 24);
 
-  d = FNday(Year, Month, Day, (float)Hour);
+  DaysToJ2000 = FNday(Year, Month, Day, (float)Hour);
 
   // Use FNsun to find the ecliptic longitude of the Sun
-  lambda = FNsun(d);
+  Lambda = FNsun(DaysToJ2000);
 
   // Obliquity of the ecliptic
-  obliq = 23.439 * DEG_TO_RAD - .0000004 * DEG_TO_RAD * d;
+  Obliquity = 23.439 * DEG_TO_RAD - .0000004 * DEG_TO_RAD * DaysToJ2000;
 
   // Find the RA and DEC of the Sun
-  alpha = atan2(cos(obliq) * sin(lambda), cos(lambda));
-  delta = asin(sin(obliq) * sin(lambda));
+  Alpha = atan2(cos(Obliquity) * sin(Lambda), cos(Lambda));
+  Delta = asin(sin(Obliquity) * sin(Lambda));
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
-  LL = L - alpha;
+  LL = L - Alpha;
   if (L < M_PI)
     LL += 2.0 * M_PI;
 
   equation = 1440.0 * (1.0 - LL / M_PI / 2.0);
 
-  HourAngle = f0(Location.Latitude, delta);
-  HourAngleTwilight = f1(Location.Latitude, delta);
+  HourAngle = f0(Location.Latitude, Delta);
+  HourAngleTwilight = f1(Location.Latitude, Delta);
 
   // length of twilight in radians
   TwilightHours = HourAngleTwilight - HourAngle;
@@ -243,11 +243,11 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
       - Location.Longitude / 15.0 + equation / 60.0;
 
   TimeOfNoon = TimeOfSunRise + 12.0 * HourAngle / M_PI;
-  altmax = 90.0 + delta * RAD_TO_DEG - Location.Latitude;
+  altmax = 90.0 + Delta * RAD_TO_DEG - Location.Latitude;
 
   // Correction for southern hemisphere suggested by David Smith
   // to express altitude as degrees from the N horizon
-  if (Location.Latitude < delta * RAD_TO_DEG)
+  if (Location.Latitude < Delta * RAD_TO_DEG)
     altmax = 180.0 - altmax;
 
   // morning twilight begin
