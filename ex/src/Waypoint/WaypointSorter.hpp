@@ -8,10 +8,10 @@
  * Structure to hold Waypoint sorting information
  */
 struct WayPointSelectInfo {
-  const Waypoint* way_point;
-  fixed Distance;
-  fixed Direction;
-  unsigned int FourChars;
+  const Waypoint* way_point; /**< Pointer to actual waypoint (unprotected!) */
+  fixed Distance; /**< Distance in user units from observer to waypoint */
+  fixed Direction; /**< Bearing (deg true north) from observer to waypoint */
+  unsigned int FourChars; /**< Fast access of first four characters of name */
 };
 
 typedef std::vector<WayPointSelectInfo> WaypointSelectInfoVector;

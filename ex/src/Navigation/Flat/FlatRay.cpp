@@ -38,11 +38,12 @@
 
 #define sgn(x) (x>0? 1:-1)
 
-/**
+/*
  * Checks whether two lines 
  * intersect or not
  * @see http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
  * adapted from line_line_intersection
+ *
  */
 fixed
 FlatRay::intersects (const FlatRay &that) const

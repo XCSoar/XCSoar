@@ -105,6 +105,7 @@ struct GeoVector {
    * Returns the location of a point from source along vector at distance
    *
    * @param source start of vector
+   * @param distance Great circle distance (m) from source at which to find intermediate point
    * @return location of point
    */
   GEOPOINT intermediate_point(const GEOPOINT &source, const fixed distance) const;

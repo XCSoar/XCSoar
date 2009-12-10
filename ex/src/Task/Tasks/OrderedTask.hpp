@@ -65,7 +65,8 @@ class OrderedTask:
 public:
   friend class TaskDijkstra;
 
-  typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector;
+  typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector; /**< Storage type of task points */ 
+
   /** 
    * Constructor.
    *

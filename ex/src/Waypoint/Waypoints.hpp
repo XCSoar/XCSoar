@@ -88,7 +88,8 @@ public:
  * Replace waypoint from the internal store.  Requires optimise() to
  * be called afterwards.
  * 
- * @param wp Waypoint to erase from internal store
+ * @param orig Waypoint that will be replaced
+ * @param replacement New waypoint 
  */
   void replace(const Waypoint& orig, Waypoint& replacement);
 
@@ -191,7 +192,7 @@ public:
 /** 
  * Look up waypoint by name (returns first match)
  * 
- * @param loc Name of waypoint to find in internal tree
+ * @param name Name of waypoint to find in internal tree
  * 
  * @return Pointer to waypoint if found (or NULL if not)
  */

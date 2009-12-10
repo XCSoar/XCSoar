@@ -137,7 +137,7 @@ public:
   /**
    * Equality operator (by id)
    * 
-   * @param wp Waypoint object to match against
+   * @param wpe Waypoint object to match against
    *
    * @return true if ids match
    */

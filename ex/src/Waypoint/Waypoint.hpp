@@ -49,17 +49,18 @@ class TaskProjection;
 
 /** 
  * Bitfield structure for Waypoint capabilities
- * 
+ * Several of these capabilities are not used by XCSoar, but are
+ * present for compatibility
  */
 struct WaypointFlags {
-  unsigned int Airport:1;
-  unsigned int TurnPoint:1;
-  unsigned int LandPoint:1;
-  unsigned int Home:1;
-  unsigned int StartPoint:1;
-  unsigned int FinishPoint:1;
-  unsigned int Restricted:1;
-  unsigned int WaypointFlag:1;
+  unsigned int Airport:1; /**< If waypoint is an airport/airfield */
+  unsigned int TurnPoint:1; /**< If waypoint can be used as a turnpoint */
+  unsigned int LandPoint:1; /**< If waypoint can be landed at */
+  unsigned int Home:1; /**< If waypoint is to be used as home */
+  unsigned int StartPoint:1; /**< If waypoint is marked as a potential start point */
+  unsigned int FinishPoint:1; /**< If waypoint is marked as a potential finish point */
+  unsigned int Restricted:1; /**< If waypoint is marked for restricted access (unused?) */
+  unsigned int WaypointFlag:1; /**< ??? */
 };
 
 
@@ -94,6 +95,11 @@ public:
   tstring Comment; /**< Additional comment text for waypoint */
   tstring Details; /**< Airfield or additional (long) details */
 
+  /** 
+   * Determine if waypoint is marked as able to be landed at
+   * 
+   * @return True if waypoint is landable
+   */
   bool is_landable() const {
     return Flags.LandPoint || Flags.Airport;
   }
