@@ -76,16 +76,6 @@ WndForm::WndForm(ContainerWindow *Parent,
 
 }
 
-WndForm::~WndForm(void){
-  // animation
-
-  if (mClientWindow)
-    mClientWindow->SetVisible(false);
-
-  kill_timer(cbTimerID);
-}
-
-
 ContainerWindow &
 WndForm::GetClientAreaWindow(void)
 {
