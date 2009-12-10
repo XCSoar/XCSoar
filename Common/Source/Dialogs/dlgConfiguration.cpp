@@ -338,8 +338,9 @@ static void OnSetupDeviceBClicked(WindowControl * Sender){
     wf->FocusNext(NULL);
 }
 
-static void UpdateDeviceSetupButton(int DeviceIdx, TCHAR *Name){
-
+static void
+UpdateDeviceSetupButton(int DeviceIdx, const TCHAR *Name)
+{
   WndButton *wb;
 
   if (DeviceIdx == 0){
