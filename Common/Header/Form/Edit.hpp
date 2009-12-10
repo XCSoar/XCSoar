@@ -127,6 +127,10 @@ public:
     return mDataField;
   }
 
+  const DataField *GetDataField(void) const {
+    return mDataField;
+  }
+
   DataField *SetDataField(DataField *Value);
   void SetText(const TCHAR *Value);
   int SetButtonSize(int Value);

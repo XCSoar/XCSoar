@@ -110,9 +110,9 @@ static void LoadIntoForm(WndForm &form, const SETTINGS_COMPUTER &settings){
 }
 
 static bool SaveFromForm(WndForm &form, SETTINGS_COMPUTER &settings){
-  WndProperty* wp;
+  const WndProperty* wp;
   bool changed = false;
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceClimbRate"));
+  wp = (const WndProperty*)form.FindByName(_T("prpVoiceClimbRate"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceClimbRate) {
       settings.EnableVoiceClimbRate = wp->GetDataField()->GetAsBoolean();
@@ -121,7 +121,7 @@ static bool SaveFromForm(WndForm &form, SETTINGS_COMPUTER &settings){
     }
   }
   
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceTerrain"));
+  wp = (const WndProperty*)form.FindByName(_T("prpVoiceTerrain"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceTerrain) {
       settings.EnableVoiceTerrain = wp->GetDataField()->GetAsBoolean();
@@ -130,7 +130,7 @@ static bool SaveFromForm(WndForm &form, SETTINGS_COMPUTER &settings){
     }
   }
   
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceWaypointDistance"));
+  wp = (const WndProperty*)form.FindByName(_T("prpVoiceWaypointDistance"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceWaypointDistance) {
       settings.EnableVoiceWaypointDistance = wp->GetDataField()->GetAsBoolean();
@@ -139,7 +139,7 @@ static bool SaveFromForm(WndForm &form, SETTINGS_COMPUTER &settings){
     }
   }
   
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceTaskAltitudeDifference"));
+  wp = (const WndProperty*)form.FindByName(_T("prpVoiceTaskAltitudeDifference"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceTaskAltitudeDifference) {
       settings.EnableVoiceTaskAltitudeDifference = wp->GetDataField()->GetAsBoolean();
@@ -148,7 +148,7 @@ static bool SaveFromForm(WndForm &form, SETTINGS_COMPUTER &settings){
     }
    }
  
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceMacCready"));
+  wp = (const WndProperty*)form.FindByName(_T("prpVoiceMacCready"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceMacCready) {
       settings.EnableVoiceMacCready = wp->GetDataField()->GetAsBoolean();
@@ -157,7 +157,7 @@ static bool SaveFromForm(WndForm &form, SETTINGS_COMPUTER &settings){
     }
   }
   
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceNewWaypoint"));
+  wp = (const WndProperty*)form.FindByName(_T("prpVoiceNewWaypoint"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceNewWaypoint) {
       settings.EnableVoiceNewWaypoint = wp->GetDataField()->GetAsBoolean();
@@ -166,7 +166,7 @@ static bool SaveFromForm(WndForm &form, SETTINGS_COMPUTER &settings){
     }
   }
   
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceInSector"));
+  wp = (const WndProperty*)form.FindByName(_T("prpVoiceInSector"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceInSector) {
       settings.EnableVoiceInSector = wp->GetDataField()->GetAsBoolean();
@@ -175,7 +175,7 @@ static bool SaveFromForm(WndForm &form, SETTINGS_COMPUTER &settings){
     }
   }
   
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceAirspace"));
+  wp = (const WndProperty*)form.FindByName(_T("prpVoiceAirspace"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceAirspace) {
       settings.EnableVoiceAirspace = wp->GetDataField()->GetAsBoolean();
