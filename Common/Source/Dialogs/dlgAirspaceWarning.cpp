@@ -703,16 +703,10 @@ int dlgAirspaceWarningInit(void){
 
   AirspaceWarnListAddNotifier(AirspaceWarningNotify);
 
-  wf->Close();  // hide the window
-
   return(res);
 }
 
 int dlgAirspaceWarningDeInit(void){
-
-  if (wf)
-    wf->SetVisible(false);
-
   AirspaceWarnListRemoveNotifier(AirspaceWarningNotify);
 
   delete wf;
