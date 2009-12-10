@@ -15,5 +15,7 @@ covstart:	FORCE
 
 cov:	FORCE
 	@$(NQ)echo "coverage report"
+	echo $(COVEND)
+	echo $(COVPROC)
 	@$(Q)$(COVEND)
 	@$(Q)$(COVPROC)

@@ -108,13 +108,20 @@ public:
   };
 
   /** 
-   * Checks whether an aircraft is inside the airspace.  First
-   * performs bounding box search, then if successful refines the
-   * search by directing the query to the enclosed concrete airspace.
-   * 
+   * Checks whether an aircraft is inside the airspace. 
+   *
    * @param loc Location to check for enclosure
    * 
    * @return true if aircraft is inside airspace
+   */
+  bool inside(const AIRCRAFT_STATE &loc) const;
+
+  /** 
+   * Checks whether a point is inside the airspace lateral boundary. 
+   *
+   * @param loc Location to check for enclosure
+   * 
+   * @return true if location is inside airspace
    */
   bool inside(const GEOPOINT &loc) const;
 

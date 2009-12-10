@@ -3,16 +3,16 @@
 AirspaceInterceptSolution 
 AirspaceSoonestSort::solve_intercept(const AbstractAirspace &a) const
 {
-  fixed time_to_intercept = m_max_time;
-  AirspaceInterceptSolution sol;
-  sol.location = a.closest_point(m_state.Location);
+  const GEOPOINT loc = a.closest_point(m_state.Location);
 
-  if (a.intercept_vertical(m_state,
-                           sol.location,
-                           m_perf,
-                           time_to_intercept,
-                           sol.altitude)) {
-    sol.elapsed_time = time_to_intercept;
+  AirspaceInterceptSolution sol;
+  bool valid = a.intercept(m_state, m_perf, sol, loc, loc);
+
+  if (sol.elapsed_time > m_max_time) {
+    valid = false;
+  }
+  if (!valid) {
+    sol.elapsed_time = -fixed_one;
   }
   return sol;
 }
@@ -29,4 +29,3 @@ AirspaceSoonestSort::find_nearest(const Airspaces &airspaces)
   const fixed range = m_perf.max_speed()*m_max_time;
   return AirspaceNearestSort::find_nearest(airspaces, range);
 }
-

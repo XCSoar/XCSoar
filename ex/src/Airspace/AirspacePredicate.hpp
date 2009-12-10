@@ -3,6 +3,7 @@
 
 class AbstractAirspace;
 class AirspacePredicateTrue;
+class AIRCRAFT_STATE;
 
 /**
  *  Functor class for conditions to be applied to airspace queries
@@ -37,6 +38,18 @@ class AirspacePredicateTrue: public AirspacePredicate
 public:
   bool operator()( const AbstractAirspace& t ) const { return true; }
 
+};
+
+/**
+ * Convenience predicate for conditions always true
+ */
+class AirspacePredicateAircraftInside: public AirspacePredicate
+{
+public:
+  AirspacePredicateAircraftInside(const AIRCRAFT_STATE& state);
+  bool operator()( const AbstractAirspace& t ) const;
+private:
+  const AIRCRAFT_STATE& m_state;
 };
 
 #endif

@@ -36,6 +36,23 @@
 */
 #include "AbstractAirspace.hpp"
 
+
+/*
+  NewCircle->Ack.AcknowledgedToday = false;
+  NewCircle->Ack.AcknowledgementTime = 0;
+  NewCircle->_NewWarnAckNoBrush = false;
+*/
+
+
+bool 
+AbstractAirspace::inside(const AIRCRAFT_STATE& state) const
+{
+  return ((state.Altitude >= m_base.Altitude) &&
+          (state.Altitude <= m_top.Altitude) &&
+          inside(state.Location));
+}
+
+
 void 
 AbstractAirspace::set_ground_level(const fixed alt) 
 {
@@ -52,28 +69,157 @@ AbstractAirspace::set_flight_level(const AtmosphericPressure &press)
 }
 
 
-bool 
+AirspaceInterceptSolution 
 AbstractAirspace::intercept_vertical(const AIRCRAFT_STATE &state,
-                                     const GEOPOINT& loc,
                                      const AirspaceAircraftPerformance& perf,
-                                     fixed &time_to_intercept,
-                                     fixed &intercept_height) const
+                                     const fixed& distance) const
 {
-  const fixed distance = state.Location.distance(loc);
-  const fixed t_this = perf.solution_vertical(distance, state.Altitude,
-                                              m_base.Altitude, m_top.Altitude,
-                                              intercept_height);
-  
-  if (!negative(t_this) && (t_this<=time_to_intercept)) {
-    time_to_intercept = t_this;
-    return true;
+  AirspaceInterceptSolution solution;
+  solution.distance = distance;
+  solution.elapsed_time = perf.solution_vertical(solution.distance, 
+                                                 state.Altitude,
+                                                 m_base.Altitude, 
+                                                 m_top.Altitude,
+                                                 solution.altitude);
+  return solution;
+}
+
+
+AirspaceInterceptSolution 
+AbstractAirspace::intercept_horizontal(const AIRCRAFT_STATE &state,
+                                       const AirspaceAircraftPerformance& perf,
+                                       const fixed& distance_start,
+                                       const fixed& distance_end,
+                                       const bool lower) const
+{
+  AirspaceInterceptSolution solution;
+
+  if (lower && m_base.is_terrain()) {
+    // impossible to be lower than terrain
+    return solution;
   }
-  return false;
+
+  solution.altitude = lower? m_base.Altitude: m_top.Altitude;
+  solution.elapsed_time = perf.solution_horizontal(distance_start, 
+                                                   distance_end,
+                                                   state.Altitude,
+                                                   solution.altitude,
+                                                   solution.distance);
+  return solution;
+}
+
+
+bool 
+AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
+                            const AirspaceAircraftPerformance& perf,
+                            AirspaceInterceptSolution &solution,
+                            const GEOPOINT& loc_start,
+                            const GEOPOINT& loc_end) const
+{
+  const fixed distance_start = state.Location.distance(loc_start);
+  const fixed distance_end = (loc_start==loc_end)? 
+    distance_start:state.Location.distance(loc_end);
+
+  AirspaceInterceptSolution solution_this;
+
+  if (state.Altitude > m_top.Altitude) {
+    // need to scan for top only
+    solution_this = intercept_horizontal(state, perf, distance_start, distance_end, false);
+
+  } else if (state.Altitude < m_base.Altitude) {
+    // need to scan for bottom only
+    solution_this = intercept_horizontal(state, perf, distance_start, distance_end, true);
+
+  } else if (positive(distance_start)) {
+    // need to scan for nearest only
+    solution_this = intercept_vertical(state, perf, distance_start);
+
+  } else {
+    // need to scan three sides, top, far, bottom (if not terrain)
+
+    AirspaceInterceptSolution solution_candidate;
+    solution_candidate = intercept_vertical(state, perf, distance_end);
+    if (solution_candidate.valid() && 
+        ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
+         negative(solution_this.elapsed_time))) {
+
+      solution_this = solution_candidate;
+    }
+
+    solution_candidate = intercept_horizontal(state, perf, distance_start, distance_end, false);
+    if (solution_candidate.valid() && 
+        ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
+         negative(solution_this.elapsed_time))) {
+      solution_this = solution_candidate;
+    }
+
+    if (!m_base.is_terrain()) {
+      solution_candidate = intercept_horizontal(state, perf, distance_start, distance_end, true);
+      if (solution_candidate.valid() && 
+          ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
+           negative(solution_this.elapsed_time))) {
+        solution_this = solution_candidate;
+      }
+    }
+  }
+  if (solution_this.valid()) {
+    solution = solution_this;
+    if (solution.distance == distance_start) {
+      solution.location = loc_start;
+    } else if (solution.distance == distance_end) {
+      solution.location = loc_end;
+    } else if (distance_end>distance_start) {
+      const fixed t = solution.distance / distance_end;
+      solution.location = loc_start+(loc_end-loc_start)*t;
+    } else {
+      solution.location = loc_start;
+    }
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+bool 
+AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
+                            const GeoVector& vec,
+                            const AirspaceAircraftPerformance& perf,
+                            AirspaceInterceptSolution &solution) const
+{
+  AirspaceIntersectionVector vis = intersects(state.Location, vec, true);
+  if (vis.empty()) {
+    return false;
+  }
+
+  AirspaceInterceptSolution this_solution;
+  for (AirspaceIntersectionVector::const_iterator it = vis.begin();
+       it != vis.end(); ++it) {
+    const GEOPOINT p1 = (it->first);
+    const GEOPOINT p2 = (it->second);
+    intercept(state, perf, this_solution, p1, p2);
+  }
+
+  if (this_solution.valid()) {
+    solution = this_solution;
+    return true;
+  } else {
+    return false;
+  }
 }
 
 
 /*
-  NewCircle->Ack.AcknowledgedToday = false;
-  NewCircle->Ack.AcknowledgementTime = 0;
-  NewCircle->_NewWarnAckNoBrush = false;
+  const GEOPOINT p_start;
+  const GEOPOINT p_end;
+
+  if (loc_start == state.Location) {
+    if (inside(state.Location)) {
+      p_start = state.Location;
+    } else {
+      p_start = closest_point(state.Location);
+    }
+  }
 */
+
+

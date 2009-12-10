@@ -10,21 +10,6 @@
 class AirspaceVisitor;
 class Airspaces;
 
-struct AirspaceInterceptSolution {
-  /**
-   *  Constructor, initialises to invalid solution
-   */
-  AirspaceInterceptSolution():
-    distance(-fixed_one),
-    altitude(-fixed_one),
-    elapsed_time(-fixed_one) {};
-
-  GEOPOINT location;
-  fixed distance;
-  fixed altitude;
-  fixed elapsed_time;
-};
-
 /**
  *  Class to sort nearest airspaces by distance to closest point.
  *  Not intended to be called repeatedly; intended as temporary object

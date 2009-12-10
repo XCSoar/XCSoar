@@ -187,7 +187,7 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state,
     count_intersections++;
 #endif
     
-    if (!condition(*v->get_airspace()) || !(*v).inside(state.Location)) {
+    if (!condition(*v->get_airspace()) || !(*v).inside(state)) {
       vectors.erase(v);
     } else {
       ++v;

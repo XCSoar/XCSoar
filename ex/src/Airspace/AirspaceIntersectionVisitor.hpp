@@ -40,6 +40,9 @@
 #include "AirspaceVisitor.hpp"
 #include "AbstractAirspace.hpp"
 
+class AIRCRAFT_STATE;
+class AirspaceAircraftPerformance;
+
 /**
  * Generic visitor for objects in the Airspaces container,
  * for intersection queries.  Sets m_point_intersect by caller.
@@ -62,6 +65,19 @@ public:
   }
 protected:
   AirspaceIntersectionVector m_intersections; /**< Vector of accumulated intersection pairs */ 
+
+/** 
+ * Find intercept solution of first pair of intersections.
+ * 
+ * @param as Airspace to test
+ * @param state Aircraft state
+ * @param perf Performance of aircraft for query
+ * 
+ * @return Solution if any
+ */
+  AirspaceInterceptSolution intercept(const AbstractAirspace& as,
+                                      const AIRCRAFT_STATE& state,
+                                      const AirspaceAircraftPerformance &perf) const;
 };
 
 #endif

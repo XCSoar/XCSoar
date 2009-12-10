@@ -12,6 +12,7 @@ TASK_SRC	:=\
 	$(topdir)/src/Airspace/AirspaceSoonestSort.cpp \
 	$(topdir)/src/Airspace/AirspacePredicate.cpp \
 	$(topdir)/src/Airspace/AirspaceVisitor.cpp \
+	$(topdir)/src/Airspace/AirspaceIntersectionVisitor.cpp \
 	$(topdir)/src/Atmosphere/Pressure.cpp \
 	$(topdir)/src/GlideSolvers/GlideState.cpp \
 	$(topdir)/src/GlideSolvers/GlidePolar.cpp \

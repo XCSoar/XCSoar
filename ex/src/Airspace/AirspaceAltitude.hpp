@@ -28,6 +28,15 @@ struct AIRSPACE_ALT
   AirspaceAltBase_t Base; /**< Type of airspace boundary */
 
 /** 
+ * Test whether airspace boundary is the terrain
+ * 
+ * @return True if this altitude limit is the terrain
+ */
+  bool is_terrain() const {
+    return (!positive(AGL) && (Base==abAGL));
+  }
+
+/** 
  * Set height of terrain for AGL-referenced airspace;
  * this sets Altitude and must be called before AGL-referenced
  * airspace is considered initialised.

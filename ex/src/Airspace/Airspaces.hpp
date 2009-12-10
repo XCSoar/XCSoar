@@ -64,7 +64,6 @@ public:
   /** 
    * Constructor.
    * Note this class can't safely be copied (yet)
-   * Note: altitude not used yet, this is a 2-D representation currently
    * 
    * @return empty Airspaces class.
    */
@@ -115,10 +114,25 @@ public:
  */
   bool empty() const;
 
+
+  /** 
+   * Set terrain altitude for all AGL-referenced airspace altitudes 
+   * 
+   * @param terrain Terrain model for lookup
+   */
+  void set_ground_levels(const RasterTerrain &terrain);
+
+  /** 
+   * Set QNH pressure for all FL-referenced airspace altitudes.
+   * Doesn't do anything if QNH is unchanged
+   * 
+   * @param press Atmospheric pressure model and QNH
+   */
+  void set_flight_levels(const AtmosphericPressure &press);
+
   /** 
    * Call visitor class on airspaces within range of location.
    * Note that the visitor is not instantiated separately for each match
-   * Note: altitude not used yet
    * 
    * @param loc location of origin of search
    * @param range distance in meters of search radius
@@ -131,7 +145,6 @@ public:
   /** 
    * Call visitor class on airspaces intersected by vector.
    * Note that the visitor is not instantiated separately for each match
-   * Note: altitude not used yet
    * 
    * @param loc location of origin of search
    * @param vec vector of line along with to search for intersections
@@ -144,21 +157,7 @@ public:
                           const bool fill_end=false) const;
 
   /** 
-   * Search for airspaces nearest to the aircraft.
-   * Note: altitude not used yet
-   * 
-   * @param state state of aircraft, from which to search
-   * @param condition condition to be applied to matches
-   * 
-   * @return single nearest airspace if external, or all airspaces enclosing the aircraft
-   */
-  const AirspaceVector scan_nearest(const AIRCRAFT_STATE &state,
-                                    const AirspacePredicate &condition
-                                    =AirspacePredicate::always_true) const;
-
-  /** 
    * Search for airspaces within range of the aircraft.
-   * Note: altitude not used yet
    * 
    * @param state state of aircraft, from which to search
    * @param range distance in meters of search radius
@@ -172,8 +171,19 @@ public:
                                   =AirspacePredicate::always_true) const;
 
   /** 
-   * Find airspaces the aircraft is inside.
-   * Note: altitude not used yet
+   * Search for airspaces nearest to the aircraft.
+   * 
+   * @param state state of aircraft, from which to search
+   * @param condition condition to be applied to matches
+   * 
+   * @return single nearest airspace if external, or all airspaces enclosing the aircraft
+   */
+  const AirspaceVector scan_nearest(const AIRCRAFT_STATE &state,
+                                    const AirspacePredicate &condition
+                                    =AirspacePredicate::always_true) const;
+
+  /** 
+   * Find airspaces the aircraft is inside (taking altitude into account)
    * 
    * @param state state of aircraft for which to search
    * @param condition condition to be applied to matches
@@ -183,21 +193,6 @@ public:
   const AirspaceVector find_inside(const AIRCRAFT_STATE &state,
                                    const AirspacePredicate &condition
                                    =AirspacePredicate::always_true) const;
-
-  /** 
-   * Set terrain altitude for AGL-referenced airspace altitudes 
-   * 
-   * @param terrain Terrain model for lookup
-   */
-  void set_ground_levels(const RasterTerrain &terrain);
-
-  /** 
-   * Set QNH pressure for FL-referenced airspace altitudes.
-   * Doesn't do anything if QNH is unchanged
-   * 
-   * @param press Atmospheric pressure model and QNH
-   */
-  void set_flight_levels(const AtmosphericPressure &press);
 
 private:
 

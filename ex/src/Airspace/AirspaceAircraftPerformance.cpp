@@ -113,7 +113,7 @@ AirspaceAircraftPerformance::solution_vertical(const fixed& distance,
       intercept_alt = top;
       return t_this;
     }
-  }
+  } 
   AirspaceAircraftInterceptVertical aaiv(*this,
                                          distance,
                                          altitude,

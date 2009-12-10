@@ -47,6 +47,26 @@
 
 class AtmosphericPressure;
 
+struct AirspaceInterceptSolution {
+  /**
+   *  Constructor, initialises to invalid solution
+   */
+  AirspaceInterceptSolution():
+    distance(-fixed_one),
+    altitude(-fixed_one),
+    elapsed_time(-fixed_one) {};
+
+  bool valid() const {
+    return !negative(elapsed_time);
+  };
+
+  GEOPOINT location;
+  fixed distance;
+  fixed altitude;
+  fixed elapsed_time;
+};
+
+
 #include <vector>
 typedef std::vector< std::pair<GEOPOINT,GEOPOINT> > AirspaceIntersectionVector;
 
@@ -87,14 +107,24 @@ public:
   virtual const GEOPOINT get_center() const = 0;
 
   /** 
-   * Checks whether an observer is inside the airspace.
+   * Checks whether an observer is inside the airspace (no altitude taken into account)
    * This is slow because it uses geodesic calculations
    * 
    * @param loc State about which to test inclusion
    * 
-   * @return true if aircraft is inside airspace boundary
+   * @return true if observer is inside airspace boundary
    */
   virtual bool inside(const GEOPOINT &loc) const = 0;
+
+  /** 
+   * Checks whether an observer is inside the airspace (altitude is taken into account)
+   * This calls inside(state.location) so can be slow.
+   * 
+   * @param state State about which to test inclusion
+   * 
+   * @return true if aircraft is inside airspace boundaries
+   */
+  virtual bool inside(const AIRCRAFT_STATE& state) const;
 
   /** 
    * Checks whether a line intersects with the airspace.
@@ -119,26 +149,6 @@ public:
  */
   virtual GEOPOINT closest_point(const GEOPOINT& loc) const
     = 0;
-
-/**
- * Find time/distance to specified point on the boundary from an observer
- * given a simplified performance model.  If inside the airspace, this will
- * give the time etc to exit (it cares not about interior/exterior, only minimum
- * time to reach the specified location)
- *
- * @param state Aircraft state
- * @param loc Location of point on/in airspace to query
- * @param perf Aircraft performance model
- * @param time_to_intercept On entry, maximum time, on exit, 
- *                          time of this intercept (if within range)
- * @param intercept_height Height of intercept (m), if within time limit
- * @return True if intercept possible
- */
-  bool intercept_vertical(const AIRCRAFT_STATE &state,
-                          const GEOPOINT& loc,
-                          const AirspaceAircraftPerformance& perf,
-                          fixed &time_to_intercept,
-                          fixed &intercept_height) const;
 
   /** 
    * Set terrain altitude for AGL-referenced airspace altitudes 
@@ -199,6 +209,44 @@ public:
     return m_top.Altitude;
   }
 
+/**
+ * Find time/distance/height to airspace from an observer given a
+ * simplified performance model and the boundary start/end points.  If
+ * inside the airspace, this will give the time etc to exit (it cares
+ * not about interior/exterior, only minimum time to reach the
+ * specified location)
+ *
+ * @param state Aircraft state
+ * @param perf Aircraft performance model
+ * @param solution Solution of intercept (set if intercept possible, else untouched)
+ * @param loc_start Location of first point on/in airspace to query (if provided)
+ * @param loc_end Location of last point on/in airspace to query (if provided)
+ * @return True if intercept found
+ */
+  bool intercept(const AIRCRAFT_STATE &state,
+                 const AirspaceAircraftPerformance& perf,
+                 AirspaceInterceptSolution &solution,
+                 const GEOPOINT& loc_start,
+                 const GEOPOINT& loc_end) const;
+
+/**
+ * Find time/distance/height to airspace from an observer given a
+ * simplified performance model and the aircraft path vector.  If
+ * inside the airspace, this will give the time etc to exit (it cares
+ * not about interior/exterior, only minimum time to reach the
+ * specified location)
+ *
+ * @param state Aircraft state
+ * @param vec Path vector of aircraft
+ * @param perf Aircraft performance model
+ * @param solution Solution of intercept (set if intercept possible, else untouched)
+ * @return True if intercept found
+ */
+  bool intercept(const AIRCRAFT_STATE &state,
+                 const GeoVector& vec,
+                 const AirspaceAircraftPerformance& perf,
+                 AirspaceInterceptSolution &solution) const;
+
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& f, 
                                    const AbstractAirspace& as);
@@ -215,6 +263,42 @@ protected:
   AIRSPACE_ACK Ack;
   unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
 #endif
+
+private:
+
+/**
+ * Find time/distance to specified point on the boundary from an observer
+ * given a simplified performance model.  If inside the airspace, this will
+ * give the time etc to exit (it cares not about interior/exterior, only minimum
+ * time to reach the specified location)
+ *
+ * @param state Aircraft state
+ * @param perf Aircraft performance model
+ * @param distance Distance from aircraft to boundary 
+ * @return Solution of intercept 
+ */
+  AirspaceInterceptSolution intercept_vertical(const AIRCRAFT_STATE &state,
+                                               const AirspaceAircraftPerformance& perf,
+                                               const fixed& distance) const;
+
+/**
+ * Find time/distance to specified horizontal boundary from an observer
+ * given a simplified performance model.  If inside the airspace, this will
+ * give the time etc to exit (it cares not about interior/exterior, only minimum
+ * time to reach the specified location)
+ *
+ * @param state Aircraft state
+ * @param perf Aircraft performance model
+ * @param distance_start Distance from aircraft to start boundary 
+ * @param distance_end Distance from aircraft to end boundary 
+ * @param lower If true, examines lower boundary, otherwise upper boundary
+ * @return Solution of intercept 
+ */
+  AirspaceInterceptSolution intercept_horizontal(const AIRCRAFT_STATE &state,
+                                                 const AirspaceAircraftPerformance& perf,
+                                                 const fixed& distance_start,
+                                                 const fixed& distance_end,
+                                                 const bool lower=true) const;
 
 public:
   DEFINE_VISITABLE()

@@ -55,6 +55,17 @@ Airspace::Airspace(AbstractAirspace& airspace,
 
 
 bool 
+Airspace::inside(const AIRCRAFT_STATE &loc) const
+{
+  if (pimpl_airspace) {
+    return pimpl_airspace->inside(loc);
+  } else {
+    return false;
+  }
+}
+
+
+bool 
 Airspace::inside(const GEOPOINT &loc) const
 {
   if (pimpl_airspace) {
@@ -63,6 +74,7 @@ Airspace::inside(const GEOPOINT &loc) const
     return false;
   }
 }
+
 
 bool 
 Airspace::intersects(const FlatRay& ray) const
