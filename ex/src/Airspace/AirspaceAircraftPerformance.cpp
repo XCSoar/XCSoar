@@ -7,17 +7,17 @@ fixed
 AirspaceAircraftPerformance::solution_general(const fixed& distance,
                                               const fixed& dh) const
 {
-  // can at least descend as fast as s_ld
-  fixed mod_descent_rate = max(descent_rate, s_ld);
-
-  const fixed t_cruise = distance/v_ld;
-  const fixed h_descent = dh-t_cruise*s_ld;
+  const fixed t_cruise = distance/get_cruise_speed();
+  const fixed h_descent = dh-t_cruise*get_cruise_descent();
 
   if (!fabs(h_descent)) {
     return t_cruise;
   } 
   if (h_descent>0) {
     // descend steeper than best glide
+
+    fixed mod_descent_rate= get_descent_rate()+m_tolerance_vertical;
+
     if (!positive(mod_descent_rate)) {
       return fixed_big;
     }
@@ -25,10 +25,13 @@ AirspaceAircraftPerformance::solution_general(const fixed& distance,
     return max(t_cruise, t_descent);
   } else {
     // require climb
-    if (!positive(climb_rate)) {
+
+    fixed mod_climb_rate= get_climb_rate()+m_tolerance_vertical;
+
+    if (!positive(mod_climb_rate)) {
       return fixed_big;
     }
-    const fixed t_climb = -h_descent/climb_rate;
+    const fixed t_climb = -h_descent/mod_climb_rate;
     return t_cruise+t_climb;
   }
 }
@@ -221,13 +224,13 @@ AirspaceAircraftPerformance::solution_exists(const fixed& distance_max,
                                              const fixed& h_min,
                                              const fixed& h_max) const
 {
-  if (positive(altitude-h_max) && !positive(descent_rate)) {
+  if (positive(altitude-h_max) && !positive(get_descent_rate()+m_tolerance_vertical)) {
     return false;
   }
-  if (positive(h_min-altitude) && !positive(climb_rate)) {
+  if (positive(h_min-altitude) && !positive(get_climb_rate()+m_tolerance_vertical)) {
     return false;
   }
-  if (positive(distance_max) && !positive(v_ld)) {
+  if (positive(distance_max) && !positive(get_cruise_speed())) {
     return false;
   }
   return true;

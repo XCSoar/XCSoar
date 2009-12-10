@@ -195,9 +195,7 @@ AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
   AirspaceInterceptSolution this_solution;
   for (AirspaceIntersectionVector::const_iterator it = vis.begin();
        it != vis.end(); ++it) {
-    const GEOPOINT p1 = (it->first);
-    const GEOPOINT p2 = (it->second);
-    intercept(state, perf, this_solution, p1, p2);
+    intercept(state, perf, this_solution, it->first, it->second);
   }
 
   if (this_solution.valid()) {

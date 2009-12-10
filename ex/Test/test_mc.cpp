@@ -9,15 +9,16 @@
 #include <string>
 #include <math.h>
 
-const double Vmin=15.0;
-const double Vmax=75.0;
+const double Vmin= 5.0;
 
 std::ofstream ofile("results/res-polar-m.txt");
 
 void polar_mc(const double mc) 
 {
   GlidePolar polar(mc,0.0,0.0);
-  ofile << mc << " " << polar.get_VbestLD() << " " << polar.get_bestLD() << "\n";
+  ofile << mc << " " << polar.get_VbestLD() << " " << polar.get_bestLD() 
+        << " " << polar.get_Vmin() << " " << polar.get_Smin() 
+        << " " << polar.get_Vmax() << " " << polar.get_Smax() << "\n";
 }
 
 void basic_polar(const double mc) 
@@ -28,7 +29,7 @@ void basic_polar(const double mc)
   std::ofstream mfile(bname);
 
   GlidePolar polar(mc,0.0,0.0);
-  for (double V= Vmin; V<= Vmax; V+= 0.25) {
+  for (double V= Vmin; V<= polar.get_Vmax(); V+= 0.25) {
     pfile << mc << " " << V << " " << -polar.SinkRate(V) << " " << V/polar.SinkRate(V)
           << "\n";
   }

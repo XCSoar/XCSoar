@@ -57,7 +57,7 @@ struct GlideResult;
  * specific GlideSolutions. 
  *
  * \todo
- * - currently the polar itself is hard-coded
+ * - currently the polar itself and Vmax is hard-coded
  * - currently bugs/ballast are ignored
  */
 
@@ -74,6 +74,42 @@ public:
   GlidePolar(const fixed _mc,
              const fixed _bugs,
              const fixed _ballast);
+
+/** 
+ * Accesses sink rate at min airspeed
+ * 
+ * @return Sink rate (m/s, positive down)
+ */
+  fixed get_Smin() const {
+    return Smin;
+  }
+
+/** 
+ * Accesses airspeed for minimum sink
+ * 
+ * @return Speed (m/s)
+ */
+  fixed get_Vmin() const {
+    return Vmin;
+  }
+
+/** 
+ * Accesses maximum airspeed
+ * 
+ * @return Speed (m/s)
+ */
+  fixed get_Vmax() const {
+    return Vmax;
+  }
+
+/** 
+ * Accesses sink rate at max airspeed
+ * 
+ * @return Sink rate (m/s, positive down)
+ */
+  fixed get_Smax() const {
+    return Smax;
+  }
 
 /** 
  * Accesses best L/D speed
@@ -198,7 +234,12 @@ private:
 /** 
  * Solve for best LD at current MC/bugs/ballast setting.
  */
-  void solve();
+  void solve_ld();
+
+/** 
+ * Solve for min sink rate at current bugs/ballast setting.
+ */
+  void solve_min();
 
   fixed mc;                  
   fixed inv_mc;                  
@@ -207,6 +248,10 @@ private:
   fixed cruise_efficiency;
   fixed VbestLD;
   fixed SbestLD;
+  fixed Smax;
+  fixed Vmax;
+  fixed Smin;
+  fixed Vmin;
 
   /** @link dependency */
   /*#  MacCready lnkMacCready; */

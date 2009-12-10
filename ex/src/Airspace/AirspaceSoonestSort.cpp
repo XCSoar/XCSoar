@@ -26,6 +26,6 @@ AirspaceSoonestSort::metric(const AirspaceInterceptSolution& sol) const
 const AbstractAirspace* 
 AirspaceSoonestSort::find_nearest(const Airspaces &airspaces)
 {
-  const fixed range = m_perf.max_speed()*m_max_time;
+  const fixed range = m_perf.get_max_speed()*m_max_time;
   return AirspaceNearestSort::find_nearest(airspaces, range);
 }

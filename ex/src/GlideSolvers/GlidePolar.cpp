@@ -41,9 +41,6 @@
 #include "Util/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
 
-static const fixed fixed_75 = 75.0;
-static const fixed fixed_15 = 15.0;
-static const fixed fixed_20 = 20.0;
 
 GlidePolar::GlidePolar(const fixed _mc,
                        const fixed _bugs,
@@ -52,8 +49,14 @@ GlidePolar::GlidePolar(const fixed _mc,
   ballast(_ballast),
   cruise_efficiency(fixed_one)
 {
+  static const fixed fixed_75 = 75.0;
+  Vmax = fixed_75;
+  Smax = SinkRate(Vmax);
+
   set_mc(_mc);
+  solve_min();
 }
+
 
 void
 GlidePolar::set_mc(const fixed _mc)
@@ -64,7 +67,7 @@ GlidePolar::set_mc(const fixed _mc)
   } else {
     inv_mc = fixed_zero;
   }
-  solve();
+  solve_ld();
 }
 
 fixed
@@ -99,8 +102,8 @@ public:
  * 
  * @return Initialised object (no search yet)
  */
-  GlidePolarVopt(const GlidePolar &_polar):
-    ZeroFinder(fixed_15, fixed_75, TOLERANCE_POLAR_BESTLD),
+  GlidePolarVopt(const GlidePolar &_polar, const fixed &vmax):
+    ZeroFinder(fixed_one, vmax, TOLERANCE_POLAR_BESTLD),
     polar(_polar)
     {
     };
@@ -120,11 +123,48 @@ private:
 
 
 void 
-GlidePolar::solve()
+GlidePolar::solve_ld()
 {
-  GlidePolarVopt gpvopt(*this);
-  VbestLD = gpvopt.find_min(fixed_20);
+  GlidePolarVopt gpvopt(*this, Vmax);
+  VbestLD = gpvopt.find_min(Vmax);
   SbestLD = SinkRate(VbestLD);
+}
+
+
+/**
+ * Finds min sink speed.
+ * Intended to be used temporarily.
+ */
+class GlidePolarMinSink: 
+  public ZeroFinder
+{
+public:
+/** 
+ * Constructor.
+ * 
+ * @param _polar Glide polar to optimise
+ * 
+ * @return Initialised object (no search yet)
+ */
+  GlidePolarMinSink(const GlidePolar &_polar, const fixed &vmax):
+    ZeroFinder(fixed_one, vmax, TOLERANCE_POLAR_MINSINK),
+    polar(_polar)
+    {
+    };
+  fixed f(const fixed V) {
+    return polar.SinkRate(V);
+  }
+private:
+  const GlidePolar &polar;
+};
+
+
+void 
+GlidePolar::solve_min()
+{
+  GlidePolarMinSink gpminsink(*this, Vmax);
+  Vmin = gpminsink.find_min(Vmax);
+  Smin = SinkRate(Vmin);
 }
 
 

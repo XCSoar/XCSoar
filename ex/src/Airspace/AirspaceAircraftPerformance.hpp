@@ -2,6 +2,7 @@
 #define AIRSPACE_AIRCRAFT_PERFORMANCE_HPP
 
 #include "Math/fixed.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 
 /**
  *  Class used for simplified/idealised performace
@@ -11,24 +12,46 @@
  */
 class AirspaceAircraftPerformance {
 public:
+  AirspaceAircraftPerformance():m_tolerance_vertical(fixed_zero) {};
+
+  void set_tolerance_vertical(const fixed val) {
+    m_tolerance_vertical = val;
+  }
+
 /** 
- * Constructor.  Initialises current to experimental values
+ * Return nominal speed
  * 
- * \todo use something more sensible?
+ * @return Nominal cruise speed (m/s)
  */
-  AirspaceAircraftPerformance():v_ld(30.0),s_ld(2.0),
-                                climb_rate(10.0),
-                                descent_rate(10.0)
-    {};
+  virtual fixed get_cruise_speed() const = 0;
+
+/** 
+ * Return nominal descent rate
+ * 
+ * @return Nominal descent speed (m/s, positive down)
+ */
+  virtual fixed get_cruise_descent() const = 0;
+
+/** 
+ * Return descent rate limit (above nominal descent rate) 
+ * 
+ * @return Max descent speed (m/s, positive down)
+ */
+  virtual fixed get_descent_rate() const = 0;
+
+/** 
+ * Return climb rate limit (above nominal descent rate) 
+ * 
+ * @return Max climb rate (m/s, positive up)
+ */
+  virtual fixed get_climb_rate() const = 0;
 
 /** 
  * Return maximum speed achievable by this model
  * 
  * @return Speed (m/s)
  */
-  fixed max_speed() const {
-    return v_ld;
-  };
+  virtual fixed get_max_speed() const = 0;
 
 /** 
  * Find minimum intercept time to a point
@@ -75,16 +98,89 @@ public:
                             const fixed& h,
                             fixed& intercept_distance) const;
 
+protected:
+  fixed m_tolerance_vertical; /**< Tolerance in vertical max speeds (m/s) */
+
 private:
   virtual bool solution_exists(const fixed& distance_min,
                                const fixed& distance_max,
                                const fixed& h_min,
                                const fixed& h_max) const;
+};
 
+
+
+
+class AirspaceAircraftPerformanceSimple:
+  public AirspaceAircraftPerformance 
+{
+public:
+/** 
+ * Constructor.  Initialises current to experimental values
+ * 
+ * \todo use something more sensible?
+ */
+  AirspaceAircraftPerformanceSimple():v_ld(30.0),s_ld(2.0),
+                                      climb_rate(10.0),
+                                      descent_rate(10.0)
+    {};
+
+  virtual fixed get_cruise_speed() const {
+    return v_ld;
+  }
+
+  virtual fixed get_cruise_descent() const {
+    return s_ld;
+  }
+
+  virtual fixed get_climb_rate() const {
+    return climb_rate;
+  }
+
+  virtual fixed get_descent_rate() const {
+    return s_ld;
+  }
+
+  virtual fixed get_max_speed() const {
+    return v_ld;
+  }
+
+protected:
   fixed v_ld;
   fixed s_ld;
   fixed climb_rate;
   fixed descent_rate;
+};
+
+class AirspaceAircraftPerformanceGlide: 
+  public AirspaceAircraftPerformance
+{
+public:
+  AirspaceAircraftPerformanceGlide(const GlidePolar& polar):
+    m_glide_polar(polar) {};
+
+  virtual fixed get_cruise_speed() const {
+    return m_glide_polar.get_VbestLD();
+  }
+
+  virtual fixed get_cruise_descent() const {
+    return m_glide_polar.get_SbestLD();
+  }
+
+  virtual fixed get_climb_rate() const {
+    return m_glide_polar.get_mc();
+  }
+
+  virtual fixed get_descent_rate() const {
+    return m_glide_polar.get_Smax();
+  }
+
+  virtual fixed get_max_speed() const {
+    return m_glide_polar.get_Vmax();
+  }
+
+private:
+  const GlidePolar &m_glide_polar;
 };
 
 #endif

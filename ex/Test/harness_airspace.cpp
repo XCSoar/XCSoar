@@ -154,7 +154,7 @@ public:
       *fout << end.Longitude << " " << end.Latitude << " " << "\n\n";
     }
 
-    AirspaceAircraftPerformance perf;
+    AirspaceAircraftPerformanceSimple perf;
     AirspaceInterceptSolution solution = intercept(as, m_state, perf);
     if (solution.valid()) {
       *fout << "# intercept " << solution.elapsed_time << " h " << solution.altitude << "\n";
@@ -210,7 +210,7 @@ public:
     *fout << c.Longitude << " " << c.Latitude << " " << "\n";
     *fout << state.Location.Longitude << " " << state.Location.Latitude << " " << "\n\n";
 #endif
-    AirspaceAircraftPerformance perf;
+    AirspaceAircraftPerformanceSimple perf;
     AirspaceInterceptSolution solution;
     GeoVector vec(state.Location, c);
     vec.Distance = 20000; // set big distance (for testing)
@@ -291,7 +291,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
   }
 
   {
-    AirspaceAircraftPerformance perf;
+    AirspaceAircraftPerformanceSimple perf;
     AirspaceSoonestSort ans(state, perf);
     const AbstractAirspace* as = ans.find_nearest(airspaces);
     if (do_report) {

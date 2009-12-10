@@ -45,12 +45,7 @@
 #include "Navigation/Aircraft.hpp"
 
 
-
-static const fixed fixed_75 = 75.0;
-static const fixed fixed_15 = 15.0;
-static const fixed fixed_20 = 20.0;
 static const fixed fixed_1mil=1.0e6;
-
 
 
 MacCready::MacCready(const GlidePolar &_glide_polar,
@@ -268,12 +263,16 @@ public:
  * 
  * @param _task Task to solve for
  * @param _mac MacCready object to use for search
+ * @param vmin Min speed for search range
+ * @param vmax Max speed for search range
  * 
  * @return Initialised object (not yet searched)
  */
   MacCreadyVopt(const GlideState &_task,
-                const MacCready &_mac):
-    ZeroFinder(fixed_15,fixed_75, TOLERANCE_MC_OPT_GLIDE),
+                const MacCready &_mac,
+                const fixed & vmin,
+                const fixed & vmax):
+    ZeroFinder(vmin, vmax, TOLERANCE_MC_OPT_GLIDE),
     task(_task),
     mac(_mac),
     inv_mc(_mac.get_inv_mc())
@@ -295,8 +294,8 @@ public:
    * Perform search for best cruise speed and return result 
    * @return Glide solution (optimum)
    */
-  GlideResult result() {
-    find_min(fixed_20);
+  GlideResult result(const fixed &vinit) {
+    find_min(vinit);
     return res;
   }
 private:
@@ -310,8 +309,8 @@ private:
 GlideResult 
 MacCready::optimise_glide(const GlideState &task) const
 {
-  MacCreadyVopt mcvopt(task, *this);
-  return mcvopt.result();
+  MacCreadyVopt mcvopt(task, *this, glide_polar.get_Vmin(), glide_polar.get_Vmax());
+  return mcvopt.result(glide_polar.get_Vmin());
 }
 
 

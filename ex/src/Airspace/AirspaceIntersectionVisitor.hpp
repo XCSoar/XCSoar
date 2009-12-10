@@ -67,17 +67,19 @@ protected:
   AirspaceIntersectionVector m_intersections; /**< Vector of accumulated intersection pairs */ 
 
 /** 
- * Find intercept solution of first pair of intersections.
+ * Find intercept solution of intersections
  * 
  * @param as Airspace to test
  * @param state Aircraft state
  * @param perf Performance of aircraft for query
+ * @param all Whether to find solution for first or all intersections
  * 
  * @return Solution if any
  */
   AirspaceInterceptSolution intercept(const AbstractAirspace& as,
                                       const AIRCRAFT_STATE& state,
-                                      const AirspaceAircraftPerformance &perf) const;
+                                      const AirspaceAircraftPerformance &perf,
+                                      bool all=true) const;
 };
 
 #endif
