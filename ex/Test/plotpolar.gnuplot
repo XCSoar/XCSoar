@@ -4,7 +4,9 @@ set title "Glide polar at M=1.7"
 set xlabel "V (m/s)"
 set ylabel "w (m/s)"
 plot 'results/res-polar.txt' using 2:($3) with lines, \
-  'results/res-polar-17-best.txt' using 2:($3) with linespoints
+  'results/res-polar-17-best.txt' using 2:($3) with linespoints, \
+  'results/res-polar-m.txt' using 4:(-$5) with points, \
+  'results/res-polar-m.txt' using 6:(-$7) with points
 pause -1
 
 set ylabel "LD"
