@@ -69,8 +69,10 @@ typedef struct{
   DWORD    CrcSourceFile;          // not used at the moment
 }BinFileHeader_t;
 
+#ifndef NDEBUG
 static void
 DumpAirspaceFile(const AirspaceDatabase &airspace_database);
+#endif
 
 static bool StartsWith(TCHAR *Text, const TCHAR *LookFor);
 static bool ReadCoords(TCHAR *Text, double *X, double *Y);
