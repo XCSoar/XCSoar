@@ -123,8 +123,7 @@ WndForm::SetTitleFont(const Font &font)
     // todo
     mhTitleFont = &font;
 
-
-
+    invalidate();
   }
 
   return res;

@@ -339,6 +339,7 @@ const Font *WindowControl::SetFont(const Font &Value){
   if (mhFont != &Value){
     // todo
     mhFont = &Value;
+    invalidate();
   }
   return res;
 }

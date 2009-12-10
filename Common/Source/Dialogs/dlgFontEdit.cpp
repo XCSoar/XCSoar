@@ -135,8 +135,6 @@ static void RedrawSampleFont(void)
   if ( _tcscmp(OriginalFontRegKey, szRegistryFontMapWindowBoldFont) == 0 ) {
     wf->SetFont(NewFont);
     wf->SetTitleFont(NewFont);
-    wf->SetVisible(false);
-    wf->SetVisible(true);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontSample"));
@@ -145,13 +143,9 @@ static void RedrawSampleFont(void)
     if (NewFont.defined()) {
       wp->SetFont(NewFont);
       wp->SetCaption(_T("Sample Text 123"));
-      wp->SetVisible(false);
-      wp->SetVisible(true);
-      wp->RefreshDisplay();
     }
     else {
       wp->SetCaption(_T("Error Creating Font!"));
-      wp->RefreshDisplay();
     }
   }
 }

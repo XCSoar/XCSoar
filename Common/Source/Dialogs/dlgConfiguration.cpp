@@ -524,8 +524,6 @@ static void RefreshFonts(void) {
     bool bUseCustomFonts= ((DataFieldBoolean*)(wp->GetDataField()))->GetAsBoolean();
     ResetFonts(bUseCustomFonts);
     wp->SetFont(TempUseCustomFontsFont); // this font is never customized
-    wp->SetVisible(false);
-    wp->SetVisible(true);
     ShowFontEditButtons(bUseCustomFonts);
 
   }
@@ -534,53 +532,37 @@ static void RefreshFonts(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpInfoWindowFont"));
   if (wp) {
     wp->SetFont(TempInfoWindowFont);
-    wp->SetVisible(false);
-    wp->SetVisible(true);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpTitleWindowFont"));
   if (wp) {
     wp->SetFont(TempTitleWindowFont);
-    wp->SetVisible(false);
-    wp->SetVisible(true);
   }
   wp = (WndProperty*)wf->FindByName(_T("prpMapWindowFont"));
   if (wp) {
     wp->SetFont(TempMapWindowFont);
-    wp->SetVisible(false);
-    wp->SetVisible(true);
   }
 
 
   wp = (WndProperty*)wf->FindByName(_T("prpTitleSmallWindowFont"));
   if (wp) {
     wp->SetFont(TempTitleSmallWindowFont);
-    wp->SetVisible(false);
-    wp->SetVisible(true);
   }
   wp = (WndProperty*)wf->FindByName(_T("prpMapWindowBoldFont"));
   if (wp) {
     wp->SetFont(TempMapWindowBoldFont);
-    wp->SetVisible(false);
-    wp->SetVisible(true);
   }
   wp = (WndProperty*)wf->FindByName(_T("prpCDIWindowFont"));
   if (wp) {
     wp->SetFont(TempCDIWindowFont);
-    wp->SetVisible(false);
-    wp->SetVisible(true);
   }
   wp = (WndProperty*)wf->FindByName(_T("prpMapLabelFont"));
   if (wp) {
     wp->SetFont(TempMapLabelFont);
-    wp->SetVisible(false);
-    wp->SetVisible(true);
   }
   wp = (WndProperty*)wf->FindByName(_T("prpStatisticsFont"));
   if (wp) {
     wp->SetFont(TempStatisticsFont);
-    wp->SetVisible(false);
-    wp->SetVisible(true);
   }
 
   // now fix the rest of the dlgConfiguration fonts:
