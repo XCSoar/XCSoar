@@ -63,31 +63,31 @@ void DataField::SetData(void){
 }
 
 bool
-DataField::GetAsBoolean()
+DataField::GetAsBoolean() const
 {
   return false;
 }
 
 int
-DataField::GetAsInteger()
+DataField::GetAsInteger() const
 {
   return 0;
 }
 
 double
-DataField::GetAsFloat()
+DataField::GetAsFloat() const
 {
   return 0;
 }
 
-TCHAR *
-DataField::GetAsString()
+const TCHAR *
+DataField::GetAsString() const
 {
   return NULL;
 }
 
-TCHAR *
-DataField::GetAsDisplayString()
+const TCHAR *
+DataField::GetAsDisplayString() const
 {
   return GetAsString();
 }
@@ -113,7 +113,7 @@ DataField::SetAsFloat(double Value)
   return 0.0;
 }
 
-TCHAR *
+const TCHAR *
 DataField::SetAsString(const TCHAR *Value)
 {
   (void)Value;

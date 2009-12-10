@@ -57,7 +57,9 @@ bool IsDots(const TCHAR* str) {
   return true;
 }
 
-int DataFieldFileReader::GetAsInteger(void){
+int
+DataFieldFileReader::GetAsInteger(void) const
+{
   return mValue;
 }
 
@@ -343,7 +345,9 @@ void DataFieldFileReader::Lookup(const TCHAR *Text) {
   }
 }
 
-int DataFieldFileReader::GetNumFiles(void) {
+int
+ DataFieldFileReader::GetNumFiles(void) const
+{
   return nFiles;
 }
 
@@ -404,8 +408,9 @@ void DataFieldFileReader::addFile(const TCHAR *Text,
   }
 }
 
-
-TCHAR *DataFieldFileReader::GetAsString(void){
+const TCHAR *
+DataFieldFileReader::GetAsString(void) const
+{
   if (mValue<nFiles) {
     return(fields[mValue].mTextFile);
   } else {

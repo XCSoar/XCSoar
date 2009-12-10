@@ -91,10 +91,10 @@ class DataFieldFileReader: public DataField {
 
   void addFile(const TCHAR *fname, const TCHAR *fpname);
   bool checkFilter(const TCHAR *fname, const TCHAR* filter);
-  int GetNumFiles(void);
+  int GetNumFiles(void) const;
 
-  int GetAsInteger(void);
-  TCHAR *GetAsString(void);
+  virtual int GetAsInteger(void) const;
+  virtual const TCHAR *GetAsString(void) const;
 
   void Lookup(const TCHAR* text);
   const TCHAR *GetPathFile(void) const;

@@ -58,7 +58,7 @@ class DataFieldString:public DataField{
       SupportCombo=false;
     };
 
-  TCHAR *SetAsString(const TCHAR *Value);
+  virtual const TCHAR *SetAsString(const TCHAR *Value);
   #if defined(__BORLANDC__)
   #pragma warn -hid
   #endif
@@ -66,8 +66,7 @@ class DataFieldString:public DataField{
   #if defined(__BORLANDC__)
   #pragma warn +hid
   #endif
-  TCHAR *GetAsString(void);
-
+  virtual const TCHAR *GetAsString(void) const;
 };
 
 #endif

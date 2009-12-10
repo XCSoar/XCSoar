@@ -74,16 +74,16 @@ class DataField{
   virtual void GetData(void);
   virtual void SetData(void);
 
-  virtual bool GetAsBoolean();
-  virtual int GetAsInteger();
-  virtual double GetAsFloat();
-  virtual TCHAR *GetAsString();
-  virtual TCHAR *GetAsDisplayString();
+  virtual bool GetAsBoolean() const;
+  virtual int GetAsInteger() const;
+  virtual double GetAsFloat() const;
+  virtual const TCHAR *GetAsString() const;
+  virtual const TCHAR *GetAsDisplayString() const;
 
   virtual bool SetAsBoolean(bool Value);
   virtual int SetAsInteger(int Value);
   virtual double SetAsFloat(double Value);
-  virtual TCHAR *SetAsString(const TCHAR *Value);
+  virtual const TCHAR *SetAsString(const TCHAR *Value);
 
   virtual void Set(bool Value){ (void)Value; };
   virtual void Set(int Value){ (void)Value;};
