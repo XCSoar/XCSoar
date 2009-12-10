@@ -1,22 +1,26 @@
 #include "AirspaceSoonestSort.hpp"
 
-fixed 
-AirspaceSoonestSort::metric(const AbstractAirspace &a) const
+AirspaceInterceptSolution 
+AirspaceSoonestSort::solve_intercept(const AbstractAirspace &a) const
 {
-  const GEOPOINT closest = a.closest_point(m_state.Location);
-
   fixed time_to_intercept = m_max_time;
-  fixed intercept_height;
+  AirspaceInterceptSolution sol;
+  sol.location = a.closest_point(m_state.Location);
 
   if (a.intercept_vertical(m_state,
-                           closest,
+                           sol.location,
                            m_perf,
                            time_to_intercept,
-                           intercept_height)) {
-    return time_to_intercept;
-  } else {
-    return -fixed_one;
+                           sol.altitude)) {
+    sol.elapsed_time = time_to_intercept;
   }
+  return sol;
+}
+
+fixed
+AirspaceSoonestSort::metric(const AirspaceInterceptSolution& sol) const
+{
+  return sol.elapsed_time;
 }
 
 const AbstractAirspace* 

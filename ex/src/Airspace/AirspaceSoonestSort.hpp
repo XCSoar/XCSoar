@@ -30,15 +30,9 @@ public:
     m_perf(perf),
     m_max_time(max_time) {};
 
-/** 
- * Metric function used for sorting.  If returns as negative, 
- * solution will be ignored.
- * 
- * @param a Airspace to calculate metric for
- * 
- * @return Metric value (non-negative low is better)
- */
-  virtual fixed metric(const AbstractAirspace &a) const;
+  virtual AirspaceInterceptSolution solve_intercept(const AbstractAirspace &a) const;
+
+  virtual fixed metric(const AirspaceInterceptSolution& ais) const;
 
 /** 
  * Convenience method, calls find_nearest(airspaces, range) with range
@@ -49,6 +43,8 @@ public:
  * @return Soonest arrival time airspace
  */
   const AbstractAirspace* find_nearest(const Airspaces &airspaces);
+
+protected:
 
 private:
   const AirspaceAircraftPerformance &m_perf;

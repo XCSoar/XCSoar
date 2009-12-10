@@ -10,8 +10,24 @@
 class AirspaceVisitor;
 class Airspaces;
 
+struct AirspaceInterceptSolution {
+  /**
+   *  Constructor, initialises to invalid solution
+   */
+  AirspaceInterceptSolution():
+    distance(-fixed_one),
+    altitude(-fixed_one),
+    elapsed_time(-fixed_one) {};
+
+  GEOPOINT location;
+  fixed distance;
+  fixed altitude;
+  fixed elapsed_time;
+};
+
 /**
  *  Class to sort nearest airspaces by distance to closest point.
+ *  Not intended to be called repeatedly; intended as temporary object
  */
 class AirspaceNearestSort
 {
@@ -55,13 +71,22 @@ public:
                     const fixed range);
 
 /** 
+ * Compute complete or partial solution as required to this sort strategy
+ * 
+ * @param a Airspace to compute solution for
+ * 
+ * @return Solution
+ */
+  virtual AirspaceInterceptSolution solve_intercept(const AbstractAirspace &a) const;
+
+/** 
  * Metric defining sort criteria
  * 
- * @param a Airspace to determine metric of
+ * @param a Intercept solution to determine metric of
  * 
  * @return Positive value indicating rank (low best), negative indicates invalid
  */
-  virtual fixed metric(const AbstractAirspace &a) const;
+  virtual fixed metric(const AirspaceInterceptSolution& ais) const;
 
 /** 
  * Set reversal of sorting order
@@ -80,7 +105,11 @@ protected:
 
 private:
 
-  typedef std::pair<fixed, Airspace> Item;
+  void populate_queue(const Airspaces &airspaces,
+                      const fixed range);
+
+  typedef std::pair<AirspaceInterceptSolution, Airspace> AirspaceSolutionItem;
+  typedef std::pair<fixed, AirspaceSolutionItem> Item;
 
   /**
    * Function object used to rank intercepts by vector parameter t(0,1)
@@ -92,6 +121,8 @@ private:
   };
 
   typedef std::priority_queue<Item, std::vector<Item>, Rank> Queue;
+
+  Queue m_q;
 
   bool m_reverse;
 
