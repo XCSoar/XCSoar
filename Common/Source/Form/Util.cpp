@@ -36,27 +36,43 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
- *
- */
-
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
-
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgHelpers.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/List.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Button.hpp"
-#include "Form/Draw.hpp"
 #include "Form/Util.hpp"
-#include "Language.hpp"
-#include "Interface.hpp"
+#include "Form/Form.hpp"
+#include "Form/Edit.hpp"
+#include "DataField/Base.hpp"
+#include "Registry.hpp"
 
-#endif
+#include <assert.h>
+
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value)
+{
+  assert(control_name != NULL);
+
+  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
+  if (ctl == NULL)
+    return;
+
+  ctl->GetDataField()->Set(value);
+  ctl->RefreshDisplay();
+}
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 bool &value, const TCHAR *registry_name)
+{
+  assert(control_name != NULL);
+  assert(registry_name != NULL);
+
+  const WndProperty *ctl = (const WndProperty *)form.FindByName(control_name);
+  if (ctl == NULL)
+    return false;
+
+  bool new_value = ctl->GetDataField()->GetAsBoolean();
+  if (new_value == value)
+    return false;
+
+  value = new_value;
+  SetToRegistry(registry_name, new_value);
+  return true;
+}

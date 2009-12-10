@@ -60,132 +60,46 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 static void LoadIntoForm(WndForm &form, const SETTINGS_COMPUTER &settings){
-  WndProperty* wp;
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceClimbRate"));
-  if (wp) {
-    wp->GetDataField()->Set(settings.EnableVoiceClimbRate);
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceTerrain"));
-  if (wp) {
-    wp->GetDataField()->Set(settings.EnableVoiceTerrain);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceWaypointDistance"));
-  if (wp) {
-    wp->GetDataField()->Set(settings.EnableVoiceWaypointDistance);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceTaskAltitudeDifference"));
-  if (wp) {
-    wp->GetDataField()->Set(settings.EnableVoiceTaskAltitudeDifference);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceMacCready"));
-  if (wp) {
-    wp->GetDataField()->Set(settings.EnableVoiceMacCready);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceNewWaypoint"));
-  if (wp) {
-    wp->GetDataField()->Set(settings.EnableVoiceNewWaypoint);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceInSector"));
-  if (wp) {
-    wp->GetDataField()->Set(settings.EnableVoiceInSector);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)form.FindByName(_T("prpVoiceAirspace"));
-  if (wp) {
-    wp->GetDataField()->Set(settings.EnableVoiceAirspace);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(form, _T("prpVoiceClimbRate"),
+                   settings.EnableVoiceClimbRate);
+  LoadFormProperty(form, _T("prpVoiceTerrain"), settings.EnableVoiceTerrain);
+  LoadFormProperty(form, _T("prpVoiceWaypointDistance"),
+                   settings.EnableVoiceWaypointDistance);
+  LoadFormProperty(form, _T("prpVoiceTaskAltitudeDifference"),
+                   settings.EnableVoiceTaskAltitudeDifference);
+  LoadFormProperty(form, _T("prpVoiceMacCready"),
+                   settings.EnableVoiceMacCready);
+  LoadFormProperty(form, _T("prpVoiceNewWaypoint"),
+                   settings.EnableVoiceNewWaypoint);
+  LoadFormProperty(form, _T("prpVoiceInSector"), settings.EnableVoiceInSector);
+  LoadFormProperty(form, _T("prpVoiceAirspace"), settings.EnableVoiceAirspace);
 }
 
 static bool
 SaveFromForm(const WndForm &form, SETTINGS_COMPUTER &settings)
 {
-  const WndProperty* wp;
-  bool changed = false;
-  wp = (const WndProperty*)form.FindByName(_T("prpVoiceClimbRate"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceClimbRate) {
-      settings.EnableVoiceClimbRate = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceClimbRate, settings.EnableVoiceClimbRate);
-      changed = true;
-    }
-  }
-  
-  wp = (const WndProperty*)form.FindByName(_T("prpVoiceTerrain"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceTerrain) {
-      settings.EnableVoiceTerrain = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceTerrain, settings.EnableVoiceTerrain);
-      changed = true;
-    }
-  }
-  
-  wp = (const WndProperty*)form.FindByName(_T("prpVoiceWaypointDistance"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceWaypointDistance) {
-      settings.EnableVoiceWaypointDistance = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceWaypointDistance, settings.EnableVoiceWaypointDistance);
-      changed = true;
-    }
-  }
-  
-  wp = (const WndProperty*)form.FindByName(_T("prpVoiceTaskAltitudeDifference"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceTaskAltitudeDifference) {
-      settings.EnableVoiceTaskAltitudeDifference = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceTaskAltitudeDifference, settings.EnableVoiceTaskAltitudeDifference);
-      changed = true;
-    }
-   }
- 
-  wp = (const WndProperty*)form.FindByName(_T("prpVoiceMacCready"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceMacCready) {
-      settings.EnableVoiceMacCready = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceMacCready, settings.EnableVoiceMacCready);
-      changed = true;
-    }
-  }
-  
-  wp = (const WndProperty*)form.FindByName(_T("prpVoiceNewWaypoint"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceNewWaypoint) {
-      settings.EnableVoiceNewWaypoint = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceNewWaypoint,settings.EnableVoiceNewWaypoint);
-      changed = true;
-    }
-  }
-  
-  wp = (const WndProperty*)form.FindByName(_T("prpVoiceInSector"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceInSector) {
-      settings.EnableVoiceInSector = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceInSector, settings.EnableVoiceInSector);
-      changed = true;
-    }
-  }
-  
-  wp = (const WndProperty*)form.FindByName(_T("prpVoiceAirspace"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != settings.EnableVoiceAirspace) {
-      settings.EnableVoiceAirspace = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceAirspace,settings.EnableVoiceAirspace);
-      changed = true;
-    }
-  }
-  return changed;
+  return
+    SaveFormProperty(form, _T("prpVoiceClimbRate"),
+                     settings.EnableVoiceClimbRate,
+                     szRegistryVoiceClimbRate) ||
+    SaveFormProperty(form, _T("prpVoiceTerrain"),
+                     settings.EnableVoiceTerrain, szRegistryVoiceTerrain) ||
+    SaveFormProperty(form, _T("prpVoiceWaypointDistance"),
+                     settings.EnableVoiceWaypointDistance,
+                     szRegistryVoiceWaypointDistance) ||
+    SaveFormProperty(form, _T("prpVoiceTaskAltitudeDifference"),
+                     settings.EnableVoiceTaskAltitudeDifference,
+                     szRegistryVoiceTaskAltitudeDifference) ||
+    SaveFormProperty(form, _T("prpVoiceMacCready"),
+                     settings.EnableVoiceMacCready,
+                     szRegistryVoiceMacCready) ||
+    SaveFormProperty(form, _T("prpVoiceNewWaypoint"),
+                     settings.EnableVoiceNewWaypoint,
+                     szRegistryVoiceNewWaypoint) ||
+    SaveFormProperty(form, _T("prpVoiceInSector"),
+                     settings.EnableVoiceInSector, szRegistryVoiceInSector) ||
+    SaveFormProperty(form, _T("prpVoiceAirspace"),
+                     settings.EnableVoiceAirspace, szRegistryVoiceAirspace);
 }
 
 

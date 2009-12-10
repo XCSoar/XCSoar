@@ -228,6 +228,7 @@ OBJS	:=\
 	$(SRC)/Form/List.o \
 	$(SRC)/Form/ScrollBar.o \
 	$(SRC)/Form/Edit.o \
+	$(SRC)/Form/Util.o \
 	$(SRC)/LogFile.o 		\
 	\
 	$(SRC)/MapWindow.o 		\

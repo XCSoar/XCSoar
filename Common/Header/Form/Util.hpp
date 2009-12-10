@@ -36,27 +36,34 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
+#ifndef XCSOAR_FORM_UTIL_HPP
+#define XCSOAR_FORM_UTIL_HPP
+
+#include <tchar.h>
+
+class WndForm;
+
+/**
+ * Loads the specified value into the form.
  *
+ * @param form the form
+ * @param control_name the name of the control in the form
+ * @param value the new value
  */
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value);
 
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
-
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgHelpers.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/List.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Button.hpp"
-#include "Form/Draw.hpp"
-#include "Form/Util.hpp"
-#include "Language.hpp"
-#include "Interface.hpp"
+/**
+ * Saves a form value into a variable and into the registry.
+ *
+ * @param form the form
+ * @param control_name the name of the control in the form
+ * @param value the new value
+ * @param registry_name the name of the registry key
+ * @return true if the value has been modified
+ */
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 bool &value, const TCHAR *registry_name);
 
 #endif
