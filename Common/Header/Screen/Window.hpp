@@ -245,6 +245,14 @@ public:
 #endif
   }
 
+  bool is_visible() const {
+#ifdef ENABLE_SDL
+    return true; // XXX
+#else
+    return ::IsWindowVisible(hWnd);
+#endif
+  }
+
   void show() {
 #ifdef ENABLE_SDL
     // XXX
@@ -259,6 +267,13 @@ public:
 #else
     ::ShowWindow(hWnd, SW_HIDE);
 #endif
+  }
+
+  void set_visible(bool visible) {
+    if (visible)
+      show();
+    else
+      hide();
   }
 
   /**
