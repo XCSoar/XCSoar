@@ -175,9 +175,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   RECT mRc = get_screen_position();
   DrawWireRects(XCSoarInterface::EnableAnimation,&mRc, 5);
 
-  show();
-
-  bring_to_top();
+  show_on_top();
 
   mModalResult = 0;
 

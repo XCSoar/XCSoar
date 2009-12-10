@@ -234,6 +234,17 @@ public:
 #endif
   }
 
+  void show_on_top() {
+    assert_none_locked();
+
+#ifdef ENABLE_SDL
+    // XXX
+#else
+    ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
+                   SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+#endif
+  }
+
   void set_font(const Font &font) {
     assert_none_locked();
 
