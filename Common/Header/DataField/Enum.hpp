@@ -83,9 +83,6 @@ class DataFieldEnum: public DataField {
 
   int GetAsInteger(void);
   TCHAR *GetAsString(void);
-  TCHAR *GetAsDisplayString(void){
-    return(GetAsString());
-  };
 
   #if defined(__BORLANDC__)
   #pragma warn -hid

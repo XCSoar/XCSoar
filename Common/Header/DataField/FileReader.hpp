@@ -95,7 +95,7 @@ class DataFieldFileReader: public DataField {
 
   int GetAsInteger(void);
   TCHAR *GetAsString(void);
-  TCHAR *GetAsDisplayString(void);
+
   void Lookup(const TCHAR* text);
   const TCHAR *GetPathFile(void) const;
 

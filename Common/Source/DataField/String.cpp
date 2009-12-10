@@ -50,7 +50,3 @@ void DataFieldString::Set(const TCHAR *Value){
 TCHAR *DataFieldString::GetAsString(void){
   return(mValue);
 }
-
-TCHAR *DataFieldString::GetAsDisplayString(void){
-  return(mValue);
-}

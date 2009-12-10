@@ -414,15 +414,6 @@ TCHAR *DataFieldFileReader::GetAsString(void){
 }
 
 
-TCHAR *DataFieldFileReader::GetAsDisplayString(void){
-  if (mValue<nFiles) {
-    return(fields[mValue].mTextFile);
-  } else {
-    return NULL;
-  }
-}
-
-
 void DataFieldFileReader::Set(int Value){
   if (Value<=(int)nFiles) {
     mValue = Value;

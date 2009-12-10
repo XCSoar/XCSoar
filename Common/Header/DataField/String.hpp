@@ -67,7 +67,6 @@ class DataFieldString:public DataField{
   #pragma warn +hid
   #endif
   TCHAR *GetAsString(void);
-  TCHAR *GetAsDisplayString(void);
 
 };
 

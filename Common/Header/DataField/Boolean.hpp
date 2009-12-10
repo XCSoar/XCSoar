@@ -72,9 +72,6 @@ class DataFieldBoolean:public DataField{
   int GetAsInteger(void);
   double GetAsFloat(void);
   TCHAR *GetAsString(void);
-  TCHAR *GetAsDisplayString(void){
-    return(GetAsString());
-  };
 
   virtual void Set(int Value){
     if (Value>0)

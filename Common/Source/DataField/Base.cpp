@@ -89,7 +89,7 @@ DataField::GetAsString()
 TCHAR *
 DataField::GetAsDisplayString()
 {
-  return NULL;
+  return GetAsString();
 }
 
 bool
