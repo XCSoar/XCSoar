@@ -254,41 +254,41 @@ static void NextPage(int Step){
   }
   if ((config_page>=15) && (config_page<=18)) {
     if (buttonCopy) {
-      buttonCopy->SetVisible(true);
+      buttonCopy->show();
     }
     if (buttonPaste) {
-      buttonPaste->SetVisible(true);
+      buttonPaste->show();
     }
   } else {
     if (buttonCopy) {
-      buttonCopy->SetVisible(false);
+      buttonCopy->hide();
     }
     if (buttonPaste) {
-      buttonPaste->SetVisible(false);
+      buttonPaste->hide();
     }
   }
-  wConfig1->SetVisible(config_page == 0);
-  wConfig2->SetVisible(config_page == 1);
-  wConfig3->SetVisible(config_page == 2);
-  wConfig4->SetVisible(config_page == 3);
-  wConfig5->SetVisible(config_page == 4);
-  wConfig6->SetVisible(config_page == 5);
-  wConfig7->SetVisible(config_page == 6);
-  wConfig8->SetVisible(config_page == 7);
-  wConfig9->SetVisible(config_page == 8);
-  wConfig10->SetVisible(config_page == 9);
-  wConfig11->SetVisible(config_page == 10);
-  wConfig12->SetVisible(config_page == 11);
-  wConfig13->SetVisible(config_page == 12);
-  wConfig14->SetVisible(config_page == 13);
-  wConfig15->SetVisible(config_page == 14);
-  wConfig16->SetVisible(config_page == 15);
-  wConfig17->SetVisible(config_page == 16);
-  wConfig18->SetVisible(config_page == 17);
-  wConfig19->SetVisible(config_page == 18);
-  wConfig20->SetVisible(config_page == 19);
-  wConfig21->SetVisible(config_page == 20);
-  wConfig22->SetVisible(config_page == 21);
+  wConfig1->set_visible(config_page == 0);
+  wConfig2->set_visible(config_page == 1);
+  wConfig3->set_visible(config_page == 2);
+  wConfig4->set_visible(config_page == 3);
+  wConfig5->set_visible(config_page == 4);
+  wConfig6->set_visible(config_page == 5);
+  wConfig7->set_visible(config_page == 6);
+  wConfig8->set_visible(config_page == 7);
+  wConfig9->set_visible(config_page == 8);
+  wConfig10->set_visible(config_page == 9);
+  wConfig11->set_visible(config_page == 10);
+  wConfig12->set_visible(config_page == 11);
+  wConfig13->set_visible(config_page == 12);
+  wConfig14->set_visible(config_page == 13);
+  wConfig15->set_visible(config_page == 14);
+  wConfig16->set_visible(config_page == 15);
+  wConfig17->set_visible(config_page == 16);
+  wConfig18->set_visible(config_page == 17);
+  wConfig19->set_visible(config_page == 18);
+  wConfig20->set_visible(config_page == 19);
+  wConfig21->set_visible(config_page == 20);
+  wConfig22->set_visible(config_page == 21);
 }
 
 
@@ -347,10 +347,7 @@ UpdateDeviceSetupButton(int DeviceIdx, const TCHAR *Name)
 
     wb = ((WndButton *)wf->FindByName(_T("cmdSetupDeviceA")));
     if (wb != NULL) {
-      if (_tcscmp(Name, _T("Vega")) == 0)
-        wb->SetVisible(true);
-      else
-        wb->SetVisible(false);
+      wb->set_visible(_tcscmp(Name, _T("Vega")) == 0);
     }
 
   }
@@ -359,10 +356,7 @@ UpdateDeviceSetupButton(int DeviceIdx, const TCHAR *Name)
 
     wb = ((WndButton *)wf->FindByName(_T("cmdSetupDeviceB")));
     if (wb != NULL) {
-      if (_tcscmp(Name, _T("Vega")) == 0)
-        wb->SetVisible(true);
-      else
-        wb->SetVisible(false);
+      wb->set_visible(_tcscmp(Name, _T("Vega")) == 0);
     }
 
   }
@@ -482,35 +476,35 @@ static void ShowFontEditButtons(bool bVisible) {
   WndProperty * wp;
   wp = (WndProperty*)wf->FindByName(_T("cmdInfoWindowFont"));
   if (wp) {
-    wp->SetVisible(bVisible);
+    wp->set_visible(bVisible);
   }
   wp = (WndProperty*)wf->FindByName(_T("cmdTitleWindowFont"));
   if (wp) {
-    wp->SetVisible(bVisible);
+    wp->set_visible(bVisible);
   }
   wp = (WndProperty*)wf->FindByName(_T("cmdMapWindowFont"));
   if (wp) {
-    wp->SetVisible(bVisible);
+    wp->set_visible(bVisible);
   }
   wp = (WndProperty*)wf->FindByName(_T("cmdTitleSmallWindowFont"));
   if (wp) {
-    wp->SetVisible(bVisible);
+    wp->set_visible(bVisible);
   }
   wp = (WndProperty*)wf->FindByName(_T("cmdMapWindowBoldFont"));
   if (wp) {
-    wp->SetVisible(bVisible);
+    wp->set_visible(bVisible);
   }
   wp = (WndProperty*)wf->FindByName(_T("cmdCDIWindowFont"));
   if (wp) {
-    wp->SetVisible(bVisible);
+    wp->set_visible(bVisible);
   }
   wp = (WndProperty*)wf->FindByName(_T("cmdMapLabelFont"));
   if (wp) {
-    wp->SetVisible(bVisible);
+    wp->set_visible(bVisible);
   }
   wp = (WndProperty*)wf->FindByName(_T("cmdStatisticsFont"));
   if (wp) {
-    wp->SetVisible(bVisible);
+    wp->set_visible(bVisible);
   }
 }
 
@@ -2091,7 +2085,7 @@ static void setVariables(void) {
 // VENTA2- PC model
     dfe->addEnumText(gettext(is_embedded()
                              ? _T("PDA/normal") : _T("PC/normal")));
-    wp->SetVisible(is_fivv());
+    wp->set_visible(is_fivv());
         dfe->Set(0);
     wp->RefreshDisplay();
   }
@@ -2285,23 +2279,21 @@ static void setVariables(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpAutoBlank"));
   if (wp) {
     if (is_altair() || !is_embedded())
-      wp->SetVisible(false);
+      wp->hide();
     wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableAutoBlank);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAutoBacklight")); // VENTA4
   if (wp) {
-    wp->SetVisible(false);
-    if (model_is_hp31x())
-    	wp->SetVisible(true);
+    wp->set_visible(model_is_hp31x());
     wp->GetDataField()->Set(CommonInterface::EnableAutoBacklight);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAutoSoundVolume")); // VENTA4
   if (wp) {
-    wp->SetVisible(is_embedded());
+    wp->set_visible(is_embedded());
     wp->GetDataField()->Set(CommonInterface::EnableAutoSoundVolume);
     wp->RefreshDisplay();
   }
@@ -2532,11 +2524,11 @@ void dlgConfigurationShowModal(void){
     // JMW we don't want these for non-PDA platforms yet
     wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
   }
 

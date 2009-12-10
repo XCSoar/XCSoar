@@ -116,7 +116,7 @@ static void OnEnableClicked(WindowControl * Sender){
 
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
-  wf->SetVisible(false);
+  wf->hide();
 //  SetFocus(hWndMainWindow);
 //  SetFocus(hWndMapWindow);
 
@@ -517,7 +517,7 @@ UserMsgNotify(WindowControl *Sender, unsigned id){
   if (id != 1)
     return false;
 
-  if (!wf->GetVisible())
+  if (!wf->is_visible())
     return true;
 
   bool do_refocus = false;
@@ -544,7 +544,7 @@ UserMsgNotify(WindowControl *Sender, unsigned id){
     }
 
     /*
-    if (!wf->GetVisible()){
+    if (!wf->is_visible()){
       Count = AirspaceWarnGetItemCount();
       wAirspaceList->ResetList();
       FocusedIdx = 0;

@@ -140,11 +140,11 @@ static void NextPage(int Step){
     }
   } while (!page_ok);
 
-  wInfo->SetVisible(page == 0);
-  wDetails->SetVisible(page == 1);
-  wCommand->SetVisible(page == 2);
-  wSpecial->SetVisible(page == 3);
-  wImage->SetVisible(page > 4);
+  wInfo->set_visible(page == 0);
+  wDetails->set_visible(page == 1);
+  wCommand->set_visible(page == 2);
+  wSpecial->set_visible(page == 3);
+  wImage->set_visible(page > 4);
 
   if (page==1) {
     wDetails->ResetList();
@@ -527,8 +527,8 @@ void dlgWayPointDetailsShowModal(void){
   wImage->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERBOTTOM | BORDERRIGHT);
   wDetails->SetBorderKind(BORDERLEFT);
 
-  wCommand->SetVisible(false);
-  wSpecial->SetVisible(false);
+  wCommand->hide();
+  wSpecial->hide();
   wImage->SetCaption(gettext(_T("Blank!")));
   wImage->SetOnPaintNotify(OnImagePaint);
 

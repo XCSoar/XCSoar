@@ -197,8 +197,8 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
     } else {
       XCSoarInterface::SetSettingsComputer().BallastTimerActive = false;
     }
-    ((WndButton *)wf->FindByName(_T("buttonDumpBallast")))->SetVisible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
-    ((WndButton *)wf->FindByName(_T("buttonStopDump")))->SetVisible(XCSoarInterface::SettingsComputer().BallastTimerActive);
+    ((WndButton *)wf->FindByName(_T("buttonDumpBallast")))->set_visible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
+    ((WndButton *)wf->FindByName(_T("buttonStopDump")))->set_visible(XCSoarInterface::SettingsComputer().BallastTimerActive);
     break;
   case DataField::daGet:
     lastRead = BALLAST;
@@ -282,8 +282,8 @@ void dlgBasicSettingsShowModal(void){
 
   wf->SetTimerNotify(OnTimerNotify);
 
-  ((WndButton *)wf->FindByName(_T("buttonDumpBallast")))->SetVisible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
-  ((WndButton *)wf->FindByName(_T("buttonStopDump")))->SetVisible(XCSoarInterface::SettingsComputer().BallastTimerActive);
+  ((WndButton *)wf->FindByName(_T("buttonDumpBallast")))->set_visible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
+  ((WndButton *)wf->FindByName(_T("buttonStopDump")))->set_visible(XCSoarInterface::SettingsComputer().BallastTimerActive);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
@@ -304,7 +304,7 @@ void dlgBasicSettingsShowModal(void){
       wp->GetDataField()->
         SetAsFloat(GlidePolar::WingLoading);
     } else {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp->RefreshDisplay();
   }

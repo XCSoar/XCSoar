@@ -608,25 +608,25 @@ static void NextPage(int Step){
     wf->SetCaption(_T("19 Display"));
     break;
   }
-  wConfig1->SetVisible(page == 0);
-  wConfig2->SetVisible(page == 1);
-  wConfig3->SetVisible(page == 2);
-  wConfig4->SetVisible(page == 3);
-  wConfig5->SetVisible(page == 4);
-  wConfig6->SetVisible(page == 5);
-  wConfig7->SetVisible(page == 6);
-  wConfig8->SetVisible(page == 7);
-  wConfig9->SetVisible(page == 8);
-  wConfig10->SetVisible(page == 9);
-  wConfig11->SetVisible(page == 10);
-  wConfig12->SetVisible(page == 11);
-  wConfig13->SetVisible(page == 12);
-  wConfig14->SetVisible(page == 13);
-  wConfig15->SetVisible(page == 14);
-  wConfig16->SetVisible(page == 15);
-  wConfig17->SetVisible(page == 16);
-  wConfig18->SetVisible(page == 17);
-  wConfig19->SetVisible(page == 18);
+  wConfig1->set_visible(page == 0);
+  wConfig2->set_visible(page == 1);
+  wConfig3->set_visible(page == 2);
+  wConfig4->set_visible(page == 3);
+  wConfig5->set_visible(page == 4);
+  wConfig6->set_visible(page == 5);
+  wConfig7->set_visible(page == 6);
+  wConfig8->set_visible(page == 7);
+  wConfig9->set_visible(page == 8);
+  wConfig10->set_visible(page == 9);
+  wConfig11->set_visible(page == 10);
+  wConfig12->set_visible(page == 11);
+  wConfig13->set_visible(page == 12);
+  wConfig14->set_visible(page == 13);
+  wConfig15->set_visible(page == 14);
+  wConfig16->set_visible(page == 15);
+  wConfig17->set_visible(page == 16);
+  wConfig18->set_visible(page == 17);
+  wConfig19->set_visible(page == 18);
 
   UpdateParameters(false);
 

@@ -129,7 +129,7 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
 	      {
 		// not existing en primary or secondary flarm id list
 		((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetCaption(_T("Set CN"));
-		((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetVisible(true);
+                ((WndButton *)wf->FindByName(_T("cmdSetCN")))->show();
 	      }
 	    else
 	      {
@@ -139,19 +139,17 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
 		if (index != -1)
 		  {
 		    ((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetCaption(_T("Edit CN"));
-		    ((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetVisible(true);
+                    ((WndButton *)wf->FindByName(_T("cmdSetCN")))->show();
 		  }
 		else
-		  {
-		    ((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetVisible(false);
-		  }
+                  ((WndButton *)wf->FindByName(_T("cmdSetCN")))->hide();
 	      }
-	    ((WndButton *)wf->FindByName(_T("cmdTrack")))->SetVisible(true);
+            ((WndButton *)wf->FindByName(_T("cmdTrack")))->show();
 	  }
 	else
 	  {
-	    ((WndButton *)wf->FindByName(_T("cmdTrack")))->SetVisible(false);
-	    ((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetVisible(false);
+            ((WndButton *)wf->FindByName(_T("cmdTrack")))->hide();
+            ((WndButton *)wf->FindByName(_T("cmdSetCN")))->hide();
 	  }
       }
   }

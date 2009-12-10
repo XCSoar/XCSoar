@@ -597,7 +597,7 @@ LoadChild(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
     LoadColors(*WC, node);
 
     if (!Visible)
-      WC->SetVisible(Visible);
+      WC->hide();
 
     if (Caption[0] != '\0')
       WC->SetCaption(Caption);

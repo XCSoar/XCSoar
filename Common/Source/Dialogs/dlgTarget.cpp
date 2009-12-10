@@ -296,65 +296,42 @@ static void RefreshCalculator(void) {
     || !task.ValidTaskPoint(target_point+1);
 
   if (btnMove) {
-    if (nodisplay) {
-      btnMove->SetVisible(false);
+    wp->set_visible(!nodisplay);
+    if (nodisplay)
       TargetMoveMode = false;
-    } else {
-      btnMove->SetVisible(true);
-    }
   }
 
   nodisplay = nodisplay || TargetMoveMode;
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
   if (wp) {
-    if (TargetMoveMode) {
-      wp->SetVisible(false);
-    } else {
-      wp->SetVisible(true);
-    }
+    wp->set_visible(!TargetMoveMode);
   }
 
   WindowControl* wc = (WindowControl*)wf->FindByName(_T("btnOK"));
   if (wc) {
-    if (TargetMoveMode) {
-      wc->SetVisible(false);
-    } else {
-      wc->SetVisible(true);
-    }
+    wp->set_visible(!TargetMoveMode);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAATTargetLocked"));
   if (wp) {
     wp->GetDataField()->Set(task.getTaskPoint(target_point).AATTargetLocked);
     wp->RefreshDisplay();
-    if (nodisplay) {
-      wp->SetVisible(false);
-    } else {
-      wp->SetVisible(true);
-    }
+    wp->set_visible(!nodisplay);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(Range*100.0);
     wp->RefreshDisplay();
-    if (nodisplay) {
-      wp->SetVisible(false);
-    } else {
-      wp->SetVisible(true);
-    }
+    wp->set_visible(!nodisplay);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRadial"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(Radial);
     wp->RefreshDisplay();
-    if (nodisplay) {
-      wp->SetVisible(false);
-    } else {
-      wp->SetVisible(true);
-    }
+    wp->set_visible(!nodisplay);
   }
 
   // update outputs
@@ -371,11 +348,7 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpAATDelta"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(dd-task.getSettings().AATTaskLength);
-    if (task.getSettings().AATEnabled) {
-      wp->SetVisible(true);
-    } else {
-      wp->SetVisible(false);
-    }
+    wp->set_visible(task.getSettings().AATEnabled);
     wp->RefreshDisplay();
   }
 

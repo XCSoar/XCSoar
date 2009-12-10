@@ -111,7 +111,7 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpAATTime"));
   if (wp) {
     if (!task.getSettings().AATEnabled) {
-      wp->SetVisible(false);
+      wp->hide();
     } else {
       wp->GetDataField()->SetAsFloat(task.getSettings().AATTaskLength);
     }
@@ -146,11 +146,8 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
     wp->RefreshDisplay();
-    if (!task.getSettings().AATEnabled || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
-      wp->SetVisible(false);
-    } else {
-      wp->SetVisible(true);
-    }
+    wp->set_visible(task.getSettings().AATEnabled &&
+                    task.ValidTaskPoint(task.getActiveIndex() + 1));
     wp->GetDataField()->SetAsFloat(Range*100.0);
     wp->RefreshDisplay();
   }
@@ -244,12 +241,12 @@ static void DoOptimise(void) {
 
 static void OnTargetClicked(WindowControl * Sender){
   (void)Sender;
-  wf->SetVisible(false);
+  wf->hide();
   dlgTarget();
   // find start value for range (it may have changed)
   Range = task.AdjustAATTargets(2.0);
   RefreshCalculator();
-  wf->SetVisible(true);
+  wf->show();
 }
 
 
@@ -364,10 +361,10 @@ void dlgTaskCalculatorShowModal(void){
   RefreshCalculator();
 
   if (!task.getSettings().AATEnabled || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
-    ((WndButton *)wf->FindByName(_T("Optimise")))->SetVisible(false);
+    ((WndButton *)wf->FindByName(_T("Optimise")))->hide();
   }
   if (!task.ValidTaskPoint(task.getActiveIndex())) {
-    ((WndButton *)wf->FindByName(_T("Target")))->SetVisible(false);
+    ((WndButton *)wf->FindByName(_T("Target")))->hide();
   }
 
   if (wf->ShowModal() == mrCancel) {

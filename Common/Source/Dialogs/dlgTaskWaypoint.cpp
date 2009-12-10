@@ -134,7 +134,7 @@ static void SetValues(bool first=false) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskFAISector"));
   if (wp) {
-    wp->SetVisible(settings_task.AATEnabled==0);
+    wp->set_visible(settings_task.AATEnabled == 0);
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     if (first) {
@@ -150,7 +150,7 @@ static void SetValues(bool first=false) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskSectorRadius"));
   if (wp) {
-    wp->SetVisible(settings_task.AATEnabled==0);
+    wp->set_visible(settings_task.AATEnabled == 0);
     wp->GetDataField()->SetAsFloat(lround(settings_task.SectorRadius*DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
@@ -172,7 +172,7 @@ static void SetValues(bool first=false) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpMinTime"));
   if (wp) {
-    wp->SetVisible(settings_task.AATEnabled>0);
+    wp->set_visible(settings_task.AATEnabled > 0);
     wp->GetDataField()->SetAsFloat(settings_task.AATTaskLength);
     wp->RefreshDisplay();
   }
@@ -193,7 +193,7 @@ static void SetValues(bool first=false) {
   WndButton* wb;
   wb = (WndButton *)wf->FindByName(_T("EditStartPoints"));
   if (wb) {
-    wb->SetVisible(settings_task.EnableMultipleStartPoints!=0);
+    wb->set_visible(settings_task.EnableMultipleStartPoints != 0);
   }
 
 }
@@ -278,7 +278,7 @@ static void SetWaypointValues(bool first=false) {
     wp->GetDataField()->SetAsFloat(lround(tp.AATCircleRadius
                                           *DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
-    wp->SetVisible(tp.AATType==0);
+    wp->set_visible(tp.AATType == 0);
     wp->RefreshDisplay();
   }
 
@@ -287,21 +287,21 @@ static void SetWaypointValues(bool first=false) {
     wp->GetDataField()->SetAsFloat(lround(tp.AATSectorRadius
                                           *DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
-    wp->SetVisible(tp.AATType>0);
+    wp->set_visible(tp.AATType > 0);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAATStartRadial"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(tp.AATStartRadial);
-    wp->SetVisible(tp.AATType>0);
+    wp->set_visible(tp.AATType > 0);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAATFinishRadial"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(tp.AATFinishRadial);
-    wp->SetVisible(tp.AATType>0);
+    wp->set_visible(tp.AATType > 0);
     wp->RefreshDisplay();
   }
 
@@ -473,11 +473,11 @@ static void OnRemoveClicked(WindowControl * Sender) {
 
 static void OnTaskRulesClicked(WindowControl * Sender){
   (void)Sender;
-  wf->SetVisible(false);
+  wf->hide();
   if (dlgTaskRules()) {
     task.SetTaskModified();
   }
-  wf->SetVisible(true);
+  wf->show();
 }
 
 
@@ -534,35 +534,35 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
   if (addonly) {
     wb = (WndButton *)wf->FindByName(_T("butSelect"));
     if (wb) {
-      wb->SetVisible(false);
+      wb->hide();
     }
     wb = (WndButton *)wf->FindByName(_T("butRemove"));
     if (wb) {
-      wb->SetVisible(false);
+      wb->hide();
     }
     wb = (WndButton *)wf->FindByName(_T("butDetails"));
     if (wb) {
-      wb->SetVisible(false);
+      wb->hide();
     }
     wb = (WndButton *)wf->FindByName(_T("butDown"));
     if (wb) {
-      wb->SetVisible(false);
+      wb->hide();
     }
     wb = (WndButton *)wf->FindByName(_T("butUp"));
     if (wb) {
-      wb->SetVisible(false);
+      wb->hide();
     }
   } else {
     if (!task.ValidTaskPoint(twItemIndex-1)) {
       wb = (WndButton *)wf->FindByName(_T("butUp"));
       if (wb) {
-        wb->SetVisible(false);
+        wb->hide();
       }
     }
     if (!task.ValidTaskPoint(twItemIndex+1)) {
       wb = (WndButton *)wf->FindByName(_T("butDown"));
       if (wb) {
-        wb->SetVisible(false);
+        wb->hide();
       }
     }
   }
@@ -571,27 +571,22 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
 
   switch (twType) {
     case 0:
-      wStart->SetVisible(1);
-      wTurnpoint->SetVisible(0);
-      wAATTurnpoint->SetVisible(0);
-      wFinish->SetVisible(0);
+      wStart->show();
+      wTurnpoint->hide();
+      wAATTurnpoint->hide();
+      wFinish->hide();
       break;
     case 1:
-      wStart->SetVisible(0);
-      if (settings_task.AATEnabled) {
-	wTurnpoint->SetVisible(0);
-	wAATTurnpoint->SetVisible(1);
-      } else {
-	wTurnpoint->SetVisible(1);
-	wAATTurnpoint->SetVisible(0);
-      }
-      wFinish->SetVisible(0);
+      wStart->hide();
+      wTurnpoint->set_visible(!settings_task.AATEnabled);
+      wAATTurnpoint->set_visible(settings_task.AATEnabled);
+      wFinish->hide();
     break;
     case 2:
-      wStart->SetVisible(0);
-      wTurnpoint->SetVisible(0);
-      wAATTurnpoint->SetVisible(0);
-      wFinish->SetVisible(1);
+      wStart->hide();
+      wTurnpoint->hide();
+      wAATTurnpoint->hide();
+      wFinish->show();
     break;
   }
 

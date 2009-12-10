@@ -82,7 +82,6 @@ private:
   bool mHasFocus;
 
   int  mBorderSize;
-  bool mVisible;
 
   WindowControl *mActiveClient;
 
@@ -122,10 +121,6 @@ public:
 
   virtual int OnHelp();
 
-  virtual void Show(void) {
-    SetVisible(true);
-  }
-
   void SetOnHelpCallback(void(*Function)(WindowControl *Sender)) {
     mOnHelpCallback = Function;
   }
@@ -137,9 +132,6 @@ public:
 
   bool GetReadOnly(void) { return mReadOnly; }
   bool SetReadOnly(bool Value);
-
-  void SetVisible(bool Value);
-  bool GetVisible(void);
 
   int  GetBorderKind(void);
   int  SetBorderKind(int Value);

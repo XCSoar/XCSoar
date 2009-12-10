@@ -175,7 +175,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   RECT mRc = get_screen_position();
   DrawWireRects(XCSoarInterface::EnableAnimation,&mRc, 5);
 
-  SetVisible(true);
+  show();
 
   bring_to_top();
 
@@ -385,15 +385,4 @@ WndForm::on_unhandled_key(unsigned key_code)
     return 0;
 
   return WindowControl::on_unhandled_key(key_code);
-}
-
-void WndForm::Show(void){
-
-  WindowControl::Show();
-
-  bring_to_top();
-
-//  SetFocus(GetTopWindow(GetHandle()));
-
-//  SetActiveWindow(GetHandle());
 }

@@ -298,7 +298,7 @@ static void Update(void){
     break;
   }
 
-  wGrid->SetVisible(page<MAXPAGE+1);
+  wGrid->set_visible(page < MAXPAGE + 1);
 
   if (wGrid != NULL)
     wGrid->invalidate();
@@ -367,9 +367,9 @@ static void OnCalcClicked(WindowControl * Sender,
     dlgBasicSettingsShowModal();
   }
   if (page==ANALYSIS_PAGE_CLIMB) {
-    wf->SetVisible(false);
+    wf->hide();
     dlgTaskCalculatorShowModal();
-    wf->SetVisible(true);
+    wf->show();
   }
   if (page==ANALYSIS_PAGE_WIND) {
     dlgWindSettingsShowModal();
@@ -381,9 +381,9 @@ static void OnCalcClicked(WindowControl * Sender,
     dlgBasicSettingsShowModal();
   }
   if ((page==ANALYSIS_PAGE_TASK) || (page==ANALYSIS_PAGE_TASK_SPEED)) {
-    wf->SetVisible(false);
+    wf->hide();
     dlgTaskCalculatorShowModal();
-    wf->SetVisible(true);
+    wf->show();
   }
   if (page==ANALYSIS_PAGE_OLC) {
     XCSoarInterface::StartHourglassCursor();

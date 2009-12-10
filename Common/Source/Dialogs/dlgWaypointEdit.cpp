@@ -109,64 +109,64 @@ static void SetUnits(void) {
   case 1: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     break;
   case 2: // ("DDMM.mmm");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     break;
   case 3: // ("DD.dddd");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
     // hide this field for DD.dddd format
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
     if (wp) {
-      wp->SetVisible(false);
+      wp->hide();
     }
     break;
   }

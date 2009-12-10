@@ -267,7 +267,7 @@ static void OverviewRefreshTask(void) {
 
 static void UpdateAdvanced(void) {
   if (wfAdvanced) {
-    wfAdvanced->SetVisible(showAdvanced);
+    wfAdvanced->set_visible(showAdvanced);
   }
 }
 
@@ -385,10 +385,10 @@ static void OnCalcClicked(WindowControl * Sender,
   (void)Sender;
   (void)ListInfo;
 
-  wf->SetVisible(false);
+  wf->hide();
   dlgTaskCalculatorShowModal();
   OverviewRefreshTask();
-  wf->SetVisible(true);
+  wf->show();
 }
 
 
@@ -397,9 +397,9 @@ static void OnAnalysisClicked(WindowControl * Sender,
   (void)Sender;
   (void)ListInfo;
 
-  wf->SetVisible(false);
+  wf->hide();
   dlgAnalysisShowModal();
-  wf->SetVisible(true);
+  wf->show();
 }
 
 

@@ -95,11 +95,11 @@ static void NextPage(int Step){
     wf->SetCaption(gettext(_T("Status: Times")));
     break;
   }
-  wStatus0->SetVisible(status_page == 0);
-  wStatus1->SetVisible(status_page == 1);
-  wStatus2->SetVisible(status_page == 2);
-  wStatus3->SetVisible(status_page == 3);
-  wStatus4->SetVisible(status_page == 4);
+  wStatus0->set_visible(status_page == 0);
+  wStatus1->set_visible(status_page == 1);
+  wStatus2->set_visible(status_page == 2);
+  wStatus3->set_visible(status_page == 3);
+  wStatus4->set_visible(status_page == 4);
 }
 
 
@@ -523,7 +523,7 @@ static void UpdateValuesTask(void) {
   Units::TimeToText(Temp, (int)task.getSettings().AATTaskLength*60);
   if (wp) {
     if (!task.getSettings().AATEnabled) {
-      wp->SetVisible(false);
+      wp->hide();
     } else {
       wp->SetText(Temp);
     }
@@ -645,11 +645,11 @@ void dlgStatusShowModal(int start_page){
     WndButton *wb;
     wb = ((WndButton *)wf->FindByName(_T("cmdNext")));
     if (wb != NULL) {
-      wb->SetVisible(false);
+      wb->hide();
     }
     wb = ((WndButton *)wf->FindByName(_T("cmdPrev")));
     if (wb != NULL) {
-      wb->SetVisible(false);
+      wb->hide();
     }
   }
 

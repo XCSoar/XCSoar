@@ -99,7 +99,6 @@ WindowControl::WindowControl(WindowControl *Owner,
 
   // todo
   mhFont = &MapWindowFont;
-  mVisible = Visible;
   mCaption[0] = '\0';
   mDontPaintSelector = false;
 
@@ -135,7 +134,7 @@ WindowControl::WindowControl(WindowControl *Owner,
 
   get_canvas().background_transparent();
 
-  if (mVisible)
+  if (Visible)
     show();
 }
 
@@ -164,7 +163,7 @@ WindowControl::~WindowControl(void){
 Window *
 WindowControl::GetCanFocus()
 {
-  if (!mVisible)
+  if (!is_visible())
     return NULL;
 
   if (mCanFocus && !mReadOnly)
@@ -208,9 +207,9 @@ void WindowControl::AddClient(WindowControl *Client){
 void WindowControl::FilterAdvanced(bool advanced){
   if (_tcsstr(mCaption, TEXT("*")) != NULL) {
     if (advanced) {
-      SetVisible(true);
+      show();
     } else {
-      SetVisible(false);
+      hide();
     }
   }
   for (int i=0; i<mClientCount; i++){
@@ -293,32 +292,6 @@ bool WindowControl::SetCanFocus(bool Value){
 
 bool WindowControl::GetFocused(void){
   return mHasFocus;
-}
-
-void
-WindowControl::SetVisible(bool Value)
-{
-  if (mVisible != Value){
-
-    mVisible = Value;
-
-    /*
-    for (int i=0; i<mClientCount; i++){
-      mClients[i]->SetVisible(mVisible);
-    }
-    */
-
-    if (mVisible){
-      show();
-    } else {
-      hide();
-    }
-
-  }
-}
-
-bool WindowControl::GetVisible(void){
-  return mVisible;
 }
 
 int WindowControl::GetBorderKind(void){
