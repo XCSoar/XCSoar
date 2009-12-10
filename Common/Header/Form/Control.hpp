@@ -99,8 +99,8 @@ protected:
   WindowControl *mClients[50];
   int mClientCount;
 
-  virtual void PaintSelector(Canvas &canvas);
-  virtual WindowControl *SetOwner(WindowControl *Value);
+  void PaintSelector(Canvas &canvas);
+  WindowControl *SetOwner(WindowControl *Value);
   bool HasFocus(void) { return mHasFocus; }
 
 public:
