@@ -465,7 +465,7 @@ void dlgWayPointDetailsShowModal(const Waypoint& waypoint)
   // alt reqd at mc 0
 
   alt = XCSoarInterface::Calculated().NavAltitude -
-    GlidePolar::MacCreadyAltitude(0.0,
+    oldGlidePolar::MacCreadyAltitude(0.0,
 				  distance,
 				  bearing,
 				  XCSoarInterface::Calculated().WindSpeed,
@@ -484,7 +484,7 @@ void dlgWayPointDetailsShowModal(const Waypoint& waypoint)
   // alt reqd at safety mc
 
   alt = XCSoarInterface::Calculated().NavAltitude -
-    GlidePolar::MacCreadyAltitude(GlidePolar::AbortSafetyMacCready(),
+    oldGlidePolar::MacCreadyAltitude(oldGlidePolar::AbortSafetyMacCready(),
 				  distance,
 				  bearing,
 				  XCSoarInterface::Calculated().WindSpeed,
@@ -500,7 +500,7 @@ void dlgWayPointDetailsShowModal(const Waypoint& waypoint)
   // alt reqd at current mc
 
   alt = XCSoarInterface::Calculated().NavAltitude -
-    GlidePolar::MacCreadyAltitude(GlidePolar::GetMacCready(),
+    oldGlidePolar::MacCreadyAltitude(oldGlidePolar::GetMacCready(),
 				  distance,
 				  bearing,
 				  XCSoarInterface::Calculated().WindSpeed,

@@ -56,6 +56,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "SettingsComputer.hpp"
 #include "options.h" /* for IBLSCALE() */
+#include "Navigation/Geometry/GeoVector.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -185,7 +186,7 @@ FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc) const
     chart.DrawNoData();
     return;
   }
-  double MACCREADY = GlidePolar::GetMacCready();
+  double MACCREADY = oldGlidePolar::GetMacCready();
 
   chart.ScaleYFromData(ThermalAverage);
   chart.ScaleYFromValue( (MACCREADY+0.5));
@@ -218,9 +219,9 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   Chart chart(canvas, rc);
 
   chart.ScaleYFromValue( 0);
-  chart.ScaleYFromValue(GlidePolar::SinkRateFast(0,
+  chart.ScaleYFromValue(oldGlidePolar::SinkRateFast(0,
        (int)(settings_computer.SAFTEYSPEED - 1)) * 1.1);
-  chart.ScaleXFromValue(GlidePolar::Vminsink*0.8);
+  chart.ScaleXFromValue(oldGlidePolar::Vminsink*0.8);
   chart.ScaleXFromValue(settings_computer.SAFTEYSPEED + 2);
 
   chart.DrawXGrid(10.0/SPEEDMODIFY, 0,
@@ -233,11 +234,11 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   bool v0valid = false;
   int i0=0;
 
-  for (i= GlidePolar::Vminsink; i < settings_computer.SAFTEYSPEED - 1;
+  for (i= oldGlidePolar::Vminsink; i < settings_computer.SAFTEYSPEED - 1;
        i++) {
 
-    sinkrate0 = GlidePolar::SinkRateFast(0,i);
-    sinkrate1 = GlidePolar::SinkRateFast(0,i+1);
+    sinkrate0 = oldGlidePolar::SinkRateFast(0,i);
+    sinkrate1 = oldGlidePolar::SinkRateFast(0,i+1);
     chart.DrawLine(i, sinkrate0 ,
 		   i+1, sinkrate1,
 		   Chart::STYLE_MEDIUMBLACK);
@@ -256,11 +257,11 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
     }
   }
 
-  double MACCREADY = GlidePolar::GetMacCready();
+  double MACCREADY = oldGlidePolar::GetMacCready();
 
   double ff = settings_computer.SAFTEYSPEED
     / max(1.0, derived.VMacCready);
-  double sb = GlidePolar::SinkRate(derived.VMacCready);
+  double sb = oldGlidePolar::SinkRate(derived.VMacCready);
   ff = (sb - MACCREADY) / max(1.0, derived.VMacCready);
 
   chart.DrawLine(0, MACCREADY, settings_computer.SAFTEYSPEED,
@@ -274,11 +275,11 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   canvas.background_opaque();
 
   _stprintf(text,TEXT("Weight %.0f kg"),
-	    GlidePolar::GetAUW());
+	    oldGlidePolar::GetAUW());
   canvas.text_opaque(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(55), text);
 
   _stprintf(text,TEXT("Wing loading %.1f kg/m2"),
-	    GlidePolar::WingLoading);
+	    oldGlidePolar::WingLoading);
   canvas.text_opaque(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(40), text);
 
   canvas.background_transparent();
@@ -739,47 +740,12 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
                                  const Airspaces &airspace_database,
                                  RasterTerrain &terrain) const
 {
-#ifdef OLD_TASK
-  double range = 50.0*1000; // km
-  double ach, acb;
-  double fj;
-  ach = nmea_info.Altitude;
-  acb = nmea_info.TrackBearing;
-  double hmin = max(0.0, nmea_info.Altitude - 3300);
-  double hmax = max(3300.0, nmea_info.Altitude + 1000);
-
-  GEOPOINT d_loc[AIRSPACE_SCANSIZE_X];
-  double d_alt[AIRSPACE_SCANSIZE_X];
-  double d_h[AIRSPACE_SCANSIZE_H];
-  int d_airspace[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X];
-  int i,j;
-
-  terrain.Lock();
-  // want most accurate rounding here
-  if (terrain.GetMap()) {
-    RasterRounding rounding(*terrain.GetMap(),0,0);
-    
-    for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
-      fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
-      FindLatitudeLongitude(nmea_info.Location,
-                            acb, range*fj,
-                            &d_loc[j]);
-      d_alt[j] = terrain.GetTerrainHeight(d_loc[j], rounding);
-      hmax = max(hmax, d_alt[j]);
-    }
-  } else {
-    for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
-      fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
-      FindLatitudeLongitude(nmea_info.Location,
-                            acb, range*fj,
-                            &d_loc[j]);
-      d_alt[j] = 0;
-      hmax = max(hmax, d_alt[j]);
-    }
-  }
-  terrain.Unlock();
-
-  double fh = (ach-hmin)/(hmax-hmin);
+  fixed range = 50000; // 50 km
+  fixed hmin = max(fixed_zero, nmea_info.Altitude - fixed(3300));
+  fixed hmax = max(fixed(3300), nmea_info.Altitude + fixed(1000));
+  const GEOPOINT p_start = nmea_info.Location;
+  const GeoVector v(range, nmea_info.TrackBearing);
+  const GEOPOINT p_end = v.end_point(p_start);
 
   Chart chart(canvas, rc);
   chart.ResetScale();
@@ -788,19 +754,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
 
-  double dfi = 1.0/(AIRSPACE_SCANSIZE_H-1);
-  double dfj = 1.0/(AIRSPACE_SCANSIZE_X-1);
-
-  for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
-    d_h[i] = (hmax-hmin)*i*dfi+hmin;
-  }
-  for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
-    for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
-      d_airspace[i][j]= -1; // no airspace
-    }
-  }
-
-  airspace_database.ScanLine(d_loc, d_h, d_airspace);
+#ifdef OLD_TASK
 
   int type;
 
@@ -828,65 +782,88 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
     }
   }
 
+#endif
+
   // draw ground
-  POINT ground[4];
-  Pen penGround(Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR);
-  Brush brushGround(Chart::GROUND_COLOUR);
-  canvas.select(penGround);
-  canvas.select(brushGround);
+  terrain.Lock();
+  if (terrain.GetMap()) {
+    // want most accurate rounding here
+    RasterRounding rounding(*terrain.GetMap(),0,0);
 
-  for (j=1; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
+    canvas.select(Pen(Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR));
+    canvas.select(Brush(Chart::GROUND_COLOUR));
+    
+    const fixed dfj = 1.0/(AIRSPACE_SCANSIZE_X-1);
+    fixed d_last, d_this, t_last, t_this;
 
-    ground[0].x = chart.screenX((j-1)*dfj*range);
-    ground[1].x = ground[0].x;
-    ground[2].x = chart.screenX((j)*dfj*range);
-    ground[3].x = ground[2].x;
-    ground[0].y = chart.screenY(0);
-    ground[1].y = chart.screenY(d_alt[j-1]);
-    ground[2].y = chart.screenY(d_alt[j]);
-    ground[3].y = ground[0].y;
-    canvas.polygon(ground, 4);
+    for (unsigned j=1; j< AIRSPACE_SCANSIZE_X; 
+         ++j, d_last=d_this, t_last=t_this) {
+
+      t_this = j*dfj;
+
+      if (j==1) {
+        d_last = terrain.GetTerrainHeight(p_start, rounding);
+        t_last = fixed_zero;
+      }
+      GEOPOINT p_this = p_start+(p_end-p_start)*t_this;
+      d_this = terrain.GetTerrainHeight(p_this, rounding);
+
+      POINT ground[4];
+      ground[0].x = chart.screenX(t_last*range);
+      ground[1].x = ground[0].x;
+      ground[2].x = chart.screenX(t_this*range);
+      ground[3].x = ground[2].x;
+      ground[0].y = chart.screenY(0);
+      ground[1].y = chart.screenY(d_last);
+      ground[2].y = chart.screenY(d_this);
+      ground[3].y = ground[0].y;
+      canvas.polygon(ground, 4);
+
+    }
   }
+  terrain.Unlock();
 
-  POINT line[4];
+  // draw aircraft trend line
   if (nmea_info.Speed>10.0) {
-    double t = range/nmea_info.Speed;
-    double gfh = (ach + derived.Average30s * t - hmin) / (hmax - hmin);
-    line[0].x = rc.left;
-    line[0].y = chart.screenY(fh);
-    line[1].x = rc.right;
-    line[1].y = chart.screenY(gfh);
-    chart.StyleLine(line[0], line[1], Chart::STYLE_BLUETHIN);
+    fixed t = range/nmea_info.Speed;
+    chart.DrawLine(0, nmea_info.Altitude, 
+                   range, nmea_info.Altitude+derived.Average30s*t,
+                   Chart::STYLE_BLUETHIN);
   }
-
-  canvas.white_pen();
-  canvas.white_brush();
-  canvas.set_text_color(Color(0xff,0xff,0xff));
-
-  chart.DrawXGrid(5.0/DISTANCEMODIFY, 0,
-		  Chart::STYLE_THINDASHPAPER, 5.0, true);
-  chart.DrawYGrid(1000.0/ALTITUDEMODIFY, 0, Chart::STYLE_THINDASHPAPER,
-		  1000.0, true);
 
   // draw aircraft
-  int delta;
-  canvas.white_pen();
-  canvas.white_brush();
+  {
+    int delta;
+    canvas.white_pen();
+    canvas.white_brush();
+    
+    POINT line[4];
+    line[0].x = chart.screenX(0.0);
+    line[0].y = chart.screenY(nmea_info.Altitude);
+    line[1].x = rc.left;
+    line[1].y = line[0].y;
+    delta = (line[0].x-line[1].x);
+    line[2].x = line[1].x;
+    line[2].y = line[0].y-delta/2;
+    line[3].x = (line[1].x+line[0].x)/2;
+    line[3].y = line[0].y;
+    canvas.polygon(line, 4);
+  }
 
-  line[0].x = chart.screenX(0.0);
-  line[0].y = chart.screenY(ach);
-  line[1].x = rc.left;
-  line[1].y = line[0].y;
-  delta = (line[0].x-line[1].x);
-  line[2].x = line[1].x;
-  line[2].y = line[0].y-delta/2;
-  line[3].x = (line[1].x+line[0].x)/2;
-  line[3].y = line[0].y;
-  canvas.polygon(line, 4);
-
-  chart.DrawXLabel(TEXT("D"));
-  chart.DrawYLabel(TEXT("h"));
-#endif
+  // draw grid
+  {
+    canvas.white_pen();
+    canvas.white_brush();
+    canvas.set_text_color(Color(0xff,0xff,0xff));
+    
+    chart.DrawXGrid(5.0/DISTANCEMODIFY, 0,
+                    Chart::STYLE_THINDASHPAPER, 5.0, true);
+    chart.DrawYGrid(1000.0/ALTITUDEMODIFY, 0, Chart::STYLE_THINDASHPAPER,
+                    1000.0, true);
+    
+    chart.DrawXLabel(TEXT("D"));
+    chart.DrawYLabel(TEXT("h"));
+  }
 }
 
 void
@@ -1059,25 +1036,25 @@ FlightStatistics::CaptionPolar(TCHAR *sTmp) const
   if (InfoBoxLayout::landscape) {
     _stprintf(sTmp, TEXT("%s:\r\n  %3.0f\r\n  at %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %3.0f %s"),
 	      gettext(TEXT("Best LD")),
-	      GlidePolar::bestld,
-	      GlidePolar::Vbestld*SPEEDMODIFY,
+	      oldGlidePolar::bestld,
+	      oldGlidePolar::Vbestld*SPEEDMODIFY,
 	      Units::GetHorizontalSpeedName(),
 	      gettext(TEXT("Min sink")),
-	      GlidePolar::minsink*LIFTMODIFY,
+	      oldGlidePolar::minsink*LIFTMODIFY,
 	      Units::GetVerticalSpeedName(),
-	      GlidePolar::Vminsink*SPEEDMODIFY,
+	      oldGlidePolar::Vminsink*SPEEDMODIFY,
 	      Units::GetHorizontalSpeedName()
 	      );
   } else {
     _stprintf(sTmp, TEXT("%s:\r\n  %3.0f at %3.0f %s\r\n%s:\r\n  %3.2f %s at %3.0f %s"),
 	      gettext(TEXT("Best LD")),
-	      GlidePolar::bestld,
-	      GlidePolar::Vbestld*SPEEDMODIFY,
+	      oldGlidePolar::bestld,
+	      oldGlidePolar::Vbestld*SPEEDMODIFY,
 	      Units::GetHorizontalSpeedName(),
 	      gettext(TEXT("Min sink")),
-	      GlidePolar::minsink*LIFTMODIFY,
+	      oldGlidePolar::minsink*LIFTMODIFY,
 	      Units::GetVerticalSpeedName(),
-	      GlidePolar::Vminsink*SPEEDMODIFY,
+	      oldGlidePolar::Vminsink*SPEEDMODIFY,
 	      Units::GetHorizontalSpeedName());
   }
 }

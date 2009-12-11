@@ -123,15 +123,15 @@ void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
   char text[20]; // TODO size it
 
   double cruise= Calculated().AverageLD;
-  static double maxcruise=(GlidePolar::bestld);
-  static double mincruise=(GlidePolar::bestld/4);
+  static double maxcruise=(oldGlidePolar::bestld);
+  static double mincruise=(oldGlidePolar::bestld/4);
   int i;
   double gunit;
   static int spread=0;
   //short rcx=rc.left+rc.right/2-IBLSCALE(20);
   //short rcy=rc.bottom-IBLSCALE(15); // 35
 
-  if ( cruise < 0 ) cruise = GlidePolar::bestld;
+  if ( cruise < 0 ) cruise = oldGlidePolar::bestld;
   if ( cruise < mincruise ) return;
   if ( cruise >maxcruise ) cruise=maxcruise;
 

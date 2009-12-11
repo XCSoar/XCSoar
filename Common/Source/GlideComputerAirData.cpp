@@ -63,7 +63,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "GPSClock.hpp"
 
-#define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
+#define TAKEOFFSPEEDTHRESHOLD (0.5*oldGlidePolar::Vminsink)
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -99,7 +99,7 @@ GlideComputerAirData::GlideComputerAirData():
 void
 GlideComputerAirData::ResetFlight(const bool full)
 {
-  GlidePolar::SetCruiseEfficiency(1.0);
+  oldGlidePolar::SetCruiseEfficiency(1.0);
 }
 
 void
@@ -539,7 +539,7 @@ GlideComputerAirData::EnergyHeightNavAltitude()
   }
 
   // Calculate energy height
-  double V_bestld_tas = GlidePolar::Vbestld * ias_to_tas;
+  double V_bestld_tas = oldGlidePolar::Vbestld * ias_to_tas;
   double V_mc_tas = Calculated().VMacCready * ias_to_tas;
   V_tas = max(V_tas, V_bestld_tas);
 
@@ -646,7 +646,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
     risk_mc = mc_setting;
   } else {
     risk_mc =
-      GlidePolar::MacCreadyRisk(Calculated().NavAltitude
+      oldGlidePolar::MacCreadyRisk(Calculated().NavAltitude
         + Calculated().EnergyHeight - SettingsComputer().SAFETYALTITUDEBREAKOFF
         - Calculated().TerrainBase, Calculated().MaxThermalHeight, mc_setting);
   }
@@ -667,7 +667,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
 
     if (!task.Valid() || !Calculated().FinalGlide) {
       // calculate speed as if cruising, wind has no effect on opt speed
-      GlidePolar::MacCreadyAltitude(delta_mc,
+      oldGlidePolar::MacCreadyAltitude(delta_mc,
                                     100.0, // dummy value
                                     Basic().TrackBearing,
                                     0.0,
@@ -677,7 +677,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
                                     false,
                                     NULL, 0, cruise_efficiency);
     } else {
-      GlidePolar::MacCreadyAltitude(delta_mc,
+      oldGlidePolar::MacCreadyAltitude(delta_mc,
                                     100.0, // dummy value
                                     Basic().TrackBearing,
                                     Calculated().WindSpeed,
@@ -691,17 +691,17 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
     // put low pass filter on VOpt so display doesn't jump around too much
     if (Calculated().Vario <= risk_mc) {
       SetCalculated().VOpt = max(Calculated().VOpt,
-          GlidePolar::Vminsink*sqrt(n));
+          oldGlidePolar::Vminsink*sqrt(n));
     } else {
       SetCalculated().VOpt = max(Calculated().VOpt,
-          (double)GlidePolar::Vminsink);
+          (double)oldGlidePolar::Vminsink);
     }
     SetCalculated().VOpt = LowPassFilter(Calculated().VOpt,VOptnew, 0.6);
 
   } else {
     // this thermal is better than maccready, so fly at minimum sink speed
     // calculate speed of min sink adjusted for load factor
-    SetCalculated().VOpt = GlidePolar::Vminsink * sqrt(n);
+    SetCalculated().VOpt = oldGlidePolar::Vminsink * sqrt(n);
   }
 #endif
 
@@ -725,12 +725,12 @@ GlideComputerAirData::NettoVario()
 
   double glider_sink_rate;
   if (Basic().AirspeedAvailable && replay_disabled) {
-    glider_sink_rate= GlidePolar::SinkRate(max((double)GlidePolar::Vminsink,
+    glider_sink_rate= oldGlidePolar::SinkRate(max((double)oldGlidePolar::Vminsink,
 					       Basic().IndicatedAirspeed), n);
   } else {
     // assume zero wind (Speed=Airspeed, very bad I know)
     // JMW TODO accuracy: adjust for estimated airspeed
-    glider_sink_rate= GlidePolar::SinkRate(max((double)GlidePolar::Vminsink,
+    glider_sink_rate= oldGlidePolar::SinkRate(max((double)oldGlidePolar::Vminsink,
 					       Basic().Speed), n);
   }
   SetCalculated().GliderSinkRate = glider_sink_rate;
@@ -749,8 +749,8 @@ GlideComputerAirData::NettoVario()
 bool
 GlideComputerAirData::ProcessVario()
 {
-  const double mc = GlidePolar::GetMacCready();
-  const double ce = GlidePolar::GetCruiseEfficiency();
+  const double mc = oldGlidePolar::GetMacCready();
+  const double ce = oldGlidePolar::GetCruiseEfficiency();
 
   NettoVario();
   SpeedToFly(mc, ce);
@@ -1058,7 +1058,7 @@ GlideComputerAirData::BallastDump()
     return;
   }
 
-  double BALLAST = GlidePolar::GetBallast();
+  double BALLAST = oldGlidePolar::GetBallast();
   double BALLAST_last = BALLAST;
   double percent_per_second =
       1.0 / max(10.0, (double)SettingsComputer().BallastSecsToEmpty);
@@ -1068,11 +1068,11 @@ GlideComputerAirData::BallastDump()
     // JMW illegal	BallastTimerActive = false;
     BALLAST = 0.0;
   }
-  GlidePolar::SetBallast(BALLAST);
+  oldGlidePolar::SetBallast(BALLAST);
 
   if (fabs(BALLAST - BALLAST_last) > 0.05) {
     // JMW update on 5 percent!
-    GlidePolar::UpdatePolar(true,SettingsComputer());
+    oldGlidePolar::UpdatePolar(true,SettingsComputer());
   }
 }
 

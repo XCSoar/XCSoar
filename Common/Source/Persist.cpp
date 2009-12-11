@@ -139,9 +139,9 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
     return;
   }
 
-  double MACCREADY = GlidePolar::GetMacCready();
-  double BUGS = GlidePolar::GetBugs();
-  double BALLAST = GlidePolar::GetBallast();
+  double MACCREADY = oldGlidePolar::GetMacCready();
+  double BUGS = oldGlidePolar::GetBugs();
+  double BALLAST = oldGlidePolar::GetBallast();
 
   // Read persistent memory into McCready, QNH, bugs, ballast and temperature
   fread(&MACCREADY, sizeof(double), 1, file);
@@ -158,9 +158,9 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   BALLAST = min(1.0, max(BALLAST, 0.0));
   //   CRUISE_EFFICIENCY = min(1.5, max(CRUISE_EFFICIENCY,0.75));
 
-  GlidePolar::SetMacCready(MACCREADY);
-  GlidePolar::SetBugs(BUGS);
-  GlidePolar::SetBallast(BALLAST);
+  oldGlidePolar::SetMacCready(MACCREADY);
+  oldGlidePolar::SetBugs(BUGS);
+  oldGlidePolar::SetBallast(BALLAST);
 
   StartupStore(TEXT("LoadCalculationsPersist OK\n"));
 
@@ -210,9 +210,9 @@ SaveCalculationsPersist(const NMEA_INFO &gps_info,
   fwrite(&size, sizeof(size), 1, file);
   fwrite(&glide_computer.GetOLC().data, size, 1, file);
 
-  double MACCREADY = GlidePolar::GetMacCready();
-  double BUGS = GlidePolar::GetBugs();
-  double BALLAST = GlidePolar::GetBallast();
+  double MACCREADY = oldGlidePolar::GetMacCready();
+  double BUGS = oldGlidePolar::GetBugs();
+  double BALLAST = oldGlidePolar::GetBallast();
 
   size = sizeof(double)*4;
   fwrite(&size, sizeof(size), 1, file);

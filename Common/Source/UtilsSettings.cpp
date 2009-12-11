@@ -169,7 +169,7 @@ void SettingsLeave() {
 
   if (POLARFILECHANGED) {
     LoadPolarById(POLARID, polar);
-    GlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
+    oldGlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
   }
 
   if (AIRFIELDFILECHANGED

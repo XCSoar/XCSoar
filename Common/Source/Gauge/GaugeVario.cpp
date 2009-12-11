@@ -252,7 +252,7 @@ void GaugeVario::Render() {
   }
 
   if (Appearance.GaugeVarioMc) {
-    double mc = GlidePolar::GetMacCready()*LIFTMODIFY;
+    double mc = oldGlidePolar::GetMacCready()*LIFTMODIFY;
     if (SettingsComputer().AutoMacCready)
       RenderValue(canvas, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
@@ -849,7 +849,7 @@ void GaugeVario::RenderBallast(Canvas &canvas)
 
   }
 
-  double BALLAST = GlidePolar::GetBallast();
+  double BALLAST = oldGlidePolar::GetBallast();
 
   if (BALLAST != lastBallast){
        // ballast hase been changed
@@ -932,7 +932,7 @@ void GaugeVario::RenderBugs(Canvas &canvas)
 
   }
 
-  double BUGS = GlidePolar::GetBugs();
+  double BUGS = oldGlidePolar::GetBugs();
 
   if (BUGS != lastBugs){
 

@@ -53,45 +53,45 @@ Copyright_License {
   double c = -1.141438761599;
 */
 
-//double GlidePolar::BallastFactor;
-double GlidePolar::RiskGamma = 0.0;
-double GlidePolar::polar_a;
-double GlidePolar::polar_b;
-double GlidePolar::polar_c;
-int GlidePolar::Vminsink = 2;
-int GlidePolar::Vbestld = 2;
-double GlidePolar::sinkratecache[MAXSAFETYSPEED];
-double GlidePolar::bestld = 0.0;
-double GlidePolar::minsink = 10000.0;
-double GlidePolar::BallastLitres = 0.0;
-double GlidePolar::WingLoading = 0.0;
+//double oldGlidePolar::BallastFactor;
+double oldGlidePolar::RiskGamma = 0.0;
+double oldGlidePolar::polar_a;
+double oldGlidePolar::polar_b;
+double oldGlidePolar::polar_c;
+int oldGlidePolar::Vminsink = 2;
+int oldGlidePolar::Vbestld = 2;
+double oldGlidePolar::sinkratecache[MAXSAFETYSPEED];
+double oldGlidePolar::bestld = 0.0;
+double oldGlidePolar::minsink = 10000.0;
+double oldGlidePolar::BallastLitres = 0.0;
+double oldGlidePolar::WingLoading = 0.0;
 
-double GlidePolar::SafetyMacCready= 0.0;
-bool GlidePolar::AbortSafetyUseCurrent = false;
-int GlidePolar::MAXSPEED=0;
+double oldGlidePolar::SafetyMacCready= 0.0;
+bool oldGlidePolar::AbortSafetyUseCurrent = false;
+int oldGlidePolar::MAXSPEED=0;
 
 static int iSAFETYSPEED=0;
 
-static Mutex mutexGlidePolar;
+static Mutex mutexoldGlidePolar;
 
 //Flight Data Globals
-double        GlidePolar::MACCREADY = 0; // JMW now in SI units (m/s) for consistency
-double        GlidePolar::BUGS = 1;
-double        GlidePolar::BALLAST = 0;
-double        GlidePolar::CRUISE_EFFICIENCY = 1.0;
+double        oldGlidePolar::MACCREADY = 0; // JMW now in SI units (m/s) for consistency
+double        oldGlidePolar::BUGS = 1;
+double        oldGlidePolar::BALLAST = 0;
+double        oldGlidePolar::CRUISE_EFFICIENCY = 1.0;
 
 unsigned POLARID = 0;
 Polar polar;
 
-void GlidePolar::Lock() {
-  mutexGlidePolar.Lock();
+void oldGlidePolar::Lock() {
+  mutexoldGlidePolar.Lock();
 }
 
-void GlidePolar::Unlock() {
-  mutexGlidePolar.Unlock();
+void oldGlidePolar::Unlock() {
+  mutexoldGlidePolar.Unlock();
 }
 
-double GlidePolar::AbortSafetyMacCready() {
+double oldGlidePolar::AbortSafetyMacCready() {
   double retval;
   Lock();
   if (AbortSafetyUseCurrent) {
@@ -103,7 +103,7 @@ double GlidePolar::AbortSafetyMacCready() {
   return retval;
 }
 
-double GlidePolar::GetAUW() {
+double oldGlidePolar::GetAUW() {
   double retval;
   Lock();
   retval = BallastLitres + polar.WEIGHTS[0] + polar.WEIGHTS[1];
@@ -115,7 +115,7 @@ double GlidePolar::GetAUW() {
  * Returns the chosen MacCready value
  * @return The chosen MacCready value
  */
-double GlidePolar::GetMacCready() {
+double oldGlidePolar::GetMacCready() {
   double retval;
   Lock();
   retval = MACCREADY;
@@ -127,7 +127,7 @@ double GlidePolar::GetMacCready() {
  * Returns the bugs factor
  * @return The bugs factor
  */
-double GlidePolar::GetBugs() {
+double oldGlidePolar::GetBugs() {
   double retval;
   Lock();
   retval = BUGS;
@@ -139,7 +139,7 @@ double GlidePolar::GetBugs() {
  * Returns the ballast percentage
  * @return The ballast percentage
  */
-double GlidePolar::GetBallast() {
+double oldGlidePolar::GetBallast() {
   double retval;
   Lock();
   retval = BALLAST;
@@ -151,7 +151,7 @@ double GlidePolar::GetBallast() {
  * Returns the cruise efficiency
  * @return The cruise efficiency
  */
-double GlidePolar::GetCruiseEfficiency() {
+double oldGlidePolar::GetCruiseEfficiency() {
   double retval;
   Lock();
   retval = CRUISE_EFFICIENCY;
@@ -163,7 +163,7 @@ double GlidePolar::GetCruiseEfficiency() {
  * Returns the ballast in liters
  * @return The ballast in liters
  */
-double GlidePolar::GetBallastLitres() {
+double oldGlidePolar::GetBallastLitres() {
   double retval;
   Lock();
   retval = BallastLitres;
@@ -175,7 +175,7 @@ double GlidePolar::GetBallastLitres() {
  * Sets the McCready value to val
  * @param val The new McCready value
  */
-void GlidePolar::SetMacCready(double val) {
+void oldGlidePolar::SetMacCready(double val) {
   Lock();
   MACCREADY = val;
   Unlock();
@@ -185,7 +185,7 @@ void GlidePolar::SetMacCready(double val) {
  * Sets the bugs factor to val
  * @param val The new bugs factor
  */
-void GlidePolar::SetBugs(double val) {
+void oldGlidePolar::SetBugs(double val) {
   Lock();
   BUGS = val;
   Unlock();
@@ -195,7 +195,7 @@ void GlidePolar::SetBugs(double val) {
  * Sets the cruise efficiency to val
  * @param val The new cruise efficiency
  */
-void GlidePolar::SetCruiseEfficiency(double val) {
+void oldGlidePolar::SetCruiseEfficiency(double val) {
   Lock();
   CRUISE_EFFICIENCY = val;
   Unlock();
@@ -205,7 +205,7 @@ void GlidePolar::SetCruiseEfficiency(double val) {
  * Sets the ballast to val
  * @param val The new ballast percentage
  */
-void GlidePolar::SetBallast(double val) {
+void oldGlidePolar::SetBallast(double val) {
   Lock();
   BALLAST = val;
   Unlock();
@@ -217,7 +217,7 @@ void GlidePolar::SetBallast(double val) {
  * @param send
  * @param settings
  */
-void GlidePolar::UpdatePolar(bool send,
+void oldGlidePolar::UpdatePolar(bool send,
 			     const SETTINGS_COMPUTER &settings) {
 
   Lock();
@@ -329,7 +329,7 @@ void GlidePolar::UpdatePolar(bool send,
  * @param v The speed used for calculation
  * @return The corresponding sinkrate
  */
-inline double GlidePolar::_SinkRateFast(const double &MC, const int &v) {
+inline double oldGlidePolar::_SinkRateFast(const double &MC, const int &v) {
   // TODO TB: check this...
   return sinkratecache[v]-MC;
 }
@@ -340,7 +340,7 @@ inline double GlidePolar::_SinkRateFast(const double &MC, const int &v) {
  * @param v The speed used for calculation
  * @return The corresponding sinkrate
  */
-double GlidePolar::SinkRateFast(const double &MC, const int &v) {
+double oldGlidePolar::SinkRateFast(const double &MC, const int &v) {
   return _SinkRateFast(MC, max(4,min(iSAFETYSPEED, v)));
 }
 
@@ -350,7 +350,7 @@ double GlidePolar::SinkRateFast(const double &MC, const int &v) {
  * @return The corresponding sinkrate
  * @see SinkRateFast
  */
-double GlidePolar::SinkRate(double V) {
+double oldGlidePolar::SinkRate(double V) {
 
   return SinkRate(polar_a,polar_b,polar_c,0.0,0.0,V);
 
@@ -364,7 +364,7 @@ double GlidePolar::SinkRate(double V) {
  * @param n G load
  * @return The corresponding sinkrate
  */
-double GlidePolar::SinkRate(double V, double n) {
+double oldGlidePolar::SinkRate(double V, double n) {
   double w0 = SinkRate(polar_a,polar_b,polar_c,0.0,0.0,V);
   n = max(0.1,fabs(n));
   //  double v1 = V/max(1,Vbestld);
@@ -382,7 +382,7 @@ double GlidePolar::SinkRate(double V, double n) {
  * @param V Plane speed
  * @return The corresponding sinkrate
  */
-double GlidePolar::MacCreadyAltitude_internal(double emcready,
+double oldGlidePolar::MacCreadyAltitude_internal(double emcready,
                                               double Distance,
                                               double Bearing,
                                               const double WindSpeed,
@@ -540,7 +540,7 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   return -BestSinkRate * TimeToDestCruise;
 }
 
-double GlidePolar::SinkRate(double a,double b, double c,
+double oldGlidePolar::SinkRate(double a,double b, double c,
                             double MC, double HW, double V)
 {
   double temp;
@@ -561,7 +561,7 @@ double GlidePolar::SinkRate(double a,double b, double c,
  * @return highest speed that provides a sink rate less than
  * the specified sink rate
  */
-double GlidePolar::FindSpeedForSinkRate(double w) {
+double oldGlidePolar::FindSpeedForSinkRate(double w) {
   double vbest= Vminsink;
   for (int v=4; v<iSAFETYSPEED; v++) {
     double wthis = _SinkRateFast(0, v);
@@ -572,7 +572,7 @@ double GlidePolar::FindSpeedForSinkRate(double w) {
   return vbest;
 }
 
-double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
+double oldGlidePolar::MacCreadyAltitude_heightadjust(double emcready,
 						  double Distance,
 						  double Bearing,
 						  const double WindSpeed,
@@ -666,7 +666,7 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
 
 }
 
-double GlidePolar::MacCreadyAltitude(double emcready,
+double oldGlidePolar::MacCreadyAltitude(double emcready,
                                      double Distance,
 				     const double Bearing,
                                      const double WindSpeed,
@@ -736,7 +736,7 @@ static double FRiskFunction(double x, double k) {
   return 2.0/(1.0+exp(-x*k))-1.0;
 }
 
-double GlidePolar::MacCreadyRisk(double HeightAboveTerrain,
+double oldGlidePolar::MacCreadyRisk(double HeightAboveTerrain,
                                  double MaxThermalHeight,
                                  double MC) {
   double riskmc = MC;

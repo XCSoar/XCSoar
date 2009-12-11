@@ -1752,7 +1752,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAbortSafetyUseCurrent"));
   if (wp) {
-    wp->GetDataField()->Set(GlidePolar::AbortSafetyUseCurrent);
+    wp->GetDataField()->Set(oldGlidePolar::AbortSafetyUseCurrent);
     wp->RefreshDisplay();
   }
 
@@ -1765,14 +1765,14 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyMacCready"));
   if (wp) {
-    wp->GetDataField()->Set(GlidePolar::SafetyMacCready*LIFTMODIFY);
+    wp->GetDataField()->Set(oldGlidePolar::SafetyMacCready*LIFTMODIFY);
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpRiskGamma"));
   if (wp) {
-    wp->GetDataField()->Set(GlidePolar::RiskGamma);
+    wp->GetDataField()->Set(oldGlidePolar::RiskGamma);
     wp->RefreshDisplay();
   }
 
@@ -2614,7 +2614,7 @@ void dlgConfigurationShowModal(void){
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpAbortSafetyUseCurrent"),
 				      szRegistryAbortSafetyUseCurrent,
-				      GlidePolar::AbortSafetyUseCurrent);
+				      oldGlidePolar::AbortSafetyUseCurrent);
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpDisableAutoLogger"),
 				      szRegistryDisableAutoLogger,
@@ -2624,10 +2624,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyMacCready"));
   if (wp) {
     val = wp->GetDataField()->GetAsFloat()/LIFTMODIFY;
-    if (GlidePolar::SafetyMacCready != val) {
-      GlidePolar::SafetyMacCready = val;
+    if (oldGlidePolar::SafetyMacCready != val) {
+      oldGlidePolar::SafetyMacCready = val;
       SetToRegistry(szRegistrySafetyMacCready,
-		    iround(GlidePolar::SafetyMacCready*10));
+		    iround(oldGlidePolar::SafetyMacCready*10));
       changed = true;
     }
   }
@@ -2635,10 +2635,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpRiskGamma"));
   if (wp) {
     val = wp->GetDataField()->GetAsFloat();
-    if (GlidePolar::RiskGamma != val) {
-      GlidePolar::RiskGamma = val;
+    if (oldGlidePolar::RiskGamma != val) {
+      oldGlidePolar::RiskGamma = val;
       SetToRegistry(szRegistryRiskGamma,
-		    iround(GlidePolar::RiskGamma*10));
+		    iround(oldGlidePolar::RiskGamma*10));
       changed = true;
     }
   }
@@ -2666,7 +2666,7 @@ void dlgConfigurationShowModal(void){
     if (POLARID != (unsigned)wp->GetDataField()->GetAsInteger()) {
       POLARID = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryPolarID, (int &)POLARID);
-      GlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
+      oldGlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
       POLARFILECHANGED = true;
       changed = true;
     }
@@ -2958,7 +2958,7 @@ void dlgConfigurationShowModal(void){
     if (_tcscmp(temptext,szPolarFile)) {
       SetRegistryString(szRegistryPolarFile, temptext);
       POLARFILECHANGED = true;
-      GlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
+      oldGlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
       changed = true;
     }
   }
@@ -3116,7 +3116,7 @@ void dlgConfigurationShowModal(void){
     if (XCSoarInterface::SettingsComputer().SAFTEYSPEED != ival) {
       XCSoarInterface::SetSettingsComputer().SAFTEYSPEED = ival;
       SetToRegistry(szRegistrySafteySpeed,(DWORD)XCSoarInterface::SettingsComputer().SAFTEYSPEED);
-      GlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
+      oldGlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
       changed = true;
     }
   }

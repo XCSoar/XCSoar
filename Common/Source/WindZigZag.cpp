@@ -533,7 +533,7 @@ WindZigZagCheckAirData(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - turn rate\n");
 #endif
-  } else if (fabs(Basic->TrueAirspeed)<GlidePolar::Vminsink*0.8) {
+  } else if (fabs(Basic->TrueAirspeed)<oldGlidePolar::Vminsink*0.8) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - true airspeed\n");

@@ -650,17 +650,17 @@ Profile::ReadRegistrySettings()
   GetFromRegistry(szRegistryLoggerTimeStepCircling,
 		  SetSettingsComputer().LoggerTimeStepCircling);
   GetFromRegistry(szRegistryAbortSafetyUseCurrent,
-		  GlidePolar::AbortSafetyUseCurrent);
+		  oldGlidePolar::AbortSafetyUseCurrent);
 
-  Temp = iround(GlidePolar::SafetyMacCready * 10);
+  Temp = iround(oldGlidePolar::SafetyMacCready * 10);
   GetFromRegistryD(szRegistrySafetyMacCready, Temp);
-  GlidePolar::SafetyMacCready = Temp / 10.0;
+  oldGlidePolar::SafetyMacCready = Temp / 10.0;
 
   GetFromRegistry(szRegistryUserLevel, UserLevel);
 
-  Temp = iround(GlidePolar::RiskGamma * 10);
+  Temp = iround(oldGlidePolar::RiskGamma * 10);
   GetFromRegistryD(szRegistryRiskGamma, Temp);
-  GlidePolar::RiskGamma = Temp / 10.0;
+  oldGlidePolar::RiskGamma = Temp / 10.0;
 
   Temp = (CompassAppearance_t)apCompassAltA; // VNT9 default
   GetFromRegistryD(szRegistryWindArrowStyle, Temp);

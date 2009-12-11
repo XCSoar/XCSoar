@@ -669,10 +669,10 @@ int OLCOptimizer::scan_triangle(const SETTINGS_COMPUTER &settings) {
       canfinish = false;
       ttogo = 0;
       if (dh>0) {
-	dfurther = iround(GlidePolar::bestld*dh/DISTANCEUNITS);
+	dfurther = iround(oldGlidePolar::bestld*dh/DISTANCEUNITS);
 	if (dfurther>dtogo) {
 	  canfinish = true;
-	  ttogo = iround(dtogo*DISTANCEUNITS/GlidePolar::Vbestld);
+	  ttogo = iround(dtogo*DISTANCEUNITS/oldGlidePolar::Vbestld);
 	}
       } else {
 	dfurther = 0;
@@ -843,18 +843,18 @@ int OLCOptimizer::scan_sprint_inprogress(const SETTINGS_COMPUTER &settings) {
   int dfurther;
 
   // TODO accuracy: Adjust for wind!
-  if (sinkrate>=GlidePolar::minsink) {
+  if (sinkrate>=oldGlidePolar::minsink) {
     // no need to climb to make it
     // (TODO accuracy: later work out time adjustment for climb here, but for
     // now we just assume we won't be climbing again)
 
-    Vopt = GlidePolar::FindSpeedForSinkRate(sinkrate);
+    Vopt = oldGlidePolar::FindSpeedForSinkRate(sinkrate);
   } else {
     // can't make it without further climb.  For now, just calculate
     // what the best you can do with remaining height.
 
-    Vopt = GlidePolar::Vbestld;
-    sinkrate = (Vopt/GlidePolar::bestld);
+    Vopt = oldGlidePolar::Vbestld;
+    sinkrate = (Vopt/oldGlidePolar::bestld);
     dt = iround(dh/sinkrate);
   }
   dfurther = (int)(Vopt*dt/DISTANCEUNITS); // neglects wind speed!  we can correct this
@@ -952,7 +952,7 @@ int OLCOptimizer::scan_classic(const SETTINGS_COMPUTER &settings) {
 	    // check if can travel further with final glide
 	    dh = data.altpntslow[i7]-data.altpntslow[i1];
 	    if (dh>0) {
-	      dfurther = (int)(GlidePolar::bestld*dh/DISTANCEUNITS);
+	      dfurther = (int)(oldGlidePolar::bestld*dh/DISTANCEUNITS);
 	    }
 	  }
 
@@ -988,7 +988,7 @@ int OLCOptimizer::scan_classic(const SETTINGS_COMPUTER &settings) {
     double score = bestdist*100/settings.Handicap/(1000.0/DISTANCEUNITS);
     int t = data.timepnts[(i7best)]-data.timepnts[(i1best)];
     if (!finished) {
-      t += (int)(dfurtherbest*DISTANCEUNITS/GlidePolar::Vbestld);
+      t += (int)(dfurtherbest*DISTANCEUNITS/oldGlidePolar::Vbestld);
 
       FindLatitudeLongitude(data.locpnts[i7best],
                             data.waypointbearing,

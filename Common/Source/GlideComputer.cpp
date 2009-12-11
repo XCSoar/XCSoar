@@ -128,8 +128,8 @@ GlideComputer::DoLogging()
 bool
 GlideComputer::ProcessGPS()
 {
-  double mc = GlidePolar::GetMacCready();
-  double ce = GlidePolar::GetCruiseEfficiency();
+  double mc = oldGlidePolar::GetMacCready();
+  double ce = oldGlidePolar::GetCruiseEfficiency();
 
   // Process basic information
   ProcessBasic();
@@ -206,7 +206,7 @@ GlideComputer::ProcessIdle()
 #ifdef OLD_TASK
   // if (Task is not aborted and Task consists of more than one waypoint)
   if (!task.TaskIsTemporary()) {
-    double mc = GlidePolar::GetMacCready();
+    double mc = oldGlidePolar::GetMacCready();
     InSector();
     DoAutoMacCready(mc);
     IterateEffectiveMacCready();

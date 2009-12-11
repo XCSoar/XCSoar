@@ -162,7 +162,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   // calculate averages
   int numtherm = 0;
 
-  double mc = GlidePolar::GetMacCready();
+  double mc = oldGlidePolar::GetMacCready();
   Wmax = max(0.5,mc);
 
   for (i=0; i<NUMTHERMALBUCKETS; i++) {

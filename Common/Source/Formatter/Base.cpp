@@ -133,7 +133,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = ALTITUDEMODIFY*Calculated().LastThermalGain;
     break;
   case 10:
-    Value = iround(LIFTMODIFY*GlidePolar::GetMacCready()*10)/10.0;
+    Value = iround(LIFTMODIFY*oldGlidePolar::GetMacCready()*10)/10.0;
     break;
   case 11:
     Value = DISTANCEMODIFY*Calculated().WaypointDistance;

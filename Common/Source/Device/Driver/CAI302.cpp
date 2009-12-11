@@ -581,21 +581,21 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
   NMEAParser::ExtractParameter(String,ctemp,10);
   GPS_INFO->MacReady = (_tcstod(ctemp, NULL) / 10.0) * KNOTSTOMETRESSECONDS;
   if (MacCreadyUpdateTimeout <= 0)
-    GlidePolar::SetMacCready(GPS_INFO->MacReady);
+    oldGlidePolar::SetMacCready(GPS_INFO->MacReady);
   else
     MacCreadyUpdateTimeout--;
 
   NMEAParser::ExtractParameter(String,ctemp,11);
   GPS_INFO->Ballast = _tcstod(ctemp, NULL) / 100.0;
   if (BugsUpdateTimeout <= 0) {
-    GlidePolar::SetBallast(GPS_INFO->Ballast);
+    oldGlidePolar::SetBallast(GPS_INFO->Ballast);
   } else
     BallastUpdateTimeout--;
 
   NMEAParser::ExtractParameter(String,ctemp,12);
   GPS_INFO->Bugs = _tcstod(ctemp, NULL) / 100.0;
   if (BugsUpdateTimeout <= 0) {
-    GlidePolar::SetBugs(GPS_INFO->Bugs);
+    oldGlidePolar::SetBugs(GPS_INFO->Bugs);
   } else
     BugsUpdateTimeout--;
 

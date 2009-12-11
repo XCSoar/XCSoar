@@ -198,7 +198,7 @@ static void Update(void){
       _stprintf(sTmp, TEXT("%s: %s (Mass %3.0f kg)"),
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Glide Polar")),
-                GlidePolar::GetAUW());
+                oldGlidePolar::GetAUW());
       wf->SetCaption(sTmp);
       fs.CaptionPolar(sTmp);
       wInfo->SetCaption(sTmp);

@@ -303,20 +303,20 @@ ActionInterface::on_key_Direction(int UpDown)
 void
 ActionInterface::on_key_MacCready(int UpDown)
 {
-  double MACCREADY = GlidePolar::GetMacCready();
+  double MACCREADY = oldGlidePolar::GetMacCready();
   if(UpDown==1) {
     MACCREADY += (double)0.1;
     if (MACCREADY>5.0) { // JMW added sensible limit
       MACCREADY=5.0;
     }
-    GlidePolar::SetMacCready(MACCREADY);
+    oldGlidePolar::SetMacCready(MACCREADY);
   }
   else if(UpDown==-1) {
     MACCREADY -= (double)0.1;
     if(MACCREADY < 0) {
       MACCREADY = 0;
     }
-    GlidePolar::SetMacCready(MACCREADY);
+    oldGlidePolar::SetMacCready(MACCREADY);
   }
  else if (UpDown==0)
     {

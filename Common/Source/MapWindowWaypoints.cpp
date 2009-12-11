@@ -79,7 +79,7 @@ public:
       bool islandable = false;
       bool dowrite = intask || (map.SettingsMap().DeclutterLabels<2);
 
-      bool reachable = true; // XXXXX TODO, calculate with glide polar!!
+      bool reachable = true; // \todo XXXXX TODO, calculate with glide polar!!
       int AltArrivalAGL = 234*ALTITUDEMODIFY;
       
       TextDisplayMode.AsInt = 0;

@@ -284,8 +284,8 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   LoadPolarById(POLARID, polar);
 
   // Calculate polar-related data and saves it to the cache
-  StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
-  GlidePolar::UpdatePolar(false, SettingsComputer());
+  StartupStore(TEXT("oldGlidePolar::UpdatePolar\n"));
+  oldGlidePolar::UpdatePolar(false, SettingsComputer());
 
   // Read the topology file(s)
   topology->Open();
@@ -337,8 +337,8 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   devStartup(lpCmdLine);
 
   // Reset polar in case devices need the data
-  StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
-  GlidePolar::UpdatePolar(true, SettingsComputer());
+  StartupStore(TEXT("oldGlidePolar::UpdatePolar\n"));
+  oldGlidePolar::UpdatePolar(true, SettingsComputer());
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 

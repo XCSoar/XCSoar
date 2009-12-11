@@ -62,8 +62,8 @@ FinalGlideThroughTerrain(const fixed this_bearing,
                          bool *out_of_range,
                          fixed *TerrainBase)
 {
-  fixed mc = GlidePolar::GetMacCready();
-  fixed irange = GlidePolar::MacCreadyAltitude(mc,
+  fixed mc = oldGlidePolar::GetMacCready();
+  fixed irange = oldGlidePolar::MacCreadyAltitude(mc,
 						1.0, this_bearing,
                                                 calculated.WindSpeed,
                                                 calculated.WindBearing,

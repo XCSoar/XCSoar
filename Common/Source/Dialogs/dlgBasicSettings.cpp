@@ -115,23 +115,23 @@ static void OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode){
 static void SetBallast(void) {
   WndProperty* wp;
 
-  GlidePolar::UpdatePolar(true, XCSoarInterface::SettingsComputer());
+  oldGlidePolar::UpdatePolar(true, XCSoarInterface::SettingsComputer());
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpBallastPercent"));
   if (wp) {
-    wp->GetDataField()->Set(GlidePolar::GetBallast()*100);
+    wp->GetDataField()->Set(oldGlidePolar::GetBallast()*100);
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
   if (wp) {
     wp->GetDataField()->
-      SetAsFloat(GlidePolar::GetBallastLitres());
+      SetAsFloat(oldGlidePolar::GetBallastLitres());
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpWingLoading"));
   if (wp) {
     wp->GetDataField()->
-      SetAsFloat(GlidePolar::WingLoading);
+      SetAsFloat(oldGlidePolar::WingLoading);
     wp->RefreshDisplay();
   }
 }
@@ -183,7 +183,7 @@ static int OnTimerNotify(WindowControl * Sender) {
 
 static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
   static double lastRead = -1;
-  double BALLAST = GlidePolar::GetBallast();
+  double BALLAST = oldGlidePolar::GetBallast();
 
   switch(Mode){
   case DataField::daSpecial:
@@ -204,7 +204,7 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
   case DataField::daPut:
     if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
       lastRead = BALLAST = Sender->GetAsFloat()/100.0;
-      GlidePolar::SetBallast(BALLAST);
+      oldGlidePolar::SetBallast(BALLAST);
       SetBallast();
     }
     break;
@@ -212,7 +212,7 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
 }
 
 static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
-  double BUGS = GlidePolar::GetBugs();
+  double BUGS = oldGlidePolar::GetBugs();
   static double lastRead = -1;
 
   switch(Mode){
@@ -224,8 +224,8 @@ static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daPut:
       if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
         lastRead = BUGS = Sender->GetAsFloat()/100.0;
-	GlidePolar::SetBugs(BUGS);
-        GlidePolar::UpdatePolar(true, XCSoarInterface::SettingsComputer());
+	oldGlidePolar::SetBugs(BUGS);
+        oldGlidePolar::UpdatePolar(true, XCSoarInterface::SettingsComputer());
       }
     break;
   }
@@ -291,14 +291,14 @@ void dlgBasicSettingsShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
   if (wp) {
     wp->GetDataField()->
-      SetAsFloat(GlidePolar::GetBallastLitres());
+      SetAsFloat(oldGlidePolar::GetBallastLitres());
     wp->RefreshDisplay();
   }
   wp = (WndProperty*)wf->FindByName(TEXT("prpWingLoading"));
   if (wp) {
-    if (GlidePolar::WingLoading>0.1) {
+    if (oldGlidePolar::WingLoading>0.1) {
       wp->GetDataField()->
-        SetAsFloat(GlidePolar::WingLoading);
+        SetAsFloat(oldGlidePolar::WingLoading);
     } else {
       wp->SetVisible(false);
     }

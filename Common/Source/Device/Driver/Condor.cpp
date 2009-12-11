@@ -113,7 +113,7 @@ cLXWP2(const TCHAR *String, NMEA_INFO *GPS_INFO)
   (void)GPS_INFO;
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GlidePolar::SetMacCready(_tcstod(ctemp, NULL));
+  oldGlidePolar::SetMacCready(_tcstod(ctemp, NULL));
   return true;
 }
 

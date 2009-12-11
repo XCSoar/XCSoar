@@ -93,7 +93,7 @@ PDSWC(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
-  double MACCREADY = GlidePolar::GetMacCready();
+  double MACCREADY = oldGlidePolar::GetMacCready();
 
   unsigned long uswitchinputs, uswitchoutputs;
   _stscanf(String,
@@ -440,7 +440,7 @@ _VarioWriteSettings(ComPort *port)
     TCHAR mcbuf[100];
 
     wsprintf(mcbuf, _T("PDVMC,%d,%d,%d,%d,%d"),
-	     iround(GlidePolar::GetMacCready()*10),
+	     iround(oldGlidePolar::GetMacCready()*10),
 	     iround(device_blackboard.Calculated().VOpt*10),
 	     device_blackboard.Calculated().Circling,
 	     iround(device_blackboard.Calculated().TerrainAlt),

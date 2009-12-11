@@ -49,7 +49,7 @@ class Polar;
 extern unsigned POLARID;
 extern Polar polar;
 
-class GlidePolar {
+class oldGlidePolar {
  public:
 
   static double MacCreadyAltitude(double MCREADY, double Distance,
