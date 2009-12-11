@@ -347,31 +347,34 @@ Color WindowControl::SetBackColor(Color Value)
   return res;
 }
 
+void
+WindowControl::PaintSelector(Canvas &canvas, const RECT rc)
+{
+  canvas.select(hPenDefaultSelector);
+
+  canvas.two_lines(rc.right - SELECTORWIDTH - 1, rc.top,
+                   rc.right - 1, rc.top,
+                   rc.right - 1, rc.top + SELECTORWIDTH + 1);
+
+  canvas.two_lines(rc.right - 1, rc.bottom - SELECTORWIDTH - 2,
+                   rc.right - 1, rc.bottom - 1,
+                   rc.right - SELECTORWIDTH - 1, rc.bottom - 1);
+
+  canvas.two_lines(SELECTORWIDTH + 1, rc.bottom - 1,
+                   rc.left, rc.bottom - 1,
+                   rc.left, rc.bottom - SELECTORWIDTH - 2);
+
+  canvas.two_lines(rc.left, rc.top + SELECTORWIDTH + 1,
+                   rc.left, rc.top,
+                   rc.left + SELECTORWIDTH + 1, rc.top);
+}
 
 void
 WindowControl::PaintSelector(Canvas &canvas)
 {
 
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
-    const RECT rc = get_client_rect();
-
-    canvas.select(hPenDefaultSelector);
-
-    canvas.two_lines(rc.right - SELECTORWIDTH - 1, rc.top,
-                     rc.right - 1, rc.top,
-                     rc.right - 1, SELECTORWIDTH + 1);
-
-    canvas.two_lines(rc.right - 1, rc.bottom - SELECTORWIDTH - 2,
-                     rc.right - 1, rc.bottom - 1,
-                     rc.right - SELECTORWIDTH - 1, rc.bottom - 1);
-
-    canvas.two_lines(SELECTORWIDTH + 1, rc.bottom - 1,
-                     rc.left, rc.bottom - 1,
-                     rc.left, rc.bottom - SELECTORWIDTH - 2);
-
-    canvas.two_lines(rc.left, SELECTORWIDTH + 1,
-                     rc.left, rc.top,
-                     SELECTORWIDTH + 1, rc.top);
+    PaintSelector(canvas, get_client_rect());
   }
 
 }
