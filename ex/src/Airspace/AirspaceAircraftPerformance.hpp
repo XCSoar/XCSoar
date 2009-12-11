@@ -157,7 +157,9 @@ class AirspaceAircraftPerformanceGlide:
 {
 public:
   AirspaceAircraftPerformanceGlide(const GlidePolar& polar):
-    m_glide_polar(polar) {};
+    m_glide_polar(polar) {
+
+  };
 
   virtual fixed get_cruise_speed() const {
     return m_glide_polar.get_VbestLD();

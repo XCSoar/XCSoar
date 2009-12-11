@@ -143,6 +143,34 @@ struct FlatPoint
   fixed dot(const FlatPoint &other) const {
     return x*other.x+y*other.y;
   }
+
+/** 
+ * Add one point to another
+ * 
+ * @param p2 Point to add
+ * 
+ * @return Added value
+ */
+  FlatPoint operator+ (const FlatPoint &p2) const {
+    FlatPoint res= *this;
+    res.x += p2.x;
+    res.y += p2.y;
+    return res;
+  };
+
+/** 
+ * Subtract one point from another
+ * 
+ * @param p2 Point to subtract
+ * 
+ * @return Subtracted value
+ */
+  FlatPoint operator- (const FlatPoint &p2) const {
+    FlatPoint res= *this;
+    res.x -= p2.x;
+    res.y -= p2.y;
+    return res;
+  };
 };
 
 #endif

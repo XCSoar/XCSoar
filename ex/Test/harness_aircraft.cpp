@@ -3,11 +3,6 @@
 #include "test_debug.hpp"
 #include "Math/Geometry.hpp"
 
-/*
-  void scan_airspaces(Airspaces &airspaces, bool do_print) {
-  }
-*/
-
 void print_mode(const char* mode) {
   if (verbose>1) {
     printf("%s",mode);

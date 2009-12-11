@@ -37,7 +37,7 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
 #endif
   for (unsigned i=0; i<n; i++) {
     AbstractAirspace* as;
-    if (rand()%3==0) {
+    if (rand()%4!=0) {
       GEOPOINT c;
       c.Longitude = (rand()%1200-600)/1000.0+0.5;
       c.Latitude = (rand()%1200-600)/1000.0+0.5;
@@ -123,14 +123,18 @@ class AirspaceIntersectionVisitorPrint:
 public:
   AirspaceIntersectionVisitorPrint(const char* fname,
                                    const char* yname,
+                                   const char* iname,
                                    const bool _do_report,
-                                   const AIRCRAFT_STATE &state):
+                                   const AIRCRAFT_STATE &state,
+                                   const AirspaceAircraftPerformance &perf):
     do_report(_do_report),
-    m_state(state)
+    m_state(state),
+    m_perf(perf)
     {      
       if (do_report) {
 #ifdef DO_PRINT
         fout = new std::ofstream(fname);
+        iout = new std::ofstream(iname);
         yout = new std::ofstream(yname);
 #endif
       }
@@ -139,6 +143,7 @@ public:
 #ifdef DO_PRINT
     if (do_report) {
       delete fout;
+      delete iout;
       delete yout;
     }
 #endif    
@@ -154,11 +159,10 @@ public:
       *fout << end.Longitude << " " << end.Latitude << " " << "\n\n";
     }
 
-    AirspaceAircraftPerformanceSimple perf;
-    AirspaceInterceptSolution solution = intercept(as, m_state, perf);
+    AirspaceInterceptSolution solution = intercept(as, m_state, m_perf);
     if (solution.valid()) {
-      *fout << "# intercept " << solution.elapsed_time << " h " << solution.altitude << "\n";
-      *fout << solution.location.Longitude << " " << solution.location.Latitude << " " << "\n\n";
+      *iout << "# intercept " << solution.elapsed_time << " h " << solution.altitude << "\n";
+      *iout << solution.location.Longitude << " " << solution.location.Latitude << " " << "\n\n";
     }
 #endif
   }
@@ -182,17 +186,21 @@ private:
 #ifdef DO_PRINT
   std::ofstream *fout;
   std::ofstream *yout;
+  std::ofstream *iout;
 #endif
   const bool do_report;
   const AIRCRAFT_STATE m_state;
+  const AirspaceAircraftPerformance &m_perf;
 };
 
 
 class AirspaceVisitorClosest: public AirspaceVisitor {
 public:
   AirspaceVisitorClosest(const char* fname,
-                         const AIRCRAFT_STATE &_state):
-    state(_state)
+                         const AIRCRAFT_STATE &_state,
+                         const AirspaceAircraftPerformance &perf):
+    state(_state),
+    m_perf(perf)
     {      
 #ifdef DO_PRINT
       fout = new std::ofstream(fname);
@@ -210,11 +218,10 @@ public:
     *fout << c.Longitude << " " << c.Latitude << " " << "\n";
     *fout << state.Location.Longitude << " " << state.Location.Latitude << " " << "\n\n";
 #endif
-    AirspaceAircraftPerformanceSimple perf;
     AirspaceInterceptSolution solution;
     GeoVector vec(state.Location, c);
     vec.Distance = 20000; // set big distance (for testing)
-    if (as.intercept(state, vec, perf, solution)) {
+    if (as.intercept(state, vec, m_perf, solution)) {
 #ifdef DO_PRINT
       *fout << "# intercept in " << solution.elapsed_time << " h " << solution.altitude << "\n";
 #endif
@@ -231,11 +238,13 @@ private:
   std::ofstream *fout;
 #endif
   const AIRCRAFT_STATE& state;
+  const AirspaceAircraftPerformance &m_perf;
 };
 
 
 void scan_airspaces(const AIRCRAFT_STATE state, 
                     const Airspaces& airspaces,
+                    const AirspaceAircraftPerformance& perf,
                     bool do_report,
                     const GEOPOINT &target) 
 {
@@ -257,7 +266,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
 
   {
     AirspaceVisitorClosest pvisitor("results/res-bb-closest.txt",
-                                    state);
+                                    state, perf);
     airspaces.visit_within_range(state.Location, range, pvisitor);
   }
 
@@ -271,8 +280,9 @@ void scan_airspaces(const AIRCRAFT_STATE state,
   {
     AirspaceIntersectionVisitorPrint ivisitor("results/res-bb-intersects.txt",
                                               "results/res-bb-intersected.txt",
+                                              "results/res-bb-intercepts.txt",
                                               do_report,
-                                              state);
+                                              state, perf);
     GeoVector vec(state.Location, target);
     airspaces.visit_intersecting(state.Location, vec, ivisitor, true);
   }
@@ -291,7 +301,6 @@ void scan_airspaces(const AIRCRAFT_STATE state,
   }
 
   {
-    AirspaceAircraftPerformanceSimple perf;
     AirspaceSoonestSort ans(state, perf);
     const AbstractAirspace* as = ans.find_nearest(airspaces);
     if (do_report) {

@@ -59,6 +59,8 @@ struct GlideResult;
  * \todo
  * - currently the polar itself and Vmax is hard-coded
  * - currently bugs/ballast are ignored
+ * - implement wing loading
+ * - implement AUW
  */
 
 class GlidePolar
@@ -171,6 +173,24 @@ public:
  */
   fixed get_inv_mc() const {
     return inv_mc;
+  }
+
+/** 
+ * Calculate all up weight 
+ *
+ * @return Mass (kg) of aircraft including ballast
+ */
+  fixed get_all_up_weight() const {
+    return fixed_one; // TODO FIX
+  }
+
+/** 
+ * Calculate wing loading 
+ *
+ * @return Wing loading (all up mass divided by reference area, kg/m^2)
+ */
+  fixed get_wing_loading() const {
+    return fixed_one; // TODO FIX
   }
 
 /** 

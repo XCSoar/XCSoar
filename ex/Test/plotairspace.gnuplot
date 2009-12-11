@@ -27,7 +27,10 @@ plot \
 pause -1
 
 plot \
-        'results/res-bb-intersected.txt' using 1:2 with filledcurve ls 3 title "airspace", \
-        'results/res-bb-intersected.txt' using 1:2 with lines ls 5 title "airspace", \
-        'results/res-bb-intersects.txt' using 1:2 with linespoints ls 4 title "intersects"
+     'results/res-bb-in.txt' using 1:2 with lines ls 3 title "all airspace", \
+     'results/res-bb-intersected.txt' using 1:2 with filledcurve ls 3 title "airspace", \
+     'results/res-bb-intersected.txt' using 1:2 with lines ls 5 title "airspace", \
+     'results/res-bb-intersects.txt' using 1:2 with linespoints ls 4 title "intersects", \
+     'results/res-bb-intercepts.txt' using 1:2 with points ls 1 title "intercepts"
+
 pause -1

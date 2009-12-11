@@ -192,6 +192,15 @@ public:
   }
 
 /** 
+ * Test whether base is at terrain level
+ * 
+ * @return True if base is 0 AGL
+ */
+  bool is_base_terrain() const {
+    return m_base.is_terrain();
+  }
+
+/** 
  * Get base altitude
  * 
  * @return Altitude AMSL (m) of base

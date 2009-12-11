@@ -77,6 +77,8 @@ bool run_flight(TaskManager &task_manager,
 
   static const fixed fixed_10 =10;
 
+  AirspaceAircraftPerformanceGlide perf(glide_polar);
+
   if (aircraft_filter) {
     aircraft_filter->reset(ac.get_state());
   }
@@ -114,7 +116,8 @@ bool run_flight(TaskManager &task_manager,
 #endif
 
     if (airspaces) {
-      scan_airspaces(ac.get_state(), *airspaces, do_print, 
+      scan_airspaces(ac.get_state(), *airspaces, perf,
+                     do_print, 
                      ac.target(task_manager));
     }
 
