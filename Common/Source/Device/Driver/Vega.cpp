@@ -488,6 +488,16 @@ VegaDevice::OnSysTicker()
 {
   if (device_blackboard.Basic().VarioAvailable)
     _VarioWriteSettings(port);
+  bool active = false;
+  if (device_blackboard.Calculated().ThermalEstimate_R>=0) {
+    active = true;
+  }
+  
+  PutThermal(active,
+             device_blackboard.Calculated().ThermalEstimate_Location.Longitude,
+             device_blackboard.Calculated().ThermalEstimate_Location.Latitude,
+             device_blackboard.Calculated().ThermalEstimate_W,
+             device_blackboard.Calculated().ThermalEstimate_R);
 }
 
 static Device *

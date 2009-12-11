@@ -1151,14 +1151,9 @@ GlideComputerAirData::ProcessThermalLocator()
   } else {    
     SetCalculated().ThermalEstimate_W = 0;
     SetCalculated().ThermalEstimate_R = -1;
+    SetCalculated().ThermalEstimate_Location = Basic().Location;
     thermallocator.Reset();
   }
-
-  AllDevicesPutThermal(active,
-                       Calculated().ThermalEstimate_Location.Longitude,
-                       Calculated().ThermalEstimate_Location.Latitude,
-                       Calculated().ThermalEstimate_W,
-                       Calculated().ThermalEstimate_R);
 }
 
 /**
