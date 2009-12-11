@@ -49,8 +49,8 @@ Copyright_License {
 
 #include <assert.h>
 
-static WndForm *wf=NULL;
-static WndListFrame *wAirspaceList=NULL;
+static WndForm *wf = NULL;
+static WndListFrame *wAirspaceList = NULL;
 
 static int ItemIndex = -1;
 static bool colormode = false;
@@ -58,7 +58,9 @@ static bool colormode = false;
 int dlgAirspaceColoursShowModal(void);
 int dlgAirspacePatternsShowModal(void);
 
-static void UpdateList(void){
+static void
+UpdateList(void)
+{
   wAirspaceList->ResetList();
   wAirspaceList->invalidate();
 }
@@ -68,9 +70,9 @@ static unsigned DrawListIndex;
 static void
 OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
 {
+  (void)Sender;
 
   TCHAR label[40];
-  (void)Sender;
 
   if (DrawListIndex >= AIRSPACECLASSCOUNT)
     return;
@@ -119,77 +121,77 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
   case AATASK:
     _tcscpy(label, gettext(_T("AAT")));
     break;
-  };
+  }
 
   int w1, w2, x0;
   int w0 = Layout::FastScale(Layout::landscape ? 202 : 225);
 
   w1 = canvas.text_width(gettext(_T("Warn"))) + Layout::FastScale(10);
   w2 = canvas.text_width(gettext(_T("Display"))) + Layout::FastScale(10);
-  x0 = w0-w1-w2;
+  x0 = w0 - w1 - w2;
 
-  canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
-                      x0 - Layout::FastScale(10), label);
+  canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2), x0
+      - Layout::FastScale(10), label);
 
   if (colormode) {
-
     canvas.white_pen();
     canvas.set_text_color(MapGfx.GetAirspaceColourByClass(i,
-                                                          XCSoarInterface::SettingsMap()));
+        XCSoarInterface::SettingsMap()));
     canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
     canvas.select(MapGfx.GetAirspaceBrushByClass(i,
-                                                 XCSoarInterface::SettingsMap()));
-    canvas.rectangle(x0, Layout::FastScale(2),
-                     w0, Layout::FastScale(22));
-
+        XCSoarInterface::SettingsMap()));
+    canvas.rectangle(x0, Layout::FastScale(2), w0, Layout::FastScale(22));
   } else {
-
     bool iswarn;
     bool isdisplay;
 
-    iswarn = (XCSoarInterface::SettingsComputer().iAirspaceMode[i]>=2);
-    isdisplay = ((XCSoarInterface::SettingsComputer().iAirspaceMode[i]%2)>0);
+    iswarn = (XCSoarInterface::SettingsComputer().iAirspaceMode[i] >= 2);
+    isdisplay = ((XCSoarInterface::SettingsComputer().iAirspaceMode[i] % 2) > 0);
+
     if (iswarn) {
       _tcscpy(label, gettext(_T("Warn")));
       canvas.text_opaque(w0 - w1 - w2, Layout::FastScale(2), label);
     }
+
     if (isdisplay) {
       _tcscpy(label, gettext(_T("Display")));
       canvas.text_opaque(w0 - w2, Layout::FastScale(2), label);
     }
-
   }
 }
 
-
 static bool changed = false;
 
-static void OnAirspaceListEnter(WindowControl * Sender,
-				WndListFrame::ListInfo_t *ListInfo) {
+static void
+OnAirspaceListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
+{
   (void)Sender;
-  ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
-  if (ItemIndex>=AIRSPACECLASSCOUNT) {
-    ItemIndex = AIRSPACECLASSCOUNT-1;
-  }
-  if (ItemIndex>=0) {
 
+  ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
+
+  if (ItemIndex >= AIRSPACECLASSCOUNT) {
+    ItemIndex = AIRSPACECLASSCOUNT - 1;
+  }
+
+  if (ItemIndex >= 0) {
     if (colormode) {
       int c = dlgAirspaceColoursShowModal();
-      if (c>=0) {
-	XCSoarInterface::SetSettingsMap().iAirspaceColour[ItemIndex] = c;
-	SetRegistryColour(ItemIndex,
-                          XCSoarInterface::SettingsMap().iAirspaceColour[ItemIndex]);
-	changed = true;
+      if (c >= 0) {
+        XCSoarInterface::SetSettingsMap().iAirspaceColour[ItemIndex] = c;
+        SetRegistryColour(ItemIndex,
+            XCSoarInterface::SettingsMap().iAirspaceColour[ItemIndex]);
+        changed = true;
       }
+
       int p = dlgAirspacePatternsShowModal();
-      if (p>=0) {
-	XCSoarInterface::SetSettingsMap().iAirspaceBrush[ItemIndex] = p;
-	SetRegistryBrush(ItemIndex,
-                         XCSoarInterface::SettingsMap().iAirspaceBrush[ItemIndex]);
-	changed = true;
+      if (p >= 0) {
+        XCSoarInterface::SetSettingsMap().iAirspaceBrush[ItemIndex] = p;
+        SetRegistryBrush(ItemIndex,
+            XCSoarInterface::SettingsMap().iAirspaceBrush[ItemIndex]);
+        changed = true;
       }
     } else {
-      int v = (XCSoarInterface::SettingsComputer().iAirspaceMode[ItemIndex]+1)%4;
+      int v = (XCSoarInterface::SettingsComputer().iAirspaceMode[ItemIndex] + 1) % 4;
       XCSoarInterface::SetSettingsComputer().iAirspaceMode[ItemIndex] = v;
       Profile::SetRegistryAirspaceMode(ItemIndex);
       changed = true;
@@ -197,31 +199,34 @@ static void OnAirspaceListEnter(WindowControl * Sender,
   }
 }
 
-
-static void OnAirspaceListInfo(WindowControl * Sender,
-			       WndListFrame::ListInfo_t *ListInfo){
+static void
+OnAirspaceListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
+{
   (void)Sender;
-  if (ListInfo->DrawIndex == -1){
+
+  if (ListInfo->DrawIndex == -1) {
     ListInfo->ItemCount = AIRSPACECLASSCOUNT;
   } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
-    ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
+    DrawListIndex = ListInfo->DrawIndex + ListInfo->ScrollIndex;
+    ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
   }
 }
 
-static void OnCloseClicked(WindowControl * Sender){
-    (void)Sender;
-	wf->SetModalResult(mrOK);
+static void
+OnCloseClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  wf->SetModalResult(mrOK);
 }
 
-
-static void OnLookupClicked(WindowControl * Sender){
+static void
+OnLookupClicked(WindowControl * Sender)
+{
   (void)Sender;
   dlgAirspaceSelect();
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnAirspacePaintListItem),
   DeclareCallBackEntry(OnAirspaceListInfo),
   DeclareCallBackEntry(OnCloseClicked),
@@ -229,27 +234,24 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-void dlgAirspaceShowModal(bool coloredit){
-
+void
+dlgAirspaceShowModal(bool coloredit)
+{
   colormode = coloredit;
 
   ItemIndex = -1;
 
-  if (!Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgAirspace_L.xml"),
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_AIRSPACE_L"));
-  } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgAirspace.xml"),
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_AIRSPACE"));
-  }
-  if (!wf) return;
+  if (!Layout::landscape)
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgAirspace_L.xml"),
+        XCSoarInterface::main_window, _T("IDR_XML_AIRSPACE_L"));
+  else
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgAirspace.xml"),
+        XCSoarInterface::main_window, _T("IDR_XML_AIRSPACE"));
 
-  assert(wf!=NULL);
+  if (!wf)
+    return;
+
+  assert(wf != NULL);
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
   assert(wAirspaceList!=NULL);
@@ -266,11 +268,9 @@ void dlgAirspaceShowModal(bool coloredit){
   if (changed) {
     Profile::StoreRegistry();
     Message::AddMessage(_T("Configuration saved"));
-  };
+  }
 
   delete wf;
 
   wf = NULL;
-
 }
-
