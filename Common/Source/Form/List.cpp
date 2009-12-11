@@ -48,7 +48,8 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
                            int X, int Y, int Width, int Height,
                            void (*OnListCallback)(WindowControl *Sender,
                                                   ListInfo_t *ListInfo)):
-  WndFrame(Owner, Name, X, Y, Width, Height)
+  WndFrame(Owner, Name, X, Y, Width, Height),
+  PaintItemCallback(NULL)
 {
   SetCanFocus(true);
   PaintSelector(true);
@@ -119,7 +120,25 @@ WndListFrame::on_paint(Canvas &canvas)
 
   WndFrame::on_paint(canvas);
 
-  if (mClientCount > 0){
+  if (PaintItemCallback != NULL && mClientCount > 0) {
+    // paint using the PaintItemCallback
+    RECT rc = mClients[0]->get_position();
+
+    for (i = 0; i < mListInfo.ItemInViewCount; i++) {
+      if (GetFocused() && mListInfo.TopIndex + i == mListInfo.ItemIndex) {
+        Brush brush(GetBackColor().highlight());
+        canvas.fill_rectangle(rc, brush);
+      }
+
+      PaintItemCallback(canvas, rc, mListInfo.TopIndex + i);
+
+      if (mListInfo.TopIndex + i == mListInfo.ItemIndex)
+        PaintSelector(canvas, rc);
+
+      ::OffsetRect(&rc, 0, rc.bottom - rc.top);
+    }
+  } else if (mClientCount > 0){
+    // paint using the hidden client window
     const RECT rc = mClients[0]->get_position();
 
     Viewport viewport(canvas, rc.right - rc.left, rc.bottom - rc.top);

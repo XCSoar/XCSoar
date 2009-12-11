@@ -141,6 +141,8 @@ public:
   }ListInfo_t;
 
   typedef void (*OnListCallback_t)(WindowControl *Sender, ListInfo_t *ListInfo);
+  typedef void (*PaintItemCallback_t)(Canvas &canvas, const RECT rc,
+                                      unsigned idx);
 
 protected:
   ScrollBar scroll_bar;
@@ -149,6 +151,7 @@ protected:
 
   OnListCallback_t mOnListCallback;
   OnListCallback_t mOnListEnterCallback;
+  PaintItemCallback_t PaintItemCallback;
 
 public:
   WndListFrame(WindowControl *Owner, const TCHAR *Name,
@@ -158,6 +161,11 @@ public:
 
   void ResetList(void);
   void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
+
+  void SetPaintItemCallback(PaintItemCallback_t cb) {
+    PaintItemCallback = cb;
+  }
+
   int GetItemIndex(void) { return mListInfo.ItemIndex; }
   void SetItemIndex(int iValue);
 
