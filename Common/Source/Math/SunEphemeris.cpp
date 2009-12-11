@@ -171,7 +171,7 @@ SunEphemeris::FNsun(double d)
 /**
  * Calculates all sun-related important times
  * depending on time of year and location
- * @param location Location to be used in calculation
+ * @param Location Location to be used in calculation
  * @param Basic NMEA_INFO for current date
  * @param Calculated DERIVED_INFO (not yet used)
  * @param TimeZone The timezone
