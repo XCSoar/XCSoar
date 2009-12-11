@@ -51,7 +51,7 @@ Copyright_License {
 #define BORDERBOTTOM (1<<bkBottom)
 #define BORDERLEFT   (1<<bkLeft)
 
-typedef enum{
+typedef enum {
   bkNone,
   bkTop,
   bkRight,
@@ -65,7 +65,7 @@ public:
 
 private:
   WindowControl *mOwner;
-  int  mBorderKind;
+  int mBorderKind;
   Color mColorBack;
   Color mColorFore;
   Brush mhBrushBk;
@@ -81,7 +81,7 @@ private:
   bool mReadOnly;
   bool mHasFocus;
 
-  int  mBorderSize;
+  int mBorderSize;
 
   static int InstCount;
   static Brush hBrushDefaultBk;
@@ -89,7 +89,6 @@ private:
   static Pen hPenDefaultSelector;
 
 protected:
-
   bool mCanFocus;
   TCHAR mCaption[254];
   bool mDontPaintSelector;
@@ -103,7 +102,9 @@ protected:
   bool HasFocus(void) { return mHasFocus; }
 
 public:
-  TCHAR *GetCaption(void) { return mCaption; }
+  TCHAR *GetCaption(void) {
+    return mCaption;
+  }
 
   virtual bool on_setfocus();
   virtual bool on_killfocus();
@@ -129,13 +130,17 @@ public:
   virtual Window *GetCanFocus();
   bool SetCanFocus(bool Value);
 
-  bool GetReadOnly(void) { return mReadOnly; }
+  bool GetReadOnly(void) {
+    return mReadOnly;
+  }
   bool SetReadOnly(bool Value);
 
   int  GetBorderKind(void);
   int  SetBorderKind(int Value);
 
-  const Font *GetFont(void) { return mhFont; }
+  const Font *GetFont(void) {
+    return mhFont;
+  }
   virtual const Font *SetFont(const Font &font);
 
   const Font *SetFont(const Font *font) {
@@ -143,21 +148,27 @@ public:
   }
 
   virtual Color SetForeColor(Color Value);
-  Color GetForeColor(void) { return mColorFore; }
+  Color GetForeColor(void) {
+    return mColorFore;
+  }
 
   virtual Color SetBackColor(Color Value);
-  Color GetBackColor(void) { return mColorBack; }
+  Color GetBackColor(void) {
+    return mColorBack;
+  }
 
   Brush &GetBackBrush(void) {
     return mhBrushBk.defined()
       ? mhBrushBk
       : hBrushDefaultBk;
   }
+
   Pen &GetBorderPen(void) {
     return mhPenBorder.defined()
       ? mhPenBorder
       : hPenDefaultBorder;
   }
+
   Pen &GetSelectorPen(void) {
     return mhPenSelector.defined()
       ? mhPenSelector
@@ -167,12 +178,21 @@ public:
   virtual void SetCaption(const TCHAR *Value);
   void SetHelpText(const TCHAR *Value);
 
-  virtual ContainerWindow &GetClientAreaWindow(void) { return *this; }
-  WindowControl *GetOwner(void) { return mOwner; }
+  virtual ContainerWindow &GetClientAreaWindow(void) {
+    return *this;
+  }
 
-  int GetTag(void) { return mTag; }
+  WindowControl *GetOwner(void) {
+    return mOwner;
+  }
+
+  int GetTag(void) {
+    return mTag;
+  }
+
   int SetTag(int Value) {
-    mTag = Value; return mTag;
+    mTag = Value;
+    return mTag;
   }
 
   Window *FocusNext(WindowControl *Sender);
@@ -180,10 +200,13 @@ public:
 
   WindowControl(WindowControl *Owner, ContainerWindow *Parent,
                 const TCHAR *Name, int X, int Y, int Width, int Height,
-                bool Visible=true);
+                bool Visible = true);
+
   virtual ~WindowControl(void);
 
-  void PaintSelector(bool Value) {mDontPaintSelector = Value;}
+  void PaintSelector(bool Value) {
+    mDontPaintSelector = Value;
+  }
 
   WindowControl *FindByName(const TCHAR *Name);
 
@@ -192,7 +215,6 @@ public:
   }
 
   void FilterAdvanced(bool advanced);
-
 };
 
 #endif
