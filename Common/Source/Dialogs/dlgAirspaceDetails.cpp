@@ -70,43 +70,44 @@ OnAcknowledgeClicked(WindowControl * Sender)
     Name = airspace_database.AirspaceArea[index_area].Name;
   }
 
-  if (Name) {
-    UINT answer;
-    answer = MessageBoxX(Name, gettext(_T("Acknowledge for day?")),
-                         MB_YESNOCANCEL | MB_ICONQUESTION);
+  if (Name == NULL)
+    return;
 
-    if (answer == IDYES) {
-      if (index_circle >= 0) {
-        AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                            XCSoarInterface::Calculated(),
-                            XCSoarInterface::SettingsComputer(),
-                            XCSoarInterface::MapProjection(),
-                            false, true, index_circle, true);
-      } else if (index_area >= 0) {
-        AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                            XCSoarInterface::Calculated(),
-                            XCSoarInterface::SettingsComputer(),
-                            XCSoarInterface::MapProjection(),
-                            false, false, index_area, true);
-      }
-      wf->SetModalResult(mrOK);
-    } else if (answer == IDNO) {
-      // this will cancel a daily ack
-      if (index_circle >= 0) {
-        AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                            XCSoarInterface::Calculated(),
-                            XCSoarInterface::SettingsComputer(),
-                            XCSoarInterface::MapProjection(),
-                            true, true, index_circle, true);
-      } else if (index_area >= 0) {
-        AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                            XCSoarInterface::Calculated(),
-                            XCSoarInterface::SettingsComputer(),
-                            XCSoarInterface::MapProjection(),
-                            true, false, index_area, true);
-      }
-      wf->SetModalResult(mrOK);
+  UINT answer;
+  answer = MessageBoxX(Name, gettext(_T("Acknowledge for day?")),
+                       MB_YESNOCANCEL | MB_ICONQUESTION);
+
+  if (answer == IDYES) {
+    if (index_circle >= 0) {
+      AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                          XCSoarInterface::Calculated(),
+                          XCSoarInterface::SettingsComputer(),
+                          XCSoarInterface::MapProjection(),
+                          false, true, index_circle, true);
+    } else if (index_area >= 0) {
+      AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                          XCSoarInterface::Calculated(),
+                          XCSoarInterface::SettingsComputer(),
+                          XCSoarInterface::MapProjection(),
+                          false, false, index_area, true);
     }
+    wf->SetModalResult(mrOK);
+  } else if (answer == IDNO) {
+    // this will cancel a daily ack
+    if (index_circle >= 0) {
+      AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                          XCSoarInterface::Calculated(),
+                          XCSoarInterface::SettingsComputer(),
+                          XCSoarInterface::MapProjection(),
+                          true, true, index_circle, true);
+    } else if (index_area >= 0) {
+      AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                          XCSoarInterface::Calculated(),
+                          XCSoarInterface::SettingsComputer(),
+                          XCSoarInterface::MapProjection(),
+                          true, false, index_area, true);
+    }
+    wf->SetModalResult(mrOK);
   }
 }
 
