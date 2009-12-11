@@ -241,8 +241,9 @@ static inline bool has_pointer()
 }
 
 // This could be also used for PDA in landscape..
-typedef enum{
-  ssnone=0,
+typedef enum
+{
+  ssnone = 0,
   ss240x320,
   ss480x640,
   ss480x800,
@@ -252,8 +253,7 @@ typedef enum{
   ss480x272,
   ss640x480,
   ss800x480
-}ScreenSize_t;
-
+} ScreenSize_t;
 
 #ifdef WINDOWSPC
 extern int SCREENWIDTH;
