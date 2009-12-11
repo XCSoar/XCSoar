@@ -142,33 +142,37 @@ public:
 
   typedef void (*OnListCallback_t)(WindowControl *Sender, ListInfo_t *ListInfo);
 
+protected:
+  ScrollBar scroll_bar;
+
+  ListInfo_t mListInfo;
+
+  OnListCallback_t mOnListCallback;
+  OnListCallback_t mOnListEnterCallback;
+
+public:
   WndListFrame(WindowControl *Owner, const TCHAR *Name,
                int X, int Y, int Width, int Height,
                void (*OnListCallback)(WindowControl *Sender,
                                       ListInfo_t *ListInfo));
 
-  bool on_mouse_move(int x, int y, unsigned keys);
   void ResetList(void);
   void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
-  void DrawScrollBar(Canvas &canvas);
-  int RecalculateIndices(bool bigscroll);
   int GetItemIndex(void) { return mListInfo.ItemIndex; }
   void SetItemIndex(int iValue);
-  void SelectItemFromScreen(int xPos, int yPos);
 
 protected:
-  ScrollBar scroll_bar;
-
   void show_or_hide_scroll_bar();
+
+  int RecalculateIndices(bool bigscroll);
+  void SelectItemFromScreen(int xPos, int yPos);
+  void DrawScrollBar(Canvas &canvas);
 
   virtual bool on_resize(unsigned width, unsigned height);
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
   virtual bool on_key_down(unsigned key_code);
-
-  OnListCallback_t mOnListCallback;
-  OnListCallback_t mOnListEnterCallback;
-  ListInfo_t mListInfo;
 
   /** from class PaintWindow */
   virtual void on_paint(Canvas &canvas);
