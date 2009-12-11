@@ -49,6 +49,7 @@ Copyright_License {
 #include <limits.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #if UINT_MAX == 65535
 typedef long          int32;

@@ -37,10 +37,10 @@
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/Layout.hpp"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
-#include "InfoBoxLayout.h"
 #include "UtilsFLARM.hpp"
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"
@@ -98,8 +98,7 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
 	     (DISTANCEMODIFY * range));
 
     if (XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID != 0)
-      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                         text);
+      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), text);
   }
 }
 
@@ -268,7 +267,7 @@ void dlgFlarmTrafficShowModal(void){
     first=false;
   }
 
-  if (InfoBoxLayout::landscape) {
+  if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgFlarmTraffic_L.xml"),
 			XCSoarInterface::main_window,

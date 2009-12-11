@@ -37,13 +37,12 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "InfoBoxLayout.h"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
-#include "McReady.h"
-#include "options.h" /* for IBLSCALE() */
+#include "MacCready.h"
+#include "Screen/Layout.hpp"
 
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
@@ -80,7 +79,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   Brush yellowBrush(Color(0xFF,0xFF,0x00));
   Brush greenBrush(Color(0x00,0xFF,0x00));
 
-  // Saves the McCready value
+  // Saves the MacCready value
   const double MACCREADY = GlidePolar::GetMacCready();
 
   // Circle through the FLARM targets

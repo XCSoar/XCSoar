@@ -1,6 +1,6 @@
 /***********************************************************************
 **
-**   windmeasurementlist.h
+**   WindMeasurementList.h
 **
 **   This file is part of Cumulus.
 **
@@ -18,23 +18,27 @@
 #ifndef WINDMEASUREMENTLIST_H
 #define WINDMEASUREMENTLIST_H
 
-/**The WindMeasurementList is a list that can contain and process windmeasurements.
-  *@author André Somers
-  */
+/**
+ * The WindMeasurementList is a list that can contain and
+ * process windmeasurements.
+ * @author André Somers
+ */
 
-#include "vector.h"
+#include "Vector.h"
 
-struct WindMeasurement {
+struct WindMeasurement
+{
   Vector vector;
   int quality;
   long time;
   double altitude;
 };
 
+/** maximum number of windmeasurements in the list. */
 #define MAX_MEASUREMENTS 200
-//maximum number of windmeasurements in the list. No idea what a sensible value would be...
 
-class WindMeasurementList {
+class WindMeasurementList
+{
 public:
   WindMeasurementList();
   ~WindMeasurementList();
@@ -45,6 +49,7 @@ public:
    * too low quality data).
    */
   const Vector getWind(double Time, double alt, bool *found) const;
+
   /** Adds the windvector vector with quality quality to the list. */
   void addMeasurement(double Time, Vector vector, double alt, int quality);
 

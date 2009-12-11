@@ -128,11 +128,9 @@ void MapWindow::CalculateScreenPositionsAirspace() {
 void MapWindow::ClearAirSpace(Canvas &canvas, bool fill) {
   assert(airspace_database != NULL);
 
-  Color whitecolor(0xff,0xff,0xff);
-
-  canvas.set_text_color(whitecolor);
+  canvas.set_text_color(Color::WHITE);
   canvas.background_transparent();
-  canvas.set_background_color(whitecolor);
+  canvas.set_background_color(Color::WHITE);
   canvas.white_pen();
   canvas.white_brush();
   canvas.rectangle(MapRect.left, MapRect.top, MapRect.right, MapRect.bottom);

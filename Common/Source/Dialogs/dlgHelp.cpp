@@ -37,9 +37,9 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/Layout.hpp"
 #include "Units.hpp"
 #include "InputEvents.h"
-#include "InfoBoxLayout.h"
 #include "Compatibility/string.h"
 
 static WndForm *wf=NULL;
@@ -65,7 +65,7 @@ dlgHelpShowModal(ContainerWindow &parent,
     return;
   }
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgHelp_L.xml"),
                         parent,

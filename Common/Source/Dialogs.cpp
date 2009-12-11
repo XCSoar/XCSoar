@@ -44,7 +44,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
 #include "MainWindow.hpp"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "SettingsTask.hpp"
 #include "Airspace.h"
 #include "AirspaceDatabase.hpp"
@@ -69,37 +69,43 @@ HCURSOR ActionInterface::oldCursor = NULL;
 /**
  * Activates the Hourglass animation
  */
-void ActionInterface::StartHourglassCursor(void) {
-#ifdef ENABLE_SDL
+void
+ActionInterface::StartHourglassCursor(void)
+{
+  #ifdef ENABLE_SDL
   // XXX
-#else /* !ENABLE_SDL */
+  #else /* !ENABLE_SDL */
   HCURSOR newc = LoadCursor(NULL, IDC_WAIT);
   oldCursor = (HCURSOR)SetCursor(newc);
   if (is_altair()) {
     SetCursorPos(160,120);
   }
-#endif /* !ENABLE_SDL */
+  #endif /* !ENABLE_SDL */
 }
 
 /**
  * Deactivates the Hourglass animation
  */
-void ActionInterface::StopHourglassCursor(void) {
-#ifdef ENABLE_SDL
+void
+ActionInterface::StopHourglassCursor(void)
+{
+  #ifdef ENABLE_SDL
   // XXX
-#else /* !ENABLE_SDL */
+  #else /* !ENABLE_SDL */
   SetCursor(oldCursor);
   if (is_altair()) {
-    SetCursorPos(640,480);
+    SetCursorPos(640, 480);
   }
   oldCursor = NULL;
-#endif /* !ENABLE_SDL */
+  #endif /* !ENABLE_SDL */
 }
 
 /**
  * Closes the ProgressWindow
  */
-void XCSoarInterface::CloseProgressDialog() {
+void
+XCSoarInterface::CloseProgressDialog()
+{
   if (progress_window != NULL) {
     delete progress_window;
     progress_window = NULL;
@@ -109,7 +115,9 @@ void XCSoarInterface::CloseProgressDialog() {
 /**
  * Updates the ProgressWindow to go up one step
  */
-void XCSoarInterface::StepProgressDialog(void) {
+void
+XCSoarInterface::StepProgressDialog(void)
+{
   if (progress_window != NULL)
     progress_window->step();
 }
@@ -118,8 +126,10 @@ bool
 XCSoarInterface::SetProgressStepSize(int nSize)
 {
   nSize = 5;
+
   if (nSize < 100 && progress_window != NULL)
     progress_window->set_step(nSize);
+
   return true;
 }
 
@@ -128,7 +138,8 @@ XCSoarInterface::SetProgressStepSize(int nSize)
  * @param text Text inside the progress bar
  */
 void
-XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
+XCSoarInterface::CreateProgressDialog(const TCHAR* text)
+{
   if (progress_window == NULL)
     progress_window = new ProgressWindow(main_window);
 
@@ -139,7 +150,8 @@ XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
 /**
  * Opens the Analysis window
  */
-void PopupAnalysis()
+void
+PopupAnalysis()
 {
   dlgAnalysisShowModal();
 }
@@ -147,11 +159,11 @@ void PopupAnalysis()
 /**
  * Opens the WaypointDetails window
  */
-void PopupWaypointDetails()
+void
+PopupWaypointDetails()
 {
   dlgWayPointDetailsShowModal();
 }
-
 
 #include "Interface.hpp"
 #include "MapWindow.h"
@@ -168,40 +180,42 @@ void PopupWaypointDetails()
  */
 bool
 PopupNearestWaypointDetails(const WayPointList &way_points,
-                            const GEOPOINT &location,
-                            double range, bool pan)
+    const GEOPOINT &location, double range, bool pan)
 {
   /*
-    if (!pan) {
+  if (!pan) {
     dlgWayPointSelect(lon, lat, 0, 1);
-    } else {
+  } else {
     dlgWayPointSelect(PanLongitude, PanLatitude, 0, 1);
-    }
+  }
   */
+
   MapWindowProjection &map_window = XCSoarInterface::main_window.map;
 
-  int i;
+  int NearestIndex;
+
   if (!pan || !XCSoarInterface::SettingsMap().EnablePan) {
-    i = FindNearestWayPoint(way_points, map_window, location, range);
+    NearestIndex = FindNearestWayPoint(way_points, map_window, location, range);
   } else {
     // nearest to center of screen if in pan mode
-    i = FindNearestWayPoint(way_points, map_window,
-			  map_window.GetPanLocation(),
-			  range);
-  }
-  if(i != -1) {
-    task.setSelected(i);
-    PopupWaypointDetails();
-    return true;
+    NearestIndex = FindNearestWayPoint(way_points, map_window,
+        map_window.GetPanLocation(), range);
   }
 
-  return false;
+  if (NearestIndex == -1)
+    return false;
+
+  task.setSelected(NearestIndex);
+  PopupWaypointDetails();
+
+  return true;
 }
 
 bool
 PopupInteriorAirspaceDetails(const AirspaceDatabase &airspace_database,
-                             const GEOPOINT &location) {
-  bool found=false;
+    const GEOPOINT &location)
+{
+  bool found = false;
 
   for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
     const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];

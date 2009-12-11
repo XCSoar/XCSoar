@@ -37,10 +37,10 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/Layout.hpp"
 #include "Protection.hpp"
 #include "SettingsTask.hpp"
 #include "Task.h"
-#include "InfoBoxLayout.h"
 #include "MainWindow.hpp"
 #include "WayPointList.hpp"
 #include "Components.hpp"
@@ -88,8 +88,7 @@ OnStartPointPaintListItem(WindowControl * Sender, Canvas &canvas)
       }
     }
 
-    canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                       label);
+    canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), label);
   }
 }
 
@@ -151,7 +150,7 @@ void dlgStartPointShowModal(void) {
 
   ItemIndex = -1;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgStartPoint_L.xml"),
                         XCSoarInterface::main_window,

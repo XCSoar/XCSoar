@@ -41,10 +41,9 @@ Copyright_License {
 #include "Task.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
-#include "options.h" /* for IBLSCALE() */
 #include "WayPointList.hpp"
 #include "TaskVisitor.hpp"
 

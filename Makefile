@@ -47,13 +47,10 @@ INCLUDES := $(TARGET_INCLUDES) -I$(HDR) -I$(SRC)
 
 ######## compiler flags
 
-CPPFLAGS := $(INCLUDES) $(TARGET_CPPFLAGS)
-CPPFLAGS	+= -DFLARM_AVERAGE 
-
-CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
-CFLAGS		:=$(OPTIMIZE) $(PROFILE)
-
+include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
+
+CPPFLAGS += -DFLARM_AVERAGE
 
 ####### linker configuration
 
@@ -118,7 +115,6 @@ DLGS	:=\
 	$(SRC)/Dialogs/dlgTeamCode.o \
 	$(SRC)/Dialogs/dlgTextEntry.o \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.o \
-	$(SRC)/Dialogs/dlgTools.o \
 	$(SRC)/Dialogs/dlgHelpers.o \
 	$(SRC)/Dialogs/dlgVegaDemo.o \
 	$(SRC)/Dialogs/dlgVoice.o \
@@ -177,7 +173,7 @@ OBJS	:=\
 	$(SRC)/LoggerImpl.o 		\
 	$(SRC)/LoggerSign.o 		\
 	$(SRC)/ReplayLogger.o 		\
-	$(SRC)/McReady.o 		\
+	$(SRC)/MacCready.o 		\
 	$(SRC)/OnLineContest.o 		\
 	$(SRC)/SnailTrail.o 		\
 	$(SRC)/Task.o			\
@@ -186,12 +182,12 @@ OBJS	:=\
 	$(SRC)/TaskVisitor.o		\
 	$(SRC)/TeamCodeCalculation.o 	\
 	$(SRC)/ThermalLocator.o 	\
-	$(SRC)/Waypointparser.o 	\
+	$(SRC)/WayPointParser.o 	\
 	$(SRC)/WayPoint.o 		\
 	$(SRC)/WayPointList.o 		\
-	$(SRC)/windanalyser.o 		\
-	$(SRC)/windmeasurementlist.o 	\
-	$(SRC)/windstore.o 		\
+	$(SRC)/WindAnalyser.o 		\
+	$(SRC)/WindMeasurementList.o 	\
+	$(SRC)/WindStore.o 		\
 	$(SRC)/WindZigZag.o 		\
 	\
 	$(SRC)/Gauge/GaugeCDI.o \
@@ -223,7 +219,15 @@ OBJS	:=\
 	$(SRC)/InputEventsActions.o 	\
 	$(SRC)/StatusMessage.o \
 	$(SRC)/PopupMessage.o \
-	$(SRC)/WindowControls.o 	\
+	$(SRC)/Form/Control.o \
+	$(SRC)/Form/Form.o \
+	$(SRC)/Form/Button.o \
+	$(SRC)/Form/EventButton.o \
+	$(SRC)/Form/Frame.o \
+	$(SRC)/Form/Draw.o \
+	$(SRC)/Form/List.o \
+	$(SRC)/Form/ScrollBar.o \
+	$(SRC)/Form/Edit.o \
 	$(SRC)/LogFile.o 		\
 	\
 	$(SRC)/MapWindow.o 		\
@@ -310,6 +314,7 @@ OBJS	:=\
 	$(SRC)/Screen/ButtonWindow.o \
 	$(SRC)/Screen/Chart.o 		\
 	$(SRC)/Screen/Fonts.o 		\
+	$(SRC)/Screen/Layout.o \
 	$(SRC)/Screen/UnitSymbol.o \
 	$(SRC)/Screen/Graphics.o 	\
 	$(SRC)/Screen/Ramp.o 		\
@@ -319,6 +324,7 @@ OBJS	:=\
 	$(SRC)/Screen/Bitmap.o \
 	$(SRC)/Screen/Brush.o \
 	$(SRC)/Screen/Canvas.o \
+	$(SRC)/Screen/Color.o \
 	$(SRC)/Screen/VirtualCanvas.o \
 	$(SRC)/Screen/BitmapCanvas.o \
 	$(SRC)/Screen/Font.o \
@@ -380,7 +386,7 @@ OBJS += $(SRC)/XCSoar-$(TARGET).rsc
 endif
 
 XCSOARSETUP_OBJS=\
-	$(SRC)/XcSoarSetup.o
+	$(SRC)/XCSoarSetup.o
 
 XCSOARLAUNCH_OBJS=\
 	$(SRC)/XCSoarLaunch.o
@@ -454,7 +460,7 @@ include $(topdir)/build/compat.mk
 #
 # Tell make how to create a compiled resource object (rsc)
 #
-%-$(TARGET).rsc: %.rc
+%-$(TARGET).rsc: %.rc $(wildcard Common/Data/Dialogs/*.xml)
 	@$(NQ)echo "  WINDRES $@"
 	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<
 

@@ -39,10 +39,9 @@ Copyright_License {
 #include "MapWindowProjection.hpp"
 #include "Task.h"
 #include "Math/Geometry.hpp"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "SettingsComputer.hpp"
 #include "UtilsProfile.hpp"
-#include "options.h" /* for IBLSCALE() */
 #include "WayPoint.hpp"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"

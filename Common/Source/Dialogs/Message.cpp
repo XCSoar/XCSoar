@@ -37,12 +37,15 @@ Copyright_License {
 */
 
 #include "Dialogs/Message.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Language.hpp"
 #include "XCSoar.h"
-#include "WindowControls.h"
+#include "Form/Button.hpp"
+#include "Form/Form.hpp"
+#include "Form/Frame.hpp"
+#include "Form/Edit.hpp"
 #include "MainWindow.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Layout.hpp"
 
 #include <assert.h>
 #include <limits.h>
@@ -85,19 +88,19 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   rc = XCSoarInterface::main_window.get_screen_position();
 
 #ifdef ALTAIRSYNC
-  Width = DLGSCALE(220);
-  Height = DLGSCALE(160);
+  Width = Layout::Scale(220);
+  Height = Layout::Scale(160);
 #else
-  Width = DLGSCALE(200);
-  Height = DLGSCALE(160);
+  Width = Layout::Scale(200);
+  Height = Layout::Scale(160);
 #endif
 
   X = ((rc.right - rc.left) - Width) / 2;
   Y = ((rc.bottom - rc.top) - Height) / 2;
 
-  y = DLGSCALE(100);
-  w = DLGSCALE(60);
-  h = DLGSCALE(32);
+  y = Layout::Scale(100);
+  w = Layout::Scale(60);
+  h = Layout::Scale(32);
 
   // Create dialog
   wf = new WndForm(&XCSoarInterface::main_window, TEXT("frmXcSoarMessageDlg"),
@@ -107,8 +110,8 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   wf->SetBackColor(Color(0xDA, 0xDB, 0xAB));
 
   // Create text element
-  wText =
-      new WndFrame(wf, TEXT("frmMessageDlgText"), 0, DLGSCALE(5), Width, Height);
+  wText = new WndFrame(wf, TEXT("frmMessageDlgText"),
+                       0, Layout::Scale(5), Width, Height);
 
   wText->SetCaption(lpText);
   wText->SetFont(MapWindowBoldFont);
@@ -118,7 +121,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   /* TODO code: this doesnt work to set font height
   dY = wText->GetLastDrawTextHeight() - Height;
   */
-  dY = DLGSCALE(-40);
+  dY = Layout::Scale(-40);
   wText->resize(Width, wText->GetTextHeight() + 5);
   wf->resize(Width, wf->get_size().cy + dY);
 

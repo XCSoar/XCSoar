@@ -66,12 +66,6 @@ Copyright_License {
 
 CoordinateFormats_t Units::CoordinateFormat;
 
-#ifndef __MINGW32__
-#define DEG "°"
-#else
-#define DEG "Â°"
-#endif
-
 //SI to Local Units
 double        SPEEDMODIFY = TOKNOTS;
 double        LIFTMODIFY  = TOKNOTS;

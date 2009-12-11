@@ -320,7 +320,7 @@ public:
 
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 
 class TaskSectorsVisitor:
   public AbsoluteTaskPointVisitor {

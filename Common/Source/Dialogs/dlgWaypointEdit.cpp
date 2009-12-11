@@ -39,8 +39,8 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Units.hpp"
 #include "InputEvents.h"
-#include "InfoBoxLayout.h"
-#include "Waypointparser.h"
+#include "Screen/Layout.hpp"
+#include "WayPointParser.h"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
@@ -458,7 +458,7 @@ dlgWaypointEditShowModal(WAYPOINT &way_point)
 {
   global_wpt = &way_point;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWaypointEdit_L.xml"),
                         XCSoarInterface::main_window,

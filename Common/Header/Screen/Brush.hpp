@@ -55,10 +55,10 @@ protected:
 public:
   #ifdef ENABLE_SDL
   Brush():hollow(true) {}
-  Brush(const Color _color):hollow(false), color(_color)  {}
+  explicit Brush(const Color _color):hollow(false), color(_color)  {}
   #else
   Brush():brush(NULL) {}
-  Brush(const Color c):brush(NULL) {
+  explicit Brush(const Color c):brush(NULL) {
     set(c);
   }
   #endif

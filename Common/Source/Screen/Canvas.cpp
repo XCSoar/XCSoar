@@ -37,10 +37,9 @@ Copyright_License {
 */
 
 #include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/Util.hpp"
-#include "InfoBoxLayout.h"
 #include "Compatibility/gdi.h"
-#include "options.h" /* for IBLSCALE() */
 #include "Asset.hpp" /* for needclipping */
 
 #include <assert.h>
@@ -224,8 +223,7 @@ Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
 {
   assert(src.surface != NULL);
 
-  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY,
-                    src.map(Color(0xff, 0xff, 0xff)));
+  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(Color::WHITE));
   copy(src);
   ::SDL_SetColorKey(src.surface, 0, 0);
 }
@@ -743,8 +741,6 @@ Canvas::copy(const Canvas &src)
 void
 Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
 {
-  static COLORREF whitecolor = RGB(0xff,0xff,0xff);
-
 #if !defined(WINDOWSPC)
   ::TransparentImage(dc,
                      rc.left, rc.top,
@@ -752,7 +748,7 @@ Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
                      src.dc,
                      rc.left, rc.top,
                      rc.right - rc.left, rc.bottom - rc.top,
-                     whitecolor);
+                     Color::WHITE);
 #else
   ::TransparentBlt(dc,
                    rc.left, rc.top,
@@ -760,7 +756,7 @@ Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
                    src.dc,
                    rc.left, rc.top,
                    rc.right - rc.left, rc.bottom - rc.top,
-                   whitecolor);
+                   Color::WHITE);
 #endif
 }
 
@@ -834,8 +830,9 @@ Canvas::scale_copy(int dest_x, int dest_y,
                    int src_x, int src_y,
                    unsigned src_width, unsigned src_height)
 {
-  if (InfoBoxLayout::scale > 1)
-    stretch(dest_x, dest_y, IBLSCALE(src_width), IBLSCALE(src_height),
+  if (Layout::ScaleEnabled())
+    stretch(dest_x, dest_y,
+            Layout::Scale(src_width), Layout::Scale(src_height),
             src, src_x, src_y, src_width, src_height);
   else
     copy(dest_x, dest_y, src_width, src_height,
@@ -848,8 +845,9 @@ Canvas::scale_or(int dest_x, int dest_y,
                  int src_x, int src_y,
                  unsigned src_width, unsigned src_height)
 {
-  if (InfoBoxLayout::scale > 1)
-    stretch_or(dest_x, dest_y, IBLSCALE(src_width), IBLSCALE(src_height),
+  if (Layout::ScaleEnabled())
+    stretch_or(dest_x, dest_y,
+               Layout::Scale(src_width), Layout::Scale(src_height),
                src, src_x, src_y, src_width, src_height);
   else
     copy_or(dest_x, dest_y, src_width, src_height,
@@ -862,8 +860,9 @@ Canvas::scale_and(int dest_x, int dest_y,
                   int src_x, int src_y,
                   unsigned src_width, unsigned src_height)
 {
-  if (InfoBoxLayout::scale > 1)
-    stretch_and(dest_x, dest_y, IBLSCALE(src_width), IBLSCALE(src_height),
+  if (Layout::ScaleEnabled())
+    stretch_and(dest_x, dest_y,
+                Layout::Scale(src_width), Layout::Scale(src_height),
                 src, src_x, src_y, src_width, src_height);
   else
     copy_and(dest_x, dest_y, src_width, src_height,

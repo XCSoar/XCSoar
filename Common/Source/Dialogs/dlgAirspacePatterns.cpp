@@ -37,8 +37,8 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 
 #include <assert.h>
@@ -67,10 +67,8 @@ OnAirspacePatternsPaintListItem(WindowControl *Sender, Canvas &canvas)
     canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
     canvas.select(MapGfx.GetAirspaceBrush(i));
     canvas.set_text_color(Color(0x00,0x00, 0x00));
-    canvas.rectangle(100 * InfoBoxLayout::scale,
-                     2 * InfoBoxLayout::scale,
-                     180 * InfoBoxLayout::scale,
-                     22 * InfoBoxLayout::scale);
+    canvas.rectangle(Layout::FastScale(100), Layout::FastScale(2),
+                     Layout::FastScale(180), Layout::FastScale(22));
   }
 }
 
@@ -118,7 +116,7 @@ int dlgAirspacePatternsShowModal(void){
 
   ItemIndex = -1;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspacePatterns_L.xml"),
                         XCSoarInterface::main_window,

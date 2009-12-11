@@ -9,9 +9,6 @@
 
 <WndForm Name="frmConfiguration" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Configuration" Font=2  BackColor=0xDADBAB>
 
-  <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
-  <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
-  <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 Tag=3 />
 
   <WndProperty Name="prpUserLevel" Caption="" X=0 Y=5  Width=70 Height=28 CaptionWidth=15 Font=2 Help="Sets the level of detail of the configuration settings.
 [Basic]: Only basic settings are shown.
@@ -972,6 +969,10 @@ To select an airspace on the map, press for about half a second on it.  If you d
   </WndProperty>
 
   </WndFrame>
+
+  <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
+  <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
+  <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 Tag=3 />
 
 </WndForm>
 

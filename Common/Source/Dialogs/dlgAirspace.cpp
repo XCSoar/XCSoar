@@ -39,11 +39,11 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "XCSoar.h"
 #include "Message.h"
-#include "InfoBoxLayout.h"
 #include "Profile.hpp"
 #include "Registry.hpp"
 #include "UtilsProfile.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "SettingsAirspace.hpp"
 
@@ -118,18 +118,15 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
       break;
     };
 
-    int w0, w1, w2, x0;
-    if (InfoBoxLayout::landscape) {
-      w0 = 202*InfoBoxLayout::scale;
-    } else {
-      w0 = 225*InfoBoxLayout::scale;
-    }
-    w1 = canvas.text_width(gettext(TEXT("Warn"))) + InfoBoxLayout::scale*10;
-    w2 = canvas.text_width(gettext(TEXT("Display"))) + InfoBoxLayout::scale*10;
+    int w1, w2, x0;
+    int w0 = Layout::FastScale(Layout::landscape ? 202 : 225);
+
+    w1 = canvas.text_width(gettext(TEXT("Warn"))) + Layout::FastScale(10);
+    w2 = canvas.text_width(gettext(TEXT("Display"))) + Layout::FastScale(10);
     x0 = w0-w1-w2;
 
-    canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                        x0 - InfoBoxLayout::scale * 10, label);
+    canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+                        x0 - Layout::FastScale(10), label);
 
     if (colormode) {
 
@@ -139,8 +136,8 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
       canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
       canvas.select(MapGfx.GetAirspaceBrushByClass(i,
                       XCSoarInterface::SettingsMap()));
-      canvas.rectangle(x0, 2 * InfoBoxLayout::scale,
-                       w0, 22 * InfoBoxLayout::scale);
+      canvas.rectangle(x0, Layout::FastScale(2),
+                       w0, Layout::FastScale(22));
 
     } else {
 
@@ -151,11 +148,11 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
       isdisplay = ((XCSoarInterface::SettingsComputer().iAirspaceMode[i]%2)>0);
       if (iswarn) {
         _tcscpy(label, gettext(TEXT("Warn")));
-        canvas.text_opaque(w0-w1-w2, 2*InfoBoxLayout::scale, label);
+        canvas.text_opaque(w0 - w1 - w2, Layout::FastScale(2), label);
       }
       if (isdisplay) {
         _tcscpy(label, gettext(TEXT("Display")));
-        canvas.text_opaque(w0-w2, 2*InfoBoxLayout::scale, label);
+        canvas.text_opaque(w0 - w2, Layout::FastScale(2), label);
       }
 
     }
@@ -238,7 +235,7 @@ void dlgAirspaceShowModal(bool coloredit){
 
   ItemIndex = -1;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgAirspace_L.xml"),
                         XCSoarInterface::main_window,

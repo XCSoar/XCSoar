@@ -47,8 +47,8 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
-#include "McReady.h"
-#include "InfoBoxLayout.h"
+#include "MacCready.h"
+#include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "WayPointList.hpp"
@@ -175,7 +175,7 @@ OnPaintDetailsListItem(WindowControl * Sender, Canvas &canvas)
       nlen--;
     }
     if (nlen>0) {
-      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
                          text + nstart, nlen);
     }
   }
@@ -362,7 +362,7 @@ void dlgWayPointDetailsShowModal(void){
   int sunsetmins;
   WndProperty *wp;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWayPointDetails_L.xml"),
                         XCSoarInterface::main_window,
@@ -452,7 +452,7 @@ void dlgWayPointDetailsShowModal(void){
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)
-    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -way_point.Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
@@ -471,7 +471,7 @@ void dlgWayPointDetailsShowModal(void){
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)
-    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -way_point.Altitude;
 
   wp = ((WndProperty *)wf->FindByName(TEXT("prpMc1")));
@@ -487,7 +487,7 @@ void dlgWayPointDetailsShowModal(void){
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)
-    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -way_point.Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,

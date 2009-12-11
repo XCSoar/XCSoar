@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_MATH_PRESSURE_H
 #define XCSOAR_MATH_PRESSURE_H
 
+#include "Compiler.h"
+
 // globals!
 extern double QNH;
 extern double QFEAltitudeOffset;
@@ -53,8 +55,10 @@ double AltitudeToQNHAltitude(double alt);
 
 double StaticPressureToAltitude(double ps);
 
+gcc_const
 double AirDensity(double altitude);
 
+gcc_const
 double AirDensityRatio(double altitude);
 
 #ifdef __cplusplus

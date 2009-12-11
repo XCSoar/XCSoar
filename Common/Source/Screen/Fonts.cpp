@@ -43,10 +43,10 @@ Copyright_License {
 #include "ButtonLabel.hpp"
 #include "Registry.hpp"
 #include "Asset.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "SettingsUser.hpp"
 #include "Appearance.hpp"
-#include "options.h" /* for IBLSCALE() */
 
 #include <stdio.h>
 
@@ -72,23 +72,25 @@ LOGFONT                                   autoStatisticsLogFont;
 
 int  UseCustomFonts;
 
+#ifndef ENABLE_SDL
+
 static void
 ApplyClearType(LOGFONT *logfont)
 {
-#ifndef ENABLE_SDL
   logfont->lfQuality = ANTIALIASED_QUALITY;
 #ifdef CLEARTYPE_COMPAT_QUALITY
   if (0) {
     logfont->lfQuality = CLEARTYPE_COMPAT_QUALITY; // VENTA TODO FIX HERE. WHY NOT LANDSCAPE? cleartype is not native, but better than nothing!
 #ifndef NOCLEARTYPE
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     logfont->lfQuality = CLEARTYPE_COMPAT_QUALITY; // VENTA TODO FIX HERE. WHY NOT LANDSCAPE? cleartype is not native, but better than nothing!
   }
 #endif
   }
 #endif
-#endif /* !ENABLE_SDL */
 }
+
+#endif /* !ENABLE_SDL */
 
 static bool
 IsNullLogFont(LOGFONT logfont)
@@ -278,7 +280,7 @@ short   ScreenSize=0;
 
 /* VENTA5 TEST automatic fallback for 320x240,640x480 and unusual resolutions
   // Fallback for any other resolution
-  else if (InfoBoxLayout::landscape) {
+  else if (Layout::landscape) {
 
     propGetFontSettingsFromString(TEXT("28,0,0,0,800,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardInfoWindowLogFont);
     propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"), ptrhardTitleWindowLogFont);
@@ -384,9 +386,6 @@ InitialiseFontsAuto(Canvas &canvas, RECT rc,
 
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
-#ifdef ENABLE_SDL
-  // XXX
-#else /* !ENABLE_SDL */
   SIZE tsize;
   do {
     HFONT TempWindowFont;
@@ -406,7 +405,6 @@ InitialiseFontsAuto(Canvas &canvas, RECT rc,
     DeleteObject(TempWindowFont);
 
   } while (tsize.cx>InfoBoxLayout::ControlWidth);
-#endif /* !ENABLE_SDL */
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
@@ -695,8 +693,8 @@ SetFontInfo(Canvas &canvas, struct FontHeightInfo *FontHeightInfo)
   FontHeightInfo->CapitalHeight = 0;
 
   canvas.background_opaque();
-  canvas.set_background_color(Color(0xff,0xff,0xff));
-  canvas.set_text_color(Color(0x00,0x00,0x00));
+  canvas.set_background_color(Color::WHITE);
+  canvas.set_text_color(Color::BLACK);
   rec.left = 0;
   rec.top = 0;
   rec.right = tm.tmAveCharWidth;
@@ -706,10 +704,12 @@ SetFontInfo(Canvas &canvas, struct FontHeightInfo *FontHeightInfo)
   top = tm.tmHeight;
   bottom = 0;
 
+  const HWColor white = canvas.map(Color::WHITE);
+
   FontHeightInfo->CapitalHeight = 0;
   for (x=0; x<tm.tmAveCharWidth; x++){
     for (y=0; y<tm.tmHeight; y++){
-      if (canvas.get_pixel(x, y) != canvas.map(Color(0xff,0xff,0xff))) {
+      if (canvas.get_pixel(x, y) != white) {
         if (top > y)
           top = y;
         if (bottom < y)

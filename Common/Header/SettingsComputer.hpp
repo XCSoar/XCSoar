@@ -49,26 +49,22 @@ Copyright_License {
 // from outside calculation thread; calculation thread should not set
 // these values
 
-// AutoWindMode
-typedef enum {
-  D_AUTOWIND_NONE=0,
+/** AutoWindMode (not in use) */
+typedef enum
+{
+  /** 0: Manual */
+  D_AUTOWIND_NONE = 0,
+  /** 1: Circling */
   D_AUTOWIND_CIRCLING,
+  /** 2: ZigZag */
   D_AUTOWIND_ZIGZAG
+  /** 3: Both */
 } AutoWindModeBits_t;
-// 0: Manual
-// 1: Circling
-// 2: ZigZag
-// 3: Both
 
-// AutoMcMode
-// 0: Final glide only
-// 1: Set to average if in climb mode
-// 2: Average if in climb mode, final glide in final glide mode
-
-// airspace display modes
-
-typedef enum {
-  ALLON=0,
+/** Airspace display modes */
+typedef enum
+{
+  ALLON = 0,
   CLIP,
   AUTO,
   ALLBELOW,
@@ -76,58 +72,85 @@ typedef enum {
   ALLOFF
 } AirspaceDisplayMode_t;
 
-struct SETTINGS_COMPUTER {
+struct SETTINGS_COMPUTER
+{
+  /** AutoMacCready feature enable (true/false) */
   bool AutoMacCready;
-  int    FinalGlideTerrain;
-  int    AutoMcMode;
-  bool   EnableCalibration;
-  bool   AutoForceFinalGlide;
-  int    AutoWindMode;
-  bool   EnableNavBaroAltitude;
-  bool   EnableBlockSTF; // block speed to fly instead of dolphin
-  int    EnableThermalLocator;
-  int    LoggerTimeStepCruise;
-  int    LoggerTimeStepCircling;
-  bool   LoggerShortName;
-  bool   DisableAutoLogger;
-  double SAFETYALTITUDEARRIVAL;
-  double SAFETYALTITUDEBREAKOFF;
-  double SAFETYALTITUDETERRAIN;
-  /** ManoeuveringSpeed */
-  double SAFTEYSPEED;
-  int    EnableExternalTriggerCruise;
-  short  AverEffTime;
-  bool   EnableBestAlternate;
-  bool   EnableAlternate1;
-  bool   EnableAlternate2;
-  // polar info
-  int    BallastSecsToEmpty;
-  bool   BallastTimerActive;
+  int FinalGlideTerrain;
 
-  int    TeamCodeRefWaypoint;
-  bool   TeamFlarmTracking;
-  TCHAR  TeamFlarmCNTarget[4]; // CN of the glider to track
+  /**
+   * AutoMacCready calculation mode
+   * 0: Final glide only
+   * 1: Set to average if in climb mode
+   * 2: Average if in climb mode, final glide in final glide mode
+   */
+  int AutoMacCreadyMode;
+  bool EnableCalibration;
+  bool AutoForceFinalGlide;
+
+  /**
+   * AutoWind calculation mode
+   * 0: Manual
+   * 1: Circling
+   * 2: ZigZag
+   * 3: Both
+   */
+  int AutoWindMode;
+  bool EnableNavBaroAltitude;
+  /** block speed to fly instead of dolphin */
+  bool EnableBlockSTF;
+  int EnableThermalLocator;
+  /** Logger interval in cruise mode */
+  int LoggerTimeStepCruise;
+  /** Logger interval in circling mode */
+  int LoggerTimeStepCircling;
+  /** Use short IGC filenames for the logger files */
+  bool LoggerShortName;
+  bool DisableAutoLogger;
+  double SafetyAltitudeArrival;
+  double SafetyAltitudeBreakoff;
+  double SafetyAltitudeTerrain;
+  /** ManoeuveringSpeed */
+  double SafetySpeed;
+  int EnableExternalTriggerCruise;
+  short AverEffTime;
+  bool EnableBestAlternate;
+  bool EnableAlternate1;
+  bool EnableAlternate2;
+  // polar info
+  int BallastSecsToEmpty;
+  bool BallastTimerActive;
+
+  int TeamCodeRefWaypoint;
+  bool TeamFlarmTracking;
+  /** CN of the glider to track */
+  TCHAR TeamFlarmCNTarget[4];
 
   // sound stuff not used?
-  bool   EnableSoundVario;
-  bool   EnableSoundTask;
-  bool   EnableSoundModes;
-  int    SoundVolume;
-  int    SoundDeadband;
+  bool EnableSoundVario;
+  bool EnableSoundTask;
+  bool EnableSoundModes;
+  int SoundVolume;
+  int SoundDeadband;
 
-  // local time adjustment
+  /** local time adjustment */
   int UTCOffset;
 
   unsigned OLCRules;
   unsigned Handicap;
   bool EnableOLC;
 
-  TCHAR  TeammateCode[10]; // auto-detected, see also in Info.h
-  bool   TeammateCodeValid;
-  int TeamFlarmIdTarget;    // FlarmId of the glider to track
+  /** auto-detected, see also in Info.h */
+  TCHAR TeammateCode[10];
+  bool TeammateCodeValid;
+  /** FlarmId of the glider to track */
+  int TeamFlarmIdTarget;
 
-  int  Alternate1; // VENTA3
-  int  Alternate2;
+  /** Array index of the first alternate waypoint */
+  int Alternate1; // VENTA3
+  /** Array index of the second alternate waypoint */
+  int Alternate2;
+  /** Array index of the home waypoint */
   int HomeWaypoint;
 
   // vegavoice stuff
@@ -140,8 +163,10 @@ struct SETTINGS_COMPUTER {
   bool EnableVoiceInSector;
   bool EnableVoiceAirspace;
 
-  bool EnableAirspaceWarnings; /* true if airspace warnings are enabled */
-  unsigned WarningTime; /** warning time before airspace entry */
+  /** Airspace warnings enabled (true/false) */
+  bool EnableAirspaceWarnings;
+  /** Warning time before airspace entry */
+  unsigned WarningTime;
   unsigned AcknowledgementTime;
 
   // airspace

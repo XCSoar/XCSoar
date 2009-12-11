@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Screen/ProgressWindow.hpp"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "Language.hpp"
 #include "Version.hpp"
 #include "resource.h"
@@ -53,7 +53,7 @@ Copyright_License {
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
 {
   set(parent,
-      InfoBoxLayout::landscape
+      Layout::landscape
       ? (LPCTSTR)IDD_PROGRESS_LANDSCAPE
       : (LPCTSTR)IDD_PROGRESS);
 

@@ -39,10 +39,10 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/Ramp.hpp"
 #include "Appearance.hpp"
 #include "MapWindowProjection.hpp"
-#include "InfoBoxLayout.h"
 #include "Math/Screen.hpp"
 #include <stdlib.h>
 #include "SettingsUser.hpp"
@@ -98,13 +98,8 @@ const Color ScreenGraphics::ColorButton = Color(0xA0, 0xE0, 0xA0);
 const Color ScreenGraphics::ColorBlack = Color(0x00, 0x00, 0x00);
 const Color ScreenGraphics::ColorMidGrey = Color(0x80, 0x80, 0x80);
 
-const Color ScreenGraphics::redColor = Color(0xff, 0x00, 0x00);
-const Color ScreenGraphics::blueColor = Color(0x00, 0x00, 0xff);
 const Color ScreenGraphics::inv_redColor = Color(0xff, 0x70, 0x70);
 const Color ScreenGraphics::inv_blueColor = Color(0x90, 0x90, 0xff);
-const Color ScreenGraphics::yellowColor = Color(0xff, 0xff, 0x00); //VENTA2
-const Color ScreenGraphics::greenColor = Color(0x00, 0xff, 0x00); //VENTA2
-const Color ScreenGraphics::magentaColor = Color(0xff, 0x00, 0xff); //VENTA2
 const Color ScreenGraphics::inv_yellowColor = Color(0xff, 0xff, 0x00); //VENTA2
 const Color ScreenGraphics::inv_greenColor = Color(0x00, 0xff, 0x00); //VENTA2
 const Color ScreenGraphics::inv_magentaColor = Color(0xff, 0x00, 0xff); //VENTA2
@@ -146,9 +141,9 @@ ScreenGraphics::Initialise(HINSTANCE hInstance, const SETTINGS_MAP &settings_map
   infoUnselectedBrush.set(MapGfx.ColorUnselected);
   buttonBrush.set(MapGfx.ColorButton);
 
-  redBrush.set(redColor);
-  yellowBrush.set(yellowColor);
-  greenBrush.set(greenColor);
+  redBrush.set(Color::RED);
+  yellowBrush.set(Color::YELLOW);
+  greenBrush.set(Color::GREEN);
 
   hBackgroundBrush.set(BackgroundColor);
 
@@ -156,7 +151,7 @@ ScreenGraphics::Initialise(HINSTANCE hInstance, const SETTINGS_MAP &settings_map
   hTerrainWarning.load(IDB_TERRAINWARNING);
   hTurnPoint.load(IDB_TURNPOINT);
   hSmall.load(IDB_SMALL);
-  hAutoMacCready.load(IDB_AUTOMCREADY);
+  hAutoMacCready.load(IDB_AUTOMACCREADY);
   hGPSStatus1.load(IDB_GPSSTATUS1);
   hGPSStatus2.load(IDB_GPSSTATUS2);
   hLogger.load(IDB_LOGGER);
@@ -192,21 +187,21 @@ ScreenGraphics::Initialise(HINSTANCE hInstance, const SETTINGS_MAP &settings_map
 #endif
 
   hBmpMapScale.load(IDB_MAPSCALE_A);
-  hBrushFlyingModeAbort.set(Color(0xff, 0x00, 0x00));
+  hBrushFlyingModeAbort.set(Color::RED);
 
   hBmpThermalSource.load(IDB_THERMALSOURCE);
   hBmpTarget.load(IDB_TARGET);
 
 #if (MONOCHROME_SCREEN > 0)
-  hbCompass.set(Color(0xff, 0xff, 0xff));
+  hbCompass.set(Color::WHITE);
 #else
   hbCompass.set(Color(0x40, 0x40, 0xFF));
 #endif
   hbThermalBand.set(Color(0x80, 0x80, 0xFF));
-  hbBestCruiseTrack.set(Color(0x0, 0x0, 0xFF));
-  hbFinalGlideBelow.set(Color(0xFF, 0x00, 0x00));
+  hbBestCruiseTrack.set(Color::BLUE);
+  hbFinalGlideBelow.set(Color::RED);
   hbFinalGlideBelowLandable.set(Color(0xFF, 180, 0x00));
-  hbFinalGlideAbove.set(Color(0x00, 0xFF, 0x00));
+  hbFinalGlideAbove.set(Color::GREEN);
 
   // all below depend on settings!
 
@@ -232,28 +227,28 @@ ScreenGraphics::Initialise(HINSTANCE hInstance, const SETTINGS_MAP &settings_map
     hSnailPens[i].set(iwidth, hSnailColours[i]);
   }
 
-  hpCompassBorder.set(IBLSCALE(3), Color(0xff, 0xff, 0xff));
+  hpCompassBorder.set(IBLSCALE(3), Color::WHITE);
 
   if (Appearance.InverseAircraft) {
-    hpAircraft.set(IBLSCALE(3), Color(0x00, 0x00, 0x00));
-    hpAircraftBorder.set(IBLSCALE(1), Color(0xff, 0xff, 0xff));
+    hpAircraft.set(IBLSCALE(3), Color::BLACK);
+    hpAircraftBorder.set(IBLSCALE(1), Color::WHITE);
   } else {
-    hpAircraft.set(IBLSCALE(3), Color(0xff, 0xff, 0xff));
-    hpAircraftBorder.set(IBLSCALE(1), Color(0x00, 0x00, 0x00));
+    hpAircraft.set(IBLSCALE(3), Color::WHITE);
+    hpAircraftBorder.set(IBLSCALE(1), Color::BLACK);
   }
 
 #if (MONOCHROME_SCREEN > 0)
-  hpWind.set(IBLSCALE(2), Color(0, 0, 0));
+  hpWind.set(IBLSCALE(2), Color::BLACK);
 #else
-  hpWind.set(IBLSCALE(2), Color(255, 0, 0));
+  hpWind.set(IBLSCALE(2), Color::RED);
 #endif
 
   hpWindThick.set(IBLSCALE(4), Color(255, 220, 220));
 
   hpBearing.set(IBLSCALE(2), Color(0, 0, 0));
-  hpBestCruiseTrack.set(IBLSCALE(1), Color(0, 0, 255));
+  hpBestCruiseTrack.set(IBLSCALE(1), Color::BLUE);
 #if (MONOCHROME_SCREEN > 0)
-  hpCompass.set(IBLSCALE(1), Color(0x00, 0x00, 0x00));
+  hpCompass.set(IBLSCALE(1), Color::BLACK);
   //hpCompass.set(1, Color(0xff,0xff,0xff));
 #else
   hpCompass.set(IBLSCALE(1), Color(0xcf, 0xcf, 0xFF));
@@ -267,8 +262,8 @@ ScreenGraphics::Initialise(HINSTANCE hInstance, const SETTINGS_MAP &settings_map
   // TODO enhancement: support red/green Color blind
   hpFinalGlideAbove.set(IBLSCALE(1), Color(0xA0, 0xFF, 0xA0));
 
-  hpSpeedSlow.set(IBLSCALE(1), Color(0xFF, 0x00, 0x00));
-  hpSpeedFast.set(IBLSCALE(1), Color(0x00, 0xFF, 0x00));
+  hpSpeedSlow.set(IBLSCALE(1), Color::RED);
+  hpSpeedFast.set(IBLSCALE(1), Color::GREEN);
 
   hpStartFinishThick.set(IBLSCALE(5), TaskColor);
 
@@ -276,12 +271,12 @@ ScreenGraphics::Initialise(HINSTANCE hInstance, const SETTINGS_MAP &settings_map
 
   hpMapScale.set(IBLSCALE(1), Color(0, 0, 0));
   hpTerrainLine.set(Pen::DASH, IBLSCALE(1), Color(0x30, 0x30, 0x30));
-  hpTerrainLineBg.set(IBLSCALE(1), Color(0xFF, 0xFF, 0xFF));
+  hpTerrainLineBg.set(IBLSCALE(1), Color::WHITE);
   // VENTA3
   hpVisualGlideLightBlack.set(Pen::DASH, IBLSCALE(1), Color(0x0, 0x0, 0x0));
   hpVisualGlideHeavyBlack.set(Pen::DASH, IBLSCALE(2), Color(0x0, 0x0, 0x0));
-  hpVisualGlideLightRed.set(Pen::DASH, IBLSCALE(1), Color(0xff, 0x0, 0x0));
-  hpVisualGlideHeavyRed.set(Pen::DASH, IBLSCALE(2), Color(0xff, 0x0, 0x0));
+  hpVisualGlideLightRed.set(Pen::DASH, IBLSCALE(1), Color::RED);
+  hpVisualGlideHeavyRed.set(Pen::DASH, IBLSCALE(2), Color::RED);
 
   if (Appearance.IndLandable == wpLandableDefault) {
     hBmpAirportReachable.load(IDB_REACHABLE);
@@ -591,7 +586,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       notoverlapping = true;
 
     if (notoverlapping) {
-      canvas.set_background_color(Color(0xff, 0xff, 0xff));
+      canvas.set_background_color(Color::WHITE);
       canvas.text_opaque(x, y, &brect, Value);
       drawn = true;
     }
@@ -607,7 +602,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
       notoverlapping = true;
 
     if (notoverlapping) {
-      canvas.set_text_color(Color(0xff, 0xff, 0xff));
+      canvas.set_text_color(Color::WHITE);
 
 #ifdef WINDOWSPC
       canvas.background_transparent();

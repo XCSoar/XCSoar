@@ -40,7 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "SettingsTask.hpp"
 #include "Logger.h"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
@@ -498,7 +498,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
   wf = NULL;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgTaskWaypoint_L.xml"),
                         XCSoarInterface::main_window,

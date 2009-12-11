@@ -38,7 +38,7 @@ Copyright_License {
 */
 
 #include "GlideComputerStats.hpp"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"

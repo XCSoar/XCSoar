@@ -43,7 +43,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Battery.h"
 #include "Units.hpp"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "Logger.h"
 #include "Math/FastMath.h"
 #include "LocalTime.hpp"
@@ -570,7 +570,7 @@ static void UpdateValuesTask(void) {
   }
 
   double d1;
-  if (abs(dd) > 0.001){
+  if (fabs(dd) > 0.001){
     d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
           + XCSoarInterface::Calculated().TaskDistanceCovered)/dd;
     // TODO bug: this fails for OLC

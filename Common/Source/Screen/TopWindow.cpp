@@ -181,6 +181,18 @@ TopWindow::on_deactivate()
   return false;
 }
 
+void
+TopWindow::post_quit()
+{
+#ifdef ENABLE_SDL
+  SDL_Event event;
+  event.type = SDL_QUIT;
+  ::SDL_PushEvent(&event);
+#else
+  ::PostQuitMessage(0);
+#endif
+}
+
 #ifdef ENABLE_SDL
 
 bool

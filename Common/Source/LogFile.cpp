@@ -52,7 +52,8 @@ static Mutex mutexLogFile;
  * Saves the given string (Str) to the debug logfile
  * @param Str String to be logged
  */
-void DebugStore(const char *Str, ...)
+void
+DebugStore(const char *Str, ...)
 {
   char buf[MAX_PATH];
   va_list ap;
@@ -63,17 +64,19 @@ void DebugStore(const char *Str, ...)
   va_end(ap);
 
   mutexLogFile.Lock();
+
   FILE *stream;
   TCHAR szFileName[] = TEXT("xcsoar-debug.log");
+
   static bool initialised = false;
   if (!initialised) {
     initialised = true;
-    stream = _tfopen(szFileName,TEXT("w"));
+    stream = _tfopen(szFileName, TEXT("w"));
   } else {
-    stream = _tfopen(szFileName,TEXT("a+"));
+    stream = _tfopen(szFileName, TEXT("a+"));
   }
 
-  fwrite(buf,len,1,stream);
+  fwrite(buf, len, 1, stream);
 
   fclose(stream);
   mutexLogFile.Unlock();
@@ -84,7 +87,8 @@ void DebugStore(const char *Str, ...)
  * Saves the given string (Str) to the logfile
  * @param Str String to be logged
  */
-void StartupStore(const TCHAR *Str, ...)
+void
+StartupStore(const TCHAR *Str, ...)
 {
   TCHAR buf[MAX_PATH];
   va_list ap;
@@ -94,24 +98,30 @@ void StartupStore(const TCHAR *Str, ...)
   va_end(ap);
 
   mutexLogFile.Lock();
+
   FILE *startupStoreFile = NULL;
   static TCHAR szFileName[MAX_PATH];
+
   static bool initialised = false;
   if (!initialised) {
     if (is_altair())
       LocalPath(szFileName, TEXT("persist/xcsoar-startup.log"));
     else
       LocalPath(szFileName, TEXT("xcsoar-startup.log"));
+
     startupStoreFile = _tfopen(szFileName, TEXT("wb"));
     if (startupStoreFile) {
       fclose(startupStoreFile);
     }
+
     initialised = true;
   }
+
   startupStoreFile = _tfopen(szFileName, TEXT("ab+"));
   if (startupStoreFile != NULL) {
     fprintf(startupStoreFile, "%S", buf);
     fclose(startupStoreFile);
   }
+
   mutexLogFile.Unlock();
 }

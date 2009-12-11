@@ -64,7 +64,7 @@ public:
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
                          bool enable_baro) = 0;
 
-  virtual bool PutMcCready(double mc_cready) = 0;
+  virtual bool PutMacCready(double MacCready) = 0;
   virtual bool PutBugs(double bugs) = 0;
   virtual bool PutBallast(double ballast) = 0;
   virtual bool PutQNH(double qnh) = 0;
@@ -98,7 +98,7 @@ class AbstractDevice : public Device {
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
                          bool enable_baro);
 
-  virtual bool PutMcCready(double mc_cready);
+  virtual bool PutMacCready(double MacCready);
   virtual bool PutBugs(double bugs);
   virtual bool PutBallast(double ballast);
   virtual bool PutQNH(double qnh);

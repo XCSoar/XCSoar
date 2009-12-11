@@ -40,7 +40,7 @@
 #include "UtilsFLARM.hpp"
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 
@@ -184,7 +184,7 @@ void dlgTeamCodeShowModal(void)
   WndButton *buttonCode = NULL;
   wf = NULL;
 
-  if (InfoBoxLayout::landscape)
+  if (Layout::landscape)
     {
       wf = dlgLoadFromXML(CallBackTable,
                           TEXT("dlgTeamCode_L.xml"),

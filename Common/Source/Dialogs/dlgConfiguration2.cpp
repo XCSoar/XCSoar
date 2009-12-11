@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "InfoBoxLayout.h"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
@@ -208,7 +208,7 @@ void OnInfoBoxHelp(WindowControl * Sender){
     break;
   case 34:
     dlgHelpShowModal(XCSoarInterface::main_window,
-                     caption, TEXT("[Speed MacReady]\r\nThe MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude.  In final glide mode, this speed-to-fly is calculated for descent."));
+                     caption, TEXT("[Speed MacCready]\r\nThe MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude.  In final glide mode, this speed-to-fly is calculated for descent."));
     break;
   case 35:
     dlgHelpShowModal(XCSoarInterface::main_window,

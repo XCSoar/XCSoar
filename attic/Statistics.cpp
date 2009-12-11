@@ -39,7 +39,7 @@ Copyright_License {
 #include "Statistics.h"
 #include "XCSoar.h"
 #include "externs.h"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Units.h"
 #include "InfoBoxLayout.h"
 #include "Atmosphere.h"
@@ -492,9 +492,9 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 {
   ResetScale();
   ScaleYFromValue(rc, 0);
-  ScaleYFromValue(rc, GlidePolar::SinkRateFast(0,(int)(SAFTEYSPEED-1)));
+  ScaleYFromValue(rc, GlidePolar::SinkRateFast(0,(int)(SafetySpeed-1)));
   ScaleXFromValue(rc, 0); // GlidePolar::Vminsink);
-  ScaleXFromValue(rc, SAFTEYSPEED);
+  ScaleXFromValue(rc, SafetySpeed);
 
   DrawXGrid(hdc, rc,
             10.0/SPEEDMODIFY, 0,
@@ -505,7 +505,7 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 
   int i;
   double sinkrate0, sinkrate1;
-  for (i= GlidePolar::Vminsink; i< SAFTEYSPEED-1;
+  for (i= GlidePolar::Vminsink; i< SafetySpeed-1;
        i++) {
 
     sinkrate0 = GlidePolar::SinkRateFast(0,i);
@@ -575,7 +575,7 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 }
 
 // from Calculations.cpp
-#include "windanalyser.h"
+#include "WindAnalyser.h"
 extern WindAnalyser *windanalyser;
 
 void Statistics::RenderWind(HDC hdc, RECT rc)
@@ -596,7 +596,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
     h = (flightstats.Altitude_Ceiling.y_max-flightstats.Altitude_Base.y_min)*
       i/(double)(numsteps-1)+flightstats.Altitude_Base.y_min;
 
-    wind = windanalyser->windstore.getWind(h, &found);
+    wind = windanalyser->windstore.GetWind(h, &found);
     mag = sqrt(wind.x*wind.x+wind.y*wind.y);
 
     windstats_mag.LeastSquaresUpdate(mag, h);
@@ -629,7 +629,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
     h = (flightstats.Altitude_Ceiling.y_max-flightstats.Altitude_Base.y_min)*
       hfact+flightstats.Altitude_Base.y_min;
 
-    wind = windanalyser->windstore.getWind(h, &found);
+    wind = windanalyser->windstore.GetWind(h, &found);
     if (windstats_mag.x_max == 0)
       windstats_mag.x_max=1;  // prevent /0 problems
     wind.x /= windstats_mag.x_max;

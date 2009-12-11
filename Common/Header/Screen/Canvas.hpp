@@ -74,7 +74,7 @@ public:
   Canvas()
     :surface(NULL),
      font(NULL), background_mode(OPAQUE) {}
-  Canvas(SDL_Surface *_surface)
+  explicit Canvas(SDL_Surface *_surface)
     :surface(_surface), font(NULL), background_mode(OPAQUE) {}
 
   void set(SDL_Surface *_surface) {

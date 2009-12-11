@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 
@@ -131,7 +131,7 @@ void dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
   }
   max_width = min(MAX_TEXTENTRY, width);
 
-  if (InfoBoxLayout::landscape)
+  if (Layout::landscape)
   {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("frmTextEntry_Keyboard_L.xml"),

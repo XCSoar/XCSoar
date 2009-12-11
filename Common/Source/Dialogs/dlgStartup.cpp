@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "XCSoar.h"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "DataField/FileReader.hpp"
 #include "LogFile.hpp"
 #include "Screen/Bitmap.hpp"
@@ -74,7 +74,7 @@ void dlgStartupShowModal(void){
   WndProperty* wp;
   StartupStore(TEXT("Startup dialog\n"));
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgStartup_L.xml"),
                         XCSoarInterface::main_window,

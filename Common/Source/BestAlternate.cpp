@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Message.h"
 #include "RasterTerrain.h"
 #include "GlideTerrain.hpp"
@@ -88,7 +88,7 @@ GlideComputerTask::SearchBestAlternate()
    */
 
   double searchrange=(Basic().Altitude-
-		      SettingsComputer().SAFETYALTITUDEARRIVAL)
+		      SettingsComputer().SafetyAltitudeArrival)
     *GlidePolar::bestld /1000;
   if (searchrange <= 0)
     searchrange=2; // lock to home airport at once
@@ -251,7 +251,7 @@ GlideComputerTask::SearchBestAlternate()
 
   bestalternate=-1;  // reset the good choice
   double safecalc = Calculated().NavAltitude -
-    SettingsComputer().SAFETYALTITUDEARRIVAL;
+    SettingsComputer().SafetyAltitudeArrival;
   static double grpolar = GlidePolar::bestld *SAFELD_FACTOR;
   int curwp, curbestairport=-1, curbestoutlanding=-1;
   double curgr=0, curbestgr=INVALID_GR;
@@ -522,7 +522,7 @@ void GlideComputerTask::DoAlternates(int AltWaypoint) {
   *altwp_dist = Distance(w1, w0);
 
   double GRsafecalc = Calculated().NavAltitude - (way_point.Altitude
-      + SettingsComputer().SAFETYALTITUDEARRIVAL);
+      + SettingsComputer().SafetyAltitudeArrival);
 
   if (GRsafecalc <= 0) {
     *altwp_gr = INVALID_GR;

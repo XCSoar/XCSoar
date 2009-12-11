@@ -38,6 +38,7 @@ Copyright_License {
 */
 
 #include "Screen/STScreenBuffer.h"
+#include "Screen/Layout.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -121,8 +122,6 @@ BOOL CSTScreenBuffer::DrawStretch(Canvas &canvas, RECT rcDest)
   return DrawStretch(canvas, ptDest, cx, cy);
 }
 
-#include "InfoBoxLayout.h"
-
 BOOL CSTScreenBuffer::DrawStretch(Canvas &canvas, POINT ptDest,
                                   unsigned int cx,
                                   unsigned int cy)
@@ -141,7 +140,7 @@ BOOL CSTScreenBuffer::DrawStretch(Canvas &canvas, POINT ptDest,
   memDc.select(m_hBitmap);
 
   int cropsize;
-  if ((cy<m_nWidth)||(InfoBoxLayout::landscape)) {
+  if (cy < m_nWidth || Layout::landscape) {
     cropsize = m_nHeight*cx/cy;
   } else {
     // NOT TESTED!

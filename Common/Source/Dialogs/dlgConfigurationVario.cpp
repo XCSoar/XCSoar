@@ -38,9 +38,9 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
-#include "McReady.h"
+#include "Screen/Layout.hpp"
+#include "MacCready.h"
 #include "Device/device.h"
-#include "InfoBoxLayout.h"
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
@@ -240,17 +240,17 @@ typedef struct VEGA_SCHEME_t
 
 // Value used for comparison in climb tone
 #define  X_NONE                       0
-#define  X_MCCREADY                   1
+#define  X_MACCREADY                   1
 #define  X_AVERAGE                    2
 
 // Condition for detecting lift in cruise mode
 #define  Y_NONE 0
 #define  Y_RELATIVE_ZERO 1
-#define  Y_RELATIVE_MCCREADY_HALF 2
+#define  Y_RELATIVE_MACCREADY_HALF 2
 #define  Y_GROSS_ZERO 3
-#define  Y_NET_MCCREADY_HALF 4
-#define  Y_RELATIVE_MCCREADY 5
-#define  Y_NET_MCCREADY 6
+#define  Y_NET_MACCREADY_HALF 4
+#define  Y_RELATIVE_MACCREADY 5
+#define  Y_NET_MACCREADY 6
 
 // Beep types
 #define  BEEPTYPE_SILENCE 0
@@ -293,7 +293,7 @@ typedef struct VEGA_SCHEME_t
 
 VEGA_SCHEME VegaSchemes[4]= {
   // Vega
-  {X_NONE, Y_RELATIVE_MCCREADY_HALF,
+  {X_NONE, Y_RELATIVE_MACCREADY_HALF,
    BEEPTYPE_LONG, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
    BEEPTYPE_SHORTDOUBLE, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
    BEEPTYPE_SHORT, PITCH_VARIO_RELATIVE, SCALE_LINEAR, PERIOD_VARIO_RELATIVE, SCALE_LINEAR,
@@ -302,7 +302,7 @@ VEGA_SCHEME VegaSchemes[4]= {
    BEEPTYPE_CONTINUOUS, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_CONST_HI, SCALE_LINEAR},
 
   // Borgelt
-  {X_AVERAGE, Y_RELATIVE_MCCREADY,
+  {X_AVERAGE, Y_RELATIVE_MACCREADY,
    BEEPTYPE_LONG, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
    BEEPTYPE_SHORTDOUBLE, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
    BEEPTYPE_MEDIUM, PITCH_VARIO_RELATIVE, SCALE_LINEAR, PERIOD_VARIO_RELATIVE, SCALE_LINEAR,
@@ -1009,7 +1009,7 @@ bool dlgConfigurationVarioShowModal(void){
     return false;
   }
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgVario_L.xml"),
                         XCSoarInterface::main_window,

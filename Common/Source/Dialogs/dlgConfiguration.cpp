@@ -50,18 +50,17 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "Logger.h"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Device/device.h"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
+#include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Registry.hpp"
 #include "Profile.hpp"
 #include "LocalTime.hpp"
-#include "McReady.h"
 #include "Math/FastMath.h"
-#include "InfoBoxLayout.h"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "Polar/BuiltIn.hpp"
 #include "Polar/Historical.hpp"
 #include "Polar/Loader.hpp"
@@ -1520,21 +1519,21 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeArrival"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL));
+    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SafetyAltitudeArrival));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeBreakoff"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SAFETYALTITUDEBREAKOFF));
+    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeTerrain"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SAFETYALTITUDETERRAIN));
+    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -1585,7 +1584,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(TEXT("Final glide")));
     dfe->addEnumText(gettext(TEXT("Average climb")));
     dfe->addEnumText(gettext(TEXT("Both")));
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoMcMode);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoMacCreadyMode);
     wp->RefreshDisplay();
   }
 
@@ -1802,7 +1801,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMaxManoeuveringSpeed"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(SPEEDMODIFY*XCSoarInterface::SettingsComputer().SAFTEYSPEED));
+    wp->GetDataField()->SetAsFloat(iround(SPEEDMODIFY*XCSoarInterface::SettingsComputer().SafetySpeed));
     wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
     wp->RefreshDisplay();
   }
@@ -2025,7 +2024,7 @@ static void setVariables(void) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
 
-    if (InfoBoxLayout::landscape) {
+    if (Layout::landscape) {
 
 
 	dfe->addEnumText(gettext(TEXT("vario+9box"))); // 0
@@ -2497,7 +2496,7 @@ void dlgConfigurationShowModal(void){
   WndProperty *wp;
   XCSoarInterface::StartHourglassCursor();
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgConfiguration_L.xml"),
                         XCSoarInterface::main_window,
@@ -2788,10 +2787,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeArrival"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if (XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL != ival) {
-      XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEARRIVAL = ival;
+    if (XCSoarInterface::SettingsComputer().SafetyAltitudeArrival != ival) {
+      XCSoarInterface::SetSettingsComputer().SafetyAltitudeArrival = ival;
       SetToRegistry(szRegistrySafetyAltitudeArrival,
-		    (DWORD)XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL);
+		    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeArrival);
       changed = true;
     }
   }
@@ -2799,10 +2798,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeBreakoff"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if (XCSoarInterface::SettingsComputer().SAFETYALTITUDEBREAKOFF != ival) {
-      XCSoarInterface::SetSettingsComputer().SAFETYALTITUDEBREAKOFF = ival;
+    if (XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff != ival) {
+      XCSoarInterface::SetSettingsComputer().SafetyAltitudeBreakoff = ival;
       SetToRegistry(szRegistrySafetyAltitudeBreakOff,
-		    (DWORD)XCSoarInterface::SettingsComputer().SAFETYALTITUDEBREAKOFF);
+		    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff);
       changed = true;
     }
   }
@@ -2810,10 +2809,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeTerrain"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if (XCSoarInterface::SettingsComputer().SAFETYALTITUDETERRAIN != ival) {
-      XCSoarInterface::SetSettingsComputer().SAFETYALTITUDETERRAIN = ival;
+    if (XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain != ival) {
+      XCSoarInterface::SetSettingsComputer().SafetyAltitudeTerrain = ival;
       SetToRegistry(szRegistrySafetyAltitudeTerrain,
-		    (DWORD)XCSoarInterface::SettingsComputer().SAFETYALTITUDETERRAIN);
+		    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain);
       changed = true;
     }
   }
@@ -2828,7 +2827,7 @@ void dlgConfigurationShowModal(void){
 
   changed |= SetValueRegistryOnChange(wf, TEXT("prpAutoMcMode"),
 				      szRegistryAutoMcMode,
-				      XCSoarInterface::SetSettingsComputer().AutoMcMode);
+				      XCSoarInterface::SetSettingsComputer().AutoMacCreadyMode);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpWaypointsOutOfRange"));
   if (wp) {
@@ -3105,9 +3104,9 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpMaxManoeuveringSpeed"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
-    if (XCSoarInterface::SettingsComputer().SAFTEYSPEED != ival) {
-      XCSoarInterface::SetSettingsComputer().SAFTEYSPEED = ival;
-      SetToRegistry(szRegistrySafteySpeed,(DWORD)XCSoarInterface::SettingsComputer().SAFTEYSPEED);
+    if (XCSoarInterface::SettingsComputer().SafetySpeed != ival) {
+      XCSoarInterface::SetSettingsComputer().SafetySpeed = ival;
+      SetToRegistry(szRegistrySafteySpeed,(DWORD)XCSoarInterface::SettingsComputer().SafetySpeed);
       GlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
       changed = true;
     }

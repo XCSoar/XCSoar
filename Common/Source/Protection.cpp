@@ -60,7 +60,7 @@ Trigger targetManipEvent(TEXT("targetManip"));
 Trigger triggerClimbEvent(TEXT("triggerClimb"));
 
 Mutex mutexBlackboard;
-// protect GPS_INFO, mcready etc,
+// protect GPS_INFO, maccready etc,
 
 /**
  * Triggers a GPS update resulting in a run of the calculation thread

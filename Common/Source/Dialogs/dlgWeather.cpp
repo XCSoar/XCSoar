@@ -41,7 +41,7 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "RasterTerrain.h"
 #include "RasterWeather.h"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
 #include "Components.hpp"
@@ -173,7 +173,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgWeatherShowModal(void){
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         TEXT("dlgWeather_L.xml"),
                         XCSoarInterface::main_window,

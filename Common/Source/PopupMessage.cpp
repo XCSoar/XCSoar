@@ -40,9 +40,9 @@ Copyright_License {
 
 #include "PopupMessage.hpp"
 #include "Protection.hpp"
-#include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
 #include "Registry.hpp"
 #include "UtilsText.hpp"
@@ -136,7 +136,7 @@ void PopupMessage::Resize() {
       rthis.top = 0;
       rthis.left = 0;
       rthis.bottom = height;
-      rthis.right = 206*InfoBoxLayout::scale;
+      rthis.right = Layout::FastScale(206);
       // TODO code: this shouldn't be hard-coded
     } else {
       rthis.left = midx-width/2;

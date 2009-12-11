@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#if !defined(AFX_MCREADY_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_MCREADY_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#if !defined(AFX_MACCREADY_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
+#define AFX_MACCREADY_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
 
 #define MAXSAFETYSPEED 200
 
@@ -49,22 +49,17 @@ class Polar;
 extern unsigned POLARID;
 extern Polar polar;
 
-class GlidePolar {
- public:
+class GlidePolar
+{
+public:
+  static double MacCreadyAltitude(double MacCready, double Distance,
+      const double Bearing, const double WindSpeed, const double WindBearing,
+      double *BestCruiseTrack, double *VMacCready, const bool isFinalGlide,
+      double *timetogo, double AltitudeAboveTarget = 1.0e6,
+      double cruise_efficiency = 1.0);
 
-  static double MacCreadyAltitude(double MCREADY, double Distance,
-                                  const double Bearing,
-				  const double WindSpeed,
-                                  const double WindBearing,
-				  double *BestCruiseTrack,
-                                  double *VMacCready,
-				  const bool isFinalGlide,
-                                  double *timetogo,
-                                  double AltitudeAboveTarget=1.0e6,
-				  double cruise_efficiency=1.0);
-
-  static double MacCreadyRisk(double HeightAboveTerrain, double MaxThermalHeight,
-                              double MCREADY);
+  static double MacCreadyRisk(double HeightAboveTerrain,
+      double MaxThermalHeight, double MacCready);
 
   static double GetAUW();
 
@@ -74,11 +69,11 @@ class GlidePolar {
 
   //  static double BallastFactor;
   static double RiskGamma;
-  static double polar_a;
-  static double polar_b;
-  static double polar_c;
-  static int    Vminsink;
-  static int    Vbestld;
+  static double PolarCoefA;
+  static double PolarCoefB;
+  static double PolarCoefC;
+  static int Vminsink;
+  static int Vbestld;
   static double bestld;
   static double minsink;
   static double WingLoading;
@@ -86,47 +81,37 @@ class GlidePolar {
   static double sinkratecache[MAXSAFETYSPEED];
 
   static double SinkRate(double Vias);
-  static double SinkRate(double Vias,
-                double loadfactor);
+  static double SinkRate(double Vias, double loadfactor);
   static double SinkRate(double a,double b, double c,
-                         double MC, double HW, double V);
+      double MC, double HW, double V);
+
   static double FindSpeedForSinkRate(double w);
   static double SinkRateFast(const double &MC, const int &v);
- private:
+
+private:
   static double _SinkRateFast(const double &MC, const int &v);
-  static double MacCreadyAltitude_internal(double MCREADY,
-                                           double Distance,
-                                           const double Bearing,
-                                           const double WindSpeed,
-                                           const double WindBearing,
-                                           double *BestCruiseTrack,
-                                           double *VMacCready,
-                                           const bool isFinalGlide,
-                                           double *timetogo,
-					   const double cruise_efficiency);
+  static double MacCreadyAltitude_internal(double MacCready, double Distance,
+      const double Bearing, const double WindSpeed, const double WindBearing,
+      double *BestCruiseTrack, double *VMacCready, const bool isFinalGlide,
+      double *timetogo, const double cruise_efficiency);
 
-  static double MacCreadyAltitude_heightadjust(double MCREADY,
-                                               double Distance,
-                                               const double Bearing,
-                                               const double WindSpeed,
-                                               const double WindBearing,
-                                               double *BestCruiseTrack,
-                                               double *VMacCready,
-                                               const bool isFinalGlide,
-                                               double *timetogo,
-                                               const double AltitudeAboveTarget,
-					       const double cruise_efficiency);
+  static double MacCreadyAltitude_heightadjust(double MacCready,
+      double Distance, const double Bearing, const double WindSpeed,
+      const double WindBearing, double *BestCruiseTrack, double *VMacCready,
+      const bool isFinalGlide, double *timetogo,
+      const double AltitudeAboveTarget, const double cruise_efficiency);
 
- private:
-  static double MACCREADY; // m/s
-  static double BUGS;
-  static double BALLAST;
+private:
+  static double _MacCready; // m/s
+  static double _Bugs;
+  static double _Ballast;
   static void Lock();
   static void Unlock();
   static double BallastLitres;
-  static double CRUISE_EFFICIENCY;
+  static double _CruiseEfficiency;
   static int MAXSPEED;
- public:
+
+public:
   static double GetMacCready();
   static double GetBugs();
   static double GetBallast();

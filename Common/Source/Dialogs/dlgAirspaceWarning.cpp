@@ -39,15 +39,14 @@ Copyright_License {
 #include "AirspaceWarning.h"
 #include "AirspaceDatabase.hpp"
 #include "Dialogs/Internal.hpp"
-#include "InfoBoxLayout.h"
 #include "Units.hpp"
 #include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Math/Units.h"
 #include "MainWindow.hpp"
 #include "Components.hpp"
+#include "Screen/Layout.hpp"
 #include "Compatibility/vk.h"
-#include "options.h" /* for IBLSCALE() */
 
 #include <assert.h>
 #include <stdlib.h>
@@ -387,7 +386,7 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
     }
 
     if ((pAS.Acknowledge > 0) && (pAS.Acknowledge >= pAS.WarnLevel)){
-      canvas.set_text_color(clGray);
+      canvas.set_text_color(Color::GRAY);
     }
 
     #ifndef NDEBUG

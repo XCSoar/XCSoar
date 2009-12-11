@@ -40,9 +40,9 @@ Copyright_License {
 #include "Units.hpp"
 #include "Device/device.h"
 #include "InputEvents.h"
-#include "InfoBoxLayout.h"
 #include "DataField/Base.hpp"
 #include "DataField/ComboList.hpp"
+#include "Screen/Layout.hpp"
 
 #include <assert.h>
 
@@ -61,8 +61,8 @@ OnPaintComboPopupListItem(WindowControl *Sender, Canvas &canvas)
   if ( ComboListPopup->ComboPopupDrawListIndex >= 0 &&
         ComboListPopup->ComboPopupDrawListIndex < ComboListPopup->ComboPopupItemCount )
   {
-    canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                        canvas.get_width() - InfoBoxLayout::scale * 5,
+    canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+                        canvas.get_width() - Layout::FastScale(5),
                         ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupDrawListIndex]->StringValueFormatted);
   }
 }
@@ -142,7 +142,7 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
     wComboPopupWndProperty = theProperty;
 
 
-    if (!InfoBoxLayout::landscape) {
+    if (!Layout::landscape) {
       wf = dlgLoadFromXML(CallBackTable,
                           TEXT("dlgComboPicker_L.xml"),
                           parent,

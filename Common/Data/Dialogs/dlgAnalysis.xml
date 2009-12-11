@@ -14,8 +14,8 @@
   <WndOwnerDrawFrame Name="frmInfo" X=0 Y=5 Width=90 Height=120 Font=2 ForeColor=0x000000 _BackColor=0xFFFFFF/>
 
   <WndButton Name="cmdCalc"  Caption="Calc" X=5 Y=130 Width=80  Height=28 Font=2 OnClickNotify="OnCalcClicked" />
-  <WndButton Name="cmdNext"  Caption="&gt;" X=48 Y=160 Width=37  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
   <WndButton Name="cmdPrev"  Caption="&lt;" X=5 Y=160 Width=37  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
+  <WndButton Name="cmdNext"  Caption="&gt;" X=48 Y=160 Width=37  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=80  Height=28 Font=2 Tag=3 />
 
 </WndForm>

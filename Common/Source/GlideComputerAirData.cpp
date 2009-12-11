@@ -39,9 +39,9 @@ Copyright_License {
 
 #include "GlideComputerAirData.hpp"
 #include "AirspaceDatabase.hpp"
-#include "McReady.h"
+#include "MacCready.h"
 #include "WindZigZag.h"
-#include "windanalyser.h"
+#include "WindAnalyser.h"
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
@@ -210,7 +210,7 @@ GlideComputerAirData::DoWindCirclingSample()
 }
 
 /**
- * Passes data to the windanalyser.slot_Altitude method
+ * Passes data to the windanalyser.SlotAltitude method
  */
 void
 GlideComputerAirData::DoWindCirclingAltitude()
@@ -224,8 +224,8 @@ GlideComputerAirData::SetWindEstimate(const double wind_speed,
     const double wind_bearing, const int quality)
 {
   Vector v_wind;
-  v_wind.x = wind_speed*cos(wind_bearing*3.1415926/180.0);
-  v_wind.y = wind_speed*sin(wind_bearing*3.1415926/180.0);
+  v_wind.x = wind_speed*cos(wind_bearing*M_PI/180.0);
+  v_wind.y = wind_speed*sin(wind_bearing*M_PI/180.0);
 
   windanalyser.slot_newEstimate(&Basic(), &SetCalculated(), v_wind, quality);
 }
@@ -238,7 +238,7 @@ GlideComputerAirData::AverageClimbRate()
 
     int vi = iround(Basic().IndicatedAirspeed);
 
-    if ((vi <= 0) || (vi >= SettingsComputer().SAFTEYSPEED)) {
+    if ((vi <= 0) || (vi >= SettingsComputer().SafetySpeed)) {
       // out of range
       return;
     }
@@ -641,7 +641,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
 
   // calculate optimum cruise speed in current track direction
   // this still makes use of mode, so it should agree with
-  // Vmcready if the track bearing is the best cruise track
+  // Vmaccready if the track bearing is the best cruise track
   // this does assume g loading of 1.0
 
   // this is basically a dolphin soaring calculator
@@ -653,7 +653,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
   } else {
     risk_mc =
       GlidePolar::MacCreadyRisk(Calculated().NavAltitude
-        + Calculated().EnergyHeight - SettingsComputer().SAFETYALTITUDEBREAKOFF
+        + Calculated().EnergyHeight - SettingsComputer().SafetyAltitudeBreakoff
         - Calculated().TerrainBase, Calculated().MaxThermalHeight, mc_setting);
   }
   SetCalculated().MacCreadyRisk = risk_mc;
@@ -1432,7 +1432,7 @@ GlideComputerAirData::ThermalBand()
   // JMW TODO accuracy: Should really work out dt here,
   //           but i'm assuming constant time steps
   double dheight = Calculated().NavAltitude
-      - SettingsComputer().SAFETYALTITUDEBREAKOFF
+      - SettingsComputer().SafetyAltitudeBreakoff
       - Calculated().TerrainBase; // JMW EXPERIMENTAL
 
   int index, i, j;
@@ -1540,5 +1540,5 @@ void
 GlideComputerAirData::ProcessSun()
 {
   sun.CalcSunTimes(Basic().Location, Basic(), Calculated(), GetUTCOffset() / 3600);
-  SetCalculated().TimeSunset = sun.settm;
+  SetCalculated().TimeSunset = sun.TimeOfSunSet;
 }

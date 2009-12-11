@@ -40,6 +40,7 @@ Copyright_License {
 #include "AirspaceDatabase.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
@@ -47,17 +48,15 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 #include "Units.hpp"
-#include "InfoBoxLayout.h"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
 #include "OnLineContest.h"
-#include "windstore.h"
+#include "WindStore.h"
 #include "Language.hpp"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Atmosphere.h"
 #include "SettingsComputer.hpp"
 #include "Task.h"
-#include "options.h" /* for IBLSCALE() */
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -216,9 +215,9 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
 
   chart.ScaleYFromValue( 0);
   chart.ScaleYFromValue(GlidePolar::SinkRateFast(0,
-       (int)(settings_computer.SAFTEYSPEED - 1)) * 1.1);
+       (int)(settings_computer.SafetySpeed - 1)) * 1.1);
   chart.ScaleXFromValue(GlidePolar::Vminsink*0.8);
-  chart.ScaleXFromValue(settings_computer.SAFTEYSPEED + 2);
+  chart.ScaleXFromValue(settings_computer.SafetySpeed + 2);
 
   chart.DrawXGrid(10.0/SPEEDMODIFY, 0,
 		  Chart::STYLE_THINDASHPAPER, 10.0, true);
@@ -230,7 +229,7 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   bool v0valid = false;
   int i0=0;
 
-  for (i= GlidePolar::Vminsink; i < settings_computer.SAFTEYSPEED - 1;
+  for (i= GlidePolar::Vminsink; i < settings_computer.SafetySpeed - 1;
        i++) {
 
     sinkrate0 = GlidePolar::SinkRateFast(0,i);
@@ -255,13 +254,13 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
 
   double MACCREADY = GlidePolar::GetMacCready();
 
-  double ff = settings_computer.SAFTEYSPEED
+  double ff = settings_computer.SafetySpeed
     / max(1.0, derived.VMacCready);
   double sb = GlidePolar::SinkRate(derived.VMacCready);
   ff = (sb - MACCREADY) / max(1.0, derived.VMacCready);
 
-  chart.DrawLine(0, MACCREADY, settings_computer.SAFTEYSPEED,
-                 MACCREADY + ff * settings_computer.SAFTEYSPEED,
+  chart.DrawLine(0, MACCREADY, settings_computer.SafetySpeed,
+                 MACCREADY + ff * settings_computer.SafetySpeed,
 		 Chart::STYLE_REDTHICK);
 
   chart.DrawXLabel(TEXT("V"));
@@ -671,7 +670,7 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 	 -Altitude_Base.y_min)*
       i/(double)(numsteps-1)+Altitude_Base.y_min;
 
-    wind = wind_store.getWind(nmea_info.Time, h, &found);
+    wind = wind_store.GetWind(nmea_info.Time, h, &found);
     mag = sqrt(wind.x*wind.x+wind.y*wind.y);
 
     windstats_mag.LeastSquaresUpdate(mag, h);
@@ -705,7 +704,7 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 	 -Altitude_Base.y_min)*
       hfact+Altitude_Base.y_min;
 
-    wind = wind_store.getWind(nmea_info.Time, h, &found);
+    wind = wind_store.GetWind(nmea_info.Time, h, &found);
     if (windstats_mag.x_max == 0)
       windstats_mag.x_max=1;  // prevent /0 problems
     wind.x /= windstats_mag.x_max;
@@ -1044,7 +1043,7 @@ FlightStatistics::CaptionClimb( TCHAR* sTmp)
 void
 FlightStatistics::CaptionPolar(TCHAR *sTmp) const
 {
-  if (InfoBoxLayout::landscape) {
+  if (Layout::landscape) {
     _stprintf(sTmp, TEXT("%s:\r\n  %3.0f\r\n  at %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %3.0f %s"),
 	      gettext(TEXT("Best LD")),
 	      GlidePolar::bestld,
@@ -1096,7 +1095,7 @@ FlightStatistics::CaptionTask(TCHAR *sTmp,
       Units::TimeToText(timetext1, (int)derived.TaskTimeToGo);
       Units::TimeToText(timetext2, (int)derived.AATTimeToGo);
 
-      if (InfoBoxLayout::landscape) {
+      if (Layout::landscape) {
 	_stprintf(sTmp,
 		  TEXT("%s:\r\n  %s\r\n%s:\r\n  %s\r\n%s:\r\n  %5.0f %s\r\n%s:\r\n  %5.0f %s\r\n"),
 		  gettext(TEXT("Task to go")),

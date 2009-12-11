@@ -43,7 +43,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "SettingsComputer.hpp"
 #include "OnLineContest.h"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Math/Pressure.h"
 #include "Atmosphere.h"
 #include "UtilsSystem.hpp"
@@ -144,7 +144,7 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   double BUGS = GlidePolar::GetBugs();
   double BALLAST = GlidePolar::GetBallast();
 
-  // Read persistent memory into McCready, QNH, bugs, ballast and temperature
+  // Read persistent memory into MacCready, QNH, bugs, ballast and temperature
   fread(&MACCREADY, sizeof(double), 1, file);
   fread(&QNH, sizeof(QNH), 1, file);
   fread(&BUGS, sizeof(double), 1, file);

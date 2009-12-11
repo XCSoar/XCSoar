@@ -50,7 +50,7 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "Device/Geoid.h"
 #include "Dialogs.h"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "AirspaceGlue.hpp"
 #include "AirspaceWarning.h"
 #include "AirspaceDatabase.hpp"
@@ -65,7 +65,7 @@ Copyright_License {
 #include "UtilsFLARM.hpp"
 #include "SettingsUser.hpp"
 #include "Logger.h"
-#include "McReady.h"
+#include "MacCready.h"
 #include "AirfieldDetails.h"
 #include "Screen/Fonts.hpp"
 #include "DeviceBlackboard.hpp"
@@ -506,7 +506,7 @@ void XCSoarInterface::Shutdown(void) {
   //  CalibrationSave();
 #endif
 
-  #if defined(GNAV) && !defined(PCGNAV)
+  if (is_altair()) {
     StartupStore(TEXT("Altair shutdown\n"));
     Sleep(2500);
     StopHourglassCursor();
@@ -514,7 +514,7 @@ void XCSoarInterface::Shutdown(void) {
     while(1) {
       Sleep(100); // free time up for processor to perform shutdown
     }
-  #endif
+  }
 
   CloseFLARMDetails();
 

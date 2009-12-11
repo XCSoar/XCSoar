@@ -59,7 +59,7 @@
 #define IDB_CRUISE                      212
 #define IDB_CLIMB                       213
 #define IDB_FINALGLIDE                  214
-#define IDB_AUTOMCREADY                 215
+#define IDB_AUTOMACCREADY               215
 #define IDD_WAYPOINTDETAILS             216
 #define IDB_TOWN                        218
 #define IDB_MARK                        219

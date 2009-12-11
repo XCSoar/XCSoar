@@ -46,6 +46,7 @@ Copyright_License {
 #ifndef XCSOAR_MATH_EARTH_HPP
 #define XCSOAR_MATH_EARTH_HPP
 
+#include "Compiler.h"
 #include "GeoPoint.hpp"
 #include <stdlib.h> // for NULL
 
@@ -61,6 +62,7 @@ double CrossTrackError(GEOPOINT loc1,
 /**
  * Calculates projected distance from P3 along line P1-P2.
  */
+gcc_const
 double ProjectedDistance(GEOPOINT loc1,
                          GEOPOINT loc2,
                          GEOPOINT loc3);
@@ -69,12 +71,15 @@ void DistanceBearing(GEOPOINT loc1,
                      GEOPOINT loc2,
                      double *Distance, double *Bearing);
 
+gcc_const
 double Distance(GEOPOINT loc1,
                 GEOPOINT loc2);
 
+gcc_const
 double Bearing(GEOPOINT loc1,
                GEOPOINT loc2);
 
+gcc_const
 double DoubleDistance(GEOPOINT loc1,
                       GEOPOINT loc2,
 		      GEOPOINT loc3);

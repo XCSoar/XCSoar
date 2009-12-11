@@ -40,10 +40,10 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Language.hpp"
 #include "Screen/Animation.hpp"
+#include "Screen/Layout.hpp"
 #include "Registry.hpp"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
-#include "options.h" /* for IBLSCALE() */
 #include "Asset.hpp"
 
 #include <assert.h>
@@ -56,9 +56,6 @@ unsigned ButtonLabel::ButtonLabelGeometry = 0;
 bool
 MenuButton::on_mouse_down(int x, int y)
 {
-  if (!is_enabled())
-    return true;
-
   int i = ButtonLabel::Find(*this);
   if (i >= 0)
     InputEvents::processButton(i);
@@ -67,9 +64,8 @@ MenuButton::on_mouse_down(int x, int y)
 }
 
 void
-ButtonLabel::GetButtonPosition(unsigned i, RECT rc,
-                               int *x, int *y,
-                               int *sizex, int *sizey)
+ButtonLabel::GetButtonPosition(unsigned i, RECT rc, int *x, int *y,
+    int *sizex, int *sizey)
 {
   TCHAR reggeompx[50];
   TCHAR reggeompy[50];
@@ -88,90 +84,83 @@ ButtonLabel::GetButtonPosition(unsigned i, RECT rc,
 
   bool geometrychanged = true; // JMW testing
 
-  if ((*sizex==0)||(*sizey==0)||geometrychanged) {
+  if ((*sizex == 0) || (*sizey == 0) || geometrychanged) {
     // not defined in registry so go with defaults
     // these will be saved back to registry
-    int hwidth = (rc.right-rc.left)/4;
-    int hheight = (rc.bottom-rc.top)/4;
+    int hwidth = (rc.right - rc.left) / 4;
+    int hheight = (rc.bottom - rc.top) / 4;
 
     switch (ButtonLabelGeometry) {
     case 0: // portrait
-      if (i==0) {
-	*sizex = IBLSCALE(52);
-	*sizey = IBLSCALE(37);
-	*x = rc.left-(*sizex); // JMW make it offscreen for now
-	*y = (rc.bottom-(*sizey));
+      if (i == 0) {
+        *sizex = IBLSCALE(52);
+        *sizey = IBLSCALE(37);
+        *x = rc.left - (*sizex); // JMW make it offscreen for now
+        *y = rc.bottom - (*sizey);
       } else {
-        if (i<5) {
+        if (i < 5) {
           *sizex = IBLSCALE(52);
           *sizey = IBLSCALE(40);
-          *x = rc.left+3+hwidth*(i-1);
-          *y = (rc.bottom-(*sizey));
+          *x = rc.left + 3 + hwidth * (i - 1);
+          *y = rc.bottom - (*sizey);
         } else {
           *sizex = IBLSCALE(80);
           *sizey = IBLSCALE(40);
-          *x = rc.right-(*sizex);
-          int k = rc.bottom-rc.top-IBLSCALE(46);
+          *x = rc.right - (*sizex);
+          int k = rc.bottom - rc.top - IBLSCALE(46);
 
           if (is_altair()) {
-            k = rc.bottom-rc.top;
+            k = rc.bottom - rc.top;
             // JMW need upside down button order for rotated Altair
-            *y = rc.bottom-(i-5)*k/5-(*sizey)-IBLSCALE(20);
+            *y = rc.bottom - (i - 5) * k / 5 - (*sizey) - IBLSCALE(20);
           } else {
-            *y = (rc.top+(i-5)*k/6+(*sizey/2+IBLSCALE(3)));
+            *y = rc.top + (i - 5) * k / 6 + (*sizey / 2 + IBLSCALE(3));
           }
         }
       }
       break;
 
     case 1: // landscape
-      hwidth = (rc.right-rc.left)/5;
-      hheight = (rc.bottom-rc.top)/(4+1);
+      hwidth = (rc.right - rc.left) / 5;
+      hheight = (rc.bottom - rc.top) / 5;
 
-      if (i==0) {
-	*sizex = IBLSCALE(52);
-	*sizey = IBLSCALE(20);
-	*x = rc.left-(*sizex); // JMW make it offscreen for now
-	*y = (rc.top);
+      if (i == 0) {
+        *sizex = IBLSCALE(52);
+        *sizey = IBLSCALE(20);
+        *x = rc.left - (*sizex); // JMW make it offscreen for now
+        *y = (rc.top);
       } else {
-	if (i<5) {
-	  *sizex = IBLSCALE(52);
-          *sizey = is_altair()
-            ? IBLSCALE(20)
-            : IBLSCALE(35);
-	  *x = rc.left+3;
-	  *y = (rc.top+hheight*i-(*sizey)/2);
-	} else {
-	  *sizex = IBLSCALE(60);
+        if (i < 5) {
+          *sizex = IBLSCALE(52);
+          *sizey = is_altair() ? IBLSCALE(20) : IBLSCALE(35);
+          *x = rc.left + 3;
+          *y = (rc.top + hheight * i - (*sizey) / 2);
+        } else {
+          *sizex = IBLSCALE(60);
           *sizey = is_altair() ? IBLSCALE(40) : IBLSCALE(35);
-	  *x = rc.left+hwidth*(i-5);
-	  *y = (rc.bottom-(*sizey));
-	}
+          *x = rc.left + hwidth * (i - 5);
+          *y = (rc.bottom - (*sizey));
+        }
       }
       break;
-
     }
 
-    SetToRegistry(reggeompx,*x);
-    SetToRegistry(reggeompy,*y);
-    SetToRegistry(reggeomsx,*sizex);
-    SetToRegistry(reggeomsy,*sizey);
-
-  };
-
+    SetToRegistry(reggeompx, *x);
+    SetToRegistry(reggeompy, *y);
+    SetToRegistry(reggeomsx, *sizex);
+    SetToRegistry(reggeomsy, *sizey);
+  }
 }
-
 
 void
 ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
 {
   int x, y, xsize, ysize;
 
-  if (InfoBoxLayout::gnav) {
+  if (InfoBoxLayout::gnav)
     ButtonLabelGeometry = 1;
-  } else {
+  else
     ButtonLabelGeometry = 0;
-  }
 
   for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
@@ -179,50 +168,49 @@ ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
 
     ButtonVisible[i] = false;
   }
-  //
 }
 
-void ButtonLabel::SetFont(const Font &Font) {
+void
+ButtonLabel::SetFont(const Font &Font)
+{
   for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     hWndButtonWindow[i].set_font(Font);
   }
 }
 
-
-void ButtonLabel::Destroy() {
+void
+ButtonLabel::Destroy()
+{
   for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     hWndButtonWindow[i].reset();
-    ButtonVisible[i]= false;
+    ButtonVisible[i] = false;
   }
 }
-
 
 void
 ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
 {
   assert(index < NUMBUTTONLABELS);
 
-  if ((text==NULL) || (*text==_T('\0'))||(*text==_T(' '))) {
+  if ((text == NULL) || (*text == _T('\0')) || (*text == _T(' '))) {
     hWndButtonWindow[index].hide();
-    ButtonVisible[index]= false;
+    ButtonVisible[index] = false;
   } else {
-
     TCHAR s[100];
 
-    bool greyed = ExpandMacros(text, s, sizeof(s)/sizeof(s[0]));
+    bool greyed = ExpandMacros(text, s, sizeof(s) / sizeof(s[0]));
     hWndButtonWindow[index].set_enabled(!greyed);
 
-    if ((s[0]==_T('\0'))||(s[0]==_T(' '))) {
+    if ((s[0] == _T('\0')) || (s[0] == _T(' '))) {
       hWndButtonWindow[index].hide();
-      ButtonVisible[index]= false;
+      ButtonVisible[index] = false;
     } else {
       hWndButtonWindow[index].set_text(gettext(s));
       hWndButtonWindow[index].insert_after(HWND_TOP, true);
 
-      ButtonVisible[index]= true;
+      ButtonVisible[index] = true;
     }
   }
-
 }
 
 int
@@ -244,14 +232,13 @@ ButtonLabel::AnimateButton(unsigned i)
   mRc = hWndButtonWindow[i].get_screen_position();
 
   if (ButtonVisible[i]) {
-    aniRect.top = (mRc.top*5+mRc.bottom)/6;
-    aniRect.left = (mRc.left*5+mRc.right)/6;
-    aniRect.right = (mRc.left+mRc.right*5)/6;
-    aniRect.bottom = (mRc.top+mRc.bottom*5)/6;
+    aniRect.top = (mRc.top * 5 + mRc.bottom) / 6;
+    aniRect.left = (mRc.left * 5 + mRc.right) / 6;
+    aniRect.right = (mRc.left + mRc.right * 5) / 6;
+    aniRect.bottom = (mRc.top + mRc.bottom * 5) / 6;
     SetSourceRectangle(aniRect);
     DrawWireRects(EnableAnimation, &mRc, 5);
   }
 
   SetSourceRectangle(mRc);
-
 }

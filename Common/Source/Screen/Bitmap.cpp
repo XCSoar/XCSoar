@@ -43,6 +43,10 @@ Copyright_License {
 #include "LocalPath.hpp"
 #endif
 
+#ifdef ENABLE_SDL
+#include <SDL/SDL_endian.h>
+#endif
+
 #include <assert.h>
 
 #ifndef ENABLE_SDL
