@@ -305,15 +305,17 @@ void
 Task::DefaultTask(const SETTINGS_COMPUTER &settings_computer,
                   const NMEA_INFO &nmea_info)
 {
-  if (!ValidTaskPoint(0)) {
-    if (settings_computer.HomeWaypoint != -1) {
-      TaskModified = true;
-      TargetModified = true;
-      task_points[0].Index = settings_computer.HomeWaypoint;
-      ActiveTaskPoint = 0;
-      RefreshTask(settings_computer, nmea_info);
-    }
-  }
+  if (ValidTaskPoint(0))
+    return;
+
+  if (settings_computer.HomeWaypoint == -1)
+    return;
+
+  TaskModified = true;
+  TargetModified = true;
+  task_points[0].Index = settings_computer.HomeWaypoint;
+  ActiveTaskPoint = 0;
+  RefreshTask(settings_computer, nmea_info);
 }
 
 // RemoveTaskpoint removes a single waypoint
