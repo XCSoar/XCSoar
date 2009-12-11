@@ -407,13 +407,14 @@ int WindowControl::OnHelp() {
   if (mHelpText) {
     dlgHelpShowModal(*get_root_owner(), mCaption, mHelpText);
     return 1;
-  } else {
-    if (mOnHelpCallback) {
-      (mOnHelpCallback)(this);
-      return 1;
-    } else
-      return 0;
   }
+
+  if (mOnHelpCallback) {
+    (mOnHelpCallback)(this);
+    return 1;
+  }
+
+  return 0;
 #endif
 }
 
