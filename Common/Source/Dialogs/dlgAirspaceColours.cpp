@@ -57,22 +57,20 @@ static void UpdateList(void){
 static unsigned DrawListIndex;
 
 static void
-OnAirspaceColoursPaintListItem(WindowControl * Sender, Canvas &canvas)
+OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  (void)Sender;
-
-  if (DrawListIndex >= NUMAIRSPACECOLORS)
+  if (i >= NUMAIRSPACECOLORS)
     return;
-
-  const int i = DrawListIndex;
 
   canvas.white_brush();
   canvas.black_pen();
   canvas.set_background_color(Color::WHITE);
   canvas.select(MapGfx.GetAirspaceBrush(1)); // this is the solid brush
   canvas.set_text_color(MapGfx.GetAirspaceColour(i));
-  canvas.rectangle(Layout::FastScale(100), Layout::FastScale(2),
-                   Layout::FastScale(180), Layout::FastScale(22));
+  canvas.rectangle(rc.left + Layout::FastScale(2),
+                   rc.top + Layout::FastScale(2),
+                   rc.right - Layout::FastScale(2),
+                   rc.bottom - Layout::FastScale(2));
 }
 
 
@@ -108,7 +106,6 @@ static void OnCloseClicked(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnAirspaceColoursPaintListItem),
   DeclareCallBackEntry(OnAirspaceColoursListInfo),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
@@ -139,6 +136,7 @@ int dlgAirspaceColoursShowModal(void){
   assert(wAirspaceColoursList!=NULL);
   wAirspaceColoursList->SetBorderKind(BORDERLEFT);
   wAirspaceColoursList->SetEnterCallback(OnAirspaceColoursListEnter);
+  wAirspaceColoursList->SetPaintItemCallback(OnAirspaceColoursPaintListItem);
 
   UpdateList();
 
