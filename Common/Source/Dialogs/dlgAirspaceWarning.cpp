@@ -68,8 +68,6 @@ static int ItemIndex=-1;
 static int DrawListIndex=-1;
 static int FocusedID = -1;     // Currently focused airspace ID
 static int FocusedIdx = -1;    // Currently socused airspace List Index
-static int SelectedID = -1;    // Currently selected airspace ID
-static int SelectedIdx = -1;   // Currently selected airspace List Index
 static bool fDialogOpen = false;
 
 void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace);
@@ -79,11 +77,7 @@ static void DoAck(int Ack){
   AirspaceInfo_c pAS;
   int Idx;
 
-  if (!wAirspaceList->GetFocused())
-    Idx = SelectedIdx;
-  else
-    Idx = ItemIndex;
-
+  Idx = ItemIndex;
   if (Idx < 0)
     Idx = 0;
 
@@ -133,16 +127,6 @@ static bool
 OnKeyDown(WindowControl *Sender, unsigned key_code)
 {
   switch(key_code){
-    case VK_RETURN:
-      if (wAirspaceList->GetFocused()){
-        SelectedID = FocusedID;
-        SelectedIdx = FocusedIdx;
-        wAirspaceList->invalidate();
-        return true;
-      }
-
-    return false;
-
     case VK_ESCAPE:
       OnCloseClicked(Sender);
     return true;
@@ -376,12 +360,7 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
       }
     }
 
-
-    if (SelectedIdx == DrawListIndex){
-      InflateRect(&rc, 1, 1);
-      canvas.black_pen();
-      canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
-    } else if (hBrushBk != NULL) {
+    if (hBrushBk != NULL) {
       canvas.fill_rectangle(rc, *hBrushBk);
     }
 
@@ -503,10 +482,7 @@ static bool FindFocus() {
       do_refocus = true;
     }
   }
-  SelectedIdx = AirspaceWarnFindIndexByID(SelectedID);
-  if (SelectedIdx < 0){
-    SelectedID = -1;
-  }
+
   return do_refocus;
 }
 
@@ -665,8 +641,6 @@ bool dlgAirspaceWarningShowDlg(bool Force){
     fDialogOpen = false;
 
     // JMW need to deselect everything on new reopening of dialog
-    SelectedID = -1;
-    SelectedIdx = -1;
     FocusedID = -1;
     FocusedIdx = -1;
 
