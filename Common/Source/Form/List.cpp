@@ -455,3 +455,24 @@ WndListFrame::on_mouse_down(int x, int y)
 
   return false;
 }
+
+bool
+WndListFrame::on_mouse_wheel(int delta)
+{
+  if (delta > 0) {
+    // scroll up
+    if (mListInfo.ScrollIndex > 0) {
+      --mListInfo.ScrollIndex;
+      invalidate();
+    }
+  } else if (delta < 0) {
+    // scroll down
+    if (mListInfo.ScrollIndex +
+        mListInfo.ItemInViewCount < mListInfo.ItemCount) {
+      ++mListInfo.ScrollIndex;
+      invalidate();
+    }
+  }
+
+  return true;
+}

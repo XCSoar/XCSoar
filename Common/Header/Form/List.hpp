@@ -180,6 +180,7 @@ protected:
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_wheel(int delta);
   virtual bool on_key_down(unsigned key_code);
 
   /** from class PaintWindow */
