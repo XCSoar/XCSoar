@@ -131,6 +131,7 @@ SetGlobalEllipse(float value)
 
 /**
  * Returns whether the application is running on an embedded platform.
+ * @return True if host hardware is an embedded platform, False otherwise
  */
 static inline bool is_embedded()
 {
@@ -181,8 +182,8 @@ static inline bool model_is_medion_p5()
 }
 
 /**
- * Returns whether the application is running on an altair
- * @return True if host hardware is altair, False otherwise
+ * Returns whether the application is running on an Altair
+ * @return True if host hardware is an Altair, False otherwise
  */
 static inline bool is_altair()
 {
@@ -207,8 +208,9 @@ static inline bool is_simulator()
 }
 
 /**
- * Returns whether the application is compiled in "FIIV" mode (enables
- * old experimental code).
+ * Returns whether the application is compiled in "FIVV" mode
+ * (enables old experimental code)
+ * @return True if compiled in "FIVV" mode, False otherwise
  */
 static inline bool is_fivv()
 {
@@ -221,6 +223,7 @@ static inline bool is_fivv()
 
 /**
  * Flag to activate extra clipping for some PNAs.
+ * @return True if extra clipping needs to be done, False otherwise
  */
 static inline bool need_clipping()
 {
@@ -229,6 +232,8 @@ static inline bool need_clipping()
 
 /**
  * Does this device have a pointer device? (mouse or touch screen)
+ * @return True if a touch screen or mouse is assumed for the hardware
+ * that XCSoar is running on, False if the hardware has only buttons
  */
 static inline bool has_pointer()
 {
