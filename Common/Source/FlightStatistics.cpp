@@ -732,6 +732,78 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 }
 
 
+#include "Airspace/AirspaceIntersectionVisitor.hpp"
+#include "Airspace/Airspaces.hpp"
+#include "Airspace/AirspaceCircle.hpp"
+#include "Airspace/AirspacePolygon.hpp"
+
+class AirspaceIntersectionVisitorSlice: 
+  public AirspaceIntersectionVisitor {
+public:
+  AirspaceIntersectionVisitorSlice(Canvas &canvas,
+                                   Chart &chart,
+                                   const SETTINGS_MAP &settings,
+                                   const GEOPOINT start):
+    m_canvas(canvas),
+    m_chart(chart),
+    m_settings(settings),
+    m_start(start)
+    {      
+      Pen mpen(Pen::BLANK, 0, Color(0xf0,0xf0,0xb0));
+      m_canvas.select(mpen);
+    };
+
+  void Render(const AbstractAirspace& as, int type) {
+    if (m_intersections.empty()) {
+      return;
+    }
+
+    m_canvas.select(MapGfx.GetAirspaceBrushByClass(type, m_settings));
+    m_canvas.set_text_color(MapGfx.GetAirspaceColourByClass(type,
+                                                          m_settings));
+
+    RECT rcd;
+    rcd.top = m_chart.screenY(as.get_top_altitude());
+    if (as.is_base_terrain()) {
+      rcd.bottom = m_chart.screenY(0);
+    } else {
+      rcd.bottom = m_chart.screenY(as.get_base_altitude());
+    }
+    
+    for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();
+         it != m_intersections.end(); ++it) {
+      const GEOPOINT p_start = (it->first);
+      const GEOPOINT p_end = (it->second);
+      const fixed distance_start = m_start.distance(p_start);
+      const fixed distance_end = m_start.distance(p_end);
+
+      rcd.left = m_chart.screenX(distance_start);
+      rcd.right = m_chart.screenX(distance_end);
+      m_canvas.rectangle(rcd.left,rcd.top,rcd.right,rcd.bottom);
+    }
+  }
+
+  void render(const AbstractAirspace& as) {
+    int type = as.get_type();
+    if (type>=0) {
+      Render(as, type);
+    }
+  }
+  void Visit(const AirspaceCircle& as) {
+    render(as);
+  }
+  void Visit(const AirspacePolygon& as) {
+    render(as);
+  }
+private:
+  Canvas& m_canvas;
+  Chart& m_chart;
+  const SETTINGS_MAP& m_settings;
+  const GEOPOINT& m_start;
+};
+
+
+
 void
 FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
                                  const NMEA_INFO &nmea_info,
@@ -744,8 +816,8 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   fixed hmin = max(fixed_zero, nmea_info.Altitude - fixed(3300));
   fixed hmax = max(fixed(3300), nmea_info.Altitude + fixed(1000));
   const GEOPOINT p_start = nmea_info.Location;
-  const GeoVector v(range, nmea_info.TrackBearing);
-  const GEOPOINT p_end = v.end_point(p_start);
+  const GeoVector vec(range, nmea_info.TrackBearing);
+  const GEOPOINT p_end = vec.end_point(p_start);
 
   Chart chart(canvas, rc);
   chart.ResetScale();
@@ -754,35 +826,9 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
 
-#ifdef OLD_TASK
-
-  int type;
-
-  Pen mpen(Pen::BLANK, 0, Color(0xf0,0xf0,0xb0));
-  canvas.select(mpen);
-
-  RECT rcd;
-  for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
-    rcd.top = chart.screenY(d_h[i]-dfi/2);
-    rcd.bottom = chart.screenY(d_h[i]+dfi/2);
-
-    for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
-      type = d_airspace[i][j];
-      if (type>=0) {
-        canvas.select(MapGfx.GetAirspaceBrushByClass(type, settings_map));
-        canvas.set_text_color(MapGfx.GetAirspaceColourByClass(type,
-                                                              settings_map));
-
-	rcd.left = chart.screenX((j-0.5)*dfj*range);
-	rcd.right = chart.screenX((j+0.5)*dfj*range);
-
-	canvas.rectangle(rcd.left,rcd.top,rcd.right,rcd.bottom);
-
-      }
-    }
-  }
-
-#endif
+  // draw airspaces
+  AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start);
+  airspace_database.visit_intersecting(p_start, vec, ivisitor, true);
 
   // draw ground
   terrain.Lock();
