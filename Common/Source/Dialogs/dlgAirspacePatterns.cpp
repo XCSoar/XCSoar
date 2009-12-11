@@ -43,8 +43,8 @@ Copyright_License {
 
 #include <assert.h>
 
-static WndForm *wf=NULL;
-static WndListFrame *wAirspacePatternsList=NULL;
+static WndForm *wf = NULL;
+static WndListFrame *wAirspacePatternsList = NULL;
 
 static void UpdateList(void){
   wAirspacePatternsList->ResetList();
@@ -67,23 +67,28 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
                    rc.bottom - Layout::FastScale(2));
 }
 
-
-static void OnAirspacePatternsListEnter(WindowControl * Sender,
-				WndListFrame::ListInfo_t *ListInfo) {
+static void
+OnAirspacePatternsListEnter(WindowControl *Sender,
+                            WndListFrame::ListInfo_t *ListInfo)
+{
   (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
-
-static void OnAirspacePatternsListInfo(WindowControl * Sender,
-			       WndListFrame::ListInfo_t *ListInfo){
+static void
+OnAirspacePatternsListInfo(WindowControl *Sender,
+                           WndListFrame::ListInfo_t *ListInfo)
+{
   (void)Sender;
-  if (ListInfo->DrawIndex == -1){
+
+  if (ListInfo->DrawIndex == -1) {
     ListInfo->ItemCount = NUMAIRSPACEBRUSHES;
   }
 }
 
-static void OnCloseClicked(WindowControl * Sender){
+static void
+OnCloseClicked(WindowControl * Sender)
+{
   (void)Sender;
   wf->SetModalResult(mrCancel);
 }
@@ -109,7 +114,8 @@ int dlgAirspacePatternsShowModal(void){
                         _T("IDR_XML_AIRSPACEPATTERNS"));
   }
 
-  if (!wf) return -1;
+  if (!wf)
+    return -1;
 
   assert(wf!=NULL);
 
@@ -127,9 +133,7 @@ int dlgAirspacePatternsShowModal(void){
     : -1;
 
   // now retrieve back the properties...
-
   delete wf;
-
   wf = NULL;
 
   return result;
