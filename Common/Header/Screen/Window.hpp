@@ -562,6 +562,7 @@ public:
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_mouse_double(int x, int y);
+  virtual bool on_mouse_wheel(int delta);
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
   virtual bool on_command(unsigned id, unsigned code);
