@@ -130,7 +130,7 @@ WndListFrame::on_paint(Canvas &canvas)
         canvas.fill_rectangle(rc, brush);
       }
 
-      PaintItemCallback(canvas, rc, mListInfo.TopIndex + i);
+      PaintItemCallback(canvas, rc, mListInfo.ScrollIndex + i);
 
       if (mListInfo.TopIndex + i == mListInfo.ItemIndex)
         PaintSelector(canvas, rc);
