@@ -68,7 +68,6 @@ private:
   Editor edit;
   POINT mEditSize;
   POINT mEditPos;
-  const Font *mhCaptionFont;
   const Font *mhValueFont;
   int  mBitmapSize;
   int  mCaptionWidth;
