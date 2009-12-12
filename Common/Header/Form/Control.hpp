@@ -83,8 +83,6 @@ private:
 
   int  mBorderSize;
 
-  WindowControl *mActiveClient;
-
   static int InstCount;
   static Brush hBrushDefaultBk;
   static Pen hPenDefaultBorder;
