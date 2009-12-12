@@ -166,7 +166,8 @@ int WndForm::ShowModal(bool bEnableMap) {
 #endif /* !ENABLE_SDL */
 
   PeriodClock enter_clock;
-  enter_clock.update();
+  if (is_embedded() && !is_altair())
+    enter_clock.update();
 
   RECT mRc = get_screen_position();
   DrawWireRects(XCSoarInterface::EnableAnimation,&mRc, 5);
@@ -231,16 +232,15 @@ int WndForm::ShowModal(bool bEnableMap) {
         && !is_allowed_map(msg.hwnd, msg.message, bEnableMap))
       continue;   // make it modal
 
-#ifndef NOKEYDEBONCE
     // hack to stop exiting immediately
-    if (!is_altair() && !hastimed && is_user_input(msg.message)) {
+    if (is_embedded() && !is_altair() && !hastimed &&
+        is_user_input(msg.message)) {
       if (!enter_clock.check(1000))
         /* ignore user input in the first 1000ms */
         continue;
       else
         hastimed = true;
     }
-#endif
 
     if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
         mOnKeyDownNotify(this, msg.wParam))
