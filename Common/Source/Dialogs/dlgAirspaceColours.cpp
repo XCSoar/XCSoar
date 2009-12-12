@@ -75,13 +75,7 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 static void OnAirspaceColoursListEnter(WindowControl * Sender,
 				WndListFrame::ListInfo_t *ListInfo) {
   (void)Sender;
-  ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
-  if (ItemIndex>=NUMAIRSPACECOLORS) {
-    ItemIndex = NUMAIRSPACECOLORS-1;
-  }
-  if (ItemIndex>=0) {
-    wf->SetModalResult(mrOK);
-  }
+  wf->SetModalResult(mrOK);
 }
 
 
@@ -90,8 +84,6 @@ static void OnAirspaceColoursListInfo(WindowControl * Sender,
   (void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = NUMAIRSPACECOLORS;
-  } else {
-    ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
   }
 }
 
@@ -137,7 +129,10 @@ int dlgAirspaceColoursShowModal(void){
 
   UpdateList();
 
-  wf->ShowModal();
+  int result = wf->ShowModal();
+  result = result == mrOK
+    ? wAirspaceColoursList->GetCursorIndex()
+    : -1;
 
   // now retrieve back the properties...
 
@@ -145,7 +140,5 @@ int dlgAirspaceColoursShowModal(void){
 
   wf = NULL;
 
-  return ItemIndex;
+  return result;
 }
-
-

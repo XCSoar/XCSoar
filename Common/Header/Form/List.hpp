@@ -169,6 +169,10 @@ public:
   int GetItemIndex(void) { return mListInfo.ItemIndex; }
   void SetItemIndex(int iValue);
 
+  int GetCursorIndex() const {
+    return mListInfo.ScrollIndex + mListInfo.ItemIndex;
+  }
+
 protected:
   void show_or_hide_scroll_bar();
 

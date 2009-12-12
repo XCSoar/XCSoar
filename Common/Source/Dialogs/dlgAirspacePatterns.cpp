@@ -46,9 +46,6 @@ Copyright_License {
 static WndForm *wf=NULL;
 static WndListFrame *wAirspacePatternsList=NULL;
 
-static int ItemIndex = -1;
-
-
 static void UpdateList(void){
   wAirspacePatternsList->ResetList();
   wAirspacePatternsList->invalidate();
@@ -74,13 +71,7 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 static void OnAirspacePatternsListEnter(WindowControl * Sender,
 				WndListFrame::ListInfo_t *ListInfo) {
   (void)Sender;
-  ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
-  if (ItemIndex>=NUMAIRSPACEBRUSHES) {
-    ItemIndex = NUMAIRSPACEBRUSHES-1;
-  }
-  if (ItemIndex>=0) {
-    wf->SetModalResult(mrOK);
-  }
+  wf->SetModalResult(mrOK);
 }
 
 
@@ -89,15 +80,12 @@ static void OnAirspacePatternsListInfo(WindowControl * Sender,
   (void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = NUMAIRSPACEBRUSHES;
-  } else {
-    ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
   }
 }
 
 static void OnCloseClicked(WindowControl * Sender){
   (void)Sender;
-  ItemIndex = -1;
-  wf->SetModalResult(mrOK);
+  wf->SetModalResult(mrCancel);
 }
 
 
@@ -109,9 +97,6 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 int dlgAirspacePatternsShowModal(void){
-
-  ItemIndex = -1;
-
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgAirspacePatterns_L.xml"),
@@ -136,7 +121,10 @@ int dlgAirspacePatternsShowModal(void){
 
   UpdateList();
 
-  wf->ShowModal();
+  int result = wf->ShowModal();
+  result = result == mrOK
+    ? wAirspacePatternsList->GetCursorIndex()
+    : -1;
 
   // now retrieve back the properties...
 
@@ -144,6 +132,5 @@ int dlgAirspacePatternsShowModal(void){
 
   wf = NULL;
 
-  return ItemIndex;
+  return result;
 }
-
