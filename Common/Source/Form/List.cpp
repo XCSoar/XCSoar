@@ -299,8 +299,7 @@ void WndListFrame::ResetList(void){
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
   mListInfo.ItemCount = 0;
-  mListInfo.ItemInViewCount = (height + client_height - 1)
-    / client_height - 1;
+  mListInfo.ItemInViewCount = height / client_height;
 
   if (mOnListCallback != NULL){
     mListInfo.DrawIndex = -1;                               // -1 -> initialize data
