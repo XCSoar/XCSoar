@@ -162,9 +162,9 @@ WndListFrame::on_paint(Canvas &canvas)
     }
 
     viewport.restore();
-
-    DrawScrollBar(canvas);
   }
+
+  DrawScrollBar(canvas);
 }
 
 void WndListFrame::DrawScrollBar(Canvas &canvas) {
