@@ -53,7 +53,6 @@ class ComboList{
   public:
 
     ComboList(void) {
-      ComboPopupDrawListIndex=0;
       ComboPopupItemSavedIndex=-1;
     }
 
@@ -68,7 +67,6 @@ class ComboList{
                                  const TCHAR *StringValueFormatted);
     void FreeComboPopupItemList(void);
 
-    int ComboPopupDrawListIndex;
     int ComboPopupItemSavedIndex;
     int ComboPopupItemCount;
     ComboListEntry_t * ComboPopupItemList[ComboPopupLISTMAX]; // RLD make this dynamic later

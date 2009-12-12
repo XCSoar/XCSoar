@@ -57,15 +57,14 @@ static TCHAR sSavedInitialValue[ComboPopupITEMMAX];
 static int iSavedInitialDataIndex=-1;
 
 static void
-OnPaintComboPopupListItem(WindowControl *Sender, Canvas &canvas)
+OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if ( ComboListPopup->ComboPopupDrawListIndex >= 0 &&
-        ComboListPopup->ComboPopupDrawListIndex < ComboListPopup->ComboPopupItemCount )
-  {
-    canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
-                        canvas.get_width() - Layout::FastScale(5),
-                        ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupDrawListIndex]->StringValueFormatted);
-  }
+  if (i > (unsigned)ComboListPopup->ComboPopupItemCount)
+    return;
+
+  canvas.text_clipped(rc.left + Layout::FastScale(2),
+                      rc.top + Layout::FastScale(2), rc,
+                      ComboListPopup->ComboPopupItemList[i]->StringValueFormatted);
 }
 
 static void OnComboPopupListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
@@ -76,10 +75,6 @@ static void OnComboPopupListInfo(WindowControl * Sender, WndListFrame::ListInfo_
     ListInfo->ItemCount = ComboListPopup->ComboPopupItemCount;
     ListInfo->ScrollIndex = 0;
     ListInfo->ItemIndex = ComboListPopup->ComboPopupItemSavedIndex;
-
-  }
-  else {
-    ComboListPopup->ComboPopupDrawListIndex = ListInfo->DrawIndex + ListInfo->ScrollIndex;
   }
 }
 
@@ -117,7 +112,6 @@ static void OnCancelClicked(WindowControl * Sender){
 
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnComboPopupListInfo),
-  DeclareCallBackEntry(OnPaintComboPopupListItem),
   DeclareCallBackEntry(OnHelpClicked),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnCancelClicked),
@@ -167,6 +161,7 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
     assert(wComboPopupListFrame!=NULL);
     wComboPopupListFrame->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERRIGHT|BORDERBOTTOM);
     wComboPopupListFrame->SetEnterCallback(OnComboPopupListEnter);
+    wComboPopupListFrame->SetPaintItemCallback(OnPaintComboPopupListItem);
 
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();
     ComboListPopup = ComboPopupDataField->GetCombo();
