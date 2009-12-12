@@ -49,16 +49,13 @@ PeriodClock WndForm::timeAnyOpenClose;
 WndForm::WndForm(ContainerWindow *Parent,
                  const TCHAR *Name, const TCHAR *Caption,
                  int X, int Y, int Width, int Height):
-  WindowControl(NULL, Parent, Name, X, Y, Width, Height, false) {
-
-  mClientWindow = NULL;
-  mOnKeyDownNotify = NULL;
-  mOnTimerNotify = NULL;
-
-  mColorTitle = Color::YELLOW;
-
-  mhTitleFont = GetFont();
-
+  WindowControl(NULL, Parent, Name, X, Y, Width, Height, false),
+  mModalResult(0),
+  mColorTitle(Color::YELLOW),
+  mhTitleFont(GetFont()),
+  mClientWindow(NULL),
+  mOnTimerNotify(NULL), mOnKeyDownNotify(NULL), mOnUserMsgNotify(NULL)
+{
   mClientWindow = new WindowControl(this, this,
                                     TEXT(""), 20, 20, Width, Height);
   mClientWindow->SetBackColor(GetBackColor());
@@ -70,7 +67,6 @@ WndForm::WndForm(ContainerWindow *Parent,
 
   cbTimerID = set_timer(1001, 500);
 
-  mModalResult = 0;
   if (Caption != NULL)
     _tcscpy(mCaption, Caption);
 

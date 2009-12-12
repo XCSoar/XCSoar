@@ -81,26 +81,20 @@ WindowControl::WindowControl(WindowControl *Owner,
                              int X, int Y,
                              int Width, int Height,
                              bool Visible)
+  :mOwner(Owner),
+   mBorderKind(0), //BORDERRIGHT | BORDERBOTTOM;
+   mColorBack(Color::WHITE),
+   mColorFore(Color::BLACK),
+   mhFont(&MapWindowFont),
+   mHelpText(NULL),
+   mOnHelpCallback(NULL),
+   mReadOnly(false), mHasFocus(false),
+   mBorderSize(1),
+   mCanFocus(false),
+   mDontPaintSelector(false),
+   mClientCount(0)
 {
-  mHelpText = NULL;
-
-  mHasFocus = false;
-  mCanFocus = false;
-
-  mReadOnly = false;
-
-  mClientCount = 0;
-
-  mOnHelpCallback = NULL;
-
-  // todo
-
-  mOwner = Owner;
-
-  // todo
-  mhFont = &MapWindowFont;
   mCaption[0] = '\0';
-  mDontPaintSelector = false;
 
   if ((Parent == NULL) && (mOwner != NULL))
     Parent = (ContainerWindow *)&mOwner->GetClientAreaWindow();
@@ -109,9 +103,6 @@ WindowControl::WindowControl(WindowControl *Owner,
     _tcscpy(mName, Name);  // todo size check
   else
     mName[0] = '\0';
-
-  mColorBack = Color::WHITE;
-  mColorFore = Color::BLACK;
 
   if (InstCount == 0){
     hBrushDefaultBk.set(mColorBack);
@@ -127,10 +118,6 @@ WindowControl::WindowControl(WindowControl *Owner,
     mOwner->AddClient(this);
 
   install_wndproc();
-
-  mBorderSize = 1;
-
-  mBorderKind = 0; //BORDERRIGHT | BORDERBOTTOM;
 
   get_canvas().background_transparent();
 

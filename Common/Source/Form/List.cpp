@@ -49,6 +49,8 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
                            void (*OnListCallback)(WindowControl *Sender,
                                                   ListInfo_t *ListInfo)):
   WndFrame(Owner, Name, X, Y, Width, Height),
+  mOnListCallback(OnListCallback),
+  mOnListEnterCallback(NULL),
   PaintItemCallback(NULL)
 {
   SetCanFocus(true);
@@ -64,8 +66,6 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
   mListInfo.ItemInViewCount = 0;
 
   mCaption[0] = '\0';
-  mOnListCallback = OnListCallback;
-  mOnListEnterCallback = NULL;
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
 }

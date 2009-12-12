@@ -44,21 +44,18 @@ WndButton::WndButton(WindowControl *Parent,
                      const TCHAR *Name, const TCHAR *Caption,
                      int X, int Y, int Width, int Height,
                      void (*Function)(WindowControl *Sender))
-      :WindowControl(Parent, NULL /*Parent->GetHandle()*/, Name, X, Y, Width, Height)
+  :WindowControl(Parent, NULL, Name, X, Y, Width, Height),
+   mDown(false),
+   mDefault(false),
+   mLastDrawTextHeight(-1),
+   mOnClickNotify(Function)
 {
   SetCanFocus(true);
-
-  mOnClickNotify = Function;
-  mDown = false;
-  mDefault = false;
 
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
 
   _tcscpy(mCaption, Caption);
-
-  mLastDrawTextHeight = -1;
-
 }
 
 bool
