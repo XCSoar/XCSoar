@@ -64,27 +64,33 @@ static void UpdateTextboxProp(void)
   }
 }
 
+static bool DoBackspace() {
+  if (cursor<1)
+    return true; // min width
+  cursor--;
+  edittext[cursor] = 0;
+  UpdateTextboxProp();
+  return true;
+}
+
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
   switch (key_code) {
-    case VK_LEFT:
-      if (cursor<1)
-        return true; // min width
-      cursor--;
-      edittext[cursor] = 0;
-      UpdateTextboxProp();
-    return true;
-
+  case VK_LEFT:
+    return DoBackspace();
       /* JMW this prevents cursor buttons from being used to enter
     case VK_RETURN:
       wf->SetModalResult(mrOK);
     return true;
       */
-
   default:
     return false;
   }
+}
+
+static void OnBackspace(WindowControl * Sender) {
+  DoBackspace();
 }
 
 static void OnKey(WindowControl * Sender)
@@ -116,6 +122,7 @@ static void OnClear(WindowControl * Sender)
 }
 
 static CallBackTableEntry_t CallBackTable[]={
+  DeclareCallBackEntry(OnBackspace),
   DeclareCallBackEntry(OnKey),
   DeclareCallBackEntry(OnClear),
   DeclareCallBackEntry(OnOk),
@@ -158,6 +165,7 @@ void dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
     _tcsupr(text);
     _tcsncpy(edittext, text, max_width-1);
     edittext[max_width-1]= 0;
+    cursor=_tcslen(text);
   }
 
   UpdateTextboxProp();
