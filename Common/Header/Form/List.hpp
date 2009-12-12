@@ -129,15 +129,11 @@ class WndListFrame : public WndFrame {
 public:
 
   typedef struct{
-    int TopIndex;
-    int BottomIndex;
     int ItemIndex;
     int DrawIndex;
-    //      int SelectedIndex;
     int ScrollIndex;
     int ItemCount;
     int ItemInViewCount;
-    int ItemInPageCount;
   }ListInfo_t;
 
   typedef void (*OnListCallback_t)(WindowControl *Sender, ListInfo_t *ListInfo);

@@ -58,10 +58,6 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
 
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
-  mListInfo.ItemInPageCount = 0;
-  mListInfo.TopIndex = 0;
-  mListInfo.BottomIndex = 0;
-//  mListInfo.SelectedIndex = 0;
   mListInfo.ItemCount = 0;
   mListInfo.ItemInViewCount = 0;
 
@@ -113,7 +109,7 @@ WndListFrame::on_paint(Canvas &canvas)
     if (mOnListCallback != NULL){
       mListInfo.DrawIndex = mListInfo.ItemIndex;
       mOnListCallback(this, &mListInfo);
-      mClients[0]->SetTop(mClients[0]->GetHeight() * (mListInfo.ItemIndex-mListInfo.TopIndex));
+      mClients[0]->SetTop(mClients[0]->GetHeight() * mListInfo.ItemIndex);
     }
 */
   }
@@ -125,14 +121,14 @@ WndListFrame::on_paint(Canvas &canvas)
     RECT rc = mClients[0]->get_position();
 
     for (i = 0; i < mListInfo.ItemInViewCount; i++) {
-      if (GetFocused() && mListInfo.TopIndex + i == mListInfo.ItemIndex) {
+      if (GetFocused() && i == mListInfo.ItemIndex) {
         Brush brush(GetBackColor().highlight());
         canvas.fill_rectangle(rc, brush);
       }
 
       PaintItemCallback(canvas, rc, mListInfo.ScrollIndex + i);
 
-      if (mListInfo.TopIndex + i == mListInfo.ItemIndex)
+      if (i == mListInfo.ItemIndex)
         PaintSelector(canvas, rc);
 
       ::OffsetRect(&rc, 0, rc.bottom - rc.top);
@@ -150,7 +146,7 @@ WndListFrame::on_paint(Canvas &canvas)
       canvas2.select(*mClients[0]->GetFont());
 
       if (mOnListCallback != NULL){
-        mListInfo.DrawIndex = mListInfo.TopIndex + i;
+        mListInfo.DrawIndex = i;
         mOnListCallback(this, &mListInfo);
       }
 
@@ -187,8 +183,9 @@ void WndListFrame::SetEnterCallback(void
 int WndListFrame::RecalculateIndices(bool bigscroll) {
 
 // scroll to smaller of current scroll or to last page
-  mListInfo.ScrollIndex = max(0,min(mListInfo.ScrollIndex,
-				    mListInfo.ItemCount-mListInfo.ItemInPageCount));
+  mListInfo.ScrollIndex = max(0, min(mListInfo.ScrollIndex,
+                                     mListInfo.ItemCount -
+                                     mListInfo.ItemInViewCount));
 
 // if we're off end of list, move scroll to last page and select 1st item in last page, return
   if (mListInfo.ItemIndex+mListInfo.ScrollIndex >= mListInfo.ItemCount) {
@@ -204,18 +201,16 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
 			      min(mListInfo.ScrollIndex,
 				  mListInfo.ItemCount-mListInfo.ItemIndex-1));
 
-  if (mListInfo.ItemIndex >= mListInfo.BottomIndex){
-    if ((mListInfo.ItemCount>mListInfo.ItemInPageCount)
-	&& (mListInfo.ItemIndex+mListInfo.ScrollIndex < mListInfo.ItemCount)) {
-      mListInfo.ScrollIndex++;
-      mListInfo.ItemIndex = mListInfo.BottomIndex-1;
+  if (mListInfo.ScrollIndex + mListInfo.ItemIndex > mListInfo.ItemCount)
+    mListInfo.ItemIndex =
+      max(mListInfo.ItemCount - mListInfo.ScrollIndex - 1, 0);
 
-      invalidate();
-      return 0;
-    } else {
-      mListInfo.ItemIndex = mListInfo.BottomIndex-1;
-      return 1;
-    }
+  if (mListInfo.ItemIndex >= mListInfo.ItemInViewCount) {
+    mListInfo.ScrollIndex++;
+    mListInfo.ItemIndex = mListInfo.ItemInViewCount - 1;
+
+    invalidate();
+    return 0;
   }
   if (mListInfo.ItemIndex < 0){
 
@@ -259,19 +254,19 @@ WndListFrame::on_key_down(unsigned key_code)
 
   case VK_LEFT:
     if (mListInfo.ScrollIndex <= 0 ||
-        mListInfo.ItemCount <= mListInfo.ItemInPageCount)
+        mListInfo.ItemCount <= mListInfo.ItemInViewCount)
       break;
 
-    mListInfo.ScrollIndex -= mListInfo.ItemInPageCount;
+    mListInfo.ScrollIndex -= mListInfo.ItemInViewCount;
     RecalculateIndices(true);
     return true;
 
   case VK_RIGHT:
     if (mListInfo.ItemIndex + mListInfo.ScrollIndex >= mListInfo.ItemCount ||
-        mListInfo.ItemCount <= mListInfo.ItemInPageCount)
+        mListInfo.ItemCount <= mListInfo.ItemInViewCount)
       break;
 
-    mListInfo.ScrollIndex += mListInfo.ItemInPageCount;
+    mListInfo.ScrollIndex += mListInfo.ItemInViewCount;
     RecalculateIndices(true);
     return true;
 
@@ -303,11 +298,6 @@ void WndListFrame::ResetList(void){
   mListInfo.ScrollIndex = 0;
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
-  mListInfo.ItemInPageCount = (height + client_height - 1)
-    / client_height - 1;
-  mListInfo.TopIndex = 0;
-  mListInfo.BottomIndex = 0;
-//  mListInfo.SelectedIndex = 0;
   mListInfo.ItemCount = 0;
   mListInfo.ItemInViewCount = (height + client_height - 1)
     / client_height - 1;
@@ -317,13 +307,6 @@ void WndListFrame::ResetList(void){
     mOnListCallback(this, &mListInfo);
     mListInfo.DrawIndex = 0;                                // setup data for first item,
     mOnListCallback(this, &mListInfo);
-  }
-
-  if (mListInfo.BottomIndex  == 0){                         // calc bounds
-    mListInfo.BottomIndex  = mListInfo.ItemCount;
-    if (mListInfo.BottomIndex > mListInfo.ItemInViewCount){
-      mListInfo.BottomIndex = mListInfo.ItemInViewCount;
-    }
   }
 
   show_or_hide_scroll_bar();
@@ -343,9 +326,8 @@ void WndListFrame::SetItemIndex(int iValue){
   mListInfo.ScrollIndex=iValue;
 
   int iTail = mListInfo.ItemCount - iValue; // if within 1 page of end
-  if ( iTail < mListInfo.ItemInPageCount)
-  {
-    int iDiff = mListInfo.ItemInPageCount - iTail;
+  if (iTail < mListInfo.ItemInViewCount) {
+    int iDiff = mListInfo.ItemInViewCount - iTail;
     int iShrinkBy = min(iValue, iDiff); // don't reduce by
 
     mListInfo.ItemIndex += iShrinkBy;
@@ -374,7 +356,7 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 */
   int index = yPos / mClients[0]->get_size().cy; // yPos is offset within ListEntry item!
 
-  if ((index>=0)&&(index<mListInfo.BottomIndex)) {
+  if (index >= 0 && index + mListInfo.ItemIndex < mListInfo.ItemCount) {
     if (index == mListInfo.ItemIndex) {
       if (mOnListEnterCallback) {
         mOnListEnterCallback(this, &mListInfo);
