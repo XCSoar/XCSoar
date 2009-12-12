@@ -54,8 +54,6 @@ static void UpdateList(void){
   wAirspacePatternsList->invalidate();
 }
 
-static unsigned DrawListIndex;
-
 static void
 OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
@@ -92,7 +90,6 @@ static void OnAirspacePatternsListInfo(WindowControl * Sender,
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = NUMAIRSPACEBRUSHES;
   } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
     ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
   }
 }

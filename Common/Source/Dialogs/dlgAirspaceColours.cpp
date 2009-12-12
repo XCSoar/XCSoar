@@ -54,8 +54,6 @@ static void UpdateList(void){
   wAirspaceColoursList->invalidate();
 }
 
-static unsigned DrawListIndex;
-
 static void
 OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
@@ -93,7 +91,6 @@ static void OnAirspaceColoursListInfo(WindowControl * Sender,
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = NUMAIRSPACECOLORS;
   } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
     ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
   }
 }
