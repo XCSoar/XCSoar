@@ -86,9 +86,7 @@ public:
 #else
   Window():hWnd(NULL), prev_wndproc(NULL) {}
 #endif
-  ~Window() {
-    reset();
-  }
+  virtual ~Window();
 
 #ifndef ENABLE_SDL
   operator HWND() const {

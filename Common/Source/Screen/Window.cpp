@@ -52,6 +52,11 @@ Copyright_License {
 #include <windowsx.h>
 #endif
 
+Window::~Window()
+{
+  reset();
+}
+
 void
 Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
             int left, int top, unsigned width, unsigned height,
