@@ -2561,9 +2561,17 @@ void dlgConfigurationShowModal(void){
 				      szRegistryAbortSafetyUseCurrent,
 				      GlidePolar::AbortSafetyUseCurrent);
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpDisableAutoLogger"),
-				      szRegistryDisableAutoLogger,
-				      XCSoarInterface::SetSettingsComputer().DisableAutoLogger);
+  wp = (WndProperty*)wf->FindByName(TEXT("prpDisableAutoLogger"));
+  if (wp) { // GUI label is "Enable Auto Logger"
+    if (!XCSoarInterface::SetSettingsComputer().DisableAutoLogger
+          != wp->GetDataField()->GetAsBoolean()) {
+      XCSoarInterface::SetSettingsComputer().DisableAutoLogger =
+          !(wp->GetDataField()->GetAsBoolean());
+      SetToRegistry(szRegistryDisableAutoLogger,
+          XCSoarInterface::SetSettingsComputer().DisableAutoLogger);
+      changed = true;
+    }
+  }
   double val;
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
