@@ -86,6 +86,8 @@ protected:
   bool on_create();
   bool on_destroy();
   bool on_close();
+  bool on_setfocus();
+
 public:
   void install_timer();
 };
