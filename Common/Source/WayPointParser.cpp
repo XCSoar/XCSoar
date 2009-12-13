@@ -587,34 +587,33 @@ ReadWayPoints(WayPointList &way_points, const RasterTerrain *terrain)
 {
   StartupStore(TEXT("ReadWayPoints\n"));
 
-  TCHAR szFile1[MAX_PATH] = TEXT("\0");
-  TCHAR szFile2[MAX_PATH] = TEXT("\0");
+  TCHAR szFile[MAX_PATH];
   bool file_embedded = false;
 
   // JMW TODO protect with mutex (whole waypoint list class)
 
   CloseWayPoints(way_points);
 
-  GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
+  GetRegistryString(szRegistryWayPointFile, szFile, MAX_PATH);
   SetRegistryString(szRegistryWayPointFile, TEXT("\0"));
 
-  if (_tcslen(szFile1) > 0) {
-    ExpandLocalPath(szFile1);
+  if (_tcslen(szFile) > 0) {
+    ExpandLocalPath(szFile);
   } else {
     file_embedded = true;
-    GetRegistryString(szRegistryMapFile, szFile1, MAX_PATH);
-    ExpandLocalPath(szFile1);
-    _tcscat(szFile1, TEXT("/"));
-    _tcscat(szFile1, TEXT("waypoints.xcw"));
+    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    ExpandLocalPath(szFile);
+    _tcscat(szFile, TEXT("/"));
+    _tcscat(szFile, TEXT("waypoints.xcw"));
   }
 
   globalFileNum = 0;
-  if (ReadWayPointFile(szFile1, way_points, terrain)) {
+  if (ReadWayPointFile(szFile, way_points, terrain)) {
     // read OK, so set the registry to the actual file name
     if (!file_embedded) {
       printf("save\n");
-      ContractLocalPath(szFile1);
-      SetRegistryString(szRegistryWayPointFile, szFile1);
+      ContractLocalPath(szFile);
+      SetRegistryString(szRegistryWayPointFile, szFile);
     }
   } else {
     StartupStore(TEXT("No waypoint file 1\n"));
@@ -622,18 +621,18 @@ ReadWayPoints(WayPointList &way_points, const RasterTerrain *terrain)
 
   // read additional waypoint file
 
-  GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
+  GetRegistryString(szRegistryAdditionalWayPointFile, szFile, MAX_PATH);
 
   SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));
 
-  if (_tcslen(szFile2) > 0) {
-    ExpandLocalPath(szFile2);
+  if (_tcslen(szFile) > 0) {
+    ExpandLocalPath(szFile);
 
     globalFileNum = 1;
-    if (ReadWayPointFile(szFile2, way_points, terrain)) {
+    if (ReadWayPointFile(szFile, way_points, terrain)) {
       // read OK, so set the registry to the actual file name
-      ContractLocalPath(szFile2);
-      SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);
+      ContractLocalPath(szFile);
+      SetRegistryString(szRegistryAdditionalWayPointFile, szFile);
     } else {
       StartupStore(TEXT("No waypoint file 2\n"));
     }
@@ -911,20 +910,19 @@ WaypointWriteFiles(WayPointList &way_points,
 {
   // JMW TODO protect with mutex (whole waypoint list class)
 
-  TCHAR szFile1[MAX_PATH] = TEXT("\0");
-  TCHAR szFile2[MAX_PATH] = TEXT("\0");
+  TCHAR szFile[MAX_PATH];
 
   FILE *fp = NULL;
 
-  GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
-  ExpandLocalPath(szFile1);
+  GetRegistryString(szRegistryWayPointFile, szFile, MAX_PATH);
+  ExpandLocalPath(szFile);
 
-  if (_tcslen(szFile1) > 0) {
-    fp = _tfopen(szFile1, TEXT("wb"));
+  if (_tcslen(szFile) > 0) {
+    fp = _tfopen(szFile, TEXT("wb"));
   } else {
-    LocalPath(szFile1);
-    _tcscat(szFile1, TEXT("\\waypoints1.dat"));
-    fp = _tfopen(szFile1, TEXT("wb"));
+    LocalPath(szFile);
+    _tcscat(szFile, TEXT("\\waypoints1.dat"));
+    fp = _tfopen(szFile, TEXT("wb"));
   }
 
   if (fp != NULL) {
@@ -935,15 +933,15 @@ WaypointWriteFiles(WayPointList &way_points,
     fp = NULL;
   }
 
-  GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
-  ExpandLocalPath(szFile2);
+  GetRegistryString(szRegistryAdditionalWayPointFile, szFile, MAX_PATH);
+  ExpandLocalPath(szFile);
 
-  if (_tcslen(szFile2) > 0) {
-    fp = _tfopen(szFile2, TEXT("wb"));
+  if (_tcslen(szFile) > 0) {
+    fp = _tfopen(szFile, TEXT("wb"));
   } else {
-    LocalPath(szFile2);
-    _tcscat(szFile2, TEXT("\\waypoints2.dat"));
-    fp = _tfopen(szFile2, TEXT("wb"));
+    LocalPath(szFile);
+    _tcscat(szFile, TEXT("\\waypoints2.dat"));
+    fp = _tfopen(szFile, TEXT("wb"));
   }
 
   if (fp != NULL) {

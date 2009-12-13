@@ -73,12 +73,10 @@ OpenAirfieldDetails()
     unicode2ascii(szAirfieldDetailsFile, zfilename, MAX_PATH);
     SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
   } else {
-    static TCHAR szMapFile[MAX_PATH] = TEXT("\0");
     static TCHAR szFile[MAX_PATH] = TEXT("\0");
-    GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
-    if (_tcslen(szMapFile)>0) {
-      ExpandLocalPath(szMapFile);
-      _tcscpy(szFile,szMapFile);
+    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    if (_tcslen(szFile)>0) {
+      ExpandLocalPath(szFile);
       _tcscat(szFile,TEXT("/airfields.txt"));
       unicode2ascii(szFile, zfilename, MAX_PATH);
     } else {

@@ -61,10 +61,8 @@ void RasterTerrain::OpenTerrain(void)
   unicode2ascii(szFile, zfilename, MAX_PATH);
 
   if (strlen(zfilename)==0) {
-    static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
-    GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
-    ExpandLocalPath(szMapFile);
-    _tcscpy(szFile,szMapFile);
+    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    ExpandLocalPath(szFile);
     _tcscat(szFile,TEXT("/terrain.jp2"));
     unicode2ascii(szFile, zfilename, MAX_PATH);
   }

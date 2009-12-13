@@ -156,18 +156,16 @@ void TopologyStore::Open() {
   if (_tcslen(szFile)==0) {
 
     // file is blank, so look for it in a map file
-    static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
-    GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
-    if (_tcslen(szMapFile)==0) {
+    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    if (_tcslen(szFile)==0) {
       return;
     }
-    ExpandLocalPath(szMapFile);
+    ExpandLocalPath(szFile);
 
     // Look for the file within the map zip file...
-    _tcscpy(Directory,szMapFile);
+    _tcscpy(Directory, szFile);
     _tcscat(Directory,TEXT("/"));
-    szFile[0]=0;
-    _tcscat(szFile,Directory);
+    _tcscat(szFile, TEXT("/"));
     _tcscat(szFile,TEXT("topology.tpl"));
 
   } else {
