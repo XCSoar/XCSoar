@@ -113,7 +113,7 @@ static void OnCodeClicked(WindowControl *Sender)
 {
   TCHAR newTeammateCode[10];
   _tcsncpy(newTeammateCode, XCSoarInterface::SettingsComputer().TeammateCode, 10);
-  dlgTextEntryShowModal(newTeammateCode, 7);
+  if (dlgTextEntryShowModal(newTeammateCode, 7)){
 
   int i= _tcslen(newTeammateCode)-1;
   while (i>=0) {
@@ -129,16 +129,20 @@ static void OnCodeClicked(WindowControl *Sender)
   if (_tcslen(XCSoarInterface::SettingsComputer().TeammateCode)>0) {
     XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
   }
+  }
 }
 
 static void OnFlarmLockClicked(WindowControl * Sender)
 {
   (void)Sender;
 
-  dlgTextEntryShowModal(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget, 4);
+  TCHAR newTeamFlarmCNTarget[4];
+  _tcsncpy(newTeamFlarmCNTarget, XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget, 4);
 
+  if (dlgTextEntryShowModal(newTeamFlarmCNTarget, 4)){
+  _tcsncpy(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget, newTeamFlarmCNTarget, 4);
   XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
-
+  }
   int flarmId = LookupFLARMDetails(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
 
   if (flarmId == 0)
