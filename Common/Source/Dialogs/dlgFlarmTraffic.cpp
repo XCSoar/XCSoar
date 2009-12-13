@@ -51,21 +51,47 @@ static int page=0;
 static WndForm *wf=NULL;
 static WndListFrame *wDetails=NULL;
 
-static int DrawListIndex=0;
-
 static void Update(){
 
   //wDetails->ResetList();
   wDetails->invalidate();
 }
 
+static void
+FlarmCursorCallback(unsigned i)
+{
+  const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[i];
+
+  WndButton *set_cn_button = (WndButton *)wf->FindByName(_T("cmdSetCN"));
+  WndButton *track_button = (WndButton *)wf->FindByName(_T("cmdTrack"));
+
+  if (traffic.ID != 0) {
+    if (LookupFLARMDetails(traffic.ID) == NULL) {
+      // not existing en primary or secondary flarm id list
+      set_cn_button->SetCaption(_T("Set CN"));
+      set_cn_button->show();
+    } else {
+      // the id was found - is it from secondary list ?
+      int index = LookupSecondaryFLARMId(traffic.ID);
+
+      if (index != -1) {
+        set_cn_button->SetCaption(_T("Edit CN"));
+        set_cn_button->show();
+      } else
+        set_cn_button->hide();
+    }
+
+    track_button->show();
+  } else {
+    track_button->hide();
+    set_cn_button->hide();
+  }
+}
 
 static void
-OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
+OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  (void)Sender;
-
-  if (DrawListIndex >= FLARM_MAX_TRAFFIC)
+  if (i >= FLARM_MAX_TRAFFIC)
     return;
 
   TCHAR tmp[100];
@@ -74,7 +100,7 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
   double range;
   double bear;
 
-  const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex];
+  const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[i];
   if (traffic.ID == 0)
     return;
 
@@ -97,7 +123,8 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
             bear,
             DISTANCEMODIFY * range);
 
-  canvas.text(Layout::FastScale(2), Layout::FastScale(2), text);
+  canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
+              text);
 }
 
 int GetActiveFlarmTrafficCount()
@@ -117,39 +144,6 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
   (void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = GetActiveFlarmTrafficCount();
-  } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
-    if (DrawListIndex != -1)
-      {
-	if (XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID != 0)
-	  {
-	    if (LookupFLARMDetails(XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID) == NULL)
-	      {
-		// not existing en primary or secondary flarm id list
-		((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetCaption(_T("Set CN"));
-                ((WndButton *)wf->FindByName(_T("cmdSetCN")))->show();
-	      }
-	    else
-	      {
-		// the id was found - is it from secondary list ?
-		int index = LookupSecondaryFLARMId(XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID);
-
-		if (index != -1)
-		  {
-		    ((WndButton *)wf->FindByName(_T("cmdSetCN")))->SetCaption(_T("Edit CN"));
-                    ((WndButton *)wf->FindByName(_T("cmdSetCN")))->show();
-		  }
-		else
-                  ((WndButton *)wf->FindByName(_T("cmdSetCN")))->hide();
-	      }
-            ((WndButton *)wf->FindByName(_T("cmdTrack")))->show();
-	  }
-	else
-	  {
-            ((WndButton *)wf->FindByName(_T("cmdTrack")))->hide();
-            ((WndButton *)wf->FindByName(_T("cmdSetCN")))->hide();
-	  }
-      }
   }
 }
 
@@ -246,7 +240,6 @@ static void OnListEnter(WindowControl * Sender,
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnTrackClicked),
   DeclareCallBackEntry(OnSetCNClicked),
-  DeclareCallBackEntry(OnPaintDetailsListItem),
   DeclareCallBackEntry(OnDetailsListInfo),
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
@@ -284,6 +277,8 @@ void dlgFlarmTrafficShowModal(void){
 
   wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
   wDetails->SetEnterCallback(OnListEnter);
+  wDetails->SetCursorCallback(FlarmCursorCallback);
+  wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
   assert(wDetails!=NULL);
 
   wDetails->SetBorderKind(BORDERLEFT);
