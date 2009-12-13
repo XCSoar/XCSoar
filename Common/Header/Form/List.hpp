@@ -169,10 +169,19 @@ public:
     return mListInfo.ScrollIndex + mListInfo.ItemIndex;
   }
 
+  /**
+   * Moves the cursor to the specified position.
+   *
+   * @return true if the cursor was moved to the specified position,
+   * false if the position was invalid
+   */
+  bool SetCursorIndex(int i);
+
 protected:
   void show_or_hide_scroll_bar();
 
   int RecalculateIndices(bool bigscroll);
+  void EnsureVisible(int i);
   void SelectItemFromScreen(int xPos, int yPos);
   void DrawScrollBar(Canvas &canvas);
 

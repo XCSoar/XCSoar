@@ -39,6 +39,8 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Screen/Viewport.hpp"
 
+#include <assert.h>
+
 #include <algorithm>
 
 using std::min;
@@ -230,6 +232,38 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
   return (0);
 }
 
+void
+WndListFrame::EnsureVisible(int i)
+{
+  assert(i >= 0 && i < mListInfo.ItemCount);
+
+  if (mListInfo.ScrollIndex > i)
+    mListInfo.ScrollIndex = i;
+  else if (mListInfo.ScrollIndex + mListInfo.ItemInViewCount <= i)
+    mListInfo.ScrollIndex = i - mListInfo.ItemInViewCount + 1;
+  else
+    /* no change, no repaint required */
+    return;
+
+  invalidate();
+}
+
+bool
+WndListFrame::SetCursorIndex(int i)
+{
+  if (i < 0 || i >= mListInfo.ItemCount)
+    return false;
+
+  if (i == GetCursorIndex())
+    return true;
+
+  EnsureVisible(i);
+
+  mListInfo.ItemIndex = i - mListInfo.ScrollIndex;
+  invalidate();
+  return true;
+}
+
 bool
 WndListFrame::on_key_down(unsigned key_code)
 {
@@ -272,19 +306,17 @@ WndListFrame::on_key_down(unsigned key_code)
 
     //#endif
   case VK_DOWN:
-    if (mListInfo.ItemIndex + mListInfo.ScrollIndex >= mListInfo.ItemCount)
+    if (GetCursorIndex() + 1 >= mListInfo.ItemCount)
       break;
 
-    mListInfo.ItemIndex++;
-    RecalculateIndices(false);
+    SetCursorIndex(GetCursorIndex() + 1);
     return true;
 
   case VK_UP:
-    if (mListInfo.ItemIndex + mListInfo.ScrollIndex <= 0)
+    if (GetCursorIndex() <= 0)
       break;
 
-    mListInfo.ItemIndex--;
-    RecalculateIndices(false);
+    SetCursorIndex(GetCursorIndex() - 1);
     return true;
   }
 
@@ -363,8 +395,7 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 
       invalidate();
     } else {
-      mListInfo.ItemIndex = index;
-      RecalculateIndices(false);
+      SetCursorIndex(mListInfo.ScrollIndex + index);
     }
   }
 }
