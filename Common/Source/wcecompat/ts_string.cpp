@@ -21,8 +21,6 @@
 #include "ts_string.h"
 
 #include <assert.h>
-#include <string.h>
-#include <stdlib.h>
 
 #ifdef _UNICODE
 
@@ -36,12 +34,6 @@ void ascii2unicode(const char *ascii, TCHAR *unicode)
 {
   assert(check_wchar_align(unicode));
 
-  if (strlen(ascii)==0) {
-    unicode[0]=0;
-    unicode[1]=0;
-    return;
-  }
-
   while (*ascii != '\0')
     *unicode++ = *ascii++;
   *unicode = '\0';
@@ -51,11 +43,6 @@ void unicode2ascii(const TCHAR *unicode, char *ascii)
 {
   assert(check_wchar_align(unicode));
 
-  if (wcslen(unicode)==0) {
-    ascii[0] = 0;
-    return;
-  }
-
   while (*unicode != '\0')
     *ascii++ = (char)*unicode++;
   *ascii = '\0';
@@ -64,12 +51,6 @@ void unicode2ascii(const TCHAR *unicode, char *ascii)
 void ascii2unicode(const char *ascii, TCHAR *unicode, int maxChars)
 {
   assert(check_wchar_align(unicode));
-
-  if (strlen(ascii)==0) {
-    unicode[0]=0;
-    unicode[1]=0;
-    return;
-  }
 
   int i;
   for (i = 0; ascii[i] != 0 && i < maxChars; i++)
@@ -81,11 +62,6 @@ void unicode2ascii(const TCHAR *unicode, char *ascii, int maxChars)
 {
   assert(check_wchar_align(unicode));
 
-  if (wcslen(unicode)==0) {
-    ascii[0] = 0;
-    return;
-  }
-
   int i;
   for (i=0; unicode[i] != 0 && i<maxChars; i++)
     ascii[i] = (char)unicode[i];
@@ -93,6 +69,8 @@ void unicode2ascii(const TCHAR *unicode, char *ascii, int maxChars)
 }
 
 #else /* !_UNICODE */
+
+#include <string.h>
 
 void unicode2ascii(const char *unicode, char *ascii, int maxChars)
 {
