@@ -196,9 +196,10 @@ static void OnSetCNClicked(WindowControl * Sender)
     {
       TCHAR newName[21];
       newName[0] = 0;
-      dlgTextEntryShowModal(newName, 4);
+      if(dlgTextEntryShowModal(newName, 4)){
 
       AddFlarmLookupItem(XCSoarInterface::Basic().FLARM_Traffic[index].ID, newName, true);
+      }
     }
 }
 
