@@ -42,24 +42,24 @@ cxx-flags = $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH)
 #
 %-$(TARGET).o: %.c
 	@$(NQ)echo "  CC      $@"
-	$(Q)$(CC) $(cc-flags) -c $(OUTPUT_OPTION) $<
+	$(Q)$(CC) -c -o $@ $(cc-flags) $<
 
 %-$(TARGET).o: %.cpp
 	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
+	$(Q)$(CXX) -c -o $@ $(cxx-flags) $<
 
 %-$(TARGET).o: %.cxx
 	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
+	$(Q)$(CXX) -c -o $@ $(cxx-flags) $<
 
 %-$(TARGET)-Simulator.o: %.c
 	@$(NQ)echo "  CC      $@"
-	$(Q)$(CC) $(cc-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
+	$(Q)$(CC) -c -o $@ $(cc-flags) -D_SIM_ $<
 
 %-$(TARGET)-Simulator.o: %.cpp
 	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) $(cxx-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
+	$(Q)$(CXX) -c -o $@ $(cxx-flags) -D_SIM_ $<
 
 %-$(TARGET)-Simulator.o: %.cxx
 	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) $(cxx-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
+	$(Q)$(CXX) -c -c -o $@ $(cxx-flags) -D_SIM_ $<
