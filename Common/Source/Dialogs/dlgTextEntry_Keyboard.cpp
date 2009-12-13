@@ -52,6 +52,7 @@ static WndOwnerDrawFrame *wGrid=NULL;
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
 static unsigned int max_width = MAX_TEXTENTRY;
+static bool gRetVal;
 static TCHAR edittext[MAX_TEXTENTRY];
 #define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
 
@@ -123,6 +124,12 @@ static void OnKey(WindowControl * Sender)
 
 static void OnOk(WindowControl * Sender)
 {
+  gRetVal=true;
+  wf->SetModalResult(mrOK);
+}
+static void OnCancel(WindowControl * Sender)
+{
+  gRetVal=false;
   wf->SetModalResult(mrOK);
 }
 
@@ -143,11 +150,12 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnBackspace),
   DeclareCallBackEntry(OnKey),
   DeclareCallBackEntry(OnClear),
+  DeclareCallBackEntry(OnCancel),
   DeclareCallBackEntry(OnOk),
   DeclareCallBackEntry(NULL)
 };
 
-void dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
+bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
 {
   wf = NULL;
   wGrid = NULL;
@@ -162,13 +170,13 @@ void dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
                         _T("frmTextEntry_Keyboard_L.xml"),
 			XCSoarInterface::main_window,
 			_T("IDR_XML_TEXTENTRY_KEYBOARD_L"));
-    if (!wf) return;
+    if (!wf) return false;
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("frmTextEntry_Keyboard.xml"),
 			XCSoarInterface::main_window,
 			_T("IDR_XML_TEXTENTRY_KEYBOARD"));
-    if (!wf) return;
+    if (!wf) return false;
   }
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
@@ -192,6 +200,8 @@ void dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
   _tcsncpy(text, edittext, max_width);
   text[max_width-1]=0;
   delete wf;
+
+  return gRetVal;
 }
 
 

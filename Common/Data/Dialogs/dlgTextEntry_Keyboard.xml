@@ -61,8 +61,9 @@
     <WndButton   Caption=" Space "    X="72" y="222" width="96"  Height="40" Font="2" OnClickNotify="OnKey"/>
     <WndButton   Caption="-"    X="208" y="222" width="24"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
-    <WndButton Name="btnOK"  Caption="Ok" x="23" Y="264" Width="96"  Height="40" Font="2" OnClickNotify="OnOk"/>
-    <WndButton   Caption="Clear"    X="122" Y="264" Width="96"  Height="40" Font="2" OnClickNotify="OnClear"/>
+    <WndButton Name="btnOK"  Caption="Ok" x="4" Y="264" Width="116"  Height="40" Font="2" OnClickNotify="OnOk"/>
+    <WndButton Name="btnCancel"  Caption="Cancel" x="124" Y="264" Width="54"  Height="40" Font="2" OnClickNotify="OnCancel"/>
+    <WndButton   Caption="Clear"    X="182" Y="264" Width="54"  Height="40" Font="2" OnClickNotify="OnClear"/>
 
 
 

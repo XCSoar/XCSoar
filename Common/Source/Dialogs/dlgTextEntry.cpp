@@ -287,16 +287,19 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
 }
 
 
-void dlgTextEntryShowModal(TCHAR *text, int width)
+bool dlgTextEntryShowModal(TCHAR *text, int width)
 {
+  bool bRetVal=false;
   switch (Appearance.TextInputStyle)
     {
     case tiKeyboard:
-      dlgTextEntryKeyboardShowModal(text, width);
+      bRetVal=dlgTextEntryKeyboardShowModal(text, width);
       break;
     case tiHighScore:
     default:
       dlgTextEntryHighscoreType(text, width);
+      bRetVal=true;
       break;
     }
+  return bRetVal;
 }

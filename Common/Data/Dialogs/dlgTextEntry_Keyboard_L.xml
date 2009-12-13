@@ -59,10 +59,11 @@
     <WndButton   Caption="."    X="276" y="145" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
 
-    <WndButton Name="btnOK"  Caption="Ok" X="32" Y="185" Width="53"  Height="40" Font="2" OnClickNotify="OnOk"/>
-    <WndButton   Caption=" Space "    X="100" y="185" width="96"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="Clear"    X="212" Y="185" Width="52"  Height="40" Font="2" OnClickNotify="OnClear"/>
-    <WndButton   Caption="-"    X="276" y="185" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton Name="btnOK"  Caption="Ok" X="4" Y="185" Width="73"  Height="40" Font="2" OnClickNotify="OnOk"/>
+    <WndButton   Caption=" Space "    X="81" y="185" width="97"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="Cancel"    X="183" Y="185" Width="50"  Height="40" Font="2" OnClickNotify="OnCancel"/>
+    <WndButton   Caption="Clear"    X="234" Y="185" Width="50"  Height="40" Font="2" OnClickNotify="OnClear"/>
+    <WndButton   Caption="-"    X="285" y="185" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
   </WndForm>
 
