@@ -111,8 +111,8 @@ static int InfoType[MAXINFOWINDOWS];
 typedef struct _SCREEN_INFO
 {
   UnitGroup_t UnitGroup;
-  const TCHAR Description[DESCRIPTION_SIZE +1];
-  const TCHAR Title[TITLE_SIZE + 1];
+  const TCHAR *Description;
+  const TCHAR *Title;
   InfoBoxFormatter *Formatter;
   void (*Process)(int UpDown);
   char next_screen;
