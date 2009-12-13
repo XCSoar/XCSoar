@@ -64,10 +64,7 @@ static Brush hBrushInsideAckBk;
 static Brush hBrushNearAckBk;
 
 static int Count=0;
-static int ItemIndex=-1;
-static int DrawListIndex=-1;
 static int FocusedID = -1;     // Currently focused airspace ID
-static int FocusedIdx = -1;    // Currently socused airspace List Index
 static bool fDialogOpen = false;
 
 void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace);
@@ -77,7 +74,7 @@ static void DoAck(int Ack){
   AirspaceInfo_c pAS;
   int Idx;
 
-  Idx = ItemIndex;
+  Idx = wAirspaceList->GetCursorIndex();
   if (Idx < 0)
     Idx = 0;
 
@@ -283,7 +280,7 @@ static TCHAR *fmtAirspaceAlt(TCHAR *Buffer, AIRSPACE_ALT *alt){
 }
 
 static void
-OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
+OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 {
   TCHAR sTmp[128];
 
@@ -296,7 +293,6 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
     TCHAR sType[32];
     AIRSPACE_ALT Base;
     AIRSPACE_ALT Top;
-    int i = DrawListIndex;
     AirspaceInfo_c pAS;
     int          Type;
     int          TextHeight = 12;
@@ -307,18 +303,18 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
     RECT         rcTextClip;
     Brush *hBrushBk = NULL;
 
-    if (i>=Count) return;
+    if (i >= (unsigned)Count)
+      return;
 
-    rc = rcTextClip = Sender->get_client_rect();
+    rc = rcTextClip = paint_rc;
     rcTextClip.right = IBLSCALE(Col1Left - 2);
 
     InflateRect(&rc, IBLSCALE(-2), IBLSCALE(-2));
 
     if (!AirspaceWarnGetItem(i, pAS)) return;
 
-    if (ItemIndex == DrawListIndex){
+    if ((int)i == wAirspaceList->GetCursorIndex())
       FocusedID = pAS.ID;
-    }
 
     if (pAS.IsCircle){
       const AIRSPACE_CIRCLE &circle =
@@ -374,14 +370,17 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
     wsprintf(sTmp, _T("%-20s"), sName);
     #endif
 
-    canvas.text_clipped(IBLSCALE(Col0Left), IBLSCALE(TextTop),
+    canvas.text_clipped(paint_rc.left + IBLSCALE(Col0Left),
+                        paint_rc.top + IBLSCALE(TextTop),
                         rcTextClip, sTmp);
 
     wsprintf(sTmp, _T("%-20s"), sTop);
-    canvas.text_opaque(IBLSCALE(Col1Left), IBLSCALE(TextTop), sTmp);
+    canvas.text_opaque(paint_rc.left + IBLSCALE(Col1Left),
+                       paint_rc.top + IBLSCALE(TextTop), sTmp);
 
     wsprintf(sTmp, _T("%-20s"), sBase);
-    canvas.text_opaque(IBLSCALE(Col1Left), IBLSCALE(TextTop + TextHeight),
+    canvas.text_opaque(paint_rc.left + IBLSCALE(Col1Left),
+                       paint_rc.top + IBLSCALE(TextTop + TextHeight),
                        sTmp);
 
     if (pAS.Inside){
@@ -432,13 +431,15 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
       }
     }
 
-    canvas.text_clipped(IBLSCALE(Col0Left), IBLSCALE(TextTop + TextHeight),
+    canvas.text_clipped(paint_rc.left + IBLSCALE(Col0Left),
+                        paint_rc.top + IBLSCALE(TextTop + TextHeight),
                         rcTextClip, sTmp);
 
   } else {
-    if (DrawListIndex == 0){
+    if (i == 0){
       _stprintf(sTmp, _T("%s"), gettext(_T("No Warnings")));
-      canvas.text_opaque(IBLSCALE(2), IBLSCALE(2), sTmp);
+      canvas.text_opaque(paint_rc.left + IBLSCALE(2),
+                         paint_rc.top + IBLSCALE(2), sTmp);
     }
   }
 }
@@ -446,19 +447,10 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
 static void OnAirspaceListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   (void)Sender;
   if (ListInfo->DrawIndex == -1){
-    if (FocusedIdx < 0) {
-      FocusedIdx = 0;
-    }
-    ListInfo->ItemIndex = FocusedIdx;
     ListInfo->ItemCount = max(1,Count);
 
     ListInfo->DrawIndex = 0;
     ListInfo->ScrollIndex = 0; // JMW bug fix
-    DrawListIndex = 0;
-
-  } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
-    FocusedIdx = ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
   }
 }
 
@@ -471,12 +463,7 @@ bool actListChange = false;
 static void
 FindFocus()
 {
-  FocusedIdx = 0;
-  FocusedIdx = AirspaceWarnFindIndexByID(FocusedID);
-  if (FocusedIdx < 0) {
-    FocusedIdx = 0;
-    FocusedID = -1; // JMW bug fix
-  }
+  wAirspaceList->SetCursorIndex(AirspaceWarnFindIndexByID(FocusedID));
 }
 
 
@@ -560,7 +547,6 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnEnableClicked),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnAirspaceListInfo),
-  DeclareCallBackEntry(OnAirspaceListItemPaint),
   DeclareCallBackEntry(NULL)
 };
 
@@ -613,7 +599,6 @@ bool dlgAirspaceWarningShowDlg(bool Force){
 
     // JMW need to deselect everything on new reopening of dialog
     FocusedID = -1;
-    FocusedIdx = -1;
 
     //    SetFocus(hWndMapWindow);
     // JMW why do this? --- not necessary?
@@ -645,6 +630,7 @@ int dlgAirspaceWarningInit(void){
   hBrushNearAckBk.set(Color(254,254,100));
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceWarningList"));
+  wAirspaceList->SetPaintItemCallback(OnAirspaceListItemPaint);
 
   AirspaceWarnListAddNotifier(AirspaceWarningNotify);
 
