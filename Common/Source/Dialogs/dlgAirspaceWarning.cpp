@@ -468,22 +468,15 @@ bool actShow = false;
 bool actListSizeChange = false;
 bool actListChange = false;
 
-static bool FindFocus() {
-  bool do_refocus = false;
-
+static void
+FindFocus()
+{
   FocusedIdx = 0;
   FocusedIdx = AirspaceWarnFindIndexByID(FocusedID);
   if (FocusedIdx < 0) {
     FocusedIdx = 0;
     FocusedID = -1; // JMW bug fix
-
-    if (wAirspaceList->GetFocused()) {
-      // JMW attempt to find fix...
-      do_refocus = true;
-    }
   }
-
-  return do_refocus;
 }
 
 
@@ -496,14 +489,12 @@ UserMsgNotify(WindowControl *Sender, unsigned id){
   if (!wf->is_visible())
     return true;
 
-  bool do_refocus = false;
-
   if (actListSizeChange){
     actListSizeChange = false;
 
     Count = AirspaceWarnGetItemCount();
 
-    do_refocus = FindFocus();
+    FindFocus();
 
     wAirspaceList->ResetList();
 
@@ -515,32 +506,12 @@ UserMsgNotify(WindowControl *Sender, unsigned id){
 
   if (actShow){
     actShow = false;
-    if (!do_refocus) {
-      do_refocus = FindFocus();
-    }
-
-    /*
-    if (!wf->is_visible()){
-      Count = AirspaceWarnGetItemCount();
-      wAirspaceList->ResetList();
-      FocusedIdx = 0;
-      FocusedID = -1;
-      wf->Show();
-      SetFocus(wAirspaceListEntry->GetHandle());
-    } else {
-      SetFocus(wAirspaceListEntry->GetHandle());
-    }
-    */
-    //    return(0);
+    FindFocus();
   }
 
   if (actListChange) {
     actListChange = false;
     wAirspaceList->invalidate();
-  }
-
-  if (do_refocus) {
-    wAirspaceList->set_focus();
   }
 
   // this is our message, we have handled it.
