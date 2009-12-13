@@ -375,13 +375,13 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
                         rcTextClip, sTmp);
 
     wsprintf(sTmp, _T("%-20s"), sTop);
-    canvas.text_opaque(paint_rc.left + IBLSCALE(Col1Left),
-                       paint_rc.top + IBLSCALE(TextTop), sTmp);
+    canvas.text(paint_rc.left + IBLSCALE(Col1Left),
+                paint_rc.top + IBLSCALE(TextTop), sTmp);
 
     wsprintf(sTmp, _T("%-20s"), sBase);
-    canvas.text_opaque(paint_rc.left + IBLSCALE(Col1Left),
-                       paint_rc.top + IBLSCALE(TextTop + TextHeight),
-                       sTmp);
+    canvas.text(paint_rc.left + IBLSCALE(Col1Left),
+                paint_rc.top + IBLSCALE(TextTop + TextHeight),
+                sTmp);
 
     if (pAS.Inside){
       wsprintf(sTmp, _T("> %c %s"), sAckIndicator[pAS.Acknowledge], sType);
