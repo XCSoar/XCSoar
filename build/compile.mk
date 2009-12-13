@@ -18,7 +18,7 @@ endif
 ####### dependency handling
 
 DEPFILE = $(dir $@).$(notdir $@).d
-DEPFLAGS = -Wp,-MD,$(DEPFILE)
+DEPFLAGS = -Wp,-MD,$(DEPFILE),-MT,$@
 dirtarget = $(subst \\,_,$(subst /,_,$(dir $@)))
 cc-flags = $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH)
 cxx-flags = $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH)
@@ -43,29 +43,23 @@ cxx-flags = $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH)
 %-$(TARGET).o: %.c
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) $(cc-flags) -c $(OUTPUT_OPTION) $<
-	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
 %-$(TARGET).o: %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
-	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
 %-$(TARGET).o: %.cxx
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
-	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
 %-$(TARGET)-Simulator.o: %.c
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) $(cc-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
-	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
 %-$(TARGET)-Simulator.o: %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
-	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
 %-$(TARGET)-Simulator.o: %.cxx
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
-	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
