@@ -52,6 +52,7 @@ Copyright_License {
 #include "WayPointList.hpp"
 #include "Components.hpp"
 #include "Task.h"
+#include "StringUtil.hpp"
 
 #include <assert.h>
 
@@ -76,7 +77,7 @@ static void UpdateFilePointer(void) {
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    if (_tcslen(task.getTaskFilename())>0) {
+    if (!string_is_empty(task.getTaskFilename())) {
       dfe->Lookup(task.getTaskFilename());
     } else {
       dfe->Set(0);
@@ -105,7 +106,7 @@ static void UpdateCaption (void) {
     name[index]= _T('\0');
   }
 
-  if (_tcslen(name)>0) {
+  if (!string_is_empty(name)) {
     _stprintf(title, _T("%s: %s"),
               gettext(_T("Task Overview")),
               name);
@@ -439,7 +440,7 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
       return;
     }
 
-    if (_tcslen(task_name)>0) {
+    if (!string_is_empty(task_name)) {
 
       _tcscat(task_name, _T(".tsk"));
 

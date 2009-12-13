@@ -43,6 +43,7 @@
 #include "Screen/Layout.hpp"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
+#include "StringUtil.hpp"
 
 static WndForm *wf=NULL;
 
@@ -128,9 +129,8 @@ OnCodeClicked(WindowControl *Sender)
 
     _tcsncpy(XCSoarInterface::SetSettingsComputer().TeammateCode,
         newTeammateCode, 10);
-    if (_tcslen(XCSoarInterface::SettingsComputer().TeammateCode) > 0) {
+    if (!string_is_empty(XCSoarInterface::SettingsComputer().TeammateCode))
       XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
-    }
   }
 }
 

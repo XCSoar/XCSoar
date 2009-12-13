@@ -52,6 +52,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
+#include "StringUtil.hpp"
 #include "MapWindowProjection.hpp"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
@@ -151,7 +152,7 @@ ParseWayPointError(int LineNumber, const TCHAR *FileName, const TCHAR *String)
 {
   TCHAR szTemp[250];
 
-  if (_tcslen(FileName) > 0) {
+  if (!string_is_empty(FileName)) {
     _stprintf(szTemp, TEXT("%s\r\n%s %s %s %d\r\n%s"),
               gettext(TEXT("Waypointfile Parse Error")),
               gettext(TEXT("File")), FileName,
@@ -597,7 +598,7 @@ ReadWayPoints(WayPointList &way_points, const RasterTerrain *terrain)
   GetRegistryString(szRegistryWayPointFile, szFile, MAX_PATH);
   SetRegistryString(szRegistryWayPointFile, TEXT("\0"));
 
-  if (_tcslen(szFile) > 0) {
+  if (!string_is_empty(szFile)) {
     ExpandLocalPath(szFile);
   } else {
     file_embedded = true;
@@ -625,7 +626,7 @@ ReadWayPoints(WayPointList &way_points, const RasterTerrain *terrain)
 
   SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));
 
-  if (_tcslen(szFile) > 0) {
+  if (!string_is_empty(szFile)) {
     ExpandLocalPath(szFile);
 
     globalFileNum = 1;
@@ -783,9 +784,9 @@ WaypointFlagsToString(int FlagsNum, TCHAR *Flags)
   if ((FlagsNum & WAYPOINTFLAG) == WAYPOINTFLAG) {
     _tcscat(Flags, TEXT("W"));
   }
-  if (_tcslen(Flags) == 0) {
+
+  if (string_is_empty(Flags))
     _tcscat(Flags, TEXT("T"));
-  }
 }
 
 static void
@@ -917,7 +918,7 @@ WaypointWriteFiles(WayPointList &way_points,
   GetRegistryString(szRegistryWayPointFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
-  if (_tcslen(szFile) > 0) {
+  if (!string_is_empty(szFile)) {
     fp = _tfopen(szFile, TEXT("wb"));
   } else {
     LocalPath(szFile);
@@ -936,7 +937,7 @@ WaypointWriteFiles(WayPointList &way_points,
   GetRegistryString(szRegistryAdditionalWayPointFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
-  if (_tcslen(szFile) > 0) {
+  if (!string_is_empty(szFile)) {
     fp = _tfopen(szFile, TEXT("wb"));
   } else {
     LocalPath(szFile);

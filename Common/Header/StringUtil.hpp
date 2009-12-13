@@ -41,6 +41,12 @@ Copyright_License {
 
 #include <tchar.h>
 
+static inline bool
+string_is_empty(const TCHAR *string)
+{
+  return *string == 0;
+}
+
 /**
  * Returns the portion of the string after a prefix.  If the string
  * does not begin with the specified prefix, this function returns

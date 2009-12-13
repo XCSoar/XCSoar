@@ -69,6 +69,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "LocalPath.hpp"
 #include "MacCready.h"
 #include "UtilsText.hpp"
+#include "StringUtil.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -214,7 +215,7 @@ InputEvents::readFile()
   ExpandLocalPath(szFile1);
   SetRegistryString(szRegistryInputFile, TEXT("\0"));
 
-  if (_tcslen(szFile1) > 0)
+  if (!string_is_empty(szFile1))
     fp = _tfopen(szFile1, TEXT("rt"));
 
   if (fp == NULL)

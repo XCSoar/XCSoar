@@ -85,6 +85,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
+#include "StringUtil.hpp"
 #include "Audio/Sound.hpp"
 #include "MacCready.h"
 #include "Interface.hpp"
@@ -1328,7 +1329,7 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
 {
   TCHAR buffer[MAX_PATH];
 
-  if (_tcslen(misc) > 0) {
+  if (!string_is_empty(misc)) {
     LocalPath(buffer, misc);
     task.LoadNewTask(buffer, SettingsComputer(), Basic());
   }
@@ -1341,7 +1342,7 @@ InputEvents::eventTaskSave(const TCHAR *misc)
 {
   TCHAR buffer[MAX_PATH];
 
-  if (_tcslen(misc) > 0) {
+  if (!string_is_empty(misc)) {
     LocalPath(buffer, misc);
     task.SaveTask(buffer);
   }
@@ -1352,7 +1353,7 @@ InputEvents::eventTaskSave(const TCHAR *misc)
 void
 InputEvents::eventProfileLoad(const TCHAR *misc)
 {
-  if (_tcslen(misc) > 0)
+  if (!string_is_empty(misc))
     ReadProfile(misc);
 }
 
@@ -1361,7 +1362,7 @@ InputEvents::eventProfileLoad(const TCHAR *misc)
 void
 InputEvents::eventProfileSave(const TCHAR *misc)
 {
-  if (_tcslen(misc) > 0)
+  if (!string_is_empty(misc))
     WriteProfile(misc);
 }
 

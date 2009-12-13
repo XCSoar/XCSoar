@@ -51,6 +51,7 @@ Copyright_License {
 #include "Math/Units.h"
 #include "NMEA/Info.h"
 #include "NMEA/Checksum.h"
+#include "StringUtil.hpp"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -847,7 +848,7 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
 #endif
 
   double GeoidSeparation;
-  if (_tcslen(params[10])>0) {
+  if (!string_is_empty(params[10])) {
     // No real need to parse this value,
     // but we do assume that no correction is required in this case
     GeoidSeparation = ParseAltitude(params[10], params[11]);

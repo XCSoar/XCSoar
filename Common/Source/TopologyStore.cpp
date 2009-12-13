@@ -46,6 +46,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
+#include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "SettingsUser.hpp" // for EnableTopology
 #include <assert.h>
@@ -153,13 +154,13 @@ void TopologyStore::Open() {
   GetRegistryString(szRegistryTopologyFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
-  if (_tcslen(szFile)==0) {
+  if (string_is_empty(szFile)) {
 
     // file is blank, so look for it in a map file
     GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
-    if (_tcslen(szFile)==0) {
+    if (string_is_empty(szFile))
       return;
-    }
+
     ExpandLocalPath(szFile);
 
     // Look for the file within the map zip file...
@@ -196,7 +197,7 @@ void TopologyStore::Open() {
 
   while(ReadString(zFile,READLINE_LENGTH,TempString)) {
 
-    if((_tcslen(TempString) > 0)
+    if(!string_is_empty(TempString)
        && (_tcsstr(TempString,TEXT("*")) != TempString)) // Look For Comment
       {
 

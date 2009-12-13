@@ -42,6 +42,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Appearance.hpp"
 #include "Asset.hpp"
+#include "StringUtil.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -262,7 +263,7 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
   cursor = 0;
   edittext[0]= 0;
   edittext[1]= 0;
-  if (_tcslen(text)>0) {
+  if (!string_is_empty(text)) {
     _tcsupr(text);
     _tcsncpy(edittext, text, max_width-1);
     edittext[max_width-1]= 0;

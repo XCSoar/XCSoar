@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "MacCready.h"
 #include "Screen/Layout.hpp"
+#include "StringUtil.hpp"
 
 #define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
@@ -164,12 +165,11 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
         canvas.set_text_color(Color(0,0,0));
 
         // If FLARM callsign/name available draw it to the canvas
-        if (_tcslen(label_name) > 0) {
+        if (!string_is_empty(label_name))
           canvas.text_opaque(sc_name.x, sc_name.y, label_name);
-        }
 
         // If average climb data available draw it to the canvas
-        if (_tcslen(label_avg)>0) {
+        if (!string_is_empty(label_avg)) {
           SIZE tsize;
           RECT brect;
 

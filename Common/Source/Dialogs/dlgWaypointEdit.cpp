@@ -47,6 +47,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Components.hpp"
 #include "WayPoint.hpp"
+#include "StringUtil.hpp"
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "RasterTerrain.h"
 #endif
@@ -60,7 +61,7 @@ static WndButton *buttonComment = NULL;
 static void UpdateButtons(void) {
   TCHAR text[MAX_PATH];
   if (buttonName) {
-    if (_tcslen(global_wpt->Name)<=0) {
+    if (string_is_empty(global_wpt->Name)) {
       _stprintf(text,_T("%s: %s"), gettext(_T("Name")),
                 gettext(_T("(blank)")));
     } else {
@@ -70,7 +71,7 @@ static void UpdateButtons(void) {
     buttonName->SetCaption(text);
   }
   if (buttonComment) {
-    if (_tcslen(global_wpt->Comment)<=0) {
+    if (string_is_empty(global_wpt->Comment)) {
       _stprintf(text,_T("%s: %s"), gettext(_T("Comment")),
                 gettext(_T("(blank)")));
     } else {

@@ -71,6 +71,7 @@ Copyright_License {
 #include "WayPointList.hpp"
 #include "XCSoar.h"
 #include "Task.h"
+#include "StringUtil.hpp"
 
 #include <assert.h>
 
@@ -694,7 +695,7 @@ InfoBoxManager::DisplayInfoBox(void)
 
     case 56: // team bearing
       if (SettingsComputer().TeamFlarmIdTarget != 0) {
-        if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0) {
+        if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
           InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
         } else {
           InfoBoxes[i]->SetComment(TEXT("???"));
@@ -712,7 +713,7 @@ InfoBoxManager::DisplayInfoBox(void)
 
     case 57: // team bearing dif
       if (SettingsComputer().TeamFlarmIdTarget != 0) {
-        if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0) {
+        if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
           InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
         } else {
           InfoBoxes[i]->SetComment(TEXT("???"));
@@ -730,7 +731,7 @@ InfoBoxManager::DisplayInfoBox(void)
 
     case 58: // team range
       if (SettingsComputer().TeamFlarmIdTarget != 0) {
-        if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0) {
+        if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
           InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
         } else {
           InfoBoxes[i]->SetComment(TEXT("???"));

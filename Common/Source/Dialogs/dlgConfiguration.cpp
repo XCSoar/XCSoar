@@ -72,6 +72,7 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "WayPointList.hpp"
 #include "Components.hpp"
+#include "StringUtil.hpp"
 
 extern ldrotary_s rotaryLD;
 
@@ -148,33 +149,33 @@ static void UpdateButtons(void) {
   TCHAR val[100];
   if (buttonPilotName) {
     GetRegistryString(szRegistryPilotName, val, 100);
-    if (_tcslen(val)<=0) {
+    if (string_is_empty(val))
       _stprintf(val, gettext(_T("(blank)")));
-    }
+
     _stprintf(text,_T("%s: %s"), gettext(_T("Pilot name")), val);
     buttonPilotName->SetCaption(text);
   }
   if (buttonAircraftType) {
     GetRegistryString(szRegistryAircraftType, val, 100);
-    if (_tcslen(val)<=0) {
+    if (string_is_empty(val))
       _stprintf(val, gettext(_T("(blank)")));
-    }
+
     _stprintf(text,_T("%s: %s"), gettext(_T("Aircraft type")), val);
     buttonAircraftType->SetCaption(text);
   }
   if (buttonAircraftRego) {
     GetRegistryString(szRegistryAircraftRego, val, 100);
-    if (_tcslen(val)<=0) {
+    if (string_is_empty(val))
       _stprintf(val, gettext(_T("(blank)")));
-    }
+
     _stprintf(text,_T("%s: %s"), gettext(_T("Competition ID")), val);
     buttonAircraftRego->SetCaption(text);
   }
   if (buttonLoggerID) {
     GetRegistryString(szRegistryLoggerID, val, 100);
-    if (_tcslen(val)<=0) {
+    if (string_is_empty(val))
       _stprintf(val, gettext(_T("(blank)")));
-    }
+
     _stprintf(text,_T("%s: %s"), gettext(_T("Logger ID")), val);
     buttonLoggerID->SetCaption(text);
   }
@@ -968,7 +969,7 @@ static void OnWaypointNewClicked(WindowControl * Sender){
   edit_waypoint.Details = 0;
   edit_waypoint.Number = 0;
   dlgWaypointEditShowModal(edit_waypoint);
-  if (_tcslen(edit_waypoint.Name)>0) {
+  if (!string_is_empty(edit_waypoint.Name)) {
     int i = way_points.append(edit_waypoint);
     if (i >= 0) {
       way_points.set(i).Details = 0;

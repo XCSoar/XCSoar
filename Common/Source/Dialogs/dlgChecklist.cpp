@@ -42,6 +42,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "MainWindow.hpp"
 #include "Defines.h"
+#include "StringUtil.hpp"
 
 #include <assert.h>
 
@@ -77,8 +78,7 @@ static void NextPage(int Step){
 
   _stprintf(buffer, gettext(_T("Checklist")));
 
-  if (ChecklistTitle[page] &&
-      (_tcslen(ChecklistTitle[page])>0)
+  if (ChecklistTitle[page] && !string_is_empty(ChecklistTitle[page])
       && (_tcslen(ChecklistTitle[page])<60)) {
     _tcscat(buffer, _T(": "));
     _tcscat(buffer, ChecklistTitle[page]);

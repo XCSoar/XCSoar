@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "DataField/FileReader.hpp"
 #include "LocalPath.hpp"
+#include "StringUtil.hpp"
 #include "Compatibility/string.h"
 
 #define WIN32_LEAN_AND_MEAN
@@ -367,10 +368,9 @@ bool DataFieldFileReader::checkFilter(const TCHAR *filename,
   TCHAR upfilter[MAX_PATH];
   // checks if the filename matches the filter exactly
 
-  if (!filter || (_tcslen(filter+1)==0)) {
+  if (!filter || string_is_empty(filter + 1))
     // invalid or short filter, pass
     return true;
-  }
 
   _tcscpy(upfilter,filter+1);
 

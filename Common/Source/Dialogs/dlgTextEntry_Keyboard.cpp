@@ -40,6 +40,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
+#include "StringUtil.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -187,7 +188,7 @@ bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
   /*edittext[0]= 0;
     edittext[1]= 0;*/
 
-  if (_tcslen(text)>0) {
+  if (!string_is_empty(text)) {
     _tcsupr(text);
     _tcsncpy(edittext, text, max_width-1);
     edittext[max_width-1]= 0;

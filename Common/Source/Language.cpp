@@ -40,6 +40,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
+#include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Registry.hpp"
 #include "Sizes.h"
@@ -169,9 +170,8 @@ void ReadLanguageFile() {
   SetRegistryString(szRegistryLanguageFile, TEXT("\0"));
 
   // If the language file is not set use the default one
-  if (_tcslen(szFile1)==0) {
+  if (string_is_empty(szFile1))
     _tcscpy(szFile1,TEXT("default.xcl"));
-  }
 
   // Open the language file
   fp  = _tfopen(szFile1, TEXT("rt"));

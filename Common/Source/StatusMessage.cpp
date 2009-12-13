@@ -41,6 +41,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
+#include "StringUtil.hpp"
 
 #include <stdio.h>
 
@@ -77,7 +78,7 @@ StatusMessageList::LoadFile()
 
   SetRegistryString(szRegistryStatusFile, TEXT("\0"));
 
-  if (_tcslen(szFile1)>0)
+  if (!string_is_empty(szFile1))
     fp  = _tfopen(szFile1, TEXT("rt"));
 
   // Unable to open file

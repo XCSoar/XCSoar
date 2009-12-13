@@ -46,6 +46,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Version.hpp"
 #include "Asset.hpp"
+#include "StringUtil.hpp"
 
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wSplash=NULL;
@@ -124,9 +125,8 @@ void dlgStartupShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    if (_tcslen(dfe->GetPathFile())>0) {
+    if (!string_is_empty(dfe->GetPathFile()))
       _tcscpy(startProfileFile,dfe->GetPathFile());
-    }
   }
 
   delete wf;

@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Registry.hpp"
+#include "StringUtil.hpp"
 #include "Device/device.h"
 #include "LogFile.hpp"
 #include "Defines.h"
@@ -691,7 +692,7 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
   StartupStore(TEXT("Loading registry from %s\n"), szFile);
   bool found = false;
   FILE *fp=NULL;
-  if (_tcslen(szFile)>0)
+  if (!string_is_empty(szFile))
 #ifndef __GNUC__
     if (wide) {
       fp = _tfopen(szFile, TEXT("rb"));
@@ -723,17 +724,17 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
         }
 #endif /* _UNICODE */
         if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"), wname, wvalue) == 2) {
-	  if (_tcslen(wname)>0) {
+          if (!string_is_empty(wname)) {
 	    SetRegistryString(wname, wvalue);
 	    found = true;
 	  }
         } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
-	  if (_tcslen(wname)>0) {
+          if (!string_is_empty(wname)) {
 	    SetToRegistry(wname, j);
 	    found = true;
 	  }
         } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
-	  if (_tcslen(wname)>0) {
+          if (!string_is_empty(wname)) {
 	    SetRegistryString(wname, TEXT(""));
 	    found = true;
 	  }
@@ -828,7 +829,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
   }
 
   FILE *fp=NULL;
-  if (_tcslen(szFile)>0)
+  if (!string_is_empty(szFile))
     fp = _tfopen(szFile, TEXT("wb"));  //20060515:sgi add b
   if(fp == NULL) {
     // error
@@ -881,13 +882,13 @@ void SaveRegistryToFile(const TCHAR *szFile)
 #ifdef __GNUC__
 	  uValue.pValue[nValueSize]= 0; // null terminate, just in case
 	  uValue.pValue[nValueSize+1]= 0; // null terminate, just in case
-	  if (_tcslen((TCHAR*)uValue.pValue)>0) {
+          if (!string_is_empty((const TCHAR*)uValue.pValue)) {
 	    fprintf(fp,"%S=\"%S\"\r\n", lpstrName, uValue.pValue);
 	  } else {
 	    fprintf(fp,"%S=\"\"\r\n", lpstrName);
 	  }
 #else
-	  if (_tcslen((TCHAR*)pValue)>0) {
+          if (!string_is_empty((const TCHAR*)pValue)) {
 	    pValue[nValueSize]= 0; // null terminate, just in case
 	    pValue[nValueSize+1]= 0; // null terminate, just in case
 	    wcstombs(sName,lpstrName,nMaxKeyNameSize+1);

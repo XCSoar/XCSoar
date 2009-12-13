@@ -47,6 +47,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "WayPoint.hpp"
 #include "Interface.hpp"
+#include "StringUtil.hpp"
 
 #include <zzip/lib.h>
 #include "wcecompat/ts_string.h"
@@ -68,14 +69,14 @@ OpenAirfieldDetails()
 
   GetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
 
-  if (_tcslen(szAirfieldDetailsFile)>0) {
+  if (!string_is_empty(szAirfieldDetailsFile)) {
     ExpandLocalPath(szAirfieldDetailsFile);
     unicode2ascii(szAirfieldDetailsFile, zfilename, MAX_PATH);
     SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
   } else {
     static TCHAR szFile[MAX_PATH];
     GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
-    if (_tcslen(szFile)>0) {
+    if (!string_is_empty(szFile)) {
       ExpandLocalPath(szFile);
       _tcscat(szFile,TEXT("/airfields.txt"));
       unicode2ascii(szFile, zfilename, MAX_PATH);
@@ -179,7 +180,7 @@ public:
         || (_tcscmp(UName, NameD) == 0) || isHome || isPreferred) {
       // found
 
-      if (_tcslen(Details) > 0) {
+      if (!string_is_empty(Details)) {
         // VENTA3 avoid setting empty details
         if (waypoint.Details)
           free(waypoint.Details);
