@@ -1355,13 +1355,10 @@ static void setVariables(void) {
     dfe->Set(XCSoarInterface::SetSettingsComputer().AltitudeMode);
     wp->RefreshDisplay();
   }
-  //
 
-  wp = (WndProperty*)wf->FindByName(_T("prpUTCOffset"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().UTCOffset/1800.0)/2.0);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpUTCOffset"),
+                   iround(XCSoarInterface::SettingsComputer().UTCOffset/1800.0)/2.0);
+
   SetLocalTime();
 
   wp = (WndProperty*)wf->FindByName(_T("prpClipAltitude"));
@@ -1378,35 +1375,16 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoZoom"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().AutoZoom);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAirspaceOutline"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().bAirspaceBlackOutline);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLockSettingsInFlight"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::LockSettingsInFlight);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLoggerShortName"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().LoggerShortName);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpDebounceTimeout"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::debounceTimeout);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpAutoZoom"),
+                   XCSoarInterface::SettingsMap().AutoZoom);
+  LoadFormProperty(*wf, _T("prpAirspaceOutline"),
+                   XCSoarInterface::SettingsMap().bAirspaceBlackOutline);
+  LoadFormProperty(*wf, _T("prpLockSettingsInFlight"),
+                   XCSoarInterface::LockSettingsInFlight);
+  LoadFormProperty(*wf, _T("prpLoggerShortName"),
+                   XCSoarInterface::SettingsComputer().LoggerShortName);
+  LoadFormProperty(*wf, _T("prpDebounceTimeout"),
+                   XCSoarInterface::debounceTimeout);
 
   wp = (WndProperty*)wf->FindByName(_T("prpEnableFLARMMap"));
   if (wp) {
@@ -1419,29 +1397,14 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpEnableFLARMGauge"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableFLARMGauge);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAirspaceWarnings"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableAirspaceWarnings);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpWarningTime"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::SetSettingsComputer().WarningTime);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAcknowledgementTime"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::SetSettingsComputer().AcknowledgementTime);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
+                   XCSoarInterface::SettingsMap().EnableFLARMGauge);
+  LoadFormProperty(*wf, _T("prpAirspaceWarnings"),
+                   XCSoarInterface::SettingsComputer().EnableAirspaceWarnings);
+  LoadFormProperty(*wf, _T("prpWarningTime"),
+                   XCSoarInterface::SetSettingsComputer().WarningTime);
+  LoadFormProperty(*wf, _T("prpAcknowledgementTime"),
+                   XCSoarInterface::SetSettingsComputer().AcknowledgementTime);
 
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabels"));
   if (wp) {
@@ -1457,23 +1420,12 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpEnableTerrain"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableTerrain);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpEnableTopology"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableTopology);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpCirclingZoom"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().CircleZoom);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpEnableTerrain"),
+                   XCSoarInterface::SettingsMap().EnableTerrain);
+  LoadFormProperty(*wf, _T("prpEnableTopology"),
+                   XCSoarInterface::SettingsMap().EnableTopology);
+  LoadFormProperty(*wf, _T("prpCirclingZoom"),
+                   XCSoarInterface::SettingsMap().CircleZoom);
 
   wp = (WndProperty*)wf->FindByName(_T("prpOrientation"));
   if (wp) {
@@ -1488,11 +1440,8 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpMenuTimeout"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::MenuTimeoutMax/2);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpMenuTimeout"),
+                   XCSoarInterface::MenuTimeoutMax / 2);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeArrival"));
   if (wp) {
@@ -1526,11 +1475,8 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpEnableNavBaroAltitude"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableNavBaroAltitude);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpEnableNavBaroAltitude"),
+                   XCSoarInterface::SettingsComputer().EnableNavBaroAltitude);
 
   wp = (WndProperty*)wf->FindByName(_T("prpWindArrowStyle"));
   if (wp) {
@@ -1576,23 +1522,12 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoForceFinalGlide"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoForceFinalGlide);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpBlockSTF"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableBlockSTF);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFAIFinishHeight"));
-  if (wp) {
-    wp->GetDataField()->Set(settings_task.EnableFAIFinishHeight);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpAutoForceFinalGlide"),
+                   XCSoarInterface::SettingsComputer().AutoForceFinalGlide);
+  LoadFormProperty(*wf, _T("prpBlockSTF"),
+                   XCSoarInterface::SettingsComputer().EnableBlockSTF);
+  LoadFormProperty(*wf, _T("prpFAIFinishHeight"),
+                   settings_task.EnableFAIFinishHeight);
 
   wp = (WndProperty*)wf->FindByName(_T("prpOLCRules"));
   if (wp) {
@@ -1605,11 +1540,8 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpHandicap"));
-  if (wp) {
-    wp->GetDataField()->SetAsInteger(XCSoarInterface::SettingsComputer().Handicap);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpHandicap"),
+                   XCSoarInterface::SettingsComputer().Handicap);
 
   if(GetFromRegistryD(szRegistrySpeedUnitsValue,Speed)!=ERROR_SUCCESS) {
     SetToRegistry(szRegistrySpeedUnitsValue, Speed);
@@ -1696,11 +1628,8 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTrailDrift"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableTrailDrift);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpTrailDrift"),
+                   XCSoarInterface::SettingsMap().EnableTrailDrift);
 
   wp = (WndProperty*)wf->FindByName(_T("prpThermalLocator"));
   if (wp) {
@@ -1713,25 +1642,12 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSetSystemTimeFromGPS"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
-    wp->RefreshDisplay();
-  }
-
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAbortSafetyUseCurrent"));
-  if (wp) {
-    wp->GetDataField()->Set(GlidePolar::AbortSafetyUseCurrent);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpDisableAutoLogger"));
-  if (wp) {
-    wp->GetDataField()->Set(!XCSoarInterface::SettingsComputer().DisableAutoLogger);
-    wp->RefreshDisplay();
-  }
-
+  LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
+                   XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
+  LoadFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
+                   GlidePolar::AbortSafetyUseCurrent);
+  LoadFormProperty(*wf, _T("prpDisableAutoLogger"),
+                   !XCSoarInterface::SettingsComputer().DisableAutoLogger);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
@@ -1740,17 +1656,8 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRiskGamma"));
-  if (wp) {
-    wp->GetDataField()->Set(GlidePolar::RiskGamma);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAnimation"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::EnableAnimation);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpRiskGamma"), GlidePolar::RiskGamma);
+  LoadFormProperty(*wf, _T("prpAnimation"), XCSoarInterface::EnableAnimation);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTrail"));
   if (wp) {
@@ -1783,11 +1690,8 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpBallastSecsToEmpty"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().BallastSecsToEmpty);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
+                   XCSoarInterface::SettingsComputer().BallastSecsToEmpty);
 
   wp = (WndProperty*)wf->FindByName(_T("prpPolarType"));
   if (wp) {
@@ -2183,35 +2087,16 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInverseInfoBox"));
-  if (wp) {
-    wp->GetDataField()->Set(Appearance.InverseInfoBox);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppDefaultMapWidth"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(Appearance.DefaultMapWidth);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpGliderScreenPosition"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::SettingsMap().GliderScreenPosition);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTerrainContrast"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsMap().TerrainContrast*100/255));
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTerrainBrightness"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsMap().TerrainBrightness*100/255));
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpAppInverseInfoBox"),
+                   Appearance.InverseInfoBox);
+  LoadFormProperty(*wf, _T("prpAppDefaultMapWidth"),
+                   Appearance.DefaultMapWidth);
+  LoadFormProperty(*wf, _T("prpGliderScreenPosition"),
+                   iround(XCSoarInterface::SettingsMap().GliderScreenPosition));
+  LoadFormProperty(*wf, _T("prpTerrainContrast"),
+                   iround(XCSoarInterface::SettingsMap().TerrainContrast*100/255));
+  LoadFormProperty(*wf, _T("prpTerrainBrightness"),
+                   iround(XCSoarInterface::SettingsMap().TerrainContrast*100/255));
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainRamp"));
   if (wp) {
@@ -2228,53 +2113,18 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxColors"));
-  if (wp) {
-    wp->GetDataField()->Set(Appearance.InfoBoxColors);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppAveNeedle"));
-  if (wp) {
-    wp->GetDataField()->Set(Appearance.GaugeVarioAveNeedle);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppGaugeVarioSpeedToFly"));
-  if (wp) {
-    wp->GetDataField()->Set(Appearance.GaugeVarioSpeedToFly);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppGaugeVarioAvgText"));
-  if (wp) {
-    wp->GetDataField()->Set(Appearance.GaugeVarioAvgText);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppGaugeVarioGross"));
-  if (wp) {
-    wp->GetDataField()->Set(Appearance.GaugeVarioGross);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppGaugeVarioMc"));
-  if (wp) {
-    wp->GetDataField()->Set(Appearance.GaugeVarioMc);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppGaugeVarioBugs"));
-  if (wp) {
-    wp->GetDataField()->Set(Appearance.GaugeVarioBugs);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppGaugeVarioBallast"));
-  if (wp) {
-    wp->GetDataField()->Set(Appearance.GaugeVarioBallast);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpAppInfoBoxColors"), Appearance.InfoBoxColors);
+  LoadFormProperty(*wf, _T("prpAppAveNeedle"), Appearance.GaugeVarioAveNeedle);
+  LoadFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
+                   Appearance.GaugeVarioSpeedToFly);
+  LoadFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
+                   Appearance.GaugeVarioAvgText );
+  LoadFormProperty(*wf, _T("prpAppGaugeVarioGross"),
+                   Appearance.GaugeVarioGross);
+  LoadFormProperty(*wf, _T("prpAppGaugeVarioMc"), Appearance.GaugeVarioMc);
+  LoadFormProperty(*wf, _T("prpAppGaugeVarioBugs"), Appearance.GaugeVarioBugs);
+  LoadFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
+                   Appearance.GaugeVarioBallast);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAutoBlank"));
   if (wp) {
@@ -2297,6 +2147,7 @@ static void setVariables(void) {
     wp->GetDataField()->Set(CommonInterface::EnableAutoSoundVolume);
     wp->RefreshDisplay();
   }
+
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskFinishLine"));
   if (wp) {
@@ -2409,23 +2260,12 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpLoggerTimeStepCruise"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::SettingsComputer().LoggerTimeStepCruise);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLoggerTimeStepCircling"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::SettingsComputer().LoggerTimeStepCircling);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpSnailWidthScale"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::SettingsMap().SnailWidthScale);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
+                   XCSoarInterface::SettingsComputer().LoggerTimeStepCruise);
+  LoadFormProperty(*wf, _T("prpLoggerTimeStepCircling"),
+                   XCSoarInterface::SettingsComputer().LoggerTimeStepCircling);
+  LoadFormProperty(*wf, _T("prpSnailWidthScale"),
+                   XCSoarInterface::SettingsMap().SnailWidthScale);
 
 #ifdef FIVV
   wp = (WndProperty*)wf->FindByName(_T("prpGPSAltitudeOffset")); // VENTA3 GPSAltitudeOffset
