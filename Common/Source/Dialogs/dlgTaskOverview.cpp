@@ -434,7 +434,10 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
 
     // TODO enhancement: suggest a good new name not already in the list
     _tcscpy(task_name,_T("0"));
-    dlgTextEntryShowModal(task_name, 10); // max length
+    if (!dlgTextEntryShowModal(task_name, 10)){ // max length
+      // TODO add messagebox
+      return;
+    }
 
     if (_tcslen(task_name)>0) {
 

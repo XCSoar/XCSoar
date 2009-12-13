@@ -11,57 +11,59 @@
 
   <WndForm Name="frmTextEntry_Keyboard" Type="Dialog" X="0" Y="0" Width="320" Height="240" Caption="Edit text" Font="2"  BackColor="0xDADBAB">
 
-    <WndProperty Name="prpText"  Caption="Text:"   X="2" Y="2" Width="200" Height="22" CaptionWidth="40" Font="2" ReadOnly="1" />
+    <WndProperty Name="prpText"  Caption=""   X="0" Y="2" Width="270" Height="22" CaptionWidth="1" Font="2" ReadOnly="1" />
+    <WndButton Name="btnBackspace" Caption="&lt;-"    X="272" Y="3" Width="36"  Height="20" Font="2" OnClickNotify="OnBackspace"/>
+    <WndButton Name="Cursor"  Caption="-"    X="0" Y="25" Width="8"  Height="5" Font="2" Readonly="1"/>
 
-    <WndButton   Caption="Clear"    X="200" Y="25" Width="60"  Height="40" Font="2" OnClickNotify="OnClear"/>
-    <WndButton   Caption="Ok" X="260" Y="25" Width="60"  Height="40" Font="2" OnClickNotify="OnOk"/>
+    <WndButton   Caption="1"    X="0" y="25" Width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="2"    X="32" y="25" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="3"    X="64" y="25" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="4"    X="96" y="25" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="5"    X="128" y="25" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="6"    X="160" y="25" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="7"    X="192" y="25" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="8"    X="224" y="25" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="9"    X="256" y="25" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="0"    X="288" y="25" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
-    <WndButton   Caption="A"    X="0" Y="25" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="B"    X="40" Y="25" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="C"    X="80" Y="25" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="D"    X="120" Y="25" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="E"    X="160" Y="25" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="Q"    X="0" y="65" Width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="W"    X="32" y="65" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="E"    X="64" y="65" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="R"    X="96" y="65" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="T"    X="128" y="65" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="Y"    X="160" y="65" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="U"    X="192" y="65" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="I"    X="224" y="65" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="O"    X="256" y="65" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="P"    X="288" Y="65" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
-    <WndButton   Caption="F"    X="0" Y="65" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="G"    X="40" Y="65" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="H"    X="80" Y="65" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="I"    X="120" Y="65" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="J"    X="160" Y="65" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="A"    X="10" y="105" Width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="S"    X="42" y="105" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="D"    X="74" y="105" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="F"    X="106" y="105" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="G"    X="138" y="105" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="H"    X="170" y="105" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="J"    X="202" y="105" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="K"    X="234" y="105" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="L"    X="266" y="105" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <XXWndButton   Caption=""    X="298" y="105" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
-    <WndButton   Caption="K"    X="0" Y="105" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="L"    X="40" Y="105" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="M"    X="80" Y="105" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="N"    X="120" Y="105" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="O"    X="160" Y="105" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="Z"    X="20" y="145" Width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="X"    X="52" y="145" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="C"    X="84" y="145" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="V"    X="116" y="145" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="B"    X="148" y="145" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="N"    X="180" y="145" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="M"    X="212" y="145" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption=","    X="244" y="145" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="."    X="276" y="145" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
-    <WndButton   Caption="P"    X="0" Y="145" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="Q"    X="40" Y="145" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="R"    X="80" Y="145" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="S"    X="120" Y="145" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="T"    X="160" Y="145" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
-    <WndButton   Caption="U"    X="0" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="V"    X="40" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="W"    X="80" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="X"    X="120" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="Y"    X="160" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="Z"    X="200" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-
-    <WndButton   Caption="9"    X="200" Y="65" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="8"    X="240" Y="65" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="7"    X="280" Y="65" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-
-    <WndButton   Caption="4"    X="200" Y="105" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="5"    X="240" Y="105" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="6"    X="280" Y="105" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-
-    <WndButton   Caption="1"    X="200" Y="145" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="2"    X="240" Y="145" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="3"    X="280" Y="145" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-
-    <WndButton   Caption="0"    X="240" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-    <WndButton   Caption="."    X="280" Y="185" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
-
+    <WndButton Name="btnOK"  Caption="Ok" X="4" Y="185" Width="73"  Height="40" Font="2" OnClickNotify="OnOk"/>
+    <WndButton   Caption=" Space "    X="81" y="185" width="97"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="Cancel"    X="183" Y="185" Width="50"  Height="40" Font="2" OnClickNotify="OnCancel"/>
+    <WndButton   Caption="Clear"    X="234" Y="185" Width="50"  Height="40" Font="2" OnClickNotify="OnClear"/>
+    <WndButton   Caption="-"    X="285" y="185" width="32"  Height="40" Font="2" OnClickNotify="OnKey"/>
 
   </WndForm>
 
