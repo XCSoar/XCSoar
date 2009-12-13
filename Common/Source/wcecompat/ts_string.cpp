@@ -48,21 +48,21 @@ void unicode2ascii(const TCHAR *unicode, char *ascii)
   *ascii = '\0';
 }
 
-void ascii2unicode(const char *ascii, TCHAR *unicode, int maxChars)
+void ascii2unicode(const char *ascii, TCHAR *unicode, size_t maxChars)
 {
   assert(check_wchar_align(unicode));
 
-  int i;
+  size_t i;
   for (i = 0; ascii[i] != 0 && i < maxChars; i++)
     unicode[i] = ascii[i];
   unicode[i] = 0;
 }
 
-void unicode2ascii(const TCHAR *unicode, char *ascii, int maxChars)
+void unicode2ascii(const TCHAR *unicode, char *ascii, size_t maxChars)
 {
   assert(check_wchar_align(unicode));
 
-  int i;
+  size_t i;
   for (i=0; unicode[i] != 0 && i<maxChars; i++)
     ascii[i] = (char)unicode[i];
   ascii[i] = 0;
@@ -72,7 +72,7 @@ void unicode2ascii(const TCHAR *unicode, char *ascii, int maxChars)
 
 #include <string.h>
 
-void unicode2ascii(const char *unicode, char *ascii, int maxChars)
+void unicode2ascii(const char *unicode, char *ascii, size_t maxChars)
 {
   strncpy(ascii, unicode, maxChars - 1);
   ascii[maxChars - 1] = 0;
