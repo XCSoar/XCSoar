@@ -143,8 +143,8 @@ void TopologyStore::Open() {
   Poco::ScopedRWLock protect(lock, true);
 
   // Start off by getting the names and paths
-  static TCHAR  szFile[MAX_PATH] = TEXT("\0");
-  static  TCHAR Directory[MAX_PATH] = TEXT("\0");
+  static TCHAR szFile[MAX_PATH];
+  static TCHAR Directory[MAX_PATH];
 
   for (int z=0; z<MAXTOPOLOGY; z++) {
     topology_store[z] = 0;

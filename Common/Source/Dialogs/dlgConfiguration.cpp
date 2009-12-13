@@ -1158,18 +1158,18 @@ static void GetInfoBoxSelector(unsigned item, int mode)
 }
 
 
-static  TCHAR szPolarFile[MAX_PATH] = _T("\0");
-static  TCHAR szAirspaceFile[MAX_PATH] = _T("\0");
-static  TCHAR szAdditionalAirspaceFile[MAX_PATH] = _T("\0");
-static  TCHAR szWaypointFile[MAX_PATH] = _T("\0");
-static  TCHAR szAdditionalWaypointFile[MAX_PATH] = _T("\0");
-static  TCHAR szTerrainFile[MAX_PATH] = _T("\0");
-static  TCHAR szTopologyFile[MAX_PATH] = _T("\0");
-static  TCHAR szAirfieldFile[MAX_PATH] = _T("\0");
-static  TCHAR szLanguageFile[MAX_PATH] = _T("\0");
-static  TCHAR szStatusFile[MAX_PATH] = _T("\0");
-static  TCHAR szInputFile[MAX_PATH] = _T("\0");
-static  TCHAR szMapFile[MAX_PATH] = _T("\0");
+static TCHAR szPolarFile[MAX_PATH];
+static TCHAR szAirspaceFile[MAX_PATH];
+static TCHAR szAdditionalAirspaceFile[MAX_PATH];
+static TCHAR szWaypointFile[MAX_PATH];
+static TCHAR szAdditionalWaypointFile[MAX_PATH];
+static TCHAR szTerrainFile[MAX_PATH];
+static TCHAR szTopologyFile[MAX_PATH];
+static TCHAR szAirfieldFile[MAX_PATH];
+static TCHAR szLanguageFile[MAX_PATH];
+static TCHAR szStatusFile[MAX_PATH];
+static TCHAR szInputFile[MAX_PATH];
+static TCHAR szMapFile[MAX_PATH];
 static  DWORD dwPortIndex1 = 0;
 static  DWORD dwSpeedIndex1 = 2;
 static  DWORD dwPortIndex2 = 0;

@@ -157,7 +157,7 @@ const TCHAR* gettext(const TCHAR* text) {
 void ReadLanguageFile() {
   StartupStore(TEXT("Loading language file\n"));
 
-  TCHAR szFile1[MAX_PATH] = TEXT("\0");
+  TCHAR szFile1[MAX_PATH];
   FILE *fp=NULL;
 
   // Read the language filename from the registry

@@ -91,7 +91,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   HANDLE hFlashCard;         // Search handle for storage cards
   WIN32_FIND_DATA FlashCardTmp; // Structure for storing card
                                       // information temporarily
-  TCHAR FlashPath[MAX_PATH] = TEXT("\0");
+  TCHAR FlashPath[MAX_PATH];
 
   hFlashCard = FindFirstFlashCard (&FlashCardTmp);
   if (hFlashCard == INVALID_HANDLE_VALUE) {

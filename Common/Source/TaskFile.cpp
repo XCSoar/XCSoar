@@ -51,7 +51,7 @@ Copyright_License {
 #include <stdio.h>
 #include <assert.h>
 
-TCHAR LastTaskFileName[MAX_PATH]= TEXT("\0");
+static TCHAR LastTaskFileName[MAX_PATH];
 
 void Task::ClearTaskFileName() {
   LastTaskFileName[0] = _T('\0');

@@ -62,7 +62,7 @@ static TCHAR  szAirfieldDetailsFile[MAX_PATH] = TEXT("\0");
 static void
 OpenAirfieldDetails()
 {
-  char zfilename[MAX_PATH] = "\0";
+  char zfilename[MAX_PATH];
 
   zAirfieldDetails = NULL;
 
@@ -73,7 +73,7 @@ OpenAirfieldDetails()
     unicode2ascii(szAirfieldDetailsFile, zfilename, MAX_PATH);
     SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
   } else {
-    static TCHAR szFile[MAX_PATH] = TEXT("\0");
+    static TCHAR szFile[MAX_PATH];
     GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
     if (_tcslen(szFile)>0) {
       ExpandLocalPath(szFile);

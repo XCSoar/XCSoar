@@ -88,7 +88,7 @@ static void UpdateFilePointer(void) {
 
 static void UpdateCaption (void) {
   TCHAR title[MAX_PATH];
-  TCHAR name[MAX_PATH] = _T("\0");
+  TCHAR name[MAX_PATH];
   int len = _tcslen(task.getTaskFilename());
   if (len>0) {
     int index = 0;

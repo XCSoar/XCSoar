@@ -50,7 +50,7 @@ Copyright_License {
 
 void RasterTerrain::OpenTerrain(void)
 {
-  TCHAR  szFile[MAX_PATH] = TEXT("\0");
+  TCHAR szFile[MAX_PATH];
 
   GetRegistryString(szRegistryTerrainFile, szFile, MAX_PATH);
 

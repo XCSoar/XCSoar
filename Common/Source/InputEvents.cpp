@@ -206,7 +206,7 @@ InputEvents::readFile()
   }
 
   // Read in user defined configuration file
-  TCHAR szFile1[MAX_PATH] = TEXT("\0");
+  TCHAR szFile1[MAX_PATH];
   FILE *fp = NULL;
 
   // Open file from registry

@@ -83,7 +83,7 @@ static int SelectedWaypoint = -1;
 
 static TCHAR path_modis[MAX_PATH];
 static TCHAR path_google[MAX_PATH];
-static TCHAR szWaypointFile[MAX_PATH] = _T("\0");
+static TCHAR szWaypointFile[MAX_PATH];
 static TCHAR Directory[MAX_PATH];
 
 #define MAXLINES 100
