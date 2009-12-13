@@ -22,7 +22,7 @@
   <WndButton Name="cmdCopy" Caption="Copy" X=75 Y=240 Width=60  Height=28 Font=2 />
   <WndButton Name="cmdPaste" Caption="Paste" X=140 Y=240 Width=60  Height=28 Font=2 />
 
-  <WndFrame Name="frmSite" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmSite" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpMapFile" Caption="Map file"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
   Help="The name of the file containing terrain, topology, and optionally waypoints, airfield details and airspace.">
@@ -68,7 +68,7 @@
 
   </WndFrame>
 
-  <WndFrame Name="frmAirspace" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmAirspace" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndButton Name="cmdAirspaceColours"  Caption="Colours" X=60 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnAirspaceColoursClicked" />
   <WndButton Name="cmdAirspaceMode"  Caption="Filter" X=140 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnAirspaceModeClicked" />
@@ -108,7 +108,7 @@
 
   </WndFrame>
 
-  <WndFrame Name="frmTerrain" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmTerrain" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpEnableTerrain" Caption="Terrain display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="Draws digital elevation terrain on the map.
 This is shaded by the wind direction: upwind is brighter, downwind darker.">
@@ -136,7 +136,7 @@ This is shaded by the wind direction: upwind is brighter, downwind darker.">
 
   </WndFrame>
 
-  <WndFrame Name="frmDisplay" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmDisplay" X=0 Y=0 Width=240 Height=222 Font=2>
 
     <WndProperty Name="prpWaypointLabels" Caption="Labels"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=100 Font=2 Help="Determines how labels are displayed with each waypoint:
 [Names] The full name of each waypoint is displayed.
@@ -192,7 +192,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   </WndFrame>
 
-  <WndFrame Name="frmInfoBoxCruise" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmInfoBoxCruise" X=0 Y=0 Width=240 Height=222 Font=2>
 
     <WndProperty Name="prpInfoBoxCruise0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
@@ -228,7 +228,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   </WndFrame>
 
-  <WndFrame Name="frmInfoBoxCircling" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmInfoBoxCircling" X=0 Y=0 Width=240 Height=222 Font=2>
 
     <WndProperty Name="prpInfoBoxCircling0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
@@ -258,7 +258,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   </WndFrame>
 
-  <WndFrame Name="frmInfoBoxFinalGlide" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmInfoBoxFinalGlide" X=0 Y=0 Width=240 Height=222 Font=2>
 
     <WndProperty Name="prpInfoBoxFinalGlide0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
@@ -294,7 +294,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   </WndFrame>
 
-  <WndFrame Name="frmInfoBoxAuxiliary" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmInfoBoxAuxiliary" X=0 Y=0 Width=240 Height=222 Font=2>
 
     <WndProperty Name="prpInfoBoxAux0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
@@ -330,7 +330,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   </WndFrame>
 
-  <WndFrame Name="frmSafety" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmSafety" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpSafetyAltitudeArrival" Caption="Arrival height"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="The height above terrain that the glider should arrive at for a safe landing.">
@@ -361,7 +361,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   </WndFrame>
 
-  <WndFrame Name="frmFinalGlide" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmFinalGlide" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpFinalGlideTerrain" Caption="Glide terrain line"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area:
@@ -425,7 +425,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   </WndFrame>
 
-  <WndFrame Name="frmPolar" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmPolar" X=0 Y=0 Width=240 Height=222 Font=2>
 
     <WndProperty Name="prpPolarType" Caption="Type"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=70 Font=2
   Help="This contains a selection of gliders of different performance classes, as well as a special entry for WinPilot File.
@@ -455,9 +455,9 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   </WndFrame>
 
-  <WndFrame Name="frmComm" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmComm" X=0 Y=0 Width=240 Height=222 Font=2>
 
-    <WndFrame Name="frmComm" Caption="Device A" X=0 Y=0 Width=236 Height=68 Font=2 Border=30>
+    <WndFrame Name="frmComm" Caption="Device A" X=0 Y=0 Width=240 Height=68 Font=2 Border=30>
 
       <WndProperty Name="prpComDevice1" Caption="Name"   X=62 Y=1  Width=173 Height=22 CaptionWidth=80 Font=2 Help="Type of primary device. The primary device should be the most reliable GPS data source.">
         <DataField name="" DataType="enum"  Min=0 Max=50 Step=1 OnDataAccess="OnDeviceAData"/>
@@ -475,7 +475,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
     </WndFrame>
 
-    <WndFrame Name="frmComm" Caption="Device B" X=0 Y=69 Width=236 Height=68 Font=2 Border=30>
+    <WndFrame Name="frmComm" Caption="Device B" X=0 Y=69 Width=240 Height=68 Font=2 Border=30>
       <WndProperty Name="prpComDevice2" Caption="Name"     X=62 Y=1  Width=173 Height=22 CaptionWidth=80 Font=2 Help="Type of secondary device.
           The secondary device may be used as backup GPS data or other data e.g. from an intelligent variometer.
           Generic can be used for GPS sources including FLARM.">
@@ -501,7 +501,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
   </WndProperty>
   </WndFrame>
 
-  <WndFrame Name="frmTaskRules" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmTaskRules" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpStartMaxSpeed" Caption="Start max speed"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="Maximum speed allowed in start observation zone.  Set to 0 for no limit.">
@@ -551,7 +551,7 @@ Help="Rules used for calculating optimal points for OnLine Contest.
 
   </WndFrame>
 
-  <WndFrame Name="frmUnits" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmUnits" X=0 Y=0 Width=240 Height=222 Font=2>
 
     <WndProperty Name="prpUnitsSpeed" Caption="Aircraft/wind speed"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=150 Font=2
 Help="Units used for airspeed and ground speed.  A separate unit is available for task speeds.">
@@ -591,7 +591,7 @@ Help="The UTC offset field allows the UTC local time offset to be specified.  Th
 
   </WndFrame>
 
-  <WndFrame Name="frmInterface" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmInterface" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpAutoBlank" Caption="Auto Blank"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
   Help="This determines whether to blank the display after a long period of inactivity when operating on internal battery power.
@@ -652,7 +652,7 @@ other languages.  If this field is left blank, then XCSoar uses English.
     </WndProperty>
   </WndFrame>
 
-  <WndFrame Name="frmAppearance" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmAppearance" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpGliderScreenPosition" Caption="Glider position"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="Defines the location of the glider drawn on the screen in percent from the bottom.">
@@ -706,7 +706,7 @@ are really available.">
   </WndFrame>
 
 
-  <WndFrame Name="frmFonts" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmFonts" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpUseCustomFonts" Caption="Customize Fonts"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="Defines the location of the glider drawn on the screen in percent from the bottom.">
@@ -759,7 +759,7 @@ are really available.">
 
 
 
-  <WndFrame Name="frmVarioAppearance" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmVarioAppearance" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="Whether to show speed command arrows on the Vario gauge.  When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.">
@@ -818,7 +818,7 @@ In all modes, the color of the target indicates the threat level.
 
   </WndFrame>
 
-  <WndFrame Name="frmTask" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmTask" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpAutoAdvance" Caption="Auto advance"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
   Help="Determines how waypoints are advanced through the task.
@@ -869,7 +869,7 @@ In all modes, the color of the target indicates the threat level.
 
   </WndFrame>
 
-  <WndFrame Name="frmLogger" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmLogger" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpLoggerTimeStepCruise" Caption="Time step cruise*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="This is the time interval between logged points when not circling. ">
@@ -904,7 +904,7 @@ Disable when flying paragliders.">
 
   </WndFrame>
 
-  <WndFrame Name="frmWaypointEdit" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmWaypointEdit" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndButton Name="cmdWaypointNew" Caption="New" X=50 Y=-1 Width=150  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointNewClicked" />
 
@@ -916,7 +916,7 @@ Disable when flying paragliders.">
 
   </WndFrame>
 
-  <WndFrame Name="frmSpecials" X=0 Y=0 Width=235 Height=222 Font=2>
+  <WndFrame Name="frmSpecials" X=0 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpAppInfoBoxModel" Caption="Device model"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="Select your PNA model to make full use of its hardware capabilities. If it is not included, use Generic type.">
