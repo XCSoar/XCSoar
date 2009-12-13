@@ -691,9 +691,10 @@ static void OnAircraftRegoClicked(WindowControl *Sender) {
   TCHAR Temp[100];
   if (buttonAircraftRego) {
     GetRegistryString(szRegistryAircraftRego,Temp,100);
-    dlgTextEntryShowModal(Temp,100);
-    SetRegistryString(szRegistryAircraftRego,Temp);
-    changed = true;
+    if (dlgTextEntryShowModal(Temp,100)) {
+      SetRegistryString(szRegistryAircraftRego,Temp);
+      changed = true;
+    }
   }
   UpdateButtons();
 }
@@ -704,9 +705,10 @@ static void OnAircraftTypeClicked(WindowControl *Sender) {
   TCHAR Temp[100];
   if (buttonAircraftType) {
     GetRegistryString(szRegistryAircraftType,Temp,100);
-    dlgTextEntryShowModal(Temp,100);
-    SetRegistryString(szRegistryAircraftType,Temp);
-    changed = true;
+    if (dlgTextEntryShowModal(Temp,100)){
+      SetRegistryString(szRegistryAircraftType,Temp);
+      changed = true;
+    }
   }
   UpdateButtons();
 }
@@ -717,9 +719,10 @@ static void OnPilotNameClicked(WindowControl *Sender) {
   TCHAR Temp[100];
   if (buttonPilotName) {
     GetRegistryString(szRegistryPilotName,Temp,100);
-    dlgTextEntryShowModal(Temp,100);
-    SetRegistryString(szRegistryPilotName,Temp);
-    changed = true;
+    if (dlgTextEntryShowModal(Temp,100)){
+      SetRegistryString(szRegistryPilotName,Temp);
+      changed = true;
+    }
   }
   UpdateButtons();
 }
@@ -730,9 +733,10 @@ static void OnLoggerIDClicked(WindowControl *Sender) {
   TCHAR Temp[100];
   if (buttonLoggerID) {
     GetRegistryString(szRegistryLoggerID,Temp,100);
-    dlgTextEntryShowModal(Temp,100);
-    SetRegistryString(szRegistryLoggerID,Temp);
-    changed = true;
+    if(dlgTextEntryShowModal(Temp,100)){
+      SetRegistryString(szRegistryLoggerID,Temp);
+      changed = true;
+    }
     ReadAssetNumber();
   }
   UpdateButtons();
