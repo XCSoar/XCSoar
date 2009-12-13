@@ -179,8 +179,6 @@ int DataField::CreateComboListStepping(void) { // for DataFieldInteger and DataF
   double fLast=ComboListInitValue;
   TCHAR sTemp[ComboPopupITEMMAX];
 
-  mComboList.ComboPopupItemIndex =-1;
-
   int iListCount=0;
   int iSelectedIndex = -1;
   int iStepDirection = 1; // for integer & float step may be negative

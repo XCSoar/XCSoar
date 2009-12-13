@@ -51,6 +51,7 @@ static WndForm *wf=NULL;
 static WndProperty *wComboPopupWndProperty;
 static DataField *ComboPopupDataField;
 static ComboList *ComboListPopup;
+static WndListFrame *wComboPopupListFrame;
 
 static TCHAR sSavedInitialValue[ComboPopupITEMMAX];
 static int iSavedInitialDataIndex=-1;
@@ -79,18 +80,19 @@ static void OnComboPopupListInfo(WindowControl * Sender, WndListFrame::ListInfo_
   }
   else {
     ComboListPopup->ComboPopupDrawListIndex = ListInfo->DrawIndex + ListInfo->ScrollIndex;
-    ComboListPopup->ComboPopupItemIndex=ListInfo->ItemIndex + ListInfo->ScrollIndex;
   }
 }
 
 
 static void OnHelpClicked(WindowControl * Sender){
   (void)Sender;
-  if (ComboListPopup->ComboPopupItemIndex >=0) {
 
-    int iDataIndex = ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupItemIndex]->DataFieldIndex;
+  int i = wComboPopupListFrame->GetCursorIndex();
+
+  if (i >= 0 && i < ComboListPopup->ComboPopupItemCount) {
+    int iDataIndex = ComboListPopup->ComboPopupItemList[i]->DataFieldIndex;
     ComboPopupDataField->SetFromCombo(iDataIndex,
-      ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupItemIndex]->StringValue);
+      ComboListPopup->ComboPopupItemList[i]->StringValue);
   }
 
   wComboPopupWndProperty->OnHelp();
@@ -109,7 +111,6 @@ static void OnComboPopupListEnter(WindowControl * Sender, WndListFrame::ListInfo
 
 static void OnCancelClicked(WindowControl * Sender){
 	(void)Sender;
-  ComboListPopup->ComboPopupItemIndex= -1;
   wf->SetModalResult(mrCancel);
 }
 
@@ -161,7 +162,7 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
 
     wf->SetCaption(theProperty->GetCaption());
 
-    WndListFrame *wComboPopupListFrame =
+    wComboPopupListFrame =
       (WndListFrame*)wf->FindByName(_T("frmComboPopupList"));
     assert(wComboPopupListFrame!=NULL);
     wComboPopupListFrame->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERRIGHT|BORDERBOTTOM);
@@ -181,29 +182,31 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
     }
 
 
-    wf->ShowModal();
+    int idx = wf->ShowModal() == mrOK
+      ? wComboPopupListFrame->GetCursorIndex()
+      : -1;
 
     bOpenCombo=false;  //tell  combo to exit loop after close
 
-    if (ComboListPopup->ComboPopupItemIndex >=0) // OK/Select
+    if (idx >= 0 && idx < ComboListPopup->ComboPopupItemCount) // OK/Select
     {
-      if (ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupItemIndex]->DataFieldIndex
+      if (ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex
                           ==ComboPopupReopenMOREDataIndex)
       { // we're last in list and the want more past end of list so select last real list item and reopen
         ComboPopupDataField->SetDetachGUI(true);  // we'll reopen, so don't call xcsoar data changed routine yet
-        ComboListPopup->ComboPopupItemIndex--;
+        --idx;
         bOpenCombo=true; // reopen combo with new selected index at center
       }
-      else if (ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupItemIndex]->DataFieldIndex
+      else if (ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex
                           ==ComboPopupReopenLESSDataIndex) // same as above but lower items needed
       {
         ComboPopupDataField->SetDetachGUI(true);
-        ComboListPopup->ComboPopupItemIndex++;
+        ++idx;
         bOpenCombo=true;
       }
-      int iDataIndex = ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupItemIndex]->DataFieldIndex;
+      int iDataIndex = ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex;
       ComboPopupDataField->SetFromCombo(iDataIndex,
-        ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupItemIndex]->StringValue);
+        ComboListPopup->ComboPopupItemList[idx]->StringValue);
     }
     else // Cancel
     { // if we've detached the GUI during the load, then there is nothing to do here
