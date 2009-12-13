@@ -63,6 +63,29 @@ Copyright_License {
 
 #include <algorithm>
 
+
+typedef enum {
+    eDialogFullWidth=0,  // cover screen, stretch controls horizontally
+    eDialogScaled=1,  // stretch only frame to maintain aspect ratio
+    eDialogScaledCentered=2, // like 1 but center dialog in screen
+    eDialogFixed=3 // don't adjust at all (same as !Layout::ScaleSupported())
+} DialogStyle_t;
+
+double g_ddlgScaleWidth = 1.0; // used when stretching dialog and components
+DialogStyle_t g_eDialogStyle=eDialogFullWidth;       // to full width of screen
+
+int Scale_Dlg_Width(int x) {
+  if (!Layout::ScaleSupported()) {
+    return Layout::Scale(x);
+  }
+  if (g_eDialogStyle == eDialogFullWidth) {
+    return (int) ((x)*g_ddlgScaleWidth); // stretch width to fill screen horizontally
+  }
+  else {
+    return Layout::Scale(x);
+  }
+}
+
 using std::min;
 
 static long
@@ -100,17 +123,18 @@ StringToColor(const TCHAR *String, Color &color)
   return true;
 }
 
+// Popup=1 says don't stretch to cover entire screen
 static void
 GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
                              int *Width, int *Height, int *Font,
                              TCHAR *Caption)
 {
-  *X = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("X")), 0));
+  *X = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("X")), 0));
   *Y = StringToIntDflt(Node->getAttribute(_T("Y")), 0);
   if (*Y>=0) { // not -1
     (*Y) = Layout::Scale(*Y);
   }
-  *Width = Layout::Scale(StringToIntDflt(Node->getAttribute(_T("Width")), 50));
+  *Width = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 50));
   *Height = StringToIntDflt(Node->getAttribute(_T("Height")), 50);
   if (*Height>=0) {
     (*Height) = Layout::Scale(*Height);
@@ -332,6 +356,26 @@ LoadColors(WindowControl &wc, const XMLNode &node)
       wc.SetForeColor(color);
 }
 
+static
+void
+CalcWidthStretch(XMLNode *xNode, ContainerWindow &Parent)
+{
+  if (!Layout::ScaleSupported()) {
+    g_eDialogStyle = eDialogFixed;
+  } else {
+    g_eDialogStyle = (DialogStyle_t)StringToIntDflt(xNode->getAttribute(
+        TEXT("Popup")), 0);
+  }
+
+  int Width = StringToIntDflt(xNode->getAttribute(TEXT("Width")), 50);
+  if (g_eDialogStyle == eDialogFullWidth) {
+    g_ddlgScaleWidth = ((double)(Parent.get_client_rect().right
+        - Parent.get_client_rect().left)) / ((double)Width);
+  } else {
+    g_ddlgScaleWidth = Layout::Scale(1); // retain dialog geometry
+  }
+}
+
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
                         const TCHAR *FileName,
                         ContainerWindow &Parent,
@@ -371,8 +415,27 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
     TCHAR sTmp[128];
     TCHAR Name[64];
 
-    GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height,
-                                 &Font, sTmp);
+    CalcWidthStretch(&xNode, Parent);
+
+    GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height, &Font,
+        sTmp);
+
+    switch (g_eDialogStyle) {
+    case eDialogFullWidth:
+      Width = Parent.get_client_rect().right; // stretch form to full width of screen
+      Height = Parent.get_client_rect().bottom;
+      X = 0;
+      Y = 0;
+      break;
+    case eDialogScaled:
+      break;
+    case eDialogScaledCentered:
+      X = (Parent.get_client_rect().right - Parent.get_client_rect().left
+          - Width) / 2; // center form horizontally on screen
+      break;
+    case eDialogFixed:
+      break;
+    }
 
     theForm = new WndForm(&Parent, Name, sTmp, X, Y, Width, Height);
 
@@ -494,7 +557,7 @@ LoadChild(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
     int MultiLine;
 
     CaptionWidth =
-      Layout::Scale(StringToIntDflt(node.getAttribute(_T("CaptionWidth")),
+        Scale_Dlg_Width(StringToIntDflt(node.getAttribute(_T("CaptionWidth")),
                                     0));
     MultiLine = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
     ReadOnly = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
@@ -617,3 +680,4 @@ LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
     LoadChild(Parent, LookUpTable,
               Node->getChildNode(i), ParentFont);
 }
+
