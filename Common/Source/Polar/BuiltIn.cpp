@@ -52,7 +52,7 @@ typedef struct WinPilotPolarInternal {
   double wing_area;
 } WinPilotPolarInternal;
 
-WinPilotPolarInternal WinPilotPolars[] =
+static const WinPilotPolarInternal WinPilotPolars[] =
 {
   // MassDryGross[kg], MaxWaterBallast[liters],
   // Speed1[km/h], Sink1[m/s],
