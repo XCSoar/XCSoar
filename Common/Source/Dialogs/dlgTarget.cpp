@@ -296,7 +296,7 @@ static void RefreshCalculator(void) {
     || !task.ValidTaskPoint(target_point+1);
 
   if (btnMove) {
-    wp->set_visible(!nodisplay);
+    btnMove->set_visible(!nodisplay);
     if (nodisplay)
       TargetMoveMode = false;
   }
@@ -310,7 +310,7 @@ static void RefreshCalculator(void) {
 
   WindowControl* wc = (WindowControl*)wf->FindByName(_T("btnOK"));
   if (wc) {
-    wp->set_visible(!TargetMoveMode);
+    wc->set_visible(!TargetMoveMode);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAATTargetLocked"));
