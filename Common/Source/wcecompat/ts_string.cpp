@@ -20,12 +20,13 @@
 
 #include "ts_string.h"
 
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
 #ifdef _UNICODE
 
-static bool
+static inline bool
 check_wchar_align(const void *p)
 {
   return ((long)p & (sizeof(TCHAR) - 1)) == 0;
@@ -33,102 +34,62 @@ check_wchar_align(const void *p)
 
 void ascii2unicode(const char *ascii, TCHAR *unicode)
 {
+  assert(check_wchar_align(unicode));
+
   if (strlen(ascii)==0) {
     unicode[0]=0;
     unicode[1]=0;
     return;
   }
 
-  if (check_wchar_align(unicode))
-	{	// word-aligned
-		while (*ascii != '\0')
-			*unicode++ = *ascii++;
-		*unicode = '\0';
-	}
-	else
-	{	// not word-aligned
-		while (*ascii != '\0')
-		{
-			*(char*)unicode = *ascii++;
-			*(((char*)unicode)+1) = 0;
-			unicode++;
-		}
-		*(char*)unicode = 0;
-		*(((char*)unicode)+1) = 0;
-	}
+  while (*ascii != '\0')
+    *unicode++ = *ascii++;
+  *unicode = '\0';
 }
 
 void unicode2ascii(const TCHAR *unicode, char *ascii)
 {
+  assert(check_wchar_align(unicode));
+
   if (wcslen(unicode)==0) {
     ascii[0] = 0;
     return;
   }
 
-  if (check_wchar_align(unicode))
-	{	// word-aligned
-		while (*unicode != '\0')
-			*ascii++ = (char)*unicode++;
-		*ascii = '\0';
-	}
-	else
-	{	// not word-aligned
-		while (*(char*)unicode != 0 || *(((char*)unicode)+1) != 0)
-			*ascii++ = *(char*)unicode++;
-		*ascii = '\0';
-	}
+  while (*unicode != '\0')
+    *ascii++ = (char)*unicode++;
+  *ascii = '\0';
 }
 
 void ascii2unicode(const char *ascii, TCHAR *unicode, int maxChars)
 {
+  assert(check_wchar_align(unicode));
+
   if (strlen(ascii)==0) {
     unicode[0]=0;
     unicode[1]=0;
     return;
   }
 
-  if (check_wchar_align(unicode))
-	{	// word-aligned
-    int i;
-		for (i=0; ascii[i] != 0 && i<maxChars; i++)
-			unicode[i] = ascii[i];
-		unicode[i] = 0;
-	}
-	else
-	{	// not word-aligned
-    int i;
-		for (i=0; ascii[i] != 0 && i<maxChars; i++)
-		{
-			*(char*)&unicode[i] = ascii[i];
-			*(((char*)&unicode[i])+1) = 0;
-			unicode++;
-		}
-		*(char*)&unicode[i] = 0;
-		*(((char*)&unicode[i])+1) = 0;
-	}
+  int i;
+  for (i = 0; ascii[i] != 0 && i < maxChars; i++)
+    unicode[i] = ascii[i];
+  unicode[i] = 0;
 }
 
 void unicode2ascii(const TCHAR *unicode, char *ascii, int maxChars)
 {
+  assert(check_wchar_align(unicode));
+
   if (wcslen(unicode)==0) {
     ascii[0] = 0;
     return;
   }
 
-  if (check_wchar_align(unicode))
-	{	// word-aligned
-    int i;
-		for (i=0; unicode[i] != 0 && i<maxChars; i++)
-			ascii[i] = (char)unicode[i];
-		ascii[i] = 0;
-	}
-	else
-	{	// not word-aligned
-    int i;
-		for (i=0; (*(char*)&unicode[i] != 0 || *(((char*)&unicode[i])+1) != 0) && i<maxChars; i++)
-			ascii[i] = *(char*)&unicode[i];
-		ascii[i] = 0;
-	}
+  int i;
+  for (i=0; unicode[i] != 0 && i<maxChars; i++)
+    ascii[i] = (char)unicode[i];
+  ascii[i] = 0;
 }
 
 #else /* !_UNICODE */
