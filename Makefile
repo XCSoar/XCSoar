@@ -61,10 +61,6 @@ MAKEFLAGS	+=-r
 
 ####### sources
 
-ifeq ($(CONFIG_PC),n)
-#CPPFLAGS_Common_Source_ :=-Werror
-endif
-
 DEVS	:=\
 	$(SRC)/Device/Driver/AltairPro.o \
 	$(SRC)/Device/Driver/BorgeltB50.o \
