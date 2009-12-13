@@ -129,7 +129,7 @@ typedef struct _SCREEN_INFO
 //   MacCready 10,34,35,43
 //   Nav 11,12,13,15,16,17,18,27,28,29,30,31
 //   Waypoint 14,36,39,40,41,42,45,46
-SCREEN_INFO Data_Options[] = {
+static const SCREEN_INFO Data_Options[] = {
           // 0
 	  {ugAltitude,        TEXT("Height GPS"), TEXT("H GPS"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_Altitude, 1, 33},
 	  // 1
