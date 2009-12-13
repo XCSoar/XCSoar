@@ -40,7 +40,7 @@ Copyright_License {
 #include "Polar/WinPilot.hpp"
 
 typedef struct WinPilotPolarInternal {
-  TCHAR name[50];
+  const TCHAR *name;
   double ww0;
   double ww1;
   double v0;
