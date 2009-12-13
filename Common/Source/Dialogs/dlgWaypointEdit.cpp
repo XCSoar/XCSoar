@@ -84,8 +84,12 @@ static void UpdateButtons(void) {
 
 static void OnNameClicked(WindowControl *Sender) {
 	(void)Sender;
+  TCHAR newName[NAME_SIZE + 1];
   if (buttonName) {
-    dlgTextEntryShowModal(global_wpt->Name, NAME_SIZE);
+    _tcsncpy(newName, global_wpt->Name, NAME_SIZE);
+    if (dlgTextEntryShowModal(newName, NAME_SIZE)){
+      _tcsncpy(global_wpt->Name, newName, NAME_SIZE);
+    }
   }
   UpdateButtons();
 }
@@ -93,8 +97,12 @@ static void OnNameClicked(WindowControl *Sender) {
 
 static void OnCommentClicked(WindowControl *Sender) {
 	(void)Sender;
+  TCHAR newComment[COMMENT_SIZE + 1];
   if (buttonComment) {
-    dlgTextEntryShowModal(global_wpt->Comment, COMMENT_SIZE);
+    _tcsncpy(newComment, global_wpt->Comment, COMMENT_SIZE);
+    if (dlgTextEntryShowModal(newComment, COMMENT_SIZE)){
+      _tcsncpy(global_wpt->Comment, newComment, COMMENT_SIZE);
+    }
   }
   UpdateButtons();
 }
