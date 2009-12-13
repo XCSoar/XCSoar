@@ -406,6 +406,9 @@ $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 
 ####### products
 
+SYNCE_PCP = synce-pcp
+SYNCE_PRM = synce-prm
+
 install: XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	@echo Copying to device...
 	-$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoar.exe'
