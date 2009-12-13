@@ -162,7 +162,7 @@ private:
   static void eventFlarmTraffic(const TCHAR *misc);
   // -------
 
-#ifdef _SIM_
+#ifdef _INPUTDEBUG_
   static void showErrors();
 #endif
 
