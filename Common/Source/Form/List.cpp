@@ -53,6 +53,7 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
   WndFrame(Owner, Name, X, Y, Width, Height),
   mOnListCallback(OnListCallback),
   mOnListEnterCallback(NULL),
+  CursorCallback(NULL),
   PaintItemCallback(NULL)
 {
   SetCanFocus(true);
@@ -261,6 +262,9 @@ WndListFrame::SetCursorIndex(int i)
 
   mListInfo.ItemIndex = i - mListInfo.ScrollIndex;
   invalidate();
+
+  if (CursorCallback != NULL)
+    CursorCallback(GetCursorIndex());
   return true;
 }
 
@@ -293,6 +297,9 @@ WndListFrame::on_key_down(unsigned key_code)
 
     mListInfo.ScrollIndex -= mListInfo.ItemInViewCount;
     RecalculateIndices(true);
+
+    if (CursorCallback != NULL)
+      CursorCallback(GetCursorIndex());
     return true;
 
   case VK_RIGHT:
@@ -302,6 +309,9 @@ WndListFrame::on_key_down(unsigned key_code)
 
     mListInfo.ScrollIndex += mListInfo.ItemInViewCount;
     RecalculateIndices(true);
+
+    if (CursorCallback != NULL)
+      CursorCallback(GetCursorIndex());
     return true;
 
     //#endif
@@ -341,6 +351,9 @@ void WndListFrame::ResetList(void){
   }
 
   show_or_hide_scroll_bar();
+
+  if (CursorCallback != NULL)
+    CursorCallback(GetCursorIndex());
 }
 
 bool
@@ -366,6 +379,9 @@ void WndListFrame::SetItemIndex(int iValue){
   }
 
   RecalculateIndices(false);
+
+  if (CursorCallback != NULL)
+    CursorCallback(GetCursorIndex());
 }
 
 void

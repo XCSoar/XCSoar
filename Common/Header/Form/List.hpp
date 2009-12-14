@@ -137,6 +137,7 @@ public:
   }ListInfo_t;
 
   typedef void (*OnListCallback_t)(WindowControl *Sender, ListInfo_t *ListInfo);
+  typedef void (*CursorCallback_t)(unsigned idx);
   typedef void (*PaintItemCallback_t)(Canvas &canvas, const RECT rc,
                                       unsigned idx);
 
@@ -147,6 +148,7 @@ protected:
 
   OnListCallback_t mOnListCallback;
   OnListCallback_t mOnListEnterCallback;
+  CursorCallback_t CursorCallback;
   PaintItemCallback_t PaintItemCallback;
 
 public:
@@ -157,6 +159,10 @@ public:
 
   void ResetList(void);
   void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
+
+  void SetCursorCallback(CursorCallback_t cb) {
+    CursorCallback = cb;
+  }
 
   void SetPaintItemCallback(PaintItemCallback_t cb) {
     PaintItemCallback = cb;
