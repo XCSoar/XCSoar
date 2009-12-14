@@ -76,7 +76,7 @@ public:
  * @param state New warning state
  * @param solution Intercept vector (to outside if currently inside, otherwise to inside)
  */
-  void update_solution(AirspaceWarningState state,
+  void update_solution(const AirspaceWarningState state,
                        AirspaceInterceptSolution& solution);
 
 /** 
@@ -85,7 +85,15 @@ public:
  * 
  * @param state New warning state
  */
-  bool state_upgraded(AirspaceWarningState state);
+  bool state_accepted(const AirspaceWarningState state);
+
+/** 
+ * Determine whether during last update, the state of this warning
+ * changed.
+ * 
+ * @return True if state upgraded/downgraded
+ */
+  bool changed_state() const;
 
 /** 
  * Access airspace managed by this object
@@ -103,6 +111,16 @@ public:
  * @return True if warning is still active
  */
   bool action_updates();
+
+/** 
+ * Determine if airspace warning was a dummy one created for testing but otherwise
+ * can be removed without reporting.
+ * 
+ * @return True if airspace warning has always been clear
+ */
+  bool trivial() const {
+    return (m_state==WARNING_CLEAR) && (m_state_last==WARNING_CLEAR);
+  }
 
 private:
   const AbstractAirspace& m_airspace;

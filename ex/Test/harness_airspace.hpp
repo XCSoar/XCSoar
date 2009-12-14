@@ -5,6 +5,7 @@
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
+#include "Airspace/AirspaceWarningManager.hpp"
 
 void setup_airspaces(Airspaces& airspaces, const unsigned n=150);
 

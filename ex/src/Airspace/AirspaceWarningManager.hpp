@@ -114,6 +114,24 @@ public:
  */
   AirspaceWarning& get_warning(const AbstractAirspace& airspace);
 
+/** 
+ * Test whether warning list is empty
+ * 
+ * @return True if no warnings in list
+ */
+  bool empty() const {
+    return m_warnings.empty();
+  }
+
+/** 
+ * Return size of warning list
+ * 
+ * @return Number of items in warning list
+ */
+  size_t size() const {
+    return m_warnings.size();
+  }
+
 private:
   const Airspaces& m_airspaces;
 

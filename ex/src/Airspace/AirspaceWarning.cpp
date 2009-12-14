@@ -7,10 +7,10 @@ void AirspaceWarning::save_state()
 }
 
 void 
-AirspaceWarning::update_solution(AirspaceWarningState state,
+AirspaceWarning::update_solution(const AirspaceWarningState state,
                                  AirspaceInterceptSolution& solution)
 {
-  if (state_upgraded(state)) {
+  if (state_accepted(state)) {
     m_state = state;
     m_solution = solution;
   }
@@ -26,9 +26,14 @@ AirspaceWarning::action_updates()
   return false;
 }
 
+bool
+AirspaceWarning::changed_state() const
+{
+  return (m_state != m_state_last);
+}
 
 bool 
-AirspaceWarning::state_upgraded(AirspaceWarningState state)
+AirspaceWarning::state_accepted(const AirspaceWarningState state)
 {
   return (state>= m_state);
 }

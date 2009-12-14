@@ -91,18 +91,24 @@ AirspaceWarningManager::update(const AIRCRAFT_STATE& state)
 
   // check from strongest to weakest alerts 
 
-  changed |= update_inside(state);
-  changed |= update_glide(state);
-  changed |= update_filter(state);
-  changed |= update_task(state);
+  update_inside(state);
+  update_glide(state);
+  update_filter(state);
+  update_task(state);
 
   // action changes
   for (AirspaceWarningList::iterator it = m_warnings.begin();
        it != m_warnings.end(); ) {
 
     if (it->action_updates()) {
+      if (it->changed_state()) {
+        changed = true;
+      }
       it++;
     } else {
+      if (!it->trivial()) {
+        changed = true; // was downgraded to eliminate
+      }
       it = m_warnings.erase(it);
     }
   }
@@ -128,7 +134,7 @@ public:
 
   void intersection(const AbstractAirspace& airspace) {
     AirspaceWarning& warning = m_warning_manager.get_warning(airspace);
-    if (warning.state_upgraded(m_warning_state)) {
+    if (warning.state_accepted(m_warning_state)) {
       AirspaceInterceptSolution solution = intercept(airspace, m_state, m_perf);
       if (solution.valid()) {
         warning.update_solution(m_warning_state, solution);
@@ -217,18 +223,16 @@ AirspaceWarningManager::update_inside(const AIRCRAFT_STATE& state)
     const AbstractAirspace& airspace = *it->get_airspace();
     AirspaceWarning& warning = get_warning(airspace);
 
-    if (warning.state_upgraded(AirspaceWarning::WARNING_INSIDE)) {
+    if (warning.state_accepted(AirspaceWarning::WARNING_INSIDE)) {
       GEOPOINT c = airspace.closest_point(state.Location);
       GeoVector vector_exit(state.Location, c);
       AirspaceInterceptSolution solution;
       airspace.intercept(state, vector_exit, m_perf_glide, solution); 
 
       warning.update_solution(AirspaceWarning::WARNING_INSIDE, solution);
+      found = true;
     }
-    found = true;
   }
 
   return found;
 }
-
-
