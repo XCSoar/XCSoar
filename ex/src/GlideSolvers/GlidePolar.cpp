@@ -50,11 +50,13 @@ GlidePolar::GlidePolar(const fixed _mc,
   cruise_efficiency(fixed_one)
 {
   static const fixed fixed_75 = 75.0;
+
   Vmax = fixed_75;
   Smax = SinkRate(Vmax);
 
-  set_mc(_mc);
   solve_min();
+
+  set_mc(_mc);
 }
 
 
@@ -102,20 +104,20 @@ public:
  * 
  * @return Initialised object (no search yet)
  */
-  GlidePolarVopt(const GlidePolar &_polar, const fixed &vmax):
-    ZeroFinder(fixed_one, vmax, TOLERANCE_POLAR_BESTLD),
+  GlidePolarVopt(const GlidePolar &_polar, const fixed& vmin, const fixed &vmax):
+    ZeroFinder(vmin, vmax, TOLERANCE_POLAR_BESTLD),
     polar(_polar)
     {
     };
 /** 
- * Glide ratio function (negative to minimise)
+ * Glide ratio function
  * 
  * @param V Speed (m/s)
  * 
- * @return MacCready-adjusted glide ratio
+ * @return MacCready-adjusted inverse glide ratio
  */
   fixed f(const fixed V) {
-    return -V/polar.MSinkRate(V);
+    return polar.MSinkRate(V)/V;
   }
 private:
   const GlidePolar &polar;
@@ -125,7 +127,7 @@ private:
 void 
 GlidePolar::solve_ld()
 {
-  GlidePolarVopt gpvopt(*this, Vmax);
+  GlidePolarVopt gpvopt(*this, Vmin, Vmax);
   VbestLD = gpvopt.find_min(Vmax);
   SbestLD = SinkRate(VbestLD);
 }
@@ -209,3 +211,71 @@ GlidePolar::possible_glide(const GlideState &task) const
   }
 }
 
+
+/**
+ * Finds speed to fly for a given MacCready setting
+ * Intended to be used temporarily.
+ *
+ * This finds the speed that maximises the glide angle over the ground
+ */
+class GlidePolarSpeedToFly: 
+  public ZeroFinder
+{
+public:
+/** 
+ * Constructor.
+ * 
+ * @param _polar Glide polar to optimise
+ * 
+ * @return Initialised object (no search yet)
+ */
+  GlidePolarSpeedToFly(const GlidePolar &_polar, 
+                       const fixed& net_sink_rate,
+                       const fixed& head_wind,
+                       const fixed& vmin, const fixed &vmax):
+    ZeroFinder(max(fixed_one,vmin-head_wind), vmax-head_wind, TOLERANCE_POLAR_DOLPHIN),
+    polar(_polar),
+    m_net_sink_rate(net_sink_rate),
+    m_head_wind(head_wind)
+    {
+    };
+
+/** 
+ * Glide ratio function
+ * 
+ * @param V Speed over ground (m/s)
+ * 
+ * @return MacCready-adjusted inverse glide ratio
+ */
+  fixed f(const fixed V) {
+    return (polar.MSinkRate(V+m_head_wind)+m_net_sink_rate)/V;
+  }
+  
+  fixed solve(const fixed Vstart) {
+    fixed Vopt = find_min(Vstart);
+    return Vopt+m_head_wind;
+  }
+private:
+  const GlidePolar &polar;
+  const fixed& m_net_sink_rate;
+  const fixed& m_head_wind;
+};
+
+
+fixed 
+GlidePolar::speed_to_fly(const fixed sink_rate,
+                         const fixed V,
+                         const GlideResult &solution) const
+{
+  const fixed net_sink_rate = sink_rate-SinkRate(V);
+
+  if (-net_sink_rate > mc) {
+    // stop to climb
+    return Vmin;
+  }
+
+  const fixed head_wind = solution.is_final_glide()? fixed_zero:fixed_zero;
+
+  GlidePolarSpeedToFly gp_stf(*this, net_sink_rate, head_wind, Vmin, Vmax);
+  return gp_stf.solve(Vmax);
+}

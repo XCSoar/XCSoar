@@ -66,17 +66,17 @@ struct GlideResult {
  * @return Initialised null result
  */
   GlideResult():
-    Vector(0,0),
-    DistanceToFinal(0.0),
-    CruiseTrackBearing(0.0),
-    VOpt(0.0),
-    HeightClimb(0.0),
-    HeightGlide(0.0),
-    TimeElapsed(0.0),
-    TimeVirtual(0.0),
-    AltitudeDifference(0.0),
-    EffectiveWindSpeed(0.0),
-    EffectiveWindAngle(0.0),
+    Vector(fixed_zero,fixed_zero),
+    DistanceToFinal(fixed_zero),
+    CruiseTrackBearing(fixed_zero),
+    VOpt(fixed_zero),
+    HeightClimb(fixed_zero),
+    HeightGlide(fixed_zero),
+    TimeElapsed(fixed_zero),
+    TimeVirtual(fixed_zero),
+    AltitudeDifference(fixed_zero),
+    EffectiveWindSpeed(fixed_zero),
+    EffectiveWindAngle(fixed_zero),
     Solution(RESULT_NOSOLUTION)
     {
       // default is null result
@@ -122,7 +122,7 @@ struct GlideResult {
  * @return True if aircraft is at or above final glide
  */
   bool is_final_glide() const {
-    return (DistanceToFinal==0.0);
+    return (!positive(DistanceToFinal));
   }
 
 /** 
@@ -143,8 +143,8 @@ struct GlideResult {
  */
   bool glide_reachable() const {
     return (Solution==RESULT_OK) &&
-      (AltitudeDifference>=0) &&
-      (HeightClimb==0);
+      (positive(AltitudeDifference)) &&
+      (HeightClimb==fixed_zero);
   }
 
 /** 

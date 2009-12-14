@@ -145,6 +145,20 @@ struct FlatPoint
   }
 
 /** 
+ * Scale a point
+ * 
+ * @param p Scale
+ * 
+ * @return Scaled point
+ */
+  FlatPoint operator* (const fixed &p) const {
+    FlatPoint res= *this;
+    res.x *= p;
+    res.y *= p;
+    return res;
+  };
+
+/** 
  * Add one point to another
  * 
  * @param p2 Point to add

@@ -61,6 +61,7 @@ struct GlideResult;
  * - currently bugs/ballast are ignored
  * - implement wing loading
  * - implement AUW
+ * - implement dolphin speed to fly
  */
 
 class GlidePolar
@@ -249,6 +250,20 @@ public:
  * @return True if a glide solution is feasible (optimistically)
  */
   bool possible_glide(const GlideState &task) const;
+
+/** 
+ * Calculate speed-to-fly according to MacCready dolphin theory
+ * with ring setting at current MC value.
+ * 
+ * @param sink_rate Instantaneous sink rate from variometer (true, m/s, positive down)
+ * @param V Airspeed (true, m/s)
+ * @param solution Solution for which Vopt is desired
+ * 
+ * @return Speed to fly (true, m/s)
+ */
+  fixed speed_to_fly(const fixed sink_rate,
+                     const fixed V,
+                     const GlideResult &solution) const;
 
 private:
 /** 

@@ -76,6 +76,20 @@ struct FlatLine
   bool intersect_czero(const fixed r,
                        FlatPoint &i1, FlatPoint &i2) const;
 
+  /** 
+   * Calculate intersections between this line
+   * and a circle of specified radius centered at point c.
+   * 
+   * @param r Radius of circle
+   * @param c Center of circle
+   * @param i1 Returned intersection point 1
+   * @param i2 Returned intersection point 2
+   * 
+   * @return True if more than one intersection is found
+   */
+  bool intersect_circle(const fixed r, const FlatPoint c,
+                        FlatPoint &i1, FlatPoint &i2) const;
+
 /** 
  * Find center point of this line
  * 
@@ -131,6 +145,19 @@ struct FlatLine
  * @param a Scale ratio
  */
   void mul_y(const fixed a);
+
+/**
+ * Return dot product of two lines (vectors)
+ * @param that other line to take dot product of 
+ * @return Dot product
+ */
+  fixed dot(const FlatLine& that) const;
+
+/**
+ * Return magnitude squared of this line
+ * @return distance of line squared
+ */
+  fixed mag_sq() const;
 
 private:
   FlatPoint p1;

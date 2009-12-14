@@ -90,8 +90,8 @@ AirspaceCircle::intersects(const GEOPOINT& start,
 
   const fixed f_radius = m_task_projection->fproject_range(m_center, m_radius);
   const FlatPoint f_center = m_task_projection->fproject(m_center);
-  const FlatPoint f_start = m_task_projection->fproject(start)-f_center;
-  const FlatPoint f_end = m_task_projection->fproject(end)-f_center;
+  const FlatPoint f_start = m_task_projection->fproject(start);
+  const FlatPoint f_end = m_task_projection->fproject(end);
   const FlatLine line(f_start, f_end);
 
   if (inside(start)) {
@@ -99,23 +99,25 @@ AirspaceCircle::intersects(const GEOPOINT& start,
   }
 
   FlatPoint f_p1, f_p2;
-  if (line.intersect_czero(f_radius, f_p1, f_p2)) {
+  if (line.intersect_circle(f_radius, f_center, f_p1, f_p2)) {
 
-    const FlatPoint f_vec = f_end-f_start;
-    const fixed mag = f_vec.mag_sq();
+    const fixed mag = line.mag_sq();
     if (positive(mag)) {
-      const fixed inv_mag = fixed_one/mag;
+      fixed inv_mag = -fixed_one;
+      const fixed t1 = FlatLine(f_start,f_p1).dot(line);
+      const fixed t2 = (f_p1 == f_p2)? -fixed_one: FlatLine(f_start,f_p2).dot(line);
 
-      const fixed t1 = (f_p1-f_start).dot(f_vec);
       if ((t1>=fixed_zero) && (t1<mag)) {
-        sorter.add(t1*inv_mag, m_task_projection->funproject(f_p1+f_center));
-      }
-      
-      if (!(f_p1 == f_p2)) {
-        const fixed t2 = (f_p2-f_start).dot(f_vec);
-        if ((t2>=fixed_zero) && (t2<mag)) {
-          sorter.add(t2*inv_mag, m_task_projection->funproject(f_p2+f_center));
+        if (negative(inv_mag)) {
+          inv_mag = fixed_one/mag;
         }
+        sorter.add(t1*inv_mag, m_task_projection->funproject(f_p1));
+      }
+      if ((t2>=fixed_zero) && (t2<mag)) {
+        if (negative(inv_mag)) {
+          inv_mag = fixed_one/mag;
+        }
+        sorter.add(t2*inv_mag, m_task_projection->funproject(f_p2));
       }
     }
   }

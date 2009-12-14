@@ -122,46 +122,33 @@ AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
 
   AirspaceInterceptSolution solution_this;
 
-  if (state.Altitude > m_top.Altitude) {
-    // need to scan for top only
-    solution_this = intercept_horizontal(state, perf, distance_start, distance_end, false);
+  // need to scan three sides, top, far, bottom (if not terrain)
 
-  } else if (state.Altitude < m_base.Altitude) {
-    // need to scan for bottom only
-    solution_this = intercept_horizontal(state, perf, distance_start, distance_end, true);
+  AirspaceInterceptSolution solution_candidate;
+  solution_candidate = intercept_vertical(state, perf, distance_end);
+  if (solution_candidate.valid() && 
+      ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
+       negative(solution_this.elapsed_time))) {
+    
+    solution_this = solution_candidate;
+  }
 
-  } else if (positive(distance_start)) {
-    // need to scan for nearest only
-    solution_this = intercept_vertical(state, perf, distance_start);
-
-  } else {
-    // need to scan three sides, top, far, bottom (if not terrain)
-
-    AirspaceInterceptSolution solution_candidate;
-    solution_candidate = intercept_vertical(state, perf, distance_end);
-    if (solution_candidate.valid() && 
-        ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
-         negative(solution_this.elapsed_time))) {
-
-      solution_this = solution_candidate;
-    }
-
-    solution_candidate = intercept_horizontal(state, perf, distance_start, distance_end, false);
+  solution_candidate = intercept_horizontal(state, perf, distance_start, distance_end, false);
+  if (solution_candidate.valid() && 
+      ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
+       negative(solution_this.elapsed_time))) {
+    solution_this = solution_candidate;
+  }
+  
+  if (!m_base.is_terrain()) {
+    solution_candidate = intercept_horizontal(state, perf, distance_start, distance_end, true);
     if (solution_candidate.valid() && 
         ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
          negative(solution_this.elapsed_time))) {
       solution_this = solution_candidate;
-    }
-
-    if (!m_base.is_terrain()) {
-      solution_candidate = intercept_horizontal(state, perf, distance_start, distance_end, true);
-      if (solution_candidate.valid() && 
-          ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
-           negative(solution_this.elapsed_time))) {
-        solution_this = solution_candidate;
-      }
     }
   }
+
   if (solution_this.valid()) {
     solution = solution_this;
     if (solution.distance == distance_start) {

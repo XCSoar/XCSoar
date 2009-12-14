@@ -41,11 +41,7 @@
 #define sgn(x,y) (negative(x)? -y:y)
 
 FlatPoint FlatLine::ave() const {
-  FlatPoint p = p1;
-  p.add(p2);
-  p.x*= fixed_half;
-  p.y*= fixed_half;
-  return p;
+  return (p1+p2)*fixed_half;
 }
 
 fixed FlatLine::dx() const {
@@ -70,9 +66,7 @@ fixed FlatLine::d() const {
 }
 
 fixed FlatLine::dsq() const {
-  const fixed _dx = dx();
-  const fixed _dy = dy();
-  return sqr(_dx)+sqr(_dy);
+  return sqr(dx())+sqr(dy());
 }
 
 void FlatLine::sub(const FlatPoint&p) {
@@ -89,9 +83,7 @@ FlatLine::add(const FlatPoint&p) {
 fixed 
 FlatLine::angle() const
 {
-  const fixed _dx = dx();
-  const fixed _dy = dy();
-  return fixed_rad_to_deg*atan2(_dy,_dx);
+  return fixed_rad_to_deg*atan2(dy(),dx());
 }
 
 void 
@@ -110,15 +102,42 @@ FlatLine::intersect_czero(const fixed r,
   const fixed dr = dsq();
   const fixed D = cross();
   
-  fixed det = sqr(r)*dr-D*D;
+  fixed det = sqr(r)*dr-sqr(D);
   if (negative(det)) {
     // no solution
     return false;
   }
   det = sqrt(det);
-  i1.x = (D*_dy+sgn(_dy,_dx)*det)/dr;
-  i2.x = (D*_dy-sgn(_dy,_dx)*det)/dr;
-  i1.y = (-D*_dx+fabs(_dy)*det)/dr;
-  i2.y = (-D*_dx-fabs(_dy)*det)/dr;
+  const fixed inv_dr = fixed_one/dr;
+  i1.x = (D*_dy+sgn(_dy,_dx)*det)*inv_dr;
+  i2.x = (D*_dy-sgn(_dy,_dx)*det)*inv_dr;
+  i1.y = (-D*_dx+fabs(_dy)*det)*inv_dr;
+  i2.y = (-D*_dx-fabs(_dy)*det)*inv_dr;
   return true;
+}
+
+
+bool 
+FlatLine::intersect_circle(const fixed r, const FlatPoint c,
+                           FlatPoint &i1, FlatPoint &i2) const
+{
+  FlatLine that = *this;
+  that.sub(c);
+  if (that.intersect_czero(r, i1, i2)) {
+    i1 = i1+c;
+    i2 = i2+c;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+fixed
+FlatLine::dot(const FlatLine& that) const {
+  return ((p2-p1).dot(that.p2-that.p1));
+}
+
+fixed
+FlatLine::mag_sq() const {
+  return (p2-p1).mag_sq();
 }
