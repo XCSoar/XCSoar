@@ -83,7 +83,7 @@ private:
 
   int mBorderSize;
 
-  static int InstCount;
+  static bool initialized;
   static Brush hBrushDefaultBk;
   static Pen hPenDefaultBorder;
   static Pen hPenDefaultSelector;

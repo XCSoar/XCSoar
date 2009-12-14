@@ -45,7 +45,7 @@ Copyright_License {
 
 #include <stdlib.h>
 
-int WindowControl::InstCount = 0;
+bool WindowControl::initialized;
 Brush WindowControl::hBrushDefaultBk;
 Pen WindowControl::hPenDefaultBorder;
 Pen WindowControl::hPenDefaultSelector;
@@ -104,12 +104,12 @@ WindowControl::WindowControl(WindowControl *Owner,
   else
     mName[0] = '\0';
 
-  if (InstCount == 0){
+  if (!initialized) {
     hBrushDefaultBk.set(mColorBack);
     hPenDefaultBorder.set(DEFAULTBORDERPENWIDTH, mColorFore);
     hPenDefaultSelector.set(DEFAULTBORDERPENWIDTH + 2, mColorFore);
+    initialized = true;
   }
-  InstCount++;
 
   set(Parent, X, Y, Width, Height,
       false, false, false, false, false);
@@ -135,15 +135,6 @@ WindowControl::~WindowControl(void)
   int i;
   for (i = mClientCount - 1; i >= 0; i--) {
     delete mClients[i];
-  }
-
-  reset();
-
-  InstCount--;
-  if (InstCount == 0) {
-    hBrushDefaultBk.reset();
-    hPenDefaultBorder.reset();
-    hPenDefaultSelector.reset();
   }
 }
 
