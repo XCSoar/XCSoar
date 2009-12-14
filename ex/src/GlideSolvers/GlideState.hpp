@@ -98,6 +98,7 @@ struct GlideState
   fixed EffectiveWindAngle;    /**< (internal use) */
   fixed wsq_;                  /**< (internal use) */
   fixed dwcostheta_;           /**< (internal use) */
+  fixed HeadWind;              /**< headwind component (m/s) in cruise */
 };
 
 #endif

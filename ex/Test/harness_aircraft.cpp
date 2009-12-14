@@ -47,7 +47,6 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   state.Speed = 16.0;
   
   bearing = 0;
-  sinkrate = 0;
   awp= 0;
   
   acstate = Cruise;
@@ -126,6 +125,7 @@ void AircraftSim::update_bearing(TaskManager& task_manager) {
   bearing = b_best+small_rand();
 }
 
+
 void AircraftSim::update_state(TaskManager &task_manager,
                                GlidePolar &glide_polar)  {
   
@@ -135,19 +135,20 @@ void AircraftSim::update_state(TaskManager &task_manager,
   case Cruise:
   case FinalGlide:
     if (positive(stat.solution_remaining.VOpt)) {
-      state.Speed = stat.solution_remaining.VOpt*speed_factor;
+      state.TrueAirspeed = stat.solution_remaining.VOpt*speed_factor;
     } else {
-      state.Speed = glide_polar.get_VbestLD();
+      state.TrueAirspeed = glide_polar.get_VbestLD();
     }
-    sinkrate = glide_polar.SinkRate(state.Speed)*sink_factor;
+    state.Vario = -glide_polar.SinkRate(state.TrueAirspeed)*sink_factor;
     update_bearing(task_manager);
     break;
   case Climb:
-    state.Speed = turn_speed;
+    state.TrueAirspeed = glide_polar.get_Vmin();
     bearing += fixed_20+small_rand();
-    sinkrate = -climb_rate*climb_factor;
+    state.Vario = climb_rate*climb_factor;
     break;
   };
+  state.NettoVario = state.Vario+glide_polar.SinkRate(state.TrueAirspeed);
 }
 
 static const fixed fixed_300 = 300;
@@ -203,14 +204,15 @@ void AircraftSim::update_mode(TaskManager &task_manager)
 GEOPOINT AircraftSim::endpoint(const fixed bear) const
 {
   GEOPOINT ref;
-  ref = GeoVector(state.Speed,bear).end_point(state.Location);
+  ref = GeoVector(state.TrueAirspeed,bear).end_point(state.Location);
   return GeoVector(state.WindSpeed,state.WindDirection).end_point(ref);
 }
 
 void AircraftSim::integrate() {
   state.TrackBearing = bearing;
+  state.Speed = endpoint(bearing).distance(state.Location);
   state.Location = endpoint(bearing);
-  state.Altitude -= sinkrate;
+  state.Altitude += state.Vario;
   state.Time += fixed_one;
 }
 

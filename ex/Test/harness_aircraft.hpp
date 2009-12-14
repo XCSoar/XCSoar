@@ -54,7 +54,6 @@ private:
   AIRCRAFT_STATE state, state_last;
   std::vector<GEOPOINT> w;
   fixed bearing;
-  fixed sinkrate;
   unsigned awp;
 
   enum AcState {

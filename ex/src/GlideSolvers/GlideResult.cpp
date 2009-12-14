@@ -52,6 +52,7 @@ GlideResult::GlideResult(const GlideState &task,
     AltitudeDifference(task.AltitudeDifference),
     EffectiveWindSpeed(task.EffectiveWindSpeed),
     EffectiveWindAngle(task.EffectiveWindAngle),
+    HeadWind(task.HeadWind),
     Solution(RESULT_NOSOLUTION)
 {
 }

@@ -40,7 +40,7 @@
 #include "MacCready.hpp"
 #include "Util/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
-
+#include "Navigation/Aircraft.hpp"
 
 GlidePolar::GlidePolar(const fixed _mc,
                        const fixed _bugs,
@@ -263,18 +263,17 @@ private:
 
 
 fixed 
-GlidePolar::speed_to_fly(const fixed sink_rate,
-                         const fixed V,
+GlidePolar::speed_to_fly(const AIRCRAFT_STATE &state,
                          const GlideResult &solution) const
 {
-  const fixed net_sink_rate = sink_rate-SinkRate(V);
+  const fixed net_sink_rate = -state.NettoVario;
 
-  if (-net_sink_rate > mc) {
+  if (-net_sink_rate > mc+Smin) {
     // stop to climb
     return Vmin;
   }
 
-  const fixed head_wind = solution.is_final_glide()? fixed_zero:fixed_zero;
+  const fixed head_wind = solution.is_final_glide()? solution.HeadWind : fixed_zero;
 
   GlidePolarSpeedToFly gp_stf(*this, net_sink_rate, head_wind, Vmin, Vmax);
   return gp_stf.solve(Vmax);

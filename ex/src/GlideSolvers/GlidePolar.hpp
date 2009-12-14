@@ -39,6 +39,7 @@
 
 struct GlideState;
 struct GlideResult;
+struct AIRCRAFT_STATE;
 
 #include "Math/fixed.hpp"
 
@@ -255,14 +256,12 @@ public:
  * Calculate speed-to-fly according to MacCready dolphin theory
  * with ring setting at current MC value.
  * 
- * @param sink_rate Instantaneous sink rate from variometer (true, m/s, positive down)
- * @param V Airspeed (true, m/s)
+ * @param state Aircraft state (taking TrueAirspeed and Vario)
  * @param solution Solution for which Vopt is desired
  * 
  * @return Speed to fly (true, m/s)
  */
-  fixed speed_to_fly(const fixed sink_rate,
-                     const fixed V,
+  fixed speed_to_fly(const AIRCRAFT_STATE &state,
                      const GlideResult &solution) const;
 
 private:

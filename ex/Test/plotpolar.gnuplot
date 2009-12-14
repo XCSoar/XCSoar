@@ -67,3 +67,30 @@ pause -1
 set ylabel "V opt (m/s)"
 plot 'results/res-polar-a.txt' using 6:4 with lines
 pause -1
+
+set key
+set title "Speed to fly"
+set xlabel "h (m)"
+plot 'results/res-polar-s0.txt' using 1:4 with lines title "STF", \
+     'results/res-polar-s0.txt' using 1:3 with lines title "VOpt"
+pause -1
+
+set xlabel "S gross (m/s)"
+plot 'results/res-polar-s1.txt' using 7:4 with lines title "STF", \
+     'results/res-polar-s1.txt' using 7:3 with lines title "VOpt"
+pause -1
+
+set xlabel "S gross (m/s)"
+plot 'results/res-polar-s1.txt' using 7:4 with lines title "STF (below) no wind", \
+     'results/res-polar-s2.txt' using 7:4 with lines title "STF (above) no wind", \
+     'results/res-polar-s3.txt' using 7:4 with lines title "STF (below) wind 10 m/s", \
+     'results/res-polar-s4.txt' using 7:4 with lines title "STF (above) wind 10 m/s"
+pause -1
+
+set xlabel "Wangle (deg)"
+set ylabel "bearing (deg)"
+plot 'results/res-polar-cb.txt' using 2:3 with lines title "target bearing", \
+     'results/res-polar-cb.txt' using 2:4 with lines title "cruise track bearing"
+pause -1
+
+

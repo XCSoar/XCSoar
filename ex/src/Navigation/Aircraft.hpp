@@ -74,6 +74,21 @@ struct AIRCRAFT_STATE {
    */
   fixed Speed; 
 
+  /**
+   * True air speed (m/s)
+   * @see Speed
+   * @see IndicatedAirspeed
+   */
+  fixed TrueAirspeed;
+
+  /**
+   * Indicated air speed (m/s)
+   * @see Speed
+   * @see TrueAirspeed
+   * @see AirDensityRatio
+   */
+  fixed IndicatedAirspeed;
+
   //##############
   //   Altitude
   //##############
@@ -85,7 +100,23 @@ struct AIRCRAFT_STATE {
   //##############
 
   fixed WindSpeed; /**< Wind speed (m/s); must be positive */
-  fixed WindDirection; /**< Wind direction (degrees) */
+  fixed WindDirection; /**< Direction of travel of wind (degrees) */
+
+  //###########
+  //   Vario
+  //###########
+
+  /**
+   * Rate of change of total energy of aircraft (m/s, up positive)
+   * @see VarioAvailable
+   */
+  fixed Vario;
+
+  /**
+   * Vertical speed of air mass (m/s, up positive)
+   * @see NettoVarioAvailable
+   */
+  fixed NettoVario;
 
   /** Accessor for the aircraft location
    */

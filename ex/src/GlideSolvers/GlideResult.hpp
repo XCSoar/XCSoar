@@ -107,6 +107,7 @@ struct GlideResult {
   fixed AltitudeDifference;    /**< Height above/below final glide for this task (m) */
   fixed EffectiveWindSpeed;    /**< (internal) */
   fixed EffectiveWindAngle;    /**< (internal) */
+  fixed HeadWind;              /**< Head wind component (m/s) in cruise */
   GlideResult_t Solution;       /**< Solution validity */
 
 /** 
