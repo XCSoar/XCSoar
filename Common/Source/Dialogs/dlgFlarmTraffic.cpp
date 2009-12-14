@@ -103,7 +103,7 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
             bear,
             DISTANCEMODIFY * range);
 
-  canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), text);
+  canvas.text(Layout::FastScale(2), Layout::FastScale(2), text);
 }
 
 int GetActiveFlarmTrafficCount()
