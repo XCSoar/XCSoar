@@ -66,9 +66,9 @@ static void VegaWriteDemo(void) {
   }
 
   TCHAR dbuf[100];
-  wsprintf(dbuf, _T("PDVDD,%d,%d"),
-	   iround(VegaDemoW*10),
-	   iround(VegaDemoV*10));
+  _stprintf(dbuf, _T("PDVDD,%d,%d"),
+            iround(VegaDemoW * 10),
+            iround(VegaDemoV * 10));
   VarioWriteNMEA(dbuf);
 };
 

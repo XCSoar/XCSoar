@@ -262,7 +262,7 @@ void SaveValues(const TCHAR * FontRegKey )
 {
   // update reg key for font
   TCHAR sValue [256];
-  wsprintf(sValue,_T("%d,%d,0,0,%d,%d,0,0,0,0,0,%d,%d,%s"),
+  _stprintf(sValue,_T("%d,%d,0,0,%d,%d,0,0,0,0,0,%d,%d,%s"),
                         NewLogFont.lfHeight,
                         NewLogFont.lfWidth,
                         NewLogFont.lfWeight,

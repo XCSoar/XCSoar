@@ -87,20 +87,19 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
                   &range,
                   &bear);
 
-  wsprintf(tmp, _T("%3s %3ld %+3.1lf %5ld"),
-           traffic.Name,
-           (int)(SPEEDMODIFY * traffic.Speed),
+  _stprintf(tmp, _T("%3s %3ld %+3.1lf %5ld"),
+            traffic.Name,
+            (int)(SPEEDMODIFY * traffic.Speed),
 #ifdef FLARM_AVERAGE
-           LIFTMODIFY * traffic.Average30s,
+            LIFTMODIFY * traffic.Average30s,
 #else
-           0.0,
+            0.0,
 #endif
-           (int)(ALTITUDEMODIFY * traffic.Altitude)
-           );
-  wsprintf(text, _T("%s %3.0lf %2.1lf"),
-           tmp,
-           bear,
-           (DISTANCEMODIFY * range));
+            (int)(ALTITUDEMODIFY * traffic.Altitude));
+  _stprintf(text, _T("%s %3.0lf %2.1lf"),
+            tmp,
+            bear,
+            DISTANCEMODIFY * range);
 
   if (traffic.ID != 0)
     canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), text);

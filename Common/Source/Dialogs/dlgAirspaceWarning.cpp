@@ -365,26 +365,26 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
     }
 
     #ifndef NDEBUG
-    wsprintf(sTmp, _T("%-20s%d"), sName , pAS.WarnLevel - pAS.Acknowledge);
+    _stprintf(sTmp, _T("%-20s%d"), sName , pAS.WarnLevel - pAS.Acknowledge);
     #else
-    wsprintf(sTmp, _T("%-20s"), sName);
+    _stprintf(sTmp, _T("%-20s"), sName);
     #endif
 
     canvas.text_clipped(paint_rc.left + IBLSCALE(Col0Left),
                         paint_rc.top + IBLSCALE(TextTop),
                         rcTextClip, sTmp);
 
-    wsprintf(sTmp, _T("%-20s"), sTop);
+    _stprintf(sTmp, _T("%-20s"), sTop);
     canvas.text(paint_rc.left + IBLSCALE(Col1Left),
                 paint_rc.top + IBLSCALE(TextTop), sTmp);
 
-    wsprintf(sTmp, _T("%-20s"), sBase);
+    _stprintf(sTmp, _T("%-20s"), sBase);
     canvas.text(paint_rc.left + IBLSCALE(Col1Left),
                 paint_rc.top + IBLSCALE(TextTop + TextHeight),
                 sTmp);
 
     if (pAS.Inside){
-      wsprintf(sTmp, _T("> %c %s"), sAckIndicator[pAS.Acknowledge], sType);
+      _stprintf(sTmp, _T("> %c %s"), sAckIndicator[pAS.Acknowledge], sType);
     } else {
       TCHAR DistanceText[MAX_PATH];
       if (pAS.hDistance == 0) {
@@ -393,15 +393,15 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 
         Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
         if (pAS.vDistance > 0) {
-          wsprintf(sTmp, _T("< %c %s ab %s"),
-                   sAckIndicator[pAS.Acknowledge],
-                   sType, DistanceText);
+          _stprintf(sTmp, _T("< %c %s ab %s"),
+                    sAckIndicator[pAS.Acknowledge],
+                    sType, DistanceText);
         }
         if (pAS.vDistance < 0) {
           Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
-          wsprintf(sTmp, _T("< %c %s bl %s"),
-                   sAckIndicator[pAS.Acknowledge],
-                   sType, DistanceText);
+          _stprintf(sTmp, _T("< %c %s bl %s"),
+                    sAckIndicator[pAS.Acknowledge],
+                    sType, DistanceText);
         }
       } else {
         if ((pAS.vDistance == 0) ||
@@ -410,8 +410,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
           // Close to airspace altitude, horizontally separated
 
           Units::FormatUserDistance(fabs((double)pAS.hDistance),DistanceText, 7);
-          wsprintf(sTmp, _T("< %c %s H %s"), sAckIndicator[pAS.Acknowledge],
-                   sType, DistanceText);
+          _stprintf(sTmp, _T("< %c %s H %s"), sAckIndicator[pAS.Acknowledge],
+                    sType, DistanceText);
         } else {
 
           // Effectively above or below airspace, steep climb or descent
@@ -419,13 +419,13 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 
           Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
           if (pAS.vDistance > 0) {
-            wsprintf(sTmp, _T("< %c %s ab %s"),
-                     sAckIndicator[pAS.Acknowledge],
-                     sType, DistanceText);
+            _stprintf(sTmp, _T("< %c %s ab %s"),
+                      sAckIndicator[pAS.Acknowledge],
+                      sType, DistanceText);
           } else {
-            wsprintf(sTmp, _T("< %c %s bl %s"),
-                     sAckIndicator[pAS.Acknowledge], sType,
-                     DistanceText);
+            _stprintf(sTmp, _T("< %c %s bl %s"),
+                      sAckIndicator[pAS.Acknowledge], sType,
+                      DistanceText);
           }
         }
       }
