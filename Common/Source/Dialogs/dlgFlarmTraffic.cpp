@@ -89,7 +89,7 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
                   &range,
                   &bear);
 
-  _stprintf(tmp, _T("%3s %3ld %+3.1lf %5ld"),
+  _stprintf(tmp, _T("%3s %3ld %+3.1f %5ld"),
             traffic.Name,
             (int)(SPEEDMODIFY * traffic.Speed),
 #ifdef FLARM_AVERAGE
@@ -98,7 +98,7 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
             0.0,
 #endif
             (int)(ALTITUDEMODIFY * traffic.Altitude));
-  _stprintf(text, _T("%s %3.0lf %2.1lf"),
+  _stprintf(text, _T("%s %3.0lf %2.1f"),
             tmp,
             bear,
             DISTANCEMODIFY * range);
