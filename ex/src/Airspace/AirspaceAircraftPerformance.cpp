@@ -10,10 +10,10 @@ AirspaceAircraftPerformance::solution_general(const fixed& distance,
   const fixed t_cruise = distance/get_cruise_speed();
   const fixed h_descent = dh-t_cruise*get_cruise_descent();
 
-  if (!fabs(h_descent)) {
+  if (fabs(h_descent)<fixed_one) {
     return t_cruise;
   } 
-  if (h_descent>0) {
+  if (positive(h_descent)) {
     // descend steeper than best glide
 
     fixed mod_descent_rate= get_descent_rate()+m_tolerance_vertical;
@@ -115,6 +115,8 @@ AirspaceAircraftPerformance::solution_vertical(const fixed& distance,
     if (t_this!= fixed_big) {
       intercept_alt = top;
       return t_this;
+    } else {
+      return -fixed_one;
     }
   } 
   AirspaceAircraftInterceptVertical aaiv(*this,
@@ -202,6 +204,8 @@ AirspaceAircraftPerformance::solution_horizontal(const fixed& distance_min,
     if (t_this!= fixed_big) {
       intercept_distance = distance_max;
       return t_this;
+    } else {
+      return -fixed_one;
     }
   }
   AirspaceAircraftInterceptHorizontal aaih(*this,
@@ -224,10 +228,11 @@ AirspaceAircraftPerformance::solution_exists(const fixed& distance_max,
                                              const fixed& h_min,
                                              const fixed& h_max) const
 {
-  if (positive(altitude-h_max) && !positive(get_descent_rate()+m_tolerance_vertical)) {
+  if (positive(altitude-h_max) && !positive(max(get_cruise_descent(),get_descent_rate())+m_tolerance_vertical)) {
     return false;
   }
-  if (positive(h_min-altitude) && !positive(get_climb_rate()+m_tolerance_vertical)) {
+  if (positive(h_min-altitude) && !positive(max(get_climb_rate(),
+                                                -get_cruise_descent())+m_tolerance_vertical)) {
     return false;
   }
   if (positive(distance_max) && !positive(get_cruise_speed())) {

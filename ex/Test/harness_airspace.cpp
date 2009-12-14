@@ -11,7 +11,7 @@ void airspace_random_properties(AbstractAirspace& as) {
   int Type = rand()%15;
   AIRSPACE_ALT base;
   AIRSPACE_ALT top;
-  base.Altitude = rand()%5000;
+  base.Altitude = rand()%2000;
   top.Altitude = base.Altitude+rand()%3000;
   as.set_properties("hello", Type, base, top);
 }
@@ -313,5 +313,41 @@ void scan_airspaces(const AIRCRAFT_STATE state,
     }
   }
 
+}
+
+
+
+#include "Airspace/AirspaceWarningVisitor.hpp"
+
+class AirspaceWarningPrint: public AirspaceWarningVisitor
+{
+public:
+  AirspaceWarningPrint(const char* fname) {
+#ifdef DO_PRINT
+    fout = new std::ofstream(fname);
+#endif
+  }
+  ~AirspaceWarningPrint() {
+#ifdef DO_PRINT
+    delete fout;
+#endif
+  }
+  virtual void Visit(const AirspaceWarning& as) {
+#ifdef DO_PRINT
+    *fout << as;
+    *fout << as.get_airspace();
+#endif      
+  }
+private:
+#ifdef DO_PRINT
+  std::ofstream *fout;
+#endif
+};
+
+void print_warnings() {
+  if (airspace_warnings) {
+    AirspaceWarningPrint visitor("results/res-as-warnings.txt");
+    airspace_warnings->visit_warnings(visitor);
+  }
 }
 

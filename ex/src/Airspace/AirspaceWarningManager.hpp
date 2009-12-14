@@ -40,6 +40,7 @@
 #include "Util/NonCopyable.hpp"
 #include "Airspaces.hpp"
 #include "AirspaceWarning.hpp"
+#include "AirspaceWarningVisitor.hpp"
 #include <list>
 
 /**
@@ -132,6 +133,8 @@ public:
     return m_warnings.size();
   }
 
+  void visit_warnings(AirspaceWarningVisitor& visitor) const;
+
 private:
   const Airspaces& m_airspaces;
 
@@ -152,7 +155,8 @@ private:
   bool update_predicted(const AIRCRAFT_STATE& state, 
                         const GEOPOINT &location_predicted,
                         const AirspaceAircraftPerformance &perf,
-                        const AirspaceWarning::AirspaceWarningState& warning_state);
+                        const AirspaceWarning::AirspaceWarningState& warning_state,
+                        const fixed max_time);
 
 };
 

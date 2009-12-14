@@ -35,7 +35,7 @@
 }
 */
 #include "AbstractAirspace.hpp"
-
+#include <assert.h>
 
 /*
   NewCircle->Ack.AcknowledgedToday = false;
@@ -156,11 +156,12 @@ AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
     } else if (solution.distance == distance_end) {
       solution.location = loc_end;
     } else if (distance_end>distance_start) {
-      const fixed t = solution.distance / distance_end;
+      const fixed t = solution.distance / (distance_end-distance_start);
       solution.location = loc_start+(loc_end-loc_start)*t;
     } else {
       solution.location = loc_start;
     }
+    assert(solution.distance>=0);
     return true;
   } else {
     return false;

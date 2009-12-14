@@ -91,10 +91,9 @@ bool AircraftSim::far(TaskManager &task_manager) {
 
 static const fixed fixed_1000 = 1000;
 static const fixed fixed_20 = 20;
-static const fixed fixed_rand_scale = 2.0/RAND_MAX;
 
 fixed AircraftSim::small_rand() {
-  return heading_filt.update(bearing_noise*fixed_rand_scale*rand()-bearing_noise);
+  return heading_filt.update(bearing_noise*(2.0*rand()/RAND_MAX)-bearing_noise);
 }
 
 void AircraftSim::update_bearing(TaskManager& task_manager) {

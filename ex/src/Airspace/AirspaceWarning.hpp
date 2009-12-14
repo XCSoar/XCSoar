@@ -38,11 +38,13 @@
 #define AIRSPACE_WARNING_HPP
 
 #include "AbstractAirspace.hpp"
+#include "Util/GenericVisitor.hpp"
 
 /**
  * Class to hold information about active airspace warnings
  */
-class AirspaceWarning 
+class AirspaceWarning: 
+  public BaseVisitable<>
 {
 public:
 
@@ -85,7 +87,7 @@ public:
  * 
  * @param state New warning state
  */
-  bool state_accepted(const AirspaceWarningState state);
+  bool state_accepted(const AirspaceWarningState state) const;
 
 /** 
  * Determine whether during last update, the state of this warning
@@ -102,6 +104,15 @@ public:
  */
   const AbstractAirspace& get_airspace() const {
     return m_airspace;
+  }
+
+/** 
+ * Access warning state
+ * 
+ * @return Warning state
+ */
+  const AirspaceWarningState& get_warning_state() const {
+    return m_state;
   }
 
 /** 
@@ -122,11 +133,29 @@ public:
     return (m_state==WARNING_CLEAR) && (m_state_last==WARNING_CLEAR);
   }
 
+/** 
+ * Access solution (nearest to enter, if outside, or to exit, if inside)
+ * 
+ * @return Reference to solution
+ */
+  const AirspaceInterceptSolution& get_solution() const {
+    return m_solution;
+  }
+
 private:
   const AbstractAirspace& m_airspace;
   AirspaceWarningState m_state;
   AirspaceWarningState m_state_last;
   AirspaceInterceptSolution m_solution;
+
+public:
+
+#ifdef DO_PRINT
+  friend std::ostream& operator<< (std::ostream& f, 
+                                   const AirspaceWarning& aw);
+#endif
+
+  DEFINE_VISITABLE()
 };
 
 #endif

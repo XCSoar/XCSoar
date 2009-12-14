@@ -208,7 +208,7 @@ TaskMacCready::print(std::ostream &f, const AIRCRAFT_STATE &aircraft) const
 std::ostream& operator<< (std::ostream& f, 
                           const AirspaceCircle& as)
 {
-  f << "# circle\n";
+  f << "# circle " << as.get_base_altitude() << " " << as.get_top_altitude() << "\n";
   for (double t=0; t<=360; t+= 30) {
     GEOPOINT l;
     FindLatitudeLongitude(as.m_center, t, as.m_radius, &l);
@@ -223,7 +223,7 @@ std::ostream& operator<< (std::ostream& f,
 std::ostream& operator<< (std::ostream& f, 
                           const AirspacePolygon& as)
 {
-  f << "# polygon\n";
+  f << "# polygon " << as.get_base_altitude() << " " << as.get_top_altitude() << "\n";
   for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
     GEOPOINT l = v->get_location();
@@ -488,5 +488,38 @@ SampledTaskPoint::print_samples(std::ostream& f,
   }
   f << "\n";
 }
+
+#include "Airspace/AirspaceWarning.hpp"
+
+std::ostream& operator<< (std::ostream& f, 
+                          const AirspaceWarning& aw)
+{
+  AirspaceWarning::AirspaceWarningState state = aw.get_warning_state();
+  f << "# warning ";
+  switch(state) {
+  case AirspaceWarning::WARNING_CLEAR:
+    f << "clear\n";
+    break;
+  case AirspaceWarning::WARNING_TASK:
+    f << "task\n";
+    break;
+  case AirspaceWarning::WARNING_FILTER:
+    f << "predicted filter\n";
+    break;
+  case AirspaceWarning::WARNING_GLIDE:
+    f << "predicted glide\n";
+    break;
+  case AirspaceWarning::WARNING_INSIDE:
+    f << "inside\n";
+    break;
+  };
+
+  f << "# intercept " << aw.m_solution.location.Longitude << " " << aw.m_solution.location.Latitude 
+    << " dist " << aw.m_solution.distance << " alt " << aw.m_solution.altitude << " time " 
+    << aw.m_solution.elapsed_time << "\n";
+
+  return f;
+}
+
 
 #endif

@@ -229,7 +229,7 @@ void DistanceBearing(GEOPOINT loc1, GEOPOINT loc2,
     const fixed s2 = sin(dlon*fixed_half)*fixed_expand_x;
     const fixed a= max(fixed_zero, min(fixed_expand_xsq, s1*s1+cloc1Latitude*cloc2Latitude*s2*s2));
 
-    *Distance = fixed_double_earth_r*atan2(sqrt(a),sqrt(fixed_expand_xsq-a));
+    *Distance = max(fixed_zero,fixed_double_earth_r*atan2(sqrt(a),sqrt(fixed_expand_xsq-a)));
   }
   if (Bearing) {
     fixed sindlon, cosdlon;
@@ -275,8 +275,8 @@ fixed DoubleDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
   count_distbearing++;
 #endif
 
-  return fixed_double_earth_r*(atan2(sqrt(a12),sqrt(fixed_expand_xsq-a12))
-                               +atan2(sqrt(a23),sqrt(fixed_expand_xsq-a23)));
+  return fixed_double_earth_r*(max(fixed_zero,atan2(sqrt(a12),sqrt(fixed_expand_xsq-a12)))
+                               +max(fixed_zero,atan2(sqrt(a23),sqrt(fixed_expand_xsq-a23))));
 
 }
 

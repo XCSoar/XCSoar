@@ -33,7 +33,7 @@ AirspaceWarning::changed_state() const
 }
 
 bool 
-AirspaceWarning::state_accepted(const AirspaceWarningState state)
+AirspaceWarning::state_accepted(const AirspaceWarningState state) const
 {
   return (state>= m_state);
 }

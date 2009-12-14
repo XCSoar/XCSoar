@@ -123,11 +123,13 @@ public:
   AirspaceIntersectionWarningVisitor(const AIRCRAFT_STATE &state,
                                      const AirspaceAircraftPerformance &perf,
                                      AirspaceWarningManager &warning_manager,
-                                     const AirspaceWarning::AirspaceWarningState warning_state):
+                                     const AirspaceWarning::AirspaceWarningState warning_state,
+                                     const fixed max_time):
     m_state(state),
     m_perf(perf),
     m_warning_manager(warning_manager),
     m_warning_state(warning_state),
+    m_max_time(max_time),
     m_found(false)
     {      
     };
@@ -136,7 +138,7 @@ public:
     AirspaceWarning& warning = m_warning_manager.get_warning(airspace);
     if (warning.state_accepted(m_warning_state)) {
       AirspaceInterceptSolution solution = intercept(airspace, m_state, m_perf);
-      if (solution.valid()) {
+      if (solution.valid() && (solution.elapsed_time <= m_max_time)) {
         warning.update_solution(m_warning_state, solution);
         m_found = true;
       }
@@ -156,6 +158,7 @@ private:
   const AirspaceAircraftPerformance &m_perf;
   AirspaceWarningManager &m_warning_manager;
   const AirspaceWarning::AirspaceWarningState m_warning_state;
+  const fixed m_max_time;
   bool m_found;
 };
 
@@ -164,9 +167,10 @@ bool
 AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state, 
                                          const GEOPOINT &location_predicted,
                                          const AirspaceAircraftPerformance &perf,
-                                         const AirspaceWarning::AirspaceWarningState& warning_state) 
+                                         const AirspaceWarning::AirspaceWarningState& warning_state,
+                                         const fixed max_time) 
 {
-  AirspaceIntersectionWarningVisitor visitor(state, perf, *this, warning_state);
+  AirspaceIntersectionWarningVisitor visitor(state, perf, *this, warning_state, max_time);
 
   GeoVector vector_predicted(state.Location, location_predicted);
   m_airspaces.visit_intersecting(state.Location, vector_predicted, visitor, true);
@@ -193,7 +197,7 @@ AirspaceWarningManager::update_filter(const AIRCRAFT_STATE& state)
 
   return update_predicted(state, location_predicted,
                           m_perf_filter,
-                          AirspaceWarning::WARNING_FILTER);
+                          AirspaceWarning::WARNING_FILTER, m_prediction_time_filter);
 }
 
 
@@ -205,7 +209,7 @@ AirspaceWarningManager::update_glide(const AIRCRAFT_STATE& state)
 
   return update_predicted(state, location_predicted,
                           m_perf_glide,
-                          AirspaceWarning::WARNING_GLIDE);
+                          AirspaceWarning::WARNING_GLIDE, m_prediction_time_glide);
 }
 
 
@@ -235,4 +239,14 @@ AirspaceWarningManager::update_inside(const AIRCRAFT_STATE& state)
   }
 
   return found;
+}
+
+
+void
+AirspaceWarningManager::visit_warnings(AirspaceWarningVisitor& visitor) const
+{
+  for (AirspaceWarningList::const_iterator it = m_warnings.begin();
+       it != m_warnings.end(); ++it) {
+    it->Accept(visitor);
+  }
 }

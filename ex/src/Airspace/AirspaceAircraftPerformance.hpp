@@ -191,6 +191,7 @@ class AirspaceAircraftPerformanceStateFilter:
 {
 public:
   AirspaceAircraftPerformanceStateFilter(const AircraftStateFilter& filter):
+    AirspaceAircraftPerformance(0.01),
     m_state_filter(filter) {
 
   }

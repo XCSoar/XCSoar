@@ -7,7 +7,6 @@
 #endif
 
 extern Airspaces *airspaces;
-extern AirspaceWarningManager *airspace_warnings;
 
 extern double time_elapsed;
 extern double time_planned;

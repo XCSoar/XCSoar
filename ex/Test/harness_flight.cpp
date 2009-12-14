@@ -10,6 +10,8 @@ Airspaces *airspaces = NULL;
 AirspaceWarningManager *airspace_warnings = NULL;
 AircraftStateFilter *aircraft_filter = NULL;
 
+
+
 double time_elapsed=0.0;
 double time_planned=1.0;
 double time_remaining=0;
@@ -129,10 +131,12 @@ bool run_flight(TaskManager &task_manager,
     }
     if (airspace_warnings) {
 #ifdef DO_PRINT
-      if (do_print && verbose>1) {
+      if (verbose>1) {
         bool warnings_updated = airspace_warnings->update(ac.get_state());
         if (warnings_updated) {
           printf("# airspace warnings updated, size %d\n", (int)airspace_warnings->size());
+          print_warnings();
+          wait_prompt(ac.get_state().Time);
         }
       }
 #endif
