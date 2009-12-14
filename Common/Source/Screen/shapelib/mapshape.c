@@ -112,8 +112,8 @@ static void writeHeader( SHPHandle psSHP )
   /* -------------------------------------------------------------------- */
   /*      Prepare header block for .shp file.                             */
   /* -------------------------------------------------------------------- */
-  for( i = 0; i < 100; i++ )
-    abyHeader[i] = 0;
+
+  memset(abyHeader, 0, sizeof(abyHeader));
 
   abyHeader[2] = 0x27;				/* magic cookie */
   abyHeader[3] = 0x0a;
@@ -480,8 +480,8 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   /* -------------------------------------------------------------------- */
   /*      Prepare header block for .shp file.                             */
   /* -------------------------------------------------------------------- */
-  for( i = 0; i < 100; i++ )
-    abyHeader[i] = 0;
+
+  memset(abyHeader, 0, sizeof(abyHeader));
 
   abyHeader[2] = 0x27;				/* magic cookie */
   abyHeader[3] = 0x0a;
