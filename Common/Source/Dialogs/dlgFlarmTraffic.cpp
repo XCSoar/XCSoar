@@ -47,17 +47,11 @@
 
 #include <assert.h>
 
-#define MAXTITLE 200
-#define MAXDETAILS 5000
-
 static int page=0;
 static WndForm *wf=NULL;
 static WndListFrame *wDetails=NULL;
 
-#define MAXLINES 100
-#define MAXLISTS 20
 static int DrawListIndex=0;
-static int nTextLines=0;
 
 static void Update(){
 
@@ -281,8 +275,6 @@ void dlgFlarmTrafficShowModal(void){
 			XCSoarInterface::main_window,
 			_T("IDR_XML_FLARMTRAFFIC"));
   }
-
-  nTextLines = 0;
 
   if (!wf) return;
 
