@@ -35,3 +35,16 @@
 }
  */
 #include "Navigation/Aircraft.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
+
+
+AIRCRAFT_STATE 
+AIRCRAFT_STATE::get_predicted_state(const fixed &in_time) const
+{
+  AIRCRAFT_STATE state_next = *this;
+  GeoVector vec(Speed*in_time, TrackBearing);
+  state_next.Location = vec.end_point(Location);
+  state_next.Altitude += Vario*in_time;
+  return state_next;
+}
+

@@ -123,6 +123,16 @@ struct AIRCRAFT_STATE {
   const GEOPOINT& get_location() const {
     return Location;
   };
+
+/**
+ * Calculate predicted state in future.
+ * Assumes aircraft will continue along current TrackBearing and Speed  
+ *
+ * @param in_time Time step for extrapolation (s)
+ * @return Predicted aircraft state in in_time seconds
+ *
+ */
+  AIRCRAFT_STATE get_predicted_state(const fixed& in_time) const;
 };
 
 #endif

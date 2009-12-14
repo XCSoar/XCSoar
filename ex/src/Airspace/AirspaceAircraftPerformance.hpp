@@ -3,6 +3,7 @@
 
 #include "Math/fixed.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Util/AircraftStateFilter.hpp"
 
 /**
  *  Class used for simplified/idealised performace
@@ -12,7 +13,8 @@
  */
 class AirspaceAircraftPerformance {
 public:
-  AirspaceAircraftPerformance():m_tolerance_vertical(fixed_zero) {};
+
+  AirspaceAircraftPerformance(const fixed tolerance=fixed_zero):m_tolerance_vertical(tolerance) {};
 
   void set_tolerance_vertical(const fixed val) {
     m_tolerance_vertical = val;
@@ -109,8 +111,6 @@ private:
 };
 
 
-
-
 class AirspaceAircraftPerformanceSimple:
   public AirspaceAircraftPerformance 
 {
@@ -183,6 +183,40 @@ public:
 
 private:
   const GlidePolar &m_glide_polar;
+};
+
+
+class AirspaceAircraftPerformanceStateFilter: 
+  public AirspaceAircraftPerformance
+{
+public:
+  AirspaceAircraftPerformanceStateFilter(const AircraftStateFilter& filter):
+    m_state_filter(filter) {
+
+  }
+
+  virtual fixed get_cruise_speed() const {
+    return m_state_filter.get_speed();
+  }
+
+  virtual fixed get_cruise_descent() const {
+    return -m_state_filter.get_climb_rate();
+  }
+
+  virtual fixed get_climb_rate() const {
+    return fixed_zero;
+  }
+
+  virtual fixed get_descent_rate() const {
+    return fixed_zero;
+  }
+
+  virtual fixed get_max_speed() const {
+    return m_state_filter.get_speed();
+  }
+
+private:
+  const AircraftStateFilter &m_state_filter;
 };
 
 #endif
