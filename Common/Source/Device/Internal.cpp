@@ -50,6 +50,8 @@ PortWriteNMEA(ComPort *port, const TCHAR *line)
   assert(port != NULL);
   assert(line != NULL);
 
+  TCHAR dollar[2]=TEXT("$");
+  port->WriteString(dollar);
   port->WriteString(line);
 
   TCHAR checksum[16];

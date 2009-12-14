@@ -443,7 +443,7 @@ VegaDevice::PutThermal(bool active,
 {
   TCHAR tbuf[100];
 
-  wsprintf(tbuf, TEXT("PTLOC,%d,%g,%g,%g,%g"),
+  swprintf(tbuf, _T("PTLOC,%d,%g,%g,%g,%g"),
            (int)active, longitude, latitude,
            W, R);
   
@@ -461,7 +461,7 @@ _VarioWriteSettings(ComPort *port)
 
     TCHAR mcbuf[100];
 
-    wsprintf(mcbuf, _T("PDVMC,%d,%d,%d,%d,%d"),
+    swprintf(mcbuf, _T("PDVMC,%d,%d,%d,%d,%d"),
 	     iround(GlidePolar::GetMacCready()*10),
 	     iround(device_blackboard.Calculated().VOpt*10),
 	     device_blackboard.Calculated().Circling,
