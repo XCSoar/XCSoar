@@ -87,12 +87,10 @@ static void SwapWord( int length, void * wordP )
 /*      A realloc cover function that will access a NULL pointer as     */
 /*      a valid input.                                                  */
 /************************************************************************/
-void * SfRealloc( void * pMem, int nNewSize )
+static void *
+SfRealloc(void *pMem, size_t nNewSize)
 {
-  if( pMem == NULL )
-    return( (void *) malloc(nNewSize) );
-  else
-    return( (void *) realloc(pMem,nNewSize) );
+  return realloc(pMem, nNewSize);
 }
 
 /************************************************************************/
