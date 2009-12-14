@@ -81,6 +81,8 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
   double bear;
 
   const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex];
+  if (traffic.ID == 0)
+    return;
 
   DistanceBearing(XCSoarInterface::Basic().Location,
                   traffic.Location,
@@ -101,8 +103,7 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
             bear,
             DISTANCEMODIFY * range);
 
-  if (traffic.ID != 0)
-    canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), text);
+  canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), text);
 }
 
 int GetActiveFlarmTrafficCount()
