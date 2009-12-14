@@ -50,6 +50,8 @@ Copyright_License {
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/param.h>
+#include <stdbool.h>
 
 #if UINT_MAX == 65535
 typedef long          int32;
@@ -59,7 +61,7 @@ typedef int           int32;
 
 #define ByteCopy( a, b, c )     memcpy( b, a, c )
 
-static int      bBigEndian;
+static const bool bBigEndian = BYTE_ORDER == BIG_ENDIAN;
 
 /************************************************************************/
 /*                              SwapWord()                              */
@@ -231,15 +233,6 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
     pszAccess = "r+b";
   else
     pszAccess = "rb";
-
-  /* -------------------------------------------------------------------- */
-  /*	Establish the byte order on this machine.			    */
-  /* -------------------------------------------------------------------- */
-  i = 1;
-  if( *((uchar *) &i) == 1 )
-    bBigEndian = MS_FALSE;
-  else
-    bBigEndian = MS_TRUE;
 
   /* -------------------------------------------------------------------- */
   /*	Initialize the info structure.					    */
@@ -451,15 +444,6 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   uchar     	abyHeader[100];
   int32	i32;
   double	dValue;
-
-  /* -------------------------------------------------------------------- */
-  /*      Establish the byte order on this system.                        */
-  /* -------------------------------------------------------------------- */
-  i = 1;
-  if( *((uchar *) &i) == 1 )
-    bBigEndian = MS_FALSE;
-  else
-    bBigEndian = MS_TRUE;
 
   /* -------------------------------------------------------------------- */
   /*	Compute the base (layer) name.  If there is any extension  	    */
