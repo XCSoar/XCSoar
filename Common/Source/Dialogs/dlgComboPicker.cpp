@@ -59,7 +59,7 @@ static int iSavedInitialDataIndex=-1;
 static void
 OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if (i > (unsigned)ComboListPopup->ComboPopupItemCount)
+  if (i >= (unsigned)ComboListPopup->ComboPopupItemCount)
     return;
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
