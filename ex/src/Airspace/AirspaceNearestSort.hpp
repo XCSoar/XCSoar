@@ -67,7 +67,7 @@ public:
 /** 
  * Metric defining sort criteria
  * 
- * @param a Intercept solution to determine metric of
+ * @param ais Intercept solution to determine metric of
  * 
  * @return Positive value indicating rank (low best), negative indicates invalid
  */

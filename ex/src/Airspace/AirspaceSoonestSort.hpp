@@ -30,8 +30,23 @@ public:
     m_perf(perf),
     m_max_time(max_time) {};
 
+/** 
+ * Compute intercept solution
+ * 
+ * @param a Airspace to solve intercept for
+ * 
+ * @return Intercept solution (whether valid or otherwise)
+ */
   virtual AirspaceInterceptSolution solve_intercept(const AbstractAirspace &a) const;
 
+/** 
+ * Calculate metric for intercept solution.  In this case, returns the
+ * time to intercept if valid.
+ * 
+ * @param ais solution to compute metric from
+ * 
+ * @return Value of metric (smaller is better)
+ */
   virtual fixed metric(const AirspaceInterceptSolution& ais) const;
 
 /** 

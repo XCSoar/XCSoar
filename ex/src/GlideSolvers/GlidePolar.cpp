@@ -101,6 +101,8 @@ public:
  * Constructor.
  * 
  * @param _polar Glide polar to optimise
+ * @param vmin Minimum speed to search (m/s)
+ * @param vmax Maximum speed to search (m/s)
  * 
  * @return Initialised object (no search yet)
  */
@@ -145,6 +147,7 @@ public:
  * Constructor.
  * 
  * @param _polar Glide polar to optimise
+ * @param vmax Maximum speed to search (m/s)
  * 
  * @return Initialised object (no search yet)
  */
@@ -226,6 +229,10 @@ public:
  * Constructor.
  * 
  * @param _polar Glide polar to optimise
+ * @param net_sink_rate Instantaneous netto sink rate (m/s), positive down
+ * @param head_wind Head wind component (m/s)
+ * @param vmin Minimum speed to search (m/s)
+ * @param vmax Maximum speed to search (m/s)
  * 
  * @return Initialised object (no search yet)
  */
@@ -250,7 +257,14 @@ public:
   fixed f(const fixed V) {
     return (polar.MSinkRate(V+m_head_wind)+m_net_sink_rate)/V;
   }
-  
+
+/** 
+ * Find best speed to fly
+ * 
+ * @param Vstart Initial search speed (m/s)
+ * 
+ * @return Speed to fly (m/s)
+ */  
   fixed solve(const fixed Vstart) {
     fixed Vopt = find_min(Vstart);
     return Vopt+m_head_wind;

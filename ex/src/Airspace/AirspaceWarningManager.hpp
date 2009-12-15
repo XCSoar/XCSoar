@@ -133,6 +133,11 @@ public:
     return m_warnings.size();
   }
 
+/** 
+ * Visit each warnings in the store
+ * 
+ * @param visitor Visitor for warnings
+ */
   void visit_warnings(AirspaceWarningVisitor& visitor) const;
 
 private:

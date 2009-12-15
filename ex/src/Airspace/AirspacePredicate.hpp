@@ -46,7 +46,15 @@ public:
 class AirspacePredicateAircraftInside: public AirspacePredicate
 {
 public:
+/** 
+ * Constructor
+ * 
+ * @param state State to check interior
+ * 
+ * @return Initialised object
+ */
   AirspacePredicateAircraftInside(const AIRCRAFT_STATE& state);
+
   bool operator()( const AbstractAirspace& t ) const;
 private:
   const AIRCRAFT_STATE& m_state;

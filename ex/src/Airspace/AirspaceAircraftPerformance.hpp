@@ -14,8 +14,20 @@
 class AirspaceAircraftPerformance {
 public:
 
+/** 
+ * Default constructor.
+ * Note that search mechanism will fail if descent_rate and climb_rate are zero
+ * without tolerance being positive.
+ * 
+ * @param tolerance Tolerance of vertical speeds (m/s)
+ */
   AirspaceAircraftPerformance(const fixed tolerance=fixed_zero):m_tolerance_vertical(tolerance) {};
 
+/** 
+ * Set tolerance of vertical speeds
+ * 
+ * @param val New value of tolerance, positive (m/s)
+ */
   void set_tolerance_vertical(const fixed val) {
     m_tolerance_vertical = val;
   }
@@ -111,6 +123,11 @@ private:
 };
 
 
+/** 
+ * Simplified aircraft performance model used for testing of
+ * airspace warning system with minimal dependencies.
+ * 
+ */
 class AirspaceAircraftPerformanceSimple:
   public AirspaceAircraftPerformance 
 {
@@ -145,17 +162,31 @@ public:
     return v_ld;
   }
 
-protected:
+private:
   fixed v_ld;
   fixed s_ld;
   fixed climb_rate;
   fixed descent_rate;
 };
 
+/**
+ * Specialisation of AirspaceAircraftPerformance
+ * based on simplified theoretical MC cross-country speeds.
+ * Assumes cruise at best LD (ignoring wind) for current MC setting,
+ * climb rate at MC setting, with direct descent possible at sink rate
+ * of cruise.
+ */
 class AirspaceAircraftPerformanceGlide: 
   public AirspaceAircraftPerformance
 {
 public:
+/** 
+ * Constructor.
+ * 
+ * @param polar Polar to take data from
+ * 
+ * @return Initialised object
+ */
   AirspaceAircraftPerformanceGlide(const GlidePolar& polar):
     m_glide_polar(polar) {
 
@@ -186,33 +217,46 @@ private:
 };
 
 
+/**
+ * Specialisation of AirspaceAircraftPerformance based on
+ * low pass filtered aircraft state --- effectively producing
+ * potential solutions at average speed in the averaged direction
+ * at the averaged climb rate.
+ */
 class AirspaceAircraftPerformanceStateFilter: 
   public AirspaceAircraftPerformance
 {
 public:
+/** 
+ * Constructor.
+ * 
+ * @param filter Filter to retrieve state information from
+ * 
+ * @return Initialised object
+ */
   AirspaceAircraftPerformanceStateFilter(const AircraftStateFilter& filter):
     AirspaceAircraftPerformance(0.01),
     m_state_filter(filter) {
 
   }
 
-  virtual fixed get_cruise_speed() const {
+  fixed get_cruise_speed() const {
     return m_state_filter.get_speed();
   }
 
-  virtual fixed get_cruise_descent() const {
+  fixed get_cruise_descent() const {
     return -m_state_filter.get_climb_rate();
   }
 
-  virtual fixed get_climb_rate() const {
+  fixed get_climb_rate() const {
     return fixed_zero;
   }
 
-  virtual fixed get_descent_rate() const {
+  fixed get_descent_rate() const {
     return fixed_zero;
   }
 
-  virtual fixed get_max_speed() const {
+  fixed get_max_speed() const {
     return m_state_filter.get_speed();
   }
 

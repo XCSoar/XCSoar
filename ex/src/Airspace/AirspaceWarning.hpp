@@ -48,12 +48,15 @@ class AirspaceWarning:
 {
 public:
 
+  /**
+   * Enumeration of airspace warning types
+   */
   enum AirspaceWarningState {
-    WARNING_CLEAR=0,
-    WARNING_TASK,
-    WARNING_FILTER,
-    WARNING_GLIDE,
-    WARNING_INSIDE
+    WARNING_CLEAR=0, /**< No warning active */
+    WARNING_TASK, /**< Warning that task intersects airspace */
+    WARNING_FILTER, /**< Warning that filtered state intersects airspace */
+    WARNING_GLIDE, /**< Warning that short-term glide intersects airspace */
+    WARNING_INSIDE /**< Warning that aircraft is currently inside airspace */
   };
 
 /** 

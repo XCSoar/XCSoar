@@ -3,6 +3,9 @@
 
 #include "AirspaceWarning.hpp"
 
+/**
+ * Generic visitor for AirspaceWarning system
+ */
 class AirspaceWarningVisitor:
   public BaseVisitor,
   public Visitor<AirspaceWarning>

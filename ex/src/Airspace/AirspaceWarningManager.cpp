@@ -117,9 +117,23 @@ AirspaceWarningManager::update(const AIRCRAFT_STATE& state)
 }
 
 
+/**
+ * Class used temporarily to check intersections with warning system
+ */
 class AirspaceIntersectionWarningVisitor: 
   public AirspaceIntersectionVisitor {
 public:
+/** 
+ * Constructor
+ * 
+ * @param state State of aircraft
+ * @param perf Aircraft performance model
+ * @param warning_manager Warning manager to add items to
+ * @param warning_state Type of warning
+ * @param max_time Time limit of intercept
+ * 
+ * @return Initialised object
+ */
   AirspaceIntersectionWarningVisitor(const AIRCRAFT_STATE &state,
                                      const AirspaceAircraftPerformance &perf,
                                      AirspaceWarningManager &warning_manager,
@@ -134,6 +148,11 @@ public:
     {      
     };
 
+/** 
+ * Check whether this intersection should be added to, or updated in, the warning manager
+ * 
+ * @param airspace Airspace corresponding to current intersection
+ */
   void intersection(const AbstractAirspace& airspace) {
     AirspaceWarning& warning = m_warning_manager.get_warning(airspace);
     if (warning.state_accepted(m_warning_state)) {
@@ -144,12 +163,18 @@ public:
       }
     }
   }
-  virtual void Visit(const AirspaceCircle& as) {
+  void Visit(const AirspaceCircle& as) {
     intersection(as);
   }
-  virtual void Visit(const AirspacePolygon& as) {
+  void Visit(const AirspacePolygon& as) {
     intersection(as);
   }
+
+/** 
+ * Determine whether intersections for this type were found (new or modified)
+ * 
+ * @return True if intersections were found
+ */
   bool found() const {
     return m_found;
   }

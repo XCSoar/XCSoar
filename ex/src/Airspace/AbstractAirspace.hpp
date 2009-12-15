@@ -47,6 +47,10 @@
 
 class AtmosphericPressure;
 
+/**
+ *  Structure to hold data for intercepts between aircraft and airspace.
+ *  (interior or exterior)
+ */
 struct AirspaceInterceptSolution {
   /**
    *  Constructor, initialises to invalid solution
@@ -56,14 +60,19 @@ struct AirspaceInterceptSolution {
     altitude(-fixed_one),
     elapsed_time(-fixed_one) {};
 
+/** 
+ * Determine whether this solution is valid
+ * 
+ * @return True if solution is valid
+ */
   bool valid() const {
     return !negative(elapsed_time);
   };
 
-  GEOPOINT location;
-  fixed distance;
-  fixed altitude;
-  fixed elapsed_time;
+  GEOPOINT location; /**< Location of intercept point */
+  fixed distance;  /**< Distance from observer to intercept point (m) */
+  fixed altitude; /**< Altitude AMSL (m) of intercept point */
+  fixed elapsed_time; /**< Estimated time (s) for observer to reach intercept point */
 };
 
 
