@@ -46,7 +46,7 @@ class ContainerWindow;
 class WndProperty;
 class Waypoint;
 class Waypoints;
-class AirspaceDatabase;
+class Airspaces;
 
 void StartupScreen();
 
@@ -108,10 +108,6 @@ bool
 PopupNearestWaypointDetails(const Waypoints &way_points,
                             const GEOPOINT &location,
                             double range, bool pan);
-
-bool
-PopupInteriorAirspaceDetails(const AirspaceDatabase &airspace_database,
-                             const GEOPOINT &location);
 
 #define mrOK             2
 #define mrCancel         3

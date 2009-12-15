@@ -830,42 +830,37 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start);
   airspace_database.visit_intersecting(p_start, vec, ivisitor, true);
 
-  // draw ground
+  // draw terrain
   terrain.Lock();
   if (terrain.GetMap()) {
     // want most accurate rounding here
     RasterRounding rounding(*terrain.GetMap(),0,0);
 
+    std::vector<POINT> points;
+    POINT pf0, pf1;
+    pf0.x = chart.screenX(range);
+    pf0.y = chart.screenY(0);
+    points.push_back(pf0);
+    pf1.x = chart.screenX(0);
+    pf1.y = chart.screenY(0);
+    points.push_back(pf1);
+
+    for (unsigned j=0; j< AIRSPACE_SCANSIZE_X; ++j) {
+
+      const fixed t_this = fixed(j)/(AIRSPACE_SCANSIZE_X-1);
+      const GEOPOINT p_this = p_start+(p_end-p_start)*t_this;
+
+      POINT p; 
+      p.x = chart.screenX(t_this*range);
+      p.y = chart.screenY(terrain.GetTerrainHeight(p_this, rounding));
+      
+      points.push_back(p);
+    }
+    points.push_back(points[0]);
+
     canvas.select(Pen(Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR));
     canvas.select(Brush(Chart::GROUND_COLOUR));
-    
-    const fixed dfj = 1.0/(AIRSPACE_SCANSIZE_X-1);
-    fixed d_last, d_this, t_last, t_this;
-
-    for (unsigned j=1; j< AIRSPACE_SCANSIZE_X; 
-         ++j, d_last=d_this, t_last=t_this) {
-
-      t_this = j*dfj;
-
-      if (j==1) {
-        d_last = terrain.GetTerrainHeight(p_start, rounding);
-        t_last = fixed_zero;
-      }
-      GEOPOINT p_this = p_start+(p_end-p_start)*t_this;
-      d_this = terrain.GetTerrainHeight(p_this, rounding);
-
-      POINT ground[4];
-      ground[0].x = chart.screenX(t_last*range);
-      ground[1].x = ground[0].x;
-      ground[2].x = chart.screenX(t_this*range);
-      ground[3].x = ground[2].x;
-      ground[0].y = chart.screenY(0);
-      ground[1].y = chart.screenY(d_last);
-      ground[2].y = chart.screenY(d_this);
-      ground[3].y = ground[0].y;
-      canvas.polygon(ground, 4);
-
-    }
+    canvas.polygon(&points[0], points.size());
   }
   terrain.Unlock();
 

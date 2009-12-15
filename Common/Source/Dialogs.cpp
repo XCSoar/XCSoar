@@ -177,30 +177,3 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
   return false;
 }
 
-#ifdef OLD_TASK
-bool
-PopupInteriorAirspaceDetails(const AirspaceDatabase &airspace_database,
-                             const GEOPOINT &location) {
-  bool found=false;
-
-  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
-    const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
-
-    if (circle.Visible && airspace_database.InsideCircle(location, i)) {
-      dlgAirspaceDetails(i, -1);
-      found = true;
-    }
-  }
-
-  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
-    const AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
-
-    if (area.Visible && airspace_database.InsideArea(location, i)) {
-      dlgAirspaceDetails(-1, i);
-      found = true;
-    }
-  }
-
-  return found; // nothing found..
-}
-#endif

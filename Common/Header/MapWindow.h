@@ -246,6 +246,11 @@ class MapWindow
   void DrawTerrainAbove(Canvas &hDC, const RECT rc, Canvas &buffer);
   void DrawCDI();
   void DrawSpotHeights(Canvas &canvas);
+
+  // events
+
+  bool AirspaceDetailsAtPoint(const GEOPOINT &location) const;
+
   //  void DrawSpeedToFly(HDC hDC, RECT rc);
   void DrawFLARMTraffic(Canvas &canvas);
   double    findMapScaleBarSize(const RECT rc);

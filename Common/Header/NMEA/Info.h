@@ -99,22 +99,10 @@ struct NMEA_INFO: public AIRCRAFT_STATE
 
   /**
    * Is air speed information available?
+   * If not, will be estimated from ground speed and wind estimate
    * @see TrueAirspeed
    */
   bool AirspeedAvailable;
-  /**
-   * Indicated air speed (if available)
-   * @see Speed
-   * @see TrueAirspeed
-   * @see AirDensityRatio
-   */
-  double IndicatedAirspeed;
-  /**
-   * True air speed (if available)
-   * @see Speed
-   * @see IndicatedAirspeed
-   */
-  double TrueAirspeed;
 
   //##############
   //   Altitude
@@ -133,7 +121,7 @@ struct NMEA_INFO: public AIRCRAFT_STATE
   fixed BaroAltitude;
 
   /**
-   * Troposhere atmosphere model for QNH corrections
+   * Troposhere atmosphere model for QNH correction
    */
   AtmosphericPressure pressure;
 
@@ -163,22 +151,12 @@ struct NMEA_INFO: public AIRCRAFT_STATE
    * @see Vario
    */
   bool VarioAvailable;
-  /**
-   * Vario signal of external device (if available)
-   * @see VarioAvailable
-   */
-  double Vario;
 
   /**
    * Is an external netto vario signal available?
    * @see NettoVario
    */
   bool NettoVarioAvailable;
-  /**
-   * Netto vario signal of external device (if available)
-   * @see NettoVarioAvailable
-   */
-  double NettoVario;
 
   //##############
   //   Settings

@@ -359,11 +359,9 @@ bool MapWindow::on_mouse_up(int x, int y)
         }
 
       } else {
-#ifdef OLD_TASK
         if (airspace_database != NULL &&
-            PopupInteriorAirspaceDetails(*airspace_database, LLstart))
+            AirspaceDetailsAtPoint(LLstart))
           return true;
-#endif
       }
 
     } else {
@@ -376,12 +374,11 @@ bool MapWindow::on_mouse_up(int x, int y)
         }
 
       } else {
-#ifdef OLD_TASK
         if (airspace_database != NULL &&
-            PopupInteriorAirspaceDetails(*airspace_database, LLstart))
+            AirspaceDetailsAtPoint(LLstart))
           return true;
-#endif
       }
+
     } // VK enabled
   } // !TargetPan
 

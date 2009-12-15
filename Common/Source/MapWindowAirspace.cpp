@@ -58,6 +58,10 @@ public:
     {};
 
   virtual bool operator()( const AbstractAirspace& airspace ) const { 
+    return condition(airspace);
+  }
+
+  bool condition( const AbstractAirspace& airspace ) const { 
     if (!parent_condition(airspace)) {
       return false;
     }
@@ -71,6 +75,7 @@ public:
 #else
     return true;
 #endif
+
   }
 private:
   const bool &m_border;
@@ -209,4 +214,53 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   v.set_fill();
   airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
   v.finish(canvas);
+}
+
+
+class AirspaceDetailsDialogVisitor: 
+  public AirspaceVisitor
+{
+public:
+  AirspaceDetailsDialogVisitor(const SETTINGS_COMPUTER& _settings, 
+                               const fixed& _altitude):
+    AirspaceVisitor(AirspaceMapVisible(_settings, _altitude, false)),
+    found(false) {};
+
+  void Visit(const AirspacePolygon& as) {
+    visit_general(as);
+  };
+  void Visit(const AirspaceCircle& as) {
+    visit_general(as);
+  };
+  void visit_general(const AbstractAirspace& as) {
+    if (m_predicate->condition(as)) {
+      // do something...
+      found = true;
+    }
+  };
+  void display() {
+    if (found) {
+      printf("XXX found an airspace\n");
+      // dlgAirspaceDetails(i, -1);
+      // need to do this on a copy
+    }
+  };
+  bool found;
+};
+
+
+bool
+MapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
+{
+  if (airspace_database == NULL)
+    return false;
+
+  AirspaceDetailsDialogVisitor airspace_copy_popup(SettingsComputer(),
+                                                   Basic().GetAnyAltitude());
+
+  airspace_database->visit_within_range(location, 100.0, airspace_copy_popup);
+
+  airspace_copy_popup.display();
+
+  return airspace_copy_popup.found;
 }

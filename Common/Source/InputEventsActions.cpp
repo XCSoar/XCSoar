@@ -1208,104 +1208,41 @@ void InputEvents::eventRepeatStatusMessage(const TCHAR *misc) {
 // If the aircraft is within airspace, this displays the distance and bearing
 // to the nearest exit to the airspace.
 
-
+#include "AirspaceVisibility.hpp"
+#include "Airspace/Airspaces.hpp"
+#include "Airspace/AirspaceSoonestSort.hpp"
 
 void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   (void)misc;
-  double nearestdistance=0;
-  double nearestbearing=0;
-  int foundcircle = -1;
-  int foundarea = -1;
-  int i;
-  bool inside = false;
-
-  TCHAR szMessageBuffer[MAX_PATH];
-  TCHAR szTitleBuffer[MAX_PATH];
-  TCHAR text[MAX_PATH];
 
 #ifdef OLD_TASK
-
   if (!dlgAirspaceWarningIsEmpty()) {
     RequestAirspaceWarningForce = true;
     airspaceWarningEvent.trigger();
     return;
   }
+#endif
 
-  StartHourglassCursor();
-  FindNearestAirspace(airspace_database,
-                      Basic().Location, Basic().GetAnyAltitude(),
-                      Calculated().TerrainAlt, SettingsComputer(),
-                      MapProjection(),
-                      &nearestdistance, &nearestbearing,
-		      &foundcircle, &foundarea);
-  StopHourglassCursor();
+  AirspaceVisible visible (SettingsComputer(), Basic().GetAnyAltitude());
+  AirspaceAircraftPerformanceSimple perf;
+  AirspaceSoonestSort ans(Basic(), perf, 1800, visible);
 
-  if ((foundcircle == -1)&&(foundarea == -1)) {
-    // nothing to display!
+  const AbstractAirspace* as = ans.find_nearest(airspace_database);
+  if (!as) {
+    printf("found nearest (soonest) airspace\n");
     return;
-  }
+  } 
 
   ScopePopupBlock block(main_window.popup);
 
-  if (foundcircle != -1) {
-    i = foundcircle;
-
-    dlgAirspaceDetails(i, -1);
-    /*
-    FormatWarningString(AirspaceCircle[i].Type , AirspaceCircle[i].Name ,
-			AirspaceCircle[i].Base, AirspaceCircle[i].Top,
-			szMessageBuffer, szTitleBuffer );
-    */
-  } else if (foundarea != -1) {
-
-    i = foundarea;
-    dlgAirspaceDetails(-1, i);
-
-    /*
-    FormatWarningString(AirspaceArea[i].Type , AirspaceArea[i].Name ,
-			AirspaceArea[i].Base, AirspaceArea[i].Top,
-			szMessageBuffer, szTitleBuffer );
-    */
-  }
-
-  return; // JMW testing only
-
-  if (nearestdistance<0) {
-    inside = true;
-    nearestdistance = -nearestdistance;
-  }
-
-  TCHAR DistanceText[MAX_PATH];
-  Units::FormatUserDistance(nearestdistance, DistanceText, 10);
-
-  if (inside &&
-      Calculated().NavAltitude <= airspace_database.AirspaceArea[i].Top.Altitude &&
-      Calculated().NavAltitude >= airspace_database.AirspaceArea[i].Base.Altitude) {
-
-    _stprintf(text,
-              TEXT("Inside airspace: %s\r\n%s\r\nExit: %s\r\nBearing %d")
-	      TEXT(DEG)TEXT("\r\n"),
-              szTitleBuffer,
-              szMessageBuffer,
-              DistanceText,
-              (int)nearestbearing);
-  } else {
-    _stprintf(text,
-	      TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %s\r\nBearing %d")
-	      TEXT(DEG)TEXT("\r\n"),
-	      szTitleBuffer,
-	      szMessageBuffer,
-	      DistanceText,
-	      (int)nearestbearing);
-  }
+// TODO OLD_TASK    dlgAirspaceDetails(i, -1);
 
   // clear previous warning if any
   Message::Acknowledge(Message::MSG_AIRSPACE);
 
   // TODO code: No control via status data (ala DoStatusMEssage)
   // - can we change this?
-  Message::AddMessage(5000, Message::MSG_AIRSPACE, text);
-#endif
+//  Message::AddMessage(5000, Message::MSG_AIRSPACE, text);
 }
 
 // NearestWaypointDetails
@@ -1313,7 +1250,6 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
 //  aircraft: the waypoint nearest the aircraft
 //  pan: the waypoint nearest to the pan cursor
 void InputEvents::eventNearestWaypointDetails(const TCHAR *misc) {
-#ifdef OLD_TASK
   if (_tcscmp(misc, TEXT("aircraft")) == 0) {
     PopupNearestWaypointDetails(way_points, Basic().Location,
 				1.0e5, // big range..
@@ -1324,7 +1260,6 @@ void InputEvents::eventNearestWaypointDetails(const TCHAR *misc) {
 				1.0e5, // big range..
 				true);
   }
-#endif
 }
 
 // Null

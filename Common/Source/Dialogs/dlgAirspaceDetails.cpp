@@ -40,9 +40,10 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
-#include "Airspace.h"
-#include "AirspaceDatabase.hpp"
-#include "AirspaceWarning.h"
+#include "Airspace/Airspaces.h"
+#ifdef OLD_TASK
+//#include "AirspaceWarning.h"
+#endif
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
