@@ -372,6 +372,18 @@ bool MapWindow::on_mouse_up(int x, int y)
   return false;
 }
 
+bool
+MapWindow::on_mouse_wheel(int delta)
+{
+  if (delta > 0)
+    // zoom in
+    InputEvents::sub_ScaleZoom(1);
+  else if (delta < 0)
+    // zoom out
+    InputEvents::sub_ScaleZoom(-1);
+
+  return true;
+}
 
 bool MapWindow::on_key_down(unsigned key_code)
 {

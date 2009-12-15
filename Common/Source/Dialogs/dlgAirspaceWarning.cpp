@@ -64,12 +64,7 @@ static Brush hBrushInsideAckBk;
 static Brush hBrushNearAckBk;
 
 static int Count=0;
-static int ItemIndex=-1;
-static int DrawListIndex=-1;
 static int FocusedID = -1;     // Currently focused airspace ID
-static int FocusedIdx = -1;    // Currently socused airspace List Index
-static int SelectedID = -1;    // Currently selected airspace ID
-static int SelectedIdx = -1;   // Currently selected airspace List Index
 static bool fDialogOpen = false;
 
 void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace);
@@ -79,11 +74,7 @@ static void DoAck(int Ack){
   AirspaceInfo_c pAS;
   int Idx;
 
-  if (!wAirspaceList->GetFocused())
-    Idx = SelectedIdx;
-  else
-    Idx = ItemIndex;
-
+  Idx = wAirspaceList->GetCursorIndex();
   if (Idx < 0)
     Idx = 0;
 
@@ -116,7 +107,7 @@ static void OnEnableClicked(WindowControl * Sender){
 
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
-  wf->SetVisible(false);
+  wf->hide();
 //  SetFocus(hWndMainWindow);
 //  SetFocus(hWndMapWindow);
 
@@ -133,16 +124,6 @@ static bool
 OnKeyDown(WindowControl *Sender, unsigned key_code)
 {
   switch(key_code){
-    case VK_RETURN:
-      if (wAirspaceList->GetFocused()){
-        SelectedID = FocusedID;
-        SelectedIdx = FocusedIdx;
-        wAirspaceList->invalidate();
-        return true;
-      }
-
-    return false;
-
     case VK_ESCAPE:
       OnCloseClicked(Sender);
     return true;
@@ -195,43 +176,43 @@ static void getAirspaceType(TCHAR *buf, int Type){
   switch (Type)
     {
     case RESTRICT:
-      _tcscpy(buf, TEXT("LxR"));
+      _tcscpy(buf, _T("LxR"));
       return;
     case PROHIBITED:
-      _tcscpy(buf, TEXT("LxP"));
+      _tcscpy(buf, _T("LxP"));
       return;
     case DANGER:
-      _tcscpy(buf, TEXT("LxD"));
+      _tcscpy(buf, _T("LxD"));
       return;
     case CLASSA:
-      _tcscpy(buf, TEXT("A"));
+      _tcscpy(buf, _T("A"));
       return;
     case CLASSB:
-      _tcscpy(buf, TEXT("B"));
+      _tcscpy(buf, _T("B"));
       return;
     case CLASSC:
-      _tcscpy(buf, TEXT("C"));
+      _tcscpy(buf, _T("C"));
       return;
     case CLASSD:
-      _tcscpy(buf, TEXT("D"));
+      _tcscpy(buf, _T("D"));
       return;
     case CLASSE:
-      _tcscpy(buf, TEXT("E"));
+      _tcscpy(buf, _T("E"));
       return;
     case CLASSF:
-      _tcscpy(buf, TEXT("F"));
+      _tcscpy(buf, _T("F"));
       return;
     case NOGLIDER:
-      _tcscpy(buf, TEXT("NoGld"));
+      _tcscpy(buf, _T("NoGld"));
       return;
     case CTR:
-      _tcscpy(buf, TEXT("CTR"));
+      _tcscpy(buf, _T("CTR"));
       return;
     case WAVE:
-      _tcscpy(buf, TEXT("Wav"));
+      _tcscpy(buf, _T("Wav"));
       return;
     default:
-      _tcscpy(buf, TEXT("?"));
+      _tcscpy(buf, _T("?"));
       return;
     }
 }
@@ -256,41 +237,41 @@ static TCHAR *fmtAirspaceAlt(TCHAR *Buffer, AIRSPACE_ALT *alt){
   switch (alt->Base){
     case abUndef:
       if (Units::GetUserAltitudeUnit() == unMeter) {
-	_stprintf(Buffer, TEXT("%s %s"), sUnitBuffer, sAltUnitBuffer);
+	_stprintf(Buffer, _T("%s %s"), sUnitBuffer, sAltUnitBuffer);
       } else {
-	_stprintf(Buffer, TEXT("%s"), sUnitBuffer);
+	_stprintf(Buffer, _T("%s"), sUnitBuffer);
       }
     break;
     case abMSL:
       if (Units::GetUserAltitudeUnit() == unMeter) {
-	_stprintf(Buffer, TEXT("%s %s MSL"), sUnitBuffer, sAltUnitBuffer);
+	_stprintf(Buffer, _T("%s %s MSL"), sUnitBuffer, sAltUnitBuffer);
       } else {
-	_stprintf(Buffer, TEXT("%s MSL"), sUnitBuffer);
+	_stprintf(Buffer, _T("%s MSL"), sUnitBuffer);
       }
     break;
     case abAGL:
       if (alt->Altitude == 0)
-        _stprintf(Buffer, TEXT("SFC"));
+        _stprintf(Buffer, _T("SFC"));
       else {
 	Units::FormatUserAltitude(alt->AGL, sUnitBuffer,
 				  sizeof(sUnitBuffer)/sizeof(sUnitBuffer[0]));
 	Units::FormatAlternateUserAltitude(alt->AGL, sAltUnitBuffer,
 			    sizeof(sAltUnitBuffer)/sizeof(sAltUnitBuffer[0]));
 	if (Units::GetUserAltitudeUnit() == unMeter) {
-	  _stprintf(Buffer, TEXT("%s %s AGL"), sUnitBuffer, sAltUnitBuffer);
+	  _stprintf(Buffer, _T("%s %s AGL"), sUnitBuffer, sAltUnitBuffer);
 	} else {
-	  _stprintf(Buffer, TEXT("%s AGL"), sUnitBuffer);
+	  _stprintf(Buffer, _T("%s AGL"), sUnitBuffer);
 	}
       }
     break;
     case abFL:
       /*AltitudeToQNHAltitude(alt->Altitude)*/
       if (Units::GetUserAltitudeUnit() == unMeter) {
-	_stprintf(Buffer, TEXT("FL%.0f %.0f m %.0f ft"),
+	_stprintf(Buffer, _T("FL%.0f %.0f m %.0f ft"),
 		  alt->FL, FLAltRounded(alt->Altitude),
 		  FLAltRounded(alt->Altitude*TOFEET));
       } else {
-	_stprintf(Buffer, TEXT("FL%.0f %.0f ft"),
+	_stprintf(Buffer, _T("FL%.0f %.0f ft"),
 		  alt->FL, FLAltRounded(alt->Altitude*TOFEET));
       }
     break;
@@ -299,20 +280,19 @@ static TCHAR *fmtAirspaceAlt(TCHAR *Buffer, AIRSPACE_ALT *alt){
 }
 
 static void
-OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
+OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 {
   TCHAR sTmp[128];
 
   if (Count != 0){
 
-    TCHAR sAckIndicator[6] = TEXT(" -++*");
+    TCHAR sAckIndicator[6] = _T(" -++*");
     TCHAR sName[21];
     TCHAR sTop[32];
     TCHAR sBase[32];
     TCHAR sType[32];
     AIRSPACE_ALT Base;
     AIRSPACE_ALT Top;
-    int i = DrawListIndex;
     AirspaceInfo_c pAS;
     int          Type;
     int          TextHeight = 12;
@@ -323,18 +303,18 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
     RECT         rcTextClip;
     Brush *hBrushBk = NULL;
 
-    if (i>=Count) return;
+    if (i >= (unsigned)Count)
+      return;
 
-    rc = rcTextClip = Sender->get_client_rect();
+    rc = rcTextClip = paint_rc;
     rcTextClip.right = IBLSCALE(Col1Left - 2);
 
     InflateRect(&rc, IBLSCALE(-2), IBLSCALE(-2));
 
     if (!AirspaceWarnGetItem(i, pAS)) return;
 
-    if (ItemIndex == DrawListIndex){
+    if ((int)i == wAirspaceList->GetCursorIndex())
       FocusedID = pAS.ID;
-    }
 
     if (pAS.IsCircle){
       const AIRSPACE_CIRCLE &circle =
@@ -376,12 +356,7 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
       }
     }
 
-
-    if (SelectedIdx == DrawListIndex){
-      InflateRect(&rc, 1, 1);
-      canvas.black_pen();
-      canvas.rectangle(rc.left, rc.top, rc.right, rc.bottom);
-    } else if (hBrushBk != NULL) {
+    if (hBrushBk != NULL) {
       canvas.fill_rectangle(rc, *hBrushBk);
     }
 
@@ -390,23 +365,26 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
     }
 
     #ifndef NDEBUG
-    wsprintf(sTmp, TEXT("%-20s%d"), sName , pAS.WarnLevel - pAS.Acknowledge);
+    _stprintf(sTmp, _T("%-20s%d"), sName , pAS.WarnLevel - pAS.Acknowledge);
     #else
-    wsprintf(sTmp, TEXT("%-20s"), sName);
+    _stprintf(sTmp, _T("%-20s"), sName);
     #endif
 
-    canvas.text_clipped(IBLSCALE(Col0Left), IBLSCALE(TextTop),
+    canvas.text_clipped(paint_rc.left + IBLSCALE(Col0Left),
+                        paint_rc.top + IBLSCALE(TextTop),
                         rcTextClip, sTmp);
 
-    wsprintf(sTmp, TEXT("%-20s"), sTop);
-    canvas.text_opaque(IBLSCALE(Col1Left), IBLSCALE(TextTop), sTmp);
+    _stprintf(sTmp, _T("%-20s"), sTop);
+    canvas.text(paint_rc.left + IBLSCALE(Col1Left),
+                paint_rc.top + IBLSCALE(TextTop), sTmp);
 
-    wsprintf(sTmp, TEXT("%-20s"), sBase);
-    canvas.text_opaque(IBLSCALE(Col1Left), IBLSCALE(TextTop + TextHeight),
-                       sTmp);
+    _stprintf(sTmp, _T("%-20s"), sBase);
+    canvas.text(paint_rc.left + IBLSCALE(Col1Left),
+                paint_rc.top + IBLSCALE(TextTop + TextHeight),
+                sTmp);
 
     if (pAS.Inside){
-      wsprintf(sTmp, TEXT("> %c %s"), sAckIndicator[pAS.Acknowledge], sType);
+      _stprintf(sTmp, _T("> %c %s"), sAckIndicator[pAS.Acknowledge], sType);
     } else {
       TCHAR DistanceText[MAX_PATH];
       if (pAS.hDistance == 0) {
@@ -415,15 +393,15 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
 
         Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
         if (pAS.vDistance > 0) {
-          wsprintf(sTmp, TEXT("< %c %s ab %s"),
-                   sAckIndicator[pAS.Acknowledge],
-                   sType, DistanceText);
+          _stprintf(sTmp, _T("< %c %s ab %s"),
+                    sAckIndicator[pAS.Acknowledge],
+                    sType, DistanceText);
         }
         if (pAS.vDistance < 0) {
           Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
-          wsprintf(sTmp, TEXT("< %c %s bl %s"),
-                   sAckIndicator[pAS.Acknowledge],
-                   sType, DistanceText);
+          _stprintf(sTmp, _T("< %c %s bl %s"),
+                    sAckIndicator[pAS.Acknowledge],
+                    sType, DistanceText);
         }
       } else {
         if ((pAS.vDistance == 0) ||
@@ -432,8 +410,8 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
           // Close to airspace altitude, horizontally separated
 
           Units::FormatUserDistance(fabs((double)pAS.hDistance),DistanceText, 7);
-          wsprintf(sTmp, TEXT("< %c %s H %s"), sAckIndicator[pAS.Acknowledge],
-                   sType, DistanceText);
+          _stprintf(sTmp, _T("< %c %s H %s"), sAckIndicator[pAS.Acknowledge],
+                    sType, DistanceText);
         } else {
 
           // Effectively above or below airspace, steep climb or descent
@@ -441,25 +419,27 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
 
           Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
           if (pAS.vDistance > 0) {
-            wsprintf(sTmp, TEXT("< %c %s ab %s"),
-                     sAckIndicator[pAS.Acknowledge],
-                     sType, DistanceText);
+            _stprintf(sTmp, _T("< %c %s ab %s"),
+                      sAckIndicator[pAS.Acknowledge],
+                      sType, DistanceText);
           } else {
-            wsprintf(sTmp, TEXT("< %c %s bl %s"),
-                     sAckIndicator[pAS.Acknowledge], sType,
-                     DistanceText);
+            _stprintf(sTmp, _T("< %c %s bl %s"),
+                      sAckIndicator[pAS.Acknowledge], sType,
+                      DistanceText);
           }
         }
       }
     }
 
-    canvas.text_clipped(IBLSCALE(Col0Left), IBLSCALE(TextTop + TextHeight),
+    canvas.text_clipped(paint_rc.left + IBLSCALE(Col0Left),
+                        paint_rc.top + IBLSCALE(TextTop + TextHeight),
                         rcTextClip, sTmp);
 
   } else {
-    if (DrawListIndex == 0){
-      _stprintf(sTmp, TEXT("%s"), gettext(TEXT("No Warnings")));
-      canvas.text_opaque(IBLSCALE(2), IBLSCALE(2), sTmp);
+    if (i == 0){
+      _stprintf(sTmp, _T("%s"), gettext(_T("No Warnings")));
+      canvas.text_opaque(paint_rc.left + IBLSCALE(2),
+                         paint_rc.top + IBLSCALE(2), sTmp);
     }
   }
 }
@@ -467,19 +447,10 @@ OnAirspaceListItemPaint(WindowControl *Sender, Canvas &canvas)
 static void OnAirspaceListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   (void)Sender;
   if (ListInfo->DrawIndex == -1){
-    if (FocusedIdx < 0) {
-      FocusedIdx = 0;
-    }
-    ListInfo->ItemIndex = FocusedIdx;
     ListInfo->ItemCount = max(1,Count);
 
     ListInfo->DrawIndex = 0;
     ListInfo->ScrollIndex = 0; // JMW bug fix
-    DrawListIndex = 0;
-
-  } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
-    FocusedIdx = ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
   }
 }
 
@@ -489,25 +460,10 @@ bool actShow = false;
 bool actListSizeChange = false;
 bool actListChange = false;
 
-static bool FindFocus() {
-  bool do_refocus = false;
-
-  FocusedIdx = 0;
-  FocusedIdx = AirspaceWarnFindIndexByID(FocusedID);
-  if (FocusedIdx < 0) {
-    FocusedIdx = 0;
-    FocusedID = -1; // JMW bug fix
-
-    if (wAirspaceList->GetFocused()) {
-      // JMW attempt to find fix...
-      do_refocus = true;
-    }
-  }
-  SelectedIdx = AirspaceWarnFindIndexByID(SelectedID);
-  if (SelectedIdx < 0){
-    SelectedID = -1;
-  }
-  return do_refocus;
+static void
+FindFocus()
+{
+  wAirspaceList->SetCursorIndex(AirspaceWarnFindIndexByID(FocusedID));
 }
 
 
@@ -517,17 +473,15 @@ UserMsgNotify(WindowControl *Sender, unsigned id){
   if (id != 1)
     return false;
 
-  if (!wf->GetVisible())
+  if (!wf->is_visible())
     return true;
-
-  bool do_refocus = false;
 
   if (actListSizeChange){
     actListSizeChange = false;
 
     Count = AirspaceWarnGetItemCount();
 
-    do_refocus = FindFocus();
+    FindFocus();
 
     wAirspaceList->ResetList();
 
@@ -539,32 +493,12 @@ UserMsgNotify(WindowControl *Sender, unsigned id){
 
   if (actShow){
     actShow = false;
-    if (!do_refocus) {
-      do_refocus = FindFocus();
-    }
-
-    /*
-    if (!wf->GetVisible()){
-      Count = AirspaceWarnGetItemCount();
-      wAirspaceList->ResetList();
-      FocusedIdx = 0;
-      FocusedID = -1;
-      wf->Show();
-      SetFocus(wAirspaceListEntry->GetHandle());
-    } else {
-      SetFocus(wAirspaceListEntry->GetHandle());
-    }
-    */
-    //    return(0);
+    FindFocus();
   }
 
   if (actListChange) {
     actListChange = false;
     wAirspaceList->invalidate();
-  }
-
-  if (do_refocus) {
-    wAirspaceList->set_focus();
   }
 
   // this is our message, we have handled it.
@@ -613,7 +547,6 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnEnableClicked),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnAirspaceListInfo),
-  DeclareCallBackEntry(OnAirspaceListItemPaint),
   DeclareCallBackEntry(NULL)
 };
 
@@ -665,10 +598,7 @@ bool dlgAirspaceWarningShowDlg(bool Force){
     fDialogOpen = false;
 
     // JMW need to deselect everything on new reopening of dialog
-    SelectedID = -1;
-    SelectedIdx = -1;
     FocusedID = -1;
-    FocusedIdx = -1;
 
     //    SetFocus(hWndMapWindow);
     // JMW why do this? --- not necessary?
@@ -684,9 +614,9 @@ int dlgAirspaceWarningInit(void){
   int res = 0;
 
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgAirspaceWarning.xml"),
+                      _T("dlgAirspaceWarning.xml"),
                       XCSoarInterface::main_window,
-                      TEXT("IDR_XML_AIRSPACEWARNING"));
+                      _T("IDR_XML_AIRSPACEWARNING"));
   if (wf == NULL)
     return 0;
 
@@ -699,20 +629,15 @@ int dlgAirspaceWarningInit(void){
   hBrushInsideAckBk.set(Color(254,100,100));
   hBrushNearAckBk.set(Color(254,254,100));
 
-  wAirspaceList = (WndListFrame*)wf->FindByName(TEXT("frmAirspaceWarningList"));
+  wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceWarningList"));
+  wAirspaceList->SetPaintItemCallback(OnAirspaceListItemPaint);
 
   AirspaceWarnListAddNotifier(AirspaceWarningNotify);
-
-  wf->Close();  // hide the window
 
   return(res);
 }
 
 int dlgAirspaceWarningDeInit(void){
-
-  if (wf)
-    wf->SetVisible(false);
-
   AirspaceWarnListRemoveNotifier(AirspaceWarningNotify);
 
   delete wf;

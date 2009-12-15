@@ -137,8 +137,7 @@ TopWindow::full_screen()
 #else /* !ENABLE_SDL */
   ::SetForegroundWindow(hWnd);
 #ifdef WINDOWSPC
-  ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
-                 SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+  show_on_top();
 #else
 #if !defined(CECORE) && !defined(GNAV)
   ::SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);

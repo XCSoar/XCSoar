@@ -42,6 +42,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Appearance.hpp"
 #include "Asset.hpp"
+#include "StringUtil.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -58,7 +59,7 @@ static int max_width = MAX_TEXTENTRY;
 
 static TCHAR edittext[MAX_TEXTENTRY];
 
-static TCHAR EntryLetters[] = TEXT(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
+static TCHAR EntryLetters[] = _T(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 
 #define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
 
@@ -223,37 +224,37 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
   max_width = min(MAX_TEXTENTRY, width);
 
   wf = dlgLoadFromXML(CallBackTable,
-                      is_altair() ? TEXT("dlgTextEntry_T.xml")
-                      : TEXT("dlgTextEntry.xml"),
+                      is_altair() ? _T("dlgTextEntry_T.xml")
+                      : _T("dlgTextEntry.xml"),
 		      XCSoarInterface::main_window,
-                      is_altair() ? TEXT("IDR_XML_TEXTENTRY_T")
-                      : TEXT("IDR_XML_TEXTENTRY"));
+                      is_altair() ? _T("IDR_XML_TEXTENTRY_T")
+                      : _T("IDR_XML_TEXTENTRY"));
   if (!wf) return;
 
-  wGrid = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmGrid"));
+  wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
 
   WndButton* wb;
-  wb = (WndButton *)(wf->FindByName(TEXT("cmdClose")));
+  wb = (WndButton *)(wf->FindByName(_T("cmdClose")));
   if (wb) {
     wb->SetOnClickNotify(OnCloseClicked);
   }
 
-  wb = (WndButton *)(wf->FindByName(TEXT("cmdLeft")));
+  wb = (WndButton *)(wf->FindByName(_T("cmdLeft")));
   if (wb) {
     wb->SetOnClickNotify(OnLeftClicked);
   }
 
-  wb = (WndButton *)(wf->FindByName(TEXT("cmdRight")));
+  wb = (WndButton *)(wf->FindByName(_T("cmdRight")));
   if (wb) {
     wb->SetOnClickNotify(OnRightClicked);
   }
 
-  wb = (WndButton *)(wf->FindByName(TEXT("cmdUp")));
+  wb = (WndButton *)(wf->FindByName(_T("cmdUp")));
   if (wb) {
     wb->SetOnClickNotify(OnUpClicked);
   }
 
-  wb = (WndButton *)(wf->FindByName(TEXT("cmdDown")));
+  wb = (WndButton *)(wf->FindByName(_T("cmdDown")));
   if (wb) {
     wb->SetOnClickNotify(OnDownClicked);
   }
@@ -262,7 +263,7 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
   cursor = 0;
   edittext[0]= 0;
   edittext[1]= 0;
-  if (_tcslen(text)>0) {
+  if (!string_is_empty(text)) {
     _tcsupr(text);
     _tcsncpy(edittext, text, max_width-1);
     edittext[max_width-1]= 0;
@@ -287,16 +288,19 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
 }
 
 
-void dlgTextEntryShowModal(TCHAR *text, int width)
+bool dlgTextEntryShowModal(TCHAR *text, int width)
 {
+  bool bRetVal=false;
   switch (Appearance.TextInputStyle)
     {
     case tiKeyboard:
-      dlgTextEntryKeyboardShowModal(text, width);
+      bRetVal=dlgTextEntryKeyboardShowModal(text, width);
       break;
     case tiHighScore:
     default:
       dlgTextEntryHighscoreType(text, width);
+      bRetVal=true;
       break;
     }
+  return bRetVal;
 }

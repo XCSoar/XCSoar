@@ -57,11 +57,11 @@ static void OnCloseClicked(WindowControl * Sender){
 static void UpdateWind(bool set) {
   WndProperty *wp;
   double ws = 0.0, wb = 0.0;
-  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeed"));
+  wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp) {
     ws = wp->GetDataField()->GetAsFloat()/SPEEDMODIFY;
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpDirection"));
+  wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
   if (wp) {
     wb = wp->GetDataField()->GetAsFloat();
   }
@@ -136,32 +136,32 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgWindSettingsShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgWindSettings.xml"),
+                      _T("dlgWindSettings.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_WINDSETTINGS"));
+		      _T("IDR_XML_WINDSETTINGS"));
   if (wf == NULL)
     return;
 
   WndProperty* wp;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeed"));
+  wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp) {
     wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("Manual")));
-    dfe->addEnumText(gettext(TEXT("Circling")));
-    dfe->addEnumText(gettext(TEXT("ZigZag")));
-    dfe->addEnumText(gettext(TEXT("Both")));
+    dfe->addEnumText(gettext(_T("Manual")));
+    dfe->addEnumText(gettext(_T("Circling")));
+    dfe->addEnumText(gettext(_T("ZigZag")));
+    dfe->addEnumText(gettext(_T("Both")));
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().AutoWindMode);
     wp->RefreshDisplay();
 
-    wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
+    wp = (WndProperty*)wf->FindByName(_T("prpTrailDrift"));
     if (wp) {
       wp->GetDataField()->Set(XCSoarInterface::SettingsMap().EnableTrailDrift);
       wp->RefreshDisplay();
@@ -170,9 +170,9 @@ void dlgWindSettingsShowModal(void){
 
   wf->ShowModal();
 
-  SetValueRegistryOnChange(wf, TEXT("prpAutoWind"), szRegistryAutoWind,
+  SetValueRegistryOnChange(wf, _T("prpAutoWind"), szRegistryAutoWind,
                            XCSoarInterface::SetSettingsComputer().AutoWindMode);
-  SetValueOnChange(wf, TEXT("prpTrailDrift"),
+  SetValueOnChange(wf, _T("prpTrailDrift"),
                    XCSoarInterface::SetSettingsMap().EnableTrailDrift);
 
   delete wf;

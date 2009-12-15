@@ -81,11 +81,8 @@ class DataFieldEnum: public DataField {
 
   void addEnumText(const TCHAR *Text);
 
-  int GetAsInteger(void);
-  TCHAR *GetAsString(void);
-  TCHAR *GetAsDisplayString(void){
-    return(GetAsString());
-  };
+  virtual int GetAsInteger(void) const;
+  virtual const TCHAR *GetAsString(void) const;
 
   #if defined(__BORLANDC__)
   #pragma warn -hid

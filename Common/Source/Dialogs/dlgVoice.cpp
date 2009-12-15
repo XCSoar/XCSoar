@@ -59,154 +59,74 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 
+static void LoadIntoForm(WndForm &form, const SETTINGS_COMPUTER &settings){
+  LoadFormProperty(form, _T("prpVoiceClimbRate"),
+                   settings.EnableVoiceClimbRate);
+  LoadFormProperty(form, _T("prpVoiceTerrain"), settings.EnableVoiceTerrain);
+  LoadFormProperty(form, _T("prpVoiceWaypointDistance"),
+                   settings.EnableVoiceWaypointDistance);
+  LoadFormProperty(form, _T("prpVoiceTaskAltitudeDifference"),
+                   settings.EnableVoiceTaskAltitudeDifference);
+  LoadFormProperty(form, _T("prpVoiceMacCready"),
+                   settings.EnableVoiceMacCready);
+  LoadFormProperty(form, _T("prpVoiceNewWaypoint"),
+                   settings.EnableVoiceNewWaypoint);
+  LoadFormProperty(form, _T("prpVoiceInSector"), settings.EnableVoiceInSector);
+  LoadFormProperty(form, _T("prpVoiceAirspace"), settings.EnableVoiceAirspace);
+}
+
+static bool
+SaveFromForm(const WndForm &form, SETTINGS_COMPUTER &settings)
+{
+  return
+    SaveFormProperty(form, _T("prpVoiceClimbRate"),
+                     settings.EnableVoiceClimbRate,
+                     szRegistryVoiceClimbRate) ||
+    SaveFormProperty(form, _T("prpVoiceTerrain"),
+                     settings.EnableVoiceTerrain, szRegistryVoiceTerrain) ||
+    SaveFormProperty(form, _T("prpVoiceWaypointDistance"),
+                     settings.EnableVoiceWaypointDistance,
+                     szRegistryVoiceWaypointDistance) ||
+    SaveFormProperty(form, _T("prpVoiceTaskAltitudeDifference"),
+                     settings.EnableVoiceTaskAltitudeDifference,
+                     szRegistryVoiceTaskAltitudeDifference) ||
+    SaveFormProperty(form, _T("prpVoiceMacCready"),
+                     settings.EnableVoiceMacCready,
+                     szRegistryVoiceMacCready) ||
+    SaveFormProperty(form, _T("prpVoiceNewWaypoint"),
+                     settings.EnableVoiceNewWaypoint,
+                     szRegistryVoiceNewWaypoint) ||
+    SaveFormProperty(form, _T("prpVoiceInSector"),
+                     settings.EnableVoiceInSector, szRegistryVoiceInSector) ||
+    SaveFormProperty(form, _T("prpVoiceAirspace"),
+                     settings.EnableVoiceAirspace, szRegistryVoiceAirspace);
+}
+
 
 void dlgVoiceShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgVoice.xml"),
+                      _T("dlgVoice.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_VOICE"));
+		      _T("IDR_XML_VOICE"));
 
-  WndProperty* wp;
-
+  
   if (!wf) return;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceClimbRate"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceClimbRate);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceTerrain"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceTerrain);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceWaypointDistance"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceWaypointDistance);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceTaskAltitudeDifference"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceTaskAltitudeDifference);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceMacCready"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceMacCready);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceNewWaypoint"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceNewWaypoint);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceInSector"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceInSector);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceAirspace"));
-  if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableVoiceAirspace);
-    wp->RefreshDisplay();
-  }
+  LoadIntoForm(*wf, XCSoarInterface::SettingsComputer());
 
   wf->ShowModal();
 
   bool changed = false;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceClimbRate"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceClimbRate) {
-      XCSoarInterface::SetSettingsComputer().EnableVoiceClimbRate = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceClimbRate, XCSoarInterface::SettingsComputer().EnableVoiceClimbRate);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceTerrain"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceTerrain) {
-      XCSoarInterface::SetSettingsComputer().EnableVoiceTerrain = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceTerrain, XCSoarInterface::SettingsComputer().EnableVoiceTerrain);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceWaypointDistance"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceWaypointDistance) {
-      XCSoarInterface::SetSettingsComputer().EnableVoiceWaypointDistance = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceWaypointDistance,
-		    XCSoarInterface::SettingsComputer().EnableVoiceWaypointDistance);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceTaskAltitudeDifference"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceTaskAltitudeDifference) {
-      XCSoarInterface::SetSettingsComputer().EnableVoiceTaskAltitudeDifference = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceTaskAltitudeDifference,
-		    XCSoarInterface::SettingsComputer().EnableVoiceTaskAltitudeDifference);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceMacCready"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceMacCready) {
-      XCSoarInterface::SetSettingsComputer().EnableVoiceMacCready = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceMacCready,
-		    XCSoarInterface::SettingsComputer().EnableVoiceMacCready);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceNewWaypoint"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceNewWaypoint) {
-      XCSoarInterface::SetSettingsComputer().EnableVoiceNewWaypoint = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceNewWaypoint,
-		    XCSoarInterface::SettingsComputer().EnableVoiceNewWaypoint);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceInSector"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceInSector) {
-      XCSoarInterface::SetSettingsComputer().EnableVoiceInSector = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceInSector,
-		    XCSoarInterface::SettingsComputer().EnableVoiceInSector);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVoiceAirspace"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != XCSoarInterface::SettingsComputer().EnableVoiceAirspace) {
-      XCSoarInterface::SetSettingsComputer().EnableVoiceAirspace = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryVoiceAirspace,
-		    XCSoarInterface::SettingsComputer().EnableVoiceAirspace);
-      changed = true;
-    }
-  }
-
+  changed = SaveFromForm(*wf, XCSoarInterface::SetSettingsComputer());
+  
   if (changed) {
     Profile::StoreRegistry();
 
-    MessageBoxX(gettext(TEXT("Changes to configuration saved.")),
-		 TEXT(""), MB_OK);
+    MessageBoxX(gettext(_T("Changes to configuration saved.")),
+		 _T(""), MB_OK);
   }
-
+    
   delete wf;
   wf = NULL;
 

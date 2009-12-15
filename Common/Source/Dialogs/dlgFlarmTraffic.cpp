@@ -47,17 +47,9 @@
 
 #include <assert.h>
 
-#define MAXTITLE 200
-#define MAXDETAILS 5000
-
 static int page=0;
 static WndForm *wf=NULL;
 static WndListFrame *wDetails=NULL;
-
-#define MAXLINES 100
-#define MAXLISTS 20
-static int DrawListIndex=0;
-static int nTextLines=0;
 
 static void Update(){
 
@@ -65,41 +57,74 @@ static void Update(){
   wDetails->invalidate();
 }
 
+static void
+FlarmCursorCallback(unsigned i)
+{
+  const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[i];
+
+  WndButton *set_cn_button = (WndButton *)wf->FindByName(_T("cmdSetCN"));
+  WndButton *track_button = (WndButton *)wf->FindByName(_T("cmdTrack"));
+
+  if (traffic.ID != 0) {
+    if (LookupFLARMDetails(traffic.ID) == NULL) {
+      // not existing en primary or secondary flarm id list
+      set_cn_button->SetCaption(_T("Set CN"));
+      set_cn_button->show();
+    } else {
+      // the id was found - is it from secondary list ?
+      int index = LookupSecondaryFLARMId(traffic.ID);
+
+      if (index != -1) {
+        set_cn_button->SetCaption(_T("Edit CN"));
+        set_cn_button->show();
+      } else
+        set_cn_button->hide();
+    }
+
+    track_button->show();
+  } else {
+    track_button->hide();
+    set_cn_button->hide();
+  }
+}
 
 static void
-OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
+OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  (void)Sender;
-  if (DrawListIndex < FLARM_MAX_TRAFFIC){
-    TCHAR tmp[100];
-    TCHAR text[100];
+  if (i >= FLARM_MAX_TRAFFIC)
+    return;
 
-    double range;
-    double bear;
+  TCHAR tmp[100];
+  TCHAR text[100];
 
-    DistanceBearing(XCSoarInterface::Basic().Location,
-		    XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Location,
-		    &range,
-		    &bear);
+  double range;
+  double bear;
 
-    wsprintf(tmp, TEXT("%3s %3ld %+3.1lf %5ld"),
-	     XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Name,
-	     (int)(SPEEDMODIFY * XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Speed),
+  const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[i];
+  if (traffic.ID == 0)
+    return;
+
+  DistanceBearing(XCSoarInterface::Basic().Location,
+                  traffic.Location,
+                  &range,
+                  &bear);
+
+  _stprintf(tmp, _T("%3s %3ld %+3.1f %5ld"),
+            traffic.Name,
+            (int)(SPEEDMODIFY * traffic.Speed),
 #ifdef FLARM_AVERAGE
-	     LIFTMODIFY * XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Average30s,
+            LIFTMODIFY * traffic.Average30s,
 #else
-	     0.0,
+            0.0,
 #endif
-	     (int)(ALTITUDEMODIFY * XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].Altitude)
-	     );
-    wsprintf(text, TEXT("%s %3.0lf %2.1lf"),
-	     tmp,
-	     bear,
-	     (DISTANCEMODIFY * range));
+            (int)(ALTITUDEMODIFY * traffic.Altitude));
+  _stprintf(text, _T("%s %3.0lf %2.1f"),
+            tmp,
+            bear,
+            DISTANCEMODIFY * range);
 
-    if (XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID != 0)
-      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), text);
-  }
+  canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
+              text);
 }
 
 int GetActiveFlarmTrafficCount()
@@ -119,41 +144,6 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
   (void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = GetActiveFlarmTrafficCount();
-  } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
-    if (DrawListIndex != -1)
-      {
-	if (XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID != 0)
-	  {
-	    if (LookupFLARMDetails(XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID) == NULL)
-	      {
-		// not existing en primary or secondary flarm id list
-		((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetCaption(TEXT("Set CN"));
-		((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetVisible(true);
-	      }
-	    else
-	      {
-		// the id was found - is it from secondary list ?
-		int index = LookupSecondaryFLARMId(XCSoarInterface::Basic().FLARM_Traffic[DrawListIndex].ID);
-
-		if (index != -1)
-		  {
-		    ((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetCaption(TEXT("Edit CN"));
-		    ((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetVisible(true);
-		  }
-		else
-		  {
-		    ((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetVisible(false);
-		  }
-	      }
-	    ((WndButton *)wf->FindByName(TEXT("cmdTrack")))->SetVisible(true);
-	  }
-	else
-	  {
-	    ((WndButton *)wf->FindByName(TEXT("cmdTrack")))->SetVisible(false);
-	    ((WndButton *)wf->FindByName(TEXT("cmdSetCN")))->SetVisible(false);
-	  }
-      }
   }
 }
 
@@ -198,9 +188,10 @@ static void OnSetCNClicked(WindowControl * Sender)
     {
       TCHAR newName[21];
       newName[0] = 0;
-      dlgTextEntryShowModal(newName, 4);
+      if(dlgTextEntryShowModal(newName, 4)){
 
       AddFlarmLookupItem(XCSoarInterface::Basic().FLARM_Traffic[index].ID, newName, true);
+      }
     }
 }
 
@@ -218,15 +209,15 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   switch(key_code) {
   case VK_LEFT:
   case '6':
-    ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
+    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
     //      NextPage(-1);
-    //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
+    //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
   case VK_RIGHT:
   case '7':
-    ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
+    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
     //      NextPage(+1);
-    //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
+    //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
@@ -249,7 +240,6 @@ static void OnListEnter(WindowControl * Sender,
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnTrackClicked),
   DeclareCallBackEntry(OnSetCNClicked),
-  DeclareCallBackEntry(OnPaintDetailsListItem),
   DeclareCallBackEntry(OnDetailsListInfo),
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
@@ -269,26 +259,26 @@ void dlgFlarmTrafficShowModal(void){
 
   if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgFlarmTraffic_L.xml"),
+                        _T("dlgFlarmTraffic_L.xml"),
 			XCSoarInterface::main_window,
-			TEXT("IDR_XML_FLARMTRAFFIC_L"));
+			_T("IDR_XML_FLARMTRAFFIC_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgFlarmTraffic.xml"),
+                        _T("dlgFlarmTraffic.xml"),
 			XCSoarInterface::main_window,
-			TEXT("IDR_XML_FLARMTRAFFIC"));
+			_T("IDR_XML_FLARMTRAFFIC"));
   }
-
-  nTextLines = 0;
 
   if (!wf) return;
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  wDetails = (WndListFrame*)wf->FindByName(TEXT("frmDetails"));
+  wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
   wDetails->SetEnterCallback(OnListEnter);
+  wDetails->SetCursorCallback(FlarmCursorCallback);
+  wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
   assert(wDetails!=NULL);
 
   wDetails->SetBorderKind(BORDERLEFT);

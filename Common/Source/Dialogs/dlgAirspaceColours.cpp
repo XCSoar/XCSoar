@@ -54,35 +54,28 @@ static void UpdateList(void){
   wAirspaceColoursList->invalidate();
 }
 
-static int DrawListIndex=0;
-
 static void
-OnAirspaceColoursPaintListItem(WindowControl * Sender, Canvas &canvas)
+OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  (void)Sender;
-  if ((DrawListIndex < NUMAIRSPACECOLORS) &&(DrawListIndex>=0)) {
-    int i = DrawListIndex;
-    canvas.white_brush();
-    canvas.black_pen();
-    canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
-    canvas.select(MapGfx.GetAirspaceBrush(1)); // this is the solid brush
-    canvas.set_text_color(MapGfx.GetAirspaceColour(i));
-    canvas.rectangle(Layout::FastScale(100), Layout::FastScale(2),
-                     Layout::FastScale(180), Layout::FastScale(22));
-  }
+  if (i >= NUMAIRSPACECOLORS)
+    return;
+
+  canvas.white_brush();
+  canvas.black_pen();
+  canvas.set_background_color(Color::WHITE);
+  canvas.select(MapGfx.GetAirspaceBrush(1)); // this is the solid brush
+  canvas.set_text_color(MapGfx.GetAirspaceColour(i));
+  canvas.rectangle(rc.left + Layout::FastScale(2),
+                   rc.top + Layout::FastScale(2),
+                   rc.right - Layout::FastScale(2),
+                   rc.bottom - Layout::FastScale(2));
 }
 
 
 static void OnAirspaceColoursListEnter(WindowControl * Sender,
 				WndListFrame::ListInfo_t *ListInfo) {
   (void)Sender;
-  ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
-  if (ItemIndex>=NUMAIRSPACECOLORS) {
-    ItemIndex = NUMAIRSPACECOLORS-1;
-  }
-  if (ItemIndex>=0) {
-    wf->SetModalResult(mrOK);
-  }
+  wf->SetModalResult(mrOK);
 }
 
 
@@ -91,9 +84,6 @@ static void OnAirspaceColoursListInfo(WindowControl * Sender,
   (void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = NUMAIRSPACECOLORS;
-  } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
-    ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
   }
 }
 
@@ -105,7 +95,6 @@ static void OnCloseClicked(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnAirspaceColoursPaintListItem),
   DeclareCallBackEntry(OnAirspaceColoursListInfo),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
@@ -118,28 +107,32 @@ int dlgAirspaceColoursShowModal(void){
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgAirspaceColours_L.xml"),
+                        _T("dlgAirspaceColours_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_AIRSPACECOLOURS_L"));
+                        _T("IDR_XML_AIRSPACECOLOURS_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgAirspaceColours.xml"),
+                        _T("dlgAirspaceColours.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_AIRSPACECOLOURS"));
+                        _T("IDR_XML_AIRSPACECOLOURS"));
   }
 
   if (!wf) return -1;
 
   assert(wf!=NULL);
 
-  wAirspaceColoursList = (WndListFrame*)wf->FindByName(TEXT("frmAirspaceColoursList"));
+  wAirspaceColoursList = (WndListFrame*)wf->FindByName(_T("frmAirspaceColoursList"));
   assert(wAirspaceColoursList!=NULL);
   wAirspaceColoursList->SetBorderKind(BORDERLEFT);
   wAirspaceColoursList->SetEnterCallback(OnAirspaceColoursListEnter);
+  wAirspaceColoursList->SetPaintItemCallback(OnAirspaceColoursPaintListItem);
 
   UpdateList();
 
-  wf->ShowModal();
+  int result = wf->ShowModal();
+  result = result == mrOK
+    ? wAirspaceColoursList->GetCursorIndex()
+    : -1;
 
   // now retrieve back the properties...
 
@@ -147,7 +140,5 @@ int dlgAirspaceColoursShowModal(void){
 
   wf = NULL;
 
-  return ItemIndex;
+  return result;
 }
-
-

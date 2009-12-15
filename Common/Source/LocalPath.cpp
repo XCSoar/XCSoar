@@ -97,7 +97,7 @@ void LocalPath(TCHAR* buffer, const TCHAR* file, int loc) {
     _tcscat(buffer,TEXT(XCSDATADIR));
   #endif
 
-  if (_tcslen(file)>0) {
+  if (!string_is_empty(file)) {
     _tcsncat(buffer, _T(DIR_SEPARATOR_S), MAX_PATH);
     _tcsncat(buffer, file, MAX_PATH);
   }
@@ -126,9 +126,8 @@ normalize_backslashes(TCHAR *p)
 void ExpandLocalPath(TCHAR* filein) {
   // Convert %LOCALPATH% to Local Path
 
-  if (_tcslen(filein)==0) {
+  if (string_is_empty(filein))
     return;
-  }
 
   TCHAR lpath[MAX_PATH];
   TCHAR code[] = TEXT("%LOCAL_PATH%\\");
@@ -138,7 +137,7 @@ void ExpandLocalPath(TCHAR* filein) {
   const TCHAR *ptr = string_after_prefix(filein, code);
   if (!ptr) return;
 
-  if (_tcslen(ptr)>0) {
+  if (!string_is_empty(ptr)) {
     _stprintf(output,TEXT("%s%s"),lpath, ptr);
     _tcscpy(filein, output);
   }
@@ -150,9 +149,8 @@ void ExpandLocalPath(TCHAR* filein) {
 void ContractLocalPath(TCHAR* filein) {
   // Convert Local Path part to %LOCALPATH%
 
-  if (_tcslen(filein)==0) {
+  if (string_is_empty(filein))
     return;
-  }
 
   TCHAR lpath[MAX_PATH];
   TCHAR code[] = TEXT("%LOCAL_PATH%\\");
@@ -162,7 +160,7 @@ void ContractLocalPath(TCHAR* filein) {
   const TCHAR *ptr = string_after_prefix(filein, lpath);
   if (!ptr) return;
 
-  if (_tcslen(ptr)>0) {
+  if (!string_is_empty(ptr)) {
     _stprintf(output,TEXT("%s%s"),code, ptr);
     _tcscpy(filein, output);
   }

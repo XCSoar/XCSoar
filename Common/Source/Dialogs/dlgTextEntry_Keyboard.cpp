@@ -40,6 +40,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
+#include "StringUtil.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -52,39 +53,64 @@ static WndOwnerDrawFrame *wGrid=NULL;
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
 static unsigned int max_width = MAX_TEXTENTRY;
+static bool gRetVal;
 static TCHAR edittext[MAX_TEXTENTRY];
 #define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
+
+static void ShowCursor(WndProperty * wp)
+{
+  WndButton *wb;
+  int iCursorX=0;
+
+  wb=(WndButton*)wf->FindByName(TEXT("Cursor"));
+  if (wb && wp) {
+    if (cursor < 1) {
+      iCursorX=0;
+    }else {
+      wp->get_canvas().select(*wp->GetFont());
+      iCursorX = wp->get_canvas().text_width(edittext);
+    }
+    wb->move(iCursorX, wp->get_position().bottom - Layout::FastScale(3));
+  }
+}
 
 static void UpdateTextboxProp(void)
 {
   WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(TEXT("prpText"));
+  wp = (WndProperty*)wf->FindByName(_T("prpText"));
   if (wp) {
     wp->SetText(edittext);
+    ShowCursor(wp);
   }
+}
+
+static bool DoBackspace() {
+  if (cursor<1)
+    return true; // min width
+  cursor--;
+  edittext[cursor] = 0;
+  UpdateTextboxProp();
+  return true;
 }
 
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
   switch (key_code) {
-    case VK_LEFT:
-      if (cursor<1)
-        return true; // min width
-      cursor--;
-      edittext[cursor] = 0;
-      UpdateTextboxProp();
-    return true;
-
+  case VK_LEFT:
+    return DoBackspace();
       /* JMW this prevents cursor buttons from being used to enter
     case VK_RETURN:
       wf->SetModalResult(mrOK);
     return true;
       */
-
   default:
     return false;
   }
+}
+
+static void OnBackspace(WindowControl * Sender) {
+  DoBackspace();
 }
 
 static void OnKey(WindowControl * Sender)
@@ -99,6 +125,12 @@ static void OnKey(WindowControl * Sender)
 
 static void OnOk(WindowControl * Sender)
 {
+  gRetVal=true;
+  wf->SetModalResult(mrOK);
+}
+static void OnCancel(WindowControl * Sender)
+{
+  gRetVal=false;
   wf->SetModalResult(mrOK);
 }
 
@@ -116,13 +148,15 @@ static void OnClear(WindowControl * Sender)
 }
 
 static CallBackTableEntry_t CallBackTable[]={
+  DeclareCallBackEntry(OnBackspace),
   DeclareCallBackEntry(OnKey),
   DeclareCallBackEntry(OnClear),
+  DeclareCallBackEntry(OnCancel),
   DeclareCallBackEntry(OnOk),
   DeclareCallBackEntry(NULL)
 };
 
-void dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
+bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
 {
   wf = NULL;
   wGrid = NULL;
@@ -134,19 +168,19 @@ void dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
   if (Layout::landscape)
   {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("frmTextEntry_Keyboard_L.xml"),
+                        _T("frmTextEntry_Keyboard_L.xml"),
 			XCSoarInterface::main_window,
-			TEXT("IDR_XML_TEXTENTRY_KEYBOARD_L"));
-    if (!wf) return;
+			_T("IDR_XML_TEXTENTRY_KEYBOARD_L"));
+    if (!wf) return false;
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("frmTextEntry_Keyboard.xml"),
+                        _T("frmTextEntry_Keyboard.xml"),
 			XCSoarInterface::main_window,
-			TEXT("IDR_XML_TEXTENTRY_KEYBOARD"));
-    if (!wf) return;
+			_T("IDR_XML_TEXTENTRY_KEYBOARD"));
+    if (!wf) return false;
   }
 
-  wGrid = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmGrid"));
+  wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
 
   cursor = 0;
   ClearText();
@@ -154,10 +188,11 @@ void dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
   /*edittext[0]= 0;
     edittext[1]= 0;*/
 
-  if (_tcslen(text)>0) {
+  if (!string_is_empty(text)) {
     _tcsupr(text);
     _tcsncpy(edittext, text, max_width-1);
     edittext[max_width-1]= 0;
+    cursor=_tcslen(text);
   }
 
   UpdateTextboxProp();
@@ -166,6 +201,8 @@ void dlgTextEntryKeyboardShowModal(TCHAR *text, int width)
   _tcsncpy(text, edittext, max_width);
   text[max_width-1]=0;
   delete wf;
+
+  return gRetVal;
 }
 
 

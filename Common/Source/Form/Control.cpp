@@ -45,7 +45,7 @@ Copyright_License {
 
 #include <stdlib.h>
 
-int WindowControl::InstCount=0;
+bool WindowControl::initialized;
 Brush WindowControl::hBrushDefaultBk;
 Pen WindowControl::hPenDefaultBorder;
 Pen WindowControl::hPenDefaultSelector;
@@ -56,7 +56,7 @@ bool
 KeyTimer(bool isdown, unsigned thekey)
 {
   static PeriodClock fps_time_down;
-  static DWORD savedKey=0;
+  static DWORD savedKey = 0;
 
   if (thekey == savedKey && fps_time_down.check_update(2000)) {
     savedKey = 0;
@@ -81,45 +81,35 @@ WindowControl::WindowControl(WindowControl *Owner,
                              int X, int Y,
                              int Width, int Height,
                              bool Visible)
+  :mOwner(Owner),
+   mBorderKind(0), //BORDERRIGHT | BORDERBOTTOM;
+   mColorBack(Color::WHITE),
+   mColorFore(Color::BLACK),
+   mhFont(&MapWindowFont),
+   mHelpText(NULL),
+   mOnHelpCallback(NULL),
+   mReadOnly(false), mHasFocus(false),
+   mBorderSize(1),
+   mCanFocus(false),
+   mDontPaintSelector(false),
+   mClientCount(0)
 {
-  mHelpText = NULL;
-
-  mHasFocus = false;
-  mCanFocus = false;
-
-  mReadOnly = false;
-
-  mClientCount = 0;
-
-  mOnHelpCallback = NULL;
-
-  // todo
-
-  mOwner = Owner;
-
-  // todo
-  mhFont = &MapWindowFont;
-  mVisible = Visible;
   mCaption[0] = '\0';
-  mDontPaintSelector = false;
 
   if ((Parent == NULL) && (mOwner != NULL))
     Parent = (ContainerWindow *)&mOwner->GetClientAreaWindow();
 
   if (Name != NULL)
-    _tcscpy(mName, Name);  // todo size check
+    _tcscpy(mName, Name); // todo size check
   else
     mName[0] = '\0';
 
-  mColorBack = Color::WHITE;
-  mColorFore = Color::BLACK;
-
-  if (InstCount == 0){
+  if (!initialized) {
     hBrushDefaultBk.set(mColorBack);
     hPenDefaultBorder.set(DEFAULTBORDERPENWIDTH, mColorFore);
     hPenDefaultSelector.set(DEFAULTBORDERPENWIDTH + 2, mColorFore);
+    initialized = true;
   }
-  InstCount++;
 
   set(Parent, X, Y, Width, Height,
       false, false, false, false, false);
@@ -129,57 +119,46 @@ WindowControl::WindowControl(WindowControl *Owner,
 
   install_wndproc();
 
-  mBorderSize = 1;
-
-  mBorderKind = 0; //BORDERRIGHT | BORDERBOTTOM;
-
   get_canvas().background_transparent();
 
-  if (mVisible)
+  if (Visible)
     show();
 }
 
-WindowControl::~WindowControl(void){
+WindowControl::~WindowControl(void)
+{
   if (mHelpText) {
     free(mHelpText);
     mHelpText = NULL;
   }
 
   int i;
-  for (i=mClientCount-1; i>=0; i--){
+  for (i = mClientCount - 1; i >= 0; i--) {
     delete mClients[i];
   }
-
-  reset();
-
-  InstCount--;
-  if (InstCount==0){
-    hBrushDefaultBk.reset();
-    hPenDefaultBorder.reset();
-    hPenDefaultSelector.reset();
-  }
-
 }
 
 Window *
 WindowControl::GetCanFocus()
 {
-  if (!mVisible)
+  if (!is_visible())
     return NULL;
 
   if (mCanFocus && !mReadOnly)
     return this;
 
-  for (int idx=0; idx<mClientCount; idx++){
+  for (int idx = 0; idx < mClientCount; idx++) {
     Window *w;
-    if ((w = mClients[idx]->GetCanFocus()) != NULL){
+    if ((w = mClients[idx]->GetCanFocus()) != NULL)
       return w;
-    }
   }
+
   return NULL;
 }
 
-void WindowControl::AddClient(WindowControl *Client){
+void
+WindowControl::AddClient(WindowControl *Client)
+{
   mClients[mClientCount] = Client;
   mClientCount++;
 
@@ -205,75 +184,86 @@ void WindowControl::AddClient(WindowControl *Client){
   */
 }
 
-void WindowControl::FilterAdvanced(bool advanced){
+void
+WindowControl::FilterAdvanced(bool advanced)
+{
   if (_tcsstr(mCaption, TEXT("*")) != NULL) {
-    if (advanced) {
-      SetVisible(true);
-    } else {
-      SetVisible(false);
-    }
+    if (advanced)
+      show();
+    else
+      hide();
   }
-  for (int i=0; i<mClientCount; i++){
+
+  for (int i = 0; i < mClientCount; i++) {
     mClients[i]->FilterAdvanced(advanced);
   }
 }
 
-WindowControl *WindowControl::FindByName(const TCHAR *Name) {
-  if (_tcscmp(mName, Name)==0)
+WindowControl *
+WindowControl::FindByName(const TCHAR *Name)
+{
+  if (_tcscmp(mName, Name) == 0)
     return this;
-  for (int i=0; i<mClientCount; i++){
+
+  for (int i = 0; i < mClientCount; i++) {
     WindowControl *W = mClients[i]->FindByName(Name);
     if (W != NULL)
       return W;
   }
+
   return NULL;
 }
 
-
-WindowControl *WindowControl::SetOwner(WindowControl *Value){
+WindowControl *
+WindowControl::SetOwner(WindowControl *Value)
+{
   WindowControl *res = mOwner;
-  if (mOwner != Value){
+
+  if (mOwner != Value)
     mOwner = Value;
-  }
+
   return res;
 }
 
-
-void WindowControl::SetHelpText(const TCHAR *Value) {
+void
+WindowControl::SetHelpText(const TCHAR *Value)
+{
   if (mHelpText) {
     free(mHelpText);
     mHelpText = NULL;
   }
-  if (Value == NULL) {
-    return;
-  }
-  int len = _tcslen(Value);
-  if (len==0) {
-    return;
-  }
 
-  mHelpText= (TCHAR*)malloc((len+1)*sizeof(TCHAR));
-  if (mHelpText != NULL) {
+  if (Value == NULL)
+    return;
+
+  int len = _tcslen(Value);
+
+  if (len == 0)
+    return;
+
+  mHelpText = (TCHAR*)malloc((len + 1) * sizeof(TCHAR));
+  if (mHelpText != NULL)
     _tcscpy(mHelpText, Value);
-  }
 }
 
-
-void WindowControl::SetCaption(const TCHAR *Value){
+void
+WindowControl::SetCaption(const TCHAR *Value)
+{
   if (Value == NULL)
     Value = TEXT("");
 
-  if (_tcscmp(mCaption, Value) != 0){
+  if (_tcscmp(mCaption, Value) != 0) {
     _tcscpy(mCaption, Value);
     invalidate();
   }
-
 }
 
-bool WindowControl::SetFocused(bool Value){
+bool
+WindowControl::SetFocused(bool Value)
+{
   bool res = mHasFocus;
 
-  if (mHasFocus != Value){
+  if (mHasFocus != Value) {
     mHasFocus = Value;
 
     if (mCanFocus)
@@ -282,149 +272,141 @@ bool WindowControl::SetFocused(bool Value){
   }
 
   return res;
-
 }
 
-bool WindowControl::SetCanFocus(bool Value){
+bool
+WindowControl::SetCanFocus(bool Value)
+{
   bool res = mCanFocus;
   mCanFocus = Value;
   return res;
 }
 
-bool WindowControl::GetFocused(void){
+bool
+WindowControl::GetFocused(void)
+{
   return mHasFocus;
 }
 
-void
-WindowControl::SetVisible(bool Value)
+int
+WindowControl::GetBorderKind(void)
 {
-  if (mVisible != Value){
-
-    mVisible = Value;
-
-    /*
-    for (int i=0; i<mClientCount; i++){
-      mClients[i]->SetVisible(mVisible);
-    }
-    */
-
-    if (mVisible){
-      show();
-    } else {
-      hide();
-    }
-
-  }
-}
-
-bool WindowControl::GetVisible(void){
-  return mVisible;
-}
-
-int WindowControl::GetBorderKind(void){
   return mBorderKind;
 }
 
-int WindowControl::SetBorderKind(int Value){
+int
+WindowControl::SetBorderKind(int Value)
+{
   int res = mBorderKind;
-  if (mBorderKind != Value){
+
+  if (mBorderKind != Value) {
     mBorderKind = Value;
     invalidate();
   }
+
   return res;
 }
 
-const Font *WindowControl::SetFont(const Font &Value){
+const Font *
+WindowControl::SetFont(const Font &Value)
+{
   const Font *res = mhFont;
-  if (mhFont != &Value){
+
+  if (mhFont != &Value) {
     // todo
     mhFont = &Value;
+    invalidate();
   }
   return res;
 }
 
-bool WindowControl::SetReadOnly(bool Value){
+bool
+WindowControl::SetReadOnly(bool Value)
+{
   bool res = mReadOnly;
-  if (mReadOnly != Value){
+
+  if (mReadOnly != Value) {
     mReadOnly = Value;
     invalidate();
   }
+
   return res;
 }
 
-Color WindowControl::SetForeColor(Color Value)
+Color
+WindowControl::SetForeColor(Color Value)
 {
   Color res = mColorFore;
-  if (mColorFore != Value){
+
+  if (mColorFore != Value) {
     mColorFore = Value;
     invalidate();
   }
+
   return res;
 }
 
-Color WindowControl::SetBackColor(Color Value)
+Color
+WindowControl::SetBackColor(Color Value)
 {
   Color res = mColorBack;
-  if (mColorBack != Value){
+
+  if (mColorBack != Value) {
     mColorBack = Value;
     mhBrushBk.set(mColorBack);
     invalidate();
   }
+
   return res;
 }
 
+void
+WindowControl::PaintSelector(Canvas &canvas, const RECT rc)
+{
+  canvas.select(hPenDefaultSelector);
+
+  canvas.two_lines(rc.right - SELECTORWIDTH - 1, rc.top,
+                   rc.right - 1, rc.top,
+                   rc.right - 1, rc.top + SELECTORWIDTH + 1);
+
+  canvas.two_lines(rc.right - 1, rc.bottom - SELECTORWIDTH - 2,
+                   rc.right - 1, rc.bottom - 1,
+                   rc.right - SELECTORWIDTH - 1, rc.bottom - 1);
+
+  canvas.two_lines(SELECTORWIDTH + 1, rc.bottom - 1,
+                   rc.left, rc.bottom - 1,
+                   rc.left, rc.bottom - SELECTORWIDTH - 2);
+
+  canvas.two_lines(rc.left, rc.top + SELECTORWIDTH + 1,
+                   rc.left, rc.top,
+                   rc.left + SELECTORWIDTH + 1, rc.top);
+}
 
 void
 WindowControl::PaintSelector(Canvas &canvas)
 {
 
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
-    const RECT rc = get_client_rect();
-
-    canvas.select(hPenDefaultSelector);
-
-    canvas.two_lines(rc.right - SELECTORWIDTH - 1, rc.top,
-                     rc.right - 1, rc.top,
-                     rc.right - 1, SELECTORWIDTH + 1);
-
-    canvas.two_lines(rc.right - 1, rc.bottom - SELECTORWIDTH - 2,
-                     rc.right - 1, rc.bottom - 1,
-                     rc.right - SELECTORWIDTH - 1, rc.bottom - 1);
-
-    canvas.two_lines(SELECTORWIDTH + 1, rc.bottom - 1,
-                     rc.left, rc.bottom - 1,
-                     rc.left, rc.bottom - SELECTORWIDTH - 2);
-
-    canvas.two_lines(rc.left, SELECTORWIDTH + 1,
-                     rc.left, rc.top,
-                     SELECTORWIDTH + 1, rc.top);
+    PaintSelector(canvas, get_client_rect());
   }
-
 }
 
 int WindowControl::OnHelp() {
 #ifdef ALTAIRSYNC
-    return 0; // undefined. return 1 if defined
+  return 0; // undefined. return 1 if defined
 #else
-    if (mHelpText) {
-      dlgHelpShowModal(*get_root_owner(), mCaption, mHelpText);
-      return 1;
-    } else {
-      if (mOnHelpCallback) {
-        (mOnHelpCallback)(this);
-        return 1;
-      } else {
-        return 0;
-      }
-    }
-#endif
-}
+  if (mHelpText) {
+    dlgHelpShowModal(*get_root_owner(), mCaption, mHelpText);
+    return 1;
+  }
 
-bool
-WindowControl::on_close(void)
-{
-  Close();
-  return true;
+  if (mOnHelpCallback) {
+    (mOnHelpCallback)(this);
+    return 1;
+  }
+
+  return 0;
+#endif
 }
 
 bool
@@ -433,8 +415,7 @@ WindowControl::on_key_down(unsigned key_code)
   // JMW: HELP
   KeyTimer(true, key_code);
 
-  return ContainerWindow::on_key_down(key_code) ||
-    on_unhandled_key(key_code);
+  return ContainerWindow::on_key_down(key_code) || on_unhandled_key(key_code);
 }
 
 bool
@@ -455,35 +436,34 @@ WindowControl::on_paint(Canvas &canvas)
   const RECT rc = get_client_rect();
 
   // JMW added highlighting, useful for lists
-  if (!mDontPaintSelector && mCanFocus && mHasFocus){
+  if (!mDontPaintSelector && mCanFocus && mHasFocus) {
     Color ff = GetBackColor().highlight();
     Brush brush(ff);
     canvas.fill_rectangle(rc, brush);
 
 #ifdef WINDOWSPC
-  // JMW make it look nice on wine
+    // JMW make it look nice on wine
     canvas.set_background_color(ff);
 #endif
   } else
     canvas.fill_rectangle(rc, GetBackBrush());
 
-  if (mBorderKind != 0){
+  if (mBorderKind != 0) {
     const RECT rc = get_client_rect();
 
     canvas.select(GetBorderPen());
 
-    if (mBorderKind & BORDERTOP){
+    if (mBorderKind & BORDERTOP)
       canvas.line(rc.left, rc.top, rc.right, rc.top);
-    }
-    if (mBorderKind & BORDERRIGHT){
+
+    if (mBorderKind & BORDERRIGHT)
       canvas.line(rc.right - 1, rc.top, rc.right - 1, rc.bottom);
-    }
-    if (mBorderKind & BORDERBOTTOM){
+
+    if (mBorderKind & BORDERBOTTOM)
       canvas.line(rc.right - 1, rc.bottom - 1, rc.left - 1, rc.bottom - 1);
-    }
-    if (mBorderKind & BORDERLEFT){
+
+    if (mBorderKind & BORDERLEFT)
       canvas.line(rc.left, rc.bottom - 1, rc.left, rc.top - 1);
-    }
   }
 
   PaintSelector(canvas);
@@ -497,26 +477,26 @@ WindowControl::FocusNext(WindowControl *Sender)
   int idx;
   Window *W;
 
-  if (Sender != NULL){
-    for (idx=0; idx<mClientCount; idx++)
-      if (mClients[idx] == Sender) break;
+  if (Sender != NULL) {
+    for (idx = 0; idx < mClientCount; idx++)
+      if (mClients[idx] == Sender)
+        break;
 
     idx++;
-  } else idx = 0;
+  } else
+    idx = 0;
 
-  for (; idx<mClientCount; idx++){
-    if ((W = mClients[idx]->GetCanFocus()) != NULL){
+  for (; idx < mClientCount; idx++) {
+    if ((W = mClients[idx]->GetCanFocus()) != NULL) {
       W->set_focus();
       return W;
     }
   }
 
-  if (GetOwner() != NULL){
+  if (GetOwner() != NULL)
     return GetOwner()->FocusNext(this);
-  }
 
   return NULL;
-
 }
 
 Window *
@@ -525,22 +505,24 @@ WindowControl::FocusPrev(WindowControl *Sender)
   int idx;
   Window *W;
 
-  if (Sender != NULL){
-    for (idx=0; idx<mClientCount; idx++)
-      if (mClients[idx] == Sender) break;
-
+  if (Sender != NULL) {
+    for (idx = 0; idx < mClientCount; idx++) {
+      if (mClients[idx] == Sender)
+        break;
+    }
     idx--;
-  } else idx = mClientCount-1;
+  } else
+    idx = mClientCount - 1;
 
-  for (; idx>=0; idx--)
-    if ((W=mClients[idx]->GetCanFocus()) != NULL){
+  for (; idx >= 0; idx--) {
+    if ((W = mClients[idx]->GetCanFocus()) != NULL) {
       W->set_focus();
       return W;
     }
-
-  if (GetOwner() != NULL){
-    return GetOwner()->FocusPrev(this);
   }
+
+  if (GetOwner() != NULL)
+    return GetOwner()->FocusPrev(this);
 
   return NULL;
 }

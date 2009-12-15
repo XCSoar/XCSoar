@@ -44,6 +44,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "Asset.hpp"
+#include "StringUtil.hpp"
 
 #include <assert.h>
 
@@ -182,9 +183,8 @@ void SetProfileFiles(const TCHAR *override) {
   LocalPath(failsafeProfileFile,TEXT(XCSPROFILE));
   _tcscpy(startProfileFile, defaultProfileFile);
 
-  if (_tcslen(override)>0) {
+  if (!string_is_empty(override))
     _tcsncpy(startProfileFile, override, MAX_PATH-1);
-  }
 }
 
 #ifdef PNA

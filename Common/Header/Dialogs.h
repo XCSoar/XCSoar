@@ -80,7 +80,7 @@ void dlgTaskWaypointShowModal(int itemindex, int type, bool addonly = false);
 void dlgTaskOverviewShowModal();
 void dlgVoiceShowModal();
 void dlgWayPointDetailsShowModal();
-void dlgTextEntryShowModal(TCHAR *text, int width = 0);
+bool dlgTextEntryShowModal(TCHAR *text, int width = 0);
 void dlgTeamCodeShowModal();
 void dlgStartPointShowModal();
 
@@ -93,7 +93,7 @@ bool dlgTaskRules();
 void dlgAirspaceDetails(int the_circle, int the_area);
 bool dlgAirspaceWarningVisible();
 void dlgFlarmTrafficShowModal();
-void dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0);
+bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0);
 void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
 
 int dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty);

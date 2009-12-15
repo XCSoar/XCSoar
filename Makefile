@@ -61,10 +61,6 @@ MAKEFLAGS	+=-r
 
 ####### sources
 
-ifeq ($(CONFIG_PC),n)
-#CPPFLAGS_Common_Source_ :=-Werror
-endif
-
 DEVS	:=\
 	$(SRC)/Device/Driver/AltairPro.o \
 	$(SRC)/Device/Driver/BorgeltB50.o \
@@ -228,6 +224,7 @@ OBJS	:=\
 	$(SRC)/Form/List.o \
 	$(SRC)/Form/ScrollBar.o \
 	$(SRC)/Form/Edit.o \
+	$(SRC)/Form/Util.o \
 	$(SRC)/LogFile.o 		\
 	\
 	$(SRC)/MapWindow.o 		\
@@ -404,6 +401,9 @@ call-%:
 $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 
 ####### products
+
+SYNCE_PCP = synce-pcp
+SYNCE_PRM = synce-prm
 
 install: XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	@echo Copying to device...

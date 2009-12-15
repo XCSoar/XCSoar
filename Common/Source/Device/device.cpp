@@ -68,6 +68,7 @@ Copyright_License {
 #include "NMEA/Checksum.h"
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
 #include "Asset.hpp"
+#include "StringUtil.hpp"
 
 #include <assert.h>
 
@@ -356,7 +357,7 @@ DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
   assert(GPS_INFO != NULL);
 
   if (fhLogFile != NULL &&
-      (String != NULL) && (_tcslen(String) > 0)) {
+      String != NULL && !string_is_empty(String)) {
     char  sTmp[500];  // temp multibyte buffer
     const TCHAR *pWC = String;
     char  *pC  = sTmp;

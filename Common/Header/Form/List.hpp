@@ -129,46 +129,74 @@ class WndListFrame : public WndFrame {
 public:
 
   typedef struct{
-    int TopIndex;
-    int BottomIndex;
     int ItemIndex;
     int DrawIndex;
-    //      int SelectedIndex;
     int ScrollIndex;
     int ItemCount;
     int ItemInViewCount;
-    int ItemInPageCount;
   }ListInfo_t;
 
   typedef void (*OnListCallback_t)(WindowControl *Sender, ListInfo_t *ListInfo);
+  typedef void (*CursorCallback_t)(unsigned idx);
+  typedef void (*PaintItemCallback_t)(Canvas &canvas, const RECT rc,
+                                      unsigned idx);
 
+protected:
+  ScrollBar scroll_bar;
+
+  ListInfo_t mListInfo;
+
+  OnListCallback_t mOnListCallback;
+  OnListCallback_t mOnListEnterCallback;
+  CursorCallback_t CursorCallback;
+  PaintItemCallback_t PaintItemCallback;
+
+public:
   WndListFrame(WindowControl *Owner, const TCHAR *Name,
                int X, int Y, int Width, int Height,
                void (*OnListCallback)(WindowControl *Sender,
                                       ListInfo_t *ListInfo));
 
-  bool on_mouse_move(int x, int y, unsigned keys);
   void ResetList(void);
   void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
-  void DrawScrollBar(Canvas &canvas);
-  int RecalculateIndices(bool bigscroll);
+
+  void SetCursorCallback(CursorCallback_t cb) {
+    CursorCallback = cb;
+  }
+
+  void SetPaintItemCallback(PaintItemCallback_t cb) {
+    PaintItemCallback = cb;
+  }
+
   int GetItemIndex(void) { return mListInfo.ItemIndex; }
   void SetItemIndex(int iValue);
-  void SelectItemFromScreen(int xPos, int yPos);
+
+  int GetCursorIndex() const {
+    return mListInfo.ScrollIndex + mListInfo.ItemIndex;
+  }
+
+  /**
+   * Moves the cursor to the specified position.
+   *
+   * @return true if the cursor was moved to the specified position,
+   * false if the position was invalid
+   */
+  bool SetCursorIndex(int i);
 
 protected:
-  ScrollBar scroll_bar;
-
   void show_or_hide_scroll_bar();
+
+  int RecalculateIndices(bool bigscroll);
+  void EnsureVisible(int i);
+  void SelectItemFromScreen(int xPos, int yPos);
+  void DrawScrollBar(Canvas &canvas);
 
   virtual bool on_resize(unsigned width, unsigned height);
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_wheel(int delta);
   virtual bool on_key_down(unsigned key_code);
-
-  OnListCallback_t mOnListCallback;
-  OnListCallback_t mOnListEnterCallback;
-  ListInfo_t mListInfo;
 
   /** from class PaintWindow */
   virtual void on_paint(Canvas &canvas);

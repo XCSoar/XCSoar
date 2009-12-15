@@ -47,7 +47,7 @@
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
-
+#include "StringUtil.hpp"
 #include "UtilsText.hpp"
 #include "LocalPath.hpp"
 #include "Device/device.h"
@@ -70,11 +70,8 @@ ReplayLogger::ReadLine(TCHAR *buffer)
     return false;
   }
 
-  if (!fp) {
-    if (_tcslen(FileName) > 0) {
-      fp = _tfopen(FileName, TEXT("rt"));
-    }
-  }
+  if (fp == NULL && !string_is_empty(FileName))
+    fp = _tfopen(FileName, _T("rt"));
 
   if (fp == NULL) {
     return false;

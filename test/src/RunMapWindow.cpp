@@ -147,6 +147,8 @@ bool InputEvents::processKey(int key) {
 void InputEvents::setMode(mode mode) {}
 InputEvents::mode InputEvents::getModeID() { return MODE_DEFAULT; }
 
+void InputEvents::sub_ScaleZoom(int vswitch) {}
+
 GaugeCDI::GaugeCDI(ContainerWindow &parent) {}
 void GaugeCDI::Update(double TrackBearing, double WaypointBearing) {}
 

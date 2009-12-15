@@ -44,21 +44,18 @@ WndButton::WndButton(WindowControl *Parent,
                      const TCHAR *Name, const TCHAR *Caption,
                      int X, int Y, int Width, int Height,
                      void (*Function)(WindowControl *Sender))
-      :WindowControl(Parent, NULL /*Parent->GetHandle()*/, Name, X, Y, Width, Height)
+  :WindowControl(Parent, NULL, Name, X, Y, Width, Height),
+   mDown(false),
+   mDefault(false),
+   mLastDrawTextHeight(-1),
+   mOnClickNotify(Function)
 {
   SetCanFocus(true);
-
-  mOnClickNotify = Function;
-  mDown = false;
-  mDefault = false;
 
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
 
   _tcscpy(mCaption, Caption);
-
-  mLastDrawTextHeight = -1;
-
 }
 
 bool
@@ -84,7 +81,6 @@ WndButton::on_mouse_up(int x, int y)
     return WindowControl::on_mouse_up(x, y);
 }
 
-
 bool
 WndButton::on_key_down(unsigned key_code)
 {
@@ -93,18 +89,18 @@ WndButton::on_key_down(unsigned key_code)
   wsprintf(ventabuffer,TEXT("ONKEYDOWN key_code=%d"), key_code); // VENTA-
   DoStatusMessage(ventabuffer);
 #endif
-  switch (key_code){
+  switch (key_code) {
 #ifdef GNAV
-    // JMW added this to make data entry easier
-    case VK_F4:
+  // JMW added this to make data entry easier
+  case VK_F4:
 #endif
-    case VK_RETURN:
-    case VK_SPACE:
-      if (!mDown){
-        mDown = true;
-        invalidate();
-      }
-      return true;
+  case VK_RETURN:
+  case VK_SPACE:
+    if (!mDown) {
+      mDown = true;
+      invalidate();
+    }
+    return true;
   }
 
   return WindowControl::on_key_down(key_code);
@@ -113,26 +109,28 @@ WndButton::on_key_down(unsigned key_code)
 bool
 WndButton::on_key_up(unsigned key_code)
 {
-  switch (key_code){
+  switch (key_code) {
 #ifdef GNAV
-    // JMW added this to make data entry easier
-    case VK_F4:
+  // JMW added this to make data entry easier
+  case VK_F4:
 #endif
-    case VK_RETURN:
-    case VK_SPACE:
-      if (!XCSoarInterface::Debounce())
-        return 1; // prevent false trigger
-      if (mDown){
-        mDown = false;
-        invalidate();
+  case VK_RETURN:
+  case VK_SPACE:
+    if (!XCSoarInterface::Debounce())
+      return 1; // prevent false trigger
 
-        if (mOnClickNotify != NULL) {
-          RECT mRc = get_screen_position();
-          SetSourceRectangle(mRc);
-          (mOnClickNotify)(this);
-        }
+    if (mDown) {
+      mDown = false;
+      invalidate();
+
+      if (mOnClickNotify != NULL) {
+        RECT mRc = get_screen_position();
+        SetSourceRectangle(mRc);
+        (mOnClickNotify)(this);
       }
-      return true;
+    }
+
+    return true;
   }
 
   return WindowControl::on_key_up(key_code);
@@ -141,14 +139,18 @@ WndButton::on_key_up(unsigned key_code)
 bool
 WndButton::on_mouse_down(int x, int y)
 {
-  (void)x; (void)y;
+  (void)x;
+  (void)y;
+
   mDown = true;
+
   if (!GetFocused())
     set_focus();
   else
     invalidate();
 
   set_capture();
+
   return true;
 }
 
@@ -170,13 +172,14 @@ WndButton::on_mouse_move(int x, int y, unsigned keys)
 bool
 WndButton::on_mouse_double(int x, int y)
 {
-  (void)x; (void)y;
+  (void)x;
+  (void)y;
+
   mDown = true;
   invalidate();
   set_capture();
   return true;
 }
-
 
 void
 WndButton::on_paint(Canvas &canvas)
@@ -190,7 +193,7 @@ WndButton::on_paint(Canvas &canvas)
 
   canvas.draw_button(rc, mDown);
 
-  if (mCaption != NULL && mCaption[0] != '\0'){
+  if (mCaption != NULL && mCaption[0] != '\0') {
     canvas.set_text_color(GetForeColor());
     canvas.set_background_color(GetBackColor());
     canvas.background_transparent();
@@ -203,34 +206,33 @@ WndButton::on_paint(Canvas &canvas)
     if (mDown)
       OffsetRect(&rc, 2, 2);
 
-    if (mLastDrawTextHeight < 0){
+    if (mLastDrawTextHeight < 0) {
       canvas.formatted_text(&rc, mCaption,
           DT_CALCRECT
-        | DT_EXPANDTABS
-        | DT_CENTER
-        | DT_NOCLIP
-        | DT_WORDBREAK // mCaptionStyle // | DT_CALCRECT
-      );
+          | DT_EXPANDTABS
+          | DT_CENTER
+          | DT_NOCLIP
+          | DT_WORDBREAK); // mCaptionStyle // | DT_CALCRECT
 
       mLastDrawTextHeight = rc.bottom - rc.top;
-      // DoTo optimize
+
+      // ToDo optimize
       rc = get_client_rect();
       InflateRect(&rc, -2, -2); // todo border width
+
       if (mDown)
         OffsetRect(&rc, 2, 2);
-
     }
 
     rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
 
     canvas.formatted_text(&rc, mCaption,
         DT_EXPANDTABS
-      | DT_CENTER
-      | DT_NOCLIP
-      | DT_WORDBREAK // mCaptionStyle // | DT_CALCRECT
-    );
+        | DT_CENTER
+        | DT_NOCLIP
+        | DT_WORDBREAK); // mCaptionStyle // | DT_CALCRECT
 
-//    mLastDrawTextHeight = rc.bottom - rc.top;
+    //mLastDrawTextHeight = rc.bottom - rc.top;
 
   }
 

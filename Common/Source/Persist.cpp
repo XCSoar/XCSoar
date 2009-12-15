@@ -60,8 +60,8 @@ Copyright_License {
   using std::max;
 #endif
 
-static TCHAR szCalculationsPersistFileName[MAX_PATH]= TEXT("\0");
-static TCHAR szCalculationsPersistDirectory[MAX_PATH]= TEXT("\0");
+static TCHAR szCalculationsPersistFileName[MAX_PATH];
+static TCHAR szCalculationsPersistDirectory[MAX_PATH];
 
 /**
  * Deletes the persistent memory file

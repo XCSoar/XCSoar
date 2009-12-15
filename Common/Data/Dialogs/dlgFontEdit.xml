@@ -7,7 +7,7 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmEditFont" Type="Dialog" X=5 Y=5 Width=235 Height=230 Caption="Edit Font" Font=2 BackColor=0xDADBAB>
+<WndForm Name="frmEditFont" Type="Dialog" X=5 Y=5 Width=240 Height=230 Caption="Edit Font" Font=2 BackColor=0xDADBAB>
 
   <WndProperty Name="prpFontName" Caption="Font Face" X=2 Y=-1  Width=235 Height=22 CaptionWidth=78 Font=2  Help="Standard names of fonts available">
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1 OnDataAccess="OnFontNameData"/>

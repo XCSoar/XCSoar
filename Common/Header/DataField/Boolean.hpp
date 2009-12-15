@@ -68,13 +68,10 @@ class DataFieldBoolean:public DataField{
   void Dec(void);
   int CreateComboList(void);
 
-  bool GetAsBoolean(void);
-  int GetAsInteger(void);
-  double GetAsFloat(void);
-  TCHAR *GetAsString(void);
-  TCHAR *GetAsDisplayString(void){
-    return(GetAsString());
-  };
+  virtual bool GetAsBoolean(void) const;
+  virtual int GetAsInteger(void) const;
+  virtual double GetAsFloat(void) const;
+  virtual const TCHAR *GetAsString(void) const;
 
   virtual void Set(int Value){
     if (Value>0)
@@ -93,7 +90,7 @@ class DataFieldBoolean:public DataField{
   bool SetAsBoolean(bool Value);
   int SetAsInteger(int Value);
   double SetAsFloat(double Value);
-  TCHAR *SetAsString(const TCHAR *Value);
+  virtual const TCHAR *SetAsString(const TCHAR *Value);
 
 };
 

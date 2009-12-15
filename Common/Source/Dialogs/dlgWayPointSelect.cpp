@@ -65,7 +65,7 @@ static GEOPOINT Location;
 static WndForm *wf=NULL;
 static WndListFrame *wWayPointList=NULL;
 
-static const TCHAR NameFilter[] = TEXT("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
+static const TCHAR NameFilter[] = _T("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 static unsigned NameFilterIdx=0;
 
 static double DistanceFilter[] = {0.0, 25.0, 50.0, 75.0, 100.0, 150.0, 250.0, 500.0, 1000.0};
@@ -77,8 +77,8 @@ static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 
 static unsigned DirectionFilterIdx=0;
 static int lastHeading=0;
 
-static const TCHAR *TypeFilter[] = {TEXT("*"), TEXT("Airport"), TEXT("Landable"),
-				    TEXT("Turnpoint"), TEXT("File 1"), TEXT("File 2")};
+static const TCHAR *TypeFilter[] = {_T("*"), _T("Airport"), _T("Landable"),
+				    _T("Turnpoint"), _T("File 1"), _T("File 2")};
 static unsigned TypeFilterIdx=0;
 
 static unsigned UpLimit=0;
@@ -349,17 +349,17 @@ static void FilterMode(bool direction) {
     DistanceFilterIdx=0;
     DirectionFilterIdx=0;
     if (wpDistance) {
-      wpDistance->GetDataField()->Set(TEXT("*"));
+      wpDistance->GetDataField()->Set(_T("*"));
       wpDistance->RefreshDisplay();
     }
     if (wpDirection) {
-      wpDirection->GetDataField()->Set(TEXT("*"));
+      wpDirection->GetDataField()->Set(_T("*"));
       wpDirection->RefreshDisplay();
     }
   } else {
     NameFilterIdx=0;
     if (wpName) {
-      wpName->GetDataField()->Set(TEXT("**"));
+      wpName->GetDataField()->Set(_T("**"));
       wpName->RefreshDisplay();
     }
   }
@@ -395,7 +395,7 @@ static void OnFilterName(DataField *Sender, DataField::DataAccessKind_t Mode){
     break;
   }
 
-  _stprintf(sTmp, TEXT("%c*"), NameFilter[NameFilterIdx]);
+  _stprintf(sTmp, _T("%c*"), NameFilter[NameFilterIdx]);
   Sender->Set(sTmp);
 
 }
@@ -408,7 +408,7 @@ static void OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode
 
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(TEXT("25"));
+      Sender->Set(_T("25"));
     break;
     case DataField::daPut:
     break;
@@ -432,9 +432,9 @@ static void OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode
   }
 
   if (DistanceFilterIdx == 0)
-    _stprintf(sTmp, TEXT("%c"), '*');
+    _stprintf(sTmp, _T("%c"), '*');
   else
-    _stprintf(sTmp, TEXT("%.0f%s"),
+    _stprintf(sTmp, _T("%.0f%s"),
               DistanceFilter[DistanceFilterIdx],
               Units::GetDistanceName());
   Sender->Set(sTmp);
@@ -450,14 +450,14 @@ static void SetDirectionData(DataField *Sender){
   }
 
   if (DirectionFilterIdx == 0)
-    _stprintf(sTmp, TEXT("%c"), '*');
+    _stprintf(sTmp, _T("%c"), '*');
   else if (DirectionFilterIdx == 1){
     int a = iround(XCSoarInterface::Calculated().Heading);
     if (a <=0)
       a += 360;
-    _stprintf(sTmp, TEXT("HDG(%d")TEXT(DEG)TEXT(")"), a);
+    _stprintf(sTmp, _T("HDG(%d")_T(DEG)_T(")"), a);
   }else
-    _stprintf(sTmp, TEXT("%d")TEXT(DEG), DirectionFilter[DirectionFilterIdx]);
+    _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
 
   Sender->Set(sTmp);
 
@@ -467,7 +467,7 @@ static void OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mod
 
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(TEXT("*"));
+      Sender->Set(_T("*"));
     break;
     case DataField::daPut:
     break;
@@ -500,7 +500,7 @@ static void OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode){
 
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(TEXT("*"));
+      Sender->Set(_T("*"));
     break;
     case DataField::daPut:
     break;
@@ -523,7 +523,7 @@ static void OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode){
     break;
   }
 
-  _stprintf(sTmp, TEXT("%s"), TypeFilter[TypeFilterIdx]);
+  _stprintf(sTmp, _T("%s"), TypeFilter[TypeFilterIdx]);
 
   Sender->Set(sTmp);
 
@@ -547,9 +547,9 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
     int w0, w1, w2, w3, x1, x2, x3;
     w0 = Layout::FastScale(Layout::landscape ? 202 : 225);
-    w1 = canvas.text_width(TEXT("XXX"));
-    w2 = canvas.text_width(TEXT(" 000km"));
-    w3 = canvas.text_width(TEXT(" 000")TEXT(DEG));
+    w1 = canvas.text_width(_T("XXX"));
+    w2 = canvas.text_width(_T(" 000km"));
+    w3 = canvas.text_width(_T(" 000")_T(DEG));
 
     x1 = w0-w1-w2-w3;
 
@@ -582,20 +582,20 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
     canvas.text_opaque(x1, Layout::FastScale(2), sTmp);
 
     // right justified after waypoint flags
-    _stprintf(sTmp, TEXT("%.0f%s"),
+    _stprintf(sTmp, _T("%.0f%s"),
               WayPointSelectInfo[i].Distance,
               Units::GetDistanceName());
     x2 = w0-w3-canvas.text_width(sTmp);
     canvas.text_opaque(x2, Layout::FastScale(2), sTmp);
 
     // right justified after distance
-    _stprintf(sTmp, TEXT("%d")TEXT(DEG),
+    _stprintf(sTmp, _T("%d")_T(DEG),
 	      iround(WayPointSelectInfo[i].Direction));
     x3 = w0-canvas.text_width(sTmp);
     canvas.text_opaque(x3, Layout::FastScale(2), sTmp);
   } else {
     if (DrawListIndex == 0){
-      _stprintf(sTmp, TEXT("%s"), gettext(TEXT("No Match!")));
+      _stprintf(sTmp, _T("%s"), gettext(_T("No Match!")));
       canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
                          sTmp);
     }
@@ -644,7 +644,7 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   WndProperty* wp;
   unsigned NewIndex = TypeFilterIdx;
 
-  wp = ((WndProperty *)wf->FindByName(TEXT("prpFltType")));
+  wp = ((WndProperty *)wf->FindByName(_T("prpFltType")));
 
   switch(key_code){
     case VK_F1:
@@ -699,14 +699,14 @@ int dlgWayPointSelect(const GEOPOINT &location, const int type, const int Filter
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgWayPointSelect_L.xml"),
+                        _T("dlgWayPointSelect_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_WAYPOINTSELECT_L"));
+                        _T("IDR_XML_WAYPOINTSELECT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgWayPointSelect.xml"),
+                        _T("dlgWayPointSelect.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_WAYPOINTSELECT"));
+                        _T("IDR_XML_WAYPOINTSELECT"));
   }
 
   if (!wf) return -1;
@@ -716,17 +716,17 @@ int dlgWayPointSelect(const GEOPOINT &location, const int type, const int Filter
   wf->SetKeyDownNotify(FormKeyDown);
 
   ((WndButton *)wf->
-   FindByName(TEXT("cmdClose")))->
+   FindByName(_T("cmdClose")))->
     SetOnClickNotify(OnWPSCloseClicked);
 
-  wWayPointList = (WndListFrame*)wf->FindByName(TEXT("frmWayPointList"));
+  wWayPointList = (WndListFrame*)wf->FindByName(_T("frmWayPointList"));
   assert(wWayPointList!=NULL);
   wWayPointList->SetBorderKind(BORDERLEFT);
   wWayPointList->SetEnterCallback(OnWaypointListEnter);
 
-  wpName = (WndProperty*)wf->FindByName(TEXT("prpFltName"));
-  wpDistance = (WndProperty*)wf->FindByName(TEXT("prpFltDistance"));
-  wpDirection = (WndProperty*)wf->FindByName(TEXT("prpFltDirection"));
+  wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));
+  wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
+  wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
 
   PrepareData();
   UpdateList();

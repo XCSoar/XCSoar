@@ -86,9 +86,7 @@ public:
 #else
   Window():hWnd(NULL), prev_wndproc(NULL) {}
 #endif
-  ~Window() {
-    reset();
-  }
+  virtual ~Window();
 
 #ifndef ENABLE_SDL
   operator HWND() const {
@@ -234,6 +232,17 @@ public:
 #endif
   }
 
+  void show_on_top() {
+    assert_none_locked();
+
+#ifdef ENABLE_SDL
+    // XXX
+#else
+    ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
+                   SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+#endif
+  }
+
   void set_font(const Font &font) {
     assert_none_locked();
 
@@ -242,6 +251,14 @@ public:
 #else
     ::SendMessage(hWnd, WM_SETFONT,
                   (WPARAM)font.native(), MAKELPARAM(TRUE,0));
+#endif
+  }
+
+  bool is_visible() const {
+#ifdef ENABLE_SDL
+    return true; // XXX
+#else
+    return ::IsWindowVisible(hWnd);
 #endif
   }
 
@@ -259,6 +276,13 @@ public:
 #else
     ::ShowWindow(hWnd, SW_HIDE);
 #endif
+  }
+
+  void set_visible(bool visible) {
+    if (visible)
+      show();
+    else
+      hide();
   }
 
   /**
@@ -536,6 +560,7 @@ public:
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_mouse_double(int x, int y);
+  virtual bool on_mouse_wheel(int delta);
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
   virtual bool on_command(unsigned id, unsigned code);

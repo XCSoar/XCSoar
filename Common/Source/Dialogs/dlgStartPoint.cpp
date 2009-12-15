@@ -82,9 +82,9 @@ OnStartPointPaintListItem(WindowControl * Sender, Canvas &canvas)
         }
       }
       if (i==i0) {
-        _tcscpy(label, TEXT("(add waypoint)"));
+        _tcscpy(label, _T("(add waypoint)"));
       } else {
-        _tcscpy(label, TEXT(" "));
+        _tcscpy(label, _T(" "));
       }
     }
 
@@ -152,14 +152,14 @@ void dlgStartPointShowModal(void) {
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgStartPoint_L.xml"),
+                        _T("dlgStartPoint_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_STARTPOINT_L"));
+                        _T("IDR_XML_STARTPOINT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgStartPoint.xml"),
+                        _T("dlgStartPoint.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_STARTPOINT"));
+                        _T("IDR_XML_STARTPOINT"));
   }
   if (!wf) return;
 
@@ -167,7 +167,7 @@ void dlgStartPointShowModal(void) {
 
   task.CheckStartPointInTask();
 
-  wStartPointList = (WndListFrame*)wf->FindByName(TEXT("frmStartPointList"));
+  wStartPointList = (WndListFrame*)wf->FindByName(_T("frmStartPointList"));
   assert(wStartPointList!=NULL);
   wStartPointList->SetBorderKind(BORDERLEFT);
   wStartPointList->SetEnterCallback(OnStartPointListEnter);

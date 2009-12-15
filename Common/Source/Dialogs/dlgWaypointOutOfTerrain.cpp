@@ -82,14 +82,14 @@ int dlgWaypointOutOfTerrain(const TCHAR *Message){
 #endif
 
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgWaypointOutOfTerrain.xml"),
+                        _T("dlgWaypointOutOfTerrain.xml"),
 		        XCSoarInterface::main_window,
-		        TEXT("IDR_XML_WAYPOINTTERRAIN"));
+		        _T("IDR_XML_WAYPOINTTERRAIN"));
 
     if (wf) {
 
 
-      wfrm = (WndFrame*)wf->FindByName(TEXT("frmWaypointOutOfTerrainText"));
+      wfrm = (WndFrame*)wf->FindByName(_T("frmWaypointOutOfTerrainText"));
 
       wfrm->SetCaption(Message);
       wfrm->SetCaptionStyle(

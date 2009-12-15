@@ -55,7 +55,9 @@ DataFieldEnum::~DataFieldEnum()
   nEnums = 0;
 }
 
-int DataFieldEnum::GetAsInteger(void){
+int
+DataFieldEnum::GetAsInteger(void) const
+{
   if (mValue <nEnums) {
     return mEntries[mValue].index;
   } else {
@@ -72,8 +74,9 @@ void DataFieldEnum::addEnumText(const TCHAR *Text) {
   }
 }
 
-
-TCHAR *DataFieldEnum::GetAsString(void){
+const TCHAR *
+DataFieldEnum::GetAsString(void) const
+{
   if (mValue < nEnums) {
     return(mEntries[mValue].mText);
   } else {

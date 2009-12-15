@@ -55,6 +55,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Button.hpp"
 #include "Form/Draw.hpp"
+#include "Form/Util.hpp"
 #include "Language.hpp"
 #include "Interface.hpp"
 

@@ -43,69 +43,58 @@ Copyright_License {
 
 #include <assert.h>
 
-static WndForm *wf=NULL;
-static WndListFrame *wAirspacePatternsList=NULL;
-
-static int ItemIndex = -1;
-
+static WndForm *wf = NULL;
+static WndListFrame *wAirspacePatternsList = NULL;
 
 static void UpdateList(void){
   wAirspacePatternsList->ResetList();
   wAirspacePatternsList->invalidate();
 }
 
-static int DrawListIndex=0;
+static void
+OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
+{
+  if (i >= NUMAIRSPACEBRUSHES)
+    return;
+
+  canvas.black_pen();
+  canvas.set_background_color(Color::WHITE);
+  canvas.select(MapGfx.GetAirspaceBrush(i));
+  canvas.set_text_color(Color::BLACK);
+  canvas.rectangle(rc.left + Layout::FastScale(2),
+                   rc.top + Layout::FastScale(2),
+                   rc.right - Layout::FastScale(2),
+                   rc.bottom - Layout::FastScale(2));
+}
 
 static void
-OnAirspacePatternsPaintListItem(WindowControl *Sender, Canvas &canvas)
+OnAirspacePatternsListEnter(WindowControl *Sender,
+                            WndListFrame::ListInfo_t *ListInfo)
 {
   (void)Sender;
-  if ((DrawListIndex < NUMAIRSPACEBRUSHES) &&(DrawListIndex>=0)) {
-    int i = DrawListIndex;
-
-    canvas.black_pen();
-    canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
-    canvas.select(MapGfx.GetAirspaceBrush(i));
-    canvas.set_text_color(Color(0x00,0x00, 0x00));
-    canvas.rectangle(Layout::FastScale(100), Layout::FastScale(2),
-                     Layout::FastScale(180), Layout::FastScale(22));
-  }
-}
-
-
-static void OnAirspacePatternsListEnter(WindowControl * Sender,
-				WndListFrame::ListInfo_t *ListInfo) {
-  (void)Sender;
-  ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
-  if (ItemIndex>=NUMAIRSPACEBRUSHES) {
-    ItemIndex = NUMAIRSPACEBRUSHES-1;
-  }
-  if (ItemIndex>=0) {
-    wf->SetModalResult(mrOK);
-  }
-}
-
-
-static void OnAirspacePatternsListInfo(WindowControl * Sender,
-			       WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender;
-  if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = NUMAIRSPACEBRUSHES;
-  } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
-    ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
-  }
-}
-
-static void OnCloseClicked(WindowControl * Sender){
-  (void)Sender;
-  ItemIndex = -1;
   wf->SetModalResult(mrOK);
+}
+
+static void
+OnAirspacePatternsListInfo(WindowControl *Sender,
+                           WndListFrame::ListInfo_t *ListInfo)
+{
+  (void)Sender;
+
+  if (ListInfo->DrawIndex == -1) {
+    ListInfo->ItemCount = NUMAIRSPACEBRUSHES;
+  }
+}
+
+static void
+OnCloseClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  wf->SetModalResult(mrCancel);
 }
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnAirspacePatternsPaintListItem),
   DeclareCallBackEntry(OnAirspacePatternsListInfo),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
@@ -113,40 +102,39 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 int dlgAirspacePatternsShowModal(void){
-
-  ItemIndex = -1;
-
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgAirspacePatterns_L.xml"),
+                        _T("dlgAirspacePatterns_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_AIRSPACEPATTERNS_L"));
+                        _T("IDR_XML_AIRSPACEPATTERNS_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgAirspacePatterns.xml"),
+                        _T("dlgAirspacePatterns.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_AIRSPACEPATTERNS"));
+                        _T("IDR_XML_AIRSPACEPATTERNS"));
   }
 
-  if (!wf) return -1;
+  if (!wf)
+    return -1;
 
   assert(wf!=NULL);
 
-  wAirspacePatternsList = (WndListFrame*)wf->FindByName(TEXT("frmAirspacePatternsList"));
+  wAirspacePatternsList = (WndListFrame*)wf->FindByName(_T("frmAirspacePatternsList"));
   assert(wAirspacePatternsList!=NULL);
   wAirspacePatternsList->SetBorderKind(BORDERLEFT);
   wAirspacePatternsList->SetEnterCallback(OnAirspacePatternsListEnter);
+  wAirspacePatternsList->SetPaintItemCallback(OnAirspacePatternsPaintListItem);
 
   UpdateList();
 
-  wf->ShowModal();
+  int result = wf->ShowModal();
+  result = result == mrOK
+    ? wAirspacePatternsList->GetCursorIndex()
+    : -1;
 
   // now retrieve back the properties...
-
   delete wf;
-
   wf = NULL;
 
-  return ItemIndex;
+  return result;
 }
-

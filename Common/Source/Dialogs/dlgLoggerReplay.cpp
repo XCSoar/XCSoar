@@ -53,7 +53,7 @@ static void OnStopClicked(WindowControl * Sender){
 static void OnStartClicked(WindowControl * Sender){
 	(void)Sender;
   WndProperty* wp;
-  wp = (WndProperty*)wf->FindByName(TEXT("prpIGCFile"));
+  wp = (WndProperty*)wf->FindByName(_T("prpIGCFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
@@ -95,25 +95,25 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgLoggerReplayShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgLoggerReplay.xml"),
+                      _T("dlgLoggerReplay.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_LOGGERREPLAY"));
+		      _T("IDR_XML_LOGGERREPLAY"));
   if (wf == NULL)
     return;
 
   WndProperty* wp;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpRate"));
+  wp = (WndProperty*)wf->FindByName(_T("prpRate"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(ReplayLogger::TimeScale);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpIGCFile"));
+  wp = (WndProperty*)wf->FindByName(_T("prpIGCFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(TEXT("*.igc"));
+    dfe->ScanDirectoryTop(_T("*.igc"));
     dfe->Lookup(ReplayLogger::GetFilename());
     wp->RefreshDisplay();
   }

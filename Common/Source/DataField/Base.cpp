@@ -62,6 +62,64 @@ void DataField::SetData(void){
   (mOnDataAccess)(this, daPut);
 }
 
+bool
+DataField::GetAsBoolean() const
+{
+  return false;
+}
+
+int
+DataField::GetAsInteger() const
+{
+  return 0;
+}
+
+double
+DataField::GetAsFloat() const
+{
+  return 0;
+}
+
+const TCHAR *
+DataField::GetAsString() const
+{
+  return NULL;
+}
+
+const TCHAR *
+DataField::GetAsDisplayString() const
+{
+  return GetAsString();
+}
+
+bool
+DataField::SetAsBoolean(bool Value)
+{
+  (void)Value;
+  return false;
+}
+
+int
+DataField::SetAsInteger(int Value)
+{
+  (void)Value;
+  return 0;
+}
+
+double
+DataField::SetAsFloat(double Value)
+{
+  (void)Value;
+  return 0.0;
+}
+
+const TCHAR *
+DataField::SetAsString(const TCHAR *Value)
+{
+  (void)Value;
+  return NULL;
+}
+
   void __Dummy(DataField *Sender, DataField::DataAccessKind_t Mode){
     (void) Sender;
     (void) Mode;
@@ -120,8 +178,6 @@ int DataField::CreateComboListStepping(void) { // for DataFieldInteger and DataF
   double fCurrent=ComboListInitValue;
   double fLast=ComboListInitValue;
   TCHAR sTemp[ComboPopupITEMMAX];
-
-  mComboList.ComboPopupItemIndex =-1;
 
   int iListCount=0;
   int iSelectedIndex = -1;

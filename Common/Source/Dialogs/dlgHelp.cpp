@@ -67,14 +67,14 @@ dlgHelpShowModal(ContainerWindow &parent,
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgHelp_L.xml"),
+                        _T("dlgHelp_L.xml"),
                         parent,
-                        TEXT("IDR_XML_HELP_L"));
+                        _T("IDR_XML_HELP_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgHelp.xml"),
+                        _T("dlgHelp.xml"),
                         parent,
-                        TEXT("IDR_XML_HELP"));
+                        _T("IDR_XML_HELP"));
   }
 
   if (wf == NULL)
@@ -83,11 +83,11 @@ dlgHelpShowModal(ContainerWindow &parent,
   WndProperty* wp;
 
   TCHAR fullcaption[100];
-  _stprintf(fullcaption,TEXT("Help: %s"), Caption);
+  _stprintf(fullcaption,_T("Help: %s"), Caption);
 
   wf->SetCaption(fullcaption);
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpHelpText"));
+  wp = (WndProperty*)wf->FindByName(_T("prpHelpText"));
   if (wp) {
     wp->SetText(HelpText);
     wp->RefreshDisplay();

@@ -36,60 +36,40 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAIN_WINDOW_HXX
-#define XCSOAR_MAIN_WINDOW_HXX
+#ifndef XCSOAR_FORM_UTIL_HPP
+#define XCSOAR_FORM_UTIL_HPP
 
-#include "Screen/TopWindow.hpp"
-#include "MapWindow.h"
-#include "PopupMessage.hpp"
+#include <tchar.h>
 
-class GaugeVario;
-class GaugeFLARM;
-class StatusMessageList;
+class WndForm;
 
 /**
- * The XCSoar main window.
+ * Loads the specified value into the form.
+ *
+ * @param form the form
+ * @param control_name the name of the control in the form
+ * @param value the new value
  */
-class MainWindow : public TopWindow {
-public:
-  MapWindow map;
-  GaugeVario *vario;
-  GaugeFLARM *flarm;
-  PopupMessage popup;
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value);
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name, int value);
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name, unsigned int value);
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name, double value);
 
-private:
-  timer_t timer_id;
-
-public:
-  MainWindow(const StatusMessageList &status_messages)
-    :vario(NULL), flarm(NULL), popup(status_messages, *this) {}
-  virtual ~MainWindow();
-
-  static bool find(LPCTSTR text) {
-    return TopWindow::find(_T("XCSoarMain"), text);
-  }
-
-  static bool register_class(HINSTANCE hInstance);
-
-  void set(LPCTSTR text,
-           int left, int top, unsigned width, unsigned height);
-
-  void reset() {
-    map.reset();
-    TopWindow::reset();
-  }
-
-protected:
-  virtual Brush *on_color(Window &window, Canvas &canvas);
-  bool on_activate();
-  bool on_timer(timer_t id);
-  bool on_create();
-  bool on_destroy();
-  bool on_close();
-  bool on_setfocus();
-
-public:
-  void install_timer();
-};
+/**
+ * Saves a form value into a variable and into the registry.
+ *
+ * @param form the form
+ * @param control_name the name of the control in the form
+ * @param value the new value
+ * @param registry_name the name of the registry key
+ * @return true if the value has been modified
+ */
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 bool &value, const TCHAR *registry_name);
 
 #endif

@@ -52,6 +52,11 @@ Copyright_License {
 #include <windowsx.h>
 #endif
 
+Window::~Window()
+{
+  reset();
+}
+
 void
 Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
             int left, int top, unsigned width, unsigned height,
@@ -304,6 +309,12 @@ Window::on_mouse_double(int x, int y)
 }
 
 bool
+Window::on_mouse_wheel(int delta)
+{
+  return false;
+}
+
+bool
 Window::on_key_down(unsigned key_code)
 {
   return false;
@@ -440,6 +451,17 @@ Window::on_message(HWND _hWnd, UINT message,
       return 0;
     }
     break;
+
+#ifdef WM_MOUSEWHEEL
+  case WM_MOUSEWHEEL:
+    XCSoarInterface::InterfaceTimeoutReset();
+    if (on_mouse_wheel(GET_WHEEL_DELTA_WPARAM(wParam))) {
+      /* true returned: message was handled */
+      ResetDisplayTimeOut();
+      return 0;
+    }
+    break;
+#endif
 
   case WM_KEYDOWN:
     XCSoarInterface::InterfaceTimeoutReset();

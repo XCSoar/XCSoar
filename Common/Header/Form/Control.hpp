@@ -51,7 +51,7 @@ Copyright_License {
 #define BORDERBOTTOM (1<<bkBottom)
 #define BORDERLEFT   (1<<bkLeft)
 
-typedef enum{
+typedef enum {
   bkNone,
   bkTop,
   bkRight,
@@ -65,7 +65,7 @@ public:
 
 private:
   WindowControl *mOwner;
-  int  mBorderKind;
+  int mBorderKind;
   Color mColorBack;
   Color mColorFore;
   Brush mhBrushBk;
@@ -81,18 +81,14 @@ private:
   bool mReadOnly;
   bool mHasFocus;
 
-  int  mBorderSize;
-  bool mVisible;
+  int mBorderSize;
 
-  WindowControl *mActiveClient;
-
-  static int InstCount;
+  static bool initialized;
   static Brush hBrushDefaultBk;
   static Pen hPenDefaultBorder;
   static Pen hPenDefaultSelector;
 
 protected:
-
   bool mCanFocus;
   TCHAR mCaption[254];
   bool mDontPaintSelector;
@@ -100,12 +96,15 @@ protected:
   WindowControl *mClients[50];
   int mClientCount;
 
-  virtual void PaintSelector(Canvas &canvas);
-  virtual WindowControl *SetOwner(WindowControl *Value);
+  void PaintSelector(Canvas &canvas, const RECT rc);
+  void PaintSelector(Canvas &canvas);
+  WindowControl *SetOwner(WindowControl *Value);
   bool HasFocus(void) { return mHasFocus; }
 
 public:
-  TCHAR *GetCaption(void) { return mCaption; }
+  TCHAR *GetCaption(void) {
+    return mCaption;
+  }
 
   virtual bool on_setfocus();
   virtual bool on_killfocus();
@@ -114,7 +113,6 @@ public:
 
   virtual void AddClient(WindowControl *Client);
 
-  virtual bool on_close(void);
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
 
@@ -122,13 +120,6 @@ public:
   virtual void on_paint(Canvas &canvas);
 
   virtual int OnHelp();
-
-  virtual void Close(void) {
-    SetVisible(false);
-  }
-  virtual void Show(void) {
-    SetVisible(true);
-  }
 
   void SetOnHelpCallback(void(*Function)(WindowControl *Sender)) {
     mOnHelpCallback = Function;
@@ -139,16 +130,17 @@ public:
   virtual Window *GetCanFocus();
   bool SetCanFocus(bool Value);
 
-  bool GetReadOnly(void) { return mReadOnly; }
+  bool GetReadOnly(void) {
+    return mReadOnly;
+  }
   bool SetReadOnly(bool Value);
-
-  void SetVisible(bool Value);
-  bool GetVisible(void);
 
   int  GetBorderKind(void);
   int  SetBorderKind(int Value);
 
-  const Font *GetFont(void) { return mhFont; }
+  const Font *GetFont(void) {
+    return mhFont;
+  }
   virtual const Font *SetFont(const Font &font);
 
   const Font *SetFont(const Font *font) {
@@ -156,21 +148,27 @@ public:
   }
 
   virtual Color SetForeColor(Color Value);
-  Color GetForeColor(void) { return mColorFore; }
+  Color GetForeColor(void) {
+    return mColorFore;
+  }
 
   virtual Color SetBackColor(Color Value);
-  Color GetBackColor(void) { return mColorBack; }
+  Color GetBackColor(void) {
+    return mColorBack;
+  }
 
   Brush &GetBackBrush(void) {
     return mhBrushBk.defined()
       ? mhBrushBk
       : hBrushDefaultBk;
   }
+
   Pen &GetBorderPen(void) {
     return mhPenBorder.defined()
       ? mhPenBorder
       : hPenDefaultBorder;
   }
+
   Pen &GetSelectorPen(void) {
     return mhPenSelector.defined()
       ? mhPenSelector
@@ -180,12 +178,21 @@ public:
   virtual void SetCaption(const TCHAR *Value);
   void SetHelpText(const TCHAR *Value);
 
-  virtual ContainerWindow &GetClientAreaWindow(void) { return *this; }
-  WindowControl *GetOwner(void) { return mOwner; }
+  virtual ContainerWindow &GetClientAreaWindow(void) {
+    return *this;
+  }
 
-  int GetTag(void) { return mTag; }
+  WindowControl *GetOwner(void) {
+    return mOwner;
+  }
+
+  int GetTag(void) {
+    return mTag;
+  }
+
   int SetTag(int Value) {
-    mTag = Value; return mTag;
+    mTag = Value;
+    return mTag;
   }
 
   Window *FocusNext(WindowControl *Sender);
@@ -193,15 +200,21 @@ public:
 
   WindowControl(WindowControl *Owner, ContainerWindow *Parent,
                 const TCHAR *Name, int X, int Y, int Width, int Height,
-                bool Visible=true);
+                bool Visible = true);
+
   virtual ~WindowControl(void);
 
-  void PaintSelector(bool Value) {mDontPaintSelector = Value;}
+  void PaintSelector(bool Value) {
+    mDontPaintSelector = Value;
+  }
 
   WindowControl *FindByName(const TCHAR *Name);
 
-  void FilterAdvanced(bool advanced);
+  const WindowControl *FindByName(const TCHAR *Name) const {
+    return const_cast<WindowControl *>(this)->FindByName(Name);
+  }
 
+  void FilterAdvanced(bool advanced);
 };
 
 #endif

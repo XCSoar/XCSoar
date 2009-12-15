@@ -68,7 +68,6 @@ private:
   Editor edit;
   POINT mEditSize;
   POINT mEditPos;
-  const Font *mhCaptionFont;
   const Font *mhValueFont;
   int  mBitmapSize;
   int  mCaptionWidth;
@@ -124,6 +123,10 @@ public:
   virtual bool on_mouse_double(int x, int y);
 
   DataField *GetDataField(void) {
+    return mDataField;
+  }
+
+  const DataField *GetDataField(void) const {
     return mDataField;
   }
 

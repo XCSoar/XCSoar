@@ -39,6 +39,8 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Screen/Viewport.hpp"
 
+#include <assert.h>
+
 #include <algorithm>
 
 using std::min;
@@ -48,23 +50,21 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
                            int X, int Y, int Width, int Height,
                            void (*OnListCallback)(WindowControl *Sender,
                                                   ListInfo_t *ListInfo)):
-  WndFrame(Owner, Name, X, Y, Width, Height)
+  WndFrame(Owner, Name, X, Y, Width, Height),
+  mOnListCallback(OnListCallback),
+  mOnListEnterCallback(NULL),
+  CursorCallback(NULL),
+  PaintItemCallback(NULL)
 {
   SetCanFocus(true);
   PaintSelector(true);
 
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
-  mListInfo.ItemInPageCount = 0;
-  mListInfo.TopIndex = 0;
-  mListInfo.BottomIndex = 0;
-//  mListInfo.SelectedIndex = 0;
   mListInfo.ItemCount = 0;
   mListInfo.ItemInViewCount = 0;
 
   mCaption[0] = '\0';
-  mOnListCallback = OnListCallback;
-  mOnListEnterCallback = NULL;
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
 }
@@ -112,14 +112,32 @@ WndListFrame::on_paint(Canvas &canvas)
     if (mOnListCallback != NULL){
       mListInfo.DrawIndex = mListInfo.ItemIndex;
       mOnListCallback(this, &mListInfo);
-      mClients[0]->SetTop(mClients[0]->GetHeight() * (mListInfo.ItemIndex-mListInfo.TopIndex));
+      mClients[0]->SetTop(mClients[0]->GetHeight() * mListInfo.ItemIndex);
     }
 */
   }
 
   WndFrame::on_paint(canvas);
 
-  if (mClientCount > 0){
+  if (PaintItemCallback != NULL && mClientCount > 0) {
+    // paint using the PaintItemCallback
+    RECT rc = mClients[0]->get_position();
+
+    for (i = 0; i < mListInfo.ItemInViewCount; i++) {
+      if (GetFocused() && i == mListInfo.ItemIndex) {
+        Brush brush(GetBackColor().highlight());
+        canvas.fill_rectangle(rc, brush);
+      }
+
+      PaintItemCallback(canvas, rc, mListInfo.ScrollIndex + i);
+
+      if (i == mListInfo.ItemIndex)
+        PaintSelector(canvas, rc);
+
+      ::OffsetRect(&rc, 0, rc.bottom - rc.top);
+    }
+  } else if (mClientCount > 0){
+    // paint using the hidden client window
     const RECT rc = mClients[0]->get_position();
 
     Viewport viewport(canvas, rc.right - rc.left, rc.bottom - rc.top);
@@ -131,7 +149,7 @@ WndListFrame::on_paint(Canvas &canvas)
       canvas2.select(*mClients[0]->GetFont());
 
       if (mOnListCallback != NULL){
-        mListInfo.DrawIndex = mListInfo.TopIndex + i;
+        mListInfo.DrawIndex = i;
         mOnListCallback(this, &mListInfo);
       }
 
@@ -143,9 +161,9 @@ WndListFrame::on_paint(Canvas &canvas)
     }
 
     viewport.restore();
-
-    DrawScrollBar(canvas);
   }
+
+  DrawScrollBar(canvas);
 }
 
 void WndListFrame::DrawScrollBar(Canvas &canvas) {
@@ -168,8 +186,9 @@ void WndListFrame::SetEnterCallback(void
 int WndListFrame::RecalculateIndices(bool bigscroll) {
 
 // scroll to smaller of current scroll or to last page
-  mListInfo.ScrollIndex = max(0,min(mListInfo.ScrollIndex,
-				    mListInfo.ItemCount-mListInfo.ItemInPageCount));
+  mListInfo.ScrollIndex = max(0, min(mListInfo.ScrollIndex,
+                                     mListInfo.ItemCount -
+                                     mListInfo.ItemInViewCount));
 
 // if we're off end of list, move scroll to last page and select 1st item in last page, return
   if (mListInfo.ItemIndex+mListInfo.ScrollIndex >= mListInfo.ItemCount) {
@@ -185,18 +204,16 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
 			      min(mListInfo.ScrollIndex,
 				  mListInfo.ItemCount-mListInfo.ItemIndex-1));
 
-  if (mListInfo.ItemIndex >= mListInfo.BottomIndex){
-    if ((mListInfo.ItemCount>mListInfo.ItemInPageCount)
-	&& (mListInfo.ItemIndex+mListInfo.ScrollIndex < mListInfo.ItemCount)) {
-      mListInfo.ScrollIndex++;
-      mListInfo.ItemIndex = mListInfo.BottomIndex-1;
+  if (mListInfo.ScrollIndex + mListInfo.ItemIndex > mListInfo.ItemCount)
+    mListInfo.ItemIndex =
+      max(mListInfo.ItemCount - mListInfo.ScrollIndex - 1, 0);
 
-      invalidate();
-      return 0;
-    } else {
-      mListInfo.ItemIndex = mListInfo.BottomIndex-1;
-      return 1;
-    }
+  if (mListInfo.ItemIndex >= mListInfo.ItemInViewCount) {
+    mListInfo.ScrollIndex++;
+    mListInfo.ItemIndex = mListInfo.ItemInViewCount - 1;
+
+    invalidate();
+    return 0;
   }
   if (mListInfo.ItemIndex < 0){
 
@@ -214,6 +231,41 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
 
   invalidate();
   return (0);
+}
+
+void
+WndListFrame::EnsureVisible(int i)
+{
+  assert(i >= 0 && i < mListInfo.ItemCount);
+
+  if (mListInfo.ScrollIndex > i)
+    mListInfo.ScrollIndex = i;
+  else if (mListInfo.ScrollIndex + mListInfo.ItemInViewCount <= i)
+    mListInfo.ScrollIndex = i - mListInfo.ItemInViewCount + 1;
+  else
+    /* no change, no repaint required */
+    return;
+
+  invalidate();
+}
+
+bool
+WndListFrame::SetCursorIndex(int i)
+{
+  if (i < 0 || i >= mListInfo.ItemCount)
+    return false;
+
+  if (i == GetCursorIndex())
+    return true;
+
+  EnsureVisible(i);
+
+  mListInfo.ItemIndex = i - mListInfo.ScrollIndex;
+  invalidate();
+
+  if (CursorCallback != NULL)
+    CursorCallback(GetCursorIndex());
+  return true;
 }
 
 bool
@@ -240,37 +292,41 @@ WndListFrame::on_key_down(unsigned key_code)
 
   case VK_LEFT:
     if (mListInfo.ScrollIndex <= 0 ||
-        mListInfo.ItemCount <= mListInfo.ItemInPageCount)
+        mListInfo.ItemCount <= mListInfo.ItemInViewCount)
       break;
 
-    mListInfo.ScrollIndex -= mListInfo.ItemInPageCount;
+    mListInfo.ScrollIndex -= mListInfo.ItemInViewCount;
     RecalculateIndices(true);
+
+    if (CursorCallback != NULL)
+      CursorCallback(GetCursorIndex());
     return true;
 
   case VK_RIGHT:
     if (mListInfo.ItemIndex + mListInfo.ScrollIndex >= mListInfo.ItemCount ||
-        mListInfo.ItemCount <= mListInfo.ItemInPageCount)
+        mListInfo.ItemCount <= mListInfo.ItemInViewCount)
       break;
 
-    mListInfo.ScrollIndex += mListInfo.ItemInPageCount;
+    mListInfo.ScrollIndex += mListInfo.ItemInViewCount;
     RecalculateIndices(true);
+
+    if (CursorCallback != NULL)
+      CursorCallback(GetCursorIndex());
     return true;
 
     //#endif
   case VK_DOWN:
-    if (mListInfo.ItemIndex + mListInfo.ScrollIndex >= mListInfo.ItemCount)
+    if (GetCursorIndex() + 1 >= mListInfo.ItemCount)
       break;
 
-    mListInfo.ItemIndex++;
-    RecalculateIndices(false);
+    SetCursorIndex(GetCursorIndex() + 1);
     return true;
 
   case VK_UP:
-    if (mListInfo.ItemIndex + mListInfo.ScrollIndex <= 0)
+    if (GetCursorIndex() <= 0)
       break;
 
-    mListInfo.ItemIndex--;
-    RecalculateIndices(false);
+    SetCursorIndex(GetCursorIndex() - 1);
     return true;
   }
 
@@ -284,14 +340,8 @@ void WndListFrame::ResetList(void){
   mListInfo.ScrollIndex = 0;
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
-  mListInfo.ItemInPageCount = (height + client_height - 1)
-    / client_height - 1;
-  mListInfo.TopIndex = 0;
-  mListInfo.BottomIndex = 0;
-//  mListInfo.SelectedIndex = 0;
   mListInfo.ItemCount = 0;
-  mListInfo.ItemInViewCount = (height + client_height - 1)
-    / client_height - 1;
+  mListInfo.ItemInViewCount = height / client_height;
 
   if (mOnListCallback != NULL){
     mListInfo.DrawIndex = -1;                               // -1 -> initialize data
@@ -300,14 +350,10 @@ void WndListFrame::ResetList(void){
     mOnListCallback(this, &mListInfo);
   }
 
-  if (mListInfo.BottomIndex  == 0){                         // calc bounds
-    mListInfo.BottomIndex  = mListInfo.ItemCount;
-    if (mListInfo.BottomIndex > mListInfo.ItemInViewCount){
-      mListInfo.BottomIndex = mListInfo.ItemInViewCount;
-    }
-  }
-
   show_or_hide_scroll_bar();
+
+  if (CursorCallback != NULL)
+    CursorCallback(GetCursorIndex());
 }
 
 bool
@@ -324,9 +370,8 @@ void WndListFrame::SetItemIndex(int iValue){
   mListInfo.ScrollIndex=iValue;
 
   int iTail = mListInfo.ItemCount - iValue; // if within 1 page of end
-  if ( iTail < mListInfo.ItemInPageCount)
-  {
-    int iDiff = mListInfo.ItemInPageCount - iTail;
+  if (iTail < mListInfo.ItemInViewCount) {
+    int iDiff = mListInfo.ItemInViewCount - iTail;
     int iShrinkBy = min(iValue, iDiff); // don't reduce by
 
     mListInfo.ItemIndex += iShrinkBy;
@@ -334,6 +379,9 @@ void WndListFrame::SetItemIndex(int iValue){
   }
 
   RecalculateIndices(false);
+
+  if (CursorCallback != NULL)
+    CursorCallback(GetCursorIndex());
 }
 
 void
@@ -355,7 +403,7 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 */
   int index = yPos / mClients[0]->get_size().cy; // yPos is offset within ListEntry item!
 
-  if ((index>=0)&&(index<mListInfo.BottomIndex)) {
+  if (index >= 0 && index + mListInfo.ItemIndex < mListInfo.ItemCount) {
     if (index == mListInfo.ItemIndex) {
       if (mOnListEnterCallback) {
         mOnListEnterCallback(this, &mListInfo);
@@ -363,8 +411,7 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 
       invalidate();
     } else {
-      mListInfo.ItemIndex = index;
-      RecalculateIndices(false);
+      SetCursorIndex(mListInfo.ScrollIndex + index);
     }
   }
 }
@@ -435,4 +482,25 @@ WndListFrame::on_mouse_down(int x, int y)
   }
 
   return false;
+}
+
+bool
+WndListFrame::on_mouse_wheel(int delta)
+{
+  if (delta > 0) {
+    // scroll up
+    if (mListInfo.ScrollIndex > 0) {
+      --mListInfo.ScrollIndex;
+      invalidate();
+    }
+  } else if (delta < 0) {
+    // scroll down
+    if (mListInfo.ScrollIndex +
+        mListInfo.ItemInViewCount < mListInfo.ItemCount) {
+      ++mListInfo.ScrollIndex;
+      invalidate();
+    }
+  }
+
+  return true;
 }

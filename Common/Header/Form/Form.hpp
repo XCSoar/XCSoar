@@ -67,7 +67,6 @@ public:
   WndForm(ContainerWindow *Parent,
           const TCHAR *Name, const TCHAR *Caption,
           int X, int Y, int Width, int Height);
-  ~WndForm(void);
 
   ContainerWindow &GetClientAreaWindow(void);
   void AddClient(WindowControl *Client);
@@ -75,11 +74,6 @@ public:
   int OnLButtonUp(WPARAM wParam, LPARAM lParam) {
     (void)wParam; (void)lParam;
     return 0;
-  }
-
-  void Close(void) {
-    WindowControl::Close();
-    mModalResult = mrCancel;
   }
 
   DWORD enterTime;

@@ -143,7 +143,10 @@ WndProperty::WndProperty(WindowControl *Parent,
   :WindowControl(Parent,
                  NULL /*Parent->GetHandle()*/,
                  Name, X, Y, Width, Height),
-  edit(this)
+   edit(this),
+   mhValueFont(GetFont()),
+   mCaptionWidth(CaptionWidth),
+   mDownDown(false), mUpDown(false)
 {
   SetCanFocus(true);
 
@@ -153,9 +156,6 @@ WndProperty::WndProperty(WindowControl *Parent,
   _tcscpy(mCaption, Caption);
   mDataField = NULL;
   mDialogStyle=false; // this is set by ::SetDataField()
-
-  mhValueFont = GetFont();
-  mCaptionWidth = CaptionWidth;
 
   if (mCaptionWidth != 0){
     mBitmapSize = Layout::Scale(32) / 2;
@@ -183,10 +183,6 @@ WndProperty::WndProperty(WindowControl *Parent,
     hBmpRight32.load(IDB_DLGBUTTONRIGHT32);
   }
   InstCount++;
-
-  mDownDown = false;
-  mUpDown = false;
-
 }
 
 

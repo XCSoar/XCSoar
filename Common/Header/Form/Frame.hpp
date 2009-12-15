@@ -45,15 +45,12 @@ class WndFrame : public WindowControl {
 public:
   WndFrame(WindowControl *Owner, const TCHAR *Name,
            int X, int Y, int Width, int Height)
-    :WindowControl(Owner, NULL, Name, X, Y, Width, Height) {
-    mIsListItem = false;
-
+    :WindowControl(Owner, NULL, Name, X, Y, Width, Height),
+     mIsListItem(false),
+     mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
+  {
     SetForeColor(GetOwner()->GetForeColor());
     SetBackColor(GetOwner()->GetBackColor());
-    mCaptionStyle = DT_EXPANDTABS
-      | DT_LEFT
-      | DT_NOCLIP
-      | DT_WORDBREAK;
   }
 
   void SetCaption(const TCHAR *Value);

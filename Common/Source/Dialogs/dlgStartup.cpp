@@ -46,6 +46,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "Version.hpp"
 #include "Asset.hpp"
+#include "StringUtil.hpp"
 
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wSplash=NULL;
@@ -72,43 +73,43 @@ extern TCHAR startProfileFile[];
 
 void dlgStartupShowModal(void){
   WndProperty* wp;
-  StartupStore(TEXT("Startup dialog\n"));
+  StartupStore(_T("Startup dialog\n"));
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgStartup_L.xml"),
+                        _T("dlgStartup_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_STARTUP_L"));
+                        _T("IDR_XML_STARTUP_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgStartup.xml"),
+                        _T("dlgStartup.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_STARTUP"));
+                        _T("IDR_XML_STARTUP"));
   }
   if (!wf) return;
 
-  wSplash = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmSplash"));
+  wSplash = (WndOwnerDrawFrame*)wf->FindByName(_T("frmSplash"));
 
-  ((WndButton *)wf->FindByName(TEXT("cmdClose")))
+  ((WndButton *)wf->FindByName(_T("cmdClose")))
     ->SetOnClickNotify(OnCloseClicked);
 
   TCHAR temp[MAX_PATH];
 
-  _stprintf(temp,TEXT("XCSoar: Version %s"), XCSoar_VersionString);
+  _stprintf(temp,_T("XCSoar: Version %s"), XCSoar_VersionString);
   wf->SetCaption(temp);
 
-  wp = ((WndProperty *)wf->FindByName(TEXT("prpDisclaimer")));
+  wp = ((WndProperty *)wf->FindByName(_T("prpDisclaimer")));
   if (wp)
-    wp->SetText(TEXT("Pilot assumes complete\r\nresponsibility to operate\r\nthe aircraft safely.\r\nMaintain effective lookout.\r\n"));
+    wp->SetText(_T("Pilot assumes complete\r\nresponsibility to operate\r\nthe aircraft safely.\r\nMaintain effective lookout.\r\n"));
 
-  wp = ((WndProperty *)wf->FindByName(TEXT("prpProfile")));
+  wp = ((WndProperty *)wf->FindByName(_T("prpProfile")));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     if (is_altair())
-      dfe->ScanDirectoryTop(TEXT("config/*.prf"));
+      dfe->ScanDirectoryTop(_T("config/*.prf"));
     else
-      dfe->ScanDirectoryTop(TEXT("*.prf"));
+      dfe->ScanDirectoryTop(_T("*.prf"));
     dfe->Lookup(startProfileFile);
     wp->RefreshDisplay();
     if (dfe->GetNumFiles()<=2) {
@@ -120,13 +121,12 @@ void dlgStartupShowModal(void){
 
   wf->ShowModal();
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpProfile"));
+  wp = (WndProperty*)wf->FindByName(_T("prpProfile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    if (_tcslen(dfe->GetPathFile())>0) {
+    if (!string_is_empty(dfe->GetPathFile()))
       _tcscpy(startProfileFile,dfe->GetPathFile());
-    }
   }
 
   delete wf;

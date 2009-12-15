@@ -49,16 +49,13 @@ PeriodClock WndForm::timeAnyOpenClose;
 WndForm::WndForm(ContainerWindow *Parent,
                  const TCHAR *Name, const TCHAR *Caption,
                  int X, int Y, int Width, int Height):
-  WindowControl(NULL, Parent, Name, X, Y, Width, Height, false) {
-
-  mClientWindow = NULL;
-  mOnKeyDownNotify = NULL;
-  mOnTimerNotify = NULL;
-
-  mColorTitle = Color::YELLOW;
-
-  mhTitleFont = GetFont();
-
+  WindowControl(NULL, Parent, Name, X, Y, Width, Height, false),
+  mModalResult(0),
+  mColorTitle(Color::YELLOW),
+  mhTitleFont(GetFont()),
+  mClientWindow(NULL),
+  mOnTimerNotify(NULL), mOnKeyDownNotify(NULL), mOnUserMsgNotify(NULL)
+{
   mClientWindow = new WindowControl(this, this,
                                     TEXT(""), 20, 20, Width, Height);
   mClientWindow->SetBackColor(GetBackColor());
@@ -70,21 +67,10 @@ WndForm::WndForm(ContainerWindow *Parent,
 
   cbTimerID = set_timer(1001, 500);
 
-  mModalResult = 0;
   if (Caption != NULL)
     _tcscpy(mCaption, Caption);
 
 }
-
-WndForm::~WndForm(void){
-  // animation
-
-  if (mClientWindow)
-    mClientWindow->SetVisible(false);
-
-  kill_timer(cbTimerID);
-}
-
 
 ContainerWindow &
 WndForm::GetClientAreaWindow(void)
@@ -133,8 +119,7 @@ WndForm::SetTitleFont(const Font &font)
     // todo
     mhTitleFont = &font;
 
-
-
+    invalidate();
   }
 
   return res;
@@ -181,14 +166,13 @@ int WndForm::ShowModal(bool bEnableMap) {
 #endif /* !ENABLE_SDL */
 
   PeriodClock enter_clock;
-  enter_clock.update();
+  if (is_embedded() && !is_altair())
+    enter_clock.update();
 
   RECT mRc = get_screen_position();
   DrawWireRects(XCSoarInterface::EnableAnimation,&mRc, 5);
 
-  SetVisible(true);
-
-  bring_to_top();
+  show_on_top();
 
   mModalResult = 0;
 
@@ -248,16 +232,15 @@ int WndForm::ShowModal(bool bEnableMap) {
         && !is_allowed_map(msg.hwnd, msg.message, bEnableMap))
       continue;   // make it modal
 
-#ifndef NOKEYDEBONCE
     // hack to stop exiting immediately
-    if (!is_altair() && !hastimed && is_user_input(msg.message)) {
+    if (is_embedded() && !is_altair() && !hastimed &&
+        is_user_input(msg.message)) {
       if (!enter_clock.check(1000))
         /* ignore user input in the first 1000ms */
         continue;
       else
         hastimed = true;
     }
-#endif
 
     if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
         mOnKeyDownNotify(this, msg.wParam))
@@ -396,15 +379,4 @@ WndForm::on_unhandled_key(unsigned key_code)
     return 0;
 
   return WindowControl::on_unhandled_key(key_code);
-}
-
-void WndForm::Show(void){
-
-  WindowControl::Show();
-
-  bring_to_top();
-
-//  SetFocus(GetTopWindow(GetHandle()));
-
-//  SetActiveWindow(GetHandle());
 }

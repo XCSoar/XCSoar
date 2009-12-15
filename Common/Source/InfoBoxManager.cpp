@@ -71,6 +71,7 @@ Copyright_License {
 #include "WayPointList.hpp"
 #include "XCSoar.h"
 #include "Task.h"
+#include "StringUtil.hpp"
 
 #include <assert.h>
 
@@ -83,37 +84,36 @@ unsigned numInfoWindows = 8;
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];
 
-static int InfoType[MAXINFOWINDOWS] =
-#ifdef GNAV
-  {
-    873336334,
-    856820491,
-    822280982,
-    2829105,
-    103166000,
-    421601569,
-    657002759,
-    621743887,
-    439168301
-  };
-#else
-  {
-    921102,
-    725525,
-    262144,
-    74518,
-    657930,
-    2236963,
-    394758,
-    1644825
-  };
-#endif
+static const int InfoTypeDefault[MAXINFOWINDOWS] = {
+  921102,
+  725525,
+  262144,
+  74518,
+  657930,
+  2236963,
+  394758,
+  1644825
+};
+
+static const int InfoTypeAltairDefault[MAXINFOWINDOWS] = {
+  873336334,
+  856820491,
+  822280982,
+  2829105,
+  103166000,
+  421601569,
+  657002759,
+  621743887,
+  439168301
+};
+
+static int InfoType[MAXINFOWINDOWS];
 
 typedef struct _SCREEN_INFO
 {
   UnitGroup_t UnitGroup;
-  const TCHAR Description[DESCRIPTION_SIZE +1];
-  const TCHAR Title[TITLE_SIZE + 1];
+  const TCHAR *Description;
+  const TCHAR *Title;
   InfoBoxFormatter *Formatter;
   void (*Process)(int UpDown);
   char next_screen;
@@ -130,7 +130,7 @@ typedef struct _SCREEN_INFO
 //   MacCready 10,34,35,43
 //   Nav 11,12,13,15,16,17,18,27,28,29,30,31
 //   Waypoint 14,36,39,40,41,42,45,46
-SCREEN_INFO Data_Options[] = {
+static const SCREEN_INFO Data_Options[] = {
           // 0
 	  {ugAltitude,        TEXT("Height GPS"), TEXT("H GPS"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_Altitude, 1, 33},
 	  // 1
@@ -695,7 +695,7 @@ InfoBoxManager::DisplayInfoBox(void)
 
     case 56: // team bearing
       if (SettingsComputer().TeamFlarmIdTarget != 0) {
-        if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0) {
+        if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
           InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
         } else {
           InfoBoxes[i]->SetComment(TEXT("???"));
@@ -713,7 +713,7 @@ InfoBoxManager::DisplayInfoBox(void)
 
     case 57: // team bearing dif
       if (SettingsComputer().TeamFlarmIdTarget != 0) {
-        if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0) {
+        if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
           InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
         } else {
           InfoBoxes[i]->SetComment(TEXT("???"));
@@ -731,7 +731,7 @@ InfoBoxManager::DisplayInfoBox(void)
 
     case 58: // team range
       if (SettingsComputer().TeamFlarmIdTarget != 0) {
-        if (_tcslen(SettingsComputer().TeamFlarmCNTarget) != 0) {
+        if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
           InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
         } else {
           InfoBoxes[i]->SetComment(TEXT("???"));
@@ -909,26 +909,9 @@ InfoBoxManager::ProcessTimer(void)
 }
 
 void InfoBoxManager::ResetInfoBoxes(void) {
-  #ifdef GNAV
-  InfoType[0]=873336334;
-  InfoType[1]=856820491;
-  InfoType[2]=822280982;
-  InfoType[3]=2829105;
-  InfoType[4]=103166000;
-  InfoType[5]=421601569;
-  InfoType[6]=657002759;
-  InfoType[7]=621743887;
-  InfoType[8]=439168301;
-  #else
-  InfoType[0] = 921102;
-  InfoType[1] = 725525;
-  InfoType[2] = 262144;
-  InfoType[3] = 74518;
-  InfoType[4] = 657930;
-  InfoType[5] = 2236963;
-  InfoType[6] = 394758;
-  InfoType[7] = 1644825;
-  #endif
+  memcpy(InfoType,
+         is_altair() ? InfoTypeAltairDefault : InfoTypeDefault,
+         sizeof(InfoType));
 }
 
 const TCHAR *
@@ -1007,6 +990,8 @@ InfoBoxManager::Paint(void)
 RECT
 InfoBoxManager::Create(RECT rc)
 {
+  ResetInfoBoxes();
+
   int xoff, yoff, sizex, sizey;
 
   RECT retval = InfoBoxLayout::GetInfoBoxSizes(rc);
