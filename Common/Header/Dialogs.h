@@ -77,9 +77,6 @@ void dlgStartTaskShowModal(bool *validStart, double Time, double Speed,
 
 void dlgAnalysisShowModal();
 void dlgStatusShowModal(int page);
-void dlgTextEntryShowModal(TCHAR *text, int width=0);
-void dlgTeamCodeShowModal(void);
-void dlgStartPointShowModal(void);
 
 void dlgSwitchesShowModal();
 void dlgTaskWaypointShowModal(int itemindex, int type, bool addonly = false);

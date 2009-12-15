@@ -50,6 +50,8 @@ Copyright_License {
 
 #define CheckIndex(x, i) do {} while (false) // XXX
 
+extern int WaypointsOutOfRange;
+
 static void
 DefaultRegistrySettingsAltair()
 {

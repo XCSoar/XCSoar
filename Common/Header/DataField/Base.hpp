@@ -85,7 +85,6 @@ class DataField{
   virtual bool SetAsBoolean(bool Value);
   virtual int SetAsInteger(int Value);
   virtual double SetAsFloat(double Value);
-  virtual fixed SetAsFixed(fixed Value);
   virtual const TCHAR *SetAsString(const TCHAR *Value);
 
   virtual void Set(bool Value){ (void)Value; };

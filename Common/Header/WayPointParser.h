@@ -46,37 +46,35 @@ Copyright_License {
 #define wpTerrainBoundsNo     102
 #define wpTerrainBoundsNoAll  103
 
-class WayPointList;
+class Waypoints;
 class MapWindowProjection;
 class RasterTerrain;
 
-struct WAYPOINT;
+struct Waypoint;
 struct GEOPOINT;
 struct SETTINGS_COMPUTER;
 
+extern int WaypointsOutOfRange;
 /**
  * Reads a text file, and appends its way points to the specified
  * WayPointList.
  */
-bool ReadWayPointFile(const TCHAR *path, WayPointList &way_points,
+bool ReadWayPointFile(const TCHAR *path, Waypoints &way_points,
     const RasterTerrain *terrain);
 
-void ReadWayPoints(WayPointList &way_points, const RasterTerrain *terrain);
+void ReadWaypoints(Waypoints &way_points, const RasterTerrain *terrain);
 
-void SetHome(const WayPointList &way_points, const RasterTerrain *terrain,
+void SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
     SETTINGS_COMPUTER &settings, const bool reset,
     const bool set_location = false);
 
-int FindNearestWayPoint(const WayPointList &way_points,
-    MapWindowProjection &map_projection, const GEOPOINT &location,
-    double MaxRange, bool exhaustive = false);
-
 int dlgWaypointOutOfTerrain(const TCHAR *Message);
 
-void WaypointWriteFiles(WayPointList &way_points,
+void WaypointWriteFiles(Waypoints &way_points,
     const SETTINGS_COMPUTER &settings_computer);
 
-void WaypointAltitudeFromTerrain(WAYPOINT &way_point,
+void WaypointAltitudeFromTerrain(Waypoint &way_point,
     const RasterTerrain &terrain);
 
 #endif
+

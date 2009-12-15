@@ -97,46 +97,18 @@ CloseWaypoints(Waypoints &way_points)
 static bool
 WaypointInTerrainRange(const Waypoint &way_point, const RasterTerrain &terrain)
 {
+  TCHAR sTmp[250];
+  int res;
+
   if (WaypointOutOfTerrainRangeDontAskAgain == 1)
     return true;
 
   if (!terrain.isTerrainLoaded())
     return true;
 
-  if (terrain.WaypointIsInTerrainRange(way_point.Location))
+  if (terrain.WaypointIsInTerrainRange(way_point.Location)) {
     return true;
-  } else {
-    if (WaypointOutOfTerrainRangeDontAskAgain == 0){
-
-      TCHAR sTmp[250];
-      int res;
-
-      _stprintf(sTmp, gettext(TEXT("Waypoint #%d \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?")),
-                way_point.id, way_point.Name.c_str());
-
-      res = dlgWaypointOutOfTerrain(sTmp);
-
-      switch(res){
-      case wpTerrainBoundsYes:
-        return true;
-      case wpTerrainBoundsNo:
-        return false;
-      case wpTerrainBoundsYesAll:
-        WaypointOutOfTerrainRangeDontAskAgain = 1;
-        WaypointsOutOfRange = 1;
-        SetToRegistry(szRegistryWaypointsOutOfRange,
-                      WaypointsOutOfRange);
-	Profile::StoreRegistry();
-        return true;
-      case mrCancel:
-      case wpTerrainBoundsNoAll:
-        WaypointOutOfTerrainRangeDontAskAgain = 2;
-        WaypointsOutOfRange = 2;
-        SetToRegistry(szRegistryWaypointsOutOfRange,
-                      WaypointsOutOfRange);
-	Profile::StoreRegistry();
-        return false;
-      }
+  } 
 
   if (WaypointOutOfTerrainRangeDontAskAgain == 2)
     return false;
@@ -146,12 +118,9 @@ WaypointInTerrainRange(const Waypoint &way_point, const RasterTerrain &terrain)
   if (WaypointOutOfTerrainRangeDontAskAgain != 0)
     return false;
 
-  TCHAR sTmp[250];
-  int res;
-
   _stprintf(sTmp,gettext(
       TEXT("Waypoint #%d \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?")),
-      way_point.Number, way_point.Name);
+      way_point.id, way_point.Name.c_str());
 
   res = dlgWaypointOutOfTerrain(sTmp);
 
@@ -326,6 +295,8 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
   way_point.FileNum = globalFileNum;
 
   unsigned ignore_id = _tcstol(input, &endptr, 10);
+  (void)ignore_id;
+
   if (endptr == input || *endptr != _T(','))
     return false;
   //  way_point.id;
@@ -637,6 +608,7 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
   if (reset || way_points.empty() ||
       !way_points.lookup_id(settings.HomeWaypoint)) {
     settings.HomeWaypoint = -1;
+  }
 
   // VENTA3 -- reset Alternates
   if (reset
@@ -647,7 +619,7 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
   }
 
   // check invalid task ref waypoint or forced reset due to file change
-  if (reset || !way_points.lookup_id(settings.TeamCodeRefWaypoint)) {
+  if (reset || !way_points.lookup_id(settings.TeamCodeRefWaypoint)) 
     settings.TeamCodeRefWaypoint = -1;
 
   if (!way_points.lookup_id(settings.HomeWaypoint)) {
@@ -835,8 +807,8 @@ WaypointWriteFiles(Waypoints &way_points,
 
   way_points.set_home(settings_computer.HomeWaypoint);
 
-  GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
-  ExpandLocalPath(szFile1);
+  GetRegistryString(szRegistryWayPointFile, szFile, MAX_PATH);
+  ExpandLocalPath(szFile);
 
   if (!string_is_empty(szFile)) {
     fp = _tfopen(szFile, TEXT("wb"));

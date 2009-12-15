@@ -71,7 +71,7 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "StringUtil.hpp"
 
 extern ldrotary_s rotaryLD;
@@ -1656,7 +1656,7 @@ static void setVariables(void) {
   LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
                    XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
   LoadFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
-                   GlidePolar::AbortSafetyUseCurrent);
+                   oldGlidePolar::AbortSafetyUseCurrent);
   LoadFormProperty(*wf, _T("prpDisableAutoLogger"),
                    !XCSoarInterface::SettingsComputer().DisableAutoLogger);
 
@@ -1667,7 +1667,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(*wf, _T("prpRiskGamma"), GlidePolar::RiskGamma);
+  LoadFormProperty(*wf, _T("prpRiskGamma"), oldGlidePolar::RiskGamma);
   LoadFormProperty(*wf, _T("prpAnimation"), XCSoarInterface::EnableAnimation);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTrail"));

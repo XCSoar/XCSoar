@@ -800,6 +800,7 @@ InfoBoxManager::DisplayInfoBox(void)
         InfoBoxes[i]->SetComment(TEXT(""));
         break;
       }
+#ifdef OLD_TASK
       if (FlipBoxValue == true) {
         Units::FormatUserDistance(
             way_points.get_calc(ActiveAlternate).Distance, sTmp, sizeof(sTmp)
@@ -811,6 +812,7 @@ InfoBoxManager::DisplayInfoBox(void)
                 / sizeof(sTmp[0]));
         InfoBoxes[i]->SetComment(sTmp);
       }
+#endif
       break;
 
     case 70: // QFE

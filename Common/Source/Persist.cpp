@@ -44,7 +44,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "OnLineContest.h"
 #include "MacCready.h"
-#include "Math/Pressure.h"
 #include "Atmosphere.h"
 #include "UtilsSystem.hpp"
 #include "Logger.h"

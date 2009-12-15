@@ -218,9 +218,9 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   Chart chart(canvas, rc);
 
   chart.ScaleYFromValue( 0);
-  chart.ScaleYFromValue(GlidePolar::SinkRateFast(0,
+  chart.ScaleYFromValue(oldGlidePolar::SinkRateFast(0,
        (int)(settings_computer.SafetySpeed - 1)) * 1.1);
-  chart.ScaleXFromValue(GlidePolar::Vminsink*0.8);
+  chart.ScaleXFromValue(oldGlidePolar::Vminsink*0.8);
   chart.ScaleXFromValue(settings_computer.SafetySpeed + 2);
 
   chart.DrawXGrid(10.0/SPEEDMODIFY, 0,
@@ -233,7 +233,7 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   bool v0valid = false;
   int i0=0;
 
-  for (i= GlidePolar::Vminsink; i < settings_computer.SafetySpeed - 1;
+  for (i= oldGlidePolar::Vminsink; i < settings_computer.SafetySpeed - 1;
        ++i) {
 
     sinkrate0 = oldGlidePolar::SinkRateFast(0,i);

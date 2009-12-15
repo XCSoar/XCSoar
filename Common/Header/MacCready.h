@@ -57,7 +57,6 @@ public:
       double *BestCruiseTrack, double *VMacCready, const bool isFinalGlide,
       double *timetogo, double AltitudeAboveTarget = 1.0e6,
       double cruise_efficiency = 1.0);
->>>>>>> ff0b7e33350ad0639d43d91a1c4e985bcfe99e8e:Common/Header/MacCready.h
 
   static double MacCreadyRisk(double HeightAboveTerrain,
       double MaxThermalHeight, double MacCready);

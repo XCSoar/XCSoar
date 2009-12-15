@@ -109,7 +109,7 @@ NextPage(int Step)
       break;
 
     case 1:
-      if (selected_waypoint->Details.empty()) {
+      if (selected_waypoint->Details.empty()) 
         page += Step;
       else
         page_ok = true;
@@ -332,9 +332,11 @@ static void
 OnTeamCodeClicked(WindowControl * Sender)
 {
   (void)Sender;
+#ifdef OLD_TASK
   XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = SelectedWaypoint;
   SetToRegistry(szRegistryTeamcodeRefWaypoint,
       XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint);
+#endif
 
   wf->SetModalResult(mrOK);
 }
@@ -489,7 +491,7 @@ dlgWayPointDetailsShowModal(const Waypoint& waypoint)
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)
-    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -selected_waypoint->Altitude;
 
   _stprintf(sTmp, _T("%.0f %s"), alt * ALTITUDEMODIFY, Units::GetAltitudeName());
@@ -508,7 +510,7 @@ dlgWayPointDetailsShowModal(const Waypoint& waypoint)
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)
-    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -selected_waypoint->Altitude;
 
   wp = ((WndProperty *)wf->FindByName(_T("prpMc1")));
@@ -525,7 +527,7 @@ dlgWayPointDetailsShowModal(const Waypoint& waypoint)
 				  XCSoarInterface::Calculated().WindBearing,
 				  0, 0, true,
 				  0)
-    -XCSoarInterface::SettingsComputer().SAFETYALTITUDEARRIVAL
+    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
     -selected_waypoint->Altitude;
 
   _stprintf(sTmp, _T("%.0f %s"), alt * ALTITUDEMODIFY, Units::GetAltitudeName());

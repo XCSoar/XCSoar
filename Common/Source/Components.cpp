@@ -85,7 +85,7 @@ Copyright_License {
 #include "InstrumentThread.hpp"
 
 #include "Waypoint/Waypoints.hpp"
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "Airspace/Airspaces.hpp"
 #include "AirspaceGlue.hpp"
 #if defined(__BORLANDC__)  // due to compiler bug
