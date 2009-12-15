@@ -46,6 +46,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Interface.hpp"
+#include "StringUtil.hpp"
 
 #include <zzip/lib.h>
 #include "wcecompat/ts_string.h"
@@ -61,23 +62,21 @@ static TCHAR  szAirfieldDetailsFile[MAX_PATH] = TEXT("\0");
 static void
 OpenAirfieldDetails()
 {
-  char zfilename[MAX_PATH] = "\0";
+  char zfilename[MAX_PATH];
 
   zAirfieldDetails = NULL;
 
   GetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
 
-  if (_tcslen(szAirfieldDetailsFile)>0) {
+  if (!string_is_empty(szAirfieldDetailsFile)) {
     ExpandLocalPath(szAirfieldDetailsFile);
     unicode2ascii(szAirfieldDetailsFile, zfilename, MAX_PATH);
     SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
   } else {
-    static TCHAR szMapFile[MAX_PATH] = TEXT("\0");
-    static TCHAR szFile[MAX_PATH] = TEXT("\0");
-    GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
-    if (_tcslen(szMapFile)>0) {
-      ExpandLocalPath(szMapFile);
-      _tcscpy(szFile,szMapFile);
+    static TCHAR szFile[MAX_PATH];
+    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    if (!string_is_empty(szFile)) {
+      ExpandLocalPath(szFile);
       _tcscat(szFile,TEXT("/airfields.txt"));
       unicode2ascii(szFile, zfilename, MAX_PATH);
     } else {
@@ -106,9 +105,6 @@ CloseAirfieldDetails()
   zAirfieldDetails = NULL;
 }
 
-
-
-
 /*
  * VENTA3: Home and Preferred landing points for BestAlternate
  * Paolo Ventafridda
@@ -116,76 +112,86 @@ CloseAirfieldDetails()
 
 #ifdef OLD_TASK
 
-class WaypointNameLookup: public WaypointVisitor {
+class WaypointNameLookup: public WaypointVisitor
+{
 public:
-  WaypointNameLookup(const TCHAR* _Name, const TCHAR* _Details):
+  WaypointNameLookup(const TCHAR* _Name, const TCHAR* _Details) :
     Name(_Name), Details(_Details)
-    {};
+  {
+  }
 
-  void waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i)
-    {
-      waypoint_airport(waypoint, wpcalc, i);
+  void
+  waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i)
+  {
+    waypoint_airport(waypoint, wpcalc, i);
+  }
+
+  void
+  waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i)
+  {
+
+    // TODO: detect and warn on multiple matches!
+
+    TCHAR UName[100];
+    TCHAR NameA[100];
+    TCHAR NameB[100];
+    TCHAR NameC[100];
+    TCHAR NameD[100];
+    TCHAR TmpName[100];
+
+    _tcscpy(UName, waypoint.Name);
+
+    CharUpper(UName); // WP name
+    // VENTA3 fix: If airfields name
+    // was not uppercase it was not recon
+
+    _stprintf(NameA, TEXT("%s A/F"), Name);
+    _stprintf(NameB, TEXT("%s AF"), Name);
+    _stprintf(NameC, TEXT("%s A/D"), Name);
+    _stprintf(NameD, TEXT("%s AD"), Name);
+
+    bool isHome = false;
+    bool isPreferred = false;
+
+    _stprintf(TmpName, TEXT("%s=HOME"), UName);
+    if ((_tcscmp(Name, TmpName) == 0))
+      isHome = true;
+
+    _stprintf(TmpName, TEXT("%s=PREF"), UName);
+    if ((_tcscmp(Name, TmpName) == 0))
+      isPreferred = true;
+
+    _stprintf(TmpName, TEXT("%s=PREFERRED"), UName);
+    if ((_tcscmp(Name, TmpName) == 0))
+      isPreferred = true;
+
+    if (isHome == true) {
+      wpcalc.Preferred = true;
+      XCSoarInterface::SetSettingsComputer().HomeWaypoint = i;
     }
-  void waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i)
-    {
 
-      // TODO: detect and warn on multiple matches!
+    if (isPreferred == true) {
+      wpcalc.Preferred = true;
+    }
 
-      TCHAR UName[100];
-      TCHAR NameA[100];
-      TCHAR NameB[100];
-      TCHAR NameC[100];
-      TCHAR NameD[100];
-      TCHAR TmpName[100];
+    if ((_tcscmp(UName, Name) == 0)
+        || (_tcscmp(UName, NameA) == 0)
+        || (_tcscmp(UName, NameB) == 0)
+        || (_tcscmp(UName, NameC) == 0)
+        || (_tcscmp(UName, NameD) == 0) || isHome || isPreferred) {
+      // found
 
-      _tcscpy(UName, waypoint.Name);
+      if (!string_is_empty(Details)) {
+        // VENTA3 avoid setting empty details
+        if (waypoint.Details)
+          free(waypoint.Details);
 
-      CharUpper(UName); // WP name
-      // VENTA3 fix: If airfields name
-      // was not uppercase it was not recon
-
-      _stprintf(NameA,TEXT("%s A/F"),Name);
-      _stprintf(NameB,TEXT("%s AF"),Name);
-      _stprintf(NameC,TEXT("%s A/D"),Name);
-      _stprintf(NameD,TEXT("%s AD"),Name);
-
-      bool isHome=false;
-      bool isPreferred=false;
-
-      _stprintf(TmpName,TEXT("%s=HOME"),UName);
-      if ( (_tcscmp(Name, TmpName)==0) )  isHome=true;
-      _stprintf(TmpName,TEXT("%s=PREF"),UName);
-      if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=true;
-      _stprintf(TmpName,TEXT("%s=PREFERRED"),UName);
-      if ( (_tcscmp(Name, TmpName)==0) )  isPreferred=true;
-
-      if ( isHome==true ) {
-        wpcalc.Preferred = true;
-        XCSoarInterface::SetSettingsComputer().HomeWaypoint = i;
-      }
-      if ( isPreferred==true ) {
-        wpcalc.Preferred = true;
-      }
-
-      if ((_tcscmp(UName, Name)==0)
-          ||(_tcscmp(UName, NameA)==0)
-          ||(_tcscmp(UName, NameB)==0)
-          ||(_tcscmp(UName, NameC)==0)
-          ||(_tcscmp(UName, NameD)==0)
-          || isHome || isPreferred )
-      {
-        // found
-
-        if (_tcslen(Details) >0 ) { // VENTA3 avoid setting empty details
-          if (waypoint.Details) {
-            free(waypoint.Details);
-          }
-          waypoint.Details = (TCHAR*)malloc((_tcslen(Details)+1)*sizeof(TCHAR));
-          _tcscpy(waypoint.Details, Details);
-        }
-        return;
+        waypoint.Details = (TCHAR*)malloc((_tcslen(Details) + 1) * sizeof(TCHAR));
+        _tcscpy(waypoint.Details, Details);
       }
     }
+  }
+
 private:
   const TCHAR* Name;
   const TCHAR* Details;
@@ -195,13 +201,12 @@ private:
 static void
 LookupAirfieldDetail(TCHAR *Name, const TCHAR *Details)
 {
-  CharUpper(Name);  // AIR name
+  CharUpper(Name); // AIR name
 #ifdef OLD_TASK
   WaypointNameLookup wnl(Name, Details);
   WaypointScan::scan_forward(wnl);
 #endif
 }
-
 
 #define DETAILS_LENGTH 5000
 
@@ -216,24 +221,24 @@ ParseAirfieldDetails()
    *        fix: remove CR from text appearing as a spurious char in waypoint details
    */
 
-  if(zAirfieldDetails == NULL)
+  if (zAirfieldDetails == NULL)
     return;
 
-  TCHAR TempString[READLINE_LENGTH+1];
-  TCHAR CleanString[READLINE_LENGTH+1];
-  TCHAR Details[DETAILS_LENGTH+1];
+  TCHAR TempString[READLINE_LENGTH + 1];
+  TCHAR CleanString[READLINE_LENGTH + 1];
+  TCHAR Details[DETAILS_LENGTH + 1];
   TCHAR Name[201];
 
-  Details[0]= 0;
-  Name[0]= 0;
-  TempString[0]=0;
-  CleanString[0]=0;
+  Details[0] = 0;
+  Name[0] = 0;
+  TempString[0] = 0;
+  CleanString[0] = 0;
 
   bool inDetails = false;
   bool hasDetails = false; // VENTA3
   int i, n;
   unsigned j;
-  int k=0;
+  int k = 0;
 
   while (ReadString(zAirfieldDetails, READLINE_LENGTH, TempString)) {
     if (TempString[0] == '[') { // Look for start
@@ -294,9 +299,12 @@ ParseAirfieldDetails()
 /**
  * Opens the airfield details file and parses it
  */
-void ReadAirfieldFile() {
+void
+ReadAirfieldFile()
+{
   StartupStore(TEXT("ReadAirfieldFile\n"));
-  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airfield Details File...")));
+  XCSoarInterface::CreateProgressDialog(
+      gettext(TEXT("Loading Airfield Details File...")));
 
   OpenAirfieldDetails();
   ParseAirfieldDetails();

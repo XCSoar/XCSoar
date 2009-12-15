@@ -37,14 +37,14 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/Layout.hpp"
 #include "Protection.hpp"
 #include "Calculations.h" // for RefreshTaskStatistics()
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "TaskFile.hpp"
 #include "Logger.h"
-#include "McReady.h"
-#include "InfoBoxLayout.h"
+#include "MacCready.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "LocalPath.hpp"
@@ -52,6 +52,7 @@ Copyright_License {
 #include "WayPointList.hpp"
 #include "Components.hpp"
 #include "Task.h"
+#include "StringUtil.hpp"
 
 #include <assert.h>
 
@@ -72,11 +73,11 @@ static double lengthtotal = 0.0;
 static bool fai_ok = false;
 
 static void UpdateFilePointer(void) {
-  WndProperty *wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    if (_tcslen(task.getTaskFilename())>0) {
+    if (!string_is_empty(task.getTaskFilename())) {
       dfe->Lookup(task.getTaskFilename());
     } else {
       dfe->Set(0);
@@ -88,7 +89,7 @@ static void UpdateFilePointer(void) {
 
 static void UpdateCaption (void) {
   TCHAR title[MAX_PATH];
-  TCHAR name[MAX_PATH] = TEXT("\0");
+  TCHAR name[MAX_PATH];
   int len = _tcslen(task.getTaskFilename());
   if (len>0) {
     int index = 0;
@@ -105,17 +106,17 @@ static void UpdateCaption (void) {
     name[index]= _T('\0');
   }
 
-  if (_tcslen(name)>0) {
-    _stprintf(title, TEXT("%s: %s"),
-              gettext(TEXT("Task Overview")),
+  if (!string_is_empty(name)) {
+    _stprintf(title, _T("%s: %s"),
+              gettext(_T("Task Overview")),
               name);
   } else {
-    _stprintf(title, TEXT("%s"),
-              gettext(TEXT("Task Overview")));
+    _stprintf(title, _T("%s"),
+              gettext(_T("Task Overview")));
   }
 
   if (task.isTaskModified()) {
-    _tcscat(title, TEXT(" *"));
+    _tcscat(title, _T(" *"));
   }
 
   wf->SetCaption(title);
@@ -129,17 +130,12 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
   int n = UpLimit - LowLimit;
   TCHAR sTmp[120];
 
-  int w0;
-  if (InfoBoxLayout::landscape) {
-    w0 = 200*InfoBoxLayout::scale;
-  } else {
-    w0 = 210*InfoBoxLayout::scale;
-  }
-  int w1 = canvas.text_width(TEXT(" 000km"));
-  int w2 = canvas.text_width(TEXT("  000")TEXT(DEG));
+  int w0 = Layout::FastScale(Layout::landscape ? 200 : 210);
+  int w1 = canvas.text_width(_T(" 000km"));
+  int w2 = canvas.text_width(_T("  000")_T(DEG));
 
-  int p1 = w0-w1-w2; // 125*InfoBoxLayout::scale;
-  int p2 = w0-w2;    // 175*InfoBoxLayout::scale;
+  int p1 = w0-w1-w2; // Layout::FastScale(125)
+  int p2 = w0-w2; // Layout::FastScale(175)
 
   if (DrawListIndex < n){
     int i = LowLimit + DrawListIndex;
@@ -147,57 +143,57 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
     if (task.ValidTaskPoint(i)) {
       TASK_POINT tp = task.getTaskPoint(i);
 
-      if (InfoBoxLayout::landscape &&
+      if (Layout::landscape &&
           task.getSettings().AATEnabled && task.ValidTaskPoint(i+1) && (i>0)) {
         if (tp.AATType==0) {
-          _stprintf(sTmp, TEXT("%s %.1f"),
+          _stprintf(sTmp, _T("%s %.1f"),
                     way_points.get(tp.Index).Name,
                     tp.AATCircleRadius*DISTANCEMODIFY);
         } else {
-          _stprintf(sTmp, TEXT("%s %.1f"),
+          _stprintf(sTmp, _T("%s %.1f"),
                     way_points.get(tp.Index).Name,
                     tp.AATSectorRadius*DISTANCEMODIFY);
         }
       } else {
-        _stprintf(sTmp, TEXT("%s"),
+        _stprintf(sTmp, _T("%s"),
                   way_points.get(tp.Index).Name);
       }
 
-      canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                          p1 - 4 * InfoBoxLayout::scale, sTmp);
+      canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+                          p1 - Layout::FastScale(4), sTmp);
 
-      _stprintf(sTmp, TEXT("%.0f %s"),
+      _stprintf(sTmp, _T("%.0f %s"),
 		tp.LegDistance*DISTANCEMODIFY,
 		Units::GetDistanceName());
       canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
-                         2 * InfoBoxLayout::scale, sTmp);
+                         Layout::FastScale(2), sTmp);
 
-      _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(tp.InBound));
+      _stprintf(sTmp, _T("%d")_T(DEG),  iround(tp.InBound));
       canvas.text_opaque(p2 + w2 - canvas.text_width(sTmp),
-                         2 * InfoBoxLayout::scale, sTmp);
+                         Layout::FastScale(2), sTmp);
     }
 
   } else {
     if (DrawListIndex==n) {
-      _stprintf(sTmp, TEXT("  (%s)"), gettext(TEXT("add waypoint")));
-      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+      _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
+      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
                          sTmp);
     } else if ((DrawListIndex==n+1) && task.ValidTaskPoint(0)) {
 
       if (!task.getSettings().AATEnabled) {
-	_stprintf(sTmp, gettext(TEXT("Total:")));
-        canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+	_stprintf(sTmp, gettext(_T("Total:")));
+        canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
                            sTmp);
 
 	if (fai_ok) {
-	  _stprintf(sTmp, TEXT("%.0f %s FAI"), lengthtotal*DISTANCEMODIFY,
+	  _stprintf(sTmp, _T("%.0f %s FAI"), lengthtotal*DISTANCEMODIFY,
 		    Units::GetDistanceName());
 	} else {
-	  _stprintf(sTmp, TEXT("%.0f %s"), lengthtotal*DISTANCEMODIFY,
+	  _stprintf(sTmp, _T("%.0f %s"), lengthtotal*DISTANCEMODIFY,
 		    Units::GetDistanceName());
 	}
         canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
-                           2 * InfoBoxLayout::scale, sTmp);
+                           Layout::FastScale(2), sTmp);
 
       } else {
 
@@ -207,14 +203,13 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
 	  d1 = XCSoarInterface::Calculated().AATTargetDistance;
 	}
 
-	_stprintf(sTmp, TEXT("%s %.0f min %.0f (%.0f) %s"),
-                  gettext(TEXT("Total:")),
+	_stprintf(sTmp, _T("%s %.0f min %.0f (%.0f) %s"),
+                  gettext(_T("Total:")),
                   task.getSettings().AATTaskLength*1.0,
 		  DISTANCEMODIFY*lengthtotal,
 		  DISTANCEMODIFY*d1,
 		  Units::GetDistanceName());
-        canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                           sTmp);
+        canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), sTmp);
       }
     }
   }
@@ -252,7 +247,7 @@ static void OverviewRefreshTask(void) {
 
   WndProperty* wp;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));
   if (wp) {
     double dd = XCSoarInterface::Calculated().TaskTimeToGo;
     if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
@@ -273,7 +268,7 @@ static void OverviewRefreshTask(void) {
 
 static void UpdateAdvanced(void) {
   if (wfAdvanced) {
-    wfAdvanced->SetVisible(showAdvanced);
+    wfAdvanced->set_visible(showAdvanced);
   }
 }
 
@@ -291,8 +286,8 @@ static void OnTaskListEnter(WindowControl * Sender,
     if (logger.CheckDeclaration()) {
 
       if (ItemIndex>0) {
-        if (MessageBoxX(gettext(TEXT("Will this be the finish?")),
-                        gettext(TEXT("Add Waypoint")),
+        if (MessageBoxX(gettext(_T("Will this be the finish?")),
+                        gettext(_T("Add Waypoint")),
                         MB_YESNO|MB_ICONQUESTION) == IDYES) {
           isfinish = true;
         } else {
@@ -374,8 +369,8 @@ static void OnCloseClicked(WindowControl * Sender){
 
 static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
 	(void)ListInfo; (void)Sender;
-  if (MessageBoxX(gettext(TEXT("Clear the task?")),
-                  gettext(TEXT("Clear task")),
+  if (MessageBoxX(gettext(_T("Clear the task?")),
+                  gettext(_T("Clear task")),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
     if (logger.CheckDeclaration()) {
       task.ClearTask();
@@ -391,10 +386,10 @@ static void OnCalcClicked(WindowControl * Sender,
   (void)Sender;
   (void)ListInfo;
 
-  wf->SetVisible(false);
+  wf->hide();
   dlgTaskCalculatorShowModal();
   OverviewRefreshTask();
-  wf->SetVisible(true);
+  wf->show();
 }
 
 
@@ -403,9 +398,9 @@ static void OnAnalysisClicked(WindowControl * Sender,
   (void)Sender;
   (void)ListInfo;
 
-  wf->SetVisible(false);
+  wf->hide();
   dlgAnalysisShowModal();
-  wf->SetVisible(true);
+  wf->show();
 }
 
 
@@ -430,7 +425,7 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   WndProperty* wp;
   DataFieldFileReader *dfe;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFile"));
   if (!wp) return;
   dfe = (DataFieldFileReader*)wp->GetDataField();
 
@@ -439,12 +434,15 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   if (file_index==0) {
 
     // TODO enhancement: suggest a good new name not already in the list
-    _tcscpy(task_name,TEXT("0"));
-    dlgTextEntryShowModal(task_name, 10); // max length
+    _tcscpy(task_name,_T("0"));
+    if (!dlgTextEntryShowModal(task_name, 10)){ // max length
+      // TODO add messagebox
+      return;
+    }
 
-    if (_tcslen(task_name)>0) {
+    if (!string_is_empty(task_name)) {
 
-      _tcscat(task_name, TEXT(".tsk"));
+      _tcscat(task_name, _T(".tsk"));
 
       LocalPath(file_name, task_name);
 
@@ -467,11 +465,11 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   if (file_index>0) {
     // file already exists! ask if want to overwrite
 
-    _stprintf(file_name, TEXT("%s: '%s'"),
-              gettext(TEXT("Task file already exists")),
+    _stprintf(file_name, _T("%s: '%s'"),
+              gettext(_T("Task file already exists")),
               dfe->GetAsString());
     if(MessageBoxX(file_name,
-                   gettext(TEXT("Overwrite?")),
+                   gettext(_T("Overwrite?")),
                    MB_YESNO|MB_ICONQUESTION) != IDYES) {
       return;
     }
@@ -488,7 +486,7 @@ static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   WndProperty* wp;
   DataFieldFileReader *dfe;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFile"));
   if (!wp) return;
   dfe = (DataFieldFileReader*) wp->GetDataField();
   int file_index = dfe->GetAsInteger();
@@ -534,16 +532,16 @@ void dlgTaskOverviewShowModal(void){
 
   wf = NULL;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgTaskOverview_L.xml"),
+                        _T("dlgTaskOverview_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_TASKOVERVIEW_L"));
+                        _T("IDR_XML_TASKOVERVIEW_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgTaskOverview.xml"),
+                        _T("dlgTaskOverview.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_TASKOVERVIEW"));
+                        _T("IDR_XML_TASKOVERVIEW"));
   }
 
   if (!wf) return;
@@ -552,10 +550,10 @@ void dlgTaskOverviewShowModal(void){
 
   UpdateCaption();
 
-  wfAdvanced = ((WndFrame *)wf->FindByName(TEXT("frmAdvanced")));
+  wfAdvanced = ((WndFrame *)wf->FindByName(_T("frmAdvanced")));
   assert(wfAdvanced!=NULL);
 
-  wTaskList = (WndListFrame*)wf->FindByName(TEXT("frmTaskList"));
+  wTaskList = (WndListFrame*)wf->FindByName(_T("frmTaskList"));
   assert(wTaskList!=NULL);
   wTaskList->SetBorderKind(BORDERLEFT);
   wTaskList->SetEnterCallback(OnTaskListEnter);
@@ -564,11 +562,11 @@ void dlgTaskOverviewShowModal(void){
 
   //
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(TEXT("*.tsk"));
+    dfe->ScanDirectoryTop(_T("*.tsk"));
     wp->RefreshDisplay();
   }
   UpdateFilePointer();

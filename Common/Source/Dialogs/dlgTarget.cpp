@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Screen/Layout.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
@@ -45,7 +46,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Calculations.h"
 #include "MapWindow.h"
-#include "InfoBoxLayout.h"
 #include "Math/Geometry.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
@@ -258,7 +258,7 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 
   if (TargetMoveMode) {
-    StartupStore(TEXT("moving\n"));
+    StartupStore(_T("moving\n"));
     switch (key_code) {
     case VK_UP:
       MoveTarget(0);
@@ -296,65 +296,42 @@ static void RefreshCalculator(void) {
     || !task.ValidTaskPoint(target_point+1);
 
   if (btnMove) {
-    if (nodisplay) {
-      btnMove->SetVisible(false);
+    btnMove->set_visible(!nodisplay);
+    if (nodisplay)
       TargetMoveMode = false;
-    } else {
-      btnMove->SetVisible(true);
-    }
   }
 
   nodisplay = nodisplay || TargetMoveMode;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskPoint"));
+  wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
   if (wp) {
-    if (TargetMoveMode) {
-      wp->SetVisible(false);
-    } else {
-      wp->SetVisible(true);
-    }
+    wp->set_visible(!TargetMoveMode);
   }
 
-  WindowControl* wc = (WindowControl*)wf->FindByName(TEXT("btnOK"));
+  WindowControl* wc = (WindowControl*)wf->FindByName(_T("btnOK"));
   if (wc) {
-    if (TargetMoveMode) {
-      wc->SetVisible(false);
-    } else {
-      wc->SetVisible(true);
-    }
+    wc->set_visible(!TargetMoveMode);
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATTargetLocked"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAATTargetLocked"));
   if (wp) {
     wp->GetDataField()->Set(task.getTaskPoint(target_point).AATTargetLocked);
     wp->RefreshDisplay();
-    if (nodisplay) {
-      wp->SetVisible(false);
-    } else {
-      wp->SetVisible(true);
-    }
+    wp->set_visible(!nodisplay);
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
+  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(Range*100.0);
     wp->RefreshDisplay();
-    if (nodisplay) {
-      wp->SetVisible(false);
-    } else {
-      wp->SetVisible(true);
-    }
+    wp->set_visible(!nodisplay);
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpRadial"));
+  wp = (WndProperty*)wf->FindByName(_T("prpRadial"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(Radial);
     wp->RefreshDisplay();
-    if (nodisplay) {
-      wp->SetVisible(false);
-    } else {
-      wp->SetVisible(true);
-    }
+    wp->set_visible(!nodisplay);
   }
 
   // update outputs
@@ -363,19 +340,15 @@ static void RefreshCalculator(void) {
     dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
   }
   dd= min(24.0*60.0,dd/60.0);
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(dd);
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATDelta"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAATDelta"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(dd-task.getSettings().AATTaskLength);
-    if (task.getSettings().AATEnabled) {
-      wp->SetVisible(true);
-    } else {
-      wp->SetVisible(false);
-    }
+    wp->set_visible(task.getSettings().AATEnabled);
     wp->RefreshDisplay();
   }
 
@@ -387,14 +360,14 @@ static void RefreshCalculator(void) {
     v1 = 0;
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedRemaining"));
+  wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(v1*TASKSPEEDMODIFY);
     wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedAchieved"));
+  wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(XCSoarInterface::Calculated().TaskSpeed*TASKSPEEDMODIFY);
     wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
@@ -422,9 +395,9 @@ static void OnMoveClicked(WindowControl * Sender){
   (void)Sender;
   TargetMoveMode = !TargetMoveMode;
   if (TargetMoveMode) {
-    btnMove->SetCaption(TEXT("Cursor"));
+    btnMove->SetCaption(_T("Cursor"));
   } else {
-    btnMove->SetCaption(TEXT("Move"));
+    btnMove->SetCaption(_T("Move"));
   }
   RefreshCalculator();
 }
@@ -568,16 +541,16 @@ void dlgTarget(void) {
   }
   ActiveTaskPointOnEntry = task.getActiveIndex();
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgTarget_L.xml"),
+                        _T("dlgTarget_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_TARGET_L"));
+                        _T("IDR_XML_TARGET_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgTarget.xml"),
+                        _T("dlgTarget.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_TARGET"));
+                        _T("IDR_XML_TARGET"));
   }
 
   if (!wf) return;
@@ -585,9 +558,9 @@ void dlgTarget(void) {
   targetManipEvent.trigger();
   TargetMoveMode = false;
 
-  if (InfoBoxLayout::landscape)
+  if (Layout::landscape)
   {// make flush right in landscape mode (at top in portrait mode)
-    WndFrame *wf2 = (WndFrame*)wf->FindByName(TEXT("frmTarget"));
+    WndFrame *wf2 = (WndFrame*)wf->FindByName(_T("frmTarget"));
     if (wf2)
     {
       RECT MapRectBig = XCSoarInterface::main_window.map.GetMapRectBig();
@@ -595,12 +568,12 @@ void dlgTarget(void) {
     }
   }
 
-  btnMove = (WindowControl*)wf->FindByName(TEXT("btnMove"));
+  btnMove = (WindowControl*)wf->FindByName(_T("btnMove"));
 
   wf->SetKeyDownNotify(FormKeyDown);
 
   WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskPoint"));
+  wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
   DataFieldEnum* dfe;
   dfe = (DataFieldEnum*)wp->GetDataField();
   TCHAR tp_label[80];
@@ -615,7 +588,7 @@ void dlgTarget(void) {
   for (unsigned i=ActiveTaskPointOnEntry; task.ValidTaskPoint(i); i++) {
     _tcsncpy(tp_short, task.getWaypoint(i).Name, 20);
     tp_short[20] = 0;
-    _stprintf(tp_label, TEXT("%d %s"), i, tp_short);
+    _stprintf(tp_label, _T("%d %s"), i, tp_short);
     dfe->addEnumText(tp_label);
   }
   dfe->Set(max(0,(int)target_point-(int)ActiveTaskPointOnEntry));

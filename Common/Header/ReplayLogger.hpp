@@ -42,24 +42,24 @@ Copyright_License {
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
 
-class ReplayLogger {
- public:
-  static bool Update(void);
-  static void Stop(void);
-  static void Start(void);
-  static const TCHAR* GetFilename(void);
+class ReplayLogger
+{
+public:
+  static bool Update();
+  static void Stop();
+  static void Start();
+  static const TCHAR* GetFilename();
   static void SetFilename(const TCHAR *name);
   static double TimeScale;
- private:
-  static bool UpdateInternal(void);
+
+private:
+  static bool UpdateInternal();
   static bool ReadLine(TCHAR *buffer);
   static bool Enabled;
   static bool ScanBuffer(const TCHAR *buffer, double *Time, double *Latitude,
-			 double *Longitude, double *Altitude);
-  static bool ReadPoint(double *Time,
-			double *Latitude,
-			double *Longitude,
-			double *Altitude);
+      double *Longitude, double *Altitude);
+  static bool ReadPoint(double *Time, double *Latitude, double *Longitude,
+      double *Altitude);
   static TCHAR FileName[MAX_PATH];
 };
 

@@ -46,24 +46,36 @@ Copyright_License {
 
 static bool DataFieldKeyUp = false;
 
-bool DataFieldInteger::GetAsBoolean(void){
+bool
+DataFieldInteger::GetAsBoolean(void) const
+{
   return(mValue != 0);
 }
 
-int DataFieldInteger::GetAsInteger(void){
+int
+DataFieldInteger::GetAsInteger(void) const
+{
   return(mValue);
 }
 
-double DataFieldInteger::GetAsFloat(void){
+double
+DataFieldInteger::GetAsFloat(void) const
+{
   return(mValue);
 }
 
-TCHAR *DataFieldInteger::GetAsString(void){
+const TCHAR *
+DataFieldInteger::GetAsString(void) const
+{
+  TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, mEditFormat, mValue);
   return(mOutBuf);
 }
 
-TCHAR *DataFieldInteger::GetAsDisplayString(void){
+const TCHAR *
+DataFieldInteger::GetAsDisplayString(void) const
+{
+  TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, mDisplayFormat, mValue, mUnits);
   return(mOutBuf);
 }
@@ -101,8 +113,10 @@ double DataFieldInteger::SetAsFloat(double Value){
   return(res);
 }
 
-TCHAR *DataFieldInteger::SetAsString(const TCHAR *Value){
-  TCHAR *res = GetAsString();
+const TCHAR *
+DataFieldInteger::SetAsString(const TCHAR *Value)
+{
+  const TCHAR *res = GetAsString();
   SetAsInteger(_ttoi(Value));
   return(res);
 }

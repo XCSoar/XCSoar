@@ -196,7 +196,6 @@ private:
   MapWindow &map;
 };
 
-
 /**
  * Draws the airspace to the given canvas
  * @param canvas The drawing canvas

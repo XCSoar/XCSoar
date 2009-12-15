@@ -45,6 +45,10 @@ Copyright_License {
 
 #include <stdlib.h>
 #include <string.h>
+#include <sys/param.h>
+#include <stdbool.h>
+
+static const bool bBigEndian = BYTE_ORDER == BIG_ENDIAN;
 
 int FileExistsA(char *FileName);
 /* -------------------------------------------------------------------- */
@@ -104,16 +108,6 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
 
     char		pabyBuf[16];
     int			i;
-    char		bBigEndian;
-
-  /* -------------------------------------------------------------------- */
-  /*	Establish the byte order on this machine.			    */
-  /* -------------------------------------------------------------------- */
-    i = 1;
-    if( *((const uchar *) &i) == 1 )
-      bBigEndian = MS_FALSE;
-    else
-      bBigEndian = MS_TRUE;
 
   /* -------------------------------------------------------------------- */
   /*	Initialize the info structure.					    */

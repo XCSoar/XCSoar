@@ -43,7 +43,7 @@ Copyright_License {
 #include "Math/Units.h"
 #include "Appearance.hpp"
 #include "InfoBoxManager.h"
-#include "McReady.h"
+#include "MacCready.h"
 #include "GlideRatio.hpp"
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
@@ -123,9 +123,8 @@ Profile::ReadRegistrySettings()
 
   StartupStore(TEXT("Read registry settings\n"));
 
-#if defined(GNAV) || defined(PCGNAV) || defined(GNAV_FONTEST)
-  DefaultRegistrySettingsAltair();
-#endif
+  if (is_altair())
+    DefaultRegistrySettingsAltair();
 
 #ifdef OLD_TASK
   SETTINGS_TASK settings_task = task.getSettings();
@@ -303,13 +302,13 @@ Profile::ReadRegistrySettings()
       SetSettingsComputer().AltWarningMargin);
 
   GetFromRegistry(szRegistrySafetyAltitudeArrival,
-		  SetSettingsComputer().SAFETYALTITUDEARRIVAL);
+		  SetSettingsComputer().SafetyAltitudeArrival);
   GetFromRegistry(szRegistrySafetyAltitudeBreakOff,
-		  SetSettingsComputer().SAFETYALTITUDEBREAKOFF);
+		  SetSettingsComputer().SafetyAltitudeBreakoff);
   GetFromRegistry(szRegistrySafetyAltitudeTerrain,
-		  SetSettingsComputer().SAFETYALTITUDETERRAIN);
+		  SetSettingsComputer().SafetyAltitudeTerrain);
   GetFromRegistry(szRegistrySafteySpeed,
-		  SetSettingsComputer().SAFTEYSPEED);
+		  SetSettingsComputer().SafetySpeed);
   GetFromRegistry(szRegistryPolarID, POLARID);
 
   GetRegistryString(szRegistryRegKey, strRegKey, 65);
@@ -577,12 +576,12 @@ Profile::ReadRegistrySettings()
   // IndFinalGlide
   // IndLandable
 
-  GetFromRegistry(szRegistryAutoMcMode,
-		  SetSettingsComputer().AutoMcMode);
 #ifdef OLD_TASK
+  GetFromRegistry(szRegistryAutoMcMode,
+		  SetSettingsComputer().AutoMacCreadyMode);
+#endif
   GetFromRegistry(szRegistryWaypointsOutOfRange,
 		  WaypointsOutOfRange);
-#endif
   GetFromRegistry(szRegistryOLCRules,
 		  SetSettingsComputer().OLCRules);
   GetFromRegistry(szRegistryHandicap,

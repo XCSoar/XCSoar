@@ -46,6 +46,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
+#include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "SettingsUser.hpp" // for EnableTopology
 #include <assert.h>
@@ -143,8 +144,8 @@ void TopologyStore::Open() {
   Poco::ScopedRWLock protect(lock, true);
 
   // Start off by getting the names and paths
-  static TCHAR  szFile[MAX_PATH] = TEXT("\0");
-  static  TCHAR Directory[MAX_PATH] = TEXT("\0");
+  static TCHAR szFile[MAX_PATH];
+  static TCHAR Directory[MAX_PATH];
 
   for (int z=0; z<MAXTOPOLOGY; z++) {
     topology_store[z] = 0;
@@ -153,21 +154,19 @@ void TopologyStore::Open() {
   GetRegistryString(szRegistryTopologyFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
-  if (_tcslen(szFile)==0) {
+  if (string_is_empty(szFile)) {
 
     // file is blank, so look for it in a map file
-    static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
-    GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
-    if (_tcslen(szMapFile)==0) {
+    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    if (string_is_empty(szFile))
       return;
-    }
-    ExpandLocalPath(szMapFile);
+
+    ExpandLocalPath(szFile);
 
     // Look for the file within the map zip file...
-    _tcscpy(Directory,szMapFile);
+    _tcscpy(Directory, szFile);
     _tcscat(Directory,TEXT("/"));
-    szFile[0]=0;
-    _tcscat(szFile,Directory);
+    _tcscat(szFile, TEXT("/"));
     _tcscat(szFile,TEXT("topology.tpl"));
 
   } else {
@@ -198,7 +197,7 @@ void TopologyStore::Open() {
 
   while(ReadString(zFile,READLINE_LENGTH,TempString)) {
 
-    if((_tcslen(TempString) > 0)
+    if(!string_is_empty(TempString)
        && (_tcsstr(TempString,TEXT("*")) != TempString)) // Look For Comment
       {
 

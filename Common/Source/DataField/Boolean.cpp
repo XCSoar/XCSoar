@@ -55,25 +55,33 @@ int DataFieldBoolean::CreateComboList(void) {
   return mComboList.ComboPopupItemCount;
 }
 
-bool DataFieldBoolean::GetAsBoolean(void){
+bool
+DataFieldBoolean::GetAsBoolean(void) const
+{
   return(mValue);
 }
 
-int DataFieldBoolean::GetAsInteger(void){
+int
+DataFieldBoolean::GetAsInteger(void) const
+{
   if (mValue)
     return(1);
   else
     return(0);
 }
 
-double DataFieldBoolean::GetAsFloat(void){
+double
+DataFieldBoolean::GetAsFloat(void) const
+{
   if (mValue)
     return(1.0);
   else
     return(0.0);
 }
 
-TCHAR *DataFieldBoolean::GetAsString(void){
+const TCHAR *
+DataFieldBoolean::GetAsString(void) const
+{
   if (mValue)
     return(mTextTrue);
   else
@@ -110,8 +118,10 @@ double DataFieldBoolean::SetAsFloat(double Value){
   return(res);
 }
 
-TCHAR *DataFieldBoolean::SetAsString(const TCHAR *Value){
-  TCHAR *res = GetAsString();
+const TCHAR *
+DataFieldBoolean::SetAsString(const TCHAR *Value)
+{
+  const TCHAR *res = GetAsString();
   if (_tcscmp(res, Value) != 0){
     SetAsBoolean(_tcscmp(Value, mTextTrue) == 0);
   }

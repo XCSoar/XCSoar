@@ -374,7 +374,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     }
   }
 
-  TCHAR szMessage[MAX_PATH] = TEXT("\0");
+  TCHAR szMessage[MAX_PATH];
 
   _tcsncpy(szMessage, TEXT("Logger Started: "), MAX_PATH);
   _tcsncat(szMessage, szLoggerFileName, MAX_PATH);

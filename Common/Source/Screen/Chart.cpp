@@ -39,11 +39,10 @@ Copyright_License {
 #include "Screen/Chart.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "Language.hpp"
 #include "Math/FastMath.h"
 #include "Math/FastRotation.hpp"
-#include "options.h" /* for IBLSCALE() */
 #include "Asset.hpp"
 
 #define BORDER_X 24

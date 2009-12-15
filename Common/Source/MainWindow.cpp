@@ -5,6 +5,7 @@
 #include "Interface.hpp"
 #include "ButtonLabel.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "Components.hpp"
 #include "ProcessTimer.hpp"
 #include "LogFile.hpp"
@@ -79,6 +80,8 @@ MainWindow::set(LPCTSTR text,
   rc = get_client_rect();
 #endif
 
+  Layout::Initalize(rc.right - rc.left, rc.bottom - rc.top);
+
   StartupStore(TEXT("InfoBox geometry\n"));
   InfoBoxLayout::ScreenGeometry(rc);
 
@@ -115,7 +118,7 @@ MainWindow::on_color(Window &window, Canvas &canvas)
   int i = ButtonLabel::Find(window);
   if (i >= 0) {
     canvas.set_background_color(MapGfx.ColorButton);
-    canvas.set_text_color(ButtonLabel::hWndButtonWindow[i].is_enabled()
+    canvas.set_text_color(window.is_enabled()
                           ? MapGfx.ColorBlack
                           : MapGfx.ColorMidGrey);
     return &MapGfx.buttonBrush;
@@ -161,7 +164,7 @@ bool MainWindow::on_destroy(void) {
 
   TopWindow::on_destroy();
 
-  PostQuitMessage(0);
+  post_quit();
   return true;
 }
 
@@ -169,5 +172,15 @@ bool MainWindow::on_close() {
   if (XCSoarInterface::CheckShutdown()) {
     XCSoarInterface::Shutdown();
   }
+  return true;
+}
+
+bool
+MainWindow::on_setfocus()
+{
+  TopWindow::on_setfocus();
+
+  /* pass the focus on to the map window */
+  map.set_focus();
   return true;
 }

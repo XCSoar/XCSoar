@@ -45,24 +45,36 @@ Copyright_License {
 
 static bool DataFieldKeyUp = false;
 
-bool DataFieldFloat::GetAsBoolean(void){
+bool
+DataFieldFloat::GetAsBoolean(void) const
+{
   return(mValue != 0.0);
 }
 
-int DataFieldFloat::GetAsInteger(void){
+int
+DataFieldFloat::GetAsInteger(void) const
+{
   return iround(mValue);
 }
 
-double DataFieldFloat::GetAsFloat(void){
+double
+DataFieldFloat::GetAsFloat(void) const
+{
   return(mValue);
 }
 
-TCHAR *DataFieldFloat::GetAsString(void){
+const TCHAR *
+DataFieldFloat::GetAsString(void) const
+{
+  TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, mEditFormat, mValue);
   return(mOutBuf);
 }
 
-TCHAR *DataFieldFloat::GetAsDisplayString(void){
+const TCHAR *
+DataFieldFloat::GetAsDisplayString(void) const
+{
+  TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, mDisplayFormat, mValue, mUnits);
   return(mOutBuf);
 }
@@ -113,8 +125,10 @@ double DataFieldFloat::SetAsFloat(double Value){
   return(res);
 }
 
-TCHAR *DataFieldFloat::SetAsString(const TCHAR *Value){
-  TCHAR *res = GetAsString();
+const TCHAR *
+DataFieldFloat::SetAsString(const TCHAR *Value)
+{
+  const TCHAR *res = GetAsString();
   SetAsFloat(_tcstod(Value, NULL));
   return(res);
 }

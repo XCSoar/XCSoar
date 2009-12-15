@@ -39,8 +39,8 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/BufferCanvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Interface.hpp"
-#include "InfoBoxLayout.h"
 #include "Asset.hpp"
 
 #ifndef _MSC_VER
@@ -56,10 +56,6 @@ bool needclipping = false;
 #ifdef HAVE_BLANK
 int DisplayTimeOut;
 #endif
-
-int InfoBoxLayout::scale = 1;
-double InfoBoxLayout::dscale = 1.0;
-bool InfoBoxLayout::IntScaleFlag;
 
 HINSTANCE CommonInterface::hInst;
 void XCSoarInterface::InterfaceTimeoutReset(void) {}
@@ -212,7 +208,7 @@ private:
 protected:
   virtual bool on_destroy(void) {
     TopWindow::on_destroy();
-    ::PostQuitMessage(0);
+    post_quit();
     return true;
   }
 

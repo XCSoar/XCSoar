@@ -46,9 +46,10 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
-#define PI 3.1415926
-#define SUN_DIAMETER 0.53     // Sunradius degrees
-#define AIR_REFRACTION 34.0/60.0 // athmospheric refraction degrees //
+// Sun radius in degrees (?)
+#define SUN_DIAMETER 0.53
+// Atmospheric refraction degrees
+#define AIR_REFRACTION 34.0/60.0
 
 #include <math.h>
 
@@ -60,31 +61,37 @@ Copyright_License {
  * @param d Day
  * @param h UT in decimal hours
  * @return days to J2000
+ * @see http://www.sci.fi/~benefon/azimalt.cpp
  */
 double
 SunEphemeris::FNday(int y, int m, int d, float h)
 {
-  long int luku = - 7 * (y + (m + 9)/12)/4 + 275*m/9 + d;
+  long int luku = -7 * (y + (m + 9) / 12) / 4 + 275 * m / 9 + d;
   // type casting necessary on PC DOS and TClite to avoid overflow
-  luku+= (long int)y*367;
-  return (double)luku - 730531.5 + h/24.0;
-};
+  luku += (long int)y * 367;
+
+  return (double)luku - 730531.5 + h / 24.0;
+}
 
 /**
  * The function below returns an angle in the range 0 to 2*PI
  * @param x Angle to be converted
  * @return an angle in the range 0 to 2*PI
+ * @see http://www.sci.fi/~benefon/azimalt.cpp
  */
 double
-SunEphemeris::FNrange (double x)
+SunEphemeris::FNrange(double x)
 {
   // QUESTION TB: DEG_TO_RAD?!
 
-  double b = 0.5*x / PI;
-  double a = 2.0*PI * (b - (long)(b));
-  if (a < 0) a = 2.0*PI + a;
+  double b = 0.5 * x / M_PI;
+  double a = 2.0 * M_PI * (b - (long)(b));
+
+  if (a < 0)
+    a = 2.0 * M_PI + a;
+
   return a;
-};
+}
 
 /**
  * Calculating the hourangle
@@ -93,16 +100,27 @@ SunEphemeris::FNrange (double x)
  * @return The hourangle
  */
 // TODO TB: find explanations/links for this and following
-double SunEphemeris::f0(double lat, double declin) {
-  double fo,dfo;
-  // Correction: different sign at S HS
-  dfo = DEG_TO_RAD*(0.5*SUN_DIAMETER + AIR_REFRACTION);
-  if (lat < 0.0) dfo = -dfo;
-  fo = tan(declin + dfo) * tan(lat*DEG_TO_RAD);
-  if (fo>0.99999) fo=1.0; // to avoid overflow //
-  fo = asin(fo) + PI/2.0;
+double
+SunEphemeris::f0(double lat, double declin)
+{
+  double fo, dfo;
+
+  // Correction: different sign at southern hemisphere
+  dfo = DEG_TO_RAD * (0.5 * SUN_DIAMETER + AIR_REFRACTION);
+
+  if (lat < 0.0)
+    dfo = -dfo;
+
+  fo = tan(declin + dfo) * tan(lat * DEG_TO_RAD);
+
+  if (fo > 0.99999)
+    // to avoid overflow
+    fo = 1.0;
+
+  fo = asin(fo) + M_PI / 2.0;
+
   return fo;
-};
+}
 
 /**
  * Calculating the hourangle for twilight times
@@ -110,24 +128,35 @@ double SunEphemeris::f0(double lat, double declin) {
  * @param declin Declination
  * @return The hourangle for twilight times
  */
-double SunEphemeris::f1(double lat, double declin) {
-  double fi,df1;
-  // Correction: different sign at S HS
+double
+SunEphemeris::f1(double lat, double declin)
+{
+  double fi, df1;
+
+  // Correction: different sign at southern hemisphere
   df1 = DEG_TO_RAD * 6.0;
+
   if (lat < 0.0)
     df1 = -df1;
+
   fi = tan(declin + df1) * tan(lat * DEG_TO_RAD);
+
   if (fi > 0.99999)
-    fi = 1.0; // to avoid overflow //
-  fi = asin(fi) + PI / 2.0;
+    // to avoid overflow
+    fi = 1.0;
+
+  fi = asin(fi) + M_PI / 2.0;
+
   return fi;
-};
+}
 
 /**
  * Find the ecliptic longitude of the Sun
  * @return The ecliptic longitude of the Sun
  */
-double SunEphemeris::FNsun (double d) {
+double
+SunEphemeris::FNsun(double d)
+{
   //   mean longitude of the Sun
   L = FNrange(280.461 * DEG_TO_RAD + .9856474 * DEG_TO_RAD * d);
 
@@ -135,95 +164,102 @@ double SunEphemeris::FNsun (double d) {
   g = FNrange(357.528 * DEG_TO_RAD + .9856003 * DEG_TO_RAD * d);
 
   //   Ecliptic longitude of the Sun
-  return FNrange(L + 1.915 * DEG_TO_RAD * sin(g) + .02 * DEG_TO_RAD * sin(2 * g));
+  return FNrange(L + 1.915 * DEG_TO_RAD * sin(g) + .02 * DEG_TO_RAD
+      * sin(2 * g));
 }
-
-/**
- * Display decimal hours in hours and minutes
- * @param dhr Decimal hours
- */
-void SunEphemeris::showhrmn(double dhr) {
-  int hr,mn;
-  hr=(int) dhr;
-  mn =(int) (dhr - (double) hr)*60;
-  // QUESTION TB: no return?! any sense??
-};
 
 /**
  * Calculates all sun-related important times
  * depending on time of year and location
- * @param location Location to be used in calculation
- * @param GPS_INFO GPS_INFO for current date
- * @param CALCULATED_INFO CALCULATED_INFO (not yet used)
- * @param tzone Timezone
+ * @param Location Location to be used in calculation
+ * @param Basic NMEA_INFO for current date
+ * @param Calculated DERIVED_INFO (not yet used)
+ * @param TimeZone The timezone
  * @return Always 0
  */
-int SunEphemeris::CalcSunTimes(const GEOPOINT &location,
-			       const NMEA_INFO &GPS_INFO,
-			       const DERIVED_INFO &CALCULATED_INFO,
-			       const double tzone)
+double
+SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
+    const DERIVED_INFO &Calculated, const double TimeZone)
 {
-  //    float intz;
-  double d,lambda;
-  double obliq,alpha,delta,LL,equation,ha,hb,twx;
-  int y, m, day, h;
+  (void)Calculated;
+
+  //float intz;
+  double DaysToJ2000, Lambda;
+  double Obliquity, Alpha, Delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;
+  int Year, Month, Day, Hour;
 
   // testing
 
   // JG Removed simulator conditional code, since GPS_INFO now set up
   // from system time.
 
-  m = GPS_INFO.Month;
-  y = GPS_INFO.Year;
-  day = GPS_INFO.Day;
-  h = ((int)GPS_INFO.Time)/3600;
-  h = (h % 24);
+  Month = Basic.Month;
+  Year = Basic.Year;
+  Day = Basic.Day;
+  Hour = ((int)Basic.Time) / 3600;
+  Hour = (Hour % 24);
 
-  d = FNday(y, m, day, (float) h);
+  DaysToJ2000 = FNday(Year, Month, Day, (float)Hour);
 
   // Use FNsun to find the ecliptic longitude of the Sun
-  lambda = FNsun(d);
+  Lambda = FNsun(DaysToJ2000);
 
   // Obliquity of the ecliptic
-  obliq = 23.439 * DEG_TO_RAD - .0000004 * DEG_TO_RAD * d;
+  Obliquity = 23.439 * DEG_TO_RAD - .0000004 * DEG_TO_RAD * DaysToJ2000;
 
-  //   Find the RA and DEC of the Sun
-  alpha = atan2(cos(obliq) * sin(lambda), cos(lambda));
-  delta = asin(sin(obliq) * sin(lambda));
+  // Find the RA and DEC of the Sun
+  Alpha = atan2(cos(Obliquity) * sin(Lambda), cos(Lambda));
+  Delta = asin(sin(Obliquity) * sin(Lambda));
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
-  LL = L - alpha;
-  if (L < PI) LL += 2.0*PI;
-  equation = 1440.0 * (1.0 - LL / PI/2.0);
-  ha = f0(location.Latitude,delta);
-  hb = f1(location.Latitude,delta);
-  twx = hb - ha;  // length of twilight in radians
-  twx = 12.0*twx/PI;              // length of twilight in hours
+  LL = L - Alpha;
+  if (L < M_PI)
+    LL += 2.0 * M_PI;
 
-  //  printf("ha= %.2f   hb= %.2f \n",ha,hb);
+  equation = 1440.0 * (1.0 - LL / M_PI / 2.0);
 
-  // Conversion of angle to hours and minutes //
-  daylen = RAD_TO_DEG*ha/7.5;
-  if (daylen<0.0001) {daylen = 0.0;}
-  // arctic winter     //
+  HourAngle = f0(Location.Latitude, Delta);
+  HourAngleTwilight = f1(Location.Latitude, Delta);
 
-  riset = 12.0 - 12.0 * ha/PI + tzone - location.Longitude/15.0 + equation/60.0;
-  settm = 12.0 + 12.0 * ha/PI + tzone - location.Longitude/15.0 + equation/60.0;
-  noont = riset + 12.0 * ha/PI;
-  altmax = 90.0 + delta * RAD_TO_DEG - location.Latitude;
+  // length of twilight in radians
+  TwilightHours = HourAngleTwilight - HourAngle;
+  // length of twilight in hours
+  TwilightHours = 12.0 * TwilightHours / M_PI;
 
-  // Correction for S HS suggested by David Smith
+  //printf("ha= %.2f   hb= %.2f \n",ha,hb);
+
+  // Conversion of angle to hours and minutes
+  DayLength = RAD_TO_DEG * HourAngle / 7.5;
+
+  if (DayLength < 0.0001)
+    // arctic winter
+    DayLength = 0.0;
+
+  TimeOfSunRise = 12.0 - 12.0 * HourAngle / M_PI + TimeZone
+      - Location.Longitude / 15.0 + equation / 60.0;
+
+  TimeOfSunSet = 12.0 + 12.0 * HourAngle / M_PI + TimeZone
+      - Location.Longitude / 15.0 + equation / 60.0;
+
+  TimeOfNoon = TimeOfSunRise + 12.0 * HourAngle / M_PI;
+  altmax = 90.0 + Delta * RAD_TO_DEG - Location.Latitude;
+
+  // Correction for southern hemisphere suggested by David Smith
   // to express altitude as degrees from the N horizon
-  if (location.Latitude < delta * RAD_TO_DEG) {
+  if (Location.Latitude < Delta * RAD_TO_DEG)
     altmax = 180.0 - altmax;
-  }
 
-  twam = riset - twx;     // morning twilight begin
-  twpm = settm + twx;     // evening twilight end
+  // morning twilight begin
+  MorningTwilight = TimeOfSunRise - TwilightHours;
+  // evening twilight end
+  EveningTwilight = TimeOfSunSet + TwilightHours;
 
-  if (riset > 24.0) riset-= 24.0;
-  if (settm > 24.0) settm-= 24.0;
+  if (TimeOfSunRise > 24.0)
+    TimeOfSunRise -= 24.0;
+
+  if (TimeOfSunSet > 24.0)
+    TimeOfSunSet -= 24.0;
 
   /*
       puts("\n Sunrise and set");
@@ -236,23 +272,23 @@ int SunEphemeris::CalcSunTimes(const GEOPOINT &location,
 
       printf("Latitude :  %3.1f, longitude: %3.1f, timezone: %3.1f \n",(float)latit,(float)longit,(float)tzone);
       printf("Declination   :  %.2f \n",delta * RAD_TO_DEG);
-      printf("Daylength     : "); showhrmn(daylen); puts(" hours \n");
+      printf("Daylength     : "); showhrmn(DayLength); puts(" hours \n");
       printf("Civil twilight: ");
-      showhrmn(twam); puts("");
+      showhrmn(MorningTwilight); puts("");
       printf("Sunrise       : ");
-      showhrmn(riset); puts("");
+      showhrmn(TimeOfSunRise); puts("");
 
       printf("Sun altitude ");
       // Amendment by D. Smith
       printf(" %.2f degr",altmax);
       printf(latit>=0.0 ? " South" : " North");
-      printf(" at noontime "); showhrmn(noont); puts("");
+      printf(" at noontime "); showhrmn(TimeOfNoon); puts("");
       printf("Sunset        : ");
-      showhrmn(settm);  puts("");
+      showhrmn(TimeOfSunSet);  puts("");
       printf("Civil twilight: ");
-      showhrmn(twpm);  puts("\n");
+      showhrmn(EveningTwilight);  puts("\n");
   */
   // QUESTION TB: why not just void?
 
-  return 0;
+  return TimeOfSunSet;
 }

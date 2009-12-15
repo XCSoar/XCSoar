@@ -48,7 +48,7 @@ static WndForm *wf=NULL;
 
 static void UpdateValues() {
   WndProperty* wp;
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFlapLanding"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFlapLanding"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.FlapLanding) {
@@ -56,7 +56,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAirbrakeExtended"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAirbrakeExtended"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.AirbrakeLocked) {
@@ -64,7 +64,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFlapPositive"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFlapPositive"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.FlapPositive) {
@@ -72,7 +72,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFlapNeutral"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFlapNeutral"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.FlapNeutral) {
@@ -80,7 +80,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFlapNegative"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFlapNegative"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.FlapNegative) {
@@ -88,7 +88,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpGearExtended"));
+  wp = (WndProperty*)wf->FindByName(_T("prpGearExtended"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.GearExtended) {
@@ -96,7 +96,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAcknowledge"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAcknowledge"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.Acknowledge) {
@@ -104,7 +104,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpRepeat"));
+  wp = (WndProperty*)wf->FindByName(_T("prpRepeat"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.Repeat) {
@@ -112,7 +112,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedCommand"));
+  wp = (WndProperty*)wf->FindByName(_T("prpSpeedCommand"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.SpeedCommand) {
@@ -120,7 +120,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpUserSwitchUp"));
+  wp = (WndProperty*)wf->FindByName(_T("prpUserSwitchUp"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.UserSwitchUp) {
@@ -128,7 +128,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpUserSwitchMiddle"));
+  wp = (WndProperty*)wf->FindByName(_T("prpUserSwitchMiddle"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.UserSwitchMiddle) {
@@ -136,7 +136,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpUserSwitchDown"));
+  wp = (WndProperty*)wf->FindByName(_T("prpUserSwitchDown"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.UserSwitchDown) {
@@ -144,7 +144,7 @@ static void UpdateValues() {
       wp->RefreshDisplay();
     }
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVarioCircling"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVarioCircling"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
 	XCSoarInterface::Basic().SwitchState.VarioCircling) {
@@ -175,9 +175,9 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgSwitchesShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgSwitches.xml"),
+                      _T("dlgSwitches.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_SWITCHES"));
+		      _T("IDR_XML_SWITCHES"));
   if (wf == NULL)
     return;
 

@@ -18,13 +18,10 @@ INCLUDES := $(TARGET_INCLUDES) -I$(HDR) -I$(SRC) -I$(topdir)/src
 
 ######## compiler flags
 
-CPPFLAGS := $(INCLUDES) $(TARGET_CPPFLAGS)
-CPPFLAGS	+= -DFLARM_AVERAGE -DFIXED_MATH
-
-CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
-CFLAGS		:=$(OPTIMIZE) $(PROFILE)
-
+include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
+
+CPPFLAGS += -DFLARM_AVERAGE
 
 ####### linker configuration
 
@@ -53,7 +50,7 @@ t/01_test_tap.exe: src/01_test_tap.c
 	gcc -o $@ $<
 
 RUN_WAY_POINT_PARSER_OBJS = \
-	$(SRC)/Waypointparser.o \
+	$(SRC)/WayPointParser.o \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/UtilsText.o \
 	$(SRC)/zzip-$(TARGET).a \
@@ -72,12 +69,14 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Screen/TopWindow.o \
 	$(SRC)/Screen/ButtonWindow.o \
 	$(SRC)/Screen/Canvas.o \
+	$(SRC)/Screen/Color.o \
 	$(SRC)/Screen/VirtualCanvas.o \
 	$(SRC)/Screen/BufferCanvas.o \
 	$(SRC)/Screen/Pen.o \
 	$(SRC)/Screen/Brush.o \
 	$(SRC)/Screen/Font.o \
 	$(SRC)/Screen/Util.o \
+	$(SRC)/Screen/Layout.o \
 	$(SRC)/Math/FastMath.o \
 	$(SRC)/Math/Geometry.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
@@ -122,7 +121,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/Math/Geometry.o \
 	$(SRC)/Math/Pressure.o \
 	$(SRC)/Math/Screen.o \
-	$(SRC)/McReady.o \
+	$(SRC)/MacCready.o \
 	$(SRC)/OnLineContest.o \
 	$(SRC)/RasterMapJPG2000.o \
 	$(SRC)/RasterMapRaw.o \
@@ -137,6 +136,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/Screen/ContainerWindow.o \
 	$(SRC)/Screen/ButtonWindow.o \
 	$(SRC)/Screen/Canvas.o \
+	$(SRC)/Screen/Color.o \
 	$(SRC)/Screen/VirtualCanvas.o \
 	$(SRC)/Screen/LabelBlock.o \
 	$(SRC)/Screen/BufferCanvas.o \
@@ -145,6 +145,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/Screen/Font.o \
 	$(SRC)/Screen/Fonts.o \
 	$(SRC)/Screen/Graphics.o \
+	$(SRC)/Screen/Layout.o \
 	$(SRC)/Screen/Util.o \
 	$(SRC)/Screen/MaskedPaintWindow.o \
 	$(SRC)/Screen/PaintWindow.o \
@@ -177,7 +178,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/Units.o \
 	$(SRC)/UtilsText.o \
 	$(SRC)/UtilsFont.o \
-	$(SRC)/Waypointparser.o \
+	$(SRC)/WayPointParser.o \
 	$(SRC)/jasper-$(TARGET).a \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a \
@@ -202,6 +203,7 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/Screen/Bitmap.o \
 	$(SRC)/Screen/Brush.o \
 	$(SRC)/Screen/Canvas.o \
+	$(SRC)/Screen/Color.o \
 	$(SRC)/Screen/VirtualCanvas.o \
 	$(SRC)/Screen/BitmapCanvas.o \
 	$(SRC)/Screen/Font.o \
@@ -215,6 +217,7 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/TopWindow.o \
 	$(SRC)/Screen/Util.o \
+	$(SRC)/Screen/Layout.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
 	$(SRC)/Thread/Debug.o \
 	$(SRC)/Thread/Mutex.o \
@@ -226,7 +229,15 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/DataField/Float.o \
 	$(SRC)/DataField/Integer.o \
 	$(SRC)/DataField/String.o \
-	$(SRC)/WindowControls.o \
+	$(SRC)/Form/Control.o \
+	$(SRC)/Form/Form.o \
+	$(SRC)/Form/Button.o \
+	$(SRC)/Form/EventButton.o \
+	$(SRC)/Form/Frame.o \
+	$(SRC)/Form/Draw.o \
+	$(SRC)/Form/List.o \
+	$(SRC)/Form/ScrollBar.o \
+	$(SRC)/Form/Edit.o \
 	$(SRC)/UtilsText.o \
 	$(SRC)/Dialogs/dlgHelp.o \
 	$(SRC)/zzip-$(TARGET).a \

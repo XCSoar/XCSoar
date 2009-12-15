@@ -65,37 +65,43 @@ HCURSOR ActionInterface::oldCursor = NULL;
 /**
  * Activates the Hourglass animation
  */
-void ActionInterface::StartHourglassCursor(void) {
-#ifdef ENABLE_SDL
+void
+ActionInterface::StartHourglassCursor(void)
+{
+  #ifdef ENABLE_SDL
   // XXX
-#else /* !ENABLE_SDL */
+  #else /* !ENABLE_SDL */
   HCURSOR newc = LoadCursor(NULL, IDC_WAIT);
   oldCursor = (HCURSOR)SetCursor(newc);
   if (is_altair()) {
     SetCursorPos(160,120);
   }
-#endif /* !ENABLE_SDL */
+  #endif /* !ENABLE_SDL */
 }
 
 /**
  * Deactivates the Hourglass animation
  */
-void ActionInterface::StopHourglassCursor(void) {
-#ifdef ENABLE_SDL
+void
+ActionInterface::StopHourglassCursor(void)
+{
+  #ifdef ENABLE_SDL
   // XXX
-#else /* !ENABLE_SDL */
+  #else /* !ENABLE_SDL */
   SetCursor(oldCursor);
   if (is_altair()) {
-    SetCursorPos(640,480);
+    SetCursorPos(640, 480);
   }
   oldCursor = NULL;
-#endif /* !ENABLE_SDL */
+  #endif /* !ENABLE_SDL */
 }
 
 /**
  * Closes the ProgressWindow
  */
-void XCSoarInterface::CloseProgressDialog() {
+void
+XCSoarInterface::CloseProgressDialog()
+{
   if (progress_window != NULL) {
     delete progress_window;
     progress_window = NULL;
@@ -105,7 +111,9 @@ void XCSoarInterface::CloseProgressDialog() {
 /**
  * Updates the ProgressWindow to go up one step
  */
-void XCSoarInterface::StepProgressDialog(void) {
+void
+XCSoarInterface::StepProgressDialog(void)
+{
   if (progress_window != NULL)
     progress_window->step();
 }
@@ -114,8 +122,10 @@ bool
 XCSoarInterface::SetProgressStepSize(int nSize)
 {
   nSize = 5;
+
   if (nSize < 100 && progress_window != NULL)
     progress_window->set_step(nSize);
+
   return true;
 }
 
@@ -124,7 +134,8 @@ XCSoarInterface::SetProgressStepSize(int nSize)
  * @param text Text inside the progress bar
  */
 void
-XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
+XCSoarInterface::CreateProgressDialog(const TCHAR* text)
+{
   if (progress_window == NULL)
     progress_window = new ProgressWindow(main_window);
 
@@ -135,11 +146,11 @@ XCSoarInterface::CreateProgressDialog(const TCHAR* text) {
 /**
  * Opens the Analysis window
  */
-void PopupAnalysis()
+void
+PopupAnalysis()
 {
   dlgAnalysisShowModal();
 }
-
 
 
 #include "Interface.hpp"

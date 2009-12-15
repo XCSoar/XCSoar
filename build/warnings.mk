@@ -16,7 +16,15 @@ CXXFLAGS += -Wno-char-subscripts
 CXXFLAGS += -Wno-strict-aliasing
 
 # make warnings fatal (for perfectionists)
-#CXXFLAGS += -Werror
+
+ifeq ($(WERROR),)
+WERROR = $(DEBUG)
+endif
+
+ifeq ($(WERROR),y)
+CXXFLAGS += -Werror
+endif
+
 #CXXFLAGS += -pedantic
 #CXXFLAGS += -pedantic-errors
 

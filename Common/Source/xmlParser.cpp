@@ -1798,7 +1798,7 @@ XMLNode::XMLNode(const XMLNode &A)
     if (d) (d->ref_count)++ ;
 }
 
-int XMLNode::nChildNode(LPCTSTR name)
+int XMLNode::nChildNode(LPCTSTR name) const
 {
     if (!d) return 0;
     int i,j=0,n=d->nChild;
@@ -1838,7 +1838,7 @@ XMLNode XMLNode::getChildNode(LPCTSTR name, int j)
 }
 
 // Find an attribute on an node.
-LPCTSTR XMLNode::getAttribute(LPCTSTR lpszAttrib, int *j)
+LPCTSTR XMLNode::getAttribute(LPCTSTR lpszAttrib, int *j) const
 {
     if (!d) return NULL;
     int i=0,n=d->nAttribute;
@@ -1856,7 +1856,7 @@ LPCTSTR XMLNode::getAttribute(LPCTSTR lpszAttrib, int *j)
     return NULL;
 }
 
-char XMLNode::isAttributeSet(LPCTSTR lpszAttrib)
+char XMLNode::isAttributeSet(LPCTSTR lpszAttrib) const
 {
     if (!d) return FALSE;
     int i,n=d->nAttribute;
@@ -1872,7 +1872,7 @@ char XMLNode::isAttributeSet(LPCTSTR lpszAttrib)
     return FALSE;
 }
 
-LPCTSTR XMLNode::getAttribute(LPCTSTR name, int j)
+LPCTSTR XMLNode::getAttribute(LPCTSTR name, int j) const
 {
     if (!d) return NULL;
     int i=0;
@@ -1880,14 +1880,14 @@ LPCTSTR XMLNode::getAttribute(LPCTSTR name, int j)
     return getAttribute(name,&i);
 }
 
-LPCTSTR XMLNode::getName(){ if (!d) return NULL; return d->lpszName;   }
-int XMLNode::nText()      { if (!d) return 0; return d->nText;      }
-int XMLNode::nChildNode() { if (!d) return 0; return d->nChild;     }
-int XMLNode::nAttribute() { if (!d) return 0; return d->nAttribute; }
-int XMLNode::nClear()     { if (!d) return 0; return d->nClear;     }
+LPCTSTR XMLNode::getName() const { if (!d) return NULL; return d->lpszName; }
+int XMLNode::nText() const { if (!d) return 0; return d->nText; }
+int XMLNode::nChildNode() const { if (!d) return 0; return d->nChild; }
+int XMLNode::nAttribute() const { if (!d) return 0; return d->nAttribute; }
+int XMLNode::nClear() const { if (!d) return 0; return d->nClear; }
 XMLClear     XMLNode::getClear     (int i) { if (!d) return emptyXMLClear;     if (i>=d->nClear    ) return emptyXMLClear;     return d->pClear[i];     }
 XMLAttribute XMLNode::getAttribute (int i) { if (!d) return emptyXMLAttribute; if (i>=d->nAttribute) return emptyXMLAttribute; return d->pAttribute[i]; }
-LPCTSTR      XMLNode::getText      (int i) { if (!d) return NULL;              if (i>=d->nText     ) return NULL;              return d->pText[i];      }
+LPCTSTR      XMLNode::getText(int i) const { if (!d) return NULL; if (i>=d->nText) return NULL; return d->pText[i]; }
 XMLNode      XMLNode::getChildNode (int i) { if (!d) return emptyXMLNode;      if (i>=d->nChild    ) return emptyXMLNode;      return d->pChild[i];     }
 char         XMLNode::isDeclaration(     ) { if (!d) return (char)0;                 return d->isDeclaration; }
 char         XMLNode::isEmpty      (     ) { return (d==NULL); }

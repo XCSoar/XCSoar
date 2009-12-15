@@ -46,15 +46,19 @@ Copyright_License {
 #include <windows.h>
 
 #ifndef _MSC_VER
-#include <algorithm>
-using std::max;
+  #include <algorithm>
+  using std::max;
 #endif
 
-int TimeLocal(int localtime) {
+int
+TimeLocal(int localtime)
+{
   localtime += GetUTCOffset();
-  if (localtime<0) {
-    localtime+= 3600*24;
+
+  if (localtime < 0) {
+    localtime += 3600 * 24;
   }
+
   return localtime;
 }
 
@@ -87,12 +91,12 @@ DetectStartTime(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 
       lastflighttime = -1;
     }
-    return (int)Basic->Time-starttime;
+    return (int)Basic->Time - starttime;
   } else {
     if (lastflighttime == -1) {
       // hasn't been stopped yet
-      if (starttime>=0) {
-        lastflighttime = (int)Basic->Time-starttime;
+      if (starttime >= 0) {
+        lastflighttime = (int)Basic->Time - starttime;
       } else {
         return 0; // no last flight time
       }
@@ -102,33 +106,34 @@ DetectStartTime(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   }
 
   // return last flighttime if it exists
-  return max(0,lastflighttime);
+  return max(0, lastflighttime);
 }
 
-long GetUTCOffset(void) {
-  if (!is_altair()) {
-    long utcoffset=0;
-    // returns offset in seconds
-    TIME_ZONE_INFORMATION TimeZoneInformation;
-    DWORD tzi = GetTimeZoneInformation(&TimeZoneInformation);
-
-    utcoffset = -TimeZoneInformation.Bias*60;
-
-    if (tzi==TIME_ZONE_ID_STANDARD) {
-      utcoffset -= TimeZoneInformation.StandardBias*60;
-    }
-
-    if (tzi==TIME_ZONE_ID_DAYLIGHT) {
-      utcoffset -= TimeZoneInformation.DaylightBias*60;
-    }
-
-    #ifdef WINDOWSPC
-      return XCSoarInterface::SettingsComputer().UTCOffset;
-    #else
-      return utcoffset;
-    #endif
-  } else {
+long
+GetUTCOffset()
+{
+  if (is_altair())
     return XCSoarInterface::SettingsComputer().UTCOffset;
+
+  long utcoffset = 0;
+  // returns offset in seconds
+  TIME_ZONE_INFORMATION TimeZoneInformation;
+  DWORD tzi = GetTimeZoneInformation(&TimeZoneInformation);
+
+  utcoffset = -TimeZoneInformation.Bias * 60;
+
+  if (tzi == TIME_ZONE_ID_STANDARD) {
+    utcoffset -= TimeZoneInformation.StandardBias * 60;
   }
+
+  if (tzi == TIME_ZONE_ID_DAYLIGHT) {
+    utcoffset -= TimeZoneInformation.DaylightBias * 60;
+  }
+
+  #ifdef WINDOWSPC
+  return XCSoarInterface::SettingsComputer().UTCOffset;
+  #else
+  return utcoffset;
+  #endif
 }
 

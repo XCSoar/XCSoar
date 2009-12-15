@@ -36,14 +36,63 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/dlgTools.h"
-#include "InfoBoxLayout.h"
+#ifndef XCSOAR_COMPILER_H
+#define XCSOAR_COMPILER_H
 
-int DLGSCALE(int x) {
-  int iRetVal = x;
-
-#ifndef ALTAIRSYNC
-    iRetVal = (int) ((x)*InfoBoxLayout::dscale);
+#ifdef __GNUC__
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+#else
+#define GCC_VERSION 0
 #endif
-  return iRetVal;
-}
+
+#if GCC_VERSION >= 30000
+
+/* GCC 4.x */
+
+#define gcc_const __attribute__((const))
+#define gcc_deprecated __attribute__((deprecated))
+#define gcc_may_alias __attribute__((may_alias))
+#define gcc_malloc __attribute__((malloc))
+#define gcc_noreturn __attribute__((noreturn))
+#define gcc_packed __attribute__((packed))
+#define gcc_printf(a,b) __attribute__((format(printf, a, b)))
+#define gcc_pure __attribute__((pure))
+#define gcc_sentinel __attribute__((sentinel))
+#define gcc_unused __attribute__((unused))
+#define gcc_warn_unused_result __attribute__((warn_unused_result))
+
+#else /* ! GCC_VERSION >= 30000 */
+
+/* generic C compiler */
+
+#define gcc_const
+#define gcc_deprecated
+#define gcc_may_alias
+#define gcc_malloc
+#define gcc_noreturn
+#define gcc_packed
+#define gcc_printf(a,b)
+#define gcc_pure
+#define gcc_sentinel
+#define gcc_unused
+#define gcc_warn_unused_result
+
+#endif /* ! GCC_VERSION >= 30000 */
+
+#if GCC_VERSION >= 40300
+
+#define gcc_hot __attribute__((hot))
+#define gcc_cold __attribute__((cold))
+
+#else /* ! GCC_UNUSED >= 40300 */
+
+#define gcc_hot
+#define gcc_cold
+
+#endif /* ! GCC_UNUSED >= 40300 */
+
+#undef GCC_VERSION
+
+#endif

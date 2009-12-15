@@ -163,7 +163,7 @@ struct NMEA_INFO: public AIRCRAFT_STATE
   //##############
 
   /** MacCready value of external device (if available) */
-  double MacReady;
+  double MacCready;
 
   /** Ballast information of external device (if available) */
   double Ballast;

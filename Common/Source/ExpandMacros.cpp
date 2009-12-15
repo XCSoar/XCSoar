@@ -216,10 +216,11 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
       break;
     }
   }
+
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
     if (!task.Valid()
-        && ((SettingsComputer().AutoMcMode==0)
-	    || (SettingsComputer().AutoMcMode==2))) {
+        && ((SettingsComputer().AutoMacCreadyMode==0)
+	    || (SettingsComputer().AutoMacCreadyMode==2))) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);

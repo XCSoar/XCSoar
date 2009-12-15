@@ -77,7 +77,7 @@ AbstractDevice::ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
 }
 
 bool
-AbstractDevice::PutMcCready(double mc_cready)
+AbstractDevice::PutMacCready(double MacCready)
 {
   return true;
 }

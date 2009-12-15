@@ -208,11 +208,6 @@ enum {
 
 static inline void CheckMenuItem(HMENU h, int id, unsigned flags) {}
 
-static inline void PostQuitMessage(int x)
-{
-  exit(x);
-}
-
 static inline void SystemIdleTimerReset() {}
 
 #endif

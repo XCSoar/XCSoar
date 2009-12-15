@@ -42,7 +42,7 @@ Copyright_License {
  * @file GlideSolvers.cpp
  */
 
-#include "McReady.h"
+#include "MacCready.h"
 #include "SettingsComputer.hpp"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
@@ -108,7 +108,7 @@ FinalGlideThroughTerrain(const fixed this_bearing,
 
   altitude = calculated.NavAltitude;
   h =  max(fixed_zero, terrain.GetTerrainHeight(loc,rounding));
-  dh = altitude - h - settings.SAFETYALTITUDETERRAIN;
+  dh = altitude - h - settings.SafetyAltitudeTerrain;
   last_dh = dh;
   if (negative(dh)) {
     start_under = true;
@@ -160,7 +160,7 @@ FinalGlideThroughTerrain(const fixed this_bearing,
     // find height over terrain
     h =  max(fixed_zero,terrain.GetTerrainHeight(loc, rounding));
 
-    dh = altitude - h - settings.SAFETYALTITUDETERRAIN;
+    dh = altitude - h - settings.SafetyAltitudeTerrain;
 
     if (TerrainBase && positive(dh) && positive(h)) {
       *TerrainBase = min(*TerrainBase, h);

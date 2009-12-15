@@ -83,54 +83,54 @@ static CallBackTableEntry_t CallBackTable[]={
 static void setVariables(void) {
   WndProperty *wp;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
+  wp = (WndProperty*)wf->FindByName(_T("prpOLCEnabled"));
   if (wp) {
     wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().EnableOLC);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFAIFinishHeight"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFAIFinishHeight"));
   if (wp) {
     wp->GetDataField()->Set(settings_task.EnableFAIFinishHeight);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeightRef"));
+  wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("AGL")));
-    dfe->addEnumText(gettext(TEXT("MSL")));
+    dfe->addEnumText(gettext(_T("AGL")));
+    dfe->addEnumText(gettext(_T("MSL")));
     dfe->Set(settings_task.StartHeightRef);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
+  wp = (WndProperty*)wf->FindByName(_T("prpOLCRules"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("Sprint")));
-    dfe->addEnumText(gettext(TEXT("Triangle")));
-    dfe->addEnumText(gettext(TEXT("Classic")));
+    dfe->addEnumText(gettext(_T("Sprint")));
+    dfe->addEnumText(gettext(_T("Triangle")));
+    dfe->addEnumText(gettext(_T("Classic")));
     dfe->Set(XCSoarInterface::SettingsComputer().OLCRules);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFinishMinHeight"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(settings_task.FinishMinHeight*ALTITUDEMODIFY));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxHeight"));
+  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxHeight*ALTITUDEMODIFY));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxSpeed"));
+  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxSpeed*SPEEDMODIFY));
     wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
@@ -144,9 +144,9 @@ bool dlgTaskRules(void){
   WndProperty *wp;
 
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgTaskRules.xml"),
+                      _T("dlgTaskRules.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_TASKRULES"));
+		      _T("IDR_XML_TASKRULES"));
 
   if (!wf) return false;
 
@@ -162,19 +162,19 @@ bool dlgTaskRules(void){
 
   int ival;
 
-  changed |= SetValueRegistryOnChange(wf, TEXT("prpFAIFinishHeight"),
+  changed |= SetValueRegistryOnChange(wf, _T("prpFAIFinishHeight"),
 				      szRegistryFAIFinishHeight,
 				      settings_task.EnableFAIFinishHeight);
-  changed |= SetValueRegistryOnChange(wf, TEXT("prpStartHeightRef"),
+  changed |= SetValueRegistryOnChange(wf, _T("prpStartHeightRef"),
 				      szRegistryStartHeightRef,
 				      settings_task.StartHeightRef);
-  changed |= SetValueRegistryOnChange(wf, TEXT("prpOLCRules"),
+  changed |= SetValueRegistryOnChange(wf, _T("prpOLCRules"),
 				      szRegistryOLCRules,
 				      XCSoarInterface::SetSettingsComputer().OLCRules);
-  changed |= SetValueOnChange(wf, TEXT("prpOLCEnabled"),
+  changed |= SetValueOnChange(wf, _T("prpOLCEnabled"),
 			      XCSoarInterface::SetSettingsComputer().EnableOLC);
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFinishMinHeight"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
     if ((int)settings_task.FinishMinHeight != ival) {
@@ -184,7 +184,7 @@ bool dlgTaskRules(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxHeight"));
+  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
     if ((int)settings_task.StartMaxHeight != ival) {
@@ -194,7 +194,7 @@ bool dlgTaskRules(void){
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxSpeed"));
+  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
     if ((int)settings_task.StartMaxSpeed != ival) {
@@ -213,8 +213,8 @@ bool dlgTaskRules(void){
     Profile::StoreRegistry();
 
     MessageBoxX (
-		 gettext(TEXT("Changes to configuration saved.")),
-		 TEXT(""), MB_OK);
+		 gettext(_T("Changes to configuration saved.")),
+		 _T(""), MB_OK);
   }
 
   return changed;

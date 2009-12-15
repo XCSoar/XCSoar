@@ -40,7 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Math/Constants.h"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Math/Earth.hpp"
 #include "SettingsComputer.hpp"
 

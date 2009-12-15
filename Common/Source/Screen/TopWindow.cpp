@@ -137,8 +137,7 @@ TopWindow::full_screen()
 #else /* !ENABLE_SDL */
   ::SetForegroundWindow(hWnd);
 #ifdef WINDOWSPC
-  ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
-                 SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+  show_on_top();
 #else
 #if !defined(CECORE) && !defined(GNAV)
   ::SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
@@ -179,6 +178,18 @@ bool
 TopWindow::on_deactivate()
 {
   return false;
+}
+
+void
+TopWindow::post_quit()
+{
+#ifdef ENABLE_SDL
+  SDL_Event event;
+  event.type = SDL_QUIT;
+  ::SDL_PushEvent(&event);
+#else
+  ::PostQuitMessage(0);
+#endif
 }
 
 #ifdef ENABLE_SDL

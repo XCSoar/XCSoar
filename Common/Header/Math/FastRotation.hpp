@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FASTROTATION_HPP
 #define XCSOAR_MATH_FASTROTATION_HPP
 
+#include "Compiler.h"
+
 void irotate(int &xin, int &yin, const double &angle);
 void irotatescale(int &xin, int &yin, const double &angle, const double &scale,
                   double &x, double &y);

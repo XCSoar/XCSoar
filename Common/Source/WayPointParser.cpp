@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
@@ -52,6 +52,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
+#include "StringUtil.hpp"
 #include "MapWindowProjection.hpp"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
@@ -75,23 +76,16 @@ static int globalFileNum = 0;
 TCHAR *strtok_r(const TCHAR *s, TCHAR *delim, TCHAR **lasts);
 
 //static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
-static bool
-ParseWayPointString(Waypoint &way_point, const TCHAR *input,
-                    const RasterTerrain *terrain);
 
-static bool
-ParseAngle(const TCHAR *input, fixed *value_r, TCHAR **endptr_r);
-
-static void
-ParseFlags(const TCHAR *input, const TCHAR **endptr_r, Waypoint& waypoint);
-
-static bool
-ParseAltitude(const TCHAR *input, fixed *altitude_r, TCHAR **endptr_r);
+static bool ParseWayPointString(Waypoint &way_point, const TCHAR *input,
+    const RasterTerrain *terrain);
+static bool ParseAngle(const TCHAR *input, fixed *value_r, TCHAR **endptr_r);
+static void ParseFlags(const TCHAR *input, const TCHAR **endptr_r, Waypoint& waypoint);
+static bool ParseAltitude(const TCHAR *input, fixed *altitude_r, TCHAR **endptr_r);
 
 static TCHAR TempString[READLINE_LENGTH];
 
 static int WaypointOutOfTerrainRangeDontAskAgain = -1;
-
 
 static void
 CloseWaypoints(Waypoints &way_points)
@@ -100,19 +94,16 @@ CloseWaypoints(Waypoints &way_points)
   WaypointOutOfTerrainRangeDontAskAgain = WaypointsOutOfRange;
 }
 
-
 static bool
 WaypointInTerrainRange(const Waypoint &way_point, const RasterTerrain &terrain)
 {
-  if (WaypointOutOfTerrainRangeDontAskAgain == 1){
-    return(true);
-  }
+  if (WaypointOutOfTerrainRangeDontAskAgain == 1)
+    return true;
 
-  if (!terrain.isTerrainLoaded()) {
-    return(true);
-  }
+  if (!terrain.isTerrainLoaded())
+    return true;
 
-  if (terrain.WaypointIsInTerrainRange(way_point.Location)) {
+  if (terrain.WaypointIsInTerrainRange(way_point.Location))
     return true;
   } else {
     if (WaypointOutOfTerrainRangeDontAskAgain == 0){
@@ -147,50 +138,76 @@ WaypointInTerrainRange(const Waypoint &way_point, const RasterTerrain &terrain)
         return false;
       }
 
-    } else {
-      if (WaypointOutOfTerrainRangeDontAskAgain == 2)
-        return(false);
-      if (WaypointOutOfTerrainRangeDontAskAgain == 1)
-        return(true);
-    }
+  if (WaypointOutOfTerrainRangeDontAskAgain == 2)
+    return false;
+  if (WaypointOutOfTerrainRangeDontAskAgain == 1)
+    return true;
+
+  if (WaypointOutOfTerrainRangeDontAskAgain != 0)
+    return false;
+
+  TCHAR sTmp[250];
+  int res;
+
+  _stprintf(sTmp,gettext(
+      TEXT("Waypoint #%d \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?")),
+      way_point.Number, way_point.Name);
+
+  res = dlgWaypointOutOfTerrain(sTmp);
+
+  switch (res) {
+  case wpTerrainBoundsYes:
+    return true;
+
+  case wpTerrainBoundsNo:
+    return false;
+
+  case wpTerrainBoundsYesAll:
+    WaypointOutOfTerrainRangeDontAskAgain = 1;
+    WaypointsOutOfRange = 1;
+    SetToRegistry(szRegistryWaypointsOutOfRange, WaypointsOutOfRange);
+    Profile::StoreRegistry();
+    return true;
+
+  case mrCancel:
+  case wpTerrainBoundsNoAll:
+    WaypointOutOfTerrainRangeDontAskAgain = 2;
+    WaypointsOutOfRange = 2;
+    SetToRegistry(szRegistryWaypointsOutOfRange, WaypointsOutOfRange);
+    Profile::StoreRegistry();
     return false;
   }
+
+  return false;
 }
 
-
-static int ParseWayPointError(int LineNumber, const TCHAR *FileName,
-                              const TCHAR *String)
+static int
+ParseWayPointError(int LineNumber, const TCHAR *FileName, const TCHAR *String)
 {
   TCHAR szTemp[250];
 
-  if (_tcslen(FileName)> 0) {
-    _stprintf(szTemp,
-              TEXT("%s\r\n%s %s %s %d\r\n%s"),
+  if (!string_is_empty(FileName)) {
+    _stprintf(szTemp, TEXT("%s\r\n%s %s %s %d\r\n%s"),
               gettext(TEXT("Waypointfile Parse Error")),
-              gettext(TEXT("File")),
-              FileName,
-              gettext(TEXT("Line")),
-              LineNumber, String);
+              gettext(TEXT("File")), FileName,
+              gettext(TEXT("Line")), LineNumber, String);
   } else {
-    _stprintf(szTemp,
-              TEXT("%s\r\n%s %s %d\r\n%s"),
+    _stprintf(szTemp, TEXT("%s\r\n%s %s %d\r\n%s"),
               gettext(TEXT("Waypointfile Parse Error")),
               gettext(TEXT("(Map file)")),
-              gettext(TEXT("Line")),
-              LineNumber, String);
+              gettext(TEXT("Line")), LineNumber, String);
   }
-  MessageBoxX(szTemp,
-              gettext(TEXT("Error")),
-              MB_OK | MB_ICONWARNING);
-  return(1);
+
+  MessageBoxX(szTemp, gettext(TEXT("Error")), MB_OK | MB_ICONWARNING);
+
+  return 1;
 }
 
 static bool
 FeedWayPointLine(Waypoints &way_points, const RasterTerrain *terrain,
-                 const TCHAR *line)
+    const TCHAR *line)
 {
-  if (TempString[0] == '\0' ||
-      TempString[0] == 0x1a || // dos end of file
+  if (TempString[0] == '\0' || TempString[0] == 0x1a || // dos end of file
       _tcsstr(TempString, TEXT("**")) == TempString || // Look For Comment
       _tcsstr(TempString, TEXT("*")) == TempString) // Look For SeeYou Comment
     /* nothing was parsed, return without error condition */
@@ -211,103 +228,98 @@ FeedWayPointLine(Waypoints &way_points, const RasterTerrain *terrain,
 
 static void
 ReadWayPointFile(FILE *fp, const TCHAR *CurrentWpFileName,
-                 Waypoints &way_points, const RasterTerrain *terrain)
+    Waypoints &way_points, const RasterTerrain *terrain)
 {
-//  TCHAR szTemp[100];
-  int nTrigger=10;
-  DWORD fSize, fPos=0;
-  int nLineNumber=0;
+  //  TCHAR szTemp[100];
+  int nTrigger = 10;
+  DWORD fSize, fPos = 0;
+  int nLineNumber = 0;
 
-  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Waypoints File...")));
+  XCSoarInterface::CreateProgressDialog(
+      gettext(TEXT("Loading Waypoints File...")));
 
   fseek(fp, 0, SEEK_END);
   fSize = ftell(fp);
   fseek(fp, 0, SEEK_SET); /* no rewind() on PPC */
 
-  if (fSize == 0) {
+  if (fSize == 0)
     return;
-  }
 
   // SetFilePointer(hFile,0,NULL,FILE_BEGIN);
   fPos = 0;
-  nTrigger = (fSize/10);
+  nTrigger = (fSize / 10);
 
-  while(ReadStringX(fp, READLINE_LENGTH, TempString)){
-
+  while (ReadStringX(fp, READLINE_LENGTH, TempString)) {
     nLineNumber++;
     fPos += _tcslen(TempString);
 
-    if (nTrigger < (int)fPos){
-      nTrigger += (fSize/10);
+    if (nTrigger < (int)fPos) {
+      nTrigger += (fSize / 10);
       XCSoarInterface::StepProgressDialog();
     }
 
-    if (!FeedWayPointLine(way_points, terrain, TempString) &&
-        ParseWayPointError(nLineNumber, CurrentWpFileName, TempString) != 1)
+    if (!FeedWayPointLine(way_points, terrain, TempString)
+        && ParseWayPointError(nLineNumber, CurrentWpFileName, TempString) != 1)
       break;
   }
 }
 
 static void
 ReadWayPointFile(ZZIP_FILE *fp, const TCHAR *CurrentWpFileName,
-                 Waypoints &way_points, const RasterTerrain *terrain)
+    Waypoints &way_points, const RasterTerrain *terrain)
 {
-//  TCHAR szTemp[100];
-  int nTrigger=10;
-  DWORD fSize, fPos=0;
-  int nLineNumber=0;
+  //  TCHAR szTemp[100];
+  int nTrigger = 10;
+  DWORD fSize, fPos = 0;
+  int nLineNumber = 0;
 
-  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Waypoints File...")));
+  XCSoarInterface::CreateProgressDialog(
+      gettext(TEXT("Loading Waypoints File...")));
 
   fSize = zzip_file_size(fp);
 
-  if (fSize == 0) {
+  if (fSize == 0)
     return;
-  }
 
   // SetFilePointer(hFile,0,NULL,FILE_BEGIN);
   fPos = 0;
-  nTrigger = (fSize/10);
+  nTrigger = (fSize / 10);
 
-  while(ReadString(fp, READLINE_LENGTH, TempString)){
-
+  while (ReadString(fp, READLINE_LENGTH, TempString)) {
     nLineNumber++;
     fPos += _tcslen(TempString);
 
-    if (nTrigger < (int)fPos){
-      nTrigger += (fSize/10);
+    if (nTrigger < (int)fPos) {
+      nTrigger += (fSize / 10);
       XCSoarInterface::StepProgressDialog();
     }
 
-    if (!FeedWayPointLine(way_points, terrain, TempString) &&
-        ParseWayPointError(nLineNumber, CurrentWpFileName, TempString) != 1)
+    if (!FeedWayPointLine(way_points, terrain, TempString)
+        && ParseWayPointError(nLineNumber, CurrentWpFileName, TempString) != 1)
       break;
   }
 }
-
 
 void
 WaypointAltitudeFromTerrain(Waypoint &way_point, const RasterTerrain &terrain)
 {
   double myalt = -1;
-  if (terrain.GetMap()) {
-    RasterRounding rounding(*terrain.GetMap(),0,0);
 
-    myalt =
-      terrain.GetTerrainHeight(way_point.Location, rounding);
+  if (terrain.GetMap()) {
+    RasterRounding rounding(*terrain.GetMap(), 0, 0);
+    myalt = terrain.GetTerrainHeight(way_point.Location, rounding);
   }
 
-  if (myalt>0) {
+  if (myalt > 0) {
     way_point.Altitude = myalt;
   } else {
     // error, can't find altitude for waypoint!
   }
 }
 
-
 static bool
 ParseWayPointString(Waypoint &way_point, const TCHAR *input,
-                    const RasterTerrain *terrain)
+    const RasterTerrain *terrain)
 {
   TCHAR *endptr;
 
@@ -321,23 +333,25 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
 
   input = endptr + 1;
 
-  if (!ParseAngle(input, &way_point.Location.Latitude, &endptr) ||
-      way_point.Location.Latitude > 90 || way_point.Location.Latitude < -90 ||
-      *endptr != _T(','))
+  if (!ParseAngle(input, &way_point.Location.Latitude, &endptr)
+      || way_point.Location.Latitude > 90
+      || way_point.Location.Latitude < -90
+      || *endptr != _T(','))
     return false;
 
   input = endptr + 1;
 
   ParseAngle(input, &way_point.Location.Longitude, &endptr);
-  if (!ParseAngle(input, &way_point.Location.Longitude, &endptr) ||
-      way_point.Location.Longitude > 180 || way_point.Location.Longitude < -180 ||
-      *endptr != _T(','))
+  if (!ParseAngle(input, &way_point.Location.Longitude, &endptr)
+      || way_point.Location.Longitude > 180
+      || way_point.Location.Longitude < -180
+      || *endptr != _T(','))
     return false;
 
   input = endptr + 1;
 
-  if (!ParseAltitude(input, &way_point.Altitude, &endptr) ||
-      *endptr != _T(','))
+  if (!ParseAltitude(input, &way_point.Altitude, &endptr)
+      || *endptr != _T(','))
     return false;
 
   input = endptr + 1;
@@ -401,8 +415,8 @@ ParseAngle(const TCHAR *input, fixed *value_r, TCHAR **endptr_r)
     return false;
 
   if (endptr[-1] == 'E')
-    /* this is a hack: strtod() stops after the "E" (east, or:
-       exponent); get it back */
+    // this is a hack: strtod() stops after the "E" (east, or exponent);
+    // get it back
     --endptr;
 
   input = endptr;
@@ -410,26 +424,23 @@ ParseAngle(const TCHAR *input, fixed *value_r, TCHAR **endptr_r)
   if (*input == ':') {
     ++input;
     Mins += ((double)_tcstol(input, &endptr, 10) / 60.0);
+
     if (endptr == input)
       return false;
   }
 
-  Degrees += (Mins/60);
+  Degrees += (Mins / 60);
 
-  if((*endptr == 'N') || (*endptr == 'E'))
-    {
-    }
-  else if((*endptr == 'S') || (*endptr == 'W'))
-    {
-      Degrees *= -1;
-    }
+  if ((*endptr == 'N') || (*endptr == 'E'))
+    ; // nothing
+  else if ((*endptr == 'S') || (*endptr == 'W'))
+    Degrees *= -1;
   else
-    {
-      return false;
-    }
+    return false;
 
   *value_r = Degrees;
   *endptr_r = endptr + 1;
+
   return true;
 }
 
@@ -484,7 +495,6 @@ ParseFlags(const TCHAR *input, const TCHAR **endptr_r, Waypoint &waypoint)
   *endptr_r = input;
 }
 
-
 static bool
 ParseAltitude(const TCHAR *input, fixed *altitude_r, TCHAR **endptr_r)
 {
@@ -510,12 +520,13 @@ ParseAltitude(const TCHAR *input, fixed *altitude_r, TCHAR **endptr_r)
 
   *altitude_r = altitude;
   *endptr_r = endptr;
+
   return true;
 }
 
 bool
 ReadWayPointZipFile(const TCHAR *path, Waypoints &way_points,
-                    const RasterTerrain *terrain)
+    const RasterTerrain *terrain)
 {
   char path_ascii[MAX_PATH];
   ZZIP_FILE *fp;
@@ -542,13 +553,14 @@ ReadWayPointFile(const TCHAR *path, Waypoints &way_points,
   if (fp == NULL)
     /* fall back to ReadWayPointZipFile() if the file was not found */
     return
-#ifdef HAVE_POSIX
-      errno == ENOTDIR &&
-#endif
-      ReadWayPointZipFile(path, way_points, terrain);
+    #ifdef HAVE_POSIX
+    errno == ENOTDIR &&
+    #endif
+    ReadWayPointZipFile(path, way_points, terrain);
 
   ReadWayPointFile(fp, path, way_points, terrain);
   fclose(fp);
+
   return true;
 }
 
@@ -557,34 +569,33 @@ ReadWaypoints(Waypoints &way_points, const RasterTerrain *terrain)
 {
   StartupStore(TEXT("ReadWaypoints\n"));
 
-  TCHAR szFile1[MAX_PATH] = TEXT("\0");
-  TCHAR szFile2[MAX_PATH] = TEXT("\0");
+  TCHAR szFile[MAX_PATH];
   bool file_embedded = false;
 
   // JMW TODO protect with mutex (whole waypoint list class)
 
   CloseWaypoints(way_points);
 
-  GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
+  GetRegistryString(szRegistryWayPointFile, szFile, MAX_PATH);
   SetRegistryString(szRegistryWayPointFile, TEXT("\0"));
 
-  if (_tcslen(szFile1)>0) {
-    ExpandLocalPath(szFile1);
+  if (!string_is_empty(szFile)) {
+    ExpandLocalPath(szFile);
   } else {
     file_embedded = true;
-    GetRegistryString(szRegistryMapFile, szFile1, MAX_PATH);
-    ExpandLocalPath(szFile1);
-    _tcscat(szFile1, TEXT("/"));
-    _tcscat(szFile1, TEXT("waypoints.xcw"));
+    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    ExpandLocalPath(szFile);
+    _tcscat(szFile, TEXT("/"));
+    _tcscat(szFile, TEXT("waypoints.xcw"));
   }
 
   globalFileNum = 0;
-  if (ReadWayPointFile(szFile1, way_points, terrain)) {
+  if (ReadWayPointFile(szFile, way_points, terrain)) {
     // read OK, so set the registry to the actual file name
     if (!file_embedded) {
       printf("save\n");
-      ContractLocalPath(szFile1);
-      SetRegistryString(szRegistryWayPointFile, szFile1);
+      ContractLocalPath(szFile);
+      SetRegistryString(szRegistryWayPointFile, szFile);
     }
 
     // inform Waypoints whether it is ok to write to this file
@@ -595,25 +606,24 @@ ReadWaypoints(Waypoints &way_points, const RasterTerrain *terrain)
 
   // read additional waypoint file
 
-  GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
+  GetRegistryString(szRegistryAdditionalWayPointFile, szFile, MAX_PATH);
 
   SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));
 
-  if (_tcslen(szFile2)>0){
-    ExpandLocalPath(szFile2);
+  if (!string_is_empty(szFile)) {
+    ExpandLocalPath(szFile);
 
     globalFileNum = 1;
-    if (ReadWayPointFile(szFile2, way_points, terrain)) {
+    if (ReadWayPointFile(szFile, way_points, terrain)) {
       // read OK, so set the registry to the actual file name
-      ContractLocalPath(szFile2);
-      SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);
+      ContractLocalPath(szFile);
+      SetRegistryString(szRegistryAdditionalWayPointFile, szFile);
     } else {
       StartupStore(TEXT("No waypoint file 2\n"));
     }
   }
   way_points.optimise();
 }
-
 
 void
 SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
@@ -627,7 +637,7 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
   if (reset || way_points.empty() ||
       !way_points.lookup_id(settings.HomeWaypoint)) {
     settings.HomeWaypoint = -1;
-  }
+
   // VENTA3 -- reset Alternates
   if (reset
       || !way_points.lookup_id(settings.Alternate1)
@@ -635,10 +645,10 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
     settings.Alternate1= -1;
     settings.Alternate2= -1;
   }
+
   // check invalid task ref waypoint or forced reset due to file change
   if (reset || !way_points.lookup_id(settings.TeamCodeRefWaypoint)) {
     settings.TeamCodeRefWaypoint = -1;
-  }
 
   if (!way_points.lookup_id(settings.HomeWaypoint)) {
     // search for home in waypoint list, if we don't have a home
@@ -653,10 +663,9 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
   }
 
   // set team code reference waypoint if we don't have one
-  if (settings.TeamCodeRefWaypoint== -1) {
-    settings.TeamCodeRefWaypoint =
-      settings.HomeWaypoint;
-  }
+  if (settings.TeamCodeRefWaypoint == -1)
+    settings.TeamCodeRefWaypoint = settings.HomeWaypoint;
+
 
   if (set_location) {
     if (const Waypoint *wp = way_points.lookup_id(settings.HomeWaypoint)) {
@@ -664,12 +673,11 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
       StartupStore(TEXT("Start at home waypoint\n"));
       device_blackboard.SetStartupLocation(wp->Location, wp->Altitude);
     } else if (terrain != NULL) {
-
       // no home at all, so set it from center of terrain if available
       GEOPOINT loc;
       if (terrain->GetTerrainCenter(&loc)) {
-	StartupStore(TEXT("Start at terrain center\n"));
-	device_blackboard.SetStartupLocation(loc, 0);
+        StartupStore(TEXT("Start at terrain center\n"));
+        device_blackboard.SetStartupLocation(loc, 0);
       }
     }
   }
@@ -720,9 +728,8 @@ WaypointFlagsToString(const Waypoint& waypoint, TCHAR *Flags)
   }
 
   // set as turnpoint by default if nothing else
-  if (_tcslen(Flags)==0) {
-    _tcscat(Flags,TEXT("T"));
-  }
+  if (string_is_empty(Flags))
+    _tcscat(Flags, TEXT("T"));
 }
 
 static void
@@ -731,7 +738,7 @@ WaypointLongitudeToString(double Longitude, TCHAR *Buffer)
   TCHAR EW[] = TEXT("WE");
   int dd, mm, ss;
 
-  int sign = Longitude<0 ? 0 : 1;
+  int sign = Longitude < 0 ? 0 : 1;
   Longitude = fabs(Longitude);
 
   dd = (int)Longitude;
@@ -739,16 +746,17 @@ WaypointLongitudeToString(double Longitude, TCHAR *Buffer)
   mm = (int)(Longitude);
   Longitude = (Longitude - mm) * 60.0;
   ss = (int)(Longitude + 0.5);
-  if (ss >= 60)
-    {
-      mm++;
-      ss -= 60;
-    }
-  if (mm >= 60)
-    {
-      dd++;
-      mm -= 60;
-    }
+
+  if (ss >= 60) {
+    mm++;
+    ss -= 60;
+  }
+
+  if (mm >= 60) {
+    dd++;
+    mm -= 60;
+  }
+
   _stprintf(Buffer, TEXT("%03d:%02d:%02d%c"), dd, mm, ss, EW[sign]);
 }
 
@@ -758,7 +766,7 @@ WaypointLatitudeToString(double Latitude, TCHAR *Buffer)
   TCHAR EW[] = TEXT("SN");
   int dd, mm, ss;
 
-  int sign = Latitude<0 ? 0 : 1;
+  int sign = Latitude < 0 ? 0 : 1;
   Latitude = fabs(Latitude);
 
   dd = (int)Latitude;
@@ -766,10 +774,12 @@ WaypointLatitudeToString(double Latitude, TCHAR *Buffer)
   mm = (int)(Latitude);
   Latitude = (Latitude - mm) * 60.0;
   ss = (int)(Latitude + 0.5);
+
   if (ss >= 60) {
     mm++;
     ss -= 60;
   }
+
   if (mm >= 60) {
     dd++;
     mm -= 60;
@@ -784,7 +794,7 @@ WriteWayPointFileWayPoint(FILE *fp, const Waypoint &way_point)
   TCHAR Latitude[MAX_PATH];
   TCHAR Longitude[MAX_PATH];
 
-  Flags[0]=0;
+  Flags[0] = 0;
 
   WaypointLatitudeToString(way_point.Location.Latitude, Latitude);
   WaypointLongitudeToString(way_point.Location.Longitude, Longitude);
@@ -819,49 +829,47 @@ WaypointWriteFiles(Waypoints &way_points,
 {
   // JMW TODO protect with mutex (whole waypoint list class)
 
-  TCHAR szFile1[MAX_PATH] = TEXT("\0");
-  TCHAR szFile2[MAX_PATH] = TEXT("\0");
+  TCHAR szFile[MAX_PATH];
 
-  FILE *fp=NULL;
+  FILE *fp = NULL;
 
   way_points.set_home(settings_computer.HomeWaypoint);
 
   GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
 
-  if (_tcslen(szFile1)>0) {
-    fp = _tfopen(szFile1, TEXT("wb"));
+  if (!string_is_empty(szFile)) {
+    fp = _tfopen(szFile, TEXT("wb"));
   } else {
-    LocalPath(szFile1);
-    _tcscat(szFile1,TEXT("\\waypoints1.dat"));
-    fp = _tfopen(szFile1, TEXT("wb"));
+    LocalPath(szFile);
+    _tcscat(szFile, TEXT("\\waypoints1.dat"));
+    fp = _tfopen(szFile, TEXT("wb"));
   }
 
-  if(fp != NULL) {
+  if (fp != NULL) {
     globalFileNum = 0;
     WriteWayPointFile(way_points, fp, settings_computer);
-    fprintf(fp,"\r\n");
+    fprintf(fp, "\r\n");
     fclose(fp);
     fp = NULL;
   }
 
-  GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
-  ExpandLocalPath(szFile2);
+  GetRegistryString(szRegistryAdditionalWayPointFile, szFile, MAX_PATH);
+  ExpandLocalPath(szFile);
 
-  if (_tcslen(szFile2)>0) {
-    fp = _tfopen(szFile2, TEXT("wb"));
+  if (!string_is_empty(szFile)) {
+    fp = _tfopen(szFile, TEXT("wb"));
   } else {
-    LocalPath(szFile2);
-    _tcscat(szFile2,TEXT("\\waypoints2.dat"));
-    fp = _tfopen(szFile2, TEXT("wb"));
+    LocalPath(szFile);
+    _tcscat(szFile, TEXT("\\waypoints2.dat"));
+    fp = _tfopen(szFile, TEXT("wb"));
   }
 
-  if(fp != NULL) {
+  if (fp != NULL) {
     globalFileNum = 1;
     WriteWayPointFile(way_points, fp, settings_computer);
-    fprintf(fp,"\r\n");
+    fprintf(fp, "\r\n");
     fclose(fp);
     fp = NULL;
   }
-
 }

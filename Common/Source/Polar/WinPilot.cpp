@@ -100,7 +100,7 @@ PolarWinPilot2XCSoar(class Polar &polar,
 bool
 ReadWinPilotPolar(Polar &polar)
 {
-  TCHAR szFile[MAX_PATH] = TEXT("\0");
+  TCHAR szFile[MAX_PATH];
   TCHAR ctemp[80];
   TCHAR TempString[READLINE_LENGTH+1];
   FILE *file;

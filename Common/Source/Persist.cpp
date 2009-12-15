@@ -43,7 +43,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "SettingsComputer.hpp"
 #include "OnLineContest.h"
-#include "McReady.h"
+#include "MacCready.h"
+#include "Math/Pressure.h"
 #include "Atmosphere.h"
 #include "UtilsSystem.hpp"
 #include "Logger.h"
@@ -59,8 +60,8 @@ Copyright_License {
   using std::max;
 #endif
 
-static TCHAR szCalculationsPersistFileName[MAX_PATH]= TEXT("\0");
-static TCHAR szCalculationsPersistDirectory[MAX_PATH]= TEXT("\0");
+static TCHAR szCalculationsPersistFileName[MAX_PATH];
+static TCHAR szCalculationsPersistDirectory[MAX_PATH];
 
 /**
  * Deletes the persistent memory file
@@ -143,7 +144,7 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   double BUGS = oldGlidePolar::GetBugs();
   double BALLAST = oldGlidePolar::GetBallast();
 
-  // Read persistent memory into McCready, QNH, bugs, ballast and temperature
+  // Read persistent memory into MacCready, QNH, bugs, ballast and temperature
   fread(&MACCREADY, sizeof(double), 1, file);
   fread(&BUGS, sizeof(double), 1, file);
   fread(&BALLAST, sizeof(double), 1, file);

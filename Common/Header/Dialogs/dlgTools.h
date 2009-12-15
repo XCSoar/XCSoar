@@ -39,7 +39,8 @@ Copyright_License {
 #if !defined(__DLGTOOLS_H)
 #define __DLGTOOLS_H
 
-#define DeclareCallBackEntry(x)        {TEXT(#x), (void *)x}
-int DLGSCALE(int x);
+#include <tchar.h>
+
+#define DeclareCallBackEntry(x) { _T(#x), (void *)x }
 
 #endif

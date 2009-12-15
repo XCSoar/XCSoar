@@ -43,7 +43,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/LowPassFilter.hpp"
-#include "McReady.h"
+#include "MacCready.h"
 #include "RasterTerrain.h"
 #include "GlideRatio.hpp"
 #include "GlideTerrain.hpp"
@@ -277,14 +277,14 @@ FAIFinishHeight(const SETTINGS_COMPUTER &settings,
     if (task.getSettings().EnableFAIFinishHeight
         && !task.getSettings().AATEnabled) {
       return max(max((double)task.getSettings().FinishMinHeight,
-          settings.SAFETYALTITUDEARRIVAL) + wp_alt,
+          settings.SafetyAltitudeArrival) + wp_alt,
           Calculated.TaskStartAltitude-1000.0);
     } else {
       return max((double)task.getSettings().FinishMinHeight,
-          settings.SAFETYALTITUDEARRIVAL) + wp_alt;
+          settings.SafetyAltitudeArrival) + wp_alt;
     }
   } else {
-    return wp_alt + settings.SAFETYALTITUDEARRIVAL;
+    return wp_alt + settings.SafetyAltitudeArrival;
   }
 #else 
   return 0;
@@ -1688,8 +1688,8 @@ GlideComputerTask::MacCreadyOrAvClimbRate(double this_maccready)
 
   if ((mc_val < 0.1)
       || (SettingsComputer().AutoMacCready
-          && ((SettingsComputer().AutoMcMode == 0)
-              || ((SettingsComputer().AutoMcMode == 2) && (is_final_glide))))) {
+          && ((SettingsComputer().AutoMacCreadyMode == 0)
+              || ((SettingsComputer().AutoMacCreadyMode == 2) && (is_final_glide))))) {
 
     mc_val = Calculated().AdjustedAverageThermal;
   }
@@ -1912,7 +1912,7 @@ GlideComputerTask::TaskSpeed(const double this_maccready,
       double w_comp = min(10.0, max(-10.0, Calculated().Vario / mc_safe));
       double vdiff = vthis / Vstar + w_comp * rho_cruise + rho_climb;
 
-      if (vthis > SettingsComputer().SAFTEYSPEED * 2) {
+      if (vthis > SettingsComputer().SafetySpeed * 2) {
         vdiff = 1.0;
         // prevent funny numbers when starting mid-track
       }
@@ -2006,8 +2006,8 @@ GlideComputerTask::ResetEnter()
 }
 
 /**
- * Does the AutoMcCready calculations
- * @param mc_setting The old McCready setting
+ * Does the AutoMacCready calculations
+ * @param mc_setting The old MacCready setting
  */
 void
 GlideComputerTask::DoAutoMacCready(double mc_setting)
@@ -2015,7 +2015,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 #ifdef OLD_TASK
   bool is_final_glide = false;
 
-  // if (AutoMcCready disabled) cancel calculation
+  // if (AutoMacCready disabled) cancel calculation
   if (!SettingsComputer().AutoMacCready)
     return;
 
@@ -2037,8 +2037,8 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
     }
 
   // if (on task, on final glide and activated at settings)
-  } else if (((SettingsComputer().AutoMcMode == 0)
-      || (SettingsComputer().AutoMcMode == 2)) && is_final_glide) {
+  } else if (((SettingsComputer().AutoMacCreadyMode == 0)
+      || (SettingsComputer().AutoMacCreadyMode == 2)) && is_final_glide) {
 
     // QUESTION TB: time_remaining until what? and why 9000???
     double time_remaining = Basic().Time - Calculated().TaskStartTime - 9000;
@@ -2072,7 +2072,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
         if (mc_pirker >= mc_new) {
           mc_new = mc_pirker;
           first_mc = false;
-        } else if (SettingsComputer().AutoMcMode == 2) {
+        } else if (SettingsComputer().AutoMacCreadyMode == 2) {
           // revert to averager based auto Mc
           if (Calculated().AdjustedAverageThermal > 0)
             mc_new = Calculated().AdjustedAverageThermal;
@@ -2082,20 +2082,20 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
       }
     } else {
       // below final glide at zero Mc, never achieved final glide
-      if (first_mc && (SettingsComputer().AutoMcMode == 2)) {
+      if (first_mc && (SettingsComputer().AutoMacCreadyMode == 2)) {
         // revert to averager based auto Mc
         if (Calculated().AdjustedAverageThermal > 0)
           mc_new = Calculated().AdjustedAverageThermal;
       }
     }
-  } else if ((SettingsComputer().AutoMcMode == 1)
-      || ((SettingsComputer().AutoMcMode == 2) && !is_final_glide)) {
+  } else if ((SettingsComputer().AutoMacCreadyMode == 1)
+      || ((SettingsComputer().AutoMacCreadyMode == 2) && !is_final_glide)) {
     if (Calculated().AdjustedAverageThermal > 0)
       // use the average climb speed of the last thermal
       mc_new = Calculated().AdjustedAverageThermal;
   }
 
-  // use a filter to prevent jumping of the McCready setting
+  // use a filter to prevent jumping of the MacCready setting
   GlidePolar::SetMacCready(LowPassFilter(mc_setting, mc_new, 0.15));
 #endif
 }
@@ -2175,7 +2175,7 @@ public:
         calculated_info.WindSpeed, calculated_info.WindBearing, 0, 0, true, 0);
 
     AltitudeRequired = AltitudeRequired
-                       + settings.SAFETYALTITUDEARRIVAL
+                       + settings.SafetyAltitudeArrival
                        + waypoint.Altitude;
 
     AltitudeDifference = calculated_info.NavAltitude - AltitudeRequired;

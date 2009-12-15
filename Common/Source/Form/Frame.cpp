@@ -36,48 +36,59 @@ Copyright_License {
 }
 */
 
-#if !defined(AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
-#define AFX_WAYPOINTPARSER_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_
+#include "Form/Frame.hpp"
 
-#include <tchar.h>
+void WndFrame::SetCaption(const TCHAR *Value){
+  if (Value == NULL)
+    Value = TEXT("");
 
-#define wpTerrainBoundsYes    100
-#define wpTerrainBoundsYesAll 101
-#define wpTerrainBoundsNo     102
-#define wpTerrainBoundsNoAll  103
+  if (_tcscmp(mCaption, Value) != 0){
+    _tcscpy(mCaption, Value);  // todo size check
+    invalidate();
+  }
+}
 
-class Waypoints;
-class Waypoint;
-class MapWindowProjection;
-class RasterTerrain;
+UINT WndFrame::SetCaptionStyle(UINT Value){
+  UINT res = mCaptionStyle;
+  if (res != Value){
+    mCaptionStyle = Value;
+    invalidate();
+  }
+  return res;
+}
 
-struct SETTINGS_COMPUTER;
+unsigned
+WndFrame::GetTextHeight()
+{
+  RECT rc = get_client_rect();
+  ::InflateRect(&rc, -2, -2); // todo border width
 
-/**
- * Reads a text file, and appends its way points to the specified
- * WaypointList.
- */
-bool
-ReadWayPointFile(const TCHAR *path, Waypoints &way_points,
-                 const RasterTerrain *terrain);
+  Canvas &canvas = get_canvas();
+  canvas.select(*GetFont());
+  canvas.formatted_text(&rc, mCaption, mCaptionStyle | DT_CALCRECT);
 
-void
-ReadWaypoints(Waypoints &way_points, const RasterTerrain *terrain);
-
-void
-SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
-        SETTINGS_COMPUTER &settings,
-        const bool reset, const bool set_location=false);
-
-int dlgWaypointOutOfTerrain(const TCHAR *Message);
-
-void
-WaypointWriteFiles(Waypoints &way_points,
-                   const SETTINGS_COMPUTER &settings_computer);
+  return rc.bottom - rc.top;
+}
 
 void
-WaypointAltitudeFromTerrain(Waypoint &way_point, const RasterTerrain &terrain);
+WndFrame::on_paint(Canvas &canvas)
+{
+  WindowControl::on_paint(canvas);
 
-extern int WaypointsOutOfRange;
+  if (mCaption != 0){
+    canvas.set_text_color(GetForeColor());
+    canvas.set_background_color(GetBackColor());
+    canvas.background_transparent();
 
-#endif
+    canvas.select(*GetFont());
+
+    RECT rc = get_client_rect();
+    InflateRect(&rc, -2, -2); // todo border width
+
+//    h = rc.bottom - rc.top;
+
+    canvas.formatted_text(&rc, mCaption,
+      mCaptionStyle // | DT_CALCRECT
+    );
+  }
+}

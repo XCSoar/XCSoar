@@ -38,9 +38,9 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
-#include "McReady.h"
+#include "Screen/Layout.hpp"
+#include "MacCready.h"
 #include "Device/device.h"
-#include "InfoBoxLayout.h"
 #include "Registry.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
@@ -95,15 +95,15 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
   }
 #endif
 
-  _stprintf(updatename, TEXT("Vega%sUpdated"), name);
-  _stprintf(fullname, TEXT("Vega%s"), name);
-  _stprintf(propname, TEXT("prp%s"), name);
+  _stprintf(updatename, _T("Vega%sUpdated"), name);
+  _stprintf(fullname, _T("Vega%s"), name);
+  _stprintf(propname, _T("prp%s"), name);
 
   if (first) {
     SetToRegistry(updatename, 0);
     // we are not ready, haven't received value from vario
     // (do request here)
-    _stprintf(requesttext,TEXT("PDVSC,R,%s"),name);
+    _stprintf(requesttext,_T("PDVSC,R,%s"),name);
     VarioWriteNMEA(requesttext);
 
     if (!is_simulator())
@@ -116,7 +116,7 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
       wp->GetDataField()->Set((int)ext_setvalue);
       wp->RefreshDisplay();
     }
-    _stprintf(requesttext,TEXT("PDVSC,S,%s,%d"),name, ext_setvalue);
+    _stprintf(requesttext,_T("PDVSC,S,%s,%d"),name, ext_setvalue);
     VarioWriteNMEA(requesttext);
 
     if (!is_simulator())
@@ -132,7 +132,7 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
   } else {
 
     // hack, fix the -1 (plug and play settings)
-    if (_tcscmp(name, TEXT("HasTemperature")) == 0){
+    if (_tcscmp(name, _T("HasTemperature")) == 0){
       if (lvalue >= 255)
         lvalue = 2;
     }
@@ -175,12 +175,12 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
 	  // note that this code currently won't work for longs
 
 	  // hack, fix the -1 (plug and play settings)
-	  if (_tcscmp(name, TEXT("HasTemperature")) == 0){
+	  if (_tcscmp(name, _T("HasTemperature")) == 0){
 	    if (newval == 2)
 	      newval = 255;
 	  }
 
-	  _stprintf(requesttext,TEXT("PDVSC,S,%s,%d"),name, newval);
+	  _stprintf(requesttext,_T("PDVSC,S,%s,%d"),name, newval);
 	  VarioWriteNMEA(requesttext);
 
           if (!is_simulator())
@@ -240,17 +240,17 @@ typedef struct VEGA_SCHEME_t
 
 // Value used for comparison in climb tone
 #define  X_NONE                       0
-#define  X_MCCREADY                   1
+#define  X_MACCREADY                   1
 #define  X_AVERAGE                    2
 
 // Condition for detecting lift in cruise mode
 #define  Y_NONE 0
 #define  Y_RELATIVE_ZERO 1
-#define  Y_RELATIVE_MCCREADY_HALF 2
+#define  Y_RELATIVE_MACCREADY_HALF 2
 #define  Y_GROSS_ZERO 3
-#define  Y_NET_MCCREADY_HALF 4
-#define  Y_RELATIVE_MCCREADY 5
-#define  Y_NET_MCCREADY 6
+#define  Y_NET_MACCREADY_HALF 4
+#define  Y_RELATIVE_MACCREADY 5
+#define  Y_NET_MACCREADY 6
 
 // Beep types
 #define  BEEPTYPE_SILENCE 0
@@ -293,7 +293,7 @@ typedef struct VEGA_SCHEME_t
 
 VEGA_SCHEME VegaSchemes[4]= {
   // Vega
-  {X_NONE, Y_RELATIVE_MCCREADY_HALF,
+  {X_NONE, Y_RELATIVE_MACCREADY_HALF,
    BEEPTYPE_LONG, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
    BEEPTYPE_SHORTDOUBLE, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
    BEEPTYPE_SHORT, PITCH_VARIO_RELATIVE, SCALE_LINEAR, PERIOD_VARIO_RELATIVE, SCALE_LINEAR,
@@ -302,7 +302,7 @@ VEGA_SCHEME VegaSchemes[4]= {
    BEEPTYPE_CONTINUOUS, PITCH_VARIO_GROSS, SCALE_LINEAR, PERIOD_CONST_HI, SCALE_LINEAR},
 
   // Borgelt
-  {X_AVERAGE, Y_RELATIVE_MCCREADY,
+  {X_AVERAGE, Y_RELATIVE_MACCREADY,
    BEEPTYPE_LONG, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
    BEEPTYPE_SHORTDOUBLE, PITCH_SPEED_ERROR, SCALE_LINEAR, PERIOD_CONST_INTERMITTENT, SCALE_LINEAR,
    BEEPTYPE_MEDIUM, PITCH_VARIO_RELATIVE, SCALE_LINEAR, PERIOD_VARIO_RELATIVE, SCALE_LINEAR,
@@ -333,214 +333,214 @@ VEGA_SCHEME VegaSchemes[4]= {
 static void SetParametersScheme(int schemetype) {
 
   if(MessageBoxX(
-		 gettext(TEXT("Set new audio scheme?  Old values will be lost.")),
-		 gettext(TEXT("Vega Audio")),
+		 gettext(_T("Set new audio scheme?  Old values will be lost.")),
+		 gettext(_T("Vega Audio")),
 		 MB_YESNO|MB_ICONQUESTION) != IDYES)
     return;
 
 
-  VegaConfigurationUpdated(TEXT("ToneClimbComparisonType"), false, true,
+  VegaConfigurationUpdated(_T("ToneClimbComparisonType"), false, true,
 			   VegaSchemes[schemetype].ToneClimbComparisonType);
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftDetectionType"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseLiftDetectionType"), false, true,
 			   VegaSchemes[schemetype].ToneLiftComparisonType);
 
-  VegaConfigurationUpdated(TEXT("ToneCruiseFasterBeepType"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseFasterBeepType"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseFasterBeepType);
-  VegaConfigurationUpdated(TEXT("ToneCruiseFasterPitchScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseFasterPitchScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseFasterPitchScheme);
-  VegaConfigurationUpdated(TEXT("ToneCruiseFasterPitchScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseFasterPitchScale"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseFasterPitchScale);
-  VegaConfigurationUpdated(TEXT("ToneCruiseFasterPeriodScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseFasterPeriodScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseFasterPeriodScheme);
-  VegaConfigurationUpdated(TEXT("ToneCruiseFasterPeriodScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseFasterPeriodScale"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseFasterPeriodScale);
 
-  VegaConfigurationUpdated(TEXT("ToneCruiseSlowerBeepType"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseSlowerBeepType"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseSlowerBeepType);
-  VegaConfigurationUpdated(TEXT("ToneCruiseSlowerPitchScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseSlowerPitchScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseSlowerPitchScheme);
-  VegaConfigurationUpdated(TEXT("ToneCruiseSlowerPitchScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseSlowerPitchScale"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseSlowerPitchScale);
-  VegaConfigurationUpdated(TEXT("ToneCruiseSlowerPeriodScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseSlowerPeriodScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseSlowerPeriodScheme);
-  VegaConfigurationUpdated(TEXT("ToneCruiseSlowerPeriodScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseSlowerPeriodScale"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseSlowerPeriodScale);
 
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftBeepType"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseLiftBeepType"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseLiftBeepType);
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftPitchScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseLiftPitchScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseLiftPitchScheme);
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftPitchScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseLiftPitchScale"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseLiftPitchScale);
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftPeriodScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseLiftPeriodScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseLiftPeriodScheme);
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftPeriodScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCruiseLiftPeriodScale"), false, true,
 			   VegaSchemes[schemetype].ToneCruiseLiftPeriodScale);
 
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingHiBeepType"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiBeepType"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingClimbingHiBeepType);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingHiPitchScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPitchScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScheme);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingHiPitchScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPitchScale"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScale);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingHiPeriodScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPeriodScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScheme);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingHiPeriodScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPeriodScale"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScale);
 
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingLowBeepType"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowBeepType"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingClimbingLowBeepType);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingLowPitchScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPitchScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScheme);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingLowPitchScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPitchScale"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScale);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingLowPeriodScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPeriodScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScheme);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingLowPeriodScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPeriodScale"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScale);
 
-  VegaConfigurationUpdated(TEXT("ToneCirclingDescendingBeepType"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingDescendingBeepType"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingDescendingBeepType);
-  VegaConfigurationUpdated(TEXT("ToneCirclingDescendingPitchScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingDescendingPitchScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingDescendingPitchScheme);
-  VegaConfigurationUpdated(TEXT("ToneCirclingDescendingPitchScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingDescendingPitchScale"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingDescendingPitchScale);
-  VegaConfigurationUpdated(TEXT("ToneCirclingDescendingPeriodScheme"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScheme"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingDescendingPeriodScheme);
-  VegaConfigurationUpdated(TEXT("ToneCirclingDescendingPeriodScale"), false, true,
+  VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScale"), false, true,
 			   VegaSchemes[schemetype].ToneCirclingDescendingPeriodScale);
 
   MessageBoxX (
-	       gettext(TEXT("Audio scheme updated.")),
-	       gettext(TEXT("Vega Audio")), MB_OK);
+	       gettext(_T("Audio scheme updated.")),
+	       gettext(_T("Vega Audio")), MB_OK);
 
 }
 
 
 static void UpdateParametersScheme(bool first) {
 
-  VegaConfigurationUpdated(TEXT("ToneClimbComparisonType"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftDetectionType"), first);
+  VegaConfigurationUpdated(_T("ToneClimbComparisonType"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseLiftDetectionType"), first);
 
-  VegaConfigurationUpdated(TEXT("ToneCruiseFasterBeepType"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseFasterPitchScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseFasterPitchScale"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseFasterPeriodScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseFasterPeriodScale"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseFasterBeepType"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseFasterPitchScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseFasterPitchScale"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseFasterPeriodScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseFasterPeriodScale"), first);
 
-  VegaConfigurationUpdated(TEXT("ToneCruiseSlowerBeepType"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseSlowerPitchScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseSlowerPitchScale"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseSlowerPeriodScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseSlowerPeriodScale"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseSlowerBeepType"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseSlowerPitchScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseSlowerPitchScale"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseSlowerPeriodScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseSlowerPeriodScale"), first);
 
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftBeepType"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftPitchScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftPitchScale"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftPeriodScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCruiseLiftPeriodScale"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseLiftBeepType"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseLiftPitchScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseLiftPitchScale"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseLiftPeriodScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCruiseLiftPeriodScale"), first);
 
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingHiBeepType"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingHiPitchScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingHiPitchScale"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingHiPeriodScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingHiPeriodScale"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiBeepType"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPitchScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPitchScale"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPeriodScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPeriodScale"), first);
 
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingLowBeepType"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingLowPitchScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingLowPitchScale"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingLowPeriodScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingClimbingLowPeriodScale"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowBeepType"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPitchScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPitchScale"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPeriodScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPeriodScale"), first);
 
-  VegaConfigurationUpdated(TEXT("ToneCirclingDescendingBeepType"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingDescendingPitchScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingDescendingPitchScale"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingDescendingPeriodScheme"), first);
-  VegaConfigurationUpdated(TEXT("ToneCirclingDescendingPeriodScale"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingDescendingBeepType"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingDescendingPitchScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingDescendingPitchScale"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScheme"), first);
+  VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScale"), first);
 
 }
 
 static void UpdateParameters(bool first) {
-  VegaConfigurationUpdated(TEXT("HasPressureTE"), first);
-  VegaConfigurationUpdated(TEXT("HasPressurePitot"), first);
-  VegaConfigurationUpdated(TEXT("HasPressureStatic"), first);
-  VegaConfigurationUpdated(TEXT("HasPressureStall"), first);
-  VegaConfigurationUpdated(TEXT("HasAccelerometer"), first);
-  VegaConfigurationUpdated(TEXT("HasTemperature"), first);
-  VegaConfigurationUpdated(TEXT("FlarmConnected"), first);
+  VegaConfigurationUpdated(_T("HasPressureTE"), first);
+  VegaConfigurationUpdated(_T("HasPressurePitot"), first);
+  VegaConfigurationUpdated(_T("HasPressureStatic"), first);
+  VegaConfigurationUpdated(_T("HasPressureStall"), first);
+  VegaConfigurationUpdated(_T("HasAccelerometer"), first);
+  VegaConfigurationUpdated(_T("HasTemperature"), first);
+  VegaConfigurationUpdated(_T("FlarmConnected"), first);
 
-  VegaConfigurationUpdated(TEXT("TotalEnergyMixingRatio"), first);
-  VegaConfigurationUpdated(TEXT("CalibrationAirSpeed"), first);
-  VegaConfigurationUpdated(TEXT("CalibrationTEStatic"), first);
-  VegaConfigurationUpdated(TEXT("CalibrationTEDynamic"), first);
-  VegaConfigurationUpdated(TEXT("CalibrationTEProbe"), first);
+  VegaConfigurationUpdated(_T("TotalEnergyMixingRatio"), first);
+  VegaConfigurationUpdated(_T("CalibrationAirSpeed"), first);
+  VegaConfigurationUpdated(_T("CalibrationTEStatic"), first);
+  VegaConfigurationUpdated(_T("CalibrationTEDynamic"), first);
+  VegaConfigurationUpdated(_T("CalibrationTEProbe"), first);
 
-  VegaConfigurationUpdated(TEXT("AccelerometerSlopeX"), first);
-  VegaConfigurationUpdated(TEXT("AccelerometerSlopeY"), first);
-  VegaConfigurationUpdated(TEXT("AccelerometerOffsetX"), first);
-  VegaConfigurationUpdated(TEXT("AccelerometerOffsetY"), first);
+  VegaConfigurationUpdated(_T("AccelerometerSlopeX"), first);
+  VegaConfigurationUpdated(_T("AccelerometerSlopeY"), first);
+  VegaConfigurationUpdated(_T("AccelerometerOffsetX"), first);
+  VegaConfigurationUpdated(_T("AccelerometerOffsetY"), first);
 
-  //  VegaConfigurationUpdated(TEXT("PDAPower"), first);
-  VegaConfigurationUpdated(TEXT("ToneAveragerVarioTimeScale"), first);
-  VegaConfigurationUpdated(TEXT("ToneAveragerCruiseTimeScale"), first);
-  VegaConfigurationUpdated(TEXT("ToneMeanVolumeCircling"), first);
-  VegaConfigurationUpdated(TEXT("ToneMeanVolumeCruise"), first);
-  VegaConfigurationUpdated(TEXT("ToneBaseFrequencyOffset"), first);
-  VegaConfigurationUpdated(TEXT("TonePitchScale"), first);
+  //  VegaConfigurationUpdated(_T("PDAPower"), first);
+  VegaConfigurationUpdated(_T("ToneAveragerVarioTimeScale"), first);
+  VegaConfigurationUpdated(_T("ToneAveragerCruiseTimeScale"), first);
+  VegaConfigurationUpdated(_T("ToneMeanVolumeCircling"), first);
+  VegaConfigurationUpdated(_T("ToneMeanVolumeCruise"), first);
+  VegaConfigurationUpdated(_T("ToneBaseFrequencyOffset"), first);
+  VegaConfigurationUpdated(_T("TonePitchScale"), first);
 
-  VegaConfigurationUpdated(TEXT("ToneDeadbandCirclingType"), first);
-  VegaConfigurationUpdated(TEXT("ToneDeadbandCirclingHigh"), first);
-  VegaConfigurationUpdated(TEXT("ToneDeadbandCirclingLow"), first);
-  VegaConfigurationUpdated(TEXT("ToneDeadbandCruiseType"), first);
-  VegaConfigurationUpdated(TEXT("ToneDeadbandCruiseHigh"), first);
-  VegaConfigurationUpdated(TEXT("ToneDeadbandCruiseLow"), first);
+  VegaConfigurationUpdated(_T("ToneDeadbandCirclingType"), first);
+  VegaConfigurationUpdated(_T("ToneDeadbandCirclingHigh"), first);
+  VegaConfigurationUpdated(_T("ToneDeadbandCirclingLow"), first);
+  VegaConfigurationUpdated(_T("ToneDeadbandCruiseType"), first);
+  VegaConfigurationUpdated(_T("ToneDeadbandCruiseHigh"), first);
+  VegaConfigurationUpdated(_T("ToneDeadbandCruiseLow"), first);
 
   UpdateParametersScheme(first);
 
-  VegaConfigurationUpdated(TEXT("VarioTimeConstantCircling"), first);
-  VegaConfigurationUpdated(TEXT("VarioTimeConstantCruise"), first);
+  VegaConfigurationUpdated(_T("VarioTimeConstantCircling"), first);
+  VegaConfigurationUpdated(_T("VarioTimeConstantCruise"), first);
 
-  VegaConfigurationUpdated(TEXT("UTCOffset"), first);
-  VegaConfigurationUpdated(TEXT("IGCLoging"), first);
-  VegaConfigurationUpdated(TEXT("IGCLoggerInterval"), first);
-  VegaConfigurationUpdated(TEXT("MuteVarioOnPlay"), first);
-  VegaConfigurationUpdated(TEXT("MuteVarioOnCom"), first);
-  VegaConfigurationUpdated(TEXT("VarioRelativeMuteVol"), first);
-  VegaConfigurationUpdated(TEXT("VoiceRelativeMuteVol"), first);
-  VegaConfigurationUpdated(TEXT("MuteComSpkThreshold"), first);
-  VegaConfigurationUpdated(TEXT("MuteComPhnThreshold"), first);
-  VegaConfigurationUpdated(TEXT("MinUrgentVolume"), first);
-  VegaConfigurationUpdated(TEXT("FlarmMaxObjectsReported"), first);
-  VegaConfigurationUpdated(TEXT("FlarmMaxObjectsReportedOnCircling"), first);
-  VegaConfigurationUpdated(TEXT("FlarmUserInterface"), first);
-  VegaConfigurationUpdated(TEXT("KeepOnStraightFlightMode"), first);
-  VegaConfigurationUpdated(TEXT("DontReportTraficModeChanges"), first);
-  VegaConfigurationUpdated(TEXT("DontReportGliderType"), first);
-  VegaConfigurationUpdated(TEXT("FlarmPrivacyFlag"), first);
-  VegaConfigurationUpdated(TEXT("FlarmAircraftType"), first);
+  VegaConfigurationUpdated(_T("UTCOffset"), first);
+  VegaConfigurationUpdated(_T("IGCLoging"), first);
+  VegaConfigurationUpdated(_T("IGCLoggerInterval"), first);
+  VegaConfigurationUpdated(_T("MuteVarioOnPlay"), first);
+  VegaConfigurationUpdated(_T("MuteVarioOnCom"), first);
+  VegaConfigurationUpdated(_T("VarioRelativeMuteVol"), first);
+  VegaConfigurationUpdated(_T("VoiceRelativeMuteVol"), first);
+  VegaConfigurationUpdated(_T("MuteComSpkThreshold"), first);
+  VegaConfigurationUpdated(_T("MuteComPhnThreshold"), first);
+  VegaConfigurationUpdated(_T("MinUrgentVolume"), first);
+  VegaConfigurationUpdated(_T("FlarmMaxObjectsReported"), first);
+  VegaConfigurationUpdated(_T("FlarmMaxObjectsReportedOnCircling"), first);
+  VegaConfigurationUpdated(_T("FlarmUserInterface"), first);
+  VegaConfigurationUpdated(_T("KeepOnStraightFlightMode"), first);
+  VegaConfigurationUpdated(_T("DontReportTraficModeChanges"), first);
+  VegaConfigurationUpdated(_T("DontReportGliderType"), first);
+  VegaConfigurationUpdated(_T("FlarmPrivacyFlag"), first);
+  VegaConfigurationUpdated(_T("FlarmAircraftType"), first);
 
-  VegaConfigurationUpdated(TEXT("FlarmInfoRepeatTime"), first);
-  VegaConfigurationUpdated(TEXT("FlarmCautionRepeatTime"), first);
-  VegaConfigurationUpdated(TEXT("FlarmWarningRepeatTime"), first);
-  VegaConfigurationUpdated(TEXT("GearOnDelay"), first);
-  VegaConfigurationUpdated(TEXT("GearOffDelay"), first);
-  VegaConfigurationUpdated(TEXT("GearRepeatTime"), first);
-  VegaConfigurationUpdated(TEXT("PlyMaxComDelay"), first);
-  VegaConfigurationUpdated(TEXT("BatLowDelay"), first);
-  VegaConfigurationUpdated(TEXT("BatEmptyDelay"), first);
-  VegaConfigurationUpdated(TEXT("BatRepeatTime"), first);
+  VegaConfigurationUpdated(_T("FlarmInfoRepeatTime"), first);
+  VegaConfigurationUpdated(_T("FlarmCautionRepeatTime"), first);
+  VegaConfigurationUpdated(_T("FlarmWarningRepeatTime"), first);
+  VegaConfigurationUpdated(_T("GearOnDelay"), first);
+  VegaConfigurationUpdated(_T("GearOffDelay"), first);
+  VegaConfigurationUpdated(_T("GearRepeatTime"), first);
+  VegaConfigurationUpdated(_T("PlyMaxComDelay"), first);
+  VegaConfigurationUpdated(_T("BatLowDelay"), first);
+  VegaConfigurationUpdated(_T("BatEmptyDelay"), first);
+  VegaConfigurationUpdated(_T("BatRepeatTime"), first);
 
-  VegaConfigurationUpdated(TEXT("NeedleGaugeType"), first);
+  VegaConfigurationUpdated(_T("NeedleGaugeType"), first);
 
-  VegaConfigurationUpdated(TEXT("VelocityNeverExceed"), first);
-  VegaConfigurationUpdated(TEXT("VelocitySafeTerrain"), first);
-  VegaConfigurationUpdated(TEXT("TerrainSafetyHeight"), first);
-  VegaConfigurationUpdated(TEXT("VelocityManoeuvering"), first);
-  VegaConfigurationUpdated(TEXT("VelocityAirbrake"), first);
-  VegaConfigurationUpdated(TEXT("VelocityFlap"), first);
-  VegaConfigurationUpdated(TEXT("LedBrightness"), first);
+  VegaConfigurationUpdated(_T("VelocityNeverExceed"), first);
+  VegaConfigurationUpdated(_T("VelocitySafeTerrain"), first);
+  VegaConfigurationUpdated(_T("TerrainSafetyHeight"), first);
+  VegaConfigurationUpdated(_T("VelocityManoeuvering"), first);
+  VegaConfigurationUpdated(_T("VelocityAirbrake"), first);
+  VegaConfigurationUpdated(_T("VelocityFlap"), first);
+  VegaConfigurationUpdated(_T("LedBrightness"), first);
 
-  VegaConfigurationUpdated(TEXT("BaudRateA"), first);
+  VegaConfigurationUpdated(_T("BaudRateA"), first);
 
 }
 
@@ -551,82 +551,82 @@ static void NextPage(int Step){
   if (page<0) { page=NUMPAGES-1; }
   switch(page) {
   case 0:
-    wf->SetCaption(TEXT(" 1 Hardware"));
+    wf->SetCaption(_T(" 1 Hardware"));
     break;
   case 1:
-    wf->SetCaption(TEXT(" 2 Calibration"));
+    wf->SetCaption(_T(" 2 Calibration"));
     break;
   case 2:
-    wf->SetCaption(TEXT(" 3 Audio Modes"));
+    wf->SetCaption(_T(" 3 Audio Modes"));
     break;
   case 3:
-    wf->SetCaption(TEXT(" 4 Deadband"));
+    wf->SetCaption(_T(" 4 Deadband"));
     break;
   case 4:
-    wf->SetCaption(TEXT(" 5 Tones: Cruise Faster"));
+    wf->SetCaption(_T(" 5 Tones: Cruise Faster"));
     break;
   case 5:
-    wf->SetCaption(TEXT(" 6 Tones: Cruise Slower"));
+    wf->SetCaption(_T(" 6 Tones: Cruise Slower"));
     break;
   case 6:
-    wf->SetCaption(TEXT(" 7 Tones: Cruise in Lift"));
+    wf->SetCaption(_T(" 7 Tones: Cruise in Lift"));
     break;
   case 7:
-    wf->SetCaption(TEXT(" 8 Tones: Circling, climbing fast"));
+    wf->SetCaption(_T(" 8 Tones: Circling, climbing fast"));
     break;
   case 8:
-    wf->SetCaption(TEXT(" 9 Tones: Circling, climbing slow"));
+    wf->SetCaption(_T(" 9 Tones: Circling, climbing slow"));
     break;
   case 9:
-    wf->SetCaption(TEXT("10 Tones: Circling, descending"));
+    wf->SetCaption(_T("10 Tones: Circling, descending"));
     break;
   case 10:
-    wf->SetCaption(TEXT("11 Vario flight logger"));
+    wf->SetCaption(_T("11 Vario flight logger"));
     break;
   case 11:
-    wf->SetCaption(TEXT("12 Audio mixer"));
+    wf->SetCaption(_T("12 Audio mixer"));
     break;
   case 12:
-    wf->SetCaption(TEXT("13 FLARM Alerts"));
+    wf->SetCaption(_T("13 FLARM Alerts"));
     break;
   case 13:
-    wf->SetCaption(TEXT("14 FLARM Identification"));
+    wf->SetCaption(_T("14 FLARM Identification"));
     break;
   case 14:
-    wf->SetCaption(TEXT("15 FLARM Repeats"));
+    wf->SetCaption(_T("15 FLARM Repeats"));
     break;
   case 15:
-    wf->SetCaption(TEXT("16 Alerts"));
+    wf->SetCaption(_T("16 Alerts"));
     break;
   case 16:
-    wf->SetCaption(TEXT("17 Airframe Limits"));
+    wf->SetCaption(_T("17 Airframe Limits"));
     break;
   case 17:
-    wf->SetCaption(TEXT("18 Audio Schemes"));
+    wf->SetCaption(_T("18 Audio Schemes"));
     break;
   case 18:
-    wf->SetCaption(TEXT("19 Display"));
+    wf->SetCaption(_T("19 Display"));
     break;
   }
-  wConfig1->SetVisible(page == 0);
-  wConfig2->SetVisible(page == 1);
-  wConfig3->SetVisible(page == 2);
-  wConfig4->SetVisible(page == 3);
-  wConfig5->SetVisible(page == 4);
-  wConfig6->SetVisible(page == 5);
-  wConfig7->SetVisible(page == 6);
-  wConfig8->SetVisible(page == 7);
-  wConfig9->SetVisible(page == 8);
-  wConfig10->SetVisible(page == 9);
-  wConfig11->SetVisible(page == 10);
-  wConfig12->SetVisible(page == 11);
-  wConfig13->SetVisible(page == 12);
-  wConfig14->SetVisible(page == 13);
-  wConfig15->SetVisible(page == 14);
-  wConfig16->SetVisible(page == 15);
-  wConfig17->SetVisible(page == 16);
-  wConfig18->SetVisible(page == 17);
-  wConfig19->SetVisible(page == 18);
+  wConfig1->set_visible(page == 0);
+  wConfig2->set_visible(page == 1);
+  wConfig3->set_visible(page == 2);
+  wConfig4->set_visible(page == 3);
+  wConfig5->set_visible(page == 4);
+  wConfig6->set_visible(page == 5);
+  wConfig7->set_visible(page == 6);
+  wConfig8->set_visible(page == 7);
+  wConfig9->set_visible(page == 8);
+  wConfig10->set_visible(page == 9);
+  wConfig11->set_visible(page == 10);
+  wConfig12->set_visible(page == 11);
+  wConfig13->set_visible(page == 12);
+  wConfig14->set_visible(page == 13);
+  wConfig15->set_visible(page == 14);
+  wConfig16->set_visible(page == 15);
+  wConfig17->set_visible(page == 16);
+  wConfig18->set_visible(page == 17);
+  wConfig19->set_visible(page == 18);
 
   UpdateParameters(false);
 
@@ -654,7 +654,7 @@ static void OnSaveClicked(WindowControl * Sender){
 	(void)Sender;
   UpdateParameters(false);  // 20060801:sgi make shure changes are
                             // sent to device
-  VarioWriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
+  VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
 
   if (!is_simulator())
     Sleep(500);
@@ -694,16 +694,16 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   switch (key_code) {
     // JMW NO! This disables editing! //   case VK_LEFT:
     case '6':
-      ((WndButton *)wf->FindByName(TEXT("cmdPrev")))->set_focus();
+      ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
       NextPage(-1);
-      //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
+      //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
     // JMW NO! This disables editing!  //  case VK_RIGHT:
     case '7':
-      ((WndButton *)wf->FindByName(TEXT("cmdNext")))->set_focus();
+      ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
       NextPage(+1);
-      //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
+      //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
@@ -729,80 +729,80 @@ static void FillAudioEnums(const TCHAR* name) {
   WndProperty *wp;
   TCHAR fullname[100];
 
-  _stprintf(fullname,TEXT("prpTone%sBeepType"),name);
+  _stprintf(fullname,_T("prpTone%sBeepType"),name);
   wp = (WndProperty*)wf->FindByName(fullname);
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Silence"));
-    dfe->addEnumText(TEXT("Short"));
-    dfe->addEnumText(TEXT("Medium"));
-    dfe->addEnumText(TEXT("Long"));
-    dfe->addEnumText(TEXT("Continuous"));
-    dfe->addEnumText(TEXT("Short double"));
+    dfe->addEnumText(_T("Silence"));
+    dfe->addEnumText(_T("Short"));
+    dfe->addEnumText(_T("Medium"));
+    dfe->addEnumText(_T("Long"));
+    dfe->addEnumText(_T("Continuous"));
+    dfe->addEnumText(_T("Short double"));
     wp->RefreshDisplay();
   }
 
-  _stprintf(fullname,TEXT("prpTone%sPitchScheme"),name);
+  _stprintf(fullname,_T("prpTone%sPitchScheme"),name);
   wp = (WndProperty*)wf->FindByName(fullname);
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Constant high"));
-    dfe->addEnumText(TEXT("Constant medium"));
-    dfe->addEnumText(TEXT("Constant low"));
-    dfe->addEnumText(TEXT("Speed percent"));
-    dfe->addEnumText(TEXT("Speed error"));
-    dfe->addEnumText(TEXT("Vario gross"));
-    dfe->addEnumText(TEXT("Vario net"));
-    dfe->addEnumText(TEXT("Vario relative"));
-    dfe->addEnumText(TEXT("Vario gross/relative"));
+    dfe->addEnumText(_T("Constant high"));
+    dfe->addEnumText(_T("Constant medium"));
+    dfe->addEnumText(_T("Constant low"));
+    dfe->addEnumText(_T("Speed percent"));
+    dfe->addEnumText(_T("Speed error"));
+    dfe->addEnumText(_T("Vario gross"));
+    dfe->addEnumText(_T("Vario net"));
+    dfe->addEnumText(_T("Vario relative"));
+    dfe->addEnumText(_T("Vario gross/relative"));
     wp->RefreshDisplay();
   }
 
-  _stprintf(fullname,TEXT("prpTone%sPeriodScheme"),name);
+  _stprintf(fullname,_T("prpTone%sPeriodScheme"),name);
   wp = (WndProperty*)wf->FindByName(fullname);
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Constant high"));
-    dfe->addEnumText(TEXT("Constant medium"));
-    dfe->addEnumText(TEXT("Constant low"));
-    dfe->addEnumText(TEXT("Speed percent"));
-    dfe->addEnumText(TEXT("Speed error"));
-    dfe->addEnumText(TEXT("Vario gross"));
-    dfe->addEnumText(TEXT("Vario net"));
-    dfe->addEnumText(TEXT("Vario relative"));
-    dfe->addEnumText(TEXT("Vario gross/relative"));
-    dfe->addEnumText(TEXT("Intermittent"));
+    dfe->addEnumText(_T("Constant high"));
+    dfe->addEnumText(_T("Constant medium"));
+    dfe->addEnumText(_T("Constant low"));
+    dfe->addEnumText(_T("Speed percent"));
+    dfe->addEnumText(_T("Speed error"));
+    dfe->addEnumText(_T("Vario gross"));
+    dfe->addEnumText(_T("Vario net"));
+    dfe->addEnumText(_T("Vario relative"));
+    dfe->addEnumText(_T("Vario gross/relative"));
+    dfe->addEnumText(_T("Intermittent"));
     wp->RefreshDisplay();
   }
 
-  _stprintf(fullname,TEXT("prpTone%sPitchScale"),name);
+  _stprintf(fullname,_T("prpTone%sPitchScale"),name);
   wp = (WndProperty*)wf->FindByName(fullname);
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("+Linear"));
-    dfe->addEnumText(TEXT("+Low end"));
-    dfe->addEnumText(TEXT("+High end"));
-    dfe->addEnumText(TEXT("-Linear"));
-    dfe->addEnumText(TEXT("-Low end"));
-    dfe->addEnumText(TEXT("-High end"));
+    dfe->addEnumText(_T("+Linear"));
+    dfe->addEnumText(_T("+Low end"));
+    dfe->addEnumText(_T("+High end"));
+    dfe->addEnumText(_T("-Linear"));
+    dfe->addEnumText(_T("-Low end"));
+    dfe->addEnumText(_T("-High end"));
     wp->RefreshDisplay();
   }
 
-  _stprintf(fullname,TEXT("prpTone%sPeriodScale"),name);
+  _stprintf(fullname,_T("prpTone%sPeriodScale"),name);
   wp = (WndProperty*)wf->FindByName(fullname);
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("+Linear"));
-    dfe->addEnumText(TEXT("+Low end"));
-    dfe->addEnumText(TEXT("+High end"));
-    dfe->addEnumText(TEXT("-Linear"));
-    dfe->addEnumText(TEXT("-Low end"));
-    dfe->addEnumText(TEXT("-High end"));
+    dfe->addEnumText(_T("+Linear"));
+    dfe->addEnumText(_T("+Low end"));
+    dfe->addEnumText(_T("+High end"));
+    dfe->addEnumText(_T("-Linear"));
+    dfe->addEnumText(_T("-Low end"));
+    dfe->addEnumText(_T("-High end"));
     wp->RefreshDisplay();
   }
 
@@ -810,185 +810,185 @@ static void FillAudioEnums(const TCHAR* name) {
 
 
 static void FillAllAudioEnums(void) {
-  FillAudioEnums(TEXT("CruiseFaster"));
-  FillAudioEnums(TEXT("CruiseSlower"));
-  FillAudioEnums(TEXT("CruiseLift"));
-  FillAudioEnums(TEXT("CirclingClimbingHi"));
-  FillAudioEnums(TEXT("CirclingClimbingLow"));
-  FillAudioEnums(TEXT("CirclingDescending"));
+  FillAudioEnums(_T("CruiseFaster"));
+  FillAudioEnums(_T("CruiseSlower"));
+  FillAudioEnums(_T("CruiseLift"));
+  FillAudioEnums(_T("CirclingClimbingHi"));
+  FillAudioEnums(_T("CirclingClimbingLow"));
+  FillAudioEnums(_T("CirclingDescending"));
 }
 
 static void FillEnums(void) {
   WndProperty *wp;
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpBaudRateA"));
+  wp = (WndProperty*)wf->FindByName(_T("prpBaudRateA"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Auto"));
-    dfe->addEnumText(TEXT("4800"));
-    dfe->addEnumText(TEXT("9600"));
-    dfe->addEnumText(TEXT("19200"));
-    dfe->addEnumText(TEXT("38400"));
-    dfe->addEnumText(TEXT("57600"));
-    dfe->addEnumText(TEXT("115200"));
+    dfe->addEnumText(_T("Auto"));
+    dfe->addEnumText(_T("4800"));
+    dfe->addEnumText(_T("9600"));
+    dfe->addEnumText(_T("19200"));
+    dfe->addEnumText(_T("38400"));
+    dfe->addEnumText(_T("57600"));
+    dfe->addEnumText(_T("115200"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpHasTemperature"));
+  wp = (WndProperty*)wf->FindByName(_T("prpHasTemperature"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("OFF"));
-    dfe->addEnumText(TEXT("ON"));
-    dfe->addEnumText(TEXT("AUTO"));
+    dfe->addEnumText(_T("OFF"));
+    dfe->addEnumText(_T("ON"));
+    dfe->addEnumText(_T("AUTO"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpToneClimbComparisonType"));
+  wp = (WndProperty*)wf->FindByName(_T("prpToneClimbComparisonType"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("None"));
-    dfe->addEnumText(TEXT("Gross>MacCready"));
-    dfe->addEnumText(TEXT("Gross>Average"));
+    dfe->addEnumText(_T("None"));
+    dfe->addEnumText(_T("Gross>MacCready"));
+    dfe->addEnumText(_T("Gross>Average"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpToneCruiseLiftDetectionType"));
+  wp = (WndProperty*)wf->FindByName(_T("prpToneCruiseLiftDetectionType"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Disabled"));
-    dfe->addEnumText(TEXT("Relative>0"));
-    dfe->addEnumText(TEXT("Relative>MacCready/2"));
-    dfe->addEnumText(TEXT("Gross>0"));
-    dfe->addEnumText(TEXT("Net>MacCready/2"));
-    dfe->addEnumText(TEXT("Relative>MacCready"));
-    dfe->addEnumText(TEXT("Net>MacCready"));
+    dfe->addEnumText(_T("Disabled"));
+    dfe->addEnumText(_T("Relative>0"));
+    dfe->addEnumText(_T("Relative>MacCready/2"));
+    dfe->addEnumText(_T("Gross>0"));
+    dfe->addEnumText(_T("Net>MacCready/2"));
+    dfe->addEnumText(_T("Relative>MacCready"));
+    dfe->addEnumText(_T("Net>MacCready"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVarioTimeConstantCircling"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVarioTimeConstantCircling"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT(" 1.0s"));
-    dfe->addEnumText(TEXT(" 1.3s"));
-    dfe->addEnumText(TEXT(" 1.8s"));
-    dfe->addEnumText(TEXT(" 2.7s"));
+    dfe->addEnumText(_T(" 1.0s"));
+    dfe->addEnumText(_T(" 1.3s"));
+    dfe->addEnumText(_T(" 1.8s"));
+    dfe->addEnumText(_T(" 2.7s"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVarioTimeConstantCruise"));
+  wp = (WndProperty*)wf->FindByName(_T("prpVarioTimeConstantCruise"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT(" 1.0s"));
-    dfe->addEnumText(TEXT(" 1.3s"));
-    dfe->addEnumText(TEXT(" 1.8s"));
-    dfe->addEnumText(TEXT(" 2.7s"));
+    dfe->addEnumText(_T(" 1.0s"));
+    dfe->addEnumText(_T(" 1.3s"));
+    dfe->addEnumText(_T(" 1.8s"));
+    dfe->addEnumText(_T(" 2.7s"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpToneAveragerVarioTimeScale"));
+  wp = (WndProperty*)wf->FindByName(_T("prpToneAveragerVarioTimeScale"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT(" 0.0s"));
-    dfe->addEnumText(TEXT(" 0.8s"));
-    dfe->addEnumText(TEXT(" 1.7s"));
-    dfe->addEnumText(TEXT(" 3.5s"));
-    dfe->addEnumText(TEXT(" 7.5s"));
-    dfe->addEnumText(TEXT("15.0s"));
-    dfe->addEnumText(TEXT("30.0s"));
+    dfe->addEnumText(_T(" 0.0s"));
+    dfe->addEnumText(_T(" 0.8s"));
+    dfe->addEnumText(_T(" 1.7s"));
+    dfe->addEnumText(_T(" 3.5s"));
+    dfe->addEnumText(_T(" 7.5s"));
+    dfe->addEnumText(_T("15.0s"));
+    dfe->addEnumText(_T("30.0s"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpToneAveragerCruiseTimeScale"));
+  wp = (WndProperty*)wf->FindByName(_T("prpToneAveragerCruiseTimeScale"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT(" 0.0s"));
-    dfe->addEnumText(TEXT(" 0.8s"));
-    dfe->addEnumText(TEXT(" 1.7s"));
-    dfe->addEnumText(TEXT(" 3.5s"));
-    dfe->addEnumText(TEXT(" 7.5s"));
-    dfe->addEnumText(TEXT("15.0s"));
-    dfe->addEnumText(TEXT("30.0s"));
+    dfe->addEnumText(_T(" 0.0s"));
+    dfe->addEnumText(_T(" 0.8s"));
+    dfe->addEnumText(_T(" 1.7s"));
+    dfe->addEnumText(_T(" 3.5s"));
+    dfe->addEnumText(_T(" 7.5s"));
+    dfe->addEnumText(_T("15.0s"));
+    dfe->addEnumText(_T("30.0s"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpToneDeadbandCirclingType"));
+  wp = (WndProperty*)wf->FindByName(_T("prpToneDeadbandCirclingType"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Step"));
-    dfe->addEnumText(TEXT("Ramp"));
+    dfe->addEnumText(_T("Step"));
+    dfe->addEnumText(_T("Ramp"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpToneDeadbandCruiseType"));
+  wp = (WndProperty*)wf->FindByName(_T("prpToneDeadbandCruiseType"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Step"));
-    dfe->addEnumText(TEXT("Ramp"));
+    dfe->addEnumText(_T("Step"));
+    dfe->addEnumText(_T("Ramp"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFlarmUserInterface"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFlarmUserInterface"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("LED+Buzzer"));
-    dfe->addEnumText(TEXT("None"));
-    dfe->addEnumText(TEXT("Buzzer"));
-    dfe->addEnumText(TEXT("LED"));
+    dfe->addEnumText(_T("LED+Buzzer"));
+    dfe->addEnumText(_T("None"));
+    dfe->addEnumText(_T("Buzzer"));
+    dfe->addEnumText(_T("LED"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFlarmAircraftType"));
+  wp = (WndProperty*)wf->FindByName(_T("prpFlarmAircraftType"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Undefined"));
-    dfe->addEnumText(TEXT("Glider"));
-    dfe->addEnumText(TEXT("Tow plane"));
-    dfe->addEnumText(TEXT("Helicopter"));
-    dfe->addEnumText(TEXT("Parachute"));
-    dfe->addEnumText(TEXT("Drop plane"));
-    dfe->addEnumText(TEXT("Fixed hangglider"));
-    dfe->addEnumText(TEXT("Soft paraglider"));
-    dfe->addEnumText(TEXT("Powered aircraft"));
-    dfe->addEnumText(TEXT("Jet aircraft"));
-    dfe->addEnumText(TEXT("UFO"));
-    dfe->addEnumText(TEXT("Baloon"));
-    dfe->addEnumText(TEXT("Blimp, Zeppelin"));
-    dfe->addEnumText(TEXT("UAV (Drone)"));
-    dfe->addEnumText(TEXT("Static"));
+    dfe->addEnumText(_T("Undefined"));
+    dfe->addEnumText(_T("Glider"));
+    dfe->addEnumText(_T("Tow plane"));
+    dfe->addEnumText(_T("Helicopter"));
+    dfe->addEnumText(_T("Parachute"));
+    dfe->addEnumText(_T("Drop plane"));
+    dfe->addEnumText(_T("Fixed hangglider"));
+    dfe->addEnumText(_T("Soft paraglider"));
+    dfe->addEnumText(_T("Powered aircraft"));
+    dfe->addEnumText(_T("Jet aircraft"));
+    dfe->addEnumText(_T("UFO"));
+    dfe->addEnumText(_T("Baloon"));
+    dfe->addEnumText(_T("Blimp, Zeppelin"));
+    dfe->addEnumText(_T("UAV (Drone)"));
+    dfe->addEnumText(_T("Static"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpNeedleGaugeType"));
+  wp = (WndProperty*)wf->FindByName(_T("prpNeedleGaugeType"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("None"));
-    dfe->addEnumText(TEXT("LX"));
-    dfe->addEnumText(TEXT("Analog"));
+    dfe->addEnumText(_T("None"));
+    dfe->addEnumText(_T("LX"));
+    dfe->addEnumText(_T("Analog"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }
@@ -1004,21 +1004,21 @@ bool dlgConfigurationVarioShowModal(void){
 
   if (!is_simulator() && devVarioFindVega() == NULL) {
     MessageBoxX (
-		 gettext(TEXT("No communication with Vega.")),
-		 gettext(TEXT("Vega error")), MB_OK);
+		 gettext(_T("No communication with Vega.")),
+		 gettext(_T("Vega error")), MB_OK);
     return false;
   }
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgVario_L.xml"),
+                        _T("dlgVario_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_VARIO_L"));
+                        _T("IDR_XML_VARIO_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgVario.xml"),
+                        _T("dlgVario.xml"),
 			XCSoarInterface::main_window,
-			TEXT("IDR_XML_VARIO"));
+			_T("IDR_XML_VARIO"));
   }
 
   if (!wf) return false;
@@ -1026,28 +1026,28 @@ bool dlgConfigurationVarioShowModal(void){
   wf->SetKeyDownNotify(FormKeyDown);
 
 
-  ((WndButton *)wf->FindByName(TEXT("cmdClose")))
+  ((WndButton *)wf->FindByName(_T("cmdClose")))
     ->SetOnClickNotify(OnCloseClicked);
 
-  wConfig1    = ((WndFrame *)wf->FindByName(TEXT("frmHardware")));
-  wConfig2    = ((WndFrame *)wf->FindByName(TEXT("frmCalibration")));
-  wConfig3    = ((WndFrame *)wf->FindByName(TEXT("frmAudioModes")));
-  wConfig4    = ((WndFrame *)wf->FindByName(TEXT("frmAudioDeadband")));
-  wConfig5    = ((WndFrame *)wf->FindByName(TEXT("frmCruiseFaster")));
-  wConfig6    = ((WndFrame *)wf->FindByName(TEXT("frmCruiseSlower")));
-  wConfig7    = ((WndFrame *)wf->FindByName(TEXT("frmCruiseLift")));
-  wConfig8    = ((WndFrame *)wf->FindByName(TEXT("frmCirclingClimbingHi")));
-  wConfig9    = ((WndFrame *)wf->FindByName(TEXT("frmCirclingClimbingLow")));
-  wConfig10    = ((WndFrame *)wf->FindByName(TEXT("frmCirclingDescending")));
-  wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
-  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmMixer")));
-  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmFlarmAlerts")));
-  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmFlarmIdentification")));
-  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmFlarmRepeats")));
-  wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmAlerts")));
-  wConfig17    = ((WndFrame *)wf->FindByName(TEXT("frmLimits")));
-  wConfig18    = ((WndFrame *)wf->FindByName(TEXT("frmSchemes")));
-  wConfig19    = ((WndFrame *)wf->FindByName(TEXT("frmDisplay")));
+  wConfig1    = ((WndFrame *)wf->FindByName(_T("frmHardware")));
+  wConfig2    = ((WndFrame *)wf->FindByName(_T("frmCalibration")));
+  wConfig3    = ((WndFrame *)wf->FindByName(_T("frmAudioModes")));
+  wConfig4    = ((WndFrame *)wf->FindByName(_T("frmAudioDeadband")));
+  wConfig5    = ((WndFrame *)wf->FindByName(_T("frmCruiseFaster")));
+  wConfig6    = ((WndFrame *)wf->FindByName(_T("frmCruiseSlower")));
+  wConfig7    = ((WndFrame *)wf->FindByName(_T("frmCruiseLift")));
+  wConfig8    = ((WndFrame *)wf->FindByName(_T("frmCirclingClimbingHi")));
+  wConfig9    = ((WndFrame *)wf->FindByName(_T("frmCirclingClimbingLow")));
+  wConfig10    = ((WndFrame *)wf->FindByName(_T("frmCirclingDescending")));
+  wConfig11    = ((WndFrame *)wf->FindByName(_T("frmLogger")));
+  wConfig12    = ((WndFrame *)wf->FindByName(_T("frmMixer")));
+  wConfig13    = ((WndFrame *)wf->FindByName(_T("frmFlarmAlerts")));
+  wConfig14    = ((WndFrame *)wf->FindByName(_T("frmFlarmIdentification")));
+  wConfig15    = ((WndFrame *)wf->FindByName(_T("frmFlarmRepeats")));
+  wConfig16    = ((WndFrame *)wf->FindByName(_T("frmAlerts")));
+  wConfig17    = ((WndFrame *)wf->FindByName(_T("frmLimits")));
+  wConfig18    = ((WndFrame *)wf->FindByName(_T("frmSchemes")));
+  wConfig19    = ((WndFrame *)wf->FindByName(_T("frmDisplay")));
 
   assert(wConfig1!=NULL);
   assert(wConfig2!=NULL);
@@ -1073,7 +1073,7 @@ bool dlgConfigurationVarioShowModal(void){
 
   FillEnums();
 
-  XCSoarInterface::CreateProgressDialog(gettext(TEXT("Reading vario settings...")));
+  XCSoarInterface::CreateProgressDialog(gettext(_T("Reading vario settings...")));
   // Need step size finer than default 10
   XCSoarInterface::SetProgressStepSize(2);
 

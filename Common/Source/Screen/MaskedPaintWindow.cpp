@@ -40,9 +40,8 @@ Copyright_License {
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/Window.hpp"
-#include "InfoBoxLayout.h"
-#include "options.h" /* for IBLSCALE() */
 
 #include <assert.h>
 

@@ -41,7 +41,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Atmosphere.h"
 #include "Device/device.h"
 #include "DataField/Base.hpp"
@@ -86,7 +86,7 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
       // VarioWriteSettings();
 
-      wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
+      wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
       if (wp) {
 	wp->GetDataField()->
 	  SetAsFloat(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
@@ -117,18 +117,18 @@ static void SetBallast(void) {
 
   oldGlidePolar::UpdatePolar(true, XCSoarInterface::SettingsComputer());
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpBallastPercent"));
+  wp = (WndProperty*)wf->FindByName(_T("prpBallastPercent"));
   if (wp) {
     wp->GetDataField()->Set(oldGlidePolar::GetBallast()*100);
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
+  wp = (WndProperty*)wf->FindByName(_T("prpBallastLitres"));
   if (wp) {
     wp->GetDataField()->
       SetAsFloat(oldGlidePolar::GetBallastLitres());
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpWingLoading"));
+  wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
   if (wp) {
     wp->GetDataField()->
       SetAsFloat(oldGlidePolar::WingLoading);
@@ -168,7 +168,7 @@ static int OnTimerNotify(WindowControl * Sender) {
   static double altlast = XCSoarInterface::Basic().BaroAltitude;
   if (fabs(XCSoarInterface::Basic().BaroAltitude-altlast)>1) {
     WndProperty* wp;
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
+    wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
     if (wp) {
       wp->GetDataField()->
 	SetAsFloat(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
@@ -193,8 +193,8 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
     } else {
       XCSoarInterface::SetSettingsComputer().BallastTimerActive = false;
     }
-    ((WndButton *)wf->FindByName(TEXT("buttonDumpBallast")))->SetVisible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
-    ((WndButton *)wf->FindByName(TEXT("buttonStopDump")))->SetVisible(XCSoarInterface::SettingsComputer().BallastTimerActive);
+    ((WndButton *)wf->FindByName(_T("buttonDumpBallast")))->set_visible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
+    ((WndButton *)wf->FindByName(_T("buttonStopDump")))->set_visible(XCSoarInterface::SettingsComputer().BallastTimerActive);
     break;
   case DataField::daGet:
     lastRead = BALLAST;
@@ -266,9 +266,9 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgBasicSettingsShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgBasicSettings.xml"),
+                      _T("dlgBasicSettings.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_BASICSETTINGS"));
+		      _T("IDR_XML_BASICSETTINGS"));
   if (wf == NULL)
     return;
 
@@ -278,29 +278,29 @@ void dlgBasicSettingsShowModal(void){
 
   wf->SetTimerNotify(OnTimerNotify);
 
-  ((WndButton *)wf->FindByName(TEXT("buttonDumpBallast")))->SetVisible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
-  ((WndButton *)wf->FindByName(TEXT("buttonStopDump")))->SetVisible(XCSoarInterface::SettingsComputer().BallastTimerActive);
+  ((WndButton *)wf->FindByName(_T("buttonDumpBallast")))->set_visible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
+  ((WndButton *)wf->FindByName(_T("buttonStopDump")))->set_visible(XCSoarInterface::SettingsComputer().BallastTimerActive);
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(
                                    Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
+  wp = (WndProperty*)wf->FindByName(_T("prpBallastLitres"));
   if (wp) {
     wp->GetDataField()->
       SetAsFloat(oldGlidePolar::GetBallastLitres());
     wp->RefreshDisplay();
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpWingLoading"));
+  wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
   if (wp) {
     if (oldGlidePolar::WingLoading>0.1) {
       wp->GetDataField()->
         SetAsFloat(oldGlidePolar::WingLoading);
     } else {
-      wp->SetVisible(false);
+      wp->hide();
     }
     wp->RefreshDisplay();
   }

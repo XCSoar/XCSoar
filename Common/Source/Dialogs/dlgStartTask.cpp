@@ -70,9 +70,9 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgStartTaskShowModal(bool *validStart, double Time, double Speed, double Altitude){
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgStartTask.xml"),
+                      _T("dlgStartTask.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_STARTTASK"));
+		      _T("IDR_XML_STARTTASK"));
   if (wf == NULL)
     return;
 
@@ -80,22 +80,22 @@ void dlgStartTaskShowModal(bool *validStart, double Time, double Speed, double A
 
   TCHAR Temp[80];
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpTime"));
+  wp = (WndProperty*)wf->FindByName(_T("prpTime"));
   if (wp) {
     Units::TimeToText(Temp, (int)TimeLocal((int)Time));
     wp->SetText(Temp);
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeed"));
+  wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp) {
-    _stprintf(Temp, TEXT("%.0f %s"),
+    _stprintf(Temp, _T("%.0f %s"),
               (double) TASKSPEEDMODIFY * Speed, Units::GetTaskSpeedName());
     wp->SetText(Temp);
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
-    _stprintf(Temp, TEXT("%.0f %s"),
+    _stprintf(Temp, _T("%.0f %s"),
               (double) Altitude*ALTITUDEMODIFY, Units::GetAltitudeName());
     wp->SetText(Temp);
   }

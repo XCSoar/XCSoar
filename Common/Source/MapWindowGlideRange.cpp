@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "MapWindow.h"
 #include "Screen/Graphics.hpp"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Screen/Fonts.hpp"
 #include "options.h" /* for IBLSCALE() */
 #include <stdio.h>
@@ -62,7 +62,7 @@ void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer) 
   if (!Calculated().Flying) return;
 
   buffer.background_transparent();
-  buffer.set_background_color(Color(0xff,0xff,0xff));
+  buffer.set_background_color(Color::WHITE);
 
   buffer.white_pen();
   buffer.set_text_color(Color(0xf0,0xf0,0xf0));
@@ -178,8 +178,7 @@ void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
       }
 
     canvas.set_text_color(turn > 0 || true
-                          ? Color(0x0,0x0,0x0)
-                          : Color(0xff,0x00,0x00)); // red
+                          ? Color::BLACK : Color::RED);
     if ( i==2 || i==4 || i==6 || i==8 ) {
       if (Units::GetUserAltitudeUnit() == unMeter)
         _stprintf(gtext, _T("-%dm"), i * 100);
@@ -190,8 +189,7 @@ void MapWindow::DrawGlideCircle(Canvas &canvas, POINT Orig, RECT rc)
     }
 
     canvas.set_text_color(turn > 0 || true
-                          ? Color(0x0,0x0,0x0) // dark grey
-                          : Color(0xff,0x00,0x00)); // red
+                          ? Color::BLACK : Color::RED);
     if ( i==2 || i==4 || i==6 || i==8 ) {
       if ( Units::GetUserDistanceUnit() == unKiloMeter )
 	{

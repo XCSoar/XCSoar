@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "DataField/FileReader.hpp"
 #include "LocalPath.hpp"
+#include "StringUtil.hpp"
 #include "Compatibility/string.h"
 
 #define WIN32_LEAN_AND_MEAN
@@ -57,7 +58,9 @@ bool IsDots(const TCHAR* str) {
   return true;
 }
 
-int DataFieldFileReader::GetAsInteger(void){
+int
+DataFieldFileReader::GetAsInteger(void) const
+{
   return mValue;
 }
 
@@ -89,7 +92,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   HANDLE hFlashCard;         // Search handle for storage cards
   WIN32_FIND_DATA FlashCardTmp; // Structure for storing card
                                       // information temporarily
-  TCHAR FlashPath[MAX_PATH] = TEXT("\0");
+  TCHAR FlashPath[MAX_PATH];
 
   hFlashCard = FindFirstFlashCard (&FlashCardTmp);
   if (hFlashCard == INVALID_HANDLE_VALUE) {
@@ -343,7 +346,9 @@ void DataFieldFileReader::Lookup(const TCHAR *Text) {
   }
 }
 
-int DataFieldFileReader::GetNumFiles(void) {
+int
+ DataFieldFileReader::GetNumFiles(void) const
+{
   return nFiles;
 }
 
@@ -363,10 +368,9 @@ bool DataFieldFileReader::checkFilter(const TCHAR *filename,
   TCHAR upfilter[MAX_PATH];
   // checks if the filename matches the filter exactly
 
-  if (!filter || (_tcslen(filter+1)==0)) {
+  if (!filter || string_is_empty(filter + 1))
     // invalid or short filter, pass
     return true;
-  }
 
   _tcscpy(upfilter,filter+1);
 
@@ -404,17 +408,9 @@ void DataFieldFileReader::addFile(const TCHAR *Text,
   }
 }
 
-
-TCHAR *DataFieldFileReader::GetAsString(void){
-  if (mValue<nFiles) {
-    return(fields[mValue].mTextFile);
-  } else {
-    return NULL;
-  }
-}
-
-
-TCHAR *DataFieldFileReader::GetAsDisplayString(void){
+const TCHAR *
+DataFieldFileReader::GetAsString(void) const
+{
   if (mValue<nFiles) {
     return(fields[mValue].mTextFile);
   } else {

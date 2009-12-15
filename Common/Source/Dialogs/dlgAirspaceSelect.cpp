@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Blackboard.hpp"
-#include "InfoBoxLayout.h"
 #include "Airspace.h"
 #include "AirspaceDatabase.hpp"
 #include "AirspaceWarning.h"
@@ -49,6 +48,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "MapWindow.h"
 #include "Components.hpp"
+#include "Screen/Layout.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -68,7 +68,7 @@ static GEOPOINT Location;
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
 
-static TCHAR NameFilter[] = TEXT("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
+static TCHAR NameFilter[] = _T("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 static unsigned NameFilterIdx=0;
 
 static double DistanceFilter[] = {0.0, 25.0, 50.0, 75.0, 100.0, 150.0,
@@ -84,21 +84,21 @@ static int lastHeading=0;
 
 static unsigned NumberOfAirspaces = 0;
 
-static const TCHAR *TypeFilter[] = {TEXT("*"),
-				    TEXT("Other"),
-				    TEXT("Restricted areas"),
-				    TEXT("Prohibited areas"),
-				    TEXT("Danger areas"),
-				    TEXT("Class A"),
-				    TEXT("Class B"),
-				    TEXT("Class C"),
-				    TEXT("Class D"),
-				    TEXT("No gliders"),
-				    TEXT("CTR"),
-				    TEXT("Wave"),
-				    TEXT("AAT"),
-				    TEXT("Class E"),
-				    TEXT("Class F"),
+static const TCHAR *TypeFilter[] = {_T("*"),
+				    _T("Other"),
+				    _T("Restricted areas"),
+				    _T("Prohibited areas"),
+				    _T("Danger areas"),
+				    _T("Class A"),
+				    _T("Class B"),
+				    _T("Class C"),
+				    _T("Class D"),
+				    _T("No gliders"),
+				    _T("CTR"),
+				    _T("Wave"),
+				    _T("AAT"),
+				    _T("Class E"),
+				    _T("Class F"),
 };
 
 static unsigned TypeFilterIdx=0;
@@ -135,7 +135,7 @@ static void OnAirspaceListEnter(WindowControl * Sender,
         if (Name) {
 	  UINT answer;
           answer = MessageBoxX(Name,
-			       gettext(TEXT("Acknowledge for day?")),
+			       gettext(_T("Acknowledge for day?")),
 			       MB_YESNOCANCEL|MB_ICONQUESTION);
 	  if (answer == IDYES) {
 	    if (index_circle>=0) {
@@ -408,17 +408,17 @@ static void FilterMode(bool direction) {
     DistanceFilterIdx=0;
     DirectionFilterIdx=0;
     if (wpDistance) {
-      wpDistance->GetDataField()->Set(TEXT("*"));
+      wpDistance->GetDataField()->Set(_T("*"));
       wpDistance->RefreshDisplay();
     }
     if (wpDirection) {
-      wpDirection->GetDataField()->Set(TEXT("*"));
+      wpDirection->GetDataField()->Set(_T("*"));
       wpDirection->RefreshDisplay();
     }
   } else {
     NameFilterIdx=0;
     if (wpName) {
-      wpName->GetDataField()->Set(TEXT("**"));
+      wpName->GetDataField()->Set(_T("**"));
       wpName->RefreshDisplay();
     }
   }
@@ -454,7 +454,7 @@ static void OnFilterName(DataField *Sender, DataField::DataAccessKind_t Mode){
     break;
   }
 
-  _stprintf(sTmp, TEXT("%c*"), NameFilter[NameFilterIdx]);
+  _stprintf(sTmp, _T("%c*"), NameFilter[NameFilterIdx]);
   Sender->Set(sTmp);
 
 }
@@ -468,7 +468,7 @@ static void OnFilterDistance(DataField *Sender,
 
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(TEXT("25"));
+      Sender->Set(_T("25"));
     break;
     case DataField::daPut:
     break;
@@ -492,9 +492,9 @@ static void OnFilterDistance(DataField *Sender,
   }
 
   if (DistanceFilterIdx == 0)
-    _stprintf(sTmp, TEXT("%c"), '*');
+    _stprintf(sTmp, _T("%c"), '*');
   else
-    _stprintf(sTmp, TEXT("%.0f%s"),
+    _stprintf(sTmp, _T("%.0f%s"),
               DistanceFilter[DistanceFilterIdx],
               Units::GetDistanceName());
   Sender->Set(sTmp);
@@ -510,14 +510,14 @@ static void SetDirectionData(DataField *Sender){
   }
 
   if (DirectionFilterIdx == 0)
-    _stprintf(sTmp, TEXT("%c"), '*');
+    _stprintf(sTmp, _T("%c"), '*');
   else if (DirectionFilterIdx == 1){
     int a = iround(XCSoarInterface::Calculated().Heading);
     if (a <=0)
       a += 360;
-    _stprintf(sTmp, TEXT("HDG(%d")TEXT(DEG)TEXT(")"), a);
+    _stprintf(sTmp, _T("HDG(%d")_T(DEG)_T(")"), a);
   }else
-    _stprintf(sTmp, TEXT("%d")TEXT(DEG), DirectionFilter[DirectionFilterIdx]);
+    _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
 
   Sender->Set(sTmp);
 
@@ -528,7 +528,7 @@ static void OnFilterDirection(DataField *Sender,
 
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(TEXT("*"));
+      Sender->Set(_T("*"));
     break;
     case DataField::daPut:
     break;
@@ -562,7 +562,7 @@ static void OnFilterType(DataField *Sender,
 
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(TEXT("*"));
+      Sender->Set(_T("*"));
     break;
     case DataField::daPut:
     break;
@@ -585,7 +585,7 @@ static void OnFilterType(DataField *Sender,
     break;
   }
 
-  _stprintf(sTmp, TEXT("%s"), TypeFilter[TypeFilterIdx]);
+  _stprintf(sTmp, _T("%s"), TypeFilter[TypeFilterIdx]);
 
   Sender->Set(sTmp);
 
@@ -615,19 +615,15 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
     if (Name) {
 
       int w0, w1, w2, w3, x1, x2, x3;
-      if (InfoBoxLayout::landscape) {
-        w0 = 202*InfoBoxLayout::scale;
-      } else {
-        w0 = 225*InfoBoxLayout::scale;
-      }
-      w1 = canvas.text_width(TEXT("XXX"));
-      w2 = canvas.text_width(TEXT(" 000km"));
-      w3 = canvas.text_width(TEXT(" 000")TEXT(DEG));
+      w0 = Layout::FastScale(Layout::landscape ? 202 : 225);
+      w1 = canvas.text_width(_T("XXX"));
+      w2 = canvas.text_width(_T(" 000km"));
+      w3 = canvas.text_width(_T(" 000")_T(DEG));
 
       x1 = w0-w1-w2-w3;
 
-      canvas.text_clipped(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
-                          x1 - InfoBoxLayout::scale * 5, Name);
+      canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+                          x1 - Layout::FastScale(5), Name);
 
       sTmp[0] = '\0';
       sTmp[1] = '\0';
@@ -635,46 +631,46 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
       switch(AirspaceSelectInfo[i].Type) {
       case CLASSA:
-        _tcscpy(sTmp, gettext(TEXT("A")));
+        _tcscpy(sTmp, gettext(_T("A")));
         break;
       case CLASSB:
-        _tcscpy(sTmp, gettext(TEXT("B")));
+        _tcscpy(sTmp, gettext(_T("B")));
         break;
       case CLASSC:
-        _tcscpy(sTmp, gettext(TEXT("C")));
+        _tcscpy(sTmp, gettext(_T("C")));
         break;
       case CLASSD:
-        _tcscpy(sTmp, gettext(TEXT("D")));
+        _tcscpy(sTmp, gettext(_T("D")));
         break;
       case CLASSE:
-        _tcscpy(sTmp, gettext(TEXT("E")));
+        _tcscpy(sTmp, gettext(_T("E")));
         break;
       case CLASSF:
-        _tcscpy(sTmp, gettext(TEXT("F")));
+        _tcscpy(sTmp, gettext(_T("F")));
         break;
       case PROHIBITED:
-        _tcscpy(sTmp, gettext(TEXT("Prb")));
+        _tcscpy(sTmp, gettext(_T("Prb")));
         break;
       case DANGER:
-        _tcscpy(sTmp, gettext(TEXT("Dgr")));
+        _tcscpy(sTmp, gettext(_T("Dgr")));
         break;
       case RESTRICT:
-        _tcscpy(sTmp, gettext(TEXT("Res")));
+        _tcscpy(sTmp, gettext(_T("Res")));
         break;
       case CTR:
-        _tcscpy(sTmp, gettext(TEXT("CTR")));
+        _tcscpy(sTmp, gettext(_T("CTR")));
         break;
       case NOGLIDER:
-        _tcscpy(sTmp, gettext(TEXT("NoGl")));
+        _tcscpy(sTmp, gettext(_T("NoGl")));
         break;
       case WAVE:
-        _tcscpy(sTmp, gettext(TEXT("Wav")));
+        _tcscpy(sTmp, gettext(_T("Wav")));
         break;
       case OTHER:
-        _tcscpy(sTmp, gettext(TEXT("?")));
+        _tcscpy(sTmp, gettext(_T("?")));
         break;
       case AATASK:
-        _tcscpy(sTmp, gettext(TEXT("AAT")));
+        _tcscpy(sTmp, gettext(_T("AAT")));
         break;
       default:
         break;
@@ -682,26 +678,26 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
       // left justified
 
-      canvas.text_opaque(x1, 2 * InfoBoxLayout::scale, sTmp);
+      canvas.text_opaque(x1, Layout::FastScale(2), sTmp);
 
       // right justified after airspace type
-      _stprintf(sTmp, TEXT("%.0f%s"),
+      _stprintf(sTmp, _T("%.0f%s"),
                 AirspaceSelectInfo[i].Distance,
                 Units::GetDistanceName());
       x2 = w0 - w3 - canvas.text_width(sTmp);
-      canvas.text_opaque(x2, 2 * InfoBoxLayout::scale, sTmp);
+      canvas.text_opaque(x2, Layout::FastScale(2), sTmp);
 
       // right justified after distance
-      _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(AirspaceSelectInfo[i].Direction));
+      _stprintf(sTmp, _T("%d")_T(DEG),  iround(AirspaceSelectInfo[i].Direction));
       x3 = w0 - canvas.text_width(sTmp);
-      canvas.text_opaque(x3, 2 * InfoBoxLayout::scale, sTmp);
+      canvas.text_opaque(x3, Layout::FastScale(2), sTmp);
     } else {
       // should never get here!
     }
   } else {
     if (DrawListIndex == 0){
-      _stprintf(sTmp, TEXT("%s"), gettext(TEXT("No Match!")));
-      canvas.text_opaque(2 * InfoBoxLayout::scale, 2 * InfoBoxLayout::scale,
+      _stprintf(sTmp, _T("%s"), gettext(_T("No Match!")));
+      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
                          sTmp);
     }
   }
@@ -749,7 +745,7 @@ FormKeyDown(WindowControl *Sender, unsigned key_code){
   WndProperty* wp;
   unsigned NewIndex = TypeFilterIdx;
 
-  wp = ((WndProperty *)wf->FindByName(TEXT("prpFltType")));
+  wp = ((WndProperty *)wf->FindByName(_T("prpFltType")));
 
   switch(key_code) {
     case VK_F1:
@@ -801,16 +797,16 @@ void dlgAirspaceSelect(void) {
 
   Location = XCSoarInterface::Basic().Location;
 
-  if (!InfoBoxLayout::landscape) {
+  if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgAirspaceSelect_L.xml"),
+                        _T("dlgAirspaceSelect_L.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_AIRSPACESELECT_L"));
+                        _T("IDR_XML_AIRSPACESELECT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
-                        TEXT("dlgAirspaceSelect.xml"),
+                        _T("dlgAirspaceSelect.xml"),
                         XCSoarInterface::main_window,
-                        TEXT("IDR_XML_AIRSPACESELECT"));
+                        _T("IDR_XML_AIRSPACESELECT"));
   }
 
   if (!wf) return;
@@ -820,17 +816,17 @@ void dlgAirspaceSelect(void) {
   wf->SetKeyDownNotify(FormKeyDown);
 
   ((WndButton *)wf->
-   FindByName(TEXT("cmdClose")))->
+   FindByName(_T("cmdClose")))->
     SetOnClickNotify(OnWPSCloseClicked);
 
-  wAirspaceList = (WndListFrame*)wf->FindByName(TEXT("frmAirspaceList"));
+  wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
   assert(wAirspaceList!=NULL);
   wAirspaceList->SetBorderKind(BORDERLEFT);
   wAirspaceList->SetEnterCallback(OnAirspaceListEnter);
 
-  wpName = (WndProperty*)wf->FindByName(TEXT("prpFltName"));
-  wpDistance = (WndProperty*)wf->FindByName(TEXT("prpFltDistance"));
-  wpDirection = (WndProperty*)wf->FindByName(TEXT("prpFltDirection"));
+  wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));
+  wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
+  wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
 
   PrepareData();
   UpdateList();

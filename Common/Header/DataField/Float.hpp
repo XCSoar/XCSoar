@@ -78,11 +78,11 @@ class DataFieldFloat:public DataField{
   int CreateComboList(void);
   int SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
-  bool GetAsBoolean(void);
-  int GetAsInteger(void);
-  double GetAsFloat(void);
-  TCHAR *GetAsString(void);
-  TCHAR *GetAsDisplayString(void);
+  virtual bool GetAsBoolean(void) const;
+  virtual int GetAsInteger(void) const;
+  virtual double GetAsFloat(void) const;
+  virtual const TCHAR *GetAsString(void) const;
+  virtual const TCHAR *GetAsDisplayString(void) const;
 
   virtual void Set(int Value){ Set((double)Value); };
 
@@ -98,8 +98,7 @@ class DataFieldFloat:public DataField{
   bool SetAsBoolean(bool Value);
   int SetAsInteger(int Value);
   double SetAsFloat(double Value);
-  TCHAR *SetAsString(const TCHAR *Value);
-
+  virtual const TCHAR *SetAsString(const TCHAR *Value);
 };
 
 #endif

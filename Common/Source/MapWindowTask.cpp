@@ -40,11 +40,9 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
-#include "InfoBoxLayout.h"
+#include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
-#include "options.h" /* for IBLSCALE() */
-
 
 #include <math.h>
 

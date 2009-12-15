@@ -82,8 +82,9 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
+#include "StringUtil.hpp"
 #include "Audio/Sound.hpp"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Language.hpp"
@@ -106,7 +107,6 @@ typedef void (CALLBACK *DLLFUNC_INPUTEVENT)(TCHAR*);
 typedef void (CALLBACK *DLLFUNC_SETHINST)(HMODULE);
 #endif /* WIN32 */
 
-
 #define MAX_DLL_CACHE 256
 typedef struct {
   TCHAR *text;
@@ -122,7 +122,9 @@ int DLLCache_Count = 0;
 
 
 // TODO code: Keep marker text for use in log file etc.
-void InputEvents::eventMarkLocation(const TCHAR *misc) {
+void
+InputEvents::eventMarkLocation(const TCHAR *misc)
+{
   if (_tcscmp(misc, TEXT("reset")) == 0) {
     marks->Reset();
   } else {
@@ -130,13 +132,13 @@ void InputEvents::eventMarkLocation(const TCHAR *misc) {
   }
 }
 
-
-void InputEvents::eventSounds(const TCHAR *misc) {
+void
+InputEvents::eventSounds(const TCHAR *misc)
+{
  // bool OldEnableSoundVario = EnableSoundVario;
 
   if (_tcscmp(misc, TEXT("toggle")) == 0)
-    SetSettingsComputer().EnableSoundVario =
-      !SettingsComputer().EnableSoundVario;
+    SetSettingsComputer().EnableSoundVario = !SettingsComputer().EnableSoundVario;
   else if (_tcscmp(misc, TEXT("on")) == 0)
     SetSettingsComputer().EnableSoundVario = true;
   else if (_tcscmp(misc, TEXT("off")) == 0)
@@ -154,15 +156,15 @@ void InputEvents::eventSounds(const TCHAR *misc) {
   */
 }
 
-void InputEvents::eventSnailTrail(const TCHAR *misc) {
-
+void
+InputEvents::eventSnailTrail(const TCHAR *misc)
+{
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    SetSettingsMap().TrailActive = SettingsMap().TrailActive+1;
-    if (SettingsMap().TrailActive>3) {
-      SetSettingsMap().TrailActive=0;
+    SetSettingsMap().TrailActive = SettingsMap().TrailActive + 1;
+    if (SettingsMap().TrailActive > 3) {
+      SetSettingsMap().TrailActive = 0;
     }
-  }
-  else if (_tcscmp(misc, TEXT("off")) == 0)
+  } else if (_tcscmp(misc, TEXT("off")) == 0)
     SetSettingsMap().TrailActive = 0;
   else if (_tcscmp(misc, TEXT("long")) == 0)
     SetSettingsMap().TrailActive = 1;
@@ -170,43 +172,43 @@ void InputEvents::eventSnailTrail(const TCHAR *misc) {
     SetSettingsMap().TrailActive = 2;
   else if (_tcscmp(misc, TEXT("full")) == 0)
     SetSettingsMap().TrailActive = 3;
-
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (SettingsMap().TrailActive==0)
+    if (SettingsMap().TrailActive == 0)
       Message::AddMessage(TEXT("SnailTrail OFF"));
-    if (SettingsMap().TrailActive==1)
+    if (SettingsMap().TrailActive == 1)
       Message::AddMessage(TEXT("SnailTrail ON Long"));
-    if (SettingsMap().TrailActive==2)
+    if (SettingsMap().TrailActive == 2)
       Message::AddMessage(TEXT("SnailTrail ON Short"));
-    if (SettingsMap().TrailActive==3)
+    if (SettingsMap().TrailActive == 3)
       Message::AddMessage(TEXT("SnailTrail ON Full"));
   }
 }
 
 // VENTA3
-void InputEvents::eventVisualGlide(const TCHAR *misc) {
+void
+InputEvents::eventVisualGlide(const TCHAR *misc)
+{
 
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    SetSettingsMap().VisualGlide ++;
-    if (SettingsMap().VisualGlide==2 &&
-	!SettingsMap().ExtendedVisualGlide) SetSettingsMap().VisualGlide=0;
-    if (SettingsMap().VisualGlide>2) {
-      SetSettingsMap().VisualGlide=0;
-    }
-  }
-  else if (_tcscmp(misc, TEXT("off")) == 0)
+    SetSettingsMap().VisualGlide++;
+
+    if (SettingsMap().VisualGlide == 2 && !SettingsMap().ExtendedVisualGlide)
+      SetSettingsMap().VisualGlide = 0;
+    else if (SettingsMap().VisualGlide > 2)
+      SetSettingsMap().VisualGlide = 0;
+
+  } else if (_tcscmp(misc, TEXT("off")) == 0)
     SetSettingsMap().VisualGlide = 0;
   else if (_tcscmp(misc, TEXT("steady")) == 0)
     SetSettingsMap().VisualGlide = 1;
   else if (_tcscmp(misc, TEXT("moving")) == 0)
     SetSettingsMap().VisualGlide = 2;
-
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (SettingsMap().VisualGlide==0)
+    if (SettingsMap().VisualGlide == 0)
       Message::AddMessage(TEXT("VisualGlide OFF"));
-    if (SettingsMap().VisualGlide==1)
+    if (SettingsMap().VisualGlide == 1)
       Message::AddMessage(TEXT("VisualGlide Steady"));
-    if (SettingsMap().VisualGlide==2)
+    if (SettingsMap().VisualGlide == 2)
       Message::AddMessage(TEXT("VisualGlide Moving"));
   }
 }
@@ -222,26 +224,30 @@ void InputEvents::eventVisualGlide(const TCHAR *misc) {
  * every OnAirSpace value >0 .  We can use negative numbers also,
  * but 0 should mean OFF all the way.
  */
-void InputEvents::eventAirSpace(const TCHAR *misc) {
+void
+InputEvents::eventAirSpace(const TCHAR *misc)
+{
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    SetSettingsMap().OnAirSpace ++;
-    if (SettingsMap().OnAirSpace>1) {
-      SetSettingsMap().OnAirSpace=0;
+    SetSettingsMap().OnAirSpace++;
+
+    if (SettingsMap().OnAirSpace > 1) {
+      SetSettingsMap().OnAirSpace = 0;
     }
-  }
-  else if (_tcscmp(misc, TEXT("off")) == 0)
+  } else if (_tcscmp(misc, TEXT("off")) == 0)
     SetSettingsMap().OnAirSpace = 0;
   else if (_tcscmp(misc, TEXT("on")) == 0)
     SetSettingsMap().OnAirSpace = 1;
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (SetSettingsMap().OnAirSpace==0)
+    if (SetSettingsMap().OnAirSpace == 0)
       Message::AddMessage(TEXT("Show Airspace OFF"));
-    if (SetSettingsMap().OnAirSpace==1)
+    if (SetSettingsMap().OnAirSpace == 1)
       Message::AddMessage(TEXT("Show Airspace ON"));
   }
 }
 
-void InputEvents::eventScreenModes(const TCHAR *misc) {
+void
+InputEvents::eventScreenModes(const TCHAR *misc)
+{
   // toggle switches like this:
   //  -- normal infobox
   //  -- auxiliary infobox
@@ -278,9 +284,10 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 
     if (model_is_hp31x()) {
       // 1 normal > 2 aux > 3 biginfo > 4 fullscreen
-      short pnascrollstatus;
-      pnascrollstatus=1;
-      if ( InfoBoxLayout::fullscreen == true ) pnascrollstatus=3;
+      short pnascrollstatus = 1;
+
+      if (InfoBoxLayout::fullscreen == true)
+        pnascrollstatus = 3;
       if (SettingsMap().FullScreen)
         pnascrollstatus = 4;
       if (SettingsMap().EnableAuxiliaryInfo)
@@ -288,61 +295,67 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 
       switch (pnascrollstatus) {
       case 1:
-	if (SettingsComputer().EnableSoundModes)
+        if (SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_CLICK"));
+
         SetSettingsMap().EnableAuxiliaryInfo = true;
-	break;
+        break;
       case 2:
-	//	EnableAuxiliaryInfo = false;		// Disable BigInfo until it is useful
-	//	InfoBoxLayout::fullscreen = true;
-	//	break;
+        //	EnableAuxiliaryInfo = false;		// Disable BigInfo until it is useful
+        //	InfoBoxLayout::fullscreen = true;
+        //	break;
       case 3:
-	//	InfoBoxLayout::fullscreen = false;
-	if (SettingsComputer().EnableSoundModes)
+        //	InfoBoxLayout::fullscreen = false;
+        if (SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_CLICK"));
+
         SetSettingsMap().EnableAuxiliaryInfo = false;
         SetSettingsMap().FullScreen = true;
-	break;
+        break;
       case 4:
-	//	InfoBoxLayout::fullscreen = false;
+        //	InfoBoxLayout::fullscreen = false;
         SetSettingsMap().EnableAuxiliaryInfo = false;
         SetSettingsMap().FullScreen = false;
-	if (SettingsComputer().EnableSoundModes)
+        if (SettingsComputer().EnableSoundModes)
           PlayResource(TEXT("IDR_WAV_BELL"));
-	break;
+
+        break;
       default:
-	break;
-      } // switch pnascrollstatus
-    } else if (is_pna()) {
-	if (SettingsMap().EnableAuxiliaryInfo) {
-	  if (SettingsComputer().EnableSoundModes)
-            PlayResource(TEXT("IDR_WAV_CLICK"));
-          SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
-          SetSettingsMap().EnableAuxiliaryInfo = false;
-	} else {
-          if (SettingsMap().FullScreen) {
-            SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
-	    if (SettingsComputer().EnableSoundModes)
-              PlayResource(TEXT("IDR_WAV_BELL"));
-	  } else {
-	    if (SettingsComputer().EnableSoundModes)
-              PlayResource(TEXT("IDR_WAV_CLICK"));
-            SetSettingsMap().EnableAuxiliaryInfo = true;
-	  }
-	}
-    } else {
-    if (SettingsMap().EnableAuxiliaryInfo) {
-      if (SettingsComputer().EnableSoundModes)
-	PlayResource(TEXT("IDR_WAV_CLICK"));
-      SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
-      SetSettingsMap().EnableAuxiliaryInfo = false;
-    } else {
-      if (SettingsMap().FullScreen) {
-	SetSettingsMap().FullScreen = false;
-      } else {
-	SetSettingsMap().EnableAuxiliaryInfo = true;
+        break;
       }
-    }
+    } else if (is_pna()) {
+      if (SettingsMap().EnableAuxiliaryInfo) {
+        if (SettingsComputer().EnableSoundModes)
+          PlayResource(TEXT("IDR_WAV_CLICK"));
+
+        SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
+        SetSettingsMap().EnableAuxiliaryInfo = false;
+      } else {
+        if (SettingsMap().FullScreen) {
+          SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
+
+          if (SettingsComputer().EnableSoundModes)
+            PlayResource(TEXT("IDR_WAV_BELL"));
+        } else {
+          if (SettingsComputer().EnableSoundModes)
+            PlayResource(TEXT("IDR_WAV_CLICK"));
+
+          SetSettingsMap().EnableAuxiliaryInfo = true;
+        }
+      }
+    } else {
+      if (SettingsMap().EnableAuxiliaryInfo) {
+        if (SettingsComputer().EnableSoundModes)
+          PlayResource(TEXT("IDR_WAV_CLICK"));
+        SetSettingsMap().FullScreen = !SettingsMap().FullScreen;
+        SetSettingsMap().EnableAuxiliaryInfo = false;
+      } else {
+        if (SettingsMap().FullScreen) {
+          SetSettingsMap().FullScreen = false;
+        } else {
+          SetSettingsMap().EnableAuxiliaryInfo = true;
+        }
+      }
     }
   }
 
@@ -350,7 +363,6 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
   InfoBoxManager::SetDirty(true);
   SendSettingsMap(true);
 }
-
 
 // eventAutoZoom - Turn on|off|toggle AutoZoom
 // misc:
@@ -364,7 +376,9 @@ void InputEvents::eventScreenModes(const TCHAR *misc) {
 //	--	- Zoom out far
 //	n.n	- Zoom to a set scale
 //	show - Show current zoom scale
-void InputEvents::eventZoom(const TCHAR* misc) {
+void
+InputEvents::eventZoom(const TCHAR* misc)
+{
   // JMW pass through to handler in MapWindow
   // here:
   // -1 means toggle
@@ -383,8 +397,7 @@ void InputEvents::eventZoom(const TCHAR* misc) {
       Message::AddMessage(TEXT("AutoZoom ON"));
     else
       Message::AddMessage(TEXT("AutoZoom OFF"));
-  }
-  else if (_tcscmp(misc, TEXT("slowout")) == 0)
+  } else if (_tcscmp(misc, TEXT("slowout")) == 0)
     sub_ScaleZoom(-4);
   else if (_tcscmp(misc, TEXT("slowin")) == 0)
     sub_ScaleZoom(4);
@@ -415,6 +428,7 @@ void InputEvents::eventZoom(const TCHAR* misc) {
     else
       Message::AddMessage(TEXT("Circling Zoom OFF"));
   }
+
   SendSettingsMap(true);
 }
 
@@ -429,7 +443,9 @@ void InputEvents::eventZoom(const TCHAR* misc) {
 //	TODO feature: n,n	Go that direction - +/-
 //	TODO feature: ???	Go to particular point
 //	TODO feature: ???	Go to waypoint (eg: next, named)
-void InputEvents::eventPan(const TCHAR *misc) {
+void
+InputEvents::eventPan(const TCHAR *misc)
+{
 
   if (_tcscmp(misc, TEXT("toggle")) == 0)
     sub_Pan(-1);
@@ -440,61 +456,61 @@ void InputEvents::eventPan(const TCHAR *misc) {
   else if (_tcscmp(misc, TEXT("off")) == 0)
     sub_Pan(0);
 
-#if defined(PNA) || defined(FIVV)   // VENTA-ADDON  let pan mode scroll wheel zooming with HP31X. VENTA-TODO: make it different for other PNAs
- else if (_tcscmp(misc, TEXT("up")) == 0)
-   sub_ScaleZoom(1);
- else if (_tcscmp(misc, TEXT("down")) == 0)
-   sub_ScaleZoom(-1); // fixed v58
-#else
+  // VENTA-ADDON  let pan mode scroll wheel zooming with HP31X. VENTA-TODO: make it different for other PNAs
+  #if defined(PNA) || defined(FIVV)
   else if (_tcscmp(misc, TEXT("up")) == 0)
-    sub_PanCursor(0,1);
+    sub_ScaleZoom(1);
   else if (_tcscmp(misc, TEXT("down")) == 0)
-    sub_PanCursor(0,-1);
-#endif   // END VENTA
+    sub_ScaleZoom(-1); // fixed v58
+  #else
+  else if (_tcscmp(misc, TEXT("up")) == 0)
+    sub_PanCursor(0, 1);
+  else if (_tcscmp(misc, TEXT("down")) == 0)
+    sub_PanCursor(0, -1);
+  #endif
+
   else if (_tcscmp(misc, TEXT("left")) == 0)
-    sub_PanCursor(1,0);
+    sub_PanCursor(1, 0);
   else if (_tcscmp(misc, TEXT("right")) == 0)
-    sub_PanCursor(-1,0);
+    sub_PanCursor(-1, 0);
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (SettingsMap().EnablePan)
       Message::AddMessage(TEXT("Pan mode ON"));
     else
       Message::AddMessage(TEXT("Pan mode OFF"));
   }
-  SendSettingsMap(true);
 
+  SendSettingsMap(true);
 }
 
 // Do JUST Terrain/Toplogy (toggle any, on/off any, show)
-void InputEvents::eventTerrainTopology(const TCHAR *misc) {
-
+void
+InputEvents::eventTerrainTopology(const TCHAR *misc)
+{
   if (_tcscmp(misc, TEXT("terrain toggle")) == 0)
     sub_TerrainTopology(-2);
   else if (_tcscmp(misc, TEXT("toplogy toggle")) == 0)
     sub_TerrainTopology(-3);
-
   else if (_tcscmp(misc, TEXT("terrain on")) == 0)
     sub_TerrainTopology(3);
-
   else if (_tcscmp(misc, TEXT("terrain off")) == 0)
     sub_TerrainTopology(4);
-
   else if (_tcscmp(misc, TEXT("topology on")) == 0)
     sub_TerrainTopology(1);
-
   else if (_tcscmp(misc, TEXT("topology off")) == 0)
     sub_TerrainTopology(2);
-
   else if (_tcscmp(misc, TEXT("show")) == 0)
     sub_TerrainTopology(0);
-
   else if (_tcscmp(misc, TEXT("toggle")) == 0)
     sub_TerrainTopology(-1);
+
   SendSettingsMap(true);
 }
 
 // Do clear warnings IF NONE Toggle Terrain/Topology
-void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
+void
+InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc)
+{
 	(void)misc;
 #ifdef OLD_TASK
   if (ClearAirspaceWarnings(airspace_database, true, false))
@@ -511,16 +527,18 @@ void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
 // Clears airspace warnings for the selected airspace
 //     day: clears the warnings for the entire day
 //     ack: clears the warnings for the acknowledgement time
-void InputEvents::eventClearAirspaceWarnings(const TCHAR *misc) {
+void
+InputEvents::eventClearAirspaceWarnings(const TCHAR *misc)
+{
 #ifdef OLD_TASK
+  // JMW clear airspace warnings for entire day (for selected airspace)
   if (_tcscmp(misc, TEXT("day")) == 0)
-    // JMW clear airspace warnings for entire day (for selected airspace)
     ClearAirspaceWarnings(airspace_database, true, true);
+
+  // default, clear airspace for short acknowledgement time
   else {
-
-    // default, clear airspace for short acknowledgement time
     if (ClearAirspaceWarnings(airspace_database, true, false)) {
-
+      // nothing
     }
   }
 #endif
@@ -528,15 +546,19 @@ void InputEvents::eventClearAirspaceWarnings(const TCHAR *misc) {
 
 // ClearStatusMessages
 // Do Clear Event Warnings
-void InputEvents::eventClearStatusMessages(const TCHAR *misc) {
-	(void)misc;
+void
+InputEvents::eventClearStatusMessages(const TCHAR *misc)
+{
+  (void)misc;
   // TODO enhancement: allow selection of specific messages (here we are acknowledging all)
   Message::Acknowledge(0);
 }
 
-void InputEvents::eventFLARMRadar(const TCHAR *misc) {
-	(void)misc;
-  //  if (_tcscmp(misc, TEXT("on")) == 0) {
+void
+InputEvents::eventFLARMRadar(const TCHAR *misc)
+{
+  (void)misc;
+  // if (_tcscmp(misc, TEXT("on")) == 0) {
 
   GaugeFLARM *gauge_flarm = main_window.flarm;
   if (gauge_flarm == NULL)
@@ -544,34 +566,32 @@ void InputEvents::eventFLARMRadar(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("ForceToggle")) == 0) {
     gauge_flarm->ForceVisible = !gauge_flarm->ForceVisible;
-    SetSettingsMap().EnableFLARMGauge =
-      gauge_flarm->ForceVisible;
+    SetSettingsMap().EnableFLARMGauge = gauge_flarm->ForceVisible;
   } else
     gauge_flarm->Suppress = !gauge_flarm->Suppress;
   // the result of this will get triggered by refreshslots
 }
 
-
 // SelectInfoBox
 // Selects the next or previous infobox
-void InputEvents::eventSelectInfoBox(const TCHAR *misc) {
-  if (_tcscmp(misc, TEXT("next")) == 0) {
+void
+InputEvents::eventSelectInfoBox(const TCHAR *misc)
+{
+  if (_tcscmp(misc, TEXT("next")) == 0)
     InfoBoxManager::Event_Select(1);
-  }
-  if (_tcscmp(misc, TEXT("previous")) == 0) {
+  if (_tcscmp(misc, TEXT("previous")) == 0)
     InfoBoxManager::Event_Select(-1);
-  }
 }
 
 // ChangeInfoBoxType
 // Changes the type of the current infobox to the next/previous type
-void InputEvents::eventChangeInfoBoxType(const TCHAR *misc) {
-  if (_tcscmp(misc, TEXT("next")) == 0) {
+void
+InputEvents::eventChangeInfoBoxType(const TCHAR *misc)
+{
+  if (_tcscmp(misc, TEXT("next")) == 0)
     InfoBoxManager::Event_Change(1);
-  }
-  if (_tcscmp(misc, TEXT("previous")) == 0) {
+  if (_tcscmp(misc, TEXT("previous")) == 0)
     InfoBoxManager::Event_Change(-1);
-  }
 }
 
 // ArmAdvance
@@ -580,9 +600,11 @@ void InputEvents::eventChangeInfoBoxType(const TCHAR *misc) {
 //    off: Disarms the advance trigger
 //   toggle: Toggles between armed and disarmed.
 //   show: Shows current armed state
-void InputEvents::eventArmAdvance(const TCHAR *misc) {
+void
+InputEvents::eventArmAdvance(const TCHAR *misc)
+{
 #ifdef OLD_TASK
-  if (task.getSettings().AutoAdvance>=2) {
+  if (task.getSettings().AutoAdvance >= 2) {
     if (_tcscmp(misc, TEXT("on")) == 0) {
       task.setAdvanceArmed(true);
     }
@@ -609,7 +631,7 @@ void InputEvents::eventArmAdvance(const TCHAR *misc) {
       }
       break;
     case 3:
-      if (task.getActiveIndex()<2) { // past start (but can re-start)
+      if (task.getActiveIndex() < 2) { // past start (but can re-start)
         if (task.isAdvanceArmed()) {
           Message::AddMessage(TEXT("Auto Advance: ARMED"));
         } else {
@@ -633,44 +655,44 @@ void InputEvents::eventArmAdvance(const TCHAR *misc) {
 //    Functions associated with the infoboxes are described in the
 //    infobox section in the reference guide
 void InputEvents::eventDoInfoKey(const TCHAR *misc) {
-  if (_tcscmp(misc, TEXT("up")) == 0) {
+  if (_tcscmp(misc, TEXT("up")) == 0)
     InfoBoxManager::ProcessKey(1);
-  }
-  if (_tcscmp(misc, TEXT("down")) == 0) {
+  if (_tcscmp(misc, TEXT("down")) == 0)
     InfoBoxManager::ProcessKey(-1);
-  }
-  if (_tcscmp(misc, TEXT("left")) == 0) {
+  if (_tcscmp(misc, TEXT("left")) == 0)
     InfoBoxManager::ProcessKey(-2);
-  }
-  if (_tcscmp(misc, TEXT("right")) == 0) {
+  if (_tcscmp(misc, TEXT("right")) == 0)
     InfoBoxManager::ProcessKey(2);
-  }
-  if (_tcscmp(misc, TEXT("return")) == 0) {
+  if (_tcscmp(misc, TEXT("return")) == 0)
     InfoBoxManager::ProcessKey(0);
-  }
-
 }
 
 // Mode
 // Sets the current event mode.
 //  The argument is the label of the mode to activate.
 //  This is used to activate menus/submenus of buttons
-void InputEvents::eventMode(const TCHAR *misc) {
+void
+InputEvents::eventMode(const TCHAR *misc)
+{
   assert(misc != NULL);
   InputEvents::setMode(misc);
 }
 
 // Don't think we need this.
-void InputEvents::eventMainMenu(const TCHAR *misc) {
-	(void)misc;
+void
+InputEvents::eventMainMenu(const TCHAR *misc)
+{
+  (void)misc;
   // todo: popup main menu
 }
 
 // Checklist
 // Displays the checklist dialog
 //  See the checklist dialog section of the reference manual for more info.
-void InputEvents::eventChecklist(const TCHAR *misc) {
-	(void)misc;
+void
+InputEvents::eventChecklist(const TCHAR *misc)
+{
+  (void)misc;
   ScopePopupBlock block(main_window.popup);
   dlgChecklistShowModal();
 }
@@ -678,18 +700,21 @@ void InputEvents::eventChecklist(const TCHAR *misc) {
 // FLARM Traffic
 // Displays the FLARM traffic dialog
 //  See the checklist dialog section of the reference manual for more info.
-void InputEvents::eventFlarmTraffic(const TCHAR *misc) {
-	(void)misc;
+void
+InputEvents::eventFlarmTraffic(const TCHAR *misc)
+{
+  (void)misc;
   ScopePopupBlock block(main_window.popup);
   dlgFlarmTrafficShowModal();
 }
 
-
 // Displays the task calculator dialog
 //  See the task calculator dialog section of the reference manual
 // for more info.
-void InputEvents::eventCalculator(const TCHAR *misc) {
-	(void)misc;
+void
+InputEvents::eventCalculator(const TCHAR *misc)
+{
+  (void)misc;
   ScopePopupBlock block(main_window.popup);
 #ifdef OLD_TASK
   dlgTaskCalculatorShowModal();
@@ -703,7 +728,9 @@ void InputEvents::eventCalculator(const TCHAR *misc) {
 //    task: displays the task status
 //  See the status dialog section of the reference manual for more info
 //  on these.
-void InputEvents::eventStatus(const TCHAR *misc) {
+void
+InputEvents::eventStatus(const TCHAR *misc)
+{
   ScopePopupBlock block(main_window.popup);
   if (_tcscmp(misc, TEXT("system")) == 0) {
     dlgStatusShowModal(1);
@@ -720,8 +747,10 @@ void InputEvents::eventStatus(const TCHAR *misc) {
 // Displays the analysis/statistics dialog
 //  See the analysis dialog section of the reference manual
 // for more info.
-void InputEvents::eventAnalysis(const TCHAR *misc) {
-	(void)misc;
+void
+InputEvents::eventAnalysis(const TCHAR *misc)
+{
+  (void)misc;
   PopupAnalysis();
 }
 
@@ -732,13 +761,15 @@ void InputEvents::eventAnalysis(const TCHAR *misc) {
 //                  selects a waypoint, then the details dialog is shown.
 //  See the waypoint dialog section of the reference manual
 // for more info.
-void InputEvents::eventWaypointDetails(const TCHAR *misc) {
-
+void
+InputEvents::eventWaypointDetails(const TCHAR *misc)
+{
   if (_tcscmp(misc, TEXT("current")) == 0) {
 #ifdef OLD_TASK
     if (task.Valid()) {
       task.setSelected();
     }
+
     if (task.getSelected()<0){
       Message::AddMessage(TEXT("No Active Waypoint!"));
       return;
@@ -757,8 +788,9 @@ void InputEvents::eventWaypointDetails(const TCHAR *misc) {
   }
 }
 
-
-void InputEvents::eventGotoLookup(const TCHAR *misc) {
+void
+InputEvents::eventGotoLookup(const TCHAR *misc)
+{
   ScopePopupBlock block(main_window.popup);
   const Waypoint* wp = dlgWayPointSelect(Basic().Location);
 #ifdef OLD_TASK
@@ -768,35 +800,40 @@ void InputEvents::eventGotoLookup(const TCHAR *misc) {
 #endif
 }
 
-
 // StatusMessage
 // Displays a user defined status message.
 //    The argument is the text to be displayed.
 //    No punctuation characters are allowed.
-void InputEvents::eventStatusMessage(const TCHAR *misc) {
+void
+InputEvents::eventStatusMessage(const TCHAR *misc)
+{
   Message::AddMessage(misc);
 }
 
 // Plays a sound from the filename
-void InputEvents::eventPlaySound(const TCHAR *misc) {
+void
+InputEvents::eventPlaySound(const TCHAR *misc)
+{
   PlayResource(misc);
 }
 
 // MacCready
 // Adjusts MacCready settings
 // up, down, auto on, auto off, auto toggle, auto show
-void InputEvents::eventMacCready(const TCHAR *misc) {
-  if (_tcscmp(misc, TEXT("up")) == 0) {
+void
+InputEvents::eventMacCready(const TCHAR *misc)
+{
+  if (_tcscmp(misc, TEXT("up")) == 0)
     on_key_MacCready(1);
-  } else if (_tcscmp(misc, TEXT("down")) == 0) {
+  else if (_tcscmp(misc, TEXT("down")) == 0)
     on_key_MacCready(-1);
-  } else if (_tcscmp(misc, TEXT("auto toggle")) == 0) {
+  else if (_tcscmp(misc, TEXT("auto toggle")) == 0)
     on_key_MacCready(0);
-  } else if (_tcscmp(misc, TEXT("auto on")) == 0) {
+  else if (_tcscmp(misc, TEXT("auto on")) == 0)
     on_key_MacCready(+2);
-  } else if (_tcscmp(misc, TEXT("auto off")) == 0) {
+  else if (_tcscmp(misc, TEXT("auto off")) == 0)
     on_key_MacCready(-2);
-  } else if (_tcscmp(misc, TEXT("auto show")) == 0) {
+  else if (_tcscmp(misc, TEXT("auto show")) == 0) {
     if (SettingsComputer().AutoMacCready) {
       Message::AddMessage(TEXT("Auto MacCready ON"));
     } else {
@@ -809,7 +846,6 @@ void InputEvents::eventMacCready(const TCHAR *misc) {
   }
 }
 
-
 // Wind
 // Adjusts the wind magnitude and direction
 //     up: increases wind magnitude
@@ -820,24 +856,20 @@ void InputEvents::eventMacCready(const TCHAR *misc) {
 //
 // TODO feature: Increase wind by larger amounts ? Set wind to specific amount ?
 //	(may sound silly - but future may get SMS event that then sets wind)
-void InputEvents::eventWind(const TCHAR *misc) {
-  if (_tcscmp(misc, TEXT("up")) == 0) {
+void
+InputEvents::eventWind(const TCHAR *misc)
+{
+  if (_tcscmp(misc, TEXT("up")) == 0)
     on_key_WindSpeed(1);
-  }
-  if (_tcscmp(misc, TEXT("down")) == 0) {
+  else if (_tcscmp(misc, TEXT("down")) == 0)
     on_key_WindSpeed(-1);
-  }
-  if (_tcscmp(misc, TEXT("left")) == 0) {
+  else if (_tcscmp(misc, TEXT("left")) == 0)
     on_key_WindSpeed(-2);
-  }
-  if (_tcscmp(misc, TEXT("right")) == 0) {
+  else if (_tcscmp(misc, TEXT("right")) == 0)
     on_key_WindSpeed(2);
-  }
-  if (_tcscmp(misc, TEXT("save")) == 0) {
+  else if (_tcscmp(misc, TEXT("save")) == 0)
     on_key_WindSpeed(0);
-  }
 }
-
 
 int jmw_demo=0;
 
@@ -847,22 +879,25 @@ int jmw_demo=0;
 //   and appended with the checksum e.g. '*40'.  The user needs only
 //   to provide the text in between the '$' and '*'.
 //
-void InputEvents::eventSendNMEA(const TCHAR *misc) {
-  if (misc) {
+void
+InputEvents::eventSendNMEA(const TCHAR *misc)
+{
+  if (misc)
     VarioWriteNMEA(misc);
-  }
 }
 
-void InputEvents::eventSendNMEAPort1(const TCHAR *misc) {
-  if (misc) {
+void
+InputEvents::eventSendNMEAPort1(const TCHAR *misc)
+{
+  if (misc)
     Port1WriteNMEA(misc);
-  }
 }
 
-void InputEvents::eventSendNMEAPort2(const TCHAR *misc) {
-  if (misc) {
+void
+InputEvents::eventSendNMEAPort2(const TCHAR *misc)
+{
+  if (misc)
     Port2WriteNMEA(misc);
-  }
 }
 
 // AdjustVarioFilter
@@ -881,52 +916,36 @@ void InputEvents::eventSendNMEAPort2(const TCHAR *misc) {
 //     save: saves the vario configuration to nonvolatile memory on the instrument
 //     zero: Zero's the airspeed indicator's offset
 //
-void InputEvents::eventAdjustVarioFilter(const TCHAR *misc) {
-  static int naccel=0;
-  if (_tcscmp(misc, TEXT("slow")) == 0) {
+void
+InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
+{
+  static int naccel = 0;
+  if (_tcscmp(misc, TEXT("slow")) == 0)
     VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,3"));
-    return;
-  }
-  if (_tcscmp(misc, TEXT("medium")) == 0) {
+  else if (_tcscmp(misc, TEXT("medium")) == 0)
     VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,2"));
-    return;
-  }
-  if (_tcscmp(misc, TEXT("fast")) == 0) {
+  else if (_tcscmp(misc, TEXT("fast")) == 0)
     VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,1"));
-    return;
-  }
-  if (_tcscmp(misc, TEXT("statistics"))==0) {
+  else if (_tcscmp(misc, TEXT("statistics")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,1"));
-    jmw_demo=0;
-    return;
-  }
-  if (_tcscmp(misc, TEXT("diagnostics"))==0) {
+    jmw_demo = 0;
+  } else if (_tcscmp(misc, TEXT("diagnostics")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,2"));
-    jmw_demo=0;
-    return;
-  }
-  if (_tcscmp(misc, TEXT("psraw"))==0) {
+    jmw_demo = 0;
+  } else if (_tcscmp(misc, TEXT("psraw")) == 0)
     VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,3"));
-    return;
-  }
-  if (_tcscmp(misc, TEXT("switch"))==0) {
+  else if (_tcscmp(misc, TEXT("switch")) == 0)
     VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,4"));
-    return;
-  }
-  if (_tcscmp(misc, TEXT("democlimb"))==0) {
+  else if (_tcscmp(misc, TEXT("democlimb")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,0"));
     VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,2"));
-    jmw_demo=2;
-    return;
-  }
-  if (_tcscmp(misc, TEXT("demostf"))==0) {
+    jmw_demo = 2;
+  } else if (_tcscmp(misc, TEXT("demostf"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,0"));
     VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,1"));
-    jmw_demo=1;
-    return;
-  }
-  if (_tcscmp(misc, TEXT("accel")) == 0) {
-    switch(naccel) {
+    jmw_demo = 1;
+  } else if (_tcscmp(misc, TEXT("accel")) == 0) {
+    switch (naccel) {
     case 0:
       VarioWriteNMEA(TEXT("PDVSC,R,AccelerometerSlopeX"));
       break;
@@ -940,77 +959,61 @@ void InputEvents::eventAdjustVarioFilter(const TCHAR *misc) {
       VarioWriteNMEA(TEXT("PDVSC,R,AccelerometerOffsetY"));
       break;
     default:
-      naccel=0;
+      naccel = 0;
       break;
     }
     naccel++;
-    if (naccel>3) {
-      naccel=0;
-    }
-    return;
-  }
-  if (_tcscmp(misc, TEXT("xdemo")) == 0) {
+    if (naccel > 3)
+      naccel = 0;
+
+  } else if (_tcscmp(misc, TEXT("xdemo")) == 0) {
     ScopePopupBlock block(main_window.popup);
     dlgVegaDemoShowModal();
-    return;
-  }
-  if (_tcscmp(misc, TEXT("zero"))==0) {
+  } else if (_tcscmp(misc, TEXT("zero"))==0) {
+    // zero, no mixing
     if (!Calculated().Flying) {
       VarioWriteNMEA(TEXT("PDVSC,S,ZeroASI,1"));
     }
-    // zero, no mixing
-    return;
-  }
-  if (_tcscmp(misc, TEXT("save"))==0) {
+  } else if (_tcscmp(misc, TEXT("save")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
-    return;
-  }
 
   // accel calibration
-  if (!Calculated().Flying) {
-    if (_tcscmp(misc, TEXT("X1"))==0) {
+  } else if (!Calculated().Flying) {
+    if (_tcscmp(misc, TEXT("X1"))==0)
       VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,1"));
-      return;
-    }
-    if (_tcscmp(misc, TEXT("X2"))==0) {
+    else if (_tcscmp(misc, TEXT("X2"))==0)
       VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,2"));
-      return;
-    }
-    if (_tcscmp(misc, TEXT("X3"))==0) {
+    else if (_tcscmp(misc, TEXT("X3"))==0)
       VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,3"));
-      return;
-    }
-    if (_tcscmp(misc, TEXT("X4"))==0) {
+    else if (_tcscmp(misc, TEXT("X4"))==0)
       VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,4"));
-      return;
-    }
-    if (_tcscmp(misc, TEXT("X5"))==0) {
+    else if (_tcscmp(misc, TEXT("X5"))==0)
       VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,5"));
-      return;
-    }
   }
 }
-
 
 // Adjust audio deadband of internal vario sounds
 // +: increases deadband
 // -: decreases deadband
-void InputEvents::eventAudioDeadband(const TCHAR *misc) {
+void
+InputEvents::eventAudioDeadband(const TCHAR *misc)
+{
   if (_tcscmp(misc, TEXT("+"))) {
     SetSettingsComputer().SoundDeadband++;
   }
   if (_tcscmp(misc, TEXT("-"))) {
     SetSettingsComputer().SoundDeadband--;
   }
-  SetSettingsComputer().SoundDeadband = min(40,
-			  max(SettingsComputer().SoundDeadband,0));
+  SetSettingsComputer().SoundDeadband =
+      min(40, max(SettingsComputer().SoundDeadband,0));
+
   /*
   VarioSound_SetVdead(SoundDeadband);
   */
+
   Profile::SaveSoundSettings(); // save to registry
 
   // TODO feature: send to vario if available
-
 }
 
 // AdjustWaypoint
@@ -1019,16 +1022,17 @@ void InputEvents::eventAudioDeadband(const TCHAR *misc) {
 //  previous: selects the previous waypoint, stops at start waypoint
 //  nextwrap: selects the next waypoint, wrapping back to start after final
 //  previouswrap: selects the previous waypoint, wrapping to final after start
-void InputEvents::eventAdjustWaypoint(const TCHAR *misc) {
-  if (_tcscmp(misc, TEXT("next")) == 0) {
+void
+InputEvents::eventAdjustWaypoint(const TCHAR *misc)
+{
+  if (_tcscmp(misc, TEXT("next")) == 0)
     on_key_Waypoint(1); // next
-  } else if (_tcscmp(misc, TEXT("nextwrap")) == 0) {
+  else if (_tcscmp(misc, TEXT("nextwrap")) == 0)
     on_key_Waypoint(2); // next - with wrap
-  } else if (_tcscmp(misc, TEXT("previous")) == 0) {
+  else if (_tcscmp(misc, TEXT("previous")) == 0)
     on_key_Waypoint(-1); // previous
-  } else if (_tcscmp(misc, TEXT("previouswrap")) == 0) {
+  else if (_tcscmp(misc, TEXT("previouswrap")) == 0)
     on_key_Waypoint(-2); // previous with wrap
-  }
 }
 
 // AbortTask
@@ -1037,7 +1041,9 @@ void InputEvents::eventAdjustWaypoint(const TCHAR *misc) {
 // resume: resumes the task if aborted
 // toggle: toggles between abort and resume
 // show: displays a status message showing the task abort status
-void InputEvents::eventAbortTask(const TCHAR *misc) {
+void
+InputEvents::eventAbortTask(const TCHAR *misc)
+{
 #ifdef OLD_TASK
   if (_tcscmp(misc, TEXT("abort")) == 0)
     task.ResumeAbortTask(SettingsComputer(), Basic(), 1);
@@ -1058,7 +1064,6 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
 }
 
 #include "Device/device.h"
-#include "McReady.h"
 
 // Bugs
 // Adjusts the degradation of glider performance due to bugs
@@ -1067,29 +1072,28 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
 // max: cleans the aircraft of bugs
 // min: selects the worst performance (50%)
 // show: shows the current bug degradation
-void InputEvents::eventBugs(const TCHAR *misc) {
-  double BUGS = oldGlidePolar::GetBugs();
+void
+InputEvents::eventBugs(const TCHAR *misc)
+{
+  double BUGS = GlidePolar::GetBugs();
   double oldBugs = BUGS;
 
-  if (_tcscmp(misc, TEXT("up")) == 0) {
-    BUGS = iround(BUGS*100+10) / 100.0;
-  }
-  if (_tcscmp(misc, TEXT("down")) == 0) {
-    BUGS = iround(BUGS*100-10) / 100.0;
-  }
-  if (_tcscmp(misc, TEXT("max")) == 0) {
-    BUGS= 1.0;
-  }
-  if (_tcscmp(misc, TEXT("min")) == 0) {
-    BUGS= 0.0;
-  }
-  if (_tcscmp(misc, TEXT("show")) == 0) {
+  if (_tcscmp(misc, TEXT("up")) == 0)
+    BUGS = iround(BUGS * 100 + 10) / 100.0;
+  else if (_tcscmp(misc, TEXT("down")) == 0)
+    BUGS = iround(BUGS * 100 - 10) / 100.0;
+  else if (_tcscmp(misc, TEXT("max")) == 0)
+    BUGS = 1.0;
+  else if (_tcscmp(misc, TEXT("min")) == 0)
+    BUGS = 0.0;
+  else if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    _stprintf(Temp,TEXT("%d"), iround(BUGS*100));
+    _stprintf(Temp, TEXT("%d"), iround(BUGS * 100));
     Message::AddMessage(TEXT("Bugs Performance"), Temp);
   }
+
   if (BUGS != oldBugs) {
-    BUGS= min(1.0,max(0.5,BUGS));
+    BUGS = min(1.0, max(0.5, BUGS));
     oldGlidePolar::SetBugs(BUGS);
     oldGlidePolar::UpdatePolar(true, SettingsComputer());
   }
@@ -1102,40 +1106,38 @@ void InputEvents::eventBugs(const TCHAR *misc) {
 // max: selects 100% ballast
 // min: selects 0% ballast
 // show: displays a status message indicating the ballast percentage
-void InputEvents::eventBallast(const TCHAR *misc) {
+void
+InputEvents::eventBallast(const TCHAR *misc)
+{
   double BALLAST = oldGlidePolar::GetBallast();
-  double oldBallast= BALLAST;
+  double oldBallast = BALLAST;
 
-  if (_tcscmp(misc, TEXT("up")) == 0) {
-    BALLAST = iround(BALLAST*100.0+10) / 100.0;
-  }
-  if (_tcscmp(misc, TEXT("down")) == 0) {
-    BALLAST = iround(BALLAST*100.0-10) / 100.0;
-  }
-  if (_tcscmp(misc, TEXT("max")) == 0) {
-    BALLAST= 1.0;
-  }
-  if (_tcscmp(misc, TEXT("min")) == 0) {
-    BALLAST= 0.0;
-  }
-  if (_tcscmp(misc, TEXT("show")) == 0) {
+  if (_tcscmp(misc, TEXT("up")) == 0)
+    BALLAST = iround(BALLAST * 100.0 + 10) / 100.0;
+  else if (_tcscmp(misc, TEXT("down")) == 0)
+    BALLAST = iround(BALLAST * 100.0 - 10) / 100.0;
+  else if (_tcscmp(misc, TEXT("max")) == 0)
+    BALLAST = 1.0;
+  else if (_tcscmp(misc, TEXT("min")) == 0)
+    BALLAST = 0.0;
+  else if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    _stprintf(Temp,TEXT("%d"),iround(BALLAST*100));
+    _stprintf(Temp, TEXT("%d"), iround(BALLAST * 100));
     Message::AddMessage(TEXT("Ballast %"), Temp);
   }
+
   if (BALLAST != oldBallast) {
-    BALLAST=min(1.0,max(0.0,BALLAST));
+    BALLAST = min(1.0,max(0.0,BALLAST));
     oldGlidePolar::SetBallast(BALLAST);
     oldGlidePolar::UpdatePolar(true, SettingsComputer());
   }
 }
 
-
-
-void InputEvents::eventAutoLogger(const TCHAR *misc) {
-  if (!SettingsComputer().DisableAutoLogger) {
+void
+InputEvents::eventAutoLogger(const TCHAR *misc)
+{
+  if (!SettingsComputer().DisableAutoLogger)
     eventLogger(misc);
-  }
 }
 
 // Logger
@@ -1149,57 +1151,55 @@ void InputEvents::eventAutoLogger(const TCHAR *misc) {
 // show: displays a status message indicating whether the logger is active
 // nmea: turns on and off NMEA logging
 // note: the text following the 'note' characters is added to the log file
-void InputEvents::eventLogger(const TCHAR *misc) {
+void
+InputEvents::eventLogger(const TCHAR *misc)
+{
   // TODO feature: start logger without requiring feedback
   // start stop toggle addnote
 
-  if (_tcscmp(misc, TEXT("start ask")) == 0) {
+  if (_tcscmp(misc, TEXT("start ask")) == 0)
     logger.guiStartLogger(Basic(),SettingsComputer());
-    return;
-  } else if (_tcscmp(misc, TEXT("start")) == 0) {
+  else if (_tcscmp(misc, TEXT("start")) == 0)
     logger.guiStartLogger(Basic(),SettingsComputer(),true);
-    return;
-  } else if (_tcscmp(misc, TEXT("stop ask")) == 0) {
+  else if (_tcscmp(misc, TEXT("stop ask")) == 0)
     logger.guiStopLogger(Basic());
-    return;
-  } else if (_tcscmp(misc, TEXT("stop")) == 0) {
+  else if (_tcscmp(misc, TEXT("stop")) == 0)
     logger.guiStopLogger(Basic(),true);
-    return;
-  } else if (_tcscmp(misc, TEXT("toggle ask")) == 0) {
+  else if (_tcscmp(misc, TEXT("toggle ask")) == 0)
     logger.guiToggleLogger(Basic(),SettingsComputer());
-    return;
-  } else if (_tcscmp(misc, TEXT("toggle")) == 0) {
+  else if (_tcscmp(misc, TEXT("toggle")) == 0)
     logger.guiToggleLogger(Basic(), SettingsComputer(),true);
-    return;
-  } else if (_tcscmp(misc, TEXT("nmea")) == 0) {
+  else if (_tcscmp(misc, TEXT("nmea")) == 0) {
     EnableLogNMEA = !EnableLogNMEA;
     if (EnableLogNMEA) {
       Message::AddMessage(TEXT("NMEA Log ON"));
     } else {
       Message::AddMessage(TEXT("NMEA Log OFF"));
     }
-    return;
-  } else if (_tcscmp(misc, TEXT("show")) == 0) {
+  } else if (_tcscmp(misc, TEXT("show")) == 0)
     if (logger.isLoggerActive()) {
       Message::AddMessage(TEXT("Logger ON"));
     } else {
       Message::AddMessage(TEXT("Logger OFF"));
     }
-  } else if (_tcsncmp(misc, TEXT("note"), 4)==0) {
+  else if (_tcsncmp(misc, TEXT("note"), 4) == 0)
     // add note to logger file if available..
-    logger.LoggerNote(misc+4);
-  }
+    logger.LoggerNote(misc + 4);
 }
 
 // RepeatStatusMessage
 // Repeats the last status message.  If pressed repeatedly, will
 // repeat previous status messages
-void InputEvents::eventRepeatStatusMessage(const TCHAR *misc) {
+void
+InputEvents::eventRepeatStatusMessage(const TCHAR *misc)
+{
   (void)misc;
-	// new interface
+  // new interface
   // TODO enhancement: display only by type specified in misc field
   Message::Repeat(0);
 }
+
+bool dlgAirspaceWarningIsEmpty(void);
 
 // NearestAirspaceDetails
 // Displays details of the nearest airspace to the aircraft in a
@@ -1212,7 +1212,9 @@ void InputEvents::eventRepeatStatusMessage(const TCHAR *misc) {
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceSoonestSort.hpp"
 
-void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
+void 
+InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) 
+{
   (void)misc;
 
 #ifdef OLD_TASK
@@ -1249,33 +1251,36 @@ void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
 // Displays the waypoint details dialog
 //  aircraft: the waypoint nearest the aircraft
 //  pan: the waypoint nearest to the pan cursor
-void InputEvents::eventNearestWaypointDetails(const TCHAR *misc) {
-  if (_tcscmp(misc, TEXT("aircraft")) == 0) {
-    PopupNearestWaypointDetails(way_points, Basic().Location,
-				1.0e5, // big range..
-				false);
-  }
-  if (_tcscmp(misc, TEXT("pan")) == 0) {
-    PopupNearestWaypointDetails(way_points, Basic().Location,
-				1.0e5, // big range..
-				true);
-  }
+void
+InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
+{
+  if (_tcscmp(misc, TEXT("aircraft")) == 0)
+    // big range..
+    PopupNearestWaypointDetails(way_points, Basic().Location, 1.0e5, false);
+  else if (_tcscmp(misc, TEXT("pan")) == 0)
+    // big range..
+    PopupNearestWaypointDetails(way_points, Basic().Location, 1.0e5, true);
 }
 
 // Null
 // The null event does nothing.  This can be used to override
 // default functionality
-void InputEvents::eventNull(const TCHAR *misc) {
-	(void)misc;
+void
+InputEvents::eventNull(const TCHAR *misc)
+{
+  (void)misc;
   // do nothing
 }
 
 // TaskLoad
 // Loads the task of the specified filename
-void InputEvents::eventTaskLoad(const TCHAR *misc) {
+void
+InputEvents::eventTaskLoad(const TCHAR *misc)
+{
   TCHAR buffer[MAX_PATH];
-  if (_tcslen(misc)>0) {
-    LocalPath(buffer,misc);
+
+  if (!string_is_empty(misc)) {
+    LocalPath(buffer, misc);
 #ifdef OLD_TASK
     task.LoadNewTask(buffer, SettingsComputer(), Basic());
 #endif
@@ -1284,9 +1289,12 @@ void InputEvents::eventTaskLoad(const TCHAR *misc) {
 
 // TaskSave
 // Saves the task to the specified filename
-void InputEvents::eventTaskSave(const TCHAR *misc) {
+void
+InputEvents::eventTaskSave(const TCHAR *misc)
+{
   TCHAR buffer[MAX_PATH];
-  if (_tcslen(misc)>0) {
+
+  if (!string_is_empty(misc)) {
     LocalPath(buffer, misc);
 #ifdef OLD_TASK
     task.SaveTask(buffer);
@@ -1296,28 +1304,32 @@ void InputEvents::eventTaskSave(const TCHAR *misc) {
 
 // ProfileLoad
 // Loads the profile of the specified filename
-void InputEvents::eventProfileLoad(const TCHAR *misc) {
-  if (_tcslen(misc)>0) {
+void
+InputEvents::eventProfileLoad(const TCHAR *misc)
+{
+  if (!string_is_empty(misc))
     ReadProfile(misc);
-  }
 }
 
 // ProfileSave
 // Saves the profile to the specified filename
-void InputEvents::eventProfileSave(const TCHAR *misc) {
-  if (_tcslen(misc)>0) {
+void
+InputEvents::eventProfileSave(const TCHAR *misc)
+{
+  if (!string_is_empty(misc))
     WriteProfile(misc);
-  }
 }
 
-
-void InputEvents::eventBeep(const TCHAR *misc) {
-#ifndef DISABLEAUDIO
+void
+InputEvents::eventBeep(const TCHAR *misc)
+{
+  #ifndef DISABLEAUDIO
   MessageBeep(MB_ICONEXCLAMATION);
-#endif
-#if defined(GNAV)
+  #endif
+
+  #if defined(GNAV)
   InputEvents::eventDLLExecute(TEXT("altairplatform.dll DoBeep2 1"));
-#endif
+  #endif
 }
 
 void SystemConfiguration(void);
@@ -1329,50 +1341,46 @@ void SystemConfiguration(void);
 //  Task: Task editor
 //  Airspace: Airspace filter settings
 //  Replay: IGC replay dialog
-void InputEvents::eventSetup(const TCHAR *misc) {
+void
+InputEvents::eventSetup(const TCHAR *misc)
+{
   ScopePopupBlock block(main_window.popup);
 
-  if (_tcscmp(misc,TEXT("Basic"))==0){
+  if (_tcscmp(misc, TEXT("Basic")) == 0)
     dlgBasicSettingsShowModal();
-  } else if (_tcscmp(misc,TEXT("Wind"))==0){
+  else if (_tcscmp(misc, TEXT("Wind")) == 0)
     dlgWindSettingsShowModal();
-  } else if (_tcscmp(misc,TEXT("System"))==0){
+  else if (_tcscmp(misc, TEXT("System")) == 0)
     SystemConfiguration();
-#ifdef OLD_TASK
-  } else if (_tcscmp(misc,TEXT("Task"))==0){
+  else if (_tcscmp(misc, TEXT("Task")) == 0)
     dlgTaskOverviewShowModal();
-  } else if (_tcscmp(misc,TEXT("Airspace"))==0){
+  else if (_tcscmp(misc, TEXT("Airspace")) == 0)
     dlgAirspaceShowModal(false);
-#endif
-  } else if (_tcscmp(misc,TEXT("Weather"))==0){
+  else if (_tcscmp(misc, TEXT("Weather")) == 0)
     dlgWeatherShowModal();
-  } else if (_tcscmp(misc,TEXT("Replay"))==0){
-    if (!Basic().MovementDetected) {
+  else if (_tcscmp(misc, TEXT("Replay")) == 0) {
+    if (!Basic().MovementDetected)
       dlgLoggerReplayShowModal();
-    }
-  } else if (_tcscmp(misc,TEXT("Switches"))==0){
+  } else if (_tcscmp(misc, TEXT("Switches")) == 0)
     dlgSwitchesShowModal();
-  } else if (_tcscmp(misc,TEXT("Voice"))==0){
+  else if (_tcscmp(misc, TEXT("Voice")) == 0)
     dlgVoiceShowModal();
-  } else if (_tcscmp(misc,TEXT("Teamcode"))==0){
+  else if (_tcscmp(misc, TEXT("Teamcode")) == 0)
     dlgTeamCodeShowModal();
-#ifdef OLD_TASK
-  } else if (_tcscmp(misc,TEXT("Target"))==0){
+  else if (_tcscmp(misc, TEXT("Target")) == 0)
     dlgTarget();
-#endif
-  }
-
 }
 
 #ifdef WIN32
-static HINSTANCE
-_loadDLL(TCHAR *name);
+static HINSTANCE _loadDLL(TCHAR *name);
 #endif /* WIN32 */
 
 // DLLExecute
 // Runs the plugin of the specified filename
-void InputEvents::eventDLLExecute(const TCHAR *misc) {
-#ifdef WIN32
+void
+InputEvents::eventDLLExecute(const TCHAR *misc)
+{
+  #ifdef WIN32
   // LoadLibrary(TEXT("test.dll"));
 
   StartupStore(TEXT("%s\n"), misc);
@@ -1432,9 +1440,9 @@ void InputEvents::eventDLLExecute(const TCHAR *misc) {
 #endif
     }
   }
-#else /* !WIN32 */
+  #else /* !WIN32 */
   // XXX implement with dlopen()
-#endif /* !WIN32 */
+  #endif /* !WIN32 */
 }
 
 #ifdef WIN32
@@ -1484,16 +1492,16 @@ _loadDLL(TCHAR *name)
 // +: increases temperature by one degree celsius
 // -: decreases temperature by one degree celsius
 // show: Shows a status message with the current forecast temperature
-void InputEvents::eventAdjustForecastTemperature(const TCHAR *misc) {
-  if (_tcscmp(misc, TEXT("+")) == 0) {
+void
+InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
+{
+  if (_tcscmp(misc, TEXT("+")) == 0)
     CuSonde::adjustForecastTemperature(1.0);
-  }
-  if (_tcscmp(misc, TEXT("-")) == 0) {
+  else if (_tcscmp(misc, TEXT("-")) == 0)
     CuSonde::adjustForecastTemperature(-1.0);
-  }
-  if (_tcscmp(misc, TEXT("show")) == 0) {
+  else if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    _stprintf(Temp,TEXT("%f"),CuSonde::maxGroundTemperature);
+    _stprintf(Temp, TEXT("%f"), CuSonde::maxGroundTemperature);
     Message::AddMessage(TEXT("Forecast temperature"), Temp);
   }
 }
@@ -1501,25 +1509,27 @@ void InputEvents::eventAdjustForecastTemperature(const TCHAR *misc) {
 // Run
 // Runs an external program of the specified filename.
 // Note that XCSoar will wait until this program exits.
-void InputEvents::eventRun(const TCHAR *misc) {
-#ifdef WIN32
+void
+InputEvents::eventRun(const TCHAR *misc)
+{
+  #ifdef WIN32
   PROCESS_INFORMATION pi;
-  if (!::CreateProcess(misc,
-		       NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi))
+  if (!::CreateProcess(misc, NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi))
     return;
 
   // wait for program to finish!
   ::WaitForSingleObject(pi.hProcess, INFINITE);
 
-#else /* !WIN32 */
+  #else /* !WIN32 */
   system(misc);
-#endif /* !WIN32 */
+  #endif /* !WIN32 */
 }
 
-
-void InputEvents::eventDeclutterLabels(const TCHAR *misc) {
+void
+InputEvents::eventDeclutterLabels(const TCHAR *misc)
+{
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    SetSettingsMap().DeclutterLabels ++;
+    SetSettingsMap().DeclutterLabels++;
     SetSettingsMap().DeclutterLabels = SettingsMap().DeclutterLabels % 3;
   } else if (_tcscmp(misc, TEXT("on")) == 0)
     SetSettingsMap().DeclutterLabels = 2;
@@ -1528,72 +1538,68 @@ void InputEvents::eventDeclutterLabels(const TCHAR *misc) {
   else if (_tcscmp(misc, TEXT("mid")) == 0)
     SetSettingsMap().DeclutterLabels = 1;
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (SettingsMap().DeclutterLabels==0)
+    if (SettingsMap().DeclutterLabels == 0)
       Message::AddMessage(TEXT("Map labels ON"));
-    else if (SettingsMap().DeclutterLabels==1)
+    else if (SettingsMap().DeclutterLabels == 1)
       Message::AddMessage(TEXT("Map labels MID"));
     else
       Message::AddMessage(TEXT("Map labels OFF"));
   }
 }
 
+void
+InputEvents::eventBrightness(const TCHAR *misc)
+{
+  (void)misc;
 
-
-
-void InputEvents::eventBrightness(const TCHAR *misc) {
-	(void)misc;
   ScopePopupBlock block(main_window.popup);
   dlgBrightnessShowModal();
 }
 
-
-void InputEvents::eventExit(const TCHAR *misc) {
+void
+InputEvents::eventExit(const TCHAR *misc)
+{
   (void)misc;
+
   SignalShutdown(false);
 }
 
-void InputEvents::eventUserDisplayModeForce(const TCHAR *misc){
-
-  if (_tcscmp(misc, TEXT("unforce")) == 0){
+void
+InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
+{
+  if (_tcscmp(misc, TEXT("unforce")) == 0)
     SetSettingsMap().UserForceDisplayMode = dmNone;
-  }
-  else if (_tcscmp(misc, TEXT("forceclimb")) == 0){
+  else if (_tcscmp(misc, TEXT("forceclimb")) == 0)
     SetSettingsMap().UserForceDisplayMode = dmCircling;
-  }
-  else if (_tcscmp(misc, TEXT("forcecruise")) == 0){
+  else if (_tcscmp(misc, TEXT("forcecruise")) == 0)
     SetSettingsMap().UserForceDisplayMode = dmCruise;
-  }
-  else if (_tcscmp(misc, TEXT("forcefinal")) == 0){
+  else if (_tcscmp(misc, TEXT("forcefinal")) == 0)
     SetSettingsMap().UserForceDisplayMode = dmFinalGlide;
-  }
-  else if (_tcscmp(misc, TEXT("show")) == 0){
+  else if (_tcscmp(misc, TEXT("show")) == 0)
     Message::AddMessage(TEXT("Map labels ON"));
-  }
 }
 
-void InputEvents::eventAirspaceDisplayMode(const TCHAR *misc){
-
-  if (_tcscmp(misc, TEXT("all")) == 0){
+void
+InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
+{
+  if (_tcscmp(misc, TEXT("all")) == 0)
     SetSettingsComputer().AltitudeMode = ALLON;
-  }
-  else if (_tcscmp(misc, TEXT("clip")) == 0){
+  else if (_tcscmp(misc, TEXT("clip")) == 0)
     SetSettingsComputer().AltitudeMode = CLIP;
-  }
-  else if (_tcscmp(misc, TEXT("auto")) == 0){
+  else if (_tcscmp(misc, TEXT("auto")) == 0)
     SetSettingsComputer().AltitudeMode = AUTO;
-  }
-  else if (_tcscmp(misc, TEXT("below")) == 0){
+  else if (_tcscmp(misc, TEXT("below")) == 0)
     SetSettingsComputer().AltitudeMode = ALLBELOW;
-  }
-  else if (_tcscmp(misc, TEXT("off")) == 0){
+  else if (_tcscmp(misc, TEXT("off")) == 0)
     SetSettingsComputer().AltitudeMode = ALLOFF;
-  }
 }
 
-
-void InputEvents::eventAddWaypoint(const TCHAR *misc) {
+void
+InputEvents::eventAddWaypoint(const TCHAR *misc)
+{
 #ifdef OLD_TASK
   static int tmpWaypointNum = 0;
+
   WAYPOINT edit_waypoint;
   edit_waypoint.Location = Basic().Location;
   edit_waypoint.Altitude = Calculated().TerrainAlt;
@@ -1614,30 +1620,20 @@ void InputEvents::eventAddWaypoint(const TCHAR *misc) {
 #endif
 }
 
-
-
-void InputEvents::eventOrientation(const TCHAR *misc){
-  if (_tcscmp(misc, TEXT("northup")) == 0){
+void
+InputEvents::eventOrientation(const TCHAR *misc)
+{
+  if (_tcscmp(misc, TEXT("northup")) == 0)
     SetSettingsMap().DisplayOrientation = NORTHUP;
-  }
-  else if (_tcscmp(misc, TEXT("northcircle")) == 0){
+  else if (_tcscmp(misc, TEXT("northcircle")) == 0)
     SetSettingsMap().DisplayOrientation = NORTHCIRCLE;
-  }
-  else if (_tcscmp(misc, TEXT("trackcircle")) == 0){
+  else if (_tcscmp(misc, TEXT("trackcircle")) == 0)
     SetSettingsMap().DisplayOrientation = TRACKCIRCLE;
-  }
-  else if (_tcscmp(misc, TEXT("trackup")) == 0){
+  else if (_tcscmp(misc, TEXT("trackup")) == 0)
     SetSettingsMap().DisplayOrientation = TRACKUP;
-  }
-  else if (_tcscmp(misc, TEXT("northtrack")) == 0){
+  else if (_tcscmp(misc, TEXT("northtrack")) == 0)
     SetSettingsMap().DisplayOrientation = NORTHTRACK;
-  }
 }
-
-
-
-
-
 
 // JMW TODO enhancement: have all inputevents return bool, indicating whether
 // the button should after processing be hilit or not.
@@ -1678,11 +1674,7 @@ eventSounds			- Include Task and Modes sounds along with Vario
 
 */
 
-
-
 // helpers
-
-
 
 /* Event_TerrainToplogy Changes
    0       Show
@@ -1693,32 +1685,46 @@ eventSounds			- Include Task and Modes sounds along with Vario
    -1      Toggle through 4 stages (off/off, off/on, on/off, on/on)
    -2      Toggle terrain
    -3      Toggle toplogy
-*/
+ */
 
-void InputEvents::sub_TerrainTopology(int vswitch) {
-  char val;
-  if (vswitch== -1) { // toggle through 4 possible options
-    val = 0;
-    if (SettingsMap().EnableTopology) val++;
-    if (SettingsMap().EnableTerrain) val += (char)2;
+void
+InputEvents::sub_TerrainTopology(int vswitch)
+{
+  if (vswitch == -1) {
+    // toggle through 4 possible options
+    char val = 0;
+
+    if (SettingsMap().EnableTopology)
+      val++;
+    if (SettingsMap().EnableTerrain)
+      val += (char)2;
+
     val++;
-    if (val>3) val=0;
-    SetSettingsMap().EnableTopology = ((val & 0x01) == 0x01);
-    SetSettingsMap().EnableTerrain  = ((val & 0x02) == 0x02);
-  } else if (vswitch == -2) { // toggle terrain
-    SetSettingsMap().EnableTerrain = !SettingsMap().EnableTerrain;
-  } else if (vswitch == -3) { // toggle topology
-    SetSettingsMap().EnableTopology = !SettingsMap().EnableTopology;
-  } else if (vswitch == 1) { // Turn on toplogy
-    SetSettingsMap().EnableTopology = true;
-  } else if (vswitch == 2) { // Turn off toplogy
-    SetSettingsMap().EnableTopology = false;
-  } else if (vswitch == 3) { // Turn on terrain
-    SetSettingsMap().EnableTerrain = true;
+    if (val > 3)
+      val = 0;
 
-  } else if (vswitch == 4) { // Turn off terrain
+    SetSettingsMap().EnableTopology = ((val & 0x01) == 0x01);
+    SetSettingsMap().EnableTerrain = ((val & 0x02) == 0x02);
+  } else if (vswitch == -2)
+    // toggle terrain
+    SetSettingsMap().EnableTerrain = !SettingsMap().EnableTerrain;
+  else if (vswitch == -3)
+    // toggle topology
+    SetSettingsMap().EnableTopology = !SettingsMap().EnableTopology;
+  else if (vswitch == 1)
+    // Turn on topology
+    SetSettingsMap().EnableTopology = true;
+  else if (vswitch == 2)
+    // Turn off topology
+    SetSettingsMap().EnableTopology = false;
+  else if (vswitch == 3)
+    // Turn on terrain
+    SetSettingsMap().EnableTerrain = true;
+  else if (vswitch == 4)
+    // Turn off terrain
     SetSettingsMap().EnableTerrain = false;
-  } else if (vswitch == 0) { // Show terrain/Topology
+  else if (vswitch == 0) {
+    // Show terrain/Topology
     // ARH Let user know what's happening
     TCHAR buf[128];
 
@@ -1728,18 +1734,22 @@ void InputEvents::sub_TerrainTopology(int vswitch) {
       _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("OFF")));
 
     if (SettingsMap().EnableTerrain)
-      _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("ON")));
+      _stprintf(buf + _tcslen(buf), TEXT("%s"), gettext(TEXT("ON")));
     else
-      _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("OFF")));
+      _stprintf(buf + _tcslen(buf), TEXT("%s"), gettext(TEXT("OFF")));
+
     Message::AddMessage(TEXT("Topology / Terrain"), buf);
   }
 }
 
-
-void InputEvents::sub_Pan(int vswitch) {
+void
+InputEvents::sub_Pan(int vswitch)
+{
   //  static bool oldfullscreen = 0;  never assigned!
   bool oldPan = SettingsMap().EnablePan;
-  if (vswitch == -2) { // superpan, toggles fullscreen also
+
+  if (vswitch == -2) {
+    // superpan, toggles fullscreen also
 
     /* JMW broken/illegal
     if (!EnablePan) {
@@ -1748,99 +1758,101 @@ void InputEvents::sub_Pan(int vswitch) {
       StoreRestoreFullscreen(false);
     }
     */
+
     // new mode
     SetSettingsMap().EnablePan = !SettingsMap().EnablePan;
     if (SettingsMap().EnablePan) { // pan now on, so go fullscreen
       //JMW illegal      askFullScreen = true;
     }
-
-  } else if (vswitch == -1) {
+  } else if (vswitch == -1)
     SetSettingsMap().EnablePan = !SettingsMap().EnablePan;
-  } else {
+  else
     SetSettingsMap().EnablePan = (vswitch !=0);
-  }
+
   if (SettingsMap().EnablePan != oldPan) {
     if (SettingsMap().EnablePan) {
       SetSettingsMap().PanLocation = Basic().Location;
       setMode(MODE_PAN);
-    } else
+    } else {
       setMode(MODE_DEFAULT);
+    }
   }
 }
 
-
-void InputEvents::sub_PanCursor(int dx, int dy) {
+void
+InputEvents::sub_PanCursor(int dx, int dy)
+{
   RECT MapRect = MapProjection().GetMapRect();
-  int X= (MapRect.right+MapRect.left)/2;
-  int Y= (MapRect.bottom+MapRect.top)/2;
+  int X = (MapRect.right + MapRect.left) / 2;
+  int Y = (MapRect.bottom + MapRect.top) / 2;
   GEOPOINT pstart, pnew;
 
   MapProjection().Screen2LonLat(X, Y, pstart);
 
-  X+= (MapRect.right-MapRect.left)*dx/4;
-  Y+= (MapRect.bottom-MapRect.top)*dy/4;
+  X += (MapRect.right - MapRect.left) * dx / 4;
+  Y += (MapRect.bottom - MapRect.top) * dy / 4;
   MapProjection().Screen2LonLat(X, Y, pnew);
 
   if (SettingsMap().EnablePan) {
-    SetSettingsMap().PanLocation.Longitude += pstart.Longitude-pnew.Longitude;
-    SetSettingsMap().PanLocation.Latitude += pstart.Latitude-pnew.Latitude;
+    SetSettingsMap().PanLocation.Longitude += pstart.Longitude - pnew.Longitude;
+    SetSettingsMap().PanLocation.Latitude += pstart.Latitude - pnew.Latitude;
   }
 }
-
-
 
 // called from UI or input event handler (same thread)
-void InputEvents::sub_AutoZoom(int vswitch) {
-  if (vswitch== -1) {
+void
+InputEvents::sub_AutoZoom(int vswitch)
+{
+  if (vswitch == -1)
     SetSettingsMap().AutoZoom = !SettingsMap().AutoZoom;
-  } else {
+  else
     SetSettingsMap().AutoZoom = (vswitch != 0); // 0 off, 1 on
-  }
-  if (SettingsMap().AutoZoom) {
-    if (SettingsMap().EnablePan) {
+
+  if (SettingsMap().AutoZoom && SettingsMap().EnablePan) {
       SetSettingsMap().EnablePan = false;
-      //      StoreRestoreFullscreen(false);
-    }
+      // StoreRestoreFullscreen(false);
   }
 }
 
-
-void InputEvents::sub_SetZoom(double value) {
+void
+InputEvents::sub_SetZoom(double value)
+{
   SetSettingsMap().MapScale = value;
 }
 
-
-void InputEvents::sub_ScaleZoom(int vswitch) {
+void
+InputEvents::sub_ScaleZoom(int vswitch)
+{
   double value;
-  if (SettingsMap().MapScale>0) {
+  if (SettingsMap().MapScale > 0)
     value = SettingsMap().MapScale;
-  } else {
+  else
     value = MapProjection().GetMapScaleUser();
-  }
+
   MapWindowProjection copy = MapProjection();
-  if (copy.HaveScaleList()){
+  if (copy.HaveScaleList()) {
     value = copy.StepMapScale(-vswitch);
   } else {
-    if (abs(vswitch)>=4) {
-      if (vswitch==4) {
+    if (abs(vswitch) >= 4) {
+      if (vswitch == 4)
         vswitch = 1;
-      }
-      if (vswitch==-4) {
+      else if (vswitch == -4)
         vswitch = -1;
-      }
     }
-    if (vswitch==1) { // zoom in a little
+
+    if (vswitch == 1)
+      // zoom in a little
       value /= 1.414;
-    }
-    if (vswitch== -1) { // zoom out a little
+    else if (vswitch == -1)
+      // zoom out a little
       value *= 1.414;
-    }
-    if (vswitch==2) { // zoom in a lot
+    else if (vswitch == 2)
+      // zoom in a lot
       value /= 2.0;
-    }
-    if (vswitch== -2) { // zoom out a lot
+    else if (vswitch == -2)
+      // zoom out a lot
       value *= 2.0;
-    }
   }
+
   sub_SetZoom(value);
 }

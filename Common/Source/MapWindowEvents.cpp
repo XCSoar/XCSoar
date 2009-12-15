@@ -42,12 +42,11 @@ Copyright_License {
 #include "Protection.hpp"
 #include "InputEvents.h"
 #include "Message.h"
-#include "InfoBoxLayout.h"
 #include "Dialogs.h"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "Defines.h"
-#include "options.h"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"
@@ -238,7 +237,7 @@ bool MapWindow::on_mouse_down(int x, int y)
 			       * (XstartScreen-tscreen.x)
 			       + (YstartScreen-tscreen.y)
 			       * (YstartScreen-tscreen.y)))
-			       / InfoBoxLayout::scale;
+        / Layout::scale;
 
       if (distance<10) {
         TargetDrag_State = 1;
@@ -273,7 +272,7 @@ bool MapWindow::on_mouse_up(int x, int y)
 
   double distance = isqrt4((long)((XstartScreen-x)*(XstartScreen-x)+
 			   (YstartScreen-y)*(YstartScreen-y)))
-    /InfoBoxLayout::scale;
+    / Layout::scale;
 
 #ifdef DEBUG_VIRTUALKEYS
   TCHAR buf[80]; char sbuf[80];
@@ -385,6 +384,18 @@ bool MapWindow::on_mouse_up(int x, int y)
   return false;
 }
 
+bool
+MapWindow::on_mouse_wheel(int delta)
+{
+  if (delta > 0)
+    // zoom in
+    InputEvents::sub_ScaleZoom(1);
+  else if (delta < 0)
+    // zoom out
+    InputEvents::sub_ScaleZoom(-1);
+
+  return true;
+}
 
 bool MapWindow::on_key_down(unsigned key_code)
 {

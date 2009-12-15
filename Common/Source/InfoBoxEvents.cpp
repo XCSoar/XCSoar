@@ -50,7 +50,7 @@ Copyright_License {
 #include "Battery.h"
 #include "Registry.hpp"
 #include "MapWindow.h"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Interface.hpp"
 #include "Components.hpp"
 
@@ -334,7 +334,7 @@ ActionInterface::on_key_MacCready(int UpDown)
     }
 
   // JMW TODO check scope
-  AllDevicesPutMcCready(MACCREADY);
+  AllDevicesPutMacCready(MACCREADY);
 }
 
 

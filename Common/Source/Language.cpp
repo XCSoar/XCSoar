@@ -40,6 +40,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
+#include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Registry.hpp"
 #include "Sizes.h"
@@ -157,7 +158,7 @@ const TCHAR* gettext(const TCHAR* text) {
 void ReadLanguageFile() {
   StartupStore(TEXT("Loading language file\n"));
 
-  TCHAR szFile1[MAX_PATH] = TEXT("\0");
+  TCHAR szFile1[MAX_PATH];
   FILE *fp=NULL;
 
   // Read the language filename from the registry
@@ -169,9 +170,8 @@ void ReadLanguageFile() {
   SetRegistryString(szRegistryLanguageFile, TEXT("\0"));
 
   // If the language file is not set use the default one
-  if (_tcslen(szFile1)==0) {
+  if (string_is_empty(szFile1))
     _tcscpy(szFile1,TEXT("default.xcl"));
-  }
 
   // Open the language file
   fp  = _tfopen(szFile1, TEXT("rt"));

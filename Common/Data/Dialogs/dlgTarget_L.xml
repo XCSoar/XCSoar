@@ -7,7 +7,7 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmTarget" Type="Dialog" X=1 Y=1 Width=240 Height=90 Caption="Target" Font=2  BackColor=0xDADBAB>
+<WndForm Name="frmTarget" Type="Dialog" X=1 Y=1 Width=240 Height=90 Caption="Target" Font=2 Popup=1 BackColor=0xDADBAB>
 
   <WndButton  Name="btnOK" Caption="OK"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
 

@@ -39,6 +39,9 @@ Copyright_License {
 #ifndef LOW_PASS_FILTER_HPP
 #define LOW_PASS_FILTER_HPP
 
+#include "Compiler.h"
+
+gcc_const
 double LowPassFilter(double y_last, double x_in, double fact);
 
 #endif

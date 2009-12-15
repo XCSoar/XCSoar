@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Screen/Util.hpp"
 #include "Screen/Canvas.hpp"
+#include "Math/Constants.h"
 #include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
 #include "Screen/shapelib/mapprimitive.h"
@@ -89,7 +90,6 @@ OutputToInput(unsigned int *inLength, POINT *inVertexArray,
   }
 }
 
-/*
 /**
  * The "Inside" function returns TRUE if the vertex tested is on the
  * inside of the clipping boundary. "Inside" is defined as "to the
@@ -412,7 +412,7 @@ void StartArc(HDC hdc,
                   latitude1, longitude1,
                   &radius,
                   &bearing);
-  double angle = 360*min(1, arclength/(2.0*3.1415926*radius));
+  double angle = 360*min(1, arclength/(2.0*M_PI*radius));
   int i0 = (int)(bearing+angle/2);
   int i1 = (int)(bearing-angle/2);
   int i;

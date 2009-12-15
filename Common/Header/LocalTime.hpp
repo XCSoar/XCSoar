@@ -41,11 +41,8 @@ Copyright_License {
 struct NMEA_INFO;
 struct DERIVED_INFO;
 
-int
-DetectStartTime(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
-
-int
-DetectCurrentTime(const NMEA_INFO *Basic);
+int DetectStartTime(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+int DetectCurrentTime(const NMEA_INFO *Basic);
 
 int TimeLocal(int d);
 long GetUTCOffset(void);

@@ -63,18 +63,18 @@ protected:
 public:
 #ifdef ENABLE_SDL
   Bitmap():surface(NULL) {}
-  Bitmap(const TCHAR *name):surface(NULL) {
+  explicit Bitmap(const TCHAR *name):surface(NULL) {
     load(name);
   }
-  Bitmap(WORD id):surface(NULL) {
+  explicit Bitmap(WORD id):surface(NULL) {
     load(id);
   }
 #else
   Bitmap():bitmap(NULL) {}
-  Bitmap(const TCHAR *name):bitmap(NULL) {
+  explicit Bitmap(const TCHAR *name):bitmap(NULL) {
     load(name);
   }
-  Bitmap(WORD id):bitmap(NULL) {
+  explicit Bitmap(WORD id):bitmap(NULL) {
     load(id);
   }
 #endif

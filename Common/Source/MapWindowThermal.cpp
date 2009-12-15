@@ -37,11 +37,10 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "InfoBoxLayout.h"
 #include "Math/Earth.hpp"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Screen/Graphics.hpp"
-#include "options.h" /* for IBLSCALE() */
+#include "Screen/Layout.hpp"
 
 void MapWindow::CalculateScreenPositionsThermalSources() {
   for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
@@ -115,7 +114,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 #define TBSCALEX 20
 
   // calculate height above safety altitude
-  double hoffset = SettingsComputer().SAFETYALTITUDEBREAKOFF
+  double hoffset = SettingsComputer().SafetyAltitudeBreakoff
     +Calculated().TerrainBase;
   h = Calculated().NavAltitude-hoffset;
 

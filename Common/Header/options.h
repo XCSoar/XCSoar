@@ -40,78 +40,65 @@ Copyright_License {
 #define OPTIONS_H
 
 #include "Debug.h"				// DEBUG OPTIONS FOR EVERYONE
+
 #define   MONOCHROME_SCREEN     1             // optimize for monochrom screen
 #define   EXPERIMENTAL          0             // ????
 
 #define   LOGGDEVICEINSTREAM    0             // log device in stream
 #define   LOGGDEVCOMMANDLINE    NULL          // device in-stream logger command line
                                               // ie TEXT("-logA=\\Speicherkarte\\logA.log ""-logB=\\SD Card\\logB.log""")
+
 #define   AIRSPACEUSEBINFILE    0             // use and maintain binary airspace file
 
 #define   FONTQUALITY           NONANTIALIASED_QUALITY
 
 #ifdef WINDOWSPC
-#ifdef _DEBUG
-// leak checking
-#define CRTDBG_MAP_ALLOC
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-#endif
+  #ifdef _DEBUG
+    // leak checking
+    #define CRTDBG_MAP_ALLOC
+    #define _CRTDBG_MAP_ALLOC
+    #include <stdlib.h>
+    #include <crtdbg.h>
+  #endif
 #endif
 
 #define DISABLEAUDIOVARIO
 
 #if defined(GNAV)
-#define DISABLEAUDIOVARIO
-// use exception handling
-#ifndef ALTAIRPROTOTYPE
-#ifndef __GNUC__
-#define HAVEEXCEPTIONS
-#endif
-#endif
-// disable internally generated sounds
-#define DISABLEAUDIO
-#else
-#ifndef BIGDISPLAY
-#define BIGDISPLAY
-#endif
-#endif
+  #define DISABLEAUDIOVARIO
+  // use exception handling
+  #ifndef ALTAIRPROTOTYPE
+    #ifndef __GNUC__
+      #define HAVEEXCEPTIONS
+    #endif
+  #endif
 
-
-#ifdef BIGDISPLAY
-#define IBLSCALE(x) (   (InfoBoxLayout::IntScaleFlag) ? ((x)*InfoBoxLayout::scale) : ((int)((x)*InfoBoxLayout::dscale)))
-
-#else
-#define IBLSCALE(x) (x)
+  // disable internally generated sounds
+  #define DISABLEAUDIO
 #endif
 
 #ifdef __GNUC__
-#ifndef WINDOWSPC
-#define NEWFLARMDB
-#endif
+  #ifndef WINDOWSPC
+    #define NEWFLARMDB
+  #endif
 #endif
 
 #ifdef WIN32_PLATFORM_PSPC /* Pocket PC */
-
-#if _WIN32_WCE == 300 /* Pocket PC 2000 (unsupported?) */
-#define OLDPPC
-#define NOTIME_H
-#endif /* _WIN32_WCE == 300 */
-
+  #if _WIN32_WCE == 300 /* Pocket PC 2000 (unsupported?) */
+    #define OLDPPC
+    #define NOTIME_H
+  #endif /* _WIN32_WCE == 300 */
 #endif /* WIN32_PLATFORM_PSPC */
 
 // VENTA2 - FIVV and PNA new inner setups
 #ifdef FIVV
-#define CREDITS_FIVV
-#define LOOK8000
+  #define CREDITS_FIVV
+  #define LOOK8000
 #endif
 
 #ifndef NDEBUG
-
-// display debug messages for virtual keys
-/* #define DEBUG_VIRTUALKEYS */
-
+  // display debug messages for virtual keys
+  /* #define DEBUG_VIRTUALKEYS */
 #endif
 
 #endif
@@ -134,4 +121,3 @@ Copyright_License {
 #define VENTA_DEBUG_KEY		// activates scan key codes, so you know what an hardware key is mapped to
 
  */
-

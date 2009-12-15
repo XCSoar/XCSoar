@@ -59,7 +59,6 @@ extern void		SmartGlobalModelType();
 extern short		InstallFonts();
 extern bool		CheckDataDir();
 extern bool		CheckRegistryProfile();
-extern void		ConvToUpper( TCHAR *);
 
 static inline void
 SetGlobalEllipse(float value)
@@ -130,6 +129,19 @@ SetGlobalEllipse(float value)
 #endif
 
 /**
+ * Returns whether the application is running on an embedded platform.
+ * @return True if host hardware is an embedded platform, False otherwise
+ */
+static inline bool is_embedded()
+{
+#if defined(WINDOWSPC) || !defined(WIN32)
+  return false;
+#else
+  return true;
+#endif
+}
+
+/**
  * Returns whether the application is running on a PNA
  * @return True if host hardware is a PNA, False otherwise
  */
@@ -169,8 +181,8 @@ static inline bool model_is_medion_p5()
 }
 
 /**
- * Returns whether the application is running on an altair
- * @return True if host hardware is altair, False otherwise
+ * Returns whether the application is running on an Altair
+ * @return True if host hardware is an Altair, False otherwise
  */
 static inline bool is_altair()
 {
@@ -195,7 +207,22 @@ static inline bool is_simulator()
 }
 
 /**
+ * Returns whether the application is compiled in "FIVV" mode
+ * (enables old experimental code)
+ * @return True if compiled in "FIVV" mode, False otherwise
+ */
+static inline bool is_fivv()
+{
+#if defined(FIVV)
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
  * Flag to activate extra clipping for some PNAs.
+ * @return True if extra clipping needs to be done, False otherwise
  */
 static inline bool need_clipping()
 {
@@ -204,6 +231,8 @@ static inline bool need_clipping()
 
 /**
  * Does this device have a pointer device? (mouse or touch screen)
+ * @return True if a touch screen or mouse is assumed for the hardware
+ * that XCSoar is running on, False if the hardware has only buttons
  */
 static inline bool has_pointer()
 {
@@ -211,8 +240,9 @@ static inline bool has_pointer()
 }
 
 // This could be also used for PDA in landscape..
-typedef enum{
-  ssnone=0,
+typedef enum
+{
+  ssnone = 0,
   ss240x320,
   ss480x640,
   ss480x800,
@@ -222,8 +252,7 @@ typedef enum{
   ss480x272,
   ss640x480,
   ss800x480
-}ScreenSize_t;
-
+} ScreenSize_t;
 
 #ifdef WINDOWSPC
 extern int SCREENWIDTH;

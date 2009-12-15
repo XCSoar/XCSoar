@@ -46,7 +46,7 @@ Copyright_License {
  */
 class ProgressWindow : public Dialog {
 public:
-  ProgressWindow(ContainerWindow &parent);
+  explicit ProgressWindow(ContainerWindow &parent);
 
   void set_message(const TCHAR *text);
 

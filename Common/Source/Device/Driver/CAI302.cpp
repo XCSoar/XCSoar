@@ -49,7 +49,7 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "Device/Port.h"
 #include "Math/Units.h"
-#include "McReady.h"
+#include "MacCready.h"
 #include "NMEA/Info.h"
 
 #include <tchar.h>
@@ -138,7 +138,7 @@ public:
   virtual bool Open();
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
                          bool enable_baro);
-  virtual bool PutMcCready(double mc_cready);
+  virtual bool PutMacCready(double MacCready);
   virtual bool PutBugs(double bugs);
   virtual bool PutBallast(double ballast);
 #ifdef OLD_TASK
@@ -190,7 +190,7 @@ CAI302Device::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
 }
 
 bool
-CAI302Device::PutMcCready(double MacCready)
+CAI302Device::PutMacCready(double MacCready)
 {
   TCHAR  szTmp[32];
 
@@ -579,9 +579,9 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
   GPS_INFO->Vario = ((_tcstod(ctemp, NULL) - 200.0) / 10.0) * KNOTSTOMETRESSECONDS;
 
   NMEAParser::ExtractParameter(String,ctemp,10);
-  GPS_INFO->MacReady = (_tcstod(ctemp, NULL) / 10.0) * KNOTSTOMETRESSECONDS;
+  GPS_INFO->MacCready = (_tcstod(ctemp, NULL) / 10.0) * KNOTSTOMETRESSECONDS;
   if (MacCreadyUpdateTimeout <= 0)
-    oldGlidePolar::SetMacCready(GPS_INFO->MacReady);
+    oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
   else
     MacCreadyUpdateTimeout--;
 

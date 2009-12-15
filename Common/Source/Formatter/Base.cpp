@@ -41,7 +41,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Atmosphere.h"
 #include "Battery.h"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Units.hpp"
 #include "Interface.hpp"
 #include <stdio.h>

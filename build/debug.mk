@@ -6,7 +6,7 @@ OPTIMIZE := -O0 -ggdb
     OPTIMIZE += -gstabs
   endif
 else
-OPTIMIZE := -O2 -DNDEBUG -Wuninitialized
+OPTIMIZE := -Os -DNDEBUG -Wuninitialized
 endif
 
 PROFILE :=

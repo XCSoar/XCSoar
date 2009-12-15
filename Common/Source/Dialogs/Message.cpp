@@ -37,12 +37,15 @@ Copyright_License {
 */
 
 #include "Dialogs/Message.hpp"
-#include "Dialogs/dlgTools.h"
 #include "Language.hpp"
 #include "XCSoar.h"
-#include "WindowControls.h"
+#include "Form/Button.hpp"
+#include "Form/Form.hpp"
+#include "Form/Frame.hpp"
+#include "Form/Edit.hpp"
 #include "MainWindow.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Layout.hpp"
 
 #include <assert.h>
 #include <limits.h>
@@ -85,30 +88,30 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   rc = XCSoarInterface::main_window.get_screen_position();
 
 #ifdef ALTAIRSYNC
-  Width = DLGSCALE(220);
-  Height = DLGSCALE(160);
+  Width = Layout::Scale(220);
+  Height = Layout::Scale(160);
 #else
-  Width = DLGSCALE(200);
-  Height = DLGSCALE(160);
+  Width = Layout::Scale(200);
+  Height = Layout::Scale(160);
 #endif
 
   X = ((rc.right - rc.left) - Width) / 2;
   Y = ((rc.bottom - rc.top) - Height) / 2;
 
-  y = DLGSCALE(100);
-  w = DLGSCALE(60);
-  h = DLGSCALE(32);
+  y = Layout::Scale(100);
+  w = Layout::Scale(60);
+  h = Layout::Scale(32);
 
   // Create dialog
-  wf = new WndForm(&XCSoarInterface::main_window, TEXT("frmXcSoarMessageDlg"),
+  wf = new WndForm(&XCSoarInterface::main_window, _T("frmXcSoarMessageDlg"),
                    lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);
   wf->SetBackColor(Color(0xDA, 0xDB, 0xAB));
 
   // Create text element
-  wText =
-      new WndFrame(wf, TEXT("frmMessageDlgText"), 0, DLGSCALE(5), Width, Height);
+  wText = new WndFrame(wf, _T("frmMessageDlgText"),
+                       0, Layout::Scale(5), Width, Height);
 
   wText->SetCaption(lpText);
   wText->SetFont(MapWindowBoldFont);
@@ -118,7 +121,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   /* TODO code: this doesnt work to set font height
   dY = wText->GetLastDrawTextHeight() - Height;
   */
-  dY = DLGSCALE(-40);
+  dY = Layout::Scale(-40);
   wText->resize(Width, wText->GetTextHeight() + 5);
   wf->resize(Width, wf->get_size().cy + dY);
 
@@ -128,7 +131,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   uType = uType & 0x000f;
   if (uType == MB_OK || uType == MB_OKCANCEL) {
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("OK")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("OK")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDOK);
     ButtonCount++;
@@ -136,13 +139,13 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_YESNO || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("Yes")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("Yes")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDYES);
     ButtonCount++;
 
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("No")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("No")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDNO);
     ButtonCount++;
@@ -150,7 +153,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_ABORTRETRYIGNORE || uType == MB_RETRYCANCEL) {
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("Retry")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("Retry")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDRETRY);
     ButtonCount++;
@@ -158,7 +161,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_OKCANCEL || uType == MB_RETRYCANCEL || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("Cancel")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("Cancel")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDCANCEL);
     ButtonCount++;
@@ -166,13 +169,13 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   if (uType == MB_ABORTRETRYIGNORE) {
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("Abort")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("Abort")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDABORT);
     ButtonCount++;
 
     wButtons[ButtonCount] =
-        new WndButton(wf, TEXT(""), gettext(TEXT("Ignore")), 0, y, w, h, OnButtonClick);
+        new WndButton(wf, _T(""), gettext(_T("Ignore")), 0, y, w, h, OnButtonClick);
 
     wButtons[ButtonCount]->SetTag(IDIGNORE);
     ButtonCount++;

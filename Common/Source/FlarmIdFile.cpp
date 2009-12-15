@@ -52,7 +52,7 @@ FlarmIdFile::FlarmIdFile(void)
   //HANDLE hFile;
   TCHAR path[MAX_PATH];
 
-  TCHAR flarmIdFileName[MAX_PATH] = TEXT("\0");
+  TCHAR flarmIdFileName[MAX_PATH];
 
   LocalPath(path);
 

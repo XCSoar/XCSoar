@@ -41,7 +41,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/Units.h"
 #include "Device/Parser.h"
-#include "McReady.h"
+#include "MacCready.h"
 #include "NMEA/Info.h"
 
 #include <tchar.h>

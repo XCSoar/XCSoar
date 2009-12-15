@@ -23,20 +23,11 @@
 #define __wcecompat__ts_string_h__
 
 #include <tchar.h>
-
-#ifdef _UNICODE
+#include <stddef.h>
 
 void ascii2unicode(const char* ascii, TCHAR* unicode);
 void unicode2ascii(const TCHAR* unicode, char* ascii);
-void ascii2unicode(const char* ascii, TCHAR* unicode, int maxChars);
-void unicode2ascii(const TCHAR* unicode, char* ascii, int maxChars);
-
-#else
-
-void unicode2ascii(const char *unicode, char *ascii, int maxChars);
-void unicode2ascii(const char *unicode, char *ascii);
-void ascii2unicode(const char *ascii, char *unicode);
-
-#endif
+void ascii2unicode(const char* ascii, TCHAR* unicode, size_t max_chars);
+void unicode2ascii(const TCHAR* unicode, char* ascii, size_t max_chars);
 
 #endif /* __wcecompat__ts_string_h__ */

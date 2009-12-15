@@ -49,6 +49,9 @@ Copyright_License {
 #include <limits.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/param.h>
+#include <stdbool.h>
 
 #if UINT_MAX == 65535
 typedef long          int32;
@@ -56,9 +59,7 @@ typedef long          int32;
 typedef int           int32;
 #endif
 
-#define ByteCopy( a, b, c )     memcpy( b, a, c )
-
-static int      bBigEndian;
+static const bool bBigEndian = BYTE_ORDER == BIG_ENDIAN;
 
 /************************************************************************/
 /*                              SwapWord()                              */
@@ -78,18 +79,38 @@ static void SwapWord( int length, void * wordP )
     }
 }
 
+static void
+set_uint32_be(uint8_t *dest, uint32_t value)
+{
+  if (bBigEndian)
+    *(uint32_t *)dest = value;
+  else {
+    dest[0] = value >> 24;
+    dest[1] = value >> 16;
+    dest[2] = value >> 8;
+    dest[3] = value;
+  }
+}
+
+static void
+set_double_be(uint8_t *dest, double value)
+{
+  *(double *)dest = value;
+
+  if (!bBigEndian)
+    SwapWord(sizeof(value), dest);
+}
+
 /************************************************************************/
 /*                             SfRealloc()                              */
 /*                                                                      */
 /*      A realloc cover function that will access a NULL pointer as     */
 /*      a valid input.                                                  */
 /************************************************************************/
-void * SfRealloc( void * pMem, int nNewSize )
+static void *
+SfRealloc(void *pMem, size_t nNewSize)
 {
-  if( pMem == NULL )
-    return( (void *) malloc(nNewSize) );
-  else
-    return( (void *) realloc(pMem,nNewSize) );
+  return realloc(pMem, nNewSize);
 }
 
 /************************************************************************/
@@ -102,54 +123,34 @@ static void writeHeader( SHPHandle psSHP )
 {
   uchar     	abyHeader[100];
   int		i;
-  int32	i32;
   double	dValue;
   int32	*panSHX;
 
   /* -------------------------------------------------------------------- */
   /*      Prepare header block for .shp file.                             */
   /* -------------------------------------------------------------------- */
-  for( i = 0; i < 100; i++ )
-    abyHeader[i] = 0;
+
+  memset(abyHeader, 0, sizeof(abyHeader));
 
   abyHeader[2] = 0x27;				/* magic cookie */
   abyHeader[3] = 0x0a;
 
-  i32 = psSHP->nFileSize/2;				/* file size */
-  ByteCopy( &i32, abyHeader+24, 4 );
-  if( !bBigEndian ) SwapWord( 4, abyHeader+24 );
+  /* file size */
+  set_uint32_be(abyHeader + 24, psSHP->nFileSize / 2);
 
-  i32 = 1000;						/* version */
-  ByteCopy( &i32, abyHeader+28, 4 );
-  if( bBigEndian ) SwapWord( 4, abyHeader+28 );
+  /* version */
+  set_uint32_be(abyHeader + 28, 1000);
 
-  i32 = psSHP->nShapeType;				/* shape type */
-  ByteCopy( &i32, abyHeader+32, 4 );
-  if( bBigEndian ) SwapWord( 4, abyHeader+32 );
+  /* shape type */
+  set_uint32_be(abyHeader + 32, psSHP->nShapeType);
 
-  dValue = psSHP->adBoundsMin[0];			/* set bounds */
-  ByteCopy( &dValue, abyHeader+36, 8 );
-  if( bBigEndian ) SwapWord( 8, abyHeader+36 );
-
-  dValue = psSHP->adBoundsMin[1];
-  ByteCopy( &dValue, abyHeader+44, 8 );
-  if( bBigEndian ) SwapWord( 8, abyHeader+44 );
-
-  dValue = psSHP->adBoundsMax[0];
-  ByteCopy( &dValue, abyHeader+52, 8 );
-  if( bBigEndian ) SwapWord( 8, abyHeader+52 );
-
-  dValue = psSHP->adBoundsMax[1];
-  ByteCopy( &dValue, abyHeader+60, 8 );
-  if( bBigEndian ) SwapWord( 8, abyHeader+60 );
-
-  dValue = psSHP->adBoundsMin[3];			/* m */
-  ByteCopy( &dValue, abyHeader+84, 8 );
-  if( bBigEndian ) SwapWord( 8, abyHeader+84 );
-
-  dValue = psSHP->adBoundsMax[3];
-  ByteCopy( &dValue, abyHeader+92, 8 );
-  if( bBigEndian ) SwapWord( 8, abyHeader+92 );
+  /* set bounds */
+  set_double_be(abyHeader + 36, psSHP->adBoundsMin[0]);
+  set_double_be(abyHeader + 44, psSHP->adBoundsMin[1]);
+  set_double_be(abyHeader + 52, psSHP->adBoundsMax[0]);
+  set_double_be(abyHeader + 60, psSHP->adBoundsMax[1]);
+  set_double_be(abyHeader + 84, psSHP->adBoundsMin[3]);
+  set_double_be(abyHeader + 92, psSHP->adBoundsMax[3]);
 
   /* -------------------------------------------------------------------- */
   /*      Write .shp file header.                                         */
@@ -167,9 +168,10 @@ static void writeHeader( SHPHandle psSHP )
   /* -------------------------------------------------------------------- */
   /*      Prepare, and write .shx file header.                            */
   /* -------------------------------------------------------------------- */
-  i32 = (psSHP->nRecords * 2 * sizeof(int32) + 100)/2;   /* file size */
-  ByteCopy( &i32, abyHeader+24, 4 );
-  if( !bBigEndian ) SwapWord( 4, abyHeader+24 );
+
+  /* file size */
+  set_uint32_be(abyHeader + 24,
+                (psSHP->nRecords * 2 * sizeof(int32) + 100) / 2);
 
   if (psSHP->fpSHX) {
     fseek( psSHP->fpSHX, 0, 0 );
@@ -230,15 +232,6 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
     pszAccess = "r+b";
   else
     pszAccess = "rb";
-
-  /* -------------------------------------------------------------------- */
-  /*	Establish the byte order on this machine.			    */
-  /* -------------------------------------------------------------------- */
-  i = 1;
-  if( *((uchar *) &i) == 1 )
-    bBigEndian = MS_FALSE;
-  else
-    bBigEndian = MS_TRUE;
 
   /* -------------------------------------------------------------------- */
   /*	Initialize the info structure.					    */
@@ -448,17 +441,6 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   int		i;
   FILE	*fpSHP, *fpSHX;
   uchar     	abyHeader[100];
-  int32	i32;
-  double	dValue;
-
-  /* -------------------------------------------------------------------- */
-  /*      Establish the byte order on this system.                        */
-  /* -------------------------------------------------------------------- */
-  i = 1;
-  if( *((uchar *) &i) == 1 )
-    bBigEndian = MS_FALSE;
-  else
-    bBigEndian = MS_TRUE;
 
   /* -------------------------------------------------------------------- */
   /*	Compute the base (layer) name.  If there is any extension  	    */
@@ -495,29 +477,26 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   /* -------------------------------------------------------------------- */
   /*      Prepare header block for .shp file.                             */
   /* -------------------------------------------------------------------- */
-  for( i = 0; i < 100; i++ )
-    abyHeader[i] = 0;
+
+  memset(abyHeader, 0, sizeof(abyHeader));
 
   abyHeader[2] = 0x27;				/* magic cookie */
   abyHeader[3] = 0x0a;
 
-  i32 = 50;						/* file size */
-  ByteCopy( &i32, abyHeader+24, 4 );
-  if( !bBigEndian ) SwapWord( 4, abyHeader+24 );
+  /* file size */
+  set_uint32_be(abyHeader + 24, 50);
 
-  i32 = 1000;						/* version */
-  ByteCopy( &i32, abyHeader+28, 4 );
-  if( bBigEndian ) SwapWord( 4, abyHeader+28 );
+  /* version */
+  set_uint32_be(abyHeader + 28, 1000);
 
-  i32 = nShapeType;					/* shape type */
-  ByteCopy( &i32, abyHeader+32, 4 );
-  if( bBigEndian ) SwapWord( 4, abyHeader+32 );
+  /* shape type */
+  set_uint32_be(abyHeader + 32, nShapeType);
 
-  dValue = 0.0;					/* set bounds */
-  ByteCopy( &dValue, abyHeader+36, 8 );
-  ByteCopy( &dValue, abyHeader+44, 8 );
-  ByteCopy( &dValue, abyHeader+52, 8 );
-  ByteCopy( &dValue, abyHeader+60, 8 );
+  /* set bounds */
+  set_double_be(abyHeader + 36, 0.0);
+  set_double_be(abyHeader + 44, 0.0);
+  set_double_be(abyHeader + 52, 0.0);
+  set_double_be(abyHeader + 60, 0.0);
 
   /* -------------------------------------------------------------------- */
   /*      Write .shp file header.                                         */
@@ -527,9 +506,9 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   /* -------------------------------------------------------------------- */
   /*      Prepare, and write .shx file header.                            */
   /* -------------------------------------------------------------------- */
-  i32 = 50;						/* file size */
-  ByteCopy( &i32, abyHeader+24, 4 );
-  if( !bBigEndian ) SwapWord( 4, abyHeader+24 );
+
+  /* file size */
+  set_uint32_be(abyHeader + 24, 50);
 
   fwrite( abyHeader, 100, 1, fpSHX );
 
@@ -573,17 +552,10 @@ static void writeBounds( uchar * pabyRec, shapeObj *shape, int nVCount )
     }
   }
 
-  if( bBigEndian ) {
-    SwapWord( 8, &dXMin );
-    SwapWord( 8, &dYMin );
-    SwapWord( 8, &dXMax );
-    SwapWord( 8, &dYMax );
-  }
-
-  ByteCopy( &dXMin, pabyRec +  0, 8 );
-  ByteCopy( &dYMin, pabyRec +  8, 8 );
-  ByteCopy( &dXMax, pabyRec + 16, 8 );
-  ByteCopy( &dYMax, pabyRec + 24, 8 );
+  set_double_be(pabyRec, dXMin);
+  set_double_be(pabyRec + 8, dYMin);
+  set_double_be(pabyRec + 16, dXMax);
+  set_double_be(pabyRec + 24, dYMax);
 }
 
 int msSHPWritePoint(SHPHandle psSHP, pointObj *point )
@@ -625,30 +597,24 @@ int msSHPWritePoint(SHPHandle psSHP, pointObj *point )
   /* -------------------------------------------------------------------- */
   /*      Write vertices for a point.                                     */
   /* -------------------------------------------------------------------- */
-  ByteCopy( &(point->x), pabyRec + 12, 8 );
-  ByteCopy( &(point->y), pabyRec + 20, 8 );
 
-  if( bBigEndian ) {
-    SwapWord( 8, pabyRec + 12 );
-    SwapWord( 8, pabyRec + 20 );
-  }
+  set_double_be(pabyRec + 12, point->x);
+  set_double_be(pabyRec + 20, point->y);
 
   nRecordSize = 20;
 
   /* -------------------------------------------------------------------- */
   /*      Set the shape type, record number, and record size.             */
   /* -------------------------------------------------------------------- */
-  i32 = psSHP->nRecords-1+1;					/* record # */
-  if( !bBigEndian ) SwapWord( 4, &i32 );
-  ByteCopy( &i32, pabyRec, 4 );
 
-  i32 = nRecordSize/2;				/* record size */
-  if( !bBigEndian ) SwapWord( 4, &i32 );
-  ByteCopy( &i32, pabyRec + 4, 4 );
+  /* record # */
+  set_uint32_be(pabyRec, psSHP->nRecords);
 
-  i32 = psSHP->nShapeType;				/* shape type */
-  if( bBigEndian ) SwapWord( 4, &i32 );
-  ByteCopy( &i32, pabyRec + 8, 4 );
+  /* record size */
+  set_uint32_be(pabyRec + 4, nRecordSize / 2);
+
+  /* shape type */
+  set_uint32_be(pabyRec + 8, psSHP->nShapeType);
 
   /* -------------------------------------------------------------------- */
   /*      Write out record.                                               */
@@ -733,34 +699,24 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
 
     writeBounds( pabyRec + 12, shape, t_nPoints );
 
-    if( bBigEndian ) {
-      SwapWord( 4, &nPoints );
-      SwapWord( 4, &nParts );
-    }
-
-    ByteCopy( &nPoints, pabyRec + 40 + 8, 4 );
-    ByteCopy( &nParts, pabyRec + 36 + 8, 4 );
+    set_uint32_be(pabyRec + 40 + 8, nPoints);
+    set_uint32_be(pabyRec + 36 + 8, nParts);
 
     partSize = 0; // first part always starts at 0
-    ByteCopy( &partSize, pabyRec + 44 + 8 + 4*0, 4 );
-    if( bBigEndian ) SwapWord( 4, pabyRec + 44 + 8 + 4*0);
+    set_uint32_be(pabyRec + 44 + 8 + 4 * 0, partSize);
 
     for( i = 1; i < t_nParts; i++ ) {
       partSize += shape->line[i-1].numpoints;
-      ByteCopy( &partSize, pabyRec + 44 + 8 + 4*i, 4 );
-      if( bBigEndian ) SwapWord( 4, pabyRec + 44 + 8 + 4*i);
+      set_uint32_be(pabyRec + 44 + 8 + 4 * i, partSize);
     }
 
     k = 0; // overall point counter
     for( i = 0; i < shape->numlines; i++ ) {
       for( j = 0; j < shape->line[i].numpoints; j++ ) {
-	ByteCopy( &(shape->line[i].point[j].x), pabyRec + 44 + 4*t_nParts + 8 + k * 16, 8 );
-	ByteCopy( &(shape->line[i].point[j].y), pabyRec + 44 + 4*t_nParts + 8 + k * 16 + 8, 8 );
-
-	if( bBigEndian ) {
-	  SwapWord( 8, pabyRec + 44+4*t_nParts+8+k*16 );
-	  SwapWord( 8, pabyRec + 44+4*t_nParts+8+k*16+8 );
-	}
+        set_double_be(pabyRec + 44 + 4 * t_nParts + 8 + k * 16,
+                      shape->line[i].point[j].x);
+        set_double_be(pabyRec + 44 + 4 * t_nParts + 8 + k * 16 + 8,
+                      shape->line[i].point[j].y);
 
 	k++;
       }
@@ -777,20 +733,17 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
 
         nRecordSize = 44 + 4*t_nParts + 8 + (t_nPoints* 16);
 
-        ByteCopy( &(dfMMin), pabyRec + nRecordSize, 8 );
-        if( bBigEndian ) SwapWord( 8, pabyRec + nRecordSize );
+        set_double_be(pabyRec + nRecordSize, dfMMin);
         nRecordSize += 8;
 
-        ByteCopy( &(dfMMax), pabyRec + nRecordSize, 8 );
-        if( bBigEndian ) SwapWord( 8, pabyRec + nRecordSize );
+        set_double_be(pabyRec + nRecordSize, dfMMax);
         nRecordSize += 8;
 
         for( i = 0; i < shape->numlines; i++ )
         {
             for( j = 0; j < shape->line[i].numpoints; j++ )
             {
-                ByteCopy( &(shape->line[i].point[j].m), pabyRec + nRecordSize, 8 );
-                if( bBigEndian ) SwapWord( 8, pabyRec + nRecordSize );
+              set_double_be(pabyRec + nRecordSize, shape->line[i].point[j].m);
                 nRecordSize += 8;
             }
         }
@@ -810,17 +763,11 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
 
     writeBounds( pabyRec + 12, shape, nPoints );
 
-    if( bBigEndian ) SwapWord( 4, &nPoints );
-    ByteCopy( &nPoints, pabyRec + 44, 4 );
+    set_uint32_be(pabyRec + 44, nPoints);
 
     for( i = 0; i < shape->line[0].numpoints; i++ ) {
-      ByteCopy( &(shape->line[0].point[i].x), pabyRec + 48 + i*16, 8 );
-      ByteCopy( &(shape->line[0].point[i].y), pabyRec + 48 + i*16 + 8, 8 );
-
-      if( bBigEndian ) {
-	SwapWord( 8, pabyRec + 48 + i*16 );
-	SwapWord( 8, pabyRec + 48 + i*16 + 8 );
-      }
+      set_double_be(pabyRec + 48 + i * 16, shape->line[0].point[i].x);
+      set_double_be(pabyRec + 48 + i * 16 + 8, shape->line[0].point[i].y);
     }
     if (psSHP->nShapeType == SHP_MULTIPOINTM)
     {
@@ -829,18 +776,15 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
         dfMMin = shape->line[0].point[0].m;
         dfMMax = shape->line[0].point[shape->line[0].numpoints-1].m;
 
-        ByteCopy( &(dfMMin), pabyRec + nRecordSize, 8 );
-        if( bBigEndian ) SwapWord( 8, pabyRec + nRecordSize );
+        set_double_be(pabyRec + nRecordSize, dfMMin);
         nRecordSize += 8;
 
-        ByteCopy( &(dfMMax), pabyRec + nRecordSize, 8 );
-        if( bBigEndian ) SwapWord( 8, pabyRec + nRecordSize );
+        set_double_be(pabyRec + nRecordSize, dfMMax);
         nRecordSize += 8;
 
         for( i = 0; i < shape->line[0].numpoints; i++ )
         {
-            ByteCopy( &(shape->line[0].point[i].m), pabyRec + nRecordSize, 8 );
-            if( bBigEndian ) SwapWord( 8, pabyRec + nRecordSize );
+          set_double_be(pabyRec + nRecordSize, shape->line[0].point[i].m);
             nRecordSize += 8;
         }
     }
@@ -852,8 +796,8 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
   /*      Write vertices for a point.                                     */
   /* -------------------------------------------------------------------- */
   else if( psSHP->nShapeType == SHP_POINT ||  psSHP->nShapeType == SHP_POINTM) {
-    ByteCopy( &(shape->line[0].point[0].x), pabyRec + 12, 8 );
-    ByteCopy( &(shape->line[0].point[0].y), pabyRec + 20, 8 );
+    set_double_be(pabyRec + 12, shape->line[0].point[0].x);
+    set_double_be(pabyRec + 20, shape->line[0].point[0].y);
 
     if( bBigEndian ) {
       SwapWord( 8, pabyRec + 12 );
@@ -864,8 +808,7 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
     {
         nRecordSize = 28;
 
-        ByteCopy( &(shape->line[0].point[0].m), pabyRec + nRecordSize, 8 );
-        if( bBigEndian ) SwapWord( 8, pabyRec + nRecordSize );
+        set_double_be(pabyRec + nRecordSize, shape->line[0].point[0].m);
         nRecordSize += 8;
     }
     else
@@ -875,17 +818,15 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
   /* -------------------------------------------------------------------- */
   /*      Set the shape type, record number, and record size.             */
   /* -------------------------------------------------------------------- */
-  i32 = psSHP->nRecords-1+1;					/* record # */
-  if( !bBigEndian ) SwapWord( 4, &i32 );
-  ByteCopy( &i32, pabyRec, 4 );
 
-  i32 = nRecordSize/2;				/* record size */
-  if( !bBigEndian ) SwapWord( 4, &i32 );
-  ByteCopy( &i32, pabyRec + 4, 4 );
+  /* record # */
+  set_uint32_be(pabyRec, psSHP->nRecords);
 
-  i32 = psSHP->nShapeType;				/* shape type */
-  if( bBigEndian ) SwapWord( 4, &i32 );
-  ByteCopy( &i32, pabyRec + 8, 4 );
+  /* record size */
+  set_uint32_be(pabyRec + 4, nRecordSize / 2);
+
+  /* shape type */
+  set_uint32_be(pabyRec + 8, psSHP->nShapeType);
 
   /* -------------------------------------------------------------------- */
   /*      Write out record.                                               */

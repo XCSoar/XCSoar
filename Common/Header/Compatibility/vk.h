@@ -42,6 +42,13 @@ Copyright_License {
 #ifdef GNAV
 /* Triadis Altair */
 
+#undef VK_APP1
+#undef VK_APP2
+#undef VK_APP3
+#undef VK_APP4
+#undef VK_APP5
+#undef VK_APP6
+
 #define VK_APP1 VK_F1
 #define VK_APP2 VK_F2
 #define VK_APP3 VK_F3

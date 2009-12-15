@@ -119,11 +119,6 @@ void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf) {
   assert(Name[0] != '\0');
   assert(lplf != NULL);
 
-#if defined(WINDOWSPC) && !defined(PCGNAV)
-  // Don't load font settings from registry values for windows version
-  return;
-#endif
-
   if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0) {
     propGetFontSettingsFromString(Buffer, lplf);
   }

@@ -41,7 +41,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
-#include "McReady.h"
+#include "MacCready.h"
 #include "Units.hpp"
 #include "Calculations.h" // TODO danger! RefreshTaskStatistics()
 #include "GlideSolvers.hpp"
@@ -96,7 +96,7 @@ static void RefreshCalculator(void) {
   RefreshTaskStatistics();
 
   // update outputs
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));
   if (wp) {
     double dd = XCSoarInterface::Calculated().TaskTimeToGo;
     if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
@@ -108,10 +108,10 @@ static void RefreshCalculator(void) {
   }
 
   // update outputs
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATTime"));
+  wp = (WndProperty*)wf->FindByName(_T("prpAATTime"));
   if (wp) {
     if (!task.getSettings().AATEnabled) {
-      wp->SetVisible(false);
+      wp->hide();
     } else {
       wp->GetDataField()->SetAsFloat(task.getSettings().AATTaskLength);
     }
@@ -123,34 +123,31 @@ static void RefreshCalculator(void) {
   if (task.getSettings().AATEnabled && (d1==0.0)) {
     d1 = XCSoarInterface::Calculated().AATTargetDistance;
   }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpDistance"));
+  wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(d1*DISTANCEMODIFY);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpMacCready"));
+  wp = (WndProperty*)wf->FindByName(_T("prpMacCready"));
   if (wp) {
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpEffectiveMacCready"));
+  wp = (WndProperty*)wf->FindByName(_T("prpEffectiveMacCready"));
   if (wp) {
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
     wp->GetDataField()->SetAsFloat(emc*LIFTMODIFY);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
+  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
     wp->RefreshDisplay();
-    if (!task.getSettings().AATEnabled || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
-      wp->SetVisible(false);
-    } else {
-      wp->SetVisible(true);
-    }
+    wp->set_visible(task.getSettings().AATEnabled &&
+                    task.ValidTaskPoint(task.getActiveIndex() + 1));
     wp->GetDataField()->SetAsFloat(Range*100.0);
     wp->RefreshDisplay();
   }
@@ -163,21 +160,21 @@ static void RefreshCalculator(void) {
     v1 = 0;
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedRemaining"));
+  wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(v1*TASKSPEEDMODIFY);
     wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedAchieved"));
+  wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(XCSoarInterface::Calculated().TaskSpeed*TASKSPEEDMODIFY);
     wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpCruiseEfficiency"));
+  wp = (WndProperty*)wf->FindByName(_T("prpCruiseEfficiency"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(cruise_efficiency*100.0);
     wp->RefreshDisplay();
@@ -244,12 +241,12 @@ static void DoOptimise(void) {
 
 static void OnTargetClicked(WindowControl * Sender){
   (void)Sender;
-  wf->SetVisible(false);
+  wf->hide();
   dlgTarget();
   // find start value for range (it may have changed)
   Range = task.AdjustAATTargets(2.0);
   RefreshCalculator();
-  wf->SetVisible(true);
+  wf->show();
 }
 
 
@@ -344,9 +341,9 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgTaskCalculatorShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
-                      TEXT("dlgTaskCalculator.xml"),
+                      _T("dlgTaskCalculator.xml"),
 		      XCSoarInterface::main_window,
-		      TEXT("IDR_XML_TASKCALCULATOR"));
+		      _T("IDR_XML_TASKCALCULATOR"));
 
   if (!wf) return;
 
@@ -364,10 +361,10 @@ void dlgTaskCalculatorShowModal(void){
   RefreshCalculator();
 
   if (!task.getSettings().AATEnabled || !task.ValidTaskPoint(task.getActiveIndex()+1)) {
-    ((WndButton *)wf->FindByName(TEXT("Optimise")))->SetVisible(false);
+    ((WndButton *)wf->FindByName(_T("Optimise")))->hide();
   }
   if (!task.ValidTaskPoint(task.getActiveIndex())) {
-    ((WndButton *)wf->FindByName(TEXT("Target")))->SetVisible(false);
+    ((WndButton *)wf->FindByName(_T("Target")))->hide();
   }
 
   if (wf->ShowModal() == mrCancel) {

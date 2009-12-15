@@ -50,9 +50,13 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgHelpers.hpp"
 #include "Dialogs/Message.hpp"
-#include "WindowControls.h"
+#include "Form/Form.hpp"
+#include "Form/List.hpp"
+#include "Form/Edit.hpp"
+#include "Form/Button.hpp"
+#include "Form/Draw.hpp"
+#include "Form/Util.hpp"
 #include "Language.hpp"
-#include "WindowControls.h"
 #include "Interface.hpp"
 
 #endif

@@ -118,6 +118,8 @@ protected:
 #endif /* !ENABLE_SDL */
 
 public:
+  void post_quit();
+
   /**
    * Runs the event loop until the application quits.
    */
