@@ -167,22 +167,22 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
     _stprintf(sTmp, _T("%.0f %s"),
               tp.LegDistance*DISTANCEMODIFY,
               Units::GetDistanceName());
-    canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
-                       Layout::FastScale(2), sTmp);
+    canvas.text(p1 + w1 - canvas.text_width(sTmp),
+                Layout::FastScale(2), sTmp);
 
     _stprintf(sTmp, _T("%d")_T(DEG),  iround(tp.InBound));
-    canvas.text_opaque(p2 + w2 - canvas.text_width(sTmp),
-                       Layout::FastScale(2), sTmp);
+    canvas.text(p2 + w2 - canvas.text_width(sTmp),
+                Layout::FastScale(2), sTmp);
   } else if (DrawListIndex==n) {
     _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
-    canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-                       sTmp);
+    canvas.text(Layout::FastScale(2), Layout::FastScale(2),
+                sTmp);
   } else if ((DrawListIndex==n+1) && task.ValidTaskPoint(0)) {
 
     if (!task.getSettings().AATEnabled) {
       _stprintf(sTmp, gettext(_T("Total:")));
-      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-                         sTmp);
+      canvas.text(Layout::FastScale(2), Layout::FastScale(2),
+                  sTmp);
 
       if (fai_ok) {
         _stprintf(sTmp, _T("%.0f %s FAI"), lengthtotal*DISTANCEMODIFY,
@@ -191,9 +191,9 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
         _stprintf(sTmp, _T("%.0f %s"), lengthtotal*DISTANCEMODIFY,
                   Units::GetDistanceName());
       }
-      canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
-                         Layout::FastScale(2), sTmp);
 
+      canvas.text(p1 + w1 - canvas.text_width(sTmp),
+                  Layout::FastScale(2), sTmp);
     } else {
 
       double d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
@@ -208,7 +208,7 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
                 DISTANCEMODIFY*lengthtotal,
                 DISTANCEMODIFY*d1,
                 Units::GetDistanceName());
-      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), sTmp);
+      canvas.text(Layout::FastScale(2), Layout::FastScale(2), sTmp);
     }
   }
 }
