@@ -55,7 +55,10 @@ Copyright_License {
  * Constructor of the GlideComputer class
  * @return
  */
-GlideComputer::GlideComputer()
+GlideComputer::GlideComputer(TaskManager &task,
+                             AirspaceWarningManager& as_manager):
+  GlideComputerTask(task),
+  GlideComputerAirData(as_manager)
 {
 
 }

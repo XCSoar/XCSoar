@@ -245,10 +245,16 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   }
 #endif
 
-  CondReplaceInString(task_manager.is_mode(TaskManager::MODE_ABORT)
-                      || task_manager.is_mode(TaskManager::MODE_GOTO),
-		      OutBuffer, TEXT("$(TaskAbortToggleActionName)"),
-		      TEXT("Resume"), TEXT("Abort"), Size);
+  if (_tcsstr(OutBuffer, TEXT("$(TaskAbortToggleActionName)"))) {
+    if (task_manager.is_mode(TaskManager::MODE_GOTO)) {
+      CondReplaceInString(task_manager.check_ordered_task(),
+                          OutBuffer, TEXT("$(TaskAbortToggleActionName)"),
+                          TEXT("Resume"), TEXT("Abort"), Size);
+    } else 
+      CondReplaceInString(task_manager.is_mode(TaskManager::MODE_ABORT),
+                          OutBuffer, TEXT("$(TaskAbortToggleActionName)"),
+                          TEXT("Resume"), TEXT("Abort"), Size);
+  }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckReplay)"))) {
     if (!Basic().Replay && Basic().MovementDetected) {

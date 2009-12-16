@@ -48,17 +48,24 @@ Copyright_License {
 using std::max;
 #endif
 
+class TaskManager;
+
 struct WAYPOINT;
 struct WPCALC;
 
-class GlideComputerTask: virtual public GlideComputerBlackboard {
+class GlideComputerTask: 
+  virtual public GlideComputerBlackboard 
+{
 public:
-  GlideComputerTask(): olc_clock(5.0) {};
+  GlideComputerTask(TaskManager& task);
+
   OLCOptimizer         olc;
   void DoAutoMacCready(double mc_setting);
   virtual bool InsideStartHeight(const DWORD Margin=0) const;
   virtual bool ValidStartSpeed(const DWORD Margin=0) const;
 protected:
+  TaskManager &m_task;
+
   void Initialise() {}
   void ProcessBasicTask(const double mc_setting,
 			const double cruise_efficiency);
@@ -69,8 +76,6 @@ protected:
   bool DoLogging();
   void InSector();
 
-  // abort stuff
-  void SortLandableWaypoints();
   // stuff for display
   void CalculateWaypointReachable(void);
 private:

@@ -35,6 +35,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+#include "Task/TaskManager.hpp"
 
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
@@ -248,10 +249,11 @@ static void
 OnGotoClicked(WindowControl * Sender)
 {
   (void)Sender;
-#ifdef OLD_TASK
-  task.FlyDirectTo(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
-      XCSoarInterface::Basic());
-#endif
+
+  if (selected_waypoint) {
+    task_manager.do_goto(*selected_waypoint);
+  }
+
   wf->SetModalResult(mrOK);
 }
 

@@ -45,6 +45,7 @@ Copyright_License {
 #include "WindAnalyser.h"
 #include "GPSClock.hpp"
 #include "Math/SunEphemeris.hpp"
+#include "Airspace/AirspaceWarningManager.hpp"
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
@@ -53,7 +54,7 @@ Copyright_License {
 
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
-  GlideComputerAirData();
+  GlideComputerAirData(AirspaceWarningManager& as_manager);
   ldrotary_s           rotaryLD;
   SunEphemeris sun;
   virtual void ProcessIdle();
@@ -65,6 +66,7 @@ public:
 private:
   ThermalLocator thermallocator;
 protected:
+  AirspaceWarningManager &m_airspace_warning;
 
   void ResetFlight(const bool full=true);
   void Initialise();
@@ -98,10 +100,7 @@ private:
 		  const double cruise_efficiency);
   void NettoVario();
   void TakeoffLanding();
-  void PredictNextPosition();
-#ifdef OLD_TASK
   void AirspaceWarning();
-#endif
   void TerrainFootprint(const double max_dist);
   void BallastDump();
   void ThermalSources();

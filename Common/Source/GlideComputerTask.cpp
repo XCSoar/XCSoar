@@ -37,6 +37,8 @@ Copyright_License {
 
 */
 
+#include "Task/TaskManager.hpp"
+
 #include "GlideComputerTask.hpp"
 #include "Protection.hpp"
 #include "SettingsTask.hpp"
@@ -63,6 +65,15 @@ using std::max;
 
 bool ForceFinalGlide= false;
 
+
+GlideComputerTask::GlideComputerTask(TaskManager& task): 
+  m_task(task), 
+  olc_clock(5.0) 
+{
+
+}
+
+
 void
 GlideComputerTask::ResetFlight(const bool full)
 {
@@ -71,6 +82,7 @@ GlideComputerTask::ResetFlight(const bool full)
 #ifdef OLD_TASK
     aatdistance.Reset();
 #endif
+    m_task.reset();
   }
   SetCalculated().BestAlternate = -1;
 }
@@ -89,6 +101,12 @@ GlideComputerTask::StartTask(const bool do_advance, const bool do_announce)
 void
 GlideComputerTask::ProcessBasicTask(const double mc, const double ce)
 {
+  if (Basic().Time != LastBasic().Time) {
+    terrain.Lock();
+    m_task.update(Basic(), LastBasic());
+    terrain.Unlock();
+  }
+
 #ifdef OLD_TASK
   DistanceToHome();
   DistanceToNext();
@@ -110,10 +128,11 @@ GlideComputerTask::ProcessBasicTask(const double mc, const double ce)
 void
 GlideComputerTask::ProcessIdle()
 {
-#ifdef OLD_TASK
-  if (task.isTaskAborted())
-    SortLandableWaypoints();
+  terrain.Lock();
+  m_task.update_idle(Basic());
+  terrain.Unlock();
 
+#ifdef OLD_TASK
   DoBestAlternateSlow();
 #endif
 }

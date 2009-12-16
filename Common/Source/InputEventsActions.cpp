@@ -91,6 +91,9 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Logger.h"
 #include "Asset.hpp"
 
+#include "Waypoint/Waypoints.hpp"
+#include "Task/TaskManager.hpp"
+
 #include <assert.h>
 #include <ctype.h>
 #include <tchar.h>
@@ -764,27 +767,25 @@ InputEvents::eventAnalysis(const TCHAR *misc)
 void
 InputEvents::eventWaypointDetails(const TCHAR *misc)
 {
-  if (_tcscmp(misc, TEXT("current")) == 0) {
-#ifdef OLD_TASK
-    if (task.Valid()) {
-      task.setSelected();
-    }
+  const Waypoint* wp = NULL;
 
-    if (task.getSelected()<0){
+  if (_tcscmp(misc, TEXT("current")) == 0) {
+
+    const TaskPoint *tp = task_manager.getActiveTaskPoint();
+    if (tp) {
+      wp = &tp->get_waypoint();
+    }
+    if (!wp) {
       Message::AddMessage(TEXT("No Active Waypoint!"));
       return;
     }
-
-    ScopePopupBlock block(main_window.popup);
-    dlgWayPointDetailsShowModal(way_point);
-#endif
   } else if (_tcscmp(misc, TEXT("select")) == 0) {
     ScopePopupBlock block(main_window.popup);
-    const Waypoint* wp = dlgWayPointSelect(Basic().Location);
-    if (wp) {
-//      task.setSelected(res);
-      dlgWayPointDetailsShowModal(*wp);
-    };
+    wp = dlgWayPointSelect(Basic().Location);
+  }
+  if (wp) {
+    ScopePopupBlock block(main_window.popup);
+    dlgWayPointDetailsShowModal(*wp);
   }
 }
 
@@ -793,11 +794,9 @@ InputEvents::eventGotoLookup(const TCHAR *misc)
 {
   ScopePopupBlock block(main_window.popup);
   const Waypoint* wp = dlgWayPointSelect(Basic().Location);
-#ifdef OLD_TASK
   if (wp) {
-    task.FlyDirectTo(res, SettingsComputer(), Basic());
+    task_manager.do_goto(*wp);
   }
-#endif
 }
 
 // StatusMessage
@@ -1044,23 +1043,34 @@ InputEvents::eventAdjustWaypoint(const TCHAR *misc)
 void
 InputEvents::eventAbortTask(const TCHAR *misc)
 {
-#ifdef OLD_TASK
   if (_tcscmp(misc, TEXT("abort")) == 0)
-    task.ResumeAbortTask(SettingsComputer(), Basic(), 1);
+    task_manager.abort();
   else if (_tcscmp(misc, TEXT("resume")) == 0)
-    task.ResumeAbortTask(SettingsComputer(), Basic(), -1);
+    task_manager.resume();
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (task.isTaskAborted())
+    if (task_manager.is_mode(TaskManager::MODE_ABORT))
       Message::AddMessage(TEXT("Task Aborted"));
-    else if (task.TaskIsTemporary()) {
-      Message::AddMessage(TEXT("Task Temporary"));
-    } else {
-      Message::AddMessage(TEXT("Task Resume"));
-    }
+    else if (task_manager.is_mode(TaskManager::MODE_GOTO)) 
+      Message::AddMessage(TEXT("Task Goto"));
+    else if (task_manager.is_mode(TaskManager::MODE_ORDERED)) 
+      Message::AddMessage(TEXT("Task Ordered"));
+    else
+      Message::AddMessage(TEXT("No Task"));    
   } else {
-    task.ResumeAbortTask(SettingsComputer(), Basic(), 0);
+    // toggle
+    if (task_manager.is_mode(TaskManager::MODE_ORDERED)) 
+      task_manager.abort();
+    else if (task_manager.is_mode(TaskManager::MODE_GOTO)) {
+      if (task_manager.check_ordered_task()) {
+        task_manager.resume();
+      } else {
+        task_manager.abort();
+      }
+    } else if (task_manager.is_mode(TaskManager::MODE_ABORT))
+      task_manager.resume();
+    else 
+      task_manager.abort();
   }
-#endif
 }
 
 #include "Device/device.h"
@@ -1235,7 +1245,6 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
   } 
 
   ScopePopupBlock block(main_window.popup);
-
   dlgAirspaceDetails(*as);
 
   // clear previous warning if any
@@ -1608,27 +1617,13 @@ InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
 void
 InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
-#ifdef OLD_TASK
-  static int tmpWaypointNum = 0;
-
-  WAYPOINT edit_waypoint;
-  edit_waypoint.Location = Basic().Location;
-  edit_waypoint.Altitude = Calculated().TerrainAlt;
-  edit_waypoint.FileNum = 2; // don't put into file
-  edit_waypoint.Flags = 0;
-  if (_tcscmp(misc, TEXT("landable")) == 0) {
-    edit_waypoint.Flags += LANDPOINT;
+  ScopePopupBlock block(main_window.popup);
+  Waypoint edit_waypoint = way_points.create(Basic().Location);
+  if (dlgWaypointEditShowModal(edit_waypoint)) {
+    if (edit_waypoint.Name.size()) {
+      way_points.append(edit_waypoint);
+    }
   }
-  edit_waypoint.Comment[0] = 0;
-  edit_waypoint.Name[0] = 0;
-  edit_waypoint.Details = 0;
-  edit_waypoint.Number = 0;
-
-  // TODO: protect inner function with lock
-  int i = way_points.append(edit_waypoint);
-  if (i >= 0)
-    _stprintf(way_points.set(i).Name, TEXT("_%d"), ++tmpWaypointNum);
-#endif
 }
 
 void

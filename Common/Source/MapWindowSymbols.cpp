@@ -49,6 +49,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "MacCready.h"
 #include "Appearance.hpp"
+#include "Task/TaskManager.hpp"
 
 #include <stdlib.h>
 
@@ -250,8 +251,8 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
   if (Appearance.FlightModeIcon == apFlightModeIconDefault){
     Bitmap *bmp;
-#ifdef OLD_TASK
-    if (task != NULL && task->isTaskAborted()) {
+
+    if (task->is_mode(TaskManager::MODE_ABORT)) {
       bmp = &MapGfx.hAbort;
     } else if (DisplayMode == dmCircling) {
       bmp = &MapGfx.hClimb;
@@ -260,9 +261,6 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
     } else {
       bmp = &MapGfx.hCruise;
     }
-#else
-    bmp = &MapGfx.hCruise;
-#endif
 
     offset -= 24;
 
@@ -318,14 +316,10 @@ void MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
     }
 
-#ifdef OLD_TASK
-    if (task != NULL && task->isTaskAborted())
+    if (task->is_mode(TaskManager::MODE_ABORT)) 
       canvas.select(MapGfx.hBrushFlyingModeAbort);
     else
       canvas.select(MapGfx.hbCompass);
-#else
-    canvas.select(MapGfx.hbCompass);
-#endif
 
     canvas.select(MapGfx.hpCompassBorder);
     canvas.polygon(Arrow, 3);
@@ -512,8 +506,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
   int Offset0;
   int i;
 
-#ifdef OLD_TASK
-  if (task != NULL && task->Valid()){
+  if (task->check_task()){
 
     const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
 
@@ -618,7 +611,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
     // JMW draw x on final glide bar if unreachable at current Mc
     // hpAircraftBorder
     if ((Calculated().TaskTimeToGo>0.9*ERROR_TIME)
-        || ((GlidePolar::GetMacCready()<0.01)
+        || ((oldGlidePolar::GetMacCready()<0.01)
             && (Calculated().TaskAltitudeDifference<0))) {
       canvas.select(MapGfx.hpAircraftBorder);
       POINT Cross[4] = { {-5, -5},
@@ -636,7 +629,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
     if (Appearance.IndFinalGlide == fgFinalGlideDefault){
 
       _stprintf(Value,TEXT("%1.0f "),
-                ALTITUDEMODIFY*Calculated().TaskAltitudeDifference);
+                ALTITUDEMODIFY*FIXED_DOUBLE(Calculated().TaskAltitudeDifference));
 
       if (Offset>=0) {
         Offset = GlideBar[2].y+Offset+IBLSCALE(5);
@@ -693,7 +686,6 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       }
 
   }
-#endif
 }
 
 
@@ -764,13 +756,9 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
 
 void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
 {
-#ifdef OLD_TASK
-  if (task == NULL || !task->Valid()) {
+  if (!task->check_task()) {
     return;
   }
-#else
-  return;
-#endif
 
   if (Calculated().WaypointDistance < 0.010)
     return;

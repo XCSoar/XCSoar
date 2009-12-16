@@ -100,7 +100,6 @@ Marks *marks;
 TopologyStore *topology;
 RasterTerrain terrain;
 RasterWeather RASP;
-GlideComputer glide_computer;
 DrawThread *draw_thread;
 CalculationThread *calculation_thread;
 InstrumentThread *instrument_thread;
@@ -124,6 +123,8 @@ AirspaceWarningManager airspace_warning(airspace_database,
                                         ac_state,
                                         glide_polar,
                                         task_manager);
+
+GlideComputer glide_computer(task_manager, airspace_warning);
 
 void XCSoarInterface::PreloadInitialisation(bool ask) {
   if (ask) {
@@ -191,6 +192,7 @@ void XCSoarInterface::AfterStartup() {
   StartupStore(TEXT("Create default task\n"));
   task.DefaultTask(SettingsComputer(), Basic());
 #endif
+  task_manager.resume();
 
   StartupStore(TEXT("CloseProgressDialog\n"));
   CloseProgressDialog();
@@ -287,9 +289,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
 #endif
 
   // Initialize main blackboard data
-#ifdef OLD_TASK
-  task.ClearTask();
-#endif
+  task_manager.reset();
 
   glide_computer.Initialise();
   logger.LinkGRecordDLL(); // try to link DLL if it exists
@@ -366,9 +366,7 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 
   main_window.map.set_way_points(&way_points);
-#ifdef OLD_TASK
-  main_window.map.set_task(&task);
-#endif
+  main_window.map.set_task(&task_manager);
   main_window.map.set_airspaces(&airspace_database);
 
   main_window.map.set_topology(topology);
@@ -507,13 +505,12 @@ void XCSoarInterface::Shutdown(void) {
   // Clear data
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
-#ifdef OLD_TASK
+
   StartupStore(TEXT("Resume abort task\n"));
-  task.ResumeAbortTask(SettingsComputer(), Basic(), -1); // turn off abort if it was on.
+  task_manager.resume();
+#ifdef OLD_TASK
   StartupStore(TEXT("Save default task\n"));
-  task.SaveDefaultTask();
-  StartupStore(TEXT("Clear task data\n"));
-  task.ClearTask();
+  task_manager.save_default();
 #endif
 
   StartupStore(TEXT("Close airspace\n"));

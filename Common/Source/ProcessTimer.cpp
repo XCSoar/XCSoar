@@ -121,6 +121,7 @@ void ProcessTimer::CommonProcessTimer()
 
   InfoBoxManager::ProcessTimer();
   InputEvents::ProcessTimer();
+
   AirspaceProcessTimer();
   MessageProcessTimer();
 }

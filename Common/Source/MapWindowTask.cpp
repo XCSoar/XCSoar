@@ -36,6 +36,10 @@ Copyright_License {
 }
 */
 
+#include "Task/TaskManager.hpp"
+#include "Task/Visitors/TaskVisitor.hpp"
+#include "Task/Visitors/TaskPointVisitor.hpp"
+
 #include "MapWindow.h"
 #include "Protection.hpp"
 #include "Screen/Graphics.hpp"
@@ -43,56 +47,154 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
-
 #include <math.h>
 
-#ifdef OLD_TASK
 
-class DrawAbortedTaskVisitor:
-  public AbsoluteTaskPointVisitor
+class DrawAbortTaskPoint:
+  public TaskPointVisitor
 {
-  const WayPointList &way_points;
-
 public:
-  DrawAbortedTaskVisitor(Canvas &_canvas, const POINT &_orig,
-                         const WayPointList &_way_points)
-    :canvas(&_canvas), orig(_orig), way_points(_way_points) {}
+  DrawAbortTaskPoint(Canvas &_canvas, 
+                     MapWindow &map,
+                     const TaskPoint* active_tp,
+                     const bool draw_bearing)
+    :m_canvas(_canvas), m_map(map), 
+     m_active_tp(active_tp), 
+     m_draw_bearing(draw_bearing),
+     dash_pen(Pen::DASH, IBLSCALE(1), MapGfx.TaskColor) 
+    {}
 
-  void
-  visit_task_point_start(TASK_POINT &point, const unsigned index)
-  {
-    canvas->line(way_points.get_calc(point.Index).Screen, orig);
-  };
+  void draw_bearing(const TaskPoint &tp) {
+    if (m_draw_bearing && (&tp== m_active_tp)) {
+      m_map.DrawGreatCircle(m_canvas, 
+                            m_map.Basic().Location, 
+                            tp.get_location_remaining());
+    }
+  }
 
-  void
-  visit_task_point_intermediate(TASK_POINT &point, const unsigned index)
-  {
-    visit_task_point_start(point,index);
-  };
+  void draw_target(const TaskPoint &tp, const POINT &target) {
+    if (!tp.has_target()) {
+      return;
+    }
+    if ((&tp == m_active_tp)
+        || m_map.SettingsMap().EnablePan 
+        || m_map.SettingsMap().TargetPan) {
+      
+      m_map.draw_masked_bitmap_if_visible(m_canvas, MapGfx.hBmpTarget,
+                                          tp.get_location_remaining(),
+                                          10, 10);
+    }
+  }
 
-  void
-  visit_task_point_final(TASK_POINT &point, const unsigned index)
-  {
-    visit_task_point_start(point,index);
-  };
+  void Visit(const UnorderedTaskPoint& tp) {
+    POINT loc;
+    m_map.LonLat2Screen(tp.get_location_remaining(), loc);
+    m_canvas.select(dash_pen);
+    m_canvas.line(m_map.GetOrigAircraft(), loc);
+    draw_bearing(tp);
+  }
+  void Visit(const OrderedTaskPoint& tp) {
+  }
+  void Visit(const FinishPoint& tp) {
+  }
+  void Visit(const StartPoint& tp) {
+  }
+  void Visit(const AATPoint& tp) {
+    POINT loc;
+    m_map.LonLat2Screen(tp.get_location_remaining(), loc);
+    draw_target(tp, loc);
+  }
+  void Visit(const ASTPoint& tp) {
+  }
 
 private:
-  Canvas *canvas;
-  POINT orig;
-  Color whitecolor;
+  Canvas &m_canvas;
+  MapWindow& m_map;
+  const TaskPoint *m_active_tp;
+  const bool& m_draw_bearing;
+  Pen dash_pen;
 };
 
-void
-MapWindow::DrawAbortedTask(Canvas &canvas)
-{
-  if (way_points == NULL || task == NULL)
-    return;
 
-  Pen dash_pen(Pen::DASH, IBLSCALE(1), MapGfx.TaskColor);
-  canvas.select(dash_pen);
-  DrawAbortedTaskVisitor dv(canvas, Orig_Aircraft, *way_points);
-  task->scan_point_forward(dv, false); // read lock
+
+class DrawTaskVisitor: public TaskVisitor
+{
+public:
+  DrawTaskVisitor(Canvas &canvas, 
+                  const RECT rc, 
+                  Canvas &buffer, 
+                  MapWindow& map,
+                  const TaskPoint* active_tp,
+                  bool draw_bearing):
+    m_canvas(canvas),
+    m_rc(rc),
+    m_buffer(buffer),
+    m_map(map),
+    m_active_tp(active_tp),
+    m_draw_bearing(draw_bearing) {};
+
+  void Visit(const AbortTask& task) {
+    DrawAbortTaskPoint tpv(m_canvas, m_map, m_active_tp, m_draw_bearing);
+    task.Accept(tpv);
+  }
+  void Visit(const OrderedTask& task) {
+//    DrawOrderedTaskPoint tpv;
+//    task.Accept(tpv);
+  }
+  void Visit(const GotoTask& task) {
+    DrawAbortTaskPoint tpv(m_canvas, m_map, m_active_tp, m_draw_bearing);
+    task.Accept(tpv);
+  }
+private:
+  Canvas &m_canvas;
+  const RECT& m_rc;
+  Canvas &m_buffer;
+  MapWindow& m_map;
+  const TaskPoint *m_active_tp;
+  const bool& m_draw_bearing;
+};
+
+#include "RasterTerrain.h"
+
+void
+MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
+{
+  terrain->Lock();
+
+  /* RLD bearing is invalid if GPS not connected and in non-sim mode,
+   but we can still draw targets */
+  const bool draw_bearing = Basic().Connected;
+
+  const TaskPoint* active_tp = task->getActiveTaskPoint();
+  DrawTaskVisitor dv(canvas, rc, buffer, *this, active_tp, draw_bearing);
+  task->Accept(dv); 
+  terrain->Unlock();
 }
+
+/*
+  const TaskPoint* tp = task->getActiveTaskPoint();
+
+  GEOPOINT gloc = tp->get_location_remaining();
+  has_target();
+
+    if (index0==0) {
+      // before start
+      visit_leg_current(point0, index0, point0, index0);
+    }
+    // Draw all of task if in target pan mode
+    if (draw_bearing and current) or 
+    if (map.SettingsMap().TargetPan) {
+      map.DrawGreatCircle(canvas, start, target);
+    }
+*/
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifdef OLD_TASK
 
 class DrawTaskVisitor:
   public AbsoluteTaskPointVisitor,
@@ -467,83 +569,6 @@ MapWindow::DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer)
   }
 }
 
-class DrawTargetVisitor:
-  public RelativeTaskPointVisitor,
-  public RelativeTaskLegVisitor
-{
-public:
-  DrawTargetVisitor(Canvas &_canvas,
-                    MapWindow &_map,
-                    bool _draw_bearing):
-    canvas(_canvas), map(_map), draw_bearing(_draw_bearing)
-  {
-  }
-
-  void
-  visit_task_point_current(TASK_POINT &point, const unsigned i)
-  {
-    if (i>0) {
-      map.draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpTarget,
-                                        point.AATTargetLocation,
-                                        10, 10);
-    }
-  };
-
-  void
-  visit_task_point_after(TASK_POINT &point, const unsigned i) {
-    // always draw all targets ahead if in pan mode
-    if (map.SettingsMap().EnablePan || map.SettingsMap().TargetPan) {
-      visit_task_point_current(point, i);
-    }
-  };
-
-  void
-  visit_leg_current(TASK_POINT &point0, const unsigned index0,
-                    TASK_POINT &point1, const unsigned index1)
-  {
-    if (draw_bearing) {
-      GEOPOINT start = map.Basic().Location;
-      GEOPOINT target = _task->getTargetLocation(index1);
-      map.DrawGreatCircle(canvas, start, target);
-    }
-  };
-
-  void
-  visit_leg_after(TASK_POINT &point0, const unsigned index0,
-                  TASK_POINT &point1, const unsigned index1)
-  {
-    if (index0==0) {
-      // before start
-      visit_leg_current(point0, index0, point0, index0);
-    }
-    // Draw all of task if in target pan mode
-    if (map.SettingsMap().TargetPan) {
-      map.DrawGreatCircle(canvas,
-                      _task->getTargetLocation(index0),
-                      _task->getTargetLocation(index1));
-    }
-  };
-
-private:
-  MapWindow &map;
-  Canvas &canvas;
-  bool draw_bearing;
-};
-
-void
-MapWindow::DrawBearing(Canvas &canvas, int bBearingValid)
-{
-  /* RLD bearing is invalid if GPS not connected and in non-sim mode,
-   but we can still draw targets */
-  if (task == NULL)
-    return;
-
-  DrawTargetVisitor tv(canvas, *this, bBearingValid);
-  task->scan_leg_forward(tv, false); // read lock
-  if (task->getSettings().AATEnabled) {
-    task->scan_point_forward(tv, false); // read lock
-  }
-}
 
 void
 MapWindow::DrawOffTrackIndicator(Canvas &canvas)

@@ -84,8 +84,9 @@ static bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
 			//   QFE on the ground, otherwise it turns to
 			//   zero at once!
 
-GlideComputerAirData::GlideComputerAirData():
-  airspace_clock(6.0), // scan airspace every 6 seconds
+GlideComputerAirData::GlideComputerAirData(AirspaceWarningManager& as_manager):
+  m_airspace_warning(as_manager),
+  airspace_clock(2.0), // scan airspace every 2 seconds
   ballast_clock(5)  // only update every 5 seconds to stop flooding
 		    // the devices
 
@@ -100,6 +101,7 @@ void
 GlideComputerAirData::ResetFlight(const bool full)
 {
   oldGlidePolar::SetCruiseEfficiency(1.0);
+  m_airspace_warning.reset(Basic());
 }
 
 void
@@ -119,7 +121,6 @@ GlideComputerAirData::ProcessBasic()
   EnergyHeightNavAltitude();
   TerrainHeight();
   Vario();
-  PredictNextPosition();
   ProcessSun();
   SetCalculated().AdjustedAverageThermal = GetAverageThermal();
 }
@@ -800,9 +801,7 @@ GlideComputerAirData::ProcessIdle()
   TerrainFootprint(MapProjection().GetScreenDistanceMeters());
   if (airspace_clock.check_advance(Basic().Time)
       && SettingsComputer().EnableAirspaceWarnings) {
-#ifdef OLD_TASK
     AirspaceWarning();
-#endif
   }
 }
 
@@ -901,114 +900,13 @@ GlideComputerAirData::OnTakeoff()
   SaveFinish();
 }
 
-/**
- * Predicts location and altitude after airspace warning time
- */
-void
-GlideComputerAirData::PredictNextPosition()
-{
-  if(Calculated().Circling) {
-    SetCalculated().NextLocation = Basic().Location;
-    SetCalculated().NextAltitude = Calculated().NavAltitude
-        + Calculated().Average30s * SettingsComputer().WarningTime;
- } else {
-    FindLatitudeLongitude(Basic().Location,
-			  Basic().TrackBearing,
-			  Basic().Speed*SettingsComputer().WarningTime,
-			  &SetCalculated().NextLocation);
 
-    if (Basic().BaroAltitudeAvailable) {
-      SetCalculated().NextAltitude = Basic().BaroAltitude
-          + Calculated().Average30s * SettingsComputer().WarningTime;
-    } else {
-      SetCalculated().NextAltitude = Calculated().NavAltitude
-          + Calculated().Average30s * SettingsComputer().WarningTime;
-    }
-  }
-  // MJJ TODO Predict terrain altitude
-  SetCalculated().NextAltitudeAGL =
-    Calculated().NextAltitude - Calculated().TerrainAlt;
-}
-
-bool GlobalClearAirspaceWarnings = false;
-
-#ifdef OLD_TASK
-static bool
-InsideAltitudeRange(const AirspaceMetadata &airspace, double alt, double agl)
-{
-  return ((airspace.Base.Base != abAGL && alt >= airspace.Base.Altitude) ||
-          (airspace.Base.Base == abAGL && agl >= airspace.Base.AGL)) &&
-         ((airspace.Top.Base != abAGL && alt < airspace.Top.Altitude) ||
-          (airspace.Top.Base == abAGL && agl < airspace.Top.AGL));
-}
 
 void
 GlideComputerAirData::AirspaceWarning()
 {
-  static bool position_is_predicted = false;
-
-  if (GlobalClearAirspaceWarnings == true) {
-    GlobalClearAirspaceWarnings = false;
-    SetCalculated().IsInAirspace = false;
-  }
-
-  position_is_predicted = !position_is_predicted;
-  // every second time step, do predicted position rather than
-  // current position
-
-  double alt;
-  double agl;
-  GEOPOINT loc;
-
-  if (position_is_predicted) {
-    alt = Calculated().NextAltitude;
-    agl = Calculated().NextAltitudeAGL;
-    loc = Calculated().NextLocation;
-  } else {
-    if (Basic().BaroAltitudeAvailable) {
-      alt = Basic().BaroAltitude;
-    } else {
-      alt = Basic().Altitude;
-    }
-    agl = Calculated().AltitudeAGL;
-    loc = Basic().Location;
-  }
-
-  // JMW TODO enhancement: FindAirspaceCircle etc should sort results, return
-  // the most critical or closest.
-
-  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceCircles; ++i) {
-    const AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[i];
-
-    if (InsideAltitudeRange(circle, alt, agl) &&
-        SettingsComputer().iAirspaceMode[circle.Type] >= 2 &&
-        airspace_database.InsideCircle(loc, i))
-      AirspaceWarnListAdd(airspace_database, Basic(), Calculated(),
-                          SettingsComputer(),
-                          MapProjection(),
-                          position_is_predicted, 1, i, false);
-  }
-
-  // repeat process for areas
-
-  for (unsigned i = 0; i < airspace_database.NumberOfAirspaceAreas; ++i) {
-    const AIRSPACE_AREA &area = airspace_database.AirspaceArea[i];
-
-    if (InsideAltitudeRange(area, alt, agl) &&
-        SettingsComputer().iAirspaceMode[area.Type] >= 2 &&
-        airspace_database.InsideArea(loc, i))
-      AirspaceWarnListAdd(airspace_database, Basic(), Calculated(),
-                          SettingsComputer(),
-                          map_projection,
-                          position_is_predicted, 0, i, false);
-  }
-
-  AirspaceWarnListProcess(airspace_database, Basic(), Calculated(),
-                          SettingsComputer(),
-                          map_projection);
+  m_airspace_warning.update(Basic());
 }
-
-#endif
 
 
 void

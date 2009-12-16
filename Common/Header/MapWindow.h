@@ -72,6 +72,7 @@ class GaugeCDI;
 class Waypoints;
 class Waypoint;
 class Airspaces;
+class TaskManager;
 
 class MapWindow
 : public MaskedPaintWindow,
@@ -87,6 +88,7 @@ class MapWindow
   RasterWeather *weather;
   TerrainRenderer *terrain_renderer;
   Airspaces *airspace_database;
+  TaskManager *task;
 
   Marks *marks;
 
@@ -117,11 +119,9 @@ class MapWindow
     way_points = _way_points;
   }
 
-/*
-  void set_task(TaskSafe *_task) {
+  void set_task(TaskManager *_task) {
     task = _task;
   }
-*/
 
   void set_airspaces(Airspaces *_airspace_database) {
     airspace_database = _airspace_database;
@@ -184,11 +184,6 @@ class MapWindow
 
   POINT         Groundline[NUMTERRAINSWEEPS+1];
 
-#ifdef OLD_TASK
-  TaskScreen_t   task_screen;
-  StartScreen_t  task_start_screen;
-#endif
-
   ZoomClimb_t    zoomclimb;
 
   THERMAL_SOURCE_VIEW ThermalSources[MAX_THERMAL_SOURCES];
@@ -207,7 +202,7 @@ class MapWindow
 
   void CalculateScreenPositions(POINT Orig, RECT rc,
                                        POINT *Orig_Aircraft);
-  void CalculateScreenPositionsTask();
+
   void CalculateScreenPositionsGroundline();
   void CalculateScreenPositionsThermalSources();
   void MapWaypointLabelSortAndRender(Canvas &canvas);
@@ -231,12 +226,9 @@ class MapWindow
                          const double TrailFirstTime);
   void DrawOffTrackIndicator(Canvas &canvas);
   void DrawProjectedTrack(Canvas &canvas);
-  void DrawTask(Canvas &canvas, RECT rc);
+  void DrawTask(Canvas &canvas, RECT rc, Canvas &buffer);
   void DrawThermalEstimate(Canvas &canvas);
-  void DrawTaskAAT(Canvas &canvas, const RECT rc, Canvas &buffer);
-  void DrawAbortedTask(Canvas &canvas);
 
-  void DrawBearing(Canvas &canvas, int bBearingValid);
   void DrawMapScale(Canvas &canvas, const RECT rc,
 			   const bool ScaleChangeFeedback);
   void DrawMapScale2(Canvas &canvas, const RECT rc);

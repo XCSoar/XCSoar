@@ -46,6 +46,8 @@ Copyright_License {
 #include "SnailTrail.hpp"
 #include "OnLineContest.h"
 
+#include "Task/TaskManager.hpp"
+
 /**
  * Calculates the screen positions of all important features
  * @param canvas The drawing canvas
@@ -160,11 +162,6 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderAreas(Canvas &canvas, const RECT rc)
 {
-  // Draw AAT areas
-#ifdef OLD_TASK
-  if (task != NULL && !task->TaskIsTemporary())
-    DrawTaskAAT(canvas, rc, buffer_canvas);
-#endif
   // Draw airspace on top
   if (SettingsMap().OnAirSpace > 0) {
     DrawAirspace(canvas, buffer_canvas);
@@ -199,14 +196,10 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
 {
-#ifdef OLD_TASK
-  if (task != NULL) {
-    if (task->isTaskAborted())
-      DrawAbortedTask(canvas);
-    else
-      DrawTask(canvas, rc);
+  if (task->check_task()) {
+    DrawTask(canvas, rc, buffer_canvas);
   }
-#endif
+
   DrawWaypoints(canvas);
 
   if (marks != NULL)
@@ -309,7 +302,6 @@ void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
     DrawOffTrackIndicator(canvas);
     DrawBestCruiseTrack(canvas);
   }
-  DrawBearing(canvas, Basic().Connected);
 #endif
 }
 

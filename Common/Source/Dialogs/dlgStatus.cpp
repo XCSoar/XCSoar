@@ -51,6 +51,9 @@ Copyright_License {
 #include "MapWindow.h"
 #include "GlideComputer.hpp"
 #include "Components.hpp"
+#include "Waypoint/Waypoints.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
+
 #ifdef OLD_TASK
 #include "Task.h"
 #endif
@@ -350,14 +353,11 @@ static void UpdateValuesTimes(void) {
 
 }
 
-static int nearest_waypoint= -1;
-
+static const Waypoint* nearest_waypoint;
 
 static void UpdateValuesFlight(void) {
   WndProperty *wp;
   TCHAR Temp[1000];
-  double bearing;
-  double distance;
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
@@ -392,27 +392,23 @@ static void UpdateValuesFlight(void) {
     wp->SetText(Temp);
   }
 
-#ifdef OLD_TASK
-  if (nearest_waypoint>=0) {
+  if (nearest_waypoint) {
 
-    DistanceBearing(XCSoarInterface::Basic().Location,
-                    way_points.get(nearest_waypoint).Location,
-                    &distance,
-                    &bearing);
+    GeoVector vec(XCSoarInterface::Basic().Location, nearest_waypoint->Location);
 
     wp = (WndProperty*)wf->FindByName(_T("prpNear"));
     if (wp) {
-      wp->SetText(way_points.get(nearest_waypoint).Name);
+      wp->SetText(nearest_waypoint->Name.c_str());
     }
     wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
     if (wp) {
-      _stprintf(Temp, _T("%d")_T(DEG), iround(bearing));
+      _stprintf(Temp, _T("%d")_T(DEG), vec.Bearing.as_int());
       wp->SetText(Temp);
     }
     wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
     if (wp) {
       TCHAR DistanceText[MAX_PATH];
-      Units::FormatUserDistance(distance,DistanceText, 10);
+      Units::FormatUserDistance(vec.Distance, DistanceText, 10);
       wp->SetText(DistanceText);
     }
   } else {
@@ -429,9 +425,6 @@ static void UpdateValuesFlight(void) {
       wp->SetText(_T("-"));
     }
   }
-#endif
-
-
 }
 
 
@@ -658,12 +651,7 @@ void dlgStatusShowModal(int start_page){
     }
   }
 
-#ifdef OLD_TASK
-  nearest_waypoint = FindNearestWayPoint(way_points,
-                                         XCSoarInterface::main_window.map,
-					 XCSoarInterface::Basic().Location,
-                                         100000.0, true); // big range limit
-#endif
+  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().Location);
 
   UpdateValuesSystem();
   UpdateValuesFlight();
