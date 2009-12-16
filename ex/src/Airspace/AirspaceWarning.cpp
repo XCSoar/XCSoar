@@ -4,8 +4,8 @@ AirspaceWarning::AirspaceWarning(const AbstractAirspace& the_airspace):
   m_airspace(the_airspace),
   m_state(WARNING_CLEAR),
   m_state_last(WARNING_CLEAR),
-  m_acktime_warning(-fixed_one),
-  m_acktime_inside(-fixed_one),
+  m_acktime_warning(0),
+  m_acktime_inside(0),
   m_ack_day(false),
   m_expired(true),
   m_expired_last(true)
@@ -39,11 +39,11 @@ AirspaceWarning::warning_live()
     m_acktime_warning = max(m_acktime_warning, m_acktime_inside);
   }
 
-  if (positive(m_acktime_warning)) {
-    m_acktime_warning-= fixed_one;
+  if (m_acktime_warning) {
+    m_acktime_warning--;
   }
-  if (positive(m_acktime_inside)) {
-    m_acktime_inside-= fixed_one;
+  if (m_acktime_inside) {
+    m_acktime_inside--;
   }
 
   m_expired = get_ack_expired();
@@ -79,9 +79,9 @@ AirspaceWarning::get_ack_expired() const
     return false;
   case WARNING_FILTER:
   case WARNING_GLIDE:
-    return !positive(m_acktime_warning);
+    return !m_acktime_warning;
   case WARNING_INSIDE:
-    return !positive(m_acktime_inside);
+    return !m_acktime_inside;
   };
   // unknown, should never get here
   return true;
@@ -93,7 +93,7 @@ AirspaceWarning::acknowledge_inside(const bool set)
   if (set) {
     m_acktime_inside = 60;
   } else {
-    m_acktime_inside = -fixed_one;
+    m_acktime_inside = 0;
   }
 }
 
@@ -103,7 +103,7 @@ AirspaceWarning::acknowledge_warning(const bool set)
   if (set) {
     m_acktime_warning = 60;
   } else {
-    m_acktime_warning = -fixed_one;
+    m_acktime_warning = 0;
   }
 }
 
@@ -111,4 +111,10 @@ void
 AirspaceWarning::acknowledge_day(const bool set)
 {
   m_ack_day = set;
+}
+
+bool 
+AirspaceWarning::get_ack_day() const
+{
+  return m_ack_day;
 }

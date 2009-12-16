@@ -66,17 +66,30 @@ AirspaceWarningManager::set_prediction_time_filter(const fixed& the_time)
 AirspaceWarning& 
 AirspaceWarningManager::get_warning(const AbstractAirspace& airspace)
 {
+  AirspaceWarning* warning = get_warning_ptr(airspace);
+
+  if (warning) {
+    return *warning;
+  } else {
+    // not found, create new entry
+    m_warnings.push_back(AirspaceWarning(airspace));
+    return m_warnings.back();
+  }
+}
+
+
+AirspaceWarning* 
+AirspaceWarningManager::get_warning_ptr(const AbstractAirspace& airspace) 
+{
   for (AirspaceWarningList::iterator it = m_warnings.begin();
        it != m_warnings.end(); ++it) {
     if (&(it->get_airspace()) == &airspace) {
-      return (*it);
+      return &(*it);
     }
   }
-
-  // not found, create new entry
-  m_warnings.push_back(AirspaceWarning(airspace));
-  return m_warnings.back();
+  return NULL;
 }
+
 
 bool 
 AirspaceWarningManager::update(const AIRCRAFT_STATE& state)
@@ -283,4 +296,26 @@ AirspaceWarningManager::visit_warnings(AirspaceWarningVisitor& visitor) const
        it != m_warnings.end(); ++it) {
     it->Accept(visitor);
   }
+}
+
+
+void 
+AirspaceWarningManager::acknowledge_warning(const AbstractAirspace& airspace,
+                                            const bool set)
+{
+  get_warning(airspace).acknowledge_warning(set);
+}
+
+void 
+AirspaceWarningManager::acknowledge_inside(const AbstractAirspace& airspace,
+                                           const bool set)
+{
+  get_warning(airspace).acknowledge_inside(set);
+}
+
+void 
+AirspaceWarningManager::acknowledge_day(const AbstractAirspace& airspace,
+                                        const bool set)
+{
+  get_warning(airspace).acknowledge_day(set);
 }

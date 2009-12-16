@@ -157,6 +157,30 @@ public:
  */
   void visit_warnings(AirspaceWarningVisitor& visitor) const;
 
+/** 
+ * Acknowledge an airspace warning
+ * 
+ * @param set Whether to set or cancel acknowledgement
+ */
+  void acknowledge_warning(const AbstractAirspace& airspace,
+                           const bool set=true);
+
+/** 
+ * Acknowledge an airspace inside
+ * 
+ * @param set Whether to set or cancel acknowledgement
+ */
+  void acknowledge_inside(const AbstractAirspace& airspace,
+                          const bool set=true);
+
+/** 
+ * Acknowledge all warnings for airspace for whole day
+ * 
+ * @param set Whether to set or cancel acknowledgement
+ */
+  void acknowledge_day(const AbstractAirspace& airspace,
+                       const bool set=true);
+
 private:
   const Airspaces& m_airspaces;
 
@@ -172,6 +196,8 @@ private:
   const TaskManager& m_task;
 
   const GlidePolar& m_glide_polar;
+
+  AirspaceWarning* get_warning_ptr(const AbstractAirspace& airspace);
 
   bool update_task(const AIRCRAFT_STATE& state);
   bool update_filter(const AIRCRAFT_STATE& state);

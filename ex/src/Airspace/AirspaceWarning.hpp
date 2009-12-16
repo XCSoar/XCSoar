@@ -152,6 +152,13 @@ public:
   bool get_ack_expired() const;
 
 /** 
+ * Determine if acknowledgement is acknowledged for whole day
+ * 
+ * @return True if acknowledged
+ */
+  bool get_ack_day() const;
+
+/** 
  * Acknowledge an airspace warning
  * 
  * @param set Whether to set or cancel acknowledgement
@@ -178,8 +185,8 @@ private:
   AirspaceWarningState m_state_last;
   AirspaceInterceptSolution m_solution;
 
-  fixed m_acktime_warning;
-  fixed m_acktime_inside;
+  unsigned m_acktime_warning;
+  unsigned m_acktime_inside;
   bool m_ack_day;
   bool m_expired;
   bool m_expired_last;
