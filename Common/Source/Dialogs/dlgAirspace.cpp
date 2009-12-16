@@ -150,12 +150,12 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
 
     if (iswarn) {
       _tcscpy(label, gettext(_T("Warn")));
-      canvas.text_opaque(w0 - w1 - w2, Layout::FastScale(2), label);
+      canvas.text(w0 - w1 - w2, Layout::FastScale(2), label);
     }
 
     if (isdisplay) {
       _tcscpy(label, gettext(_T("Display")));
-      canvas.text_opaque(w0 - w2, Layout::FastScale(2), label);
+      canvas.text(w0 - w2, Layout::FastScale(2), label);
     }
   }
 }
