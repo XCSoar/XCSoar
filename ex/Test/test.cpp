@@ -1,11 +1,12 @@
 #include "Math/FastMath.h"
 #include "harness_flight.hpp"
+#include "harness_airspace.hpp"
 
 int main(int argc, char** argv) {
   ::InitSineTable();
 
   // default arguments
-  verbose=1;  
+  verbose=2;  
   
   // default arguments
   bearing_noise=0;
@@ -17,8 +18,7 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-#if 0
-  plan_tests(6);
+  plan_tests(7);
 
   terrain_height = 500;
   ok(test_flight(3,0,1.0,true),"high terrain",0);
@@ -28,10 +28,8 @@ int main(int argc, char** argv) {
   ok(test_abort(0),"abort",0);
   ok(test_goto(0,5),"goto",0);
   ok(test_null(),"null",0);
-#else
-  plan_tests(1);
-#endif
   ok(test_flight(2,0,1.0,true),"basic flight test",0);
+  ok(test_airspace(100),"airspace 100",0);
 
   return exit_status();
 }

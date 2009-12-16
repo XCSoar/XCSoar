@@ -71,7 +71,7 @@ public:
  * Find minimum intercept time to a point
  * 
  * @param distance Distance to point (m)
- * @param dh Height of observer from point (m)
+ * @param dh Relative height of observer above point (m)
  * 
  * @return Time to intercept (s) or -1 if failed
  */
@@ -212,8 +212,8 @@ public:
     return m_glide_polar.get_Vmax();
   }
 
-private:
-  const GlidePolar &m_glide_polar;
+protected:
+  const GlidePolar &m_glide_polar; /**< Glide polar used for speed model */
 };
 
 
@@ -263,5 +263,50 @@ public:
 private:
   const AircraftStateFilter &m_state_filter;
 };
+
+
+class TaskManager;
+
+/**
+ * Specialisation of AirspaceAircraftPerformance
+ * for tasks where part of the path is in cruise, part in
+ * final glide.  This is intended to be used temporarily only.
+ *
+ * This simplifies the path by assuming flight is constant altitude
+ * or descent to the task point elevation.
+ */
+class AirspaceAircraftPerformanceTask: 
+  public AirspaceAircraftPerformance
+{
+public:
+/** 
+ * Constructor.
+ * 
+ * @param state Aircraft state at query
+ * @param task Task to retrieve plan from
+ * 
+ * @return Initialised object
+ */
+  AirspaceAircraftPerformanceTask(const AIRCRAFT_STATE &state,
+                                  const GlidePolar& polar,
+                                  const TaskManager& task);
+
+  fixed get_cruise_speed() const;
+
+  fixed get_cruise_descent() const;
+
+  fixed get_climb_rate() const;
+
+  fixed get_descent_rate() const;
+
+  fixed get_max_speed() const;
+
+private:
+  fixed m_v;
+  fixed m_cruise_descent;
+  fixed m_max_descent;
+  fixed m_climb_rate;
+};
+
 
 #endif

@@ -1,9 +1,24 @@
 #include "AirspaceWarning.hpp"
 
+AirspaceWarning::AirspaceWarning(const AbstractAirspace& the_airspace):
+  m_airspace(the_airspace),
+  m_state(WARNING_CLEAR),
+  m_state_last(WARNING_CLEAR),
+  m_acktime_warning(-fixed_one),
+  m_acktime_inside(-fixed_one),
+  m_ack_day(false),
+  m_expired(true),
+  m_expired_last(true)
+{
+
+}
+
+
 void AirspaceWarning::save_state()
 {
   m_state_last = m_state;
   m_state = WARNING_CLEAR;
+  m_expired_last = m_expired;
 }
 
 void 
@@ -17,23 +32,83 @@ AirspaceWarning::update_solution(const AirspaceWarningState state,
 }
 
 bool
-AirspaceWarning::action_updates()
+AirspaceWarning::warning_live()
 {
-  if (m_state != WARNING_CLEAR) {
-    return true;
+  if ((m_state != WARNING_CLEAR) && (m_state < m_state_last) && (m_state_last == WARNING_INSIDE)) {
+    // if inside was acknowledged, consider warning to be acknowledged
+    m_acktime_warning = max(m_acktime_warning, m_acktime_inside);
   }
 
-  return false;
+  if (positive(m_acktime_warning)) {
+    m_acktime_warning-= fixed_one;
+  }
+  if (positive(m_acktime_inside)) {
+    m_acktime_inside-= fixed_one;
+  }
+
+  m_expired = get_ack_expired();
+
+  if (m_state == WARNING_CLEAR) {
+    return !m_expired;
+  } else { 
+    return true;
+  }
 }
 
 bool
 AirspaceWarning::changed_state() const
 {
-  return (m_state != m_state_last);
+  return (m_expired > m_expired_last) || (m_state != m_state_last);
 }
 
 bool 
 AirspaceWarning::state_accepted(const AirspaceWarningState state) const
 {
   return (state>= m_state);
+}
+
+bool
+AirspaceWarning::get_ack_expired() const
+{
+  if (m_ack_day) {
+    return false; // these ones persist
+  }
+  switch (m_state) {
+  case WARNING_CLEAR:
+  case WARNING_TASK:
+    return false;
+  case WARNING_FILTER:
+  case WARNING_GLIDE:
+    return !positive(m_acktime_warning);
+  case WARNING_INSIDE:
+    return !positive(m_acktime_inside);
+  };
+  // unknown, should never get here
+  return true;
+}
+
+void 
+AirspaceWarning::acknowledge_inside(const bool set)
+{
+  if (set) {
+    m_acktime_inside = 60;
+  } else {
+    m_acktime_inside = -fixed_one;
+  }
+}
+
+void 
+AirspaceWarning::acknowledge_warning(const bool set)
+{
+  if (set) {
+    m_acktime_warning = 60;
+  } else {
+    m_acktime_warning = -fixed_one;
+  }
+}
+
+void 
+AirspaceWarning::acknowledge_day(const bool set)
+{
+  m_ack_day = set;
 }

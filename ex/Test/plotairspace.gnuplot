@@ -27,7 +27,7 @@ plot \
 pause -1
 
 plot \
-     'results/res-bb-in.txt' using 1:2 with lines ls 3 title "all airspace", \
+     'results/res-bb-in.txt' using 1:2 with lines ls 5 title "all airspace", \
      'results/res-bb-intersected.txt' using 1:2 with filledcurve ls 3 title "airspace", \
      'results/res-bb-intersected.txt' using 1:2 with lines ls 5 title "airspace", \
      'results/res-bb-intersects.txt' using 1:2 with linespoints ls 4 title "intersects", \
@@ -35,9 +35,12 @@ plot \
 
 pause -1
 
-
+set title "Airspace Warning Manager"
 plot \
-     'results/res-bb-in.txt' using 1:2 with lines ls 3 title "all airspace", \
-     'results/res-as-warnings.txt' using 1:2 with lines ls 4 title "Warnings", \
+     'results/res-bb-in.txt' using 1:2 with lines ls 5 title "all airspace", \
+     'results/res-as-warnings-inside.txt' using 1:2 with lines ls 8 title "inside", \
+     'results/res-as-warnings-glide.txt' using 1:2 with lines ls 3 title "glide", \
+     'results/res-as-warnings-filter.txt' using 1:2 with lines ls 2 title "filter", \
+     'results/res-as-warnings-task.txt' using 1:2 with lines ls 4 title "Task", \
      'results/res-sample.txt' using 2:3 with lines ls 1 title "sample"
 pause -1

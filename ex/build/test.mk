@@ -28,24 +28,10 @@ TESTSLOW = \
 TESTS = $(TESTFAST:.exe=-$(TARGET).exe) $(TESTSLOW:.exe=-$(TARGET).exe) 
 
 testslow:	$(TESTSLOW:.exe=-$(TARGET).exe)
-ifeq ($(COVERAGE),y)
-	$(Q)$(COVSTART)
-endif
 	$(Q)perl Test/testall.pl $(TESTSLOW:.exe=-$(TARGET).exe)
-ifeq ($(COVERAGE),y)
-	$(Q)$(COVEND)
-	$(Q)$(COVPROC)
-endif
 
 testfast:	$(TESTFAST:.exe=-$(TARGET).exe)
-ifeq ($(COVERAGE),y)
-	$(Q)$(COVSTART)
-endif
 	$(Q)perl Test/testall.pl $(TESTFAST:.exe=-$(TARGET).exe)
-ifeq ($(COVERAGE),y)
-	$(Q)$(COVEND)
-	$(Q)$(COVPROC)
-endif
 
 Test/%-$(TARGET).exe: Test/%.cpp src/task-$(TARGET).a Test/harness-$(TARGET).a
 	@$(NQ)echo "  CXX/LN      $@"

@@ -39,7 +39,7 @@
 #include "AirspaceCircle.hpp"
 #include "AirspacePolygon.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
-
+#include "Task/TaskManager.hpp"
 
 void
 AirspaceWarningManager::reset(const AIRCRAFT_STATE& state)
@@ -100,7 +100,7 @@ AirspaceWarningManager::update(const AIRCRAFT_STATE& state)
   for (AirspaceWarningList::iterator it = m_warnings.begin();
        it != m_warnings.end(); ) {
 
-    if (it->action_updates()) {
+    if (it->warning_live()) {
       if (it->changed_state()) {
         changed = true;
       }
@@ -207,8 +207,17 @@ AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state,
 bool 
 AirspaceWarningManager::update_task(const AIRCRAFT_STATE& state)
 {
+  if (!m_task.getActiveTaskPoint()) {
+    // empty task, nothing to do
+    return false;
+  }
 
-  return false;
+  AirspaceAircraftPerformanceTask perf_task(state, m_glide_polar, m_task);
+  const GEOPOINT location_tp = m_task.getActiveTaskPoint()->get_location_remaining();
+  const fixed time_remaining = m_task.get_stats().current_leg.solution_remaining.TimeElapsed; 
+
+  return update_predicted(state, location_tp, perf_task,
+                          AirspaceWarning::WARNING_TASK, time_remaining);
 }
 
 

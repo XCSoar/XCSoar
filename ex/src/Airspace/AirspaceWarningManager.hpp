@@ -43,8 +43,21 @@
 #include "AirspaceWarningVisitor.hpp"
 #include <list>
 
+class TaskManager;
+
 /**
  * Class to detect and track airspace warnings
+ *
+ * Several types of airspace checks are performed:
+ * - Interior (whether aircraft is inside the airspace)
+ * - Glide polar (short range predicted warning based on MacCready performance)
+ * - Filter (longer range predicted warning based on low pass filtered state)
+ * - Task (longer range predicted warning based on current leg of task)
+ *
+ * \todo
+ * - Acknowledgement and 'debounce'
+ * - Filter condition based on airspace warning settings
+ * - Quick lookup of whether an airspace is temporarily acknowledged or active warning
  */
 class AirspaceWarningManager: 
   public NonCopyable
@@ -56,6 +69,7 @@ public:
    * @param airspaces Store of airspaces
    * @param state Initial state of aircraft
    * @param glide_polar Polar used for glide predictions
+   * @param task_manager Task manager holding task
    * @param prediction_time_glide Time (s) of glide predictor (default 15 s)
    * @param prediction_time_filter Time (s) of state filter predictor (default 60 s)
    *
@@ -64,6 +78,7 @@ public:
   AirspaceWarningManager(const Airspaces& airspaces,
                          const AIRCRAFT_STATE &state,
                          const GlidePolar &glide_polar,
+                         const TaskManager &task_manager,
                          const fixed& prediction_time_glide=15.0,
                          const fixed& prediction_time_filter=60.0):
     m_airspaces(airspaces),
@@ -71,7 +86,9 @@ public:
     m_prediction_time_filter(prediction_time_filter),
     m_perf_glide(glide_polar),
     m_state_filter(state, prediction_time_filter),
-    m_perf_filter(m_state_filter)
+    m_perf_filter(m_state_filter),
+    m_task(task_manager),
+    m_glide_polar(glide_polar)
     {}
 
   typedef std::list<AirspaceWarning> AirspaceWarningList; /**< Type of warning storage */
@@ -151,6 +168,10 @@ private:
   AirspaceAircraftPerformanceStateFilter m_perf_filter;  
 
   AirspaceWarningList m_warnings;
+
+  const TaskManager& m_task;
+
+  const GlidePolar& m_glide_polar;
 
   bool update_task(const AIRCRAFT_STATE& state);
   bool update_filter(const AIRCRAFT_STATE& state);

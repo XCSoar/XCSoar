@@ -1,5 +1,7 @@
 #include "AirspaceAircraftPerformance.hpp"
 #include "Util/ZeroFinder.hpp"
+#include "Task/TaskManager.hpp"
+#include <assert.h>
 
 static const fixed fixed_big = 1e6;
 
@@ -241,3 +243,65 @@ AirspaceAircraftPerformance::solution_exists(const fixed& distance_max,
   return true;
 }
 
+
+
+AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AIRCRAFT_STATE &state,
+                                                                 const GlidePolar& polar,
+                                                                 const TaskManager& task)
+{
+  assert(task.getActiveTaskPoint());
+
+  const GlideResult& solution = task.get_stats().current_leg.solution_remaining; 
+  const fixed leg_distance = solution.Vector.Distance;
+  const fixed time_remaining = solution.TimeElapsed;
+  const fixed target_elevation = task.getActiveTaskPoint()->get_elevation();
+
+  if (positive(time_remaining)) {
+    m_v = leg_distance / time_remaining;
+    if (positive(solution.HeightClimb)) {
+      m_cruise_descent = -solution.HeightClimb/time_remaining; 
+      m_climb_rate = polar.get_mc();
+    } else {
+      m_cruise_descent = solution.HeightGlide/time_remaining;
+      m_climb_rate = fixed_zero;
+    }
+  } else {
+    m_v = fixed_one;
+    m_cruise_descent = fixed_zero;
+    m_climb_rate = fixed_zero;
+  }
+  m_max_descent = polar.get_SbestLD();
+
+  set_tolerance_vertical(0.001);
+}
+
+
+fixed 
+AirspaceAircraftPerformanceTask::get_cruise_speed() const
+{
+  return m_v;
+}
+
+fixed 
+AirspaceAircraftPerformanceTask::get_cruise_descent() const
+{
+  return m_cruise_descent;
+}
+
+fixed 
+AirspaceAircraftPerformanceTask::get_climb_rate() const
+{
+  return m_climb_rate;
+}
+
+fixed 
+AirspaceAircraftPerformanceTask::get_descent_rate() const
+{
+  return m_max_descent;
+}
+
+fixed 
+AirspaceAircraftPerformanceTask::get_max_speed() const
+{
+  return m_v;
+}

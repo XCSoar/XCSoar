@@ -89,7 +89,8 @@ bool run_flight(TaskManager &task_manager,
   if (airspaces) {
     airspace_warnings = new AirspaceWarningManager(*airspaces,
                                                    ac.get_state(),
-                                                   glide_polar);
+                                                   glide_polar,
+                                                   task_manager);
   }
 
   do {

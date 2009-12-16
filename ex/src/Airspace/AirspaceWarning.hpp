@@ -42,6 +42,8 @@
 
 /**
  * Class to hold information about active airspace warnings
+ * \todo
+ * - use settings for acknowledgement time
  */
 class AirspaceWarning: 
   public BaseVisitable<>
@@ -64,10 +66,7 @@ public:
  * 
  * @param the_airspace Airspace that this object will manage warnings for
  */
-  AirspaceWarning(const AbstractAirspace& the_airspace):
-    m_airspace(the_airspace),
-    m_state(WARNING_CLEAR),
-    m_state_last(WARNING_CLEAR) {};
+  AirspaceWarning(const AbstractAirspace& the_airspace);
 
 /** 
  * Save warning state prior to performing update
@@ -124,7 +123,7 @@ public:
  * 
  * @return True if warning is still active
  */
-  bool action_updates();
+  bool warning_live();
 
 /** 
  * Determine if airspace warning was a dummy one created for testing but otherwise
@@ -145,11 +144,45 @@ public:
     return m_solution;
   }
 
+/** 
+ * Determine if acknowledgement is expired (warning is current)
+ * 
+ * @return True if acknowledgement is expired
+ */
+  bool get_ack_expired() const;
+
+/** 
+ * Acknowledge an airspace warning
+ * 
+ * @param set Whether to set or cancel acknowledgement
+ */
+  void acknowledge_warning(const bool set=true);
+
+/** 
+ * Acknowledge an airspace inside
+ * 
+ * @param set Whether to set or cancel acknowledgement
+ */
+  void acknowledge_inside(const bool set=true);
+
+/** 
+ * Acknowledge all warnings for airspace for whole day
+ * 
+ * @param set Whether to set or cancel acknowledgement
+ */
+  void acknowledge_day(const bool set=true);
+
 private:
   const AbstractAirspace& m_airspace;
   AirspaceWarningState m_state;
   AirspaceWarningState m_state_last;
   AirspaceInterceptSolution m_solution;
+
+  fixed m_acktime_warning;
+  fixed m_acktime_inside;
+  bool m_ack_day;
+  bool m_expired;
+  bool m_expired_last;
 
 public:
 

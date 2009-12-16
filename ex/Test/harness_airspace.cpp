@@ -322,7 +322,8 @@ void scan_airspaces(const AIRCRAFT_STATE state,
 class AirspaceWarningPrint: public AirspaceWarningVisitor
 {
 public:
-  AirspaceWarningPrint(const char* fname) {
+  AirspaceWarningPrint(const char* fname,
+                       const AirspaceWarning::AirspaceWarningState state):m_state(state) {
 #ifdef DO_PRINT
     fout = new std::ofstream(fname);
 #endif
@@ -333,21 +334,36 @@ public:
 #endif
   }
   virtual void Visit(const AirspaceWarning& as) {
+    if (as.get_warning_state() == m_state) {
 #ifdef DO_PRINT
     *fout << as;
     *fout << as.get_airspace();
-#endif      
+#endif
+    }
   }
 private:
 #ifdef DO_PRINT
   std::ofstream *fout;
 #endif
+  AirspaceWarning::AirspaceWarningState m_state;
 };
 
 void print_warnings() {
   if (airspace_warnings) {
-    AirspaceWarningPrint visitor("results/res-as-warnings.txt");
-    airspace_warnings->visit_warnings(visitor);
+    {
+      AirspaceWarningPrint visitor_inside("results/res-as-warnings-inside.txt", 
+                                          AirspaceWarning::WARNING_INSIDE);
+      AirspaceWarningPrint visitor_glide("results/res-as-warnings-glide.txt", 
+                                          AirspaceWarning::WARNING_GLIDE);
+      AirspaceWarningPrint visitor_filter("results/res-as-warnings-filter.txt", 
+                                          AirspaceWarning::WARNING_FILTER);
+      AirspaceWarningPrint visitor_task("results/res-as-warnings-task.txt", 
+                                          AirspaceWarning::WARNING_TASK);
+      airspace_warnings->visit_warnings(visitor_inside);
+      airspace_warnings->visit_warnings(visitor_glide);
+      airspace_warnings->visit_warnings(visitor_filter);
+      airspace_warnings->visit_warnings(visitor_task);
+    }
   }
 }
 
