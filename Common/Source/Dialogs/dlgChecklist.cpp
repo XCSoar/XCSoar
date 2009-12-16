@@ -117,8 +117,8 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
     nlen--;
 
   if (nlen > 0)
-    canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-                       text + nstart, nlen);
+    canvas.text(Layout::FastScale(2), Layout::FastScale(2),
+                text + nstart, nlen);
 }
 
 
