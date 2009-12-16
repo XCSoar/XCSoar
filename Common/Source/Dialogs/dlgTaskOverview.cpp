@@ -64,11 +64,6 @@ static bool showAdvanced= false;
 static int UpLimit=0;
 static int LowLimit=0;
 
-static int ItemIndex = -1;
-
-
-static int DrawListIndex=0;
-
 static double lengthtotal = 0.0;
 static bool fai_ok = false;
 
@@ -124,10 +119,9 @@ static void UpdateCaption (void) {
 
 
 static void
-OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
+OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
-  (void)Sender;
-  int n = UpLimit - LowLimit;
+  unsigned n = UpLimit - LowLimit;
   TCHAR sTmp[120];
 
   int w0 = Layout::FastScale(Layout::landscape ? 200 : 210);
@@ -161,27 +155,28 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
                 way_points.get(tp.Index).Name);
     }
 
-    canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+    canvas.text_clipped(rc.left + Layout::FastScale(2),
+                        rc.top + Layout::FastScale(2),
                         p1 - Layout::FastScale(4), sTmp);
 
     _stprintf(sTmp, _T("%.0f %s"),
               tp.LegDistance*DISTANCEMODIFY,
               Units::GetDistanceName());
-    canvas.text(p1 + w1 - canvas.text_width(sTmp),
-                Layout::FastScale(2), sTmp);
+    canvas.text(rc.left + p1 + w1 - canvas.text_width(sTmp),
+                rc.top + Layout::FastScale(2), sTmp);
 
     _stprintf(sTmp, _T("%d")_T(DEG),  iround(tp.InBound));
-    canvas.text(p2 + w2 - canvas.text_width(sTmp),
-                Layout::FastScale(2), sTmp);
+    canvas.text(rc.left + p2 + w2 - canvas.text_width(sTmp),
+                rc.top + Layout::FastScale(2), sTmp);
   } else if (DrawListIndex==n) {
     _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
-    canvas.text(Layout::FastScale(2), Layout::FastScale(2),
+    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 sTmp);
   } else if ((DrawListIndex==n+1) && task.ValidTaskPoint(0)) {
 
     if (!task.getSettings().AATEnabled) {
       _stprintf(sTmp, gettext(_T("Total:")));
-      canvas.text(Layout::FastScale(2), Layout::FastScale(2),
+      canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                   sTmp);
 
       if (fai_ok) {
@@ -192,8 +187,8 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
                   Units::GetDistanceName());
       }
 
-      canvas.text(p1 + w1 - canvas.text_width(sTmp),
-                  Layout::FastScale(2), sTmp);
+      canvas.text(rc.left + p1 + w1 - canvas.text_width(sTmp),
+                  rc.top + Layout::FastScale(2), sTmp);
     } else {
 
       double d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
@@ -208,7 +203,8 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
                 DISTANCEMODIFY*lengthtotal,
                 DISTANCEMODIFY*d1,
                 Units::GetDistanceName());
-      canvas.text(Layout::FastScale(2), Layout::FastScale(2), sTmp);
+      canvas.text(rc.left + Layout::FastScale(2),
+                  rc.top + Layout::FastScale(2), sTmp);
     }
   }
 }
@@ -275,7 +271,7 @@ static void OnTaskListEnter(WindowControl * Sender,
 		     WndListFrame::ListInfo_t *ListInfo) {
   (void)Sender;
   bool isfinish = false;
-  ItemIndex = ListInfo->ItemIndex;
+  int ItemIndex = wTaskList->GetCursorIndex();
   if ((ItemIndex>= UpLimit) || (UpLimit==0)) {
     if (ItemIndex>=UpLimit) {
       ItemIndex= UpLimit;
@@ -353,16 +349,12 @@ static void OnTaskListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *Lis
 	(void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = UpLimit-LowLimit+1;
-  } else {
-    DrawListIndex = ListInfo->DrawIndex;
-    ItemIndex = ListInfo->ItemIndex;
   }
 }
 
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
-  ItemIndex = -1; // to stop FormDown bringing up task details
-  wf->SetModalResult(mrOK);
+  wf->SetModalResult(mrCancel);
 }
 
 static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
@@ -506,7 +498,6 @@ static void OnAdvancedClicked(WindowControl * Sender, WndListFrame::ListInfo_t *
 }
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnTaskPaintListItem),
   DeclareCallBackEntry(OnTaskListInfo),
   DeclareCallBackEntry(OnDeclareClicked),
   DeclareCallBackEntry(OnCalcClicked),
@@ -524,7 +515,6 @@ void dlgTaskOverviewShowModal(void){
 
   UpLimit = 0;
   LowLimit = 0;
-  ItemIndex = -1;
 
   showAdvanced = false;
 
@@ -555,6 +545,7 @@ void dlgTaskOverviewShowModal(void){
   assert(wTaskList!=NULL);
   wTaskList->SetBorderKind(BORDERLEFT);
   wTaskList->SetEnterCallback(OnTaskListEnter);
+  wTaskList->SetPaintItemCallback(OnTaskPaintListItem);
 
   WndProperty* wp;
 

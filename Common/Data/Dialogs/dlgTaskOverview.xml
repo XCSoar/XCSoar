@@ -34,7 +34,7 @@
   </WndFrame>
 
   <WndListFrame Name="frmTaskList" X=102 Y=0 Width=215 Height=222 Font=2 OnListInfo="OnTaskListInfo">
-    <WndOwnerDrawFrame Name="frmTaskListEntry" X=2 Y=2 Width=211 Height=18 Font=2  OnPaint="OnTaskPaintListItem"/>
+    <WndFrame Name="frmTaskListEntry" X=2 Y=2 Width=211 Height=18 Font=2/>
   </WndListFrame>
 
 </WndForm>
