@@ -49,10 +49,17 @@ class CalculationThread;
 class InstrumentThread;
 class Waypoints;
 class Airspaces;
+class AirspaceWarningManager;
+class GlidePolar;
+class TaskManager;
 
 // other global objects
 extern Waypoints way_points;
 extern Airspaces airspace_database;
+extern AirspaceWarningManager airspace_warning;
+extern GlidePolar glide_polar;
+extern TaskManager task_manager;
+
 extern Marks *marks;
 extern TopologyStore *topology;
 extern RasterTerrain terrain;

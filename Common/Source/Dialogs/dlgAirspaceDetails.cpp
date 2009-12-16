@@ -40,10 +40,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Blackboard.hpp"
 #include "InfoBoxLayout.h"
-#include "Airspace/Airspaces.h"
-#ifdef OLD_TASK
-//#include "AirspaceWarning.h"
-#endif
+#include "Airspace/AirspaceWarningManager.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
@@ -54,8 +51,7 @@ Copyright_License {
 
 #include <assert.h>
 
-static int index_circle = -1;
-static int index_area = -1;
+static const AbstractAirspace* airspace;
 static WndForm *wf = NULL;
 
 static void
@@ -63,51 +59,18 @@ OnAcknowledgeClicked(WindowControl * Sender)
 {
   (void)Sender;
 
-  TCHAR *Name = NULL;
-
-  if (index_circle >= 0) {
-    Name = airspace_database.AirspaceCircle[index_circle].Name;
-  } else if (index_area >= 0) {
-    Name = airspace_database.AirspaceArea[index_area].Name;
-  }
-
-  if (Name == NULL)
-    return;
+  assert(airspace);
 
   UINT answer;
-  answer = MessageBoxX(Name, gettext(_T("Acknowledge for day?")),
+  answer = MessageBoxX(airspace->get_name_text(true).c_str(), 
+                       gettext(_T("Acknowledge for day?")),
                        MB_YESNOCANCEL | MB_ICONQUESTION);
 
   if (answer == IDYES) {
-    if (index_circle >= 0) {
-      AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                          XCSoarInterface::Calculated(),
-                          XCSoarInterface::SettingsComputer(),
-                          XCSoarInterface::MapProjection(),
-                          false, true, index_circle, true);
-    } else if (index_area >= 0) {
-      AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                          XCSoarInterface::Calculated(),
-                          XCSoarInterface::SettingsComputer(),
-                          XCSoarInterface::MapProjection(),
-                          false, false, index_area, true);
-    }
+    airspace_warning.acknowledge_day(*airspace, true);
     wf->SetModalResult(mrOK);
   } else if (answer == IDNO) {
-    // this will cancel a daily ack
-    if (index_circle >= 0) {
-      AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                          XCSoarInterface::Calculated(),
-                          XCSoarInterface::SettingsComputer(),
-                          XCSoarInterface::MapProjection(),
-                          true, true, index_circle, true);
-    } else if (index_area >= 0) {
-      AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                          XCSoarInterface::Calculated(),
-                          XCSoarInterface::SettingsComputer(),
-                          XCSoarInterface::MapProjection(),
-                          true, false, index_area, true);
-    }
+    airspace_warning.acknowledge_day(*airspace, false);
     wf->SetModalResult(mrOK);
   }
 }
@@ -125,228 +88,48 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-static double
-FLAltRounded(double alt)
-{
-  int f = iround(alt / 10) * 10;
-  return (double)f;
-}
-
 static void
 SetValues(void)
 {
-  int atype = 0;
-  AIRSPACE_ALT* top = NULL;
-  AIRSPACE_ALT* base = NULL;
-  TCHAR *name = 0;
+  assert(airspace);
+
   WndProperty* wp;
-  TCHAR buffer[80];
-  TCHAR buffer2[80];
-  bool inside = false;
-  double range = 0.0;
-  double bearing;
-
-  if (index_area >= 0) {
-    AIRSPACE_AREA &area = airspace_database.AirspaceArea[index_area];
-    MapWindow &map_window = XCSoarInterface::main_window.map;
-
-    atype = area.Type;
-    top = &area.Top;
-    base = &area.Base;
-    name = area.Name;
-    inside = airspace_database.InsideArea(XCSoarInterface::Basic().Location,
-                                          index_area);
-    range = airspace_database.RangeArea(XCSoarInterface::Basic().Location,
-                                        index_area, &bearing,
-                                        map_window);
-  }
-
-  if (index_circle >= 0) {
-    AIRSPACE_CIRCLE &circle = airspace_database.AirspaceCircle[index_circle];
-
-    atype = circle.Type;
-    top = &circle.Top;
-    base = &circle.Base;
-    name = circle.Name;
-    inside = airspace_database.InsideCircle(XCSoarInterface::Basic().Location,
-                                            index_circle);
-    range = airspace_database.CircleDistance(XCSoarInterface::Basic().Location,
-                                             index_circle);
-
-    DistanceBearing(XCSoarInterface::Basic().Location, circle.Location,
-                    NULL, &bearing);
-
-    if (inside) {
-      bearing = AngleLimit360(bearing + 180);
-    }
-  }
-
-  if (range < 0) {
-    range = -range;
-  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpName"));
   if (wp) {
-    wp->SetText(name);
+    wp->SetText(airspace->get_name_text(true).c_str());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpType"));
   if (wp) {
-    switch (atype) {
-    case RESTRICT:
-      wp->SetText(gettext(_T("Restricted")));
-      break;
-    case PROHIBITED:
-      wp->SetText(gettext(_T("Prohibited")));
-      break;
-    case DANGER:
-      wp->SetText(gettext(_T("Danger Area")));
-      break;
-    case CLASSA:
-      wp->SetText(gettext(_T("Class A")));
-      break;
-    case CLASSB:
-      wp->SetText(gettext(_T("Class B")));
-      break;
-    case CLASSC:
-      wp->SetText(gettext(_T("Class C")));
-      break;
-    case CLASSD:
-      wp->SetText(gettext(_T("Class D")));
-      break;
-    case CLASSE:
-      wp->SetText(gettext(_T("Class E")));
-      break;
-    case CLASSF:
-      wp->SetText(gettext(_T("Class F")));
-      break;
-    case NOGLIDER:
-      wp->SetText(gettext(_T("No Glider")));
-      break;
-    case CTR:
-      wp->SetText(gettext(_T("CTR")));
-      break;
-    case WAVE:
-      wp->SetText(gettext(_T("Wave")));
-      break;
-    default:
-      wp->SetText(gettext(_T("Unknown")));
-    }
+    wp->SetText(airspace->get_type_text().c_str());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpTop"));
   if (wp) {
-    switch (top->Base) {
-    case abUndef:
-      if (Units::GetUserAltitudeUnit() == unMeter)
-        _stprintf(buffer, _T("%.0f[m] %.0f[ft] [?]"),
-                  top->Altitude, top->Altitude * TOFEET);
-      else
-        _stprintf(buffer, _T("%.0f ft [?]"),
-                  top->Altitude * TOFEET);
-
-      break;
-    case abMSL:
-      if (Units::GetUserAltitudeUnit() == unMeter)
-        _stprintf(buffer, _T("%.0f[m] %.0f[ft] MSL"),
-                  top->Altitude, top->Altitude * TOFEET);
-      else
-        _stprintf(buffer, _T("%.0f ft MSL"), top->Altitude * TOFEET);
-
-      break;
-    case abAGL:
-      if (Units::GetUserAltitudeUnit() == unMeter)
-        _stprintf(buffer, _T("%.0f[m] %.0f[ft] AGL"),
-                  top->AGL, top->AGL * TOFEET);
-      else
-        _stprintf(buffer, _T("%.0f ft AGL"), top->AGL * TOFEET);
-
-      break;
-    case abFL:
-      if (Units::GetUserAltitudeUnit() == unMeter)
-        _stprintf(buffer, _T("FL%.0f (%.0f[m] %.0f[ft])"),
-                  top->FL, FLAltRounded(top->Altitude),
-                  FLAltRounded(top->Altitude * TOFEET));
-      else
-        _stprintf(buffer, _T("FL%.0f (%.0f ft)"),
-                  top->FL, FLAltRounded(top->Altitude * TOFEET));
-
-      break;
-    }
-    wp->SetText(buffer);
+    wp->SetText(airspace->get_top_text().c_str());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpBase"));
   if (wp) {
-    switch (base->Base) {
-    case abUndef:
-      if (Units::GetUserAltitudeUnit() == unMeter)
-        _stprintf(buffer, _T("%.0f[m] %.0f[ft] [?]"),
-                  base->Altitude, base->Altitude * TOFEET);
-      else
-        _stprintf(buffer, _T("%.0f ft [?]"), base->Altitude * TOFEET);
-
-      break;
-    case abMSL:
-      if (Units::GetUserAltitudeUnit() == unMeter)
-        _stprintf(buffer, _T("%.0f[m] %.0f[ft] MSL"),
-                  base->Altitude, base->Altitude * TOFEET);
-      else
-        _stprintf(buffer, _T("%.0f ft MSL"),
-                  base->Altitude * TOFEET);
-
-      break;
-    case abAGL:
-      if (base->Altitude == 0) {
-        _stprintf(buffer, _T("SFC"));
-      } else {
-        if (Units::GetUserAltitudeUnit() == unMeter)
-          _stprintf(buffer, _T("%.0f[m] %.0f[ft] AGL"),
-                    base->AGL, base->AGL * TOFEET);
-        else
-          _stprintf(buffer, _T("%.0f ft AGL"),
-                    base->AGL * TOFEET);
-      }
-      break;
-    case abFL:
-      if (Units::GetUserAltitudeUnit() == unMeter)
-        _stprintf(buffer, _T("FL %.0f (%.0f[m] %.0f[ft])"),
-                  base->FL, FLAltRounded(base->Altitude),
-                  FLAltRounded(base->Altitude * TOFEET));
-      else
-        _stprintf(buffer, _T("FL%.0f (%.0f ft)"),
-                  base->FL, FLAltRounded(base->Altitude * TOFEET));
-
-      break;
-    }
-    wp->SetText(buffer);
+    wp->SetText(airspace->get_base_text().c_str());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
-    if (inside) {
-      wp->SetCaption(gettext(_T("Inside")));
-    }
-    Units::FormatUserDistance(range, buffer, 20);
-    _stprintf(buffer2, _T(" %d")_T(DEG), iround(bearing));
-    _tcscat(buffer, buffer2);
-    wp->SetText(buffer);
-    wp->RefreshDisplay();
+// OLD_TASK TODO
   }
 }
 
+
 void
-dlgAirspaceDetails(int the_circle, int the_area)
+dlgAirspaceDetails(const AbstractAirspace& the_airspace)
 {
-  index_circle = the_circle;
-  index_area = the_area;
-  if ((index_area <= 0) && (index_circle <= 0)) {
-    return;
-  }
+  airspace = &the_airspace;
 
   wf = dlgLoadFromXML(CallBackTable,
                       _T("dlgAirspaceDetails.xml"),
@@ -365,15 +148,3 @@ dlgAirspaceDetails(int the_circle, int the_area)
   delete wf;
   wf = NULL;
 }
-
-/*
-                       distance,
-                    Units::GetDistanceName()
-
-  wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(distance);
-    wp->GetDataField()->SetUnits(Units::GetDistanceName());
-    wp->RefreshDisplay();
-  }
-*/

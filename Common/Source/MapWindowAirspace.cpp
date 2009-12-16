@@ -39,6 +39,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Screen/Graphics.hpp"
 #include "Airspace/Airspaces.hpp"
+#include "Dialogs.h"
 
 #include <assert.h>
 
@@ -223,7 +224,7 @@ public:
   AirspaceDetailsDialogVisitor(const SETTINGS_COMPUTER& _settings, 
                                const fixed& _altitude):
     AirspaceVisitor(AirspaceMapVisible(_settings, _altitude, false)),
-    found(false) {};
+    m_airspace(NULL) {};
 
   void Visit(const AirspacePolygon& as) {
     visit_general(as);
@@ -233,18 +234,19 @@ public:
   };
   void visit_general(const AbstractAirspace& as) {
     if (m_predicate->condition(as)) {
-      // do something...
-      found = true;
+      m_airspace = &as;
     }
   };
   void display() {
-    if (found) {
-      printf("XXX found an airspace\n");
-      // dlgAirspaceDetails(i, -1);
-      // need to do this on a copy
+    if (m_airspace) {
+      dlgAirspaceDetails(*m_airspace);
     }
   };
-  bool found;
+  bool found() const {
+    return m_airspace != NULL;
+  }
+private:
+  const AbstractAirspace *m_airspace;
 };
 
 
@@ -261,5 +263,5 @@ MapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
 
   airspace_copy_popup.display();
 
-  return airspace_copy_popup.found;
+  return airspace_copy_popup.found();
 }

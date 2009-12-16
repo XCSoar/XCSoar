@@ -47,6 +47,7 @@ class WndProperty;
 class Waypoint;
 class Waypoints;
 class Airspaces;
+class AbstractAirspace;
 
 void StartupScreen();
 
@@ -55,6 +56,8 @@ bool dlgAirspaceWarningShowDlg(bool force);
 const Waypoint* dlgWayPointSelect(const GEOPOINT &location, 
                                   const int type=-1, 
                                   const int FilterNear=0);
+
+void dlgAirspaceDetails(const AbstractAirspace& the_airspace);
 
 int dlgAirspaceColoursShowModal();
 int dlgAirspacePatternsShowModal();

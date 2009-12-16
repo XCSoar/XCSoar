@@ -1231,13 +1231,12 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
 
   const AbstractAirspace* as = ans.find_nearest(airspace_database);
   if (!as) {
-    printf("found nearest (soonest) airspace\n");
     return;
   } 
 
   ScopePopupBlock block(main_window.popup);
 
-// TODO OLD_TASK    dlgAirspaceDetails(i, -1);
+  dlgAirspaceDetails(*as);
 
   // clear previous warning if any
   Message::Acknowledge(Message::MSG_AIRSPACE);

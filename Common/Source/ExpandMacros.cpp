@@ -53,6 +53,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Airspace/Airspaces.hpp"
+#include "Task/TaskManager.hpp"
 
 #include <stdlib.h>
 
@@ -111,26 +112,38 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
     ReplaceInString(OutBuffer, TEXT("$(CheckAirspace)"), TEXT(""), Size);
   }
-#ifdef OLD_TASK
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckTaskResumed)"))) {
-    if (task.isTaskAborted()) {
-      // TODO code: check, does this need to be set with temporary task?
-      invalid = true;
-    }
+    // TODO code: check, does this need to be set with temporary task?
+    invalid |= task_manager.is_mode(TaskManager::MODE_ABORT);
+    invalid |= task_manager.is_mode(TaskManager::MODE_GOTO);
     ReplaceInString(OutBuffer, TEXT("$(CheckTaskResumed)"), TEXT(""), Size);
   }
+
   if (_tcsstr(OutBuffer, TEXT("$(CheckTask)"))) {
-    if (!task.Valid()) {
+    if (!task_manager.check_task()) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTask)"), TEXT(""), Size);
   }
-  if (task.isTaskAborted()) {
+
+  if (!task_manager.check_task() || task_manager.is_mode(TaskManager::MODE_GOTO)) {
+
+    if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
+      invalid = true;
+      ReplaceInString(OutBuffer, TEXT("$(WaypointNext)"), TEXT("Waypoint\nNext"), Size);
+    }
+    if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
+      invalid = true;
+      ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
+    }
+
+  } else if (task_manager.is_mode(TaskManager::MODE_ABORT)) {
+
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid = !task.ValidTaskPoint(task.getActiveIndex()+1);
-      CondReplaceInString(!task.ValidTaskPoint(task.getActiveIndex()+2),
+      invalid |= !task_manager.validTaskPoint(1);
+      CondReplaceInString(!task_manager.validTaskPoint(2),
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
                           TEXT("Landpoint\nFurthest"),
@@ -139,8 +152,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     } else
     if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
       // Waypoint\nNext
-      invalid = !task.ValidTaskPoint(task.getActiveIndex()-1);
-      CondReplaceInString(!task.ValidTaskPoint(task.getActiveIndex()-2),
+      invalid |= !task_manager.validTaskPoint(-1);
+      CondReplaceInString(!task_manager.validTaskPoint(-2),
                           OutBuffer,
                           TEXT("$(WaypointPrevious)"),
                           TEXT("Landpoint\nClosest"),
@@ -149,8 +162,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   } else {
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid = !task.ValidTaskPoint(task.getActiveIndex()+1);
-      CondReplaceInString(!task.ValidTaskPoint(task.getActiveIndex()+2),
+      invalid |= !task_manager.validTaskPoint(1);
+      CondReplaceInString(!task_manager.validTaskPoint(2),
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
                           TEXT("Waypoint\nFinish"),
@@ -158,23 +171,28 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
     } else
     if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
-      if (task.getActiveIndex()==1) {
-        invalid = !task.ValidTaskPoint(task.getActiveIndex()-1);
+      if (!task_manager.validTaskPoint(-2)) {
+        invalid |= !task_manager.validTaskPoint(-1);
         ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"),
                         TEXT("Waypoint\nStart"), Size);
-      } else if (task.getSettings().EnableMultipleStartPoints) {
-        invalid = !task.ValidTaskPoint(0);
+      } 
+#ifdef OLD_TASK
+      else if (task.getSettings().EnableMultipleStartPoints) {
+        invalid |= !task.ValidTaskPoint(0);
         CondReplaceInString((task.getActiveIndex()==0),
                             OutBuffer,
                             TEXT("$(WaypointPrevious)"),
                             TEXT("StartPoint\nCycle"), TEXT("Waypoint\nPrevious"), Size);
-      } else {
-        invalid = (task.getActiveIndex()<=0);
+      } 
+#endif
+      else {
+        invalid |= !task_manager.validTaskPoint(-1);
         ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
       }
     }
   }
 
+#ifdef OLD_TASK
   if (_tcsstr(OutBuffer, TEXT("$(AdvanceArmed)"))) {
     switch (task.getSettings().AutoAdvance) {
     case 0:
@@ -225,16 +243,12 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);
   }
+#endif
 
-  CondReplaceInString(task.TaskIsTemporary(),
+  CondReplaceInString(task_manager.is_mode(TaskManager::MODE_ABORT)
+                      || task_manager.is_mode(TaskManager::MODE_GOTO),
 		      OutBuffer, TEXT("$(TaskAbortToggleActionName)"),
 		      TEXT("Resume"), TEXT("Abort"), Size);
-#else
-
-  ReplaceInString(OutBuffer, TEXT("$(CheckTaskResumed)"), TEXT(""), Size);
-  ReplaceInString(OutBuffer, TEXT("$(CheckTask)"), TEXT(""), Size);
-
-#endif
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckReplay)"))) {
     if (!Basic().Replay && Basic().MovementDetected) {
@@ -244,9 +258,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckWaypointFile)"))) {
-    if (way_points.empty()) {
-      invalid = true;
-    }
+    invalid |= way_points.empty();
     ReplaceInString(OutBuffer, TEXT("$(CheckWaypointFile)"), TEXT(""), Size);
   }
 

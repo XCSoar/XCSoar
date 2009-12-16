@@ -133,7 +133,7 @@ struct TempAirspaceType {
   std::vector<GEOPOINT> points;
   int Rotation;
   GEOPOINT Center;
-  int Type;
+  AirspaceClass_t Type;
   fixed Radius;
   AIRSPACE_ALT Base;
   AIRSPACE_ALT Top;
@@ -226,7 +226,7 @@ ParseLine(Airspaces &airspace_database, int nLineType)
     
     for (nIndex = 0; nIndex < k_nAreaCount; nIndex++) {
       if (StartsWith(&TempString[3], k_strAreaStart[nIndex])) {
-        temp_area.Type = k_nAreaType[nIndex];
+        temp_area.Type = (AirspaceClass_t)k_nAreaType[nIndex];
         break;
       }
     }
