@@ -326,6 +326,10 @@ public:
 
   void text(int x, int y, const TCHAR *text);
 
+  void text(int x, int y, const TCHAR *text, size_t length) {
+    // XXX
+  }
+
   void text_opaque(int x, int y, const TCHAR *text, size_t length) {
     // XXX
   }
@@ -690,6 +694,7 @@ public:
   }
 
   void text(int x, int y, const TCHAR *text);
+  void text(int x, int y, const TCHAR *text, size_t length);
   void text_opaque(int x, int y, const TCHAR *text, size_t length);
   void text_opaque(int x, int y, const RECT* lprc, const TCHAR *text);
   void text_opaque(int x, int y, const TCHAR *text) {

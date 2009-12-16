@@ -678,6 +678,12 @@ Canvas::text(int x, int y, const TCHAR *text)
 }
 
 void
+Canvas::text(int x, int y, const TCHAR *text, size_t length)
+{
+  ::ExtTextOut(dc, x, y, 0, NULL, text, length, NULL);
+}
+
+void
 Canvas::text_opaque(int x, int y, const TCHAR *text, size_t length)
 {
   ::ExtTextOut(dc, x, y, ETO_OPAQUE, NULL, text, length, NULL);
