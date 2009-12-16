@@ -38,12 +38,14 @@
 #define ABSTRACTAIRSPACE_HPP
 
 #include "Util/GenericVisitor.hpp"
+#include "Util/tstring.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "AirspaceAltitude.hpp"
 #include "Util/tstring.hpp"
 #include "AirspaceAircraftPerformance.hpp"
+#include "AirspaceClass.hpp"
 
 class AtmosphericPressure;
 
@@ -182,7 +184,7 @@ public:
    * @param _top Upper limit
    */
   void set_properties(const tstring &_Name,
-                      const int _Type,
+                      const AirspaceClass_t _Type,
                       const AIRSPACE_ALT &_base,
                       const AIRSPACE_ALT &_top) {
     Name = _Name;
@@ -196,7 +198,7 @@ public:
    * 
    * @return Type/class of airspace
    */
-  int get_type() const {
+  AirspaceClass_t get_type() const {
     return Type;
   }
 
@@ -270,17 +272,49 @@ public:
                                    const AbstractAirspace& as);
 #endif
 
+/** 
+ * Produce text version of airspace class.
+ * 
+ * @param concise Whether to use short form or long form
+ * 
+ * @return Text version of class
+ */
+  const tstring get_type_text(const bool concise=false) const;
+
+/** 
+ * Produce text version of name and airspace class.
+ * If concise is true, only produces name.
+ * 
+ * @param concise Whether to use short form or long form
+ * 
+ * @return Text version of name/type
+ */
+  const tstring get_name_text(const bool concise=false) const;
+
+/** 
+ * Produce text version of base altitude.
+ * 
+ * @param concise Whether to use short form or long form
+ * 
+ * @return Text version of base altitude
+ */
+  const tstring get_base_text(const bool concise=false) const;
+
+/** 
+ * Produce text version of top altitude.
+ * 
+ * @param concise Whether to use short form or long form
+ * 
+ * @return Text version of top altitude
+ */
+  const tstring get_top_text(const bool concise=false) const;
+
 protected:
   AIRSPACE_ALT m_base; /**< Base of airspace */
   AIRSPACE_ALT m_top; /**< Top of airspace */
   tstring Name; /**< Airspace name (identifier) */
-  int Type; /**< Airspace class */
+  AirspaceClass_t Type; /**< Airspace class */
   const TaskProjection* m_task_projection; /**< Task projection (owned by container) that can be used for query speedups */
-
-#ifdef OLD_TASK
-  AIRSPACE_ACK Ack;
-  unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
-#endif
 
 private:
 

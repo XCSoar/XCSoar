@@ -79,6 +79,14 @@ AbortTask::getActiveTaskPoint() const
 }
 
 
+bool 
+AbortTask::validTaskPoint(const int index_offset) const
+{
+  unsigned index = activeTaskPoint+index_offset;
+  return (index<tps.size());
+}
+
+
 unsigned
 AbortTask::task_size() const
 {

@@ -61,6 +61,15 @@ GotoTask::getActiveTaskPoint() const
   return tp;
 }
 
+bool 
+GotoTask::validTaskPoint(const int index_offset) const
+{
+  if (index_offset !=0) 
+    return false;
+  return (tp != NULL);
+}
+
+
 void 
 GotoTask::setActiveTaskPoint(unsigned index)
 {

@@ -15,6 +15,7 @@ TASK_SRC	:=\
 	$(topdir)/src/Airspace/AirspaceIntersectionVisitor.cpp \
 	$(topdir)/src/Airspace/AirspaceWarningManager.cpp \
 	$(topdir)/src/Airspace/AirspaceWarning.cpp \
+	$(topdir)/src/Airspace/AirspaceClass.cpp \
 	$(topdir)/src/Atmosphere/Pressure.cpp \
 	$(topdir)/src/GlideSolvers/GlideState.cpp \
 	$(topdir)/src/GlideSolvers/GlidePolar.cpp \

@@ -465,16 +465,16 @@ OrderedTask::replace(OrderedTaskPoint* new_tp,
 }
 
 
-//////////  
-
-void OrderedTask::setActiveTaskPoint(unsigned index)
+void 
+OrderedTask::setActiveTaskPoint(unsigned index)
 {
   if (index<tps.size()) {
     activeTaskPoint = index;
   }
 }
 
-TaskPoint* OrderedTask::getActiveTaskPoint() const
+TaskPoint* 
+OrderedTask::getActiveTaskPoint() const
 {
   if (activeTaskPoint<tps.size()) {
     return tps[activeTaskPoint];
@@ -483,7 +483,13 @@ TaskPoint* OrderedTask::getActiveTaskPoint() const
   }
 }
 
-////////// Glide functions
+bool 
+OrderedTask::validTaskPoint(const int index_offset) const
+{
+  unsigned index = activeTaskPoint+index_offset;
+  return (index<tps.size());
+}
+
 
 void
 OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft, 

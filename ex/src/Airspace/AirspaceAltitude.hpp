@@ -2,6 +2,7 @@
 #define AIRSPACE_ALTITUDE_HPP
 
 #include "Math/fixed.hpp"
+#include "Util/tstring.hpp"
 
 class AtmosphericPressure;
 
@@ -53,6 +54,18 @@ struct AIRSPACE_ALT
  * @param press Atmospheric pressure model (to obtain QNH)
  */
   void set_flight_level(const AtmosphericPressure &press);
+
+/** 
+ * Generate text form of airspace altitude boundary
+ * 
+ * \todo
+ * - handle units, FL etc, SFC, AGL, GND
+ *
+ * @param concise Whether to produce short-form
+ * 
+ * @return String version of altitude reference
+ */
+  const tstring get_as_text(const bool concise=false) const;
 };
 
 #endif

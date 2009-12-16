@@ -108,6 +108,14 @@ public:
  */
   const OrderedTaskPoint* getTaskPoint(const unsigned index) const;
 
+/**
+ * Determine whether active task point optionally shifted points to
+ * a valid task point.
+ *
+ * @param index_offset offset (default 0)
+ */
+  bool validTaskPoint(const int index_offset=0) const;
+
 /** 
  * Check if task has a single StartPoint
  * 

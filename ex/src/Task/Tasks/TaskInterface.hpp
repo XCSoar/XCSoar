@@ -80,6 +80,14 @@ public:
  */  
   virtual TaskPoint* getActiveTaskPoint() const = 0;
 
+/**
+ * Determine whether active task point optionally shifted points to
+ * a valid task point.
+ *
+ * @param index_offset offset (default 0)
+ */
+  virtual bool validTaskPoint(const int index_offset=0) const = 0;
+
 /** 
  * Accessor for task statistics for this task
  * 

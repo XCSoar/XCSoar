@@ -8,7 +8,7 @@
 
 
 void airspace_random_properties(AbstractAirspace& as) {
-  int Type = rand()%15;
+  AirspaceClass_t Type = (AirspaceClass_t)(rand()%15);
   AIRSPACE_ALT base;
   AIRSPACE_ALT top;
   base.Altitude = rand()%2000;
@@ -96,11 +96,21 @@ public:
     }
 #endif    
   }
+  virtual void visit_general(const AbstractAirspace& as) {
+    if (do_report) {
+#ifdef DO_PRINT
+      *fout << "# Name: " << as.get_name_text() 
+            << " Base: " << as.get_base_text() 
+            << " Top: " << as.get_top_text() << "\n";
+#endif
+    }
+  }
   virtual void Visit(const AirspaceCircle& as) {
     if (do_report) {
 #ifdef DO_PRINT
       *fout << as;
 #endif
+      visit_general(as);
     }
   }
   virtual void Visit(const AirspacePolygon& as) {
@@ -108,6 +118,7 @@ public:
 #ifdef DO_PRINT
       *fout << as;
 #endif
+      visit_general(as);
     }
   }
 private:

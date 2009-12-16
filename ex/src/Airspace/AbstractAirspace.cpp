@@ -34,14 +34,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "AbstractAirspace.hpp"
 #include <assert.h>
-
-/*
-  NewCircle->Ack.AcknowledgedToday = false;
-  NewCircle->Ack.AcknowledgementTime = 0;
-  NewCircle->_NewWarnAckNoBrush = false;
-*/
 
 
 bool 
@@ -194,18 +189,32 @@ AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
   }
 }
 
+const tstring 
+AbstractAirspace::get_type_text(const bool concise) const
+{
+  return airspace_class_as_text(Type, concise);
+}
 
-/*
-  const GEOPOINT p_start;
-  const GEOPOINT p_end;
 
-  if (loc_start == state.Location) {
-    if (inside(state.Location)) {
-      p_start = state.Location;
-    } else {
-      p_start = closest_point(state.Location);
-    }
+const tstring 
+AbstractAirspace::get_name_text(const bool concise) const
+{
+  if (concise) {
+    return Name;
+  } else {
+    return Name + _T(" ") + airspace_class_as_text(Type);
   }
-*/
+}
 
 
+const tstring 
+AbstractAirspace::get_base_text(const bool concise) const
+{
+  return m_base.get_as_text(concise);
+}
+
+const tstring 
+AbstractAirspace::get_top_text(const bool concise) const
+{
+  return m_top.get_as_text(concise);
+}

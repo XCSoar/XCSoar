@@ -91,6 +91,14 @@ public:
  */
   void setActiveTaskPoint(unsigned index);
 
+/**
+ * Determine whether active task point optionally shifted points to
+ * a valid task point.
+ *
+ * @param index_offset offset (default 0)
+ */
+  bool validTaskPoint(const int index_offset=0) const;
+
 /** 
  * Update internal states when aircraft state advances.
  * This performs a scan of reachable waypoints.

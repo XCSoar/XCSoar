@@ -112,6 +112,16 @@ TaskManager::getActiveTaskPoint() const
 
 
 bool 
+TaskManager::validTaskPoint(const int index_offset) const
+{
+  if (active_task) 
+    return active_task->validTaskPoint(index_offset);
+  else 
+    return false;
+}
+
+
+bool 
 TaskManager::update(const AIRCRAFT_STATE &state, 
                     const AIRCRAFT_STATE& state_last)
 {

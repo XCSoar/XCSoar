@@ -101,6 +101,14 @@ public:
  */
   virtual TaskPoint* getActiveTaskPoint() const;
 
+/**
+ * Determine whether active task point optionally shifted points to
+ * a valid task point.
+ *
+ * @param index_offset offset (default 0)
+ */
+  virtual bool validTaskPoint(const int index_offset=0) const;
+
 /** 
  * Get a random point in the task OZ (for testing simulation route)
  * 
@@ -190,6 +198,15 @@ public:
   virtual const TaskStats& get_stats() const;
 
 /** 
+ * Convenience function, determines whether stats are valid
+ * 
+ * @return True if stats valid
+ */
+  const bool stats_valid() const {
+    return get_stats().task_valid;
+  }
+
+/** 
  * Size of active task
  * 
  * @return Number of taskpoints in active task
@@ -239,6 +256,24 @@ public:
  */
   TaskAdvance& get_task_advance() {
     return task_advance;
+  }
+
+/** 
+ * Access active task mode
+ * 
+ * @return Active task mode
+ */
+  const TaskMode_t get_mode() const;
+
+/** 
+ * Determine if the active mode is a particular mode
+ * 
+ * @param the_mode Mode to compare against
+ * 
+ * @return True if modes match
+ */
+  bool is_mode(const TaskMode_t the_mode) const {
+    return mode == the_mode;
   }
 
 private:

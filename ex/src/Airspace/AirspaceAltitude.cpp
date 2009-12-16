@@ -37,6 +37,7 @@
 #include "AirspaceAltitude.hpp"
 #include "Atmosphere/Pressure.hpp"
 
+
 void 
 AIRSPACE_ALT::set_flight_level(const AtmosphericPressure &press)
 {
@@ -51,3 +52,75 @@ AIRSPACE_ALT::set_ground_level(const fixed alt)
   if (Base == abAGL)
     Altitude = AGL+alt;
 }
+
+const tstring 
+AIRSPACE_ALT::get_as_text(const bool concise) const
+{
+  static const fixed fixed_10 = 10;
+
+  tstringstream oss;
+  switch (Base) {
+  case abAGL:
+    if (!positive(AGL)) {
+      oss << _T("GND");
+    } else {
+      oss << AGL.as_int() << _T(" AGL");
+    }
+    break;
+  case abFL:
+    oss << _T("FL") << (fixed_10*FL).as_int();
+    break;
+  case abMSL:
+  case abUndef:
+  default:
+    break;
+  };
+  if (!concise) {
+    oss << _T(" ") << Altitude.as_int();
+  }
+  return oss.str();
+}
+
+
+/*
+
+    switch (top->Base) {
+    case abUndef:
+      if (Units::GetUserAltitudeUnit() == unMeter)
+        _stprintf(buffer, _T("%.0f[m] %.0f[ft] [?]"),
+                  top->Altitude, top->Altitude * TOFEET);
+      else
+        _stprintf(buffer, _T("%.0f ft [?]"),
+                  top->Altitude * TOFEET);
+
+      break;
+    case abMSL:
+      if (Units::GetUserAltitudeUnit() == unMeter)
+        _stprintf(buffer, _T("%.0f[m] %.0f[ft] MSL"),
+                  top->Altitude, top->Altitude * TOFEET);
+      else
+        _stprintf(buffer, _T("%.0f ft MSL"), top->Altitude * TOFEET);
+
+      break;
+    case abAGL:
+      if (Units::GetUserAltitudeUnit() == unMeter)
+        _stprintf(buffer, _T("%.0f[m] %.0f[ft] AGL"),
+                  top->AGL, top->AGL * TOFEET);
+      else
+        _stprintf(buffer, _T("%.0f ft AGL"), top->AGL * TOFEET);
+
+      break;
+    case abFL:
+      if (Units::GetUserAltitudeUnit() == unMeter)
+        _stprintf(buffer, _T("FL%.0f (%.0f[m] %.0f[ft])"),
+                  top->FL, FLAltRounded(top->Altitude),
+                  FLAltRounded(top->Altitude * TOFEET));
+      else
+        _stprintf(buffer, _T("FL%.0f (%.0f ft)"),
+                  top->FL, FLAltRounded(top->Altitude * TOFEET));
+
+      break;
+    }
+    wp->SetText(buffer);
+
+*/
