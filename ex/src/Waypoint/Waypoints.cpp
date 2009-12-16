@@ -118,6 +118,16 @@ Waypoints::append(const Waypoint& wp)
 }
 
 
+const Waypoint*
+Waypoints::get_nearest(const GEOPOINT &loc) const 
+{
+  WaypointTree::const_iterator it = find_nearest(loc);
+  if (it != waypoint_tree.end()) {
+    return &it->get_waypoint();
+  }
+  return NULL;
+}
+
 
 Waypoints::WaypointTree::const_iterator 
 Waypoints::find_nearest(const GEOPOINT &loc) const 
