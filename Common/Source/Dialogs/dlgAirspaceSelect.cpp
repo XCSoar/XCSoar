@@ -678,27 +678,26 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
       // left justified
 
-      canvas.text_opaque(x1, Layout::FastScale(2), sTmp);
+      canvas.text(x1, Layout::FastScale(2), sTmp);
 
       // right justified after airspace type
       _stprintf(sTmp, _T("%.0f%s"),
                 AirspaceSelectInfo[i].Distance,
                 Units::GetDistanceName());
       x2 = w0 - w3 - canvas.text_width(sTmp);
-      canvas.text_opaque(x2, Layout::FastScale(2), sTmp);
+      canvas.text(x2, Layout::FastScale(2), sTmp);
 
       // right justified after distance
       _stprintf(sTmp, _T("%d")_T(DEG),  iround(AirspaceSelectInfo[i].Direction));
       x3 = w0 - canvas.text_width(sTmp);
-      canvas.text_opaque(x3, Layout::FastScale(2), sTmp);
+      canvas.text(x3, Layout::FastScale(2), sTmp);
     } else {
       // should never get here!
     }
   } else {
     if (DrawListIndex == 0){
       _stprintf(sTmp, _T("%s"), gettext(_T("No Match!")));
-      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-                         sTmp);
+      canvas.text(Layout::FastScale(2), Layout::FastScale(2), sTmp);
     }
   }
 }
