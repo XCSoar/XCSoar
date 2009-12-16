@@ -56,8 +56,7 @@ static WndListFrame *wDetails=NULL;
 #define MAXLINES 100
 #define MAXLISTS 20
 static int LineOffsets[MAXLINES];
-static int DrawListIndex=0;
-static int nTextLines=0;
+static unsigned nTextLines;
 static int nLists=0;
 static TCHAR *ChecklistText[MAXDETAILS];
 static TCHAR *ChecklistTitle[MAXTITLE];
@@ -91,20 +90,19 @@ static void NextPage(int Step){
 
 
 static void
-OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
+OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  (void)Sender;
-  if (DrawListIndex >= nTextLines)
+  if (i >= nTextLines)
     return;
 
   TCHAR* text = ChecklistText[page];
   if (text == NULL)
     return;
 
-  int nstart = LineOffsets[DrawListIndex];
+  int nstart = LineOffsets[i];
   int nlen;
-  if (DrawListIndex < nTextLines - 1) {
-    nlen = LineOffsets[DrawListIndex + 1] - LineOffsets[DrawListIndex] - 1;
+  if (i < nTextLines - 1) {
+    nlen = LineOffsets[i + 1] - LineOffsets[i] - 1;
     nlen--;
   } else {
     nlen = _tcslen(text + nstart);
@@ -117,7 +115,7 @@ OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
     nlen--;
 
   if (nlen > 0)
-    canvas.text(Layout::FastScale(2), Layout::FastScale(2),
+    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 text + nstart, nlen);
 }
 
@@ -126,8 +124,6 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
   (void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = nTextLines-1;
-  } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
   }
 }
 
@@ -176,7 +172,6 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(OnPaintDetailsListItem),
   DeclareCallBackEntry(OnDetailsListInfo),
   DeclareCallBackEntry(NULL)
 };
@@ -303,6 +298,7 @@ void dlgChecklistShowModal(void){
   assert(wDetails!=NULL);
 
   wDetails->SetBorderKind(BORDERLEFT);
+  wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
 
   page = 0;
 
