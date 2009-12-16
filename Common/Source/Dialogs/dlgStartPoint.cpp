@@ -66,30 +66,31 @@ OnStartPointPaintListItem(WindowControl * Sender, Canvas &canvas)
 
   TCHAR label[MAX_PATH];
 
-  if (DrawListIndex < MAXSTARTPOINTS){
-    int i = DrawListIndex;
+  if (DrawListIndex >= MAXSTARTPOINTS)
+    return;
 
-    if ((task_start_points[i].Index != -1)
-	&&(task_start_stats[i].Active)) {
-      _tcscpy(label, way_points.get(task_start_points[i].Index).Name);
-    } else {
-      int j;
-      int i0=0;
-      for (j=MAXSTARTPOINTS-1; j>=0; j--) {
-        if ((task_start_points[j].Index!= -1)&&(task_start_stats[j].Active)) {
-          i0=j+1;
-          break;
-        }
-      }
-      if (i==i0) {
-        _tcscpy(label, _T("(add waypoint)"));
-      } else {
-        _tcscpy(label, _T(" "));
+  int i = DrawListIndex;
+
+  if ((task_start_points[i].Index != -1)
+      &&(task_start_stats[i].Active)) {
+    _tcscpy(label, way_points.get(task_start_points[i].Index).Name);
+  } else {
+    int j;
+    int i0=0;
+    for (j=MAXSTARTPOINTS-1; j>=0; j--) {
+      if ((task_start_points[j].Index!= -1)&&(task_start_stats[j].Active)) {
+        i0=j+1;
+        break;
       }
     }
-
-    canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), label);
+    if (i==i0) {
+      _tcscpy(label, _T("(add waypoint)"));
+    } else {
+      _tcscpy(label, _T(" "));
+    }
   }
+
+  canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), label);
 }
 
 
@@ -102,13 +103,15 @@ static void OnStartPointListEnter(WindowControl * Sender,
   if (ItemIndex>=MAXSTARTPOINTS) {
     ItemIndex = MAXSTARTPOINTS-1;
   }
-  if (ItemIndex>=0) {
-    int res;
-    res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
-    if (res>=0) {
-      task.SetStartPoint(ItemIndex, res);
-      changed = true;
-    }
+
+  if (ItemIndex < 0)
+    return;
+
+  int res;
+  res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
+  if (res>=0) {
+    task.SetStartPoint(ItemIndex, res);
+    changed = true;
   }
 }
 
