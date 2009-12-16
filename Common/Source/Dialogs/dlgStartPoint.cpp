@@ -50,33 +50,25 @@ Copyright_License {
 static WndForm *wf=NULL;
 static WndListFrame *wStartPointList=NULL;
 
-static int ItemIndex = -1;
-
 static void UpdateList(void){
   wStartPointList->ResetList();
   wStartPointList->invalidate();
 }
 
-static int DrawListIndex=0;
-
 static void
-OnStartPointPaintListItem(WindowControl * Sender, Canvas &canvas)
+OnStartPointPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-	(void)Sender;
-
   TCHAR label[MAX_PATH];
 
-  if (DrawListIndex >= MAXSTARTPOINTS)
+  if (i >= MAXSTARTPOINTS)
     return;
-
-  int i = DrawListIndex;
 
   if ((task_start_points[i].Index != -1)
       &&(task_start_stats[i].Active)) {
     _tcscpy(label, way_points.get(task_start_points[i].Index).Name);
   } else {
     int j;
-    int i0=0;
+    unsigned i0 = 0;
     for (j=MAXSTARTPOINTS-1; j>=0; j--) {
       if ((task_start_points[j].Index!= -1)&&(task_start_stats[j].Active)) {
         i0=j+1;
@@ -90,7 +82,8 @@ OnStartPointPaintListItem(WindowControl * Sender, Canvas &canvas)
     }
   }
 
-  canvas.text(Layout::FastScale(2), Layout::FastScale(2), label);
+  canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
+              label);
 }
 
 
@@ -99,7 +92,7 @@ static bool changed = false;
 static void OnStartPointListEnter(WindowControl * Sender,
 				WndListFrame::ListInfo_t *ListInfo) {
   (void)Sender;
-  ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
+  int ItemIndex = wStartPointList->GetCursorIndex();
   if (ItemIndex>=MAXSTARTPOINTS) {
     ItemIndex = MAXSTARTPOINTS-1;
   }
@@ -121,9 +114,6 @@ static void OnStartPointListInfo(WindowControl * Sender,
 	(void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = MAXSTARTPOINTS;
-  } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
-    ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
   }
 }
 
@@ -141,7 +131,6 @@ static void OnClearClicked(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnStartPointPaintListItem),
   DeclareCallBackEntry(OnStartPointListInfo),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnClearClicked),
@@ -150,9 +139,6 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 void dlgStartPointShowModal(void) {
-
-  ItemIndex = -1;
-
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgStartPoint_L.xml"),
@@ -174,6 +160,7 @@ void dlgStartPointShowModal(void) {
   assert(wStartPointList!=NULL);
   wStartPointList->SetBorderKind(BORDERLEFT);
   wStartPointList->SetEnterCallback(OnStartPointListEnter);
+  wStartPointList->SetPaintItemCallback(OnStartPointPaintListItem);
 
   UpdateList();
 
