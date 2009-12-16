@@ -140,77 +140,75 @@ OnTaskPaintListItem(WindowControl *Sender, Canvas &canvas)
   if (DrawListIndex < n){
     int i = LowLimit + DrawListIndex;
 
-    if (task.ValidTaskPoint(i)) {
-      TASK_POINT tp = task.getTaskPoint(i);
+    if (!task.ValidTaskPoint(i))
+      return;
 
-      if (Layout::landscape &&
-          task.getSettings().AATEnabled && task.ValidTaskPoint(i+1) && (i>0)) {
-        if (tp.AATType==0) {
-          _stprintf(sTmp, _T("%s %.1f"),
-                    way_points.get(tp.Index).Name,
-                    tp.AATCircleRadius*DISTANCEMODIFY);
-        } else {
-          _stprintf(sTmp, _T("%s %.1f"),
-                    way_points.get(tp.Index).Name,
-                    tp.AATSectorRadius*DISTANCEMODIFY);
-        }
+    TASK_POINT tp = task.getTaskPoint(i);
+
+    if (Layout::landscape &&
+        task.getSettings().AATEnabled && task.ValidTaskPoint(i+1) && (i>0)) {
+      if (tp.AATType==0) {
+        _stprintf(sTmp, _T("%s %.1f"),
+                  way_points.get(tp.Index).Name,
+                  tp.AATCircleRadius*DISTANCEMODIFY);
       } else {
-        _stprintf(sTmp, _T("%s"),
-                  way_points.get(tp.Index).Name);
+        _stprintf(sTmp, _T("%s %.1f"),
+                  way_points.get(tp.Index).Name,
+                  tp.AATSectorRadius*DISTANCEMODIFY);
       }
+    } else {
+      _stprintf(sTmp, _T("%s"),
+                way_points.get(tp.Index).Name);
+    }
 
-      canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
-                          p1 - Layout::FastScale(4), sTmp);
+    canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+                        p1 - Layout::FastScale(4), sTmp);
 
-      _stprintf(sTmp, _T("%.0f %s"),
-		tp.LegDistance*DISTANCEMODIFY,
-		Units::GetDistanceName());
+    _stprintf(sTmp, _T("%.0f %s"),
+              tp.LegDistance*DISTANCEMODIFY,
+              Units::GetDistanceName());
+    canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
+                       Layout::FastScale(2), sTmp);
+
+    _stprintf(sTmp, _T("%d")_T(DEG),  iround(tp.InBound));
+    canvas.text_opaque(p2 + w2 - canvas.text_width(sTmp),
+                       Layout::FastScale(2), sTmp);
+  } else if (DrawListIndex==n) {
+    _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
+    canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
+                       sTmp);
+  } else if ((DrawListIndex==n+1) && task.ValidTaskPoint(0)) {
+
+    if (!task.getSettings().AATEnabled) {
+      _stprintf(sTmp, gettext(_T("Total:")));
+      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
+                         sTmp);
+
+      if (fai_ok) {
+        _stprintf(sTmp, _T("%.0f %s FAI"), lengthtotal*DISTANCEMODIFY,
+                  Units::GetDistanceName());
+      } else {
+        _stprintf(sTmp, _T("%.0f %s"), lengthtotal*DISTANCEMODIFY,
+                  Units::GetDistanceName());
+      }
       canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
                          Layout::FastScale(2), sTmp);
 
-      _stprintf(sTmp, _T("%d")_T(DEG),  iround(tp.InBound));
-      canvas.text_opaque(p2 + w2 - canvas.text_width(sTmp),
-                         Layout::FastScale(2), sTmp);
-    }
+    } else {
 
-  } else {
-    if (DrawListIndex==n) {
-      _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
-      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-                         sTmp);
-    } else if ((DrawListIndex==n+1) && task.ValidTaskPoint(0)) {
-
-      if (!task.getSettings().AATEnabled) {
-	_stprintf(sTmp, gettext(_T("Total:")));
-        canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-                           sTmp);
-
-	if (fai_ok) {
-	  _stprintf(sTmp, _T("%.0f %s FAI"), lengthtotal*DISTANCEMODIFY,
-		    Units::GetDistanceName());
-	} else {
-	  _stprintf(sTmp, _T("%.0f %s"), lengthtotal*DISTANCEMODIFY,
-		    Units::GetDistanceName());
-	}
-        canvas.text_opaque(p1 + w1 - canvas.text_width(sTmp),
-                           Layout::FastScale(2), sTmp);
-
-      } else {
-
-	double d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
-		     +XCSoarInterface::Calculated().TaskDistanceCovered);
-	if (d1==0.0) {
-	  d1 = XCSoarInterface::Calculated().AATTargetDistance;
-	}
-
-	_stprintf(sTmp, _T("%s %.0f min %.0f (%.0f) %s"),
-                  gettext(_T("Total:")),
-                  task.getSettings().AATTaskLength*1.0,
-		  DISTANCEMODIFY*lengthtotal,
-		  DISTANCEMODIFY*d1,
-		  Units::GetDistanceName());
-        canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), sTmp);
+      double d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
+                   +XCSoarInterface::Calculated().TaskDistanceCovered);
+      if (d1==0.0) {
+        d1 = XCSoarInterface::Calculated().AATTargetDistance;
       }
+
+      _stprintf(sTmp, _T("%s %.0f min %.0f (%.0f) %s"),
+                gettext(_T("Total:")),
+                task.getSettings().AATTaskLength*1.0,
+                DISTANCEMODIFY*lengthtotal,
+                DISTANCEMODIFY*d1,
+                Units::GetDistanceName());
+      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), sTmp);
     }
   }
 }
