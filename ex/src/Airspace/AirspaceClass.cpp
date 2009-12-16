@@ -1,0 +1,93 @@
+#include "AirspaceClass.hpp"
+#include <assert.h>
+
+
+const tstring 
+airspace_class_as_text(const AirspaceClass_t item,
+                       const bool concise)
+{
+  switch(item) {
+  case RESTRICT:
+    if (concise) {
+      return _T("Restricted");
+    } else {
+      return _T("R");
+    }
+  case PROHIBITED:
+    if (concise) {
+      return _T("Prohibited");
+    } else {
+      return _T("P");
+    }
+  case DANGER:
+    if (concise) {
+      return _T("Danger Area");
+    } else {
+      return _T("Q");
+    }
+  case CLASSA:
+    if (concise) {
+      return _T("Class A");
+    } else {
+      return _T("A");
+    }
+  case CLASSB:
+    if (concise) {
+      return _T("Class B");
+    } else {
+      return _T("B");
+    }
+  case CLASSC:
+    if (concise) {
+      return _T("Class C");
+    } else {
+      return _T("C");
+    }
+  case CLASSD:
+    if (concise) {
+      return _T("Class D");
+    } else {
+      return _T("D");
+    }
+  case CLASSE:
+    if (concise) {
+      return _T("Class E");
+    } else {
+      return _T("E");
+    }
+  case CLASSF:
+    if (concise) {
+      return _T("Class F");
+    } else {
+      return _T("F");
+    }
+  case NOGLIDER:
+    if (concise) {
+      return _T("No Glider");
+    } else {
+      return _T("GP");
+    }
+  case CTR:
+    if (concise) {
+      return _T("CTR");
+    } else {
+      return _T("CTR");
+    }
+  case WAVE:
+    if (concise) {
+      return _T("Wave");
+    } else {
+      return _T("W");
+    }
+  case AATASK:
+    if (concise) {
+      return _T("AAT");
+    } else {
+      return _T("T");
+    }
+  default:
+    break;
+  };
+  assert(1);
+  return _T("Unknown");
+}
