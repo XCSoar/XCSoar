@@ -71,7 +71,7 @@ TopWindow::TopWindow() {
 }
 
 bool
-TopWindow::find(LPCTSTR cls, LPCTSTR text)
+TopWindow::find(const TCHAR *cls, const TCHAR *text)
 {
 #ifdef ENABLE_SDL
   return false; // XXX
@@ -85,7 +85,7 @@ TopWindow::find(LPCTSTR cls, LPCTSTR text)
 }
 
 void
-TopWindow::set(LPCTSTR cls, LPCTSTR text,
+TopWindow::set(const TCHAR *cls, const TCHAR *text,
                 int left, int top, unsigned width, unsigned height)
 {
 #ifdef ENABLE_SDL

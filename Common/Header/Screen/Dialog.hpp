@@ -53,7 +53,7 @@ protected:
 #endif /* !ENABLE_SDL */
 
 public:
-  void set(ContainerWindow &_parent, LPCTSTR template_name);
+  void set(ContainerWindow &_parent, const TCHAR *template_name);
 
   void end(int result) {
 #ifdef ENABLE_SDL

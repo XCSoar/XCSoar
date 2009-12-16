@@ -74,9 +74,9 @@ class TopWindow : public ContainerWindow {
 public:
   TopWindow();
 
-  static bool find(LPCTSTR cls, LPCTSTR text);
+  static bool find(const TCHAR *cls, const TCHAR *text);
 
-  void set(LPCTSTR cls, LPCTSTR text,
+  void set(const TCHAR *cls, const TCHAR *text,
            int left, int top, unsigned width, unsigned height);
 
   void set_active() {

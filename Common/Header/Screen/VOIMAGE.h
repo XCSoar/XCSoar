@@ -29,7 +29,7 @@
 class CVOResource
 {
 public:
-	CVOResource(HMODULE hModule, DWORD dwResourceID, LPCTSTR pcszClass);
+	CVOResource(HMODULE hModule, DWORD dwResourceID, const TCHAR *pcszClass);
 	~CVOResource();
 
 	BOOL IsLoaded();
@@ -57,11 +57,11 @@ public:
 	BOOL IsLoaded();
 	static void CALLBACK ImageProgress( IImageRender *, BOOL, LPARAM);
 	static DWORD CALLBACK GetImageData( LPSTR, DWORD, LPARAM);
-	BOOL SetBitmap(HDC hdc, DWORD dwResourceID, LPCTSTR pcszClass = TEXT("IMAGE"), HMODULE hModule = 0 );
+	BOOL SetBitmap(HDC hdc, DWORD dwResourceID, const TCHAR *pcszClass = _T("IMAGE"), HMODULE hModule = 0 );
 	DWORD GetWidth();
 	DWORD GetHeight();
 	BOOL Draw(HDC hdc, int x, int y, int cx = -1, int cy = -1);
-	BOOL Load(HDC hdc, LPCTSTR pcszFileName);
+	BOOL Load(HDC hdc, const TCHAR *pcszFileName);
 	CVOImage();
 	virtual ~CVOImage();
 	operator HBITMAP() { return m_hbitmap; }

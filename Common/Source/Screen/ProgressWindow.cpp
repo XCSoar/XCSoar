@@ -54,8 +54,8 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 {
   set(parent,
       Layout::landscape
-      ? (LPCTSTR)IDD_PROGRESS_LANDSCAPE
-      : (LPCTSTR)IDD_PROGRESS);
+      ? (const TCHAR *)IDD_PROGRESS_LANDSCAPE
+      : (const TCHAR *)IDD_PROGRESS);
 
   TCHAR Temp[1024];
   _stprintf(Temp, _T("%s %s"), gettext(_T("Version")), XCSoar_VersionString);

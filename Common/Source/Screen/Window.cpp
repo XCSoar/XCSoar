@@ -58,7 +58,7 @@ Window::~Window()
 }
 
 void
-Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
+Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
             int left, int top, unsigned width, unsigned height,
             DWORD style, DWORD ex_style)
 {
@@ -86,7 +86,7 @@ Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
 }
 
 void
-Window::set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
+Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
             int left, int top, unsigned width, unsigned height,
             bool center, bool notify, bool show,
             bool tabstop, bool border)
