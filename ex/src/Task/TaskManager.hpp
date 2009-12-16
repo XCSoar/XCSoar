@@ -202,7 +202,7 @@ public:
  * 
  * @return True if stats valid
  */
-  const bool stats_valid() const {
+  bool stats_valid() const {
     return get_stats().task_valid;
   }
 
@@ -263,7 +263,9 @@ public:
  * 
  * @return Active task mode
  */
-  const TaskMode_t get_mode() const;
+  TaskMode_t get_mode() const {
+    return mode;
+  }
 
 /** 
  * Determine if the active mode is a particular mode

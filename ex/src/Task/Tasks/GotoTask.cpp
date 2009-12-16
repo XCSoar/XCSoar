@@ -94,7 +94,7 @@ GotoTask::check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&)
 bool 
 GotoTask::do_goto(const Waypoint & wp)
 {
-  if (!task_behaviour.goto_nonlandable || wp.is_landable()) {
+  if (task_behaviour.goto_nonlandable || wp.is_landable()) {
     if (tp) {
       delete tp;
     }

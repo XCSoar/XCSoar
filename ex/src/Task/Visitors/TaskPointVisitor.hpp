@@ -37,11 +37,11 @@
 #ifndef TASKPOINTVISITOR_HPP
 #define TASKPOINTVISITOR_HPP
 
-class TaskPoint;
-class StartPoint;
-class FinishPoint;
-class ASTPoint;
-class AATPoint;
+#include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/FinishPoint.hpp"
+#include "Task/TaskPoints/ASTPoint.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
 
 #include "Util/GenericVisitor.hpp"
 
@@ -50,7 +50,7 @@ class AATPoint;
  */
 class TaskPointVisitor:
   public BaseVisitor,
-  public Visitor<TaskPoint>,
+  public Visitor<UnorderedTaskPoint>,
   public Visitor<StartPoint>,
   public Visitor<ASTPoint>,
   public Visitor<AATPoint>,

@@ -143,6 +143,7 @@ bool
 AbstractTask::update(const AIRCRAFT_STATE &state, 
                      const AIRCRAFT_STATE &state_last)
 {
+
   stats.task_valid = check_task();
 
   const bool full_update = 

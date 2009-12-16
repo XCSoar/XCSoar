@@ -10,7 +10,7 @@
 class TaskPointVisitorPrint: public TaskPointVisitor
 {
 public:
-  virtual void Visit(const TaskPoint& tp) {
+  virtual void Visit(const UnorderedTaskPoint& tp) {
     printf("# got a tp\n");
   }
   virtual void Visit(const OrderedTaskPoint& tp) {

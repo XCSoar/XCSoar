@@ -197,7 +197,7 @@ private:
 
 bool 
 AbortTask::update_sample(const AIRCRAFT_STATE &state, 
-                              const bool full_update)
+                         const bool full_update)
 {
   update_polar();
   clear();
@@ -257,7 +257,8 @@ void
 AbortTask::Accept(TaskPointVisitor& visitor) const
 {
   for (std::vector<TaskPoint*>::const_iterator 
-         i= tps.begin(); i!= tps.end(); i++) {
+         i= tps.begin(); i!= tps.end(); ++i) {
+
     (*i)->Accept(visitor);
   }
 }
@@ -271,7 +272,7 @@ AbortTask::remove_unlandable(WaypointVector &approx_waypoints)
     if (!v->is_landable()) {
       approx_waypoints.erase(v);
     } else {
-      v++;
+      ++v;
     }
   }
 }
