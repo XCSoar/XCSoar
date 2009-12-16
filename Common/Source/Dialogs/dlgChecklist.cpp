@@ -182,7 +182,7 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 static void
-addChecklist(TCHAR *name, TCHAR *details)
+addChecklist(const TCHAR *name, const TCHAR *details)
 {
   if (nLists >= MAXLISTS)
     return;
