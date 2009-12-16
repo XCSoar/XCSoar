@@ -94,28 +94,31 @@ static void
 OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
 {
   (void)Sender;
-  if (DrawListIndex < nTextLines){
-    TCHAR* text = ChecklistText[page];
-    if (!text) return;
-    int nstart = LineOffsets[DrawListIndex];
-    int nlen;
-    if (DrawListIndex<nTextLines-1) {
-      nlen = LineOffsets[DrawListIndex+1]-LineOffsets[DrawListIndex]-1;
-      nlen--;
-    } else {
-      nlen = _tcslen(text+nstart);
-    }
-    while (_tcscmp(text+nstart+nlen-1,_T("\r"))==0) {
-      nlen--;
-    }
-    while (_tcscmp(text+nstart+nlen-1,_T("\n"))==0) {
-      nlen--;
-    }
-    if (nlen>0) {
-      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-                         text + nstart, nlen);
-    }
+  if (DrawListIndex >= nTextLines)
+    return;
+
+  TCHAR* text = ChecklistText[page];
+  if (text == NULL)
+    return;
+
+  int nstart = LineOffsets[DrawListIndex];
+  int nlen;
+  if (DrawListIndex < nTextLines - 1) {
+    nlen = LineOffsets[DrawListIndex + 1] - LineOffsets[DrawListIndex] - 1;
+    nlen--;
+  } else {
+    nlen = _tcslen(text + nstart);
   }
+
+  while (_tcscmp(text + nstart + nlen - 1, _T("\r")) == 0)
+    nlen--;
+
+  while (_tcscmp(text + nstart + nlen - 1, _T("\n")) == 0)
+    nlen--;
+
+  if (nlen > 0)
+    canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
+                       text + nstart, nlen);
 }
 
 
@@ -179,15 +182,16 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 void addChecklist(TCHAR* name, TCHAR* details) {
-  if (nLists<MAXLISTS) {
-    ChecklistTitle[nLists] = (TCHAR*)malloc((_tcslen(name)+1)*sizeof(TCHAR));
-    ChecklistText[nLists] = (TCHAR*)malloc((_tcslen(details)+1)*sizeof(TCHAR));
-    _tcscpy(ChecklistTitle[nLists], name);
-    ChecklistTitle[MAXTITLE-1]= 0;
-    _tcscpy(ChecklistText[nLists], details);
-    ChecklistText[MAXDETAILS-1]= 0;
-    nLists++;
-  }
+  if (nLists >= MAXLISTS)
+    return;
+
+  ChecklistTitle[nLists] = (TCHAR*)malloc((_tcslen(name)+1)*sizeof(TCHAR));
+  ChecklistText[nLists] = (TCHAR*)malloc((_tcslen(details)+1)*sizeof(TCHAR));
+  _tcscpy(ChecklistTitle[nLists], name);
+  ChecklistTitle[MAXTITLE-1]= 0;
+  _tcscpy(ChecklistText[nLists], details);
+  ChecklistText[MAXDETAILS-1]= 0;
+  nLists++;
 }
 
 void LoadChecklist(void) {
