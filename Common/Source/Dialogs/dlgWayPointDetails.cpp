@@ -88,8 +88,7 @@ static TCHAR Directory[MAX_PATH];
 
 #define MAXLINES 100
 static int LineOffsets[MAXLINES];
-static int DrawListIndex = 0;
-static int nTextLines = 0;
+static unsigned nTextLines = 0;
 
 static void
 NextPage(int Step)
@@ -161,9 +160,8 @@ NextPage(int Step)
 }
 
 static void
-OnPaintDetailsListItem(WindowControl * Sender, Canvas &canvas)
+OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
-  (void)Sender;
   if (DrawListIndex >= nTextLines)
     return;
 
@@ -184,7 +182,7 @@ OnPaintDetailsListItem(WindowControl * Sender, Canvas &canvas)
     nlen--;
 
   if (nlen > 0)
-    canvas.text(Layout::FastScale(2), Layout::FastScale(2),
+    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 text + nstart, nlen);
 }
 
@@ -194,8 +192,6 @@ OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
   (void)Sender;
   if (ListInfo->DrawIndex == -1)
     ListInfo->ItemCount = nTextLines - 1;
-  else
-    DrawListIndex = ListInfo->DrawIndex + ListInfo->ScrollIndex;
 }
 
 static void
@@ -384,7 +380,6 @@ OnImagePaint(WindowControl *Sender, Canvas &canvas)
 static CallBackTableEntry_t CallBackTable[] = {
     DeclareCallBackEntry(OnNextClicked),
     DeclareCallBackEntry(OnPrevClicked),
-    DeclareCallBackEntry(OnPaintDetailsListItem),
     DeclareCallBackEntry(OnDetailsListInfo),
     DeclareCallBackEntry(NULL)
 };
@@ -513,6 +508,7 @@ dlgWayPointDetailsShowModal(void)
   wSpecial = ((WndFrame *)wf->FindByName(_T("frmSpecial")));
   wImage = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmImage")));
   wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
+  wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
 
   assert(wInfo != NULL);
   assert(wCommand != NULL);
