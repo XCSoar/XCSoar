@@ -187,12 +187,8 @@ addChecklist(const TCHAR *name, const TCHAR *details)
   if (nLists >= MAXLISTS)
     return;
 
-  ChecklistTitle[nLists] = (TCHAR*)malloc((_tcslen(name)+1)*sizeof(TCHAR));
-  ChecklistText[nLists] = (TCHAR*)malloc((_tcslen(details)+1)*sizeof(TCHAR));
-  _tcscpy(ChecklistTitle[nLists], name);
-  ChecklistTitle[MAXTITLE-1]= 0;
-  _tcscpy(ChecklistText[nLists], details);
-  ChecklistText[MAXDETAILS-1]= 0;
+  ChecklistTitle[nLists] = _tcsdup(name);
+  ChecklistText[nLists] = _tcsdup(details);
   nLists++;
 }
 
