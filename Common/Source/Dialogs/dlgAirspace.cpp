@@ -52,7 +52,6 @@ Copyright_License {
 static WndForm *wf = NULL;
 static WndListFrame *wAirspaceList = NULL;
 
-static int ItemIndex = -1;
 static bool colormode = false;
 
 int dlgAirspaceColoursShowModal(void);
@@ -65,19 +64,14 @@ UpdateList(void)
   wAirspaceList->invalidate();
 }
 
-static unsigned DrawListIndex;
-
 static void
-OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
+OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  (void)Sender;
-
   TCHAR label[40];
 
-  if (DrawListIndex >= AIRSPACECLASSCOUNT)
+  if (i >= AIRSPACECLASSCOUNT)
     return;
 
-  int i = DrawListIndex;
   switch (i) {
   case CLASSA:
     _tcscpy(label, gettext(_T("Class A")));
@@ -130,8 +124,9 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
   w2 = canvas.text_width(gettext(_T("Display"))) + Layout::FastScale(10);
   x0 = w0 - w1 - w2;
 
-  canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2), x0
-      - Layout::FastScale(10), label);
+  canvas.text_clipped(rc.left + Layout::FastScale(2),
+                      rc.top + Layout::FastScale(2),
+                      x0 - Layout::FastScale(10), label);
 
   if (colormode) {
     canvas.white_pen();
@@ -140,7 +135,9 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
     canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
     canvas.select(MapGfx.GetAirspaceBrushByClass(i,
         XCSoarInterface::SettingsMap()));
-    canvas.rectangle(x0, Layout::FastScale(2), w0, Layout::FastScale(22));
+    canvas.rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
+                     rc.right - Layout::FastScale(2),
+                     rc.bottom - Layout::FastScale(2));
   } else {
     bool iswarn;
     bool isdisplay;
@@ -150,12 +147,13 @@ OnAirspacePaintListItem(WindowControl *Sender, Canvas &canvas)
 
     if (iswarn) {
       _tcscpy(label, gettext(_T("Warn")));
-      canvas.text(w0 - w1 - w2, Layout::FastScale(2), label);
+      canvas.text(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
+                  label);
     }
 
     if (isdisplay) {
       _tcscpy(label, gettext(_T("Display")));
-      canvas.text(w0 - w2, Layout::FastScale(2), label);
+      canvas.text(rc.left + w0 - w2, rc.top + Layout::FastScale(2), label);
     }
   }
 }
@@ -167,7 +165,7 @@ OnAirspaceListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
 {
   (void)Sender;
 
-  ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
+  int ItemIndex = wAirspaceList->GetCursorIndex();
 
   if (ItemIndex >= AIRSPACECLASSCOUNT) {
     ItemIndex = AIRSPACECLASSCOUNT - 1;
@@ -206,9 +204,6 @@ OnAirspaceListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
 
   if (ListInfo->DrawIndex == -1) {
     ListInfo->ItemCount = AIRSPACECLASSCOUNT;
-  } else {
-    DrawListIndex = ListInfo->DrawIndex + ListInfo->ScrollIndex;
-    ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
   }
 }
 
@@ -227,7 +222,6 @@ OnLookupClicked(WindowControl * Sender)
 }
 
 static CallBackTableEntry_t CallBackTable[] = {
-  DeclareCallBackEntry(OnAirspacePaintListItem),
   DeclareCallBackEntry(OnAirspaceListInfo),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnLookupClicked),
@@ -238,8 +232,6 @@ void
 dlgAirspaceShowModal(bool coloredit)
 {
   colormode = coloredit;
-
-  ItemIndex = -1;
 
   if (!Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable, _T("dlgAirspace_L.xml"),
@@ -257,6 +249,7 @@ dlgAirspaceShowModal(bool coloredit)
   assert(wAirspaceList!=NULL);
   wAirspaceList->SetBorderKind(BORDERLEFT);
   wAirspaceList->SetEnterCallback(OnAirspaceListEnter);
+  wAirspaceList->SetPaintItemCallback(OnAirspacePaintListItem);
 
   UpdateList();
 
