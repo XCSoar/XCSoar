@@ -164,27 +164,28 @@ static void
 OnPaintDetailsListItem(WindowControl * Sender, Canvas &canvas)
 {
   (void)Sender;
-  if (DrawListIndex < nTextLines) {
-    TCHAR* text = way_points.get(SelectedWaypoint).Details;
-    int nstart = LineOffsets[DrawListIndex];
-    int nlen;
-    if (DrawListIndex < nTextLines - 1) {
-      nlen = LineOffsets[DrawListIndex + 1] - LineOffsets[DrawListIndex] - 1;
-      nlen--;
-    } else {
-      nlen = _tcslen(text + nstart);
-    }
+  if (DrawListIndex >= nTextLines)
+    return;
 
-    while (_tcscmp(text + nstart + nlen - 1, _T("\r")) == 0)
-      nlen--;
-
-    while (_tcscmp(text + nstart + nlen - 1, _T("\n")) == 0)
-      nlen--;
-
-    if (nlen > 0)
-      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-          text + nstart, nlen);
+  TCHAR* text = way_points.get(SelectedWaypoint).Details;
+  int nstart = LineOffsets[DrawListIndex];
+  int nlen;
+  if (DrawListIndex < nTextLines - 1) {
+    nlen = LineOffsets[DrawListIndex + 1] - LineOffsets[DrawListIndex] - 1;
+    nlen--;
+  } else {
+    nlen = _tcslen(text + nstart);
   }
+
+  while (_tcscmp(text + nstart + nlen - 1, _T("\r")) == 0)
+    nlen--;
+
+  while (_tcscmp(text + nstart + nlen - 1, _T("\n")) == 0)
+    nlen--;
+
+  if (nlen > 0)
+    canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
+                       text + nstart, nlen);
 }
 
 static void
