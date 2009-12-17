@@ -164,29 +164,30 @@ OnAirspaceListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
     ItemIndex = AIRSPACECLASSCOUNT - 1;
   }
 
-  if (ItemIndex >= 0) {
-    if (colormode) {
-      int c = dlgAirspaceColoursShowModal();
-      if (c >= 0) {
-        XCSoarInterface::SetSettingsMap().iAirspaceColour[ItemIndex] = c;
-        SetRegistryColour(ItemIndex,
-            XCSoarInterface::SettingsMap().iAirspaceColour[ItemIndex]);
-        changed = true;
-      }
+  if (ItemIndex < 0)
+    return;
 
-      int p = dlgAirspacePatternsShowModal();
-      if (p >= 0) {
-        XCSoarInterface::SetSettingsMap().iAirspaceBrush[ItemIndex] = p;
-        SetRegistryBrush(ItemIndex,
-            XCSoarInterface::SettingsMap().iAirspaceBrush[ItemIndex]);
-        changed = true;
-      }
-    } else {
-      int v = (XCSoarInterface::SettingsComputer().iAirspaceMode[ItemIndex] + 1) % 4;
-      XCSoarInterface::SetSettingsComputer().iAirspaceMode[ItemIndex] = v;
-      Profile::SetRegistryAirspaceMode(ItemIndex);
+  if (colormode) {
+    int c = dlgAirspaceColoursShowModal();
+    if (c >= 0) {
+      XCSoarInterface::SetSettingsMap().iAirspaceColour[ItemIndex] = c;
+      SetRegistryColour(ItemIndex,
+                        XCSoarInterface::SettingsMap().iAirspaceColour[ItemIndex]);
       changed = true;
     }
+
+    int p = dlgAirspacePatternsShowModal();
+    if (p >= 0) {
+      XCSoarInterface::SetSettingsMap().iAirspaceBrush[ItemIndex] = p;
+      SetRegistryBrush(ItemIndex,
+                       XCSoarInterface::SettingsMap().iAirspaceBrush[ItemIndex]);
+      changed = true;
+    }
+  } else {
+    int v = (XCSoarInterface::SettingsComputer().iAirspaceMode[ItemIndex] + 1) % 4;
+    XCSoarInterface::SetSettingsComputer().iAirspaceMode[ItemIndex] = v;
+    Profile::SetRegistryAirspaceMode(ItemIndex);
+    changed = true;
   }
 }
 

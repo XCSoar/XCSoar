@@ -114,63 +114,58 @@ static void OnAirspaceListEnter(WindowControl * Sender,
   (void)Sender; (void)ListInfo;
 
   int ItemIndex = wAirspaceList->GetCursorIndex();
-  if (ItemIndex != -1) {
+  if (UpLimit <= LowLimit ||
+      ItemIndex < 0 ||
+      (unsigned)ItemIndex >= UpLimit - LowLimit)
+    return;
 
-    if (UpLimit > LowLimit
-        && (ItemIndex >= 0)  // JMW fixed bug, was >0
-        && ((unsigned)ItemIndex < (UpLimit - LowLimit))) {
+  int index_circle = AirspaceSelectInfo[LowLimit+ItemIndex].Index_Circle;
+  int index_area = AirspaceSelectInfo[LowLimit+ItemIndex].Index_Area;
 
-      int index_circle = AirspaceSelectInfo[LowLimit+ItemIndex].Index_Circle;
-      int index_area = AirspaceSelectInfo[LowLimit+ItemIndex].Index_Area;
+  if ((index_circle>=0) || (index_area>=0)) {
 
-      if ((index_circle>=0) || (index_area>=0)) {
-
-        TCHAR *Name = NULL;
+    TCHAR *Name = NULL;
+    if (index_circle>=0) {
+      Name = airspace_database.AirspaceCircle[index_circle].Name;
+    } else if (index_area>=0) {
+      Name = airspace_database.AirspaceArea[index_area].Name;
+    }
+    if (Name) {
+      UINT answer;
+      answer = MessageBoxX(Name,
+                           gettext(_T("Acknowledge for day?")),
+                           MB_YESNOCANCEL|MB_ICONQUESTION);
+      if (answer == IDYES) {
         if (index_circle>=0) {
-          Name = airspace_database.AirspaceCircle[index_circle].Name;
+          AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                              XCSoarInterface::Calculated(),
+                              XCSoarInterface::SettingsComputer(),
+                              XCSoarInterface::MapProjection(),
+                              false, true, index_circle, true);
         } else if (index_area>=0) {
-          Name = airspace_database.AirspaceArea[index_area].Name;
+          AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                              XCSoarInterface::Calculated(),
+                              XCSoarInterface::SettingsComputer(),
+                              XCSoarInterface::MapProjection(),
+                              false, false, index_area, true);
         }
-        if (Name) {
-	  UINT answer;
-          answer = MessageBoxX(Name,
-			       gettext(_T("Acknowledge for day?")),
-			       MB_YESNOCANCEL|MB_ICONQUESTION);
-	  if (answer == IDYES) {
-	    if (index_circle>=0) {
-              AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                                  XCSoarInterface::Calculated(),
-                                  XCSoarInterface::SettingsComputer(),
-                                  XCSoarInterface::MapProjection(),
-                                  false, true, index_circle, true);
-            } else if (index_area>=0) {
-              AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                                  XCSoarInterface::Calculated(),
-                                  XCSoarInterface::SettingsComputer(),
-                                  XCSoarInterface::MapProjection(),
-                                  false, false, index_area, true);
-            }
-          } else if (answer == IDNO) {
-	    // this will cancel a daily ack
-	    if (index_circle>=0) {
-              AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                                  XCSoarInterface::Calculated(),
-                                  XCSoarInterface::SettingsComputer(),
-                                  XCSoarInterface::MapProjection(),
-                                  true, true, index_circle, true);
-            } else if (index_area>=0) {
-              AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                                  XCSoarInterface::Calculated(),
-                                  XCSoarInterface::SettingsComputer(),
-                                  XCSoarInterface::MapProjection(),
-                                  true, false, index_area, true);
-            }
-	  }
+      } else if (answer == IDNO) {
+        // this will cancel a daily ack
+        if (index_circle>=0) {
+          AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                              XCSoarInterface::Calculated(),
+                              XCSoarInterface::SettingsComputer(),
+                              XCSoarInterface::MapProjection(),
+                              true, true, index_circle, true);
+        } else if (index_area>=0) {
+          AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                              XCSoarInterface::Calculated(),
+                              XCSoarInterface::SettingsComputer(),
+                              XCSoarInterface::MapProjection(),
+                              true, false, index_area, true);
         }
       }
     }
-  } else {
-    wf->SetModalResult(mrCancel);
   }
 }
 
