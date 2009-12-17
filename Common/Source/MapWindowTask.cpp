@@ -39,6 +39,7 @@ Copyright_License {
 #include "Task/TaskManager.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 #include "MapWindow.h"
 #include "Protection.hpp"
@@ -48,110 +49,296 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include <math.h>
+#include "MapDrawHelper.hpp"
 
 
-class DrawAbortTaskPoint:
-  public TaskPointVisitor
+class DrawObservationZone: 
+  public ObservationZoneVisitor, 
+  public MapDrawHelper
 {
 public:
-  DrawAbortTaskPoint(Canvas &_canvas, 
-                     MapWindow &map,
-                     const TaskPoint* active_tp,
-                     const bool draw_bearing)
-    :m_canvas(_canvas), m_map(map), 
-     m_active_tp(active_tp), 
-     m_draw_bearing(draw_bearing),
-     dash_pen(Pen::DASH, IBLSCALE(1), MapGfx.TaskColor) 
-    {}
+  DrawObservationZone(MapDrawHelper &_draw)
+    :MapDrawHelper(_draw),
+     pen_boundary_active(Pen::SOLID, IBLSCALE(2), MapGfx.TaskColor),
+     pen_boundary_inactive(Pen::SOLID, IBLSCALE(1), Color(127, 127, 127)),
+     m_past(false),
+     m_background(false)
+    {};
 
-  void draw_bearing(const TaskPoint &tp) {
-    if (m_draw_bearing && (&tp== m_active_tp)) {
-      m_map.DrawGreatCircle(m_canvas, 
-                            m_map.Basic().Location, 
-                            tp.get_location_remaining());
+  bool draw_style(bool is_boundary_active) {
+    if (m_background) {
+      // this color is used as the black bit
+      m_buffer.set_text_color(MapGfx.Colours[m_map.SettingsMap().
+                                           iAirspaceColour[AATASK]]);
+      // get brush, can be solid or a 1bpp bitmap
+      m_buffer.select(MapGfx.hAirspaceBrushes[m_map.SettingsMap().
+                                            iAirspaceBrush[AATASK]]);
+      m_buffer.white_pen();
+
+      return !m_past;
+    } else {
+      m_buffer.hollow_brush();
+      if (is_boundary_active) {
+        m_buffer.select(pen_boundary_active);
+      } else {
+        m_buffer.select(pen_boundary_inactive); 
+      }
+      return true;
     }
   }
 
-  void draw_target(const TaskPoint &tp, const POINT &target) {
-    if (!tp.has_target()) {
-      return;
+  void draw_two_lines() {
+    m_buffer.two_lines(p_start, p_center, p_end);
+  }
+
+  void draw_circle() {
+    m_buffer.circle(p_center.x, p_center.y, p_radius);
+  }
+
+  void draw_segment(const fixed start_radial, const fixed end_radial) {
+    m_buffer.segment(p_center.x, p_center.y, p_radius, m_rc, 
+                     start_radial-m_map.GetDisplayAngle(), 
+                     end_radial-m_map.GetDisplayAngle());
+  }
+
+  void parms_oz(const CylinderZone& oz) {
+    buffer_render_start();
+    p_radius = m_map.DistanceMetersToScreen(oz.getRadius());
+    m_map.LonLat2Screen(oz.get_location(), p_center);
+  }
+
+  void parms_sector(const SectorZone& oz) {
+    parms_oz(oz);
+    m_map.LonLat2Screen(oz.get_SectorStart(), p_start);
+    m_map.LonLat2Screen(oz.get_SectorEnd(), p_end);
+  }
+
+  void Visit(const FAISectorZone& oz) {
+    parms_sector(oz);
+    if (draw_style(false)) {
+      draw_segment(oz.getStartRadial(), oz.getEndRadial());
     }
-    if ((&tp == m_active_tp)
-        || m_map.SettingsMap().EnablePan 
-        || m_map.SettingsMap().TargetPan) {
-      
-      m_map.draw_masked_bitmap_if_visible(m_canvas, MapGfx.hBmpTarget,
-                                          tp.get_location_remaining(),
-                                          10, 10);
+    if (draw_style(!m_past)) {
+      draw_two_lines();
     }
   }
 
-  void Visit(const UnorderedTaskPoint& tp) {
-    POINT loc;
-    m_map.LonLat2Screen(tp.get_location_remaining(), loc);
-    m_canvas.select(dash_pen);
-    m_canvas.line(m_map.GetOrigAircraft(), loc);
-    draw_bearing(tp);
+  void Visit(const SectorZone& oz) {
+    parms_sector(oz);
+    if (draw_style(!m_past)) {
+      draw_segment(oz.getStartRadial(), oz.getEndRadial());
+      draw_two_lines();
+    }
   }
-  void Visit(const OrderedTaskPoint& tp) {
+  void Visit(const LineSectorZone& oz) {
+    parms_sector(oz);
+    if (draw_style(false)) {
+      draw_segment(oz.getStartRadial(), oz.getEndRadial());
+    }
+    if (draw_style(!m_past)) {
+      draw_two_lines();
+    }
   }
-  void Visit(const FinishPoint& tp) {
+  void Visit(const CylinderZone& oz) {
+    parms_oz(oz);
+    if (draw_style(!m_past)) {
+      draw_circle();
+    }
   }
-  void Visit(const StartPoint& tp) {
+  void set_past(bool set) {
+    m_past = set;
   }
-  void Visit(const AATPoint& tp) {
-    POINT loc;
-    m_map.LonLat2Screen(tp.get_location_remaining(), loc);
-    draw_target(tp, loc);
-  }
-  void Visit(const ASTPoint& tp) {
+  void set_background(bool set) {
+    m_background = set;
   }
 
 private:
-  Canvas &m_canvas;
-  MapWindow& m_map;
+  const Pen pen_boundary_active;
+  const Pen pen_boundary_inactive;
+  POINT p_center, p_start, p_end;
+  unsigned p_radius;
+  bool m_past;
+  bool m_background;
+};
+
+
+class DrawTaskPoint:
+  public TaskPointVisitor,
+  public MapDrawHelper
+{
+public:
+  DrawTaskPoint(MapDrawHelper &_helper, 
+                const TaskPoint* active_tp,
+                const bool draw_bearing)
+    :MapDrawHelper(_helper),
+     m_active_tp(active_tp), 
+     m_draw_bearing(draw_bearing),
+     pen_leg_active(Pen::DASH, IBLSCALE(2), MapGfx.TaskColor),
+     pen_leg_inactive(Pen::DASH, IBLSCALE(1), MapGfx.TaskColor),
+     pen_isoline(Pen::SOLID, IBLSCALE(2), Color(0,0,255)), 
+     m_index(0),
+     ozv(*this),
+     m_active_index(0)
+    {}
+
+  void Visit(const UnorderedTaskPoint& tp) {
+    buffer_render_start();
+
+    POINT loc;
+    m_map.LonLat2Screen(tp.get_location_remaining(), loc);
+    draw_task_line(m_map.GetOrigAircraft(), loc);
+    draw_bearing(tp);
+  }
+
+  void visit_ordered(const OrderedTaskPoint& tp) {
+    buffer_render_start();
+
+    ozv.set_past(point_past());
+    ozv.set_background(true);
+    tp.Accept_oz(ozv);
+
+    if (point_current() || point_past()) {
+
+      m_buffer.set_text_color(MapGfx.Colours[m_map.SettingsMap().
+                                           iAirspaceColour[1]]);
+      // get brush, can be solid or a 1bpp bitmap
+      m_buffer.select(MapGfx.hAirspaceBrushes[m_map.SettingsMap().
+                                            iAirspaceBrush[1]]);
+      m_buffer.white_pen();
+
+      draw_search_point_vector(m_buffer, tp.get_sample_points());
+    }
+
+    POINT loc;
+    m_map.LonLat2Screen(tp.get_location_remaining(), loc);    
+    if (m_index>0) {
+      draw_task_line(m_last_point, loc);
+    }
+    m_last_point = loc;
+
+    ozv.set_background(false);
+    tp.Accept_oz(ozv);
+
+    draw_bearing(tp);
+    draw_target(tp);
+  }
+
+  void Visit(const StartPoint& tp) {
+    m_index = 0;
+    visit_ordered(tp);
+  }
+  void Visit(const FinishPoint& tp) {
+    m_index++;
+    visit_ordered(tp);
+  }
+  void Visit(const AATPoint& tp) {
+    m_index++;
+
+   // TODO: draw isolines
+
+    visit_ordered(tp);
+  }
+  void Visit(const ASTPoint& tp) {
+    m_index++;
+
+    visit_ordered(tp);
+  }
+
+  void set_active_index(unsigned active_index) {
+    m_active_index = active_index;
+  }
+
+private:
+  bool leg_active() {
+    return (m_index+1>m_active_index);
+  }
+  bool point_past() {
+    return (m_index<m_active_index);
+  }
+  bool point_current() {
+    return (m_index==m_active_index);
+  }
+
+  bool do_draw_bearing(const TaskPoint &tp) {
+    return m_draw_bearing && (&tp == m_active_tp);
+  }
+
+  bool do_draw_target(const TaskPoint &tp) {
+    if (!tp.has_target()) {
+      return false;
+    }
+    return ((&tp == m_active_tp)
+            || m_map.SettingsMap().EnablePan 
+            || m_map.SettingsMap().TargetPan);
+  }
+
+  void draw_bearing(const TaskPoint &tp) {
+    if (!do_draw_bearing(tp)) 
+      return;
+
+    m_map.DrawGreatCircle(m_buffer, 
+                          m_map.Basic().Location, 
+                          tp.get_location_remaining());
+  }
+
+  void draw_target(const TaskPoint &tp) {
+    if (!do_draw_target(tp)) 
+      return;
+
+    m_map.draw_masked_bitmap_if_visible(m_buffer, MapGfx.hBmpTarget,
+                                        tp.get_location_remaining(),
+                                        10, 10);
+  }
+
+  void draw_task_line(const POINT& start, const POINT& end) {
+    if (leg_active()) {
+      m_buffer.select(pen_leg_active);
+    } else {
+      m_buffer.select(pen_leg_inactive);
+    }
+    m_buffer.line(start, end);
+  }
+
   const TaskPoint *m_active_tp;
   const bool& m_draw_bearing;
-  Pen dash_pen;
+  const Pen pen_leg_active;
+  const Pen pen_leg_inactive;
+  const Pen pen_isoline;
+  POINT m_last_point;
+  unsigned m_index;
+  DrawObservationZone ozv;
+  unsigned m_active_index;
 };
 
 
 
-class DrawTaskVisitor: public TaskVisitor
+class DrawTaskVisitor: 
+  public TaskVisitor,
+  public MapDrawHelper
 {
 public:
-  DrawTaskVisitor(Canvas &canvas, 
-                  const RECT rc, 
-                  Canvas &buffer, 
-                  MapWindow& map,
+  DrawTaskVisitor(MapDrawHelper &_helper,
                   const TaskPoint* active_tp,
                   bool draw_bearing):
-    m_canvas(canvas),
-    m_rc(rc),
-    m_buffer(buffer),
-    m_map(map),
-    m_active_tp(active_tp),
-    m_draw_bearing(draw_bearing) {};
+    MapDrawHelper(_helper),
+    tpv(*this, active_tp, draw_bearing)
+    {};
 
-  void Visit(const AbortTask& task) {
-    DrawAbortTaskPoint tpv(m_canvas, m_map, m_active_tp, m_draw_bearing);
+  void visit_general(const AbstractTask& task) {
     task.Accept(tpv);
+  }
+  void Visit(const AbortTask& task) {
+    visit_general(task);
   }
   void Visit(const OrderedTask& task) {
-//    DrawOrderedTaskPoint tpv;
-//    task.Accept(tpv);
+    tpv.set_active_index(task.getActiveIndex());
+    visit_general(task);
   }
   void Visit(const GotoTask& task) {
-    DrawAbortTaskPoint tpv(m_canvas, m_map, m_active_tp, m_draw_bearing);
-    task.Accept(tpv);
+    visit_general(task);
   }
 private:
-  Canvas &m_canvas;
-  const RECT& m_rc;
-  Canvas &m_buffer;
-  MapWindow& m_map;
-  const TaskPoint *m_active_tp;
-  const bool& m_draw_bearing;
+  DrawTaskPoint tpv;
 };
 
 #include "RasterTerrain.h"
@@ -159,35 +346,20 @@ private:
 void
 MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
-  terrain->Lock();
 
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
   const bool draw_bearing = Basic().Connected;
 
-  const TaskPoint* active_tp = task->getActiveTaskPoint();
-  DrawTaskVisitor dv(canvas, rc, buffer, *this, active_tp, draw_bearing);
-  task->Accept(dv); 
+  terrain->Lock(); 
+  {
+    const TaskPoint* active_tp = task->getActiveTaskPoint();
+    MapDrawHelper helper(canvas, buffer, *this, rc);
+    DrawTaskVisitor dv(helper, active_tp, draw_bearing);
+    task->Accept(dv); 
+  }
   terrain->Unlock();
 }
-
-/*
-  const TaskPoint* tp = task->getActiveTaskPoint();
-
-  GEOPOINT gloc = tp->get_location_remaining();
-  has_target();
-
-    if (index0==0) {
-      // before start
-      visit_leg_current(point0, index0, point0, index0);
-    }
-    // Draw all of task if in target pan mode
-    if (draw_bearing and current) or 
-    if (map.SettingsMap().TargetPan) {
-      map.DrawGreatCircle(canvas, start, target);
-    }
-*/
-
 
 
 /////////////////////////////////////////////////////////////////////////////

@@ -436,8 +436,7 @@ dlgWayPointDetailsShowModal(const Waypoint& waypoint)
            Directory,
            selected_waypoint->id+1);
 
-  _stprintf(sTmp, TEXT("%s: "), wf->GetCaption());
-  _tcscat(sTmp, selected_waypoint->Name.c_str());
+  _stprintf(sTmp, TEXT("%s: '%s'"), wf->GetCaption(), selected_waypoint->Name.c_str());
   wf->SetCaption(sTmp);
 
   wp = ((WndProperty *)wf->FindByName(TEXT("prpWpComment")));

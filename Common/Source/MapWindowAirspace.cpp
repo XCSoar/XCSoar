@@ -82,6 +82,8 @@ private:
   const bool &m_border;
 };
 
+#include "MapDrawHelper.hpp"
+
 
 /**
  * Class to render airspaces onto map in two passes,
@@ -90,111 +92,65 @@ private:
  * The old way of doing it was possibly faster but required a lot
  * of code overhead.
  */
-class AirspaceVisitorMap: public AirspaceVisitor 
+class AirspaceVisitorMap: 
+  public AirspaceVisitor,
+  public MapDrawHelper
 {
 public:
-  AirspaceVisitorMap(MapWindow &_map,
-                     Canvas& _buffer):map(_map),
-                                      buffer(_buffer),
-                                      m_found(false),
-                                      m_border(true),
-                                      visible(_map.SettingsComputer(),
-                                              _map.Basic().GetAnyAltitude(),
-                                              m_border)
+  AirspaceVisitorMap(MapDrawHelper &_helper):
+    MapDrawHelper(_helper),
+    m_border(false),
+    visible(m_map.SettingsComputer(),
+            m_map.Basic().GetAnyAltitude(),
+            m_border)
     {
       m_predicate = &visible;
     };
 
   void Visit(const AirspaceCircle& airspace) {
-    start_render(airspace);
+    buffer_render_start();
+    set_buffer_pens(airspace);
+
     POINT center;
-    map.LonLat2Screen(airspace.get_center(),center);
-    unsigned radius = map.DistanceMetersToScreen(airspace.get_radius());
-    buffer.circle(center.x, center.y, radius);
+    m_map.LonLat2Screen(airspace.get_center(),center);
+    unsigned radius = m_map.DistanceMetersToScreen(airspace.get_radius());
+    m_buffer.circle(center.x, center.y, radius);
   }
 
   void Visit(const AirspacePolygon& airspace) {
-    start_render(airspace);
-
-    const SearchPointVector& points = airspace.get_points();
-    const size_t size = points.size();
-    std::vector<POINT> screen; 
-    screen.reserve(size);
-    for (SearchPointVector::const_iterator it = points.begin();
-         it!= points.end(); ++it) {
-      POINT sc;
-      map.LonLat2Screen(it->get_location(), sc);
-      screen.push_back(sc);
-    }
-    if (!m_border) {
-      buffer.polyline(&screen[0], size);
-    } else {
-      buffer.polygon(&screen[0], size);
-    }
+    buffer_render_start();
+    set_buffer_pens(airspace);
+    draw_search_point_vector(m_buffer, airspace.get_points());
   }
 
-  void set_fill() {
-    m_border = false;
-    if (m_found) {
-      buffer.hollow_brush();
-      buffer.white_pen();
-    }
-  }
-
-  void finish(Canvas& canvas) {
-    if (m_found) {
-      // need to do this to prevent drawing of colored outline
-      buffer.white_pen();
-      canvas.copy_transparent_white(buffer, map.GetMapRect());
-
-      // restore original color
-      //    SetTextColor(hDCTemp, origcolor);
-      buffer.background_opaque();
-    }
+  void set_border(bool set) {
+    m_border = set;
   }
 
 private:
 
-  void start_render(const AbstractAirspace &airspace) {
-    if (!m_found) {
-      m_found = true;
-      clear();
-      if (!m_border) {
-        buffer.hollow_brush();
-        buffer.white_pen();
-      }
-    }
-    if (!m_border) {
-      if (map.SettingsMap().bAirspaceBlackOutline)
-        buffer.black_pen();
+  void set_buffer_pens(const AbstractAirspace &airspace) {
+    if (m_border) {
+      if (m_map.SettingsMap().bAirspaceBlackOutline)
+        m_buffer.black_pen();
       else
-        buffer.select(MapGfx.hAirspacePens[airspace.get_type()]);
+        m_buffer.select(MapGfx.hAirspacePens[airspace.get_type()]);
+
+      m_buffer.hollow_brush();
+
     } else {
       // this color is used as the black bit
-      buffer.set_text_color(MapGfx.Colours[map.SettingsMap().
+      m_buffer.set_text_color(MapGfx.Colours[m_map.SettingsMap().
                                            iAirspaceColour[airspace.get_type()]]);
       // get brush, can be solid or a 1bpp bitmap
-      buffer.select(MapGfx.hAirspaceBrushes[map.SettingsMap().
+      m_buffer.select(MapGfx.hAirspaceBrushes[m_map.SettingsMap().
                                             iAirspaceBrush[airspace.get_type()]]);
+      m_buffer.white_pen();
     }
-  }
-
-  void clear() {
-    static const Color whitecolor(0xff,0xff,0xff);
-    buffer.background_transparent();
-    buffer.set_background_color(whitecolor);
-    buffer.set_text_color(whitecolor);
-    buffer.white_pen();
-    buffer.white_brush();
-    const RECT &MapRect = map.GetMapRect();
-    buffer.rectangle(MapRect.left, MapRect.top, MapRect.right, MapRect.bottom);
   }
 
   AirspaceMapVisible visible;
-  bool m_found;
   bool m_border;
-  Canvas &buffer;
-  MapWindow &map;
 };
 
 /**
@@ -209,11 +165,12 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   if (airspace_database == NULL)
     return;
 
-  AirspaceVisitorMap v(*this, buffer);
+  MapDrawHelper helper (canvas, buffer, *this, GetMapRect());
+  AirspaceVisitorMap v(helper);
+  v.set_border(false);
   airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
-  v.set_fill();
+  v.set_border(true);
   airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
-  v.finish(canvas);
 }
 
 

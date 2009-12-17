@@ -339,7 +339,7 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
     if (!end) {
       return false;
     }
-    way_point.Name = text.substr(0, end);
+    way_point.Name = trim(text.substr(0, end));
   }
 
   endptr = _tcschr(input, _T(','));
@@ -354,12 +354,12 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
     }
     if (endptr>input) {
       tstring text = input;
-      way_point.Comment = text.substr(0,endptr-input);
+      way_point.Comment = trim(text.substr(0,endptr-input));
     } else {
-      way_point.Comment = input;
+      way_point.Comment = trim(input);
     }
   } else {
-    way_point.Comment = TEXT("");
+    way_point.Comment.clear();
     way_point.Zoom = 0;
   }
 

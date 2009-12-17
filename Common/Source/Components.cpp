@@ -126,6 +126,46 @@ AirspaceWarningManager airspace_warning(airspace_database,
 
 GlideComputer glide_computer(task_manager, airspace_warning);
 
+void default_task() {
+
+  AbstractTaskFactory *fact;
+  OrderedTaskPoint *tp;
+  const Waypoint *wp;
+
+  task_manager.set_factory(TaskManager::FACTORY_MIXED);
+  fact = task_manager.get_factory();
+
+  wp = way_points.lookup_name(_T("BENALLA"));
+  if (wp) {
+    tp = fact->createStart(AbstractTaskFactory::START_LINE,*wp);
+    fact->append(tp,false);
+  }
+
+  task_manager.setActiveTaskPoint(0);
+  task_manager.resume();
+
+  wp = way_points.lookup_name(_T("Goorambat"));
+  if (wp) {
+    tp = fact->createIntermediate(AbstractTaskFactory::FAI_SECTOR,*wp);
+    fact->append(tp,false);
+  }
+
+  wp = way_points.lookup_name(_T("Glenrowan"));
+  if (wp) {
+    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
+    fact->append(tp,false);
+  }
+
+  wp = way_points.lookup_name(_T("BENALLA"));
+  if (wp) {
+    tp = fact->createFinish(AbstractTaskFactory::FINISH_LINE,*wp);
+    fact->append(tp,false);
+  }
+}
+
+
+
+
 void XCSoarInterface::PreloadInitialisation(bool ask) {
   if (ask) {
     #ifdef PNA
@@ -191,6 +231,8 @@ void XCSoarInterface::AfterStartup() {
   // Create default task if none exists
   StartupStore(TEXT("Create default task\n"));
   task.DefaultTask(SettingsComputer(), Basic());
+#else
+  default_task();
 #endif
   task_manager.resume();
 
