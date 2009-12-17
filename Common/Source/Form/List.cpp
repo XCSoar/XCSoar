@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Form/List.hpp"
-#include "Screen/Viewport.hpp"
 
 #include <assert.h>
 
@@ -83,13 +82,6 @@ WndListFrame::show_or_hide_scroll_bar()
   else
     /* all items are visible - hide the scroll bar */
     scroll_bar.reset();
-
-  /* now resize the item renderer, according to the width of the
-     scroll bar */
-
-  const RECT rc = mClients[0]->get_position();
-  mClients[0]->resize(scroll_bar.get_left(size) - rc.left * 2,
-                      rc.bottom - rc.top);
 }
 
 bool
@@ -105,23 +97,15 @@ WndListFrame::on_paint(Canvas &canvas)
 {
   int i;
 
-  if (mClientCount > 0){
-    ((WndFrame *)mClients[0])->SetIsListItem(true);
-//    ShowWindow(mClients[0]->GetHandle(), SW_HIDE);
-/*
-    if (mOnListCallback != NULL){
-      mListInfo.DrawIndex = mListInfo.ItemIndex;
-      mOnListCallback(this, &mListInfo);
-      mClients[0]->SetTop(mClients[0]->GetHeight() * mListInfo.ItemIndex);
-    }
-*/
-  }
+  if (mClientCount > 0)
+    mClients[0]->hide();
 
   WndFrame::on_paint(canvas);
 
   if (PaintItemCallback != NULL && mClientCount > 0) {
     // paint using the PaintItemCallback
     RECT rc = mClients[0]->get_position();
+    rc.right = scroll_bar.get_left(get_size()) - rc.left;
 
     for (i = 0; i < mListInfo.ItemInViewCount; i++) {
       if (GetFocused() && i == mListInfo.ItemIndex) {
@@ -136,31 +120,6 @@ WndListFrame::on_paint(Canvas &canvas)
 
       ::OffsetRect(&rc, 0, rc.bottom - rc.top);
     }
-  } else if (mClientCount > 0){
-    // paint using the hidden client window
-    const RECT rc = mClients[0]->get_position();
-
-    Viewport viewport(canvas, rc.right - rc.left, rc.bottom - rc.top);
-    Canvas &canvas2 = viewport;
-
-    viewport.move(rc.left, rc.top);
-
-    for (i=0; i<mListInfo.ItemInViewCount; i++){
-      canvas2.select(*mClients[0]->GetFont());
-
-      if (mOnListCallback != NULL){
-        mListInfo.DrawIndex = i;
-        mOnListCallback(this, &mListInfo);
-      }
-
-      mClients[0]->PaintSelector(mListInfo.DrawIndex != mListInfo.ItemIndex);
-      mClients[0]->on_paint(canvas2);
-
-      viewport.commit();
-      viewport.move(0, rc.bottom - rc.top);
-    }
-
-    viewport.restore();
   }
 
   DrawScrollBar(canvas);
