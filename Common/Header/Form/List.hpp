@@ -39,10 +39,10 @@ Copyright_License {
 #ifndef XCSOAR_FORM_LIST_HPP
 #define XCSOAR_FORM_LIST_HPP
 
-#include "Form/Frame.hpp"
+#include "Form/Control.hpp"
 #include "Screen/Bitmap.hpp"
 
-class WndListFrame : public WndFrame {
+class WndListFrame : public WindowControl {
   class ScrollBar {
     Bitmap hScrollBarBitmapTop;
     Bitmap hScrollBarBitmapMid;

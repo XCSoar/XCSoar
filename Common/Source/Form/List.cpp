@@ -47,7 +47,7 @@ using std::max;
 
 WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
                            int X, int Y, int Width, int Height):
-  WndFrame(Owner, Name, X, Y, Width, Height),
+  WindowControl(Owner, NULL, Name, X, Y, Width, Height),
   length(0), origin(0), items_visible(1), relative_cursor(0),
   ActivateCallback(NULL),
   CursorCallback(NULL),
@@ -80,7 +80,7 @@ WndListFrame::show_or_hide_scroll_bar()
 bool
 WndListFrame::on_resize(unsigned width, unsigned height)
 {
-  WndFrame::on_resize(width, height);
+  WindowControl::on_resize(width, height);
   show_or_hide_scroll_bar();
   return true;
 }
@@ -91,12 +91,17 @@ WndListFrame::on_paint(Canvas &canvas)
   if (mClientCount > 0)
     mClients[0]->hide();
 
-  WndFrame::on_paint(canvas);
+  WindowControl::on_paint(canvas);
 
   if (PaintItemCallback != NULL && mClientCount > 0) {
     // paint using the PaintItemCallback
     RECT rc = mClients[0]->get_position();
     rc.right = scroll_bar.get_left(get_size()) - rc.left;
+
+    canvas.set_text_color(GetForeColor());
+    canvas.set_background_color(GetBackColor());
+    canvas.background_transparent();
+    canvas.select(*GetFont());
 
     for (unsigned i = 0; i < items_visible; i++) {
       if (GetFocused() && i == relative_cursor) {
@@ -266,7 +271,7 @@ WndListFrame::on_key_down(unsigned key_code)
     return true;
   }
 
-  return WndFrame::on_key_down(key_code);
+  return WindowControl::on_key_down(key_code);
 }
 
 bool
