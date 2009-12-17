@@ -56,7 +56,6 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
   PaintSelector(true);
 
   mListInfo.ItemIndex = 0;
-  mListInfo.DrawIndex = 0;
   mListInfo.ItemCount = 0;
   mListInfo.ItemInViewCount = 1;
 

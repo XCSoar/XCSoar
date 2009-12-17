@@ -130,7 +130,6 @@ public:
 
   typedef struct{
     int ItemIndex;
-    int DrawIndex;
     int ScrollIndex;
     int ItemCount;
     int ItemInViewCount;
