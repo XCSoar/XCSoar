@@ -26,6 +26,8 @@
 
 #include "imgdecmp.h"
 
+#include <tchar.h>
+
 class CVOResource
 {
 public:
