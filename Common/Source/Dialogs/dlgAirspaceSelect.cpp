@@ -109,14 +109,10 @@ static unsigned LowLimit=0;
 static AirspaceSelectInfo_t *AirspaceSelectInfo=NULL;
 
 
-static void OnAirspaceListEnter(WindowControl * Sender,
-				WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender; (void)ListInfo;
-
-  int ItemIndex = wAirspaceList->GetCursorIndex();
-  if (UpLimit <= LowLimit ||
-      ItemIndex < 0 ||
-      (unsigned)ItemIndex >= UpLimit - LowLimit)
+static void
+OnAirspaceListEnter(unsigned ItemIndex)
+{
+  if (UpLimit <= LowLimit || ItemIndex >= UpLimit - LowLimit)
     return;
 
   int index_circle = AirspaceSelectInfo[LowLimit+ItemIndex].Index_Circle;
@@ -791,7 +787,7 @@ void dlgAirspaceSelect(void) {
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
   assert(wAirspaceList!=NULL);
   wAirspaceList->SetBorderKind(BORDERLEFT);
-  wAirspaceList->SetEnterCallback(OnAirspaceListEnter);
+  wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
   wAirspaceList->SetPaintItemCallback(OnPaintListItem);
 
   wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));

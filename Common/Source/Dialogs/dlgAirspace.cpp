@@ -154,18 +154,11 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 static bool changed = false;
 
 static void
-OnAirspaceListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
+OnAirspaceListEnter(unsigned ItemIndex)
 {
-  (void)Sender;
-
-  int ItemIndex = wAirspaceList->GetCursorIndex();
-
   if (ItemIndex >= AIRSPACECLASSCOUNT) {
     ItemIndex = AIRSPACECLASSCOUNT - 1;
   }
-
-  if (ItemIndex < 0)
-    return;
 
   if (colormode) {
     int c = dlgAirspaceColoursShowModal();
@@ -231,7 +224,7 @@ dlgAirspaceShowModal(bool coloredit)
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
   assert(wAirspaceList!=NULL);
   wAirspaceList->SetBorderKind(BORDERLEFT);
-  wAirspaceList->SetEnterCallback(OnAirspaceListEnter);
+  wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
   wAirspaceList->SetPaintItemCallback(OnAirspacePaintListItem);
   wAirspaceList->SetLength(AIRSPACECLASSCOUNT);
 

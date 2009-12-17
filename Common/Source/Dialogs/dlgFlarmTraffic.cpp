@@ -222,8 +222,8 @@ static int OnTimerNotify(WindowControl * Sender) {
   return 0;
 }
 
-static void OnListEnter(WindowControl * Sender,
-			WndListFrame::ListInfo_t *ListInfo)
+static void
+OnListEnter(unsigned i)
 {
   SelectAsTeamTrack();
 }
@@ -266,7 +266,7 @@ void dlgFlarmTrafficShowModal(void){
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
-  wDetails->SetEnterCallback(OnListEnter);
+  wDetails->SetActivateCallback(OnListEnter);
   wDetails->SetCursorCallback(FlarmCursorCallback);
   wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
 

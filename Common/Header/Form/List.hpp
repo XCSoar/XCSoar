@@ -136,7 +136,7 @@ public:
     int ItemInViewCount;
   }ListInfo_t;
 
-  typedef void (*OnListCallback_t)(WindowControl *Sender, ListInfo_t *ListInfo);
+  typedef void (*ActivateCallback_t)(unsigned idx);
   typedef void (*CursorCallback_t)(unsigned idx);
   typedef void (*PaintItemCallback_t)(Canvas &canvas, const RECT rc,
                                       unsigned idx);
@@ -146,7 +146,7 @@ protected:
 
   ListInfo_t mListInfo;
 
-  OnListCallback_t mOnListEnterCallback;
+  ActivateCallback_t ActivateCallback;
   CursorCallback_t CursorCallback;
   PaintItemCallback_t PaintItemCallback;
 
@@ -154,7 +154,9 @@ public:
   WndListFrame(WindowControl *Owner, const TCHAR *Name,
                int X, int Y, int Width, int Height);
 
-  void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
+  void SetActivateCallback(ActivateCallback_t cb) {
+    ActivateCallback = cb;
+  }
 
   void SetCursorCallback(CursorCallback_t cb) {
     CursorCallback = cb;

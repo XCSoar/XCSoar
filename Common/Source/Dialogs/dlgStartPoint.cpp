@@ -84,16 +84,11 @@ OnStartPointPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 
 static bool changed = false;
 
-static void OnStartPointListEnter(WindowControl * Sender,
-				WndListFrame::ListInfo_t *ListInfo) {
-  (void)Sender;
-  int ItemIndex = wStartPointList->GetCursorIndex();
+static void
+OnStartPointListEnter(unsigned ItemIndex) {
   if (ItemIndex>=MAXSTARTPOINTS) {
     ItemIndex = MAXSTARTPOINTS-1;
   }
-
-  if (ItemIndex < 0)
-    return;
 
   int res;
   res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
@@ -145,7 +140,7 @@ void dlgStartPointShowModal(void) {
   wStartPointList = (WndListFrame*)wf->FindByName(_T("frmStartPointList"));
   assert(wStartPointList!=NULL);
   wStartPointList->SetBorderKind(BORDERLEFT);
-  wStartPointList->SetEnterCallback(OnStartPointListEnter);
+  wStartPointList->SetActivateCallback(OnStartPointListEnter);
   wStartPointList->SetPaintItemCallback(OnStartPointPaintListItem);
   wStartPointList->SetLength(MAXSTARTPOINTS);
 

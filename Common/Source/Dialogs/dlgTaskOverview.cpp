@@ -267,15 +267,15 @@ static void UpdateAdvanced(void) {
 }
 
 
-static void OnTaskListEnter(WindowControl * Sender,
-		     WndListFrame::ListInfo_t *ListInfo) {
-  (void)Sender;
+static void
+OnTaskListEnter(unsigned ItemIndex)
+{
   bool isfinish = false;
-  int ItemIndex = wTaskList->GetCursorIndex();
-  if ((ItemIndex>= UpLimit) || (UpLimit==0)) {
-    if (ItemIndex>=UpLimit) {
+
+  if ((int)ItemIndex >= UpLimit || (UpLimit==0)) {
+    if ((int)ItemIndex >= UpLimit)
       ItemIndex= UpLimit;
-    }
+
     // add new waypoint
     if (logger.CheckDeclaration()) {
 
@@ -335,7 +335,7 @@ static void OnTaskListEnter(WindowControl * Sender,
   }
   if (ItemIndex==0) {
     dlgTaskWaypointShowModal(ItemIndex, 0); // start waypoint
-  } else if (ItemIndex==UpLimit-1) {
+  } else if ((int)ItemIndex == UpLimit - 1) {
     dlgTaskWaypointShowModal(ItemIndex, 2); // finish waypoint
   } else {
     dlgTaskWaypointShowModal(ItemIndex, 1); // turnpoint
@@ -535,7 +535,7 @@ void dlgTaskOverviewShowModal(void){
   wTaskList = (WndListFrame*)wf->FindByName(_T("frmTaskList"));
   assert(wTaskList!=NULL);
   wTaskList->SetBorderKind(BORDERLEFT);
-  wTaskList->SetEnterCallback(OnTaskListEnter);
+  wTaskList->SetActivateCallback(OnTaskListEnter);
   wTaskList->SetPaintItemCallback(OnTaskPaintListItem);
 
   WndProperty* wp;

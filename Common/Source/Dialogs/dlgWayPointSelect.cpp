@@ -87,14 +87,10 @@ static unsigned LowLimit=0;
 static int SelectedWayPointFileIdx = 0;
 
 
-static void OnWaypointListEnter(WindowControl * Sender,
-				WndListFrame::ListInfo_t *ListInfo){
-	(void)Sender; (void)ListInfo;
-  if (wWayPointList->GetCursorIndex() >= 0) {
-    wf->SetModalResult(mrOK);
-  }
-  else
-    wf->SetModalResult(mrCancel);
+static void
+OnWaypointListEnter(unsigned i)
+{
+  wf->SetModalResult(mrOK);
 }
 
 
@@ -696,7 +692,7 @@ int dlgWayPointSelect(const GEOPOINT &location, const int type, const int Filter
   wWayPointList = (WndListFrame*)wf->FindByName(_T("frmWayPointList"));
   assert(wWayPointList!=NULL);
   wWayPointList->SetBorderKind(BORDERLEFT);
-  wWayPointList->SetEnterCallback(OnWaypointListEnter);
+  wWayPointList->SetActivateCallback(OnWaypointListEnter);
   wWayPointList->SetPaintItemCallback(OnPaintListItem);
 
   wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));

@@ -86,10 +86,10 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
-static void OnComboPopupListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
+static void
+OnComboPopupListEnter(unsigned i)
 { // double-click on item -- NOT in callback table because added manually
-  (void)Sender;
-  OnCloseClicked(Sender);
+  OnCloseClicked(wf);
 }
 
 static void OnCancelClicked(WindowControl * Sender){
@@ -147,7 +147,7 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
       (WndListFrame*)wf->FindByName(_T("frmComboPopupList"));
     assert(wComboPopupListFrame!=NULL);
     wComboPopupListFrame->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERRIGHT|BORDERBOTTOM);
-    wComboPopupListFrame->SetEnterCallback(OnComboPopupListEnter);
+    wComboPopupListFrame->SetActivateCallback(OnComboPopupListEnter);
     wComboPopupListFrame->SetPaintItemCallback(OnPaintComboPopupListItem);
 
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();

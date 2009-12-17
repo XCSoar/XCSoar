@@ -48,7 +48,7 @@ using std::max;
 WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
                            int X, int Y, int Width, int Height):
   WndFrame(Owner, Name, X, Y, Width, Height),
-  mOnListEnterCallback(NULL),
+  ActivateCallback(NULL),
   CursorCallback(NULL),
   PaintItemCallback(NULL)
 {
@@ -129,14 +129,6 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
   scroll_bar.set_button(mListInfo.ItemCount, mListInfo.ItemInViewCount,
                         mListInfo.ScrollIndex);
   scroll_bar.paint(canvas, GetForeColor());
-}
-
-
-void WndListFrame::SetEnterCallback(void
-                                    (*OnListCallback)(WindowControl *Sender,
-                                                      ListInfo_t *ListInfo))
-{
-  mOnListEnterCallback = OnListCallback;
 }
 
 void
@@ -269,11 +261,11 @@ WndListFrame::on_key_down(unsigned key_code)
   case VK_F4:
 #endif
   case VK_RETURN:
-    if (mOnListEnterCallback == NULL)
+    if (ActivateCallback == NULL)
       break;
 
-    mOnListEnterCallback(this, &mListInfo);
-    invalidate();
+    if (GetCursorIndex() >= 0 && (unsigned)GetCursorIndex() < GetLength())
+      ActivateCallback(GetCursorIndex());
     return true;
 
     //#ifndef GNAV
@@ -349,9 +341,8 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 
   if (index >= 0 && index + mListInfo.ItemIndex < mListInfo.ItemCount) {
     if (index == mListInfo.ItemIndex) {
-      if (mOnListEnterCallback) {
-        mOnListEnterCallback(this, &mListInfo);
-      }
+      if (ActivateCallback != NULL)
+        ActivateCallback(GetCursorIndex());
 
       invalidate();
     } else {

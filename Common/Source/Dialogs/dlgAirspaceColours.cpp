@@ -66,9 +66,9 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 }
 
 
-static void OnAirspaceColoursListEnter(WindowControl * Sender,
-				WndListFrame::ListInfo_t *ListInfo) {
-  (void)Sender;
+static void
+OnAirspaceColoursListEnter(unsigned i)
+{
   wf->SetModalResult(mrOK);
 }
 
@@ -108,7 +108,7 @@ int dlgAirspaceColoursShowModal(void){
   wAirspaceColoursList = (WndListFrame*)wf->FindByName(_T("frmAirspaceColoursList"));
   assert(wAirspaceColoursList!=NULL);
   wAirspaceColoursList->SetBorderKind(BORDERLEFT);
-  wAirspaceColoursList->SetEnterCallback(OnAirspaceColoursListEnter);
+  wAirspaceColoursList->SetActivateCallback(OnAirspaceColoursListEnter);
   wAirspaceColoursList->SetPaintItemCallback(OnAirspaceColoursPaintListItem);
   wAirspaceColoursList->SetLength(NUMAIRSPACECOLORS);
 

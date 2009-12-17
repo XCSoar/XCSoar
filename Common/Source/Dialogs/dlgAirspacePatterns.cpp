@@ -62,10 +62,8 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 }
 
 static void
-OnAirspacePatternsListEnter(WindowControl *Sender,
-                            WndListFrame::ListInfo_t *ListInfo)
+OnAirspacePatternsListEnter(unsigned i)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
@@ -105,7 +103,7 @@ int dlgAirspacePatternsShowModal(void){
     (WndListFrame*)wf->FindByName(_T("frmAirspacePatternsList"));
   assert(wAirspacePatternsList!=NULL);
   wAirspacePatternsList->SetBorderKind(BORDERLEFT);
-  wAirspacePatternsList->SetEnterCallback(OnAirspacePatternsListEnter);
+  wAirspacePatternsList->SetActivateCallback(OnAirspacePatternsListEnter);
   wAirspacePatternsList->SetPaintItemCallback(OnAirspacePatternsPaintListItem);
   wAirspacePatternsList->SetLength(NUMAIRSPACEBRUSHES);
 
