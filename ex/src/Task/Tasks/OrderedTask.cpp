@@ -625,7 +625,7 @@ OrderedTask::OrderedTask(const TaskEvents &te,
 ////////////////////////
 
 void 
-OrderedTask::Accept(TaskPointVisitor& visitor) const
+OrderedTask::Accept(TaskPointVisitor& visitor, const bool reverse) const
 {
   for (OrderedTaskPointVector::const_iterator it = tps.begin(); it!= tps.end(); it++) {
     (*it)->Accept(visitor);

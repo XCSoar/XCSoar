@@ -4,8 +4,23 @@
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 #include "harness_waypoints.hpp"
+
+class ObservationZoneVisitorPrint: public ObservationZoneVisitor
+{
+public:
+  virtual void Visit(const SectorZone& oz) {
+    printf("# sector zone\n");
+  }
+  virtual void Visit(const LineSectorZone& oz) {
+    printf("# line zone\n");
+  }
+  virtual void Visit(const CylinderZone& oz) {
+    printf("# cylinder zone\n");
+  }
+};
 
 class TaskPointVisitorPrint: public TaskPointVisitor
 {
@@ -15,19 +30,26 @@ public:
   }
   virtual void Visit(const OrderedTaskPoint& tp) {
     printf("# got an otp\n");
+    tp.Accept_oz(ozv);
   }
   virtual void Visit(const FinishPoint& tp) {
     printf("# got an ftp\n");
+    tp.Accept_oz(ozv);
   }
   virtual void Visit(const StartPoint& tp) {
     printf("# got an stp\n");
+    tp.Accept_oz(ozv);
   }
   virtual void Visit(const AATPoint& tp) {
     printf("# got an aat\n");
+    tp.Accept_oz(ozv);
   }
   virtual void Visit(const ASTPoint& tp) {
     printf("# got an ast\n");
+    tp.Accept_oz(ozv);
   }
+private:
+  ObservationZoneVisitorPrint ozv;
 };
 
 class TaskVisitorPrint: public TaskVisitor
@@ -35,13 +57,11 @@ class TaskVisitorPrint: public TaskVisitor
 public:
   virtual void Visit(const AbortTask& task) {
     printf("# task is abort\n");
-    TaskPointVisitorPrint tpv;
     task.Accept(tpv);
     print_distances(task);
   };
   virtual void Visit(const OrderedTask& task) {
     printf("# task is ordered\n");
-    TaskPointVisitorPrint tpv;
     task.Accept(tpv);
     print_distances(task);
     if (task.get_stats().distance_max>task.get_stats().distance_min) {
@@ -51,13 +71,14 @@ public:
   };
   virtual void Visit(const GotoTask& task) {
     printf("# task is goto\n");
-    TaskPointVisitorPrint tpv;
     task.Accept(tpv);
     print_distances(task);
   };
   virtual void print_distances(const AbstractTask& task) {
     printf("# - dist nominal %g\n",task.get_stats().distance_nominal);
   };
+private:
+  TaskPointVisitorPrint tpv;
 };
 
 void task_report(TaskManager& task_manager, const char* text)

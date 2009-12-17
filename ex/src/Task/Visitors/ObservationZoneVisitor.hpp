@@ -1,5 +1,4 @@
-/*
-  Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,52 +33,27 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
+#ifndef OBSERVATION_POINT_VISITOR_HPP
+#define OBSERVATION_POINT_VISITOR_HPP
 
-#ifndef FAISECTORZONE_HPP
-#define FAISECTORZONE_HPP
-
-#include "SymmetricSectorZone.hpp"
+#include "Task/ObservationZones/LineSectorZone.hpp"
+#include "Task/ObservationZones/SectorZone.hpp"
+#include "Task/ObservationZones/FAISectorZone.hpp"
+#include "Task/ObservationZones/CylinderZone.hpp"
+#include "Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 
 /**
- *  A 90 degree sector centered at the bisector of incoming/outgoing legs
- * \todo This really should have infinite length
+ * Generic visitor for observation zones (for double-dispatch)
  */
-class FAISectorZone: 
-  public SymmetricSectorZone 
+class ObservationZoneVisitor:
+  public BaseVisitor,
+  public Visitor<FAISectorZone>,
+  public Visitor<SectorZone>,
+  public Visitor<LineSectorZone>,
+  public Visitor<CylinderZone>
 {
-public:  
-  /** 
-   * Constructor
-   * 
-   * @param loc Tip point of sector
-   * 
-   * @return Initialised object
-   */
-  FAISectorZone(const GEOPOINT loc):
-    SymmetricSectorZone(loc,10000.0,90.0)
-    {}
 
-  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
-    if (_location) {
-      return new FAISectorZone(*_location);
-    } else {
-      return new FAISectorZone(get_location());
-    }
-  }
-
-/** 
- * Test whether an OZ is equivalent to this one
- * 
- * @param other OZ to compare to
- * 
- * @return True if same type and OZ parameters
- */
-
-  virtual bool equals(const ObservationZonePoint* other) const;
-
-public:
-  DEFINE_VISITABLE();
 };
 
 #endif

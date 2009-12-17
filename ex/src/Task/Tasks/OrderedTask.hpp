@@ -95,9 +95,18 @@ public:
 /** 
  * Retrieves the active task point sequence.
  * 
- * @return Index of active task point sequence
+ * @return Active task point
  */
   TaskPoint* getActiveTaskPoint() const;
+
+/** 
+ * Retrieves the active task point index.
+ * 
+ * @return Index of active task point sequence
+ */
+  unsigned getActiveIndex() const {
+    return activeTaskPoint;
+  }
 
 /** 
  * Retrieve task point by sequence index
@@ -553,7 +562,7 @@ public:
  * 
  * @param visitor Visitor to accept
  */
-  void Accept(TaskPointVisitor& visitor) const;
+  void Accept(TaskPointVisitor& visitor, const bool reverse=false) const;
 
   DEFINE_VISITABLE()
 };

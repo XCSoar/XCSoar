@@ -145,7 +145,7 @@ public:
  * 
  * @param visitor Visitor to accept
  */
-  void Accept(TaskPointVisitor& visitor) const;
+  void Accept(TaskPointVisitor& visitor, const bool reverse=false) const;
   DEFINE_VISITABLE()
 };
 

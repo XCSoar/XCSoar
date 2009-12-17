@@ -133,6 +133,13 @@ public:
     return m_task_projection;
   };
 
+/** 
+ * Retrieve interior sample polygon (pure).
+ * 
+ * @return Vector of sample points representing a closed polygon
+ */
+  const SearchPointVector& get_sample_points() const;
+
 protected:
 
 /** 

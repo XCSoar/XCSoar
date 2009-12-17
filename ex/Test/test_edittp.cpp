@@ -31,6 +31,8 @@ public:
 private:
   OrderedTaskPoint *edited_tp;
 
+  virtual void Visit(const UnorderedTaskPoint& tp) {
+  }
   virtual void Visit(const FinishPoint& tp) {
   }
   virtual void Visit(const StartPoint& tp) {
@@ -41,8 +43,6 @@ private:
     edited_tp = new AATPoint(tp);
   }
   virtual void Visit(const ASTPoint& tp) {
-  }
-  virtual void Visit(const TaskPoint& tp) {
   }
 };
 
@@ -136,6 +136,13 @@ public:
     }
     counter++;
   }
+  virtual void Visit(const UnorderedTaskPoint& tp) {
+    if (counter==tp_to_edit) {
+      // ??? unknown type, this shouldn't happen
+//        new_tp = new ASTPoint(tp);
+    }
+    counter++;
+  }
   virtual void Visit(const FinishPoint& tp) {
     clone_on_index(tp);
   }
@@ -147,13 +154,6 @@ public:
   }
   virtual void Visit(const ASTPoint& tp) {
     clone_on_index(tp);
-  }
-  virtual void Visit(const TaskPoint& tp) {
-    if (counter==tp_to_edit) {
-      // ??? unknown type, this shouldn't happen
-//        new_tp = new ASTPoint(tp);
-    }
-    counter++;
   }
 
   TaskManager &task_mgr;

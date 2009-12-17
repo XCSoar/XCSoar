@@ -154,3 +154,9 @@ SampledTaskPoint::get_search_points()
   }
 }
 
+
+const SearchPointVector& 
+SampledTaskPoint::get_sample_points() const
+{
+  return m_sampled_points;
+}

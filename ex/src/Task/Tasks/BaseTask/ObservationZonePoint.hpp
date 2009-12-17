@@ -40,6 +40,8 @@
 #define OBSERVATIONZONEPOINT_HPP
 #include "Navigation/ReferencePoint.hpp"
 #include "ObservationZone.hpp"
+#include "Util/GenericVisitor.hpp"
+#include "Util/NonCopyable.hpp"
 
 struct GEOPOINT;
 class TaskPoint;
@@ -49,22 +51,10 @@ class TaskPoint;
  * - add arc type for future use
  */
 class ObservationZonePoint : public ReferencePoint, 
-                             public ObservationZone
+                             public ObservationZone,
+                             public NonCopyable,
+                             public BaseVisitable<> 
 {
-protected:
-/** 
- * Non-copyable
- * 
- */
-  ObservationZonePoint(); 
-private:
-/** 
- * Non-copyable
- * 
- * @return 
- */
-  ObservationZonePoint & operator = (const ObservationZonePoint &);
-
 public:
 /** 
  * Constructor
@@ -115,6 +105,9 @@ public:
  * @return Cloned object
  */
   virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const = 0;
+
+public:
+  DEFINE_VISITABLE();
 };
 
 #endif

@@ -421,8 +421,9 @@ public:
  * all TaskPoint in the task
  * 
  * @param visitor Visitor to accept
+ * @param reverse Perform scan in reverse sequence
  */
-  virtual void Accept(TaskPointVisitor& visitor) const = 0;
+  virtual void Accept(TaskPointVisitor& visitor, const bool reverse=false) const = 0;
   DEFINE_VISITABLE()
 };
 #endif //ABSTRACTTASK_H

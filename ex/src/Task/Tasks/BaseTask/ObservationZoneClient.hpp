@@ -39,6 +39,8 @@
 
 #include "ObservationZonePoint.hpp"
 
+class ObservationZoneVisitor;
+
 /**
  * Class holding an ObzervationZonePoint, directing calls to it
  */
@@ -96,6 +98,15 @@ public:
  */
   virtual fixed score_adjustment() const {
     return m_oz->score_adjustment();
+  }
+
+/** 
+ * Visit the OZ
+ * 
+ * @param visitor Visitor to apply
+ */
+  void Accept_oz(BaseVisitor& visitor) const {
+    m_oz->Accept(visitor);
   }
 
 protected:

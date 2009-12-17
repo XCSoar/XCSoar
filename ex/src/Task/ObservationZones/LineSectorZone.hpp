@@ -121,7 +121,8 @@ public:
  */
 
   virtual bool equals(const ObservationZonePoint* other) const;
-
+public:
+  DEFINE_VISITABLE();
 };
 
 #endif

@@ -149,6 +149,8 @@ public:
 
 protected:
   fixed Radius; /**< radius (m) of OZ */
+public:
+  DEFINE_VISITABLE();
 };
 
 #endif

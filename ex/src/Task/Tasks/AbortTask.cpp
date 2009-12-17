@@ -254,7 +254,7 @@ AbortTask::check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&)
 }
 
 void 
-AbortTask::Accept(TaskPointVisitor& visitor) const
+AbortTask::Accept(TaskPointVisitor& visitor, const bool reverse) const
 {
   for (std::vector<TaskPoint*>::const_iterator 
          i= tps.begin(); i!= tps.end(); ++i) {

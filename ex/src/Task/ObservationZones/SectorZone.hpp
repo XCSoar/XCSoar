@@ -151,6 +151,14 @@ public:
 
   virtual bool equals(const ObservationZonePoint* other) const;
 
+  const GEOPOINT& get_SectorStart() const {
+    return SectorStart;
+  }
+
+  const GEOPOINT& get_SectorEnd() const {
+    return SectorEnd;
+  }
+
 protected:
 /** 
  * Updates sector parameters; call this if geometry changes to recalculate
@@ -175,6 +183,8 @@ private:
 
   fixed StartRadial;
   fixed EndRadial;
+public:
+  DEFINE_VISITABLE();
 };
 
 #endif
