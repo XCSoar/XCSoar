@@ -143,7 +143,7 @@ static int GetActiveFlarmTrafficCount()
 
 static void SelectAsTeamTrack()
 {
-  int index = wDetails->GetItemIndex();
+  int index = wDetails->GetCursorIndex();
 
   if (index < 0 || index >= FLARM_MAX_TRAFFIC)
     return;
@@ -174,7 +174,7 @@ static void OnSetCNClicked(WindowControl * Sender)
 {
   (void)Sender;
 
-  int index = wDetails->GetItemIndex();
+  int index = wDetails->GetCursorIndex();
 
   if (index < 0 || index >= FLARM_MAX_TRAFFIC)
     return;

@@ -328,27 +328,6 @@ WndListFrame::on_mouse_up(int x, int y)
     return false;
 }
 
-void WndListFrame::SetItemIndex(int iValue){
-
-
-  mListInfo.ItemIndex=0;  // usually leaves selected item as first in screen
-  mListInfo.ScrollIndex=iValue;
-
-  int iTail = mListInfo.ItemCount - iValue; // if within 1 page of end
-  if (iTail < mListInfo.ItemInViewCount) {
-    int iDiff = mListInfo.ItemInViewCount - iTail;
-    int iShrinkBy = min(iValue, iDiff); // don't reduce by
-
-    mListInfo.ItemIndex += iShrinkBy;
-    mListInfo.ScrollIndex -= iShrinkBy;
-  }
-
-  RecalculateIndices(false);
-
-  if (CursorCallback != NULL)
-    CursorCallback(GetCursorIndex());
-}
-
 void
 WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 {

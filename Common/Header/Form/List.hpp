@@ -164,9 +164,6 @@ public:
     PaintItemCallback = cb;
   }
 
-  int GetItemIndex(void) { return mListInfo.ItemIndex; }
-  void SetItemIndex(int iValue);
-
   /**
    * @return the number of items in the list
    */

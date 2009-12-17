@@ -156,7 +156,7 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
 
     ComboPopupDataField->CreateComboList();
     wComboPopupListFrame->SetLength(ComboListPopup->ComboPopupItemCount);
-    wComboPopupListFrame->SetItemIndex(ComboListPopup->ComboPopupItemSavedIndex);
+    wComboPopupListFrame->SetCursorIndex(ComboListPopup->ComboPopupItemSavedIndex);
     if (bInitialPage) { // save values for "Cancel" from first page only
       bInitialPage=false;
       iSavedInitialDataIndex=ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupItemSavedIndex]->DataFieldIndex;
