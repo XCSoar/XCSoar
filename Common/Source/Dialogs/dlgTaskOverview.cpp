@@ -349,8 +349,11 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrCancel);
 }
 
-static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-	(void)ListInfo; (void)Sender;
+static void
+OnClearClicked(WindowControl *Sender)
+{
+  (void)Sender;
+
   if (MessageBoxX(gettext(_T("Clear the task?")),
                   gettext(_T("Clear task")),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
@@ -363,10 +366,10 @@ static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *Lis
   }
 }
 
-static void OnCalcClicked(WindowControl * Sender,
-			  WndListFrame::ListInfo_t *ListInfo){
+static void
+OnCalcClicked(WindowControl *Sender)
+{
   (void)Sender;
-  (void)ListInfo;
 
   wf->hide();
   dlgTaskCalculatorShowModal();
@@ -374,21 +377,21 @@ static void OnCalcClicked(WindowControl * Sender,
   wf->show();
 }
 
-
-static void OnAnalysisClicked(WindowControl * Sender,
-                              WndListFrame::ListInfo_t *ListInfo){
+static void
+OnAnalysisClicked(WindowControl *Sender)
+{
   (void)Sender;
-  (void)ListInfo;
 
   wf->hide();
   dlgAnalysisShowModal();
   wf->show();
 }
 
-
-static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+static void
+OnDeclareClicked(WindowControl *Sender)
+{
 	(void)Sender;
-	(void)ListInfo;
+
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
 
@@ -397,9 +400,10 @@ static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *L
   // do something here.
 }
 
-
-static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  (void)ListInfo; (void)Sender;
+static void
+OnSaveClicked(WindowControl * Sender)
+{
+  (void)Sender;
 
   int file_index;
   TCHAR task_name[MAX_PATH];
@@ -462,8 +466,10 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
 }
 
 
-static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  (void)ListInfo; (void)Sender;
+static void
+OnLoadClicked(WindowControl *Sender)
+{
+  (void)Sender;
 
   WndProperty* wp;
   DataFieldFileReader *dfe;
@@ -482,9 +488,11 @@ static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   }
 }
 
+static void
+OnAdvancedClicked(WindowControl *Sender)
+{
+  (void)Sender;
 
-static void OnAdvancedClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender; (void)ListInfo;
   showAdvanced = !showAdvanced;
   UpdateAdvanced();
 }
