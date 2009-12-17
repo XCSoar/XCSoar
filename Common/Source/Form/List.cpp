@@ -162,56 +162,6 @@ WndListFrame::SetLength(unsigned n)
   SetCursorIndex(cursor);
 }
 
-int WndListFrame::RecalculateIndices(bool bigscroll) {
-
-// scroll to smaller of current scroll or to last page
-  mListInfo.ScrollIndex = max(0, min(mListInfo.ScrollIndex,
-                                     mListInfo.ItemCount -
-                                     mListInfo.ItemInViewCount));
-
-// if we're off end of list, move scroll to last page and select 1st item in last page, return
-  if (mListInfo.ItemIndex+mListInfo.ScrollIndex >= mListInfo.ItemCount) {
-    mListInfo.ItemIndex = max(0,mListInfo.ItemCount-mListInfo.ScrollIndex-1);
-    mListInfo.ScrollIndex = max(0,
-			      min(mListInfo.ScrollIndex,
-				  mListInfo.ItemCount-mListInfo.ItemIndex-1));
-    return 1;
-  }
-
-// again, check to see if we're too far off end of list
-  mListInfo.ScrollIndex = max(0,
-			      min(mListInfo.ScrollIndex,
-				  mListInfo.ItemCount-mListInfo.ItemIndex-1));
-
-  if (mListInfo.ScrollIndex + mListInfo.ItemIndex > mListInfo.ItemCount)
-    mListInfo.ItemIndex =
-      max(mListInfo.ItemCount - mListInfo.ScrollIndex - 1, 0);
-
-  if (mListInfo.ItemIndex >= mListInfo.ItemInViewCount) {
-    mListInfo.ScrollIndex++;
-    mListInfo.ItemIndex = mListInfo.ItemInViewCount - 1;
-
-    invalidate();
-    return 0;
-  }
-  if (mListInfo.ItemIndex < 0){
-
-    mListInfo.ItemIndex = 0;
-    // JMW scroll
-    if (mListInfo.ScrollIndex>0) {
-      mListInfo.ScrollIndex--;
-      invalidate();
-      return 0;
-    } else {
-      // only return if no more scrolling left to do
-      return 1;
-    }
-  }
-
-  invalidate();
-  return (0);
-}
-
 void
 WndListFrame::EnsureVisible(int i)
 {
@@ -247,6 +197,26 @@ WndListFrame::SetCursorIndex(int i)
   return true;
 }
 
+void
+WndListFrame::SetOrigin(unsigned i)
+{
+  if (mListInfo.ItemCount <= mListInfo.ItemInViewCount)
+    return;
+
+  if (i + mListInfo.ItemInViewCount > (unsigned)mListInfo.ItemCount)
+    i = mListInfo.ItemCount - mListInfo.ItemInViewCount;
+
+  if (i == (unsigned)mListInfo.ScrollIndex)
+    return;
+
+  mListInfo.ScrollIndex = i;
+
+  invalidate();
+
+  if (CursorCallback != NULL)
+    CursorCallback(GetCursorIndex());
+}
+
 bool
 WndListFrame::on_key_down(unsigned key_code)
 {
@@ -274,11 +244,9 @@ WndListFrame::on_key_down(unsigned key_code)
         mListInfo.ItemCount <= mListInfo.ItemInViewCount)
       break;
 
-    mListInfo.ScrollIndex -= mListInfo.ItemInViewCount;
-    RecalculateIndices(true);
-
-    if (CursorCallback != NULL)
-      CursorCallback(GetCursorIndex());
+    SetOrigin(mListInfo.ScrollIndex > mListInfo.ItemInViewCount
+              ? mListInfo.ScrollIndex - mListInfo.ItemInViewCount
+              : 0);
     return true;
 
   case VK_RIGHT:
@@ -286,11 +254,7 @@ WndListFrame::on_key_down(unsigned key_code)
         mListInfo.ItemCount <= mListInfo.ItemInViewCount)
       break;
 
-    mListInfo.ScrollIndex += mListInfo.ItemInViewCount;
-    RecalculateIndices(true);
-
-    if (CursorCallback != NULL)
-      CursorCallback(GetCursorIndex());
+    SetOrigin(mListInfo.ScrollIndex + mListInfo.ItemInViewCount);
     return true;
 
     //#endif
@@ -323,19 +287,7 @@ void
 WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 {
   (void)xPos;
-/*  int w = GetWidth()- 4*SELECTORWIDTH;
-  int h = GetHeight()- SELECTORWIDTH;
 
-  if ((xPos>= w) && (mListInfo.ItemCount > mListInfo.ItemInViewCount)
-      && (mListInfo.ItemCount>0)) {
-    // TODO code: scroll!
-
-    mListInfo.ScrollIndex = mListInfo.ItemCount*yPos/h;
-    RecalculateIndices(true);
-
-    return;
-  }
-*/
   int index = yPos / mClients[0]->get_size().cy; // yPos is offset within ListEntry item!
 
   if (index >= 0 && index + mListInfo.ItemIndex < mListInfo.ItemCount) {
@@ -361,16 +313,9 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
     bMoving=true;
 
     if (scroll_bar.is_dragging()) {
-      int iScrollIndex = scroll_bar.drag_move(mListInfo.ItemCount,
-                                              mListInfo.ItemInViewCount,
-                                              y);
-
-      if(iScrollIndex !=mListInfo.ScrollIndex)
-      {
-        int iScrollAmount = iScrollIndex - mListInfo.ScrollIndex;
-        mListInfo.ScrollIndex = mListInfo.ScrollIndex + iScrollAmount;
-        invalidate();
-      }
+      SetOrigin(scroll_bar.drag_move(mListInfo.ItemCount,
+                                     mListInfo.ItemInViewCount,
+                                     y));
     }
 
     bMoving=false;

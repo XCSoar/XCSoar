@@ -189,10 +189,14 @@ public:
    */
   bool SetCursorIndex(int i);
 
+  /**
+   * Scrolls to the specified index.
+   */
+  void SetOrigin(unsigned i);
+
 protected:
   void show_or_hide_scroll_bar();
 
-  int RecalculateIndices(bool bigscroll);
   void EnsureVisible(int i);
   void SelectItemFromScreen(int xPos, int yPos);
   void DrawScrollBar(Canvas &canvas);
