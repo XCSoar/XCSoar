@@ -127,7 +127,7 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
               text);
 }
 
-int GetActiveFlarmTrafficCount()
+static int GetActiveFlarmTrafficCount()
 {
   int count = 0;
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++)
@@ -147,7 +147,7 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
   }
 }
 
-void SelectAsTeamTrack()
+static void SelectAsTeamTrack()
 {
   int index = wDetails->GetItemIndex();
 
