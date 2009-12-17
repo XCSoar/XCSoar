@@ -127,14 +127,6 @@ class WndListFrame : public WndFrame {
   };
 
 public:
-
-  typedef struct{
-    int ItemIndex;
-    int ScrollIndex;
-    int ItemCount;
-    int ItemInViewCount;
-  }ListInfo_t;
-
   typedef void (*ActivateCallback_t)(unsigned idx);
   typedef void (*CursorCallback_t)(unsigned idx);
   typedef void (*PaintItemCallback_t)(Canvas &canvas, const RECT rc,
@@ -143,7 +135,25 @@ public:
 protected:
   ScrollBar scroll_bar;
 
-  ListInfo_t mListInfo;
+  /**
+   * The number of items in the list.
+   */
+  unsigned length;
+
+  /**
+   * The index of the topmost item currently being displayed.
+   */
+  unsigned origin;
+
+  /**
+   * The number of items visible at a time.
+   */
+  unsigned items_visible;
+
+  /**
+   * The index of the selected item on the screen.
+   */
+  unsigned relative_cursor;
 
   ActivateCallback_t ActivateCallback;
   CursorCallback_t CursorCallback;
@@ -169,7 +179,7 @@ public:
    * @return the number of items in the list
    */
   unsigned GetLength() const {
-    return mListInfo.ItemCount;
+    return length;
   }
 
   /**
@@ -177,8 +187,8 @@ public:
    */
   void SetLength(unsigned n);
 
-  int GetCursorIndex() const {
-    return mListInfo.ScrollIndex + mListInfo.ItemIndex;
+  unsigned GetCursorIndex() const {
+    return origin + relative_cursor;
   }
 
   /**
@@ -187,7 +197,7 @@ public:
    * @return true if the cursor was moved to the specified position,
    * false if the position was invalid
    */
-  bool SetCursorIndex(int i);
+  bool SetCursorIndex(unsigned i);
 
   /**
    * Scrolls to the specified index.
@@ -197,7 +207,7 @@ public:
 protected:
   void show_or_hide_scroll_bar();
 
-  void EnsureVisible(int i);
+  void EnsureVisible(unsigned i);
   void SelectItemFromScreen(int xPos, int yPos);
   void DrawScrollBar(Canvas &canvas);
 

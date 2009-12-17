@@ -313,7 +313,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 
     if (!AirspaceWarnGetItem(i, pAS)) return;
 
-    if ((int)i == wAirspaceList->GetCursorIndex())
+    if (i == wAirspaceList->GetCursorIndex())
       FocusedID = pAS.ID;
 
     if (pAS.IsCircle){

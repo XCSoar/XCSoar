@@ -48,16 +48,13 @@ using std::max;
 WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
                            int X, int Y, int Width, int Height):
   WndFrame(Owner, Name, X, Y, Width, Height),
+  length(0), origin(0), items_visible(1), relative_cursor(0),
   ActivateCallback(NULL),
   CursorCallback(NULL),
   PaintItemCallback(NULL)
 {
   SetCanFocus(true);
   PaintSelector(true);
-
-  mListInfo.ItemIndex = 0;
-  mListInfo.ItemCount = 0;
-  mListInfo.ItemInViewCount = 1;
 
   mCaption[0] = '\0';
   SetForeColor(GetOwner()->GetForeColor());
@@ -72,7 +69,7 @@ WndListFrame::show_or_hide_scroll_bar()
 
   const SIZE size = get_size();
 
-  if (mListInfo.ItemCount > mListInfo.ItemInViewCount)
+  if (length > items_visible)
     /* enable the scroll bar */
     scroll_bar.set(size);
   else
@@ -91,8 +88,6 @@ WndListFrame::on_resize(unsigned width, unsigned height)
 void
 WndListFrame::on_paint(Canvas &canvas)
 {
-  int i;
-
   if (mClientCount > 0)
     mClients[0]->hide();
 
@@ -103,15 +98,15 @@ WndListFrame::on_paint(Canvas &canvas)
     RECT rc = mClients[0]->get_position();
     rc.right = scroll_bar.get_left(get_size()) - rc.left;
 
-    for (i = 0; i < mListInfo.ItemInViewCount; i++) {
-      if (GetFocused() && i == mListInfo.ItemIndex) {
+    for (unsigned i = 0; i < items_visible; i++) {
+      if (GetFocused() && i == relative_cursor) {
         Brush brush(GetBackColor().highlight());
         canvas.fill_rectangle(rc, brush);
       }
 
-      PaintItemCallback(canvas, rc, mListInfo.ScrollIndex + i);
+      PaintItemCallback(canvas, rc, origin + i);
 
-      if (i == mListInfo.ItemIndex)
+      if (i == relative_cursor)
         PaintSelector(canvas, rc);
 
       ::OffsetRect(&rc, 0, rc.bottom - rc.top);
@@ -125,36 +120,35 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
   if (!scroll_bar.defined())
     return;
 
-  scroll_bar.set_button(mListInfo.ItemCount, mListInfo.ItemInViewCount,
-                        mListInfo.ScrollIndex);
+  scroll_bar.set_button(length, items_visible, origin);
   scroll_bar.paint(canvas, GetForeColor());
 }
 
 void
 WndListFrame::SetLength(unsigned n)
 {
-  if (n == (unsigned)mListInfo.ItemCount)
+  if (n == length)
     return;
 
-  int cursor = GetCursorIndex();
+  unsigned cursor = GetCursorIndex();
 
-  mListInfo.ItemCount = n;
+  length = n;
 
   if (n == 0)
     cursor = 0;
-  else if (cursor >= (int)n)
+  else if (cursor >= n)
     cursor = n - 1;
 
-  mListInfo.ItemInViewCount = mClientCount > 0
-    ? max(1, (int)(get_size().cy / mClients[0]->get_size().cy))
+  items_visible = mClientCount > 0
+    ? max(1U, (unsigned)(get_size().cy / mClients[0]->get_size().cy))
     : 1;
 
-  if (n <= (unsigned)mListInfo.ItemInViewCount)
-    mListInfo.ScrollIndex = 0;
-  else if ((unsigned)(mListInfo.ScrollIndex + mListInfo.ItemInViewCount) > n)
-    mListInfo.ScrollIndex = n - mListInfo.ItemInViewCount;
-  else if (cursor < mListInfo.ScrollIndex)
-    mListInfo.ScrollIndex = cursor;
+  if (n <= items_visible)
+    origin = 0;
+  else if (origin + items_visible > n)
+    origin = n - items_visible;
+  else if (cursor < origin)
+    origin = cursor;
 
   show_or_hide_scroll_bar();
   invalidate();
@@ -163,14 +157,14 @@ WndListFrame::SetLength(unsigned n)
 }
 
 void
-WndListFrame::EnsureVisible(int i)
+WndListFrame::EnsureVisible(unsigned i)
 {
-  assert(i >= 0 && i < mListInfo.ItemCount);
+  assert(i < length);
 
-  if (mListInfo.ScrollIndex > i)
-    mListInfo.ScrollIndex = i;
-  else if (mListInfo.ScrollIndex + mListInfo.ItemInViewCount <= i)
-    mListInfo.ScrollIndex = i - mListInfo.ItemInViewCount + 1;
+  if (origin > i)
+    origin = i;
+  else if (origin + items_visible <= i)
+    origin = i - items_visible + 1;
   else
     /* no change, no repaint required */
     return;
@@ -179,9 +173,9 @@ WndListFrame::EnsureVisible(int i)
 }
 
 bool
-WndListFrame::SetCursorIndex(int i)
+WndListFrame::SetCursorIndex(unsigned i)
 {
-  if (i < 0 || i >= mListInfo.ItemCount)
+  if (i >= length)
     return false;
 
   if (i == GetCursorIndex())
@@ -189,7 +183,7 @@ WndListFrame::SetCursorIndex(int i)
 
   EnsureVisible(i);
 
-  mListInfo.ItemIndex = i - mListInfo.ScrollIndex;
+  relative_cursor = i - origin;
   invalidate();
 
   if (CursorCallback != NULL)
@@ -200,16 +194,16 @@ WndListFrame::SetCursorIndex(int i)
 void
 WndListFrame::SetOrigin(unsigned i)
 {
-  if (mListInfo.ItemCount <= mListInfo.ItemInViewCount)
+  if (length <= items_visible)
     return;
 
-  if (i + mListInfo.ItemInViewCount > (unsigned)mListInfo.ItemCount)
-    i = mListInfo.ItemCount - mListInfo.ItemInViewCount;
+  if (i + items_visible > length)
+    i = length - items_visible;
 
-  if (i == (unsigned)mListInfo.ScrollIndex)
+  if (i == origin)
     return;
 
-  mListInfo.ScrollIndex = i;
+  origin = i;
 
   invalidate();
 
@@ -233,33 +227,32 @@ WndListFrame::on_key_down(unsigned key_code)
     if (ActivateCallback == NULL)
       break;
 
-    if (GetCursorIndex() >= 0 && (unsigned)GetCursorIndex() < GetLength())
+    if (GetCursorIndex() < GetLength())
       ActivateCallback(GetCursorIndex());
     return true;
 
     //#ifndef GNAV
 
   case VK_LEFT:
-    if (mListInfo.ScrollIndex <= 0 ||
-        mListInfo.ItemCount <= mListInfo.ItemInViewCount)
+    if (origin == 0 || length <= items_visible)
       break;
 
-    SetOrigin(mListInfo.ScrollIndex > mListInfo.ItemInViewCount
-              ? mListInfo.ScrollIndex - mListInfo.ItemInViewCount
+    SetOrigin(origin > items_visible
+              ? origin - items_visible
               : 0);
     return true;
 
   case VK_RIGHT:
-    if (mListInfo.ItemIndex + mListInfo.ScrollIndex >= mListInfo.ItemCount ||
-        mListInfo.ItemCount <= mListInfo.ItemInViewCount)
+    if (origin + relative_cursor >= length ||
+        length <= items_visible)
       break;
 
-    SetOrigin(mListInfo.ScrollIndex + mListInfo.ItemInViewCount);
+    SetOrigin(origin + items_visible);
     return true;
 
     //#endif
   case VK_DOWN:
-    if (GetCursorIndex() + 1 >= mListInfo.ItemCount)
+    if (GetCursorIndex() + 1 >= length)
       break;
 
     SetCursorIndex(GetCursorIndex() + 1);
@@ -290,14 +283,14 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 
   int index = yPos / mClients[0]->get_size().cy; // yPos is offset within ListEntry item!
 
-  if (index >= 0 && index + mListInfo.ItemIndex < mListInfo.ItemCount) {
-    if (index == mListInfo.ItemIndex) {
+  if (index >= 0 && index + relative_cursor < length) {
+    if ((unsigned)index == relative_cursor) {
       if (ActivateCallback != NULL)
         ActivateCallback(GetCursorIndex());
 
       invalidate();
     } else {
-      SetCursorIndex(mListInfo.ScrollIndex + index);
+      SetCursorIndex(origin + index);
     }
   }
 }
@@ -313,9 +306,7 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
     bMoving=true;
 
     if (scroll_bar.is_dragging()) {
-      SetOrigin(scroll_bar.drag_move(mListInfo.ItemCount,
-                                     mListInfo.ItemInViewCount,
-                                     y));
+      SetOrigin(scroll_bar.drag_move(length, items_visible, y));
     }
 
     bMoving=false;
@@ -343,14 +334,15 @@ WndListFrame::on_mouse_down(int x, int y)
   else if (scroll_bar.in(Pos)) // clicked in scroll bar up/down/pgup/pgdn
   {
     if (scroll_bar.in_up_arrow(Pos.y))
-      mListInfo.ScrollIndex = max(0, mListInfo.ScrollIndex- 1);
+      origin = max(0U, origin - 1);
     else if (scroll_bar.in_down_arrow(Pos.y))
-      mListInfo.ScrollIndex = max(0,min(mListInfo.ItemCount- mListInfo.ItemInViewCount, mListInfo.ScrollIndex+ 1));
+      origin = max(0U, min(length - items_visible, origin + 1));
     else if (scroll_bar.above_button(Pos.y)) // page up
-      mListInfo.ScrollIndex = max(0, mListInfo.ScrollIndex- mListInfo.ItemInViewCount);
+      origin = max(0U, origin - items_visible);
     else if (scroll_bar.below_button(Pos.y)) // page up
-      if (mListInfo.ItemCount > mListInfo.ScrollIndex+ mListInfo.ItemInViewCount)
-          mListInfo.ScrollIndex = min ( mListInfo.ItemCount- mListInfo.ItemInViewCount, mListInfo.ScrollIndex +mListInfo.ItemInViewCount);
+      if (length > origin + items_visible)
+          origin = min(length - items_visible,
+                       origin + items_visible);
 
     invalidate();
   }
@@ -368,15 +360,14 @@ WndListFrame::on_mouse_wheel(int delta)
 {
   if (delta > 0) {
     // scroll up
-    if (mListInfo.ScrollIndex > 0) {
-      --mListInfo.ScrollIndex;
+    if (origin > 0) {
+      --origin;
       invalidate();
     }
   } else if (delta < 0) {
     // scroll down
-    if (mListInfo.ScrollIndex +
-        mListInfo.ItemInViewCount < mListInfo.ItemCount) {
-      ++mListInfo.ScrollIndex;
+    if (origin + items_visible < length) {
+      ++origin;
       invalidate();
     }
   }
