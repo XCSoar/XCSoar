@@ -444,18 +444,6 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   }
 }
 
-static void OnAirspaceListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender;
-  if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = max(1,Count);
-
-    ListInfo->DrawIndex = 0;
-    ListInfo->ScrollIndex = 0; // JMW bug fix
-  }
-}
-
-
-
 bool actShow = false;
 bool actListSizeChange = false;
 bool actListChange = false;
@@ -483,7 +471,8 @@ UserMsgNotify(WindowControl *Sender, unsigned id){
 
     FindFocus();
 
-    wAirspaceList->ResetList();
+    wAirspaceList->SetLength(max(1, Count));
+    wAirspaceList->invalidate();
 
     if (Count == 0) {
       // auto close
@@ -546,7 +535,6 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnAck2Clicked),
   DeclareCallBackEntry(OnEnableClicked),
   DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnAirspaceListInfo),
   DeclareCallBackEntry(NULL)
 };
 
@@ -589,7 +577,7 @@ bool dlgAirspaceWarningShowDlg(bool Force){
   assert(wf != NULL);
   assert(wAirspaceList != NULL);
 
-  wAirspaceList->ResetList();
+  wAirspaceList->SetLength(max(1, Count));
 
   if (!fDialogOpen) {
     fDialogOpen = true;

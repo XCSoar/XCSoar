@@ -44,12 +44,6 @@ Copyright_License {
 #include <assert.h>
 
 static WndForm *wf = NULL;
-static WndListFrame *wAirspacePatternsList = NULL;
-
-static void UpdateList(void){
-  wAirspacePatternsList->ResetList();
-  wAirspacePatternsList->invalidate();
-}
 
 static void
 OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
@@ -76,17 +70,6 @@ OnAirspacePatternsListEnter(WindowControl *Sender,
 }
 
 static void
-OnAirspacePatternsListInfo(WindowControl *Sender,
-                           WndListFrame::ListInfo_t *ListInfo)
-{
-  (void)Sender;
-
-  if (ListInfo->DrawIndex == -1) {
-    ListInfo->ItemCount = NUMAIRSPACEBRUSHES;
-  }
-}
-
-static void
 OnCloseClicked(WindowControl * Sender)
 {
   (void)Sender;
@@ -95,7 +78,6 @@ OnCloseClicked(WindowControl * Sender)
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnAirspacePatternsListInfo),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
@@ -119,13 +101,13 @@ int dlgAirspacePatternsShowModal(void){
 
   assert(wf!=NULL);
 
-  wAirspacePatternsList = (WndListFrame*)wf->FindByName(_T("frmAirspacePatternsList"));
+  WndListFrame *wAirspacePatternsList =
+    (WndListFrame*)wf->FindByName(_T("frmAirspacePatternsList"));
   assert(wAirspacePatternsList!=NULL);
   wAirspacePatternsList->SetBorderKind(BORDERLEFT);
   wAirspacePatternsList->SetEnterCallback(OnAirspacePatternsListEnter);
   wAirspacePatternsList->SetPaintItemCallback(OnAirspacePatternsPaintListItem);
-
-  UpdateList();
+  wAirspacePatternsList->SetLength(NUMAIRSPACEBRUSHES);
 
   int result = wf->ShowModal();
   result = result == mrOK

@@ -31,7 +31,7 @@
  <WndButton  Name="cmdSave" Caption="Save"    X=65 Y=46 Width=60  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
  </WndFrame>
 
-  <WndListFrame Name="frmTaskList" X=0 Y=-1 Width=230 Height=220 Font=2 OnListInfo="OnTaskListInfo">
+  <WndListFrame Name="frmTaskList" X=0 Y=-1 Width=230 Height=220 Font=2>
     <WndFrame Name="frmTaskListEntry" X=2 Y=2 Width=220 Height=18 Font=2/>
   </WndListFrame>
 

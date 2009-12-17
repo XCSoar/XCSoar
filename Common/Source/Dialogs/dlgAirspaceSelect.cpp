@@ -390,7 +390,7 @@ static void UpdateList(void){
 	  sizeof(AirspaceSelectInfo_t), AirspaceDistanceCompare);
   }
 
-  wAirspaceList->ResetList();
+  wAirspaceList->SetLength(UpLimit - LowLimit);
   wAirspaceList->invalidate();
 }
 
@@ -697,19 +697,6 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
   }
 }
 
-// DrawListIndex = number of things to draw
-// ItemIndex = current selected item
-
-
-static void OnWpListInfo(WindowControl * Sender,
-                         WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender;
-	if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = UpLimit-LowLimit;
-  }
-}
-
-
 static void OnWPSCloseClicked(WindowControl * Sender){
 	(void)Sender;
   wf->SetModalResult(mrCancel);
@@ -768,7 +755,6 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnFilterDistance),
   DeclareCallBackEntry(OnFilterDirection),
   DeclareCallBackEntry(OnFilterType),
-  DeclareCallBackEntry(OnWpListInfo),
   DeclareCallBackEntry(NULL)
 };
 

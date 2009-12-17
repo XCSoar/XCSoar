@@ -67,18 +67,6 @@ OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
                       ComboListPopup->ComboPopupItemList[i]->StringValueFormatted);
 }
 
-static void OnComboPopupListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
-{ // callback function for the ComboPopup
-  (void)Sender;
-  if (ListInfo->DrawIndex == -1){ // initialize
-
-    ListInfo->ItemCount = ComboListPopup->ComboPopupItemCount;
-    ListInfo->ScrollIndex = 0;
-    ListInfo->ItemIndex = ComboListPopup->ComboPopupItemSavedIndex;
-  }
-}
-
-
 static void OnHelpClicked(WindowControl * Sender){
   (void)Sender;
 
@@ -111,7 +99,6 @@ static void OnCancelClicked(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnComboPopupListInfo),
   DeclareCallBackEntry(OnHelpClicked),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnCancelClicked),
@@ -168,7 +155,7 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
     assert(ComboPopupDataField!=NULL);
 
     ComboPopupDataField->CreateComboList();
-    wComboPopupListFrame->ResetList();
+    wComboPopupListFrame->SetLength(ComboListPopup->ComboPopupItemCount);
     wComboPopupListFrame->SetItemIndex(ComboListPopup->ComboPopupItemSavedIndex);
     if (bInitialPage) { // save values for "Cancel" from first page only
       bInitialPage=false;

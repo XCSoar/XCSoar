@@ -46,11 +46,8 @@ using std::min;
 using std::max;
 
 WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
-                           int X, int Y, int Width, int Height,
-                           void (*OnListCallback)(WindowControl *Sender,
-                                                  ListInfo_t *ListInfo)):
+                           int X, int Y, int Width, int Height):
   WndFrame(Owner, Name, X, Y, Width, Height),
-  mOnListCallback(OnListCallback),
   mOnListEnterCallback(NULL),
   CursorCallback(NULL),
   PaintItemCallback(NULL)
@@ -61,7 +58,7 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
   mListInfo.ItemCount = 0;
-  mListInfo.ItemInViewCount = 0;
+  mListInfo.ItemInViewCount = 1;
 
   mCaption[0] = '\0';
   SetForeColor(GetOwner()->GetForeColor());
@@ -140,6 +137,38 @@ void WndListFrame::SetEnterCallback(void
                                                       ListInfo_t *ListInfo))
 {
   mOnListEnterCallback = OnListCallback;
+}
+
+void
+WndListFrame::SetLength(unsigned n)
+{
+  if (n == (unsigned)mListInfo.ItemCount)
+    return;
+
+  int cursor = GetCursorIndex();
+
+  mListInfo.ItemCount = n;
+
+  if (n == 0)
+    cursor = 0;
+  else if (cursor >= (int)n)
+    cursor = n - 1;
+
+  mListInfo.ItemInViewCount = mClientCount > 0
+    ? max(1, (int)(get_size().cy / mClients[0]->get_size().cy))
+    : 1;
+
+  if (n <= (unsigned)mListInfo.ItemInViewCount)
+    mListInfo.ScrollIndex = 0;
+  else if ((unsigned)(mListInfo.ScrollIndex + mListInfo.ItemInViewCount) > n)
+    mListInfo.ScrollIndex = n - mListInfo.ItemInViewCount;
+  else if (cursor < mListInfo.ScrollIndex)
+    mListInfo.ScrollIndex = cursor;
+
+  show_or_hide_scroll_bar();
+  invalidate();
+
+  SetCursorIndex(cursor);
 }
 
 int WndListFrame::RecalculateIndices(bool bigscroll) {
@@ -290,29 +319,6 @@ WndListFrame::on_key_down(unsigned key_code)
   }
 
   return WndFrame::on_key_down(key_code);
-}
-
-void WndListFrame::ResetList(void){
-  unsigned height = get_size().cy;
-  unsigned client_height = mClients[0]->get_size().cy;
-
-  mListInfo.ScrollIndex = 0;
-  mListInfo.ItemIndex = 0;
-  mListInfo.DrawIndex = 0;
-  mListInfo.ItemCount = 0;
-  mListInfo.ItemInViewCount = height / client_height;
-
-  if (mOnListCallback != NULL){
-    mListInfo.DrawIndex = -1;                               // -1 -> initialize data
-    mOnListCallback(this, &mListInfo);
-    mListInfo.DrawIndex = 0;                                // setup data for first item,
-    mOnListCallback(this, &mListInfo);
-  }
-
-  show_or_hide_scroll_bar();
-
-  if (CursorCallback != NULL)
-    CursorCallback(GetCursorIndex());
 }
 
 bool

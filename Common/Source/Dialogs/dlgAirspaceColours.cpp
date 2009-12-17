@@ -48,12 +48,6 @@ static WndListFrame *wAirspaceColoursList=NULL;
 
 static int ItemIndex = -1;
 
-
-static void UpdateList(void){
-  wAirspaceColoursList->ResetList();
-  wAirspaceColoursList->invalidate();
-}
-
 static void
 OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
@@ -78,15 +72,6 @@ static void OnAirspaceColoursListEnter(WindowControl * Sender,
   wf->SetModalResult(mrOK);
 }
 
-
-static void OnAirspaceColoursListInfo(WindowControl * Sender,
-			       WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender;
-  if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = NUMAIRSPACECOLORS;
-  }
-}
-
 static void OnCloseClicked(WindowControl * Sender){
   (void)Sender;
   ItemIndex = -1;
@@ -95,7 +80,6 @@ static void OnCloseClicked(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnAirspaceColoursListInfo),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
@@ -126,8 +110,7 @@ int dlgAirspaceColoursShowModal(void){
   wAirspaceColoursList->SetBorderKind(BORDERLEFT);
   wAirspaceColoursList->SetEnterCallback(OnAirspaceColoursListEnter);
   wAirspaceColoursList->SetPaintItemCallback(OnAirspaceColoursPaintListItem);
-
-  UpdateList();
+  wAirspaceColoursList->SetLength(NUMAIRSPACECOLORS);
 
   int result = wf->ShowModal();
   result = result == mrOK

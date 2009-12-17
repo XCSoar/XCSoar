@@ -252,7 +252,7 @@ static void OverviewRefreshTask(void) {
   }
 
   LowLimit =0;
-  wTaskList->ResetList();
+  wTaskList->SetLength(UpLimit - LowLimit + 1);
   wTaskList->invalidate();
 
   UpdateCaption();
@@ -342,14 +342,6 @@ static void OnTaskListEnter(WindowControl * Sender,
   }
   OverviewRefreshTask();
 
-}
-
-
-static void OnTaskListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-	(void)Sender;
-  if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = UpLimit-LowLimit+1;
-  }
 }
 
 static void OnCloseClicked(WindowControl * Sender){
@@ -498,7 +490,6 @@ static void OnAdvancedClicked(WindowControl * Sender, WndListFrame::ListInfo_t *
 }
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnTaskListInfo),
   DeclareCallBackEntry(OnDeclareClicked),
   DeclareCallBackEntry(OnCalcClicked),
   DeclareCallBackEntry(OnClearClicked),

@@ -51,9 +51,10 @@ static int page=0;
 static WndForm *wf=NULL;
 static WndListFrame *wDetails=NULL;
 
-static void Update(){
+static int GetActiveFlarmTrafficCount();
 
-  //wDetails->ResetList();
+static void Update(){
+  wDetails->SetLength(GetActiveFlarmTrafficCount());
   wDetails->invalidate();
 }
 
@@ -138,13 +139,6 @@ static int GetActiveFlarmTrafficCount()
 	}
     }
   return count;
-}
-
-static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender;
-  if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = GetActiveFlarmTrafficCount();
-  }
 }
 
 static void SelectAsTeamTrack()
@@ -237,7 +231,6 @@ static void OnListEnter(WindowControl * Sender,
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnTrackClicked),
   DeclareCallBackEntry(OnSetCNClicked),
-  DeclareCallBackEntry(OnDetailsListInfo),
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
 };
@@ -276,13 +269,11 @@ void dlgFlarmTrafficShowModal(void){
   wDetails->SetEnterCallback(OnListEnter);
   wDetails->SetCursorCallback(FlarmCursorCallback);
   wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
-  assert(wDetails!=NULL);
 
   wDetails->SetBorderKind(BORDERLEFT);
 
   page = 0;
 
-  wDetails->ResetList();
   Update();
 
   wf->SetTimerNotify(OnTimerNotify);

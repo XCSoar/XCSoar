@@ -50,11 +50,6 @@ Copyright_License {
 static WndForm *wf=NULL;
 static WndListFrame *wStartPointList=NULL;
 
-static void UpdateList(void){
-  wStartPointList->ResetList();
-  wStartPointList->invalidate();
-}
-
 static void
 OnStartPointPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
@@ -108,15 +103,6 @@ static void OnStartPointListEnter(WindowControl * Sender,
   }
 }
 
-
-static void OnStartPointListInfo(WindowControl * Sender,
-			       WndListFrame::ListInfo_t *ListInfo){
-	(void)Sender;
-  if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = MAXSTARTPOINTS;
-  }
-}
-
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
   wf->SetModalResult(mrOK);
@@ -126,12 +112,12 @@ static void OnClearClicked(WindowControl * Sender){
   (void)Sender;
   task.ClearStartPoints();
   changed = true;
-  UpdateList();
+
+  wStartPointList->invalidate();
 }
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnStartPointListInfo),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnClearClicked),
   DeclareCallBackEntry(NULL)
@@ -161,8 +147,7 @@ void dlgStartPointShowModal(void) {
   wStartPointList->SetBorderKind(BORDERLEFT);
   wStartPointList->SetEnterCallback(OnStartPointListEnter);
   wStartPointList->SetPaintItemCallback(OnStartPointPaintListItem);
-
-  UpdateList();
+  wStartPointList->SetLength(MAXSTARTPOINTS);
 
   changed = false;
 

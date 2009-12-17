@@ -58,13 +58,6 @@ int dlgAirspaceColoursShowModal(void);
 int dlgAirspacePatternsShowModal(void);
 
 static void
-UpdateList(void)
-{
-  wAirspaceList->ResetList();
-  wAirspaceList->invalidate();
-}
-
-static void
 OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
   TCHAR label[40];
@@ -198,16 +191,6 @@ OnAirspaceListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
 }
 
 static void
-OnAirspaceListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
-{
-  (void)Sender;
-
-  if (ListInfo->DrawIndex == -1) {
-    ListInfo->ItemCount = AIRSPACECLASSCOUNT;
-  }
-}
-
-static void
 OnCloseClicked(WindowControl * Sender)
 {
   (void)Sender;
@@ -222,7 +205,6 @@ OnLookupClicked(WindowControl * Sender)
 }
 
 static CallBackTableEntry_t CallBackTable[] = {
-  DeclareCallBackEntry(OnAirspaceListInfo),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnLookupClicked),
   DeclareCallBackEntry(NULL)
@@ -250,8 +232,7 @@ dlgAirspaceShowModal(bool coloredit)
   wAirspaceList->SetBorderKind(BORDERLEFT);
   wAirspaceList->SetEnterCallback(OnAirspaceListEnter);
   wAirspaceList->SetPaintItemCallback(OnAirspacePaintListItem);
-
-  UpdateList();
+  wAirspaceList->SetLength(AIRSPACECLASSCOUNT);
 
   changed = false;
 

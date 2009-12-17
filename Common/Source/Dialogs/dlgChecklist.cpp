@@ -84,7 +84,7 @@ static void NextPage(int Step){
   }
   wf->SetCaption(buffer);
 
-  wDetails->ResetList();
+  wDetails->SetLength(nTextLines - 1);
   wDetails->invalidate();
 }
 
@@ -118,16 +118,6 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 text + nstart, nlen);
 }
-
-
-static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender;
-  if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = nTextLines-1;
-  }
-}
-
-
 
 static void OnNextClicked(WindowControl * Sender){
   (void)Sender;
@@ -172,7 +162,6 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(OnDetailsListInfo),
   DeclareCallBackEntry(NULL)
 };
 

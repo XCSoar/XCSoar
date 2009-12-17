@@ -13,7 +13,7 @@
 
   <WndButton   Name="cmdLookup" Caption="Lookup"    X=85 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnLookupClicked"/>
 
-  <WndListFrame Name="frmAirspaceList" X=0 Y=0 Width=238 Height=250 Font=2 OnListInfo="OnAirspaceListInfo">
+  <WndListFrame Name="frmAirspaceList" X=0 Y=0 Width=238 Height=250 Font=2>
     <WndFrame Name="frmAirspaceListEntry" X=2 Y=2 Width=226 Height=18 Font=2/>
   </WndListFrame>
 

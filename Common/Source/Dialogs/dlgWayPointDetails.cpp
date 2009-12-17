@@ -152,11 +152,6 @@ NextPage(int Step)
   wCommand->set_visible(page == 2);
   wSpecial->set_visible(page == 3);
   wImage->set_visible(page > 4);
-
-  if (page == 1) {
-    wDetails->ResetList();
-    wDetails->invalidate();
-  }
 }
 
 static void
@@ -184,14 +179,6 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
   if (nlen > 0)
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 text + nstart, nlen);
-}
-
-static void
-OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
-{
-  (void)Sender;
-  if (ListInfo->DrawIndex == -1)
-    ListInfo->ItemCount = nTextLines - 1;
 }
 
 static void
@@ -380,7 +367,6 @@ OnImagePaint(WindowControl *Sender, Canvas &canvas)
 static CallBackTableEntry_t CallBackTable[] = {
     DeclareCallBackEntry(OnNextClicked),
     DeclareCallBackEntry(OnPrevClicked),
-    DeclareCallBackEntry(OnDetailsListInfo),
     DeclareCallBackEntry(NULL)
 };
 
@@ -517,6 +503,7 @@ dlgWayPointDetailsShowModal(void)
   assert(wDetails != NULL);
 
   nTextLines = TextToLineOffsets(way_point.Details, LineOffsets, MAXLINES);
+  wDetails->SetLength(nTextLines - 1);
 
   /*
   TODO enhancement: wpdetails

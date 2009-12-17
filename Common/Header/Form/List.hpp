@@ -146,18 +146,14 @@ protected:
 
   ListInfo_t mListInfo;
 
-  OnListCallback_t mOnListCallback;
   OnListCallback_t mOnListEnterCallback;
   CursorCallback_t CursorCallback;
   PaintItemCallback_t PaintItemCallback;
 
 public:
   WndListFrame(WindowControl *Owner, const TCHAR *Name,
-               int X, int Y, int Width, int Height,
-               void (*OnListCallback)(WindowControl *Sender,
-                                      ListInfo_t *ListInfo));
+               int X, int Y, int Width, int Height);
 
-  void ResetList(void);
   void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
 
   void SetCursorCallback(CursorCallback_t cb) {
@@ -170,6 +166,18 @@ public:
 
   int GetItemIndex(void) { return mListInfo.ItemIndex; }
   void SetItemIndex(int iValue);
+
+  /**
+   * @return the number of items in the list
+   */
+  unsigned GetLength() const {
+    return mListInfo.ItemCount;
+  }
+
+  /**
+   * Changes the number of items in the list.
+   */
+  void SetLength(unsigned n);
 
   int GetCursorIndex() const {
     return mListInfo.ScrollIndex + mListInfo.ItemIndex;
