@@ -199,6 +199,8 @@ InputEvents::readFile()
       #include "InputEvents_pc.cpp"
     } else if (is_altair()) {
       #include "InputEvents_altair.cpp"
+    } else if (is_pna()) {
+      #include "InputEvents_pna.cpp"
     } else {
       #include "InputEvents_defaults.cpp"
     }
