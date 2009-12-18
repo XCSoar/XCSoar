@@ -130,7 +130,10 @@ MainWindow::on_color(Window &window, Canvas &canvas)
 bool
 MainWindow::on_activate()
 {
+  TopWindow::on_activate();
+
   full_screen();
+
   return true;
 }
 
