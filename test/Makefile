@@ -4,12 +4,9 @@
 
 topdir = ..
 
-SRC = $(topdir)/Common/Source
-HDR = $(topdir)/Common/Header
-
+include $(topdir)/build/common.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
-include $(topdir)/build/verbose.mk
 include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
