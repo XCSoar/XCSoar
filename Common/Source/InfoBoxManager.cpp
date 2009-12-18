@@ -358,7 +358,6 @@ InfoBoxManager::Event_Select(int i)
   } else {
     InfoBoxes[i]->set_focus();
     DisplayInfoBox();
-    InputEvents::setMode(InputEvents::MODE_INFOBOX);
   }
 }
 
