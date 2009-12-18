@@ -191,7 +191,9 @@ Window::get_root_owner()
   }
 #endif
 
-  return (ContainerWindow *)get(hRoot);
+  /* can't use the "checked" method get() because hRoot may be a
+     dialog, and uses Dialog::DlgProc() */
+  return (ContainerWindow *)get_unchecked(hRoot);
 #endif /* !ENABLE_SDL */
 }
 
