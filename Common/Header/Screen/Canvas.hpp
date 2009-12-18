@@ -324,6 +324,10 @@ public:
     return text_size(text).cx;
   }
 
+  unsigned text_height(const TCHAR *text) const {
+    return text_size(_T("W")).cy;
+  }
+
   void text(int x, int y, const TCHAR *text);
 
   void text(int x, int y, const TCHAR *text, size_t length) {
@@ -692,6 +696,8 @@ public:
   unsigned text_width(const TCHAR *text) const {
     return text_size(text).cx;
   }
+
+  unsigned text_height(const TCHAR *text) const;
 
   void text(int x, int y, const TCHAR *text);
   void text(int x, int y, const TCHAR *text, size_t length);

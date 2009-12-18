@@ -671,6 +671,14 @@ Canvas::text_size(const TCHAR *text) const
   return text_size(text, _tcslen(text));
 }
 
+unsigned
+Canvas::text_height(const TCHAR *text) const
+{
+  TEXTMETRIC tm;
+  GetTextMetrics(dc, &tm);
+  return tm.tmHeight;
+}
+
 void
 Canvas::text(int x, int y, const TCHAR *text)
 {
