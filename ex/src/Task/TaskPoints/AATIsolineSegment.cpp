@@ -45,6 +45,7 @@ AATIsolineSegment::AATIsolineSegment(const AATPoint& ap):
 
   t_up = icf_up.solve();
   t_down = icf_down.solve();
+
   if ((t_up<-fixed_half) || (t_down<-fixed_half)) {
     t_up = fixed_zero;
     t_down = fixed_zero;

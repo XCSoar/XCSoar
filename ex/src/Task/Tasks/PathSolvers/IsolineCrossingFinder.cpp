@@ -60,22 +60,30 @@ IsolineCrossingFinder::f(const fixed t)
 
   // note: use of isInSector is slow!
   if (aap.isInSector(s)) {
-    return fixed_one;
+    // attract solutions away from t
+    return fixed_one-fabs(t);
   } else {
-    return -fixed_one;
+    // attract solutions towards t
+    return -fixed_one-fabs(t);
   }
 }
+
+#define bsgn(x) (x<fixed_zero? false:true)
 
 bool 
 IsolineCrossingFinder::valid(const fixed x) 
 {
-  return positive(f(x)) || positive(f(x+tolerance)) || positive(f(x-tolerance));
+  const bool bsgn_0 = bsgn(f(x));
+  const bool bsgn_m = bsgn(f(x-tolerance));
+  const bool bsgn_p = bsgn(f(x+tolerance));
+
+  return (bsgn_0^bsgn_m) || (bsgn_0^bsgn_p);
 }
 
 fixed 
 IsolineCrossingFinder::solve() 
 {
-  const fixed sol = find_zero((xmax+xmin)/2);
+  const fixed sol = find_zero((xmax+xmin)*fixed_half);
   if (valid(sol)) {
     return sol;
   } else {
