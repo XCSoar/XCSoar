@@ -783,6 +783,20 @@ InputEvents::processButton(int bindex)
   return false;
 }
 
+unsigned
+InputEvents::key_to_event(mode mode, unsigned key_code)
+{
+  if (key_code >= MAX_KEY)
+    return 0;
+
+  unsigned event_id = Key2Event[mode][key_code];
+  if (event_id == 0)
+    /* not found in this mode - try the default binding */
+    event_id = Key2Event[0][key_code];
+
+  return event_id;
+}
+
 /*
   InputEvent::processKey(KeyID);
   Process keys normally brought in by hardware or keyboard presses
@@ -799,29 +813,11 @@ InputEvents::processKey(int dWord)
   InterfaceTimeoutReset();
   */
 
-  int event_id;
-
-  // Valid input ?
-  if ((dWord < 0) || (dWord > MAX_KEY))
-    return false;
-
   // get current mode
   InputEvents::mode mode = InputEvents::getModeID();
 
   // Which key - can be defined locally or at default (fall back to default)
-  event_id = Key2Event[mode][dWord];
-
-  #ifdef VENTA_DEBUG_KEY
-  // VENTA- DEBUG HARDWARE KEY PRESSED
-  TCHAR ventabuffer[80];
-  _stprintf(ventabuffer,TEXT("PRCKEY %d MODE %d EVENT %d"), dWord, mode,event_id);
-  DoStatusMessage(ventabuffer);
-  #endif
-
-  if (event_id == 0) {
-    // go with default key..
-    event_id = Key2Event[0][dWord];
-  }
+  int event_id = key_to_event(mode, dWord);
 
   if (event_id <= 0)
     return false;
