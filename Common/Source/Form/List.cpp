@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Form/List.hpp"
+#include "Screen/Layout.hpp"
 
 #include <assert.h>
 
@@ -46,9 +47,12 @@ using std::min;
 using std::max;
 
 WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
-                           int X, int Y, int Width, int Height):
+                           int X, int Y, int Width, int Height,
+                           unsigned _item_height):
   WindowControl(Owner, NULL, Name, X, Y, Width, Height),
-  length(0), origin(0), items_visible(1), relative_cursor(0),
+  item_height(_item_height),
+  length(0), origin(0), items_visible(Height / item_height),
+  relative_cursor(0),
   ActivateCallback(NULL),
   CursorCallback(NULL),
   PaintItemCallback(NULL)
@@ -64,9 +68,6 @@ WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
 void
 WndListFrame::show_or_hide_scroll_bar()
 {
-  if (mClientCount == 0)
-    return;
-
   const SIZE size = get_size();
 
   if (length > items_visible)
@@ -88,15 +89,14 @@ WndListFrame::on_resize(unsigned width, unsigned height)
 void
 WndListFrame::on_paint(Canvas &canvas)
 {
-  if (mClientCount > 0)
-    mClients[0]->hide();
-
   WindowControl::on_paint(canvas);
 
-  if (PaintItemCallback != NULL && mClientCount > 0) {
+  if (PaintItemCallback != NULL) {
     // paint using the PaintItemCallback
-    RECT rc = mClients[0]->get_position();
+    RECT rc;
+    rc.left = rc.top = Layout::FastScale(2);
     rc.right = scroll_bar.get_left(get_size()) - rc.left;
+    rc.bottom = rc.top + item_height;
 
     canvas.set_text_color(GetForeColor());
     canvas.set_background_color(GetBackColor());
@@ -130,6 +130,16 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
 }
 
 void
+WndListFrame::SetItemHeight(unsigned _item_height)
+{
+  item_height = _item_height;
+  items_visible = get_size().cy / item_height;
+
+  show_or_hide_scroll_bar();
+  invalidate();
+}
+
+void
 WndListFrame::SetLength(unsigned n)
 {
   if (n == length)
@@ -144,9 +154,7 @@ WndListFrame::SetLength(unsigned n)
   else if (cursor >= n)
     cursor = n - 1;
 
-  items_visible = mClientCount > 0
-    ? max(1U, (unsigned)(get_size().cy / mClients[0]->get_size().cy))
-    : 1;
+  items_visible = get_size().cy / item_height;
 
   if (n <= items_visible)
     origin = 0;
@@ -286,7 +294,7 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 {
   (void)xPos;
 
-  int index = yPos / mClients[0]->get_size().cy; // yPos is offset within ListEntry item!
+  int index = yPos / item_height; // yPos is offset within ListEntry item!
 
   if (index >= 0 && index + relative_cursor < length) {
     if ((unsigned)index == relative_cursor) {
@@ -352,7 +360,6 @@ WndListFrame::on_mouse_down(int x, int y)
     invalidate();
   }
   else
-  if (mClientCount > 0)
   {
     SelectItemFromScreen(x, y);
   }

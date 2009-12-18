@@ -13,10 +13,7 @@
   <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=270 Width=60  Height=28 Font=2 Tag=3 />
 
-  <WndListFrame Name=frmDetails X=0 Y=0 Width=240 Height=220 Font=3>
-    <WndFrame Name=frmDetailsEntry X=2 Y=2 Width=235 Height=18 Font=3/>
-  </WndListFrame>
-
+  <WndListFrame Name=frmDetails X=0 Y=0 Width=240 Height=220 ItemHeight=18 Font=3/>
 </WndForm>
 
 </PMML>

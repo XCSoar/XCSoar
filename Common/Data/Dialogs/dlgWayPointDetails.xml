@@ -28,9 +28,7 @@
 
   </WndFrame>
 
-  <WndListFrame Name=frmDetails X=70 Y=0 Width=246 Height=222 Font=3>
-    <WndFrame Name=frmDetailsEntry X=2 Y=2 Width=235 Height=18 Font=3/>
-  </WndListFrame>
+  <WndListFrame Name=frmDetails X=70 Y=0 Width=246 Height=222 ItemHeight=18 Font=3/>
 
   <WndFrame Name="frmCommands" X=70 Y=0 Width=246 Height=222 Font=2 Visible=0>
 

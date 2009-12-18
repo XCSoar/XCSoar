@@ -9,9 +9,7 @@
 
 <WndForm Name="frmAirspaceWarning" Type="Dialog" X=2 Y=2 Width=236 Height=172 Caption="Airspace Warnings" Font=2 BackColor=0xDADBAB>
 
-  <WndListFrame Name=frmAirspaceWarningList X=0 Y=2 Width=234 Height=110 Font=2>
-    <WndFrame X=0 Y=0 Width=222 Height=30 Font=2/>
-  </WndListFrame>
+  <WndListFrame Name=frmAirspaceWarningList X=0 Y=2 Width=234 Height=110 ItemHeight=30 Font=2/>
 
   <WndButton   name="cmdAckOutside" Caption="ACK Warn"    X=1   Y=114 width=46 height=36 Font=2 OnClickNotify="OnAck1Clicked"/>
   <WndButton   name="cmdAck"        Caption="ACK Space"   X=47  Y=114 width=46 height=36 Font=2 OnClickNotify="OnAckClicked"/>

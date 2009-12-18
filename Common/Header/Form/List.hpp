@@ -136,6 +136,11 @@ protected:
   ScrollBar scroll_bar;
 
   /**
+   * The height of one item on the screen, in pixels.
+   */
+  unsigned item_height;
+
+  /**
    * The number of items in the list.
    */
   unsigned length;
@@ -161,7 +166,8 @@ protected:
 
 public:
   WndListFrame(WindowControl *Owner, const TCHAR *Name,
-               int X, int Y, int Width, int Height);
+               int X, int Y, int Width, int Height,
+               unsigned _item_height);
 
   void SetActivateCallback(ActivateCallback_t cb) {
     ActivateCallback = cb;
@@ -174,6 +180,8 @@ public:
   void SetPaintItemCallback(PaintItemCallback_t cb) {
     PaintItemCallback = cb;
   }
+
+  void SetItemHeight(unsigned _item_height);
 
   /**
    * @return the number of items in the list
