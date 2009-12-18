@@ -207,6 +207,7 @@ public:
     if (m_layer == 3) {
       draw_bearing(tp);
     }
+    m_index++;
   }
 
   void draw_ordered(const OrderedTaskPoint& tp) {
