@@ -42,5 +42,18 @@ AATIsoline::AATIsoline(const AATPoint& ap):
       ap.get_location_target(),
       ap.get_task_projection())
 {
+
+  GEOPOINT a;
+  a = ap.get_previous()->get_location_remaining();
+  printf("previous remaining ");
+  printf("%g %g\n", a.Longitude.as_double(), a.Latitude.as_double());
+
+  a = ap.get_next()->get_location_remaining();
+  printf("next remaining ");
+  printf("%g %g\n", a.Longitude.as_double(), a.Latitude.as_double());
+
+  a = ap.get_location_target();
+  printf("target ");
+  printf("%g %g\n", a.Longitude.as_double(), a.Latitude.as_double());
 }
 

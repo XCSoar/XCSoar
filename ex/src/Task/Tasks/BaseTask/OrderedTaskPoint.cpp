@@ -127,13 +127,13 @@ OrderedTaskPoint::scan_active(OrderedTaskPoint* atp)
 
 
 bool
-OrderedTaskPoint::search_boundary_points()
+OrderedTaskPoint::search_boundary_points() const
 {
   return m_active_state == AFTER_ACTIVE;
 }
 
 bool
-OrderedTaskPoint::search_nominal_if_unsampled()
+OrderedTaskPoint::search_nominal_if_unsampled() const
 {
   return m_active_state == BEFORE_ACTIVE;
 }

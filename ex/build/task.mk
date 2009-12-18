@@ -32,6 +32,7 @@ TASK_SRC	:=\
 	$(topdir)/src/Navigation/Memento/DistanceMemento.cpp \
 	$(topdir)/src/Navigation/Memento/GeoVectorMemento.cpp \
 	$(topdir)/src/Navigation/Geometry/GeoVector.cpp \
+	$(topdir)/src/Navigation/Geometry/GeoEllipse.cpp \
 	$(topdir)/src/Navigation/Flat/FlatBoundingBox.cpp \
 	$(topdir)/src/Navigation/Flat/FlatGeoPoint.cpp \
 	$(topdir)/src/Navigation/Flat/FlatRay.cpp \

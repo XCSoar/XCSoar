@@ -85,6 +85,15 @@ public:
   TaskPoint* getActiveTaskPoint() const;
 
 /** 
+ * Retrieves the active task point index.
+ * 
+ * @return Index of active task point sequence
+ */
+  unsigned getActiveIndex() const {
+    return activeTaskPoint;
+  }
+
+/** 
  * Set active task point index
  * 
  * @param index Desired active index of task sequence

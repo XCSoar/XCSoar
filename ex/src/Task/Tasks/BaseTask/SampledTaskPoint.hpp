@@ -165,14 +165,14 @@ private:
  *
  * @return Vector of boundary points representing a closed polygon
  */
-  virtual bool search_nominal_if_unsampled() = 0;
+  virtual bool search_nominal_if_unsampled() const = 0;
 
 /** 
  * Determines whether to return sampled or boundary points for max/min search
  *
  * @return Vector of boundary points representing a closed polygon
  */
-  virtual bool search_boundary_points() = 0;
+  virtual bool search_boundary_points() const = 0;
 
 /** 
  * Retrieve interior sample polygon.
@@ -183,7 +183,7 @@ private:
  * 
  * @return Vector of boundary points representing a closed polygon
  */
-    const SearchPointVector& get_search_points();
+  const SearchPointVector& get_search_points() const;
 
 /** 
  * Set the location of the sample/boundary polygon node
@@ -213,6 +213,7 @@ private:
  */
   void clear_sample_points();
 
+  SearchPointVector m_nominal_point;
   SearchPointVector m_sampled_points;
   SearchPointVector m_boundary_points;
   SearchPoint m_search_max;

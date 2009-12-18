@@ -34,51 +34,37 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "IsolineCrossingFinder.hpp"
-#include "Navigation/Geometry/GeoEllipse.hpp"
-#include "Task/TaskPoints/AATPoint.hpp"
-#include "Util/Tolerances.hpp"
+#include "GeoEllipse.hpp"
 
-IsolineCrossingFinder::IsolineCrossingFinder(const AATPoint& _aap,
-                                             const GeoEllipse &_ell,
-                                             const fixed _xmin, 
-                                             const fixed _xmax):
-  ZeroFinder(_xmin, _xmax, TOLERANCE_ISOLINE_CROSSING),
-  aap(_aap),
-  ell(_ell)
+GeoEllipse::GeoEllipse(const GEOPOINT &f1, const GEOPOINT &f2,
+                       const GEOPOINT &p,
+                       const TaskProjection &_task_projection): 
+  task_projection(_task_projection)
 {
-
+  ell = FlatEllipse(task_projection.fproject(f1),
+                    task_projection.fproject(f2),
+                    task_projection.fproject(p));
 }
 
-
-fixed 
-IsolineCrossingFinder::f(const fixed t) 
-{
-  const GEOPOINT a = ell.parametric(t);
-  AIRCRAFT_STATE s;
-  s.Location = a;
-
-  // note: use of isInSector is slow!
-  if (aap.isInSector(s)) {
-    return fixed_one;
-  } else {
-    return -fixed_one;
-  }
+GEOPOINT 
+GeoEllipse::parametric(double t) const {
+  const FlatPoint fp = ell.parametric(t);
+  return task_projection.funproject(fp);
 }
 
 bool 
-IsolineCrossingFinder::valid(const fixed x) 
+GeoEllipse::intersect_extended(const GEOPOINT &p,
+                               GEOPOINT &i1,
+                               GEOPOINT &i2) const 
 {
-  return positive(f(x)) || positive(f(x+tolerance)) || positive(f(x-tolerance));
-}
-
-fixed 
-IsolineCrossingFinder::solve() 
-{
-  const fixed sol = find_zero((xmax+xmin)/2);
-  if (valid(sol)) {
-    return sol;
+  const FlatPoint pf = task_projection.fproject(p);
+  FlatPoint i1f, i2f;
+  if (ell.intersect_extended(pf,i1f,i2f)) {
+    i1 = task_projection.funproject(i1f);
+    i2 = task_projection.funproject(i2f);
+    return true;
   } else {
-    return -fixed_one;
+    return false;
   }
 }
+

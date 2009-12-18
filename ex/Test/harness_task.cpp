@@ -11,6 +11,9 @@
 class ObservationZoneVisitorPrint: public ObservationZoneVisitor
 {
 public:
+  virtual void Visit(const FAISectorZone& oz) {
+    printf("# fai sect zone\n");
+  }
   virtual void Visit(const SectorZone& oz) {
     printf("# sector zone\n");
   }

@@ -215,8 +215,8 @@ protected:
 
 private:
 
-  bool search_nominal_if_unsampled();
-  bool search_boundary_points();
+  bool search_nominal_if_unsampled() const;
+  bool search_boundary_points() const;
 
   ActiveState_t m_active_state; /**< ActiveState determined from scan_active() */
 
