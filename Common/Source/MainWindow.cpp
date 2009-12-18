@@ -177,13 +177,3 @@ bool MainWindow::on_close() {
   }
   return true;
 }
-
-bool
-MainWindow::on_setfocus()
-{
-  TopWindow::on_setfocus();
-
-  /* pass the focus on to the map window */
-  map.set_focus();
-  return true;
-}
