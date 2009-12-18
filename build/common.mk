@@ -1,4 +1,4 @@
-MAKEFLAGS += -r
+MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 
 include $(topdir)/build/verbose.mk
 
