@@ -823,38 +823,37 @@ InputEvents::processKey(int dWord)
     event_id = Key2Event[0][dWord];
   }
 
-  if (event_id > 0) {
-    int bindex = -1;
-    InputEvents::mode lastMode = mode;
-    const TCHAR *pLabelText = NULL;
+  if (event_id <= 0)
+    return false;
 
-    // JMW should be done by gui handler
-    // if (!Debounce()) return true;
+  int bindex = -1;
+  InputEvents::mode lastMode = mode;
+  const TCHAR *pLabelText = NULL;
 
-    int i;
-    for (i = ModeLabel_count[mode]; i >= 0; i--) {
-      if ((ModeLabel[mode][i].event == event_id)) {
-        bindex = ModeLabel[mode][i].location;
-        pLabelText = ModeLabel[mode][i].label;
-        if (bindex > 0) {
-          ButtonLabel::AnimateButton(bindex);
-        }
+  // JMW should be done by gui handler
+  // if (!Debounce()) return true;
+
+  int i;
+  for (i = ModeLabel_count[mode]; i >= 0; i--) {
+    if ((ModeLabel[mode][i].event == event_id)) {
+      bindex = ModeLabel[mode][i].location;
+      pLabelText = ModeLabel[mode][i].label;
+      if (bindex > 0) {
+        ButtonLabel::AnimateButton(bindex);
       }
     }
-
-    if (bindex < 0 || ButtonLabel::hWndButtonWindow[bindex].is_enabled())
-      InputEvents::processGo(event_id);
-
-    // experimental: update button text, macro may change the value
-    if ((lastMode == getModeID()) && (bindex > 0) && (pLabelText != NULL)
-        && ButtonLabel::ButtonVisible[bindex]) {
-      drawButtons(lastMode);
-    }
-
-    return true;
   }
 
-  return false;
+  if (bindex < 0 || ButtonLabel::hWndButtonWindow[bindex].is_enabled())
+    InputEvents::processGo(event_id);
+
+  // experimental: update button text, macro may change the value
+  if ((lastMode == getModeID()) && (bindex > 0) && (pLabelText != NULL)
+      && ButtonLabel::ButtonVisible[bindex]) {
+    drawButtons(lastMode);
+  }
+
+  return true;
 }
 
 bool
