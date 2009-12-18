@@ -48,10 +48,6 @@ cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH)
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) -c -o $@ $(cxx-flags) $<
 
-%-$(TARGET).o: %.cxx
-	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) -c -o $@ $(cxx-flags) $<
-
 %-$(TARGET)-Simulator.o: %.c
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) -c -o $@ $(cc-flags) -D_SIM_ $<
@@ -59,7 +55,3 @@ cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH)
 %-$(TARGET)-Simulator.o: %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) -c -o $@ $(cxx-flags) -D_SIM_ $<
-
-%-$(TARGET)-Simulator.o: %.cxx
-	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) -c -c -o $@ $(cxx-flags) -D_SIM_ $<
