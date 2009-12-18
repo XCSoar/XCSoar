@@ -599,7 +599,7 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
     if (Name) {
 
       int w0, w1, w2, w3, x1, x2, x3;
-      w0 = Layout::FastScale(Layout::landscape ? 202 : 225);
+      w0 = rc.right - rc.left - Layout::FastScale(4);
       w1 = canvas.text_width(_T("XXX"));
       w2 = canvas.text_width(_T(" 000km"));
       w3 = canvas.text_width(_T(" 000")_T(DEG));

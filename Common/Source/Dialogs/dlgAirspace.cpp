@@ -111,7 +111,7 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
   }
 
   int w1, w2, x0;
-  int w0 = Layout::FastScale(Layout::landscape ? 202 : 225);
+  int w0 = rc.right - rc.left - Layout::FastScale(4);
 
   w1 = canvas.text_width(gettext(_T("Warn"))) + Layout::FastScale(10);
   w2 = canvas.text_width(gettext(_T("Display"))) + Layout::FastScale(10);

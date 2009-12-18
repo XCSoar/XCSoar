@@ -124,7 +124,7 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
   unsigned n = UpLimit - LowLimit;
   TCHAR sTmp[120];
 
-  int w0 = Layout::FastScale(Layout::landscape ? 200 : 210);
+  int w0 = rc.right - rc.left - Layout::FastScale(4);
   int w1 = canvas.text_width(_T(" 000km"));
   int w2 = canvas.text_width(_T("  000")_T(DEG));
 
