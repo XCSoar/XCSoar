@@ -194,6 +194,7 @@ public:
 
   void set_layer(unsigned set) {
     m_layer = set;
+    m_index = 0;
   }
 
   void Visit(const UnorderedTaskPoint& tp) {
