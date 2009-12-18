@@ -38,6 +38,7 @@
 #include "GlideState.hpp"
 #include <math.h>
 #include "Math/NavFunctions.hpp"
+#include "Navigation/Aircraft.hpp"
 
 GlideResult::GlideResult(const GlideState &task, 
                          const fixed V):
@@ -50,6 +51,7 @@ GlideResult::GlideResult(const GlideState &task,
     TimeElapsed(fixed_zero),
     TimeVirtual(fixed_zero),
     AltitudeDifference(task.AltitudeDifference),
+    AltitudeRequired(task.AltitudeDifference),
     EffectiveWindSpeed(task.EffectiveWindSpeed),
     EffectiveWindAngle(task.EffectiveWindAngle),
     HeadWind(task.HeadWind),
@@ -57,6 +59,13 @@ GlideResult::GlideResult(const GlideState &task,
 {
 }
 
+
+void
+GlideResult::calc_deferred(const AIRCRAFT_STATE& state)
+{
+  AltitudeRequired = AltitudeDifference + state.Altitude;
+  calc_cruise_bearing();
+}
 
 void
 GlideResult::calc_cruise_bearing()

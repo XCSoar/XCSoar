@@ -42,6 +42,7 @@
 #include <iostream>
 #endif
 #include "DistanceStat.hpp"
+#include "TaskVario.hpp"
 
 struct AIRCRAFT_STATE;
 
@@ -56,21 +57,13 @@ public:
  * Constructor.  Initialises all to zero.
  * 
  */
-  ElementStat():
-    TimeStarted(-1.0),
-    TimeElapsed(0.0),
-    TimeRemaining(0.0),
-    TimePlanned(0.0),
-    gradient(0.0),
-    initialised(false)
-    {
-    };
+  ElementStat();
 
-  double TimeStarted; /**< Time (s) this element was started */
-  double TimeElapsed; /**< Time (s) since element was started */
-  double TimeRemaining; /**< Time (s) to element completion */
-  double TimePlanned; /**< Time (s) of overall element */
-  double gradient; /**< Gradient to element completion */
+  fixed TimeStarted; /**< Time (s) this element was started */
+  fixed TimeElapsed; /**< Time (s) since element was started */
+  fixed TimeRemaining; /**< Time (s) to element completion */
+  fixed TimePlanned; /**< Time (s) of overall element */
+  fixed gradient; /**< Gradient to element completion */
 
   DistanceRemainingStat remaining_effective; /**< Stats for effective remaining distance of element */
   DistanceRemainingStat remaining; /**< Stats for actual remaining distance of element */
@@ -80,6 +73,9 @@ public:
   GlideResult solution_planned; /**< Glide solution for planned element */
   GlideResult solution_travelled; /**< Glide solution for travelled element */
   GlideResult solution_remaining; /**< Glide solution for remaining element */
+  GlideResult solution_mc0; /**< Glide solution for remaining element, MC=0 */
+
+  TaskVario vario; /**< Rate of change of altitude difference (m/s) */ 
 
 /** 
  * Calculate element times
@@ -103,6 +99,15 @@ public:
  * of incremental speeds.
  */
   void reset();
+
+
+/** 
+ * Determine whether the task (or subtask) is able to be finished
+ * (will fail if MC too low, wind too high etc)
+ * 
+ * @return True if can finish the task
+ */
+  bool achievable() const;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 

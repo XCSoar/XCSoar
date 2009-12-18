@@ -41,6 +41,7 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 
 struct GlideState;
+struct AIRCRAFT_STATE;
 
 /**
  * Class used to represent a solution to a glide task
@@ -105,16 +106,18 @@ struct GlideResult {
   fixed TimeElapsed;           /**< Time to complete task (s) */
   fixed TimeVirtual;           /**< Equivalent time to recover glided height (s) at MC */
   fixed AltitudeDifference;    /**< Height above/below final glide for this task (m) */
+  fixed AltitudeRequired;      /**< Height required to solve this task (m) */
   fixed EffectiveWindSpeed;    /**< (internal) */
   fixed EffectiveWindAngle;    /**< (internal) */
   fixed HeadWind;              /**< Head wind component (m/s) in cruise */
   GlideResult_t Solution;       /**< Solution validity */
 
-/** 
- * Calculate cruise track bearing from internal variables.
- * This is expensive so is only done on demand.
- */
-  void calc_cruise_bearing();
+  /**
+   * Calculate additional items (CruiseTrackBearing and AltitudeRequired) that were
+   * deferred.
+   * @param state State from which this solution was obtained
+   */
+  void calc_deferred(const AIRCRAFT_STATE &state);
 
 /** 
  * Check whether aircraft can finish this task without
@@ -179,6 +182,16 @@ struct GlideResult {
   friend std::ostream& operator<< (std::ostream& o, 
                                    const GlideResult& gl);
 #endif
+
+private:
+
+/** 
+ * Calculate cruise track bearing from internal variables.
+ * This is expensive so is only done on demand.
+ */
+  void calc_cruise_bearing();
+
+
 };
 
 #endif

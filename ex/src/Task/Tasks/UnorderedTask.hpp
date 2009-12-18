@@ -68,8 +68,9 @@ protected:
   double calc_glide_required(const AIRCRAFT_STATE &state_now);
 
   void glide_solution_remaining(const AIRCRAFT_STATE &state_now, 
-                                        GlideResult &total,
-                                        GlideResult &leg);
+                                const GlidePolar &polar,
+                                GlideResult &total,
+                                GlideResult &leg);
 
   void glide_solution_travelled(const AIRCRAFT_STATE &state_now, 
                                         GlideResult &total,
@@ -99,7 +100,7 @@ protected:
 
   void scan_distance_minmax(const GEOPOINT &ref, 
                             bool full,
-                            double *dmin, double *dmax);
+                            fixed *dmin, fixed *dmax);
 
   double calc_gradient(const AIRCRAFT_STATE &state_now);
 

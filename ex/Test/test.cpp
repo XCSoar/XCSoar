@@ -21,17 +21,17 @@ int main(int argc, char** argv) {
   plan_tests(7);
 
 
-  ok(test_abort(0),"abort",0);
-
-  terrain_height = 500;
-  ok(test_flight(3,0,1.0,true),"high terrain",0);
   terrain_height = 1;
   ok(test_flight(3,0,1.0,true),"basic flight test",0);
+/*
   ok(test_goto(0,5),"goto",0);
   ok(test_null(),"null",0);
   ok(test_flight(2,0,1.0,true),"basic flight test",0);
   ok(test_airspace(100),"airspace 100",0);
-
+  ok(test_abort(0),"abort",0);
+  terrain_height = 500;
+  ok(test_flight(3,0,1.0,true),"high terrain",0);
+*/
   return exit_status();
 }
 

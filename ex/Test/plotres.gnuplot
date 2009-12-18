@@ -56,3 +56,10 @@ plot \
 pause -1
 
 
+set autoscale
+set title "Stats - Task vario"
+plot \
+     'results/res-stats.txt' using 1:11 with lines title "task vario (m/s)"
+pause -1
+
+

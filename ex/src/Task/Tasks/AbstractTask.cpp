@@ -113,8 +113,23 @@ void
 AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
 {
   glide_solution_remaining(state, 
+                           glide_polar,
                            stats.total.solution_remaining,
                            stats.current_leg.solution_remaining);
+
+  if (positive(glide_polar.get_mc())) {
+    GlidePolar polar_mc0 = glide_polar;
+    polar_mc0.set_mc(fixed_zero);
+    
+    glide_solution_remaining(state, 
+                             polar_mc0,
+                             stats.total.solution_mc0,
+                             stats.current_leg.solution_mc0);
+  } else {
+    // no need to re-calculate, just copy
+    stats.total.solution_mc0 = stats.total.solution_remaining;
+    stats.current_leg.solution_mc0 = stats.current_leg.solution_remaining;
+  }
 
   glide_solution_travelled(state, 
                            stats.total.solution_travelled,

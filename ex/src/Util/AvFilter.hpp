@@ -80,7 +80,7 @@ public:
 private:
   std::vector<double> x;
   unsigned n;
-  const unsigned n_max;
+  unsigned n_max; // ideally const but then non-copyable
 };
 
 #endif

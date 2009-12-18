@@ -38,6 +38,19 @@
 #include "Navigation/Aircraft.hpp"
 #include <algorithm>
 
+ElementStat::ElementStat():
+  TimeStarted(-1.0),
+  TimeElapsed(0.0),
+  TimeRemaining(0.0),
+  TimePlanned(0.0),
+  gradient(0.0),
+  initialised(false)
+{
+
+
+}
+
+
 void 
 ElementStat::set_times(const double ts, 
                        const AIRCRAFT_STATE& state)
@@ -68,6 +81,7 @@ ElementStat::calc_speeds(const double dt)
     if ((dt>0) && (TimeElapsed>15)) {
       initialised=true;
     }
+    vario.reset(solution_remaining);
     remaining_effective.calc_incremental_speed(0.0);
     remaining.calc_incremental_speed(0.0);
     planned.calc_incremental_speed(0.0);
@@ -77,5 +91,12 @@ ElementStat::calc_speeds(const double dt)
     remaining.calc_incremental_speed(dt);
     planned.calc_incremental_speed(dt);
     travelled.calc_incremental_speed(dt);
+    vario.update(solution_remaining, dt);
   }
+}
+
+bool
+ElementStat::achievable() const
+{
+  return solution_remaining.Solution == GlideResult::RESULT_OK;
 }

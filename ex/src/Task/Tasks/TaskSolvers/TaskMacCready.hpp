@@ -134,10 +134,7 @@ public:
  * 
  * @return Glide solution of current leg
  */
-  const GlideResult& get_active_solution() {
-    m_gs[m_activeTaskPoint].calc_cruise_bearing();
-    return m_gs[m_activeTaskPoint];
-  };
+  const GlideResult& get_active_solution(const AIRCRAFT_STATE &aircraft);
 
 protected:
 

@@ -68,8 +68,8 @@ public:
     task.Accept(tpv);
     print_distances(task);
     if (task.get_stats().distance_max>task.get_stats().distance_min) {
-      printf("# - dist max %g\n",task.get_stats().distance_max);
-      printf("# - dist min %g\n",task.get_stats().distance_min);
+      printf("# - dist max %g\n",task.get_stats().distance_max.as_double());
+      printf("# - dist min %g\n",task.get_stats().distance_min.as_double());
     }
   };
   virtual void Visit(const GotoTask& task) {
@@ -78,7 +78,7 @@ public:
     print_distances(task);
   };
   virtual void print_distances(const AbstractTask& task) {
-    printf("# - dist nominal %g\n",task.get_stats().distance_nominal);
+    printf("# - dist nominal %g\n",task.get_stats().distance_nominal.as_double());
   };
 private:
   TaskPointVisitorPrint tpv;

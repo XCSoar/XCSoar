@@ -370,7 +370,7 @@ protected:
  */
   void scan_distance_minmax(const GEOPOINT &ref, 
                             bool full,
-                            double *dmin, double *dmax);
+                            fixed *dmin, fixed *dmax);
 
 /** 
  * Calculate task start time.
@@ -395,10 +395,12 @@ protected:
  * Calculate glide result for remainder of task
  * 
  * @param state_now Aircraft state
+ * @param polar Glide polar used for calculation
  * @param total Glide result accumulated for total remaining task
  * @param leg Glide result for current leg of task
  */
   void glide_solution_remaining(const AIRCRAFT_STATE &state_now, 
+                                const GlidePolar &polar,
                                 GlideResult &total,
                                 GlideResult &leg);
 

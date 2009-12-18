@@ -142,12 +142,16 @@ std::ostream& operator<< (std::ostream& f,
   f << es.solution_remaining;
   f << "#  Remaining effective: \n";
   f << es.remaining_effective;
+  f << "#  Remaining mc0: \n";
+  f << es.solution_mc0;
   f << "#  Planned: \n";
   f << es.planned;
   f << es.solution_planned;
   f << "#  Travelled: \n";
   f << es.travelled;
   f << es.solution_travelled;
+  f << "#  Vario: \n";
+  f << es.vario.get_value();
   return f;
 }
 
@@ -274,7 +278,7 @@ AbstractTask::print(const AIRCRAFT_STATE &state)
 
   if (first) {
     first = false;
-    f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc\n";
+    f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc task_vario\n";
   }
 
   if (stats.Time>0) {
@@ -288,6 +292,7 @@ AbstractTask::print(const AIRCRAFT_STATE &state)
        << " " << stats.total.remaining.get_speed_incremental() 
        << " " << stats.total.remaining_effective.get_speed() 
        << " " << stats.total.remaining_effective.get_speed_incremental() 
+       << " " << stats.total.vario.get_value() 
        << "\n";
     f6.flush();
   } else {

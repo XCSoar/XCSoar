@@ -54,19 +54,20 @@ public:
   ElementStat total; /**< Total task statistics */
   ElementStat current_leg; /**< Current (active) leg statistics */
 
-  double Time; /**< Global time (UTC, s) of last update */
+  fixed Time; /**< Global time (UTC, s) of last update */
 
   // calculated values
-  double glide_required; /**< Calculated glide angle required */
-  double cruise_efficiency; /**< Calculated cruise efficiency ratio */
-  double mc_best; /**< Best MacCready setting calculated for final glide (m/s) */
+  fixed glide_required; /**< Calculated glide angle required */
+  fixed cruise_efficiency; /**< Calculated cruise efficiency ratio */
+  fixed mc_best; /**< Best MacCready setting calculated for final glide (m/s) */
 
-  double distance_nominal; /**< Nominal task distance (m) */
-  double distance_max; /**< Maximum achievable task distance (m) */
-  double distance_min; /**< Minimum achievable task distance (m) */
-  double distance_scored; /**< Scored distance (m) */
+  fixed distance_nominal; /**< Nominal task distance (m) */
+  fixed distance_max; /**< Maximum achievable task distance (m) */
+  fixed distance_min; /**< Minimum achievable task distance (m) */
+  fixed distance_scored; /**< Scored distance (m) */
 
   bool task_valid; /**< Whether the task is navigable */
+  bool task_finished; /**< Whether the task is finished */
 
 /** 
  * Reset each element (for incremental speeds).

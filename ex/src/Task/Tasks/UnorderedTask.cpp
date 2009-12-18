@@ -79,6 +79,7 @@ UnorderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft)
 
 void
 UnorderedTask::glide_solution_remaining(const AIRCRAFT_STATE &state, 
+                                        const GlidePolar &polar,
                                         GlideResult &total,
                                         GlideResult &leg)
 {
@@ -86,8 +87,8 @@ UnorderedTask::glide_solution_remaining(const AIRCRAFT_STATE &state,
 
   TaskPoint* tp = getActiveTaskPoint();
   if (tp) {
-    res = TaskSolution::glide_solution_remaining(*tp, state, glide_polar);
-    res.calc_cruise_bearing();
+    res = TaskSolution::glide_solution_remaining(*tp, state, polar);
+    res.calc_deferred(state);
   }
   total = res;
   leg = res;
@@ -136,7 +137,7 @@ UnorderedTask::scan_leg_start_time(const AIRCRAFT_STATE &state)
 
 void 
 UnorderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
-                                    double *dmin, double *dmax)
+                                    fixed *dmin, fixed *dmax)
 {
   *dmin = stats.total.remaining.get_distance();
   *dmax = stats.total.remaining.get_distance();

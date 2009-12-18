@@ -47,13 +47,15 @@ TaskStats::reset()
 {
   total.reset();
   current_leg.reset();
-  Time = 0.0;
-  glide_required = 0.0;
-  cruise_efficiency = 1.0;
-  mc_best = 0.0;
-  distance_nominal = 0.0;
-  distance_max = 0.0;
-  distance_min = 0.0;
-  distance_scored = 0.0;
+  Time = fixed_zero;
+  glide_required = fixed_zero;
+  cruise_efficiency = fixed_one;
+  mc_best = fixed_zero;
+  distance_nominal = fixed_zero;
+  distance_max = fixed_zero;
+  distance_min = fixed_zero;
+  distance_scored = fixed_zero;
   task_valid = false;
+  task_finished = false;
 }
+

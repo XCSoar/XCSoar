@@ -140,7 +140,7 @@ OrderedTask::scan_distance_max()
 void
 OrderedTask::scan_distance_minmax(const GEOPOINT &location, 
                                   bool force,
-                                  double *dmin, double *dmax)
+                                  fixed *dmin, fixed *dmax)
 {
   if (!ts) {
     return;
@@ -265,6 +265,11 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   }
 
   ts->scan_active(tps[activeTaskPoint]);
+
+  if ((activeTaskPoint+1 == tps.size()) && 
+      tps[activeTaskPoint]->has_entered()) {
+    stats.task_finished = true;
+  }
 
   return full_update;
 }
@@ -492,13 +497,14 @@ OrderedTask::validTaskPoint(const int index_offset) const
 
 
 void
-OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft, 
+OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
+                                      const GlidePolar &polar,
                                       GlideResult &total,
                                       GlideResult &leg)
 {
-  TaskMacCreadyRemaining tm(tps,activeTaskPoint,glide_polar);
+  TaskMacCreadyRemaining tm(tps,activeTaskPoint, polar);
   total = tm.glide_solution(aircraft);
-  leg = tm.get_active_solution();
+  leg = tm.get_active_solution(aircraft);
 }
 
 void
@@ -508,7 +514,7 @@ OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft,
 {
   TaskMacCreadyTravelled tm(tps,activeTaskPoint,glide_polar);
   total = tm.glide_solution(aircraft);
-  leg = tm.get_active_solution();
+  leg = tm.get_active_solution(aircraft);
 }
 
 void
@@ -522,7 +528,7 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
 {
   TaskMacCreadyTotal tm(tps,activeTaskPoint,glide_polar);
   total = tm.glide_solution(aircraft);
-  leg = tm.get_active_solution();
+  leg = tm.get_active_solution(aircraft);
 
   total_remaining_effective.
     set_distance(tm.effective_distance(total_t_elapsed));
@@ -641,6 +647,7 @@ OrderedTask::reset()
     (*it)->reset();
   }
   AbstractTask::reset();
+  stats.task_finished = false;
 }
 
 

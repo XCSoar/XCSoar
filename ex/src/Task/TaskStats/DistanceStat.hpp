@@ -127,7 +127,7 @@ private:
   AvFilter av_dist;
   DiffFilter df;
   Filter v_lpf;
-  const bool is_positive;
+  bool is_positive; // ideally const but then non-copyable
 };
 
 /**

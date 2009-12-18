@@ -139,7 +139,7 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
   }
   alt_difference -= gr.HeightClimb;
   gr.AltitudeDifference = alt_difference;
-  gr.calc_cruise_bearing();
+  gr.calc_deferred(aircraft);
   return gr;
 }
 
@@ -170,4 +170,13 @@ TaskMacCready::tp_sink(const unsigned i,
                        const fixed S) const
 {
   return TaskSolution::glide_solution_sink(*m_tps[i], aircraft, m_glide_polar, S);
+}
+
+
+const 
+GlideResult& 
+TaskMacCready::get_active_solution(const AIRCRAFT_STATE &aircraft) 
+{
+  m_gs[m_activeTaskPoint].calc_deferred(aircraft);
+  return m_gs[m_activeTaskPoint];
 }

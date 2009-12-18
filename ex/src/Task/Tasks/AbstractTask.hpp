@@ -333,16 +333,18 @@ protected:
  */
   virtual void scan_distance_minmax(const GEOPOINT &ref, 
                                     bool full,
-                                    double *dmin, double *dmax) = 0;
+                                    fixed *dmin, fixed *dmax) = 0;
 
 /** 
  * Calculate glide result for remainder of task
  * 
  * @param state_now Aircraft state
+ * @param polar Glide polar used for calculation
  * @param total Glide result accumulated for total remaining task
  * @param leg Glide result for current leg of task
  */
   virtual void glide_solution_remaining(const AIRCRAFT_STATE &state_now, 
+                                        const GlidePolar &polar,
                                         GlideResult &total,
                                         GlideResult &leg) = 0;
 
