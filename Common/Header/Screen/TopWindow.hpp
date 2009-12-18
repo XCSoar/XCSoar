@@ -66,6 +66,12 @@ class TopWindow : public ContainerWindow {
 #ifdef ENABLE_SDL
   TopCanvas screen;
 #else /* !ENABLE_SDL */
+
+  /**
+   * On WM_ACTIVATE, the focus is returned to this window.
+   */
+  HWND hSavedFocus;
+
 #ifdef HAVE_ACTIVATE_INFO
   SHACTIVATEINFO s_sai;
 #endif
