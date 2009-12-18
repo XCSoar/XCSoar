@@ -128,6 +128,8 @@ GlideComputer glide_computer(task_manager, airspace_warning);
 
 void default_task() {
 
+  task_behaviour.all_off();
+
   AbstractTaskFactory *fact;
   OrderedTaskPoint *tp;
   const Waypoint *wp;
@@ -146,7 +148,7 @@ void default_task() {
 
   wp = way_points.lookup_name(_T("Goorambat"));
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::FAI_SECTOR,*wp);
+    tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     fact->append(tp,false);
   }
 

@@ -40,6 +40,7 @@ Copyright_License {
 #include "Task/Visitors/TaskVisitor.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
+#include "Task/TaskPoints/AATIsolineSegment.hpp"
 
 #include "MapWindow.h"
 #include "Protection.hpp"
@@ -59,9 +60,11 @@ class DrawObservationZone:
 public:
   DrawObservationZone(MapDrawHelper &_draw)
     :MapDrawHelper(_draw),
-     pen_boundary_active(Pen::SOLID, IBLSCALE(2), MapGfx.TaskColor),
+     pen_boundary_current(Pen::SOLID, IBLSCALE(2), MapGfx.TaskColor),
+     pen_boundary_active(Pen::SOLID, IBLSCALE(1), MapGfx.TaskColor),
      pen_boundary_inactive(Pen::SOLID, IBLSCALE(1), Color(127, 127, 127)),
      m_past(false),
+     m_current(false),
      m_background(false)
     {};
 
@@ -79,7 +82,11 @@ public:
     } else {
       m_buffer.hollow_brush();
       if (is_boundary_active) {
-        m_buffer.select(pen_boundary_active);
+        if (m_current) {
+          m_buffer.select(pen_boundary_current);
+        } else {
+          m_buffer.select(pen_boundary_active);
+        }
       } else {
         m_buffer.select(pen_boundary_inactive); 
       }
@@ -148,16 +155,21 @@ public:
   void set_past(bool set) {
     m_past = set;
   }
+  void set_current(bool set) {
+    m_current = set;
+  }
   void set_background(bool set) {
     m_background = set;
   }
 
 private:
+  const Pen pen_boundary_current;
   const Pen pen_boundary_active;
   const Pen pen_boundary_inactive;
   POINT p_center, p_start, p_end;
   unsigned p_radius;
   bool m_past;
+  bool m_current;
   bool m_background;
 };
 
@@ -168,80 +180,91 @@ class DrawTaskPoint:
 {
 public:
   DrawTaskPoint(MapDrawHelper &_helper, 
-                const TaskPoint* active_tp,
                 const bool draw_bearing)
     :MapDrawHelper(_helper),
-     m_active_tp(active_tp), 
      m_draw_bearing(draw_bearing),
      pen_leg_active(Pen::DASH, IBLSCALE(2), MapGfx.TaskColor),
      pen_leg_inactive(Pen::DASH, IBLSCALE(1), MapGfx.TaskColor),
      pen_isoline(Pen::SOLID, IBLSCALE(2), Color(0,0,255)), 
      m_index(0),
      ozv(*this),
-     m_active_index(0)
+     m_active_index(0),
+     m_layer(0)
     {}
+
+  void set_layer(unsigned set) {
+    m_layer = set;
+  }
 
   void Visit(const UnorderedTaskPoint& tp) {
     buffer_render_start();
 
-    POINT loc;
-    m_map.LonLat2Screen(tp.get_location_remaining(), loc);
-    draw_task_line(m_map.GetOrigAircraft(), loc);
-    draw_bearing(tp);
+    if (m_layer == 1) {
+      POINT loc;
+      m_map.LonLat2Screen(tp.get_location_remaining(), loc);
+      draw_task_line(m_map.GetOrigAircraft(), loc);
+    }
+    if (m_layer == 3) {
+      draw_bearing(tp);
+    }
   }
 
-  void visit_ordered(const OrderedTaskPoint& tp) {
+  void draw_ordered(const OrderedTaskPoint& tp) {
     buffer_render_start();
 
-    ozv.set_past(point_past());
-    ozv.set_background(true);
-    tp.Accept_oz(ozv);
-
-    if (point_current() || point_past()) {
-
-      m_buffer.set_text_color(MapGfx.Colours[m_map.SettingsMap().
-                                           iAirspaceColour[1]]);
-      // get brush, can be solid or a 1bpp bitmap
-      m_buffer.select(MapGfx.hAirspaceBrushes[m_map.SettingsMap().
-                                            iAirspaceBrush[1]]);
-      m_buffer.white_pen();
-
-      draw_search_point_vector(m_buffer, tp.get_sample_points());
+    if (m_layer == 0) {
+      draw_oz_background(tp);
+      draw_samples(tp);
     }
 
-    POINT loc;
-    m_map.LonLat2Screen(tp.get_location_remaining(), loc);    
-    if (m_index>0) {
-      draw_task_line(m_last_point, loc);
+    if (m_layer == 1) {
+      POINT loc;
+      m_map.LonLat2Screen(tp.get_location_remaining(), loc);    
+      if (m_index>0) {
+        draw_task_line(m_last_point, loc);
+      }
+      m_last_point = loc;
     }
-    m_last_point = loc;
 
-    ozv.set_background(false);
-    tp.Accept_oz(ozv);
-
-    draw_bearing(tp);
-    draw_target(tp);
+    if (m_layer == 2) {
+      draw_oz_foreground(tp);
+    }
   }
 
   void Visit(const StartPoint& tp) {
     m_index = 0;
-    visit_ordered(tp);
+    draw_ordered(tp);
+    if (m_layer == 3) {
+      draw_bearing(tp);
+      draw_target(tp);
+    }
   }
   void Visit(const FinishPoint& tp) {
     m_index++;
-    visit_ordered(tp);
+    draw_ordered(tp);
+    if (m_layer == 3) {
+      draw_bearing(tp);
+      draw_target(tp);
+    }
   }
   void Visit(const AATPoint& tp) {
     m_index++;
 
-   // TODO: draw isolines
-
-    visit_ordered(tp);
+    draw_ordered(tp);
+    if (m_layer == 3) {
+      draw_isoline(tp);
+      draw_bearing(tp);
+      draw_target(tp);
+    }
   }
   void Visit(const ASTPoint& tp) {
     m_index++;
 
-    visit_ordered(tp);
+    draw_ordered(tp);
+    if (m_layer == 3) {
+      draw_bearing(tp);
+      draw_target(tp);
+    }
   }
 
   void set_active_index(unsigned active_index) {
@@ -259,17 +282,25 @@ private:
     return (m_index==m_active_index);
   }
 
+  bool do_draw_samples(const TaskPoint& tp) {
+    return point_current() || point_past();
+  }
+
   bool do_draw_bearing(const TaskPoint &tp) {
-    return m_draw_bearing && (&tp == m_active_tp);
+    return m_draw_bearing && point_current();
   }
 
   bool do_draw_target(const TaskPoint &tp) {
     if (!tp.has_target()) {
       return false;
     }
-    return ((&tp == m_active_tp)
+    return (point_current()
             || m_map.SettingsMap().EnablePan 
             || m_map.SettingsMap().TargetPan);
+  }
+
+  bool do_draw_isoline(const TaskPoint &tp) {
+    return do_draw_target(tp);
   }
 
   void draw_bearing(const TaskPoint &tp) {
@@ -299,7 +330,55 @@ private:
     m_buffer.line(start, end);
   }
 
-  const TaskPoint *m_active_tp;
+  void draw_isoline(const AATPoint& tp) {
+    if (!do_draw_isoline(tp)) {
+      return;
+    }
+    AATIsolineSegment seg(tp);
+    if (!seg.valid()) {
+      return;
+    }
+    std::vector<POINT> screen; 
+    for (double t = 0.0; t<=1.0; t+= 1.0/20) {
+      GEOPOINT ga = seg.parametric(t);
+      POINT sc;
+      m_map.LonLat2Screen(ga, sc);
+      screen.push_back(sc);
+    }
+    if (screen.size()>=2) {
+      m_buffer.select(pen_isoline);
+      m_buffer.polyline(&screen[0], screen.size());
+    }
+  }
+
+  void draw_samples(const OrderedTaskPoint& tp) {
+    if (!do_draw_samples(tp)) {
+      return;
+    }
+    m_buffer.set_text_color(MapGfx.Colours[m_map.SettingsMap().
+                                           iAirspaceColour[1]]);
+    // get brush, can be solid or a 1bpp bitmap
+    m_buffer.select(MapGfx.hAirspaceBrushes[m_map.SettingsMap().
+                                            iAirspaceBrush[1]]);
+    m_buffer.white_pen();
+    
+    draw_search_point_vector(m_buffer, tp.get_sample_points());
+  }
+
+  void draw_oz_background(const OrderedTaskPoint& tp) {
+    ozv.set_past(point_past());
+    ozv.set_current(point_current());
+    ozv.set_background(true);
+    tp.Accept_oz(ozv);
+  }
+
+  void draw_oz_foreground(const OrderedTaskPoint& tp) {
+    ozv.set_past(point_past());
+    ozv.set_current(point_current());
+    ozv.set_background(false);
+    tp.Accept_oz(ozv);
+  }
+
   const bool& m_draw_bearing;
   const Pen pen_leg_active;
   const Pen pen_leg_inactive;
@@ -308,6 +387,7 @@ private:
   unsigned m_index;
   DrawObservationZone ozv;
   unsigned m_active_index;
+  unsigned m_layer;
 };
 
 
@@ -318,24 +398,28 @@ class DrawTaskVisitor:
 {
 public:
   DrawTaskVisitor(MapDrawHelper &_helper,
-                  const TaskPoint* active_tp,
                   bool draw_bearing):
     MapDrawHelper(_helper),
-    tpv(*this, active_tp, draw_bearing)
+    tpv(*this, draw_bearing)
     {};
 
-  void visit_general(const AbstractTask& task) {
-    task.Accept(tpv);
+  void draw_layers(const AbstractTask& task) {
+    for (unsigned i=0; i<4; i++) {
+      tpv.set_layer(i);
+      task.Accept(tpv);
+    }
   }
   void Visit(const AbortTask& task) {
-    visit_general(task);
+    tpv.set_active_index(task.getActiveIndex());
+    draw_layers(task);
   }
   void Visit(const OrderedTask& task) {
     tpv.set_active_index(task.getActiveIndex());
-    visit_general(task);
+    draw_layers(task);
   }
   void Visit(const GotoTask& task) {
-    visit_general(task);
+    tpv.set_active_index(0);
+    draw_layers(task);
   }
 private:
   DrawTaskPoint tpv;
@@ -353,9 +437,8 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
 
   terrain->Lock(); 
   {
-    const TaskPoint* active_tp = task->getActiveTaskPoint();
     MapDrawHelper helper(canvas, buffer, *this, rc);
-    DrawTaskVisitor dv(helper, active_tp, draw_bearing);
+    DrawTaskVisitor dv(helper, draw_bearing);
     task->Accept(dv); 
   }
   terrain->Unlock();
