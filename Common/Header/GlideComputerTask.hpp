@@ -102,7 +102,6 @@ private:
 		      const double cruise_efficiency);
   void LegSpeed();
   void TerrainWarning();
-  void DistanceCovered();
   void AATStats_Time();
   void AATStats_Distance();
   void AATStats();
@@ -132,7 +131,6 @@ private:
 protected:
 
   virtual void SaveTaskSpeed(double val) = 0;
-  virtual void SetLegStart();
   virtual void ProcessIdle();
   double FAIFinishHeight(int wp) const;
 private:

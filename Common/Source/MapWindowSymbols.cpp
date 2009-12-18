@@ -512,8 +512,8 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
 
     // 60 units is size, div by 8 means 60*8 = 480 meters.
 
-    Offset = ((int)Calculated().TaskAltitudeDifference)/8;
-    Offset0 = ((int)Calculated().TaskAltitudeDifference0)/8;
+    Offset = ((int)Calculated().task_stats.total.solution_remaining.AltitudeDifference)/8;
+    Offset0 = ((int)Calculated().task_stats.total.solution_mc0.AltitudeDifference)/8;
     // TODO feature: should be an angle if in final glide mode
 
     if(Offset > 60) Offset = 60;
@@ -608,11 +608,9 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       canvas.polygon(GlideBar0, 6);
     }
 
-    // JMW draw x on final glide bar if unreachable at current Mc
-    // hpAircraftBorder
-    if ((Calculated().TaskTimeToGo>0.9*ERROR_TIME)
-        || ((oldGlidePolar::GetMacCready()<0.01)
-            && (Calculated().TaskAltitudeDifference<0))) {
+    // draw x on final glide bar if unreachable at current Mc
+
+    if (!Calculated().task_stats.total.achievable()) {
       canvas.select(MapGfx.hpAircraftBorder);
       POINT Cross[4] = { {-5, -5},
                          { 5,  5},
@@ -629,7 +627,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
     if (Appearance.IndFinalGlide == fgFinalGlideDefault){
 
       _stprintf(Value,TEXT("%1.0f "),
-                ALTITUDEMODIFY*FIXED_DOUBLE(Calculated().TaskAltitudeDifference));
+                ALTITUDEMODIFY*FIXED_DOUBLE(Calculated().task_stats.total.solution_remaining.AltitudeDifference));
 
       if (Offset>=0) {
         Offset = GlideBar[2].y+Offset+IBLSCALE(5);
@@ -654,7 +652,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
         int x = GlideBar[2].x+IBLSCALE(1);
 
         _stprintf(Value, TEXT("%1.0f"),
-                  Units::ToUserAltitude(Calculated().TaskAltitudeDifference));
+                  Units::ToUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference));
 
         canvas.select(MapWindowBoldFont);
         TextSize = canvas.text_size(Value);
@@ -760,13 +758,13 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
     return;
   }
 
-  if (Calculated().WaypointDistance < 0.010)
+  if (Calculated().task_stats.current_leg.solution_remaining.Vector.Distance < 0.010)
     return;
 
   canvas.select(MapGfx.hpBestCruiseTrack);
   canvas.select(MapGfx.hbBestCruiseTrack);
 
-  if (Appearance.BestCruiseTrack == ctBestCruiseTrackDefault){
+  if (Appearance.BestCruiseTrack == ctBestCruiseTrackDefault) {
 
     int dy = (long)(70);
     POINT Arrow[7] = { {-1,-40}, {1,-40}, {1,0}, {6,8}, {-6,8}, {-1,0}, {-1,-40}};
@@ -777,7 +775,7 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
     Arrow[5].y -= dy;
 
     PolygonRotateShift(Arrow, 7, Orig_Aircraft.x, Orig_Aircraft.y,
-                       Calculated().BestCruiseTrack-DisplayAngle);
+                       Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing-DisplayAngle);
 
     canvas.polygon(Arrow, 7);
 
@@ -789,7 +787,7 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
 
     PolygonRotateShift(Arrow, sizeof(Arrow)/sizeof(Arrow[0]),
                        Orig_Aircraft.x, Orig_Aircraft.y,
-                       Calculated().BestCruiseTrack-DisplayAngle);
+                       Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing-DisplayAngle);
     canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
   }
 }
@@ -884,7 +882,8 @@ void MapWindow::DrawCDI() {
 
   if (dodrawcdi) {
     cdi->show();
-    cdi->Update(Basic().TrackBearing, Calculated().WaypointBearing);
+    cdi->Update(Basic().TrackBearing, 
+                Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing);
   } else {
     cdi->hide();
   }

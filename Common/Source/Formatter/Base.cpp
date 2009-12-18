@@ -104,8 +104,8 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = LIFTMODIFY*Calculated().Average30s;
     break;
   case 3:
-    Value = Calculated().WaypointBearing;
-    Valid = Calculated().WaypointDistance > 10.0;
+    Value = Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing;
+    Valid = Calculated().task_stats.current_leg.solution_remaining.Vector.Distance > 10.0;
     break;
   case 4:
     if (Calculated().LD== 999) {
@@ -136,71 +136,53 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = iround(LIFTMODIFY*oldGlidePolar::GetMacCready()*10)/10.0;
     break;
   case 11:
-    Value = DISTANCEMODIFY*Calculated().WaypointDistance;
-#ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex());
-#endif
+    Value = DISTANCEMODIFY*Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 12:
-    Value = ALTITUDEMODIFY*Calculated().NextAltitudeDifference;
-#ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex());
-#endif
+    Value = ALTITUDEMODIFY*Calculated().task_stats.current_leg.solution_remaining.AltitudeDifference;
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 13:
-    Value = ALTITUDEMODIFY*Calculated().NextAltitudeRequired;
-#ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex());
-#endif
+    Value = ALTITUDEMODIFY*Calculated().task_stats.current_leg.solution_remaining.AltitudeRequired;
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 14:
     Value = 0; // Next Waypoint Text
     break;
   case 15:
-    Value = ALTITUDEMODIFY*Calculated().TaskAltitudeDifference;
-#ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex());
-#endif
+    Value = ALTITUDEMODIFY*Calculated().task_stats.total.solution_remaining.AltitudeDifference;
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 16:
-    Value = ALTITUDEMODIFY*Calculated().TaskAltitudeRequired;
-#ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex());
-#endif
+    Value = ALTITUDEMODIFY*Calculated().task_stats.total.solution_remaining.AltitudeRequired;
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 17:
-    Value = TASKSPEEDMODIFY*Calculated().TaskSpeed;
-#ifdef OLD_TASK
-    if (task.getActiveIndex()>=1) {
-      Valid = task.ValidTaskPoint(task.getActiveIndex());
-    } else {
-      Valid = false;
-    }
-#endif
+    Value = TASKSPEEDMODIFY*Calculated().task_stats.total.remaining.get_speed();
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 18:
-    if (Calculated().ValidFinish) {
-      Value = DISTANCEMODIFY*Calculated().WaypointDistance;
+    if (Calculated().task_stats.task_finished) {
+      Value = DISTANCEMODIFY*Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
     } else {
-      Value = DISTANCEMODIFY*Calculated().TaskDistanceToGo;
+      Value = DISTANCEMODIFY*Calculated().task_stats.total.remaining.get_distance();
     }
-#ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex());
-#endif
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 19:
+#ifdef OLD_TASK
     if (Calculated().LDFinish== 999) {
       Valid = false;
     } else {
-#ifdef OLD_TASK
-      Valid = task.ValidTaskPoint(task.getActiveIndex());
+      Valid = Calculated().task_stats.task_valid;
       if (Calculated().ValidFinish) {
         Value = 0;
       } else {
         Value = Calculated().LDFinish;
       }
-#endif
     }
+#endif
     break;
   case 20:
     Value = ALTITUDEMODIFY*Calculated().TerrainAlt ;
@@ -229,34 +211,30 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = Calculated().WindBearing;
     break;
   case 28:
-    Value = DISTANCEMODIFY*Calculated().AATMaxDistance ;
-#ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
-#endif
+    Value = DISTANCEMODIFY*Calculated().task_stats.distance_max;
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 29:
-    Value = DISTANCEMODIFY*Calculated().AATMinDistance ;
-#ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
-#endif
+    Value = DISTANCEMODIFY*Calculated().task_stats.distance_min;
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 30:
-    Value = TASKSPEEDMODIFY*Calculated().AATMaxSpeed;
 #ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
-#endif
+    Value = TASKSPEEDMODIFY*Calculated().AATMaxSpeed;
+    Valid = Calculated().task_stats.task_valid;
     if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }
+#endif
     break;
   case 31:
-    Value = TASKSPEEDMODIFY*Calculated().AATMinSpeed;
 #ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
-#endif
+    Value = TASKSPEEDMODIFY*Calculated().AATMinSpeed;
+    Valid = Calculated().task_stats.task_valid;
     if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }
+#endif
     break;
   case 32:
     Valid = Basic().AirspeedAvailable;
@@ -277,14 +255,14 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = Basic().Gload;
     break;
   case 38:
+#ifdef OLD_TASK
     if (Calculated().LDNext== 999) {
       Valid = false;
     } else {
-#ifdef OLD_TASK
-      Valid = task.ValidTaskPoint(task.getActiveIndex());
-#endif
+      Valid = Calculated().task_stats.task_valid;
       Value = Calculated().LDNext;
     }
+#endif
     break;
   case 43:
     //    Valid = Basic().AirspeedAvailable;
@@ -304,19 +282,17 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = CuSonde::maxGroundTemperature;
     break;
   case 51:
-    Value = DISTANCEMODIFY*Calculated().AATTargetDistance ;
-#ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
-#endif
+    Value = DISTANCEMODIFY*Calculated().task_stats.total.planned.get_distance();
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 52:
-    Value = TASKSPEEDMODIFY*Calculated().AATTargetSpeed;
 #ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled;
-#endif
+    Value = TASKSPEEDMODIFY*Calculated().AATTargetSpeed;
+    Valid = Calculated().task_stats.task_valid;
     if (Calculated().AATTimeToGo<1) {
       Valid = false;
     }
+#endif
     break;
   case 53:
     if (Calculated().LDvario== 999) {
@@ -353,14 +329,8 @@ void InfoBoxFormatter::AssignValue(int i) {
       }
     break;
   case 59:
-    Value = TASKSPEEDMODIFY*Calculated().TaskSpeedInstantaneous;
-#ifdef OLD_TASK
-    if (task.getActiveIndex()>=1) {
-      Valid = task.ValidTaskPoint(task.getActiveIndex());
-    } else {
-      Valid = false;
-    }
-#endif
+    Value = TASKSPEEDMODIFY*Calculated().task_stats.total.remaining_effective.get_speed_incremental();
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 60:
     Value = DISTANCEMODIFY*Calculated().HomeDistance ;
@@ -373,14 +343,8 @@ void InfoBoxFormatter::AssignValue(int i) {
 #endif
     break;
   case 61:
-    Value = TASKSPEEDMODIFY*Calculated().TaskSpeedAchieved;
-#ifdef OLD_TASK
-    if (task.getActiveIndex()>=1) {
-      Valid = task.ValidTaskPoint(task.getActiveIndex());
-    } else {
-      Valid = false;
-    }
-#endif
+    Value = TASKSPEEDMODIFY*Calculated().task_stats.total.remaining_effective.get_speed();
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 63:
     if (Calculated().timeCircling>0) {
@@ -394,13 +358,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 64:
     Value = LIFTMODIFY*Calculated().DistanceVario;
-#ifdef OLD_TASK
-    if (task.getActiveIndex()>=1) {
-      Valid = task.ValidTaskPoint(task.getActiveIndex());
-    } else {
-      Valid = false;
-    }
-#endif
+    Valid = Calculated().task_stats.task_valid;
     break;
   case 65: // battery voltage
 #if !defined(WINDOWSPC) && !defined(HAVE_POSIX)
@@ -421,11 +379,11 @@ void InfoBoxFormatter::AssignValue(int i) {
 #endif
     break;
   case 66: // VENTA-ADDON added GR Final
+#ifdef OLD_TASK
     if (Calculated().GRFinish== 999) {
       Valid = false;
     } else {
-#ifdef OLD_TASK
-      Valid = task.ValidTaskPoint(task.getActiveIndex());
+      Valid = Calculated().task_stats.task_valid;
       if (Calculated().ValidFinish) {
 	Value = 0;
       } else {
@@ -439,8 +397,8 @@ void InfoBoxFormatter::AssignValue(int i) {
 	    _tcscpy(Format, _T("%1.1f"));
 	  }
       }
-#endif      
     }
+#endif      
     break;
   case 70:	// VENTA3 QFE
 #ifdef OLD_TASK

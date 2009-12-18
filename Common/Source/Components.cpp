@@ -143,9 +143,6 @@ void default_task() {
     fact->append(tp,false);
   }
 
-  task_manager.setActiveTaskPoint(0);
-  task_manager.resume();
-
   wp = way_points.lookup_name(_T("Goorambat"));
   if (wp) {
     tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
@@ -163,6 +160,10 @@ void default_task() {
     tp = fact->createFinish(AbstractTaskFactory::FINISH_LINE,*wp);
     fact->append(tp,false);
   }
+
+  task_manager.setActiveTaskPoint(0);
+  task_manager.resume();
+
 }
 
 

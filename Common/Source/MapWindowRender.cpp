@@ -295,14 +295,14 @@ void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
 {
-#ifdef OLD_TASK
   if (Basic().Connected) {
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
+#ifdef OLD_TASK
     DrawProjectedTrack(canvas);
     DrawOffTrackIndicator(canvas);
+#endif
     DrawBestCruiseTrack(canvas);
   }
-#endif
 }
 
 /**

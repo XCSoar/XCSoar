@@ -432,6 +432,8 @@ static void UpdateValuesRules(void) {
   WndProperty *wp;
   TCHAR Temp[80];
 
+#ifdef OLD_TASK
+
   wp = (WndProperty*)wf->FindByName(_T("prpValidStart"));
   if (wp) {
     if (XCSoarInterface::Calculated().ValidStart) {
@@ -472,7 +474,6 @@ static void UpdateValuesRules(void) {
   }
   // StartMaxHeight, StartMaxSpeed;
 
-#ifdef OLD_TASK
   wp = (WndProperty*)wf->FindByName(_T("prpStartPoint"));
   if (wp) {
     int wp_index = task.getWaypointIndex(0);

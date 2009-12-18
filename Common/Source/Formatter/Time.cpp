@@ -78,11 +78,9 @@ void FormatterTime::AssignValue(int i) {
     SecsToDisplayTime((int)(Basic().Time));
     break;
   case 46:
-    SecsToDisplayTime((int)(Calculated().LegTimeToGo+DetectCurrentTime(&Basic())));
-#ifdef OLD_TASK
-    Valid = task.ValidTaskPoint(task.getActiveIndex()) &&
-      (Calculated().LegTimeToGo< 0.9*ERROR_TIME);
-#endif
+    SecsToDisplayTime((int)(Calculated().task_stats.current_leg.solution_remaining.TimeElapsed
+                            +DetectCurrentTime(&Basic())));
+    Valid = Calculated().task_stats.current_leg.achievable();
     break;
   default:
     break;

@@ -96,7 +96,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 {
   POINT GliderBand[5] = { {0,0},{23,0},{22,0},{24,0},{0,0} };
 
-  if ((Calculated().TaskAltitudeDifference>50)
+  if ((Calculated().task_stats.total.solution_remaining.AltitudeDifference>50)
       &&(DisplayMode == dmFinalGlide)) {
     return;
   }

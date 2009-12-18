@@ -240,8 +240,7 @@ GlideComputer::IterateEffectiveMacCready()
 void
 GlideComputer::SetLegStart()
 {
-    GlideComputerTask::SetLegStart();
-    GlideComputerStats::SetLegStart();
+  GlideComputerStats::SetLegStart();
 }
 
 #include "Math/NavFunctions.hpp" // used for team code

@@ -602,10 +602,12 @@ GlideComputerAirData::Vario()
     SetCalculated().GPSVario = Gain / dT;
     SetCalculated().GPSVarioTE = GainTE / dT;
 
+#ifdef OLD_TASK
     double dv = (Calculated().TaskAltitudeDifference
         - LastCalculated().TaskAltitudeDifference) / dT;
     SetCalculated().DistanceVario =
         LowPassFilter(Calculated().DistanceVario, dv, 0.1);
+#endif
   }
 
   if (!Basic().VarioAvailable || Basic().Replay) {
@@ -641,6 +643,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
 
   // this is basically a dolphin soaring calculator
 
+#ifdef OLD_TASK
   double delta_mc;
   double risk_mc;
   if (Calculated().TaskAltitudeDifference > -120) {
@@ -658,6 +661,7 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
   } else {
     delta_mc = risk_mc - Calculated().NettoVario;
   }
+#endif
 
 #ifdef OLD_TASK
   // QUESTION TB: if(1) ?!
@@ -705,8 +709,6 @@ GlideComputerAirData::SpeedToFly(const double mc_setting,
     SetCalculated().VOpt = oldGlidePolar::Vminsink * sqrt(n);
   }
 #endif
-
-  SetCalculated().STFMode = !Calculated().Circling;
 }
 
 void
@@ -880,9 +882,11 @@ GlideComputerAirData::OnLanding()
   // VENTA3 TODO maybe reset WasFlying to false, so that QFE is reset
   // though users can reset by hand anyway anytime..
 
+#ifdef OLD_TASK
   if (Calculated().ValidFinish) {
     RestoreFinish();
   }
+#endif
   SetCalculated().Flying = false;
 }
 
@@ -1097,11 +1101,6 @@ GlideComputerAirData::Turning()
   }
   rate_history[0] = Rate;
   rate_ave /= 60;
-
-  SetCalculated().Essing = fabs(rate_ave) * 100 / MinTurnRate;
-  if (fabs(rate_ave) < MinTurnRate * 2) {
-    // Calculated().Essing = rate_ave;
-  }
 
   // Make the turn rate more smooth using the LowPassFilter
   Rate = LowPassFilter(LastCalculated().SmoothedTurnRate, Rate, 0.3);

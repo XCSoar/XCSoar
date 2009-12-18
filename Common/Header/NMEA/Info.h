@@ -63,10 +63,38 @@ struct SWITCH_INFO
   // bool Stall;
 };
 
-/**
- * A struct that holds all the parsed data read from the connected devices
- */
-struct NMEA_INFO: public AIRCRAFT_STATE
+
+struct FLARM_STATE
+{
+  //###########
+  //   FLARM
+  //###########
+
+  /** Number of received FLARM devices */
+  unsigned short FLARM_RX;
+  /** Transmit status */
+  unsigned short FLARM_TX;
+  /** GPS status */
+  unsigned short FLARM_GPS;
+  /** Alarm level of FLARM (0-3) */
+  unsigned short FLARM_AlarmLevel;
+  /** Is FLARM information available? */
+  bool FLARM_Available;
+  /** Flarm traffic information */
+  FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC];
+  /**
+   * Is there FLARM traffic present?
+   * @see FLARM_Traffic
+   */
+  bool FLARMTraffic;
+  /**
+   * Is there new FLARM traffic present?
+   * @see FLARM_Traffic
+   */
+  bool NewTraffic;
+};
+
+struct GPS_STATE
 {
   //############
   //   Status
@@ -93,6 +121,49 @@ struct NMEA_INFO: public AIRCRAFT_STATE
   /** Is the GPS unit moving? (Speed > 2.0) */
   bool MovementDetected;
 
+  /** Is XCSoar in replay mode? */
+  bool Replay;
+};
+
+struct ACCELERATION_STATE
+{
+  //##################
+  //   Acceleration
+  //##################
+
+  /**
+   * Is G-load information available?
+   * @see Gload
+   * @see AccelX
+   * @see AccelY
+   */
+  bool AccelerationAvailable;
+  /**
+   * G-Load information of external device (if available)
+   * @see AccelerationAvailable
+   */
+  double Gload;
+  /**
+   * G-Load information of external device in X-direction (if available)
+   * @see AccelerationAvailable
+   */
+  double AccelX;
+  /**
+   * G-Load information of external device in Y-direction (if available)
+   * @see AccelerationAvailable
+   */
+  double AccelZ;
+};
+
+/**
+ * A struct that holds all the parsed data read from the connected devices
+ */
+struct NMEA_INFO: 
+  public GPS_STATE,
+  public AIRCRAFT_STATE,
+  public FLARM_STATE,
+  public ACCELERATION_STATE
+{
   //############
   //   Speeds
   //############
@@ -171,33 +242,6 @@ struct NMEA_INFO: public AIRCRAFT_STATE
   /** Bugs information of external device (if available) */
   double Bugs;
 
-  //##################
-  //   Acceleration
-  //##################
-
-  /**
-   * Is G-load information available?
-   * @see Gload
-   * @see AccelX
-   * @see AccelY
-   */
-  bool AccelerationAvailable;
-  /**
-   * G-Load information of external device (if available)
-   * @see AccelerationAvailable
-   */
-  double Gload;
-  /**
-   * G-Load information of external device in X-direction (if available)
-   * @see AccelerationAvailable
-   */
-  double AccelX;
-  /**
-   * G-Load information of external device in Y-direction (if available)
-   * @see AccelerationAvailable
-   */
-  double AccelZ;
-
   //################
   //   Atmosphere
   //################
@@ -244,33 +288,6 @@ struct NMEA_INFO: public AIRCRAFT_STATE
   double RelativeHumidity;
 
   //###########
-  //   FLARM
-  //###########
-
-  /** Number of received FLARM devices */
-  unsigned short FLARM_RX;
-  /** Transmit status */
-  unsigned short FLARM_TX;
-  /** GPS status */
-  unsigned short FLARM_GPS;
-  /** Alarm level of FLARM (0-3) */
-  unsigned short FLARM_AlarmLevel;
-  /** Is FLARM information available? */
-  bool FLARM_Available;
-  /** Flarm traffic information */
-  FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC];
-  /**
-   * Is there FLARM traffic present?
-   * @see FLARM_Traffic
-   */
-  bool FLARMTraffic;
-  /**
-   * Is there new FLARM traffic present?
-   * @see FLARM_Traffic
-   */
-  bool NewTraffic;
-
-  //###########
   //   Other
   //###########
 
@@ -281,14 +298,6 @@ struct NMEA_INFO: public AIRCRAFT_STATE
   SWITCH_INFO SwitchState;
 
   double StallRatio;
-
-  /** Is XCSoar in replay mode? */
-  bool Replay;
-
-  //  TCHAR  WaypointID[WAY_POINT_ID_SIZE + 1];
-  //  double WaypointBearing;
-  //  double WaypointDistance;
-  //  double WaypointSpeed; IGNORED NOW
 
   /**
    * Returns the barometric altitude, and falls back to the GPS

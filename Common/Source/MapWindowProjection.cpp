@@ -361,7 +361,7 @@ MapWindowProjection::CalculateOrientationNormal
     _origin_centered = true;
 
     if (settings.DisplayOrientation == TRACKCIRCLE) {
-      DisplayAngle = DerivedDrawInfo.WaypointBearing;
+      DisplayAngle = DerivedDrawInfo.task_stats.current_leg.solution_remaining.Vector.Bearing;
       DisplayAircraftAngle = trackbearing-DisplayAngle;
     } else {
       DisplayAngle = 0.0;

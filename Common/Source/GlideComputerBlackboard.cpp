@@ -73,11 +73,8 @@ GlideComputerBlackboard::ResetFlight(const bool full)
     calculated_info.CruiseStartTime = -1;
     calculated_info.ClimbStartTime = -1;
 
-    calculated_info.LDFinish = INVALID_GR;
-    calculated_info.GRFinish = INVALID_GR;  // VENTA-ADDON GR to final destination
     calculated_info.CruiseLD = INVALID_GR;
     calculated_info.AverageLD = INVALID_GR;
-    calculated_info.LDNext = INVALID_GR;
     calculated_info.LD = INVALID_GR;
     calculated_info.LDvario = INVALID_GR;
     calculated_info.AverageThermal = 0;
@@ -87,12 +84,6 @@ GlideComputerBlackboard::ResetFlight(const bool full)
       calculated_info.AverageClimbRateN[i]= 0;
     }
 
-    calculated_info.ValidFinish = false;
-    calculated_info.ValidStart = false;
-    calculated_info.TaskStartTime = 0;
-    calculated_info.TaskStartSpeed = 0;
-    calculated_info.TaskStartAltitude = 0;
-    calculated_info.LegStartTime = 0;
     calculated_info.MinAltitude = 0;
     calculated_info.MaxHeightGain = 0;
   }
@@ -109,7 +100,6 @@ GlideComputerBlackboard::ResetFlight(const bool full)
 
   calculated_info.Flying = false;
   calculated_info.Circling = false;
-  calculated_info.FinalGlide = false;
   for (int i = 0; i <= NUMTERRAINSWEEPS; i++) {
     calculated_info.GlideFootPrint[i].Longitude = 0;
     calculated_info.GlideFootPrint[i].Latitude = 0;
@@ -129,12 +119,6 @@ GlideComputerBlackboard::ResetFlight(const bool full)
 void
 GlideComputerBlackboard::StartTask()
 {
-  calculated_info.ValidFinish = false;
-  calculated_info.TaskStartTime = gps_info.Time ;
-  calculated_info.TaskStartSpeed = gps_info.Speed;
-  calculated_info.TaskStartAltitude = calculated_info.NavAltitude;
-  calculated_info.LegStartTime = gps_info.Time;
-
   calculated_info.CruiseStartLocation = gps_info.Location;
   calculated_info.CruiseStartAlt = calculated_info.NavAltitude;
   calculated_info.CruiseStartTime = gps_info.Time;
@@ -143,7 +127,6 @@ GlideComputerBlackboard::StartTask()
   // more accurate
 
   calculated_info.AverageThermal = 0; // VNT for some reason looked uninitialised
-  calculated_info.WaypointBearing=0; // VNT TEST
 
   // JMW reset time cruising/time circling stats on task start
   calculated_info.timeCircling = 0;

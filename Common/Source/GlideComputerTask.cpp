@@ -84,7 +84,6 @@ GlideComputerTask::ResetFlight(const bool full)
 #endif
     m_task.reset();
   }
-  SetCalculated().BestAlternate = -1;
 }
 
 
@@ -131,10 +130,6 @@ GlideComputerTask::ProcessIdle()
   terrain.Lock();
   m_task.update_idle(Basic());
   terrain.Unlock();
-
-#ifdef OLD_TASK
-  DoBestAlternateSlow();
-#endif
 }
 
 /**
@@ -144,6 +139,7 @@ GlideComputerTask::ProcessIdle()
 bool GlideComputerTask::DoLogging() {
 
   if (Calculated().Flying && olc_clock.check_advance(Basic().Time)) {
+#ifdef OLD_TASK
     bool restart = olc.addPoint(Basic().Location,
 				Calculated().NavAltitude,
 				Calculated().WaypointBearing,
@@ -155,6 +151,7 @@ bool GlideComputerTask::DoLogging() {
       StartTask(false, false);
       SetCalculated().ValidStart = true;
     }
+#endif
     return true;
   } else {
     return false;
@@ -978,23 +975,6 @@ GlideComputerTask::CheckForceFinalGlide()
 #endif
 }
 
-void
-GlideComputerTask::LegSpeed()
-{
-#ifdef OLD_TASK
-  if (!task.Valid() || !task.ValidTaskPoint(1)) {
-    SetCalculated().LegSpeed = 0;
-    return;
-  }
-
-  if (Basic().Time > Calculated().LegStartTime) {
-    SetCalculated().LegSpeed = Calculated().LegDistanceCovered
-                               / (Basic().Time - Calculated().LegStartTime);
-  } else if (Basic().Time< Calculated().LegStartTime) {
-    SetLegStart();
-  }
-#endif
-}
 
 void
 GlideComputerTask::TerrainWarning()
@@ -1014,53 +994,6 @@ GlideComputerTask::TerrainWarning()
 #endif
 }
 
-void
-GlideComputerTask::DistanceCovered()
-{
-#ifdef OLD_TASK
-  if (!task.Valid()) {
-    SetCalculated().LegDistanceCovered = 0;
-    SetCalculated().TaskDistanceCovered = 0;
-  }
-  double LegCovered;
-
-  if ((task.getActiveIndex() == 0) || task.TaskIsTemporary()) {
-    LegCovered = 0;
-  } else {
-    GEOPOINT w0 = task.getTargetLocation(task.getActiveIndex() - 1);
-    GEOPOINT w1 = task.getTargetLocation();
-    // TODO accuracy: Get best range point to here...
-
-    LegCovered = ProjectedDistance(w0, w1, Basic().Location);
-
-    if ((task.getSettings().StartType == START_CIRCLE) && (task.getActiveIndex() == 1)) {
-      // Correct speed calculations for radius
-      // JMW TODO accuracy: legcovered replace this with more accurate version
-      // LegDistance -= StartRadius;
-      LegCovered = max(0.0, LegCovered - task.getSettings().StartRadius);
-    }
-  }
-
-  SetCalculated().LegDistanceCovered = LegCovered;
-  SetCalculated().TaskDistanceCovered = LegCovered;
-
-  // Now add distances for start to previous waypoint
-  if (!task.TaskIsTemporary() && (task.getActiveIndex() > 0)) {
-    if (!task.getSettings().AATEnabled) {
-      for (unsigned i = 0; i + 1 < task.getActiveIndex(); i++) {
-        SetCalculated().TaskDistanceCovered
-            += task.getTaskPoint(i + 1).LegDistance;
-      }
-    } else {
-      // JMW added correction for distance covered
-      SetCalculated().TaskDistanceCovered =
-          aatdistance.DistanceCovered(Basic().Location,
-                                      task.getActiveIndex(),
-                                      AATCloseDistance());
-    }
-  }
-#endif
-}
 
 #ifdef OLD_TASK
 
@@ -1698,8 +1631,10 @@ GlideComputerTask::MacCreadyOrAvClimbRate(double this_maccready)
   double mc_val = this_maccready;
   bool is_final_glide = false;
 
+#ifdef OLD_TASK
   if (Calculated().FinalGlide)
     is_final_glide = true;
+#endif
 
   // when calculating 'achieved' task speed, need to use Mc if
   // not in final glide, or if in final glide mode and using
@@ -2119,11 +2054,6 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 #endif
 }
 
-void
-GlideComputerTask::SetLegStart()
-{
-  SetCalculated().LegStartTime = Basic().Time;
-}
 
 #ifdef OLD_TASK
 
