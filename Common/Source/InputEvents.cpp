@@ -70,6 +70,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MacCready.h"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
+#include "Asset.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -192,15 +193,15 @@ InputEvents::readFile()
 
   // Get defaults
   if (!InitONCE) {
-    #ifdef FIVV
-    #include "InputEvents_fivv.cpp"   // VENTA3
-    #elif defined(WINDOWSPC)
-    #include "InputEvents_pc.cpp"
-    #elif defined(GNAV)
-    #include "InputEvents_altair.cpp"
-    #else
-    #include "InputEvents_defaults.cpp"
-    #endif
+    if (is_fivv()) {
+      #include "InputEvents_fivv.cpp"   // VENTA3
+    } else if (!is_embedded()) {
+      #include "InputEvents_pc.cpp"
+    } else if (is_altair()) {
+      #include "InputEvents_altair.cpp"
+    } else {
+      #include "InputEvents_defaults.cpp"
+    }
 
     #include "InputEvents_Text2Event.cpp"
     InitONCE = true;
