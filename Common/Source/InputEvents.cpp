@@ -202,7 +202,7 @@ InputEvents::readFile()
     } else if (is_pna()) {
       #include "InputEvents_pna.cpp"
     } else {
-      #include "InputEvents_defaults.cpp"
+      #include "InputEvents_default.cpp"
     }
 
     #include "InputEvents_Text2Event.cpp"

@@ -2,6 +2,8 @@
 # The XCSoar test suite.
 #
 
+.DEFAULT_GOAL := all
+
 topdir = ..
 
 include $(topdir)/build/common.mk

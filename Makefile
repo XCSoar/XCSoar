@@ -18,6 +18,8 @@
 #               0 means quiet, and 2 prints the full compiler commands.
 #
 
+.DEFAULT_GOAL := all
+
 topdir = .
 
 include $(topdir)/build/common.mk
@@ -26,6 +28,7 @@ include $(topdir)/build/debug.mk
 include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
+include $(topdir)/build/generate.mk
 
 ######## output files
 
@@ -470,6 +473,7 @@ $(addprefix clean-,$(filter-out WINE,$(TARGETS))): clean-%:
 clean-: $(addprefix clean-,$(TARGETS))
 
 clean: clean-$(TARGET) cleani FORCE
+	rm -rf output
 	find Common $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
 	-type f -print | xargs -r $(RM)
 
