@@ -100,6 +100,7 @@ AbortTask::clear() {
     delete (*v); 
     tps.erase(v);
   }
+  m_landable_reachable = false;
 }
 
 
@@ -124,14 +125,32 @@ AbortTask::task_full() const
   return (tps.size()>=10);
 }
 
-void
+
+fixed 
+AbortTask::is_reachable(const AIRCRAFT_STATE &state,
+                        const Waypoint& waypoint,
+                        const GlidePolar &polar) const
+{
+  UnorderedTaskPoint t(waypoint, task_behaviour);
+  GlideResult r = TaskSolution::glide_solution_remaining(t, state, polar);
+  if (!r.glide_reachable()) {
+    return -fixed_one;
+  } else {
+    return r.TimeElapsed;
+  }
+}
+
+
+bool
 AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
                           WaypointVector &approx_waypoints,
+                          const GlidePolar &polar,
                           const bool only_airfield)
 {  
   if (task_full()) {
-    return;
+    return false;
   }
+  bool found = false;
   std::priority_queue<WP_ALT, std::vector<WP_ALT>, Rank> q;
   for (WaypointVector::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ) {
@@ -139,13 +158,14 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
     if (only_airfield && !v->Flags.Airport) {
       continue;
     }
-
-    UnorderedTaskPoint t(*v, task_behaviour);
-    GlideResult r = TaskSolution::glide_solution_remaining(t, state, polar_safety);
-    if (r.glide_reachable()) {
-      q.push(std::make_pair(*v,r.TimeElapsed));
+    const fixed t_elapsed = is_reachable(state, *v, polar);
+    if (!negative(t_elapsed)) {
+      q.push(std::make_pair(*v, t_elapsed));
       // remove it since it's already in the list now      
       approx_waypoints.erase(v);
+
+      found = true;
+
     } else {
       v++;
     }
@@ -160,6 +180,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
 
     q.pop();
   }
+  return found;
 }
 
 
@@ -209,32 +230,30 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
 
   WaypointVisitorVector wvv(approx_waypoints);
   waypoints.visit_within_radius(state.Location, abort_range(state), wvv);
-
   remove_unlandable(approx_waypoints);
-
   if (!approx_waypoints.size()) {
     /**
      * \todo
      * - increase range
      */
+    return false;
   }
 
   // sort by alt difference
 
   // first try with safety polar
-  fill_reachable(state, approx_waypoints, true);
-  fill_reachable(state, approx_waypoints, false);
+  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, true);
+  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, false);
 
   // now try with non-safety polar
-  polar_safety = glide_polar;
-  fill_reachable(state, approx_waypoints, true);
-  fill_reachable(state, approx_waypoints, false);
+  fill_reachable(state, approx_waypoints, glide_polar, true);
+  fill_reachable(state, approx_waypoints, glide_polar, false);
 
   // now try with fake height added
   AIRCRAFT_STATE fake = state;
   fake.Altitude += 10000.0;
-  fill_reachable(fake, approx_waypoints, true);
-  fill_reachable(fake, approx_waypoints, false);
+  fill_reachable(fake, approx_waypoints, glide_polar, true);
+  fill_reachable(fake, approx_waypoints, glide_polar, false);
 
   if (tps.size()) {
     active_waypoint = tps[activeTaskPoint]->get_waypoint().id;
@@ -246,6 +265,29 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   return false; // nothing to do
 }
 
+
+
+void 
+AbortTask::update_offline(const AIRCRAFT_STATE &state)
+{
+  update_polar();
+  m_landable_reachable = false;
+
+  WaypointVector approx_waypoints; 
+
+  WaypointVisitorVector wvv(approx_waypoints);
+  waypoints.visit_within_radius(state.Location, abort_range(state), wvv);
+  remove_unlandable(approx_waypoints);
+
+  for (WaypointVector::iterator v = approx_waypoints.begin();
+       v!=approx_waypoints.end(); ++v) {
+
+    if (!negative(is_reachable(state, *v, polar_safety))) {
+      m_landable_reachable = true;
+      return;
+    }
+  }
+}
 
 bool 
 AbortTask::check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&)
@@ -282,4 +324,17 @@ AbortTask::reset()
 {
   clear();
   UnorderedTask::reset();
+}
+
+
+GeoVector 
+AbortTask::get_vector_home(const AIRCRAFT_STATE &state) const
+{
+  const Waypoint* home_waypoint = waypoints.find_home();
+  if (home_waypoint) {
+    return GeoVector(state.Location, home_waypoint->Location);
+  } else {
+    GeoVector null_vector(fixed_zero, fixed_zero);
+    return null_vector;
+  }
 }

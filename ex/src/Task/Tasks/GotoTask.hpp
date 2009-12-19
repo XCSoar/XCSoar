@@ -70,21 +70,21 @@ public:
  * 
  * @return Number of taskpoints in task
  */
-  virtual unsigned task_size() const;
+  unsigned task_size() const;
 
 /** 
  * Retrieves the active task point sequence.
  * 
  * @return Index of active task point sequence
  */
-  virtual TaskPoint* getActiveTaskPoint() const;
+  TaskPoint* getActiveTaskPoint() const;
 
 /** 
  * Set active task point index
  * 
  * @param index Desired active index of task sequence
  */
-  virtual void setActiveTaskPoint(unsigned index);
+  void setActiveTaskPoint(unsigned index);
 
 /**
  * Determine whether active task point optionally shifted points to
@@ -117,8 +117,8 @@ public:
  *
  * @return True if internal state changes
  */
-  virtual bool update_sample(const AIRCRAFT_STATE &state_now, 
-                             const bool full_update);
+  bool update_sample(const AIRCRAFT_STATE &state_now, 
+                     const bool full_update);
 protected:
 /** 
  * Test whether (and how) transitioning into/out of task points should occur, typically
@@ -129,14 +129,14 @@ protected:
  * 
  * @return True if transition occurred
  */
-  virtual bool check_transitions(const AIRCRAFT_STATE& state_now, 
-                                 const AIRCRAFT_STATE& state_last);
+  bool check_transitions(const AIRCRAFT_STATE& state_now, 
+                         const AIRCRAFT_STATE& state_last);
 
 private:    
   TaskPoint* tp;
 public:
 #ifdef DO_PRINT
-  virtual void print(const AIRCRAFT_STATE &state);
+  void print(const AIRCRAFT_STATE &state);
 #endif
 
 /** 

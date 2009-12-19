@@ -120,6 +120,41 @@ TaskManager::validTaskPoint(const int index_offset) const
     return false;
 }
 
+void
+TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
+{
+  if (task_ordered.task_size()>1) {
+    common_stats.task_finished = task_ordered.get_stats().task_finished;
+
+    common_stats.aat_time_remaining = task_behaviour.aat_min_time
+      -task_ordered.get_stats().total.TimeElapsed;
+
+    if (positive(common_stats.aat_time_remaining)) {
+      common_stats.aat_remaining_speed = task_ordered.get_stats().total.remaining.get_distance()/
+        common_stats.aat_time_remaining;
+    } else {
+      common_stats.aat_remaining_speed = -fixed_one;
+    }
+
+    common_stats.task_time_remaining = task_ordered.get_stats().total.TimeRemaining;
+    common_stats.task_time_elapsed = task_ordered.get_stats().total.TimeElapsed;
+
+  } else {
+    common_stats.reset();
+  }
+
+  common_stats.vector_home = task_abort.get_vector_home(state);
+
+  // if during this update, no landables found, try abort task
+
+  if (active_task && (active_task != &task_abort)) {
+    // update abort task offline
+    task_abort.update_offline(state);
+  }
+  common_stats.landable_reachable |= task_abort.has_landable_reachable();
+
+}
+
 
 bool 
 TaskManager::update(const AIRCRAFT_STATE &state, 
@@ -129,12 +164,19 @@ TaskManager::update(const AIRCRAFT_STATE &state,
   // in abort/goto mode, the task stats are still updated
 
   bool retval = false;
+
   if (task_ordered.task_size()>1) {
+    // always update ordered task
     retval |= task_ordered.update(state, state_last);
   }
+
   if (active_task && (active_task != &task_ordered)) {
+    // update mode task
     retval |= active_task->update(state, state_last);
   }
+
+  update_common_stats(state);
+
   return retval;
 }
 
@@ -157,6 +199,12 @@ TaskManager::get_stats() const
   } else {
     return null_stats;
   }
+}
+
+const CommonStats& 
+TaskManager::get_common_stats() const
+{
+  return common_stats;
 }
 
 void
@@ -215,6 +263,7 @@ TaskManager::reset()
   task_ordered.reset();
   task_goto.reset();
   task_abort.reset();
+  common_stats.reset();
 }
 
 TaskManager::Factory_t 
@@ -267,3 +316,5 @@ TaskManager::random_point_in_task(const unsigned index, const double mag) const
     return null_location;
   }
 }
+
+

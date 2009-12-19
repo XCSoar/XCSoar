@@ -90,7 +90,7 @@ public:
    * Reset the task (as if never flown)
    * 
    */
-  virtual void reset();
+  void reset();
 
 /** 
  * Retrieves the active task point sequence.
@@ -130,21 +130,21 @@ public:
  * 
  * @return True if task has start
  */
-  virtual bool has_start() const;
+  bool has_start() const;
 
 /** 
  * Check if task has a single FinishPoint
  * 
  * @return True if task has finish
  */
-  virtual bool has_finish() const;
+  bool has_finish() const;
 
 /** 
  * Set active task point index
  * 
  * @param desired Desired active index of task sequence
  */
-  virtual void setActiveTaskPoint(unsigned desired);
+  void setActiveTaskPoint(unsigned desired);
 
 /** 
  * Insert taskpoint before specified index in task.  May fail if the candidate
@@ -207,7 +207,7 @@ public:
  * 
  * @return True if task is finished
  */
-  virtual bool task_finished() const;
+  bool task_finished() const;
 
 /** 
  * Test if task has started.  Used to determine whether
@@ -215,7 +215,7 @@ public:
  * 
  * @return True if task has started
  */
-  virtual bool task_started() const;
+  bool task_started() const;
 
 /** 
  * Update internal states when aircraft state advances.
@@ -225,8 +225,8 @@ public:
  *
  * @return True if internal state changes
  */
-  virtual bool update_sample(const AIRCRAFT_STATE &state_now, 
-                             const bool full_update);
+  bool update_sample(const AIRCRAFT_STATE &state_now, 
+                     const bool full_update);
 
 
 /** 
@@ -237,7 +237,7 @@ public:
  * 
  * @return True if internal state changed
  */
-  virtual bool update_idle(const AIRCRAFT_STATE& state_now);
+  bool update_idle(const AIRCRAFT_STATE& state_now);
 
 /** 
  * Return size of task
@@ -307,8 +307,8 @@ protected:
  * 
  * @return True if transition occurred
  */
-  virtual bool check_transitions(const AIRCRAFT_STATE &state_now, 
-                                 const AIRCRAFT_STATE &state_last);
+  bool check_transitions(const AIRCRAFT_STATE &state_now, 
+                         const AIRCRAFT_STATE &state_last);
 
 /** 
  * Calculate distance of nominal task (sum of distances from each
@@ -379,7 +379,7 @@ protected:
  * 
  * @return Time (s) of start of task
  */
-  virtual double scan_total_start_time(const AIRCRAFT_STATE &state_now);
+  double scan_total_start_time(const AIRCRAFT_STATE &state_now);
 
 /** 
  * Calculate leg start time.
@@ -388,7 +388,7 @@ protected:
  * 
  * @return Time (s) of start of leg
  */
-  virtual double scan_leg_start_time(const AIRCRAFT_STATE &state_now);
+  double scan_leg_start_time(const AIRCRAFT_STATE &state_now);
 
 
 /** 
@@ -479,8 +479,8 @@ protected:
  * 
  * @return Target range parameter (0-1)
  */
-  double calc_min_target(const AIRCRAFT_STATE &state_now, 
-                         const double t_target);
+  fixed calc_min_target(const AIRCRAFT_STATE &state_now, 
+                        const fixed t_target);
 
 /** 
  * Calculate angle from aircraft to remainder of task (minimum of leg
@@ -490,7 +490,7 @@ protected:
  * 
  * @return Minimum gradient angle of remainder of task
  */
-  virtual double calc_gradient(const AIRCRAFT_STATE &state_now);
+  double calc_gradient(const AIRCRAFT_STATE &state_now);
 
 private:
 
@@ -555,7 +555,7 @@ private:
 public:
 
 #ifdef DO_PRINT
-  virtual void print(const AIRCRAFT_STATE &state);
+  void print(const AIRCRAFT_STATE &state);
 #endif
 
 /** 

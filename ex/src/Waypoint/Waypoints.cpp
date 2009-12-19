@@ -82,7 +82,8 @@ private:
 
 
 Waypoints::Waypoints():
-  m_file0_writable(false)
+  m_file0_writable(false),
+  m_home(NULL)
 {
 }
 
@@ -182,13 +183,20 @@ Waypoints::lookup_location(const GEOPOINT &loc, const fixed range) const
 const Waypoint* 
 Waypoints::find_home() const
 {
-  WaypointTree::const_iterator found = waypoint_tree.begin();
-  while (found != waypoint_tree.end()) {
-    const Waypoint* wp = &(*found).get_waypoint();
-    if (wp->Flags.Home) {
-      return wp;
+  if (!m_home || !m_home->Flags.Home) {
+
+    WaypointTree::const_iterator found = waypoint_tree.begin();
+    while (found != waypoint_tree.end()) {
+      const Waypoint* wp = &(*found).get_waypoint();
+      if (wp->Flags.Home) {
+        m_home = wp;
+        return wp;
+      }
+      found++;
     }
-    found++;
+  } 
+  if (m_home) {
+    return m_home;
   }
   return NULL;
 }

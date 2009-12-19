@@ -51,7 +51,7 @@ TaskBehaviour::all_off()
 bool 
 TaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state) const
 {
-  if ((start_max_speed>0) && (state.Speed>start_max_speed)) {
+  if (positive(start_max_speed) && (state.Speed>start_max_speed)) {
     return false;
   } else {
     return true;

@@ -566,19 +566,19 @@ OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft)
   }
 }
 
-double
+fixed
 OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft, 
-                             const double t_target)
+                             const fixed t_target)
 {
   if (stats.distance_max>stats.distance_min) {
     // only perform scan if modification is possible
-    const double t_rem = max(0.0, t_target-stats.total.TimeElapsed);
+    const fixed t_rem = max(fixed_zero, t_target-stats.total.TimeElapsed);
     
     TaskMinTarget bmt(tps, activeTaskPoint, aircraft, glide_polar, t_rem, ts);
-    double p= bmt.search(0.0);
+    fixed p= bmt.search(0.0);
     return p;
   } else {
-    return 0.0;
+    return fixed_zero;
   }
 }
 

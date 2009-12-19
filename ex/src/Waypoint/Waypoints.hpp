@@ -294,6 +294,8 @@ private:
   std::deque< WaypointEnvelope > tmp_wps;
 
   bool m_file0_writable;
+
+  mutable const Waypoint* m_home;
 };
 
 #endif

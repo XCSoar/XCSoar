@@ -87,6 +87,7 @@ TASK_SRC	:=\
 	$(topdir)/src/Task/Tasks/TaskSolvers/TaskSolution.cpp \
 	$(topdir)/src/Task/TaskStats/DistanceStat.cpp \
 	$(topdir)/src/Task/TaskStats/ElementStat.cpp \
+	$(topdir)/src/Task/TaskStats/CommonStats.cpp \
 	$(topdir)/src/Task/TaskStats/TaskStats.cpp \
 	$(topdir)/src/Task/TaskStats/TaskVario.cpp \
 	$(topdir)/src/Waypoint/Waypoint.cpp \

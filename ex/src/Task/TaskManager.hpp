@@ -44,6 +44,7 @@
 #include "Tasks/GotoTask.hpp"
 #include "Tasks/OrderedTask.hpp"
 #include "TaskStats/TaskStats.hpp"
+#include "TaskStats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskEvents.hpp"
 #include "TaskBehaviour.hpp"
@@ -85,21 +86,21 @@ public:
  * 
  * @param index Sequence number of task point
  */
-    virtual void setActiveTaskPoint(unsigned index);
+  void setActiveTaskPoint(unsigned index);
 
 /** 
  * Accessor for active taskpoint sequence for active task
  * 
  * @return Sequence number of task point
  */
-  virtual unsigned getActiveTaskPointIndex() const;
+  unsigned getActiveTaskPointIndex() const;
 
 /** 
  * Accessor of current task point of active task
  * 
  * @return TaskPoint of active task point, and 0 if no active task
  */
-  virtual TaskPoint* getActiveTaskPoint() const;
+  TaskPoint* getActiveTaskPoint() const;
 
 /**
  * Determine whether active task point optionally shifted points to
@@ -107,7 +108,7 @@ public:
  *
  * @param index_offset offset (default 0)
  */
-  virtual bool validTaskPoint(const int index_offset=0) const;
+  bool validTaskPoint(const int index_offset=0) const;
 
 /** 
  * Get a random point in the task OZ (for testing simulation route)
@@ -176,8 +177,8 @@ public:
  * @param state_last Aircraft state at last update 
  * @return True if internal state changed
  */
-  virtual bool update(const AIRCRAFT_STATE &state_now, 
-                      const AIRCRAFT_STATE &state_last);
+  bool update(const AIRCRAFT_STATE &state_now, 
+              const AIRCRAFT_STATE &state_last);
 
 /** 
  * Updates internal state of task to produce
@@ -188,14 +189,21 @@ public:
  * 
  * @return True if internal state changed
  */
-  virtual bool update_idle(const AIRCRAFT_STATE &state);
+  bool update_idle(const AIRCRAFT_STATE &state);
 
 /** 
  * Accessor for statistics of active task
  * 
  * @return Statistics of active task
  */
-  virtual const TaskStats& get_stats() const;
+  const TaskStats& get_stats() const;
+
+/** 
+ * Accessor for common statistics 
+ * 
+ * @return Statistics 
+ */
+  const CommonStats& get_common_stats() const;
 
 /** 
  * Convenience function, determines whether stats are valid
@@ -226,10 +234,6 @@ public:
  * @return True if task is valid
  */
   bool check_task() const;
-
-#ifdef DO_PRINT
-  virtual void print(const AIRCRAFT_STATE &location);
-#endif
 
 /** 
  * Accessor for factory system for constructing tasks
@@ -278,6 +282,10 @@ public:
     return mode == the_mode;
   }
 
+#ifdef DO_PRINT
+  void print(const AIRCRAFT_STATE &location);
+#endif
+
 private:
   /** @link aggregation */
   OrderedTask task_ordered;
@@ -310,6 +318,10 @@ private:
 
   /** @link aggregation */
   TaskAdvance task_advance;
+
+  CommonStats common_stats;
+
+  void update_common_stats(const AIRCRAFT_STATE &state);
   
 public:
   /**

@@ -120,10 +120,41 @@ public:
  *
  * @return True if internal state changes
  */
-  virtual bool update_sample(const AIRCRAFT_STATE &state_now, 
-                             const bool full_update);
+  bool update_sample(const AIRCRAFT_STATE &state_now, 
+                     const bool full_update);
+
+
+/** 
+ * Update internal states when aircraft state advances.
+ * (for when system is inactive, to determine landable reachability)
+ * 
+ * \todo
+ * - should use find_nearest_iterative for speed
+ *
+ * @param state_now Aircraft state at this time step
+ *
+ */
+  void update_offline(const AIRCRAFT_STATE &state_now);
+
+/** 
+ * Determine if any landable reachable waypoints were found in the 
+ * last update.
+ * 
+ * @return True if a landable waypoint was found
+ */
+  bool has_landable_reachable() const {
+    return m_landable_reachable;
+  }
 
   void reset();
+
+/** 
+ * Calculate vector to home waypoint
+ * 
+ * @param state State of aircraft
+ * @return Vector to home waypoint
+ */
+  GeoVector get_vector_home(const AIRCRAFT_STATE &state) const;
 
 protected:
 
@@ -136,8 +167,8 @@ protected:
  * 
  * @return True if transition occurred
  */
-  virtual bool check_transitions(const AIRCRAFT_STATE& state_now, 
-                                 const AIRCRAFT_STATE& state_last);
+  bool check_transitions(const AIRCRAFT_STATE& state_now, 
+                         const AIRCRAFT_STATE& state_last);
 
 /** 
  * Clears task points in list
@@ -182,10 +213,13 @@ protected:
  *
  * @param state Aircraft state
  * @param approx_waypoints List of candidate waypoints
+ * @param polar Polar used for tests
  * @param only_airfield If true, only add waypoints that are airfields.
+ * @return True if a reachable landpoint was found
  */
-  void fill_reachable(const AIRCRAFT_STATE &state,
+  bool fill_reachable(const AIRCRAFT_STATE &state,
                       WaypointVector &approx_waypoints,
+                      const GlidePolar &polar,
                       const bool only_airfield);
 
   typedef std::pair<Waypoint,double> WP_ALT; /**< Class used to hold sorting data, second item is arival altitude */
@@ -203,14 +237,30 @@ protected:
   };
 
 private:
+
+/** 
+ * Test whether the given waypoint is reachable with the specified
+ * glide polar.
+ *
+ * @param state Aircraft state
+ * @param waypoint Waypoint to test
+ * @param polar Polar to use for tests
+ *
+ * @return Time elapsed to arrive if possible, otherwise negative
+ */
+  fixed is_reachable(const AIRCRAFT_STATE &state,
+                     const Waypoint& waypoint,
+                     const GlidePolar &polar) const;
+
   std::vector<TaskPoint*> tps;
   unsigned active_waypoint;
   const Waypoints &waypoints;
   GlidePolar polar_safety;
+  bool m_landable_reachable;
 
 public:
 #ifdef DO_PRINT
-  virtual void print(const AIRCRAFT_STATE &location);
+  void print(const AIRCRAFT_STATE &location);
 #endif
 
 /** 

@@ -228,9 +228,9 @@ protected:
  * 
  * @return Target range parameter (0-1)
  */
-  virtual double calc_min_target(const AIRCRAFT_STATE &state_now, 
-                                 const double t_target) {
-    return 0.0;
+  virtual fixed calc_min_target(const AIRCRAFT_STATE &state_now, 
+                                const fixed t_target) {
+    return fixed_zero;
   };
 
 /** 
