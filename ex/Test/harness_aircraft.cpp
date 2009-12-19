@@ -125,9 +125,9 @@ void AircraftSim::update_bearing(TaskManager& task_manager) {
 }
 
 
-void AircraftSim::update_state(TaskManager &task_manager,
-                               GlidePolar &glide_polar)  {
-  
+void AircraftSim::update_state(TaskManager &task_manager)  {
+
+  const GlidePolar &glide_polar = task_manager.get_glide_polar_ref();
   const ElementStat stat = task_manager.get_stats().current_leg;
   
   switch (acstate) {
@@ -215,10 +215,9 @@ void AircraftSim::integrate() {
   state.Time += fixed_one;
 }
 
-bool AircraftSim::advance(TaskManager &task_manager,
-                          GlidePolar &glide_polar)  {
+bool AircraftSim::advance(TaskManager &task_manager)  {
 
-  update_state(task_manager, glide_polar);
+  update_state(task_manager);
   
   integrate();
   

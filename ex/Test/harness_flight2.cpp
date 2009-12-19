@@ -220,13 +220,14 @@ bool test_abort(int n_wind)
 
   TaskManager task_manager(default_events,
                            task_behaviour,
-                           glide_polar,
                            waypoints);
+
+  task_manager.set_glide_polar(glide_polar);
 
   task_manager.abort();
   task_report(task_manager, "abort");
 
-  return run_flight(task_manager, glide_polar, true, target_noise, n_wind);
+  return run_flight(task_manager, true, target_noise, n_wind);
 
 }
 
@@ -249,15 +250,16 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
 
   TaskManager task_manager(default_events,
                            task_behaviour,
-                           glide_polar,
                            waypoints);
+
+  task_manager.set_glide_polar(glide_polar);
 
   test_task(task_manager, waypoints, 2);
 
   task_manager.do_goto(*waypoints.lookup_id(id));
   task_report(task_manager, "goto");
 
-  return run_flight(task_manager, glide_polar, true, target_noise, n_wind);
+  return run_flight(task_manager, true, target_noise, n_wind);
 }
 
 
@@ -280,11 +282,13 @@ bool test_null()
 
   TaskManager task_manager(default_events,
                            task_behaviour,
-                           glide_polar,
                            waypoints);
+
+  task_manager.set_glide_polar(glide_polar);
+
   task_report(task_manager, "null");
 
-  return run_flight(task_manager, glide_polar, true, target_noise, 0);
+  return run_flight(task_manager, true, target_noise, 0);
 }
 
 

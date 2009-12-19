@@ -20,13 +20,11 @@ public:
 
   bool far(TaskManager &task_manager);
   fixed small_rand();
-  void update_state(TaskManager &task_manager,
-                    GlidePolar &glide_polar);
+  void update_state(TaskManager &task_manager);
   void update_mode(TaskManager &task_manager);
   void integrate();
 
-  bool advance(TaskManager &task_manager,
-               GlidePolar &glide_polar);
+  bool advance(TaskManager &task_manager);
 
 #ifdef DO_PRINT
   void print(std::ostream &f4);

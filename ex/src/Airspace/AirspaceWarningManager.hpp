@@ -77,19 +77,9 @@ public:
    */
   AirspaceWarningManager(const Airspaces& airspaces,
                          const AIRCRAFT_STATE &state,
-                         const GlidePolar &glide_polar,
                          const TaskManager &task_manager,
                          const fixed& prediction_time_glide=15.0,
-                         const fixed& prediction_time_filter=60.0):
-    m_airspaces(airspaces),
-    m_prediction_time_glide(prediction_time_glide),
-    m_prediction_time_filter(prediction_time_filter),
-    m_perf_glide(glide_polar),
-    m_state_filter(state, prediction_time_filter),
-    m_perf_filter(m_state_filter),
-    m_task(task_manager),
-    m_glide_polar(glide_polar)
-    {}
+                         const fixed& prediction_time_filter=60.0);
 
   typedef std::list<AirspaceWarning> AirspaceWarningList; /**< Type of warning storage */
 

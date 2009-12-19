@@ -39,6 +39,8 @@
 
 #include "Math/fixed.hpp"
 
+class AIRCRAFT_STATE;
+
 /**
  *  Class defining options for task system.
  *  Typical uses might be default values, and simple aspects of task behaviour.
@@ -52,21 +54,6 @@ public:
  * 
  */
   TaskBehaviour();
-
-/** 
- * Convenience function (used primarily for testing) to disable
- * all expensive task behaviour functions.
- */
-  void all_off();
-
-/** 
- * Check whether aircraft speed is within start speed limits
- * 
- * @param state Aircraft state
- * 
- * @return True if within limits
- */
-  bool check_start_speed(const AIRCRAFT_STATE &state) const;
 
   bool optimise_targets_range; /**< Option to enable positionining of AAT targets to achieve desired AAT minimum task time */
   bool optimise_targets_bearing; /**< Option to enable positioning of AAT targets at optimal point on isoline */
@@ -85,6 +72,21 @@ public:
   fixed safety_height_arrival; /**< Minimum height above terrain for arrival height at landable waypoint (m) */
   fixed start_max_speed; /**< Maximum ground speed (m/s) allowed in start sector */
 
+
+/** 
+ * Convenience function (used primarily for testing) to disable
+ * all expensive task behaviour functions.
+ */
+  void all_off();
+
+/** 
+ * Check whether aircraft speed is within start speed limits
+ * 
+ * @param state Aircraft state
+ * 
+ * @return True if within limits
+ */
+  bool check_start_speed(const AIRCRAFT_STATE &state) const;
 };
 
 #endif

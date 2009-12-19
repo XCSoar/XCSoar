@@ -203,7 +203,7 @@ void test_glide_cb(const fixed h, const fixed W,
   GlideState gs (vect,0.0,ac);
   GlideResult gr = polar.solve(gs);
 
-  gr.calc_cruise_bearing();
+  gr.calc_deferred(ac);
   fixed cb = gr.CruiseTrackBearing;
 
   hfile << W << " "

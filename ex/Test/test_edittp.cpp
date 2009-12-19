@@ -184,8 +184,8 @@ int main(int argc, char** argv) {
 
   TaskManager task_manager(default_events,
                            task_behaviour,
-                           glide_polar,
                            waypoints);
+  task_manager.set_glide_polar(glide_polar);
   test_task(task_manager, waypoints, 0);
 
   plan_tests(task_manager.task_size());

@@ -36,24 +36,25 @@
  */
 #include "TaskManager.hpp"
 #include "Visitors/TaskVisitor.hpp"
+#include "Visitors/TaskPointVisitor.hpp"
 
 // uses delegate pattern
 
 TaskManager::TaskManager(const TaskEvents &te,
                          const TaskBehaviour &tb,
-                         GlidePolar &gp,
                          const Waypoints &wps): 
-    task_ordered(te,tb,task_advance,gp),
-    task_goto(te,tb,task_advance,gp),
-    task_abort(te,tb,task_advance,gp,wps),
-    task_behaviour(tb),
-    factory_fai(task_ordered,tb),
-    factory_aat(task_ordered,tb),
-    factory_mixed(task_ordered,tb),
-    mode(MODE_NULL),
-    active_task(NULL),
-    factory_mode(FACTORY_FAI),
-    active_factory(&factory_fai)
+  m_glide_polar(0,0,0),
+  task_ordered(te,tb,task_advance,m_glide_polar),
+  task_goto(te,tb,task_advance,m_glide_polar),
+  task_abort(te,tb,task_advance,m_glide_polar,wps),
+  task_behaviour(tb),
+  factory_fai(task_ordered,tb),
+  factory_aat(task_ordered,tb),
+  factory_mixed(task_ordered,tb),
+  mode(MODE_NULL),
+  active_task(NULL),
+  factory_mode(FACTORY_FAI),
+  active_factory(&factory_fai)
 {
 }
 
@@ -120,6 +121,37 @@ TaskManager::validTaskPoint(const int index_offset) const
     return false;
 }
 
+
+class WaypointLister: public TaskPointVisitor
+{
+public:
+  WaypointLister(CommonStats& the_stats):stats(the_stats) 
+    {
+      stats.clear_waypoints_in_task();
+    };
+
+  void Visit(const UnorderedTaskPoint& tp) {
+    stats.append_waypoint_in_task(tp.get_waypoint());
+  }
+  void Visit(const OrderedTaskPoint& tp) {
+    stats.append_waypoint_in_task(tp.get_waypoint());
+  }
+  void Visit(const FinishPoint& tp) {
+    stats.append_waypoint_in_task(tp.get_waypoint());
+  }
+  void Visit(const StartPoint& tp) {
+    stats.append_waypoint_in_task(tp.get_waypoint());
+  }
+  void Visit(const AATPoint& tp) {
+    stats.append_waypoint_in_task(tp.get_waypoint());
+  }
+  void Visit(const ASTPoint& tp) {
+    stats.append_waypoint_in_task(tp.get_waypoint());
+  }
+private:
+  CommonStats& stats;
+};
+
 void
 TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
 {
@@ -153,6 +185,21 @@ TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
   }
   common_stats.landable_reachable |= task_abort.has_landable_reachable();
 
+  // modes
+
+  common_stats.mode_abort = (mode==MODE_ABORT);
+  common_stats.mode_goto = (mode==MODE_GOTO);
+  common_stats.mode_ordered = (mode==MODE_ORDERED);
+
+  common_stats.ordered_valid = task_ordered.check_task();
+
+  WaypointLister lister(common_stats);
+  if (common_stats.ordered_valid) {
+    task_ordered.Accept(lister);
+  }
+  if (active_task && (active_task != &task_ordered)) {
+    active_task->Accept(lister);
+  }  
 }
 
 

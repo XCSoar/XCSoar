@@ -141,14 +141,20 @@ struct GlideResult {
   }
 
 /** 
- * Check whether task is entirely achievable on final glide.
+ * Check whether task is achievable (optionally entirely on final glide)
  * 
- * @return True if target is reachable without further climb
+ * @param final_glide Whether no further climb allowed
+ *
+ * @return True if target is reachable 
  */
-  bool glide_reachable() const {
-    return (Solution==RESULT_OK) &&
-      (positive(AltitudeDifference)) &&
-      (HeightClimb==fixed_zero);
+  bool glide_reachable(const bool final_glide=true) const {
+    if (final_glide) {
+      return (Solution==RESULT_OK);
+    } else {
+      return (Solution==RESULT_OK) &&
+        positive(AltitudeDifference) &&
+        !positive(HeightClimb);
+    }
   }
 
 /** 

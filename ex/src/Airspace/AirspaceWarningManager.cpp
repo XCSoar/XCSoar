@@ -41,6 +41,23 @@
 #include "AirspaceIntersectionVisitor.hpp"
 #include "Task/TaskManager.hpp"
 
+
+AirspaceWarningManager::AirspaceWarningManager(const Airspaces& airspaces,
+                                               const AIRCRAFT_STATE &state,
+                                               const TaskManager &task_manager,
+                                               const fixed& prediction_time_glide,
+                                               const fixed& prediction_time_filter):
+  m_airspaces(airspaces),
+  m_prediction_time_glide(prediction_time_glide),
+  m_prediction_time_filter(prediction_time_filter),
+  m_perf_glide(task_manager.get_glide_polar_ref()),
+  m_state_filter(state, prediction_time_filter),
+  m_perf_filter(m_state_filter),
+  m_task(task_manager),
+  m_glide_polar(task_manager.get_glide_polar_ref())
+{
+}
+
 void
 AirspaceWarningManager::reset(const AIRCRAFT_STATE& state)
 {

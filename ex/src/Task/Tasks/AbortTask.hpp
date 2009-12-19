@@ -215,12 +215,15 @@ protected:
  * @param approx_waypoints List of candidate waypoints
  * @param polar Polar used for tests
  * @param only_airfield If true, only add waypoints that are airfields.
+ * @param final_glide Whether solution must be glide only or climb allowed
+ *
  * @return True if a reachable landpoint was found
  */
   bool fill_reachable(const AIRCRAFT_STATE &state,
                       WaypointVector &approx_waypoints,
                       const GlidePolar &polar,
-                      const bool only_airfield);
+                      const bool only_airfield,
+                      const bool final_glide);
 
   typedef std::pair<Waypoint,double> WP_ALT; /**< Class used to hold sorting data, second item is arival altitude */
 
@@ -245,12 +248,14 @@ private:
  * @param state Aircraft state
  * @param waypoint Waypoint to test
  * @param polar Polar to use for tests
+ * @param final_glide Whether solution must be glide only or climb allowed
  *
  * @return Time elapsed to arrive if possible, otherwise negative
  */
   fixed is_reachable(const AIRCRAFT_STATE &state,
                      const Waypoint& waypoint,
-                     const GlidePolar &polar) const;
+                     const GlidePolar &polar,
+                     const bool final_glide) const;
 
   std::vector<TaskPoint*> tps;
   unsigned active_waypoint;

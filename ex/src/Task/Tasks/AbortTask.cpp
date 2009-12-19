@@ -129,11 +129,12 @@ AbortTask::task_full() const
 fixed 
 AbortTask::is_reachable(const AIRCRAFT_STATE &state,
                         const Waypoint& waypoint,
-                        const GlidePolar &polar) const
+                        const GlidePolar &polar,
+                        const bool final_glide) const
 {
   UnorderedTaskPoint t(waypoint, task_behaviour);
   GlideResult r = TaskSolution::glide_solution_remaining(t, state, polar);
-  if (!r.glide_reachable()) {
+  if (!r.glide_reachable(final_glide)) {
     return -fixed_one;
   } else {
     return r.TimeElapsed;
@@ -145,7 +146,8 @@ bool
 AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
                           WaypointVector &approx_waypoints,
                           const GlidePolar &polar,
-                          const bool only_airfield)
+                          const bool only_airfield,
+                          const bool final_glide)
 {  
   if (task_full()) {
     return false;
@@ -158,7 +160,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
     if (only_airfield && !v->Flags.Airport) {
       continue;
     }
-    const fixed t_elapsed = is_reachable(state, *v, polar);
+    const fixed t_elapsed = is_reachable(state, *v, polar, final_glide);
     if (!negative(t_elapsed)) {
       q.push(std::make_pair(*v, t_elapsed));
       // remove it since it's already in the list now      
@@ -241,19 +243,19 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
 
   // sort by alt difference
 
-  // first try with safety polar
-  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, true);
-  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, false);
+  // first try with safety polar, final glide only
+  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, true, true);
+  m_landable_reachable|=  fill_reachable(state, approx_waypoints, polar_safety, false, true);
 
   // now try with non-safety polar
-  fill_reachable(state, approx_waypoints, glide_polar, true);
-  fill_reachable(state, approx_waypoints, glide_polar, false);
+  fill_reachable(state, approx_waypoints, glide_polar, true, false);
+  fill_reachable(state, approx_waypoints, glide_polar, false, false);
 
   // now try with fake height added
   AIRCRAFT_STATE fake = state;
   fake.Altitude += 10000.0;
-  fill_reachable(fake, approx_waypoints, glide_polar, true);
-  fill_reachable(fake, approx_waypoints, glide_polar, false);
+  fill_reachable(fake, approx_waypoints, glide_polar, true, false);
+  fill_reachable(fake, approx_waypoints, glide_polar, false, false);
 
   if (tps.size()) {
     active_waypoint = tps[activeTaskPoint]->get_waypoint().id;
@@ -282,7 +284,7 @@ AbortTask::update_offline(const AIRCRAFT_STATE &state)
   for (WaypointVector::iterator v = approx_waypoints.begin();
        v!=approx_waypoints.end(); ++v) {
 
-    if (!negative(is_reachable(state, *v, polar_safety))) {
+    if (!negative(is_reachable(state, *v, polar_safety, true))) {
       m_landable_reachable = true;
       return;
     }

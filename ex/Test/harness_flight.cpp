@@ -49,7 +49,6 @@ const char* wind_name(int n_wind) {
 
 
 bool run_flight(TaskManager &task_manager,
-                GlidePolar &glide_polar,
                 bool goto_target,
                 double random_mag,
                 int n_wind,
@@ -80,7 +79,7 @@ bool run_flight(TaskManager &task_manager,
 
   static const fixed fixed_10 =10;
 
-  AirspaceAircraftPerformanceGlide perf(glide_polar);
+  AirspaceAircraftPerformanceGlide perf(task_manager.get_glide_polar_ref());
 
   if (aircraft_filter) {
     aircraft_filter->reset(ac.get_state());
@@ -89,7 +88,6 @@ bool run_flight(TaskManager &task_manager,
   if (airspaces) {
     airspace_warnings = new AirspaceWarningManager(*airspaces,
                                                    ac.get_state(),
-                                                   glide_polar,
                                                    task_manager);
   }
 
@@ -151,7 +149,7 @@ bool run_flight(TaskManager &task_manager,
       aircraft_filter->update(ac.get_state());
     }
 
-  } while (ac.advance(task_manager, glide_polar));
+  } while (ac.advance(task_manager));
 
 #ifdef DO_PRINT
   if (verbose) {
@@ -202,8 +200,9 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
 
   TaskManager task_manager(default_events,
                            task_behaviour,
-                           glide_polar,
                            waypoints);
+
+  task_manager.set_glide_polar(glide_polar);
 
   bool goto_target = false;
 
@@ -223,7 +222,7 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
 
   test_task(task_manager, waypoints, test_num);
 
-  return run_flight(task_manager, glide_polar, goto_target, target_noise, n_wind,
+  return run_flight(task_manager, goto_target, target_noise, n_wind,
                     speed_factor);
 }
 

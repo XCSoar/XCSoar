@@ -8,7 +8,6 @@
 #include "harness_task.hpp"
 
 bool run_flight(TaskManager &task_manager,
-                GlidePolar &glide_polar,
                 bool goto_target,
                 double random_mag,
                 int n_wind,
