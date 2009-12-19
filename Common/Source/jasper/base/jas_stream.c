@@ -215,7 +215,7 @@ jas_stream_t *jas_stream_memopen(char *buf, int bufsize)
 	if (buf) {
 		obj->buf_ = (unsigned char *) buf;
 	} else {
-		obj->buf_ = (char *) jas_malloc(obj->bufsize_ * sizeof(char));
+		obj->buf_ = (unsigned char *) jas_malloc(obj->bufsize_ * sizeof(char));
 		obj->myalloc_ = 1;
 	}
 	if (!obj->buf_) {
@@ -725,7 +725,7 @@ static void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf,
 		if (!buf) {
 			/* The caller has not specified a buffer to employ, so allocate
 			  one. */
-			if ((stream->bufbase_ = (char *)jas_malloc(JAS_STREAM_BUFSIZE +
+			if ((stream->bufbase_ = (unsigned char *)jas_malloc(JAS_STREAM_BUFSIZE +
 			  JAS_STREAM_MAXPUTBACK))) {
 				stream->bufmode_ |= JAS_STREAM_FREEBUF;
 				stream->bufsize_ = JAS_STREAM_BUFSIZE;

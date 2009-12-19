@@ -89,7 +89,7 @@ typedef unsigned int uint;
 /* Marker segment table entry. */
 typedef struct {
 	int id;
-	char *name;
+	const char *name;
 	jpc_msops_t ops;
 } jpc_mstabent_t;
 

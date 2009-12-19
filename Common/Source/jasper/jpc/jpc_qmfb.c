@@ -102,6 +102,7 @@
 *
 \******************************************************************************/
 
+#if 0
 #if ( defined(_MSC_VER) || defined(WIN32) || defined(__INTEL_COMPILER) || defined(__ICC) )
   #pragma message("QMFB: BATCH_SIZE = 256")
   #define JPC_BATCH_SIZE 128
@@ -110,6 +111,8 @@
   #pragma message("QMFB: BATCH_SIZE = 128")
   #define JPC_BATCH_SIZE 128
 #endif
+#endif
+#define JPC_BATCH_SIZE 128
 
 static jpc_qmfb1d_t *jpc_qmfb1d_create(void);
 

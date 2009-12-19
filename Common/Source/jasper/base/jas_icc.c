@@ -586,8 +586,8 @@ static void jas_iccprof_sorttagtab(jas_icctagtab_t *tagtab)
 
 static int jas_icctagtabent_cmp(const void *src, const void *dst)
 {
-	jas_icctagtabent_t *srctagtabent = JAS_CAST(jas_icctagtabent_t *, src);
-	jas_icctagtabent_t *dsttagtabent = JAS_CAST(jas_icctagtabent_t *, dst);
+	const jas_icctagtabent_t *srctagtabent = JAS_CAST(const jas_icctagtabent_t *, src);
+	const jas_icctagtabent_t *dsttagtabent = JAS_CAST(const jas_icctagtabent_t *, dst);
 	if (srctagtabent->off > dsttagtabent->off) {
 		return 1;
 	} else if (srctagtabent->off < dsttagtabent->off) {
@@ -1027,7 +1027,7 @@ static int jas_icctxtdesc_input(jas_iccattrval_t *attrval, jas_stream_t *in,
 	if (jas_iccgetuint32(in, &txtdesc->uclangcode) ||
 	  jas_iccgetuint32(in, &txtdesc->uclen))
 		goto error;
-	if (!(txtdesc->ucdata = (char *)jas_malloc(txtdesc->uclen * 2)))
+	if (!(txtdesc->ucdata = (unsigned char *)jas_malloc(txtdesc->uclen * 2)))
 		goto error;
 	if (jas_stream_read(in, txtdesc->ucdata, txtdesc->uclen * 2) !=
 	  JAS_CAST(int, txtdesc->uclen * 2))

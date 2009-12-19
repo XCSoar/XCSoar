@@ -1686,7 +1686,7 @@ static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms)
     jpc_com_t *com = &ms->parms.com;
 
     if (ms->len < sizeof(sTmp)) {
-      strncpy(sTmp, com->data, ms->len-2); // build a null-terminated string
+      strncpy(sTmp, (const char *)com->data, ms->len-2); // build a null-terminated string
       sTmp[ms->len-2]= '\0';
       cptr = strstr (sTmp, "XCSoar");
       if (cptr) {

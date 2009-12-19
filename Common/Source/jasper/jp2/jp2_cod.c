@@ -450,7 +450,7 @@ int jp2_box_put(jp2_box_t *box, jas_stream_t *out)
 		jas_stream_rewind(tmpstream);
 	}
 	extlen =
-#ifndef __MINGW32__
+#ifndef __GNUC__
 	  (box->len >= (((uint_fast64_t)1) << 32)) != 0;
 #else
 	0;
@@ -884,7 +884,7 @@ static int jp2_getint(jas_stream_t *in, int s, int n, int_fast32_t *val)
 	return 0;
 }
 
-jp2_cdefchan_t *jp2_cdef_lookup(jp2_cdef_t *cdef, int channo)
+const jp2_cdefchan_t *jp2_cdef_lookup(jp2_cdef_t *cdef, int channo)
 {
 	unsigned int i;
 	jp2_cdefchan_t *cdefent;

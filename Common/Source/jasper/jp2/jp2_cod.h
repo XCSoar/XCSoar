@@ -126,7 +126,7 @@
 #define	JP2_JP_LEN		12
 
 // Magick sequence for GeoJP2 box
-static unsigned char msi_uuid2[16] =
+static const unsigned char msi_uuid2[16] =
         {0xb1,0x4b,0xf8,0xbd,0x08,0x3d,0x4b,0x43,
          0xa5,0xae,0x8c,0xd7,0xd5,0xa6,0xce,0x03};
 
@@ -255,8 +255,8 @@ typedef struct {
 struct jp2_boxops_s;
 typedef struct {
 
-	struct jp2_boxops_s *ops;
-	struct jp2_boxinfo_s *info;
+	const struct jp2_boxops_s *ops;
+	const struct jp2_boxinfo_s *info;
 
 	uint_fast32_t type;
 	uint_fast32_t len;
@@ -289,7 +289,7 @@ typedef struct jp2_boxops_s {
 
 typedef struct jp2_boxinfo_s {
 	int type;
-	char *name;
+	const char *name;
 	int flags;
 	jp2_boxops_t ops;
 } jp2_boxinfo_t;
@@ -312,7 +312,7 @@ int jp2_box_put(jp2_box_t *box, jas_stream_t *out);
 #define ICC_CS_YCBCR	0x59436272
 #define ICC_CS_GRAY	0x47524159
 
-jp2_cdefchan_t *jp2_cdef_lookup(jp2_cdef_t *cdef, int channo);
+const jp2_cdefchan_t *jp2_cdef_lookup(jp2_cdef_t *cdef, int channo);
 
 
 #endif
