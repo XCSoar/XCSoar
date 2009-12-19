@@ -179,7 +179,7 @@ ReadAirspace(Airspaces &airspace_database, ZZIP_FILE *fp)
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
   // Need step size finer than default 10
   XCSoarInterface::SetProgressStepSize(5);
-  dwStep = zzip_file_size(fp) / 10L;
+  dwStep = zzip_file_size(fp) / 5L;
 
   dwOldPos = 0L;
   XCSoarInterface::StepProgressDialog();

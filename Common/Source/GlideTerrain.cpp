@@ -65,8 +65,8 @@ FinalGlideThroughTerrain(const fixed this_bearing,
   fixed mc = oldGlidePolar::GetMacCready();
   fixed irange = oldGlidePolar::MacCreadyAltitude(mc,
 						1.0, this_bearing,
-                                                calculated.WindSpeed,
-                                                calculated.WindBearing,
+                                                basic.WindSpeed,
+                                                basic.WindDirection,
 						0, 0, true, 0);
   const GEOPOINT start_loc = basic.Location;
   if (retloc) {
@@ -74,7 +74,7 @@ FinalGlideThroughTerrain(const fixed this_bearing,
   }
   *out_of_range = false;
 
-  if (!positive(irange) || !positive(calculated.NavAltitude))
+  if (!positive(irange) || !positive(basic.NavAltitude))
     // can't make progress in this direction at the current windspeed/mc
     return 0;
 
@@ -82,7 +82,7 @@ FinalGlideThroughTerrain(const fixed this_bearing,
   if (map == NULL)
     return 0;
 
-  const fixed glide_max_range = calculated.NavAltitude/irange;
+  const fixed glide_max_range = basic.NavAltitude/irange;
 
   // returns distance one would arrive at altitude in straight glide
   // first estimate max range at this altitude
@@ -106,7 +106,7 @@ FinalGlideThroughTerrain(const fixed this_bearing,
 
   loc = last_loc = start_loc;
 
-  altitude = calculated.NavAltitude;
+  altitude = basic.NavAltitude;
   h =  max(fixed_zero, terrain.GetTerrainHeight(loc,rounding));
   dh = altitude - h - settings.SafetyAltitudeTerrain;
   last_dh = dh;
@@ -129,7 +129,7 @@ FinalGlideThroughTerrain(const fixed this_bearing,
     f_scale *= max_range/glide_max_range;
   }
 
-  fixed delta_alt = -f_scale * calculated.NavAltitude;
+  fixed delta_alt = -f_scale * basic.NavAltitude;
 
   dloc.Latitude *= f_scale;
   dloc.Longitude *= f_scale;

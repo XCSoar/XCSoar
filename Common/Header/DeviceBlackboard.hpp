@@ -70,9 +70,6 @@ public:
   bool LowerConnection();
   void RaiseConnection();
   void StopReplay();
-  void FLARM_RefreshSlots();
-  void FLARM_ScanTraffic();
-  void SetSystemTime();
   void SetBaroAlt(fixed x) {
     SetBasic().BaroAltitude = x;
   }
@@ -80,6 +77,23 @@ public:
   void SetTrackBearing(fixed val);
   void SetSpeed(fixed val);
   void SetAltitude(fixed alt);
+
+  void tick();
+
+private:
+// moved from GlideComputerAirData
+  void FLARM_RefreshSlots();
+  void FLARM_ScanTraffic();
+  void SetSystemTime();
+  void NavAltitude();
+  void Heading();
+  void Dynamics();
+  void Wind();
+  void TurnRate();
+  void Vario();
+
+  NMEA_INFO state_last;
+  const NMEA_INFO& LastBasic() { return state_last; }
 };
 
 extern DeviceBlackboard device_blackboard;

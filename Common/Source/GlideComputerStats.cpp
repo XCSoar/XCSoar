@@ -112,7 +112,7 @@ GlideComputerStats::DoLogging()
       flightstats.AddAltitudeTerrain(Basic().Time - Calculated().TakeOffTime,
           Calculated().TerrainAlt);
       flightstats.AddAltitude(Basic().Time - Calculated().TakeOffTime,
-          Calculated().NavAltitude);
+          Basic().NavAltitude);
     }
   }
 

@@ -116,22 +116,22 @@ void FormatterAATTime::AssignValue(int i) {
 
   switch (i) {
   case 27:
-    SecsToDisplayTime(Calculated().common_stats.aat_time_remaining);
+    SecsToDisplayTime((int)Calculated().common_stats.aat_time_remaining);
     Valid = Calculated().task_stats.task_valid 
       && positive(Calculated().common_stats.aat_time_remaining)
       && Calculated().task_stats.total.achievable();
     break;
   case 41:
-    SecsToDisplayTime(Calculated().common_stats.task_time_remaining);
+    SecsToDisplayTime((int)Calculated().common_stats.task_time_remaining);
     Valid = Calculated().task_stats.task_valid && Calculated().task_stats.total.achievable();
     break;
   case 42:
-    SecsToDisplayTime(Calculated().task_stats.current_leg.TimeRemaining);
+    SecsToDisplayTime((int)Calculated().task_stats.current_leg.TimeRemaining);
     Valid = Calculated().task_stats.task_valid && Calculated().task_stats.current_leg.achievable();
     break;
   case 45:
-    SecsToDisplayTime(Calculated().common_stats.task_time_remaining
-                      +Calculated().common_stats.task_time_elapsed+Calculated().task_stats.Time);
+    SecsToDisplayTime((int)(Calculated().common_stats.task_time_remaining
+                            +DetectCurrentTime(&Basic())));
     Valid = Calculated().task_stats.task_valid && Calculated().task_stats.total.achievable();
     break;
   case 62:

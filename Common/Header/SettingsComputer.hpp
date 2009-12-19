@@ -40,6 +40,9 @@ Copyright_License {
 #define XCSOAR_SETTINGS_COMPUTER_HPP
 
 #include <tchar.h>
+
+#include "Task/TaskBehaviour.hpp"
+
 #include "SettingsAirspace.hpp"
 
 // control of calculations, these only changed by user interface
@@ -61,33 +64,8 @@ typedef enum
   /** 3: Both */
 } AutoWindModeBits_t;
 
-/** Airspace display modes */
-typedef enum
-{
-  ALLON = 0,
-  CLIP,
-  AUTO,
-  ALLBELOW,
-  INSIDE,
-  ALLOFF
-} AirspaceDisplayMode_t;
 
-struct SETTINGS_COMPUTER
-{
-  /** AutoMacCready feature enable (true/false) */
-  bool AutoMacCready;
-  int FinalGlideTerrain;
-
-  /**
-   * AutoMacCready calculation mode
-   * 0: Final glide only
-   * 1: Set to average if in climb mode
-   * 2: Average if in climb mode, final glide in final glide mode
-   */
-  int AutoMacCreadyMode;
-  bool EnableCalibration;
-  bool AutoForceFinalGlide;
-
+struct SETTINGS_WIND {
   /**
    * AutoWind calculation mode
    * 0: Manual
@@ -96,10 +74,9 @@ struct SETTINGS_COMPUTER
    * 3: Both
    */
   int AutoWindMode;
-  bool EnableNavBaroAltitude;
-  /** block speed to fly instead of dolphin */
-  bool EnableBlockSTF;
-  int EnableThermalLocator;
+};
+
+struct SETTINGS_LOGGER {
   /** Logger interval in cruise mode */
   int LoggerTimeStepCruise;
   /** Logger interval in circling mode */
@@ -107,52 +84,45 @@ struct SETTINGS_COMPUTER
   /** Use short IGC filenames for the logger files */
   bool LoggerShortName;
   bool DisableAutoLogger;
-  double SafetyAltitudeArrival;
-  double SafetyAltitudeBreakoff;
-  double SafetyAltitudeTerrain;
+};
+
+struct SETTINGS_POLAR {
   /** ManoeuveringSpeed */
   double SafetySpeed;
-  int EnableExternalTriggerCruise;
-  short AverEffTime;
-  bool EnableBestAlternate;
-  bool EnableAlternate1;
-  bool EnableAlternate2;
   // polar info
   int BallastSecsToEmpty;
   bool BallastTimerActive;
+};
 
-  int TeamCodeRefWaypoint;
-  bool TeamFlarmTracking;
-  /** CN of the glider to track */
-  TCHAR TeamFlarmCNTarget[4];
+struct SETTINGS_OLC {
+  unsigned OLCRules;
+  unsigned Handicap;
+  bool EnableOLC;
+};
 
+struct SETTINGS_SOUND {
   // sound stuff not used?
   bool EnableSoundVario;
   bool EnableSoundTask;
   bool EnableSoundModes;
   int SoundVolume;
   int SoundDeadband;
+};
 
-  /** local time adjustment */
-  int UTCOffset;
-
-  unsigned OLCRules;
-  unsigned Handicap;
-  bool EnableOLC;
+struct SETTINGS_TEAMCODE {
+  int TeamCodeRefWaypoint;
+  bool TeamFlarmTracking;
+  /** CN of the glider to track */
+  TCHAR TeamFlarmCNTarget[4];
 
   /** auto-detected, see also in Info.h */
   TCHAR TeammateCode[10];
   bool TeammateCodeValid;
   /** FlarmId of the glider to track */
   int TeamFlarmIdTarget;
+};
 
-  /** Array index of the first alternate waypoint */
-  int Alternate1; // VENTA3
-  /** Array index of the second alternate waypoint */
-  int Alternate2;
-  /** Array index of the home waypoint */
-  int HomeWaypoint;
-
+struct SETTINGS_VOICE {
   // vegavoice stuff
   bool EnableVoiceClimbRate;
   bool EnableVoiceTerrain;
@@ -162,18 +132,79 @@ struct SETTINGS_COMPUTER
   bool EnableVoiceNewWaypoint;
   bool EnableVoiceInSector;
   bool EnableVoiceAirspace;
+};
 
-  /** Airspace warnings enabled (true/false) */
-  bool EnableAirspaceWarnings;
-  /** Warning time before airspace entry */
-  unsigned WarningTime;
-  unsigned AcknowledgementTime;
+struct SETTINGS_PLACES_OF_INTEREST {
+  bool EnableBestAlternate;
+  bool EnableAlternate1;
+  bool EnableAlternate2;
 
-  // airspace
-  AirspaceDisplayMode_t AltitudeMode;
-  unsigned ClipAltitude;
-  unsigned AltWarningMargin;
-  int iAirspaceMode[AIRSPACECLASSCOUNT];
+  /** Array index of the first alternate waypoint */
+  int Alternate1; // VENTA3
+  /** Array index of the second alternate waypoint */
+  int Alternate2;
+  /** Array index of the home waypoint */
+  int HomeWaypoint;
+};
+
+
+struct SETTINGS_HEIGHT_MARGINS {
+  double SafetyAltitudeArrival;
+  double SafetyAltitudeBreakoff;
+  double SafetyAltitudeTerrain;
+};
+
+struct SETTINGS_FEATURES {
+  /** AutoMacCready feature enable (true/false) */
+  bool AutoMacCready;
+
+  /**
+   * AutoMacCready calculation mode
+   * 0: Final glide only
+   * 1: Set to average if in climb mode
+   * 2: Average if in climb mode, final glide in final glide mode
+   */
+  int AutoMacCreadyMode;
+
+  /** Calculate final glide over terrain */
+  int FinalGlideTerrain;
+
+  /** block speed to fly instead of dolphin */
+  bool EnableBlockSTF;
+
+  /** Navigate by baro altitude instead of GPS altitude */
+  bool EnableNavBaroAltitude;
+
+  int EnableThermalLocator;
+
+  /** Display mode in final glide if in final glide prior to last turnpoint */
+  bool AutoForceFinalGlide;
+};
+
+
+struct SETTINGS_COMPUTER: 
+  public SETTINGS_AIRSPACE,
+  public SETTINGS_WIND,
+  public SETTINGS_LOGGER,
+  public SETTINGS_POLAR,
+  public SETTINGS_OLC,
+  public SETTINGS_SOUND,
+  public SETTINGS_TEAMCODE,
+  public SETTINGS_VOICE,
+  public SETTINGS_PLACES_OF_INTEREST,
+  public SETTINGS_HEIGHT_MARGINS,
+  public SETTINGS_FEATURES,
+  public TaskBehaviour
+{
+
+  bool EnableCalibration;
+  int EnableExternalTriggerCruise;
+
+  short AverEffTime;
+
+  /** local time adjustment */
+  int UTCOffset;
+
 };
 
 #endif

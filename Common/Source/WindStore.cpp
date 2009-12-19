@@ -85,7 +85,7 @@ WindStore::SlotMeasurement(const NMEA_INFO *nmeaInfo,
     DERIVED_INFO *derivedInfo, Vector windvector, int quality)
 {
   updated = true;
-  windlist->addMeasurement(nmeaInfo->Time, windvector, nmeaInfo->Altitude, quality);
+  windlist->addMeasurement(nmeaInfo->Time, windvector, nmeaInfo->GPSAltitude, quality);
   //we may have a new wind value, so make sure it's emitted if needed!
   recalculateWind(nmeaInfo, derivedInfo);
 }
@@ -98,12 +98,12 @@ WindStore::SlotMeasurement(const NMEA_INFO *nmeaInfo,
 void
 WindStore::SlotAltitude(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
 {
-  if ((fabs(nmeaInfo->Altitude - _lastAltitude) > 100.0) || (updated)) {
+  if ((fabs(nmeaInfo->GPSAltitude - _lastAltitude) > 100.0) || (updated)) {
     //only recalculate if there is a significant change
     recalculateWind(nmeaInfo, derivedInfo);
 
     updated = false;
-    _lastAltitude = nmeaInfo->Altitude;
+    _lastAltitude = nmeaInfo->GPSAltitude;
   }
 }
 
@@ -121,7 +121,7 @@ WindStore::recalculateWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
 {
   bool found;
   Vector CurWind =
-      windlist->getWind(nmeaInfo->Time, nmeaInfo->Altitude, &found);
+      windlist->getWind(nmeaInfo->Time, nmeaInfo->GPSAltitude, &found);
 
   if (found) {
     if ((fabs(CurWind.x - _lastWind.x) > 1.0)
@@ -130,7 +130,7 @@ WindStore::recalculateWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
       _lastWind = CurWind;
 
       updated = false;
-      _lastAltitude = nmeaInfo->Altitude;
+      _lastAltitude = nmeaInfo->GPSAltitude;
 
       NewWind(nmeaInfo, derivedInfo, CurWind);
     }
@@ -150,12 +150,12 @@ WindStore::NewWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
     bearing = atan2(wind.y, wind.x) * RAD_TO_DEG;
 
   if (mag < 30) { // limit to reasonable values
-    derivedInfo->WindSpeed = mag;
+    derivedInfo->WindSpeed_estimated = mag;
 
     if (bearing < 0)
       bearing += 360;
 
-    derivedInfo->WindBearing = bearing;
+    derivedInfo->WindBearing_estimated = bearing;
   } else {
     // TODO code: give warning, wind estimate bogus or very strong!
   }

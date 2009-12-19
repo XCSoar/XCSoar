@@ -131,6 +131,11 @@ struct ACCELERATION_STATE
   //   Acceleration
   //##################
 
+  /** Estimated bank angle */
+  fixed BankAngle;
+  /** Estimated pitch angle */
+  fixed PitchAngle;
+
   /**
    * Is G-load information available?
    * @see Gload
@@ -138,11 +143,7 @@ struct ACCELERATION_STATE
    * @see AccelY
    */
   bool AccelerationAvailable;
-  /**
-   * G-Load information of external device (if available)
-   * @see AccelerationAvailable
-   */
-  double Gload;
+
   /**
    * G-Load information of external device in X-direction (if available)
    * @see AccelerationAvailable
@@ -155,6 +156,7 @@ struct ACCELERATION_STATE
   double AccelZ;
 };
 
+
 /**
  * A struct that holds all the parsed data read from the connected devices
  */
@@ -164,6 +166,19 @@ struct NMEA_INFO:
   public FLARM_STATE,
   public ACCELERATION_STATE
 {
+
+  /** Bearing including wind factor */
+  fixed Heading;
+
+  /** Turn rate based on heading (including wind) */
+  fixed TurnRateWind;
+
+  /** Turn rate based on track */
+  fixed TurnRate;
+
+  /** Estimated track bearing at next time step @author JMW */
+  fixed NextTrackBearing;
+
   //############
   //   Speeds
   //############
@@ -171,13 +186,17 @@ struct NMEA_INFO:
   /**
    * Is air speed information available?
    * If not, will be estimated from ground speed and wind estimate
-   * @see TrueAirspeed
+   * @see TrueAirspeed in Aircraft
    */
   bool AirspeedAvailable;
+
+  fixed TrueAirspeedEstimated;
 
   //##############
   //   Altitude
   //##############
+
+  fixed GPSAltitude; /**< GPS altitude AMSL (m) */
 
   /**
    * Is a barometric altitude available?
@@ -251,23 +270,11 @@ struct NMEA_INFO:
    * @see ExternalWindSpeed
    * @see ExternalWindDirection
    */
-  bool ExternalWindAvailalbe;
-  /**
-   * Wind speed of external device (if available)
-   * @see ExternalWindDirection
-   * @see ExternalWindAvailalbe
-   */
-  double ExternalWindSpeed;
-  /**
-   * Wind direction of external device (if available)
-   * @see ExternalWindSpeed
-   * @see ExternalWindAvailalbe
-   */
-  double ExternalWindDirection;
+  bool ExternalWindAvailable;
 
   /**
    * Is temperature information available?
-   * @see OutsideAirTemperatur
+   * @see OutsideAirTemperature
    */
   bool TemperatureAvailable;
   /**
@@ -306,7 +313,7 @@ struct NMEA_INFO:
   fixed GetAnyAltitude() const {
     return BaroAltitudeAvailable
       ? BaroAltitude
-      : Altitude;
+      : GPSAltitude;
   }
 };
 

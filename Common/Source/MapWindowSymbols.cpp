@@ -106,7 +106,7 @@ void MapWindow::DrawAircraft(Canvas &canvas)
 
     PolygonRotateShift(Aircraft, NUMAIRCRAFTPOINTS, Orig_Aircraft.x+1, Orig_Aircraft.y+1,
                        DisplayAircraftAngle+
-                       (Calculated().Heading-Basic().TrackBearing));
+                       (Basic().Heading-Basic().TrackBearing));
 
     canvas.polygon(Aircraft, NUMAIRCRAFTPOINTS);
 
@@ -158,7 +158,7 @@ void MapWindow::DrawAircraft(Canvas &canvas)
       int n = sizeof(Aircraft)/sizeof(Aircraft[0]);
 
       double angle = DisplayAircraftAngle+
-	(Calculated().Heading-Basic().TrackBearing);
+	(Basic().Heading-Basic().TrackBearing);
 
       PolygonRotateShift(Aircraft, n,
 			 Orig_Aircraft.x-1, Orig_Aircraft.y, angle);
@@ -351,7 +351,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
   TCHAR sTmp[12];
   static SIZE tsize = {0,0};
 
-  if (Calculated().WindSpeed<1) {
+  if (Basic().WindSpeed<1) {
     return; // JMW don't bother drawing it if not significant
   }
 
@@ -364,7 +364,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
   canvas.select(MapGfx.hpWind);
   canvas.select(MapGfx.hbWind);
 
-  int wmag = iround(4.0*Calculated().WindSpeed);
+  int wmag = iround(4.0*Basic().WindSpeed);
 
   Start.y = Orig.y;
   Start.x = Orig.x;
@@ -380,7 +380,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
     Arrow[i].y -= wmag;
 
   PolygonRotateShift(Arrow, 7, Start.x, Start.y,
-		     Calculated().WindBearing-DisplayAngle);
+		     Basic().WindDirection-DisplayAngle);
   canvas.polygon(Arrow, 5);
 
   if (SettingsMap().WindArrowStyle==1) {
@@ -389,7 +389,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
       { 0, Layout::FastScale(-26 - min(20, wmag) * 3) },
     };
 
-    double angle = AngleLimit360(Calculated().WindBearing-DisplayAngle);
+    double angle = AngleLimit360(Basic().WindDirection-DisplayAngle);
     for(i=0; i<2; i++) {
       protateshift(Tail[i], angle, Start.x, Start.y);
     }
@@ -401,7 +401,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
   }
 
 
-  _stprintf(sTmp, TEXT("%i"), iround(Calculated().WindSpeed * SPEEDMODIFY));
+  _stprintf(sTmp, TEXT("%i"), iround(Basic().WindSpeed * SPEEDMODIFY));
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 }; // JMW test {2 | 16};
   if (Arrow[5].y>=Arrow[6].y) {
@@ -425,12 +425,16 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   Pen hpHorizonGround(IBLSCALE(1), Color(106,55,12));
   Brush hbHorizonGround(Color(157,101,60));
 
+  static const fixed fixed_div = 1.0/50.0;
+  static const fixed fixed_89 = 89;
+
   int radius = IBLSCALE(17);
-  double phi = max(-89,min(89,Calculated().BankAngle));
-  double alpha = RAD_TO_DEG
-    *acos(max(-1.0,min(1.0,Calculated().PitchAngle/50.0)));
-  double alpha1 = 180-alpha-phi;
-  double alpha2 = 180+alpha-phi;
+  fixed phi = max(-fixed_89,min(fixed_89,Basic().BankAngle));
+  fixed alpha = fixed_rad_to_deg
+    *acos(max(-fixed_one,min(fixed_one,Basic().PitchAngle*fixed_div)));
+  fixed sphi = 180-phi;
+  fixed alpha1 = sphi-alpha;
+  fixed alpha2 = sphi+alpha;
 
   canvas.select(hpHorizonSky);
   canvas.select(hbHorizonSky);
@@ -513,6 +517,8 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
     // 60 units is size, div by 8 means 60*8 = 480 meters.
 
     Offset = ((int)Calculated().task_stats.total.solution_remaining.AltitudeDifference)/8;
+
+    // JMW OLD_TASK this is broken now
     Offset0 = ((int)Calculated().task_stats.total.solution_mc0.AltitudeDifference)/8;
     // TODO feature: should be an angle if in final glide mode
 

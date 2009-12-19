@@ -812,8 +812,8 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
                                  RasterTerrain &terrain) const
 {
   fixed range = 50000; // 50 km
-  fixed hmin = max(fixed_zero, nmea_info.Altitude - fixed(3300));
-  fixed hmax = max(fixed(3300), nmea_info.Altitude + fixed(1000));
+  fixed hmin = max(fixed_zero, nmea_info.GPSAltitude - fixed(3300));
+  fixed hmax = max(fixed(3300), nmea_info.GPSAltitude + fixed(1000));
   const GEOPOINT p_start = nmea_info.Location;
   const GeoVector vec(range, nmea_info.TrackBearing);
   const GEOPOINT p_end = vec.end_point(p_start);
@@ -866,8 +866,8 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   // draw aircraft trend line
   if (nmea_info.Speed>10.0) {
     fixed t = range/nmea_info.Speed;
-    chart.DrawLine(0, nmea_info.Altitude, 
-                   range, nmea_info.Altitude+derived.Average30s*t,
+    chart.DrawLine(0, nmea_info.GPSAltitude, 
+                   range, nmea_info.GPSAltitude+derived.Average30s*t,
                    Chart::STYLE_BLUETHIN);
   }
 
@@ -879,7 +879,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
     
     POINT line[4];
     line[0].x = chart.screenX(0.0);
-    line[0].y = chart.screenY(nmea_info.Altitude);
+    line[0].y = chart.screenY(nmea_info.GPSAltitude);
     line[1].x = rc.left;
     line[1].y = line[0].y;
     delta = (line[0].x-line[1].x);

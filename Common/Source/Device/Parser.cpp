@@ -841,10 +841,7 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   // VENTA3 CONDOR ALTITUDE
   // "Altitude" should always be GPS Altitude.
-  GPS_INFO->Altitude = ParseAltitude(params[8], params[9]);
-#ifdef FIVV
-  GPS_INFO->Altitude += GPSAltitudeOffset;
-#endif
+  GPS_INFO->GPSAltitude = ParseAltitude(params[8], params[9]);
 
   double GeoidSeparation;
   if (!string_is_empty(params[10])) {
@@ -864,7 +861,7 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
       // JMW TODO really need to know the actual device..
       GeoidSeparation = LookupGeoidSeparation(GPS_INFO->Location.Latitude,
 					      GPS_INFO->Location.Longitude);
-      GPS_INFO->Altitude -= GeoidSeparation;
+      GPS_INFO->GPSAltitude -= GeoidSeparation;
     }
   }
 
@@ -1171,7 +1168,7 @@ bool NMEAParser::PFLAA(const TCHAR *String,
   // alt
   GPS_INFO->FLARM_Traffic[flarm_slot].Altitude =
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeAltitude +
-    GPS_INFO->Altitude;
+    GPS_INFO->GPSAltitude;
 
 #ifdef FLARM_AVERAGE
   GPS_INFO->FLARM_Traffic[flarm_slot].Average30s =

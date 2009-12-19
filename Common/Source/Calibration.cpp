@@ -135,7 +135,7 @@ CalibrationUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   if (index_vspeed>= NUM_CAL_VSPEED)
     return;
 
-  calibration_speed_val[index_vspeed] += (double)Calculated->TrueAirspeedEstimated;
+  calibration_speed_val[index_vspeed] += (double)Basic->TrueAirspeedEstimated;
   calibration_speed_num[index_vspeed] ++;
 
 }

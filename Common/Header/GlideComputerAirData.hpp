@@ -46,6 +46,7 @@ Copyright_License {
 #include "GPSClock.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
+#include "Util/DiffFilter.hpp"
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
@@ -91,10 +92,9 @@ private:
   void ThermalGain();
   void LD();
   void CruiseLD();
-  void Heading();
   void Wind();
   void TerrainHeight();
-  void EnergyHeightNavAltitude();
+  void EnergyHeight();
   void Vario();
   void SpeedToFly(const double mc_setting,
 		  const double cruise_efficiency);
@@ -112,6 +112,9 @@ private:
   void ProcessSun();
   GPSClock airspace_clock;
   GPSClock ballast_clock;
+
+  DiffFilter diff_gps_vario;
+  DiffFilter diff_gps_te_vario;
 };
 
 #endif

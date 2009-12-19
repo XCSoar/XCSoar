@@ -148,7 +148,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic,
     return;
 
   // find appropriate level
-  unsigned short level = (unsigned short)((int)max(basic.Altitude, 0.0)
+  unsigned short level = (unsigned short)((int)max(basic.GetAnyAltitude(), 0.0)
                                           / CUSONDE_HEIGHTSTEP);
 
   // if (level out of range) cancel update

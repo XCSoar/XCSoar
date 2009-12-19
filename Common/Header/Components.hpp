@@ -50,15 +50,15 @@ class InstrumentThread;
 class Waypoints;
 class Airspaces;
 class AirspaceWarningManager;
-class GlidePolar;
 class TaskManager;
+class TaskBehaviour;
 
 // other global objects
 extern Waypoints way_points;
 extern Airspaces airspace_database;
 extern AirspaceWarningManager airspace_warning;
-extern GlidePolar glide_polar;
 extern TaskManager task_manager;
+extern TaskBehaviour task_behaviour;
 
 extern Marks *marks;
 extern TopologyStore *topology;

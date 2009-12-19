@@ -55,6 +55,12 @@ Copyright_License {
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
 
+
+#include "GlideSolvers/GlidePolar.hpp"
+#include "Task/TaskManager.hpp"
+#include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
+#include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
+
 #include <assert.h>
 
 #ifndef CECORE
@@ -403,9 +409,9 @@ static CallBackTableEntry_t CallBackTable[] = {
 };
 
 void 
-dlgWayPointDetailsShowModal(const Waypoint& waypoint)
+dlgWayPointDetailsShowModal(const Waypoint& way_point)
 {
-  selected_waypoint = &waypoint;
+  selected_waypoint = &way_point;
 
   TCHAR sTmp[128];
   double sunsettime;
@@ -480,62 +486,44 @@ dlgWayPointDetailsShowModal(const Waypoint& waypoint)
   _stprintf(sTmp, _T("%d")_T(DEG), iround(bearing));
   ((WndProperty *)wf->FindByName(_T("prpBearing"))) ->SetText(sTmp);
 
-  double alt = 0;
-
-  // alt reqd at mc 0
-
-  alt = XCSoarInterface::Calculated().NavAltitude -
-    oldGlidePolar::MacCreadyAltitude(0.0,
-				  distance,
-				  bearing,
-				  XCSoarInterface::Calculated().WindSpeed,
-				  XCSoarInterface::Calculated().WindBearing,
-				  0, 0, true,
-				  0)
-    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
-    -selected_waypoint->Altitude;
-
-  _stprintf(sTmp, _T("%.0f %s"), alt * ALTITUDEMODIFY, Units::GetAltitudeName());
-
-  wp = ((WndProperty *)wf->FindByName(_T("prpMc0")));
-  if (wp)
-    wp->SetText(sTmp);
-
-  // alt reqd at safety mc
-
-  alt = XCSoarInterface::Calculated().NavAltitude -
-    oldGlidePolar::MacCreadyAltitude(oldGlidePolar::AbortSafetyMacCready(),
-				  distance,
-				  bearing,
-				  XCSoarInterface::Calculated().WindSpeed,
-				  XCSoarInterface::Calculated().WindBearing,
-				  0, 0, true,
-				  0)
-    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
-    -selected_waypoint->Altitude;
-
-  wp = ((WndProperty *)wf->FindByName(_T("prpMc1")));
-  if (wp)
-    wp->SetText(sTmp);
+  GlidePolar glide_polar = task_manager.get_glide_polar();
+  UnorderedTaskPoint t(way_point, XCSoarInterface::SettingsComputer());
+  GlideResult r;
 
   // alt reqd at current mc
 
-  alt = XCSoarInterface::Calculated().NavAltitude -
-    oldGlidePolar::MacCreadyAltitude(oldGlidePolar::GetMacCready(),
-				  distance,
-				  bearing,
-				  XCSoarInterface::Calculated().WindSpeed,
-				  XCSoarInterface::Calculated().WindBearing,
-				  0, 0, true,
-				  0)
-    -XCSoarInterface::SettingsComputer().SafetyAltitudeArrival
-    -selected_waypoint->Altitude;
-
-  _stprintf(sTmp, _T("%.0f %s"), alt * ALTITUDEMODIFY, Units::GetAltitudeName());
-
-  wp = ((WndProperty *)wf->FindByName(_T("prpMc2")));
-  if (wp)
+  r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic(), glide_polar);
+  wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
+  if (wp) {
+    _stprintf(sTmp, _T("%.0f %s"), (r.AltitudeDifference * ALTITUDEMODIFY).as_double(), 
+              Units::GetAltitudeName());
     wp->SetText(sTmp);
+  }
+
+  // alt reqd at mc 0
+
+  glide_polar.set_mc(0.0);
+  r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic(), glide_polar);
+
+  wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
+  if (wp) {
+    _stprintf(sTmp, _T("%.0f %s"), (r.AltitudeDifference * ALTITUDEMODIFY).as_double(), 
+              Units::GetAltitudeName());
+    wp->SetText(sTmp);
+  }
+
+  // alt reqd at safety mc
+
+  glide_polar.set_mc(1.0); // JMW OLD_TASK TODO
+  r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic(), glide_polar);
+
+  wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
+  if (wp) {
+    _stprintf(sTmp, _T("%.0f %s"), (r.AltitudeDifference * ALTITUDEMODIFY).as_double(), 
+              Units::GetAltitudeName());
+    wp->SetText(sTmp);
+  }
+
 
   wf->SetKeyDownNotify(FormKeyDown);
 
@@ -553,7 +541,7 @@ dlgWayPointDetailsShowModal(const Waypoint& waypoint)
   assert(wImage != NULL);
   assert(wDetails != NULL);
 
-  nTextLines = TextToLineOffsets(waypoint.Details.c_str(), LineOffsets, MAXLINES);
+  nTextLines = TextToLineOffsets(way_point.Details.c_str(), LineOffsets, MAXLINES);
 
   /*
   TODO enhancement: wpdetails

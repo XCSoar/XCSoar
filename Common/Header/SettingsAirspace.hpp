@@ -43,4 +43,33 @@ Copyright_License {
 
 extern int    AirspacePriority[AIRSPACECLASSCOUNT];
 
+
+/** Airspace display modes */
+typedef enum
+{
+  ALLON = 0,
+  CLIP,
+  AUTO,
+  ALLBELOW,
+  INSIDE,
+  ALLOFF
+} AirspaceDisplayMode_t;
+
+
+struct SETTINGS_AIRSPACE
+{
+  /** Airspace warnings enabled (true/false) */
+  bool EnableAirspaceWarnings;
+  /** Warning time before airspace entry */
+  unsigned WarningTime;
+  unsigned AcknowledgementTime;
+
+  // airspace
+  AirspaceDisplayMode_t AltitudeMode;
+  unsigned ClipAltitude;
+  unsigned AltWarningMargin;
+  int iAirspaceMode[AIRSPACECLASSCOUNT];
+};
+
+
 #endif

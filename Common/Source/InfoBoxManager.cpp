@@ -515,13 +515,6 @@ InfoBoxManager::DisplayInfoBox(void)
 
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i]) || first);
 
-#ifdef OLD_TASK
-    int theactive = task.getActiveIndex();
-    if (!task.ValidTaskPoint(theactive)) {
-      theactive = -1;
-    }
-#endif
-
     //
     // Set Infobox title and middle value. Bottom line comes next
     //
@@ -583,8 +576,8 @@ InfoBoxManager::DisplayInfoBox(void)
 
     case 14: // Next waypoint
       InfoBoxes[i]->SetSmallerFont(false);
-#ifdef OLD_TASK
-      if (theactive != -1) {
+
+      if (Calculated().task_stats.task_valid) {
         InfoBoxes[i]-> SetTitle(
             Data_Options[DisplayType[i]].Formatter-> Render(&color));
         InfoBoxes[i]->SetColor(color);
@@ -598,7 +591,6 @@ InfoBoxManager::DisplayInfoBox(void)
       if (needupdate)
         InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
             Data_Options[DisplayType[i]].UnitGroup));
-#endif
       break;
 
     default:
@@ -640,7 +632,7 @@ InfoBoxManager::DisplayInfoBox(void)
       break;
 
     case 0: // GPS Alt
-      Units::FormatAlternateUserAltitude(Basic().Altitude, sTmp, sizeof(sTmp)
+      Units::FormatAlternateUserAltitude(Basic().GPSAltitude, sTmp, sizeof(sTmp)
           / sizeof(sTmp[0]));
       InfoBoxes[i]->SetComment(sTmp);
       break;
@@ -753,10 +745,7 @@ InfoBoxManager::DisplayInfoBox(void)
 
     // VENTA3 wind speed + bearing bottom line
     case 25:
-      if (Calculated().WindBearing == 0)
-        _stprintf(sTmp, _T("0%s"), _T(DEG));
-      else
-        _stprintf(sTmp, _T("%1.0d%s"), (int)Calculated().WindBearing, _T(DEG));
+      _stprintf(sTmp, _T("%1.0d%s"), (int)Basic().WindDirection, _T(DEG));
       InfoBoxes[i]->SetComment(sTmp);
       break;
 
@@ -819,9 +808,7 @@ InfoBoxManager::DisplayInfoBox(void)
        } else {
        */
 
-      //Units::FormatUserArrival(Basic().Altitude,
-
-      Units::FormatUserAltitude(Basic().Altitude, sTmp, sizeof(sTmp)
+      Units::FormatUserAltitude(Basic().GPSAltitude, sTmp, sizeof(sTmp)
           / sizeof(sTmp[0]));
       InfoBoxes[i]->SetComment(sTmp);
       break;

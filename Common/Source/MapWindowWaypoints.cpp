@@ -40,6 +40,10 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
+#include "Task/TaskManager.hpp"
+#include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
+#include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 
 #include <assert.h>
 
@@ -58,8 +62,10 @@ void MapWaypointLabelClear();
 class WaypointVisitorMap: public WaypointVisitor {
 public:
   WaypointVisitorMap(MapWindow &_map,
-                     Canvas& _canvas):map(_map),
-                                     canvas(_canvas) 
+                     Canvas& _canvas,
+                     const GlidePolar& polar):map(_map),
+                                              canvas(_canvas),
+                                              glide_polar(polar)
     {
       // if pan mode, show full names
       pDisplayTextType = map.SettingsMap().DisplayTextType;
@@ -67,6 +73,7 @@ public:
         pDisplayTextType = DISPLAYNAME;
       }
       _tcscpy(sAltUnit, Units::GetAltitudeName());
+
     };
 
   void DrawWaypoint(const Waypoint& way_point, bool intask=false) {
@@ -79,17 +86,33 @@ public:
       bool islandable = false;
       bool dowrite = intask || (map.SettingsMap().DeclutterLabels<2);
 
-      bool reachable = true; // \todo XXXXX TODO, calculate with glide polar!!
-      int AltArrivalAGL = 234*ALTITUDEMODIFY;
-      
       TextDisplayMode.AsInt = 0;
       
       irange = map.WaypointInScaleFilter(way_point);
       
       Bitmap *wp_bmp = &MapGfx.hSmall;
+
+      bool draw_alt = false;
+      int AltArrivalAGL= 0;
       
       if(way_point.is_landable()) {
         islandable = true; // so we can always draw them
+
+        bool reachable = false;
+      
+        if ((map.SettingsMap().DeclutterLabels<1) || intask) {
+
+          UnorderedTaskPoint t(way_point, map.SettingsComputer());
+          GlideResult r = TaskSolution::glide_solution_remaining(t, map.Basic(), glide_polar);
+          reachable = r.glide_reachable();
+
+          if (reachable) {
+            AltArrivalAGL = ALTITUDEMODIFY*r.AltitudeDifference.as_double();
+          }
+
+          draw_alt = reachable;
+        }
+ 
         if (reachable) {
           
           TextDisplayMode.AsFlag.Reachable = 1;
@@ -126,19 +149,16 @@ public:
         TextDisplayMode.AsFlag.WhiteBold = 1;
       }
       
-      if(irange || intask || islandable || dowrite) {
+      if(irange || intask || dowrite || islandable) {
         map.draw_masked_bitmap(canvas, *wp_bmp,
                                sc.x, sc.y,
                                20, 20);
       }
       
-      if (intask || irange || dowrite) {
+      if (irange || intask || dowrite) {
         
         TCHAR Buffer[32];
         TCHAR Buffer2[32];
-        
-        bool draw_alt = TextDisplayMode.AsFlag.Reachable
-          && ((map.SettingsMap().DeclutterLabels<1) || intask);
         
         switch(pDisplayTextType) {
         case DISPLAYNAMEIFINTASK:
@@ -224,13 +244,14 @@ public:
   }
 
   void Visit(const Waypoint& way_point) {
-    DrawWaypoint(way_point);
+    DrawWaypoint(way_point, map.Calculated().common_stats.is_waypoint_in_task(way_point));
   }
 private:
   MapWindow &map;
   Canvas &canvas;
   int pDisplayTextType;
   TCHAR sAltUnit[4];
+  const GlidePolar glide_polar;
 };
 
 
@@ -242,7 +263,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
 
   MapWaypointLabelClear();
 
-  WaypointVisitorMap v(*this, canvas);
+  WaypointVisitorMap v(*this, canvas, task->get_glide_polar());
   way_points->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
 
   // OLD_TASK -> new TODO, also draw waypoints in task 

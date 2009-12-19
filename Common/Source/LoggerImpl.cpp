@@ -163,13 +163,13 @@ LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
       gps_info.Location.Longitude;
 
   LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Altitude =
-      gps_info.Altitude;
+      gps_info.GPSAltitude;
   LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].BaroAltitude =
       gps_info.BaroAltitude;
 
   if (!gps_info.BaroAltitudeAvailable) {
     LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].BaroAltitude =
-        gps_info.Altitude;
+        gps_info.GPSAltitude;
   }
 
   LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Hour =
@@ -212,7 +212,7 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   LogFRecordToFile(gps_info.SatelliteIDs, gps_info.Hour, gps_info.Minute,
       gps_info.Second, gps_info.Time, gps_info.NAVWarning);
 
-  if ((gps_info.Altitude < -100) || (gps_info.BaroAltitude < -100)
+  if ((gps_info.GPSAltitude < -100) || (gps_info.BaroAltitude < -100)
       || gps_info.NAVWarning) {
     return;
   }
@@ -242,7 +242,7 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n",
           gps_info.Hour, gps_info.Minute, gps_info.Second,
           DegLat, MinLat, NoS, DegLon, MinLon, EoW,
-          (int)gps_info.BaroAltitude,(int)gps_info.Altitude);
+          (int)gps_info.BaroAltitude,(int)gps_info.GPSAltitude);
 
   IGCWriteRecord(szBRecord, szLoggerFileName);
 }
@@ -257,7 +257,7 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
       NMEA_INFO tmp_info;
       tmp_info.Location.Latitude = LoggerPreTakeoffBuffer[i].Latitude;
       tmp_info.Location.Longitude = LoggerPreTakeoffBuffer[i].Longitude;
-      tmp_info.Altitude = LoggerPreTakeoffBuffer[i].Altitude;
+      tmp_info.GPSAltitude = LoggerPreTakeoffBuffer[i].Altitude;
       tmp_info.BaroAltitude = LoggerPreTakeoffBuffer[i].BaroAltitude;
       tmp_info.Hour = LoggerPreTakeoffBuffer[i].Hour;
       tmp_info.Minute = LoggerPreTakeoffBuffer[i].Minute;

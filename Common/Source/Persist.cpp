@@ -78,6 +78,9 @@ DeleteCalculationsPersist(void)
 void
 LoadCalculationsPersist(DERIVED_INFO *Calculated)
 {
+
+  return; // do nothing, this is broken for CommonStats
+
   // Get the persistent memory filename
   if (szCalculationsPersistFileName[0] == 0) {
     if (is_altair()) {

@@ -35,7 +35,7 @@
 
   <WndFrame Name="frmCommands" X=70 Y=0 Width=246 Height=222 Font=2 Visible=0>
 
-    <WndButton Name="cmdGoto"        Caption="Goto (and clear task)" X=50 Y=10 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdGoto"        Caption="Goto" X=50 Y=10 Width=150  Height=30 Font=2 />
     <WndButton Name="cmdReplace"     Caption="Replace in task"       X=50 Y=-1 Width=150  Height=30 Font=2 />
     <WndButton Name="cmdInserInTask" Caption="Insert in task"        X=50 Y=-1 Width=150  Height=30 Font=2 />
     <WndButton Name="cmdAppendInTask" Caption="Append to task"       X=50 Y=-1 Width=150  Height=30 Font=2 />

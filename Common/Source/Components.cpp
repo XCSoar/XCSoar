@@ -105,14 +105,12 @@ CalculationThread *calculation_thread;
 InstrumentThread *instrument_thread;
 Logger logger; // global
 
-GlidePolar glide_polar(0,0,0);
 Waypoints way_points;
 TaskBehaviour task_behaviour;
 TaskEvents task_events;
 
 TaskManager task_manager(task_events,
                          task_behaviour,
-                         glide_polar,
                          way_points);
 
 Airspaces airspace_database;
@@ -121,14 +119,15 @@ AIRCRAFT_STATE ac_state; // dummy
 
 AirspaceWarningManager airspace_warning(airspace_database,
                                         ac_state,
-                                        glide_polar,
                                         task_manager);
 
 GlideComputer glide_computer(task_manager, airspace_warning);
 
 void default_task() {
 
+  GlidePolar glide_polar = task_manager.get_glide_polar();
   glide_polar.set_mc(2.0);
+  task_manager.set_glide_polar(glide_polar);
 
   task_behaviour.all_off();
 

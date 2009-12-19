@@ -552,10 +552,10 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
 
   NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->ExternalWindAvailalbe = true;
-  GPS_INFO->ExternalWindSpeed = _tcstod(ctemp, NULL) / 10.0;
+  GPS_INFO->ExternalWindAvailable = true;
+  GPS_INFO->WindSpeed = _tcstod(ctemp, NULL) / 10.0;
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->ExternalWindDirection = _tcstod(ctemp, NULL);
+  GPS_INFO->WindDirection = _tcstod(ctemp, NULL);
 
 
   NMEAParser::ExtractParameter(String,ctemp,4);

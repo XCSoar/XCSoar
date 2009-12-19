@@ -97,14 +97,28 @@ GlideComputerTask::StartTask(const bool do_advance, const bool do_announce)
 }
 
 
+extern TaskBehaviour task_behaviour;
+
 void
 GlideComputerTask::ProcessBasicTask(const double mc, const double ce)
 {
   if (Basic().Time != LastBasic().Time) {
     terrain.Lock();
+
+  // JMW TODO OLD_TASK, this is a hack
+    task_behaviour = SettingsComputer();
+
     m_task.update(Basic(), LastBasic());
     SetCalculated().task_stats = m_task.get_stats();
     SetCalculated().common_stats = m_task.get_common_stats();
+
+    if (SettingsComputer().EnableBlockSTF) {
+      SetCalculated().VOpt = m_task.get_common_stats().V_block;
+    } else {
+      SetCalculated().VOpt = m_task.get_common_stats().V_dolphin;
+    }
+    SetCalculated().VMacCready = m_task.get_stats().current_leg.solution_remaining.VOpt;
+
     terrain.Unlock();
   }
 

@@ -76,8 +76,8 @@ double MapWindow::DrawTrail(Canvas &canvas, const SnailTrail &snail_trail)
     GEOPOINT tp1;
 
     FindLatitudeLongitude(Basic().Location,
-                          Calculated().WindBearing,
-                          Calculated().WindSpeed,
+                          Basic().WindDirection,
+                          Basic().WindSpeed,
                           &tp1);
     traildrift.Latitude = (Basic().Location.Latitude-tp1.Latitude);
     traildrift.Longitude = (Basic().Location.Longitude-tp1.Longitude);

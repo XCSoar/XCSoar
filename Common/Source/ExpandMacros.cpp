@@ -115,81 +115,81 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckTaskResumed)"))) {
     // TODO code: check, does this need to be set with temporary task?
-    invalid |= task_manager.is_mode(TaskManager::MODE_ABORT);
-    invalid |= task_manager.is_mode(TaskManager::MODE_GOTO);
+    invalid |= Calculated().common_stats.mode_abort;
+    invalid |= Calculated().common_stats.mode_goto;
     ReplaceInString(OutBuffer, TEXT("$(CheckTaskResumed)"), TEXT(""), Size);
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckTask)"))) {
-    if (!task_manager.check_task()) {
+    if (!Calculated().task_stats.task_valid) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTask)"), TEXT(""), Size);
   }
 
-  if (!task_manager.check_task() || task_manager.is_mode(TaskManager::MODE_GOTO)) {
+  if (!Calculated().task_stats.task_valid || Calculated().common_stats.mode_goto) {
 
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       invalid = true;
       ReplaceInString(OutBuffer, TEXT("$(WaypointNext)"), TEXT("Waypoint\nNext"), Size);
-    }
-    if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
+
+    } else if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
       invalid = true;
       ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
     }
 
-  } else if (task_manager.is_mode(TaskManager::MODE_ABORT)) {
+  } else if (Calculated().common_stats.mode_abort) {
 
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid |= !task_manager.validTaskPoint(1);
-      CondReplaceInString(!task_manager.validTaskPoint(2),
+      invalid |= !Calculated().common_stats.active_has_next;
+      CondReplaceInString(Calculated().common_stats.next_is_last,
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
                           TEXT("Landpoint\nFurthest"),
                           TEXT("Landpoint\nNext"), Size);
 
-    } else
-    if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
+    } else if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
       // Waypoint\nNext
-      invalid |= !task_manager.validTaskPoint(-1);
-      CondReplaceInString(!task_manager.validTaskPoint(-2),
+      invalid |= !Calculated().common_stats.active_has_previous;
+      CondReplaceInString(Calculated().common_stats.previous_is_first,
                           OutBuffer,
                           TEXT("$(WaypointPrevious)"),
                           TEXT("Landpoint\nClosest"),
                           TEXT("Landpoint\nPrevious"), Size);
     }
+
   } else {
     if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
       // Waypoint\nNext
-      invalid |= !task_manager.validTaskPoint(1);
-      CondReplaceInString(!task_manager.validTaskPoint(2),
+      invalid |= !Calculated().common_stats.active_has_next;
+      CondReplaceInString(Calculated().common_stats.next_is_last,
                           OutBuffer,
                           TEXT("$(WaypointNext)"),
                           TEXT("Waypoint\nFinish"),
                           TEXT("Waypoint\nNext"), Size);
 
-    } else
-    if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
-      if (!task_manager.validTaskPoint(-2)) {
-        invalid |= !task_manager.validTaskPoint(-1);
-        ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"),
-                        TEXT("Waypoint\nStart"), Size);
-      } 
+    } else if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
+      invalid |= !Calculated().common_stats.active_has_previous;
+      CondReplaceInString(Calculated().common_stats.previous_is_first,
+                          OutBuffer,
+                          TEXT("$(WaypointPrevious)"),
+                          TEXT("Waypoint\nStart"),
+                          TEXT("Waypoint\nPrevious"), Size);
+    } 
 #ifdef OLD_TASK
-      else if (task.getSettings().EnableMultipleStartPoints) {
-        invalid |= !task.ValidTaskPoint(0);
-        CondReplaceInString((task.getActiveIndex()==0),
-                            OutBuffer,
-                            TEXT("$(WaypointPrevious)"),
-                            TEXT("StartPoint\nCycle"), TEXT("Waypoint\nPrevious"), Size);
-      } 
-#endif
-      else {
-        invalid |= !task_manager.validTaskPoint(-1);
-        ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
-      }
+    else if (task.getSettings().EnableMultipleStartPoints) {
+      invalid |= !task.ValidTaskPoint(0);
+      CondReplaceInString((task.getActiveIndex()==0),
+                          OutBuffer,
+                          TEXT("$(WaypointPrevious)"),
+                          TEXT("StartPoint\nCycle"), TEXT("Waypoint\nPrevious"), Size);
+    } 
+    else {
+      invalid |= !Calculated().common_stats.active_has_previous;
+      ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
     }
+#endif
   }
 
 #ifdef OLD_TASK
@@ -246,12 +246,12 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 #endif
 
   if (_tcsstr(OutBuffer, TEXT("$(TaskAbortToggleActionName)"))) {
-    if (task_manager.is_mode(TaskManager::MODE_GOTO)) {
-      CondReplaceInString(task_manager.check_ordered_task(),
+    if (Calculated().common_stats.mode_goto) {
+      CondReplaceInString(Calculated().common_stats.ordered_valid,
                           OutBuffer, TEXT("$(TaskAbortToggleActionName)"),
                           TEXT("Resume"), TEXT("Abort"), Size);
     } else 
-      CondReplaceInString(task_manager.is_mode(TaskManager::MODE_ABORT),
+      CondReplaceInString(Calculated().common_stats.mode_abort,
                           OutBuffer, TEXT("$(TaskAbortToggleActionName)"),
                           TEXT("Resume"), TEXT("Abort"), Size);
   }

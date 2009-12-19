@@ -87,7 +87,6 @@ struct VARIO_INFO
   int AverageLD;
 
   fixed LDvario;
-  fixed DistanceVario;
 
   fixed GliderSinkRate;
 };
@@ -113,11 +112,6 @@ struct CLIMB_INFO
 
 struct CIRCLING_INFO
 {
-  /** Turn rate */
-  fixed TurnRate;
-
-  /** Turn rate based on heading (including wind) */
-  fixed TurnRateWind;
 
   /** Turn rate after low pass filter */
   fixed SmoothedTurnRate;
@@ -193,9 +187,6 @@ struct THERMAL_BAND_INFO
 
 struct DERIVED_ALT_INFO
 {
-  /** Altitude used for navigation (GPS or Baro) */
-  fixed NavAltitude;
-
   /** Energy height excess to slow to best glide speed @author JMW */
   fixed EnergyHeight;
 };
@@ -225,16 +216,6 @@ struct THERMAL_LOCATOR_INFO
   THERMAL_SOURCE_INFO ThermalSources[MAX_THERMAL_SOURCES];
 };
 
-struct HORIZON_INFO
-{
-  /** Estimated bank angle */
-  fixed BankAngle;
-  /** Estimated pitch angle */
-  fixed PitchAngle;
-
-  /** Calculated Gload (assuming balanced turn) */
-  fixed Gload;
-};
 
 struct TEAMCODE_INFO
 {
@@ -264,17 +245,8 @@ struct DERIVED_INFO:
   public FLYING_INFO,
   public THERMAL_BAND_INFO,
   public THERMAL_LOCATOR_INFO,
-  public HORIZON_INFO,
   public TEAMCODE_INFO
 {
-  fixed TrueAirspeedEstimated;
-
-  /** Bearing including wind factor */
-  fixed Heading;
-
-  /** Estimated track bearing at next time step @author JMW */
-  fixed NextTrackBearing;
-
   /** MacCready (block) speed */
   fixed VMacCready;
 
@@ -284,9 +256,9 @@ struct DERIVED_INFO:
   fixed MacCreadyRisk;
 
   /** Wind speed */
-  fixed WindSpeed;
+  fixed WindSpeed_estimated;
   /** Wind bearing */
-  fixed WindBearing;
+  fixed WindBearing_estimated;
 
   bool FinalGlide; /**< Used for display mode */
 

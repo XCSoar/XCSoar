@@ -153,8 +153,8 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    wind_mag = cmp.Calculated().WindSpeed;
-    wind_bearing = cmp.Calculated().WindBearing;
+    wind_mag = cmp.Basic().WindSpeed;
+    wind_bearing = cmp.Basic().WindDirection;
 
     if (!cmp.Calculated().Flying) {
       last_wind_mag = wind_mag;

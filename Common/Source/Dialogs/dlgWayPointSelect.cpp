@@ -120,7 +120,7 @@ static void UpdateList(void)
     sort_distance = true;
     int a = DirectionFilter[DirectionFilterIdx];
     if (a == DirHDG) {
-      a = iround(XCSoarInterface::Calculated().Heading);
+      a = iround(XCSoarInterface::Basic().Heading);
       lastHeading = a;
     }
     waypoint_sorter->filter_direction(WayPointSelectInfo, a);
@@ -250,7 +250,7 @@ static void SetDirectionData(DataField *Sender){
   if (DirectionFilterIdx == 0)
     _stprintf(sTmp, _T("%c"), '*');
   else if (DirectionFilterIdx == 1){
-    int a = iround(XCSoarInterface::Calculated().Heading);
+    int a = iround(XCSoarInterface::Basic().Heading);
     if (a <=0)
       a += 360;
     _stprintf(sTmp, _T("HDG(%d")_T(DEG)_T(")"), a);
@@ -423,7 +423,7 @@ static int OnTimerNotify(WindowControl * Sender) {
   (void)Sender;
   if (DirectionFilterIdx == 1){
     int a;
-    a = (lastHeading - iround(XCSoarInterface::Calculated().Heading));
+    a = (lastHeading - iround(XCSoarInterface::Basic().Heading));
     if (abs(a) > 0){
       UpdateList();
       SetDirectionData(NULL);

@@ -46,36 +46,30 @@ Copyright_License {
 #include <stdio.h>
 #include "Interface.hpp"
 
-/*
-JMW OLD_TASK 
-Note: it will be slow to look up waypoint each time it is rendered, 
-  we should keep a local copy
-*/
+#include "Task/TaskManager.hpp"
 
 const TCHAR *FormatterWaypoint::Render(int *color) {
-#ifdef OLD_TASK
-  int index = task.getWaypointIndex();
-  if (index>=0) {
-    const WAYPOINT &way_point = way_points.get(index);
-    const WPCALC &wpcalc = way_points.get_calc(index);
 
-    if (wpcalc.Reachable) {
+  if (TaskPoint* tp = task_manager.getActiveTaskPoint()) {
+    const Waypoint& way_point = tp->get_waypoint();
+
+    if (Calculated().task_stats.current_leg.solution_remaining.is_final_glide()) {
       *color = 2; // blue text
     } else {
       *color = 0; // black text
     }
     if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
     {
-      _tcsncpy(Text, way_point.Name,3);
+      _tcsncpy(Text, way_point.Name.c_str(),3);
       Text[3] = '\0';
     }
     else if( SettingsMap().DisplayTextType == DISPLAYNUMBER)
     {
-      _stprintf(Text,_T("%d"), way_point.Number );
+      _stprintf(Text,_T("%d"), way_point.id );
     }
     else
     {
-      _tcsncpy(Text, way_point.Name,
+      _tcsncpy(Text, way_point.Name.c_str(),
                (sizeof(Text)/sizeof(TCHAR))-1);
       Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
     }
@@ -85,7 +79,6 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
     Valid = false;
     RenderInvalid(color);
   }
-#endif
   return(Text);
 }
 
@@ -229,17 +222,16 @@ void FormatterAlternate::AssignValue(int i) {
 }
 
 
-
-
 const TCHAR *FormatterDiffBearing::Render(int *color) {
 
-#ifdef OLD_TASK
-  if (task.Valid()
-      && (Calculated().WaypointDistance > 10.0)) {
+  if (Calculated().task_stats.task_valid
+      && (Calculated().task_stats.current_leg.solution_remaining.Vector.Distance > 10.0)) {
     Valid = true;
 
-    Value = Calculated().WaypointBearing -  Basic().TrackBearing;
+    Value = Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing 
+      -  Basic().TrackBearing;
 
+    // TODO use AngleLimit180
     if (Value < -180.0)
       Value += 360.0;
     else
@@ -266,7 +258,6 @@ const TCHAR *FormatterDiffBearing::Render(int *color) {
     Valid = false;
     RenderInvalid(color);
   }
-#endif
   return(Text);
 }
 

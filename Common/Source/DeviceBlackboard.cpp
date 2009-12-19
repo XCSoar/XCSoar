@@ -45,6 +45,7 @@ Copyright_License {
 #include "UtilsFLARM.hpp"
 #include "Asset.hpp"
 #include "Device/Parser.h"
+#include "Math/Constants.h"
 
 DeviceBlackboard device_blackboard;
 
@@ -97,7 +98,7 @@ DeviceBlackboard::Initialise()
       gps_info.Speed = _SIM_STARTUPSPEED;
     #endif
     #ifdef _SIM_STARTUPALTITUDE
-      gps_info.Altitude = _SIM_STARTUPALTITUDE;
+      gps_info.GPSAltitude = _SIM_STARTUPALTITUDE;
     #endif
   }
 }
@@ -115,7 +116,7 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().Location = loc;
-  SetBasic().Altitude = alt;
+  SetBasic().GPSAltitude = alt;
 }
 
 /**
@@ -140,7 +141,7 @@ DeviceBlackboard::SetLocation(const GEOPOINT &loc,
   SetBasic().Speed = speed;
   SetBasic().IndicatedAirspeed = speed; // cheat
   SetBasic().TrackBearing = bearing;
-  SetBasic().Altitude = alt;
+  SetBasic().GPSAltitude = alt;
   SetBasic().BaroAltitude = baroalt;
   SetBasic().Time = t;
   SetBasic().Replay = true;
@@ -266,7 +267,7 @@ void
 DeviceBlackboard::SetAltitude(fixed val)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().Altitude = val;
+  SetBasic().GPSAltitude = val;
   SetBasic().BaroAltitude = val;
 }
 
@@ -423,6 +424,197 @@ DeviceBlackboard::FLARM_ScanTraffic()
           }
         }
       }
+    }
+  }
+}
+
+void
+DeviceBlackboard::tick()
+{
+  // check for timeout on FLARM objects
+  FLARM_RefreshSlots();
+  // lookup known traffic
+  FLARM_ScanTraffic();
+  // set system time if necessary
+  SetSystemTime();
+
+  // calculate fast data to complete aircraft state
+  Wind();
+  Heading();
+  NavAltitude();
+  Vario();
+
+  if (Basic().Time!= LastBasic().Time) {
+
+    if (Basic().Time>LastBasic().Time) {
+      TurnRate();
+      Dynamics();
+    }
+
+    state_last = Basic();
+  }
+}
+
+
+
+/**
+ * 1. Determines which altitude to use (GPS/baro)
+ * 2. If possible calculates true airspeed and TAS/IAS ratio
+ * 3. Calculates energy height on TAS basis
+ *
+ * \f${m/2} \times v^2 = m \times g \times h\f$ therefore \f$h = {v^2}/{2 \times g}\f$
+ */
+void
+DeviceBlackboard::NavAltitude()
+{
+  // Determine which altitude to use for nav functions
+  if (SettingsComputer().EnableNavBaroAltitude
+      && Basic().BaroAltitudeAvailable) {
+    SetBasic().NavAltitude = Basic().BaroAltitude;
+  } else {
+    SetBasic().NavAltitude = Basic().GPSAltitude;
+  }
+}
+
+
+/**
+ * Calculates the heading, and the estimated true airspeed
+ */
+void
+DeviceBlackboard::Heading()
+{
+  if ((Basic().Speed > 0) || (Basic().WindSpeed > 0)) {
+
+    fixed x0 = fastsine(Basic().TrackBearing)*Basic().Speed;
+    fixed y0 = fastcosine(Basic().TrackBearing)*Basic().Speed;
+    x0 += fastsine(Basic().WindDirection)*Basic().WindSpeed;
+    y0 += fastcosine(Basic().WindDirection)*Basic().WindSpeed;
+
+    if (!Calculated().Flying) {
+      // don't take wind into account when on ground
+      SetBasic().Heading = Basic().TrackBearing;
+    } else {
+      SetBasic().Heading = AngleLimit360(atan2(x0, y0) * RAD_TO_DEG);
+    }
+
+    // calculate estimated true airspeed
+    SetBasic().TrueAirspeedEstimated = sqrt(x0*x0+y0*y0);
+
+  } else {
+    SetBasic().Heading = Basic().TrackBearing;
+    SetBasic().TrueAirspeedEstimated = 0.0;
+  }
+
+  if (!Basic().AirspeedAvailable) {
+    SetBasic().TrueAirspeed = SetBasic().TrueAirspeedEstimated;
+  }
+}
+
+void
+DeviceBlackboard::Vario()
+{
+  if (!Basic().NettoVarioAvailable) {
+    SetBasic().NettoVario = Calculated().NettoVario;
+  }
+}
+
+void
+DeviceBlackboard::Wind()
+{
+  if (!Basic().ExternalWindAvailable) {
+    SetBasic().WindSpeed = Calculated().WindSpeed_estimated;
+    SetBasic().WindDirection = Calculated().WindBearing_estimated;
+  }
+}
+
+/**
+ * Calculates the turn rate and the derived features.
+ * Determines the current flight mode (cruise/circling).
+ */
+void
+DeviceBlackboard::TurnRate()
+{
+  // Calculate time passed since last calculation
+  const fixed dT = Basic().Time - LastBasic().Time;
+
+  // Calculate turn rate
+
+  if (!Calculated().Flying) {
+    SetBasic().TurnRate = fixed_zero;
+    SetBasic().NextTrackBearing = Basic().TrackBearing;
+    return;
+  }
+
+  SetBasic().TurnRate =
+    AngleLimit180(Basic().TrackBearing - LastBasic().TrackBearing) / dT;
+
+  // if (time passed is less then 2 seconds) time step okay
+  if (dT < fixed_two) {
+    // calculate turn rate acceleration (turn rate derived)
+    fixed dRate = (Basic().TurnRate - LastBasic().TurnRate) / dT;
+
+    // integrate assuming constant acceleration, for one second
+    // QUESTION TB: shouldn't dtlead be = 1, for one second?!
+    static const fixed dtlead = 0.3;
+
+    const fixed calc_bearing = Basic().TrackBearing + dtlead
+      * (Basic().TurnRate + fixed_half * dtlead * dRate);
+
+    // b_new = b_old + Rate * t + 0.5 * dRate * t * t
+
+    // Limit the projected bearing to 360 degrees
+    SetBasic().NextTrackBearing = AngleLimit360(calc_bearing);
+
+  } else {
+
+    // Time step too big, so just take the last measurement
+    SetBasic().NextTrackBearing = Basic().TrackBearing;
+  }
+}
+
+/**
+ * Calculates the turn rate of the heading,
+ * the estimated bank angle and
+ * the estimated pitch angle
+ */
+void
+DeviceBlackboard::Dynamics()
+{
+  static const fixed fixed_inv_g = 1.0/9.81;
+  static const fixed fixed_small = 0.001;
+
+  if (Calculated().Flying && ((Basic().Speed > 0) || (Basic().WindSpeed > 0))) {
+
+    // calculate turn rate in wind coordinates
+    const fixed dT = Basic().Time - LastBasic().Time;
+
+    if (positive(dT)) {
+      SetBasic().TurnRateWind =
+        AngleLimit180(Basic().Heading - LastBasic().Heading) / dT;
+    }
+
+    // estimate bank angle (assuming balanced turn)
+    const fixed angle = atan(fixed_deg_to_rad * Basic().TurnRateWind
+        * Basic().TrueAirspeed * fixed_inv_g);
+
+    SetBasic().BankAngle = fixed_rad_to_deg * angle;
+
+    if (!Basic().AccelerationAvailable) {
+      SetBasic().Gload = fixed_one / max(fixed_small, fabs(cos(angle)));
+    }
+
+    // estimate pitch angle (assuming balanced turn)
+    SetBasic().PitchAngle = fixed_rad_to_deg *
+      atan2(Calculated().GPSVario-Calculated().Vario,
+	    Basic().TrueAirspeed);
+
+  } else {
+    SetBasic().BankAngle = fixed_zero;
+    SetBasic().PitchAngle = fixed_zero;
+    SetBasic().TurnRateWind = fixed_zero;
+
+    if (!Basic().AccelerationAvailable) {
+      SetBasic().Gload = fixed_one;
     }
   }
 }

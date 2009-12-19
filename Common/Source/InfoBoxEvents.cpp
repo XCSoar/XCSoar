@@ -140,9 +140,9 @@ ActionInterface::on_key_Altitude(int UpDown)
   fixed fixed_step = 100/ALTITUDEMODIFY;
   if (is_simulator()) {
     if(UpDown==1) {
-      device_blackboard.SetAltitude(Basic().Altitude+fixed_step);
+      device_blackboard.SetAltitude(Basic().GPSAltitude+fixed_step);
     } else if (UpDown==-1) {
-      device_blackboard.SetAltitude(m_max(fixed_zero,Basic().Altitude-fixed_step));
+      device_blackboard.SetAltitude(m_max(fixed_zero,Basic().GPSAltitude-fixed_step));
     } else if (UpDown==-2) {
       on_key_Direction(-1);
     } else if (UpDown==2) {

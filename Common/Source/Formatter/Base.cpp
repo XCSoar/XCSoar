@@ -94,7 +94,7 @@ void InfoBoxFormatter::RenderInvalid(int *color) {
 void InfoBoxFormatter::AssignValue(int i) {
   switch (i) {
   case 0:
-    Value = ALTITUDEMODIFY*Basic().Altitude;
+    Value = ALTITUDEMODIFY*Basic().GPSAltitude;
     break;
   case 1:
     Value = ALTITUDEMODIFY*Calculated().AltitudeAGL  ;
@@ -205,10 +205,10 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 25:
-    Value = SPEEDMODIFY*Calculated().WindSpeed;
+    Value = SPEEDMODIFY*Basic().WindSpeed;
     break;
   case 26:
-    Value = Calculated().WindBearing;
+    Value = Basic().WindDirection;
     break;
   case 28:
     Value = DISTANCEMODIFY*Calculated().task_stats.distance_max;
@@ -219,19 +219,12 @@ void InfoBoxFormatter::AssignValue(int i) {
     Valid = Calculated().task_stats.task_valid;
     break;
   case 30:
-#ifdef OLD_TASK
-    Value = TASKSPEEDMODIFY*Calculated().common_stats.aat_max_speed;
-    Valid = Calculated().task_stats.task_valid && positive(Calculated().common_stats.aat_max_speed);
-#endif
+    Value = TASKSPEEDMODIFY*Calculated().common_stats.aat_speed_max;
+    Valid = Calculated().task_stats.task_valid && positive(Calculated().common_stats.aat_speed_max);
     break;
   case 31:
-#ifdef OLD_TASK
-    Value = TASKSPEEDMODIFY*Calculated().AATMinSpeed;
-    Valid = Calculated().task_stats.task_valid;
-    if (Calculated().AATTimeToGo<1) {
-      Valid = false;
-    }
-#endif
+    Value = TASKSPEEDMODIFY*Calculated().common_stats.aat_speed_min;
+    Valid = Calculated().task_stats.task_valid && positive(Calculated().common_stats.aat_speed_min);
     break;
   case 32:
     Valid = Basic().AirspeedAvailable;
@@ -283,8 +276,8 @@ void InfoBoxFormatter::AssignValue(int i) {
     Valid = Calculated().task_stats.task_valid;
     break;
   case 52:
-    Value = TASKSPEEDMODIFY*Calculated().common_stats.aat_remaining_speed;
-    Valid = Calculated().task_stats.task_valid && positive(Calculated().common_stats.aat_remaining_speed);
+    Value = TASKSPEEDMODIFY*Calculated().common_stats.aat_speed_remaining;
+    Valid = Calculated().task_stats.task_valid && positive(Calculated().common_stats.aat_speed_remaining);
     break;
   case 53:
     if (Calculated().LDvario== 999) {
@@ -343,7 +336,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 64:
-    Value = LIFTMODIFY*Calculated().DistanceVario;
+    Value = LIFTMODIFY*Calculated().task_stats.total.vario.get_value();
     Valid = Calculated().task_stats.task_valid;
     break;
   case 65: // battery voltage
@@ -366,6 +359,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 66: // VENTA-ADDON added GR Final
 #ifdef OLD_TASK
+    Valid = Calculated().task_stats.task_valid;
     if (Calculated().GRFinish== 999) {
       Valid = false;
     } else {
@@ -388,9 +382,9 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 70:	// VENTA3 QFE
 #ifdef OLD_TASK
-    Value = ALTITUDEMODIFY* (Basic().Altitude-QFEAltitudeOffset);
+    Value = ALTITUDEMODIFY* (Basic().GPSAltitude-QFEAltitudeOffset);
 #else
-    Value = ALTITUDEMODIFY* Basic().Altitude;
+    Value = ALTITUDEMODIFY* Basic().GPSAltitude;
 #endif
     break;
   case 71:

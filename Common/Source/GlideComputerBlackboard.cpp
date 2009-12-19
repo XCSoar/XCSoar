@@ -108,7 +108,6 @@ GlideComputerBlackboard::ResetFlight(const bool full)
   calculated_info.TerrainWarningLocation.Longitude = 0.0;
 
   // If you load persistent values, you need at least these reset:
-  calculated_info.WindBearing = 0.0;
   calculated_info.LastThermalAverage=0.0;
   calculated_info.ThermalGain=0.0;
 }
@@ -120,7 +119,7 @@ void
 GlideComputerBlackboard::StartTask()
 {
   calculated_info.CruiseStartLocation = gps_info.Location;
-  calculated_info.CruiseStartAlt = calculated_info.NavAltitude;
+  calculated_info.CruiseStartAlt = gps_info.NavAltitude;
   calculated_info.CruiseStartTime = gps_info.Time;
 
   // JMW TODO accuracy: Get time from aatdistance module since this is

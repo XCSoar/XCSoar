@@ -587,7 +587,7 @@ WindZigZagCheckAirData(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   bool airdata_invalid = false;
   if (!Calculated->Flying) {
     airdata_invalid = true;
-  } else if (fabs(Calculated->TurnRate) > 20.0) {
+  } else if (fabs(Basic->TurnRate) > 20.0) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - turn rate\n");
@@ -602,7 +602,7 @@ WindZigZagCheckAirData(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - ground speed\n");
 #endif
-  } else if (Basic->AccelerationAvailable && (fabs(Basic->Gload - 1.0) > 0.3)) {
+  } else if (fabs(Basic->Gload - 1.0) > 0.3) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - acceleration\n");
@@ -667,8 +667,8 @@ WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
   if (Basic->Time < tLastEstimate + UPDATE_RATE)
     return 0;
 
-  double V_wind_estimate = Calculated->WindSpeed;
-  double theta_wind_estimate = Calculated->WindBearing * DEGTORAD;
+  double V_wind_estimate = Basic->WindSpeed;
+  double theta_wind_estimate = Basic->WindDirection * DEGTORAD;
   double percent_error = myzigzag.StartSearch(V_wind_estimate, theta_wind_estimate);
 
   // Check spread of zig-zag manoeuver
@@ -712,8 +712,8 @@ WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
             Basic->Time,
             V_wind_estimate,
             theta_wind_estimate,
-            Calculated->WindSpeed,
-            Calculated->WindBearing,
+            Basic->WindSpeed,
+            Basic->WindDirection,
             percent_error,
             quality);
     #endif
