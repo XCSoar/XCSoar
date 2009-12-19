@@ -50,6 +50,8 @@
  *
  */
 struct AIRCRAFT_STATE {
+  AIRCRAFT_STATE();
+
   //##########
   //   Time
   //##########
@@ -61,6 +63,7 @@ struct AIRCRAFT_STATE {
   //################
 
   GEOPOINT Location; /**< location of aircraft */
+
   fixed TrackBearing; /**< track angle in degrees true */
 
   //############
@@ -118,6 +121,19 @@ struct AIRCRAFT_STATE {
    * @see NettoVarioAvailable
    */
   fixed NettoVario;
+
+  //##################
+  //   Acceleration
+  //##################
+
+  /**
+   * G-Load information of external device (if available)
+   * or estimated (assuming balanced turn) 
+   * @see AccelerationAvailable
+   */
+
+  fixed Gload;
+
 
   /** Accessor for the aircraft location
    */

@@ -48,3 +48,9 @@ AIRCRAFT_STATE::get_predicted_state(const fixed &in_time) const
   return state_next;
 }
 
+
+AIRCRAFT_STATE::AIRCRAFT_STATE():
+  Gload(fixed_one)
+{
+
+}
