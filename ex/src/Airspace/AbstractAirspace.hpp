@@ -52,6 +52,9 @@ class AtmosphericPressure;
 /**
  *  Structure to hold data for intercepts between aircraft and airspace.
  *  (interior or exterior)
+ *
+ * \todo
+ * - currently uses NavAltitude, should really use baro if available
  */
 struct AirspaceInterceptSolution {
   /**

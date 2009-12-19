@@ -588,7 +588,7 @@ OrderedTask::calc_gradient(const AIRCRAFT_STATE &state)
 {
   fixed g_best = fixed_zero;
   fixed d_acc = fixed_zero;
-  fixed h_this = state.Altitude;
+  fixed h_this = state.NavAltitude;
 
   for (unsigned i=activeTaskPoint; i< tps.size(); i++) {
     d_acc += tps[i]->get_vector_remaining(state).Distance;

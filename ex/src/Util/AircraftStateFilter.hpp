@@ -46,6 +46,8 @@
  * Class for filtering aircraft state (location and altitude) 
  * in order to derive average speed, bearing and climb rate
  * 
+ * \todo
+ * - if this is to be used for airspace queies, should use same altitude datum as airspace
  */
 class AircraftStateFilter {
 public:

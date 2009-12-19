@@ -93,7 +93,8 @@ struct AIRCRAFT_STATE {
   //   Altitude
   //##############
 
-  fixed Altitude; /**< GPS altitude AMSL (m) */
+  /** Altitude used for navigation (GPS or Baro) */
+  fixed NavAltitude;
 
   //##############
   //   Wind

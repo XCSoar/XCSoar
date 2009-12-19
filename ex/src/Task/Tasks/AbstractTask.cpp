@@ -251,7 +251,7 @@ AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft)
   }
   const fixed d = tp->get_vector_remaining(aircraft).Distance;
   if (d) {
-    return (aircraft.Altitude-tp->get_elevation())/d;
+    return (aircraft.NavAltitude-tp->get_elevation())/d;
   } else {
     return 0.0;
   }

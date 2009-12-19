@@ -48,7 +48,7 @@ AircraftStateFilter::AircraftStateFilter(const AIRCRAFT_STATE& state,
   m_lpf_alt(cutoff_wavelength),
   m_x(fixed_zero),
   m_y(fixed_zero),
-  m_alt(state.Altitude)
+  m_alt(state.NavAltitude)
 {
   reset(state);
 }
@@ -60,7 +60,7 @@ AircraftStateFilter::reset(const AIRCRAFT_STATE& state)
 
   m_x = fixed_zero;
   m_y = fixed_zero;
-  m_alt = state.Altitude;
+  m_alt = state.NavAltitude;
 
   m_vx = 0;
   m_vy = 0;
@@ -91,7 +91,7 @@ AircraftStateFilter::update(const AIRCRAFT_STATE& state)
   GeoVector vec(m_state_last.Location, state.Location);
   m_x+= sin(fixed_deg_to_rad*vec.Bearing)*vec.Distance;
   m_y+= cos(fixed_deg_to_rad*vec.Bearing)*vec.Distance;
-  m_alt = state.Altitude;
+  m_alt = state.NavAltitude;
 
   m_vx = m_lpf_x.update(m_df_x.update(m_x));
   m_vy = m_lpf_y.update(m_df_y.update(m_y));
@@ -135,6 +135,6 @@ AircraftStateFilter::get_predicted_state(const fixed &in_time) const
   AIRCRAFT_STATE state_next = m_state_last;
   GeoVector vec(get_speed()*in_time, get_bearing());
   state_next.Location = vec.end_point(m_state_last.Location);
-  state_next.Altitude = m_state_last.Altitude+get_climb_rate()*in_time;
+  state_next.NavAltitude = m_state_last.NavAltitude+get_climb_rate()*in_time;
   return state_next;
 }

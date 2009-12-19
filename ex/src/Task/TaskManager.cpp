@@ -162,10 +162,18 @@ TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
       -task_ordered.get_stats().total.TimeElapsed;
 
     if (positive(common_stats.aat_time_remaining)) {
-      common_stats.aat_remaining_speed = task_ordered.get_stats().total.remaining.get_distance()/
+      common_stats.aat_speed_remaining = task_ordered.get_stats().total.remaining.get_distance()/
         common_stats.aat_time_remaining;
     } else {
-      common_stats.aat_remaining_speed = -fixed_one;
+      common_stats.aat_speed_remaining = -fixed_one;
+    }
+
+    if (positive(task_behaviour.aat_min_time)) {
+      common_stats.aat_speed_max = task_ordered.get_stats().distance_max / task_behaviour.aat_min_time;
+      common_stats.aat_speed_min = task_ordered.get_stats().distance_min / task_behaviour.aat_min_time;
+    } else {
+      common_stats.aat_speed_max = -fixed_one;
+      common_stats.aat_speed_min = -fixed_one;
     }
 
     common_stats.task_time_remaining = task_ordered.get_stats().total.TimeRemaining;
@@ -192,6 +200,18 @@ TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
   common_stats.mode_ordered = (mode==MODE_ORDERED);
 
   common_stats.ordered_valid = task_ordered.check_task();
+
+  if (active_task && active_task->get_stats().task_valid) {
+    common_stats.active_has_next = active_task->validTaskPoint(1);
+    common_stats.active_has_previous = active_task->validTaskPoint(-1);
+    common_stats.next_is_last = active_task->validTaskPoint(1) && !active_task->validTaskPoint(2);
+    common_stats.previous_is_first = active_task->validTaskPoint(-1) && !active_task->validTaskPoint(-2);
+  } else {
+    common_stats.active_has_next = false;
+    common_stats.active_has_previous = false;
+    common_stats.next_is_last = false;
+    common_stats.previous_is_first = false;
+  }
 
   WaypointLister lister(common_stats);
   if (common_stats.ordered_valid) {

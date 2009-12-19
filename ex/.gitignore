@@ -4,6 +4,7 @@
 *.exe
 .stgit*
 .deps
+*.gcov
 *~
 *.rsc
 *.IGC

@@ -42,8 +42,8 @@
 bool 
 AbstractAirspace::inside(const AIRCRAFT_STATE& state) const
 {
-  return ((state.Altitude >= m_base.Altitude) &&
-          (state.Altitude <= m_top.Altitude) &&
+  return ((state.NavAltitude >= m_base.Altitude) &&
+          (state.NavAltitude <= m_top.Altitude) &&
           inside(state.Location));
 }
 
@@ -72,7 +72,7 @@ AbstractAirspace::intercept_vertical(const AIRCRAFT_STATE &state,
   AirspaceInterceptSolution solution;
   solution.distance = distance;
   solution.elapsed_time = perf.solution_vertical(solution.distance, 
-                                                 state.Altitude,
+                                                 state.NavAltitude,
                                                  m_base.Altitude, 
                                                  m_top.Altitude,
                                                  solution.altitude);
@@ -97,7 +97,7 @@ AbstractAirspace::intercept_horizontal(const AIRCRAFT_STATE &state,
   solution.altitude = lower? m_base.Altitude: m_top.Altitude;
   solution.elapsed_time = perf.solution_horizontal(distance_start, 
                                                    distance_end,
-                                                   state.Altitude,
+                                                   state.NavAltitude,
                                                    solution.altitude,
                                                    solution.distance);
   return solution;

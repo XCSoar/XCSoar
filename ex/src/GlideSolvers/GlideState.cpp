@@ -99,7 +99,7 @@ GlideState::GlideState(const GeoVector &vector,
 
 void GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
 {
-  AltitudeDifference = (aircraft.Altitude-MinHeight);
+  AltitudeDifference = (aircraft.NavAltitude-MinHeight);
   if (positive(aircraft.WindSpeed)) {
     WindDirection = aircraft.WindDirection;
     EffectiveWindSpeed = aircraft.WindSpeed;

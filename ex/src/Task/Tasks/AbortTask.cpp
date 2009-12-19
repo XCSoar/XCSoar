@@ -108,7 +108,7 @@ double
 AbortTask::abort_range(const AIRCRAFT_STATE &state)
 {
   // always scan at least 50km or approx glide range
-  return max(50000.0, state.Altitude*polar_safety.get_bestLD());
+  return max(50000.0, state.NavAltitude*polar_safety.get_bestLD());
 }
 
 void
@@ -253,7 +253,7 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
 
   // now try with fake height added
   AIRCRAFT_STATE fake = state;
-  fake.Altitude += 10000.0;
+  fake.NavAltitude += 10000.0;
   fill_reachable(fake, approx_waypoints, glide_polar, true, false);
   fill_reachable(fake, approx_waypoints, glide_polar, false, false);
 
