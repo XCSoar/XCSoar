@@ -128,6 +128,8 @@ GlideComputer glide_computer(task_manager, airspace_warning);
 
 void default_task() {
 
+  glide_polar.set_mc(2.0);
+
   task_behaviour.all_off();
 
   AbstractTaskFactory *fact;

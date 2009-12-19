@@ -163,7 +163,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Valid = Calculated().task_stats.task_valid;
     break;
   case 18:
-    if (Calculated().task_stats.task_finished) {
+    if (Calculated().common_stats.task_finished) {
       Value = DISTANCEMODIFY*Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
     } else {
       Value = DISTANCEMODIFY*Calculated().task_stats.total.remaining.get_distance();
@@ -220,11 +220,8 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 30:
 #ifdef OLD_TASK
-    Value = TASKSPEEDMODIFY*Calculated().AATMaxSpeed;
-    Valid = Calculated().task_stats.task_valid;
-    if (Calculated().AATTimeToGo<1) {
-      Valid = false;
-    }
+    Value = TASKSPEEDMODIFY*Calculated().common_stats.aat_max_speed;
+    Valid = Calculated().task_stats.task_valid && positive(Calculated().common_stats.aat_max_speed);
 #endif
     break;
   case 31:
@@ -286,13 +283,8 @@ void InfoBoxFormatter::AssignValue(int i) {
     Valid = Calculated().task_stats.task_valid;
     break;
   case 52:
-#ifdef OLD_TASK
-    Value = TASKSPEEDMODIFY*Calculated().AATTargetSpeed;
-    Valid = Calculated().task_stats.task_valid;
-    if (Calculated().AATTimeToGo<1) {
-      Valid = false;
-    }
-#endif
+    Value = TASKSPEEDMODIFY*Calculated().common_stats.aat_remaining_speed;
+    Valid = Calculated().task_stats.task_valid && positive(Calculated().common_stats.aat_remaining_speed);
     break;
   case 53:
     if (Calculated().LDvario== 999) {
@@ -333,14 +325,8 @@ void InfoBoxFormatter::AssignValue(int i) {
     Valid = Calculated().task_stats.task_valid;
     break;
   case 60:
-    Value = DISTANCEMODIFY*Calculated().HomeDistance ;
-#ifdef OLD_TASK
-    if (SettingsComputer().HomeWaypoint>=0) {
-      Valid = way_points.verify_index(SettingsComputer().HomeWaypoint);
-    } else {
-      Valid = false;
-    }
-#endif
+    Value = DISTANCEMODIFY*Calculated().common_stats.vector_home.Distance;
+    Valid = true;
     break;
   case 61:
     Value = TASKSPEEDMODIFY*Calculated().task_stats.total.remaining_effective.get_speed();

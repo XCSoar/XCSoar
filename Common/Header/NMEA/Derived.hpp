@@ -42,6 +42,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Task/TaskStats/TaskStats.hpp"
+#include "Task/TaskStats/CommonStats.hpp"
 
 #define NUMTHERMALBUCKETS 10
 #define MAX_THERMAL_SOURCES 20
@@ -288,7 +289,6 @@ struct DERIVED_INFO:
   fixed WindBearing;
 
   bool FinalGlide; /**< Used for display mode */
-  bool LandableReachable; /**< Whether or not there are landable turnpoints within glide range */
 
   // reflects whether aircraft is in a start/finish/aat/turn sector
   bool IsInSector;
@@ -300,11 +300,6 @@ struct DERIVED_INFO:
   fixed AverageClimbRate[200];
   long AverageClimbRateN[200];
 
-  /** Distance to home airport */
-  fixed HomeDistance;
-  /** Direction to home airport */
-  fixed HomeRadial;
-
   fixed ZoomDistance;
 
   fixed TimeSunset;
@@ -313,6 +308,7 @@ struct DERIVED_INFO:
   fixed Experimental;
 
   TaskStats task_stats;
+  CommonStats common_stats;
 };
 
 #endif

@@ -762,16 +762,7 @@ InfoBoxManager::DisplayInfoBox(void)
 
     // VENTA3 radial
     case 60:
-      if (SettingsComputer().HomeWaypoint == -1) { // should be redundant
-        InfoBoxes[i]->SetComment(TEXT(""));
-        break;
-      }
-
-      if (Calculated().HomeRadial == 0) {
-        _stprintf(sTmp, _T("0%s"), _T(DEG));
-      } else {
-        _stprintf(sTmp, _T("%1.0d%s"), (int)Calculated().HomeRadial, _T(DEG));
-      }
+      _stprintf(sTmp, _T("%1.0d%s"), Calculated().common_stats.vector_home.Bearing.as_int(), _T(DEG));
       InfoBoxes[i]->SetComment(sTmp);
       break;
 

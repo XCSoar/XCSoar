@@ -432,11 +432,10 @@ static void UpdateValuesRules(void) {
   WndProperty *wp;
   TCHAR Temp[80];
 
-#ifdef OLD_TASK
-
   wp = (WndProperty*)wf->FindByName(_T("prpValidStart"));
   if (wp) {
-    if (XCSoarInterface::Calculated().ValidStart) {
+    if (positive(XCSoarInterface::Calculated().common_stats.task_time_elapsed)) {
+      /// \todo proper task validity check
       wp->SetText(gettext(_T("TRUE")));
     } else {
       wp->SetText(gettext(_T("FALSE")));
@@ -444,7 +443,7 @@ static void UpdateValuesRules(void) {
   }
   wp = (WndProperty*)wf->FindByName(_T("prpValidFinish"));
   if (wp) {
-    if (XCSoarInterface::Calculated().ValidFinish) {
+    if (XCSoarInterface::Calculated().common_stats.task_finished) {
       wp->SetText(gettext(_T("TRUE")));
     } else {
       wp->SetText(gettext(_T("FALSE")));
@@ -453,13 +452,17 @@ static void UpdateValuesRules(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   if (wp) {
-    if (XCSoarInterface::Calculated().TaskStartTime>0) {
-      Units::TimeToText(Temp, (int)TimeLocal((int)(XCSoarInterface::Calculated().TaskStartTime)));
+    if (positive(XCSoarInterface::Calculated().common_stats.task_time_elapsed)) {
+      fixed the_time = XCSoarInterface::Calculated().task_stats.Time - 
+        XCSoarInterface::Calculated().common_stats.task_time_elapsed;
+      Units::TimeToText(Temp, (int)TimeLocal(the_time));
       wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));
     }
   }
+
+#ifdef OLD_TASK
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartSpeed"));
   if (wp) {
@@ -525,73 +528,55 @@ static void UpdateValuesTask(void) {
       wp->SetText(Temp);
     }
   }
-
-  double dd = XCSoarInterface::Calculated().TaskTimeToGo;
-  if (XCSoarInterface::Calculated().TaskStartTime>0.0) {
-    dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
-  }
+#endif
 
   wp = (WndProperty*)wf->FindByName(_T("prpETETime"));
   if (wp) {
-    Units::TimeToText(Temp, (int)dd);
+    Units::TimeToText(Temp, XCSoarInterface::Calculated().common_stats.task_time_elapsed
+                      +XCSoarInterface::Calculated().common_stats.task_time_remaining);
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRemainingTime"));
   if (wp) {
-    Units::TimeToText(Temp, (int)XCSoarInterface::Calculated().TaskTimeToGo);
+    Units::TimeToText(Temp, XCSoarInterface::Calculated().common_stats.task_time_remaining);
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskDistance"));
   if (wp) {
     _stprintf(Temp, _T("%.0f %s"), DISTANCEMODIFY*
-              (XCSoarInterface::Calculated().TaskDistanceToGo
-               +XCSoarInterface::Calculated().TaskDistanceCovered),
+              XCSoarInterface::Calculated().task_stats.total.planned.get_distance(),
               Units::GetDistanceName());
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRemainingDistance"));
   if (wp) {
-    if (task.getSettings().AATEnabled) {
-      _stprintf(Temp, _T("%.0f %s"),
-                DISTANCEMODIFY*XCSoarInterface::Calculated().AATTargetDistance,
-                Units::GetDistanceName());
-    } else {
-      _stprintf(Temp, _T("%.0f %s"),
-                DISTANCEMODIFY*XCSoarInterface::Calculated().TaskDistanceToGo,
-                Units::GetDistanceName());
-    }
+    _stprintf(Temp, _T("%.0f %s"),
+              DISTANCEMODIFY*
+              XCSoarInterface::Calculated().task_stats.total.remaining.get_distance(),
+              Units::GetDistanceName());
     wp->SetText(Temp);
   }
-
-  double d1;
-  if (fabs(dd) > 0.001){
-    d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
-          + XCSoarInterface::Calculated().TaskDistanceCovered)/dd;
-    // TODO bug: this fails for OLC
-  } else {
-      d1 = 0;
-  }
-
 
   wp = (WndProperty*)wf->FindByName(_T("prpEstimatedSpeed"));
   if (wp) {
     _stprintf(Temp, _T("%.0f %s"),
-              TASKSPEEDMODIFY*d1, Units::GetTaskSpeedName());
+              TASKSPEEDMODIFY*
+              XCSoarInterface::Calculated().task_stats.total.planned.get_speed(), 
+              Units::GetTaskSpeedName());
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAverageSpeed"));
   if (wp) {
     _stprintf(Temp, _T("%.0f %s"),
-              TASKSPEEDMODIFY*XCSoarInterface::Calculated().TaskSpeed,
+              TASKSPEEDMODIFY*
+              XCSoarInterface::Calculated().task_stats.total.travelled.get_speed(), 
               Units::GetTaskSpeedName());
     wp->SetText(Temp);
   }
-#endif
-
 }
 
 

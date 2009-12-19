@@ -103,6 +103,8 @@ GlideComputerTask::ProcessBasicTask(const double mc, const double ce)
   if (Basic().Time != LastBasic().Time) {
     terrain.Lock();
     m_task.update(Basic(), LastBasic());
+    SetCalculated().task_stats = m_task.get_stats();
+    SetCalculated().common_stats = m_task.get_common_stats();
     terrain.Unlock();
   }
 

@@ -578,7 +578,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
 
     // draw actual glide bar
     if (Offset<=0) {
-      if (Calculated().LandableReachable) {
+      if (Calculated().common_stats.landable_reachable) {
         canvas.select(MapGfx.hpFinalGlideBelowLandable);
         canvas.select(MapGfx.hbFinalGlideBelowLandable);
       } else {
@@ -593,7 +593,7 @@ void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
 
     // draw glide bar at mc 0
     if (Offset0<=0) {
-      if (Calculated().LandableReachable) {
+      if (Calculated().common_stats.landable_reachable) {
         canvas.select(MapGfx.hpFinalGlideBelowLandable);
         canvas.hollow_brush();
       } else {

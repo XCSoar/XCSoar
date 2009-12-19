@@ -89,7 +89,8 @@ void FormatterTime::AssignValue(int i) {
 
 
 void FormatterAATTime::AssignValue(int i) {
-  double dd;
+  double dd=0;
+  status = 0;
 #ifdef OLD_TASK
   if (task.getSettings().AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
     dd = Calculated().TaskTimeToGo;
@@ -111,29 +112,30 @@ void FormatterAATTime::AssignValue(int i) {
     dd = 0;
     status = 0; // black
   }
+#endif
 
   switch (i) {
   case 27:
-    SecsToDisplayTime((int)Calculated().AATTimeToGo);
-    Valid = (task.ValidTaskPoint(task.getActiveIndex()) && task.getSettings().AATEnabled
-	     && (Calculated().AATTimeToGo< 0.9*ERROR_TIME));
+    SecsToDisplayTime(Calculated().common_stats.aat_time_remaining);
+    Valid = Calculated().task_stats.task_valid 
+      && positive(Calculated().common_stats.aat_time_remaining)
+      && Calculated().task_stats.total.achievable();
     break;
   case 41:
-    SecsToDisplayTime((int)(Calculated().TaskTimeToGo));
-    Valid = task.ValidTaskPoint(task.getActiveIndex())
-      && (Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
+    SecsToDisplayTime(Calculated().common_stats.task_time_remaining);
+    Valid = Calculated().task_stats.task_valid && Calculated().task_stats.total.achievable();
     break;
   case 42:
-    SecsToDisplayTime((int)(Calculated().LegTimeToGo));
-    Valid = task.ValidTaskPoint(task.getActiveIndex())
-      && (Calculated().LegTimeToGo< 0.9*ERROR_TIME);
+    SecsToDisplayTime(Calculated().task_stats.current_leg.TimeRemaining);
+    Valid = Calculated().task_stats.task_valid && Calculated().task_stats.current_leg.achievable();
     break;
   case 45:
-    SecsToDisplayTime((int)(Calculated().TaskTimeToGo+DetectCurrentTime(&Basic())));
-    Valid = task.ValidTaskPoint(task.getActiveIndex())
-      && (Calculated().TaskTimeToGo< 0.9*ERROR_TIME);
+    SecsToDisplayTime(Calculated().common_stats.task_time_remaining
+                      +Calculated().common_stats.task_time_elapsed+Calculated().task_stats.Time);
+    Valid = Calculated().task_stats.task_valid && Calculated().task_stats.total.achievable();
     break;
   case 62:
+#ifdef OLD_TASK
     if (task.getSettings().AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
       SecsToDisplayTime((int)dd);
       Valid = (dd< 0.9*ERROR_TIME);
@@ -141,11 +143,11 @@ void FormatterAATTime::AssignValue(int i) {
       SecsToDisplayTime(0);
       Valid = false;
     }
+#endif
     break;
   default:
     break;
   }
-#endif
 }
 
 const TCHAR *FormatterTime::Render(int *color) {
