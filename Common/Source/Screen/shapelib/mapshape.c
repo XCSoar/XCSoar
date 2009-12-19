@@ -123,7 +123,6 @@ static void writeHeader( SHPHandle psSHP )
 {
   uchar     	abyHeader[100];
   int		i;
-  double	dValue;
   int32	*panSHX;
 
   /* -------------------------------------------------------------------- */
@@ -562,7 +561,7 @@ int msSHPWritePoint(SHPHandle psSHP, pointObj *point )
 {
   int nRecordOffset, nRecordSize=0;
   uchar	*pabyRec;
-  int32	i32, nPoints, nParts;
+  int32 nPoints, nParts;
 
   if( psSHP->nShapeType != SHP_POINT ) return(-1);
 
@@ -653,7 +652,7 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
 {
   int nRecordOffset, i, j, k, nRecordSize=0;
   uchar	*pabyRec;
-  int32	i32, nPoints, nParts;
+  int32 nPoints, nParts;
   double dfMMin, dfMMax = 0;
   psSHP->bUpdated = MS_TRUE;
 

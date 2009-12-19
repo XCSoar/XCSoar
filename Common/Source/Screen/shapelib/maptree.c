@@ -352,7 +352,7 @@ static int treeNodeAddShapeId( treeNodeObj *node, int id, rectObj rect, int maxd
     /*      Otherwise, consider creating two subnodes if could fit into     */
     /*      them, and adding to the appropriate subnode.                    */
     /* -------------------------------------------------------------------- */
-#if MAX_SUBNODE == 2
+#if MAX_SUBNODES == 2
     else if( maxdepth > 1 && node->numsubnodes == 0 ) {
       rectObj half1, half2;
 
@@ -373,7 +373,7 @@ static int treeNodeAddShapeId( treeNodeObj *node, int id, rectObj rect, int maxd
             return(treeNodeAddShapeId(node->subnode[1], id, rect, maxdepth-1));
         }
     }
-#endif /* MAX_SUBNODE == 2 */
+#endif /* MAX_SUBNODES == 2 */
 
 /* -------------------------------------------------------------------- */
 /*      If none of that worked, just add it to this nodes list.         */
