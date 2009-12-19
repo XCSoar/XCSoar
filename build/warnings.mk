@@ -15,6 +15,12 @@ CXXFLAGS += -Wno-char-subscripts
 # FastMath.h does dirty aliasing tricks
 CXXFLAGS += -Wno-strict-aliasing
 
+# plain C warnings
+
+CFLAGS += -Wall -Wextra
+CFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
+CFLAGS += -Wundef
+
 # make warnings fatal (for perfectionists)
 
 ifeq ($(WERROR),)
@@ -23,6 +29,9 @@ endif
 
 ifeq ($(WERROR),y)
 CXXFLAGS += -Werror
+
+# disabled due to zzip/_fmode warning
+#CFLAGS += -Werror
 endif
 
 #CXXFLAGS += -pedantic
