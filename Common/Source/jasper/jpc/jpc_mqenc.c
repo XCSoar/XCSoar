@@ -378,15 +378,3 @@ static void jpc_mqenc_setbits(jpc_mqenc_t *mqenc)
 		mqenc->creg -= 0x8000;
 	}
 }
-
-/* Dump a MQ encoder to a stream for debugging. */
-
-int jpc_mqenc_dump(jpc_mqenc_t *mqenc, FILE *out)
-{
-	fprintf(out, "AREG = %08x, CREG = %08x, CTREG = %d\n",
-	  mqenc->areg, mqenc->creg, mqenc->ctreg);
-	fprintf(out, "IND = %02d, MPS = %d, QEVAL = %04x\n",
-	  *mqenc->curctx - jpc_mqstates, (*mqenc->curctx)->mps,
-	  (*mqenc->curctx)->qeval);
-	return 0;
-}

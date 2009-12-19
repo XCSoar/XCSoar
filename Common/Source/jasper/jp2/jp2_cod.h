@@ -281,7 +281,6 @@ typedef struct jp2_boxops_s {
 	void (*destroy)(jp2_box_t *box);
 	int (*getdata)(jp2_box_t *box, jas_stream_t *in);
 	int (*putdata)(jp2_box_t *box, jas_stream_t *out);
-	void (*dumpdata)(jp2_box_t *box, FILE *out);
 } jp2_boxops_t;
 
 /******************************************************************************\

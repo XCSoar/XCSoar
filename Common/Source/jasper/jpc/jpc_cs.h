@@ -697,9 +697,6 @@ typedef struct jpc_msops_s {
 	/* Put the marker segment parameters to a stream. */
 	int (*putparms)(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 
-	/* Dump the marker segment parameters (for debugging). */
-	int (*dumpparms)(jpc_ms_t *ms, FILE *out);
-
 } jpc_msops_t;
 
 /******************************************************************************\

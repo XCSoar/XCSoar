@@ -99,7 +99,6 @@ typedef struct {
 
 static jpc_mstabent_t *jpc_mstab_lookup(int id);
 
-static int jpc_poc_dumpparms(jpc_ms_t *ms, FILE *out);
 static int jpc_poc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 static int jpc_poc_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
 static void jpc_poc_destroyparms(jpc_ms_t *ms);
@@ -132,20 +131,6 @@ static int jpc_ppt_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 static int jpc_crg_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 static int jpc_com_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 
-static int jpc_sot_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_siz_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_cod_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_coc_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_qcd_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_qcc_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_rgn_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_unk_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_sop_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_ppm_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_ppt_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_crg_dumpparms(jpc_ms_t *ms, FILE *out);
-static int jpc_com_dumpparms(jpc_ms_t *ms, FILE *out);
-
 static void jpc_siz_destroyparms(jpc_ms_t *ms);
 static void jpc_qcd_destroyparms(jpc_ms_t *ms);
 static void jpc_qcc_destroyparms(jpc_ms_t *ms);
@@ -173,40 +158,38 @@ static int jpc_cox_putcompparms(jpc_ms_t *ms, jpc_cstate_t *cstate,
 \******************************************************************************/
 
 static jpc_mstabent_t jpc_mstab[] = {
-	{JPC_MS_SOC, "SOC", {0, 0, 0, 0}},
-	{JPC_MS_SOT, "SOT", {0, jpc_sot_getparms, jpc_sot_putparms,
-	  jpc_sot_dumpparms}},
-	{JPC_MS_SOD, "SOD", {0, 0, 0, 0}},
-	{JPC_MS_EOC, "EOC", {0, 0, 0, 0}},
+	{JPC_MS_SOC, "SOC", {0, 0, 0}},
+	{JPC_MS_SOT, "SOT", {0, jpc_sot_getparms, jpc_sot_putparms, }},
+	{JPC_MS_SOD, "SOD", {0, 0, 0}},
+	{JPC_MS_EOC, "EOC", {0, 0, 0}},
 	{JPC_MS_SIZ, "SIZ", {jpc_siz_destroyparms, jpc_siz_getparms,
-	  jpc_siz_putparms, jpc_siz_dumpparms}},
+	  jpc_siz_putparms, }},
 	{JPC_MS_COD, "COD", {jpc_cod_destroyparms, jpc_cod_getparms,
-	  jpc_cod_putparms, jpc_cod_dumpparms}},
+	  jpc_cod_putparms, }},
 	{JPC_MS_COC, "COC", {jpc_coc_destroyparms, jpc_coc_getparms,
-	  jpc_coc_putparms, jpc_coc_dumpparms}},
-	{JPC_MS_RGN, "RGN", {0, jpc_rgn_getparms, jpc_rgn_putparms,
-	  jpc_rgn_dumpparms}},
+	  jpc_coc_putparms, }},
+	{JPC_MS_RGN, "RGN", {0, jpc_rgn_getparms, jpc_rgn_putparms, }},
 	{JPC_MS_QCD, "QCD", {jpc_qcd_destroyparms, jpc_qcd_getparms,
-	  jpc_qcd_putparms, jpc_qcd_dumpparms}},
+	  jpc_qcd_putparms, }},
 	{JPC_MS_QCC, "QCC", {jpc_qcc_destroyparms, jpc_qcc_getparms,
-	  jpc_qcc_putparms, jpc_qcc_dumpparms}},
+	  jpc_qcc_putparms, }},
 	{JPC_MS_POC, "POC", {jpc_poc_destroyparms, jpc_poc_getparms,
-	  jpc_poc_putparms, jpc_poc_dumpparms}},
-	{JPC_MS_TLM, "TLM", {0, jpc_unk_getparms, jpc_unk_putparms, 0}},
-	{JPC_MS_PLM, "PLM", {0, jpc_unk_getparms, jpc_unk_putparms, 0}},
+	  jpc_poc_putparms, }},
+	{JPC_MS_TLM, "TLM", {0, jpc_unk_getparms, jpc_unk_putparms}},
+	{JPC_MS_PLM, "PLM", {0, jpc_unk_getparms, jpc_unk_putparms}},
 	{JPC_MS_PPM, "PPM", {jpc_ppm_destroyparms, jpc_ppm_getparms,
-	  jpc_ppm_putparms, jpc_ppm_dumpparms}},
+	  jpc_ppm_putparms, }},
 	{JPC_MS_PPT, "PPT", {jpc_ppt_destroyparms, jpc_ppt_getparms,
-	  jpc_ppt_putparms, jpc_ppt_dumpparms}},
+	  jpc_ppt_putparms, }},
 	{JPC_MS_SOP, "SOP", {0, jpc_sop_getparms, jpc_sop_putparms,
-	  jpc_sop_dumpparms}},
-	{JPC_MS_EPH, "EPH", {0, 0, 0, 0}},
+	  }},
+	{JPC_MS_EPH, "EPH", {0, 0, 0}},
 	{JPC_MS_CRG, "CRG", {0, jpc_crg_getparms, jpc_crg_putparms,
-	  jpc_crg_dumpparms}},
+	  }},
 	{JPC_MS_COM, "COM", {jpc_com_destroyparms, jpc_com_getparms,
-	  jpc_com_putparms, jpc_com_dumpparms}},
+	  jpc_com_putparms, }},
 	{-1, "UNKNOWN",  {jpc_unk_destroyparms, jpc_unk_getparms,
-	  jpc_unk_putparms, jpc_unk_dumpparms}}
+	  jpc_unk_putparms, }}
 };
 
 /******************************************************************************\
@@ -289,10 +272,6 @@ jpc_ms_t *jpc_getms(jas_stream_t *in, jpc_cstate_t *cstate)
 			return 0;
 		}
 
-		if (jas_getdbglevel() > 0) {
-			jpc_ms_dump(ms, stderr);
-		}
-
 #if 0 // JMW
 		if (JAS_CAST(ulong, jas_stream_tell(tmpstream)) != ms->len) {
                   fprintf(stderr,
@@ -307,10 +286,6 @@ jpc_ms_t *jpc_getms(jas_stream_t *in, jpc_cstate_t *cstate)
 	} else {
 		/* There are no marker segment parameters. */
 		ms->len = 0;
-
-		if (jas_getdbglevel() > 0) {
-			jpc_ms_dump(ms, stderr);
-		}
 	}
 
 	/* Update the code stream state information based on the type of
@@ -370,10 +345,6 @@ int jpc_putms(jas_stream_t *out, jpc_cstate_t *cstate, jpc_ms_t *ms)
 		cstate->numcomps = ms->parms.siz.numcomps;
 	}
 
-	if (jas_getdbglevel() > 0) {
-		jpc_ms_dump(ms, stderr);
-	}
-
 	return 0;
 }
 
@@ -405,24 +376,6 @@ void jpc_ms_destroy(jpc_ms_t *ms)
 		(*ms->ops->destroyparms)(ms);
 	}
 	jas_free(ms);
-}
-
-/* Dump a marker segment to a stream for debugging. */
-void jpc_ms_dump(jpc_ms_t *ms, FILE *out)
-{
-	jpc_mstabent_t *mstabent;
-	mstabent = jpc_mstab_lookup(ms->id);
-	fprintf(out, "type = 0x%04x (%s);", ms->id, mstabent->name);
-	if (JPC_MS_HASPARMS(ms->id)) {
-		fprintf(out, " len = %d;", ms->len + 2);
-		if (ms->ops->dumpparms) {
-			(*ms->ops->dumpparms)(ms, out);
-		} else {
-			fprintf(out, "\n");
-		}
-	} else {
-		fprintf(out, "\n");
-	}
 }
 
 /******************************************************************************\
@@ -461,14 +414,6 @@ static int jpc_sot_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	  jpc_putuint8(out, sot->numparts)) {
 		return -1;
 	}
-	return 0;
-}
-
-static int jpc_sot_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_sot_t *sot = &ms->parms.sot;
-	fprintf(out, "tileno = %d; len = %d; partno = %d; numparts = %d\n",
-	  sot->tileno, sot->len, sot->partno, sot->numparts);
 	return 0;
 }
 
@@ -563,25 +508,6 @@ static int jpc_siz_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	return 0;
 }
 
-static int jpc_siz_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_siz_t *siz = &ms->parms.siz;
-	unsigned int i;
-	fprintf(out, "caps = 0x%02x;\n", siz->caps);
-	fprintf(out, "width = %d; height = %d; xoff = %d; yoff = %d;\n",
-	  siz->width, siz->height, siz->xoff, siz->yoff);
-	fprintf(out, "tilewidth = %d; tileheight = %d; tilexoff = %d; "
-	  "tileyoff = %d;\n", siz->tilewidth, siz->tileheight, siz->tilexoff,
-	  siz->tileyoff);
-	for (i = 0; i < siz->numcomps; ++i) {
-		fprintf(out, "prec[%d] = %d; sgnd[%d] = %d; hsamp[%d] = %d; "
-		  "vsamp[%d] = %d\n", i, siz->comps[i].prec, i,
-		  siz->comps[i].sgnd, i, siz->comps[i].hsamp, i,
-		  siz->comps[i].vsamp);
-	}
-	return 0;
-}
-
 /******************************************************************************\
 * COD marker segment operations.
 \******************************************************************************/
@@ -628,28 +554,6 @@ static int jpc_cod_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	if (jpc_cox_putcompparms(ms, cstate, out,
 	  (cod->csty & JPC_COX_PRT) != 0, &cod->compparms)) {
 		return -1;
-	}
-	return 0;
-}
-
-static int jpc_cod_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_cod_t *cod = &ms->parms.cod;
-	int i;
-	fprintf(out, "csty = 0x%02x;\n", cod->compparms.csty);
-	fprintf(out, "numdlvls = %d; qmfbid = %d; mctrans = %d\n",
-	  cod->compparms.numdlvls, cod->compparms.qmfbid, cod->mctrans);
-	fprintf(out, "prg = %d; numlyrs = %d;\n",
-	  cod->prg, cod->numlyrs);
-	fprintf(out, "cblkwidthval = %d; cblkheightval = %d; "
-	  "cblksty = 0x%02x;\n", cod->compparms.cblkwidthval, cod->compparms.cblkheightval,
-	  cod->compparms.cblksty);
-	if (cod->csty & JPC_COX_PRT) {
-		for (i = 0; i < cod->compparms.numrlvls; ++i) {
-			fprintf(stderr, "prcwidth[%d] = %d, prcheight[%d] = %d\n",
-			  i, cod->compparms.rlvls[i].parwidthval,
-			  i, cod->compparms.rlvls[i].parheightval);
-		}
 	}
 	return 0;
 }
@@ -714,16 +618,6 @@ static int jpc_coc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	return 0;
 }
 
-static int jpc_coc_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_coc_t *coc = &ms->parms.coc;
-	fprintf(out, "compno = %d; csty = 0x%02x; numdlvls = %d;\n",
-	  coc->compno, coc->compparms.csty, coc->compparms.numdlvls);
-	fprintf(out, "cblkwidthval = %d; cblkheightval = %d; "
-	  "cblksty = 0x%02x; qmfbid = %d;\n", coc->compparms.cblkwidthval,
-	  coc->compparms.cblkheightval, coc->compparms.cblksty, coc->compparms.qmfbid);
-	return 0;
-}
 /******************************************************************************\
 * COD/COC marker segment operation helper functions.
 \******************************************************************************/
@@ -845,14 +739,6 @@ static int jpc_rgn_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	return 0;
 }
 
-static int jpc_rgn_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_rgn_t *rgn = &ms->parms.rgn;
-	fprintf(out, "compno = %d; roisty = %d; roishift = %d\n",
-	  rgn->compno, rgn->roisty, rgn->roishift);
-	return 0;
-}
-
 /******************************************************************************\
 * QCD marker segment operations.
 \******************************************************************************/
@@ -873,20 +759,6 @@ static int jpc_qcd_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 {
 	jpc_qcxcp_t *compparms = &ms->parms.qcd.compparms;
 	return jpc_qcx_putcompparms(compparms, cstate, out);
-}
-
-static int jpc_qcd_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_qcd_t *qcd = &ms->parms.qcd;
-	int i;
-	fprintf(out, "qntsty = %d; numguard = %d; numstepsizes = %d\n",
-	  (int) qcd->compparms.qntsty, qcd->compparms.numguard, qcd->compparms.numstepsizes);
-	for (i = 0; i < qcd->compparms.numstepsizes; ++i) {
-		fprintf(out, "expn[%d] = 0x%04x; mant[%d] = 0x%04x;\n",
-		  i, (unsigned) JPC_QCX_GETEXPN(qcd->compparms.stepsizes[i]),
-		  i, (unsigned) JPC_QCX_GETMANT(qcd->compparms.stepsizes[i]));
-	}
-	return 0;
 }
 
 /******************************************************************************\
@@ -933,21 +805,6 @@ static int jpc_qcc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	if (jpc_qcx_putcompparms(&qcc->compparms, cstate, out)) {
 		return -1;
-	}
-	return 0;
-}
-
-static int jpc_qcc_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_qcc_t *qcc = &ms->parms.qcc;
-	int i;
-	fprintf(out, "compno = %d; qntsty = %d; numguard = %d; "
-	  "numstepsizes = %d\n", qcc->compno, qcc->compparms.qntsty, qcc->compparms.numguard,
-	  qcc->compparms.numstepsizes);
-	for (i = 0; i < qcc->compparms.numstepsizes; ++i) {
-		fprintf(out, "expn[%d] = 0x%04x; mant[%d] = 0x%04x;\n",
-		  i, (unsigned) JPC_QCX_GETEXPN(qcc->compparms.stepsizes[i]),
-		  i, (unsigned) JPC_QCX_GETMANT(qcc->compparms.stepsizes[i]));
 	}
 	return 0;
 }
@@ -1062,13 +919,6 @@ static int jpc_sop_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	return 0;
 }
 
-static int jpc_sop_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_sop_t *sop = &ms->parms.sop;
-	fprintf(out, "seqno = %d;\n", sop->seqno);
-	return 0;
-}
-
 /******************************************************************************\
 * PPM marker segment operations.
 \******************************************************************************/
@@ -1124,17 +974,6 @@ static int jpc_ppm_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 
 	if (JAS_CAST(uint, jas_stream_write(out, (char *) ppm->data, ppm->len)) != ppm->len) {
 		return -1;
-	}
-	return 0;
-}
-
-static int jpc_ppm_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_ppm_t *ppm = &ms->parms.ppm;
-	fprintf(out, "ind=%d; len = %d;\n", ppm->ind, ppm->len);
-	if (ppm->len > 0) {
-		fprintf(out, "data =\n");
-		jas_memdump(out, ppm->data, ppm->len);
 	}
 	return 0;
 }
@@ -1196,17 +1035,6 @@ static int jpc_ppt_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	if (jas_stream_write(out, (char *) ppt->data, ppt->len) != JAS_CAST(int, ppt->len)) {
 		return -1;
-	}
-	return 0;
-}
-
-static int jpc_ppt_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_ppt_t *ppt = &ms->parms.ppt;
-	fprintf(out, "ind=%d; len = %d;\n", ppt->ind, ppt->len);
-	if (ppt->len > 0) {
-		fprintf(out, "data =\n");
-		jas_memdump(out, ppt->data, ppt->len);
 	}
 	return 0;
 }
@@ -1301,23 +1129,6 @@ static int jpc_poc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	return 0;
 }
 
-static int jpc_poc_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_poc_t *poc = &ms->parms.poc;
-	jpc_pocpchg_t *pchg;
-	int pchgno;
-	for (pchgno = 0, pchg = poc->pchgs; pchgno < poc->numpchgs;
-	  ++pchgno, ++pchg) {
-		fprintf(out, "po[%d] = %d; ", pchgno, pchg->prgord);
-		fprintf(out, "cs[%d] = %d; ce[%d] = %d; ",
-		  pchgno, pchg->compnostart, pchgno, pchg->compnoend);
-		fprintf(out, "rs[%d] = %d; re[%d] = %d; ",
-		  pchgno, pchg->rlvlnostart, pchgno, pchg->rlvlnoend);
-		fprintf(out, "le[%d] = %d\n", pchgno, pchg->lyrnoend);
-	}
-	return 0;
-}
-
 /******************************************************************************\
 * CRG marker segment operations.
 \******************************************************************************/
@@ -1365,19 +1176,6 @@ static int jpc_crg_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 		  jpc_putuint16(out, comp->voff)) {
 			return -1;
 		}
-	}
-	return 0;
-}
-
-static int jpc_crg_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_crg_t *crg = &ms->parms.crg;
-	int compno;
-	jpc_crgcomp_t *comp;
-	for (compno = 0, comp = crg->comps; compno < crg->numcomps; ++compno,
-	  ++comp) {
-		fprintf(out, "hoff[%d] = %d; voff[%d] = %d\n", compno,
-		  comp->hoff, compno, comp->voff);
 	}
 	return 0;
 }
@@ -1435,27 +1233,6 @@ static int jpc_com_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	return 0;
 }
 
-static int jpc_com_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	jpc_com_t *com = &ms->parms.com;
-	unsigned int i;
-	int printable;
-	fprintf(out, "regid = %d;\n", com->regid);
-	printable = 1;
-	for (i = 0; i < com->len; ++i) {
-		if (!isprint(com->data[i])) {
-			printable = 0;
-			break;
-		}
-	}
-	if (printable) {
-		fprintf(out, "data = ");
-		fwrite(com->data, sizeof(char), com->len, out);
-		fprintf(out, "\n");
-	}
-	return 0;
-}
-
 /******************************************************************************\
 * Operations for unknown types of marker segments.
 \******************************************************************************/
@@ -1501,16 +1278,6 @@ static int jpc_unk_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	/* If this function is called, we are trying to write an unsupported
 	  type of marker segment.  Return with an error indication.  */
 	return -1;
-}
-
-static int jpc_unk_dumpparms(jpc_ms_t *ms, FILE *out)
-{
-	unsigned int i;
-	jpc_unk_t *unk = &ms->parms.unk;
-	for (i = 0; i < unk->len; ++i) {
-		fprintf(out, "%02x ", unk->data[i]);
-	}
-	return 0;
 }
 
 /******************************************************************************\
