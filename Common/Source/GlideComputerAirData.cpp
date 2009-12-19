@@ -79,10 +79,6 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 #define ClimbCruiseSwitch 10
 #define THERMAL_TIME_MIN 45.0
 
-static bool WasFlying = false; // VENTA3 used by auto QFE: do not reset QFE
-			//   if previously in flight. So you can check
-			//   QFE on the ground, otherwise it turns to
-			//   zero at once!
 
 GlideComputerAirData::GlideComputerAirData(AirspaceWarningManager& as_manager):
   m_airspace_warning(as_manager),
@@ -750,9 +746,6 @@ GlideComputerAirData::OnLanding()
   // JMWX  restore data calculated at finish so
   // user can review flight as at finish line
 
-  // VENTA3 TODO maybe reset WasFlying to false, so that QFE is reset
-  // though users can reset by hand anyway anytime..
-
 #ifdef OLD_TASK
   if (Calculated().ValidFinish) {
     RestoreFinish();
@@ -765,7 +758,7 @@ void
 GlideComputerAirData::OnTakeoff()
 {
   SetCalculated().Flying = true;
-  WasFlying = true; // VENTA3
+
   // reset stats on takeoff
   ResetFlight();
 
