@@ -66,22 +66,7 @@ struct GlideResult {
  * 
  * @return Initialised null result
  */
-  GlideResult():
-    Vector(fixed_zero,fixed_zero),
-    DistanceToFinal(fixed_zero),
-    CruiseTrackBearing(fixed_zero),
-    VOpt(fixed_zero),
-    HeightClimb(fixed_zero),
-    HeightGlide(fixed_zero),
-    TimeElapsed(fixed_zero),
-    TimeVirtual(fixed_zero),
-    AltitudeDifference(fixed_zero),
-    EffectiveWindSpeed(fixed_zero),
-    EffectiveWindAngle(fixed_zero),
-    Solution(RESULT_NOSOLUTION)
-    {
-      // default is null result
-    }
+  GlideResult();
 
 /** 
  * Constructor with partial initialisation for a particular
@@ -97,21 +82,6 @@ struct GlideResult {
   GlideResult(const GlideState &task, 
                const fixed V);
 
-  GeoVector Vector;             /**< Distance/bearing of task achievable */
-  fixed DistanceToFinal;       /**< Distance to go before final glide (m) */
-  fixed CruiseTrackBearing;    /**< Track bearing in cruise for optimal drift compensation (deg true) */
-  fixed VOpt;                  /**< Optimal speed to fly in cruise (m/s) */
-  fixed HeightClimb;           /**< Height to be climbed (m) */
-  fixed HeightGlide;           /**< Height that will be glided (m) */
-  fixed TimeElapsed;           /**< Time to complete task (s) */
-  fixed TimeVirtual;           /**< Equivalent time to recover glided height (s) at MC */
-  fixed AltitudeDifference;    /**< Height above/below final glide for this task (m) */
-  fixed AltitudeRequired;      /**< Height required to solve this task (m) */
-  fixed EffectiveWindSpeed;    /**< (internal) */
-  fixed EffectiveWindAngle;    /**< (internal) */
-  fixed HeadWind;              /**< Head wind component (m/s) in cruise */
-  GlideResult_t Solution;       /**< Solution validity */
-
   /**
    * Calculate additional items (CruiseTrackBearing and AltitudeRequired) that were
    * deferred.
@@ -125,9 +95,7 @@ struct GlideResult {
  * 
  * @return True if aircraft is at or above final glide
  */
-  bool is_final_glide() const {
-    return (!positive(DistanceToFinal));
-  }
+  bool is_final_glide() const;
 
 /** 
  * Check whether task is partially achievable.  It will
@@ -147,15 +115,7 @@ struct GlideResult {
  *
  * @return True if target is reachable 
  */
-  bool glide_reachable(const bool final_glide=true) const {
-    if (final_glide) {
-      return (Solution==RESULT_OK);
-    } else {
-      return (Solution==RESULT_OK) &&
-        positive(AltitudeDifference) &&
-        !positive(HeightClimb);
-    }
-  }
+  bool glide_reachable(const bool final_glide=true) const;
 
 /** 
  * Adds another GlideResult to this.  This is used to 
@@ -188,6 +148,21 @@ struct GlideResult {
   friend std::ostream& operator<< (std::ostream& o, 
                                    const GlideResult& gl);
 #endif
+
+  GeoVector Vector;             /**< Distance/bearing of task achievable */
+  fixed DistanceToFinal;       /**< Distance to go before final glide (m) */
+  fixed CruiseTrackBearing;    /**< Track bearing in cruise for optimal drift compensation (deg true) */
+  fixed VOpt;                  /**< Optimal speed to fly in cruise (m/s) */
+  fixed HeightClimb;           /**< Height to be climbed (m) */
+  fixed HeightGlide;           /**< Height that will be glided (m) */
+  fixed TimeElapsed;           /**< Time to complete task (s) */
+  fixed TimeVirtual;           /**< Equivalent time to recover glided height (s) at MC */
+  fixed AltitudeDifference;    /**< Height above/below final glide for this task (m) */
+  fixed AltitudeRequired;      /**< Height required to solve this task (m) */
+  fixed EffectiveWindSpeed;    /**< (internal) */
+  fixed EffectiveWindAngle;    /**< (internal) */
+  fixed HeadWind;              /**< Head wind component (m/s) in cruise */
+  GlideResult_t Solution;       /**< Solution validity */
 
 private:
 

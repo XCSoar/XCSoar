@@ -40,6 +40,24 @@
 #include "Math/NavFunctions.hpp"
 #include "Navigation/Aircraft.hpp"
 
+GlideResult::GlideResult():
+  Vector(fixed_zero,fixed_zero),
+  DistanceToFinal(fixed_zero),
+  CruiseTrackBearing(fixed_zero),
+  VOpt(fixed_zero),
+  HeightClimb(fixed_zero),
+  HeightGlide(fixed_zero),
+  TimeElapsed(fixed_zero),
+  TimeVirtual(fixed_zero),
+  AltitudeDifference(fixed_zero),
+  EffectiveWindSpeed(fixed_zero),
+  EffectiveWindAngle(fixed_zero),
+  Solution(RESULT_NOSOLUTION)
+{
+  // default is null result
+}
+
+
 GlideResult::GlideResult(const GlideState &task, 
                          const fixed V):
     Vector(task.Vector),
@@ -130,10 +148,31 @@ GlideResult::calc_vspeed(const fixed inv_mc)
 fixed 
 GlideResult::glide_angle_ground() const
 {
-  if (Vector.Distance>0) {
+  static const fixed fixed_100;
+
+  if (positive(Vector.Distance)) {
     return HeightGlide/Vector.Distance;
   } else {
-    return 100;
+    return fixed_100;
   }
 }
 
+
+bool 
+GlideResult::glide_reachable(const bool final_glide) const 
+{
+  if (final_glide) {
+    return (Solution==RESULT_OK) &&
+      positive(AltitudeDifference) &&
+      !positive(HeightClimb);
+  } else {
+    return (Solution==RESULT_OK);
+  }
+}
+
+
+bool 
+GlideResult::is_final_glide() const 
+{
+  return (Solution == RESULT_OK) && !positive(DistanceToFinal);
+}

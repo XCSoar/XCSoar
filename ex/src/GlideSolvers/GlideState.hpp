@@ -61,11 +61,6 @@ struct GlideState
               const fixed htarget,
               const AIRCRAFT_STATE &aircraft);
 
-  GeoVector Vector;             /**< Distance/bearing of task */
-  fixed MinHeight;             /**< Height (m above MSL) of end */
-  fixed WindDirection;         /**< Direction of wind (deg True) */
-  fixed AltitudeDifference;    /**< Aircraft height less target height */
-
 /** 
  * Calculate internal quantities to reduce computation time
  * by clients of this class
@@ -93,6 +88,11 @@ struct GlideState
  * @return Distance (m) of drift
  */
   fixed drifted_distance(const fixed t_climb) const;
+
+  GeoVector Vector;             /**< Distance/bearing of task */
+  fixed MinHeight;             /**< Height (m above MSL) of end */
+  fixed WindDirection;         /**< Direction of wind (deg True) */
+  fixed AltitudeDifference;    /**< Aircraft height less target height */
 
   fixed EffectiveWindSpeed;    /**< (internal use) */
   fixed EffectiveWindAngle;    /**< (internal use) */

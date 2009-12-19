@@ -138,9 +138,7 @@ public:
  * 
  * @return Best L/D ratio
  */
-  fixed get_bestLD() const {
-    return VbestLD/SbestLD;
-  }
+  fixed get_bestLD() const;
 
 /** 
  * Set cruise efficiency value.  1.0 = perfect MacCready speed
@@ -182,18 +180,14 @@ public:
  *
  * @return Mass (kg) of aircraft including ballast
  */
-  fixed get_all_up_weight() const {
-    return fixed_one; // TODO FIX
-  }
+  fixed get_all_up_weight() const;
 
 /** 
  * Calculate wing loading 
  *
  * @return Wing loading (all up mass divided by reference area, kg/m^2)
  */
-  fixed get_wing_loading() const {
-    return fixed_one; // TODO FIX
-  }
+  fixed get_wing_loading() const;
 
 /** 
  * Sink rate model (actual glide polar) function.

@@ -47,3 +47,8 @@ double AngleToGradient(const double d)
     return 999.0;
   }
 }
+
+bool GradientValid(const double d)
+{
+  return (fabs(d)<999.0);
+}

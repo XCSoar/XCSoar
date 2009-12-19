@@ -41,6 +41,23 @@
 #include "Util/Gradient.hpp"
 
 
+AbstractTask::AbstractTask(const TaskEvents &te,
+                           const TaskBehaviour &tb,
+                           TaskAdvance &ta,
+                           GlidePolar &gp): 
+  activeTaskPoint(0),
+  activeTaskPoint_last(0-1),
+  task_events(te),
+  task_advance(ta),
+  task_behaviour(tb),
+  glide_polar(gp),
+  mc_lpf(10.0),
+  ce_lpf(60.0),
+  trigger_auto(false)
+{
+}
+
+
 bool 
 AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 {

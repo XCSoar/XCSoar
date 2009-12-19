@@ -365,3 +365,52 @@ TaskManager::random_point_in_task(const unsigned index, const double mag) const
 }
 
 
+
+
+TaskManager::TaskMode_t 
+TaskManager::get_mode() const 
+{
+  return mode;
+}
+
+bool 
+TaskManager::is_mode(const TaskMode_t the_mode) const 
+{
+  return mode == the_mode;
+}
+
+GlidePolar 
+TaskManager::get_glide_polar() const 
+{
+  return m_glide_polar;
+}
+
+const GlidePolar& 
+TaskManager::get_glide_polar_ref() const 
+{
+  return m_glide_polar;
+}
+
+void 
+TaskManager::set_glide_polar(const GlidePolar& glide_polar) 
+{
+  m_glide_polar = glide_polar;
+}
+
+TaskAdvance& 
+TaskManager::get_task_advance() 
+{
+  return task_advance;
+}
+
+AbstractTaskFactory* 
+TaskManager::get_factory() const 
+{
+  return active_factory;
+}
+
+bool 
+TaskManager::stats_valid() const 
+{
+  return get_stats().task_valid;
+}

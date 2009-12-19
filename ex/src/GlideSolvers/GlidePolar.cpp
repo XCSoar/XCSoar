@@ -292,3 +292,19 @@ GlidePolar::speed_to_fly(const AIRCRAFT_STATE &state,
   GlidePolarSpeedToFly gp_stf(*this, net_sink_rate, head_wind, Vmin, Vmax);
   return gp_stf.solve(Vmax);
 }
+
+
+fixed 
+GlidePolar::get_all_up_weight() const {
+  return fixed_one; // TODO FIX
+}
+
+fixed 
+GlidePolar::get_wing_loading() const {
+  return fixed_one; // TODO FIX
+}
+
+fixed 
+GlidePolar::get_bestLD() const {
+  return VbestLD/SbestLD;
+}

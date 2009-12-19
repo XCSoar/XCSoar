@@ -702,3 +702,41 @@ OrderedTask::distance_is_significant(const GEOPOINT &location,
   SearchPoint a2(location_last, task_projection);
   return TaskDijkstra::distance_is_significant(a1, a2);
 }
+
+
+const SearchPointVector& 
+OrderedTask::get_tp_search_points(unsigned tp) const 
+{
+  return tps[tp]->get_search_points();
+}
+
+void 
+OrderedTask::set_tp_search_min(unsigned tp, const SearchPoint &sol) 
+{
+  tps[tp]->set_search_min(sol);
+}
+
+void 
+OrderedTask::set_tp_search_max(unsigned tp, const SearchPoint &sol) 
+{
+  tps[tp]->set_search_max(sol);
+}
+
+
+unsigned 
+OrderedTask::task_size() const 
+{
+  return tps.size();
+}
+
+unsigned 
+OrderedTask::getActiveIndex() const 
+{
+  return activeTaskPoint;
+}
+
+TaskProjection& 
+OrderedTask::get_task_projection() 
+{
+  return task_projection;
+}

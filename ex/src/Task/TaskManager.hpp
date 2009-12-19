@@ -208,9 +208,7 @@ public:
  * 
  * @return True if stats valid
  */
-  bool stats_valid() const {
-    return get_stats().task_valid;
-  }
+  bool stats_valid() const;
 
 /** 
  * Size of active task
@@ -238,9 +236,7 @@ public:
  * 
  * @return Factory
  */
-  AbstractTaskFactory* get_factory() const {
-    return active_factory;
-  }
+  AbstractTaskFactory* get_factory() const;
 
 /** 
  * Set type of task factory to be used for constructing tasks
@@ -256,18 +252,14 @@ public:
  * 
  * @return Task advance mechanism
  */
-  TaskAdvance& get_task_advance() {
-    return task_advance;
-  }
+  TaskAdvance& get_task_advance();
 
 /** 
  * Access active task mode
  * 
  * @return Active task mode
  */
-  TaskMode_t get_mode() const {
-    return mode;
-  }
+  TaskMode_t get_mode() const;
 
 /** 
  * Determine if the active mode is a particular mode
@@ -276,36 +268,28 @@ public:
  * 
  * @return True if modes match
  */
-  bool is_mode(const TaskMode_t the_mode) const {
-    return mode == the_mode;
-  }
+  bool is_mode(const TaskMode_t the_mode) const;
 
 /** 
  * Retrieve copy of glide polar used by task system
  * 
  * @return Copy of glide polar 
  */
-  GlidePolar get_glide_polar() const {
-    return m_glide_polar;
-  }
+  GlidePolar get_glide_polar() const;
 
 /** 
  * Retrieve copy of glide polar used by task system
  * 
  * @return Reference to glide polar
  */
-  const GlidePolar& get_glide_polar_ref() const {
-    return m_glide_polar;
-  }
+  const GlidePolar& get_glide_polar_ref() const;
 
 /**
  * Update glide polar used by task system
  *
  * @param glide_polar The polar to set to
  */
-  void set_glide_polar(const GlidePolar& glide_polar) {
-    m_glide_polar = glide_polar;
-  }
+  void set_glide_polar(const GlidePolar& glide_polar);
 
 #ifdef DO_PRINT
   void print(const AIRCRAFT_STATE &location);

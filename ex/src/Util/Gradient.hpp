@@ -48,4 +48,13 @@
  */
 double AngleToGradient(const double d);
 
+/**
+ * Determines whether gradient is error value (999)
+ *
+ * @param d Gradient
+ *
+ * @return True if gradient effectively infinite
+ */
+bool GradientValid(const double d);
+
 #endif

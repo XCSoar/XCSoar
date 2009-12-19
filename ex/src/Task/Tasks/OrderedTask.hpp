@@ -104,9 +104,7 @@ public:
  * 
  * @return Index of active task point sequence
  */
-  unsigned getActiveIndex() const {
-    return activeTaskPoint;
-  }
+  unsigned getActiveIndex() const;
 
 /** 
  * Retrieve task point by sequence index
@@ -244,18 +242,14 @@ public:
  * 
  * @return Number of task points in task
  */
-  unsigned task_size() const {
-    return tps.size();
-  }
+  unsigned task_size() const;
 
 /** 
  * Accessor for task projection, for use when creating task points
  * 
  * @return Task global projection
  */
-  TaskProjection& get_task_projection() {
-    return task_projection;
-  }
+  TaskProjection& get_task_projection();
 
 protected:
 
@@ -267,9 +261,7 @@ protected:
  * 
  * @return Vector of search point candidates
  */
-  const SearchPointVector& get_tp_search_points(unsigned tp) const {
-    return tps[tp]->get_search_points();
-  }
+  const SearchPointVector& get_tp_search_points(unsigned tp) const;
 
 /** 
  * Set task point's minimum distance value (by TaskDijkstra).
@@ -277,9 +269,7 @@ protected:
  * @param tp Index of task point to set min
  * @param sol Search point found to be minimum distance
  */
-  void set_tp_search_min(unsigned tp, const SearchPoint &sol) {
-    tps[tp]->set_search_min(sol);
-  }
+  void set_tp_search_min(unsigned tp, const SearchPoint &sol);
 
 /** 
  * Set task point's maximum distance value (by TaskDijkstra).
@@ -287,9 +277,7 @@ protected:
  * @param tp Index of task point to set max
  * @param sol Search point found to be maximum distance
  */
-  void set_tp_search_max(unsigned tp, const SearchPoint &sol) {
-    tps[tp]->set_search_max(sol);
-  }
+  void set_tp_search_max(unsigned tp, const SearchPoint &sol);
 
 /** 
  * Scan task for valid start/finish points
