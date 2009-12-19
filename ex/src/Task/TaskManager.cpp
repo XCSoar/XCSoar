@@ -153,7 +153,7 @@ private:
 };
 
 void
-TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
+TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
 {
   if (task_ordered.task_size()>1) {
     common_stats.task_finished = task_ordered.get_stats().task_finished;
@@ -182,7 +182,11 @@ TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
   } else {
     common_stats.reset();
   }
+}
 
+void
+TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
+{
   common_stats.vector_home = task_abort.get_vector_home(state);
 
   // if during this update, no landables found, try abort task
@@ -193,8 +197,18 @@ TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
   }
   common_stats.landable_reachable |= task_abort.has_landable_reachable();
 
-  // modes
+  WaypointLister lister(common_stats);
+  if (common_stats.ordered_valid) {
+    task_ordered.Accept(lister);
+  }
+  if (active_task && (active_task != &task_ordered)) {
+    active_task->Accept(lister);
+  }
+}
 
+void
+TaskManager::update_common_stats_task(const AIRCRAFT_STATE &state)
+{
   common_stats.mode_abort = (mode==MODE_ABORT);
   common_stats.mode_goto = (mode==MODE_GOTO);
   common_stats.mode_ordered = (mode==MODE_ORDERED);
@@ -212,14 +226,29 @@ TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
     common_stats.next_is_last = false;
     common_stats.previous_is_first = false;
   }
+}
 
-  WaypointLister lister(common_stats);
-  if (common_stats.ordered_valid) {
-    task_ordered.Accept(lister);
-  }
-  if (active_task && (active_task != &task_ordered)) {
-    active_task->Accept(lister);
-  }  
+void
+TaskManager::update_common_stats_speed_to_fly(const AIRCRAFT_STATE &state)
+{
+  /// \todo Adjust MC accounting for risk
+
+  common_stats.V_block = m_glide_polar.speed_to_fly(state,
+                                                    get_stats().current_leg.solution_remaining,
+                                                    true);
+
+  common_stats.V_dolphin = m_glide_polar.speed_to_fly(state,
+                                                      get_stats().current_leg.solution_remaining,
+                                                      false);
+}
+
+void
+TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
+{
+  update_common_stats_times(state);
+  update_common_stats_task(state);
+  update_common_stats_waypoints(state);
+  update_common_stats_speed_to_fly(state);
 }
 
 

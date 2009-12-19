@@ -333,6 +333,10 @@ private:
   CommonStats common_stats;
 
   void update_common_stats(const AIRCRAFT_STATE &state);
+  void update_common_stats_times(const AIRCRAFT_STATE &state);
+  void update_common_stats_task(const AIRCRAFT_STATE &state);
+  void update_common_stats_waypoints(const AIRCRAFT_STATE &state);
+  void update_common_stats_speed_to_fly(const AIRCRAFT_STATE &state);
   
 public:
   /**

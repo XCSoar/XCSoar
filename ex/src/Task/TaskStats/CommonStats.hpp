@@ -37,6 +37,9 @@ public:
   bool next_is_last; /**< Is next turnpoint the final */
   bool previous_is_first; /**< Is previous turnpoint the first */
 
+  fixed V_block; /**< Block speed to fly */
+  fixed V_dolphin; /**< Dolphin speed to fly */
+
   WaypointIdSet waypoints_in_task;
 
 /** 

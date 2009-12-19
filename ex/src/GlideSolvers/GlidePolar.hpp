@@ -199,6 +199,16 @@ public:
   fixed SinkRate(const fixed V) const;
 
 /** 
+ * Sink rate model (actual glide polar) function.
+ * 
+ * @param V Speed at which sink rate is to be evaluated
+ * @param n Load factor
+ * 
+ * @return Sink rate (m/s, positive down)
+ */
+  fixed SinkRate(const fixed V, const fixed n) const;
+
+/** 
  * Sink rate model adjusted by MC setting.  This is used
  * to accomodate speed ring (MC) settings in optimal glide
  * calculations. 
@@ -252,11 +262,13 @@ public:
  * 
  * @param state Aircraft state (taking TrueAirspeed and Vario)
  * @param solution Solution for which Vopt is desired
+ * @param block_stf Whether to use block speed to fly or dolphin
  * 
  * @return Speed to fly (true, m/s)
  */
   fixed speed_to_fly(const AIRCRAFT_STATE &state,
-                     const GlideResult &solution) const;
+                     const GlideResult &solution,
+                     const bool block_stf) const;
 
 private:
 /** 
@@ -280,6 +292,7 @@ private:
   fixed Vmax;
   fixed Smin;
   fixed Vmin;
+  fixed bestLD;
 
   /** @link dependency */
   /*#  MacCready lnkMacCready; */

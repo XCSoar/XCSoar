@@ -28,6 +28,9 @@ CommonStats::reset()
   next_is_last = false;
   previous_is_first = false;
 
+  V_block = fixed_zero;
+  V_dolphin = fixed_zero;
+
   clear_waypoints_in_task();
 }
 

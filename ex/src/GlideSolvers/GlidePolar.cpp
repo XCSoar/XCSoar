@@ -89,6 +89,19 @@ GlidePolar::SinkRate(const fixed V) const
   return v0+v1*V+v2*V*V;
 }
 
+fixed 
+GlidePolar::SinkRate(const fixed V, const fixed n) const
+{
+  static const fixed fixed_small = 0.1;
+
+  const fixed n_lim = max(fixed_small, fabs(n));
+  const fixed w0 = SinkRate(V);
+  const fixed v2 = VbestLD / max(VbestLD*fixed_half, V);
+
+  return w0+(V/(fixed_two*bestLD))*(n_lim*n_lim-fixed_one)*v2*v2; 
+}
+
+
 /**
  * Finds VOpt for a given MacCready setting
  * Intended to be used temporarily.
@@ -132,6 +145,7 @@ GlidePolar::solve_ld()
   GlidePolarVopt gpvopt(*this, Vmin, Vmax);
   VbestLD = gpvopt.find_min(Vmax);
   SbestLD = SinkRate(VbestLD);
+  bestLD = VbestLD/SbestLD;
 }
 
 
@@ -278,19 +292,25 @@ private:
 
 fixed 
 GlidePolar::speed_to_fly(const AIRCRAFT_STATE &state,
-                         const GlideResult &solution) const
+                         const GlideResult &solution,
+                         const bool block_stf) const
 {
-  const fixed net_sink_rate = -state.NettoVario;
+  fixed V_stf;
 
-  if (-net_sink_rate > mc+Smin) {
+  if (state.NettoVario > mc+Smin) {
     // stop to climb
-    return Vmin;
+    V_stf = Vmin;
+
+  } else {
+
+    const fixed head_wind = solution.is_final_glide()? solution.HeadWind : fixed_zero;
+    const fixed stf_sink_rate = block_stf? fixed_zero: -state.NettoVario;
+    
+    GlidePolarSpeedToFly gp_stf(*this, stf_sink_rate, head_wind, Vmin, Vmax);
+    V_stf = gp_stf.solve(Vmax);
+
   }
-
-  const fixed head_wind = solution.is_final_glide()? solution.HeadWind : fixed_zero;
-
-  GlidePolarSpeedToFly gp_stf(*this, net_sink_rate, head_wind, Vmin, Vmax);
-  return gp_stf.solve(Vmax);
+  return max(Vmin, V_stf*sqrt(fabs(state.Gload)));
 }
 
 
@@ -306,5 +326,5 @@ GlidePolar::get_wing_loading() const {
 
 fixed 
 GlidePolar::get_bestLD() const {
-  return VbestLD/SbestLD;
+  return bestLD;
 }
