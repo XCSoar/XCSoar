@@ -24,7 +24,6 @@
 #include <zzip/fetch.h>
 #include <zzip/__debug.h>
 
-
 #if defined(__MINGW32__)
 //defined(WINDOWSPC)&&
 // JMW needed otherwise seek/tell won't work!
@@ -129,8 +128,8 @@ zzip_file_saveoffset(ZZIP_FILE * fp)
 static zzip_char_t*
 _dirsep_strrchr (zzip_char_t* name)
 {
-    char* n = strrchr ((char *)name, '/');
-    char* m = strrchr ((char *)name, '\\');
+    char* n = strrchr ((const char *)name, '/');
+    char* m = strrchr ((const char *)name, '\\');
     if (m && n && m > n) n = m;
     return n;
 }
