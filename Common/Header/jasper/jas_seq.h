@@ -191,8 +191,6 @@ void jas_matrix_destroy(jas_matrix_t *matrix);
 /* Resize a matrix.  The previous contents of the matrix are lost. */
 int jas_matrix_resize(jas_matrix_t *matrix, int numrows, int numcols);
 
-int jas_matrix_output(jas_matrix_t *matrix, FILE *out);
-
 /* Create a matrix that references part of another matrix. */
 void jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1, int r0, int c0,
   int r1, int c1);

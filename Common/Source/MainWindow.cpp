@@ -130,7 +130,10 @@ MainWindow::on_color(Window &window, Canvas &canvas)
 bool
 MainWindow::on_activate()
 {
+  TopWindow::on_activate();
+
   full_screen();
+
   return true;
 }
 
@@ -172,15 +175,5 @@ bool MainWindow::on_close() {
   if (XCSoarInterface::CheckShutdown()) {
     XCSoarInterface::Shutdown();
   }
-  return true;
-}
-
-bool
-MainWindow::on_setfocus()
-{
-  TopWindow::on_setfocus();
-
-  /* pass the focus on to the map window */
-  map.set_focus();
   return true;
 }

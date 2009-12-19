@@ -372,22 +372,3 @@ int jpc_tagtree_decode(jpc_tagtree_t *tree, jpc_tagtreenode_t *leaf,
 
 	return (node->value_ < threshold) ? 1 : 0;
 }
-
-/******************************************************************************\
-* Code for debugging.
-\******************************************************************************/
-
-void jpc_tagtree_dump(jpc_tagtree_t *tree, FILE *out)
-{
-	jpc_tagtreenode_t *node;
-	int n;
-
-	node = tree->nodes_;
-	n = tree->numnodes_;
-	while (--n >= 0) {
-		fprintf(out, "node %p, parent %p, value %d, lower %d, known %d\n",
-		  (void *) node, (void *) node->parent_, node->value_, node->low_,
-		  node->known_);
-		++node;
-	}
-}

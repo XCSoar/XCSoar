@@ -215,7 +215,7 @@ jas_stream_t *jas_stream_memopen(char *buf, int bufsize)
 	if (buf) {
 		obj->buf_ = (unsigned char *) buf;
 	} else {
-		obj->buf_ = (char *) jas_malloc(obj->bufsize_ * sizeof(char));
+		obj->buf_ = (unsigned char *) jas_malloc(obj->bufsize_ * sizeof(char));
 		obj->myalloc_ = 1;
 	}
 	if (!obj->buf_) {
@@ -725,7 +725,7 @@ static void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf,
 		if (!buf) {
 			/* The caller has not specified a buffer to employ, so allocate
 			  one. */
-			if ((stream->bufbase_ = (char *)jas_malloc(JAS_STREAM_BUFSIZE +
+			if ((stream->bufbase_ = (unsigned char *)jas_malloc(JAS_STREAM_BUFSIZE +
 			  JAS_STREAM_MAXPUTBACK))) {
 				stream->bufmode_ |= JAS_STREAM_FREEBUF;
 				stream->bufsize_ = JAS_STREAM_BUFSIZE;
@@ -920,57 +920,6 @@ long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt)
 	old = stream->rwcnt_;
 	stream->rwcnt_ = rwcnt;
 	return old;
-}
-
-int jas_stream_display(jas_stream_t *stream, FILE *fp, int n)
-{
-	unsigned char buf[16];
-	int i;
-	int j;
-	int m;
-	int c;
-	int display;
-	int cnt;
-
-	cnt = n - (n % 16);
-	display = 1;
-
-	for (i = 0; i < n; i += 16) {
-		if (n > 16 && i > 0) {
-			display = (i >= cnt) ? 1 : 0;
-		}
-		if (display) {
-			fprintf(fp, "%08x:", i);
-		}
-		m = JAS_MIN(n - i, 16);
-		for (j = 0; j < m; ++j) {
-			if ((c = jas_stream_getc(stream)) == EOF) {
-				abort();
-				return -1;
-			}
-			buf[j] = c;
-		}
-		if (display) {
-			for (j = 0; j < m; ++j) {
-				fprintf(fp, " %02x", buf[j]);
-			}
-			fputc(' ', fp);
-			for (; j < 16; ++j) {
-				fprintf(fp, "   ");
-			}
-			for (j = 0; j < m; ++j) {
-				if (isprint(buf[j])) {
-					fputc(buf[j], fp);
-				} else {
-					fputc(' ', fp);
-				}
-			}
-			fprintf(fp, "\n");
-		}
-
-
-	}
-	return 0;
 }
 
 long jas_stream_length(jas_stream_t *stream)

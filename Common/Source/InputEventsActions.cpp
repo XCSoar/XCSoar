@@ -677,6 +677,9 @@ void
 InputEvents::eventMode(const TCHAR *misc)
 {
   assert(misc != NULL);
+
+  main_window.map.set_focus();
+
   InputEvents::setMode(misc);
 }
 

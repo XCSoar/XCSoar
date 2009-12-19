@@ -84,19 +84,13 @@ static unsigned TypeFilterIdx=0;
 static unsigned UpLimit=0;
 static unsigned LowLimit=0;
 
-static int ItemIndex = -1;
-
 static int SelectedWayPointFileIdx = 0;
 
 
-static void OnWaypointListEnter(WindowControl * Sender,
-				WndListFrame::ListInfo_t *ListInfo){
-	(void)Sender; (void)ListInfo;
-  if (ItemIndex != -1) {
-    wf->SetModalResult(mrOK);
-  }
-  else
-    wf->SetModalResult(mrCancel);
+static void
+OnWaypointListEnter(unsigned i)
+{
+  wf->SetModalResult(mrOK);
 }
 
 
@@ -226,8 +220,6 @@ static void UpdateList(void){
 //  TCHAR sTmp[128];
   bool distancemode = false;
 
-  ItemIndex = 0;
-
   UpLimit = way_points.get_count();
   LowLimit =0;
 
@@ -335,7 +327,7 @@ static void UpdateList(void){
 	  sizeof(WayPointSelectInfo_t), WaypointDistanceCompare);
   }
 
-  wWayPointList->ResetList();
+  wWayPointList->SetLength(UpLimit - LowLimit);
   wWayPointList->invalidate();
 }
 
@@ -529,31 +521,28 @@ static void OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 }
 
-static int DrawListIndex=0;
-
 static void
-OnPaintListItem(WindowControl *Sender, Canvas &canvas)
+OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  (void)Sender;
   int n = UpLimit - LowLimit;
   TCHAR sTmp[12];
 
-  if (DrawListIndex < n){
-
-    int i = LowLimit + DrawListIndex;
+  if ((int)i < n) {
+    i += LowLimit;
     const WAYPOINT &way_point = way_points.get(WayPointSelectInfo[i].Index);
 
 // Sleep(100);
 
     int w0, w1, w2, w3, x1, x2, x3;
-    w0 = Layout::FastScale(Layout::landscape ? 202 : 225);
+    w0 = rc.right - rc.left - Layout::FastScale(4);
     w1 = canvas.text_width(_T("XXX"));
     w2 = canvas.text_width(_T(" 000km"));
     w3 = canvas.text_width(_T(" 000")_T(DEG));
 
     x1 = w0-w1-w2-w3;
 
-    canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+    canvas.text_clipped(rc.left + Layout::FastScale(2),
+                        rc.top + Layout::FastScale(2),
                         x1 - Layout::FastScale(5),
                         way_point.Name);
 
@@ -579,48 +568,32 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
     }
 
     // left justified
-    canvas.text_opaque(x1, Layout::FastScale(2), sTmp);
+    canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), sTmp);
 
     // right justified after waypoint flags
     _stprintf(sTmp, _T("%.0f%s"),
               WayPointSelectInfo[i].Distance,
               Units::GetDistanceName());
     x2 = w0-w3-canvas.text_width(sTmp);
-    canvas.text_opaque(x2, Layout::FastScale(2), sTmp);
+    canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), sTmp);
 
     // right justified after distance
     _stprintf(sTmp, _T("%d")_T(DEG),
 	      iround(WayPointSelectInfo[i].Direction));
     x3 = w0-canvas.text_width(sTmp);
-    canvas.text_opaque(x3, Layout::FastScale(2), sTmp);
+    canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
   } else {
-    if (DrawListIndex == 0){
+    if (i == 0){
       _stprintf(sTmp, _T("%s"), gettext(_T("No Match!")));
-      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-                         sTmp);
+      canvas.text(rc.left + Layout::FastScale(2),
+                  rc.top + Layout::FastScale(2), sTmp);
     }
   }
 
 }
 
-// DrawListIndex = number of things to draw
-// ItemIndex = current selected item
-
-
-static void OnWpListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender;
-	if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = UpLimit-LowLimit;
-  } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
-    ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
-  }
-}
-
-
 static void OnWPSCloseClicked(WindowControl * Sender){
 	(void)Sender;
-  ItemIndex = -1;
   wf->SetModalResult(mrCancel);
 }
 
@@ -677,8 +650,6 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnFilterDistance),
   DeclareCallBackEntry(OnFilterDirection),
   DeclareCallBackEntry(OnFilterType),
-  DeclareCallBackEntry(OnPaintListItem),
-  DeclareCallBackEntry(OnWpListInfo),
   DeclareCallBackEntry(NULL)
 };
 
@@ -686,7 +657,6 @@ int dlgWayPointSelect(const GEOPOINT &location, const int type, const int Filter
 
   UpLimit = 0;
   LowLimit = 0;
-  ItemIndex = -1;
 
   Location = location;
 
@@ -722,7 +692,8 @@ int dlgWayPointSelect(const GEOPOINT &location, const int type, const int Filter
   wWayPointList = (WndListFrame*)wf->FindByName(_T("frmWayPointList"));
   assert(wWayPointList!=NULL);
   wWayPointList->SetBorderKind(BORDERLEFT);
-  wWayPointList->SetEnterCallback(OnWaypointListEnter);
+  wWayPointList->SetActivateCallback(OnWaypointListEnter);
+  wWayPointList->SetPaintItemCallback(OnPaintListItem);
 
   wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
@@ -733,8 +704,9 @@ int dlgWayPointSelect(const GEOPOINT &location, const int type, const int Filter
 
   wf->SetTimerNotify(OnTimerNotify);
 
+  int ItemIndex;
   if ((wf->ShowModal() == mrOK) && (UpLimit > LowLimit) &&
-      (ItemIndex >= 0)  // JMW fixed bug, was >0
+      (ItemIndex = wWayPointList->GetCursorIndex()) >= 0
       && ((unsigned)ItemIndex < (UpLimit - LowLimit))) {
     ItemIndex = WayPointSelectInfo[LowLimit + ItemIndex].Index;
   }else

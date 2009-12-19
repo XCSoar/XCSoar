@@ -152,11 +152,11 @@ public:
   }
 #endif
 
-  void set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
+  void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
            int left, int top, unsigned width, unsigned height,
            DWORD style, DWORD ex_style=0);
 
-  void set(ContainerWindow *parent, LPCTSTR cls, LPCTSTR text,
+  void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
            int left, int top, unsigned width, unsigned height,
            bool center = false, bool notify = false, bool show = true,
            bool tabstop = false, bool border = false);

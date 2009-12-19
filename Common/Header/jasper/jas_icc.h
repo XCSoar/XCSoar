@@ -299,7 +299,6 @@ typedef struct {
 	int (*input)(struct jas_iccattrval_s *, jas_stream_t *, int);
 	int (*output)(struct jas_iccattrval_s *, jas_stream_t *);
 	int (*getsize)(struct jas_iccattrval_s *);
-	void (*dump)(struct jas_iccattrval_s *, FILE *);
 } jas_iccattrvalops_t;
 
 /* Attribute value type (type and value information). */

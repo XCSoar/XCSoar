@@ -89,7 +89,7 @@ typedef struct {
 	int id;
 	/* The ID for the tag. */
 
-	char *name;
+	const char *name;
 	/* The name of the tag. */
 
 } jas_taginfo_t;
@@ -104,7 +104,7 @@ typedef struct {
 	char *tag;
 	/* The current tag name. */
 
-	char *val;
+	const char *val;
 	/* The current value. */
 
 	char *pos;
@@ -142,7 +142,7 @@ int jas_tvparser_next(jas_tvparser_t *tvparser);
 char *jas_tvparser_gettag(jas_tvparser_t *tvparser);
 
 /* Get the value for the current tag-value pair. */
-char *jas_tvparser_getval(jas_tvparser_t *tvparser);
+const char *jas_tvparser_getval(jas_tvparser_t *tvparser);
 
 #ifdef __cplusplus
 }

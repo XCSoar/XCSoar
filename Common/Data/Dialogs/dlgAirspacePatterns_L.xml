@@ -11,10 +11,7 @@
 
   <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=270 Width=98  Height=28 Font=2 OnClickNotify="OnCloseClicked"/>
 
-  <WndListFrame Name="frmAirspacePatternsList" X=5 Y=0 Width=230 Height=250 Font=2 OnListInfo="OnAirspacePatternsListInfo">
-    <WndOwnerDrawFrame Name="frmAirspacePatternsListEntry" X=2 Y=2 Width=220 Height=18 Font=2  OnPaint="OnAirspacePatternsPaintListItem"/>
-  </WndListFrame>
-
+  <WndListFrame Name="frmAirspacePatternsList" X=5 Y=0 Width=230 Height=250 ItemHeight=18 Font=2/>
 </WndForm>
 
 </PMML>

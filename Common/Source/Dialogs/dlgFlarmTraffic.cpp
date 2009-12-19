@@ -51,9 +51,10 @@ static int page=0;
 static WndForm *wf=NULL;
 static WndListFrame *wDetails=NULL;
 
-static void Update(){
+static int GetActiveFlarmTrafficCount();
 
-  //wDetails->ResetList();
+static void Update(){
+  wDetails->SetLength(GetActiveFlarmTrafficCount());
   wDetails->invalidate();
 }
 
@@ -127,7 +128,7 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
               text);
 }
 
-int GetActiveFlarmTrafficCount()
+static int GetActiveFlarmTrafficCount()
 {
   int count = 0;
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++)
@@ -140,36 +141,26 @@ int GetActiveFlarmTrafficCount()
   return count;
 }
 
-static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender;
-  if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = GetActiveFlarmTrafficCount();
-  }
-}
-
-void SelectAsTeamTrack()
+static void SelectAsTeamTrack()
 {
-  int index = wDetails->GetItemIndex();
-  if (index != -1)
-    {
-      if (XCSoarInterface::Basic().FLARM_Traffic[index].Name[0] == 0)
-	{
-	  XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
-	}
-      else
-	{
-	  // copy the 3 first chars from the name
-	  for (int z = 0; z < 3; z++)
-	    {
-	      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[z] = XCSoarInterface::Basic().FLARM_Traffic[index].Name[z];
-	    }
-	  XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
-	}
-      // now tracking !
-      XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = XCSoarInterface::Basic().FLARM_Traffic[index].ID;
-      XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
-      XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
-    }
+  int index = wDetails->GetCursorIndex();
+
+  if (index < 0 || index >= FLARM_MAX_TRAFFIC)
+    return;
+
+  if (XCSoarInterface::Basic().FLARM_Traffic[index].Name[0] == 0) {
+    XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+  } else {
+    // copy the 3 first chars from the name
+    for (int z = 0; z < 3; z++)
+      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[z] = XCSoarInterface::Basic().FLARM_Traffic[index].Name[z];
+    XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
+  }
+
+  // now tracking !
+  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = XCSoarInterface::Basic().FLARM_Traffic[index].ID;
+  XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
+  XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
 }
 
 static void OnTrackClicked(WindowControl * Sender)
@@ -183,16 +174,16 @@ static void OnSetCNClicked(WindowControl * Sender)
 {
   (void)Sender;
 
-  int index = wDetails->GetItemIndex();
-  if (index != -1)
-    {
-      TCHAR newName[21];
-      newName[0] = 0;
-      if(dlgTextEntryShowModal(newName, 4)){
+  int index = wDetails->GetCursorIndex();
 
-      AddFlarmLookupItem(XCSoarInterface::Basic().FLARM_Traffic[index].ID, newName, true);
-      }
-    }
+  if (index < 0 || index >= FLARM_MAX_TRAFFIC)
+    return;
+
+  TCHAR newName[21];
+  newName[0] = 0;
+  if(dlgTextEntryShowModal(newName, 4))
+    AddFlarmLookupItem(XCSoarInterface::Basic().FLARM_Traffic[index].ID,
+                       newName, true);
 }
 
 
@@ -231,8 +222,8 @@ static int OnTimerNotify(WindowControl * Sender) {
   return 0;
 }
 
-static void OnListEnter(WindowControl * Sender,
-			WndListFrame::ListInfo_t *ListInfo)
+static void
+OnListEnter(unsigned i)
 {
   SelectAsTeamTrack();
 }
@@ -240,7 +231,6 @@ static void OnListEnter(WindowControl * Sender,
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnTrackClicked),
   DeclareCallBackEntry(OnSetCNClicked),
-  DeclareCallBackEntry(OnDetailsListInfo),
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
 };
@@ -276,16 +266,14 @@ void dlgFlarmTrafficShowModal(void){
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
-  wDetails->SetEnterCallback(OnListEnter);
+  wDetails->SetActivateCallback(OnListEnter);
   wDetails->SetCursorCallback(FlarmCursorCallback);
   wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
-  assert(wDetails!=NULL);
 
   wDetails->SetBorderKind(BORDERLEFT);
 
   page = 0;
 
-  wDetails->ResetList();
   Update();
 
   wf->SetTimerNotify(OnTimerNotify);

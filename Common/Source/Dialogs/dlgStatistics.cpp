@@ -359,9 +359,9 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
-static void OnCalcClicked(WindowControl * Sender,
-			  WndListFrame::ListInfo_t *ListInfo){
-  (void)ListInfo;
+static void
+OnCalcClicked(WindowControl *Sender)
+{
   (void)Sender;
   if (page==ANALYSIS_PAGE_BAROGRAPH) {
     dlgBasicSettingsShowModal();

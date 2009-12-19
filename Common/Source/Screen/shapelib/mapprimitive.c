@@ -327,7 +327,10 @@ void msClipPolylineRect(shapeObj *shape, rectObj rect)
   int i,j;
   lineObj line={0,NULL};
   double x1, x2, y1, y2;
-  shapeObj tmp={0,NULL};
+  shapeObj tmp = {
+    .numlines = 0,
+    .line = NULL,
+  };
 
   if(shape->numlines == 0) /* nothing to clip */
     return;

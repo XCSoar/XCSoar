@@ -359,26 +359,6 @@ int jas_matrix_resize(jas_matrix_t *matrix, int numrows, int numcols)
 	return 0;
 }
 
-int jas_matrix_output(jas_matrix_t *matrix, FILE *out)
-{
-	int i;
-	int j;
-	jas_seqent_t x;
-
-	fprintf(out, "%d %d\n", jas_matrix_numrows(matrix), jas_matrix_numcols(matrix));
-	for (i = 0; i < jas_matrix_numrows(matrix); ++i) {
-		for (j = 0; j < jas_matrix_numcols(matrix); ++j) {
-			x = jas_matrix_get(matrix, i, j);
-			fprintf(out, "%ld", JAS_CAST(long, x));
-			if (j < jas_matrix_numcols(matrix) - 1) {
-				fprintf(out, " ");
-			}
-		}
-		fprintf(out, "\n");
-	}
-	return 0;
-}
-
 void jas_matrix_setall(jas_matrix_t *matrix, jas_seqent_t val)
 {
 	int i;

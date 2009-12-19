@@ -88,8 +88,7 @@ static TCHAR Directory[MAX_PATH];
 
 #define MAXLINES 100
 static int LineOffsets[MAXLINES];
-static int DrawListIndex = 0;
-static int nTextLines = 0;
+static unsigned nTextLines = 0;
 
 static void
 NextPage(int Step)
@@ -153,48 +152,33 @@ NextPage(int Step)
   wCommand->set_visible(page == 2);
   wSpecial->set_visible(page == 3);
   wImage->set_visible(page > 4);
-
-  if (page == 1) {
-    wDetails->ResetList();
-    wDetails->invalidate();
-  }
 }
 
 static void
-OnPaintDetailsListItem(WindowControl * Sender, Canvas &canvas)
+OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
-  (void)Sender;
-  if (DrawListIndex < nTextLines) {
-    TCHAR* text = way_points.get(SelectedWaypoint).Details;
-    int nstart = LineOffsets[DrawListIndex];
-    int nlen;
-    if (DrawListIndex < nTextLines - 1) {
-      nlen = LineOffsets[DrawListIndex + 1] - LineOffsets[DrawListIndex] - 1;
-      nlen--;
-    } else {
-      nlen = _tcslen(text + nstart);
-    }
+  if (DrawListIndex >= nTextLines)
+    return;
 
-    while (_tcscmp(text + nstart + nlen - 1, _T("\r")) == 0)
-      nlen--;
-
-    while (_tcscmp(text + nstart + nlen - 1, _T("\n")) == 0)
-      nlen--;
-
-    if (nlen > 0)
-      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-          text + nstart, nlen);
+  TCHAR* text = way_points.get(SelectedWaypoint).Details;
+  int nstart = LineOffsets[DrawListIndex];
+  int nlen;
+  if (DrawListIndex < nTextLines - 1) {
+    nlen = LineOffsets[DrawListIndex + 1] - LineOffsets[DrawListIndex] - 1;
+    nlen--;
+  } else {
+    nlen = _tcslen(text + nstart);
   }
-}
 
-static void
-OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
-{
-  (void)Sender;
-  if (ListInfo->DrawIndex == -1)
-    ListInfo->ItemCount = nTextLines - 1;
-  else
-    DrawListIndex = ListInfo->DrawIndex + ListInfo->ScrollIndex;
+  while (_tcscmp(text + nstart + nlen - 1, _T("\r")) == 0)
+    nlen--;
+
+  while (_tcscmp(text + nstart + nlen - 1, _T("\n")) == 0)
+    nlen--;
+
+  if (nlen > 0)
+    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
+                text + nstart, nlen);
 }
 
 static void
@@ -383,8 +367,6 @@ OnImagePaint(WindowControl *Sender, Canvas &canvas)
 static CallBackTableEntry_t CallBackTable[] = {
     DeclareCallBackEntry(OnNextClicked),
     DeclareCallBackEntry(OnPrevClicked),
-    DeclareCallBackEntry(OnPaintDetailsListItem),
-    DeclareCallBackEntry(OnDetailsListInfo),
     DeclareCallBackEntry(NULL)
 };
 
@@ -512,6 +494,7 @@ dlgWayPointDetailsShowModal(void)
   wSpecial = ((WndFrame *)wf->FindByName(_T("frmSpecial")));
   wImage = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmImage")));
   wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
+  wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
 
   assert(wInfo != NULL);
   assert(wCommand != NULL);
@@ -520,6 +503,7 @@ dlgWayPointDetailsShowModal(void)
   assert(wDetails != NULL);
 
   nTextLines = TextToLineOffsets(way_point.Details, LineOffsets, MAXLINES);
+  wDetails->SetLength(nTextLines - 1);
 
   /*
   TODO enhancement: wpdetails

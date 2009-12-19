@@ -80,7 +80,7 @@ private:
 public:
   static bool register_class(HINSTANCE hInstance);
 
-  void set(ContainerWindow &parent, LPCTSTR cls,
+  void set(ContainerWindow &parent, const TCHAR *cls,
            int left, int top, unsigned width, unsigned height) {
     Window::set(&parent, cls, NULL, left, top, width, height);
   }

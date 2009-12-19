@@ -479,7 +479,7 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
 
 {
     int	       	nRecordOffset, i;
-    uchar	*pabyRec;
+    const char *pabyRec;
     char	*pReturnField = NULL;
 
     /* -------------------------------------------------------------------- */
@@ -512,7 +512,7 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
 	psDBF->nCurrentRecord = hEntity;
     }
 
-    pabyRec = (uchar *) psDBF->pszCurrentRecord;
+    pabyRec = (const char *) psDBF->pszCurrentRecord;
 
     /* -------------------------------------------------------------------- */
     /*	Ensure our field buffer is large enough to hold this buffer.	    */
@@ -654,7 +654,9 @@ DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName
 /*									*/
 /*	Write an attribute record to the file.				*/
 /************************************************************************/
-static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * pValue )
+static int
+msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
+                    const void *pValue)
 {
   int	       	nRecordOffset, i, j;
   uchar	*pabyRec;
@@ -710,13 +712,13 @@ static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * 
   case 'F':
     if( psDBF->panFieldDecimals[iField] == 0 ) {
       sprintf( szFormat, "%%%dd", psDBF->panFieldSize[iField] );
-      sprintf(szSField, szFormat, (int) *((double *) pValue) );
+      sprintf(szSField, szFormat, (int) *((const double *) pValue) );
       if( strlen(szSField) > (unsigned)psDBF->panFieldSize[iField] )
 	szSField[psDBF->panFieldSize[iField]] = '\0';
       strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]), szSField, strlen(szSField) );
     } else {
       sprintf( szFormat, "%%%d.%df", psDBF->panFieldSize[iField], psDBF->panFieldDecimals[iField] );
-      sprintf(szSField, szFormat, *((double *) pValue) );
+      sprintf(szSField, szFormat, *((const double *) pValue) );
       if( strlen(szSField) > (unsigned)psDBF->panFieldSize[iField] )
 	szSField[psDBF->panFieldSize[iField]] = '\0';
       strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]),  szSField, strlen(szSField) );
@@ -724,12 +726,13 @@ static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * 
     break;
 
   default:
-    if( strlen((char *) pValue) > (unsigned)psDBF->panFieldSize[iField] )
+    if (strlen((const char *) pValue) > (unsigned)psDBF->panFieldSize[iField])
       j = psDBF->panFieldSize[iField];
     else
-      j = strlen((char *) pValue);
+      j = strlen((const char *) pValue);
 
-    strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]), (char *) pValue, j );
+    strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]),
+            (const char *) pValue, j);
     break;
   }
 
@@ -769,7 +772,7 @@ int msDBFWriteIntegerAttribute( DBFHandle psDBF, int iRecord, int iField,	int nV
 /************************************************************************/
 int msDBFWriteStringAttribute( DBFHandle psDBF, int iRecord, int iField, const char * pszValue )
 {
-  return( msDBFWriteAttribute( psDBF, iRecord, iField, (void *) pszValue ) );
+  return msDBFWriteAttribute(psDBF, iRecord, iField, (const void *)pszValue);
 }
 
 int m_strcasecmp(const char *s1, const char*s2) {

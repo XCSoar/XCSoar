@@ -2,25 +2,20 @@
 # The XCSoar test suite.
 #
 
+.DEFAULT_GOAL := all
+
 topdir = ..
 
-SRC = $(topdir)/Common/Source
-HDR = $(topdir)/Common/Header
-
+include $(topdir)/build/common.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
-include $(topdir)/build/verbose.mk
+include $(topdir)/build/flags.mk
+include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
-
-######## paths
-
-INCLUDES := $(TARGET_INCLUDES) -I$(HDR) -I$(SRC)
 
 ######## compiler flags
 
-include $(topdir)/build/flags.mk
-include $(topdir)/build/warnings.mk
-
+INCLUDES += $(TARGET_INCLUDES) -I$(HDR) -I$(SRC)
 CPPFLAGS += -DFLARM_AVERAGE
 
 ####### linker configuration

@@ -52,7 +52,7 @@ private:
   BitmapCanvas mask_canvas;
 
 public:
-  void set(ContainerWindow &parent, LPCTSTR cls,
+  void set(ContainerWindow &parent, const TCHAR *cls,
            int left, int top, unsigned width, unsigned height) {
     PaintWindow::set(parent, cls, left, top, width, height);
   }

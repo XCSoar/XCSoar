@@ -83,17 +83,6 @@
 #include "jpc_mqdec.h"
 
 /******************************************************************************\
-* Local macros.
-\******************************************************************************/
-
-#ifndef NDEBUG
-#define	MQDEC_CALL(n, x) \
-	((jas_getdbglevel() >= (n)) ? ((void)(x)) : ((void)0))
-#else
-#define	MQDEC_CALL(n, x)
-#endif
-
-/******************************************************************************\
 * Local function prototypes.
 \******************************************************************************/
 
@@ -224,9 +213,7 @@ int jpc_mqdec_getbit_func(register jpc_mqdec_t *mqdec)
 {
 	int bit;
 	JAS_DBGLOG(100, ("jpc_mqdec_getbit_func(%p)\n", mqdec));
-	MQDEC_CALL(100, jpc_mqdec_dump(mqdec, stderr));
 	bit = jpc_mqdec_getbit_macro(mqdec);
-	MQDEC_CALL(100, jpc_mqdec_dump(mqdec, stderr));
 	JAS_DBGLOG(100, ("ctx = %d, decoded %d\n", mqdec->curctx -
 	  mqdec->ctxs, bit));
 	return bit;
@@ -287,20 +274,4 @@ static void jpc_mqdec_bytein(jpc_mqdec_t *mqdec)
 		mqdec->creg += 0xff00;
 		mqdec->ctreg = 8;
 	}
-}
-
-/******************************************************************************\
-* Code for debugging.
-\******************************************************************************/
-
-/* Dump a MQ decoder to a stream for debugging. */
-
-void jpc_mqdec_dump(jpc_mqdec_t *mqdec, FILE *out)
-{
-	fprintf(out, "MQDEC A = %08lx, C = %08lx, CT=%08lx, ",
-	  (unsigned long) mqdec->areg, (unsigned long) mqdec->creg,
-	  (unsigned long) mqdec->ctreg);
-	fprintf(out, "CTX = %d, ", mqdec->curctx - mqdec->ctxs);
-	fprintf(out, "IND %d, MPS %d, QEVAL %x\n", *mqdec->curctx -
-	  jpc_mqstates, (*mqdec->curctx)->mps, (*mqdec->curctx)->qeval);
 }

@@ -42,7 +42,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-Dialog::set(ContainerWindow &_parent, LPCTSTR template_name)
+Dialog::set(ContainerWindow &_parent, const TCHAR *template_name)
 {
 #ifdef ENABLE_SDL
   // XXX

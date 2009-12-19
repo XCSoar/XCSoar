@@ -25,10 +25,7 @@
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </WndProperty>
 
-  <WndListFrame Name=frmWayPointList X=0 Y=116 Width=238 Height=190 Font=2 OnListInfo="OnWpListInfo">
-    <WndOwnerDrawFrame Name=frmWayPointListEntry X=2 Y=2 Width=226 Height=18 Font=2  OnPaint="OnPaintListItem"/>
-  </WndListFrame>
-
+  <WndListFrame Name=frmWayPointList X=0 Y=116 Width=238 Height=190 ItemHeight=18 Font=2/>
 </WndForm>
 
 </PMML>

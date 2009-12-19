@@ -208,6 +208,9 @@ int jpc_enc_enccblk(jpc_enc_t *enc, jas_stream_t *out, jpc_enc_tcmpt_t *tcmpt, j
 	int termmode;
 	int c;
 
+	(void)enc;
+	(void)out;
+
 	bout = 0;
 	rlvl = band->rlvl;
 
@@ -649,6 +652,8 @@ static int jpc_encrefpass(jpc_mqenc_t *mqenc, int bitpos, int vcausalflag, jas_m
 	jpc_fix_t *fp;
 int k;
 
+	(void)vcausalflag;
+
 	*nmsedec = 0;
 	width = jas_matrix_numcols(data);
 	height = jas_matrix_numrows(data);
@@ -740,6 +745,8 @@ static int jpc_encrawrefpass(jpc_bitstream_t *out, int bitpos, int vcausalflag, 
 	jpc_fix_t *dvscanstart;
 	jpc_fix_t *dp;
 	jpc_fix_t *fp;
+
+	(void)vcausalflag;
 
 	*nmsedec = 0;
 	width = jas_matrix_numcols(data);

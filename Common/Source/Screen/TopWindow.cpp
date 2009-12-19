@@ -63,7 +63,11 @@ TopCanvas::full_screen()
 
 #endif /* ENABLE_SDL */
 
-TopWindow::TopWindow() {
+TopWindow::TopWindow()
+#ifndef ENABLE_SDL
+  :hSavedFocus(NULL)
+#endif
+{
 #ifdef HAVE_ACTIVATE_INFO
   memset(&s_sai, 0, sizeof(s_sai));
   s_sai.cbSize = sizeof(s_sai);
@@ -71,7 +75,7 @@ TopWindow::TopWindow() {
 }
 
 bool
-TopWindow::find(LPCTSTR cls, LPCTSTR text)
+TopWindow::find(const TCHAR *cls, const TCHAR *text)
 {
 #ifdef ENABLE_SDL
   return false; // XXX
@@ -85,7 +89,7 @@ TopWindow::find(LPCTSTR cls, LPCTSTR text)
 }
 
 void
-TopWindow::set(LPCTSTR cls, LPCTSTR text,
+TopWindow::set(const TCHAR *cls, const TCHAR *text,
                 int left, int top, unsigned width, unsigned height)
 {
 #ifdef ENABLE_SDL
@@ -171,12 +175,29 @@ TopWindow::expose() {
 bool
 TopWindow::on_activate()
 {
+#ifndef ENABLE_SDL
+  if (hSavedFocus != NULL && ::IsWindow(hSavedFocus) &&
+      ::IsWindowVisible(hSavedFocus) && ::IsWindowEnabled(hSavedFocus)) {
+    /* restore the keyboard focus to the control which was previously
+       focused */
+    ::SetFocus(hSavedFocus);
+    return true;
+  }
+#endif
+
   return false;
 }
 
 bool
 TopWindow::on_deactivate()
 {
+#ifndef ENABLE_SDL
+  /* remember the currently focused control */
+  hSavedFocus = ::GetFocus();
+  if (hSavedFocus != NULL && !identify_descendant(hSavedFocus))
+    hSavedFocus = NULL;
+#endif
+
   return false;
 }
 

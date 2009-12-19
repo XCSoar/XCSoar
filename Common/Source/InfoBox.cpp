@@ -667,7 +667,11 @@ InfoBox::InitializeDrawHelpers(void)
 bool
 InfoBox::on_key_down(unsigned key_code)
 {
-  if (InputEvents::processKey(TranscodeKey(key_code))) {
+  unsigned event_id = InputEvents::key_to_event(InputEvents::MODE_INFOBOX,
+                                                key_code);
+  if (event_id > 0) {
+    InputEvents::processGo(event_id);
+
     // restart focus timer if not idle
     if (focus_timer != 0)
       kill_timer(focus_timer);
@@ -734,8 +738,6 @@ InfoBox::on_setfocus()
 
   /* automatically return focus back to MapWindow if idle */
   focus_timer = set_timer(100, FOCUSTIMEOUTMAX * 500);
-
-  InputEvents::setMode(InputEvents::MODE_INFOBOX);
 
   PaintFast();
 

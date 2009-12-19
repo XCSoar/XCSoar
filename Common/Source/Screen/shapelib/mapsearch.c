@@ -87,36 +87,6 @@ int msPointInRect(const pointObj *p, const rectObj *rect)
   return(MS_TRUE);
 }
 
-static int msPolygonDirection(const lineObj *c)
-{
-  double mx, my, area;
-  int i, v=0, lv, nv;
-
-  /* first find lowest, rightmost point of polygon */
-  mx = c->point[0].x;
-  my = c->point[0].y;
-
-  for(i=0; i<c->numpoints-1; i++) {
-    if((c->point[i].y < my) || ((c->point[i].y == my) && (c->point[i].x > mx))) {
-      v = i;
-      mx = c->point[i].x;
-      my = c->point[i].y;
-    }
-  }
-
-  lv = LASTVERT(v,c->numpoints);
-  nv = NEXTVERT(v,c->numpoints);
-
-  area = c->point[lv].x*c->point[v].y - c->point[lv].y*c->point[v].x + c->point[lv].y*c->point[nv].x - c->point[lv].x*c->point[nv].y + c->point[v].x*c->point[nv].y - c->point[nv].x*c->point[v].y;
-  if(area > 0)
-    return(1); /* counter clockwise orientation */
-  else
-    if(area < 0) /* clockwise orientation */
-      return(-1);
-    else
-      return(0); /* shouldn't happen unless the polygon is self intersecting */
-}
-
 int msPointInPolygon(const pointObj *p, const lineObj *c)
 {
   int i, j, status = MS_FALSE;
