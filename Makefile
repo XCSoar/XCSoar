@@ -329,6 +329,7 @@ OBJS	:=\
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/SingleWindow.o \
 	$(SRC)/Screen/Dialog.o \
 	$(SRC)/Screen/ProgressWindow.o \
 	\

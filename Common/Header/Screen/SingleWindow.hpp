@@ -36,56 +36,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAIN_WINDOW_HXX
-#define XCSOAR_MAIN_WINDOW_HXX
+#ifndef XCSOAR_SCREEN_SINGLE_WINDOW_HXX
+#define XCSOAR_SCREEN_SINGLE_WINDOW_HXX
 
-#include "Screen/SingleWindow.hpp"
-#include "MapWindow.h"
-#include "PopupMessage.hpp"
-
-class GaugeVario;
-class GaugeFLARM;
-class StatusMessageList;
+#include "Screen/TopWindow.hpp"
 
 /**
- * The XCSoar main window.
+ * The single top-level window of an application.  When it is closed,
+ * the process quits.
  */
-class MainWindow : public SingleWindow {
+class SingleWindow : public TopWindow {
 public:
-  MapWindow map;
-  GaugeVario *vario;
-  GaugeFLARM *flarm;
-  PopupMessage popup;
-
-private:
-  timer_t timer_id;
-
-public:
-  MainWindow(const StatusMessageList &status_messages)
-    :vario(NULL), flarm(NULL), popup(status_messages, *this) {}
-  virtual ~MainWindow();
-
-  static bool find(LPCTSTR text) {
-    return TopWindow::find(_T("XCSoarMain"), text);
-  }
-
-  static bool register_class(HINSTANCE hInstance);
-
-  void set(LPCTSTR text,
-           int left, int top, unsigned width, unsigned height);
-
-  void reset() {
-    map.reset();
-    TopWindow::reset();
-  }
-
 protected:
-  virtual Brush *on_color(Window &window, Canvas &canvas);
-  bool on_activate();
-  bool on_timer(timer_t id);
-  bool on_create();
-  bool on_destroy();
-  bool on_close();
+  virtual bool on_destroy();
 };
 
 #endif

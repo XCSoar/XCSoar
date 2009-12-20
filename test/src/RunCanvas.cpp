@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "Screen/TopWindow.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/BufferCanvas.hpp"
@@ -60,7 +60,7 @@ int DisplayTimeOut;
 HINSTANCE CommonInterface::hInst;
 void XCSoarInterface::InterfaceTimeoutReset(void) {}
 
-class TestWindow : public TopWindow {
+class TestWindow : public SingleWindow {
   ButtonWindow buffer_button, close_button;
   unsigned page;
   bool buffered;
@@ -103,8 +103,8 @@ public:
   }
 
   void set(int left, int top, unsigned width, unsigned height) {
-    TopWindow::set(_T("RunCanvas"), _T("RunCanvas"),
-                left, top, width, height);
+    SingleWindow::set(_T("RunCanvas"), _T("RunCanvas"),
+                      left, top, width, height);
 
     RECT rc = get_client_rect();
 
@@ -204,14 +204,8 @@ private:
   }
 
 protected:
-  virtual bool on_destroy(void) {
-    TopWindow::on_destroy();
-    post_quit();
-    return true;
-  }
-
   virtual bool on_mouse_down(int x, int y) {
-    if (TopWindow::on_mouse_down(x, y))
+    if (SingleWindow::on_mouse_down(x, y))
       return true;
 
     page = (page + 1) % 7;
@@ -235,7 +229,7 @@ protected:
       return true;
     }
 
-    return TopWindow::on_command(id, code);
+    return SingleWindow::on_command(id, code);
   }
 
   /*
@@ -263,7 +257,7 @@ protected:
     } else
       canvas.copy(buffer);
 
-    TopWindow::on_paint(canvas);
+    SingleWindow::on_paint(canvas);
   }
 };
 

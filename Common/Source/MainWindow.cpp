@@ -68,7 +68,7 @@ void
 MainWindow::set(LPCTSTR text,
                 int left, int top, unsigned width, unsigned height)
 {
-  TopWindow::set(_T("XCSoarMain"), text, left, top, width, height);
+  SingleWindow::set(_T("XCSoarMain"), text, left, top, width, height);
 
   RECT rc;
 #ifdef WINDOWSPC
@@ -132,13 +132,13 @@ MainWindow::on_color(Window &window, Canvas &canvas)
     return &MapGfx.buttonBrush;
   }
 
-  return TopWindow::on_color(window, canvas);
+  return SingleWindow::on_color(window, canvas);
 }
 
 bool
 MainWindow::on_activate()
 {
-  TopWindow::on_activate();
+  SingleWindow::on_activate();
 
   full_screen();
 
@@ -149,7 +149,7 @@ bool
 MainWindow::on_timer(timer_t id)
 {
   if (id != timer_id)
-    return TopWindow::on_timer(id);
+    return SingleWindow::on_timer(id);
 
   if (globalRunningEvent.test()) {
     XCSoarInterface::AfterStartup();
@@ -160,7 +160,7 @@ MainWindow::on_timer(timer_t id)
 
 bool MainWindow::on_create(void)
 {
-  TopWindow::on_create();
+  SingleWindow::on_create();
 
   timer_id = set_timer(1000, 500); // 2 times per second
 
@@ -170,9 +170,8 @@ bool MainWindow::on_create(void)
 bool MainWindow::on_destroy(void) {
   kill_timer(timer_id);
 
-  TopWindow::on_destroy();
+  SingleWindow::on_destroy();
 
-  post_quit();
   return true;
 }
 

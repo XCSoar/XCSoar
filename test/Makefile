@@ -65,6 +65,7 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Screen/PaintWindow.o \
 	$(SRC)/Screen/ContainerWindow.o \
 	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/SingleWindow.o \
 	$(SRC)/Screen/ButtonWindow.o \
 	$(SRC)/Screen/Canvas.o \
 	$(SRC)/Screen/Color.o \
@@ -151,6 +152,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/Screen/STScreenBuffer.o \
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/SingleWindow.o \
 	$(SRC)/Screen/UnitSymbol.o \
 	$(SRC)/Screen/Window.o \
 	$(SRC)/Screen/shapelib/mapbits.o \
@@ -215,6 +217,7 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/SingleWindow.o \
 	$(SRC)/Screen/Util.o \
 	$(SRC)/Screen/Layout.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
