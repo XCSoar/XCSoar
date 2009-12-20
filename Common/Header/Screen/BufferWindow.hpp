@@ -52,6 +52,8 @@ private:
 #endif /* !ENABLE_SDL */
 
 public:
+  virtual ~BufferWindow();
+
 #ifndef ENABLE_SDL
   void set(ContainerWindow &parent, const TCHAR *cls,
            int left, int top, unsigned width, unsigned height) {

@@ -45,6 +45,11 @@ ContainerWindow::ContainerWindow()
 {
 }
 
+ContainerWindow::~ContainerWindow()
+{
+  reset();
+}
+
 #endif /* ENABLE_SDL */
 
 Brush *

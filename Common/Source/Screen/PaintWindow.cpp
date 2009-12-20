@@ -74,6 +74,11 @@ void WindowCanvas::reset()
 
 #endif /* !ENABLE_SDL */
 
+PaintWindow::~PaintWindow()
+{
+  reset();
+}
+
 bool
 PaintWindow::register_class(HINSTANCE hInstance)
 {

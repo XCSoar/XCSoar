@@ -82,6 +82,8 @@ private:
   void install_wndproc();
 
 public:
+  virtual ~PaintWindow();
+
   static bool register_class(HINSTANCE hInstance);
 
   void set(ContainerWindow &parent, const TCHAR *cls,
