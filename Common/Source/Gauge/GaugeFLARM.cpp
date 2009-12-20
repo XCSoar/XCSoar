@@ -38,32 +38,21 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeFLARM.hpp"
-#include "XCSoar.h"
-#include "Protection.hpp"
-#include "Math/Constants.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Screen.hpp"
-#include "Compatibility/string.h"
-#include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/BitmapCanvas.hpp"
-#include "Screen/ContainerWindow.hpp"
-#include "options.h" /* for IBLSCALE() */
 #include "NMEA/Info.h"
-#include "SettingsUser.hpp"
-#include "Appearance.hpp"
 #include "Units.hpp"
+#include "resource.h"
 
-#include <stdlib.h>
-
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::min;
 using std::max;
-#endif
 
 #define FLARMMAXRANGE 2000
 

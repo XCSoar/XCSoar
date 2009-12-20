@@ -37,25 +37,16 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeVario.hpp"
-#include "XCSoar.h"
-#include "Asset.hpp"
-#include "Protection.hpp"
 #include "LogFile.hpp"
-#include "Interface.hpp"
-#include "MapWindowProjection.hpp"
-#include "Math/FastMath.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/BitmapCanvas.hpp"
-#include "Screen/ContainerWindow.hpp"
 #include "Math/Geometry.hpp"
 #include "MacCready.h"
-#include "options.h" /* for IBLSCALE() */
-#include "SettingsUser.hpp"
-#include "SettingsComputer.hpp"
 #include "Appearance.hpp"
+#include "resource.h"
 
 #include <assert.h>
 #include <stdlib.h>
