@@ -50,6 +50,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "Interface.hpp"
 #include "Form/Form.hpp"
 #include "Form/Edit.hpp"
@@ -377,7 +378,7 @@ CalcWidthStretch(XMLNode *xNode, const RECT rc)
 
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
                         const TCHAR *FileName,
-                        ContainerWindow &Parent,
+                        SingleWindow &Parent,
                         const TCHAR* resource) {
 
   WndForm *theForm = NULL;
@@ -438,7 +439,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
       break;
     }
 
-    theForm = new WndForm(&Parent, Name, sTmp, X, Y, Width, Height);
+    theForm = new WndForm(Parent, Name, sTmp, X, Y, Width, Height);
 
     if (Font != -1)
       theForm->SetTitleFont(*FontMap[Font]);

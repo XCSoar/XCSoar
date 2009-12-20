@@ -394,7 +394,7 @@ int WindowControl::OnHelp() {
   return 0; // undefined. return 1 if defined
 #else
   if (mHelpText) {
-    dlgHelpShowModal(*get_root_owner(), mCaption, mHelpText);
+    dlgHelpShowModal(*(SingleWindow *)get_root_owner(), mCaption, mHelpText);
     return 1;
   }
 

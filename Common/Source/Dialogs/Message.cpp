@@ -103,7 +103,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   h = Layout::Scale(32);
 
   // Create dialog
-  wf = new WndForm(&XCSoarInterface::main_window, _T("frmXcSoarMessageDlg"),
+  wf = new WndForm(XCSoarInterface::main_window, _T("frmXcSoarMessageDlg"),
                    lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);

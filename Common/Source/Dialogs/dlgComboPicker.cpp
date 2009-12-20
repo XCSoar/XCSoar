@@ -106,7 +106,7 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 int
-dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
+dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
 {
   static bool bInComboPicker=false;
   bool bInitialPage=true;

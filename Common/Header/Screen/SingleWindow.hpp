@@ -41,13 +41,27 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 
+#include <stack>
+#include <assert.h>
+
 /**
  * The single top-level window of an application.  When it is closed,
  * the process quits.
  */
 class SingleWindow : public TopWindow {
-public:
 protected:
+  std::stack<Window *> dialogs;
+
+public:
+  void add_dialog(Window *dialog);
+  void remove_dialog(Window *dialog);
+
+  bool has_dialog() {
+    return !dialogs.empty();
+  }
+
+protected:
+  virtual bool on_close();
   virtual bool on_destroy();
 };
 

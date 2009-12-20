@@ -342,7 +342,7 @@ WndProperty::on_mouse_down(int x, int y)
   {
     if (!GetReadOnly())  // when they click on the label
     {
-      dlgComboPicker(*get_root_owner(), this);
+      dlgComboPicker(*(SingleWindow *)get_root_owner(), this);
     }
     else
     {

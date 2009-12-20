@@ -176,6 +176,9 @@ bool MainWindow::on_destroy(void) {
 }
 
 bool MainWindow::on_close() {
+  if (SingleWindow::on_close())
+    return true;
+
   if (XCSoarInterface::CheckShutdown()) {
     XCSoarInterface::Shutdown();
   }

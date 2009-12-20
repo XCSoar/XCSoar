@@ -43,13 +43,15 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MapWindow.h"
 #include "Screen/Animation.hpp"
+#include "Screen/SingleWindow.hpp"
 
 PeriodClock WndForm::timeAnyOpenClose;
 
-WndForm::WndForm(ContainerWindow *Parent,
+WndForm::WndForm(SingleWindow &_main_window,
                  const TCHAR *Name, const TCHAR *Caption,
                  int X, int Y, int Width, int Height):
-  WindowControl(NULL, Parent, Name, X, Y, Width, Height, false),
+  WindowControl(NULL, &_main_window, Name, X, Y, Width, Height, false),
+  main_window(_main_window),
   mModalResult(0),
   mColorTitle(Color::YELLOW),
   mhTitleFont(GetFont()),
@@ -206,6 +208,8 @@ int WndForm::ShowModal(bool bEnableMap) {
 #endif /* !ENABLE_SDL */
   WndForm::timeAnyOpenClose.update(); // when current dlg opens or child closes
 
+  main_window.add_dialog(this);
+
 #ifdef ENABLE_SDL
 
   update();
@@ -223,6 +227,7 @@ int WndForm::ShowModal(bool bEnableMap) {
       parent->on_event(event);
   }
 
+  main_window.remove_dialog(this);
   return 0;
 
 #else /* !ENABLE_SDL */
@@ -274,6 +279,8 @@ int WndForm::ShowModal(bool bEnableMap) {
     }
   } // End Modal Loop
 #endif /* !ENABLE_SDL */
+
+  main_window.remove_dialog(this);
 
   // static.  this is current open/close or child open/close
   WndForm::timeAnyOpenClose.update();

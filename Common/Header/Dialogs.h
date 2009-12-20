@@ -43,7 +43,7 @@ Copyright_License {
 
 struct GEOPOINT;
 struct WAYPOINT;
-class ContainerWindow;
+class SingleWindow;
 class WndProperty;
 class WayPointList;
 class AirspaceDatabase;
@@ -59,7 +59,7 @@ int dlgAirspacePatternsShowModal();
 void dlgAirspaceShowModal(bool colored);
 void dlgBasicSettingsShowModal();
 void dlgBrightnessShowModal();
-void dlgHelpShowModal(ContainerWindow &parent, const TCHAR* Caption,
+void dlgHelpShowModal(SingleWindow &parent, const TCHAR* Caption,
     const TCHAR* HelpText);
 
 void dlgChecklistShowModal();
@@ -96,7 +96,7 @@ void dlgFlarmTrafficShowModal();
 bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0);
 void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
 
-int dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty);
+int dlgComboPicker(SingleWindow &parent, WndProperty *theProperty);
 
 void PopupWaypointDetails();
 void PopupAnalysis();
