@@ -283,10 +283,11 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 
   if (has_start()
       && (task_behaviour.optimise_targets_range)
-      && (task_behaviour.aat_min_time>0.0)) {
+      && (task_behaviour.aat_min_time>fixed_zero)) {
 
     if (activeTaskPoint>0) {
-      double p = calc_min_target(state, task_behaviour.aat_min_time);
+
+      fixed p = calc_min_target(state, task_behaviour.aat_min_time);
       (void)p;
 
       if (task_behaviour.optimise_targets_bearing) {
@@ -573,7 +574,7 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
   if (stats.distance_max>stats.distance_min) {
     // only perform scan if modification is possible
     const fixed t_rem = max(fixed_zero, t_target-stats.total.TimeElapsed);
-    
+
     TaskMinTarget bmt(tps, activeTaskPoint, aircraft, glide_polar, t_rem, ts);
     fixed p= bmt.search(0.0);
     return p;

@@ -136,7 +136,8 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
 
   if (positive(glide_polar.get_mc())) {
     GlidePolar polar_mc0 = glide_polar;
-    polar_mc0.set_mc(fixed_zero);
+
+    polar_mc0.set_mc(fixed_zero+0.001); // this small number needed due to bug?
     
     glide_solution_remaining(state, 
                              polar_mc0,

@@ -103,7 +103,7 @@ void GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
   if (positive(aircraft.WindSpeed)) {
     WindDirection = aircraft.WindDirection;
     EffectiveWindSpeed = aircraft.WindSpeed;
-    const fixed theta = aircraft.WindDirection-Vector.Bearing;
+    const fixed theta = fixed_180+aircraft.WindDirection-Vector.Bearing;
     EffectiveWindAngle = theta;
     wsq_ = aircraft.WindSpeed*aircraft.WindSpeed;
     HeadWind = -aircraft.WindSpeed*cos(fixed_deg_to_rad*theta);
@@ -123,7 +123,7 @@ fixed
 GlideState::drifted_distance(const fixed t_cl) const
 {
   if (positive(EffectiveWindSpeed)) {
-    const fixed wd = fixed_deg_to_rad*(WindDirection);
+    const fixed wd = fixed_deg_to_rad*(fixed_180+WindDirection);
     fixed sinwd, coswd;  sin_cos(wd,&sinwd,&coswd);
 
     const fixed tb = fixed_deg_to_rad*(Vector.Bearing);

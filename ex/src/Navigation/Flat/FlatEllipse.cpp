@@ -81,9 +81,9 @@ FlatEllipse::ba() const {
 
 FlatPoint 
 FlatEllipse::parametric(const fixed t) const {
-  const fixed at = fixed_360*t+theta_initial;
+  const fixed at = (fixed_360*t+theta_initial)*fixed_deg_to_rad;
   fixed cat, sat;
-  sin_cos(fixed_rad_to_deg*at,&sat,&cat);
+  sin_cos(at,&sat,&cat);
 
   FlatPoint res(a*cat,b*sat);
   res.rotate(theta);

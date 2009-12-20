@@ -36,6 +36,8 @@
  */
 #include "AATIsolineSegment.hpp"
 #include "Task/Tasks/PathSolvers/IsolineCrossingFinder.hpp"
+#include "Util/Tolerances.hpp"
+
 
 AATIsolineSegment::AATIsolineSegment(const AATPoint& ap):
   AATIsoline(ap)
@@ -56,7 +58,7 @@ AATIsolineSegment::AATIsolineSegment(const AATPoint& ap):
 bool
 AATIsolineSegment::valid() const
 {
-  return (t_up>t_down);
+  return (t_up>t_down+TOLERANCE_ISOLINE_CROSSING*fixed_two);
 }
 
 GEOPOINT 

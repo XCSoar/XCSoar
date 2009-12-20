@@ -204,7 +204,7 @@ GEOPOINT AircraftSim::endpoint(const fixed bear) const
 {
   GEOPOINT ref;
   ref = GeoVector(state.TrueAirspeed,bear).end_point(state.Location);
-  return GeoVector(state.WindSpeed,state.WindDirection).end_point(ref);
+  return GeoVector(state.WindSpeed,state.WindDirection+fixed_180).end_point(ref);
 }
 
 void AircraftSim::integrate() {
