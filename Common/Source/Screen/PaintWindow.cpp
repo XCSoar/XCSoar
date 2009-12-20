@@ -123,12 +123,6 @@ PaintWindow::set(ContainerWindow &parent,
       center, notify, show, tabstop, border);
 }
 
-void
-PaintWindow::reset()
-{
-  Window::reset();
-}
-
 #ifndef ENABLE_SDL
 
 bool

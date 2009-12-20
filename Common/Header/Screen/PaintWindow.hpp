@@ -101,8 +101,6 @@ public:
            bool center = false, bool notify = false, bool show = true,
            bool tabstop = false, bool border = false);
 
-  void reset();
-
   Canvas &get_canvas() {
     return canvas;
   }

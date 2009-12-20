@@ -55,12 +55,10 @@ class ButtonWindow : public PaintWindow
 
 public:
   ButtonWindow():down(false) {}
-  ~ButtonWindow() { reset(); }
 
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
            int left, int top, unsigned width, unsigned height);
-  void reset();
 
 protected:
   virtual bool on_mouse_down(int x, int y);
