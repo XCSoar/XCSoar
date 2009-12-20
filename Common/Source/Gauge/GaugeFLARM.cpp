@@ -85,16 +85,15 @@ void GaugeFLARM::RenderBg(Canvas &canvas) {
   BitmapCanvas hdcTemp(canvas, hRoseBitMap);
 
   // If it doesn't fit, make it fit
-  if (hRoseBitMapSize.cx != IBLSCALE(InfoBoxLayout::ControlWidth * 2) ||
-      hRoseBitMapSize.cy != IBLSCALE(InfoBoxLayout::ControlHeight * 2 - 1)) {
+  if ((unsigned)hRoseBitMapSize.cx != canvas.get_width() ||
+      (unsigned)hRoseBitMapSize.cy != canvas.get_height()) {
     canvas.stretch(0, 0,
-                   InfoBoxLayout::ControlWidth * 2,
-                   InfoBoxLayout::ControlHeight * 2 - 1,
+                   canvas.get_width(),
+                   canvas.get_height(),
                    hdcTemp,
                    0, 0, hRoseBitMapSize.cx, hRoseBitMapSize.cy);
   } else {
-    canvas.copy(0, 0, InfoBoxLayout::ControlWidth * 2,
-                InfoBoxLayout::ControlHeight * 2 - 1,
+    canvas.copy(0, 0, canvas.get_width(), canvas.get_height(),
                 hdcTemp, 0, 0);
   }
 }
