@@ -72,6 +72,14 @@ WndForm::WndForm(ContainerWindow *Parent,
 
 }
 
+WndForm::~WndForm()
+{
+  /* we must override the ~Window() reset call, because in ~Window(),
+     our own on_destroy() method won't be called (during object
+     destruction, this object loses its identity) */
+  reset();
+}
+
 ContainerWindow &
 WndForm::GetClientAreaWindow(void)
 {
@@ -88,6 +96,16 @@ void WndForm::AddClient(WindowControl *Client){      // add client window
     mClientWindow->AddClient(Client); // add it to the clientarea window
   } else
     WindowControl::AddClient(Client);
+}
+
+bool
+WndForm::on_destroy()
+{
+  if (mModalResult == 0)
+    mModalResult = mrCancel;
+
+  WindowControl::on_destroy();
+  return true;
 }
 
 bool

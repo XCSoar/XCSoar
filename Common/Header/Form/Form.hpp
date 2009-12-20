@@ -67,6 +67,7 @@ public:
   WndForm(ContainerWindow *Parent,
           const TCHAR *Name, const TCHAR *Caption,
           int X, int Y, int Width, int Height);
+  virtual ~WndForm();
 
   ContainerWindow &GetClientAreaWindow(void);
   void AddClient(WindowControl *Client);
@@ -95,6 +96,7 @@ public:
   virtual bool on_unhandled_key(unsigned key_code);
 
   /** from class Window */
+  virtual bool on_destroy();
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
 
