@@ -117,8 +117,6 @@ WindowControl::WindowControl(WindowControl *Owner,
   if (mOwner != NULL)
     mOwner->AddClient(this);
 
-  install_wndproc();
-
   get_canvas().background_transparent();
 
   if (Visible)

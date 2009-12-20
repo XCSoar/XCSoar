@@ -77,6 +77,10 @@ private:
   WindowCanvas canvas;
 #endif
 
+private:
+  /* hide this method */
+  void install_wndproc();
+
 public:
   static bool register_class(HINSTANCE hInstance);
 
@@ -189,6 +193,7 @@ public:
 protected:
 #ifndef ENABLE_SDL
   virtual bool on_create();
+  virtual bool on_destroy();
 
   virtual bool on_resize(unsigned width, unsigned height);
 #endif /* !ENABLE_SDL */

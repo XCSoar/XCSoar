@@ -163,7 +163,6 @@ GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
   xoffset = get_width();
   yoffset = get_height() / 2;
 
-  install_wndproc();
   hide();
 }
 

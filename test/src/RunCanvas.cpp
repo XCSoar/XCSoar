@@ -109,10 +109,8 @@ public:
     RECT rc = get_client_rect();
 
     buffer_button.set(*this, _T("Buffer"), ID_BUFFER, 5, rc.bottom - 30, 65, 25);
-    buffer_button.install_wndproc();
 
     close_button.set(*this, _T("Close"), ID_CLOSE, rc.right - 70, rc.bottom - 30, 65, 25);
-    close_button.install_wndproc();
   }
 
 private:

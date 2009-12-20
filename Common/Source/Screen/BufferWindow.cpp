@@ -41,6 +41,25 @@ Copyright_License {
 #ifndef ENABLE_SDL
 
 bool
+BufferWindow::on_create()
+{
+  if (!PaintWindow::on_create())
+    return false;
+
+  buffer.set(PaintWindow::get_canvas(), get_width(), get_height());
+  return true;
+}
+
+bool
+BufferWindow::on_destroy()
+{
+  PaintWindow::on_destroy();
+
+  buffer.reset();
+  return true;
+}
+
+bool
 BufferWindow::on_resize(unsigned width, unsigned height)
 {
   buffer.resize(width, height);

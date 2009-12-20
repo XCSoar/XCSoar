@@ -84,12 +84,7 @@ PaintWindow::register_class(HINSTANCE hInstance)
 
   wc.hInstance = hInstance;
   wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
-
-  /* not registering Window::WndProc() here, because this would break
-     all users who call install_wndproc(); once we get rid of this
-     hack, we can do it properly */
-  wc.lpfnWndProc = DefWindowProc;
-
+  wc.lpfnWndProc = Window::WndProc;
   wc.cbClsExtra = 0;
   wc.cbWndExtra = 0;
   wc.hIcon = (HICON)NULL;
@@ -108,16 +103,9 @@ PaintWindow::set(ContainerWindow *parent,
                  bool center, bool notify, bool show,
                  bool tabstop, bool border)
 {
-  canvas.reset();
-
   Window::set(parent, TEXT("PaintWindow"), TEXT(" "),
               left, top, width, height,
               center, notify, show, tabstop, border);
-
-#ifndef ENABLE_SDL
-  if (!canvas.defined())
-    canvas.set(hWnd, width, height);
-#endif /* !ENABLE_SDL */
 }
 
 void
@@ -133,7 +121,6 @@ PaintWindow::set(ContainerWindow &parent,
 void
 PaintWindow::reset()
 {
-  canvas.reset();
   Window::reset();
 }
 
@@ -148,6 +135,15 @@ PaintWindow::on_create()
     return false;
 
   canvas.set(hWnd, 1, 1);
+  return true;
+}
+
+bool
+PaintWindow::on_destroy()
+{
+  Window::on_destroy();
+
+  canvas.reset();
   return true;
 }
 

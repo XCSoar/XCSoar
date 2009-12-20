@@ -307,8 +307,6 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
   get_canvas().set_text_color(colText);
   get_canvas().set_background_color(colTextBackgnd);
 
-  install_wndproc();
-
   // Render Background for the first time
   RenderBg(get_canvas());
 
