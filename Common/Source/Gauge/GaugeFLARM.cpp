@@ -65,11 +65,6 @@ using std::min;
 using std::max;
 #endif
 
-// TODO TB: use these?!
-static Color colTextGray;
-static Color colText;
-static Color colTextBackgnd;
-
 #define FLARMMAXRANGE 2000
 
 /**
@@ -115,8 +110,8 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
   // Set font and colors
   canvas.select(TitleWindowFont);
-  canvas.set_text_color(Color(0x0,0x0,0x0));
-  canvas.set_background_color(Color(0xff,0xff,0xff));
+  canvas.set_text_color(Color::BLACK);
+  canvas.set_background_color(Color::WHITE);
 
   // Cycle through FLARM targets
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
@@ -291,21 +286,6 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
 
   // Save the size of the background bitmap
   hRoseBitMapSize = hRoseBitMap.get_size();
-
-  // Define colors
-  if (Appearance.InverseInfoBox){
-    colText = Color(0xff, 0xff, 0xff);
-    colTextBackgnd = Color(0x00, 0x00, 0x00);
-    colTextGray = Color(0xa0, 0xa0, 0xa0);
-  } else {
-    colText = Color(0x00, 0x00, 0x00);
-    colTextBackgnd = Color(0xff, 0xff, 0xff);
-    colTextGray = Color(~0xa0, ~0xa0, ~0xa0);
-  }
-
-  // Set colors
-  get_canvas().set_text_color(colText);
-  get_canvas().set_background_color(colTextBackgnd);
 
   // Render Background for the first time
   RenderBg(get_canvas());
