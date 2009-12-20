@@ -73,6 +73,7 @@ protected:
 #include "Screen/Window.hpp"
 
 #include <tchar.h>
+#include <commctrl.h>
 
 /**
  * A clickable button.
@@ -81,7 +82,7 @@ class ButtonWindow : public Window {
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
            int left, int top, unsigned width, unsigned height) {
-    Window::set(&parent, _T("BUTTON"), text,
+    Window::set(&parent, WC_BUTTON, text,
                 left, top, width, height);
 
     ::SetWindowLong(hWnd, GWL_ID, id);

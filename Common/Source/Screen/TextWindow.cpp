@@ -38,13 +38,15 @@ Copyright_License {
 
 #include "Screen/TextWindow.hpp"
 
+#include <commctrl.h>
+
 void
 TextWindow::set(ContainerWindow &parent,
                 int left, int top, unsigned width, unsigned height,
                 bool center, bool notify, bool show,
                 bool tabstop, bool border)
 {
-  Window::set(&parent, TEXT("STATIC"), NULL,
+  Window::set(&parent, WC_STATIC, NULL,
               left, top, width, height,
               center, notify, show, tabstop, border);
 }
