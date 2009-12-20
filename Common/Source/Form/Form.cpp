@@ -310,7 +310,6 @@ WndForm::on_paint(Canvas &canvas)
 
   if (mClientWindow && !EqualRect(&mClientRect, &rcClient)){
     mClientWindow->move(rcClient.left, rcClient.top);
-    mClientWindow->insert_after(HWND_TOP, true);
 
     CopyRect(&mClientRect, &rcClient);
 
