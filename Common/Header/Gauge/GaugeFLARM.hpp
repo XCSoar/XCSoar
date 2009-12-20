@@ -64,8 +64,6 @@ public:
   void TrafficPresent(bool traffic);
  private:
   int RangeScale(double d);
-
-  friend LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
 #endif
