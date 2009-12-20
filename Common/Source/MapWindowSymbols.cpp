@@ -881,7 +881,7 @@ void MapWindow::DrawCDI() {
     : SettingsMap().EnableCDICruise;
 
   if (dodrawcdi) {
-    cdi->show();
+    cdi->show_on_top();
     cdi->Update(Basic().TrackBearing, Calculated().WaypointBearing);
   } else {
     cdi->hide();
