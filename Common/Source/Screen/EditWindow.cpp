@@ -50,7 +50,7 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
 {
 #ifdef ENABLE_SDL
   // XXX
-  Window::set(&parent, TEXT("EDIT"), NULL,
+  Window::set(&parent, NULL, NULL,
               left, top, width, height);
 #else /* !ENABLE_SDL */
   DWORD style = WS_BORDER | WS_VISIBLE | WS_CHILD
@@ -78,7 +78,7 @@ EditWindow::set_ro_ml(ContainerWindow &parent, int left, int top,
 {
 #ifdef ENABLE_SDL
   // XXX
-  Window::set(&parent, TEXT("EDIT"), NULL,
+  Window::set(&parent, NULL, NULL,
               left, top, width, height);
 #else /* !ENABLE_SDL */
   DWORD style = WS_BORDER | WS_CHILD
