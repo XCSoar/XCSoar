@@ -81,7 +81,6 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
 
   set(parent, left, top, width, height,
       false, false, false);
-  insert_after(HWND_TOP, false);
 
   // load vario scale
   if (Units::GetUserVerticalSpeedUnit()==unKnots) {

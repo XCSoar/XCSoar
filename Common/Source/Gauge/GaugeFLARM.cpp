@@ -256,7 +256,6 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
 
   set(parent, left, top, width, height,
       false, false, false);
-  insert_after(HWND_TOP, false);
 
   center.x = get_hmiddle();
   center.y = get_vmiddle();
