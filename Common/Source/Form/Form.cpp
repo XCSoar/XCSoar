@@ -375,7 +375,7 @@ bool
 WndForm::on_unhandled_key(unsigned key_code)
 {
   if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, key_code))
-    return 0;
+    return true;
 
   return WindowControl::on_unhandled_key(key_code);
 }
