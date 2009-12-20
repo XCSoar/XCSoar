@@ -259,22 +259,15 @@ void GaugeFLARM::Render(const NMEA_INFO &gps_info)
  * Constructor of the GaugeFLARM class
  * @param parent Parent window
  */
-GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
+GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
+                       int left, int top, unsigned width, unsigned height)
   :Visible(false), ForceVisible(false), Suppress(false), Traffic(false)
 {
   // start of new code for displaying FLARM window
 
-  RECT rc = parent.get_client_rect();
-
-  set(parent,
-      (int)(rc.right - InfoBoxLayout::ControlWidth * 2)+1,
-      (int)(rc.bottom - InfoBoxLayout::ControlHeight * 2)+1,
-      (int)(InfoBoxLayout::ControlWidth * 2)-1,
-      (int)(InfoBoxLayout::ControlHeight * 2)-1,
+  set(parent, left, top, width, height,
       false, false, false);
   insert_after(HWND_TOP, false);
-
-  rc = get_client_rect();
 
   center.x = get_hmiddle();
   center.y = get_vmiddle();

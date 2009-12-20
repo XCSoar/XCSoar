@@ -44,7 +44,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MapWindowProjection.hpp"
 #include "Math/FastMath.h"
-#include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
@@ -67,10 +66,6 @@ using std::min;
 using std::max;
 #endif
 
-#define GAUGEXSIZE (InfoBoxLayout::ControlWidth)
-#define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
-
-
 static Color colTextGray;
 static Color colText;
 static Color colTextBackgnd;
@@ -80,7 +75,8 @@ static Color colTextBackgnd;
 #define ARROWYSIZE IBLSCALE(3)
 #define ARROWXSIZE IBLSCALE(7)
 
-GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
+GaugeVario::GaugeVario(ContainerWindow &parent,
+                       int left, int top, unsigned width, unsigned height)
  :polys(NULL), lines(NULL)
 {
   diValueTop.InitDone = false;
@@ -92,12 +88,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
 
   StartupStore(TEXT("Create Vario\n"));
 
-  set(parent,
-      Layout::landscape
-      ? (MapRectBig.right + InfoBoxLayout::ControlWidth)
-      : (MapRectBig.right - GAUGEXSIZE),
-      MapRectBig.top,
-      GAUGEXSIZE, GAUGEYSIZE,
+  set(parent, left, top, width, height,
       false, false, false);
   insert_after(HWND_TOP, false);
 

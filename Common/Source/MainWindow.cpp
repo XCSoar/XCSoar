@@ -103,8 +103,16 @@ MainWindow::set(LPCTSTR text,
   map.set_font(MapWindowFont);
   map.SetMapRect(rcsmall);
 
-  vario = new GaugeVario(*this, map.GetMapRect());
-  flarm = new GaugeFLARM(*this);
+  vario = new GaugeVario(*this,
+                         rc.right - InfoBoxLayout::ControlWidth, 0,
+                         InfoBoxLayout::ControlWidth,
+                         InfoBoxLayout::ControlHeight * 3);
+
+  flarm = new GaugeFLARM(*this,
+                         rc.right - InfoBoxLayout::ControlWidth * 2 + 1,
+                         rc.bottom - InfoBoxLayout::ControlHeight * 2 + 1,
+                         InfoBoxLayout::ControlWidth * 2 - 1,
+                         InfoBoxLayout::ControlHeight * 2 - 1);
 
   StartupStore(TEXT("Initialise message system\n"));
   popup.set(rc);

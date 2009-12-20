@@ -56,7 +56,8 @@ public:
   bool Visible, ForceVisible, Suppress, Traffic;
 
 public:
-  GaugeFLARM(ContainerWindow &parent);
+  GaugeFLARM(ContainerWindow &parent,
+             int left, int top, unsigned width, unsigned height);
   void Render(const NMEA_INFO &gps_info);
   void RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info);
   void RenderBg(Canvas &canvas);
