@@ -124,13 +124,13 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   blueThickPen.set(IBLSCALE(5), theblueColor);
 
   if (Appearance.InverseInfoBox){
-    colText = Color(0xff, 0xff, 0xff);
-    colTextBackgnd = Color(0x00, 0x00, 0x00);
+    colText = Color::WHITE;
+    colTextBackgnd = Color::BLACK;
     colTextGray = Color(0xa0, 0xa0, 0xa0);
     hBitmapClimb.load(IDB_CLIMBSMALLINV);
   } else {
-    colText = Color(0x00, 0x00, 0x00);
-    colTextBackgnd = Color(0xff, 0xff, 0xff);
+    colText = Color::BLACK;
+    colTextBackgnd = Color::WHITE;
     colTextGray = Color(~0xa0, ~0xa0, ~0xa0);
     hBitmapClimb.load(IDB_CLIMBSMALL);
   }
