@@ -211,17 +211,6 @@ public:
 #endif
   }
 
-  void insert_after(HWND hWnd2, bool show=true) {
-    assert_none_locked();
-
-#ifdef ENABLE_SDL
-    // XXX
-#else
-    ::SetWindowPos(hWnd, hWnd2, 0, 0, 0, 0,
-                   SWP_NOMOVE|SWP_NOSIZE|(show?SWP_SHOWWINDOW:SWP_HIDEWINDOW));
-#endif
-  }
-
   void bring_to_top() {
     assert_none_locked();
 
