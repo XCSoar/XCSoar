@@ -224,9 +224,6 @@ int WndForm::ShowModal(bool bEnableMap) {
       XCSoarInterface::InterfaceTimeoutReset();
     }
 
-    if ((msg.message == WM_KEYDOWN) && ((msg.wParam & 0xffff) == VK_ESCAPE))
-      mModalResult = mrCancel;
-
     if (is_user_input(msg.message)
         && !identify_descendant(msg.hwnd) // not current window or child
         && !is_allowed_map(msg.hwnd, msg.message, bEnableMap))
@@ -376,6 +373,12 @@ WndForm::on_unhandled_key(unsigned key_code)
 {
   if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, key_code))
     return true;
+
+  switch (key_code) {
+  case VK_ESCAPE:
+    SetModalResult(mrCancel);
+    return true;
+  }
 
   return WindowControl::on_unhandled_key(key_code);
 }
