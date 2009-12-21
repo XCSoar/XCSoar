@@ -15,7 +15,7 @@
 **
 ***********************************************************************/
 
-#if defined(__BORLANDC__)
+#if defined(__BORLANDC__) || defined(HAVE_MSVCRT)
 
 #include <stdlib.h>
 

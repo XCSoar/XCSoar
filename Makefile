@@ -123,9 +123,11 @@ VOLKS	:=\
 	$(SRC)/Device/Volkslogger/vlapi2.cpp \
 	$(SRC)/Device/Volkslogger/vlapihlp.cpp \
 	$(SRC)/Device/Volkslogger/vlapisys_win.cpp \
-	$(SRC)/Device/Volkslogger/vlconv.cpp \
-	$(SRC)/Device/Volkslogger/vlutils.cpp
+	$(SRC)/Device/Volkslogger/vlconv.cpp
 
+ifeq ($(HAVE_MSVCRT),n)
+VOLKS += $(SRC)/Device/Volkslogger/vlutils.cpp
+endif
 
 
 OBJS	:=\
