@@ -40,14 +40,59 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Dialogs.h"
+#include "Screen/Layout.hpp"
 
 #include <assert.h>
 
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
-
 #include "AirspaceVisibility.hpp"
+#include "Components.hpp"
+#include "Airspace/AirspaceWarningManager.hpp"
+#include "Airspace/AirspaceWarningVisitor.hpp"
+
+class AirspaceWarningCopy: public AirspaceWarningVisitor
+{
+public:
+  void Visit(const AirspaceWarning& as) {
+    if (as.get_warning_state()== AirspaceWarning::WARNING_INSIDE) {
+      ids_inside.push_back(&as.get_airspace());
+    } else if (as.get_warning_state()> AirspaceWarning::WARNING_CLEAR) {
+      ids_warning.push_back(&as.get_airspace());
+    }
+    if (!as.get_ack_expired()) {
+      ids_acked.push_back(&as.get_airspace());
+    }
+  }
+  bool is_warning(const AbstractAirspace& as) const {
+    return find(as, ids_warning);
+  }
+  bool is_acked(const AbstractAirspace& as) const {
+    return find(as, ids_acked);
+  }
+  bool is_inside(const AbstractAirspace& as) const {
+    return find(as, ids_inside);
+  }
+
+private:
+  bool find(const AbstractAirspace& as, 
+            const std::vector<const AbstractAirspace*>& list) const {
+    for (std::vector<const AbstractAirspace*>::const_iterator it = list.begin();
+         it != list.end(); ++it) {
+      if ((*it) == &as) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  std::vector<const AbstractAirspace*> ids_inside;
+  std::vector<const AbstractAirspace*> ids_warning;
+  std::vector<const AbstractAirspace*> ids_acked;
+
+};
+
 
 class AirspaceMapVisible: public AirspaceVisible
 {
@@ -97,14 +142,17 @@ class AirspaceVisitorMap:
   public MapDrawHelper
 {
 public:
-  AirspaceVisitorMap(MapDrawHelper &_helper):
+  AirspaceVisitorMap(MapDrawHelper &_helper, const AirspaceWarningCopy& warnings):
     MapDrawHelper(_helper),
+    m_warnings(warnings),
     m_border(false),
+    pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
     visible(m_map.SettingsComputer(),
             m_map.Basic().GetAnyAltitude(),
             m_border)
     {
       m_predicate = &visible;
+      m_use_stencil = true;
     };
 
   void Visit(const AirspaceCircle& airspace) {
@@ -115,12 +163,18 @@ public:
     m_map.LonLat2Screen(airspace.get_center(),center);
     unsigned radius = m_map.DistanceMetersToScreen(airspace.get_radius());
     m_buffer.circle(center.x, center.y, radius);
+    if (!m_border) {
+      m_stencil.circle(center.x, center.y, radius);
+    }
   }
 
   void Visit(const AirspacePolygon& airspace) {
     buffer_render_start();
     set_buffer_pens(airspace);
     draw_search_point_vector(m_buffer, airspace.get_points());
+    if (!m_border) {
+      draw_search_point_vector(m_stencil, airspace.get_points());
+    }
   }
 
   void set_border(bool set) {
@@ -139,19 +193,43 @@ private:
       m_buffer.hollow_brush();
 
     } else {
-      // this color is used as the black bit
-      m_buffer.set_text_color(MapGfx.Colours[m_map.SettingsMap().
-                                           iAirspaceColour[airspace.get_type()]]);
-      // get brush, can be solid or a 1bpp bitmap
-      m_buffer.select(MapGfx.hAirspaceBrushes[m_map.SettingsMap().
-                                            iAirspaceBrush[airspace.get_type()]]);
-      m_buffer.white_pen();
+
+      if (m_warnings.is_acked(airspace)) {
+
+        m_buffer.hollow_brush();
+        printf("acked\n");
+
+      } else {
+
+        // this color is used as the black bit
+        m_buffer.set_text_color(MapGfx.Colours[m_map.SettingsMap().
+                                               iAirspaceColour[airspace.get_type()]]);
+        // get brush, can be solid or a 1bpp bitmap
+        m_buffer.select(MapGfx.hAirspaceBrushes[m_map.SettingsMap().
+                                                iAirspaceBrush[airspace.get_type()]]);
+        m_buffer.white_pen();
+
+      }
+
+      if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
+        m_stencil.black_brush();
+        m_stencil.black_pen();
+      } else {
+        m_stencil.select(pen_thick);
+        m_stencil.hollow_brush();
+      }
+
     }
   }
 
+  const AirspaceWarningCopy& m_warnings;
+  Pen pen_thick;
   AirspaceMapVisible visible;
   bool m_border;
 };
+
+
+#include "RasterTerrain.h"
 
 /**
  * Draws the airspace to the given canvas
@@ -165,12 +243,36 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
   if (airspace_database == NULL)
     return;
 
-  MapDrawHelper helper (canvas, buffer, *this, GetMapRect());
-  AirspaceVisitorMap v(helper);
-  v.set_border(false);
-  airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
-  v.set_border(true);
-  airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
+  {
+    terrain->Lock(); // JMW OLD_TASK locking is temporary
+
+    AirspaceWarningCopy awc;
+    airspace_warning.visit_warnings(awc);
+
+    MapDrawHelper helper (canvas, buffer, stencil_canvas, *this, GetMapRect());
+    AirspaceVisitorMap v(helper, awc);
+    v.set_border(false);
+    airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
+    v.set_border(true);
+    airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
+    terrain->Unlock();
+  }
+
+  // testing
+  /*
+  // draw on stencil BLACK areas to be set
+  {
+    Pen pen_thick(Pen::SOLID, IBLSCALE(8), Color(0x00, 0x00, 0x00));
+
+    if (0) {
+      m_stencil.black_brush(); // optional if active
+    } else {
+      m_stencil.hollow_brush();
+    }
+    m_stencil.select(pen_thick);
+    m_stencil.circle(Orig_Screen.x, Orig_Screen.y, 50);
+  }
+  */
 }
 
 

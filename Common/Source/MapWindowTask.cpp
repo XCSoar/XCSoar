@@ -356,15 +356,21 @@ private:
       return;
     }
     std::vector<POINT> screen; 
-    for (double t = 0.0; t<=1.0; t+= 1.0/20) {
-      GEOPOINT ga = seg.parametric(t);
-      POINT sc;
-      m_map.LonLat2Screen(ga, sc);
-      screen.push_back(sc);
-    }
-    if (screen.size()>=2) {
-      m_buffer.select(pen_isoline);
-      m_buffer.polyline(&screen[0], screen.size());
+    static const fixed fixed_twentieth = 1.0/20.0;
+
+    if (m_map.DistanceMetersToScreen(seg.parametric(fixed_zero).
+                                     distance(seg.parametric(fixed_one)))>2) {
+
+      for (fixed t = fixed_zero; t<=fixed_one; t+= fixed_twentieth) {
+        GEOPOINT ga = seg.parametric(t);
+        POINT sc;
+        m_map.LonLat2Screen(ga, sc);
+        screen.push_back(sc);
+      }
+      if (screen.size()>=2) {
+        m_buffer.select(pen_isoline);
+        m_buffer.polyline(&screen[0], screen.size());
+      }
     }
   }
 
@@ -372,11 +378,15 @@ private:
     if (!do_draw_samples(tp)) {
       return;
     }
+    /*
     m_buffer.set_text_color(MapGfx.Colours[m_map.SettingsMap().
                                            iAirspaceColour[1]]);
     // get brush, can be solid or a 1bpp bitmap
     m_buffer.select(MapGfx.hAirspaceBrushes[m_map.SettingsMap().
                                             iAirspaceBrush[1]]);
+    */
+    // erase where aircraft has been
+    m_buffer.white_brush();
     m_buffer.white_pen();
     
     draw_search_point_vector(m_buffer, tp.get_sample_points());
@@ -455,7 +465,7 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
 
   terrain->Lock(); 
   {
-    MapDrawHelper helper(canvas, buffer, *this, rc);
+    MapDrawHelper helper(canvas, buffer, stencil_canvas, *this, rc);
     DrawTaskVisitor dv(helper, draw_bearing);
     task->Accept(dv); 
   }

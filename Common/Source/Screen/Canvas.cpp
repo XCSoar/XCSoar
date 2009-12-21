@@ -229,6 +229,16 @@ Canvas::copy_transparent_white(const Canvas &src, const RECT &rc)
 }
 
 void
+Canvas::copy_transparent_black(const Canvas &src, const RECT &rc)
+{
+  assert(src.surface != NULL);
+
+  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(Color::BLACK));
+  copy(src);
+  ::SDL_SetColorKey(src.surface, 0, 0);
+}
+
+void
 Canvas::stretch(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 const Canvas &src,
@@ -736,6 +746,28 @@ void
 Canvas::copy(const Canvas &src)
 {
   copy(src, 0, 0);
+}
+
+void
+Canvas::copy_transparent_black(const Canvas &src, const RECT &rc)
+{
+#if !defined(WINDOWSPC)
+  ::TransparentImage(dc,
+                     rc.left, rc.top,
+                     rc.right - rc.left, rc.bottom - rc.top,
+                     src.dc,
+                     rc.left, rc.top,
+                     rc.right - rc.left, rc.bottom - rc.top,
+                     Color::BLACK);
+#else
+  ::TransparentBlt(dc,
+                   rc.left, rc.top,
+                   rc.right - rc.left, rc.bottom - rc.top,
+                   src.dc,
+                   rc.left, rc.top,
+                   rc.right - rc.left, rc.bottom - rc.top,
+                   Color::BLACK);
+#endif
 }
 
 void

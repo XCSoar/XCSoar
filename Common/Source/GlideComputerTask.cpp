@@ -107,6 +107,11 @@ GlideComputerTask::ProcessBasicTask(const double mc, const double ce)
 
   // JMW TODO OLD_TASK, this is a hack
     task_behaviour = SettingsComputer();
+    task_behaviour.aat_min_time = 60*45;
+
+//    task_behaviour.all_off();
+//    task_behaviour.optimise_targets_range = true;
+//  task_behaviour.auto_mc=true;
 
     m_task.update(Basic(), LastBasic());
     SetCalculated().task_stats = m_task.get_stats();

@@ -359,6 +359,7 @@ public:
   void copy(const Canvas &src);
 
   void copy_transparent_white(const Canvas &src, const RECT &rc);
+  void copy_transparent_black(const Canvas &src, const RECT &rc);
 
   void stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
@@ -712,6 +713,7 @@ public:
   void copy(const Canvas &src);
 
   void copy_transparent_white(const Canvas &src, const RECT &rc);
+  void copy_transparent_black(const Canvas &src, const RECT &rc);
 
   void stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,

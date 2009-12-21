@@ -129,8 +129,6 @@ void default_task() {
   glide_polar.set_mc(2.0);
   task_manager.set_glide_polar(glide_polar);
 
-  task_behaviour.all_off();
-
   AbstractTaskFactory *fact;
   OrderedTaskPoint *tp;
   const Waypoint *wp;

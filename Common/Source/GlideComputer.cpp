@@ -215,8 +215,8 @@ GlideComputer::ProcessIdle()
     IterateEffectiveMacCready();
   }
 #endif
-
   GlideComputerAirData::ProcessIdle();
+  GlideComputerTask::ProcessIdle();
 }
 
 bool

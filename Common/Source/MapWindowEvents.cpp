@@ -120,6 +120,7 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
 
   draw_canvas.resize(width, height);
   buffer_canvas.resize(width, height);
+  stencil_canvas.resize(width, height);
 
   SetFontInfoAll(get_canvas());
 
@@ -133,6 +134,7 @@ bool MapWindow::on_create()
 
   draw_canvas.set(get_canvas());
   buffer_canvas.set(get_canvas());
+  stencil_canvas.set(get_canvas());
   return true;
 }
 
@@ -140,6 +142,7 @@ bool MapWindow::on_destroy()
 {
   draw_canvas.reset();
   buffer_canvas.reset();
+  stencil_canvas.reset();
 
   MaskedPaintWindow::on_destroy();
   return true;

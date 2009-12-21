@@ -7,21 +7,26 @@ class MapDrawHelper
 {
 public:
   MapDrawHelper(Canvas &_canvas, 
-             Canvas &_buffer, 
-             MapWindow &_map,
-             const RECT &_rc):
+                Canvas &_buffer, 
+                Canvas &_stencil, 
+                MapWindow &_map,
+                const RECT &_rc):
     m_canvas(_canvas),
     m_buffer(_buffer),
+    m_stencil(_stencil),
     m_map(_map),
     m_rc(_rc),
-    m_buffer_drawn(false) {};
+    m_buffer_drawn(false),
+    m_use_stencil(false) {};
 
   MapDrawHelper(MapDrawHelper &_that):
     m_canvas(_that.m_canvas),
     m_buffer(_that.m_buffer),
+    m_stencil(_that.m_stencil),
     m_map(_that.m_map),
     m_rc(_that.m_rc),
-    m_buffer_drawn(false) {};
+    m_buffer_drawn(_that.m_buffer_drawn),
+    m_use_stencil(_that.m_use_stencil) {};
 
   ~MapDrawHelper() {
     buffer_render_finish();
@@ -29,9 +34,11 @@ public:
 
   Canvas &m_canvas;
   Canvas &m_buffer;
+  Canvas &m_stencil;
   MapWindow& m_map;
   const RECT& m_rc;
   bool m_buffer_drawn;
+  bool m_use_stencil;
 
 protected:
 
@@ -55,6 +62,10 @@ protected:
     if (m_buffer_drawn) {
       // need to do this to prevent drawing of colored outline
       m_buffer.white_pen();
+
+      if (m_use_stencil) {
+        m_buffer.copy_transparent_black(m_stencil, m_rc);
+      }
       m_canvas.copy_transparent_white(m_buffer, m_rc);
       m_buffer.background_opaque();
       m_buffer_drawn = false;
@@ -75,7 +86,14 @@ protected:
     m_buffer.set_text_color(whitecolor);
     m_buffer.white_pen();
     m_buffer.white_brush();
-    m_buffer.rectangle(m_rc.left, m_rc.top, m_rc.right, m_rc.bottom);
+    m_buffer.clear();
+
+    m_stencil.background_transparent();
+    m_stencil.set_background_color(whitecolor);
+    m_stencil.set_text_color(whitecolor);
+    m_stencil.white_pen();
+    m_stencil.white_brush(); 
+    m_stencil.clear();
   }
 
 };

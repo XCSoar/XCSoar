@@ -255,6 +255,7 @@ class MapWindow
 
   BufferCanvas draw_canvas;
   BufferCanvas buffer_canvas;
+  BufferCanvas stencil_canvas;
 
   LabelBlock label_block;
  public:
