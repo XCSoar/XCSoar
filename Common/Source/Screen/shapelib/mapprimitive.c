@@ -75,19 +75,6 @@ void msFreeCharArray(char **array, int num_items)
   return;
 }
 
-void msPrintShape(shapeObj *p)
-{
-  int i,j;
-
-  msDebug("Shape contains %d parts.\n",  p->numlines);
-  for (i=0; i<p->numlines; i++) {
-    msDebug("\tPart %d contains %d points.\n", i, p->line[i].numpoints);
-    for (j=0; j<p->line[i].numpoints; j++) {
-      msDebug("\t\t%d: (%f, %f)\n", j, p->line[i].point[j].x, p->line[i].point[j].y);
-    }
-  }
-}
-
 void msInitShape(shapeObj *shape)
 {
   // spatial component
