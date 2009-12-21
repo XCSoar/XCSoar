@@ -1,6 +1,6 @@
 WARNINGS = -Wall -Wextra
 WARNINGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
-WARNINGS += -Wundef
+WARNINGS += -Wundef -Wredundant-decls
 
 CXXFLAGS += $(WARNINGS)
 CXXFLAGS += -Wmissing-noreturn
@@ -18,6 +18,7 @@ CXXFLAGS += -Wno-strict-aliasing
 # plain C warnings
 
 CFLAGS += $(WARNINGS)
+CFLAGS += -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes
 
 # make warnings fatal (for perfectionists)
 
@@ -35,3 +36,4 @@ endif
 
 # -Wdisabled-optimization
 # -Wunused -Wshadow -Wunreachable-code
+# -Wfloat-equal
