@@ -9,9 +9,6 @@ ifneq ($(WINHOST),y)
 	CXXFLAGS += -Wno-missing-field-initializers 
 endif
 
-# InputEvents_defaults.cpp should be fixed
-CXXFLAGS += -Wno-char-subscripts
-
 # FastMath.h does dirty aliasing tricks
 CXXFLAGS += -Wno-strict-aliasing
 
