@@ -468,11 +468,9 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   }
 #endif
 
-#ifdef OLD_TASK
   // Initialise the airspace warning dialog
   StartupStore(TEXT("dlgAirspaceWarningInit\n"));
   dlgAirspaceWarningInit();
-#endif
 
   // Find unique ID of this PDA
   ReadAssetNumber();

@@ -775,7 +775,9 @@ GlideComputerAirData::AirspaceWarning()
 {
   // JMW OLD_TASK this locking is just for now since we don't have any protection
   terrain.Lock();
-  m_airspace_warning.update(Basic());
+  if (m_airspace_warning.update(Basic())) {
+    airspaceWarningEvent.trigger();
+  }
   terrain.Unlock();
 }
 

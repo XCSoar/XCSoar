@@ -80,31 +80,24 @@ void
 ProcessTimer::MessageProcessTimer()
 {
   // don't display messages if airspace warning dialog is active
-#ifdef OLD_TASK
   if (!dlgAirspaceWarningVisible()) {
-#endif
     if (Message::Render()) {
       // turn screen on if blanked and receive a new message
       ResetDisplayTimeOut();
     }
-#ifdef OLD_TASK
   }
-#endif
 }
 
 void
 ProcessTimer::AirspaceProcessTimer()
 {
-#ifdef OLD_TASK
   if (globalRunningEvent.test()) {
     if (airspaceWarningEvent.test()) {
       airspaceWarningEvent.reset();
       ResetDisplayTimeOut();
-      dlgAirspaceWarningShowDlg(RequestAirspaceWarningForce);
-      RequestAirspaceWarningForce = false;
+      dlgAirspaceWarningShowDlg();
     }
   }
-#endif
 }
 
 extern void TestVisitor();

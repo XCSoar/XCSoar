@@ -51,17 +51,20 @@ class AbstractAirspace;
 
 void StartupScreen();
 
-bool dlgAirspaceWarningShowDlg(bool force);
+void dlgAirspaceWarningShowDlg();
+void dlgAirspaceWarningInit();
+bool dlgAirspaceWarningIsEmpty();
+bool dlgAirspaceWarningVisible();
+void dlgAirspaceDetails(const AbstractAirspace& the_airspace);
+int dlgAirspaceColoursShowModal();
+int dlgAirspacePatternsShowModal();
+void dlgAirspaceShowModal(bool colored);
+void dlgAirspaceSelect();
 
 const Waypoint* dlgWayPointSelect(const GEOPOINT &location, 
                                   const int type=-1, 
                                   const int FilterNear=0);
 
-void dlgAirspaceDetails(const AbstractAirspace& the_airspace);
-
-int dlgAirspaceColoursShowModal();
-int dlgAirspacePatternsShowModal();
-void dlgAirspaceShowModal(bool colored);
 void dlgBasicSettingsShowModal();
 void dlgBrightnessShowModal();
 void dlgHelpShowModal(ContainerWindow &parent, const TCHAR* Caption,
@@ -93,10 +96,8 @@ void dlgStartPointShowModal();
 bool dlgWaypointEditShowModal(Waypoint &way_point);
 
 void dlgWeatherShowModal();
-void dlgAirspaceSelect();
 void dlgTarget();
 bool dlgTaskRules();
-bool dlgAirspaceWarningVisible();
 void dlgFlarmTrafficShowModal();
 bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0);
 void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);

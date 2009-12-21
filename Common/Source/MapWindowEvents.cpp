@@ -327,7 +327,7 @@ bool MapWindow::on_mouse_up(int x, int y)
     return true;
   }
 
-  if (is_simulator()) {
+  if (is_simulator() && (dwInterval>50)) {
     if (!Basic().Replay && !my_target_pan && (distance>IBLSCALE(36))) {
       // This drag moves the aircraft (changes speed and direction)
       double oldbearing = Basic().TrackBearing;

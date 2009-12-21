@@ -469,6 +469,8 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
   ((WndProperty *)wf->FindByName(_T("prpBearing"))) ->SetText(sTmp);
 
   GlidePolar glide_polar = task_manager.get_glide_polar();
+  GlidePolar safety_polar = task_manager.get_safety_polar();
+
   UnorderedTaskPoint t(way_point, XCSoarInterface::SettingsComputer());
   GlideResult r;
 
@@ -496,8 +498,7 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
 
   // alt reqd at safety mc
 
-  glide_polar.set_mc(fixed_one); // JMW OLD_TASK TODO
-  r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic(), glide_polar);
+  r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic(), safety_polar);
 
   wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
   if (wp) {

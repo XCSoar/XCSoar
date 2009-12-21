@@ -1212,8 +1212,6 @@ InputEvents::eventRepeatStatusMessage(const TCHAR *misc)
   Message::Repeat(0);
 }
 
-bool dlgAirspaceWarningIsEmpty(void);
-
 // NearestAirspaceDetails
 // Displays details of the nearest airspace to the aircraft in a
 // status message.  This does nothing if there is no airspace within
@@ -1230,13 +1228,10 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
 {
   (void)misc;
 
-#ifdef OLD_TASK
   if (!dlgAirspaceWarningIsEmpty()) {
-    RequestAirspaceWarningForce = true;
     airspaceWarningEvent.trigger();
     return;
   }
-#endif
 
   AirspaceVisible visible (SettingsComputer(), Basic().GetAnyAltitude());
   AirspaceAircraftPerformanceSimple perf;

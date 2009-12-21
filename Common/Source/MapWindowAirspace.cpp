@@ -108,20 +108,13 @@ public:
   }
 
   bool condition( const AbstractAirspace& airspace ) const { 
+
+    // \todo always make airspaces in warning visible?
+
     if (!parent_condition(airspace)) {
       return false;
     }
-#ifdef OLD_TASK        
-    if (airspace._NewWarnAckNoBrush ||
-        (m_settings.iAirspaceBrush[airspace.Type] == NUMAIRSPACEBRUSHES-1)) {
-      return m_border;
-    } else {
-      return true;
-    }
-#else
     return true;
-#endif
-
   }
 private:
   const bool &m_border;
@@ -147,6 +140,7 @@ public:
     m_warnings(warnings),
     m_border(false),
     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
+    pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)),
     visible(m_map.SettingsComputer(),
             m_map.Basic().GetAnyAltitude(),
             m_border)
@@ -197,7 +191,6 @@ private:
       if (m_warnings.is_acked(airspace)) {
 
         m_buffer.hollow_brush();
-        printf("acked\n");
 
       } else {
 
@@ -213,7 +206,7 @@ private:
 
       if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
         m_stencil.black_brush();
-        m_stencil.black_pen();
+        m_stencil.select(pen_medium);
       } else {
         m_stencil.select(pen_thick);
         m_stencil.hollow_brush();
@@ -224,6 +217,7 @@ private:
 
   const AirspaceWarningCopy& m_warnings;
   Pen pen_thick;
+  Pen pen_medium;
   AirspaceMapVisible visible;
   bool m_border;
 };
