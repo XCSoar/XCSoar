@@ -71,8 +71,6 @@ Copyright_License {
 
 static int globalFileNum = 0;
 
-TCHAR *strtok_r(const TCHAR *s, TCHAR *delim, TCHAR **lasts);
-
 //static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 static bool ParseWayPointString(WAYPOINT &way_point, const TCHAR *input,
     const RasterTerrain *terrain);

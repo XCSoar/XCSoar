@@ -57,7 +57,7 @@ PExtractParameter(const TCHAR *Source, TCHAR *Destination,
 void ExtractDirectory(TCHAR *Dest, const TCHAR *Source);
 
 void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2));
-TCHAR *strtok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts);
+TCHAR *_tcstok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts);
 
 // Parse string (new lines etc) and malloc the string
 TCHAR* StringMallocParse(const TCHAR* old_string);

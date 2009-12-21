@@ -401,7 +401,7 @@ bsearch(void *key, void *base0, size_t nmemb, size_t size, int
 }
 
 TCHAR *
-strtok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts)
+_tcstok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts)
 {
   // "s" MUST be a pointer to an array, not to a string!!!
   // (ARM92, Win emulator cause access violation if not)
