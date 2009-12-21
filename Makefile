@@ -282,6 +282,7 @@ OBJS	:=\
 	$(SRC)/Version.o 		\
 	$(SRC)/Audio/Sound.o \
 	$(SRC)/Audio/VegaVoice.o	\
+	$(SRC)/Compatibility/fmode.o \
 	$(SRC)/Compatibility/string.o 	\
 	$(SRC)/Registry.o 		\
 	$(SRC)/Profile.o \

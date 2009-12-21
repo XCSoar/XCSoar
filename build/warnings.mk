@@ -29,9 +29,7 @@ endif
 
 ifeq ($(WERROR),y)
 CXXFLAGS += -Werror
-
-# disabled due to zzip/_fmode warning
-#CFLAGS += -Werror
+CFLAGS += -Werror
 endif
 
 #CXXFLAGS += -pedantic

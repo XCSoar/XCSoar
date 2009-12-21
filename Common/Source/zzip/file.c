@@ -24,15 +24,6 @@
 #include <zzip/fetch.h>
 #include <zzip/__debug.h>
 
-#if defined(__MINGW32__)
-//defined(WINDOWSPC)&&
-// JMW needed otherwise seek/tell won't work!
-#ifndef __WINE__
-#undef _fmode
-int _fmode = _O_BINARY;
-#endif
-#endif
-
 #if 0
 # if defined ZZIP_HAVE_IO_H
 # include <io.h> /* tell */
