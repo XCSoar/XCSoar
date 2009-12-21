@@ -1,6 +1,9 @@
-CXXFLAGS += -Wall -Wextra
-CXXFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
-CXXFLAGS += -Wmissing-noreturn -Wundef
+WARNINGS = -Wall -Wextra
+WARNINGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
+WARNINGS += -Wundef
+
+CXXFLAGS += $(WARNINGS)
+CXXFLAGS += -Wmissing-noreturn
 
 # disable some warnings, we're not ready for them yet
 CXXFLAGS += -Wno-unused-parameter -Wno-format -Wno-reorder -Wno-switch -Wno-non-virtual-dtor
@@ -14,9 +17,7 @@ CXXFLAGS += -Wno-strict-aliasing
 
 # plain C warnings
 
-CFLAGS += -Wall -Wextra
-CFLAGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
-CFLAGS += -Wundef
+CFLAGS += $(WARNINGS)
 
 # make warnings fatal (for perfectionists)
 
