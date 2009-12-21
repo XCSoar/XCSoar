@@ -60,7 +60,7 @@ typedef struct error_obj {
 ** Function prototypes
 */
 errorObj *msGetErrorObj(void);
-void msResetErrorList();
+void msResetErrorList(void);
 char *msGetVersion(void);
 char *msGetErrorString(char *delimiter);
 

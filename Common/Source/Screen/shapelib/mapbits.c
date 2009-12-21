@@ -37,6 +37,7 @@ Copyright_License {
 }
 */
 
+#include "Screen/shapelib/mapprimitive.h"
 #include "Screen/shapelib/maperror.h"
 
 #include <limits.h>
@@ -56,7 +57,7 @@ char *msAllocBitArray(int numbits)
   return(array);
 }
 
-int msGetBit(char *array, int index)
+int msGetBit(const char *array, int index)
 {
   array += index / CHAR_BIT;
   return (*array & (1 << (index % CHAR_BIT))) != 0;    /* 0 or 1 */

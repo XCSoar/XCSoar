@@ -138,7 +138,8 @@ errorObj *msGetErrorObj()
 ** the head is moved to the new errorObj, freeing the head errorObj to receive
 ** the new error information.
 */
-static errorObj *msInsertErrorObj()
+static errorObj *
+msInsertErrorObj(void)
 {
   errorObj *ms_error;
   ms_error = msGetErrorObj();
@@ -177,7 +178,7 @@ static errorObj *msInsertErrorObj()
 **
 ** Clear the list of error objects.
 */
-void msResetErrorList()
+void msResetErrorList(void)
 {
   errorObj *ms_error, *this_error;
   ms_error = msGetErrorObj();
