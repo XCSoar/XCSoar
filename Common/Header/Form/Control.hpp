@@ -127,7 +127,7 @@ public:
 
   bool SetFocused(bool Value);
   bool GetFocused(void);
-  virtual Window *GetCanFocus();
+  virtual Window *GetCanFocus(bool forward);
   bool SetCanFocus(bool Value);
 
   bool GetReadOnly(void) {

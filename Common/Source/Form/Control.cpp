@@ -137,7 +137,7 @@ WindowControl::~WindowControl(void)
 }
 
 Window *
-WindowControl::GetCanFocus()
+WindowControl::GetCanFocus(bool forward)
 {
   if (!is_visible())
     return NULL;
@@ -145,10 +145,18 @@ WindowControl::GetCanFocus()
   if (mCanFocus && !mReadOnly)
     return this;
 
-  for (int idx = 0; idx < mClientCount; idx++) {
-    Window *w;
-    if ((w = mClients[idx]->GetCanFocus()) != NULL)
-      return w;
+  if (forward) {
+    for (int idx = 0; idx < mClientCount; ++idx) {
+      Window *w = mClients[idx]->GetCanFocus(forward);
+      if (w != NULL)
+        return w;
+    }
+  } else {
+    for (int idx = mClientCount - 1; idx >= 0; --idx) {
+      Window *w = mClients[idx]->GetCanFocus(forward);
+      if (w != NULL)
+        return w;
+    }
   }
 
   return NULL;
@@ -485,7 +493,7 @@ WindowControl::FocusNext(WindowControl *Sender)
     idx = 0;
 
   for (; idx < mClientCount; idx++) {
-    if ((W = mClients[idx]->GetCanFocus()) != NULL) {
+    if ((W = mClients[idx]->GetCanFocus(true)) != NULL) {
       W->set_focus();
       return W;
     }
@@ -513,7 +521,7 @@ WindowControl::FocusPrev(WindowControl *Sender)
     idx = mClientCount - 1;
 
   for (; idx >= 0; idx--) {
-    if ((W = mClients[idx]->GetCanFocus()) != NULL) {
+    if ((W = mClients[idx]->GetCanFocus(false)) != NULL) {
       W->set_focus();
       return W;
     }

@@ -204,9 +204,9 @@ WndProperty::~WndProperty(void){
 }
 
 Window *
-WndProperty::GetCanFocus()
+WndProperty::GetCanFocus(bool forward)
 {
-  Window *w = WindowControl::GetCanFocus();
+  Window *w = WindowControl::GetCanFocus(forward);
   if (w == this)
     return &edit;
 
