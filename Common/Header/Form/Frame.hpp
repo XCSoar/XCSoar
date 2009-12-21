@@ -60,19 +60,6 @@ public:
 
   unsigned GetTextHeight();
 
-  void SetIsListItem(bool Value) {
-    if (Value == mIsListItem)
-      return;
-
-    mIsListItem = Value;
-
-    if (mIsListItem) {
-      hide();
-      SetCanFocus(true);
-      SetFocused(true);
-    }
-  }
-
 protected:
   bool mIsListItem;
 

@@ -136,7 +136,7 @@ Canvas::text_size(const TCHAR *text, size_t length) const
 }
 
 const SIZE
-Canvas::text_size(LPCTSTR text) const
+Canvas::text_size(const TCHAR *text) const
 {
   SIZE size = { 0, 0 };
 
@@ -158,7 +158,7 @@ Canvas::text_size(LPCTSTR text) const
 }
 
 void
-Canvas::text(int x, int y, LPCTSTR text)
+Canvas::text(int x, int y, const TCHAR *text)
 {
   SDL_Surface *s;
 
@@ -180,14 +180,14 @@ Canvas::text(int x, int y, LPCTSTR text)
 }
 
 void
-Canvas::text_opaque(int x, int y, const RECT* lprc, LPCTSTR _text)
+Canvas::text_opaque(int x, int y, const RECT* lprc, const TCHAR *_text)
 {
   // XXX
   text(x, y, _text);
 }
 
 void
-Canvas::bottom_right_text(int x, int y, LPCTSTR _text)
+Canvas::bottom_right_text(int x, int y, const TCHAR *_text)
 {
   SIZE size = text_size(_text);
   text(x - size.cx, y - size.cy, _text);
@@ -681,10 +681,24 @@ Canvas::text_size(const TCHAR *text) const
   return text_size(text, _tcslen(text));
 }
 
+unsigned
+Canvas::text_height(const TCHAR *text) const
+{
+  TEXTMETRIC tm;
+  GetTextMetrics(dc, &tm);
+  return tm.tmHeight;
+}
+
 void
 Canvas::text(int x, int y, const TCHAR *text)
 {
   ::ExtTextOut(dc, x, y, 0, NULL, text, _tcslen(text), NULL);
+}
+
+void
+Canvas::text(int x, int y, const TCHAR *text, size_t length)
+{
+  ::ExtTextOut(dc, x, y, 0, NULL, text, length, NULL);
 }
 
 void

@@ -319,18 +319,26 @@ public:
   void draw_button(RECT rc, bool down);
 
   const SIZE text_size(const TCHAR *text, size_t length) const;
-  const SIZE text_size(LPCTSTR text) const;
+  const SIZE text_size(const TCHAR *text) const;
   unsigned text_width(const TCHAR *text) const {
     return text_size(text).cx;
   }
 
-  void text(int x, int y, LPCTSTR text);
+  unsigned text_height(const TCHAR *text) const {
+    return text_size(_T("W")).cy;
+  }
+
+  void text(int x, int y, const TCHAR *text);
+
+  void text(int x, int y, const TCHAR *text, size_t length) {
+    // XXX
+  }
 
   void text_opaque(int x, int y, const TCHAR *text, size_t length) {
     // XXX
   }
 
-  void text_opaque(int x, int y, const RECT* lprc, LPCTSTR text);
+  void text_opaque(int x, int y, const RECT* lprc, const TCHAR *text);
   void text_opaque(int x, int y, const TCHAR *text) {
     text_opaque(x, y, NULL, text);
   }
@@ -345,7 +353,7 @@ public:
     this->text(x, y, text);
   }
 
-  void bottom_right_text(int x, int y, LPCTSTR text);
+  void bottom_right_text(int x, int y, const TCHAR *text);
 
   void formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
     // XXX
@@ -690,7 +698,10 @@ public:
     return text_size(text).cx;
   }
 
+  unsigned text_height(const TCHAR *text) const;
+
   void text(int x, int y, const TCHAR *text);
+  void text(int x, int y, const TCHAR *text, size_t length);
   void text_opaque(int x, int y, const TCHAR *text, size_t length);
   void text_opaque(int x, int y, const RECT* lprc, const TCHAR *text);
   void text_opaque(int x, int y, const TCHAR *text) {

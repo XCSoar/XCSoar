@@ -20,8 +20,8 @@ endif
 DEPFILE = $(dir $@).$(notdir $@).d
 DEPFLAGS = -Wp,-MD,$(DEPFILE),-MT,$@
 dirtarget = $(subst \\,_,$(subst /,_,$(dir $@)))
-cc-flags = $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH)
-cxx-flags = $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH)
+cc-flags = $(DEPFLAGS) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH)
+cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH)
 
 #
 # Useful debugging targets - make preprocessed versions of the source
@@ -48,10 +48,6 @@ cxx-flags = $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH)
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) -c -o $@ $(cxx-flags) $<
 
-%-$(TARGET).o: %.cxx
-	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) -c -o $@ $(cxx-flags) $<
-
 %-$(TARGET)-Simulator.o: %.c
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) -c -o $@ $(cc-flags) -D_SIM_ $<
@@ -59,7 +55,3 @@ cxx-flags = $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH)
 %-$(TARGET)-Simulator.o: %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) -c -o $@ $(cxx-flags) -D_SIM_ $<
-
-%-$(TARGET)-Simulator.o: %.cxx
-	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) -c -c -o $@ $(cxx-flags) -D_SIM_ $<

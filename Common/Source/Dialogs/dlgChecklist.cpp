@@ -56,8 +56,7 @@ static WndListFrame *wDetails=NULL;
 #define MAXLINES 100
 #define MAXLISTS 20
 static int LineOffsets[MAXLINES];
-static int DrawListIndex=0;
-static int nTextLines=0;
+static unsigned nTextLines;
 static int nLists=0;
 static TCHAR *ChecklistText[MAXDETAILS];
 static TCHAR *ChecklistTitle[MAXTITLE];
@@ -85,50 +84,40 @@ static void NextPage(int Step){
   }
   wf->SetCaption(buffer);
 
-  wDetails->ResetList();
+  wDetails->SetLength(nTextLines - 1);
   wDetails->invalidate();
 }
 
 
 static void
-OnPaintDetailsListItem(WindowControl *Sender, Canvas &canvas)
+OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  (void)Sender;
-  if (DrawListIndex < nTextLines){
-    TCHAR* text = ChecklistText[page];
-    if (!text) return;
-    int nstart = LineOffsets[DrawListIndex];
-    int nlen;
-    if (DrawListIndex<nTextLines-1) {
-      nlen = LineOffsets[DrawListIndex+1]-LineOffsets[DrawListIndex]-1;
-      nlen--;
-    } else {
-      nlen = _tcslen(text+nstart);
-    }
-    while (_tcscmp(text+nstart+nlen-1,_T("\r"))==0) {
-      nlen--;
-    }
-    while (_tcscmp(text+nstart+nlen-1,_T("\n"))==0) {
-      nlen--;
-    }
-    if (nlen>0) {
-      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-                         text + nstart, nlen);
-    }
-  }
-}
+  if (i >= nTextLines)
+    return;
 
+  TCHAR* text = ChecklistText[page];
+  if (text == NULL)
+    return;
 
-static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender;
-  if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = nTextLines-1;
+  int nstart = LineOffsets[i];
+  int nlen;
+  if (i < nTextLines - 1) {
+    nlen = LineOffsets[i + 1] - LineOffsets[i] - 1;
+    nlen--;
   } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
+    nlen = _tcslen(text + nstart);
   }
+
+  while (_tcscmp(text + nstart + nlen - 1, _T("\r")) == 0)
+    nlen--;
+
+  while (_tcscmp(text + nstart + nlen - 1, _T("\n")) == 0)
+    nlen--;
+
+  if (nlen > 0)
+    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
+                text + nstart, nlen);
 }
-
-
 
 static void OnNextClicked(WindowControl * Sender){
   (void)Sender;
@@ -173,21 +162,18 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(OnPaintDetailsListItem),
-  DeclareCallBackEntry(OnDetailsListInfo),
   DeclareCallBackEntry(NULL)
 };
 
-void addChecklist(TCHAR* name, TCHAR* details) {
-  if (nLists<MAXLISTS) {
-    ChecklistTitle[nLists] = (TCHAR*)malloc((_tcslen(name)+1)*sizeof(TCHAR));
-    ChecklistText[nLists] = (TCHAR*)malloc((_tcslen(details)+1)*sizeof(TCHAR));
-    _tcscpy(ChecklistTitle[nLists], name);
-    ChecklistTitle[MAXTITLE-1]= 0;
-    _tcscpy(ChecklistText[nLists], details);
-    ChecklistText[MAXDETAILS-1]= 0;
-    nLists++;
-  }
+static void
+addChecklist(const TCHAR *name, const TCHAR *details)
+{
+  if (nLists >= MAXLISTS)
+    return;
+
+  ChecklistTitle[nLists] = _tcsdup(name);
+  ChecklistText[nLists] = _tcsdup(details);
+  nLists++;
 }
 
 void LoadChecklist(void) {
@@ -301,6 +287,7 @@ void dlgChecklistShowModal(void){
   assert(wDetails!=NULL);
 
   wDetails->SetBorderKind(BORDERLEFT);
+  wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
 
   page = 0;
 

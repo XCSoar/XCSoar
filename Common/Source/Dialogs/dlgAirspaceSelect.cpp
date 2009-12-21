@@ -106,72 +106,62 @@ static unsigned TypeFilterIdx=0;
 static unsigned UpLimit=0;
 static unsigned LowLimit=0;
 
-static int ItemIndex = -1;
-
 static AirspaceSelectInfo_t *AirspaceSelectInfo=NULL;
 
 
-static void OnAirspaceListEnter(WindowControl * Sender,
-				WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender; (void)ListInfo;
+static void
+OnAirspaceListEnter(unsigned ItemIndex)
+{
+  if (UpLimit <= LowLimit || ItemIndex >= UpLimit - LowLimit)
+    return;
 
-  if (ItemIndex != -1) {
+  int index_circle = AirspaceSelectInfo[LowLimit+ItemIndex].Index_Circle;
+  int index_area = AirspaceSelectInfo[LowLimit+ItemIndex].Index_Area;
 
-    if (UpLimit > LowLimit
-        && (ItemIndex >= 0)  // JMW fixed bug, was >0
-        && ((unsigned)ItemIndex < (UpLimit - LowLimit))) {
+  if ((index_circle>=0) || (index_area>=0)) {
 
-      int index_circle = AirspaceSelectInfo[LowLimit+ItemIndex].Index_Circle;
-      int index_area = AirspaceSelectInfo[LowLimit+ItemIndex].Index_Area;
-
-      if ((index_circle>=0) || (index_area>=0)) {
-
-        TCHAR *Name = NULL;
+    TCHAR *Name = NULL;
+    if (index_circle>=0) {
+      Name = airspace_database.AirspaceCircle[index_circle].Name;
+    } else if (index_area>=0) {
+      Name = airspace_database.AirspaceArea[index_area].Name;
+    }
+    if (Name) {
+      UINT answer;
+      answer = MessageBoxX(Name,
+                           gettext(_T("Acknowledge for day?")),
+                           MB_YESNOCANCEL|MB_ICONQUESTION);
+      if (answer == IDYES) {
         if (index_circle>=0) {
-          Name = airspace_database.AirspaceCircle[index_circle].Name;
+          AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                              XCSoarInterface::Calculated(),
+                              XCSoarInterface::SettingsComputer(),
+                              XCSoarInterface::MapProjection(),
+                              false, true, index_circle, true);
         } else if (index_area>=0) {
-          Name = airspace_database.AirspaceArea[index_area].Name;
+          AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                              XCSoarInterface::Calculated(),
+                              XCSoarInterface::SettingsComputer(),
+                              XCSoarInterface::MapProjection(),
+                              false, false, index_area, true);
         }
-        if (Name) {
-	  UINT answer;
-          answer = MessageBoxX(Name,
-			       gettext(_T("Acknowledge for day?")),
-			       MB_YESNOCANCEL|MB_ICONQUESTION);
-	  if (answer == IDYES) {
-	    if (index_circle>=0) {
-              AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                                  XCSoarInterface::Calculated(),
-                                  XCSoarInterface::SettingsComputer(),
-                                  XCSoarInterface::MapProjection(),
-                                  false, true, index_circle, true);
-            } else if (index_area>=0) {
-              AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                                  XCSoarInterface::Calculated(),
-                                  XCSoarInterface::SettingsComputer(),
-                                  XCSoarInterface::MapProjection(),
-                                  false, false, index_area, true);
-            }
-          } else if (answer == IDNO) {
-	    // this will cancel a daily ack
-	    if (index_circle>=0) {
-              AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                                  XCSoarInterface::Calculated(),
-                                  XCSoarInterface::SettingsComputer(),
-                                  XCSoarInterface::MapProjection(),
-                                  true, true, index_circle, true);
-            } else if (index_area>=0) {
-              AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
-                                  XCSoarInterface::Calculated(),
-                                  XCSoarInterface::SettingsComputer(),
-                                  XCSoarInterface::MapProjection(),
-                                  true, false, index_area, true);
-            }
-	  }
+      } else if (answer == IDNO) {
+        // this will cancel a daily ack
+        if (index_circle>=0) {
+          AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                              XCSoarInterface::Calculated(),
+                              XCSoarInterface::SettingsComputer(),
+                              XCSoarInterface::MapProjection(),
+                              true, true, index_circle, true);
+        } else if (index_area>=0) {
+          AirspaceWarnListAdd(airspace_database, XCSoarInterface::Basic(),
+                              XCSoarInterface::Calculated(),
+                              XCSoarInterface::SettingsComputer(),
+                              XCSoarInterface::MapProjection(),
+                              true, false, index_area, true);
         }
       }
     }
-  } else {
-    wf->SetModalResult(mrCancel);
   }
 }
 
@@ -320,8 +310,6 @@ static void UpdateList(void){
   unsigned i;
   bool distancemode = false;
 
-  ItemIndex = 0;
-
   UpLimit= NumberOfAirspaces;
   LowLimit =0;
 
@@ -393,7 +381,7 @@ static void UpdateList(void){
 	  sizeof(AirspaceSelectInfo_t), AirspaceDistanceCompare);
   }
 
-  wAirspaceList->ResetList();
+  wAirspaceList->SetLength(UpLimit - LowLimit);
   wAirspaceList->invalidate();
 }
 
@@ -591,18 +579,14 @@ static void OnFilterType(DataField *Sender,
 
 }
 
-static int DrawListIndex=0;
-
 static void
-OnPaintListItem(WindowControl *Sender, Canvas &canvas)
+OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  (void)Sender;
   int n = UpLimit - LowLimit;
   TCHAR sTmp[12];
 
-  if (DrawListIndex < n){
-
-    int i = LowLimit + DrawListIndex;
+  if ((int)i < n) {
+    i += LowLimit;
 
 // Sleep(100);
     TCHAR *Name = 0;
@@ -615,14 +599,15 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
     if (Name) {
 
       int w0, w1, w2, w3, x1, x2, x3;
-      w0 = Layout::FastScale(Layout::landscape ? 202 : 225);
+      w0 = rc.right - rc.left - Layout::FastScale(4);
       w1 = canvas.text_width(_T("XXX"));
       w2 = canvas.text_width(_T(" 000km"));
       w3 = canvas.text_width(_T(" 000")_T(DEG));
 
       x1 = w0-w1-w2-w3;
 
-      canvas.text_clipped(Layout::FastScale(2), Layout::FastScale(2),
+      canvas.text_clipped(rc.left + Layout::FastScale(2),
+                          rc.top + Layout::FastScale(2),
                           x1 - Layout::FastScale(5), Name);
 
       sTmp[0] = '\0';
@@ -678,50 +663,33 @@ OnPaintListItem(WindowControl *Sender, Canvas &canvas)
 
       // left justified
 
-      canvas.text_opaque(x1, Layout::FastScale(2), sTmp);
+      canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), sTmp);
 
       // right justified after airspace type
       _stprintf(sTmp, _T("%.0f%s"),
                 AirspaceSelectInfo[i].Distance,
                 Units::GetDistanceName());
       x2 = w0 - w3 - canvas.text_width(sTmp);
-      canvas.text_opaque(x2, Layout::FastScale(2), sTmp);
+      canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), sTmp);
 
       // right justified after distance
       _stprintf(sTmp, _T("%d")_T(DEG),  iround(AirspaceSelectInfo[i].Direction));
       x3 = w0 - canvas.text_width(sTmp);
-      canvas.text_opaque(x3, Layout::FastScale(2), sTmp);
+      canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
     } else {
       // should never get here!
     }
   } else {
-    if (DrawListIndex == 0){
+    if (i == 0){
       _stprintf(sTmp, _T("%s"), gettext(_T("No Match!")));
-      canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2),
-                         sTmp);
+      canvas.text(rc.left + Layout::FastScale(2),
+                  rc.top + Layout::FastScale(2), sTmp);
     }
   }
 }
 
-// DrawListIndex = number of things to draw
-// ItemIndex = current selected item
-
-
-static void OnWpListInfo(WindowControl * Sender,
-                         WndListFrame::ListInfo_t *ListInfo){
-  (void)Sender;
-	if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = UpLimit-LowLimit;
-  } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
-    ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
-  }
-}
-
-
 static void OnWPSCloseClicked(WindowControl * Sender){
 	(void)Sender;
-  ItemIndex = -1;
   wf->SetModalResult(mrCancel);
 }
 
@@ -778,8 +746,6 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnFilterDistance),
   DeclareCallBackEntry(OnFilterDirection),
   DeclareCallBackEntry(OnFilterType),
-  DeclareCallBackEntry(OnPaintListItem),
-  DeclareCallBackEntry(OnWpListInfo),
   DeclareCallBackEntry(NULL)
 };
 
@@ -790,7 +756,6 @@ void dlgAirspaceSelect(void) {
 
   UpLimit = 0;
   LowLimit = 0;
-  ItemIndex = -1;
 
   NumberOfAirspaces = airspace_database.NumberOfAirspaceCircles +
     airspace_database.NumberOfAirspaceAreas;
@@ -822,7 +787,8 @@ void dlgAirspaceSelect(void) {
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
   assert(wAirspaceList!=NULL);
   wAirspaceList->SetBorderKind(BORDERLEFT);
-  wAirspaceList->SetEnterCallback(OnAirspaceListEnter);
+  wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
+  wAirspaceList->SetPaintItemCallback(OnPaintListItem);
 
   wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));

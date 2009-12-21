@@ -67,18 +67,6 @@ OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
                       ComboListPopup->ComboPopupItemList[i]->StringValueFormatted);
 }
 
-static void OnComboPopupListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
-{ // callback function for the ComboPopup
-  (void)Sender;
-  if (ListInfo->DrawIndex == -1){ // initialize
-
-    ListInfo->ItemCount = ComboListPopup->ComboPopupItemCount;
-    ListInfo->ScrollIndex = 0;
-    ListInfo->ItemIndex = ComboListPopup->ComboPopupItemSavedIndex;
-  }
-}
-
-
 static void OnHelpClicked(WindowControl * Sender){
   (void)Sender;
 
@@ -98,10 +86,10 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
-static void OnComboPopupListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
+static void
+OnComboPopupListEnter(unsigned i)
 { // double-click on item -- NOT in callback table because added manually
-  (void)Sender;
-  OnCloseClicked(Sender);
+  OnCloseClicked(wf);
 }
 
 static void OnCancelClicked(WindowControl * Sender){
@@ -111,7 +99,6 @@ static void OnCancelClicked(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnComboPopupListInfo),
   DeclareCallBackEntry(OnHelpClicked),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnCancelClicked),
@@ -160,7 +147,7 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
       (WndListFrame*)wf->FindByName(_T("frmComboPopupList"));
     assert(wComboPopupListFrame!=NULL);
     wComboPopupListFrame->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERRIGHT|BORDERBOTTOM);
-    wComboPopupListFrame->SetEnterCallback(OnComboPopupListEnter);
+    wComboPopupListFrame->SetActivateCallback(OnComboPopupListEnter);
     wComboPopupListFrame->SetPaintItemCallback(OnPaintComboPopupListItem);
 
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();
@@ -168,8 +155,8 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
     assert(ComboPopupDataField!=NULL);
 
     ComboPopupDataField->CreateComboList();
-    wComboPopupListFrame->ResetList();
-    wComboPopupListFrame->SetItemIndex(ComboListPopup->ComboPopupItemSavedIndex);
+    wComboPopupListFrame->SetLength(ComboListPopup->ComboPopupItemCount);
+    wComboPopupListFrame->SetCursorIndex(ComboListPopup->ComboPopupItemSavedIndex);
     if (bInitialPage) { // save values for "Cancel" from first page only
       bInitialPage=false;
       iSavedInitialDataIndex=ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupItemSavedIndex]->DataFieldIndex;

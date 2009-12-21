@@ -77,6 +77,13 @@ private:
   static int findGCE(const TCHAR *data);
   static int findNE(const TCHAR *data);
   static pt2Event findEvent(const TCHAR *);
+
+  /**
+   * Looks up the specified key code, and returns the associated event
+   * id.  Returns 0 if the key was not found.
+   */
+  static unsigned key_to_event(mode mode, unsigned key_code);
+
   static bool processKey(int key);
   static bool processNmea(int key);
   static bool processButton(int bindex);

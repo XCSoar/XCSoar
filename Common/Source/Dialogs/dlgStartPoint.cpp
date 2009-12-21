@@ -50,77 +50,51 @@ Copyright_License {
 static WndForm *wf=NULL;
 static WndListFrame *wStartPointList=NULL;
 
-static int ItemIndex = -1;
-
-static void UpdateList(void){
-  wStartPointList->ResetList();
-  wStartPointList->invalidate();
-}
-
-static int DrawListIndex=0;
-
 static void
-OnStartPointPaintListItem(WindowControl * Sender, Canvas &canvas)
+OnStartPointPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-	(void)Sender;
-
   TCHAR label[MAX_PATH];
 
-  if (DrawListIndex < MAXSTARTPOINTS){
-    int i = DrawListIndex;
+  if (i >= MAXSTARTPOINTS)
+    return;
 
-    if ((task_start_points[i].Index != -1)
-	&&(task_start_stats[i].Active)) {
-      _tcscpy(label, way_points.get(task_start_points[i].Index).Name);
-    } else {
-      int j;
-      int i0=0;
-      for (j=MAXSTARTPOINTS-1; j>=0; j--) {
-        if ((task_start_points[j].Index!= -1)&&(task_start_stats[j].Active)) {
-          i0=j+1;
-          break;
-        }
-      }
-      if (i==i0) {
-        _tcscpy(label, _T("(add waypoint)"));
-      } else {
-        _tcscpy(label, _T(" "));
+  if ((task_start_points[i].Index != -1)
+      &&(task_start_stats[i].Active)) {
+    _tcscpy(label, way_points.get(task_start_points[i].Index).Name);
+  } else {
+    int j;
+    unsigned i0 = 0;
+    for (j=MAXSTARTPOINTS-1; j>=0; j--) {
+      if ((task_start_points[j].Index!= -1)&&(task_start_stats[j].Active)) {
+        i0=j+1;
+        break;
       }
     }
-
-    canvas.text_opaque(Layout::FastScale(2), Layout::FastScale(2), label);
+    if (i==i0) {
+      _tcscpy(label, _T("(add waypoint)"));
+    } else {
+      _tcscpy(label, _T(" "));
+    }
   }
+
+  canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
+              label);
 }
 
 
 static bool changed = false;
 
-static void OnStartPointListEnter(WindowControl * Sender,
-				WndListFrame::ListInfo_t *ListInfo) {
-  (void)Sender;
-  ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
+static void
+OnStartPointListEnter(unsigned ItemIndex) {
   if (ItemIndex>=MAXSTARTPOINTS) {
     ItemIndex = MAXSTARTPOINTS-1;
   }
-  if (ItemIndex>=0) {
-    int res;
-    res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
-    if (res>=0) {
-      task.SetStartPoint(ItemIndex, res);
-      changed = true;
-    }
-  }
-}
 
-
-static void OnStartPointListInfo(WindowControl * Sender,
-			       WndListFrame::ListInfo_t *ListInfo){
-	(void)Sender;
-  if (ListInfo->DrawIndex == -1){
-    ListInfo->ItemCount = MAXSTARTPOINTS;
-  } else {
-    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
-    ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
+  int res;
+  res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
+  if (res>=0) {
+    task.SetStartPoint(ItemIndex, res);
+    changed = true;
   }
 }
 
@@ -133,13 +107,12 @@ static void OnClearClicked(WindowControl * Sender){
   (void)Sender;
   task.ClearStartPoints();
   changed = true;
-  UpdateList();
+
+  wStartPointList->invalidate();
 }
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclareCallBackEntry(OnStartPointPaintListItem),
-  DeclareCallBackEntry(OnStartPointListInfo),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnClearClicked),
   DeclareCallBackEntry(NULL)
@@ -147,9 +120,6 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 void dlgStartPointShowModal(void) {
-
-  ItemIndex = -1;
-
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgStartPoint_L.xml"),
@@ -170,9 +140,9 @@ void dlgStartPointShowModal(void) {
   wStartPointList = (WndListFrame*)wf->FindByName(_T("frmStartPointList"));
   assert(wStartPointList!=NULL);
   wStartPointList->SetBorderKind(BORDERLEFT);
-  wStartPointList->SetEnterCallback(OnStartPointListEnter);
-
-  UpdateList();
+  wStartPointList->SetActivateCallback(OnStartPointListEnter);
+  wStartPointList->SetPaintItemCallback(OnStartPointPaintListItem);
+  wStartPointList->SetLength(MAXSTARTPOINTS);
 
   changed = false;
 

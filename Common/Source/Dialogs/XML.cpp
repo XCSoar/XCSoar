@@ -641,13 +641,9 @@ LoadChild(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
     // recursivly create dialog
     LoadChildsFromXML(WC, LookUpTable, &node, ParentFont);
   } else if (_tcscmp(node.getName(), _T("WndListFrame")) == 0){
-    TCHAR ListCallback[128];
-    _tcscpy(ListCallback,
-            StringToStringDflt(node.getAttribute(_T("OnListInfo")),
-                               _T("")));
-    WC = new WndListFrame(Parent, Name, X, Y, Width, Height,
-                          (WndListFrame::OnListCallback_t)
-                          CallBackLookup(LookUpTable, ListCallback));
+    unsigned item_height =
+      Layout::Scale(StringToIntDflt(node.getAttribute(_T("ItemHeight")), 18));
+    WC = new WndListFrame(Parent, Name, X, Y, Width, Height, item_height);
 
     // recursivly create dialog
     LoadChildsFromXML(WC, LookUpTable, &node, ParentFont);

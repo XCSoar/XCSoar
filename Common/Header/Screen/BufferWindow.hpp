@@ -53,7 +53,7 @@ private:
 
 public:
 #ifndef ENABLE_SDL
-  void set(ContainerWindow &parent, LPCTSTR cls,
+  void set(ContainerWindow &parent, const TCHAR *cls,
            int left, int top, unsigned width, unsigned height) {
     PaintWindow::set(parent, cls, left, top, width, height);
     buffer.set(PaintWindow::get_canvas(), width, height);

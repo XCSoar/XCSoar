@@ -103,10 +103,6 @@ static int dec_rawrefpass(jpc_dec_t *dec, jpc_bitstream_t *in, int bitpos,
 static int dec_clnpass(jpc_dec_t *dec, jpc_mqdec_t *mqdec, int bitpos, int orient,
   int vcausalflag, int segsymflag, jas_matrix_t *flags, jas_matrix_t *data);
 
-#ifndef NDEBUG
-static long t1dec_cnt = 0;
-#endif
-
 #ifdef NDEBUG
 #define	JPC_T1D_GETBIT(mqdec, v, passtypename, symtypename) \
 	((v) = jpc_mqdec_getbit(mqdec))
@@ -114,10 +110,6 @@ static long t1dec_cnt = 0;
 #define	JPC_T1D_GETBIT(mqdec, v, passtypename, symtypename) \
 { \
 	(v) = jpc_mqdec_getbit(mqdec); \
-	if (jas_getdbglevel() >= 100) { \
-		fprintf(stderr, "index = %ld; passtype = %s; symtype = %s; sym = %d\n", t1dec_cnt, passtypename, symtypename, v); \
-		++t1dec_cnt; \
-	} \
 }
 #endif
 #define	JPC_T1D_GETBITNOSKEW(mqdec, v, passtypename, symtypename) \
@@ -130,10 +122,6 @@ static long t1dec_cnt = 0;
 #define	JPC_T1D_RAWGETBIT(bitstream, v, passtypename, symtypename) \
 { \
 	(v) = jpc_bitstream_getbit(bitstream); \
-	if (jas_getdbglevel() >= 100) { \
-		fprintf(stderr, "index = %ld; passtype = %s; symtype = %s; sym = %d\n", t1dec_cnt, passtypename, symtypename, v); \
-		++t1dec_cnt; \
-	} \
 }
 #endif
 

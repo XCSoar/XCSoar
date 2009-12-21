@@ -53,6 +53,7 @@ while (<>) {
 				# Mode string
 				my $label = $rec{label};
 				$label =~ s|\\([^rn\\])|\\\\$1|g if ($label);
+				$label = '' unless defined $label;
 				my $location = $rec{location};
 				if ($location) {
 					print qq{makeLabel(mode_id,TEXT("$label"),$location,event_id);\n};

@@ -413,9 +413,6 @@ int jas_stream_flush(jas_stream_t *stream);
 /* Copy data from one stream to another. */
 int jas_stream_copy(jas_stream_t *dst, jas_stream_t *src, int n);
 
-/* Display stream contents (for debugging purposes). */
-int jas_stream_display(jas_stream_t *stream, FILE *fp, int n);
-
 /* Consume (i.e., discard) characters from stream. */
 int jas_stream_gobble(jas_stream_t *stream, int n);
 

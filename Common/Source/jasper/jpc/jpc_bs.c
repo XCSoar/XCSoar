@@ -92,7 +92,7 @@ static jpc_bitstream_t *jpc_bitstream_alloc(void);
 \******************************************************************************/
 
 /* Open a bit stream from a stream. */
-jpc_bitstream_t *jpc_bitstream_sopen(jas_stream_t *stream, char *mode)
+jpc_bitstream_t *jpc_bitstream_sopen(jas_stream_t *stream, const char *mode)
 {
 	jpc_bitstream_t *bitstream;
 

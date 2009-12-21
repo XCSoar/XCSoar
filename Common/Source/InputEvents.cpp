@@ -70,6 +70,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MacCready.h"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
+#include "Asset.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -192,15 +193,17 @@ InputEvents::readFile()
 
   // Get defaults
   if (!InitONCE) {
-    #ifdef FIVV
-    #include "InputEvents_fivv.cpp"   // VENTA3
-    #elif defined(WINDOWSPC)
-    #include "InputEvents_pc.cpp"
-    #elif defined(GNAV)
-    #include "InputEvents_altair.cpp"
-    #else
-    #include "InputEvents_defaults.cpp"
-    #endif
+    if (is_fivv()) {
+      #include "InputEvents_fivv.cpp"   // VENTA3
+    } else if (!is_embedded()) {
+      #include "InputEvents_pc.cpp"
+    } else if (is_altair()) {
+      #include "InputEvents_altair.cpp"
+    } else if (is_pna()) {
+      #include "InputEvents_pna.cpp"
+    } else {
+      #include "InputEvents_default.cpp"
+    }
 
     #include "InputEvents_Text2Event.cpp"
     InitONCE = true;
@@ -783,6 +786,20 @@ InputEvents::processButton(int bindex)
   return false;
 }
 
+unsigned
+InputEvents::key_to_event(mode mode, unsigned key_code)
+{
+  if (key_code >= MAX_KEY)
+    return 0;
+
+  unsigned event_id = Key2Event[mode][key_code];
+  if (event_id == 0)
+    /* not found in this mode - try the default binding */
+    event_id = Key2Event[0][key_code];
+
+  return event_id;
+}
+
 /*
   InputEvent::processKey(KeyID);
   Process keys normally brought in by hardware or keyboard presses
@@ -799,62 +816,43 @@ InputEvents::processKey(int dWord)
   InterfaceTimeoutReset();
   */
 
-  int event_id;
-
-  // Valid input ?
-  if ((dWord < 0) || (dWord > MAX_KEY))
-    return false;
-
   // get current mode
   InputEvents::mode mode = InputEvents::getModeID();
 
   // Which key - can be defined locally or at default (fall back to default)
-  event_id = Key2Event[mode][dWord];
+  int event_id = key_to_event(mode, dWord);
 
-  #ifdef VENTA_DEBUG_KEY
-  // VENTA- DEBUG HARDWARE KEY PRESSED
-  TCHAR ventabuffer[80];
-  _stprintf(ventabuffer,TEXT("PRCKEY %d MODE %d EVENT %d"), dWord, mode,event_id);
-  DoStatusMessage(ventabuffer);
-  #endif
+  if (event_id <= 0)
+    return false;
 
-  if (event_id == 0) {
-    // go with default key..
-    event_id = Key2Event[0][dWord];
-  }
+  int bindex = -1;
+  InputEvents::mode lastMode = mode;
+  const TCHAR *pLabelText = NULL;
 
-  if (event_id > 0) {
-    int bindex = -1;
-    InputEvents::mode lastMode = mode;
-    const TCHAR *pLabelText = NULL;
+  // JMW should be done by gui handler
+  // if (!Debounce()) return true;
 
-    // JMW should be done by gui handler
-    // if (!Debounce()) return true;
-
-    int i;
-    for (i = ModeLabel_count[mode]; i >= 0; i--) {
-      if ((ModeLabel[mode][i].event == event_id)) {
-        bindex = ModeLabel[mode][i].location;
-        pLabelText = ModeLabel[mode][i].label;
-        if (bindex > 0) {
-          ButtonLabel::AnimateButton(bindex);
-        }
+  int i;
+  for (i = ModeLabel_count[mode]; i >= 0; i--) {
+    if ((ModeLabel[mode][i].event == event_id)) {
+      bindex = ModeLabel[mode][i].location;
+      pLabelText = ModeLabel[mode][i].label;
+      if (bindex > 0) {
+        ButtonLabel::AnimateButton(bindex);
       }
     }
-
-    if (bindex < 0 || ButtonLabel::hWndButtonWindow[bindex].is_enabled())
-      InputEvents::processGo(event_id);
-
-    // experimental: update button text, macro may change the value
-    if ((lastMode == getModeID()) && (bindex > 0) && (pLabelText != NULL)
-        && ButtonLabel::ButtonVisible[bindex]) {
-      drawButtons(lastMode);
-    }
-
-    return true;
   }
 
-  return false;
+  if (bindex < 0 || ButtonLabel::hWndButtonWindow[bindex].is_enabled())
+    InputEvents::processGo(event_id);
+
+  // experimental: update button text, macro may change the value
+  if ((lastMode == getModeID()) && (bindex > 0) && (pLabelText != NULL)
+      && ButtonLabel::ButtonVisible[bindex]) {
+    drawButtons(lastMode);
+  }
+
+  return true;
 }
 
 bool
@@ -1068,9 +1066,7 @@ InputEvents::ShowMenu()
 void
 InputEvents::ProcessMenuTimer()
 {
-  if (InfoBoxManager::IsFocus()) {
-    setMode(MODE_INFOBOX);
-  } else {
+  if (!InfoBoxManager::IsFocus()) {
     if (MenuTimeOut == MenuTimeoutMax) {
       if (SettingsMap().EnablePan && !SettingsMap().TargetPan) {
         setMode(MODE_PAN);

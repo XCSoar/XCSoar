@@ -93,7 +93,7 @@ CVOImage::~CVOImage()
 		DeleteObject(m_hbitmap);
 }
 
-BOOL CVOImage::Load(HDC hdc, LPCTSTR pcszFileName)
+BOOL CVOImage::Load(HDC hdc, const TCHAR *pcszFileName)
 {
 	if(m_hbitmap)
 		DeleteObject(m_hbitmap);
@@ -205,7 +205,7 @@ DWORD CVOImage::GetWidth()
 	return m_dwWidth;
 }
 
-BOOL CVOImage::SetBitmap(HDC hdc, DWORD dwResourceID, LPCTSTR pcszClass, HMODULE hModule)
+BOOL CVOImage::SetBitmap(HDC hdc, DWORD dwResourceID, const TCHAR *pcszClass, HMODULE hModule)
 {
 	if(!g_hdc)
 		g_hdc = CreateCompatibleDC(hdc);
@@ -298,7 +298,7 @@ BOOL CVOImage::IsLoaded()
 	return (m_hbitmap != 0);
 }
 
-CVOResource::CVOResource(HMODULE hModule, DWORD dwResourceID, LPCTSTR pcszClass)
+CVOResource::CVOResource(HMODULE hModule, DWORD dwResourceID, const TCHAR *pcszClass)
 {
 	m_dwSize = 0;
 	m_hGlobal = 0;

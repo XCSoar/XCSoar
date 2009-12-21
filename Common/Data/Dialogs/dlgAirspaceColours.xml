@@ -11,10 +11,7 @@
 
   <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=2 Width=98  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
 
-  <WndListFrame Name="frmAirspaceColoursList" X=102 Y=0 Width=215 Height=222 Font=2 OnListInfo="OnAirspaceColoursListInfo">
-    <WndOwnerDrawFrame Name="frmAirspaceColoursListEntry" X=2 Y=2 Width=203 Height=18 Font=2  OnPaint="OnAirspaceColoursPaintListItem"/>
-  </WndListFrame>
-
+  <WndListFrame Name="frmAirspaceColoursList" X=102 Y=0 Width=215 Height=222 ItemHeight=18 Font=2/>
 </WndForm>
 
 </PMML>

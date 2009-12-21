@@ -201,7 +201,7 @@ char *jas_tvparser_gettag(jas_tvparser_t *tvp)
 }
 
 /* Get the current value. */
-char *jas_tvparser_getval(jas_tvparser_t *tvp)
+const char *jas_tvparser_getval(jas_tvparser_t *tvp)
 {
 	return tvp->val;
 }

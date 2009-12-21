@@ -39,10 +39,10 @@ Copyright_License {
 #ifndef XCSOAR_FORM_LIST_HPP
 #define XCSOAR_FORM_LIST_HPP
 
-#include "Form/Frame.hpp"
+#include "Form/Control.hpp"
 #include "Screen/Bitmap.hpp"
 
-class WndListFrame : public WndFrame {
+class WndListFrame : public WindowControl {
   class ScrollBar {
     Bitmap hScrollBarBitmapTop;
     Bitmap hScrollBarBitmapMid;
@@ -127,16 +127,7 @@ class WndListFrame : public WndFrame {
   };
 
 public:
-
-  typedef struct{
-    int ItemIndex;
-    int DrawIndex;
-    int ScrollIndex;
-    int ItemCount;
-    int ItemInViewCount;
-  }ListInfo_t;
-
-  typedef void (*OnListCallback_t)(WindowControl *Sender, ListInfo_t *ListInfo);
+  typedef void (*ActivateCallback_t)(unsigned idx);
   typedef void (*CursorCallback_t)(unsigned idx);
   typedef void (*PaintItemCallback_t)(Canvas &canvas, const RECT rc,
                                       unsigned idx);
@@ -144,21 +135,43 @@ public:
 protected:
   ScrollBar scroll_bar;
 
-  ListInfo_t mListInfo;
+  /**
+   * The height of one item on the screen, in pixels.
+   */
+  unsigned item_height;
 
-  OnListCallback_t mOnListCallback;
-  OnListCallback_t mOnListEnterCallback;
+  /**
+   * The number of items in the list.
+   */
+  unsigned length;
+
+  /**
+   * The index of the topmost item currently being displayed.
+   */
+  unsigned origin;
+
+  /**
+   * The number of items visible at a time.
+   */
+  unsigned items_visible;
+
+  /**
+   * The index of the selected item on the screen.
+   */
+  unsigned relative_cursor;
+
+  ActivateCallback_t ActivateCallback;
   CursorCallback_t CursorCallback;
   PaintItemCallback_t PaintItemCallback;
 
 public:
   WndListFrame(WindowControl *Owner, const TCHAR *Name,
                int X, int Y, int Width, int Height,
-               void (*OnListCallback)(WindowControl *Sender,
-                                      ListInfo_t *ListInfo));
+               unsigned _item_height);
 
-  void ResetList(void);
-  void SetEnterCallback(void (*OnListCallback)(WindowControl *Sender, ListInfo_t *ListInfo));
+  void SetActivateCallback(ActivateCallback_t cb) {
+    ActivateCallback = cb;
+  }
 
   void SetCursorCallback(CursorCallback_t cb) {
     CursorCallback = cb;
@@ -168,11 +181,22 @@ public:
     PaintItemCallback = cb;
   }
 
-  int GetItemIndex(void) { return mListInfo.ItemIndex; }
-  void SetItemIndex(int iValue);
+  void SetItemHeight(unsigned _item_height);
 
-  int GetCursorIndex() const {
-    return mListInfo.ScrollIndex + mListInfo.ItemIndex;
+  /**
+   * @return the number of items in the list
+   */
+  unsigned GetLength() const {
+    return length;
+  }
+
+  /**
+   * Changes the number of items in the list.
+   */
+  void SetLength(unsigned n);
+
+  unsigned GetCursorIndex() const {
+    return origin + relative_cursor;
   }
 
   /**
@@ -181,13 +205,17 @@ public:
    * @return true if the cursor was moved to the specified position,
    * false if the position was invalid
    */
-  bool SetCursorIndex(int i);
+  bool SetCursorIndex(unsigned i);
+
+  /**
+   * Scrolls to the specified index.
+   */
+  void SetOrigin(unsigned i);
 
 protected:
   void show_or_hide_scroll_bar();
 
-  int RecalculateIndices(bool bigscroll);
-  void EnsureVisible(int i);
+  void EnsureVisible(unsigned i);
   void SelectItemFromScreen(int xPos, int yPos);
   void DrawScrollBar(Canvas &canvas);
 

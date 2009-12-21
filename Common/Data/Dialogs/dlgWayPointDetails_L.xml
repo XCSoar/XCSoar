@@ -28,10 +28,7 @@
 
   </WndFrame>
 
-  <WndListFrame Name=frmDetails X=0 Y=0 Width=240 Height=220 Font=3
-    OnListInfo="OnDetailsListInfo">
-    <WndOwnerDrawFrame Name=frmDetailsEntry X=2 Y=2 Width=235 Height=18 Font=3  OnPaint="OnPaintDetailsListItem"/>
-  </WndListFrame>
+  <WndListFrame Name=frmDetails X=0 Y=0 Width=240 Height=220 ItemHeight=18 Font=3/>
 
   <WndFrame Name="frmCommands" X=0 Y=0 Width=240 Height=220 Font=2 Visible=0>
 

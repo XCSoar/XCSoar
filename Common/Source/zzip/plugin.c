@@ -37,6 +37,7 @@
 zzip_off_t
 zzip_filesize(int fd)
 {
+    (void)fd;
 
 // JMW
 #if defined(WINDOWSPC) && !defined(__MINGW32__)
