@@ -75,7 +75,7 @@ AIRSPACE_ALT::get_as_text(const bool concise) const
   default:
     break;
   };
-  if (!concise) {
+  if (!concise && positive(Altitude)) {
     oss << _T(" ") << Altitude.as_int();
   }
   return oss.str();

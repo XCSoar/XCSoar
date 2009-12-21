@@ -76,7 +76,6 @@ AirspaceWarning::get_ack_expired() const
   switch (m_state) {
   case WARNING_CLEAR:
   case WARNING_TASK:
-    return false;
   case WARNING_FILTER:
   case WARNING_GLIDE:
     return !m_acktime_warning;
