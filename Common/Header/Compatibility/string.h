@@ -54,7 +54,7 @@ _strupr(char *p)
   char *q;
 
   for (q = p; *q != 0; ++q)
-    *q = toupper(*q);
+    *q = (char)toupper(*q);
 
   return p;
 }
