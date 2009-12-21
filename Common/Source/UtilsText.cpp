@@ -58,12 +58,12 @@ StringChomp(TCHAR *p)
 
 void
 PExtractParameter(const TCHAR *Source, TCHAR *Destination,
-    int DesiredFieldNumber)
+                  unsigned DesiredFieldNumber)
 {
-  int index = 0;
-  int dest_index = 0;
-  int CurrentFieldNumber = 0;
-  int StringLength = 0;
+  size_t index = 0;
+  size_t dest_index = 0;
+  unsigned CurrentFieldNumber = 0;
+  size_t StringLength;
 
   StringLength = _tcslen(Source);
 
