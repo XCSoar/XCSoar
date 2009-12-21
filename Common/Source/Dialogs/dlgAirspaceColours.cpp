@@ -114,7 +114,7 @@ int dlgAirspaceColoursShowModal(void){
 
   int result = wf->ShowModal();
   result = result == mrOK
-    ? wAirspaceColoursList->GetCursorIndex()
+    ? (int)wAirspaceColoursList->GetCursorIndex()
     : -1;
 
   // now retrieve back the properties...

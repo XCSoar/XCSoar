@@ -165,7 +165,7 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
 
 
     int idx = wf->ShowModal() == mrOK
-      ? wComboPopupListFrame->GetCursorIndex()
+      ? (int)wComboPopupListFrame->GetCursorIndex()
       : -1;
 
     bOpenCombo=false;  //tell  combo to exit loop after close
