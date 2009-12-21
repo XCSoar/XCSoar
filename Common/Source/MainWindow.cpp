@@ -167,9 +167,6 @@ bool MainWindow::on_create(void)
   return true;
 }
 
-void MainWindow::install_timer(void) {
-}
-
 bool MainWindow::on_destroy(void) {
   kill_timer(timer_id);
 
