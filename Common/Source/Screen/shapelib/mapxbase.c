@@ -775,7 +775,9 @@ int msDBFWriteStringAttribute( DBFHandle psDBF, int iRecord, int iField, const c
   return msDBFWriteAttribute(psDBF, iRecord, iField, (const void *)pszValue);
 }
 
-int m_strcasecmp(const char *s1, const char*s2) {
+static int
+m_strcasecmp(const char *s1, const char*s2)
+{
   unsigned int i;
 
   for (i = 0; s1[i] != 0 && s2[i] != 0; i++) {

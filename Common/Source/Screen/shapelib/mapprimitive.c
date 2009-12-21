@@ -236,7 +236,8 @@ void msRectToPolygon(rectObj rect, shapeObj *poly)
 ** from "Getting Graphic: Programming Fundamentals in C and C++" by Mark Finlay
 ** and John Petritis. (pages 179-182)
 */
- int clipLine(double *x1, double *y1, double *x2, double *y2, rectObj rect)
+static int
+clipLine(double *x1, double *y1, double *x2, double *y2, rectObj rect)
 {
   double x, y;
   double slope;
@@ -623,7 +624,9 @@ static int get_centroid(shapeObj *p, pointObj *lp, double *miny, double *maxy)
 }
 #endif
 
-void get_bbox(shapeObj *poly, double *minx, double *miny, double *maxx, double *maxy) {
+static void
+get_bbox(shapeObj *poly, double *minx, double *miny, double *maxx, double *maxy)
+{
   int i, j;
 
   *minx = *maxx = poly->line[0].point[0].x;
