@@ -137,7 +137,7 @@ GlideResult::calc_vspeed(const fixed inv_mc)
     } else {
       TimeVirtual = fixed_zero;
       // minimise 1.0/LD over ground 
-      return -HeightGlide/Vector.Distance;
+      return HeightGlide/Vector.Distance;
     }
   } else {
     TimeVirtual = fixed_zero;

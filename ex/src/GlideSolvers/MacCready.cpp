@@ -148,7 +148,8 @@ MacCready::solve_cruise(const GlideState &task) const
 GlideResult 
 MacCready::solve_glide(const GlideState &task,
                        const fixed Vset,
-                       const fixed S) const
+                       const fixed S,
+                       const bool allow_partial) const
 {
   // spend a lot of time in this function, so it should be quick!
 
@@ -165,21 +166,22 @@ MacCready::solve_glide(const GlideState &task,
     return result;
   }
 
-  const fixed Vndh = Vn*task.AltitudeDifference;
+  result.Solution = GlideResult::RESULT_OK;
 
-  if (S*task.Vector.Distance>Vndh) { // S/Vn > dh/task.Distance
-    if (negative(task.AltitudeDifference)) { 
-      // insufficient height, and can't climb
-      result.Vector.Distance = fixed_zero;
-      result.Solution = GlideResult::RESULT_MACCREADY_INSUFFICIENT;
-      return result;
-    } else {
-      result.Vector.Distance = Vndh/S; // frac*task.Distance; 
+  if (allow_partial) {
+    const fixed Vndh = Vn*task.AltitudeDifference;
+    
+    if (S*task.Vector.Distance>Vndh) { // S/Vn > dh/task.Distance
       result.Solution = GlideResult::RESULT_PARTIAL;
-    }
-  } else {
-    result.Solution = GlideResult::RESULT_OK;
+      if (negative(task.AltitudeDifference)) { 
+        // insufficient height, and can't climb
+        result.Vector.Distance = fixed_zero;
+      } else {
+        result.Vector.Distance = Vndh/S; // frac*task.Distance; 
+      }
+    } 
   }
+
   const fixed t_cr = result.Vector.Distance/Vn;
   result.TimeElapsed = t_cr;
   result.HeightGlide = t_cr*S;
@@ -192,10 +194,10 @@ MacCready::solve_glide(const GlideState &task,
 
 GlideResult 
 MacCready::solve_glide(const GlideState &task,
-                       const fixed Vset) const
+                       const fixed Vset, const bool allow_partial) const
 {
   const fixed S = glide_polar.SinkRate(Vset);
-  return solve_glide(task, Vset, S);
+  return solve_glide(task, Vset, S, allow_partial);
 }
 
 GlideResult 
@@ -217,9 +219,9 @@ MacCready::solve(const GlideState &task) const
 {
   if (!positive(task.Vector.Distance)) {
     return solve_vertical(task);
-  } else if (glide_polar.get_mc()== fixed_zero) {
+  } else if (!positive(glide_polar.get_mc())) {
     // whole task must be glide
-    return optimise_glide(task);
+    return optimise_glide(task, false);
   } else if (!positive(task.AltitudeDifference)) {
     // whole task climb-cruise
     return solve_cruise(task);
@@ -227,7 +229,7 @@ MacCready::solve(const GlideState &task) const
     // task partial climb-cruise, partial glide
 
     // calc first final glide part
-    GlideResult result_fg = optimise_glide(task);
+    GlideResult result_fg = optimise_glide(task, true);
     if (result_fg.Solution == GlideResult::RESULT_OK) {
       // whole task final glided
       return result_fg;
@@ -271,11 +273,13 @@ public:
   MacCreadyVopt(const GlideState &_task,
                 const MacCready &_mac,
                 const fixed & vmin,
-                const fixed & vmax):
+                const fixed & vmax,
+                const bool _allow_partial):
     ZeroFinder(vmin, vmax, TOLERANCE_MC_OPT_GLIDE),
     task(_task),
     mac(_mac),
-    inv_mc(_mac.get_inv_mc())
+    inv_mc(_mac.get_inv_mc()),
+    allow_partial(_allow_partial)
     {
     };
 
@@ -286,7 +290,7 @@ public:
    * @return Virtual speed (m/s) of flight
    */
   fixed f(const fixed V) {
-    res = mac.solve_glide(task, V);
+    res = mac.solve_glide(task, V, allow_partial);
     return res.calc_vspeed(inv_mc);
   }
   
@@ -303,13 +307,14 @@ private:
   const GlideState &task;
   const MacCready &mac;
   const fixed inv_mc;
+  const bool allow_partial;
 };
 
 
 GlideResult 
-MacCready::optimise_glide(const GlideState &task) const
+MacCready::optimise_glide(const GlideState &task, const bool allow_partial) const
 {
-  MacCreadyVopt mcvopt(task, *this, glide_polar.get_Vmin(), glide_polar.get_Vmax());
+  MacCreadyVopt mcvopt(task, *this, glide_polar.get_Vmin(), glide_polar.get_Vmax(), allow_partial);
   return mcvopt.result(glide_polar.get_Vmin());
 }
 

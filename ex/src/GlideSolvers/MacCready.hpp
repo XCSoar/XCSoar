@@ -103,10 +103,12 @@ public:
    *
    * @param task The task for which a solution is desired
    * @param V The airspeed the glider will be travelling
+   * @param allow_partial Return after glide exhausted
    * @return Returns the glide result containing data about the optimal solution
    */
   GlideResult solve_glide(const GlideState &task,
-			   const fixed V) const;
+                          const fixed V,
+                          const bool allow_partial=false) const;
 
   /**
    * Returns current MacCready setting of the glide polar (convenience function)
@@ -128,21 +130,24 @@ private:
    * @param task The task for which a solution is desired
    * @param V The airspeed the glider will be travelling
    * @param S The sinkrate of the glider in cruise
+   * @param allow_partial Return after glide exhausted
    * @return Returns the glide result containing data about the optimal solution
    */
   GlideResult solve_glide(const GlideState &task,
-			   const fixed V,
-                           const fixed S) const;
+                          const fixed V,
+                          const fixed S,
+                          const bool allow_partial=false) const;
 
 /** 
  * Solve a task which is known to be pure glide,
  * seeking optimal speed to fly. 
  * 
  * @param task Task to solve for
+ * @param allow_partial Return after glide exhausted
  * 
  * @return Solution
  */
-  GlideResult optimise_glide(const GlideState &task) const;
+  GlideResult optimise_glide(const GlideState &task, const bool allow_partial=false) const;
 
 /** 
  * Solve a task which is known to be pure climb (no distance 

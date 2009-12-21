@@ -50,17 +50,25 @@ GeoVector::GeoVector(const GEOPOINT &source, const GEOPOINT &target,
 GEOPOINT 
 GeoVector::end_point(const GEOPOINT &source) const
 {
-  GEOPOINT p;
-  ::FindLatitudeLongitude(source, Bearing, Distance, &p);
-  return p;
+  if (!positive(Distance)) {
+    return source;
+  } else {
+    GEOPOINT p;
+    ::FindLatitudeLongitude(source, Bearing, Distance, &p);
+    return p;
+  }
 }
 
 GEOPOINT 
 GeoVector::mid_point(const GEOPOINT &source) const
 {
-  GEOPOINT p;
-  ::FindLatitudeLongitude(source, Bearing, Distance*fixed_half, &p);
-  return p;
+  if (!positive(Distance)) {
+    return source;
+  } else {
+    GEOPOINT p;
+    ::FindLatitudeLongitude(source, Bearing, Distance*fixed_half, &p);
+    return p;
+  }
 }
 
 fixed

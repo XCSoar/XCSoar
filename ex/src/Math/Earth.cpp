@@ -295,6 +295,11 @@ void FindLatitudeLongitude(GEOPOINT loc, fixed Bearing, fixed Distance,
 {
   fixed result;
 
+  if (!positive(Distance)) {
+    *loc_out = loc;
+    return;
+  }
+
   loc.Latitude *= fixed_deg_to_rad;
   loc.Longitude *= fixed_deg_to_rad;
   Bearing *= fixed_deg_to_rad;
