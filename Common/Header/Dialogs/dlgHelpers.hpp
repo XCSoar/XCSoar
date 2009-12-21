@@ -52,8 +52,6 @@ bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
 bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
 			      const TCHAR* reg, int &value);
 bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, int &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
 			      const TCHAR* reg, DisplayTextType_t &value);
 bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
 			      const TCHAR* reg, short &value);
@@ -62,8 +60,6 @@ bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
 		      bool &value);
 bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
 		      unsigned int &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      int &value);
 bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
 		      int &value);
 bool SetValueOnChange(WndForm* wfm, const TCHAR* field,

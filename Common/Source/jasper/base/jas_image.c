@@ -114,8 +114,6 @@ static long uptomult(long x, long y);
 static long downtomult(long x, long y);
 static long convert(long val, int oldsgnd, int oldprec, int newsgnd,
   int newprec);
-static void jas_image_calcbbox2(jas_image_t *image, jas_image_coord_t *tlx,
-  jas_image_coord_t *tly, jas_image_coord_t *brx, jas_image_coord_t *bry);
 
 /******************************************************************************\
 * Global data.

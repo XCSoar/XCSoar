@@ -94,7 +94,4 @@ private:
   void FLARM_ScanTraffic();
 };
 
-double FAIFinishHeight(const SETTINGS_COMPUTER &settings,
-    const DERIVED_INFO& Calculated, int wp);
-
 #endif

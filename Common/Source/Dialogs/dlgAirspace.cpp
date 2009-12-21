@@ -54,9 +54,6 @@ static WndListFrame *wAirspaceList = NULL;
 
 static bool colormode = false;
 
-int dlgAirspaceColoursShowModal(void);
-int dlgAirspacePatternsShowModal(void);
-
 static void
 OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
