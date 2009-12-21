@@ -123,6 +123,24 @@ public:
   AirspaceWarning& get_warning(const AbstractAirspace& airspace);
 
 /** 
+ * Find corresponding airspace warning item in store by index 
+ * 
+ * @param index Sequence index to find warning for
+ * 
+ * @return Pointer to airspace warning item (or NULL if not found)
+ */
+  AirspaceWarning* get_warning(const unsigned index);
+
+/** 
+ * Find index of airspace warning item in store for an airspace
+ * 
+ * @param airspace Airspace to find warning for
+ * 
+ * @return Index of warning item in list or -1 if not found
+ */
+  int get_warning_index(const AbstractAirspace& airspace) const;
+
+/** 
  * Test whether warning list is empty
  * 
  * @return True if no warnings in list

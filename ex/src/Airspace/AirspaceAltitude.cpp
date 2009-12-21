@@ -71,11 +71,13 @@ AIRSPACE_ALT::get_as_text(const bool concise) const
     oss << _T("FL") << (fixed_10*FL).as_int();
     break;
   case abMSL:
+    oss << Altitude.as_int();
+    break;
   case abUndef:
   default:
     break;
   };
-  if (!concise && positive(Altitude)) {
+  if (!concise && Base!=abMSL && positive(Altitude)) {
     oss << _T(" ") << Altitude.as_int();
   }
   return oss.str();

@@ -156,6 +156,13 @@ public:
  */
   GeoVector get_vector_home(const AIRCRAFT_STATE &state) const;
 
+/** 
+ * Retrieve copy of safety glide polar used by task system
+ * 
+ * @return Copy of safety glide polar 
+ */
+  GlidePolar get_safety_polar() const;
+
 protected:
 
 /** 

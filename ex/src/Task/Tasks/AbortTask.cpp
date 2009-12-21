@@ -51,7 +51,8 @@ AbortTask::AbortTask(const TaskEvents &te,
   waypoints(wps),
   polar_safety(gp)
 {
-
+  // default MC value
+  polar_safety.set_mc(1.0);
 }
 
 AbortTask::~AbortTask()
@@ -111,12 +112,20 @@ AbortTask::abort_range(const AIRCRAFT_STATE &state)
   return max(50000.0, state.NavAltitude*polar_safety.get_bestLD());
 }
 
+GlidePolar
+AbortTask::get_safety_polar() const
+{
+  fixed mc_safety = polar_safety.get_mc();
+  GlidePolar polar = glide_polar;
+  polar.set_mc(mc_safety);
+  return polar;
+}
+
 void
 AbortTask::update_polar()
 {
   // glide_polar for task
-  polar_safety = glide_polar;
-  polar_safety.set_mc(0.0);
+  polar_safety = get_safety_polar();
 }
 
 bool

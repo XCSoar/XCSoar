@@ -429,13 +429,13 @@ TaskManager::is_mode(const TaskMode_t the_mode) const
 }
 
 GlidePolar 
-TaskManager::get_glide_polar() const 
+TaskManager::get_glide_polar()  
 {
   return m_glide_polar;
 }
 
 const GlidePolar& 
-TaskManager::get_glide_polar_ref() const 
+TaskManager::get_glide_polar() const 
 {
   return m_glide_polar;
 }
@@ -445,6 +445,13 @@ TaskManager::set_glide_polar(const GlidePolar& glide_polar)
 {
   m_glide_polar = glide_polar;
 }
+
+GlidePolar 
+TaskManager::get_safety_polar() const 
+{
+  return task_abort.get_safety_polar();
+}
+
 
 TaskAdvance& 
 TaskManager::get_task_advance() 

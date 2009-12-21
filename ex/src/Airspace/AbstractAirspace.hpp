@@ -46,39 +46,10 @@
 #include "Util/tstring.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "AirspaceClass.hpp"
+#include "AirspaceInterceptSolution.hpp"
 
 class AtmosphericPressure;
 
-/**
- *  Structure to hold data for intercepts between aircraft and airspace.
- *  (interior or exterior)
- *
- * \todo
- * - currently uses NavAltitude, should really use baro if available
- */
-struct AirspaceInterceptSolution {
-  /**
-   *  Constructor, initialises to invalid solution
-   */
-  AirspaceInterceptSolution():
-    distance(-fixed_one),
-    altitude(-fixed_one),
-    elapsed_time(-fixed_one) {};
-
-/** 
- * Determine whether this solution is valid
- * 
- * @return True if solution is valid
- */
-  bool valid() const {
-    return !negative(elapsed_time);
-  };
-
-  GEOPOINT location; /**< Location of intercept point */
-  fixed distance;  /**< Distance from observer to intercept point (m) */
-  fixed altitude; /**< Altitude AMSL (m) of intercept point */
-  fixed elapsed_time; /**< Estimated time (s) for observer to reach intercept point */
-};
 
 
 #include <vector>

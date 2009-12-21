@@ -73,13 +73,15 @@ IsolineCrossingFinder::f(const fixed t)
 bool 
 IsolineCrossingFinder::valid(const fixed x) 
 {
+/*
   const bool bsgn_0 = bsgn(f(x));
   const bool bsgn_m = bsgn(f(x-fixed_two*tolerance));
   const bool bsgn_p = bsgn(f(x+fixed_two*tolerance));
 
-/// \todo this is broken, so assume it's ok for now
+  \todo this is broken, so assume it's ok for now
+  return (bsgn_0 != bsgn_m) || (bsgn_0 != bsgn_p);
+*/
   return true;
-//  return (bsgn_0 != bsgn_m) || (bsgn_0 != bsgn_p);
 }
 
 fixed 

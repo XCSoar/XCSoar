@@ -275,14 +275,14 @@ public:
  * 
  * @return Copy of glide polar 
  */
-  GlidePolar get_glide_polar() const;
+  GlidePolar get_glide_polar();
 
 /** 
- * Retrieve copy of glide polar used by task system
+ * Retrieves glide polar used by task system
  * 
  * @return Reference to glide polar
  */
-  const GlidePolar& get_glide_polar_ref() const;
+  const GlidePolar& get_glide_polar() const;
 
 /**
  * Update glide polar used by task system
@@ -290,6 +290,20 @@ public:
  * @param glide_polar The polar to set to
  */
   void set_glide_polar(const GlidePolar& glide_polar);
+
+/** 
+ * Retrieve copy of safety glide polar used by task system
+ * 
+ * @return Copy of glide polar 
+ */
+  GlidePolar get_safety_polar() const;
+
+/**
+ * Update safety polar used by task system
+ *
+ * @param glide_polar The polar to set to
+ */
+  void set_safety_polar(const GlidePolar& glide_polar);
 
 #ifdef DO_PRINT
   void print(const AIRCRAFT_STATE &location);

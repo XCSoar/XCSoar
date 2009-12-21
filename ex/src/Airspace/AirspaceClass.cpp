@@ -11,19 +11,19 @@ airspace_class_as_text(const AirspaceClass_t item,
     if (concise) {
       return _T("Restricted");
     } else {
-      return _T("R");
+      return _T("R"); // was LxR
     }
   case PROHIBITED:
     if (concise) {
       return _T("Prohibited");
     } else {
-      return _T("P");
+      return _T("P"); // was LxP 
     }
   case DANGER:
     if (concise) {
       return _T("Danger Area");
     } else {
-      return _T("Q");
+      return _T("Q"); // was lxD
     }
   case CLASSA:
     if (concise) {
@@ -65,7 +65,7 @@ airspace_class_as_text(const AirspaceClass_t item,
     if (concise) {
       return _T("No Glider");
     } else {
-      return _T("GP");
+      return _T("GP"); // was NoGld
     }
   case CTR:
     if (concise) {
@@ -77,7 +77,7 @@ airspace_class_as_text(const AirspaceClass_t item,
     if (concise) {
       return _T("Wave");
     } else {
-      return _T("W");
+      return _T("W"); // was Wav
     }
   case AATASK:
     if (concise) {

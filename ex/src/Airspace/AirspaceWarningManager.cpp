@@ -50,11 +50,11 @@ AirspaceWarningManager::AirspaceWarningManager(const Airspaces& airspaces,
   m_airspaces(airspaces),
   m_prediction_time_glide(prediction_time_glide),
   m_prediction_time_filter(prediction_time_filter),
-  m_perf_glide(task_manager.get_glide_polar_ref()),
+  m_perf_glide(task_manager.get_glide_polar()),
   m_state_filter(state, prediction_time_filter),
   m_perf_filter(m_state_filter),
   m_task(task_manager),
-  m_glide_polar(task_manager.get_glide_polar_ref())
+  m_glide_polar(task_manager.get_glide_polar())
 {
 }
 
@@ -107,6 +107,33 @@ AirspaceWarningManager::get_warning_ptr(const AbstractAirspace& airspace)
   return NULL;
 }
 
+AirspaceWarning* 
+AirspaceWarningManager::get_warning(const unsigned index)
+{
+  unsigned i=0;
+  for (AirspaceWarningList::iterator it = m_warnings.begin();
+       it != m_warnings.end(); ++it, ++i) {
+    if (i==index) {
+      return &(*it);
+    }
+  }
+  return NULL;
+}
+
+
+int
+AirspaceWarningManager::get_warning_index(const AbstractAirspace& airspace) const
+{
+  int i=0;
+  for (AirspaceWarningList::const_iterator it = m_warnings.begin();
+       it != m_warnings.end(); ++it, ++i) {
+    if (&(it->get_airspace()) == &airspace) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 
 bool 
 AirspaceWarningManager::update(const AIRCRAFT_STATE& state)
@@ -137,7 +164,7 @@ AirspaceWarningManager::update(const AIRCRAFT_STATE& state)
       it++;
     } else {
       if (!it->trivial()) {
-        changed = true; // was downgraded to eliminate
+//        changed = true; // was downgraded to eliminate
       }
       it = m_warnings.erase(it);
     }

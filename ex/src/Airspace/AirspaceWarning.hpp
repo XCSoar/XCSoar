@@ -127,13 +127,12 @@ public:
 
 /** 
  * Determine if airspace warning was a dummy one created for testing but otherwise
- * can be removed without reporting.
+ * can be removed without reporting.  This also applies to warnings that have
+ * expired.
  * 
- * @return True if airspace warning has always been clear
+ * @return True if airspace warning has effectively always been clear.
  */
-  bool trivial() const {
-    return (m_state==WARNING_CLEAR) && (m_state_last==WARNING_CLEAR);
-  }
+  bool trivial() const;
 
 /** 
  * Access solution (nearest to enter, if outside, or to exit, if inside)

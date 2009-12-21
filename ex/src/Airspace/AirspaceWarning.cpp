@@ -34,7 +34,10 @@ AirspaceWarning::update_solution(const AirspaceWarningState state,
 bool
 AirspaceWarning::warning_live()
 {
-  if ((m_state != WARNING_CLEAR) && (m_state < m_state_last) && (m_state_last == WARNING_INSIDE)) {
+  if ((m_state != WARNING_CLEAR) 
+      && (m_state < m_state_last) 
+      && (m_state_last == WARNING_INSIDE)) 
+  {
     // if inside was acknowledged, consider warning to be acknowledged
     m_acktime_warning = max(m_acktime_warning, m_acktime_inside);
   }
@@ -58,7 +61,20 @@ AirspaceWarning::warning_live()
 bool
 AirspaceWarning::changed_state() const
 {
-  return (m_expired > m_expired_last) || (m_state != m_state_last);
+  if (m_expired > m_expired_last) 
+    return true;
+
+  if ((m_state_last == WARNING_CLEAR) && (m_state > WARNING_CLEAR)) 
+    return get_ack_expired();
+
+  if ((m_state_last < WARNING_INSIDE) && (m_state == WARNING_INSIDE)) {
+    return get_ack_expired();
+  }
+  if ((m_state_last < WARNING_GLIDE) && (m_state == WARNING_GLIDE)) {
+    return true;
+  }
+
+  return false;
 }
 
 bool 
@@ -116,4 +132,10 @@ bool
 AirspaceWarning::get_ack_day() const
 {
   return m_ack_day;
+}
+
+bool 
+AirspaceWarning::trivial() const 
+{
+  return (m_state==WARNING_CLEAR) && (m_state_last==WARNING_CLEAR) && get_ack_expired();
 }
