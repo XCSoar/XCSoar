@@ -484,7 +484,7 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
 
   // alt reqd at mc 0
 
-  glide_polar.set_mc(0.0);
+  glide_polar.set_mc(fixed_zero);
   r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic(), glide_polar);
 
   wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
@@ -496,7 +496,7 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
 
   // alt reqd at safety mc
 
-  glide_polar.set_mc(1.0); // JMW OLD_TASK TODO
+  glide_polar.set_mc(fixed_one); // JMW OLD_TASK TODO
   r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic(), glide_polar);
 
   wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
@@ -505,7 +505,6 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
               Units::GetAltitudeName());
     wp->SetText(sTmp);
   }
-
 
   wf->SetKeyDownNotify(FormKeyDown);
 
