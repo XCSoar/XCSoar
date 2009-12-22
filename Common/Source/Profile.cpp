@@ -102,10 +102,10 @@ CheckInfoTypes()
   if (iszero_fg || iszero_aux) {
     for (i = 0; i < MAXINFOWINDOWS; i++) {
       if (iszero_fg) {
-        InfoBoxManager::setType(i, 2, InfoBoxManager::getType(i, 1));
+        InfoBoxManager::setType(i, InfoBoxManager::getType(i, 1), 2);
       }
       if (iszero_aux) {
-        InfoBoxManager::setType(i, 3, InfoBoxManager::getType(i, 1));
+        InfoBoxManager::setType(i, InfoBoxManager::getType(i, 1), 3);
       }
       StoreType(i, InfoBoxManager::getTypeAll(i));
     }

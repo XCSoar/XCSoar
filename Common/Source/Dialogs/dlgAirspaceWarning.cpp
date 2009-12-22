@@ -62,18 +62,33 @@ static Brush hBrushNearBk;
 static Brush hBrushInsideAckBk;
 static Brush hBrushNearAckBk;
 
-static int Count=0;
-
-static const AbstractAirspace* FocusedAirspace = NULL;     // Currently focused airspace
-
+static const AbstractAirspace* CursorAirspace = NULL; // Current list cursor airspace
+static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
 
 #include "RasterTerrain.h"
 // just to get the lock OLD_TASK
 
-
-static void DoAck(int Ack) {
+static void
+OnAirspaceListEnter(unsigned i)
+{
   terrain.Lock();
   AirspaceWarning* warning = airspace_warning.get_warning(wAirspaceList->GetCursorIndex());
+  if (warning) {
+    FocusAirspace = &warning->get_airspace();
+  } else {
+    FocusAirspace = NULL;
+    // error!
+  }
+  terrain.Unlock();
+}
+
+
+static void DoAck(int Ack) {
+  if (!FocusAirspace) {
+    FocusAirspace = CursorAirspace;
+  }
+  terrain.Lock();
+  AirspaceWarning* warning = airspace_warning.get_warning_ptr(*FocusAirspace);
   if (warning) {
     switch(Ack) {
     case -1:
@@ -184,7 +199,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   const AirspaceInterceptSolution& solution = warning->get_solution();
 
   if (i == wAirspaceList->GetCursorIndex())
-    FocusedAirspace = &as;
+    CursorAirspace = &as;
 
   TCHAR sAckIndicator[6] = _T(" -++*");
 
@@ -322,11 +337,11 @@ update_list()
 {
   // JMW OLD_TASK this locking is just for now since we don't have any protection
   terrain.Lock();
-  Count = airspace_warning.size();
+  unsigned Count = airspace_warning.size();
   if (Count) {
-    wAirspaceList->SetLength(max(1, Count));
-    if (FocusedAirspace) {
-      wAirspaceList->SetCursorIndex(airspace_warning.get_warning_index(*FocusedAirspace));
+    wAirspaceList->SetLength(std::max((unsigned)1, Count));
+    if (CursorAirspace) {
+      wAirspaceList->SetCursorIndex(airspace_warning.get_warning_index(*CursorAirspace));
     } else {
       wAirspaceList->SetCursorIndex(0);
     }
@@ -379,7 +394,8 @@ void dlgAirspaceWarningShowDlg()
     return;
   } else {
     // JMW need to deselect everything on new reopening of dialog
-    FocusedAirspace = NULL;
+    CursorAirspace = NULL;
+    FocusAirspace = NULL;
     wf->ShowModal();
   }
 }
@@ -414,6 +430,7 @@ void dlgAirspaceWarningInit()
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceWarningList"));
   wAirspaceList->SetPaintItemCallback(OnAirspaceListItemPaint);
+  wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
 }
 
 void dlgAirspaceWarningDeInit()

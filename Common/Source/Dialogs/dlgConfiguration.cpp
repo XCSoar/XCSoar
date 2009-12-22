@@ -1097,11 +1097,11 @@ static void SetInfoBoxSelector(unsigned item, int mode)
     int it=0;
 
     switch(mode) {
-    case 1: // climb
-      it = InfoBoxManager::getType(item, 0);
-      break;
     case 0: // cruise
       it = InfoBoxManager::getType(item, 1);
+      break;
+    case 1: // climb
+      it = InfoBoxManager::getType(item, 0);
       break;
     case 2: // final glide
       it = InfoBoxManager::getType(item, 2);
@@ -1127,11 +1127,11 @@ static void GetInfoBoxSelector(unsigned item, int mode)
     int it=0;
 
     switch(mode) {
-    case 1: // climb
-      it = InfoBoxManager::getType(item, 0);
-      break;
     case 0: // cruise
       it = InfoBoxManager::getType(item, 1);
+      break;
+    case 1: // climb
+      it = InfoBoxManager::getType(item, 0);
       break;
     case 2: // final glide
       it = InfoBoxManager::getType(item, 2);
@@ -1144,19 +1144,20 @@ static void GetInfoBoxSelector(unsigned item, int mode)
     if (it != itnew) {
 
       changed = true;
+      printf("changed from %d to %d\n", it, itnew);
 
       switch(mode) {
       case 0: // cruise
-	InfoBoxManager::setType(item, 1, itnew);
+	InfoBoxManager::setType(item, itnew, 1);
 	break;
       case 1: // climb
-	InfoBoxManager::setType(item, 0, itnew);
+	InfoBoxManager::setType(item, itnew, 0);
 	break;
       case 2: // final glide
-	InfoBoxManager::setType(item, 2, itnew);
+	InfoBoxManager::setType(item, itnew, 2);
 	break;
       case 3: // aux
-	InfoBoxManager::setType(item, 3, itnew);
+	InfoBoxManager::setType(item, itnew, 3);
 	break;
       };
       StoreType(item, InfoBoxManager::getTypeAll(item));
@@ -3477,8 +3478,8 @@ void dlgConfigurationShowModal(void){
     WritePort2Settings(dwPortIndex2,dwSpeedIndex2);
   }
 
-  for (unsigned i = 0; i < 4; i++) {
-    for (unsigned j = 0; j < numInfoWindows; j++) {
+  for (unsigned i = 0; i < 4; ++i) {
+    for (unsigned j = 0; j < numInfoWindows; ++j) {
       GetInfoBoxSelector(j, i);
     }
   }

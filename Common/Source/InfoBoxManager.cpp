@@ -424,6 +424,8 @@ InfoBoxManager::setType(unsigned i, char j, unsigned layer)
 {
   assert(i < MAXINFOWINDOWS);
 
+  int old = InfoType[i];
+
   switch (layer) {
   case 0:
     InfoType[i] &= 0xffffff00;
@@ -442,20 +444,21 @@ InfoBoxManager::setType(unsigned i, char j, unsigned layer)
     InfoType[i] += (j << 24);
     break;
   }
+  printf("%d %d\n", InfoType[i], old);
 }
 
 void
 InfoBoxManager::setType(unsigned i, char j)
 {
   if (SettingsMap().EnableAuxiliaryInfo) {
-    setType(i, 3, j);
+    setType(i, j, 3);
   } else {
     if (MapProjection().GetDisplayMode() == dmCircling) {
-      setType(i, 0, j);
+      setType(i, j, 0);
     } else if (MapProjection().GetDisplayMode() == dmFinalGlide) {
-      setType(i, 2, j);
+      setType(i, j, 2);
     } else {
-      setType(i, 1, j);
+      setType(i, j, 1);
     }
   }
 }
