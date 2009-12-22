@@ -128,7 +128,10 @@ AirspaceCircle::intersects(const GEOPOINT& start,
 GEOPOINT 
 AirspaceCircle::closest_point(const GEOPOINT& loc) const
 {
-  return m_center.intermediate_point(loc, m_radius);
+  const fixed d = loc.distance(m_center);
+  if (d<=m_radius) {
+    return loc;
+  } else {
+    return m_center.intermediate_point(loc, m_radius);
+  }
 }
-
-

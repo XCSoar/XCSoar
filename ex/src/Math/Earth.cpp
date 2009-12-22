@@ -49,8 +49,7 @@ unsigned count_distbearing = 0;
 static const fixed fixed_earth_r = 6371000;
 static const fixed fixed_double_earth_r = 6371000*2;
 static const fixed fixed_inv_earth_r = (1.0/6371000);
-static const fixed fixed_xtd_fact = (fixed_rad_to_deg*111194.9267);
-static const fixed fixed_xte_fact = 1.0/(fixed_rad_to_deg * fixed_xtd_fact); 
+static const fixed fixed_xte_fact = 1.0/(fixed_rad_to_deg * fixed_earth_r); 
 
 #ifdef FIXED_MATH
   // need to expand range for meter accuracy
@@ -114,8 +113,7 @@ GEOPOINT IntermediatePoint(GEOPOINT loc1,
                            GEOPOINT loc2,
                            const fixed dthis) 
 {
-  fixed ff = fixed_one/fixed_xtd_fact; // was fixed_xte_fact;
-  fixed dtotal = ::Distance(loc1, loc2); 
+  const fixed dtotal = ::Distance(loc1, loc2); 
 
   if (dthis>=dtotal) {
     return loc2;
@@ -124,7 +122,7 @@ GEOPOINT IntermediatePoint(GEOPOINT loc1,
     loc2.Latitude *= fixed_deg_to_rad;
     loc1.Longitude *= fixed_deg_to_rad;
     loc2.Longitude *= fixed_deg_to_rad;
-    return IntermediatePoint(loc1, loc2, dthis*ff, dtotal*ff);
+    return IntermediatePoint(loc1, loc2, dthis*fixed_inv_earth_r, dtotal*fixed_inv_earth_r);
   }
 }
 
@@ -167,7 +165,7 @@ fixed CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3,
 #endif
 
   // units
-  return XTD*fixed_xtd_fact;
+  return XTD*fixed_earth_r;
 }
 
 fixed ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
@@ -198,7 +196,7 @@ fixed ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
   count_distbearing++;
 #endif
 
-  return ATD*fixed_xtd_fact;
+  return ATD*fixed_earth_r;
 }
 
 
