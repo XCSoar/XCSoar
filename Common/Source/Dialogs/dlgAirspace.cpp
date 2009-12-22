@@ -46,6 +46,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "SettingsAirspace.hpp"
+#include "Airspace/AirspaceClass.hpp"
 
 #include <assert.h>
 
@@ -57,55 +58,8 @@ static bool colormode = false;
 static void
 OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  TCHAR label[40];
-
   if (i >= AIRSPACECLASSCOUNT)
     return;
-
-  switch (i) {
-  case CLASSA:
-    _tcscpy(label, gettext(_T("Class A")));
-    break;
-  case CLASSB:
-    _tcscpy(label, gettext(_T("Class B")));
-    break;
-  case CLASSC:
-    _tcscpy(label, gettext(_T("Class C")));
-    break;
-  case CLASSD:
-    _tcscpy(label, gettext(_T("Class D")));
-    break;
-  case CLASSE:
-    _tcscpy(label, gettext(_T("Class E")));
-    break;
-  case CLASSF:
-    _tcscpy(label, gettext(_T("Class F")));
-    break;
-  case PROHIBITED:
-    _tcscpy(label, gettext(_T("Prohibited areas")));
-    break;
-  case DANGER:
-    _tcscpy(label, gettext(_T("Danger areas")));
-    break;
-  case RESTRICT:
-    _tcscpy(label, gettext(_T("Restricted areas")));
-    break;
-  case CTR:
-    _tcscpy(label, gettext(_T("CTR")));
-    break;
-  case NOGLIDER:
-    _tcscpy(label, gettext(_T("No gliders")));
-    break;
-  case WAVE:
-    _tcscpy(label, gettext(_T("Wave")));
-    break;
-  case OTHER:
-    _tcscpy(label, gettext(_T("Other")));
-    break;
-  case AATASK:
-    _tcscpy(label, gettext(_T("AAT")));
-    break;
-  }
 
   int w1, w2, x0;
   int w0 = rc.right - rc.left - Layout::FastScale(4);
@@ -116,7 +70,8 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2),
-                      x0 - Layout::FastScale(10), label);
+                      x0 - Layout::FastScale(10), 
+                      airspace_class_as_text((AirspaceClass_t)i,false).c_str());
 
   if (colormode) {
     canvas.white_pen();
@@ -136,14 +91,12 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
     isdisplay = ((XCSoarInterface::SettingsComputer().iAirspaceMode[i] % 2) > 0);
 
     if (iswarn) {
-      _tcscpy(label, gettext(_T("Warn")));
       canvas.text(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
-                  label);
+                  gettext(_T("Warn")));
     }
-
     if (isdisplay) {
-      _tcscpy(label, gettext(_T("Display")));
-      canvas.text(rc.left + w0 - w2, rc.top + Layout::FastScale(2), label);
+      canvas.text(rc.left + w0 - w2, rc.top + Layout::FastScale(2), 
+                  gettext(_T("Display")));
     }
   }
 }

@@ -80,7 +80,11 @@ DEVS	:=\
 DLGS	:=\
 	$(SRC)/Dialogs/XML.o \
 	$(SRC)/Dialogs/Message.o \
+	$(SRC)/Dialogs/dlgAirspace.o \
+	$(SRC)/Dialogs/dlgAirspaceColours.o \
+	$(SRC)/Dialogs/dlgAirspacePatterns.o \
 	$(SRC)/Dialogs/dlgAirspaceDetails.o \
+	$(SRC)/Dialogs/dlgAirspaceSelect.o \
 	$(SRC)/Dialogs/dlgAirspaceWarning.o \
 	$(SRC)/Dialogs/dlgBasicSettings.o \
 	$(SRC)/Dialogs/dlgBrightness.o \

@@ -78,7 +78,7 @@ OnWaypointListEnter(unsigned i)
 
 static WaypointSelectInfoVector WayPointSelectInfo;
 
-WaypointSorter* waypoint_sorter;
+static WaypointSorter* waypoint_sorter;
 static unsigned UpLimit = 0;
 
 static void UpdateList(void)
@@ -104,11 +104,11 @@ static void UpdateList(void)
   }
   
   bool sort_distance = false;
-  if (DistanceFilterIdx != 0) {
+  if (DistanceFilterIdx) {
     sort_distance = true;
     waypoint_sorter->filter_distance(WayPointSelectInfo, DistanceFilter[DistanceFilterIdx]);
   } 
-  if (DirectionFilterIdx != 0) {
+  if (DirectionFilterIdx) {
     sort_distance = true;
     int a = DirectionFilter[DirectionFilterIdx];
     if (a == DirHDG) {
@@ -120,7 +120,7 @@ static void UpdateList(void)
   if (sort_distance) {
     waypoint_sorter->sort_distance(WayPointSelectInfo);
   }
-  if (NameFilterIdx != 0) {
+  if (NameFilterIdx) {
     waypoint_sorter->filter_name(WayPointSelectInfo, (NameFilter[NameFilterIdx])&0xff);
   }
 

@@ -1365,11 +1365,7 @@ InputEvents::eventSetup(const TCHAR *misc)
 	(void)1;
 #endif
   else if (_tcscmp(misc, TEXT("Airspace")) == 0)
-#ifdef OLD_TASK
     dlgAirspaceShowModal(false);
-#else
-	(void)1;
-#endif
   else if (_tcscmp(misc, TEXT("Weather")) == 0)
     dlgWeatherShowModal();
   else if (_tcscmp(misc, TEXT("Replay")) == 0) {

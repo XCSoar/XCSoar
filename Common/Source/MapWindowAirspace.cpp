@@ -98,9 +98,11 @@ class AirspaceMapVisible: public AirspaceVisible
 {
 public:
   AirspaceMapVisible(const SETTINGS_COMPUTER& _settings, 
-                     const fixed& _altitude, const bool& _border):
+                     const fixed& _altitude, const bool& _border,
+                     const AirspaceWarningCopy& warnings):
     m_border(_border),
-    AirspaceVisible(_settings, _altitude)
+    AirspaceVisible(_settings, _altitude),
+    m_warnings(warnings)
     {};
 
   virtual bool operator()( const AbstractAirspace& airspace ) const { 
@@ -108,16 +110,13 @@ public:
   }
 
   bool condition( const AbstractAirspace& airspace ) const { 
-
-    // \todo always make airspaces in warning visible?
-
-    if (!parent_condition(airspace)) {
-      return false;
-    }
-    return true;
+    return parent_condition(airspace) 
+      || m_warnings.is_inside(airspace)
+      || m_warnings.is_warning(airspace);
   }
 private:
   const bool &m_border;
+  const AirspaceWarningCopy& m_warnings;
 };
 
 #include "MapDrawHelper.hpp"
@@ -143,7 +142,8 @@ public:
     pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)),
     visible(m_map.SettingsComputer(),
             m_map.Basic().GetAnyAltitude(),
-            m_border)
+            m_border,
+            warnings)
     {
       m_predicate = &visible;
       m_use_stencil = true;
@@ -275,8 +275,10 @@ class AirspaceDetailsDialogVisitor:
 {
 public:
   AirspaceDetailsDialogVisitor(const SETTINGS_COMPUTER& _settings, 
-                               const fixed& _altitude):
-    AirspaceVisitor(AirspaceMapVisible(_settings, _altitude, false)),
+                               const fixed& _altitude,
+                               const AirspaceWarningCopy& warnings):
+    AirspaceVisitor(AirspaceMapVisible(_settings, _altitude, false, 
+                                       warnings)),
     m_airspace(NULL) {};
 
   void Visit(const AirspacePolygon& as) {
@@ -309,10 +311,18 @@ MapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
   if (airspace_database == NULL)
     return false;
 
+  terrain->Lock(); // JMW OLD_TASK locking is temporary
+
+  AirspaceWarningCopy awc;
+  airspace_warning.visit_warnings(awc);
+
   AirspaceDetailsDialogVisitor airspace_copy_popup(SettingsComputer(),
-                                                   Basic().GetAnyAltitude());
+                                                   Basic().GetAnyAltitude(),
+                                                   awc);
 
   airspace_database->visit_within_range(location, 100.0, airspace_copy_popup);
+
+  terrain->Unlock();
 
   airspace_copy_popup.display();
 

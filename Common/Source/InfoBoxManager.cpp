@@ -444,7 +444,6 @@ InfoBoxManager::setType(unsigned i, char j, unsigned layer)
     InfoType[i] += (j << 24);
     break;
   }
-  printf("%d %d\n", InfoType[i], old);
 }
 
 void

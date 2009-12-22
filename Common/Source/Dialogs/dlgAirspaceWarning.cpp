@@ -203,7 +203,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 
   TCHAR sAckIndicator[6] = _T(" -++*");
 
-  tstring sName = as.get_name_text(false);
+  tstring sName = as.get_name_text(true);
   tstring sTop = as.get_top_text(true);
   tstring sBase = as.get_base_text(true);
   tstring sType = as.get_type_text(true);

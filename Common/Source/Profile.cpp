@@ -92,15 +92,15 @@ static void
 CheckInfoTypes()
 {
   int i;
-  char iszero_fg = 0;
-  char iszero_aux = 0;
+  bool iszero_fg = true;
+  bool iszero_aux = true;
 
-  for (i = 0; i < MAXINFOWINDOWS; i++) {
-    iszero_fg  |= InfoBoxManager::getType(i, 2);
-    iszero_aux |= InfoBoxManager::getType(i, 3);
+  for (i = 0; i < MAXINFOWINDOWS; ++i) {
+    iszero_fg  &= (InfoBoxManager::getType(i, 2)==0);
+    iszero_aux &= (InfoBoxManager::getType(i, 3)==0);
   }
   if (iszero_fg || iszero_aux) {
-    for (i = 0; i < MAXINFOWINDOWS; i++) {
+    for (i = 0; i < MAXINFOWINDOWS; ++i) {
       if (iszero_fg) {
         InfoBoxManager::setType(i, InfoBoxManager::getType(i, 1), 2);
       }

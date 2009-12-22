@@ -52,6 +52,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Components.hpp"
 #include "Calculations.h"
+#include "Protection.hpp"
 
 #define MAXPAGE 8
 
@@ -395,9 +396,7 @@ OnCalcClicked(WindowControl *Sender)
     XCSoarInterface::StopHourglassCursor();
   }
   if (page==ANALYSIS_PAGE_AIRSPACE) {
-#ifdef OLD_TASK
-    dlgAirspaceWarningShowDlg(true);
-#endif
+    airspaceWarningEvent.trigger();
   }
   Update();
 }

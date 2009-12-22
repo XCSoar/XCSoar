@@ -746,16 +746,12 @@ static void OnLoggerIDClicked(WindowControl *Sender) {
 
 static void OnAirspaceColoursClicked(WindowControl * Sender){
 	(void)Sender;
-#ifdef OLD_TASK
   dlgAirspaceShowModal(true);
-#endif
 }
 
 static void OnAirspaceModeClicked(WindowControl * Sender){
 	(void)Sender;
-#ifdef OLD_TASK
   dlgAirspaceShowModal(false);
-#endif
 }
 
 static void OnNextClicked(WindowControl * Sender){
@@ -1144,7 +1140,6 @@ static void GetInfoBoxSelector(unsigned item, int mode)
     if (it != itnew) {
 
       changed = true;
-      printf("changed from %d to %d\n", it, itnew);
 
       switch(mode) {
       case 0: // cruise
