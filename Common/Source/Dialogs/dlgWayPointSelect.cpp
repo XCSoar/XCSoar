@@ -79,7 +79,7 @@ OnWaypointListEnter(unsigned i)
 static WaypointSelectInfoVector WayPointSelectInfo;
 
 WaypointSorter* waypoint_sorter;
-static unsigned int UpLimit = 0;
+static unsigned UpLimit = 0;
 
 static void UpdateList(void)
 {
@@ -324,7 +324,7 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
   TCHAR sTmp[12];
 
-  if (i < (int)UpLimit) {
+  if (i < UpLimit) {
 
     const Waypoint &way_point = *WayPointSelectInfo[i].way_point;
 
@@ -503,12 +503,9 @@ dlgWayPointSelect(const GEOPOINT &location,
   wf->SetTimerNotify(OnTimerNotify);
 
   const Waypoint* wp_selected = NULL;
-  int ItemIndex;
+  unsigned ItemIndex = wWayPointList->GetCursorIndex();
 
-  if ((wf->ShowModal() == mrOK) && UpLimit &&
-      (ItemIndex = wWayPointList->GetCursorIndex()) >= 0
-      && ((unsigned)ItemIndex < UpLimit)) {
-
+  if ((wf->ShowModal() == mrOK) && (ItemIndex < UpLimit)) {
     wp_selected = WayPointSelectInfo[ItemIndex].way_point;
   }
 
