@@ -48,6 +48,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow.h"
 #include "Components.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 
 #include <assert.h>
 
@@ -121,7 +122,14 @@ SetValues(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
-// OLD_TASK TODO
+    const GEOPOINT &ac_loc = XCSoarInterface::Basic().Location;
+    const GEOPOINT closest_loc = airspace->closest_point(ac_loc);
+    const GeoVector vec(ac_loc, closest_loc);
+    TCHAR buf[80];
+    _stprintf(buf,_T("%d%s"), (vec.Distance*DISTANCEMODIFY).as_int(),
+              Units::GetDistanceName());
+    wp->SetText(buf);
+    wp->RefreshDisplay();
   }
 }
 
@@ -135,11 +143,7 @@ dlgAirspaceDetails(const AbstractAirspace& the_airspace)
                       _T("dlgAirspaceDetails.xml"),
                       XCSoarInterface::main_window,
                       _T("IDR_XML_AIRSPACEDETAILS"));
-
-  if (!wf)
-    return;
-
-  assert(wf != NULL);
+  if (!wf) return;
 
   SetValues();
 
