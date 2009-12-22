@@ -178,6 +178,8 @@ public:
  */
   void acknowledge_day(const bool set=true);
 
+  bool operator < (const AirspaceWarning& rhs);
+
 private:
   const AbstractAirspace& m_airspace;
   AirspaceWarningState m_state;
@@ -186,6 +188,7 @@ private:
 
   unsigned m_acktime_warning;
   unsigned m_acktime_inside;
+  unsigned m_debouncetime;
   bool m_ack_day;
   bool m_expired;
   bool m_expired_last;

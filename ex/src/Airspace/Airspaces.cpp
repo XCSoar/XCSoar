@@ -309,4 +309,15 @@ Airspaces::set_flight_levels(const AtmosphericPressure &press)
   }
 }
 
-///////////////////
+Airspaces::AirspaceTree::const_iterator
+Airspaces::begin() const
+{
+  return airspace_tree.begin();
+}
+
+Airspaces::AirspaceTree::const_iterator
+Airspaces::end() const
+{
+  return airspace_tree.end();
+}
+

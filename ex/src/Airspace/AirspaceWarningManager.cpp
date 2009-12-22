@@ -170,6 +170,9 @@ AirspaceWarningManager::update(const AIRCRAFT_STATE& state)
     }
   }
 
+  // sort by importance, most severe top
+  m_warnings.sort();
+
   return changed;
 }
 
@@ -363,3 +366,4 @@ AirspaceWarningManager::acknowledge_day(const AbstractAirspace& airspace,
 {
   get_warning(airspace).acknowledge_day(set);
 }
+

@@ -194,15 +194,32 @@ public:
                                    const AirspacePredicate &condition
                                    =AirspacePredicate::always_true) const;
 
-private:
-
-  fixed m_QNH;
-
+  /**
+   * Type of KD-tree data structure for airspace container
+   */
   typedef KDTree::KDTree<4, 
                          Airspace, 
                          FlatBoundingBox::kd_get_bounds,
                          FlatBoundingBox::kd_distance
                          > AirspaceTree;
+
+/** 
+ * Access first airspace in store, for use in iterators.
+ * 
+ * @return First airspace in store
+ */
+  AirspaceTree::const_iterator begin() const;
+
+/** 
+ * Access end airspace in store, for use in iterators as end point.
+ * 
+ * @return End airspace in store
+ */
+  AirspaceTree::const_iterator end() const;
+
+private:
+
+  fixed m_QNH;
 
   AirspaceTree airspace_tree;
   TaskProjection task_projection;

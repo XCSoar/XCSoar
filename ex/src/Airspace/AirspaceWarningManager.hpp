@@ -81,8 +81,6 @@ public:
                          const fixed& prediction_time_glide=15.0,
                          const fixed& prediction_time_filter=60.0);
 
-  typedef std::list<AirspaceWarning> AirspaceWarningList; /**< Type of warning storage */
-
 /** 
  * Reset warning list and filter (as in new flight)
  * 
@@ -130,6 +128,15 @@ public:
  * @return Pointer to airspace warning item (or NULL if not found)
  */
   AirspaceWarning* get_warning(const unsigned index);
+
+/** 
+ * Find corresponding airspace warning item in store by airspace 
+ * 
+ * @param airspace Airspace to find warning for
+ * 
+ * @return Pointer to airspace warning item (or NULL if not found)
+ */
+  AirspaceWarning* get_warning_ptr(const AbstractAirspace& airspace);
 
 /** 
  * Find index of airspace warning item in store for an airspace
@@ -199,13 +206,9 @@ private:
   AircraftStateFilter m_state_filter;
   AirspaceAircraftPerformanceStateFilter m_perf_filter;  
 
-  AirspaceWarningList m_warnings;
-
   const TaskManager& m_task;
 
   const GlidePolar& m_glide_polar;
-
-  AirspaceWarning* get_warning_ptr(const AbstractAirspace& airspace);
 
   bool update_task(const AIRCRAFT_STATE& state);
   bool update_filter(const AIRCRAFT_STATE& state);
@@ -217,6 +220,10 @@ private:
                         const AirspaceAircraftPerformance &perf,
                         const AirspaceWarning::AirspaceWarningState& warning_state,
                         const fixed max_time);
+
+  typedef std::list<AirspaceWarning> AirspaceWarningList;
+
+  AirspaceWarningList m_warnings;
 
 };
 
