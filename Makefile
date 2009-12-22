@@ -123,9 +123,11 @@ VOLKS	:=\
 	$(SRC)/Device/Volkslogger/vlapi2.cpp \
 	$(SRC)/Device/Volkslogger/vlapihlp.cpp \
 	$(SRC)/Device/Volkslogger/vlapisys_win.cpp \
-	$(SRC)/Device/Volkslogger/vlconv.cpp \
-	$(SRC)/Device/Volkslogger/vlutils.cpp
+	$(SRC)/Device/Volkslogger/vlconv.cpp
 
+ifeq ($(HAVE_MSVCRT),n)
+VOLKS += $(SRC)/Device/Volkslogger/vlutils.cpp
+endif
 
 
 OBJS	:=\
@@ -282,6 +284,7 @@ OBJS	:=\
 	$(SRC)/Version.o 		\
 	$(SRC)/Audio/Sound.o \
 	$(SRC)/Audio/VegaVoice.o	\
+	$(SRC)/Compatibility/fmode.o \
 	$(SRC)/Compatibility/string.o 	\
 	$(SRC)/Registry.o 		\
 	$(SRC)/Profile.o \
@@ -329,6 +332,7 @@ OBJS	:=\
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/SingleWindow.o \
 	$(SRC)/Screen/Dialog.o \
 	$(SRC)/Screen/ProgressWindow.o \
 	\

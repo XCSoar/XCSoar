@@ -42,10 +42,12 @@ Copyright_License {
 #include "Form/Control.hpp"
 #include "Dialogs.h"
 
+class SingleWindow;
 class PeriodClock;
 
 class WndForm : public WindowControl {
 protected:
+  SingleWindow &main_window;
   int mModalResult;
   Color mColorTitle;
   const Font *mhTitleFont;
@@ -64,9 +66,10 @@ protected:
 
 public:
 
-  WndForm(ContainerWindow *Parent,
+  WndForm(SingleWindow &_main_window,
           const TCHAR *Name, const TCHAR *Caption,
           int X, int Y, int Width, int Height);
+  virtual ~WndForm();
 
   ContainerWindow &GetClientAreaWindow(void);
   void AddClient(WindowControl *Client);
@@ -95,6 +98,7 @@ public:
   virtual bool on_unhandled_key(unsigned key_code);
 
   /** from class Window */
+  virtual bool on_destroy();
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
 

@@ -58,7 +58,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 void
-dlgHelpShowModal(ContainerWindow &parent,
+dlgHelpShowModal(SingleWindow &parent,
                  const TCHAR* Caption, const TCHAR* HelpText)
 {
   if (!Caption || !HelpText) {

@@ -50,6 +50,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "Interface.hpp"
 #include "Form/Form.hpp"
 #include "Form/Edit.hpp"
@@ -358,7 +359,7 @@ LoadColors(WindowControl &wc, const XMLNode &node)
 
 static
 void
-CalcWidthStretch(XMLNode *xNode, ContainerWindow &Parent)
+CalcWidthStretch(XMLNode *xNode, const RECT rc)
 {
   if (!Layout::ScaleSupported()) {
     g_eDialogStyle = eDialogFixed;
@@ -369,8 +370,7 @@ CalcWidthStretch(XMLNode *xNode, ContainerWindow &Parent)
 
   int Width = StringToIntDflt(xNode->getAttribute(TEXT("Width")), 50);
   if (g_eDialogStyle == eDialogFullWidth) {
-    g_ddlgScaleWidth = ((double)(Parent.get_client_rect().right
-        - Parent.get_client_rect().left)) / ((double)Width);
+    g_ddlgScaleWidth = (double)(rc.right - rc.left) / (double)Width;
   } else {
     g_ddlgScaleWidth = Layout::Scale(1); // retain dialog geometry
   }
@@ -378,7 +378,7 @@ CalcWidthStretch(XMLNode *xNode, ContainerWindow &Parent)
 
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
                         const TCHAR *FileName,
-                        ContainerWindow &Parent,
+                        SingleWindow &Parent,
                         const TCHAR* resource) {
 
   WndForm *theForm = NULL;
@@ -415,29 +415,31 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
     TCHAR sTmp[128];
     TCHAR Name[64];
 
-    CalcWidthStretch(&xNode, Parent);
+    const RECT rc = Parent.get_client_rect();
+    CalcWidthStretch(&xNode, rc);
 
     GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height, &Font,
         sTmp);
 
     switch (g_eDialogStyle) {
     case eDialogFullWidth:
-      Width = Parent.get_client_rect().right; // stretch form to full width of screen
-      Height = Parent.get_client_rect().bottom;
+      X = rc.top;
+      Y = rc.bottom;
+      Width = rc.right - rc.left; // stretch form to full width of screen
+      Height = rc.bottom - rc.top;
       X = 0;
       Y = 0;
       break;
     case eDialogScaled:
       break;
     case eDialogScaledCentered:
-      X = (Parent.get_client_rect().right - Parent.get_client_rect().left
-          - Width) / 2; // center form horizontally on screen
+      X = (rc.right - rc.left) / 2; // center form horizontally on screen
       break;
     case eDialogFixed:
       break;
     }
 
-    theForm = new WndForm(&Parent, Name, sTmp, X, Y, Width, Height);
+    theForm = new WndForm(Parent, Name, sTmp, X, Y, Width, Height);
 
     if (Font != -1)
       theForm->SetTitleFont(*FontMap[Font]);

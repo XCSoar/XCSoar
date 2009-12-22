@@ -52,6 +52,8 @@ private:
   BitmapCanvas mask_canvas;
 
 public:
+  virtual ~MaskedPaintWindow();
+
   void set(ContainerWindow &parent, const TCHAR *cls,
            int left, int top, unsigned width, unsigned height) {
     PaintWindow::set(parent, cls, left, top, width, height);
@@ -60,8 +62,6 @@ public:
            int left, int top, unsigned width, unsigned height,
            bool center = false, bool notify = false, bool show = true,
            bool tabstop = false, bool border = false);
-
-  void reset();
 
   void draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
 			  const int x, const int y,
@@ -83,6 +83,7 @@ protected:
 #endif /* !ENABLE_SDL */
 
   virtual bool on_create();
+  virtual bool on_destroy();
 };
 
 #endif

@@ -36,35 +36,39 @@ Copyright_License {
 }
 */
 
-#ifndef DIALOG_HELPERS_HPP
-#define DIALOG_HELPERS_HPP
+#include "Screen/SingleWindow.hpp"
 
-#include "SettingsUser.hpp"
+void
+SingleWindow::add_dialog(Window *dialog)
+{
+  dialogs.push(dialog);
+}
 
-#include <tchar.h>
+void
+SingleWindow::remove_dialog(Window *dialog)
+{
+  assert(dialog == dialogs.top());
 
-class WndForm;
+  dialogs.pop();
+}
 
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, bool &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, unsigned int &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, int &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, DisplayTextType_t &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, short &value);
+bool
+SingleWindow::on_close()
+{
+  if (!dialogs.empty()) {
+    /* close the current dialog instead of the main window */
+    Window *dialog = dialogs.top();
+    dialog->reset();
+    return true;
+  }
 
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      bool &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      unsigned int &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      int &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      DisplayTextType_t &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      short &value);
+  return TopWindow::on_close();
+}
 
-#endif
+bool
+SingleWindow::on_destroy()
+{
+  TopWindow::on_destroy();
+  post_quit();
+  return true;
+}

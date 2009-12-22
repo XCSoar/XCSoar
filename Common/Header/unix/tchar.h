@@ -136,7 +136,7 @@ CharUpper(LPTSTR s)
 #ifdef UNICODE
     *p = towupper(*p);
 #else
-    *p = toupper(*p);
+    *p = (TCHAR)toupper(*p);
 #endif
   return s;
 }

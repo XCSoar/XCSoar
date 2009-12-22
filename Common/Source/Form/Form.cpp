@@ -43,13 +43,15 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MapWindow.h"
 #include "Screen/Animation.hpp"
+#include "Screen/SingleWindow.hpp"
 
 PeriodClock WndForm::timeAnyOpenClose;
 
-WndForm::WndForm(ContainerWindow *Parent,
+WndForm::WndForm(SingleWindow &_main_window,
                  const TCHAR *Name, const TCHAR *Caption,
                  int X, int Y, int Width, int Height):
-  WindowControl(NULL, Parent, Name, X, Y, Width, Height, false),
+  WindowControl(NULL, &_main_window, Name, X, Y, Width, Height, false),
+  main_window(_main_window),
   mModalResult(0),
   mColorTitle(Color::YELLOW),
   mhTitleFont(GetFont()),
@@ -72,6 +74,14 @@ WndForm::WndForm(ContainerWindow *Parent,
 
 }
 
+WndForm::~WndForm()
+{
+  /* we must override the ~Window() reset call, because in ~Window(),
+     our own on_destroy() method won't be called (during object
+     destruction, this object loses its identity) */
+  reset();
+}
+
 ContainerWindow &
 WndForm::GetClientAreaWindow(void)
 {
@@ -88,6 +98,16 @@ void WndForm::AddClient(WindowControl *Client){      // add client window
     mClientWindow->AddClient(Client); // add it to the clientarea window
   } else
     WindowControl::AddClient(Client);
+}
+
+bool
+WndForm::on_destroy()
+{
+  if (mModalResult == 0)
+    mModalResult = mrCancel;
+
+  WindowControl::on_destroy();
+  return true;
 }
 
 bool
@@ -188,6 +208,8 @@ int WndForm::ShowModal(bool bEnableMap) {
 #endif /* !ENABLE_SDL */
   WndForm::timeAnyOpenClose.update(); // when current dlg opens or child closes
 
+  main_window.add_dialog(this);
+
 #ifdef ENABLE_SDL
 
   update();
@@ -205,6 +227,7 @@ int WndForm::ShowModal(bool bEnableMap) {
       parent->on_event(event);
   }
 
+  main_window.remove_dialog(this);
   return 0;
 
 #else /* !ENABLE_SDL */
@@ -223,9 +246,6 @@ int WndForm::ShowModal(bool bEnableMap) {
     if (msg.message == WM_KEYDOWN) {
       XCSoarInterface::InterfaceTimeoutReset();
     }
-
-    if ((msg.message == WM_KEYDOWN) && ((msg.wParam & 0xffff) == VK_ESCAPE))
-      mModalResult = mrCancel;
 
     if (is_user_input(msg.message)
         && !identify_descendant(msg.hwnd) // not current window or child
@@ -259,6 +279,8 @@ int WndForm::ShowModal(bool bEnableMap) {
     }
   } // End Modal Loop
 #endif /* !ENABLE_SDL */
+
+  main_window.remove_dialog(this);
 
   // static.  this is current open/close or child open/close
   WndForm::timeAnyOpenClose.update();
@@ -310,7 +332,6 @@ WndForm::on_paint(Canvas &canvas)
 
   if (mClientWindow && !EqualRect(&mClientRect, &rcClient)){
     mClientWindow->move(rcClient.left, rcClient.top);
-    mClientWindow->insert_after(HWND_TOP, true);
 
     CopyRect(&mClientRect, &rcClient);
 
@@ -376,7 +397,13 @@ bool
 WndForm::on_unhandled_key(unsigned key_code)
 {
   if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, key_code))
-    return 0;
+    return true;
+
+  switch (key_code) {
+  case VK_ESCAPE:
+    SetModalResult(mrCancel);
+    return true;
+  }
 
   return WindowControl::on_unhandled_key(key_code);
 }

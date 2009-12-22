@@ -204,9 +204,9 @@ WndProperty::~WndProperty(void){
 }
 
 Window *
-WndProperty::GetCanFocus()
+WndProperty::GetCanFocus(bool forward)
 {
-  Window *w = WindowControl::GetCanFocus();
+  Window *w = WindowControl::GetCanFocus(forward);
   if (w == this)
     return &edit;
 
@@ -342,7 +342,7 @@ WndProperty::on_mouse_down(int x, int y)
   {
     if (!GetReadOnly())  // when they click on the label
     {
-      dlgComboPicker(*get_root_owner(), this);
+      dlgComboPicker(*(SingleWindow *)get_root_owner(), this);
     }
     else
     {

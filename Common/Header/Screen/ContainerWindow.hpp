@@ -64,6 +64,7 @@ protected:
 
 public:
   ContainerWindow();
+  virtual ~ContainerWindow();
 #endif /* ENABLE_SDL */
 
 protected:

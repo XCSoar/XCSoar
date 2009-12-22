@@ -177,7 +177,8 @@ int jpc_enc_enccblks(jpc_enc_t *enc)
 	return 0;
 }
 
-int getthebyte(jas_stream_t *in, long off)
+static int
+getthebyte(jas_stream_t *in, long off)
 {
 	int c;
 	long oldpos;

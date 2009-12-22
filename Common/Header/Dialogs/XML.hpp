@@ -42,7 +42,7 @@ Copyright_License {
 #include <tchar.h>
 
 class WndForm;
-class ContainerWindow;
+class SingleWindow;
 
 typedef struct{
   const TCHAR *Name;
@@ -51,7 +51,7 @@ typedef struct{
 
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
                         const TCHAR *FileName,
-                        ContainerWindow &Parent,
+                        SingleWindow &Parent,
                         const TCHAR *resource=NULL);
 
 #endif

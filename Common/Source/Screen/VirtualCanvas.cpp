@@ -38,6 +38,8 @@ Copyright_License {
 
 #include "Screen/VirtualCanvas.hpp"
 
+#include <assert.h>
+
 #ifdef ENABLE_SDL
 
 VirtualCanvas::VirtualCanvas(const Canvas &canvas,
@@ -52,6 +54,7 @@ VirtualCanvas::VirtualCanvas(const Canvas &canvas,
                              unsigned _width, unsigned _height)
   :Canvas(::CreateCompatibleDC(canvas), _width, _height)
 {
+  assert(canvas.defined());
 }
 
 #endif /* !ENABLE_SDL */
@@ -96,6 +99,8 @@ VirtualCanvas::set(unsigned _width, unsigned _height)
 void
 VirtualCanvas::set(const Canvas &canvas, unsigned _width, unsigned _height)
 {
+  assert(canvas.defined());
+
 #ifdef ENABLE_SDL
   set(_width, _height);
 #else /* !ENABLE_SDL */

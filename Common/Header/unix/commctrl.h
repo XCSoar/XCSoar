@@ -36,35 +36,11 @@ Copyright_License {
 }
 */
 
-#ifndef DIALOG_HELPERS_HPP
-#define DIALOG_HELPERS_HPP
-
-#include "SettingsUser.hpp"
+#ifndef COMMCTRL_H
+#define COMMCTRL_H
 
 #include <tchar.h>
 
-class WndForm;
-
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, bool &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, unsigned int &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, int &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, DisplayTextType_t &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, short &value);
-
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      bool &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      unsigned int &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      int &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      DisplayTextType_t &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      short &value);
+#define WC_STATIC _T("STATIC")
 
 #endif

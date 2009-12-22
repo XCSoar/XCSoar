@@ -52,11 +52,12 @@ private:
 #endif /* !ENABLE_SDL */
 
 public:
+  virtual ~BufferWindow();
+
 #ifndef ENABLE_SDL
   void set(ContainerWindow &parent, const TCHAR *cls,
            int left, int top, unsigned width, unsigned height) {
     PaintWindow::set(parent, cls, left, top, width, height);
-    buffer.set(PaintWindow::get_canvas(), width, height);
   }
 
   void set(ContainerWindow *parent,
@@ -65,7 +66,6 @@ public:
            bool tabstop = false, bool border = false) {
     PaintWindow::set(parent, left, top, width, height,
                      center, notify, show, tabstop, border);
-    buffer.set(PaintWindow::get_canvas(), width, height);
   }
 
   void set(ContainerWindow &parent,
@@ -74,12 +74,6 @@ public:
            bool tabstop = false, bool border = false) {
     PaintWindow::set(parent, left, top, width, height,
                      center, notify, show, tabstop, border);
-    buffer.set(PaintWindow::get_canvas(), width, height);
-  }
-
-  void reset() {
-    buffer.reset();
-    PaintWindow::reset();
   }
 
   Canvas &get_canvas() {
@@ -107,6 +101,9 @@ public:
 
 protected:
 #ifndef ENABLE_SDL
+  virtual bool on_create();
+  virtual bool on_destroy();
+
   virtual bool on_resize(unsigned width, unsigned height);
 #endif /* !ENABLE_SDL */
 

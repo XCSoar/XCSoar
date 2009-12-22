@@ -72,10 +72,10 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 #endif
 #endif
 
-  insert_after(HWND_TOP, true);
-
   set_range(0, 100);
   set_step(5);
+
+  show_on_top();
 
 #ifndef ENABLE_SDL
   ::SetForegroundWindow(hWnd);

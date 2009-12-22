@@ -36,9 +36,6 @@ typedef interface IImageRender IImageRender;
 #include "oaidl.h"
 #include "ocidl.h"
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * );
-
 #ifndef __IImageRender_INTERFACE_DEFINED__
 #define __IImageRender_INTERFACE_DEFINED__
 

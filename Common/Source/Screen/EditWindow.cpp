@@ -43,6 +43,8 @@ Copyright_License {
 #include "Appearance.hpp" // for GlobalModelType
 #endif
 
+#include <commctrl.h>
+
 void
 EditWindow::set(ContainerWindow &parent, int left, int top,
                 unsigned width, unsigned height,
@@ -50,7 +52,7 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
 {
 #ifdef ENABLE_SDL
   // XXX
-  Window::set(&parent, TEXT("EDIT"), TEXT("\0"),
+  Window::set(&parent, NULL, NULL,
               left, top, width, height);
 #else /* !ENABLE_SDL */
   DWORD style = WS_BORDER | WS_VISIBLE | WS_CHILD
@@ -67,7 +69,7 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
   if (model_is_hp31x())
     ex_style |= WS_EX_CLIENTEDGE;
 
-  Window::set(&parent, TEXT("EDIT"), TEXT("\0"),
+  Window::set(&parent, WC_EDIT, NULL,
               left, top, width, height, style, ex_style);
 #endif /* !ENABLE_SDL */
 }
@@ -78,7 +80,7 @@ EditWindow::set_ro_ml(ContainerWindow &parent, int left, int top,
 {
 #ifdef ENABLE_SDL
   // XXX
-  Window::set(&parent, TEXT("EDIT"), TEXT("\0"),
+  Window::set(&parent, NULL, NULL,
               left, top, width, height);
 #else /* !ENABLE_SDL */
   DWORD style = WS_BORDER | WS_CHILD
@@ -86,7 +88,7 @@ EditWindow::set_ro_ml(ContainerWindow &parent, int left, int top,
     | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
   DWORD ex_style = 0;
 
-  Window::set(&parent, TEXT("EDIT"), TEXT("\0"),
+  Window::set(&parent, WC_EDIT, NULL,
               left, top, width, height, style, ex_style);
 #endif /* !ENABLE_SDL */
 }

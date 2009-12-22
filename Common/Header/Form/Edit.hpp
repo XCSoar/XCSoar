@@ -105,7 +105,7 @@ public:
               int MultiLine=false);
   ~WndProperty(void);
 
-  virtual Window *GetCanFocus();
+  virtual Window *GetCanFocus(bool forward);
 
   void on_editor_setfocus();
   void on_editor_killfocus();

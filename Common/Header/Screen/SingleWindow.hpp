@@ -36,35 +36,33 @@ Copyright_License {
 }
 */
 
-#ifndef DIALOG_HELPERS_HPP
-#define DIALOG_HELPERS_HPP
+#ifndef XCSOAR_SCREEN_SINGLE_WINDOW_HXX
+#define XCSOAR_SCREEN_SINGLE_WINDOW_HXX
 
-#include "SettingsUser.hpp"
+#include "Screen/TopWindow.hpp"
 
-#include <tchar.h>
+#include <stack>
+#include <assert.h>
 
-class WndForm;
+/**
+ * The single top-level window of an application.  When it is closed,
+ * the process quits.
+ */
+class SingleWindow : public TopWindow {
+protected:
+  std::stack<Window *> dialogs;
 
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, bool &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, unsigned int &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, int &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, DisplayTextType_t &value);
-bool SetValueRegistryOnChange(WndForm* wfm, const TCHAR* field,
-			      const TCHAR* reg, short &value);
+public:
+  void add_dialog(Window *dialog);
+  void remove_dialog(Window *dialog);
 
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      bool &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      unsigned int &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      int &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      DisplayTextType_t &value);
-bool SetValueOnChange(WndForm* wfm, const TCHAR* field,
-		      short &value);
+  bool has_dialog() {
+    return !dialogs.empty();
+  }
+
+protected:
+  virtual bool on_close();
+  virtual bool on_destroy();
+};
 
 #endif

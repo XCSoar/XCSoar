@@ -37,26 +37,16 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeVario.hpp"
-#include "XCSoar.h"
-#include "Asset.hpp"
-#include "Protection.hpp"
 #include "LogFile.hpp"
-#include "Interface.hpp"
-#include "MapWindowProjection.hpp"
-#include "Math/FastMath.h"
-#include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/BitmapCanvas.hpp"
-#include "Screen/ContainerWindow.hpp"
 #include "Math/Geometry.hpp"
 #include "MacCready.h"
-#include "options.h" /* for IBLSCALE() */
-#include "SettingsUser.hpp"
-#include "SettingsComputer.hpp"
 #include "Appearance.hpp"
+#include "resource.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -67,10 +57,6 @@ using std::min;
 using std::max;
 #endif
 
-#define GAUGEXSIZE (InfoBoxLayout::ControlWidth)
-#define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
-
-
 static Color colTextGray;
 static Color colText;
 static Color colTextBackgnd;
@@ -80,7 +66,8 @@ static Color colTextBackgnd;
 #define ARROWYSIZE IBLSCALE(3)
 #define ARROWXSIZE IBLSCALE(7)
 
-GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
+GaugeVario::GaugeVario(ContainerWindow &parent,
+                       int left, int top, unsigned width, unsigned height)
  :polys(NULL), lines(NULL)
 {
   diValueTop.InitDone = false;
@@ -92,14 +79,8 @@ GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
 
   StartupStore(TEXT("Create Vario\n"));
 
-  set(parent,
-      Layout::landscape
-      ? (MapRectBig.right + InfoBoxLayout::ControlWidth)
-      : (MapRectBig.right - GAUGEXSIZE),
-      MapRectBig.top,
-      GAUGEXSIZE, GAUGEYSIZE,
+  set(parent, left, top, width, height,
       false, false, false);
-  insert_after(HWND_TOP, false);
 
   // load vario scale
   if (Units::GetUserVerticalSpeedUnit()==unKnots) {
@@ -142,13 +123,13 @@ GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
   blueThickPen.set(IBLSCALE(5), theblueColor);
 
   if (Appearance.InverseInfoBox){
-    colText = Color(0xff, 0xff, 0xff);
-    colTextBackgnd = Color(0x00, 0x00, 0x00);
+    colText = Color::WHITE;
+    colTextBackgnd = Color::BLACK;
     colTextGray = Color(0xa0, 0xa0, 0xa0);
     hBitmapClimb.load(IDB_CLIMBSMALLINV);
   } else {
-    colText = Color(0x00, 0x00, 0x00);
-    colTextBackgnd = Color(0xff, 0xff, 0xff);
+    colText = Color::BLACK;
+    colTextBackgnd = Color::WHITE;
     colTextGray = Color(~0xa0, ~0xa0, ~0xa0);
     hBitmapClimb.load(IDB_CLIMBSMALL);
   }
@@ -163,7 +144,6 @@ GaugeVario::GaugeVario(ContainerWindow &parent, const RECT MapRectBig)
   xoffset = get_width();
   yoffset = get_height() / 2;
 
-  install_wndproc();
   hide();
 }
 

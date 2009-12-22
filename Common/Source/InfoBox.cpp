@@ -116,8 +116,6 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
     hPenSelector.set(DEFAULTBORDERPENWIDTH + 2, mColorFore);
   }
 
-  install_wndproc();
-
   mhBrushBk = hBrushDefaultBackGround;
   mhBrushBkSel = hBrushDefaultBackGroundSel;
   mhPenBorder = hPenDefaultBorder;

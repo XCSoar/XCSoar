@@ -54,7 +54,9 @@ double QFEAltitudeOffset= 0.0; /**< not in use(?) */
  * @param alt Altitude over QNH-based zero
  * @return Air pressure at given altitude
  */
-double QNHAltitudeToStaticPressure(double alt) {
+static double
+QNHAltitudeToStaticPressure(double alt)
+{
   const double k1=0.190263;
   const double k2=8.417286e-5;
   return 100.0*pow((pow(QNH,k1)-k2*alt),1.0/k1);

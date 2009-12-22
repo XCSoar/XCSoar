@@ -58,12 +58,12 @@ StringChomp(TCHAR *p)
 
 void
 PExtractParameter(const TCHAR *Source, TCHAR *Destination,
-    int DesiredFieldNumber)
+                  unsigned DesiredFieldNumber)
 {
-  int index = 0;
-  int dest_index = 0;
-  int CurrentFieldNumber = 0;
-  int StringLength = 0;
+  size_t index = 0;
+  size_t dest_index = 0;
+  unsigned CurrentFieldNumber = 0;
+  size_t StringLength;
 
   StringLength = _tcslen(Source);
 
@@ -401,7 +401,7 @@ bsearch(void *key, void *base0, size_t nmemb, size_t size, int
 }
 
 TCHAR *
-strtok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts)
+_tcstok_r(TCHAR *s, const TCHAR *delim, TCHAR **lasts)
 {
   // "s" MUST be a pointer to an array, not to a string!!!
   // (ARM92, Win emulator cause access violation if not)

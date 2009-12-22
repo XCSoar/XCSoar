@@ -132,7 +132,7 @@ int propGetScaleList(double *List, size_t Size){
 
   if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0){
 
-    pToken = strtok_r(Buffer, TEXT(","), &pWClast);
+    pToken = _tcstok_r(Buffer, TEXT(","), &pWClast);
 
     while(Idx < (int)Size && pToken != NULL){
       val = _tcstod(pToken, NULL);
@@ -143,7 +143,7 @@ int propGetScaleList(double *List, size_t Size){
       List[Idx] = val;
       Idx++;
       vlast = val;
-      pToken = strtok_r(NULL, TEXT(","), &pWClast);
+      pToken = _tcstok_r(NULL, TEXT(","), &pWClast);
     }
 
     return(Idx);

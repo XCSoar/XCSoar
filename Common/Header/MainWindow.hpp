@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_MAIN_WINDOW_HXX
 #define XCSOAR_MAIN_WINDOW_HXX
 
-#include "Screen/TopWindow.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "MapWindow.h"
 #include "PopupMessage.hpp"
 
@@ -50,7 +50,7 @@ class StatusMessageList;
 /**
  * The XCSoar main window.
  */
-class MainWindow : public TopWindow {
+class MainWindow : public SingleWindow {
 public:
   MapWindow map;
   GaugeVario *vario;
@@ -86,9 +86,6 @@ protected:
   bool on_create();
   bool on_destroy();
   bool on_close();
-
-public:
-  void install_timer();
 };
 
 #endif

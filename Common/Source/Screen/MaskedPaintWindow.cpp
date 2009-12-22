@@ -45,6 +45,11 @@ Copyright_License {
 
 #include <assert.h>
 
+MaskedPaintWindow::~MaskedPaintWindow()
+{
+  reset();
+}
+
 void
 MaskedPaintWindow::set(ContainerWindow *parent,
                  int left, int top, unsigned width, unsigned height,
@@ -68,13 +73,6 @@ MaskedPaintWindow::on_resize(unsigned width, unsigned height)
 }
 #endif /* !ENABLE_SDL */
 
-void
-MaskedPaintWindow::reset()
-{
-  mask_canvas.reset();
-  PaintWindow::reset();
-}
-
 bool
 MaskedPaintWindow::on_create()
 {
@@ -87,6 +85,14 @@ MaskedPaintWindow::on_create()
   return true;
 }
 
+bool
+MaskedPaintWindow::on_destroy()
+{
+  PaintWindow::on_destroy();
+
+  mask_canvas.reset();
+  return true;
+}
 
 void MaskedPaintWindow::draw_masked_bitmap(Canvas &canvas, const Bitmap &bitmap,
 					   const int x, const int y,

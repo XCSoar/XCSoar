@@ -68,7 +68,8 @@ zzip_filesize(int fd)
 #include <windows.h>
 #include <fcntl.h>
 
-int mingw_open (const char *path, int oflag, ...)
+static int
+mingw_open (const char *path, int oflag, ...)
 {
     wchar_t wpath[MAX_PATH];
     DWORD fileaccess;

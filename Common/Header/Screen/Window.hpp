@@ -211,17 +211,6 @@ public:
 #endif
   }
 
-  void insert_after(HWND hWnd2, bool show=true) {
-    assert_none_locked();
-
-#ifdef ENABLE_SDL
-    // XXX
-#else
-    ::SetWindowPos(hWnd, hWnd2, 0, 0, 0, 0,
-                   SWP_NOMOVE|SWP_NOSIZE|(show?SWP_SHOWWINDOW:SWP_HIDEWINDOW));
-#endif
-  }
-
   void bring_to_top() {
     assert_none_locked();
 
@@ -564,6 +553,7 @@ public:
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
   virtual bool on_command(unsigned id, unsigned code);
+  virtual bool on_cancel_mode();
   virtual bool on_setfocus();
   virtual bool on_killfocus();
   virtual bool on_timer(timer_t id);

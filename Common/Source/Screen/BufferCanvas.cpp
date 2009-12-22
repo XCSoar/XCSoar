@@ -38,6 +38,8 @@ Copyright_License {
 
 #include "Screen/BufferCanvas.hpp"
 
+#include <assert.h>
+
 #ifndef ENABLE_SDL
 
 BufferCanvas::BufferCanvas(const Canvas &canvas, unsigned _width, unsigned _height)
@@ -54,6 +56,8 @@ BufferCanvas::~BufferCanvas()
 
 void BufferCanvas::set(const Canvas &canvas, unsigned _width, unsigned _height)
 {
+  assert(canvas.defined());
+
   reset();
   VirtualCanvas::set(canvas, _width, _height);
   bitmap = ::CreateCompatibleBitmap(canvas, width, height);
@@ -75,6 +79,8 @@ void BufferCanvas::reset()
 
 void BufferCanvas::resize(unsigned _width, unsigned _height)
 {
+  assert(dc != NULL);
+
   if (_width == width && _height == height)
     return;
 
