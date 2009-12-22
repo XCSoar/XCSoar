@@ -503,10 +503,12 @@ dlgWayPointSelect(const GEOPOINT &location,
   wf->SetTimerNotify(OnTimerNotify);
 
   const Waypoint* wp_selected = NULL;
-  unsigned ItemIndex = wWayPointList->GetCursorIndex();
 
-  if ((wf->ShowModal() == mrOK) && (ItemIndex < UpLimit)) {
-    wp_selected = WayPointSelectInfo[ItemIndex].way_point;
+  if (wf->ShowModal() == mrOK) {
+    unsigned ItemIndex = wWayPointList->GetCursorIndex();
+    if (ItemIndex < UpLimit) {
+      wp_selected = WayPointSelectInfo[ItemIndex].way_point;
+    }
   }
 
   delete wf;
