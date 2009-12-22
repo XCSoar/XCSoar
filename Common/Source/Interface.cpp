@@ -163,16 +163,14 @@ XCSoarInterface::InterfaceTimeoutCheck(void)
 }
 
 void ActionInterface::SignalShutdown(bool force) {
-  if (!ShutdownRequested) {
-    doForceShutdown = force;
-    ShutdownRequested = true;
-    main_window.close(); // signals close
-  }
+  doForceShutdown = force;
+  main_window.close(); // signals close
 }
 
 bool XCSoarInterface::CheckShutdown(void) {
   bool retval = false;
-  if (ShutdownRequested) {
+  if (!ShutdownRequested) {
+    ShutdownRequested = true;
     if(doForceShutdown ||
        (MessageBoxX(gettext(TEXT("Quit program?")),
                     gettext(TEXT("XCSoar")),

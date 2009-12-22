@@ -887,7 +887,7 @@ void MapWindow::DrawCDI() {
     : SettingsMap().EnableCDICruise;
 
   if (dodrawcdi) {
-    cdi->show();
+    cdi->show_on_top();
     cdi->Update(Basic().TrackBearing, 
                 Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing);
   } else {

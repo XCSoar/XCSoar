@@ -37,7 +37,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Screen/Blank.hpp"
-#include "Screen/TopWindow.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "wcecompat/ts_string.h"
 #include "Screen/Layout.hpp"
 #include "UtilsSystem.hpp"
@@ -154,7 +154,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   }
 #endif
 
-  TopWindow main_window;
+  SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunDialog"),
                   0, 0, 640, 480);
   main_window.show();

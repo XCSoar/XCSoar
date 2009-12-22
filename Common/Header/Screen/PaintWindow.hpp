@@ -77,7 +77,13 @@ private:
   WindowCanvas canvas;
 #endif
 
+private:
+  /* hide this method */
+  void install_wndproc();
+
 public:
+  virtual ~PaintWindow();
+
   static bool register_class(HINSTANCE hInstance);
 
   void set(ContainerWindow &parent, const TCHAR *cls,
@@ -94,8 +100,6 @@ public:
            int left, int top, unsigned width, unsigned height,
            bool center = false, bool notify = false, bool show = true,
            bool tabstop = false, bool border = false);
-
-  void reset();
 
   Canvas &get_canvas() {
     return canvas;
@@ -189,6 +193,7 @@ public:
 protected:
 #ifndef ENABLE_SDL
   virtual bool on_create();
+  virtual bool on_destroy();
 
   virtual bool on_resize(unsigned width, unsigned height);
 #endif /* !ENABLE_SDL */

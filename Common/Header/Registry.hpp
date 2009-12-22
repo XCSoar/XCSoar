@@ -224,7 +224,11 @@ bool GetFromRegistry(const TCHAR *szRegValue, double &pPos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal);	// JG
 HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal);	// JG
+
+#ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
 HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal);	// JG
+#endif
+
 BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
 HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
 

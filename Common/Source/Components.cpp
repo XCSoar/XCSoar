@@ -304,7 +304,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   if (!main_window.defined()) {
     return false;
   }
-  main_window.install_timer();
 
   // Initialize DeviceBlackboard
   device_blackboard.Initialise();

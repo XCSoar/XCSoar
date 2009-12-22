@@ -335,6 +335,12 @@ Window::on_command(unsigned id, unsigned code)
 }
 
 bool
+Window::on_cancel_mode()
+{
+  return false;
+}
+
+bool
 Window::on_setfocus()
 {
 #ifdef ENABLE_SDL
@@ -490,6 +496,11 @@ Window::on_message(HWND _hWnd, UINT message,
       ResetDisplayTimeOut();
       return 0;
     }
+    break;
+
+  case WM_CANCELMODE:
+    if (on_cancel_mode())
+      return 0;
     break;
 
   case WM_SETFOCUS:

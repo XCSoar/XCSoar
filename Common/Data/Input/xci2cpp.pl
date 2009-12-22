@@ -67,7 +67,7 @@ while (<>) {
 					}
 					if (length($data) == 1) {
 						$data = uc($data);
-						$data = qq{'$data'};
+						$data = qq{(int)'$data'};
 					} else {
 						$data = "VK_$data";
 					}

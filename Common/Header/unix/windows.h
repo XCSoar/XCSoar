@@ -60,10 +60,6 @@ enum {
   MB_ICONERROR = 0,
 };
 
-int MessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType);
-
-
-
 static inline DWORD
 GetTickCount(void)
 {

@@ -48,8 +48,6 @@ Copyright_License {
 
 #include <assert.h>
 
-extern void dlgVegaDemoShowModal(void);
-
 static bool changed = false;
 static int page=0;
 static WndForm *wf=NULL;

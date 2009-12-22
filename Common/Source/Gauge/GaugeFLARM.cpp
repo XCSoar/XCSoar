@@ -38,37 +38,21 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeFLARM.hpp"
-#include "XCSoar.h"
-#include "Protection.hpp"
-#include "Math/Constants.h"
 #include "Math/FastMath.h"
 #include "Math/FastRotation.hpp"
 #include "Math/Screen.hpp"
-#include "Compatibility/string.h"
-#include "InfoBoxLayout.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/BitmapCanvas.hpp"
-#include "Screen/ContainerWindow.hpp"
-#include "options.h" /* for IBLSCALE() */
 #include "NMEA/Info.h"
-#include "SettingsUser.hpp"
-#include "Appearance.hpp"
 #include "Units.hpp"
+#include "resource.h"
 
-#include <stdlib.h>
-
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::min;
 using std::max;
-#endif
-
-// TODO TB: use these?!
-static Color colTextGray;
-static Color colText;
-static Color colTextBackgnd;
 
 #define FLARMMAXRANGE 2000
 
@@ -90,16 +74,15 @@ void GaugeFLARM::RenderBg(Canvas &canvas) {
   BitmapCanvas hdcTemp(canvas, hRoseBitMap);
 
   // If it doesn't fit, make it fit
-  if (hRoseBitMapSize.cx != IBLSCALE(InfoBoxLayout::ControlWidth * 2) ||
-      hRoseBitMapSize.cy != IBLSCALE(InfoBoxLayout::ControlHeight * 2 - 1)) {
+  if ((unsigned)hRoseBitMapSize.cx != canvas.get_width() ||
+      (unsigned)hRoseBitMapSize.cy != canvas.get_height()) {
     canvas.stretch(0, 0,
-                   InfoBoxLayout::ControlWidth * 2,
-                   InfoBoxLayout::ControlHeight * 2 - 1,
+                   canvas.get_width(),
+                   canvas.get_height(),
                    hdcTemp,
                    0, 0, hRoseBitMapSize.cx, hRoseBitMapSize.cy);
   } else {
-    canvas.copy(0, 0, InfoBoxLayout::ControlWidth * 2,
-                InfoBoxLayout::ControlHeight * 2 - 1,
+    canvas.copy(0, 0, canvas.get_width(), canvas.get_height(),
                 hdcTemp, 0, 0);
   }
 }
@@ -115,8 +98,8 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
   // Set font and colors
   canvas.select(TitleWindowFont);
-  canvas.set_text_color(Color(0x0,0x0,0x0));
-  canvas.set_background_color(Color(0xff,0xff,0xff));
+  canvas.set_text_color(Color::BLACK);
+  canvas.set_background_color(Color::WHITE);
 
   // Cycle through FLARM targets
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
@@ -265,22 +248,14 @@ void GaugeFLARM::Render(const NMEA_INFO &gps_info)
  * Constructor of the GaugeFLARM class
  * @param parent Parent window
  */
-GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
+GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
+                       int left, int top, unsigned width, unsigned height)
   :Visible(false), ForceVisible(false), Suppress(false), Traffic(false)
 {
   // start of new code for displaying FLARM window
 
-  RECT rc = parent.get_client_rect();
-
-  set(parent,
-      (int)(rc.right - InfoBoxLayout::ControlWidth * 2)+1,
-      (int)(rc.bottom - InfoBoxLayout::ControlHeight * 2)+1,
-      (int)(InfoBoxLayout::ControlWidth * 2)-1,
-      (int)(InfoBoxLayout::ControlHeight * 2)-1,
+  set(parent, left, top, width, height,
       false, false, false);
-  insert_after(HWND_TOP, false);
-
-  rc = get_client_rect();
 
   center.x = get_hmiddle();
   center.y = get_vmiddle();
@@ -291,23 +266,6 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent)
 
   // Save the size of the background bitmap
   hRoseBitMapSize = hRoseBitMap.get_size();
-
-  // Define colors
-  if (Appearance.InverseInfoBox){
-    colText = Color(0xff, 0xff, 0xff);
-    colTextBackgnd = Color(0x00, 0x00, 0x00);
-    colTextGray = Color(0xa0, 0xa0, 0xa0);
-  } else {
-    colText = Color(0x00, 0x00, 0x00);
-    colTextBackgnd = Color(0xff, 0xff, 0xff);
-    colTextGray = Color(~0xa0, ~0xa0, ~0xa0);
-  }
-
-  // Set colors
-  get_canvas().set_text_color(colText);
-  get_canvas().set_background_color(colTextBackgnd);
-
-  install_wndproc();
 
   // Render Background for the first time
   RenderBg(get_canvas());

@@ -109,7 +109,7 @@ int dlgAirspacePatternsShowModal(void){
 
   int result = wf->ShowModal();
   result = result == mrOK
-    ? wAirspacePatternsList->GetCursorIndex()
+    ? (int)wAirspacePatternsList->GetCursorIndex()
     : -1;
 
   // now retrieve back the properties...

@@ -68,7 +68,7 @@ void
 MainWindow::set(LPCTSTR text,
                 int left, int top, unsigned width, unsigned height)
 {
-  TopWindow::set(_T("XCSoarMain"), text, left, top, width, height);
+  SingleWindow::set(_T("XCSoarMain"), text, left, top, width, height);
 
   RECT rc;
 #ifdef WINDOWSPC
@@ -103,8 +103,16 @@ MainWindow::set(LPCTSTR text,
   map.set_font(MapWindowFont);
   map.SetMapRect(rcsmall);
 
-  vario = new GaugeVario(*this, map.GetMapRect());
-  flarm = new GaugeFLARM(*this);
+  vario = new GaugeVario(*this,
+                         rc.right - InfoBoxLayout::ControlWidth, 0,
+                         InfoBoxLayout::ControlWidth,
+                         InfoBoxLayout::ControlHeight * 3);
+
+  flarm = new GaugeFLARM(*this,
+                         rc.right - InfoBoxLayout::ControlWidth * 2 + 1,
+                         rc.bottom - InfoBoxLayout::ControlHeight * 2 + 1,
+                         InfoBoxLayout::ControlWidth * 2 - 1,
+                         InfoBoxLayout::ControlHeight * 2 - 1);
 
   StartupStore(TEXT("Initialise message system\n"));
   popup.set(rc);
@@ -124,13 +132,13 @@ MainWindow::on_color(Window &window, Canvas &canvas)
     return &MapGfx.buttonBrush;
   }
 
-  return TopWindow::on_color(window, canvas);
+  return SingleWindow::on_color(window, canvas);
 }
 
 bool
 MainWindow::on_activate()
 {
-  TopWindow::on_activate();
+  SingleWindow::on_activate();
 
   full_screen();
 
@@ -141,7 +149,7 @@ bool
 MainWindow::on_timer(timer_t id)
 {
   if (id != timer_id)
-    return TopWindow::on_timer(id);
+    return SingleWindow::on_timer(id);
 
   if (globalRunningEvent.test()) {
     XCSoarInterface::AfterStartup();
@@ -152,26 +160,25 @@ MainWindow::on_timer(timer_t id)
 
 bool MainWindow::on_create(void)
 {
-  TopWindow::on_create();
+  SingleWindow::on_create();
 
   timer_id = set_timer(1000, 500); // 2 times per second
 
   return true;
 }
 
-void MainWindow::install_timer(void) {
-}
-
 bool MainWindow::on_destroy(void) {
   kill_timer(timer_id);
 
-  TopWindow::on_destroy();
+  SingleWindow::on_destroy();
 
-  post_quit();
   return true;
 }
 
 bool MainWindow::on_close() {
+  if (SingleWindow::on_close())
+    return true;
+
   if (XCSoarInterface::CheckShutdown()) {
     XCSoarInterface::Shutdown();
   }

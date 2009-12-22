@@ -250,7 +250,7 @@ ifeq ($(HAVE_MSVCRT),y)
   TARGET_CPPFLAGS += -DUNICODE -D_UNICODE
 endif
 
-ifeq ($(HAVE_POSIX),n)
+ifeq ($(HAVE_POSIX)$(CONFIG_PC),nn)
   TARGET_INCLUDES += -I$(HDR)/mingw32compat
 endif
 

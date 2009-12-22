@@ -95,7 +95,8 @@ private:
   const UnitSymbol *unit_symbol;
 
  public:
-  GaugeVario(ContainerWindow &parent, const RECT rc);
+  GaugeVario(ContainerWindow &parent,
+             int left, int top, unsigned width, unsigned height);
   ~GaugeVario();
 
   void Render();

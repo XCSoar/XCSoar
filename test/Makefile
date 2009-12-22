@@ -54,6 +54,7 @@ RUN_WAY_POINT_PARSER_OBJS = \
 	$(SRC)/compat-$(TARGET).a \
 	$(SRC)/LocalPath.o \
 	$(SRC)/StringUtil.o \
+	$(SRC)/Compatibility/fmode.o \
 	src/RunWayPointParser.o
 RunWayPointParser-$(TARGET)$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(TARGET).o) $(topdir)/src/task-$(TARGET).a
 	@$(NQ)echo "  LINK    $@"
@@ -64,6 +65,7 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Screen/PaintWindow.o \
 	$(SRC)/Screen/ContainerWindow.o \
 	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/SingleWindow.o \
 	$(SRC)/Screen/ButtonWindow.o \
 	$(SRC)/Screen/Canvas.o \
 	$(SRC)/Screen/Color.o \
@@ -79,6 +81,7 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Screen/shapelib/mapsearch.o \
 	$(SRC)/Thread/Debug.o \
 	$(SRC)/Thread/Mutex.o \
+	$(SRC)/Compatibility/fmode.o \
 	src/RunCanvas.o \
 	$(SRC)/compat-$(TARGET).a
 ifneq ($(ENABLE_SDL),y)
@@ -150,6 +153,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/Screen/STScreenBuffer.o \
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/SingleWindow.o \
 	$(SRC)/Screen/UnitSymbol.o \
 	$(SRC)/Screen/Window.o \
 	$(SRC)/Screen/shapelib/mapbits.o \
@@ -176,6 +180,7 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/UtilsText.o \
 	$(SRC)/UtilsFont.o \
 	$(SRC)/WayPointParser.o \
+	$(SRC)/Compatibility/fmode.o \
 	$(SRC)/jasper-$(TARGET).a \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a \
@@ -213,6 +218,7 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/Screen/TextWindow.o \
 	$(SRC)/Screen/EditWindow.o \
 	$(SRC)/Screen/TopWindow.o \
+	$(SRC)/Screen/SingleWindow.o \
 	$(SRC)/Screen/Util.o \
 	$(SRC)/Screen/Layout.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
@@ -240,6 +246,7 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/zzip-$(TARGET).a \
 	src/RunDialog.o \
 	$(SRC)/Compatibility/string.o \
+	$(SRC)/Compatibility/fmode.o \
 	$(SRC)/compat-$(TARGET).a
 ifeq ($(ENABLE_SDL),y)
 RUN_DIALOG_OBJS += $(SRC)/Screen/Timer.o

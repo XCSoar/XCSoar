@@ -58,12 +58,6 @@ ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
   font.set("../Common/Data/Fonts/DejaVuSansCondensed2.ttf", 12);
 }
 
-void
-ButtonWindow::reset()
-{
-  PaintWindow::reset();
-}
-
 bool
 ButtonWindow::on_mouse_down(int x, int y)
 {

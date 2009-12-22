@@ -206,7 +206,7 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
       ButtonVisible[index] = false;
     } else {
       hWndButtonWindow[index].set_text(gettext(s));
-      hWndButtonWindow[index].insert_after(HWND_TOP, true);
+      hWndButtonWindow[index].show_on_top();
 
       ButtonVisible[index] = true;
     }

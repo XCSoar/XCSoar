@@ -55,7 +55,6 @@ GaugeCDI::GaugeCDI(ContainerWindow &parent)
       (int)(InfoBoxLayout::ControlHeight + 1),
       (int)(InfoBoxLayout::ControlWidth * 2.8),
       (int)(InfoBoxLayout::TitleHeight * 1.4));
-  insert_after(HWND_TOP);
   set_font(CDIWindowFont);
 
   hide();

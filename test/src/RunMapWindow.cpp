@@ -36,7 +36,7 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "Screen/TopWindow.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/BufferCanvas.hpp"
@@ -245,7 +245,7 @@ Logger::CheckDeclaration(void)
 
 void ButtonLabel::SetFont(const Font &Font) {}
 
-class TestWindow : public TopWindow {
+class TestWindow : public SingleWindow {
 public:
   MapWindow map;
 
@@ -280,8 +280,8 @@ public:
   }
 
   void set(int left, int top, unsigned width, unsigned height) {
-    TopWindow::set(_T("RunMapWindow"), _T("RunMapWindow"),
-                   left, top, width, height);
+    SingleWindow::set(_T("RunMapWindow"), _T("RunMapWindow"),
+                      left, top, width, height);
 
     RECT rc = get_client_rect();
     map.set(*this, rc, rc);
@@ -289,13 +289,6 @@ public:
     map.set_airspaces(&airspace_database);
     map.set_topology(topology);
     map.set_terrain(&terrain);
-  }
-
-protected:
-  virtual bool on_destroy(void) {
-    TopWindow::on_destroy();
-    post_quit();
-    return true;
   }
 };
 

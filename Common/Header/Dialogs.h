@@ -42,7 +42,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct GEOPOINT;
-class ContainerWindow;
+class SingleWindow;
 class WndProperty;
 class Waypoint;
 class Waypoints;
@@ -67,7 +67,7 @@ const Waypoint* dlgWayPointSelect(const GEOPOINT &location,
 
 void dlgBasicSettingsShowModal();
 void dlgBrightnessShowModal();
-void dlgHelpShowModal(ContainerWindow &parent, const TCHAR* Caption,
+void dlgHelpShowModal(SingleWindow &parent, const TCHAR* Caption,
     const TCHAR* HelpText);
 
 void dlgChecklistShowModal();
@@ -102,7 +102,7 @@ void dlgFlarmTrafficShowModal();
 bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0);
 void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
 
-int dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty);
+int dlgComboPicker(SingleWindow &parent, WndProperty *theProperty);
 
 void PopupAnalysis();
 

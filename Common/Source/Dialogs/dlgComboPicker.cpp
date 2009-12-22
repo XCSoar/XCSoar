@@ -106,7 +106,7 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 int
-dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
+dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
 {
   static bool bInComboPicker=false;
   bool bInitialPage=true;
@@ -165,7 +165,7 @@ dlgComboPicker(ContainerWindow &parent, WndProperty *theProperty)
 
 
     int idx = wf->ShowModal() == mrOK
-      ? wComboPopupListFrame->GetCursorIndex()
+      ? (int)wComboPopupListFrame->GetCursorIndex()
       : -1;
 
     bOpenCombo=false;  //tell  combo to exit loop after close

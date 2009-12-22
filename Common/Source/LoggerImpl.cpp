@@ -68,7 +68,7 @@ LoggerImpl::isLoggerActive() const
   return LoggerActive;
 }
 
-TCHAR
+static TCHAR
 NumToIGCChar(int n)
 {
   if (n < 10) {
@@ -88,7 +88,7 @@ LoggerImpl::isTaskDeclared() const
   return DeclaredToDevice;
 }
 
-int
+static int
 IGCCharToNum(TCHAR c)
 {
   if ((c >= _T('1')) && (c <= _T('9'))) {
@@ -282,8 +282,7 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
   }
 }
 
-
-bool
+static bool
 IsAlphaNum (TCHAR c)
 {
   if (((c >= _T('A')) && (c <= _T('Z')))
@@ -617,7 +616,7 @@ LoggerImpl::CheckDeclaration(void)
   }
 }
 
-FILETIME
+static FILETIME
 LogFileDate(const NMEA_INFO &gps_info, TCHAR* filename)
 {
   FILETIME ft;
@@ -690,7 +689,7 @@ LogFileDate(const NMEA_INFO &gps_info, TCHAR* filename)
   return ft;
 }
 
-bool
+static bool
 LogFileIsOlder(const NMEA_INFO &gps_info,
     TCHAR *oldestname, TCHAR *thisname)
 {
@@ -705,7 +704,7 @@ LogFileIsOlder(const NMEA_INFO &gps_info,
  * @param pathname Path where to search for the IGC files
  * @return True if a file was found and deleted, False otherwise
  */
-bool
+static bool
 DeleteOldestIGCFile(const NMEA_INFO &gps_info, TCHAR *pathname)
 {
   HANDLE hFind; // file handle
@@ -759,13 +758,13 @@ DeleteOldestIGCFile(const NMEA_INFO &gps_info, TCHAR *pathname)
 // data (85 kb approx) and a new log file
 
 #ifdef DEBUG_IGCFILENAME
-TCHAR testtext1[] = TEXT("2007-11-05-XXX-AAA-01.IGC");
-TCHAR testtext2[] = TEXT("2007-11-05-XXX-AAA-02.IGC");
-TCHAR testtext3[] = TEXT("3BOA1VX2.IGC");
-TCHAR testtext4[] = TEXT("5BDX7B31.IGC");
-TCHAR testtext5[] = TEXT("3BOA1VX2.IGC");
-TCHAR testtext6[] = TEXT("9BDX7B31.IGC");
-TCHAR testtext7[] = TEXT("2008-01-05-XXX-AAA-01.IGC");
+static const TCHAR testtext1[] = TEXT("2007-11-05-XXX-AAA-01.IGC");
+static const TCHAR testtext2[] = TEXT("2007-11-05-XXX-AAA-02.IGC");
+static const TCHAR testtext3[] = TEXT("3BOA1VX2.IGC");
+static const TCHAR testtext4[] = TEXT("5BDX7B31.IGC");
+static const TCHAR testtext5[] = TEXT("3BOA1VX2.IGC");
+static const TCHAR testtext6[] = TEXT("9BDX7B31.IGC");
+static const TCHAR testtext7[] = TEXT("2008-01-05-XXX-AAA-01.IGC");
 #endif
 
 /**
