@@ -48,19 +48,23 @@ void sin_cos(const double&theta, double*s, double*c);
 
 class fixed
 {
-public:
 #ifdef HAVE_BOOST
-  typedef boost::int64_t __int64;
-  typedef boost::uint64_t __uint64;
+  typedef boost::int64_t int64_t;
+  typedef boost::uint64_t uint64_t;
 #else
-  typedef unsigned __int64 __uint64;
+  typedef __int64 int64_t;
+  typedef unsigned __int64 uint64_t;
 #endif
+  typedef uint64_t uvalue_t;
+
+public:
+  typedef int64_t value_t;
 
   static const unsigned resolution_shift = 28;
-  static const __int64 resolution = 1 << resolution_shift;
+  static const value_t resolution = 1 << resolution_shift;
 
 private:
-    __int64 m_nVal;
+    value_t m_nVal;
 
 public:
 
@@ -71,44 +75,44 @@ public:
         m_nVal(0)
     {}
     
-    fixed(internal, __int64 nVal):
+    fixed(internal, value_t nVal):
         m_nVal(nVal)
     {}
-//    fixed(__int64 nVal):
+//    fixed(value_t nVal):
 //        m_nVal(nVal<<resolution_shift)
 //    {}
     
     fixed(long nVal):
-        m_nVal((__int64)(nVal)<<resolution_shift)
+        m_nVal((value_t)(nVal)<<resolution_shift)
     {}
     
     fixed(int nVal):
-        m_nVal((__int64)(nVal)<<resolution_shift)
+        m_nVal((value_t)(nVal)<<resolution_shift)
     {}
     
     fixed(short nVal):
-        m_nVal((__int64)(nVal)<<resolution_shift)
+        m_nVal((value_t)(nVal)<<resolution_shift)
     {}
 
 /*    
-    fixed(unsigned __int64 nVal):
+    fixed(unsigned value_t nVal):
         m_nVal(nVal<<resolution_shift)
     {}
 */  
     fixed(unsigned long nVal):
-        m_nVal((__int64)(nVal)<<resolution_shift)
+        m_nVal((value_t)(nVal)<<resolution_shift)
     {}
     fixed(unsigned int nVal):
-        m_nVal((__int64)(nVal)<<resolution_shift)
+        m_nVal((value_t)(nVal)<<resolution_shift)
     {}
     fixed(unsigned short nVal):
-        m_nVal((__int64)(nVal)<<resolution_shift)
+        m_nVal((value_t)(nVal)<<resolution_shift)
     {}
     fixed(double nVal):
-        m_nVal(static_cast<__int64>(nVal*static_cast<double>(resolution)))
+        m_nVal(static_cast<value_t>(nVal*static_cast<double>(resolution)))
     {}
     fixed(float nVal):
-        m_nVal(static_cast<__int64>(nVal*static_cast<float>(resolution)))
+        m_nVal(static_cast<value_t>(nVal*static_cast<float>(resolution)))
     {}
 
     template<typename T>
@@ -180,7 +184,7 @@ public:
     {
         return (long)(m_nVal/resolution);
     }
-    __int64 as_int64() const
+    int64_t as_int64() const
     {
         return m_nVal/resolution;
     }
@@ -195,9 +199,9 @@ public:
         return (unsigned long)(m_nVal/resolution);
     }
 /*
-    unsigned __int64 as_unsigned_int64() const
+    uint64_t as_unsigned_int64() const
     {
-        return (unsigned __int64)m_nVal/resolution;
+        return (uint64_t)m_nVal/resolution;
     }
 */
     unsigned int as_unsigned_int() const
@@ -258,7 +262,7 @@ public:
         return (*this)*=fixed(val);
     }
 /*
-    fixed& operator*=(__int64 val)
+    fixed& operator*=(value_t val)
     {
         m_nVal*=val;
         return *this;
@@ -285,7 +289,7 @@ public:
         return *this;
     }
 /*
-    fixed& operator*=(unsigned __int64 val)
+    fixed& operator*=(unsigned value_t val)
     {
         m_nVal*=val;
         return *this;
@@ -320,7 +324,7 @@ public:
         return (*this)/=fixed(val);
     }
 /*
-    fixed& operator/=(__int64 val)
+    fixed& operator/=(value_t val)
     {
         m_nVal/=val;
         return *this;
@@ -347,7 +351,7 @@ public:
         return *this;
     }
 /*
-    fixed& operator/=(unsigned __int64 val)
+    fixed& operator/=(unsigned value_t val)
     {
         m_nVal/=val;
         return *this;
@@ -1635,7 +1639,7 @@ inline fixed fixed::ceil() const
 inline fixed fixed::floor() const
 {
     fixed res(*this);
-    __int64 const remainder=m_nVal%resolution;
+    value_t const remainder=m_nVal%resolution;
     if(remainder)
     {
         res.m_nVal-=remainder;
@@ -1681,7 +1685,7 @@ inline fixed fixed::abs() const
 
 inline fixed fixed::modf(fixed*integral_part) const
 {
-    __int64 fractional_part=m_nVal%resolution;
+    value_t fractional_part=m_nVal%resolution;
     if(m_nVal<0 && fractional_part>0)
     {
         fractional_part-=resolution;
