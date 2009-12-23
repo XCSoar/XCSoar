@@ -153,7 +153,7 @@ public:
  *
  * @return True if target was moved
  */
-  bool set_range(const double p, const bool force_if_current);
+  bool set_range(const fixed p, const bool force_if_current);
 
 /** 
  * Capability of this TaskPoint to have adjustable range (true for AAT unless it

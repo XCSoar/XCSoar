@@ -135,7 +135,7 @@ AATPoint::check_target_outside(const AIRCRAFT_STATE& state)
 
 
 bool
-AATPoint::set_range(const double p, const bool force_if_current)
+AATPoint::set_range(const fixed p, const bool force_if_current)
 {
   if (m_target_locked) {
     return false;
