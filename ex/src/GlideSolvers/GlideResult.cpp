@@ -129,7 +129,7 @@ GlideResult::calc_vspeed(const fixed inv_mc)
     TimeVirtual = fixed_zero;
     return fixed_bignum;
   }
-  if (positive(Vector.Distance)) {
+  if (Vector.Distance>= fixed_one) {
     if (positive(inv_mc)) {
       // equivalent time to gain the height that was used
       TimeVirtual = HeightGlide*inv_mc;

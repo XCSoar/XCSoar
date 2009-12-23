@@ -224,6 +224,8 @@ bool test_abort(int n_wind)
 
   task_manager.set_glide_polar(glide_polar);
 
+  test_task(task_manager, waypoints, 2);
+
   task_manager.abort();
   task_report(task_manager, "abort");
 
