@@ -100,7 +100,7 @@ GlideComputerTask::StartTask(const bool do_advance, const bool do_announce)
 extern TaskBehaviour task_behaviour;
 
 void
-GlideComputerTask::ProcessBasicTask(const double mc, const double ce)
+GlideComputerTask::ProcessBasicTask()
 {
   if (Basic().Time != LastBasic().Time) {
     terrain.Lock();

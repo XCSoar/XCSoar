@@ -44,7 +44,6 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "AirfieldDetails.h"
 #include "TopologyStore.h"
-#include "MacCready.h"
 #include "Dialogs.h"
 #include "Device/device.h"
 #include "Message.h"
@@ -59,6 +58,7 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "AirspaceGlue.hpp"
 #include "WayPointParser.h"
+#include "Task/TaskManager.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -158,8 +158,10 @@ void SettingsLeave() {
   }
 
   if (POLARFILECHANGED) {
-    LoadPolarById(POLARID, polar);
-    oldGlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
+    GlidePolar gp = task_manager.get_glide_polar();
+    if (LoadPolarById(XCSoarInterface::SettingsComputer(), gp)) {
+      task_manager.set_glide_polar(gp);
+    }
   }
 
   if (AIRFIELDFILECHANGED

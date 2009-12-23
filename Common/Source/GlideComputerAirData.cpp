@@ -38,7 +38,6 @@ Copyright_License {
 */
 
 #include "GlideComputerAirData.hpp"
-#include "MacCready.h"
 #include "WindZigZag.h"
 #include "WindAnalyser.h"
 #include "GlideComputer.hpp"
@@ -63,7 +62,9 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "GPSClock.hpp"
 
-#define TAKEOFFSPEEDTHRESHOLD (0.5*oldGlidePolar::Vminsink)
+#include "GlideSolvers/GlidePolar.hpp"
+
+#define TAKEOFFSPEEDTHRESHOLD (0.5*glide_polar.get_Vmin())
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -72,7 +73,7 @@ using std::max;
 #endif
 
 void
-DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
+DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated, double speed_threshold);
 
 #define MinTurnRate  4
 #define CruiseClimbSwitch 15
@@ -80,13 +81,15 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 #define THERMAL_TIME_MIN 45.0
 
 
-GlideComputerAirData::GlideComputerAirData(AirspaceWarningManager& as_manager):
+GlideComputerAirData::GlideComputerAirData(AirspaceWarningManager& as_manager,
+  const GlidePolar& _glide_polar):
   m_airspace_warning(as_manager),
   airspace_clock(2.0), // scan airspace every 2 seconds
   ballast_clock(5),  // only update every 5 seconds to stop flooding
 		    // the devices
   diff_gps_vario(0),
-  diff_gps_te_vario(0)
+  diff_gps_te_vario(0),
+  glide_polar(_glide_polar)
 {
   InitLDRotary(SettingsComputer(), &rotaryLD);
 
@@ -97,7 +100,6 @@ GlideComputerAirData::GlideComputerAirData(AirspaceWarningManager& as_manager):
 void
 GlideComputerAirData::ResetFlight(const bool full)
 {
-  oldGlidePolar::SetCruiseEfficiency(1.0);
   m_airspace_warning.reset(Basic());
 
   diff_gps_vario.reset(0,0);
@@ -477,7 +479,7 @@ GlideComputerAirData::EnergyHeight()
   V_tas = Basic().TrueAirspeed;
 
   // Calculate energy height
-  double V_bestld_tas = oldGlidePolar::Vbestld * ias_to_tas;
+  double V_bestld_tas = glide_polar.get_VbestLD() * ias_to_tas;
   double V_mc_tas = Calculated().VMacCready * ias_to_tas;
   V_tas = max(V_tas, V_bestld_tas);
 
@@ -556,10 +558,8 @@ GlideComputerAirData::Vario()
 }
 
 void
-GlideComputerAirData::SpeedToFly(const double mc_setting,
-                                 const double cruise_efficiency)
+GlideComputerAirData::SpeedToFly()
 {
-
   const double n = fabs(Basic().Gload);
 
   // calculate optimum cruise speed in current track direction
@@ -594,15 +594,8 @@ GlideComputerAirData::NettoVario()
   bool replay_disabled = !Basic().Replay;
 
   double glider_sink_rate;
-  if (Basic().AirspeedAvailable && replay_disabled) {
-    glider_sink_rate= oldGlidePolar::SinkRate(max((double)oldGlidePolar::Vminsink,
-					       Basic().IndicatedAirspeed), n);
-  } else {
-    // assume zero wind (Speed=Airspeed, very bad I know)
-    // JMW TODO accuracy: adjust for estimated airspeed
-    glider_sink_rate= oldGlidePolar::SinkRate(max((double)oldGlidePolar::Vminsink,
-					       Basic().Speed), n);
-  }
+  fixed speed = (Basic().AirspeedAvailable && replay_disabled)? Basic().IndicatedAirspeed: Basic().TrueAirspeed;
+  glider_sink_rate= -glide_polar.SinkRate(max(glide_polar.get_Vmin(), speed), n);
   SetCalculated().GliderSinkRate = glider_sink_rate;
 
   if (Basic().NettoVarioAvailable && replay_disabled) {
@@ -619,11 +612,8 @@ GlideComputerAirData::NettoVario()
 bool
 GlideComputerAirData::ProcessVario()
 {
-  const double mc = oldGlidePolar::GetMacCready();
-  const double ce = oldGlidePolar::GetCruiseEfficiency();
-
   NettoVario();
-  SpeedToFly(mc, ce);
+  SpeedToFly();
 
   // has GPS time advanced?
   return time_advanced();
@@ -729,7 +719,7 @@ GlideComputerAirData::TakeoffLanding()
 
     if (Calculated().TimeOnGround > 10) {
       SetCalculated().OnGround = true;
-      DoAutoQNH(&Basic(), &Calculated());
+      DoAutoQNH(&Basic(), &Calculated(), TAKEOFFSPEEDTHRESHOLD);
     }
   } else {
     // detect landing
@@ -829,22 +819,20 @@ GlideComputerAirData::BallastDump()
     return;
   }
 
-  double BALLAST = oldGlidePolar::GetBallast();
+  double BALLAST = glide_polar.get_ballast();
   double BALLAST_last = BALLAST;
   double percent_per_second =
       1.0 / max(10.0, (double)SettingsComputer().BallastSecsToEmpty);
 
   BALLAST -= dt * percent_per_second;
   if (BALLAST < 0) {
-    // JMW illegal	BallastTimerActive = false;
+    /// TODO SettingsComputer().BallastTimerActive = false;
     BALLAST = 0.0;
   }
+#ifdef OLD_TASK 
+  // TODO, set back in task
   oldGlidePolar::SetBallast(BALLAST);
-
-  if (fabs(BALLAST - BALLAST_last) > 0.05) {
-    // JMW update on 5 percent!
-    oldGlidePolar::UpdatePolar(true,SettingsComputer());
-  }
+#endif
 }
 
 void
@@ -1226,7 +1214,7 @@ GlideComputerAirData::ThermalBand()
 }
 
 void
-DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated, double takeoffspeedthreshold)
 {
   static int done_autoqnh = 0;
 
@@ -1250,7 +1238,7 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   if (!Calculated->TerrainValid)
     return;
 
-  if (Basic->Speed < TAKEOFFSPEEDTHRESHOLD) {
+  if (Basic->Speed < takeoffspeedthreshold) {
     done_autoqnh++;
   } else {
     done_autoqnh= 0; // restart...
@@ -1258,7 +1246,6 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 
   if (done_autoqnh == 10) {
     double fixaltitude = Calculated->TerrainAlt;
-
 #ifdef OLD_TASK
     Basic->pressure.FindQNH(Basic->BaroAltitude, fixaltitude);
     AllDevicesPutQNH(Basic->pressure);

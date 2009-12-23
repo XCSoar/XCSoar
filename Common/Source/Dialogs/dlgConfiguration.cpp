@@ -50,7 +50,6 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "Logger.h"
-#include "MacCready.h"
 #include "Device/device.h"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
@@ -1652,18 +1651,18 @@ static void setVariables(void) {
   LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
                    XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
   LoadFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
-                   oldGlidePolar::AbortSafetyUseCurrent);
+                   XCSoarInterface::SettingsComputer().AbortSafetyUseCurrent);
   LoadFormProperty(*wf, _T("prpDisableAutoLogger"),
                    !XCSoarInterface::SettingsComputer().DisableAutoLogger);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
-    wp->GetDataField()->Set(oldGlidePolar::SafetyMacCready*LIFTMODIFY);
+    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().SafetyMacCready*LIFTMODIFY);
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(*wf, _T("prpRiskGamma"), oldGlidePolar::RiskGamma);
+  LoadFormProperty(*wf, _T("prpRiskGamma"), XCSoarInterface::SettingsComputer().RiskGamma);
   LoadFormProperty(*wf, _T("prpAnimation"), XCSoarInterface::EnableAnimation);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTrail"));
@@ -1720,7 +1719,7 @@ static void setVariables(void) {
       i++;
     }
     dfe->Sort();
-    dfe->Set(POLARID);
+    dfe->Set(XCSoarInterface::SettingsComputer().POLARID);
     wp->RefreshDisplay();
   }
 
@@ -2408,7 +2407,7 @@ void dlgConfigurationShowModal(void){
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAbortSafetyUseCurrent"),
 				      szRegistryAbortSafetyUseCurrent,
-				      oldGlidePolar::AbortSafetyUseCurrent);
+				      XCSoarInterface::SetSettingsComputer().AbortSafetyUseCurrent);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpDisableAutoLogger"));
   if (wp) { // GUI label is "Enable Auto Logger"
@@ -2426,10 +2425,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
     val = wp->GetDataField()->GetAsFloat()/LIFTMODIFY;
-    if (oldGlidePolar::SafetyMacCready != val) {
-      oldGlidePolar::SafetyMacCready = val;
+    if (XCSoarInterface::SettingsComputer().SafetyMacCready != val) {
+      XCSoarInterface::SetSettingsComputer().SafetyMacCready = val;
       SetToRegistry(szRegistrySafetyMacCready,
-		    iround(oldGlidePolar::SafetyMacCready*10));
+		    iround(XCSoarInterface::SettingsComputer().SafetyMacCready*10));
       changed = true;
     }
   }
@@ -2437,10 +2436,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpRiskGamma"));
   if (wp) {
     val = wp->GetDataField()->GetAsFloat();
-    if (oldGlidePolar::RiskGamma != val) {
-      oldGlidePolar::RiskGamma = val;
+    if (XCSoarInterface::SettingsComputer().RiskGamma != val) {
+      XCSoarInterface::SetSettingsComputer().RiskGamma = val;
       SetToRegistry(szRegistryRiskGamma,
-		    iround(oldGlidePolar::RiskGamma*10));
+		    iround(XCSoarInterface::SettingsComputer().RiskGamma*10));
       changed = true;
     }
   }
@@ -2465,10 +2464,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpPolarType"));
   if (wp) {
-    if (POLARID != (unsigned)wp->GetDataField()->GetAsInteger()) {
-      POLARID = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryPolarID, (int &)POLARID);
-      oldGlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
+    if (XCSoarInterface::SettingsComputer().POLARID != (unsigned)wp->GetDataField()->GetAsInteger()) {
+      XCSoarInterface::SetSettingsComputer().POLARID = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryPolarID, (int &)XCSoarInterface::SettingsComputer().POLARID);
       POLARFILECHANGED = true;
       changed = true;
     }
@@ -2760,7 +2758,6 @@ void dlgConfigurationShowModal(void){
     if (_tcscmp(temptext,szPolarFile)) {
       SetRegistryString(szRegistryPolarFile, temptext);
       POLARFILECHANGED = true;
-      oldGlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
       changed = true;
     }
   }
@@ -2918,7 +2915,6 @@ void dlgConfigurationShowModal(void){
     if (XCSoarInterface::SettingsComputer().SafetySpeed != ival) {
       XCSoarInterface::SetSettingsComputer().SafetySpeed = ival;
       SetToRegistry(szRegistrySafteySpeed,(DWORD)XCSoarInterface::SettingsComputer().SafetySpeed);
-      oldGlidePolar::UpdatePolar(false, XCSoarInterface::SettingsComputer());
       changed = true;
     }
   }

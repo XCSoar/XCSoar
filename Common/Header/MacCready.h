@@ -46,7 +46,6 @@ Copyright_License {
 struct SETTINGS_COMPUTER;
 class Polar;
 
-extern unsigned POLARID;
 extern Polar polar;
 
 class oldGlidePolar

@@ -67,8 +67,7 @@ protected:
   TaskManager &m_task;
 
   void Initialise() {}
-  void ProcessBasicTask(const double mc_setting,
-			const double cruise_efficiency);
+  void ProcessBasicTask();
   void ResetFlight(const bool full=true);
   virtual void StartTask(const bool do_advance,
 			 const bool do_announce);

@@ -311,7 +311,8 @@ Profile::ReadRegistrySettings()
 		  SetSettingsComputer().SafetyAltitudeTerrain);
   GetFromRegistry(szRegistrySafteySpeed,
 		  SetSettingsComputer().SafetySpeed);
-  GetFromRegistry(szRegistryPolarID, POLARID);
+  GetFromRegistry(szRegistryPolarID, 
+                  SetSettingsComputer().POLARID);
 
   GetRegistryString(szRegistryRegKey, strRegKey, 65);
 

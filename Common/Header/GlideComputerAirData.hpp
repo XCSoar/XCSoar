@@ -48,6 +48,8 @@ Copyright_License {
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Util/DiffFilter.hpp"
 
+class GlidePolar;
+
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
@@ -55,7 +57,9 @@ Copyright_License {
 
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
-  GlideComputerAirData(AirspaceWarningManager& as_manager);
+  GlideComputerAirData(AirspaceWarningManager& as_manager,
+    const GlidePolar& glide_polar);
+
   ldrotary_s           rotaryLD;
   SunEphemeris sun;
   virtual void ProcessIdle();
@@ -96,8 +100,7 @@ private:
   void TerrainHeight();
   void EnergyHeight();
   void Vario();
-  void SpeedToFly(const double mc_setting,
-		  const double cruise_efficiency);
+  void SpeedToFly();
   void NettoVario();
   void TakeoffLanding();
   void AirspaceWarning();
@@ -115,6 +118,8 @@ private:
 
   DiffFilter diff_gps_vario;
   DiffFilter diff_gps_te_vario;
+
+  const GlidePolar& glide_polar;
 };
 
 #endif

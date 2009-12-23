@@ -205,7 +205,7 @@ static void Update(void){
                 gettext(_T("Glide Polar")),
                 task_manager.get_glide_polar().get_all_up_weight().as_int());
       wf->SetCaption(sTmp);
-      fs.CaptionPolar(sTmp);
+      fs.CaptionPolar(sTmp, task_manager.get_glide_polar());
       wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:

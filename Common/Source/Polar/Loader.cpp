@@ -44,29 +44,69 @@ Copyright_License {
 #include "Language.hpp"
 #include "Dialogs/Message.hpp"
 
+#include "GlideSolvers/GlidePolar.hpp"
+#include "Polar/Polar.hpp"
+
 static bool
-LoadPolarById2(unsigned id, Polar &polar)
+LoadPolarById2(unsigned id, Polar &a_polar)
 {
   if (id < POLARUSEWINPILOTFILE)
     // polar data from historical table
-    return LoadHistoricalPolar(id, polar);
+    return LoadHistoricalPolar(id, a_polar);
   else if (id == POLARUSEWINPILOTFILE)
     // polar data from winpilot file
-    return ReadWinPilotPolar(polar);
+    return ReadWinPilotPolar(a_polar);
   else
     // polar data from built-in table
-    return ReadWinPilotPolarInternal(id - POLARUSEWINPILOTFILE - 1, polar);
+    return ReadWinPilotPolarInternal(id - POLARUSEWINPILOTFILE - 1, a_polar);
 }
 
-bool
-LoadPolarById(unsigned id, Polar &polar)
+
+extern Polar polar; // for now, this is owned by oldGlidePolar
+
+
+void
+setGlidePolar(GlidePolar& gp)
+{
+  gp.empty_mass = polar.WEIGHTS[0]+polar.WEIGHTS[1];
+  gp.ballast_ratio = polar.WEIGHTS[2]/gp.empty_mass;
+  gp.wing_area = polar.WingArea;
+
+  gp.ideal_polar_a = -polar.POLAR[0]/sqrt(gp.empty_mass);
+  gp.ideal_polar_b = -polar.POLAR[1];
+  gp.ideal_polar_c = -polar.POLAR[2]*sqrt(gp.empty_mass);
+
+  printf("%g    - %g %g %g\n", 
+         gp.empty_mass.as_double(),
+         gp.ideal_polar_a.as_double(),
+         gp.ideal_polar_b.as_double(),
+         gp.ideal_polar_c.as_double());
+
+  gp.update();
+}
+
+
+static bool
+LoadPolarById_internal(const SETTINGS_POLAR &settings)
 {
   StartupStore(_T("Load polar\n"));
-  if (LoadPolarById2(id, polar))
+  if (LoadPolarById2(settings.POLARID, polar))
     return true;
 
   MessageBoxX(gettext(_T("Error loading Polar file!\r\nUse LS8 Polar.")),
               gettext(_T("Warning")),
               MB_OK|MB_ICONERROR);
   return LoadHistoricalPolar(2, polar);
+}
+
+
+bool
+LoadPolarById(const SETTINGS_POLAR &settings, GlidePolar& gp)
+{
+  if (LoadPolarById_internal(settings)) {
+    setGlidePolar(gp);
+    return true;
+  } else {
+    return false;
+  }
 }

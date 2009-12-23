@@ -60,7 +60,6 @@ Copyright_License {
 #include "UtilsFLARM.hpp"
 #include "SettingsUser.hpp"
 #include "Logger.h"
-#include "MacCready.h"
 #include "AirfieldDetails.h"
 #include "Screen/Fonts.hpp"
 #include "DeviceBlackboard.hpp"
@@ -90,10 +89,6 @@ Copyright_License {
 #include "AirspaceGlue.hpp"
 #include "Task/TaskManager.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-
-#if defined(__BORLANDC__)  // due to compiler bug
-  #include "Polar/Polar.hpp"
-#endif
 
 Marks *marks;
 TopologyStore *topology;
@@ -345,7 +340,10 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   Profile::LoadWindFromRegistry();
 
   // TODO TB: seems to be out of date?!
-  LoadPolarById(POLARID, polar);
+  GlidePolar gp = task_manager.get_glide_polar();
+  if (LoadPolarById(SettingsComputer(), gp)) {
+    task_manager.set_glide_polar(gp);
+  }
 
   // Read the topology file(s)
   topology->Open();

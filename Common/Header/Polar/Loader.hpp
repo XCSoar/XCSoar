@@ -39,7 +39,9 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_LOADER_HPP
 #define XCSOAR_POLAR_LOADER_HPP
 
-class Polar;
+#include "SettingsComputer.hpp"
+
+class GlidePolar;
 
 enum {
   /** if this polar is selected use the winpilot file */
@@ -50,6 +52,6 @@ enum {
 };
 
 bool
-LoadPolarById(unsigned id, Polar &polar);
+LoadPolarById(const SETTINGS_POLAR &settings, GlidePolar& gp);
 
 #endif

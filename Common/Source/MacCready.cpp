@@ -81,7 +81,6 @@ double oldGlidePolar::_Bugs = 1;
 double oldGlidePolar::_Ballast = 0;
 double oldGlidePolar::_CruiseEfficiency = 1.0;
 
-unsigned POLARID = 0;
 Polar polar;
 
 void

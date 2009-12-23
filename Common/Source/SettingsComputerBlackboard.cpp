@@ -123,5 +123,13 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.iAirspaceMode[11] =  1;
   settings_computer.iAirspaceMode[12] =  1;
   settings_computer.iAirspaceMode[13] =  0;
+
+  settings_computer.POLARID = 1.0;
+  settings_computer.SafetySpeed = 70.0;
+  settings_computer.BallastSecsToEmpty  = 120;
+  settings_computer.BallastTimerActive = false;
+  settings_computer.SafetyMacCready = 1.0;
+  settings_computer.AbortSafetyUseCurrent = false;
+  settings_computer.RiskGamma = 0.0;
 }
 

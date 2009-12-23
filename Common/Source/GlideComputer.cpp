@@ -51,6 +51,8 @@ Copyright_License {
 #include "Task.h"
 #endif
 
+#include "Task/TaskManager.hpp"
+
 /**
  * Constructor of the GlideComputer class
  * @return
@@ -58,7 +60,7 @@ Copyright_License {
 GlideComputer::GlideComputer(TaskManager &task,
                              AirspaceWarningManager& as_manager):
   GlideComputerTask(task),
-  GlideComputerAirData(as_manager)
+  GlideComputerAirData(as_manager, task.get_glide_polar())
 {
 
 }
@@ -131,14 +133,11 @@ GlideComputer::DoLogging()
 bool
 GlideComputer::ProcessGPS()
 {
-  double mc = oldGlidePolar::GetMacCready();
-  double ce = oldGlidePolar::GetCruiseEfficiency();
-
   // Process basic information
   ProcessBasic();
 
   // Process basic task information
-  ProcessBasicTask(mc, ce);
+  ProcessBasicTask();
 
   // Check if everything is okay with the gps time and process it
   if (!FlightTimes()) {

@@ -49,9 +49,8 @@ public:
   };
 
 public:
-  double POLAR[POLARSIZE];
-  double WEIGHTS[POLARSIZE];
-
+  double POLAR[POLARSIZE];  // a*sqrt(W),b,c/sqrt(W)
+  double WEIGHTS[POLARSIZE]; // Pilot mass, glider empty mass, ballast mass
   double WingArea;
 };
 

@@ -37,13 +37,13 @@ Copyright_License {
 
 */
 
+#include "Task/TaskManager.hpp"
 #include "Persist.hpp"
 #include "XCSoar.h"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "SettingsComputer.hpp"
 #include "OnLineContest.h"
-#include "MacCready.h"
 #include "Atmosphere.h"
 #include "UtilsSystem.hpp"
 #include "Logger.h"
@@ -141,9 +141,9 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
     return;
   }
 
-  double MACCREADY = oldGlidePolar::GetMacCready();
-  double BUGS = oldGlidePolar::GetBugs();
-  double BALLAST = oldGlidePolar::GetBallast();
+  double MACCREADY = task_manager.get_glide_polar().get_mc();
+  double BUGS = task_manager.get_glide_polar().get_bugs();
+  double BALLAST = task_manager.get_glide_polar().get_ballast();
 
   // Read persistent memory into MacCready, QNH, bugs, ballast and temperature
   fread(&MACCREADY, sizeof(double), 1, file);
@@ -160,9 +160,11 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   BALLAST = min(1.0, max(BALLAST, 0.0));
   //   CRUISE_EFFICIENCY = min(1.5, max(CRUISE_EFFICIENCY,0.75));
 
-  oldGlidePolar::SetMacCready(MACCREADY);
-  oldGlidePolar::SetBugs(BUGS);
-  oldGlidePolar::SetBallast(BALLAST);
+  GlidePolar gp = task_manager.get_glide_polar();
+  gp.set_mc(MACCREADY);
+  gp.set_bugs(BUGS);
+  gp.set_ballast(BALLAST);
+  task_manager.set_glide_polar(gp);
 
   StartupStore(TEXT("LoadCalculationsPersist OK\n"));
 
@@ -212,9 +214,9 @@ SaveCalculationsPersist(const NMEA_INFO &gps_info,
   fwrite(&size, sizeof(size), 1, file);
   fwrite(&glide_computer.GetOLC().data, size, 1, file);
 
-  double MACCREADY = oldGlidePolar::GetMacCready();
-  double BUGS = oldGlidePolar::GetBugs();
-  double BALLAST = oldGlidePolar::GetBallast();
+  double MACCREADY = task_manager.get_glide_polar().get_mc();
+  double BUGS = task_manager.get_glide_polar().get_bugs();
+  double BALLAST = task_manager.get_glide_polar().get_ballast();
 
   size = sizeof(double)*4;
   fwrite(&size, sizeof(size), 1, file);

@@ -100,7 +100,8 @@ public:
                    const DERIVED_INFO &derived) const;
   void CaptionBarograph( TCHAR *sTmp);
   void CaptionClimb( TCHAR* sTmp);
-  void CaptionPolar(TCHAR * sTmp) const;
+  void CaptionPolar(TCHAR * sTmp,
+                    const GlidePolar& glide_polar) const;
   void CaptionTempTrace(TCHAR *sTmp) const;
   void CaptionTask(TCHAR *sTmp,
                    const DERIVED_INFO &derived) const;

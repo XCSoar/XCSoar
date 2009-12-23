@@ -52,7 +52,6 @@ Copyright_License {
 #include "OnLineContest.h"
 #include "WindStore.h"
 #include "Language.hpp"
-#include "MacCready.h"
 #include "Atmosphere.h"
 #include "SettingsComputer.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
@@ -1074,30 +1073,31 @@ FlightStatistics::CaptionClimb( TCHAR* sTmp)
 
 
 void
-FlightStatistics::CaptionPolar(TCHAR *sTmp) const
+FlightStatistics::CaptionPolar(TCHAR *sTmp,
+                               const GlidePolar& glide_polar) const
 {
   if (Layout::landscape) {
-    _stprintf(sTmp, TEXT("%s:\r\n  %3.0f\r\n  at %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %3.0f %s"),
+    _stprintf(sTmp, TEXT("%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %d %s"),
 	      gettext(TEXT("Best LD")),
-	      oldGlidePolar::bestld,
-	      oldGlidePolar::Vbestld*SPEEDMODIFY,
+	      glide_polar.get_bestLD().as_int(),
+	      (glide_polar.get_VbestLD()*SPEEDMODIFY).as_int(),
 	      Units::GetHorizontalSpeedName(),
 	      gettext(TEXT("Min sink")),
-	      oldGlidePolar::minsink*LIFTMODIFY,
+	      (glide_polar.get_Smin()*LIFTMODIFY).as_double(),
 	      Units::GetVerticalSpeedName(),
-	      oldGlidePolar::Vminsink*SPEEDMODIFY,
+	      (glide_polar.get_Vmin()*SPEEDMODIFY).as_int(),
 	      Units::GetHorizontalSpeedName()
 	      );
   } else {
-    _stprintf(sTmp, TEXT("%s:\r\n  %3.0f at %3.0f %s\r\n%s:\r\n  %3.2f %s at %3.0f %s"),
+    _stprintf(sTmp, TEXT("%s:\r\n  %d at %d %s\r\n%s:\r\n  %3.2f %s at %d %s"),
 	      gettext(TEXT("Best LD")),
-	      oldGlidePolar::bestld,
-	      oldGlidePolar::Vbestld*SPEEDMODIFY,
+	      glide_polar.get_bestLD().as_int(),
+	      (glide_polar.get_VbestLD()*SPEEDMODIFY).as_int(),
 	      Units::GetHorizontalSpeedName(),
 	      gettext(TEXT("Min sink")),
-	      oldGlidePolar::minsink*LIFTMODIFY,
+	      (glide_polar.get_Smin()*LIFTMODIFY).as_double(),
 	      Units::GetVerticalSpeedName(),
-	      oldGlidePolar::Vminsink*SPEEDMODIFY,
+	      (glide_polar.get_Vmin()*SPEEDMODIFY).as_int(),
 	      Units::GetHorizontalSpeedName());
   }
 }

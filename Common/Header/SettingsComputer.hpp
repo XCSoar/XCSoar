@@ -87,11 +87,15 @@ struct SETTINGS_LOGGER {
 };
 
 struct SETTINGS_POLAR {
+  unsigned POLARID;
   /** ManoeuveringSpeed */
   double SafetySpeed;
   // polar info
   int BallastSecsToEmpty;
   bool BallastTimerActive;
+  double SafetyMacCready;
+  bool AbortSafetyUseCurrent;
+  double RiskGamma;
 };
 
 struct SETTINGS_OLC {
