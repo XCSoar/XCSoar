@@ -572,13 +572,17 @@ GlideComputerAirData::SpeedToFly()
 #ifdef OLD_TASK
   double delta_mc;
   double risk_mc;
-  if (Calculated().TaskAltitudeDifference > -120) {
+
+  double margin_height = Basic().NavAltitude
+    + Calculated().EnergyHeight - SettingsComputer().SafetyAltitudeBreakoff
+    - Calculated().TerrainBase;
+
+  if ((Calculated().TaskAltitudeDifference > -120) || (Calculated().MaxThermalHeight<1)) {
     risk_mc = mc_setting;
   } else {
+
     risk_mc =
-      oldGlidePolar::MacCreadyRisk(Basic().NavAltitude
-        + Calculated().EnergyHeight - SettingsComputer().SafetyAltitudeBreakoff
-        - Calculated().TerrainBase, Calculated().MaxThermalHeight, mc_setting);
+      glide_polar.mc_risk(margin_height/Calculated().MaxThermalHeight, SettingsComputer().RiskGamma);
   }
   SetCalculated().MacCreadyRisk = risk_mc;
 #endif
@@ -829,9 +833,9 @@ GlideComputerAirData::BallastDump()
     /// TODO SettingsComputer().BallastTimerActive = false;
     BALLAST = 0.0;
   }
-#ifdef OLD_TASK 
-  // TODO, set back in task
-  oldGlidePolar::SetBallast(BALLAST);
+#ifdef OLD_TASK
+  glide_polar.set_ballast(BALLAST);
+  task.set_glide_polar(glide_polar);
 #endif
 }
 

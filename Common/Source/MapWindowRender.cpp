@@ -217,11 +217,6 @@ void MapWindow::RenderGlide(Canvas &canvas, const RECT rc)
   if (SettingsComputer().FinalGlideTerrain && Calculated().TerrainValid) {
     DrawGlideThroughTerrain(canvas);
   }
-  /*
-  if ( (!TargetPan) && (!EnablePan) && (VisualGlide>0) ) {
-    DrawGlideCircle(canvas, rc);
-  }
-  */
   if ((terrain != NULL && SettingsMap().EnableTerrain &&
        Calculated().TerrainValid) ||
       (weather != NULL && weather->GetParameter() != 0)) {

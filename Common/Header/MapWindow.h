@@ -210,7 +210,6 @@ class MapWindow
   // display renderers
   void DrawAircraft(Canvas &canvas);
   void DrawCrossHairs(Canvas &canvas);
-  void DrawGlideCircle(Canvas &canvas, const POINT Orig, const RECT rc); // VENTA3
   void DrawBestCruiseTrack(Canvas &canvas);
   void DrawCompass(Canvas &canvas, const RECT rc);
   void DrawHorizon(Canvas &canvas, const RECT rc);

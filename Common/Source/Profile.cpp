@@ -43,7 +43,6 @@ Copyright_License {
 #include "Math/Units.h"
 #include "Appearance.hpp"
 #include "InfoBoxManager.h"
-#include "MacCready.h"
 #include "GlideRatio.hpp"
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
@@ -652,17 +651,17 @@ Profile::ReadRegistrySettings()
   GetFromRegistry(szRegistryLoggerTimeStepCircling,
 		  SetSettingsComputer().LoggerTimeStepCircling);
   GetFromRegistry(szRegistryAbortSafetyUseCurrent,
-		  oldGlidePolar::AbortSafetyUseCurrent);
+		  SetSettingsComputer().AbortSafetyUseCurrent);
 
-  Temp = iround(oldGlidePolar::SafetyMacCready * 10);
+  Temp = iround(SettingsComputer().SafetyMacCready * 10);
   GetFromRegistryD(szRegistrySafetyMacCready, Temp);
-  oldGlidePolar::SafetyMacCready = Temp / 10.0;
+  SetSettingsComputer().SafetyMacCready = Temp / 10.0;
 
   GetFromRegistry(szRegistryUserLevel, UserLevel);
 
-  Temp = iround(oldGlidePolar::RiskGamma * 10);
+  Temp = iround(SettingsComputer().RiskGamma * 10);
   GetFromRegistryD(szRegistryRiskGamma, Temp);
-  oldGlidePolar::RiskGamma = Temp / 10.0;
+  SetSettingsComputer().RiskGamma = Temp / 10.0;
 
   Temp = (CompassAppearance_t)apCompassAltA; // VNT9 default
   GetFromRegistryD(szRegistryWindArrowStyle, Temp);

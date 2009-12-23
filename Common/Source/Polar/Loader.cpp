@@ -76,12 +76,6 @@ setGlidePolar(GlidePolar& gp)
   gp.ideal_polar_b = -polar.POLAR[1];
   gp.ideal_polar_c = -polar.POLAR[2]*sqrt(gp.empty_mass);
 
-  printf("%g    - %g %g %g\n", 
-         gp.empty_mass.as_double(),
-         gp.ideal_polar_a.as_double(),
-         gp.ideal_polar_b.as_double(),
-         gp.ideal_polar_c.as_double());
-
   gp.update();
 }
 

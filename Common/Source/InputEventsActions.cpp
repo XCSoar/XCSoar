@@ -84,7 +84,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
 #include "Audio/Sound.hpp"
-#include "MacCready.h"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Language.hpp"
@@ -843,7 +842,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
     }
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    _stprintf(Temp,TEXT("%0.1f"),oldGlidePolar::GetMacCready()*LIFTMODIFY);
+    _stprintf(Temp,TEXT("%0.1f"), (task_manager.get_glide_polar().get_mc()*LIFTMODIFY).as_double());
     Message::AddMessage(TEXT("MacCready "), Temp);
   }
 }
@@ -1088,7 +1087,7 @@ InputEvents::eventAbortTask(const TCHAR *misc)
 void
 InputEvents::eventBugs(const TCHAR *misc)
 {
-  double BUGS = oldGlidePolar::GetBugs();
+  double BUGS = task_manager.get_glide_polar().get_bugs();
   double oldBugs = BUGS;
 
   if (_tcscmp(misc, TEXT("up")) == 0)
@@ -1107,8 +1106,9 @@ InputEvents::eventBugs(const TCHAR *misc)
 
   if (BUGS != oldBugs) {
     BUGS = min(1.0, max(0.5, BUGS));
-    oldGlidePolar::SetBugs(BUGS);
-    oldGlidePolar::UpdatePolar(true, SettingsComputer());
+    GlidePolar polar = task_manager.get_glide_polar();
+    polar.set_bugs(BUGS);
+    task_manager.set_glide_polar(polar);
   }
 }
 
@@ -1122,7 +1122,7 @@ InputEvents::eventBugs(const TCHAR *misc)
 void
 InputEvents::eventBallast(const TCHAR *misc)
 {
-  double BALLAST = oldGlidePolar::GetBallast();
+  double BALLAST = task_manager.get_glide_polar().get_ballast();
   double oldBallast = BALLAST;
 
   if (_tcscmp(misc, TEXT("up")) == 0)
@@ -1141,8 +1141,9 @@ InputEvents::eventBallast(const TCHAR *misc)
 
   if (BALLAST != oldBallast) {
     BALLAST = min(1.0,max(0.0,BALLAST));
-    oldGlidePolar::SetBallast(BALLAST);
-    oldGlidePolar::UpdatePolar(true, SettingsComputer());
+    GlidePolar polar = task_manager.get_glide_polar();
+    polar.set_ballast(BALLAST);
+    task_manager.set_glide_polar(polar);
   }
 }
 

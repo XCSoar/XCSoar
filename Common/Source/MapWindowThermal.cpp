@@ -36,9 +36,9 @@ Copyright_License {
 }
 */
 
+#include "Task/TaskManager.hpp"
 #include "MapWindow.h"
 #include "Math/Earth.hpp"
-#include "MacCready.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 
@@ -161,7 +161,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   // calculate averages
   int numtherm = 0;
 
-  double mc = oldGlidePolar::GetMacCready();
+  const double mc = task->get_glide_polar().get_mc();
   Wmax = max(0.5,mc);
 
   for (i=0; i<NUMTHERMALBUCKETS; i++) {

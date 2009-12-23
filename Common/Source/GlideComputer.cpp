@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "GlideComputer.hpp"
-#include "MacCready.h"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.h"
@@ -208,7 +207,6 @@ GlideComputer::ProcessIdle()
 #ifdef OLD_TASK
   // if (Task is not aborted and Task consists of more than one waypoint)
   if (!task.TaskIsTemporary()) {
-    double mc = oldGlidePolar::GetMacCready();
     InSector();
     DoAutoMacCready(mc);
     IterateEffectiveMacCready();

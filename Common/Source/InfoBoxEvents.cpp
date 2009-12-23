@@ -50,9 +50,10 @@ Copyright_License {
 #include "Battery.h"
 #include "Registry.hpp"
 #include "MapWindow.h"
-#include "MacCready.h"
 #include "Interface.hpp"
 #include "Components.hpp"
+
+#include "Task/TaskManager.hpp"
 
 #include <stdlib.h>
 #include "FlarmCalculations.h"
@@ -303,20 +304,24 @@ ActionInterface::on_key_Direction(int UpDown)
 void
 ActionInterface::on_key_MacCready(int UpDown)
 {
-  double MACCREADY = oldGlidePolar::GetMacCready();
+  double MACCREADY = task_manager.get_glide_polar().get_mc();
   if(UpDown==1) {
     MACCREADY += (double)0.1;
     if (MACCREADY>5.0) { // JMW added sensible limit
       MACCREADY=5.0;
     }
-    oldGlidePolar::SetMacCready(MACCREADY);
+    GlidePolar polar = task_manager.get_glide_polar();
+    polar.set_mc(MACCREADY);
+    task_manager.set_glide_polar(polar);
   }
   else if(UpDown==-1) {
     MACCREADY -= (double)0.1;
     if(MACCREADY < 0) {
       MACCREADY = 0;
     }
-    oldGlidePolar::SetMacCready(MACCREADY);
+    GlidePolar polar = task_manager.get_glide_polar();
+    polar.set_mc(MACCREADY);
+    task_manager.set_glide_polar(polar);
   }
  else if (UpDown==0)
     {

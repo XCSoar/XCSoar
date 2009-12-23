@@ -36,6 +36,7 @@ Copyright_License {
 }
 */
 
+#include "Task/TaskManager.hpp"
 #include "MapWindow.h"
 #include "Appearance.hpp"
 #include "Screen/Graphics.hpp"
@@ -202,8 +203,8 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
         _tcscat(ScaleInfo, TEXT("REPLAY "));
       }
       if (SettingsComputer().BallastTimerActive) {
-        _stprintf(TEMP,TEXT("BALLAST %3.0f LITERS"),
-		  oldGlidePolar::GetBallastLitres());
+        _stprintf(TEMP,TEXT("BALLAST %d LITERS"),
+		  task->get_glide_polar().get_ballast_litres().as_int());
         _tcscat(ScaleInfo, TEMP);
       }
 

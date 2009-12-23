@@ -36,12 +36,12 @@ Copyright_License {
 }
 */
 
+#include "Task/TaskManager.hpp"
 #include "MapWindow.h"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
-#include "MacCready.h"
 #include "Screen/Layout.hpp"
 #include "StringUtil.hpp"
 
@@ -81,7 +81,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   Brush greenBrush(Color(0x00,0xFF,0x00));
 
   // Saves the McCready value
-  const double MACCREADY = oldGlidePolar::GetMacCready();
+  const double MACCREADY = task->get_glide_polar().get_mc();
 
   // Circle through the FLARM targets
   for (int i = 0; i < FLARM_MAX_TRAFFIC; i++) {

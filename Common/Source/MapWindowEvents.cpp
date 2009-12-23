@@ -36,6 +36,8 @@ Copyright_License {
 }
 */
 
+#include "Task/TaskManager.hpp"
+
 #include "MapWindow.h"
 #include "UtilsSystem.hpp"
 #include "Appearance.hpp"
@@ -46,13 +48,13 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Defines.h"
-#include "MacCready.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Waypoint/Waypoints.hpp"
+
 #ifndef _MSC_VER
 #include <algorithm>
 using std::min;
@@ -330,9 +332,9 @@ bool MapWindow::on_mouse_up(int x, int y)
   if (is_simulator() && (dwInterval>50)) {
     if (!Basic().Replay && !my_target_pan && (distance>IBLSCALE(36))) {
       // This drag moves the aircraft (changes speed and direction)
-      double oldbearing = Basic().TrackBearing;
-      double minspeed = 1.1*oldGlidePolar::Vminsink;
-      double newbearing = Bearing(LLstart, G);
+      const double oldbearing = Basic().TrackBearing;
+      const double minspeed = 1.1*task->get_glide_polar().get_Vmin();
+      const double newbearing = Bearing(LLstart, G);
       if ((fabs(AngleLimit180(newbearing - oldbearing)) < 30)
           || (Basic().Speed < minspeed)) {
 
