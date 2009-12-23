@@ -33,9 +33,9 @@ testslow:	$(TESTSLOW:.exe=-$(TARGET).exe)
 testfast:	$(TESTFAST:.exe=-$(TARGET).exe)
 	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTFAST:.exe=-$(TARGET).exe)
 
-$(TEST_SRC_DIR)/%-$(TARGET).exe: $(TEST_SRC_DIR)/%.cpp $(SRC)/task-$(TARGET).a $(TEST_SRC_DIR)/harness-$(TARGET).a
+$(TEST_SRC_DIR)/%-$(TARGET).exe: $(TEST_SRC_DIR)/%.cpp $(ENGINE_SRC_DIR)/task-$(TARGET).a $(TEST_SRC_DIR)/harness-$(TARGET).a
 	@$(NQ)echo "  CXX/LN      $@"
 	$(Q)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) $< -o $@ \
 		$(TEST_SRC_DIR)/harness-$(TARGET).a \
-		$(SRC)/task-$(TARGET).a
+		$(ENGINE_SRC_DIR)/task-$(TARGET).a
 

@@ -5,4 +5,5 @@ include $(topdir)/build/util.mk
 
 SRC = $(topdir)/Common/Source
 HDR = $(topdir)/Common/Header
+ENGINE_SRC_DIR = $(topdir)/ex/src
 OUT = $(topdir)/output

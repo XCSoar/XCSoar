@@ -18,7 +18,7 @@ include $(topdir)/build/compile.mk
 
 ######## compiler flags
 
-INCLUDES += $(TARGET_INCLUDES) -I$(HDR) -I$(SRC) -I$(topdir)/src
+INCLUDES += -I$(HDR) -I$(SRC) -I$(ENGINE_SRC_DIR)
 
 ####### linker configuration
 
@@ -56,7 +56,7 @@ RUN_WAY_POINT_PARSER_OBJS = \
 	$(SRC)/StringUtil.o \
 	$(SRC)/Compatibility/fmode.o \
 	src/RunWayPointParser.o
-RunWayPointParser-$(TARGET)$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(TARGET).o) $(topdir)/src/task-$(TARGET).a
+RunWayPointParser-$(TARGET)$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(TARGET).o) $(ENGINE_SRC_DIR)/task-$(TARGET).a
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

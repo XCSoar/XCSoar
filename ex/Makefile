@@ -1,8 +1,8 @@
-
 topdir = ..
-SRC = src
+
 TEST_SRC_DIR = Test
 
+include $(topdir)/build/common.mk
 include $(topdir)/build/verbose.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
@@ -11,9 +11,7 @@ include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
 include $(topdir)/build/coverage.mk
 
-MAKEFLAGS	+=-r
-
-INCLUDES := $(TARGET_INCLUDES) -I$(SRC)
+INCLUDES := $(TARGET_INCLUDES) -I$(ENGINE_SRC_DIR)
 CPPFLAGS := $(INCLUDES) 
 CPPFLAGS += -DFIXED_MATH 
 
@@ -37,7 +35,7 @@ include $(topdir)/build/test.mk
 
 ####### sources
 
-OUTPUTS = $(SRC)/task-$(TARGET).a $(TEST_SRC_DIR)/harness-$(TARGET).a $(TESTS)
+OUTPUTS = $(ENGINE_SRC_DIR)/task-$(TARGET).a $(TEST_SRC_DIR)/harness-$(TARGET).a $(TESTS)
 
 all: $(OUTPUTS)
 	@echo "done"

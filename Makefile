@@ -48,7 +48,7 @@ endif
 
 ######## compiler flags
 
-INCLUDES += -I$(HDR) -I$(SRC) -Isrc
+INCLUDES += -I$(HDR) -I$(SRC) -I$(ENGINE_SRC_DIR)
 
 ####### linker configuration
 
@@ -348,7 +348,7 @@ OBJS	:=\
 	\
 	$(DLGS:.cpp=.o) 		\
 	$(VOLKS:.cpp=.o) 		\
-	src/task-$(TARGET).a \
+	$(ENGINE_SRC_DIR)/task-$(TARGET).a \
 	$(SRC)/jasper-$(TARGET).a \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a
