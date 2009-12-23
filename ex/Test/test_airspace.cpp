@@ -15,8 +15,8 @@ int main(int argc, char** argv)
 
   plan_tests(3);
 
-  ok(test_airspace(100),"airspace 100",0);
   ok(test_airspace(20),"airspace 20",0);
+  ok(test_airspace(100),"airspace 100",0);
   
   Airspaces airspaces;
   setup_airspaces(airspaces, 20);

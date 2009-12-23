@@ -63,10 +63,6 @@ struct AIRCRAFT_STATE;
  *
  * \todo
  * - currently the polar itself and Vmax is hard-coded
- * - currently bugs/ballast are ignored
- * - implement wing loading
- * - implement AUW
- * - implement dolphin speed to fly
  */
 
 class GlidePolar
@@ -104,6 +100,8 @@ public:
 /** 
  * Accesses maximum airspeed
  * 
+ * \todo this should be set by SETTINGS_COMPUTER SafetySpeed
+ *
  * @return Speed (m/s)
  */
   fixed get_Vmax() const {
@@ -156,9 +154,15 @@ public:
 /** 
  * Set bugs value.
  * 
- * @param clean The new bugs setting (clean ratio) (0-1)
+ * @param clean The new bugs setting (clean ratio) (0-1]
  */
   void set_bugs(const fixed clean);
+
+  /**
+   * Retrieve bugs 
+   * @return Cleanliness of glider (0-1]
+   */
+  fixed get_bugs() const;
 
 /** 
  * Set ballast value.
@@ -166,6 +170,25 @@ public:
  * @param ratio The new ballast setting (proportion of possible ballast, [0-1]
  */
   void set_ballast(const fixed ratio);
+
+  /**
+   * Retrieve ballast 
+   * @return Proportion of possible ballast [0-1]
+   */
+  fixed get_ballast() const;
+
+  /**
+   * Retrieve ballast in litres
+   * @return Ballast (l or kg)
+   */
+  fixed get_ballast_litres() const;
+
+/** 
+ * Determine if glider carries ballast
+ * 
+ * @return True if glider can carry ballast
+ */
+  bool is_ballastable() const;
 
 /** 
  * Set MacCready value.  Internally this performs search
@@ -337,6 +360,8 @@ private:
   fixed polar_c;             /**< 'c' coefficient of glide polar at bug/ballast */
 
   fixed ballast_ratio;       /**< Ratio of mass of ballast to glider empty weight */
+  fixed empty_mass;          /**< Empty mass of glider, kg */
+  fixed wing_area;           /**< Reference wing area, m^2 */
 };
 
 #endif
