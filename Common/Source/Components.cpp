@@ -347,10 +347,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   // TODO TB: seems to be out of date?!
   LoadPolarById(POLARID, polar);
 
-  // Calculate polar-related data and saves it to the cache
-  StartupStore(TEXT("oldGlidePolar::UpdatePolar\n"));
-  oldGlidePolar::UpdatePolar(false, SettingsComputer());
-
   // Read the topology file(s)
   topology->Open();
 
@@ -402,9 +398,14 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   CreateProgressDialog(gettext(TEXT("Starting devices")));
   devStartup(lpCmdLine);
 
-  // Reset polar in case devices need the data
-  StartupStore(TEXT("oldGlidePolar::UpdatePolar\n"));
-  oldGlidePolar::UpdatePolar(true, SettingsComputer());
+/*
+  -- Reset polar in case devices need the data
+  StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
+  GlidePolar::UpdatePolar(true, SettingsComputer());
+
+  This should be done inside devStartup if it is really required
+
+*/
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 
