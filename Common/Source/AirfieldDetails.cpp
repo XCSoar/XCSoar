@@ -1,5 +1,4 @@
 /*
-
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
@@ -51,6 +50,9 @@ Copyright_License {
 #include <zzip/lib.h>
 #include "wcecompat/ts_string.h"
 #include <stdlib.h>
+#include "Waypoint/Waypoints.hpp"
+#include "Waypoint/WaypointSorter.hpp"
+#include "Components.hpp"
 
 ZZIP_FILE* zAirfieldDetails = NULL;
 
@@ -105,110 +107,68 @@ CloseAirfieldDetails()
   zAirfieldDetails = NULL;
 }
 
-/*
- * VENTA3: Home and Preferred landing points for BestAlternate
- * Paolo Ventafridda
- */
 
-#ifdef OLD_TASK
-
-class WaypointNameLookup: public WaypointVisitor
+static bool
+check_name(const Waypoint &waypoint, const TCHAR *Name)
 {
-public:
-  WaypointNameLookup(const TCHAR* _Name, const TCHAR* _Details) :
-    Name(_Name), Details(_Details)
-  {
+  // TODO: detect and warn on multiple matches!
+  
+  TCHAR UName[100];
+  TCHAR NameA[100];
+  TCHAR NameB[100];
+  TCHAR NameC[100];
+  TCHAR NameD[100];
+  TCHAR TmpName[100];
+  
+  _tcscpy(UName, waypoint.Name.c_str());
+  
+  CharUpper(UName); // WP name
+  // VENTA3 fix: If airfields name
+  // was not uppercase it was not recon
+  
+  _stprintf(NameA, TEXT("%s A/F"), Name);
+  _stprintf(NameB, TEXT("%s AF"), Name);
+  _stprintf(NameC, TEXT("%s A/D"), Name);
+  _stprintf(NameD, TEXT("%s AD"), Name);
+  
+  bool isHome = false;
+  
+  _stprintf(TmpName, TEXT("%s=HOME"), UName);
+  if ((_tcscmp(Name, TmpName) == 0))
+    isHome = true;
+  
+  if (isHome == true) {
+    XCSoarInterface::SetSettingsComputer().HomeWaypoint = waypoint.id;
   }
-
-  void
-  waypoint_landable(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i)
-  {
-    waypoint_airport(waypoint, wpcalc, i);
+  
+  if ((_tcscmp(UName, Name) == 0)
+      || (_tcscmp(UName, NameA) == 0)
+      || (_tcscmp(UName, NameB) == 0)
+      || (_tcscmp(UName, NameC) == 0)
+      || (_tcscmp(UName, NameD) == 0) || isHome) {
+    // found
+    return true;
+  } else {
+    return false;
   }
-
-  void
-  waypoint_airport(WAYPOINT &waypoint, WPCALC &wpcalc, const unsigned i)
-  {
-
-    // TODO: detect and warn on multiple matches!
-
-    TCHAR UName[100];
-    TCHAR NameA[100];
-    TCHAR NameB[100];
-    TCHAR NameC[100];
-    TCHAR NameD[100];
-    TCHAR TmpName[100];
-
-    _tcscpy(UName, waypoint.Name);
-
-    CharUpper(UName); // WP name
-    // VENTA3 fix: If airfields name
-    // was not uppercase it was not recon
-
-    _stprintf(NameA, TEXT("%s A/F"), Name);
-    _stprintf(NameB, TEXT("%s AF"), Name);
-    _stprintf(NameC, TEXT("%s A/D"), Name);
-    _stprintf(NameD, TEXT("%s AD"), Name);
-
-    bool isHome = false;
-    bool isPreferred = false;
-
-    _stprintf(TmpName, TEXT("%s=HOME"), UName);
-    if ((_tcscmp(Name, TmpName) == 0))
-      isHome = true;
-
-    _stprintf(TmpName, TEXT("%s=PREF"), UName);
-    if ((_tcscmp(Name, TmpName) == 0))
-      isPreferred = true;
-
-    _stprintf(TmpName, TEXT("%s=PREFERRED"), UName);
-    if ((_tcscmp(Name, TmpName) == 0))
-      isPreferred = true;
-
-    if (isHome == true) {
-      wpcalc.Preferred = true;
-      XCSoarInterface::SetSettingsComputer().HomeWaypoint = i;
-    }
-
-    if (isPreferred == true) {
-      wpcalc.Preferred = true;
-    }
-
-    if ((_tcscmp(UName, Name) == 0)
-        || (_tcscmp(UName, NameA) == 0)
-        || (_tcscmp(UName, NameB) == 0)
-        || (_tcscmp(UName, NameC) == 0)
-        || (_tcscmp(UName, NameD) == 0) || isHome || isPreferred) {
-      // found
-
-      if (!string_is_empty(Details)) {
-        // VENTA3 avoid setting empty details
-        if (waypoint.Details)
-          free(waypoint.Details);
-
-        waypoint.Details = (TCHAR*)malloc((_tcslen(Details) + 1) * sizeof(TCHAR));
-        _tcscpy(waypoint.Details, Details);
-      }
-    }
-  }
-
-private:
-  const TCHAR* Name;
-  const TCHAR* Details;
-};
-#endif
-
-static void
-LookupAirfieldDetail(TCHAR *Name, const TCHAR *Details)
-{
-  CharUpper(Name); // AIR name
-#ifdef OLD_TASK
-  WaypointNameLookup wnl(Name, Details);
-  WaypointScan::scan_forward(wnl);
-#endif
 }
 
-#define DETAILS_LENGTH 5000
+static void
+LookupAirfieldDetail(WaypointSelectInfoVector &airports,
+                     TCHAR *Name, const tstring &Details)
+{
+  CharUpper(Name); // AIR name
+
+  for (WaypointSelectInfoVector::const_iterator it =
+         airports.begin(); it!= airports.end(); ++it) {
+    const Waypoint &wp = *it->way_point;
+
+    if (check_name(wp, Name)) {
+      way_points.set_details(wp, Details);
+      return;
+    }
+  }
+}
 
 /**
  * Parses the data provided by the airfield details file handle
@@ -226,10 +186,9 @@ ParseAirfieldDetails()
 
   TCHAR TempString[READLINE_LENGTH + 1];
   TCHAR CleanString[READLINE_LENGTH + 1];
-  TCHAR Details[DETAILS_LENGTH + 1];
+  tstring Details;
   TCHAR Name[201];
 
-  Details[0] = 0;
   Name[0] = 0;
   TempString[0] = 0;
   CleanString[0] = 0;
@@ -240,11 +199,15 @@ ParseAirfieldDetails()
   unsigned j;
   int k = 0;
 
+  WaypointSorter waypoints_filter(way_points, XCSoarInterface::Basic().Location, 1);
+  WaypointSelectInfoVector airports = waypoints_filter.get_list();
+  waypoints_filter.filter_airport(airports);
+
   while (ReadString(zAirfieldDetails, READLINE_LENGTH, TempString)) {
     if (TempString[0] == '[') { // Look for start
       if (inDetails) {
-        LookupAirfieldDetail(Name, Details);
-        Details[0] = 0;
+        LookupAirfieldDetail(airports, Name, Details);
+        Details.clear();
         Name[0] = 0;
         hasDetails = false;
       }
@@ -283,16 +246,15 @@ ParseAirfieldDetails()
         }
         CleanString[n] = '\0';
 
-        if (_tcslen(Details) + _tcslen(CleanString) + 3 < DETAILS_LENGTH) {
-          _tcscat(Details, CleanString);
-          _tcscat(Details, TEXT("\r\n"));
-        }
+        Details += CleanString;
+        Details += _T("\r\n");
       }
     }
   }
 
   if (inDetails) {
-    LookupAirfieldDetail(Name, Details);
+    LookupAirfieldDetail(airports, Name, Details);
+    Details.clear();
   }
 }
 
