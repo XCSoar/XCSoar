@@ -165,6 +165,8 @@ LookupAirfieldDetail(WaypointSelectInfoVector &airports,
 
     if (check_name(wp, Name)) {
       way_points.set_details(wp, Details);
+
+      airports.erase(v); // this one no longer needs searching, remove from list
       return;
     }
   }
