@@ -123,7 +123,7 @@ AirspaceWarningManager airspace_warning(airspace_database,
 
 GlideComputer glide_computer(task_manager, airspace_warning);
 
-void default_task() {
+void test_task() {
 
   GlidePolar glide_polar = task_manager.get_glide_polar();
   glide_polar.set_mc(2.0);
@@ -229,13 +229,14 @@ void XCSoarInterface::AfterStartup() {
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
-#ifdef OLD_TASK
   // Create default task if none exists
   StartupStore(TEXT("Create default task\n"));
-  task.DefaultTask(SettingsComputer(), Basic());
-#else
-  default_task();
+  task_manager.default_task(Basic().Location);
+
+#ifndef OLD_TASK
+  test_task(); // for testing only
 #endif
+
   task_manager.resume();
 
   StartupStore(TEXT("CloseProgressDialog\n"));
@@ -503,11 +504,6 @@ void XCSoarInterface::Shutdown(void) {
   // turn off all displays
   globalRunningEvent.reset();
 
-  StartupStore(TEXT("dlgAirspaceWarningDeInit\n"));
-#ifdef OLD_TASK
-  dlgAirspaceWarningDeInit();
-#endif
-
   CreateProgressDialog(gettext(TEXT("Shutdown, saving logs...")));
   // stop logger
   logger.guiStopLogger(Basic(),true);
@@ -545,10 +541,14 @@ void XCSoarInterface::Shutdown(void) {
 
   // Clear data
 
+  StartupStore(TEXT("dlgAirspaceWarningDeInit\n"));
+  dlgAirspaceWarningDeInit();
+
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
 
   StartupStore(TEXT("Resume abort task\n"));
   task_manager.resume();
+
 #ifdef OLD_TASK
   StartupStore(TEXT("Save default task\n"));
   task_manager.save_default();

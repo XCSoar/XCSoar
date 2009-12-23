@@ -435,6 +435,10 @@ void dlgAirspaceWarningInit()
 
 void dlgAirspaceWarningDeInit()
 {
+  if (dlgAirspaceWarningVisible()) {
+    wf->hide();
+    wf->SetModalResult(mrOK);
+  }
   delete wf;
   wf = NULL;
 }
