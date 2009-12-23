@@ -167,6 +167,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
        v!=approx_waypoints.end(); ) {
 
     if (only_airfield && !v->Flags.Airport) {
+      ++v;
       continue;
     }
     const fixed t_elapsed = is_reachable(state, *v, polar, final_glide);
@@ -178,7 +179,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
       found = true;
 
     } else {
-      v++;
+      ++v;
     }
   }
   while (!q.empty() && !task_full()) {
