@@ -36,6 +36,8 @@ Copyright_License {
 }
 */
 
+#include "Task/TaskManager.hpp"
+
 #include "Dialogs/Internal.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
@@ -52,6 +54,8 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Components.hpp"
 #include "Protection.hpp"
+
+#include "GlideSolvers/GlidePolar.hpp"
 
 #define MAXPAGE 8
 
@@ -101,7 +105,7 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(_T("Task calc"));
-    fs.RenderClimb(canvas, rcgfx);
+    fs.RenderClimb(canvas, rcgfx, task_manager.get_glide_polar());
     break;
   case ANALYSIS_PAGE_WIND:
     SetCalcCaption(_T("Set wind"));
@@ -113,7 +117,8 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     SetCalcCaption(_T("Settings"));
     fs.RenderGlidePolar(canvas, rcgfx,
                         XCSoarInterface::Calculated(),
-                        XCSoarInterface::SettingsComputer());
+                        XCSoarInterface::SettingsComputer(),
+                        task_manager.get_glide_polar());
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     SetCalcCaption(_T("Settings"));
@@ -195,10 +200,10 @@ static void Update(void){
       wInfo->SetCaption(sTmp);
     break;
     case ANALYSIS_PAGE_POLAR:
-      _stprintf(sTmp, _T("%s: %s (Mass %3.0f kg)"),
+      _stprintf(sTmp, _T("%s: %s (Mass %d kg)"),
                 gettext(_T("Analysis")),
                 gettext(_T("Glide Polar")),
-                oldGlidePolar::GetAUW());
+                task_manager.get_glide_polar().get_all_up_weight().as_int());
       wf->SetCaption(sTmp);
       fs.CaptionPolar(sTmp);
       wInfo->SetCaption(sTmp);

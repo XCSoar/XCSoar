@@ -36,6 +36,8 @@ Copyright_License {
 }
 */
 
+#include "Task/TaskManager.hpp"
+
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
@@ -47,12 +49,13 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 #include "Components.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 
 #include <math.h>
 
 static WndForm *wf=NULL;
 
-// static bool BallastTimerActive = false;
+static bool changed = false;
 
 static void OnCloseClicked(WindowControl * Sender){
   (void)Sender;
@@ -83,9 +86,6 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
       AllDevicesPutQNH(XCSoarInterface::Basic().pressure);
       airspace_database.set_flight_levels(XCSoarInterface::Basic().pressure);
 #endif
-
-      // VarioWriteSettings();
-
       wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
       if (wp) {
 	wp->GetDataField()->
@@ -111,100 +111,107 @@ static void OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode){
   }
 }
 
+GlidePolar* glide_polar = NULL;
 
-static void SetBallast(void) {
-  WndProperty* wp;
 
-  oldGlidePolar::UpdatePolar(true, XCSoarInterface::SettingsComputer());
-
-  wp = (WndProperty*)wf->FindByName(_T("prpBallastPercent"));
-  if (wp) {
-    wp->GetDataField()->Set(oldGlidePolar::GetBallast()*100);
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpBallastLitres"));
-  if (wp) {
-    wp->GetDataField()->
-      SetAsFloat(oldGlidePolar::GetBallastLitres());
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
-  if (wp) {
-    wp->GetDataField()->
-      SetAsFloat(oldGlidePolar::WingLoading);
-    wp->RefreshDisplay();
-  }
-}
-
-//int BallastSecsToEmpty = 120;
-
-static int OnTimerNotify(WindowControl * Sender) {
-  (void)Sender;
-/*
-  static double BallastTimeLast = -1;
-
-  if (BallastTimerActive) {
-    if (XCSoarInterface::Basic().Time > BallastTimeLast) {
-      double BALLAST_last = BALLAST;
-      double dt = XCSoarInterface::Basic().Time - BallastTimeLast;
-      double percent_per_second = 1.0/max(10.0, BallastSecsToEmpty);
-      BALLAST -= dt*percent_per_second;
-      if (BALLAST<0) {
-	BallastTimerActive = false;
-	BALLAST = 0.0;
-      }
-      if (fabs(BALLAST-BALLAST_last)>0.001) {
-	SetBallast();
-      }
-    }
-    BallastTimeLast = XCSoarInterface::Basic().Time;
-  } else {
-    BallastTimeLast = XCSoarInterface::Basic().Time;
-  }
-*/
-
-  SetBallast();
-
-  static double altlast = XCSoarInterface::Basic().BaroAltitude;
+static void SetAltitude()
+{
+  static double altlast = -2;
   if (fabs(XCSoarInterface::Basic().BaroAltitude-altlast)>1) {
     WndProperty* wp;
     wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
     if (wp) {
-      wp->GetDataField()->
-	SetAsFloat(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
-      wp->RefreshDisplay();
+      if (!XCSoarInterface::Basic().BaroAltitudeAvailable) {
+        wp->hide();
+      } else {
+        wp->GetDataField()->
+          SetAsFloat(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
+        wp->RefreshDisplay();
+      }
     }
   }
   altlast = XCSoarInterface::Basic().BaroAltitude;
-
-  return 0;
 }
 
 
+static void SetBallast(void) 
+{
+  WndProperty* wp;
+
+  wp = (WndProperty*)wf->FindByName(_T("prpBallastPercent"));
+  if (wp) {
+    if (glide_polar->is_ballastable()) {
+      wp->GetDataField()->SetAsFloat(glide_polar->get_ballast()*100);
+    } else {
+      wp->hide();
+    }
+    wp->RefreshDisplay();
+  }
+  wp = (WndProperty*)wf->FindByName(_T("prpBallastLitres"));
+  if (wp) {
+    if (glide_polar->is_ballastable()) {
+      wp->GetDataField()->SetAsFloat(glide_polar->get_ballast_litres());
+    } else {
+      wp->hide();
+    }
+    wp->RefreshDisplay();
+  }
+  wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
+  if (wp) {
+    if (fixed wl = glide_polar->get_wing_loading() > fixed_zero) {
+      wp->GetDataField()->SetAsFloat(wl);
+    } else {
+      wp->hide();
+    }
+    wp->RefreshDisplay();
+  }
+}
+
+static int OnTimerNotify(WindowControl * Sender) 
+{
+  (void)Sender;
+  SetBallast();
+  SetAltitude();
+  return 0;
+}
+
+static void SetButtons()
+{
+  WndButton* wb;
+
+  if ((wb = (WndButton *)wf->FindByName(_T("buttonDumpBallast"))) != NULL) {
+    wb->set_visible(!XCSoarInterface::SettingsComputer().BallastTimerActive && 
+                    glide_polar->is_ballastable());
+  }
+  if ((wb = (WndButton *)wf->FindByName(_T("buttonStopDump"))) != NULL) {
+    wb->set_visible(XCSoarInterface::SettingsComputer().BallastTimerActive &&
+                    glide_polar->is_ballastable());
+  }
+}
+
 static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
   static double lastRead = -1;
-  double BALLAST = oldGlidePolar::GetBallast();
 
   switch(Mode){
   case DataField::daSpecial:
-    if (BALLAST>0.01) {
+    if (glide_polar->get_ballast()>0.01) {
       XCSoarInterface::SetSettingsComputer().BallastTimerActive =
 	!XCSoarInterface::SettingsComputer().BallastTimerActive;
     } else {
       XCSoarInterface::SetSettingsComputer().BallastTimerActive = false;
     }
-    ((WndButton *)wf->FindByName(_T("buttonDumpBallast")))->set_visible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
-    ((WndButton *)wf->FindByName(_T("buttonStopDump")))->set_visible(XCSoarInterface::SettingsComputer().BallastTimerActive);
+    SetButtons();
     break;
   case DataField::daGet:
-    lastRead = BALLAST;
-    Sender->Set(BALLAST*100);
+    lastRead = glide_polar->get_ballast();
+    Sender->SetAsFloat(glide_polar->get_ballast()*100);
     break;
   case DataField::daChange:
   case DataField::daPut:
     if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
-      lastRead = BALLAST = Sender->GetAsFloat()/100.0;
-      oldGlidePolar::SetBallast(BALLAST);
+      lastRead = Sender->GetAsFloat()/100.0;
+      glide_polar->set_ballast(lastRead);
+      changed = true;
       SetBallast();
     }
     break;
@@ -212,20 +219,18 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
 }
 
 static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
-  double BUGS = oldGlidePolar::GetBugs();
   static double lastRead = -1;
 
   switch(Mode){
     case DataField::daGet:
-      lastRead = BUGS;
-      Sender->Set(BUGS*100);
+      lastRead = glide_polar->get_bugs();
+      Sender->Set(lastRead*100);
     break;
     case DataField::daChange:
     case DataField::daPut:
       if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
-        lastRead = BUGS = Sender->GetAsFloat()/100.0;
-	oldGlidePolar::SetBugs(BUGS);
-        oldGlidePolar::UpdatePolar(true, XCSoarInterface::SettingsComputer());
+        lastRead = Sender->GetAsFloat()/100.0;
+        glide_polar->set_bugs(lastRead);
       }
     break;
   }
@@ -264,7 +269,11 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 
-void dlgBasicSettingsShowModal(void){
+void dlgBasicSettingsShowModal() 
+{
+  GlidePolar gp_copy = task_manager.get_glide_polar();
+  glide_polar = &gp_copy;
+
   wf = dlgLoadFromXML(CallBackTable,
                       _T("dlgBasicSettings.xml"),
 		      XCSoarInterface::main_window,
@@ -274,38 +283,16 @@ void dlgBasicSettingsShowModal(void){
 
   WndProperty* wp;
 
-//  BallastTimerActive = false;
+  changed = false;
 
   wf->SetTimerNotify(OnTimerNotify);
 
-  ((WndButton *)wf->FindByName(_T("buttonDumpBallast")))->set_visible(!XCSoarInterface::SettingsComputer().BallastTimerActive);
-  ((WndButton *)wf->FindByName(_T("buttonStopDump")))->set_visible(XCSoarInterface::SettingsComputer().BallastTimerActive);
+  OnTimerNotify(NULL);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(
-                                   Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpBallastLitres"));
-  if (wp) {
-    wp->GetDataField()->
-      SetAsFloat(oldGlidePolar::GetBallastLitres());
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
-  if (wp) {
-    if (oldGlidePolar::WingLoading>0.1) {
-      wp->GetDataField()->
-        SetAsFloat(oldGlidePolar::WingLoading);
-    } else {
-      wp->hide();
-    }
-    wp->RefreshDisplay();
+  if ((wf->ShowModal() == mrOK) && changed) {
+    task_manager.set_glide_polar(gp_copy);
   }
 
-  wf->ShowModal();
   delete wf;
 }
 

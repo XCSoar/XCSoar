@@ -57,6 +57,8 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
+#include "GlideSolvers/GlidePolar.hpp"
+
 #ifndef _MSC_VER
 #include <algorithm>
 using std::min;
@@ -177,7 +179,8 @@ FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
 }
 
 void
-FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc) const
+FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc,
+                              const GlidePolar& glide_polar) const
 {
   Chart chart(canvas, rc);
 
@@ -185,7 +188,7 @@ FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc) const
     chart.DrawNoData();
     return;
   }
-  double MACCREADY = oldGlidePolar::GetMacCready();
+  double MACCREADY = glide_polar.get_mc();
 
   chart.ScaleYFromData(ThermalAverage);
   chart.ScaleYFromValue( (MACCREADY+0.5));
@@ -212,16 +215,16 @@ FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc) const
 void
 FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
                                    const DERIVED_INFO &derived,
-                                   const SETTINGS_COMPUTER &settings_computer) const
+                                   const SETTINGS_COMPUTER &settings_computer,
+                                   const GlidePolar& glide_polar) const
 {
   int i;
   Chart chart(canvas, rc);
 
   chart.ScaleYFromValue( 0);
-  chart.ScaleYFromValue(oldGlidePolar::SinkRateFast(0,
-       (int)(settings_computer.SafetySpeed - 1)) * 1.1);
-  chart.ScaleXFromValue(oldGlidePolar::Vminsink*0.8);
-  chart.ScaleXFromValue(settings_computer.SafetySpeed + 2);
+  chart.ScaleYFromValue(-glide_polar.get_Smax()*1.1);
+  chart.ScaleXFromValue(glide_polar.get_Vmin()*0.8);
+  chart.ScaleXFromValue(glide_polar.get_Vmax() + 2);
 
   chart.DrawXGrid(10.0/SPEEDMODIFY, 0,
 		  Chart::STYLE_THINDASHPAPER, 10.0, true);
@@ -233,11 +236,11 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   bool v0valid = false;
   int i0=0;
 
-  for (i= oldGlidePolar::Vminsink; i < settings_computer.SafetySpeed - 1;
+  for (i= glide_polar.get_Vmin(); i <= glide_polar.get_Vmax();
        ++i) {
 
-    sinkrate0 = oldGlidePolar::SinkRateFast(0,i);
-    sinkrate1 = oldGlidePolar::SinkRateFast(0,i+1);
+    sinkrate0 = -glide_polar.SinkRate(i);
+    sinkrate1 = -glide_polar.SinkRate(i+1);
     chart.DrawLine(i, sinkrate0 ,
 		   i+1, sinkrate1,
 		   Chart::STYLE_MEDIUMBLACK);
@@ -256,15 +259,15 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
     }
   }
 
-  double MACCREADY = oldGlidePolar::GetMacCready();
+  double MACCREADY = glide_polar.get_mc();
 
-  double ff = settings_computer.SafetySpeed
+  double ff = glide_polar.get_Vmax()
     / max(1.0, derived.VMacCready);
-  double sb = oldGlidePolar::SinkRate(derived.VMacCready);
+  double sb = -glide_polar.SinkRate(derived.VMacCready);
   ff = (sb - MACCREADY) / max(1.0, derived.VMacCready);
 
-  chart.DrawLine(0, MACCREADY, settings_computer.SafetySpeed,
-                 MACCREADY + ff * settings_computer.SafetySpeed,
+  chart.DrawLine(0, MACCREADY, glide_polar.get_Vmax(),
+                 MACCREADY + ff * glide_polar.get_Vmax(),
 		 Chart::STYLE_REDTHICK);
 
   chart.DrawXLabel(TEXT("V"));
@@ -273,12 +276,12 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   TCHAR text[80];
   canvas.background_opaque();
 
-  _stprintf(text,TEXT("Weight %.0f kg"),
-	    oldGlidePolar::GetAUW());
+  _stprintf(text,TEXT("Weight %d kg"),
+	    glide_polar.get_all_up_weight().as_int());
   canvas.text_opaque(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(55), text);
 
   _stprintf(text,TEXT("Wing loading %.1f kg/m2"),
-	    oldGlidePolar::WingLoading);
+	    glide_polar.get_wing_loading().as_double());
   canvas.text_opaque(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(40), text);
 
   canvas.background_transparent();

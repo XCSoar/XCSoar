@@ -54,6 +54,7 @@ class OLCOptimizer;
 class WindStore;
 class Airspaces;
 class RasterTerrain;
+class GlidePolar;
 
 class FlightStatistics {
 public:
@@ -80,10 +81,12 @@ public:
                       RasterTerrain &terrain) const;
   void RenderBarograph(Canvas &canvas, const RECT rc,
                        const DERIVED_INFO &derived) const;
-  void RenderClimb(Canvas &canvas, const RECT rc) const;
+  void RenderClimb(Canvas &canvas, const RECT rc,
+                   const GlidePolar& glide_polar) const;
   void RenderGlidePolar(Canvas &canvas, const RECT rc,
                         const DERIVED_INFO &derived,
-                        const SETTINGS_COMPUTER &settings_computer) const;
+                        const SETTINGS_COMPUTER &settings_computer,
+                        const GlidePolar& glide_polar) const;
   void RenderWind(Canvas &canvas, const RECT rc,
                   const NMEA_INFO &nmea_info,
                   const WindStore &wind_store) const;
