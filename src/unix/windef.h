@@ -168,9 +168,6 @@ typedef LRESULT CALLBACK (*WNDPROC)(
     LPARAM lParam
 );
 
-#define max(a,b) ((a)>(b)?(a):(b))
-#define min(a,b) ((a)<(b)?(a):(b))
-
 typedef void *LPSECURITY_ATTRIBUTES;
 
 typedef struct OVERLAPPED OVERLAPPED;
