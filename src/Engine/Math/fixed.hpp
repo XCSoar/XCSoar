@@ -42,16 +42,20 @@ void sin_cos(const double&theta, double*s, double*c);
 
 #ifdef HAVE_BOOST
 #include <boost/cstdint.hpp>
-typedef boost::int64_t __int64;
-typedef boost::uint64_t __uint64;
 #else
 #include <stdint.h>
-typedef unsigned __int64    __uint64;
 #endif
 
 class fixed
 {
 public:
+#ifdef HAVE_BOOST
+  typedef boost::int64_t __int64;
+  typedef boost::uint64_t __uint64;
+#else
+  typedef unsigned __int64 __uint64;
+#endif
+
   static const unsigned resolution_shift = 28;
   static const __int64 resolution = 1 << resolution_shift;
 
