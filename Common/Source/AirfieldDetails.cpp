@@ -159,14 +159,14 @@ LookupAirfieldDetail(WaypointSelectInfoVector &airports,
 {
   CharUpper(Name); // AIR name
 
-  for (WaypointSelectInfoVector::const_iterator it =
+  for (WaypointSelectInfoVector::iterator it =
          airports.begin(); it!= airports.end(); ++it) {
     const Waypoint &wp = *it->way_point;
 
     if (check_name(wp, Name)) {
       way_points.set_details(wp, Details);
 
-      airports.erase(v); // this one no longer needs searching, remove from list
+      airports.erase(it); // this one no longer needs searching, remove from list
       return;
     }
   }
