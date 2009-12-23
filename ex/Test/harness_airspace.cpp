@@ -41,7 +41,7 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
       GEOPOINT c;
       c.Longitude = (rand()%1200-600)/1000.0+0.5;
       c.Latitude = (rand()%1200-600)/1000.0+0.5;
-      double radius = 10000.0*(0.2+(rand()%12)/12.0);
+      fixed radius(10000.0*(0.2+(rand()%12)/12.0));
       as = new AirspaceCircle(c,radius);
     } else {
 
@@ -55,8 +55,8 @@ void setup_airspaces(Airspaces& airspaces, const unsigned n) {
       std::vector<GEOPOINT> pts;
       for (unsigned j=0; j<num; j++) {
         GEOPOINT p=c;
-        p.Longitude += (rand()%200)/1000.0;
-        p.Latitude += (rand()%200)/1000.0;
+        p.Longitude += fixed((rand()%200)/1000.0);
+        p.Latitude += fixed((rand()%200)/1000.0);
         pts.push_back(p);
       }
       as = new AirspacePolygon(pts,true);
@@ -259,7 +259,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
                     bool do_report,
                     const GEOPOINT &target) 
 {
-  const fixed range = 20000.0;
+  const fixed range(20000.0);
 
   const std::vector<Airspace> vn = airspaces.scan_nearest(state);
   AirspaceVisitorPrint pvn("results/res-bb-nearest.txt",

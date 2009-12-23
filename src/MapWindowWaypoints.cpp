@@ -264,7 +264,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
   MapWaypointLabelClear();
 
   WaypointVisitorMap v(*this, canvas, task->get_glide_polar());
-  way_points->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
+  way_points->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
 
   // OLD_TASK -> new TODO, also draw waypoints in task 
 

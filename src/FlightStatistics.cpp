@@ -238,8 +238,8 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   for (i= glide_polar.get_Vmin(); i <= glide_polar.get_Vmax();
        ++i) {
 
-    sinkrate0 = -glide_polar.SinkRate(i);
-    sinkrate1 = -glide_polar.SinkRate(i+1);
+    sinkrate0 = -glide_polar.SinkRate(fixed(i));
+    sinkrate1 = -glide_polar.SinkRate(fixed(i + 1));
     chart.DrawLine(i, sinkrate0 ,
 		   i+1, sinkrate1,
 		   Chart::STYLE_MEDIUMBLACK);
@@ -260,10 +260,9 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
 
   double MACCREADY = glide_polar.get_mc();
 
-  double ff = glide_polar.get_Vmax()
-    / max(1.0, derived.VMacCready);
+  double ff = glide_polar.get_Vmax() / max(fixed_one, derived.VMacCready);
   double sb = -glide_polar.SinkRate(derived.VMacCready);
-  ff = (sb - MACCREADY) / max(1.0, derived.VMacCready);
+  ff = (sb - MACCREADY) / max(fixed_one, derived.VMacCready);
 
   chart.DrawLine(0, MACCREADY, glide_polar.get_Vmax(),
                  MACCREADY + ff * glide_polar.get_Vmax(),
@@ -813,7 +812,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
                                  const Airspaces &airspace_database,
                                  RasterTerrain &terrain) const
 {
-  fixed range = 50000; // 50 km
+  static const fixed range(50000); // 50 km
   fixed hmin = max(fixed_zero, nmea_info.GPSAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), nmea_info.GPSAltitude + fixed(1000));
   const GEOPOINT p_start = nmea_info.Location;

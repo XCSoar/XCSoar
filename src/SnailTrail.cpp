@@ -65,7 +65,7 @@ SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   pt.Time = Basic->Time;
   pt.FarVisible = true; // hasn't been filtered out yet.
   if (Calculated->TerrainValid) {
-    fixed hr = max(0,Calculated->AltitudeAGL)/100.0;
+    fixed hr = max(fixed_zero, Calculated->AltitudeAGL)/100.0;
     pt.DriftFactor = 2.0/(1.0+exp(-hr))-1.0;
   } else {
     pt.DriftFactor = 1.0;
@@ -79,8 +79,8 @@ SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 
   fixed scale = Calculated->AdjustedAverageThermal; // just for now.. TODO replace
   // with mc or something more consistent
-  fixed vario_max = (fixed)(1.5*min(5.0, max(scale,0.5)));
-  fixed vario_min = (fixed)(-1.5*min(5.0, max(scale,2.0)));
+  fixed vario_max = min(fixed(5.0), max(scale, fixed(0.5))) * 1.5;
+  fixed vario_min = min(fixed(5.0), max(scale, fixed(2.0))) * -1.;
   fixed colour_vario = pt.Vario;
   if (pt.Vario<0) {
     colour_vario /= (-vario_min); // JMW fixed bug here

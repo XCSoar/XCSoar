@@ -203,7 +203,7 @@ bool test_bestcruisetrack(int test_num, int n_wind)
 
 bool test_abort(int n_wind)
 {
-  GlidePolar glide_polar(2.0);
+  GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
   setup_waypoints(waypoints);
 
@@ -235,7 +235,7 @@ bool test_abort(int n_wind)
 
 bool test_goto(int n_wind, unsigned id, bool auto_mc)
 {
-  GlidePolar glide_polar(2.0);
+  GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
   setup_waypoints(waypoints);
 
@@ -267,7 +267,7 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
 
 bool test_null()
 {
-  GlidePolar glide_polar(2.0);
+  GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
   setup_waypoints(waypoints);
 

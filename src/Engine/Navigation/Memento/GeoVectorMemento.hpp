@@ -51,7 +51,7 @@ public:
    * Constructor, initialises all to zero. 
    */
   GeoVectorMemento():
-    value(0.0) {};
+    value(fixed_zero) {};
 
   /**
    * Returns a GeoVector object from the origin to destination, 

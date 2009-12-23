@@ -136,13 +136,12 @@ cLXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   11 windspeed (kph)
 
   */
-  double alt, airspeed;
 
   NMEAParser::ExtractParameter(String,ctemp,1);
-  airspeed = _tcstod(ctemp, NULL) / TOKPH;
+  fixed airspeed(_tcstod(ctemp, NULL) / TOKPH);
 
   NMEAParser::ExtractParameter(String,ctemp,2);
-  alt = _tcstod(ctemp, NULL);
+  fixed alt(_tcstod(ctemp, NULL));
 
   GPS_INFO->IndicatedAirspeed = airspeed/GPS_INFO->pressure.AirDensityRatio(alt);
   GPS_INFO->TrueAirspeed = airspeed;

@@ -120,7 +120,7 @@ GlideComputer glide_computer(task_manager, airspace_warning);
 void test_task() {
 
   GlidePolar glide_polar = task_manager.get_glide_polar();
-  glide_polar.set_mc(2.0);
+  glide_polar.set_mc(fixed_two);
   task_manager.set_glide_polar(glide_polar);
 
   AbstractTaskFactory *fact;

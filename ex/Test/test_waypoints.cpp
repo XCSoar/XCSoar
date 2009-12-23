@@ -43,7 +43,7 @@ unsigned test_range(const Waypoints& waypoints, const double range)
   const Waypoint *r = waypoints.lookup_id(3);
   if (r) {
     WaypointVisitorPrint v;
-    waypoints.visit_within_range(r->Location, range, v);
+    waypoints.visit_within_range(r->Location, fixed(range), v);
     return v.count;
   } else {
     return 0;
@@ -55,7 +55,7 @@ unsigned test_radius(const Waypoints& waypoints, const double range)
   const Waypoint *r = waypoints.lookup_id(3);
   if (r) {
     WaypointVisitorPrint v;
-    waypoints.visit_within_radius(r->Location, range, v);
+    waypoints.visit_within_radius(r->Location, fixed(range), v);
     return v.count;
   } else {
     return 0;

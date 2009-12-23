@@ -257,7 +257,6 @@ static bool
 PDVDV(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
   TCHAR ctemp[80];
-  double alt;
 
   NMEAParser::ExtractParameter(String,ctemp,0);
   GPS_INFO->Vario = _tcstod(ctemp, NULL) / 10.0;
@@ -275,7 +274,7 @@ PDVDV(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   if (enable_baro){
     NMEAParser::ExtractParameter(String,ctemp,3);
-    alt = _tcstod(ctemp, NULL);
+    fixed alt(_tcstod(ctemp, NULL));
     GPS_INFO->BaroAltitudeAvailable = true;
     GPS_INFO->BaroAltitude = GPS_INFO->pressure.
       AltitudeToQNHAltitude(alt);

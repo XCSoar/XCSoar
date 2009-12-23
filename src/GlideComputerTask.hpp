@@ -137,7 +137,7 @@ private:
 public:
   virtual void ResetEnter();
   double AATCloseDistance(void) const {
-    return max(100.0, Basic().Speed*1.5);
+    return max(fixed(100.0), Basic().Speed * 1.5);
   }
 };
 

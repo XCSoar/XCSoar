@@ -229,7 +229,7 @@ bool test_task_mixed(TaskManager& task_manager,
   if (wp) {
     tp = fact->createStart(AbstractTaskFactory::START_LINE,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-      cz->setRadius(5000.0);
+      cz->setRadius(fixed(5000.0));
       tp->update_oz();
     }
     if (!fact->append(tp,false)) return false;
@@ -252,7 +252,7 @@ bool test_task_mixed(TaskManager& task_manager,
   if (wp) {
     tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-      cz->setRadius(30000.0);
+      cz->setRadius(fixed(30000.0));
       tp->update_oz();
     }
     if (!fact->append(tp,false)) return false;
@@ -270,7 +270,7 @@ bool test_task_mixed(TaskManager& task_manager,
   if (wp) {
     tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-      cz->setRadius(30000.0);
+      cz->setRadius(fixed(30000.0));
       tp->update_oz();
     }
     if (!fact->append(tp,false)) return false;
@@ -372,7 +372,7 @@ bool test_task_aat(TaskManager& task_manager,
   if (wp) {
     OrderedTaskPoint* tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-      cz->setRadius(30000.0);
+      cz->setRadius(fixed(30000.0));
       tp->update_oz();
     }
     if (!fact->append(tp,false)) {
@@ -385,7 +385,7 @@ bool test_task_aat(TaskManager& task_manager,
   if (wp) {
     OrderedTaskPoint* tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-      cz->setRadius(40000.0);
+      cz->setRadius(fixed(40000.0));
       tp->update_oz();
     }
     if (!fact->append(tp,false)) {
@@ -573,7 +573,7 @@ bool test_task_random(TaskManager& task_manager,
 
     tp = fact->createStart(s,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-      cz->setRadius(500.0);
+      cz->setRadius(fixed(500.0));
       tp->update_oz();
     }
     if (!fact->append(tp,false)) {
@@ -593,7 +593,7 @@ bool test_task_random(TaskManager& task_manager,
 
       tp = fact->createIntermediate(s,*wp);
       if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-        cz->setRadius(500.0);
+        cz->setRadius(fixed(500.0));
         tp->update_oz();
       }
       if (!fact->append(tp,false)) {
@@ -610,7 +610,7 @@ bool test_task_random(TaskManager& task_manager,
 
     tp = fact->createFinish(s,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
-      cz->setRadius(500.0);
+      cz->setRadius(fixed(500.0));
       tp->update_oz();
     }
     if (!fact->append(tp,false)) {

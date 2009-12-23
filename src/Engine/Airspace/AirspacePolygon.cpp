@@ -80,7 +80,7 @@ const GEOPOINT
 AirspacePolygon::get_center() const
 {
   if (m_border.empty()) {
-    return GEOPOINT(0,0);
+    return GEOPOINT(fixed_zero, fixed_zero);
   } else {
     return m_border[0].get_location();
   }

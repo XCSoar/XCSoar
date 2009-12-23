@@ -46,15 +46,15 @@ Copyright_License {
 unsigned count_distbearing = 0;
 #endif
 
-static const fixed fixed_earth_r = 6371000;
-static const fixed fixed_double_earth_r = 6371000*2;
-static const fixed fixed_inv_earth_r = (1.0/6371000);
-static const fixed fixed_xte_fact = 1.0/(fixed_rad_to_deg * fixed_earth_r); 
+static const fixed fixed_earth_r(6371000);
+static const fixed fixed_double_earth_r(6371000 * 2);
+static const fixed fixed_inv_earth_r(1.0 / 6371000);
+static const fixed fixed_xte_fact(1.0 / (fixed_rad_to_deg * fixed_earth_r));
 
 #ifdef FIXED_MATH
   // need to expand range for meter accuracy
-  static const fixed fixed_expand_xsq = 1e8;
-  static const fixed fixed_expand_x = 1e4;
+  static const fixed fixed_expand_xsq(1e8);
+  static const fixed fixed_expand_x(1e4);
 #else
 #define fixed_expand_xsq 1.0
 #define fixed_expand_x 1.0
@@ -143,14 +143,15 @@ fixed CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3,
   //  course towards B to the point abeam D
 
   const fixed sindist_AD = sin(dist_AD);
-  const fixed XTD = asin(sindist_AD*sin(crs_AD-crs_AB)); // cross track distance
+  const fixed XTD(asin(sindist_AD * sin(crs_AD - crs_AB))); // cross track distance
 
   if (loc4) {
     fixed sinXTD, cosXTD;
     sin_cos(XTD,&sinXTD,&cosXTD);
 
-    const fixed ATD // along track distance
-      = asin(sqrt( sindist_AD*sindist_AD - sinXTD*sinXTD )/cosXTD);
+    // along track distance
+    const fixed ATD(asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD)
+                         / cosXTD));
 
     loc1.Latitude *= fixed_deg_to_rad;
     loc2.Latitude *= fixed_deg_to_rad;
@@ -184,13 +185,14 @@ fixed ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3)
   //  course towards B to the point abeam D
 
   const fixed sindist_AD = sin(dist_AD);
-  const fixed XTD = asin(sindist_AD*sin(crs_AD-crs_AB)); // cross track distance
+  const fixed XTD(asin(sindist_AD * sin(crs_AD - crs_AB))); // cross track distance
 
   fixed sinXTD, cosXTD;
   sin_cos(XTD,&sinXTD,&cosXTD);
 
-  const fixed ATD // along track distance
-    = asin(sqrt( sindist_AD*sindist_AD - sinXTD*sinXTD )/cosXTD);
+  // along track distance
+  const fixed ATD(asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD)
+                       / cosXTD));
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;

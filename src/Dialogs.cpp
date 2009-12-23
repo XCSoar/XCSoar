@@ -176,10 +176,11 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
 
   const Waypoint *way_point;
   if (!pan || !XCSoarInterface::SettingsMap().EnablePan) {
-    way_point = way_points.lookup_location(location, range);
+    way_point = way_points.lookup_location(location, fixed(range));
   } else {
     // nearest to center of screen if in pan mode
-    way_point = way_points.lookup_location(map_window.GetPanLocation(), range);
+    way_point = way_points.lookup_location(map_window.GetPanLocation(),
+                                           fixed(range));
   }
   if (way_point) {
     dlgWayPointDetailsShowModal(*way_point);

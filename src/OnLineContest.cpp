@@ -901,8 +901,8 @@ int OLCOptimizer::scan_sprint_inprogress(const SETTINGS_COMPUTER &settings) {
   if (bestdist>0) {
 
     FindLatitudeLongitude(locend,
-                          data.waypointbearing,
-                          dfurther*DISTANCEUNITS,
+                          fixed(data.waypointbearing),
+                          fixed(dfurther * DISTANCEUNITS),
                           &loc_proj);
 
     double score = bestdist*100/(settings.Handicap*2.5)/(1000.0/DISTANCEUNITS);
@@ -991,8 +991,8 @@ int OLCOptimizer::scan_classic(const SETTINGS_COMPUTER &settings) {
       t += (int)(dfurtherbest*DISTANCEUNITS/oldGlidePolar::Vbestld);
 
       FindLatitudeLongitude(data.locpnts[i7best],
-                            data.waypointbearing,
-                            dfurther*DISTANCEUNITS,
+                            fixed(data.waypointbearing),
+                            fixed(dfurther * DISTANCEUNITS),
                             &loc_proj);
     }
     UpdateSolution(bestdist, t, i1best, i2best, i3best, i4best,

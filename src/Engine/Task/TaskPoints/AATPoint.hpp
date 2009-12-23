@@ -173,7 +173,8 @@ public:
  * 
  * @return True if double leg distance from state is within threshold of target
  */
-  bool close_to_target(const AIRCRAFT_STATE& state, const fixed threshold=0) const;
+  bool close_to_target(const AIRCRAFT_STATE& state,
+                       const fixed threshold=fixed_zero) const;
 
 #ifdef DO_PRINT
   void print(std::ostream& f, const AIRCRAFT_STATE&state, 

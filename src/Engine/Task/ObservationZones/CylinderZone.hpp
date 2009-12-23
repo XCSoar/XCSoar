@@ -56,7 +56,7 @@ public:
  * 
  * @return Initialised object
  */
-  CylinderZone(const GEOPOINT &loc, const fixed _radius=10000.0):
+  CylinderZone(const GEOPOINT &loc, const fixed _radius=fixed(10000.0)):
     ObservationZonePoint(loc),
     Radius(_radius)
   {

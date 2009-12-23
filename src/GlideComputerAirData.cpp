@@ -247,8 +247,8 @@ GlideComputerAirData::AverageClimbRate()
 
     if (Basic().TrueAirspeed>0) {
       // TODO: Check this is correct for TAS/IAS
-      double ias_to_tas = Basic().IndicatedAirspeed / Basic().TrueAirspeed;
-      double w_tas = Basic().Vario * ias_to_tas;
+      fixed ias_to_tas = Basic().IndicatedAirspeed / Basic().TrueAirspeed;
+      fixed w_tas = Basic().Vario * ias_to_tas;
 
       SetCalculated().AverageClimbRate[vi] += w_tas;
       SetCalculated().AverageClimbRateN[vi]++;
@@ -383,7 +383,7 @@ GlideComputerAirData::MaxHeightGain()
     return;
 
   if (Calculated().MinAltitude > 0) {
-    double height_gain = Basic().NavAltitude - Calculated().MinAltitude;
+    fixed height_gain = Basic().NavAltitude - Calculated().MinAltitude;
     SetCalculated().MaxHeightGain = max(height_gain, Calculated().MaxHeightGain);
   } else {
     SetCalculated().MinAltitude = Basic().NavAltitude;
@@ -595,9 +595,12 @@ GlideComputerAirData::NettoVario()
 
   bool replay_disabled = !Basic().Replay;
 
-  double glider_sink_rate;
-  fixed speed = (Basic().AirspeedAvailable && replay_disabled)? Basic().IndicatedAirspeed: Basic().TrueAirspeed;
-  glider_sink_rate= -glide_polar.SinkRate(max(glide_polar.get_Vmin(), speed), n);
+  fixed glider_sink_rate;
+  fixed speed = (Basic().AirspeedAvailable && replay_disabled)
+    ? Basic().IndicatedAirspeed
+    : Basic().TrueAirspeed;
+  glider_sink_rate = -glide_polar.SinkRate(max(glide_polar.get_Vmin(), speed),
+                                           fixed(n));
   SetCalculated().GliderSinkRate = glider_sink_rate;
 
   if (Basic().NettoVarioAvailable && replay_disabled) {
@@ -796,13 +799,14 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
     bearing = (i * 360.0) / NUMTERRAINSWEEPS;
 
     terrain.Lock();
-    distance = FinalGlideThroughTerrain(bearing, Basic(), Calculated(),
-        SettingsComputer(), terrain, &loc, mymaxrange, &out_of_range,
+    distance = FinalGlideThroughTerrain(fixed(bearing), Basic(), Calculated(),
+        SettingsComputer(), terrain, &loc, fixed(mymaxrange), &out_of_range,
         &SetCalculated().TerrainBase);
     terrain.Unlock();
 
     if (out_of_range) {
-      FindLatitudeLongitude(Basic().Location, bearing, mymaxrange * 20, &loc);
+      FindLatitudeLongitude(Basic().Location, fixed(bearing),
+                            fixed(mymaxrange * 20), &loc);
     }
 
     SetCalculated().GlideFootPrint[i].Longitude = loc.Longitude;
@@ -861,7 +865,7 @@ GlideComputerAirData::PercentCircling(const double Rate)
   if (Calculated().Circling && (Rate > MinTurnRate)) {
     // Add one second to the circling time
     // timeCircling += (Basic->Time-LastTime);
-    SetCalculated().timeCircling += 1.0;
+    SetCalculated().timeCircling += fixed_one;
 
     // Add the Vario signal to the total climb height
     SetCalculated().TotalHeightClimb += Calculated().GPSVario;
@@ -872,7 +876,7 @@ GlideComputerAirData::PercentCircling(const double Rate)
   } else {
     // Add one second to the cruise time
     // timeCruising += (Basic->Time-LastTime);
-    SetCalculated().timeCruising += 1.0;
+    SetCalculated().timeCruising += fixed_one;
   }
 
   // Calculate the circling percentage
@@ -920,7 +924,7 @@ GlideComputerAirData::Turning()
 
   // JMW limit rate to 50 deg per second otherwise a big spike
   // will cause spurious lock on circling for a long time
-  double Rate = max(-50.0, min(50.0, Basic().TurnRate));
+  double Rate = max(-50.0, min(50.0, (double)Basic().TurnRate));
 
   // average rate, to detect essing
   // TODO: use rotary buffer
@@ -1175,7 +1179,7 @@ GlideComputerAirData::ThermalBand()
     // calculate new buckets so glider is below max
     fixed hbuk = Calculated().MaxThermalHeight/NUMTHERMALBUCKETS;
 
-    max_thermal_height_new = max(1.0, Calculated().MaxThermalHeight);
+    max_thermal_height_new = max(fixed_one, Calculated().MaxThermalHeight);
     while (max_thermal_height_new < dheight) {
       max_thermal_height_new += hbuk;
     }
@@ -1208,7 +1212,7 @@ GlideComputerAirData::ThermalBand()
 
   index = min(NUMTHERMALBUCKETS - 1,
               iround(NUMTHERMALBUCKETS
-                     * (dheight / max(1.0, Calculated().MaxThermalHeight))));
+                     * (dheight / max(fixed_one, Calculated().MaxThermalHeight))));
 
   SetCalculated().ThermalProfileW[index] += Calculated().Vario;
   SetCalculated().ThermalProfileN[index]++;

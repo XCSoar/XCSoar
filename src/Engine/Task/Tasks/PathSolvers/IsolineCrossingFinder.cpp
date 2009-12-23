@@ -43,7 +43,7 @@ IsolineCrossingFinder::IsolineCrossingFinder(const AATPoint& _aap,
                                              const GeoEllipse &_ell,
                                              const fixed _xmin, 
                                              const fixed _xmax):
-  ZeroFinder(_xmin, _xmax, TOLERANCE_ISOLINE_CROSSING),
+  ZeroFinder(_xmin, _xmax, fixed(TOLERANCE_ISOLINE_CROSSING)),
   aap(_aap),
   ell(_ell)
 {

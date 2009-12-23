@@ -4,13 +4,13 @@
 
 bool test_find_qnh() {
   AtmosphericPressure pres;
-  pres.FindQNH(100,100);
+  pres.FindQNH(fixed(100), fixed(100));
   return fabs(pres.get_QNH()-fixed(1013.25))<0.01;
 }
 
 bool test_find_qnh2() {
   AtmosphericPressure pres;
-  pres.FindQNH(100,120);
+  pres.FindQNH(fixed(100), fixed(120));
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(pres.get_QNH()));
   }
@@ -23,7 +23,7 @@ bool test_find_qnh2() {
 
 bool test_qnh_to_static() {
   AtmosphericPressure pres;
-  fixed p0 = pres.QNHAltitudeToStaticPressure(0);
+  fixed p0 = pres.QNHAltitudeToStaticPressure(fixed_zero);
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(p0));
   }
@@ -32,8 +32,8 @@ bool test_qnh_to_static() {
 
 bool test_qnh_round() {
   AtmosphericPressure pres;
-  pres.FindQNH(100,120);
-  fixed h0 = pres.AltitudeToQNHAltitude(100);
+  pres.FindQNH(fixed(100), fixed(120));
+  fixed h0 = pres.AltitudeToQNHAltitude(fixed(100));
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(h0));
   }
@@ -42,7 +42,7 @@ bool test_qnh_round() {
 
 bool test_qnh_round2() {
   AtmosphericPressure pres;
-  pres.FindQNH(100,120);
+  pres.FindQNH(fixed(100), fixed(120));
   fixed p0 = pres.get_QNH()*100;
   fixed h0 = pres.StaticPressureToQNHAltitude(p0);
   if (verbose) {
@@ -87,11 +87,11 @@ int main(int argc, char** argv)
 
   ok(test_qnh_round2(),"qnh round 2",0);
 
-  ok(test_isa_pressure(1524, 0.8320), "isa pressure at 1524m",0);
-  ok(test_isa_pressure(6096, 0.4594), "isa pressure at 6096m",0);
+  ok(test_isa_pressure(fixed(1524), fixed(0.8320)), "isa pressure at 1524m",0);
+  ok(test_isa_pressure(fixed(6096), fixed(0.4594)), "isa pressure at 6096m",0);
 
-  ok(test_isa_density(1524, 0.8617), "isa density at 1524m",0);
-  ok(test_isa_density(6096, 0.5328), "isa density at 6096m",0);
+  ok(test_isa_density(fixed(1524), fixed(0.8617)), "isa density at 1524m",0);
+  ok(test_isa_density(fixed(6096), fixed(0.5328)), "isa density at 6096m",0);
 
   return exit_status();
 }

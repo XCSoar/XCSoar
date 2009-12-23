@@ -332,13 +332,14 @@ bool MapWindow::on_mouse_up(int x, int y)
   if (is_simulator() && (dwInterval>50)) {
     if (!Basic().Replay && !my_target_pan && (distance>IBLSCALE(36))) {
       // This drag moves the aircraft (changes speed and direction)
-      const double oldbearing = Basic().TrackBearing;
-      const double minspeed = 1.1*task->get_glide_polar().get_Vmin();
-      const double newbearing = Bearing(LLstart, G);
-      if ((fabs(AngleLimit180(newbearing - oldbearing)) < 30)
+      const fixed oldbearing = Basic().TrackBearing;
+      const fixed minspeed = 1.1*task->get_glide_polar().get_Vmin();
+      const fixed newbearing = Bearing(LLstart, G);
+      if ((fabs(AngleLimit180(fixed(newbearing - oldbearing))) < 30)
           || (Basic().Speed < minspeed)) {
 
-        device_blackboard.SetSpeed(min(100.0, max(minspeed, distance / 3)));
+        device_blackboard.SetSpeed(min(fixed(100.0), max(minspeed,
+                                                         fixed(distance / 3))));
       }
       device_blackboard.SetTrackBearing(newbearing);
       // change bearing without changing speed if direction change > 30

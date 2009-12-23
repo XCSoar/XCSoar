@@ -57,7 +57,7 @@ public:
    * @return Initialised object
    */
   FAISectorZone(const GEOPOINT loc):
-    SymmetricSectorZone(loc,10000.0,90.0)
+    SymmetricSectorZone(loc, fixed(10000.0), fixed(90.0))
     {}
 
   virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {

@@ -180,7 +180,7 @@ FeedWayPointLine(Waypoints &way_points, const RasterTerrain *terrain,
     /* nothing was parsed, return without error condition */
     return true;
 
-  Waypoint new_waypoint = way_points.create(GEOPOINT(0,0));
+  Waypoint new_waypoint = way_points.create(GEOPOINT(fixed_zero, fixed_zero));
   if (!ParseWayPointString(new_waypoint, TempString, terrain)) {
     return false;
   }

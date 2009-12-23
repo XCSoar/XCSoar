@@ -41,7 +41,7 @@
 void 
 AIRSPACE_ALT::set_flight_level(const AtmosphericPressure &press)
 {
-  static const fixed fl_feet_to_m = 30.48;
+  static const fixed fl_feet_to_m(30.48);
   if (Base == abFL)
     Altitude = press.AltitudeToQNHAltitude(FL * fl_feet_to_m);
 }
@@ -56,7 +56,7 @@ AIRSPACE_ALT::set_ground_level(const fixed alt)
 const tstring 
 AIRSPACE_ALT::get_as_text(const bool concise) const
 {
-  static const fixed fixed_10 = 10;
+  static const fixed fixed_10(10);
 
   tstringstream oss;
   switch (Base) {

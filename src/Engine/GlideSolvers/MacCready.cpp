@@ -45,7 +45,7 @@
 #include "Navigation/Aircraft.hpp"
 
 
-static const fixed fixed_1mil=1.0e6;
+static const fixed fixed_1mil(1.0e6);
 
 
 MacCready::MacCready(const GlidePolar &_glide_polar,
@@ -276,7 +276,7 @@ public:
                 const fixed & vmin,
                 const fixed & vmax,
                 const bool _allow_partial):
-    ZeroFinder(vmin, vmax, TOLERANCE_MC_OPT_GLIDE),
+    ZeroFinder(vmin, vmax, fixed(TOLERANCE_MC_OPT_GLIDE)),
     task(_task),
     mac(_mac),
     inv_mc(_mac.get_inv_mc()),

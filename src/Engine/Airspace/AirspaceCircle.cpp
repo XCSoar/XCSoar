@@ -51,11 +51,11 @@ AirspaceCircle::AirspaceCircle(const GEOPOINT &loc,
 const FlatBoundingBox 
 AirspaceCircle::get_bounding_box(const TaskProjection& task_projection) 
 {
-  const double eradius = m_radius*1.42;
-  const GEOPOINT ll = GeoVector(eradius,225).end_point(m_center);
-  const GEOPOINT lr = GeoVector(eradius,135).end_point(m_center);
-  const GEOPOINT ur = GeoVector(eradius,45).end_point(m_center);
-  const GEOPOINT ul = GeoVector(eradius,315).end_point(m_center);
+  const fixed eradius = m_radius*1.42;
+  const GEOPOINT ll = GeoVector(eradius, fixed(225)).end_point(m_center);
+  const GEOPOINT lr = GeoVector(eradius, fixed(135)).end_point(m_center);
+  const GEOPOINT ur = GeoVector(eradius, fixed(45)).end_point(m_center);
+  const GEOPOINT ul = GeoVector(eradius, fixed(315)).end_point(m_center);
 
   FLAT_GEOPOINT fll = task_projection.project(ll);
   FLAT_GEOPOINT flr = task_projection.project(lr);

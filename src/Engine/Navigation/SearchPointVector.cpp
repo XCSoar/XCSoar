@@ -72,12 +72,12 @@ FLAT_GEOPOINT nearest_point(const FLAT_GEOPOINT &p1,
                             const FLAT_GEOPOINT &p3)
 {
   const FLAT_GEOPOINT p12 = p2-p1;
-  const fixed rsq = p12.dot(p12);
+  const fixed rsq(p12.dot(p12));
   if (!positive(rsq)) {
     return p1;
   }
   const FLAT_GEOPOINT p13 = p3-p1;
-  const fixed numerator = p13.dot(p12);
+  const fixed numerator(p13.dot(p12));
   
   if (!positive(numerator)) {
     return p1;

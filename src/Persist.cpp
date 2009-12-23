@@ -161,9 +161,9 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   //   CRUISE_EFFICIENCY = min(1.5, max(CRUISE_EFFICIENCY,0.75));
 
   GlidePolar gp = task_manager.get_glide_polar();
-  gp.set_mc(MACCREADY);
-  gp.set_bugs(BUGS);
-  gp.set_ballast(BALLAST);
+  gp.set_mc(fixed(MACCREADY));
+  gp.set_bugs(fixed(BUGS));
+  gp.set_ballast(fixed(BALLAST));
   task_manager.set_glide_polar(gp);
 
   StartupStore(TEXT("LoadCalculationsPersist OK\n"));

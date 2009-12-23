@@ -59,8 +59,12 @@ static WndListFrame *wAirspaceList=NULL;
 static TCHAR NameFilter[] = _T("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 static unsigned NameFilterIdx=0;
 
-static double DistanceFilter[] = {0.0, 25.0, 50.0, 75.0, 100.0, 150.0,
-                                  250.0, 500.0, 1000.0};
+static const fixed DistanceFilter[] = {
+  fixed_zero, fixed(25.0), fixed(50.0),
+  fixed(75.0), fixed(100.0), fixed(150.0),
+  fixed(250.0), fixed(500.0), fixed(1000.0),
+};
+
 static unsigned DistanceFilterIdx=0;
 
 #define DirHDG -1
@@ -125,7 +129,7 @@ static void UpdateList(void)
       a = iround(XCSoarInterface::Basic().Heading);
       lastHeading = a;
     }
-    airspace_sorter->filter_direction(AirspaceSelectInfo, a);
+    airspace_sorter->filter_direction(AirspaceSelectInfo, fixed(a));
   }
   if (sort_distance) {
     airspace_sorter->sort_distance(AirspaceSelectInfo);
@@ -235,7 +239,7 @@ static void OnFilterDistance(DataField *Sender,
     _stprintf(sTmp, _T("%c"), '*');
   else
     _stprintf(sTmp, _T("%.0f%s"),
-              DistanceFilter[DistanceFilterIdx],
+              (double)DistanceFilter[DistanceFilterIdx],
               Units::GetDistanceName());
   Sender->Set(sTmp);
 }
@@ -478,7 +482,8 @@ void dlgAirspaceSelect(void) {
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
 
-  AirspaceSorter g_airspace_sorter(airspace_database, Location, DISTANCEMODIFY);
+  AirspaceSorter g_airspace_sorter(airspace_database, Location,
+                                   fixed(DISTANCEMODIFY));
   airspace_sorter = &g_airspace_sorter;
 
   UpdateList();

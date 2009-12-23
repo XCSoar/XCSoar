@@ -555,7 +555,7 @@ DeviceBlackboard::TurnRate()
 
     // integrate assuming constant acceleration, for one second
     // QUESTION TB: shouldn't dtlead be = 1, for one second?!
-    static const fixed dtlead = 0.3;
+    static const fixed dtlead(0.3);
 
     const fixed calc_bearing = Basic().TrackBearing + dtlead
       * (Basic().TurnRate + fixed_half * dtlead * dRate);
@@ -580,8 +580,8 @@ DeviceBlackboard::TurnRate()
 void
 DeviceBlackboard::Dynamics()
 {
-  static const fixed fixed_inv_g = 1.0/9.81;
-  static const fixed fixed_small = 0.001;
+  static const fixed fixed_inv_g(1.0/9.81);
+  static const fixed fixed_small(0.001);
 
   if (Calculated().Flying && ((Basic().Speed > 0) || (Basic().WindSpeed > 0))) {
 

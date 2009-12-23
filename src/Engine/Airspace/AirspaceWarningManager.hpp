@@ -77,8 +77,8 @@ public:
   AirspaceWarningManager(const Airspaces& airspaces,
                          const AIRCRAFT_STATE &state,
                          const TaskManager &task_manager,
-                         const fixed& prediction_time_glide=15.0,
-                         const fixed& prediction_time_filter=60.0);
+                         const fixed& prediction_time_glide=fixed(15.0),
+                         const fixed& prediction_time_filter=fixed(60.0));
 
 /** 
  * Reset warning list and filter (as in new flight)

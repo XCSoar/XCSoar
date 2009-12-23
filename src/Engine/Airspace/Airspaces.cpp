@@ -123,7 +123,7 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
     // also should do scan_range with range = 0 since there
     // could be more than one with zero dist
     if (found.second==0) {
-      return scan_range(state, 0, condition);
+      return scan_range(state, fixed_zero, condition);
     } else {
       if (condition(*found.first->get_airspace())) {
         res.push_back(*found.first);

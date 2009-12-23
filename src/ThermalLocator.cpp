@@ -95,7 +95,7 @@ void ThermalLocator::AddPoint(const fixed t,
   points[nindex].latitude = location.Latitude;
   points[nindex].t = t;
   points[nindex].w = w;
-  points[nindex].iw = iround(max(w,-0.1)*10);
+  points[nindex].iw = iround(max(w, fixed(-0.1)) * 10);
   //  points[nindex].logw = log(max(w,0.1)*10.0);
   points[nindex].valid = true;
   nindex++;
@@ -157,7 +157,7 @@ void ThermalLocator::Update(const fixed t_0,
 
   Update_Internal(t_0, location_0.Longitude, location_0.Latitude,
                   traildrift_lon, traildrift_lat,
-                  trackbearing, 1.0,
+                  trackbearing, fixed_one,
                   &(Thermal_Location->Longitude),
                   &(Thermal_Location->Latitude),
                   Thermal_W,
@@ -165,7 +165,7 @@ void ThermalLocator::Update(const fixed t_0,
 
   Update_Internal(t_0, location_0.Longitude, location_0.Latitude,
                   traildrift_lon, traildrift_lat,
-                  trackbearing, 2.0,
+                  trackbearing, fixed_two,
                   &Thermal_Location0.Longitude,
                   &Thermal_Location0.Latitude,
                   &Thermal_W0,
@@ -313,14 +313,14 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
   fixed Xrounding = fabs(loc.Longitude-Thermal_Location.Longitude)/2;
   fixed Yrounding = fabs(loc.Latitude-Thermal_Location.Latitude)/2;
 
-  for (fixed t = 0; t<=Tmax; t+= dt) {
+  for (fixed t = fixed_zero; t<=Tmax; t+= dt) {
 
     FindLatitudeLongitude(Thermal_Location,
                           wind_bearing,
                           wind_speed*t, &loc);
 
     fixed hthermal = altitude-wthermal*t;
-    fixed hground = 0;
+    fixed hground = fixed_zero;
 
     if (terrain.GetMap()) {
       RasterRounding rounding(*terrain.GetMap(),Xrounding,Yrounding);
@@ -336,7 +336,7 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
     }
   }
 
-  fixed hground = 0;
+  fixed hground = fixed_zero;
   if (terrain.GetMap()) {
     RasterRounding rounding(*terrain.GetMap(),Xrounding,Yrounding);
     hground = terrain.GetTerrainHeight(loc, rounding);

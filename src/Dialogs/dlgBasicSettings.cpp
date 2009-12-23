@@ -79,7 +79,7 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
     break;
     case DataField::daPut:
     case DataField::daChange:
-      fixed QNH = Sender->GetAsFloat();
+      fixed QNH(Sender->GetAsFloat());
 
 #ifdef OLD_TASK
       XCSoarInterface::Basic().pressure.set_QNH(QNH);
@@ -211,7 +211,7 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
   case DataField::daPut:
     if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
       lastRead = Sender->GetAsFloat()/100.0;
-      glide_polar->set_ballast(lastRead);
+      glide_polar->set_ballast(fixed(lastRead));
       changed = true;
       SetBallast();
     }
@@ -231,7 +231,7 @@ static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daPut:
       if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
         lastRead = Sender->GetAsFloat()/100.0;
-        glide_polar->set_bugs(lastRead);
+        glide_polar->set_bugs(fixed(lastRead));
       }
     break;
   }

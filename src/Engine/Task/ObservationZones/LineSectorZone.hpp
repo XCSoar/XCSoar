@@ -59,8 +59,8 @@ public:
  * 
  * @return Initialised object
  */
-  LineSectorZone(const GEOPOINT loc, const fixed radius=1000.0):
-    SymmetricSectorZone(loc,radius,180.0)
+  LineSectorZone(const GEOPOINT loc, const fixed radius=fixed(1000.0)):
+    SymmetricSectorZone(loc, radius, fixed(180.0))
   {};
 
   virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {

@@ -59,9 +59,9 @@ public:
  * @return Initialised object
  */
   SectorZone(const GEOPOINT &loc, 
-             const fixed _radius=10000.0,
-             const fixed _startRadial=0.0, 
-             const fixed _endRadial=360.0):
+             const fixed _radius=fixed(10000.0),
+             const fixed _startRadial=fixed_zero,
+             const fixed _endRadial=fixed(360.0)):
     CylinderZone(loc,_radius),
     StartRadial(_startRadial),
     EndRadial(_endRadial) 

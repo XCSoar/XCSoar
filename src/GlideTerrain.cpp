@@ -62,12 +62,12 @@ FinalGlideThroughTerrain(const fixed this_bearing,
                          bool *out_of_range,
                          fixed *TerrainBase)
 {
-  fixed mc = oldGlidePolar::GetMacCready();
-  fixed irange = oldGlidePolar::MacCreadyAltitude(mc,
+  fixed mc(oldGlidePolar::GetMacCready());
+  fixed irange(oldGlidePolar::MacCreadyAltitude(mc,
 						1.0, this_bearing,
                                                 basic.WindSpeed,
                                                 basic.WindDirection,
-						0, 0, true, 0);
+                                                0, 0, true, 0));
   const GEOPOINT start_loc = basic.Location;
   if (retloc) {
     *retloc = start_loc;
@@ -76,11 +76,11 @@ FinalGlideThroughTerrain(const fixed this_bearing,
 
   if (!positive(irange) || !positive(basic.NavAltitude))
     // can't make progress in this direction at the current windspeed/mc
-    return 0;
+    return fixed_zero;
 
   const RasterMap *map = terrain.GetMap();
   if (map == NULL)
-    return 0;
+    return fixed_zero;
 
   const fixed glide_max_range = basic.NavAltitude/irange;
 
@@ -107,7 +107,7 @@ FinalGlideThroughTerrain(const fixed this_bearing,
   loc = last_loc = start_loc;
 
   altitude = basic.NavAltitude;
-  h =  max(fixed_zero, terrain.GetTerrainHeight(loc,rounding));
+  h = max(fixed_zero, fixed(terrain.GetTerrainHeight(loc, rounding)));
   dh = altitude - h - settings.SafetyAltitudeTerrain;
   last_dh = dh;
   if (negative(dh)) {
@@ -158,7 +158,7 @@ FinalGlideThroughTerrain(const fixed this_bearing,
     loc.Longitude += dloc.Longitude;
 
     // find height over terrain
-    h =  max(fixed_zero,terrain.GetTerrainHeight(loc, rounding));
+    h = max(fixed_zero, fixed(terrain.GetTerrainHeight(loc, rounding)));
 
     dh = altitude - h - settings.SafetyAltitudeTerrain;
 

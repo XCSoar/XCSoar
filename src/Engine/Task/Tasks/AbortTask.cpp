@@ -52,7 +52,7 @@ AbortTask::AbortTask(const TaskEvents &te,
   polar_safety(gp)
 {
   // default MC value
-  polar_safety.set_mc(1.0);
+  polar_safety.set_mc(fixed_one);
 }
 
 AbortTask::~AbortTask()
@@ -262,7 +262,7 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
 
   // now try with fake height added
   AIRCRAFT_STATE fake = state;
-  fake.NavAltitude += 10000.0;
+  fake.NavAltitude += fixed(10000.0);
   fill_reachable(fake, approx_waypoints, glide_polar, true, false);
   fill_reachable(fake, approx_waypoints, glide_polar, false, false);
 

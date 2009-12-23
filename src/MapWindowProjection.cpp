@@ -173,10 +173,10 @@ MapWindowProjection::CalculateScreenBounds(double scale) const
       p.x = screen_center.x + iround(fastcosine(ang)*maxsc*scale);
       p.y = screen_center.y + iround(fastsine(ang)*maxsc*scale);
       Screen2LonLat(p.x, p.y, g);
-      sb.minx = min(g.Longitude, sb.minx);
-      sb.miny = min(g.Latitude, sb.miny);
-      sb.maxx = max(g.Longitude, sb.maxx);
-      sb.maxy = max(g.Latitude, sb.maxy);
+      sb.minx = min((double)g.Longitude, sb.minx);
+      sb.miny = min((double)g.Latitude, sb.miny);
+      sb.maxx = max((double)g.Longitude, sb.maxx);
+      sb.maxy = max((double)g.Latitude, sb.maxy);
     }
 
   } else {
@@ -194,20 +194,26 @@ MapWindowProjection::CalculateScreenBounds(double scale) const
     x = MapRect.right;
     y = MapRect.top;
     Screen2LonLat(x, y, g);
-    xmin = min(xmin, g.Longitude); xmax = max(xmax, g.Longitude);
-    ymin = min(ymin, g.Latitude); ymax = max(ymax, g.Latitude);
+    xmin = min(xmin, (double)g.Longitude);
+    xmax = max(xmax, (double)g.Longitude);
+    ymin = min(ymin, (double)g.Latitude);
+    ymax = max(ymax, (double)g.Latitude);
 
     x = MapRect.right;
     y = MapRect.bottom;
     Screen2LonLat(x, y, g);
-    xmin = min(xmin, g.Longitude); xmax = max(xmax, g.Longitude);
-    ymin = min(ymin, g.Latitude); ymax = max(ymax, g.Latitude);
+    xmin = min(xmin, (double)g.Longitude);
+    xmax = max(xmax, (double)g.Longitude);
+    ymin = min(ymin, (double)g.Latitude);
+    ymax = max(ymax, (double)g.Latitude);
 
     x = MapRect.left;
     y = MapRect.bottom;
     Screen2LonLat(x, y, g);
-    xmin = min(xmin, g.Longitude); xmax = max(xmax, g.Longitude);
-    ymin = min(ymin, g.Latitude); ymax = max(ymax, g.Latitude);
+    xmin = min(xmin, (double)g.Longitude);
+    xmax = max(xmax, (double)g.Longitude);
+    ymin = min(ymin, (double)g.Latitude);
+    ymax = max(ymax, (double)g.Latitude);
 
     sb.minx = xmin;
     sb.maxx = xmax;

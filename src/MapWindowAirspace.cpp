@@ -246,9 +246,9 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
     MapDrawHelper helper (canvas, buffer, stencil_canvas, *this, GetMapRect());
     AirspaceVisitorMap v(helper, awc);
     v.set_border(false);
-    airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
+    airspace_database->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
     v.set_border(true);
-    airspace_database->visit_within_range(PanLocation, GetScreenDistanceMeters(), v);
+    airspace_database->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
     terrain->Unlock();
   }
 
@@ -320,7 +320,8 @@ MapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
                                                    Basic().GetAnyAltitude(),
                                                    awc);
 
-  airspace_database->visit_within_range(location, 100.0, airspace_copy_popup);
+  airspace_database->visit_within_range(location, fixed(100.0),
+                                        airspace_copy_popup);
 
   terrain->Unlock();
 

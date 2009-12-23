@@ -38,7 +38,7 @@
 #include "SectorZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-static const fixed fixed_nearlyone = 0.999;
+static const fixed fixed_nearlyone(0.999);
 
 GEOPOINT SectorZone::get_boundary_parametric(fixed t) const
 { 

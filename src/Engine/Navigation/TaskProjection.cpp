@@ -39,7 +39,7 @@
 #include "Math/Earth.hpp"
 #include <algorithm>
 
-static const fixed fixed_scale = 1000.0;
+static const fixed fixed_scale(1000.0);
 
 TaskProjection::TaskProjection()
 {

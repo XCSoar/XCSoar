@@ -93,7 +93,7 @@ AltairProDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
     if (enable_baro) {
       GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(lastAlt);
+      GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(fixed(lastAlt));
     }
 
     last_enable_baro = enable_baro;
@@ -122,7 +122,7 @@ AltairProDevice::PutQNH(const AtmosphericPressure &pres)
 {
   // TODO code: JMW check sending QNH to Altair
   if (last_enable_baro)
-    device_blackboard.SetBaroAlt(pres.AltitudeToQNHAltitude(lastAlt));
+    device_blackboard.SetBaroAlt(pres.AltitudeToQNHAltitude(fixed(lastAlt)));
 
   return true;
 }

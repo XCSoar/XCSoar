@@ -59,8 +59,8 @@ public:
  * @return Initialised object
  */
   SymmetricSectorZone(const GEOPOINT &loc,
-                      const fixed radius=10000.0,
-		      const fixed angle=90.0):
+                      const fixed radius=fixed(10000.0),
+                      const fixed angle=fixed(90.0)):
     SectorZone(loc,radius),
     SectorAngle(angle) {}
 

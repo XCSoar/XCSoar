@@ -120,7 +120,7 @@ EWMicroRecorderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
   if (!_tcscmp(params[0], _T("$PGRMZ")) && nparams >= 3) {
     if (enable_baro) {
-      double altitude = NMEAParser::ParseAltitude(params[1], params[2]);
+      fixed altitude(NMEAParser::ParseAltitude(params[1], params[2]));
 
       GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(altitude);
       GPS_INFO->BaroAltitudeAvailable = true;

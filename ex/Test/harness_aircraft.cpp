@@ -26,11 +26,11 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   if (task_manager.task_size()<=1) {
     short_flight = true;
     // cheat for non-ordered tasks
-    w.push_back(GEOPOINT(0.1,0.1));
+    w.push_back(GEOPOINT(fixed(0.1), fixed(0.1)));
     if (task_manager.task_size()>0) {
       w.push_back(task_manager.random_point_in_task(0, fixed(random_mag)));
     } else {
-      w.push_back(GEOPOINT(1.0,0.0));
+      w.push_back(GEOPOINT(fixed_one, fixed_zero));
     }
   } else {
     for (unsigned i=0; i<task_manager.task_size(); i++) {
@@ -81,7 +81,7 @@ bool AircraftSim::far(TaskManager &task_manager) {
     return (stat.remaining.get_distance()>100.0) || !entered;
   } else {
     fixed dc = w[awp].distance(state.Location);
-    if (!positive(awp)) {
+    if (!positive(fixed(awp))) {
       return (dc>state.Speed);
     } else {
       return (dc>state.Speed) || !entered;
@@ -89,11 +89,11 @@ bool AircraftSim::far(TaskManager &task_manager) {
   }
 }
 
-static const fixed fixed_1000 = 1000;
-static const fixed fixed_20 = 20;
+static const fixed fixed_1000(1000);
+static const fixed fixed_20(20);
 
 fixed AircraftSim::small_rand() {
-  return heading_filt.update(bearing_noise*(2.0*rand()/RAND_MAX)-bearing_noise);
+  return fixed(heading_filt.update(bearing_noise*(2.0*rand()/RAND_MAX)-bearing_noise));
 }
 
 void AircraftSim::update_bearing(TaskManager& task_manager) {
@@ -150,8 +150,8 @@ void AircraftSim::update_state(TaskManager &task_manager)  {
   state.NettoVario = state.Vario+glide_polar.SinkRate(state.TrueAirspeed);
 }
 
-static const fixed fixed_300 = 300;
-static const fixed fixed_1500 = 1500;
+static const fixed fixed_300(300);
+static const fixed fixed_1500(1500);
 
 fixed
 AircraftSim::target_height(TaskManager &task_manager)  

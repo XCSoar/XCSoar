@@ -861,7 +861,7 @@ bool NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
       // JMW TODO really need to know the actual device..
       GeoidSeparation = LookupGeoidSeparation(GPS_INFO->Location.Latitude,
 					      GPS_INFO->Location.Longitude);
-      GPS_INFO->GPSAltitude -= GeoidSeparation;
+      GPS_INFO->GPSAltitude -= fixed(GeoidSeparation);
     }
   }
 
@@ -1005,8 +1005,8 @@ bool NMEAParser::PTAS1(const TCHAR *String,
   GPS_INFO->VarioAvailable = true;
   GPS_INFO->Vario = wnet;
   GPS_INFO->BaroAltitudeAvailable = true;
-  GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(baralt);
-  GPS_INFO->IndicatedAirspeed = vtas/GPS_INFO->pressure.AirDensityRatio(baralt);
+  GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(fixed(baralt));
+  GPS_INFO->IndicatedAirspeed = vtas/GPS_INFO->pressure.AirDensityRatio(fixed(baralt));
 
   TriggerVarioUpdate();
 
@@ -1039,8 +1039,8 @@ bool NMEAParser::PFLAU(const TCHAR *String,
 
   // calculate relative east and north projection to lat/lon
 
-  double delta_lat = 0.01;
-  double delta_lon = 0.01;
+  fixed delta_lat(0.01);
+  fixed delta_lon(0.01);
 
   GEOPOINT plat = GPS_INFO->Location; plat.Latitude+= delta_lat;
   GEOPOINT plon = GPS_INFO->Location; plon.Longitude+= delta_lon;

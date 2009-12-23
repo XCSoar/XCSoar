@@ -356,7 +356,7 @@ private:
       return;
     }
     std::vector<POINT> screen; 
-    static const fixed fixed_twentieth = 1.0/20.0;
+    static const fixed fixed_twentieth(1.0 / 20.0);
 
     if (m_map.DistanceMetersToScreen(seg.parametric(fixed_zero).
                                      distance(seg.parametric(fixed_one)))>2) {

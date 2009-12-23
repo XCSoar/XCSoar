@@ -138,7 +138,7 @@ ActionInterface::on_key_TeamCode(int UpDown)
 void
 ActionInterface::on_key_Altitude(int UpDown)
 {
-  fixed fixed_step = 100/ALTITUDEMODIFY;
+  fixed fixed_step = fixed(100 / ALTITUDEMODIFY);
   if (is_simulator()) {
     if(UpDown==1) {
       device_blackboard.SetAltitude(Basic().GPSAltitude+fixed_step);
@@ -201,7 +201,7 @@ ActionInterface::on_key_BestAlternate(int UpDown)
 void
 ActionInterface::on_key_Speed(int UpDown)
 {
-  fixed fixed_step = 10/SPEEDMODIFY;
+  fixed fixed_step = fixed(10 / SPEEDMODIFY);
 
   if (is_simulator()) {
     if(UpDown==1)
@@ -311,7 +311,7 @@ ActionInterface::on_key_MacCready(int UpDown)
       MACCREADY=5.0;
     }
     GlidePolar polar = task_manager.get_glide_polar();
-    polar.set_mc(MACCREADY);
+    polar.set_mc(fixed(MACCREADY));
     task_manager.set_glide_polar(polar);
   }
   else if(UpDown==-1) {
@@ -320,7 +320,7 @@ ActionInterface::on_key_MacCready(int UpDown)
       MACCREADY = 0;
     }
     GlidePolar polar = task_manager.get_glide_polar();
-    polar.set_mc(MACCREADY);
+    polar.set_mc(fixed(MACCREADY));
     task_manager.set_glide_polar(polar);
   }
  else if (UpDown==0)

@@ -15,34 +15,34 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
 
   Waypoint wp;
 
-  wp = waypoints.create(GEOPOINT(0,0));
+  wp = waypoints.create(GEOPOINT(fixed_zero, fixed_zero));
   wp.Flags.Airport = true;
   wp.Altitude=0.25;
   waypoints.append(wp);
 
-  wp = waypoints.create(GEOPOINT(0.0,1.0));
+  wp = waypoints.create(GEOPOINT(fixed_zero, fixed_one));
   wp.Flags.Airport = true;
   wp.Altitude=0.25;
   waypoints.append(wp);
 
-  wp = waypoints.create(GEOPOINT(1.0,1.0));
+  wp = waypoints.create(GEOPOINT(fixed_one, fixed_one));
   wp.Name = "Hello";
   wp.Flags.Airport = true;
   wp.Altitude=0.5;
   waypoints.append(wp);
 
-  wp = waypoints.create(GEOPOINT(0.8,0.5));
+  wp = waypoints.create(GEOPOINT(fixed(0.8), fixed(0.5)));
   wp.Name = "Unk";
   wp.Flags.Airport = true;
   wp.Altitude=0.25;
   waypoints.append(wp);
 
-  wp = waypoints.create(GEOPOINT(1.0,0.0));
+  wp = waypoints.create(GEOPOINT(fixed_one, fixed_zero));
   wp.Flags.Airport = true;
   wp.Altitude=0.25;
   waypoints.append(wp);
 
-  wp = waypoints.create(GEOPOINT(0.0,0.23));
+  wp = waypoints.create(GEOPOINT(fixed_zero, fixed(0.23)));
   wp.Flags.Airport = true;
   wp.Altitude=0.25;
   waypoints.append(wp);
@@ -51,7 +51,7 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
     int x = rand()%1200-100;
     int y = rand()%1200-100;
     double z = rand()% std::max(terrain_height,1);
-    wp = waypoints.create(GEOPOINT(x/1000.0,y/1000.0));
+    wp = waypoints.create(GEOPOINT(fixed(x/1000.0), fixed(y/1000.0)));
     wp.Flags.Airport = false;
     wp.Altitude = z;
     waypoints.append(wp);

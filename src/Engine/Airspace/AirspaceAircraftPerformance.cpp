@@ -3,7 +3,7 @@
 #include "Task/TaskManager.hpp"
 #include <assert.h>
 
-static const fixed fixed_big = 1e6;
+static const fixed fixed_big(1e6);
 
 fixed 
 AirspaceAircraftPerformance::solution_general(const fixed& distance,
@@ -272,7 +272,7 @@ AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AIRCRAFT_
   }
   m_max_descent = polar.get_SbestLD();
 
-  set_tolerance_vertical(0.001);
+  set_tolerance_vertical(fixed(0.001));
 }
 
 

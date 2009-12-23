@@ -79,15 +79,15 @@ public:
 //        m_nVal(nVal<<resolution_shift)
 //    {}
     
-    fixed(long nVal):
+  explicit fixed(long nVal):
         m_nVal((value_t)(nVal)<<resolution_shift)
     {}
     
-    fixed(int nVal):
+  explicit fixed(int nVal):
         m_nVal((value_t)(nVal)<<resolution_shift)
     {}
     
-    fixed(short nVal):
+  explicit fixed(short nVal):
         m_nVal((value_t)(nVal)<<resolution_shift)
     {}
 
@@ -96,19 +96,19 @@ public:
         m_nVal(nVal<<resolution_shift)
     {}
 */  
-    fixed(unsigned long nVal):
+  explicit fixed(unsigned long nVal):
         m_nVal((value_t)(nVal)<<resolution_shift)
     {}
-    fixed(unsigned int nVal):
+  explicit fixed(unsigned int nVal):
         m_nVal((value_t)(nVal)<<resolution_shift)
     {}
-    fixed(unsigned short nVal):
+  explicit fixed(unsigned short nVal):
         m_nVal((value_t)(nVal)<<resolution_shift)
     {}
-    fixed(double nVal):
+  explicit fixed(double nVal):
         m_nVal(static_cast<value_t>(nVal*static_cast<double>(resolution)))
     {}
-    fixed(float nVal):
+  explicit fixed(float nVal):
         m_nVal(static_cast<value_t>(nVal*static_cast<float>(resolution)))
     {}
 
@@ -474,62 +474,62 @@ inline fixed operator-(char a, fixed const& b)
 inline fixed operator-(fixed const& a,double b)
 {
     fixed temp(a);
-    return temp-=b;
+    return temp -= fixed(b);
 }
 
 
 inline fixed operator-(fixed const& a,float b)
 {
     fixed temp(a);
-    return temp-=b;
+    return temp -= fixed(b);
 }
 
 inline fixed operator-(fixed const& a,unsigned long b)
 {
     fixed temp(a);
-    return temp-=b;
+    return temp -= fixed(b);
 }
 
 inline fixed operator-(fixed const& a,long b)
 {
     fixed temp(a);
-    return temp-=b;
+    return temp -= fixed(b);
 }
 
 inline fixed operator-(fixed const& a,unsigned b)
 {
     fixed temp(a);
-    return temp-=b;
+    return temp -= fixed(b);
 }
 
 inline fixed operator-(fixed const& a,int b)
 {
     fixed temp(a);
-    return temp-=b;
+    return temp -= fixed(b);
 }
 
 inline fixed operator-(fixed const& a,unsigned short b)
 {
     fixed temp(a);
-    return temp-=b;
+    return temp -= fixed(b);
 }
 
 inline fixed operator-(fixed const& a,short b)
 {
     fixed temp(a);
-    return temp-=b;
+    return temp -= fixed(b);
 }
 
 inline fixed operator-(fixed const& a,unsigned char b)
 {
     fixed temp(a);
-    return temp-=b;
+    return temp -= fixed(b);
 }
 
 inline fixed operator-(fixed const& a,char b)
 {
     fixed temp(a);
-    return temp-=b;
+    return temp -= fixed(b);
 }
 
 inline fixed operator-(fixed const& a,fixed const& b)
@@ -602,62 +602,62 @@ inline fixed operator%(char a, fixed const& b)
 inline fixed operator%(fixed const& a,double b)
 {
     fixed temp(a);
-    return temp%=b;
+    return temp %= fixed(b);
 }
 
 
 inline fixed operator%(fixed const& a,float b)
 {
     fixed temp(a);
-    return temp%=b;
+    return temp %= fixed(b);
 }
 
 inline fixed operator%(fixed const& a,unsigned long b)
 {
     fixed temp(a);
-    return temp%=b;
+    return temp %= fixed(b);
 }
 
 inline fixed operator%(fixed const& a,long b)
 {
     fixed temp(a);
-    return temp%=b;
+    return temp %= fixed(b);
 }
 
 inline fixed operator%(fixed const& a,unsigned b)
 {
     fixed temp(a);
-    return temp%=b;
+    return temp %= fixed(b);
 }
 
 inline fixed operator%(fixed const& a,int b)
 {
     fixed temp(a);
-    return temp%=b;
+    return temp %= fixed(b);
 }
 
 inline fixed operator%(fixed const& a,unsigned short b)
 {
     fixed temp(a);
-    return temp%=b;
+    return temp %= fixed(b);
 }
 
 inline fixed operator%(fixed const& a,short b)
 {
     fixed temp(a);
-    return temp%=b;
+    return temp %= fixed(b);
 }
 
 inline fixed operator%(fixed const& a,unsigned char b)
 {
     fixed temp(a);
-    return temp%=b;
+    return temp %= fixed(b);
 }
 
 inline fixed operator%(fixed const& a,char b)
 {
     fixed temp(a);
-    return temp%=b;
+    return temp %= fixed(b);
 }
 
 inline fixed operator%(fixed const& a,fixed const& b)
@@ -730,62 +730,62 @@ inline fixed operator+(char a, fixed const& b)
 inline fixed operator+(fixed const& a,double b)
 {
     fixed temp(a);
-    return temp+=b;
+    return temp += fixed(b);
 }
 
 
 inline fixed operator+(fixed const& a,float b)
 {
     fixed temp(a);
-    return temp+=b;
+    return temp += fixed(b);
 }
 
 inline fixed operator+(fixed const& a,unsigned long b)
 {
     fixed temp(a);
-    return temp+=b;
+    return temp += fixed(b);
 }
 
 inline fixed operator+(fixed const& a,long b)
 {
     fixed temp(a);
-    return temp+=b;
+    return temp += fixed(b);
 }
 
 inline fixed operator+(fixed const& a,unsigned b)
 {
     fixed temp(a);
-    return temp+=b;
+    return temp += fixed(b);
 }
 
 inline fixed operator+(fixed const& a,int b)
 {
     fixed temp(a);
-    return temp+=b;
+    return temp += fixed(b);
 }
 
 inline fixed operator+(fixed const& a,unsigned short b)
 {
     fixed temp(a);
-    return temp+=b;
+    return temp += fixed(b);
 }
 
 inline fixed operator+(fixed const& a,short b)
 {
     fixed temp(a);
-    return temp+=b;
+    return temp += fixed(b);
 }
 
 inline fixed operator+(fixed const& a,unsigned char b)
 {
     fixed temp(a);
-    return temp+=b;
+    return temp += fixed(b);
 }
 
 inline fixed operator+(fixed const& a,char b)
 {
     fixed temp(a);
-    return temp+=b;
+    return temp += fixed(b);
 }
 
 inline fixed operator+(fixed const& a,fixed const& b)
@@ -858,62 +858,62 @@ inline fixed operator*(char a, fixed const& b)
 inline fixed operator*(fixed const& a,double b)
 {
     fixed temp(a);
-    return temp*=b;
+    return temp *= fixed(b);
 }
 
 
 inline fixed operator*(fixed const& a,float b)
 {
     fixed temp(a);
-    return temp*=b;
+    return temp *= fixed(b);
 }
 
 inline fixed operator*(fixed const& a,unsigned long b)
 {
     fixed temp(a);
-    return temp*=b;
+    return temp *= fixed(b);
 }
 
 inline fixed operator*(fixed const& a,long b)
 {
     fixed temp(a);
-    return temp*=b;
+    return temp *= fixed(b);
 }
 
 inline fixed operator*(fixed const& a,unsigned b)
 {
     fixed temp(a);
-    return temp*=b;
+    return temp *= fixed(b);
 }
 
 inline fixed operator*(fixed const& a,int b)
 {
     fixed temp(a);
-    return temp*=b;
+    return temp *= fixed(b);
 }
 
 inline fixed operator*(fixed const& a,unsigned short b)
 {
     fixed temp(a);
-    return temp*=b;
+    return temp *= fixed(b);
 }
 
 inline fixed operator*(fixed const& a,short b)
 {
     fixed temp(a);
-    return temp*=b;
+    return temp *= fixed(b);
 }
 
 inline fixed operator*(fixed const& a,unsigned char b)
 {
     fixed temp(a);
-    return temp*=b;
+    return temp *= fixed(b);
 }
 
 inline fixed operator*(fixed const& a,char b)
 {
     fixed temp(a);
-    return temp*=b;
+    return temp *= fixed(b);
 }
 
 inline fixed operator*(fixed const& a,fixed const& b)
@@ -986,62 +986,62 @@ inline fixed operator/(char a, fixed const& b)
 inline fixed operator/(fixed const& a,double b)
 {
     fixed temp(a);
-    return temp/=b;
+    return temp /= fixed(b);
 }
 
 
 inline fixed operator/(fixed const& a,float b)
 {
     fixed temp(a);
-    return temp/=b;
+    return temp /= fixed(b);
 }
 
 inline fixed operator/(fixed const& a,unsigned long b)
 {
     fixed temp(a);
-    return temp/=b;
+    return temp /= fixed(b);
 }
 
 inline fixed operator/(fixed const& a,long b)
 {
     fixed temp(a);
-    return temp/=b;
+    return temp /= fixed(b);
 }
 
 inline fixed operator/(fixed const& a,unsigned b)
 {
     fixed temp(a);
-    return temp/=b;
+    return temp /= fixed(b);
 }
 
 inline fixed operator/(fixed const& a,int b)
 {
     fixed temp(a);
-    return temp/=b;
+    return temp /= fixed(b);
 }
 
 inline fixed operator/(fixed const& a,unsigned short b)
 {
     fixed temp(a);
-    return temp/=b;
+    return temp /= fixed(b);
 }
 
 inline fixed operator/(fixed const& a,short b)
 {
     fixed temp(a);
-    return temp/=b;
+    return temp /= fixed(b);
 }
 
 inline fixed operator/(fixed const& a,unsigned char b)
 {
     fixed temp(a);
-    return temp/=b;
+    return temp /= fixed(b);
 }
 
 inline fixed operator/(fixed const& a,char b)
 {
     fixed temp(a);
-    return temp/=b;
+    return temp /= fixed(b);
 }
 
 inline fixed operator/(fixed const& a,fixed const& b)
@@ -1642,7 +1642,7 @@ inline fixed fixed::floor() const
         res.m_nVal-=remainder;
         if(m_nVal<0)
         {
-            res-=1;
+          res -= fixed(1);
         }
     }
     return res;

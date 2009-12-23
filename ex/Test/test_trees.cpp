@@ -31,7 +31,7 @@ bool test_wp(const unsigned n, std::ostream &fo) {
     state.Location.Latitude = y/1000.0;
 
     WaypointVisitorPrint wvp;
-    waypoints.visit_within_radius(state.Location, 50000.0, wvp);
+    waypoints.visit_within_radius(state.Location, fixed(50000.0), wvp);
   }
   print_queries(n, fo);
   fo.flush();
@@ -57,7 +57,7 @@ bool test_as(const unsigned n, std::ostream &fo) {
   print_queries(n, fo);
   fo.flush();
 
-  airspaces.scan_range(state, 20000.0);
+  airspaces.scan_range(state, fixed(20000.0));
 
   return true;
 }

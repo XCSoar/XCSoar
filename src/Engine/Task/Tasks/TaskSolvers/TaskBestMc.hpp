@@ -65,7 +65,7 @@ public:
              const unsigned activeTaskPoint,
              const AIRCRAFT_STATE &_aircraft,
              const GlidePolar &_gp,
-             const fixed _mc_min=0.0);
+             const fixed _mc_min=fixed_zero);
 /** 
  * Constructor for single task points (non-ordered ones)
  * 

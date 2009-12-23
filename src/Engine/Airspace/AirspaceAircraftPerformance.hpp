@@ -235,7 +235,7 @@ public:
  * @return Initialised object
  */
   AirspaceAircraftPerformanceStateFilter(const AircraftStateFilter& filter):
-    AirspaceAircraftPerformance(0.01),
+    AirspaceAircraftPerformance(fixed(0.01)),
     m_state_filter(filter) {
 
   }

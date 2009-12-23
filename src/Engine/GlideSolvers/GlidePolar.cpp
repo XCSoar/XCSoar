@@ -46,7 +46,7 @@
 /// \todo note polar terms are hardcoded at present, will need proper
 /// polar management later
 
-static const fixed fixed_75 = 75.0;
+static const fixed fixed_75(75.0);
 
 GlidePolar::GlidePolar(const fixed _mc,
                        const fixed _bugs,
@@ -163,7 +163,7 @@ public:
  * @return Initialised object (no search yet)
  */
   GlidePolarVopt(const GlidePolar &_polar, const fixed& vmin, const fixed &vmax):
-    ZeroFinder(vmin, vmax, TOLERANCE_POLAR_BESTLD),
+    ZeroFinder(vmin, vmax, fixed(TOLERANCE_POLAR_BESTLD)),
     polar(_polar)
     {
     };
@@ -209,7 +209,7 @@ public:
  * @return Initialised object (no search yet)
  */
   GlidePolarMinSink(const GlidePolar &_polar, const fixed &vmax):
-    ZeroFinder(fixed_one, vmax, TOLERANCE_POLAR_MINSINK),
+    ZeroFinder(fixed_one, vmax, fixed(TOLERANCE_POLAR_MINSINK)),
     polar(_polar)
     {
     };
@@ -297,7 +297,8 @@ public:
                        const fixed& net_sink_rate,
                        const fixed& head_wind,
                        const fixed& vmin, const fixed &vmax):
-    ZeroFinder(max(fixed_one,vmin-head_wind), vmax-head_wind, TOLERANCE_POLAR_DOLPHIN),
+    ZeroFinder(max(fixed_one, vmin - head_wind), vmax - head_wind,
+               fixed(TOLERANCE_POLAR_DOLPHIN)),
     polar(_polar),
     m_net_sink_rate(net_sink_rate),
     m_head_wind(head_wind)

@@ -295,7 +295,7 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
           // very nasty hack
           TaskOptTarget tot(tps, activeTaskPoint, state, glide_polar,
                             *ap, ts);
-          tot.search(0.5);
+          tot.search(fixed(0.5));
         }
       }
     }
@@ -532,10 +532,10 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
   leg = tm.get_active_solution(aircraft);
 
   total_remaining_effective.
-    set_distance(tm.effective_distance(total_t_elapsed));
+    set_distance(tm.effective_distance(fixed(total_t_elapsed)));
 
   leg_remaining_effective.
-    set_distance(tm.effective_leg_distance(leg_t_elapsed));
+    set_distance(tm.effective_leg_distance(fixed(leg_t_elapsed)));
 }
 
 ////////// Auxiliary glide functions
@@ -544,7 +544,7 @@ double
 OrderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft) 
 {
   TaskGlideRequired bgr(tps, activeTaskPoint, aircraft, glide_polar);
-  return bgr.search(0.0);
+  return bgr.search(fixed_zero);
 }
 
 double
@@ -561,7 +561,7 @@ OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft)
 {
   if (activeTaskPoint>0) {
     TaskCruiseEfficiency bce(tps,activeTaskPoint, aircraft, glide_polar);
-    return bce.search(1.0);
+    return bce.search(fixed_one);
   } else {
     return 1.0;
   }
@@ -576,7 +576,7 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
     const fixed t_rem = max(fixed_zero, t_target-stats.total.TimeElapsed);
 
     TaskMinTarget bmt(tps, activeTaskPoint, aircraft, glide_polar, t_rem, ts);
-    fixed p= bmt.search(0.0);
+    fixed p = bmt.search(fixed_zero);
     return p;
   } else {
     return fixed_zero;

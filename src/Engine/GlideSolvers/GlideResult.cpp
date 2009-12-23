@@ -120,7 +120,7 @@ GlideResult::add(const GlideResult &s2)
   }
 }
 
-static const fixed fixed_bignum = 1e6; // error condition
+static const fixed fixed_bignum(1e6); // error condition
 
 fixed 
 GlideResult::calc_vspeed(const fixed inv_mc) 

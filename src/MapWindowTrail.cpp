@@ -143,7 +143,7 @@ double MapWindow::DrawTrail(Canvas &canvas, const SnailTrail &snail_trail)
   // this expands them by one minute
 
   rectObj bounds_thermal = screenbounds_latlon;
-  const static fixed fixed_60=60.0;
+  const static fixed fixed_60(60);
   screenbounds_latlon.minx -= (double)fabs(fixed_60*traildrift.Longitude);
   screenbounds_latlon.maxx += (double)fabs(fixed_60*traildrift.Longitude);
   screenbounds_latlon.miny -= (double)fabs(fixed_60*traildrift.Latitude);
@@ -232,7 +232,7 @@ double MapWindow::DrawTrail(Canvas &canvas, const SnailTrail &snail_trail)
     // now we know either point is visible, better get screen coords
     // if we don't already.
 
-    double dt = max(0.0, (display_time - P1.Time) * P1.DriftFactor);
+    double dt = max(fixed_zero, (display_time - P1.Time) * P1.DriftFactor);
     double this_lon = P1.Longitude+traildrift.Longitude*dt;
     double this_lat = P1.Latitude+traildrift.Latitude*dt;
 

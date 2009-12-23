@@ -429,7 +429,7 @@ void fixed::sin_cos(fixed const& theta,fixed* s,fixed*c)
 fixed fixed::atan() const
 {
     fixed r,theta;
-    to_polar(1,*this,&r,&theta);
+    to_polar(fixed_one, *this, &r, &theta);
     return theta;
 }
 

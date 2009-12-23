@@ -63,7 +63,7 @@ public:
   static GlideResult glide_solution_remaining(const TaskPoint& taskpoint,
                                               const AIRCRAFT_STATE &state, 
                                               const GlidePolar &polar,
-                                              const fixed minH=0);
+                                              const fixed minH=fixed_zero);
 
 /** 
  * Compute optimal glide solution from aircraft to destination, with
@@ -94,7 +94,7 @@ public:
   static GlideResult glide_solution_travelled(const TaskPoint& taskpoint,
                                               const AIRCRAFT_STATE &state, 
                                               const GlidePolar &polar,
-                                              const fixed minH=0);
+                                              const fixed minH=fixed_zero);
 
 /** 
  * Compute optimal glide solution from aircraft to destination, or modified
@@ -109,7 +109,7 @@ public:
   static GlideResult glide_solution_planned(const TaskPoint& taskpoint,
                                             const AIRCRAFT_STATE &state, 
                                             const GlidePolar &polar,
-                                            const fixed minH=0);
+                                            const fixed minH=fixed_zero);
 };
 
 #endif

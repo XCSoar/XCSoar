@@ -42,7 +42,7 @@ TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>&
                                            const unsigned activeTaskPoint,
                                            const AIRCRAFT_STATE &_aircraft,
                                            const GlidePolar &gp):
-  ZeroFinder(0.1,2.0,TOLERANCE_CRUISE_EFFICIENCY),
+  ZeroFinder(fixed(0.1), fixed(2.0), fixed(TOLERANCE_CRUISE_EFFICIENCY)),
   tm(tps,activeTaskPoint,gp),
   aircraft(_aircraft) 
 {

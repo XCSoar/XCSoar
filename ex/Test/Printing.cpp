@@ -216,7 +216,7 @@ std::ostream& operator<< (std::ostream& f,
   f << "# circle " << as.get_base_altitude() << " " << as.get_top_altitude() << "\n";
   for (double t=0; t<=360; t+= 30) {
     GEOPOINT l;
-    FindLatitudeLongitude(as.m_center, t, as.m_radius, &l);
+    FindLatitudeLongitude(as.m_center, fixed(t), as.m_radius, &l);
     f << l.Longitude << " " << l.Latitude << "\n";
   }
   f << "\n";
@@ -419,7 +419,7 @@ void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
       bool filter_backtrack = true;
       if (seg.valid()) {
         for (double t = 0.0; t<=1.0; t+= 1.0/20) {
-          GEOPOINT ga = seg.parametric(t);
+          GEOPOINT ga = seg.parametric(fixed(t));
           double dthis = ::Distance(get_previous()->get_location_remaining(),
                                     ga);
           if (!filter_backtrack 
@@ -430,7 +430,7 @@ void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
           }
         }
       } else {
-        GEOPOINT ga = seg.parametric(0.0);
+        GEOPOINT ga = seg.parametric(fixed_zero);
         f << ga.Longitude << " " << ga.Latitude << "\n";
       }
       f << "\n";
@@ -464,10 +464,10 @@ OrderedTaskPoint::print_boundary(std::ostream& f, const AIRCRAFT_STATE &state) c
 {
   f << "#   Boundary points\n";
   for (double t=0; t<= 1.0; t+= 0.05) {
-    GEOPOINT loc = get_boundary_parametric(t);
+    GEOPOINT loc = get_boundary_parametric(fixed(t));
     f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
   }
-  GEOPOINT loc = get_boundary_parametric(0);
+  GEOPOINT loc = get_boundary_parametric(fixed_zero);
   f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
   f << "\n";
 }

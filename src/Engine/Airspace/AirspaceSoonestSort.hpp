@@ -24,7 +24,7 @@ public:
  */
   AirspaceSoonestSort(const AIRCRAFT_STATE &state,
                       const AirspaceAircraftPerformance &perf,
-                      const fixed max_time= 1.0e6,
+                      const fixed max_time = fixed(1.0e6),
                       const AirspacePredicate &condition=AirspacePredicate::always_true):
     AirspaceNearestSort(state, condition),
     m_perf(perf),

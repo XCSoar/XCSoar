@@ -38,18 +38,18 @@ Copyright_License {
 
 #include "Pressure.hpp"
 
-static const fixed fixed_101325 = 1013.25;
-static const fixed isa_sea_level_density= 1.225;
-static const fixed hpa_to_pa = 100;
-static const fixed pa_to_hpa = 0.01;
-static const fixed k1=0.190263;
-static const fixed inv_k1=1.0/0.190263;
-static const fixed k2=8.417286e-5;
-static const fixed inv_k2=1.0/8.417286e-5;
-static const fixed k4= 44330.8;
-static const fixed k5=1.0/4946.54;
-static const fixed k6 = 1.0/42266.5;
-static const fixed k7 = 1.0/0.234969;
+static const fixed fixed_101325(1013.25);
+static const fixed isa_sea_level_density(1.225);
+static const fixed hpa_to_pa(100);
+static const fixed pa_to_hpa(0.01);
+static const fixed k1(0.190263);
+static const fixed inv_k1(1.0 / 0.190263);
+static const fixed k2(8.417286e-5);
+static const fixed inv_k2(1.0 / 8.417286e-5);
+static const fixed k4(44330.8);
+static const fixed k5(1.0 / 4946.54);
+static const fixed k6(1.0 / 42266.5);
+static const fixed k7(1.0 / 0.234969);
 
 
 AtmosphericPressure::AtmosphericPressure():
@@ -73,7 +73,7 @@ AtmosphericPressure::StaticPressureToQNHAltitude(const fixed ps) const
 fixed
 AtmosphericPressure::AltitudeToQNHAltitude(const fixed alt) const
 {
-  return StaticPressureToQNHAltitude(pow((k4-alt)*k5, inv_k1));
+  return StaticPressureToQNHAltitude(fixed(pow((k4 - alt) * k5, inv_k1)));
 }
 
 void
@@ -90,7 +90,7 @@ AtmosphericPressure::FindQNH(const fixed alt_raw,
 fixed 
 AtmosphericPressure::AirDensity(const fixed altitude) const
 {
-  return pow((k4-altitude)*k6,k7);
+  return fixed(pow((k4 - altitude) * k6, k7));
 }
 
 fixed

@@ -109,7 +109,7 @@ WaypointSorter::filter_name(WaypointSelectInfoVector& vec,
   vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointNameFilter), vec.end());
 }
 
-static const fixed fixed_18 = 18;
+static const fixed fixed_18(18);
 static fixed Direction;
 
 static bool

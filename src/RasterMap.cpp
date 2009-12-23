@@ -75,8 +75,8 @@ int
 RasterMap::GetEffectivePixelSize(double *pixel_D,
                                  const GEOPOINT &location) const
 {
-  double terrain_step_x, terrain_step_y;
-  double step_size = TerrainInfo.StepSize*sqrt(2.0);
+  fixed terrain_step_x, terrain_step_y;
+  fixed step_size(TerrainInfo.StepSize * sqrt(2.0));
 
   if ((*pixel_D<=0) || (step_size==0)) {
     *pixel_D = 1.0;
@@ -91,9 +91,9 @@ RasterMap::GetEffectivePixelSize(double *pixel_D,
   dloc = location; dloc.Longitude += step_size;
   terrain_step_y = Distance(location, dloc);
 
-  double rfact = max(terrain_step_x,terrain_step_y)/(*pixel_D);
+  fixed rfact = max(terrain_step_x, terrain_step_y) / *pixel_D;
 
-  int epx = (int)(max(1,ceil(rfact)));
+  int epx = (int)(max(fixed_one, ceil(rfact)));
   //  *pixel_D = (*pixel_D)*rfact/epx;
 
   return epx;

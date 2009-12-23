@@ -425,8 +425,8 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
   Pen hpHorizonGround(IBLSCALE(1), Color(106,55,12));
   Brush hbHorizonGround(Color(157,101,60));
 
-  static const fixed fixed_div = 1.0/50.0;
-  static const fixed fixed_89 = 89;
+  static const fixed fixed_div(1.0/50.0);
+  static const fixed fixed_89(89);
 
   int radius = IBLSCALE(17);
   fixed phi = max(-fixed_89,min(fixed_89,Basic().BankAngle));

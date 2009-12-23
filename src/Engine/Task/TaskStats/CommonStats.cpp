@@ -2,7 +2,7 @@
 #include "Waypoint/Waypoint.hpp"
 
 CommonStats::CommonStats():
-  vector_home(0,0)
+  vector_home(fixed_zero, fixed_zero)
 {
   reset();
 }

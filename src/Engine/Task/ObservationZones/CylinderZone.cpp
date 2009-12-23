@@ -66,10 +66,9 @@ CylinderZone::randomPointInSector(const fixed mag) const
 {
   AIRCRAFT_STATE ac;  
   do {
-
-    double dir = rand()%360;
-    double dmag = max(min(Radius,100.0), Radius*mag);
-    double dis = (0.1+(rand()%90)/100.0)*dmag;
+    fixed dir(rand() % 360);
+    fixed dmag = max(min(Radius, fixed(100.0)), Radius*mag);
+    fixed dis = (0.1+(rand()%90)/100.0)*dmag;
     GeoVector vec(dis,dir);
     ac.Location = vec.end_point(get_location());
   } while (!isInSector(ac));

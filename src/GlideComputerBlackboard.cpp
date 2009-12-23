@@ -162,7 +162,7 @@ GlideComputerBlackboard::RestoreFinish()
 double
 GlideComputerBlackboard::GetAverageThermal() const
 {
-  return max(0.0, calculated_info.AverageThermal);
+  return max(fixed_zero, calculated_info.AverageThermal);
 }
 
 /**

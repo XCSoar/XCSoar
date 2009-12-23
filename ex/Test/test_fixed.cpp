@@ -14,8 +14,8 @@ int main(int argc, char** argv) {
   double da = 20.0;
   double dsina = sin(da);
 
-  fixed a = da;
-  fixed sina = sin(a);
+  fixed a(da);
+  fixed sina(sin(a));
 
   printf("a=%g, sin(a)=%g\n",FIXED_DOUBLE(a),FIXED_DOUBLE(sina));
   printf("a=%g, sin(a)=%g\n",da, dsina);
@@ -26,9 +26,9 @@ int main(int argc, char** argv) {
   double dy=0.6;
   double dt=atan2(dy,dx);
 
-  fixed x=dx;
-  fixed y=dy;
-  fixed t=atan2(y,x);
+  fixed x(dx);
+  fixed y(dy);
+  fixed t(atan2(y, x));
 
   printf("x=%g, y=%g atan(y,x)=%g\n",FIXED_DOUBLE(x),FIXED_DOUBLE(y),FIXED_DOUBLE(t));
   printf("x=%g, y=%g atan(y,x)=%g\n",dx,dy,dt);

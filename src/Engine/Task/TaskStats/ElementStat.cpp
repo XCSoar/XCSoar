@@ -56,7 +56,7 @@ ElementStat::set_times(const double ts,
                        const AIRCRAFT_STATE& state)
 {
   TimeStarted = ts;
-  TimeElapsed = max(state.Time-ts,0.0);
+  TimeElapsed = max(state.Time-ts, fixed_zero);
   TimeRemaining = solution_remaining.TimeElapsed;
   TimePlanned = TimeElapsed+TimeRemaining;
 }
@@ -91,7 +91,7 @@ ElementStat::calc_speeds(const double dt)
     remaining.calc_incremental_speed(dt);
     planned.calc_incremental_speed(dt);
     travelled.calc_incremental_speed(dt);
-    vario.update(solution_remaining, dt);
+    vario.update(solution_remaining, fixed(dt));
   }
 }
 

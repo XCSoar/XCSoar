@@ -1107,7 +1107,7 @@ InputEvents::eventBugs(const TCHAR *misc)
   if (BUGS != oldBugs) {
     BUGS = min(1.0, max(0.5, BUGS));
     GlidePolar polar = task_manager.get_glide_polar();
-    polar.set_bugs(BUGS);
+    polar.set_bugs(fixed(BUGS));
     task_manager.set_glide_polar(polar);
   }
 }
@@ -1142,7 +1142,7 @@ InputEvents::eventBallast(const TCHAR *misc)
   if (BALLAST != oldBallast) {
     BALLAST = min(1.0,max(0.0,BALLAST));
     GlidePolar polar = task_manager.get_glide_polar();
-    polar.set_ballast(BALLAST);
+    polar.set_ballast(fixed(BALLAST));
     task_manager.set_glide_polar(polar);
   }
 }
@@ -1236,7 +1236,7 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
 
   AirspaceVisible visible (SettingsComputer(), Basic().GetAnyAltitude());
   AirspaceAircraftPerformanceSimple perf;
-  AirspaceSoonestSort ans(Basic(), perf, 1800, visible);
+  AirspaceSoonestSort ans(Basic(), perf, fixed(1800), visible);
 
   const AbstractAirspace* as = ans.find_nearest(airspace_database);
   if (!as) {

@@ -658,15 +658,15 @@ CalculateSector(TCHAR *Text)
   fixed EndBearing;
   TCHAR *Stop;
   GEOPOINT TempPoint;
-  static const fixed fixed_75 = 7.5;
-  static const fixed fixed_5 = 5;
+  static const fixed fixed_75 = fixed(7.5);
+  static const fixed fixed_5 = fixed(5);
 
   Radius = NAUTICALMILESTOMETRES * _tcstod(&Text[2], &Stop);
   StartBearing = _tcstod(&Stop[1], &Stop);
   EndBearing = _tcstod(&Stop[1], &Stop);
 
   if (EndBearing<StartBearing) {
-    EndBearing+= 360;
+    EndBearing += fixed(360);
   }
 
   while(fabs(EndBearing-StartBearing) > fixed_75) {
@@ -691,8 +691,8 @@ CalculateArc(TCHAR *Text)
   fixed Radius;
   TCHAR *Comma = NULL;
   GEOPOINT TempPoint;
-  static const fixed fixed_75 = 7.5;
-  static const fixed fixed_5 = 5;
+  static const fixed fixed_75 = fixed(7.5);
+  static const fixed fixed_5 = fixed(5);
 
   ReadCoords(&Text[3],Start);
 

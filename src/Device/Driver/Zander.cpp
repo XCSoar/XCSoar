@@ -95,7 +95,7 @@ PZAN1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   GPS_INFO->BaroAltitudeAvailable = true;
   NMEAParser::ExtractParameter(String,ctemp,0);
   GPS_INFO->BaroAltitude = 
-    GPS_INFO->pressure.AltitudeToQNHAltitude(_tcstod(ctemp, NULL));
+    GPS_INFO->pressure.AltitudeToQNHAltitude(fixed(_tcstod(ctemp, NULL)));
   return true;
 }
 

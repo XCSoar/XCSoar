@@ -77,11 +77,10 @@ vl_PGCS1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
 
   TCHAR ctemp[80];
-  double InternalAltitude;
 
   NMEAParser::ExtractParameter(String,ctemp,2);
   // four characers, hex, barometric altitude
-  InternalAltitude = HexStrToDouble(ctemp,NULL);
+  fixed InternalAltitude(HexStrToDouble(ctemp, NULL));
 
   if (enable_baro) {
     if(InternalAltitude > 60000)

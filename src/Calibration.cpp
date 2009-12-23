@@ -110,7 +110,7 @@ CalibrationUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
     return;
   }
   double ias_to_tas = Basic->TrueAirspeed/
-    max(1.0,Basic->IndicatedAirspeed);
+    max(fixed(1.0), Basic->IndicatedAirspeed);
 
   // Vario calibration info
   int index_te_vario = lround(Calculated->GPSVarioTE*10)+50;

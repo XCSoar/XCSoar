@@ -64,12 +64,12 @@ struct FlatEllipse
  * 
  * @return Initialised object
  */
-  FlatEllipse():f1(0.0,0.0),
-                f2(0.0,0.0),
-                ap(0.0,0.0), 
-                p(0.0,0.0),
-                a(1.0),b(1.0),theta(0.0),
-                theta_initial(0.0)
+  FlatEllipse():f1(fixed_zero, fixed_zero),
+                f2(fixed_zero, fixed_zero),
+                ap(fixed_zero, fixed_zero), 
+                p(fixed_zero, fixed_zero),
+                a(fixed_one), b(fixed_one), theta(fixed_zero),
+                theta_initial(fixed_zero)
     {
     };
 

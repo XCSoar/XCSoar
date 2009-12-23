@@ -74,7 +74,7 @@ UnorderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft)
     return 0.0;
   }
   TaskGlideRequired bgr(tp, aircraft, glide_polar);
-  return bgr.search(0.0);
+  return bgr.search(fixed_zero);
 }
 
 void
@@ -146,13 +146,13 @@ UnorderedTask::scan_distance_minmax(const GEOPOINT &location, bool full,
 fixed 
 UnorderedTask::scan_distance_nominal()
 {
-  return stats.total.remaining.get_distance();
+  return fixed(stats.total.remaining.get_distance());
 }
 
 fixed
 UnorderedTask::scan_distance_planned()
 {
-  return stats.total.remaining.get_distance();
+  return fixed(stats.total.remaining.get_distance());
 }
 
 fixed 

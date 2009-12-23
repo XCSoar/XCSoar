@@ -45,7 +45,7 @@ TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const GlidePolar &_gp,
                              const fixed _t_remaining,
                              StartPoint *_ts):
-  ZeroFinder(0.0,1.0, TOLERANCE_MIN_TARGET),
+  ZeroFinder(fixed(0.0), fixed(1.0), fixed(TOLERANCE_MIN_TARGET)),
   tm(tps,activeTaskPoint,_gp),
   aircraft(_aircraft),
   t_remaining(_t_remaining),

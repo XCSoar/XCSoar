@@ -114,7 +114,7 @@ GPWIN(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   if (enable_baro) {
     GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(_tcstod(ctemp, NULL) / 10);
+    GPS_INFO->BaroAltitude = GPS_INFO->pressure.AltitudeToQNHAltitude(fixed(_tcstod(ctemp, NULL)) / 10);
   }
 
   return false;

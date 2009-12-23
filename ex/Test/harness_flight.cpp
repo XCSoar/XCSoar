@@ -62,7 +62,7 @@ bool run_flight(TaskManager &task_manager,
   if (n_wind) {
     ac.set_wind(wind_to_mag(n_wind),wind_to_dir(n_wind));
   }
-  ac.set_speed_factor(speed_factor);
+  ac.set_speed_factor(fixed(speed_factor));
 
 #ifdef DO_PRINT
   std::ofstream f4("results/res-sample.txt");
@@ -77,7 +77,7 @@ bool run_flight(TaskManager &task_manager,
   time_remaining=0;
   calc_cruise_efficiency=1.0;
 
-  static const fixed fixed_10 =10;
+  static const fixed fixed_10(10);
 
   AirspaceAircraftPerformanceGlide perf(task_manager.get_glide_polar());
 
@@ -183,7 +183,7 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
 {
   // multipurpose flight test
 
-  GlidePolar glide_polar(2.0);
+  GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
   setup_waypoints(waypoints);
 
