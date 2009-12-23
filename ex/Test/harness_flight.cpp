@@ -79,7 +79,7 @@ bool run_flight(TaskManager &task_manager,
 
   static const fixed fixed_10 =10;
 
-  AirspaceAircraftPerformanceGlide perf(task_manager.get_glide_polar_ref());
+  AirspaceAircraftPerformanceGlide perf(task_manager.get_glide_polar());
 
   if (aircraft_filter) {
     aircraft_filter->reset(ac.get_state());

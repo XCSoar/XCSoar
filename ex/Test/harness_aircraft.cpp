@@ -40,7 +40,7 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   
   state.Location = w[0];
   state_last.Location = w[0];
-  state.Altitude = 1500.0;
+  state.NavAltitude = 1500.0;
   state.Time = 0.0;
   state.WindSpeed = 0.0;
   state.WindDirection = 0;
@@ -127,7 +127,7 @@ void AircraftSim::update_bearing(TaskManager& task_manager) {
 
 void AircraftSim::update_state(TaskManager &task_manager)  {
 
-  const GlidePolar &glide_polar = task_manager.get_glide_polar_ref();
+  const GlidePolar &glide_polar = task_manager.get_glide_polar();
   const ElementStat stat = task_manager.get_stats().current_leg;
   
   switch (acstate) {
@@ -175,7 +175,7 @@ void AircraftSim::update_mode(TaskManager &task_manager)
       print_mode("# mode fg\n");
       acstate = FinalGlide;
     } else {
-      if (state.Altitude<=target_height(task_manager)) {
+      if (state.NavAltitude<=target_height(task_manager)) {
         print_mode("# mode climb\n");
         acstate = Climb;
       }
@@ -192,7 +192,7 @@ void AircraftSim::update_mode(TaskManager &task_manager)
         (task_manager.get_stats().total.solution_remaining.DistanceToFinal<= state.Speed)) {
       print_mode("# mode fg\n");
       acstate = FinalGlide;
-    } else if (state.Altitude>=fixed_1500) {
+    } else if (state.NavAltitude>=fixed_1500) {
       acstate = Cruise;
       print_mode("# mode cruise\n");
     }
@@ -211,7 +211,7 @@ void AircraftSim::integrate() {
   state.TrackBearing = bearing;
   state.Speed = endpoint(bearing).distance(state.Location);
   state.Location = endpoint(bearing);
-  state.Altitude += state.Vario;
+  state.NavAltitude += state.Vario;
   state.Time += fixed_one;
 }
 
@@ -263,7 +263,7 @@ void AircraftSim::print(std::ostream &f4) {
   f4 << state.Time << " " 
      <<  state.Location.Longitude << " " 
      <<  state.Location.Latitude << " "
-     <<  state.Altitude << "\n";
+     <<  state.NavAltitude << "\n";
 }
 #endif
 

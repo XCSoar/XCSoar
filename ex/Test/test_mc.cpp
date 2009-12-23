@@ -60,7 +60,7 @@ void test_glide_alt(const fixed h, const fixed W,
   } else {
     ac.WindDirection = Wangle;
   }
-  ac.Altitude = h;
+  ac.NavAltitude = h;
 
   GeoVector vect(400.0,0.0);
   GlideState gs (vect,0.0,ac);
@@ -90,14 +90,14 @@ void test_glide_stf(const fixed h, const fixed W,
   } else {
     ac.WindDirection = Wangle;
   }
-  ac.Altitude = h;
+  ac.NavAltitude = h;
   ac.NettoVario = S;
 
   GeoVector vect(400.0,0.0);
   GlideState gs (vect,0.0,ac);
   GlideResult gr = polar.solve(gs);
 
-  fixed Vstf = polar.speed_to_fly(ac, gr);
+  fixed Vstf = polar.speed_to_fly(ac, gr, false);
 
   hfile << h << " " 
         << gr.AltitudeDifference << " "
@@ -197,7 +197,7 @@ void test_glide_cb(const fixed h, const fixed W,
   } else {
     ac.WindDirection = Wangle;
   }
-  ac.Altitude = h;
+  ac.NavAltitude = h;
 
   GeoVector vect(400.0,0.0);
   GlideState gs (vect,0.0,ac);
