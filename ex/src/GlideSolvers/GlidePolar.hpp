@@ -330,6 +330,17 @@ public:
   fixed speed_to_fly(const AIRCRAFT_STATE &state,
                      const GlideResult &solution,
                      const bool block_stf) const;
+/** 
+ * Compute MacCready ring setting to adjust speeds to incorporate
+ * risk as the aircraft gets low.
+ * 
+ * @param height_fraction Ratio of height to climb ceiling
+ * @param riskGamma Risk adjustment factor.  Lower gamma, MC is uniform with height.  High gamma, MC scales almost uniformly with height
+ * 
+ * @return MC value adjusted for risk (m/s)
+ */
+  fixed mc_risk(const fixed height_fraction, 
+                const fixed riskGamma) const;
 
 private:
 

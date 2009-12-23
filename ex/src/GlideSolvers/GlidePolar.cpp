@@ -88,6 +88,7 @@ GlidePolar::update_polar()
   polar_c = inv_bugs * ideal_polar_c * loading_factor;
 }
 
+
 void
 GlidePolar::set_bugs(const fixed clean)
 {
@@ -131,7 +132,7 @@ GlidePolar::MSinkRate(const fixed V) const
 fixed 
 GlidePolar::SinkRate(const fixed V) const
 {
-  return polar_c+V*(polar_b+V*polar_a);
+  return V*(V*polar_a+polar_b)+polar_c;
 }
 
 fixed 
@@ -397,40 +398,24 @@ GlidePolar::is_ballastable() const
 }
 
 
-/*
-
-static double
-FRiskFunction(double x, double k)
+static fixed
+FRiskFunction(const fixed x, const fixed k)
 {
-  return 2.0 / (1.0 + exp(-x * k)) - 1.0;
+  return fixed_two/(fixed_one + exp(-x * k))-fixed_one;
 }
 
-double
-oldGlidePolar::MacCreadyRisk(double HeightAboveTerrain, double MaxThermalHeight,
-    double MacCready)
+fixed
+GlidePolar::mc_risk(const fixed height_fraction, 
+                    const fixed riskGamma) const
 {
-  double RiskMC = MacCready;
+  fixed x = max(fixed_zero, min(fixed_one, height_fraction));
 
-  double hthis = max(1.0, HeightAboveTerrain);
-  double hmax = max(hthis, MaxThermalHeight);
-  double x = hthis / hmax;
-  double f;
-
-  if (RiskGamma < 0.1)
-    return MacCready;
-
-  if (RiskGamma > 0.9)
-    f = x;
+  if (riskGamma < 0.1)
+    return mc;
+  else if (riskGamma > 0.9)
+    return x*mc;
   else {
-    double k;
-    k = 1.0 / (RiskGamma * RiskGamma) - 1.0;
-    f = FRiskFunction(x, k) / FRiskFunction(1.0, k);
+    const fixed k = fixed_one / (riskGamma * riskGamma) - fixed_one;
+    return mc*FRiskFunction(x, k) / FRiskFunction(fixed_one, k);
   }
-
-  double mmin = 0; // min(MacCready, AbortSafetyMacCready());
-  RiskMC = f * RiskMC + (1 - f) * mmin;
-
-  return RiskMC;
 }
-*/
-
