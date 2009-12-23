@@ -66,7 +66,7 @@ public:
  * 
  * @return Location of point on ellipse
  */
-  GEOPOINT parametric(double t) const;
+  GEOPOINT parametric(const fixed t) const;
 
 /** 
  * Calculate where a line from the first focus through a point p

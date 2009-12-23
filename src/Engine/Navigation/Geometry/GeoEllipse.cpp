@@ -47,7 +47,7 @@ GeoEllipse::GeoEllipse(const GEOPOINT &f1, const GEOPOINT &f2,
 }
 
 GEOPOINT 
-GeoEllipse::parametric(double t) const {
+GeoEllipse::parametric(const fixed t) const {
   const FlatPoint fp = ell.parametric(t);
   return task_projection.funproject(fp);
 }
