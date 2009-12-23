@@ -364,6 +364,7 @@ TaskManager::reset()
   task_goto.reset();
   task_abort.reset();
   common_stats.reset();
+  m_glide_polar.set_cruise_efficiency(fixed_one);
 }
 
 TaskManager::Factory_t 

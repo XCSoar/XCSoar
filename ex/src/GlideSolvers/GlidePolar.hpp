@@ -67,6 +67,8 @@ struct AIRCRAFT_STATE;
 
 class GlidePolar
 {
+  friend void setGlidePolar(GlidePolar& gp);
+
 public:
 /** 
  * Constructor.  Performs search for best LD at instantiation
@@ -149,6 +151,15 @@ public:
  */
   void set_cruise_efficiency(const fixed _ce) {
     cruise_efficiency = _ce;
+  }
+
+/** 
+ * Accessor for current cruise efficiency
+ * 
+ * @return Cruise efficiency
+ */
+  fixed get_cruise_efficiency() const {
+    return cruise_efficiency;
   }
 
 /** 
@@ -321,6 +332,11 @@ public:
                      const bool block_stf) const;
 
 private:
+
+/** 
+ * Update computed values after change
+ */
+  void update();
 
 /** 
  * Update glide polar coefficients from ideal terms

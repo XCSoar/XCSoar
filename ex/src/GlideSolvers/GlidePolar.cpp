@@ -46,9 +46,12 @@
 /// \todo note polar terms are hardcoded at present, will need proper
 /// polar management later
 
+static const fixed fixed_75 = 75.0;
+
 GlidePolar::GlidePolar(const fixed _mc,
                        const fixed _bugs,
                        const fixed _ballast):
+  mc(_mc),
   bugs(_bugs),
   ballast(_ballast),
   cruise_efficiency(fixed_one),
@@ -57,17 +60,19 @@ GlidePolar::GlidePolar(const fixed _mc,
   ideal_polar_c(1.48),
   ballast_ratio(0.3),
   empty_mass(300),
-  wing_area(fixed_zero)
+  wing_area(fixed_zero),
+  Vmax(fixed_75)
 {
-  static const fixed fixed_75 = 75.0;
+  update();
+}
 
+void
+GlidePolar::update()
+{
   update_polar();
-
-  Vmax = fixed_75;
   Smax = SinkRate(Vmax);
   solve_min();
-
-  set_mc(_mc);
+  set_mc(mc);
 }
 
 void
@@ -87,8 +92,7 @@ void
 GlidePolar::set_bugs(const fixed clean)
 {
   bugs = clean;
-  update_polar();
-  solve_ld();
+  update();
 }
 
 fixed
@@ -102,8 +106,7 @@ void
 GlidePolar::set_ballast(const fixed bal)
 {
   ballast = bal;
-  update_polar();
-  solve_ld();
+  update();
 }
 
 
@@ -392,3 +395,42 @@ GlidePolar::is_ballastable() const
 {
   return positive(ballast_ratio);
 }
+
+
+/*
+
+static double
+FRiskFunction(double x, double k)
+{
+  return 2.0 / (1.0 + exp(-x * k)) - 1.0;
+}
+
+double
+oldGlidePolar::MacCreadyRisk(double HeightAboveTerrain, double MaxThermalHeight,
+    double MacCready)
+{
+  double RiskMC = MacCready;
+
+  double hthis = max(1.0, HeightAboveTerrain);
+  double hmax = max(hthis, MaxThermalHeight);
+  double x = hthis / hmax;
+  double f;
+
+  if (RiskGamma < 0.1)
+    return MacCready;
+
+  if (RiskGamma > 0.9)
+    f = x;
+  else {
+    double k;
+    k = 1.0 / (RiskGamma * RiskGamma) - 1.0;
+    f = FRiskFunction(x, k) / FRiskFunction(1.0, k);
+  }
+
+  double mmin = 0; // min(MacCready, AbortSafetyMacCready());
+  RiskMC = f * RiskMC + (1 - f) * mmin;
+
+  return RiskMC;
+}
+*/
+
