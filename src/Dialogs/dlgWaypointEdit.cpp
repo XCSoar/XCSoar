@@ -85,7 +85,6 @@ static void UpdateButtons(void) {
 
 static void OnNameClicked(WindowControl *Sender) {
 	(void)Sender;
-  TCHAR newName[NAME_SIZE + 1];
   if (buttonName) {
     TCHAR buff[NAME_SIZE+1];
     _stprintf(buff, TEXT("%s"), global_wpt->Name.c_str());
@@ -98,7 +97,6 @@ static void OnNameClicked(WindowControl *Sender) {
 
 static void OnCommentClicked(WindowControl *Sender) {
 	(void)Sender;
-  TCHAR newComment[COMMENT_SIZE + 1];
   if (buttonComment) {
     TCHAR buff[COMMENT_SIZE+1];
     _stprintf(buff, TEXT("%s"), global_wpt->Comment.c_str());

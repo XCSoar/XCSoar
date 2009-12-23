@@ -1021,8 +1021,8 @@ static void OnWaypointSaveClicked(WindowControl * Sender){
 
 static void OnWaypointDeleteClicked(WindowControl * Sender){
 	(void)Sender;
-  int res;
 #ifdef OLD_TASK
+  int res;
   res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
     if(MessageBoxX(way_points.get(res).Name,

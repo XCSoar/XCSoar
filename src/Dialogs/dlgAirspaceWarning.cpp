@@ -201,8 +201,6 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   if (i == wAirspaceList->GetCursorIndex())
     CursorAirspace = &as;
 
-  TCHAR sAckIndicator[6] = _T(" -++*");
-
   tstring sName = as.get_name_text(true);
   tstring sTop = as.get_top_text(true);
   tstring sBase = as.get_base_text(true);
@@ -274,6 +272,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   
 /*  
   
+  TCHAR sAckIndicator[6] = _T(" -++*");
+
   if (pAS.Inside){
     
     _stprintf(sTmp, _T("> %c %s"), sAckIndicator[pAS.Acknowledge], sType);

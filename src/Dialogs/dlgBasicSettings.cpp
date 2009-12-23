@@ -281,8 +281,6 @@ void dlgBasicSettingsShowModal()
   if (wf == NULL)
     return;
 
-  WndProperty* wp;
-
   changed = false;
 
   wf->SetTimerNotify(OnTimerNotify);

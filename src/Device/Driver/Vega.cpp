@@ -322,12 +322,12 @@ PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   if (device_blackboard.SettingsComputer().EnableCalibration) {
     DebugStore("%g %g %g %g %g %g #te net\r\n",
-	    GPS_INFO->IndicatedAirspeed,
-	    GPS_INFO->BaroAltitude,
-	    GPS_INFO->Vario,
-	    GPS_INFO->NettoVario,
-	    GPS_INFO->AccelX,
-	    GPS_INFO->AccelZ);
+               (double)GPS_INFO->IndicatedAirspeed,
+               (double)GPS_INFO->BaroAltitude,
+               (double)GPS_INFO->Vario,
+               (double)GPS_INFO->NettoVario,
+               (double)GPS_INFO->AccelX,
+               (double)GPS_INFO->AccelZ);
   }
   GPS_INFO->VarioAvailable = true;
   //hasVega = true;

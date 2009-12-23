@@ -146,11 +146,13 @@ public:
 #endif
 };
 
+#ifdef OLD_TASK
 //static cai302_Wdata_t cai302_Wdata;
 static cai302_OdataNoArgs_t cai302_OdataNoArgs;
 static cai302_OdataPilot_t cai302_OdataPilot;
 static cai302_GdataNoArgs_t cai302_GdataNoArgs;
 static cai302_Gdata_t cai302_Gdata;
+#endif
 
 // Additional sentance for CAI302 support
 static bool
@@ -240,10 +242,10 @@ CAI302Device::Open()
   return true;
 }
 
+#ifdef OLD_TASK
 static int DeclIndex = 128;
 static int nDeclErrorCode;
 
-#ifdef OLD_TASK
 static bool
 cai302DeclAddWayPoint(ComPort *port, const WAYPOINT &way_point);
 

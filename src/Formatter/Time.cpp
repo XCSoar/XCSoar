@@ -89,9 +89,9 @@ void FormatterTime::AssignValue(int i) {
 
 
 void FormatterAATTime::AssignValue(int i) {
-  double dd=0;
   status = 0;
 #ifdef OLD_TASK
+  double dd=0;
   if (task.getSettings().AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
     dd = Calculated().TaskTimeToGo;
     if ((Calculated().TaskStartTime>0.0) && (Calculated().Flying)

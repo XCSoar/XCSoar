@@ -560,8 +560,6 @@ GlideComputerAirData::Vario()
 void
 GlideComputerAirData::SpeedToFly()
 {
-  const double n = fabs(Basic().Gload);
-
   // calculate optimum cruise speed in current track direction
   // this still makes use of mode, so it should agree with
   // Vmaccready if the track bearing is the best cruise track
@@ -824,7 +822,6 @@ GlideComputerAirData::BallastDump()
   }
 
   double BALLAST = glide_polar.get_ballast();
-  double BALLAST_last = BALLAST;
   double percent_per_second =
       1.0 / max(10.0, (double)SettingsComputer().BallastSecsToEmpty);
 
@@ -1249,8 +1246,8 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated, double takeoff
   }
 
   if (done_autoqnh == 10) {
-    double fixaltitude = Calculated->TerrainAlt;
 #ifdef OLD_TASK
+    double fixaltitude = Calculated->TerrainAlt;
     Basic->pressure.FindQNH(Basic->BaroAltitude, fixaltitude);
     AllDevicesPutQNH(Basic->pressure);
     airspace_database.set_flight_levels(Basic->pressure);

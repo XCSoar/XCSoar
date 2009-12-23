@@ -131,12 +131,11 @@ VolksloggerDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
 static VLAPI vl;
 
+#ifdef OLD_TASK
 static int nturnpoints = 0;
 
 static bool
 VLDeclAddWayPoint(const Waypoint &way_point);
-
-#ifdef OLD_TASK
 
 bool
 VolksloggerDevice::Declare(const struct Declaration *decl)

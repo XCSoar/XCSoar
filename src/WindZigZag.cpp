@@ -709,11 +709,11 @@ WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
 
     #ifdef DEBUG_ZIGZAG
     DebugStore("%f %3.1f %03.0f %3.1f %03.0f %f %d # zigzag\n",
-            Basic->Time,
+               (double)Basic->Time,
             V_wind_estimate,
             theta_wind_estimate,
-            Basic->WindSpeed,
-            Basic->WindDirection,
+               (double)Basic->WindSpeed,
+               (double)Basic->WindDirection,
             percent_error,
             quality);
     #endif

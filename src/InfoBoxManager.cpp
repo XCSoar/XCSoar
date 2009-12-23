@@ -424,8 +424,6 @@ InfoBoxManager::setType(unsigned i, char j, unsigned layer)
 {
   assert(i < MAXINFOWINDOWS);
 
-  int old = InfoType[i];
-
   switch (layer) {
   case 0:
     InfoType[i] &= 0xffffff00;

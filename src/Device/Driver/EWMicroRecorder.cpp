@@ -77,6 +77,7 @@ public:
 #endif
 };
 
+#ifdef OLD_TASK
 static bool
 ExpectStringWait(ComPort *port, const TCHAR *token)
 {
@@ -105,6 +106,7 @@ ExpectStringWait(ComPort *port, const TCHAR *token)
   #endif
   return false;
 }
+#endif
 
 bool
 EWMicroRecorderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
@@ -170,6 +172,7 @@ EWMicroRecorderDevice::TryConnect()
   return false;
 }
 
+#ifdef OLD_TASK
 
 static void
 EWMicroRecorderPrintf(ComPort *port, const TCHAR *fmt, ...)
@@ -184,7 +187,6 @@ EWMicroRecorderPrintf(ComPort *port, const TCHAR *fmt, ...)
   port->WriteString(EWStr);
 }
 
-#ifdef OLD_TASK
 static void
 EWMicroRecorderWriteWayPoint(ComPort *port,
                              const WAYPOINT &way_point, const TCHAR *EWType)
