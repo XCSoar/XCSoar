@@ -54,9 +54,7 @@ Copyright_License {
 #include "Profile.hpp"
 #include "LocalTime.hpp"
 #include "LocalPath.hpp"
-#include "WayPointList.hpp"
 #include "WayPointParser.h"
-#include "Task.h"
 #include "Logger.h"
 #include "wcecompat/ts_string.h"
 #include "Device/device.h"
@@ -69,9 +67,12 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "ButtonLabel.hpp"
 #include "DeviceBlackboard.hpp"
-#include "AirspaceDatabase.hpp"
-#include "AirspaceWarning.h"
+#include "AirspaceParser.hpp"
 #include "Registry.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
+#include "Engine/Airspace/AirspaceWarningManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -89,14 +90,11 @@ int DisplayTimeOut;
 
 DeviceBlackboard device_blackboard;
 
-void DeviceBlackboard::SetTrackBearing(double val) {}
-void DeviceBlackboard::SetSpeed(double val) {}
+void DeviceBlackboard::SetTrackBearing(fixed val) {}
+void DeviceBlackboard::SetSpeed(fixed val) {}
 
 void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt) {}
-
-int dlgWaypointOutOfTerrain(const TCHAR *Message) { return 0; }
-int WaypointsOutOfRange;
 
 void Profile::StoreRegistry(void) {}
 
@@ -114,8 +112,21 @@ FileExistsA(const char *FileName)
 Trigger drawTriggerEvent(TEXT("drawTriggerEvent"),false);
 Trigger targetManipEvent(TEXT("targetManip"));
 
-WayPointList way_points;
-AirspaceDatabase airspace_database;
+Waypoints way_points;
+
+TaskBehaviour task_behaviour;
+TaskEvents task_events;
+
+TaskManager task_manager(task_events,
+                         task_behaviour,
+                         way_points);
+
+Airspaces airspace_database;
+
+AIRCRAFT_STATE ac_state; // dummy
+
+AirspaceWarningManager airspace_warning(airspace_database, ac_state,
+                                        task_manager);
 static TopologyStore *topology;
 static RasterTerrain terrain;
 Logger logger;
@@ -163,31 +174,19 @@ WPARAM TranscodeKey(WPARAM wParam) {
 }
 
 bool
-PopupNearestWaypointDetails(const WayPointList &way_points,
-                            const GEOPOINT &location,
-                            double range, bool pan)
+PopupNearestWaypointDetails(const Waypoints &way_points,
+                            const GEOPOINT &location, double range, bool pan)
 {
   return false;
 }
 
-bool
-PopupInteriorAirspaceDetails(const AirspaceDatabase &airspace_database,
-                             const GEOPOINT &location)
+int dlgWaypointOutOfTerrain(const TCHAR *Message)
 {
-  return false;
+  _ftprintf(stderr, _T("%s\n"), Message);
+  return mrCancel;
 }
 
-bool
-ClearAirspaceWarnings(AirspaceDatabase &airspace_database,
-                      bool ack, bool allday)
-{
-  return false;
-}
-
-void
-AirspaceWarnListClear(AirspaceDatabase &airspace_database)
-{
-}
+void dlgAirspaceDetails(const AbstractAirspace& the_airspace) {}
 
 Logger::Logger() {}
 Logger::~Logger() {}
@@ -235,12 +234,6 @@ long
 CheckFreeRam(void)
 {
   return 64 * 1024 * 1024;
-}
-
-bool
-Logger::CheckDeclaration(void)
-{
-  return false;
 }
 
 void ButtonLabel::SetFont(const Font &Font) {}
@@ -321,7 +314,7 @@ LoadFiles()
 
   terrain.OpenTerrain();
 
-  ReadWayPoints(way_points, &terrain);
+  ReadWaypoints(way_points, &terrain);
 
   TCHAR tpath[MAX_PATH];
   GetRegistryString(szRegistryAirspaceFile, tpath, MAX_PATH);
@@ -334,9 +327,6 @@ LoadFiles()
     if (!ReadAirspace(airspace_database, path))
       StartupStore(TEXT("No airspace file 1\n"));
   }
-
-  FindAirspaceAreaBounds(airspace_database);
-  FindAirspaceCircleBounds(airspace_database);
 }
 
 static void
@@ -353,7 +343,7 @@ GenerateBlackboard(MapWindow &map)
   nmea_info.Location.Longitude = 7.7;
   nmea_info.TrackBearing = 90;
   nmea_info.Speed = 50;
-  nmea_info.Altitude = 1500;
+  nmea_info.GPSAltitude = 1500;
 
   memset(&derived_info, 0, sizeof(derived_info));
   derived_info.TerrainValid = true;

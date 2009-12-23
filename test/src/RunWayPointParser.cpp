@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "Waypointparser.h"
+#include "WayPointParser.h"
 #include "Waypoint/Waypoints.hpp"
 #include "RasterTerrain.h"
 #include "Thread/Mutex.hpp"
@@ -111,7 +111,7 @@ XCSoarInterface::StepProgressDialog(void)
 }
 
 bool
-MapWindowProjection::WaypointInScaleFilter(const WAYPOINT &way_point) const
+MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 {
   return true;
 }
