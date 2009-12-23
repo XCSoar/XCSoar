@@ -49,11 +49,12 @@ typedef boost::uint64_t __uint64;
 typedef unsigned __int64    __uint64;
 #endif
 
-unsigned const fixed_resolution_shift=28;
-__int64 const fixed_resolution=1<<fixed_resolution_shift; // JMW was LL
-
 class fixed
 {
+public:
+  static const unsigned resolution_shift = 28;
+  static const __int64 resolution = 1 << resolution_shift;
+
 private:
     __int64 m_nVal;
 
@@ -70,40 +71,40 @@ public:
         m_nVal(nVal)
     {}
 //    fixed(__int64 nVal):
-//        m_nVal(nVal<<fixed_resolution_shift)
+//        m_nVal(nVal<<resolution_shift)
 //    {}
     
     fixed(long nVal):
-        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<resolution_shift)
     {}
     
     fixed(int nVal):
-        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<resolution_shift)
     {}
     
     fixed(short nVal):
-        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<resolution_shift)
     {}
 
 /*    
     fixed(unsigned __int64 nVal):
-        m_nVal(nVal<<fixed_resolution_shift)
+        m_nVal(nVal<<resolution_shift)
     {}
 */  
     fixed(unsigned long nVal):
-        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<resolution_shift)
     {}
     fixed(unsigned int nVal):
-        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<resolution_shift)
     {}
     fixed(unsigned short nVal):
-        m_nVal((__int64)(nVal)<<fixed_resolution_shift)
+        m_nVal((__int64)(nVal)<<resolution_shift)
     {}
     fixed(double nVal):
-        m_nVal(static_cast<__int64>(nVal*static_cast<double>(fixed_resolution)))
+        m_nVal(static_cast<__int64>(nVal*static_cast<double>(resolution)))
     {}
     fixed(float nVal):
-        m_nVal(static_cast<__int64>(nVal*static_cast<float>(fixed_resolution)))
+        m_nVal(static_cast<__int64>(nVal*static_cast<float>(resolution)))
     {}
 
     template<typename T>
@@ -163,62 +164,62 @@ public:
     }
     float as_float() const
     {
-        return m_nVal/(float)fixed_resolution;
+        return m_nVal/(float)resolution;
     }
 
     double as_double() const
     {
-        return m_nVal/(double)fixed_resolution;
+        return m_nVal/(double)resolution;
     }
 
     long as_long() const
     {
-        return (long)(m_nVal/fixed_resolution);
+        return (long)(m_nVal/resolution);
     }
     __int64 as_int64() const
     {
-        return m_nVal/fixed_resolution;
+        return m_nVal/resolution;
     }
 
     int as_int() const
     {
-        return (int)(m_nVal/fixed_resolution);
+        return (int)(m_nVal/resolution);
     }
 
     unsigned long as_unsigned_long() const
     {
-        return (unsigned long)(m_nVal/fixed_resolution);
+        return (unsigned long)(m_nVal/resolution);
     }
 /*
     unsigned __int64 as_unsigned_int64() const
     {
-        return (unsigned __int64)m_nVal/fixed_resolution;
+        return (unsigned __int64)m_nVal/resolution;
     }
 */
     unsigned int as_unsigned_int() const
     {
-        return (unsigned int)(m_nVal/fixed_resolution);
+        return (unsigned int)(m_nVal/resolution);
     }
 
     short as_short() const
     {
-        return (short)(m_nVal/fixed_resolution);
+        return (short)(m_nVal/resolution);
     }
 
     unsigned short as_unsigned_short() const
     {
-        return (unsigned short)(m_nVal/fixed_resolution);
+        return (unsigned short)(m_nVal/resolution);
     }
 
     fixed operator++()
     {
-        m_nVal += fixed_resolution;
+        m_nVal += resolution;
         return *this;
     }
 
     fixed operator--()
     {
-        m_nVal -= fixed_resolution;
+        m_nVal -= resolution;
         return *this;
     }
 
@@ -1617,7 +1618,7 @@ inline fixed modf(fixed const& x,fixed*integral_part)
 
 inline fixed fixed::ceil() const
 {
-    if(m_nVal%fixed_resolution)
+    if(m_nVal%resolution)
     {
         return floor()+1;
     }
@@ -1630,7 +1631,7 @@ inline fixed fixed::ceil() const
 inline fixed fixed::floor() const
 {
     fixed res(*this);
-    __int64 const remainder=m_nVal%fixed_resolution;
+    __int64 const remainder=m_nVal%resolution;
     if(remainder)
     {
         res.m_nVal-=remainder;
@@ -1676,10 +1677,10 @@ inline fixed fixed::abs() const
 
 inline fixed fixed::modf(fixed*integral_part) const
 {
-    __int64 fractional_part=m_nVal%fixed_resolution;
+    __int64 fractional_part=m_nVal%resolution;
     if(m_nVal<0 && fractional_part>0)
     {
-        fractional_part-=fixed_resolution;
+        fractional_part-=resolution;
     }
     integral_part->m_nVal=m_nVal-fractional_part;
     return fixed(internal(),fractional_part);
@@ -1711,11 +1712,11 @@ namespace std
 }
 
 fixed const fixed_max(fixed::internal(),0x7fffffffffffffffLL);
-fixed const fixed_one(fixed::internal(),1<<(fixed_resolution_shift));
-fixed const fixed_two(fixed::internal(),1<<(fixed_resolution_shift+1));
-fixed const fixed_four(fixed::internal(),1<<(fixed_resolution_shift+2));
+fixed const fixed_one(fixed::internal(),1<<(fixed::resolution_shift));
+fixed const fixed_two(fixed::internal(),1<<(fixed::resolution_shift+1));
+fixed const fixed_four(fixed::internal(),1<<(fixed::resolution_shift+2));
 fixed const fixed_zero(fixed::internal(),0);
-fixed const fixed_half(fixed::internal(),1<<(fixed_resolution_shift-1));
+fixed const fixed_half(fixed::internal(),1<<(fixed::resolution_shift-1));
 extern fixed const fixed_pi;
 extern fixed const fixed_two_pi;
 extern fixed const fixed_half_pi;

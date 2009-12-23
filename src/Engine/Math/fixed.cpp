@@ -13,6 +13,9 @@ void sin_cos(const double&theta, double*s, double*c)
 
 #else
 
+const unsigned fixed::resolution_shift;
+const __int64 fixed::resolution;
+
 __int64 const internal_pi=0x3243f6a8;
 __int64 const internal_two_pi=0x6487ed51;
 __int64 const internal_half_pi=0x1921fb54;
@@ -44,7 +47,7 @@ fixed& fixed::operator*=(fixed const& val)
     
     if(__uint64 const self_upper=(self>>32))
     {
-        m_nVal=(self_upper*other)<<(32-fixed_resolution_shift);
+        m_nVal=(self_upper*other)<<(32-resolution_shift);
     }
     else
     {
@@ -56,8 +59,8 @@ fixed& fixed::operator*=(fixed const& val)
       unsigned long const other_lower=static_cast<unsigned long>(other&0xffffffff);
       __uint64 const lower_self_upper_other_res=self_lower*other_upper;
       __uint64 const lower_self_lower_other_res=self_lower*other_lower;
-        m_nVal+=(lower_self_upper_other_res<<(32-fixed_resolution_shift))
-            + (lower_self_lower_other_res>>fixed_resolution_shift);
+        m_nVal+=(lower_self_upper_other_res<<(32-resolution_shift))
+            + (lower_self_lower_other_res>>resolution_shift);
     }
     
     if(negate)
@@ -86,7 +89,7 @@ fixed& fixed::operator/=(fixed const& divisor)
     
         __uint64 temp=b;
         bool const a_large=a>b;
-        unsigned shift=fixed_resolution_shift;
+        unsigned shift=resolution_shift;
 
         if(a_large)
         {
@@ -128,7 +131,7 @@ fixed fixed::sqrt() const
 {
     unsigned const max_shift=62;
     __uint64 a_squared=1LL<<max_shift;
-    unsigned b_shift=(max_shift+fixed_resolution_shift)/2;
+    unsigned b_shift=(max_shift+resolution_shift)/2;
     __uint64 a=1LL<<b_shift;
     
     __uint64 x=m_nVal;
@@ -145,8 +148,8 @@ fixed fixed::sqrt() const
     
     while(remainder && b_shift)
     {
-        __uint64 b_squared=1LL<<(2*b_shift-fixed_resolution_shift);
-        int const two_a_b_shift=b_shift+1-fixed_resolution_shift;
+        __uint64 b_squared=1LL<<(2*b_shift-resolution_shift);
+        int const two_a_b_shift=b_shift+1-resolution_shift;
         __uint64 two_a_b=(two_a_b_shift>0)?(a<<two_a_b_shift):(a>>-two_a_b_shift);
         
         while(b_shift && remainder<(b_squared+two_a_b))
@@ -171,7 +174,7 @@ fixed fixed::sqrt() const
 
 namespace
 {
-    int const max_power=63-fixed_resolution_shift;
+  int const max_power=63-fixed::resolution_shift;
     __int64 const log_two_power_n_reversed[]={
         0x18429946ELL,0x1791272EFLL,0x16DFB516FLL,0x162E42FF0LL,0x157CD0E70LL,0x14CB5ECF1LL,0x1419ECB71LL,0x13687A9F2LL,
         0x12B708872LL,0x1205966F3LL,0x115424573LL,0x10A2B23F4LL,0xFF140274LL,0xF3FCE0F5LL,0xE8E5BF75LL,0xDDCE9DF6LL,
@@ -202,23 +205,23 @@ fixed fixed::exp() const
     {
         return fixed_max;
     }
-    if(m_nVal<-log_two_power_n_reversed[63-2*fixed_resolution_shift])
+    if(m_nVal<-log_two_power_n_reversed[63-2*resolution_shift])
     {
         return fixed(internal(),0);
     }
     if(!m_nVal)
     {
-        return fixed(internal(),fixed_resolution);
+        return fixed(internal(),resolution);
     }
 
-    __int64 res=fixed_resolution;
+    __int64 res=resolution;
 
     if(m_nVal>0)
     {
         int power=max_power;
         __int64 const* log_entry=log_two_power_n_reversed;
         __int64 temp=m_nVal;
-        while(temp && power>(-(int)fixed_resolution_shift))
+        while(temp && power>(-(int)resolution_shift))
         {
             while(!power || (temp<*log_entry))
             {
@@ -245,11 +248,11 @@ fixed fixed::exp() const
     }
     else
     {
-        int power=fixed_resolution_shift;
+        int power=resolution_shift;
         __int64 const* log_entry=log_two_power_n_reversed+(max_power-power);
         __int64 temp=m_nVal;
 
-        while(temp && power>(-(int)fixed_resolution_shift))
+        while(temp && power>(-(int)resolution_shift))
         {
             while(!power || (temp>(-*log_entry)))
             {
@@ -284,7 +287,7 @@ fixed fixed::log() const
     {
         return -fixed_max;
     }
-    if(m_nVal==fixed_resolution)
+    if(m_nVal==resolution)
     {
         return fixed_zero;
     }
@@ -302,9 +305,9 @@ fixed fixed::log() const
         -log_two_power_n_reversed[2*max_power-left_shift];
     unsigned right_shift=1;
     __uint64 shifted_temp=temp>>1;
-    while(temp && (right_shift<fixed_resolution_shift))
+    while(temp && (right_shift<resolution_shift))
     {
-        while((right_shift<fixed_resolution_shift) && (temp<(shifted_temp+scale_position)))
+        while((right_shift<resolution_shift) && (temp<(shifted_temp+scale_position)))
         {
             shifted_temp>>=1;
             ++right_shift;
@@ -342,8 +345,7 @@ namespace
     {
         long x = px, y = py;
         long const *arctanptr = arctantab;
-        for (int i = -1; i <= (int)fixed_resolution_shift; ++i)
-        {
+        for (int i = -1; i <= (int)fixed::resolution_shift; ++i) {
             long const yshift=right_shift(y,i);
             long const xshift=right_shift(x,i);
 
@@ -370,8 +372,7 @@ namespace
         long theta=0;
         long x = argx, y = argy;
         long const *arctanptr = arctantab;
-        for(int i = -1; i <= (int)fixed_resolution_shift; ++i)
-        {
+        for (int i = -1; i <= (int)fixed::resolution_shift; ++i) {
             long const yshift=right_shift(y,i);
             long const xshift=right_shift(x,i);
             if(y < 0)
@@ -448,7 +449,7 @@ void fixed::to_polar(fixed const& x,fixed const& y,fixed* r,fixed* theta)
     __uint64 b=negative_y?-y.m_nVal:y.m_nVal;
 
     unsigned right_shift=0;
-    unsigned const max_value=1U<<fixed_resolution_shift;
+    unsigned const max_value=1U<<resolution_shift;
 
     while((a>=max_value) || (b>=max_value))
     {
