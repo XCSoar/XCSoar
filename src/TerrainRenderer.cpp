@@ -600,7 +600,7 @@ void TerrainRenderer::FillHeightBuffer(MapWindowProjection &map_projection,
 
 	gp.Latitude = PanLatitude - (ycost+x*sint)*InvDrawScale;
 	gp.Longitude = PanLongitude + (x*cost-ysint)*invfastcosine(gp.Latitude)*InvDrawScale;
-	*myhbuf = max(0, DisplayMap->GetField(gp, *rounding));
+        *myhbuf = max((short)0, DisplayMap->GetField(gp, *rounding));
       } else {
 	*myhbuf = 0;
       }

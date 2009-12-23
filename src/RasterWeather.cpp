@@ -74,7 +74,7 @@ RasterMap* RasterWeather::GetMap() {
   RasterMap* retval;
   if (_parameter) {
     assert(_parameter<=MAX_WEATHER_MAP);
-    retval = weather_map[min(MAX_WEATHER_MAP,_parameter)-1];
+    retval = weather_map[min((unsigned)MAX_WEATHER_MAP, _parameter) - 1];
   } else {
     assert(1);
     retval = NULL;
@@ -95,7 +95,7 @@ unsigned RasterWeather::GetTime() {
 bool RasterWeather::isWeatherAvailable(unsigned t) {
   Poco::ScopedRWLock protect(lock, false);
   assert(t<MAX_WEATHER_TIMES);
-  return weather_available[min(MAX_WEATHER_TIMES,t-1)];
+  return weather_available[min((unsigned)MAX_WEATHER_TIMES, t - 1)];
 }
 
 void RasterWeather::RASP_filename(char* rasp_filename,
@@ -295,7 +295,7 @@ void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
     _stprintf(Buffer, TEXT("%.0f%s"), val*ALTITUDEMODIFY, Units::GetAltitudeName());
     return;
   case 5: // blcloudpct
-    _stprintf(Buffer, TEXT("%d%%"), (int)max(0,min(100,val)));
+    _stprintf(Buffer, TEXT("%d%%"), (int)max(0,min(100, (int)val)));
     return;
   case 6: // sfctemp
     _stprintf(Buffer, TEXT("%d")TEXT(DEG), iround(val*0.5-20.0));

@@ -250,7 +250,7 @@ void Chart::DrawXLabel(const TCHAR *text) {
 void Chart::DrawYLabel(const TCHAR *text) {
   canvas.select(MapLabelFont);
   SIZE tsize = canvas.text_size(text);
-  int x = max(2,rc.left-tsize.cx);
+  int x = max(2, (int)(rc.left - tsize.cx));
   int y = rc.top;
   canvas.text_opaque(x, y, text);
 }

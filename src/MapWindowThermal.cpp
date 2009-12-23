@@ -139,7 +139,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 
   // calculate top/bottom height
   maxh = max(h, mth);
-  minh = min(h, 0);
+  minh = min(h, 0.0);
 
   if (draw_start_height) {
     maxh = max(maxh, hstart);

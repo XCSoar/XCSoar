@@ -420,7 +420,7 @@ oldGlidePolar::SinkRate(double V, double n)
 
   double w0 = SinkRate(PolarCoefA, PolarCoefB, PolarCoefC, 0.0, 0.0, V);
   //double v1 = V / max(1, Vbestld);
-  double v2 = Vbestld / max(Vbestld/2,V);
+  double v2 = Vbestld / max((double)(Vbestld / 2),V);
   return w0 - (V / (2 * bestld)) * (n * n - 1) * (v2 * v2);
 }
 
@@ -555,7 +555,7 @@ oldGlidePolar::MacCreadyAltitude_internal(double eMacCready, double Distance,
     }
 
     if (bestfound) {
-      BestSpeed = min(MAXSPEED, vtrack_real);
+      BestSpeed = min((double)MAXSPEED, vtrack_real);
       if (BestCruiseTrack) {
         // best track bearing is the track along cruise that
         // compensates for the drift during climb

@@ -43,7 +43,7 @@ Copyright_License {
 #include <math.h>
 
 
-#define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
+#define fSnailColour(cv) max((short)0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
 
 SnailTrail::SnailTrail(): clock(2.0)

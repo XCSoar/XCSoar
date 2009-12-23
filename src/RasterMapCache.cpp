@@ -166,7 +166,7 @@ short RasterMapCache::LookupTerrainCacheFile(const long &SeekPos) {
     if (zzip_fread(&NewAlt, 1, sizeof(NewAlt), fpTerrain) != sizeof(NewAlt))
       Alt = TERRAIN_INVALID;
     else {
-      Alt = max(0,NewAlt);
+      Alt = max((int16_t)0,NewAlt);
     }
   }
 

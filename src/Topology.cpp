@@ -283,7 +283,7 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
 
           int minx = rc.right;
           int miny = rc.bottom;
-          int msize = min(shape->line[tt].numpoints, MAXCLIPPOLYGON);
+          int msize = min(shape->line[tt].numpoints, (int)MAXCLIPPOLYGON);
 
           map_projection.LonLat2Screen(shape->line[tt].point,
               pt, msize, 1);
@@ -308,7 +308,8 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
 
           int minx = rc.right;
           int miny = rc.bottom;
-          int msize = min(shape->line[tt].numpoints/iskip, MAXCLIPPOLYGON);
+          int msize = min(shape->line[tt].numpoints / iskip,
+                          (int)MAXCLIPPOLYGON);
 
           map_projection.LonLat2Screen(shape->line[tt].point,
               pt, msize*iskip, iskip);

@@ -295,7 +295,7 @@ public:
   double
   GetMaxTime()
   {
-    return max(0, max(p[0].t, max(p[1].t, max(p[2].t, p[3].t))));
+    return max(0.0, max(p[0].t, max(p[1].t, max(p[2].t, p[3].t))));
   }
 
   double
