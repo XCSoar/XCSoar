@@ -129,10 +129,6 @@
 
 #define ERROR_TIME 1.0e6
 
-// used by RasterRASP
-#define MAX_WEATHER_MAP 16
-#define MAX_WEATHER_TIMES 48
-
 // used by map window
 #define WPCIRCLESIZE        2
 

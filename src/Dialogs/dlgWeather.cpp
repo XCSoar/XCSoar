@@ -73,7 +73,7 @@ static void RASPGetTime(DataField *Sender) {
   DataFieldEnum* dfe;
   dfe = (DataFieldEnum*)Sender;
   int index=0;
-  for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
+  for (unsigned i = 0; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
     if (RASP.isWeatherAvailable(i)) {
       if (RASP.GetTime() == i) {
         Sender->Set(index);
@@ -89,7 +89,7 @@ static void RASPSetTime(DataField *Sender) {
     RASP.SetTime(0);
     return;
   }
-  for (int i=0; i<MAX_WEATHER_TIMES; i++) {
+  for (unsigned i = 0; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
     if (RASP.isWeatherAvailable(i)) {
       if (index == Sender->GetAsInteger()) {
         RASP.SetTime(i);
@@ -195,7 +195,7 @@ void dlgWeatherShowModal(void){
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_T("Now"));
-    for (int i=1; i<MAX_WEATHER_TIMES; i++) {
+    for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
       if (RASP.isWeatherAvailable(i)) {
         TCHAR timetext[10];
         _stprintf(timetext,_T("%04d"), RASP.IndexToTime(i));

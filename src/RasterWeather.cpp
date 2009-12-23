@@ -50,6 +50,9 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
+const unsigned RasterWeather::MAX_WEATHER_MAP;
+const unsigned RasterWeather::MAX_WEATHER_TIMES;
+
 int RasterWeather::IndexToTime(int x) {
   if (x % 2 == 0) {
     return (x/2)*100;
@@ -117,8 +120,8 @@ bool RasterWeather::LoadItem(int item, const TCHAR* name) {
 
 void RasterWeather::ScanAll(const GEOPOINT &location) {
   Poco::ScopedRWLock protect(lock, true);
-  int i;
-  for (i=0; i<MAX_WEATHER_TIMES; i++) {
+
+  for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
     _weather_time = i;
     weather_available[i] = LoadItem(0,TEXT("wstar"));
     if (!weather_available[i]) {
@@ -208,8 +211,7 @@ void RasterWeather::Close() {
 }
 
 void RasterWeather::_Close() {
-  int i;
-  for (i=0; i<MAX_WEATHER_MAP; i++) {
+  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
       delete weather_map[i];
       weather_map[i]=0;
@@ -220,7 +222,8 @@ void RasterWeather::_Close() {
 
 void RasterWeather::SetViewCenter(const GEOPOINT &location) {
   Poco::ScopedRWLock protect(lock, true);
-  for (int i=0; i<MAX_WEATHER_MAP; i++) {
+
+  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
       weather_map[i]->SetViewCenter(location);
     }
@@ -229,7 +232,7 @@ void RasterWeather::SetViewCenter(const GEOPOINT &location) {
 
 
 void RasterWeather::ServiceFullReload(const GEOPOINT &location) {
-  for (int i=0; i<MAX_WEATHER_MAP; i++) {
+  for (unsigned i = 0; i < MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
       weather_map[i]->ServiceFullReload(location);
     }

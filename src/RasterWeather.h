@@ -40,7 +40,6 @@ Copyright_License {
 #define RASTERWEATHER_H
 
 #include "Poco/RWLock.h"
-#include "Sizes.h"
 
 #include <tchar.h>
 
@@ -49,8 +48,12 @@ struct GEOPOINT;
 
 class RasterWeather {
 public:
+  static const unsigned MAX_WEATHER_MAP = 16;
+  static const unsigned MAX_WEATHER_TIMES = 48;
+
+public:
   RasterWeather() {
-    int i;
+    unsigned i;
     bsratio = false;
     for (i=0; i<MAX_WEATHER_MAP; i++) {
       weather_map[i]= 0;
