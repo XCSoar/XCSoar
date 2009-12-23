@@ -161,8 +161,8 @@ protected:
       return false;
     }
 
-    double mag_change = fabs(wind_mag - last_wind_mag);
-    double dir_change = fabs(AngleLimit180(wind_bearing - last_wind_bearing));
+    fixed mag_change = fabs(wind_mag - last_wind_mag);
+    fixed dir_change = fabs(AngleLimit180(wind_bearing - last_wind_bearing));
 
     if (mag_change > 5 / TOKNOTS)
       return true;
@@ -187,10 +187,10 @@ protected:
   }
 
 private:
-  double wind_mag;
-  double wind_bearing;
-  double last_wind_mag;
-  double last_wind_bearing;
+  fixed wind_mag;
+  fixed wind_bearing;
+  fixed last_wind_mag;
+  fixed last_wind_bearing;
 };
 
 class ConditionMonitorFinalGlide: public ConditionMonitor
