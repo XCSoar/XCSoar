@@ -41,22 +41,61 @@
 #include "Util/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
 #include "Navigation/Aircraft.hpp"
+#include <assert.h>
+
+/// \todo note polar terms are hardcoded at present, will need proper
+/// polar management later
 
 GlidePolar::GlidePolar(const fixed _mc,
                        const fixed _bugs,
                        const fixed _ballast):
   bugs(_bugs),
   ballast(_ballast),
-  cruise_efficiency(fixed_one)
+  cruise_efficiency(fixed_one),
+  ideal_polar_a(0.00157),
+  ideal_polar_b(-0.0734),
+  ideal_polar_c(1.48),
+  ballast_ratio(0.3)
 {
   static const fixed fixed_75 = 75.0;
 
+  update_polar();
+
   Vmax = fixed_75;
   Smax = SinkRate(Vmax);
-
   solve_min();
 
   set_mc(_mc);
+}
+
+void
+GlidePolar::update_polar()
+{
+  assert(positive(bugs));
+
+  const fixed loading_factor = sqrt(fixed_one+ballast*ballast_ratio);
+  const fixed inv_bugs = fixed_one/bugs;
+
+  polar_a = inv_bugs * ideal_polar_a / loading_factor;
+  polar_b = inv_bugs * ideal_polar_b;
+  polar_c = inv_bugs * ideal_polar_c * loading_factor;
+}
+
+void
+GlidePolar::set_bugs(const fixed clean)
+{
+  bugs = clean;
+  update_polar();
+  solve_ld();
+}
+
+
+void
+GlidePolar::set_ballast(const fixed bal)
+{
+  ballast = bal;
+  update_polar();
+  solve_ld();
 }
 
 
@@ -81,24 +120,16 @@ GlidePolar::MSinkRate(const fixed V) const
 fixed 
 GlidePolar::SinkRate(const fixed V) const
 {
-  /// \todo note this is hardcoded at present, will need proper polar management later
-  static const fixed v0 = 1.48;
-  static const fixed v1 = -0.0734;
-  static const fixed v2 = 0.00157;
-
-  return v0+v1*V+v2*V*V;
+  return polar_c+V*(polar_b+V*polar_a);
 }
 
 fixed 
 GlidePolar::SinkRate(const fixed V, const fixed n) const
 {
-  static const fixed fixed_small = 0.1;
-
-  const fixed n_lim = max(fixed_small, fabs(n));
   const fixed w0 = SinkRate(V);
-  const fixed v2 = VbestLD / max(VbestLD*fixed_half, V);
+  const fixed vl = VbestLD / max(VbestLD*fixed_half, V);
 
-  return w0+(V/(fixed_two*bestLD))*(n_lim*n_lim-fixed_one)*v2*v2; 
+  return max(fixed_zero, w0+(V/(fixed_two*bestLD))*(n*n-fixed_one)*vl*vl); 
 }
 
 

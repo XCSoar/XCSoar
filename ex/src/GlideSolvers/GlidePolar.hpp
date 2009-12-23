@@ -57,6 +57,10 @@ struct AIRCRAFT_STATE;
  * The MacCready class uses this GlidePolar data to calculate
  * specific GlideSolutions. 
  *
+ * This uses a parabolic glide polar:
+ * \f[ w = a.V^2+b.V+c \f]
+ * Where \f$ w, V\f$ are in m/s
+ *
  * \todo
  * - currently the polar itself and Vmax is hard-coded
  * - currently bugs/ballast are ignored
@@ -69,15 +73,15 @@ class GlidePolar
 {
 public:
 /** 
- * Constructor.  Performs search for best LD at instantiation.
+ * Constructor.  Performs search for best LD at instantiation
  * 
  * @param _mc MacCready value at construction
- * @param _bugs Bugs value at construction (currently unimplemented)
- * @param _ballast Ballast value at construction (currently unimplemented)
+ * @param _bugs Bugs (clean) ratio (default clean)
+ * @param _ballast Ballast ratio (default empty)
  */
   GlidePolar(const fixed _mc,
-             const fixed _bugs,
-             const fixed _ballast);
+             const fixed _bugs=fixed_one,
+             const fixed _ballast=fixed_zero);
 
 /** 
  * Accesses sink rate at min airspeed
@@ -150,6 +154,20 @@ public:
   }
 
 /** 
+ * Set bugs value.
+ * 
+ * @param clean The new bugs setting (clean ratio) (0-1)
+ */
+  void set_bugs(const fixed clean);
+
+/** 
+ * Set ballast value.
+ * 
+ * @param ratio The new ballast setting (proportion of possible ballast, [0-1]
+ */
+  void set_ballast(const fixed ratio);
+
+/** 
  * Set MacCready value.  Internally this performs search
  * for best LD values corresponding to this setting.
  * 
@@ -201,6 +219,15 @@ public:
 /** 
  * Sink rate model (actual glide polar) function.
  * 
+ * Uses a parabolic load factor model to calculate additional sink rate
+ * from loading:
+ *
+ * \f[ w(V,n) = w_0 + ({{V}\over{2 \Lambda}})[n^2-1]({{V_\Lambda}\over{V}})^2 \f]
+ * Where:
+ * - \f$n \f$ is the load factor
+ * - \f$\Lambda \f$ is the best L/D ratio
+ * - \f$V_\Lambda \f$ is the speed for best L/D 
+ *
  * @param V Speed at which sink rate is to be evaluated
  * @param n Load factor
  * 
@@ -271,6 +298,13 @@ public:
                      const bool block_stf) const;
 
 private:
+
+/** 
+ * Update glide polar coefficients from ideal terms
+ * 
+ */
+  void update_polar();
+
 /** 
  * Solve for best LD at current MC/bugs/ballast setting.
  */
@@ -281,21 +315,28 @@ private:
  */
   void solve_min();
 
-  fixed mc;                  
-  fixed inv_mc;                  
-  fixed bugs;
-  fixed ballast;
-  fixed cruise_efficiency;
-  fixed VbestLD;
-  fixed SbestLD;
-  fixed Smax;
-  fixed Vmax;
-  fixed Smin;
-  fixed Vmin;
-  fixed bestLD;
+  fixed mc;                  /**< MacCready ring setting (m/s) */
+  fixed inv_mc;              /**< Inverse of MC setting (s/m) */
+  fixed bugs;                /**< Clean ratio (1=clean, 0=100% bugs) */ 
+  fixed ballast;             /**< Ballast ratio (0=empty, 1=full) */
+  fixed cruise_efficiency;   /**< Cruise efficiency */
+  fixed bestLD;              /**< Best lift to drag ratio */
+  fixed VbestLD;             /**< Speed for best L/D (m/s) */
+  fixed SbestLD;             /**< Sink rate at best L/D (m/s, positive down) */
+  fixed Vmax;                /**< Maximum cruise speed (m/s) */
+  fixed Smax;                /**< Sink rate at maximum cruise speed (m/s, positive down) */
+  fixed Vmin;                /**< Speed for minimum sink (m/s) */
+  fixed Smin;                /**< Minimum sink rate (m/s, positive down) */
 
-  /** @link dependency */
-  /*#  MacCready lnkMacCready; */
+  fixed ideal_polar_a;       /**< 'a' coefficient of glide polar empty/clean */
+  fixed ideal_polar_b;       /**< 'b' coefficient of glide polar empty/clean */
+  fixed ideal_polar_c;       /**< 'c' coefficient of glide polar empty/clean */
+
+  fixed polar_a;             /**< 'a' coefficient of glide polar at bug/ballast */
+  fixed polar_b;             /**< 'b' coefficient of glide polar at bug/ballast */
+  fixed polar_c;             /**< 'c' coefficient of glide polar at bug/ballast */
+
+  fixed ballast_ratio;       /**< Ratio of mass of ballast to glider empty weight */
 };
 
 #endif

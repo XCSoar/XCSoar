@@ -29,7 +29,7 @@ public:
 /** 
  * Constructor.  Sorts master list of waypoints by name 
  * 
- * @param _airspace Airspaces store
+ * @param _airspaces Airspaces store
  * @param Location Location of aircraft at time of query
  * @param distance_factor Units factor to apply to distance calculations
  */

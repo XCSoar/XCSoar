@@ -183,7 +183,7 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
 {
   // multipurpose flight test
 
-  GlidePolar glide_polar(2.0,0.0,0.0);
+  GlidePolar glide_polar(2.0);
   Waypoints waypoints;
   setup_waypoints(waypoints);
 

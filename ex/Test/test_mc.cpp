@@ -15,7 +15,7 @@ std::ofstream ofile("results/res-polar-m.txt");
 
 void polar_mc(const fixed mc) 
 {
-  GlidePolar polar(mc,0.0,0.0);
+  GlidePolar polar(mc);
   ofile << mc << " " << polar.get_VbestLD() << " " << polar.get_bestLD() 
         << " " << polar.get_Vmin() << " " << polar.get_Smin() 
         << " " << polar.get_Vmax() << " " << polar.get_Smax() << "\n";
@@ -28,7 +28,7 @@ void basic_polar(const fixed mc)
   std::ofstream pfile("results/res-polar.txt");
   std::ofstream mfile(bname);
 
-  GlidePolar polar(mc,0.0,0.0);
+  GlidePolar polar(mc);
   for (fixed V= Vmin; V<= polar.get_Vmax(); V+= 0.25) {
     pfile << mc << " " << V << " " << -polar.SinkRate(V) << " " << V/polar.SinkRate(V)
           << "\n";
@@ -50,7 +50,7 @@ void basic_polar(const fixed mc)
 void test_glide_alt(const fixed h, const fixed W, 
                     const fixed Wangle, std::ostream &hfile) 
 {
-  GlidePolar polar(0.0,0.0,0.0);
+  GlidePolar polar(0.0);
   polar.set_mc(1.0);
 
   AIRCRAFT_STATE ac;
@@ -80,7 +80,7 @@ void test_glide_stf(const fixed h, const fixed W,
                     const fixed S,
                     std::ostream &hfile) 
 {
-  GlidePolar polar(0.0,0.0,0.0);
+  GlidePolar polar(0.0);
   polar.set_mc(1.0);
 
   AIRCRAFT_STATE ac;
@@ -187,8 +187,7 @@ void test_glide_cb(const fixed h, const fixed W,
                    const fixed Wangle,
                    std::ostream &hfile) 
 {
-  GlidePolar polar(0.0,0.0,0.0);
-  polar.set_mc(1.0);
+  GlidePolar polar(1.0);
 
   AIRCRAFT_STATE ac;
   ac.WindSpeed = fabs(W);

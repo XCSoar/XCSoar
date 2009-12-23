@@ -151,10 +151,20 @@ public:
 
   virtual bool equals(const ObservationZonePoint* other) const;
 
+  /** 
+   * Retrieve start radial endpoint
+   * 
+   * @return Location of extreme point on start radial
+   */
   const GEOPOINT& get_SectorStart() const {
     return SectorStart;
   }
 
+  /** 
+   * Retrieve end radial endpoint
+   * 
+   * @return Location of extreme point on end radial
+   */
   const GEOPOINT& get_SectorEnd() const {
     return SectorEnd;
   }

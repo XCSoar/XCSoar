@@ -68,7 +68,6 @@ public:
    * 
    * @param airspaces Store of airspaces
    * @param state Initial state of aircraft
-   * @param glide_polar Polar used for glide predictions
    * @param task_manager Task manager holding task
    * @param prediction_time_glide Time (s) of glide predictor (default 15 s)
    * @param prediction_time_filter Time (s) of state filter predictor (default 60 s)
@@ -182,6 +181,7 @@ public:
 /** 
  * Acknowledge an airspace warning
  * 
+ * @param airspace The airspace subject
  * @param set Whether to set or cancel acknowledgement
  */
   void acknowledge_warning(const AbstractAirspace& airspace,
@@ -190,6 +190,7 @@ public:
 /** 
  * Acknowledge an airspace inside
  * 
+ * @param airspace The airspace subject
  * @param set Whether to set or cancel acknowledgement
  */
   void acknowledge_inside(const AbstractAirspace& airspace,
@@ -198,6 +199,7 @@ public:
 /** 
  * Acknowledge all warnings for airspace for whole day
  * 
+ * @param airspace The airspace subject
  * @param set Whether to set or cancel acknowledgement
  */
   void acknowledge_day(const AbstractAirspace& airspace,

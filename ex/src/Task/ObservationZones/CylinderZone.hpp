@@ -150,6 +150,9 @@ public:
 protected:
   fixed Radius; /**< radius (m) of OZ */
 public:
+/**
+ * Defines as a visitor 
+ */
   DEFINE_VISITABLE();
 };
 

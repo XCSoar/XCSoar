@@ -283,6 +283,7 @@ public:
  * Constructor.
  * 
  * @param state Aircraft state at query
+ * @param polar Polar
  * @param task Task to retrieve plan from
  * 
  * @return Initialised object

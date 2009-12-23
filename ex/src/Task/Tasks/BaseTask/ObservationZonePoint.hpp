@@ -107,6 +107,9 @@ public:
   virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const = 0;
 
 public:
+/**
+ * Defines as a visitor 
+ */
   DEFINE_VISITABLE();
 };
 

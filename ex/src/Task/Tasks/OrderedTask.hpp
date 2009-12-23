@@ -551,6 +551,9 @@ public:
  * all TaskPoint in the task
  * 
  * @param visitor Visitor to accept
+ * @param reverse Visit task points in reverse order 
+ *
+ * \todo reverse not implemented yet
  */
   void Accept(TaskPointVisitor& visitor, const bool reverse=false) const;
 

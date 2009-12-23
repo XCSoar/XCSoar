@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 
   TaskBehaviour task_behaviour;
   TaskEventsPrint default_events(verbose);
-  GlidePolar glide_polar(2.0,0.0,0.0);
+  GlidePolar glide_polar(2.0);
 
   Waypoints waypoints;
   setup_waypoints(waypoints);

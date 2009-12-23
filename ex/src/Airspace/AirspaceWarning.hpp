@@ -178,7 +178,12 @@ public:
  */
   void acknowledge_day(const bool set=true);
 
-  bool operator < (const AirspaceWarning& rhs);
+/**
+ * Ranking operator for warnings
+ * 
+ * @return True if this is more severe than that
+ */
+  bool operator < (const AirspaceWarning& that);
 
 private:
   const AbstractAirspace& m_airspace;

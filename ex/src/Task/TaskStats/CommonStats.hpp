@@ -9,6 +9,12 @@ typedef std::set<unsigned> WaypointIdSet;
 
 class Waypoint;
 
+/** 
+ * Task statistics that are common across all managed tasks.
+ * This is used for statistics for which it makes no sense to
+ * have per-task instances, and where access to certain statistics
+ * is required whatever mode the task manager is in.
+ */
 class CommonStats 
 {
 public:
@@ -40,7 +46,7 @@ public:
   fixed V_block; /**< Block speed to fly */
   fixed V_dolphin; /**< Dolphin speed to fly */
 
-  WaypointIdSet waypoints_in_task;
+  WaypointIdSet waypoints_in_task; /**< List of waypoints by id that are managed in the task */
 
 /** 
  * Clears the set of waypoints listed as in the task

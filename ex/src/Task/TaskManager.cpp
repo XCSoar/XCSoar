@@ -43,7 +43,7 @@
 TaskManager::TaskManager(const TaskEvents &te,
                          const TaskBehaviour &tb,
                          const Waypoints &wps): 
-  m_glide_polar(0,0,0),
+  m_glide_polar(0),
   task_ordered(te,tb,task_advance,m_glide_polar),
   task_goto(te,tb,task_advance,m_glide_polar),
   task_abort(te,tb,task_advance,m_glide_polar,wps),
@@ -122,18 +122,22 @@ TaskManager::validTaskPoint(const int index_offset) const
 }
 
 
+/**
+ * Convenience class to find waypoints in task unobtrusively
+ *
+ */
 class WaypointLister: public TaskPointVisitor
 {
 public:
+  /**
+   * Constructor; clears waypoints in task in stats struct
+   */
   WaypointLister(CommonStats& the_stats):stats(the_stats) 
     {
       stats.clear_waypoints_in_task();
     };
 
   void Visit(const UnorderedTaskPoint& tp) {
-    stats.append_waypoint_in_task(tp.get_waypoint());
-  }
-  void Visit(const OrderedTaskPoint& tp) {
     stats.append_waypoint_in_task(tp.get_waypoint());
   }
   void Visit(const FinishPoint& tp) {

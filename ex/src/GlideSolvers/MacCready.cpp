@@ -267,6 +267,7 @@ public:
  * @param _mac MacCready object to use for search
  * @param vmin Min speed for search range
  * @param vmax Max speed for search range
+ * @param _allow_partial Whether to allow partial solutions or not
  * 
  * @return Initialised object (not yet searched)
  */
