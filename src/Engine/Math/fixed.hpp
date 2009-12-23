@@ -51,9 +51,6 @@ class fixed
 #ifdef HAVE_BOOST
   typedef boost::int64_t int64_t;
   typedef boost::uint64_t uint64_t;
-#else
-  typedef __int64 int64_t;
-  typedef unsigned __int64 uint64_t;
 #endif
   typedef uint64_t uvalue_t;
 
