@@ -39,7 +39,6 @@ Copyright_License {
 
 #include "ConditionMonitor.hpp"
 #include "XCSoar.h"
-#include "Calculations.h"
 #include <math.h>
 #include "Math/Geometry.hpp"
 #include "Math/Units.h"

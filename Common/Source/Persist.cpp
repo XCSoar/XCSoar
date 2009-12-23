@@ -48,7 +48,6 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "Logger.h"
 #include "GlideComputer.hpp"
-#include "Calculations.h"
 #include "Protection.hpp"
 #include "Components.hpp"
 #include "Asset.hpp"

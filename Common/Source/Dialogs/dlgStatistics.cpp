@@ -51,7 +51,6 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "Blackboard.hpp"
 #include "Components.hpp"
-#include "Calculations.h"
 #include "Protection.hpp"
 
 #define MAXPAGE 8
@@ -224,7 +223,6 @@ static void Update(void){
               gettext(_T("Analysis")),
               gettext(_T("Task")));
     wf->SetCaption(sTmp);
-    RefreshTaskStatistics();
     fs.CaptionTask(sTmp, XCSoarInterface::Calculated());
     wInfo->SetCaption(sTmp);
     break;

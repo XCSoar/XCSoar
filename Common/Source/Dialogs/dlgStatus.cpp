@@ -47,7 +47,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "LocalTime.hpp"
 #include "MainWindow.hpp"
-#include "Calculations.h" // TODO danger! FAIFinishHeight
 #include "MapWindow.h"
 #include "GlideComputer.hpp"
 #include "Components.hpp"

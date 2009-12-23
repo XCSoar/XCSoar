@@ -140,7 +140,6 @@ OBJS	:=\
 	$(SRC)/ClimbAverageCalculator.o \
 	$(SRC)/ConditionMonitor.o 	\
 	$(SRC)/Calibration.o 		\
-	$(SRC)/Calculations.o 		\
 	$(SRC)/FlarmIdFile.o 		\
 	$(SRC)/FlarmCalculations.o 	\
 	$(SRC)/GlideComputer.o 		\

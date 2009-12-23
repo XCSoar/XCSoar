@@ -43,7 +43,6 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Device/Parser.h"
 #include "Gauge/GaugeVario.hpp"
-#include "Calculations.h"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "GlideComputer.hpp"

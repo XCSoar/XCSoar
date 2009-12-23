@@ -71,7 +71,6 @@ Copyright_License {
 #include "Topology.h"
 #include "Audio/VarioSound.h"
 #include "Screen/Graphics.hpp"
-#include "Calculations.h"
 #include "Polar/Loader.hpp"
 #include "Persist.hpp"
 #include "Device/Parser.h"
