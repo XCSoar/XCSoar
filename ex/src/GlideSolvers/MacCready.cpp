@@ -286,12 +286,15 @@ public:
   /**
    * Function to optimise in search
    *
+   * \note the f(x) is magnified because with fixed, find_min can
+   *   fail with too small df/dx
+   *
    * @param V cruise true air speed (m/s)
    * @return Virtual speed (m/s) of flight
    */
   fixed f(const fixed V) {
     res = mac.solve_glide(task, V, allow_partial);
-    return res.calc_vspeed(inv_mc);
+    return res.calc_vspeed(inv_mc)*fixed_360;
   }
   
   /**

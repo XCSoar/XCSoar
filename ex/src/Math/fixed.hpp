@@ -1736,17 +1736,8 @@ inline bool negative(const fixed&f) {
 #endif
 
 inline void limit_tolerance(fixed& f, const fixed tol_act) {
-  if (positive(f)) {
-    if (f<tol_act) {
-      f= tol_act;
-    }
-    return;
-  }
-  if (negative(f)) {
-    if (f>-tol_act) {
-      f= -tol_act;
-    }
-    return;
+  if (fabs(f)<tol_act) {
+    f = positive(f)? tol_act:-tol_act;
   }
 }
 

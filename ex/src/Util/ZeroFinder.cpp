@@ -288,14 +288,14 @@ fixed ZeroFinder::find_min(const fixed xstart)
     			/* Decide if the interpolation can be tried	*/
     if( fabs(x-w) >= tol_act  )		/* If x and w are distinct      */
     {					/* interpolatiom may be tried	*/
-	fixed p; 		/* Interpolation step is calcula-*/
-	fixed q;              /* ted as p/q; division operation*/
+	fixed p; 		        /* Interpolation step is calcula-*/
+	fixed q;                        /* ted as p/q; division operation*/
                                         /* is delayed until last moment	*/
 
 	const fixed t = (x-w) * (fx-fv);
 	q = (x-v) * (fx-fw);
 	p = (x-v)*q - (x-w)*t;
-	q = 2*(q-t);
+	q = fixed_two*(q-t);
 
 	if( positive(q) )		/* q was calculated with the op-*/
 	  p = -p;			/* posite sign; make q positive	*/
@@ -320,10 +320,8 @@ fixed ZeroFinder::find_min(const fixed xstart)
       const fixed ft = f(t);
       if( ft <= fx )
       {                                 /* t is a better approximation	*/
-	if( t < x )			/* Reduce the range so that	*/
-	  b = x;                        /* t would fall within it	*/
-	else
-	  a = x;
+	( t < x ? b : a ) = x;          /* Reduce the range so that	*/
+	                                /* t would fall within it	*/
       
 	v = w;  w = x;  x = t;		/* Assign the best approx to x	*/
 	fv=fw;  fw=fx;  fx=ft;
@@ -332,17 +330,14 @@ fixed ZeroFinder::find_min(const fixed xstart)
       else                              /* x remains the better approx  */
       {        		             
         x_best = true;
-	if( t < x )			/* Reduce the range enclosing x	*/
-	  a = t;                   
-	else
-	  b = t;
+        ( t < x ? a : b ) = t;          /* Reduce the range enclosing x	*/
       
-        if( ft <= fw || w==x )
+        if( (ft <= fw) || (w==x) )
         {
            v = w;  w = t;
 	   fv=fw;  fw=ft;
         }
-        else if( ft<=fv || v==x || v==w )
+        else if( (ft<=fv) || (v==x) || (v==w) )
         {
            v = t;
 	   fv=ft;
