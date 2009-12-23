@@ -107,7 +107,7 @@ void GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
     EffectiveWindAngle = theta;
     wsq_ = aircraft.WindSpeed*aircraft.WindSpeed;
     HeadWind = -aircraft.WindSpeed*cos(fixed_deg_to_rad*theta);
-    dwcostheta_ = -fixed_two*HeadWind;
+    dwcostheta_ = fixed_two*HeadWind;
   } else {
     WindDirection = fixed_zero;
     EffectiveWindSpeed = fixed_zero;

@@ -195,6 +195,9 @@ bool test_flight(int test_num, int n_wind, const double speed_factor,
   task_behaviour.auto_mc = auto_mc;
   task_behaviour.aat_min_time = aat_min_time(test_num);
   task_behaviour.calc_glide_required = false;
+  if ((test_num ==0) || (test_num==2)) {
+    task_behaviour.optimise_targets_bearing = false;
+  }
 
   TaskEventsPrint default_events(verbose);
 

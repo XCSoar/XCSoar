@@ -152,6 +152,7 @@ std::ostream& operator<< (std::ostream& f,
   f << es.solution_travelled;
   f << "#  Vario: ";
   f << es.vario.get_value();
+  f << "\n";
   return f;
 }
 
