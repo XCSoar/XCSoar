@@ -470,3 +470,10 @@ TaskManager::stats_valid() const
 {
   return get_stats().task_valid;
 }
+
+
+void 
+TaskManager::default_task(const GEOPOINT loc, const bool force)
+{
+  /// \todo implement default_task
+}

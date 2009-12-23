@@ -157,6 +157,13 @@ public:
   }
 
 /** 
+ * Clear all warnings
+ */
+  void clear() {
+    m_warnings.clear();
+  }
+
+/** 
  * Return size of warning list
  * 
  * @return Number of items in warning list

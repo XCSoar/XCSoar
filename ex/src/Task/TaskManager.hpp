@@ -166,6 +166,14 @@ public:
   bool do_goto(const Waypoint & wp);
 
 /** 
+ * Create a default task if no task is available
+ * 
+ * @param loc Location of aircraft at start
+ * @param force Force creation of default task even if a task is present
+ */
+  void default_task(const GEOPOINT loc, const bool force=false);
+
+/** 
  * Updates internal state of task given new aircraft.
  * Only essential calculations are performed here;
  * other calculations and housekeeping may be performed
