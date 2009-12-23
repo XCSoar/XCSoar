@@ -251,15 +251,15 @@ ifeq ($(HAVE_MSVCRT),y)
 endif
 
 ifeq ($(HAVE_POSIX)$(CONFIG_PC),nn)
-  TARGET_INCLUDES += -I$(HDR)/mingw32compat
+  TARGET_INCLUDES += -I$(SRC)/mingw32compat
 endif
 
 ifeq ($(HAVE_WIN32),n)
-  TARGET_INCLUDES += -I$(HDR)/unix
+  TARGET_INCLUDES += -I$(SRC)/unix
 endif
 
 ifeq ($(TARGET),WINE)
-  TARGET_INCLUDES += -I$(HDR)/wine
+  TARGET_INCLUDES += -I$(SRC)/wine
 endif
 
 ifeq ($(TARGET),UNIX)
@@ -283,7 +283,7 @@ else
     endif
   endif
 
-  WINDRESFLAGS := -I$(HDR) -I$(SRC) $(TARGET_CPPFLAGS) -D_MINGW32_
+  WINDRESFLAGS := -I$(SRC) $(TARGET_CPPFLAGS) -D_MINGW32_
   ifeq ($(CONFIG_ALTAIR),y)
     WINDRESFLAGS += -DGNAV
   endif

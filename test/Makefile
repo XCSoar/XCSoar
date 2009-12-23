@@ -18,7 +18,7 @@ include $(topdir)/build/compile.mk
 
 ######## compiler flags
 
-INCLUDES += -I$(HDR) -I$(SRC) -I$(ENGINE_SRC_DIR)
+INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
 
 ####### linker configuration
 
