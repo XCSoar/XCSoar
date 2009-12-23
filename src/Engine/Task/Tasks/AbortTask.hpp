@@ -197,7 +197,7 @@ protected:
  * 
  * @return Distance (m) of approximate glide range of aircraft
  */
-  double abort_range(const AIRCRAFT_STATE &state_now);
+  fixed abort_range(const AIRCRAFT_STATE &state_now);
 
 /** 
  * Propagate changes to safety glide polar from global glide polar. 
