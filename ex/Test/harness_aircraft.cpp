@@ -255,6 +255,10 @@ bool AircraftSim::advance(TaskManager &task_manager)  {
   if (short_flight && awp>=1) {
     return false;
   }
+  if (task_manager.get_common_stats().task_finished) {
+    return false;
+  }
+
   return true;
 }
 
