@@ -93,6 +93,14 @@ public:
     return waypoint;
   }
 
+/**
+ *  Set airfield details
+ * @param Details text of airfield details
+ */
+  void set_details(const tstring& Details) const {
+    waypoint.Details = Details;
+  }
+
 /** 
  * Set/clear home flag of waypoint
  * @param set True/false

@@ -155,6 +155,15 @@ public:
   bool get_writable(const Waypoint& wp) const;
 
 /** 
+ * Sets the airfield details of the specified waypoint
+ *
+ * @param wp Waypoint to set
+ * @param Details Text for airfield details
+ * 
+ */
+  void set_details(const Waypoint& wp, const tstring& Details);
+
+/** 
  * Find first home waypoint
  * 
  * @return Pointer to waypoint if found (or NULL if not)

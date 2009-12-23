@@ -87,6 +87,8 @@ Waypoints::Waypoints():
 {
 }
 
+
+
 void
 Waypoints::optimise()
 {
@@ -144,6 +146,21 @@ Waypoints::find_nearest(const GEOPOINT &loc) const
   return found.first;
 }
 
+
+
+void 
+Waypoints::set_details(const Waypoint& wp, const tstring& Details)
+{
+  WaypointTree::iterator found = waypoint_tree.begin();
+  while (found != waypoint_tree.end()) {
+    if (found->get_waypoint().id == wp.id) {
+      found->set_details(Details);
+    }
+    ++found;
+  }
+}
+
+
 const Waypoint*
 Waypoints::lookup_name(const tstring &name) const
 {
@@ -152,7 +169,7 @@ Waypoints::lookup_name(const tstring &name) const
     if ((*found).get_waypoint().Name == name) {
       return &(*found).get_waypoint();
     }
-    found++;
+    ++found;
   }
   return NULL;
 }
@@ -192,7 +209,7 @@ Waypoints::find_home() const
         m_home = wp;
         return wp;
       }
-      found++;
+      ++found;
     }
   } 
   if (m_home) {
@@ -209,7 +226,7 @@ Waypoints::set_home(const unsigned id)
   while (found != waypoint_tree.end()) {
     const WaypointEnvelope* wp = &(*found);
     wp->set_home(wp->get_waypoint().id == id);
-    found++;
+    ++found;
   }
   return ok;
 }
@@ -222,7 +239,7 @@ Waypoints::lookup_id(const unsigned id) const
     if (found->get_waypoint().id == id) {
       return &found->get_waypoint();
     }
-    found++;
+    ++found;
   }
   return NULL;
 }
@@ -236,7 +253,7 @@ Waypoints::find_id(const unsigned id) const
     if (found->get_waypoint().id == id) {
       break;
     }
-    found++;
+    ++found;
   }
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -302,7 +319,7 @@ Waypoints::visit_within_radius(const GEOPOINT &loc,
       vectors.erase(v);
     } else {
       visitor(v->get_waypoint());
-      v++;
+      ++v;
     }
   }
 }

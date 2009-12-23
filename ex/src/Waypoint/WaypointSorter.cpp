@@ -52,7 +52,6 @@ WaypointAirportFilter(const WayPointSelectInfo& elem1)
 void
 WaypointSorter::filter_airport(WaypointSelectInfoVector& vec) const
 {
-
   vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointAirportFilter), vec.end());
 }
 
