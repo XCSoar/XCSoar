@@ -39,6 +39,7 @@ Copyright_License {
 #include "AirspaceGlue.hpp"
 #include "AirspaceParser.hpp"
 #include "Airspace/Airspaces.hpp"
+#include "Airspace/AirspaceWarningManager.hpp"
 #include "Registry.hpp"
 #include "RasterTerrain.h"
 #include "LocalPath.hpp"
@@ -112,10 +113,9 @@ ReadAirspace(Airspaces &airspace_database, RasterTerrain *terrain,
 }
 
 void 
-CloseAirspace(Airspaces &airspace_database) 
+CloseAirspace(Airspaces &airspace_database,
+              AirspaceWarningManager& airspace_warning) 
 {
-#ifdef OLD_TASK
-  AirspaceWarnListClear(airspace_database);
-#endif
+  airspace_warning.clear();
   airspace_database.clear();
 }

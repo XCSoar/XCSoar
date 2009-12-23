@@ -555,7 +555,7 @@ void XCSoarInterface::Shutdown(void) {
 #endif
 
   StartupStore(TEXT("Close airspace\n"));
-  CloseAirspace(airspace_database);
+  CloseAirspace(airspace_database, airspace_warning);
 
   StartupStore(TEXT("Close waypoints\n"));
   way_points.clear();

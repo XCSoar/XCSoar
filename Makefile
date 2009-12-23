@@ -259,7 +259,6 @@ OBJS	:=\
 	$(SRC)/LocalTime.o		\
 	$(SRC)/Units.o 			\
 	$(SRC)/StringUtil.o \
-	$(SRC)/UtilsAirspace.o		\
 	$(SRC)/UtilsFLARM.o		\
 	$(SRC)/UtilsFont.o		\
 	$(SRC)/UtilsProfile.o		\

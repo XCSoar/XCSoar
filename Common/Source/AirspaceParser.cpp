@@ -52,10 +52,6 @@ Copyright_License {
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 
-#ifdef OLD_TASK
-#include "AirspaceWarning.h"
-#endif
-
 #include <math.h>
 #include <tchar.h>
 #include <ctype.h>
