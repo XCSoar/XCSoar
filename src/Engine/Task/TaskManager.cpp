@@ -403,7 +403,7 @@ TaskManager::task_size() const
 }
 
 GEOPOINT 
-TaskManager::random_point_in_task(const unsigned index, const double mag) const
+TaskManager::random_point_in_task(const unsigned index, const fixed mag) const
 {
   if (active_task == &task_ordered) {
     if (index< task_size()) {

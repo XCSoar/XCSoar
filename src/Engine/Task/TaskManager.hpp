@@ -116,7 +116,8 @@ public:
  * 
  * @return Location of point
  */
-  GEOPOINT random_point_in_task(const unsigned index, const double mag=1.0) const;
+  GEOPOINT random_point_in_task(const unsigned index,
+                                const fixed mag=fixed_one) const;
 
   /**
    * Enumeration of task modes

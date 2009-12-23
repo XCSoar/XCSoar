@@ -28,13 +28,13 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
     // cheat for non-ordered tasks
     w.push_back(GEOPOINT(0.1,0.1));
     if (task_manager.task_size()>0) {
-      w.push_back(task_manager.random_point_in_task(0, random_mag));
+      w.push_back(task_manager.random_point_in_task(0, fixed(random_mag)));
     } else {
       w.push_back(GEOPOINT(1.0,0.0));
     }
   } else {
     for (unsigned i=0; i<task_manager.task_size(); i++) {
-      w.push_back(task_manager.random_point_in_task(i, random_mag));
+      w.push_back(task_manager.random_point_in_task(i, fixed(random_mag)));
     }
   }
   
