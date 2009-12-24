@@ -52,7 +52,7 @@ INCLUDES += -I$(HDR) -I$(SRC) -Isrc
 
 ####### linker configuration
 
-LDFLAGS = $(TARGET_LDFLAGS) $(PROFILE)
+LDFLAGS = $(TARGET_LDFLAGS) $(FLAGS_PROFILE)
 LDLIBS = $(TARGET_LDLIBS)
 
 ####### sources

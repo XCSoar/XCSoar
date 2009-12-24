@@ -1,11 +1,12 @@
 
-topdir = .
-SRC := $(topdir)/src
+topdir = ..
+SRC = src
 TEST_SRC_DIR = Test
 
 include $(topdir)/build/verbose.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
+include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
 include $(topdir)/build/coverage.mk
@@ -41,6 +42,5 @@ OUTPUTS = $(SRC)/task-$(TARGET).a $(TEST_SRC_DIR)/harness-$(TARGET).a $(TESTS)
 all: $(OUTPUTS)
 	@echo "done"
 
-include $(topdir)/build/rules.mk
 include $(topdir)/build/clean.mk
 
