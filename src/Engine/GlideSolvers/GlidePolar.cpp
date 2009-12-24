@@ -41,6 +41,7 @@
 #include "Util/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "Util/Quadratic.hpp"
 #include <assert.h>
 
 /// \todo note polar terms are hardcoded at present, will need proper
@@ -429,6 +430,22 @@ GlidePolar::get_Vtakeoff() const
 fixed 
 GlidePolar::get_ld_over_ground(const AIRCRAFT_STATE &state) const
 {
-  // TODO adjust for wind
-  return bestLD;
+  if (!positive(state.WindSpeed)) {
+    return bestLD;
+  }
+
+  const fixed c_theta = -cos(fixed_deg_to_rad*(state.WindDirection-state.TrackBearing));
+
+  Quadratic q(-fixed_two*state.WindSpeed*c_theta,
+              state.WindSpeed*state.WindSpeed-bestLD*bestLD);
+
+  if (!q.check()) {
+    return fixed_zero;
+  } else {
+    if (positive(c_theta)) {
+      return max(fixed_zero,q.solution_max());
+    } else {
+      return max(fixed_zero,q.solution_min());
+    }
+  }
 }

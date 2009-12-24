@@ -42,22 +42,49 @@ Copyright_License {
 #include <stddef.h>
 
 class AIRCRAFT_STATE;
-struct GEOPOINT;
 struct SETTINGS_COMPUTER;
 class RasterTerrain;
 class GlidePolar;
+class RasterRounding;
 
-/**
- * @param terrain a locked RasterTerrain object
- */
-fixed
-FinalGlideThroughTerrain(const AIRCRAFT_STATE &basic,
-                         const GlidePolar& polar,
-                         const SETTINGS_COMPUTER &settings,
-                         const RasterTerrain &terrain,
-                         GEOPOINT *retlocation,
-                         const fixed maxrange,
-                         bool *outofrange,
-                         fixed *TerrainBase = NULL);
+#include "Math/fixed.hpp"
+#include "Navigation/GeoPoint.hpp"
+
+struct TerrainIntersection
+{
+  TerrainIntersection(const GEOPOINT& start);
+
+  GEOPOINT location;
+  fixed range;
+  fixed altitude;
+  bool out_of_range;
+};
+
+class GlideTerrain
+{
+public:
+  GlideTerrain(const SETTINGS_COMPUTER &settings,
+               RasterTerrain &terrain);
+
+  ~GlideTerrain();
+
+  void set_max_range(const fixed set);
+
+  fixed get_terrain_base() const;
+
+  bool valid() const;
+
+  TerrainIntersection find_intersection(const AIRCRAFT_STATE &basic,
+                                        const GlidePolar &polar);
+
+private:
+  fixed h_terrain(const GEOPOINT& loc);
+
+  RasterTerrain &m_terrain;
+  const fixed SafetyAltitudeTerrain;
+  fixed TerrainBase;
+  fixed max_range;
+  RasterRounding *rounding;
+};
 
 #endif

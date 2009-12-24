@@ -117,6 +117,19 @@ struct GEOPOINT {
   };
 
 /** 
+ * Add a delta to a point
+ * 
+ * @param delta Delta to add 
+ * 
+ * @return Modified point
+ */
+  const GEOPOINT& operator+= (const GEOPOINT &delta) {
+    Longitude += delta.Longitude;
+    Latitude += delta.Latitude;
+    return *this;
+  };
+
+/** 
  * Subtracts a delta from a point
  * 
  * @param delta Delta to subtract 

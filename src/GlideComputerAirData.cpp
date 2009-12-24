@@ -595,40 +595,35 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   if (!SettingsComputer().FinalGlideTerrain)
     return;
 
-  double bearing, distance;
-  bool out_of_range;
-
   // estimate max range (only interested in at most one screen
   // distance away) except we need to scan for terrain base, so 20km
   // search minimum is required
 
-  double mymaxrange = max(20000.0, screen_range);
-
   SetCalculated().TerrainBase = Calculated().TerrainAlt;
 
+  terrain.Lock();
+  GlideTerrain g_terrain(SettingsComputer(), terrain);
+
+  g_terrain.set_max_range(fixed(max(20000.0, screen_range)));
+  
+  const fixed d_bearing = fixed_360/NUMTERRAINSWEEPS;
+
+  unsigned i=0;
+
   AIRCRAFT_STATE state = Basic();
+  for (state.TrackBearing = fixed_zero;
+       state.TrackBearing<= fixed_360;
+       state.TrackBearing+= d_bearing, i++) {
+    
+    TerrainIntersection its = g_terrain.find_intersection(state, glide_polar);
+    
+    SetCalculated().GlideFootPrint[i].Longitude = its.location.Longitude;
+    SetCalculated().GlideFootPrint[i].Latitude = its.location.Latitude;
+  } 
 
-  GEOPOINT loc;
-  for (int i = 0; i <= NUMTERRAINSWEEPS; i++) {
-    bearing = (i * 360.0) / NUMTERRAINSWEEPS;
+  terrain.Unlock();
 
-    terrain.Lock();
-    state.TrackBearing = bearing;
-    distance = 
-      FinalGlideThroughTerrain(state, glide_polar, 
-                               SettingsComputer(), terrain, &loc, fixed(mymaxrange), &out_of_range,
-                               &SetCalculated().TerrainBase);
-    terrain.Unlock();
-
-    if (out_of_range) {
-      FindLatitudeLongitude(Basic().Location, fixed(bearing),
-                            fixed(mymaxrange * 20), &loc);
-    }
-
-    SetCalculated().GlideFootPrint[i].Longitude = loc.Longitude;
-    SetCalculated().GlideFootPrint[i].Latitude = loc.Latitude;
-  }
-
+  SetCalculated().TerrainBase = g_terrain.get_terrain_base();
   SetCalculated().Experimental = Calculated().TerrainBase;
 }
 

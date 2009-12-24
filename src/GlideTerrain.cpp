@@ -42,7 +42,7 @@ Copyright_License {
  * @file GlideSolvers.cpp
  */
 
-#include "MacCready.h"
+#include "GlideTerrain.hpp"
 #include "SettingsComputer.hpp"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
@@ -51,97 +51,115 @@ Copyright_License {
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 
-fixed
-FinalGlideThroughTerrain(const AIRCRAFT_STATE &basic,
-                         const GlidePolar& polar,
-                         const SETTINGS_COMPUTER &settings,
-                         const RasterTerrain &terrain,
-                         GEOPOINT *retloc,
-                         const fixed max_range,
-                         bool *out_of_range,
-                         fixed *TerrainBase)
+TerrainIntersection::TerrainIntersection(const GEOPOINT& start):
+  location(start),
+  range(fixed_zero),
+  altitude(fixed_zero),
+  out_of_range(false)
+{};
+
+GlideTerrain::GlideTerrain(const SETTINGS_COMPUTER &settings,
+                           RasterTerrain &terrain):
+  m_terrain(terrain),
+  SafetyAltitudeTerrain(settings.SafetyAltitudeTerrain),
+  TerrainBase(fixed_zero),
+  max_range(-fixed_one)
 {
-  const fixed ld = polar.get_ld_over_ground(basic);
-
-  const GEOPOINT start_loc = basic.Location;
-  if (retloc) {
-    *retloc = start_loc;
+  if (const RasterMap *map = m_terrain.GetMap()) {
+    rounding = new RasterRounding(*map, 0, 0);
   }
-  *out_of_range = false;
+}
 
-  if (!positive(ld) || !positive(basic.NavAltitude))
+GlideTerrain::~GlideTerrain() 
+{
+  if (rounding) {
+    delete rounding;
+  }
+}
+
+void 
+GlideTerrain::set_max_range(const fixed set) 
+{
+  max_range = set;
+}
+
+fixed 
+GlideTerrain::get_terrain_base() const 
+{
+  return TerrainBase;
+}
+
+bool 
+GlideTerrain::valid() const 
+{
+  return (rounding!=NULL);
+}
+
+TerrainIntersection 
+GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
+                                const GlidePolar& polar) 
+{
+  TerrainIntersection retval(state.Location);
+
+  if (!valid()) {
+    // no terrain!
+    return retval;
+  }
+  
+  const fixed glide_max_range = state.NavAltitude*polar.get_ld_over_ground(state);
+  
+  if (!positive(glide_max_range)) {
     // can't make progress in this direction at the current windspeed/mc
-    return fixed_zero;
-
-  const RasterMap *map = terrain.GetMap();
-  if (map == NULL)
-    return fixed_zero;
-
-  const fixed glide_max_range = basic.NavAltitude*ld;
-
-  // returns distance one would arrive at altitude in straight glide
-  // first estimate max range at this altitude
-
-  // calculate terrain rounding factor
-
-  GeoVector vec(glide_max_range/NUMFINALGLIDETERRAIN, basic.TrackBearing);
-  const RasterRounding rounding(*map, (vec.end_point(start_loc)-start_loc)*fixed_half);
-
-  fixed h= fixed_zero, dh= fixed_zero;
-  fixed last_dh=fixed_zero;
-  fixed altitude = basic.NavAltitude;
-
-  GEOPOINT loc= start_loc, last_loc = start_loc;
-
-  h = max(fixed_zero, fixed(terrain.GetTerrainHeight(loc, rounding)));
-  dh = altitude - h - settings.SafetyAltitudeTerrain;
-  last_dh = dh;
-
+    return retval;
+  }
+  
+  GEOPOINT loc= state.Location, last_loc = loc;
+  fixed altitude = state.NavAltitude;
+  fixed h = h_terrain(loc);
+  fixed dh = altitude - h;
+  fixed last_dh = dh;
   bool start_under = negative(dh);
-
+  
   fixed f_scale = fixed_one/NUMFINALGLIDETERRAIN;
   if (positive(max_range) && (max_range<glide_max_range)) {
     f_scale *= max_range/glide_max_range;
   }
-
+  
   // find grid
-  vec.Distance = glide_max_range*f_scale;
-  GEOPOINT dloc = vec.end_point(start_loc)-start_loc;
-
-  const fixed delta_alt = -f_scale * basic.NavAltitude;
-
-  for (int i=1; i<=NUMFINALGLIDETERRAIN; i++) {
+  const GeoVector vec(glide_max_range*f_scale, state.TrackBearing);
+  const GEOPOINT delta_ll = vec.end_point(state.Location)-state.Location;
+  const fixed delta_alt = -f_scale * state.NavAltitude;
+  
+  for (int i=1; i<=NUMFINALGLIDETERRAIN; ++i) {
     fixed f;
-    bool solution_found = false;
     const fixed fi = i*f_scale;
     // fraction of glide_max_range
-
+    
     if (positive(max_range)&&(fi>=fixed_one)) {
       // early exit
-      *out_of_range = true;
-      return max_range;
+      retval.out_of_range = true;
+      return retval;
     }
-
+    
     if (start_under) {
       altitude += fixed_two*delta_alt;
     } else {
       altitude += delta_alt;
     }
-
+    
     // find lat, lon of point of interest
-
-    loc.Latitude += dloc.Latitude;
-    loc.Longitude += dloc.Longitude;
-
+    loc += delta_ll;
+    
     // find height over terrain
-    h = max(fixed_zero, fixed(terrain.GetTerrainHeight(loc, rounding)));
-
-    dh = altitude - h - settings.SafetyAltitudeTerrain;
-
-    if (TerrainBase && positive(dh) && positive(h)) {
-      *TerrainBase = min(*TerrainBase, h);
+    h = h_terrain(loc);
+    dh = altitude - h;
+    
+    if (positive(dh) && positive(h)) {
+      TerrainBase = min(TerrainBase, h);
     }
-
+    
+    bool solution_found = false;
+    
     if (start_under) {
       if (dh>last_dh) {
         // better solution found, ok to continue...
@@ -163,17 +181,23 @@ FinalGlideThroughTerrain(const AIRCRAFT_STATE &basic,
       solution_found = true;
     }
     if (solution_found) {
-      loc = loc.interpolate(last_loc, f);
-      if (retloc) {
-        *retloc = loc;
-      }
-      return loc.distance(start_loc);
+      retval.location = last_loc.interpolate(loc, f);
+      retval.range = retval.location.distance(state.Location);
+      retval.altitude = h; // approximation
+      return retval;
     }
     last_dh = dh;
     last_loc = loc;
   }
+    
+  retval.out_of_range = true;
+  GeoVector long_vec(max(glide_max_range,max_range)*fixed_two, state.TrackBearing);
+  retval.location = long_vec.end_point(state.Location);
+  return retval;
+}
 
-  *out_of_range = true;
-
-  return glide_max_range;
+fixed 
+GlideTerrain::h_terrain(const GEOPOINT& loc) 
+{
+  return max(fixed_zero, fixed(m_terrain.GetTerrainHeight(loc, *rounding)))+SafetyAltitudeTerrain;
 }
