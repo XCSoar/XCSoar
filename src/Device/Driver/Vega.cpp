@@ -45,7 +45,6 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "InputEvents.h"
 #include "LogFile.hpp"
-#include "MacCready.h"
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -93,7 +92,8 @@ PDSWC(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
-  double MACCREADY = oldGlidePolar::GetMacCready();
+  double MACCREADY;
+  /// \todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
 
   unsigned long uswitchinputs, uswitchoutputs;
   _stscanf(String,
@@ -107,6 +107,8 @@ PDSWC(const TCHAR *String, NMEA_INFO *GPS_INFO)
   long switchoutputs = uswitchoutputs;
 
   MACCREADY /= 10;
+//  oldGlidePolar::SetMacCready(MACCREADY);
+
   GPS_INFO->SupplyBatteryVoltage/= 10;
 
   GPS_INFO->SwitchState.AirbrakeLocked =
@@ -435,11 +437,10 @@ VegaDevice::PutVoice(const TCHAR *Sentence)
 static void
 _VarioWriteSettings(ComPort *port)
 {
-
     TCHAR mcbuf[100];
 
     wsprintf(mcbuf, _T("PDVMC,%d,%d,%d,%d,%d"),
-	     iround(oldGlidePolar::GetMacCready()*10),
+	     iround(device_blackboard.Calculated().common_stats.current_mc*10),
 	     iround(device_blackboard.Calculated().V_stf*10),
 	     device_blackboard.Calculated().Circling,
 	     iround(device_blackboard.Calculated().TerrainAlt),

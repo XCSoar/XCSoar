@@ -49,7 +49,6 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "Device/Port.h"
 #include "Math/Units.h"
-#include "MacCready.h"
 #include "NMEA/Info.h"
 
 #include <tchar.h>
@@ -582,22 +581,25 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
   NMEAParser::ExtractParameter(String,ctemp,10);
   GPS_INFO->MacCready = (_tcstod(ctemp, NULL) / 10.0) * KNOTSTOMETRESSECONDS;
-  if (MacCreadyUpdateTimeout <= 0)
-    oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
-  else
+  if (MacCreadyUpdateTimeout <= 0) {
+  /// \todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
+  ///    oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
+  } else
     MacCreadyUpdateTimeout--;
 
   NMEAParser::ExtractParameter(String,ctemp,11);
   GPS_INFO->Ballast = _tcstod(ctemp, NULL) / 100.0;
   if (BugsUpdateTimeout <= 0) {
-    oldGlidePolar::SetBallast(GPS_INFO->Ballast);
+  /// \todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
+///    oldGlidePolar::SetBallast(GPS_INFO->Ballast);
   } else
     BallastUpdateTimeout--;
 
   NMEAParser::ExtractParameter(String,ctemp,12);
   GPS_INFO->Bugs = _tcstod(ctemp, NULL) / 100.0;
   if (BugsUpdateTimeout <= 0) {
-    oldGlidePolar::SetBugs(GPS_INFO->Bugs);
+  /// \todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
+///    oldGlidePolar::SetBugs(GPS_INFO->Bugs);
   } else
     BugsUpdateTimeout--;
 

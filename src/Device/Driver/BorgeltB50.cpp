@@ -41,7 +41,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Device/Parser.h"
 #include "Math/Units.h"
-#include "MacCready.h"
 #include "NMEA/Info.h"
 
 #include <tchar.h>
@@ -130,7 +129,9 @@ PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   NMEAParser::ExtractParameter(String,ctemp,2);
   GPS_INFO->MacCready = _tcstod(ctemp, NULL) / TOKNOTS;
-  oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
+
+  /// \todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
+  ///  oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
 
   NMEAParser::ExtractParameter(String,ctemp,3);
   vias = sqrt(_tcstod(ctemp, NULL)) / TOKNOTS;

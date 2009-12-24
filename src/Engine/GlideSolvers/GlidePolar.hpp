@@ -65,9 +65,11 @@ struct AIRCRAFT_STATE;
  * - currently the polar itself and Vmax is hard-coded
  */
 
+class Polar;
+
 class GlidePolar
 {
-  friend void setGlidePolar(GlidePolar& gp);
+  friend void setGlidePolar(const Polar& polar, GlidePolar& gp);
 
 public:
 /** 

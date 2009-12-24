@@ -41,7 +41,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/Units.h"
 #include "Device/Parser.h"
-#include "MacCready.h"
 #include "NMEA/Info.h"
 #include <tchar.h>
 #include <stdlib.h>
@@ -113,7 +112,10 @@ cLXWP2(const TCHAR *String, NMEA_INFO *GPS_INFO)
   (void)GPS_INFO;
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  oldGlidePolar::SetMacCready(_tcstod(ctemp, NULL));
+
+//  oldGlidePolar::SetMacCready(_tcstod(ctemp, NULL));
+  /// \todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
+
   return true;
 }
 

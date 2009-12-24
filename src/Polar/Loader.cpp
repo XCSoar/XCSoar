@@ -62,11 +62,8 @@ LoadPolarById2(unsigned id, Polar &a_polar)
 }
 
 
-extern Polar polar; // for now, this is owned by oldGlidePolar
-
-
 void
-setGlidePolar(GlidePolar& gp)
+setGlidePolar(const Polar &polar, GlidePolar& gp)
 {
   gp.empty_mass = polar.WEIGHTS[0]+polar.WEIGHTS[1];
   gp.ballast_ratio = polar.WEIGHTS[2]/gp.empty_mass;
@@ -81,7 +78,7 @@ setGlidePolar(GlidePolar& gp)
 
 
 static bool
-LoadPolarById_internal(const SETTINGS_POLAR &settings)
+LoadPolarById_internal(Polar& polar, const SETTINGS_POLAR &settings)
 {
   StartupStore(_T("Load polar\n"));
   if (LoadPolarById2(settings.POLARID, polar))
@@ -97,8 +94,9 @@ LoadPolarById_internal(const SETTINGS_POLAR &settings)
 bool
 LoadPolarById(const SETTINGS_POLAR &settings, GlidePolar& gp)
 {
-  if (LoadPolarById_internal(settings)) {
-    setGlidePolar(gp);
+  Polar polar;
+  if (LoadPolarById_internal(polar, settings)) {
+    setGlidePolar(polar, gp);
     return true;
   } else {
     return false;
