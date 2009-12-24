@@ -115,7 +115,9 @@ AirspaceWarningManager airspace_warning(airspace_database,
                                         ac_state,
                                         task_manager);
 
-GlideComputer glide_computer(task_manager, airspace_warning);
+GlideComputer glide_computer(task_manager, 
+                             airspace_warning,
+                             airspace_database);
 
 void test_task() {
 

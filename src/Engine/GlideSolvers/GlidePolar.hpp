@@ -144,6 +144,12 @@ public:
  */
   fixed get_bestLD() const;
 
+/**
+ * Takeoff speed
+ * @return Takeoff speed threshold (m/s)
+ */
+  fixed get_Vtakeoff() const;
+
 /** 
  * Set cruise efficiency value.  1.0 = perfect MacCready speed
  * 

@@ -66,16 +66,12 @@ Copyright_License {
 
 #include "GlideSolvers/GlidePolar.hpp"
 
-#define TAKEOFFSPEEDTHRESHOLD (0.5*glide_polar.get_Vmin())
 
 #ifndef _MSC_VER
 #include <algorithm>
 using std::min;
 using std::max;
 #endif
-
-void
-DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated, double speed_threshold);
 
 #define MinTurnRate  4
 #define CruiseClimbSwitch 15
@@ -84,8 +80,10 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated, double speed_t
 
 
 GlideComputerAirData::GlideComputerAirData(AirspaceWarningManager& as_manager,
+                                           Airspaces& _airspaces,
   const TaskManager& _task):
   m_airspace_warning(as_manager),
+  m_airspaces(_airspaces),
   airspace_clock(2.0), // scan airspace every 2 seconds
   ballast_clock(5),  // only update every 5 seconds to stop flooding
 		    // the devices
@@ -544,7 +542,7 @@ GlideComputerAirData::TakeoffLanding()
   // GPS not lost
   if (!Basic().NAVWarning) {
     // Speed too high for being on the ground
-    if (Basic().Speed> TAKEOFFSPEEDTHRESHOLD) {
+    if (Basic().Speed> glide_polar.get_Vtakeoff()) {
       SetCalculated().TimeInFlight= LastCalculated().TimeInFlight+1;
       SetCalculated().TimeOnGround= 0;
     } else {
@@ -580,7 +578,6 @@ GlideComputerAirData::TakeoffLanding()
 
     if (Calculated().TimeOnGround > 10) {
       SetCalculated().OnGround = true;
-      DoAutoQNH(&Basic(), &Calculated(), TAKEOFFSPEEDTHRESHOLD);
     }
   } else {
     // detect landing
@@ -626,6 +623,7 @@ GlideComputerAirData::AirspaceWarning()
 {
   // JMW OLD_TASK this locking is just for now since we don't have any protection
   terrain.Lock();
+  m_airspaces.set_flight_levels(Basic().pressure);
   if (m_airspace_warning.update(Basic())) {
     airspaceWarningEvent.trigger();
   }
@@ -1074,46 +1072,6 @@ GlideComputerAirData::ThermalBand()
   SetCalculated().ThermalProfileN[index]++;
 }
 
-void
-DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated, double takeoffspeedthreshold)
-{
-  static int done_autoqnh = 0;
-
-  // Reject if already done
-  if (done_autoqnh == 10)
-    return;
-
-  // Reject if in IGC logger mode
-  if (Basic->Replay)
-    return;
-
-  // Reject if no valid GPS fix
-  if (Basic->NAVWarning)
-    return;
-
-  // Reject if no baro altitude
-  if (!Basic->BaroAltitudeAvailable)
-    return;
-
-  // Reject if terrain height is invalid
-  if (!Calculated->TerrainValid)
-    return;
-
-  if (Basic->Speed < takeoffspeedthreshold) {
-    done_autoqnh++;
-  } else {
-    done_autoqnh= 0; // restart...
-  }
-
-  if (done_autoqnh == 10) {
-#ifdef OLD_TASK
-    double fixaltitude = Calculated->TerrainAlt;
-    Basic->pressure.FindQNH(Basic->BaroAltitude, fixaltitude);
-    AllDevicesPutQNH(Basic->pressure);
-    airspace_database.set_flight_levels(Basic->pressure);
-#endif
-  }
-}
 
 void
 GlideComputerAirData::ProcessSun()

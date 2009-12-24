@@ -419,3 +419,9 @@ GlidePolar::mc_risk(const fixed height_fraction,
     return mc*FRiskFunction(x, k) / FRiskFunction(fixed_one, k);
   }
 }
+
+fixed
+GlidePolar::get_Vtakeoff() const
+{
+  return fixed_half*get_Vmin();
+}

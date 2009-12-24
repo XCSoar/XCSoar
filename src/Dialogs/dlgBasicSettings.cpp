@@ -84,7 +84,6 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
 #ifdef OLD_TASK
       XCSoarInterface::Basic().pressure.set_QNH(QNH);
       AllDevicesPutQNH(XCSoarInterface::Basic().pressure);
-      airspace_database.set_flight_levels(XCSoarInterface::Basic().pressure);
 #endif
       wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
       if (wp) {

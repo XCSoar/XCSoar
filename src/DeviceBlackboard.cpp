@@ -47,6 +47,7 @@ Copyright_License {
 #include "Device/Parser.h"
 #include "Math/Constants.h"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Device/device.h"
 
 DeviceBlackboard device_blackboard;
 
@@ -443,6 +444,7 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
   Wind();
   Heading();
   NavAltitude();
+  AutoQNH(glide_polar);
 
   tick_fast(glide_polar);
 
@@ -673,4 +675,32 @@ DeviceBlackboard::EnergyHeight()
   const fixed V_target = Calculated().common_stats.V_block * ias_to_tas;
   SetBasic().EnergyHeight = (Basic().TrueAirspeed * Basic().TrueAirspeed - V_target * V_target) * fixed_inv_2g;
   SetBasic().TEAltitude = Basic().NavAltitude+Basic().EnergyHeight;
+}
+
+
+void
+DeviceBlackboard::AutoQNH(const GlidePolar& glide_polar)
+{
+  static int countdown_autoqnh = 0;
+
+  if (!Calculated().OnGround // must be on ground
+      || !countdown_autoqnh    // only do it once
+      || Basic().Replay       // never in replay mode
+      || Basic().NAVWarning     // Reject if no valid GPS fix
+      || !Basic().BaroAltitudeAvailable // Reject if no baro altitude
+      || !Calculated().TerrainValid // Reject if terrain height is invalid
+      || Basic().Speed > glide_polar.get_Vtakeoff()) {
+
+    countdown_autoqnh= 10; // restart...
+    return;
+  }
+
+  if (countdown_autoqnh) {
+    countdown_autoqnh--;
+  }
+  if (!countdown_autoqnh) {
+    SetBasic().pressure.FindQNH(Basic().BaroAltitude, 
+                                Calculated().TerrainAlt);
+    AllDevicesPutQNH(Basic().pressure);
+  }
 }

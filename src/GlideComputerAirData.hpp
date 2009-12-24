@@ -59,7 +59,8 @@ class TaskManager;
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
   GlideComputerAirData(AirspaceWarningManager& as_manager,
-    const TaskManager& _task);
+                       Airspaces& airspaces,
+                       const TaskManager& _task);
 
   ldrotary_s           rotaryLD;
   SunEphemeris sun;
@@ -76,6 +77,7 @@ private:
   ThermalLocator thermallocator;
 protected:
   AirspaceWarningManager &m_airspace_warning;
+  Airspaces &m_airspaces;
 
   void ResetFlight(const bool full=true);
   void Initialise();
