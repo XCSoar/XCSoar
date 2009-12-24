@@ -67,6 +67,7 @@ public:
  */
   fixed solve() const {
     if (check()) {
+      /// \todo check this is correct for all theta
       return solution_max();
     } else {
       return -fixed_one;

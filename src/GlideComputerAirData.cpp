@@ -175,7 +175,8 @@ GlideComputerAirData::Wind()
 
   // update zigzag wind
   if (((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG) == D_AUTOWIND_ZIGZAG)
-      && (!Basic().Replay)) {
+      && (!Basic().Replay)
+      && (Basic().TrueAirspeed > glide_polar.get_Vtakeoff())) {
     double zz_wind_speed;
     double zz_wind_bearing;
     int quality;

@@ -46,6 +46,7 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 
 struct SETTINGS_COMPUTER;
+class GlidePolar;
 
 typedef struct _OLCSolution
 {
@@ -133,7 +134,8 @@ public:
 		const SETTINGS_COMPUTER &settings);
 
 public:
-  bool Optimize(const SETTINGS_COMPUTER &settings, bool isflying);
+  bool Optimize(const SETTINGS_COMPUTER &settings, bool isflying,
+                const GlidePolar& glide_polar);
   int getN() const;
   const GEOPOINT &getLocation(int i) const;
   double getTime(int i) const;
@@ -143,13 +145,13 @@ private:
 
   void thin_data();
 
-  int optimize_internal(const SETTINGS_COMPUTER &settings);
+  int optimize_internal(const SETTINGS_COMPUTER &settings, const GlidePolar& glide_polar);
   int triangle_legal(int i2, int i3, int i4, int i5);
-  int scan_triangle(const SETTINGS_COMPUTER &settings);
-  int scan_sprint(const SETTINGS_COMPUTER &settings);
-  int scan_sprint_inprogress(const SETTINGS_COMPUTER &settings);
+  int scan_triangle(const SETTINGS_COMPUTER &settings, const GlidePolar& glide_polar);
+  int scan_sprint(const SETTINGS_COMPUTER &settings, const GlidePolar& glide_polar);
+  int scan_sprint_inprogress(const SETTINGS_COMPUTER &settings, const GlidePolar& glide_polar);
   int scan_sprint_finished(const SETTINGS_COMPUTER &settings);
-  int scan_classic(const SETTINGS_COMPUTER &settings);
+  int scan_classic(const SETTINGS_COMPUTER &settings, const GlidePolar& glide_polar);
   Mutex mutexOLC;
  public:
   void Lock() { mutexOLC.Lock(); }

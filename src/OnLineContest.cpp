@@ -40,7 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Math/Constants.h"
-#include "MacCready.h"
+#include "GlideSolvers/GlidePolar.hpp"
 #include "Math/Earth.hpp"
 #include "SettingsComputer.hpp"
 
@@ -479,14 +479,16 @@ OLCOptimizer::getLocation(int i) const
   return data.locpnts[i];
 }
 
-bool OLCOptimizer::Optimize(const SETTINGS_COMPUTER &settings, bool isflying) {
+bool OLCOptimizer::Optimize(const SETTINGS_COMPUTER &settings, bool isflying,
+                            const GlidePolar& glide_polar) 
+{
   flying = isflying;
 
 #ifdef DEBUG_OLC
   DWORD tm =GetTickCount();
 #endif
 
-  bool retval = (optimize_internal(settings) == 0);
+  bool retval = (optimize_internal(settings, glide_polar) == 0);
   Clear();
 
   if (retval) {
@@ -528,7 +530,8 @@ void OLCOptimizer::UpdateSolution(int dbest, int tbest,
 }
 
 
-int OLCOptimizer::optimize_internal(const SETTINGS_COMPUTER &settings) {
+int OLCOptimizer::optimize_internal(const SETTINGS_COMPUTER &settings,
+                                    const GlidePolar& glide_polar) {
   const int pnts = data.pnts_in;
 
   busy = true;
@@ -570,13 +573,13 @@ int OLCOptimizer::optimize_internal(const SETTINGS_COMPUTER &settings) {
 
   switch(settings.OLCRules) {
   case 0:
-    scan_sprint(settings);
+    scan_sprint(settings, glide_polar);
     break;
   case 1:
-    scan_triangle(settings);
+    scan_triangle(settings, glide_polar);
     break;
   case 2:
-    scan_classic(settings);
+    scan_classic(settings, glide_polar);
     break;
   }
 
@@ -638,7 +641,8 @@ int OLCOptimizer::triangle_legal(int i1, int i2, int i3, int i4) {
 }
 
 
-int OLCOptimizer::scan_triangle(const SETTINGS_COMPUTER &settings) {
+int OLCOptimizer::scan_triangle(const SETTINGS_COMPUTER &settings,
+                                const GlidePolar& glide_polar) {
   const int pnts = data.pnts_in;
   int i2, i3, i4, i5;
   int dh, d;
@@ -669,10 +673,10 @@ int OLCOptimizer::scan_triangle(const SETTINGS_COMPUTER &settings) {
       canfinish = false;
       ttogo = 0;
       if (dh>0) {
-	dfurther = iround(oldGlidePolar::bestld*dh/DISTANCEUNITS);
+	dfurther = iround(glide_polar.get_bestLD()*dh/DISTANCEUNITS);
 	if (dfurther>dtogo) {
 	  canfinish = true;
-	  ttogo = iround(dtogo*DISTANCEUNITS/oldGlidePolar::Vbestld);
+	  ttogo = iround(dtogo*DISTANCEUNITS/glide_polar.get_VbestLD());
 	}
       } else {
 	dfurther = 0;
@@ -775,20 +779,24 @@ int OLCOptimizer::scan_sprint_finished(const SETTINGS_COMPUTER &settings) {
 }
 
 
-int OLCOptimizer::scan_sprint(const SETTINGS_COMPUTER &settings) {
+int OLCOptimizer::scan_sprint(const SETTINGS_COMPUTER &settings,
+                              const GlidePolar& glide_polar) 
+{
   int retval=0;
   // first scan for a finished sprint
   // then see if improvement can be made with final glide at excess altitude
 
   retval = scan_sprint_finished(settings);
   if (flying) {
-    retval |= scan_sprint_inprogress(settings);
+    retval |= scan_sprint_inprogress(settings, glide_polar);
   }
   return retval;
 }
 
 
-int OLCOptimizer::scan_sprint_inprogress(const SETTINGS_COMPUTER &settings) {
+int OLCOptimizer::scan_sprint_inprogress(const SETTINGS_COMPUTER &settings,
+                                         const GlidePolar& glide_polar) 
+{
   const int pnts = data.pnts_in;
   int i1,i2,i3,i4,i5, d, bestdist;
   int i1best=0, i2best=0, i3best=0, i4best=0, i5best=0;
@@ -843,18 +851,19 @@ int OLCOptimizer::scan_sprint_inprogress(const SETTINGS_COMPUTER &settings) {
   int dfurther;
 
   // TODO accuracy: Adjust for wind!
-  if (sinkrate>=oldGlidePolar::minsink) {
+  if (sinkrate>= glide_polar.get_Smin()) {
     // no need to climb to make it
     // (TODO accuracy: later work out time adjustment for climb here, but for
     // now we just assume we won't be climbing again)
 
-    Vopt = oldGlidePolar::FindSpeedForSinkRate(sinkrate);
+    Vopt = glide_polar.get_V_for_sinkrate(fixed(sinkrate));
+
   } else {
     // can't make it without further climb.  For now, just calculate
     // what the best you can do with remaining height.
 
-    Vopt = oldGlidePolar::Vbestld;
-    sinkrate = (Vopt/oldGlidePolar::bestld);
+    Vopt = glide_polar.get_VbestLD();
+    sinkrate = glide_polar.get_SbestLD();
     dt = iround(dh/sinkrate);
   }
   dfurther = (int)(Vopt*dt/DISTANCEUNITS); // neglects wind speed!  we can correct this
@@ -916,7 +925,9 @@ int OLCOptimizer::scan_sprint_inprogress(const SETTINGS_COMPUTER &settings) {
 }
 
 
-int OLCOptimizer::scan_classic(const SETTINGS_COMPUTER &settings) {
+int OLCOptimizer::scan_classic(const SETTINGS_COMPUTER &settings,
+  const GlidePolar& glide_polar) 
+{
   const int pnts = data.pnts_in;
   int i1,i2,i3,i4,i5,i6,i7, d, bestdist, dh;
   int i1best=0, i2best=0, i3best=0, i4best=0, i5best=0, i6best=0, i7best=0;
@@ -952,7 +963,7 @@ int OLCOptimizer::scan_classic(const SETTINGS_COMPUTER &settings) {
 	    // check if can travel further with final glide
 	    dh = data.altpntslow[i7]-data.altpntslow[i1];
 	    if (dh>0) {
-	      dfurther = (int)(oldGlidePolar::bestld*dh/DISTANCEUNITS);
+	      dfurther = (int)(glide_polar.get_bestLD()*dh/DISTANCEUNITS);
 	    }
 	  }
 
@@ -988,7 +999,7 @@ int OLCOptimizer::scan_classic(const SETTINGS_COMPUTER &settings) {
     double score = bestdist*100/settings.Handicap/(1000.0/DISTANCEUNITS);
     int t = data.timepnts[(i7best)]-data.timepnts[(i1best)];
     if (!finished) {
-      t += (int)(dfurtherbest*DISTANCEUNITS/oldGlidePolar::Vbestld);
+      t += (int)(dfurtherbest*DISTANCEUNITS/glide_polar.get_VbestLD());
 
       FindLatitudeLongitude(data.locpnts[i7best],
                             fixed(data.waypointbearing),

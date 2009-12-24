@@ -395,7 +395,9 @@ OnCalcClicked(WindowControl *Sender)
   }
   if (page==ANALYSIS_PAGE_OLC) {
     XCSoarInterface::StartHourglassCursor();
-    glide_computer.GetOLC().Optimize(XCSoarInterface::SettingsComputer(),(XCSoarInterface::Calculated().Flying==1));
+    glide_computer.GetOLC().Optimize(XCSoarInterface::SettingsComputer(),
+                                     (XCSoarInterface::Calculated().Flying==1), 
+                                     task_manager.get_glide_polar());
     XCSoarInterface::StopHourglassCursor();
   }
   if (page==ANALYSIS_PAGE_AIRSPACE) {

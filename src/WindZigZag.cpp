@@ -40,7 +40,6 @@ Copyright_License {
 #include "WindZigZag.h"
 #include "LogFile.hpp"
 #include "Math/FastMath.h"
-#include "MacCready.h"
 #include "NMEA/Info.h"
 #include "NMEA/Derived.hpp"
 
@@ -592,11 +591,6 @@ WindZigZagCheckAirData(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - turn rate\n");
 #endif
-  } else if (fabs(Basic->TrueAirspeed) < oldGlidePolar::Vminsink * 0.8) {
-    airdata_invalid = true;
-#ifdef DEBUG_ZIGZAG_A
-    DebugStore("zigzag airdata invalid - true airspeed\n");
-#endif
   } else if (fabs(Basic->Speed) < 2.5) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
@@ -728,45 +722,3 @@ WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
   return 0;
 }
 
-// UB-20060720.log 7 kts@259, 00:35:00 8 kts@ 222, 00:48:00
-//       7 kts@169 at 2:15
-//
-// UB-20060618 storm at end of flight
-//  5@224 0:26:00
-//  7@227 0:37:00
-//  4@005 1:00:00 ?
-//  5@021 1:06:00
-//  6@006 1:07:00
-//  4@337 1:13:00
-//  2@334 1:17:00
-//  1@304 1:28:00
-//  2@281 1:31:42
-//  2@247 1:35:00
-//  1@049 1:49:00
-// 27@227 2:11:00
-
-// 35@150 2:08
-
-/*
-1524020.000000 0.5 160 0.1 217 2.200000 4 # zigzag
-1524040.000000 0.5 120 0.2 196 2.000000 4 # zigzag
-1524558.000000 10.5 190 0.2 173 1.000000 4 # zigzag
-1524689.000000 16.0 170 7.4 190 2.900000 4 # zigzag
-1524886.000000 19.0 230 13.7 174 5.500000 2 # zigzag
-1524907.000000 18.0 230 14.7 207 3.800000 3 # zigzag
-1524927.000000 17.0 230 16.1 220 3.900000 3 # zigzag
-1524948.000000 17.5 240 16.5 224 3.100000 1 # zigzag
-1524974.000000 17.5 240 16.8 227 3.700000 3 # zigzag
-
-wind builds up at 2:01:00 to 10 knots
-                  2:02:00 to 15 knots
-                  2:03:30 to 20 knots 0@173
-                  2:05:15 to 22 knots, est 14@190
-                  2:06:00 to 30 knots, est 24@176
-                  2:08:00                  27@174
-                    09:00                  29@207
-                    10:00                  31@220
-                    10:30                  33@227
-
-wind is reset on landing?
-*/

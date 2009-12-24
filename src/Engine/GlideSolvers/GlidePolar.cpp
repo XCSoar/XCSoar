@@ -409,11 +409,14 @@ fixed
 GlidePolar::mc_risk(const fixed height_fraction, 
                     const fixed riskGamma) const
 {
+  static const fixed fixed_low_limit(0.1);
+  static const fixed fixed_up_limit(0.9);
+
   fixed x = max(fixed_zero, min(fixed_one, height_fraction));
 
-  if (riskGamma < 0.1)
+  if (riskGamma < fixed_low_limit)
     return mc;
-  else if (riskGamma > 0.9)
+  else if (riskGamma > fixed_up_limit)
     return x*mc;
   else {
     const fixed k = fixed_one / (riskGamma * riskGamma) - fixed_one;
@@ -448,4 +451,12 @@ GlidePolar::get_ld_over_ground(const AIRCRAFT_STATE &state) const
       return max(fixed_zero,q.solution_min());
     }
   }
+}
+
+
+fixed 
+GlidePolar::get_V_for_sinkrate(const fixed S) const
+{
+  /// \todo unimplemented
+  return VbestLD;
 }

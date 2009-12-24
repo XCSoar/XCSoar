@@ -357,6 +357,15 @@ public:
  */
   fixed get_ld_over_ground(const AIRCRAFT_STATE &state) const;
 
+/** 
+ * Find speed to produce a specified sink rate
+ * 
+ * @param S Sink rate (m/s, positive down)
+ * 
+ * @return Speed (m/s)
+ */
+  fixed get_V_for_sinkrate(const fixed S) const;
+
 private:
 
 /** 
