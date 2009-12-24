@@ -9,20 +9,23 @@ topdir = ..
 include $(topdir)/build/common.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
+
+CPPFLAGS += -DFLARM_AVERAGE -DFIXED_MATH
+
 include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
 
 ######## compiler flags
 
-INCLUDES += $(TARGET_INCLUDES) -I$(HDR) -I$(SRC)
-CPPFLAGS += -DFLARM_AVERAGE
+INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
 
 ####### linker configuration
 
 LDFLAGS = $(TARGET_LDFLAGS) $(PROFILE)
 LDLIBS = $(TARGET_LDLIBS)
 
+include $(topdir)/build/task.mk
 include $(topdir)/build/sdl.mk
 include $(topdir)/build/gconf.mk
 
@@ -37,7 +40,6 @@ all: $(BUILDTESTS) RunWayPointParser-$(TARGET)$(TARGET_EXEEXT) \
 	RunDialog-$(TARGET)$(TARGET_EXEEXT)
 
 test: .phony $(BUILDTESTS)
-	# prove
 	perl tools/testall.pl t/*
 
 # TODO generalise
@@ -46,10 +48,7 @@ t/01_test_tap.exe: src/01_test_tap.c
 
 RUN_WAY_POINT_PARSER_OBJS = \
 	$(SRC)/WayPointParser.o \
-	$(SRC)/WayPointList.o \
-	$(SRC)/Math/Earth.o \
 	$(SRC)/Math/FastMath.o \
-	$(SRC)/Math/Geometry.o \
 	$(SRC)/UtilsText.o \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a \
@@ -57,7 +56,7 @@ RUN_WAY_POINT_PARSER_OBJS = \
 	$(SRC)/StringUtil.o \
 	$(SRC)/Compatibility/fmode.o \
 	src/RunWayPointParser.o
-RunWayPointParser-$(TARGET)$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(TARGET).o)
+RunWayPointParser-$(TARGET)$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS:.o=-$(TARGET).o) $(ENGINE_SRC_DIR)/task-$(TARGET).a
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
@@ -78,7 +77,6 @@ RUN_CANVAS_OBJS = \
 	$(SRC)/Screen/Util.o \
 	$(SRC)/Screen/Layout.o \
 	$(SRC)/Math/FastMath.o \
-	$(SRC)/Math/Geometry.o \
 	$(SRC)/Screen/shapelib/mapsearch.o \
 	$(SRC)/Thread/Debug.o \
 	$(SRC)/Thread/Mutex.o \
@@ -88,15 +86,14 @@ RUN_CANVAS_OBJS = \
 ifneq ($(ENABLE_SDL),y)
 RUN_CANVAS_OBJS += $(SRC)/Screen/PaintCanvas.o
 endif
-RunCanvas-$(TARGET)$(TARGET_EXEEXT): $(RUN_CANVAS_OBJS:.o=-$(TARGET).o)
+RunCanvas-$(TARGET)$(TARGET_EXEEXT): $(RUN_CANVAS_OBJS:.o=-$(TARGET).o) $(ENGINE_SRC_DIR)/task-$(TARGET).a
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/Poco/RWLock.o \
-	$(SRC)/Airspace.o \
-	$(SRC)/AirspaceDatabase.o \
 	$(SRC)/AirspaceParser.o \
+	$(SRC)/AirspaceVisibility.o \
 	$(SRC)/Appearance.o \
 	$(SRC)/Globals.o \
 	$(SRC)/LocalPath.o \
@@ -117,10 +114,8 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/MapWindowTrail.o \
 	$(SRC)/MapWindowWaypoints.o \
 	$(SRC)/Marks.o \
-	$(SRC)/Math/Earth.o \
 	$(SRC)/Math/FastMath.o \
-	$(SRC)/Math/Geometry.o \
-	$(SRC)/Math/Pressure.o \
+	$(SRC)/Math/FastRotation.o \
 	$(SRC)/Math/Screen.o \
 	$(SRC)/MacCready.o \
 	$(SRC)/OnLineContest.o \
@@ -168,10 +163,6 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/SettingsComputerBlackboard.o \
 	$(SRC)/SnailTrail.o \
 	$(SRC)/StringUtil.o \
-	$(SRC)/Task.o \
-	$(SRC)/TaskImpl.o \
-	$(SRC)/TaskVisitor.o \
-	$(SRC)/TaskFile.o \
 	$(SRC)/TerrainRenderer.o \
 	$(SRC)/Thread/Debug.o \
 	$(SRC)/Thread/Mutex.o \
@@ -180,7 +171,6 @@ RUN_MAP_WINDOW_OBJS = \
 	$(SRC)/Units.o \
 	$(SRC)/UtilsText.o \
 	$(SRC)/UtilsFont.o \
-	$(SRC)/WayPointList.o \
 	$(SRC)/WayPointParser.o \
 	$(SRC)/Compatibility/fmode.o \
 	$(SRC)/jasper-$(TARGET).a \
@@ -193,7 +183,7 @@ endif
 ifeq ($(HAVE_WIN32),y)
 RUN_MAP_WINDOW_OBJS += $(SRC)/XCSoar-$(TARGET).rsc
 endif
-RunMapWindow-$(TARGET)$(TARGET_EXEEXT): $(RUN_MAP_WINDOW_OBJS:.o=-$(TARGET).o)
+RunMapWindow-$(TARGET)$(TARGET_EXEEXT): $(RUN_MAP_WINDOW_OBJS:.o=-$(TARGET).o) $(ENGINE_SRC_DIR)/task-$(TARGET).a
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
@@ -202,7 +192,6 @@ RUN_DIALOG_OBJS = \
 	$(SRC)/Dialogs/XML.o \
 	$(SRC)/Dialogs/dlgComboPicker.o \
 	$(SRC)/Math/FastMath.o \
-	$(SRC)/Math/Geometry.o \
 	$(SRC)/Screen/Animation.o \
 	$(SRC)/Screen/Bitmap.o \
 	$(SRC)/Screen/Brush.o \
@@ -255,7 +244,7 @@ RUN_DIALOG_OBJS += $(SRC)/Screen/Timer.o
 else
 RUN_DIALOG_OBJS += $(SRC)/Screen/PaintCanvas.o
 endif
-RunDialog-$(TARGET)$(TARGET_EXEEXT): $(RUN_DIALOG_OBJS:.o=-$(TARGET).o)
+RunDialog-$(TARGET)$(TARGET_EXEEXT): $(RUN_DIALOG_OBJS:.o=-$(TARGET).o) $(ENGINE_SRC_DIR)/task-$(TARGET).a
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

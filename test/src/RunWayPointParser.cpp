@@ -36,7 +36,7 @@ Copyright_License {
 */
 
 #include "WayPointParser.h"
-#include "WayPointList.hpp"
+#include "Waypoint/Waypoints.hpp"
 #include "RasterTerrain.h"
 #include "Thread/Mutex.hpp"
 #include "Language.hpp"
@@ -64,7 +64,6 @@ const TCHAR szRegistryAlternate1[] = _T("");
 const TCHAR szRegistryAlternate2[] = _T("");
 const TCHAR szRegistryHomeWaypoint[] = _T("");
 const TCHAR szRegistryTeamcodeRefWaypoint[] = _T("");
-int WaypointsOutOfRange;
 DeviceBlackboard device_blackboard;
 
 int WINAPI
@@ -112,7 +111,7 @@ XCSoarInterface::StepProgressDialog(void)
 }
 
 bool
-MapWindowProjection::WaypointInScaleFilter(const WAYPOINT &way_point) const
+MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 {
   return true;
 }
@@ -171,9 +170,13 @@ int main(int argc, char **argv)
   }
 
   TCHAR path[MAX_PATH];
-  WayPointList way_points;
+  Waypoints way_points;
 
   ascii2unicode(argv[1], path);
   ReadWayPointFile(path, way_points, NULL);
+
+  way_points.optimise();
+  printf("Size %d\n", way_points.size());
+
   return 0;
 }

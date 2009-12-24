@@ -25,6 +25,9 @@ topdir = .
 include $(topdir)/build/common.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
+
+CPPFLAGS += -DFLARM_AVERAGE -DFIXED_MATH
+
 include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
@@ -45,15 +48,16 @@ endif
 
 ######## compiler flags
 
-INCLUDES += -I$(HDR) -I$(SRC)
-CPPFLAGS += -DFLARM_AVERAGE
+INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
 
 ####### linker configuration
 
-LDFLAGS = $(TARGET_LDFLAGS) $(PROFILE)
+LDFLAGS = $(TARGET_LDFLAGS) $(FLAGS_PROFILE)
 LDLIBS = $(TARGET_LDLIBS)
 
 ####### sources
+
+include $(topdir)/build/task.mk
 
 DEVS	:=\
 	$(SRC)/Device/Driver/AltairPro.o \
@@ -78,8 +82,8 @@ DLGS	:=\
 	$(SRC)/Dialogs/Message.o \
 	$(SRC)/Dialogs/dlgAirspace.o \
 	$(SRC)/Dialogs/dlgAirspaceColours.o \
-	$(SRC)/Dialogs/dlgAirspaceDetails.o \
 	$(SRC)/Dialogs/dlgAirspacePatterns.o \
+	$(SRC)/Dialogs/dlgAirspaceDetails.o \
 	$(SRC)/Dialogs/dlgAirspaceSelect.o \
 	$(SRC)/Dialogs/dlgAirspaceWarning.o \
 	$(SRC)/Dialogs/dlgBasicSettings.o \
@@ -92,29 +96,22 @@ DLGS	:=\
 	$(SRC)/Dialogs/dlgFlarmTraffic.o \
 	$(SRC)/Dialogs/dlgHelp.o \
 	$(SRC)/Dialogs/dlgLoggerReplay.o \
-	$(SRC)/Dialogs/dlgStartPoint.o \
 	$(SRC)/Dialogs/dlgStartup.o \
 	$(SRC)/Dialogs/dlgStatistics.o \
 	$(SRC)/Dialogs/dlgStatus.o \
 	$(SRC)/Dialogs/dlgSwitches.o \
-	$(SRC)/Dialogs/dlgTarget.o \
-	$(SRC)/Dialogs/dlgTaskCalculator.o \
-	$(SRC)/Dialogs/dlgTaskOverview.o \
-	$(SRC)/Dialogs/dlgTaskRules.o \
-	$(SRC)/Dialogs/dlgTaskWaypoint.o \
 	$(SRC)/Dialogs/dlgTeamCode.o \
 	$(SRC)/Dialogs/dlgTextEntry.o \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.o \
 	$(SRC)/Dialogs/dlgHelpers.o \
 	$(SRC)/Dialogs/dlgVegaDemo.o \
 	$(SRC)/Dialogs/dlgVoice.o \
+	$(SRC)/Dialogs/dlgWeather.o \
+	$(SRC)/Dialogs/dlgWaypointOutOfTerrain.o \
 	$(SRC)/Dialogs/dlgWayPointDetails.o \
 	$(SRC)/Dialogs/dlgWaypointEdit.o \
 	$(SRC)/Dialogs/dlgWayPointSelect.o \
-	$(SRC)/Dialogs/dlgWaypointOutOfTerrain.o \
-	$(SRC)/Dialogs/dlgWeather.o \
 	$(SRC)/Dialogs/dlgWindSettings.o \
-	$(SRC)/Dialogs/dlgStartTask.o \
 	$(SRC)/Dialogs/dlgFontEdit.o \
 
 VOLKS	:=\
@@ -135,20 +132,14 @@ OBJS	:=\
 	\
 	$(SRC)/Poco/RWLock.o		\
 	\
-	$(SRC)/AATDistance.o 		\
-	$(SRC)/Abort.o 			\
-	$(SRC)/Airspace.o 		\
-	$(SRC)/AirspaceDatabase.o \
-	$(SRC)/AirspaceGlue.o \
+	$(SRC)/AirspaceGlue.o 		\
 	$(SRC)/AirspaceParser.o 	\
-	$(SRC)/AirspaceTerrain.o \
-	$(SRC)/AirspaceWarning.o 	\
+	$(SRC)/AirspaceVisibility.o 	\
+	\
 	$(SRC)/Atmosphere.o 		\
-	$(SRC)/BestAlternate.o 		\
 	$(SRC)/ClimbAverageCalculator.o \
 	$(SRC)/ConditionMonitor.o 	\
 	$(SRC)/Calibration.o 		\
-	$(SRC)/Calculations.o 		\
 	$(SRC)/FlarmIdFile.o 		\
 	$(SRC)/FlarmCalculations.o 	\
 	$(SRC)/GlideComputer.o 		\
@@ -158,7 +149,6 @@ OBJS	:=\
 	$(SRC)/GlideComputerStats.o 	\
 	$(SRC)/GlideComputerTask.o 	\
 	$(SRC)/GlideRatio.o 		\
-	$(SRC)/GlideSolvers.o 		\
 	$(SRC)/GlideTerrain.o \
 	$(SRC)/Logger.o 		\
 	$(SRC)/LoggerFRecord.o 		\
@@ -168,15 +158,9 @@ OBJS	:=\
 	$(SRC)/MacCready.o 		\
 	$(SRC)/OnLineContest.o 		\
 	$(SRC)/SnailTrail.o 		\
-	$(SRC)/Task.o			\
-	$(SRC)/TaskImpl.o		\
-	$(SRC)/TaskFile.o		\
-	$(SRC)/TaskVisitor.o		\
 	$(SRC)/TeamCodeCalculation.o 	\
 	$(SRC)/ThermalLocator.o 	\
 	$(SRC)/WayPointParser.o 	\
-	$(SRC)/WayPoint.o 		\
-	$(SRC)/WayPointList.o 		\
 	$(SRC)/WindAnalyser.o 		\
 	$(SRC)/WindMeasurementList.o 	\
 	$(SRC)/WindStore.o 		\
@@ -274,7 +258,6 @@ OBJS	:=\
 	$(SRC)/LocalTime.o		\
 	$(SRC)/Units.o 			\
 	$(SRC)/StringUtil.o \
-	$(SRC)/UtilsAirspace.o		\
 	$(SRC)/UtilsFLARM.o		\
 	$(SRC)/UtilsFont.o		\
 	$(SRC)/UtilsProfile.o		\
@@ -293,13 +276,10 @@ OBJS	:=\
 	$(SRC)/Thread/Mutex.o \
 	$(SRC)/Thread/Debug.o \
 	\
-	$(SRC)/Math/Earth.o 		\
-	$(SRC)/Math/FastMath.o 		\
-	$(SRC)/Math/Geometry.o 		\
+	$(SRC)/Math/FastRotation.o	\
 	$(SRC)/Math/leastsqs.o 		\
 	$(SRC)/Math/LowPassFilter.o 	\
 	$(SRC)/Math/NavFunctions.o	\
-	$(SRC)/Math/Pressure.o 		\
 	$(SRC)/Math/Screen.o 		\
 	$(SRC)/Math/SunEphemeris.o 	\
 	\
@@ -368,6 +348,7 @@ OBJS	:=\
 	\
 	$(DLGS:.cpp=.o) 		\
 	$(VOLKS:.cpp=.o) 		\
+	$(ENGINE_SRC_DIR)/task-$(TARGET).a \
 	$(SRC)/jasper-$(TARGET).a \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a
@@ -478,11 +459,11 @@ clean-: $(addprefix clean-,$(TARGETS))
 
 clean: clean-$(TARGET) cleani FORCE
 	rm -rf output
-	find Common $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
+	find Common src $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
 	-type f -print | xargs -r $(RM)
 
 cleani: FORCE
-	find Common $(IGNORE) \( -name '*.i' \) \
+	find Common src $(IGNORE) \( -name '*.i' \) \
 		-type f -print | xargs -r $(RM)
 
 .PHONY: FORCE
