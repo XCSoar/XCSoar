@@ -58,8 +58,8 @@ Copyright_License {
  */
 GlideComputer::GlideComputer(TaskManager &task,
                              AirspaceWarningManager& as_manager):
-  GlideComputerTask(task),
-  GlideComputerAirData(as_manager, task.get_glide_polar())
+  GlideComputerAirData(as_manager, task),
+  GlideComputerTask(task)
 {
 
 }

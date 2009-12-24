@@ -65,15 +65,6 @@ typedef enum {
 
 struct VARIO_INFO
 {
-  /** Vertical speed */
-  fixed Vario;
-  /** Vertical speed of the airmass */
-  fixed NettoVario;
-  /** GPS-based vario */
-  fixed GPSVario;
-  /** GPS-based vario including energy height */
-  fixed GPSVarioTE;
-
   /** Average vertical speed based on 30s */
   fixed Average30s;
   /** Average vertical speed of the airmass based on 30s */
@@ -87,8 +78,6 @@ struct VARIO_INFO
   int AverageLD;
 
   fixed LDvario;
-
-  fixed GliderSinkRate;
 };
 
 struct CLIMB_INFO
@@ -185,12 +174,6 @@ struct THERMAL_BAND_INFO
   fixed ThermalProfileW[NUMTHERMALBUCKETS];
 };
 
-struct DERIVED_ALT_INFO
-{
-  /** Energy height excess to slow to best glide speed @author JMW */
-  fixed EnergyHeight;
-};
-
 struct FLYING_INFO
 {
   /** True if airborne, False otherwise */
@@ -238,7 +221,6 @@ struct TEAMCODE_INFO
  */
 struct DERIVED_INFO: 
   public VARIO_INFO,
-  public DERIVED_ALT_INFO,
   public CLIMB_INFO,
   public CIRCLING_INFO,
   public TERRAIN_ALT_INFO,
@@ -247,13 +229,7 @@ struct DERIVED_INFO:
   public THERMAL_LOCATOR_INFO,
   public TEAMCODE_INFO
 {
-  /** MacCready (block) speed */
-  fixed VMacCready;
-
-  /** Optimum speed to fly instantaneously */
-  fixed VOpt;
-
-  fixed MacCreadyRisk;
+  fixed V_stf; /**< Speed to fly block/dolphin (m/s) */
 
   /** Wind speed */
   fixed WindSpeed_estimated;

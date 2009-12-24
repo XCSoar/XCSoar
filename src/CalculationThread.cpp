@@ -74,11 +74,15 @@ CalculationThread::run()
     // update and transfer master info to glide computer
     mutexBlackboard.Lock();
 
+    const GlidePolar& glide_polar = glide_computer->get_glide_polar();
+
     // if (new GPS data available)
     if (gps_trigger.test()) {
-      device_blackboard.tick();
+      device_blackboard.tick(glide_polar);
       // inform map new data is ready
       drawTriggerEvent.trigger();
+    } else {
+      device_blackboard.tick_fast(glide_polar);
     }
 
     // Copy data from DeviceBlackboard to GlideComputerBlackboard

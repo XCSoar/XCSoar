@@ -113,7 +113,7 @@ CalibrationUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
     max(fixed(1.0), Basic->IndicatedAirspeed);
 
   // Vario calibration info
-  int index_te_vario = lround(Calculated->GPSVarioTE*10)+50;
+  int index_te_vario = lround(Basic->GPSVarioTE*10)+50;
   int index_speed = lround((Basic->TrueAirspeed-20)/2);
   if (index_te_vario < 0)
     return;

@@ -210,6 +210,12 @@ struct NMEA_INFO:
    */
   fixed BaroAltitude;
 
+  /** Energy height excess to slow to best glide speed @author JMW */
+  fixed EnergyHeight;
+
+  /** Nav Altitude + Energy height (m) */
+  fixed TEAltitude;
+
   /**
    * Troposhere atmosphere model for QNH correction
    */
@@ -235,6 +241,13 @@ struct NMEA_INFO:
   //###########
   //   Vario
   //###########
+
+  fixed GliderSinkRate;
+
+  /** GPS-based vario */
+  fixed GPSVario;
+  /** GPS-based vario including energy height */
+  fixed GPSVarioTE;
 
   /**
    * Is an external vario signal available?

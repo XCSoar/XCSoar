@@ -71,11 +71,7 @@ SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
     pt.DriftFactor = 1.0;
   }
 
-  if (Calculated->Circling) {
-    pt.Vario = (fixed)(Calculated->NettoVario) ;
-  } else {
-    pt.Vario = (fixed)(Calculated->NettoVario) ;
-  }
+  pt.Vario = (fixed)(Calculated->NettoVario);
 
   fixed scale = Calculated->AdjustedAverageThermal; // just for now.. TODO replace
   // with mc or something more consistent

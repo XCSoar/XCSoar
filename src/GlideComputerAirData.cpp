@@ -37,6 +37,8 @@ Copyright_License {
 
 */
 
+#include "Task/TaskManager.hpp"
+
 #include "GlideComputerAirData.hpp"
 #include "WindZigZag.h"
 #include "WindAnalyser.h"
@@ -82,20 +84,28 @@ DoAutoQNH(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated, double speed_t
 
 
 GlideComputerAirData::GlideComputerAirData(AirspaceWarningManager& as_manager,
-  const GlidePolar& _glide_polar):
+  const TaskManager& _task):
   m_airspace_warning(as_manager),
   airspace_clock(2.0), // scan airspace every 2 seconds
   ballast_clock(5),  // only update every 5 seconds to stop flooding
 		    // the devices
   diff_gps_vario(0),
   diff_gps_te_vario(0),
-  glide_polar(_glide_polar)
+  glide_polar(_task.get_glide_polar())
 {
   InitLDRotary(SettingsComputer(), &rotaryLD);
 
   // JMW TODO enhancement: seed initial wind store with start conditions
   // SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing, 1);
 }
+
+
+const GlidePolar& 
+GlideComputerAirData::get_glide_polar() const
+{
+  return glide_polar;
+}
+
 
 void
 GlideComputerAirData::ResetFlight(const bool full)
@@ -119,7 +129,6 @@ GlideComputerAirData::Initialise()
 void
 GlideComputerAirData::ProcessBasic()
 {
-  EnergyHeight();
   TerrainHeight();
   Vario();
   ProcessSun();
@@ -292,17 +301,8 @@ GlideComputerAirData::Average30s()
 
       Altitude[index] = Basic().NavAltitude;
 
-      if (Basic().NettoVarioAvailable) {
-        NettoVario[index] = Basic().NettoVario;
-      } else {
-        NettoVario[index] = Calculated().NettoVario;
-      }
-
-      if (Basic().VarioAvailable) {
-        Vario[index] = Basic().Vario;
-      } else {
-        Vario[index] = Calculated().Vario;
-      }
+      NettoVario[index] = Basic().NettoVario;
+      Vario[index] = Basic().Vario;
 
       if (num_samples < 30) {
         num_samples++;
@@ -368,8 +368,7 @@ GlideComputerAirData::AverageThermal()
 {
   if (Calculated().ClimbStartTime >= 0) {
     if (Basic().Time > Calculated().ClimbStartTime) {
-      double Gain = Basic().NavAltitude + Calculated().EnergyHeight
-          - Calculated().ClimbStartAlt;
+      double Gain = Basic().TEAltitude - Calculated().ClimbStartAlt;
       SetCalculated().AverageThermal =
           Gain / (Basic().Time - Calculated().ClimbStartTime);
       }
@@ -397,8 +396,7 @@ GlideComputerAirData::ThermalGain()
 {
   if (Calculated().ClimbStartTime >= 0) {
     if(Basic().Time >= Calculated().ClimbStartTime) {
-      SetCalculated().ThermalGain = Basic().NavAltitude
-          + Calculated().EnergyHeight - Calculated().ClimbStartAlt;
+      SetCalculated().ThermalGain = Basic().TEAltitude - Calculated().ClimbStartAlt;
     }
   }
 }
@@ -456,36 +454,6 @@ GlideComputerAirData::CruiseLD()
 }
 
 
-/**
- * 1. Determines which altitude to use (GPS/baro)
- * 2. If possible calculates true airspeed and TAS/IAS ratio
- * 3. Calculates energy height on TAS basis
- *
- * \f${m/2} \times v^2 = m \times g \times h\f$ therefore \f$h = {v^2}/{2 \times g}\f$
- */
-void
-GlideComputerAirData::EnergyHeight()
-{
-  double ias_to_tas;
-  double V_tas;
-
-  // Calculate true airspeed
-  if (Basic().AirspeedAvailable && (Basic().IndicatedAirspeed > 0)) {
-    ias_to_tas = Basic().TrueAirspeed / Basic().IndicatedAirspeed;
-  } else {
-    ias_to_tas = 1.0;
-  }
-
-  V_tas = Basic().TrueAirspeed;
-
-  // Calculate energy height
-  double V_bestld_tas = glide_polar.get_VbestLD() * ias_to_tas;
-  double V_mc_tas = Calculated().VMacCready * ias_to_tas;
-  V_tas = max(V_tas, V_bestld_tas);
-
-  double V_target = max(V_bestld_tas, V_mc_tas);
-  SetCalculated().EnergyHeight = (V_tas * V_tas - V_target * V_target) / (9.81 * 2.0);
-}
 
 /**
  * Reads the current terrain height and calculates the altitude over terrain
@@ -525,33 +493,10 @@ GlideComputerAirData::TerrainHeight()
 }
 
 /**
- * 1. Calculates the vario values for gps vario, gps total energy vario and distance vario
- * 2. Sets Vario to GPSVario or received Vario data from instrument
  */
 void
 GlideComputerAirData::Vario()
 {
-  double dT = Basic().Time - LastBasic().Time;
-  if (dT > 0) {
-    double Gain = Basic().NavAltitude - LastBasic().NavAltitude;
-    double GainTE = (Calculated().EnergyHeight + Basic().GPSAltitude)
-        - (LastCalculated().EnergyHeight + LastBasic().GPSAltitude);
-
-    // estimate value from GPS
-    SetCalculated().GPSVario = Gain / dT;
-    SetCalculated().GPSVarioTE = GainTE / dT;
-  }
-
-  if (!Basic().VarioAvailable || Basic().Replay) {
-    // TODO: why not TE?!
-    SetCalculated().Vario = Calculated().GPSVario;
-  } else {
-    // get value from instrument
-    SetCalculated().Vario = Basic().Vario;
-    // we don't bother with sound here as it is polled at a
-    // faster rate in the DoVarioCalcs methods
-  }
-
   if (Basic().VarioAvailable && !Basic().Replay) {
     CalibrationUpdate(&Basic(), &Calculated());
   }
@@ -571,9 +516,7 @@ GlideComputerAirData::SpeedToFly()
   double delta_mc;
   double risk_mc;
 
-  double margin_height = Basic().NavAltitude
-    + Calculated().EnergyHeight - SettingsComputer().SafetyAltitudeBreakoff
-    - Calculated().TerrainBase;
+  double margin_height = Basic().TEAltitude - SettingsComputer().SafetyAltitudeBreakoff - Calculated().TerrainBase;
 
   if ((Calculated().TaskAltitudeDifference > -120) || (Calculated().MaxThermalHeight<1)) {
     risk_mc = mc_setting;
@@ -586,38 +529,9 @@ GlideComputerAirData::SpeedToFly()
 #endif
 }
 
-void
-GlideComputerAirData::NettoVario()
-{
-  const double n = fabs(Basic().Gload);
-
-  // calculate sink rate of glider for calculating netto vario
-
-  bool replay_disabled = !Basic().Replay;
-
-  fixed glider_sink_rate;
-  fixed speed = (Basic().AirspeedAvailable && replay_disabled)
-    ? Basic().IndicatedAirspeed
-    : Basic().TrueAirspeed;
-  glider_sink_rate = -glide_polar.SinkRate(max(glide_polar.get_Vmin(), speed),
-                                           fixed(n));
-  SetCalculated().GliderSinkRate = glider_sink_rate;
-
-  if (Basic().NettoVarioAvailable && replay_disabled) {
-    SetCalculated().NettoVario = Basic().NettoVario;
-  } else {
-    if (Basic().VarioAvailable && replay_disabled) {
-      SetCalculated().NettoVario = Basic().Vario - glider_sink_rate;
-    } else {
-      SetCalculated().NettoVario = Calculated().Vario - glider_sink_rate;
-    }
-  }
-}
-
 bool
 GlideComputerAirData::ProcessVario()
 {
-  NettoVario();
   SpeedToFly();
 
   // has GPS time advanced?
@@ -868,7 +782,7 @@ GlideComputerAirData::PercentCircling(const double Rate)
     SetCalculated().timeCircling += fixed_one;
 
     // Add the Vario signal to the total climb height
-    SetCalculated().TotalHeightClimb += Calculated().GPSVario;
+    SetCalculated().TotalHeightClimb += Basic().GPSVario;
 
     // QUESTION TB: should the thermal band function really be called here
     // instead of in the Turning() function
@@ -896,7 +810,7 @@ GlideComputerAirData::ProcessThermalLocator()
 
   if (Calculated().Circling) {
     thermallocator.AddPoint(Basic().Time, Basic().Location,
-        Calculated().NettoVario);
+        Basic().NettoVario);
 
     thermallocator.Update(Basic().Time, Basic().Location,
         Basic().WindSpeed, Basic().WindDirection, Basic().TrackBearing,
@@ -977,7 +891,7 @@ GlideComputerAirData::Turning()
       SetCalculated().TurnStartTime = Basic().Time;
       SetCalculated().TurnStartLocation = Basic().Location;
       SetCalculated().TurnStartAltitude = Basic().NavAltitude;
-      SetCalculated().TurnStartEnergyHeight = Calculated().EnergyHeight;
+      SetCalculated().TurnStartEnergyHeight = Basic().EnergyHeight;
       SetCalculated().TurnMode = WAITCLIMB;
     }
     if (forcecircling) {
@@ -1029,7 +943,7 @@ GlideComputerAirData::Turning()
       SetCalculated().TurnStartTime = Basic().Time;
       SetCalculated().TurnStartLocation = Basic().Location;
       SetCalculated().TurnStartAltitude = Basic().NavAltitude;
-      SetCalculated().TurnStartEnergyHeight = Calculated().EnergyHeight;
+      SetCalculated().TurnStartEnergyHeight = Basic().EnergyHeight;
 
       // JMW Transition to cruise, due to not properly turning
       SetCalculated().TurnMode = WAITCRUISE;
@@ -1123,7 +1037,7 @@ GlideComputerAirData::LastThermalStats()
 
     if (ThermalTime > 0) {
       double ThermalGain = Calculated().CruiseStartAlt
-          + Calculated().EnergyHeight - Calculated().ClimbStartAlt;
+          + Basic().EnergyHeight - Calculated().ClimbStartAlt;
 
       if ((ThermalGain > 0) && (ThermalTime > THERMAL_TIME_MIN)) {
 
@@ -1214,7 +1128,7 @@ GlideComputerAirData::ThermalBand()
               iround(NUMTHERMALBUCKETS
                      * (dheight / max(fixed_one, Calculated().MaxThermalHeight))));
 
-  SetCalculated().ThermalProfileW[index] += Calculated().Vario;
+  SetCalculated().ThermalProfileW[index] += Basic().Vario;
   SetCalculated().ThermalProfileN[index]++;
 }
 

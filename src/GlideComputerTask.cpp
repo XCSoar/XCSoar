@@ -118,11 +118,10 @@ GlideComputerTask::ProcessBasicTask()
     SetCalculated().common_stats = m_task.get_common_stats();
 
     if (SettingsComputer().EnableBlockSTF) {
-      SetCalculated().VOpt = m_task.get_common_stats().V_block;
+      SetCalculated().V_stf = m_task.get_common_stats().V_block;
     } else {
-      SetCalculated().VOpt = m_task.get_common_stats().V_dolphin;
+      SetCalculated().V_stf = m_task.get_common_stats().V_dolphin;
     }
-    SetCalculated().VMacCready = m_task.get_stats().current_leg.solution_remaining.VOpt;
 
     terrain.Unlock();
   }

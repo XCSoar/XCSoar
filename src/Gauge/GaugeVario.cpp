@@ -45,7 +45,6 @@ Copyright_License {
 #include "Screen/BitmapCanvas.hpp"
 #include "Math/FastRotation.hpp"
 #include "Math/Geometry.hpp"
-#include "MacCready.h"
 #include "Appearance.hpp"
 #include "resource.h"
 
@@ -203,11 +202,7 @@ void GaugeVario::Render() {
     InitDone = true;
   }
 
-  if (Basic().VarioAvailable && !Basic().Replay) {
-    vval = Basic().Vario;
-  } else {
-    vval = Calculated().Vario;
-  }
+  vval = Basic().Vario;
 
   double vvaldisplay = min(99.9,max(-99.9,vval*LIFTMODIFY));
 
@@ -223,7 +218,7 @@ void GaugeVario::Render() {
   }
 
   if (Appearance.GaugeVarioMc) {
-    double mc = oldGlidePolar::GetMacCready()*LIFTMODIFY;
+    double mc = Calculated().common_stats.current_mc*LIFTMODIFY;
     if (SettingsComputer().AutoMacCready)
       RenderValue(canvas, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
@@ -256,7 +251,7 @@ void GaugeVario::Render() {
   static int ival_last = 0;
 
   ival = ValueToNeedlePos(vval);
-  sval = ValueToNeedlePos(Calculated().GliderSinkRate);
+  sval = ValueToNeedlePos(Basic().GliderSinkRate);
   if (Appearance.GaugeVarioAveNeedle) {
     if (!Calculated().Circling) {
       ival_av = ValueToNeedlePos(Calculated().NettoAverage30s);
@@ -648,7 +643,7 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
   if ((Calculated().Flying)
       && (!is_simulator() || !Calculated().Circling)
       && !Basic().SwitchState.VarioCircling) {
-    vdiff = (Calculated().VOpt - Basic().IndicatedAirspeed);
+    vdiff = (Calculated().V_stf - Basic().IndicatedAirspeed);
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
     vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;
   } else
@@ -807,7 +802,7 @@ void GaugeVario::RenderBallast(Canvas &canvas)
 
   }
 
-  double BALLAST = oldGlidePolar::GetBallast();
+  double BALLAST = Calculated().common_stats.current_ballast;
 
   if (BALLAST != lastBallast){
        // ballast hase been changed
@@ -890,7 +885,7 @@ void GaugeVario::RenderBugs(Canvas &canvas)
 
   }
 
-  double BUGS = oldGlidePolar::GetBugs();
+  double BUGS = Calculated().common_stats.current_bugs;
 
   if (BUGS != lastBugs){
 

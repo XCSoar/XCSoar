@@ -54,11 +54,12 @@ class GlidePolar;
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
 
+class TaskManager;
 
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
   GlideComputerAirData(AirspaceWarningManager& as_manager,
-    const GlidePolar& glide_polar);
+    const TaskManager& _task);
 
   ldrotary_s           rotaryLD;
   SunEphemeris sun;
@@ -68,6 +69,9 @@ public:
 		       const double wind_bearing,
 		       const int quality=3); // JMW check
   WindAnalyser   windanalyser; // JMW TODO, private and lock-protected
+
+  const GlidePolar& get_glide_polar() const;
+
 private:
   ThermalLocator thermallocator;
 protected:

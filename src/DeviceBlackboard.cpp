@@ -46,6 +46,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Device/Parser.h"
 #include "Math/Constants.h"
+#include "GlideSolvers/GlidePolar.hpp"
 
 DeviceBlackboard device_blackboard;
 
@@ -429,7 +430,7 @@ DeviceBlackboard::FLARM_ScanTraffic()
 }
 
 void
-DeviceBlackboard::tick()
+DeviceBlackboard::tick(const GlidePolar& glide_polar)
 {
   // check for timeout on FLARM objects
   FLARM_RefreshSlots();
@@ -442,7 +443,8 @@ DeviceBlackboard::tick()
   Wind();
   Heading();
   NavAltitude();
-  Vario();
+
+  tick_fast(glide_polar);
 
   if (Basic().Time!= LastBasic().Time) {
 
@@ -456,23 +458,39 @@ DeviceBlackboard::tick()
 }
 
 
+void
+DeviceBlackboard::tick_fast(const GlidePolar& glide_polar)
+{
+  EnergyHeight();
+  Vario();
+  NettoVario(glide_polar);
+}
+
+
+void
+DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
+{
+  SetBasic().GliderSinkRate = -glide_polar.SinkRate(Basic().IndicatedAirspeed, Basic().Gload);
+
+  if (!Basic().NettoVarioAvailable || Basic().Replay) {
+    SetBasic().NettoVario = Basic().Vario - Basic().GliderSinkRate;
+  }
+}
+
+
 
 /**
  * 1. Determines which altitude to use (GPS/baro)
- * 2. If possible calculates true airspeed and TAS/IAS ratio
- * 3. Calculates energy height on TAS basis
- *
- * \f${m/2} \times v^2 = m \times g \times h\f$ therefore \f$h = {v^2}/{2 \times g}\f$
  */
 void
 DeviceBlackboard::NavAltitude()
 {
-  // Determine which altitude to use for nav functions
-  if (SettingsComputer().EnableNavBaroAltitude
-      && Basic().BaroAltitudeAvailable) {
-    SetBasic().NavAltitude = Basic().BaroAltitude;
-  } else {
+  if (!SettingsComputer().EnableNavBaroAltitude
+      || !Basic().BaroAltitudeAvailable 
+      || Basic().Replay) {
     SetBasic().NavAltitude = Basic().GPSAltitude;
+  } else {
+    SetBasic().NavAltitude = Basic().BaroAltitude;
   }
 }
 
@@ -505,23 +523,42 @@ DeviceBlackboard::Heading()
     SetBasic().TrueAirspeedEstimated = 0.0;
   }
 
-  if (!Basic().AirspeedAvailable) {
-    SetBasic().TrueAirspeed = SetBasic().TrueAirspeedEstimated;
+  if (!Basic().AirspeedAvailable || Basic().Replay) {
+    SetBasic().TrueAirspeed = Basic().TrueAirspeedEstimated;
+    SetBasic().IndicatedAirspeed = Basic().TrueAirspeed
+      /Basic().pressure.AirDensityRatio(Basic().GetAnyAltitude());
   }
 }
 
+/**
+ * 1. Calculates the vario values for gps vario, gps total energy vario and distance vario
+ * 2. Sets Vario to GPSVario or received Vario data from instrument
+ */
 void
 DeviceBlackboard::Vario()
 {
-  if (!Basic().NettoVarioAvailable) {
-    SetBasic().NettoVario = Calculated().NettoVario;
+  // Calculate time passed since last calculation
+  const fixed dT = Basic().Time - LastBasic().Time;
+
+  if (positive(dT)) {
+    const fixed Gain = Basic().NavAltitude - LastBasic().NavAltitude;
+    const fixed GainTE = Basic().TEAltitude - LastBasic().TEAltitude;
+
+    // estimate value from GPS
+    SetBasic().GPSVario = Gain / dT;
+    SetBasic().GPSVarioTE = GainTE / dT;
+  }
+
+  if (!Basic().VarioAvailable || Basic().Replay) {
+    SetBasic().Vario = Basic().GPSVario;
   }
 }
+
 
 void
 DeviceBlackboard::Wind()
 {
-  if (!Basic().ExternalWindAvailable) {
+  if (!Basic().ExternalWindAvailable || Basic().Replay) {
     SetBasic().WindSpeed = Calculated().WindSpeed_estimated;
     SetBasic().WindDirection = Calculated().WindBearing_estimated;
   }
@@ -583,7 +620,8 @@ DeviceBlackboard::Dynamics()
   static const fixed fixed_inv_g(1.0/9.81);
   static const fixed fixed_small(0.001);
 
-  if (Calculated().Flying && ((Basic().Speed > 0) || (Basic().WindSpeed > 0))) {
+  if (Calculated().Flying && 
+      (positive(Basic().Speed) || positive(Basic().WindSpeed))) {
 
     // calculate turn rate in wind coordinates
     const fixed dT = Basic().Time - LastBasic().Time;
@@ -599,13 +637,13 @@ DeviceBlackboard::Dynamics()
 
     SetBasic().BankAngle = fixed_rad_to_deg * angle;
 
-    if (!Basic().AccelerationAvailable) {
+    if (!Basic().AccelerationAvailable || Basic().Replay) {
       SetBasic().Gload = fixed_one / max(fixed_small, fabs(cos(angle)));
     }
 
     // estimate pitch angle (assuming balanced turn)
     SetBasic().PitchAngle = fixed_rad_to_deg *
-      atan2(Calculated().GPSVario-Calculated().Vario,
+      atan2(Basic().GPSVario-Basic().Vario,
 	    Basic().TrueAirspeed);
 
   } else {
@@ -613,8 +651,25 @@ DeviceBlackboard::Dynamics()
     SetBasic().PitchAngle = fixed_zero;
     SetBasic().TurnRateWind = fixed_zero;
 
-    if (!Basic().AccelerationAvailable) {
+    if (!Basic().AccelerationAvailable || Basic().Replay) {
       SetBasic().Gload = fixed_one;
     }
   }
+}
+
+
+/**
+ * Calculates energy height on TAS basis
+ *
+ * \f${m/2} \times v^2 = m \times g \times h\f$ therefore \f$h = {v^2}/{2 \times g}\f$
+ */
+void
+DeviceBlackboard::EnergyHeight()
+{
+  const fixed ias_to_tas = Basic().pressure.AirDensityRatio(Basic().GetAnyAltitude());
+  static const fixed fixed_inv_2g = 1.0/(2.0*9.81);
+
+  const fixed V_target = Calculated().common_stats.V_block * ias_to_tas;
+  SetBasic().EnergyHeight = (Basic().TrueAirspeed * Basic().TrueAirspeed - V_target * V_target) * fixed_inv_2g;
+  SetBasic().TEAltitude = Basic().NavAltitude+Basic().EnergyHeight;
 }

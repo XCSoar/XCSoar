@@ -440,7 +440,7 @@ _VarioWriteSettings(ComPort *port)
 
     wsprintf(mcbuf, _T("PDVMC,%d,%d,%d,%d,%d"),
 	     iround(oldGlidePolar::GetMacCready()*10),
-	     iround(device_blackboard.Calculated().VOpt*10),
+	     iround(device_blackboard.Calculated().V_stf*10),
 	     device_blackboard.Calculated().Circling,
 	     iround(device_blackboard.Calculated().TerrainAlt),
 	     10132); // JMW 20080716 bug

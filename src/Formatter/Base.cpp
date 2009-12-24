@@ -41,7 +41,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Atmosphere.h"
 #include "Battery.h"
-#include "MacCready.h"
 #include "Units.hpp"
 #include "Interface.hpp"
 #include <stdio.h>
@@ -133,7 +132,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = ALTITUDEMODIFY*Calculated().LastThermalGain;
     break;
   case 10:
-    Value = iround(LIFTMODIFY*oldGlidePolar::GetMacCready()*10)/10.0;
+    Value = (LIFTMODIFY*Calculated().common_stats.current_mc*10).as_int()/10.0;
     break;
   case 11:
     Value = DISTANCEMODIFY*Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
@@ -198,11 +197,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = Basic().TrackBearing;
     break;
   case 24:
-    if (Basic().VarioAvailable) {
-      Value = LIFTMODIFY*Basic().Vario;
-    } else {
-      Value = LIFTMODIFY*Calculated().Vario;
-    }
+    Value = LIFTMODIFY*Basic().Vario;
     break;
   case 25:
     Value = SPEEDMODIFY*Basic().WindSpeed;
@@ -235,7 +230,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = ALTITUDEMODIFY*Basic().BaroAltitude;
     break;
   case 34:
-    Value = SPEEDMODIFY*Calculated().VMacCready;
+    Value = SPEEDMODIFY*Calculated().common_stats.V_block;
     break;
   case 35:
     Value = Calculated().PercentCircling;
@@ -255,12 +250,10 @@ void InfoBoxFormatter::AssignValue(int i) {
 #endif
     break;
   case 43:
-    //    Valid = Basic().AirspeedAvailable;
-    Value = Calculated().VOpt*SPEEDMODIFY;
+    Value = Calculated().V_stf*SPEEDMODIFY;
     break;
   case 44:
-    //    Valid = Basic().AirspeedAvailable;
-    Value = Calculated().NettoVario*LIFTMODIFY;
+    Value = Basic().NettoVario*LIFTMODIFY;
     break;
   case 48:
     Value = Basic().OutsideAirTemperature;

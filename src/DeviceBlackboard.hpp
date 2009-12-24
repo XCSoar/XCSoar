@@ -44,6 +44,8 @@ Copyright_License {
 #include "SettingsMapBlackboard.hpp"
 #include "MapProjectionBlackboard.hpp"
 
+class GlidePolar;
+
 // the deviceblackboard is used as the global ground truth-state
 // since it is accessed quickly with only one mutex (flight)
 class DeviceBlackboard:
@@ -78,7 +80,8 @@ public:
   void SetSpeed(fixed val);
   void SetAltitude(fixed alt);
 
-  void tick();
+  void tick(const GlidePolar& glide_polar);
+  void tick_fast(const GlidePolar& glide_polar);
 
 private:
 // moved from GlideComputerAirData
@@ -89,8 +92,10 @@ private:
   void Heading();
   void Dynamics();
   void Wind();
+  void EnergyHeight();
   void TurnRate();
   void Vario();
+  void NettoVario(const GlidePolar& glide_polar);
 
   NMEA_INFO state_last;
   const NMEA_INFO& LastBasic() { return state_last; }
