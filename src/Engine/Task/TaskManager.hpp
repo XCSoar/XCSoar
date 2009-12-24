@@ -48,6 +48,7 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskEvents.hpp"
 #include "TaskBehaviour.hpp"
+#include "TaskAdvance.hpp"
 
 #include "Factory/FAITaskFactory.hpp"
 #include "Factory/AATTaskFactory.hpp"

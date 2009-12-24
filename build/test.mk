@@ -18,6 +18,7 @@ TESTFAST += $(TEST_SRC_DIR)/test_win32.exe
 endif
 
 TESTSLOW = \
+	$(TEST_SRC_DIR)/test_effectivemc.exe \
 	$(TEST_SRC_DIR)/test_randomtask.exe \
 	$(TEST_SRC_DIR)/test_vopt.exe \
 	$(TEST_SRC_DIR)/test_cruiseefficiency.exe \

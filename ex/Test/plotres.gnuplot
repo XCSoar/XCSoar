@@ -38,10 +38,9 @@ plot \
      'results/res-stats.txt' using 1:5 with lines title "dist eff act"
 pause -1
 
-set title "Stats - Misc"
+set title "Stats - Cruise efficiency"
 plot \
      'results/res-stats.txt' using 1:2 with lines title "active task point", \
-     'results/res-stats.txt' using 1:3 with lines title "mc_best", \
      'results/res-stats.txt' using 1:6 with lines title "cruise efficiency"
 pause -1
 
@@ -57,9 +56,11 @@ pause -1
 
 
 set autoscale
-set title "Stats - Task vario"
+set title "Stats - Vario quantities"
 plot \
-     'results/res-stats.txt' using 1:11 with lines title "task vario (m/s)"
+     'results/res-stats.txt' using 1:11 with lines title "task vario (m/s)", \
+     'results/res-stats.txt' using 1:12 with lines title "effective mc (m/s)", \
+     'results/res-stats.txt' using 1:3 with lines title "mc_best"
 pause -1
 
 

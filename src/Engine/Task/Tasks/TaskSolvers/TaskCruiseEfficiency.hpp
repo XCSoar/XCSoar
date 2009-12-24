@@ -34,11 +34,10 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef TASKCRUISEEFFICIENCY_HPP
-#define TASKCRUISEEFFICIENCY_HPP
+#ifndef TASK_CRUISE_EFFICIENCY_HPP
+#define TASK_CRUISE_EFFICIENCY_HPP
 
-#include "TaskMacCreadyTravelled.hpp"
-#include "Util/ZeroFinder.hpp"
+#include "TaskSolveTravelled.hpp"
 
 /**
  *  Class to solve for cruise efficiency.
@@ -48,7 +47,7 @@
  *  This is calculated for the part of the task that has been travelled
  */
 class TaskCruiseEfficiency: 
-  public ZeroFinder
+  public TaskSolveTravelled
 {
 public:
 /** 
@@ -65,23 +64,7 @@ public:
                        const GlidePolar &gp);
   virtual ~TaskCruiseEfficiency() {};
 
-  virtual fixed f(const fixed ce);
-
-/** 
- * Search for cruise efficiency value.
- * 
- * @param ce Default cruise efficiency value
- * 
- * @return Solution value of cruise efficiency
- */
-  virtual fixed search(const fixed ce);
-
-private:
-  TaskMacCreadyTravelled tm;
-  GlideResult res;
-  const AIRCRAFT_STATE &aircraft;
-  fixed inv_dt;
-  fixed dt;
+  fixed f(const fixed ce);
 };
 
 #endif

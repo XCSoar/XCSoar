@@ -36,12 +36,15 @@
 */
 
 #include "OrderedTask.hpp"
+#include "Task/TaskEvents.hpp"
+#include "Task/TaskAdvance.hpp"
 #include "BaseTask/OrderedTaskPoint.hpp"
 #include "PathSolvers/TaskDijkstra.hpp"
 #include "TaskSolvers/TaskMacCreadyTravelled.hpp"
 #include "TaskSolvers/TaskMacCreadyRemaining.hpp"
 #include "TaskSolvers/TaskMacCreadyTotal.hpp"
 #include "TaskSolvers/TaskCruiseEfficiency.hpp"
+#include "TaskSolvers/TaskEffectiveMacCready.hpp"
 #include "TaskSolvers/TaskBestMc.hpp"
 #include "TaskSolvers/TaskMinTarget.hpp"
 #include "TaskSolvers/TaskGlideRequired.hpp"
@@ -82,23 +85,23 @@ OrderedTask::update_geometry()
 
 ////////// TIMES
 
-double 
+fixed 
 OrderedTask::scan_total_start_time(const AIRCRAFT_STATE &)
 {
   if (ts) {
     return ts->get_state_entered().Time;
   } else {
-    return 0.0;
+    return fixed_zero;
   }
 }
 
-double 
+fixed 
 OrderedTask::scan_leg_start_time(const AIRCRAFT_STATE &)
 {
   if (activeTaskPoint) {
     return tps[activeTaskPoint-1]->get_state_entered().Time;
   } else {
-    return -1;
+    return -fixed_one;
   }
 }
 
@@ -524,8 +527,8 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
                                     GlideResult &leg,
                                     DistanceRemainingStat &total_remaining_effective,
                                     DistanceRemainingStat &leg_remaining_effective,
-                                    const double total_t_elapsed,
-                                    const double leg_t_elapsed)
+                                    const fixed total_t_elapsed,
+                                    const fixed leg_t_elapsed)
 {
   TaskMacCreadyTotal tm(tps,activeTaskPoint,glide_polar);
   total = tm.glide_solution(aircraft);
@@ -540,14 +543,14 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
 
 ////////// Auxiliary glide functions
 
-double
+fixed
 OrderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft) 
 {
   TaskGlideRequired bgr(tps, activeTaskPoint, aircraft, glide_polar);
   return bgr.search(fixed_zero);
 }
 
-double
+fixed
 OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft)
 {
   // note setting of lower limit on mc
@@ -556,16 +559,28 @@ OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft)
 }
 
 
-double
+fixed
 OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft)
 {
   if (activeTaskPoint>0) {
     TaskCruiseEfficiency bce(tps,activeTaskPoint, aircraft, glide_polar);
     return bce.search(fixed_one);
   } else {
-    return 1.0;
+    return fixed_one;
   }
 }
+
+fixed 
+OrderedTask::calc_effective_mc(const AIRCRAFT_STATE &aircraft) 
+{
+  if (activeTaskPoint>0) {
+    TaskEffectiveMacCready bce(tps,activeTaskPoint, aircraft, glide_polar);
+    return bce.search(glide_polar.get_mc());
+  } else {
+    return glide_polar.get_mc();
+  }
+}
+
 
 fixed
 OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft, 
@@ -584,7 +599,7 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
 }
 
 
-double 
+fixed 
 OrderedTask::calc_gradient(const AIRCRAFT_STATE &state) 
 {
   fixed g_best = fixed_zero;

@@ -50,6 +50,7 @@ TaskStats::reset()
   Time = fixed_zero;
   glide_required = fixed_zero;
   cruise_efficiency = fixed_one;
+  effective_mc = fixed_zero;
   mc_best = fixed_zero;
   distance_nominal = fixed_zero;
   distance_max = fixed_zero;

@@ -40,6 +40,7 @@
 #include "UnorderedTask.hpp"
 #include <vector>
 #include "Waypoint/Waypoints.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 
 /**
  * Abort task provides automatic management of a sorted list of task points
@@ -232,7 +233,7 @@ protected:
                       const bool only_airfield,
                       const bool final_glide);
 
-  typedef std::pair<Waypoint,double> WP_ALT; /**< Class used to hold sorting data, second item is arival altitude */
+  typedef std::pair<Waypoint,fixed> WP_ALT; /**< Class used to hold sorting data, second item is arival altitude */
 
   /**
    * Function object used to rank waypoints by arrival altitude

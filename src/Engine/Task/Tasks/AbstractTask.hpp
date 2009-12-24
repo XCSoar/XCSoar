@@ -38,14 +38,15 @@
 #define ABSTRACTTASK_H
 
 #include "TaskInterface.hpp"
-#include "Task/TaskEvents.hpp"
-#include "Task/TaskBehaviour.hpp"
-#include "Task/TaskAdvance.hpp"
 #include "Task/TaskStats/TaskStats.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "Util/Filter.hpp"
 
 class TaskPointVisitor;
+class AbortTask;
+class TaskBehaviour;
+class TaskEvents;
+class TaskAdvance;
+class GlidePolar;
 
 /**
  * Abstract base class for actual navigatable tasks.
@@ -177,7 +178,7 @@ protected:
  * 
  * @return Best MC value found (m/s)
  */
-  virtual double calc_mc_best(const AIRCRAFT_STATE &state_now) = 0;
+  virtual fixed calc_mc_best(const AIRCRAFT_STATE &state_now) = 0;
 
 /** 
  * Calculate virtual sink rate of aircraft that allows a pure glide solution
@@ -188,7 +189,7 @@ protected:
  * 
  * @return Sink rate of aircraft (m/s)
  */
-  virtual double calc_glide_required(const AIRCRAFT_STATE &state_now) = 0;
+  virtual fixed calc_glide_required(const AIRCRAFT_STATE &state_now) = 0;
 
 /** 
  * Calculate cruise efficiency for the travelled part of the task.
@@ -202,9 +203,21 @@ protected:
  * 
  * @return Cruise efficiency (0-1)
  */
-  virtual double calc_cruise_efficiency(const AIRCRAFT_STATE &state_now) {
-    return 1.0;
+  virtual fixed calc_cruise_efficiency(const AIRCRAFT_STATE &state_now) {
+    return fixed_one;
   }
+
+/** 
+ * Calculate effective MacCready for the travelled part of the task.
+ * 
+ * Defaults to MC for non-ordered tasks, since non-ordered tasks have no
+ * task start time.
+ *
+ * @param state_now Aircraft state
+ * 
+ * @return Cruise efficiency (0-1)
+ */
+  virtual fixed calc_effective_mc(const AIRCRAFT_STATE &state_now);
 
 /** 
  * Optimise target ranges (for adjustable tasks) to produce an estimated
@@ -230,7 +243,7 @@ protected:
  * 
  * @return Gradient angle of remainder of task
  */
-  double leg_gradient(const AIRCRAFT_STATE &state_now);
+  fixed leg_gradient(const AIRCRAFT_STATE &state_now);
 
 /** 
  * Calculate angle from aircraft to remainder of task (height above finish divided
@@ -240,7 +253,7 @@ protected:
  * 
  * @return Gradient angle of remainder of task
  */
-  virtual double calc_gradient(const AIRCRAFT_STATE &state_now) = 0;
+  virtual fixed calc_gradient(const AIRCRAFT_STATE &state_now) = 0;
 
 /** 
  * Calculate task start time.  Default behaviour is current time, to be used
@@ -250,7 +263,7 @@ protected:
  * 
  * @return Time (s) of start of task
  */
-  virtual double scan_total_start_time(const AIRCRAFT_STATE &state_now) = 0;
+  virtual fixed scan_total_start_time(const AIRCRAFT_STATE &state_now) = 0;
 
 /** 
  * Calculate leg start time.  Default behaviour is current time, to be used
@@ -260,7 +273,7 @@ protected:
  * 
  * @return Time (s) of start of leg
  */
-  virtual double scan_leg_start_time(const AIRCRAFT_STATE &state_now) = 0;
+  virtual fixed scan_leg_start_time(const AIRCRAFT_STATE &state_now) = 0;
 
 /** 
  * Calculate distance of nominal task (sum of distances from each
@@ -367,8 +380,8 @@ protected:
                                       GlideResult &leg,
                                       DistanceRemainingStat &total_remaining_effective,
                                       DistanceRemainingStat &leg_remaining_effective,
-                                      const double total_t_elapsed,
-                                      const double leg_t_elapsed) = 0;
+                                      const fixed total_t_elapsed,
+                                      const fixed leg_t_elapsed) = 0;
 
 protected:
 
@@ -399,6 +412,7 @@ private:
 
   Filter mc_lpf; /**< low pass filter on best MC calculations */
   Filter ce_lpf; /**< low pass filter on cruise efficiency calculations */
+  Filter em_lpf; /**< low pass filter on effective MC calculations */
 
   bool trigger_auto; /**< whether auto MC has been triggered (above final glide) */
 

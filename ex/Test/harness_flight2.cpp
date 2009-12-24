@@ -12,6 +12,7 @@ extern double time_elapsed;
 extern double time_planned;
 extern double time_remaining;
 extern double calc_cruise_efficiency;
+extern double calc_effective_mc;
 
 
 bool test_speed_factor(int test_num, int n_wind) 
@@ -44,7 +45,6 @@ bool test_speed_factor(int test_num, int n_wind)
 
 bool test_cruise_efficiency(int test_num, int n_wind) 
 {
-
   // tests functionality of cruise efficiency calculations
 
   double ce0, ce1, ce2, ce3, ce4, ce5, ce6;
@@ -131,6 +131,8 @@ bool test_cruise_efficiency(int test_num, int n_wind)
   }
   return retval;
 }
+
+
 
 
 bool test_aat(int test_num, int n_wind) 
@@ -301,4 +303,95 @@ bool test_airspace(const unsigned n_airspaces)
   bool fine = test_flight(4,0);
   delete airspaces; airspaces = NULL;
   return fine;
+}
+
+
+
+bool test_effective_mc(int test_num, int n_wind) 
+{
+  // tests functionality of effective mc calculations
+
+  double ce0, ce1, ce2, ce3, ce4, ce5, ce6;
+
+  bearing_noise = 0.0;
+  target_noise = 0.1;
+
+  test_flight(test_num, n_wind);
+  ce0 = calc_effective_mc;
+
+  // wandering
+  bearing_noise = 40.0;
+  test_flight(test_num, n_wind);
+  ce1 = calc_effective_mc;
+  // effective mc of this should be lower than nominal
+  ok (ce0>ce1, test_name("emc wandering",test_num, n_wind),0);
+  if (ce0<=ce1 || verbose) {
+    printf("# calc effective mc %g\n", calc_effective_mc);
+  }
+
+  // flying too slow
+  bearing_noise = 0.0;
+  test_flight(test_num, n_wind, 0.8);
+  ce2 = calc_effective_mc;
+  // effective mc of this should be lower than nominal
+  ok (ce0>ce2, test_name("emc speed slow",test_num, n_wind),0);
+  if (ce0<=ce2 || verbose) {
+    printf("# calc effective mc %g\n", calc_effective_mc);
+  }
+
+  // flying too fast
+  bearing_noise = 0.0;
+  test_flight(test_num, n_wind, 1.2);
+  ce3 = calc_effective_mc;
+  // effective mc of this should be lower than nominal
+  ok (ce0>ce3, test_name("emc speed fast",test_num, n_wind),0);
+  if (ce0<=ce3 || verbose) {
+    printf("# calc effective mc %g\n", calc_effective_mc);
+  }
+
+  // higher than expected cruise sink
+  sink_factor = 1.2;
+  test_flight(test_num, n_wind);
+  ce4 = calc_effective_mc;
+  ok (ce0>ce4, test_name("emc high sink",test_num, n_wind),0);
+  // effective mc of this should be lower than nominal
+  sink_factor = 1.0;
+  if (ce0<=ce4 || verbose) {
+    printf("# calc effective mc %g\n", calc_effective_mc);
+  }
+
+  // slower than expected climb
+  climb_factor = 0.8;
+  test_flight(test_num, n_wind);
+  ce5 = calc_effective_mc;
+  ok (ce0>ce5, test_name("emc slow climb",test_num, n_wind),0);
+  // effective mc of this should be lower than nominal
+  climb_factor = 1.0;
+  if (ce0<=ce5 || verbose) {
+    printf("# calc effective mc %g\n", calc_effective_mc);
+  }
+
+  // lower than expected cruise sink; 
+  sink_factor = 0.8;
+  test_flight(test_num, n_wind);
+  ce6 = calc_effective_mc;
+  ok (ce0<ce6, test_name("emc low sink",test_num, n_wind),0);
+  // effective mc of this should be greater than nominal
+  sink_factor = 1.0;
+  if (ce0>=ce6 || verbose) {
+    printf("# calc effective mc %g\n", calc_effective_mc);
+  }
+
+  bool retval = (ce0>ce1) && (ce0>ce2) && (ce0>ce3) && (ce0>ce4) && (ce0>ce5)
+    && (ce0<ce6);
+  if (verbose || !retval) {
+    printf("# emc nominal %g\n",ce0);
+    printf("# emc wandering %g\n",ce1);
+    printf("# emc speed slow %g\n",ce2);
+    printf("# emc speed fast %g\n",ce3);
+    printf("# emc high sink %g\n",ce4);
+    printf("# emc slow climb %g\n",ce5);
+    printf("# emc low sink %g\n",ce6);
+  }
+  return retval;
 }

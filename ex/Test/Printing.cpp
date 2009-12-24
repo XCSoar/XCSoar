@@ -279,7 +279,7 @@ AbstractTask::print(const AIRCRAFT_STATE &state)
 
   if (first) {
     first = false;
-    f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc task_vario\n";
+    f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc task_vario effective_mc\n";
   }
 
   if (stats.Time>0) {
@@ -294,6 +294,7 @@ AbstractTask::print(const AIRCRAFT_STATE &state)
        << " " << stats.total.remaining_effective.get_speed() 
        << " " << stats.total.remaining_effective.get_speed_incremental() 
        << " " << stats.total.vario.get_value() 
+       << " " << stats.effective_mc
        << "\n";
     f6.flush();
   } else {

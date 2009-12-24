@@ -39,6 +39,7 @@
 #include "Navigation/Aircraft.hpp"
 #include "BaseTask/TaskPoint.hpp"
 #include "Util/Gradient.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 
 
 AbstractTask::AbstractTask(const TaskEvents &te,
@@ -53,6 +54,7 @@ AbstractTask::AbstractTask(const TaskEvents &te,
   glide_polar(gp),
   mc_lpf(10.0),
   ce_lpf(60.0),
+  em_lpf(60.0),
   trigger_auto(false)
 {
 }
@@ -63,7 +65,7 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 {
   bool retval = false;
   if (task_started() && task_behaviour.auto_mc) {
-    double mc_found = calc_mc_best(state);
+    fixed mc_found = calc_mc_best(state);
     if (trigger_auto || (mc_found > stats.mc_best)) {
       trigger_auto = true;
       stats.mc_best = mc_lpf.update(mc_found);
@@ -77,11 +79,19 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
     trigger_auto = false;
     stats.mc_best = mc_lpf.reset(glide_polar.get_mc());
   }
+
   if (task_started() && task_behaviour.calc_cruise_efficiency) {
     stats.cruise_efficiency = ce_lpf.update(calc_cruise_efficiency(state));
     retval = true;
   } else {
     stats.cruise_efficiency = ce_lpf.reset(1.0);
+  }
+
+  if (task_started() && task_behaviour.calc_effective_mc) {
+    stats.effective_mc = em_lpf.update(calc_effective_mc(state));
+    retval = true;
+  } else {
+    stats.effective_mc = em_lpf.reset(glide_polar.get_mc());
   }
 
   if (task_behaviour.calc_glide_required) {
@@ -243,17 +253,24 @@ AbstractTask::reset()
 }
 
 
-double
+fixed
 AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) 
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
-    return 0.0;
+    return fixed_zero;
   }
   const fixed d = tp->get_vector_remaining(aircraft).Distance;
   if (d) {
     return (aircraft.NavAltitude-tp->get_elevation())/d;
   } else {
-    return 0.0;
+    return fixed_zero;
   }
+}
+
+
+fixed 
+AbstractTask::calc_effective_mc(const AIRCRAFT_STATE &state_now) 
+{
+  return glide_polar.get_mc();
 }

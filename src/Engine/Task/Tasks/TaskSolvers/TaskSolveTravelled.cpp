@@ -34,53 +34,44 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef TASKSTATS_HPP
-#define TASKSTATS_HPP
+#include "TaskSolveTravelled.hpp"
+#include <math.h>
+#include "Util/Tolerances.hpp"
 
-#include "ElementStat.hpp"
-
-/**
- * Container for common task statistics
- */
-class TaskStats 
+TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps,
+                                       const unsigned activeTaskPoint,
+                                       const AIRCRAFT_STATE &_aircraft,
+                                       const GlidePolar &gp,
+                                       const fixed _xmin, 
+                                       const fixed _xmax):
+  ZeroFinder(fixed(_xmin), fixed(_xmax), fixed(TOLERANCE_CRUISE_EFFICIENCY)),
+  tm(tps,activeTaskPoint,gp),
+  aircraft(_aircraft) 
 {
-public:
-/** 
- * Constructor.  Initialises all to zero.
- * 
- */
-  TaskStats();
+  dt = aircraft.Time-tps[0]->get_state_entered().Time;
+  if (positive(dt)) {
+    inv_dt = fixed_one/dt;
+  } else {
+    inv_dt = fixed_zero; // error!
+  }
+}
 
-  ElementStat total; /**< Total task statistics */
-  ElementStat current_leg; /**< Current (active) leg statistics */
+fixed 
+TaskSolveTravelled::time_error() 
+{
+  res = tm.glide_solution(aircraft);
+  fixed d = fabs(res.TimeElapsed-dt);
+  if (!res.Solution==GlideResult::RESULT_OK) {
+    d += res.TimeVirtual;
+  }
+  if (positive(dt)) {
+    d*= inv_dt;
+  }
+  return d;
+}
 
-  fixed Time; /**< Global time (UTC, s) of last update */
-
-  // calculated values
-  fixed glide_required; /**< Calculated glide angle required */
-  fixed cruise_efficiency; /**< Calculated cruise efficiency ratio */
-  fixed effective_mc; /**< Calculated effective MC (m/s) */
-  fixed mc_best; /**< Best MacCready setting calculated for final glide (m/s) */
-
-  fixed distance_nominal; /**< Nominal task distance (m) */
-  fixed distance_max; /**< Maximum achievable task distance (m) */
-  fixed distance_min; /**< Minimum achievable task distance (m) */
-  fixed distance_scored; /**< Scored distance (m) */
-
-  bool task_valid; /**< Whether the task is navigable */
-  bool task_finished; /**< Whether the task is finished */
-
-/** 
- * Reset each element (for incremental speeds).
- * 
- */
-  void reset();
-
-#ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, 
-                                   const TaskStats& ts);
-#endif
-};
-
-
-#endif
+fixed 
+TaskSolveTravelled::search(const fixed ce) 
+{
+  return find_min(ce);
+}

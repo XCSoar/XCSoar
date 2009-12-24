@@ -63,6 +63,7 @@ TaskBehaviour::TaskBehaviour():
     optimise_targets_bearing(true),
     auto_mc(false),
     calc_cruise_efficiency(true),
+    calc_effective_mc(true),
     calc_glide_required(true),
     goto_nonlandable(true),
     task_scored(true),

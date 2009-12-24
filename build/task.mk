@@ -81,7 +81,9 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCreadyRemaining.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCreadyTotal.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskBestMc.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskSolveTravelled.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskCruiseEfficiency.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskEffectiveMacCready.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMinTarget.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskOptTarget.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskGlideRequired.cpp \

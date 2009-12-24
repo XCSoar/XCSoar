@@ -34,53 +34,58 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef TASKSTATS_HPP
-#define TASKSTATS_HPP
+#ifndef TASKSOLVETRAVELLED_HPP
+#define TASKSOLVETRAVELLED_HPP
 
-#include "ElementStat.hpp"
+#include "TaskMacCreadyTravelled.hpp"
+#include "Util/ZeroFinder.hpp"
 
 /**
- * Container for common task statistics
+ *  Abstract class to solve for travelled time.
  */
-class TaskStats 
+class TaskSolveTravelled: 
+  public ZeroFinder
 {
 public:
 /** 
- * Constructor.  Initialises all to zero.
+ * Constructor for ordered task points
  * 
+ * @param tps Vector of ordered task points comprising the task
+ * @param activeTaskPoint Current active task point in sequence
+ * @param _aircraft Current aircraft state
+ * @param gp Glide polar to copy for calculations
  */
-  TaskStats();
+  TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps,
+                     const unsigned activeTaskPoint,
+                     const AIRCRAFT_STATE &_aircraft,
+                     const GlidePolar &gp,
+                     const fixed xmin,
+                     const fixed xmax);
+  virtual ~TaskSolveTravelled() {};
 
-  ElementStat total; /**< Total task statistics */
-  ElementStat current_leg; /**< Current (active) leg statistics */
-
-  fixed Time; /**< Global time (UTC, s) of last update */
-
-  // calculated values
-  fixed glide_required; /**< Calculated glide angle required */
-  fixed cruise_efficiency; /**< Calculated cruise efficiency ratio */
-  fixed effective_mc; /**< Calculated effective MC (m/s) */
-  fixed mc_best; /**< Best MacCready setting calculated for final glide (m/s) */
-
-  fixed distance_nominal; /**< Nominal task distance (m) */
-  fixed distance_max; /**< Maximum achievable task distance (m) */
-  fixed distance_min; /**< Minimum achievable task distance (m) */
-  fixed distance_scored; /**< Scored distance (m) */
-
-  bool task_valid; /**< Whether the task is navigable */
-  bool task_finished; /**< Whether the task is finished */
+/**
+ * Calls travelled calculator 
+ *
+ * @return Time error
+ */
+  fixed time_error();
 
 /** 
- * Reset each element (for incremental speeds).
+ * Search for parameter value.
  * 
+ * @param ce Default parameter value
+ * 
+ * @return Value producing same travelled time
  */
-  void reset();
+  virtual fixed search(const fixed ce);
 
-#ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, 
-                                   const TaskStats& ts);
-#endif
+protected:
+  TaskMacCreadyTravelled tm; /**< Travelled calculator */
+private:
+  GlideResult res;
+  const AIRCRAFT_STATE &aircraft;
+  fixed inv_dt;
+  fixed dt;
 };
-
 
 #endif

@@ -49,7 +49,7 @@ UnorderedTask::UnorderedTask(const TaskEvents &te,
 }
 
 
-double 
+fixed 
 UnorderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft)
 {
   TaskPoint *tp = getActiveTaskPoint();
@@ -66,12 +66,12 @@ UnorderedTask::check_task() const
   return (getActiveTaskPoint()!=NULL);
 }
 
-double 
+fixed 
 UnorderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft)
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
-    return 0.0;
+    return fixed_zero;
   }
   TaskGlideRequired bgr(tp, aircraft, glide_polar);
   return bgr.search(fixed_zero);
@@ -110,8 +110,8 @@ UnorderedTask::glide_solution_planned(const AIRCRAFT_STATE &state,
                                       GlideResult &leg,
                                       DistanceRemainingStat &total_remaining_effective,
                                       DistanceRemainingStat &leg_remaining_effective,
-                                      const double total_t_elapsed,
-                                      const double leg_t_elapsed)
+                                      const fixed total_t_elapsed,
+                                      const fixed leg_t_elapsed)
 {
   GlideResult res = stats.total.solution_remaining;
   total = res;
@@ -122,13 +122,13 @@ UnorderedTask::glide_solution_planned(const AIRCRAFT_STATE &state,
 
 
 
-double 
+fixed 
 UnorderedTask::scan_total_start_time(const AIRCRAFT_STATE &state)
 {
   return state.Time;
 }
 
-double 
+fixed 
 UnorderedTask::scan_leg_start_time(const AIRCRAFT_STATE &state)
 {
   return state.Time;
@@ -177,7 +177,7 @@ UnorderedTask::scan_distance_remaining(const GEOPOINT &location)
   return tp->distance(location);
 }
 
-double 
+fixed 
 UnorderedTask::calc_gradient(const AIRCRAFT_STATE &state) 
 {
   return leg_gradient(state);

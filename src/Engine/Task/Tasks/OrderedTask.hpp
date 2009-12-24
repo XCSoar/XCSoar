@@ -367,7 +367,7 @@ protected:
  * 
  * @return Time (s) of start of task
  */
-  double scan_total_start_time(const AIRCRAFT_STATE &state_now);
+  fixed scan_total_start_time(const AIRCRAFT_STATE &state_now);
 
 /** 
  * Calculate leg start time.
@@ -376,7 +376,7 @@ protected:
  * 
  * @return Time (s) of start of leg
  */
-  double scan_leg_start_time(const AIRCRAFT_STATE &state_now);
+  fixed scan_leg_start_time(const AIRCRAFT_STATE &state_now);
 
 
 /** 
@@ -422,8 +422,8 @@ protected:
                               GlideResult &leg,
                               DistanceRemainingStat &total_remaining_effective,
                               DistanceRemainingStat &leg_remaining_effective,
-                              const double total_t_elapsed,
-                              const double leg_t_elapsed);
+                              const fixed total_t_elapsed,
+                              const fixed leg_t_elapsed);
 
 /** 
  * Calculate/search for best MC, being the highest MC value to produce a
@@ -433,7 +433,7 @@ protected:
  * 
  * @return Best MC value found (m/s)
  */
-  double calc_mc_best(const AIRCRAFT_STATE &state_now);
+  fixed calc_mc_best(const AIRCRAFT_STATE &state_now);
 
 /** 
  * Calculate virtual sink rate of aircraft that allows a pure glide solution
@@ -444,7 +444,7 @@ protected:
  * 
  * @return Sink rate of aircraft (m/s)
  */
-  double calc_glide_required(const AIRCRAFT_STATE &state_now);
+  fixed calc_glide_required(const AIRCRAFT_STATE &state_now);
 
 /** 
  * Calculate cruise efficiency for the travelled part of the task.
@@ -455,7 +455,9 @@ protected:
  * 
  * @return Cruise efficiency (0-1)
  */
-  double calc_cruise_efficiency(const AIRCRAFT_STATE &state_now);
+  fixed calc_cruise_efficiency(const AIRCRAFT_STATE &state_now);
+
+  fixed calc_effective_mc(const AIRCRAFT_STATE &state_now);
 
 /** 
  * Optimise target ranges (for adjustable tasks) to produce an estimated
@@ -478,7 +480,7 @@ protected:
  * 
  * @return Minimum gradient angle of remainder of task
  */
-  double calc_gradient(const AIRCRAFT_STATE &state_now);
+  fixed calc_gradient(const AIRCRAFT_STATE &state_now);
 
 private:
 

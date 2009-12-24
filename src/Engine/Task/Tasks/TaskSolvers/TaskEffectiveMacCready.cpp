@@ -34,53 +34,19 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef TASKSTATS_HPP
-#define TASKSTATS_HPP
+#include "TaskEffectiveMacCready.hpp"
 
-#include "ElementStat.hpp"
-
-/**
- * Container for common task statistics
- */
-class TaskStats 
+TaskEffectiveMacCready::TaskEffectiveMacCready(const std::vector<OrderedTaskPoint*>& tps,
+                                           const unsigned activeTaskPoint,
+                                           const AIRCRAFT_STATE &_aircraft,
+                                           const GlidePolar &gp):
+  TaskSolveTravelled(tps, activeTaskPoint, _aircraft, gp, fixed(0.001), fixed(5.0))
 {
-public:
-/** 
- * Constructor.  Initialises all to zero.
- * 
- */
-  TaskStats();
+}
 
-  ElementStat total; /**< Total task statistics */
-  ElementStat current_leg; /**< Current (active) leg statistics */
-
-  fixed Time; /**< Global time (UTC, s) of last update */
-
-  // calculated values
-  fixed glide_required; /**< Calculated glide angle required */
-  fixed cruise_efficiency; /**< Calculated cruise efficiency ratio */
-  fixed effective_mc; /**< Calculated effective MC (m/s) */
-  fixed mc_best; /**< Best MacCready setting calculated for final glide (m/s) */
-
-  fixed distance_nominal; /**< Nominal task distance (m) */
-  fixed distance_max; /**< Maximum achievable task distance (m) */
-  fixed distance_min; /**< Minimum achievable task distance (m) */
-  fixed distance_scored; /**< Scored distance (m) */
-
-  bool task_valid; /**< Whether the task is navigable */
-  bool task_finished; /**< Whether the task is finished */
-
-/** 
- * Reset each element (for incremental speeds).
- * 
- */
-  void reset();
-
-#ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, 
-                                   const TaskStats& ts);
-#endif
-};
-
-
-#endif
+fixed 
+TaskEffectiveMacCready::f(const fixed mc) 
+{
+  tm.set_mc(mc);
+  return time_error();
+}

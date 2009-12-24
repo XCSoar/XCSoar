@@ -16,6 +16,7 @@ double time_elapsed=0.0;
 double time_planned=1.0;
 double time_remaining=0;
 double calc_cruise_efficiency=1.0;
+double calc_effective_mc=1.0;
 
 double aat_min_time(int test_num) {
   TaskBehaviour beh;
@@ -76,6 +77,7 @@ bool run_flight(TaskManager &task_manager,
   time_planned=1.0;
   time_remaining=0;
   calc_cruise_efficiency=1.0;
+  calc_effective_mc=1.0;
 
   static const fixed fixed_10(10);
 
@@ -165,6 +167,7 @@ bool run_flight(TaskManager &task_manager,
   time_elapsed = task_manager.get_stats().total.TimeElapsed;
   time_planned = task_manager.get_stats().total.TimePlanned;
   calc_cruise_efficiency = task_manager.get_stats().cruise_efficiency;
+  calc_effective_mc = task_manager.get_stats().effective_mc;
 
   if (verbose) {
     distance_counts();

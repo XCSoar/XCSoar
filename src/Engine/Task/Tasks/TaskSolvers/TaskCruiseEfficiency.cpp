@@ -35,42 +35,18 @@
 }
  */
 #include "TaskCruiseEfficiency.hpp"
-#include <math.h>
-#include "Util/Tolerances.hpp"
 
 TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
                                            const unsigned activeTaskPoint,
                                            const AIRCRAFT_STATE &_aircraft,
                                            const GlidePolar &gp):
-  ZeroFinder(fixed(0.1), fixed(2.0), fixed(TOLERANCE_CRUISE_EFFICIENCY)),
-  tm(tps,activeTaskPoint,gp),
-  aircraft(_aircraft) 
+  TaskSolveTravelled(tps, activeTaskPoint, _aircraft, gp, fixed(0.1), fixed(2.0))
 {
-  dt = aircraft.Time-tps[0]->get_state_entered().Time;
-  if (positive(dt)) {
-    inv_dt = fixed_one/dt;
-  } else {
-    inv_dt = fixed_zero; // error!
-  }
 }
 
 fixed 
 TaskCruiseEfficiency::f(const fixed ce) 
 {
   tm.set_cruise_efficiency(ce);
-  res = tm.glide_solution(aircraft);
-  fixed d = fabs(res.TimeElapsed-dt);
-  if (!res.Solution==GlideResult::RESULT_OK) {
-    d += res.TimeVirtual;
-  }
-  if (positive(dt)) {
-    d*= inv_dt;
-  }
-  return d;
-}
-
-fixed 
-TaskCruiseEfficiency::search(const fixed ce) 
-{
-  return find_min(ce);
+  return time_error();
 }

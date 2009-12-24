@@ -63,9 +63,9 @@ protected:
 
   bool check_task() const;
 
-  double calc_mc_best(const AIRCRAFT_STATE &state_now);
+  fixed calc_mc_best(const AIRCRAFT_STATE &state_now);
 
-  double calc_glide_required(const AIRCRAFT_STATE &state_now);
+  fixed calc_glide_required(const AIRCRAFT_STATE &state_now);
 
   void glide_solution_remaining(const AIRCRAFT_STATE &state_now, 
                                 const GlidePolar &polar,
@@ -81,12 +81,12 @@ protected:
                                       GlideResult &leg,
                                       DistanceRemainingStat &total_remaining_effective,
                                       DistanceRemainingStat &leg_remaining_effective,
-                                      const double total_t_elapsed,
-                                      const double leg_t_elapsed);
+                                      const fixed total_t_elapsed,
+                                      const fixed leg_t_elapsed);
 
-  double scan_total_start_time(const AIRCRAFT_STATE &state_now);
+  fixed scan_total_start_time(const AIRCRAFT_STATE &state_now);
 
-  double scan_leg_start_time(const AIRCRAFT_STATE &state_now);
+  fixed scan_leg_start_time(const AIRCRAFT_STATE &state_now);
 
   fixed scan_distance_nominal();
   
@@ -102,7 +102,7 @@ protected:
                             bool full,
                             fixed *dmin, fixed *dmax);
 
-  double calc_gradient(const AIRCRAFT_STATE &state_now);
+  fixed calc_gradient(const AIRCRAFT_STATE &state_now);
 
 }; 
 

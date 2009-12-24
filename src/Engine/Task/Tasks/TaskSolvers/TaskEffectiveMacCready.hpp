@@ -34,53 +34,38 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef TASKSTATS_HPP
-#define TASKSTATS_HPP
+#ifndef TASK_SOLVE_TRAVELLED_HPP
+#define TASK_SOLVE_TRAVELLED_HPP
 
-#include "ElementStat.hpp"
+#include "TaskSolveTravelled.hpp"
 
 /**
- * Container for common task statistics
+ *  Class to solve for effective MC.
+ *
+ *  This is the MC setting that would produce the same travelled speed
+ *  at 100% cruise efficiency.
+ *
+ *  This is calculated for the part of the task that has been travelled
  */
-class TaskStats 
+class TaskEffectiveMacCready: 
+  public TaskSolveTravelled
 {
 public:
 /** 
- * Constructor.  Initialises all to zero.
+ * Constructor for ordered task points
  * 
+ * @param tps Vector of ordered task points comprising the task
+ * @param activeTaskPoint Current active task point in sequence
+ * @param _aircraft Current aircraft state
+ * @param gp Glide polar to copy for calculations
  */
-  TaskStats();
+  TaskEffectiveMacCready(const std::vector<OrderedTaskPoint*>& tps,
+                       const unsigned activeTaskPoint,
+                       const AIRCRAFT_STATE &_aircraft,
+                       const GlidePolar &gp);
+  virtual ~TaskEffectiveMacCready() {};
 
-  ElementStat total; /**< Total task statistics */
-  ElementStat current_leg; /**< Current (active) leg statistics */
-
-  fixed Time; /**< Global time (UTC, s) of last update */
-
-  // calculated values
-  fixed glide_required; /**< Calculated glide angle required */
-  fixed cruise_efficiency; /**< Calculated cruise efficiency ratio */
-  fixed effective_mc; /**< Calculated effective MC (m/s) */
-  fixed mc_best; /**< Best MacCready setting calculated for final glide (m/s) */
-
-  fixed distance_nominal; /**< Nominal task distance (m) */
-  fixed distance_max; /**< Maximum achievable task distance (m) */
-  fixed distance_min; /**< Minimum achievable task distance (m) */
-  fixed distance_scored; /**< Scored distance (m) */
-
-  bool task_valid; /**< Whether the task is navigable */
-  bool task_finished; /**< Whether the task is finished */
-
-/** 
- * Reset each element (for incremental speeds).
- * 
- */
-  void reset();
-
-#ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, 
-                                   const TaskStats& ts);
-#endif
+  fixed f(const fixed ce);
 };
-
 
 #endif

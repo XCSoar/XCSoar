@@ -40,6 +40,7 @@
 #include <queue>
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "TaskSolvers/TaskSolution.hpp"
+#include "Task/TaskEvents.hpp"
 
 AbortTask::AbortTask(const TaskEvents &te, 
                      const TaskBehaviour &tb,
@@ -51,7 +52,8 @@ AbortTask::AbortTask(const TaskEvents &te,
   waypoints(wps),
   polar_safety(gp)
 {
-  // default MC value
+  // default MC value 
+  /// \todo get safety mc value from settings
   polar_safety.set_mc(fixed_one);
 }
 
