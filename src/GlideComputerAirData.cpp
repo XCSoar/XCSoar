@@ -279,13 +279,10 @@ GlideComputerAirData::Average30s()
 void
 GlideComputerAirData::Average30s()
 {
-  static double LastTime = 0;
-  static double Altitude[30];
   static double Vario[30];
   static double NettoVario[30];
   int Elapsed, i;
   long index = 0;
-  double Gain;
   static int num_samples = 0;
 
   if (time_advanced()) {
@@ -294,12 +291,9 @@ GlideComputerAirData::Average30s()
       // reset!
 
 
-    Elapsed = (int)(Basic().Time - LastBasic().Time);
+    Elapsed = (Basic().Time - LastBasic().Time).as_int();
     for (i = 0; i < Elapsed; i++) {
-      index = (long)LastTime + i;
-      index %= 30;
-
-      Altitude[index] = Basic().NavAltitude;
+      index = (LastBasic().Time + i).as_int() %30;
 
       NettoVario[index] = Basic().NettoVario;
       Vario[index] = Basic().Vario;
@@ -326,16 +320,6 @@ GlideComputerAirData::Average30s()
       Vave /= num_samples;
       NVave /= num_samples;
     }
-
-    if (!Basic().VarioAvailable) {
-      index = (Basic().Time.as_long() - 1)%30;
-      Gain = Altitude[index];
-
-      index = Basic().Time.as_long()%30;
-      Gain = Gain - Altitude[index];
-
-      Vave = Gain / 30;
-    }
     SetCalculated().Average30s =
       LowPassFilter(Calculated().Average30s, Vave, 0.8);
     SetCalculated().NettoAverage30s =
@@ -353,7 +337,6 @@ GlideComputerAirData::Average30s()
   } else {
     if (time_retreated()) {
       for (i = 0; i < 30; i++) {
-        Altitude[i] = 0;
         Vario[i] = 0;
         NettoVario[i] = 0;
       }
