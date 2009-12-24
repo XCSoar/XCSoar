@@ -158,7 +158,8 @@ static void SetBallast(void)
   }
   wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
   if (wp) {
-    if (fixed wl = glide_polar->get_wing_loading() > fixed_zero) {
+    const fixed wl = glide_polar->get_wing_loading();
+    if (wl > fixed_zero) {
       wp->GetDataField()->SetAsFloat(wl);
     } else {
       wp->hide();
