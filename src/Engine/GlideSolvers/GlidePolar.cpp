@@ -140,7 +140,6 @@ GlidePolar::SinkRate(const fixed V, const fixed n) const
 {
   const fixed w0 = SinkRate(V);
   const fixed vl = VbestLD / max(VbestLD*fixed_half, V);
-
   return max(fixed_zero, w0+(V/(fixed_two*bestLD))*(n*n-fixed_one)*vl*vl); 
 }
 

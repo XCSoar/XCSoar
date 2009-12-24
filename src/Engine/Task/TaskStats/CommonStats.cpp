@@ -31,6 +31,11 @@ CommonStats::reset()
   V_block = fixed_zero;
   V_dolphin = fixed_zero;
 
+  current_mc = fixed_zero;
+  current_risk_mc = fixed_zero;
+  current_bugs = fixed_one;
+  current_ballast = fixed_zero;
+
   clear_waypoints_in_task();
 }
 

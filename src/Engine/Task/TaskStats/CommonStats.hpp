@@ -46,6 +46,11 @@ public:
   fixed V_block; /**< Block speed to fly */
   fixed V_dolphin; /**< Dolphin speed to fly */
 
+  fixed current_mc; /**< MC setting at last update (m/s) */
+  fixed current_risk_mc; /**< Risk MC setting (m/s) */
+  fixed current_bugs; /**< Bugs setting at last update */
+  fixed current_ballast; /**< Ballast setting at last update */
+
   WaypointIdSet waypoints_in_task; /**< List of waypoints by id that are managed in the task */
 
 /** 

@@ -233,9 +233,15 @@ TaskManager::update_common_stats_task(const AIRCRAFT_STATE &state)
 }
 
 void
-TaskManager::update_common_stats_speed_to_fly(const AIRCRAFT_STATE &state)
+TaskManager::update_common_stats_polar(const AIRCRAFT_STATE &state)
 {
-  /// \todo Adjust MC accounting for risk
+
+  common_stats.current_mc = m_glide_polar.get_mc();
+  common_stats.current_bugs = m_glide_polar.get_bugs();
+  common_stats.current_ballast = m_glide_polar.get_ballast();
+
+  /// \todo Adjust MC accounting for risk, use this for speed to fly below
+    // common_stats.current_risk_mc = ...
 
   common_stats.V_block = m_glide_polar.speed_to_fly(state,
                                                     get_stats().current_leg.solution_remaining,
@@ -252,7 +258,7 @@ TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
   update_common_stats_times(state);
   update_common_stats_task(state);
   update_common_stats_waypoints(state);
-  update_common_stats_speed_to_fly(state);
+  update_common_stats_polar(state);
 }
 
 
