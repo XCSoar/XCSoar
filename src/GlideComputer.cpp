@@ -45,11 +45,7 @@ Copyright_License {
 #include "ConditionMonitor.hpp"
 #include "TeamCodeCalculation.h"
 #include "Components.hpp"
-#ifdef OLD_TASK
-#include "WayPointList.hpp"
-#include "Task.h"
-#endif
-
+#include "PeriodClock.hpp"
 #include "Task/TaskManager.hpp"
 
 /**
@@ -133,6 +129,9 @@ GlideComputer::DoLogging()
 bool
 GlideComputer::ProcessGPS()
 {
+  PeriodClock clock;
+  clock.update();
+
   // Process basic information
   ProcessBasic();
 
@@ -164,6 +163,8 @@ GlideComputer::ProcessGPS()
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(*this);
 
+  SetCalculated().time_process_gps = clock.elapsed();
+
   return true;
 }
 
@@ -183,6 +184,9 @@ GlideComputer::SaveTaskSpeed(double val)
 void
 GlideComputer::ProcessIdle()
 {
+  PeriodClock clock;
+  clock.update();
+
   /*
   // VENTA3 Alternates
   if ( EnableAlternate1 == true ) DoAlternates(Basic, Calculated,Alternate1);
@@ -196,16 +200,9 @@ GlideComputer::ProcessIdle()
 
   CalculateWaypointReachable();
 
-#ifdef OLD_TASK
-  // if (Task is not aborted and Task consists of more than one waypoint)
-  if (!task.TaskIsTemporary()) {
-    InSector();
-    DoAutoMacCready(mc);
-    IterateEffectiveMacCready();
-  }
-#endif
   GlideComputerAirData::ProcessIdle();
   GlideComputerTask::ProcessIdle();
+  SetCalculated().time_process_idle = clock.elapsed();
 }
 
 bool
@@ -220,11 +217,6 @@ GlideComputer::ValidStartSpeed(const DWORD Margin) const
   return GlideComputerTask::ValidStartSpeed(Margin);
 }
 
-void
-GlideComputer::IterateEffectiveMacCready()
-{
-
-}
 
 void
 GlideComputer::SetLegStart()
@@ -235,7 +227,6 @@ GlideComputer::SetLegStart()
 #include "Math/NavFunctions.hpp" // used for team code
 #include "InputEvents.h"
 #include "SettingsComputer.hpp"
-#include "PeriodClock.hpp"
 #include "Math/Earth.hpp"
 
 static PeriodClock last_team_code_update;

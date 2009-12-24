@@ -64,7 +64,6 @@ public:
   virtual void ProcessIdle();
   virtual bool InsideStartHeight(const DWORD Margin=0) const;
   virtual bool ValidStartSpeed(const DWORD Margin=0) const;
-  virtual void IterateEffectiveMacCready();
   virtual void ResetEnter() {
     GlideComputerTask::ResetEnter();
   }

@@ -446,17 +446,6 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
 
   canvas.segment(Start.x, Start.y, radius, rc, alpha1, alpha2, true);
 
-  /*
-  POINT a1, a2;
-  a1.x = Start.x + fastsine(alpha1)*radius;
-  a1.y = Start.y - fastcosine(alpha1)*radius;
-  a2.x = Start.x + fastsine(alpha2)*radius;
-  a2.y = Start.y - fastcosine(alpha2)*radius;
-
-  ClipDrawLine(hDC, PS_SOLID, IBLSCALE(1),
-            a1, a2, RGB(0,0,0));
-  */
-
   Pen dash_pen(Pen::DASH, 2, Color(0, 0, 0));
   canvas.select(dash_pen);
 
@@ -488,17 +477,6 @@ void MapWindow::DrawHorizon(Canvas &canvas, const RECT rc)
 
 void MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
 {
-
-  /*
-  POINT Scale[18] = {
-    {5,-50 }, {14,-60 }, {23, -50},
-    {5,-40 }, {14,-50 }, {23, -40},
-    {5,-30 }, {14,-40 }, {23, -30},
-    {5,-20 }, {14,-30 }, {23, -20},
-    {5,-10 }, {14,-20 }, {23, -10},
-    {5, 0  }, {14,-10 }, {23,   0},
-  };*/
-
   POINT GlideBar[6] =
     { {0,0},{9,-9},{18,0},{18,0},{9,0},{0,0} };
   POINT GlideBar0[6] =
@@ -797,86 +775,6 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
     canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
   }
 }
-
-
-/*
-void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
-  POINT chevron[3];
-
-  HPEN hpOld;
-  HBRUSH hbOld;
-
-  //  TCHAR Value[10];
-  int i;
-
-  if (Appearance.DontShowSpeedToFly || !Calculated().Flying)
-    return;
-
-#ifndef _SIM_
-  if (!(Basic().AirspeedAvailable && Basic().VarioAvailable)) {
-    return;
-  }
-#else
-  // cheat
-  Basic().IndicatedAirspeed = Basic().Speed;
-#endif
-
-  hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
-  hpOld = (HPEN)SelectObject(hDC, hpBearing);
-
-  double vdiff;
-  int vsize = (rc.bottom-rc.top)/2;
-
-  vdiff = (Calculated().VOpt - Basic().IndicatedAirspeed)/40.0;
-  // 25.0 m/s is maximum scale
-  vdiff = max(-0.5,min(0.5,vdiff)); // limit it
-
-  int yoffset=0;
-  int hyoffset=0;
-  vsize = iround(fabs(vdiff*vsize));
-  int xoffset = rc.right-IBLSCALE(25);
-  int ycenter = (rc.bottom+rc.top)/2;
-
-  int k=0;
-
-  for (k=0; k<2; k++) {
-
-    for (i=0; i< vsize; i+= 5) {
-      if (vdiff>0) {
-        yoffset = i+ycenter+k;
-        hyoffset = IBLSCALE(4);
-      } else {
-        yoffset = -i+ycenter-k;
-        hyoffset = -IBLSCALE(4);
-      }
-      chevron[0].x = xoffset;
-      chevron[0].y = yoffset;
-      chevron[1].x = xoffset+IBLSCALE(10);
-      chevron[1].y = yoffset+hyoffset;
-      chevron[2].x = xoffset+IBLSCALE(20);
-      chevron[2].y = yoffset;
-
-      ClipPolyline(hDC, chevron, 3, rc);
-    }
-    if (vdiff>0) {
-      hpOld = (HPEN)SelectObject(hDC, hpSpeedSlow);
-    } else {
-      hpOld = (HPEN)SelectObject(hDC, hpSpeedFast);
-    }
-  }
-
-  SelectObject(hDC, hpBearing);
-  chevron[0].x = xoffset-IBLSCALE(3);
-  chevron[0].y = ycenter;
-  chevron[1].x = xoffset+IBLSCALE(3+20);
-  chevron[1].y = ycenter;
-  ClipPolyline(hDC, chevron, 2, rc);
-
-  SelectObject(hDC, hbOld);
-  SelectObject(hDC, hpOld);
-
-}
-*/
 
 
 #include "Gauge/GaugeCDI.hpp"

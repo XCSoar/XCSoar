@@ -372,9 +372,7 @@ OnCalcClicked(WindowControl *Sender)
   }
   if (page==ANALYSIS_PAGE_CLIMB) {
     wf->hide();
-#ifdef OLD_TASK
     dlgTaskCalculatorShowModal();
-#endif
     wf->show();
   }
   if (page==ANALYSIS_PAGE_WIND) {
@@ -388,9 +386,7 @@ OnCalcClicked(WindowControl *Sender)
   }
   if ((page==ANALYSIS_PAGE_TASK) || (page==ANALYSIS_PAGE_TASK_SPEED)) {
     wf->hide();
-#ifdef OLD_TASK
     dlgTaskCalculatorShowModal();
-#endif
     wf->show();
   }
   if (page==ANALYSIS_PAGE_OLC) {

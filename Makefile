@@ -26,7 +26,7 @@ include $(topdir)/build/common.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
 
-CPPFLAGS += -DFLARM_AVERAGE -DFIXED_MATH
+CPPFLAGS += -DFLARM_AVERAGE -DFIXED_MATH -DDRAWLOAD
 
 include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
@@ -100,6 +100,7 @@ DLGS	:=\
 	$(SRC)/Dialogs/dlgStatistics.o \
 	$(SRC)/Dialogs/dlgStatus.o \
 	$(SRC)/Dialogs/dlgSwitches.o \
+	$(SRC)/Dialogs/dlgTaskCalculator.o \
 	$(SRC)/Dialogs/dlgTeamCode.o \
 	$(SRC)/Dialogs/dlgTextEntry.o \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.o \

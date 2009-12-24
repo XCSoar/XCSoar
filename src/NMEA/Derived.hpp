@@ -257,6 +257,9 @@ struct DERIVED_INFO:
 
   TaskStats task_stats;
   CommonStats common_stats;
+
+  unsigned time_process_gps;
+  unsigned time_process_idle;
 };
 
 #endif

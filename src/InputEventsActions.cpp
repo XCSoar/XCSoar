@@ -721,9 +721,7 @@ InputEvents::eventCalculator(const TCHAR *misc)
 {
   (void)misc;
   ScopePopupBlock block(main_window.popup);
-#ifdef OLD_TASK
   dlgTaskCalculatorShowModal();
-#endif
 }
 
 // Status

@@ -80,14 +80,7 @@ CalculationThread::run()
 
       // if (new GPS data available)
       if (gps_updated) {
-        device_blackboard.tick(glide_polar);
-        // inform map new data is ready
-        drawTriggerEvent.trigger();
-        
-        if (!glide_computer->Basic().VarioAvailable) {
-          TriggerVarioUpdate(); // emulate vario update
-        }
-        
+        device_blackboard.tick(glide_polar);                
       } else {
         device_blackboard.tick_fast(glide_polar);
       }
@@ -99,11 +92,19 @@ CalculationThread::run()
       // Copy mapprojection from MapProjectionBlackboard to GlideComputerBlackboard
       glide_computer->ReadMapProjection(device_blackboard.MapProjection());
       
-      mutexBlackboard.Unlock();
     }
+    mutexBlackboard.Unlock();
 
     // if (new GPS data)
     if (gps_updated) {
+
+      // inform map new data is ready
+      drawTriggerEvent.trigger();
+
+      if (!glide_computer->Basic().VarioAvailable) {
+        TriggerVarioUpdate(); // emulate vario update
+      }
+
       // process GPS data
       // if (time advanced)
       if (glide_computer->ProcessGPS()){

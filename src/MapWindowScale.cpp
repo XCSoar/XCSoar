@@ -225,8 +225,10 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
 
     #ifdef DRAWLOAD
     canvas.select(MapWindowFont);
-    _stprintf(ScaleInfo,TEXT("    %d ms"),
-              GetAverageTime());
+    _stprintf(ScaleInfo,TEXT("draw %d gps %d idle %d"),
+              GetAverageTime(),
+              Calculated().time_process_gps,
+              Calculated().time_process_idle);
 
     canvas.text(rc.left, rc.top, ScaleInfo);
     #endif

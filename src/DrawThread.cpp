@@ -90,6 +90,7 @@ DrawThread::run()
   // circle until application is closed
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
+
       // take control (or wait for the resume())
       running.wait();
 
@@ -113,6 +114,13 @@ DrawThread::run()
       // Draw the moving map
       map.DrawThreadLoop();
 
+      if (drawTriggerEvent.test()) {
+        // interrupt re-calculation of bounds if there was a 
+        // request made.  Since we will re-enter, we know the remainder
+        // of this code will be called anyway.
+        continue;
+      }
+
       if (map.SmartBounds(false)) {
         // this call is quick
         bounds_dirty = map.Idle(true);
@@ -129,5 +137,5 @@ DrawThread::run()
 
       continue;
     }
-  } while (!closeTriggerEvent.wait(500));
+  } while (!closeTriggerEvent.wait(MIN_WAIT_TIME));
 }
