@@ -1,20 +1,20 @@
 TEST_SRC = \
-	Test/Printing.cpp \
-	Test/test_debug.cpp \
-	Test/harness_aircraft.cpp \
-	Test/harness_airspace.cpp \
-	Test/harness_flight.cpp \
-	Test/harness_flight2.cpp \
-	Test/harness_waypoints.cpp \
-	Test/harness_task.cpp \
-	Test/harness_task2.cpp \
-	Test/TaskEventsPrint.cpp \
-	Test/tap.c
+	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/test_debug.cpp \
+	$(TEST_SRC_DIR)/harness_aircraft.cpp \
+	$(TEST_SRC_DIR)/harness_airspace.cpp \
+	$(TEST_SRC_DIR)/harness_flight.cpp \
+	$(TEST_SRC_DIR)/harness_flight2.cpp \
+	$(TEST_SRC_DIR)/harness_waypoints.cpp \
+	$(TEST_SRC_DIR)/harness_task.cpp \
+	$(TEST_SRC_DIR)/harness_task2.cpp \
+	$(TEST_SRC_DIR)/TaskEventsPrint.cpp \
+	$(TEST_SRC_DIR)/tap.c
 
 ifeq ($(HAVE_WIN32),y)
-TEST_SRC += Test/winmain.cpp
+TEST_SRC += $(TEST_SRC_DIR)/winmain.cpp
 endif
 
-$(topdir)/Test/harness-$(TARGET).a: $(patsubst %.cpp,%-$(TARGET).o,$(TEST_SRC:.c=-$(TARGET).o))
+$(TEST_SRC_DIR)/harness-$(TARGET).a: $(patsubst %.cpp,%-$(TARGET).o,$(TEST_SRC:.c=-$(TARGET).o))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^

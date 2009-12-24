@@ -108,6 +108,6 @@ TASK_SRC	:=\
 	$(topdir)/src/Util/tstring.cpp \
 	$(topdir)/src/Util/ZeroFinder.cpp 
 
-$(topdir)/src/task-$(TARGET).a: $(patsubst %.cpp,%-$(TARGET).o,$(TASK_SRC:.c=-$(TARGET).o))
+$(SRC)/task-$(TARGET).a: $(patsubst %.cpp,%-$(TARGET).o,$(TASK_SRC:.c=-$(TARGET).o))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^

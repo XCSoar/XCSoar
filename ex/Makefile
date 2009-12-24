@@ -1,6 +1,7 @@
 
 topdir = .
 SRC := $(topdir)/src
+TEST_SRC_DIR = Test
 
 include $(topdir)/build/verbose.mk
 include $(topdir)/build/targets.mk
@@ -35,7 +36,7 @@ include $(topdir)/build/test.mk
 
 ####### sources
 
-OUTPUTS = $(topdir)/src/task-$(TARGET).a $(topdir)/Test/harness-$(TARGET).a $(TESTS) 
+OUTPUTS = $(SRC)/task-$(TARGET).a $(TEST_SRC_DIR)/harness-$(TARGET).a $(TESTS)
 
 all: $(OUTPUTS)
 	@echo "done"
