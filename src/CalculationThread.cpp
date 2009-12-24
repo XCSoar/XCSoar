@@ -71,33 +71,36 @@ CalculationThread::run()
     if (!data_trigger.wait(MIN_WAIT_TIME))
       continue;
 
-    // update and transfer master info to glide computer
-    mutexBlackboard.Lock();
-
-    const GlidePolar& glide_polar = glide_computer->get_glide_polar();
     const bool gps_updated = gps_trigger.test();
 
-    // if (new GPS data available)
-    if (gps_updated) {
-      device_blackboard.tick(glide_polar);
-      // inform map new data is ready
-      drawTriggerEvent.trigger();
+    // update and transfer master info to glide computer
+    mutexBlackboard.Lock();
+    {
+      const GlidePolar& glide_polar = glide_computer->get_glide_polar();
 
-      if (!glide_computer->Basic().VarioAvailable) {
-        TriggerVarioUpdate(); // emulate vario update
+      // if (new GPS data available)
+      if (gps_updated) {
+        device_blackboard.tick(glide_polar);
+        // inform map new data is ready
+        drawTriggerEvent.trigger();
+        
+        if (!glide_computer->Basic().VarioAvailable) {
+          TriggerVarioUpdate(); // emulate vario update
+        }
+        
+      } else {
+        device_blackboard.tick_fast(glide_polar);
       }
-
-    } else {
-      device_blackboard.tick_fast(glide_polar);
+      
+      // Copy data from DeviceBlackboard to GlideComputerBlackboard
+      glide_computer->ReadBlackboard(device_blackboard.Basic());
+      // Copy settings form SettingsComputerBlackboard to GlideComputerBlackboard
+      glide_computer->ReadSettingsComputer(device_blackboard.SettingsComputer());
+      // Copy mapprojection from MapProjectionBlackboard to GlideComputerBlackboard
+      glide_computer->ReadMapProjection(device_blackboard.MapProjection());
+      
+      mutexBlackboard.Unlock();
     }
-
-    // Copy data from DeviceBlackboard to GlideComputerBlackboard
-    glide_computer->ReadBlackboard(device_blackboard.Basic());
-    // Copy settings form SettingsComputerBlackboard to GlideComputerBlackboard
-    glide_computer->ReadSettingsComputer(device_blackboard.SettingsComputer());
-    // Copy mapprojection from MapProjectionBlackboard to GlideComputerBlackboard
-    glide_computer->ReadMapProjection(device_blackboard.MapProjection());
-    mutexBlackboard.Unlock();
 
     // if (new GPS data)
     if (gps_updated) {
@@ -123,7 +126,9 @@ CalculationThread::run()
     // should be changed in DoCalculations, so we only need to write
     // that one back (otherwise we may write over new data)
     mutexBlackboard.Lock();
-    device_blackboard.ReadBlackboard(glide_computer->Calculated());
+    {
+      device_blackboard.ReadBlackboard(glide_computer->Calculated());
+    }
     mutexBlackboard.Unlock();
 
     // reset triggers
