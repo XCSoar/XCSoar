@@ -55,6 +55,13 @@ fixed AngleLimit180(fixed theta);
  */
 fixed AngleLimit360(fixed theta);
 
+/**
+ * Limits the angle (theta) to -180 - +180 degrees
+ * @param theta Input angle
+ * @return Output angle (-180 - +180 degrees)
+ */
+double AngleLimit360(double theta);
+
 fixed BiSector(fixed InBound, fixed OutBound);
 
 /**

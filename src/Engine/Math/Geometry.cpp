@@ -71,6 +71,17 @@ fixed AngleLimit180(fixed theta) {
   return theta;
 }
 
+double AngleLimit360(double theta)
+{
+  while (theta < fixed_zero)
+    theta += 360.0;
+
+  while (theta > fixed_360)
+    theta -= 360.0;
+
+  return theta;
+}
+
 /**
  * Rotate angle by 180 degrees and limit to 0 - 360 degrees
  * @param InBound Input angle
