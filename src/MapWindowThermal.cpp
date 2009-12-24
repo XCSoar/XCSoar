@@ -161,7 +161,8 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   // calculate averages
   int numtherm = 0;
 
-  const double mc = task->get_glide_polar().get_mc();
+  const double mc = task != NULL
+    ? task->get_glide_polar().get_mc() : fixed_zero;
   Wmax = max(0.5,mc);
 
   for (i=0; i<NUMTHERMALBUCKETS; i++) {

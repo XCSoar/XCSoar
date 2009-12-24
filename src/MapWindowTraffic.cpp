@@ -81,7 +81,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   Brush greenBrush(Color(0x00,0xFF,0x00));
 
   // Saves the McCready value
-  const double MACCREADY = task->get_glide_polar().get_mc();
+  const double MACCREADY = task != NULL
+    ? task->get_glide_polar().get_mc() : fixed_zero;
 
   // Circle through the FLARM targets
   for (int i = 0; i < FLARM_MAX_TRAFFIC; i++) {

@@ -458,6 +458,8 @@ private:
 void
 MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
 {
+  if (task == NULL)
+    return;
 
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */

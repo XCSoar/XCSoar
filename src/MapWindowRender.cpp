@@ -196,7 +196,7 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
 {
-  if (task->check_task()) {
+  if (task != NULL && task->check_task()) {
     DrawTask(canvas, rc, buffer_canvas);
   }
 
