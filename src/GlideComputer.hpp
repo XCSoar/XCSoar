@@ -62,7 +62,6 @@ public:
   void Initialise();
   bool ProcessGPS(); // returns true if idle needs processing
   virtual void ProcessIdle();
-  virtual bool ProcessVario();
   virtual bool InsideStartHeight(const DWORD Margin=0) const;
   virtual bool ValidStartSpeed(const DWORD Margin=0) const;
   virtual void IterateEffectiveMacCready();

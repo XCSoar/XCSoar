@@ -84,7 +84,6 @@ protected:
   void ProcessBasic();
   void ProcessVertical();
 
-  virtual bool ProcessVario();
   virtual void OnTakeoff();
   virtual void OnLanding();
   virtual void OnDepartedThermal();
@@ -104,9 +103,6 @@ private:
   void CruiseLD();
   void Wind();
   void TerrainHeight();
-  void EnergyHeight();
-  void Vario();
-  void NettoVario();
   void TakeoffLanding();
   void AirspaceWarning();
   void TerrainFootprint(const double max_dist);

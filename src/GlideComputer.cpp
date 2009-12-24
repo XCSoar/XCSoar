@@ -168,15 +168,6 @@ GlideComputer::ProcessGPS()
 }
 
 /**
- * Calls GlideComputerAirData::ProcessVario()
- */
-bool
-GlideComputer::ProcessVario()
-{
-  return GlideComputerAirData::ProcessVario();
-}
-
-/**
  * Calls GlideComputerStats::SaveTaskSpeed(val)
  * @param val Task speed
  */

@@ -128,9 +128,12 @@ void
 GlideComputerAirData::ProcessBasic()
 {
   TerrainHeight();
-  Vario();
   ProcessSun();
   SetCalculated().AdjustedAverageThermal = GetAverageThermal();
+
+  if (Basic().VarioAvailable && !Basic().Replay) {
+    CalibrationUpdate(&Basic(), &Calculated());
+  }
 }
 
 /**
@@ -432,23 +435,6 @@ GlideComputerAirData::TerrainHeight()
   }
 }
 
-/**
- */
-void
-GlideComputerAirData::Vario()
-{
-  if (Basic().VarioAvailable && !Basic().Replay) {
-    CalibrationUpdate(&Basic(), &Calculated());
-  }
-}
-
-
-bool
-GlideComputerAirData::ProcessVario()
-{
-  // has GPS time advanced?
-  return time_advanced();
-}
 
 /**
  * 1. Detects time retreat and calls ResetFlight if GPS lost

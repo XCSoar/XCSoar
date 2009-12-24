@@ -75,12 +75,18 @@ CalculationThread::run()
     mutexBlackboard.Lock();
 
     const GlidePolar& glide_polar = glide_computer->get_glide_polar();
+    const bool gps_updated = gps_trigger.test();
 
     // if (new GPS data available)
-    if (gps_trigger.test()) {
+    if (gps_updated) {
       device_blackboard.tick(glide_polar);
       // inform map new data is ready
       drawTriggerEvent.trigger();
+
+      if (!glide_computer->Basic().VarioAvailable) {
+        TriggerVarioUpdate(); // emulate vario update
+      }
+
     } else {
       device_blackboard.tick_fast(glide_polar);
     }
@@ -93,31 +99,13 @@ CalculationThread::run()
     glide_computer->ReadMapProjection(device_blackboard.MapProjection());
     mutexBlackboard.Unlock();
 
-    bool calculations_updated = false;
-
-    // Do vario first to reduce audio latency
-    // (called also when gps_trigger is not active!!)
-    if (glide_computer->Basic().VarioAvailable) {
-      glide_computer->ProcessVario();
-      calculations_updated = true;
-    } else {
-      // run the function anyway, because this gives audio functions
-      // if no vario connected
-      if (gps_trigger.test()) {
-        glide_computer->ProcessVario();
-        TriggerVarioUpdate(); // emulate vario update
-        calculations_updated = true;
-      }
-    }
-
     // if (new GPS data)
-    if (gps_trigger.test()) {
+    if (gps_updated) {
       // process GPS data
       // if (time advanced)
       if (glide_computer->ProcessGPS()){
         need_calculations_slow = true;
       }
-      calculations_updated = true;
     }
 
     // drop out on exit event
@@ -129,17 +117,14 @@ CalculationThread::run()
       // do slow calculations
       glide_computer->ProcessIdle();
       need_calculations_slow = false;
-      calculations_updated = true;
     }
 
-    if (calculations_updated) {
-      // values changed, so copy them back now: ONLY CALCULATED INFO
-      // should be changed in DoCalculations, so we only need to write
-      // that one back (otherwise we may write over new data)
-      mutexBlackboard.Lock();
-      device_blackboard.ReadBlackboard(glide_computer->Calculated());
-      mutexBlackboard.Unlock();
-    }
+    // values changed, so copy them back now: ONLY CALCULATED INFO
+    // should be changed in DoCalculations, so we only need to write
+    // that one back (otherwise we may write over new data)
+    mutexBlackboard.Lock();
+    device_blackboard.ReadBlackboard(glide_computer->Calculated());
+    mutexBlackboard.Unlock();
 
     // reset triggers
     data_trigger.reset();
