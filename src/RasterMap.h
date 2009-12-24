@@ -134,6 +134,14 @@ public:
   {
     Set(map, xr, yr);
   };
+
+    RasterRounding(const RasterMap &map,
+                   const GEOPOINT delta):
+      DirectFine(false)
+    {
+      Set(map, fabs(delta.Longitude), fabs(delta.Latitude));
+    }
+
   void Set(const RasterMap &map,
            const double xr,
            const double yr)

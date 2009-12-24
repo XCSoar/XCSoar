@@ -46,10 +46,9 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
-#include "Math/FastMath.h"
-#include "Math/Earth.hpp"
 #include "Navigation/Aircraft.hpp"
 
+#include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 
 fixed
@@ -82,48 +81,34 @@ FinalGlideThroughTerrain(const AIRCRAFT_STATE &basic,
 
   // returns distance one would arrive at altitude in straight glide
   // first estimate max range at this altitude
-  GEOPOINT loc, last_loc;
 
   // calculate terrain rounding factor
 
-  FindLatitudeLongitude(start_loc, fixed_zero,
-                        glide_max_range/NUMFINALGLIDETERRAIN, &loc);
-
-  fixed Xrounding = fabs(loc.Longitude-start_loc.Longitude)/2;
-  fixed Yrounding = fabs(loc.Latitude-start_loc.Latitude)/2;
-  const RasterRounding rounding(*map, Xrounding, Yrounding);
+  GeoVector vec(glide_max_range/NUMFINALGLIDETERRAIN, basic.TrackBearing);
+  const RasterRounding rounding(*map, (vec.end_point(start_loc)-start_loc)*fixed_half);
 
   fixed h= fixed_zero, dh= fixed_zero;
   fixed last_dh=fixed_zero;
-  fixed altitude;
+  fixed altitude = basic.NavAltitude;
 
-  fixed retval = fixed_zero;
+  GEOPOINT loc= start_loc, last_loc = start_loc;
 
-  loc = last_loc = start_loc;
-
-  altitude = basic.NavAltitude;
   h = max(fixed_zero, fixed(terrain.GetTerrainHeight(loc, rounding)));
   dh = altitude - h - settings.SafetyAltitudeTerrain;
   last_dh = dh;
 
   bool start_under = negative(dh);
 
-  // find grid
-  GEOPOINT dloc;
-
-  FindLatitudeLongitude(loc, basic.TrackBearing, glide_max_range, &dloc);
-  dloc.Latitude -= start_loc.Latitude;
-  dloc.Longitude -= start_loc.Longitude;
-
   fixed f_scale = fixed_one/NUMFINALGLIDETERRAIN;
   if (positive(max_range) && (max_range<glide_max_range)) {
     f_scale *= max_range/glide_max_range;
   }
 
-  const fixed delta_alt = -f_scale * basic.NavAltitude;
+  // find grid
+  vec.Distance = glide_max_range*f_scale;
+  GEOPOINT dloc = vec.end_point(start_loc)-start_loc;
 
-  dloc.Latitude *= f_scale;
-  dloc.Longitude *= f_scale;
+  const fixed delta_alt = -f_scale * basic.NavAltitude;
 
   for (int i=1; i<=NUMFINALGLIDETERRAIN; i++) {
     fixed f;
@@ -178,19 +163,17 @@ FinalGlideThroughTerrain(const AIRCRAFT_STATE &basic,
       solution_found = true;
     }
     if (solution_found) {
-      loc.Latitude = last_loc.Latitude*(fixed_one-f)+loc.Latitude*f;
-      loc.Longitude = last_loc.Longitude*(fixed_one-f)+loc.Longitude*f;
+      loc = loc.interpolate(last_loc, f);
       if (retloc) {
         *retloc = loc;
       }
-      return Distance(start_loc, loc);
+      return loc.distance(start_loc);
     }
     last_dh = dh;
     last_loc = loc;
   }
 
   *out_of_range = true;
-  retval = glide_max_range;
 
-  return retval;
+  return glide_max_range;
 }
