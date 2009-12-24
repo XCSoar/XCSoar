@@ -56,7 +56,7 @@ public:
   AATTaskFactory(OrderedTask& _task,
                  const TaskBehaviour &tb);
 
-    virtual ~AATTaskFactory() {};
+  ~AATTaskFactory() {};
 
 /** 
  * Check whether task is complete and valid according to factory rules

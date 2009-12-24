@@ -618,8 +618,7 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
     
     TerrainIntersection its = g_terrain.find_intersection(state, glide_polar);
     
-    SetCalculated().GlideFootPrint[i].Longitude = its.location.Longitude;
-    SetCalculated().GlideFootPrint[i].Latitude = its.location.Latitude;
+    SetCalculated().GlideFootPrint[i] = its.location;
   } 
 
   terrain.Unlock();

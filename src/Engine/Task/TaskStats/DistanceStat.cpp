@@ -64,11 +64,17 @@ DistanceStat::calc_incremental_speed(const double dt)
       }
     }
   } else {    
-    df.reset(distance,(is_positive? -1:1)*speed*(N_AV));
-    v_lpf.reset((is_positive? -1:1)*speed);
-    speed_incremental = speed;
-    av_dist.reset();
+    reset_incremental_speed();
   }
+}
+
+void
+DistanceStat::reset_incremental_speed()
+{
+  df.reset(distance,(is_positive? -1:1)*speed*(N_AV));
+  v_lpf.reset((is_positive? -1:1)*speed);
+  speed_incremental = speed;
+  av_dist.reset();
 }
 
 

@@ -112,7 +112,7 @@ public:
  * 
  * @param dt Time step (s)
  */
-  virtual void calc_incremental_speed(const double dt);
+  void calc_incremental_speed(const double dt);
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
@@ -128,6 +128,8 @@ private:
   DiffFilter df;
   Filter v_lpf;
   bool is_positive; // ideally const but then non-copyable
+
+  void reset_incremental_speed();
 };
 
 /**

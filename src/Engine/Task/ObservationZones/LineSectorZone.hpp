@@ -63,7 +63,7 @@ public:
     SymmetricSectorZone(loc, radius, fixed(180.0))
   {};
 
-  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+  ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
     if (_location) {
       return new LineSectorZone(*_location, Radius);
     } else {
@@ -80,8 +80,8 @@ public:
  * 
  * @return True if constraints are satisfied
  */
-  virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
-                                     const AIRCRAFT_STATE & ref_last) {
+  bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
+                             const AIRCRAFT_STATE & ref_last) {
     return CylinderZone::isInSector(ref_now) && CylinderZone::isInSector(ref_last);
   }
 
@@ -92,14 +92,14 @@ public:
  * 
  * @return Distance (m) to subtract from score
  */
-  virtual fixed score_adjustment() const;
+  fixed score_adjustment() const;
 
 /** 
  * Set length property
  * 
  * @param new_length Length (m) of line
  */
-  virtual void setLength(const fixed new_length) {
+  void setLength(const fixed new_length) {
     setRadius(new_length*fixed_half);
   }
   
@@ -120,7 +120,7 @@ public:
  * @return True if same type and OZ parameters
  */
 
-  virtual bool equals(const ObservationZonePoint* other) const;
+  bool equals(const ObservationZonePoint* other) const;
 public:
   DEFINE_VISITABLE();
 };

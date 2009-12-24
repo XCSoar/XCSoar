@@ -56,7 +56,7 @@ public:
   FAITaskFactory(OrderedTask& _task,
                  const TaskBehaviour &tb);
 
-    virtual ~FAITaskFactory() {};
+  ~FAITaskFactory() {};
 
 /** 
  * Check whether task is complete and valid according to factory rules

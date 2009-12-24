@@ -60,7 +60,7 @@ public:
     SymmetricSectorZone(loc, fixed(10000.0), fixed(90.0))
     {}
 
-  virtual ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
+  ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
     if (_location) {
       return new FAISectorZone(*_location);
     } else {
@@ -76,7 +76,7 @@ public:
  * @return True if same type and OZ parameters
  */
 
-  virtual bool equals(const ObservationZonePoint* other) const;
+  bool equals(const ObservationZonePoint* other) const;
 
 public:
 /**
