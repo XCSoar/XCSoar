@@ -667,7 +667,7 @@ void
 DeviceBlackboard::EnergyHeight()
 {
   const fixed ias_to_tas = Basic().pressure.AirDensityRatio(Basic().GetAnyAltitude());
-  static const fixed fixed_inv_2g = 1.0/(2.0*9.81);
+  static const fixed fixed_inv_2g (1.0/(2.0*9.81));
 
   const fixed V_target = Calculated().common_stats.V_block * ias_to_tas;
   SetBasic().EnergyHeight = (Basic().TrueAirspeed * Basic().TrueAirspeed - V_target * V_target) * fixed_inv_2g;
