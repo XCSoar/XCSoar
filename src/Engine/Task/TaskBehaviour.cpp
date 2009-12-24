@@ -69,7 +69,8 @@ TaskBehaviour::TaskBehaviour():
     aat_min_time(3600*5.35),
     safety_height_terrain(150.0),
     safety_height_arrival(300.0),
-    start_max_speed(60.0)
+    start_max_speed(60.0),
+    risk_gamma(0.0)
 {
 }
 

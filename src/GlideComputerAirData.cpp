@@ -442,38 +442,10 @@ GlideComputerAirData::Vario()
   }
 }
 
-void
-GlideComputerAirData::SpeedToFly()
-{
-  // calculate optimum cruise speed in current track direction
-  // this still makes use of mode, so it should agree with
-  // Vmaccready if the track bearing is the best cruise track
-  // this does assume g loading of 1.0
-
-  // this is basically a dolphin soaring calculator
-
-#ifdef OLD_TASK
-  double delta_mc;
-  double risk_mc;
-
-  double margin_height = Basic().TEAltitude - SettingsComputer().SafetyAltitudeBreakoff - Calculated().TerrainBase;
-
-  if ((Calculated().TaskAltitudeDifference > -120) || (Calculated().MaxThermalHeight<1)) {
-    risk_mc = mc_setting;
-  } else {
-
-    risk_mc =
-      glide_polar.mc_risk(margin_height/Calculated().MaxThermalHeight, SettingsComputer().RiskGamma);
-  }
-  SetCalculated().MacCreadyRisk = risk_mc;
-#endif
-}
 
 bool
 GlideComputerAirData::ProcessVario()
 {
-  SpeedToFly();
-
   // has GPS time advanced?
   return time_advanced();
 }
@@ -1001,18 +973,17 @@ GlideComputerAirData::OnDepartedThermal()
 void
 GlideComputerAirData::ThermalBand()
 {
-  if (!Basic().Time > LastBasic().Time)
+  if (!time_advanced())
     return;
 
   // JMW TODO accuracy: Should really work out dt here,
   //           but i'm assuming constant time steps
-  double dheight = Basic().NavAltitude
-      - SettingsComputer().SafetyAltitudeBreakoff
-      - Calculated().TerrainBase; // JMW EXPERIMENTAL
+
+  const fixed dheight = Basic().working_band_height;
 
   int index, i, j;
 
-  if (dheight < 0) {
+  if (!positive(Basic().working_band_height)) {
     return; // nothing to do.
   }
   if (Calculated().MaxThermalHeight == 0) {

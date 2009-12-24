@@ -1662,7 +1662,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(*wf, _T("prpRiskGamma"), XCSoarInterface::SettingsComputer().RiskGamma);
+  LoadFormProperty(*wf, _T("prpRiskGamma"), XCSoarInterface::SettingsComputer().risk_gamma);
   LoadFormProperty(*wf, _T("prpAnimation"), XCSoarInterface::EnableAnimation);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTrail"));
@@ -2436,10 +2436,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpRiskGamma"));
   if (wp) {
     val = wp->GetDataField()->GetAsFloat();
-    if (XCSoarInterface::SettingsComputer().RiskGamma != val) {
-      XCSoarInterface::SetSettingsComputer().RiskGamma = val;
+    if (XCSoarInterface::SettingsComputer().risk_gamma != val) {
+      XCSoarInterface::SetSettingsComputer().risk_gamma = val;
       SetToRegistry(szRegistryRiskGamma,
-		    iround(XCSoarInterface::SettingsComputer().RiskGamma*10));
+		    iround(XCSoarInterface::SettingsComputer().risk_gamma*10));
       changed = true;
     }
   }

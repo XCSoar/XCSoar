@@ -99,6 +99,9 @@ struct AIRCRAFT_STATE {
   /** Altitude used for navigation (GPS or Baro) */
   fixed NavAltitude;
 
+  /** Fraction of working band height */
+  fixed working_band_fraction;
+
   //##############
   //   Wind
   //##############

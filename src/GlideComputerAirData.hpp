@@ -106,7 +106,6 @@ private:
   void TerrainHeight();
   void EnergyHeight();
   void Vario();
-  void SpeedToFly();
   void NettoVario();
   void TakeoffLanding();
   void AirspaceWarning();

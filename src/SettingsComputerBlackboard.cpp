@@ -130,6 +130,5 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.BallastTimerActive = false;
   settings_computer.SafetyMacCready = 1.0;
   settings_computer.AbortSafetyUseCurrent = false;
-  settings_computer.RiskGamma = 0.0;
 }
 

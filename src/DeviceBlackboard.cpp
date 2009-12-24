@@ -464,6 +464,7 @@ void
 DeviceBlackboard::tick_fast(const GlidePolar& glide_polar)
 {
   EnergyHeight();
+  WorkingBand();
   Vario();
   NettoVario(glide_polar);
 }
@@ -677,6 +678,27 @@ DeviceBlackboard::EnergyHeight()
   SetBasic().TEAltitude = Basic().NavAltitude+Basic().EnergyHeight;
 }
 
+
+void
+DeviceBlackboard::WorkingBand()
+{
+  const fixed working_band_height = Basic().TEAltitude 
+    - SettingsComputer().SafetyAltitudeBreakoff 
+    - Calculated().TerrainBase;
+ 
+  SetBasic().working_band_height = working_band_height;
+  
+  if (negative(SetBasic().working_band_height)) {
+    SetBasic().working_band_fraction = fixed_zero;
+    return;
+  }
+  const fixed max_height = Calculated().MaxThermalHeight;
+  if (positive(max_height)) {
+    SetBasic().working_band_fraction = working_band_height/max_height;
+  } else {
+    SetBasic().working_band_fraction = fixed_one;
+  }
+}
 
 void
 DeviceBlackboard::AutoQNH(const GlidePolar& glide_polar)

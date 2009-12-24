@@ -50,7 +50,8 @@ AIRCRAFT_STATE::get_predicted_state(const fixed &in_time) const
 
 
 AIRCRAFT_STATE::AIRCRAFT_STATE():
-  Gload(fixed_one)
+  Gload(fixed_one),
+  working_band_fraction(fixed_one)
 {
 
 }

@@ -659,9 +659,9 @@ Profile::ReadRegistrySettings()
 
   GetFromRegistry(szRegistryUserLevel, UserLevel);
 
-  Temp = iround(SettingsComputer().RiskGamma * 10);
+  Temp = iround(SettingsComputer().risk_gamma * 10);
   GetFromRegistryD(szRegistryRiskGamma, Temp);
-  SetSettingsComputer().RiskGamma = Temp / 10.0;
+  SetSettingsComputer().risk_gamma = Temp / 10.0;
 
   Temp = (CompassAppearance_t)apCompassAltA; // VNT9 default
   GetFromRegistryD(szRegistryWindArrowStyle, Temp);

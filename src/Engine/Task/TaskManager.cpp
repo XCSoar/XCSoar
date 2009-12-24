@@ -240,16 +240,25 @@ TaskManager::update_common_stats_polar(const AIRCRAFT_STATE &state)
   common_stats.current_bugs = m_glide_polar.get_bugs();
   common_stats.current_ballast = m_glide_polar.get_ballast();
 
-  /// \todo Adjust MC accounting for risk, use this for speed to fly below
-    // common_stats.current_risk_mc = ...
+  common_stats.current_risk_mc = 
+    m_glide_polar.mc_risk(state.working_band_fraction, 
+                          task_behaviour.risk_gamma);
 
-  common_stats.V_block = m_glide_polar.speed_to_fly(state,
-                                                    get_stats().current_leg.solution_remaining,
-                                                    true);
+  GlidePolar risk_polar = m_glide_polar;
+  risk_polar.set_mc(common_stats.current_risk_mc);
 
-  common_stats.V_dolphin = m_glide_polar.speed_to_fly(state,
-                                                      get_stats().current_leg.solution_remaining,
-                                                      false);
+  common_stats.V_block = 
+    m_glide_polar.speed_to_fly(state,
+                               get_stats().current_leg.solution_remaining,
+                               true);
+
+  // note right now we only use risk mc for dolphin speeds
+
+  common_stats.V_dolphin = 
+    risk_polar.speed_to_fly(state,
+                            get_stats().current_leg.solution_remaining,
+                            false);
+
 }
 
 void

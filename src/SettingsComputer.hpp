@@ -95,7 +95,6 @@ struct SETTINGS_POLAR {
   bool BallastTimerActive;
   double SafetyMacCready;
   bool AbortSafetyUseCurrent;
-  double RiskGamma;
 };
 
 struct SETTINGS_OLC {

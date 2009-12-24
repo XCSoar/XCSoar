@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_FORM_UTIL_HPP
 
 #include <tchar.h>
+#include "Math/fixed.hpp"
 
 class WndForm;
 
@@ -58,6 +59,8 @@ void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, unsigned int value);
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, double value);
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value);
 
 /**
  * Saves a form value into a variable and into the registry.

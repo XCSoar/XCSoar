@@ -93,6 +93,7 @@ private:
   void Dynamics();
   void Wind();
   void EnergyHeight();
+  void WorkingBand();
   void TurnRate();
   void Vario();
   void NettoVario(const GlidePolar& glide_polar);

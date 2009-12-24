@@ -216,6 +216,9 @@ struct NMEA_INFO:
   /** Nav Altitude + Energy height (m) */
   fixed TEAltitude;
 
+  /** Height above working band/safety (m) */
+  fixed working_band_height;
+
   /**
    * Troposhere atmosphere model for QNH correction
    */

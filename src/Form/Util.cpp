@@ -97,6 +97,19 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, double value)
   ctl->RefreshDisplay();
 }
 
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
+{
+  assert(control_name != NULL);
+
+  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
+  if (ctl == NULL)
+    return;
+
+  ctl->GetDataField()->Set(value.as_double());
+  ctl->RefreshDisplay();
+}
+
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
                  bool &value, const TCHAR *registry_name)
