@@ -104,6 +104,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Util/AvFilter.cpp \
 	$(ENGINE_SRC_DIR)/Util/DiffFilter.cpp \
 	$(ENGINE_SRC_DIR)/Util/Filter.cpp \
+	$(ENGINE_SRC_DIR)/Util/WindowFilter.cpp \
 	$(ENGINE_SRC_DIR)/Util/Gradient.cpp \
 	$(ENGINE_SRC_DIR)/Util/tstring.cpp \
 	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp

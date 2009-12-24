@@ -62,7 +62,7 @@ public:
  * 
  * @return True if buffer is full
  */
-  bool update(const double x0);
+  virtual bool update(const double x0);
 
 /** 
  * Calculate average from samples
@@ -75,9 +75,9 @@ public:
  * Resets filter (zero samples)
  * 
  */
-  void reset();
+  virtual void reset();
 
-private:
+protected:
   std::vector<double> x;
   unsigned n;
   unsigned n_max; // ideally const but then non-copyable

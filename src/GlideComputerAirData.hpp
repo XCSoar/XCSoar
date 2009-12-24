@@ -46,7 +46,7 @@ Copyright_License {
 #include "GPSClock.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
-#include "Util/DiffFilter.hpp"
+#include "Util/WindowFilter.hpp"
 
 class GlidePolar;
 
@@ -120,8 +120,8 @@ private:
   GPSClock airspace_clock;
   GPSClock ballast_clock;
 
-  DiffFilter diff_gps_vario;
-  DiffFilter diff_gps_te_vario;
+  WindowFilter vario_30s_filter;
+  WindowFilter netto_30s_filter;
 
   const GlidePolar& glide_polar;
 };

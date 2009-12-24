@@ -89,8 +89,8 @@ GlideComputerAirData::GlideComputerAirData(AirspaceWarningManager& as_manager,
   airspace_clock(2.0), // scan airspace every 2 seconds
   ballast_clock(5),  // only update every 5 seconds to stop flooding
 		    // the devices
-  diff_gps_vario(0),
-  diff_gps_te_vario(0),
+  vario_30s_filter(30),
+  netto_30s_filter(30),
   glide_polar(_task.get_glide_polar())
 {
   InitLDRotary(SettingsComputer(), &rotaryLD);
@@ -112,8 +112,8 @@ GlideComputerAirData::ResetFlight(const bool full)
 {
   m_airspace_warning.reset(Basic());
 
-  diff_gps_vario.reset(0,0);
-  diff_gps_te_vario.reset(0,0);
+  vario_30s_filter.reset();
+  netto_30s_filter.reset();
 }
 
 void
@@ -279,69 +279,28 @@ GlideComputerAirData::Average30s()
 void
 GlideComputerAirData::Average30s()
 {
-  static double Vario[30];
-  static double NettoVario[30];
-  int Elapsed, i;
-  long index = 0;
-  static int num_samples = 0;
+  if (!time_advanced() 
+      || (Calculated().Circling != LastCalculated().Circling)) {
 
-  if (time_advanced()) {
-    if (Calculated().Circling != LastCalculated().Circling)
-      num_samples = 0;
-      // reset!
-
-
-    Elapsed = (Basic().Time - LastBasic().Time).as_int();
-    for (i = 0; i < Elapsed; i++) {
-      index = (LastBasic().Time + i).as_int() %30;
-
-      NettoVario[index] = Basic().NettoVario;
-      Vario[index] = Basic().Vario;
-
-      if (num_samples < 30) {
-        num_samples++;
-      }
-    }
-
-    double Vave = 0;
-    double NVave = 0;
-    int j;
-
-    for (i = 0; i < num_samples; i++) {
-      j = (index - i) % 30;
-      if (j < 0) {
-        j += 30;
-      }
-      Vave += Vario[j];
-      NVave += NettoVario[j];
-    }
-
-    if (num_samples) {
-      Vave /= num_samples;
-      NVave /= num_samples;
-    }
-    SetCalculated().Average30s =
-      LowPassFilter(Calculated().Average30s, Vave, 0.8);
-    SetCalculated().NettoAverage30s =
-      LowPassFilter(Calculated().NettoAverage30s, NVave, 0.8);
-
-#ifdef DEBUGAVERAGER
-    if (Calculated().Flying) {
-      DebugStore("%d %g %g %g # averager\r\n",
-		 num_samples,
-		 Calculated().Vario,
-		 Calculated().Average30s, Calculated().NettoAverage30s);
-    }
-#endif
-
-  } else {
-    if (time_retreated()) {
-      for (i = 0; i < 30; i++) {
-        Vario[i] = 0;
-        NettoVario[i] = 0;
-      }
-    }
+    vario_30s_filter.reset();
+    netto_30s_filter.reset();
+    SetCalculated().Average30s = Basic().Vario;
+    SetCalculated().NettoAverage30s = Basic().NettoVario;
   }
+
+  if (!time_advanced()) {
+    return;
+  }
+
+  const unsigned Elapsed = (Basic().Time - LastBasic().Time).as_int();
+  for (unsigned i = 0; i < Elapsed; ++i) {
+    vario_30s_filter.update(Basic().Vario);
+    netto_30s_filter.update(Basic().NettoVario);
+  }
+  SetCalculated().Average30s =
+    LowPassFilter(Calculated().Average30s, vario_30s_filter.average(), 0.8);
+  SetCalculated().NettoAverage30s =
+    LowPassFilter(Calculated().NettoAverage30s, netto_30s_filter.average(), 0.8);
 }
 #endif
 
