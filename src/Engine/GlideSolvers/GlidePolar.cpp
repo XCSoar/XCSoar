@@ -425,3 +425,10 @@ GlidePolar::get_Vtakeoff() const
 {
   return fixed_half*get_Vmin();
 }
+
+fixed 
+GlidePolar::get_ld_over_ground(const AIRCRAFT_STATE &state) const
+{
+  // TODO adjust for wind
+  return bestLD;
+}

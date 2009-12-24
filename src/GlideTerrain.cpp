@@ -48,13 +48,13 @@ Copyright_License {
 #include "RasterMap.h"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "NMEA/Info.h"
-#include "NMEA/Derived.hpp"
+#include "Navigation/Aircraft.hpp"
+
+#include "GlideSolvers/GlidePolar.hpp"
 
 fixed
-FinalGlideThroughTerrain(const fixed this_bearing,
-                         const NMEA_INFO &basic,
-                         const DERIVED_INFO &calculated,
+FinalGlideThroughTerrain(const AIRCRAFT_STATE &basic,
+                         const GlidePolar& polar,
                          const SETTINGS_COMPUTER &settings,
                          const RasterTerrain &terrain,
                          GEOPOINT *retloc,
@@ -62,19 +62,15 @@ FinalGlideThroughTerrain(const fixed this_bearing,
                          bool *out_of_range,
                          fixed *TerrainBase)
 {
-  fixed mc(oldGlidePolar::GetMacCready());
-  fixed irange(oldGlidePolar::MacCreadyAltitude(mc,
-						1.0, this_bearing,
-                                                basic.WindSpeed,
-                                                basic.WindDirection,
-                                                0, 0, true, 0));
+  const fixed ld = polar.get_ld_over_ground(basic);
+
   const GEOPOINT start_loc = basic.Location;
   if (retloc) {
     *retloc = start_loc;
   }
   *out_of_range = false;
 
-  if (!positive(irange) || !positive(basic.NavAltitude))
+  if (!positive(ld) || !positive(basic.NavAltitude))
     // can't make progress in this direction at the current windspeed/mc
     return fixed_zero;
 
@@ -82,18 +78,11 @@ FinalGlideThroughTerrain(const fixed this_bearing,
   if (map == NULL)
     return fixed_zero;
 
-  const fixed glide_max_range = basic.NavAltitude/irange;
+  const fixed glide_max_range = basic.NavAltitude*ld;
 
   // returns distance one would arrive at altitude in straight glide
   // first estimate max range at this altitude
   GEOPOINT loc, last_loc;
-  fixed h= fixed_zero, dh= fixed_zero;
-  // int imax=0;
-  fixed last_dh=fixed_zero;
-  fixed altitude;
-
-  fixed retval = fixed_zero;
-  bool start_under = false;
 
   // calculate terrain rounding factor
 
@@ -104,23 +93,25 @@ FinalGlideThroughTerrain(const fixed this_bearing,
   fixed Yrounding = fabs(loc.Latitude-start_loc.Latitude)/2;
   const RasterRounding rounding(*map, Xrounding, Yrounding);
 
+  fixed h= fixed_zero, dh= fixed_zero;
+  fixed last_dh=fixed_zero;
+  fixed altitude;
+
+  fixed retval = fixed_zero;
+
   loc = last_loc = start_loc;
 
   altitude = basic.NavAltitude;
   h = max(fixed_zero, fixed(terrain.GetTerrainHeight(loc, rounding)));
   dh = altitude - h - settings.SafetyAltitudeTerrain;
   last_dh = dh;
-  if (negative(dh)) {
-    start_under = true;
-    // already below safety terrain height
-    //    retval = 0;
-    //    goto OnExit;
-  }
+
+  bool start_under = negative(dh);
 
   // find grid
   GEOPOINT dloc;
 
-  FindLatitudeLongitude(loc, this_bearing, glide_max_range, &dloc);
+  FindLatitudeLongitude(loc, basic.TrackBearing, glide_max_range, &dloc);
   dloc.Latitude -= start_loc.Latitude;
   dloc.Longitude -= start_loc.Longitude;
 
@@ -129,7 +120,7 @@ FinalGlideThroughTerrain(const fixed this_bearing,
     f_scale *= max_range/glide_max_range;
   }
 
-  fixed delta_alt = -f_scale * basic.NavAltitude;
+  const fixed delta_alt = -f_scale * basic.NavAltitude;
 
   dloc.Latitude *= f_scale;
   dloc.Longitude *= f_scale;
@@ -137,7 +128,7 @@ FinalGlideThroughTerrain(const fixed this_bearing,
   for (int i=1; i<=NUMFINALGLIDETERRAIN; i++) {
     fixed f;
     bool solution_found = false;
-    fixed fi = i*f_scale;
+    const fixed fi = i*f_scale;
     // fraction of glide_max_range
 
     if (positive(max_range)&&(fi>=fixed_one)) {
@@ -182,7 +173,7 @@ FinalGlideThroughTerrain(const fixed this_bearing,
       if ((dh<last_dh) && positive(last_dh)) {
         f = max(fixed_zero,min(fixed_one,(-last_dh)/(dh-last_dh)));
       } else {
-        f = 0;
+        f = fixed_zero;
       }
       solution_found = true;
     }

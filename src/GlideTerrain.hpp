@@ -41,19 +41,18 @@ Copyright_License {
 
 #include <stddef.h>
 
-struct NMEA_INFO;
-struct DERIVED_INFO;
+class AIRCRAFT_STATE;
 struct GEOPOINT;
 struct SETTINGS_COMPUTER;
 class RasterTerrain;
+class GlidePolar;
 
 /**
  * @param terrain a locked RasterTerrain object
  */
 fixed
-FinalGlideThroughTerrain(const fixed bearing,
-                         const NMEA_INFO &basic,
-                         const DERIVED_INFO &calculated,
+FinalGlideThroughTerrain(const AIRCRAFT_STATE &basic,
+                         const GlidePolar& polar,
                          const SETTINGS_COMPUTER &settings,
                          const RasterTerrain &terrain,
                          GEOPOINT *retlocation,

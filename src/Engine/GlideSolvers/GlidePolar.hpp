@@ -348,6 +348,15 @@ public:
   fixed mc_risk(const fixed height_fraction, 
                 const fixed riskGamma) const;
 
+/** 
+ * Find LD relative to ground for specified track bearing
+ * 
+ * @param state Aircraft state (for wind)
+ * 
+ * @return LD ratio (distance travelled per unit height loss)
+ */
+  fixed get_ld_over_ground(const AIRCRAFT_STATE &state) const;
+
 private:
 
 /** 

@@ -606,14 +606,18 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
 
   SetCalculated().TerrainBase = Calculated().TerrainAlt;
 
+  AIRCRAFT_STATE state = Basic();
+
   GEOPOINT loc;
   for (int i = 0; i <= NUMTERRAINSWEEPS; i++) {
     bearing = (i * 360.0) / NUMTERRAINSWEEPS;
 
     terrain.Lock();
-    distance = FinalGlideThroughTerrain(fixed(bearing), Basic(), Calculated(),
-        SettingsComputer(), terrain, &loc, fixed(mymaxrange), &out_of_range,
-        &SetCalculated().TerrainBase);
+    state.TrackBearing = bearing;
+    distance = 
+      FinalGlideThroughTerrain(state, glide_polar, 
+                               SettingsComputer(), terrain, &loc, fixed(mymaxrange), &out_of_range,
+                               &SetCalculated().TerrainBase);
     terrain.Unlock();
 
     if (out_of_range) {
