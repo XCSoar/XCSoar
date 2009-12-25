@@ -4,7 +4,7 @@
 void 
 AirspaceIntersectSort::add(const fixed t, const GEOPOINT &p)
 {
-  if ((t>=fixed_zero) && (t<fixed_one)) {
+  if (t>=fixed_zero) {
     m_q.push(std::make_pair(t,p));
   }
 }
@@ -31,7 +31,7 @@ AirspaceIntersectSort::top(GEOPOINT &p) const
 }
 
 AirspaceIntersectionVector
-AirspaceIntersectSort::all(const bool fill_end)
+AirspaceIntersectSort::all()
 {
   AirspaceIntersectionVector res;
 
@@ -41,10 +41,15 @@ AirspaceIntersectSort::all(const bool fill_end)
     const GEOPOINT p_this = m_q.top().second; 
     const GEOPOINT p_mid = (p_this+p_last)*fixed_half;
 
-    if (m_airspace->inside(p_mid)) {
+    if (m_airspace->inside(p_mid)) {    
       res.push_back(std::make_pair(p_last, p_this));
       waiting = false;
     } else {
+
+      if (m_q.top().first>= fixed_one) {
+        // exit on reaching first point out of range
+        break;
+      }
       waiting = true;
     }
 
@@ -53,13 +58,9 @@ AirspaceIntersectSort::all(const bool fill_end)
     m_q.pop();
   }
 
-  // fill last point (not really an intercept, but beyond range)
+  // fill last point if not matched 
   if (waiting) {
-    if (fill_end) {
-      res.push_back(std::make_pair(p_last, m_end));
-    } else {
-      res.push_back(std::make_pair(p_last, p_last));
-    }
+    res.push_back(std::make_pair(p_last, p_last));
   }
   return res;
 }

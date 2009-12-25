@@ -104,6 +104,8 @@ MapWindowTimer::StopTimer()
   if (!timestats_dirty) {
     // Calculates the drawing time
     // QUESTION TB: why the weird formula and why is timestats_av = tottime?!
+
+	// Answer: This is a low pass filter
     tottime = (2*tottime+(timestamp_draw-timestamp_newdata))/3;
     timestats_av = tottime;
     cpuload=0;

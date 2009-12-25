@@ -32,6 +32,7 @@ include $(topdir)/build/doco.mk
 include $(topdir)/build/task.mk
 include $(topdir)/build/harness.mk
 include $(topdir)/build/test.mk
+include $(topdir)/build/shapelib.mk
 
 ####### sources
 

@@ -51,14 +51,10 @@ public:
 
 /** 
  * Return vector of pairs of enter/exit intersections.
- * If fill_end is true, will add virtual closure point to last intercept at end.
- * Otherwise it will add the entry point twice as the last entry
- * 
- * @param fill_end 
  * 
  * @return vector
  */
-  AirspaceIntersectionVector all(const bool fill_end=false);
+  AirspaceIntersectionVector all();
 
 private:
   typedef std::pair<fixed,GEOPOINT> Intersection;

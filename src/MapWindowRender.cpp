@@ -298,6 +298,8 @@ void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
 #endif
     DrawBestCruiseTrack(canvas);
   }
+
+  DrawAirspaceIntersections(canvas);
 }
 
 /**
@@ -306,7 +308,7 @@ void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
  * @param rc The area to draw in
  */
 void MapWindow::Render(Canvas &canvas, const RECT rc)
-{
+{ 
   // Calculate screen positions
   RenderStart(canvas, rc);
 
@@ -334,7 +336,7 @@ void MapWindow::Render(Canvas &canvas, const RECT rc)
 
   // Render aircraft symbol (and FLARM traffic)
   RenderAirborne(canvas, rc);
-
+  
   // Render upper symbology
   RenderSymbology_upper(canvas, rc);
 }

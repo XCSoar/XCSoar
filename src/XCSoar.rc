@@ -213,6 +213,7 @@ IDB_SCROLLBARMID        BITMAP  DISCARDABLE     "Bitmaps/scrollbarMid.bmp"
 IDB_SCROLLBARBOT        BITMAP  DISCARDABLE     "Bitmaps/scrollbarBot.bmp"
 IDB_SCROLLBARFILL       BITMAP  DISCARDABLE     "Bitmaps/scrollbarFill.bmp"
 IDB_OBSTACLE            BITMAP  DISCARDABLE     "Bitmaps/Obstacle.bmp"
+IDB_AIRSPACEI           BITMAP  DISCARDABLE     "Bitmaps/airspacei.bmp"
 /////////////////////////////////////////////////////////////////////////////
 //
 // XMLDIALOG

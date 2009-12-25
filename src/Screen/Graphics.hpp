@@ -94,6 +94,7 @@ public:
 
   Bitmap hAboveTerrainBitmap;
   Brush hAboveTerrainBrush;
+  Bitmap hAirspaceInterceptBitmap;
 
   Bitmap
     hTurnPoint, hSmall, hCruise, hClimb,

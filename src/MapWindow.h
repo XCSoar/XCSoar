@@ -48,6 +48,8 @@ Copyright_License {
 #include "MapWindowBlackboard.hpp"
 #include "PeriodClock.hpp"
 
+#include <vector>
+
 typedef struct _THERMAL_SOURCE_VIEW
 {
   POINT Screen;
@@ -215,6 +217,7 @@ class MapWindow
   void DrawHorizon(Canvas &canvas, const RECT rc);
   void DrawWindAtAircraft2(Canvas &canvas, POINT Orig, RECT rc);
   void DrawAirspace(Canvas &canvas, Canvas &buffer);
+  void DrawAirspaceIntersections(Canvas &canvas);
   void DrawWaypoints(Canvas &canvas);
 
   void DrawFlightMode(Canvas &canvas, const RECT rc);
@@ -291,6 +294,8 @@ class MapWindow
   void RenderAirborne(Canvas &canvas, const RECT rc);
   void RenderSymbology_upper(Canvas &canvas, const RECT rc);
   void RenderSymbology_lower(Canvas &canvas, const RECT rc);
+
+  std::vector<GEOPOINT> m_airspace_intersections;
 
   friend class DrawThread;
 };

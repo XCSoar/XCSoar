@@ -172,6 +172,7 @@ ScreenGraphics::Initialise(HINSTANCE hInstance, const SETTINGS_MAP &settings_map
   hAirspaceBitmap[5].load(IDB_AIRSPACE5);
   hAirspaceBitmap[6].load(IDB_AIRSPACE6);
   hAirspaceBitmap[7].load(IDB_AIRSPACE7);
+  hAirspaceInterceptBitmap.load(IDB_AIRSPACEI);
 
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
 
@@ -367,6 +368,7 @@ ScreenGraphics::Destroy()
     hAirspaceBrushes[i].reset();
     hAirspaceBitmap[i].reset();
   }
+  hAirspaceInterceptBitmap.reset();
 
   hAboveTerrainBitmap.reset();
   hAboveTerrainBrush.reset();

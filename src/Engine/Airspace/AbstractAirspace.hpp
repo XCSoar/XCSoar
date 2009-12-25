@@ -117,13 +117,11 @@ public:
    * 
    * @param g1 Location of origin of search vector
    * @param vec Line from origin
-   * @param fill_end whether to create fake point for orphaned entry point
    * 
    * @return Vector of intersection pairs if the line intersects the airspace
    */
   virtual AirspaceIntersectionVector intersects(const GEOPOINT& g1, 
-                                                const GeoVector &vec,
-                                                const bool fill_end=false) const = 0;
+                                                const GeoVector &vec) const = 0;
 
 /** 
  * Find location of closest point on boundary to a reference

@@ -316,14 +316,6 @@ OBJS	:=\
 	$(SRC)/Screen/Dialog.o \
 	$(SRC)/Screen/ProgressWindow.o \
 	\
-	$(SRC)/Screen/shapelib/mapbits.o 	\
-	$(SRC)/Screen/shapelib/maperror.o 	\
-	$(SRC)/Screen/shapelib/mapprimitive.o 	\
-	$(SRC)/Screen/shapelib/mapsearch.o 	\
-	$(SRC)/Screen/shapelib/mapshape.o 	\
-	$(SRC)/Screen/shapelib/maptree.o 	\
-	$(SRC)/Screen/shapelib/mapxbase.o 	\
-	\
 	$(SRC)/Polar/Polar.o \
 	$(SRC)/Polar/Loader.o \
 	$(SRC)/Polar/WinPilot.o 	\
@@ -349,6 +341,7 @@ OBJS	:=\
 	$(DLGS:.cpp=.o) 		\
 	$(VOLKS:.cpp=.o) 		\
 	$(ENGINE_SRC_DIR)/task-$(TARGET).a \
+	$(SRC)/shapelib-$(TARGET).a \
 	$(SRC)/jasper-$(TARGET).a \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a
@@ -434,6 +427,7 @@ XCSoarLaunch.dll: $(XCSOARLAUNCH_OBJS)
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk
 include $(topdir)/build/compat.mk
+include $(topdir)/build/shapelib.mk
 
 ####### shared objects
 #

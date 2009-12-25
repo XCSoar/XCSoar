@@ -60,10 +60,15 @@ public:
       ids_inside.push_back(&as.get_airspace());
     } else if (as.get_warning_state()> AirspaceWarning::WARNING_CLEAR) {
       ids_warning.push_back(&as.get_airspace());
+      locs.push_back(as.get_solution().location);
     }
     if (!as.get_ack_expired()) {
       ids_acked.push_back(&as.get_airspace());
     }
+  }
+
+  std::vector<GEOPOINT> get_locations() const {
+    return locs;
   }
   bool is_warning(const AbstractAirspace& as) const {
     return find(as, ids_warning);
@@ -90,7 +95,7 @@ private:
   std::vector<const AbstractAirspace*> ids_inside;
   std::vector<const AbstractAirspace*> ids_warning;
   std::vector<const AbstractAirspace*> ids_acked;
-
+  std::vector<GEOPOINT> locs;
 };
 
 
@@ -121,7 +126,6 @@ private:
 
 #include "MapDrawHelper.hpp"
 
-
 /**
  * Class to render airspaces onto map in two passes,
  * one for border, one for area.
@@ -146,7 +150,6 @@ public:
             warnings)
     {
       m_predicate = &visible;
-      m_use_stencil = true;
     };
 
   void Visit(const AirspaceCircle& airspace) {
@@ -156,23 +159,23 @@ public:
     POINT center;
     m_map.LonLat2Screen(airspace.get_center(),center);
     unsigned radius = m_map.DistanceMetersToScreen(airspace.get_radius());
-    m_buffer.circle(center.x, center.y, radius);
-    if (!m_border) {
-      m_stencil.circle(center.x, center.y, radius);
-    }
+    draw_circle(m_buffer, center, radius);
   }
 
   void Visit(const AirspacePolygon& airspace) {
     buffer_render_start();
     set_buffer_pens(airspace);
     draw_search_point_vector(m_buffer, airspace.get_points());
-    if (!m_border) {
-      draw_search_point_vector(m_stencil, airspace.get_points());
-    }
   }
 
   void set_border(bool set) {
     m_border = set;
+    m_use_stencil = !m_border;
+  }
+
+  void draw_intercepts() {
+    set_border(false);
+    buffer_render_finish();
   }
 
 private:
@@ -225,6 +228,17 @@ private:
 };
 
 
+void
+MapWindow::DrawAirspaceIntersections(Canvas &canvas)
+{
+  for (std::vector<GEOPOINT>::const_iterator it = m_airspace_intersections.begin();
+       it != m_airspace_intersections.end(); ++it) {
+    
+    draw_masked_bitmap_if_visible(canvas, MapGfx.hAirspaceInterceptBitmap,
+                                  *it, 10, 10);
+  }
+}
+
 #include "RasterTerrain.h"
 
 /**
@@ -247,28 +261,19 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
 
     MapDrawHelper helper (canvas, buffer, stencil_canvas, *this, GetMapRect());
     AirspaceVisitorMap v(helper, awc);
+
+    // JMW TODO wasteful to draw twice, can't it be drawn once?
+    // we are using two draws so borders go on top of everything
+    
     v.set_border(false);
     airspace_database->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
     v.set_border(true);
     airspace_database->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
+    v.draw_intercepts();
     terrain->Unlock();
-  }
 
-  // testing
-  /*
-  // draw on stencil BLACK areas to be set
-  {
-    Pen pen_thick(Pen::SOLID, IBLSCALE(8), Color(0x00, 0x00, 0x00));
-
-    if (0) {
-      m_stencil.black_brush(); // optional if active
-    } else {
-      m_stencil.hollow_brush();
-    }
-    m_stencil.select(pen_thick);
-    m_stencil.circle(Orig_Screen.x, Orig_Screen.y, 50);
+    m_airspace_intersections = awc.get_locations();
   }
-  */
 }
 
 

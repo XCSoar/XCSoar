@@ -56,6 +56,16 @@ protected:
       screen.push_back(sc);
     }
     the_canvas.polygon(&screen[0], size);
+    if (m_use_stencil) {
+      m_stencil.polygon(&screen[0], size);
+    }
+  }
+
+  void draw_circle(Canvas& the_canvas, const POINT& center, unsigned radius) {
+    the_canvas.circle(center.x, center.y, radius);
+    if (m_use_stencil) {
+      m_stencil.circle(center.x, center.y, radius);
+    }
   }
 
   void buffer_render_finish() {

@@ -129,8 +129,7 @@ AirspacePolygon::inside(const GEOPOINT &loc) const
 
 AirspaceIntersectionVector
 AirspacePolygon::intersects(const GEOPOINT& start, 
-                            const GeoVector &vec,
-                            const bool fill_end) const
+                            const GeoVector &vec) const
 {
   const GEOPOINT end = vec.end_point(start);
   const FlatRay ray(m_task_projection->project(start),
@@ -146,11 +145,11 @@ AirspacePolygon::intersects(const GEOPOINT& start,
 
     const fixed t = ray.intersects(r_seg);
     
-    if ((t>=fixed_zero) && (t<fixed_one)) {
+    if (t>=fixed_zero) {
       sorter.add(t, m_task_projection->unproject(ray.parametric(t)));
     }
   }
-  return sorter.all(fill_end);
+  return sorter.all();
 }
 
 
