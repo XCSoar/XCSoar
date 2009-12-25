@@ -71,8 +71,7 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
 void 
 Airspaces::visit_intersecting(const GEOPOINT &loc, 
                               const GeoVector &vec,
-                              AirspaceIntersectionVisitor& visitor,
-                              const bool fill_end) const
+                              AirspaceIntersectionVisitor& visitor) const
 {
   FlatRay ray(task_projection.project(loc), 
               task_projection.project(vec.end_point(loc)));
@@ -96,7 +95,7 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
     if (!v->intersects(ray)) {
       continue;
     }
-    if (visitor.set_intersections(v->intersects(loc, vec, fill_end))) {
+    if (visitor.set_intersections(v->intersects(loc, vec))) {
       v->Accept(visitor);
     } 
   }

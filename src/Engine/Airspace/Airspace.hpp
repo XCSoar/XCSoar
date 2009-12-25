@@ -145,8 +145,7 @@ public:
    * 
    * @return true if the line intersects the airspace
    */
-  AirspaceIntersectionVector intersects(const GEOPOINT& g1, const GeoVector &vec,
-                                        const bool fill_end=false) const;
+  AirspaceIntersectionVector intersects(const GEOPOINT& g1, const GeoVector &vec) const;
 
   /** 
    * Destroys concrete airspace enclosed by this instance if present.
