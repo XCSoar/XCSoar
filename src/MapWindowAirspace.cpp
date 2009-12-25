@@ -188,6 +188,8 @@ private:
 
     } else {
 
+      /// \todo stop drawing border for acked outside airspaces     
+
       if (m_warnings.is_acked(airspace)) {
 
         m_buffer.hollow_brush();

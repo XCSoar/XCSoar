@@ -191,6 +191,7 @@ public:
  * @param warning_manager Warning manager to add items to
  * @param warning_state Type of warning
  * @param max_time Time limit of intercept
+ * @param max_alt Maximum height of base to allow (optional)
  * 
  * @return Initialised object
  */
@@ -198,13 +199,15 @@ public:
                                      const AirspaceAircraftPerformance &perf,
                                      AirspaceWarningManager &warning_manager,
                                      const AirspaceWarning::AirspaceWarningState warning_state,
-                                     const fixed max_time):
+                                     const fixed max_time,
+                                     const fixed max_alt = -fixed_one):
     m_state(state),
     m_perf(perf),
     m_warning_manager(warning_manager),
     m_warning_state(warning_state),
     m_max_time(max_time),
-    m_found(false)
+    m_found(false),
+    m_max_alt(max_alt)
     {      
     };
 
@@ -214,6 +217,9 @@ public:
  * @param airspace Airspace corresponding to current intersection
  */
   void intersection(const AbstractAirspace& airspace) {
+    if (exclude_alt(airspace)) {
+      return;
+    }
     AirspaceWarning& warning = m_warning_manager.get_warning(airspace);
     if (warning.state_accepted(m_warning_state)) {
       AirspaceInterceptSolution solution = intercept(airspace, m_state, m_perf);
@@ -245,6 +251,16 @@ private:
   const AirspaceWarning::AirspaceWarningState m_warning_state;
   const fixed m_max_time;
   bool m_found;
+  const fixed m_max_alt;
+
+  bool exclude_alt(const AbstractAirspace& airspace) {
+    if (!positive(m_max_alt)) {
+      return false;
+    }
+    return (airspace.get_base_altitude()> m_max_alt);
+  }
+
+
 };
 
 
@@ -255,7 +271,8 @@ AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state,
                                          const AirspaceWarning::AirspaceWarningState& warning_state,
                                          const fixed max_time) 
 {
-  AirspaceIntersectionWarningVisitor visitor(state, perf, *this, warning_state, max_time);
+  AirspaceIntersectionWarningVisitor visitor(state, perf, *this, warning_state, max_time,
+    state.NavAltitude + 1000);
 
   GeoVector vector_predicted(state.Location, location_predicted);
   m_airspaces.visit_intersecting(state.Location, vector_predicted, visitor, true);
