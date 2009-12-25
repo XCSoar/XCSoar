@@ -230,11 +230,12 @@ AirspaceAircraftPerformance::solution_exists(const fixed& distance_max,
                                              const fixed& h_min,
                                              const fixed& h_max) const
 {
-  if (positive(altitude-h_max) && !positive(max(get_cruise_descent(),get_descent_rate())+m_tolerance_vertical)) {
+  if (positive(altitude-h_max) 
+      && !positive(max(get_cruise_descent(),get_descent_rate())+m_tolerance_vertical)) {
     return false;
   }
-  if (positive(h_min-altitude) && !positive(max(get_climb_rate(),
-                                                -get_cruise_descent())+m_tolerance_vertical)) {
+  if (positive(h_min-altitude) 
+      && !positive(max(get_climb_rate(),-get_cruise_descent())+m_tolerance_vertical)) {
     return false;
   }
   if (positive(distance_max) && !positive(get_cruise_speed())) {
