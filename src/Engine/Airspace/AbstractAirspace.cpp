@@ -150,9 +150,9 @@ AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
       solution.location = loc_start;
     } else if (solution.distance == distance_end) {
       solution.location = loc_end;
-    } else if (distance_end>distance_start) {
-      const fixed t = solution.distance / (distance_end-distance_start);
-      solution.location = loc_start+(loc_end-loc_start)*t;
+    } else if (positive(distance_end)) {
+      const fixed t = solution.distance / distance_end;
+      solution.location = state.Location.interpolate(loc_end, t);
     } else {
       solution.location = loc_start;
     }
