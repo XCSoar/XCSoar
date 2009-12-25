@@ -170,7 +170,7 @@ AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
                             const AirspaceAircraftPerformance& perf,
                             AirspaceInterceptSolution &solution) const
 {
-  AirspaceIntersectionVector vis = intersects(state.Location, vec, true);
+  AirspaceIntersectionVector vis = intersects(state.Location, vec);
   if (vis.empty()) {
     return false;
   }

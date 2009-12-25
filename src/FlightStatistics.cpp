@@ -826,7 +826,7 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
 
   // draw airspaces
   AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start);
-  airspace_database.visit_intersecting(p_start, vec, ivisitor, true);
+  airspace_database.visit_intersecting(p_start, vec, ivisitor);
 
   // draw terrain
   terrain.Lock();

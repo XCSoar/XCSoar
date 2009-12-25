@@ -275,7 +275,7 @@ AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state,
     state.NavAltitude + 1000);
 
   GeoVector vector_predicted(state.Location, location_predicted);
-  m_airspaces.visit_intersecting(state.Location, vector_predicted, visitor, true);
+  m_airspaces.visit_intersecting(state.Location, vector_predicted, visitor);
 
   return visitor.found();
 }
