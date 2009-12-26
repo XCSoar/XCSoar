@@ -426,7 +426,7 @@ void AATPoint::print(std::ostream& f, const AIRCRAFT_STATE& state,
           if (!filter_backtrack 
               || (dthis>=tdist)
               || (dthis>=rdist)) {
-            /// \todo unless double dist is better than current
+            /// @todo unless double dist is better than current
             f << ga.Longitude << " " << ga.Latitude << "\n";
           }
         }

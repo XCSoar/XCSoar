@@ -75,7 +75,7 @@ OrderedTask::update_geometry()
 
   if (has_start()) {
     // update stats so data can be used during task construction
-    /// \todo this should only be done if not flying! (currently done with has_entered)
+    /// @todo this should only be done if not flying! (currently done with has_entered)
     if (!ts->has_entered()) {
       GEOPOINT loc = ts->get_location();
       update_stats_distances(loc, true);
@@ -366,7 +366,7 @@ OrderedTask::check_task() const
 bool 
 OrderedTask::scan_start_finish()
 {
-  /// \todo also check there are not more than one start/finish point
+  /// @todo also check there are not more than one start/finish point
 
   if (!tps.size()) {
     ts = NULL;
@@ -656,7 +656,7 @@ OrderedTask::Accept(TaskPointVisitor& visitor, const bool reverse) const
 void
 OrderedTask::reset()
 {  
-  /// \todo also reset data in this class e.g. stats?
+  /// @todo also reset data in this class e.g. stats?
   for (OrderedTaskPointVector::iterator it = tps.begin(); it!= tps.end(); it++) {
     (*it)->reset();
   }

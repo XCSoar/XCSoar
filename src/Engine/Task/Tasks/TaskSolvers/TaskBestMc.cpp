@@ -39,7 +39,7 @@
 #include "Util/Tolerances.hpp"
 #include <algorithm>
 
-/// \todo only engage this class if above final glide at mc=0
+/// @todo only engage this class if above final glide at mc=0
 
 TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
                        const unsigned activeTaskPoint,

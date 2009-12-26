@@ -434,7 +434,7 @@ static void UpdateValuesRules(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpValidStart"));
   if (wp) {
     if (positive(XCSoarInterface::Calculated().common_stats.task_time_elapsed)) {
-      /// \todo proper task validity check
+      /// @todo proper task validity check
       wp->SetText(gettext(_T("TRUE")));
     } else {
       wp->SetText(gettext(_T("FALSE")));

@@ -50,7 +50,7 @@ AirspaceVisible::type_visible(const AbstractAirspace& airspace) const
 bool
 AirspaceVisible::altitude_visible(const AbstractAirspace& airspace) const
 {
-  /// \todo airspace visibility did use ToMSL(..., map.Calculated().TerrainAlt); 
+  /// @todo airspace visibility did use ToMSL(..., map.Calculated().TerrainAlt); 
 
   switch (m_settings.AltitudeMode) {
 

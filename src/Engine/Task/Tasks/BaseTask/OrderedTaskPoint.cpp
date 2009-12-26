@@ -94,7 +94,7 @@ OrderedTaskPoint::update_oz()
 {
   update_geometry();
 
-  /// \todo also clear search points?
+  /// @todo also clear search points?
   SampledTaskPoint::update_oz();
 }
 

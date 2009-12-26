@@ -44,7 +44,7 @@
 #include "Util/Quadratic.hpp"
 #include <assert.h>
 
-/// \todo note polar terms are hardcoded at present, will need proper
+/// @todo note polar terms are hardcoded at present, will need proper
 /// polar management later
 
 static const fixed fixed_75(75.0);
@@ -457,6 +457,6 @@ GlidePolar::get_ld_over_ground(const AIRCRAFT_STATE &state) const
 fixed 
 GlidePolar::get_V_for_sinkrate(const fixed S) const
 {
-  /// \todo unimplemented
+  /// @todo unimplemented
   return VbestLD;
 }

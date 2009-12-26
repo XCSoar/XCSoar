@@ -82,7 +82,7 @@ TaskMinTarget::search(const fixed tp)
   }
 
   force_current = false;
-  /// \todo if search fails, force current
+  /// @todo if search fails, force current
   const fixed p = find_zero(tp);
   if (valid(p)) {
     return p;

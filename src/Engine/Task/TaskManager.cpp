@@ -389,7 +389,7 @@ TaskManager::set_factory(const Factory_t the_factory)
     // can switch from anything to mixed, otherwise need reset
     task_ordered.reset();
 
-    /// \todo call into task_events to ask if reset is desired on factory change
+    /// @todo call into task_events to ask if reset is desired on factory change
   }
   factory_mode = the_factory;
   switch (factory_mode) {
@@ -495,5 +495,5 @@ TaskManager::stats_valid() const
 void 
 TaskManager::default_task(const GEOPOINT loc, const bool force)
 {
-  /// \todo implement default_task
+  /// @todo implement default_task
 }

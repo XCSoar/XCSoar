@@ -53,7 +53,7 @@ AbortTask::AbortTask(const TaskEvents &te,
   polar_safety(gp)
 {
   // default MC value 
-  /// \todo get safety mc value from settings
+  /// @todo get safety mc value from settings
   polar_safety.set_mc(fixed_one);
 }
 

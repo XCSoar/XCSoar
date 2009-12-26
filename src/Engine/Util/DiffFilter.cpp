@@ -54,7 +54,7 @@ DiffFilter::update(const double x0)
   x[2]= x[1];
   x[1]= x[0];
   x[0] = x0;
-  /// \note not sure why need to divide by pi/2 here
+  /// @note not sure why need to divide by pi/2 here
   return ((x[6]-x[0])/16+x[2]-x[4])/1.5708;
 }
 

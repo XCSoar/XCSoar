@@ -108,7 +108,7 @@ LXWP2(const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   NMEAParser::ExtractParameter(String,ctemp,0);
 
-  /// \todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
+  /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
 //  oldGlidePolar::SetMacCready(_tcstod(ctemp, NULL));
   return true;
 }

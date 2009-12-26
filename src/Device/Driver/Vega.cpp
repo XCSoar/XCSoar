@@ -93,7 +93,7 @@ PDSWC(const TCHAR *String, NMEA_INFO *GPS_INFO)
   static long last_switchinputs;
   static long last_switchoutputs;
   double MACCREADY;
-  /// \todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
+  /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
 
   unsigned long uswitchinputs, uswitchoutputs;
   _stscanf(String,
