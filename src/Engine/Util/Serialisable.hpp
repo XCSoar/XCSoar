@@ -39,18 +39,18 @@
 #ifndef SERIALISABLE_HPP
 #define SERIALISABLE_HPP
 
-/////////////////////////////////////////////////
-/// Abstract classes
+// Abstract classes
 
 #ifdef DO_PRINT
 #include <iostream>
 #endif
 
 /** Base class for classes that can be serialised/unserialised for file storage */
-class Serialisable {
+class Serialisable
+{
 public:
-    //  virtual void Serialise() = 0;
-    //  virtual void Unserialise() = 0;
+  // virtual void Serialise() = 0;
+  // virtual void Unserialise() = 0;
 };
 
 #endif
