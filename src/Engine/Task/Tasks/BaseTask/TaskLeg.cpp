@@ -62,8 +62,6 @@ TaskLeg::next() const
   return destination.get_next();
 }
 
-//////////////////////////////////////////////
-
 GeoVector 
 TaskLeg::leg_vector_planned() const
 {
@@ -228,8 +226,6 @@ TaskLeg::leg_distance_min() const
     return fixed_zero; 
   }
 }
-
-/////////////////
 
 fixed 
 TaskLeg::scan_distance_travelled(const GEOPOINT &ref) 
