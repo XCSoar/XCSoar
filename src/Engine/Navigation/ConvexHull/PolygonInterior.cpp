@@ -36,8 +36,6 @@
  */
 #include "PolygonInterior.hpp"
 
-///////////////////////////////////////////////////
-
 // Copyright 2001, softSurfer (www.softsurfer.com)
 // This code may be freely used and modified for any purpose
 // providing that this copyright notice is included with it.
