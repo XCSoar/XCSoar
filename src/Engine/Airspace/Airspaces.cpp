@@ -45,7 +45,6 @@ extern unsigned n_queries;
 extern long count_intersections;
 #endif
 
-
 void 
 Airspaces::visit_within_range(const GEOPOINT &loc, 
                               const fixed range,
@@ -55,18 +54,18 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
   int mrange = task_projection.project_range(loc, range);
   std::deque< Airspace > vectors;
   airspace_tree.find_within_range(bb_target, -mrange, std::back_inserter(vectors));
+
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
-  for (std::deque<Airspace>::iterator v=vectors.begin();
-       v != vectors.end(); ++v) {
-    if (!visitor.condition(*v)) {
+
+  for (std::deque<Airspace>::iterator v = vectors.begin(); v != vectors.end(); ++v) {
+    if (!visitor.condition(*v))
       continue;
-    } 
+
     v->Accept(visitor);
   }
 }
-
 
 void 
 Airspaces::visit_intersecting(const GEOPOINT &loc, 
@@ -86,23 +85,19 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
   n_queries++;
 #endif
 
-  for (std::deque<Airspace>::iterator v=vectors.begin();
-       v != vectors.end(); ++v) {
+  for (std::deque<Airspace>::iterator v = vectors.begin(); v != vectors.end(); ++v) {
+    if (!visitor.condition(*v))
+      continue;
 
-    if (!visitor.condition(*v)) {
+    if (!v->intersects(ray))
       continue;
-    }
-    if (!v->intersects(ray)) {
-      continue;
-    }
-    if (visitor.set_intersections(v->intersects(loc, vec))) {
+
+    if (visitor.set_intersections(v->intersects(loc, vec)))
       v->Accept(visitor);
-    } 
   }
 }
 
-
-////////////// SCAN METHODS
+// SCAN METHODS
 
 const Airspaces::AirspaceVector
 Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
@@ -121,17 +116,16 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
   if (found.first != airspace_tree.end()) {
     // also should do scan_range with range = 0 since there
     // could be more than one with zero dist
-    if (found.second==0) {
+    if (found.second == 0) {
       return scan_range(state, fixed_zero, condition);
     } else {
-      if (condition(*found.first->get_airspace())) {
+      if (condition(*found.first->get_airspace()))
         res.push_back(*found.first);
-      }
     }
   }
+
   return res;
 }
-
 
 const Airspaces::AirspaceVector
 Airspaces::scan_range(const AIRCRAFT_STATE &state, 
@@ -150,21 +144,19 @@ Airspaces::scan_range(const AIRCRAFT_STATE &state,
 
   AirspaceVector res;
 
-  for (std::deque<Airspace>::iterator v=vectors.begin();
-       v != vectors.end(); ++v) {
-    if (!condition(*v->get_airspace())) {
+  for (std::deque<Airspace>::iterator v = vectors.begin(); v != vectors.end(); ++v) {
+    if (!condition(*v->get_airspace()))
       continue;
-    } 
-    if ((*v).distance(bb_target)> range) {
+
+    if ((*v).distance(bb_target)> range)
       continue;
-    }
-    if ((*v).inside(state.Location) || (range>0)) {
+
+    if ((*v).inside(state.Location) || (range>0))
       res.push_back(*v);
-    }        
   }
+
   return res;
 }
-
 
 const Airspaces::AirspaceVector
 Airspaces::find_inside(const AIRCRAFT_STATE &state,
@@ -179,73 +171,63 @@ Airspaces::find_inside(const AIRCRAFT_STATE &state,
   n_queries++;
 #endif
 
-  for (AirspaceVector::iterator v=vectors.begin();
-       v != vectors.end(); ) {
+  for (AirspaceVector::iterator v = vectors.begin(); v != vectors.end();) {
 
 #ifdef INSTRUMENT_TASK
     count_intersections++;
 #endif
     
-    if (!condition(*v->get_airspace()) || !(*v).inside(state)) {
+    if (!condition(*v->get_airspace()) || !(*v).inside(state))
       vectors.erase(v);
-    } else {
+    else
       ++v;
-    }
   }
+
   return vectors;
 }
-
-
-//////////////////
-
 
 void 
 Airspaces::optimise()
 {
   if (task_projection.update_fast()) {
-
     // task projection changed, so need to push items back onto stack
     // to re-build airspace envelopes
 
     for (AirspaceTree::iterator it = airspace_tree.begin();
-         it != airspace_tree.end(); ++it) {
+         it != airspace_tree.end(); ++it)
       tmp_as.push_back(it->get_airspace());
-    }
+
     airspace_tree.clear();
   }
 
   if (!tmp_as.empty()) {
-
     while (!tmp_as.empty()) {
       Airspace as(*tmp_as.front(), task_projection);
       airspace_tree.insert(as);
       tmp_as.pop_front();
     }
     airspace_tree.optimise();
-
   }
 }
 
 void 
 Airspaces::insert(AbstractAirspace* asp)
 {
-  if (!asp) {
+  if (!asp)
     // nothing to add
     return;
-  }
-  if (empty()) {
+
+  if (empty())
     task_projection.reset(asp->get_center());
-  }
+
   task_projection.scan_location(asp->get_center());
 
   tmp_as.push_back(asp);
 }
 
-
 void
 Airspaces::clear()
 {
-
   // delete temporaries in case they were added without an optimise() call
   while (!tmp_as.empty()) {
     AbstractAirspace *aa = tmp_as.front();
@@ -280,8 +262,6 @@ Airspaces::~Airspaces()
 {
   clear();
 }
-
-////////////////////////////////////
 
 void 
 Airspaces::set_ground_levels(const RasterTerrain &terrain)
@@ -319,4 +299,3 @@ Airspaces::end() const
 {
   return airspace_tree.end();
 }
-
