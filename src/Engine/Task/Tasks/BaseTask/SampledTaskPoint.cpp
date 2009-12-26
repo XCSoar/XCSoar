@@ -51,8 +51,7 @@ SampledTaskPoint::SampledTaskPoint(const TaskProjection& tp,
   m_nominal_point.push_back(m_search_reference);
 }
 
-////////////// SAMPLES /////////////////////////
-
+// SAMPLES
 
 bool 
 SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
@@ -90,7 +89,7 @@ SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last)
   }
 }
 
-////////////// BOUNDARY
+// BOUNDARY
 
 static const fixed fixed_steps(0.05);
 
@@ -112,8 +111,7 @@ SampledTaskPoint::update_oz()
   update_projection();
 }
 
-
-///////////// SAMPLES + BOUNDARY
+// SAMPLES + BOUNDARY
 
 void 
 SampledTaskPoint::update_projection()
