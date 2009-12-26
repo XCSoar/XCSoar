@@ -44,7 +44,8 @@ class NonCopyable
 {
   protected:
     NonCopyable () {}
-    ~NonCopyable () {} /// Protected non-virtual destructor
+    /** Protected non-virtual destructor */
+    ~NonCopyable () {}
   private: 
     NonCopyable (const NonCopyable &);
     NonCopyable & operator = (const NonCopyable &);
