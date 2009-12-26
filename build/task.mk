@@ -54,6 +54,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Tasks/GotoTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/OrderedTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/UnorderedTask.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/OnlineContest.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/IntermediatePoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/ObservationZoneClient.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/ObservationZonePoint.cpp \
@@ -75,6 +76,8 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/SymmetricSectorZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/FAISectorZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstra.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/NavDijkstra.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCDijkstra.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/IsolineCrossingFinder.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCready.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCreadyTravelled.cpp \
