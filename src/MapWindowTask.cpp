@@ -474,11 +474,6 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
   terrain->Unlock();
 }
 
-
-/////////////////////////////////////////////////////////////////////////////
-
-
-
 #ifdef OLD_TASK
 
 void
