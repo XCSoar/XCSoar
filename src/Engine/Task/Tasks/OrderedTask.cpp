@@ -83,7 +83,7 @@ OrderedTask::update_geometry()
   }
 }
 
-////////// TIMES
+// TIMES
 
 fixed 
 OrderedTask::scan_total_start_time(const AIRCRAFT_STATE &)
@@ -105,7 +105,7 @@ OrderedTask::scan_leg_start_time(const AIRCRAFT_STATE &)
   }
 }
 
-////////// DISTANCES
+// DISTANCES
 
 fixed
 OrderedTask::scan_distance_min(const GEOPOINT &location, bool full)
@@ -208,7 +208,7 @@ OrderedTask::scan_distance_planned()
   }
 }
 
-////////// TRANSITIONS
+// TRANSITIONS
 
 bool 
 OrderedTask::check_transitions(const AIRCRAFT_STATE &state, 
@@ -277,7 +277,7 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   return full_update;
 }
 
-////////// ADDITIONAL FUNCTIONS
+// ADDITIONAL FUNCTIONS
 
 bool 
 OrderedTask::update_idle(const AIRCRAFT_STATE& state)
@@ -316,7 +316,7 @@ OrderedTask::update_sample(const AIRCRAFT_STATE &state,
   return true;
 }
 
-////////// TASK 
+// TASK
 
 void
 OrderedTask::set_neighbours(unsigned position)
@@ -541,7 +541,7 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
     set_distance(tm.effective_leg_distance(fixed(leg_t_elapsed)));
 }
 
-////////// Auxiliary glide functions
+// Auxiliary glide functions
 
 fixed
 OrderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft) 
@@ -622,7 +622,7 @@ OrderedTask::calc_gradient(const AIRCRAFT_STATE &state)
 }
 
 
-////////// Constructors/destructors
+// Constructors/destructors
 
 OrderedTask::~OrderedTask()
 {
@@ -643,8 +643,6 @@ OrderedTask::OrderedTask(const TaskEvents &te,
   tf(NULL)
 {
 }
-
-////////////////////////
 
 void 
 OrderedTask::Accept(TaskPointVisitor& visitor, const bool reverse) const
