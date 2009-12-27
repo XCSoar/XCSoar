@@ -94,9 +94,9 @@ NavDijkstra::finish_satisfied() const
 
 void
 NavDijkstra::find_solution(const DijkstraTaskPoint &dijkstra, 
-                           const ScanTaskPoint curNode)
+                           const ScanTaskPoint destination)
 {
-  ScanTaskPoint p = curNode; 
+  ScanTaskPoint p = destination; 
   ScanTaskPoint p_last;
   do {
     p_last = p;

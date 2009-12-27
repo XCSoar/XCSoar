@@ -18,15 +18,23 @@ OnlineContest::OnlineContest(const TaskEvents &te,
 bool 
 OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 {
+  bool do_add = false;
+
   if (m_sampled_points.empty()) {
     m_task_projection.reset(state.Location);
     m_task_projection.update_fast();
+    do_add = true;
+  } else {
+    if (distance_is_significant(state.Location, m_sampled_points.back().get_location())) {
+      do_add = true;
+    }
+  }
+  if (!do_add) {
+    return false;
   }
 
   SearchPoint sp(state.Location, m_task_projection, true);
   m_sampled_points.push_back(sp);
-
-  // todo: use distance_is_significant function so not adding every point.
 
   return true;
 }

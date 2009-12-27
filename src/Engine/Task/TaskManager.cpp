@@ -292,8 +292,9 @@ TaskManager::update(const AIRCRAFT_STATE &state,
   }
 
   // always update OLC task
-
-  retval |= task_olc.update_sample(state);
+  if (task_behaviour.enable_olc) {
+    retval |= task_olc.update_sample(state);
+  }
 
   update_common_stats(state);
 
@@ -304,7 +305,11 @@ bool
 TaskManager::update_idle(const AIRCRAFT_STATE& state)
 {
   // always update OLC
-  bool retval = task_olc.update_idle(state);
+  bool retval = false;
+
+  if (task_behaviour.enable_olc) {
+    retval |= task_olc.update_idle(state);
+  }
 
   if (active_task) {
     retval |= active_task->update_idle(state);

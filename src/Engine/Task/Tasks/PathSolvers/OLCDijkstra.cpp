@@ -44,9 +44,9 @@ OLCDijkstra::~OLCDijkstra() {
 
 
 OLCDijkstra::OLCDijkstra(OnlineContest& _olc, const unsigned n_legs):
-  NavDijkstra(n_legs),
+  NavDijkstra(n_legs+1),
   olc(_olc),
-  n_points(olc.get_sample_points().size())
+  n_points(_olc.get_sample_points().size())
 {
   m_weightings.reserve(n_legs);
 }
@@ -54,7 +54,7 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc, const unsigned n_legs):
 void
 OLCDijkstra::set_weightings()
 {
-  for (unsigned i=0; i<num_stages; i++) {
+  for (unsigned i=0; i+1<num_stages; ++i) {
     m_weightings[i] = 1;
   }
 }
@@ -80,39 +80,42 @@ OLCDijkstra::solve()
   const ScanTaskPoint start(0,0);
   DijkstraTaskPoint dijkstra(start);
 
+  add_start_edges(dijkstra);
+
   const unsigned d= distance_general(dijkstra);
   return d;
 }
 
 void 
 OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
-                       const ScanTaskPoint& curNode) 
+                       const ScanTaskPoint& origin) 
 {
-  if (curNode.first) {
-    ScanTaskPoint destination;
-    destination.first = curNode.first+1;
-    destination.second = curNode.second+1;
-    const unsigned end = (int)n_points+curNode.first-num_stages+1;
-    
-    find_solution(dijkstra, curNode);
-    
-    for (; destination.second< end; ++destination.second) {
-      dijkstra.link(destination, curNode, weighted_distance(curNode, destination));
-    }
-  } else {
-
-    dijkstra.pop(); // need to remove dummy first point
-
-    ScanTaskPoint destination;
-    destination.first = 0;
-    destination.second = 0;
-    const unsigned end = (int)n_points-num_stages+1;
-    
-    for (; destination.second< end; ++destination.second) {
-      dijkstra.link(destination, destination, 0);
-    }
+  ScanTaskPoint destination;
+  destination.first = origin.first+1;
+  destination.second = origin.second+1;
+  const unsigned end = (int)n_points+origin.first-num_stages+1;
+  
+  find_solution(dijkstra, destination);
+  
+  for (; destination.second< end; ++destination.second) {
+    dijkstra.link(destination, origin, weighted_distance(origin, destination));
   }
+}
 
+void
+OLCDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra)
+{
+
+  ScanTaskPoint destination;
+  destination.first = 0;
+  destination.second = 0;
+  const unsigned end = (int)n_points-num_stages+1;
+
+  dijkstra.pop();
+
+  for (; destination.second< end; ++destination.second) {
+    dijkstra.link(destination, destination, 0);
+  }
 }
 
 unsigned 

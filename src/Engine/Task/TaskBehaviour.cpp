@@ -46,6 +46,7 @@ TaskBehaviour::all_off()
   calc_cruise_efficiency=false;
   calc_glide_required=false;
   task_scored = false;
+  enable_olc = false;
 }
 
 bool 
@@ -71,7 +72,8 @@ TaskBehaviour::TaskBehaviour():
     safety_height_terrain(150.0),
     safety_height_arrival(300.0),
     start_max_speed(60.0),
-    risk_gamma(0.0)
+    risk_gamma(0.0),
+    enable_olc(false)
 {
 }
 

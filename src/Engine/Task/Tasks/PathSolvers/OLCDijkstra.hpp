@@ -72,12 +72,15 @@ protected:
   virtual void set_weightings();
 
 private:
+
   const unsigned n_points;
   std::vector<unsigned> m_weightings;
   OnlineContest& olc;
 
   unsigned weighted_distance(const ScanTaskPoint &sp1,
                              const ScanTaskPoint &sp2) const;
+
+  void add_start_edges(DijkstraTaskPoint &dijkstra);
 
 };
 

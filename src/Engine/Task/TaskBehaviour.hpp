@@ -70,6 +70,8 @@ public:
   fixed start_max_speed; /**< Maximum ground speed (m/s) allowed in start sector */
   fixed risk_gamma; /**< Compensation factor for risk at low altitude */
 
+  bool enable_olc; /**< Whether to do online OLC optimisation */
+
 /** 
  * Convenience function (used primarily for testing) to disable
  * all expensive task behaviour functions.

@@ -55,7 +55,7 @@ protected:
                     const ScanTaskPoint &sp2) const;
 
   void find_solution(const DijkstraTaskPoint &dijkstra, 
-                     const ScanTaskPoint curNode);
+                     const ScanTaskPoint destination);
 
 private:
 
