@@ -104,3 +104,4 @@ NavDijkstra::find_solution(const DijkstraTaskPoint &dijkstra,
     p = dijkstra.get_predecessor(p_last);
   } while (!(p == p_last));
 }
+

@@ -38,12 +38,20 @@ public:
  * - check tracking of active waypoint
  *
  * @param state_now Aircraft state at this time step
- * @param full_update Force update due to task state change
  *
  * @return True if internal state changes
  */
-  bool update_sample(const AIRCRAFT_STATE &state_now, 
-                     const bool full_update);
+  bool update_sample(const AIRCRAFT_STATE &state_now);
+
+/** 
+ * Update internal states (non-essential) for housework, or where functions are slow
+ * and would cause loss to real-time performance.
+ * 
+ * @param state_now Aircraft state at this time step
+ * 
+ * @return True if internal state changed
+ */
+  bool update_idle(const AIRCRAFT_STATE &state);
 
   /** 
    * Reset the task (as if never flown)

@@ -43,6 +43,7 @@
 #include "Tasks/AbortTask.hpp"
 #include "Tasks/GotoTask.hpp"
 #include "Tasks/OrderedTask.hpp"
+#include "Tasks/OnlineContest.hpp"
 #include "TaskStats/TaskStats.hpp"
 #include "TaskStats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
@@ -322,14 +323,13 @@ public:
 private:
   GlidePolar m_glide_polar;
 
-  /** @link aggregation */
   OrderedTask task_ordered;
 
-  /** @link aggregation */
   GotoTask task_goto;
   
-  /** @link aggregation */
   AbortTask task_abort;
+
+  OnlineContest task_olc;
 
   const TaskBehaviour &task_behaviour;
 

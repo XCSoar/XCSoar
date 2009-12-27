@@ -16,8 +16,7 @@ OnlineContest::OnlineContest(const TaskEvents &te,
 
 
 bool 
-OnlineContest::update_sample(const AIRCRAFT_STATE &state, 
-                             const bool full_update)
+OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 {
   if (m_sampled_points.empty()) {
     m_task_projection.reset(state.Location);
@@ -31,6 +30,17 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state,
 
   return true;
 }
+
+
+bool 
+OnlineContest::update_idle(const AIRCRAFT_STATE &state)
+{
+  OLCDijkstra dijkstra(*this, 3); // num stages, for testing now
+  dijkstra.solve();
+
+  return true;
+}
+
 
 void
 OnlineContest::reset()
@@ -57,7 +67,7 @@ void
 OnlineContest::Accept(TaskPointVisitor& visitor, 
                       const bool reverse) const
 {
-
+  /// \todo - visit "OLCPoint"
 }
 
 bool 

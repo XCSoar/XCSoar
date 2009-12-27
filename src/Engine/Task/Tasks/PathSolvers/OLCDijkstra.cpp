@@ -78,16 +78,31 @@ void
 OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
                        const ScanTaskPoint& curNode) 
 {
-  ScanTaskPoint destination;
-  destination.first = curNode.first+1;
-  destination.second = curNode.second+1;
-  const unsigned end = (int)n_points+curNode.first-num_stages+1;
+  if (curNode.first) {
+    ScanTaskPoint destination;
+    destination.first = curNode.first+1;
+    destination.second = curNode.second+1;
+    const unsigned end = (int)n_points+curNode.first-num_stages+1;
+    
+    find_solution(dijkstra, curNode);
+    
+    for (; destination.second< end; ++destination.second) {
+      dijkstra.link(destination, curNode, weighted_distance(curNode, destination));
+    }
+  } else {
 
-  find_solution(dijkstra, curNode);
+    dijkstra.pop(); // need to remove dummy first point
 
-  for (; destination.second< end; ++destination.second) {
-    dijkstra.link(destination, curNode, weighted_distance(curNode, destination));
+    ScanTaskPoint destination;
+    destination.first = 0;
+    destination.second = 0;
+    const unsigned end = (int)n_points-num_stages+1;
+    
+    for (; destination.second< end; ++destination.second) {
+      dijkstra.link(destination, destination, 0);
+    }
   }
+
 }
 
 unsigned 
@@ -98,7 +113,6 @@ OLCDijkstra::weighted_distance(const ScanTaskPoint &sp1,
   return distance(sp1, sp2);
 }
 
-// need a add_start_edges call (otherwise requires start at first point)
 
 bool 
 OLCDijkstra::finish_satisfied() const

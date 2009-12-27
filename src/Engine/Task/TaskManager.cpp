@@ -47,6 +47,7 @@ TaskManager::TaskManager(const TaskEvents &te,
   task_ordered(te,tb,task_advance,m_glide_polar),
   task_goto(te,tb,task_advance,m_glide_polar),
   task_abort(te,tb,task_advance,m_glide_polar,wps),
+  task_olc(te,tb,m_glide_polar),
   task_behaviour(tb),
   factory_fai(task_ordered,tb),
   factory_aat(task_ordered,tb),
@@ -290,6 +291,10 @@ TaskManager::update(const AIRCRAFT_STATE &state,
     retval |= active_task->update(state, state_last);
   }
 
+  // always update OLC task
+
+  retval |= task_olc.update_sample(state);
+
   update_common_stats(state);
 
   return retval;
@@ -298,11 +303,14 @@ TaskManager::update(const AIRCRAFT_STATE &state,
 bool 
 TaskManager::update_idle(const AIRCRAFT_STATE& state)
 {
+  // always update OLC
+  bool retval = task_olc.update_idle(state);
+
   if (active_task) {
-    return active_task->update_idle(state);
-  } else {
-    return false;
+    retval |= active_task->update_idle(state);
   }
+
+  return retval;
 }
 
 
@@ -378,6 +386,7 @@ TaskManager::reset()
   task_ordered.reset();
   task_goto.reset();
   task_abort.reset();
+  task_olc.reset();
   common_stats.reset();
   m_glide_polar.set_cruise_efficiency(fixed_one);
 }
