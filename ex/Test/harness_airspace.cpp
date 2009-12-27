@@ -295,7 +295,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
                                               do_report,
                                               state, perf);
     GeoVector vec(state.Location, target);
-    airspaces.visit_intersecting(state.Location, vec, ivisitor, true);
+    airspaces.visit_intersecting(state.Location, vec, ivisitor);
   }
 
   {

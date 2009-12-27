@@ -34,8 +34,7 @@ testslow:	$(TESTSLOW:.exe=-$(TARGET).exe)
 testfast:	$(TESTFAST:.exe=-$(TARGET).exe)
 	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTFAST:.exe=-$(TARGET).exe)
 
-TESTLIBS = $(SRC)/shapelib-$(TARGET).a \
-	   $(TEST_SRC_DIR)/harness-$(TARGET).a \
+TESTLIBS = $(TEST_SRC_DIR)/harness-$(TARGET).a \
 	   $(ENGINE_SRC_DIR)/task-$(TARGET).a 
 
 $(TEST_SRC_DIR)/%-$(TARGET).exe: $(TEST_SRC_DIR)/%.cpp $(TESTLIBS)
