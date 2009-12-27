@@ -119,8 +119,8 @@ public:
  * 
  * @return Predecessor node
  */
-  Node get_predecessor(const Node &n) {
-    IterP it = p.find(n);
+  Node get_predecessor(const Node &n) const {
+    IterCP it = p.find(n);
     if (it == p.end()) { // first entry
       return n;
     } else {
@@ -160,6 +160,7 @@ private:
 
   typedef typename std::map<Node, unsigned>::iterator Iter;
   typedef typename std::map<Node, Node>::iterator IterP;
+  typedef typename std::map<Node, Node>::const_iterator IterCP;
 
   typedef std::pair<unsigned, Iter> Value;
 

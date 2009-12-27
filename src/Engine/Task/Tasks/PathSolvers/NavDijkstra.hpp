@@ -54,7 +54,8 @@ protected:
   unsigned distance(const ScanTaskPoint &sp1,
                     const ScanTaskPoint &sp2) const;
 
-  void find_solution(const ScanTaskPoint curNode);
+  void find_solution(const DijkstraTaskPoint &dijkstra, 
+                     const ScanTaskPoint curNode);
 
 private:
 

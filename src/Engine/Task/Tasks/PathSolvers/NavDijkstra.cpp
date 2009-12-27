@@ -33,7 +33,7 @@ NavDijkstra::distance_general(DijkstraTaskPoint &dijkstra)
 
       if (curNode.first+1 == num_stages) {
 
-        find_solution(curNode);
+        find_solution(dijkstra, curNode);
 
         if (finish_satisfied()) {
           return extremal_distance(dijkstra.dist());
@@ -93,7 +93,8 @@ NavDijkstra::finish_satisfied() const
 }
 
 void
-NavDijkstra::find_solution(const ScanTaskPoint curNode)
+NavDijkstra::find_solution(const DijkstraTaskPoint &dijkstra, 
+                           const ScanTaskPoint curNode)
 {
   ScanTaskPoint p = curNode; 
   ScanTaskPoint p_last;
