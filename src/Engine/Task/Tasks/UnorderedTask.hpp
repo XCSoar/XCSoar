@@ -42,7 +42,8 @@
 /**
  *  Common class for all unordered task types
  */
-class UnorderedTask: public AbstractTask
+class UnorderedTask: 
+  public AbstractTask
 {
 public:
   /** 

@@ -38,13 +38,9 @@
 #ifndef TASK_DIJKSTRA_HPP
 #define TASK_DIJKSTRA_HPP
 
-#include "Util/NonCopyable.hpp"
-#include "Navigation/SearchPointVector.hpp"
+#include "NavDijkstra.hpp"
 
 class OrderedTask;
-typedef std::pair<unsigned, unsigned> ScanTaskPoint;
-template <class Node> class Dijkstra;
-typedef Dijkstra<ScanTaskPoint> DijkstraTaskPoint;
 
 /**
  * Class used to scan an OrderedTask for maximum/minimum distance
@@ -63,7 +59,8 @@ typedef Dijkstra<ScanTaskPoint> DijkstraTaskPoint;
  *
  * This uses a Dijkstra search and so is O(N log(N)).
  */
-class TaskDijkstra: private NonCopyable 
+class TaskDijkstra: 
+  public NavDijkstra
 {
 public:
 /**
@@ -103,23 +100,11 @@ public:
  */  
   unsigned distance_min(const SearchPoint& location);
 
-/** 
- * Test whether two points (as previous search locations) are significantly
- * different to warrant a new search
- * 
- * @param a1 First point to compare
- * @param a2 Second point to compare
- * 
- * @return True if distance is significant
- */
-  static bool distance_is_significant(const SearchPoint& a1,
-                                      const SearchPoint& a2);
+protected:
+  const SearchPoint &get_point(const ScanTaskPoint &sp) const;
 
 private:
-
-  std::vector<unsigned> sp_sizes;
-
-  unsigned distance_general(DijkstraTaskPoint &dijkstra);
+  unsigned get_size(const unsigned stage) const;
 
   void add_edges(DijkstraTaskPoint &dijkstra,
                  const ScanTaskPoint &curNode);
@@ -127,27 +112,12 @@ private:
   void add_start_edges(DijkstraTaskPoint &dijkstra,
                  const SearchPoint &loc);
 
-  unsigned distance(const ScanTaskPoint &sp,
-                    const SearchPoint &loc) const;
-
-  unsigned distance(const ScanTaskPoint &sp1,
-                    const ScanTaskPoint &sp2) const;
-
   void save_max();
   void save_min();
 
-  unsigned activeStage;
-
-  unsigned extremal_distance(const unsigned d) const;
-
-  SearchPointVector solution;
-
   OrderedTask& task;
-  bool shortest;
-  const unsigned num_taskpoints;
-
-  const SearchPoint &get_point(const ScanTaskPoint &sp) const;
-  unsigned get_size(const unsigned stage) const;
+  std::vector<unsigned> sp_sizes;
+  unsigned active_stage;
 };
 
 #endif
