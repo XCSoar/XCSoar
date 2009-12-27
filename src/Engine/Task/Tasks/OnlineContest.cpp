@@ -79,15 +79,16 @@ OnlineContest::distance_is_significant(const GEOPOINT &location,
      check extra rules (e.g. triangle leg lengths)
   -- (specialised for each type of OLC rule)
 
-- OLCDijsktra
+- OLCDijksktra
   (much like TaskDijsktra)
 
 - Possible use of convex reduction for approximate solution to triangle
 
-- Need to template SearchPointVector so it can have extras or less
+- Need to template SearchPointVector (and NavDijkstra) so it can have extras or less
   - GeoPoint
   - +FlatPoint
   - +Time
   - +Altitude
 
+- Specialised thinning routine; store max/min altitude etc
 */

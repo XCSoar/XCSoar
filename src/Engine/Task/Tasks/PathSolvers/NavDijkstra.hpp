@@ -54,6 +54,8 @@ protected:
   unsigned distance(const ScanTaskPoint &sp1,
                     const ScanTaskPoint &sp2) const;
 
+  void find_solution(const ScanTaskPoint curNode);
+
 private:
 
   unsigned extremal_distance(const unsigned d) const;

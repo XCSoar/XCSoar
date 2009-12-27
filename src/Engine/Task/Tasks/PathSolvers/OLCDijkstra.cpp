@@ -83,6 +83,8 @@ OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
   destination.second = curNode.second+1;
   const unsigned end = (int)n_points+curNode.first-num_stages+1;
 
+  find_solution(curNode);
+
   for (; destination.second< end; ++destination.second) {
     dijkstra.link(destination, curNode, weighted_distance(curNode, destination));
   }
