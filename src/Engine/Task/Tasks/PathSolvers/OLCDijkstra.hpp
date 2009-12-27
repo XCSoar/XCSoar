@@ -69,13 +69,16 @@ protected:
                  const ScanTaskPoint &curNode);
 
   virtual bool finish_satisfied() const;
+  virtual void set_weightings();
 
 private:
   const unsigned n_points;
+  std::vector<unsigned> m_weightings;
   OnlineContest& olc;
 
-  virtual unsigned weighted_distance(const ScanTaskPoint &sp1,
-                                     const ScanTaskPoint &sp2) const;
+  unsigned weighted_distance(const ScanTaskPoint &sp1,
+                             const ScanTaskPoint &sp2) const;
+
 };
 
 #endif

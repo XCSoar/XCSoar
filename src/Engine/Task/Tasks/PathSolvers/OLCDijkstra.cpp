@@ -48,8 +48,16 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc, const unsigned n_legs):
   olc(_olc),
   n_points(olc.get_sample_points().size())
 {
+  m_weightings.reserve(n_legs);
 }
 
+void
+OLCDijkstra::set_weightings()
+{
+  for (unsigned i=0; i<num_stages; i++) {
+    m_weightings[i] = 1;
+  }
+}
 
 const SearchPoint &
 OLCDijkstra::get_point(const ScanTaskPoint &sp) const
@@ -66,6 +74,8 @@ OLCDijkstra::solve()
   }
 
   shortest = false;
+
+  set_weightings();
 
   const ScanTaskPoint start(0,0);
   DijkstraTaskPoint dijkstra(start);
@@ -109,8 +119,7 @@ unsigned
 OLCDijkstra::weighted_distance(const ScanTaskPoint &sp1,
                                const ScanTaskPoint &sp2) const
 {
-  /// \todo implement leg weightings for some OLC types
-  return distance(sp1, sp2);
+  return m_weightings[sp1.first]*distance(sp1, sp2);
 }
 
 
