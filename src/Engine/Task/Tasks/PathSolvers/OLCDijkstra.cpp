@@ -36,7 +36,6 @@
 */
 
 #include "OLCDijkstra.hpp"
-#include "Dijkstra.hpp"
 #include "Task/Tasks/OnlineContest.hpp"
 
 OLCDijkstra::~OLCDijkstra() {
@@ -44,9 +43,9 @@ OLCDijkstra::~OLCDijkstra() {
 
 
 OLCDijkstra::OLCDijkstra(OnlineContest& _olc, const unsigned n_legs):
-  NavDijkstra(n_legs+1),
+  NavDijkstra<TracePoint>(n_legs+1),
   olc(_olc),
-  n_points(_olc.get_sample_points().size())
+  n_points(_olc.get_trace_points().size())
 {
   m_weightings.reserve(n_legs);
 }
@@ -59,10 +58,10 @@ OLCDijkstra::set_weightings()
   }
 }
 
-const SearchPoint &
+const TracePoint &
 OLCDijkstra::get_point(const ScanTaskPoint &sp) const
 {
-  return olc.get_sample_points()[sp.second];
+  return olc.get_trace_points()[sp.second];
 }
 
 
@@ -133,3 +132,36 @@ OLCDijkstra::finish_satisfied() const
   /// - e.g. triangle leg
   return true;
 }
+
+
+/*
+
+OLC classic:
+- start, 5 turnpoints, finish
+- weightings: 1,1,1,0.8,0.8,0.6
+
+OLC league:
+- start, 3 turnpoints, finish
+- weightings: 1 all
+- The sprint start point can not be higher than the sprint end point.
+- The sprint start altitude is the altitude at the sprint start point.
+- Sprint arrival height is the altitude at the sprint end point.
+- The average speed (points) of each individual flight is the sum of
+the distances from sprint start, around up to three turnpoints, to the
+sprint end divided DAeC index increased by 100, multiplied by 200 and
+divided by 2.5h: [formula: Points = km / 2,5 * 200 / (Index+100)
+
+FAI OLC:
+- start, 2 turnpoints, finish
+- if d<500km, shortest leg >= 28% d; else shortest leg >= 25%d
+- considered closed if a fix is within 1km of starting point
+- weightings: 1 all
+
+OLC classic + FAI-OLC
+- min finish alt is 1000m below start altitude 
+- start altitude is lowest altitude before reaching start
+- start time is time at which start altitude is reached
+- The finish altitude is the highest altitude after reaching the finish point and before end of free flight.
+- The finish time is the time at which the finish altitude is reached after the finish point is reached.
+
+*/

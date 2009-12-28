@@ -44,6 +44,7 @@ typedef std::vector<SearchPoint> SearchPointVector;
 
 bool prune_interior(SearchPointVector& spv);
 bool is_convex(const SearchPointVector& spv);
+
 void project(SearchPointVector& spv, const TaskProjection& tp);
 
 FLAT_GEOPOINT nearest_point(const SearchPointVector& spv, 

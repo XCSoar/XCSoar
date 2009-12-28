@@ -39,13 +39,14 @@
 #define OLC_DIJKSTRA_HPP
 
 #include "NavDijkstra.hpp"
+#include "Navigation/TracePoint.hpp"
 
 class OnlineContest;
 
 /**
  */
 class OLCDijkstra: 
-  public NavDijkstra
+  public NavDijkstra<TracePoint>
 {
 public:
 /**
@@ -63,7 +64,7 @@ public:
   unsigned solve();
 
 protected:
-  const SearchPoint &get_point(const ScanTaskPoint &sp) const;
+  const TracePoint &get_point(const ScanTaskPoint &sp) const;
 
   void add_edges(DijkstraTaskPoint &dijkstra,
                  const ScanTaskPoint &curNode);

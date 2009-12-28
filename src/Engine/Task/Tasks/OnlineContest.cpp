@@ -20,12 +20,12 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 {
   bool do_add = false;
 
-  if (m_sampled_points.empty()) {
+  if (m_trace_points.empty()) {
     m_task_projection.reset(state.Location);
     m_task_projection.update_fast();
     do_add = true;
   } else {
-    if (distance_is_significant(state.Location, m_sampled_points.back().get_location())) {
+    if (distance_is_significant(state, m_trace_points.back())) {
       do_add = true;
     }
   }
@@ -33,8 +33,8 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
     return false;
   }
 
-  SearchPoint sp(state.Location, m_task_projection, true);
-  m_sampled_points.push_back(sp);
+  TracePoint sp(state, m_task_projection);
+  m_trace_points.push_back(sp);
 
   return true;
 }
@@ -53,21 +53,21 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 void
 OnlineContest::reset()
 {
-  m_sampled_points.clear();
+  m_trace_points.clear();
 }
 
 
-const SearchPointVector& 
-OnlineContest::get_sample_points() const
+const TracePointVector& 
+OnlineContest::get_trace_points() const
 {
-  return m_sampled_points;
+  return m_trace_points;
 }
 
 
 void
-OnlineContest::thin_samples()
+OnlineContest::thin_trace()
 {
-  /// \todo thin samples if OLC samples gets too big
+  /// \todo thin trace if OLC samples gets too big
 }
 
 
@@ -79,12 +79,11 @@ OnlineContest::Accept(TaskPointVisitor& visitor,
 }
 
 bool 
-OnlineContest::distance_is_significant(const GEOPOINT &location,
-                                       const GEOPOINT &location_last) const
+OnlineContest::distance_is_significant(const AIRCRAFT_STATE &state,
+                                       const TracePoint &state_last) const
 {
-  SearchPoint a1(location, m_task_projection);
-  SearchPoint a2(location_last, m_task_projection);
-  return OLCDijkstra::distance_is_significant(a1, a2);
+  TracePoint a1(state, m_task_projection);
+  return OLCDijkstra::distance_is_significant(a1, state_last);
 }
 
 /*

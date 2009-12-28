@@ -25,7 +25,6 @@ extern long count_mc;
 long count_intersections;
 extern unsigned n_queries;
 extern unsigned count_distbearing;
-extern unsigned num_dijkstra;
 #endif
 
 
@@ -36,7 +35,6 @@ void distance_counts() {
 #ifdef INSTRUMENT_TASK
     printf("#     dist+bearing calcs/c %d\n",count_distbearing/n_samples); 
     printf("#     mc calcs/c %d\n",(int)(count_mc/n_samples));
-    printf("#     dijkstra/c %d\n",num_dijkstra/n_samples);
     if (n_queries>0) {
       printf("#     intersection tests/q %d\n",(unsigned)(count_intersections/n_queries));
       printf("#    (total queries %d)\n\n",n_queries);
@@ -51,7 +49,6 @@ void distance_counts() {
   n_queries = 0;
   count_distbearing = 0;
   count_mc = 0;
-  num_dijkstra = 0;
 #endif
 }
 

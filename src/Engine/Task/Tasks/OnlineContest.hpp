@@ -3,7 +3,7 @@
 
 #include "Util/GenericVisitor.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Navigation/SearchPointVector.hpp"
+#include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include <vector>
 
@@ -60,11 +60,11 @@ public:
   void reset();
 
 /** 
- * Retrieve interior sample polygon (pure).
+ * Retrieve trace vector
  * 
  * @return Vector of sample points 
  */
-  const SearchPointVector& get_sample_points() const;
+  const TracePointVector& get_trace_points() const;
 
 private:
   const TaskEvents &m_task_events;
@@ -72,13 +72,12 @@ private:
   const GlidePolar &m_glide_polar;
   TaskProjection m_task_projection;
 
-  SearchPointVector m_sampled_points;
+  TracePointVector m_trace_points;
 
-  // note this is copied from OrderedTask.cpp
-  bool distance_is_significant(const GEOPOINT &location,
-                               const GEOPOINT &location_last) const;
+  bool distance_is_significant(const AIRCRAFT_STATE &state,
+                               const TracePoint &state_last) const;
 
-  void thin_samples();
+  void thin_trace();
 
 public:
 /** 

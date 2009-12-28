@@ -39,6 +39,7 @@
 #define TASK_DIJKSTRA_HPP
 
 #include "NavDijkstra.hpp"
+#include "Navigation/SearchPointVector.hpp"
 
 class OrderedTask;
 
@@ -60,7 +61,7 @@ class OrderedTask;
  * This uses a Dijkstra search and so is O(N log(N)).
  */
 class TaskDijkstra: 
-  public NavDijkstra
+  public NavDijkstra<SearchPoint>
 {
 public:
 /**
