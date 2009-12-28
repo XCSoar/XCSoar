@@ -2,7 +2,7 @@
 #include "Task/TaskEvents.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "PathSolvers/OLCDijkstra.hpp"
+#include "PathSolvers/OLCSprint.hpp"
 
 OnlineContest::OnlineContest(const TaskEvents &te, 
                              const TaskBehaviour &tb,
@@ -43,7 +43,7 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 bool 
 OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 {
-  OLCDijkstra dijkstra(*this, 3); // num stages, for testing now
+  OLCSprint dijkstra(*this);
   dijkstra.solve();
 
   return true;

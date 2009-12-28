@@ -37,15 +37,19 @@
 
 #include "OLCDijkstra.hpp"
 #include "Task/Tasks/OnlineContest.hpp"
+#include <assert.h>
 
 OLCDijkstra::~OLCDijkstra() {
 }
 
 
-OLCDijkstra::OLCDijkstra(OnlineContest& _olc, const unsigned n_legs):
+OLCDijkstra::OLCDijkstra(OnlineContest& _olc, 
+                         const unsigned n_legs,
+                         const unsigned finish_alt_diff):
   NavDijkstra<TracePoint>(n_legs+1),
   olc(_olc),
-  n_points(_olc.get_trace_points().size())
+  n_points(_olc.get_trace_points().size()),
+  m_finish_alt_diff(finish_alt_diff)
 {
   m_weightings.reserve(n_legs);
 }
@@ -54,7 +58,7 @@ void
 OLCDijkstra::set_weightings()
 {
   for (unsigned i=0; i+1<num_stages; ++i) {
-    m_weightings[i] = 1;
+    m_weightings[i] = 5;
   }
 }
 
@@ -82,7 +86,7 @@ OLCDijkstra::solve()
   add_start_edges(dijkstra);
 
   const unsigned d= distance_general(dijkstra);
-  return d;
+  return d/5;
 }
 
 void 
@@ -97,7 +101,9 @@ OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
   find_solution(dijkstra, destination);
   
   for (; destination.second< end; ++destination.second) {
-    dijkstra.link(destination, origin, weighted_distance(origin, destination));
+    if (admit_candidate(destination)) {
+      dijkstra.link(destination, origin, weighted_distance(origin, destination));
+    }
   }
 }
 
@@ -125,12 +131,22 @@ OLCDijkstra::weighted_distance(const ScanTaskPoint &sp1,
 }
 
 
-bool 
-OLCDijkstra::finish_satisfied() const
+bool
+OLCDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
 {
-  /// \todo implement checks for some OLC types
-  /// - e.g. triangle leg
-  return true;
+  if (candidate.first+1 < num_stages) 
+    return true;
+  else {
+    return (get_point(candidate).altitude+m_finish_alt_diff > 
+            solution[0].altitude);
+  }
+}
+
+bool 
+OLCDijkstra::finish_satisfied(const ScanTaskPoint &sp) const
+{
+  assert(admit_candidate(sp));
+  return admit_candidate(sp);
 }
 
 
@@ -139,17 +155,6 @@ OLCDijkstra::finish_satisfied() const
 OLC classic:
 - start, 5 turnpoints, finish
 - weightings: 1,1,1,0.8,0.8,0.6
-
-OLC league:
-- start, 3 turnpoints, finish
-- weightings: 1 all
-- The sprint start point can not be higher than the sprint end point.
-- The sprint start altitude is the altitude at the sprint start point.
-- Sprint arrival height is the altitude at the sprint end point.
-- The average speed (points) of each individual flight is the sum of
-the distances from sprint start, around up to three turnpoints, to the
-sprint end divided DAeC index increased by 100, multiplied by 200 and
-divided by 2.5h: [formula: Points = km / 2,5 * 200 / (Index+100)
 
 FAI OLC:
 - start, 2 turnpoints, finish
@@ -163,5 +168,17 @@ OLC classic + FAI-OLC
 - start time is time at which start altitude is reached
 - The finish altitude is the highest altitude after reaching the finish point and before end of free flight.
 - The finish time is the time at which the finish altitude is reached after the finish point is reached.
+
+
+OLC league:
+- start, 3 turnpoints, finish
+- weightings: 1 all
+- The sprint start point can not be higher than the sprint end point.
+- The sprint start altitude is the altitude at the sprint start point.
+- Sprint arrival height is the altitude at the sprint end point.
+- The average speed (points) of each individual flight is the sum of
+the distances from sprint start, around up to three turnpoints, to the
+sprint end divided DAeC index increased by 100, multiplied by 200 and
+divided by 2.5h: [formula: Points = km / 2,5 * 200 / (Index+100)
 
 */

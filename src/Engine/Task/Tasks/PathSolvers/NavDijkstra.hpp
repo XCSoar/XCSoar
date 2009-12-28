@@ -42,7 +42,7 @@ public:
 
 protected:
 
-  virtual bool finish_satisfied() const {
+  virtual bool finish_satisfied(const ScanTaskPoint &sp) const {
     return true;
   }
 
@@ -64,7 +64,7 @@ protected:
           
           find_solution(dijkstra, destination);
           
-          if (finish_satisfied()) {
+          if (finish_satisfied(destination)) {
             return extremal_distance(dijkstra.dist());
           }
         }

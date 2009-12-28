@@ -34,61 +34,25 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+#ifndef OLC_CLASSIC_HPP
+#define OLC_CLASSIC_HPP
 
-#ifndef OLC_DIJKSTRA_HPP
-#define OLC_DIJKSTRA_HPP
+#include "OLCDijkstra.hpp"
 
-#include "NavDijkstra.hpp"
-#include "Navigation/TracePoint.hpp"
-
-class OnlineContest;
-
-/**
- */
-class OLCDijkstra: 
-  public NavDijkstra<TracePoint>
+class OLCClassic: 
+  public OLCDijkstra
 {
 public:
+
 /**
  * Constructor
  *
  * @param _olc The OLC task to solve for
  */
-  OLCDijkstra(OnlineContest& _olc, const unsigned n_legs,
-    const unsigned finish_alt_diff = 3000);
-
-/**
- * Destructor, frees local variables
- */
-  ~OLCDijkstra();
-
-  unsigned solve();
+  OLCClassic(OnlineContest& _olc);
 
 protected:
-  const TracePoint &get_point(const ScanTaskPoint &sp) const;
-
-  void add_edges(DijkstraTaskPoint &dijkstra,
-                 const ScanTaskPoint &curNode);
-
-  virtual bool finish_satisfied(const ScanTaskPoint &sp) const;
-
-  virtual void set_weightings();
-
-  virtual bool admit_candidate(const ScanTaskPoint &candidate) const;
-
-  std::vector<unsigned> m_weightings;
-
-private:
-
-  OnlineContest& olc;
-  const unsigned n_points;
-  const unsigned m_finish_alt_diff;
-
-  unsigned weighted_distance(const ScanTaskPoint &sp1,
-                             const ScanTaskPoint &sp2) const;
-
-  void add_start_edges(DijkstraTaskPoint &dijkstra);
-
+  void set_weightings();
 };
 
 #endif
