@@ -59,63 +59,63 @@ LDLIBS = $(TARGET_LDLIBS)
 
 include $(topdir)/build/task.mk
 
-DEVS	:=\
-	$(SRC)/Device/Driver/AltairPro.o \
-	$(SRC)/Device/Driver/BorgeltB50.o \
-	$(SRC)/Device/Driver/CAI302.o \
-	$(SRC)/Device/Driver/CaiGpsNav.o \
-	$(SRC)/Device/Driver/Condor.o \
-	$(SRC)/Device/Driver/EW.o \
-	$(SRC)/Device/Driver/EWMicroRecorder.o \
-	$(SRC)/Device/Driver/FlymasterF1.o \
-	$(SRC)/Device/Driver/Generic.o \
-	$(SRC)/Device/Driver/LX.o \
-	$(SRC)/Device/Driver/NmeaOut.o \
-	$(SRC)/Device/Driver/PosiGraph.o \
-	$(SRC)/Device/Driver/Vega.o \
-	$(SRC)/Device/Driver/Volkslogger.o \
-	$(SRC)/Device/Driver/XCOM760.o \
-	$(SRC)/Device/Driver/Zander.o
+DRIVER_SOURCES = \
+	$(SRC)/Device/Driver/AltairPro.cpp \
+	$(SRC)/Device/Driver/BorgeltB50.cpp \
+	$(SRC)/Device/Driver/CAI302.cpp \
+	$(SRC)/Device/Driver/CaiGpsNav.cpp \
+	$(SRC)/Device/Driver/Condor.cpp \
+	$(SRC)/Device/Driver/EW.cpp \
+	$(SRC)/Device/Driver/EWMicroRecorder.cpp \
+	$(SRC)/Device/Driver/FlymasterF1.cpp \
+	$(SRC)/Device/Driver/Generic.cpp \
+	$(SRC)/Device/Driver/LX.cpp \
+	$(SRC)/Device/Driver/NmeaOut.cpp \
+	$(SRC)/Device/Driver/PosiGraph.cpp \
+	$(SRC)/Device/Driver/Vega.cpp \
+	$(SRC)/Device/Driver/Volkslogger.cpp \
+	$(SRC)/Device/Driver/XCOM760.cpp \
+	$(SRC)/Device/Driver/Zander.cpp
 
-DLGS	:=\
-	$(SRC)/Dialogs/XML.o \
-	$(SRC)/Dialogs/Message.o \
-	$(SRC)/Dialogs/dlgAirspace.o \
-	$(SRC)/Dialogs/dlgAirspaceColours.o \
-	$(SRC)/Dialogs/dlgAirspacePatterns.o \
-	$(SRC)/Dialogs/dlgAirspaceDetails.o \
-	$(SRC)/Dialogs/dlgAirspaceSelect.o \
-	$(SRC)/Dialogs/dlgAirspaceWarning.o \
-	$(SRC)/Dialogs/dlgBasicSettings.o \
-	$(SRC)/Dialogs/dlgBrightness.o \
-	$(SRC)/Dialogs/dlgChecklist.o \
-	$(SRC)/Dialogs/dlgComboPicker.o \
-	$(SRC)/Dialogs/dlgConfiguration.o \
-	$(SRC)/Dialogs/dlgConfiguration2.o \
-	$(SRC)/Dialogs/dlgConfigurationVario.o \
-	$(SRC)/Dialogs/dlgFlarmTraffic.o \
-	$(SRC)/Dialogs/dlgHelp.o \
-	$(SRC)/Dialogs/dlgLoggerReplay.o \
-	$(SRC)/Dialogs/dlgStartup.o \
-	$(SRC)/Dialogs/dlgStatistics.o \
-	$(SRC)/Dialogs/dlgStatus.o \
-	$(SRC)/Dialogs/dlgSwitches.o \
-	$(SRC)/Dialogs/dlgTaskCalculator.o \
-	$(SRC)/Dialogs/dlgTeamCode.o \
-	$(SRC)/Dialogs/dlgTextEntry.o \
-	$(SRC)/Dialogs/dlgTextEntry_Keyboard.o \
-	$(SRC)/Dialogs/dlgHelpers.o \
-	$(SRC)/Dialogs/dlgVegaDemo.o \
-	$(SRC)/Dialogs/dlgVoice.o \
-	$(SRC)/Dialogs/dlgWeather.o \
-	$(SRC)/Dialogs/dlgWaypointOutOfTerrain.o \
-	$(SRC)/Dialogs/dlgWayPointDetails.o \
-	$(SRC)/Dialogs/dlgWaypointEdit.o \
-	$(SRC)/Dialogs/dlgWayPointSelect.o \
-	$(SRC)/Dialogs/dlgWindSettings.o \
-	$(SRC)/Dialogs/dlgFontEdit.o \
+DIALOG_SOURCES = \
+	$(SRC)/Dialogs/XML.cpp \
+	$(SRC)/Dialogs/Message.cpp \
+	$(SRC)/Dialogs/dlgAirspace.cpp \
+	$(SRC)/Dialogs/dlgAirspaceColours.cpp \
+	$(SRC)/Dialogs/dlgAirspacePatterns.cpp \
+	$(SRC)/Dialogs/dlgAirspaceDetails.cpp \
+	$(SRC)/Dialogs/dlgAirspaceSelect.cpp \
+	$(SRC)/Dialogs/dlgAirspaceWarning.cpp \
+	$(SRC)/Dialogs/dlgBasicSettings.cpp \
+	$(SRC)/Dialogs/dlgBrightness.cpp \
+	$(SRC)/Dialogs/dlgChecklist.cpp \
+	$(SRC)/Dialogs/dlgComboPicker.cpp \
+	$(SRC)/Dialogs/dlgConfiguration.cpp \
+	$(SRC)/Dialogs/dlgConfiguration2.cpp \
+	$(SRC)/Dialogs/dlgConfigurationVario.cpp \
+	$(SRC)/Dialogs/dlgFlarmTraffic.cpp \
+	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(SRC)/Dialogs/dlgLoggerReplay.cpp \
+	$(SRC)/Dialogs/dlgStartup.cpp \
+	$(SRC)/Dialogs/dlgStatistics.cpp \
+	$(SRC)/Dialogs/dlgStatus.cpp \
+	$(SRC)/Dialogs/dlgSwitches.cpp \
+	$(SRC)/Dialogs/dlgTaskCalculator.cpp \
+	$(SRC)/Dialogs/dlgTeamCode.cpp \
+	$(SRC)/Dialogs/dlgTextEntry.cpp \
+	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
+	$(SRC)/Dialogs/dlgHelpers.cpp \
+	$(SRC)/Dialogs/dlgVegaDemo.cpp \
+	$(SRC)/Dialogs/dlgVoice.cpp \
+	$(SRC)/Dialogs/dlgWeather.cpp \
+	$(SRC)/Dialogs/dlgWaypointOutOfTerrain.cpp \
+	$(SRC)/Dialogs/dlgWayPointDetails.cpp \
+	$(SRC)/Dialogs/dlgWaypointEdit.cpp \
+	$(SRC)/Dialogs/dlgWayPointSelect.cpp \
+	$(SRC)/Dialogs/dlgWindSettings.cpp \
+	$(SRC)/Dialogs/dlgFontEdit.cpp \
 
-VOLKS	:=\
+VOLKSLOGGER_SOURCES = \
 	$(SRC)/Device/Volkslogger/dbbconv.cpp \
 	$(SRC)/Device/Volkslogger/grecord.cpp \
 	$(SRC)/Device/Volkslogger/vlapi2.cpp \
@@ -124,240 +124,244 @@ VOLKS	:=\
 	$(SRC)/Device/Volkslogger/vlconv.cpp
 
 ifeq ($(HAVE_MSVCRT),n)
-VOLKS += $(SRC)/Device/Volkslogger/vlutils.cpp
+VOLKSLOGGER_SOURCES += $(SRC)/Device/Volkslogger/vlutils.cpp
 endif
 
 
-OBJS	:=\
-	$(SRC)/Globals.o 		\
+XCSOAR_SOURCES := \
+	$(SRC)/Globals.cpp \
 	\
-	$(SRC)/Poco/RWLock.o		\
+	$(SRC)/Poco/RWLock.cpp \
 	\
-	$(SRC)/AirspaceGlue.o 		\
-	$(SRC)/AirspaceParser.o 	\
-	$(SRC)/AirspaceVisibility.o 	\
+	$(SRC)/AirspaceGlue.cpp \
+	$(SRC)/AirspaceParser.cpp \
+	$(SRC)/AirspaceVisibility.cpp \
 	\
-	$(SRC)/Atmosphere.o 		\
-	$(SRC)/ClimbAverageCalculator.o \
-	$(SRC)/ConditionMonitor.o 	\
-	$(SRC)/Calibration.o 		\
-	$(SRC)/FlarmIdFile.o 		\
-	$(SRC)/FlarmCalculations.o 	\
-	$(SRC)/GlideComputer.o 		\
-	$(SRC)/GlideComputerBlackboard.o 	\
-	$(SRC)/GlideComputerAirData.o 	\
-	$(SRC)/GlideComputerInterface.o \
-	$(SRC)/GlideComputerStats.o 	\
-	$(SRC)/GlideComputerTask.o 	\
-	$(SRC)/GlideRatio.o 		\
-	$(SRC)/GlideTerrain.o \
-	$(SRC)/Logger.o 		\
-	$(SRC)/LoggerFRecord.o 		\
-	$(SRC)/LoggerImpl.o 		\
-	$(SRC)/LoggerSign.o 		\
-	$(SRC)/ReplayLogger.o 		\
-	$(SRC)/SnailTrail.o 		\
-	$(SRC)/TeamCodeCalculation.o 	\
-	$(SRC)/ThermalLocator.o 	\
-	$(SRC)/WayPointParser.o 	\
-	$(SRC)/WindAnalyser.o 		\
-	$(SRC)/WindMeasurementList.o 	\
-	$(SRC)/WindStore.o 		\
-	$(SRC)/WindZigZag.o 		\
+	$(SRC)/Atmosphere.cpp \
+	$(SRC)/ClimbAverageCalculator.cpp \
+	$(SRC)/ConditionMonitor.cpp \
+	$(SRC)/Calibration.cpp \
+	$(SRC)/FlarmIdFile.cpp \
+	$(SRC)/FlarmCalculations.cpp \
+	$(SRC)/GlideComputer.cpp \
+	$(SRC)/GlideComputerBlackboard.cpp \
+	$(SRC)/GlideComputerAirData.cpp \
+	$(SRC)/GlideComputerInterface.cpp \
+	$(SRC)/GlideComputerStats.cpp \
+	$(SRC)/GlideComputerTask.cpp \
+	$(SRC)/GlideRatio.cpp \
+	$(SRC)/GlideTerrain.cpp \
+	$(SRC)/Logger.cpp \
+	$(SRC)/LoggerFRecord.cpp \
+	$(SRC)/LoggerImpl.cpp \
+	$(SRC)/LoggerSign.cpp \
+	$(SRC)/ReplayLogger.cpp \
+	$(SRC)/SnailTrail.cpp \
+	$(SRC)/TeamCodeCalculation.cpp \
+	$(SRC)/ThermalLocator.cpp \
+	$(SRC)/WayPointParser.cpp \
+	$(SRC)/WindAnalyser.cpp \
+	$(SRC)/WindMeasurementList.cpp \
+	$(SRC)/WindStore.cpp \
+	$(SRC)/WindZigZag.cpp \
 	\
-	$(SRC)/Gauge/GaugeCDI.o \
-	$(SRC)/Gauge/GaugeFLARM.o \
-	$(SRC)/Gauge/GaugeVario.o \
+	$(SRC)/Gauge/GaugeCDI.cpp \
+	$(SRC)/Gauge/GaugeFLARM.cpp \
+	$(SRC)/Gauge/GaugeVario.cpp \
 	\
-	$(SRC)/AirfieldDetails.o 	\
-	$(SRC)/ButtonLabel.o 		\
-	$(SRC)/DataField/Base.o 	\
-	$(SRC)/DataField/Boolean.o 	\
-	$(SRC)/DataField/ComboList.o 	\
-	$(SRC)/DataField/Enum.o 	\
-	$(SRC)/DataField/FileReader.o 	\
-	$(SRC)/DataField/Float.o 	\
-	$(SRC)/DataField/Integer.o 	\
-	$(SRC)/DataField/String.o 	\
-	$(SRC)/Dialogs.o 		\
-	$(SRC)/ExpandMacros.o 		\
-	$(SRC)/Formatter/Base.o 	\
-	$(SRC)/Formatter/TeamCode.o 	\
-	$(SRC)/Formatter/WayPoint.o 	\
-	$(SRC)/Formatter/LowWarning.o 	\
-	$(SRC)/Formatter/Time.o 	\
-	$(SRC)/InfoBox.o 		\
-	$(SRC)/InfoBoxLayout.o 		\
-	$(SRC)/InfoBoxEvents.o 		\
-	$(SRC)/InfoBoxManager.o 	\
-	$(SRC)/InputEvents.o 		\
-	$(SRC)/InputEventsActions.o 	\
-	$(SRC)/StatusMessage.o \
-	$(SRC)/PopupMessage.o \
-	$(SRC)/Form/Control.o \
-	$(SRC)/Form/Form.o \
-	$(SRC)/Form/Button.o \
-	$(SRC)/Form/EventButton.o \
-	$(SRC)/Form/Frame.o \
-	$(SRC)/Form/Draw.o \
-	$(SRC)/Form/List.o \
-	$(SRC)/Form/ScrollBar.o \
-	$(SRC)/Form/Edit.o \
-	$(SRC)/Form/Util.o \
-	$(SRC)/LogFile.o 		\
+	$(SRC)/AirfieldDetails.cpp \
+	$(SRC)/ButtonLabel.cpp \
+	$(SRC)/DataField/Base.cpp \
+	$(SRC)/DataField/Boolean.cpp \
+	$(SRC)/DataField/ComboList.cpp \
+	$(SRC)/DataField/Enum.cpp \
+	$(SRC)/DataField/FileReader.cpp \
+	$(SRC)/DataField/Float.cpp \
+	$(SRC)/DataField/Integer.cpp \
+	$(SRC)/DataField/String.cpp \
+	$(SRC)/Dialogs.cpp \
+	$(SRC)/ExpandMacros.cpp \
+	$(SRC)/Formatter/Base.cpp \
+	$(SRC)/Formatter/TeamCode.cpp \
+	$(SRC)/Formatter/WayPoint.cpp \
+	$(SRC)/Formatter/LowWarning.cpp \
+	$(SRC)/Formatter/Time.cpp \
+	$(SRC)/InfoBox.cpp \
+	$(SRC)/InfoBoxLayout.cpp \
+	$(SRC)/InfoBoxEvents.cpp \
+	$(SRC)/InfoBoxManager.cpp \
+	$(SRC)/InputEvents.cpp \
+	$(SRC)/InputEventsActions.cpp \
+	$(SRC)/StatusMessage.cpp \
+	$(SRC)/PopupMessage.cpp \
+	$(SRC)/Form/Control.cpp \
+	$(SRC)/Form/Form.cpp \
+	$(SRC)/Form/Button.cpp \
+	$(SRC)/Form/EventButton.cpp \
+	$(SRC)/Form/Frame.cpp \
+	$(SRC)/Form/Draw.cpp \
+	$(SRC)/Form/List.cpp \
+	$(SRC)/Form/ScrollBar.cpp \
+	$(SRC)/Form/Edit.cpp \
+	$(SRC)/Form/Util.cpp \
+	$(SRC)/LogFile.cpp \
 	\
-	$(SRC)/MapWindow.o 		\
-	$(SRC)/MapWindowAirspace.o 	\
-	$(SRC)/MapWindowEvents.o	\
-	$(SRC)/MapWindowGlideRange.o 	\
-	$(SRC)/MapWindowLabels.o 	\
-	$(SRC)/MapWindowProjection.o 	\
-	$(SRC)/MapWindowRender.o 	\
-	$(SRC)/MapWindowScale.o 	\
-	$(SRC)/MapWindowSymbols.o 	\
-	$(SRC)/MapWindowTask.o 		\
-	$(SRC)/MapWindowTarget.o	\
-	$(SRC)/MapWindowThermal.o	\
-	$(SRC)/MapWindowTimer.o 	\
-	$(SRC)/MapWindowTraffic.o 	\
-	$(SRC)/MapWindowTrail.o 	\
-	$(SRC)/MapWindowWaypoints.o 	\
-	$(SRC)/DrawThread.o \
+	$(SRC)/MapWindow.cpp \
+	$(SRC)/MapWindowAirspace.cpp \
+	$(SRC)/MapWindowEvents.cpp \
+	$(SRC)/MapWindowGlideRange.cpp \
+	$(SRC)/MapWindowLabels.cpp \
+	$(SRC)/MapWindowProjection.cpp \
+	$(SRC)/MapWindowRender.cpp \
+	$(SRC)/MapWindowScale.cpp \
+	$(SRC)/MapWindowSymbols.cpp \
+	$(SRC)/MapWindowTask.cpp \
+	$(SRC)/MapWindowTarget.cpp \
+	$(SRC)/MapWindowThermal.cpp \
+	$(SRC)/MapWindowTimer.cpp \
+	$(SRC)/MapWindowTraffic.cpp \
+	$(SRC)/MapWindowTrail.cpp \
+	$(SRC)/MapWindowWaypoints.cpp \
+	$(SRC)/DrawThread.cpp \
 	\
-	$(SRC)/DeviceBlackboard.o 	\
-	$(SRC)/InstrumentBlackboard.o 	\
-	$(SRC)/InterfaceBlackboard.o 	\
-	$(SRC)/MapProjectionBlackboard.o 	\
-	$(SRC)/MapWindowBlackboard.o 	\
-	$(SRC)/SettingsMapBlackboard.o 	\
-	$(SRC)/SettingsComputerBlackboard.o 	\
-	$(SRC)/CalculationThread.o 	\
-	$(SRC)/InstrumentThread.o 	\
+	$(SRC)/DeviceBlackboard.cpp \
+	$(SRC)/InstrumentBlackboard.cpp \
+	$(SRC)/InterfaceBlackboard.cpp \
+	$(SRC)/MapProjectionBlackboard.cpp \
+	$(SRC)/MapWindowBlackboard.cpp \
+	$(SRC)/SettingsMapBlackboard.cpp \
+	$(SRC)/SettingsComputerBlackboard.cpp \
+	$(SRC)/CalculationThread.cpp \
+	$(SRC)/InstrumentThread.cpp \
 	\
-	$(SRC)/Topology.o		\
-	$(SRC)/TopologyStore.o		\
-	$(SRC)/RasterMap.o 		\
-	$(SRC)/RasterMapCache.o 	\
-	$(SRC)/RasterMapJPG2000.o 	\
-	$(SRC)/RasterMapRaw.o 		\
-	$(SRC)/RasterTerrain.o 		\
-	$(SRC)/RasterWeather.o 		\
-	$(SRC)/TerrainRenderer.o	\
-	$(SRC)/Marks.o 			\
+	$(SRC)/Topology.cpp \
+	$(SRC)/TopologyStore.cpp \
+	$(SRC)/RasterMap.cpp \
+	$(SRC)/RasterMapCache.cpp \
+	$(SRC)/RasterMapJPG2000.cpp \
+	$(SRC)/RasterMapRaw.cpp \
+	$(SRC)/RasterTerrain.cpp \
+	$(SRC)/RasterWeather.cpp \
+	$(SRC)/TerrainRenderer.cpp \
+	$(SRC)/Marks.cpp \
 	\
-	$(SRC)/Persist.o 		\
-	$(SRC)/FlightStatistics.o 	\
+	$(SRC)/Persist.cpp \
+	$(SRC)/FlightStatistics.cpp \
 	\
-	$(SRC)/Asset.o 			\
-	$(SRC)/Appearance.o 		\
-	$(SRC)/Battery.o 		\
-	$(SRC)/Language.o 		\
-	$(SRC)/LocalPath.o 		\
-	$(SRC)/Interface.o		\
-	$(SRC)/LocalTime.o		\
-	$(SRC)/Units.o 			\
-	$(SRC)/StringUtil.o \
-	$(SRC)/UtilsFLARM.o		\
-	$(SRC)/UtilsFont.o		\
-	$(SRC)/UtilsProfile.o		\
-	$(SRC)/UtilsSettings.o		\
-	$(SRC)/UtilsSystem.o		\
-	$(SRC)/UtilsText.o		\
-	$(SRC)/Version.o 		\
-	$(SRC)/Audio/Sound.o \
-	$(SRC)/Audio/VegaVoice.o	\
-	$(SRC)/Compatibility/fmode.o \
-	$(SRC)/Compatibility/string.o 	\
-	$(SRC)/Registry.o 		\
-	$(SRC)/Profile.o \
-	$(SRC)/xmlParser.o 		\
-	$(SRC)/Thread/Thread.o \
-	$(SRC)/Thread/Mutex.o \
-	$(SRC)/Thread/Debug.o \
+	$(SRC)/Asset.cpp \
+	$(SRC)/Appearance.cpp \
+	$(SRC)/Battery.c 		\
+	$(SRC)/Language.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Interface.cpp \
+	$(SRC)/LocalTime.cpp \
+	$(SRC)/Units.cpp \
+	$(SRC)/StringUtil.cpp \
+	$(SRC)/UtilsFLARM.cpp \
+	$(SRC)/UtilsFont.cpp \
+	$(SRC)/UtilsProfile.cpp \
+	$(SRC)/UtilsSettings.cpp \
+	$(SRC)/UtilsSystem.cpp \
+	$(SRC)/UtilsText.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/Audio/Sound.cpp \
+	$(SRC)/Audio/VegaVoice.cpp \
+	$(SRC)/Compatibility/fmode.c \
+	$(SRC)/Compatibility/string.c 	\
+	$(SRC)/Registry.cpp \
+	$(SRC)/Profile.cpp \
+	$(SRC)/xmlParser.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Debug.cpp \
 	\
-	$(SRC)/Math/FastRotation.o	\
-	$(SRC)/Math/leastsqs.o 		\
-	$(SRC)/Math/LowPassFilter.o 	\
-	$(SRC)/Math/NavFunctions.o	\
-	$(SRC)/Math/Screen.o 		\
-	$(SRC)/Math/SunEphemeris.o 	\
+	$(SRC)/Math/FastRotation.cpp \
+	$(SRC)/Math/leastsqs.cpp \
+	$(SRC)/Math/LowPassFilter.cpp \
+	$(SRC)/Math/NavFunctions.cpp \
+	$(SRC)/Math/Screen.cpp \
+	$(SRC)/Math/SunEphemeris.cpp \
 	\
-	$(SRC)/Screen/Animation.o 	\
-	$(SRC)/Screen/Blank.o 		\
-	$(SRC)/Screen/ButtonWindow.o \
-	$(SRC)/Screen/Chart.o 		\
-	$(SRC)/Screen/Fonts.o 		\
-	$(SRC)/Screen/Layout.o \
-	$(SRC)/Screen/UnitSymbol.o \
-	$(SRC)/Screen/Graphics.o 	\
-	$(SRC)/Screen/Ramp.o 		\
-	$(SRC)/Screen/STScreenBuffer.o 	\
-	$(SRC)/Screen/Util.o 		\
-	$(SRC)/Screen/VOIMAGE.o 	\
-	$(SRC)/Screen/Bitmap.o \
-	$(SRC)/Screen/Brush.o \
-	$(SRC)/Screen/Canvas.o \
-	$(SRC)/Screen/Color.o \
-	$(SRC)/Screen/VirtualCanvas.o \
-	$(SRC)/Screen/BitmapCanvas.o \
-	$(SRC)/Screen/Font.o \
-	$(SRC)/Screen/Pen.o \
-	$(SRC)/Screen/LabelBlock.o \
-	$(SRC)/Screen/Window.o \
-	$(SRC)/Screen/BufferWindow.o \
-	$(SRC)/Screen/PaintWindow.o \
-	$(SRC)/Screen/MaskedPaintWindow.o \
-	$(SRC)/Screen/ContainerWindow.o \
-	$(SRC)/Screen/TextWindow.o \
-	$(SRC)/Screen/EditWindow.o \
-	$(SRC)/Screen/TopWindow.o \
-	$(SRC)/Screen/SingleWindow.o \
-	$(SRC)/Screen/Dialog.o \
-	$(SRC)/Screen/ProgressWindow.o \
+	$(SRC)/Screen/Animation.cpp \
+	$(SRC)/Screen/Blank.cpp \
+	$(SRC)/Screen/ButtonWindow.cpp \
+	$(SRC)/Screen/Chart.cpp \
+	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/UnitSymbol.cpp \
+	$(SRC)/Screen/Graphics.cpp \
+	$(SRC)/Screen/Ramp.cpp \
+	$(SRC)/Screen/STScreenBuffer.cpp \
+	$(SRC)/Screen/Util.cpp \
+	$(SRC)/Screen/VOIMAGE.cpp \
+	$(SRC)/Screen/Bitmap.cpp \
+	$(SRC)/Screen/Brush.cpp \
+	$(SRC)/Screen/Canvas.cpp \
+	$(SRC)/Screen/Color.cpp \
+	$(SRC)/Screen/VirtualCanvas.cpp \
+	$(SRC)/Screen/BitmapCanvas.cpp \
+	$(SRC)/Screen/Font.cpp \
+	$(SRC)/Screen/Pen.cpp \
+	$(SRC)/Screen/LabelBlock.cpp \
+	$(SRC)/Screen/Window.cpp \
+	$(SRC)/Screen/BufferWindow.cpp \
+	$(SRC)/Screen/PaintWindow.cpp \
+	$(SRC)/Screen/MaskedPaintWindow.cpp \
+	$(SRC)/Screen/ContainerWindow.cpp \
+	$(SRC)/Screen/TextWindow.cpp \
+	$(SRC)/Screen/EditWindow.cpp \
+	$(SRC)/Screen/TopWindow.cpp \
+	$(SRC)/Screen/SingleWindow.cpp \
+	$(SRC)/Screen/Dialog.cpp \
+	$(SRC)/Screen/ProgressWindow.cpp \
 	\
-	$(SRC)/Polar/Polar.o \
-	$(SRC)/Polar/Loader.o \
-	$(SRC)/Polar/WinPilot.o 	\
-	$(SRC)/Polar/BuiltIn.o 		\
-	$(SRC)/Polar/Historical.o 	\
+	$(SRC)/Polar/Polar.cpp \
+	$(SRC)/Polar/Loader.cpp \
+	$(SRC)/Polar/WinPilot.cpp \
+	$(SRC)/Polar/BuiltIn.cpp \
+	$(SRC)/Polar/Historical.cpp \
 	\
-	$(SRC)/Blackboard.o 		\
-	$(SRC)/Protection.o 		\
-	$(SRC)/ProcessTimer.o 		\
-	$(SRC)/MainWindow.o \
-	$(SRC)/Components.o 		\
-	$(SRC)/XCSoar.o 		\
+	$(SRC)/Blackboard.cpp \
+	$(SRC)/Protection.cpp \
+	$(SRC)/ProcessTimer.cpp \
+	$(SRC)/MainWindow.cpp \
+	$(SRC)/Components.cpp \
+	$(SRC)/XCSoar.cpp \
 	\
-	$(SRC)/Device/Driver.o \
-	$(SRC)/Device/device.o 		\
-	$(SRC)/Device/Geoid.o 		\
-	$(SRC)/Device/Parser.o		\
-	$(SRC)/Device/Port.o 		\
-	$(SRC)/Device/FLARM.o \
-	$(SRC)/Device/Internal.o \
-	$(DEVS) 			\
-	\
-	$(DLGS:.cpp=.o) 		\
-	$(VOLKS:.cpp=.o) 		\
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/device.cpp \
+	$(SRC)/Device/Geoid.cpp \
+	$(SRC)/Device/Parser.cpp \
+	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/FLARM.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(DRIVER_SOURCES) \
+	$(VOLKSLOGGER_SOURCES) \
+	$(DIALOG_SOURCES)
+
+#	$(SRC)/VarioSound.cpp \
+#	$(SRC)/WaveThread.cpp \
+
+
+XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
+XCSOAR_LDADD = \
 	$(ENGINE_SRC_DIR)/task-$(TARGET).a \
 	$(SRC)/shapelib-$(TARGET).a \
 	$(SRC)/jasper-$(TARGET).a \
 	$(SRC)/zzip-$(TARGET).a \
 	$(SRC)/compat-$(TARGET).a
 
-#	$(SRC)/VarioSound.o \
-#	$(SRC)/WaveThread.o \
-
-
 ifeq ($(HAVE_WIN32),y)
-OBJS += $(SRC)/XCSoar-$(TARGET).rsc
+XCSOAR_LDADD += $(SRC)/XCSoar-$(TARGET).rsc
 endif
 
-XCSOARSETUP_OBJS=\
-	$(SRC)/XCSoarSetup.o
+XCSOARSETUP_SOURCES = \
+	$(SRC)/XCSoarSetup.cpp
+XCSOARSETUP_OBJS = $(call SRC_TO_OBJ,$(XCSOARSETUP_SOURCES))
 
-XCSOARLAUNCH_OBJS=\
-	$(SRC)/XCSoarLaunch.o
+XCSOARLAUNCH_SOURCES = \
+	$(SRC)/XCSoarLaunch.c
+XCSOARLAUNCH_OBJS = $(call SRC_TO_OBJ,$(XCSOARLAUNCH_SOURCES))
 
 include $(topdir)/build/sdl.mk
 include $(topdir)/build/gconf.mk
@@ -404,11 +408,11 @@ XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT): XCSoarSimulator-$(TARGET)$(NOSTRIP_SU
 	$(Q)$(SIZE) $@
 endif
 
-XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(OBJS:.o=-$(TARGET).o)
+XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(OBJS:.o=-$(TARGET)-Simulator.o)
+XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS:.o=-Simulator.o) $(XCSOAR_LDADD)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

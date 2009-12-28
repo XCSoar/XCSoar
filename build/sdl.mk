@@ -12,9 +12,9 @@ endif
 CPPFLAGS += -DENABLE_SDL
 LDLIBS += -lSDL_gfx -lSDL_ttf
 
-OBJS += $(SRC)/Screen/Timer.o
+XCSOAR_SOURCES += $(SRC)/Screen/Timer.cpp
 else
-OBJS += \
-	$(SRC)/Screen/BufferCanvas.o \
-	$(SRC)/Screen/PaintCanvas.o
+XCSOAR_SOURCES += \
+	$(SRC)/Screen/BufferCanvas.cpp \
+	$(SRC)/Screen/PaintCanvas.cpp
 endif
