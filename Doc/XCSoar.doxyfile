@@ -597,7 +597,7 @@ RECURSIVE = YES
 # excluded from the INPUT source files. This way you can easily exclude a
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE = 
+EXCLUDE = ../src/Engine/kdtree++
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or
 # directories that are symbolic links (a Unix filesystem feature) are excluded
@@ -611,7 +611,7 @@ EXCLUDE_SYMLINKS = NO
 # against the file with absolute path, so to exclude all test directories
 # for example use the pattern */test/*
 
-EXCLUDE_PATTERNS = 
+EXCLUDE_PATTERNS = *.o.d
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -773,7 +773,7 @@ HTML_OUTPUT = html
 # each generated HTML page (for example: .htm,.php,.asp). If it is left blank
 # doxygen will generate files with .html extension.
 
-HTML_FILE_EXTENSION = .htm
+HTML_FILE_EXTENSION = .html
 
 # The HTML_HEADER tag can be used to specify a personal HTML header for
 # each generated HTML page. If it is left blank doxygen will generate a
