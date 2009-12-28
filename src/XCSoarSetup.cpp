@@ -42,12 +42,35 @@ Copyright_License {
  */
 
 #include <windows.h>
+
+#ifdef __GNUC__
+/* cegcc doesn't provide ce_setup.h; the following enum values are
+   taken from MSDN */
+typedef enum {
+  codeINSTALL_INIT_CONTINUE = 0,
+  codeINSTALL_INIT_CANCEL
+} codeINSTALL_INIT;
+
+typedef enum {
+  codeINSTALL_EXIT_DONE = 0,
+  codeINSTALL_EXIT_UNINSTALL
+} codeINSTALL_EXIT;
+
+typedef enum {
+  codeUNINSTALL_INIT_CONTINUE = 0,
+  codeUNINSTALL_INIT_CANCEL
+} codeUNINSTALL_INIT;
+
+typedef enum {
+  codeUNINSTALL_EXIT_DONE = 0
+} codeUNINSTALL_EXIT;
+#else
 #if (WIN32_PLATFORM_PSPC == 1)
   #include <..\support\ActiveSync\inc\ce_setup.h>
 #else
   #include <ce_setup.h>
 #endif
-
+#endif
 
 //#define DebugMessage(Caption, Text)    MessageBox(NULL, Text, Caption, MB_ICONINFORMATION)
 #define DebugMessage(Caption, Text)      ((void)0)

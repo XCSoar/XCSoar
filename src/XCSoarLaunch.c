@@ -76,6 +76,7 @@ Copyright_License {
 
 
 #include "resource-launch.h"
+#include "Compiler.h"
 
 
 
@@ -140,12 +141,6 @@ Copyright_License {
 static HINSTANCE hInst;
 
 static HWND hToolTip;
-
-
-
-static TCHAR backbmpfile[BUF_SIZE];
-
-static int stretch_backbmp = 0;
 
 static int IconSizeX = 112;
 
@@ -223,8 +218,8 @@ TCHAR installDir[BUF_SIZE];
 
 
 
-BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
-
+static BOOL
+GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
 
   HKEY    hKey;
@@ -353,10 +348,9 @@ static HBITMAP CreateMaskBMP(HBITMAP hBMPOrig, COLORREF bgCol)
 
 
 
-static void CreateFileList() {
-
-
-
+static void
+CreateFileList(void)
+{
 #ifdef USE_MASKS
 
 	int i;
@@ -473,8 +467,9 @@ static void CreateFileList() {
 
 
 
-BOOL WINAPI DllMain(HINSTANCE hModule, DWORD fdwReason, PVOID pvReserved)
-
+BOOL WINAPI
+DllMain(HINSTANCE hModule, gcc_unused DWORD fdwReason,
+        gcc_unused PVOID pvReserved)
 {
 
 	hInst = hModule;
@@ -501,7 +496,8 @@ BOOL WINAPI DllMain(HINSTANCE hModule, DWORD fdwReason, PVOID pvReserved)
 
 
 
-static BOOL CALLBACK ToolTipProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+static BOOL CALLBACK
+ToolTipProc(HWND hDlg, UINT uMsg, gcc_unused WPARAM wParam, LPARAM lParam)
 
 {
 
@@ -611,9 +607,8 @@ static BOOL CALLBACK ToolTipProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 ******************************************************************************/
 
-
-
-void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
+static void
+OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 
 {
 
@@ -845,8 +840,8 @@ static int Point2Item(int px, int py)
 
 
 
-static BOOL ShellOpen(TCHAR *FileName, TCHAR *CommandLine)
-
+static BOOL
+ShellOpen(const TCHAR *FileName, const TCHAR *CommandLine)
 {
 
 	SHELLEXECUTEINFO sei;
@@ -1242,7 +1237,7 @@ static HWND InitInstance(HWND pWnd, TODAYLISTITEM *ptli)
 
 	//ウィンドウの作成
 
-	return CreateWindow(MAIN_WND_CLASS, WINDOW_TITLE, WS_CHILD | WS_VISIBLE, CW_DEFAULT, CW_DEFAULT, 0, 0,
+	return CreateWindow(MAIN_WND_CLASS, WINDOW_TITLE, WS_CHILD | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0,
 
 		pWnd, NULL, ptli->hinstDLL, NULL);
 
@@ -1262,10 +1257,8 @@ static HWND InitInstance(HWND pWnd, TODAYLISTITEM *ptli)
 
 ******************************************************************************/
 
-
-
+gcc_unused
 HWND APIENTRY InitializeCustomItem(TODAYLISTITEM *ptli, HWND pWnd)
-
 {
 
 	if(ptli->fEnabled == 0){
@@ -1292,10 +1285,10 @@ HWND APIENTRY InitializeCustomItem(TODAYLISTITEM *ptli, HWND pWnd)
 
 ******************************************************************************/
 
-
-
-BOOL APIENTRY CustomItemOptionsDlgProc(HWND hDlg, UINT uMsg, UINT wParam, LONG lParam)
-
+gcc_unused
+BOOL APIENTRY
+CustomItemOptionsDlgProc(HWND hDlg, UINT uMsg, UINT wParam,
+                         gcc_unused LONG lParam)
 {
 
 	SHINITDLGINFO shidi;

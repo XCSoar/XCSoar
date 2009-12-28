@@ -416,6 +416,8 @@ XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS:.o=-Si
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
+$(XCSOARSETUP_OBJS) $(XCSOARLAUNCH_OBJS): CFLAGS += -Wno-missing-declarations -Wno-missing-prototypes
+
 XCSoarSetup.dll: $(XCSOARSETUP_OBJS)
 	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 # JMW not tested yet, probably need to use dlltool?
