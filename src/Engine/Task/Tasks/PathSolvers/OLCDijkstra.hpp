@@ -40,6 +40,7 @@
 
 #include "NavDijkstra.hpp"
 #include "Navigation/TracePoint.hpp"
+#include "Math/fixed.hpp"
 
 class OnlineContest;
 
@@ -62,7 +63,7 @@ public:
  */
   ~OLCDijkstra();
 
-  unsigned solve();
+  virtual fixed score();
 
 protected:
   const TracePoint &get_point(const ScanTaskPoint &sp) const;
@@ -78,17 +79,17 @@ protected:
 
   std::vector<unsigned> m_weightings;
 
+  unsigned solve();
+
 private:
 
   OnlineContest& olc;
   const unsigned n_points;
   const unsigned m_finish_alt_diff;
 
-  unsigned weighted_distance(const ScanTaskPoint &sp1,
-                             const ScanTaskPoint &sp2) const;
-
   void add_start_edges(DijkstraTaskPoint &dijkstra);
 
+  unsigned stage_end(const ScanTaskPoint &sp) const;
 };
 
 #endif

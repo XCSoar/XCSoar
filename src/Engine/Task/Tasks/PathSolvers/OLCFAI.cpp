@@ -1,7 +1,7 @@
 #include "OLCFAI.hpp"
 
 OLCFAI::OLCFAI(OnlineContest& _olc):
-  OLCDijkstra(_olc, 2, 3000) 
+  OLCDijkstra(_olc, 3, 3000) 
 {
 
 }

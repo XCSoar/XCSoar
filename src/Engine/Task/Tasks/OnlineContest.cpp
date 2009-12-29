@@ -15,18 +15,27 @@ OnlineContest::OnlineContest(const TaskEvents &te,
 }
 
 
+static bool updated = false;
+static unsigned counter = 0;
+
 bool 
 OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 {
   bool do_add = false;
+  updated = false;
 
   if (m_trace_points.empty()) {
     m_task_projection.reset(state.Location);
     m_task_projection.update_fast();
     do_add = true;
   } else {
+
+    if (counter++ % 10 != 0) 
+      return false;
+
     if (distance_is_significant(state, m_trace_points.back())) {
       do_add = true;
+      // \todo replace if lower even if not significant distance away
     }
   }
   if (!do_add) {
@@ -36,6 +45,8 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
   TracePoint sp(state, m_task_projection);
   m_trace_points.push_back(sp);
 
+  updated = true;
+
   return true;
 }
 
@@ -43,9 +54,16 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 bool 
 OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 {
-  OLCSprint dijkstra(*this);
-  dijkstra.solve();
 
+  // \todo: possibly scan each type in a round robin fashion?
+
+  if (updated) {
+    OLCSprint dijkstra(*this);
+    const fixed score = dijkstra.score();
+    if (positive(score)) {
+//      printf("OLC %g (m/s)\n", score.as_double());
+    }
+  }
   return true;
 }
 
@@ -83,7 +101,7 @@ OnlineContest::distance_is_significant(const AIRCRAFT_STATE &state,
                                        const TracePoint &state_last) const
 {
   TracePoint a1(state, m_task_projection);
-  return OLCDijkstra::distance_is_significant(a1, state_last);
+  return OLCDijkstra::distance_is_significant(a1, state_last, 10);
 }
 
 /*

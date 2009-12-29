@@ -40,7 +40,7 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   
   state.Location = w[0];
   state_last.Location = w[0];
-  state.NavAltitude = 1500.0;
+  state.NavAltitude = start_alt;
   state.Time = 0.0;
   state.WindSpeed = 0.0;
   state.WindDirection = 0;

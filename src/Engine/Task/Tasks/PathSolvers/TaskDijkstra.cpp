@@ -38,6 +38,7 @@
 #include "TaskDijkstra.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
+
 TaskDijkstra::~TaskDijkstra() {
 }
 
@@ -73,10 +74,8 @@ unsigned TaskDijkstra::distance_max()
     return 0;
   }
 
-  shortest = false;
-
   const ScanTaskPoint start(0,0);
-  DijkstraTaskPoint dijkstra(start);
+  DijkstraTaskPoint dijkstra(start, false);
 
   const unsigned d= distance_general(dijkstra);
   save_max();
@@ -89,10 +88,9 @@ TaskDijkstra::distance_min(const SearchPoint &currentLocation)
   if (num_stages<2) {
     return 0;
   }
-  shortest = true; 
 
   const ScanTaskPoint start(max(1,(int)active_stage)-1,0);
-  DijkstraTaskPoint dijkstra(start);
+  DijkstraTaskPoint dijkstra(start, true);
   if (active_stage) {
     add_start_edges(dijkstra, currentLocation);
   }
@@ -127,14 +125,10 @@ void
 TaskDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
                        const ScanTaskPoint& curNode) 
 {
-  ScanTaskPoint destination;
-  destination.first = curNode.first+1;
-
+  ScanTaskPoint destination(curNode.first+1, 0);
   const unsigned dsize = get_size(destination.first);
 
-  for (destination.second=0; 
-       destination.second!= dsize; ++destination.second) {
-
+  for (; destination.second!= dsize; ++destination.second) {
     dijkstra.link(destination, curNode, (distance(curNode, destination)));
   }
 }
@@ -143,16 +137,12 @@ void
 TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
                              const SearchPoint &currentLocation) 
 {
-  ScanTaskPoint destination;
-  destination.first = active_stage;
-
   dijkstra.pop(); // need to remove dummy first point
 
+  ScanTaskPoint destination(active_stage, 0);
   const unsigned dsize = get_size(destination.first);
 
-  for (destination.second=0; 
-       destination.second!= dsize; ++destination.second) {
-
+  for (; destination.second!= dsize; ++destination.second) {
     dijkstra.link(destination, destination, (distance(destination, currentLocation)));
   }
 }

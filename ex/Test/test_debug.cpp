@@ -16,6 +16,7 @@ double target_noise = 0.2;
 double turn_speed = 25.0;
 double sink_factor = 1.0;
 double climb_factor = 1.0;
+double start_alt = 1500.0;
 int terrain_height = 1;
 
 bool enable_bestcruisetrack = false;
@@ -105,6 +106,7 @@ bool parse_args(int argc, char** argv)
 	/* These options set a flag. */
 	{"verbose", optional_argument,       0, 'v'},
 	{"interactive", optional_argument,   0, 'i'},
+	{"startalt", required_argument,   0, 'a'},
 	{"bearingnoise", required_argument,   0, 'n'},
 	{"outputskip", required_argument,       0, 's'},
 	{"targetnoise", required_argument,       0, 't'},
@@ -114,7 +116,7 @@ bool parse_args(int argc, char** argv)
     /* getopt_long stores the option index here. */
     int option_index = 0;
     
-    int c = getopt_long (argc, argv, "s:v:i:n:t:r:",
+    int c = getopt_long (argc, argv, "s:v:i:n:t:r:a:",
                          long_options, &option_index);
     /* Detect the end of the options. */
     if (c == -1)
@@ -129,6 +131,9 @@ bool parse_args(int argc, char** argv)
       if (optarg)
 	printf (" with arg %s", optarg);
       printf ("\n");
+      break;
+    case 'a':
+      start_alt = atof(optarg);
       break;
     case 's':
       output_skip = atoi(optarg);

@@ -51,7 +51,7 @@ public:
  * Default constructor
  * 
  */
-  Dijkstra() {}
+  Dijkstra(const bool is_min=true):m_min(is_min) {}
 
 /** 
  * Constructor
@@ -59,8 +59,9 @@ public:
  * @param n Node to start
  * @param e Initial edge distance
  */
-  Dijkstra(const Node &n, const unsigned &e=0) { 
-    push(n, n, e); 
+  Dijkstra(const Node &n, const bool is_min=true):
+    m_min(is_min) { 
+    push(n, n, 0); 
   }
 
 /** 
@@ -99,7 +100,7 @@ public:
  *
  * @return Total edge distances so far
  */
-  const unsigned &dist() const { return cur->second; }
+  const unsigned dist() const { return minmax_dist(cur->second); }
 
 /** 
  * Add an edge (node-node-distance) to the search 
@@ -109,7 +110,7 @@ public:
  * @param e Edge distance
  */
   void link(const Node &n, const Node &pn, const unsigned &e=1) { 
-    push(n, pn, cur->second + e); 
+    push(n, pn, cur->second + minmax_dist(e)); 
   }
 
 /** 
@@ -129,6 +130,11 @@ public:
   }
   
 private:
+
+  const unsigned minmax_dist(const unsigned d) const {
+    return m_min? d:-d;
+  }
+
 /** 
  * Add node to search queue
  * 
@@ -177,6 +183,7 @@ private:
   std::priority_queue<Value, std::vector<Value>, Rank> q;
 
   Iter cur;
+  const bool m_min;
 };
 
 #endif

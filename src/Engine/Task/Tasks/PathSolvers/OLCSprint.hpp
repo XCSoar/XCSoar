@@ -51,6 +51,8 @@ public:
  */
   OLCSprint(OnlineContest& _olc);
 
+  fixed score();
+
 protected:
 
   bool admit_candidate(const ScanTaskPoint &candidate) const;

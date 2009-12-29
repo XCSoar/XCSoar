@@ -1,4 +1,5 @@
 TESTFAST = \
+	$(TEST_SRC_DIR)/test_olc.exe \
 	$(TEST_SRC_DIR)/test_fixed.exe \
 	$(TEST_SRC_DIR)/test_waypoints.exe \
 	$(TEST_SRC_DIR)/test_edittp.exe \
