@@ -23,7 +23,7 @@ OLCSprint::score(fixed& the_distance)
   const fixed dist = OLCDijkstra::score(the_distance);
 
   if (positive(dist)) {
-    const fixed time(solution[num_stages-1].time-solution[0].time);
+    fixed time = calc_time();
     if (positive(time)) {
       return dist/time;
     }

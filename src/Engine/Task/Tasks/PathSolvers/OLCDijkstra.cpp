@@ -100,17 +100,32 @@ fixed
 OLCDijkstra::score(fixed& the_distance) 
 {
   if (solve()) {
-    fixed dist = fixed_zero;
-    for (unsigned i=0; i+1<num_stages; ++i) {
-      dist += m_weightings[0]*solution[i].distance(solution[i+1].get_location());
-    }
-    static const fixed fixed_fifth(0.2);
-    dist *= fixed_fifth;
-    the_distance = dist;
-    return dist;
+    the_distance = calc_distance();
+    return the_distance;
   }
   return fixed_zero;
 }
+
+
+fixed
+OLCDijkstra::calc_time() const
+{
+  return fixed(solution[num_stages-1].time-solution[0].time);
+}
+
+
+fixed
+OLCDijkstra::calc_distance() const
+{
+  fixed dist = fixed_zero;
+  for (unsigned i=0; i+1<num_stages; ++i) {
+    dist += m_weightings[0]*solution[i].distance(solution[i+1].get_location());
+  }
+  static const fixed fixed_fifth(0.2);
+  dist *= fixed_fifth;
+  return dist;
+}
+
 
 unsigned 
 OLCDijkstra::stage_end(const ScanTaskPoint &sp) const

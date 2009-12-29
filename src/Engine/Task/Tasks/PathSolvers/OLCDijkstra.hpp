@@ -68,6 +68,9 @@ public:
 
   void copy_solution(TracePointVector &vec);
 
+  fixed calc_distance() const;
+  fixed calc_time() const;
+
 protected:
   const TracePoint &get_point(const ScanTaskPoint &sp) const;
 

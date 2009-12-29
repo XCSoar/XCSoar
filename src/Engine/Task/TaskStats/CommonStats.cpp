@@ -37,6 +37,8 @@ CommonStats::reset()
   current_ballast = fixed_zero;
 
   distance_olc = fixed_zero;
+  time_olc = fixed_zero;
+  speed_olc = fixed_zero;
 
   clear_waypoints_in_task();
 }

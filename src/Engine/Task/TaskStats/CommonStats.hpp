@@ -54,6 +54,8 @@ public:
   WaypointIdSet waypoints_in_task; /**< List of waypoints by id that are managed in the task */
 
   fixed distance_olc; /**< Optimum distance (m) travelled according to OLC rule */
+  fixed time_olc; /**< Time (s) of optimised OLC path */
+  fixed speed_olc; /**< Speed (m/s) of optimised OLC path */
 
 /** 
  * Clears the set of waypoints listed as in the task

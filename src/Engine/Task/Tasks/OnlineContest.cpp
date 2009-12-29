@@ -55,6 +55,12 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
 {
   fixed score = dijkstra.score(common_stats.distance_olc);
   if (positive(score)) {
+    common_stats.time_olc = dijkstra.calc_time();
+    if (positive(common_stats.time_olc)) {
+      common_stats.speed_olc = dijkstra.calc_distance()/common_stats.time_olc;
+    } else {
+      common_stats.speed_olc = fixed_zero;
+    }
     dijkstra.copy_solution(m_solution);
   }
 }
@@ -123,24 +129,7 @@ OnlineContest::distance_is_significant(const AIRCRAFT_STATE &state,
   -- eliminate bad candidates
   -- remaining candidates are potential finish points
 
-- OLCDijsktraRules
-  -- max number of stages 
-  -- distance weighting per stage
-  -- retrieve point, num points per stage to search
-  -- at stopping criterion (reached final stage),
-     check extra rules (e.g. triangle leg lengths)
-  -- (specialised for each type of OLC rule)
-
-- OLCDijksktra
-  (much like TaskDijsktra)
-
 - Possible use of convex reduction for approximate solution to triangle
-
-- Need to template SearchPointVector (and NavDijkstra) so it can have extras or less
-  - GeoPoint
-  - +FlatPoint
-  - +Time
-  - +Altitude
 
 - Specialised thinning routine; store max/min altitude etc
 */

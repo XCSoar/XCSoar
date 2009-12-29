@@ -140,7 +140,9 @@ std::ostream& operator<< (std::ostream& f,
                           const CommonStats& ts)
 {
   f << "#### Common Stats\n";
-  f << "# dist olc " << ts.distance_olc << " (m)\n";
+  f << "# olc dist " << ts.distance_olc << " (m)\n";
+  f << "# olc time " << ts.time_olc << " (s)\n";
+  f << "# olc speed " << ts.speed_olc << " (m/s)\n";
   return f;
 }
 
