@@ -21,13 +21,10 @@ OnlineContest::OnlineContest(const TaskEvents &te,
 }
 
 
-static bool updated = false;
-
 bool 
 OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 {
   bool do_add = false;
-  updated = false;
 
   if (m_trace_points.empty()) {
     m_task_projection.reset(state.Location);
@@ -37,7 +34,9 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 
     if (distance_is_significant(state, m_trace_points.back())) {
       do_add = true;
-      // \todo replace if lower even if not significant distance away
+    } else if (state.NavAltitude < m_trace_points.back().altitude) {
+      // replace if lower even if not significant distance away
+      m_trace_points.back().altitude = state.NavAltitude.as_int();
     }
   }
   if (!do_add) {
@@ -46,8 +45,6 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 
   TracePoint sp(state, m_task_projection);
   m_trace_points.push_back(sp);
-
-  updated = true;
 
   return true;
 }
@@ -68,20 +65,17 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 {
   // \todo: possibly scan each type in a round robin fashion?
 
-  if (updated) {
-
-    switch (m_task_behaviour.olc_rules) {
-    case OLC_Sprint:
-      run_olc(olc_sprint);
-      break;
-    case OLC_FAI:
-      run_olc(olc_fai);
-      break;
-    case OLC_Classic:
-      run_olc(olc_classic);
-      break;
-    };
-  }
+  switch (m_task_behaviour.olc_rules) {
+  case OLC_Sprint:
+    run_olc(olc_sprint);
+    break;
+  case OLC_FAI:
+    run_olc(olc_fai);
+    break;
+  case OLC_Classic:
+    run_olc(olc_classic);
+    break;
+  };
   return true;
 }
 

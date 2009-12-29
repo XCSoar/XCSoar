@@ -88,14 +88,13 @@ OLCDijkstra::solve()
   }
 
   if (m_dijkstra.empty()) {
-    const ScanTaskPoint start(0,0);
-    m_dijkstra.reset(start);
-    add_start_edges(m_dijkstra);
+    m_dijkstra.reset(ScanTaskPoint(0,0));
+    add_start_edges();
   }
 
-  return distance_general(m_dijkstra);
-
+  return distance_general(m_dijkstra, 20);
 }
+
 
 fixed
 OLCDijkstra::score(fixed& the_distance) 
@@ -138,15 +137,15 @@ OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
 
 
 void
-OLCDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra)
+OLCDijkstra::add_start_edges()
 {
-  dijkstra.pop();
+  m_dijkstra.pop();
 
   ScanTaskPoint destination(0,0);
   const unsigned end = stage_end(destination);
   
   for (; destination.second!= end; ++destination.second) {
-    dijkstra.link(destination, destination, 0);
+    m_dijkstra.link(destination, destination, 0);
   }
 }
 

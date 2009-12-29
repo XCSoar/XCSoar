@@ -90,7 +90,7 @@ private:
   unsigned n_points;
   const unsigned m_finish_alt_diff;
 
-  void add_start_edges(DijkstraTaskPoint &dijkstra);
+  void add_start_edges();
 
   unsigned stage_end(const ScanTaskPoint &sp) const;
 

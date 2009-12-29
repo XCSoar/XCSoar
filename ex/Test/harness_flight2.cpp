@@ -409,6 +409,7 @@ bool test_olc(int n_wind, OLCRules id)
 
   TaskBehaviour task_behaviour;
 
+  task_behaviour.all_off();
   task_behaviour.olc_rules = id;
   task_behaviour.enable_olc = true;
 
@@ -419,7 +420,7 @@ bool test_olc(int n_wind, OLCRules id)
                            waypoints);
 
   task_manager.set_glide_polar(glide_polar);
-  test_task(task_manager, waypoints, 2);
+  test_task(task_manager, waypoints, 1);
 
   return run_flight(task_manager, true, target_noise, n_wind);
 }

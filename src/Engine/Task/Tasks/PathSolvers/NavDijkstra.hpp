@@ -59,7 +59,8 @@ protected:
   virtual void add_edges(DijkstraTaskPoint &dijkstra,
                          const ScanTaskPoint &curNode) = 0;
   
-  bool distance_general(DijkstraTaskPoint &dijkstra) {
+  bool distance_general(DijkstraTaskPoint &dijkstra, 
+                        unsigned max_steps = 0-1) {
 
 #ifdef INSTRUMENT_TASK
  count_dijkstra_queries++;
@@ -78,8 +79,13 @@ protected:
       } else {
         add_edges(dijkstra, destination);
       }
+
+      if (max_steps) {
+        --max_steps;
+      } else {
+        return false; // Reached limit
+      }
     }
-    dijkstra.clear();
     return false; // No path found
   }
 
