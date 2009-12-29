@@ -234,16 +234,16 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
       break;
     }
   }
+#endif
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
-    if (!task.Valid()
+    if (!Calculated().task_stats.task_valid
         && ((SettingsComputer().AutoMacCreadyMode==0)
 	    || (SettingsComputer().AutoMacCreadyMode==2))) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);
   }
-#endif
 
   if (_tcsstr(OutBuffer, TEXT("$(TaskAbortToggleActionName)"))) {
     if (Calculated().common_stats.mode_goto) {
