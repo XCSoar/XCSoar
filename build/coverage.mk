@@ -13,8 +13,8 @@ LCOVOPTS = --no-checksum -q -b $(topdir) -d $(topdir)/src
 COVSTART = lcov -c -i $(LCOVOPTS) -o app_base.info
 COVEND = lcov -c $(LCOVOPTS) -o app_test.info
 COVMERGE = lcov -q -a app_base.info -a app_test.info -o app_total.info
-COVCLEAN = lcov -q -r app_total.info "/usr/*" "./src/*" -o app_totalr.info
-COVPROC = genhtml --frames -q -o doc/lcov app_totalr.info
+COVCLEAN = lcov -q -r app_total.info "/usr/*" -o app_totalr.info
+COVPROC = genhtml --frames -q -o $(DOC)/lcov app_totalr.info
 
 covstart:	FORCE
 	@$(NQ)echo "coverage initialise"

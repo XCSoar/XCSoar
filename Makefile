@@ -25,13 +25,24 @@ topdir = .
 include $(topdir)/build/common.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
+include $(topdir)/build/coverage.mk
 
 CPPFLAGS += -DFLARM_AVERAGE -DFIXED_MATH -DDRAWLOAD
+
+ifeq ($(HAVE_WIN32),n)
+CPPFLAGS += -DDO_PRINT
+CPPFLAGS += -DINSTRUMENT_TASK
+CPPFLAGS += -DHAVE_TAP
+CPPFLAGS += -DHAVE_BOOST
+endif
 
 include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
 include $(topdir)/build/generate.mk
+include $(topdir)/build/doco.mk
+include $(topdir)/build/harness.mk
+include $(topdir)/build/test.mk
 
 ######## output files
 
@@ -456,13 +467,26 @@ $(addprefix clean-,$(filter-out WINE,$(TARGETS))): clean-%:
 
 clean-: $(addprefix clean-,$(TARGETS))
 
-clean: clean-$(TARGET) cleani FORCE
-	rm -rf output
-	find Common src $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
+clean: clean-$(TARGET) cleani cleancov FORCE
+	@$(NQ)echo "cleaning all"
+	$(Q)rm -rf output
+	$(Q)find src $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
 	-type f -print | xargs -r $(RM)
 
+cleancov: FORCE
+	@$(NQ)echo "cleaning cov"
+	$(Q)find ./ $(IGNORE) \( \
+		   -name '*.bb' \
+		-o -name '*.bbg' \
+		-o -name '*.gcda' \
+		-o -name '*.gcda.info' \
+		-o -name '*.gcno' \
+		-o -name '*.gcno.info' \
+	\) -type f -print | xargs -r $(RM)
+
 cleani: FORCE
-	find Common src $(IGNORE) \( -name '*.i' \) \
+	@$(NQ)echo "cleaning .i"
+	$(Q)find src $(IGNORE) \( -name '*.i' \) \
 		-type f -print | xargs -r $(RM)
 
 .PHONY: FORCE

@@ -1,5 +1,4 @@
 
 doco: FORCE
-	tools/cloc --exclude-lang=D src > doc/cloc.txt
-	doxygen doc/doxygen/Doxyfile | grep Warning
-
+	$(topdir)/ex/tools/cloc --exclude-lang=D src > Doc/cloc.txt
+	cd $(DOC) && doxygen XCSoar.doxyfile

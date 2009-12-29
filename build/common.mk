@@ -5,4 +5,6 @@ include $(topdir)/build/util.mk
 
 SRC = $(topdir)/src
 ENGINE_SRC_DIR = $(SRC)/Engine
+DOC = $(topdir)/Doc
 OUT = $(topdir)/output
+TEST_SRC_DIR = $(topdir)/ex/Test

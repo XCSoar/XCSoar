@@ -1,9 +1,11 @@
 *.o
 *.a
 *.o.d
+*.d
 *.exe
 .stgit*
 .deps
+*.gcov
 *~
 *.rsc
 *.IGC
@@ -20,5 +22,11 @@
 *-WINE
 *-WINE.exe.so
 *-UNIX
+*.gcno
+*.gcno.info
+*.gcda
+*.gcda.info
+app_*.info
 Doc/html/*
+Doc/cloc.txt
 output

@@ -40,5 +40,5 @@ TESTLIBS = $(TEST_SRC_DIR)/harness-$(TARGET).a \
 
 $(TEST_SRC_DIR)/%-$(TARGET).exe: $(TEST_SRC_DIR)/%.cpp $(TESTLIBS)
 	@$(NQ)echo "  CXX/LN      $@"
-	$(Q)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) $< -o $@ $(TESTLIBS)
+	$(Q)$(CXX) -o $@ $(cxx-flags) $(INCLUDES) $^
 

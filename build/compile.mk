@@ -20,8 +20,8 @@ endif
 DEPFILE = $(dir $@).$(notdir $@).d
 DEPFLAGS = -Wp,-MD,$(DEPFILE),-MT,$@
 dirtarget = $(subst \\,_,$(subst /,_,$(dir $@)))
-cc-flags = $(DEPFLAGS) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH)
-cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH)
+cc-flags = $(DEPFLAGS) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)
+cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)
 
 #
 # Useful debugging targets - make preprocessed versions of the source
