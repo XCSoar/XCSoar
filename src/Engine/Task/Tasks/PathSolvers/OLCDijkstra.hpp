@@ -86,7 +86,7 @@ protected:
 private:
 
   OnlineContest& olc;
-  const unsigned n_points;
+  unsigned n_points;
   const unsigned m_finish_alt_diff;
 
   void add_start_edges(DijkstraTaskPoint &dijkstra);

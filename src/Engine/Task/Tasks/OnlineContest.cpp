@@ -59,9 +59,6 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
   fixed score = dijkstra.score(common_stats.distance_olc);
   if (positive(score)) {
     dijkstra.copy_solution(m_solution);
-  } else {
-    common_stats.distance_olc = fixed_zero;
-    m_solution.clear();
   }
 }
 

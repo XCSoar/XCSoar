@@ -78,6 +78,8 @@ public:
     while (!q.empty()) {
       q.pop();
     }
+    p.clear();
+    m.clear();
     push(n,n,0);
   };
 
@@ -185,9 +187,7 @@ private:
   };
 
   std::map<Node, unsigned> m;
-
   std::map<Node, Node> p;
-
   std::priority_queue<Value, std::vector<Value>, Rank> q;
 
   Iter cur;

@@ -49,7 +49,6 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc,
                          const unsigned finish_alt_diff):
   NavDijkstra<TracePoint>(n_legs+1),
   olc(_olc),
-  n_points(_olc.get_trace_points().size()),
   m_finish_alt_diff(finish_alt_diff)
 {
   m_weightings.reserve(n_legs);
@@ -75,7 +74,8 @@ OLCDijkstra::get_point(const ScanTaskPoint &sp) const
 bool 
 OLCDijkstra::solve()
 {
-  if (n_points<num_stages) { // todo check this
+  n_points = olc.get_trace_points().size();
+  if (n_points<num_stages) {
     return false;
   }
 
@@ -92,12 +92,12 @@ OLCDijkstra::solve()
 fixed
 OLCDijkstra::score(fixed& the_distance) 
 {
-  static const fixed fixed_fifth(0.2);
   if (solve()) {
     fixed dist = fixed_zero;
     for (unsigned i=0; i+1<num_stages; ++i) {
       dist += m_weightings[0]*solution[i].distance(solution[i+1].get_location());
     }
+    static const fixed fixed_fifth(0.2);
     dist *= fixed_fifth;
     the_distance = dist;
     return dist;
