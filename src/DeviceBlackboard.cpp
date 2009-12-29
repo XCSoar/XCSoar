@@ -726,3 +726,20 @@ DeviceBlackboard::AutoQNH(const GlidePolar& glide_polar)
     AllDevicesPutQNH(Basic().pressure);
   }
 }
+
+
+void
+DeviceBlackboard::SetQNH(fixed qnh)
+{
+  ScopeLock protect(mutexBlackboard);
+  SetBasic().pressure.set_QNH(qnh);
+  AllDevicesPutQNH(Basic().pressure);
+}
+
+void
+DeviceBlackboard::SetMC(fixed mc)
+{
+  ScopeLock protect(mutexBlackboard);
+  SetBasic().MacCready = mc;
+  AllDevicesPutMacCready(mc);
+}

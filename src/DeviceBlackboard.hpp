@@ -79,6 +79,8 @@ public:
   void SetTrackBearing(fixed val);
   void SetSpeed(fixed val);
   void SetAltitude(fixed alt);
+  void SetQNH(fixed qnh);
+  void SetMC(fixed mc);
 
   void tick(const GlidePolar& glide_polar);
   void tick_fast(const GlidePolar& glide_polar);

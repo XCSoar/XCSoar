@@ -624,7 +624,7 @@ InfoBoxManager::DisplayInfoBox(void)
       break;
 
     case 10:
-      if (SettingsComputer().AutoMacCready)
+      if (SettingsComputer().auto_mc)
         InfoBoxes[i]->SetComment(TEXT("AUTO"));
       else
         InfoBoxes[i]->SetComment(TEXT("MANUAL"));

@@ -389,7 +389,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     }
   }
 
-  CondReplaceInString(SettingsComputer().AutoMacCready != 0, OutBuffer, TEXT("$(MacCreadyToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
+  CondReplaceInString(SettingsComputer().auto_mc, OutBuffer, TEXT("$(MacCreadyToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
   CondReplaceInString(SettingsMap().EnableAuxiliaryInfo, OutBuffer, TEXT("$(AuxInfoToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
 
   CondReplaceInString(SettingsMap().UserForceDisplayMode == dmCircling, OutBuffer, TEXT("$(DispModeClimbShortIndicator)"), TEXT("(*)"), TEXT(""), Size);

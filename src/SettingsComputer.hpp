@@ -153,9 +153,6 @@ struct SETTINGS_HEIGHT_MARGINS {
 };
 
 struct SETTINGS_FEATURES {
-  /** AutoMacCready feature enable (true/false) */
-  bool AutoMacCready;
-
   /**
    * AutoMacCready calculation mode
    * 0: Final glide only

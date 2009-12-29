@@ -833,7 +833,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
   else if (_tcscmp(misc, TEXT("auto off")) == 0)
     on_key_MacCready(-2);
   else if (_tcscmp(misc, TEXT("auto show")) == 0) {
-    if (SettingsComputer().AutoMacCready) {
+    if (SettingsComputer().auto_mc) {
       Message::AddMessage(TEXT("Auto MacCready ON"));
     } else {
       Message::AddMessage(TEXT("Auto MacCready OFF"));

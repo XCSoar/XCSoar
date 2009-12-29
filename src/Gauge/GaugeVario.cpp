@@ -219,7 +219,7 @@ void GaugeVario::Render() {
 
   if (Appearance.GaugeVarioMc) {
     double mc = Calculated().common_stats.current_mc*LIFTMODIFY;
-    if (SettingsComputer().AutoMacCready)
+    if (SettingsComputer().auto_mc)
       RenderValue(canvas, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
 		  mc, TEXT("Auto Mc"));

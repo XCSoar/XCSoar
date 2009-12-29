@@ -41,6 +41,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
+#include "DeviceBlackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
 #include "MacCready.h"
@@ -81,10 +82,7 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daChange:
       fixed QNH(Sender->GetAsFloat());
 
-#ifdef OLD_TASK
-      XCSoarInterface::Basic().pressure.set_QNH(QNH);
-      AllDevicesPutQNH(XCSoarInterface::Basic().pressure);
-#endif
+      device_blackboard.SetQNH(QNH);
       wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
       if (wp) {
 	wp->GetDataField()->

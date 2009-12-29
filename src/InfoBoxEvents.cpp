@@ -52,7 +52,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Interface.hpp"
 #include "Components.hpp"
-
+#include "DeviceBlackboard.hpp"
 #include "Task/TaskManager.hpp"
 
 #include <stdlib.h>
@@ -133,7 +133,6 @@ ActionInterface::on_key_TeamCode(int UpDown)
   }
 }
 
-#include "DeviceBlackboard.hpp"
 
 void
 ActionInterface::on_key_Altitude(int UpDown)
@@ -325,21 +324,20 @@ ActionInterface::on_key_MacCready(int UpDown)
   }
  else if (UpDown==0)
     {
-      SetSettingsComputer().AutoMacCready
-	= !SettingsComputer().AutoMacCready;
+      SetSettingsComputer().auto_mc
+	= !SettingsComputer().auto_mc;
     }
   else if (UpDown==-2)
     {
-      SetSettingsComputer().AutoMacCready = false;  // SDP on auto maccready
+      SetSettingsComputer().auto_mc = false;  // SDP on auto maccready
 
     }
   else if (UpDown==+2)
     {
-      SetSettingsComputer().AutoMacCready = true;	// SDP off auto maccready
+      SetSettingsComputer().auto_mc = true;	// SDP off auto maccready
     }
 
-  // JMW TODO check scope
-  AllDevicesPutMacCready(MACCREADY);
+  device_blackboard.SetMC(fixed(MACCREADY));
 }
 
 

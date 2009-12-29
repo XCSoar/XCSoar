@@ -40,7 +40,6 @@ Copyright_License {
 
 SettingsComputerBlackboard::SettingsComputerBlackboard()
 {
-  settings_computer.AutoMacCready = false;
   settings_computer.AutoWindMode= D_AUTOWIND_CIRCLING;
   settings_computer.AutoMacCreadyMode = 0;
   settings_computer.SafetyAltitudeArrival = 500;

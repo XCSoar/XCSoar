@@ -1631,7 +1631,7 @@ GlideComputerTask::MacCreadyOrAvClimbRate(double this_maccready)
   // auto Mc, use the average climb rate achieved so far.
 
   if ((mc_val < 0.1)
-      || (SettingsComputer().AutoMacCready
+      || (SettingsComputer().auto_mc
           && ((SettingsComputer().AutoMacCreadyMode == 0)
               || ((SettingsComputer().AutoMacCreadyMode == 2) && (is_final_glide))))) {
 
@@ -1960,7 +1960,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
   bool is_final_glide = false;
 
   // if (AutoMacCready disabled) cancel calculation
-  if (!SettingsComputer().AutoMacCready)
+  if (!SettingsComputer().auto_mc)
     return;
 
   double mc_new = mc_setting;
