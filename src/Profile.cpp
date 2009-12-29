@@ -584,10 +584,13 @@ Profile::ReadRegistrySettings()
 #endif
   GetFromRegistry(szRegistryWaypointsOutOfRange,
 		  WaypointsOutOfRange);
-  GetFromRegistry(szRegistryOLCRules,
-		  SetSettingsComputer().OLCRules);
+  {
+    unsigned t = SettingsComputer().olc_rules;
+    GetFromRegistry(szRegistryOLCRules, t);
+    SetSettingsComputer().olc_rules = (OLCRules)t;
+  }
   GetFromRegistry(szRegistryHandicap,
-		  SetSettingsComputer().Handicap);
+		  SetSettingsComputer().olc_handicap);
   GetFromRegistry(szRegistryEnableExternalTriggerCruise,
 		  SetSettingsComputer().EnableExternalTriggerCruise);
 

@@ -81,6 +81,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCSprint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCClassic.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCFAI.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCRules.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/IsolineCrossingFinder.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCready.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCreadyTravelled.cpp \

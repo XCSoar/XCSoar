@@ -74,7 +74,8 @@ TaskBehaviour::TaskBehaviour():
     start_max_speed(60.0),
     risk_gamma(0.0),
     enable_olc(false),
-    olc_rules(OLC_Sprint)
+    olc_rules(OLC_Sprint),
+    olc_handicap(100)
 {
 }
 

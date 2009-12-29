@@ -42,7 +42,7 @@ Copyright_License {
 #include "Math/leastsqs.h"
 #include "Thread/Mutex.hpp"
 #include "Sizes.h"
-
+#include "Navigation/TracePoint.hpp"
 #include <windef.h>
 
 struct NMEA_INFO;
@@ -55,6 +55,7 @@ class WindStore;
 class Airspaces;
 class RasterTerrain;
 class GlidePolar;
+class Chart;
 
 class FlightStatistics {
 public:
@@ -91,11 +92,27 @@ public:
                   const NMEA_INFO &nmea_info,
                   const WindStore &wind_store) const;
   void RenderTemperature(Canvas &canvas, const RECT rc) const;
+
+
+  void RenderTrace(Canvas &canvas, const RECT rc,
+                   const NMEA_INFO &nmea_info,
+                   const SETTINGS_COMPUTER &settings_computer,
+                   const SETTINGS_MAP &settings_map,
+                   const TracePointVector& trace) const;
+
+  void RenderOLC(Canvas &canvas, const RECT rc,
+                 const NMEA_INFO &nmea_info,
+                 const SETTINGS_COMPUTER &settings_computer,
+                 const SETTINGS_MAP &settings_map,
+                 const TracePointVector& olc,
+                 const TracePointVector& trace) const;
+
   void RenderTask(Canvas &canvas, const RECT rc,
                   const NMEA_INFO &nmea_info,
                   const SETTINGS_COMPUTER &settings_computer,
                   const SETTINGS_MAP &settings_map,
-                  bool olcmode) const;
+                  const TracePointVector& trace) const;
+
   void RenderSpeed(Canvas &canvas, const RECT rc,
                    const DERIVED_INFO &derived) const;
   void CaptionBarograph( TCHAR *sTmp);
@@ -106,6 +123,10 @@ public:
   void CaptionTask(TCHAR *sTmp,
                    const DERIVED_INFO &derived) const;
 private:
+
+  void ExpandToTrace(Chart &chart, const TracePointVector& trace) const;
+  void DrawTrace(Chart &chart, const TracePointVector& trace, unsigned style) const;
+
   LeastSquares ThermalAverage;
   LeastSquares Wind_x;
   LeastSquares Wind_y;

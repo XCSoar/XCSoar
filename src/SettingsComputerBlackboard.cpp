@@ -72,13 +72,6 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.BallastSecsToEmpty = 120;
   settings_computer.UTCOffset = 0;
 
-  settings_computer.EnableOLC = false;
-  settings_computer.OLCRules = 0;
-// 0: sprint task
-// 1: FAI triangle
-// 2: OLC classic
-  settings_computer.Handicap = 108; // LS-3
-
   // for user-set teammate code
   settings_computer.TeammateCode[0] = 0;
   settings_computer.TeammateCodeValid = false;

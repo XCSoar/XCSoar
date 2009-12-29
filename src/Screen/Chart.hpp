@@ -51,7 +51,7 @@ class Chart {
 
   static const Color GROUND_COLOUR;
 
-  enum {
+  enum Style {
     STYLE_BLUETHIN,
     STYLE_REDTHICK,
     STYLE_DASHGREEN,

@@ -282,285 +282,94 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   canvas.background_transparent();
 }
 
+
+void 
+FlightStatistics::ExpandToTrace(Chart &chart, 
+                                const TracePointVector& trace) const
+{
+  if (trace.empty()) return;
+  for (TracePointVector::const_iterator it = trace.begin();
+       it != trace.end(); ++it) {
+    chart.ScaleXFromValue(it->get_location().Longitude);
+    chart.ScaleYFromValue(it->get_location().Latitude);
+  }
+}
+
+
+void 
+FlightStatistics::DrawTrace(Chart &chart, 
+                            const TracePointVector& trace,
+                            unsigned style) const
+{
+  GEOPOINT last;
+  for (TracePointVector::const_iterator it = trace.begin();
+       it != trace.end(); ++it) {
+    if (it != trace.begin()) {
+      chart.DrawLine(it->get_location().Longitude, 
+                     it->get_location().Latitude, 
+                     last.Longitude, 
+                     last.Latitude, 
+                     (Chart::Style)style);
+    }
+    last = it->get_location();
+  }
+}
+
+void
+FlightStatistics::RenderOLC(Canvas &canvas, const RECT rc,
+                            const NMEA_INFO &nmea_info,
+                            const SETTINGS_COMPUTER &settings_computer,
+                            const SETTINGS_MAP &settings_map,
+                            const TracePointVector& olc,
+                            const TracePointVector& trace) const
+{
+  Chart chart(canvas, rc);
+
+  if (trace.size()<2) {
+    chart.DrawNoData();
+    return;
+  }
+
+  { // set scale
+    chart.ResetScale();
+    ExpandToTrace(chart, trace);
+    ExpandToTrace(chart, olc);
+
+    chart.ScaleXFromValue(nmea_info.Location.Longitude);
+    chart.ScaleYFromValue(nmea_info.Location.Latitude);
+
+    chart.ScaleMakeSquare();
+  }
+
+  { // background
+    chart.DrawXGrid(1.0, 0, Chart::STYLE_THINDASHPAPER, 1.0, false);
+    chart.DrawYGrid(1.0, 0, Chart::STYLE_THINDASHPAPER, 1.0, false);
+  }
+
+  { // draw contents
+    DrawTrace(chart, trace, (unsigned)Chart::STYLE_MEDIUMBLACK);
+    DrawTrace(chart, olc, (unsigned)Chart::STYLE_REDTHICK);
+  }
+
+  { // draw aircraft on top
+    chart.DrawLabel(TEXT("+"), nmea_info.Location.Longitude, nmea_info.Location.Latitude);
+  }
+
+}
+
 void
 FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
                              const NMEA_INFO &nmea_info,
                              const SETTINGS_COMPUTER &settings_computer,
                              const SETTINGS_MAP &settings_map,
-                             const bool olcmode) const
+                             const TracePointVector& trace) const
 {
-#ifdef OLD_TASK
-  int i;
-  Chart chart(canvas, rc);
-
-  double lat1 = 0;
-  double lon1 = 0;
-  double lat2 = 0;
-  double lon2 = 0;
-  double x1, y1, x2=0, y2=0;
-  double lat_c, lon_c;
-  double aatradius[MAXTASKPOINTS];
-
-  // find center
-
-  for (i=0; i<MAXTASKPOINTS; i++) {
-    aatradius[i]=0;
-  }
-  bool nowaypoints = true;
-
-  for (i=0; task.ValidTaskPoint(i); i++) {
-    lat1 = task.getTaskPointLocation(i).Latitude;
-    lon1 = task.getTaskPointLocation(i).Longitude;
-    chart.ScaleYFromValue( lat1);
-    chart.ScaleXFromValue(lon1);
-    nowaypoints = false;
-  }
-
-  if (nowaypoints && !olcmode) {
-    chart.DrawNoData();
-    return;
-  }
-
-  int nolc = olc.getN();
-  bool olcvalid = olc.getValid(settings_computer);
-  bool olcfinished = olc.getFinished(settings_computer);
-
-  if (olcvalid) {
-    for (i=0; i< nolc; i++) {
-      lat1 = olc.getLocation(i).Latitude;
-      lon1 = olc.getLocation(i).Longitude;
-      chart.ScaleYFromValue( lat1);
-      chart.ScaleXFromValue(lon1);
-    }
-    if (!olcfinished) {
-      lat1 = olc.loc_proj.Latitude;
-      lon1 = olc.loc_proj.Longitude;
-      chart.ScaleYFromValue( lat1);
-      chart.ScaleXFromValue(lon1);
-    }
-  }
-
-  lat_c = (chart.getYmax()+chart.getYmin())/2;
-  lon_c = (chart.getXmax()+chart.getXmin())/2;
-
-  int nwps = 0;
-
-  // find scale
-  chart.ResetScale();
-
-  lat1 = nmea_info.Location.Latitude;
-  lon1 = nmea_info.Location.Longitude;
-  x1 = (lon1-lon_c)*fastcosine(lat1);
-  y1 = (lat1-lat_c);
-  chart.ScaleXFromValue(x1);
-  chart.ScaleYFromValue(y1);
-
-  for (i=0; task.ValidTaskPoint(i); i++) {
-    nwps++;
-    lat1 = task.getTaskPointLocation(i).Latitude;
-    lon1 = task.getTaskPointLocation(i).Longitude;
-    x1 = (lon1-lon_c)*fastcosine(lat1);
-    y1 = (lat1-lat_c);
-    chart.ScaleXFromValue(x1);
-    chart.ScaleYFromValue(y1);
-
-    if (task.getSettings().AATEnabled) {
-      GEOPOINT aatloc;
-      double bearing;
-      double radius;
-
-      if (task.ValidTaskPoint(i+1)) {
-        if (task.getTaskPoint(i).AATType == AAT_SECTOR) {
-          radius = task.getTaskPoint(i).AATSectorRadius;
-        } else {
-          radius = task.getTaskPoint(i).AATCircleRadius;
-        }
-        for (int j=0; j<4; j++) {
-          bearing = j*360.0/4;
-
-          FindLatitudeLongitude(task.getTaskPointLocation(i),
-                                bearing, radius,
-                                &aatloc);
-          x1 = (aatloc.Longitude-lon_c)*fastcosine(aatloc.Latitude);
-          y1 = (aatloc.Latitude-lat_c);
-          chart.ScaleXFromValue(x1);
-          chart.ScaleYFromValue(y1);
-          if (j==0) {
-            aatradius[i] = fabs(aatloc.Latitude -
-                                task.getTaskPointLocation(i).Latitude);
-          }
-        }
-      } else {
-        aatradius[i] = 0;
-      }
-    }
-  }
-
-  for (i=0; i< nolc; i++) {
-    lat1 = olc.getLocation(i).Latitude;
-    lon1 = olc.getLocation(i).Longitude;
-    x1 = (lon1-lon_c)*fastcosine(lat1);
-    y1 = (lat1-lat_c);
-    chart.ScaleXFromValue(x1);
-    chart.ScaleYFromValue( y1);
-  }
-
-  chart.ScaleMakeSquare();
-  chart.DrawXGrid(1.0, 0, Chart::STYLE_THINDASHPAPER, 1.0, false);
-  chart.DrawYGrid(1.0, 0, Chart::STYLE_THINDASHPAPER, 1.0, false);
-
-  // draw aat areas
-  if (!olcmode) {
-    if (task.getSettings().AATEnabled) {
-      for (i=MAXTASKPOINTS-1; i>0; i--) {
-	if (task.ValidTaskPoint(i)) {
-          lat1 = task.getTaskPointLocation(i-1).Latitude;
-          lon1 = task.getTaskPointLocation(i-1).Longitude;
-          lat2 = task.getTaskPointLocation(i).Latitude;
-          lon2 = task.getTaskPointLocation(i).Longitude;
-	  x1 = (lon1-lon_c)*fastcosine(lat1);
-	  y1 = (lat1-lat_c);
-	  x2 = (lon2-lon_c)*fastcosine(lat2);
-	  y2 = (lat2-lat_c);
-
-          canvas.select(MapGfx.GetAirspaceBrushByClass(AATASK, settings_map));
-          canvas.white_pen();
-	  if (task.getTaskPoint(i).AATType == AAT_SECTOR) {
-	    canvas.segment(chart.screenX(x2), chart.screenY(y2),
-                           chart.screenS(aatradius[i]),
-                           rc,
-                           task.getTaskPoint(i).AATStartRadial,
-                           task.getTaskPoint(i).AATFinishRadial);
-	  } else {
-            canvas.autoclip_circle(chart.screenX(x2), chart.screenY(y2),
-                                   chart.screenS(aatradius[i]), rc);
-	  }
-	}
-      }
-    }
-  }
-
-  // draw track
-
-  for (i=0; i< nolc-1; i++) {
-    lat1 = olc.getLocation(i).Latitude;
-    lon1 = olc.getLocation(i).Longitude;
-    lat2 = olc.getLocation(i+1).Latitude;
-    lon2 = olc.getLocation(i+1).Longitude;
-    x1 = (lon1-lon_c)*fastcosine(lat1);
-    y1 = (lat1-lat_c);
-    x2 = (lon2-lon_c)*fastcosine(lat2);
-    y2 = (lat2-lat_c);
-    chart.DrawLine(x1, y1, x2, y2,
-		   Chart::STYLE_MEDIUMBLACK);
-  }
-
-  // draw task lines and labels
-
-  if (!olcmode) {
-    for (i=MAXTASKPOINTS-1; i>0; i--) {
-      if (task.ValidTaskPoint(i) && task.ValidTaskPoint(i-1)) {
-        lat1 = task.getTaskPointLocation(i-1).Latitude;
-        lon1 = task.getTaskPointLocation(i-1).Longitude;
-	if (task.TaskIsTemporary()) {
-	  lat2 = nmea_info.Location.Latitude;
-	  lon2 = nmea_info.Location.Longitude;
-	} else {
-          lat2 = task.getTaskPointLocation(i).Latitude;
-          lon2 = task.getTaskPointLocation(i).Longitude;
-	}
-	x1 = (lon1-lon_c)*fastcosine(lat1);
-	y1 = (lat1-lat_c);
-	x2 = (lon2-lon_c)*fastcosine(lat2);
-	y2 = (lat2-lat_c);
-
+/*
 	chart.DrawLine(x1, y1, x2, y2,
 		       Chart::STYLE_DASHGREEN);
-
-	TCHAR text[100];
-	if ((i==nwps-1) &&
-            (task.getWaypointIndex(i) == task.getWaypointIndex(0))) {
-	  _stprintf(text,TEXT("%0d"),1);
-	  chart.DrawLabel(text, x2, y2);
-	} else {
-	  _stprintf(text,TEXT("%0d"),i+1);
-	  chart.DrawLabel(text, x2, y2);
-	}
-
-	if ((i==(int)task.getActiveIndex())&&(!task.getSettings().AATEnabled)) {
-	  lat1 = nmea_info.Location.Latitude;
-	  lon1 = nmea_info.Location.Longitude;
-	  x1 = (lon1-lon_c)*fastcosine(lat1);
-	  y1 = (lat1-lat_c);
 	  chart.DrawLine(x1, y1, x2, y2,
 			 Chart::STYLE_REDTHICK);
-	}
-
-      }
-    }
-
-    // draw aat task line
-
-    if (task.getSettings().AATEnabled) {
-      for (i=0; task.ValidTaskPoint(i) && task.ValidTaskPoint(i+1); i++) {
-        GEOPOINT loc1 = task.getTargetLocation(i);
-        GEOPOINT loc2 = task.getTargetLocation(i+1);
-
-        x1 = (loc1.Longitude-lon_c)*fastcosine(loc1.Latitude);
-        y1 = (loc1.Latitude-lat_c);
-        x2 = (loc2.Longitude-lon_c)*fastcosine(loc2.Latitude);
-        y2 = (loc2.Latitude-lat_c);
-
-        chart.DrawLine(x1, y1, x2, y2,
-                       Chart::STYLE_REDTHICK);
-      }
-    }
-  }
-
-  if (olcmode && olcvalid) {
-    for (i=0; i< 7-1; i++) {
-      switch (settings_computer.OLCRules) {
-      case 0:
-	lat1 = olc.data.solution_FAI_sprint.location[i].Latitude;
-	lon1 = olc.data.solution_FAI_sprint.location[i].Longitude;
-	lat2 = olc.data.solution_FAI_sprint.location[i+1].Latitude;
-	lon2 = olc.data.solution_FAI_sprint.location[i+1].Longitude;
-	break;
-      case 1:
-	lat1 = olc.data.solution_FAI_triangle.location[i].Latitude;
-	lon1 = olc.data.solution_FAI_triangle.location[i].Longitude;
-	lat2 = olc.data.solution_FAI_triangle.location[i+1].Latitude;
-	lon2 = olc.data.solution_FAI_triangle.location[i+1].Longitude;
-	break;
-      case 2:
-	lat1 = olc.data.solution_FAI_classic.location[i].Latitude;
-	lon1 = olc.data.solution_FAI_classic.location[i].Longitude;
-	lat2 = olc.data.solution_FAI_classic.location[i+1].Latitude;
-	lon2 = olc.data.solution_FAI_classic.location[i+1].Longitude;
-	break;
-      }
-      x1 = (lon1-lon_c)*fastcosine(lat1);
-      y1 = (lat1-lat_c);
-      x2 = (lon2-lon_c)*fastcosine(lat2);
-      y2 = (lat2-lat_c);
-      chart.DrawLine(x1, y1, x2, y2,
-		     Chart::STYLE_REDTHICK);
-    }
-    if (!olcfinished) {
-      x1 = (olc.loc_proj.Longitude-lon_c)*fastcosine(lat1);
-      y1 = (olc.loc_proj.Latitude-lat_c);
-      chart.DrawLine(x1, y1, x2, y2,
-		     Chart::STYLE_BLUETHIN);
-    }
-  }
-
-  // Draw aircraft on top
-  lat1 = nmea_info.Location.Latitude;
-  lon1 = nmea_info.Location.Longitude;
-  x1 = (lon1-lon_c)*fastcosine(lat1);
-  y1 = (lat1-lat_c);
-  chart.DrawLabel(TEXT("+"), x1, y1);
-#endif
+*/
 }
 
 void
@@ -823,12 +632,13 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
 
+  terrain.Lock();
+
   // draw airspaces
   AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start);
   airspace_database.visit_intersecting(p_start, vec, ivisitor);
 
   // draw terrain
-  terrain.Lock();
   if (terrain.GetMap()) {
     // want most accurate rounding here
     RasterRounding rounding(*terrain.GetMap(),0,0);

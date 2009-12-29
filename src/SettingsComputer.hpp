@@ -97,11 +97,6 @@ struct SETTINGS_POLAR {
   bool AbortSafetyUseCurrent;
 };
 
-struct SETTINGS_OLC {
-  unsigned OLCRules;
-  unsigned Handicap;
-  bool EnableOLC;
-};
 
 struct SETTINGS_SOUND {
   // sound stuff not used?
@@ -190,7 +185,6 @@ struct SETTINGS_COMPUTER:
   public SETTINGS_WIND,
   public SETTINGS_LOGGER,
   public SETTINGS_POLAR,
-  public SETTINGS_OLC,
   public SETTINGS_SOUND,
   public SETTINGS_TEAMCODE,
   public SETTINGS_VOICE,

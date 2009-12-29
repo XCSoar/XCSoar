@@ -107,6 +107,7 @@ GlideComputerTask::ProcessBasicTask()
 //    task_behaviour.all_off();
 //    task_behaviour.optimise_targets_range = true;
 //  task_behaviour.auto_mc=true;
+    task_behaviour.enable_olc = true;
 
     m_task.update(Basic(), LastBasic());
     SetCalculated().task_stats = m_task.get_stats();

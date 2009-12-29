@@ -240,7 +240,7 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas)
   }
 }
 
-#include "RasterTerrain.h"
+#include "RasterTerrain.h" // OLD_TASK for temporary locking
 
 /**
  * Draws the airspace to the given canvas

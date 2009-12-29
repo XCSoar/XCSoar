@@ -1539,15 +1539,15 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Sprint")));
-    dfe->addEnumText(gettext(_T("Triangle")));
-    dfe->addEnumText(gettext(_T("Classic")));
-    dfe->Set(XCSoarInterface::SettingsComputer().OLCRules);
+    dfe->addEnumText(gettext(rule_as_text((OLCRules)0).c_str()));
+    dfe->addEnumText(gettext(rule_as_text((OLCRules)1).c_str()));
+    dfe->addEnumText(gettext(rule_as_text((OLCRules)2).c_str()));
+    dfe->Set(XCSoarInterface::SettingsComputer().olc_rules);
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpHandicap"),
-                   XCSoarInterface::SettingsComputer().Handicap);
+                   XCSoarInterface::SettingsComputer().olc_handicap);
 
   if(GetFromRegistryD(szRegistrySpeedUnitsValue,Speed)!=ERROR_SUCCESS) {
     SetToRegistry(szRegistrySpeedUnitsValue, Speed);
@@ -2741,13 +2741,17 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-  changed |= SetValueRegistryOnChange(wf, _T("prpOLCRules"),
-				      szRegistryOLCRules,
-				      XCSoarInterface::SetSettingsComputer().OLCRules);
+  {
+    unsigned t= XCSoarInterface::SettingsComputer().olc_rules;
+    changed |= SetValueRegistryOnChange(wf, _T("prpOLCRules"),
+                                        szRegistryOLCRules,
+                                        t);
+    XCSoarInterface::SetSettingsComputer().olc_rules = (OLCRules)t;
+  }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpHandicap"),
 				      szRegistryHandicap,
-				      XCSoarInterface::SetSettingsComputer().Handicap);
+				      XCSoarInterface::SetSettingsComputer().olc_handicap);
 
   wp = (WndProperty*)wf->FindByName(_T("prpPolarFile"));
   if (wp) {

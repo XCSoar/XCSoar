@@ -74,6 +74,7 @@ public:
   bool enable_olc; /**< Whether to do online OLC optimisation */
 
   OLCRules olc_rules; /**< Rule set to scan for in OLC */
+  unsigned olc_handicap; /**< Handicap factor */
 
 /** 
  * Convenience function (used primarily for testing) to disable

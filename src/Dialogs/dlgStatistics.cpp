@@ -57,6 +57,8 @@ Copyright_License {
 
 #include "GlideSolvers/GlidePolar.hpp"
 
+#include "RasterTerrain.h" // OLD_TASK for temporary locking of task_manager
+
 #define MAXPAGE 8
 
 static int page=0;
@@ -104,7 +106,9 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(_T("Task calc"));
+    terrain.Lock();
     fs.RenderClimb(canvas, rcgfx, task_manager.get_glide_polar());
+    terrain.Unlock();
     break;
   case ANALYSIS_PAGE_WIND:
     SetCalcCaption(_T("Set wind"));
@@ -114,10 +118,12 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_POLAR:
     SetCalcCaption(_T("Settings"));
+    terrain.Lock();
     fs.RenderGlidePolar(canvas, rcgfx,
                         XCSoarInterface::Calculated(),
                         XCSoarInterface::SettingsComputer(),
                         task_manager.get_glide_polar());
+    terrain.Unlock();
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     SetCalcCaption(_T("Settings"));
@@ -125,19 +131,24 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(_T("Task calc"));
+    terrain.Lock();
     fs.RenderTask(canvas, rcgfx,
                   XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
                   XCSoarInterface::SettingsMap(),
-                  false);
+                  task_manager.get_trace_points());
+    terrain.Unlock();
     break;
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(_T("Optimise"));
-    fs.RenderTask(canvas, rcgfx,
+    terrain.Lock();
+    fs.RenderOLC(canvas, rcgfx,
                   XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
-                  XCSoarInterface::SettingsMap(),
-                  true);
+                 XCSoarInterface::SettingsMap(),
+                 task_manager.get_olc_points(),
+                 task_manager.get_trace_points());
+    terrain.Unlock();
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(_T("Warnings"));
@@ -231,62 +242,32 @@ static void Update(void){
               gettext(_T("OnLine Contest")));
     wf->SetCaption(sTmp);
 
-#ifdef OLD_TASK
-    TCHAR sFinished[20];
-    double dt, score;
-    bool olcvalid;
-    bool olcfinished;
-
-    dt = glide_computer.GetOLC().getDt(XCSoarInterface::SettingsComputer());
-    d = glide_computer.GetOLC().getD(XCSoarInterface::SettingsComputer());
-    olcvalid = glide_computer.GetOLC().getValid(XCSoarInterface::SettingsComputer());
-    score = glide_computer.GetOLC().getScore(XCSoarInterface::SettingsComputer());
-    olcfinished = glide_computer.GetOLC().getFinished(XCSoarInterface::SettingsComputer());
-
-    if (olcfinished) {
-      _tcscpy(sFinished,_T("Finished"));
+    TCHAR timetext1[100];
+    Units::TimeToText(timetext1, XCSoarInterface::Calculated().common_stats.time_olc.as_int());
+    if (Layout::landscape) {
+      _stprintf(sTmp,
+                _T("%s:\r\n  %d %s\r\n%s: %s\r\n%s: %d %s\r\n"),
+                gettext(_T("Distance")),
+                (DISTANCEMODIFY*XCSoarInterface::Calculated().common_stats.distance_olc).as_int(),
+                Units::GetDistanceName(),
+                gettext(_T("Time")),
+                timetext1,
+                gettext(_T("Speed")),
+                (TASKSPEEDMODIFY*XCSoarInterface::Calculated().common_stats.speed_olc).as_int(),
+                Units::GetTaskSpeedName());
     } else {
-      _tcscpy(sFinished,_T("..."));
-    }
-
-    if (olcvalid) {
-      TCHAR timetext1[100];
-      Units::TimeToText(timetext1, (int)dt);
-      if (Layout::landscape) {
-        _stprintf(sTmp,
-                  _T("%s\r\n%s:\r\n  %5.0f %s\r\n%s: %s\r\n%s: %3.0f %s\r\n%s: %.2f\r\n"),
-                  sFinished,
-                  gettext(_T("Distance")),
-                  DISTANCEMODIFY*d,
-                  Units::GetDistanceName(),
-                  gettext(_T("Time")),
-                  timetext1,
-                  gettext(_T("Speed")),
-                  TASKSPEEDMODIFY*d/dt,
-                  Units::GetTaskSpeedName(),
-                  gettext(_T("Score")),
-                  score);
-      } else {
-        _stprintf(sTmp,
-                  _T("%s\r\n%s: %5.0f %s\r\n%s: %s\r\n%s: %3.0f %s\r\n%s: %.2f\r\n"),
-                  sFinished,
-                  gettext(_T("Distance")),
-                  DISTANCEMODIFY*d,
-                  Units::GetDistanceName(),
-                  gettext(_T("Time")),
-                  timetext1,
-                  gettext(_T("Speed")),
-                  TASKSPEEDMODIFY*d/dt,
-                  Units::GetTaskSpeedName(),
-                  gettext(_T("Score")),
-                  score);
-      }
-    } else {
-      _stprintf(sTmp, _T("%s\r\n"),
-                gettext(_T("No valid path")));
+      _stprintf(sTmp,
+                _T("%s: %d %s\r\n%s: %s\r\n%s: %d %s\r\n"),
+                gettext(_T("Distance")),
+                (DISTANCEMODIFY*XCSoarInterface::Calculated().common_stats.distance_olc).as_int(),
+                Units::GetDistanceName(),
+                gettext(_T("Time")),
+                timetext1,
+                gettext(_T("Speed")),
+                (TASKSPEEDMODIFY*XCSoarInterface::Calculated().common_stats.speed_olc).as_int(),
+                Units::GetTaskSpeedName());
     }
     wInfo->SetCaption(sTmp);
-#endif
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     _stprintf(sTmp, _T("%s: %s"),
