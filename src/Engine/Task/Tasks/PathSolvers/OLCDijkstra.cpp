@@ -53,7 +53,7 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc,
   m_dijkstra(ScanTaskPoint(0,0), false)
 {
   m_weightings.reserve(n_legs);
-  m_dijkstra.clear();  // start with empty
+  reset();
 }
 
 void
@@ -96,10 +96,20 @@ OLCDijkstra::solve()
 }
 
 
+void
+OLCDijkstra::reset()
+{
+  m_dijkstra.clear();
+  n_points = 0;
+  solution_found = false;
+}
+
+
 fixed
 OLCDijkstra::score(fixed& the_distance) 
 {
   if (solve()) {
+    solution_found = true;
     the_distance = calc_distance();
     return the_distance;
   }

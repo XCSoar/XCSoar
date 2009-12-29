@@ -91,6 +91,9 @@ OnlineContest::reset()
 {
   m_trace_points.clear();
   m_solution.clear();
+  olc_sprint.reset();
+  olc_fai.reset();
+  olc_classic.reset();
 }
 
 
@@ -125,7 +128,7 @@ OnlineContest::distance_is_significant(const AIRCRAFT_STATE &state,
 
 /*
 
-- SearchPointVector find self intersections
+- SearchPointVector find self intersections (for OLC-FAI)
   -- eliminate bad candidates
   -- remaining candidates are potential finish points
 

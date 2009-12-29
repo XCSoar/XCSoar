@@ -71,6 +71,8 @@ public:
   fixed calc_distance() const;
   fixed calc_time() const;
 
+  void reset();
+
 protected:
   const TracePoint &get_point(const ScanTaskPoint &sp) const;
 
@@ -92,6 +94,8 @@ private:
   OnlineContest& olc;
   unsigned n_points;
   const unsigned m_finish_alt_diff;
+
+  bool solution_found;
 
   void add_start_edges();
 
