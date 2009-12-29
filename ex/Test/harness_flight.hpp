@@ -31,6 +31,7 @@ bool test_abort(int n_wind);
 bool test_goto(int n_wind, unsigned id, bool auto_mc=false);
 bool test_null();
 bool test_airspace(const unsigned n_airspaces);
+bool test_olc(int n_wind, OLCRules id);
 
 double aat_min_time(int test_num);
 

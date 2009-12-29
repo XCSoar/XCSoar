@@ -3,20 +3,25 @@
 #include "Task/TaskBehaviour.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "PathSolvers/OLCSprint.hpp"
+#include "PathSolvers/OLCFAI.hpp"
+#include "PathSolvers/OLCClassic.hpp"
+#include "Task/TaskStats/CommonStats.hpp"
+
 
 OnlineContest::OnlineContest(const TaskEvents &te, 
                              const TaskBehaviour &tb,
-                             const GlidePolar &gp):
+                             const GlidePolar &gp,
+                             CommonStats &stats):
   m_task_events(te),
   m_task_behaviour(tb),
-  m_glide_polar(gp)
+  m_glide_polar(gp),
+  common_stats(stats)
 {
-
+  reset();
 }
 
 
 static bool updated = false;
-static unsigned counter = 0;
 
 bool 
 OnlineContest::update_sample(const AIRCRAFT_STATE &state)
@@ -29,9 +34,6 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
     m_task_projection.update_fast();
     do_add = true;
   } else {
-
-    if (counter++ % 10 != 0) 
-      return false;
 
     if (distance_is_significant(state, m_trace_points.back())) {
       do_add = true;
@@ -51,18 +53,41 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 }
 
 
+void
+OnlineContest::run_olc(OLCDijkstra &dijkstra)
+{
+  fixed score = dijkstra.score(common_stats.distance_olc);
+  if (positive(score)) {
+    dijkstra.copy_solution(m_solution);
+  } else {
+    common_stats.distance_olc = fixed_zero;
+    m_solution.clear();
+  }
+}
+
+
 bool 
 OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 {
-
   // \todo: possibly scan each type in a round robin fashion?
 
   if (updated) {
-    OLCSprint dijkstra(*this);
-    const fixed score = dijkstra.score();
-    if (positive(score)) {
-//      printf("OLC %g (m/s)\n", score.as_double());
-    }
+
+    OLCSprint dijkstra_sprint(*this);
+    OLCFAI dijkstra_fai(*this);
+    OLCClassic dijkstra_classic(*this);
+
+    switch (m_task_behaviour.olc_rules) {
+    case OLC_Sprint:
+      run_olc(dijkstra_sprint);
+      break;
+    case OLC_FAI:
+      run_olc(dijkstra_fai);
+      break;
+    case OLC_Classic:
+      run_olc(dijkstra_classic);
+      break;
+    };
   }
   return true;
 }
@@ -72,6 +97,7 @@ void
 OnlineContest::reset()
 {
   m_trace_points.clear();
+  m_solution.clear();
 }
 
 

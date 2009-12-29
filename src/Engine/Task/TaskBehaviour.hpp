@@ -38,6 +38,7 @@
 #define TASK_BEHAVIOUR_HPP
 
 #include "Math/fixed.hpp"
+#include "Tasks/PathSolvers/OLCRules.hpp"
 
 class AIRCRAFT_STATE;
 
@@ -71,6 +72,8 @@ public:
   fixed risk_gamma; /**< Compensation factor for risk at low altitude */
 
   bool enable_olc; /**< Whether to do online OLC optimisation */
+
+  OLCRules olc_rules; /**< Rule set to scan for in OLC */
 
 /** 
  * Convenience function (used primarily for testing) to disable

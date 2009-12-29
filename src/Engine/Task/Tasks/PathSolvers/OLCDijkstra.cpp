@@ -58,8 +58,9 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc,
 void
 OLCDijkstra::set_weightings()
 {
+  m_weightings.clear();
   for (unsigned i=0; i+1<num_stages; ++i) {
-    m_weightings[i] = 5;
+    m_weightings.push_back(5);
   }
 }
 
@@ -89,7 +90,7 @@ OLCDijkstra::solve()
 }
 
 fixed
-OLCDijkstra::score() 
+OLCDijkstra::score(fixed& the_distance) 
 {
   static const fixed fixed_fifth(0.2);
   if (solve()) {
@@ -98,6 +99,7 @@ OLCDijkstra::score()
       dist += m_weightings[0]*solution[i].distance(solution[i+1].get_location());
     }
     dist *= fixed_fifth;
+    the_distance = dist;
     return dist;
   }
   return fixed_zero;
@@ -134,7 +136,7 @@ OLCDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra)
 
   ScanTaskPoint destination(0,0);
   const unsigned end = stage_end(destination);
-
+  
   for (; destination.second!= end; ++destination.second) {
     dijkstra.link(destination, destination, 0);
   }
@@ -147,7 +149,7 @@ OLCDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
   if (!is_final(candidate)) 
     return true;
   else {
-    return (get_point(candidate).altitude+m_finish_alt_diff > 
+    return (get_point(candidate).altitude+m_finish_alt_diff >= 
             solution[0].altitude);
   }
 }
@@ -159,6 +161,17 @@ OLCDijkstra::finish_satisfied(const ScanTaskPoint &sp) const
     return true;
   } else {
     return false;
+  }
+}
+
+
+void
+OLCDijkstra::copy_solution(TracePointVector &vec)
+{
+  vec.clear();
+  vec.reserve(num_stages);
+  for (unsigned i=0; i<num_stages; i++) {
+    vec.push_back(solution[i]);
   }
 }
 

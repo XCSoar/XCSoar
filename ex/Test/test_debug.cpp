@@ -24,6 +24,8 @@ bool enable_bestcruisetrack = false;
 #ifdef INSTRUMENT_TASK
 extern long count_mc;
 long count_intersections;
+long count_dijkstra_links = 0;
+long count_dijkstra_queries = 0;
 extern unsigned n_queries;
 extern unsigned count_distbearing;
 #endif
@@ -40,12 +42,17 @@ void distance_counts() {
       printf("#     intersection tests/q %d\n",(unsigned)(count_intersections/n_queries));
       printf("#    (total queries %d)\n\n",n_queries);
     }
+    if (count_dijkstra_queries>0) {
+      printf("#     dijkstra links/q %d\n", (unsigned)(count_dijkstra_links/count_dijkstra_queries));
+    }
 #endif
     printf("#    (total cycles %d)\n\n",n_samples);
 #endif
   }
   n_samples = 0;
 #ifdef INSTRUMENT_TASK
+  count_dijkstra_links = 0;
+  count_dijkstra_queries = 0;
   count_intersections = 0;
   n_queries = 0;
   count_distbearing = 0;

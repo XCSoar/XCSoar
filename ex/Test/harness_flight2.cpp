@@ -395,3 +395,31 @@ bool test_effective_mc(int test_num, int n_wind)
   }
   return retval;
 }
+
+
+bool test_olc(int n_wind, OLCRules id)
+{
+  GlidePolar glide_polar(fixed_two);
+  Waypoints waypoints;
+  setup_waypoints(waypoints);
+
+  if (verbose) {
+    distance_counts();
+  }
+
+  TaskBehaviour task_behaviour;
+
+  task_behaviour.olc_rules = id;
+  task_behaviour.enable_olc = true;
+
+  TaskEventsPrint default_events(verbose);
+
+  TaskManager task_manager(default_events,
+                           task_behaviour,
+                           waypoints);
+
+  task_manager.set_glide_polar(glide_polar);
+  test_task(task_manager, waypoints, 2);
+
+  return run_flight(task_manager, true, target_noise, n_wind);
+}

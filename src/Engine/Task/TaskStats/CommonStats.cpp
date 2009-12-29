@@ -36,6 +36,8 @@ CommonStats::reset()
   current_bugs = fixed_one;
   current_ballast = fixed_zero;
 
+  distance_olc = fixed_zero;
+
   clear_waypoints_in_task();
 }
 

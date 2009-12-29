@@ -42,12 +42,17 @@
 
 void TaskManager::print(const AIRCRAFT_STATE &state)
 {
+  task_olc.print();
   if (active_task) 
-    return active_task->print(state);
+    active_task->print(state);
+
+  std::ofstream fs("results/res-stats-common.txt");
+  fs << common_stats;
 }
 
 #include "Math/Earth.hpp"
 #include "Navigation/TaskProjection.hpp"
+
 
 
 /*
@@ -125,6 +130,17 @@ std::ostream& operator<< (std::ostream& f,
   f << ts.total;
   f << "# Leg -- \n";
   f << ts.current_leg;
+  return f;
+}
+
+
+#include "Task/TaskStats/CommonStats.hpp"
+
+std::ostream& operator<< (std::ostream& f, 
+                          const CommonStats& ts)
+{
+  f << "#### Common Stats\n";
+  f << "# dist olc " << ts.distance_olc << " (m)\n";
   return f;
 }
 
@@ -526,6 +542,26 @@ std::ostream& operator<< (std::ostream& f,
     << aw.m_solution.elapsed_time << "\n";
 
   return f;
+}
+
+
+
+#include "Task/Tasks/OnlineContest.hpp"
+
+void
+OnlineContest::print() const 
+{
+  std::ofstream fs("results/res-olc-sprint.txt");
+
+  if (m_solution.empty()) 
+    return;
+
+  for (TracePointVector::const_iterator it = m_solution.begin();
+       it != m_solution.end(); ++it) {
+    fs << it->get_location().Longitude << " " << it->get_location().Latitude 
+       << " " << it->altitude << " " << it->time 
+       << "\n";
+  }
 }
 
 

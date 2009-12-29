@@ -63,7 +63,9 @@ public:
  */
   ~OLCDijkstra();
 
-  virtual fixed score();
+  virtual fixed score(fixed &the_distance);
+
+  void copy_solution(TracePointVector &vec);
 
 protected:
   const TracePoint &get_point(const ScanTaskPoint &sp) const;

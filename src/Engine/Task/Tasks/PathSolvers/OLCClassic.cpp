@@ -9,11 +9,11 @@ OLCClassic::OLCClassic(OnlineContest& _olc):
 void 
 OLCClassic::set_weightings()
 {
-  m_weightings[0] = 5;
-  m_weightings[1] = 5;
-  m_weightings[2] = 5;
-  m_weightings[3] = 4;
-  m_weightings[4] = 4;
-  m_weightings[5] = 3;
+  m_weightings.clear();
+  m_weightings.push_back(5);
+  m_weightings.push_back(5);
+  m_weightings.push_back(5);
+  m_weightings.push_back(4);
+  m_weightings.push_back(4);
+  m_weightings.push_back(3);
 }
-

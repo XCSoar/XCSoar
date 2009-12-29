@@ -41,6 +41,10 @@
 #include <queue>
 #include <assert.h>
 
+#ifdef INSTRUMENT_TASK
+extern long count_dijkstra_links;
+#endif
+
 /**
  * Dijkstra search algorithm.
  * From http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
@@ -111,6 +115,9 @@ public:
  * @param e Edge distance
  */
   void link(const Node &n, const Node &pn, const unsigned &e=1) { 
+#ifdef INSTRUMENT_TASK
+    count_dijkstra_links++;
+#endif
     push(n, pn, cur->second + minmax_dist(e)); 
   }
 

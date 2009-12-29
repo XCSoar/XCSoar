@@ -47,7 +47,7 @@ TaskManager::TaskManager(const TaskEvents &te,
   task_ordered(te,tb,task_advance,m_glide_polar),
   task_goto(te,tb,task_advance,m_glide_polar),
   task_abort(te,tb,task_advance,m_glide_polar,wps),
-  task_olc(te,tb,m_glide_polar),
+  task_olc(te,tb,m_glide_polar,common_stats),
   task_behaviour(tb),
   factory_fai(task_ordered,tb),
   factory_aat(task_ordered,tb),
@@ -294,6 +294,8 @@ TaskManager::update(const AIRCRAFT_STATE &state,
   // always update OLC task
   if (task_behaviour.enable_olc) {
     retval |= task_olc.update_sample(state);
+  } else {
+    common_stats.distance_olc = fixed_zero;
   }
 
   update_common_stats(state);

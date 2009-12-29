@@ -73,7 +73,8 @@ TaskBehaviour::TaskBehaviour():
     safety_height_arrival(300.0),
     start_max_speed(60.0),
     risk_gamma(0.0),
-    enable_olc(false)
+    enable_olc(false),
+    olc_rules(OLC_Sprint)
 {
 }
 

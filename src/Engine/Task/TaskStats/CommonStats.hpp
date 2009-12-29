@@ -53,6 +53,8 @@ public:
 
   WaypointIdSet waypoints_in_task; /**< List of waypoints by id that are managed in the task */
 
+  fixed distance_olc; /**< Optimum distance (m) travelled according to OLC rule */
+
 /** 
  * Clears the set of waypoints listed as in the task
  * 
@@ -79,6 +81,11 @@ public:
  * 
  */
   void reset();
+
+#ifdef DO_PRINT
+  friend std::ostream& operator<< (std::ostream& o, 
+                                   const CommonStats& ts);
+#endif
 
 };
 

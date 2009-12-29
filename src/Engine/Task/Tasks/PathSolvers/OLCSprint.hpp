@@ -51,7 +51,7 @@ public:
  */
   OLCSprint(OnlineContest& _olc);
 
-  fixed score();
+  fixed score(fixed& the_distance);
 
 protected:
 

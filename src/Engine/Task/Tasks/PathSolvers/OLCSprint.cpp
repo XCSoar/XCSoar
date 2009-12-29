@@ -1,7 +1,5 @@
 #include "OLCSprint.hpp"
 
-#include <fstream>
-
 
 OLCSprint::OLCSprint(OnlineContest& _olc):
   OLCDijkstra(_olc, 4, 0) 
@@ -18,28 +16,16 @@ OLCSprint::admit_candidate(const ScanTaskPoint &candidate) const
 }
 
 fixed
-OLCSprint::score()  
+OLCSprint::score(fixed& the_distance)  
 {
   static const fixed fixed_9000(9000);
 
-  const fixed dist = OLCDijkstra::score();
+  const fixed dist = OLCDijkstra::score(the_distance);
 
   if (positive(dist)) {
     const fixed time(solution[num_stages-1].time-solution[0].time);
-
     if (positive(time)) {
-
-      const fixed speed = dist/time;
-      printf("%d %d %g\n", dist.as_int(), time.as_int(), speed.as_double());
-
-      std::ofstream fs("results/res-olc-sprint.txt");
-      for (unsigned i=0; i<num_stages; ++i) {
-        fs << solution[i].get_location().Longitude << " " << solution[i].get_location().Latitude 
-           << " " << solution[i].altitude << " " << solution[i].time 
-           << "\n";
-      }
-
-      return speed;
+      return dist/time;
     }
   }
   return fixed_zero;

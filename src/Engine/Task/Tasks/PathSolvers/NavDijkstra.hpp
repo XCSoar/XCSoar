@@ -5,6 +5,10 @@
 #include "Util/NonCopyable.hpp"
 #include "Dijkstra.hpp"
 
+#ifdef INSTRUMENT_TASK
+extern long count_dijkstra_queries;
+#endif
+
 typedef std::pair<unsigned, unsigned> ScanTaskPoint;
 typedef Dijkstra<ScanTaskPoint> DijkstraTaskPoint;
 
@@ -56,6 +60,10 @@ protected:
                          const ScanTaskPoint &curNode) = 0;
   
   bool distance_general(DijkstraTaskPoint &dijkstra) {
+
+#ifdef INSTRUMENT_TASK
+ count_dijkstra_queries++;
+#endif
 
     while (!dijkstra.empty()) {
       
