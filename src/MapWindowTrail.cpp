@@ -36,6 +36,8 @@ Copyright_License {
 }
 */
 
+#include "Task/TaskManager.hpp"
+
 #include "MapWindow.h"
 #include "SnailTrail.hpp"
 #include "Math/Geometry.hpp"
@@ -43,8 +45,9 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Util.hpp"
 #include "MacCready.h"
-#include "OnLineContest.h"
 #include "Screen/Graphics.hpp"
+
+#include "RasterTerrain.h" // OLD_TASK just for locking
 
 #include <math.h>
 
@@ -293,32 +296,32 @@ double MapWindow::DrawTrail(Canvas &canvas, const SnailTrail &snail_trail)
 
 
 void
-MapWindow::DrawTrailFromTask(Canvas &canvas, const OLCOptimizer &olc,
+MapWindow::DrawTrailFromTask(Canvas &canvas, 
                              const double TrailFirstTime)
 {
-  static POINT ptin[MAXCLIPPOLYGON];
-
   if((SettingsMap().TrailActive!=3)
      || (DisplayMode == dmCircling)
      || (TrailFirstTime<0))
     return;
 
-  const double mTrailFirstTime = TrailFirstTime - Calculated().TakeOffTime;
-  // since.GetOLC() keeps track of time wrt takeoff
+  terrain->Lock(); 
 
-  int n = min((int)MAXCLIPPOLYGON, olc.getN());
-  int i, j=0;
-  for (i=0; i<n; i++) {
-    if (olc.getTime(i)>= mTrailFirstTime)
+  const TracePointVector& trace = task->get_trace_points();
+  std::vector<POINT> points; points.reserve(trace.size());
+  for (TracePointVector::const_iterator it = trace.begin();
+       it != trace.end(); ++it) {
+
+    if (it->time >= TrailFirstTime) 
       break;
-    LonLat2Screen(olc.getLocation(i),
-                  ptin[j]);
-    j++;
+    POINT pt;
+    LonLat2Screen(it->get_location(), pt);
+    points.push_back(pt);
   }
+  terrain->Unlock();
 
-  if (j>=2) {
+  if (points.size()>=2) {
     canvas.select(MapGfx.hSnailPens[NUMSNAILCOLORS / 2]);
-    canvas.polyline(ptin, j);
+    canvas.polyline(&points[0], points.size());
   }
 }
 

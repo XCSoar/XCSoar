@@ -107,7 +107,7 @@ OnlineContest::get_trace_points() const
 const TracePointVector& 
 OnlineContest::get_olc_points() const
 {
-  return m_solution_points;
+  return m_solution;
 }
 
 

@@ -291,12 +291,8 @@ TaskManager::update(const AIRCRAFT_STATE &state,
     retval |= active_task->update(state, state_last);
   }
 
-  // always update OLC task
-  if (task_behaviour.enable_olc) {
-    retval |= task_olc.update_sample(state);
-  } else {
-    common_stats.distance_olc = fixed_zero;
-  }
+  // always update OLC sampling task
+  retval |= task_olc.update_sample(state);
 
   update_common_stats(state);
 

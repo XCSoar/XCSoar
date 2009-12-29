@@ -99,7 +99,7 @@ protected:
 
   unsigned distance(const ScanTaskPoint &s1,
                     const ScanTaskPoint &s2) const {
-    get_point(s1).flat_distance(get_point(s2));
+    return get_point(s1).flat_distance(get_point(s2));
   }
 
   void find_solution(const DijkstraTaskPoint &dijkstra, 

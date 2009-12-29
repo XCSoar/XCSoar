@@ -95,7 +95,7 @@ public:
                   const NMEA_INFO &nmea_info,
                   const SETTINGS_COMPUTER &settings_computer,
                   const SETTINGS_MAP &settings_map,
-                  const OLCOptimizer &olc, bool olcmode) const;
+                  bool olcmode) const;
   void RenderSpeed(Canvas &canvas, const RECT rc,
                    const DERIVED_INFO &derived) const;
   void CaptionBarograph( TCHAR *sTmp);

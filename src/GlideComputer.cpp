@@ -118,8 +118,6 @@ GlideComputer::DoLogging()
   // -> returns if valid fix
   // if (valid fix)
   if (GlideComputerStats::DoLogging()) {
-    // call Task::DoLogging()
-    GlideComputerTask::DoLogging();
   }
 }
 

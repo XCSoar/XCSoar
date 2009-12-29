@@ -72,8 +72,6 @@ static void OnOKClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
-static double Range = 0;
-
 
 static void GetCruiseEfficiency(void) {
   cruise_efficiency = XCSoarInterface::Calculated().task_stats.cruise_efficiency;
@@ -234,6 +232,8 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 static void OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode) {
   double clast = task_manager.get_glide_polar().get_cruise_efficiency();
+  (void)clast; // unused for now
+
   switch(Mode){
   case DataField::daGet:
     break;
@@ -286,6 +286,8 @@ void dlgTaskCalculatorShowModal(void){
   if (!wf) return;
 
   double MACCREADY_enter = task_manager.get_glide_polar().get_mc();
+  (void)MACCREADY_enter; // unused for now
+
   double CRUISE_EFFICIENCY_enter = task_manager.get_glide_polar().get_cruise_efficiency();
 
   emc = XCSoarInterface::Calculated().task_stats.effective_mc;

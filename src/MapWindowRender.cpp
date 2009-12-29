@@ -44,7 +44,6 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "RasterWeather.h"
 #include "SnailTrail.hpp"
-#include "OnLineContest.h"
 
 #include "Task/TaskManager.hpp"
 
@@ -182,10 +181,8 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
   double TrailFirstTime = DrawTrail(canvas, *snail_trail);
   snail_trail->Unlock();
 
-  if (olc != NULL && TrailFirstTime >= 0) {
-    olc->Lock();
-    DrawTrailFromTask(canvas, *olc, TrailFirstTime);
-    olc->Unlock();
+  if (TrailFirstTime >= 0) {
+    DrawTrailFromTask(canvas, TrailFirstTime);
   }
 }
 

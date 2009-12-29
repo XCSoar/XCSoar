@@ -418,7 +418,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   main_window.map.set_weather(&RASP);
   main_window.map.set_marks(marks);
   main_window.map.set_snail_trail(&glide_computer.GetSnailTrail());
-  main_window.map.set_olc(&glide_computer.GetOLC());
 
   // Finally ready to go.. all structures must be present before this.
 

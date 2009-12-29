@@ -67,8 +67,7 @@ bool ForceFinalGlide= false;
 
 
 GlideComputerTask::GlideComputerTask(TaskManager& task): 
-  m_task(task), 
-  olc_clock(5.0) 
+  m_task(task) 
 {
 
 }
@@ -78,10 +77,6 @@ void
 GlideComputerTask::ResetFlight(const bool full)
 {
   if (full) {
-    olc.ResetFlight();
-#ifdef OLD_TASK
-    aatdistance.Reset();
-#endif
     m_task.reset();
   }
 }
@@ -150,32 +145,6 @@ GlideComputerTask::ProcessIdle()
   terrain.Lock();
   m_task.update_idle(Basic());
   terrain.Unlock();
-}
-
-/**
- * Logs GPS fixes for OLC optimization
- * @return True is new fix is saved, False otherwise
- */
-bool GlideComputerTask::DoLogging() {
-
-  if (Calculated().Flying && olc_clock.check_advance(Basic().Time)) {
-#ifdef OLD_TASK
-    bool restart = olc.addPoint(Basic().Location,
-				Calculated().NavAltitude,
-				Calculated().WaypointBearing,
-				Basic().Time-Calculated().TakeOffTime,
-				SettingsComputer());
-
-    if (restart && SettingsComputer().EnableOLC) {
-      SetCalculated().ValidFinish = false;
-      StartTask(false, false);
-      SetCalculated().ValidStart = true;
-    }
-#endif
-    return true;
-  } else {
-    return false;
-  }
 }
 
 // VENTA3 added radial

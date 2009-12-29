@@ -156,7 +156,6 @@ OBJS	:=\
 	$(SRC)/LoggerImpl.o 		\
 	$(SRC)/LoggerSign.o 		\
 	$(SRC)/ReplayLogger.o 		\
-	$(SRC)/OnLineContest.o 		\
 	$(SRC)/SnailTrail.o 		\
 	$(SRC)/TeamCodeCalculation.o 	\
 	$(SRC)/ThermalLocator.o 	\

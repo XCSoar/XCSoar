@@ -43,7 +43,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "SettingsComputer.hpp"
-#include "OnLineContest.h"
 #include "Atmosphere.h"
 #include "UtilsSystem.hpp"
 #include "Logger.h"
@@ -125,6 +124,7 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   // Read persistent memory into FlightStats
   fread(&glide_computer.GetFlightStats(), sizeof(glide_computer.GetFlightStats()), 1, file);
 
+#ifdef OLD_TASK
   fread(&sizein, sizeof(sizein), 1, file);
   if (sizein != sizeof(glide_computer.GetOLC().data)) {
     glide_computer.GetOLC().ResetFlight();
@@ -134,6 +134,8 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
 
   // Read persistent memory into OLC.data
   fread(&glide_computer.GetOLC().data, sizeof(glide_computer.GetOLC().data), 1, file);
+#endif
+
 
   fread(&sizein, sizeof(sizein), 1, file);
   if (sizein != 4 * sizeof(double)) {
@@ -210,9 +212,11 @@ SaveCalculationsPersist(const NMEA_INFO &gps_info,
   fwrite(&size, sizeof(size), 1, file);
   fwrite(&glide_computer.GetFlightStats(), size, 1, file);
 
+#ifdef OLD_TASK
   size = sizeof(OLCData);
   fwrite(&size, sizeof(size), 1, file);
   fwrite(&glide_computer.GetOLC().data, size, 1, file);
+#endif
 
   double MACCREADY = task_manager.get_glide_polar().get_mc();
   double BUGS = task_manager.get_glide_polar().get_bugs();

@@ -453,7 +453,7 @@ private:
   DrawTaskPoint tpv;
 };
 
-#include "RasterTerrain.h"
+#include "RasterTerrain.h" // OLD_TASK just for locking
 
 void
 MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
@@ -465,6 +465,7 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
    but we can still draw targets */
   const bool draw_bearing = Basic().Connected;
 
+  // JMW OLD_TASK temporary locking
   terrain->Lock(); 
   {
     MapDrawHelper helper(canvas, buffer, stencil_canvas, *this, rc);

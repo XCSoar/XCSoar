@@ -40,7 +40,6 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_TASK_HPP
 
 #include "GlideComputerBlackboard.hpp"
-#include "OnLineContest.h"
 #include "GPSClock.hpp"
 
 #ifndef _MSC_VER
@@ -59,7 +58,6 @@ class GlideComputerTask:
 public:
   GlideComputerTask(TaskManager& task);
 
-  OLCOptimizer         olc;
   void DoAutoMacCready(double mc_setting);
   virtual bool InsideStartHeight(const DWORD Margin=0) const;
   virtual bool ValidStartSpeed(const DWORD Margin=0) const;
@@ -72,7 +70,6 @@ protected:
   virtual void StartTask(const bool do_advance,
 			 const bool do_announce);
   virtual void AnnounceWayPointSwitch(bool do_advance)= 0;
-  bool DoLogging();
   void InSector();
 
   // stuff for display
@@ -132,8 +129,6 @@ protected:
   virtual void SaveTaskSpeed(double val) = 0;
   virtual void ProcessIdle();
   double FAIFinishHeight(int wp) const;
-private:
-  GPSClock olc_clock;
 public:
   virtual void ResetEnter();
   double AATCloseDistance(void) const {

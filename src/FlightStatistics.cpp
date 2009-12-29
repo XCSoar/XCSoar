@@ -49,7 +49,6 @@ Copyright_License {
 #include "Units.hpp"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
-#include "OnLineContest.h"
 #include "WindStore.h"
 #include "Language.hpp"
 #include "Atmosphere.h"
@@ -288,7 +287,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
                              const NMEA_INFO &nmea_info,
                              const SETTINGS_COMPUTER &settings_computer,
                              const SETTINGS_MAP &settings_map,
-                             const OLCOptimizer &olc, const bool olcmode) const
+                             const bool olcmode) const
 {
 #ifdef OLD_TASK
   int i;

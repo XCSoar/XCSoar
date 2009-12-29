@@ -71,8 +71,6 @@ public:
   // TODO: make these const
   /** Returns the SnailTrail object */
   SnailTrail &GetSnailTrail() { return snail_trail; }
-  /** Returns the OLCOptimizer object */
-  OLCOptimizer &GetOLC() { return olc; }
   /** Returns the FlightStatistics object */
   FlightStatistics &GetFlightStats() { return flightstats; }
 

@@ -201,9 +201,11 @@ void
 OLCDijkstra::copy_solution(TracePointVector &vec)
 {
   vec.clear();
-  vec.reserve(num_stages);
-  for (unsigned i=0; i<num_stages; i++) {
-    vec.push_back(solution[i]);
+  if (solution_found) {
+    vec.reserve(num_stages);
+    for (unsigned i=0; i<num_stages; ++i) {
+      vec.push_back(solution[i]);
+    }
   }
 }
 

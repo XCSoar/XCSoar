@@ -61,7 +61,7 @@ MapWindow::MapWindow()
    way_points(NULL),
    topology(NULL), terrain(NULL), weather(NULL), terrain_renderer(NULL),
    airspace_database(NULL), task(NULL),
-   marks(NULL), snail_trail(NULL), olc(NULL),
+   marks(NULL), snail_trail(NULL), 
    cdi(NULL),
    TargetDrag_State(0),
    BigZoom(true),

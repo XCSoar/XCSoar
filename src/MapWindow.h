@@ -69,7 +69,6 @@ class RasterWeather;
 class TerrainRenderer;
 class Marks;
 class SnailTrail;
-class OLCOptimizer;
 class GaugeCDI;
 class Waypoints;
 class Waypoint;
@@ -95,8 +94,6 @@ class MapWindow
   Marks *marks;
 
   SnailTrail *snail_trail;
-
-  OLCOptimizer *olc;
 
   GaugeCDI *cdi;
 
@@ -139,10 +136,6 @@ class MapWindow
 
   void set_snail_trail(SnailTrail *_snail_trail) {
     snail_trail = _snail_trail;
-  }
-
-  void set_olc(OLCOptimizer *_olc) {
-    olc = _olc;
   }
 
   // used by dlgTarget
@@ -224,7 +217,7 @@ class MapWindow
   void DrawGPSStatus(Canvas &canvas, const RECT rc);
   double DrawTrail(Canvas &canvas, const SnailTrail &snail_trail);
   void DrawTeammate(Canvas &canvas);
-  void DrawTrailFromTask(Canvas &canvas, const OLCOptimizer &olc,
+  void DrawTrailFromTask(Canvas &canvas, 
                          const double TrailFirstTime);
   void DrawOffTrackIndicator(Canvas &canvas);
   void DrawProjectedTrack(Canvas &canvas);

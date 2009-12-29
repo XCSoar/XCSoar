@@ -95,7 +95,6 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   canvas.set_text_color(Sender->GetForeColor());
 
   const FlightStatistics &fs = glide_computer.GetFlightStats();
-  OLCOptimizer &olc = glide_computer.GetOLC();
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -126,23 +125,19 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(_T("Task calc"));
-    olc.Lock();
     fs.RenderTask(canvas, rcgfx,
                   XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
                   XCSoarInterface::SettingsMap(),
-                  olc, false);
-    olc.Unlock();
+                  false);
     break;
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(_T("Optimise"));
-    olc.Lock();
     fs.RenderTask(canvas, rcgfx,
                   XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
                   XCSoarInterface::SettingsMap(),
-                  olc, true);
-    olc.Unlock();
+                  true);
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(_T("Warnings"));
@@ -168,7 +163,6 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 static void Update(void){
   TCHAR sTmp[1000];
   //  WndProperty *wp;
-  double d=0;
 
   FlightStatistics &fs = glide_computer.GetFlightStats();
 
@@ -237,6 +231,7 @@ static void Update(void){
               gettext(_T("OnLine Contest")));
     wf->SetCaption(sTmp);
 
+#ifdef OLD_TASK
     TCHAR sFinished[20];
     double dt, score;
     bool olcvalid;
@@ -291,7 +286,7 @@ static void Update(void){
                 gettext(_T("No valid path")));
     }
     wInfo->SetCaption(sTmp);
-
+#endif
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     _stprintf(sTmp, _T("%s: %s"),
@@ -390,11 +385,7 @@ OnCalcClicked(WindowControl *Sender)
     wf->show();
   }
   if (page==ANALYSIS_PAGE_OLC) {
-    XCSoarInterface::StartHourglassCursor();
-    glide_computer.GetOLC().Optimize(XCSoarInterface::SettingsComputer(),
-                                     (XCSoarInterface::Calculated().Flying==1), 
-                                     task_manager.get_glide_polar());
-    XCSoarInterface::StopHourglassCursor();
+    // nothing to do!
   }
   if (page==ANALYSIS_PAGE_AIRSPACE) {
     airspaceWarningEvent.trigger();
