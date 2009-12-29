@@ -124,7 +124,7 @@ public:
  *
  * @return True if target was moved
  */
-  virtual bool set_range(const double p, const bool force_if_current) {
+  virtual bool set_range(const fixed p, const bool force_if_current) {
     return false;
   };
 

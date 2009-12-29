@@ -111,7 +111,7 @@ public:
  *
  * @return Total edge distances so far
  */
-  const unsigned dist() const { return minmax_dist(cur->second); }
+  unsigned dist() const { return minmax_dist(cur->second); }
 
 /** 
  * Add an edge (node-node-distance) to the search 
@@ -145,7 +145,7 @@ public:
   
 private:
 
-  const unsigned minmax_dist(const unsigned d) const {
+  unsigned minmax_dist(const unsigned d) const {
     return m_min? d:134217727-d;
   }
 
