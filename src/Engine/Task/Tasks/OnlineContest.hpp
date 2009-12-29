@@ -69,9 +69,16 @@ public:
 /** 
  * Retrieve trace vector
  * 
- * @return Vector of sample points 
+ * @return Vector of all trace points 
  */
   const TracePointVector& get_trace_points() const;
+
+/** 
+ * Retrieve olc solution vector
+ * 
+ * @return Vector of trace points selected for OLC
+ */
+  const TracePointVector& get_olc_points() const;
 
 private:
   const TaskEvents &m_task_events;

@@ -50,7 +50,6 @@
 #include "TaskEvents.hpp"
 #include "TaskBehaviour.hpp"
 #include "TaskAdvance.hpp"
-
 #include "Factory/FAITaskFactory.hpp"
 #include "Factory/AATTaskFactory.hpp"
 #include "Factory/MixedTaskFactory.hpp"
@@ -315,6 +314,20 @@ public:
  * @param glide_polar The polar to set to
  */
   void set_safety_polar(const GlidePolar& glide_polar);
+
+/** 
+ * Retrieve trace vector
+ * 
+ * @return Vector of all trace points 
+ */
+  const TracePointVector& get_trace_points() const;
+
+/** 
+ * Retrieve olc solution vector
+ * 
+ * @return Vector of trace points selected for OLC
+ */
+  const TracePointVector& get_olc_points() const;
 
 #ifdef DO_PRINT
   void print(const AIRCRAFT_STATE &location);

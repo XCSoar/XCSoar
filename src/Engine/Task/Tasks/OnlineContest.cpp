@@ -104,6 +104,13 @@ OnlineContest::get_trace_points() const
 }
 
 
+const TracePointVector& 
+OnlineContest::get_olc_points() const
+{
+  return m_solution_points;
+}
+
+
 void
 OnlineContest::thin_trace()
 {

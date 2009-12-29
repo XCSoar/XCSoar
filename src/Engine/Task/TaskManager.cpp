@@ -513,3 +513,17 @@ TaskManager::default_task(const GEOPOINT loc, const bool force)
 {
   /// @todo implement default_task
 }
+
+
+const TracePointVector& 
+TaskManager::get_trace_points() const
+{
+  return task_olc.get_trace_points();
+}
+
+
+const TracePointVector& 
+TaskManager::get_olc_points() const
+{
+  return task_olc.get_olc_points();
+}
