@@ -49,11 +49,15 @@ TaskDijkstra::TaskDijkstra(OrderedTask& _task):
   task(_task)
 {
   sp_sizes.reserve(num_stages);
-  for (unsigned stage=0; stage<num_stages; ++stage) {
+}
+
+void
+TaskDijkstra::get_sizes()
+{
+  for (unsigned stage=0; stage!= num_stages; ++stage) {
     sp_sizes[stage]= task.get_tp_search_points(stage).size();
   }
 }
-
 
 unsigned 
 TaskDijkstra::get_size(const unsigned stage) const
@@ -68,35 +72,44 @@ TaskDijkstra::get_point(const ScanTaskPoint &sp) const
 }
 
 
-unsigned TaskDijkstra::distance_max()
+bool 
+TaskDijkstra::distance_max()
 {
   if (num_stages<2) {
     return 0;
   }
 
+  get_sizes();
+
   const ScanTaskPoint start(0,0);
   DijkstraTaskPoint dijkstra(start, false);
 
-  const unsigned d= distance_general(dijkstra);
-  save_max();
-  return d;
+  const bool retval= distance_general(dijkstra);
+  if (retval) {
+    save_max();
+  }
+  return retval;
 }
 
-unsigned 
+bool 
 TaskDijkstra::distance_min(const SearchPoint &currentLocation)
 {
   if (num_stages<2) {
     return 0;
   }
 
+  get_sizes();
+
   const ScanTaskPoint start(max(1,(int)active_stage)-1,0);
   DijkstraTaskPoint dijkstra(start, true);
   if (active_stage) {
     add_start_edges(dijkstra, currentLocation);
   }
-  const unsigned d = distance_general(dijkstra);
-  save_min();
-  return d;
+  const bool retval = distance_general(dijkstra);
+  if (retval) {
+    save_min();
+  }
+  return retval;
 }
 
 
@@ -129,7 +142,7 @@ TaskDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
   const unsigned dsize = get_size(destination.first);
 
   for (; destination.second!= dsize; ++destination.second) {
-    dijkstra.link(destination, curNode, (distance(curNode, destination)));
+    dijkstra.link(destination, curNode, distance(curNode, destination));
   }
 }
 
@@ -143,7 +156,7 @@ TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
   const unsigned dsize = get_size(destination.first);
 
   for (; destination.second!= dsize; ++destination.second) {
-    dijkstra.link(destination, destination, (distance(destination, currentLocation)));
+    dijkstra.link(destination, destination, distance(destination, currentLocation));
   }
 }
 

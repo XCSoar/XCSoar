@@ -39,6 +39,7 @@
 
 #include <map>
 #include <queue>
+#include <assert.h>
 
 /**
  * Dijkstra search algorithm.
@@ -132,7 +133,7 @@ public:
 private:
 
   const unsigned minmax_dist(const unsigned d) const {
-    return m_min? d:-d;
+    return m_min? d:134217727-d;
   }
 
 /** 

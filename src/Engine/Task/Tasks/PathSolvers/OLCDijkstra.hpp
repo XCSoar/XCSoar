@@ -79,7 +79,7 @@ protected:
 
   std::vector<unsigned> m_weightings;
 
-  unsigned solve();
+  bool solve();
 
 private:
 

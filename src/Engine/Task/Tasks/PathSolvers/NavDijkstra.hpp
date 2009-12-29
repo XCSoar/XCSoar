@@ -55,27 +55,22 @@ protected:
   virtual void add_edges(DijkstraTaskPoint &dijkstra,
                          const ScanTaskPoint &curNode) = 0;
   
-  unsigned distance_general(DijkstraTaskPoint &dijkstra) {
+  bool distance_general(DijkstraTaskPoint &dijkstra) {
 
     while (!dijkstra.empty()) {
       
       const ScanTaskPoint destination = dijkstra.pop();
       
-      if (!is_final(destination)) {
-
-        add_edges(dijkstra, destination);
-
-      } else {
-
+      if (is_final(destination)) {
         find_solution(dijkstra, destination);
-        
         if (finish_satisfied(destination)) {
-          return dijkstra.dist();
+          return true;
         }
+      } else {
+        add_edges(dijkstra, destination);
       }
     }
-
-    return 0-1; // No path found
+    return false; // No path found
   }
 
   unsigned num_stages;
@@ -93,13 +88,14 @@ protected:
 
   void find_solution(const DijkstraTaskPoint &dijkstra, 
                      const ScanTaskPoint destination) {
-    ScanTaskPoint p = destination; 
-    ScanTaskPoint p_last;
+    ScanTaskPoint p(destination); 
+    ScanTaskPoint p_last(p);
+
     do {
+      solution[p.first] = get_point(p);
       p_last = p;
-      solution[p_last.first] = get_point(p_last);
-      p = dijkstra.get_predecessor(p_last);
-    } while ((p.second != p_last.second) || (p.first != p_last.first));    
+      p = dijkstra.get_predecessor(p);
+    } while ((p.second != p_last.second) || (p.first != p_last.first));
   }
 
 private:

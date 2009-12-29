@@ -71,12 +71,11 @@ OLCDijkstra::get_point(const ScanTaskPoint &sp) const
 }
 
 
-unsigned 
+bool 
 OLCDijkstra::solve()
 {
-  const unsigned d_fail = 0-1;
   if (n_points<num_stages) { // todo check this
-    return d_fail;
+    return false;
   }
 
   set_weightings();
@@ -86,24 +85,19 @@ OLCDijkstra::solve()
 
   add_start_edges(dijkstra);
 
-  const unsigned d= distance_general(dijkstra);
-  if (d< d_fail) {
-    return d/5;
-  } else {
-    return d_fail;
-  }
+  return distance_general(dijkstra);
 }
 
 fixed
 OLCDijkstra::score() 
 {
-  unsigned d = solve();
-  if (d != 0-1) {
+  static const fixed fixed_fifth(0.2);
+  if (solve()) {
     fixed dist = fixed_zero;
     for (unsigned i=0; i+1<num_stages; ++i) {
       dist += m_weightings[0]*solution[i].distance(solution[i+1].get_location());
     }
-    dist /= 5;
+    dist *= fixed_fifth;
     return dist;
   }
   return fixed_zero;
@@ -124,9 +118,10 @@ OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
 
   find_solution(dijkstra, origin);
   
-  for (; destination.second< end; ++destination.second) {
+  for (; destination.second!= end; ++destination.second) {
     if (admit_candidate(destination)) {
-      dijkstra.link(destination, origin, m_weightings[origin.first]*distance(origin, destination));
+      const unsigned d = m_weightings[origin.first]*distance(origin, destination);
+      dijkstra.link(destination, origin, d);
     }
   }
 }
@@ -140,7 +135,7 @@ OLCDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra)
   ScanTaskPoint destination(0,0);
   const unsigned end = stage_end(destination);
 
-  for (; destination.second< end; ++destination.second) {
+  for (; destination.second!= end; ++destination.second) {
     dijkstra.link(destination, destination, 0);
   }
 }

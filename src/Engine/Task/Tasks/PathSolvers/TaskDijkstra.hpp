@@ -82,9 +82,9 @@ public:
  * in the corresponding task points for later accurate distance
  * measurement.
  * 
- * @return Approximate flat-earth distance of maximum task
+ * @return True if succeeded
  */  
-  unsigned distance_max();
+  bool distance_max();
 
 /** 
  * Search task points for targets within OZs to produce the
@@ -97,9 +97,9 @@ public:
  * location.
  *
  * @param location Location of aircraft
- * @return Approximate flat-earth distance of minimum task
+ * @return True if succeeded
  */  
-  unsigned distance_min(const SearchPoint& location);
+  bool distance_min(const SearchPoint& location);
 
 protected:
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
@@ -115,6 +115,8 @@ private:
 
   void save_max();
   void save_min();
+
+  void get_sizes();
 
   OrderedTask& task;
   std::vector<unsigned> sp_sizes;
