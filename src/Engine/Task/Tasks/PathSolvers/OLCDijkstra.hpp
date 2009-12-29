@@ -55,8 +55,9 @@ public:
  *
  * @param _olc The OLC task to solve for
  */
-  OLCDijkstra(OnlineContest& _olc, const unsigned n_legs,
-    const unsigned finish_alt_diff = 3000);
+  OLCDijkstra(OnlineContest& _olc, 
+              const unsigned n_legs,
+              const unsigned finish_alt_diff = 3000);
 
 /**
  * Destructor, frees local variables
@@ -92,6 +93,8 @@ private:
   void add_start_edges(DijkstraTaskPoint &dijkstra);
 
   unsigned stage_end(const ScanTaskPoint &sp) const;
+
+  DijkstraTaskPoint m_dijkstra;
 };
 
 #endif

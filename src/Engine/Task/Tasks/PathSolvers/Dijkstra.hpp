@@ -75,12 +75,16 @@ public:
  * @param n Node to start
  */
   void reset(const Node &n) {
+    clear();
+    push(n,n,0);
+  };
+
+  void clear() {
     while (!q.empty()) {
       q.pop();
     }
     p.clear();
     m.clear();
-    push(n,n,0);
   };
 
 /** 

@@ -72,12 +72,14 @@ protected:
       if (is_final(destination)) {
         find_solution(dijkstra, destination);
         if (finish_satisfied(destination)) {
+          dijkstra.clear();
           return true;
         }
       } else {
         add_edges(dijkstra, destination);
       }
     }
+    dijkstra.clear();
     return false; // No path found
   }
 

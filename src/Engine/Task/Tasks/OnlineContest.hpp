@@ -7,13 +7,16 @@
 #include "Navigation/TaskProjection.hpp"
 #include <vector>
 
+#include "PathSolvers/OLCSprint.hpp"
+#include "PathSolvers/OLCFAI.hpp"
+#include "PathSolvers/OLCClassic.hpp"
+
 class TaskPoint;
 class TaskEvents;
 class TaskBehaviour;
 class TaskPointVisitor;
 class GlidePolar;
 class CommonStats;
-class OLCDijkstra;
 
 class OnlineContest:
   public BaseVisitable<> 
@@ -87,6 +90,10 @@ private:
   void thin_trace();
 
   void run_olc(OLCDijkstra& dijkstra);
+
+  OLCSprint olc_sprint;
+  OLCFAI olc_fai;
+  OLCClassic olc_classic;
 
 public:
 #ifdef DO_PRINT

@@ -2,9 +2,6 @@
 #include "Task/TaskEvents.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "PathSolvers/OLCSprint.hpp"
-#include "PathSolvers/OLCFAI.hpp"
-#include "PathSolvers/OLCClassic.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
 
 
@@ -15,7 +12,10 @@ OnlineContest::OnlineContest(const TaskEvents &te,
   m_task_events(te),
   m_task_behaviour(tb),
   m_glide_polar(gp),
-  common_stats(stats)
+  common_stats(stats),
+  olc_sprint(*this),
+  olc_fai(*this),
+  olc_classic(*this)
 {
   reset();
 }
@@ -70,19 +70,15 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 
   if (updated) {
 
-    OLCSprint dijkstra_sprint(*this);
-    OLCFAI dijkstra_fai(*this);
-    OLCClassic dijkstra_classic(*this);
-
     switch (m_task_behaviour.olc_rules) {
     case OLC_Sprint:
-      run_olc(dijkstra_sprint);
+      run_olc(olc_sprint);
       break;
     case OLC_FAI:
-      run_olc(dijkstra_fai);
+      run_olc(olc_fai);
       break;
     case OLC_Classic:
-      run_olc(dijkstra_classic);
+      run_olc(olc_classic);
       break;
     };
   }
