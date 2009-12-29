@@ -50,7 +50,7 @@ public:
 
 protected:
   const SETTINGS_COMPUTER &m_settings;
-  const fixed& m_altitude;
+  const fixed m_altitude;
 };
 
 

@@ -108,7 +108,8 @@ public:
     m_border(_border),
     AirspaceVisible(_settings, _altitude),
     m_warnings(warnings)
-    {};
+    {
+    };
 
   virtual bool operator()( const AbstractAirspace& airspace ) const { 
     return condition(airspace);
