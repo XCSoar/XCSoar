@@ -26,6 +26,7 @@
 
 #ifdef HAVE_TAP
 
+#define _GNU_SOURCE
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -275,7 +276,7 @@ plan_tests(unsigned int tests)
 }
 
 unsigned int
-diag(char *fmt, ...)
+diag(const char *fmt, ...)
 {
 	va_list ap;
 

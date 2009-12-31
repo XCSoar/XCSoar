@@ -82,7 +82,7 @@ int plan_no_plan(void);
 int plan_skip_all(char *);
 int plan_tests(unsigned int);
 
-unsigned int diag(char *, ...);
+unsigned int diag(const char *, ...);
 
 int skip(unsigned int, char *, ...);
 

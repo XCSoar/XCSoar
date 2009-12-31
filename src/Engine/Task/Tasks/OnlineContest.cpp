@@ -142,6 +142,11 @@ OnlineContest::reset_rank()
 void
 OnlineContest::prune()
 {
+  for (TracePointVector::const_iterator it = m_trace_points.begin();
+       it != m_trace_points.end(); ++it) {
+    printf("%d %d %d\n", it->time, it->altitude, it->rank);
+  }
+
   if (m_trace_points.size()<300) {
     // no need to prune
     return;
