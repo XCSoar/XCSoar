@@ -105,7 +105,7 @@ protected:
       if (is_final(destination)) {
         find_solution(dijkstra, destination);
         if (finish_satisfied(destination)) {
-          rank_solution(dijkstra);
+          rank_solution(dijkstra, destination);
         }
       } else {
         add_edges(dijkstra, destination);

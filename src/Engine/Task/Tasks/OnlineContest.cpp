@@ -136,7 +136,7 @@ OnlineContest::set_rank(const unsigned i, const unsigned d)
 void 
 OnlineContest::reset_rank()
 {
-  reset_rank(m_trace_points);
+  ::reset_rank(m_trace_points);
 }
 
 void
