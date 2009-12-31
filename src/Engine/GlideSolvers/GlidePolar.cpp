@@ -445,11 +445,7 @@ GlidePolar::get_ld_over_ground(const AIRCRAFT_STATE &state) const
   if (!q.check()) {
     return fixed_zero;
   } else {
-    if (positive(c_theta)) {
-      return max(fixed_zero,q.solution_max());
-    } else {
-      return max(fixed_zero,q.solution_min());
-    }
+    return max(fixed_zero,q.solution_max());
   }
 }
 
