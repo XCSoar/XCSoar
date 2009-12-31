@@ -111,13 +111,6 @@ OnlineContest::get_olc_points() const
 }
 
 
-void
-OnlineContest::thin_trace()
-{
-  /// \todo thin trace if OLC samples gets too big
-}
-
-
 void 
 OnlineContest::Accept(TaskPointVisitor& visitor, 
                       const bool reverse) const
@@ -131,6 +124,30 @@ OnlineContest::distance_is_significant(const AIRCRAFT_STATE &state,
 {
   TracePoint a1(state, m_task_projection);
   return OLCDijkstra::distance_is_significant(a1, state_last, 10);
+}
+
+
+void 
+OnlineContest::set_rank(const unsigned i, const unsigned d)
+{
+  m_trace_points[i].set_rank(d);
+}
+
+void 
+OnlineContest::reset_rank()
+{
+  reset_rank(m_trace_points);
+}
+
+void
+OnlineContest::prune()
+{
+  if (m_trace_points.size()<300) {
+    // no need to prune
+    return;
+  }
+  /// \todo thin data based on rank
+
 }
 
 /*

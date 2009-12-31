@@ -89,6 +89,8 @@ protected:
 
   bool solve();
 
+  void set_rank(const ScanTaskPoint &sp, const unsigned d);
+
 private:
 
   OnlineContest& olc;
@@ -102,6 +104,8 @@ private:
   unsigned stage_end(const ScanTaskPoint &sp) const;
 
   DijkstraTaskPoint m_dijkstra;
+
+  bool m_rank_mode;
 };
 
 #endif

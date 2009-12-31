@@ -56,6 +56,8 @@ protected:
 
   virtual const T &get_point(const ScanTaskPoint &sp) const = 0;
 
+  virtual void set_rank(const ScanTaskPoint &sp, const unsigned d) = 0;
+
   virtual void add_edges(DijkstraTaskPoint &dijkstra,
                          const ScanTaskPoint &curNode) = 0;
   
@@ -89,6 +91,36 @@ protected:
     return false; // No path found
   }
 
+  bool distance_rank(DijkstraTaskPoint &dijkstra, 
+                     unsigned max_steps = 0-1) {
+
+#ifdef INSTRUMENT_TASK
+    count_dijkstra_queries++;
+#endif
+
+    while (!dijkstra.empty()) {
+      
+      const ScanTaskPoint destination = dijkstra.pop();
+      
+      if (is_final(destination)) {
+        find_solution(dijkstra, destination);
+        if (finish_satisfied(destination)) {
+          rank_solution(dijkstra);
+        }
+      } else {
+        add_edges(dijkstra, destination);
+      }
+
+      if (max_steps) {
+        --max_steps;
+      } else {
+        return false; // Reached limit
+      }
+    }
+    dijkstra.clear();
+    return true;  // finished scan
+  }
+
   unsigned num_stages;
   std::vector<T> solution;
 
@@ -109,6 +141,19 @@ protected:
 
     do {
       solution[p.first] = get_point(p);
+      p_last = p;
+      p = dijkstra.get_predecessor(p);
+    } while ((p.second != p_last.second) || (p.first != p_last.first));
+  }
+
+  void rank_solution(const DijkstraTaskPoint &dijkstra, 
+                     const ScanTaskPoint destination) {
+    ScanTaskPoint p(destination); 
+    ScanTaskPoint p_last(p);
+    const unsigned rank = dijkstra.dist();
+
+    do {
+      set_rank(p, rank);
       p_last = p;
       p = dijkstra.get_predecessor(p);
     } while ((p.second != p_last.second) || (p.first != p_last.first));

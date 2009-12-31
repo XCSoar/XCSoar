@@ -80,6 +80,10 @@ public:
  */
   const TracePointVector& get_olc_points() const;
 
+  void set_rank(const unsigned i, const unsigned d);
+  void reset_rank();
+  void prune();
+
 private:
   const TaskEvents &m_task_events;
   const TaskBehaviour &m_task_behaviour;
@@ -93,8 +97,6 @@ private:
 
   bool distance_is_significant(const AIRCRAFT_STATE &state,
                                const TracePoint &state_last) const;
-
-  void thin_trace();
 
   void run_olc(OLCDijkstra& dijkstra);
 

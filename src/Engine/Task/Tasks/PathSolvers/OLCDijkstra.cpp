@@ -89,10 +89,30 @@ OLCDijkstra::solve()
 
   if (m_dijkstra.empty()) {
     m_dijkstra.reset(ScanTaskPoint(0,0));
+    if (m_rank_mode) {
+      olc.reset_rank();
+    }
     add_start_edges();
   }
 
-  return distance_general(m_dijkstra, 20);
+  // alternate between rank mode and distance mode
+
+  if (m_rank_mode) {
+    if (distance_rank(m_dijkstra, 20)) {
+      olc.prune();
+      // switch modes back
+      m_rank_mode = false;
+    }
+    return false;
+  } else {
+    if (distance_general(m_dijkstra, 20)) {
+      // switch to rank mode
+      m_rank_mode = true;
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 
@@ -102,6 +122,7 @@ OLCDijkstra::reset()
   m_dijkstra.clear();
   n_points = 0;
   solution_found = false;
+  m_rank_mode = false;
 }
 
 
@@ -207,6 +228,13 @@ OLCDijkstra::copy_solution(TracePointVector &vec)
       vec.push_back(solution[i]);
     }
   }
+}
+
+
+void 
+OLCDijkstra::set_rank(const ScanTaskPoint &sp, const unsigned d)
+{
+  olc.set_rank(sp.second, -d);
 }
 
 

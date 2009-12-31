@@ -27,6 +27,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Navigation/ReferencePoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/TracePoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
