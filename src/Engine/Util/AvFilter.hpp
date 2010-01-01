@@ -34,6 +34,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef AV_FILTER_HPP
 #define AV_FILTER_HPP
 
@@ -50,31 +51,32 @@ public:
    *
    * @param _n_max Number of elements in bucket
    */
-  AvFilter(const unsigned _n_max):n_max(_n_max)  {
+  AvFilter(const unsigned _n_max) : n_max(_n_max)
+  {
     x.reserve(n_max);
     reset();
   }
 
-/** 
- * Updates filter to add sample to buffer
- * 
- * @param x0 Input (pre-filtered) value at sample time
- * 
- * @return True if buffer is full
- */
+  /**
+   * Updates filter to add sample to buffer
+   *
+   * @param x0 Input (pre-filtered) value at sample time
+   *
+   * @return True if buffer is full
+   */
   virtual bool update(const double x0);
 
-/** 
- * Calculate average from samples
- * 
- * @return Average value in buffer
- */
+  /**
+   * Calculate average from samples
+   *
+   * @return Average value in buffer
+   */
   double average();
 
-/** 
- * Resets filter (zero samples)
- * 
- */
+  /**
+   * Resets filter (zero samples)
+   *
+   */
   virtual void reset();
 
 protected:
