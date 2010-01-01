@@ -42,9 +42,10 @@
 
 void TaskManager::print(const AIRCRAFT_STATE &state)
 {
-  task_olc.print();
   if (active_task) 
     active_task->print(state);
+
+  trace.print(state.Location);
 
   std::ofstream fs("results/res-stats-common.txt");
   fs << common_stats;
@@ -553,18 +554,53 @@ std::ostream& operator<< (std::ostream& f,
 void
 OnlineContest::print() const 
 {
-  std::ofstream fs("results/res-olc-sprint.txt");
+  {
+    std::ofstream fs("results/res-olc-trace.txt");
+
+    for (TracePointVector::const_iterator it = m_trace_points.begin();
+         it != m_trace_points.end(); ++it) {
+      fs << it->get_location().Longitude << " " << it->get_location().Latitude 
+         << " " << it->altitude << " " << it->time 
+         << " " << it->rank
+         << "\n";
+    }
+  }
 
   if (m_solution.empty()) 
     return;
 
-  for (TracePointVector::const_iterator it = m_solution.begin();
-       it != m_solution.end(); ++it) {
-    fs << it->get_location().Longitude << " " << it->get_location().Latitude 
-       << " " << it->altitude << " " << it->time 
-       << "\n";
+  {
+    std::ofstream fs("results/res-olc-solution.txt");
+
+    for (TracePointVector::const_iterator it = m_solution.begin();
+         it != m_solution.end(); ++it) {
+      fs << it->get_location().Longitude << " " << it->get_location().Latitude 
+         << " " << it->altitude << " " << it->time 
+         << "\n";
+    }
   }
 }
 
+
+#include "Trace/Trace.hpp"
+
+void
+Trace::print(const GEOPOINT &loc) const
+{
+  std::ofstream fs("results/res-trace.txt");
+
+  TracePointVector vec = find_within_range(loc, fixed(10000),
+                                                  0);
+  for (TracePointVector::const_iterator it = vec.begin(); it != vec.end();
+       ++it) {
+    fs << it->time 
+       << " " << it->get_location().Longitude 
+       << " " << it->get_location().Latitude
+       << " " << it->altitude
+       << " " << it->last_time
+       << "\n";
+  }
+
+}
 
 #endif

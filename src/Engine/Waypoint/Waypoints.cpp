@@ -37,8 +37,6 @@
 
 #include "Waypoints.hpp"
 #include "WaypointVisitor.hpp"
-#include "Navigation/TaskProjection.hpp"
-#include <vector>
 
 #ifdef INSTRUMENT_TASK
 unsigned n_queries = 0;

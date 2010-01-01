@@ -91,7 +91,13 @@ protected:
 
   void set_rank(const ScanTaskPoint &sp, const unsigned d);
 
+  unsigned dist_to_rank(const unsigned dist) const;
+
+  bool m_reverse;
+
 private:
+
+  unsigned get_weighting(const unsigned i) const;
 
   OnlineContest& olc;
   unsigned n_points;
@@ -100,8 +106,6 @@ private:
   bool solution_found;
 
   void add_start_edges();
-
-  unsigned stage_end(const ScanTaskPoint &sp) const;
 
   DijkstraTaskPoint m_dijkstra;
 

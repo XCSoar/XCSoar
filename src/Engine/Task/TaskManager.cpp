@@ -281,6 +281,8 @@ TaskManager::update(const AIRCRAFT_STATE &state,
 
   bool retval = false;
 
+  trace.append(state);
+
   if (task_ordered.task_size()>1) {
     // always update ordered task
     retval |= task_ordered.update(state, state_last);
@@ -304,6 +306,8 @@ TaskManager::update_idle(const AIRCRAFT_STATE& state)
 {
   // always update OLC
   bool retval = false;
+
+  retval |= trace.optimise_if_old();
 
   if (task_behaviour.enable_olc) {
     retval |= task_olc.update_idle(state);
@@ -392,6 +396,7 @@ TaskManager::reset()
   task_olc.reset();
   common_stats.reset();
   m_glide_polar.set_cruise_efficiency(fixed_one);
+  trace.clear();
 }
 
 TaskManager::Factory_t 

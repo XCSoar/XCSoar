@@ -13,14 +13,21 @@ set style line 8 lt 2 lc rgb "red" lw 2
 
 plot \
      'results/res-task.txt' using 1:2 with lines ls 6 title "OZ", \
-     'results/res-olc-sprint.txt' using 1:2 with linespoints ls 8 title "olc", \
+     'results/res-olc-solution.txt' using 1:2 with linespoints ls 8 title "olc", \
      'results/res-sample.txt' using 2:3 with lines ls 1 title "sample"
 pause -1
 
+set size noratio
 set autoscale
 set ylabel "h (m)"
 set xlabel "t (s)"
 plot \
-     'results/res-olc-sprint.txt' using 4:3 with linespoints ls 8 title "olc", \
+     'results/res-olc-solution.txt' using 4:3 with linespoints ls 8 title "olc", \
      'results/res-sample.txt' using 1:4 with lines ls 1 title "sample"
+pause -1
+
+set ylabel "rank (m)"
+set xlabel "t (s)"
+plot \
+     'results/res-olc-trace.txt' using 4:5 with lines ls 8 title "olc"
 pause -1

@@ -10,9 +10,15 @@ OLCSprint::OLCSprint(OnlineContest& _olc):
 bool 
 OLCSprint::admit_candidate(const ScanTaskPoint &candidate) const
 {
-  return (get_point(candidate).time <=
-          solution[0].time + 9000) &&
-    OLCDijkstra::admit_candidate(candidate);
+  if (m_reverse) {
+    return (get_point(candidate).time+9000 >=
+            solution[0].time) &&
+      OLCDijkstra::admit_candidate(candidate);
+  } else {
+    return (get_point(candidate).time <=
+            solution[0].time + 9000) &&
+      OLCDijkstra::admit_candidate(candidate);
+  }
 }
 
 fixed

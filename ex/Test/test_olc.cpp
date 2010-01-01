@@ -19,8 +19,8 @@ int main(int argc, char** argv) {
 
   plan_tests(3);
 
-  ok(test_olc(0,OLC_Classic),"olc classic",0);
   ok(test_olc(0,OLC_Sprint),"olc sprint",0);
+  ok(test_olc(0,OLC_Classic),"olc classic",0);
   ok(test_olc(0,OLC_FAI),"olc fai",0);
 
   return exit_status();

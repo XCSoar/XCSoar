@@ -52,6 +52,12 @@ class SearchPoint:
   public ReferencePoint 
 {
 public:
+  /** 
+   * Dummy constructor
+   * 
+   * @return Null object
+   */
+  SearchPoint():ReferencePoint(GEOPOINT(fixed_zero,fixed_zero)) {}
 
 /** 
  * Constructor

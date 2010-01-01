@@ -53,6 +53,7 @@
 #include "Factory/FAITaskFactory.hpp"
 #include "Factory/AATTaskFactory.hpp"
 #include "Factory/MixedTaskFactory.hpp"
+#include "Trace/Trace.hpp"
 
 class Waypoints;
 class TaskVisitor;
@@ -346,13 +347,10 @@ private:
 
   const TaskBehaviour &task_behaviour;
 
-  /** @link aggregation */
   FAITaskFactory factory_fai;
 
-  /** @link aggregation */
   AATTaskFactory factory_aat;
 
-  /** @link aggregation */
   MixedTaskFactory factory_mixed;
 
   TaskMode_t mode;
@@ -364,10 +362,11 @@ private:
 
   TaskMode_t set_mode(const TaskMode_t mode);
 
-  /** @link aggregation */
   TaskAdvance task_advance;
 
   CommonStats common_stats;
+
+  Trace trace;
 
   void update_common_stats(const AIRCRAFT_STATE &state);
   void update_common_stats_times(const AIRCRAFT_STATE &state);

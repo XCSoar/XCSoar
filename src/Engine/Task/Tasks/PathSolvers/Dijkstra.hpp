@@ -45,6 +45,8 @@
 extern long count_dijkstra_links;
 #endif
 
+#define MINMAX_OFFSET 134217727
+
 /**
  * Dijkstra search algorithm.
  * From http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
@@ -146,7 +148,7 @@ public:
 private:
 
   unsigned minmax_dist(const unsigned d) const {
-    return m_min? d:134217727-d;
+    return m_min? d:MINMAX_OFFSET-d;
   }
 
 /** 

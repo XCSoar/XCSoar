@@ -98,7 +98,7 @@ private:
   bool distance_is_significant(const AIRCRAFT_STATE &state,
                                const TracePoint &state_last) const;
 
-  void run_olc(OLCDijkstra& dijkstra);
+  bool run_olc(OLCDijkstra& dijkstra);
 
   OLCSprint olc_sprint;
   OLCFAI olc_fai;

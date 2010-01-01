@@ -50,10 +50,10 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 }
 
 
-void
+bool
 OnlineContest::run_olc(OLCDijkstra &dijkstra)
 {
-  fixed score = dijkstra.score(common_stats.distance_olc);
+  const fixed score = dijkstra.score(common_stats.distance_olc);
   if (positive(score)) {
     common_stats.time_olc = dijkstra.calc_time();
     if (positive(common_stats.time_olc)) {
@@ -62,6 +62,9 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
       common_stats.speed_olc = fixed_zero;
     }
     dijkstra.copy_solution(m_solution);
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -70,19 +73,25 @@ bool
 OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 {
   // \todo: possibly scan each type in a round robin fashion?
+  bool retval = false;
 
   switch (m_task_behaviour.olc_rules) {
   case OLC_Sprint:
-    run_olc(olc_sprint);
+    retval = run_olc(olc_sprint);
     break;
   case OLC_FAI:
-    run_olc(olc_fai);
+    retval = run_olc(olc_fai);
     break;
   case OLC_Classic:
-    run_olc(olc_classic);
+    retval = run_olc(olc_classic);
     break;
   };
-  return true;
+
+  if (retval) {
+//    printf("time %d size %d\n", state.Time.as_int(), m_trace_points.size());
+  }
+
+  return retval;
 }
 
 
@@ -142,11 +151,9 @@ OnlineContest::reset_rank()
 void
 OnlineContest::prune()
 {
-  for (TracePointVector::const_iterator it = m_trace_points.begin();
-       it != m_trace_points.end(); ++it) {
-    printf("%d %d %d\n", it->time, it->altitude, it->rank);
-  }
-
+#ifdef DO_PRINT
+  print();
+#endif
   if (m_trace_points.size()<300) {
     // no need to prune
     return;

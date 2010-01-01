@@ -470,7 +470,7 @@ clean-: $(addprefix clean-,$(TARGETS))
 clean: clean-$(TARGET) cleani cleancov FORCE
 	@$(NQ)echo "cleaning all"
 	$(Q)rm -rf output
-	$(Q)find src $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
+	$(Q)find src ex/Test $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
 	-type f -print | xargs -r $(RM)
 
 cleancov: FORCE

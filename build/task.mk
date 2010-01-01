@@ -101,6 +101,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/TaskStats/ElementStat.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskStats/TaskStats.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskStats/TaskVario.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointEnvelope.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \

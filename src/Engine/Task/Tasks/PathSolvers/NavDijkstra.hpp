@@ -15,6 +15,8 @@ typedef Dijkstra<ScanTaskPoint> DijkstraTaskPoint;
 /**
  * Abstract class for Dijsktra searches of nav points
  *
+ * Expected running time, see http://www.avglab.com/andrew/pub/neci-tr-96-062.ps
+ *
  * NavDijkstra<SearchPoint>
  */
 template <class T>
@@ -50,16 +52,21 @@ protected:
     return true;
   }
 
-  bool is_final(const ScanTaskPoint &sp) const {
-    return sp.first+1== num_stages;
-  }
-
   virtual const T &get_point(const ScanTaskPoint &sp) const = 0;
 
   virtual void set_rank(const ScanTaskPoint &sp, const unsigned d) = 0;
 
   virtual void add_edges(DijkstraTaskPoint &dijkstra,
                          const ScanTaskPoint &curNode) = 0;
+
+  virtual unsigned dist_to_rank(const unsigned dist) const = 0;
+
+  bool is_final(const ScanTaskPoint &sp) const {
+    return sp.first+1== num_stages;
+  }
+  bool is_first(const ScanTaskPoint &sp) const {
+    return sp.first== 0;
+  }
   
   bool distance_general(DijkstraTaskPoint &dijkstra, 
                         unsigned max_steps = 0-1) {
@@ -80,6 +87,7 @@ protected:
         }
       } else {
         add_edges(dijkstra, destination);
+        if (dijkstra.empty()) return false; // error, no way to reach final
       }
 
       if (max_steps) {
@@ -106,9 +114,14 @@ protected:
         find_solution(dijkstra, destination);
         if (finish_satisfied(destination)) {
           rank_solution(dijkstra, destination);
+          /*
+          dijkstra.clear();
+          return true;
+          */
         }
       } else {
         add_edges(dijkstra, destination);
+        if (dijkstra.empty()) return true; // error, no way to reach final
       }
 
       if (max_steps) {
@@ -150,7 +163,7 @@ protected:
                      const ScanTaskPoint destination) {
     ScanTaskPoint p(destination); 
     ScanTaskPoint p_last(p);
-    const unsigned rank = dijkstra.dist();
+    const unsigned rank = dist_to_rank(dijkstra.dist());
 
     do {
       set_rank(p, rank);
