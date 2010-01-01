@@ -1,19 +1,19 @@
 #include "Trace.hpp"
 #include "Navigation/Aircraft.hpp"
 
-Trace::Trace():m_optimise_time(0)
+Trace::Trace() :
+  m_optimise_time(0)
 {
-
 }
 
-void 
+void
 Trace::append(const AIRCRAFT_STATE& state)
 {
   if (empty()) {
     task_projection.reset(state.get_location());
     task_projection.update_fast();
-    m_last_point.time = 0-1;
-  } else if ((trace_tree.size()>0) && (state.Time < m_last_point.time)) {
+    m_last_point.time = -1;
+  } else if ((trace_tree.size() > 0) && (state.Time < m_last_point.time)) {
     clear();
     return;
   }
@@ -37,7 +37,7 @@ Trace::clear()
   trace_tree.clear();
   trace_tree.optimize();
   m_optimise_time = 0;
-  m_last_point.time = 0-1;
+  m_last_point.time = -1;
 }
 
 unsigned
@@ -52,14 +52,13 @@ Trace::empty() const
   return trace_tree.empty();
 }
 
-Trace::TraceTree::const_iterator 
+Trace::TraceTree::const_iterator
 Trace::begin() const
 {
   return trace_tree.begin();
 }
 
-
-Trace::TraceTree::const_iterator 
+Trace::TraceTree::const_iterator
 Trace::end() const
 {
   return trace_tree.end();
@@ -91,20 +90,20 @@ Trace::find_within_range(const GEOPOINT &loc, const fixed range,
   return vectors;
 }
 
-
-bool 
+bool
 Trace::optimise_if_old()
 {
-  if (m_last_point.time > m_optimise_time+60) {    
+  if (m_last_point.time > m_optimise_time + 60) {
     optimise();
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }
 
-
-static void adjust_links(const TracePoint& previous, const TracePoint& obj, TracePoint& next)
+static void
+adjust_links(const TracePoint& previous, const TracePoint& obj,
+    TracePoint& next)
 {
   if ((obj.last_time == previous.time) && (next.last_time == obj.time)) {
     next.last_time = previous.time;
@@ -127,7 +126,7 @@ Trace::thin_trace(TracePointSet& tset, const unsigned mrange_sq) const
     TracePointSet::iterator it_previous = it;
     TracePointSet::iterator it_next = it;
 
-    if (it->approx_sq_dist(*it_previous)<mrange_sq) {
+    if (it->approx_sq_dist(*it_previous) < mrange_sq) {
       adjust_links(*it_previous, *it, *it_next);
       tset.erase(it);
     } else {
