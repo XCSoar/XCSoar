@@ -109,21 +109,21 @@ Filter::reset(const double _x)
 double
 Filter::update(const double _x)
 {
-  if (ok) {
-    x[2] = x[1];
-    x[1] = x[0];
-    x[0] = _x;
-
-    double _y = a[0] * x[0]
-              + a[1] * x[1]
-              + a[2] * x[2]
-              + b[0] * y[0]
-              + b[1] * y[1];
-
-    y[1] = y[0];
-    y[0] = _y;
-    return _y;
-  } else {
+  if (!ok)
     return _x;
-  }
+
+  x[2] = x[1];
+  x[1] = x[0];
+  x[0] = _x;
+
+  double _y = a[0] * x[0]
+            + a[1] * x[1]
+            + a[2] * x[2]
+            + b[0] * y[0]
+            + b[1] * y[1];
+
+  y[1] = y[0];
+  y[0] = _y;
+
+  return _y;
 }
