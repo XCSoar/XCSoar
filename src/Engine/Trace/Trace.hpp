@@ -92,36 +92,36 @@ public:
   bool empty() const;
 
   /**
-  * Type of KD-tree data structure for trace container
-  */
+   * Type of KD-tree data structure for trace container
+   */
   typedef KDTree::KDTree<2, TracePoint, TracePoint::kd_get_location> TraceTree;
 
   /**
-  * Access first trace in store, for use in iterators.
-  *
-  * @return First trace in store
-  */
+   * Access first trace in store, for use in iterators.
+   *
+   * @return First trace in store
+   */
   TraceTree::const_iterator begin() const;
 
   /**
-  * Access end trace in store, for use in iterators as end point.
-  *
-  * @return End trace in store
-  */
+   * Access end trace in store, for use in iterators as end point.
+   *
+   * @return End trace in store
+   */
   TraceTree::const_iterator end() const;
 
   bool optimise_if_old();
 
   /**
-  * Find traces within approximate range (square range box)
-  * to search location.  Possible use by screen display functions.
-  *
-  * @param loc Location from which to search
-  * @param range Distance in meters of search radius
-  * @param mintime Minimum time to match (recency)
-  *
-  * @return Vector of trace points within square range
-  */
+   * Find traces within approximate range (square range box)
+   * to search location.  Possible use by screen display functions.
+   *
+   * @param loc Location from which to search
+   * @param range Distance in meters of search radius
+   * @param mintime Minimum time to match (recency)
+   *
+   * @return Vector of trace points within square range
+   */
   TracePointVector find_within_range(const GEOPOINT &loc, const fixed range,
       const unsigned mintime = 0) const;
 
