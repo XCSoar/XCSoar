@@ -118,7 +118,7 @@ MapWindow::DrawTrail(Canvas &canvas)
        it != trace.end(); ++it) {
 
     POINT pt;
-    fixed dt = Basic().Time-it->time;
+    const fixed dt = (Basic().Time-it->time)*it->drift_factor;
     LonLat2Screen(it->get_location().parametric(traildrift, dt), pt);
 
     if (it->last_time != last_time) {
