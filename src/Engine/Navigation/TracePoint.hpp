@@ -20,10 +20,12 @@ public:
     SearchPoint(state.Location, tp, true),
     altitude(state.NavAltitude.as_int()),
     time(state.Time.as_int()),
+    Vario(state.Vario),
     rank(0) {};
 
   unsigned altitude;
   unsigned time;
+  fixed Vario;
   unsigned rank;
   unsigned last_time;
 

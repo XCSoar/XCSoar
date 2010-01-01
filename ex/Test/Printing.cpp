@@ -586,14 +586,20 @@ OnlineContest::print() const
 
 void print_tpv(const TracePointVector& vec, std::ofstream& fs) 
 {
+  unsigned last_time = 0;
   for (TracePointVector::const_iterator it = vec.begin(); it != vec.end();
        ++it) {
+    if (it->last_time != last_time) {
+      fs << "\n";
+    }
     fs << it->time 
        << " " << it->get_location().Longitude 
        << " " << it->get_location().Latitude
        << " " << it->altitude
        << " " << it->last_time
+       << " " << it->Vario
        << "\n";
+    last_time = it->time;
   }
 }
 

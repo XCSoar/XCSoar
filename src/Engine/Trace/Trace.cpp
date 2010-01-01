@@ -116,6 +116,7 @@ static void adjust_links(const TracePoint& previous, const TracePoint& obj, Trac
 {
   if ((obj.last_time == previous.time) && (next.last_time == obj.time)) {
     next.last_time = previous.time;
+    next.Vario = fixed((int)next.altitude-(int)previous.altitude)/(next.time-previous.time);
   }
 }
 
