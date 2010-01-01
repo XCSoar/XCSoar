@@ -55,7 +55,7 @@ public:
     install_wndproc();
   }
 
-  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_up(int x, int y);
 };
 
 class ButtonLabel: public ActionInterface

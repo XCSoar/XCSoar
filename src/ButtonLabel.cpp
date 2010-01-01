@@ -54,7 +54,7 @@ bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
 unsigned ButtonLabel::ButtonLabelGeometry = 0;
 
 bool
-MenuButton::on_mouse_down(int x, int y)
+MenuButton::on_mouse_up(int x, int y)
 {
   int i = ButtonLabel::Find(*this);
   if (i >= 0)
