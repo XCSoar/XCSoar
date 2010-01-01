@@ -31,6 +31,7 @@ typedef double fixed;
 void sin_cos(const double&theta, double*s, double*c);
 #define positive(x) (x>0)
 #define negative(x) (x<0)
+#define signum(x) (2.0/(1.0+exp(-x))-1.0)
 
 #else
 #define FIXED_DOUBLE(x) x.as_double()
@@ -387,6 +388,7 @@ public:
     static void sin_cos(fixed const& theta,fixed* s,fixed*c);
     static void to_polar(fixed const& x,fixed const& y,fixed* r,fixed*theta);
     static fixed atan2(fixed const& y,fixed const& x);
+    static fixed signum(fixed const& x);
 
     fixed sin() const;
     fixed cos() const;
@@ -1696,6 +1698,10 @@ inline void sin_cos(fixed const& theta,fixed* s,fixed*c)
   ::fixed::sin_cos(theta, s, c);
 }
 
+inline fixed signum(fixed const& x)
+{
+  return ::fixed::signum(x);
+}
 
 namespace std
 {
@@ -1730,6 +1736,10 @@ extern fixed const fixed_deg_to_rad;
 extern fixed const fixed_rad_to_deg;
 extern fixed const fixed_360;
 extern fixed const fixed_180;
+
+inline fixed fixed::signum(const fixed&x) {
+  return fixed_two/(fixed_one+x.exp())-fixed_one;
+}
 
 inline bool positive(const fixed&f) {
   return f.positive();

@@ -17,6 +17,7 @@ class TaskBehaviour;
 class TaskPointVisitor;
 class GlidePolar;
 class CommonStats;
+class Trace;
 
 class OnlineContest:
   public BaseVisitable<> 
@@ -35,7 +36,8 @@ public:
   OnlineContest(const TaskEvents &te, 
                 const TaskBehaviour &tb,
                 const GlidePolar &gp,
-                CommonStats &stats);
+                CommonStats &stats,
+                const Trace &trace);
 
 /** 
  * Update internal states when aircraft state advances.
@@ -89,20 +91,18 @@ private:
   const TaskBehaviour &m_task_behaviour;
   const GlidePolar &m_glide_polar;
   CommonStats &common_stats;
-
-  TaskProjection m_task_projection;
+  const Trace &m_trace;
 
   TracePointVector m_trace_points;
   TracePointVector m_solution;
-
-  bool distance_is_significant(const AIRCRAFT_STATE &state,
-                               const TracePoint &state_last) const;
 
   bool run_olc(OLCDijkstra& dijkstra);
 
   OLCSprint olc_sprint;
   OLCFAI olc_fai;
   OLCClassic olc_classic;
+
+  void update_trace();
 
 public:
 #ifdef DO_PRINT

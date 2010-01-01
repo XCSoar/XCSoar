@@ -406,7 +406,7 @@ private:
     tp.Accept_oz(ozv);
   }
 
-  const bool& m_draw_bearing;
+  const bool m_draw_bearing;
   const Pen pen_leg_active;
   const Pen pen_leg_inactive;
   const Pen pen_leg_arrow;

@@ -96,7 +96,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = ALTITUDEMODIFY*Basic().GPSAltitude;
     break;
   case 1:
-    Value = ALTITUDEMODIFY*Calculated().AltitudeAGL  ;
+    Value = ALTITUDEMODIFY*Basic().AltitudeAGL  ;
     Valid = Calculated().TerrainValid;
     break;
   case 2:

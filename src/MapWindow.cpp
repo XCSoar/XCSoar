@@ -45,7 +45,6 @@ Copyright_License {
 #include "RasterWeather.h"
 #include "Gauge/GaugeCDI.hpp"
 #include "Protection.hpp"
-#include "SnailTrail.hpp"
 
 #include <tchar.h>
 
@@ -61,7 +60,7 @@ MapWindow::MapWindow()
    way_points(NULL),
    topology(NULL), terrain(NULL), weather(NULL), terrain_renderer(NULL),
    airspace_database(NULL), task(NULL),
-   marks(NULL), snail_trail(NULL), 
+   marks(NULL), 
    cdi(NULL),
    TargetDrag_State(0),
    BigZoom(true),
@@ -176,15 +175,13 @@ MapWindow::Idle(const bool do_force)
 
   StartTimer();
 
-  static MapIdleTrigger main_idle;
   static MapIdleTrigger terrain_idle;
   static MapIdleTrigger topology_idle;
   static MapIdleTrigger rasp_idle;
-  static unsigned robin = 3;
+  static unsigned robin = 2;
 
   if (do_force) {
-    robin = 3;
-    main_idle.dirty = true;
+    robin = 2;
     terrain_idle.dirty = true;
     topology_idle.dirty = true;
     rasp_idle.dirty = true;
@@ -194,24 +191,9 @@ MapWindow::Idle(const bool do_force)
   }
 
   do {
-    robin = (robin+1)%4;
+    robin = (robin+1)%3;
     switch(robin) {
     case 0:
-      // scan main object visibility
-      if (main_idle.dirty) {
-        main_idle.dirty = false;
-        ScanVisibility(getSmartBounds());
-
-        if (do_force) {
-          // exit after important object visibilities are scanned
-          // this ensures waypoints/airspace are visible after a significant
-          // shift of the map
-          return true;
-        }
-
-        break;
-      }
-    case 1:
       if (topology != NULL && topology_idle.dirty) {
         if (SettingsMap().EnableTopology) {
           topology_idle.dirty =
@@ -221,7 +203,7 @@ MapWindow::Idle(const bool do_force)
         }
         break;
       }
-    case 2:
+    case 1:
       if (terrain != NULL && terrain_idle.dirty) {
         terrain->ServiceTerrainCenter(Basic().Location);
         terrain->ServiceCache();
@@ -232,7 +214,7 @@ MapWindow::Idle(const bool do_force)
         }
         break;
       }
-    case 3:
+    case 2:
       if (weather != NULL && rasp_idle.dirty) {
         weather->SetViewCenter(Basic().Location);
         if (!do_force) {
@@ -248,8 +230,7 @@ MapWindow::Idle(const bool do_force)
   } while (RenderTimeAvailable() &&
 	   !drawTriggerEvent.test() &&
 	   (still_dirty =
-	      main_idle.dirty
-	    | terrain_idle.dirty
+	      terrain_idle.dirty
 	    | topology_idle.dirty
 	    | rasp_idle.dirty));
 
@@ -356,19 +337,6 @@ bool MapWindow::checkLabelBlock(const RECT brect) {
   return label_block.check(brect);
 }
 
-void MapWindow::ScanVisibility(rectObj *bounds_active) {
-  // received when the SetTopoBounds determines the visibility
-  // boundary has changed.
-  // This happens rarely, so it is good pre-filtering of what is visible.
-  // (saves from having to do it every screen redraw)
-
-  if (snail_trail != NULL)
-    snail_trail->ScanVisibility(bounds_active);
-
-#ifdef OLD_TASK
-  ScanVisibilityAirspace(bounds_active);
-#endif
-}
 
 void MapWindow::SwitchZoomClimb(void) {
 

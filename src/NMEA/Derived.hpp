@@ -154,9 +154,6 @@ struct TERRAIN_ALT_INFO
   /** True if terrain is valid, False otherwise */
   bool   TerrainValid;
 
-  /** Altitude over terrain */
-  fixed AltitudeAGL;
-
   GEOPOINT TerrainWarningLocation;
 
   /** Final glide ground line */

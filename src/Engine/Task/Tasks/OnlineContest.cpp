@@ -3,16 +3,18 @@
 #include "Task/TaskBehaviour.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
-
+#include "Trace/Trace.hpp"
 
 OnlineContest::OnlineContest(const TaskEvents &te, 
                              const TaskBehaviour &tb,
                              const GlidePolar &gp,
-                             CommonStats &stats):
+                             CommonStats& stats,
+                             const Trace& trace):
   m_task_events(te),
   m_task_behaviour(tb),
   m_glide_polar(gp),
   common_stats(stats),
+  m_trace(trace),
   olc_sprint(*this),
   olc_fai(*this),
   olc_classic(*this)
@@ -24,44 +26,12 @@ OnlineContest::OnlineContest(const TaskEvents &te,
 bool 
 OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 {
-  bool do_add = false;
-
-  if (m_trace_points.empty()) {
-    m_task_projection.reset(state.Location);
-    m_task_projection.update_fast();
-    do_add = true;
-  } else {
-
-    if (distance_is_significant(state, m_trace_points.back())) {
-      do_add = true;
-    } else if (state.NavAltitude < m_trace_points.back().altitude) {
-      // replace if lower even if not significant distance away
-      m_trace_points.back().altitude = state.NavAltitude.as_int();
-    }
-  }
-  if (!do_add) {
+  if (m_trace_points.empty()) 
     return false;
-  }
-
-  TracePoint sp(state, m_task_projection);
-  m_trace_points.push_back(sp);
-
-  return true;
-}
-
-
-bool
-OnlineContest::run_olc(OLCDijkstra &dijkstra)
-{
-  const fixed score = dijkstra.score(common_stats.distance_olc);
-  if (positive(score)) {
-    common_stats.time_olc = dijkstra.calc_time();
-    if (positive(common_stats.time_olc)) {
-      common_stats.speed_olc = dijkstra.calc_distance()/common_stats.time_olc;
-    } else {
-      common_stats.speed_olc = fixed_zero;
-    }
-    dijkstra.copy_solution(m_solution);
+    
+  if (state.NavAltitude < m_trace_points.back().NavAltitude) {
+    // replace if lower even if not significant distance away
+    m_trace_points.back().NavAltitude = state.NavAltitude;
     return true;
   } else {
     return false;
@@ -69,11 +39,44 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
 }
 
 
+bool
+OnlineContest::run_olc(OLCDijkstra &dijkstra)
+{
+  if (dijkstra.solve()) {
+    const fixed score = dijkstra.score(common_stats.distance_olc);
+    if (positive(score)) {
+      common_stats.time_olc = dijkstra.calc_time();
+      if (positive(common_stats.time_olc)) {
+        common_stats.speed_olc = dijkstra.calc_distance()/common_stats.time_olc;
+      } else {
+        common_stats.speed_olc = fixed_zero;
+      }
+    }
+    dijkstra.copy_solution(m_solution);
+    update_trace();
+
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+void
+OnlineContest::update_trace()
+{
+  m_trace_points = m_trace.get_trace_points(300);
+}
+
 bool 
 OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 {
   // \todo: possibly scan each type in a round robin fashion?
   bool retval = false;
+
+  if (m_trace_points.size()<10) {
+    update_trace();
+  }
 
   switch (m_task_behaviour.olc_rules) {
   case OLC_Sprint:
@@ -125,14 +128,6 @@ OnlineContest::Accept(TaskPointVisitor& visitor,
                       const bool reverse) const
 {
   /// \todo - visit "OLCPoint"
-}
-
-bool 
-OnlineContest::distance_is_significant(const AIRCRAFT_STATE &state,
-                                       const TracePoint &state_last) const
-{
-  TracePoint a1(state, m_task_projection);
-  return OLCDijkstra::distance_is_significant(a1, state_last, 10);
 }
 
 

@@ -248,11 +248,6 @@ void XCSoarInterface::AfterStartup() {
 #endif
 }
 
-// NEWTASK
-#ifdef NEWTASK
-extern int test_newtask(int test_num);
-#endif
-
 
 /**
  * "Boots" up XCSoar
@@ -417,7 +412,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   main_window.map.set_terrain(&terrain);
   main_window.map.set_weather(&RASP);
   main_window.map.set_marks(marks);
-  main_window.map.set_snail_trail(&glide_computer.GetSnailTrail());
 
   // Finally ready to go.. all structures must be present before this.
 
@@ -433,39 +427,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   // Create the calculation thread
   StartupStore(TEXT("CreateCalculationThread\n"));
   CreateCalculationThread();
-
-#ifdef NEWTASK  
-  { // NEWTASK
-    PeriodClock t;
-    t.reset(); t.update();
-    CreateProgressDialog(gettext(TEXT("Running test 0")));
-    test_newtask(0);
-    StartupStore(TEXT("test 0 %d\n"),t.elapsed());
-
-    /*
-    t.update();
-    CreateProgressDialog(gettext(TEXT("Running test 1")));
-    test_newtask(1);
-    StartupStore(TEXT("test 1 %d\n"),t.elapsed());
-
-    t.update();
-    CreateProgressDialog(gettext(TEXT("Running test 2")));
-    test_newtask(2);
-    StartupStore(TEXT("test 2 %d\n"),t.elapsed());
-
-    t.update();
-    CreateProgressDialog(gettext(TEXT("Running test 3")));
-    test_newtask(3);
-    StartupStore(TEXT("test 3 %d\n"),t.elapsed());
-
-    t.update();
-    CreateProgressDialog(gettext(TEXT("Running test 4")));
-    test_newtask(4);
-    StartupStore(TEXT("test 4 %d\n"),t.elapsed());
-    */
-    CreateProgressDialog(gettext(TEXT("test complete")));
-  }
-#endif
 
   // Initialise the airspace warning dialog
   StartupStore(TEXT("dlgAirspaceWarningInit\n"));

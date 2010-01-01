@@ -41,14 +41,12 @@ Copyright_License {
 
 #include "GlideComputerBlackboard.hpp"
 #include "FlightStatistics.hpp"
-#include "SnailTrail.hpp"
 #include "GPSClock.hpp"
 
 class GlideComputerStats: virtual public GlideComputerBlackboard {
 public:
   GlideComputerStats();
   FlightStatistics     flightstats;
-  SnailTrail           snail_trail;
 protected:
   void ResetFlight(const bool full=true);
   void StartTask();

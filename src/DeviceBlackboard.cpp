@@ -485,6 +485,7 @@ DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
 
 /**
  * 1. Determines which altitude to use (GPS/baro)
+ * 2. Calculates height over ground
  */
 void
 DeviceBlackboard::NavAltitude()
@@ -496,6 +497,7 @@ DeviceBlackboard::NavAltitude()
   } else {
     SetBasic().NavAltitude = Basic().BaroAltitude;
   }
+  SetBasic().AltitudeAGL = Basic().NavAltitude - Calculated().TerrainAlt;
 }
 
 

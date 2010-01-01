@@ -50,8 +50,22 @@ AIRCRAFT_STATE::get_predicted_state(const fixed &in_time) const
 
 
 AIRCRAFT_STATE::AIRCRAFT_STATE():
-  Gload(fixed_one),
+  ALTITUDE_STATE(),
+  Gload(fixed_one)
+{
+
+}
+
+ALTITUDE_STATE::ALTITUDE_STATE():
   working_band_fraction(fixed_one)
 {
 
 }
+
+fixed 
+ALTITUDE_STATE::thermal_drift_factor() const
+{
+  static const fixed fixed_100(100);
+  return signum(AltitudeAGL/fixed_100);
+}
+

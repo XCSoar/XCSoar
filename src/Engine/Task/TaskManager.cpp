@@ -47,7 +47,7 @@ TaskManager::TaskManager(const TaskEvents &te,
   task_ordered(te,tb,task_advance,m_glide_polar),
   task_goto(te,tb,task_advance,m_glide_polar),
   task_abort(te,tb,task_advance,m_glide_polar,wps),
-  task_olc(te,tb,m_glide_polar,common_stats),
+  task_olc(te,tb,m_glide_polar,common_stats,trace),
   task_behaviour(tb),
   factory_fai(task_ordered,tb),
   factory_aat(task_ordered,tb),
@@ -280,6 +280,10 @@ TaskManager::update(const AIRCRAFT_STATE &state,
   // in abort/goto mode, the task stats are still updated
 
   bool retval = false;
+
+  if (state_last.Time > state.Time) {
+    reset();
+  }
 
   trace.append(state);
 
@@ -517,14 +521,26 @@ TaskManager::default_task(const GEOPOINT loc, const bool force)
 
 
 const TracePointVector& 
+TaskManager::get_olc_points() const
+{
+  return task_olc.get_olc_points();
+}
+
+
+const TracePointVector& 
 TaskManager::get_trace_points() const
 {
   return task_olc.get_trace_points();
 }
 
 
-const TracePointVector& 
-TaskManager::get_olc_points() const
+TracePointVector 
+TaskManager::find_trace_points(const GEOPOINT &loc, const fixed range,
+                               const unsigned mintime, const fixed resolution) const
 {
-  return task_olc.get_olc_points();
+  TracePointVector vec = trace.find_within_range(loc, range, mintime);
+  if (positive(resolution)) {
+    trace.thin_trace(vec, loc, resolution);
+  }
+  return vec;
 }

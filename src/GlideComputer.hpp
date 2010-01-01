@@ -69,8 +69,6 @@ public:
   }
 
   // TODO: make these const
-  /** Returns the SnailTrail object */
-  SnailTrail &GetSnailTrail() { return snail_trail; }
   /** Returns the FlightStatistics object */
   FlightStatistics &GetFlightStats() { return flightstats; }
 

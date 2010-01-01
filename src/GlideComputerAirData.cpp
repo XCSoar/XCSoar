@@ -429,11 +429,10 @@ GlideComputerAirData::TerrainHeight()
     SetCalculated().TerrainAlt = Alt;
   }
 
-  SetCalculated().AltitudeAGL = Basic().NavAltitude - Calculated().TerrainAlt;
-
   if (!SettingsComputer().FinalGlideTerrain) {
     SetCalculated().TerrainBase = Calculated().TerrainAlt;
   }
+
 }
 
 
@@ -446,6 +445,11 @@ GlideComputerAirData::TerrainHeight()
 bool
 GlideComputerAirData::FlightTimes()
 {
+  if (Basic().Replay != LastBasic().Replay) {
+    // reset flight before/after replay logger
+    ResetFlight(Basic().Replay);
+  }
+
   if ((Basic().Time != 0) && time_retreated()) {
     // 20060519:sgi added (Basic().Time != 0) due to always return here
     // if no GPS time available
@@ -454,11 +458,6 @@ GlideComputerAirData::FlightTimes()
       ResetFlight(false);
     }
     return false;
-  }
-
-  if (Basic().Replay != LastBasic().Replay) {
-    // reset flight before/after replay logger
-    ResetFlight(false);
   }
 
   double t = DetectStartTime(&Basic(), &Calculated());
@@ -505,7 +504,7 @@ GlideComputerAirData::TakeoffLanding()
       SetCalculated().TimeInFlight= LastCalculated().TimeInFlight+1;
       SetCalculated().TimeOnGround= 0;
     } else {
-      if ((Calculated().AltitudeAGL < 300) && (Calculated().TerrainValid)) {
+      if ((Basic().AltitudeAGL < 300) && (Calculated().TerrainValid)) {
         SetCalculated().TimeInFlight = LastCalculated().TimeInFlight - 1;
       } else if (!Calculated().TerrainValid) {
         SetCalculated().TimeInFlight = LastCalculated().TimeInFlight - 1;

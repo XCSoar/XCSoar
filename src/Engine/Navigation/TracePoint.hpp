@@ -6,7 +6,9 @@
 #include <vector>
 
 class TracePoint:
-  public SearchPoint
+  public SearchPoint,
+  public ALTITUDE_STATE,
+  public VARIO_STATE
 {
 public:
 /** 
@@ -16,18 +18,12 @@ public:
  */
   TracePoint():time(0-1),last_time(0-1) {};
 
-  TracePoint(const AIRCRAFT_STATE &state, const TaskProjection& tp):
-    SearchPoint(state.Location, tp, true),
-    altitude(state.NavAltitude.as_int()),
-    time(state.Time.as_int()),
-    Vario(state.Vario),
-    rank(0) {};
+  TracePoint(const AIRCRAFT_STATE &state, const TaskProjection& tp);
 
-  unsigned altitude;
   unsigned time;
-  fixed Vario;
   unsigned rank;
   unsigned last_time;
+  fixed drift_factor;
 
   void set_rank(const unsigned d) {
     if (d>rank) {
@@ -35,9 +31,13 @@ public:
     }
   }
 
-  unsigned approx_dist(const TracePoint& tp) const {
-    return std::max(abs(get_flatLocation().Longitude-tp.get_flatLocation().Longitude),
-                    abs(get_flatLocation().Latitude-tp.get_flatLocation().Latitude));
+  unsigned dsqr(const int d) const {
+    return d*d;
+  }
+
+  unsigned approx_sq_dist(const TracePoint& tp) const {
+    return dsqr(get_flatLocation().Longitude-tp.get_flatLocation().Longitude)+
+      dsqr(get_flatLocation().Latitude-tp.get_flatLocation().Latitude);
   }
 
   /**

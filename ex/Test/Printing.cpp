@@ -560,7 +560,7 @@ OnlineContest::print() const
     for (TracePointVector::const_iterator it = m_trace_points.begin();
          it != m_trace_points.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
-         << " " << it->altitude << " " << it->time 
+         << " " << it->NavAltitude << " " << it->time 
          << " " << it->rank
          << "\n";
     }
@@ -575,7 +575,7 @@ OnlineContest::print() const
     for (TracePointVector::const_iterator it = m_solution.begin();
          it != m_solution.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
-         << " " << it->altitude << " " << it->time 
+         << " " << it->NavAltitude << " " << it->time 
          << "\n";
     }
   }
@@ -595,7 +595,7 @@ void print_tpv(const TracePointVector& vec, std::ofstream& fs)
     fs << it->time 
        << " " << it->get_location().Longitude 
        << " " << it->get_location().Latitude
-       << " " << it->altitude
+       << " " << it->NavAltitude
        << " " << it->last_time
        << " " << it->Vario
        << "\n";

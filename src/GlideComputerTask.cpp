@@ -76,9 +76,9 @@ GlideComputerTask::GlideComputerTask(TaskManager& task):
 void
 GlideComputerTask::ResetFlight(const bool full)
 {
-  if (full) {
-    m_task.reset();
-  }
+  terrain.Lock();
+  m_task.reset();
+  terrain.Unlock();
 }
 
 

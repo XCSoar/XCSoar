@@ -49,23 +49,9 @@
  * device, then this structure itself should be contained within a larger one.
  *
  */
-struct AIRCRAFT_STATE {
-  AIRCRAFT_STATE();
 
-  //##########
-  //   Time
-  //##########
-
-  fixed Time; /**< global time (seconds UTC) */
-
-  //################
-  //   Navigation
-  //################
-
-  GEOPOINT Location; /**< location of aircraft */
-
-  fixed TrackBearing; /**< track angle in degrees true */
-
+struct SPEED_STATE 
+{
   //############
   //   Speeds
   //############
@@ -91,6 +77,12 @@ struct AIRCRAFT_STATE {
    * @see AirDensityRatio
    */
   fixed IndicatedAirspeed;
+};
+
+
+struct ALTITUDE_STATE 
+{
+  ALTITUDE_STATE();
 
   //##############
   //   Altitude
@@ -102,13 +94,27 @@ struct AIRCRAFT_STATE {
   /** Fraction of working band height */
   fixed working_band_fraction;
 
+  /** Altitude over terrain */
+  fixed AltitudeAGL;
+
+  /** Thermal drift factor */
+  fixed thermal_drift_factor() const;
+};
+
+
+struct WIND_STATE 
+{
   //##############
   //   Wind
   //##############
 
   fixed WindSpeed; /**< Wind speed (m/s); must be positive */
   fixed WindDirection; /**< Direction of travel of wind (degrees) */
+};
 
+
+struct VARIO_STATE
+{
   //###########
   //   Vario
   //###########
@@ -124,6 +130,30 @@ struct AIRCRAFT_STATE {
    * @see NettoVarioAvailable
    */
   fixed NettoVario;
+};
+
+
+struct AIRCRAFT_STATE: 
+  public ALTITUDE_STATE,
+  public SPEED_STATE,
+  public VARIO_STATE,
+  public WIND_STATE
+{
+  AIRCRAFT_STATE();
+
+  //##########
+  //   Time
+  //##########
+
+  fixed Time; /**< global time (seconds UTC) */
+
+  //################
+  //   Navigation
+  //################
+
+  GEOPOINT Location; /**< location of aircraft */
+
+  fixed TrackBearing; /**< track angle in degrees true */
 
   //##################
   //   Acceleration

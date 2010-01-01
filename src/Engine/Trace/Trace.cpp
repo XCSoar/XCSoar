@@ -14,8 +14,10 @@ Trace::append(const AIRCRAFT_STATE& state)
     task_projection.reset(state.get_location());
     task_projection.update_fast();
     m_last_point.time = 0-1;
-  } else if (state.Time <= m_last_point.time)
-    return; // don't add duplicates
+  } else if ((trace_tree.size()>0) && (state.Time < m_last_point.time)) {
+    clear();
+    return;
+  }
 
   TracePoint tp(state, task_projection);
   tp.last_time = m_last_point.time;
@@ -34,7 +36,9 @@ void
 Trace::clear()
 {
   trace_tree.clear();
+  trace_tree.optimize();
   m_optimise_time = 0;
+  m_last_point.time = 0-1;
 }
 
 unsigned
@@ -116,7 +120,28 @@ static void adjust_links(const TracePoint& previous, const TracePoint& obj, Trac
 {
   if ((obj.last_time == previous.time) && (next.last_time == obj.time)) {
     next.last_time = previous.time;
-    next.Vario = fixed((int)next.altitude-(int)previous.altitude)/(next.time-previous.time);
+    next.Vario = (next.NavAltitude-previous.NavAltitude)/(next.time-previous.time);
+    /// \todo work out scheme to merge NettoVario etc also
+  }
+}
+
+
+void 
+Trace::thin_trace(TracePointVector& vec, const unsigned mrange_sq) const
+{
+  if (vec.size()<2) return;
+
+  for (TracePointVector::iterator it = vec.begin()+1; it+1 != vec.end(); ) {
+
+    TracePointVector::iterator it_previous = it-1;
+    TracePointVector::iterator it_next = it+1;
+
+    if (it->approx_sq_dist(*it_previous)<mrange_sq) {
+      adjust_links(*it_previous, *it, *it_next);
+      vec.erase(it);
+    } else {
+      ++it;
+    }
   }
 }
 
@@ -126,18 +151,30 @@ Trace::thin_trace(TracePointVector& vec, const GEOPOINT &loc, const fixed range)
 {
   const unsigned mrange = task_projection.project_range(loc, range);
 
-  if (vec.size()<2) return;
+  thin_trace(vec, mrange*mrange);
+}
 
-  for (TracePointVector::iterator it = vec.begin()+1; it+1 != vec.end(); ) {
 
-    TracePointVector::iterator it_previous = it-1;
-    TracePointVector::iterator it_next = it+1;
+TracePointVector 
+Trace::get_trace_points(unsigned max_points) const
+{
+  TracePointVector vectors;
 
-    if (it->approx_dist(*it_previous)<mrange) {
-      adjust_links(*it_previous, *it, *it_next);
-      vec.erase(it);
-    } else {
-      ++it;
-    }
+  for (TraceTree::const_iterator it = begin();
+       it != end(); ++it) {
+    vectors.push_back(*it);
   }
+  if (vectors.empty()) return vectors;
+
+  std::sort(vectors.begin(), vectors.end(), time_sort);
+
+  unsigned mrange = 3;
+
+  do {
+    thin_trace(vectors, mrange);
+    mrange = (mrange*4)/3;
+  } while (vectors.size()>max_points);
+
+//  printf("trace points size %d mrange %d\n", vectors.size(), mrange);
+  return vectors;
 }

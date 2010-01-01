@@ -637,7 +637,7 @@ InfoBoxManager::DisplayInfoBox(void)
       break;
 
     case 1: // AGL
-      Units::FormatAlternateUserAltitude(Calculated().AltitudeAGL, sTmp,
+      Units::FormatAlternateUserAltitude(Basic().AltitudeAGL, sTmp,
           sizeof(sTmp) / sizeof(sTmp[0]));
       InfoBoxes[i]->SetComment(sTmp);
       break;

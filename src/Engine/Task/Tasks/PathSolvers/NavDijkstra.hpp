@@ -87,7 +87,7 @@ protected:
         }
       } else {
         add_edges(dijkstra, destination);
-        if (dijkstra.empty()) return false; // error, no way to reach final
+        if (dijkstra.empty()) return true; // error, no way to reach final
       }
 
       if (max_steps) {

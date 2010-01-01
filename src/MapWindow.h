@@ -68,7 +68,6 @@ class RasterTerrain;
 class RasterWeather;
 class TerrainRenderer;
 class Marks;
-class SnailTrail;
 class GaugeCDI;
 class Waypoints;
 class Waypoint;
@@ -92,8 +91,6 @@ class MapWindow
   TaskManager *task;
 
   Marks *marks;
-
-  SnailTrail *snail_trail;
 
   GaugeCDI *cdi;
 
@@ -132,10 +129,6 @@ class MapWindow
 
   void set_marks(Marks *_marks) {
     marks = _marks;
-  }
-
-  void set_snail_trail(SnailTrail *_snail_trail) {
-    snail_trail = _snail_trail;
   }
 
   // used by dlgTarget
@@ -193,10 +186,8 @@ class MapWindow
 
   // display element functions
 
-  void ScanVisibility(rectObj *bounds_active);
-
   void CalculateScreenPositions(POINT Orig, RECT rc,
-                                       POINT *Orig_Aircraft);
+                                POINT *Orig_Aircraft);
 
   void CalculateScreenPositionsGroundline();
   void CalculateScreenPositionsThermalSources();
@@ -215,10 +206,8 @@ class MapWindow
 
   void DrawFlightMode(Canvas &canvas, const RECT rc);
   void DrawGPSStatus(Canvas &canvas, const RECT rc);
-  double DrawTrail(Canvas &canvas, const SnailTrail &snail_trail);
+  void DrawTrail(Canvas &canvas);
   void DrawTeammate(Canvas &canvas);
-  void DrawTrailFromTask(Canvas &canvas, 
-                         const double TrailFirstTime);
   void DrawOffTrackIndicator(Canvas &canvas);
   void DrawProjectedTrack(Canvas &canvas);
   void DrawTask(Canvas &canvas, RECT rc, Canvas &buffer);

@@ -64,13 +64,7 @@ SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   pt.Longitude = Basic->Location.Longitude;
   pt.Time = Basic->Time;
   pt.FarVisible = true; // hasn't been filtered out yet.
-  if (Calculated->TerrainValid) {
-    fixed hr = max(fixed_zero, Calculated->AltitudeAGL)/100.0;
-    pt.DriftFactor = 2.0/(1.0+exp(-hr))-1.0;
-  } else {
-    pt.DriftFactor = 1.0;
-  }
-
+  pt.DriftFactor = Basic->thermal_drift_factor();
   pt.Vario = Basic->NettoVario;
 
   fixed scale = Calculated->AdjustedAverageThermal; // just for now.. TODO replace

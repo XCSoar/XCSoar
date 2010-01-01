@@ -319,9 +319,9 @@ public:
 /** 
  * Retrieve trace vector
  * 
- * @return Vector of all trace points 
  */
-  const TracePointVector& get_trace_points() const;
+  TracePointVector find_trace_points(const GEOPOINT &loc, const fixed range,
+                                     const unsigned mintime, const fixed resolution) const;
 
 /** 
  * Retrieve olc solution vector
@@ -329,6 +329,13 @@ public:
  * @return Vector of trace points selected for OLC
  */
   const TracePointVector& get_olc_points() const;
+
+/** 
+ * Retrieve olc trace vector
+ * 
+ * @return Vector of trace points reduced for OLC
+ */
+  const TracePointVector& get_trace_points() const;
 
 #ifdef DO_PRINT
   void print(const AIRCRAFT_STATE &location);

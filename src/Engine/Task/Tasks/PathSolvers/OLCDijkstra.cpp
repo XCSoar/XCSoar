@@ -130,12 +130,13 @@ OLCDijkstra::reset()
 fixed
 OLCDijkstra::score(fixed& the_distance) 
 {
-  if (solve()) {
+  if (positive(calc_time())) {
     solution_found = true;
     the_distance = calc_distance();
     return the_distance;
+  } else {
+    return fixed_zero;
   }
-  return fixed_zero;
 }
 
 
@@ -232,16 +233,16 @@ OLCDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
     if (!is_final(candidate)) 
       return true;
     else 
-      return (get_point(candidate).altitude <= 
-              solution[0].altitude+m_finish_alt_diff);
+      return (get_point(candidate).NavAltitude <= 
+              solution[0].NavAltitude+m_finish_alt_diff);
 
   } else {
 
     if (!is_final(candidate)) 
       return true;
     else 
-      return (get_point(candidate).altitude+m_finish_alt_diff >= 
-              solution[0].altitude);
+      return (get_point(candidate).NavAltitude+m_finish_alt_diff >= 
+              solution[0].NavAltitude);
   }
 }
 

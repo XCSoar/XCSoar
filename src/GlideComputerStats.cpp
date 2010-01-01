@@ -73,24 +73,23 @@ GlideComputerStats::StartTask()
 }
 
 /**
- * Logs GPS fixes for snail trail and stats
+ * Logs GPS fixes for stats
  * @return True if valid fix (fix distance <= 200m), False otherwise
  */
 bool
 GlideComputerStats::DoLogging()
 {
   // QUESTION TB: put that in seperate function?!
+
   // prevent bad fixes from being logged or added to OLC store
   if (Distance(Basic().Location, LastBasic().Location) > 200.0)
     return false;
 
-  // draw snail points more often in circling mode
+  // log points more often in circling mode
   if (Calculated().Circling) {
     log_clock.set_dt(SettingsComputer().LoggerTimeStepCircling);
-    snail_trail.clock.set_dt(1.0);
   } else {
     log_clock.set_dt(SettingsComputer().LoggerTimeStepCruise);
-    snail_trail.clock.set_dt(5.0);
   }
 
   if (FastLogNum) {
@@ -102,12 +101,7 @@ GlideComputerStats::DoLogging()
     logger.LogPoint(Basic());
   }
 
-
   if (Calculated().Flying) {
-    if (snail_trail.clock.check_advance(Basic().Time)) {
-      snail_trail.AddPoint(&Basic(), &Calculated());
-    }
-
     if (stats_clock.check_advance(Basic().Time)) {
       flightstats.AddAltitudeTerrain(Basic().Time - Calculated().TakeOffTime,
           Calculated().TerrainAlt);

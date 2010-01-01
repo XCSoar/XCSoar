@@ -39,7 +39,6 @@ Copyright_License {
 #include "Task/TaskManager.hpp"
 
 #include "MapWindow.h"
-#include "SnailTrail.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
@@ -57,21 +56,37 @@ using std::min;
 using std::max;
 #endif
 
-#define fSnailColour(cv) max(0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
+#define fSnailColour(cv) max(0,min(NUMSNAILCOLORS-1, ((cv+fixed_one)*fixed_half*NUMSNAILCOLORS).as_int()))
 
-// This function is slow...
-double MapWindow::DrawTrail(Canvas &canvas, const SnailTrail &snail_trail)
+
+void
+MapWindow::DrawTrail(Canvas &canvas)
 {
-  int i, snail_index;
-  SNAIL_POINT P1;
-  POINT Screen;
-
-  double TrailFirstTime = -1;
-
   if(!SettingsMap().TrailActive)
-    return -1;
+    return;
 
-  // Trail drift calculations
+  unsigned min_time = 0;
+
+  switch(SettingsMap().TrailActive) {
+  case 1:
+    min_time = max(0,(Basic().Time-3600).as_int());
+    break;
+  case 2:
+    min_time = max(0,(Basic().Time-600).as_int());
+    break;
+  case 0:
+    min_time = 0; // full
+    break;
+  }; 
+
+  terrain->Lock(); 
+  TracePointVector trace = task->find_trace_points(GetPanLocation(),
+                                                   fixed(GetScreenDistanceMeters()), 
+                                                   min_time, 
+                                                   fixed(DistancePixelsToMeters(3)));
+  terrain->Unlock();
+
+  if (trace.empty()) return; // nothing to draw
 
   GEOPOINT traildrift;
 
@@ -82,247 +97,45 @@ double MapWindow::DrawTrail(Canvas &canvas, const SnailTrail &snail_trail)
                           Basic().WindDirection,
                           Basic().WindSpeed,
                           &tp1);
-    traildrift.Latitude = (Basic().Location.Latitude-tp1.Latitude);
-    traildrift.Longitude = (Basic().Location.Longitude-tp1.Longitude);
-  } else {
-    traildrift.Latitude = 0.0;
-    traildrift.Longitude = 0.0;
+    traildrift = Basic().Location-tp1;
   }
 
-  // JMW don't draw first bit from home airport
+  fixed vario_max = fixed(0.75);
+  fixed vario_min = fixed(-2.0);
 
-  //  Trail size
+  for (TracePointVector::const_iterator it = trace.begin();
+       it != trace.end(); ++it) {
+    vario_max = max(it->NettoVario, vario_max);
+    vario_min = min(it->NettoVario, vario_min);
+  };
 
-  int num_trail_max;
-  if (SettingsMap().TrailActive!=2) {
-    num_trail_max = SnailTrail::TRAILSIZE;
-  } else {
-    num_trail_max = SnailTrail::TRAILSIZE / SnailTrail::TRAILSHRINK;
-  }
-  if ((DisplayMode == dmCircling)) {
-    num_trail_max /= SnailTrail::TRAILSHRINK;
-  }
+  vario_max = min(fixed(7.5), vario_max);
+  vario_min = max(fixed(-5.0), vario_min);
 
-  // Snail skipping
+  unsigned last_time = 0;
 
-  const int skip_divisor = num_trail_max/5;
-  int skip_border = skip_divisor;
-  int skip_level= 3; // TODO code: try lower level?
-
-  int snail_offset = SnailTrail::TRAILSIZE + snail_trail.getIndex()
-    - num_trail_max;
-  while (snail_offset>= SnailTrail::TRAILSIZE) {
-    snail_offset -= SnailTrail::TRAILSIZE;
-  }
-  while (snail_offset< 0) {
-    snail_offset += SnailTrail::TRAILSIZE;
-  }
-  const int zero_offset = SnailTrail::TRAILSIZE - snail_offset;
-  skip_border += zero_offset % skip_level;
-
-  int index_skip = ((int)Basic().Time)%skip_level;
-
-  // TODO code: Divide by time step cruise/circling for zero_offset
-
-  // Keep track of what's drawn
-
-  bool this_visible = true;
-  bool last_visible = false;
-  POINT point_lastdrawn;
-  point_lastdrawn.x = 0;
-  point_lastdrawn.y = 0;
-
-  // Average colour display for skipped points
-  int vario_av = 0;
-  int vario_av_num = 0;
-
-  // Constants for speedups
-
-  const bool display_circling = DisplayMode == dmCircling;
-  const double display_time = Basic().Time;
-
-  // expand bounds so in strong winds the appropriate snail points are
-  // still visible (since they are being tested before drift is applied)
-  // this expands them by one minute
-
-  rectObj bounds_thermal = screenbounds_latlon;
-  const static fixed fixed_60(60);
-  screenbounds_latlon.minx -= (double)fabs(fixed_60*traildrift.Longitude);
-  screenbounds_latlon.maxx += (double)fabs(fixed_60*traildrift.Longitude);
-  screenbounds_latlon.miny -= (double)fabs(fixed_60*traildrift.Latitude);
-  screenbounds_latlon.maxy += (double)fabs(fixed_60*traildrift.Latitude);
-
-  const rectObj bounds = bounds_thermal;
-
-  const int deg = DEG_TO_INT(AngleLimit360(DisplayAngle));
-  const int cost = ICOSTABLE[deg];
-  const int sint = ISINETABLE[deg];
-  const int xxs = Orig_Screen.x*1024-512;
-  const int yys = Orig_Screen.y*1024+512;
-  const double mDrawScale = GetLonLatToScreenScale();
-  const GEOPOINT &mPanLocation = PanLocation;
-
-  // Main loop
-
-  for(i=1;i< num_trail_max; ++i)
-  {
-    // Handle skipping
-
-    if (i>=skip_border) {
-      skip_level= max(1,skip_level-1);
-      skip_border= i+2*(zero_offset % skip_level)+skip_divisor;
-      index_skip = skip_level;
-    }
-
-    index_skip++;
-    if ((i<num_trail_max-10) && (index_skip < skip_level)) {
-      continue;
-    } else {
-      index_skip=0;
-    }
-
-    // Find the snail point
-
-    snail_index = snail_offset+i;
-    while (snail_index >= SnailTrail::TRAILSIZE)
-      snail_index -= SnailTrail::TRAILSIZE;
-
-    P1 = snail_trail.getPoint(snail_index);
-
-    // Mark first time of display point
-
-    if (((TrailFirstTime<0) || (P1.Time<TrailFirstTime)) && (P1.Time>=0)) {
-      TrailFirstTime = P1.Time;
-    }
-
-    // Ignoring display elements for modes
-
-    if (display_circling) {
-      if ((!P1.Circling)&&( i<num_trail_max-60 )) {
-        // ignore cruise mode lines unless very recent
-	last_visible = false;
-        continue;
-      }
-    } else {
-      //  if ((P1.Circling)&&( snail_index % 5 != 0 )) {
-        // JMW TODO code: This won't work properly!
-        // draw only every 5 points from circling when in cruise mode
-	//        continue;
-      //      }
-    }
-
-    // Filter if far visible
-
-    if (!P1.FarVisible) {
-      last_visible = false;
-      continue;
-    }
-
-    // Determine if this is visible
-
-    this_visible =   ((P1.Longitude> bounds.minx) &&
-		     (P1.Longitude< bounds.maxx) &&
-		     (P1.Latitude> bounds.miny) &&
-		     (P1.Latitude< bounds.maxy)) ;
-
-    if (!this_visible && !last_visible) {
-      last_visible = false;
-      continue;
-    }
-
-    // Find coordinates on screen after applying trail drift
-
-    // now we know either point is visible, better get screen coords
-    // if we don't already.
-
-    double dt = max(fixed_zero, (display_time - P1.Time) * P1.DriftFactor);
-    double this_lon = P1.Longitude+traildrift.Longitude*dt;
-    double this_lat = P1.Latitude+traildrift.Latitude*dt;
-
-#if 1
-    // this is faster since many parameters are const
-    int Y = Real2Int((mPanLocation.Latitude-this_lat)*mDrawScale);
-    int X = Real2Int((mPanLocation.Longitude-this_lon)*fastcosine(this_lat)*mDrawScale);
-    Screen.x = (xxs-X*cost + Y*sint)/1024;
-    Screen.y = (Y*cost + X*sint + yys)/1024;
-#else
-    LonLat2Screen(this_lon,
-		  this_lat,
-		  Screen);
-#endif
-
-    // Determine if we should skip if close to previous point
-
-    if (last_visible && this_visible) {
-      // only average what's visible
-
-      if (abs(Screen.y-point_lastdrawn.y)
-	  +abs(Screen.x-point_lastdrawn.x)<IBLSCALE(4)) {
-	vario_av += P1.Colour;
-	vario_av_num ++;
-	continue;
-	// don't draw if very short line
-      }
-    }
-
-    // Lookup the colour if it's not already set
-    // JMW TODO: this should be done by the snail class itself
-    int colour_vario = P1.Colour;
-    if (vario_av_num) {
-      // set color to average if skipped
-      colour_vario = (colour_vario+vario_av)/(vario_av_num+1);
-      vario_av_num= 0;
-      vario_av= 0;
-    }
-
-    canvas.select(MapGfx.hSnailPens[colour_vario]);
-
-    if (!last_visible) { // draw set cursor at P1
-      canvas.move_to(Screen.x, Screen.y);
-    } else {
-      canvas.line_to(Screen.x, Screen.y);
-    }
-    point_lastdrawn = Screen;
-    last_visible = this_visible;
-  }
-
-  // draw final point to glider
-  if (last_visible) {
-    canvas.line_to(Orig_Aircraft.x, Orig_Aircraft.y);
-  }
-
-  return TrailFirstTime;
-}
-
-
-void
-MapWindow::DrawTrailFromTask(Canvas &canvas, 
-                             const double TrailFirstTime)
-{
-  if((SettingsMap().TrailActive!=3)
-     || (DisplayMode == dmCircling)
-     || (TrailFirstTime<0))
-    return;
-
-  terrain->Lock(); 
-
-  const TracePointVector& trace = task->get_trace_points();
-  std::vector<POINT> points; points.reserve(trace.size());
   for (TracePointVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
 
-    if (it->time >= TrailFirstTime) 
-      break;
     POINT pt;
-    LonLat2Screen(it->get_location(), pt);
-    points.push_back(pt);
-  }
-  terrain->Unlock();
+    fixed dt = Basic().Time-it->time;
+    LonLat2Screen(it->get_location().parametric(traildrift, dt), pt);
 
-  if (points.size()>=2) {
-    canvas.select(MapGfx.hSnailPens[NUMSNAILCOLORS / 2]);
-    canvas.polyline(&points[0], points.size());
+    if (it->last_time != last_time) {
+      canvas.move_to(pt.x, pt.y);
+    } else {
+
+      const fixed colour_vario = negative(it->NettoVario)?
+        -it->NettoVario/vario_min :
+        it->NettoVario/vario_max ;
+
+      canvas.select(MapGfx.hSnailPens[fSnailColour(colour_vario)]);
+      canvas.line_to(pt.x, pt.y);
+    }
+    last_time = it->time;
   }
+  canvas.line_to(Orig_Aircraft.x, Orig_Aircraft.y);
+
 }
 
 

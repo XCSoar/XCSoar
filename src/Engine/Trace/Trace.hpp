@@ -130,7 +130,11 @@ public:
 
   void thin_trace(TracePointVector& vec, const GEOPOINT &loc, const fixed range) const;
 
+  TracePointVector get_trace_points(unsigned max_points) const;
+
 private:
+
+  void thin_trace(TracePointVector& vec, const unsigned range_sq) const;
 
   TraceTree trace_tree;
   TaskProjection task_projection;

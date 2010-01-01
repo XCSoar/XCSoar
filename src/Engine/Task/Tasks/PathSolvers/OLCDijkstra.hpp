@@ -73,6 +73,8 @@ public:
 
   void reset();
 
+  bool solve();
+
 protected:
   const TracePoint &get_point(const ScanTaskPoint &sp) const;
 
@@ -86,8 +88,6 @@ protected:
   virtual bool admit_candidate(const ScanTaskPoint &candidate) const;
 
   std::vector<unsigned> m_weightings;
-
-  bool solve();
 
   void set_rank(const ScanTaskPoint &sp, const unsigned d);
 
