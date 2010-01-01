@@ -112,9 +112,9 @@ Trace::optimise_if_old()
   if (m_last_point.time > m_optimise_time + 60) {
     optimise();
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }
 
 static void
