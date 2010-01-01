@@ -51,89 +51,86 @@ class AIRCRAFT_STATE;
 class Trace: private NonCopyable 
 {
 public:
-/** 
- * Constructor.  Task projection is updated after first call to append().
- * 
- */
+  /**
+   * Constructor.  Task projection is updated after first call to append().
+   *
+   */
   Trace();
 
-/** 
- * Add trace to internal store.  Call optimise() periodically
- * to balance tree for faster queries
- * 
- * @param state Aircraft state to log point for
- */
+  /**
+   * Add trace to internal store.  Call optimise() periodically
+   * to balance tree for faster queries
+   *
+   * @param state Aircraft state to log point for
+   */
   void append(const AIRCRAFT_STATE& state);
 
-/** 
- * Optimise the internal search tree after adding/removing elements.
- */
+  /**
+   * Optimise the internal search tree after adding/removing elements.
+   */
   void optimise();
 
-/** 
- * Clear the trace store
- * 
- */
+  /**
+   * Clear the trace store
+   *
+   */
   void clear();
 
-/** 
- * Size of traces (in tree, not in temporary store) ---
- * must call optimise() before this for it to be accurate.
- * 
- * @return Number of traces in tree
- */
+  /**
+   * Size of traces (in tree, not in temporary store) ---
+   * must call optimise() before this for it to be accurate.
+   *
+   * @return Number of traces in tree
+   */
   unsigned size() const;
 
-/** 
- * Whether traces store is empty
- * 
- * @return True if no traces stored
- */
+  /**
+   * Whether traces store is empty
+   *
+   * @return True if no traces stored
+   */
   bool empty() const;
 
   /**
-   * Type of KD-tree data structure for trace container
-   */
-  typedef KDTree::KDTree<2, 
-                         TracePoint, 
-                         TracePoint::kd_get_location
-                         > TraceTree;
+  * Type of KD-tree data structure for trace container
+  */
+  typedef KDTree::KDTree<2, TracePoint, TracePoint::kd_get_location> TraceTree;
 
-/** 
- * Access first trace in store, for use in iterators.
- * 
- * @return First trace in store
- */
+  /**
+  * Access first trace in store, for use in iterators.
+  *
+  * @return First trace in store
+  */
   TraceTree::const_iterator begin() const;
 
-/** 
- * Access end trace in store, for use in iterators as end point.
- * 
- * @return End trace in store
- */
+  /**
+  * Access end trace in store, for use in iterators as end point.
+  *
+  * @return End trace in store
+  */
   TraceTree::const_iterator end() const;
 
   bool optimise_if_old();
 
-/** 
- * Find traces within approximate range (square range box)
- * to search location.  Possible use by screen display functions.
- * 
- * @param loc Location from which to search
- * @param range Distance in meters of search radius
- * @param mintime Minimum time to match (recency)
- * 
- * @return Vector of trace points within square range
- */
-  TracePointVector
-  find_within_range(const GEOPOINT &loc, const fixed range, const unsigned mintime=0) const;
+  /**
+  * Find traces within approximate range (square range box)
+  * to search location.  Possible use by screen display functions.
+  *
+  * @param loc Location from which to search
+  * @param range Distance in meters of search radius
+  * @param mintime Minimum time to match (recency)
+  *
+  * @return Vector of trace points within square range
+  */
+  TracePointVector find_within_range(const GEOPOINT &loc, const fixed range,
+      const unsigned mintime = 0) const;
 
-  void thin_trace(TracePointVector& vec, const GEOPOINT &loc, const fixed range) const;
+  void thin_trace(TracePointVector& vec, const GEOPOINT &loc,
+      const fixed range) const;
 
   TracePointVector get_trace_points(unsigned max_points) const;
 
 private:
-
   void thin_trace(TracePointVector& vec, const unsigned range_sq) const;
 
   TraceTree trace_tree;
