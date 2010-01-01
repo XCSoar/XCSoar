@@ -2,6 +2,11 @@
 #define MAP_DRAW_HELPER_HPP
 
 #include "Navigation/SearchPointVector.hpp"
+#include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
+
+class Canvas;
+class MapWindow;
 
 class MapDrawHelper 
 {
@@ -10,27 +15,11 @@ public:
                 Canvas &_buffer, 
                 Canvas &_stencil, 
                 MapWindow &_map,
-                const RECT &_rc):
-    m_canvas(_canvas),
-    m_buffer(_buffer),
-    m_stencil(_stencil),
-    m_map(_map),
-    m_rc(_rc),
-    m_buffer_drawn(false),
-    m_use_stencil(false) {};
+                const RECT &_rc);
 
-  MapDrawHelper(MapDrawHelper &_that):
-    m_canvas(_that.m_canvas),
-    m_buffer(_that.m_buffer),
-    m_stencil(_that.m_stencil),
-    m_map(_that.m_map),
-    m_rc(_that.m_rc),
-    m_buffer_drawn(_that.m_buffer_drawn),
-    m_use_stencil(_that.m_use_stencil) {};
+  MapDrawHelper(MapDrawHelper &_that);
 
-  ~MapDrawHelper() {
-    buffer_render_finish();
-  }
+  ~MapDrawHelper();
 
   Canvas &m_canvas;
   Canvas &m_buffer;
@@ -42,69 +31,21 @@ public:
 
 protected:
 
-  void draw_search_point_vector(Canvas& the_canvas, const SearchPointVector& points) {
-    const size_t size = points.size();
-    if (size<3) {
-      return;
-    }
-    std::vector<POINT> screen; 
-    screen.reserve(size);
-    for (SearchPointVector::const_iterator it = points.begin();
-         it!= points.end(); ++it) {
-      POINT sc;
-      m_map.LonLat2Screen(it->get_location(), sc);
-      screen.push_back(sc);
-    }
-    the_canvas.polygon(&screen[0], size);
-    if (m_use_stencil) {
-      m_stencil.polygon(&screen[0], size);
-    }
-  }
+  void draw_great_circle(Canvas& the_canvas, const GEOPOINT &from,
+                         const GEOPOINT &to);
 
-  void draw_circle(Canvas& the_canvas, const POINT& center, unsigned radius) {
-    the_canvas.circle(center.x, center.y, radius);
-    if (m_use_stencil) {
-      m_stencil.circle(center.x, center.y, radius);
-    }
-  }
+  void draw_search_point_vector(Canvas& the_canvas, const SearchPointVector& points);
 
-  void buffer_render_finish() {
-    if (m_buffer_drawn) {
-      // need to do this to prevent drawing of colored outline
-      m_buffer.white_pen();
+  void draw_circle(Canvas& the_canvas, const POINT& center, unsigned radius);
 
-      if (m_use_stencil) {
-        m_buffer.copy_transparent_black(m_stencil, m_rc);
-      }
-      m_canvas.copy_transparent_white(m_buffer, m_rc);
-      m_buffer.background_opaque();
-      m_buffer_drawn = false;
-    }
-  }
+  void buffer_render_finish();
 
-  void buffer_render_start() {
-    if (!m_buffer_drawn) {
-      clear_buffer();
-      m_buffer_drawn = true;
-    }
-  }
+  void buffer_render_start();
 
-  void clear_buffer() {
-    static const Color whitecolor(0xff,0xff,0xff);
-    m_buffer.background_transparent();
-    m_buffer.set_background_color(whitecolor);
-    m_buffer.set_text_color(whitecolor);
-    m_buffer.white_pen();
-    m_buffer.white_brush();
-    m_buffer.clear();
+  void clear_buffer();
 
-    m_stencil.background_transparent();
-    m_stencil.set_background_color(whitecolor);
-    m_stencil.set_text_color(whitecolor);
-    m_stencil.white_pen();
-    m_stencil.white_brush(); 
-    m_stencil.clear();
-  }
+  bool add_if_visible(std::vector<POINT>& screen, const GEOPOINT& pt) const;
+  void add(std::vector<POINT>& screen, const GEOPOINT& pt) const;
 
 };
 

@@ -45,6 +45,6 @@ void CleanRegistry(); // VENTA2-ADDON cleanregistrykeyA
 
 void WriteProfile(const TCHAR *szFile);
 void ReadProfile(const TCHAR *szFile);
-int propGetScaleList(double *List, size_t Size);
+int propGetScaleList(fixed *List, size_t Size);
 
 #endif

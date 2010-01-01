@@ -40,7 +40,6 @@ Copyright_License {
 #define XCSOAR_MATH_FASTMATH_H
 
 #include "Compiler.h"
-
 #include <math.h>
 
 // =================================================================================
@@ -67,12 +66,6 @@ iround(double i)
   return Real2Int(floor(i + 0.5));
 }
 
-/*
-static inline long lround(double i) {
-    return (long)(floor(i+0.5));
-}
-*/
-
 extern double COSTABLE[4096];
 extern double SINETABLE[4096];
 extern double INVCOSINETABLE[4096];
@@ -92,6 +85,23 @@ extern int ICOSTABLE[4096];
 #define fastsine(x) SINETABLE[DEG_TO_INT(x)]
 
 #ifdef __cplusplus
+
+#ifdef FIXED_MATH
+#include "Math/fixed.hpp"
+
+gcc_const static inline int
+iround(const fixed &x)
+{
+  return floor(x+fixed_half).as_int();
+}
+
+gcc_const static inline int
+Real2Int(const fixed& val)
+{
+  return val.as_int();
+}
+#endif
+
 inline unsigned int
 CombinedDivAndMod(unsigned int &lx)
 {

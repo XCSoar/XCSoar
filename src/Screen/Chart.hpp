@@ -40,6 +40,7 @@ Copyright_License {
 #define CHART_HPP
 
 #include "Math/leastsqs.h"
+#include "Math/fixed.hpp"
 #include "Screen/Canvas.hpp"
 
 class Chart {
@@ -105,7 +106,7 @@ class Chart {
 		 const double xv, const double yv);
 
   void DrawArrow(const double x, const double y,
-		 const double mag, const double angle,
+		 const double mag, const fixed angle,
 		 const int Style);
 
   void DrawNoData();

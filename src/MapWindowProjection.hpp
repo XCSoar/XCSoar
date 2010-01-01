@@ -45,6 +45,7 @@ Copyright_License {
 #include "Sizes.h"
 #include "Navigation/GeoPoint.hpp"
 #include <windef.h>
+#include "Math/fixed.hpp"
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
@@ -72,19 +73,19 @@ class MapWindowProjection {
   POINT   GetOrigScreen(void) const { return Orig_Screen; }
   POINT   GetOrigAircraft(void) const { return Orig_Aircraft; }
   GEOPOINT GetPanLocation() const { return PanLocation; }
-  double  GetDisplayAngle() const { return DisplayAngle; }
+  fixed  GetDisplayAngle() const { return DisplayAngle; }
 
-  rectObj CalculateScreenBounds(double scale) const;
+  rectObj CalculateScreenBounds(const fixed scale) const;
 
-  double  GetScreenDistanceMeters(void) const;
+  fixed  GetScreenDistanceMeters(void) const;
 
-  double GetScreenScaleToLonLat() const {
+  fixed GetScreenScaleToLonLat() const {
     return InvDrawScale;
   }
-  double GetMapScaleUser() const { // Topology
+  fixed GetMapScaleUser() const { // Topology
     return MapScale;
   }
-  double GetMapScaleKM() const {
+  fixed GetMapScaleKM() const {
     return MapScale*0.001/DISTANCEMODIFY;
   }
   RECT GetMapRectBig() const {
@@ -96,10 +97,6 @@ class MapWindowProjection {
 
   // used by waypoint nearest routine
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
-
-  // drawing functions
-  void DrawGreatCircle(Canvas &canvas,
-                       const GEOPOINT &loc_start, const GEOPOINT &loc_end);
 
   rectObj* getSmartBounds() {
     return &smart_bounds_active;
@@ -113,19 +110,20 @@ class MapWindowProjection {
     return DisplayMode;
   }
 
-  unsigned DistanceMetersToScreen(const double x) {
+  unsigned DistanceMetersToScreen(const fixed x) {
     return iround(_scale_meters_to_screen*x);
   }
 
   bool LonLat2ScreenIfVisible(const GEOPOINT &loc,
 			      POINT *sc) const;
 
+  bool LonLatVisible(const GEOPOINT &loc) const;
+
  protected:
   DisplayMode_t DisplayMode;
 
   // helpers
   bool PointVisible(const POINT &P) const;
-  bool LonLatVisible(const GEOPOINT &loc) const;
   bool PointInRect(const double &x, const double &y,
 		   const rectObj &bounds) const;
 
@@ -136,8 +134,8 @@ class MapWindowProjection {
   GEOPOINT PanLocation;
   POINT  Orig_Screen, Orig_Aircraft;
 
-  double DisplayAngle;
-  double DisplayAircraftAngle;
+  fixed DisplayAngle;
+  fixed DisplayAircraftAngle;
 
   // scale/display stuff
   void   CalculateOrigin(const RECT rc,
@@ -149,24 +147,24 @@ class MapWindowProjection {
   void      InitialiseScaleList(const SETTINGS_MAP &settings);
 
   // 4 = x*30/1000
-  double DistancePixelsToMeters(const double x) const {
+  fixed DistancePixelsToMeters(const int x) const {
     return x*MapScale/(DISTANCEMODIFY*GetMapResolutionFactor());
   }
   //
-  double RequestDistancePixelsToMeters(const double x) const {
+  fixed RequestDistancePixelsToMeters(const int x) const {
     return x*_RequestedMapScale/(DISTANCEMODIFY*GetMapResolutionFactor());
   }
-  double DistanceScreenToUser(const unsigned x) const {
+  fixed DistanceScreenToUser(const int x) const {
     return x*MapScale/GetMapResolutionFactor();
   }
-  double RequestMapScale(double x, const SETTINGS_MAP &settings_map) {
+  fixed RequestMapScale(fixed x, const SETTINGS_MAP &settings_map) {
     _RequestedMapScale = LimitMapScale(x, settings_map);
     return _RequestedMapScale;
   }
-  double GetRequestedMapScale() const {
+  fixed GetRequestedMapScale() const {
     return _RequestedMapScale;
   }
-  double GetLonLatToScreenScale() const {
+  fixed GetLonLatToScreenScale() const {
     return DrawScale;
   }
   bool IsOriginCentered() const {
@@ -174,21 +172,21 @@ class MapWindowProjection {
   }
 
   bool SmartBounds(const bool force);
-  double    StepMapScale(int Step) const;
+  fixed StepMapScale(int Step) const;
 public:
   bool HaveScaleList() const {
     return ScaleListCount>0;
   }
-  double    StepMapScale(int Step);
+  fixed StepMapScale(int Step);
 
  private:
 
-  double DrawScale;
-  double InvDrawScale;
+  fixed DrawScale;
+  fixed InvDrawScale;
 
-  double _scale_meters_to_screen; // speedup
-  double MapScale;
-  double _RequestedMapScale;
+  fixed _scale_meters_to_screen; // speedup
+  fixed MapScale;
+  fixed _RequestedMapScale;
 
   void   ModifyMapScale(const SETTINGS_MAP &settings_map);
 
@@ -203,16 +201,16 @@ public:
 				    const SETTINGS_MAP &settings);
 
   bool   _origin_centered;
-  double    LimitMapScale(double value,
+  fixed    LimitMapScale(fixed value,
 			  const SETTINGS_MAP &settings);
-  double    FindMapScale(double Value);
+  fixed    FindMapScale(const fixed Value);
   int       ScaleCurrent;
-  double    ScaleList[SCALELISTSIZE];
+  fixed    ScaleList[SCALELISTSIZE];
   int       ScaleListCount;
   int GetMapResolutionFactor() const;
 
   rectObj smart_bounds_active;
-  double smart_range_active;
+  fixed smart_range_active;
 };
 
 #endif

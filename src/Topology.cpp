@@ -240,7 +240,7 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
     iskip = 4;
   }
 
-  rectObj screenRect = map_projection.CalculateScreenBounds(0.0);
+  rectObj screenRect = map_projection.CalculateScreenBounds(fixed_zero);
 
   static POINT pt[MAXCLIPPOLYGON];
   const bool render_labels = (m_window.SettingsMap().DeclutterLabels<2);

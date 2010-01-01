@@ -57,8 +57,8 @@ typedef struct _THERMAL_SOURCE_VIEW
 } THERMAL_SOURCE_VIEW;
 
 struct ZoomClimb_t {
-  double CruiseMapScale;
-  double ClimbMapScale;
+  fixed CruiseMapScale;
+  fixed ClimbMapScale;
   bool last_isclimb;
   bool last_targetpan;
 };

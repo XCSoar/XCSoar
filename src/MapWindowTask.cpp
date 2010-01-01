@@ -203,9 +203,7 @@ public:
     buffer_render_start();
 
     if (m_layer == 1) {
-      POINT loc;
-      m_map.LonLat2Screen(tp.get_location_remaining(), loc);
-      draw_task_line(m_map.GetOrigAircraft(), loc);
+      draw_task_line(m_map.Basic().Location, tp.get_location_remaining());
     }
     if (m_layer == 3) {
       draw_bearing(tp);
@@ -222,12 +220,10 @@ public:
     }
 
     if (m_layer == 1) {
-      POINT loc;
-      m_map.LonLat2Screen(tp.get_location_remaining(), loc);    
       if (m_index>0) {
-        draw_task_line(m_last_point, loc);
+        draw_task_line(m_last_point, tp.get_location_remaining());
       }
-      m_last_point = loc;
+      m_last_point = tp.get_location_remaining();
     }
 
     if (m_layer == 2) {
@@ -311,9 +307,9 @@ private:
     if (!do_draw_bearing(tp)) 
       return;
 
-    m_map.DrawGreatCircle(m_buffer, 
-                          m_map.Basic().Location, 
-                          tp.get_location_remaining());
+    m_buffer.select(MapGfx.hpBearing);
+    draw_great_circle(m_buffer, m_map.Basic().Location, 
+                      tp.get_location_remaining());
   }
 
   void draw_target(const TaskPoint &tp) {
@@ -325,20 +321,28 @@ private:
                                         10, 10);
   }
 
-  void draw_task_line(const POINT& start, const POINT& end) {
+  void draw_task_line(const GEOPOINT& start, const GEOPOINT& end) {
+
     if (leg_active()) {
       m_buffer.select(pen_leg_active);
     } else {
       m_buffer.select(pen_leg_inactive);
     }
-    m_buffer.line(start, end);
+    draw_great_circle(m_buffer, start, end);
 
     // draw small arrow along task direction
     POINT p_p;
     POINT Arrow[3] = { {6,6}, {-6,6}, {0,0} };
 
-    const double ang = AngleLimit360(atan2(end.x-start.x,start.y-end.y)*180/3.141592);
-    ScreenClosestPoint(start, end, m_map.GetOrigScreen(), &p_p, IBLSCALE(25));
+    POINT p_start;
+    m_map.LonLat2Screen(start, p_start);
+
+    POINT p_end;
+    m_map.LonLat2Screen(end, p_end);
+
+    const double ang = AngleLimit360(atan2(p_end.x-p_start.x,
+                                           p_start.y-p_end.y)*180/3.141592);
+    ScreenClosestPoint(p_start, p_end, m_map.GetOrigScreen(), &p_p, IBLSCALE(25));
     PolygonRotateShift(Arrow, 2, p_p.x, p_p.y, ang);
     Arrow[2] = Arrow[1];
     Arrow[1] = p_p;
@@ -411,7 +415,7 @@ private:
   const Pen pen_leg_inactive;
   const Pen pen_leg_arrow;
   const Pen pen_isoline;
-  POINT m_last_point;
+  GEOPOINT m_last_point;
   unsigned m_index;
   DrawObservationZone ozv;
   unsigned m_active_index;

@@ -50,11 +50,11 @@ Copyright_License {
  * @param yin Y value
  * @param angle Rotation angle
  */
-void rotate(double &xin, double &yin, const double &angle)
+void rotate(double &xin, double &yin, const fixed &angle)
 {
   double x= xin;
   double y= yin;
-  static double lastangle = 0;
+  static fixed lastangle(0);
   static double cost=1,sint=0;
 
   if(angle != lastangle)
@@ -67,47 +67,6 @@ void rotate(double &xin, double &yin, const double &angle)
   yin = y*cost + x*sint;
 }
 
-/**
- * Rotates the point (xin, yin) by angle degrees around (0, 0)
- *
- * float based
- * @param xin X value
- * @param yin Y value
- * @param angle Rotation angle
- */
-void frotate(float &xin, float &yin, const float &angle)
-{
-  float x= xin;
-  float y= yin;
-  static float lastangle = 0;
-  static float cost=1,sint=0;
-
-  if(angle != lastangle)
-    {
-      lastangle = angle;
-      cost = (float)fastcosine(angle);
-      sint = (float)fastsine(angle);
-    }
-  xin = x*cost - y*sint;
-  yin = y*cost + x*sint;
-}
-
-void irotatescale(int &xin, int &yin, const double &angle,
-                  const double &scale, double &x, double &y)
-{
-  static double lastangle = 0;
-  static double lastscale = 0;
-  static int cost=1024,sint=0;
-  if((angle != lastangle)||(scale != lastscale))
-    {
-      lastscale = scale/1024;
-      lastangle = angle;
-      cost = ifastcosine(angle);
-      sint = ifastsine(angle);
-    }
-  x = (xin*cost - yin*sint + 512)*lastscale;
-  y = (yin*cost + xin*sint + 512)*lastscale;
-}
 
 /**
  * Rotates the point (xin, yin) by angle degrees around (0, 0)
@@ -117,11 +76,11 @@ void irotatescale(int &xin, int &yin, const double &angle,
  * @param yin Y value
  * @param angle Rotation angle
  */
-void irotate(int &xin, int &yin, const double &angle)
+void irotate(int &xin, int &yin, const fixed &angle)
 {
   int x= xin;
   int y= yin;
-  static double lastangle = 0;
+  static fixed lastangle(0);
   static int cost=1024,sint=0;
 
   if(angle != lastangle)
@@ -134,46 +93,6 @@ void irotate(int &xin, int &yin, const double &angle)
   yin = (y*cost + x*sint + 512)/1024;
 }
 
-
-void rotatescale(double &xin, double &yin,
-                 const double &angle, const double &scale)
-{
-  double x= xin;
-  double y= yin;
-  static double lastangle = 0;
-  static double lastscale = 0;
-  static double cost=1,sint=0;
-
-  if((angle != lastangle)||(scale != lastscale))
-    {
-      lastangle = angle;
-      lastscale = scale;
-      cost = (double)fastcosine(angle)*scale;
-      sint = (double)fastsine(angle)*scale;
-    }
-  xin = x*cost - y*sint;
-  yin = y*cost + x*sint;
-}
-
-
-void frotatescale(float &xin, float &yin, const float &angle, const float &scale)
-{
-  float x= xin;
-  float y= yin;
-  static float lastangle = 0;
-  static float lastscale = 0;
-  static float cost=1,sint=0;
-
-  if((angle != lastangle)||(scale != lastscale))
-    {
-      lastangle = angle;
-      lastscale = scale;
-      cost = (float)fastcosine(angle)*scale;
-      sint = (float)fastsine(angle)*scale;
-    }
-  xin = x*cost - y*sint;
-  yin = y*cost + x*sint;
-}
 
 /**
  * Detects if angle (x) is between two other angles (Angle0 and Angle1)

@@ -40,15 +40,10 @@ Copyright_License {
 #define XCSOAR_MATH_FASTROTATION_HPP
 
 #include "Compiler.h"
+#include "Math/fixed.hpp"
 
-void irotate(int &xin, int &yin, const double &angle);
-void irotatescale(int &xin, int &yin, const double &angle, const double &scale,
-                  double &x, double &y);
-void rotate(double &xin, double &yin, const double &angle);
-void frotate(float &xin, float &yin, const float &angle);
-void rotatescale(double &xin, double &yin,
-                 const double &angle, const double &scale);
-void frotatescale(float &xin, float &yin,
-                  const float &angle, const float &scale);
+void irotate(int &xin, int &yin, const fixed &angle);
+
+void rotate(double &xin, double &yin, const fixed &angle);
 
 #endif

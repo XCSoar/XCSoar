@@ -323,19 +323,19 @@ void GaugeVario::MakePolygon(const int i) {
   }
 
   dx = -xoffset+nlength0; dy = nwidth;
-  rotate(dx, dy, i);
+  rotate(dx, dy, fixed(i));
   bit[0].x = lround(dx+xoffset); bit[0].y = lround(dy*GlobalEllipse+yoffset+1);
 
   dx = -xoffset+nlength0; dy = -nwidth;
-  rotate(dx, dy, i);
+  rotate(dx, dy, fixed(i));
   bit[2].x = lround(dx+xoffset); bit[2].y = lround(dy*GlobalEllipse+yoffset+1);
 
   dx = -xoffset+nlength1; dy = 0;
-  rotate(dx, dy, i);
+  rotate(dx, dy, fixed(i));
   bit[1].x = lround(dx+xoffset); bit[1].y = lround(dy*GlobalEllipse+yoffset+1);
 
   dx = -xoffset+nline; dy = 0;
-  rotate(dx, dy, i);
+  rotate(dx, dy, fixed(i));
   bline->x = lround(dx+xoffset); bline->y = lround(dy*GlobalEllipse+yoffset+1);
 }
 

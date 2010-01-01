@@ -216,6 +216,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Form/Util.cpp \
 	$(SRC)/LogFile.cpp \
 	\
+	$(SRC)/MapDrawHelper.cpp \
 	$(SRC)/MapWindow.cpp \
 	$(SRC)/MapWindowAirspace.cpp \
 	$(SRC)/MapWindowEvents.cpp \

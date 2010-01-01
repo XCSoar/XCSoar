@@ -116,7 +116,7 @@ void ReadProfile(const TCHAR *szFile)
 }
 
 
-int propGetScaleList(double *List, size_t Size){
+int propGetScaleList(fixed *List, size_t Size){
   static const TCHAR Name[] = TEXT("ScaleList");
   TCHAR Buffer[128];
   TCHAR *pWClast, *pToken;

@@ -589,7 +589,7 @@ long Chart::screenS(double s) {
 
 
 void Chart::DrawArrow(const double x, const double y,
-		      const double mag, const double angle,
+		      const double mag, const fixed angle,
 		      const int Style) {
   POINT wv[2];
   double dX, dY;

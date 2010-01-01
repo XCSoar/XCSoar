@@ -51,13 +51,13 @@ Copyright_License {
 
 MapWindowProjection::MapWindowProjection():
   _origin_centered(false),
-  DisplayAngle ( 0.0),
-  _RequestedMapScale(5),
-  MapScale(5),
-  _scale_meters_to_screen ( 0.0),
-  DisplayAircraftAngle ( 0.0),
-  ScaleListCount ( 0),
-  smart_range_active(1.0),
+  DisplayAngle (fixed_zero),
+  _RequestedMapScale(fixed(5)),
+  MapScale(fixed(5)),
+  _scale_meters_to_screen (fixed_zero),
+  DisplayAircraftAngle (fixed_zero),
+  ScaleListCount (0),
+  smart_range_active(fixed_one),
   DisplayMode(dmCruise)
 {
   PanLocation.Latitude = 0.0;
@@ -139,7 +139,7 @@ MapWindowProjection::PointVisible(const POINT &P) const
 
 
 rectObj
-MapWindowProjection::CalculateScreenBounds(double scale) const
+MapWindowProjection::CalculateScreenBounds(const fixed scale) const
 {
   // compute lat lon extents of visible screen
   rectObj sb;
@@ -251,8 +251,9 @@ void
 MapWindowProjection::LonLat2Screen(const GEOPOINT &g,
                                    POINT &sc) const
 {
-  int Y = Real2Int((PanLocation.Latitude-g.Latitude)*DrawScale);
-  int X = Real2Int((PanLocation.Longitude-g.Longitude)*fastcosine(g.Latitude)*DrawScale);
+  const GEOPOINT d = PanLocation-g;
+  int Y = (d.Latitude*DrawScale).as_int();
+  int X = (d.Longitude*fastcosine(g.Latitude)*DrawScale).as_int();
 
   irotate(X, Y, DisplayAngle);
 
@@ -273,11 +274,11 @@ void
 MapWindowProjection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
                                    unsigned n, unsigned skip) const
 {
-  static double lastangle = -1;
+  static fixed lastangle(-1);
   static int cost=1024, sint=0;
-  const double mDisplayAngle = DisplayAngle;
+  const fixed mDisplayAngle(DisplayAngle);
 
-  if(mDisplayAngle != lastangle) {
+  if (mDisplayAngle != lastangle) {
     lastangle = mDisplayAngle;
     int deg = DEG_TO_INT(AngleLimit360(mDisplayAngle));
     cost = ICOSTABLE[deg];
@@ -285,15 +286,14 @@ MapWindowProjection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
   }
   const int xxs = Orig_Screen.x*1024-512;
   const int yys = Orig_Screen.y*1024+512;
-  const double mDrawScale = DrawScale;
-  const double mPanLongitude = PanLocation.Longitude;
-  const double mPanLatitude = PanLocation.Latitude;
+  const fixed mDrawScale = DrawScale;
+  const GEOPOINT mPan = PanLocation;
   const GEOPOINT *p = ptin;
   const GEOPOINT *ptend = ptin + n;
 
   while (p<ptend) {
-    int Y = Real2Int((mPanLatitude - p->Latitude) * mDrawScale);
-    int X = Real2Int((mPanLongitude - p->Longitude) *
+    int Y = Real2Int((mPan.Latitude - p->Latitude) * mDrawScale);
+    int X = Real2Int((mPan.Longitude - p->Longitude) *
                      fastcosine(p->Latitude) * mDrawScale);
     ptout->x = (xxs-X*cost + Y*sint)/1024;
     ptout->y = (Y*cost + X*sint + yys)/1024;
@@ -317,9 +317,9 @@ MapWindowProjection::LonLat2Screen(const pointObj* const ptin,
                                    const int n,
                                    const int skip) const
 {
-  static double lastangle = -1;
+  static fixed lastangle(-1);
   static int cost=1024, sint=0;
-  const double mDisplayAngle = DisplayAngle;
+  const fixed mDisplayAngle(DisplayAngle);
 
   if(mDisplayAngle != lastangle) {
     lastangle = mDisplayAngle;
@@ -329,9 +329,9 @@ MapWindowProjection::LonLat2Screen(const pointObj* const ptin,
   }
   const int xxs = Orig_Screen.x*1024-512;
   const int yys = Orig_Screen.y*1024+512;
-  const double mDrawScale = DrawScale;
-  const double mPanLongitude = PanLocation.Longitude;
-  const double mPanLatitude = PanLocation.Latitude;
+  const fixed mDrawScale = DrawScale;
+  const fixed mPanLongitude = PanLocation.Longitude;
+  const fixed mPanLatitude = PanLocation.Latitude;
   pointObj const * p = ptin;
   const pointObj* ptend = ptin+n;
 
@@ -352,7 +352,7 @@ MapWindowProjection::CalculateOrientationNormal
  const SETTINGS_MAP &settings)
 
 {
-  double trackbearing = DrawInfo.TrackBearing;
+  fixed trackbearing = DrawInfo.TrackBearing;
 
   if( (settings.DisplayOrientation == NORTHUP)
       ||
@@ -486,13 +486,13 @@ MapWindowProjection::CalculateOrigin
   LonLat2Screen(DrawInfo.Location,
                 Orig_Aircraft);
 
-  screenbounds_latlon = CalculateScreenBounds(0.0);
+  screenbounds_latlon = CalculateScreenBounds(fixed_zero);
 }
 
 
 
 
-double
+fixed
 MapWindowProjection::GetScreenDistanceMeters() const
 {
   return DistancePixelsToMeters(max(MapRectBig.right-MapRectBig.left,
@@ -505,10 +505,10 @@ MapWindowProjection::GetMapResolutionFactor(void) const
   return IBLSCALE(30);
 }
 
-double MapWindowProjection::LimitMapScale(double value,
-					  const SETTINGS_MAP& settings_map) {
+fixed MapWindowProjection::LimitMapScale(fixed value,
+                                         const SETTINGS_MAP& settings_map) {
 
-  double minreasonable;
+  fixed minreasonable;
 
   minreasonable = 0.05;
 
@@ -524,7 +524,7 @@ double MapWindowProjection::LimitMapScale(double value,
 #endif
   }
 
-  value = max(minreasonable, min(160.0, value));
+  value = max(minreasonable, min(fixed(160.0), value));
   if (ScaleListCount > 0)
     value = FindMapScale(value);
 
@@ -532,7 +532,7 @@ double MapWindowProjection::LimitMapScale(double value,
 }
 
 
-double MapWindowProjection::StepMapScale(int Step){
+fixed MapWindowProjection::StepMapScale(int Step){
   if (abs(Step)>=4) {
     ScaleCurrent += Step/4;
   } else {
@@ -543,16 +543,16 @@ double MapWindowProjection::StepMapScale(int Step){
          /(IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right)));
 }
 
-double MapWindowProjection::FindMapScale(double Value){
+fixed MapWindowProjection::FindMapScale(const fixed Value){
 
   int    i;
-  double BestFit = 99999;
+  fixed BestFit(99999);
   int    BestFitIdx=-1;
-  double DesiredScale =
+  fixed DesiredScale =
     (Value*IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right))/GetMapResolutionFactor();
 
   for (i=0; i<ScaleListCount; i++){
-    double err = fabs(DesiredScale - ScaleList[i])/DesiredScale;
+    fixed err = fabs(DesiredScale - ScaleList[i])/DesiredScale;
     if (err < BestFit){
       BestFit = err;
       BestFitIdx = i;
@@ -589,13 +589,13 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
                                     const SETTINGS_MAP &settings_map)
 {
   static int AutoMapScaleWaypointIndex = -1;
-  static double StartingAutoMapScale=0.0;
-  double AutoZoomFactor;
+  static fixed StartingAutoMapScale(fixed_zero);
+  fixed AutoZoomFactor;
   static DisplayMode_t DisplayModeLast = DisplayMode;
 
   // if there is user intervention in the scale
   if (settings_map.MapScale>0) {
-    double ext_mapscale = LimitMapScale(settings_map.MapScale, settings_map);
+    fixed ext_mapscale = LimitMapScale(fixed(settings_map.MapScale), settings_map);
     if ((fabs(_RequestedMapScale-ext_mapscale)>0.05) &&
 	(ext_mapscale>0.0) && (DisplayMode==DisplayModeLast)) {
       _RequestedMapScale = ext_mapscale;
@@ -606,7 +606,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   }
   DisplayModeLast = DisplayMode;
 
-  double wpd;
+  fixed wpd;
   if (settings_map.TargetPan) {
     wpd = settings_map.TargetZoomDistance;
   } else {
@@ -691,83 +691,6 @@ void MapWindowProjection::ExchangeBlackboard(const DERIVED_INFO &derived_info,
 }
 
 
-#include "Screen/Graphics.hpp"
-
-void MapWindowProjection::DrawGreatCircle(Canvas &canvas,
-					  const GEOPOINT &loc_start,
-                                          const GEOPOINT &loc_end) {
-
-#ifdef OLD_GREAT_CIRCLE
-  // TODO accuracy: this is actually wrong, it should recalculate the
-  // bearing each step
-  double distance=0;
-  double distanceTotal=0;
-  double Bearing;
-
-  DistanceBearing(loc_start,
-                  loc_end,
-                  &distanceTotal,
-                  &Bearing);
-
-  distance = distanceTotal;
-
-  if (distanceTotal==0.0) {
-    return;
-  }
-
-  double d_distance = max(5000.0,distanceTotal/10);
-
-  canvas.select(MapGfx.hpBearing);
-
-  POINT StartP;
-  POINT EndP;
-  LonLat2Screen(loc_start,
-		StartP);
-  LonLat2Screen(loc_end,
-		EndP);
-
-  if (d_distance>distanceTotal) {
-    canvas.line(StartP, EndP);
-  } else {
-
-    for (int i=0; i<= 10; i++) {
-
-      GEOPOINT t_loc;
-
-      FindLatitudeLongitude(loc_start,
-                            Bearing,
-                            min(distance,d_distance),
-                            &t_loc);
-
-      DistanceBearing(t_loc, loc_end,
-                      &distance,
-                      &Bearing);
-
-      LonLat2Screen(t_loc,
-                    EndP);
-
-      canvas.line(StartP, EndP);
-
-      StartP.x = EndP.x;
-      StartP.y = EndP.y;
-
-      startLat = tlat1;
-      startLon = tlon1;
-
-    }
-  }
-#else
-  // Simple and this should work for PNA with display bug
-
-  canvas.select(MapGfx.hpBearing);
-  POINT pt[2];
-  LonLat2Screen(loc_start, pt[0]);
-  LonLat2Screen(loc_end, pt[1]);
-  canvas.polyline(pt, 2);
-
-#endif
-}
-
 #define MINRANGE 0.2
 
 bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
@@ -781,7 +704,7 @@ bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
 }
 
 bool MapWindowProjection::SmartBounds(const bool force) {
-  rectObj bounds_screen = CalculateScreenBounds(1.0);
+  const rectObj bounds_screen = CalculateScreenBounds(fixed_one);
   bool recompute = false;
 
   // only recalculate which shapes when bounds change significantly
@@ -793,11 +716,11 @@ bool MapWindowProjection::SmartBounds(const bool force) {
   }
 
   // also trigger if the scale has changed heaps
-  double range_real = max((bounds_screen.maxx-bounds_screen.minx),
-			  (bounds_screen.maxy-bounds_screen.miny));
-  double range = max(MINRANGE,range_real);
+  const fixed range_real = fixed(max((bounds_screen.maxx-bounds_screen.minx),
+                                     (bounds_screen.maxy-bounds_screen.miny)));
+  const fixed range = max(fixed(MINRANGE),range_real);
 
-  double scale = range/smart_range_active;
+  fixed scale = range/smart_range_active;
   if (max(scale, 1.0/scale)>4) {
     recompute = true;
   }

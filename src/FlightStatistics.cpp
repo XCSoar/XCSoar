@@ -510,7 +510,7 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 
   // draw direction vectors
 
-  double angle;
+  fixed angle;
   double hfact;
   for (i=0; i<numsteps ; i++) {
     hfact = (i+1)/(double)(numsteps+1);
