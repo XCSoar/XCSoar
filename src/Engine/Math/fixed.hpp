@@ -24,7 +24,7 @@ typedef double fixed;
 #define fixed_deg_to_rad					0.0174532925199432958
 #define fixed_rad_to_deg					57.2957795131
 #define fixed_pi 3.1415926
-#define fixed_two_pi 2.0*3.1415926
+#define fixed_two_pi 6.2831852
 #define fixed_360 360
 #define fixed_180 180
 
