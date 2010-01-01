@@ -531,14 +531,14 @@ static void UpdateValuesTask(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpETETime"));
   if (wp) {
-    Units::TimeToText(Temp, XCSoarInterface::Calculated().common_stats.task_time_elapsed
-                      +XCSoarInterface::Calculated().common_stats.task_time_remaining);
+    Units::TimeToText(Temp, XCSoarInterface::Calculated().task_stats.total.TimeElapsed
+                      +XCSoarInterface::Calculated().task_stats.total.TimeRemaining);
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRemainingTime"));
   if (wp) {
-    Units::TimeToText(Temp, XCSoarInterface::Calculated().common_stats.task_time_remaining);
+    Units::TimeToText(Temp, XCSoarInterface::Calculated().task_stats.total.TimeRemaining);
     wp->SetText(Temp);
   }
 
