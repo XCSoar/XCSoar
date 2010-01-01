@@ -201,7 +201,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   if (i == wAirspaceList->GetCursorIndex())
     CursorAirspace = &as;
 
-  tstring sName = as.get_name_text(true);
+  tstring sName = as.get_name_text(false);
   tstring sTop = as.get_top_text(true);
   tstring sBase = as.get_base_text(true);
   tstring sType = as.get_type_text(true);

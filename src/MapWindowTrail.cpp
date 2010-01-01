@@ -79,12 +79,18 @@ MapWindow::DrawTrail(Canvas &canvas)
     break;
   }; 
 
+  PeriodClock clock;
+  clock.update();
+
   terrain->Lock(); 
   TracePointVector trace = task->find_trace_points(GetPanLocation(),
                                                    fixed(GetScreenDistanceMeters()), 
                                                    min_time, 
-                                                   fixed(DistancePixelsToMeters(3)));
+                                                   -fixed(DistancePixelsToMeters(3)));
   terrain->Unlock();
+
+  printf("A: %d\n", clock.elapsed());
+  clock.update();
 
   if (trace.empty()) return; // nothing to draw
 
@@ -135,6 +141,8 @@ MapWindow::DrawTrail(Canvas &canvas)
     last_time = it->time;
   }
   canvas.line_to(Orig_Aircraft.x, Orig_Aircraft.y);
+
+  printf("B: %d\n", clock.elapsed());
 
 }
 

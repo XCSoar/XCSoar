@@ -538,9 +538,5 @@ TracePointVector
 TaskManager::find_trace_points(const GEOPOINT &loc, const fixed range,
                                const unsigned mintime, const fixed resolution) const
 {
-  TracePointVector vec = trace.find_within_range(loc, range, mintime);
-  if (positive(resolution)) {
-    trace.thin_trace(vec, loc, resolution);
-  }
-  return vec;
+  return trace.find_within_range(loc, range, mintime, resolution);
 }

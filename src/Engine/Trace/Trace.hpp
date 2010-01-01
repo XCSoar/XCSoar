@@ -41,8 +41,11 @@
 #include <kdtree++/kdtree.hpp>
 #include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
+#include <set>
 
 class AIRCRAFT_STATE;
+
+typedef std::set<TracePoint, TracePoint::time_sort> TracePointSet;
 
 /**
  * Container for traces using kd-tree representation internally for fast 
@@ -126,15 +129,13 @@ public:
  * @return Vector of trace points within square range
  */
   TracePointVector
-  find_within_range(const GEOPOINT &loc, const fixed range, const unsigned mintime=0) const;
+  find_within_range(const GEOPOINT &loc, const fixed range, const unsigned mintime=0,
+                    const fixed resolution = -fixed_one) const;
 
-  void thin_trace(TracePointVector& vec, const GEOPOINT &loc, const fixed range) const;
-
-  TracePointVector get_trace_points(unsigned max_points) const;
+  TracePointVector get_trace_points(const unsigned max_points) const;
 
 private:
-
-  void thin_trace(TracePointVector& vec, const unsigned range_sq) const;
+  void thin_trace(TracePointSet& vec, const unsigned range_sq) const;
 
   TraceTree trace_tree;
   TaskProjection task_projection;

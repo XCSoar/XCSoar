@@ -62,6 +62,12 @@ public:
       return 0; 
     };
   };
+
+  struct time_sort {
+    bool operator()(const TracePoint& s1, const TracePoint& s2) {
+      return s1.time < s2.time;
+    }
+  };
 };
 
 typedef std::vector<TracePoint> TracePointVector;

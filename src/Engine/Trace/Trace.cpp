@@ -1,7 +1,6 @@
 #include "Trace.hpp"
 #include "Navigation/Aircraft.hpp"
 
-
 Trace::Trace():m_optimise_time(0)
 {
 
@@ -66,40 +65,29 @@ Trace::end() const
   return trace_tree.end();
 }
 
-struct time_out_of_range {
-  time_out_of_range(const unsigned the_time = 0):m_time(the_time) {}
-
-  bool operator() (const TracePoint& x) const { return (x.time < m_time); }
-
-  const unsigned m_time;
-};
-
-
-static bool
-time_sort(const TracePoint& elem1, 
-          const TracePoint& elem2 ) 
-{
-  return (elem1.time < elem2.time);
-}
-
 
 TracePointVector
 Trace::find_within_range(const GEOPOINT &loc, const fixed range,
-  const unsigned mintime) const
+                         const unsigned mintime, const fixed resolution) const
 {
-  AIRCRAFT_STATE state; state.Location = loc;
+  AIRCRAFT_STATE state; state.Location = loc; state.Time = mintime;
   TracePoint bb_target(state, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
+  const unsigned rrange = task_projection.project_range(loc, resolution);
 
-  TracePointVector vectors;
+//  TracePointVector vectors;
+  TracePointSet tset;
   trace_tree.find_within_range(bb_target, mrange, 
-                               std::back_inserter(vectors));
+                               std::inserter(tset, tset.begin()));
 
-  time_out_of_range time_pred(mintime);
-  vectors.erase(std::remove_if(vectors.begin(), vectors.end(), time_pred), vectors.end());
-
-  std::sort(vectors.begin(), vectors.end(), time_sort);
-
+  if (mintime>0) {
+    TracePointSet::iterator tit = tset.lower_bound(bb_target);
+    tset.erase(tset.begin(), tit);
+  }
+  if (positive(resolution)) {
+    thin_trace(tset, rrange*rrange);
+  }
+  TracePointVector vectors(tset.begin(), tset.end());
   return vectors;
 }
 
@@ -120,61 +108,55 @@ static void adjust_links(const TracePoint& previous, const TracePoint& obj, Trac
 {
   if ((obj.last_time == previous.time) && (next.last_time == obj.time)) {
     next.last_time = previous.time;
-    next.Vario = (next.NavAltitude-previous.NavAltitude)/(next.time-previous.time);
-    /// \todo work out scheme to merge NettoVario etc also
   }
 }
 
 
 void 
-Trace::thin_trace(TracePointVector& vec, const unsigned mrange_sq) const
+Trace::thin_trace(TracePointSet& tset, const unsigned mrange_sq) const
 {
-  if (vec.size()<2) return;
+/*
+  if (tset.size()<2) return;
 
-  for (TracePointVector::iterator it = vec.begin()+1; it+1 != vec.end(); ) {
+  TracePointSet::iterator it = tset.begin(); it++;
 
-    TracePointVector::iterator it_previous = it-1;
-    TracePointVector::iterator it_next = it+1;
+  it->last_time--;
+
+  for (; it+1 != tset.end(); ) {
+
+    TracePointSet::iterator it_previous = it;
+    TracePointSet::iterator it_next = it;
 
     if (it->approx_sq_dist(*it_previous)<mrange_sq) {
       adjust_links(*it_previous, *it, *it_next);
-      vec.erase(it);
+      tset.erase(it);
     } else {
       ++it;
     }
   }
-}
-
-
-void 
-Trace::thin_trace(TracePointVector& vec, const GEOPOINT &loc, const fixed range) const
-{
-  const unsigned mrange = task_projection.project_range(loc, range);
-
-  thin_trace(vec, mrange*mrange);
+*/
 }
 
 
 TracePointVector 
-Trace::get_trace_points(unsigned max_points) const
+Trace::get_trace_points(const unsigned max_points) const
 {
-  TracePointVector vectors;
+  TracePointSet tset;
 
   for (TraceTree::const_iterator it = begin();
        it != end(); ++it) {
-    vectors.push_back(*it);
+    tset.insert(*it);
   }
-  if (vectors.empty()) return vectors;
 
-  std::sort(vectors.begin(), vectors.end(), time_sort);
+  if (!tset.empty()) {
 
-  unsigned mrange = 3;
+    unsigned mrange = 3;
+    do {
+      thin_trace(tset, mrange);
+      mrange = (mrange*4)/3;
+    } while (tset.size()>max_points);
+  }
 
-  do {
-    thin_trace(vectors, mrange);
-    mrange = (mrange*4)/3;
-  } while (vectors.size()>max_points);
-
-//  printf("trace points size %d mrange %d\n", vectors.size(), mrange);
+  TracePointVector vectors(tset.begin(), tset.end());
   return vectors;
 }
