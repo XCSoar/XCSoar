@@ -584,13 +584,8 @@ OnlineContest::print() const
 
 #include "Trace/Trace.hpp"
 
-void
-Trace::print(const GEOPOINT &loc) const
+void print_tpv(const TracePointVector& vec, std::ofstream& fs) 
 {
-  std::ofstream fs("results/res-trace.txt");
-
-  TracePointVector vec = find_within_range(loc, fixed(10000),
-                                                  0);
   for (TracePointVector::const_iterator it = vec.begin(); it != vec.end();
        ++it) {
     fs << it->time 
@@ -600,7 +595,21 @@ Trace::print(const GEOPOINT &loc) const
        << " " << it->last_time
        << "\n";
   }
+}
 
+void
+Trace::print(const GEOPOINT &loc) const
+{
+  std::ofstream fs("results/res-trace.txt");
+
+  TracePointVector vec = find_within_range(loc, fixed(10000),
+                                                  0);
+  print_tpv(vec, fs);
+
+  std::ofstream ft("results/res-trace-thin.txt");
+  thin_trace(vec, loc, fixed(1000));
+
+  print_tpv(vec, ft);
 }
 
 #endif

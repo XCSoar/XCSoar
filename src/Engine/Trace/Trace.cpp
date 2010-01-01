@@ -112,3 +112,31 @@ Trace::optimise_if_old()
 }
 
 
+static void adjust_links(const TracePoint& previous, const TracePoint& obj, TracePoint& next)
+{
+  if ((obj.last_time == previous.time) && (next.last_time == obj.time)) {
+    next.last_time = previous.time;
+  }
+}
+
+
+void 
+Trace::thin_trace(TracePointVector& vec, const GEOPOINT &loc, const fixed range) const
+{
+  const unsigned mrange = task_projection.project_range(loc, range);
+
+  if (vec.size()<2) return;
+
+  for (TracePointVector::iterator it = vec.begin()+1; it+1 != vec.end(); ) {
+
+    TracePointVector::iterator it_previous = it-1;
+    TracePointVector::iterator it_next = it+1;
+
+    if (it->approx_dist(*it_previous)<mrange) {
+      adjust_links(*it_previous, *it, *it_next);
+      vec.erase(it);
+    } else {
+      ++it;
+    }
+  }
+}

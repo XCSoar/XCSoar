@@ -115,8 +115,6 @@ public:
 
   bool optimise_if_old();
 
-private:
-
 /** 
  * Find traces within approximate range (square range box)
  * to search location.  Possible use by screen display functions.
@@ -127,8 +125,12 @@ private:
  * 
  * @return Vector of trace points within square range
  */
-  std::vector< TracePoint >
+  TracePointVector
   find_within_range(const GEOPOINT &loc, const fixed range, const unsigned mintime=0) const;
+
+  void thin_trace(TracePointVector& vec, const GEOPOINT &loc, const fixed range) const;
+
+private:
 
   TraceTree trace_tree;
   TaskProjection task_projection;

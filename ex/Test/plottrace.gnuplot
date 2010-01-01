@@ -13,6 +13,7 @@ set style line 8 lt 2 lc rgb "red" lw 2
 
 plot \
      'results/res-sample.txt' using 2:3 with lines ls 1 title "sample", \
-     'results/res-trace.txt' using 2:3 with lines ls 8 title "trace"
+     'results/res-trace.txt' using 2:3 with lines ls 8 title "trace", \
+     'results/res-trace-thin.txt' using 2:3 with linespoints ls 3 title "thin trace"
 pause -1
 

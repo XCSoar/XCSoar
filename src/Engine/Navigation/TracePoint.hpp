@@ -33,6 +33,11 @@ public:
     }
   }
 
+  unsigned approx_dist(const TracePoint& tp) const {
+    return std::max(abs(get_flatLocation().Longitude-tp.get_flatLocation().Longitude),
+                    abs(get_flatLocation().Latitude-tp.get_flatLocation().Latitude));
+  }
+
   /**
    * Function object used to provide access to coordinate values by kd-tree
    */
