@@ -34,12 +34,13 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef DIFF_FILTER_HPP
 #define DIFF_FILTER_HPP
 
 /**
  * Differentiating low-pass IIR filter
- * adapted from http://www.dsprelated.com/showarticle/35.php
+ * @see http://www.dsprelated.com/showarticle/35.php
  */
 class DiffFilter 
 {
@@ -67,7 +68,6 @@ public:
  * 
  * @param x0 Steady state value of filter input
  * @param y0 Desired value of differentiated output
- * 
  */
   void reset(const double x0, const double y0);
 
