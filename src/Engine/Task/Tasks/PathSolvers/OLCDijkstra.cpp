@@ -83,18 +83,18 @@ OLCDijkstra::solve()
     add_start_edges();
   }
 
-  return solve_inner();
-}
-
-bool
-OLCDijkstra::solve_inner()
-{
-  if (distance_general(m_dijkstra, 20)) {
+  if (solve_inner()) {
     olc.prune();
     return true;
   } else {
     return false;
   }
+}
+
+bool
+OLCDijkstra::solve_inner()
+{
+  return distance_general(m_dijkstra, 20);
 }
 
 void
@@ -103,8 +103,6 @@ OLCDijkstra::reset()
   m_dijkstra.clear();
   n_points = 0;
   solution_found = false;
-  m_rank_mode = false;
-  m_reverse = false;
 }
 
 
@@ -175,11 +173,7 @@ const TracePoint &
 OLCDijkstra::get_point(const ScanTaskPoint &sp) const
 {
   assert(sp.second<n_points);
-  if (m_reverse) {
-    return olc.get_trace_points()[n_points-1-sp.second];
-  } else {
-    return olc.get_trace_points()[sp.second];
-  }
+  return olc.get_trace_points()[sp.second];
 }
 
 
@@ -187,44 +181,24 @@ unsigned
 OLCDijkstra::get_weighting(const unsigned i) const
 {
   assert(i<num_stages-1);
-  if (m_reverse) {
-    return m_weightings[num_stages-2-i];
-  } else {
-    return m_weightings[i];
-  }
+  return m_weightings[i];
 }
 
 void 
 OLCDijkstra::set_rank(const ScanTaskPoint &sp, const unsigned d)
 {
-  if (m_reverse) {
-    olc.set_rank(n_points-1-sp.second, d);
-  } else {
-    olc.set_rank(sp.second, d);
-  }
+  olc.set_rank(sp.second, d);
 }
 
 
 bool
 OLCDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
 {
-  // reverse
-  if (m_reverse) {
-
-    if (!is_final(candidate)) 
-      return true;
-    else 
-      return (get_point(candidate).NavAltitude <= 
-              solution[0].NavAltitude+m_finish_alt_diff);
-
-  } else {
-
-    if (!is_final(candidate)) 
-      return true;
-    else 
-      return (get_point(candidate).NavAltitude+m_finish_alt_diff >= 
-              solution[0].NavAltitude);
-  }
+  if (!is_final(candidate)) 
+    return true;
+  else 
+    return (get_point(candidate).NavAltitude+m_finish_alt_diff >= 
+            solution[0].NavAltitude);
 }
 
 

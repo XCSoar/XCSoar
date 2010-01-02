@@ -9,18 +9,20 @@ OLCSprint::OLCSprint(OnlineContest& _olc):
 
 }
 
+void
+OLCSprint::reset()
+{
+  OLCDijkstra::reset();
+  m_start_limit = 0;
+  m_start_current = 0;
+}
+
 bool 
 OLCSprint::admit_candidate(const ScanTaskPoint &candidate) const
 {
-  if (m_reverse) {
-    return (get_point(candidate).time+9000 >=
-            solution[0].time) &&
-      OLCDijkstra::admit_candidate(candidate);
-  } else {
-    return (get_point(candidate).time <=
-            solution[0].time + 9000) &&
-      OLCDijkstra::admit_candidate(candidate);
-  }
+  return (get_point(candidate).time <=
+          solution[0].time + 9000) &&
+    OLCDijkstra::admit_candidate(candidate);
 }
 
 fixed
@@ -41,31 +43,19 @@ OLCSprint::score(fixed& the_distance)
 //  return dist/max(fixed_9000, time);
 }
 
-/*
-  @todo 
-  - if solve completes, check against best solution
-  - on completion, increment start edge counter
-  - return true when start edge counter reaches limit
-  - when to compute this limit?
- */
 bool
 OLCSprint::solve_inner()
 {
-  const bool solved = OLCDijkstra::solve_inner();
-  const bool finished = (m_start_current >= m_start_limit);
-  if (solved) {
-    if (finished) {
-      // find new start limit
-      m_start_current = 0;
-      m_start_limit = find_start_limit();
-    }
-    // @todo save best
+  if (OLCDijkstra::solve_inner()) {
+    // @todo save best    
+    return (m_start_current==0);
+  } else {
+    return false;
   }
-  return solved && finished;
 }
 
 /*
-  @todo add only one start edge, each time, until get to 2.5 hours from end
+  add only one start edge, each time
  */
 void
 OLCSprint::add_start_edges()
@@ -74,8 +64,13 @@ OLCSprint::add_start_edges()
 
   ScanTaskPoint destination(0, m_start_current);
   m_dijkstra.link(destination, destination, 0);
-  if (m_start_current<m_start_limit)
+
+  if (m_start_current<m_start_limit) {
     m_start_current++;
+  } else {
+    m_start_current = 0;
+    m_start_limit = find_start_limit();
+  }
 }
 
 unsigned

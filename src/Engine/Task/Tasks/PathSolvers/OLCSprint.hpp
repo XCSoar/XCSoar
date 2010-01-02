@@ -53,6 +53,8 @@ public:
 
   fixed score(fixed& the_distance);
 
+  void reset();
+
 protected:
 
   bool admit_candidate(const ScanTaskPoint &candidate) const;

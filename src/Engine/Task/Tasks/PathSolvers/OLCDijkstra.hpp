@@ -76,7 +76,7 @@ public:
   fixed calc_distance() const;
   fixed calc_time() const;
 
-  void reset();
+  virtual void reset();
 
   bool solve();
 
