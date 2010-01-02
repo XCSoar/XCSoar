@@ -245,7 +245,6 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas)
 /**
  * Draws the airspace to the given canvas
  * @param canvas The drawing canvas
- * @param rc The area to draw in
  * @param buffer The drawing buffer
  */
 void

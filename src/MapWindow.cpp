@@ -141,6 +141,8 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
  * and reads the Settings from the DeviceBlackboard.
  * @param nmea_info Basic info
  * @param derived_info Calculated info
+ * @param settings_computer Computer settings to exchange
+ * @param settings_map Map settings to exchange
  */
 void
 MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,

@@ -251,6 +251,10 @@ void GaugeFLARM::Render(const NMEA_INFO &gps_info)
 /**
  * Constructor of the GaugeFLARM class
  * @param parent Parent window
+ * @param left Left edge of window pixel location
+ * @param top Top edge of window pixel location
+ * @param width Width of window (pixels)
+ * @param height Height of window (pixels)
  */
 GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
                        int left, int top, unsigned width, unsigned height)

@@ -37,6 +37,7 @@ public:
  * 
  * @param a1 First point to compare
  * @param a2 Second point to compare
+ * @param dist_threshold Threshold distance for significance
  * 
  * @return True if distance is significant
  */

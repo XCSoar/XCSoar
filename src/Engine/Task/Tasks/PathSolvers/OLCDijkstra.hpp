@@ -54,6 +54,8 @@ public:
  * Constructor
  *
  * @param _olc The OLC task to solve for
+ * @param n_legs Maximum number of legs in OLC task
+ * @param finish_alt_diff Maximum height loss from start to finish (m)
  */
   OLCDijkstra(OnlineContest& _olc, 
               const unsigned n_legs,
