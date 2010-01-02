@@ -82,7 +82,7 @@ static void RefreshCalculator(void) {
   // update outputs
   wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::Calculated().common_stats.aat_time_remaining);
+    wp->GetDataField()->SetAsFloat((XCSoarInterface::Calculated().common_stats.task_time_remaining+XCSoarInterface::Calculated().common_stats.task_time_elapsed)/60);
     wp->RefreshDisplay();
   }
 
