@@ -114,7 +114,7 @@ private:
  * @return x value of solution
  */
   fixed solution(const bool positive) const {
-    return (-b+(positiv?sqrt(denom):-sqrt(denom)))/da;
+    return (-b+(positive?sqrt(denom):-sqrt(denom)))/da;
   }
   const fixed da;
   const fixed b;

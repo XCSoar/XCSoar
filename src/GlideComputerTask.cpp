@@ -45,7 +45,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/LowPassFilter.hpp"
-#include "MacCready.h"
 #include "RasterTerrain.h"
 #include "GlideRatio.hpp"
 #include "GlideTerrain.hpp"

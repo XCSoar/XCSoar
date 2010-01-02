@@ -43,7 +43,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Util.hpp"
-#include "MacCready.h"
 #include "Screen/Graphics.hpp"
 
 #include "RasterTerrain.h" // OLD_TASK just for locking

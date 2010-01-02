@@ -47,7 +47,6 @@ Copyright_License {
 #include "Math/Constants.h"
 #include "Logger.h"
 #include "Language.hpp"
-#include "MacCready.h"
 #include "Appearance.hpp"
 #include "Task/TaskManager.hpp"
 

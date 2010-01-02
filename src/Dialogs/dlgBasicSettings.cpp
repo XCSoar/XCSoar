@@ -44,7 +44,6 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
-#include "MacCready.h"
 #include "Atmosphere.h"
 #include "Device/device.h"
 #include "DataField/Base.hpp"

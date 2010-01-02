@@ -41,7 +41,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
-#include "MacCready.h"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"

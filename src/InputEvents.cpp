@@ -67,7 +67,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "ButtonLabel.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
-#include "MacCready.h"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
 #include "Asset.hpp"

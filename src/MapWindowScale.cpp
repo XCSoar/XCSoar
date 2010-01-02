@@ -43,7 +43,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/UnitSymbol.hpp"
-#include "MacCready.h"
 #include "RasterWeather.h"
 
 #include <math.h>

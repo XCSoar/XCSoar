@@ -41,7 +41,6 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
-#include "MacCready.h"
 #include "Units.hpp"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
