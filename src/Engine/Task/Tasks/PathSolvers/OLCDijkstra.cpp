@@ -69,10 +69,8 @@ OLCDijkstra::set_weightings()
 bool 
 OLCDijkstra::solve()
 {
-  if (m_dijkstra.empty() && !m_reverse && !m_rank_mode) {
-
+  if (m_dijkstra.empty()) {
     set_weightings();
-
     n_points = olc.get_trace_points().size();
   }
 
@@ -82,39 +80,22 @@ OLCDijkstra::solve()
 
   if (m_dijkstra.empty()) {
     m_dijkstra.reset(ScanTaskPoint(0,0));
-    if (m_rank_mode && !m_reverse) {
-      olc.reset_rank();
-    }
     add_start_edges();
   }
 
-  // alternate between rank mode (scan forward and reverse) and distance mode
-
-  if (m_rank_mode) {
-    if (distance_rank(m_dijkstra, -1)) {
-
-      if (!m_reverse) {
-        m_reverse = true;
-      } else {
-        // switch modes back
-        m_rank_mode = false;
-        m_reverse = false;
-      }
-    }
-    return false;
-  } else {
-    if (distance_general(m_dijkstra, 20)) {
-      // switch to rank mode
-      olc.prune();
-//      m_rank_mode = true;
-      m_reverse = false;
-      return true;
-    } else {
-      return false;
-    }
-  }
+  return solve_inner();
 }
 
+bool
+OLCDijkstra::solve_inner()
+{
+  if (distance_general(m_dijkstra, 20)) {
+    olc.prune();
+    return true;
+  } else {
+    return false;
+  }
+}
 
 void
 OLCDijkstra::reset()

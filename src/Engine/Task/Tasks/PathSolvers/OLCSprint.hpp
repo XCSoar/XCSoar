@@ -57,6 +57,16 @@ protected:
 
   bool admit_candidate(const ScanTaskPoint &candidate) const;
 
+  bool solve_inner();
+
+private:
+
+  void add_start_edges();
+  unsigned m_start_limit;
+  unsigned m_start_current;
+
+  unsigned find_start_limit() const;
+
 };
 
 #endif
