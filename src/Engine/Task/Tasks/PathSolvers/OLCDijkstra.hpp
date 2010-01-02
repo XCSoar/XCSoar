@@ -104,9 +104,9 @@ protected:
 
   unsigned n_points;
 
-private:
-
   unsigned get_weighting(const unsigned i) const;
+
+private:
 
   OnlineContest& olc;
   const unsigned m_finish_alt_diff;

@@ -54,12 +54,12 @@ FLAT_GEOPOINT::distance_sq_to(const FLAT_GEOPOINT &sp) const
 unsigned 
 FLAT_GEOPOINT::projected_distance(const FLAT_GEOPOINT &other) const
 {
-  const unsigned d_other = other.dot(other);
   const unsigned d_this = dot(*this);
 
   if (d_this == 0) {
     return 0;
   } else {
-    return min(d_other, dot(d_other)/d_this);
+    const unsigned d_other = other.dot(other);
+    return min(d_other, dot(other)/d_this);
   }
 }
