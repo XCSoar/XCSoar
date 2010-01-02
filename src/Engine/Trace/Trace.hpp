@@ -52,6 +52,9 @@ typedef std::list<TracePoint> TracePointList;
 /**
  * Container for traces using kd-tree representation internally for fast 
  * geospatial lookups.
+ *
+ * @todo consider partial thinning, maintenance of separate stores or some
+ *       kind of LOD algorithm; currently this does slow down on long flights
  */
 class Trace: private NonCopyable 
 {

@@ -19,7 +19,7 @@ Trace::append(const AIRCRAFT_STATE& state)
   }
 
   TracePoint tp(state, task_projection);
-  if (tp.time % 2 == 1) return;
+  if ((tp.time-m_last_point.time)<2) return;
 
   tp.last_time = m_last_point.time;
   trace_tree.insert(tp);
@@ -66,6 +66,29 @@ Trace::end() const
   return trace_tree.end();
 }
 
+class TracePointSetFilterInserter
+{
+public:
+  TracePointSetFilterInserter(TracePointSet& the_set,
+    const unsigned _min_time=0):
+    m_set(&the_set),min_time(_min_time) {}
+
+  TracePointSetFilterInserter& operator=(const TracePoint& val) {
+    if (val.time>=min_time) {
+      m_set->insert(val);
+    }
+    return *this;
+  }
+  TracePointSetFilterInserter& operator*() {
+    return *this;
+  }
+  TracePointSetFilterInserter& operator++(const int x) {
+    return *this;
+  }
+private:
+  TracePointSet* m_set;
+  unsigned min_time;
+};
 
 TracePointVector
 Trace::find_within_range(const GEOPOINT &loc, const fixed range,
@@ -78,13 +101,16 @@ Trace::find_within_range(const GEOPOINT &loc, const fixed range,
 
 //  TracePointVector vectors;
   TracePointSet tset;
-  trace_tree.find_within_range(bb_target, mrange, 
-                               std::inserter(tset, tset.begin()));
+  TracePointSetFilterInserter filter(tset, mintime);
+  trace_tree.find_within_range(bb_target, mrange, filter);
 
+/*
+//                               std::inserter(tset, tset.begin()));
   if (mintime>0) {
     TracePointSet::iterator tit = tset.lower_bound(bb_target);
     tset.erase(tset.begin(), tit);
   }
+*/
   if (positive(resolution)) {
     TracePointList tlist(tset.begin(), tset.end());
     thin_trace(tlist, rrange*rrange);

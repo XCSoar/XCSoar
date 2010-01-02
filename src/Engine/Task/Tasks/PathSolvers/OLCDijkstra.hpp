@@ -45,6 +45,9 @@
 class OnlineContest;
 
 /**
+ * @todo This currently only finds the first solution, not the best solution;
+ *       needs a little more work
+ *
  */
 class OLCDijkstra: 
   public NavDijkstra<TracePoint>

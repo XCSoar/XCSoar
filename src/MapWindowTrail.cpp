@@ -57,6 +57,7 @@ using std::max;
 
 #define fSnailColour(cv) max(0,min(NUMSNAILCOLORS-1, ((cv+fixed_one)*fixed_half*NUMSNAILCOLORS).as_int()))
 
+//#define TIME_TRAIL
 
 void
 MapWindow::DrawTrail(Canvas &canvas)
@@ -66,17 +67,21 @@ MapWindow::DrawTrail(Canvas &canvas)
 
   unsigned min_time = 0;
 
-  switch(SettingsMap().TrailActive) {
-  case 1:
-    min_time = max(0,(Basic().Time-3600).as_int());
-    break;
-  case 2:
+  if (DisplayMode == dmCircling) {
     min_time = max(0,(Basic().Time-600).as_int());
-    break;
-  case 0:
-    min_time = 0; // full
-    break;
-  }; 
+  } else {
+    switch(SettingsMap().TrailActive) {
+    case 1:
+      min_time = max(0,(Basic().Time-3600).as_int());
+      break;
+    case 2:
+      min_time = max(0,(Basic().Time-600).as_int());
+      break;
+    case 0:
+      min_time = 0; // full
+      break;
+    }
+  }
 
 #ifdef TIME_TRAIL
   PeriodClock clock;
