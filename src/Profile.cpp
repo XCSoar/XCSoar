@@ -46,6 +46,7 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
+#include "Dialogs/XML.hpp"
 
 #define CheckIndex(x, i) do {} while (false) // XXX
 
@@ -556,6 +557,10 @@ Profile::ReadRegistrySettings()
   Temp = Appearance.TextInputStyle;
   GetFromRegistryD(szRegistryAppTextInputStyle, Temp);
   Appearance.TextInputStyle = (TextInputStyle_t)Temp;
+
+  Temp = g_eDialogStyle;
+  GetFromRegistryD(szRegistryAppDialogStyle, Temp);
+  g_eDialogStyle = (DialogStyle_t)Temp;
 
   GetFromRegistry(szRegistryAppDefaultMapWidth,
 		  Appearance.DefaultMapWidth);

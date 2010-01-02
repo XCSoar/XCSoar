@@ -19,6 +19,8 @@ Trace::append(const AIRCRAFT_STATE& state)
   }
 
   TracePoint tp(state, task_projection);
+  if (tp.time % 2 == 1) return;
+
   tp.last_time = m_last_point.time;
   trace_tree.insert(tp);
   m_last_point = tp;

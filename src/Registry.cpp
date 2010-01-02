@@ -244,6 +244,7 @@ const TCHAR szRegistryAppGaugeVarioGross[] = CONF("AppGaugeVarioGross");
 const TCHAR szRegistryAppCompassAppearance[] = CONF("AppCompassAppearance");
 const TCHAR szRegistryAppStatusMessageAlignment[] = CONF("AppStatusMessageAlignment");
 const TCHAR szRegistryAppTextInputStyle[] = CONF("AppTextInputStyle");
+const TCHAR szRegistryAppDialogStyle[] = CONF("AppDialogStyle");
 const TCHAR szRegistryAppInfoBoxColors[] = CONF("AppInfoBoxColors");
 const TCHAR szRegistryAppDefaultMapWidth[] = CONF("AppDefaultMapWidth");
 const TCHAR szRegistryTeamcodeRefWaypoint[] = CONF("TeamcodeRefWaypoint");

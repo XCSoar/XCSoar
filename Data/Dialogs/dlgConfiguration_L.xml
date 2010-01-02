@@ -605,11 +605,6 @@ Help="The UTC offset field allows the UTC local time offset to be specified.  Th
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpAppStatusMessageAlignment" Caption="Msg window"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
-  Help="Defines the alignment of the status message box, either centered or in the top left corner.">
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
-
   <WndProperty Name="prpInputFile" Caption="Events*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
 Help="The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices.
 ">
@@ -650,6 +645,12 @@ other languages.  If this field is left blank, then XCSoar uses English.
     Help="Determines how the user is prompted for text input (filename, teamcode etc.)">
       <DataField name="" DataType="enum" Min="0" Max="50" Step="1"/>
     </WndProperty>
+
+    <WndProperty Name="prpDialogStyle" Caption="Dialog Style*"  X="2" Y="-1"   Width="235" Height="22" CaptionWidth="100" Font="2"
+    Help="Determines display size of dialogs.">
+      <DataField name="" DataType="enum" Min="0" Max="50" Step="1"/>
+    </WndProperty>
+
   </WndFrame>
 
   <WndFrame Name="frmAppearance" X=0 Y=0 Width=240 Height=222 Font=2>
@@ -701,7 +702,10 @@ are really available.">
       <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-
+  <WndProperty Name="prpAppStatusMessageAlignment" Caption="Msg window"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
+  Help="Defines the alignment of the status message box, either centered or in the top left corner.">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
 
   </WndFrame>
 

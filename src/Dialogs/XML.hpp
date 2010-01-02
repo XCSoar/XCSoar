@@ -47,7 +47,16 @@ class SingleWindow;
 typedef struct{
   const TCHAR *Name;
   void *Ptr;
-}CallBackTableEntry_t;
+} CallBackTableEntry_t;
+
+typedef enum {
+    eDialogFullWidth=0,  // cover screen, stretch controls horizontally
+    eDialogScaled=1,  // stretch only frame to maintain aspect ratio
+    eDialogScaledCentered=2, // like 1 but center dialog in screen
+    eDialogFixed=3 // don't adjust at all (same as !Layout::ScaleSupported())
+} DialogStyle_t;
+
+extern DialogStyle_t g_eDialogStyle;
 
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
                         const TCHAR *FileName,

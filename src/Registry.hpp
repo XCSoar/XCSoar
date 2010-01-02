@@ -141,6 +141,7 @@ extern const TCHAR szRegistryAppGaugeVarioGross[];
 extern const TCHAR szRegistryAppCompassAppearance[];
 extern const TCHAR szRegistryAppStatusMessageAlignment[];
 extern const TCHAR szRegistryAppTextInputStyle[];
+extern const TCHAR szRegistryAppDialogStyle[];
 extern const TCHAR szRegistryAppInfoBoxBorder[];
 #if defined(PNA) || defined(FIVV)
 extern const TCHAR szRegistryAppInfoBoxGeom[];   // VENTA-ADDON GEOM CHANGE

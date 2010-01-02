@@ -1892,7 +1892,17 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-
+  wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(_T("Full width")));
+    dfe->addEnumText(gettext(_T("Scaled")));
+    dfe->addEnumText(gettext(_T("Scaled centered")));
+    dfe->addEnumText(gettext(_T("Fixed")));
+    dfe->Set(g_eDialogStyle);
+    wp->RefreshDisplay();
+  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
   if (wp) {
@@ -3163,6 +3173,17 @@ void dlgConfigurationShowModal(void){
       {
 	Appearance.TextInputStyle = (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
 	SetToRegistry(szRegistryAppTextInputStyle, (DWORD)(Appearance.TextInputStyle));
+	changed = true;
+      }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
+  if (wp)
+  {
+    if (g_eDialogStyle != (DialogStyle_t)(wp->GetDataField()->GetAsInteger()))
+      {
+	g_eDialogStyle = (DialogStyle_t)(wp->GetDataField()->GetAsInteger());
+	SetToRegistry(szRegistryAppDialogStyle, (DWORD)(g_eDialogStyle));
 	changed = true;
       }
   }
