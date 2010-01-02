@@ -141,7 +141,6 @@ public:
    * 
    * @param g1 Location of origin of search vector
    * @param vec Line from origin
-   * @param fill_end whether to create fake point for orphaned entry point
    * 
    * @return true if the line intersects the airspace
    */
@@ -181,9 +180,6 @@ public:
 
 private:
 
-  /**
-   * @supplierCardinality 0..1 
-   */
   mutable AbstractAirspace *pimpl_airspace;
 
 public:

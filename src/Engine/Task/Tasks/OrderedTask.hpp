@@ -525,14 +525,8 @@ private:
 
   OrderedTaskPointVector tps;
 
-  /**
-   * @supplierCardinality 1 
-   */
   StartPoint *ts;
 
-  /**
-   * @supplierCardinality 1 
-   */
   FinishPoint *tf;
 
   TaskProjection task_projection;

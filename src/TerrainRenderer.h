@@ -108,6 +108,7 @@ private:
   void Draw(Canvas &canvas, RECT rc);
 
   /**
+   * @param loc Location of center
    * @param day_time the UTC time, in seconds since midnight
    */
   bool SetMap(const GEOPOINT &loc, int day_time);

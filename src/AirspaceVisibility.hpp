@@ -32,8 +32,7 @@ public:
 /** 
  * Determine if airspace is visible based on observers' altitude
  * 
- * @param alt Altitude of observer
- * @param settings Airspace altitude visibility settings
+ * @param airspace Airspace to test
  * 
  * @return True if visible
  */
@@ -42,7 +41,7 @@ public:
 /** 
  * Determine if airspace is visible based on type
  * 
- * @param settings Airspace visibility settings
+ * @param airspace Airspace to test
  * 
  * @return True if visible
  */

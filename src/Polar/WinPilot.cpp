@@ -47,6 +47,7 @@ Copyright_License {
 
 /**
  * Converts a WinPilot based to a XCSoar based polar
+ * @param polar The polar structure to convert
  * @param POLARV Speed1, Speed2 and Speed3
  * @param POLARW Sinkrate1, Sinkrate2 and Sinkrate3
  * @param ww dry mass, maximum takeoff weight

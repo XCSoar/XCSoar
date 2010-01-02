@@ -132,8 +132,8 @@ CuSonde::adjustForecastTemperature(double delta)
 
 /**
  * Update the measurements if new level reached
- * @param Basic NMEA_INFO for temperature and humidity
- * @param Calculated DERIVED_INFO for Flying status
+ * @param basic NMEA_INFO for temperature and humidity
+ * @param calculated DERIVED_INFO for Flying status
  */
 void
 CuSonde::updateMeasurements(const NMEA_INFO &basic,

@@ -124,6 +124,7 @@ public:
  * @param loc Location from which to search
  * @param range Distance in meters of search radius
  * @param mintime Minimum time to match (recency)
+ * @param resolution Thin data to achieve minimum step size in (m) (if positive)
  * 
  * @return Vector of trace points within square range
  */

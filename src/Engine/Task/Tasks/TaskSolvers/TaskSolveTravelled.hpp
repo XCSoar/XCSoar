@@ -54,6 +54,8 @@ public:
  * @param activeTaskPoint Current active task point in sequence
  * @param _aircraft Current aircraft state
  * @param gp Glide polar to copy for calculations
+ * @param xmin Min value of search parameter
+ * @param xmax Max value of search parameter
  */
   TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps,
                      const unsigned activeTaskPoint,

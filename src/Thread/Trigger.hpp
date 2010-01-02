@@ -68,6 +68,7 @@ public:
    * Initializes the trigger.
    *
    * @param name an application specific name for this trigger
+   * @param _manual_reset whether trigger needs to be manually reset
    */
 #ifdef HAVE_POSIX
   Trigger(const TCHAR *name, bool _manual_reset = true)

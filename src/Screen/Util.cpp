@@ -90,7 +90,7 @@ OutputToInput(unsigned int *inLength, POINT *inVertexArray,
   }
 }
 
-/**
+/*
  * The "Inside" function returns TRUE if the vertex tested is on the
  * inside of the clipping boundary. "Inside" is defined as "to the
  * left of clipping boundary when one looks from the first vertex to
@@ -463,8 +463,7 @@ void StartArc(HDC hdc,
  * @param y y-Coordinate of the circle's center
  * @param radius Radius of the circle
  * @param rc Clipping bounds
- * @param clip If True the circle will be clipped to rc
- * @param fill (?)
+ * @param fill Whether the circle will be filled (closed polygon) 
  * @return
  */
 int

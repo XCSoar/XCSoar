@@ -42,7 +42,7 @@ Copyright_License {
 #include <math.h>
 #include <string.h>
 
-void ConvertBearingToTeamCode(double bearing, TCHAR *code);
+void ConvertBearingToTeamCode(const double bearing, TCHAR *code);
 void NumberToTeamCode(double value, TCHAR *code, int minCiffers);
 double GetBearing(const TCHAR *code);
 double GetRange(const TCHAR *code);
@@ -76,20 +76,20 @@ GetTeamCode(TCHAR *code, double bearing, double range)
 
 /**
  * Converts a given bearing to the bearing part of the teamcode
- * @param heading Bearing to the reference waypoint
+ * @param bearing Bearing to the reference waypoint
  * @param code The teamcode (pointer)
  */
 void
-ConvertBearingToTeamCode(double bearing, TCHAR *code)
+ConvertBearingToTeamCode(const double bearing, TCHAR *code)
 {
-	if (bearing >= 360) {
-		code[0] = '-';
-		code[1] = '-';
-		return;
-	}
+  if (bearing >= 360) {
+    code[0] = '-';
+    code[1] = '-';
+    return;
+  }
 
-	double bamValue = (bearing * TEAMCODE_COMBINATIONS) / 360.0;
-	NumberToTeamCode(bamValue, code, 2);
+  const double bamValue = (bearing * TEAMCODE_COMBINATIONS) / 360.0;
+  NumberToTeamCode(bamValue, code, 2);
 }
 
 /**

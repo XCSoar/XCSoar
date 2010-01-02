@@ -57,6 +57,7 @@ public:
 /** 
  * Default constructor
  * 
+ * @param is_min Whether this algorithm will search for min or max distance
  */
   Dijkstra(const bool is_min=true):m_min(is_min) {}
 
@@ -64,7 +65,7 @@ public:
  * Constructor
  * 
  * @param n Node to start
- * @param e Initial edge distance
+ * @param is_min Whether this algorithm will search for min or max distance
  */
   Dijkstra(const Node &n, const bool is_min=true):
     m_min(is_min) { 

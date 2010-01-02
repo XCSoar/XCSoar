@@ -220,14 +220,8 @@ private:
 
   ActiveState_t m_active_state; /**< ActiveState determined from scan_active() */
 
-  /**
-   * @supplierCardinality 0..1 
-   */
   OrderedTaskPoint* tp_next;
 
-  /**
-   * @supplierCardinality 0..1 
-   */
   OrderedTaskPoint* tp_previous;
 
 };
