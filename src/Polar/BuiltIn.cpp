@@ -179,6 +179,7 @@ const TCHAR* GetWinPilotPolarInternalName(unsigned i)
  * Reads internal WinPilot polar and passes it to
  * the converter
  * @param i Array id of the polar
+ * @param polar Polar to set
  */
 bool
 ReadWinPilotPolarInternal(unsigned i, Polar &polar)

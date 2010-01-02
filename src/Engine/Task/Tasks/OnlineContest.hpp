@@ -31,6 +31,7 @@ public:
    * @param tb Global task behaviour settings
    * @param gp Global glide polar used for navigation calculations
    * @param stats Common stats to write OLC info to
+   * @param trace Trace object containing flight history for scanning
    * 
    */
   OnlineContest(const TaskEvents &te, 
@@ -46,17 +47,17 @@ public:
  * \todo
  * - check tracking of active waypoint
  *
- * @param state_now Aircraft state at this time step
+ * @param state Aircraft state at this time step
  *
  * @return True if internal state changes
  */
-  bool update_sample(const AIRCRAFT_STATE &state_now);
+  bool update_sample(const AIRCRAFT_STATE &state);
 
 /** 
  * Update internal states (non-essential) for housework, or where functions are slow
  * and would cause loss to real-time performance.
  * 
- * @param state_now Aircraft state at this time step
+ * @param state Aircraft state at this time step
  * 
  * @return True if internal state changed
  */

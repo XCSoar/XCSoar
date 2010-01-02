@@ -77,8 +77,8 @@ public:
     pthread_cond_init(&cond, NULL);
   }
 #else
-  Trigger(const TCHAR *name, bool manual_reset = true)
-    :handle(::CreateEvent(NULL, manual_reset, false, name)) {}
+  Trigger(const TCHAR *name, bool _manual_reset = true)
+    :handle(::CreateEvent(NULL, _manual_reset, false, name)) {}
 #endif
 
   /**

@@ -77,6 +77,7 @@ public:
   void SetParameter(unsigned i);
 
   /**
+   * @param location Location of observer
    * @param day_time the UTC time, in seconds since midnight
    */
   void Reload(const GEOPOINT &location, int day_time);
