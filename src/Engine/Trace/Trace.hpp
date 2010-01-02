@@ -42,10 +42,12 @@
 #include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include <set>
+#include <list>
 
 class AIRCRAFT_STATE;
 
 typedef std::set<TracePoint, TracePoint::time_sort> TracePointSet;
+typedef std::list<TracePoint> TracePointList;
 
 /**
  * Container for traces using kd-tree representation internally for fast 
@@ -132,7 +134,7 @@ public:
   TracePointVector get_trace_points(const unsigned max_points) const;
 
 private:
-  void thin_trace(TracePointSet& vec, const unsigned range_sq) const;
+  void thin_trace(TracePointList& vec, const unsigned range_sq) const;
 
   TraceTree trace_tree;
   TaskProjection task_projection;

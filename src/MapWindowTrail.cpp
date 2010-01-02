@@ -86,7 +86,7 @@ MapWindow::DrawTrail(Canvas &canvas)
   TracePointVector trace = task->find_trace_points(GetPanLocation(),
                                                    fixed(GetScreenDistanceMeters()), 
                                                    min_time, 
-                                                   -fixed(DistancePixelsToMeters(3)));
+                                                   fixed(DistancePixelsToMeters(3)));
   terrain->Unlock();
 
   printf("A: %d\n", clock.elapsed());

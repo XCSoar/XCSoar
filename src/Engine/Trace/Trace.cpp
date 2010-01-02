@@ -84,10 +84,12 @@ Trace::find_within_range(const GEOPOINT &loc, const fixed range,
     tset.erase(tset.begin(), tit);
   }
   if (positive(resolution)) {
-    thin_trace(tset, rrange*rrange);
+    TracePointList tlist(tset.begin(), tset.end());
+    thin_trace(tlist, rrange*rrange);
+    return TracePointVector(tlist.begin(), tlist.end());
+  } else {
+    return TracePointVector(tset.begin(), tset.end());
   }
-  TracePointVector vectors(tset.begin(), tset.end());
-  return vectors;
 }
 
 bool
@@ -112,50 +114,46 @@ adjust_links(const TracePoint& previous, const TracePoint& obj,
 
 
 void 
-Trace::thin_trace(TracePointSet& tset, const unsigned mrange_sq) const
+Trace::thin_trace(TracePointList& tlist, const unsigned mrange_sq) const
 {
-/*
-  if (tset.size()<2) return;
+  if (tlist.size()<2) return;
 
-  TracePointSet::iterator it = tset.begin(); it++;
+  TracePointList::iterator it_prev = tlist.begin();
+  TracePointList::iterator it = tlist.begin(); ++it;
+  TracePointList::iterator it_next = it; ++it_next;
 
-  it->last_time--;
+  for (; it_next != tlist.end(); ) {
 
-  for (; it+1 != tset.end(); ) {
-
-    TracePointSet::iterator it_previous = it;
-    TracePointSet::iterator it_next = it;
-
-    if (it->approx_sq_dist(*it_previous) < mrange_sq) {
-      adjust_links(*it_previous, *it, *it_next);
-      tset.erase(it);
+    if (it->approx_sq_dist(*it_prev) < mrange_sq) {
+      adjust_links(*it_prev, *it, *it_next);
+      it = tlist.erase(it);
+      it_next = it; ++it_next;
     } else {
       ++it;
+      ++it_next;
+      ++it_prev;
     }
   }
-*/
 }
 
 
 TracePointVector 
 Trace::get_trace_points(const unsigned max_points) const
 {
-  TracePointSet tset;
-
-  for (TraceTree::const_iterator it = begin();
-       it != end(); ++it) {
-    tset.insert(*it);
-  }
+  TracePointSet tset(begin(),end());
 
   if (!tset.empty()) {
 
+    TracePointList tlist(tset.begin(), tset.end());
+
     unsigned mrange = 3;
-    do {
-      thin_trace(tset, mrange);
+    while (tlist.size()>max_points) {
+      thin_trace(tlist, mrange);
       mrange = (mrange*4)/3;
-    } while (tset.size()>max_points);
+    }
+
+    return TracePointVector(tlist.begin(), tlist.end());
   }
 
-  TracePointVector vectors(tset.begin(), tset.end());
-  return vectors;
+  return TracePointVector();
 }

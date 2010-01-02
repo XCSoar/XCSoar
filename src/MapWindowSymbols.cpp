@@ -58,10 +58,10 @@ void MapWindow::DrawCrossHairs(Canvas &canvas)
   Pen dash_pen(Pen::DASH, 1, Color(50, 50, 50));
   canvas.select(dash_pen);
 
-  canvas.line(Orig_Screen.x + 20, Orig_Screen.x - 20,
-              Orig_Screen.y, Orig_Screen.y);
-  canvas.line(Orig_Screen.x, Orig_Screen.x,
-              Orig_Screen.y + 20, Orig_Screen.y - 20);
+  canvas.line(Orig_Screen.x + 20, Orig_Screen.y,
+              Orig_Screen.x - 20, Orig_Screen.y);
+  canvas.line(Orig_Screen.x, Orig_Screen.y + 20,
+              Orig_Screen.x, Orig_Screen.y - 20);
 }
 
 void MapWindow::DrawAircraft(Canvas &canvas)
