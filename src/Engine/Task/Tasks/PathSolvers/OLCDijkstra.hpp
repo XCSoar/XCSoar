@@ -83,8 +83,8 @@ public:
 protected:
   const TracePoint &get_point(const ScanTaskPoint &sp) const;
 
-  void add_edges(DijkstraTaskPoint &dijkstra,
-                 const ScanTaskPoint &curNode);
+  virtual void add_edges(DijkstraTaskPoint &dijkstra,
+                         const ScanTaskPoint &curNode);
 
   virtual bool finish_satisfied(const ScanTaskPoint &sp) const;
 

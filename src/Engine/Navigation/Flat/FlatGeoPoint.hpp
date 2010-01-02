@@ -157,6 +157,12 @@ struct FLAT_GEOPOINT {
   bool operator== (const FLAT_GEOPOINT &other) const {
     return (Longitude == other.Longitude) && (Latitude == other.Latitude);
   };
+
+/**
+ * With this as a vector, and other as a vector, compute
+ * the projected distance of this along other.
+ */
+  unsigned projected_distance(const FLAT_GEOPOINT &other) const;
 };
 
 #endif
