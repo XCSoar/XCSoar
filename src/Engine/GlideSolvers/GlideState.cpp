@@ -122,22 +122,22 @@ GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
 fixed
 GlideState::drifted_distance(const fixed t_cl) const
 {
-  if (positive(EffectiveWindSpeed)) {
-    const fixed wd = fixed_deg_to_rad * (fixed_180 + WindDirection);
-    fixed sinwd, coswd;
-    sin_cos(wd, &sinwd, &coswd);
-
-    const fixed tb = fixed_deg_to_rad * (Vector.Bearing);
-    fixed sintb, costb;
-    sin_cos(tb, &sintb, &costb);
-
-    const fixed aw = EffectiveWindSpeed * t_cl;
-    const fixed dx = Vector.Distance * sintb - aw * sinwd;
-    const fixed dy = Vector.Distance * costb - aw * coswd;
-
-    return sqrt(dx * dx + dy * dy);
-  } else {
+  if (!positive(EffectiveWindSpeed))
     return Vector.Distance;
-  }
+
+  const fixed wd = fixed_deg_to_rad * (fixed_180 + WindDirection);
+  fixed sinwd, coswd;
+  sin_cos(wd, &sinwd, &coswd);
+
+  const fixed tb = fixed_deg_to_rad * (Vector.Bearing);
+  fixed sintb, costb;
+  sin_cos(tb, &sintb, &costb);
+
+  const fixed aw = EffectiveWindSpeed * t_cl;
+  const fixed dx = Vector.Distance * sintb - aw * sinwd;
+  const fixed dy = Vector.Distance * costb - aw * coswd;
+
+  return sqrt(dx * dx + dy * dy);
+
   // ??   task.Bearing = RAD_TO_DEG*(atan2(dx,dy));
 }
