@@ -46,13 +46,15 @@ Copyright_License {
  * @param theta Input angle
  * @return Output angle (0-360 degrees)
  */
-fixed AngleLimit360(fixed theta) {
-  while (theta<fixed_zero) {
-    theta+= fixed_360;
-  }
-  while (theta>fixed_360) {
-    theta-= fixed_360;
-  }
+fixed
+AngleLimit360(fixed theta)
+{
+  while (theta < fixed_zero)
+    theta += fixed_360;
+
+  while (theta > fixed_360)
+    theta -= fixed_360;
+
   return theta;
 }
 
@@ -61,17 +63,20 @@ fixed AngleLimit360(fixed theta) {
  * @param theta Input angle
  * @return Output angle (-180 - +180 degrees)
  */
-fixed AngleLimit180(fixed theta) {
-  while (theta<-fixed_180) {
-    theta+= fixed_360;
-  }
-  while (theta>fixed_180) {
-    theta-= fixed_360;
-  }
+fixed
+AngleLimit180(fixed theta)
+{
+  while (theta < -fixed_180)
+    theta += fixed_360;
+
+  while (theta > fixed_180)
+    theta -= fixed_360;
+
   return theta;
 }
 
-double AngleLimit360(double theta)
+double
+AngleLimit360(double theta)
 {
   while (theta < fixed_zero)
     theta += 360.0;
@@ -87,44 +92,33 @@ double AngleLimit360(double theta)
  * @param InBound Input angle
  * @return Output angle (0 - 360 degrees)
  */
-fixed Reciprocal(fixed InBound)
+fixed
+Reciprocal(fixed InBound)
 {
-  return AngleLimit360(InBound+fixed_180);
+  return AngleLimit360(InBound + fixed_180);
 }
 
-fixed BiSector(fixed InBound, fixed OutBound)
+fixed
+BiSector(fixed InBound, fixed OutBound)
 {
   fixed result;
 
   InBound = Reciprocal(InBound);
 
-  if(InBound == OutBound)
-    {
-      result = Reciprocal(InBound);
-    }
+  if (InBound == OutBound) {
+    result = Reciprocal(InBound);
+  } else if (InBound > OutBound) {
+    if ((InBound - OutBound) < fixed_180)
+      result = Reciprocal((InBound + OutBound) * fixed_half);
+    else
+      result = (InBound + OutBound) * fixed_half;
+  } else {
+    if ((OutBound - InBound) < fixed_180)
+      result = Reciprocal((InBound + OutBound) * fixed_half);
+    else
+      result = (InBound + OutBound) * fixed_half;
+  }
 
-  else if (InBound > OutBound)
-    {
-      if( (InBound - OutBound) < fixed_180)
-	{
-	  result = Reciprocal((InBound+OutBound)*fixed_half);
-	}
-      else
-	{
-	  result = (InBound+OutBound)*fixed_half;
-	}
-    }
-  else
-    {
-      if( (OutBound - InBound) < fixed_180)
-	{
-	  result = Reciprocal((InBound+OutBound)*fixed_half);
-	}
-      else
-	{
-	  result = (InBound+OutBound)*fixed_half;
-	}
-    }
   return result;
 }
 
