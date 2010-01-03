@@ -64,7 +64,6 @@ struct AIRCRAFT_STATE;
  * \todo
  * - currently the polar itself and Vmax is hard-coded
  */
-
 class Polar;
 
 class GlidePolar
@@ -72,109 +71,124 @@ class GlidePolar
   friend void setGlidePolar(const Polar& polar, GlidePolar& gp);
 
 public:
-/** 
- * Constructor.  Performs search for best LD at instantiation
- * 
- * @param _mc MacCready value at construction
- * @param _bugs Bugs (clean) ratio (default clean)
- * @param _ballast Ballast ratio (default empty)
- */
-  GlidePolar(const fixed _mc,
-             const fixed _bugs=fixed_one,
-             const fixed _ballast=fixed_zero);
+  /**
+   * Constructor.  Performs search for best LD at instantiation
+   *
+   * @param _mc MacCready value at construction
+   * @param _bugs Bugs (clean) ratio (default clean)
+   * @param _ballast Ballast ratio (default empty)
+   */
+  GlidePolar(const fixed _mc, const fixed _bugs = fixed_one,
+      const fixed _ballast = fixed_zero);
 
-/** 
- * Accesses sink rate at min airspeed
- * 
- * @return Sink rate (m/s, positive down)
- */
-  fixed get_Smin() const {
+  /**
+   * Accesses sink rate at min airspeed
+   *
+   * @return Sink rate (m/s, positive down)
+   */
+  fixed
+  get_Smin() const
+  {
     return Smin;
   }
 
-/** 
- * Accesses airspeed for minimum sink
- * 
- * @return Speed (m/s)
- */
-  fixed get_Vmin() const {
+  /**
+   * Accesses airspeed for minimum sink
+   *
+   * @return Speed (m/s)
+   */
+  fixed
+  get_Vmin() const
+  {
     return Vmin;
   }
 
-/** 
- * Accesses maximum airspeed
- * 
- * \todo this should be set by SETTINGS_COMPUTER SafetySpeed
- *
- * @return Speed (m/s)
- */
-  fixed get_Vmax() const {
+  /**
+   * Accesses maximum airspeed
+   *
+   * @todo this should be set by SETTINGS_COMPUTER SafetySpeed
+   *
+   * @return Speed (m/s)
+   */
+  fixed
+  get_Vmax() const
+  {
     return Vmax;
   }
 
-/** 
- * Accesses sink rate at max airspeed
- * 
- * @return Sink rate (m/s, positive down)
- */
-  fixed get_Smax() const {
+  /**
+   * Accesses sink rate at max airspeed
+   *
+   * @return Sink rate (m/s, positive down)
+   */
+  fixed
+  get_Smax() const
+  {
     return Smax;
   }
 
-/** 
- * Accesses best L/D speed
- * 
- * @return Speed of best LD (m/s)
- */
-  fixed get_VbestLD() const {
+  /**
+   * Accesses best L/D speed
+   *
+   * @return Speed of best LD (m/s)
+   */
+  fixed
+  get_VbestLD() const
+  {
     return VbestLD;
   }
 
-/** 
- * Accesses best L/D sink rate (positive down)
- * 
- * @return Sink rate at best L/D (m/s)
- */
-  fixed get_SbestLD() const {
+  /**
+   * Accesses best L/D sink rate (positive down)
+   *
+   * @return Sink rate at best L/D (m/s)
+   */
+  fixed
+  get_SbestLD() const
+  {
     return SbestLD;
   }
 
-/** 
- * Accesses best L/D ratio
- * 
- * @return Best L/D ratio
- */
+  /**
+   * Accesses best L/D ratio
+   *
+   * @return Best L/D ratio
+   */
   fixed get_bestLD() const;
 
-/**
- * Takeoff speed
- * @return Takeoff speed threshold (m/s)
- */
+  /**
+   * Takeoff speed
+   * @return Takeoff speed threshold (m/s)
+   */
   fixed get_Vtakeoff() const;
 
-/** 
- * Set cruise efficiency value.  1.0 = perfect MacCready speed
- * 
- * @param _ce The new cruise efficiency value
- */
-  void set_cruise_efficiency(const fixed _ce) {
+  /**
+   * Set cruise efficiency value.  1.0 = perfect MacCready speed
+   *
+   * @param _ce The new cruise efficiency value
+   */
+  void
+  set_cruise_efficiency(const fixed _ce)
+  {
     cruise_efficiency = _ce;
   }
 
-/** 
- * Accessor for current cruise efficiency
- * 
- * @return Cruise efficiency
- */
-  fixed get_cruise_efficiency() const {
+  /**
+   * Accessor for current cruise efficiency
+   *
+   * @return Cruise efficiency
+   */
+  fixed
+  get_cruise_efficiency() const
+  {
     return cruise_efficiency;
   }
 
-/** 
- * Set bugs value.
- * 
- * @param clean The new bugs setting (clean ratio) (0-1]
- */
+  /**
+   * Set bugs value.
+   *
+   * @param clean The new bugs setting (clean ratio) (0-1]
+   */
   void set_bugs(const fixed clean);
 
   /**
@@ -183,11 +197,11 @@ public:
    */
   fixed get_bugs() const;
 
-/** 
- * Set ballast value.
- * 
- * @param ratio The new ballast setting (proportion of possible ballast, [0-1]
- */
+  /**
+   * Set ballast value.
+   *
+   * @param ratio The new ballast setting (proportion of possible ballast, [0-1]
+   */
   void set_ballast(const fixed ratio);
 
   /**
@@ -202,193 +216,181 @@ public:
    */
   fixed get_ballast_litres() const;
 
-/** 
- * Determine if glider carries ballast
- * 
- * @return True if glider can carry ballast
- */
+  /**
+   * Determine if glider carries ballast
+   *
+   * @return True if glider can carry ballast
+   */
   bool is_ballastable() const;
 
-/** 
- * Set MacCready value.  Internally this performs search
- * for best LD values corresponding to this setting.
- * 
- * @param _mc The new MacCready ring setting (m/s)
- */
+  /**
+   * Set MacCready value.  Internally this performs search
+   * for best LD values corresponding to this setting.
+   *
+   * @param _mc The new MacCready ring setting (m/s)
+   */
   void set_mc(const fixed _mc);
 
-/** 
- * Accessor for MC setting
- * 
- * @return The current MacCready ring setting (m/s)
- */
+  /**
+   * Accessor for MC setting
+   *
+   * @return The current MacCready ring setting (m/s)
+   */
   fixed get_mc() const {
     return mc;
   }
 
-/** 
- * Accessor for inverse of MC setting
- * 
- * @return The inverse of current MacCready ring setting (s/m)
- */
+  /**
+   * Accessor for inverse of MC setting
+   *
+   * @return The inverse of current MacCready ring setting (s/m)
+   */
   fixed get_inv_mc() const {
     return inv_mc;
   }
 
-/** 
- * Calculate all up weight 
- *
- * @return Mass (kg) of aircraft including ballast
- */
+  /**
+   * Calculate all up weight
+   *
+   * @return Mass (kg) of aircraft including ballast
+   */
   fixed get_all_up_weight() const;
 
-/** 
- * Calculate wing loading 
- *
- * @return Wing loading (all up mass divided by reference area, kg/m^2)
- */
+  /**
+   * Calculate wing loading
+   *
+   * @return Wing loading (all up mass divided by reference area, kg/m^2)
+   */
   fixed get_wing_loading() const;
 
-/** 
- * Sink rate model (actual glide polar) function.
- * 
- * @param V Speed at which sink rate is to be evaluated
- * 
- * @return Sink rate (m/s, positive down)
- */
+  /**
+   * Sink rate model (actual glide polar) function.
+   *
+   * @param V Speed at which sink rate is to be evaluated
+   *
+   * @return Sink rate (m/s, positive down)
+   */
   fixed SinkRate(const fixed V) const;
 
-/** 
- * Sink rate model (actual glide polar) function.
- * 
- * Uses a parabolic load factor model to calculate additional sink rate
- * from loading:
- *
- * \f[ w(V,n) = w_0 + ({{V}\over{2 \Lambda}})[n^2-1]({{V_\Lambda}\over{V}})^2 \f]
- * Where:
- * - \f$n \f$ is the load factor
- * - \f$\Lambda \f$ is the best L/D ratio
- * - \f$V_\Lambda \f$ is the speed for best L/D 
- *
- * @param V Speed at which sink rate is to be evaluated
- * @param n Load factor
- * 
- * @return Sink rate (m/s, positive down)
- */
+  /**
+   * Sink rate model (actual glide polar) function.
+   *
+   * Uses a parabolic load factor model to calculate additional sink rate
+   * from loading:
+   *
+   * \f[ w(V,n) = w_0 + ({{V}\over{2 \Lambda}})[n^2-1]({{V_\Lambda}\over{V}})^2 \f]
+   * Where:
+   * - \f$n \f$ is the load factor
+   * - \f$\Lambda \f$ is the best L/D ratio
+   * - \f$V_\Lambda \f$ is the speed for best L/D
+   *
+   * @param V Speed at which sink rate is to be evaluated
+   * @param n Load factor
+   *
+   * @return Sink rate (m/s, positive down)
+   */
   fixed SinkRate(const fixed V, const fixed n) const;
 
-/** 
- * Sink rate model adjusted by MC setting.  This is used
- * to accomodate speed ring (MC) settings in optimal glide
- * calculations. 
- * 
- * @param V Speed at which sink rate is to be evaluated
- * 
- * @return Sink rate plus MC setting (m/s, positive down)
- */
+  /**
+   * Sink rate model adjusted by MC setting.  This is used
+   * to accomodate speed ring (MC) settings in optimal glide
+   * calculations.
+   *
+   * @param V Speed at which sink rate is to be evaluated
+   *
+   * @return Sink rate plus MC setting (m/s, positive down)
+   */
   fixed MSinkRate(const fixed V) const;
 
-/** 
- * Use classical MC theory to compute the optimal glide solution
- * for a given task.
- * 
- * @param task The glide task for which to compute a solution
- * 
- * @return Glide solution
- */
+  /**
+   * Use classical MC theory to compute the optimal glide solution
+   * for a given task.
+   *
+   * @param task The glide task for which to compute a solution
+   *
+   * @return Glide solution
+   */
   GlideResult solve(const GlideState &task) const;
 
-/** 
- * Neglecting the actual glide sink rate, calculate the
- * glide solution with an externally supplied sink rate,
- * assuming the glider flies at speeds according to classical
- * MacCready theory.  This is used to calculate the sink rate
- * required for glide-only solutions.
- * 
- * @param task The glide task for which to compute a solution
- * @param S Imposed sink rate
- * 
- * @return Glide solution for the virtual task
- */
-  GlideResult solve_sink(const GlideState &task,
-                          const fixed S) const;
+  /**
+   * Neglecting the actual glide sink rate, calculate the
+   * glide solution with an externally supplied sink rate,
+   * assuming the glider flies at speeds according to classical
+   * MacCready theory.  This is used to calculate the sink rate
+   * required for glide-only solutions.
+   *
+   * @param task The glide task for which to compute a solution
+   * @param S Imposed sink rate
+   *
+   * @return Glide solution for the virtual task
+   */
+  GlideResult solve_sink(const GlideState &task, const fixed S) const;
 
-/** 
- * Quickly determine whether a task is achievable without 
- * climb, assuming favorable wind.  This can be used to quickly
- * pre-filter waypoints for arrival altitude before performing
- * expensive optimal glide solution searches.
- * 
- * @param task The glide task for which to estimate a solution
- * 
- * @return True if a glide solution is feasible (optimistically)
- */
+  /**
+   * Quickly determine whether a task is achievable without
+   * climb, assuming favorable wind.  This can be used to quickly
+   * pre-filter waypoints for arrival altitude before performing
+   * expensive optimal glide solution searches.
+   *
+   * @param task The glide task for which to estimate a solution
+   *
+   * @return True if a glide solution is feasible (optimistically)
+   */
   bool possible_glide(const GlideState &task) const;
 
-/** 
- * Calculate speed-to-fly according to MacCready dolphin theory
- * with ring setting at current MC value.
- * 
- * @param state Aircraft state (taking TrueAirspeed and Vario)
- * @param solution Solution for which Vopt is desired
- * @param block_stf Whether to use block speed to fly or dolphin
- * 
- * @return Speed to fly (true, m/s)
- */
-  fixed speed_to_fly(const AIRCRAFT_STATE &state,
-                     const GlideResult &solution,
-                     const bool block_stf) const;
-/** 
- * Compute MacCready ring setting to adjust speeds to incorporate
- * risk as the aircraft gets low.
- * 
- * @param height_fraction Ratio of height to climb ceiling
- * @param riskGamma Risk adjustment factor.  Lower gamma, MC is uniform with height.  High gamma, MC scales almost uniformly with height
- * 
- * @return MC value adjusted for risk (m/s)
- */
-  fixed mc_risk(const fixed height_fraction, 
-                const fixed riskGamma) const;
+  /**
+   * Calculate speed-to-fly according to MacCready dolphin theory
+   * with ring setting at current MC value.
+   *
+   * @param state Aircraft state (taking TrueAirspeed and Vario)
+   * @param solution Solution for which Vopt is desired
+   * @param block_stf Whether to use block speed to fly or dolphin
+   *
+   * @return Speed to fly (true, m/s)
+   */
+  fixed speed_to_fly(const AIRCRAFT_STATE &state, const GlideResult &solution,
+      const bool block_stf) const;
 
-/** 
- * Find LD relative to ground for specified track bearing
- * 
- * @param state Aircraft state (for wind)
- * 
- * @return LD ratio (distance travelled per unit height loss)
- */
+  /**
+   * Compute MacCready ring setting to adjust speeds to incorporate
+   * risk as the aircraft gets low.
+   *
+   * @param height_fraction Ratio of height to climb ceiling
+   * @param riskGamma Risk adjustment factor.  Lower gamma, MC is uniform with height.  High gamma, MC scales almost uniformly with height
+   *
+   * @return MC value adjusted for risk (m/s)
+   */
+  fixed mc_risk(const fixed height_fraction, const fixed riskGamma) const;
+
+  /**
+   * Find LD relative to ground for specified track bearing
+   *
+   * @param state Aircraft state (for wind)
+   *
+   * @return LD ratio (distance travelled per unit height loss)
+   */
   fixed get_ld_over_ground(const AIRCRAFT_STATE &state) const;
 
-/** 
- * Find speed to produce a specified sink rate
- * 
- * @param S Sink rate (m/s, positive down)
- * 
- * @return Speed (m/s)
- */
+  /**
+   * Find speed to produce a specified sink rate
+   *
+   * @param S Sink rate (m/s, positive down)
+   *
+   * @return Speed (m/s)
+   */
   fixed get_V_for_sinkrate(const fixed S) const;
 
 private:
-
-/** 
- * Update computed values after change
- */
+  /** Update computed values after change */
   void update();
 
-/** 
- * Update glide polar coefficients from ideal terms
- * 
- */
+  /** Update glide polar coefficients from ideal terms */
   void update_polar();
 
-/** 
- * Solve for best LD at current MC/bugs/ballast setting.
- */
+  /** Solve for best LD at current MC/bugs/ballast setting. */
   void solve_ld();
 
-/** 
- * Solve for min sink rate at current bugs/ballast setting.
- */
+  /** Solve for min sink rate at current bugs/ballast setting. */
   void solve_min();
 
   fixed mc;                  /**< MacCready ring setting (m/s) */
@@ -418,4 +420,3 @@ private:
 };
 
 #endif
-
