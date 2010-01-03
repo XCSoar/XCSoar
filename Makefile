@@ -33,7 +33,9 @@ ifeq ($(HAVE_WIN32),n)
 CPPFLAGS += -DDO_PRINT
 CPPFLAGS += -DINSTRUMENT_TASK
 CPPFLAGS += -DHAVE_TAP
-CPPFLAGS += -DHAVE_BOOST
+ifneq ($(TARGET),CYGWIN)
+  CPPFLAGS += -DHAVE_BOOST
+endif
 endif
 
 include $(topdir)/build/flags.mk

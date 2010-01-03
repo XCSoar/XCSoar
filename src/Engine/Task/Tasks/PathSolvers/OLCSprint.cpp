@@ -8,6 +8,9 @@
     this instance instead of in OnlineContest.
   - Solutions must be improving as time goes on, so no need to search
     back from current best
+  - with sampling at approx 300 points, 2.5 hours = 1pt/30s
+    .: to keep ahead, will need to be able to find a solution within
+     30s at 300pt resolution, otherwise solver will lag behind new data.
 */
 
 OLCSprint::OLCSprint(OnlineContest& _olc):

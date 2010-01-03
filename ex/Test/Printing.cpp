@@ -609,11 +609,11 @@ Trace::print(const GEOPOINT &loc) const
   std::ofstream fs("results/res-trace.txt");
 
   TracePointVector vec = find_within_range(loc, fixed(10000),
-                                                  0);
+                                           0, -fixed_one);
   print_tpv(vec, fs);
 
   std::ofstream ft("results/res-trace-thin.txt");
-  thin_trace(vec, loc, fixed(1000));
+  vec = find_within_range(loc, fixed(10000), 0, fixed(1000));
 
   print_tpv(vec, ft);
 }

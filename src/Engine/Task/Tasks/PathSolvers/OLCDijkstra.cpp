@@ -109,6 +109,7 @@ OLCDijkstra::reset()
   m_dijkstra.clear();
   n_points = 0;
   solution_found = false;
+  best_distance = fixed_zero;
 }
 
 
