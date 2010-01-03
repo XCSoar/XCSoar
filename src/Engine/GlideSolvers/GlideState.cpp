@@ -42,36 +42,37 @@
 
 /**
  * Quadratic function solver for MacCready theory constraint equation
- * \todo document this equation!
+ * @todo document this equation!
  */
 class GlideQuadratic: public Quadratic
 {
 public:
-/** 
- * Constructor.
- * 
- * @param task Task to initialse solver for
- * @param V Speed (m/s)
- * 
- * @return Initialised object (not solved)
- */
-  GlideQuadratic(const GlideState &task, 
-                 const fixed V):
-    Quadratic(task.dwcostheta_, task.wsq_-V*V)
-    {};
+  /**
+   * Constructor.
+   *
+   * @param task Task to initialse solver for
+   * @param V Speed (m/s)
+   *
+   * @return Initialised object (not solved)
+   */
+  GlideQuadratic(const GlideState &task, const fixed V) :
+    Quadratic(task.dwcostheta_, task.wsq_ - V * V)
+  {
+  }
 
-/** 
- * Find ground speed from task and wind
- * 
- * @return Ground speed during cruise (m/s)
- */
-  fixed solve() const {
-    if (check()) {
+  /**
+   * Find ground speed from task and wind
+   *
+   * @return Ground speed during cruise (m/s)
+   */
+  fixed
+  solve() const
+  {
+    if (check())
       /// @todo check this is correct for all theta
       return solution_max();
-    } else {
+    else
       return -fixed_one;
-    }
   }
 };
 
@@ -88,27 +89,26 @@ GlideState::calc_ave_speed(const fixed Veff) const
 }
 
 // dummy task
-GlideState::GlideState(const GeoVector &vector,
-                         const fixed htarget,
-                         const AIRCRAFT_STATE &aircraft):
+GlideState::GlideState(const GeoVector &vector, const fixed htarget,
+    const AIRCRAFT_STATE &aircraft) :
   Vector(vector),
   MinHeight(htarget)
 {
   calc_speedups(aircraft);
 }
 
-
-void GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
+void
+GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
 {
-  AltitudeDifference = (aircraft.NavAltitude-MinHeight);
+  AltitudeDifference = (aircraft.NavAltitude - MinHeight);
   if (positive(aircraft.WindSpeed)) {
     WindDirection = aircraft.WindDirection;
     EffectiveWindSpeed = aircraft.WindSpeed;
-    const fixed theta = fixed_180+aircraft.WindDirection-Vector.Bearing;
+    const fixed theta = fixed_180 + aircraft.WindDirection - Vector.Bearing;
     EffectiveWindAngle = theta;
-    wsq_ = aircraft.WindSpeed*aircraft.WindSpeed;
-    HeadWind = -aircraft.WindSpeed*cos(fixed_deg_to_rad*theta);
-    dwcostheta_ = fixed_two*HeadWind;
+    wsq_ = aircraft.WindSpeed * aircraft.WindSpeed;
+    HeadWind = -aircraft.WindSpeed * cos(fixed_deg_to_rad * theta);
+    dwcostheta_ = fixed_two * HeadWind;
   } else {
     WindDirection = fixed_zero;
     EffectiveWindSpeed = fixed_zero;
@@ -119,23 +119,25 @@ void GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
   }
 }
 
-
 fixed
 GlideState::drifted_distance(const fixed t_cl) const
 {
   if (positive(EffectiveWindSpeed)) {
-    const fixed wd = fixed_deg_to_rad*(fixed_180+WindDirection);
-    fixed sinwd, coswd;  sin_cos(wd,&sinwd,&coswd);
+    const fixed wd = fixed_deg_to_rad * (fixed_180 + WindDirection);
+    fixed sinwd, coswd;
+    sin_cos(wd, &sinwd, &coswd);
 
-    const fixed tb = fixed_deg_to_rad*(Vector.Bearing);
-    fixed sintb, costb;  sin_cos(tb,&sintb,&costb);
+    const fixed tb = fixed_deg_to_rad * (Vector.Bearing);
+    fixed sintb, costb;
+    sin_cos(tb, &sintb, &costb);
 
-    const fixed aw = EffectiveWindSpeed*t_cl;
-    const fixed dx= Vector.Distance*sintb-aw*sinwd;
-    const fixed dy= Vector.Distance*costb-aw*coswd;
-    return sqrt(dx*dx+dy*dy);
+    const fixed aw = EffectiveWindSpeed * t_cl;
+    const fixed dx = Vector.Distance * sintb - aw * sinwd;
+    const fixed dy = Vector.Distance * costb - aw * coswd;
+
+    return sqrt(dx * dx + dy * dy);
   } else {
     return Vector.Distance;
   }
- // ??   task.Bearing = RAD_TO_DEG*(atan2(dx,dy));
+  // ??   task.Bearing = RAD_TO_DEG*(atan2(dx,dy));
 }

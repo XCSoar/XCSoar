@@ -45,60 +45,67 @@ struct AIRCRAFT_STATE;
  */
 struct GlideState 
 {
+  /**
+   * Dummy task constructor.  Typically used for synthetic glide
+   * tasks.  Where there are real targets, the other constructors should
+   * be used instead.
+   *
+   * @param vector Specified vector for task
+   * @param htarget Height of target (m above MSL)
+   * @param aircraft Aircraft state
+   *
+   * @return Initialised glide task
+   */
+  GlideState(const GeoVector &vector, const fixed htarget,
+      const AIRCRAFT_STATE &aircraft);
 
-/** 
- * Dummy task constructor.  Typically used for synthetic glide
- * tasks.  Where there are real targets, the other constructors should
- * be used instead.
- * 
- * @param vector Specified vector for task
- * @param htarget Height of target (m above MSL)
- * @param aircraft Aircraft state
- * 
- * @return Initialised glide task
- */
-  GlideState(const GeoVector &vector,
-              const fixed htarget,
-              const AIRCRAFT_STATE &aircraft);
-
-/** 
- * Calculate internal quantities to reduce computation time
- * by clients of this class
- * 
- * @param aircraft Aircraft state
- */
+  /**
+   * Calculate internal quantities to reduce computation time
+   * by clients of this class
+   *
+   * @param aircraft Aircraft state
+   */
   void calc_speedups(const AIRCRAFT_STATE &aircraft);
 
-/** 
- * Calculates average cross-country speed from effective 
- * cross-country speed (accounting for wind)
- * 
- * @param Veff Effective cruise speed (m/s)
- * 
- * @return Average cross-country speed (m/s)
- */
+  /**
+   * Calculates average cross-country speed from effective
+   * cross-country speed (accounting for wind)
+   *
+   * @param Veff Effective cruise speed (m/s)
+   *
+   * @return Average cross-country speed (m/s)
+   */
   fixed calc_ave_speed(const fixed Veff) const;
 
-/** 
- * Calculate distance a circling aircraft will drift
- * in a given time
- * 
- * @param t_climb Time spent in climb (s)
- * 
- * @return Distance (m) of drift
- */
+  /**
+   * Calculate distance a circling aircraft will drift
+   * in a given time
+   *
+   * @param t_climb Time spent in climb (s)
+   *
+   * @return Distance (m) of drift
+   */
   fixed drifted_distance(const fixed t_climb) const;
 
-  GeoVector Vector;             /**< Distance/bearing of task */
-  fixed MinHeight;             /**< Height (m above MSL) of end */
-  fixed WindDirection;         /**< Direction of wind (deg True) */
-  fixed AltitudeDifference;    /**< Aircraft height less target height */
+  /** Distance/bearing of task */
+  GeoVector Vector;
+  /** Height (m above MSL) of end */
+  fixed MinHeight;
+  /** Direction of wind (deg True) */
+  fixed WindDirection;
+  /** Aircraft height less target height */
+  fixed AltitudeDifference;
 
-  fixed EffectiveWindSpeed;    /**< (internal use) */
-  fixed EffectiveWindAngle;    /**< (internal use) */
-  fixed wsq_;                  /**< (internal use) */
-  fixed dwcostheta_;           /**< (internal use) */
-  fixed HeadWind;              /**< headwind component (m/s) in cruise */
+  /** (internal use) */
+  fixed EffectiveWindSpeed;
+  /** (internal use) */
+  fixed EffectiveWindAngle;
+  /** (internal use) */
+  fixed wsq_;
+  /** (internal use) */
+  fixed dwcostheta_;
+  /** headwind component (m/s) in cruise */
+  fixed HeadWind;
 };
 
 #endif
