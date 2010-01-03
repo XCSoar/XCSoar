@@ -83,9 +83,9 @@ GlideState::calc_ave_speed(const fixed Veff) const
     // only need to solve if positive wind speed
     GlideQuadratic q(*this, Veff);
     return q.solve();
-  } else {
-    return Veff;
   }
+
+  return Veff;
 }
 
 // dummy task
