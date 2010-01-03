@@ -45,10 +45,10 @@ const fixed ZeroFinder::epsilon(fixed::internal(),2);
 const fixed ZeroFinder::sqrt_epsilon = sqrt(ZeroFinder::epsilon);
 #else
 const fixed ZeroFinder::epsilon = std::numeric_limits<double>::epsilon();
-const fixed ZeroFinder::sqrt_epsilon = sqrt(std::numeric_limits<double>::epsilon());
+const fixed ZeroFinder::sqrt_epsilon =
+    sqrt(std::numeric_limits<double>::epsilon());
 #endif
 const fixed ZeroFinder::r((3. - sqrt(5.0)) / 2); /* Gold section ratio */
-
 
 /*
  ************************************************************************
@@ -103,10 +103,10 @@ static const fixed fixed_threequaters(0.75);
 static const fixed fixed_third(1.0 / 3.0);
 
 fixed ZeroFinder::find_zero(const fixed xstart) {
-  fixed a,b,c;				/* Abscissae, descr. see above	*/
-  fixed fa;				/* f(a)				*/
-  fixed fb;				/* f(b)				*/
-  fixed fc;				/* f(c)				*/
+  fixed a, b, c; // Abscissae, descr. see above
+  fixed fa; // f(a)
+  fixed fb; // f(b)
+  fixed fc; // f(c)
 
   bool b_best = true; // b is best and last called
 
@@ -116,87 +116,103 @@ fixed ZeroFinder::find_zero(const fixed xstart) {
   b = xmax;  
   fb = f(b);
 
-  for(;;)		/* Main iteration loop	*/
-  {
-    fixed prev_step = b-a;		/* Distance from the last but one*/
-					/* to the last approximation	*/    
+  // Main iteration loop
+  for (;;) {
+    // Distance from the last but one to the last approximation
+    fixed prev_step = b - a;
    
-    if( fabs(fc) < fabs(fb) )
-    {                         		/* Swap data for b to be the 	*/
-      a = b;  b = c;  c = a;          /* best approximation		*/
-      fa=fb;  fb=fc;  fc=fa;
+    if (fabs(fc) < fabs(fb)) {
+      // Swap data for b to be the best approximation
+      a = b;
+      b = c;
+      c = a;
+
+      fa = fb;
+      fb = fc;
+      fc = fa;
+
       b_best = false;
     } else {
       b_best = true;
     }
-    const fixed tol_act = 		/* Actual tolerance	        */
-      fixed_two*epsilon*fabs(b) + tolerance*fixed_half;
 
-    fixed new_step = (c-b)*fixed_half;    /* Step at this iteration       */
+    // Actual tolerance
+    const fixed tol_act = fixed_two * epsilon * fabs(b)
+        + tolerance * fixed_half;
 
-    if( fabs(new_step) <= tol_act || fb == (fixed)0 ) {
-      if (!b_best) {
-        fb = f(b); // call once more
+    // Step at this iteration
+    fixed new_step = (c - b) * fixed_half;
+
+    if (fabs(new_step) <= tol_act || fb == (fixed)0) {
+      if (!b_best)
+        // call once more
+        fb = f(b);
+
+      // Acceptable approx. is found
+      return b;
+    }
+
+    // Decide if the interpolation can be tried
+
+    // If prev_step was large enough and was in true direction,
+    // interpolation may be tried
+    if (fabs(prev_step) >= tol_act && fabs(fa) > fabs(fb)) {
+      // Interpolation step is calculated in the form p/q;
+      // division operations is delayed until the last moment
+      fixed p;
+      fixed q;
+
+      const fixed cb = c - b;
+      // If we have only two distinct points
+      // -> linear interpolation can only be applied
+      if (a == c) {
+        const fixed t1 = fb / fa;
+        p = cb * t1;
+        q = fixed_one - t1;
+      } else {
+        // Quadric inverse interpolation
+        q = fa / fc;
+        const fixed t1 = fb / fc;
+        const fixed t2 = fb / fa;
+        p = t2 * (cb * q * (q - t1) - (b - a) * (t1 - fixed_one));
+        q = (q - fixed_one) * (t1 - fixed_one) * (t2 - fixed_one);
       }
-      return b;				/* Acceptable approx. is found	*/
+
+      // p was calculated with the opposite sign;
+      // make p positive and assign possible minus to q
+      if (positive(p))
+        q = -q;
+      else
+        p = -p;
+
+      // If b+p/q falls in [b,c] and isn't too large it is accepted
+      // If p/q is too large then the bissection procedure can
+      // reduce [b,c] range to more extent
+      if (p < (fixed_threequaters * cb * q - fabs(tol_act * q) * fixed_half)
+          && p < fabs(prev_step * q * fixed_half))
+        new_step = p / q;
     }
 
-    			/* Decide if the interpolation can be tried	*/
-    if( fabs(prev_step) >= tol_act	/* If prev_step was large enough*/
-	&& fabs(fa) > fabs(fb) )	/* and was in true direction,	*/
-    {					/* Interpolatiom may be tried	*/
-
-      fixed p;      			/* Interpolation step is calcu- */
-      fixed q;      			/* lated in the form p/q; divi- */
-  					/* sion operations is delayed   */
- 					/* until the last moment	*/
-
-      const fixed cb = c-b;
-      if( a==c )			/* If we have only two distinct	*/
-	{				/* points linear interpolation 	*/
-	  const fixed t1 = fb/fa;	/* can only be applied		*/
-	  p = cb*t1;
-	  q = fixed_one - t1;
- 	}
-	else				/* Quadric inverse interpolation*/
-	{
-	  q = fa/fc;  
-          const fixed t1 = fb/fc;  
-          const fixed t2 = fb/fa;
-	  p = t2 * ( cb*q*(q-t1) - (b-a)*(t1-fixed_one) );
-	  q = (q-fixed_one) * (t1-fixed_one) * (t2-fixed_one);
-	}
-      if( positive(p) )		/* p was calculated with the op-*/
-	  q = -q;			/* posite sign; make p positive	*/
-	else				/* and assign possible minus to	*/
-	  p = -p;			/* q				*/
-
-	if( p < (fixed_threequaters*cb*q-fabs(tol_act*q)*fixed_half)	/* If b+p/q falls in [b,c]*/
-	    && p < fabs(prev_step*q*fixed_half) )	/* and isn't too large	*/
-	  new_step = p/q;			/* it is accepted	*/
-					/* If p/q is too large then the	*/
-					/* bissection procedure can 	*/
-					/* reduce [b,c] range to more	*/
-					/* extent			*/
-    }
-
+    // Adjust the step to be not less than tolerance
     limit_tolerance(new_step, tol_act);
-    /* Adjust the step to be not less than tolerance */
 
-    a = b;  fa = fb;			/* Save the previous approx.	*/
-    b += new_step;                      /* Do step to a new approxim.	*/
+    // Save the previous approx.
+    a = b;
+    fa = fb;
+
+    // Do step to a new approxim.
+    b += new_step;
     fb = f(b);
 
-    if( (positive(fb) && positive(fc)) || (negative(fb) && negative(fc)) )
-    {                 			/* Adjust c for it to have a sign*/
-      c = a;  fc = fa;                  /* opposite to that of b	*/
+    // Adjust c for it to have a sign opposite to that of b
+    if ((positive(fb) && positive(fc)) || (negative(fb) && negative(fc))) {
+      c = a;
+      fc = fa;
     }
 
-    assert((b<=xmax) && (b>=xmin));
+    assert((b <= xmax) && (b >= xmin));
   }
-
 }
-
 
 /*
  ************************************************************************
@@ -250,101 +266,112 @@ fixed ZeroFinder::find_zero(const fixed xstart) {
  */
 fixed ZeroFinder::find_min(const fixed xstart)
 {
-  fixed x,v,w;				/* Abscissae, descr. see above	*/
-  fixed fx;				/* f(x)				*/
-  fixed fv;				/* f(v)				*/
-  fixed fw;				/* f(w)				*/
+  fixed x, v, w; // Abscissae, descr. see above
+  fixed fx; // f(x)
+  fixed fv; // f(v)
+  fixed fw; // f(w)
   fixed a = xmin;
   fixed b = xmax;
   bool x_best = true;
 
-  assert( tolerance > 0 && b > a );
+  assert(tolerance > 0 && b > a);
 
   /* First step - always gold section*/
-  x = w = v = a + r*(b-a);
-  fx= fw = fv = f(v);
+  x = w = v = a + r * (b - a);
+  fx = fw = fv = f(v);
 
-  for(;;)		/* Main iteration loop	*/
-  {
-    const fixed range = b-a;      /* Range over which the minimum */
-                                   /* is seeked for		*/
-    const fixed middle_range = (a+b)*fixed_half;
+  // Main iteration loop
+  for (;;) {
+    // Range over which the minimum is seeked for
+    const fixed range = b - a;
+    const fixed middle_range = (a + b) * fixed_half;
 
-    const fixed tol_act =			/* Actual tolerance		*/
-      sqrt_epsilon*fabs(x) + tolerance*fixed_third;
-    const fixed double_tol_act = fixed_two*tol_act;
+    // Actual tolerance
+    const fixed tol_act = sqrt_epsilon * fabs(x) + tolerance * fixed_third;
+    const fixed double_tol_act = fixed_two * tol_act;
 
     if( fabs(x-middle_range) + range*fixed_half <= double_tol_act ) {
-      if (!x_best) {
-        fx = f(x); // call once more
-      }
-      return x;				/* Acceptable approx. is found	*/
+      if (!x_best)
+        // call once more
+        fx = f(x);
+
+      // Acceptable approx. is found
+      return x;
     }
 
-    fixed new_step      		/* Step at this iteration       */
-					/* Obtain the gold section step	*/
-      = r * ( x<middle_range ? b-x : a-x );
+    // Step at this iteration
+    // Obtain the gold section step
+    fixed new_step = r * (x < middle_range ? b - x : a - x);
 
-    			/* Decide if the interpolation can be tried	*/
-    if( fabs(x-w) >= tol_act  )		/* If x and w are distinct      */
-    {					/* interpolatiom may be tried	*/
-	fixed p; 		        /* Interpolation step is calcula-*/
-	fixed q;                        /* ted as p/q; division operation*/
-                                        /* is delayed until last moment	*/
+    // Decide if the interpolation can be tried
 
-	const fixed t = (x-w) * (fx-fv);
-	q = (x-v) * (fx-fw);
-	p = (x-v)*q - (x-w)*t;
-	q = fixed_two*(q-t);
+    // If x and w are distinct
+    // interpolation may be tried
+    if (fabs(x - w) >= tol_act) {
+      // Interpolation step is calculated as p/q;
+      // division operation is delayed until last moment
+      fixed p;
+      fixed q;
 
-	if( positive(q) )		/* q was calculated with the op-*/
-	  p = -p;			/* posite sign; make q positive	*/
-	else				/* and assign possible minus to	*/
-	  q = -q;			/* p				*/
+      const fixed t = (x - w) * (fx - fv);
+      q = (x - v) * (fx - fw);
+      p = (x - v) * q - (x - w) * t;
+      q = fixed_two * (q - t);
 
-	if( fabs(p) < fabs(new_step*q) &&	/* If x+p/q falls in [a,b]*/
-	    p > q*(a-x+double_tol_act) &&		/* not too close to a and */
-	    p < q*(b-x-double_tol_act)  )            /* b, and isn't too large */
-	  new_step = p/q;			/* it is accepted         */
-					/* If p/q is too large then the	*/
-					/* gold section procedure can 	*/
-					/* reduce [a,b] range to more	*/
-					/* extent			*/
+      // q was calculated with the opposite sign;
+      // make q positive and assign possible minus to p
+      if (positive(q))
+        p = -p;
+      else
+        q = -q;
+
+      // If x+p/q falls in [a,b] not too close to a and b,
+      // and isn't too large it is accepted
+      // If p/q is too large then the gold section procedure can
+      // reduce [a,b] range to more extent
+      if (fabs(p) < fabs(new_step * q) && p > q * (a - x + double_tol_act)
+          && p < q * (b - x - double_tol_act))
+        new_step = p / q;
     }
 
-    limit_tolerance(new_step, tol_act); /* Adjust the step to be not less than tolerance */
+    // Adjust the step to be not less than tolerance
+    limit_tolerance(new_step, tol_act);
 
-				/* Obtain the next approximation to min	*/
-    {				/* and reduce the enveloping range	*/
-      const fixed t = x + new_step;	/* Tentative point for the min	*/
+    // Obtain the next approximation to min and reduce the enveloping range
+    {
+      // Tentative point for the min
+      const fixed t = x + new_step;
       const fixed ft = f(t);
-      if( ft <= fx )
-      {                                 /* t is a better approximation	*/
-	( t < x ? b : a ) = x;          /* Reduce the range so that	*/
-	                                /* t would fall within it	*/
-      
-	v = w;  w = x;  x = t;		/* Assign the best approx to x	*/
-	fv=fw;  fw=fx;  fx=ft;
-        x_best = false;
-      }
-      else                              /* x remains the better approx  */
-      {        		             
-        x_best = true;
-        ( t < x ? a : b ) = t;          /* Reduce the range enclosing x	*/
-      
-        if( (ft <= fw) || (w==x) )
-        {
-           v = w;  w = t;
-	   fv=fw;  fw=ft;
-        }
-        else if( (ft<=fv) || (v==x) || (v==w) )
-        {
-           v = t;
-	   fv=ft;
-        }
-      }
-      
-    }			/* ----- end-of-block ----- */
-  }		/* ===== End of loop ===== */
+      // t is a better approximation
+      if (ft <= fx) {
+        // Reduce the range so that t would fall within it
+        (t < x ? b : a) = x;
 
+        // Assign the best approx to x
+        v = w;
+        w = x;
+        x = t;
+
+        fv = fw;
+        fw = fx;
+        fx = ft;
+        x_best = false;
+      } else {
+        // x remains the better approx
+        x_best = true;
+        // Reduce the range enclosing x
+        (t < x ? a : b) = t;
+
+        if ((ft <= fw) || (w == x)) {
+          v = w;
+          w = t;
+          fv = fw;
+          fw = ft;
+        } else if ((ft <= fv) || (v == x) || (v == w)) {
+          v = t;
+          fv = ft;
+        }
+      }
+    }
+  }
 }

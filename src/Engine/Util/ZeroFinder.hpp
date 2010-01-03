@@ -45,56 +45,60 @@
  */
 class ZeroFinder {
 public:
-/** 
- * Constructor of zero finder search algorithm
- * 
- * @param _xmin Minimum allowable value of x
- * @param _xmax Maximum allowable value of x
- * @param _tolerance Absolute tolerance of solution (in x)
- */
-  ZeroFinder(const fixed _xmin, const fixed _xmax, const fixed _tolerance): 
-    xmin(_xmin),
-    xmax(_xmax),
-    tolerance(_tolerance)
-    {
-    };
+  /**
+   * Constructor of zero finder search algorithm
+   *
+   * @param _xmin Minimum allowable value of x
+   * @param _xmax Maximum allowable value of x
+   * @param _tolerance Absolute tolerance of solution (in x)
+   */
+  ZeroFinder(const fixed _xmin, const fixed _xmax, const fixed _tolerance) :
+    xmin(_xmin), xmax(_xmax), tolerance(_tolerance)
+  {
+  }
 
-/** 
- * Abstract method for function to be minimised or root-solved 
- * 
- * @param x Value of x
- * 
- * @return f(x)
- */
+  /**
+   * Abstract method for function to be minimised or root-solved
+   *
+   * @param x Value of x
+   *
+   * @return f(x)
+   */
   virtual fixed f(const fixed x) = 0;
 
-/** 
- * Find closest value of x that produces f(x)=0
- * Method used is a variant of a bisector search. 
- *
- * @param xstart Initial value of x (not used)
- * 
- * @return x value of best solution
- */
+  /**
+   * Find closest value of x that produces f(x)=0
+   * Method used is a variant of a bisector search.
+   *
+   * @param xstart Initial value of x (not used)
+   *
+   * @return x value of best solution
+   */
   fixed find_zero(const fixed xstart);
 
-/** 
- * Find value of x that minimises f(x)
- * Method used is a variant of a bisector search. 
- * 
- * @param xstart Initial value of x (not used)
- * 
- * @return x value of best solution
- */
+  /**
+   * Find value of x that minimises f(x)
+   * Method used is a variant of a bisector search.
+   *
+   * @param xstart Initial value of x (not used)
+   *
+   * @return x value of best solution
+   */
   fixed find_min(const fixed xstart);
 
 protected:
-  const fixed xmin; /**< min value of search range */
-  const fixed xmax; /**< max value of search range */
-  const fixed tolerance; /**< search tolerance */
+  /** min value of search range */
+  const fixed xmin;
+  /** max value of search range */
+  const fixed xmax;
+  /** search tolerance */
+  const fixed tolerance;
+
 private:
-  static const fixed epsilon; /**< machine tolerance */
-  static const fixed sqrt_epsilon; /**< sqrt of machine tolerance */
+  /** machine tolerance */
+  static const fixed epsilon;
+  /** sqrt of machine tolerance */
+  static const fixed sqrt_epsilon;
   static const fixed r;
 };
 
