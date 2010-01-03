@@ -120,17 +120,17 @@ public:
 
   bool optimise_if_old();
 
-/** 
- * Find traces within approximate range (square range box)
- * to search location.  Possible use by screen display functions.
- * 
- * @param loc Location from which to search
- * @param range Distance in meters of search radius
- * @param mintime Minimum time to match (recency)
- * @param resolution Thin data to achieve minimum step size in (m) (if positive)
- * 
- * @return Vector of trace points within square range
- */
+  /**
+   * Find traces within approximate range (square range box)
+   * to search location.  Possible use by screen display functions.
+   *
+   * @param loc Location from which to search
+   * @param range Distance in meters of search radius
+   * @param mintime Minimum time to match (recency)
+   * @param resolution Thin data to achieve minimum step size in (m) (if positive)
+   *
+   * @return Vector of trace points within square range
+   */
   TracePointVector
   find_within_range(const GEOPOINT &loc, const fixed range, const unsigned mintime=0,
                     const fixed resolution = -fixed_one) const;
