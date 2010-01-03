@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-/*! \file
- * \brief Library for calculating Earth dimensions
+/*! @file
+ * @brief Library for calculating Earth dimensions
  *
  * This library provides general functions for calculating dimensions
  * on the Earth with GPS coordinates.
@@ -53,27 +53,20 @@ Copyright_License {
  * Finds cross track error in meters and closest point P4 between P3
  * and desired track P1-P2.  Very slow function!
  */
-fixed CrossTrackError(GEOPOINT loc1,
-                      GEOPOINT loc2,
-                      GEOPOINT loc3,
-                      GEOPOINT *loc4);
+fixed CrossTrackError(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3,
+    GEOPOINT *loc4);
 
 /**
  * Calculates projected distance from P3 along line P1-P2.
  */
-fixed ProjectedDistance(GEOPOINT loc1,
-                        GEOPOINT loc2,
-                        GEOPOINT loc3);
+fixed ProjectedDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3);
 
-void DistanceBearing(GEOPOINT loc1,
-                     GEOPOINT loc2,
-                     fixed *Distance, fixed *Bearing);
+void DistanceBearing(GEOPOINT loc1, GEOPOINT loc2, fixed *Distance,
+    fixed *Bearing);
 
-fixed Distance(GEOPOINT loc1,
-               GEOPOINT loc2);
+fixed Distance(GEOPOINT loc1, GEOPOINT loc2);
 
-fixed Bearing(GEOPOINT loc1,
-              GEOPOINT loc2);
+fixed Bearing(GEOPOINT loc1, GEOPOINT loc2);
 
 /**
  * Finds the point along a distance dthis (m) between p1 and p2, which are
@@ -81,9 +74,7 @@ fixed Bearing(GEOPOINT loc1,
  *
  * This is a slow function.  Adapted from The Aviation Formulary 1.42.
  */
-GEOPOINT IntermediatePoint(GEOPOINT loc1,
-                           GEOPOINT loc2,
-                           const fixed dthis);
+GEOPOINT IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2, const fixed dthis);
 
 /** 
  * Calculate and add distances between point 1 and 2, and point 2 and 3.
@@ -94,13 +85,9 @@ GEOPOINT IntermediatePoint(GEOPOINT loc1,
  * 
  * @return Distance 12 plus 23 (m)
  */
-fixed DoubleDistance(GEOPOINT loc1,
-                     GEOPOINT loc2,
-                     GEOPOINT loc3);
+fixed DoubleDistance(GEOPOINT loc1, GEOPOINT loc2, GEOPOINT loc3);
 
-void FindLatitudeLongitude(GEOPOINT loc,
-                           fixed Bearing, 
-                           fixed Distance,
-                           GEOPOINT *loc_out);
+void FindLatitudeLongitude(GEOPOINT loc, fixed Bearing, fixed Distance,
+    GEOPOINT *loc_out);
 
 #endif
