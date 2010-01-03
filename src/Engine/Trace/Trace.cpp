@@ -177,18 +177,17 @@ Trace::get_trace_points(const unsigned max_points) const
 {
   TracePointSet tset(begin(), end());
 
-  if (!tset.empty()) {
-    TracePointList tlist(tset.begin(), tset.end());
+  if (tset.empty())
+    return TracePointVector();
 
-    unsigned mrange = 3;
+  TracePointList tlist(tset.begin(), tset.end());
 
-    while (tlist.size() > max_points) {
-      thin_trace(tlist, mrange);
-      mrange = (mrange * 4) / 3;
-    }
+  unsigned mrange = 3;
 
-    return TracePointVector(tlist.begin(), tlist.end());
+  while (tlist.size() > max_points) {
+    thin_trace(tlist, mrange);
+    mrange = (mrange * 4) / 3;
   }
 
-  return TracePointVector();
+  return TracePointVector(tlist.begin(), tlist.end());
 }
