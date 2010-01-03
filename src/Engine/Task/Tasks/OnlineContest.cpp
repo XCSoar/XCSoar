@@ -5,6 +5,10 @@
 #include "Task/TaskStats/CommonStats.hpp"
 #include "Trace/Trace.hpp"
 
+#ifdef DO_PRINT
+#include <stdio.h>
+#endif
+
 OnlineContest::OnlineContest(const TaskEvents &te, 
                              const TaskBehaviour &tb,
                              const GlidePolar &gp,
@@ -91,7 +95,11 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
   };
 
   if (retval) {
-//    printf("time %d size %d\n", state.Time.as_int(), m_trace_points.size());
+#ifdef DO_PRINT
+    printf("time %d size %d dist %g\n", state.Time.as_int(), 
+           m_trace_points.size(), 
+           common_stats.distance_olc.as_double());
+#endif
   }
 
   return retval;
@@ -141,20 +149,6 @@ void
 OnlineContest::reset_rank()
 {
   ::reset_rank(m_trace_points);
-}
-
-void
-OnlineContest::prune()
-{
-#ifdef DO_PRINT
-  print();
-#endif
-  if (m_trace_points.size()<300) {
-    // no need to prune
-    return;
-  }
-  /// \todo thin data based on rank
-
 }
 
 /*

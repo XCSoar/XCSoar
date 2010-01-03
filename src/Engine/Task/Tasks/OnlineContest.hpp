@@ -85,7 +85,6 @@ public:
 
   void set_rank(const unsigned i, const unsigned d);
   void reset_rank();
-  void prune();
 
 private:
   const TaskEvents &m_task_events;

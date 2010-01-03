@@ -23,7 +23,9 @@ CFLAGS += -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes
 # make warnings fatal (for perfectionists)
 
 ifeq ($(WERROR),)
+ifneq ($(TARGET),CYGWIN)
 WERROR = $(DEBUG)
+endif
 endif
 
 ifeq ($(WERROR),y)

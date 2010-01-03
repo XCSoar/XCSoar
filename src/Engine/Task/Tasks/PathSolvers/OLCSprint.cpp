@@ -1,5 +1,9 @@
 #include "OLCSprint.hpp"
 
+#ifdef DO_PRINT
+#include <stdio.h>
+#endif
+
 /*
  @todo
   - note, this only searches 2.5 hour blocks, so should be able
@@ -11,12 +15,17 @@
   - with sampling at approx 300 points, 2.5 hours = 1pt/30s
     .: to keep ahead, will need to be able to find a solution within
      30s at 300pt resolution, otherwise solver will lag behind new data.
+  - is there an implicit assumption that start is lowest point?
+
+  - if this is up to date, no need to process anything earlier than
+    last 2.5 hours, since save_solution will catch the very best
+
+  - only need to pass in last 2.5 hours worth of data, therefore 
+    use min_time and have this class request data directly from Trace
 */
 
 OLCSprint::OLCSprint(OnlineContest& _olc):
-  OLCDijkstra(_olc, 4, 0),
-  m_start_limit(0),
-  m_start_current(0)
+  OLCDijkstra(_olc, 4, 0)
 {
 
 }
@@ -25,8 +34,6 @@ void
 OLCSprint::reset()
 {
   OLCDijkstra::reset();
-  m_start_limit = 0;
-  m_start_current = 0;
 }
 
 bool 
@@ -55,47 +62,31 @@ OLCSprint::score(fixed& the_distance)
 //  return dist/max(fixed_9000, time);
 }
 
-bool
-OLCSprint::solve_inner()
-{
-  if (OLCDijkstra::solve_inner()) {
-    return (m_start_current==0);
-  } else {
-    return false;
-  }
-}
-
-/*
-  add only one start edge, each time
- */
-void
-OLCSprint::add_start_edges()
-{
-  m_dijkstra.pop();
-
-  ScanTaskPoint destination(0, m_start_current);
-  m_dijkstra.link(destination, destination, 0);
-
-  if (m_start_current<m_start_limit) {
-    m_start_current++;
-  } else {
-    m_start_current = 0;
-    m_start_limit = find_start_limit();
-  }
-}
 
 unsigned
-OLCSprint::find_start_limit() const
+OLCSprint::find_start() const
 {
-  ScanTaskPoint start(0,0);
+  ScanTaskPoint start(0,1);
   const ScanTaskPoint end(0, n_points-1);
 
-  while (get_point(end).time-get_point(start).time > 9000) {
+  while (get_point(start).time + 9000 < get_point(end).time) {
     start.second++;
   }
   return start.second;
 }
 
+void
+OLCSprint::add_start_edges()
+{
+  m_dijkstra.pop();
+
+  ScanTaskPoint start(0, find_start());
+  ScanTaskPoint finish(num_stages-1, n_points-1);
+
+  if (admit_candidate(finish)) {
+    m_dijkstra.link(start, start, 0);
+  }
+}
 
 void 
 OLCSprint::add_edges(DijkstraTaskPoint &dijkstra,
@@ -113,7 +104,9 @@ OLCSprint::add_edges(DijkstraTaskPoint &dijkstra,
 
   find_solution(dijkstra, origin);
   
-  for (; destination.second> origin.first; --destination.second) {
+  for (int p=destination.second; 
+       p>= (int)origin.second; --p) {
+    destination.second = p;
     if (admit_candidate(destination)) {
       const unsigned d = get_weighting(origin.first)
         *distance(origin, destination);

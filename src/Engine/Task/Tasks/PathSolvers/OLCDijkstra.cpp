@@ -39,6 +39,10 @@
 #include "Task/Tasks/OnlineContest.hpp"
 #include <assert.h>
 
+#ifdef DO_PRINT
+#include <stdio.h>
+#endif
+
 
 OLCDijkstra::~OLCDijkstra() {
 }
@@ -82,20 +86,23 @@ OLCDijkstra::solve()
   if (m_dijkstra.empty()) {
     m_dijkstra.reset(ScanTaskPoint(0,0));
     add_start_edges();
+    if (m_dijkstra.empty()) {
+      // no processing to perform!
+      // @todo
+      // problem with this is it will immediately ask
+      // OnlineContest for new data, which will be expensive
+      // instead, new data should arrive only when preconditions
+      // are satisfied (significant difference and valid)
+      return true;
+    }
   }
-
-  if (solve_inner()) {
-    olc.prune();
-    return true;
-  } else {
-    return false;
-  }
+  return solve_inner();
 }
 
 bool
 OLCDijkstra::solve_inner()
 {
-  if (distance_general(m_dijkstra, 20)) {
+  if (distance_general(m_dijkstra, 30)) {
     save_solution();
     return true;
   } else {
@@ -118,6 +125,7 @@ OLCDijkstra::score(fixed& the_distance)
 {
   if (positive(calc_time())) {
     solution_found = true;
+    the_distance = best_distance;
     return best_distance;
   } else {
     return fixed_zero;
@@ -221,7 +229,15 @@ OLCDijkstra::save_solution()
 {
   const fixed the_distance = calc_distance();
   if (the_distance > best_distance) {
-    best_solution = solution;
+#ifdef DO_PRINT
+    printf("best dist %d from %d to %d s\n", 
+           the_distance.as_int(), solution[0].time,
+           solution[num_stages-1].time);
+#endif
+    best_solution.clear();
+    for (unsigned i=0; i<num_stages; ++i) {
+      best_solution.push_back(solution[i]);
+    }
     best_distance = the_distance;
   }
 }
