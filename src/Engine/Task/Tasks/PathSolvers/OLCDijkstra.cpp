@@ -50,7 +50,8 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc,
   NavDijkstra<TracePoint>(n_legs+1),
   olc(_olc),
   m_finish_alt_diff(finish_alt_diff),
-  m_dijkstra(ScanTaskPoint(0,0), false)
+  m_dijkstra(ScanTaskPoint(0,0), false),
+  best_distance(fixed_zero)
 {
   m_weightings.reserve(n_legs);
   reset();
@@ -94,7 +95,12 @@ OLCDijkstra::solve()
 bool
 OLCDijkstra::solve_inner()
 {
-  return distance_general(m_dijkstra, 20);
+  if (distance_general(m_dijkstra, 20)) {
+    save_solution();
+    return true;
+  } else {
+    return false;
+  }
 }
 
 void
@@ -111,8 +117,7 @@ OLCDijkstra::score(fixed& the_distance)
 {
   if (positive(calc_time())) {
     solution_found = true;
-    the_distance = calc_distance();
-    return the_distance;
+    return best_distance;
   } else {
     return fixed_zero;
   }
@@ -162,7 +167,8 @@ OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
   
   for (; destination.second!= n_points; ++destination.second) {
     if (admit_candidate(destination)) {
-      const unsigned d = get_weighting(origin.first)*distance(origin, destination);
+      const unsigned d = get_weighting(origin.first)
+        *distance(origin, destination);
       dijkstra.link(destination, origin, d);
     }
   }
@@ -210,13 +216,23 @@ OLCDijkstra::finish_satisfied(const ScanTaskPoint &sp) const
 
 
 void
+OLCDijkstra::save_solution()
+{
+  const fixed the_distance = calc_distance();
+  if (the_distance > best_distance) {
+    best_solution = solution;
+    best_distance = the_distance;
+  }
+}
+
+void
 OLCDijkstra::copy_solution(TracePointVector &vec)
 {
   vec.clear();
   if (solution_found) {
     vec.reserve(num_stages);
     for (unsigned i=0; i<num_stages; ++i) {
-      vec.push_back(solution[i]);
+      vec.push_back(best_solution[i]);
     }
   }
 }

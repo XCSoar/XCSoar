@@ -61,9 +61,13 @@ protected:
 
   bool solve_inner();
 
+  void add_edges(DijkstraTaskPoint &dijkstra,
+                 const ScanTaskPoint &origin);
+
 private:
 
   void add_start_edges();
+
   unsigned m_start_limit;
   unsigned m_start_current;
 

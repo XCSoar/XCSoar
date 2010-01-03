@@ -1,5 +1,14 @@
 #include "OLCSprint.hpp"
 
+/*
+ @todo
+  - note, this only searches 2.5 hour blocks, so should be able
+    to handle larger number of points than other OLCDijkstra's
+  - Therefore, consider having the trace points stored within
+    this instance instead of in OnlineContest.
+  - Solutions must be improving as time goes on, so no need to search
+    back from current best
+*/
 
 OLCSprint::OLCSprint(OnlineContest& _olc):
   OLCDijkstra(_olc, 4, 0),
@@ -47,7 +56,6 @@ bool
 OLCSprint::solve_inner()
 {
   if (OLCDijkstra::solve_inner()) {
-    // @todo save best    
     return (m_start_current==0);
   } else {
     return false;
@@ -83,4 +91,31 @@ OLCSprint::find_start_limit() const
     start.second++;
   }
   return start.second;
+}
+
+
+void 
+OLCSprint::add_edges(DijkstraTaskPoint &dijkstra,
+                     const ScanTaskPoint &origin)
+{
+  ScanTaskPoint destination(origin.first+1, origin.second);
+  if (!is_final(destination)) {
+    OLCDijkstra::add_edges(dijkstra, origin);
+    return;
+  }
+
+/*
+  For final, only add last valid point
+ */
+
+  find_solution(dijkstra, origin);
+  
+  for (; destination.second> origin.first; --destination.second) {
+    if (admit_candidate(destination)) {
+      const unsigned d = get_weighting(origin.first)
+        *distance(origin, destination);
+      dijkstra.link(destination, origin, d);
+      return;
+    }
+  }
 }

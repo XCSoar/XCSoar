@@ -81,6 +81,7 @@ public:
   bool solve();
 
 protected:
+
   const TracePoint &get_point(const ScanTaskPoint &sp) const;
 
   virtual void add_edges(DijkstraTaskPoint &dijkstra,
@@ -111,7 +112,11 @@ private:
   OnlineContest& olc;
   const unsigned m_finish_alt_diff;
 
+  void save_solution();
+
   bool solution_found;
+  fixed best_distance;
+  TracePointVector best_solution;
 
   virtual void add_start_edges();
 };
