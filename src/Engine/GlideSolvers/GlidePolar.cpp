@@ -364,8 +364,8 @@ GlidePolar::get_wing_loading() const
 {
   if (positive(wing_area))
     return get_all_up_weight() / wing_area;
-  else
-    return fixed_zero;
+
+  return fixed_zero;
 }
 
 fixed 
