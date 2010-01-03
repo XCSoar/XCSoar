@@ -410,10 +410,9 @@ GlidePolar::mc_risk(const fixed height_fraction, const fixed riskGamma) const
     return mc;
   else if (riskGamma > fixed_up_limit)
     return x * mc;
-  else {
-    const fixed k = fixed_one / (riskGamma * riskGamma) - fixed_one;
-    return mc * FRiskFunction(x, k) / FRiskFunction(fixed_one, k);
-  }
+
+  const fixed k = fixed_one / (riskGamma * riskGamma) - fixed_one;
+  return mc * FRiskFunction(x, k) / FRiskFunction(fixed_one, k);
 }
 
 fixed
