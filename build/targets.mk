@@ -135,12 +135,14 @@ ifeq ($(TARGET),UNIX)
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
   ENABLE_SDL := y
+  HAVE_VASPRINTF := y
 endif
 
 ifeq ($(TARGET),CYGWIN)
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
+  HAVE_VASPRINTF := n
 endif
 
 ifeq ($(TARGET),PPC2000)

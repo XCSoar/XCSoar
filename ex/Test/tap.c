@@ -60,6 +60,8 @@ static int test_died = 0;
 # define UNLOCK
 //#endif
 
+
+
 static void _expected_tests(unsigned int);
 static void _tap_init(void);
 static void _cleanup(void);
@@ -87,9 +89,13 @@ _gen_result(int ok, const char *func, const char *file, unsigned int line,
 	/* Start by taking the test name and performing any printf()
 	   expansions on it */
 	if(test_name != NULL) {
+#ifdef HAVE_VASPRINTF
 		va_start(ap, test_name);
 		vasprintf(&local_test_name, test_name, ap);
 		va_end(ap);
+#else
+                local_test_name = test_name;
+#endif
 
 		/* Make sure the test name contains more than digits
 		   and spaces.  Emit an error message and exit if it
@@ -123,13 +129,17 @@ _gen_result(int ok, const char *func, const char *file, unsigned int line,
 		/* Print the test name, escaping any '#' characters it
 		   might contain */
 		if(local_test_name != NULL) {
+#ifdef HAVE_VASPRINTF
 			flockfile(stdout);
+#endif
 			for(c = local_test_name; *c != '\0'; c++) {
 				if(*c == '#')
 					fputc('\\', stdout);
 				fputc((int)*c, stdout);
 			}
+#ifdef HAVE_VASPRINTF
 			funlockfile(stdout);
+#endif
 		} else {	/* vasprintf() failed, use a fixed message */
 			printf("%s", todo_msg_fixed);
 		}
@@ -307,9 +317,13 @@ skip(unsigned int n, char *fmt, ...)
 
 	LOCK;
 
+#ifdef HAVE_VASPRINTF
 	va_start(ap, fmt);
 	asprintf(&skip_msg, fmt, ap);
 	va_end(ap);
+#else
+        skip_msg = fmt;
+#endif
 
 	while(n-- > 0) {
 		test_count++;
@@ -332,10 +346,13 @@ todo_start(char *fmt, ...)
 
 	LOCK;
 
+#ifdef HAVE_VASPRINTF
 	va_start(ap, fmt);
 	vasprintf(&todo_msg, fmt, ap);
 	va_end(ap);
-
+#else
+        todo_msg = fmt;
+#endif
 	todo = 1;
 
 	UNLOCK;
