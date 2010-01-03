@@ -50,6 +50,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Components.hpp"
 #include "Asset.hpp"
+#include <stdio.h>
 
 #ifndef _MSC_VER
   #include <algorithm>
