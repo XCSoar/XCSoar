@@ -51,29 +51,33 @@ int ICOSTABLE[4096];
 /**
  * Fills the FastSine/FastCosine table
  */
-void InitSineTable(void)
+void
+InitSineTable(void)
 {
   int i;
   double angle;
   double cosa, sina;
 
-  for(i=0;i<4096; i++)
-    {
-      angle = DEG_TO_RAD*((double)i*360)/4096;
-      cosa = cos(angle);
-      sina = sin(angle);
-      SINETABLE[i] = sina;
-      COSTABLE[i] = cosa;
-      ISINETABLE[i] = iround(sina*1024);
-      ICOSTABLE[i] = iround(cosa*1024);
-      if ((cosa>0) && (cosa<1.0e-8)) {
-        cosa = 1.0e-8;
-      }
-      if ((cosa<0) && (cosa>-1.0e-8)) {
-        cosa = -1.0e-8;
-      }
-      INVCOSINETABLE[i] = 1.0/cosa;
-    }
+  for (i = 0; i < 4096; i++) {
+    angle = DEG_TO_RAD * ((double)i * 360) / 4096;
+
+    cosa = cos(angle);
+    sina = sin(angle);
+
+    SINETABLE[i] = sina;
+    COSTABLE[i] = cosa;
+
+    ISINETABLE[i] = iround(sina * 1024);
+    ICOSTABLE[i] = iround(cosa * 1024);
+
+    if ((cosa > 0) && (cosa < 1.0e-8))
+      cosa = 1.0e-8;
+
+    if ((cosa < 0) && (cosa > -1.0e-8))
+      cosa = -1.0e-8;
+
+    INVCOSINETABLE[i] = 1.0 / cosa;
+  }
 }
 
 /**
@@ -117,5 +121,6 @@ unsigned int isqrt4(unsigned long val) {
 
   temp = g+g+1;
   if (val >= temp) g++;
+
   return g;
 }

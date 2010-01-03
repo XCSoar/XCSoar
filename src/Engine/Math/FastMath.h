@@ -46,7 +46,8 @@ Copyright_License {
 // =================================================================================
 // Real2Int
 // =================================================================================
-static inline int Real2Int(double val)
+static inline int
+Real2Int(double val)
 {
 #if defined(WINDOWSPC) && defined(BROKEN)
   // JMW this is broken?
@@ -57,8 +58,10 @@ static inline int Real2Int(double val)
 #endif
 }
 
-static inline int iround(double i) {
-    return Real2Int(floor(i+0.5));
+static inline int
+iround(double i)
+{
+  return Real2Int(floor(i+0.5));
 }
 
 /*
