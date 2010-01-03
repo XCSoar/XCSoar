@@ -433,10 +433,10 @@ GlidePolar::get_ld_over_ground(const AIRCRAFT_STATE &state) const
   Quadratic q(-fixed_two * state.WindSpeed * c_theta,
       state.WindSpeed * state.WindSpeed - bestLD * bestLD);
 
-  if (!q.check())
-    return fixed_zero;
-  else
+  if (q.check())
     return max(fixed_zero, q.solution_max());
+
+  return fixed_zero;
 }
 
 fixed 
