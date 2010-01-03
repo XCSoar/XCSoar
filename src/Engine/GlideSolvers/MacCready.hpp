@@ -68,8 +68,7 @@ public:
    * @param _glide_polar The glide polar used for calculations.
    * @param _cruise_efficiency The efficiency ratio for calculations 
    */
-  MacCready(const GlidePolar &_glide_polar,
-            const fixed _cruise_efficiency);
+  MacCready(const GlidePolar &_glide_polar, const fixed _cruise_efficiency);
 
   /** 
    * Calculates the glide solution with a specified sink rate (or lift rate)
@@ -82,8 +81,7 @@ public:
    * @param S The sink rate 
    * @return Returns the glide result containing data about the optimal solution
    */
-  GlideResult solve_sink(const GlideState &task,
-                          const fixed S) const;
+  GlideResult solve_sink(const GlideState &task, const fixed S) const;
 
   /** 
    * Calculates the glide solution for a classical MacCready theory task.
@@ -106,9 +104,8 @@ public:
    * @param allow_partial Return after glide exhausted
    * @return Returns the glide result containing data about the optimal solution
    */
-  GlideResult solve_glide(const GlideState &task,
-                          const fixed V,
-                          const bool allow_partial=false) const;
+  GlideResult solve_glide(const GlideState &task, const fixed V,
+      const bool allow_partial=false) const;
 
   /**
    * Returns current MacCready setting of the glide polar (convenience function)
@@ -121,7 +118,6 @@ public:
   fixed get_inv_mc() const;
 
 private:
-
   /**
    * Calculates the glide solution for a classical MacCready theory task
    * with no climb component (pure glide).  This is used internally to
@@ -133,54 +129,53 @@ private:
    * @param allow_partial Return after glide exhausted
    * @return Returns the glide result containing data about the optimal solution
    */
-  GlideResult solve_glide(const GlideState &task,
-                          const fixed V,
-                          const fixed S,
-                          const bool allow_partial=false) const;
+  GlideResult
+  solve_glide(const GlideState &task, const fixed V, const fixed S,
+      const bool allow_partial = false) const;
 
-/** 
- * Solve a task which is known to be pure glide,
- * seeking optimal speed to fly. 
- * 
- * @param task Task to solve for
- * @param allow_partial Return after glide exhausted
- * 
- * @return Solution
- */
-  GlideResult optimise_glide(const GlideState &task, const bool allow_partial=false) const;
+  /**
+   * Solve a task which is known to be pure glide,
+   * seeking optimal speed to fly.
+   *
+   * @param task Task to solve for
+   * @param allow_partial Return after glide exhausted
+   *
+   * @return Solution
+   */
+  GlideResult optimise_glide(const GlideState &task,
+      const bool allow_partial = false) const;
 
-/** 
- * Solve a task which is known to be pure climb (no distance 
- * to travel other than that due to drift).
- *
- * \todo
- * - Check equations
- * 
- * @param task Task to solve for
- * 
- * @return Solution
- */
+  /**
+   * Solve a task which is known to be pure climb (no distance
+   * to travel other than that due to drift).
+   *
+   * \todo
+   * - Check equations
+   *
+   * @param task Task to solve for
+   *
+   * @return Solution
+   */
   GlideResult solve_vertical(const GlideState &task) const;
 
-/** 
- * Solve a task which is known to be pure climb-cruise 
- * (zero height difference)
- *
- * @param task Task to solve for
- * 
- * @return Solution
- */
+  /**
+   * Solve a task which is known to be pure climb-cruise
+   * (zero height difference)
+   *
+   * @param task Task to solve for
+   *
+   * @return Solution
+   */
   GlideResult solve_cruise(const GlideState &task) const;
 
   const GlidePolar &glide_polar;
   const fixed cruise_efficiency;
 
-  /** @link dependency */
+  // /** @link dependency */
   /*#  MacCreadyVopt lnkMacCreadyVopt; */
 
-  /** @link dependency */
+  // /** @link dependency */
   /*#  GlideQuadratic lnkGlideQuadratic; */
 };
-
 
 #endif
