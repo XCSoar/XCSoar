@@ -53,9 +53,20 @@ public:
 
   fixed score(fixed& the_distance);
 
+  void reset();
+
 protected:
 
   bool admit_candidate(const ScanTaskPoint &candidate) const;
+
+  void add_edges(DijkstraTaskPoint &dijkstra,
+                 const ScanTaskPoint &origin);
+
+private:
+
+  void add_start_edges();
+
+  unsigned find_start() const;
 
 };
 

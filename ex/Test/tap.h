@@ -25,6 +25,7 @@
  */
 
 #ifdef HAVE_TAP
+#include <assert.h>
 
 /* '## __VA_ARGS__' is a gcc'ism. C99 doesn't allow the token pasting
    and requires the caller to add the final comma if they've ommitted

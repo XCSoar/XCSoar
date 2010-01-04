@@ -36,7 +36,7 @@
  */
 #include "FlatGeoPoint.hpp"
 #include "Math/FastMath.h"
-
+#include <algorithm>
 
 unsigned 
 FLAT_GEOPOINT::distance_to(const FLAT_GEOPOINT &sp) const
@@ -51,3 +51,15 @@ FLAT_GEOPOINT::distance_sq_to(const FLAT_GEOPOINT &sp) const
   return delta.dot(delta);
 }
 
+unsigned 
+FLAT_GEOPOINT::projected_distance(const FLAT_GEOPOINT &other) const
+{
+  const unsigned d_this = dot(*this);
+
+  if (d_this == 0) {
+    return 0;
+  } else {
+    const unsigned d_other = other.dot(other);
+    return min(d_other, dot(other)/d_this);
+  }
+}

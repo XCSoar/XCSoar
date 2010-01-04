@@ -53,6 +53,9 @@ public:
 
 protected:
 
+  void add_edges(DijkstraTaskPoint &dijkstra,
+                 const ScanTaskPoint &curNode);
+
   bool admit_candidate(const ScanTaskPoint &candidate) const;
   bool finish_satisfied(const ScanTaskPoint &sp) const;
 

@@ -76,15 +76,16 @@ public:
   fixed calc_distance() const;
   fixed calc_time() const;
 
-  void reset();
+  virtual void reset();
 
   bool solve();
 
 protected:
+
   const TracePoint &get_point(const ScanTaskPoint &sp) const;
 
-  void add_edges(DijkstraTaskPoint &dijkstra,
-                 const ScanTaskPoint &curNode);
+  virtual void add_edges(DijkstraTaskPoint &dijkstra,
+                         const ScanTaskPoint &curNode);
 
   virtual bool finish_satisfied(const ScanTaskPoint &sp) const;
 
@@ -97,24 +98,27 @@ protected:
   void set_rank(const ScanTaskPoint &sp, const unsigned d);
 
   unsigned dist_to_rank(const unsigned dist) const;
-
-  bool m_reverse;
-
-private:
-
-  unsigned get_weighting(const unsigned i) const;
-
-  OnlineContest& olc;
-  unsigned n_points;
-  const unsigned m_finish_alt_diff;
-
-  bool solution_found;
-
-  void add_start_edges();
+  
+  virtual bool solve_inner();
 
   DijkstraTaskPoint m_dijkstra;
 
-  bool m_rank_mode;
+  unsigned n_points;
+
+  unsigned get_weighting(const unsigned i) const;
+
+private:
+
+  OnlineContest& olc;
+  const unsigned m_finish_alt_diff;
+
+  void save_solution();
+
+  bool solution_found;
+  fixed best_distance;
+  TracePointVector best_solution;
+
+  virtual void add_start_edges();
 };
 
 #endif

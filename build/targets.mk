@@ -115,6 +115,10 @@ ifeq ($(TARGET),UNIX)
   TCPATH :=
 endif
 
+ifeq ($(TARGET),CYGWIN)
+  TCPATH :=
+endif
+
 ############# platform info
 
 HAVE_POSIX := n
@@ -131,6 +135,14 @@ ifeq ($(TARGET),UNIX)
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
   ENABLE_SDL := y
+  HAVE_VASPRINTF := y
+endif
+
+ifeq ($(TARGET),CYGWIN)
+  HAVE_POSIX := y
+  HAVE_WIN32 := n
+  HAVE_MSVCRT := n
+  HAVE_VASPRINTF := n
 endif
 
 ifeq ($(TARGET),PPC2000)
@@ -281,6 +293,9 @@ else
     ifeq ($(TARGET),PNA)
       TARGET_ARCH := -mwin32
     endif
+  endif
+  ifeq ($(TARGET),CYGWIN)
+    TARGET_ARCH :=
   endif
 
   WINDRESFLAGS := -I$(SRC) $(TARGET_CPPFLAGS) -D_MINGW32_
