@@ -22,6 +22,16 @@
 
   - only need to pass in last 2.5 hours worth of data, therefore 
     use min_time and have this class request data directly from Trace
+
+  - so, calculate acceptable n_points size so we get a solution
+    on slow platforms within a close-to-one fraction of the 
+    resulting time step for new points
+    e.g. if n_points is 150 (one per minute), we expect a solution
+    in approx worst case within 60 cycles.
+
+    we want n_points as large as possible to reduce error.
+
+    potentially implement as circular buffer (emulate as dequeue)
 */
 
 OLCSprint::OLCSprint(OnlineContest& _olc):

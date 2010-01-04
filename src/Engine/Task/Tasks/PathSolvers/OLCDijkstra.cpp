@@ -102,7 +102,7 @@ OLCDijkstra::solve()
 bool
 OLCDijkstra::solve_inner()
 {
-  if (distance_general(m_dijkstra, 30)) {
+  if (distance_general(m_dijkstra, 25)) {
     save_solution();
     return true;
   } else {
