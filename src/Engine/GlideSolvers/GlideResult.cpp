@@ -126,20 +126,21 @@ GlideResult::calc_vspeed(const fixed inv_mc)
     TimeVirtual = fixed_zero;
     return fixed_bignum;
   }
-  if (Vector.Distance >= fixed_one) {
-    if (positive(inv_mc)) {
-      // equivalent time to gain the height that was used
-      TimeVirtual = HeightGlide * inv_mc;
-      return (TimeElapsed + TimeVirtual) / Vector.Distance;
-    } else {
-      TimeVirtual = fixed_zero;
-      // minimise 1.0/LD over ground 
-      return HeightGlide / Vector.Distance;
-    }
-  } else {
+
+  if (Vector.Distance < fixed_one) {
     TimeVirtual = fixed_zero;
     return fixed_zero;
   }
+
+  if (!positive(inv_mc)) {
+    TimeVirtual = fixed_zero;
+    // minimise 1.0/LD over ground
+    return HeightGlide / Vector.Distance;
+  }
+
+  // equivalent time to gain the height that was used
+  TimeVirtual = HeightGlide * inv_mc;
+  return (TimeElapsed + TimeVirtual) / Vector.Distance;
 }
 
 fixed
