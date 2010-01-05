@@ -47,10 +47,13 @@ Copyright_License {
 // Forward declaration
 struct DeviceDescriptor;
 
-class ComPort {
+class ComPort
+{
 public:
   ComPort(struct DeviceDescriptor *d);
-  ~ComPort() { };
+  ~ComPort()
+  {
+  }
 
   void PutChar(BYTE);
   void WriteString(const TCHAR *);
