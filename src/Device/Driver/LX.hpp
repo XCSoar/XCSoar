@@ -42,4 +42,3 @@ Copyright_License {
 extern const struct DeviceRegister lxDevice;
 
 #endif
-

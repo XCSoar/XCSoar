@@ -46,33 +46,30 @@ Copyright_License {
 #include <tchar.h>
 #include <stdlib.h>
 
-class LXDevice : public AbstractDevice {
+class LXDevice: public AbstractDevice
+{
 public:
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
-                         bool enable_baro);
+      bool enable_baro);
 };
 
-static bool
-LXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
+static bool LXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro);
 
-static bool
-LXWP1(const TCHAR *String, NMEA_INFO *GPS_INFO);
+static bool LXWP1(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static bool
-LXWP2(const TCHAR *String, NMEA_INFO *GPS_INFO);
+static bool LXWP2(const TCHAR *String, NMEA_INFO *GPS_INFO);
 
 bool
 LXDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
-  if (_tcsncmp(_T("$LXWP0"), String, 6) == 0) {
+  if (_tcsncmp(_T("$LXWP0"), String, 6) == 0)
     return LXWP0(&String[7], GPS_INFO, enable_baro);
-  }
-  if (_tcsncmp(_T("$LXWP1"), String, 6) == 0) {
+
+  if (_tcsncmp(_T("$LXWP1"), String, 6) == 0)
     return LXWP1(&String[7], GPS_INFO);
-  }
-  if (_tcsncmp(_T("$LXWP2"), String, 6) == 0) {
+
+  if (_tcsncmp(_T("$LXWP2"), String, 6) == 0)
     return LXWP2(&String[7], GPS_INFO);
-  }
 
   return false;
 }
@@ -106,10 +103,10 @@ LXWP2(const TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
   (void)GPS_INFO;
 
-  NMEAParser::ExtractParameter(String,ctemp,0);
+  NMEAParser::ExtractParameter(String, ctemp, 0);
 
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
-//  oldGlidePolar::SetMacCready(_tcstod(ctemp, NULL));
+  //  oldGlidePolar::SetMacCready(_tcstod(ctemp, NULL));
   return true;
 }
 
@@ -131,21 +128,22 @@ LXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   11 windspeed (kph)
   */
 
-  NMEAParser::ExtractParameter(String,ctemp,1);
+  NMEAParser::ExtractParameter(String, ctemp, 1);
   fixed airspeed(_tcstod(ctemp, NULL) / TOKPH);
 
-  NMEAParser::ExtractParameter(String,ctemp,2);
+  NMEAParser::ExtractParameter(String, ctemp, 2);
   fixed alt(_tcstod(ctemp, NULL));
 
-  GPS_INFO->IndicatedAirspeed = airspeed/GPS_INFO->pressure.AirDensityRatio(alt);
+  GPS_INFO->IndicatedAirspeed =
+      airspeed / GPS_INFO->pressure.AirDensityRatio(alt);
   GPS_INFO->TrueAirspeed = airspeed;
 
   if (enable_baro) {
     GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = alt;    // ToDo check if QNH correction is needed!
+    GPS_INFO->BaroAltitude = alt; // ToDo check if QNH correction is needed!
   }
 
-  NMEAParser::ExtractParameter(String,ctemp,3);
+  NMEAParser::ExtractParameter(String, ctemp, 3);
   GPS_INFO->Vario = _tcstod(ctemp, NULL);
 
   GPS_INFO->AirspeedAvailable = true;
