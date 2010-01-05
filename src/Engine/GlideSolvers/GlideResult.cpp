@@ -41,25 +41,23 @@
 #include "Navigation/Aircraft.hpp"
 
 GlideResult::GlideResult():
-  Vector(fixed_zero,fixed_zero),
-  DistanceToFinal(fixed_zero),
-  CruiseTrackBearing(fixed_zero),
-  VOpt(fixed_zero),
-  HeightClimb(fixed_zero),
-  HeightGlide(fixed_zero),
-  TimeElapsed(fixed_zero),
-  TimeVirtual(fixed_zero),
-  AltitudeDifference(fixed_zero),
-  EffectiveWindSpeed(fixed_zero),
-  EffectiveWindAngle(fixed_zero),
-  Solution(RESULT_NOSOLUTION)
+    Vector(fixed_zero,fixed_zero),
+    DistanceToFinal(fixed_zero),
+    CruiseTrackBearing(fixed_zero),
+    VOpt(fixed_zero),
+    HeightClimb(fixed_zero),
+    HeightGlide(fixed_zero),
+    TimeElapsed(fixed_zero),
+    TimeVirtual(fixed_zero),
+    AltitudeDifference(fixed_zero),
+    EffectiveWindSpeed(fixed_zero),
+    EffectiveWindAngle(fixed_zero),
+    Solution(RESULT_NOSOLUTION)
 {
   // default is null result
 }
 
-
-GlideResult::GlideResult(const GlideState &task, 
-                         const fixed V):
+GlideResult::GlideResult(const GlideState &task, const fixed V):
     Vector(task.Vector),
     DistanceToFinal(task.Vector.Distance),
     CruiseTrackBearing(task.Vector.Bearing),
@@ -77,7 +75,6 @@ GlideResult::GlideResult(const GlideState &task,
 {
 }
 
-
 void
 GlideResult::calc_deferred(const AIRCRAFT_STATE& state)
 {
@@ -88,21 +85,20 @@ GlideResult::calc_deferred(const AIRCRAFT_STATE& state)
 void
 GlideResult::calc_cruise_bearing()
 {
-  CruiseTrackBearing= Vector.Bearing;
+  CruiseTrackBearing = Vector.Bearing;
   if (positive(EffectiveWindSpeed)) {
-    const fixed sintheta = sin(fixed_deg_to_rad*EffectiveWindAngle);
-    if (sintheta==fixed_zero) {
+    const fixed sintheta = sin(fixed_deg_to_rad * EffectiveWindAngle);
+    if (sintheta == fixed_zero)
       return;
-    }
+
     // Wn/sin(alpha) = V/sin(theta)
-    //   (Wn/V)*sin(theta) = sin(alpha)
-    CruiseTrackBearing -= fixed_half*fixed_rad_to_deg*asin(sintheta*EffectiveWindSpeed/VOpt);
+    // (Wn/V)*sin(theta) = sin(alpha)
+    CruiseTrackBearing -= fixed_half * fixed_rad_to_deg *
+        asin(sintheta * EffectiveWindSpeed / VOpt);
   }
 }
 
-
-
-void 
+void
 GlideResult::add(const GlideResult &s2) 
 {
   TimeElapsed += s2.TimeElapsed;
@@ -113,31 +109,31 @@ GlideResult::add(const GlideResult &s2)
   TimeVirtual += s2.TimeVirtual;
 
   if (negative(AltitudeDifference) || negative(s2.AltitudeDifference)) {
-    AltitudeDifference= min(s2.AltitudeDifference+AltitudeDifference,
-      AltitudeDifference);
+    AltitudeDifference = min(s2.AltitudeDifference + AltitudeDifference,
+        AltitudeDifference);
   } else {
-    AltitudeDifference= min(s2.AltitudeDifference, AltitudeDifference);
+    AltitudeDifference = min(s2.AltitudeDifference, AltitudeDifference);
   }
 }
 
 static const fixed fixed_bignum(1e6); // error condition
 
-fixed 
-GlideResult::calc_vspeed(const fixed inv_mc) 
+fixed
+GlideResult::calc_vspeed(const fixed inv_mc)
 {
   if (!ok_or_partial()) {
     TimeVirtual = fixed_zero;
     return fixed_bignum;
   }
-  if (Vector.Distance>= fixed_one) {
+  if (Vector.Distance >= fixed_one) {
     if (positive(inv_mc)) {
       // equivalent time to gain the height that was used
-      TimeVirtual = HeightGlide*inv_mc;
-      return (TimeElapsed+TimeVirtual)/Vector.Distance;
+      TimeVirtual = HeightGlide * inv_mc;
+      return (TimeElapsed + TimeVirtual) / Vector.Distance;
     } else {
       TimeVirtual = fixed_zero;
       // minimise 1.0/LD over ground 
-      return HeightGlide/Vector.Distance;
+      return HeightGlide / Vector.Distance;
     }
   } else {
     TimeVirtual = fixed_zero;
@@ -145,31 +141,29 @@ GlideResult::calc_vspeed(const fixed inv_mc)
   }
 }
 
-fixed 
+fixed
 GlideResult::glide_angle_ground() const
 {
   static const fixed fixed_100;
 
   if (positive(Vector.Distance)) {
-    return HeightGlide/Vector.Distance;
+    return HeightGlide / Vector.Distance;
   } else {
     return fixed_100;
   }
 }
 
-
-bool 
-GlideResult::glide_reachable(const bool final_glide) const 
+bool
+GlideResult::glide_reachable(const bool final_glide) const
 {
   if (final_glide) {
-    return (Solution==RESULT_OK) &&
-      positive(AltitudeDifference) &&
-      !positive(HeightClimb);
+    return (Solution == RESULT_OK)
+           && positive(AltitudeDifference)
+           && !positive(HeightClimb);
   } else {
-    return (Solution==RESULT_OK);
+    return (Solution == RESULT_OK);
   }
 }
-
 
 bool 
 GlideResult::is_final_glide() const 

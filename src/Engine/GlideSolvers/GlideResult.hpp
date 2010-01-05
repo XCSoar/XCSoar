@@ -53,34 +53,33 @@ struct GlideResult {
    * fails due to insufficient MC value etc.
    */
   enum GlideResult_t {
-    RESULT_OK = 0,              /**< Solution is achievable */
-    RESULT_PARTIAL,             /**< Solution is partially achievable */
-    RESULT_WIND_EXCESSIVE,      /**< Wind is too strong to allow progress */
+    RESULT_OK = 0,                 /**< Solution is achievable */
+    RESULT_PARTIAL,                /**< Solution is partially achievable */
+    RESULT_WIND_EXCESSIVE,         /**< Wind is too strong to allow progress */
     RESULT_MACCREADY_INSUFFICIENT, /**< Expected climb rate is too low to allow progress */
-    RESULT_NOSOLUTION           /**< Solution not computed or algorithm failed */
+    RESULT_NOSOLUTION              /**< Solution not computed or algorithm failed */
   };
 
-/** 
- * Dummy constructor for null result.  Used as default
- * return value for failed/trivial tasks
- * 
- * @return Initialised null result
- */
+  /**
+   * Dummy constructor for null result.  Used as default
+   * return value for failed/trivial tasks
+   *
+   * @return Initialised null result
+   */
   GlideResult();
 
-/** 
- * Constructor with partial initialisation for a particular
- * task.  This copies task information so that the resulting instance
- * contains everything required for navigation and the GlideState 
- * instance can be destroyed.
- * 
- * @param task Task for which glide result will be calculated
- * @param V Optimal speed to fly
- * 
- * @return Blank glide result
- */
-  GlideResult(const GlideState &task, 
-               const fixed V);
+  /**
+   * Constructor with partial initialisation for a particular
+   * task.  This copies task information so that the resulting instance
+   * contains everything required for navigation and the GlideState
+   * instance can be destroyed.
+   *
+   * @param task Task for which glide result will be calculated
+   * @param V Optimal speed to fly
+   *
+   * @return Blank glide result
+   */
+  GlideResult(const GlideState &task, const fixed V);
 
   /**
    * Calculate additional items (CruiseTrackBearing and AltitudeRequired) that were
@@ -89,59 +88,60 @@ struct GlideResult {
    */
   void calc_deferred(const AIRCRAFT_STATE &state);
 
-/** 
- * Check whether aircraft can finish this task without
- * further climb.
- * 
- * @return True if aircraft is at or above final glide
- */
+  /**
+   * Check whether aircraft can finish this task without
+   * further climb.
+   *
+   * @return True if aircraft is at or above final glide
+   */
   bool is_final_glide() const;
 
-/** 
- * Check whether task is partially achievable.  It will
- * fail if the wind is excessive for the current MC value.
- * 
- * @return True if task is at least partially achievable
- */
-  bool ok_or_partial() const {
-    return (Solution == RESULT_OK)
-      || (Solution == RESULT_PARTIAL);
+  /**
+   * Check whether task is partially achievable.  It will
+   * fail if the wind is excessive for the current MC value.
+   *
+   * @return True if task is at least partially achievable
+   */
+  bool
+  ok_or_partial() const
+  {
+    return (Solution == RESULT_OK) || (Solution == RESULT_PARTIAL);
   }
 
-/** 
- * Check whether task is achievable (optionally entirely on final glide)
- * 
- * @param final_glide Whether no further climb allowed
- *
- * @return True if target is reachable 
- */
+  /**
+   * Check whether task is achievable (optionally entirely on final glide)
+   *
+   * @param final_glide Whether no further climb allowed
+   *
+   * @return True if target is reachable
+   */
   bool glide_reachable(const bool final_glide=true) const;
 
-/** 
- * Adds another GlideResult to this.  This is used to 
- * accumulate GlideResults for a sequence of task segments.
- * The order is important.
- * 
- * @param s2 The other glide result segment
- */
+  /**
+   * Adds another GlideResult to this.  This is used to
+   * accumulate GlideResults for a sequence of task segments.
+   * The order is important.
+   *
+   * @param s2 The other glide result segment
+   */
   void add(const GlideResult &s2);
 
-/** 
- * Calculate virtual speed of solution.  This is defined as
- * the distance divided by the time elapsed plus the time required
- * to recover the altitude expended in cruise.
- * 
- * @param inv_mc Inverse of MC value (s/m), negative if MC is zero
- * 
- * @return Virtual speed (m/s)
- */
+  /**
+   * Calculate virtual speed of solution.  This is defined as
+   * the distance divided by the time elapsed plus the time required
+   * to recover the altitude expended in cruise.
+   *
+   * @param inv_mc Inverse of MC value (s/m), negative if MC is zero
+   *
+   * @return Virtual speed (m/s)
+   */
   fixed calc_vspeed(const fixed inv_mc);
 
-/** 
- * Find the gradient of this solution relative to ground
- * 
- * @return Glide gradient (positive down), or zero if no distance to travel.
- */
+  /**
+   * Find the gradient of this solution relative to ground
+   *
+   * @return Glide gradient (positive down), or zero if no distance to travel.
+   */
   fixed glide_angle_ground() const;
 
 #ifdef DO_PRINT
@@ -149,7 +149,7 @@ struct GlideResult {
                                    const GlideResult& gl);
 #endif
 
-  GeoVector Vector;             /**< Distance/bearing of task achievable */
+  GeoVector Vector;            /**< Distance/bearing of task achievable */
   fixed DistanceToFinal;       /**< Distance to go before final glide (m) */
   fixed CruiseTrackBearing;    /**< Track bearing in cruise for optimal drift compensation (deg true) */
   fixed VOpt;                  /**< Optimal speed to fly in cruise (m/s) */
@@ -162,17 +162,14 @@ struct GlideResult {
   fixed EffectiveWindSpeed;    /**< (internal) */
   fixed EffectiveWindAngle;    /**< (internal) */
   fixed HeadWind;              /**< Head wind component (m/s) in cruise */
-  GlideResult_t Solution;       /**< Solution validity */
+  GlideResult_t Solution;      /**< Solution validity */
 
 private:
-
-/** 
- * Calculate cruise track bearing from internal variables.
- * This is expensive so is only done on demand.
- */
+  /**
+   * Calculate cruise track bearing from internal variables.
+   * This is expensive so is only done on demand.
+   */
   void calc_cruise_bearing();
-
-
 };
 
 #endif
