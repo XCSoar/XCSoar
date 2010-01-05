@@ -150,9 +150,9 @@ GlideResult::glide_angle_ground() const
 
   if (positive(Vector.Distance)) {
     return HeightGlide / Vector.Distance;
-  } else {
-    return fixed_100;
   }
+
+  return fixed_100;
 }
 
 bool
