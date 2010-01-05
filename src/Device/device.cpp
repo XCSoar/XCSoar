@@ -99,7 +99,16 @@ static const TCHAR *const COMMPort[] = {
   _T("COM0:"),
 };
 
-static  const DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
+static const DWORD dwSpeed[] = {
+  1200,
+  2400,
+  4800,
+  9600,
+  19200,
+  38400,
+  57600,
+  115200
+};
 
 const struct DeviceRegister *const DeviceRegister[] = {
   // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
@@ -145,8 +154,10 @@ devGetBaroAltitude(double *Value)
   // hack, just return GPS_INFO->BaroAltitude
   if (Value == NULL)
     return false;
+
   if (device_blackboard.Basic().BaroAltitudeAvailable)
     *Value = device_blackboard.Basic().BaroAltitude;
+
   return true;
 
   // ToDo
@@ -156,15 +167,16 @@ devGetBaroAltitude(double *Value)
   // - whats happen if primary source fails
   // - plausibility check? against second baro? or GPS alt?
   // - whats happen if the diference is too big?
-
 }
 
 bool
 devRegisterGetName(int Index, TCHAR *Name)
 {
   Name[0] = '\0';
+
   if (Index < 0 || Index >= DeviceRegisterCount)
     return false;
+
   _tcscpy(Name, DeviceRegister[Index]->Name);
   return true;
 }
@@ -226,6 +238,7 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
       nmeaout = dev;
     }
   }
+
   return true;
 }
 
@@ -235,7 +248,7 @@ devInit(LPCTSTR CommandLine)
   int i;
   struct DeviceDescriptor *pDevNmeaOut = NULL;
 
-  for (i=0; i<NUMDEV; i++){
+  for (i = 0; i < NUMDEV; i++) {
     DeviceList[i].Port = -1;
     DeviceList[i].fhLogFile = NULL;
     DeviceList[i].Name[0] = '\0';
@@ -244,19 +257,23 @@ devInit(LPCTSTR CommandLine)
   }
 
   pDevPrimaryBaroSource = NULL;
-  pDevSecondaryBaroSource=NULL;
+  pDevSecondaryBaroSource = NULL;
 
   DWORD PortIndex1, PortIndex2, SpeedIndex1, SpeedIndex2;
   if (is_altair()) {
-    PortIndex1 = 2; SpeedIndex1 = 5;
-    PortIndex2 = 0; SpeedIndex2 = 5;
+    PortIndex1 = 2;
+    SpeedIndex1 = 5;
+    PortIndex2 = 0;
+    SpeedIndex2 = 5;
   } else {
-    PortIndex1 = 0; SpeedIndex1 = 2;
-    PortIndex2 = 0; SpeedIndex2 = 2;
+    PortIndex1 = 0;
+    SpeedIndex1 = 2;
+    PortIndex2 = 0;
+    SpeedIndex2 = 2;
   }
 
-  ReadPort1Settings(&PortIndex1,&SpeedIndex1);
-  ReadPort2Settings(&PortIndex2,&SpeedIndex2);
+  ReadPort1Settings(&PortIndex1, &SpeedIndex1);
+  ReadPort2Settings(&PortIndex2, &SpeedIndex2);
 
   devInitOne(devA(), 0, COMMPort[PortIndex1], dwSpeed[SpeedIndex1], pDevNmeaOut);
 
@@ -265,80 +282,70 @@ devInit(LPCTSTR CommandLine)
 
   CommandLine = LOGGDEVCOMMANDLINE;
 
-  if (CommandLine != NULL){
+  if (CommandLine != NULL) {
     TCHAR *pC, *pCe;
     TCHAR wcLogFileName[MAX_PATH];
     TCHAR sTmp[128];
 
     pC = _tcsstr(CommandLine, _T("-logA="));
-    if (pC != NULL){
+    if (pC != NULL) {
       pC += strlen("-logA=");
-      if (*pC == '"'){
+
+      if (*pC == '"') {
         pC++;
         pCe = pC;
-        while (*pCe != '"' && *pCe != '\0') pCe++;
-      } else{
+        while (*pCe != '"' && *pCe != '\0')
+          pCe++;
+      } else {
         pCe = pC;
-        while (*pCe != ' ' && *pCe != '\0') pCe++;
+        while (*pCe != ' ' && *pCe != '\0')
+          pCe++;
       }
+
       if (pCe != NULL && pCe-1 > pC){
+        _tcsncpy(wcLogFileName, pC, pCe - pC);
+        wcLogFileName[pCe - pC] = '\0';
 
-        _tcsncpy(wcLogFileName, pC, pCe-pC);
-        wcLogFileName[pCe-pC] = '\0';
-
-        if (devOpenLog(devA(), wcLogFileName)){
+        if (devOpenLog(devA(), wcLogFileName)) {
           _stprintf(sTmp, _T("Device A logs to\r\n%s"), wcLogFileName);
-          MessageBoxX (sTmp,
-                      gettext(_T("Information")),
-                      MB_OK|MB_ICONINFORMATION);
+          MessageBoxX(sTmp, gettext(_T("Information")), MB_OK | MB_ICONINFORMATION);
         } else {
-          _stprintf(sTmp,
-                    _T("Unable to open log\r\non device A\r\n%s"), wcLogFileName);
-          MessageBoxX (sTmp,
-                      gettext(_T("Error")),
-                      MB_OK|MB_ICONWARNING);
+          _stprintf(sTmp, _T("Unable to open log\r\non device A\r\n%s"), wcLogFileName);
+          MessageBoxX(sTmp, gettext(_T("Error")), MB_OK | MB_ICONWARNING);
         }
-
       }
-
     }
 
     pC = _tcsstr(CommandLine, _T("-logB="));
-    if (pC != NULL){
+    if (pC != NULL) {
       pC += strlen("-logA=");
-      if (*pC == '"'){
+      if (*pC == '"') {
         pC++;
         pCe = pC;
-        while (*pCe != '"' && *pCe != '\0') pCe++;
-      } else{
+        while (*pCe != '"' && *pCe != '\0')
+          pCe++;
+      } else {
         pCe = pC;
-        while (*pCe != ' ' && *pCe != '\0') pCe++;
+        while (*pCe != ' ' && *pCe != '\0')
+          pCe++;
       }
-      if (pCe != NULL && pCe > pC){
 
-        _tcsncpy(wcLogFileName, pC, pCe-pC);
-        wcLogFileName[pCe-pC] = '\0';
+      if (pCe != NULL && pCe > pC) {
+        _tcsncpy(wcLogFileName, pC, pCe - pC);
+        wcLogFileName[pCe - pC] = '\0';
 
-        if (devOpenLog(devB(), wcLogFileName)){
+        if (devOpenLog(devB(), wcLogFileName)) {
           _stprintf(sTmp, _T("Device B logs to\r\n%s"), wcLogFileName);
-          MessageBoxX (sTmp,
-                      gettext(_T("Information")),
-                      MB_OK|MB_ICONINFORMATION);
+          MessageBoxX(sTmp, gettext(_T("Information")), MB_OK | MB_ICONINFORMATION);
         } else {
-          _stprintf(sTmp, _T("Unable to open log\r\non device B\r\n%s"),
-                    wcLogFileName);
-          MessageBoxX (sTmp,
-                      gettext(_T("Error")),
-                      MB_OK|MB_ICONWARNING);
+          _stprintf(sTmp, _T("Unable to open log\r\non device B\r\n%s"), wcLogFileName);
+          MessageBoxX(sTmp, gettext(_T("Error")), MB_OK | MB_ICONWARNING);
         }
-
       }
-
     }
-
   }
 
-  if (pDevNmeaOut != NULL){
+  if (pDevNmeaOut != NULL) {
     if (pDevNmeaOut == devA()){
       devB()->pDevPipeTo = devA();
     }
@@ -356,18 +363,17 @@ DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
   assert(String != NULL);
   assert(GPS_INFO != NULL);
 
-  if (fhLogFile != NULL &&
-      String != NULL && !string_is_empty(String)) {
-    char  sTmp[500];  // temp multibyte buffer
+  if (fhLogFile != NULL && String != NULL && !string_is_empty(String)) {
+    char sTmp[500]; // temp multibyte buffer
     const TCHAR *pWC = String;
-    char  *pC  = sTmp;
+    char *pC = sTmp;
     //    static DWORD lastFlush = 0;
 
     sprintf(pC, "%9u <", (unsigned)GetTickCount());
     pC = sTmp + strlen(sTmp);
 
-    while (*pWC){
-      if (*pWC != '\r'){
+    while (*pWC) {
+      if (*pWC != '\r') {
         *pC = (char)*pWC;
         pC++;
       }
@@ -381,7 +387,6 @@ DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
     fputs(sTmp, fhLogFile);
   }
 
-
   if (pDevPipeTo && pDevPipeTo->Com) {
     // stream pipe, pass nmea to other device (NmeaOut)
     // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
@@ -389,13 +394,13 @@ DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
   }
 
   if (device != NULL && device->ParseNMEA(String, GPS_INFO,
-                                          this == pDevPrimaryBaroSource)) {
+      this == pDevPrimaryBaroSource)) {
     GPS_INFO->Connected = 2;
     return true;
   }
 
-  if(String[0]=='$') {  // Additional "if" to find GPS strings
-    if(NMEAParser::ParseNMEAString(Port, String, GPS_INFO)) {
+  if (String[0] == '$') { // Additional "if" to find GPS strings
+    if (NMEAParser::ParseNMEAString(Port, String, GPS_INFO)) {
       GPS_INFO->Connected = 2;
       return true;
     }
@@ -469,65 +474,49 @@ DeviceDescriptor::IsBaroSource() const
 bool
 DeviceDescriptor::PutMacCready(double MacCready)
 {
-  return device != NULL
-    ? device->PutMacCready(MacCready)
-    : true;
+  return device != NULL ? device->PutMacCready(MacCready) : true;
 }
 
 bool
 DeviceDescriptor::PutBugs(double bugs)
 {
-  return device != NULL
-    ? device->PutBugs(bugs)
-    : true;
+  return device != NULL ? device->PutBugs(bugs) : true;
 }
 
 bool
 DeviceDescriptor::PutBallast(double ballast)
 {
-  return device != NULL
-    ? device->PutBallast(ballast)
-    : true;
+  return device != NULL ? device->PutBallast(ballast) : true;
 }
 
 bool
 DeviceDescriptor::PutVolume(int volume)
 {
-  return device != NULL
-    ? device->PutVolume(volume)
-    : true;
+  return device != NULL ? device->PutVolume(volume) : true;
 }
 
 bool
 DeviceDescriptor::PutActiveFrequency(double frequency)
 {
-  return device != NULL
-    ? device->PutActiveFrequency(frequency)
-    : true;
+  return device != NULL ? device->PutActiveFrequency(frequency) : true;
 }
 
 bool
 DeviceDescriptor::PutStandbyFrequency(double frequency)
 {
-  return device != NULL
-    ? device->PutStandbyFrequency(frequency)
-    : true;
+  return device != NULL ? device->PutStandbyFrequency(frequency) : true;
 }
 
 bool
 DeviceDescriptor::PutQNH(const AtmosphericPressure& pres)
 {
-  return device != NULL
-    ? device->PutQNH(pres)
-    : true;
+  return device != NULL ? device->PutQNH(pres) : true;
 }
 
 bool
 DeviceDescriptor::PutVoice(const TCHAR *sentence)
 {
-  return device != NULL
-    ? device->PutVoice(sentence)
-    : true;
+  return device != NULL ? device->PutVoice(sentence) : true;
 }
 
 void
@@ -540,8 +529,7 @@ DeviceDescriptor::LinkTimeout()
 bool
 DeviceDescriptor::Declare(const struct Declaration *declaration)
 {
-  bool result = device != NULL &&
-    device->Declare(declaration);
+  bool result = (device != NULL) && (device->Declare(declaration));
 
   if (NMEAParser::PortIsFlarm(Port))
     result = FlarmDeclare(Com, declaration) || result;
@@ -670,14 +658,15 @@ devCloseLog(struct DeviceDescriptor *d)
 {
   assert(d != NULL);
 
-  if (d->fhLogFile != NULL){
+  if (d->fhLogFile != NULL) {
     fclose(d->fhLogFile);
     return true;
   } else
     return false;
 }
 
-void devTick()
+void
+devTick()
 {
   int i;
 
@@ -689,12 +678,14 @@ void devTick()
   mutexComm.Unlock();
 }
 
-static void devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
+static void
+devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
 {
   _sntprintf(dst, sz, _T("$%s*%02X\r\n"), text, NMEAChecksum(text));
 }
 
-void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *text)
+void
+devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *text)
 {
   TCHAR tmp[512];
 
@@ -708,7 +699,8 @@ void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *text)
   mutexComm.Unlock();
 }
 
-void VarioWriteNMEA(const TCHAR *text)
+void
+VarioWriteNMEA(const TCHAR *text)
 {
   TCHAR tmp[512];
 
@@ -722,15 +714,18 @@ void VarioWriteNMEA(const TCHAR *text)
   mutexComm.Unlock();
 }
 
-struct DeviceDescriptor *devVarioFindVega(void)
+struct DeviceDescriptor *
+devVarioFindVega(void)
 {
   for (int i = 0; i < NUMDEV; i++)
     if (_tcscmp(DeviceList[i].Name, _T("Vega")) == 0)
       return &DeviceList[i];
+
   return NULL;
 }
 
-void AllDevicesPutMacCready(double MacCready)
+void
+AllDevicesPutMacCready(double MacCready)
 {
   if (is_simulator())
     return;
@@ -741,7 +736,8 @@ void AllDevicesPutMacCready(double MacCready)
     DeviceList[i].PutMacCready(MacCready);
 }
 
-void AllDevicesPutBugs(double bugs)
+void
+AllDevicesPutBugs(double bugs)
 {
   if (is_simulator())
     return;
@@ -752,7 +748,8 @@ void AllDevicesPutBugs(double bugs)
     DeviceList[i].PutBugs(bugs);
 }
 
-void AllDevicesPutBallast(double ballast)
+void
+AllDevicesPutBallast(double ballast)
 {
   if (is_simulator())
     return;
@@ -763,7 +760,8 @@ void AllDevicesPutBallast(double ballast)
     DeviceList[i].PutBallast(ballast);
 }
 
-void AllDevicesPutVolume(int volume)
+void
+AllDevicesPutVolume(int volume)
 {
   if (is_simulator())
     return;
@@ -774,7 +772,8 @@ void AllDevicesPutVolume(int volume)
     DeviceList[i].PutBallast(volume);
 }
 
-void AllDevicesPutActiveFrequency(double frequency)
+void
+AllDevicesPutActiveFrequency(double frequency)
 {
   if (is_simulator())
     return;
@@ -785,7 +784,8 @@ void AllDevicesPutActiveFrequency(double frequency)
     DeviceList[i].PutActiveFrequency(frequency);
 }
 
-void AllDevicesPutStandbyFrequency(double frequency)
+void
+AllDevicesPutStandbyFrequency(double frequency)
 {
   if (is_simulator())
     return;
@@ -796,7 +796,8 @@ void AllDevicesPutStandbyFrequency(double frequency)
     DeviceList[i].PutStandbyFrequency(frequency);
 }
 
-void AllDevicesPutQNH(const AtmosphericPressure& pres)
+void
+AllDevicesPutQNH(const AtmosphericPressure& pres)
 {
   if (is_simulator())
     return;
@@ -807,7 +808,8 @@ void AllDevicesPutQNH(const AtmosphericPressure& pres)
     DeviceList[i].PutQNH(pres);
 }
 
-void AllDevicesPutVoice(const TCHAR *sentence)
+void
+AllDevicesPutVoice(const TCHAR *sentence)
 {
   if (is_simulator())
     return;
@@ -818,7 +820,8 @@ void AllDevicesPutVoice(const TCHAR *sentence)
     DeviceList[i].PutVoice(sentence);
 }
 
-void AllDevicesLinkTimeout()
+void
+AllDevicesLinkTimeout()
 {
   if (is_simulator())
     return;
@@ -829,40 +832,45 @@ void AllDevicesLinkTimeout()
     DeviceList[i].LinkTimeout();
 }
 
-void devStartup(LPTSTR lpCmdLine)
+void
+devStartup(LPTSTR lpCmdLine)
 {
   StartupStore(_T("Register serial devices\n"));
 
   devInit(lpCmdLine);
 }
 
-void devShutdown()
+void
+devShutdown()
 {
   int i;
 
   // Stop COM devices
   StartupStore(_T("Stop COM devices\n"));
 
-  for (i=0; i<NUMDEV; i++){
+  for (i = 0; i < NUMDEV; i++) {
     DeviceList[i].Close();
     devCloseLog(&DeviceList[i]);
   }
 }
 
-void devRestart() {
+void
+devRestart()
+{
   if (is_simulator())
     return;
 
   /*
-#ifdef WINDOWSPC
+  #ifdef WINDOWSPC
   static bool first = true;
   if (!first) {
     NMEAParser::Reset();
     return;
   }
   first = false;
-#endif
+  #endif
   */
+
   StartupStore(_T("RestartCommPorts\n"));
 
   mutexComm.Lock();
