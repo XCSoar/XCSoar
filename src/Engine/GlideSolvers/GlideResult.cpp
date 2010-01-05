@@ -86,16 +86,17 @@ void
 GlideResult::calc_cruise_bearing()
 {
   CruiseTrackBearing = Vector.Bearing;
-  if (positive(EffectiveWindSpeed)) {
-    const fixed sintheta = sin(fixed_deg_to_rad * EffectiveWindAngle);
-    if (sintheta == fixed_zero)
-      return;
+  if (!positive(EffectiveWindSpeed))
+    return;
 
-    // Wn/sin(alpha) = V/sin(theta)
-    // (Wn/V)*sin(theta) = sin(alpha)
-    CruiseTrackBearing -= fixed_half * fixed_rad_to_deg *
-        asin(sintheta * EffectiveWindSpeed / VOpt);
-  }
+  const fixed sintheta = sin(fixed_deg_to_rad * EffectiveWindAngle);
+  if (sintheta == fixed_zero)
+    return;
+
+  // Wn/sin(alpha) = V/sin(theta)
+  // (Wn/V)*sin(theta) = sin(alpha)
+  CruiseTrackBearing -= fixed_half * fixed_rad_to_deg *
+      asin(sintheta * EffectiveWindSpeed / VOpt);
 }
 
 void
