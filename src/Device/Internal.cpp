@@ -50,7 +50,7 @@ PortWriteNMEA(ComPort *port, const TCHAR *line)
   assert(port != NULL);
   assert(line != NULL);
 
-  TCHAR dollar[2]=TEXT("$");
+  TCHAR dollar[2] = TEXT("$");
   port->WriteString(dollar);
   port->WriteString(line);
 
@@ -62,27 +62,26 @@ PortWriteNMEA(ComPort *port, const TCHAR *line)
 bool
 ExpectString(ComPort *port, const TCHAR *token)
 {
-  int i=0, ch;
+  int i = 0, ch;
 
   assert(token != NULL);
 
   if (port == NULL)
     return false;
 
-  while ((ch = port->GetChar()) != EOF){
-
+  while ((ch = port->GetChar()) != EOF) {
     if (token[i] == ch)
       i++;
     else
-      i=0;
+      i = 0;
 
     if ((unsigned)i == _tcslen(token))
       return true;
-
   }
 
   #if debugIGNORERESPONCE > 0
   return true;
   #endif
+
   return false;
 }

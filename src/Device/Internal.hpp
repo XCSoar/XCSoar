@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-/** \file
+/** @file
  *
  * Internal header for driver implementations.
  */
@@ -57,10 +57,8 @@ struct DeviceDescriptor;
  * @param port the port to write to
  * @param line the line without asterisk, checksum and newline
  */
-void
-PortWriteNMEA(ComPort *port, const TCHAR *line);
+void PortWriteNMEA(ComPort *port, const TCHAR *line);
 
-bool
-ExpectString(ComPort *port, const TCHAR *token);
+bool ExpectString(ComPort *port, const TCHAR *token);
 
 #endif
