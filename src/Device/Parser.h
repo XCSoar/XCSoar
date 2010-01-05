@@ -43,8 +43,9 @@ Copyright_License {
 
 struct NMEA_INFO;
 
-class NMEAParser {
- public:
+class NMEAParser
+{
+public:
   NMEAParser();
   static void UpdateMonitor(void);
   static bool ParseNMEAString(int portnum,
@@ -62,7 +63,7 @@ class NMEAParser {
 
   static int StartDay;
 
- public:
+public:
   static void TestRoutine(NMEA_INFO *GPS_INFO);
 
   // these routines can be used by other parsers.
@@ -77,7 +78,7 @@ class NMEAParser {
 			       TCHAR *Destination,
 			       int DesiredFieldNumber);
 
- private:
+private:
   bool GSAAvailable;
   bool GGAAvailable;
   bool RMZAvailable;
