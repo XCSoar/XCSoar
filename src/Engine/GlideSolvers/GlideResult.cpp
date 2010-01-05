@@ -162,9 +162,9 @@ GlideResult::glide_reachable(const bool final_glide) const
     return (Solution == RESULT_OK)
            && positive(AltitudeDifference)
            && !positive(HeightClimb);
-  } else {
-    return (Solution == RESULT_OK);
   }
+
+  return (Solution == RESULT_OK);
 }
 
 bool 
