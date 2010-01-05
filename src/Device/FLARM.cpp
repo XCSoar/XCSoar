@@ -44,7 +44,8 @@ Copyright_License {
 #include <tchar.h>
 
 static bool
-FlarmDeclareSetGet(ComPort *port, TCHAR *Buffer) {
+FlarmDeclareSetGet(ComPort *port, TCHAR *Buffer)
+{
   assert(port != NULL);
 
   //PortWriteNMEA(d->Com, Buffer);
@@ -55,7 +56,7 @@ FlarmDeclareSetGet(ComPort *port, TCHAR *Buffer) {
 
   port->WriteString(tmp);
 
-  Buffer[6]= _T('A');
+  Buffer[6] = _T('A');
   return ExpectString(port, Buffer);
 }
 
@@ -69,17 +70,17 @@ FlarmDeclare(ComPort *port, const struct Declaration *decl)
   TCHAR Buffer[256];
 
   port->StopRxThread();
-  port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+  port->SetRxTimeout(500); // set RX timeout to 500[ms]
 
-  _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"),decl->PilotName);
+  _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"), decl->PilotName);
   if (!FlarmDeclareSetGet(port, Buffer))
     result = false;
 
-  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"),decl->AircraftRego);
+  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"), decl->AircraftRego);
   if (!FlarmDeclareSetGet(port, Buffer))
     result = false;
 
-  _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"),decl->AircraftType);
+  _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"), decl->AircraftType);
   if (!FlarmDeclareSetGet(port, Buffer))
     result = false;
 

@@ -42,7 +42,6 @@ Copyright_License {
 class ComPort;
 struct Declaration;
 
-bool
-FlarmDeclare(ComPort *port, const struct Declaration *decl);
+bool FlarmDeclare(ComPort *port, const struct Declaration *decl);
 
 #endif
