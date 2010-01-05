@@ -129,14 +129,14 @@ LookupGeoidSeparation(double lat, double lon)
     return 0.0;
 
   int ilat, ilon;
-  ilat = iround((90.0-lat)/2.0);
+  ilat = iround((90.0 - lat) / 2.0);
   // TODO: TB: use limit180
-  if (lon < 0) {
+  if (lon < 0)
     lon += 360.0;
-  }
+
   ilon = iround(lon/2.0);
 
-  int offset = ilat*180+ilon;
+  int offset = ilat * 180 + ilon;
   if (offset >= EGM96SIZE)
     return 0.0;
   if (offset < 0)
