@@ -558,18 +558,19 @@ ComPort::Read(void *Buffer, size_t Size)
 void
 ComPort::ProcessChar(char c)
 {
-  if (bi < NMEA_BUF_SIZE - 1) {
-    BuildingString[bi++] = c;
-
-    if (c == '\n') {
-      BuildingString[bi] = '\0';
-      mutexBlackboard.Lock();
-      dev->ParseNMEA(BuildingString, &device_blackboard.SetBasic());
-      mutexBlackboard.Unlock();
-    } else {
-      return;
-    }
+  if (bi >= NMEA_BUF_SIZE - 1) {
+    // overflow, so reset buffer
+    bi = 0;
+    return;
   }
-  // overflow, so reset buffer
-  bi = 0;
+
+  BuildingString[bi++] = c;
+
+  if (c != '\n')
+    return;
+
+  BuildingString[bi] = '\0';
+  mutexBlackboard.Lock();
+  dev->ParseNMEA(BuildingString, &device_blackboard.SetBasic());
+  mutexBlackboard.Unlock();
 }
