@@ -108,10 +108,11 @@ OpenGeoid(void)
 void
 CloseGeoid(void)
 {
-  if (egm96data) {
-    free(egm96data);
-    egm96data = NULL;
-  }
+  if (!egm96data)
+    return;
+
+  free(egm96data);
+  egm96data = NULL;
 }
 
 /**
