@@ -56,177 +56,176 @@ class WaypointVisitor;
 class Waypoints: private NonCopyable 
 {
 public:
-/** 
- * Constructor.  Task projection is updated after call to optimise().
- * As waypoints are added they are stored temporarily before applying
- * projection so that the bounds of the projection may be obtained.
- * 
- * See below for usage notes --- further work is required.
- * 
- */
+  /**
+   * Constructor.  Task projection is updated after call to optimise().
+   * As waypoints are added they are stored temporarily before applying
+   * projection so that the bounds of the projection may be obtained.
+   *
+   * See below for usage notes --- further work is required.
+   *
+   */
   Waypoints();
 
 
-/** 
- * Add waypoint to internal store.  Internal copy is made.
- * optimise() must be called after inserting waypoints prior to
- * performing any queries, but can be done in batches.
- * 
- * @param wp Waypoint to add to internal store
- */
+  /**
+   * Add waypoint to internal store.  Internal copy is made.
+   * optimise() must be called after inserting waypoints prior to
+   * performing any queries, but can be done in batches.
+   *
+   * @param wp Waypoint to add to internal store
+   */
   void append(const Waypoint& wp);
 
-/** 
- * Erase waypoint from the internal store.  Requires optimise() to
- * be called afterwards
- * 
- * @param wp Waypoint to erase from internal store
- */
+  /**
+   * Erase waypoint from the internal store.  Requires optimise() to
+   * be called afterwards
+   *
+   * @param wp Waypoint to erase from internal store
+   */
   void erase(const Waypoint& wp);
 
-/** 
- * Replace waypoint from the internal store.  Requires optimise() to
- * be called afterwards.
- * 
- * @param orig Waypoint that will be replaced
- * @param replacement New waypoint 
- */
+  /**
+   * Replace waypoint from the internal store.  Requires optimise() to
+   * be called afterwards.
+   *
+   * @param orig Waypoint that will be replaced
+   * @param replacement New waypoint
+   */
   void replace(const Waypoint& orig, Waypoint& replacement);
 
-/** 
- * Create new waypoint (without appending it to the store),
- * with set id.  This is like a factory method.
- * 
- * @param location Location of waypoint
- * 
- * @return Blank object at given location, with id set
- */
+  /**
+   * Create new waypoint (without appending it to the store),
+   * with set id.  This is like a factory method.
+   *
+   * @param location Location of waypoint
+   *
+   * @return Blank object at given location, with id set
+   */
   Waypoint create(const GEOPOINT& location);
 
-/** 
- * Optimise the internal search tree after adding/removing elements.
- * Also performs projection to flat earth for new elements.
- * This updates the task_projection.
- * 
- * Note: currently this code doesn't check for task projections
- * being modified from multiple calls to optimise() so it should
- * only be called once (until this is fixed).
- */
+  /**
+   * Optimise the internal search tree after adding/removing elements.
+   * Also performs projection to flat earth for new elements.
+   * This updates the task_projection.
+   *
+   * Note: currently this code doesn't check for task projections
+   * being modified from multiple calls to optimise() so it should
+   * only be called once (until this is fixed).
+   */
   void optimise();
 
-/** 
- * Clear the waypoint store
- * 
- */
+  /**
+   * Clear the waypoint store
+   */
   void clear();
 
-/** 
- * Size of waypoints (in tree, not in temporary store) ---
- * must call optimise() before this for it to be accurate.
- * 
- * @return Number of waypoints in tree
- */
+  /**
+   * Size of waypoints (in tree, not in temporary store) ---
+   * must call optimise() before this for it to be accurate.
+   *
+   * @return Number of waypoints in tree
+   */
   unsigned size() const;
 
-/** 
- * Whether waypoints store is empty
- * 
- * @return True if no waypoints stored
- */
+  /**
+   * Whether waypoints store is empty
+   *
+   * @return True if no waypoints stored
+   */
   bool empty() const;
 
-/** 
- * Set whether first waypoint file will be writable
- * (this is used for create() method of waypoints not
- *  generated from the Waypointparser)
- *
- * @param set Set/unset writable
- */
+  /**
+   * Set whether first waypoint file will be writable
+   * (this is used for create() method of waypoints not
+   *  generated from the Waypointparser)
+   *
+   * @param set Set/unset writable
+   */
   void set_file0_writable(const bool set);
 
-/** 
- * Determine whether a waypoint can be edited
- * based on the writability of the file it is assigned to 
- *
- * @param wp Waypoint to check
- * 
- * @return True if waypoint can be edited
- */
+  /**
+   * Determine whether a waypoint can be edited
+   * based on the writability of the file it is assigned to
+   *
+   * @param wp Waypoint to check
+   *
+   * @return True if waypoint can be edited
+   */
   bool get_writable(const Waypoint& wp) const;
 
-/** 
- * Sets the airfield details of the specified waypoint
- *
- * @param wp Waypoint to set
- * @param Details Text for airfield details
- * 
- */
+  /**
+   * Sets the airfield details of the specified waypoint
+   *
+   * @param wp Waypoint to set
+   * @param Details Text for airfield details
+   *
+   */
   void set_details(const Waypoint& wp, const tstring& Details);
 
-/** 
- * Find first home waypoint
- * 
- * @return Pointer to waypoint if found (or NULL if not)
- */
+  /**
+   * Find first home waypoint
+   *
+   * @return Pointer to waypoint if found (or NULL if not)
+   */
   const Waypoint* find_home() const;
 
-/** 
- * Set single home waypoint (clearing all others as home)
- * 
- * @param id Id of waypoint to set as home
- * @return True on success (id was found)
- */
+  /**
+   * Set single home waypoint (clearing all others as home)
+   *
+   * @param id Id of waypoint to set as home
+   * @return True on success (id was found)
+   */
   bool set_home(const unsigned id);
 
-/** 
- * Look up waypoint by ID.
- * 
- * @param id Id of waypoint to find in internal tree
- * 
- * @return Pointer to waypoint if found (or NULL if not)
- */
+  /**
+   * Look up waypoint by ID.
+   *
+   * @param id Id of waypoint to find in internal tree
+   *
+   * @return Pointer to waypoint if found (or NULL if not)
+   */
   const Waypoint* lookup_id(const unsigned id) const;
 
-/** 
- * Look up waypoint by location (returns first match)
- * 
- * @param loc Location of waypoint to find in internal tree
- * @param range Threshold for range
- * 
- * @return Pointer to waypoint if found (or NULL if none found)
- */
+  /**
+   * Look up waypoint by location (returns first match)
+   *
+   * @param loc Location of waypoint to find in internal tree
+   * @param range Threshold for range
+   *
+   * @return Pointer to waypoint if found (or NULL if none found)
+   */
   const Waypoint* lookup_location(const GEOPOINT &loc,
                                   const fixed range= fixed_zero) const;
 
-/** 
- * Look up waypoint by name (returns first match)
- * 
- * @param name Name of waypoint to find in internal tree
- * 
- * @return Pointer to waypoint if found (or NULL if not)
- */
+  /**
+   * Look up waypoint by name (returns first match)
+   *
+   * @param name Name of waypoint to find in internal tree
+   *
+   * @return Pointer to waypoint if found (or NULL if not)
+   */
   const Waypoint* lookup_name(const tstring &name) const;
 
-/** 
- * Call visitor function on waypoints within approximate range
- * (square range box) to search location.  Possible use by screen display
- * functions.
- * 
- * @param loc Location from which to search
- * @param range Distance in meters of search radius
- * @param visitor Visitor to be called on waypoints within range
- */
+  /**
+   * Call visitor function on waypoints within approximate range
+   * (square range box) to search location.  Possible use by screen display
+   * functions.
+   *
+   * @param loc Location from which to search
+   * @param range Distance in meters of search radius
+   * @param visitor Visitor to be called on waypoints within range
+   */
   void visit_within_range(const GEOPOINT &loc, const fixed range,
                           WaypointVisitor& visitor) const;
 
-/** 
- * Call visitor function on waypoints within radius
- * to search location.
- * 
- * @param loc Location from which to search
- * @param range Distance in meters of search radius
- * @param visitor Visitor to be called on waypoints within range
- */
+  /**
+   * Call visitor function on waypoints within radius
+   * to search location.
+   *
+   * @param loc Location from which to search
+   * @param range Distance in meters of search radius
+   * @param visitor Visitor to be called on waypoints within range
+   */
   void visit_within_radius(const GEOPOINT &loc, const fixed range,
                            WaypointVisitor& visitor) const;
 
@@ -238,69 +237,69 @@ public:
                          WaypointEnvelope::kd_get_location
                          > WaypointTree;
 
-/** 
- * Looks up nearest waypoint to the search location.
- * Performs search according to flat-earth internal representation,
- * so is approximate.
- * 
- * @param loc Location from which to search
- * 
- * @return Null if none found, otherwise pointer to nearest
- */
+  /**
+   * Looks up nearest waypoint to the search location.
+   * Performs search according to flat-earth internal representation,
+   * so is approximate.
+   *
+   * @param loc Location from which to search
+   *
+   * @return Null if none found, otherwise pointer to nearest
+   */
   const Waypoint* get_nearest(const GEOPOINT &loc) const;
 
-/** 
- * Looks up nearest waypoint to the search location.
- * Performs search according to flat-earth internal representation,
- * so is approximate.
- * 
- * @param loc Location from which to search
- * 
- * @return Iterator to absolute nearest waypoint 
- */
+  /**
+   * Looks up nearest waypoint to the search location.
+   * Performs search according to flat-earth internal representation,
+   * so is approximate.
+   *
+   * @param loc Location from which to search
+   *
+   * @return Iterator to absolute nearest waypoint
+   */
   WaypointTree::const_iterator find_nearest(const GEOPOINT &loc) const;
 
-/** 
- * Look up waypoint by ID.
- * 
- * @param id Id of waypoint to find in internal tree
- * 
- * @return Iterator to matching waypoint (or end if not found)
- */
+  /**
+   * Look up waypoint by ID.
+   *
+   * @param id Id of waypoint to find in internal tree
+   *
+   * @return Iterator to matching waypoint (or end if not found)
+   */
   WaypointTree::const_iterator find_id(const unsigned id) const;
 
-/** 
- * Access first waypoint in store, for use in iterators.
- * 
- * @return First waypoint in store
- */
+  /**
+   * Access first waypoint in store, for use in iterators.
+   *
+   * @return First waypoint in store
+   */
   WaypointTree::const_iterator begin() const;
 
-/** 
- * Access end waypoint in store, for use in iterators as end point.
- * 
- * @return End waypoint in store
- */
+  /**
+   * Access end waypoint in store, for use in iterators as end point.
+   *
+   * @return End waypoint in store
+   */
   WaypointTree::const_iterator end() const;
 
 private:
 
-/** 
- * Find waypoints within approximate range (square range box)
- * to search location.  Possible use by screen display functions.
- * 
- * @param loc Location from which to search
- * @param range Distance in meters of search radius
- * 
- * @return Vector of waypoints within square range
- */
-  std::vector< WaypointEnvelope >
+  /**
+   * Find waypoints within approximate range (square range box)
+   * to search location.  Possible use by screen display functions.
+   *
+   * @param loc Location from which to search
+   * @param range Distance in meters of search radius
+   *
+   * @return Vector of waypoints within square range
+   */
+  std::vector<WaypointEnvelope>
     find_within_range(const GEOPOINT &loc, const fixed range) const;
 
   WaypointTree waypoint_tree;
   TaskProjection task_projection;
 
-  std::deque< WaypointEnvelope > tmp_wps;
+  std::deque<WaypointEnvelope> tmp_wps;
 
   bool m_file0_writable;
 

@@ -46,38 +46,39 @@ extern long count_intersections;
 /**
  * Container accessor to allow a WaypointVisitor to visit WaypointEnvelopes 
  */
-class WaypointEnvelopeVisitor:
-  public Visitor<WaypointEnvelope> 
+class WaypointEnvelopeVisitor: public Visitor<WaypointEnvelope>
 {
 public:
-/** 
- * Constructor
- * 
- * @param wve Contained visitor
- * 
- * @return Initialised object
- */
+  /**
+   * Constructor
+   *
+   * @param wve Contained visitor
+   *
+   * @return Initialised object
+   */
   WaypointEnvelopeVisitor(WaypointVisitor* wve):waypoint_visitor(wve) {};
 
-/** 
- * Accessor operator to perform visit
- * 
- */
-  void operator()(const WaypointEnvelope& as) {
+  /**
+   * Accessor operator to perform visit
+   */
+  void
+  operator()(const WaypointEnvelope& as)
+  {
     Visit(as);
   }
 
-/** 
- * Visit item inside envelope
- * 
- */
-  void Visit(const WaypointEnvelope& as) {
+  /**
+   * Visit item inside envelope
+   */
+  void
+  Visit(const WaypointEnvelope& as)
+  {
     as.get_waypoint().Accept(*waypoint_visitor);
-  };
+  }
+
 private:
   WaypointVisitor *waypoint_visitor;
 };
-
 
 Waypoints::Waypoints():
   m_file0_writable(false),
@@ -85,14 +86,12 @@ Waypoints::Waypoints():
 {
 }
 
-
-
 void
 Waypoints::optimise()
 {
   if (task_projection.update_fast()) {
     // task projection changed, so need to push items back onto stack
-    std::copy(begin(),end(),std::back_inserter(tmp_wps));
+    std::copy(begin(), end(), std::back_inserter(tmp_wps));
     waypoint_tree.clear();
   }
 
@@ -104,38 +103,37 @@ Waypoints::optimise()
       tmp_wps.pop_front();
     }
     waypoint_tree.optimize();
-  } 
+  }
 }
 
 void
 Waypoints::append(const Waypoint& wp)
 {
-  if (empty()) {
+  if (empty())
     task_projection.reset(wp.Location);
-  }
+
   task_projection.scan_location(wp.Location);
 
   tmp_wps.push_back(WaypointEnvelope(wp));
 }
 
-
 const Waypoint*
 Waypoints::get_nearest(const GEOPOINT &loc) const 
 {
   WaypointTree::const_iterator it = find_nearest(loc);
-  if (it != waypoint_tree.end()) {
+
+  if (it != waypoint_tree.end())
     return &it->get_waypoint();
-  }
+
   return NULL;
 }
 
-
-Waypoints::WaypointTree::const_iterator 
-Waypoints::find_nearest(const GEOPOINT &loc) const 
+Waypoints::WaypointTree::const_iterator
+Waypoints::find_nearest(const GEOPOINT &loc) const
 {
   WaypointEnvelope bb_target(loc, task_projection);
-  std::pair<WaypointTree::const_iterator, double> 
-    found = waypoint_tree.find_nearest(bb_target);
+  std::pair<WaypointTree::const_iterator, double> found =
+      waypoint_tree.find_nearest(bb_target);
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -144,29 +142,26 @@ Waypoints::find_nearest(const GEOPOINT &loc) const
   return found.first;
 }
 
-
-
-void 
+void
 Waypoints::set_details(const Waypoint& wp, const tstring& Details)
 {
   WaypointTree::iterator found = waypoint_tree.begin();
   while (found != waypoint_tree.end()) {
-    if (found->get_waypoint().id == wp.id) {
+    if (found->get_waypoint().id == wp.id)
       found->set_details(Details);
-    }
+
     ++found;
   }
 }
-
 
 const Waypoint*
 Waypoints::lookup_name(const tstring &name) const
 {
   WaypointTree::const_iterator found = waypoint_tree.begin();
   while (found != waypoint_tree.end()) {
-    if ((*found).get_waypoint().Name == name) {
+    if ((*found).get_waypoint().Name == name)
       return &(*found).get_waypoint();
-    }
+
     ++found;
   }
   return NULL;
@@ -176,8 +171,8 @@ const Waypoint*
 Waypoints::lookup_location(const GEOPOINT &loc, const fixed range) const
 {
   WaypointEnvelope bb_target(loc, task_projection);
-  std::pair<WaypointTree::const_iterator, double> 
-    found = waypoint_tree.find_nearest(bb_target);
+  std::pair<WaypointTree::const_iterator, double> found =
+      waypoint_tree.find_nearest(bb_target);
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -187,15 +182,14 @@ Waypoints::lookup_location(const GEOPOINT &loc, const fixed range) const
     const Waypoint* wp = &(found.first)->get_waypoint();
     if (wp->Location == loc)
       return wp;
-    else if (positive(range) && (wp->Location.distance(loc)<=range)) {
+    else if (positive(range) && (wp->Location.distance(loc) <= range))
       return wp;
-    }
-  } 
+  }
+
   return NULL;
 }
 
-
-const Waypoint* 
+const Waypoint*
 Waypoints::find_home() const
 {
   if (!m_home || !m_home->Flags.Home) {
@@ -209,23 +203,26 @@ Waypoints::find_home() const
       }
       ++found;
     }
-  } 
-  if (m_home) {
-    return m_home;
   }
+
+  if (m_home)
+    return m_home;
+
   return NULL;
 }
 
 bool
-Waypoints::set_home(const unsigned id) 
+Waypoints::set_home(const unsigned id)
 {
   bool ok = false;
   WaypointTree::iterator found = waypoint_tree.begin();
+
   while (found != waypoint_tree.end()) {
     const WaypointEnvelope* wp = &(*found);
     wp->set_home(wp->get_waypoint().id == id);
     ++found;
   }
+
   return ok;
 }
 
@@ -233,12 +230,14 @@ const Waypoint*
 Waypoints::lookup_id(const unsigned id) const
 {
   WaypointTree::const_iterator found = waypoint_tree.begin();
+
   while (found != waypoint_tree.end()) {
-    if (found->get_waypoint().id == id) {
+    if (found->get_waypoint().id == id)
       return &found->get_waypoint();
-    }
+
     ++found;
   }
+
   return NULL;
 }
 
@@ -247,12 +246,14 @@ Waypoints::WaypointTree::const_iterator
 Waypoints::find_id(const unsigned id) const
 {
   WaypointTree::const_iterator found = waypoint_tree.begin();
+
   while (found != waypoint_tree.end()) {
     if (found->get_waypoint().id == id) {
       break;
     }
     ++found;
   }
+
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
@@ -260,33 +261,30 @@ Waypoints::find_id(const unsigned id) const
   return found;
 }
 
-
-std::vector< WaypointEnvelope >
-Waypoints::find_within_range(const GEOPOINT &loc, 
-                             const fixed range) const
+std::vector<WaypointEnvelope>
+Waypoints::find_within_range(const GEOPOINT &loc, const fixed range) const
 {
   WaypointEnvelope bb_target(loc, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
 
-  std::vector< WaypointEnvelope > vectors;
-  waypoint_tree.find_within_range(bb_target, mrange, 
-                                  std::back_inserter(vectors));
+  std::vector<WaypointEnvelope> vectors;
+  waypoint_tree.find_within_range(bb_target, mrange, std::back_inserter(vectors));
+
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
+
   return vectors;
 }
 
-
-void 
-Waypoints::visit_within_range(const GEOPOINT &loc, 
-                              const fixed range,
-                              WaypointVisitor& visitor) const
+void
+Waypoints::visit_within_range(const GEOPOINT &loc, const fixed range,
+    WaypointVisitor& visitor) const
 {
   WaypointEnvelope bb_target(loc, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
 
-  WaypointEnvelopeVisitor wve(&visitor);  
+  WaypointEnvelopeVisitor wve(&visitor);
 
   waypoint_tree.visit_within_range(bb_target, mrange, wve);
 
@@ -295,25 +293,22 @@ Waypoints::visit_within_range(const GEOPOINT &loc,
 #endif
 }
 
-
 void
-Waypoints::visit_within_radius(const GEOPOINT &loc, 
-                               const fixed range,
-                               WaypointVisitor& visitor) const
+Waypoints::visit_within_radius(const GEOPOINT &loc, const fixed range,
+    WaypointVisitor& visitor) const
 {
   const unsigned mrange = task_projection.project_range(loc, range);
   FLAT_GEOPOINT floc = task_projection.project(loc);
 
-  std::vector < WaypointEnvelope > vectors = find_within_range(loc, range);
+  std::vector<WaypointEnvelope> vectors = find_within_range(loc, range);
 
-  for (std::vector< WaypointEnvelope >::iterator v=vectors.begin();
-       v != vectors.end(); ) {
+  for (std::vector< WaypointEnvelope >::iterator v=vectors.begin(); v != vectors.end();) {
 
 #ifdef INSTRUMENT_TASK
-        count_intersections++;
+    count_intersections++;
 #endif
 
-    if ((*v).flat_distance_to(floc)> mrange) {
+    if ((*v).flat_distance_to(floc) > mrange) {
       vectors.erase(v);
     } else {
       visitor(v->get_waypoint());
@@ -321,7 +316,6 @@ Waypoints::visit_within_radius(const GEOPOINT &loc,
     }
   }
 }
-
 
 Waypoints::WaypointTree::const_iterator
 Waypoints::begin() const
@@ -334,8 +328,6 @@ Waypoints::end() const
 {
   return waypoint_tree.end();
 }
-
-
 
 void
 Waypoints::clear()
@@ -356,7 +348,6 @@ Waypoints::empty() const
   return waypoint_tree.empty() && tmp_wps.empty();
 }
 
-
 void
 Waypoints::erase(const Waypoint& wp)
 {
@@ -373,20 +364,20 @@ Waypoints::replace(const Waypoint& orig, Waypoint& replacement)
 }
 
 Waypoint
-Waypoints::create(const GEOPOINT &location) 
+Waypoints::create(const GEOPOINT &location)
 {
   Waypoint edit_waypoint;
   edit_waypoint.Location = location;
-  edit_waypoint.id = size()+tmp_wps.size()+1;
-  
+  edit_waypoint.id = size() + tmp_wps.size() + 1;
+
   if (edit_waypoint.id == 1) {
     // first waypoint, put into primary file (this will be auto-generated)
     edit_waypoint.FileNum = 0;
     m_file0_writable = true;
   } else if (m_file0_writable) {
-    edit_waypoint.FileNum = 0; 
+    edit_waypoint.FileNum = 0;
   } else {
-    edit_waypoint.FileNum = 1; 
+    edit_waypoint.FileNum = 1;
   }
 
   return edit_waypoint;
