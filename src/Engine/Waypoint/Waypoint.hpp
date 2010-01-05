@@ -53,36 +53,33 @@ class TaskProjection;
  * present for compatibility
  */
 struct WaypointFlags {
-  unsigned int Airport:1; /**< If waypoint is an airport/airfield */
-  unsigned int TurnPoint:1; /**< If waypoint can be used as a turnpoint */
-  unsigned int LandPoint:1; /**< If waypoint can be landed at */
-  unsigned int Home:1; /**< If waypoint is to be used as home */
-  unsigned int StartPoint:1; /**< If waypoint is marked as a potential start point */
-  unsigned int FinishPoint:1; /**< If waypoint is marked as a potential finish point */
-  unsigned int Restricted:1; /**< If waypoint is marked for restricted access (unused?) */
+  unsigned int Airport:1;      /**< If waypoint is an airport/airfield */
+  unsigned int TurnPoint:1;    /**< If waypoint can be used as a turnpoint */
+  unsigned int LandPoint:1;    /**< If waypoint can be landed at */
+  unsigned int Home:1;         /**< If waypoint is to be used as home */
+  unsigned int StartPoint:1;   /**< If waypoint is marked as a potential start point */
+  unsigned int FinishPoint:1;  /**< If waypoint is marked as a potential finish point */
+  unsigned int Restricted:1;   /**< If waypoint is marked for restricted access (unused?) */
   unsigned int WaypointFlag:1; /**< ??? */
 };
-
 
 /**
  * Class for waypoints.  
  * This is small enough currently to be used with local copies (e.g. in a TaskPoint),
  * but this may change if we include airfield details inside.
  *
- * \todo
+ * @todo
  * - consider having a static factory method provide the ID automatically
  *   so we know they will be unique.
  */
-class Waypoint:
-  public BaseVisitable<>
+class Waypoint: public BaseVisitable<>
 {
 public:
-
-/** 
- * Constructor for real waypoints
- * 
- * @return Uninitialised object
- */
+  /**
+   * Constructor for real waypoints
+   *
+   * @return Uninitialised object
+   */
   Waypoint() {};
 
   unsigned id; /**< Unique id */
@@ -100,7 +97,9 @@ public:
    * 
    * @return True if waypoint is landable
    */
-  bool is_landable() const {
+  bool
+  is_landable() const
+  {
     return Flags.LandPoint || Flags.Airport;
   }
 
@@ -111,7 +110,9 @@ public:
    *
    * @return true if ids match
    */
-  bool operator==(const Waypoint&wp) const {
+  bool
+  operator==(const Waypoint&wp) const
+  {
     return id == wp.id;
   }
 
@@ -119,10 +120,8 @@ public:
   DEFINE_VISITABLE()
 
 #ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, 
-                                   const Waypoint& wp);
+  friend std::ostream& operator<< (std::ostream& o, const Waypoint& wp);
 #endif
 };
-
 
 #endif
