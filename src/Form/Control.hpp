@@ -51,6 +51,8 @@ Copyright_License {
 #define BORDERBOTTOM (1<<bkBottom)
 #define BORDERLEFT   (1<<bkLeft)
 
+class ContainerControl;
+
 typedef enum {
   bkNone,
   bkTop,
@@ -64,7 +66,7 @@ public:
   typedef void (*OnHelpCallback_t)(WindowControl *Sender);
 
 private:
-  WindowControl *mOwner;
+  ContainerControl *mOwner;
   int mBorderKind;
   Color mColorBack;
   Color mColorFore;
@@ -93,9 +95,6 @@ protected:
   TCHAR mCaption[254];
   bool mDontPaintSelector;
 
-  WindowControl *mClients[50];
-  int mClientCount;
-
   void PaintSelector(Canvas &canvas, const RECT rc);
   void PaintSelector(Canvas &canvas);
   bool HasFocus(void) { return mHasFocus; }
@@ -109,8 +108,6 @@ public:
   virtual bool on_killfocus();
 
   virtual bool on_unhandled_key(unsigned key_code);
-
-  virtual void AddClient(WindowControl *Client);
 
   virtual bool on_key_down(unsigned key_code);
   virtual bool on_key_up(unsigned key_code);
@@ -181,7 +178,7 @@ public:
     return *this;
   }
 
-  WindowControl *GetOwner(void) {
+  ContainerControl *GetOwner(void) {
     return mOwner;
   }
 
@@ -194,10 +191,7 @@ public:
     return mTag;
   }
 
-  Window *FocusNext(WindowControl *Sender);
-  Window *FocusPrev(WindowControl *Sender);
-
-  WindowControl(WindowControl *Owner, ContainerWindow *Parent,
+  WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
                 const TCHAR *Name, int X, int Y, int Width, int Height,
                 bool Visible = true);
 
@@ -207,13 +201,13 @@ public:
     mDontPaintSelector = Value;
   }
 
-  WindowControl *FindByName(const TCHAR *Name);
+  virtual WindowControl *FindByName(const TCHAR *Name);
 
   const WindowControl *FindByName(const TCHAR *Name) const {
     return const_cast<WindowControl *>(this)->FindByName(Name);
   }
 
-  void FilterAdvanced(bool advanced);
+  virtual void FilterAdvanced(bool advanced);
 };
 
 #endif

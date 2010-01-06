@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Form/List.hpp"
+#include "Form/Container.hpp"
 #include "Screen/Layout.hpp"
 
 #include <assert.h>
@@ -46,7 +47,7 @@ Copyright_License {
 using std::min;
 using std::max;
 
-WndListFrame::WndListFrame(WindowControl *Owner, const TCHAR *Name,
+WndListFrame::WndListFrame(ContainerControl *Owner, const TCHAR *Name,
                            int X, int Y, int Width, int Height,
                            unsigned _item_height):
   WindowControl(Owner, NULL, Name, X, Y, Width, Height),

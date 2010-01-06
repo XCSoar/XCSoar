@@ -50,7 +50,7 @@ PeriodClock WndForm::timeAnyOpenClose;
 WndForm::WndForm(SingleWindow &_main_window,
                  const TCHAR *Name, const TCHAR *Caption,
                  int X, int Y, int Width, int Height):
-  WindowControl(NULL, &_main_window, Name, X, Y, Width, Height, false),
+  ContainerControl(NULL, &_main_window, Name, X, Y, Width, Height, false),
   main_window(_main_window),
   mModalResult(0),
   mColorTitle(Color::YELLOW),
@@ -58,8 +58,8 @@ WndForm::WndForm(SingleWindow &_main_window,
   mClientWindow(NULL),
   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL), mOnUserMsgNotify(NULL)
 {
-  mClientWindow = new WindowControl(this, this,
-                                    TEXT(""), 20, 20, Width, Height);
+  mClientWindow = new ContainerControl(this, this,
+                                       TEXT(""), 20, 20, Width, Height);
   mClientWindow->SetBackColor(GetBackColor());
 
   mClientRect.top=0;
@@ -97,7 +97,7 @@ void WndForm::AddClient(WindowControl *Client){      // add client window
   if (mClientWindow != NULL){
     mClientWindow->AddClient(Client); // add it to the clientarea window
   } else
-    WindowControl::AddClient(Client);
+    ContainerControl::AddClient(Client);
 }
 
 bool
@@ -106,7 +106,7 @@ WndForm::on_destroy()
   if (mModalResult == 0)
     mModalResult = mrCancel;
 
-  WindowControl::on_destroy();
+  ContainerControl::on_destroy();
   return true;
 }
 
@@ -118,7 +118,7 @@ WndForm::on_timer(timer_t id)
       mOnTimerNotify(this);
     return true;
   } else
-    return WindowControl::on_timer(id);
+    return ContainerControl::on_timer(id);
 }
 
 bool
@@ -127,7 +127,7 @@ WndForm::on_user(unsigned id)
   if (mOnUserMsgNotify != NULL && mOnUserMsgNotify(this, id))
     return true;
 
-  return WindowControl::on_user(id);
+  return ContainerControl::on_user(id);
 }
 
 const Font *
@@ -307,7 +307,7 @@ int WndForm::ShowModal(bool bEnableMap) {
 void
 WndForm::on_paint(Canvas &canvas)
 {
-  WindowControl::on_paint(canvas);
+  ContainerControl::on_paint(canvas);
 
   RECT rcClient = get_client_rect();
 
@@ -356,20 +356,20 @@ Color WndForm::SetForeColor(Color Value)
 {
   if (mClientWindow)
     mClientWindow->SetForeColor(Value);
-  return WindowControl::SetForeColor(Value);
+  return ContainerControl::SetForeColor(Value);
 }
 
 Color WndForm::SetBackColor(Color Value)
 {
   if (mClientWindow)
   mClientWindow->SetBackColor(Value);
-  return WindowControl::SetBackColor(Value);
+  return ContainerControl::SetBackColor(Value);
 }
 
 const Font *WndForm::SetFont(const Font &Value){
   if (mClientWindow)
     mClientWindow->SetFont(Value);
-  return WindowControl::SetFont(Value);
+  return ContainerControl::SetFont(Value);
 }
 
 void
@@ -405,5 +405,5 @@ WndForm::on_unhandled_key(unsigned key_code)
     return true;
   }
 
-  return WindowControl::on_unhandled_key(key_code);
+  return ContainerControl::on_unhandled_key(key_code);
 }

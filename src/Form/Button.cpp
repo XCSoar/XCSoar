@@ -37,10 +37,11 @@ Copyright_License {
 */
 
 #include "Form/Button.hpp"
+#include "Form/Container.hpp"
 #include "Screen/Animation.hpp"
 #include "Interface.hpp"
 
-WndButton::WndButton(WindowControl *Parent,
+WndButton::WndButton(ContainerControl *Parent,
                      const TCHAR *Name, const TCHAR *Caption,
                      int X, int Y, int Width, int Height,
                      void (*Function)(WindowControl *Sender))

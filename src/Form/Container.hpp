@@ -36,28 +36,40 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORM_FRAME_HPP
-#define XCSOAR_FORM_FRAME_HPP
+#ifndef XCSOAR_FORM_CONTAINER_HPP
+#define XCSOAR_FORM_CONTAINER_HPP
 
-#include "Form/Container.hpp"
+#include "Form/Control.hpp"
 
-class WndFrame : public ContainerControl {
-public:
-  WndFrame(ContainerControl *Owner, const TCHAR *Name,
-           int X, int Y, int Width, int Height);
-
-  void SetCaption(const TCHAR *Value);
-
-  UINT GetCaptionStyle(void) { return mCaptionStyle; }
-  UINT SetCaptionStyle(UINT Value);
-
-  unsigned GetTextHeight();
-
+class ContainerControl : public WindowControl {
 protected:
-  UINT mCaptionStyle;
+  WindowControl *mClients[50];
+  int mClientCount;
 
-  /** from class PaintWindow */
-  virtual void on_paint(Canvas &canvas);
+public:
+  ContainerControl(ContainerControl *owner, ContainerWindow *parent,
+                   const TCHAR *name, int x, int y, int width, int height,
+                   bool visible = true)
+    :WindowControl(owner, parent, name, x, y, width, height, visible),
+     mClientCount(0) {}
+  virtual ~ContainerControl();
+
+public:
+  virtual void AddClient(WindowControl *Client);
+
+  virtual WindowControl *FindByName(const TCHAR *Name);
+
+  const WindowControl *FindByName(const TCHAR *Name) const {
+    return const_cast<ContainerControl *>(this)->FindByName(Name);
+  }
+
+  virtual Window *GetCanFocus(bool forward);
+
+  virtual void FilterAdvanced(bool advanced);
+
+public:
+  Window *FocusNext(WindowControl *Sender);
+  Window *FocusPrev(WindowControl *Sender);
 };
 
 #endif

@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Form/Edit.hpp"
+#include "Form/Container.hpp"
 #include "Form/Internal.hpp"
 #include "DataField/Base.hpp"
 #include "Screen/Bitmap.hpp"
@@ -131,7 +132,7 @@ Bitmap WndProperty::hBmpRight32;
 
 int WndProperty::InstCount = 0;
 
-WndProperty::WndProperty(WindowControl *Parent,
+WndProperty::WndProperty(ContainerControl *Parent,
                          TCHAR *Name,
                          TCHAR *Caption,
                          int X, int Y,

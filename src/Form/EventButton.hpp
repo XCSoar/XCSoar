@@ -47,7 +47,7 @@ typedef void (*webpt2Event)(const TCHAR *);
 
 class WndEventButton : public WndButton {
 public:
-  WndEventButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption,
+  WndEventButton(ContainerControl *Parent, const TCHAR *Name, const TCHAR *Caption,
                  int X, int Y, int Width, int Height,
                  const TCHAR *ename,
                  const TCHAR *eparameters);

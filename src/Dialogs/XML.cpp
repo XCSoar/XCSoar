@@ -176,7 +176,7 @@ CallBackLookup(CallBackTableEntry_t *LookUpTable, TCHAR *Name)
 }
 
 static void
-LoadChildrenFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
+LoadChildrenFromXML(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
                   XMLNode *Node, int Font, const DialogStyle_t eDialogStyle);
 
 static Font *FontMap[5] = {
@@ -538,7 +538,7 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
 }
 
 static void
-LoadChild(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
+LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
           XMLNode node, int ParentFont, const DialogStyle_t eDialogStyle)
 {
   int X,Y,Width,Height,Font;
@@ -649,10 +649,11 @@ LoadChild(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
                                (WndOwnerDrawFrame::OnPaintCallback_t)
                                CallBackLookup(LookUpTable, PaintCallback));
   } else if (_tcscmp(node.getName(), _T("WndFrame")) == 0){
-    WC = new WndFrame(Parent, Name, X, Y, Width, Height);
+    WndFrame *frame = new WndFrame(Parent, Name, X, Y, Width, Height);
+    WC = frame;
 
     // recursivly create dialog
-    LoadChildrenFromXML(WC, LookUpTable, &node, ParentFont, eDialogStyle);
+    LoadChildrenFromXML(frame, LookUpTable, &node, ParentFont, eDialogStyle);
   } else if (_tcscmp(node.getName(), _T("WndListFrame")) == 0){
     unsigned item_height =
       Layout::Scale(StringToIntDflt(node.getAttribute(_T("ItemHeight")), 18));
@@ -677,7 +678,7 @@ LoadChild(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
 }
 
 static void
-LoadChildrenFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
+LoadChildrenFromXML(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
                   XMLNode *Node, int ParentFont, const DialogStyle_t eDialogStyle)
 {
   int Count = Node->nChildNode();

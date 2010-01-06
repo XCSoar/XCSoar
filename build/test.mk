@@ -247,6 +247,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/DataField/Integer.cpp \
 	$(SRC)/DataField/String.cpp \
 	$(SRC)/Form/Control.cpp \
+	$(SRC)/Form/Container.cpp \
 	$(SRC)/Form/Form.cpp \
 	$(SRC)/Form/Button.cpp \
 	$(SRC)/Form/EventButton.cpp \

@@ -39,19 +39,19 @@ Copyright_License {
 #ifndef XCSOAR_FORM_FORM_HPP
 #define XCSOAR_FORM_FORM_HPP
 
-#include "Form/Control.hpp"
+#include "Form/Container.hpp"
 #include "Dialogs.h"
 
 class SingleWindow;
 class PeriodClock;
 
-class WndForm : public WindowControl {
+class WndForm : public ContainerControl {
 protected:
   SingleWindow &main_window;
   int mModalResult;
   Color mColorTitle;
   const Font *mhTitleFont;
-  WindowControl *mClientWindow;
+  ContainerControl *mClientWindow;
   RECT mClientRect;
   RECT mTitleRect;
 

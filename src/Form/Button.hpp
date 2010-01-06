@@ -56,7 +56,7 @@ public:
 
   typedef void (*ClickNotifyCallback_t)(WindowControl *Sender);
 
-  WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption,
+  WndButton(ContainerControl *Parent, const TCHAR *Name, const TCHAR *Caption,
             int X, int Y, int Width, int Height,
             void (*Function)(WindowControl *Sender) = NULL);
 

@@ -165,7 +165,7 @@ protected:
   PaintItemCallback_t PaintItemCallback;
 
 public:
-  WndListFrame(WindowControl *Owner, const TCHAR *Name,
+  WndListFrame(ContainerControl *Owner, const TCHAR *Name,
                int X, int Y, int Width, int Height,
                unsigned _item_height);
 

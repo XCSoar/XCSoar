@@ -62,7 +62,7 @@ WndEventButton::~WndEventButton() {
 }
 
 
-WndEventButton::WndEventButton(WindowControl *Parent, const TCHAR *Name,
+WndEventButton::WndEventButton(ContainerControl *Parent, const TCHAR *Name,
 			       const TCHAR *Caption,
 			       int X, int Y, int Width, int Height,
 			       const TCHAR* ename,

@@ -98,7 +98,7 @@ public:
 
   typedef int (*DataChangeCallback_t)(WindowControl *Sender, int Mode, int Value);
 
-  WndProperty(WindowControl *Parent, TCHAR *Name, TCHAR *Caption,
+  WndProperty(ContainerControl *Parent, TCHAR *Name, TCHAR *Caption,
               int X, int Y, int Width, int Height, int CaptionWidth,
               int (*DataChangeNotify)(WindowControl *Sender,
                                       int Mode, int Value),

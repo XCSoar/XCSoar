@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Form/Control.hpp"
+#include "Form/Container.hpp"
 #include "Form/Internal.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
@@ -75,7 +76,7 @@ KeyTimer(bool isdown, unsigned thekey)
   return false;
 }
 
-WindowControl::WindowControl(WindowControl *Owner,
+WindowControl::WindowControl(ContainerControl *Owner,
                              ContainerWindow *Parent,
                              const TCHAR *Name,
                              int X, int Y,
@@ -91,8 +92,7 @@ WindowControl::WindowControl(WindowControl *Owner,
    mReadOnly(false), mHasFocus(false),
    mBorderSize(1),
    mCanFocus(false),
-   mDontPaintSelector(false),
-   mClientCount(0)
+   mDontPaintSelector(false)
 {
   mCaption[0] = '\0';
 
@@ -129,11 +129,6 @@ WindowControl::~WindowControl(void)
     free(mHelpText);
     mHelpText = NULL;
   }
-
-  int i;
-  for (i = mClientCount - 1; i >= 0; i--) {
-    delete mClients[i];
-  }
 }
 
 Window *
@@ -145,48 +140,7 @@ WindowControl::GetCanFocus(bool forward)
   if (mCanFocus && !mReadOnly)
     return this;
 
-  if (forward) {
-    for (int idx = 0; idx < mClientCount; ++idx) {
-      Window *w = mClients[idx]->GetCanFocus(forward);
-      if (w != NULL)
-        return w;
-    }
-  } else {
-    for (int idx = mClientCount - 1; idx >= 0; --idx) {
-      Window *w = mClients[idx]->GetCanFocus(forward);
-      if (w != NULL)
-        return w;
-    }
-  }
-
   return NULL;
-}
-
-void
-WindowControl::AddClient(WindowControl *Client)
-{
-  mClients[mClientCount] = Client;
-  mClientCount++;
-
-  Client->SetFont(GetFont());
-
-  if (Client->get_position().top == -1 && mClientCount > 1)
-    Client->move(Client->get_position().left,
-                 mClients[mClientCount - 2]->get_position().bottom);
-
-  /*
-  // TODO code: also allow autosizing of height/width to maximum of parent
-
-  if (Client->mHeight == -1){
-    // maximum height
-    Client->mHeight = mHeight - Client->mY;
-    SetWindowPos(Client->GetHandle(), 0,
-                 Client->mX, Client->mY,
-                 Client->mWidth, Client->mHeight,
-                 SWP_NOSIZE | SWP_NOZORDER
-                 | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
-  }
-  */
 }
 
 void
@@ -198,10 +152,6 @@ WindowControl::FilterAdvanced(bool advanced)
     else
       hide();
   }
-
-  for (int i = 0; i < mClientCount; i++) {
-    mClients[i]->FilterAdvanced(advanced);
-  }
 }
 
 WindowControl *
@@ -209,12 +159,6 @@ WindowControl::FindByName(const TCHAR *Name)
 {
   if (_tcscmp(mName, Name) == 0)
     return this;
-
-  for (int i = 0; i < mClientCount; i++) {
-    WindowControl *W = mClients[i]->FindByName(Name);
-    if (W != NULL)
-      return W;
-  }
 
   return NULL;
 }
@@ -463,62 +407,6 @@ WindowControl::on_paint(Canvas &canvas)
   PaintSelector(canvas);
 
   ContainerWindow::on_paint(canvas);
-}
-
-Window *
-WindowControl::FocusNext(WindowControl *Sender)
-{
-  int idx;
-  Window *W;
-
-  if (Sender != NULL) {
-    for (idx = 0; idx < mClientCount; idx++)
-      if (mClients[idx] == Sender)
-        break;
-
-    idx++;
-  } else
-    idx = 0;
-
-  for (; idx < mClientCount; idx++) {
-    if ((W = mClients[idx]->GetCanFocus(true)) != NULL) {
-      W->set_focus();
-      return W;
-    }
-  }
-
-  if (GetOwner() != NULL)
-    return GetOwner()->FocusNext(this);
-
-  return NULL;
-}
-
-Window *
-WindowControl::FocusPrev(WindowControl *Sender)
-{
-  int idx;
-  Window *W;
-
-  if (Sender != NULL) {
-    for (idx = 0; idx < mClientCount; idx++) {
-      if (mClients[idx] == Sender)
-        break;
-    }
-    idx--;
-  } else
-    idx = mClientCount - 1;
-
-  for (; idx >= 0; idx--) {
-    if ((W = mClients[idx]->GetCanFocus(false)) != NULL) {
-      W->set_focus();
-      return W;
-    }
-  }
-
-  if (GetOwner() != NULL)
-    return GetOwner()->FocusPrev(this);
-
-  return NULL;
 }
 
 bool
