@@ -19,6 +19,8 @@
   <WndButton Name="cmdCopy" Caption="Copy" X=5 Y=40 Width=60  Height=28 Font=2 />
   <WndButton Name="cmdPaste" Caption="Paste" X=5 Y=70 Width=60  Height=28 Font=2 />
 
+  <Tabbed Name="tabbed" X=70 Y=0 Width=250 Height=222>
+
   <WndFrame Name="frmSite" X=70 Y=0 Width=250 Height=222 Font=2>
 
   <WndProperty Name="prpMapFile" Caption="Map file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2
@@ -971,6 +973,8 @@ To select an airspace on the map, press for about half a second on it.  If you d
   </WndProperty>
 
   </WndFrame>
+
+  </Tabbed>
 
   <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
   <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />

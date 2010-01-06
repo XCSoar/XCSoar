@@ -17,6 +17,8 @@
 
   <WndButton Name="cmdSave"  Caption="Save" X=5 Y=90 Width=60  Height=28 Font=2 OnClickNotify="OnSaveClicked" Tag=1 />
 
+  <Tabbed Name="tabbed" X=70 Y=0 Width=246 Height=222>
+
   <WndFrame Name="frmHardware" X=70 Y=0 Width=246 Height=222 Font=2>
 
   <WndProperty Name="prpHasPressureTE" Caption="TE port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether the Total Energy port is connected.">
@@ -500,6 +502,7 @@
 
   </WndFrame>
 
+  </Tabbed>
 
 </WndForm>
 

@@ -42,14 +42,14 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 
-extern int config_page;
+extern TabbedControl *configuration_tabbed;
 
 void OnInfoBoxHelp(WindowControl * Sender){
   WndProperty *wp = (WndProperty*)Sender;
   int type = wp->GetDataField()->GetAsInteger();
   TCHAR caption[100];
   TCHAR mode[100];
-  switch (config_page) {
+  switch (configuration_tabbed->GetCurrentPage()) {
   case 15:
     _tcscpy(mode,gettext(_T("circling")));
     break;

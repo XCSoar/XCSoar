@@ -70,30 +70,8 @@ static const TCHAR *const captions[] = {
 };
 
 static bool changed = false;
-static int page=0;
 static WndForm *wf=NULL;
-static WndFrame *wConfig1=NULL;
-static WndFrame *wConfig2=NULL;
-static WndFrame *wConfig3=NULL;
-static WndFrame *wConfig4=NULL;
-static WndFrame *wConfig5=NULL;
-static WndFrame *wConfig6=NULL;
-static WndFrame *wConfig7=NULL;
-static WndFrame *wConfig8=NULL;
-static WndFrame *wConfig9=NULL;
-static WndFrame *wConfig10=NULL;
-static WndFrame *wConfig11=NULL;
-static WndFrame *wConfig12=NULL;
-static WndFrame *wConfig13=NULL;
-static WndFrame *wConfig14=NULL;
-static WndFrame *wConfig15=NULL;
-static WndFrame *wConfig16=NULL;
-static WndFrame *wConfig17=NULL;
-static WndFrame *wConfig18=NULL;
-static WndFrame *wConfig19=NULL;
-
-#define NUMPAGES 19
-
+static TabbedControl *tabbed;
 
 static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
                                      bool setvalue=false,
@@ -561,32 +539,10 @@ static void UpdateParameters(bool first) {
 }
 
 
-static void NextPage(int Step){
-  page += Step;
-  if (page>=NUMPAGES) { page=0; }
-  if (page<0) { page=NUMPAGES-1; }
-
-  wf->SetCaption(captions[page]);
-
-  wConfig1->set_visible(page == 0);
-  wConfig2->set_visible(page == 1);
-  wConfig3->set_visible(page == 2);
-  wConfig4->set_visible(page == 3);
-  wConfig5->set_visible(page == 4);
-  wConfig6->set_visible(page == 5);
-  wConfig7->set_visible(page == 6);
-  wConfig8->set_visible(page == 7);
-  wConfig9->set_visible(page == 8);
-  wConfig10->set_visible(page == 9);
-  wConfig11->set_visible(page == 10);
-  wConfig12->set_visible(page == 11);
-  wConfig13->set_visible(page == 12);
-  wConfig14->set_visible(page == 13);
-  wConfig15->set_visible(page == 14);
-  wConfig16->set_visible(page == 15);
-  wConfig17->set_visible(page == 16);
-  wConfig18->set_visible(page == 17);
-  wConfig19->set_visible(page == 18);
+static void
+PageSwitched()
+{
+  wf->SetCaption(captions[tabbed->GetCurrentPage()]);
 
   UpdateParameters(false);
 
@@ -595,12 +551,14 @@ static void NextPage(int Step){
 
 static void OnNextClicked(WindowControl * Sender){
   (void)Sender;
-  NextPage(+1);
+  tabbed->NextPage();
+  PageSwitched();
 }
 
 static void OnPrevClicked(WindowControl * Sender){
   (void)Sender;
-  NextPage(-1);
+  tabbed->PreviousPage();
+  PageSwitched();
 }
 
 static void OnCloseClicked(WindowControl * Sender){
@@ -655,14 +613,16 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
     // JMW NO! This disables editing! //   case VK_LEFT:
   case '6':
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-    NextPage(-1);
+    tabbed->PreviousPage();
+    PageSwitched();
     //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
     // JMW NO! This disables editing!  //  case VK_RIGHT:
   case '7':
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-    NextPage(+1);
+    tabbed->NextPage();
+    PageSwitched();
     //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
@@ -989,45 +949,10 @@ bool dlgConfigurationVarioShowModal(void){
   ((WndButton *)wf->FindByName(_T("cmdClose")))
     ->SetOnClickNotify(OnCloseClicked);
 
-  wConfig1    = ((WndFrame *)wf->FindByName(_T("frmHardware")));
-  wConfig2    = ((WndFrame *)wf->FindByName(_T("frmCalibration")));
-  wConfig3    = ((WndFrame *)wf->FindByName(_T("frmAudioModes")));
-  wConfig4    = ((WndFrame *)wf->FindByName(_T("frmAudioDeadband")));
-  wConfig5    = ((WndFrame *)wf->FindByName(_T("frmCruiseFaster")));
-  wConfig6    = ((WndFrame *)wf->FindByName(_T("frmCruiseSlower")));
-  wConfig7    = ((WndFrame *)wf->FindByName(_T("frmCruiseLift")));
-  wConfig8    = ((WndFrame *)wf->FindByName(_T("frmCirclingClimbingHi")));
-  wConfig9    = ((WndFrame *)wf->FindByName(_T("frmCirclingClimbingLow")));
-  wConfig10    = ((WndFrame *)wf->FindByName(_T("frmCirclingDescending")));
-  wConfig11    = ((WndFrame *)wf->FindByName(_T("frmLogger")));
-  wConfig12    = ((WndFrame *)wf->FindByName(_T("frmMixer")));
-  wConfig13    = ((WndFrame *)wf->FindByName(_T("frmFlarmAlerts")));
-  wConfig14    = ((WndFrame *)wf->FindByName(_T("frmFlarmIdentification")));
-  wConfig15    = ((WndFrame *)wf->FindByName(_T("frmFlarmRepeats")));
-  wConfig16    = ((WndFrame *)wf->FindByName(_T("frmAlerts")));
-  wConfig17    = ((WndFrame *)wf->FindByName(_T("frmLimits")));
-  wConfig18    = ((WndFrame *)wf->FindByName(_T("frmSchemes")));
-  wConfig19    = ((WndFrame *)wf->FindByName(_T("frmDisplay")));
+  tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
+  assert(tabbed != NULL);
 
-  assert(wConfig1!=NULL);
-  assert(wConfig2!=NULL);
-  assert(wConfig3!=NULL);
-  assert(wConfig4!=NULL);
-  assert(wConfig5!=NULL);
-  assert(wConfig6!=NULL);
-  assert(wConfig7!=NULL);
-  assert(wConfig8!=NULL);
-  assert(wConfig9!=NULL);
-  assert(wConfig10!=NULL);
-  assert(wConfig11!=NULL);
-  assert(wConfig12!=NULL);
-  assert(wConfig13!=NULL);
-  assert(wConfig14!=NULL);
-  assert(wConfig15!=NULL);
-  assert(wConfig16!=NULL);
-  assert(wConfig17!=NULL);
-  assert(wConfig18!=NULL);
-  assert(wConfig19!=NULL);
+  PageSwitched();
 
   // populate enums
 
@@ -1040,10 +965,6 @@ bool dlgConfigurationVarioShowModal(void){
   UpdateParameters(true);
 
   XCSoarInterface::CloseProgressDialog();
-
-  page = 0;
-
-  NextPage(0); // JMW just to turn proper pages on/off
 
   wf->ShowModal();
 

@@ -133,40 +133,15 @@ static bool requirerestart = false;
 static bool utcchanged = false;
 static bool waypointneedsave = false;
 static bool FontRegistryChanged=false;
-int config_page=0;
+static unsigned config_page;
 static WndForm *wf=NULL;
-static WndFrame *wConfig1=NULL;
-static WndFrame *wConfig2=NULL;
-static WndFrame *wConfig3=NULL;
-static WndFrame *wConfig4=NULL;
-static WndFrame *wConfig5=NULL;
-static WndFrame *wConfig6=NULL;
-static WndFrame *wConfig7=NULL;
-static WndFrame *wConfig8=NULL;
-static WndFrame *wConfig9=NULL;
-static WndFrame *wConfig10=NULL;
-static WndFrame *wConfig11=NULL;
-static WndFrame *wConfig12=NULL;
-static WndFrame *wConfig13=NULL;
-static WndFrame *wConfig14=NULL;
-static WndFrame *wConfig15=NULL;
-static WndFrame *wConfig16=NULL;
-static WndFrame *wConfig17=NULL;
-static WndFrame *wConfig18=NULL;
-static WndFrame *wConfig19=NULL;
-static WndFrame *wConfig20=NULL;
-static WndFrame *wConfig21=NULL;
-static WndFrame *wConfig22=NULL;
+TabbedControl *configuration_tabbed;
 static WndButton *buttonPilotName=NULL;
 static WndButton *buttonAircraftType=NULL;
 static WndButton *buttonAircraftRego=NULL;
 static WndButton *buttonLoggerID=NULL;
 static WndButton *buttonCopy=NULL;
 static WndButton *buttonPaste=NULL;
-
-#define NUMPAGES 22
-
-
 
 static void UpdateButtons(void) {
   TCHAR text[120];
@@ -205,10 +180,10 @@ static void UpdateButtons(void) {
   }
 }
 
-static void NextPage(int Step){
-  config_page += Step;
-  if (config_page>=NUMPAGES) { config_page=0; }
-  if (config_page<0) { config_page=NUMPAGES-1; }
+static void
+PageSwitched()
+{
+  config_page = configuration_tabbed->GetCurrentPage();
 
   wf->SetCaption(gettext(captions[config_page]));
 
@@ -227,28 +202,6 @@ static void NextPage(int Step){
       buttonPaste->hide();
     }
   }
-  wConfig1->set_visible(config_page == 0);
-  wConfig2->set_visible(config_page == 1);
-  wConfig3->set_visible(config_page == 2);
-  wConfig4->set_visible(config_page == 3);
-  wConfig5->set_visible(config_page == 4);
-  wConfig6->set_visible(config_page == 5);
-  wConfig7->set_visible(config_page == 6);
-  wConfig8->set_visible(config_page == 7);
-  wConfig9->set_visible(config_page == 8);
-  wConfig10->set_visible(config_page == 9);
-  wConfig11->set_visible(config_page == 10);
-  wConfig12->set_visible(config_page == 11);
-  wConfig13->set_visible(config_page == 12);
-  wConfig14->set_visible(config_page == 13);
-  wConfig15->set_visible(config_page == 14);
-  wConfig16->set_visible(config_page == 15);
-  wConfig17->set_visible(config_page == 16);
-  wConfig18->set_visible(config_page == 17);
-  wConfig19->set_visible(config_page == 18);
-  wConfig20->set_visible(config_page == 19);
-  wConfig21->set_visible(config_page == 20);
-  wConfig22->set_visible(config_page == 21);
 }
 
 
@@ -715,12 +668,14 @@ static void OnAirspaceModeClicked(WindowControl * Sender){
 
 static void OnNextClicked(WindowControl * Sender){
   (void)Sender;
-  NextPage(+1);
+  configuration_tabbed->NextPage();
+  PageSwitched();
 }
 
 static void OnPrevClicked(WindowControl * Sender){
   (void)Sender;
-  NextPage(-1);
+  configuration_tabbed->PreviousPage();
+  PageSwitched();
 }
 
 static void OnCloseClicked(WindowControl * Sender){
@@ -731,7 +686,7 @@ static void OnCloseClicked(WindowControl * Sender){
 static int cpyInfoBox[10];
 
 static int page2mode(void) {
-  return config_page-15;  // RLD upped by 1
+  return configuration_tabbed->GetCurrentPage() - 15;  // RLD upped by 1
 }
 
 
@@ -807,13 +762,15 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   switch (key_code) {
   case '6':
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-    NextPage(-1);
+    configuration_tabbed->PreviousPage();
+    PageSwitched();
     //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
   case '7':
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-    NextPage(+1);
+    configuration_tabbed->NextPage();
+    PageSwitched();
     //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
@@ -1180,10 +1137,6 @@ static void setVariables(void) {
   UpdateButtons();
 
   /*
-    config_page = 0;
-
-    NextPage(0); // JMW just to turn proper pages on/off
-
     wf->ShowModal();
 
     delete wf;
@@ -2294,51 +2247,12 @@ void dlgConfigurationShowModal(void){
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  wConfig1    = ((WndFrame *)wf->FindByName(_T("frmSite")));
-  wConfig2    = ((WndFrame *)wf->FindByName(_T("frmAirspace")));
-  wConfig3    = ((WndFrame *)wf->FindByName(_T("frmDisplay")));
-  wConfig4    = ((WndFrame *)wf->FindByName(_T("frmTerrain")));
-  wConfig5    = ((WndFrame *)wf->FindByName(_T("frmFinalGlide")));
-  wConfig6    = ((WndFrame *)wf->FindByName(_T("frmSafety")));
-  wConfig7    = ((WndFrame *)wf->FindByName(_T("frmPolar")));
-  wConfig8    = ((WndFrame *)wf->FindByName(_T("frmComm")));
-  wConfig9    = ((WndFrame *)wf->FindByName(_T("frmUnits")));
-  wConfig10    = ((WndFrame *)wf->FindByName(_T("frmInterface")));
-  wConfig11    = ((WndFrame *)wf->FindByName(_T("frmAppearance")));
-  wConfig12    = ((WndFrame *)wf->FindByName(_T("frmFonts")));
-  wConfig13    = ((WndFrame *)wf->FindByName(_T("frmVarioAppearance")));
-  wConfig14    = ((WndFrame *)wf->FindByName(_T("frmTask")));
-  wConfig15    = ((WndFrame *)wf->FindByName(_T("frmTaskRules")));
-  wConfig16    = ((WndFrame *)wf->FindByName(_T("frmInfoBoxCircling")));
-  wConfig17    = ((WndFrame *)wf->FindByName(_T("frmInfoBoxCruise")));
-  wConfig18    = ((WndFrame *)wf->FindByName(_T("frmInfoBoxFinalGlide")));
-  wConfig19    = ((WndFrame *)wf->FindByName(_T("frmInfoBoxAuxiliary")));
-  wConfig20    = ((WndFrame *)wf->FindByName(_T("frmLogger")));
-  wConfig21    = ((WndFrame *)wf->FindByName(_T("frmWaypointEdit")));
-  wConfig22    = ((WndFrame *)wf->FindByName(_T("frmSpecials")));
+  configuration_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
+  assert(configuration_tabbed != NULL);
 
-  assert(wConfig1!=NULL);
-  assert(wConfig2!=NULL);
-  assert(wConfig3!=NULL);
-  assert(wConfig4!=NULL);
-  assert(wConfig5!=NULL);
-  assert(wConfig6!=NULL);
-  assert(wConfig7!=NULL);
-  assert(wConfig8!=NULL);
-  assert(wConfig9!=NULL);
-  assert(wConfig10!=NULL);
-  assert(wConfig11!=NULL);
-  assert(wConfig12!=NULL);
-  assert(wConfig13!=NULL);
-  assert(wConfig14!=NULL);
-  assert(wConfig15!=NULL);
-  assert(wConfig16!=NULL);
-  assert(wConfig17!=NULL);
-  assert(wConfig18!=NULL);
-  assert(wConfig19!=NULL);
-  assert(wConfig20!=NULL);
-  assert(wConfig21!=NULL);
-  assert(wConfig22!=NULL);
+  /* restore previous page */
+  configuration_tabbed->SetCurrentPage(config_page);
+  PageSwitched();
 
   wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
 
@@ -2367,8 +2281,6 @@ void dlgConfigurationShowModal(void){
   UpdateDeviceSetupButton(0, devA()->Name);
   UpdateDeviceSetupButton(1, devB()->Name);
 
-  NextPage(0); // just to turn proper pages on/off
-
   changed = false;
   taskchanged = false;
   requirerestart = false;
@@ -2377,6 +2289,9 @@ void dlgConfigurationShowModal(void){
 
   XCSoarInterface::StopHourglassCursor();
   wf->ShowModal();
+
+  /* save page number for next time this dialog is opened */
+  config_page = configuration_tabbed->GetCurrentPage();
 
   // TODO enhancement: implement a cancel button that skips all this
   // below after exit.

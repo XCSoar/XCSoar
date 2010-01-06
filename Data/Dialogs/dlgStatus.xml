@@ -13,6 +13,8 @@
   <WndButton Name="cmdPrev"  Caption="&lt;" X=165 Y=2 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
   <WndButton Name="cmdNext"  Caption="&gt;" X=202 Y=2 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
 
+  <Tabbed Name="tabbed" X=0 Y=32 Width=230 Height=200>
+
   <WndFrame Name="frmStatusFlight" X=0 Y=32 Width=230 Height=200 Font=2>
 
   <WndProperty Name="prpLatitude"  Caption="Latitude"  X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
@@ -68,6 +70,8 @@
   <WndProperty Name="prpLandingTime"    Caption="Landing time"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpSunset"    Caption="Sunset"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   </WndFrame>
+
+  </Tabbed>
 
 </WndForm>
 

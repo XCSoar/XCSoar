@@ -66,44 +66,9 @@ using std::max;
 #endif
 
 static WndForm *wf=NULL;
+static TabbedControl *tabbed;
 static bool multi_page = false;
 static int status_page = 0;
-static WndFrame *wStatus0=NULL;
-static WndFrame *wStatus1=NULL;
-static WndFrame *wStatus2=NULL;
-static WndFrame *wStatus3=NULL;
-static WndFrame *wStatus4=NULL;
-
-#define NUMPAGES 5
-
-static void NextPage(int Step){
-  status_page += Step;
-  if (status_page>=NUMPAGES) { status_page=0; }
-  if (status_page<0) { status_page=NUMPAGES-1; }
-  switch(status_page) {
-  case 0:
-    wf->SetCaption(gettext(_T("Status: Aircraft")));
-    break;
-  case 1:
-    wf->SetCaption(gettext(_T("Status: System")));
-    break;
-  case 2:
-    wf->SetCaption(gettext(_T("Status: Task")));
-    break;
-  case 3:
-    wf->SetCaption(gettext(_T("Status: Rules")));
-    break;
-  case 4:
-    wf->SetCaption(gettext(_T("Status: Times")));
-    break;
-  }
-  wStatus0->set_visible(status_page == 0);
-  wStatus1->set_visible(status_page == 1);
-  wStatus2->set_visible(status_page == 2);
-  wStatus3->set_visible(status_page == 3);
-  wStatus4->set_visible(status_page == 4);
-}
-
 
 static void OnCloseClicked(WindowControl * Sender){
   (void)Sender;
@@ -119,14 +84,14 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   case VK_LEFT:
   case '6':
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-    NextPage(-1);
+    tabbed->PreviousPage();
     //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
   case VK_RIGHT:
   case '7':
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-    NextPage(+1);
+    tabbed->NextPage();
     //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
@@ -137,12 +102,14 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 
 static void OnNextClicked(WindowControl * Sender){
   (void)Sender;
-  NextPage(+1);
+
+  tabbed->NextPage();
 }
 
 static void OnPrevClicked(WindowControl * Sender){
   (void)Sender;
-  NextPage(-1);
+
+  tabbed->PreviousPage();
 }
 
 static CallBackTableEntry_t CallBackTable[]={
@@ -591,7 +558,6 @@ void dlgStatusShowModal(int start_page){
 
   if (start_page==-1) {
     multi_page = true;
-    status_page = max(0,min(NUMPAGES-1,status_page));
   } else {
     status_page = start_page;
     multi_page = false;
@@ -610,17 +576,11 @@ void dlgStatusShowModal(int start_page){
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  wStatus0    = ((WndFrame *)wf->FindByName(_T("frmStatusFlight")));
-  wStatus1    = ((WndFrame *)wf->FindByName(_T("frmStatusSystem")));
-  wStatus2    = ((WndFrame *)wf->FindByName(_T("frmStatusTask")));
-  wStatus3    = ((WndFrame *)wf->FindByName(_T("frmStatusRules")));
-  wStatus4    = ((WndFrame *)wf->FindByName(_T("frmStatusTimes")));
+  tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
+  assert(tabbed != NULL);
 
-  assert(wStatus0!=NULL);
-  assert(wStatus1!=NULL);
-  assert(wStatus2!=NULL);
-  assert(wStatus3!=NULL);
-  assert(wStatus4!=NULL);
+  /* restore previous page */
+  tabbed->SetCurrentPage(status_page);
 
   wf->SetTimerNotify(OnTimerNotify);
 
@@ -644,9 +604,10 @@ void dlgStatusShowModal(int start_page){
   UpdateValuesRules();
   UpdateValuesTimes();
 
-  NextPage(0); // just to turn proper pages on/off
-
   wf->ShowModal();
+
+  /* save page number for next time this dialog is opened */
+  status_page = tabbed->GetCurrentPage();
 
   delete wf;
 
