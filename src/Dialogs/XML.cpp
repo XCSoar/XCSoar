@@ -657,9 +657,6 @@ LoadChild(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
     unsigned item_height =
       Layout::Scale(StringToIntDflt(node.getAttribute(_T("ItemHeight")), 18));
     WC = new WndListFrame(Parent, Name, X, Y, Width, Height, item_height);
-
-    // recursivly create dialog
-    LoadChildrenFromXML(WC, LookUpTable, &node, ParentFont, eDialogStyle);
   }
 
   if (WC != NULL){
