@@ -84,7 +84,7 @@ WndFrame::on_paint(Canvas &canvas)
 {
   ContainerControl::on_paint(canvas);
 
-  if (mCaption != 0){
+  if (mCaption[0] != 0){
     canvas.set_text_color(GetForeColor());
     canvas.set_background_color(GetBackColor());
     canvas.background_transparent();
