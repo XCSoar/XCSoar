@@ -78,7 +78,7 @@ ContainerControl::FindByName(const TCHAR *Name)
   if (w != NULL)
     return w;
 
-  for (int i = 0; i < mClientCount; i++) {
+  for (unsigned i = 0; i < mClientCount; i++) {
     w = mClients[i]->FindByName(Name);
     if (w != NULL)
       return w;
@@ -98,7 +98,7 @@ ContainerControl::GetCanFocus(bool forward)
     return w;
 
   if (forward) {
-    for (int idx = 0; idx < mClientCount; ++idx) {
+    for (unsigned idx = 0; idx < mClientCount; ++idx) {
       Window *w = mClients[idx]->GetCanFocus(forward);
       if (w != NULL)
         return w;
@@ -119,14 +119,14 @@ ContainerControl::FilterAdvanced(bool advanced)
 {
   WindowControl::FilterAdvanced(advanced);
 
-  for (int i = 0; i < mClientCount; i++)
+  for (unsigned i = 0; i < mClientCount; i++)
     mClients[i]->FilterAdvanced(advanced);
 }
 
 Window *
 ContainerControl::FocusNext(WindowControl *Sender)
 {
-  int idx;
+  unsigned idx;
   Window *W;
 
   if (Sender != NULL) {
@@ -158,7 +158,7 @@ ContainerControl::FocusPrev(WindowControl *Sender)
   Window *W;
 
   if (Sender != NULL) {
-    for (idx = 0; idx < mClientCount; idx++) {
+    for (idx = 0; (unsigned)idx < mClientCount; idx++) {
       if (mClients[idx] == Sender)
         break;
     }

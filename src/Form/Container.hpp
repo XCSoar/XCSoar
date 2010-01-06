@@ -44,7 +44,7 @@ Copyright_License {
 class ContainerControl : public WindowControl {
 protected:
   WindowControl *mClients[50];
-  int mClientCount;
+  unsigned mClientCount;
 
 public:
   ContainerControl(ContainerControl *owner, ContainerWindow *parent,
