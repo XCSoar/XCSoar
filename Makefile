@@ -453,7 +453,7 @@ include $(topdir)/build/shapelib.mk
 #
 # Tell make how to create a compiled resource object (rsc)
 #
-%-$(TARGET).rsc: %.rc $(wildcard Common/Data/Dialogs/*.xml)
+%-$(TARGET).rsc: %.rc $(wildcard Data/Dialogs/*.xml)
 	@$(NQ)echo "  WINDRES $@"
 	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<
 
