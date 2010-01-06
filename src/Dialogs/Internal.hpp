@@ -51,6 +51,7 @@ Copyright_License {
 #include "Dialogs/dlgHelpers.hpp"
 #include "Dialogs/Message.hpp"
 #include "Form/Form.hpp"
+#include "Form/Frame.hpp"
 #include "Form/List.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Button.hpp"

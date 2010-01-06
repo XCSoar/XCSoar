@@ -39,9 +39,9 @@ Copyright_License {
 #ifndef XCSOAR_FORM_DRAW_HPP
 #define XCSOAR_FORM_DRAW_HPP
 
-#include "Form/Frame.hpp"
+#include "Form/Control.hpp"
 
-class WndOwnerDrawFrame : public WndFrame {
+class WndOwnerDrawFrame : public WindowControl {
 public:
 
   typedef void (*OnPaintCallback_t)(WindowControl *Sender, Canvas &canvas);

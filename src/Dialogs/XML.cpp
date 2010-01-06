@@ -53,6 +53,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Interface.hpp"
 #include "Form/Form.hpp"
+#include "Form/Frame.hpp"
 #include "Form/Edit.hpp"
 #include "Form/EventButton.hpp"
 #include "Form/Draw.hpp"
