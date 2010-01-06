@@ -15,7 +15,7 @@ ifeq ($(HAVE_WIN32),y)
 TEST_SRC += $(TEST_SRC_DIR)/winmain.cpp
 endif
 
-HARNESS_LIBS = $(TEST_SRC_DIR)/harness-$(TARGET).a
+HARNESS_LIBS = $(TARGET_OUTPUT_DIR)/harness-$(TARGET).a
 
 $(HARNESS_LIBS): $(call SRC_TO_OBJ,$(TEST_SRC))
 	@$(NQ)echo "  AR      $@"

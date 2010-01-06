@@ -56,15 +56,15 @@ include $(topdir)/build/test.mk
 
 ######## output files
 
-OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT)
+OUTPUTS := $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT) $(TARGET_BIN_DIR)/XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT)
 ifeq ($(CONFIG_ALTAIR),y)
-OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT)
+OUTPUTS := $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT)
 endif
 ifeq ($(ALTAIR_PORTRAIT),y)
-OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT)
+OUTPUTS := $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT)
 endif
 ifeq ($(CONFIG_PNA),y)
-OUTPUTS 	:= XCSoar-$(TARGET)$(TARGET_EXEEXT)
+OUTPUTS := $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT)
 endif
 
 ######## compiler flags
@@ -413,54 +413,40 @@ cab:	XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 #	wine ezsetup.exe -l english -i XCSoar$(TARGET).ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$(TARGET).exe
 
 ifneq ($(NOSTRIP_SUFFIX),)
-XCSoar-$(TARGET)$(TARGET_EXEEXT): XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
+$(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT): $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
 	$(Q)$(SIZE) $@
 
-XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT): XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
+$(TARGET_BIN_DIR)/XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT): $(TARGET_BIN_DIR)/XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
 	$(Q)$(SIZE) $@
 endif
 
-XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD)
+$(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS:$(OBJ_SUFFIX)=-Simulator$(OBJ_SUFFIX)) $(XCSOAR_LDADD)
+$(TARGET_BIN_DIR)/XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS:$(OBJ_SUFFIX)=-Simulator$(OBJ_SUFFIX)) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 $(XCSOARSETUP_OBJS) $(XCSOARLAUNCH_OBJS): CFLAGS += -Wno-missing-declarations -Wno-missing-prototypes
 
-XCSoarSetup.dll: $(XCSOARSETUP_OBJS)
+$(TARGET_BIN_DIR)/XCSoarSetup.dll: $(XCSOARSETUP_OBJS) | $(TARGET_BIN_DIR)/dirstamp
 	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 # JMW not tested yet, probably need to use dlltool?
 
-XCSoarLaunch.dll: $(XCSOARLAUNCH_OBJS)
+$(TARGET_BIN_DIR)/XCSoarLaunch.dll: $(XCSOARLAUNCH_OBJS) | $(TARGET_BIN_DIR)/dirstamp
 	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
-clean-WINE:
-	$(RM) XCSoar-WINE XCSoarSimulator-WINE
-	$(RM) XCSoar-WINE.exe.so XCSoarSimulator-WINE.exe.so
-
-clean-%: TARGET=$(patsubst clean-%,%,$@)
-$(addprefix clean-,$(filter-out WINE,$(TARGETS))): clean-%:
-	$(RM) XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
-	$(RM) XCSoar-$(TARGET)$(TARGET_EXEEXT) XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT)
-	$(RM) TAGS
-
-clean-: $(addprefix clean-,$(TARGETS))
-
-clean: clean-$(TARGET) cleani cleancov FORCE
+clean: cleancov FORCE
 	@$(NQ)echo "cleaning all"
 	$(Q)rm -rf output
-	$(Q)find src $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
-	-type f -print | xargs -r $(RM)
-	$(RM) $(BUILDTESTS) $(DEBUG_PROGRAMS)
+	$(RM) $(BUILDTESTS)
 
 cleancov: FORCE
 	@$(NQ)echo "cleaning cov"
@@ -473,17 +459,15 @@ cleancov: FORCE
 		-o -name '*.gcno.info' \
 	\) -type f -print | xargs -r $(RM)
 
-cleani: FORCE
-	@$(NQ)echo "cleaning .i"
-	$(Q)find src $(IGNORE) \( -name '*.i' \) \
-		-type f -print | xargs -r $(RM)
-
 .PHONY: FORCE
 
-ifneq ($(wildcard $(SRC)/.*.d),)
-include $(wildcard $(SRC)/.*.d)
+ifneq ($(wildcard $(OBJ_PREFIX)src/*.d),)
+include $(wildcard $(OBJ_PREFIX)src/*.d)
 endif
-ifneq ($(wildcard $(SRC)/*/.*.d),)
-include $(wildcard $(SRC)/*/.*.d)
+ifneq ($(wildcard $(OBJ_PREFIX)src/*/*.d),)
+include $(wildcard $(OBJ_PREFIX)src/*/*.d)
+endif
+ifneq ($(wildcard $(OBJ_PREFIX)src/*/*/*.d),)
+include $(wildcard $(OBJ_PREFIX)src/*/*/*.d)
 endif
 

@@ -17,14 +17,14 @@ endif
 
 ####### paths
 
-OBJ_SUFFIX = -$(TARGET).o
+OBJ_SUFFIX = .o
 
 # Converts a list of source file names to *.o
-SRC_TO_OBJ = $(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(1)))
+SRC_TO_OBJ = $(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(TARGET_OUTPUT_DIR)/,$(1))))
 
 ####### dependency handling
 
-DEPFILE = $(dir $@).$(notdir $@).d
+DEPFILE = $(@:.o=.d)
 DEPFLAGS = -Wp,-MD,$(DEPFILE),-MT,$@
 dirtarget = $(subst \\,_,$(subst /,_,$(dir $@)))
 cc-flags = $(DEPFLAGS) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)
@@ -33,13 +33,13 @@ cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_C
 #
 # Useful debugging targets - make preprocessed versions of the source
 #
-%.i: %.cpp FORCE
+$(TARGET_OUTPUT_DIR)/%.i: %.cpp FORCE
 	$(CXX) $(cxx-flags) -E $(OUTPUT_OPTION) $<
 
-%.s: %.cpp FORCE
+$(TARGET_OUTPUT_DIR)/%.s: %.cpp FORCE
 	$(CXX) $(cxx-flags) -S $(OUTPUT_OPTION) $<
 
-%.i: %.c FORCE
+$(TARGET_OUTPUT_DIR)/%.i: %.c FORCE
 	$(CC) $(cc-flags) -E $(OUTPUT_OPTION) $<
 
 ####### build rules
@@ -48,18 +48,18 @@ cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_C
 # Provide our own rules for building...
 #
 
-%$(OBJ_SUFFIX): %.c
+$(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) -c -o $@ $(cc-flags) $<
 
-%$(OBJ_SUFFIX): %.cpp
+$(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) -c -o $@ $(cxx-flags) $<
 
-%-Simulator$(OBJ_SUFFIX): %.c
+$(TARGET_OUTPUT_DIR)/%-Simulator$(OBJ_SUFFIX): %.c $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) -c -o $@ $(cc-flags) -D_SIM_ $<
 
-%-Simulator$(OBJ_SUFFIX): %.cpp
+$(TARGET_OUTPUT_DIR)/%-Simulator$(OBJ_SUFFIX): %.cpp $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) -c -o $@ $(cxx-flags) -D_SIM_ $<

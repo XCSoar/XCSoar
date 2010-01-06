@@ -8,3 +8,5 @@ ENGINE_SRC_DIR = $(SRC)/Engine
 DOC = $(topdir)/Doc
 OUT = $(topdir)/output
 TEST_SRC_DIR = $(topdir)/test/src
+TARGET_OUTPUT_DIR = $(OUT)/$(TARGET)
+TARGET_BIN_DIR = $(TARGET_OUTPUT_DIR)/bin
