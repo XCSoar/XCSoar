@@ -98,7 +98,6 @@ protected:
 
   void PaintSelector(Canvas &canvas, const RECT rc);
   void PaintSelector(Canvas &canvas);
-  WindowControl *SetOwner(WindowControl *Value);
   bool HasFocus(void) { return mHasFocus; }
 
 public:

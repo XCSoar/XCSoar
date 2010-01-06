@@ -168,7 +168,6 @@ WindowControl::AddClient(WindowControl *Client)
   mClients[mClientCount] = Client;
   mClientCount++;
 
-  Client->SetOwner(this);
   Client->SetFont(GetFont());
 
   if (Client->get_position().top == -1 && mClientCount > 1)
@@ -218,17 +217,6 @@ WindowControl::FindByName(const TCHAR *Name)
   }
 
   return NULL;
-}
-
-WindowControl *
-WindowControl::SetOwner(WindowControl *Value)
-{
-  WindowControl *res = mOwner;
-
-  if (mOwner != Value)
-    mOwner = Value;
-
-  return res;
 }
 
 void
