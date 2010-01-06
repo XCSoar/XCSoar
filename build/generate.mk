@@ -18,7 +18,8 @@ $(XCI_HEADERS): $(OUT)/include/InputEvents_%.cpp: \
 	$(Q)$(PERL) $(topdir)/Data/Input/xci2cpp.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(SRC)/InputEvents-$(TARGET).o $(SRC)/InputEvents-$(TARGET)-Simulator.o: \
+T2E_OBJ = $(call SRC_TO_OBJ,$(SRC)/InputEvents.cpp)
+$(T2E_OBJ) $(T2E_OBJ:$(OBJ_SUFFIX)=-Simulator$(OBJ_SUFFIX)): \
 	$(XCI_HEADERS) \
 	$(OUT)/include/InputEvents_Text2Event.cpp
 
@@ -28,5 +29,6 @@ $(OUT)/include/Status_defaults.cpp: Data/Status/default.xcs \
 	$(Q)$(PERL) Data/Status/xcs2cpp.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(SRC)/StatusMessage-$(TARGET).o $(SRC)/StatusMessage-$(TARGET)-Simulator.o: \
+SM_OBJ = $(call SRC_TO_OBJ,$(SRC)/StatusMessage.cpp)
+$(SM_OBJ) $(SM_OBJ:$(OBJ_SUFFIX)=-Simulator$(OBJ_SUFFIX)): \
 	$(OUT)/include/Status_defaults.cpp

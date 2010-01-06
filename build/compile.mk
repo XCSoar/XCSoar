@@ -40,18 +40,19 @@ cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_C
 #
 # Provide our own rules for building...
 #
-%-$(TARGET).o: %.c
+
+%$(OBJ_SUFFIX): %.c
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) -c -o $@ $(cc-flags) $<
 
-%-$(TARGET).o: %.cpp
+%$(OBJ_SUFFIX): %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) -c -o $@ $(cxx-flags) $<
 
-%-$(TARGET)-Simulator.o: %.c
+%-Simulator$(OBJ_SUFFIX): %.c
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) -c -o $@ $(cc-flags) -D_SIM_ $<
 
-%-$(TARGET)-Simulator.o: %.cpp
+%-Simulator$(OBJ_SUFFIX): %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) -c -o $@ $(cxx-flags) -D_SIM_ $<

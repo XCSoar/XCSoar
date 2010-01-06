@@ -18,6 +18,6 @@ JASPER = \
 	$(JASSRC)/jpc/jpc_tagtree.c	$(JASSRC)/jpc/jpc_tsfb.c \
 	$(JASSRC)/jpc/jpc_util.c 	$(JASSRC)/jpc/RasterTile.cpp
 
-$(SRC)/jasper-$(TARGET).a: $(patsubst %.cpp,%-$(TARGET).o,$(JASPER:.c=-$(TARGET).o))
+$(SRC)/jasper-$(TARGET).a: $(call SRC_TO_OBJ,$(JASPER))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^
