@@ -44,13 +44,7 @@ Copyright_License {
 class WndFrame : public WindowControl {
 public:
   WndFrame(WindowControl *Owner, const TCHAR *Name,
-           int X, int Y, int Width, int Height)
-    :WindowControl(Owner, NULL, Name, X, Y, Width, Height),
-     mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
-  {
-    SetForeColor(GetOwner()->GetForeColor());
-    SetBackColor(GetOwner()->GetBackColor());
-  }
+           int X, int Y, int Width, int Height);
 
   void SetCaption(const TCHAR *Value);
 

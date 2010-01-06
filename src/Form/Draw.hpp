@@ -48,14 +48,7 @@ public:
 
   WndOwnerDrawFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
                     int Width, int Height,
-                    OnPaintCallback_t OnPaintCallback):
-    WndFrame(Owner, Name, X, Y, Width, Height),
-    mOnPaintCallback(OnPaintCallback)
-  {
-    mCaption[0] = '\0';
-    SetForeColor(GetOwner()->GetForeColor());
-    SetBackColor(GetOwner()->GetBackColor());
-  }
+                    OnPaintCallback_t OnPaintCallback);
 
   void SetOnPaintNotify(OnPaintCallback_t OnPaintCallback) {
     mOnPaintCallback = OnPaintCallback;

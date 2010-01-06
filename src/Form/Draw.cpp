@@ -38,6 +38,17 @@ Copyright_License {
 
 #include "Form/Draw.hpp"
 
+WndOwnerDrawFrame::WndOwnerDrawFrame(WindowControl *Owner, TCHAR *Name,
+                                     int X, int Y, int Width, int Height,
+                                     OnPaintCallback_t OnPaintCallback)
+  :WndFrame(Owner, Name, X, Y, Width, Height),
+   mOnPaintCallback(OnPaintCallback)
+{
+  mCaption[0] = '\0';
+  SetForeColor(GetOwner()->GetForeColor());
+  SetBackColor(GetOwner()->GetBackColor());
+}
+
 void
 WndOwnerDrawFrame::on_paint(Canvas &canvas)
 {

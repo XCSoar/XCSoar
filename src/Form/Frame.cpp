@@ -38,6 +38,15 @@ Copyright_License {
 
 #include "Form/Frame.hpp"
 
+WndFrame::WndFrame(WindowControl *Owner, const TCHAR *Name,
+                   int X, int Y, int Width, int Height)
+  :WindowControl(Owner, NULL, Name, X, Y, Width, Height),
+   mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
+{
+  SetForeColor(GetOwner()->GetForeColor());
+  SetBackColor(GetOwner()->GetBackColor());
+}
+
 void WndFrame::SetCaption(const TCHAR *Value){
   if (Value == NULL)
     Value = TEXT("");
