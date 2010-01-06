@@ -108,34 +108,6 @@
 
   </WndFrame>
 
-  <WndFrame Name="frmTerrain" X=0 Y=0 Width=240 Height=222 Font=2>
-
-  <WndProperty Name="prpEnableTerrain" Caption="Terrain display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="Draws digital elevation terrain on the map.
-This is shaded by the wind direction: upwind is brighter, downwind darker.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
-  <WndProperty Name="prpEnableTopology" Caption="Topology display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="Draw topological features (roads, rivers, lakes etc) on the map.  Requires the topology file to be specified.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
-  <WndProperty Name="prpTerrainContrast" Caption="Terrain contrast"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="Defines the amount of phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
-  </WndProperty>
-
-  <WndProperty Name="prpTerrainBrightness" Caption="Terrain brightness"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
-  </WndProperty>
-
-  <WndProperty Name="prpTerrainRamp" Caption="Terrain colors"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="Defines the color ramp used in terrain rendering.">
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
-
-  </WndFrame>
-
   <WndFrame Name="frmDisplay" X=0 Y=0 Width=240 Height=222 Font=2>
 
     <WndProperty Name="prpWaypointLabels" Caption="Labels"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=100 Font=2 Help="Determines how labels are displayed with each waypoint:
@@ -192,171 +164,30 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   </WndFrame>
 
-  <WndFrame Name="frmInfoBoxCruise" X=0 Y=0 Width=240 Height=222 Font=2>
+  <WndFrame Name="frmTerrain" X=0 Y=0 Width=240 Height=222 Font=2>
 
-    <WndProperty Name="prpInfoBoxCruise0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxCruise1" Caption="2"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxCruise2" Caption="3"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxCruise3" Caption="4"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxCruise4" Caption="5"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxCruise5" Caption="6"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxCruise6" Caption="7"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxCruise7" Caption="8"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-  </WndFrame>
-
-  <WndFrame Name="frmInfoBoxCircling" X=0 Y=0 Width=240 Height=222 Font=2>
-
-    <WndProperty Name="prpInfoBoxCircling0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxCircling1" Caption="2"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling2" Caption="3"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling3" Caption="4"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling4" Caption="5"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling5" Caption="6"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling6" Caption="7"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling7" Caption="8"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-  </WndFrame>
-
-  <WndFrame Name="frmInfoBoxFinalGlide" X=0 Y=0 Width=240 Height=222 Font=2>
-
-    <WndProperty Name="prpInfoBoxFinalGlide0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxFinalGlide1" Caption="2"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxFinalGlide2" Caption="3"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxFinalGlide3" Caption="4"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxFinalGlide4" Caption="5"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxFinalGlide5" Caption="6"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxFinalGlide6" Caption="7"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxFinalGlide7" Caption="8"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-  </WndFrame>
-
-  <WndFrame Name="frmInfoBoxAuxiliary" X=0 Y=0 Width=240 Height=222 Font=2>
-
-    <WndProperty Name="prpInfoBoxAux0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxAux1" Caption="2"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxAux2" Caption="3"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxAux3" Caption="4"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxAux4" Caption="5"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxAux5" Caption="6"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxAux6" Caption="7"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-    <WndProperty Name="prpInfoBoxAux7" Caption="8"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
-      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
-    </WndProperty>
-
-  </WndFrame>
-
-  <WndFrame Name="frmSafety" X=0 Y=0 Width=240 Height=222 Font=2>
-
-  <WndProperty Name="prpSafetyAltitudeArrival" Caption="Arrival height"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="The height above terrain that the glider should arrive at for a safe landing.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
-  </WndProperty>
-
-  <WndProperty Name="prpSafetyAltitudeBreakoff" Caption="Breakoff height"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="This is the height above terrain, below which the pilot should abort the task and prepare for an outlanding.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
-  </WndProperty>
-
-  <WndProperty Name="prpSafetyAltitudeTerrain" Caption="Terrain height"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="The height above terrain that the glider must clear during final glide.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
-  </WndProperty>
-
-  <WndProperty Name="prpAbortSafetyUseCurrent"
-    Caption="Abort use current Mc*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="When enabled, the current MacCready setting is used for determining arrival altitude during task abort mode.">
+  <WndProperty Name="prpEnableTerrain" Caption="Terrain display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="Draws digital elevation terrain on the map.
+This is shaded by the wind direction: upwind is brighter, downwind darker.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpSafetyMacCready"
-    Caption="Safety Mc*" X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="The MacCready setting used in task abort mode and for determining arrival altitude at airfields. ">
-    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=10 Step=0.1/>
+  <WndProperty Name="prpEnableTopology" Caption="Topology display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="Draw topological features (roads, rivers, lakes etc) on the map.  Requires the topology file to be specified.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpTerrainContrast" Caption="Terrain contrast"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="Defines the amount of phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpTerrainBrightness" Caption="Terrain brightness"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpTerrainRamp" Caption="Terrain colors"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="Defines the color ramp used in terrain rendering.">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
   </WndFrame>
@@ -421,6 +252,37 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
   Help="The STF risk factor reduces the MacCready setting used to calculate speed to fly
  as the glider gets low, in order to compensate for risk.  Set to 0.0 for no compensation, 1.0 scales Mc linearly with height.">
     <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=1 Step=0.1/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmSafety" X=0 Y=0 Width=240 Height=222 Font=2>
+
+  <WndProperty Name="prpSafetyAltitudeArrival" Caption="Arrival height"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="The height above terrain that the glider should arrive at for a safe landing.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
+  </WndProperty>
+
+  <WndProperty Name="prpSafetyAltitudeBreakoff" Caption="Breakoff height"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="This is the height above terrain, below which the pilot should abort the task and prepare for an outlanding.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
+  </WndProperty>
+
+  <WndProperty Name="prpSafetyAltitudeTerrain" Caption="Terrain height"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="The height above terrain that the glider must clear during final glide.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
+  </WndProperty>
+
+  <WndProperty Name="prpAbortSafetyUseCurrent"
+    Caption="Abort use current Mc*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="When enabled, the current MacCready setting is used for determining arrival altitude during task abort mode.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpSafetyMacCready"
+    Caption="Safety Mc*" X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="The MacCready setting used in task abort mode and for determining arrival altitude at airfields. ">
+    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=10 Step=0.1/>
   </WndProperty>
 
   </WndFrame>
@@ -499,56 +361,6 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
   Help="option, if enabled sets the clock of the computer to the GPS time once a fix is set.  This is only necessary if your computer does not have a real-time clock with battery backup or your computer frequently runs out of battery power or otherwise loses time.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
-  </WndFrame>
-
-  <WndFrame Name="frmTaskRules" X=0 Y=0 Width=240 Height=222 Font=2>
-
-  <WndProperty Name="prpStartMaxSpeed" Caption="Start max speed"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="Maximum speed allowed in start observation zone.  Set to 0 for no limit.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=300 Step=5/>
-  </WndProperty>
-
-  <WndProperty Name="prpStartMaxSpeedMargin" Caption="Start max speed margin"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="Maximum speed above maximum start speed to tolerate.  Set to 0 for no tolerance.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=300 Step=5/>
-  </WndProperty>
-
-  <WndProperty Name="prpStartMaxHeight" Caption="Start max height"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-   Help="Maximum height above ground while starting the task.  Set to 0 for no limit.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
-  </WndProperty>
-
-  <WndProperty Name="prpStartMaxHeightMargin" Caption="Start max height margin"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-   Help="Maximum height above maximum start height to tolerate.  Set to 0 for no tolerance.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
-  </WndProperty>
-
-  <WndProperty Name="prpStartHeightRef" Caption="Start height ref"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=150 Font=2
-Help="Reference used for start max height rule
-[MSL] Reference is altitude above mean sea level
-[AGL] Reference is the height above the start point">
-      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
-    </WndProperty>
-
-  <WndProperty Name="prpFinishMinHeight" Caption="Finish min height"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="Minimum height above ground while finishing the task.  Set to 0 for no limit.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
-  </WndProperty>
-
-    <WndProperty Name="prpFAIFinishHeight" Caption="FAI finish height"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=150 Font=2
-Help="If enabled, this option requires the minimum height above ground for finish to be greater than 1000m below the start height.">
-    <DataField name="" DataType="boolean"/>
-    </WndProperty>
-
-    <WndProperty Name="prpOLCRules" Caption="Online contest"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=150 Font=2
-Help="Rules used for calculating optimal points for OnLine Contest.
-[Sprint]: Conforms to FAI IGC League rules.  Up to 5 points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.
-[Triangle]: Conforms to FAI OLC triangle rules.  Four points with common start and finish.  For tasks longer than 500km, no leg less than 25% or larger than 45%; otherwise no leg less than 28% of total.  Finish height must not be lower than start height less 1000 meters.
-[Classic]: Conforms to OLC classic rules.  Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.  Points awarded 80% on second last leg and 60% on last leg.
-">
-      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
-    </WndProperty>
-
   </WndFrame>
 
   <WndFrame Name="frmUnits" X=0 Y=0 Width=240 Height=222 Font=2>
@@ -870,6 +682,194 @@ In all modes, the color of the target indicates the threat level.
     <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=100 Step="0.5" Fine=1/>
 
   </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmTaskRules" X=0 Y=0 Width=240 Height=222 Font=2>
+
+  <WndProperty Name="prpStartMaxSpeed" Caption="Start max speed"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="Maximum speed allowed in start observation zone.  Set to 0 for no limit.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=300 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpStartMaxSpeedMargin" Caption="Start max speed margin"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="Maximum speed above maximum start speed to tolerate.  Set to 0 for no tolerance.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=300 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpStartMaxHeight" Caption="Start max height"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+   Help="Maximum height above ground while starting the task.  Set to 0 for no limit.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
+  </WndProperty>
+
+  <WndProperty Name="prpStartMaxHeightMargin" Caption="Start max height margin"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+   Help="Maximum height above maximum start height to tolerate.  Set to 0 for no tolerance.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
+  </WndProperty>
+
+  <WndProperty Name="prpStartHeightRef" Caption="Start height ref"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=150 Font=2
+Help="Reference used for start max height rule
+[MSL] Reference is altitude above mean sea level
+[AGL] Reference is the height above the start point">
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpFinishMinHeight" Caption="Finish min height"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="Minimum height above ground while finishing the task.  Set to 0 for no limit.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
+  </WndProperty>
+
+    <WndProperty Name="prpFAIFinishHeight" Caption="FAI finish height"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=150 Font=2
+Help="If enabled, this option requires the minimum height above ground for finish to be greater than 1000m below the start height.">
+    <DataField name="" DataType="boolean"/>
+    </WndProperty>
+
+    <WndProperty Name="prpOLCRules" Caption="Online contest"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=150 Font=2
+Help="Rules used for calculating optimal points for OnLine Contest.
+[Sprint]: Conforms to FAI IGC League rules.  Up to 5 points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.
+[Triangle]: Conforms to FAI OLC triangle rules.  Four points with common start and finish.  For tasks longer than 500km, no leg less than 25% or larger than 45%; otherwise no leg less than 28% of total.  Finish height must not be lower than start height less 1000 meters.
+[Classic]: Conforms to OLC classic rules.  Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.  Points awarded 80% on second last leg and 60% on last leg.
+">
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmInfoBoxCircling" X=0 Y=0 Width=240 Height=222 Font=2>
+
+    <WndProperty Name="prpInfoBoxCircling0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCircling1" Caption="2"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling2" Caption="3"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling3" Caption="4"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling4" Caption="5"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling5" Caption="6"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling6" Caption="7"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling7" Caption="8"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmInfoBoxCruise" X=0 Y=0 Width=240 Height=222 Font=2>
+
+    <WndProperty Name="prpInfoBoxCruise0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise1" Caption="2"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise2" Caption="3"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise3" Caption="4"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise4" Caption="5"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise5" Caption="6"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise6" Caption="7"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise7" Caption="8"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmInfoBoxFinalGlide" X=0 Y=0 Width=240 Height=222 Font=2>
+
+    <WndProperty Name="prpInfoBoxFinalGlide0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide1" Caption="2"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide2" Caption="3"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide3" Caption="4"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide4" Caption="5"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide5" Caption="6"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide6" Caption="7"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide7" Caption="8"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmInfoBoxAuxiliary" X=0 Y=0 Width=240 Height=222 Font=2>
+
+    <WndProperty Name="prpInfoBoxAux0" Caption="1"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux1" Caption="2"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux2" Caption="3"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux3" Caption="4"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux4" Caption="5"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux5" Caption="6"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux6" Caption="7"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux7" Caption="8"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
 
   </WndFrame>
 
