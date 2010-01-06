@@ -36,29 +36,62 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
- *
- */
-
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
-
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgHelpers.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/Frame.hpp"
-#include "Form/List.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Button.hpp"
-#include "Form/Draw.hpp"
 #include "Form/Tabbed.hpp"
-#include "Form/Util.hpp"
-#include "Language.hpp"
-#include "Interface.hpp"
 
-#endif
+#include <assert.h>
+
+TabbedControl::TabbedControl(ContainerControl *owner, const TCHAR *name,
+                             int x, int y, unsigned width, unsigned height)
+  :ContainerControl(owner, NULL, name, x, y, width, height),
+   current(0)
+{
+  SetForeColor(GetOwner()->GetForeColor());
+  SetBackColor(GetOwner()->GetBackColor());
+}
+
+void
+TabbedControl::AddClient(WindowControl *w)
+{
+  ContainerControl::AddClient(w);
+
+  const RECT rc = get_client_rect();
+  w->move(rc.left, rc.top, rc.right, rc.bottom);
+
+  if (mClientCount - 1 != current)
+    w->hide();
+}
+
+void
+TabbedControl::SetCurrentPage(unsigned i)
+{
+  assert(i < mClientCount);
+
+  if (i == current)
+    return;
+
+  mClients[current]->hide();
+  current = i;
+  mClients[current]->show();
+}
+
+void
+TabbedControl::NextPage()
+{
+  if (mClientCount < 2)
+    return;
+
+  assert(current < mClientCount);
+
+  SetCurrentPage((current + 1) % mClientCount);
+}
+
+void
+TabbedControl::PreviousPage()
+{
+  if (mClientCount < 2)
+    return;
+
+  assert(current < mClientCount);
+
+  SetCurrentPage((current + mClientCount - 1) % mClientCount);
+}

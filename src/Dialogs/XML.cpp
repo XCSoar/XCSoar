@@ -58,6 +58,7 @@ Copyright_License {
 #include "Form/EventButton.hpp"
 #include "Form/Draw.hpp"
 #include "Form/List.hpp"
+#include "Form/Tabbed.hpp"
 #include "StringUtil.hpp"
 
 #include <stdio.h>    // for _stprintf
@@ -659,6 +660,13 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
     unsigned item_height =
       Layout::Scale(StringToIntDflt(node.getAttribute(_T("ItemHeight")), 18));
     WC = new WndListFrame(Parent, Name, X, Y, Width, Height, item_height);
+  } else if (_tcscmp(node.getName(), _T("Tabbed")) == 0) {
+    TabbedControl *tabbed = new TabbedControl(Parent, Name,
+                                              X, Y, Width, Height);
+    WC = tabbed;
+
+    // recursivly create dialog
+    LoadChildrenFromXML(tabbed, LookUpTable, &node, ParentFont, eDialogStyle);
   }
 
   if (WC != NULL){

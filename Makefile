@@ -222,6 +222,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Form/List.cpp \
 	$(SRC)/Form/ScrollBar.cpp \
 	$(SRC)/Form/Edit.cpp \
+	$(SRC)/Form/Tabbed.cpp \
 	$(SRC)/Form/Util.cpp \
 	$(SRC)/LogFile.cpp \
 	\

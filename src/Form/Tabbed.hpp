@@ -36,29 +36,30 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
- *
- */
+#ifndef XCSOAR_FORM_TABBED_HPP
+#define XCSOAR_FORM_TABBED_HPP
 
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
+#include "Form/Container.hpp"
 
-#include "Dialogs.h"
-#include "Dialogs/dlgTools.h"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/dlgHelpers.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/Frame.hpp"
-#include "Form/List.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Button.hpp"
-#include "Form/Draw.hpp"
-#include "Form/Tabbed.hpp"
-#include "Form/Util.hpp"
-#include "Language.hpp"
-#include "Interface.hpp"
+class TabbedControl : public ContainerControl {
+protected:
+  unsigned current;
+
+public:
+  TabbedControl(ContainerControl *owner, const TCHAR *name,
+                int x, int y, unsigned width, unsigned height);
+
+public:
+  virtual void AddClient(WindowControl *w);
+
+public:
+  unsigned GetCurrentPage() const {
+    return current;
+  }
+
+  void SetCurrentPage(unsigned i);
+  void NextPage();
+  void PreviousPage();
+};
 
 #endif

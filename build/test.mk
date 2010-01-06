@@ -256,6 +256,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Form/List.cpp \
 	$(SRC)/Form/ScrollBar.cpp \
 	$(SRC)/Form/Edit.cpp \
+	$(SRC)/Form/Tabbed.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(TEST_SRC_DIR)/RunDialog.cpp \
