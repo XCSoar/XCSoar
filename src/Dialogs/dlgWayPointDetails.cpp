@@ -157,7 +157,7 @@ NextPage(int Step)
   wDetails->set_visible(page == 1);
   wCommand->set_visible(page == 2);
   wSpecial->set_visible(page == 3);
-  wImage->set_visible(page > 4);
+  wImage->set_visible(page >= 4);
 }
 
 static void
@@ -374,10 +374,10 @@ OnImagePaint(WindowControl *Sender, Canvas &canvas)
 
   #ifndef CECORE
   #ifndef GNAV
-  if (page == 3)
+  if (page == 4)
     jpgimage1.Draw(canvas, 0, 0, -1, -1);
 
-  if (page == 4)
+  if (page == 5)
     jpgimage2.Draw(canvas, 0, 0, -1, -1);
   #endif
   #endif
