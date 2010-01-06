@@ -47,6 +47,28 @@ Copyright_License {
 
 #include <assert.h>
 
+static const TCHAR *const captions[] = {
+  _T(" 1 Hardware"),
+  _T(" 2 Calibration"),
+  _T(" 3 Audio Modes"),
+  _T(" 4 Deadband"),
+  _T(" 5 Tones: Cruise Faster"),
+  _T(" 6 Tones: Cruise Slower"),
+  _T(" 7 Tones: Cruise in Lift"),
+  _T(" 8 Tones: Circling, climbing fast"),
+  _T(" 9 Tones: Circling, climbing slow"),
+  _T("10 Tones: Circling, descending"),
+  _T("11 Vario flight logger"),
+  _T("12 Audio mixer"),
+  _T("13 FLARM Alerts"),
+  _T("14 FLARM Identification"),
+  _T("15 FLARM Repeats"),
+  _T("16 Alerts"),
+  _T("17 Airframe Limits"),
+  _T("18 Audio Schemes"),
+  _T("19 Display"),
+};
+
 static bool changed = false;
 static int page=0;
 static WndForm *wf=NULL;
@@ -543,65 +565,9 @@ static void NextPage(int Step){
   page += Step;
   if (page>=NUMPAGES) { page=0; }
   if (page<0) { page=NUMPAGES-1; }
-  switch(page) {
-  case 0:
-    wf->SetCaption(_T(" 1 Hardware"));
-    break;
-  case 1:
-    wf->SetCaption(_T(" 2 Calibration"));
-    break;
-  case 2:
-    wf->SetCaption(_T(" 3 Audio Modes"));
-    break;
-  case 3:
-    wf->SetCaption(_T(" 4 Deadband"));
-    break;
-  case 4:
-    wf->SetCaption(_T(" 5 Tones: Cruise Faster"));
-    break;
-  case 5:
-    wf->SetCaption(_T(" 6 Tones: Cruise Slower"));
-    break;
-  case 6:
-    wf->SetCaption(_T(" 7 Tones: Cruise in Lift"));
-    break;
-  case 7:
-    wf->SetCaption(_T(" 8 Tones: Circling, climbing fast"));
-    break;
-  case 8:
-    wf->SetCaption(_T(" 9 Tones: Circling, climbing slow"));
-    break;
-  case 9:
-    wf->SetCaption(_T("10 Tones: Circling, descending"));
-    break;
-  case 10:
-    wf->SetCaption(_T("11 Vario flight logger"));
-    break;
-  case 11:
-    wf->SetCaption(_T("12 Audio mixer"));
-    break;
-  case 12:
-    wf->SetCaption(_T("13 FLARM Alerts"));
-    break;
-  case 13:
-    wf->SetCaption(_T("14 FLARM Identification"));
-    break;
-  case 14:
-    wf->SetCaption(_T("15 FLARM Repeats"));
-    break;
-  case 15:
-    wf->SetCaption(_T("16 Alerts"));
-    break;
-  case 16:
-    wf->SetCaption(_T("17 Airframe Limits"));
-    break;
-  case 17:
-    wf->SetCaption(_T("18 Audio Schemes"));
-    break;
-  case 18:
-    wf->SetCaption(_T("19 Display"));
-    break;
-  }
+
+  wf->SetCaption(captions[page]);
+
   wConfig1->set_visible(page == 0);
   wConfig2->set_visible(page == 1);
   wConfig3->set_visible(page == 2);

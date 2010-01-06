@@ -73,9 +73,34 @@ Copyright_License {
 #include "WayPointParser.h"
 #include "StringUtil.hpp"
 
-extern ldrotary_s rotaryLD;
-
 #include <assert.h>
+
+static const TCHAR *const captions[] = {
+  _T("1 Site"),
+  _T("2 Airspace"),
+  _T("3 Map Display"),
+  _T("4 Terrain Display"),
+  _T("5 Glide Computer"),
+  _T("6 Safety factors"),
+  _T("7 Polar"),
+  _T("8 Devices"),
+  _T("9 Units"),
+  _T("10 Interface"),
+  _T("11 Appearance"),
+  _T("12 Fonts"),
+  _T("13 Vario Gauge and FLARM"),
+  _T("14 Task"),
+  _T("15 Task rules"),
+  _T("16 InfoBox Cruise"),
+  _T("17 InfoBox Circling"),
+  _T("18 InfoBox Final Glide"),
+  _T("19 InfoBox Auxiliary"),
+  _T("20 Logger"),
+  _T("21 Waypoint Edit"),
+  _T("22 Experimental features"),
+};
+
+extern ldrotary_s rotaryLD;
 
 static SETTINGS_TASK settings_task;
 
@@ -184,74 +209,9 @@ static void NextPage(int Step){
   config_page += Step;
   if (config_page>=NUMPAGES) { config_page=0; }
   if (config_page<0) { config_page=NUMPAGES-1; }
-  switch(config_page) {
-  case 0:
-    wf->SetCaption(gettext(_T("1 Site")));
-    break;
-  case 1:
-    wf->SetCaption(gettext(_T("2 Airspace")));
-    break;
-  case 2:
-    wf->SetCaption(gettext(_T("3 Map Display")));
-    break;
-  case 3:
-    wf->SetCaption(gettext(_T("4 Terrain Display")));
-    break;
-  case 4:
-    wf->SetCaption(gettext(_T("5 Glide Computer")));
-    break;
-  case 5:
-    wf->SetCaption(gettext(_T("6 Safety factors")));
-    break;
-  case 6:
-    wf->SetCaption(gettext(_T("7 Polar")));
-    break;
-  case 7:
-    wf->SetCaption(gettext(_T("8 Devices")));
-    break;
-  case 8:
-    wf->SetCaption(gettext(_T("9 Units")));
-    break;
-  case 9:
-    wf->SetCaption(gettext(_T("10 Interface")));
-    break;
-  case 10:
-    wf->SetCaption(gettext(_T("11 Appearance")));
-    break;
-  case 11:
-    wf->SetCaption(gettext(_T("12 Fonts")));
-    break;
-  case 12:
-    wf->SetCaption(gettext(_T("13 Vario Gauge and FLARM")));
-    break;
-  case 13:
-    wf->SetCaption(gettext(_T("14 Task")));
-    break;
-  case 14:
-    wf->SetCaption(gettext(_T("15 Task rules")));
-    break;
-  case 15:
-    wf->SetCaption(gettext(_T("16 InfoBox Cruise")));
-    break;
-  case 16:
-    wf->SetCaption(gettext(_T("17 InfoBox Circling")));
-    break;
-  case 17:
-    wf->SetCaption(gettext(_T("18 InfoBox Final Glide")));
-    break;
-  case 18:
-    wf->SetCaption(gettext(_T("19 InfoBox Auxiliary")));
-    break;
-  case 19:
-    wf->SetCaption(gettext(_T("20 Logger")));
-    break;
-  case 20:
-    wf->SetCaption(gettext(_T("21 Waypoint Edit")));
-    break;
-  case 21:
-    wf->SetCaption(gettext(_T("22 Experimental features")));
-    break;
-  }
+
+  wf->SetCaption(gettext(captions[config_page]));
+
   if ((config_page>=15) && (config_page<=18)) {
     if (buttonCopy) {
       buttonCopy->show();
