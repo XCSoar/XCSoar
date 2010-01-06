@@ -138,8 +138,8 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
       // helps if variables haven't been modified.
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-	wp->GetDataField()->Set(lvalue);
-	wp->RefreshDisplay();
+        wp->GetDataField()->Set(lvalue);
+        wp->RefreshDisplay();
       }
     }
   }
@@ -154,37 +154,37 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
 
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-	wp->GetDataField()->Set(lvalue);
-	wp->RefreshDisplay();
+        wp->GetDataField()->Set(lvalue);
+        wp->RefreshDisplay();
       }
     } else if (updated==2) {
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-	newval = (wp->GetDataField()->GetAsInteger());
-	if (newval != lvalue) {
-	  // value has changed
-	  SetToRegistry(updatename, 2);
-	  SetToRegistry(fullname, (DWORD)lvalue);
+        newval = (wp->GetDataField()->GetAsInteger());
+        if (newval != lvalue) {
+          // value has changed
+          SetToRegistry(updatename, 2);
+          SetToRegistry(fullname, (DWORD)lvalue);
 
-	  changed = true;
+          changed = true;
 
-	  // maybe represent all as text?
-	  // note that this code currently won't work for longs
+          // maybe represent all as text?
+          // note that this code currently won't work for longs
 
-	  // hack, fix the -1 (plug and play settings)
-	  if (_tcscmp(name, _T("HasTemperature")) == 0){
-	    if (newval == 2)
-	      newval = 255;
-	  }
+          // hack, fix the -1 (plug and play settings)
+          if (_tcscmp(name, _T("HasTemperature")) == 0){
+            if (newval == 2)
+              newval = 255;
+          }
 
-	  _stprintf(requesttext,_T("PDVSC,S,%s,%d"),name, newval);
-	  VarioWriteNMEA(requesttext);
+          _stprintf(requesttext,_T("PDVSC,S,%s,%d"),name, newval);
+          VarioWriteNMEA(requesttext);
 
           if (!is_simulator())
             Sleep(250);
 
-	  return true;
-	}
+          return true;
+        }
       }
     }
   }
@@ -329,88 +329,85 @@ VEGA_SCHEME VegaSchemes[4]= {
 
 static void SetParametersScheme(int schemetype) {
 
-  if(MessageBoxX(
-		 gettext(_T("Set new audio scheme?  Old values will be lost.")),
-		 gettext(_T("Vega Audio")),
-		 MB_YESNO|MB_ICONQUESTION) != IDYES)
+  if(MessageBoxX(gettext(_T("Set new audio scheme?  Old values will be lost.")),
+                 gettext(_T("Vega Audio")),
+                 MB_YESNO|MB_ICONQUESTION) != IDYES)
     return;
 
 
   VegaConfigurationUpdated(_T("ToneClimbComparisonType"), false, true,
-			   VegaSchemes[schemetype].ToneClimbComparisonType);
+                           VegaSchemes[schemetype].ToneClimbComparisonType);
   VegaConfigurationUpdated(_T("ToneCruiseLiftDetectionType"), false, true,
-			   VegaSchemes[schemetype].ToneLiftComparisonType);
+                           VegaSchemes[schemetype].ToneLiftComparisonType);
 
   VegaConfigurationUpdated(_T("ToneCruiseFasterBeepType"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseFasterBeepType);
+                           VegaSchemes[schemetype].ToneCruiseFasterBeepType);
   VegaConfigurationUpdated(_T("ToneCruiseFasterPitchScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseFasterPitchScheme);
+                           VegaSchemes[schemetype].ToneCruiseFasterPitchScheme);
   VegaConfigurationUpdated(_T("ToneCruiseFasterPitchScale"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseFasterPitchScale);
+                           VegaSchemes[schemetype].ToneCruiseFasterPitchScale);
   VegaConfigurationUpdated(_T("ToneCruiseFasterPeriodScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseFasterPeriodScheme);
+                           VegaSchemes[schemetype].ToneCruiseFasterPeriodScheme);
   VegaConfigurationUpdated(_T("ToneCruiseFasterPeriodScale"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseFasterPeriodScale);
+                           VegaSchemes[schemetype].ToneCruiseFasterPeriodScale);
 
   VegaConfigurationUpdated(_T("ToneCruiseSlowerBeepType"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseSlowerBeepType);
+                           VegaSchemes[schemetype].ToneCruiseSlowerBeepType);
   VegaConfigurationUpdated(_T("ToneCruiseSlowerPitchScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseSlowerPitchScheme);
+                           VegaSchemes[schemetype].ToneCruiseSlowerPitchScheme);
   VegaConfigurationUpdated(_T("ToneCruiseSlowerPitchScale"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseSlowerPitchScale);
+                           VegaSchemes[schemetype].ToneCruiseSlowerPitchScale);
   VegaConfigurationUpdated(_T("ToneCruiseSlowerPeriodScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseSlowerPeriodScheme);
+                           VegaSchemes[schemetype].ToneCruiseSlowerPeriodScheme);
   VegaConfigurationUpdated(_T("ToneCruiseSlowerPeriodScale"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseSlowerPeriodScale);
+                           VegaSchemes[schemetype].ToneCruiseSlowerPeriodScale);
 
   VegaConfigurationUpdated(_T("ToneCruiseLiftBeepType"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseLiftBeepType);
+                           VegaSchemes[schemetype].ToneCruiseLiftBeepType);
   VegaConfigurationUpdated(_T("ToneCruiseLiftPitchScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseLiftPitchScheme);
+                           VegaSchemes[schemetype].ToneCruiseLiftPitchScheme);
   VegaConfigurationUpdated(_T("ToneCruiseLiftPitchScale"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseLiftPitchScale);
+                           VegaSchemes[schemetype].ToneCruiseLiftPitchScale);
   VegaConfigurationUpdated(_T("ToneCruiseLiftPeriodScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseLiftPeriodScheme);
+                           VegaSchemes[schemetype].ToneCruiseLiftPeriodScheme);
   VegaConfigurationUpdated(_T("ToneCruiseLiftPeriodScale"), false, true,
-			   VegaSchemes[schemetype].ToneCruiseLiftPeriodScale);
+                           VegaSchemes[schemetype].ToneCruiseLiftPeriodScale);
 
   VegaConfigurationUpdated(_T("ToneCirclingClimbingHiBeepType"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingClimbingHiBeepType);
+                           VegaSchemes[schemetype].ToneCirclingClimbingHiBeepType);
   VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPitchScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScheme);
+                           VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScheme);
   VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPitchScale"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScale);
+                           VegaSchemes[schemetype].ToneCirclingClimbingHiPitchScale);
   VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPeriodScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScheme);
+                           VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScheme);
   VegaConfigurationUpdated(_T("ToneCirclingClimbingHiPeriodScale"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScale);
+                           VegaSchemes[schemetype].ToneCirclingClimbingHiPeriodScale);
 
   VegaConfigurationUpdated(_T("ToneCirclingClimbingLowBeepType"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingClimbingLowBeepType);
+                           VegaSchemes[schemetype].ToneCirclingClimbingLowBeepType);
   VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPitchScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScheme);
+                           VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScheme);
   VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPitchScale"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScale);
+                           VegaSchemes[schemetype].ToneCirclingClimbingLowPitchScale);
   VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPeriodScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScheme);
+                           VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScheme);
   VegaConfigurationUpdated(_T("ToneCirclingClimbingLowPeriodScale"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScale);
+                           VegaSchemes[schemetype].ToneCirclingClimbingLowPeriodScale);
 
   VegaConfigurationUpdated(_T("ToneCirclingDescendingBeepType"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingDescendingBeepType);
+                           VegaSchemes[schemetype].ToneCirclingDescendingBeepType);
   VegaConfigurationUpdated(_T("ToneCirclingDescendingPitchScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingDescendingPitchScheme);
+                           VegaSchemes[schemetype].ToneCirclingDescendingPitchScheme);
   VegaConfigurationUpdated(_T("ToneCirclingDescendingPitchScale"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingDescendingPitchScale);
+                           VegaSchemes[schemetype].ToneCirclingDescendingPitchScale);
   VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScheme"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingDescendingPeriodScheme);
+                           VegaSchemes[schemetype].ToneCirclingDescendingPeriodScheme);
   VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScale"), false, true,
-			   VegaSchemes[schemetype].ToneCirclingDescendingPeriodScale);
+                           VegaSchemes[schemetype].ToneCirclingDescendingPeriodScale);
 
-  MessageBoxX (
-	       gettext(_T("Audio scheme updated.")),
-	       gettext(_T("Vega Audio")), MB_OK);
-
+  MessageBoxX(gettext(_T("Audio scheme updated.")),
+              gettext(_T("Vega Audio")), MB_OK);
 }
 
 
@@ -631,24 +628,24 @@ static void NextPage(int Step){
 
 
 static void OnNextClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   NextPage(+1);
 }
 
 static void OnPrevClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   NextPage(-1);
 }
 
 static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   UpdateParameters(false);  // 20060801:sgi make shure changes are
                             // sent to device
   wf->SetModalResult(mrOK);
 }
 
 static void OnSaveClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   UpdateParameters(false);  // 20060801:sgi make shure changes are
                             // sent to device
   VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
@@ -658,7 +655,7 @@ static void OnSaveClicked(WindowControl * Sender){
 }
 
 static void OnDemoClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   // retrieve changes from form
   UpdateParameters(false);
   dlgVegaDemoShowModal();
@@ -666,22 +663,22 @@ static void OnDemoClicked(WindowControl * Sender){
 
 
 static void OnSchemeVegaClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   SetParametersScheme(0);
 }
 
 static void OnSchemeBorgeltClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   SetParametersScheme(1);
 }
 
 static void OnSchemeCambridgeClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   SetParametersScheme(2);
 }
 
 static void OnSchemeZanderClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   SetParametersScheme(3);
 }
 
@@ -690,17 +687,17 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
   switch (key_code) {
     // JMW NO! This disables editing! //   case VK_LEFT:
-    case '6':
-      ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-      NextPage(-1);
-      //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
+  case '6':
+    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
+    NextPage(-1);
+    //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
     // JMW NO! This disables editing!  //  case VK_RIGHT:
-    case '7':
-      ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-      NextPage(+1);
-      //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
+  case '7':
+    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
+    NextPage(+1);
+    //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
@@ -1001,8 +998,8 @@ bool dlgConfigurationVarioShowModal(void){
 
   if (!is_simulator() && devVarioFindVega() == NULL) {
     MessageBoxX (
-		 gettext(_T("No communication with Vega.")),
-		 gettext(_T("Vega error")), MB_OK);
+                 gettext(_T("No communication with Vega.")),
+                 gettext(_T("Vega error")), MB_OK);
     return false;
   }
 
@@ -1014,8 +1011,8 @@ bool dlgConfigurationVarioShowModal(void){
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgVario.xml"),
-			XCSoarInterface::main_window,
-			_T("IDR_XML_VARIO"));
+                        XCSoarInterface::main_window,
+                        _T("IDR_XML_VARIO"));
   }
 
   if (!wf) return false;

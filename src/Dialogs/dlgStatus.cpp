@@ -106,7 +106,7 @@ static void NextPage(int Step){
 
 
 static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
@@ -114,20 +114,20 @@ static void OnCloseClicked(WindowControl * Sender){
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
-	(void)Sender;
+  (void)Sender;
   switch (key_code) {
-    case VK_LEFT:
-    case '6':
-      ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-      NextPage(-1);
-      //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
+  case VK_LEFT:
+  case '6':
+    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
+    NextPage(-1);
+    //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
-    case VK_RIGHT:
-    case '7':
-      ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-      NextPage(+1);
-      //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
+  case VK_RIGHT:
+  case '7':
+    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
+    NextPage(+1);
+    //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
@@ -136,12 +136,12 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 }
 
 static void OnNextClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   NextPage(+1);
 }
 
 static void OnPrevClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   NextPage(-1);
 }
 
@@ -452,7 +452,7 @@ static void UpdateValuesRules(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   if (wp) {
     if (positive(XCSoarInterface::Calculated().common_stats.task_time_elapsed)) {
-      fixed the_time = XCSoarInterface::Calculated().task_stats.Time - 
+      fixed the_time = XCSoarInterface::Calculated().task_stats.Time -
         XCSoarInterface::Calculated().common_stats.task_time_elapsed;
       Units::TimeToText(Temp, (int)TimeLocal(the_time));
       wp->SetText(Temp);
@@ -502,7 +502,7 @@ static void UpdateValuesRules(void) {
   if (wp) {
     double finish_min =
       FAIFinishHeight(XCSoarInterface::SettingsComputer(),
-		      XCSoarInterface::Calculated(), -1);
+                      XCSoarInterface::Calculated(), -1);
     _stprintf(Temp, _T("%.0f %s"),
               finish_min*ALTITUDEMODIFY,
               Units::GetAltitudeName());
@@ -563,7 +563,7 @@ static void UpdateValuesTask(void) {
   if (wp) {
     _stprintf(Temp, _T("%.0f %s"),
               TASKSPEEDMODIFY*
-              XCSoarInterface::Calculated().task_stats.total.planned.get_speed(), 
+              XCSoarInterface::Calculated().task_stats.total.planned.get_speed(),
               Units::GetTaskSpeedName());
     wp->SetText(Temp);
   }
@@ -572,7 +572,7 @@ static void UpdateValuesTask(void) {
   if (wp) {
     _stprintf(Temp, _T("%.0f %s"),
               TASKSPEEDMODIFY*
-              XCSoarInterface::Calculated().task_stats.total.travelled.get_speed(), 
+              XCSoarInterface::Calculated().task_stats.total.travelled.get_speed(),
               Units::GetTaskSpeedName());
     wp->SetText(Temp);
   }
@@ -601,8 +601,8 @@ void dlgStatusShowModal(int start_page){
 
   wf = dlgLoadFromXML(CallBackTable,
                       _T("dlgStatus.xml"),
-		      XCSoarInterface::main_window,
-		      _T("IDR_XML_STATUS"));
+                      XCSoarInterface::main_window,
+                      _T("IDR_XML_STATUS"));
 
   if (!wf) return;
 

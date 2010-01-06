@@ -296,46 +296,46 @@ static void NextPage(int Step){
 static void OnSetupDeviceAClicked(WindowControl * Sender){
   (void)Sender;
 
-  #ifdef ToDo
-    devA()->DoSetup();
-    wf->FocusNext(NULL);
-  #endif
+#ifdef ToDo
+  devA()->DoSetup();
+  wf->FocusNext(NULL);
+#endif
 
-// this is a hack, devices dont jet support device dependant setup dialogs
+  // this is a hack, devices dont jet support device dependant setup dialogs
 
-    if (!is_simulator() && (devA() == NULL ||
-                            _tcscmp(devA()->Name,_T("Vega")) != 0))
-      return;
+  if (!is_simulator() && (devA() == NULL ||
+                          _tcscmp(devA()->Name,_T("Vega")) != 0))
+    return;
 
-    changed = dlgConfigurationVarioShowModal();
+  changed = dlgConfigurationVarioShowModal();
 
-    // this is a hack to get the dialog to retain focus because
-    // the progress dialog in the vario configuration somehow causes
-    // focus problems
-    wf->FocusNext(NULL);
+  // this is a hack to get the dialog to retain focus because
+  // the progress dialog in the vario configuration somehow causes
+  // focus problems
+  wf->FocusNext(NULL);
 }
 
 
 static void OnSetupDeviceBClicked(WindowControl * Sender){
   (void)Sender;
 
-  #ifdef ToDo
-    devB()->DoSetup();
-    wf->FocusNext(NULL);
-  #endif
+#ifdef ToDo
+  devB()->DoSetup();
+  wf->FocusNext(NULL);
+#endif
 
-// this is a hack, devices dont jet support device dependant setup dialogs
+  // this is a hack, devices dont jet support device dependant setup dialogs
 
-    if (!is_simulator() && (devB() == NULL ||
-                            _tcscmp(devB()->Name,_T("Vega")) != 0))
-      return;
+  if (!is_simulator() && (devB() == NULL ||
+                          _tcscmp(devB()->Name,_T("Vega")) != 0))
+    return;
 
-    changed = dlgConfigurationVarioShowModal();
+  changed = dlgConfigurationVarioShowModal();
 
-    // this is a hack to get the dialog to retain focus because
-    // the progress dialog in the vario configuration somehow causes
-    // focus problems
-    wf->FocusNext(NULL);
+  // this is a hack to get the dialog to retain focus because
+  // the progress dialog in the vario configuration somehow causes
+  // focus problems
+  wf->FocusNext(NULL);
 }
 
 static void
@@ -368,20 +368,20 @@ static void OnUserLevel(DataField *Sender, DataField::DataAccessKind_t Mode){
   WndProperty* wp;
 
   switch(Mode){
-    case DataField::daGet:
+  case DataField::daGet:
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      wp = (WndProperty*)wf->FindByName(_T("prpUserLevel"));
-      if (wp) {
-        if (wp->GetDataField()->GetAsInteger() !=
-	    (int)XCSoarInterface::UserLevel) {
-          XCSoarInterface::UserLevel = wp->GetDataField()->GetAsInteger();
-          changed = true;
-          SetToRegistry(szRegistryUserLevel,(int)XCSoarInterface::UserLevel);
-          wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
-        }
+  case DataField::daPut:
+  case DataField::daChange:
+    wp = (WndProperty*)wf->FindByName(_T("prpUserLevel"));
+    if (wp) {
+      if (wp->GetDataField()->GetAsInteger() !=
+          (int)XCSoarInterface::UserLevel) {
+        XCSoarInterface::UserLevel = wp->GetDataField()->GetAsInteger();
+        changed = true;
+        SetToRegistry(szRegistryUserLevel,(int)XCSoarInterface::UserLevel);
+        wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
       }
+    }
     break;
   }
 }
@@ -390,11 +390,11 @@ static void OnUserLevel(DataField *Sender, DataField::DataAccessKind_t Mode){
 static void OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
   switch(Mode){
-    case DataField::daGet:
+  case DataField::daGet:
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      UpdateDeviceSetupButton(0, Sender->GetAsString());
+  case DataField::daPut:
+  case DataField::daChange:
+    UpdateDeviceSetupButton(0, Sender->GetAsString());
     break;
   }
 
@@ -403,11 +403,11 @@ static void OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode){
 static void OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
   switch(Mode){
-    case DataField::daGet:
+  case DataField::daGet:
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      UpdateDeviceSetupButton(1, Sender->GetAsString());
+  case DataField::daPut:
+  case DataField::daChange:
+    UpdateDeviceSetupButton(1, Sender->GetAsString());
     break;
   }
 
@@ -579,14 +579,14 @@ static void RefreshFonts(void) {
 static void OnUseCustomFontData(DataField *Sender, DataField::DataAccessKind_t Mode) {
 
   switch(Mode){
-    case DataField::daGet:
+  case DataField::daGet:
     break;
 
-    case DataField::daPut:
+  case DataField::daPut:
     break;
 
-    case DataField::daChange:
-      RefreshFonts();
+  case DataField::daChange:
+    RefreshFonts();
 
     break;
   }
@@ -618,8 +618,8 @@ static void OnEditTitleWindowFontClicked(WindowControl *Sender) {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpTitleWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
-                            szRegistryFontTitleWindowFont,
-                            autoTitleWindowLogFont)) {
+                           szRegistryFontTitleWindowFont,
+                           autoTitleWindowLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -628,8 +628,8 @@ static void OnEditMapWindowFontClicked(WindowControl *Sender) {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpMapWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
-                            szRegistryFontMapWindowFont,
-                            autoMapWindowLogFont)) {
+                           szRegistryFontMapWindowFont,
+                           autoMapWindowLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -638,8 +638,8 @@ static void OnEditTitleSmallWindowFontClicked(WindowControl *Sender) {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpTitleSmallWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
-                            szRegistryFontTitleSmallWindowFont,
-                            autoTitleSmallWindowLogFont)) {
+                           szRegistryFontTitleSmallWindowFont,
+                           autoTitleSmallWindowLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -648,8 +648,8 @@ static void OnEditMapWindowBoldFontClicked(WindowControl *Sender) {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpMapWindowBoldFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
-                            szRegistryFontMapWindowBoldFont,
-                            autoMapWindowBoldLogFont)) {
+                           szRegistryFontMapWindowBoldFont,
+                           autoMapWindowBoldLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -658,8 +658,8 @@ static void OnEditCDIWindowFontClicked(WindowControl *Sender) {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpCDIWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
-                            szRegistryFontCDIWindowFont,
-                            autoCDIWindowLogFont)) {
+                           szRegistryFontCDIWindowFont,
+                           autoCDIWindowLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -668,8 +668,8 @@ static void OnEditMapLabelFontClicked(WindowControl *Sender) {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpMapLabelFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
-                            szRegistryFontMapLabelFont,
-                            autoMapLabelLogFont)) {
+                           szRegistryFontMapLabelFont,
+                           autoMapLabelLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -678,8 +678,8 @@ static void OnEditStatisticsFontClicked(WindowControl *Sender) {
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpStatisticsFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
-                            szRegistryFontStatisticsFont,
-                            autoStatisticsLogFont)) {
+                           szRegistryFontStatisticsFont,
+                           autoStatisticsLogFont)) {
     FontRegistryChanged=true;
     RefreshFonts();
   }
@@ -687,7 +687,7 @@ static void OnEditStatisticsFontClicked(WindowControl *Sender) {
 
 
 static void OnAircraftRegoClicked(WindowControl *Sender) {
-	(void)Sender;
+  (void)Sender;
   TCHAR Temp[100];
   if (buttonAircraftRego) {
     GetRegistryString(szRegistryAircraftRego,Temp,100);
@@ -701,7 +701,7 @@ static void OnAircraftRegoClicked(WindowControl *Sender) {
 
 
 static void OnAircraftTypeClicked(WindowControl *Sender) {
-	(void)Sender;
+  (void)Sender;
   TCHAR Temp[100];
   if (buttonAircraftType) {
     GetRegistryString(szRegistryAircraftType,Temp,100);
@@ -715,7 +715,7 @@ static void OnAircraftTypeClicked(WindowControl *Sender) {
 
 
 static void OnPilotNameClicked(WindowControl *Sender) {
-	(void)Sender;
+  (void)Sender;
   TCHAR Temp[100];
   if (buttonPilotName) {
     GetRegistryString(szRegistryPilotName,Temp,100);
@@ -729,7 +729,7 @@ static void OnPilotNameClicked(WindowControl *Sender) {
 
 
 static void OnLoggerIDClicked(WindowControl *Sender) {
-	(void)Sender;
+  (void)Sender;
   TCHAR Temp[100];
   if (buttonLoggerID) {
     GetRegistryString(szRegistryLoggerID,Temp,100);
@@ -744,27 +744,27 @@ static void OnLoggerIDClicked(WindowControl *Sender) {
 
 
 static void OnAirspaceColoursClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   dlgAirspaceShowModal(true);
 }
 
 static void OnAirspaceModeClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   dlgAirspaceShowModal(false);
 }
 
 static void OnNextClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   NextPage(+1);
 }
 
 static void OnPrevClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   NextPage(-1);
 }
 
 static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
@@ -823,8 +823,8 @@ static void OnPaste(WindowControl *Sender) {
   }
 
   if(MessageBoxX(gettext(_T("Overwrite?")),
-		 gettext(_T("InfoBox paste")),
-		 MB_YESNO|MB_ICONQUESTION) == IDYES) {
+                 gettext(_T("InfoBox paste")),
+                 MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
     for (unsigned item = 0; item < numInfoWindows; item++) {
       InfoBoxPropName(name, item, mode);
@@ -832,8 +832,8 @@ static void OnPaste(WindowControl *Sender) {
       wp = (WndProperty*)wf->FindByName(name);
       if (wp && (cpyInfoBox[item] >=0 ) &&
           ((unsigned)cpyInfoBox[item] < NUMSELECTSTRINGS)) {
-	wp->GetDataField()->Set(cpyInfoBox[item]);
-	wp->RefreshDisplay();
+        wp->GetDataField()->Set(cpyInfoBox[item]);
+        wp->RefreshDisplay();
       }
     }
   }
@@ -842,19 +842,19 @@ static void OnPaste(WindowControl *Sender) {
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
-	(void)Sender;
+  (void)Sender;
 
   switch (key_code) {
-    case '6':
-      ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-      NextPage(-1);
-      //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
+  case '6':
+    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
+    NextPage(-1);
+    //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
-    case '7':
-      ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-      NextPage(+1);
-      //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
+  case '7':
+    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
+    NextPage(+1);
+    //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
@@ -866,7 +866,7 @@ static void SetLocalTime(void) {
   WndProperty* wp;
   TCHAR temp[20];
   Units::TimeToText(temp,
-		    (int)TimeLocal((int)(XCSoarInterface::Basic().Time)));
+                    (int)TimeLocal((int)(XCSoarInterface::Basic().Time)));
 
   wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
   if (wp) {
@@ -876,20 +876,20 @@ static void SetLocalTime(void) {
 }
 
 static void OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode){
-//  WndProperty* wp;
+  //  WndProperty* wp;
   int ival;
 
   switch(Mode){
-    case DataField::daGet:
+  case DataField::daGet:
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      ival = iround(Sender->GetAsFloat()*3600.0);
-      if (XCSoarInterface::SettingsComputer().UTCOffset != ival) {
-	XCSoarInterface::SetSettingsComputer().UTCOffset = ival;
-	utcchanged = true;
-      }
-      SetLocalTime();
+  case DataField::daPut:
+  case DataField::daChange:
+    ival = iround(Sender->GetAsFloat()*3600.0);
+    if (XCSoarInterface::SettingsComputer().UTCOffset != ival) {
+      XCSoarInterface::SetSettingsComputer().UTCOffset = ival;
+      utcchanged = true;
+    }
+    SetLocalTime();
     break;
   }
 
@@ -901,21 +901,21 @@ static void OnPolarFileData(DataField *Sender, DataField::DataAccessKind_t Mode)
   WndProperty* wp;
 
   switch(Mode){
-    case DataField::daGet:
+  case DataField::daGet:
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      if (Sender->GetAsString() != NULL && _tcscmp(Sender->GetAsString(), _T("")) != 0){
-        // then ... set Polar Tape to Winpilot
+  case DataField::daPut:
+  case DataField::daChange:
+    if (Sender->GetAsString() != NULL && _tcscmp(Sender->GetAsString(), _T("")) != 0){
+      // then ... set Polar Tape to Winpilot
 
-        wp = (WndProperty *)wf->FindByName(_T("prpPolarType"));
+      wp = (WndProperty *)wf->FindByName(_T("prpPolarType"));
 
-        if (wp != NULL){
-          wp->GetDataField()->SetAsInteger(POLARUSEWINPILOTFILE);
-          wp->RefreshDisplay();
-        }
-
+      if (wp != NULL){
+        wp->GetDataField()->SetAsInteger(POLARUSEWINPILOTFILE);
+        wp->RefreshDisplay();
       }
+
+    }
     break;
   }
 
@@ -926,28 +926,28 @@ static void OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
   WndProperty* wp;
 
   switch(Mode){
-    case DataField::daGet:
+  case DataField::daGet:
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      wp = (WndProperty *)wf->FindByName(_T("prpPolarFile"));
+  case DataField::daPut:
+  case DataField::daChange:
+    wp = (WndProperty *)wf->FindByName(_T("prpPolarFile"));
 
-      if (Sender->GetAsInteger() != POLARUSEWINPILOTFILE){
-        // then ... clear Winpilot File if Polar Type is not WinpilotFile
+    if (Sender->GetAsInteger() != POLARUSEWINPILOTFILE){
+      // then ... clear Winpilot File if Polar Type is not WinpilotFile
 
-        if (wp != NULL && wp->GetDataField()->GetAsInteger() > 0){
-          lastSelectedPolarFile = wp->GetDataField()->GetAsInteger();
-          wp->GetDataField()->SetAsInteger(-1);
-          wp->RefreshDisplay();
-        }
-
-      } else {
-        if (wp != NULL && wp->GetDataField()->GetAsInteger() <= 0 && lastSelectedPolarFile > 0){
-          wp->GetDataField()->SetAsInteger(lastSelectedPolarFile);
-          wp->RefreshDisplay();
-        }
-
+      if (wp != NULL && wp->GetDataField()->GetAsInteger() > 0){
+        lastSelectedPolarFile = wp->GetDataField()->GetAsInteger();
+        wp->GetDataField()->SetAsInteger(-1);
+        wp->RefreshDisplay();
       }
+
+    } else {
+      if (wp != NULL && wp->GetDataField()->GetAsInteger() <= 0 && lastSelectedPolarFile > 0){
+        wp->GetDataField()->SetAsInteger(lastSelectedPolarFile);
+        wp->RefreshDisplay();
+      }
+
+    }
     break;
   }
 
@@ -982,8 +982,8 @@ static void OnWaypointEditClicked(WindowControl * Sender){
       }
     } else {
       MessageBoxX (
-		   gettext(TEXT("Waypoint not editable")),
-		   TEXT("Error"), MB_OK);
+                   gettext(TEXT("Waypoint not editable")),
+                   TEXT("Error"), MB_OK);
     }
   }
 }
@@ -1020,7 +1020,7 @@ static void OnWaypointSaveClicked(WindowControl * Sender){
 
 
 static void OnWaypointDeleteClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
 #ifdef OLD_TASK
   int res;
   res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
@@ -1142,17 +1142,17 @@ static void GetInfoBoxSelector(unsigned item, int mode)
 
       switch(mode) {
       case 0: // cruise
-	InfoBoxManager::setType(item, itnew, 1);
-	break;
+        InfoBoxManager::setType(item, itnew, 1);
+        break;
       case 1: // climb
-	InfoBoxManager::setType(item, itnew, 0);
-	break;
+        InfoBoxManager::setType(item, itnew, 0);
+        break;
       case 2: // final glide
-	InfoBoxManager::setType(item, itnew, 2);
-	break;
+        InfoBoxManager::setType(item, itnew, 2);
+        break;
       case 3: // aux
-	InfoBoxManager::setType(item, itnew, 3);
-	break;
+        InfoBoxManager::setType(item, itnew, 3);
+        break;
       };
       StoreType(item, InfoBoxManager::getTypeAll(item));
     }
@@ -1220,17 +1220,17 @@ static void setVariables(void) {
   UpdateButtons();
 
   /*
-  config_page = 0;
+    config_page = 0;
 
-  NextPage(0); // JMW just to turn proper pages on/off
+    NextPage(0); // JMW just to turn proper pages on/off
 
-  wf->ShowModal();
+    wf->ShowModal();
 
-  delete wf;
+    delete wf;
 
-  wf = NULL;
+    wf = NULL;
 
-  return;
+    return;
   */
 
   wp = (WndProperty*)wf->FindByName(_T("prpUserLevel"));
@@ -1243,12 +1243,18 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-    const TCHAR *COMMPort[] = {_T("COM1"),_T("COM2"),_T("COM3"),_T("COM4"),
-			       _T("COM5"),_T("COM6"),_T("COM7"),_T("COM8"),
-			       _T("COM9"),_T("COM10"),_T("COM0")};
-    const TCHAR *tSpeed[] = {_T("1200"),_T("2400"),_T("4800"),_T("9600"),
-			     _T("19200"),_T("38400"),_T("57600"),_T("115200")};
-//  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
+  const TCHAR *COMMPort[] = {
+    _T("COM1"), _T("COM2"), _T("COM3"), _T("COM4"),
+    _T("COM5"), _T("COM6"), _T("COM7"), _T("COM8"),
+    _T("COM9"), _T("COM10"), _T("COM0")
+  };
+
+  const TCHAR *tSpeed[] = {
+    _T("1200"), _T("2400"), _T("4800"), _T("9600"),
+    _T("19200"), _T("38400"), _T("57600"), _T("115200")
+  };
+
+  //  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
   ReadPort1Settings(&dwPortIndex1,&dwSpeedIndex1);
 
@@ -1712,9 +1718,9 @@ static void setVariables(void) {
       const TCHAR *name;
       name = GetWinPilotPolarInternalName(i);
       if (!name) {
-	ok=false;
+        ok=false;
       } else {
-	dfe->addEnumText(name);
+        dfe->addEnumText(name);
       }
       i++;
     }
@@ -1748,7 +1754,7 @@ static void setVariables(void) {
   }
 
   GetRegistryString(szRegistryAdditionalAirspaceFile,
-		    szAdditionalAirspaceFile, MAX_PATH);
+                    szAdditionalAirspaceFile, MAX_PATH);
   _tcscpy(temptext,szAdditionalAirspaceFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpAdditionalAirspaceFile"));
@@ -1774,7 +1780,7 @@ static void setVariables(void) {
   }
 
   GetRegistryString(szRegistryAdditionalWayPointFile,
-		    szAdditionalWaypointFile, MAX_PATH);
+                    szAdditionalWaypointFile, MAX_PATH);
   _tcscpy(temptext,szAdditionalWaypointFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpAdditionalWaypointFile"));
@@ -1888,7 +1894,7 @@ static void setVariables(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(_T("HighScore Style")));
     dfe->addEnumText(gettext(_T("Keyboard")));
-	dfe->Set(Appearance.TextInputStyle);
+    dfe->Set(Appearance.TextInputStyle);
     wp->RefreshDisplay();
   }
 
@@ -1969,30 +1975,30 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(_T("Nokia500"))); // VENTA3
     dfe->addEnumText(gettext(_T("PN6000")));
 
-	int iTmp;
-	switch (GlobalModelType) {
-		case MODELTYPE_PNA_PNA:
-				iTmp=(InfoBoxModelAppearance_t)apImPnaGeneric;
-				break;
-		case MODELTYPE_PNA_HP31X:
-				iTmp=(InfoBoxModelAppearance_t)apImPnaHp31x;
-				break;
-		case MODELTYPE_PNA_PN6000:
-				iTmp=(InfoBoxModelAppearance_t)apImPnaPn6000;
-				break;
-		case MODELTYPE_PNA_MIO:
-				iTmp=(InfoBoxModelAppearance_t)apImPnaMio;
-				break;
-		case MODELTYPE_PNA_NOKIA_500:
-				iTmp=(InfoBoxModelAppearance_t)apImPnaNokia500;
-				break;
-		case MODELTYPE_PNA_MEDION_P5:
-				iTmp=(InfoBoxModelAppearance_t)apImPnaMedionP5;
-				break;
-		default:
-				iTmp=(InfoBoxModelAppearance_t)apImPnaGeneric;
-				break;
-	}
+    int iTmp;
+    switch (GlobalModelType) {
+    case MODELTYPE_PNA_PNA:
+      iTmp=(InfoBoxModelAppearance_t)apImPnaGeneric;
+      break;
+    case MODELTYPE_PNA_HP31X:
+      iTmp=(InfoBoxModelAppearance_t)apImPnaHp31x;
+      break;
+    case MODELTYPE_PNA_PN6000:
+      iTmp=(InfoBoxModelAppearance_t)apImPnaPn6000;
+      break;
+    case MODELTYPE_PNA_MIO:
+      iTmp=(InfoBoxModelAppearance_t)apImPnaMio;
+      break;
+    case MODELTYPE_PNA_NOKIA_500:
+      iTmp=(InfoBoxModelAppearance_t)apImPnaNokia500;
+      break;
+    case MODELTYPE_PNA_MEDION_P5:
+      iTmp=(InfoBoxModelAppearance_t)apImPnaMedionP5;
+      break;
+    default:
+      iTmp=(InfoBoxModelAppearance_t)apImPnaGeneric;
+      break;
+    }
 
     dfe->Set(iTmp);
     wp->RefreshDisplay();
@@ -2416,17 +2422,17 @@ void dlgConfigurationShowModal(void){
   // below after exit.
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAbortSafetyUseCurrent"),
-				      szRegistryAbortSafetyUseCurrent,
-				      XCSoarInterface::SetSettingsComputer().AbortSafetyUseCurrent);
+                                      szRegistryAbortSafetyUseCurrent,
+                                      XCSoarInterface::SetSettingsComputer().AbortSafetyUseCurrent);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpDisableAutoLogger"));
   if (wp) { // GUI label is "Enable Auto Logger"
     if (!XCSoarInterface::SetSettingsComputer().DisableAutoLogger
-          != wp->GetDataField()->GetAsBoolean()) {
+        != wp->GetDataField()->GetAsBoolean()) {
       XCSoarInterface::SetSettingsComputer().DisableAutoLogger =
-          !(wp->GetDataField()->GetAsBoolean());
+        !(wp->GetDataField()->GetAsBoolean());
       SetToRegistry(szRegistryDisableAutoLogger,
-          XCSoarInterface::SetSettingsComputer().DisableAutoLogger);
+                    XCSoarInterface::SetSettingsComputer().DisableAutoLogger);
       changed = true;
     }
   }
@@ -2438,7 +2444,7 @@ void dlgConfigurationShowModal(void){
     if (XCSoarInterface::SettingsComputer().SafetyMacCready != val) {
       XCSoarInterface::SetSettingsComputer().SafetyMacCready = val;
       SetToRegistry(szRegistrySafetyMacCready,
-		    iround(XCSoarInterface::SettingsComputer().SafetyMacCready*10));
+                    iround(XCSoarInterface::SettingsComputer().SafetyMacCready*10));
       changed = true;
     }
   }
@@ -2449,26 +2455,26 @@ void dlgConfigurationShowModal(void){
     if (XCSoarInterface::SettingsComputer().risk_gamma != val) {
       XCSoarInterface::SetSettingsComputer().risk_gamma = val;
       SetToRegistry(szRegistryRiskGamma,
-		    iround(XCSoarInterface::SettingsComputer().risk_gamma*10));
+                    iround(XCSoarInterface::SettingsComputer().risk_gamma*10));
       changed = true;
     }
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpSetSystemTimeFromGPS"),
-				      szRegistrySetSystemTimeFromGPS,
-				      XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS);
+                                      szRegistrySetSystemTimeFromGPS,
+                                      XCSoarInterface::SetSettingsMap().SetSystemTimeFromGPS);
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableAnimation"),
-				      szRegistryAnimation,
-				      XCSoarInterface::EnableAnimation);
+                                      szRegistryAnimation,
+                                      XCSoarInterface::EnableAnimation);
   changed |= SetValueRegistryOnChange(wf, _T("prpTrailDrift"),
-				      szRegistryTrailDrift,
-				      XCSoarInterface::SetSettingsMap().EnableTrailDrift);
+                                      szRegistryTrailDrift,
+                                      XCSoarInterface::SetSettingsMap().EnableTrailDrift);
   changed |= SetValueRegistryOnChange(wf, _T("prpThermalLocator"),
-				      szRegistryThermalLocator,
-				      XCSoarInterface::SetSettingsComputer().EnableThermalLocator);
+                                      szRegistryThermalLocator,
+                                      XCSoarInterface::SetSettingsComputer().EnableThermalLocator);
   changed |= SetValueRegistryOnChange(wf, _T("prpTrail"),
-				      szRegistrySnailTrail,
-				      XCSoarInterface::SetSettingsMap().TrailActive);
+                                      szRegistrySnailTrail,
+                                      XCSoarInterface::SetSettingsMap().TrailActive);
 
 // VENTA3: do not save VisualGlide to registry or profile
 
@@ -2484,24 +2490,24 @@ void dlgConfigurationShowModal(void){
 
   short tmp = XCSoarInterface::SetSettingsComputer().AltitudeMode;
   changed |= SetValueRegistryOnChange(wf, _T("prpAirspaceDisplay"),
-				      szRegistryAltMode, tmp);
+                                      szRegistryAltMode, tmp);
   XCSoarInterface::SetSettingsComputer().AltitudeMode = (AirspaceDisplayMode_t)tmp;
 
   changed |= SetValueRegistryOnChange(wf, _T("prpLockSettingsInFlight"),
-				      szRegistryLockSettingsInFlight,
-				      XCSoarInterface::LockSettingsInFlight);
+                                      szRegistryLockSettingsInFlight,
+                                      XCSoarInterface::LockSettingsInFlight);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpLoggerShortName"),
-				      szRegistryLoggerShort,
-				      XCSoarInterface::SetSettingsComputer().LoggerShortName);
+                                      szRegistryLoggerShort,
+                                      XCSoarInterface::SetSettingsComputer().LoggerShortName);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableFLARMMap"),
-				      szRegistryEnableFLARMMap,
-				      XCSoarInterface::SetSettingsMap().EnableFLARMMap);
+                                      szRegistryEnableFLARMMap,
+                                      XCSoarInterface::SetSettingsMap().EnableFLARMMap);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableFLARMGauge"),
-				      szRegistryEnableFLARMGauge,
-				      XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
+                                      szRegistryEnableFLARMGauge,
+                                      XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
 
   wp = (WndProperty*)wf->FindByName(_T("prpDebounceTimeout"));
   if (wp) {
@@ -2513,12 +2519,12 @@ void dlgConfigurationShowModal(void){
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAirspaceOutline"),
-				      szRegistryAirspaceBlackOutline,
-				      XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
+                                      szRegistryAirspaceBlackOutline,
+                                      XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAutoZoom"),
-				      szRegistryAutoZoom,
-				      XCSoarInterface::SetSettingsMap().AutoZoom);
+                                      szRegistryAutoZoom,
+                                      XCSoarInterface::SetSettingsMap().AutoZoom);
 
   int ival;
 
@@ -2557,39 +2563,39 @@ void dlgConfigurationShowModal(void){
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAirspaceWarnings"),
-				      szRegistryAirspaceWarning,
-				      XCSoarInterface::SetSettingsComputer().EnableAirspaceWarnings);
+                                      szRegistryAirspaceWarning,
+                                      XCSoarInterface::SetSettingsComputer().EnableAirspaceWarnings);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpWarningTime"),
-				      szRegistryWarningTime,
-				      XCSoarInterface::SetSettingsComputer().WarningTime);
+                                      szRegistryWarningTime,
+                                      XCSoarInterface::SetSettingsComputer().WarningTime);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAcknowledgementTime"),
-				      szRegistryAcknowledgementTime,
-				      XCSoarInterface::SetSettingsComputer().AcknowledgementTime);
+                                      szRegistryAcknowledgementTime,
+                                      XCSoarInterface::SetSettingsComputer().AcknowledgementTime);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpWaypointLabels"),
-				      szRegistryDisplayText,
-				      XCSoarInterface::SetSettingsMap().DisplayTextType);
+                                      szRegistryDisplayText,
+                                      XCSoarInterface::SetSettingsMap().DisplayTextType);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableTerrain"),
-				      szRegistryDrawTerrain,
-				      XCSoarInterface::SetSettingsMap().EnableTerrain);
+                                      szRegistryDrawTerrain,
+                                      XCSoarInterface::SetSettingsMap().EnableTerrain);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableTopology"),
-				      szRegistryDrawTopology,
-				      XCSoarInterface::SetSettingsMap().EnableTopology);
+                                      szRegistryDrawTopology,
+                                      XCSoarInterface::SetSettingsMap().EnableTopology);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpCirclingZoom"),
-				      szRegistryCircleZoom,
-				      XCSoarInterface::SetSettingsMap().CircleZoom);
+                                      szRegistryCircleZoom,
+                                      XCSoarInterface::SetSettingsMap().CircleZoom);
 
   wp = (WndProperty*)wf->FindByName(_T("prpOrientation"));
   if (wp) {
     if (XCSoarInterface::SettingsMap().DisplayOrientation != wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::SetSettingsMap().DisplayOrientation = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryDisplayUpValue,
-		    XCSoarInterface::SettingsMap().DisplayOrientation);
+                    XCSoarInterface::SettingsMap().DisplayOrientation);
       changed = true;
     }
   }
@@ -2609,7 +2615,7 @@ void dlgConfigurationShowModal(void){
     if (XCSoarInterface::SettingsComputer().SafetyAltitudeArrival != ival) {
       XCSoarInterface::SetSettingsComputer().SafetyAltitudeArrival = ival;
       SetToRegistry(szRegistrySafetyAltitudeArrival,
-		    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeArrival);
+                    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeArrival);
       changed = true;
     }
   }
@@ -2620,7 +2626,7 @@ void dlgConfigurationShowModal(void){
     if (XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff != ival) {
       XCSoarInterface::SetSettingsComputer().SafetyAltitudeBreakoff = ival;
       SetToRegistry(szRegistrySafetyAltitudeBreakOff,
-		    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff);
+                    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff);
       changed = true;
     }
   }
@@ -2631,22 +2637,22 @@ void dlgConfigurationShowModal(void){
     if (XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain != ival) {
       XCSoarInterface::SetSettingsComputer().SafetyAltitudeTerrain = ival;
       SetToRegistry(szRegistrySafetyAltitudeTerrain,
-		    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain);
+                    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain);
       changed = true;
     }
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAutoWind"),
-				      szRegistryAutoWind,
-				      XCSoarInterface::SetSettingsComputer().AutoWindMode);
+                                      szRegistryAutoWind,
+                                      XCSoarInterface::SetSettingsComputer().AutoWindMode);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpWindArrowStyle"),
-				      szRegistryWindArrowStyle,
-				      XCSoarInterface::SetSettingsMap().WindArrowStyle);
+                                      szRegistryWindArrowStyle,
+                                      XCSoarInterface::SetSettingsMap().WindArrowStyle);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAutoMcMode"),
-				      szRegistryAutoMcMode,
-				      XCSoarInterface::SetSettingsComputer().AutoMacCreadyMode);
+                                      szRegistryAutoMcMode,
+                                      XCSoarInterface::SetSettingsComputer().AutoMacCreadyMode);
 
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointsOutOfRange"));
   if (wp) {
@@ -2659,20 +2665,20 @@ void dlgConfigurationShowModal(void){
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAutoForceFinalGlide"),
-				      szRegistryAutoForceFinalGlide,
-				      XCSoarInterface::SetSettingsComputer().AutoForceFinalGlide);
+                                      szRegistryAutoForceFinalGlide,
+                                      XCSoarInterface::SetSettingsComputer().AutoForceFinalGlide);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableNavBaroAltitude"),
-				      szRegistryEnableNavBaroAltitude,
-				      XCSoarInterface::SetSettingsComputer().EnableNavBaroAltitude);
+                                      szRegistryEnableNavBaroAltitude,
+                                      XCSoarInterface::SetSettingsComputer().EnableNavBaroAltitude);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpFinalGlideTerrain"),
-				      szRegistryFinalGlideTerrain,
-				      XCSoarInterface::SetSettingsComputer().FinalGlideTerrain);
+                                      szRegistryFinalGlideTerrain,
+                                      XCSoarInterface::SetSettingsComputer().FinalGlideTerrain);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpBlockSTF"),
-				      szRegistryBlockSTF,
-				      XCSoarInterface::SetSettingsComputer().EnableBlockSTF);
+                                      szRegistryBlockSTF,
+                                      XCSoarInterface::SetSettingsComputer().EnableBlockSTF);
 
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
   if (wp) {
@@ -2760,8 +2766,8 @@ void dlgConfigurationShowModal(void){
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpHandicap"),
-				      szRegistryHandicap,
-				      XCSoarInterface::SetSettingsComputer().olc_handicap);
+                                      szRegistryHandicap,
+                                      XCSoarInterface::SetSettingsComputer().olc_handicap);
 
   wp = (WndProperty*)wf->FindByName(_T("prpPolarFile"));
   if (wp) {
@@ -2920,8 +2926,8 @@ void dlgConfigurationShowModal(void){
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpBallastSecsToEmpty"),
-				      szRegistryBallastSecsToEmpty,
-				      XCSoarInterface::SetSettingsComputer().BallastSecsToEmpty);
+                                      szRegistryBallastSecsToEmpty,
+                                      XCSoarInterface::SetSettingsComputer().BallastSecsToEmpty);
 
   wp = (WndProperty*)wf->FindByName(_T("prpMaxManoeuveringSpeed"));
   if (wp) {
@@ -3008,11 +3014,11 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpAppCompassAppearance"));
   if (wp) {
     if (Appearance.CompassAppearance != (CompassAppearance_t)
-	(wp->GetDataField()->GetAsInteger())) {
+        (wp->GetDataField()->GetAsInteger())) {
       Appearance.CompassAppearance = (CompassAppearance_t)
-	(wp->GetDataField()->GetAsInteger());
+        (wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryAppCompassAppearance,
-		    (DWORD)(Appearance.CompassAppearance));
+                    (DWORD)(Appearance.CompassAppearance));
       changed = true;
       requirerestart = true;
     }
@@ -3021,11 +3027,11 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
   if (wp) {
     if (Appearance.InfoBoxBorder != (InfoBoxBorderAppearance_t)
-	(wp->GetDataField()->GetAsInteger())) {
+        (wp->GetDataField()->GetAsInteger())) {
       Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)
-	(wp->GetDataField()->GetAsInteger());
+        (wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryAppInfoBoxBorder,
-		    (DWORD)(Appearance.InfoBoxBorder));
+                    (DWORD)(Appearance.InfoBoxBorder));
       changed = true;
       requirerestart = true;
     }
@@ -3034,22 +3040,22 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpExtendedVisualGlide")); // VENTA4
   if (wp) {
     if (XCSoarInterface::SettingsMap().ExtendedVisualGlide != (ExtendedVisualGlide_t)
-	(wp->GetDataField()->GetAsInteger())) {
+        (wp->GetDataField()->GetAsInteger())) {
       XCSoarInterface::SetSettingsMap().ExtendedVisualGlide = (ExtendedVisualGlide_t)
-	(wp->GetDataField()->GetAsInteger());
+        (wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryExtendedVisualGlide,
-		    (DWORD)(XCSoarInterface::SettingsMap().ExtendedVisualGlide));
+                    (DWORD)(XCSoarInterface::SettingsMap().ExtendedVisualGlide));
       changed = true;
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpVirtualKeys")); // VENTA6
   if (wp) {
     if (CommonInterface::VirtualKeys != (VirtualKeys_t)
-	(wp->GetDataField()->GetAsInteger())) {
+        (wp->GetDataField()->GetAsInteger())) {
       CommonInterface::VirtualKeys = (VirtualKeys_t)
-	(wp->GetDataField()->GetAsInteger());
+        (wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryVirtualKeys,
-		    (DWORD)(CommonInterface::VirtualKeys));
+                    (DWORD)(CommonInterface::VirtualKeys));
       changed = true;
     }
   }
@@ -3057,11 +3063,11 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime")); // VENTA6
   if (wp) {
     if (XCSoarInterface::SettingsComputer().AverEffTime !=
-	(wp->GetDataField()->GetAsInteger())) {
+        (wp->GetDataField()->GetAsInteger())) {
       XCSoarInterface::SetSettingsComputer().AverEffTime =
-	(wp->GetDataField()->GetAsInteger());
+        (wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryAverEffTime,
-		    (DWORD)(XCSoarInterface::SettingsComputer().AverEffTime));
+                    (DWORD)(XCSoarInterface::SettingsComputer().AverEffTime));
       changed = true;
       requirerestart = true;
     }
@@ -3069,7 +3075,7 @@ void dlgConfigurationShowModal(void){
 
 
 #if defined(PNA) || defined(FIVV)
-// VENTA-ADDON GEOM
+  // VENTA-ADDON GEOM
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
   if (wp) {
     if (Appearance.InfoBoxGeom != (InfoBoxGeomAppearance_t)
@@ -3082,11 +3088,11 @@ void dlgConfigurationShowModal(void){
       requirerestart = true;
     }
   }
-//
+  //
 #endif
 
 #if defined(PNA)
-// VENTA-ADDON MODEL CHANGE
+  // VENTA-ADDON MODEL CHANGE
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
   if (wp) {
     if (Appearance.InfoBoxModel != (InfoBoxModelAppearance_t)
@@ -3096,26 +3102,26 @@ void dlgConfigurationShowModal(void){
 
       switch (Appearance.InfoBoxModel) {
       case apImPnaGeneric:
-	GlobalModelType = MODELTYPE_PNA_PNA;
-	break;
+        GlobalModelType = MODELTYPE_PNA_PNA;
+        break;
       case apImPnaHp31x:
-	GlobalModelType = MODELTYPE_PNA_HP31X;
-	break;
+        GlobalModelType = MODELTYPE_PNA_HP31X;
+        break;
       case apImPnaPn6000:
-	GlobalModelType = MODELTYPE_PNA_PN6000;
-	break;
+        GlobalModelType = MODELTYPE_PNA_PN6000;
+        break;
       case apImPnaMio:
-	GlobalModelType = MODELTYPE_PNA_MIO;
-	break;
+        GlobalModelType = MODELTYPE_PNA_MIO;
+        break;
       case apImPnaNokia500:
-	GlobalModelType = MODELTYPE_PNA_NOKIA_500;
-	break;
+        GlobalModelType = MODELTYPE_PNA_NOKIA_500;
+        break;
       case apImPnaMedionP5:
-	GlobalModelType = MODELTYPE_PNA_MEDION_P5;
-	break;
+        GlobalModelType = MODELTYPE_PNA_MEDION_P5;
+        break;
       default:
-	GlobalModelType = MODELTYPE_UNKNOWN; // Can't happen, troubles ..
-	break;
+        GlobalModelType = MODELTYPE_UNKNOWN; // Can't happen, troubles ..
+        break;
 
       }
       SetToRegistry(szRegistryAppInfoBoxModel,
@@ -3157,36 +3163,36 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpAppStatusMessageAlignment"));
   if (wp) {
     if (Appearance.StateMessageAlign != (StateMessageAlign_t)
-	(wp->GetDataField()->GetAsInteger())) {
+        (wp->GetDataField()->GetAsInteger())) {
       Appearance.StateMessageAlign = (StateMessageAlign_t)
-	(wp->GetDataField()->GetAsInteger());
+        (wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryAppStatusMessageAlignment,
-		    (DWORD)(Appearance.StateMessageAlign));
+                    (DWORD)(Appearance.StateMessageAlign));
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpTextInput"));
   if (wp)
-  {
-    if (Appearance.TextInputStyle != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger()))
-      {
-	Appearance.TextInputStyle = (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
-	SetToRegistry(szRegistryAppTextInputStyle, (DWORD)(Appearance.TextInputStyle));
-	changed = true;
-      }
-  }
+    {
+      if (Appearance.TextInputStyle != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger()))
+        {
+          Appearance.TextInputStyle = (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
+          SetToRegistry(szRegistryAppTextInputStyle, (DWORD)(Appearance.TextInputStyle));
+          changed = true;
+        }
+    }
 
   wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
   if (wp)
-  {
-    if (g_eDialogStyle != (DialogStyle_t)(wp->GetDataField()->GetAsInteger()))
-      {
-	g_eDialogStyle = (DialogStyle_t)(wp->GetDataField()->GetAsInteger());
-	SetToRegistry(szRegistryAppDialogStyle, (DWORD)(g_eDialogStyle));
-	changed = true;
-      }
-  }
+    {
+      if (g_eDialogStyle != (DialogStyle_t)(wp->GetDataField()->GetAsInteger()))
+        {
+          g_eDialogStyle = (DialogStyle_t)(wp->GetDataField()->GetAsInteger());
+          SetToRegistry(szRegistryAppDialogStyle, (DWORD)(g_eDialogStyle));
+          changed = true;
+        }
+    }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppIndLandable"));
   if (wp) {
@@ -3199,8 +3205,8 @@ void dlgConfigurationShowModal(void){
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableExternalTriggerCruise"),
-				      szRegistryEnableExternalTriggerCruise,
-				      XCSoarInterface::SetSettingsComputer().EnableExternalTriggerCruise);
+                                      szRegistryEnableExternalTriggerCruise,
+                                      XCSoarInterface::SetSettingsComputer().EnableExternalTriggerCruise);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppInverseInfoBox"));
   if (wp) {
@@ -3213,8 +3219,8 @@ void dlgConfigurationShowModal(void){
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpGliderScreenPosition"),
-				      szRegistryGliderScreenPosition,
-				      XCSoarInterface::SetSettingsMap().GliderScreenPosition);
+                                      szRegistryGliderScreenPosition,
+                                      XCSoarInterface::SetSettingsMap().GliderScreenPosition);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppDefaultMapWidth"));
   if (wp) {
@@ -3229,7 +3235,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpAppAveNeedle"));
   if (wp) {
     if ((int)(Appearance.GaugeVarioAveNeedle) !=
-	wp->GetDataField()->GetAsInteger()) {
+        wp->GetDataField()->GetAsInteger()) {
       Appearance.GaugeVarioAveNeedle =
         (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppAveNeedle,Appearance.GaugeVarioAveNeedle);
@@ -3278,16 +3284,16 @@ void dlgConfigurationShowModal(void){
   }
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAppGaugeVarioMc"),
-				      szRegistryAppGaugeVarioMc,
-				      Appearance.GaugeVarioMc);
+                                      szRegistryAppGaugeVarioMc,
+                                      Appearance.GaugeVarioMc);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAppGaugeVarioBugs"),
-				      szRegistryAppGaugeVarioBugs,
-				      Appearance.GaugeVarioBugs);
+                                      szRegistryAppGaugeVarioBugs,
+                                      Appearance.GaugeVarioBugs);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAppGaugeVarioBallast"),
-				      szRegistryAppGaugeVarioBallast,
-				      Appearance.GaugeVarioBallast);
+                                      szRegistryAppGaugeVarioBallast,
+                                      Appearance.GaugeVarioBallast);
 
 #ifdef HAVE_BLANK
   wp = (WndProperty*)wf->FindByName(_T("prpAutoBlank"));
@@ -3301,17 +3307,17 @@ void dlgConfigurationShowModal(void){
 #endif
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAutoBacklight"), // VENTA4
-				      szRegistryAutoBacklight,
-				      CommonInterface::EnableAutoBacklight);
+                                      szRegistryAutoBacklight,
+                                      CommonInterface::EnableAutoBacklight);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAutoSoundVolume"), // VENTA4
-				      szRegistryAutoSoundVolume,
-				      CommonInterface::EnableAutoSoundVolume);
+                                      szRegistryAutoSoundVolume,
+                                      CommonInterface::EnableAutoSoundVolume);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainContrast"));
   if (wp) {
     if (iround(XCSoarInterface::SettingsMap().TerrainContrast*100/255) !=
-	wp->GetDataField()->GetAsInteger()) {
+        wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::SetSettingsMap().TerrainContrast = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
       SetToRegistry(szRegistryTerrainContrast,XCSoarInterface::SettingsMap().TerrainContrast);
       changed = true;
@@ -3321,18 +3327,18 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainBrightness"));
   if (wp) {
     if (iround(XCSoarInterface::SettingsMap().TerrainBrightness*100/255) !=
-	wp->GetDataField()->GetAsInteger()) {
+        wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::SetSettingsMap().TerrainBrightness = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
       SetToRegistry(szRegistryTerrainBrightness,
-		    XCSoarInterface::SettingsMap().TerrainBrightness);
+                    XCSoarInterface::SettingsMap().TerrainBrightness);
       changed = true;
     }
   }
 
   changed |= SetValueRegistryOnChange(wf,
-				      _T("prpTerrainRamp"),
-				      szRegistryTerrainRamp,
-				      XCSoarInterface::SetSettingsMap().TerrainRamp);
+                                      _T("prpTerrainRamp"),
+                                      szRegistryTerrainRamp,
+                                      XCSoarInterface::SetSettingsMap().TerrainRamp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
@@ -3405,12 +3411,12 @@ void dlgConfigurationShowModal(void){
   settings_task.AutoAdvance = (AutoAdvanceMode_t)tmp;
 
   changed |= SetValueRegistryOnChange(wf, _T("prpLoggerTimeStepCruise"),
-				      szRegistryLoggerTimeStepCruise,
-				      XCSoarInterface::SetSettingsComputer().LoggerTimeStepCruise);
+                                      szRegistryLoggerTimeStepCruise,
+                                      XCSoarInterface::SetSettingsComputer().LoggerTimeStepCruise);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpLoggerTimeStepCircling"),
-				      szRegistryLoggerTimeStepCircling,
-				      XCSoarInterface::SetSettingsComputer().LoggerTimeStepCircling);
+                                      szRegistryLoggerTimeStepCircling,
+                                      XCSoarInterface::SetSettingsComputer().LoggerTimeStepCircling);
 
   wp = (WndProperty*)wf->FindByName(_T("prpComPort1"));
   if (wp) {
@@ -3475,7 +3481,7 @@ void dlgConfigurationShowModal(void){
     if (XCSoarInterface::SettingsMap().SnailWidthScale != wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::SetSettingsMap().SnailWidthScale = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistrySnailWidthScale,
-		    XCSoarInterface::SettingsMap().SnailWidthScale);
+                    XCSoarInterface::SettingsMap().SnailWidthScale);
       changed = true;
       requirerestart = true;
     }
@@ -3528,14 +3534,12 @@ void dlgConfigurationShowModal(void){
     Profile::StoreRegistry();
 
     if (!requirerestart) {
-      MessageBoxX (
-		   gettext(_T("Changes to configuration saved.")),
-		   _T(""), MB_OK);
+      MessageBoxX(gettext(_T("Changes to configuration saved.")),
+                  _T(""), MB_OK);
     } else {
 
-      MessageBoxX (
-		   gettext(_T("Changes to configuration saved.  Restart XCSoar to apply changes.")),
-		   _T(""), MB_OK);
+      MessageBoxX(gettext(_T("Changes to configuration saved.  Restart XCSoar to apply changes.")),
+                  _T(""), MB_OK);
     }
   }
 
