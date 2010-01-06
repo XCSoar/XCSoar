@@ -50,13 +50,26 @@ Copyright_License {
 #include <assert.h>
 #include <limits.h>
 
+static WndForm *
+FindForm(WindowControl *w)
+{
+  assert(w != NULL);
+
+  while (true) {
+    WindowControl *parent = w->GetOwner();
+    if (parent == NULL)
+      return (WndForm *)w;
+    w = parent;
+  }
+}
+
 /**
  * This event is triggered when a button of the MessageBox is pressed
  */
 static void
 OnButtonClick(WindowControl * Sender)
 {
-  ((WndForm *) Sender->GetOwner()->GetOwner())->SetModalResult(Sender->GetTag());
+  FindForm(Sender)->SetModalResult(Sender->GetTag());
 }
 
 // Message Box Replacement
