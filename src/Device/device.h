@@ -45,6 +45,7 @@ Copyright_License {
 #endif
 #include "Device/Declaration.hpp"
 
+#include <tchar.h>
 #include <stdio.h>
 
 struct NMEA_INFO;
@@ -130,7 +131,7 @@ void AllDevicesPutVoice(const TCHAR *sentence);
 
 void AllDevicesLinkTimeout();
 
-void devStartup(LPTSTR lpCmdLine);
+void devStartup(const TCHAR *lpCmdLine);
 void devShutdown();
 void devRestart(void);
 void devConnectionMonitor();

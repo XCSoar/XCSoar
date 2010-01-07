@@ -243,7 +243,7 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
 }
 
 static bool
-devInit(LPCTSTR CommandLine)
+devInit(const TCHAR *CommandLine)
 {
   int i;
   struct DeviceDescriptor *pDevNmeaOut = NULL;
@@ -833,7 +833,7 @@ AllDevicesLinkTimeout()
 }
 
 void
-devStartup(LPTSTR lpCmdLine)
+devStartup(const TCHAR *lpCmdLine)
 {
   StartupStore(_T("Register serial devices\n"));
 
