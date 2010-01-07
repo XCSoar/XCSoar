@@ -44,10 +44,10 @@ Copyright_License {
 #include "TeamCodeCalculation.h"
 #include "UtilsFLARM.hpp"
 #include "Asset.hpp"
-#include "Device/Parser.h"
+#include "Device/Parser.hpp"
+#include "Device/device.hpp"
 #include "Math/Constants.h"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Device/device.h"
 
 DeviceBlackboard device_blackboard;
 

@@ -43,7 +43,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Units.h"
 #include "Message.h"
-#include "Device/device.h"
+#include "Device/device.hpp"
 #include "SettingsTask.hpp"
 #include "Protection.hpp"
 #include "Math/SunEphemeris.hpp"

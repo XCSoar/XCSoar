@@ -63,7 +63,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "LogFile.hpp"
-#include "Device/Parser.h"
+#include "Device/Parser.hpp"
+#include "Device/device.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
@@ -73,7 +74,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Marks.h"
 #include "InfoBoxLayout.h"
 #include "InfoBoxManager.h"
-#include "Device/device.h"
 #include "Units.hpp"
 #include "MainWindow.hpp"
 #include "Atmosphere.h"
@@ -1072,8 +1072,6 @@ InputEvents::eventAbortTask(const TCHAR *misc)
       task_manager.abort();
   }
 }
-
-#include "Device/device.h"
 
 // Bugs
 // Adjusts the degradation of glider performance due to bugs

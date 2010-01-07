@@ -38,12 +38,12 @@ Copyright_License {
 
 */
 
-#include "Device/Parser.h"
+#include "Device/Parser.hpp"
+#include "Device/device.hpp"
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include <math.h>
 #include "Audio/VarioSound.h"
-#include "Device/device.h"
 #include "Device/Geoid.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"

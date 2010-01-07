@@ -16,7 +16,7 @@
  ***********************************************************************/
 
 #include "Device/Volkslogger/vla_support.h"
-#include "Device/Port.h"
+#include "Device/Port.hpp"
 #include "Interface.hpp"
 
 #include <stdio.h>

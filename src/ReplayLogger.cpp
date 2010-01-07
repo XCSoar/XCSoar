@@ -41,7 +41,7 @@
 #include "Protection.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "Device/Port.h"
+#include "Device/Port.hpp"
 #include "SettingsTask.hpp"
 #include "Registry.hpp"
 #include "Math/Earth.hpp"
@@ -50,7 +50,7 @@
 #include "StringUtil.hpp"
 #include "UtilsText.hpp"
 #include "LocalPath.hpp"
-#include "Device/device.h"
+#include "Device/device.hpp"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 

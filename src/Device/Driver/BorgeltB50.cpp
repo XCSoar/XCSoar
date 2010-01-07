@@ -37,9 +37,9 @@ Copyright_License {
 */
 
 #include "Device/Driver/BorgeltB50.hpp"
+#include "Device/Parser.hpp"
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
-#include "Device/Parser.h"
 #include "Math/Units.h"
 #include "NMEA/Info.h"
 

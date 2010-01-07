@@ -49,7 +49,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
 #include "Logger.h"
-#include "Device/device.h"
+#include "Device/device.hpp"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"

@@ -38,8 +38,8 @@ Copyright_License {
 
 #include "Device/FLARM.hpp"
 #include "Device/Internal.hpp"
-#include "Device/device.h"
-#include "Device/Port.h"
+#include "Device/device.hpp"
+#include "Device/Port.hpp"
 
 #include <assert.h>
 #include <tchar.h>

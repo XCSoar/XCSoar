@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Registry.hpp"
 #include "StringUtil.hpp"
-#include "Device/device.h"
+#include "Device/device.hpp"
 #include "LogFile.hpp"
 #include "Defines.h"
 

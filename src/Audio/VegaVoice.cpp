@@ -41,8 +41,9 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Protection.hpp"
 #include "InputEvents.h"  // used for altair beep hack
-#include "Device/device.h"
+#include "Device/device.hpp"
 #include "Units.hpp"
+
 #include <tchar.h>
 #include <math.h>
 

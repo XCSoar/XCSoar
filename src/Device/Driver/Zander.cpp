@@ -37,9 +37,9 @@ Copyright_License {
 */
 
 #include "Device/Driver/Zander.hpp"
+#include "Device/Parser.hpp"
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
-#include "Device/Parser.h"
 #include "NMEA/Info.h"
 
 #include <stdlib.h>

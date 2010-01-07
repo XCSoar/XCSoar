@@ -44,10 +44,10 @@ Copyright_License {
 // all other functions are called from windows message loop thread
 
 #include "Device/Driver/CAI302.hpp"
+#include "Device/Parser.hpp"
+#include "Device/Port.hpp"
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
-#include "Device/Parser.h"
-#include "Device/Port.h"
 #include "Math/Units.h"
 #include "NMEA/Info.h"
 

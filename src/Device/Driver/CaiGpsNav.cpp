@@ -45,7 +45,7 @@ Copyright_License {
 
 #include "Device/Driver/CaiGpsNav.hpp"
 #include "Device/Internal.hpp"
-#include "Device/Port.h"
+#include "Device/Port.hpp"
 
 #include <tchar.h>
 

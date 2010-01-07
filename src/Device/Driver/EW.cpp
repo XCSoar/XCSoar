@@ -43,7 +43,7 @@ Copyright_License {
 
 #include "Device/Driver/EW.hpp"
 #include "Device/Internal.hpp"
-#include "Device/Port.h"
+#include "Device/Port.hpp"
 #include "NMEA/Checksum.h"
 
 #include <tchar.h>

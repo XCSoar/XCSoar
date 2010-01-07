@@ -57,7 +57,7 @@ Copyright_License {
 #include "WayPointParser.h"
 #include "Logger.h"
 #include "wcecompat/ts_string.h"
-#include "Device/device.h"
+#include "Device/device.hpp"
 #include "InputEvents.h"
 #include "TopologyStore.h"
 #include "Dialogs.h"

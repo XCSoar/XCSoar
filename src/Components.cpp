@@ -65,7 +65,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "MapWindow.h"
 #include "Marks.h"
-#include "Device/device.h"
+#include "Device/device.hpp"
 #include "TopologyStore.h"
 #include "Topology.h"
 #include "Audio/VarioSound.h"

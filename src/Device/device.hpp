@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef	DEVICE_H
-#define	DEVICE_H
+#ifndef XCSOAR_DEVICE_DEVICE_HPP
+#define XCSOAR_DEVICE_DEVICE_HPP
 
 #ifdef OLD_TASK
 #include "WayPoint.hpp"

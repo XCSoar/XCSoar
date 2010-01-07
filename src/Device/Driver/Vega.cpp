@@ -37,10 +37,10 @@ Copyright_License {
 */
 
 #include "Device/Driver/Vega.hpp"
+#include "Device/Parser.hpp"
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
 #include "Message.h"
-#include "Device/Parser.h"
 #include "Registry.hpp"
 #include "DeviceBlackboard.hpp"
 #include "InputEvents.h"

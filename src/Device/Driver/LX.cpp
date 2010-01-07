@@ -38,9 +38,9 @@ Copyright_License {
 
 #include "Device/Driver/LX.hpp"
 #include "Device/Internal.hpp"
+#include "Device/Parser.hpp"
 #include "Protection.hpp"
 #include "Math/Units.h"
-#include "Device/Parser.h"
 #include "NMEA/Info.h"
 
 #include <tchar.h>

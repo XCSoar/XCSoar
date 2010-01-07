@@ -36,12 +36,12 @@ Copyright_License {
 }
 */
 
-#include "Device/Port.h"
+#include "Device/Port.hpp"
+#include "Device/device.hpp"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "Device/device.h"
 #include "Message.h"
 
 #include <windows.h>

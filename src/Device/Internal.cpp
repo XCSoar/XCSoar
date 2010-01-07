@@ -37,8 +37,8 @@ Copyright_License {
 */
 
 #include "Device/Internal.hpp"
-#include "Device/device.h"
-#include "Device/Port.h"
+#include "Device/device.hpp"
+#include "Device/Port.hpp"
 #include "NMEA/Checksum.h"
 
 #include <assert.h>

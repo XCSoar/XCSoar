@@ -40,7 +40,7 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
 #include "Math/Units.h"
-#include "Device/Parser.h"
+#include "Device/Parser.hpp"
 #include "NMEA/Info.h"
 #include <tchar.h>
 #include <stdlib.h>

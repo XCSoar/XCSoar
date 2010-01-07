@@ -41,7 +41,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "InputEvents.h"
 #include "ReplayLogger.hpp"
-#include "Device/device.h"
+#include "Device/device.hpp"
 #include "Dialogs.h"
 #include "Screen/Blank.hpp"
 #include "SettingsUser.hpp"
