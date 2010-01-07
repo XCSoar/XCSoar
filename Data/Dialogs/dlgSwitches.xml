@@ -10,7 +10,7 @@
 <WndForm Name="frmSwitches" Type="Dialog" X=0 Y=0 Width=300 Height=240 Caption="Switches" Font=2 BackColor=0xDADBAB>
   <WndButton   Caption="Close"    X=2 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
 
-  <WndFrame Name="frmFrm1" X=0 Y=30 Width=145 Height=200 Font=2>
+  <Panel Name="frmFrm1" X=0 Y=30 Width=145 Height=200 Font=2>
 
   <WndProperty Name="prpAirbrakeExtended" Caption="Airbrake locked"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
   <DataField name="" DataType="boolean" />
@@ -44,9 +44,9 @@
   <DataField name="" DataType="boolean" />
   </WndProperty>
 
-  </WndFrame>
+  </Panel>
 
-  <WndFrame Name="frmFrm2" X=150 Y=30 Width=145 Height=200 Font=2>
+  <Panel Name="frmFrm2" X=150 Y=30 Width=145 Height=200 Font=2>
 
   <WndProperty Name="prpUserSwitchUp" Caption="User up"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
   <DataField name="" DataType="boolean" />
@@ -68,7 +68,7 @@
   <DataField name="" DataType="boolean" />
   </WndProperty>
 
-  </WndFrame>
+  </Panel>
 
 </WndForm>
 

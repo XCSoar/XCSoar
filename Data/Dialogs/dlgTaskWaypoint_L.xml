@@ -16,7 +16,7 @@
   <WndButton  Name="butDown" Caption="Move down"    X=80 Y=25 Width=90  Height=22 Font=2 OnClickNotify="OnMoveAfterClicked"/>
   <WndButton  Name="butUp" Caption="Move up"    X=80 Y=50 Width=90  Height=22 Font=2 OnClickNotify="OnMoveBeforeClicked"/>
 
-  <WndFrame Name="frmStart" X=0 Y=80 Width=240 Height=220 Font=2>
+  <Panel Name="frmStart" X=0 Y=80 Width=240 Height=220 Font=2>
 
   <WndProperty Name="prpTaskStartLine" Caption="Start type"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Type of the start.
 [Line]: The task is started when the line is crossed.  The line length is set via the 'Start radius' property.
@@ -65,13 +65,13 @@
 
   <WndButton  Name="butRules" Caption="Task Rules"    X=150 Y=-1 Width=80  Height=22 Font=2 OnClickNotify="OnTaskRulesClicked"/>
 
-  </WndFrame>
+  </Panel>
 
-  <WndFrame Name="frmTurnpoint" X=0 Y=80 Width=240 Height=220 Font=2>
+  <Panel Name="frmTurnpoint" X=0 Y=80 Width=240 Height=220 Font=2>
 
-  </WndFrame>
+  </Panel>
 
-  <WndFrame Name="frmAATTurnpoint" X=0 Y=80 Width=240 Height=220 Font=2>
+  <Panel Name="frmAATTurnpoint" X=0 Y=80 Width=240 Height=220 Font=2>
 
     <WndProperty Name="prpAATType" Caption="Type"     X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 Help="Type of the AAT observation area:
 [Cylinder]: Defines a cylindrical AAT area, radius is defined by the 'Circle radius' properties.
@@ -95,9 +95,9 @@
     <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=360 Step=1/>
     </WndProperty>
 
-  </WndFrame>
+  </Panel>
 
-  <WndFrame Name="frmFinish" X=0 Y=80 Width=240 Height=220 Font=2>
+  <Panel Name="frmFinish" X=0 Y=80 Width=240 Height=220 Font=2>
 
   <WndProperty Name="prpTaskFinishLine" Caption="Finish type"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Type of the finish.
 [Line]: The task is finished when the line is crossed.  The line length is set via the 'Finish radius' property.
@@ -111,7 +111,7 @@
 
   </WndProperty>
 
-  </WndFrame>
+  </Panel>
 
 </WndForm>
 

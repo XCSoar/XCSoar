@@ -15,7 +15,7 @@
 
   <Tabbed Name="tabbed" X=0 Y=32 Width=230 Height=200>
 
-  <WndFrame Name="frmStatusFlight" X=0 Y=32 Width=230 Height=200 Font=2>
+  <Panel Name="frmStatusFlight" X=0 Y=32 Width=230 Height=200 Font=2>
 
   <WndProperty Name="prpLatitude"  Caption="Latitude"  X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpLongitude" Caption="Longitude" X=2 Y=-1  Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
@@ -25,9 +25,9 @@
   <WndProperty Name="prpBearing"   Caption="Bearing"   X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpDistance"  Caption="Distance"   X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
 
-  </WndFrame>
+  </Panel>
 
-  <WndFrame Name="frmStatusSystem" X=0 Y=32 Width=230 Height=200 Font=2>
+  <Panel Name="frmStatusSystem" X=0 Y=32 Width=230 Height=200 Font=2>
 
   <WndProperty Name="prpGPS"       Caption="GPS lock"       X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpNumSat"    Caption="Satellites in view"   X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
@@ -37,9 +37,9 @@
   <WndProperty Name="prpDeclared"    Caption="Declared"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpBattery"       Caption="Supply voltage"       X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
 
-  </WndFrame>
+  </Panel>
 
-  <WndFrame Name="frmStatusTask" X=0 Y=32 Width=230 Height=200 Font=2>
+  <Panel Name="frmStatusTask" X=0 Y=32 Width=230 Height=200 Font=2>
 
   <WndProperty Name="prpTaskTime" Caption="Assigned task time" X=2 Y=-1  Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
   <WndProperty Name="prpETETime"  Caption="Estimated task time"  X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
@@ -49,9 +49,9 @@
   <WndProperty Name="prpEstimatedSpeed"      Caption="Speed estimated"      X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
   <WndProperty Name="prpAverageSpeed"      Caption="Speed average"      X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
 
-  </WndFrame>
+  </Panel>
 
-  <WndFrame Name="frmStatusRules" X=0 Y=32 Width=230 Height=200 Font=2>
+  <Panel Name="frmStatusRules" X=0 Y=32 Width=230 Height=200 Font=2>
 
   <WndProperty Name="prpValidStart"      Caption="Valid start"      X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpStartTime"    Caption="Start time"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
@@ -61,15 +61,15 @@
   <WndProperty Name="prpFinishAlt" Caption="Finish alt min" X=2 Y=-1  Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpValidFinish"      Caption="Valid finish"      X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
 
-  </WndFrame>
+  </Panel>
 
-  <WndFrame Name="frmStatusTimes" X=0 Y=32 Width=230 Height=200 Font=2>
+  <Panel Name="frmStatusTimes" X=0 Y=32 Width=230 Height=200 Font=2>
   <WndProperty Name="prpLocalTime"    Caption="Local time"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpFlightTime"    Caption="Flight time"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpTakeoffTime"    Caption="Takeoff time"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpLandingTime"    Caption="Landing time"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpSunset"    Caption="Sunset"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
-  </WndFrame>
+  </Panel>
 
   </Tabbed>
 
