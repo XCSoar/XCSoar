@@ -112,15 +112,12 @@ WindowControl::WindowControl(ContainerControl *Owner,
   }
 
   set(Parent, X, Y, Width, Height,
-      false, false, false, false, false);
+      false, false, Visible, false, false);
 
   if (mOwner != NULL)
     mOwner->AddClient(this);
 
   get_canvas().background_transparent();
-
-  if (Visible)
-    show();
 }
 
 WindowControl::~WindowControl(void)
