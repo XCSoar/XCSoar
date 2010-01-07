@@ -39,7 +39,7 @@ Copyright_License {
 #include "Version.hpp"
 #include "Language.hpp"
 
-#define VERSION "5.2.5"
+#define VERSION "6.0~git"
 
 #ifdef GNAV
   #define TARGET "Altair"
