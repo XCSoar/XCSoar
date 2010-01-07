@@ -45,7 +45,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
 #include "Atmosphere.h"
-#include "Device/device.h"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 #include "Components.hpp"

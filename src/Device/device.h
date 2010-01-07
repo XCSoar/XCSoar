@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef	DEVICE_H
 #define	DEVICE_H
 
-#include "Port.h"
 #ifdef OLD_TASK
 #include "WayPoint.hpp"
 #endif
@@ -49,6 +48,7 @@ Copyright_License {
 #include <stdio.h>
 
 struct NMEA_INFO;
+class ComPort;
 class Device;
 struct AtmosphericPressure;
 

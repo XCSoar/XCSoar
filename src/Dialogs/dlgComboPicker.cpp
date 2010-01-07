@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Units.hpp"
-#include "Device/device.h"
 #include "InputEvents.h"
 #include "DataField/Base.hpp"
 #include "DataField/ComboList.hpp"

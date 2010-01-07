@@ -72,7 +72,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Polar/Loader.hpp"
 #include "Persist.hpp"
-#include "Device/Parser.h"
 #include "MainWindow.hpp"
 #include "resource.h"
 #include "GlideComputer.hpp"
