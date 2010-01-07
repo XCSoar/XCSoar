@@ -1,3 +1,3 @@
 %/dirstamp:
-	@mkdir -p $(@D)
-	@touch $@
+	@mkdir -p $(abspath $(@D))
+	@touch $(abspath $@)
