@@ -42,7 +42,15 @@ include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
 include $(topdir)/build/generate.mk
 include $(topdir)/build/doco.mk
+
+# Create libraries for zzip, jasper and compatibility stuff
+include $(topdir)/build/zzip.mk
+include $(topdir)/build/jasper.mk
+include $(topdir)/build/compat.mk
+include $(topdir)/build/shapelib.mk
+include $(topdir)/build/task.mk
 include $(topdir)/build/harness.mk
+
 include $(topdir)/build/test.mk
 
 ######## output files
@@ -68,8 +76,6 @@ LDFLAGS = $(TARGET_LDFLAGS) $(FLAGS_PROFILE)
 LDLIBS = $(TARGET_LDLIBS)
 
 ####### sources
-
-include $(topdir)/build/task.mk
 
 DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/AltairPro.cpp \
@@ -357,11 +363,11 @@ XCSOAR_SOURCES := \
 
 XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
 XCSOAR_LDADD = \
-	$(ENGINE_SRC_DIR)/task-$(TARGET).a \
-	$(SRC)/shapelib-$(TARGET).a \
-	$(SRC)/jasper-$(TARGET).a \
-	$(SRC)/zzip-$(TARGET).a \
-	$(SRC)/compat-$(TARGET).a
+	$(ENGINE_LIBS) \
+	$(SHAPELIB_LIBS) \
+	$(JASPER_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
 
 ifeq ($(HAVE_WIN32),y)
 XCSOAR_LDADD += $(SRC)/XCSoar-$(TARGET).rsc
@@ -436,15 +442,6 @@ XCSoarSetup.dll: $(XCSOARSETUP_OBJS)
 
 XCSoarLaunch.dll: $(XCSOARLAUNCH_OBJS)
 	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
-
-#
-# Create libraries for zzip, jasper and compatibility stuff
-#
-
-include $(topdir)/build/zzip.mk
-include $(topdir)/build/jasper.mk
-include $(topdir)/build/compat.mk
-include $(topdir)/build/shapelib.mk
 
 ####### shared objects
 #

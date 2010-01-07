@@ -120,6 +120,8 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Util/tstring.cpp \
 	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp
 
-$(ENGINE_SRC_DIR)/task-$(TARGET).a: $(call SRC_TO_OBJ,$(TASK_SRC))
+ENGINE_LIBS = $(ENGINE_SRC_DIR)/task-$(TARGET).a
+
+$(ENGINE_LIBS): $(call SRC_TO_OBJ,$(TASK_SRC))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^

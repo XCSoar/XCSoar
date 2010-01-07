@@ -6,6 +6,8 @@ ifeq ($(HAVE_POSIX)$(CONFIG_PC),nn)
 COMPAT += $(COMPATSRC)/errno.cpp
 endif
 
-$(SRC)/compat-$(TARGET).a: $(call SRC_TO_OBJ,$(COMPAT))
+COMPAT_LIBS = $(SRC)/compat-$(TARGET).a
+
+$(COMPAT_LIBS): $(call SRC_TO_OBJ,$(COMPAT))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^

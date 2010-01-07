@@ -11,6 +11,8 @@ ZZIP = \
 	$(ZZIPSRC)/zip.c 		$(ZZIPSRC)/zstat.c \
 	$(ZZIPSRC)/zutil.c
 
-$(SRC)/zzip-$(TARGET).a: $(call SRC_TO_OBJ,$(ZZIP))
+ZZIP_LIBS = $(SRC)/zzip-$(TARGET).a
+
+$(ZZIP_LIBS): $(call SRC_TO_OBJ,$(ZZIP))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^

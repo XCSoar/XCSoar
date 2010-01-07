@@ -9,6 +9,8 @@ SHAPELIB = \
 	$(SHPSRC)/maptree.c 	\
 	$(SHPSRC)/mapxbase.c 	
 
-$(SRC)/shapelib-$(TARGET).a: $(call SRC_TO_OBJ,$(SHAPELIB))
+SHAPELIB_LIBS = $(SRC)/shapelib-$(TARGET).a
+
+$(SHAPELIB_LIBS): $(call SRC_TO_OBJ,$(SHAPELIB))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^

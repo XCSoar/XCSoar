@@ -35,8 +35,8 @@ testslow:	$(TESTSLOW:.exe=-$(TARGET).exe)
 testfast:	$(TESTFAST:.exe=-$(TARGET).exe)
 	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTFAST:.exe=-$(TARGET).exe)
 
-TESTLIBS = $(TEST_SRC_DIR)/harness-$(TARGET).a \
-	   $(ENGINE_SRC_DIR)/task-$(TARGET).a 
+TESTLIBS = $(HARNESS_LIBS) \
+	   $(ENGINE_LIBS)
 
 ifeq ($(HAVE_WIN32),n)
 TEST_CPPFLAGS += -DDO_PRINT
@@ -73,9 +73,9 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/RunWayPointParser.cpp
 RUN_WAY_POINT_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_WAY_POINT_PARSER_SOURCES))
 RUN_WAY_POINT_PARSER_LDADD = \
-	$(ENGINE_SRC_DIR)/task-$(TARGET).a \
-	$(SRC)/zzip-$(TARGET).a \
-	$(SRC)/compat-$(TARGET).a
+	$(ENGINE_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
 RunWayPointParser-$(TARGET)$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS) $(RUN_WAY_POINT_PARSER_LDADD)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
@@ -107,8 +107,8 @@ RUN_CANVAS_SOURCES += $(SRC)/Screen/PaintCanvas.cpp
 endif
 RUN_CANVAS_OBJS = $(call SRC_TO_OBJ,$(RUN_CANVAS_SOURCES))
 RUN_CANVAS_LDADD = \
-	$(ENGINE_SRC_DIR)/task-$(TARGET).a \
-	$(SRC)/compat-$(TARGET).a
+	$(ENGINE_LIBS) \
+	$(COMPAT_LIBS)
 RunCanvas-$(TARGET)$(TARGET_EXEEXT): $(RUN_CANVAS_OBJS) $(RUN_CANVAS_LDADD)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
@@ -204,10 +204,10 @@ RUN_MAP_WINDOW_SOURCES += $(SRC)/XCSoar-$(TARGET).rsc
 endif
 RUN_MAP_WINDOW_OBJS = $(call SRC_TO_OBJ,$(RUN_MAP_WINDOW_SOURCES))
 RUN_MAP_WINDOW_LDADD = \
-	$(ENGINE_SRC_DIR)/task-$(TARGET).a \
-	$(SRC)/jasper-$(TARGET).a \
-	$(SRC)/zzip-$(TARGET).a \
-	$(SRC)/compat-$(TARGET).a
+	$(ENGINE_LIBS) \
+	$(JASPER_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
 RunMapWindow-$(TARGET)$(TARGET_EXEEXT): $(RUN_MAP_WINDOW_OBJS) $(RUN_MAP_WINDOW_LDADD)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
@@ -269,9 +269,9 @@ RUN_DIALOG_SOURCES += $(SRC)/Screen/PaintCanvas.cpp
 endif
 RUN_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_DIALOG_SOURCES))
 RUN_DIALOG_LDADD = \
-	$(ENGINE_SRC_DIR)/task-$(TARGET).a \
-	$(SRC)/zzip-$(TARGET).a \
-	$(SRC)/compat-$(TARGET).a
+	$(ENGINE_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
 RunDialog-$(TARGET)$(TARGET_EXEEXT): $(RUN_DIALOG_OBJS) $(RUN_DIALOG_LDADD)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
