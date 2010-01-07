@@ -40,6 +40,7 @@ endif
 include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
+include $(topdir)/build/resource.mk
 include $(topdir)/build/generate.mk
 include $(topdir)/build/doco.mk
 
@@ -367,11 +368,8 @@ XCSOAR_LDADD = \
 	$(SHAPELIB_LIBS) \
 	$(JASPER_LIBS) \
 	$(ZZIP_LIBS) \
-	$(COMPAT_LIBS)
-
-ifeq ($(HAVE_WIN32),y)
-XCSOAR_LDADD += $(SRC)/XCSoar-$(TARGET).rsc
-endif
+	$(COMPAT_LIBS) \
+	$(RESOURCE_BINARY)
 
 XCSOARSETUP_SOURCES = \
 	$(SRC)/XCSoarSetup.cpp
@@ -442,14 +440,6 @@ XCSoarSetup.dll: $(XCSOARSETUP_OBJS)
 
 XCSoarLaunch.dll: $(XCSOARLAUNCH_OBJS)
 	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
-
-####### shared objects
-#
-# Tell make how to create a compiled resource object (rsc)
-#
-%-$(TARGET).rsc: %.rc $(wildcard Data/Dialogs/*.xml)
-	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<
 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
