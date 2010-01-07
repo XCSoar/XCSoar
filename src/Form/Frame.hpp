@@ -41,7 +41,7 @@ Copyright_License {
 
 #include "Form/Container.hpp"
 
-class WndFrame : public ContainerControl {
+class WndFrame : public WindowControl {
 public:
   WndFrame(ContainerControl *Owner, const TCHAR *Name,
            int X, int Y, int Width, int Height);

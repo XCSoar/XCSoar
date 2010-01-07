@@ -40,7 +40,7 @@ Copyright_License {
 
 WndFrame::WndFrame(ContainerControl *Owner, const TCHAR *Name,
                    int X, int Y, int Width, int Height)
-  :ContainerControl(Owner, NULL, Name, X, Y, Width, Height),
+  :WindowControl(Owner, NULL, Name, X, Y, Width, Height),
    mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
   SetForeColor(GetOwner()->GetForeColor());
@@ -82,7 +82,7 @@ WndFrame::GetTextHeight()
 void
 WndFrame::on_paint(Canvas &canvas)
 {
-  ContainerControl::on_paint(canvas);
+  WindowControl::on_paint(canvas);
 
   if (mCaption[0] != 0){
     canvas.set_text_color(GetForeColor());

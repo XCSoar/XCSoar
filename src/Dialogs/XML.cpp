@@ -658,11 +658,7 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
                                (WndOwnerDrawFrame::OnPaintCallback_t)
                                CallBackLookup(LookUpTable, PaintCallback));
   } else if (_tcscmp(node.getName(), _T("WndFrame")) == 0){
-    WndFrame *frame = new WndFrame(Parent, Name, X, Y, Width, Height);
-    WC = frame;
-
-    // recursivly create dialog
-    LoadChildrenFromXML(frame, LookUpTable, &node, ParentFont, eDialogStyle);
+    WC = new WndFrame(Parent, Name, X, Y, Width, Height);
   } else if (_tcscmp(node.getName(), _T("WndListFrame")) == 0){
     unsigned item_height =
       Layout::Scale(StringToIntDflt(node.getAttribute(_T("ItemHeight")), 18));
