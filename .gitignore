@@ -1,3 +1,4 @@
+results/res-*
 *.o
 *.a
 *.o.d
