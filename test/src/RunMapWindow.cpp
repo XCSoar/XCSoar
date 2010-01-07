@@ -164,7 +164,7 @@ GaugeCDI::GaugeCDI(ContainerWindow &parent) {}
 void GaugeCDI::Update(double TrackBearing, double WaypointBearing) {}
 
 int
-propGetScaleList(double *List, size_t Size)
+propGetScaleList(fixed *List, size_t Size)
 {
   return 0;
 }

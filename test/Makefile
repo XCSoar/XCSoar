@@ -119,12 +119,11 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindowTraffic.cpp \
 	$(SRC)/MapWindowTrail.cpp \
 	$(SRC)/MapWindowWaypoints.cpp \
+	$(SRC)/MapDrawHelper.cpp \
 	$(SRC)/Marks.cpp \
 	$(SRC)/Math/FastMath.c \
 	$(SRC)/Math/FastRotation.cpp \
 	$(SRC)/Math/Screen.cpp \
-	$(SRC)/MacCready.cpp \
-	$(SRC)/OnLineContest.cpp \
 	$(SRC)/RasterMapJPG2000.cpp \
 	$(SRC)/RasterMapRaw.cpp \
 	$(SRC)/RasterMapCache.cpp \
