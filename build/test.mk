@@ -38,6 +38,13 @@ testfast:	$(TESTFAST:.exe=-$(TARGET).exe)
 TESTLIBS = $(TEST_SRC_DIR)/harness-$(TARGET).a \
 	   $(ENGINE_SRC_DIR)/task-$(TARGET).a 
 
+ifeq ($(HAVE_WIN32),n)
+TEST_CPPFLAGS += -DDO_PRINT
+TEST_CPPFLAGS += -DINSTRUMENT_TASK
+CPPFLAGS += -DHAVE_TAP
+endif
+
+$(TESTS): CPPFLAGS += $(TEST_CPPFLAGS)
 $(TEST_SRC_DIR)/%-$(TARGET).exe: $(TEST_SRC_DIR)/%.cpp $(TESTLIBS)
 	@$(NQ)echo "  CXX/LN      $@"
 	$(Q)$(CXX) -o $@ $(cxx-flags) $(INCLUDES) $^ $(TARGET_LDLIBS)
