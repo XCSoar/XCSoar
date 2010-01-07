@@ -473,6 +473,7 @@ clean: clean-$(TARGET) cleani cleancov FORCE
 	$(Q)rm -rf output
 	$(Q)find src $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '.*.d' \) \
 	-type f -print | xargs -r $(RM)
+	$(RM) $(BUILDTESTS) $(DEBUG_PROGRAMS)
 
 cleancov: FORCE
 	@$(NQ)echo "cleaning cov"
@@ -498,7 +499,4 @@ endif
 ifneq ($(wildcard $(SRC)/*/.*.d),)
 include $(wildcard $(SRC)/*/.*.d)
 endif
-
-test: .PHONY
-	$(MAKE) -C test test
 
