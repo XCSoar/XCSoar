@@ -62,7 +62,7 @@ using std::max;
 void
 MapWindow::DrawTrail(Canvas &canvas)
 {
-  if(!SettingsMap().TrailActive)
+  if (!SettingsMap().TrailActive || task == NULL)
     return;
 
   unsigned min_time = 0;
