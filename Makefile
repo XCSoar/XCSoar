@@ -214,6 +214,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/PopupMessage.cpp \
 	$(SRC)/Form/Control.cpp \
 	$(SRC)/Form/Container.cpp \
+	$(SRC)/Form/Panel.cpp \
 	$(SRC)/Form/Form.cpp \
 	$(SRC)/Form/Button.cpp \
 	$(SRC)/Form/EventButton.cpp \

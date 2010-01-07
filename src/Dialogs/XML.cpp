@@ -59,6 +59,7 @@ Copyright_License {
 #include "Form/Draw.hpp"
 #include "Form/List.hpp"
 #include "Form/Tabbed.hpp"
+#include "Form/Panel.hpp"
 #include "StringUtil.hpp"
 
 #include <stdio.h>    // for _stprintf
@@ -643,6 +644,12 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
 
     Caption[0] = '\0';
 #endif
+  } else if (_tcscmp(node.getName(), _T("Panel")) == 0){
+    PanelControl *frame = new PanelControl(Parent, Name, X, Y, Width, Height);
+    WC = frame;
+
+    // recursivly create dialog
+    LoadChildrenFromXML(frame, LookUpTable, &node, ParentFont, eDialogStyle);
   } else if (_tcscmp(node.getName(), _T("WndOwnerDrawFrame")) == 0){
     TCHAR PaintCallback[128];
     _tcscpy(PaintCallback,
