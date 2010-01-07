@@ -15,6 +15,13 @@ STRIP = strip$(EXE)
 WINDRES = wrc$(EXE)
 endif
 
+####### paths
+
+OBJ_SUFFIX = -$(TARGET).o
+
+# Converts a list of source file names to *.o
+SRC_TO_OBJ = $(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(1)))
+
 ####### dependency handling
 
 DEPFILE = $(dir $@).$(notdir $@).d
