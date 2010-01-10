@@ -185,13 +185,11 @@ devRegisterGetName(int Index, TCHAR *Name)
 static const struct DeviceRegister *
 devGetDriver(const TCHAR *DevName)
 {
-  int i;
-
-  for (i = DeviceRegisterCount - 1; i >= 0; i--)
-    if (_tcscmp(DeviceRegister[i]->Name, DevName) == 0 || i == 0)
+  for (unsigned i = 1; DeviceRegister[i] != NULL; ++i)
+    if (_tcscmp(DeviceRegister[i]->Name, DevName) == 0)
       return DeviceRegister[i];
 
-  return NULL;
+  return DeviceRegister[0];
 }
 
 static bool
