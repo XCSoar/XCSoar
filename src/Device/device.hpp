@@ -43,6 +43,7 @@ Copyright_License {
 #include "WayPoint.hpp"
 #endif
 #include "Device/Declaration.hpp"
+#include "Device/Port.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -60,7 +61,7 @@ struct AtmosphericPressure;
 
 struct DeviceRegister;
 
-struct DeviceDescriptor {
+struct DeviceDescriptor : public ComPort::Handler {
   int	Port;
   FILE  *fhLogFile;
   ComPort *Com;
@@ -80,8 +81,10 @@ struct DeviceDescriptor {
   bool IsGPSSource() const;
   bool IsBaroSource() const;
 
+private:
   bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info);
 
+public:
   bool PutMacCready(double MacCready);
   bool PutBugs(double bugs);
   bool PutBallast(double ballast);
@@ -95,6 +98,8 @@ struct DeviceDescriptor {
   bool Declare(const struct Declaration *declaration);
 
   void OnSysTicker();
+
+  virtual void LineReceived(const TCHAR *line);
 };
 
 #define Port1WriteNMEA(s)	devWriteNMEAString(devA(), s)

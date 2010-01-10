@@ -50,7 +50,19 @@ struct DeviceDescriptor;
 class ComPort
 {
 public:
-  ComPort(struct DeviceDescriptor *d);
+  /**
+   * Interface with callbacks for the #ComPort class.
+   */
+  class Handler {
+  public:
+    virtual void LineReceived(const TCHAR *line) = 0;
+  };
+
+protected:
+  Handler &handler;
+
+public:
+  ComPort(Handler &_handler);
   ~ComPort()
   {
   }
@@ -85,7 +97,6 @@ private:
 
   TCHAR BuildingString[NMEA_BUF_SIZE];
   int bi;
-  struct DeviceDescriptor *dev;
 };
 
 #endif

@@ -37,9 +37,7 @@ Copyright_License {
 */
 
 #include "Device/Port.hpp"
-#include "Device/device.hpp"
 #include "Protection.hpp"
-#include "DeviceBlackboard.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Message.h"
@@ -67,7 +65,8 @@ ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *fmt, ...)
     Message::AddMessage(tmp);
 }
 
-ComPort::ComPort(struct DeviceDescriptor *d)
+ComPort::ComPort(Handler &_handler)
+  :handler(_handler)
 {
   hReadThread = NULL;
   CloseThread = 0;
@@ -76,7 +75,6 @@ ComPort::ComPort(struct DeviceDescriptor *d)
   hPort = INVALID_HANDLE_VALUE;
   BuildingString[0] = 0;
   bi = 0;
-  dev = d;
 }
 
 bool
@@ -572,7 +570,5 @@ ComPort::ProcessChar(char c)
   BuildingString[bi] = '\0';
   bi = 0;
 
-  mutexBlackboard.Lock();
-  dev->ParseNMEA(BuildingString, &device_blackboard.SetBasic());
-  mutexBlackboard.Unlock();
+  handler.LineReceived(BuildingString);
 }

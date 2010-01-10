@@ -61,7 +61,7 @@ public:
   void ReadSettingsMap(const SETTINGS_MAP &settings);
 
   // only the device blackboard can write to gps
-  friend class ComPort;
+  friend class DeviceDescriptor;
 protected:
   NMEA_INFO& SetBasic() { return gps_info; }
 public:

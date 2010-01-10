@@ -45,6 +45,7 @@ Copyright_License {
 #include "Device/FLARM.hpp"
 #include "Thread/Mutex.hpp"
 #include "LogFile.hpp"
+#include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
@@ -212,7 +213,7 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
   const struct DeviceRegister *Driver = devGetDriver(DeviceName);
 
   if (Driver) {
-    ComPort *Com = new ComPort(dev);
+    ComPort *Com = new ComPort(*dev);
 
     if (!Com->Initialize(port, speed))
       return false;
@@ -547,6 +548,14 @@ DeviceDescriptor::OnSysTicker()
   if (ticker)
     // write settings to vario every second
     device->OnSysTicker();
+}
+
+void
+DeviceDescriptor::LineReceived(const TCHAR *line)
+{
+  mutexBlackboard.Lock();
+  ParseNMEA(line, &device_blackboard.SetBasic());
+  mutexBlackboard.Unlock();
 }
 
 bool
