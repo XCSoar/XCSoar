@@ -308,7 +308,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 
   // VENTA3 use logs subdirectory when not in main memory (true for FIVV and PNA)
   #if defined(GNAV) || defined(FIVV) || defined(PNA)
-    LocalPath(path,TEXT("logs"));
+    LocalPath(path, _T("logs"));
   #else
     LocalPath(path);
   #endif
@@ -334,7 +334,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     if (!settings.LoggerShortName) {
       // Long file name
       _stprintf(szLoggerFileName,
-          TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
+                _T("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
           path,
           gps_info.Year,
           gps_info.Month,
@@ -351,7 +351,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
       cday = NumToIGCChar(gps_info.Day);
       cflight = NumToIGCChar(i);
       _stprintf(szLoggerFileName,
-          TEXT("%s\\%c%c%cX%c%c%c%c.IGC"),
+                _T("%s\\%c%c%cX%c%c%c%c.IGC"),
           path,
           cyear,
           cmonth,
@@ -375,9 +375,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 
   TCHAR szMessage[MAX_PATH];
 
-  _tcsncpy(szMessage, TEXT("Logger Started: "), MAX_PATH);
+  _tcsncpy(szMessage, _T("Logger Started: "), MAX_PATH);
   _tcsncat(szMessage, szLoggerFileName, MAX_PATH);
-  _tcsncat(szMessage, TEXT("\r\n"), MAX_PATH);
+  _tcsncat(szMessage, _T("\r\n"), MAX_PATH);
   StartupStore(szMessage);
 
   return;
@@ -422,7 +422,7 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
 
   TCHAR DeviceName[DEVNAMESIZE];
   if (is_simulator()) {
-    _tcscpy(DeviceName, TEXT("Simulator"));
+    _tcscpy(DeviceName, _T("Simulator"));
   } else {
     ReadDeviceSettings(0, DeviceName);
   }
@@ -545,14 +545,14 @@ LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev,
   if (!devIsLogger(dev))
     return false;
 
-  if (MessageBoxX(gettext(TEXT("Declare Task?")),
+  if (MessageBoxX(gettext(_T("Declare Task?")),
                   dev->Name, MB_YESNO| MB_ICONQUESTION) == IDYES) {
     if (devDeclare(dev, decl)) {
-      MessageBoxX(gettext(TEXT("Task Declared!")),
+      MessageBoxX(gettext(_T("Task Declared!")),
                   dev->Name, MB_OK| MB_ICONINFORMATION);
       DeclaredToDevice = true;
     } else {
-      MessageBoxX(gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
+      MessageBoxX(gettext(_T("Error occured,\r\nTask NOT Declared!")),
                   dev->Name, MB_OK| MB_ICONERROR);
       DeclaredToDevice = false;
     }
@@ -585,7 +585,7 @@ LoggerImpl::LoggerDeviceDeclare()
       found_logger = true;
 
   if (!found_logger) {
-    MessageBoxX(gettext(TEXT("No logger connected")),
+    MessageBoxX(gettext(_T("No logger connected")),
                 devB()->Name, MB_OK | MB_ICONINFORMATION);
     DeclaredToDevice = true; // testing only
   }
@@ -603,8 +603,8 @@ LoggerImpl::CheckDeclaration(void)
   if (!isTaskDeclared())
     return true;
 
-  if(MessageBoxX(gettext(TEXT("OK to invalidate declaration?")),
-     gettext(TEXT("Task declared")),
+  if (MessageBoxX(gettext(_T("OK to invalidate declaration?")),
+                  gettext(_T("Task declared")),
      MB_YESNO| MB_ICONQUESTION) == IDYES){
     DeclaredToDevice = false;
     return true;
@@ -626,7 +626,7 @@ LogFileDate(const NMEA_INFO &gps_info, TCHAR* filename)
   int matches;
   // scan for long filename
   matches = _stscanf(filename,
-                    TEXT("%hu-%hu-%hu-%7s-%hu.IGC"),
+                     _T("%hu-%hu-%hu-%7s-%hu.IGC"),
                     &year,
                     &month,
                     &day,
@@ -648,7 +648,7 @@ LogFileDate(const NMEA_INFO &gps_info, TCHAR* filename)
   TCHAR cyear, cmonth, cday, cflight;
   // scan for short filename
   matches = _stscanf(filename,
-		     TEXT("%c%c%c%4s%c.IGC"),
+                     _T("%c%c%c%4s%c.IGC"),
 		     &cyear,
 		     &cmonth,
 		     &cday,
@@ -709,15 +709,15 @@ DeleteOldestIGCFile(const NMEA_INFO &gps_info, TCHAR *pathname)
   TCHAR oldestname[MAX_PATH];
   TCHAR searchpath[MAX_PATH];
   TCHAR fullname[MAX_PATH];
-  _stprintf(searchpath, TEXT("%s*"), pathname);
+  _stprintf(searchpath, _T("%s*"), pathname);
 
   hFind = FindFirstFile(searchpath, &FindFileData); // find the first file
   if(hFind == INVALID_HANDLE_VALUE)
     return false;
 
   if(!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-    if (!MatchesExtension(FindFileData.cFileName, TEXT(".igc"))
-        && !MatchesExtension(FindFileData.cFileName, TEXT(".IGC")))
+    if (!MatchesExtension(FindFileData.cFileName, _T(".igc"))
+        && !MatchesExtension(FindFileData.cFileName, _T(".IGC")))
       return false;
 
       // do something...
@@ -729,8 +729,8 @@ DeleteOldestIGCFile(const NMEA_INFO &gps_info, TCHAR *pathname)
   while (bSearch) {
     if (FindNextFile(hFind, &FindFileData)) {
       if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-          && (MatchesExtension(FindFileData.cFileName, TEXT(".igc"))
-              || (MatchesExtension(FindFileData.cFileName, TEXT(".IGC"))))) {
+          && (MatchesExtension(FindFileData.cFileName, _T(".igc"))
+              || (MatchesExtension(FindFileData.cFileName, _T(".IGC"))))) {
         if (LogFileIsOlder(gps_info, oldestname, FindFileData.cFileName)) {
           _tcscpy(oldestname, FindFileData.cFileName);
           // we have a new oldest name
@@ -743,7 +743,7 @@ DeleteOldestIGCFile(const NMEA_INFO &gps_info, TCHAR *pathname)
   FindClose(hFind); // closing file handle
 
   // now, delete the file...
-  _stprintf(fullname, TEXT("%s%s"), pathname, oldestname);
+  _stprintf(fullname, _T("%s%s"), pathname, oldestname);
   DeleteFile(fullname);
 
   // did delete one
@@ -755,13 +755,13 @@ DeleteOldestIGCFile(const NMEA_INFO &gps_info, TCHAR *pathname)
 // data (85 kb approx) and a new log file
 
 #ifdef DEBUG_IGCFILENAME
-static const TCHAR testtext1[] = TEXT("2007-11-05-XXX-AAA-01.IGC");
-static const TCHAR testtext2[] = TEXT("2007-11-05-XXX-AAA-02.IGC");
-static const TCHAR testtext3[] = TEXT("3BOA1VX2.IGC");
-static const TCHAR testtext4[] = TEXT("5BDX7B31.IGC");
-static const TCHAR testtext5[] = TEXT("3BOA1VX2.IGC");
-static const TCHAR testtext6[] = TEXT("9BDX7B31.IGC");
-static const TCHAR testtext7[] = TEXT("2008-01-05-XXX-AAA-01.IGC");
+static const TCHAR testtext1[] = _T("2007-11-05-XXX-AAA-01.IGC");
+static const TCHAR testtext2[] = _T("2007-11-05-XXX-AAA-02.IGC");
+static const TCHAR testtext3[] = _T("3BOA1VX2.IGC");
+static const TCHAR testtext4[] = _T("5BDX7B31.IGC");
+static const TCHAR testtext5[] = _T("3BOA1VX2.IGC");
+static const TCHAR testtext6[] = _T("9BDX7B31.IGC");
+static const TCHAR testtext7[] = _T("2008-01-05-XXX-AAA-01.IGC");
 #endif
 
 /**
@@ -781,7 +781,7 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
 
   LocalPath(pathname);
   if (is_altair()) {
-    LocalPath(subpathname, TEXT("logs"));
+    LocalPath(subpathname, _T("logs"));
   } else {
     LocalPath(subpathname);
   }
@@ -811,10 +811,10 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
     }
   }
   if (kbfree >= LOGGER_MINFREESTORAGE) {
-    StartupStore(TEXT("LoggerFreeSpace returned: true\r\n"));
+    StartupStore(_T("LoggerFreeSpace returned: true\r\n"));
     return true;
   } else {
-    StartupStore(TEXT("LoggerFreeSpace returned: false\r\n"));
+    StartupStore(_T("LoggerFreeSpace returned: false\r\n"));
     return false;
   }
 }
@@ -835,22 +835,22 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
   }
 
   TCHAR TaskMessage[1024];
-  _tcscpy(TaskMessage, TEXT("Start Logger With Declaration\r\n"));
+  _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
 
 #ifdef OLD_TASK
   if (task.Valid()) {
     for (unsigned i = 0; task.ValidTaskPoint(i); i++) {
       _tcscat(TaskMessage, task.getWaypoint(i).Name);
-      _tcscat(TaskMessage, TEXT("\r\n"));
+      _tcscat(TaskMessage, _T("\r\n"));
     }
   } else {
-    _tcscat(TaskMessage, TEXT("None"));
+    _tcscat(TaskMessage, _T("None"));
   }
 #else
-    _tcscat(TaskMessage, TEXT("None"));
+    _tcscat(TaskMessage, _T("None"));
 #endif
 
-  if(noAsk || (MessageBoxX(TaskMessage,gettext(TEXT("Start Logger")),
+  if (noAsk || (MessageBoxX(TaskMessage, gettext(_T("Start Logger")),
                            MB_YESNO | MB_ICONQUESTION) == IDYES)) {
     if (LoggerClearFreeSpace(gps_info)) {
       StartLogger(gps_info, settings, strAssetNumber);
@@ -870,9 +870,9 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
 #endif
       LoggerActive = true; // start logger after Header is completed.  Concurrency
     } else {
-      MessageBoxX(gettext(TEXT("Logger inactive, insufficient storage!")),
-                  gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
-      StartupStore(TEXT("Logger not started: Insufficient Storage\r\n"));
+      MessageBoxX(gettext(_T("Logger inactive, insufficient storage!")),
+                  gettext(_T("Logger Error")), MB_OK| MB_ICONERROR);
+      StartupStore(_T("Logger not started: Insufficient Storage\r\n"));
     }
   }
 }
@@ -883,8 +883,8 @@ LoggerImpl::guiStopLogger(const NMEA_INFO& gps_info, bool noAsk)
   if (!LoggerActive)
     return;
 
-  if(noAsk || (MessageBoxX(gettext(TEXT("Stop Logger")),
-                           gettext(TEXT("Stop Logger")),
+  if(noAsk || (MessageBoxX(gettext(_T("Stop Logger")),
+                           gettext(_T("Stop Logger")),
                            MB_YESNO | MB_ICONQUESTION) == IDYES)) {
     StopLogger(gps_info);
   }
