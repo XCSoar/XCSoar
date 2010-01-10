@@ -203,23 +203,26 @@ PageSwitched()
   }
 }
 
-
-
-static void OnSetupDeviceAClicked(WindowControl * Sender){
-  (void)Sender;
-
+static void
+SetupDevice(DeviceDescriptor &device)
+{
 #ifdef ToDo
-  devA()->DoSetup();
+  device.DoSetup();
   wf->FocusNext(NULL);
 #endif
 
   // this is a hack, devices dont jet support device dependant setup dialogs
 
-  if (!is_simulator() && (devA() == NULL ||
-                          _tcscmp(devA()->Name,_T("Vega")) != 0))
+  if (!is_simulator() && _tcscmp(device.Name,_T("Vega")) != 0)
     return;
 
   changed = dlgConfigurationVarioShowModal();
+}
+
+static void OnSetupDeviceAClicked(WindowControl * Sender){
+  (void)Sender;
+
+  SetupDevice(DeviceList[0]);
 
   // this is a hack to get the dialog to retain focus because
   // the progress dialog in the vario configuration somehow causes
@@ -231,18 +234,7 @@ static void OnSetupDeviceAClicked(WindowControl * Sender){
 static void OnSetupDeviceBClicked(WindowControl * Sender){
   (void)Sender;
 
-#ifdef ToDo
-  devB()->DoSetup();
-  wf->FocusNext(NULL);
-#endif
-
-  // this is a hack, devices dont jet support device dependant setup dialogs
-
-  if (!is_simulator() && (devB() == NULL ||
-                          _tcscmp(devB()->Name,_T("Vega")) != 0))
-    return;
-
-  changed = dlgConfigurationVarioShowModal();
+  SetupDevice(DeviceList[1]);
 
   // this is a hack to get the dialog to retain focus because
   // the progress dialog in the vario configuration somehow causes
