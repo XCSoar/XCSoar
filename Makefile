@@ -464,13 +464,13 @@ cleancov: FORCE
 
 .PHONY: FORCE
 
-ifneq ($(wildcard $(OBJ_PREFIX)src/*.d),)
-include $(wildcard $(OBJ_PREFIX)src/*.d)
+ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/src/*.d),)
+include $(wildcard $(TARGET_OUTPUT_DIR)/src/*.d)
 endif
-ifneq ($(wildcard $(OBJ_PREFIX)src/*/*.d),)
-include $(wildcard $(OBJ_PREFIX)src/*/*.d)
+ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/src/*/*.d),)
+include $(wildcard $(TARGET_OUTPUT_DIR)/src/*/*.d)
 endif
-ifneq ($(wildcard $(OBJ_PREFIX)src/*/*/*.d),)
-include $(wildcard $(OBJ_PREFIX)src/*/*/*.d)
+ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*.d),)
+include $(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*.d)
 endif
 
