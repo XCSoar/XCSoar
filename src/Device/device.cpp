@@ -171,11 +171,11 @@ devGetBaroAltitude(double *Value)
 }
 
 bool
-devRegisterGetName(int Index, TCHAR *Name)
+devRegisterGetName(unsigned Index, TCHAR *Name)
 {
   Name[0] = '\0';
 
-  if (Index < 0 || Index >= DeviceRegisterCount)
+  if (Index >= DeviceRegisterCount)
     return false;
 
   _tcscpy(Name, DeviceRegister[Index]->Name);
