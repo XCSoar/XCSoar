@@ -872,7 +872,7 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
     // If the separation doesn't appear in the sentence,
     // we can assume the GPS unit is giving ellipsoid height
     //
-    if (!devIsCondor(devA())) {
+    if (!HaveCondorDevice()) {
       // JMW TODO really need to know the actual device..
       GeoidSeparation = LookupGeoidSeparation(GPS_INFO->Location.Latitude,
           GPS_INFO->Location.Longitude);

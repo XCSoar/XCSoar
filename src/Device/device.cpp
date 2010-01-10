@@ -628,7 +628,7 @@ devIsRadio(const struct DeviceDescriptor *d)
   return result;
 }
 
-bool
+static bool
 devIsCondor(const struct DeviceDescriptor *d)
 {
   bool result = false;
@@ -642,6 +642,16 @@ devIsCondor(const struct DeviceDescriptor *d)
   mutexComm.Unlock();
 
   return result;
+}
+
+bool
+HaveCondorDevice()
+{
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    if (devIsCondor(&DeviceList[i]))
+      return true;
+
+  return false;
 }
 
 static bool

@@ -116,7 +116,14 @@ bool devIsLogger(const struct DeviceDescriptor *d);
 bool devIsGPSSource(const struct DeviceDescriptor *d);
 bool devIsBaroSource(const struct DeviceDescriptor *d);
 bool devIsRadio(const struct DeviceDescriptor *d);
-bool devIsCondor(const struct DeviceDescriptor *d);
+
+/**
+ * Returns true if at least one of the connected device is a Condor
+ * flight simulator.
+ */
+bool
+HaveCondorDevice();
+
 void devTick(void);
 bool devGetBaroAltitude(double *Value);
 

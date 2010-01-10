@@ -288,7 +288,7 @@ protected:
 
     bool past_sunset = (d1 > sunsettime) && (d0 < sunsettime);
 
-    if (past_sunset && !devIsCondor(devA()))
+    if (past_sunset && !HaveCondorDevice())
       // notify on change only
       return true;
     else
