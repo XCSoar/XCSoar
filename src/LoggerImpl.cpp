@@ -586,7 +586,7 @@ LoggerImpl::LoggerDeviceDeclare()
 
   if (!found_logger) {
     MessageBoxX(gettext(_T("No logger connected")),
-                devB()->Name, MB_OK | MB_ICONINFORMATION);
+                gettext(_T("Declare task")), MB_OK | MB_ICONINFORMATION);
     DeclaredToDevice = true; // testing only
   }
 }
