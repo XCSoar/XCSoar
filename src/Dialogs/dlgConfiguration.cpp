@@ -1193,16 +1193,15 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpComDevice1"));
   if (wp) {
+    DeviceDescriptor &device = DeviceList[0];
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     for (int i = 0; DeviceRegister[i] != NULL; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
       if (!is_simulator()) {
-        if (devA() != NULL){
-          if (_tcscmp(DeviceName, devA()->Name) == 0)
+        if (_tcscmp(DeviceName, device.Name) == 0)
             dwDeviceIndex1 = i;
-        }
       } else {
         if (_tcscmp(DeviceName, deviceName1) == 0)
           dwDeviceIndex1 = i;
@@ -1240,16 +1239,15 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpComDevice2"));
   if (wp) {
+    DeviceDescriptor &device = DeviceList[1];
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     for (int i = 0; DeviceRegister[i] != NULL; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
       if (!is_simulator()) {
-        if (devB() != NULL){
-          if (_tcscmp(DeviceName, devB()->Name) == 0)
-            dwDeviceIndex2 = i;
-        }
+        if (_tcscmp(DeviceName, device.Name) == 0)
+          dwDeviceIndex2 = i;
       } else {
         if (_tcscmp(DeviceName, deviceName2) == 0)
           dwDeviceIndex2 = i;
@@ -2269,8 +2267,8 @@ void dlgConfigurationShowModal(void){
 
   setVariables();
 
-  UpdateDeviceSetupButton(0, devA()->Name);
-  UpdateDeviceSetupButton(1, devB()->Name);
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    UpdateDeviceSetupButton(i, DeviceList[i].Name);
 
   changed = false;
   taskchanged = false;
