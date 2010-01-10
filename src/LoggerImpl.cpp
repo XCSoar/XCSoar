@@ -47,6 +47,7 @@
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "Device/device.hpp"
+#include "Device/List.hpp"
 #include "Compatibility/string.h"
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.h"

@@ -41,6 +41,7 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
+#include "Device/List.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
 #include "Device/FLARM.hpp"
@@ -95,8 +96,6 @@ static const DWORD dwSpeed[] = {
   57600,
   115200
 };
-
-struct DeviceDescriptor DeviceList[NUMDEV];
 
 static struct DeviceDescriptor *pDevPrimaryBaroSource;
 static struct DeviceDescriptor *pDevSecondaryBaroSource;

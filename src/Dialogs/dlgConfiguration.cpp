@@ -51,6 +51,7 @@ Copyright_License {
 #include "Logger.h"
 #include "Device/device.hpp"
 #include "Device/Register.hpp"
+#include "Device/List.hpp"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"

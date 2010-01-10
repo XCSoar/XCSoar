@@ -54,7 +54,6 @@ class Device;
 struct AtmosphericPressure;
 
 #define DEVNAMESIZE  32
-#define	NUMDEV		 2
 
 #define	devA()	    (&DeviceList[0])
 #define	devB()	    (&DeviceList[1])
@@ -108,8 +107,6 @@ public:
 void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
 struct DeviceDescriptor *devVarioFindVega(void);
-
-extern struct DeviceDescriptor DeviceList[NUMDEV];
 
 bool devHasBaroSource(void);
 bool devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl);
