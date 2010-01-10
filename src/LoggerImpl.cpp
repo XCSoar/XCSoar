@@ -543,7 +543,7 @@ LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev,
     const struct Declaration *decl)
 {
   if (!devIsLogger(dev))
-    return FALSE;
+    return false;
 
   if (MessageBoxX(gettext(TEXT("Declare Task?")),
                   dev->Name, MB_YESNO| MB_ICONQUESTION) == IDYES) {
@@ -558,7 +558,7 @@ LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev,
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 void
