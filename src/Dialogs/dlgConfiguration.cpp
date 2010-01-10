@@ -1086,7 +1086,6 @@ static  DWORD dwPortIndex2 = 0;
 static  DWORD dwSpeedIndex2 = 2;
 static  int dwDeviceIndex1=0;
 static  int dwDeviceIndex2=0;
-static  TCHAR DeviceName[DEVNAMESIZE+1];
 static  DWORD Speed = 1; // default is knots
 static  DWORD TaskSpeed = 2; // default is kph
 static  DWORD Distance = 2; // default is km
@@ -1196,8 +1195,9 @@ static void setVariables(void) {
     DeviceDescriptor &device = DeviceList[0];
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (int i = 0; DeviceRegister[i] != NULL; i++) {
-      devRegisterGetName(i, DeviceName);
+
+    const TCHAR *DeviceName;
+    for (int i = 0; (DeviceName = devRegisterGetName(i)) != NULL; i++) {
       dfe->addEnumText((DeviceName));
       if (!is_simulator()) {
         if (_tcscmp(DeviceName, device.Name) == 0)
@@ -1242,8 +1242,9 @@ static void setVariables(void) {
     DeviceDescriptor &device = DeviceList[1];
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (int i = 0; DeviceRegister[i] != NULL; i++) {
-      devRegisterGetName(i, DeviceName);
+
+    const TCHAR *DeviceName;
+    for (int i = 0; (DeviceName = devRegisterGetName(i)) != NULL; i++) {
       dfe->addEnumText((DeviceName));
       if (!is_simulator()) {
         if (_tcscmp(DeviceName, device.Name) == 0)
@@ -3306,8 +3307,8 @@ void dlgConfigurationShowModal(void){
       dwDeviceIndex1 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;
-      devRegisterGetName(dwDeviceIndex1, DeviceName);
-      WriteDeviceSettings(0, DeviceName);
+
+      WriteDeviceSettings(0, devRegisterGetName(dwDeviceIndex1));
     }
   }
 
@@ -3335,8 +3336,8 @@ void dlgConfigurationShowModal(void){
       dwDeviceIndex2 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;
-      devRegisterGetName(dwDeviceIndex2, DeviceName);
-      WriteDeviceSettings(1, DeviceName);
+
+      WriteDeviceSettings(1, devRegisterGetName(dwDeviceIndex2));
     }
   }
 

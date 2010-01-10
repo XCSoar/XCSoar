@@ -114,7 +114,9 @@ extern struct DeviceDescriptor DeviceList[NUMDEV];
 /** NULL terminated array of available device drivers. */
 extern const struct DeviceRegister *const DeviceRegister[];
 
-bool devRegisterGetName(unsigned Index, TCHAR *Name);
+const TCHAR *
+devRegisterGetName(unsigned Index);
+
 bool devHasBaroSource(void);
 bool devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl);
 bool devIsLogger(const struct DeviceDescriptor *d);

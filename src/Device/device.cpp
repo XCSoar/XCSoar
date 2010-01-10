@@ -170,16 +170,13 @@ devGetBaroAltitude(double *Value)
   // - whats happen if the diference is too big?
 }
 
-bool
-devRegisterGetName(unsigned Index, TCHAR *Name)
+const TCHAR *
+devRegisterGetName(unsigned Index)
 {
-  Name[0] = '\0';
-
   if (Index >= DeviceRegisterCount)
-    return false;
+    return NULL;
 
-  _tcscpy(Name, DeviceRegister[Index]->Name);
-  return true;
+  return DeviceRegister[Index]->Name;
 }
 
 static const struct DeviceRegister *
