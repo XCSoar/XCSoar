@@ -580,11 +580,9 @@ LoggerImpl::LoggerDeviceDeclare()
 
   DeclaredToDevice = false;
 
-  if (LoggerDeclare(devA(), &Decl))
-    found_logger = true;
-
-  if (LoggerDeclare(devB(), &Decl))
-    found_logger = true;
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    if (LoggerDeclare(&DeviceList[i], &Decl))
+      found_logger = true;
 
   if (!found_logger) {
     MessageBoxX(gettext(TEXT("No logger connected")),
