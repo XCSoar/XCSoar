@@ -62,7 +62,7 @@ ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *fmt, ...)
   tmp[126] = _T('\0');
 
   if (caption)
-    MessageBoxX(tmp, gettext(caption), type);
+    MessageBoxX(tmp, caption, type);
   else
     Message::AddMessage(tmp);
 }
