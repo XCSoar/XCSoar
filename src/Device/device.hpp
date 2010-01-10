@@ -111,12 +111,6 @@ struct DeviceDescriptor *devVarioFindVega(void);
 
 extern struct DeviceDescriptor DeviceList[NUMDEV];
 
-/** NULL terminated array of available device drivers. */
-extern const struct DeviceRegister *const DeviceRegister[];
-
-const TCHAR *
-devRegisterGetName(unsigned Index);
-
 bool devHasBaroSource(void);
 bool devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl);
 bool devIsLogger(const struct DeviceDescriptor *d);

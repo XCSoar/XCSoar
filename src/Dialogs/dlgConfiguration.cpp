@@ -50,6 +50,7 @@ Copyright_License {
 #include "UtilsProfile.hpp"
 #include "Logger.h"
 #include "Device/device.hpp"
+#include "Device/Register.hpp"
 #include "Screen/Animation.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"

@@ -40,6 +40,7 @@ Copyright_License {
 
 #include "Device/device.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
 #include "Device/FLARM.hpp"
@@ -50,22 +51,6 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Registry.hpp"
-#include "Device/Driver/CAI302.hpp"
-#include "Device/Driver/CaiGpsNav.hpp"
-#include "Device/Driver/EW.hpp"
-#include "Device/Driver/AltairPro.hpp"
-#include "Device/Driver/Generic.hpp"
-#include "Device/Driver/Vega.hpp"
-#include "Device/Driver/NmeaOut.hpp"
-#include "Device/Driver/PosiGraph.hpp"
-#include "Device/Driver/BorgeltB50.hpp"
-#include "Device/Driver/Volkslogger.hpp"
-#include "Device/Driver/EWMicroRecorder.hpp"
-#include "Device/Driver/LX.hpp"
-#include "Device/Driver/Zander.hpp"
-#include "Device/Driver/FlymasterF1.hpp"
-#include "Device/Driver/XCOM760.hpp"
-#include "Device/Driver/Condor.hpp"
 #include "NMEA/Checksum.h"
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
 #include "Asset.hpp"
@@ -111,31 +96,6 @@ static const DWORD dwSpeed[] = {
   115200
 };
 
-const struct DeviceRegister *const DeviceRegister[] = {
-  // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
-  &genDevice, // MUST BE FIRST
-  &cai302Device,
-  &ewDevice,
-  &atrDevice,
-  &vgaDevice,
-  &caiGpsNavDevice,
-  &nmoDevice,
-  &pgDevice,
-  &b50Device,
-  &vlDevice,
-  &ewMicroRecorderDevice,
-  &lxDevice,
-  &zanderDevice,
-  &flymasterf1Device,
-  &xcom760Device,
-  &condorDevice,
-  NULL
-};
-
-enum {
-  DeviceRegisterCount = sizeof(DeviceRegister) / sizeof(DeviceRegister[0]) - 1
-};
-
 struct DeviceDescriptor DeviceList[NUMDEV];
 
 static struct DeviceDescriptor *pDevPrimaryBaroSource;
@@ -168,25 +128,6 @@ devGetBaroAltitude(double *Value)
   // - whats happen if primary source fails
   // - plausibility check? against second baro? or GPS alt?
   // - whats happen if the diference is too big?
-}
-
-const TCHAR *
-devRegisterGetName(unsigned Index)
-{
-  if (Index >= DeviceRegisterCount)
-    return NULL;
-
-  return DeviceRegister[Index]->Name;
-}
-
-static const struct DeviceRegister *
-devGetDriver(const TCHAR *DevName)
-{
-  for (unsigned i = 1; DeviceRegister[i] != NULL; ++i)
-    if (_tcscmp(DeviceRegister[i]->Name, DevName) == 0)
-      return DeviceRegister[i];
-
-  return DeviceRegister[0];
 }
 
 static bool
