@@ -50,28 +50,35 @@ class MapWindowProjection;
 class MapWindow;
 class LabelBlock;
 
-class XShape {
- public:
+class XShape
+{
+public:
   XShape();
   virtual ~XShape();
 
   virtual void load(shapefileObj* shpfile, int i);
   virtual void clear();
-  virtual void renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y) {
-    (void)canvas; (void)x; (void)y;
-  };
+
+  virtual void
+  renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y)
+  {
+    (void)canvas;
+    (void)x;
+    (void)y;
+  }
 
   bool hide;
   shapeObj shape;
-
 };
 
-
-class XShapeLabel: public XShape {
- public:
-  XShapeLabel() {
-    label= NULL;
+class XShapeLabel: public XShape
+{
+public:
+  XShapeLabel()
+  {
+    label = NULL;
   }
+
   virtual ~XShapeLabel();
   virtual void clear();
   char *label;
@@ -79,11 +86,10 @@ class XShapeLabel: public XShape {
   virtual void renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y);
 };
 
-
-class Topology {
-
- public:
-  Topology(const char* shpname, const Color thecolor, bool doappend=false);
+class Topology
+{
+public:
+  Topology(const char* shpname, const Color thecolor, bool doappend = false);
   Topology() {};
 
   ~Topology();
@@ -93,17 +99,20 @@ class Topology {
   void TriggerIfScaleNowVisible(MapWindowProjection &map_projection);
 
   void updateCache(MapWindowProjection &map_projection,
-		   rectObj thebounds, bool purgeonly=false);
+		   rectObj thebounds, bool purgeonly = false);
   void Paint(Canvas &canvas, MapWindow &m_window, const RECT rc);
 
   double scaleThreshold;
   void loadBitmap(const int);
   bool triggerUpdateCache;
-  int getNumVisible() {
+
+  int
+  getNumVisible()
+  {
     return shapes_visible_count;
   }
- private:
 
+private:
   bool CheckScale(double map_scale);
 
   int shapes_visible_count;
@@ -115,7 +124,7 @@ class Topology {
   virtual void removeShape(const int i);
   virtual XShape* addShape(const int i);
 
- protected:
+protected:
   char filename[MAX_PATH];
 
   void flushCache();
@@ -127,12 +136,11 @@ class Topology {
   Bitmap hBitmap;
   shapefileObj shpfile;
   bool shapefileopen;
-
 };
 
-
-class TopologyWriter: public Topology {
- public:
+class TopologyWriter: public Topology
+{
+public:
   TopologyWriter(const char *shpname, const Color thecolor);
   ~TopologyWriter();
 
@@ -142,16 +150,14 @@ class TopologyWriter: public Topology {
   void DeleteFiles(void);
 };
 
-
-
-class TopologyLabel: public Topology {
- public:
+class TopologyLabel: public Topology
+{
+public:
   TopologyLabel(const char* shpname, const Color thecolor, INT field1);
   ~TopologyLabel();
   virtual XShape* addShape(const int i);
   void setField(int i);
   int field;
-
 };
 
 #endif

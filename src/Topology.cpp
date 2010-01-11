@@ -53,45 +53,55 @@ Copyright_License {
 
 #include "LogFile.hpp"
 
-XShape::XShape() {
-  hide=false;
+XShape::XShape()
+{
+  hide = false;
 }
 
-XShape::~XShape() {
+XShape::~XShape()
+{
   clear();
 }
 
-void XShape::clear() {
+void
+XShape::clear()
+{
   msFreeShape(&shape);
 }
 
-void XShape::load(shapefileObj* shpfile, int i) {
+void
+XShape::load(shapefileObj* shpfile, int i)
+{
   msInitShape(&shape);
   msSHPReadShape(shpfile->hSHP, i, &shape);
 }
 
-void Topology::loadBitmap(const int xx) {
+void
+Topology::loadBitmap(const int xx)
+{
   hBitmap.load(xx);
 }
 
-Topology::Topology(const char* shpname, const Color thecolor, bool doappend) {
-
+Topology::Topology(const char* shpname, const Color thecolor, bool doappend)
+{
   append = doappend;
-  memset((void*)&shpfile, 0 ,sizeof(shpfile));
+  memset((void*)&shpfile, 0, sizeof(shpfile));
   shapefileopen = false;
   triggerUpdateCache = false;
   scaleThreshold = 0;
-  shpCache= NULL;
+  shpCache = NULL;
 
   in_scale = false;
 
-  strcpy( filename, shpname );
+  strcpy(filename, shpname);
   hPen.set(1, thecolor);
   hbBrush.set(thecolor);
   Open();
 }
 
-void Topology::Open() {
+void
+Topology::Open()
+{
   shapefileopen = false;
 
   if (append) {
@@ -105,51 +115,65 @@ void Topology::Open() {
   }
 
   scaleThreshold = 1000.0;
-  shpCache = (XShape**)malloc(sizeof(XShape*)*shpfile.numshapes);
+  shpCache = (XShape**)malloc(sizeof(XShape*) * shpfile.numshapes);
   if (shpCache) {
     shapefileopen = true;
-    for (int i=0; i<shpfile.numshapes; i++) {
+    for (int i = 0; i < shpfile.numshapes; i++) {
       shpCache[i] = NULL;
     }
   }
 }
 
-void Topology::Close() {
+void
+Topology::Close()
+{
   if (shapefileopen) {
     if (shpCache) {
       flushCache();
-      free(shpCache); shpCache = NULL;
+      free(shpCache);
+      shpCache = NULL;
     }
+
     msSHPCloseFile(&shpfile);
-    shapefileopen = false;  // added sgi
+    shapefileopen = false; // added sgi
   }
 }
 
-Topology::~Topology() {
+Topology::~Topology()
+{
   Close();
 }
 
-bool Topology::CheckScale(double map_scale) {
+bool
+Topology::CheckScale(double map_scale)
+{
   return (map_scale <= scaleThreshold);
 }
 
-void Topology::TriggerIfScaleNowVisible(MapWindowProjection &map_projection) {
+void
+Topology::TriggerIfScaleNowVisible(MapWindowProjection &map_projection)
+{
   triggerUpdateCache |= (CheckScale(map_projection.GetMapScaleUser()) != in_scale);
 }
 
-void Topology::flushCache() {
-  for (int i=0; i<shpfile.numshapes; i++) {
+void
+Topology::flushCache()
+{
+  for (int i = 0; i < shpfile.numshapes; i++) {
     removeShape(i);
   }
   shapes_visible_count = 0;
 }
 
-void Topology::updateCache(MapWindowProjection &map_projection,
-			   rectObj thebounds, bool purgeonly) {
+void
+Topology::updateCache(MapWindowProjection &map_projection, rectObj thebounds,
+    bool purgeonly)
+{
+  if (!triggerUpdateCache)
+    return;
 
-  if (!triggerUpdateCache) return;
-
-  if (!shapefileopen) return;
+  if (!shapefileopen)
+    return;
 
   in_scale = CheckScale(map_projection.GetMapScaleUser());
 
@@ -161,7 +185,8 @@ void Topology::updateCache(MapWindowProjection &map_projection,
     return;
   }
 
-  if (purgeonly) return;
+  if (purgeonly)
+    return;
 
   triggerUpdateCache = false;
 
@@ -175,9 +200,9 @@ void Topology::updateCache(MapWindowProjection &map_projection,
 
   shapes_visible_count = 0;
 
-  for (int i=0; i<shpfile.numshapes; i++) {
+  for (int i = 0; i < shpfile.numshapes; i++) {
     if (msGetBit(shpfile.status, i)) {
-      if (shpCache[i]==NULL) {
+      if (shpCache[i] == NULL) {
         // shape is now in range, and wasn't before
         shpCache[i] = addShape(i);
       }
@@ -188,26 +213,34 @@ void Topology::updateCache(MapWindowProjection &map_projection,
   }
 }
 
-XShape* Topology::addShape(const int i) {
+XShape*
+Topology::addShape(const int i)
+{
   XShape* theshape = new XShape();
-  theshape->load(&shpfile,i);
+  theshape->load(&shpfile, i);
   return theshape;
 }
 
-void Topology::removeShape(const int i) {
+void
+Topology::removeShape(const int i)
+{
   if (shpCache[i]) {
     delete shpCache[i];
-    shpCache[i]= NULL;
+    shpCache[i] = NULL;
   }
 }
 
-bool Topology::checkVisible(shapeObj& shape, rectObj &screenRect) {
+bool
+Topology::checkVisible(shapeObj& shape, rectObj &screenRect)
+{
   return (msRectOverlap(&shape.bounds, &screenRect) == MS_TRUE);
 }
 
-void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
-
-  if (!shapefileopen) return;
+void
+Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
+{
+  if (!shapefileopen)
+    return;
 
   MapWindowProjection &map_projection = m_window;
   LabelBlock *label_block = m_window.getLabelBlock();
@@ -230,66 +263,59 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
 
   int iskip = 1;
 
-  if (map_scale>0.25*scaleThreshold) {
+  if (map_scale > 0.25 * scaleThreshold) {
     iskip = 2;
   }
-  if (map_scale>0.5*scaleThreshold) {
+  if (map_scale > 0.5 * scaleThreshold) {
     iskip = 3;
   }
-  if (map_scale>0.75*scaleThreshold) {
+  if (map_scale > 0.75 * scaleThreshold) {
     iskip = 4;
   }
 
   rectObj screenRect = map_projection.CalculateScreenBounds(fixed_zero);
 
   static POINT pt[MAXCLIPPOLYGON];
-  const bool render_labels = (m_window.SettingsMap().DeclutterLabels<2);
+  const bool render_labels = (m_window.SettingsMap().DeclutterLabels < 2);
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
-
     XShape *cshape = shpCache[ixshp];
 
-    if (!cshape || cshape->hide) continue;
+    if (!cshape || cshape->hide)
+      continue;
 
     shapeObj *shape = &(cshape->shape);
 
-    switch(shape->type) {
-      case(MS_SHAPE_POINT):{
-
-        if (checkVisible(*shape, screenRect)) {
-          for (int tt = 0; tt < shape->numlines; tt++) {
-
-            for (int jj=0; jj< shape->line[tt].numpoints; jj++) {
-
-              POINT sc;
-              GEOPOINT l;
-              l.Longitude = shape->line[tt].point[jj].x;
-              l.Latitude = shape->line[tt].point[jj].y;
-              if (m_window.draw_masked_bitmap_if_visible(canvas, hBitmap, l,
-                  10, 10, &sc)) {
-                if (render_labels)
-                  cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
-              }
+    switch (shape->type) {
+    case (MS_SHAPE_POINT):
+      if (checkVisible(*shape, screenRect)) {
+        for (int tt = 0; tt < shape->numlines; tt++) {
+          for (int jj = 0; jj < shape->line[tt].numpoints; jj++) {
+            POINT sc;
+            GEOPOINT l;
+            l.Longitude = shape->line[tt].point[jj].x;
+            l.Latitude = shape->line[tt].point[jj].y;
+            if (m_window.draw_masked_bitmap_if_visible(canvas, hBitmap, l, 10,
+                10, &sc)) {
+              if (render_labels)
+                cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
             }
           }
         }
+      }
+      break;
 
-      }; break;
-
-    case(MS_SHAPE_LINE):
-
+    case (MS_SHAPE_LINE):
       if (checkVisible(*shape, screenRect))
-        for (int tt = 0; tt < shape->numlines; tt ++) {
-
+        for (int tt = 0; tt < shape->numlines; tt++) {
           int minx = rc.right;
           int miny = rc.bottom;
           int msize = min(shape->line[tt].numpoints, (int)MAXCLIPPOLYGON);
 
-          map_projection.LonLat2Screen(shape->line[tt].point,
-              pt, msize, 1);
+          map_projection.LonLat2Screen(shape->line[tt].point, pt, msize, 1);
 
-          for (int jj=0; jj< msize; jj++) {
-            if (pt[jj].x<=minx) {
+          for (int jj = 0; jj < msize; jj++) {
+            if (pt[jj].x <= minx) {
               minx = pt[jj].x;
               miny = pt[jj].y;
             }
@@ -301,25 +327,24 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
         }
       break;
 
-    case(MS_SHAPE_POLYGON):
-
+    case (MS_SHAPE_POLYGON):
       if (checkVisible(*shape, screenRect))
-        for (int tt = 0; tt < shape->numlines; tt ++) {
-
+        for (int tt = 0; tt < shape->numlines; tt++) {
           int minx = rc.right;
           int miny = rc.bottom;
           int msize = min(shape->line[tt].numpoints / iskip,
-                          (int)MAXCLIPPOLYGON);
+              (int)MAXCLIPPOLYGON);
 
-          map_projection.LonLat2Screen(shape->line[tt].point,
-              pt, msize*iskip, iskip);
+          map_projection.LonLat2Screen(shape->line[tt].point, pt,
+              msize * iskip, iskip);
 
-          for (int jj=0; jj< msize; jj++) {
-            if (pt[jj].x<=minx) {
+          for (int jj = 0; jj < msize; jj++) {
+            if (pt[jj].x <= minx) {
               minx = pt[jj].x;
               miny = pt[jj].y;
             }
           }
+
           canvas.polygon(pt, msize);
           if (render_labels)
             cshape->renderSpecial(canvas, *label_block, minx, miny);
@@ -333,10 +358,11 @@ void Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc) {
 }
 
 TopologyLabel::TopologyLabel(const char* shpname, const Color thecolor,
-                             int field1):Topology(shpname, thecolor)
+    int field1) :
+  Topology(shpname, thecolor)
 {
   //sjt 02nov05 - enabled label fields
-  setField(max(0,field1));
+  setField(max(0, field1));
   // JMW this is causing XCSoar to crash on my system!
 }
 
@@ -344,50 +370,56 @@ TopologyLabel::~TopologyLabel()
 {
 }
 
-void TopologyLabel::setField(int i) {
+void
+TopologyLabel::setField(int i)
+{
   field = i;
 }
 
-XShape* TopologyLabel::addShape(const int i) {
-
+XShape*
+TopologyLabel::addShape(const int i)
+{
   XShapeLabel* theshape = new XShapeLabel();
-  theshape->load(&shpfile,i);
-  theshape->setlabel(msDBFReadStringAttribute( shpfile.hDBF, i, field));
+  theshape->load(&shpfile, i);
+  theshape->setlabel(msDBFReadStringAttribute(shpfile.hDBF, i, field));
   return theshape;
 }
 
-void XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y) {
+void
+XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x,
+    int y)
+{
   if (label) {
     TCHAR Temp[100];
-    _stprintf(Temp,TEXT("%S"),label);
+    _stprintf(Temp, TEXT("%S"), label);
     canvas.background_transparent();
 
     // TODO code: JMW asks, what does this do?
     if (ispunct(Temp[0])) {
       double dTemp;
 
-      Temp[0]='0';
+      Temp[0] = '0';
       dTemp = _tcstod(Temp, NULL);
-      dTemp = ALTITUDEMODIFY*dTemp;
+      dTemp = ALTITUDEMODIFY * dTemp;
       if (dTemp > 999)
-        _stprintf(Temp,TEXT("%.1f"),(dTemp/1000));
+        _stprintf(Temp, TEXT("%.1f"), (dTemp / 1000));
       else
-        _stprintf(Temp,TEXT("%d"),int(dTemp));
+        _stprintf(Temp, TEXT("%d"), int(dTemp));
     }
 
     SIZE tsize = canvas.text_size(Temp);
     RECT brect;
-    x+= 2;
-    y+= 2;
+    x += 2;
+    y += 2;
     brect.left = x;
-    brect.right = brect.left+tsize.cx;
+    brect.right = brect.left + tsize.cx;
     brect.top = y;
-    brect.bottom = brect.top+tsize.cy;
+    brect.bottom = brect.top + tsize.cy;
 
     if (!label_block.check(brect))
       return;
 
-    canvas.set_text_color(Color(0x20,0x20,0x20));
+    canvas.set_text_color(Color(0x20, 0x20, 0x20));
     canvas.text(x, y, Temp);
   }
 }
@@ -396,57 +428,63 @@ void XShapeLabel::setlabel(const char* src) {
   if (src &&
       (strcmp(src,"UNK") != 0) &&
       (strcmp(src,"RAILWAY STATION") != 0) &&
-      (strcmp(src,"RAILROAD STATION") != 0)
-      ) {
-    if (label) free(label);
-    label = (char*)malloc(strlen(src)+1);
+      (strcmp(src,"RAILROAD STATION") != 0)) {
+    if (label)
+      free(label);
+    label = (char*)malloc(strlen(src) + 1);
     if (label) {
-      strcpy(label,src);
+      strcpy(label, src);
     }
-    hide=false;
+    hide = false;
   } else {
     if (label) {
       free(label);
-      label= NULL;
+      label = NULL;
     }
-    hide=true;
+    hide = true;
   }
 }
 
-XShapeLabel::~XShapeLabel() {
+XShapeLabel::~XShapeLabel()
+{
   if (label) {
     free(label);
-    label= NULL;
+    label = NULL;
   }
 }
 
-void XShapeLabel::clear() {
+void
+XShapeLabel::clear()
+{
   XShape::clear();
   if (label) {
     free(label);
-    label= NULL;
+    label = NULL;
   }
 }
 
 //       wsprintf(Scale,TEXT("%1.2f%c"),MapScale, autozoomstring);
 
-TopologyWriter::~TopologyWriter() {
+TopologyWriter::~TopologyWriter()
+{
   if (shapefileopen) {
     Close();
     DeleteFiles();
   }
 }
 
-TopologyWriter::TopologyWriter(const char* shpname, const Color thecolor):
-  Topology(shpname, thecolor, true) {
-
+TopologyWriter::TopologyWriter(const char* shpname, const Color thecolor) :
+  Topology(shpname, thecolor, true)
+{
   Reset();
 }
 
-void TopologyWriter::DeleteFiles(void) {
+void
+TopologyWriter::DeleteFiles(void)
+{
   // Delete all files, since zziplib interface doesn't handle file modes
   // properly
-  if (strlen(filename)>0) {
+  if (strlen(filename) > 0) {
     TCHAR fname[MAX_PATH];
     ascii2unicode(filename, fname);
     _tcscat(fname, TEXT(".shp"));
@@ -460,21 +498,25 @@ void TopologyWriter::DeleteFiles(void) {
   }
 }
 
-void TopologyWriter::CreateFiles(void) {
+void
+TopologyWriter::CreateFiles(void)
+{
   // by default, now, this overwrites previous contents
   if (msSHPCreateFile(&shpfile, filename, SHP_POINT) == -1) {
   } else {
     char dbfname[100];
-    strcpy(dbfname, filename );
+    strcpy(dbfname, filename);
     strcat(dbfname, ".dbf");
     shpfile.hDBF = msDBFCreate(dbfname);
 
-    shapefileopen=true;
+    shapefileopen = true;
     Close();
   }
 }
 
-void TopologyWriter::Reset(void) {
+void
+TopologyWriter::Reset(void)
+{
   if (shapefileopen) {
     Close();
   }
@@ -485,8 +527,10 @@ void TopologyWriter::Reset(void) {
   Open();
 }
 
-void TopologyWriter::addPoint(double x, double y) {
-  pointObj p = {x,y};
+void
+TopologyWriter::addPoint(double x, double y)
+{
+  pointObj p = { x, y };
 
   if (shapefileopen) {
     msSHPWritePoint(shpfile.hSHP, &p);
