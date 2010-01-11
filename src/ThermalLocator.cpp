@@ -47,37 +47,39 @@ Copyright_License {
 
 #define SFACT 111195
 
-void ThermalLocator_Point::Drift(fixed t_0,
-				 fixed longitude_0, fixed latitude_0,
-				 fixed drift_lon, fixed drift_lat,
-                                 fixed decay) {
-
+void
+ThermalLocator_Point::Drift(fixed t_0, fixed longitude_0, fixed latitude_0,
+    fixed drift_lon, fixed drift_lat, fixed decay)
+{
   // convert to flat earth coordinates, then drift by wind and delta t
-  fixed dt = t_0-t;
-  weight = (exp(-1.5*decay*dt/TLOCATOR_NMAX));
-  x = (longitude+drift_lon*dt-longitude_0)*fastcosine(latitude_0);
-  y = (latitude+drift_lat*dt-latitude_0);
+  fixed dt = t_0 - t;
 
-  iweight = iround(weight*100);
-  xiw = iround(x*SFACT*iweight);
-  yiw = iround(y*SFACT*iweight);
+  weight = (exp(-1.5 * decay * dt / TLOCATOR_NMAX));
 
+  x = (longitude + drift_lon * dt - longitude_0) * fastcosine(latitude_0);
+  y = (latitude + drift_lat * dt - latitude_0);
+
+  iweight = iround(weight * 100);
+  xiw = iround(x * SFACT * iweight);
+  yiw = iround(y * SFACT * iweight);
 }
 
-
-ThermalLocator::ThermalLocator() {
+ThermalLocator::ThermalLocator()
+{
   initialised = true;
   Reset();
 }
 
-
-void ThermalLocator::Reset() {
+void
+ThermalLocator::Reset()
+{
   ScopeLock protect(mutexThermalLocator);
+
   if (initialised) {
     initialised = false;
 
     // clear array
-    for (int i=0; i<TLOCATOR_NMAX; i++) {
+    for (int i = 0; i < TLOCATOR_NMAX; i++) {
       points[i].valid = false;
     }
     nindex = 0;
@@ -85,10 +87,9 @@ void ThermalLocator::Reset() {
   }
 }
 
-
-void ThermalLocator::AddPoint(const fixed t,
-			      const GEOPOINT &location,
-                              const fixed w) {
+void
+ThermalLocator::AddPoint(const fixed t, const GEOPOINT &location, const fixed w)
+{
   ScopeLock protect(mutexThermalLocator);
 
   points[nindex].longitude = location.Longitude;
@@ -96,14 +97,14 @@ void ThermalLocator::AddPoint(const fixed t,
   points[nindex].t = t;
   points[nindex].w = w;
   points[nindex].iw = iround(max(w, fixed(-0.1)) * 10);
-  //  points[nindex].logw = log(max(w,0.1)*10.0);
+  // points[nindex].logw = log(max(w,0.1)*10.0);
   points[nindex].valid = true;
+
   nindex++;
   nindex = (nindex % TLOCATOR_NMAX);
 
-  if (npoints<TLOCATOR_NMAX-1) {
+  if (npoints < TLOCATOR_NMAX - 1)
     npoints++;
-  }
 
   if (!initialised) {
     initialised = true;
@@ -115,21 +116,16 @@ void ThermalLocator::AddPoint(const fixed t,
     est_w = 0;
     est_t = t;
   }
-
 }
 
-void ThermalLocator::Update(const fixed t_0,
-			    const GEOPOINT &location_0,
-			    const fixed wind_speed,
-                            const fixed wind_bearing,
-			    const fixed trackbearing,
-			    GEOPOINT *Thermal_Location,
-			    fixed *Thermal_W,
-			    fixed *Thermal_R) {
-
+void
+ThermalLocator::Update(const fixed t_0, const GEOPOINT &location_0,
+    const fixed wind_speed, const fixed wind_bearing, const fixed trackbearing,
+    GEOPOINT *Thermal_Location, fixed *Thermal_W, fixed *Thermal_R)
+{
   ScopeLock protect(mutexThermalLocator);
 
-  if (npoints<TLOCATOR_NMIN) {
+  if (npoints < TLOCATOR_NMIN) {
     *Thermal_R = -1;
     *Thermal_W = 0;
     return; // nothing to do.
@@ -137,19 +133,17 @@ void ThermalLocator::Update(const fixed t_0,
 
   GEOPOINT dloc;
 
-  FindLatitudeLongitude(location_0,
-                        wind_bearing,
-                        wind_speed, &dloc);
+  FindLatitudeLongitude(location_0, wind_bearing, wind_speed, &dloc);
 
-  fixed traildrift_lat = (location_0.Latitude-dloc.Latitude);
-  fixed traildrift_lon = (location_0.Longitude-dloc.Longitude);
+  fixed traildrift_lat = (location_0.Latitude - dloc.Latitude);
+  fixed traildrift_lon = (location_0.Longitude - dloc.Longitude);
 
   // drift estimate from previous time step
-  fixed dt = t_0-est_t;
-  est_longitude += traildrift_lon*dt;
-  est_latitude += traildrift_lat*dt;
-  est_x = (est_longitude-location_0.Longitude)*fastcosine(location_0.Latitude);
-  est_y = (est_latitude-location_0.Latitude);
+  fixed dt = t_0 - est_t;
+  est_longitude += traildrift_lon * dt;
+  est_latitude += traildrift_lat * dt;
+  est_x = (est_longitude - location_0.Longitude) * fastcosine(location_0.Latitude);
+  est_y = (est_latitude - location_0.Latitude);
 
   GEOPOINT Thermal_Location0;
   fixed Thermal_W0;
@@ -171,94 +165,84 @@ void ThermalLocator::Update(const fixed t_0,
                   &Thermal_W0,
                   &Thermal_R0);
 
-  if ((Thermal_W0>0)&&(*Thermal_W>0)) {
-
 #ifdef DEBUG_THERMAL_LOCATOR
-    fixed d = Distance(*Thermal_Location,
-                        Thermal_Location0);
+  if ((Thermal_W0 > 0) && (*Thermal_W > 0)) {
+    fixed d = Distance(*Thermal_Location, Thermal_Location0);
 
-    //    if (d>200.0) {
+    // if (d > 200.0) {
     // big shift detected
 
     DebugStore("%f %f %f %f %f # center2 \n",
-	    *Thermal_Longitude, *Thermal_Latitude,
-            Thermal_Longitude0, Thermal_Latitude0,
-            d);
-    //    }
-#endif
-
-
+        *Thermal_Longitude,
+        *Thermal_Latitude,
+        Thermal_Longitude0,
+        Thermal_Latitude0,
+        d);
+    // }
   }
-
+#endif
 }
 
-
-
-void ThermalLocator::Update_Internal(fixed t_0,
-                                     fixed longitude_0,
-                                     fixed latitude_0,
-                                     fixed traildrift_lon,
-                                     fixed traildrift_lat,
-                                     fixed trackbearing,
-                                     fixed decay,
-                                     fixed *Thermal_Longitude,
-                                     fixed *Thermal_Latitude,
-                                     fixed *Thermal_W,
-                                     fixed *Thermal_R) {
-
+void
+ThermalLocator::Update_Internal(fixed t_0, fixed longitude_0, fixed latitude_0,
+    fixed traildrift_lon, fixed traildrift_lat, fixed trackbearing,
+    fixed decay, fixed *Thermal_Longitude, fixed *Thermal_Latitude,
+    fixed *Thermal_W, fixed *Thermal_R)
+{
   // drift points (only do this once)
   Drift(t_0, longitude_0, latitude_0, traildrift_lon, traildrift_lat, decay);
 
   int slogw = 0;
-  int sx=0;
-  int sy=0;
+  int sx = 0;
+  int sy = 0;
   int i;
 
-  int xav=0;
-  int yav=0;
+  int xav = 0;
+  int yav = 0;
 
-  for (i=0; i<TLOCATOR_NMAX; i++) {
+  for (i = 0; i < TLOCATOR_NMAX; i++) {
     if (points[i].valid) {
-      xav+= points[i].xiw;
-      yav+= points[i].yiw;
+      xav += points[i].xiw;
+      yav += points[i].yiw;
       slogw += points[i].iweight;
     }
   }
-  xav/= slogw;
-  yav/= slogw;
+  xav /= slogw;
+  yav /= slogw;
 
   // xav, yav is average glider's position
 
   slogw = 0;
-  for (i=0; i<TLOCATOR_NMAX; i++) {
+  for (i = 0; i < TLOCATOR_NMAX; i++) {
     if (points[i].valid) {
-      int dx = (points[i].xiw-xav*points[i].iweight)*points[i].iw;
-      int dy = (points[i].yiw-yav*points[i].iweight)*points[i].iw;
+      int dx = (points[i].xiw - xav * points[i].iweight) * points[i].iw;
+      int dy = (points[i].yiw - yav * points[i].iweight) * points[i].iw;
       sx += dx;
       sy += dy;
-      slogw += points[i].iw*points[i].iweight;
+      slogw += points[i].iw * points[i].iweight;
     }
   }
-  if (slogw>0.25) {
+
+  if (slogw > 0.25) {
     sx /= slogw;
     sy /= slogw;
 
-    //    int vx = iround(100*fastsine(trackbearing));
-    //    int vy = iround(100*fastcosine(trackbearing));
-    //    long dx = sx;
-    //    long dy = sy;
-    //    int mag = isqrt4((dx*dx+dy*dy)*256*256)/256;
+    // int vx = iround(100*fastsine(trackbearing));
+    // int vy = iround(100*fastcosine(trackbearing));
+    // long dx = sx;
+    // long dy = sy;
+    // int mag = isqrt4((dx*dx+dy*dy)*256*256)/256;
 
     // find magnitude of angle error
-//    fixed g = max(-0.99,min(0.99,(dx*vx + dy*vy)/(100.0*mag)));
-//    fixed angle = acos(g)*RAD_TO_DEG-90;
+    // fixed g = max(-0.99,min(0.99,(dx*vx + dy*vy)/(100.0*mag)));
+    // fixed angle = acos(g)*RAD_TO_DEG-90;
 
-    est_x = (sx+xav)/(1.0*SFACT);
-    est_y = (sy+yav)/(1.0*SFACT);
+    est_x = (sx + xav) / (1.0 * SFACT);
+    est_y = (sy + yav) / (1.0 * SFACT);
 
-    est_t =  t_0;
-    est_latitude = est_y+latitude_0;
-    est_longitude = est_x/fastcosine(latitude_0)+longitude_0;
+    est_t = t_0;
+    est_latitude = est_y + latitude_0;
+    est_longitude = est_x / fastcosine(latitude_0) + longitude_0;
 
     *Thermal_Longitude = est_longitude;
     *Thermal_Latitude = est_latitude;
@@ -270,29 +254,26 @@ void ThermalLocator::Update_Internal(fixed t_0,
   }
 }
 
-
-void ThermalLocator::Drift(fixed t_0,
-			   fixed longitude_0, fixed latitude_0,
-			   fixed wind_lon, fixed wind_lat, fixed decay) {
-
-  for (int i=0; i<TLOCATOR_NMAX; i++) {
-    if (points[i].valid) {
+void
+ThermalLocator::Drift(fixed t_0, fixed longitude_0, fixed latitude_0,
+    fixed wind_lon, fixed wind_lat, fixed decay)
+{
+  for (int i = 0; i < TLOCATOR_NMAX; i++) {
+    if (points[i].valid)
       points[i].Drift(t_0, longitude_0, latitude_0, wind_lon, wind_lat, decay);
-    }
   }
 }
 
-
-void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
-                                         const fixed altitude,
-                                         const fixed wthermal,
-                                         const fixed wind_speed,
-                                         const fixed wind_bearing,
-                                         GEOPOINT *ground_location,
-                                         fixed *ground_alt) {
+void
+ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
+    const fixed altitude, const fixed wthermal, const fixed wind_speed,
+    const fixed wind_bearing, GEOPOINT *ground_location, fixed *ground_alt)
+{
   ScopeLock protect(mutexThermalLocator);
 
-  if ((Thermal_Location.Longitude == 0.0)||(Thermal_Location.Latitude==0.0)||(wthermal<1.0)) {
+  if ((Thermal_Location.Longitude == 0.0)
+      || (Thermal_Location.Latitude == 0.0)
+      || (wthermal < 1.0)) {
     ground_location->Longitude = 0.0;
     ground_location->Latitude = 0.0;
     *ground_alt = -1.0;
@@ -300,45 +281,38 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
   }
 
   fixed Tmax;
-  Tmax = (altitude/wthermal);
-  fixed dt = Tmax/10;
+  Tmax = (altitude / wthermal);
+  fixed dt = Tmax / 10;
 
   terrain.Lock();
 
   GEOPOINT loc;
-  FindLatitudeLongitude(Thermal_Location,
-                        wind_bearing,
-                        wind_speed*dt,
-                        &loc);
-  fixed Xrounding = fabs(loc.Longitude-Thermal_Location.Longitude)/2;
-  fixed Yrounding = fabs(loc.Latitude-Thermal_Location.Latitude)/2;
+  FindLatitudeLongitude(Thermal_Location, wind_bearing, wind_speed * dt, &loc);
+  fixed Xrounding = fabs(loc.Longitude - Thermal_Location.Longitude) / 2;
+  fixed Yrounding = fabs(loc.Latitude - Thermal_Location.Latitude) / 2;
 
-  for (fixed t = fixed_zero; t<=Tmax; t+= dt) {
+  for (fixed t = fixed_zero; t <= Tmax; t += dt) {
+    FindLatitudeLongitude(Thermal_Location, wind_bearing, wind_speed * t, &loc);
 
-    FindLatitudeLongitude(Thermal_Location,
-                          wind_bearing,
-                          wind_speed*t, &loc);
-
-    fixed hthermal = altitude-wthermal*t;
+    fixed hthermal = altitude - wthermal * t;
     fixed hground = fixed_zero;
 
     if (terrain.GetMap()) {
-      RasterRounding rounding(*terrain.GetMap(),Xrounding,Yrounding);
+      RasterRounding rounding(*terrain.GetMap(), Xrounding, Yrounding);
       hground = terrain.GetTerrainHeight(loc, rounding);
     }
-    fixed dh = hthermal-hground;
-    if (dh<0) {
-      t = t+dh/wthermal;
-      FindLatitudeLongitude(Thermal_Location,
-                            wind_bearing,
-                            wind_speed*t, &loc);
+
+    fixed dh = hthermal - hground;
+    if (dh < 0) {
+      t = t + dh / wthermal;
+      FindLatitudeLongitude(Thermal_Location, wind_bearing, wind_speed * t, &loc);
       break;
     }
   }
 
   fixed hground = fixed_zero;
   if (terrain.GetMap()) {
-    RasterRounding rounding(*terrain.GetMap(),Xrounding,Yrounding);
+    RasterRounding rounding(*terrain.GetMap(), Xrounding, Yrounding);
     hground = terrain.GetTerrainHeight(loc, rounding);
   }
 
@@ -346,5 +320,4 @@ void ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
 
   *ground_location = loc;
   *ground_alt = hground;
-
 }

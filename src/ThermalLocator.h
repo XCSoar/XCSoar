@@ -48,22 +48,24 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 
 class ThermalLocator_Point {
- public:
-  ThermalLocator_Point() {
+public:
+  ThermalLocator_Point()
+  {
     valid = false;
   }
+
   fixed latitude;
   fixed longitude;
   fixed t;
   fixed w;
-  //  fixed logw;
+  // fixed logw;
   fixed d;
   bool valid;
   fixed weight;
 
-  void Drift(fixed t_0,
-	     fixed longitude_0, fixed latitude_0,
-	     fixed wind_lon, fixed wind_lat, fixed decay);
+  void Drift(fixed t_0, fixed longitude_0, fixed latitude_0,
+	    fixed wind_lon, fixed wind_lat, fixed decay);
+
   fixed x;
   fixed y;
   int xiw;
@@ -73,28 +75,29 @@ class ThermalLocator_Point {
 };
 
 class ThermalLocator {
- public:
+public:
   ThermalLocator();
 
   void Reset();
   void AddPoint(const fixed t, const GEOPOINT &location, const fixed w);
   void Update(const fixed t_0,
-	      const GEOPOINT &location_0,
-	      const fixed wind_speed, const fixed wind_bearing,
-	      const fixed trackbearing,
-	      GEOPOINT *Thermal_Location,
-	      fixed *Thermal_W,
-	      fixed *Thermal_R);
+      const GEOPOINT &location_0,
+      const fixed wind_speed, const fixed wind_bearing,
+      const fixed trackbearing,
+      GEOPOINT *Thermal_Location,
+      fixed *Thermal_W,
+      fixed *Thermal_R);
 
   //  fixed Estimate(fixed t_x, fixed t_y);
 
   void EstimateThermalBase(const GEOPOINT Thermal_Location,
-			   const fixed altitude,
-			   const fixed wthermal,
-			   const fixed wind_speed,
-			   const fixed wind_bearing,
-                           GEOPOINT *ground_location,
-			   fixed *ground_alt);
+      const fixed altitude,
+      const fixed wthermal,
+      const fixed wind_speed,
+      const fixed wind_bearing,
+      GEOPOINT *ground_location,
+      fixed *ground_alt);
+
   fixed est_x;
   fixed est_y;
   fixed est_w;
@@ -102,8 +105,8 @@ class ThermalLocator {
   fixed est_t;
   fixed est_latitude;
   fixed est_longitude;
- private:
 
+private:
   void Update_Internal(fixed t_0,
                        fixed longitude_0, fixed latitude_0,
                        fixed traildrift_lon, fixed traildrift_lat,
@@ -117,6 +120,7 @@ class ThermalLocator {
   void Drift(fixed t_0,
 	     fixed longitude_0, fixed latitude_0,
 	     fixed wind_lon, fixed wind_lat, fixed decay);
+
   ThermalLocator_Point points[TLOCATOR_NMAX];
   LeastSquares ols;
   bool initialised;
