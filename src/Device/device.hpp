@@ -58,7 +58,8 @@ class Mutex;
 
 struct DeviceRegister;
 
-struct DeviceDescriptor : public ComPort::Handler {
+class DeviceDescriptor : public ComPort::Handler {
+public:
   int	Port;
   FILE  *fhLogFile;
   ComPort *Com;
@@ -70,6 +71,7 @@ struct DeviceDescriptor : public ComPort::Handler {
 
   bool ticker;
 
+public:
   /* Warning: the following methods do not lock mutexComm */
   bool Open(int Port);
   void Close();
