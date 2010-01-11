@@ -69,6 +69,8 @@ public:
 
   Device *device;
 
+  bool enable_baro;
+
   bool ticker;
 
 public:

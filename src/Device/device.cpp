@@ -97,15 +97,16 @@ static const DWORD dwSpeed[] = {
   115200
 };
 
-static struct DeviceDescriptor *pDevPrimaryBaroSource;
-static struct DeviceDescriptor *pDevSecondaryBaroSource;
-
 // This function is used to determine whether a generic
 // baro source needs to be used if available
 bool
 devHasBaroSource(void)
 {
-  return pDevPrimaryBaroSource || pDevSecondaryBaroSource;
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    if (DeviceList[i].enable_baro)
+      return true;
+
+  return false;
 }
 
 bool
@@ -162,13 +163,7 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
 
     dev->Open(index);
 
-    if (devIsBaroSource(dev)) {
-      if (pDevPrimaryBaroSource == NULL) {
-        pDevPrimaryBaroSource = dev;
-      } else if (pDevSecondaryBaroSource == NULL) {
-        pDevSecondaryBaroSource = dev;
-      }
-    }
+    dev->enable_baro = devIsBaroSource(dev) && !devHasBaroSource();
 
     if (nmeaout == NULL && Driver->Flags & (1l << dfNmeaOut)) {
       nmeaout = dev;
@@ -244,10 +239,8 @@ devInit(const TCHAR *CommandLine)
     DeviceList[i].Name[0] = '\0';
     DeviceList[i].Driver = NULL;
     DeviceList[i].pDevPipeTo = NULL;
+    DeviceList[i].enable_baro = false;
   }
-
-  pDevPrimaryBaroSource = NULL;
-  pDevSecondaryBaroSource = NULL;
 
   DWORD PortIndex1, PortIndex2, SpeedIndex1, SpeedIndex2;
   if (is_altair()) {
@@ -319,8 +312,7 @@ DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
     pDevPipeTo->Com->WriteString(String);
   }
 
-  if (device != NULL && device->ParseNMEA(String, GPS_INFO,
-      this == pDevPrimaryBaroSource)) {
+  if (device != NULL && device->ParseNMEA(String, GPS_INFO, enable_baro)) {
     GPS_INFO->Connected = 2;
     return true;
   }
