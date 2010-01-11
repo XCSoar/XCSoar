@@ -398,6 +398,18 @@ DeviceDescriptor::IsBaroSource() const
 }
 
 bool
+DeviceDescriptor::IsRadio() const
+{
+  return Driver != NULL && (Driver->Flags & drfRadio) != 0;
+}
+
+bool
+DeviceDescriptor::IsCondor() const
+{
+  return Driver != NULL && (Driver->Flags & drfCondor) != 0;
+}
+
+bool
 DeviceDescriptor::PutMacCready(double MacCready)
 {
   return device != NULL ? device->PutMacCready(MacCready) : true;
@@ -547,42 +559,12 @@ devIsBaroSource(const struct DeviceDescriptor *d)
 }
 
 bool
-devIsRadio(const struct DeviceDescriptor *d)
-{
-  bool result = false;
-
-  assert(d != NULL);
-
-  mutexComm.Lock();
-  if (d && d->Driver) {
-    result = (d->Driver->Flags & drfRadio) != 0;
-  }
-  mutexComm.Unlock();
-
-  return result;
-}
-
-static bool
-devIsCondor(const struct DeviceDescriptor *d)
-{
-  bool result = false;
-
-  assert(d != NULL);
-
-  mutexComm.Lock();
-  if (d && d->Driver) {
-    result = (d->Driver->Flags & drfCondor) != 0;
-  }
-  mutexComm.Unlock();
-
-  return result;
-}
-
-bool
 HaveCondorDevice()
 {
+  ScopeLock lock(mutexComm);
+
   for (unsigned i = 0; i < NUMDEV; ++i)
-    if (devIsCondor(&DeviceList[i]))
+    if (DeviceList[i].IsCondor())
       return true;
 
   return false;

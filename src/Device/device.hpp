@@ -76,6 +76,8 @@ struct DeviceDescriptor : public ComPort::Handler {
   bool IsLogger() const;
   bool IsGPSSource() const;
   bool IsBaroSource() const;
+  bool IsRadio() const;
+  bool IsCondor() const;
 
 private:
   bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info);
@@ -107,7 +109,6 @@ bool devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl);
 bool devIsLogger(const struct DeviceDescriptor *d);
 bool devIsGPSSource(const struct DeviceDescriptor *d);
 bool devIsBaroSource(const struct DeviceDescriptor *d);
-bool devIsRadio(const struct DeviceDescriptor *d);
 
 /**
  * Returns true if at least one of the connected device is a Condor
