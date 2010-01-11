@@ -506,8 +506,7 @@ devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
     return true;
 
   mutexComm.Lock();
-  if (d != NULL)
-    d->Declare(decl);
+  d->Declare(decl);
   mutexComm.Unlock();
 
   return result;
@@ -521,8 +520,7 @@ devIsLogger(const struct DeviceDescriptor *d)
   assert(d != NULL);
 
   mutexComm.Lock();
-  if (d != NULL)
-    result = d->IsLogger();
+  result = d->IsLogger();
   mutexComm.Unlock();
 
   return result;
@@ -536,8 +534,7 @@ devIsGPSSource(const struct DeviceDescriptor *d)
   assert(d != NULL);
 
   mutexComm.Lock();
-  if (d != NULL)
-    result = d->IsGPSSource();
+  result = d->IsGPSSource();
   mutexComm.Unlock();
 
   return result;
@@ -551,8 +548,7 @@ devIsBaroSource(const struct DeviceDescriptor *d)
   assert(d != NULL);
 
   mutexComm.Lock();
-  if (d != NULL)
-    result = d->IsBaroSource();
+  result = d->IsBaroSource();
   mutexComm.Unlock();
 
   return result;
