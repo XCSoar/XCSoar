@@ -40,10 +40,7 @@ Copyright_License {
 
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
-#include "XCSoar.h"
 #include "Protection.hpp"
-#include <math.h>
-#include "Audio/VarioSound.h"
 #include "Device/Geoid.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
@@ -51,15 +48,16 @@ Copyright_License {
 #include "NMEA/Info.h"
 #include "NMEA/Checksum.h"
 #include "StringUtil.hpp"
+#include "InputEvents.h"
 
+#include <math.h>
 #include <ctype.h>
 #include <stdlib.h>
 
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::min;
 using std::max;
-#endif
 
 #ifdef FLARM_AVERAGE
 #include "FlarmCalculations.h"
@@ -1033,8 +1031,6 @@ NMEAParser::PTAS1(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   return false;
 }
-
-#include "InputEvents.h"
 
 static double FLARM_NorthingToLatitude = 0.0;
 static double FLARM_EastingToLongitude = 0.0;
