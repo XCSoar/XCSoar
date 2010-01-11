@@ -42,14 +42,14 @@ Copyright_License {
 
 #include <math.h>
 
+#define fSnailColour(cv) max((short)0, min((short)(NUMSNAILCOLORS - 1),       \
+                             (short)((cv + 1.0) / 2.0 * NUMSNAILCOLORS)))
 
-#define fSnailColour(cv) max((short)0,min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
-
-
-SnailTrail::SnailTrail(): clock(2.0)
+SnailTrail::SnailTrail() :
+  clock(2.0)
 {
   indexNext = 0;
-  memset(&TrailPoints[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
+  memset(&TrailPoints[0], 0, TRAILSIZE * sizeof(SNAIL_POINT));
 }
 
 // called by calculation thread
@@ -68,35 +68,37 @@ SnailTrail::AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   pt.Vario = Basic->NettoVario;
 
   fixed scale = Calculated->AdjustedAverageThermal; // just for now.. TODO replace
+
   // with mc or something more consistent
   fixed vario_max = min(fixed(5.0), max(scale, fixed(0.5))) * 1.5;
   fixed vario_min = min(fixed(5.0), max(scale, fixed(2.0))) * -1.;
+
   fixed colour_vario = pt.Vario;
-  if (pt.Vario<0) {
+  if (pt.Vario < 0)
     colour_vario /= (-vario_min); // JMW fixed bug here
-  } else {
+  else
     colour_vario /= vario_max;
-  }
+
   pt.Colour = fSnailColour(colour_vario);
   pt.Circling = Calculated->Circling;
 
-  indexNext ++;
+  indexNext++;
   indexNext %= TRAILSIZE;
-
 }
 
-
-void SnailTrail::ScanVisibility(rectObj *bounds_active) {
+void
+SnailTrail::ScanVisibility(rectObj *bounds_active)
+{
   Poco::ScopedRWLock protect(lock, true);
 
-  SNAIL_POINT *sv= TrailPoints;
+  SNAIL_POINT *sv = TrailPoints;
   const rectObj bounds = *bounds_active;
-  const SNAIL_POINT *s_end = sv+TRAILSIZE;
-  while (sv<s_end) {
-    sv->FarVisible = ((sv->Longitude> bounds.minx) &&
-		      (sv->Longitude< bounds.maxx) &&
-		      (sv->Latitude> bounds.miny) &&
-		      (sv->Latitude< bounds.maxy));
+  const SNAIL_POINT *s_end = sv + TRAILSIZE;
+  while (sv < s_end) {
+    sv->FarVisible = ((sv->Longitude > bounds.minx)
+                      && (sv->Longitude < bounds.maxx)
+                      && (sv->Latitude > bounds.miny)
+                      && (sv->Latitude < bounds.maxy));
     sv++;
   }
 }

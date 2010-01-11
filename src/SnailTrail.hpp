@@ -72,24 +72,36 @@ public:
 
 public:
   SnailTrail();
+
   void AddPoint(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated);
 
-  int getIndex() const {
+  int
+  getIndex() const
+  {
     return indexNext;
   }
-  const SNAIL_POINT& getPoint(int index) const {
+
+  const SNAIL_POINT&
+  getPoint(int index) const
+  {
     return TrailPoints[index];
   }
 
   void ScanVisibility(rectObj *bounds);
   GPSClock clock;
 
-  void ReadLock() {
+  void
+  ReadLock()
+  {
     lock.readLock();
   }
-  void Unlock() {
+
+  void
+  Unlock()
+  {
     lock.unlock();
   }
+
 private:
   SNAIL_POINT TrailPoints[TRAILSIZE];
   int indexNext;
