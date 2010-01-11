@@ -66,6 +66,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
 #include "Device/List.hpp"
+#include "Device/Descriptor.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "SettingsUser.hpp"

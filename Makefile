@@ -354,6 +354,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/List.cpp \
 	$(SRC)/Device/device.cpp \
+	$(SRC)/Device/Descriptor.cpp \
 	$(SRC)/Device/All.cpp \
 	$(SRC)/Device/Geoid.cpp \
 	$(SRC)/Device/Parser.cpp \

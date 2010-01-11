@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Device/All.hpp"
 #include "Device/List.hpp"
+#include "Device/Descriptor.hpp"
 #include "Device/device.hpp"
 #include "Thread/Mutex.hpp"
 #include "Asset.hpp"

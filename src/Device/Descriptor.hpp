@@ -36,7 +36,67 @@ Copyright_License {
 }
 */
 
-#include "Device/List.hpp"
-#include "Device/Descriptor.hpp"
+#ifndef XCSOAR_DEVICE_DESCRIPTOR_HPP
+#define XCSOAR_DEVICE_DESCRIPTOR_HPP
 
-DeviceDescriptor DeviceList[NUMDEV];
+#include "Device/Port.hpp"
+
+#include <tchar.h>
+#include <stdio.h>
+
+struct NMEA_INFO;
+class ComPort;
+class Device;
+struct AtmosphericPressure;
+struct DeviceRegister;
+
+#define DEVNAMESIZE  32
+
+class DeviceDescriptor : public ComPort::Handler {
+public:
+  int	Port;
+  FILE  *fhLogFile;
+  ComPort *Com;
+  TCHAR	Name[DEVNAMESIZE+1];
+  struct DeviceDescriptor *pDevPipeTo;
+  const struct DeviceRegister *Driver;
+
+  Device *device;
+
+  bool enable_baro;
+
+  bool ticker;
+
+public:
+  /* Warning: the following methods do not lock mutexComm */
+  bool Open(int Port);
+  void Close();
+
+  bool IsLogger() const;
+  bool IsGPSSource() const;
+  bool IsBaroSource() const;
+  bool IsRadio() const;
+  bool IsCondor() const;
+
+private:
+  bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info);
+
+public:
+  bool PutMacCready(double MacCready);
+  bool PutBugs(double bugs);
+  bool PutBallast(double ballast);
+  bool PutVolume(int volume);
+  bool PutActiveFrequency(double frequency);
+  bool PutStandbyFrequency(double frequency);
+  bool PutQNH(const AtmosphericPressure& pres);
+  bool PutVoice(const TCHAR *sentence);
+
+  void LinkTimeout();
+  bool Declare(const struct Declaration *declaration);
+
+  void OnSysTicker();
+
+  virtual void LineReceived(const TCHAR *line);
+};
+
+#endif
