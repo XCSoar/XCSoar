@@ -51,18 +51,20 @@ class MapWindowProjection;
 class Topology;
 class TopologyWriter;
 
-class TopologyStore {
+class TopologyStore
+{
 public:
   TopologyStore(TopologyWriter* _marks):topo_marks(_marks) {};
   ~TopologyStore();
+
   bool ScanVisibility(MapWindowProjection &m_projection,
-		      rectObj &_bounds_active,
-		      const bool force=false);
+      rectObj &_bounds_active, const bool force = false);
   void TriggerUpdateCaches(MapWindowProjection &m_projection);
   void Open();
   void Close();
   void Draw(Canvas &canvas, MapWindow &m_window, const RECT rc);
- private:
+
+private:
   Topology* topology_store[MAXTOPOLOGY];
   TopologyWriter* topo_marks;
   Poco::RWLock lock;
