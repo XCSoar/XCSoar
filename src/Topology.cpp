@@ -507,16 +507,16 @@ void
 TopologyWriter::CreateFiles(void)
 {
   // by default, now, this overwrites previous contents
-  if (msSHPCreateFile(&shpfile, filename, SHP_POINT) == -1) {
-  } else {
-    char dbfname[100];
-    strcpy(dbfname, filename);
-    strcat(dbfname, ".dbf");
-    shpfile.hDBF = msDBFCreate(dbfname);
+  if (msSHPCreateFile(&shpfile, filename, SHP_POINT) == -1)
+    return;
 
-    shapefileopen = true;
-    Close();
-  }
+  char dbfname[100];
+  strcpy(dbfname, filename);
+  strcat(dbfname, ".dbf");
+  shpfile.hDBF = msDBFCreate(dbfname);
+
+  shapefileopen = true;
+  Close();
 }
 
 void
