@@ -444,10 +444,11 @@ void XShapeLabel::setlabel(const char* src) {
 
 XShapeLabel::~XShapeLabel()
 {
-  if (label) {
-    free(label);
-    label = NULL;
-  }
+  if (!label)
+    return;
+
+  free(label);
+  label = NULL;
 }
 
 void
