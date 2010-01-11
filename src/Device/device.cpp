@@ -251,15 +251,10 @@ SetPipeTo(DeviceDescriptor &out)
 static bool
 devInit(const TCHAR *CommandLine)
 {
-  int i;
   struct DeviceDescriptor *pDevNmeaOut = NULL;
 
-  for (i = 0; i < NUMDEV; i++) {
-    DeviceList[i].fhLogFile = NULL;
-    DeviceList[i].Driver = NULL;
-    DeviceList[i].pDevPipeTo = NULL;
-    DeviceList[i].enable_baro = false;
-  }
+  for (unsigned i = 0; i < NUMDEV; i++)
+    DeviceList[i].Clear();
 
   DWORD PortIndex1, PortIndex2, SpeedIndex1, SpeedIndex2;
   if (is_altair()) {

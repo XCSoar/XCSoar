@@ -48,6 +48,28 @@ Copyright_License {
 
 #include <assert.h>
 
+DeviceDescriptor::DeviceDescriptor()
+  :fhLogFile(NULL), Com(NULL), pDevPipeTo(NULL),
+   Driver(NULL), device(NULL),
+   enable_baro(false),
+   ticker(false)
+{
+}
+
+void
+DeviceDescriptor::Clear()
+{
+  /* must be closed already */
+  assert(fhLogFile == NULL);
+  assert(device == NULL);
+  assert(Com == NULL);
+
+  Driver = NULL;
+  pDevPipeTo = NULL;
+  enable_baro = false;
+  ticker = false;
+}
+
 bool
 DeviceDescriptor::Open()
 {
