@@ -104,23 +104,17 @@ Topology::Open()
 {
   shapefileopen = false;
 
-  if (append) {
-    if (msSHPOpenFile(&shpfile, "rb+", filename) == -1) {
-      return;
-    }
-  } else {
-    if (msSHPOpenFile(&shpfile, "rb", filename) == -1) {
-      return;
-    }
-  }
+  if (msSHPOpenFile(&shpfile, (append ? "rb+" : "rb"), filename) == -1)
+    return;
 
   scaleThreshold = 1000.0;
   shpCache = (XShape**)malloc(sizeof(XShape*) * shpfile.numshapes);
-  if (shpCache) {
-    shapefileopen = true;
-    for (int i = 0; i < shpfile.numshapes; i++) {
-      shpCache[i] = NULL;
-    }
+  if (!shpCache)
+    return;
+
+  shapefileopen = true;
+  for (int i = 0; i < shpfile.numshapes; i++) {
+    shpCache[i] = NULL;
   }
 }
 
