@@ -570,6 +570,8 @@ ComPort::ProcessChar(char c)
     return;
 
   BuildingString[bi] = '\0';
+  bi = 0;
+
   mutexBlackboard.Lock();
   dev->ParseNMEA(BuildingString, &device_blackboard.SetBasic());
   mutexBlackboard.Unlock();
