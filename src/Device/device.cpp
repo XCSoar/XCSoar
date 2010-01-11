@@ -265,10 +265,10 @@ devInit(const TCHAR *CommandLine)
   ReadPort1Settings(&PortIndex1, &SpeedIndex1);
   ReadPort2Settings(&PortIndex2, &SpeedIndex2);
 
-  devInitOne(devA(), 0, COMMPort[PortIndex1], dwSpeed[SpeedIndex1], pDevNmeaOut);
+  devInitOne(&DeviceList[0], 0, COMMPort[PortIndex1], dwSpeed[SpeedIndex1], pDevNmeaOut);
 
   if (PortIndex1 != PortIndex2)
-    devInitOne(devB(), 1, COMMPort[PortIndex2], dwSpeed[SpeedIndex2], pDevNmeaOut);
+    devInitOne(&DeviceList[0], 1, COMMPort[PortIndex2], dwSpeed[SpeedIndex2], pDevNmeaOut);
 
   CommandLine = LOGGDEVCOMMANDLINE;
 

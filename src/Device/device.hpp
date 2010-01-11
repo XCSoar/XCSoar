@@ -55,9 +55,6 @@ struct AtmosphericPressure;
 
 #define DEVNAMESIZE  32
 
-#define	devA()	    (&DeviceList[0])
-#define	devB()	    (&DeviceList[1])
-
 struct DeviceRegister;
 
 struct DeviceDescriptor : public ComPort::Handler {
