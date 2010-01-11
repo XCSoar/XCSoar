@@ -383,42 +383,44 @@ TopologyLabel::addShape(const int i)
 }
 
 void
-XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x,
-    int y)
+XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y)
 {
-  if (label) {
-    TCHAR Temp[100];
-    _stprintf(Temp, TEXT("%S"), label);
-    canvas.background_transparent();
+  if (!label)
+    return;
 
-    // TODO code: JMW asks, what does this do?
-    if (ispunct(Temp[0])) {
-      double dTemp;
+  TCHAR Temp[100];
+  _stprintf(Temp, TEXT("%S"), label);
+  canvas.background_transparent();
 
-      Temp[0] = '0';
-      dTemp = _tcstod(Temp, NULL);
-      dTemp = ALTITUDEMODIFY * dTemp;
-      if (dTemp > 999)
-        _stprintf(Temp, TEXT("%.1f"), (dTemp / 1000));
-      else
-        _stprintf(Temp, TEXT("%d"), int(dTemp));
-    }
+  // TODO code: JMW asks, what does this do?
+  if (ispunct(Temp[0])) {
+    double dTemp;
 
-    SIZE tsize = canvas.text_size(Temp);
-    RECT brect;
-    x += 2;
-    y += 2;
-    brect.left = x;
-    brect.right = brect.left + tsize.cx;
-    brect.top = y;
-    brect.bottom = brect.top + tsize.cy;
-
-    if (!label_block.check(brect))
-      return;
-
-    canvas.set_text_color(Color(0x20, 0x20, 0x20));
-    canvas.text(x, y, Temp);
+    Temp[0] = '0';
+    dTemp = _tcstod(Temp, NULL);
+    dTemp = ALTITUDEMODIFY * dTemp;
+    if (dTemp > 999)
+      _stprintf(Temp, TEXT("%.1f"), (dTemp / 1000));
+    else
+      _stprintf(Temp, TEXT("%d"), int(dTemp));
   }
+
+  SIZE tsize = canvas.text_size(Temp);
+
+  x += 2;
+  y += 2;
+
+  RECT brect;
+  brect.left = x;
+  brect.right = brect.left + tsize.cx;
+  brect.top = y;
+  brect.bottom = brect.top + tsize.cy;
+
+  if (!label_block.check(brect))
+    return;
+
+  canvas.set_text_color(Color(0x20, 0x20, 0x20));
+  canvas.text(x, y, Temp);
 }
 
 void XShapeLabel::setlabel(const char* src) {
