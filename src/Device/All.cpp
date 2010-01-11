@@ -47,12 +47,12 @@ devTick()
 {
   int i;
 
-  mutexComm.Lock();
+  ScopeLock protect(mutexComm);
+
   for (i = 0; i < NUMDEV; i++) {
     struct DeviceDescriptor *d = &DeviceList[i];
     d->OnSysTicker();
   }
-  mutexComm.Unlock();
 }
 
 void

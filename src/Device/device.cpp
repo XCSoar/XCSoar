@@ -490,74 +490,53 @@ DeviceDescriptor::OnSysTicker()
 void
 DeviceDescriptor::LineReceived(const TCHAR *line)
 {
-  mutexBlackboard.Lock();
+  ScopeLock protect(mutexBlackboard);
   ParseNMEA(line, &device_blackboard.SetBasic());
-  mutexBlackboard.Unlock();
 }
 
 bool
 devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
 {
-  bool result = false;
-
   assert(d != NULL);
 
   if (is_simulator())
     return true;
 
-  mutexComm.Lock();
-  d->Declare(decl);
-  mutexComm.Unlock();
-
-  return result;
+  ScopeLock protect(mutexComm);
+  return d->Declare(decl);
 }
 
 bool
 devIsLogger(const struct DeviceDescriptor *d)
 {
-  bool result = false;
-
   assert(d != NULL);
 
-  mutexComm.Lock();
-  result = d->IsLogger();
-  mutexComm.Unlock();
-
-  return result;
+  ScopeLock protect(mutexComm);
+  return d->IsLogger();
 }
 
 bool
 devIsGPSSource(const struct DeviceDescriptor *d)
 {
-  bool result = false;
-
   assert(d != NULL);
 
-  mutexComm.Lock();
-  result = d->IsGPSSource();
-  mutexComm.Unlock();
-
-  return result;
+  ScopeLock protect(mutexComm);
+  return d->IsGPSSource();
 }
 
 bool
 devIsBaroSource(const struct DeviceDescriptor *d)
 {
-  bool result = false;
-
   assert(d != NULL);
 
-  mutexComm.Lock();
-  result = d->IsBaroSource();
-  mutexComm.Unlock();
-
-  return result;
+  ScopeLock protect(mutexComm);
+  return d->IsBaroSource();
 }
 
 bool
 HaveCondorDevice()
 {
-  ScopeLock lock(mutexComm);
+  ScopeLock protect(mutexComm);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     if (DeviceList[i].IsCondor())
@@ -600,12 +579,13 @@ devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *text)
 
   assert(d != NULL);
 
+  if (d->Com == NULL)
+    return;
+
   devFormatNMEAString(tmp, 512, text);
 
-  mutexComm.Lock();
-  if (d->Com)
-    d->Com->WriteString(tmp);
-  mutexComm.Unlock();
+  ScopeLock protect(mutexComm);
+  d->Com->WriteString(tmp);
 }
 
 void
@@ -615,12 +595,11 @@ VarioWriteNMEA(const TCHAR *text)
 
   devFormatNMEAString(tmp, 512, text);
 
-  mutexComm.Lock();
+  ScopeLock protect(mutexComm);
   for (int i = 0; i < NUMDEV; i++)
     if (_tcscmp(DeviceList[i].Name, _T("Vega")) == 0)
       if (DeviceList[i].Com)
         DeviceList[i].Com->WriteString(tmp);
-  mutexComm.Unlock();
 }
 
 struct DeviceDescriptor *
@@ -674,19 +653,16 @@ devRestart()
 
   StartupStore(_T("RestartCommPorts\n"));
 
-  mutexComm.Lock();
+  ScopeLock protect(mutexComm);
 
   devShutdown();
   NMEAParser::Reset();
 
   devInit(_T(""));
-
-  mutexComm.Unlock();
 }
 
 void devConnectionMonitor()
 {
-  mutexComm.Lock();
+  ScopeLock protect(mutexComm);
   NMEAParser::UpdateMonitor();
-  mutexComm.Unlock();
 }
