@@ -889,15 +889,19 @@ InputEvents::eventSendNMEA(const TCHAR *misc)
 void
 InputEvents::eventSendNMEAPort1(const TCHAR *misc)
 {
-  if (misc)
-    Port1WriteNMEA(misc);
+  const unsigned i = 0;
+
+  if (misc != NULL && i < NUMDEV)
+    devWriteNMEAString(&DeviceList[i], misc);
 }
 
 void
 InputEvents::eventSendNMEAPort2(const TCHAR *misc)
 {
-  if (misc)
-    Port2WriteNMEA(misc);
+  const unsigned i = 1;
+
+  if (misc != NULL && i < NUMDEV)
+    devWriteNMEAString(&DeviceList[i], misc);
 }
 
 // AdjustVarioFilter

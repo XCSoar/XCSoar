@@ -101,9 +101,6 @@ public:
   virtual void LineReceived(const TCHAR *line);
 };
 
-#define Port1WriteNMEA(s)	devWriteNMEAString(devA(), s)
-#define Port2WriteNMEA(s)	devWriteNMEAString(devB(), s)
-
 void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
 struct DeviceDescriptor *devVarioFindVega(void);
