@@ -485,18 +485,22 @@ TopologyWriter::DeleteFiles(void)
 {
   // Delete all files, since zziplib interface doesn't handle file modes
   // properly
-  if (strlen(filename) > 0) {
-    TCHAR fname[MAX_PATH];
-    ascii2unicode(filename, fname);
-    _tcscat(fname, TEXT(".shp"));
-    DeleteFile(fname);
-    ascii2unicode(filename, fname);
-    _tcscat(fname, TEXT(".shx"));
-    DeleteFile(fname);
-    ascii2unicode(filename, fname);
-    _tcscat(fname, TEXT(".dbf"));
-    DeleteFile(fname);
-  }
+  if (strlen(filename) <= 0)
+    return;
+
+  TCHAR fname[MAX_PATH];
+
+  ascii2unicode(filename, fname);
+  _tcscat(fname, TEXT(".shp"));
+  DeleteFile(fname);
+
+  ascii2unicode(filename, fname);
+  _tcscat(fname, TEXT(".shx"));
+  DeleteFile(fname);
+
+  ascii2unicode(filename, fname);
+  _tcscat(fname, TEXT(".dbf"));
+  DeleteFile(fname);
 }
 
 void
