@@ -219,10 +219,11 @@ Topology::addShape(const int i)
 void
 Topology::removeShape(const int i)
 {
-  if (shpCache[i]) {
-    delete shpCache[i];
-    shpCache[i] = NULL;
-  }
+  if (!shpCache[i])
+    return;
+
+  delete shpCache[i];
+  shpCache[i] = NULL;
 }
 
 bool
