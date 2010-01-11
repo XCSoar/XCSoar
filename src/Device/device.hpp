@@ -52,6 +52,7 @@ struct NMEA_INFO;
 class ComPort;
 class Device;
 struct AtmosphericPressure;
+class Mutex;
 
 #define DEVNAMESIZE  32
 
@@ -99,6 +100,8 @@ public:
 
   virtual void LineReceived(const TCHAR *line);
 };
+
+extern Mutex mutexComm;
 
 void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);

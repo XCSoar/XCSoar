@@ -59,7 +59,7 @@ Copyright_License {
 
 #include <assert.h>
 
-static Mutex mutexComm;
+Mutex mutexComm;
 
 // A note about locking.
 //  The ComPort RX threads lock using FlightData critical section.
