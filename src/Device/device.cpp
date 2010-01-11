@@ -179,6 +179,50 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
 }
 
 static void
+ParseLogOption(DeviceDescriptor &device, const TCHAR *CommandLine,
+               const TCHAR *option)
+{
+  assert(CommandLine != NULL);
+  assert(option != NULL);
+
+  TCHAR *start = _tcsstr(CommandLine, option);
+  if (start == NULL)
+    return;
+
+  start += _tcslen(option);
+
+  TCHAR *end;
+  if (*start == '"') {
+    start++;
+    while (*end != '"' && *end != '\0')
+      end++;
+  } else {
+    end = start;
+    while (*end != ' ' && *end != '\0')
+      end++;
+  }
+
+  if (start >= end)
+    return;
+
+  TCHAR path[MAX_PATH];
+  _tcsncpy(path, start, end - start);
+  path[end - start] = '\0';
+
+  if (devOpenLog(&device, path)) {
+    TCHAR msg[512];
+    _stprintf(msg, _T("Device %s logs to\r\n%s"),
+              device.Name, path);
+    MessageBoxX(msg, gettext(_T("Information")), MB_OK | MB_ICONINFORMATION);
+  } else {
+    TCHAR msg[512];
+    _stprintf(msg, _T("Unable to open log\r\non device %s\r\n%s"),
+              device.Name, path);
+    MessageBoxX(msg, gettext(_T("Error")), MB_OK | MB_ICONWARNING);
+  }
+}
+
+static void
 SetPipeTo(DeviceDescriptor &out)
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
@@ -229,66 +273,8 @@ devInit(const TCHAR *CommandLine)
   CommandLine = LOGGDEVCOMMANDLINE;
 
   if (CommandLine != NULL) {
-    TCHAR *pC, *pCe;
-    TCHAR wcLogFileName[MAX_PATH];
-    TCHAR sTmp[128];
-
-    pC = _tcsstr(CommandLine, _T("-logA="));
-    if (pC != NULL) {
-      pC += strlen("-logA=");
-
-      if (*pC == '"') {
-        pC++;
-        pCe = pC;
-        while (*pCe != '"' && *pCe != '\0')
-          pCe++;
-      } else {
-        pCe = pC;
-        while (*pCe != ' ' && *pCe != '\0')
-          pCe++;
-      }
-
-      if (pCe != NULL && pCe-1 > pC){
-        _tcsncpy(wcLogFileName, pC, pCe - pC);
-        wcLogFileName[pCe - pC] = '\0';
-
-        if (devOpenLog(devA(), wcLogFileName)) {
-          _stprintf(sTmp, _T("Device A logs to\r\n%s"), wcLogFileName);
-          MessageBoxX(sTmp, gettext(_T("Information")), MB_OK | MB_ICONINFORMATION);
-        } else {
-          _stprintf(sTmp, _T("Unable to open log\r\non device A\r\n%s"), wcLogFileName);
-          MessageBoxX(sTmp, gettext(_T("Error")), MB_OK | MB_ICONWARNING);
-        }
-      }
-    }
-
-    pC = _tcsstr(CommandLine, _T("-logB="));
-    if (pC != NULL) {
-      pC += strlen("-logA=");
-      if (*pC == '"') {
-        pC++;
-        pCe = pC;
-        while (*pCe != '"' && *pCe != '\0')
-          pCe++;
-      } else {
-        pCe = pC;
-        while (*pCe != ' ' && *pCe != '\0')
-          pCe++;
-      }
-
-      if (pCe != NULL && pCe > pC) {
-        _tcsncpy(wcLogFileName, pC, pCe - pC);
-        wcLogFileName[pCe - pC] = '\0';
-
-        if (devOpenLog(devB(), wcLogFileName)) {
-          _stprintf(sTmp, _T("Device B logs to\r\n%s"), wcLogFileName);
-          MessageBoxX(sTmp, gettext(_T("Information")), MB_OK | MB_ICONINFORMATION);
-        } else {
-          _stprintf(sTmp, _T("Unable to open log\r\non device B\r\n%s"), wcLogFileName);
-          MessageBoxX(sTmp, gettext(_T("Error")), MB_OK | MB_ICONWARNING);
-        }
-      }
-    }
+    ParseLogOption(DeviceList[0], CommandLine, _T("-logA="));
+    ParseLogOption(DeviceList[1], CommandLine, _T("-logB="));
   }
 
   if (pDevNmeaOut != NULL)
