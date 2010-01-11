@@ -467,10 +467,11 @@ XShapeLabel::clear()
 
 TopologyWriter::~TopologyWriter()
 {
-  if (shapefileopen) {
-    Close();
-    DeleteFiles();
-  }
+  if (!shapefileopen)
+    return;
+
+  Close();
+  DeleteFiles();
 }
 
 TopologyWriter::TopologyWriter(const char* shpname, const Color thecolor) :
