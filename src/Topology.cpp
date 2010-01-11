@@ -522,9 +522,8 @@ TopologyWriter::CreateFiles(void)
 void
 TopologyWriter::Reset(void)
 {
-  if (shapefileopen) {
+  if (shapefileopen)
     Close();
-  }
 
   DeleteFiles();
   CreateFiles();
@@ -541,6 +540,6 @@ TopologyWriter::addPoint(double x, double y)
     msSHPWritePoint(shpfile.hSHP, &p);
     Close();
   }
-  Open();
 
+  Open();
 }
