@@ -455,10 +455,12 @@ void
 XShapeLabel::clear()
 {
   XShape::clear();
-  if (label) {
-    free(label);
-    label = NULL;
-  }
+
+  if (!label)
+    return;
+
+  free(label);
+  label = NULL;
 }
 
 //       wsprintf(Scale,TEXT("%1.2f%c"),MapScale, autozoomstring);
