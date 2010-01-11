@@ -259,15 +259,12 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
 
   int iskip = 1;
 
-  if (map_scale > 0.25 * scaleThreshold) {
+  if (map_scale > 0.25 * scaleThreshold)
     iskip = 2;
-  }
-  if (map_scale > 0.5 * scaleThreshold) {
+  if (map_scale > 0.5 * scaleThreshold)
     iskip = 3;
-  }
-  if (map_scale > 0.75 * scaleThreshold) {
+  if (map_scale > 0.75 * scaleThreshold)
     iskip = 4;
-  }
 
   rectObj screenRect = map_projection.CalculateScreenBounds(fixed_zero);
 
@@ -284,67 +281,71 @@ Topology::Paint(Canvas &canvas, MapWindow &m_window, const RECT rc)
 
     switch (shape->type) {
     case (MS_SHAPE_POINT):
-      if (checkVisible(*shape, screenRect)) {
-        for (int tt = 0; tt < shape->numlines; tt++) {
-          for (int jj = 0; jj < shape->line[tt].numpoints; jj++) {
-            POINT sc;
-            GEOPOINT l;
-            l.Longitude = shape->line[tt].point[jj].x;
-            l.Latitude = shape->line[tt].point[jj].y;
-            if (m_window.draw_masked_bitmap_if_visible(canvas, hBitmap, l, 10,
-                10, &sc)) {
-              if (render_labels)
-                cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
-            }
+      if (!checkVisible(*shape, screenRect))
+        break;
+
+      for (int tt = 0; tt < shape->numlines; tt++) {
+        for (int jj = 0; jj < shape->line[tt].numpoints; jj++) {
+          POINT sc;
+          GEOPOINT l;
+          l.Longitude = shape->line[tt].point[jj].x;
+          l.Latitude = shape->line[tt].point[jj].y;
+
+          if (m_window.draw_masked_bitmap_if_visible(canvas, hBitmap, l, 10, 10, &sc)) {
+            if (render_labels)
+              cshape->renderSpecial(canvas, *label_block, sc.x, sc.y);
           }
         }
       }
       break;
 
     case (MS_SHAPE_LINE):
-      if (checkVisible(*shape, screenRect))
-        for (int tt = 0; tt < shape->numlines; tt++) {
-          int minx = rc.right;
-          int miny = rc.bottom;
-          int msize = min(shape->line[tt].numpoints, (int)MAXCLIPPOLYGON);
+      if (!checkVisible(*shape, screenRect))
+        break;
 
-          map_projection.LonLat2Screen(shape->line[tt].point, pt, msize, 1);
+      for (int tt = 0; tt < shape->numlines; tt++) {
+        int minx = rc.right;
+        int miny = rc.bottom;
+        int msize = min(shape->line[tt].numpoints, (int)MAXCLIPPOLYGON);
 
-          for (int jj = 0; jj < msize; jj++) {
-            if (pt[jj].x <= minx) {
-              minx = pt[jj].x;
-              miny = pt[jj].y;
-            }
+        map_projection.LonLat2Screen(shape->line[tt].point, pt, msize, 1);
+
+        for (int jj = 0; jj < msize; jj++) {
+          if (pt[jj].x <= minx) {
+            minx = pt[jj].x;
+            miny = pt[jj].y;
           }
-
-          canvas.polyline(pt, msize);
-          if (render_labels)
-            cshape->renderSpecial(canvas, *label_block, minx, miny);
         }
+
+        canvas.polyline(pt, msize);
+        if (render_labels)
+          cshape->renderSpecial(canvas, *label_block, minx, miny);
+      }
       break;
 
     case (MS_SHAPE_POLYGON):
-      if (checkVisible(*shape, screenRect))
-        for (int tt = 0; tt < shape->numlines; tt++) {
-          int minx = rc.right;
-          int miny = rc.bottom;
-          int msize = min(shape->line[tt].numpoints / iskip,
-              (int)MAXCLIPPOLYGON);
+      if (!checkVisible(*shape, screenRect))
+        break;
 
-          map_projection.LonLat2Screen(shape->line[tt].point, pt,
-              msize * iskip, iskip);
+      for (int tt = 0; tt < shape->numlines; tt++) {
+        int minx = rc.right;
+        int miny = rc.bottom;
+        int msize = min(shape->line[tt].numpoints / iskip, (int)MAXCLIPPOLYGON);
 
-          for (int jj = 0; jj < msize; jj++) {
-            if (pt[jj].x <= minx) {
-              minx = pt[jj].x;
-              miny = pt[jj].y;
-            }
+        map_projection.LonLat2Screen(shape->line[tt].point, pt,
+            msize * iskip, iskip);
+
+        for (int jj = 0; jj < msize; jj++) {
+          if (pt[jj].x <= minx) {
+            minx = pt[jj].x;
+            miny = pt[jj].y;
           }
-
-          canvas.polygon(pt, msize);
-          if (render_labels)
-            cshape->renderSpecial(canvas, *label_block, minx, miny);
         }
+
+        canvas.polygon(pt, msize);
+        if (render_labels)
+          cshape->renderSpecial(canvas, *label_block, minx, miny);
+      }
       break;
 
     default:
