@@ -86,6 +86,23 @@ DeviceDescriptor::Close()
 }
 
 bool
+DeviceDescriptor::OpenLog(const TCHAR *FileName)
+{
+  fhLogFile = _tfopen(FileName, _T("a+b"));
+  return fhLogFile != NULL;
+}
+
+void
+DeviceDescriptor::CloseLog()
+{
+  if (fhLogFile == NULL)
+    return;
+
+  fclose(fhLogFile);
+  fhLogFile = NULL;
+}
+
+bool
 DeviceDescriptor::IsLogger() const
 {
   return Driver != NULL &&

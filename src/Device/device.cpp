@@ -129,9 +129,6 @@ devGetBaroAltitude(double *Value)
 }
 
 static bool
-devOpenLog(struct DeviceDescriptor *d, const TCHAR *FileName);
-
-static bool
 devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
            DWORD speed, struct DeviceDescriptor *&nmeaout)
 {
@@ -202,7 +199,7 @@ ParseLogOption(DeviceDescriptor &device, const TCHAR *CommandLine,
   _tcsncpy(path, start, end - start);
   path[end - start] = '\0';
 
-  if (devOpenLog(&device, path)) {
+  if (device.OpenLog(path)) {
     TCHAR msg[512];
     _stprintf(msg, _T("Device %s logs to\r\n%s"),
               device.Name, path);
@@ -325,27 +322,6 @@ HaveCondorDevice()
   return false;
 }
 
-static bool
-devOpenLog(struct DeviceDescriptor *d, const TCHAR *FileName)
-{
-  assert(d != NULL);
-
-  d->fhLogFile = _tfopen(FileName, _T("a+b"));
-  return d->fhLogFile != NULL;
-}
-
-static bool
-devCloseLog(struct DeviceDescriptor *d)
-{
-  assert(d != NULL);
-
-  if (d->fhLogFile != NULL) {
-    fclose(d->fhLogFile);
-    return true;
-  } else
-    return false;
-}
-
 static void
 devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
 {
@@ -410,7 +386,7 @@ devShutdown()
 
   for (i = 0; i < NUMDEV; i++) {
     DeviceList[i].Close();
-    devCloseLog(&DeviceList[i]);
+    DeviceList[i].CloseLog();
   }
 }
 

@@ -72,6 +72,9 @@ public:
   bool Open(int Port);
   void Close();
 
+  bool OpenLog(const TCHAR *FileName);
+  void CloseLog();
+
   bool IsLogger() const;
   bool IsGPSSource() const;
   bool IsBaroSource() const;
