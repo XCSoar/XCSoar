@@ -178,6 +178,16 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
   return true;
 }
 
+static void
+SetPipeTo(DeviceDescriptor &out)
+{
+  for (unsigned i = 0; i < NUMDEV; ++i) {
+    DeviceDescriptor &device = DeviceList[i];
+
+    device.pDevPipeTo = &device == &out ? NULL : &out;
+  }
+}
+
 static bool
 devInit(const TCHAR *CommandLine)
 {
@@ -281,14 +291,8 @@ devInit(const TCHAR *CommandLine)
     }
   }
 
-  if (pDevNmeaOut != NULL) {
-    if (pDevNmeaOut == devA()){
-      devB()->pDevPipeTo = devA();
-    }
-    if (pDevNmeaOut == devB()){
-      devA()->pDevPipeTo = devB();
-    }
-  }
+  if (pDevNmeaOut != NULL)
+    SetPipeTo(*pDevNmeaOut);
 
   return true;
 }
