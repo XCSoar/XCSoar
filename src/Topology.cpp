@@ -424,22 +424,20 @@ XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y
 }
 
 void XShapeLabel::setlabel(const char* src) {
+  if (label)
+    free(label);
+
   if (src &&
       (strcmp(src,"UNK") != 0) &&
       (strcmp(src,"RAILWAY STATION") != 0) &&
       (strcmp(src,"RAILROAD STATION") != 0)) {
-    if (label)
-      free(label);
     label = (char*)malloc(strlen(src) + 1);
-    if (label) {
+    if (label)
       strcpy(label, src);
-    }
+
     hide = false;
   } else {
-    if (label) {
-      free(label);
-      label = NULL;
-    }
+    label = NULL;
     hide = true;
   }
 }
