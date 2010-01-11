@@ -591,19 +591,6 @@ devCloseLog(struct DeviceDescriptor *d)
     return false;
 }
 
-void
-devTick()
-{
-  int i;
-
-  mutexComm.Lock();
-  for (i = 0; i < NUMDEV; i++) {
-    struct DeviceDescriptor *d = &DeviceList[i];
-    d->OnSysTicker();
-  }
-  mutexComm.Unlock();
-}
-
 static void
 devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
 {
@@ -648,114 +635,6 @@ devVarioFindVega(void)
       return &DeviceList[i];
 
   return NULL;
-}
-
-void
-AllDevicesPutMacCready(double MacCready)
-{
-  if (is_simulator())
-    return;
-
-  ScopeLock protect(mutexComm);
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutMacCready(MacCready);
-}
-
-void
-AllDevicesPutBugs(double bugs)
-{
-  if (is_simulator())
-    return;
-
-  ScopeLock protect(mutexComm);
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutBugs(bugs);
-}
-
-void
-AllDevicesPutBallast(double ballast)
-{
-  if (is_simulator())
-    return;
-
-  ScopeLock protect(mutexComm);
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutBallast(ballast);
-}
-
-void
-AllDevicesPutVolume(int volume)
-{
-  if (is_simulator())
-    return;
-
-  ScopeLock protect(mutexComm);
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutBallast(volume);
-}
-
-void
-AllDevicesPutActiveFrequency(double frequency)
-{
-  if (is_simulator())
-    return;
-
-  ScopeLock protect(mutexComm);
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutActiveFrequency(frequency);
-}
-
-void
-AllDevicesPutStandbyFrequency(double frequency)
-{
-  if (is_simulator())
-    return;
-
-  ScopeLock protect(mutexComm);
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutStandbyFrequency(frequency);
-}
-
-void
-AllDevicesPutQNH(const AtmosphericPressure& pres)
-{
-  if (is_simulator())
-    return;
-
-  ScopeLock protect(mutexComm);
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutQNH(pres);
-}
-
-void
-AllDevicesPutVoice(const TCHAR *sentence)
-{
-  if (is_simulator())
-    return;
-
-  ScopeLock protect(mutexComm);
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutVoice(sentence);
-}
-
-void
-AllDevicesLinkTimeout()
-{
-  if (is_simulator())
-    return;
-
-  ScopeLock protect(mutexComm);
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].LinkTimeout();
 }
 
 void

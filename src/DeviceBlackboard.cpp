@@ -45,7 +45,7 @@ Copyright_License {
 #include "UtilsFLARM.hpp"
 #include "Asset.hpp"
 #include "Device/Parser.hpp"
-#include "Device/device.hpp"
+#include "Device/All.hpp"
 #include "Math/Constants.h"
 #include "GlideSolvers/GlidePolar.hpp"
 

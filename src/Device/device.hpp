@@ -120,23 +120,12 @@ bool devIsBaroSource(const struct DeviceDescriptor *d);
 bool
 HaveCondorDevice();
 
-void devTick(void);
 bool devGetBaroAltitude(double *Value);
 
-void AllDevicesPutMacCready(double MacCready);
-void AllDevicesPutBugs(double bugs);
-void AllDevicesPutBallast(double ballast);
-void AllDevicesPutVolume(int volume);
-void AllDevicesPutActiveFrequency(double frequency);
-void AllDevicesPutStandbyFrequency(double frequency);
-void AllDevicesPutQNH(const AtmosphericPressure& pres);
-void AllDevicesPutVoice(const TCHAR *sentence);
-
-void AllDevicesLinkTimeout();
+void devConnectionMonitor();
 
 void devStartup(const TCHAR *lpCmdLine);
 void devShutdown();
 void devRestart(void);
-void devConnectionMonitor();
 
 #endif
