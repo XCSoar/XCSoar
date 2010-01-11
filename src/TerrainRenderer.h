@@ -56,7 +56,7 @@ struct COLORRAMP;
 class TerrainRenderer {
 public:
   TerrainRenderer(const RasterTerrain *_terrain, RasterWeather *_weather,
-                  RECT rc);
+      RECT rc);
   ~TerrainRenderer();
 
 public:
@@ -69,9 +69,11 @@ private:
   const RasterTerrain *terrain;
   RasterWeather *weather;
 
-  unsigned int ixs, iys; // screen dimensions in coarse pixels
+  // screen dimensions in coarse pixels
+  unsigned int ixs, iys;
   unsigned int dtquant;
-  unsigned int epx; // step size used for slope calculations
+  // step size used for slope calculations
+  unsigned int epx;
 
   RECT rect_visible;
 
@@ -113,24 +115,23 @@ private:
    */
   bool SetMap(const GEOPOINT &loc, int day_time);
 
- public:
-  void SetSettings(short _TerrainRamp,
-		   short _TerrainContrast,
-		   short _TerrainBrightness) {
+public:
+  void
+  SetSettings(short _TerrainRamp, short _TerrainContrast,
+      short _TerrainBrightness)
+  {
     TerrainRamp = _TerrainRamp;
-    TerrainContrast= _TerrainContrast;
+    TerrainContrast = _TerrainContrast;
     TerrainBrightness = _TerrainBrightness;
   }
 
- public:
+public:
   /**
    * @param day_time the UTC time, in seconds since midnight
    */
-  bool Draw(Canvas &canvas,
-	    MapWindowProjection &map_projection,
-	    const double sunazimuth, const double sunelevation,
-            const GEOPOINT &loc, int day_time,
-	    const bool isBigZoom);
+  bool Draw(Canvas &canvas, MapWindowProjection &map_projection,
+      const double sunazimuth, const double sunelevation, const GEOPOINT &loc,
+      int day_time, const bool isBigZoom);
 };
 
 #endif
