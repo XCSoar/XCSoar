@@ -121,16 +121,17 @@ Topology::Open()
 void
 Topology::Close()
 {
-  if (shapefileopen) {
-    if (shpCache) {
-      flushCache();
-      free(shpCache);
-      shpCache = NULL;
-    }
+  if (!shapefileopen)
+    return;
 
-    msSHPCloseFile(&shpfile);
-    shapefileopen = false; // added sgi
+  if (shpCache) {
+    flushCache();
+    free(shpCache);
+    shpCache = NULL;
   }
+
+  msSHPCloseFile(&shpfile);
+  shapefileopen = false;
 }
 
 Topology::~Topology()
