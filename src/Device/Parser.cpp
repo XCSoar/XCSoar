@@ -1145,9 +1145,7 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   isFlarm = true;
 
   // 5 id, 6 digit hex
-  long ID;
-  _stscanf(params[5], _T("%lx"), &ID);
-  //  unsigned long uID = ID;
+  long ID = _tcstol(params[5], NULL, 16);
 
   FLARM_TRAFFIC *flarm_slot = FLARM_FindSlot(GPS_INFO, ID);
   if (flarm_slot == NULL)
