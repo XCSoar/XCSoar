@@ -79,10 +79,8 @@ DeviceDescriptor::Close()
   ComPort *OldCom = Com;
   Com = NULL;
 
-  if (OldCom != NULL) {
-    OldCom->Close();
+  if (OldCom != NULL)
     delete OldCom;
-  }
 }
 
 bool

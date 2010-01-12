@@ -65,6 +65,7 @@ public:
   ComPort(Handler &_handler);
   ~ComPort()
   {
+    Close();
   }
 
   void PutChar(BYTE);
