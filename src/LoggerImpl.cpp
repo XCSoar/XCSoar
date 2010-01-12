@@ -51,7 +51,7 @@
 #include "Device/List.hpp"
 #include "Compatibility/string.h"
 #include "SettingsComputer.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 
 LoggerImpl::LoggerImpl():
   LoggerActive(false),

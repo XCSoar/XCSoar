@@ -45,7 +45,7 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Atmosphere.h"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
 #include <math.h>

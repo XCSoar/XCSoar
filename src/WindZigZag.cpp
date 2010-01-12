@@ -40,7 +40,7 @@ Copyright_License {
 #include "WindZigZag.h"
 #include "LogFile.hpp"
 #include "Math/FastMath.h"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
 #include <math.h>

@@ -58,7 +58,7 @@ Copyright_License {
 #include "WindStore.h"
 #include "XCSoar.h"
 #include "Math/Constants.h"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
 #include <math.h>

@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef BLACKBOARD_H
 #define BLACKBOARD_H
 
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
 class BaseBlackboard

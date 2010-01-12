@@ -38,7 +38,7 @@ Copyright_License {
 
 #ifdef FLARM_AVERAGE
 #include "FlarmCalculations.h"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 
 FlarmCalculations::FlarmCalculations(void)
 {

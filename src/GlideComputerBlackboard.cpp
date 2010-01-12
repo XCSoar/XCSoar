@@ -40,7 +40,7 @@ Copyright_License {
 #include "GlideComputerBlackboard.hpp"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "GlideRatio.hpp"
 

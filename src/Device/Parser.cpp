@@ -45,7 +45,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Units.h"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Checksum.h"
 #include "StringUtil.hpp"
 #include "InputEvents.h"

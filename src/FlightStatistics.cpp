@@ -44,7 +44,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Math/Constants.h"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units.hpp"
 #include "RasterTerrain.h"

@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "LocalTime.hpp"
 #include "Interface.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Asset.hpp"
 

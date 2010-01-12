@@ -42,7 +42,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "LogFile.hpp"
 #include "XCSoar.h"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
 #include <tchar.h>

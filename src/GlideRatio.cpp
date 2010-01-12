@@ -39,7 +39,7 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "XCSoar.h"
 #include "Math/LowPassFilter.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "SettingsComputer.hpp"
 

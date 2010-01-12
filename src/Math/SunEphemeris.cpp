@@ -43,7 +43,7 @@ Copyright_License {
 
 #include "Math/SunEphemeris.hpp"
 #include "Math/Constants.h"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
 // Sun radius in degrees (?)

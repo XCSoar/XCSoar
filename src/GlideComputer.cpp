@@ -39,7 +39,7 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Persist.hpp"
 #include "ConditionMonitor.hpp"

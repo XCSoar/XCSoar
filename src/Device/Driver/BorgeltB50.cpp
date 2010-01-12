@@ -41,7 +41,7 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
 #include "Math/Units.h"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 
 #include <tchar.h>
 #include <stdlib.h>

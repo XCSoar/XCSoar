@@ -47,7 +47,7 @@ Copyright_License {
 #include "Task.h"
 #include "Math/Earth.hpp"
 #include "Components.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
 double

@@ -42,7 +42,7 @@ Copyright_License {
 #include "Device/FLARM.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Protection.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
 #include "StringUtil.hpp"
 

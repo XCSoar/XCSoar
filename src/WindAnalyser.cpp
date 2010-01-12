@@ -58,7 +58,7 @@ Copyright_License {
 #include "Math/Constants.h"
 #include "Math/FastMath.h"
 #include "LogFile.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
 #include <stdlib.h>

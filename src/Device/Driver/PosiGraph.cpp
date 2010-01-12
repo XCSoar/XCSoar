@@ -49,7 +49,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Internal.hpp"
 #include "Math/FastMath.h"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 
 
 #include <tchar.h>

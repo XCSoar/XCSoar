@@ -41,7 +41,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Logger.h"
 #include "Math/Earth.hpp"

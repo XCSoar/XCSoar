@@ -42,7 +42,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "SettingsComputer.hpp"
 #include "UtilsProfile.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Waypoint/Waypoint.hpp"
 

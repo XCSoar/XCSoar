@@ -45,7 +45,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/BitmapCanvas.hpp"
-#include "NMEA/Info.h"
+#include "NMEA/Info.hpp"
 #include "Units.hpp"
 #include "resource.h"
 
