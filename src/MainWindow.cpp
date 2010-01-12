@@ -113,6 +113,7 @@ MainWindow::set(LPCTSTR text,
                          rc.bottom - InfoBoxLayout::ControlHeight * 2 + 1,
                          InfoBoxLayout::ControlWidth * 2 - 1,
                          InfoBoxLayout::ControlHeight * 2 - 1);
+  flarm->bring_to_top();
 
   StartupStore(TEXT("Initialise message system\n"));
   popup.set(rc);
