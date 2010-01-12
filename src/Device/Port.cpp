@@ -58,8 +58,6 @@ ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *fmt, ...)
   _vsntprintf(tmp, 127, fmt, ap);
   va_end(ap);
 
-  tmp[126] = _T('\0');
-
   if (caption)
     MessageBoxX(tmp, caption, type);
   else
