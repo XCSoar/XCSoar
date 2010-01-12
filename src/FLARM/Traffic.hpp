@@ -39,9 +39,9 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_TRAFFIC_HPP
 #define XCSOAR_FLARM_TRAFFIC_HPP
 
-#include "Sizes.h"
-#include <tchar.h>
 #include "Navigation/GeoPoint.hpp"
+
+#include <tchar.h>
 
 struct FLARM_TRAFFIC {
   /** Location of the FLARM target */
@@ -65,7 +65,7 @@ struct FLARM_TRAFFIC {
   /** FLARM id of the FLARM target */
   long ID;
   /** (if exists) Name of the FLARM target */
-  TCHAR Name[FLARM_NAME_SIZE];
+  TCHAR Name[10];
   unsigned short IDType;
   unsigned short AlarmLevel;
   /** Last time the FLARM target was seen */

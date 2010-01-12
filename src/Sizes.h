@@ -138,7 +138,4 @@ enum {
 
 #define SCALELISTSIZE  30
 
-#define FLARM_NAME_SIZE 10
-
-
 #endif
