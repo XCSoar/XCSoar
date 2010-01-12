@@ -144,10 +144,8 @@ struct Color {
     #endif
   }
 
-  static const Color WHITE, BLACK,
-    GRAY,
-    RED, GREEN, BLUE,
-    YELLOW, CYAN, MAGENTA;
+  static const Color WHITE, BLACK, GRAY, RED, GREEN, BLUE, YELLOW, CYAN,
+      MAGENTA;
 };
 
 static inline bool
