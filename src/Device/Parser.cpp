@@ -67,9 +67,6 @@ FlarmCalculations flarmCalculations;
 #define MAX_NMEA_LEN	90
 #define MAX_NMEA_PARAMS 18
 
-NMEAParser nmeaParser1;
-NMEAParser nmeaParser2;
-
 int NMEAParser::StartDay = -1;
 
 /**
@@ -77,14 +74,14 @@ int NMEAParser::StartDay = -1;
  * @return NMEAParser object
  */
 NMEAParser::NMEAParser() {
-  _Reset();
+  Reset();
 }
 
 /**
  * Resets the NMEAParser
  */
 void
-NMEAParser::_Reset(void)
+NMEAParser::Reset(void)
 {
   nSatellites = 0;
   gpsValid = false;
@@ -96,60 +93,6 @@ NMEAParser::_Reset(void)
   RMAAvailable = false;
   RMAAltitude = 0;
   LastTime = 0;
-}
-
-/**
- * Resets both NMEAParsers (Port1 + Port2)
- */
-void
-NMEAParser::Reset(void)
-{
-  // clear status
-  nmeaParser1._Reset();
-  nmeaParser2._Reset();
-}
-
-/**
- * Checks which port has valid GPS information and activates it
- */
-void
-NMEAParser::UpdateMonitor(void)
-{
-  // does anyone have GPS?
-  if (nmeaParser1.gpsValid || nmeaParser2.gpsValid) {
-    if (nmeaParser1.gpsValid && nmeaParser2.gpsValid) {
-      // both valid, just use first
-      nmeaParser2.activeGPS = false;
-      nmeaParser1.activeGPS = true;
-    } else {
-      nmeaParser1.activeGPS = nmeaParser1.gpsValid;
-      nmeaParser2.activeGPS = nmeaParser2.gpsValid;
-    }
-  } else {
-    // assume device 1 is active
-    nmeaParser2.activeGPS = false;
-    nmeaParser1.activeGPS = true;
-  }
-}
-
-/**
- * Redirects parsing of the String into GPS_INFO to the right device parser
- * @param device 0 or 1, depending on the port used
- * @param String NMEA string
- * @param GPS_INFO GPS_INFO struct that will be updated
- * @return Parsing success
- */
-bool
-NMEAParser::ParseNMEAString(int device, const TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  switch (device) {
-  case 0:
-    return nmeaParser1.ParseNMEAString_Internal(String, GPS_INFO);
-  case 1:
-    return nmeaParser2.ParseNMEAString_Internal(String, GPS_INFO);
-  }
-
-  return false;
 }
 
 /**
@@ -1169,9 +1112,9 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   //  static TCHAR b50[] = _T("0,.1,.0,0,0,1.06,0,-222");
   //  static TCHAR t4[] = _T("-3,500,1024,50");
 
-  //  nmeaParser1.ParseNMEAString_Internal(_T("$PTAS1,201,200,02583,000*2A"), GPS_INFO);
-  //  nmeaParser1.ParseNMEAString_Internal(_T("$GPRMC,082430.00,A,3744.09096,S,14426.16069,E,0.520294.90,301207,,,A*77"), GPS_INFO);
-  //  nmeaParser1.ParseNMEAString_Internal(_T("$GPGGA,082430.00,3744.09096,S,1426.16069,E,1,08,1.37,157.6,M,-4.9,M,,*5B"), GPS_INFO);
+  //  ParseNMEAString_Internal(_T("$PTAS1,201,200,02583,000*2A"), GPS_INFO);
+  //  ParseNMEAString_Internal(_T("$GPRMC,082430.00,A,3744.09096,S,14426.16069,E,0.520294.90,301207,,,A*77"), GPS_INFO);
+  //  ParseNMEAString_Internal(_T("$GPGGA,082430.00,3744.09096,S,1426.16069,E,1,08,1.37,157.6,M,-4.9,M,,*5B"), GPS_INFO);
 
   i++;
 
@@ -1183,12 +1126,12 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
     TCHAR ctemp[MAX_NMEA_LEN];
     const TCHAR *params[MAX_NMEA_PARAMS];
     size_t nr;
-    nr = nmeaParser1.ExtractParameters(t1, ctemp, params, MAX_NMEA_PARAMS);
-    nmeaParser1.PFLAU(t1, params, nr, GPS_INFO);
-    nr = nmeaParser1.ExtractParameters(t2, ctemp, params, MAX_NMEA_PARAMS);
-    nmeaParser1.PFLAA(t2, params, nr, GPS_INFO);
-    nr = nmeaParser1.ExtractParameters(t3, ctemp, params, MAX_NMEA_PARAMS);
-    nmeaParser1.PFLAA(t3, params, nr, GPS_INFO);
+    nr = ExtractParameters(t1, ctemp, params, MAX_NMEA_PARAMS);
+    PFLAU(t1, params, nr, GPS_INFO);
+    nr = ExtractParameters(t2, ctemp, params, MAX_NMEA_PARAMS);
+    PFLAA(t2, params, nr, GPS_INFO);
+    nr = ExtractParameters(t3, ctemp, params, MAX_NMEA_PARAMS);
+    PFLAA(t3, params, nr, GPS_INFO);
   }
 #endif
 #endif
@@ -1222,22 +1165,4 @@ LogNMEA(const TCHAR* text)
 
   WriteFile(nmeaLogFile, text, _tcslen(text) * sizeof(TCHAR), &dwBytesRead,
       (OVERLAPPED *)NULL);
-}
-
-/**
- * Returns whether the given device is a FLARM unit
- * @param device Device id (0 or 1)
- * @return True if device is a FLARM unit
- */
-bool
-NMEAParser::PortIsFlarm(int device)
-{
-  switch (device) {
-  case 0:
-    return nmeaParser1.isFlarm;
-  case 1:
-    return nmeaParser2.isFlarm;
-  default:
-    return false;
-  }
 }

@@ -58,6 +58,8 @@ DeviceDescriptor::Open(int _port)
 
   assert(Driver->CreateOnComPort != NULL);
 
+  parser.Reset();
+
   device = Driver->CreateOnComPort(Com);
   if (!device->Open()) {
     delete device;
@@ -106,7 +108,7 @@ DeviceDescriptor::IsLogger() const
   return Driver != NULL &&
     ((Driver->Flags & drfLogger) != 0 ||
      (device != NULL && device->IsLogger()) ||
-     NMEAParser::PortIsFlarm(Port));
+     parser.isFlarm);
 }
 
 bool
@@ -179,7 +181,7 @@ DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
   }
 
   if (String[0] == '$') { // Additional "if" to find GPS strings
-    if (NMEAParser::ParseNMEAString(Port, String, GPS_INFO)) {
+    if (parser.ParseNMEAString_Internal(String, GPS_INFO)) {
       GPS_INFO->Connected = 2;
       return true;
     }
@@ -248,7 +250,7 @@ DeviceDescriptor::Declare(const struct Declaration *declaration)
 {
   bool result = (device != NULL) && (device->Declare(declaration));
 
-  if (NMEAParser::PortIsFlarm(Port))
+  if (parser.isFlarm)
     result = FlarmDeclare(Com, declaration) || result;
 
   return result;

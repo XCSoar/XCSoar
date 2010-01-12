@@ -47,12 +47,7 @@ class NMEAParser
 {
 public:
   NMEAParser();
-  static void UpdateMonitor(void);
-  static bool ParseNMEAString(int portnum,
-                              const TCHAR *String, NMEA_INFO *GPS_INFO);
-  static void Reset(void);
-  static bool PortIsFlarm(int portnum);
-  void _Reset(void);
+  void Reset(void);
 
   bool ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO);
   bool gpsValid;
@@ -64,7 +59,7 @@ public:
   static int StartDay;
 
 public:
-  static void TestRoutine(NMEA_INFO *GPS_INFO);
+  void TestRoutine(NMEA_INFO *GPS_INFO);
 
   // these routines can be used by other parsers.
   static double ParseAltitude(const TCHAR *, const TCHAR *);

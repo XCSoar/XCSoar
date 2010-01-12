@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_DESCRIPTOR_HPP
 
 #include "Device/Port.hpp"
+#include "Device/Parser.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -64,6 +65,7 @@ public:
   Device *device;
 
   bool enable_baro;
+  NMEAParser parser;
 
   bool ticker;
 

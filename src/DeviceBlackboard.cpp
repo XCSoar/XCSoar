@@ -45,6 +45,8 @@ Copyright_License {
 #include "UtilsFLARM.hpp"
 #include "Asset.hpp"
 #include "Device/Parser.hpp"
+#include "Device/List.hpp"
+#include "Device/Descriptor.hpp"
 #include "Device/All.hpp"
 #include "Math/Constants.h"
 #include "GlideSolvers/GlidePolar.hpp"
@@ -225,9 +227,8 @@ DeviceBlackboard::ProcessSimulation()
 
     #ifndef NDEBUG
       // use this to test FLARM parsing/display
-      if (!is_altair()) {
-        NMEAParser::TestRoutine(&SetBasic());
-      }
+    if (!is_altair())
+        DeviceList[0].parser.TestRoutine(&SetBasic());
     #endif
   }
 }
