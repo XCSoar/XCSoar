@@ -55,7 +55,6 @@ struct DeviceRegister;
 
 class DeviceDescriptor : public ComPort::Handler {
 public:
-  int	Port;
   FILE  *fhLogFile;
   ComPort *Com;
   TCHAR	Name[DEVNAMESIZE+1];
@@ -71,7 +70,7 @@ public:
 
 public:
   /* Warning: the following methods do not lock mutexComm */
-  bool Open(int Port);
+  bool Open();
   void Close();
 
   bool OpenLog(const TCHAR *FileName);

@@ -49,10 +49,8 @@ Copyright_License {
 #include <assert.h>
 
 bool
-DeviceDescriptor::Open(int _port)
+DeviceDescriptor::Open()
 {
-  Port = _port;
-
   if (Driver == NULL)
     return false;
 

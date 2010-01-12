@@ -156,7 +156,7 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
 
     dev->Com = Com;
 
-    dev->Open(index);
+    dev->Open();
 
     dev->enable_baro = devIsBaroSource(dev) && !devHasBaroSource();
 
@@ -232,7 +232,6 @@ devInit(const TCHAR *CommandLine)
   struct DeviceDescriptor *pDevNmeaOut = NULL;
 
   for (i = 0; i < NUMDEV; i++) {
-    DeviceList[i].Port = -1;
     DeviceList[i].fhLogFile = NULL;
     DeviceList[i].Name[0] = '\0';
     DeviceList[i].Driver = NULL;
