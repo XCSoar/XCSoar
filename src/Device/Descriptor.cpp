@@ -146,12 +146,6 @@ DeviceDescriptor::IsRadio() const
 }
 
 bool
-DeviceDescriptor::IsCondor() const
-{
-  return Driver != NULL && (Driver->Flags & drfCondor) != 0;
-}
-
-bool
 DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   assert(String != NULL);

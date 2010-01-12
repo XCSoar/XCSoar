@@ -109,7 +109,17 @@ class AbstractDevice : public Device {
   virtual void OnSysTicker();
 };
 
-typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut, dfRadio, dfCondor } DeviceFlags_t;
+typedef enum {
+  dfGPS,
+  dfLogger,
+  dfSpeed,
+  dfVario,
+  dfBaroAlt,
+  dfWind,
+  dfVoice,
+  dfNmeaOut,
+  dfRadio,
+} DeviceFlags_t;
 
 #define drfGPS		(1l << dfGPS)
 #define drfLogger	(1l << dfLogger)
@@ -120,7 +130,6 @@ typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfN
 #define drfVoice	(1l << dfVoice)
 #define drfNmeaOut	(1l << dfNmeaOut)
 #define drfRadio	(1l << dfRadio)
-#define drfCondor	(1l << dfCondor)
 
 /**
  * This is the structure exported by a device driver.

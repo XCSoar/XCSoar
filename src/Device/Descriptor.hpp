@@ -86,7 +86,10 @@ public:
   bool IsGPSSource() const;
   bool IsBaroSource() const;
   bool IsRadio() const;
-  bool IsCondor() const;
+
+  bool IsCondor() const {
+    return IsDriver(_T("Condor"));
+  }
 
   bool IsVega() const {
     return IsDriver(_T("Vega"));

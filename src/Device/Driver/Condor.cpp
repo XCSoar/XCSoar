@@ -88,7 +88,7 @@ CondorCreateOnComPort(ComPort *com_port)
 
 const struct DeviceRegister condorDevice = {
   _T("Condor"),
-  drfGPS | drfBaroAlt | drfSpeed | drfVario | drfCondor,
+  drfGPS | drfBaroAlt | drfSpeed | drfVario,
   CondorCreateOnComPort,
 };
 
