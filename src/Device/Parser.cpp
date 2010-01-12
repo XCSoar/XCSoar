@@ -1099,37 +1099,6 @@ NMEAParser::PFLAU(const TCHAR *String, const TCHAR **params, size_t nparams,
 }
 
 /**
- * Finds existing or new slot of given FLARM id in FLARM_Traffic array
- * @param GPS_INFO Pointer to the basic GPS info struct
- * @param Id FLARM id
- * @return Existing or new slot, NULL if buffer is full
- */
-static FLARM_TRAFFIC *
-FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
-{
-  int i;
-  for (i = 0; i < FLARM_MAX_TRAFFIC; i++) {
-    // find position in existing slot
-    if (Id == GPS_INFO->FLARM_Traffic[i].ID) {
-      return &GPS_INFO->FLARM_Traffic[i];
-    }
-    // find old empty slot
-  }
-
-  // not found, so try to find an empty slot
-  for (i = 0; i < FLARM_MAX_TRAFFIC; i++) {
-    if (!GPS_INFO->FLARM_Traffic[i].defined()) {
-      // this is a new target
-      GPS_INFO->NewTraffic = true;
-      return &GPS_INFO->FLARM_Traffic[i];
-    }
-  }
-
-  // still not found and no empty slots left, buffer is full
-  return NULL;
-}
-
-/**
  * Parses a PFLAA sentence
  * @param String Input string
  * @param params Parameter array
@@ -1147,10 +1116,15 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   // 5 id, 6 digit hex
   long ID = _tcstol(params[5], NULL, 16);
 
-  FLARM_TRAFFIC *flarm_slot = FLARM_FindSlot(GPS_INFO, ID);
-  if (flarm_slot == NULL)
-    // no more slots available,
-    return false;
+  FLARM_TRAFFIC *flarm_slot = GPS_INFO->FindTraffic(ID);
+  if (flarm_slot == NULL) {
+    flarm_slot = GPS_INFO->AllocateTraffic();
+    if (flarm_slot == NULL)
+      // no more slots available
+      return false;
+
+    GPS_INFO->NewTraffic = true;
+  }
 
   // set time of fix to current time
   flarm_slot->Time_Fix = GPS_INFO->Time;
