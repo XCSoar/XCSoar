@@ -181,15 +181,18 @@ ParseLogOption(DeviceDescriptor &device, const TCHAR *CommandLine,
 
   start += _tcslen(option);
 
-  TCHAR *end = start;
+  TCHAR *end;
   if (*start == '"') {
     start++;
-    while (*end != '"' && *end != '\0')
-      end++;
+
+    end = _tcschr(start, _T('"'));
+    if (end == NULL)
+      /* ignoring the parser error (missing double quote) */
+      return;
   } else {
-    end = start;
-    while (*end != ' ' && *end != '\0')
-      end++;
+    end = _tcschr(start, _T(' '));
+    if (end == NULL)
+      end = start + _tcslen(start);
   }
 
   if (start >= end)
