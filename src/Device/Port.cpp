@@ -65,13 +65,11 @@ ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *fmt, ...)
 }
 
 ComPort::ComPort(Handler &_handler)
-  :handler(_handler)
+  :handler(_handler),
+   hPort(INVALID_HANDLE_VALUE), hReadThread(NULL),
+   dwMask(0),
+   CloseThread(false), fRxThreadTerminated(true)
 {
-  hReadThread = NULL;
-  CloseThread = 0;
-  fRxThreadTerminated = true;
-  dwMask = 0;
-  hPort = INVALID_HANDLE_VALUE;
 }
 
 bool
