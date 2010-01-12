@@ -144,9 +144,9 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
   const struct DeviceRegister *Driver = devGetDriver(DeviceName);
 
   if (Driver) {
-    ComPort *Com = new ComPort(*dev);
+    ComPort *Com = new ComPort(port, speed, *dev);
 
-    if (!Com->Initialize(port, speed))
+    if (!Com->Open())
       return false;
 
     memset(dev->Name, 0, sizeof(dev->Name));

@@ -64,22 +64,23 @@ ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *fmt, ...)
     Message::AddMessage(tmp);
 }
 
-ComPort::ComPort(Handler &_handler)
+ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
   :handler(_handler),
+   baud_rate(_baud_rate),
    hPort(INVALID_HANDLE_VALUE), hReadThread(NULL),
    dwMask(0),
    CloseThread(false), fRxThreadTerminated(true)
 {
+  assert(path != NULL);
+
+  _tcscpy(sPortName, path);
 }
 
 bool
-ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
+ComPort::Open()
 {
   DWORD dwError;
   DCB PortDCB;
-
-  if (lpszPortName)
-    _tcscpy(sPortName, lpszPortName);
 
   bi = 0;
 
@@ -113,7 +114,7 @@ ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
   GetCommState(hPort, &PortDCB);
 
   // Change the DCB structure settings.
-  PortDCB.BaudRate = dwPortSpeed;       // Current baud
+  PortDCB.BaudRate = baud_rate; // Current baud
   PortDCB.fBinary = true;               // Binary mode; no EOF check
   PortDCB.fParity = true;               // Enable parity checking
   PortDCB.fOutxCtsFlow = false;         // No CTS output flow control

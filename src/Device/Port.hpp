@@ -59,10 +59,22 @@ public:
   };
 
 protected:
+  unsigned baud_rate;
+
   Handler &handler;
 
 public:
-  ComPort(Handler &_handler);
+  /**
+   * Creates a new serial port (RS-232) object, but does not open it
+   * yet.
+   *
+   * @param path the path of the virtual file to open, e.g. "COM1:"
+   * @param _baud_rate the speed of the port
+   * @param _handler the callback object for input received on the
+   * port
+   */
+  ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler);
+
   ~ComPort()
   {
     Close();
@@ -72,7 +84,7 @@ public:
   void WriteString(const TCHAR *);
   void Flush();
 
-  bool Initialize(LPCTSTR, DWORD);
+  bool Open();
   bool Close();
 
   int SetRxTimeout(int);
