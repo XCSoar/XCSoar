@@ -62,7 +62,8 @@ Update()
 static void
 FlarmCursorCallback(unsigned i)
 {
-  const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[i];
+  const FLARM_TRAFFIC &traffic =
+    XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
 
   WndButton *set_cn_button = (WndButton *)wf->FindByName(_T("cmdSetCN"));
   WndButton *track_button = (WndButton *)wf->FindByName(_T("cmdTrack"));
@@ -102,7 +103,8 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
   fixed range;
   fixed bear;
 
-  const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[i];
+  const FLARM_TRAFFIC &traffic =
+    XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
   if (!traffic.defined())
     return;
 
@@ -131,7 +133,7 @@ GetActiveFlarmTrafficCount()
 {
   int count = 0;
   for (int i = 0; i < FLARM_MAX_TRAFFIC; i++) {
-    if (XCSoarInterface::Basic().FLARM_Traffic[i].defined()) {
+    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
       count++;
     }
   }
@@ -145,7 +147,8 @@ SelectAsTeamTrack()
   if (index >= FLARM_MAX_TRAFFIC)
     return;
 
-  const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[index];
+  const FLARM_TRAFFIC &traffic =
+    XCSoarInterface::Basic().flarm.FLARM_Traffic[index];
 
   if (!traffic.HasName()) {
     XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
@@ -180,7 +183,8 @@ OnSetCNClicked(WindowControl * Sender)
   if (index >= FLARM_MAX_TRAFFIC)
     return;
 
-  const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[index];
+  const FLARM_TRAFFIC &traffic =
+    XCSoarInterface::Basic().flarm.FLARM_Traffic[index];
 
   TCHAR newName[21];
   newName[0] = 0;

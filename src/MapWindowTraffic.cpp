@@ -58,7 +58,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   if (!SettingsMap().EnableFLARMMap) return;
 
   // Return if FLARM data is not available
-  const FLARM_STATE &flarm = Basic();
+  const FLARM_STATE &flarm = Basic().flarm;
   if (!flarm.FLARM_Available)
     return;
 

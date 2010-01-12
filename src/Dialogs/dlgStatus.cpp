@@ -125,7 +125,7 @@ static void UpdateValuesSystem() {
   static int NAVWarning_last = XCSoarInterface::Basic().NAVWarning;
   static int SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
   static int VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
-  static int FLARM_Available_last = XCSoarInterface::Basic().FLARM_Available;
+  static int FLARM_Available_last = XCSoarInterface::Basic().flarm.FLARM_Available;
   static bool LoggerActive_last = logger.isLoggerActive();
   static bool DeclaredToDevice_last = logger.isTaskDeclared();
   static double SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
@@ -136,7 +136,7 @@ static void UpdateValuesSystem() {
       (NAVWarning_last != XCSoarInterface::Basic().NAVWarning) ||
       (SatellitesUsed_last != XCSoarInterface::Basic().SatellitesUsed) ||
       (VarioAvailable_last != XCSoarInterface::Basic().VarioAvailable) ||
-      (FLARM_Available_last != XCSoarInterface::Basic().FLARM_Available) ||
+      (FLARM_Available_last != XCSoarInterface::Basic().flarm.FLARM_Available) ||
       (LoggerActive_last != logger.isLoggerActive()) ||
       (DeclaredToDevice_last != logger.isTaskDeclared()) ||
       (SupplyBatteryVoltage_last != XCSoarInterface::Basic().SupplyBatteryVoltage) ||
@@ -147,7 +147,7 @@ static void UpdateValuesSystem() {
     NAVWarning_last = XCSoarInterface::Basic().NAVWarning;
     SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
     VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
-    FLARM_Available_last = XCSoarInterface::Basic().FLARM_Available;
+    FLARM_Available_last = XCSoarInterface::Basic().flarm.FLARM_Available;
     LoggerActive_last = logger.isLoggerActive();
     DeclaredToDevice_last = logger.isTaskDeclared();
     SupplyBatteryVoltage_last = XCSoarInterface::Basic().SupplyBatteryVoltage;
@@ -203,7 +203,7 @@ static void UpdateValuesSystem() {
 
   if (wp) {
     wp = (WndProperty*)wf->FindByName(_T("prpFLARM"));
-    if (XCSoarInterface::Basic().FLARM_Available) {
+    if (XCSoarInterface::Basic().flarm.FLARM_Available) {
       wp->SetText(gettext(_T("Connected")));
     } else {
       wp->SetText(gettext(_T("Disconnected")));

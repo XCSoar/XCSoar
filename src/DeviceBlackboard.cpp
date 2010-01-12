@@ -318,7 +318,7 @@ DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
  */
 void
 DeviceBlackboard::FLARM_RefreshSlots() {
-  FLARM_STATE &flarm_state = SetBasic();
+  FLARM_STATE &flarm_state = SetBasic().flarm;
   flarm_state.Refresh(Basic().Time);
 }
 
@@ -382,7 +382,7 @@ DeviceBlackboard::FLARM_ScanTraffic()
   // should only scan the first time it appears with that ID.
   // at least it is now not being done by the parser
 
-  FLARM_STATE &flarm = SetBasic();
+  FLARM_STATE &flarm = SetBasic().flarm;
 
   // if (FLARM data is available)
   if (!flarm.FLARM_Available)

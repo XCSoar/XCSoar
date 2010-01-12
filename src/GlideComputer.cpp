@@ -376,12 +376,12 @@ GlideComputer::FLARM_ScanTraffic()
 {
 #ifdef OLD_TASK
   // If (not FLARM available) cancel
-  if (!Basic().FLARM_Available)
+  if (!Basic().flarm.FLARM_Available)
     return;
 
   // Iterate through all FLARM contacts
   for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; ++i) {
-    const FLARM_TRAFFIC &traffic = Basic().FLARM_Traffic[i];
+    const FLARM_TRAFFIC &traffic = Basic().flarm.FLARM_Traffic[i];
 
     // If (FLARM contact found)
     if (traffic.defined()) {

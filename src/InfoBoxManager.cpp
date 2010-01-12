@@ -677,7 +677,7 @@ InfoBoxManager::DisplayInfoBox(void)
       InfoBoxes[i]->SetComment(Calculated().TeammateCode);
 
       if (SettingsComputer().TeamFlarmTracking) {
-        if (IsFlarmTargetCNInRange(Basic(),
+        if (IsFlarmTargetCNInRange(Basic().flarm,
             SettingsComputer().TeamFlarmIdTarget)) {
           InfoBoxes[i]->SetColorBottom(2);
         } else {
@@ -699,7 +699,8 @@ InfoBoxManager::DisplayInfoBox(void)
         InfoBoxes[i]->SetComment(TEXT("---"));
       }
 
-      if (IsFlarmTargetCNInRange(Basic(), SettingsComputer().TeamFlarmIdTarget)) {
+      if (IsFlarmTargetCNInRange(Basic().flarm,
+                                 SettingsComputer().TeamFlarmIdTarget)) {
         InfoBoxes[i]->SetColorBottom(2);
       } else {
         InfoBoxes[i]->SetColorBottom(1);
@@ -717,7 +718,8 @@ InfoBoxManager::DisplayInfoBox(void)
         InfoBoxes[i]->SetComment(TEXT("---"));
       }
 
-      if (IsFlarmTargetCNInRange(Basic(), SettingsComputer().TeamFlarmIdTarget)) {
+      if (IsFlarmTargetCNInRange(Basic().flarm,
+                                 SettingsComputer().TeamFlarmIdTarget)) {
         InfoBoxes[i]->SetColorBottom(2);
       } else {
         InfoBoxes[i]->SetColorBottom(1);
@@ -735,7 +737,8 @@ InfoBoxManager::DisplayInfoBox(void)
         InfoBoxes[i]->SetComment(TEXT("---"));
       }
 
-      if (IsFlarmTargetCNInRange(Basic(), SettingsComputer().TeamFlarmIdTarget)) {
+      if (IsFlarmTargetCNInRange(Basic().flarm,
+                                 SettingsComputer().TeamFlarmIdTarget)) {
         InfoBoxes[i]->SetColorBottom(2);
       } else {
         InfoBoxes[i]->SetColorBottom(1);

@@ -277,7 +277,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckFLARM)"))) {
-    if (!Basic().FLARM_Available) {
+    if (!Basic().flarm.FLARM_Available) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckFLARM)"), TEXT(""), Size);

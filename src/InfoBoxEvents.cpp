@@ -84,7 +84,7 @@ ActionInterface::on_key_Airspeed(int UpDown)
 void
 ActionInterface::on_key_TeamCode(int UpDown)
 {
-  const FLARM_STATE &flarm = Basic();
+  const FLARM_STATE &flarm = Basic().flarm;
   const FLARM_TRAFFIC *traffic = SettingsComputer().TeamFlarmIdTarget != 0
     ? flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget)
     : NULL;

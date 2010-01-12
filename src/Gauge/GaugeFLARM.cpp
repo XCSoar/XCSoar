@@ -103,7 +103,7 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
   // Cycle through FLARM targets
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    const FLARM_TRAFFIC &traffic = gps_info.FLARM_Traffic[i];
+    const FLARM_TRAFFIC &traffic = gps_info.flarm.FLARM_Traffic[i];
 
     if (!traffic.defined())
       continue;

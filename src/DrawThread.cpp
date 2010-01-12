@@ -99,12 +99,12 @@ DrawThread::run()
 
       if (flarm != NULL) {
         // If FLARM alarm level higher then 0
-        if (map.Basic().FLARM_AlarmLevel > 0) {
+        if (map.Basic().flarm.FLARM_AlarmLevel > 0) {
           // Show FLARM gauge and do not care about suppression
           flarm->Suppress = false;
         }
 
-        flarm->TrafficPresent(map.Basic().FLARMTraffic);
+        flarm->TrafficPresent(map.Basic().flarm.FLARMTraffic);
         flarm->Show(map.SettingsMap().EnableFLARMGauge);
 
         // Draw/Render the FLARM gauge

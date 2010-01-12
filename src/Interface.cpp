@@ -271,7 +271,7 @@ ActionInterface::DisplayModes()
     }
   }
 
-  if (Basic().NewTraffic) {
+  if (Basic().flarm.NewTraffic) {
     // TODO bug: JMW: broken, currently won't work very well, needs to be reworked
     GaugeFLARM *gauge_flarm = main_window.flarm;
     if (gauge_flarm != NULL)

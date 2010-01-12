@@ -196,7 +196,7 @@ NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
       return PFLAA(&String[7], params + 1, n_params, GPS_INFO);
 
     if (_tcscmp(params[0] + 1, _T("PFLAU")) == 0)
-      return PFLAU(&String[7], params + 1, n_params, *GPS_INFO);
+      return PFLAU(&String[7], params + 1, n_params, GPS_INFO->flarm);
 
     // Garmin altitude sentence
     if (_tcscmp(params[0] + 1, _T("PGRMZ")) == 0)
@@ -1024,6 +1024,8 @@ bool
 NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
     NMEA_INFO *GPS_INFO)
 {
+  FLARM_STATE &flarm = GPS_INFO->flarm;
+
   isFlarm = true;
 
   // calculate relative east and north projection to lat/lon
@@ -1053,14 +1055,14 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   // 5 id, 6 digit hex
   long ID = _tcstol(params[5], NULL, 16);
 
-  FLARM_TRAFFIC *flarm_slot = GPS_INFO->FindTraffic(ID);
+  FLARM_TRAFFIC *flarm_slot = flarm.FindTraffic(ID);
   if (flarm_slot == NULL) {
-    flarm_slot = GPS_INFO->AllocateTraffic();
+    flarm_slot = flarm.AllocateTraffic();
     if (flarm_slot == NULL)
       // no more slots available
       return false;
 
-    GPS_INFO->NewTraffic = true;
+    flarm.NewTraffic = true;
   }
 
   // set time of fix to current time
@@ -1122,12 +1124,12 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
     i = 0;
 
   if (i < 50) {
-    GPS_INFO->FLARM_Available = true;
+    GPS_INFO->flarm.FLARM_Available = true;
     TCHAR ctemp[MAX_NMEA_LEN];
     const TCHAR *params[MAX_NMEA_PARAMS];
     size_t nr;
     nr = ExtractParameters(t1, ctemp, params, MAX_NMEA_PARAMS);
-    PFLAU(t1, params, nr, *GPS_INFO);
+    PFLAU(t1, params, nr, GPS_INFO->flarm);
     nr = ExtractParameters(t2, ctemp, params, MAX_NMEA_PARAMS);
     PFLAA(t2, params, nr, GPS_INFO);
     nr = ExtractParameters(t3, ctemp, params, MAX_NMEA_PARAMS);

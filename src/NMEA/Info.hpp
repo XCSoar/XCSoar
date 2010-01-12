@@ -132,7 +132,6 @@ struct ACCELERATION_STATE
 struct NMEA_INFO: 
   public GPS_STATE,
   public AIRCRAFT_STATE,
-  public FLARM_STATE,
   public ACCELERATION_STATE
 {
 
@@ -290,6 +289,8 @@ struct NMEA_INFO:
   SWITCH_INFO SwitchState;
 
   double StallRatio;
+
+  FLARM_STATE flarm;
 
   /**
    * Returns the barometric altitude, and falls back to the GPS
