@@ -1102,16 +1102,16 @@ NMEAParser::PFLAU(const TCHAR *String, const TCHAR **params, size_t nparams,
  * Finds existing or new slot of given FLARM id in FLARM_Traffic array
  * @param GPS_INFO Pointer to the basic GPS info struct
  * @param Id FLARM id
- * @return Existing or new slot, -1 if buffer is full
+ * @return Existing or new slot, NULL if buffer is full
  */
-int
+static FLARM_TRAFFIC *
 FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
 {
   int i;
   for (i = 0; i < FLARM_MAX_TRAFFIC; i++) {
     // find position in existing slot
     if (Id == GPS_INFO->FLARM_Traffic[i].ID) {
-      return i;
+      return &GPS_INFO->FLARM_Traffic[i];
     }
     // find old empty slot
   }
@@ -1121,12 +1121,12 @@ FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
     if (!GPS_INFO->FLARM_Traffic[i].defined()) {
       // this is a new target
       GPS_INFO->NewTraffic = true;
-      return i;
+      return &GPS_INFO->FLARM_Traffic[i];
     }
   }
 
   // still not found and no empty slots left, buffer is full
-  return -1;
+  return NULL;
 }
 
 /**
@@ -1142,8 +1142,6 @@ bool
 NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
     NMEA_INFO *GPS_INFO)
 {
-  int flarm_slot = 0;
-
   isFlarm = true;
 
   // 5 id, 6 digit hex
@@ -1151,50 +1149,43 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   _stscanf(params[5], _T("%lx"), &ID);
   //  unsigned long uID = ID;
 
-  flarm_slot = FLARM_FindSlot(GPS_INFO, ID);
-  if (flarm_slot < 0) {
+  FLARM_TRAFFIC *flarm_slot = FLARM_FindSlot(GPS_INFO, ID);
+  if (flarm_slot == NULL)
     // no more slots available,
     return false;
-  }
 
   // set time of fix to current time
-  GPS_INFO->FLARM_Traffic[flarm_slot].Time_Fix = GPS_INFO->Time;
+  flarm_slot->Time_Fix = GPS_INFO->Time;
 
   _stscanf(String,
       _T("%hu,%lf,%lf,%lf,%hu,%lx,%lf,%lf,%lf,%lf,%hu"),
-      &GPS_INFO->FLARM_Traffic[flarm_slot].AlarmLevel, // unsigned short 0
-      &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth, // double?     1
-      &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast, // double?      2
-      &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeAltitude, // double   3
-      &GPS_INFO->FLARM_Traffic[flarm_slot].IDType, // unsigned short     4
-      &GPS_INFO->FLARM_Traffic[flarm_slot].ID, // 6 char hex
-      &GPS_INFO->FLARM_Traffic[flarm_slot].TrackBearing, // double       6
-      &GPS_INFO->FLARM_Traffic[flarm_slot].TurnRate, // double           7
-      &GPS_INFO->FLARM_Traffic[flarm_slot].Speed, // double              8
-      &GPS_INFO->FLARM_Traffic[flarm_slot].ClimbRate, // double          9
-      &GPS_INFO->FLARM_Traffic[flarm_slot].Type); // unsigned short     10
+           &flarm_slot->AlarmLevel, // unsigned short 0
+           &flarm_slot->RelativeNorth, // double?     1
+           &flarm_slot->RelativeEast, // double?      2
+           &flarm_slot->RelativeAltitude, // double   3
+           &flarm_slot->IDType, // unsigned short     4
+           &flarm_slot->ID, // 6 char hex
+           &flarm_slot->TrackBearing, // double       6
+           &flarm_slot->TurnRate, // double           7
+           &flarm_slot->Speed, // double              8
+           &flarm_slot->ClimbRate, // double          9
+           &flarm_slot->Type); // unsigned short     10
 
   // 1 relativenorth, meters
-  GPS_INFO->FLARM_Traffic[flarm_slot].Location.Latitude =
-      GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth
+  flarm_slot->Location.Latitude = flarm_slot->RelativeNorth
       * FLARM_NorthingToLatitude + GPS_INFO->Location.Latitude;
 
   // 2 relativeeast, meters
-  GPS_INFO->FLARM_Traffic[flarm_slot].Location.Longitude =
-      GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast
+  flarm_slot->Location.Longitude = flarm_slot->RelativeEast
       * FLARM_EastingToLongitude + GPS_INFO->Location.Longitude;
 
   // alt
-  GPS_INFO->FLARM_Traffic[flarm_slot].Altitude =
-      GPS_INFO->FLARM_Traffic[flarm_slot].RelativeAltitude +
-      GPS_INFO->GPSAltitude;
+  flarm_slot->Altitude = flarm_slot->RelativeAltitude + GPS_INFO->GPSAltitude;
 
 #ifdef FLARM_AVERAGE
-  GPS_INFO->FLARM_Traffic[flarm_slot].Average30s =
-    flarmCalculations.Average30s(
-				 GPS_INFO->FLARM_Traffic[flarm_slot].ID,
-				 GPS_INFO->Time,
-				 GPS_INFO->FLARM_Traffic[flarm_slot].Altitude);
+  flarm_slot->Average30s = flarmCalculations.Average30s(flarm_slot->ID,
+                                                        GPS_INFO->Time,
+                                                        flarm_slot->Altitude);
 #endif
 
   // QUESTION TB: never returns true?!
