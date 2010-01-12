@@ -57,7 +57,6 @@ class DeviceDescriptor : public ComPort::Handler {
 public:
   FILE  *fhLogFile;
   ComPort *Com;
-  TCHAR	Name[DEVNAMESIZE+1];
   struct DeviceDescriptor *pDevPipeTo;
   const struct DeviceRegister *Driver;
 
@@ -76,11 +75,22 @@ public:
   bool OpenLog(const TCHAR *FileName);
   void CloseLog();
 
+  const TCHAR *GetName() const;
+
+  /**
+   * Compares the driver's name.
+   */
+  bool IsDriver(const TCHAR *name) const;
+
   bool IsLogger() const;
   bool IsGPSSource() const;
   bool IsBaroSource() const;
   bool IsRadio() const;
   bool IsCondor() const;
+
+  bool IsVega() const {
+    return IsDriver(_T("Vega"));
+  }
 
 private:
   bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info);

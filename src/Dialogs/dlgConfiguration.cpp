@@ -215,7 +215,7 @@ SetupDevice(DeviceDescriptor &device)
 
   // this is a hack, devices dont jet support device dependant setup dialogs
 
-  if (!is_simulator() && _tcscmp(device.Name,_T("Vega")) != 0)
+  if (!is_simulator() && !device.IsVega())
     return;
 
   changed = dlgConfigurationVarioShowModal();
@@ -253,7 +253,7 @@ UpdateDeviceSetupButton(int DeviceIdx, const TCHAR *Name)
 
     wb = ((WndButton *)wf->FindByName(_T("cmdSetupDeviceA")));
     if (wb != NULL) {
-      wb->set_visible(_tcscmp(Name, _T("Vega")) == 0);
+      wb->set_visible(Name != NULL && _tcscmp(Name, _T("Vega")) == 0);
     }
 
   }
@@ -262,7 +262,7 @@ UpdateDeviceSetupButton(int DeviceIdx, const TCHAR *Name)
 
     wb = ((WndButton *)wf->FindByName(_T("cmdSetupDeviceB")));
     if (wb != NULL) {
-      wb->set_visible(_tcscmp(Name, _T("Vega")) == 0);
+      wb->set_visible(Name != NULL && _tcscmp(Name, _T("Vega")) == 0);
     }
 
   }
@@ -1202,7 +1202,7 @@ static void setVariables(void) {
     for (int i = 0; (DeviceName = devRegisterGetName(i)) != NULL; i++) {
       dfe->addEnumText((DeviceName));
       if (!is_simulator()) {
-        if (_tcscmp(DeviceName, device.Name) == 0)
+        if (device.IsDriver(DeviceName))
             dwDeviceIndex1 = i;
       } else {
         if (_tcscmp(DeviceName, deviceName1) == 0)
@@ -1249,7 +1249,7 @@ static void setVariables(void) {
     for (int i = 0; (DeviceName = devRegisterGetName(i)) != NULL; i++) {
       dfe->addEnumText((DeviceName));
       if (!is_simulator()) {
-        if (_tcscmp(DeviceName, device.Name) == 0)
+        if (device.IsDriver(DeviceName))
           dwDeviceIndex2 = i;
       } else {
         if (_tcscmp(DeviceName, deviceName2) == 0)
@@ -2271,7 +2271,7 @@ void dlgConfigurationShowModal(void){
   setVariables();
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    UpdateDeviceSetupButton(i, DeviceList[i].Name);
+    UpdateDeviceSetupButton(i, DeviceList[i].GetName());
 
   changed = false;
   taskchanged = false;

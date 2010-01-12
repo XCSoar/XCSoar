@@ -100,6 +100,20 @@ DeviceDescriptor::CloseLog()
   fhLogFile = NULL;
 }
 
+const TCHAR *
+DeviceDescriptor::GetName() const
+{
+  return Driver != NULL ? Driver->Name : NULL;
+}
+
+bool
+DeviceDescriptor::IsDriver(const TCHAR *name) const
+{
+  return Driver != NULL
+    ? _tcscmp(Driver->Name, name)
+    : false;
+}
+
 bool
 DeviceDescriptor::IsLogger() const
 {

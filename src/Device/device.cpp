@@ -149,9 +149,6 @@ devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
     if (!Com->Open())
       return false;
 
-    memset(dev->Name, 0, sizeof(dev->Name));
-    _tcsncpy(dev->Name, Driver->Name, DEVNAMESIZE);
-
     dev->Driver = Driver;
 
     dev->Com = Com;
@@ -205,12 +202,12 @@ ParseLogOption(DeviceDescriptor &device, const TCHAR *CommandLine,
   if (device.OpenLog(path)) {
     TCHAR msg[512];
     _stprintf(msg, _T("Device %s logs to\r\n%s"),
-              device.Name, path);
+              device.GetName(), path);
     MessageBoxX(msg, gettext(_T("Information")), MB_OK | MB_ICONINFORMATION);
   } else {
     TCHAR msg[512];
     _stprintf(msg, _T("Unable to open log\r\non device %s\r\n%s"),
-              device.Name, path);
+              device.GetName(), path);
     MessageBoxX(msg, gettext(_T("Error")), MB_OK | MB_ICONWARNING);
   }
 }
@@ -233,7 +230,6 @@ devInit(const TCHAR *CommandLine)
 
   for (i = 0; i < NUMDEV; i++) {
     DeviceList[i].fhLogFile = NULL;
-    DeviceList[i].Name[0] = '\0';
     DeviceList[i].Driver = NULL;
     DeviceList[i].pDevPipeTo = NULL;
     DeviceList[i].enable_baro = false;
@@ -355,7 +351,7 @@ VarioWriteNMEA(const TCHAR *text)
 
   ScopeLock protect(mutexComm);
   for (int i = 0; i < NUMDEV; i++)
-    if (_tcscmp(DeviceList[i].Name, _T("Vega")) == 0)
+    if (DeviceList[i].IsVega())
       if (DeviceList[i].Com)
         DeviceList[i].Com->WriteString(tmp);
 }
@@ -364,7 +360,7 @@ struct DeviceDescriptor *
 devVarioFindVega(void)
 {
   for (int i = 0; i < NUMDEV; i++)
-    if (_tcscmp(DeviceList[i].Name, _T("Vega")) == 0)
+    if (DeviceList[i].IsVega())
       return &DeviceList[i];
 
   return NULL;

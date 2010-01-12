@@ -548,14 +548,14 @@ LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev,
     return false;
 
   if (MessageBoxX(gettext(_T("Declare Task?")),
-                  dev->Name, MB_YESNO| MB_ICONQUESTION) == IDYES) {
+                  dev->GetName(), MB_YESNO| MB_ICONQUESTION) == IDYES) {
     if (devDeclare(dev, decl)) {
       MessageBoxX(gettext(_T("Task Declared!")),
-                  dev->Name, MB_OK| MB_ICONINFORMATION);
+                  dev->GetName(), MB_OK| MB_ICONINFORMATION);
       DeclaredToDevice = true;
     } else {
       MessageBoxX(gettext(_T("Error occured,\r\nTask NOT Declared!")),
-                  dev->Name, MB_OK| MB_ICONERROR);
+                  dev->GetName(), MB_OK| MB_ICONERROR);
       DeclaredToDevice = false;
     }
   }
