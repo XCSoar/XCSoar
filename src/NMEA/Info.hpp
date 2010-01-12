@@ -92,6 +92,20 @@ struct FLARM_STATE
    * @see FLARM_Traffic
    */
   bool NewTraffic;
+
+  void Refresh(fixed Time) {
+    bool present = false;
+
+    if (FLARM_Available) {
+      for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++) {
+        if (FLARM_Traffic[i].Refresh(Time))
+          present = true;
+      }
+    }
+
+    FLARMTraffic = present;
+    NewTraffic = false;
+  }
 };
 
 struct GPS_STATE

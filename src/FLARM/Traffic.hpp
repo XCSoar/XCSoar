@@ -78,6 +78,32 @@ struct FLARM_TRAFFIC {
   bool defined() const {
     return ID > 0;
   }
+
+  void Clear() {
+    ID = 0;
+    Name[0] = 0;
+  }
+
+  /**
+   * Clear this object if its data has expired.
+   *
+   * @return true if the object is still valid
+   */
+  bool Refresh(fixed Time) {
+    if (!defined())
+      return false;
+
+    // if (FLARM target is too old or time has gone backwards)
+    if (Time > Time_Fix + 2 || Time < Time_Fix) {
+      // clear this slot if it is too old (2 seconds), or if
+      // time has gone backwards (due to replay)
+      Clear();
+      return false;
+    } else {
+      // FLARM data is present
+      return true;
+    }
+  }
 };
 
 #endif

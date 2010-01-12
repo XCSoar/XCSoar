@@ -317,33 +317,8 @@ DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
  */
 void
 DeviceBlackboard::FLARM_RefreshSlots() {
-  int i;
-  bool present = false;
-
-  // if (Flarm data is available)
-  if (Basic().FLARM_Available) {
-    // for each item in FLARM_Traffic
-    for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
-      // if (FLARM_Traffic[i] has data)
-      if (Basic().FLARM_Traffic[i].defined()) {
-        // if (FLARM target is too old or time has gone backwards)
-        if ((Basic().Time > Basic().FLARM_Traffic[i].Time_Fix + 2)
-            || (Basic().Time < Basic().FLARM_Traffic[i].Time_Fix)) {
-          // clear this slot if it is too old (2 seconds), or if
-          // time has gone backwards (due to replay)
-          SetBasic().FLARM_Traffic[i].ID = 0;
-          SetBasic().FLARM_Traffic[i].Name[0] = 0;
-        } else {
-          // FLARM data is present
-          present = true;
-        }
-      }
-    }
-  }
-
-  // Save the status of present into Basic()
-  SetBasic().FLARMTraffic = present;
-  SetBasic().NewTraffic = false;
+  FLARM_STATE &flarm_state = SetBasic();
+  flarm_state.Refresh(Basic().Time);
 }
 
 /**
