@@ -42,7 +42,7 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "FLARM/Traffic.h"
+#include "FLARM/Traffic.hpp"
 #include "Sizes.h"
 
 struct SWITCH_INFO

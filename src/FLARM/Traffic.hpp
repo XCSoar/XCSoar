@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_TRAFFIC_H
-#define XCSOAR_FLARM_TRAFFIC_H
+#ifndef XCSOAR_FLARM_TRAFFIC_HPP
+#define XCSOAR_FLARM_TRAFFIC_HPP
 
 #include "Sizes.h"
 #include <tchar.h>
