@@ -181,7 +181,7 @@ ParseLogOption(DeviceDescriptor &device, const TCHAR *CommandLine,
 
   start += _tcslen(option);
 
-  TCHAR *end;
+  TCHAR *end = start;
   if (*start == '"') {
     start++;
     while (*end != '"' && *end != '\0')
