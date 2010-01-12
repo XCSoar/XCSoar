@@ -67,12 +67,6 @@ FlarmCalculations flarmCalculations;
 #define MAX_NMEA_LEN	90
 #define MAX_NMEA_PARAMS 18
 
-static double EastOrWest(double in, TCHAR EoW);
-static double NorthOrSouth(double in, TCHAR NoS);
-//static double LeftOrRight(double in, TCHAR LoR);
-static double MixedFormatToDegrees(double mixed);
-static int NAVWarn(TCHAR c);
-
 NMEAParser nmeaParser1;
 NMEAParser nmeaParser2;
 
