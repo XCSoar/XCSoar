@@ -43,8 +43,7 @@ Copyright_License {
 #include <tchar.h>
 #include "Navigation/GeoPoint.hpp"
 
-typedef struct _FLARM_TRAFFIC
-{
+struct FLARM_TRAFFIC {
   /** Location of the FLARM target */
   GEOPOINT Location;
   /** TrackBearing of the FLARM target */
@@ -75,6 +74,6 @@ typedef struct _FLARM_TRAFFIC
 #ifdef FLARM_AVERAGE
   double Average30s;
 #endif
-} FLARM_TRAFFIC;
+};
 
 #endif
