@@ -382,7 +382,7 @@ GlideComputer::FLARM_ScanTraffic()
   // Iterate through all FLARM contacts
   for (int flarm_slot = 0; flarm_slot < FLARM_MAX_TRAFFIC; flarm_slot++) {
     // If (FLARM contact found)
-    if (Basic().FLARM_Traffic[flarm_slot].ID > 0) {
+    if (Basic().FLARM_Traffic[flarm_slot].defined()) {
       // JMW TODO: this is dangerous, it uses the task!
       // it should be done outside the parser/comms thread
 

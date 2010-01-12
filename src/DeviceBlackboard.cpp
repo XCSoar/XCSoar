@@ -325,7 +325,7 @@ DeviceBlackboard::FLARM_RefreshSlots() {
     // for each item in FLARM_Traffic
     for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
       // if (FLARM_Traffic[i] has data)
-      if (Basic().FLARM_Traffic[i].ID>0) {
+      if (Basic().FLARM_Traffic[i].defined()) {
         // if (FLARM target is too old or time has gone backwards)
         if ((Basic().Time > Basic().FLARM_Traffic[i].Time_Fix + 2)
             || (Basic().Time < Basic().FLARM_Traffic[i].Time_Fix)) {
@@ -411,7 +411,7 @@ DeviceBlackboard::FLARM_ScanTraffic()
     // for each item in FLARM_Traffic
     for (int flarm_slot=0; flarm_slot<FLARM_MAX_TRAFFIC; flarm_slot++) {
       // if (FLARM_Traffic[flarm_slot] has data)
-      if (Basic().FLARM_Traffic[flarm_slot].ID>0) {
+      if (Basic().FLARM_Traffic[flarm_slot].defined()) {
         // if (Target currently without name)
         if (!_tcslen(Basic().FLARM_Traffic[flarm_slot].Name)) {
           // need to lookup name for this target

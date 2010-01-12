@@ -66,7 +66,7 @@ FlarmCursorCallback(unsigned i)
   WndButton *set_cn_button = (WndButton *)wf->FindByName(_T("cmdSetCN"));
   WndButton *track_button = (WndButton *)wf->FindByName(_T("cmdTrack"));
 
-  if (traffic.ID != 0) {
+  if (traffic.defined()) {
     if (LookupFLARMDetails(traffic.ID) == NULL) {
       // not existing en primary or secondary flarm id list
       set_cn_button->SetCaption(_T("Set CN"));
@@ -102,7 +102,7 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
   fixed bear;
 
   const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[i];
-  if (traffic.ID == 0)
+  if (!traffic.defined())
     return;
 
   DistanceBearing(XCSoarInterface::Basic().Location,
@@ -133,7 +133,7 @@ static int GetActiveFlarmTrafficCount()
   int count = 0;
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++)
     {
-      if (XCSoarInterface::Basic().FLARM_Traffic[i].ID!=0)
+      if (XCSoarInterface::Basic().FLARM_Traffic[i].defined())
 	{
 	  count++;
 	}

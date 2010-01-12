@@ -101,7 +101,7 @@ ActionInterface::on_key_TeamCode(int UpDown)
       }
     }
 
-    if (Basic().FLARM_Traffic[searchSlot].ID != 0) {
+    if (Basic().FLARM_Traffic[searchSlot].defined()) {
       newFlarmSlot = searchSlot;
       break; // a new flarmSlot with a valid flarm traffic record was found !
     }

@@ -74,6 +74,10 @@ struct FLARM_TRAFFIC {
 #ifdef FLARM_AVERAGE
   double Average30s;
 #endif
+
+  bool defined() const {
+    return ID > 0;
+  }
 };
 
 #endif

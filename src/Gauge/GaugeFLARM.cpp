@@ -103,7 +103,7 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
   // Cycle through FLARM targets
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    if (gps_info.FLARM_Traffic[i].ID>0) {
+    if (gps_info.FLARM_Traffic[i].defined()) {
       // Set the arrow color depending on alarm level
       switch (gps_info.FLARM_Traffic[i].AlarmLevel) {
       case 1:

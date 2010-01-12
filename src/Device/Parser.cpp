@@ -1118,7 +1118,7 @@ FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
 
   // not found, so try to find an empty slot
   for (i = 0; i < FLARM_MAX_TRAFFIC; i++) {
-    if (GPS_INFO->FLARM_Traffic[i].ID == 0) {
+    if (!GPS_INFO->FLARM_Traffic[i].defined()) {
       // this is a new target
       GPS_INFO->NewTraffic = true;
       return i;
