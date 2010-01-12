@@ -72,8 +72,6 @@ ComPort::ComPort(Handler &_handler)
   fRxThreadTerminated = true;
   dwMask = 0;
   hPort = INVALID_HANDLE_VALUE;
-  BuildingString[0] = 0;
-  bi = 0;
 }
 
 bool
@@ -84,6 +82,8 @@ ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 
   if (lpszPortName)
     _tcscpy(sPortName, lpszPortName);
+
+  bi = 0;
 
   // Open the serial port.
   hPort = CreateFile(sPortName, // Pointer to the name of the port
