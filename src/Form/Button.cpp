@@ -64,20 +64,28 @@ WndButton::WndButton(ContainerControl *Parent, const TCHAR *Name,
 bool
 WndButton::on_mouse_up(int x, int y)
 {
+  // If button does not have capture -> call parent function
   if (!has_capture())
     return WindowControl::on_mouse_up(x, y);
 
   release_capture();
 
+  // If button hasn't been pressed, mouse is only released over it -> return
   if (!mDown)
     return true;
 
+  // Button is not pressed anymore
   mDown = false;
+
+  // Repainting needed
   invalidate();
 
   if (mOnClickNotify != NULL) {
+    // Save the button coordinates for possible animation
     RECT mRc = get_screen_position();
     SetSourceRectangle(mRc);
+
+    // Call the OnClick function
     (mOnClickNotify)(this);
   }
 
@@ -92,6 +100,7 @@ WndButton::on_key_down(unsigned key_code)
   wsprintf(ventabuffer,TEXT("ONKEYDOWN key_code=%d"), key_code); // VENTA-
   DoStatusMessage(ventabuffer);
 #endif
+
   switch (key_code) {
 #ifdef GNAV
   // JMW added this to make data entry easier
