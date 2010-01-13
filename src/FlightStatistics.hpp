@@ -61,18 +61,14 @@ class FlightStatistics {
 public:
   void StartTask(double starttime);
   double AverageThermalAdjusted(const double wthis, const bool circling);
-  void AddAltitude(const double tflight,
-		   const double alt);
-  void AddAltitudeTerrain(const double tflight,
-			  const double terrainalt);
+  void AddAltitude(const double tflight, const double alt);
+  void AddAltitudeTerrain(const double tflight, const double terrainalt);
   void SaveTaskSpeed(const double val);
-  void SetLegStart(const int activewaypoint,
-		   const double time);
-  void AddClimbBase(const double tflight,
-		    const double alt);
-  void AddClimbCeiling(const double tflight,
-		       const double alt);
+  void SetLegStart(const int activewaypoint, const double time);
+  void AddClimbBase(const double tflight, const double alt);
+  void AddClimbCeiling(const double tflight, const double alt);
   void AddThermalAverage(const double v);
+
 public:
   void Reset();
   void RenderAirspace(Canvas &canvas, const RECT rc,
@@ -80,10 +76,13 @@ public:
                       const SETTINGS_MAP &settings_map,
                       const Airspaces &airspace_database,
                       RasterTerrain &terrain) const;
+
   void RenderBarograph(Canvas &canvas, const RECT rc,
                        const DERIVED_INFO &derived) const;
+
   void RenderClimb(Canvas &canvas, const RECT rc,
                    const GlidePolar& glide_polar) const;
+
   void RenderGlidePolar(Canvas &canvas, const RECT rc,
                         const DERIVED_INFO &derived,
                         const SETTINGS_COMPUTER &settings_computer,
@@ -91,6 +90,7 @@ public:
   void RenderWind(Canvas &canvas, const RECT rc,
                   const NMEA_INFO &nmea_info,
                   const WindStore &wind_store) const;
+
   void RenderTemperature(Canvas &canvas, const RECT rc) const;
 
 
@@ -115,15 +115,15 @@ public:
 
   void RenderSpeed(Canvas &canvas, const RECT rc,
                    const DERIVED_INFO &derived) const;
-  void CaptionBarograph( TCHAR *sTmp);
-  void CaptionClimb( TCHAR* sTmp);
-  void CaptionPolar(TCHAR * sTmp,
-                    const GlidePolar& glide_polar) const;
-  void CaptionTempTrace(TCHAR *sTmp) const;
-  void CaptionTask(TCHAR *sTmp,
-                   const DERIVED_INFO &derived) const;
-private:
 
+  void CaptionBarograph(TCHAR *sTmp);
+  void CaptionClimb(TCHAR* sTmp);
+  void CaptionPolar(TCHAR * sTmp, const GlidePolar& glide_polar) const;
+
+  void CaptionTempTrace(TCHAR *sTmp) const;
+  void CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const;
+
+private:
   void ExpandToTrace(Chart &chart, const TracePointVector& trace) const;
   void DrawTrace(Chart &chart, const TracePointVector& trace, unsigned style) const;
 
@@ -134,17 +134,16 @@ private:
   LeastSquares Altitude_Base;
   LeastSquares Altitude_Ceiling;
   LeastSquares Task_Speed;
+
 #ifdef OLD_TASK
   double       LegStartTime[MAXTASKPOINTS];
 #endif
+
   LeastSquares Altitude_Terrain;
   Mutex mutexStats;
-  void Lock() {
-    mutexStats.Lock();
-  }
-  void Unlock() {
-    mutexStats.Unlock();
-  }
+
+  void Lock() { mutexStats.Lock(); }
+  void Unlock() { mutexStats.Unlock(); }
 };
 
 #endif
