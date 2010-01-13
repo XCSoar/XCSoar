@@ -55,8 +55,6 @@ protected:
 
   virtual const T &get_point(const ScanTaskPoint &sp) const = 0;
 
-  virtual void set_rank(const ScanTaskPoint &sp, const unsigned d) = 0;
-
   virtual void add_edges(DijkstraTaskPoint &dijkstra,
                          const ScanTaskPoint &curNode) = 0;
 
