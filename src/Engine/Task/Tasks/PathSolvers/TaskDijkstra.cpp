@@ -161,20 +161,6 @@ TaskDijkstra::add_start_edges(DijkstraTaskPoint &dijkstra,
 }
 
 
-void 
-TaskDijkstra::set_rank(const ScanTaskPoint &sp, const unsigned d)
-{
-  // nothing to do (unused for now)
-}
-
-unsigned 
-TaskDijkstra::dist_to_rank(const unsigned dist) const
-{
-  // dummy
-  return dist;
-}
-
-
 /**
  * \todo 
  * - only scan parts that are required, and prune out points

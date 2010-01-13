@@ -104,10 +104,6 @@ public:
 protected:
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
 
-  void set_rank(const ScanTaskPoint &sp, const unsigned d);
-
-  unsigned dist_to_rank(const unsigned dist) const;
-
 private:
   unsigned get_size(const unsigned stage) const;
 

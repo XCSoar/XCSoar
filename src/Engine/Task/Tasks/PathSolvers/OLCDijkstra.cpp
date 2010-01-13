@@ -199,12 +199,6 @@ OLCDijkstra::get_weighting(const unsigned i) const
   return m_weightings[i];
 }
 
-void 
-OLCDijkstra::set_rank(const ScanTaskPoint &sp, const unsigned d)
-{
-  olc.set_rank(sp.second, d);
-}
-
 
 bool
 OLCDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
@@ -252,13 +246,6 @@ OLCDijkstra::copy_solution(TracePointVector &vec)
       vec.push_back(best_solution[i]);
     }
   }
-}
-
-
-unsigned 
-OLCDijkstra::dist_to_rank(const unsigned dist) const
-{
-  return (num_stages)*MINMAX_OFFSET-dist;
 }
 
 

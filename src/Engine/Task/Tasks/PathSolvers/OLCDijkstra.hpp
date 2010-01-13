@@ -147,10 +147,6 @@ protected:
    */
   unsigned get_weighting(const unsigned index) const;
 
-  void set_rank(const ScanTaskPoint &sp, const unsigned d);
-
-  unsigned dist_to_rank(const unsigned dist) const;
-  
 private:
 
   /**
