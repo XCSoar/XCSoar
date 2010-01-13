@@ -534,7 +534,7 @@ TopologyWriter::Reset(void)
 void
 TopologyWriter::addPoint(double x, double y)
 {
-  pointObj p = { x, y };
+  pointObj p = { x, y, 0.0 };
 
   if (shapefileopen) {
     msSHPWritePoint(shpfile.hSHP, &p);
