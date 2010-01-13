@@ -58,7 +58,9 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   if (!SettingsMap().EnableFLARMMap) return;
 
   // Return if FLARM data is not available
-  if (!Basic().FLARM_Available) return;
+  const FLARM_STATE &flarm = Basic();
+  if (!flarm.FLARM_Available)
+    return;
 
   // Create pen for icon outlines
   Pen thinBlackPen(IBLSCALE(1), Color(0, 0, 0));
@@ -86,11 +88,13 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
   // Circle through the FLARM targets
   for (int i = 0; i < FLARM_MAX_TRAFFIC; i++) {
+    const FLARM_TRAFFIC &traffic = flarm.FLARM_Traffic[i];
+
     // if FLARM target i exists
-    if (Basic().FLARM_Traffic[i].ID!=0) {
+    if (traffic.ID!=0) {
       // Save the location of the FLARM target
       GEOPOINT target_loc;
-      target_loc = Basic().FLARM_Traffic[i].Location;
+      target_loc = traffic.Location;
 
       // If Scaled mode is chosen, recalculate the
       // targets virtual position using the scale factor
@@ -123,8 +127,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       sc_av.y += IBLSCALE(16);
 
 #ifndef FLARM_AVERAGE
-      if (Basic().FLARM_Traffic[i].HasName()) {
-        TextInBox(hDC, Basic().FLARM_Traffic[i].Name, sc.x+IBLSCALE(3),
+      if (traffic.HasName()) {
+        TextInBox(hDC, traffic.Name, sc.x+IBLSCALE(3),
                   sc.y, 0, displaymode,
                   true);
       }
@@ -134,16 +138,16 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
       sc_av.x += IBLSCALE(3);
 
-      if (Basic().FLARM_Traffic[i].HasName()) {
+      if (traffic.HasName()) {
         sc_name.y -= IBLSCALE(8);
-        _stprintf(label_name, TEXT("%s"), Basic().FLARM_Traffic[i].Name);
+        _stprintf(label_name, TEXT("%s"), traffic.Name);
       } else {
         label_name[0]= _T('\0');
       }
 
-      if (Basic().FLARM_Traffic[i].Average30s >= 0.1) {
+      if (traffic.Average30s >= 0.1) {
         _stprintf(label_avg, TEXT("%.1f"),
-            LIFTMODIFY * Basic().FLARM_Traffic[i].Average30s);
+            LIFTMODIFY * traffic.Average30s);
       } else {
         label_avg[0]= _T('\0');
       }
@@ -185,7 +189,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
           float vmax = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
           float vmin = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
 
-          float cv = Basic().FLARM_Traffic[i].Average30s;
+          float cv = traffic.Average30s;
           if (cv < 0) {
             cv /= (-vmin); // JMW fixed bug here
           } else {
@@ -215,8 +219,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 #endif
 
       // If FLARM alarm draw alarm icon below corresponding target
-      if ((Basic().FLARM_Traffic[i].AlarmLevel > 0)
-          && (Basic().FLARM_Traffic[i].AlarmLevel < 4)) {
+      if ((traffic.AlarmLevel > 0)
+          && (traffic.AlarmLevel < 4)) {
         draw_masked_bitmap(canvas, MapGfx.hFLARMTraffic, sc.x, sc.y, 10, 10, true);
       }
 
@@ -232,10 +236,10 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       Arrow[4].x = -4;
       Arrow[4].y = 5;
 
-      // double vmag = max(1.0,min(15.0,Basic().FLARM_Traffic[i].Speed/5.0))*2;
+      // double vmag = max(1.0,min(15.0,traffic.Speed/5.0))*2;
 
       // Select brush depending on AlarmLevel
-      switch (Basic().FLARM_Traffic[i].AlarmLevel) {
+      switch (traffic.AlarmLevel) {
       case 1:
         canvas.select(yellowBrush);
         break;
@@ -251,7 +255,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
       // Rotate and shift the arrow to the right position and angle
       PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                         Basic().FLARM_Traffic[i].TrackBearing - DisplayAngle);
+                         traffic.TrackBearing - DisplayAngle);
 
       // Draw the arrow
       canvas.polygon(Arrow, 5);
