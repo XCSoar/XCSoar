@@ -61,8 +61,6 @@ private:
 
 #endif
 
-int FindFlarmSlot(const NMEA_INFO &GPS_INFO, const int flarmId);
-int FindFlarmSlot(const NMEA_INFO &GPS_INFO, const TCHAR *flarmCN);
 bool IsFlarmTargetCNInRange(const NMEA_INFO &GPS_INFO, const long target_id);
 
 #endif
