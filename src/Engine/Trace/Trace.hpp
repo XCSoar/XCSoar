@@ -118,6 +118,11 @@ public:
    */
   TraceTree::const_iterator end() const;
 
+  /**
+   * Re-balance kd-tree periodically 
+   *
+   * @return True if trace store was optimised
+   */
   bool optimise_if_old();
 
   /**
@@ -135,6 +140,13 @@ public:
   find_within_range(const GEOPOINT &loc, const fixed range, const unsigned mintime=0,
                     const fixed resolution = -fixed_one) const;
 
+  /** 
+   * Retrieve a vector of trace points thinned to limit the number of points 
+   * 
+   * @param max_points Maximum number of points to thin to
+   * 
+   * @return Vector of trace points
+   */
   TracePointVector get_trace_points(const unsigned max_points) const;
 
 private:

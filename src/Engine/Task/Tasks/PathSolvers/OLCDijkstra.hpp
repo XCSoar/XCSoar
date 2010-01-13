@@ -45,8 +45,7 @@
 class OnlineContest;
 
 /**
- * @todo This currently only finds the first solution, not the best solution;
- *       needs a little more work
+ * Abstract class for OLC path searches
  *
  */
 class OLCDijkstra: 
@@ -69,15 +68,48 @@ public:
  */
   ~OLCDijkstra();
 
+/** 
+ * Calculate the scored value of the OLC path
+ * 
+ * @param the_distance output distance (m) of scored path
+ * 
+ * @return Score (interpretation depends on OLC type)
+ */
   virtual fixed score(fixed &the_distance);
 
+/** 
+ * Copy the best OLC path solution
+ * 
+ * @param vec output vector
+ */
   void copy_solution(TracePointVector &vec);
 
+/** 
+ * Calculate distance of best path
+ * 
+ * @return Distance (m) 
+ */
   fixed calc_distance() const;
+
+/** 
+ * Calculate elapsed time of best path
+ * 
+ * @return Distance (m) 
+ */
   fixed calc_time() const;
 
+/** 
+ * Reset the optimiser as if never flown 
+ * 
+ */
   virtual void reset();
 
+/** 
+ * Update the solver.  The solver is incremental, so this method can
+ * be safely called every time step.
+ * 
+ * @return True if solver completed in this call
+ */
   bool solve();
 
 protected:
@@ -89,25 +121,43 @@ protected:
 
   virtual bool finish_satisfied(const ScanTaskPoint &sp) const;
 
+  /**
+   * Set weightings of each leg.  Default is constant weighting.
+   */
   virtual void set_weightings();
 
+  /**
+   * Determine if a trace point can be added to the search list
+   *
+   * @param candidate The index to the candidate
+   * @return True if candidate is valid
+   */
   virtual bool admit_candidate(const ScanTaskPoint &candidate) const;
 
-  std::vector<unsigned> m_weightings;
+  std::vector<unsigned> m_weightings; /**< Weightings applied to each leg distance */
+
+  DijkstraTaskPoint m_dijkstra; /**< Dijkstra search algorithm */
+
+  unsigned n_points; /**< Number of points in current trace set */
+
+  /**
+   * Retrieve weighting of specified leg
+   * @param index Index of leg
+   * @return Weighting of leg
+   */
+  unsigned get_weighting(const unsigned index) const;
 
   void set_rank(const ScanTaskPoint &sp, const unsigned d);
 
   unsigned dist_to_rank(const unsigned dist) const;
   
-  virtual bool solve_inner();
-
-  DijkstraTaskPoint m_dijkstra;
-
-  unsigned n_points;
-
-  unsigned get_weighting(const unsigned i) const;
-
 private:
+
+  /**
+   * Iterate solver
+   * @return True if solver returned
+   */
+  bool solve_inner();
 
   OnlineContest& olc;
   const unsigned m_finish_alt_diff;
