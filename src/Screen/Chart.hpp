@@ -43,11 +43,13 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Screen/Canvas.hpp"
 
-class Chart {
- private:
+class Chart
+{
+private:
   Canvas &canvas;
   RECT rc;
- public:
+
+public:
   Chart(Canvas &the_canvas, const RECT the_rc);
 
   static const Color GROUND_COLOUR;
@@ -63,20 +65,12 @@ class Chart {
   void Reset();
 
   void DrawBarChart(const LeastSquares &lsdata);
-
   void DrawFilledLineGraph(const LeastSquares &lsdata, const Color thecolor);
-
-  void DrawLineGraph(const LeastSquares &lsdata,
-		     const int Style);
-  void DrawTrend(const LeastSquares &lsdata,
-                        const int Style);
-  void DrawTrendN(const LeastSquares &lsdata,
-                         const int Style);
-
-  void DrawLine(const double xmin,
-		const double ymin,
-		const double xmax,
-		const double ymax, const int Style);
+  void DrawLineGraph(const LeastSquares &lsdata,  const int Style);
+  void DrawTrend(const LeastSquares &lsdata, const int Style);
+  void DrawTrendN(const LeastSquares &lsdata, const int Style);
+  void DrawLine(const double xmin, const double ymin,
+      const double xmax, const double ymax, const int Style);
 
   void ScaleYFromData(const LeastSquares &lsdata);
   void ScaleXFromData(const LeastSquares &lsdata);
@@ -84,39 +78,32 @@ class Chart {
   void ScaleXFromValue(const double val);
   void ScaleMakeSquare();
 
-  void StyleLine(const POINT l1, const POINT l2,
-		 const int Style);
+  void StyleLine(const POINT l1, const POINT l2, const int Style);
 
   void ResetScale();
 
   void FormatTicText(TCHAR *text, const double val, const double step);
-  void DrawXGrid(const double tic_step,
-		 const double zero,
-		 const int Style,
-		 const double unit_step,
-		 bool draw_units=false);
-  void DrawYGrid(const double tic_step,
-		 const double zero,
-		 const int Style,
-		 const double unit_step, bool draw_units=false);
+  void DrawXGrid(const double tic_step, const double zero, const int Style,
+      const double unit_step, bool draw_units = false);
+  void DrawYGrid(const double tic_step, const double zero, const int Style,
+		  const double unit_step, bool draw_units = false);
 
   void DrawXLabel(const TCHAR *text);
   void DrawYLabel(const TCHAR *text);
-  void DrawLabel(const TCHAR *text,
-		 const double xv, const double yv);
-
-  void DrawArrow(const double x, const double y,
-		 const double mag, const fixed angle,
-		 const int Style);
-
+  void DrawLabel(const TCHAR *text, const double xv, const double yv);
+  void DrawArrow(const double x, const double y, const double mag,
+      const fixed angle, const int Style);
   void DrawNoData();
+
   double getYmin() { return y_min; }
   double getYmax() { return y_max; }
   double getXmin() { return x_min; }
   double getXmax() { return x_max; }
+
   long screenX(double x);
   long screenY(double y);
   long screenS(double s);
+
 private:
   double yscale;
   double xscale;
