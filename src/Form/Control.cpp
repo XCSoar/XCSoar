@@ -76,23 +76,19 @@ KeyTimer(bool isdown, unsigned thekey)
   return false;
 }
 
-WindowControl::WindowControl(ContainerControl *Owner,
-                             ContainerWindow *Parent,
-                             const TCHAR *Name,
-                             int X, int Y,
-                             int Width, int Height,
-                             bool Visible)
-  :mOwner(Owner),
-   mBorderKind(0), //BORDERRIGHT | BORDERBOTTOM;
-   mColorBack(Color::WHITE),
-   mColorFore(Color::BLACK),
-   mhFont(&MapWindowFont),
-   mHelpText(NULL),
-   mOnHelpCallback(NULL),
-   mReadOnly(false), mHasFocus(false),
-   mBorderSize(1),
-   mCanFocus(false),
-   mDontPaintSelector(false)
+WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
+    const TCHAR *Name, int X, int Y, int Width, int Height, bool Visible) :
+    mOwner(Owner),
+    mBorderKind(0), //BORDERRIGHT | BORDERBOTTOM;
+    mColorBack(Color::WHITE),
+    mColorFore(Color::BLACK),
+    mhFont(&MapWindowFont),
+    mHelpText(NULL),
+    mOnHelpCallback(NULL),
+    mReadOnly(false), mHasFocus(false),
+    mBorderSize(1),
+    mCanFocus(false),
+    mDontPaintSelector(false)
 {
   mCaption[0] = '\0';
 
@@ -111,8 +107,7 @@ WindowControl::WindowControl(ContainerControl *Owner,
     initialized = true;
   }
 
-  set(Parent, X, Y, Width, Height,
-      false, false, Visible, false, false);
+  set(Parent, X, Y, Width, Height, false, false, Visible, false, false);
 
   if (mOwner != NULL)
     mOwner->AddClient(this);
@@ -320,13 +315,14 @@ WindowControl::PaintSelector(Canvas &canvas, const RECT rc)
 void
 WindowControl::PaintSelector(Canvas &canvas)
 {
-
-  if (!mDontPaintSelector && mCanFocus && mHasFocus){
+  if (!mDontPaintSelector && mCanFocus && mHasFocus) {
     PaintSelector(canvas, get_client_rect());
   }
 }
 
-int WindowControl::OnHelp() {
+int
+WindowControl::OnHelp()
+{
 #ifdef ALTAIRSYNC
   return 0; // undefined. return 1 if defined
 #else
