@@ -50,11 +50,14 @@ WndButton::WndButton(ContainerControl *Parent, const TCHAR *Name,
   mLastDrawTextHeight(-1),
   mOnClickNotify(Function)
 {
+  // a button can receive focus
   SetCanFocus(true);
 
+  // fore- and background color should be derived from the parent control
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
 
+  // copy the buttons caption to the mCaption field
   _tcscpy(mCaption, Caption);
 }
 
