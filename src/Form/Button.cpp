@@ -98,11 +98,15 @@ WndButton::on_mouse_down(int x, int y)
   (void)x;
   (void)y;
 
+  // Button is now pressed
   mDown = true;
 
   if (!GetFocused())
+    // If button not yet focused -> give focus to the button
     set_focus();
   else
+    // If button has focus -> repaint
+    // QUESTION TB: why not invalidate() if focus is set!?
     invalidate();
 
   set_capture();
@@ -131,9 +135,13 @@ WndButton::on_mouse_double(int x, int y)
   (void)x;
   (void)y;
 
+  // Button is now pressed
   mDown = true;
+  // ... will be repainted
   invalidate();
+  // ... and gets captured
   set_capture();
+
   return true;
 }
 
@@ -153,6 +161,7 @@ WndButton::on_key_down(unsigned key_code)
 #endif
   case VK_RETURN:
   case VK_SPACE:
+    // "Press" the button via keys and repaint it
     if (!mDown) {
       mDown = true;
       invalidate();
@@ -160,6 +169,7 @@ WndButton::on_key_down(unsigned key_code)
     return true;
   }
 
+  // If key_down hasn't been handled yet -> call parent function
   return WindowControl::on_key_down(key_code);
 }
 
@@ -173,16 +183,23 @@ WndButton::on_key_up(unsigned key_code)
 #endif
   case VK_RETURN:
   case VK_SPACE:
+    // Return if button was not pressed long enough
     if (!XCSoarInterface::Debounce())
-      return 1; // prevent false trigger
+      return true; // prevent false trigger
 
+    // If button was pressed before
     if (mDown) {
+      // "Release" button via keys
       mDown = false;
+      // Repaint the button
       invalidate();
 
       if (mOnClickNotify != NULL) {
+        // Save the button coordinates for possible animation
         RECT mRc = get_screen_position();
         SetSourceRectangle(mRc);
+
+        // Call the OnClick function
         (mOnClickNotify)(this);
       }
     }
@@ -190,53 +207,66 @@ WndButton::on_key_up(unsigned key_code)
     return true;
   }
 
+  // If key_down hasn't been handled yet -> call parent function
   return WindowControl::on_key_up(key_code);
 }
 
 void
 WndButton::on_paint(Canvas &canvas)
 {
+  // Call parent on_paint function (selector/focus)
   WindowControl::on_paint(canvas);
 
+  // Get button RECT and shrink it to make room for the selector/focus
   RECT rc = get_client_rect();
   InflateRect(&rc, -2, -2); // todo border width
 
   // JMW todo: add icons?
 
+  // Draw button to the background
   canvas.draw_button(rc, mDown);
 
+  // If button has text on it
   if (mCaption != NULL && mCaption[0] != '\0') {
+    // Set drawing colors
     canvas.set_text_color(GetForeColor());
     canvas.set_background_color(GetBackColor());
     canvas.background_transparent();
 
+    // Set drawing font
     canvas.select(*GetFont());
 
+    // Get button RECT and shrink it to make room for the selector/focus
+    // TODO TB: check duplicate code!?
     rc = get_client_rect();
     InflateRect(&rc, -2, -2); // todo border width
 
+    // If button is pressed, offset the text for 3D effect
     if (mDown)
       OffsetRect(&rc, 2, 2);
 
     if (mLastDrawTextHeight < 0) {
-      canvas.formatted_text(&rc, mCaption, DT_CALCRECT | DT_EXPANDTABS
-          | DT_CENTER | DT_NOCLIP | DT_WORDBREAK); // mCaptionStyle // | DT_CALCRECT
+      // Calculate the text height and save it for the future
+      canvas.formatted_text(&rc, mCaption,
+          DT_CALCRECT | DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
 
       mLastDrawTextHeight = rc.bottom - rc.top;
 
+      // Get button RECT and shrink it to make room for the selector/focus
+      // TODO TB: check duplicate code!?
       // ToDo optimize
       rc = get_client_rect();
       InflateRect(&rc, -2, -2); // todo border width
 
+      // If button is pressed, offset the text for 3D effect
       if (mDown)
         OffsetRect(&rc, 2, 2);
     }
 
+    // Vertical middle alignment
     rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
 
-    canvas.formatted_text(&rc, mCaption, DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
-        | DT_WORDBREAK); // mCaptionStyle // | DT_CALCRECT
-
-    //mLastDrawTextHeight = rc.bottom - rc.top;
+    canvas.formatted_text(&rc, mCaption,
+        DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
   }
 }
