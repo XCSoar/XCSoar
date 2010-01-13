@@ -67,6 +67,17 @@ struct FLARM_STATE
    */
   bool NewTraffic;
 
+protected:
+  const FLARM_TRAFFIC *FirstTrafficSlot() const {
+    return &FLARM_Traffic[0];
+  }
+
+  const FLARM_TRAFFIC *LastTrafficSlot() const {
+    return &FLARM_Traffic[FLARM_MAX_TRAFFIC - 1];
+  }
+
+public:
+
   /**
    * Looks up an item in the traffic list.
    *
@@ -136,6 +147,44 @@ struct FLARM_STATE
         return &FLARM_Traffic[i];
 
     return NULL;
+  }
+
+  /**
+   * Search for the previous traffic in the ordered list.
+   */
+  const FLARM_TRAFFIC *PreviousTraffic(const FLARM_TRAFFIC *t) const {
+    while (--t >= FirstTrafficSlot()) {
+      if (t->defined())
+        return t;
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Search for the next traffic in the ordered list.
+   */
+  const FLARM_TRAFFIC *NextTraffic(const FLARM_TRAFFIC *t) const {
+    while (++t <= LastTrafficSlot()) {
+      if (t->defined())
+        return t;
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Search for the first traffic in the ordered list.
+   */
+  const FLARM_TRAFFIC *FirstTraffic() const {
+    return NextTraffic(FirstTrafficSlot() - 1);
+  }
+
+  /**
+   * Search for the last traffic in the ordered list.
+   */
+  const FLARM_TRAFFIC *LastTraffic() const {
+    return PreviousTraffic(LastTrafficSlot() + 1);
   }
 
   void Refresh(fixed Time) {
