@@ -84,10 +84,39 @@ struct FLARM_STATE
   /**
    * Looks up an item in the traffic list.
    *
+   * @param id FLARM id
+   * @return the FLARM_TRAFFIC pointer, NULL if not found
+   */
+  const FLARM_TRAFFIC *FindTraffic(long id) const {
+    for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
+      if (FLARM_Traffic[i].ID == id)
+        return &FLARM_Traffic[i];
+
+    return NULL;
+  }
+
+  /**
+   * Looks up an item in the traffic list.
+   *
    * @param name the name or call sign
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   FLARM_TRAFFIC *FindTraffic(const TCHAR *name) {
+    for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
+      if (FLARM_Traffic[i].defined() &&
+          _tcscmp(FLARM_Traffic[i].Name, name) == 0)
+        return &FLARM_Traffic[i];
+
+    return NULL;
+  }
+
+  /**
+   * Looks up an item in the traffic list.
+   *
+   * @param name the name or call sign
+   * @return the FLARM_TRAFFIC pointer, NULL if not found
+   */
+  const FLARM_TRAFFIC *FindTraffic(const TCHAR *name) const {
     for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
       if (FLARM_Traffic[i].defined() &&
           _tcscmp(FLARM_Traffic[i].Name, name) == 0)
