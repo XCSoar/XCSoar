@@ -43,6 +43,9 @@ Copyright_License {
 
 class Bitmap;
 
+/**
+ * A Brush is used for drawing filled circles, rectangles and so on
+ */
 class Brush {
 protected:
   #ifdef ENABLE_SDL
@@ -57,18 +60,41 @@ public:
   Brush():hollow(true) {}
   explicit Brush(const Color _color):hollow(false), color(_color)  {}
   #else
+  /** Base Constructor of the Brush class */
   Brush():brush(NULL) {}
-  explicit Brush(const Color c):brush(NULL) {
-    set(c);
-  }
+
+  /**
+   * Constructor (creates a Brush object of the given Color
+   * @param c Color of the Brush
+   */
+  explicit Brush(const Color c) : brush(NULL) { set(c); }
   #endif
+
+  /** Destructor */
   ~Brush() { reset(); }
 
 public:
+  /**
+   * Sets the Color of the Brush
+   * @param c The new Color
+   */
   void set(const Color c);
+
+  /**
+   * Creates a bitmap-based Brush
+   * @param bitmap The bitmap the new Brush will be based on
+   */
   void set(const Bitmap &bitmap);
+
+  /**
+   * Resets the Brush to NULL
+   */
   void reset();
 
+  /**
+   * Returns whether the Brush is defined (!= NULL)
+   * @return True if the Brush is defined, False otherwise
+   */
   bool
   defined() const
   {
@@ -83,6 +109,10 @@ public:
   bool is_hollow() const { return hollow; }
   const Color get_color() const { return color; }
   #else
+  /**
+   * Returns the native HBRUSH object
+   * @return The native HBRUSH object
+   */
   HBRUSH native() const {
     return brush;
   }
