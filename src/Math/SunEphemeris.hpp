@@ -56,7 +56,7 @@ class SunEphemeris {
   double MorningTwilight, altmax, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;
 
   double CalcSunTimes(const GEOPOINT &location, const NMEA_INFO &GPS_INFO,
-      const DERIVED_INFO &CALCULATED_INFO, double tzone);
+      const DERIVED_INFO &CALCULATED_INFO, double TimeZone);
 };
 
 #endif
