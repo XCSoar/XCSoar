@@ -103,9 +103,11 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
   // Cycle through FLARM targets
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    if (gps_info.FLARM_Traffic[i].defined()) {
+    const FLARM_TRAFFIC &traffic = gps_info.FLARM_Traffic[i];
+
+    if (traffic.defined()) {
       // Set the arrow color depending on alarm level
-      switch (gps_info.FLARM_Traffic[i].AlarmLevel) {
+      switch (traffic.AlarmLevel) {
       case 1:
         canvas.select(MapGfx.yellowBrush);
         break;
@@ -120,8 +122,8 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
       }
 
       double x, y;
-      x = gps_info.FLARM_Traffic[i].RelativeEast;
-      y = -gps_info.FLARM_Traffic[i].RelativeNorth;
+      x = traffic.RelativeEast;
+      y = -traffic.RelativeNorth;
       double d = sqrt(x*x+y*y);
       if (d>0) {
         x /= d;
@@ -130,7 +132,7 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
         x = 0;
         y = 0;
       }
-      double dh = gps_info.FLARM_Traffic[i].RelativeAltitude;
+      double dh = traffic.RelativeAltitude;
       double slope = atan2(dh,d)*2.0/M_PI; // (-1,1)
 
       slope = max(-1.0,min(1.0,slope*2)); // scale so 45 degrees or more=90
@@ -150,7 +152,7 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
       sc.x = center.x + iround(x*scale);
       sc.y = center.y + iround(y*scale);
 
-      if (gps_info.FLARM_Traffic[i].AlarmLevel>0) {
+      if (traffic.AlarmLevel > 0) {
         // Draw line through target
         canvas.line(sc.x, sc.y,
                     center.x + iround(radius*x),
@@ -172,14 +174,12 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
       // Rotate and shift the arrow
       PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                         gps_info.FLARM_Traffic[i].TrackBearing
-                         + DisplayAngle);
+                         traffic.TrackBearing + DisplayAngle);
 
       // Draw the polygon
       canvas.polygon(Arrow, 5);
 
-      short relalt =
-          iround(gps_info.FLARM_Traffic[i].RelativeAltitude*ALTITUDEMODIFY/100);
+      short relalt = iround(traffic.RelativeAltitude * ALTITUDEMODIFY / 100);
 
       // if (relative altitude is other than zero)
       if (relalt != 0) {
