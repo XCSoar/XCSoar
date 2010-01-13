@@ -48,39 +48,41 @@ Copyright_License {
 #include "LabelBlock.hpp"
 #include "SettingsUser.hpp"
 
-typedef union{
+typedef union
+{
   unsigned int AsInt;
-  struct{
-    unsigned Border:1;
-    unsigned FillBackground:1;
-    unsigned AlignRight:1;
-    unsigned Reachable:1;
-    unsigned AlignCenter:1;
-    unsigned WhiteBorder:1;
-    unsigned WhiteBold:1;
-    unsigned NoSetFont:1;  // VENTA5
-    unsigned Color:3;
+  struct
+  {
+    unsigned Border :1;
+    unsigned FillBackground :1;
+    unsigned AlignRight :1;
+    unsigned Reachable :1;
+    unsigned AlignCenter :1;
+    unsigned WhiteBorder :1;
+    unsigned WhiteBold :1;
+    unsigned NoSetFont :1;
+    unsigned Color :3;
   } AsFlag;
 } TextInBoxMode_t;
-  // mode are flags
-  // bit 0 == fill background add border / 1
-  // bit 1 == fill background            / 2
-  // bit 2 == right alligned             / 4
-  // bit 3 == landable TP label          / 8
-  // bit 4 == center alligned
 
+// mode are flags
+// bit 0 == fill background add border / 1
+// bit 1 == fill background            / 2
+// bit 2 == right alligned             / 4
+// bit 3 == landable TP label          / 8
+// bit 4 == center alligned
 
 class ScreenGraphics {
 public:
-  void Initialise(HINSTANCE hInstance,
-		  const SETTINGS_MAP &settings_map);
+  void Initialise(HINSTANCE hInstance, const SETTINGS_MAP &settings_map);
   void Destroy();
 
   // airspace brushes/colours
   const Color GetAirspaceColour(const int i);
   const Brush &GetAirspaceBrush(const int i);
-  const Color GetAirspaceColourByClass(const int i,  const SETTINGS_MAP &settings);
-  const Brush &GetAirspaceBrushByClass(const int i,  const SETTINGS_MAP &settings);
+  const Color GetAirspaceColourByClass(const int i, const SETTINGS_MAP &settings);
+  const Brush &GetAirspaceBrushByClass(const int i, const SETTINGS_MAP &settings);
+
   Pen hAirspacePens[AIRSPACECLASSCOUNT];
   Brush hAirspaceBrushes[NUMAIRSPACEBRUSHES];
   Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
@@ -96,12 +98,11 @@ public:
   Brush hAboveTerrainBrush;
   Bitmap hAirspaceInterceptBitmap;
 
-  Bitmap
-    hTurnPoint, hSmall, hCruise, hClimb,
-    hFinalGlide, hAutoMacCready, hTerrainWarning, hGPSStatus1, hGPSStatus2,
-    hAbort, hLogger, hLoggerOff, hFLARMTraffic;
+  Bitmap hTurnPoint, hSmall, hCruise, hClimb, hFinalGlide, hAutoMacCready,
+      hTerrainWarning, hGPSStatus1, hGPSStatus2, hAbort, hLogger, hLoggerOff,
+      hFLARMTraffic;
 
-  Brush   hBackgroundBrush;
+  Brush hBackgroundBrush;
 
   Pen hpAircraft;
   Pen hpAircraftBorder;
@@ -118,11 +119,11 @@ public:
   Pen hpMapScale;
   Pen hpTerrainLine;
   Pen hpTerrainLineBg;
-  Pen hpVisualGlideLightRed; // VENTA3
-  Pen hpVisualGlideHeavyRed; //
-  Pen hpVisualGlideLightBlack; // VENTA3
-  Pen hpVisualGlideHeavyBlack; //
-  Pen hpVisualGlideExtra; // future use
+  Pen hpVisualGlideLightRed;
+  Pen hpVisualGlideHeavyRed;
+  Pen hpVisualGlideLightBlack;
+  Pen hpVisualGlideHeavyBlack;
+  Pen hpVisualGlideExtra;
   Pen hpSpeedFast;
   Pen hpSpeedSlow;
   Pen hpStartFinishThick;
@@ -136,8 +137,8 @@ public:
   Brush hbFinalGlideAbove;
   Brush hbWind;
 
-  Pen    hpCompassBorder;
-  Brush  hBrushFlyingModeAbort;
+  Pen hpCompassBorder;
+  Brush hBrushFlyingModeAbort;
 
   Bitmap hBmpAirportReachable;
   Bitmap hBmpAirportUnReachable;
@@ -170,7 +171,7 @@ public:
   // used by infobox and gauges
   static const Color inv_redColor;
   static const Color inv_blueColor;
-// Not really used, tested and dropped. But useful for the future
+  // Not really used, tested and dropped. But useful for the future
   static const Color inv_yellowColor;
   static const Color inv_greenColor;
   static const Color inv_magentaColor;
@@ -188,7 +189,6 @@ public:
 extern ScreenGraphics MapGfx;
 
 bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
-	       TextInBoxMode_t Mode, const RECT MapRect,
-	       LabelBlock *label_block=NULL);
+    TextInBoxMode_t Mode, const RECT MapRect, LabelBlock *label_block = NULL);
 
 #endif
