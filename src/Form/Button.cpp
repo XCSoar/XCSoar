@@ -239,27 +239,18 @@ WndButton::on_paint(Canvas &canvas)
     // Set drawing font
     canvas.select(*GetFont());
 
+    if (mLastDrawTextHeight < 0) {
+      // Calculate the text height and save it for the future
+      RECT rc_t = rc;
+      canvas.formatted_text(&rc_t, mCaption,
+          DT_CALCRECT | DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
+
+      mLastDrawTextHeight = rc_t.bottom - rc_t.top;
+    }
+
     // If button is pressed, offset the text for 3D effect
     if (mDown)
       OffsetRect(&rc, 2, 2);
-
-    if (mLastDrawTextHeight < 0) {
-      // Calculate the text height and save it for the future
-      canvas.formatted_text(&rc, mCaption,
-          DT_CALCRECT | DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
-
-      mLastDrawTextHeight = rc.bottom - rc.top;
-
-      // Get button RECT and shrink it to make room for the selector/focus
-      // TODO TB: check duplicate code!?
-      // ToDo optimize
-      rc = get_client_rect();
-      InflateRect(&rc, -2, -2); // todo border width
-
-      // If button is pressed, offset the text for 3D effect
-      if (mDown)
-        OffsetRect(&rc, 2, 2);
-    }
 
     // Vertical middle alignment
     rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
