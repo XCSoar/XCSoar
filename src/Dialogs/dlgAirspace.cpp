@@ -68,10 +68,6 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
   w2 = canvas.text_width(gettext(_T("Display"))) + Layout::FastScale(10);
   x0 = w0 - w1 - w2;
 
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
-      rc.top + Layout::FastScale(2), x0 - Layout::FastScale(10),
-      airspace_class_as_text((AirspaceClass_t)i, false).c_str());
-
   if (colormode) {
     canvas.white_pen();
     canvas.set_text_color(MapGfx.GetAirspaceColourByClass(i,
@@ -97,6 +93,10 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
           gettext(_T("Display")));
     }
   }
+
+  canvas.text_clipped(rc.left + Layout::FastScale(2),
+      rc.top + Layout::FastScale(2), x0 - Layout::FastScale(10),
+      airspace_class_as_text((AirspaceClass_t)i, false).c_str());
 }
 
 static bool changed = false;
