@@ -76,22 +76,53 @@ public:
   Pen(unsigned _width, const Color _color)
     :width(_width), color(_color) {}
   #else /* !ENABLE_SDL */
-  Pen():pen(NULL) {}
+  /** Base Constructor for the Pen class */
+  Pen() : pen(NULL) {}
+  /**
+   * Constructor that creates a Pen object, based on the given parameters
+   * @param style Line style (SOLID, DASH, BLANK)
+   * @param width Width of the line/Pen
+   * @param c Color of the Pen
+   */
   Pen(enum style style, unsigned width, const Color c):pen(NULL) {
     set(style, width, c);
   }
+  /**
+   * Constructor that creates a solid Pen object, based on the given parameters
+   * @param width Width of the line/Pen
+   * @param c Color of the Pen
+   */
   Pen(unsigned width, Color c):pen(NULL) {
     set(width, c);
   }
   #endif /* !ENABLE_SDL */
 
+  /** Destructor */
   ~Pen() { reset(); }
 
 public:
+  /**
+   * Sets the Pens parameters to the given values
+   * @param style Line style (SOLID, DASH, BLANK)
+   * @param width Width of the line/Pen
+   * @param c Color of the Pen
+   */
   void set(enum style style, unsigned width, const Color c);
+  /**
+   * Sets the Pens parameters to the given values
+   * @param width Width of the line/Pen
+   * @param c Color of the Pen
+   */
   void set(unsigned width, const Color c);
+  /**
+   * Resets the Pen to NULL
+   */
   void reset();
 
+  /**
+   * Returns whether the Pen is defined (!= NULL)
+   * @return True if the Pen is defined, False otherwise
+   */
   bool
   defined() const
   {
@@ -115,11 +146,11 @@ public:
     return color;
   }
   #else
-  HPEN
-  native() const
-  {
-    return pen;
-  }
+  /**
+   * Returns the native HPEN object
+   * @return The native HPEN object
+   */
+  HPEN native() const { return pen; }
   #endif
 };
 
