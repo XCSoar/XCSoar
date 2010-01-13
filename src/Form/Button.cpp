@@ -39,6 +39,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Container.hpp"
 #include "Screen/Animation.hpp"
+#include "Screen/Layout.hpp"
 #include "Interface.hpp"
 
 WndButton::WndButton(ContainerControl *Parent, const TCHAR *Name,
@@ -250,7 +251,7 @@ WndButton::on_paint(Canvas &canvas)
 
     // If button is pressed, offset the text for 3D effect
     if (mDown)
-      OffsetRect(&rc, 2, 2);
+      OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
 
     // Vertical middle alignment
     rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
