@@ -41,45 +41,111 @@ Copyright_License {
 #include "Screen/Animation.hpp"
 #include "Interface.hpp"
 
-WndButton::WndButton(ContainerControl *Parent,
-                     const TCHAR *Name, const TCHAR *Caption,
-                     int X, int Y, int Width, int Height,
-                     void (*Function)(WindowControl *Sender))
-  :WindowControl(Parent, NULL, Name, X, Y, Width, Height),
-   mDown(false),
-   mDefault(false),
-   mLastDrawTextHeight(-1),
-   mOnClickNotify(Function)
+WndButton::WndButton(ContainerControl *Parent, const TCHAR *Name,
+    const TCHAR *Caption, int X, int Y, int Width, int Height, void
+    (*Function)(WindowControl *Sender)) :
+  WindowControl(Parent, NULL, Name, X, Y, Width, Height),
+  mDown(false),
+  mDefault(false),
+  mLastDrawTextHeight(-1),
+  mOnClickNotify(Function)
 {
+  // a button can receive focus
   SetCanFocus(true);
 
+  // fore- and background color should be derived from the parent control
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
 
+  // copy the buttons caption to the mCaption field
   _tcscpy(mCaption, Caption);
 }
 
 bool
 WndButton::on_mouse_up(int x, int y)
 {
-  if (has_capture()) {
-    release_capture();
+  // If button does not have capture -> call parent function
+  if (!has_capture())
+    return WindowControl::on_mouse_up(x, y);
 
-    if (!mDown)
-      return true;
+  release_capture();
 
-    mDown = false;
+  // If button hasn't been pressed, mouse is only released over it -> return
+  if (!mDown)
+    return true;
+
+  // Button is not pressed anymore
+  mDown = false;
+
+  // Repainting needed
+  invalidate();
+
+  if (mOnClickNotify != NULL) {
+    // Save the button coordinates for possible animation
+    RECT mRc = get_screen_position();
+    SetSourceRectangle(mRc);
+
+    // Call the OnClick function
+    (mOnClickNotify)(this);
+  }
+
+  return true;
+}
+
+bool
+WndButton::on_mouse_down(int x, int y)
+{
+  (void)x;
+  (void)y;
+
+  // Button is now pressed
+  mDown = true;
+
+  if (!GetFocused())
+    // If button not yet focused -> give focus to the button
+    set_focus();
+  else
+    // If button has focus -> repaint
+    // QUESTION TB: why not invalidate() if focus is set!?
     invalidate();
 
-    if (mOnClickNotify != NULL) {
-      RECT mRc = get_screen_position();
-      SetSourceRectangle(mRc);
-      (mOnClickNotify)(this);
-    }
+  set_capture();
 
-    return true;
-  } else
-    return WindowControl::on_mouse_up(x, y);
+  return true;
+}
+
+bool
+WndButton::on_mouse_move(int x, int y, unsigned keys)
+{
+  // If button does not have capture -> call parent function
+  if (!has_capture())
+    return WindowControl::on_mouse_move(x, y, keys);
+
+  bool in = in_client_rect(x, y);
+
+  // If button is currently pressed and mouse cursor is moving on top of it
+  if (in != mDown) {
+    mDown = in;
+    invalidate();
+  }
+
+  return true;
+}
+
+bool
+WndButton::on_mouse_double(int x, int y)
+{
+  (void)x;
+  (void)y;
+
+  // Button is now pressed
+  mDown = true;
+  // ... will be repainted
+  invalidate();
+  // ... and gets captured
+  set_capture();
+
+  return true;
 }
 
 bool
@@ -90,6 +156,7 @@ WndButton::on_key_down(unsigned key_code)
   wsprintf(ventabuffer,TEXT("ONKEYDOWN key_code=%d"), key_code); // VENTA-
   DoStatusMessage(ventabuffer);
 #endif
+
   switch (key_code) {
 #ifdef GNAV
   // JMW added this to make data entry easier
@@ -97,6 +164,7 @@ WndButton::on_key_down(unsigned key_code)
 #endif
   case VK_RETURN:
   case VK_SPACE:
+    // "Press" the button via keys and repaint it
     if (!mDown) {
       mDown = true;
       invalidate();
@@ -104,6 +172,7 @@ WndButton::on_key_down(unsigned key_code)
     return true;
   }
 
+  // If key_down hasn't been handled yet -> call parent function
   return WindowControl::on_key_down(key_code);
 }
 
@@ -117,16 +186,23 @@ WndButton::on_key_up(unsigned key_code)
 #endif
   case VK_RETURN:
   case VK_SPACE:
+    // Return if button was not pressed long enough
     if (!XCSoarInterface::Debounce())
-      return 1; // prevent false trigger
+      return true; // prevent false trigger
 
+    // If button was pressed before
     if (mDown) {
+      // "Release" button via keys
       mDown = false;
+      // Repaint the button
       invalidate();
 
       if (mOnClickNotify != NULL) {
+        // Save the button coordinates for possible animation
         RECT mRc = get_screen_position();
         SetSourceRectangle(mRc);
+
+        // Call the OnClick function
         (mOnClickNotify)(this);
       }
     }
@@ -134,118 +210,66 @@ WndButton::on_key_up(unsigned key_code)
     return true;
   }
 
+  // If key_down hasn't been handled yet -> call parent function
   return WindowControl::on_key_up(key_code);
-}
-
-bool
-WndButton::on_mouse_down(int x, int y)
-{
-  (void)x;
-  (void)y;
-
-  mDown = true;
-
-  if (!GetFocused())
-    set_focus();
-  else
-    invalidate();
-
-  set_capture();
-
-  return true;
-}
-
-bool
-WndButton::on_mouse_move(int x, int y, unsigned keys)
-{
-  if (has_capture()) {
-    bool in = in_client_rect(x, y);
-    if (in != mDown) {
-      mDown = in;
-      invalidate();
-    }
-
-    return true;
-  } else
-    return WindowControl::on_mouse_move(x, y, keys);
-}
-
-bool
-WndButton::on_mouse_double(int x, int y)
-{
-  (void)x;
-  (void)y;
-
-  mDown = true;
-  invalidate();
-  set_capture();
-  return true;
 }
 
 void
 WndButton::on_paint(Canvas &canvas)
 {
+  // Call parent on_paint function (selector/focus)
   WindowControl::on_paint(canvas);
 
+  // Get button RECT and shrink it to make room for the selector/focus
   RECT rc = get_client_rect();
   InflateRect(&rc, -2, -2); // todo border width
 
   // JMW todo: add icons?
 
+  // Draw button to the background
   canvas.draw_button(rc, mDown);
 
+  // If button has text on it
   if (mCaption != NULL && mCaption[0] != '\0') {
+    // Set drawing colors
     canvas.set_text_color(GetForeColor());
     canvas.set_background_color(GetBackColor());
     canvas.background_transparent();
 
+    // Set drawing font
     canvas.select(*GetFont());
 
+    // Get button RECT and shrink it to make room for the selector/focus
+    // TODO TB: check duplicate code!?
     rc = get_client_rect();
     InflateRect(&rc, -2, -2); // todo border width
 
+    // If button is pressed, offset the text for 3D effect
     if (mDown)
       OffsetRect(&rc, 2, 2);
 
     if (mLastDrawTextHeight < 0) {
+      // Calculate the text height and save it for the future
       canvas.formatted_text(&rc, mCaption,
-          DT_CALCRECT
-          | DT_EXPANDTABS
-          | DT_CENTER
-          | DT_NOCLIP
-          | DT_WORDBREAK); // mCaptionStyle // | DT_CALCRECT
+          DT_CALCRECT | DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
 
       mLastDrawTextHeight = rc.bottom - rc.top;
 
+      // Get button RECT and shrink it to make room for the selector/focus
+      // TODO TB: check duplicate code!?
       // ToDo optimize
       rc = get_client_rect();
       InflateRect(&rc, -2, -2); // todo border width
 
+      // If button is pressed, offset the text for 3D effect
       if (mDown)
         OffsetRect(&rc, 2, 2);
     }
 
+    // Vertical middle alignment
     rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
 
     canvas.formatted_text(&rc, mCaption,
-        DT_EXPANDTABS
-        | DT_CENTER
-        | DT_NOCLIP
-        | DT_WORDBREAK); // mCaptionStyle // | DT_CALCRECT
-
-    //mLastDrawTextHeight = rc.bottom - rc.top;
-
+        DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
   }
-
-//  UINT lastAlign = SetTextAlign(hDC, TA_CENTER /*| VTA_CENTER*/);
-//  ExtTextOut(hDC, GetWidth()/2, GetHeight()/2,
-//    /*ETO_OPAQUE | */ETO_CLIPPED, &r, mCaption, _tcslen(mCaption), NULL);
-//  if (lastAlign != GDI_ERROR){
-//    SetTextAlign(hDC, lastAlign);
-//  }
-
-
-// 20060518:sgi old version
-//  ExtTextOut(hDC, org.x, org.y,
-//    /*ETO_OPAQUE | */ETO_CLIPPED, &r, mCaption, _tcslen(mCaption), NULL);
 }

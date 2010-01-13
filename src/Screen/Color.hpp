@@ -72,11 +72,26 @@ struct Color {
     value.unused = SDL_ALPHA_OPAQUE; // alpha for SDL_gfx, see gfx_color()
   }
   #else
-  Color():value(RGB(0, 0, 0)) {}
-  explicit Color(COLORREF c):value(c) {}
-  Color(int r, int g, int b):value(RGB(r, g, b)) {}
+  /** Base Constructor (creates a black Color object) */
+  Color() : value(RGB(0, 0, 0)) {}
+  /**
+   * Constructor (creates a Color object based on the given COLORREF)
+   * @param c COLORREF (e.g. 0xFF6677)
+   */
+  explicit Color(COLORREF c) : value(c) {}
+  /**
+   * Constructor (creates a Color object based on the given color parts)
+   * @param r Red part
+   * @param g Green part
+   * @param b Blue part
+   */
+  Color(int r, int g, int b) : value(RGB(r, g, b)) {}
   #endif
 
+  /**
+   * Returns the red part of the color
+   * @return The red part of the color (0-255)
+   */
   unsigned char
   red() const
   {
@@ -87,6 +102,10 @@ struct Color {
     #endif
   }
 
+  /**
+   * Returns the green part of the color
+   * @return The green part of the color (0-255)
+   */
   unsigned char
   green() const
   {
@@ -97,6 +116,10 @@ struct Color {
     #endif
   }
 
+  /**
+   * Returns the blue part of the color
+   * @return The blue part of the color (0-255)
+   */
   unsigned char
   blue() const
   {
@@ -124,9 +147,7 @@ struct Color {
     return *this;
   }
 
-  operator COLORREF() const {
-    return value;
-  }
+  operator COLORREF() const { return value; }
   #endif
 
   /**
@@ -144,12 +165,16 @@ struct Color {
     #endif
   }
 
-  static const Color WHITE, BLACK,
-    GRAY,
-    RED, GREEN, BLUE,
-    YELLOW, CYAN, MAGENTA;
+  static const Color WHITE, BLACK, GRAY, RED, GREEN, BLUE, YELLOW, CYAN,
+      MAGENTA;
 };
 
+/**
+ * Compares two colors
+ * @param a Color 1
+ * @param b Color 2
+ * @return True if colors match, False otherwise
+ */
 static inline bool
 operator ==(const Color a, const Color b)
 {
@@ -162,6 +187,12 @@ operator ==(const Color a, const Color b)
   #endif
 }
 
+/**
+ * Compares two colors (negative)
+ * @param a Color 1
+ * @param b Color 2
+ * @return True if color do not match, False otherwise
+ */
 static inline bool
 operator !=(const Color a, const Color b)
 {
@@ -169,9 +200,9 @@ operator !=(const Color a, const Color b)
 }
 
 /**
- * A hardware color on a specific #Canvas.  A #Canvas maps a #Color
- * object into #HWColor.  Depending on the platform, #Color and
- * #HWColor may be different, e.g. if the #Canvas can not display 24
+ * A hardware color on a specific Canvas.  A Canvas maps a Color
+ * object into HWColor.  Depending on the platform, Color and
+ * HWColor may be different, e.g. if the Canvas can not display 24
  * bit RGB colors.
  */
 struct HWColor {
@@ -189,13 +220,9 @@ struct HWColor {
   #endif
 
   #ifdef ENABLE_SDL
-  operator Uint32() const {
-    return value;
-  }
+  operator Uint32() const { return value; }
   #else
-  operator COLORREF() const {
-    return value;
-  }
+  operator COLORREF() const { return value; }
   #endif
 };
 

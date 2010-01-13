@@ -100,9 +100,7 @@ protected:
   bool HasFocus(void) { return mHasFocus; }
 
 public:
-  TCHAR *GetCaption(void) {
-    return mCaption;
-  }
+  TCHAR *GetCaption(void) { return mCaption; }
 
   virtual bool on_setfocus();
   virtual bool on_killfocus();
@@ -122,78 +120,53 @@ public:
   }
 
   bool SetFocused(bool Value);
-  bool GetFocused(void);
+  bool GetFocused(void) { return mHasFocus; }
   virtual Window *GetCanFocus(bool forward);
   bool SetCanFocus(bool Value);
 
-  bool GetReadOnly(void) {
-    return mReadOnly;
-  }
+  bool GetReadOnly(void) { return mReadOnly; }
   bool SetReadOnly(bool Value);
 
-  int  GetBorderKind(void);
+  int  GetBorderKind(void) { return mBorderKind; }
   int  SetBorderKind(int Value);
 
-  const Font *GetFont(void) {
-    return mhFont;
-  }
+  const Font *GetFont(void) { return mhFont; }
   virtual const Font *SetFont(const Font &font);
-
-  const Font *SetFont(const Font *font) {
-    return SetFont(*font);
-  }
+  const Font *SetFont(const Font *font) { return SetFont(*font); }
 
   virtual Color SetForeColor(Color Value);
-  Color GetForeColor(void) {
-    return mColorFore;
-  }
+  Color GetForeColor(void) { return mColorFore; }
 
   virtual Color SetBackColor(Color Value);
-  Color GetBackColor(void) {
-    return mColorBack;
-  }
+  Color GetBackColor(void) { return mColorBack; }
 
   Brush &GetBackBrush(void) {
-    return mhBrushBk.defined()
-      ? mhBrushBk
-      : hBrushDefaultBk;
+    return mhBrushBk.defined() ? mhBrushBk : hBrushDefaultBk;
   }
 
   Pen &GetBorderPen(void) {
-    return mhPenBorder.defined()
-      ? mhPenBorder
-      : hPenDefaultBorder;
+    return mhPenBorder.defined() ? mhPenBorder : hPenDefaultBorder;
   }
 
   Pen &GetSelectorPen(void) {
-    return mhPenSelector.defined()
-      ? mhPenSelector
-      : hPenDefaultSelector;
+    return mhPenSelector.defined() ? mhPenSelector : hPenDefaultSelector;
   }
 
   virtual void SetCaption(const TCHAR *Value);
   void SetHelpText(const TCHAR *Value);
 
-  virtual ContainerWindow &GetClientAreaWindow(void) {
-    return *this;
-  }
+  virtual ContainerWindow &GetClientAreaWindow(void) { return *this; }
 
-  ContainerControl *GetOwner(void) {
-    return mOwner;
-  }
+  ContainerControl *GetOwner(void) { return mOwner; }
 
-  int GetTag(void) {
-    return mTag;
-  }
-
+  int GetTag(void) { return mTag; }
   int SetTag(int Value) {
     mTag = Value;
     return mTag;
   }
 
   WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
-                const TCHAR *Name, int X, int Y, int Width, int Height,
-                bool Visible = true);
+      const TCHAR *Name, int X, int Y, int Width, int Height, bool Visible = true);
 
   virtual ~WindowControl(void);
 
