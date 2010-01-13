@@ -212,18 +212,6 @@ WindowControl::SetCanFocus(bool Value)
   return res;
 }
 
-bool
-WindowControl::GetFocused(void)
-{
-  return mHasFocus;
-}
-
-int
-WindowControl::GetBorderKind(void)
-{
-  return mBorderKind;
-}
-
 int
 WindowControl::SetBorderKind(int Value)
 {

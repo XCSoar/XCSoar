@@ -120,22 +120,19 @@ public:
   }
 
   bool SetFocused(bool Value);
-  bool GetFocused(void);
+  bool GetFocused(void) { return mHasFocus; }
   virtual Window *GetCanFocus(bool forward);
   bool SetCanFocus(bool Value);
 
   bool GetReadOnly(void) { return mReadOnly; }
   bool SetReadOnly(bool Value);
 
-  int  GetBorderKind(void);
+  int  GetBorderKind(void) { return mBorderKind; }
   int  SetBorderKind(int Value);
 
   const Font *GetFont(void) { return mhFont; }
   virtual const Font *SetFont(const Font &font);
-
-  const Font *SetFont(const Font *font) {
-    return SetFont(*font);
-  }
+  const Font *SetFont(const Font *font) { return SetFont(*font); }
 
   virtual Color SetForeColor(Color Value);
   Color GetForeColor(void) { return mColorFore; }
