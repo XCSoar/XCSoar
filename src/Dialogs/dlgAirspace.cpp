@@ -69,9 +69,8 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
   x0 = w0 - w1 - w2;
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2),
-                      x0 - Layout::FastScale(10), 
-                      airspace_class_as_text((AirspaceClass_t)i,false).c_str());
+      rc.top + Layout::FastScale(2), x0 - Layout::FastScale(10),
+      airspace_class_as_text((AirspaceClass_t)i, false).c_str());
 
   if (colormode) {
     canvas.white_pen();
@@ -81,8 +80,7 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
     canvas.select(MapGfx.GetAirspaceBrushByClass(i,
         XCSoarInterface::SettingsMap()));
     canvas.rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
-                     rc.right - Layout::FastScale(2),
-                     rc.bottom - Layout::FastScale(2));
+        rc.right - Layout::FastScale(2), rc.bottom - Layout::FastScale(2));
   } else {
     bool iswarn;
     bool isdisplay;
@@ -92,11 +90,11 @@ OnAirspacePaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 
     if (iswarn) {
       canvas.text(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
-                  gettext(_T("Warn")));
+          gettext(_T("Warn")));
     }
     if (isdisplay) {
-      canvas.text(rc.left + w0 - w2, rc.top + Layout::FastScale(2), 
-                  gettext(_T("Display")));
+      canvas.text(rc.left + w0 - w2, rc.top + Layout::FastScale(2),
+          gettext(_T("Display")));
     }
   }
 }
@@ -115,7 +113,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
     if (c >= 0) {
       XCSoarInterface::SetSettingsMap().iAirspaceColour[ItemIndex] = c;
       SetRegistryColour(ItemIndex,
-                        XCSoarInterface::SettingsMap().iAirspaceColour[ItemIndex]);
+          XCSoarInterface::SettingsMap().iAirspaceColour[ItemIndex]);
       changed = true;
     }
 
@@ -123,7 +121,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
     if (p >= 0) {
       XCSoarInterface::SetSettingsMap().iAirspaceBrush[ItemIndex] = p;
       SetRegistryBrush(ItemIndex,
-                       XCSoarInterface::SettingsMap().iAirspaceBrush[ItemIndex]);
+          XCSoarInterface::SettingsMap().iAirspaceBrush[ItemIndex]);
       changed = true;
     }
   } else {
@@ -172,7 +170,7 @@ dlgAirspaceShowModal(bool coloredit)
   assert(wf != NULL);
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
-  assert(wAirspaceList!=NULL);
+  assert(wAirspaceList != NULL);
   wAirspaceList->SetBorderKind(BORDERLEFT);
   wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
   wAirspaceList->SetPaintItemCallback(OnAirspacePaintListItem);
