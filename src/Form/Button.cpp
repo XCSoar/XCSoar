@@ -239,11 +239,6 @@ WndButton::on_paint(Canvas &canvas)
     // Set drawing font
     canvas.select(*GetFont());
 
-    // Get button RECT and shrink it to make room for the selector/focus
-    // TODO TB: check duplicate code!?
-    rc = get_client_rect();
-    InflateRect(&rc, -2, -2); // todo border width
-
     // If button is pressed, offset the text for 3D effect
     if (mDown)
       OffsetRect(&rc, 2, 2);
