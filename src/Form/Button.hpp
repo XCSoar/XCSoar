@@ -41,33 +41,82 @@ Copyright_License {
 
 #include "Form/Control.hpp"
 
+/**
+ * This class is used for creating buttons.
+ * It is based on the WindowControl class.
+ */
 class WndButton : public WindowControl {
 private:
-
-  /** from class PaintWindow */
+  /**
+   * The on_paint event is called when the button needs to be drawn
+   * (derived from WindowControl)
+   */
   virtual void on_paint(Canvas &canvas);
 
+  /** True if the button is currently pressed */
   bool mDown;
+
+  /** not used yet */
   bool mDefault;
   int mLastDrawTextHeight;
   void (*mOnClickNotify)(WindowControl *Sender);
 
 public:
-
   typedef void (*ClickNotifyCallback_t)(WindowControl *Sender);
 
+  /**
+   * Constructor of the WndButton class
+   * @param Parent Parent window/ContainerControl
+   * @param Name Name of the button
+   * @param Caption Text on the button
+   * @param X x-Coordinate relative to the parent
+   * @param Y y-Coordinate relative to the parent
+   * @param Width Width of the button
+   * @param Height Height of the button
+   * @param Function The function that should be called
+   * when the button is clicked
+   */
   WndButton(ContainerControl *Parent, const TCHAR *Name, const TCHAR *Caption,
             int X, int Y, int Width, int Height,
             void (*Function)(WindowControl *Sender) = NULL);
 
-  /* override event methods from class Window */
+  /**
+   * The on_mouse_up event is called when the mouse is released over the button
+   * (derived from WindowControl)
+   */
   virtual bool on_mouse_up(int x, int y);
+  /**
+   * The on_mouse_down event is called when the mouse is pressed over the button
+   * (derived from WindowControl)
+   */
   virtual bool on_mouse_down(int x, int y);
+  /**
+   * The on_mouse_move event is called when the mouse is moved over the button
+   * (derived from WindowControl)
+   */
   virtual bool on_mouse_move(int x, int y, unsigned keys);
+  /**
+   * The on_mouse_double event is called when the button is double clicked
+   * (derived from WindowControl)
+   */
   virtual bool on_mouse_double(int x, int y);
+  /**
+   * The on_key_down event is called when a key is pressed while the
+   * button is focused
+   * (derived from WindowControl)
+   */
   virtual bool on_key_down(unsigned key_code);
+  /**
+   * The on_key_down event is called when a key is released while the
+   * button is focused
+   * (derived from WindowControl)
+   */
   virtual bool on_key_up(unsigned key_code);
 
+  /**
+   * Sets the function that should be called when the button is pressed
+   * @param Function Pointer to the function to be called
+   */
   void SetOnClickNotify(void(*Function)(WindowControl *Sender)) {
     mOnClickNotify = Function;
   }
