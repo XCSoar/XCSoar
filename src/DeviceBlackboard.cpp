@@ -389,7 +389,7 @@ DeviceBlackboard::FLARM_ScanTraffic()
       // if (FLARM_Traffic[flarm_slot] has data)
       if (Basic().FLARM_Traffic[flarm_slot].defined()) {
         // if (Target currently without name)
-        if (!_tcslen(Basic().FLARM_Traffic[flarm_slot].Name)) {
+        if (!Basic().FLARM_Traffic[flarm_slot].HasName()) {
           // need to lookup name for this target
 	        const TCHAR *fname =
               LookupFLARMDetails(Basic().FLARM_Traffic[flarm_slot].ID);

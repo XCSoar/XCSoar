@@ -79,6 +79,10 @@ struct FLARM_TRAFFIC {
     return ID > 0;
   }
 
+  bool HasName() const {
+    return Name[0] != _T('\0');
+  }
+
   void Clear() {
     ID = 0;
     Name[0] = 0;

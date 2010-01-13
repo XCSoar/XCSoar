@@ -123,7 +123,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       sc_av.y += IBLSCALE(16);
 
 #ifndef FLARM_AVERAGE
-      if (Basic().FLARM_Traffic[i].Name) {
+      if (Basic().FLARM_Traffic[i].HasName()) {
         TextInBox(hDC, Basic().FLARM_Traffic[i].Name, sc.x+IBLSCALE(3),
                   sc.y, 0, displaymode,
                   true);
@@ -134,7 +134,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
       sc_av.x += IBLSCALE(3);
 
-      if (Basic().FLARM_Traffic[i].Name) {
+      if (Basic().FLARM_Traffic[i].HasName()) {
         sc_name.y -= IBLSCALE(8);
         _stprintf(label_name, TEXT("%s"), Basic().FLARM_Traffic[i].Name);
       } else {

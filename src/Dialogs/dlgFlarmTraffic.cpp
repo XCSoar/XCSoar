@@ -148,7 +148,7 @@ static void SelectAsTeamTrack()
   if (index < 0 || index >= FLARM_MAX_TRAFFIC)
     return;
 
-  if (XCSoarInterface::Basic().FLARM_Traffic[index].Name[0] == 0) {
+  if (!XCSoarInterface::Basic().FLARM_Traffic[index].HasName()) {
     XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
   } else {
     // copy the 3 first chars from the name

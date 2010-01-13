@@ -111,7 +111,7 @@ ActionInterface::on_key_TeamCode(int UpDown)
   if (newFlarmSlot != -1) {
     SetSettingsComputer().TeamFlarmIdTarget = Basic().FLARM_Traffic[newFlarmSlot].ID;
 
-    if (_tcslen(Basic().FLARM_Traffic[newFlarmSlot].Name) != 0) {
+    if (Basic().FLARM_Traffic[newFlarmSlot].HasName()) {
       // copy the 3 first chars from the name to TeamFlarmCNTarget
       for (int z = 0; z < 3; z++) {
 	if (Basic().FLARM_Traffic[newFlarmSlot].Name[z] != 0) {
