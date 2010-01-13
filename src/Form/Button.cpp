@@ -117,16 +117,19 @@ WndButton::on_mouse_down(int x, int y)
 bool
 WndButton::on_mouse_move(int x, int y, unsigned keys)
 {
-  if (has_capture()) {
-    bool in = in_client_rect(x, y);
-    if (in != mDown) {
-      mDown = in;
-      invalidate();
-    }
-
-    return true;
-  } else
+  // If button does not have capture -> call parent function
+  if (!has_capture())
     return WindowControl::on_mouse_move(x, y, keys);
+
+  bool in = in_client_rect(x, y);
+
+  // If button is currently pressed and mouse cursor is moving on top of it
+  if (in != mDown) {
+    mDown = in;
+    invalidate();
+  }
+
+  return true;
 }
 
 bool
