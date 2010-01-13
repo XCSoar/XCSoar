@@ -84,39 +84,31 @@ ActionInterface::on_key_Airspeed(int UpDown)
 void
 ActionInterface::on_key_TeamCode(int UpDown)
 {
-  int tryCount = 0;
-  int searchSlot = FindFlarmSlot(Basic(), SettingsComputer().TeamFlarmIdTarget);
-  int newFlarmSlot = -1;
+  const FLARM_STATE &flarm = Basic();
+  const FLARM_TRAFFIC *traffic = SettingsComputer().TeamFlarmIdTarget != 0
+    ? flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget)
+    : NULL;
 
-  while (tryCount < FLARM_MAX_TRAFFIC) {
-    if (UpDown == 1) {
-      searchSlot++;
-      if (searchSlot > FLARM_MAX_TRAFFIC - 1) {
-	searchSlot = 0;
-      }
-    } else if (UpDown == -1) {
-      searchSlot--;
-      if (searchSlot < 0) {
-	searchSlot = FLARM_MAX_TRAFFIC - 1;
-      }
-    }
-
-    if (Basic().FLARM_Traffic[searchSlot].defined()) {
-      newFlarmSlot = searchSlot;
-      break; // a new flarmSlot with a valid flarm traffic record was found !
-    }
-    tryCount++;
+  if (UpDown == 1) {
+    if (traffic != NULL)
+      traffic = flarm.NextTraffic(traffic);
+    if (traffic == NULL)
+      traffic = flarm.FirstTraffic();
+  } else {
+    if (traffic != NULL)
+      traffic = flarm.PreviousTraffic(traffic);
+    if (traffic == NULL)
+      traffic = flarm.LastTraffic();
   }
 
-  if (newFlarmSlot != -1) {
-    SetSettingsComputer().TeamFlarmIdTarget = Basic().FLARM_Traffic[newFlarmSlot].ID;
+  if (traffic != NULL) {
+    SetSettingsComputer().TeamFlarmIdTarget = traffic->ID;
 
-    if (Basic().FLARM_Traffic[newFlarmSlot].HasName()) {
+    if (traffic->HasName()) {
       // copy the 3 first chars from the name to TeamFlarmCNTarget
       for (int z = 0; z < 3; z++) {
-	if (Basic().FLARM_Traffic[newFlarmSlot].Name[z] != 0) {
-	  SetSettingsComputer().TeamFlarmCNTarget[z] =
-	    Basic().FLARM_Traffic[newFlarmSlot].Name[z];
+        if (traffic->Name[z] != 0) {
+          SetSettingsComputer().TeamFlarmCNTarget[z] = traffic->Name[z];
 	} else {
 	  SetSettingsComputer().TeamFlarmCNTarget[z] = 32; // add space char
 	}
