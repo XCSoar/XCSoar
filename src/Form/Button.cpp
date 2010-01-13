@@ -64,24 +64,24 @@ WndButton::WndButton(ContainerControl *Parent, const TCHAR *Name,
 bool
 WndButton::on_mouse_up(int x, int y)
 {
-  if (has_capture()) {
-    release_capture();
-
-    if (!mDown)
-      return true;
-
-    mDown = false;
-    invalidate();
-
-    if (mOnClickNotify != NULL) {
-      RECT mRc = get_screen_position();
-      SetSourceRectangle(mRc);
-      (mOnClickNotify)(this);
-    }
-
-    return true;
-  } else
+  if (!has_capture())
     return WindowControl::on_mouse_up(x, y);
+
+  release_capture();
+
+  if (!mDown)
+    return true;
+
+  mDown = false;
+  invalidate();
+
+  if (mOnClickNotify != NULL) {
+    RECT mRc = get_screen_position();
+    SetSourceRectangle(mRc);
+    (mOnClickNotify)(this);
+  }
+
+  return true;
 }
 
 bool
