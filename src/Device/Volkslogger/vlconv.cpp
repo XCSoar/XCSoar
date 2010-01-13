@@ -1057,11 +1057,11 @@ conv_dir(DIRENTRY* flights, lpb p, int countonly)
   byte Haupttyp, Untertyp;
   byte l; // length of DS
   lpb p2; // Pointer to the beginning of the content of a vrb or vrt
-  tm olddate = { 0, };
+  tm olddate;
   int olddate_flg = 0;
   int flight_of_day = 0;
   long temptime;
-  tm timetm1 = { 0, };
+  tm timetm1;
   int bfv = 0;
   number_of_flights = 0;
   char pilot1[17];
