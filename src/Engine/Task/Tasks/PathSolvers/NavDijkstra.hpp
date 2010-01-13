@@ -13,7 +13,8 @@ typedef std::pair<unsigned, unsigned> ScanTaskPoint;
 typedef Dijkstra<ScanTaskPoint> DijkstraTaskPoint;
 
 /**
- * Abstract class for Dijsktra searches of nav points
+ * Abstract class for Dijsktra searches of nav points, managing edges in multiple 
+ * stages (corresponding to turn points).
  *
  * Expected running time, see http://www.avglab.com/andrew/pub/neci-tr-96-062.ps
  *
