@@ -93,6 +93,51 @@ WndButton::on_mouse_up(int x, int y)
 }
 
 bool
+WndButton::on_mouse_down(int x, int y)
+{
+  (void)x;
+  (void)y;
+
+  mDown = true;
+
+  if (!GetFocused())
+    set_focus();
+  else
+    invalidate();
+
+  set_capture();
+
+  return true;
+}
+
+bool
+WndButton::on_mouse_move(int x, int y, unsigned keys)
+{
+  if (has_capture()) {
+    bool in = in_client_rect(x, y);
+    if (in != mDown) {
+      mDown = in;
+      invalidate();
+    }
+
+    return true;
+  } else
+    return WindowControl::on_mouse_move(x, y, keys);
+}
+
+bool
+WndButton::on_mouse_double(int x, int y)
+{
+  (void)x;
+  (void)y;
+
+  mDown = true;
+  invalidate();
+  set_capture();
+  return true;
+}
+
+bool
 WndButton::on_key_down(unsigned key_code)
 {
 #ifdef VENTA_DEBUG_EVENT
@@ -146,51 +191,6 @@ WndButton::on_key_up(unsigned key_code)
   }
 
   return WindowControl::on_key_up(key_code);
-}
-
-bool
-WndButton::on_mouse_down(int x, int y)
-{
-  (void)x;
-  (void)y;
-
-  mDown = true;
-
-  if (!GetFocused())
-    set_focus();
-  else
-    invalidate();
-
-  set_capture();
-
-  return true;
-}
-
-bool
-WndButton::on_mouse_move(int x, int y, unsigned keys)
-{
-  if (has_capture()) {
-    bool in = in_client_rect(x, y);
-    if (in != mDown) {
-      mDown = in;
-      invalidate();
-    }
-
-    return true;
-  } else
-    return WindowControl::on_mouse_move(x, y, keys);
-}
-
-bool
-WndButton::on_mouse_double(int x, int y)
-{
-  (void)x;
-  (void)y;
-
-  mDown = true;
-  invalidate();
-  set_capture();
-  return true;
 }
 
 void
