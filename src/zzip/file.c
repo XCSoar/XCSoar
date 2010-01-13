@@ -619,8 +619,8 @@ zzip_freopen(zzip_char_t* filename, zzip_char_t* mode, ZZIP_FILE* stream)
 	ZZIP_FILE* fp =
 	    zzip_open_shared_io (stream, filename, o_flags, o_modes, 0, 0);
 
-	if (! o_modes&ZZIP_FACTORY && stream) {
-	    zzip_file_close (stream);
+	if (!o_modes && ZZIP_FACTORY && stream) {
+      zzip_file_close(stream);
 	}
 
 	return fp;
