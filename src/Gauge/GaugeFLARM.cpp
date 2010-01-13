@@ -105,127 +105,128 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
     const FLARM_TRAFFIC &traffic = gps_info.FLARM_Traffic[i];
 
-    if (traffic.defined()) {
-      // Set the arrow color depending on alarm level
-      switch (traffic.AlarmLevel) {
-      case 1:
-        canvas.select(MapGfx.yellowBrush);
-        break;
-      case 2:
-      case 3:
-        canvas.select(MapGfx.redBrush);
-        break;
-      case 0:
-      case 4:
-        canvas.select(MapGfx.greenBrush);
-        break;
-      }
+    if (!traffic.defined())
+      continue;
 
-      double x, y;
-      x = traffic.RelativeEast;
-      y = -traffic.RelativeNorth;
-      double d = sqrt(x*x+y*y);
-      if (d>0) {
-        x /= d;
-        y /= d;
-      } else {
-        x = 0;
-        y = 0;
-      }
-      double dh = traffic.RelativeAltitude;
-      double slope = atan2(dh,d)*2.0/M_PI; // (-1,1)
+    // Set the arrow color depending on alarm level
+    switch (traffic.AlarmLevel) {
+    case 1:
+      canvas.select(MapGfx.yellowBrush);
+      break;
+    case 2:
+    case 3:
+      canvas.select(MapGfx.redBrush);
+      break;
+    case 0:
+    case 4:
+      canvas.select(MapGfx.greenBrush);
+      break;
+    }
 
-      slope = max(-1.0,min(1.0,slope*2)); // scale so 45 degrees or more=90
+    double x, y;
+    x = traffic.RelativeEast;
+    y = -traffic.RelativeNorth;
+    double d = sqrt(x*x+y*y);
+    if (d>0) {
+      x /= d;
+      y /= d;
+    } else {
+      x = 0;
+      y = 0;
+    }
+    double dh = traffic.RelativeAltitude;
+    double slope = atan2(dh,d)*2.0/M_PI; // (-1,1)
 
-      // QUESTION TB: what about north up mode???
-      // JMW: nothing to do with map --- display for FLARM gauge always up
+    slope = max(-1.0,min(1.0,slope*2)); // scale so 45 degrees or more=90
 
-      fixed DisplayAngle = -gps_info.TrackBearing;
-      rotate(x, y, DisplayAngle); 	// or use .Heading? (no,
+    // QUESTION TB: what about north up mode???
+    // JMW: nothing to do with map --- display for FLARM gauge always up
+
+    fixed DisplayAngle = -gps_info.TrackBearing;
+    rotate(x, y, DisplayAngle); 	// or use .Heading? (no,
                                         // because heading is not
                                         // reliable)
 
-      double scale = RangeScale(d);
+    double scale = RangeScale(d);
 
-      // Calculate screen coordinates
-      POINT sc;
-      sc.x = center.x + iround(x*scale);
-      sc.y = center.y + iround(y*scale);
+    // Calculate screen coordinates
+    POINT sc;
+    sc.x = center.x + iround(x*scale);
+    sc.y = center.y + iround(y*scale);
 
-      if (traffic.AlarmLevel > 0) {
-        // Draw line through target
-        canvas.line(sc.x, sc.y,
-                    center.x + iround(radius*x),
-                    center.y + iround(radius*y));
+    if (traffic.AlarmLevel > 0) {
+      // Draw line through target
+      canvas.line(sc.x, sc.y,
+                  center.x + iround(radius*x),
+                  center.y + iround(radius*y));
+    }
+
+    // Create an arrow polygon
+    POINT Arrow[5];
+    Arrow[0].x = -3;
+    Arrow[0].y = 4;
+    Arrow[1].x = 0;
+    Arrow[1].y = -5;
+    Arrow[2].x = 3;
+    Arrow[2].y = 4;
+    Arrow[3].x = 0;
+    Arrow[3].y = 1;
+    Arrow[4].x = -3;
+    Arrow[4].y = 4;
+
+    // Rotate and shift the arrow
+    PolygonRotateShift(Arrow, 5, sc.x, sc.y,
+                       traffic.TrackBearing + DisplayAngle);
+
+    // Draw the polygon
+    canvas.polygon(Arrow, 5);
+
+    short relalt = iround(traffic.RelativeAltitude * ALTITUDEMODIFY / 100);
+
+    // if (relative altitude is other than zero)
+    if (relalt != 0) {
+      // Write the relativ altitude devided by 100 to the Buffer
+      TCHAR Buffer[10];
+      _stprintf(Buffer, TEXT("%d"), abs(relalt));
+
+      // Calculate size of the output string
+      SIZE tsize = canvas.text_size(Buffer);
+      tsize.cx = (tsize.cx+IBLSCALE(6))/2;
+
+      // Draw string
+      canvas.text(sc.x - tsize.cx + IBLSCALE(7),
+                  sc.y - tsize.cy - IBLSCALE(5),
+                  Buffer);
+
+      // Set black brush for the up/down arrow
+      canvas.black_brush();
+
+      // Prepare the triangular polygon
+      POINT triangle[4];
+      triangle[0].x = 3;  // was  2
+      triangle[0].y = -3; // was -2
+      triangle[1].x = 6;  // was 4
+      triangle[1].y = 1;
+      triangle[2].x = 0;
+      triangle[2].y = 1;
+
+      // Flip = -1 for arrow pointing downwards
+      short flip = 1;
+      if (relalt<0) {
+        flip = -1;
       }
 
-      // Create an arrow polygon
-      POINT Arrow[5];
-      Arrow[0].x = -3;
-      Arrow[0].y = 4;
-      Arrow[1].x = 0;
-      Arrow[1].y = -5;
-      Arrow[2].x = 3;
-      Arrow[2].y = 4;
-      Arrow[3].x = 0;
-      Arrow[3].y = 1;
-      Arrow[4].x = -3;
-      Arrow[4].y = 4;
-
-      // Rotate and shift the arrow
-      PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                         traffic.TrackBearing + DisplayAngle);
-
-      // Draw the polygon
-      canvas.polygon(Arrow, 5);
-
-      short relalt = iround(traffic.RelativeAltitude * ALTITUDEMODIFY / 100);
-
-      // if (relative altitude is other than zero)
-      if (relalt != 0) {
-        // Write the relativ altitude devided by 100 to the Buffer
-        TCHAR Buffer[10];
-        _stprintf(Buffer, TEXT("%d"), abs(relalt));
-
-        // Calculate size of the output string
-        SIZE tsize = canvas.text_size(Buffer);
-        tsize.cx = (tsize.cx+IBLSCALE(6))/2;
-
-        // Draw string
-        canvas.text(sc.x - tsize.cx + IBLSCALE(7),
-            sc.y - tsize.cy - IBLSCALE(5),
-            Buffer);
-
-        // Set black brush for the up/down arrow
-        canvas.black_brush();
-
-        // Prepare the triangular polygon
-        POINT triangle[4];
-        triangle[0].x = 3;  // was  2
-        triangle[0].y = -3; // was -2
-        triangle[1].x = 6;  // was 4
-        triangle[1].y = 1;
-        triangle[2].x = 0;
-        triangle[2].y = 1;
-
-        // Flip = -1 for arrow pointing downwards
-        short flip = 1;
-        if (relalt<0) {
-          flip = -1;
-        }
-
-        // Shift the arrow to the right position
-        for (int j=0; j<3; j++) {
-          triangle[j].x = sc.x+IBLSCALE(triangle[j].x)-tsize.cx;
-          triangle[j].y = sc.y+flip*IBLSCALE(triangle[j].y)
+      // Shift the arrow to the right position
+      for (int j=0; j<3; j++) {
+        triangle[j].x = sc.x+IBLSCALE(triangle[j].x)-tsize.cx;
+        triangle[j].y = sc.y+flip*IBLSCALE(triangle[j].y)
           -tsize.cy/2-IBLSCALE(5);
-        }
-        triangle[3].x = triangle[0].x;
-        triangle[3].y = triangle[0].y;
-
-        // Draw the arrow
-        canvas.polygon(triangle, 4);
       }
+      triangle[3].x = triangle[0].x;
+      triangle[3].y = triangle[0].y;
+
+      // Draw the arrow
+      canvas.polygon(triangle, 4);
     }
   }
 }
