@@ -41,15 +41,14 @@ Copyright_License {
 #include "Screen/Animation.hpp"
 #include "Interface.hpp"
 
-WndButton::WndButton(ContainerControl *Parent,
-                     const TCHAR *Name, const TCHAR *Caption,
-                     int X, int Y, int Width, int Height,
-                     void (*Function)(WindowControl *Sender))
-  :WindowControl(Parent, NULL, Name, X, Y, Width, Height),
-   mDown(false),
-   mDefault(false),
-   mLastDrawTextHeight(-1),
-   mOnClickNotify(Function)
+WndButton::WndButton(ContainerControl *Parent, const TCHAR *Name,
+    const TCHAR *Caption, int X, int Y, int Width, int Height, void
+    (*Function)(WindowControl *Sender)) :
+  WindowControl(Parent, NULL, Name, X, Y, Width, Height),
+  mDown(false),
+  mDefault(false),
+  mLastDrawTextHeight(-1),
+  mOnClickNotify(Function)
 {
   SetCanFocus(true);
 
@@ -208,12 +207,8 @@ WndButton::on_paint(Canvas &canvas)
       OffsetRect(&rc, 2, 2);
 
     if (mLastDrawTextHeight < 0) {
-      canvas.formatted_text(&rc, mCaption,
-          DT_CALCRECT
-          | DT_EXPANDTABS
-          | DT_CENTER
-          | DT_NOCLIP
-          | DT_WORDBREAK); // mCaptionStyle // | DT_CALCRECT
+      canvas.formatted_text(&rc, mCaption, DT_CALCRECT | DT_EXPANDTABS
+          | DT_CENTER | DT_NOCLIP | DT_WORDBREAK); // mCaptionStyle // | DT_CALCRECT
 
       mLastDrawTextHeight = rc.bottom - rc.top;
 
@@ -227,25 +222,9 @@ WndButton::on_paint(Canvas &canvas)
 
     rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
 
-    canvas.formatted_text(&rc, mCaption,
-        DT_EXPANDTABS
-        | DT_CENTER
-        | DT_NOCLIP
+    canvas.formatted_text(&rc, mCaption, DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
         | DT_WORDBREAK); // mCaptionStyle // | DT_CALCRECT
 
     //mLastDrawTextHeight = rc.bottom - rc.top;
-
   }
-
-//  UINT lastAlign = SetTextAlign(hDC, TA_CENTER /*| VTA_CENTER*/);
-//  ExtTextOut(hDC, GetWidth()/2, GetHeight()/2,
-//    /*ETO_OPAQUE | */ETO_CLIPPED, &r, mCaption, _tcslen(mCaption), NULL);
-//  if (lastAlign != GDI_ERROR){
-//    SetTextAlign(hDC, lastAlign);
-//  }
-
-
-// 20060518:sgi old version
-//  ExtTextOut(hDC, org.x, org.y,
-//    /*ETO_OPAQUE | */ETO_CLIPPED, &r, mCaption, _tcslen(mCaption), NULL);
 }

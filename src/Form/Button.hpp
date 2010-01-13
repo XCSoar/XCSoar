@@ -77,8 +77,8 @@ public:
    * when the button is clicked
    */
   WndButton(ContainerControl *Parent, const TCHAR *Name, const TCHAR *Caption,
-            int X, int Y, int Width, int Height,
-            void (*Function)(WindowControl *Sender) = NULL);
+      int X, int Y, int Width, int Height, void
+      (*Function)(WindowControl *Sender) = NULL);
 
   /**
    * The on_mouse_up event is called when the mouse is released over the button
@@ -117,7 +117,9 @@ public:
    * Sets the function that should be called when the button is pressed
    * @param Function Pointer to the function to be called
    */
-  void SetOnClickNotify(void(*Function)(WindowControl *Sender)) {
+  void
+  SetOnClickNotify(void (*Function)(WindowControl *Sender))
+  {
     mOnClickNotify = Function;
   }
 };
