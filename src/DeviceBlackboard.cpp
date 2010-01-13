@@ -382,26 +382,23 @@ DeviceBlackboard::FLARM_ScanTraffic()
   // should only scan the first time it appears with that ID.
   // at least it is now not being done by the parser
 
-  // if (FLARM data is available)
-  if (Basic().FLARM_Available) {
-    // for each item in FLARM_Traffic
-    for (int flarm_slot=0; flarm_slot<FLARM_MAX_TRAFFIC; flarm_slot++) {
-      // if (FLARM_Traffic[flarm_slot] has data)
-      if (Basic().FLARM_Traffic[flarm_slot].defined()) {
-        // if (Target currently without name)
-        if (!Basic().FLARM_Traffic[flarm_slot].HasName()) {
-          // need to lookup name for this target
-	        const TCHAR *fname =
-              LookupFLARMDetails(Basic().FLARM_Traffic[flarm_slot].ID);
+  FLARM_STATE &flarm = SetBasic();
 
-          // if (name for FLARM id found)
-          if (fname) {
-            _tcscpy(SetBasic().FLARM_Traffic[flarm_slot].Name, fname);
-          } else {
-            SetBasic().FLARM_Traffic[flarm_slot].Name[0] = 0;
-          }
-        }
-      }
+  // if (FLARM data is available)
+  if (!flarm.FLARM_Available)
+    return;
+
+  // for each item in FLARM_Traffic
+  for (int flarm_slot=0; flarm_slot<FLARM_MAX_TRAFFIC; flarm_slot++) {
+    FLARM_TRAFFIC &traffic = flarm.FLARM_Traffic[flarm_slot];
+
+    // if (FLARM_Traffic[flarm_slot] has data)
+    // and if (Target currently without name)
+    if (traffic.defined() && !traffic.HasName()) {
+      // need to lookup name for this target
+      const TCHAR *fname = LookupFLARMDetails(traffic.ID);
+      if (fname != NULL)
+        _tcscpy(traffic.Name, fname);
     }
   }
 }
