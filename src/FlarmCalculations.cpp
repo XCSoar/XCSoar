@@ -38,7 +38,7 @@ Copyright_License {
 
 #ifdef FLARM_AVERAGE
 #include "FlarmCalculations.h"
-#include "NMEA/Info.hpp"
+#include "FLARM/State.hpp"
 
 FlarmCalculations::FlarmCalculations(void)
 {
@@ -68,12 +68,12 @@ double FlarmCalculations::Average30s(long flarmId, double curTime, double curAlt
 
 #endif
 
-bool IsFlarmTargetCNInRange(const NMEA_INFO &GPS_INFO, const long target_id)
+bool IsFlarmTargetCNInRange(const FLARM_STATE &flarm, const long target_id)
 {
   bool FlarmTargetContact = false;
   for(int z = 0; z < FLARM_MAX_TRAFFIC; z++) {
-    if (GPS_INFO.FLARM_Traffic[z].defined()) {
-      if (GPS_INFO.FLARM_Traffic[z].ID == target_id) {
+    if (flarm.FLARM_Traffic[z].defined()) {
+      if (flarm.FLARM_Traffic[z].ID == target_id) {
         FlarmTargetContact = true;
         break;
       }

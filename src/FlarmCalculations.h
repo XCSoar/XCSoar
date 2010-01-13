@@ -46,7 +46,7 @@ Copyright_License {
 #include <map>
 #include <tchar.h>
 
-struct NMEA_INFO;
+struct FLARM_STATE;
 
 class FlarmCalculations
 {
@@ -61,6 +61,6 @@ private:
 
 #endif
 
-bool IsFlarmTargetCNInRange(const NMEA_INFO &GPS_INFO, const long target_id);
+bool IsFlarmTargetCNInRange(const FLARM_STATE &flarm, const long target_id);
 
 #endif
