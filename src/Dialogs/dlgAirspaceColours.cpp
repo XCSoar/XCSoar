@@ -43,8 +43,8 @@ Copyright_License {
 
 #include <assert.h>
 
-static WndForm *wf=NULL;
-static WndListFrame *wAirspaceColoursList=NULL;
+static WndForm *wf = NULL;
+static WndListFrame *wAirspaceColoursList = NULL;
 
 static int ItemIndex = -1;
 
@@ -65,57 +65,53 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
                    rc.bottom - Layout::FastScale(2));
 }
 
-
 static void
 OnAirspaceColoursListEnter(unsigned i)
 {
   wf->SetModalResult(mrOK);
 }
 
-static void OnCloseClicked(WindowControl * Sender){
+static void
+OnCloseClicked(WindowControl * Sender)
+{
   (void)Sender;
   ItemIndex = -1;
   wf->SetModalResult(mrOK);
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 
-
-int dlgAirspaceColoursShowModal(void){
-
+int
+dlgAirspaceColoursShowModal(void)
+{
   ItemIndex = -1;
 
   if (!Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgAirspaceColours_L.xml"),
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_AIRSPACECOLOURS_L"));
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgAirspaceColours_L.xml"),
+        XCSoarInterface::main_window, _T("IDR_XML_AIRSPACECOLOURS_L"));
   } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgAirspaceColours.xml"),
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_AIRSPACECOLOURS"));
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgAirspaceColours.xml"),
+        XCSoarInterface::main_window, _T("IDR_XML_AIRSPACECOLOURS"));
   }
 
-  if (!wf) return -1;
+  if (!wf)
+    return -1;
 
-  assert(wf!=NULL);
+  assert(wf != NULL);
 
-  wAirspaceColoursList = (WndListFrame*)wf->FindByName(_T("frmAirspaceColoursList"));
-  assert(wAirspaceColoursList!=NULL);
+  wAirspaceColoursList = (WndListFrame*)wf->FindByName(
+      _T("frmAirspaceColoursList"));
+  assert(wAirspaceColoursList != NULL);
   wAirspaceColoursList->SetBorderKind(BORDERLEFT);
   wAirspaceColoursList->SetActivateCallback(OnAirspaceColoursListEnter);
   wAirspaceColoursList->SetPaintItemCallback(OnAirspaceColoursPaintListItem);
   wAirspaceColoursList->SetLength(NUMAIRSPACECOLORS);
 
   int result = wf->ShowModal();
-  result = result == mrOK
-    ? (int)wAirspaceColoursList->GetCursorIndex()
-    : -1;
+  result = result == mrOK ? (int)wAirspaceColoursList->GetCursorIndex() : -1;
 
   // now retrieve back the properties...
 
