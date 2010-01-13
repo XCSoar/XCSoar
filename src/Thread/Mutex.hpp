@@ -39,12 +39,12 @@ Copyright_License {
 /**
  * This file is about mutexes.
  *
- * "A mutex lock is also known as a mutually exclusive lock. This type of lock
+ * A mutex lock is also known as a mutually exclusive lock. This type of lock
  * is provided by many threading systems as a means of synchronization.
  * Basically, it is only possible for one thread to grab a mutex at a time:
  * if two threads try to grab a mutex, only one succeeds. The other thread
  * has to wait until the first thread releases the lock; it can then grab the
- * lock and continue operation."
+ * lock and continue operation.
  * @file Mutex.hpp
  */
 
