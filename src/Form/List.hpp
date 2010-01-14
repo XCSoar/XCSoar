@@ -48,12 +48,17 @@ Copyright_License {
  */
 class WndListFrame : public WindowControl {
   class ScrollBar {
+    /** Top button bitmap */
     Bitmap hScrollBarBitmapTop;
+    /** Slider bitmap */
     Bitmap hScrollBarBitmapMid;
+    /** Bottom button bitmap */
     Bitmap hScrollBarBitmapBot;
+    /** Scrollbar background bitmap */
     Bitmap hScrollBarBitmapFill;
 
   protected:
+    /** Whether the slider is currently being dragged */
     bool dragging;
     int drag_offset;
     /** Coordinates of the ScrollBar */
@@ -79,16 +84,20 @@ class WndListFrame : public WindowControl {
       return rc.bottom - rc.top;
     }
 
-    /** Returns the height of a button of the ScrollBar */
+    /** Returns the height of the slider */
     int get_button_height() const {
       return button.bottom - button.top;
     }
 
+    /** Returns the height of the scrollable area of the ScrollBar */
     int get_netto_height() const {
       return get_height() - 2 * get_width();
     }
 
-    /** Returns the height of the scroll area of the ScrollBar */
+    /**
+     * Returns the height of the visible scroll area of the ScrollBar
+     * (the area thats not covered with the slider)
+     */
     int get_scroll_height() const {
       return get_netto_height() - get_button_height();
     }
