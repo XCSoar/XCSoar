@@ -67,68 +67,21 @@ typedef enum {
  */
 class WindowControl : public ContainerWindow {
 public:
-  typedef void (*OnHelpCallback_t)(WindowControl *Sender);
-
-private:
-  /** Parent ContainerControl */
-  ContainerControl *mOwner;
-  int mBorderKind;
-  /** Background color */
-  Color mColorBack;
-  /** Foreground color */
-  Color mColorFore;
-  /** Brush for painting the background */
-  Brush mhBrushBk;
-  /** Pen for drawing borders */
-  Pen mhPenBorder;
-  /** Pen for drawing the "Selector" */
-  Pen mhPenSelector;
-  /** Font of the Control */
-  const Font *mhFont;
-  /** Name of the Control */
-  TCHAR mName[64];
-  /** Helptext of the Control */
-  TCHAR *mHelpText;
-
-  OnHelpCallback_t mOnHelpCallback;
-
-  /** Tag of the Control */
-  int mTag;
-  /** Whether the Control is read-only */
-  bool mReadOnly;
-  /** True if the Control has been focused right now */
-  bool mHasFocus;
-
-  int mBorderSize;
-
-  /** True if the default brushes and pens are already initialized */
-  static bool initialized;
-  /** The default Brush for painting the background */
-  static Brush hBrushDefaultBk;
-  /** The default Pen for drawing borders */
-  static Pen hPenDefaultBorder;
-  /** The default Pen for drawing the "Selector" */
-  static Pen hPenDefaultSelector;
-
-protected:
-  /** If true, the Control can get focused */
-  bool mCanFocus;
-  /** Caption/Text of the Control */
-  TCHAR mCaption[254];
-  /** If true, the "Selector" is not painted */
-  bool mDontPaintSelector;
-
-  /** Paints the "Selector" */
-  void PaintSelector(Canvas &canvas, const RECT rc);
-  /** Paints the "Selector", but checks first if it should be painted */
-  void PaintSelector(Canvas &canvas);
-
-public:
   /**
-   * Returns the Caption/Text of the Control
-   * @return The Caption/Text of the Control
+   * Constructor of the WindowControl class
+   * @param Owner
+   * @param Parent
+   * @param Name Name of the Control
+   * @param X x-Coordinate of the Control
+   * @param Y y-Coordinate of the Control
+   * @param Width Width of the Control
+   * @param Height Height of the Control
+   * @param Visible Visibility of the Control
    */
-  TCHAR *GetCaption(void) { return mCaption; }
+  WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
+      const TCHAR *Name, int X, int Y, int Width, int Height, bool Visible = true);
+  /** Destructor */
+  virtual ~WindowControl(void);
 
   virtual bool on_setfocus();
   virtual bool on_killfocus();
@@ -154,6 +107,8 @@ public:
   virtual void on_paint(Canvas &canvas);
 
   virtual int OnHelp();
+
+  typedef void (*OnHelpCallback_t)(WindowControl *Sender);
 
   void SetOnHelpCallback(void(*Function)(WindowControl *Sender)) {
     mOnHelpCallback = Function;
@@ -273,10 +228,16 @@ public:
   }
 
   /**
+   * Returns the Caption/Text of the Control
+   * @return The Caption/Text of the Control
+   */
+  TCHAR *GetCaption(void) { return mCaption; }
+  /**
    * Sets the Caption/Text of the Control
    * @param Value The new Caption/Text of the Control
    */
   virtual void SetCaption(const TCHAR *Value);
+
   /**
    * Sets the Helptext of the Control
    * @param Value The new Helptext of the Control
@@ -305,22 +266,6 @@ public:
     mTag = Value;
     return mTag;
   }
-
-  /**
-   * Constructor of the WindowControl class
-   * @param Owner
-   * @param Parent
-   * @param Name Name of the Control
-   * @param X x-Coordinate of the Control
-   * @param Y y-Coordinate of the Control
-   * @param Width Width of the Control
-   * @param Height Height of the Control
-   * @param Visible Visibility of the Control
-   */
-  WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
-      const TCHAR *Name, int X, int Y, int Width, int Height, bool Visible = true);
-  /** Destructor */
-  virtual ~WindowControl(void);
 
   /**
    * Sets whether to draw the "Selector" or not
@@ -352,6 +297,60 @@ public:
    * @param advanced True if advanced mode activated
    */
   virtual void FilterAdvanced(bool advanced);
+
+protected:
+  /** If true, the Control can get focused */
+  bool mCanFocus;
+  /** Caption/Text of the Control */
+  TCHAR mCaption[254];
+  /** If true, the "Selector" is not painted */
+  bool mDontPaintSelector;
+
+  /** Paints the "Selector" */
+  void PaintSelector(Canvas &canvas, const RECT rc);
+  /** Paints the "Selector", but checks first if it should be painted */
+  void PaintSelector(Canvas &canvas);
+
+private:
+  /** Parent ContainerControl */
+  ContainerControl *mOwner;
+  int mBorderKind;
+  /** Background color */
+  Color mColorBack;
+  /** Foreground color */
+  Color mColorFore;
+  /** Brush for painting the background */
+  Brush mhBrushBk;
+  /** Pen for drawing borders */
+  Pen mhPenBorder;
+  /** Pen for drawing the "Selector" */
+  Pen mhPenSelector;
+  /** Font of the Control */
+  const Font *mhFont;
+  /** Name of the Control */
+  TCHAR mName[64];
+  /** Helptext of the Control */
+  TCHAR *mHelpText;
+
+  OnHelpCallback_t mOnHelpCallback;
+
+  /** Tag of the Control */
+  int mTag;
+  /** Whether the Control is read-only */
+  bool mReadOnly;
+  /** True if the Control has been focused right now */
+  bool mHasFocus;
+
+  int mBorderSize;
+
+  /** True if the default brushes and pens are already initialized */
+  static bool initialized;
+  /** The default Brush for painting the background */
+  static Brush hBrushDefaultBk;
+  /** The default Pen for drawing borders */
+  static Pen hPenDefaultBorder;
+  /** The default Pen for drawing the "Selector" */
+  static Pen hPenDefaultSelector;
 };
 
 #endif
