@@ -47,7 +47,6 @@
 
 #include <assert.h>
 
-static int page = 0;
 static WndForm *wf = NULL;
 static WndListFrame *wDetails = NULL;
 
@@ -241,10 +240,6 @@ static CallBackTableEntry_t CallBackTable[] = {
 void
 dlgFlarmTrafficShowModal(void)
 {
-  static bool first = true;
-  if (first)
-    first = false;
-
   if (Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable, _T("dlgFlarmTraffic_L.xml"),
         XCSoarInterface::main_window, _T("IDR_XML_FLARMTRAFFIC_L"));
@@ -267,8 +262,6 @@ dlgFlarmTrafficShowModal(void)
   wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
 
   wDetails->SetBorderKind(BORDERLEFT);
-
-  page = 0;
 
   Update();
 
