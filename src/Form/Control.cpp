@@ -126,6 +126,8 @@ WindowControl::~WindowControl(void)
 Window *
 WindowControl::GetCanFocus(bool forward)
 {
+  (void)forward;
+
   if (!is_visible())
     return NULL;
 
