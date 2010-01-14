@@ -47,13 +47,15 @@
 
 #include <assert.h>
 
-static int page=0;
-static WndForm *wf=NULL;
-static WndListFrame *wDetails=NULL;
+static int page = 0;
+static WndForm *wf = NULL;
+static WndListFrame *wDetails = NULL;
 
 static int GetActiveFlarmTrafficCount();
 
-static void Update(){
+static void
+Update()
+{
   wDetails->SetLength(GetActiveFlarmTrafficCount());
   wDetails->invalidate();
 }
@@ -105,43 +107,40 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
   if (!traffic.defined())
     return;
 
-  DistanceBearing(XCSoarInterface::Basic().Location,
-                  traffic.Location,
-                  &range,
-                  &bear);
+  DistanceBearing(XCSoarInterface::Basic().Location, traffic.Location,
+      &range, &bear);
 
-  _stprintf(tmp, _T("%3s %3ld %+3.1f %5ld"),
-            traffic.Name,
-            (int)(SPEEDMODIFY * traffic.Speed),
+  _stprintf(tmp, _T("%3s %3ld %+3.1f %5ld"), traffic.Name,
+      (int)(SPEEDMODIFY * traffic.Speed),
+
 #ifdef FLARM_AVERAGE
-            LIFTMODIFY * traffic.Average30s,
+      LIFTMODIFY * traffic.Average30s,
 #else
-            0.0,
+      0.0,
 #endif
-            (int)(ALTITUDEMODIFY * traffic.Altitude));
-  _stprintf(text, _T("%s %3.0lf %2.1f"),
-            tmp,
-            FIXED_DOUBLE(bear),
-            FIXED_DOUBLE(DISTANCEMODIFY * range));
+      (int)(ALTITUDEMODIFY * traffic.Altitude));
+
+  _stprintf(text, _T("%s %3.0lf %2.1f"), tmp, FIXED_DOUBLE(bear),
+      FIXED_DOUBLE(DISTANCEMODIFY * range));
 
   canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-              text);
+      text);
 }
 
-static int GetActiveFlarmTrafficCount()
+static int
+GetActiveFlarmTrafficCount()
 {
   int count = 0;
-  for (int i=0; i<FLARM_MAX_TRAFFIC; i++)
-    {
-      if (XCSoarInterface::Basic().FLARM_Traffic[i].defined())
-	{
-	  count++;
-	}
+  for (int i = 0; i < FLARM_MAX_TRAFFIC; i++) {
+    if (XCSoarInterface::Basic().FLARM_Traffic[i].defined()) {
+      count++;
     }
+  }
   return count;
 }
 
-static void SelectAsTeamTrack()
+static void
+SelectAsTeamTrack()
 {
   int index = wDetails->GetCursorIndex();
 
@@ -153,24 +152,29 @@ static void SelectAsTeamTrack()
   } else {
     // copy the 3 first chars from the name
     for (int z = 0; z < 3; z++)
-      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[z] = XCSoarInterface::Basic().FLARM_Traffic[index].Name[z];
+      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[z]
+          = XCSoarInterface::Basic().FLARM_Traffic[index].Name[z];
+
     XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
   }
 
   // now tracking !
-  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = XCSoarInterface::Basic().FLARM_Traffic[index].ID;
+  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget
+      = XCSoarInterface::Basic().FLARM_Traffic[index].ID;
   XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
   XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
 }
 
-static void OnTrackClicked(WindowControl * Sender)
+static void
+OnTrackClicked(WindowControl * Sender)
 {
   (void)Sender;
   SelectAsTeamTrack();
   wf->SetModalResult(mrOK);
 }
 
-static void OnSetCNClicked(WindowControl * Sender)
+static void
+OnSetCNClicked(WindowControl * Sender)
 {
   (void)Sender;
 
@@ -181,13 +185,14 @@ static void OnSetCNClicked(WindowControl * Sender)
 
   TCHAR newName[21];
   newName[0] = 0;
-  if(dlgTextEntryShowModal(newName, 4))
+  if (dlgTextEntryShowModal(newName, 4))
     AddFlarmLookupItem(XCSoarInterface::Basic().FLARM_Traffic[index].ID,
-                       newName, true);
+        newName, true);
 }
 
-
-static void OnCloseClicked(WindowControl * Sender){
+static void
+OnCloseClicked(WindowControl * Sender)
+{
   (void)Sender;
   wf->SetModalResult(mrOK);
 }
@@ -197,18 +202,14 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
   (void)Sender;
 
-  switch(key_code) {
+  switch (key_code) {
   case VK_LEFT:
   case '6':
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-    //      NextPage(-1);
-    //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
   case VK_RIGHT:
   case '7':
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-    //      NextPage(+1);
-    //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
@@ -216,7 +217,9 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
-static int OnTimerNotify(WindowControl * Sender) {
+static int
+OnTimerNotify(WindowControl * Sender)
+{
   (void)Sender;
   Update();
   return 0;
@@ -228,42 +231,35 @@ OnListEnter(unsigned i)
   SelectAsTeamTrack();
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnTrackClicked),
   DeclareCallBackEntry(OnSetCNClicked),
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
 };
 
-
-
-
-
-
-void dlgFlarmTrafficShowModal(void){
-  static bool first=true;
-  if (first) {
-
-    first=false;
-  }
+void
+dlgFlarmTrafficShowModal(void)
+{
+  static bool first = true;
+  if (first)
+    first = false;
 
   if (Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgFlarmTraffic_L.xml"),
-			XCSoarInterface::main_window,
-			_T("IDR_XML_FLARMTRAFFIC_L"));
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgFlarmTraffic_L.xml"),
+        XCSoarInterface::main_window, _T("IDR_XML_FLARMTRAFFIC_L"));
   } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgFlarmTraffic.xml"),
-			XCSoarInterface::main_window,
-			_T("IDR_XML_FLARMTRAFFIC"));
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgFlarmTraffic.xml"),
+        XCSoarInterface::main_window, _T("IDR_XML_FLARMTRAFFIC"));
   }
 
-  if (!wf) return;
+  if (!wf)
+    return;
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+  ((WndButton *)wf->FindByName(_T("cmdClose")))->
+      SetOnClickNotify(OnCloseClicked);
 
   wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
   wDetails->SetActivateCallback(OnListEnter);
@@ -281,8 +277,6 @@ void dlgFlarmTrafficShowModal(void){
   wf->ShowModal();
 
   delete wf;
-
   wf = NULL;
-
 }
 
