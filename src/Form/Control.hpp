@@ -272,7 +272,7 @@ public:
    * @param Value If false, the "Selector" will be drawn
    */
   void SetPaintSelector(bool Value) {
-    mDontPaintSelector = Value;
+    mPaintSelector = Value;
   }
 
   /**
@@ -304,7 +304,7 @@ protected:
   /** Caption/Text of the Control */
   TCHAR mCaption[254];
   /** If true, the "Selector" is not painted */
-  bool mDontPaintSelector;
+  bool mPaintSelector;
 
   /** Paints the "Selector" */
   void PaintSelector(Canvas &canvas, const RECT rc);
