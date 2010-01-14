@@ -271,7 +271,7 @@ public:
    * Sets whether to draw the "Selector" or not
    * @param Value If false, the "Selector" will be drawn
    */
-  void PaintSelector(bool Value) {
+  void SetPaintSelector(bool Value) {
     mDontPaintSelector = Value;
   }
 

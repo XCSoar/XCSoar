@@ -59,7 +59,7 @@ WndListFrame::WndListFrame(ContainerControl *Owner, const TCHAR *Name,
   PaintItemCallback(NULL)
 {
   SetCanFocus(true);
-  PaintSelector(true);
+  SetPaintSelector(true);
 
   mCaption[0] = '\0';
   SetForeColor(GetOwner()->GetForeColor());
