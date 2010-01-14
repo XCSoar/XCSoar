@@ -563,8 +563,8 @@ void dlgTarget(void) {
     WndFrame *wf2 = (WndFrame*)wf->FindByName(_T("frmTarget"));
     if (wf2)
     {
-      RECT MapRectBig = XCSoarInterface::main_window.map.GetMapRectBig();
-      wf->move(MapRectBig.top, MapRectBig.right - wf2->get_size().cx);
+      RECT rc = XCSoarInterface::main_window.get_client_rect();
+      wf->move(rc.top, rc.right - wf2->get_size().cx);
     }
   }
 
