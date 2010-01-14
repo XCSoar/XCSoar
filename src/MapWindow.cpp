@@ -63,8 +63,7 @@ MapWindow::MapWindow()
    marks(NULL), 
    cdi(NULL),
    TargetDrag_State(0),
-   BigZoom(true),
-   FullScreen(false)
+   BigZoom(true)
 {
   TargetDrag_Location.Latitude = 0;
   TargetDrag_Location.Longitude = 0;
@@ -389,9 +388,7 @@ void MapWindow::SwitchZoomClimb(void) {
 
 
 void MapWindow::ApplyScreenSize() {
-  FullScreen = SettingsMap().FullScreen;
-  // ok, save the state.
-  if (FullScreen) {
+  if (SettingsMap().FullScreen) {
     SetMapRect(MapRectBig);
   } else {
     SetMapRect(MapRectSmall);

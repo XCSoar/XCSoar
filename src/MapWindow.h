@@ -178,7 +178,6 @@ class MapWindow
 
   // projection
   bool      BigZoom;
-  bool      FullScreen;
   void      StoreRestoreFullscreen(bool);
 
   // interface handlers
