@@ -141,9 +141,8 @@ GetActiveFlarmTrafficCount()
 static void
 SelectAsTeamTrack()
 {
-  int index = wDetails->GetCursorIndex();
-
-  if (index < 0 || index >= FLARM_MAX_TRAFFIC)
+  unsigned index = wDetails->GetCursorIndex();
+  if (index >= FLARM_MAX_TRAFFIC)
     return;
 
   if (!XCSoarInterface::Basic().FLARM_Traffic[index].HasName()) {
@@ -177,9 +176,8 @@ OnSetCNClicked(WindowControl * Sender)
 {
   (void)Sender;
 
-  int index = wDetails->GetCursorIndex();
-
-  if (index < 0 || index >= FLARM_MAX_TRAFFIC)
+  unsigned index = wDetails->GetCursorIndex();
+  if (index >= FLARM_MAX_TRAFFIC)
     return;
 
   TCHAR newName[21];
