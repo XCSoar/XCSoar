@@ -207,6 +207,7 @@
 <path value=""/>
 </doc-comment-owner>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 </cconfiguration>
 <cconfiguration id="0.697445322.381966687">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="0.697445322.381966687" moduleId="org.eclipse.cdt.core.settings" name="Debug">
@@ -225,7 +226,7 @@
 <folderInfo id="0.697445322.381966687." name="/" resourcePath="">
 <toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.509916813" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
 <targetPlatform binaryParser="org.eclipse.cdt.core.PE" id="org.eclipse.cdt.build.core.prefbase.toolchain.509916813.1174137624" name=""/>
-<builder arguments="WINHOST=y DEBUG=y V=2" command="make" id="org.eclipse.cdt.build.core.settings.default.builder.898019562" incrementalBuildTarget="TARGET=PC" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+<builder arguments="WINHOST=y DEBUG=y" command="make" id="org.eclipse.cdt.build.core.settings.default.builder.898019562" incrementalBuildTarget="TARGET=PC output/PC/bin/XCSoarSimulator-PC-ns.exe" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 <tool id="org.eclipse.cdt.build.core.settings.holder.libs.1054929940" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
 <tool id="org.eclipse.cdt.build.core.settings.holder.617622965" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.2085238888" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
@@ -412,6 +413,7 @@
 <path value=""/>
 </doc-comment-owner>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
