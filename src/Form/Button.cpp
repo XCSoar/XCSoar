@@ -253,6 +253,31 @@ WndButton::on_paint(Canvas &canvas)
     if (mDown)
       OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
 
+    if (mCaption[0] == '<' || mCaption[0] == '>') {
+      int size = min((rc.right - rc.left) / 2, (rc.bottom - rc.top) / 2);
+      size *= 0.5;
+
+      static POINT Arrow[4];
+      Arrow[0].x = (rc.left + rc.right) / 2 + (mCaption[0] == '<' ? size : -size);
+      Arrow[0].y = (rc.top + rc.bottom) / 2 + size;
+      Arrow[1].x = (rc.left + rc.right) / 2 + (mCaption[0] == '<' ? -size : size);
+      Arrow[1].y = (rc.top + rc.bottom) / 2;
+      Arrow[2].x = (rc.left + rc.right) / 2 + (mCaption[0] == '<' ? size : -size);
+      Arrow[2].y = (rc.top + rc.bottom) / 2 - size;
+      Arrow[3].x = Arrow[0].x;
+      Arrow[3].y = Arrow[0].y;
+
+      static Pen p;
+      p.set(0, Color(0x00, 0x00, 0x00));
+      canvas.select(p);
+      static Brush b;
+      b.set(Color(0x00, 0x00, 0x00));
+      canvas.select(b);
+      canvas.polygon(Arrow, 4);
+
+      return;
+    }
+
     // Vertical middle alignment
     rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
 
