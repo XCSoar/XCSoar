@@ -206,9 +206,11 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
                      bitmap_canvas, 0, 0, 30, 28);
 
   // box around slider rect
-  Pen pen3(DEFAULTBORDERPENWIDTH * 2, fore_color);
+  pen.set(DEFAULTBORDERPENWIDTH * 2, fore_color);
+  canvas.select(pen);
+
   int iBorderOffset = 1;  // set to 1 if BORDERWIDTH >2, else 0
-  canvas.select(pen3);
+
   canvas.two_lines(button.left + iBorderOffset, button.top,
                    button.left + iBorderOffset, button.bottom,
                    button.right, button.bottom); // just left line of scrollbar
