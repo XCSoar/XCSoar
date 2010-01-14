@@ -141,21 +141,31 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
   Pen pen(DEFAULTBORDERPENWIDTH, fore_color);
   canvas.select(pen);
 
+  // ###################
+  // #### ScrollBar ####
+  // ###################
+
   // draw rectangle around entire scrollbar area
   canvas.two_lines(rc.left, rc.top, rc.left, rc.bottom,
                    rc.right, rc.bottom);
   canvas.two_lines(rc.right, rc.bottom, rc.right, rc.top,
                    rc.left, rc.top);
 
-  // Just Scroll Bar Slider button
+  // TODO: ScrollBar Fill Bitmap is unused
+
+  // ###################
+  // ####  Buttons  ####
+  // ###################
 
   bool bTransparentUpDown = true;
 
+  // Create a canvas for drawing the bitmaps
   BitmapCanvas bitmap_canvas(canvas);
 
-  // TOP Dn Button 32x32
-  // BOT Up Button 32x32
   if (get_width() == SCROLLBARWIDTH_INITIAL) {
+    // If the Scrollbar size hasn't been changed
+    // -> just copy the button bitmaps to the canvas
+
     bitmap_canvas.select(hScrollBarBitmapTop);
     canvas.copy(rc.left, rc.top,
                 SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
@@ -168,13 +178,15 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
                 bitmap_canvas, 0, 0,
                 bTransparentUpDown);
   } else {
+    // If the Scrollbar size has been changed
+    // -> stretch-copy the button bitmaps to the canvas
+
     bitmap_canvas.select(hScrollBarBitmapTop);
     canvas.stretch(rc.left, rc.top, get_width(), get_width(),
                    bitmap_canvas,
                    0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
                    bTransparentUpDown);
 
-    // BOT Up Button 32x32
     bitmap_canvas.select(hScrollBarBitmapBot);
     canvas.stretch(rc.left, rc.bottom - get_width(), get_width(), get_width(),
                    bitmap_canvas,
@@ -182,9 +194,10 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
                    bTransparentUpDown);
   }
 
-  // Middle Slider Button 30x28
+  // ###################
+  // ####  Slider   ####
+  // ###################
 
-  // handle on slider
   bitmap_canvas.select(hScrollBarBitmapMid);
   // always SRCAND b/c on top of scrollbutton texture
   canvas.stretch_and(button.left + 1, button.top + 1,

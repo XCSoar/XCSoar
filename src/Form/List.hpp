@@ -42,6 +42,10 @@ Copyright_License {
 #include "Form/Control.hpp"
 #include "Screen/Bitmap.hpp"
 
+/**
+ * A WndListFrame implements a scrollable list control based on the
+ * WindowControl class.
+ */
 class WndListFrame : public WindowControl {
   class ScrollBar {
     Bitmap hScrollBarBitmapTop;
@@ -52,23 +56,30 @@ class WndListFrame : public WindowControl {
   protected:
     bool dragging;
     int drag_offset;
-    RECT rc, button;
+    /** Coordinates of the ScrollBar */
+    RECT rc;
+    /** Coordinates of the Slider */
+    RECT button;
 
   public:
     enum {
       SCROLLBARWIDTH_INITIAL = 32,
     };
 
+    /** Constructor of the ScrollBar class */
     ScrollBar();
 
+    /** Returns the width of the ScrollBar */
     int get_width() const {
       return rc.right - rc.left;
     }
 
+    /** Returns the height of the ScrollBar */
     int get_height() const {
       return rc.bottom - rc.top;
     }
 
+    /** Returns the height of a button of the ScrollBar */
     int get_button_height() const {
       return button.bottom - button.top;
     }
@@ -77,6 +88,7 @@ class WndListFrame : public WindowControl {
       return get_height() - 2 * get_width();
     }
 
+    /** Returns the height of the scroll area of the ScrollBar */
     int get_scroll_height() const {
       return get_netto_height() - get_button_height();
     }
@@ -89,10 +101,21 @@ class WndListFrame : public WindowControl {
       return defined() ? rc.left : size.cx;
     }
 
+    /**
+     * Returns whether the given POINT is in the ScrollBar area
+     * @param pt POINT to check
+     * @return True if the given POINT is in the ScrollBar area, False otherwise
+     */
     bool in(const POINT pt) const {
       return ::PtInRect(&rc, pt);
     }
 
+    /**
+     * Returns whether the given POINT is in the ScrollBar button area
+     * @param pt POINT to check
+     * @return True if the given POINT is in the ScrollBar button area,
+     * False otherwise
+     */
     bool in_button(const POINT pt) const {
       return ::PtInRect(&button, pt);
     }
@@ -113,6 +136,11 @@ class WndListFrame : public WindowControl {
       return y >= button.bottom;
     }
 
+    /**
+     * Sets the size of the ScrollBar
+     * (actually just the height, width is automatically set)
+     * @param size Size of the Control the ScrollBar is used with
+     */
     void set(const SIZE size);
     void reset();
     void set_button(unsigned size, unsigned view_size, unsigned origin);
