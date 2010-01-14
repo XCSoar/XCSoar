@@ -46,24 +46,7 @@ Copyright_License {
  * It is based on the WindowControl class.
  */
 class WndButton : public WindowControl {
-private:
-  /**
-   * The on_paint event is called when the button needs to be drawn
-   * (derived from WindowControl)
-   */
-  virtual void on_paint(Canvas &canvas);
-
-  /** True if the button is currently pressed */
-  bool mDown;
-
-  /** not used yet */
-  bool mDefault;
-  int mLastDrawTextHeight;
-  void (*mOnClickNotify)(WindowControl *Sender);
-
 public:
-  typedef void (*ClickNotifyCallback_t)(WindowControl *Sender);
-
   /**
    * Constructor of the WndButton class
    * @param Parent Parent window/ContainerControl
@@ -80,6 +63,19 @@ public:
       int X, int Y, int Width, int Height, void
       (*Function)(WindowControl *Sender) = NULL);
 
+  /**
+   * Sets the function that should be called when the button is pressed
+   * @param Function Pointer to the function to be called
+   */
+  void
+  SetOnClickNotify(void (*Function)(WindowControl *Sender))
+  {
+    mOnClickNotify = Function;
+  }
+
+  typedef void (*ClickNotifyCallback_t)(WindowControl *Sender);
+
+protected:
   /**
    * The on_mouse_up event is called when the mouse is released over the button
    * (derived from WindowControl)
@@ -114,14 +110,18 @@ public:
   virtual bool on_key_up(unsigned key_code);
 
   /**
-   * Sets the function that should be called when the button is pressed
-   * @param Function Pointer to the function to be called
+   * The on_paint event is called when the button needs to be drawn
+   * (derived from WindowControl)
    */
-  void
-  SetOnClickNotify(void (*Function)(WindowControl *Sender))
-  {
-    mOnClickNotify = Function;
-  }
+  virtual void on_paint(Canvas &canvas);
+
+private:
+  /** True if the button is currently pressed */
+  bool mDown;
+  /** not used yet */
+  bool mDefault;
+  int mLastDrawTextHeight;
+  void (*mOnClickNotify)(WindowControl *Sender);
 };
 
 #endif
