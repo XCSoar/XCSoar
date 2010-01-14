@@ -969,9 +969,6 @@ NMEAParser::PTAS1(const TCHAR *String, const TCHAR **params, size_t nparams,
   return false;
 }
 
-static double FLARM_NorthingToLatitude = 0.0;
-static double FLARM_EastingToLongitude = 0.0;
-
 /**
  * Parses a PFLAU sentence
  * @param String Input string
@@ -989,27 +986,6 @@ NMEAParser::PFLAU(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   GPS_INFO->FLARM_Available = true;
   isFlarm = true;
-
-  // calculate relative east and north projection to lat/lon
-
-  fixed delta_lat(0.01);
-  fixed delta_lon(0.01);
-
-  GEOPOINT plat = GPS_INFO->Location;
-  plat.Latitude += delta_lat;
-  GEOPOINT plon = GPS_INFO->Location;
-  plon.Longitude += delta_lon;
-
-  double dlat = Distance(GPS_INFO->Location, plat);
-  double dlon = Distance(GPS_INFO->Location, plon);
-
-  if ((fabs(dlat) > 0.0) && (fabs(dlon) > 0.0)) {
-    FLARM_NorthingToLatitude = delta_lat / dlat;
-    FLARM_EastingToLongitude = delta_lon / dlon;
-  } else {
-    FLARM_NorthingToLatitude = 0.0;
-    FLARM_EastingToLongitude = 0.0;
-  }
 
   _stscanf(String,
       _T("%hu,%hu,%hu,%hu"),
@@ -1049,6 +1025,30 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
     NMEA_INFO *GPS_INFO)
 {
   isFlarm = true;
+
+  // calculate relative east and north projection to lat/lon
+
+  fixed delta_lat(0.01);
+  fixed delta_lon(0.01);
+
+  GEOPOINT plat = GPS_INFO->Location;
+  plat.Latitude += delta_lat;
+  GEOPOINT plon = GPS_INFO->Location;
+  plon.Longitude += delta_lon;
+
+  double dlat = Distance(GPS_INFO->Location, plat);
+  double dlon = Distance(GPS_INFO->Location, plon);
+
+  double FLARM_NorthingToLatitude;
+  double FLARM_EastingToLongitude;
+
+  if ((fabs(dlat) > 0.0) && (fabs(dlon) > 0.0)) {
+    FLARM_NorthingToLatitude = delta_lat / dlat;
+    FLARM_EastingToLongitude = delta_lon / dlon;
+  } else {
+    FLARM_NorthingToLatitude = 0.0;
+    FLARM_EastingToLongitude = 0.0;
+  }
 
   // 5 id, 6 digit hex
   long ID = _tcstol(params[5], NULL, 16);
