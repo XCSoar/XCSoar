@@ -340,28 +340,28 @@ WndListFrame::on_mouse_down(int x, int y)
   if (!GetFocused())
     set_focus();
 
-  if (scroll_bar.in_slider(Pos)) // see if click is on scrollbar handle
-  {
-    // start mouse drag
+  if (scroll_bar.in_slider(Pos)) {
+    // if click is on scrollbar handle
+    // -> start mouse drag
     scroll_bar.drag_begin(this, Pos.y);
-  }
-  else if (scroll_bar.in(Pos)) // clicked in scroll bar up/down/pgup/pgdn
-  {
+  } else if (scroll_bar.in(Pos)) {
+    // if click in scroll bar up/down/pgup/pgdn
     if (scroll_bar.in_up_arrow(Pos.y))
-      origin = max(0U, origin - 1);
+      // up
+      origin = ((origin >= 1) ? (origin - 1) : 0U);
     else if (scroll_bar.in_down_arrow(Pos.y))
+      // down
       origin = max(0U, min(length - items_visible, origin + 1));
-    else if (scroll_bar.above_slider(Pos.y)) // page up
-      origin = max(0U, origin - items_visible);
-    else if (scroll_bar.below_slider(Pos.y)) // page up
+    else if (scroll_bar.above_slider(Pos.y))
+      // page up
+      origin = ((origin >= items_visible) ? (origin - items_visible) : 0U);
+    else if (scroll_bar.below_slider(Pos.y))
+      // page down
       if (length > origin + items_visible)
-          origin = min(length - items_visible,
-                       origin + items_visible);
+        origin = min(length - items_visible, origin + items_visible);
 
     invalidate();
-  }
-  else
-  {
+  } else {
     SelectItemFromScreen(x, y);
   }
 
