@@ -64,7 +64,7 @@ class WndListFrame : public WindowControl {
     /** Coordinates of the ScrollBar */
     RECT rc;
     /** Coordinates of the Slider */
-    RECT button;
+    RECT rc_slider;
 
   public:
     enum {
@@ -85,8 +85,8 @@ class WndListFrame : public WindowControl {
     }
 
     /** Returns the height of the slider */
-    int get_button_height() const {
-      return button.bottom - button.top;
+    int get_slider_height() const {
+      return rc_slider.bottom - rc_slider.top;
     }
 
     /** Returns the height of the scrollable area of the ScrollBar */
@@ -99,7 +99,7 @@ class WndListFrame : public WindowControl {
      * (the area thats not covered with the slider)
      */
     int get_scroll_height() const {
-      return get_netto_height() - get_button_height();
+      return get_netto_height() - get_slider_height();
     }
 
     bool defined() const {
@@ -120,13 +120,12 @@ class WndListFrame : public WindowControl {
     }
 
     /**
-     * Returns whether the given POINT is in the ScrollBar button area
+     * Returns whether the given POINT is in the slider area
      * @param pt POINT to check
-     * @return True if the given POINT is in the ScrollBar button area,
-     * False otherwise
+     * @return True if the given POINT is in the slider area, False otherwise
      */
-    bool in_button(const POINT pt) const {
-      return ::PtInRect(&button, pt);
+    bool in_slider(const POINT pt) const {
+      return ::PtInRect(&rc_slider, pt);
     }
 
     bool in_up_arrow(int y) const {
@@ -137,12 +136,12 @@ class WndListFrame : public WindowControl {
       return y >= rc.bottom - get_width();
     }
 
-    bool above_button(int y) const {
-      return y < button.top;
+    bool above_slider(int y) const {
+      return y < rc_slider.top;
     }
 
-    bool below_button(int y) const {
-      return y >= button.bottom;
+    bool below_slider(int y) const {
+      return y >= rc_slider.bottom;
     }
 
     /**
@@ -152,7 +151,7 @@ class WndListFrame : public WindowControl {
      */
     void set(const SIZE size);
     void reset();
-    void set_button(unsigned size, unsigned view_size, unsigned origin);
+    void set_slider(unsigned size, unsigned view_size, unsigned origin);
     unsigned to_origin(unsigned size, unsigned view_size, int y) const;
 
     void paint(Canvas &canvas, Color fore_color) const;

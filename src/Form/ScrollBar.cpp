@@ -91,11 +91,11 @@ void
 WndListFrame::ScrollBar::reset()
 {
   SetRectEmpty(&rc);
-  SetRectEmpty(&button);
+  SetRectEmpty(&rc_slider);
 }
 
 void
-WndListFrame::ScrollBar::set_button(unsigned size, unsigned view_size,
+WndListFrame::ScrollBar::set_slider(unsigned size, unsigned view_size,
                                     unsigned origin)
 {
   const int netto_height = get_netto_height();
@@ -112,10 +112,10 @@ WndListFrame::ScrollBar::set_button(unsigned size, unsigned view_size,
   if (top + height > netto_height)
     height = netto_height - top;
 
-  button.left = rc.left;
-  button.top = rc.top + get_width() + top - 1;
-  button.right = rc.right - 1; // -2 if use 3x pen.  -1 if 2x pen
-  button.bottom = button.top + height + 2; // +2 for 3x pen, +1 for 2x pen
+  rc_slider.left = rc.left;
+  rc_slider.top = rc.top + get_width() + top - 1;
+  rc_slider.right = rc.right - 1; // -2 if use 3x pen.  -1 if 2x pen
+  rc_slider.bottom = rc_slider.top + height + 2; // +2 for 3x pen, +1 for 2x pen
 }
 
 unsigned
@@ -200,9 +200,9 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
 
   bitmap_canvas.select(hScrollBarBitmapMid);
   // always SRCAND b/c on top of scrollbutton texture
-  canvas.stretch_and(button.left + 1, button.top + 1,
-                     button.right - button.left - 2,
-                     button.bottom - button.top - 2,
+  canvas.stretch_and(rc_slider.left + 1, rc_slider.top + 1,
+                     rc_slider.right - rc_slider.left - 2,
+                     rc_slider.bottom - rc_slider.top - 2,
                      bitmap_canvas, 0, 0, 30, 28);
 
   // box around slider rect
@@ -211,12 +211,12 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
 
   int iBorderOffset = 1;  // set to 1 if BORDERWIDTH >2, else 0
 
-  canvas.two_lines(button.left + iBorderOffset, button.top,
-                   button.left + iBorderOffset, button.bottom,
-                   button.right, button.bottom); // just left line of scrollbar
-  canvas.two_lines(button.right, button.bottom,
-                   button.right, button.top,
-                   button.left + iBorderOffset, button.top); // just left line of scrollbar
+  canvas.two_lines(rc_slider.left + iBorderOffset, rc_slider.top,
+                   rc_slider.left + iBorderOffset, rc_slider.bottom,
+                   rc_slider.right, rc_slider.bottom); // just left line of scrollbar
+  canvas.two_lines(rc_slider.right, rc_slider.bottom,
+                   rc_slider.right, rc_slider.top,
+                   rc_slider.left + iBorderOffset, rc_slider.top); // just left line of scrollbar
 }
 
 void
@@ -224,7 +224,7 @@ WndListFrame::ScrollBar::drag_begin(Window *w, unsigned y)
 {
   assert(!dragging);
 
-  drag_offset = y - button.top;
+  drag_offset = y - rc_slider.top;
   dragging = true;
   w->set_capture();
 }

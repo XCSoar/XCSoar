@@ -126,7 +126,7 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
   if (!scroll_bar.defined())
     return;
 
-  scroll_bar.set_button(length, items_visible, origin);
+  scroll_bar.set_slider(length, items_visible, origin);
   scroll_bar.paint(canvas, GetForeColor());
 }
 
@@ -340,7 +340,7 @@ WndListFrame::on_mouse_down(int x, int y)
   if (!GetFocused())
     set_focus();
 
-  if (scroll_bar.in_button(Pos)) // see if click is on scrollbar handle
+  if (scroll_bar.in_slider(Pos)) // see if click is on scrollbar handle
   {
     // start mouse drag
     scroll_bar.drag_begin(this, Pos.y);
@@ -351,9 +351,9 @@ WndListFrame::on_mouse_down(int x, int y)
       origin = max(0U, origin - 1);
     else if (scroll_bar.in_down_arrow(Pos.y))
       origin = max(0U, min(length - items_visible, origin + 1));
-    else if (scroll_bar.above_button(Pos.y)) // page up
+    else if (scroll_bar.above_slider(Pos.y)) // page up
       origin = max(0U, origin - items_visible);
-    else if (scroll_bar.below_button(Pos.y)) // page up
+    else if (scroll_bar.below_slider(Pos.y)) // page up
       if (length > origin + items_visible)
           origin = min(length - items_visible,
                        origin + items_visible);
