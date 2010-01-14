@@ -196,7 +196,7 @@ NMEAParser::ParseNMEAString_Internal(const TCHAR *String, NMEA_INFO *GPS_INFO)
       return PFLAA(&String[7], params + 1, n_params, GPS_INFO);
 
     if (_tcscmp(params[0] + 1, _T("PFLAU")) == 0)
-      return PFLAU(&String[7], params + 1, n_params, GPS_INFO);
+      return PFLAU(&String[7], params + 1, n_params, *GPS_INFO);
 
     // Garmin altitude sentence
     if (_tcscmp(params[0] + 1, _T("PGRMZ")) == 0)
@@ -980,33 +980,33 @@ NMEAParser::PTAS1(const TCHAR *String, const TCHAR **params, size_t nparams,
  */
 bool
 NMEAParser::PFLAU(const TCHAR *String, const TCHAR **params, size_t nparams,
-    NMEA_INFO *GPS_INFO)
+                  FLARM_STATE &flarm)
 {
   static int old_flarm_rx = 0;
 
-  GPS_INFO->FLARM_Available = true;
+  flarm.FLARM_Available = true;
   isFlarm = true;
 
   _stscanf(String,
       _T("%hu,%hu,%hu,%hu"),
-      &GPS_INFO->FLARM_RX,
-      &GPS_INFO->FLARM_TX,
-      &GPS_INFO->FLARM_GPS,
-      &GPS_INFO->FLARM_AlarmLevel);
+      &flarm.FLARM_RX,
+      &flarm.FLARM_TX,
+      &flarm.FLARM_GPS,
+      &flarm.FLARM_AlarmLevel);
 
   // process flarm updates
 
-  if ((GPS_INFO->FLARM_RX) && (old_flarm_rx == 0))
+  if (flarm.FLARM_RX && old_flarm_rx == 0)
     // traffic has appeared..
     InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
 
-  if ((GPS_INFO->FLARM_RX == 0) && (old_flarm_rx))
+  if (flarm.FLARM_RX == 0 && old_flarm_rx)
     // traffic has disappeared..
     InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
 
   // TODO feature: add another event for new traffic.
 
-  old_flarm_rx = GPS_INFO->FLARM_RX;
+  old_flarm_rx = flarm.FLARM_RX;
 
   return false;
 }
@@ -1127,7 +1127,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
     const TCHAR *params[MAX_NMEA_PARAMS];
     size_t nr;
     nr = ExtractParameters(t1, ctemp, params, MAX_NMEA_PARAMS);
-    PFLAU(t1, params, nr, GPS_INFO);
+    PFLAU(t1, params, nr, *GPS_INFO);
     nr = ExtractParameters(t2, ctemp, params, MAX_NMEA_PARAMS);
     PFLAA(t2, params, nr, GPS_INFO);
     nr = ExtractParameters(t3, ctemp, params, MAX_NMEA_PARAMS);

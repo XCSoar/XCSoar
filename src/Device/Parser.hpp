@@ -41,6 +41,7 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct FLARM_STATE;
 struct NMEA_INFO;
 
 class NMEAParser
@@ -101,7 +102,7 @@ private:
   bool PTAS1(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);  // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
   // FLARM sentences
-  bool PFLAU(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  bool PFLAU(const TCHAR *String, const TCHAR **, size_t, FLARM_STATE &flarm);
   bool PFLAA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
 };
 
