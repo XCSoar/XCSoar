@@ -63,9 +63,9 @@ WndListFrame::ScrollBar::set(const SIZE size)
 
   if (has_pointer()) {
     // shrink width factor.  Range .1 to 1 where 1 is very "fat"
-    double SHRINKSBFACTOR = is_pna() ? 1.0 : 0.75;
+    double ShrinkFactor = is_pna() ? 1.0 : 0.75;
 
-    width = (unsigned)Layout::Scale(SCROLLBARWIDTH_INITIAL * SHRINKSBFACTOR);
+    width = (unsigned)Layout::Scale(SCROLLBARWIDTH_INITIAL * ShrinkFactor);
 
     // resize height for each dialog so top button is below 1st item (to avoid initial highlighted overlap)
   } else {
