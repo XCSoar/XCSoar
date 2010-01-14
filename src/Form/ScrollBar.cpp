@@ -145,8 +145,7 @@ WndListFrame::ScrollBar::to_origin(unsigned size, unsigned view_size,
 void
 WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
 {
-  // Prepare Brush and Pen
-  Brush brush(Color(0xff, 0xff, 0xff));
+  // Prepare Pen
   Pen pen(DEFAULTBORDERPENWIDTH, fore_color);
   canvas.select(pen);
 
