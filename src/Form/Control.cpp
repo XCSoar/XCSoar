@@ -90,16 +90,19 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
     mCanFocus(false),
     mDontPaintSelector(false)
 {
+  // Clear the caption
   mCaption[0] = '\0';
 
   if ((Parent == NULL) && (mOwner != NULL))
     Parent = (ContainerWindow *)&mOwner->GetClientAreaWindow();
 
+  // Save the Name of the Control
   if (Name != NULL)
     _tcscpy(mName, Name); // todo size check
   else
     mName[0] = '\0';
 
+  // If not done already -> initialize default brushes and pens
   if (!initialized) {
     hBrushDefaultBk.set(mColorBack);
     hPenDefaultBorder.set(DEFAULTBORDERPENWIDTH, mColorFore);
@@ -109,6 +112,7 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
 
   set(Parent, X, Y, Width, Height, false, false, Visible, false, false);
 
+  // Add the Control as a client of its parent
   if (mOwner != NULL)
     mOwner->AddClient(this);
 
