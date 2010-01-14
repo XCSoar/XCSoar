@@ -145,20 +145,20 @@ SelectAsTeamTrack()
   if (index >= FLARM_MAX_TRAFFIC)
     return;
 
-  if (!XCSoarInterface::Basic().FLARM_Traffic[index].HasName()) {
+  const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[index];
+
+  if (!traffic.HasName()) {
     XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
   } else {
     // copy the 3 first chars from the name
     for (int z = 0; z < 3; z++)
       XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[z]
-          = XCSoarInterface::Basic().FLARM_Traffic[index].Name[z];
-
+        = traffic.Name[z];
     XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
   }
 
   // now tracking !
-  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget
-      = XCSoarInterface::Basic().FLARM_Traffic[index].ID;
+  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = traffic.ID;
   XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
   XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
 }
@@ -180,11 +180,12 @@ OnSetCNClicked(WindowControl * Sender)
   if (index >= FLARM_MAX_TRAFFIC)
     return;
 
+  const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().FLARM_Traffic[index];
+
   TCHAR newName[21];
   newName[0] = 0;
   if (dlgTextEntryShowModal(newName, 4))
-    AddFlarmLookupItem(XCSoarInterface::Basic().FLARM_Traffic[index].ID,
-        newName, true);
+    AddFlarmLookupItem(traffic.ID, newName, true);
 }
 
 static void
