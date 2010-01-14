@@ -52,8 +52,7 @@ using std::min;
 WndListFrame::ScrollBar::ScrollBar()
   :dragging(false)
 {
-  SetRectEmpty(&rc);
-  SetRectEmpty(&button);
+  reset();
 }
 
 void
