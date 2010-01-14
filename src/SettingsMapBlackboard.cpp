@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "SettingsMapBlackboard.hpp"
+#include "Asset.hpp"
 
 SettingsMapBlackboard::SettingsMapBlackboard()
 {
@@ -76,11 +77,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.ScreenBlanked = false;
   settings_map.EnableAutoBlank = false;
 
-#if defined(GNAV) && !defined(WINDOWSPC)
-  settings_map.SetSystemTimeFromGPS = true;
-#else
-  settings_map.SetSystemTimeFromGPS = false;
-#endif
+  settings_map.SetSystemTimeFromGPS = is_altair() && is_embedded();
   settings_map.iAirspaceBrush[0]=2;
   settings_map.iAirspaceBrush[1]=0;
   settings_map.iAirspaceBrush[2]=0;
