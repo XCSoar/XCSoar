@@ -100,18 +100,25 @@ WndListFrame::ScrollBar::set_slider(unsigned size, unsigned view_size,
 {
   const int netto_height = get_netto_height();
 
-  int height = size > 0 ? netto_height * view_size / size : netto_height;
+  // If (no size) slider fills the whole area (no scrolling)
+  int height = (size > 0) ? (netto_height * view_size / size) : netto_height;
+  // Prevent the slider from getting to small
   if (height < get_width())
     height = get_width();
 
+  // Calculate highest origin (counted in ListItems)
   int max_origin = size - view_size;
-  int top = max_origin > 0
-    ? (netto_height - height) * origin / max_origin
-    : 0;
 
+  // Move the slider to the appropriate position
+  int top = (max_origin > 0) ?
+      ((netto_height - height) * origin / max_origin) : 0;
+
+  // Prevent the slider from getting to big
+  // TODO: not needed?!
   if (top + height > netto_height)
     height = netto_height - top;
 
+  // Update slider coordinates
   rc_slider.left = rc.left;
   rc_slider.top = rc.top + get_width() + top - 1;
   rc_slider.right = rc.right - 1; // -2 if use 3x pen.  -1 if 2x pen
@@ -122,6 +129,7 @@ unsigned
 WndListFrame::ScrollBar::to_origin(unsigned size, unsigned view_size,
                                    int y) const
 {
+  // Calculate highest origin (counted in ListItems)
   int max_origin = size - view_size;
   if (max_origin <= 0)
     return 0;
@@ -137,6 +145,7 @@ WndListFrame::ScrollBar::to_origin(unsigned size, unsigned view_size,
 void
 WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
 {
+  // Prepare Brush and Pen
   Brush brush(Color(0xff, 0xff, 0xff));
   Pen pen(DEFAULTBORDERPENWIDTH, fore_color);
   canvas.select(pen);
