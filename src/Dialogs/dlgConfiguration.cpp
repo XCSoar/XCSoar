@@ -2269,6 +2269,7 @@ void dlgConfigurationShowModal(void){
 #endif
 
   setVariables();
+  PageSwitched();
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     UpdateDeviceSetupButton(i, DeviceList[i].GetName());
