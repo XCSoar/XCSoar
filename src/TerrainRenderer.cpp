@@ -466,7 +466,8 @@ TerrainRenderer::SetMap(const GEOPOINT &loc, int day_time)
 }
 
 void
-TerrainRenderer::Height(MapWindowProjection &map_projection, bool isBigZoom)
+TerrainRenderer::Height(const MapWindowProjection &map_projection,
+                        bool isBigZoom)
 {
   GEOPOINT G, middle;
   int x, y;
@@ -592,7 +593,7 @@ TerrainRenderer::ScanSpotHeights(const int X0, const int Y0,
 }
 
 void
-TerrainRenderer::FillHeightBuffer(MapWindowProjection &map_projection,
+TerrainRenderer::FillHeightBuffer(const MapWindowProjection &map_projection,
     const int X0, const int Y0, const int X1, const int Y1)
 {
   // fill the buffer
@@ -853,7 +854,8 @@ TerrainRenderer::Draw(Canvas &canvas, RECT rc)
  * @return (?)
  */
 bool
-TerrainRenderer::Draw(Canvas &canvas, MapWindowProjection &map_projection,
+TerrainRenderer::Draw(Canvas &canvas,
+                      const MapWindowProjection &map_projection,
     const double sunazimuth, const double sunelevation, const GEOPOINT &loc,
     int day_time, const bool isBigZoom)
 {

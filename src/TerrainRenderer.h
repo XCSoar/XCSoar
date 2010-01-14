@@ -101,9 +101,9 @@ private:
   short TerrainBrightness;
 
 private:
-  void Height(MapWindowProjection &map_projection, bool isBigZoom);
+  void Height(const MapWindowProjection &map_projection, bool isBigZoom);
   void ScanSpotHeights(const int X0, const int Y0, const int X1, const int Y1);
-  void FillHeightBuffer(MapWindowProjection &map_projection,
+  void FillHeightBuffer(const MapWindowProjection &map_projection,
 			const int X0, const int Y0, const int X1, const int Y1);
   void Slope(const int sx, const int sy, const int sz);
   void ColorTable();
@@ -129,7 +129,7 @@ public:
   /**
    * @param day_time the UTC time, in seconds since midnight
    */
-  bool Draw(Canvas &canvas, MapWindowProjection &map_projection,
+  bool Draw(Canvas &canvas, const MapWindowProjection &map_projection,
       const double sunazimuth, const double sunelevation, const GEOPOINT &loc,
       int day_time, const bool isBigZoom);
 };
