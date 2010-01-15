@@ -310,28 +310,33 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 bool
 WndListFrame::on_mouse_move(int x, int y, unsigned keys)
 {
+  // Make sure this method can not be called multiple times parallel
   static bool bMoving = false;
-
   if (!bMoving) {
     bMoving = true;
+
+    // If we are currently dragging the ScrollBar slider
     if (scroll_bar.is_dragging()) {
+      // -> Update ListBox origin
       SetOrigin(scroll_bar.drag_move(length, items_visible, y));
     }
+
     bMoving = false;
   }
-
   return false;
 }
 
 bool
 WndListFrame::on_mouse_down(int x, int y)
 {
+  // End any previous drag
   scroll_bar.drag_end(this);
 
   POINT Pos;
   Pos.x = x;
   Pos.y = y;
 
+  // If possible -> Give focus to the Control
   if (!GetFocused())
     set_focus();
 
@@ -357,6 +362,8 @@ WndListFrame::on_mouse_down(int x, int y)
 
     invalidate();
   } else {
+    // if click in ListBox area
+    // -> select appropriate item
     SelectItemFromScreen(x, y);
   }
 
