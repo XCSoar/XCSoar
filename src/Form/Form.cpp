@@ -328,9 +328,9 @@ WndForm::on_paint(Canvas &canvas)
   CopyRect(&mTitleRect, &rcClient);
   mTitleRect.bottom = mTitleRect.top + tsize.cy;
 
-  rcClient.top += tsize.cy;
+  if (mClientWindow && !EqualRect(&mClientRect, &rcClient)) {
+    rcClient.top += tsize.cy;
 
-  if (mClientWindow && !EqualRect(&mClientRect, &rcClient)){
     mClientWindow->move(rcClient.left, rcClient.top,
         (rcClient.right - rcClient.left), (rcClient.bottom - rcClient.top));
 
