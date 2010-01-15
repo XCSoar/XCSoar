@@ -45,30 +45,54 @@ Copyright_License {
 class SingleWindow;
 class PeriodClock;
 
-class WndForm : public ContainerControl {
+/**
+ * A WndForm represents a Window with a titlebar.
+ * It is used to display the XML dialogs and MessageBoxes.
+ */
+class WndForm: public ContainerControl
+{
 protected:
   SingleWindow &main_window;
   int mModalResult;
+  /** Background color of the titlebar */
   Color mColorTitle;
+  /** Font of the titlebar */
   const Font *mhTitleFont;
+  /** The ClientWindow */
   ContainerControl *mClientWindow;
+  /** Coordinates of the ClientWindow */
   RECT mClientRect;
+  /** Coordinates of the titlebar */
   RECT mTitleRect;
 
   int (*mOnTimerNotify)(WindowControl *Sender);
   bool (*mOnKeyDownNotify)(WindowControl *Sender, unsigned key_code);
   bool (*mOnUserMsgNotify)(WindowControl *Sender, unsigned id);
 
-  /** from class PaintWindow */
+  /**
+   * The on_paint event is called when the button needs to be drawn
+   * (derived from WindowControl)
+   */
   virtual void on_paint(Canvas &canvas);
 
   timer_t cbTimerID;
 
 public:
+  /**
+   * Constructor of the WndForm class
+   * @param _main_window
+   * @param Name Name of the Window
+   * @param Caption Titlebar text of the Window
+   * @param X x-Coordinate of the Window
+   * @param Y y-Coordinate of the Window
+   * @param Width Width of the Window
+   * @param Height Height of the Window
+   */
 
   WndForm(SingleWindow &_main_window,
           const TCHAR *Name, const TCHAR *Caption,
           int X, int Y, int Width, int Height);
+  /** Destructor */
   virtual ~WndForm();
 
   ContainerWindow &GetClientAreaWindow(void);
@@ -87,12 +111,14 @@ public:
     return Value;
   }
 
+  /** Set the font of the titlebar */
   const Font *SetTitleFont(const Font &font);
 
   int ShowModal(bool bEnableMap);
   int ShowModal(void);
   void Show(void);
 
+  /** Set the titlebar text */
   void SetCaption(const TCHAR *Value);
 
   virtual bool on_unhandled_key(unsigned key_code);
@@ -102,8 +128,11 @@ public:
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
 
+  /** Set the foreground color of the window */
   Color SetForeColor(Color Value);
+  /** Set the background color of the window */
   Color SetBackColor(Color Value);
+  /** Set the font of the window (not titlebar) */
   const Font *SetFont(const Font &Value);
 
   void SetKeyDownNotify(bool (*KeyDownNotify)(WindowControl *Sender,

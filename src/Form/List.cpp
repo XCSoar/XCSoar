@@ -59,7 +59,7 @@ WndListFrame::WndListFrame(ContainerControl *Owner, const TCHAR *Name,
   PaintItemCallback(NULL)
 {
   SetCanFocus(true);
-  PaintSelector(true);
+  SetPaintSelector(false);
 
   mCaption[0] = '\0';
   SetForeColor(GetOwner()->GetForeColor());
@@ -72,10 +72,11 @@ WndListFrame::show_or_hide_scroll_bar()
   const SIZE size = get_size();
 
   if (length > items_visible)
-    /* enable the scroll bar */
+    // enable the scroll bar
     scroll_bar.set(size);
   else
-    /* all items are visible - hide the scroll bar */
+    // all items are visible
+    // -> hide the scroll bar
     scroll_bar.reset();
 }
 
@@ -126,7 +127,7 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
   if (!scroll_bar.defined())
     return;
 
-  scroll_bar.set_button(length, items_visible, origin);
+  scroll_bar.set_slider(length, items_visible, origin);
   scroll_bar.paint(canvas, GetForeColor());
 }
 
@@ -234,7 +235,7 @@ WndListFrame::on_key_down(unsigned key_code)
 
   switch (key_code) {
 #ifdef GNAV
-    // JMW added this to make data entry easier
+  // JMW added this to make data entry easier
   case VK_F4:
 #endif
   case VK_RETURN:
@@ -245,26 +246,22 @@ WndListFrame::on_key_down(unsigned key_code)
       ActivateCallback(GetCursorIndex());
     return true;
 
-    //#ifndef GNAV
-
+//#ifndef GNAV
   case VK_LEFT:
     if (origin == 0 || length <= items_visible)
       break;
 
-    SetOrigin(origin > items_visible
-              ? origin - items_visible
-              : 0);
+    SetOrigin(origin > items_visible ? origin - items_visible : 0);
     return true;
 
   case VK_RIGHT:
-    if (origin + relative_cursor >= length ||
-        length <= items_visible)
+    if (origin + relative_cursor >= length || length <= items_visible)
       break;
 
     SetOrigin(origin + items_visible);
     return true;
 
-    //#endif
+//#endif
   case VK_DOWN:
     if (GetCursorIndex() + 1 >= length)
       break;
@@ -287,7 +284,7 @@ bool
 WndListFrame::on_mouse_up(int x, int y)
 {
   scroll_bar.drag_end(this);
-    return false;
+  return false;
 }
 
 void
@@ -295,7 +292,8 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 {
   (void)xPos;
 
-  int index = yPos / item_height; // yPos is offset within ListEntry item!
+  // yPos is offset within ListEntry item!
+  int index = yPos / item_height;
 
   if (index >= 0 && index + relative_cursor < length) {
     if ((unsigned)index == relative_cursor) {
@@ -309,22 +307,19 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
   }
 }
 
-
 bool
 WndListFrame::on_mouse_move(int x, int y, unsigned keys)
 {
   static bool bMoving = false;
 
-  if (!bMoving)
-  {
-    bMoving=true;
-
+  if (!bMoving) {
+    bMoving = true;
     if (scroll_bar.is_dragging()) {
       SetOrigin(scroll_bar.drag_move(length, items_visible, y));
     }
+    bMoving = false;
+  }
 
-    bMoving=false;
-  } // Tickcount
   return false;
 }
 
@@ -340,28 +335,28 @@ WndListFrame::on_mouse_down(int x, int y)
   if (!GetFocused())
     set_focus();
 
-  if (scroll_bar.in_button(Pos)) // see if click is on scrollbar handle
-  {
-    // start mouse drag
+  if (scroll_bar.in_slider(Pos)) {
+    // if click is on scrollbar handle
+    // -> start mouse drag
     scroll_bar.drag_begin(this, Pos.y);
-  }
-  else if (scroll_bar.in(Pos)) // clicked in scroll bar up/down/pgup/pgdn
-  {
+  } else if (scroll_bar.in(Pos)) {
+    // if click in scroll bar up/down/pgup/pgdn
     if (scroll_bar.in_up_arrow(Pos.y))
-      origin = max(0U, origin - 1);
+      // up
+      origin = ((origin >= 1) ? (origin - 1) : 0U);
     else if (scroll_bar.in_down_arrow(Pos.y))
+      // down
       origin = max(0U, min(length - items_visible, origin + 1));
-    else if (scroll_bar.above_button(Pos.y)) // page up
-      origin = max(0U, origin - items_visible);
-    else if (scroll_bar.below_button(Pos.y)) // page up
+    else if (scroll_bar.above_slider(Pos.y))
+      // page up
+      origin = ((origin >= items_visible) ? (origin - items_visible) : 0U);
+    else if (scroll_bar.below_slider(Pos.y))
+      // page down
       if (length > origin + items_visible)
-          origin = min(length - items_visible,
-                       origin + items_visible);
+        origin = min(length - items_visible, origin + items_visible);
 
     invalidate();
-  }
-  else
-  {
+  } else {
     SelectItemFromScreen(x, y);
   }
 

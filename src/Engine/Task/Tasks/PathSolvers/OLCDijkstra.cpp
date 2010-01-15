@@ -65,13 +65,12 @@ void
 OLCDijkstra::set_weightings()
 {
   m_weightings.clear();
-  for (unsigned i=0; i+1<num_stages; ++i) {
+  for (unsigned i = 0; i + 1 < num_stages; ++i) {
     m_weightings.push_back(5);
   }
 }
 
-
-bool 
+bool
 OLCDijkstra::solve()
 {
   if (m_dijkstra.empty()) {
@@ -79,12 +78,12 @@ OLCDijkstra::solve()
     n_points = olc.get_trace_points().size();
   }
 
-  if (n_points<num_stages) {
+  if (n_points < num_stages) {
     return false;
   }
 
   if (m_dijkstra.empty()) {
-    m_dijkstra.reset(ScanTaskPoint(0,0));
+    m_dijkstra.reset(ScanTaskPoint(0, 0));
     add_start_edges();
     if (m_dijkstra.empty()) {
       // no processing to perform!
@@ -96,6 +95,7 @@ OLCDijkstra::solve()
       return true;
     }
   }
+
   return solve_inner();
 }
 
@@ -119,9 +119,8 @@ OLCDijkstra::reset()
   best_distance = fixed_zero;
 }
 
-
 fixed
-OLCDijkstra::score(fixed& the_distance) 
+OLCDijkstra::score(fixed& the_distance)
 {
   if (positive(calc_time())) {
     solution_found = true;
@@ -132,91 +131,82 @@ OLCDijkstra::score(fixed& the_distance)
   }
 }
 
-
 fixed
 OLCDijkstra::calc_time() const
 {
-  return fixed(solution[num_stages-1].time-solution[0].time);
+  return fixed(solution[num_stages - 1].time - solution[0].time);
 }
-
 
 fixed
 OLCDijkstra::calc_distance() const
 {
   fixed dist = fixed_zero;
-  for (unsigned i=0; i+1<num_stages; ++i) {
-    dist += get_weighting(i)*solution[i].distance(solution[i+1].get_location());
+  for (unsigned i = 0; i + 1 < num_stages; ++i) {
+    dist += get_weighting(i) *
+        solution[i].distance(solution[i + 1].get_location());
   }
   static const fixed fixed_fifth(0.2);
   dist *= fixed_fifth;
   return dist;
 }
 
-
-
 void
 OLCDijkstra::add_start_edges()
 {
   m_dijkstra.pop();
 
-  ScanTaskPoint destination(0,0);
-    
-  for (; destination.second!= n_points; ++destination.second) {
+  ScanTaskPoint destination(0, 0);
+
+  for (; destination.second != n_points; ++destination.second) {
     m_dijkstra.link(destination, destination, 0);
   }
 }
 
-void 
-OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra,
-                       const ScanTaskPoint& origin) 
+void
+OLCDijkstra::add_edges(DijkstraTaskPoint &dijkstra, const ScanTaskPoint& origin)
 {
-  ScanTaskPoint destination(origin.first+1, origin.second);
+  ScanTaskPoint destination(origin.first + 1, origin.second);
 
   find_solution(dijkstra, origin);
-  
-  for (; destination.second!= n_points; ++destination.second) {
+
+  for (; destination.second != n_points; ++destination.second) {
     if (admit_candidate(destination)) {
-      const unsigned d = get_weighting(origin.first)
-        *distance(origin, destination);
+      const unsigned d = get_weighting(origin.first) *
+          distance(origin, destination);
       dijkstra.link(destination, origin, d);
     }
   }
 }
 
-
 const TracePoint &
 OLCDijkstra::get_point(const ScanTaskPoint &sp) const
 {
-  assert(sp.second<n_points);
+  assert(sp.second < n_points);
   return olc.get_trace_points()[sp.second];
 }
 
-
-unsigned 
+unsigned
 OLCDijkstra::get_weighting(const unsigned i) const
 {
-  assert(i<num_stages-1);
+  assert(i < num_stages - 1);
   return m_weightings[i];
 }
-
 
 bool
 OLCDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
 {
-  if (!is_final(candidate)) 
+  if (!is_final(candidate))
     return true;
-  else 
-    return (get_point(candidate).NavAltitude+m_finish_alt_diff >= 
-            solution[0].NavAltitude);
+  else
+    return (get_point(candidate).NavAltitude + m_finish_alt_diff
+        >= solution[0].NavAltitude);
 }
 
-
-bool 
+bool
 OLCDijkstra::finish_satisfied(const ScanTaskPoint &sp) const
 {
   return admit_candidate(sp);
 }
-
 
 void
 OLCDijkstra::save_solution()
@@ -224,12 +214,12 @@ OLCDijkstra::save_solution()
   const fixed the_distance = calc_distance();
   if (the_distance > best_distance) {
 #ifdef DO_PRINT
-    printf("best dist %d from %d to %d s\n", 
-           the_distance.as_int(), solution[0].time,
-           solution[num_stages-1].time);
+    printf("best dist %d from %d to %d s\n",
+        the_distance.as_int(), solution[0].time,
+        solution[num_stages-1].time);
 #endif
     best_solution.clear();
-    for (unsigned i=0; i<num_stages; ++i) {
+    for (unsigned i = 0; i < num_stages; ++i) {
       best_solution.push_back(solution[i]);
     }
     best_distance = the_distance;
@@ -242,12 +232,11 @@ OLCDijkstra::copy_solution(TracePointVector &vec)
   vec.clear();
   if (solution_found) {
     vec.reserve(num_stages);
-    for (unsigned i=0; i<num_stages; ++i) {
+    for (unsigned i = 0; i < num_stages; ++i) {
       vec.push_back(best_solution[i]);
     }
   }
 }
-
 
 /*
 

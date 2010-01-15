@@ -41,30 +41,74 @@ Copyright_License {
 
 #include "Form/Control.hpp"
 
+/**
+ * A ContainerControl is a special type of WindowControl,
+ * that can contain other WindowControls itself.
+ * It is for example the base class for WndForm.
+ */
 class ContainerControl : public WindowControl {
 protected:
+  /** Array of ClientControls */
   WindowControl *mClients[50];
+  /** Number of ClientControls */
   unsigned mClientCount;
 
 public:
+  /**
+   * Constructor for the ContainerControl class
+   * @param owner
+   * @param parent
+   * @param name Name of the ContainerControl
+   * @param x x-Coordinate of the ContainerControl
+   * @param y y-Coordinate of the ContainerControl
+   * @param width Width of the ContainerControl
+   * @param height Height of the ContainerControl
+   * @param visible True if the ContainerControl should be visible, False if not
+   */
   ContainerControl(ContainerControl *owner, ContainerWindow *parent,
                    const TCHAR *name, int x, int y, int width, int height,
                    bool visible = true)
     :WindowControl(owner, parent, name, x, y, width, height, visible),
      mClientCount(0) {}
+  /** Destructor */
   virtual ~ContainerControl();
 
 public:
+  /**
+   * Add a ClientControl to the ContainerControl
+   * @param Client A WindowControl to add as a ClientControl
+   */
   virtual void AddClient(WindowControl *Client);
 
+  /**
+   * Searches for a ClientControl with the given Name
+   * @param Name Name of the ClientControl to search for
+   * @return The ClientControl if found, otherwise NULL
+   */
   virtual WindowControl *FindByName(const TCHAR *Name);
 
+  /**
+   * Searches for a ClientControl with the given Name
+   * @param Name Name of the ClientControl to search for
+   * @return The ClientControl if found, otherwise NULL
+   */
   const WindowControl *FindByName(const TCHAR *Name) const {
     return const_cast<ContainerControl *>(this)->FindByName(Name);
   }
 
+  /**
+   * Checks whether the ContainerControl or any of its ClientControls
+   * can have the focus and returns the Window of the first one that can.
+   * @param forward Searches forward if true, backward if false
+   * @return see above
+   */
   virtual Window *GetCanFocus(bool forward);
 
+  /**
+   * Shows/Hides the ClientControls depending on the given value of advanced and
+   * whether their caption includes an asterisk.
+   * @param advanced True if advanced mode activated
+   */
   virtual void FilterAdvanced(bool advanced);
 
 public:

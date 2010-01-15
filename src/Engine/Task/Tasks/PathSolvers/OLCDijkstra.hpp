@@ -48,76 +48,75 @@ class OnlineContest;
  * Abstract class for OLC path searches
  *
  */
-class OLCDijkstra: 
+class OLCDijkstra:
   public NavDijkstra<TracePoint>
 {
 public:
-/**
- * Constructor
- *
- * @param _olc The OLC task to solve for
- * @param n_legs Maximum number of legs in OLC task
- * @param finish_alt_diff Maximum height loss from start to finish (m)
- */
+  /**
+   * Constructor
+   *
+   * @param _olc The OLC task to solve for
+   * @param n_legs Maximum number of legs in OLC task
+   * @param finish_alt_diff Maximum height loss from start to finish (m)
+   */
   OLCDijkstra(OnlineContest& _olc, 
               const unsigned n_legs,
               const unsigned finish_alt_diff = 3000);
 
-/**
- * Destructor, frees local variables
- */
+  /**
+   * Destructor, frees local variables
+   */
   ~OLCDijkstra();
 
-/** 
- * Calculate the scored value of the OLC path
- * 
- * @param the_distance output distance (m) of scored path
- * 
- * @return Score (interpretation depends on OLC type)
- */
+  /**
+   * Calculate the scored value of the OLC path
+   *
+   * @param the_distance output distance (m) of scored path
+   *
+   * @return Score (interpretation depends on OLC type)
+   */
   virtual fixed score(fixed &the_distance);
 
-/** 
- * Copy the best OLC path solution
- * 
- * @param vec output vector
- */
+  /**
+   * Copy the best OLC path solution
+   *
+   * @param vec output vector
+   */
   void copy_solution(TracePointVector &vec);
 
-/** 
- * Calculate distance of best path
- * 
- * @return Distance (m) 
- */
+  /**
+   * Calculate distance of best path
+   *
+   * @return Distance (m)
+   */
   fixed calc_distance() const;
 
-/** 
- * Calculate elapsed time of best path
- * 
- * @return Distance (m) 
- */
+  /**
+   * Calculate elapsed time of best path
+   *
+   * @return Distance (m)
+   */
   fixed calc_time() const;
 
-/** 
- * Reset the optimiser as if never flown 
- * 
- */
+  /**
+   * Reset the optimiser as if never flown
+   *
+   */
   virtual void reset();
 
-/** 
- * Update the solver.  The solver is incremental, so this method can
- * be safely called every time step.
- * 
- * @return True if solver completed in this call
- */
+  /**
+   * Update the solver.  The solver is incremental, so this method can
+   * be safely called every time step.
+   *
+   * @return True if solver completed in this call
+   */
   bool solve();
 
 protected:
-
   const TracePoint &get_point(const ScanTaskPoint &sp) const;
 
   virtual void add_edges(DijkstraTaskPoint &dijkstra,
-                         const ScanTaskPoint &curNode);
+      const ScanTaskPoint &curNode);
 
   virtual bool finish_satisfied(const ScanTaskPoint &sp) const;
 
@@ -134,11 +133,14 @@ protected:
    */
   virtual bool admit_candidate(const ScanTaskPoint &candidate) const;
 
-  std::vector<unsigned> m_weightings; /**< Weightings applied to each leg distance */
+  /** Weightings applied to each leg distance */
+  std::vector<unsigned> m_weightings;
 
-  DijkstraTaskPoint m_dijkstra; /**< Dijkstra search algorithm */
+  /** Dijkstra search algorithm */
+  DijkstraTaskPoint m_dijkstra;
 
-  unsigned n_points; /**< Number of points in current trace set */
+  /** Number of points in current trace set */
+  unsigned n_points;
 
   /**
    * Retrieve weighting of specified leg
@@ -148,7 +150,6 @@ protected:
   unsigned get_weighting(const unsigned index) const;
 
 private:
-
   /**
    * Iterate solver
    * @return True if solver returned

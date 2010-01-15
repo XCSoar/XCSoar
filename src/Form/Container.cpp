@@ -40,6 +40,7 @@ Copyright_License {
 
 ContainerControl::~ContainerControl()
 {
+  // Delete all ClientControls
   for (int i = mClientCount - 1; i >= 0; i--)
     delete mClients[i];
 }
@@ -47,11 +48,15 @@ ContainerControl::~ContainerControl()
 void
 ContainerControl::AddClient(WindowControl *Client)
 {
+  // Add the ClientControl to the array
   mClients[mClientCount] = Client;
   mClientCount++;
 
+  // Set the client font to the ContainerControl font
   Client->SetFont(GetFont());
 
+  // If the client doesn't know where to go
+  // -> move it below the previous one
   if (Client->get_position().top == -1 && mClientCount > 1)
     Client->move(Client->get_position().left,
                  mClients[mClientCount - 2]->get_position().bottom);
@@ -74,10 +79,12 @@ ContainerControl::AddClient(WindowControl *Client)
 WindowControl *
 ContainerControl::FindByName(const TCHAR *Name)
 {
+  // Check whether the ContainerControl itself has the given Name
   WindowControl *w = WindowControl::FindByName(Name);
   if (w != NULL)
     return w;
 
+  // Search for ClientControls with the given Name
   for (unsigned i = 0; i < mClientCount; i++) {
     w = mClients[i]->FindByName(Name);
     if (w != NULL)
@@ -90,13 +97,17 @@ ContainerControl::FindByName(const TCHAR *Name)
 Window *
 ContainerControl::GetCanFocus(bool forward)
 {
+  // If the ContainerControl is not visible it can't be focused
   if (!is_visible())
     return NULL;
 
+  // If the ContainerControl itself can be focused
+  // -> return it
   Window *w = WindowControl::GetCanFocus(forward);
   if (w != NULL)
     return w;
 
+  // Check whether any of the ClientControls can be focused
   if (forward) {
     for (unsigned idx = 0; idx < mClientCount; ++idx) {
       Window *w = mClients[idx]->GetCanFocus(forward);
@@ -111,14 +122,17 @@ ContainerControl::GetCanFocus(bool forward)
     }
   }
 
+  // If nothing was found -> return NULL
   return NULL;
 }
 
 void
 ContainerControl::FilterAdvanced(bool advanced)
 {
+  // Call the base function
   WindowControl::FilterAdvanced(advanced);
 
+  // Call FilterAdvanced for every ClientControl
   for (unsigned i = 0; i < mClientCount; i++)
     mClients[i]->FilterAdvanced(advanced);
 }

@@ -52,8 +52,7 @@ using std::min;
 WndListFrame::ScrollBar::ScrollBar()
   :dragging(false)
 {
-  SetRectEmpty(&rc);
-  SetRectEmpty(&button);
+  reset();
 }
 
 void
@@ -61,23 +60,23 @@ WndListFrame::ScrollBar::set(const SIZE size)
 {
   unsigned width;
 
+  // if the device has a pointer (mouse/touchscreen/etc.)
   if (has_pointer()) {
     // shrink width factor.  Range .1 to 1 where 1 is very "fat"
-    double SHRINKSBFACTOR = is_pna() ? 1.0 : 0.75;
-
-    width = (unsigned)Layout::Scale(SCROLLBARWIDTH_INITIAL * SHRINKSBFACTOR);
-
-    // resize height for each dialog so top button is below 1st item (to avoid initial highlighted overlap)
+    double ShrinkFactor = is_pna() ? 1.0 : 0.75;
+    width = (unsigned)Layout::Scale(SCROLLBARWIDTH_INITIAL * ShrinkFactor);
   } else {
     // thin for ALTAIR b/c no touch screen
     width = SELECTORWIDTH * 2;
   }
 
+  // Update the coordinates of the scrollbar
   rc.left = size.cx - width;
   rc.top = 0;
   rc.right = size.cx;
   rc.bottom = size.cy;
 
+  // Load bitmaps
   if (!hScrollBarBitmapTop.defined())
     hScrollBarBitmapTop.load(IDB_SCROLLBARTOP);
   if (!hScrollBarBitmapMid.defined())
@@ -92,37 +91,45 @@ void
 WndListFrame::ScrollBar::reset()
 {
   SetRectEmpty(&rc);
-  SetRectEmpty(&button);
+  SetRectEmpty(&rc_slider);
 }
 
 void
-WndListFrame::ScrollBar::set_button(unsigned size, unsigned view_size,
+WndListFrame::ScrollBar::set_slider(unsigned size, unsigned view_size,
                                     unsigned origin)
 {
   const int netto_height = get_netto_height();
 
-  int height = size > 0 ? netto_height * view_size / size : netto_height;
+  // If (no size) slider fills the whole area (no scrolling)
+  int height = (size > 0) ? (netto_height * view_size / size) : netto_height;
+  // Prevent the slider from getting to small
   if (height < get_width())
     height = get_width();
 
+  // Calculate highest origin (counted in ListItems)
   int max_origin = size - view_size;
-  int top = max_origin > 0
-    ? (netto_height - height) * origin / max_origin
-    : 0;
 
+  // Move the slider to the appropriate position
+  int top = (max_origin > 0) ?
+      ((netto_height - height) * origin / max_origin) : 0;
+
+  // Prevent the slider from getting to big
+  // TODO: not needed?!
   if (top + height > netto_height)
     height = netto_height - top;
 
-  button.left = rc.left;
-  button.top = rc.top + get_width() + top - 1;
-  button.right = rc.right - 1; // -2 if use 3x pen.  -1 if 2x pen
-  button.bottom = button.top + height + 2; // +2 for 3x pen, +1 for 2x pen
+  // Update slider coordinates
+  rc_slider.left = rc.left;
+  rc_slider.top = rc.top + get_width() + top - 1;
+  rc_slider.right = rc.right - 1; // -2 if use 3x pen.  -1 if 2x pen
+  rc_slider.bottom = rc_slider.top + height + 2; // +2 for 3x pen, +1 for 2x pen
 }
 
 unsigned
 WndListFrame::ScrollBar::to_origin(unsigned size, unsigned view_size,
                                    int y) const
 {
+  // Calculate highest origin (counted in ListItems)
   int max_origin = size - view_size;
   if (max_origin <= 0)
     return 0;
@@ -138,9 +145,13 @@ WndListFrame::ScrollBar::to_origin(unsigned size, unsigned view_size,
 void
 WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
 {
-  Brush brush(Color(0xff, 0xff, 0xff));
+  // Prepare Pen
   Pen pen(DEFAULTBORDERPENWIDTH, fore_color);
   canvas.select(pen);
+
+  // ###################
+  // #### ScrollBar ####
+  // ###################
 
   // draw rectangle around entire scrollbar area
   canvas.two_lines(rc.left, rc.top, rc.left, rc.bottom,
@@ -148,15 +159,21 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
   canvas.two_lines(rc.right, rc.bottom, rc.right, rc.top,
                    rc.left, rc.top);
 
-  // Just Scroll Bar Slider button
+  // TODO: ScrollBar Fill Bitmap is unused
+
+  // ###################
+  // ####  Buttons  ####
+  // ###################
 
   bool bTransparentUpDown = true;
 
+  // Create a canvas for drawing the bitmaps
   BitmapCanvas bitmap_canvas(canvas);
 
-  // TOP Dn Button 32x32
-  // BOT Up Button 32x32
   if (get_width() == SCROLLBARWIDTH_INITIAL) {
+    // If the Scrollbar size hasn't been changed
+    // -> just copy the button bitmaps to the canvas
+
     bitmap_canvas.select(hScrollBarBitmapTop);
     canvas.copy(rc.left, rc.top,
                 SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
@@ -169,13 +186,15 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
                 bitmap_canvas, 0, 0,
                 bTransparentUpDown);
   } else {
+    // If the Scrollbar size has been changed
+    // -> stretch-copy the button bitmaps to the canvas
+
     bitmap_canvas.select(hScrollBarBitmapTop);
     canvas.stretch(rc.left, rc.top, get_width(), get_width(),
                    bitmap_canvas,
                    0, 0, SCROLLBARWIDTH_INITIAL, SCROLLBARWIDTH_INITIAL,
                    bTransparentUpDown);
 
-    // BOT Up Button 32x32
     bitmap_canvas.select(hScrollBarBitmapBot);
     canvas.stretch(rc.left, rc.bottom - get_width(), get_width(), get_width(),
                    bitmap_canvas,
@@ -183,26 +202,29 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
                    bTransparentUpDown);
   }
 
-  // Middle Slider Button 30x28
+  // ###################
+  // ####  Slider   ####
+  // ###################
 
-  // handle on slider
   bitmap_canvas.select(hScrollBarBitmapMid);
   // always SRCAND b/c on top of scrollbutton texture
-  canvas.stretch_and(button.left + 1, button.top + 1,
-                     button.right - button.left - 2,
-                     button.bottom - button.top - 2,
+  canvas.stretch_and(rc_slider.left + 1, rc_slider.top + 1,
+                     rc_slider.right - rc_slider.left - 2,
+                     rc_slider.bottom - rc_slider.top - 2,
                      bitmap_canvas, 0, 0, 30, 28);
 
   // box around slider rect
-  Pen pen3(DEFAULTBORDERPENWIDTH * 2, fore_color);
+  pen.set(DEFAULTBORDERPENWIDTH * 2, fore_color);
+  canvas.select(pen);
+
   int iBorderOffset = 1;  // set to 1 if BORDERWIDTH >2, else 0
-  canvas.select(pen3);
-  canvas.two_lines(button.left + iBorderOffset, button.top,
-                   button.left + iBorderOffset, button.bottom,
-                   button.right, button.bottom); // just left line of scrollbar
-  canvas.two_lines(button.right, button.bottom,
-                   button.right, button.top,
-                   button.left + iBorderOffset, button.top); // just left line of scrollbar
+
+  canvas.two_lines(rc_slider.left + iBorderOffset, rc_slider.top,
+                   rc_slider.left + iBorderOffset, rc_slider.bottom,
+                   rc_slider.right, rc_slider.bottom); // just left line of scrollbar
+  canvas.two_lines(rc_slider.right, rc_slider.bottom,
+                   rc_slider.right, rc_slider.top,
+                   rc_slider.left + iBorderOffset, rc_slider.top); // just left line of scrollbar
 }
 
 void
@@ -210,7 +232,7 @@ WndListFrame::ScrollBar::drag_begin(Window *w, unsigned y)
 {
   assert(!dragging);
 
-  drag_offset = y - button.top;
+  drag_offset = y - rc_slider.top;
   dragging = true;
   w->set_capture();
 }

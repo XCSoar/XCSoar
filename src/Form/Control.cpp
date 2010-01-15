@@ -88,18 +88,21 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
     mReadOnly(false), mHasFocus(false),
     mBorderSize(1),
     mCanFocus(false),
-    mDontPaintSelector(false)
+    mPaintSelector(true)
 {
+  // Clear the caption
   mCaption[0] = '\0';
 
   if ((Parent == NULL) && (mOwner != NULL))
     Parent = (ContainerWindow *)&mOwner->GetClientAreaWindow();
 
+  // Save the Name of the Control
   if (Name != NULL)
     _tcscpy(mName, Name); // todo size check
   else
     mName[0] = '\0';
 
+  // If not done already -> initialize default brushes and pens
   if (!initialized) {
     hBrushDefaultBk.set(mColorBack);
     hPenDefaultBorder.set(DEFAULTBORDERPENWIDTH, mColorFore);
@@ -109,6 +112,7 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
 
   set(Parent, X, Y, Width, Height, false, false, Visible, false, false);
 
+  // Add the Control as a client of its parent
   if (mOwner != NULL)
     mOwner->AddClient(this);
 
@@ -126,6 +130,8 @@ WindowControl::~WindowControl(void)
 Window *
 WindowControl::GetCanFocus(bool forward)
 {
+  (void)forward;
+
   if (!is_visible())
     return NULL;
 
@@ -303,7 +309,7 @@ WindowControl::PaintSelector(Canvas &canvas, const RECT rc)
 void
 WindowControl::PaintSelector(Canvas &canvas)
 {
-  if (!mDontPaintSelector && mCanFocus && mHasFocus) {
+  if (mPaintSelector && mCanFocus && mHasFocus) {
     PaintSelector(canvas, get_client_rect());
   }
 }
@@ -355,7 +361,7 @@ WindowControl::on_paint(Canvas &canvas)
   const RECT rc = get_client_rect();
 
   // JMW added highlighting, useful for lists
-  if (!mDontPaintSelector && mCanFocus && mHasFocus) {
+  if (mPaintSelector && mCanFocus && mHasFocus) {
     Color ff = GetBackColor().highlight();
     Brush brush(ff);
     canvas.fill_rectangle(rc, brush);
