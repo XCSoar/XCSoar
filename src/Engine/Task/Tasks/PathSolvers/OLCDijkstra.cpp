@@ -55,9 +55,11 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc,
   olc(_olc),
   m_finish_alt_diff(finish_alt_diff),
   m_dijkstra(ScanTaskPoint(0,0), false),
-  best_distance(fixed_zero)
+  best_distance(fixed_zero),
+  solution_found(false)
 {
   m_weightings.reserve(n_legs);
+  best_solution.reserve(num_stages);
   reset();
 }
 
