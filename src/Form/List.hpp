@@ -334,41 +334,41 @@ protected:
 
   /**
    * The on_resize event is called when the Control is resized
-   * (derived from WindowControl)
+   * (derived from Window)
    */
   virtual bool on_resize(unsigned width, unsigned height);
 
   /**
    * The on_mouse_down event is called when the mouse is pressed over the button
-   * (derived from WindowControl)
+   * (derived from Window)
    */
   virtual bool on_mouse_down(int x, int y);
   /**
    * The on_mouse_up event is called when the mouse is released over the button
-   * (derived from WindowControl)
+   * (derived from Window)
    */
   virtual bool on_mouse_up(int x, int y);
   /**
    * The on_mouse_move event is called when the mouse is moved over the button
-   * (derived from WindowControl)
+   * (derived from Window)
    */
   virtual bool on_mouse_move(int x, int y, unsigned keys);
   /**
    * The on_mouse_wheel event is called when the mouse wheel is turned
-   * (derived from WindowControl)
+   * (derived from Window)
    */
   virtual bool on_mouse_wheel(int delta);
 
   /**
    * The on_key_down event is called when a key is pressed while the
    * button is focused
-   * (derived from WindowControl)
+   * (derived from Window)
    */
   virtual bool on_key_down(unsigned key_code);
 
   /**
    * The on_paint event is called when the button needs to be drawn
-   * (derived from WindowControl)
+   * (derived from PaintWindow)
    */
   virtual void on_paint(Canvas &canvas);
 };
