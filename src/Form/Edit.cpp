@@ -51,19 +51,20 @@ Copyright_License {
 bool
 WndProperty::Editor::on_mouse_down(int x, int y)
 {
-  // if it's an Combopicker field, then call the combopicker routine
-  if (parent->mDialogStyle) {
-    if (parent->on_mouse_down(x, y)) {
+  // if it's an Combopicker field
+  if (parent->mDialogStyle)
+    // call the combopicker routine
+    if (parent->on_mouse_down(x, y))
       return true;
-    }
-  } //end combopicker
 
 #ifndef ENABLE_SDL
+
+  // If the Control is read-only -> drop this event,
+  // so the default handler doesn't obtain the focus
   if (parent->GetReadOnly())
-    /* drop this event, so the default handler doesn't obtain the
-       keyboard focus */
     return true;
-#endif /* !ENABLE_SDL */
+
+#endif
 
   return false;
 }
@@ -71,17 +72,19 @@ WndProperty::Editor::on_mouse_down(int x, int y)
 bool
 WndProperty::Editor::on_key_down(unsigned key_code)
 {
-  if (key_code == VK_RETURN || key_code == VK_F23) { // Compaq uses VKF23
-    if (parent->mDialogStyle) {
-      if (parent->on_mouse_down(0, 0)) {
+  // If return key pressed (Compaq uses VKF23)
+  if (key_code == VK_RETURN || key_code == VK_F23)
+    // if it's an Combopicker field
+    if (parent->mDialogStyle)
+      // call the combopicker routine
+      if (parent->on_mouse_down(0, 0))
         return true;
-      }
-    } //end combopicker
-  }
+
+  // Check for long key press
   // tmep hack, do not process nav keys
   if (KeyTimer(true, key_code)) {
-    // activate tool tips if hit return for long time
-    if (key_code == VK_RETURN || key_code == VK_F23) { // Compaq uses VKF23
+    // Activate Help dialog
+    if (key_code == VK_RETURN || key_code == VK_F23) {
       if (parent->OnHelp())
         return true;
     }
