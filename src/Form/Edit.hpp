@@ -44,27 +44,62 @@ Copyright_License {
 
 class DataField;
 
+/**
+ * The WndProperty class implements a WindowControl with a caption label and
+ * an editable field (the Editor).
+ */
 class WndProperty : public WindowControl {
   class Editor : public EditWindow {
   private:
+    /** The parent Control */
     WndProperty *parent;
 
   public:
+    /**
+     * Constructor of the Editor class
+     * @param _parent The parent Control the Editor belongs to
+     */
     Editor(WndProperty *_parent):parent(_parent) {}
 
+    /**
+     * The on_mouse_down event is called when the mouse is pressed over the button
+     * (derived from Window)
+     */
     virtual bool on_mouse_down(int x, int y);
+    /**
+     * The on_key_down event is called when a key is pressed while the
+     * button is focused
+     * (derived from Window)
+     */
     virtual bool on_key_down(unsigned key_code);
+    /**
+     * The on_key_down event is called when a key is released while the
+     * button is focused
+     * (derived from Window)
+     */
     virtual bool on_key_up(unsigned key_code);
+    /**
+     * The on_setfocus event is called when the Control gets focused
+     * button is focused
+     * (derived from Window)
+     */
     virtual bool on_setfocus();
+    /**
+     * The on_killfocus event is called when the Control loses focus
+     * button is focused
+     * (derived from Window)
+     */
     virtual bool on_killfocus();
   };
 
 private:
-
+  /** Arrow left bitmap */
   static Bitmap hBmpLeft32;
+  /** Arrow right bitmap */
   static Bitmap hBmpRight32;
   static int InstCount;
 
+  /** Editor Control */
   Editor edit;
   POINT mEditSize;
   POINT mEditPos;
@@ -98,11 +133,25 @@ public:
 
   typedef int (*DataChangeCallback_t)(WindowControl *Sender, int Mode, int Value);
 
+  /**
+   * Constructor of the WndProperty
+   * @param Parent The parent ContainerControl
+   * @param Name Name of the Control
+   * @param Caption Caption of the Control
+   * @param X x-Coordinate of the Control
+   * @param Y y-Coordinate of the Control
+   * @param Width Width of the Control
+   * @param Height Heigth of the Control
+   * @param CaptionWidth Width of the Caption of the Control
+   * @param DataChangeNotify Function to call when the data changed
+   * @param MultiLine If true, the Control can handle mutliple lines
+   */
   WndProperty(ContainerControl *Parent, TCHAR *Name, TCHAR *Caption,
               int X, int Y, int Width, int Height, int CaptionWidth,
               int (*DataChangeNotify)(WindowControl *Sender,
                                       int Mode, int Value),
               int MultiLine=false);
+  /** Destructor */
   ~WndProperty(void);
 
   virtual Window *GetCanFocus(bool forward);
