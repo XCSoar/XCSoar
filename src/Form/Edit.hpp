@@ -102,28 +102,46 @@ private:
   static Bitmap hBmpLeft32;
   /** Arrow right bitmap */
   static Bitmap hBmpRight32;
+  /** Instance counter */
   static int InstCount;
 
   /** Editor Control */
   Editor edit;
+  /** Size of the Editor Control */
   POINT mEditSize;
+  /** Position of the Editor Control */
   POINT mEditPos;
+  /** Font of the Editor Control */
   const Font *mhValueFont;
+  /** Size of the "up" and "down" buttons */
   int  mBitmapSize;
+  /** Width reserved for the caption of the Control */
   int  mCaptionWidth;
+  /** Coordinates of the "up" button */
   RECT mHitRectUp;
+  /** Coordinates of the "down" button */
   RECT mHitRectDown;
+  /** True if the "down" button is currently pressed */
   bool mDownDown;
+  /** True if the "up" button is currently pressed */
   bool mUpDown;
 
-  /** from class PaintWindow */
+  /**
+   * The on_paint event is called when the button needs to be drawn
+   * (derived from PaintWindow)
+   */
   virtual void on_paint(Canvas &canvas);
 
+  /** Function to call when the Editor data has changed */
   DataChangeCallback_t mOnDataChangeNotify;
+  /** Function to call when the "up" button has been pressed */
   ClickUpCallback_t mOnClickUpNotify;
+  /** Function to call when the "down" button has been pressed */
   ClickDownCallback_t mOnClickDownNotify;
 
+  /** Increases the Editor value */
   int IncValue(void);
+  /** Decreases the Editor value */
   int DecValue(void);
 
   DataField *mDataField;
@@ -154,11 +172,20 @@ public:
   /** Destructor */
   ~WndProperty(void);
 
+  /**
+   * Checks whether the Control can be focused and if so returns the Editor
+   * @return NULL if the Control can not be focused, the Editor otherwise
+   */
   virtual Window *GetCanFocus(bool forward);
 
   void on_editor_setfocus();
   void on_editor_killfocus();
 
+  /**
+   * Sets the read-only attribute of the Control to the given Value
+   * @param Value If true, the Control will be read only
+   * @return The old value
+   */
   bool SetReadOnly(bool Value);
 
   void RefreshDisplay(void);
@@ -183,15 +210,28 @@ public:
    */
   virtual bool on_mouse_double(int x, int y);
 
+  /**
+   * Returns the Control's DataField
+   * @return The Control's DataField
+   */
   DataField *GetDataField(void) {
     return mDataField;
   }
 
+  /**
+   * Returns the Control's DataField
+   * @return The Control's DataField
+   */
   const DataField *GetDataField(void) const {
     return mDataField;
   }
 
   DataField *SetDataField(DataField *Value);
+
+  /**
+   * Sets the Editors text to the given Value
+   * @param Value The new text of the Editor Control
+   */
   void SetText(const TCHAR *Value);
   int SetButtonSize(int Value);
 };
