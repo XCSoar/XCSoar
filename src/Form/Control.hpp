@@ -91,12 +91,14 @@ public:
   /**
    * The on_key_down event is called when a key is pressed while the
    * button is focused
+   * (derived from Window)
    */
   virtual bool on_key_down(unsigned key_code);
 
   /**
    * The on_key_up event is called when a key is released while the
    * button is focused
+   * (derived from Window)
    */
   virtual bool on_key_up(unsigned key_code);
 
