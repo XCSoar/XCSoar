@@ -52,6 +52,7 @@ using std::min;
 WndListFrame::ScrollBar::ScrollBar()
   :dragging(false)
 {
+  // Reset the ScrollBar on creation
   reset();
 }
 
@@ -230,9 +231,12 @@ WndListFrame::ScrollBar::paint(Canvas &canvas, Color fore_color) const
 void
 WndListFrame::ScrollBar::drag_begin(Window *w, unsigned y)
 {
+  // Make sure that we are not dragging already
   assert(!dragging);
 
+  // Save the offset of the drag
   drag_offset = y - rc_slider.top;
+  // ... and remember that we are dragging now
   dragging = true;
   w->set_capture();
 }
@@ -240,9 +244,11 @@ WndListFrame::ScrollBar::drag_begin(Window *w, unsigned y)
 void
 WndListFrame::ScrollBar::drag_end(Window *w)
 {
+  // If we are not dragging right now -> nothing to end
   if (!dragging)
     return;
 
+  // Realize that we are not dragging anymore
   dragging = false;
   w->release_capture();
 }
