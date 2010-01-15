@@ -58,6 +58,7 @@ WndForm::WndForm(SingleWindow &_main_window,
   mClientWindow(NULL),
   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL), mOnUserMsgNotify(NULL)
 {
+  // Create ClientWindow
   mClientWindow = new ContainerControl(this, this,
                                        TEXT(""), 20, 20, Width, Height);
   mClientWindow->SetBackColor(GetBackColor());
@@ -309,34 +310,44 @@ WndForm::on_paint(Canvas &canvas)
 {
   ContainerControl::on_paint(canvas);
 
+  // Get window coordinates
   RECT rcClient = get_client_rect();
 
+  // Select default pen and brush
   canvas.select(GetBorderPen());
   canvas.select(GetBackBrush());
 
+  // Draw the borders
   canvas.raised_edge(rcClient);
 
+  // Set the colors
   canvas.set_text_color(GetForeColor());
   canvas.set_background_color(mColorTitle);
   canvas.background_transparent();
 
+  // Set the titlebar font and font-size
   canvas.select(*mhTitleFont);
   SIZE tsize = canvas.text_size(mCaption);
 
   // JMW todo add here icons?
 
+  // Calculate the titlebar coordinates
   CopyRect(&mTitleRect, &rcClient);
   mTitleRect.bottom = mTitleRect.top + tsize.cy;
 
   if (mClientWindow && !EqualRect(&mClientRect, &rcClient)) {
+    // Calculate the ClientWindow coordinates
     rcClient.top += tsize.cy;
 
+    // Move the ClientWindow to the new coordinates
     mClientWindow->move(rcClient.left, rcClient.top,
         (rcClient.right - rcClient.left), (rcClient.bottom - rcClient.top));
 
+    // Save the new coordinates
     CopyRect(&mClientRect, &rcClient);
   }
 
+  // Draw titlebar text
   canvas.text_opaque(mTitleRect.left + 1, mTitleRect.top - 2,
                      &mTitleRect, mCaption);
 }
