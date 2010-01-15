@@ -71,7 +71,7 @@ protected:
 
   /**
    * The on_paint event is called when the button needs to be drawn
-   * (derived from WindowControl)
+   * (derived from PaintWindow)
    */
   virtual void on_paint(Canvas &canvas);
 
