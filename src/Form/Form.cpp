@@ -331,10 +331,10 @@ WndForm::on_paint(Canvas &canvas)
   rcClient.top += tsize.cy;
 
   if (mClientWindow && !EqualRect(&mClientRect, &rcClient)){
-    mClientWindow->move(rcClient.left, rcClient.top);
+    mClientWindow->move(rcClient.left, rcClient.top,
+        (rcClient.right - rcClient.left), (rcClient.bottom - rcClient.top));
 
     CopyRect(&mClientRect, &rcClient);
-
   }
 
   canvas.text_opaque(mTitleRect.left + 1, mTitleRect.top - 2,
