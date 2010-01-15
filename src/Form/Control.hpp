@@ -112,7 +112,7 @@ public:
 
   typedef void (*OnHelpCallback_t)(WindowControl *Sender);
 
-  void SetOnHelpCallback(void(*Function)(WindowControl *Sender)) {
+  void SetOnHelpCallback(OnHelpCallback_t Function) {
     mOnHelpCallback = Function;
   }
 
