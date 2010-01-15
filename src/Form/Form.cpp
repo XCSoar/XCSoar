@@ -44,6 +44,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Screen/Animation.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Screen/Layout.hpp"
 
 PeriodClock WndForm::timeAnyOpenClose;
 
@@ -333,11 +334,11 @@ WndForm::on_paint(Canvas &canvas)
 
   // Calculate the titlebar coordinates
   CopyRect(&mTitleRect, &rcClient);
-  mTitleRect.bottom = mTitleRect.top + tsize.cy;
+  mTitleRect.bottom = mTitleRect.top + tsize.cy + Layout::FastScale(1);
 
   if (mClientWindow && !EqualRect(&mClientRect, &rcClient)) {
     // Calculate the ClientWindow coordinates
-    rcClient.top += tsize.cy;
+    rcClient.top += tsize.cy + Layout::FastScale(1);
 
     // Move the ClientWindow to the new coordinates
     mClientWindow->move(rcClient.left, rcClient.top,
@@ -348,8 +349,8 @@ WndForm::on_paint(Canvas &canvas)
   }
 
   // Draw titlebar text
-  canvas.text_opaque(mTitleRect.left + 1, mTitleRect.top - 2,
-                     &mTitleRect, mCaption);
+  canvas.text_opaque(mTitleRect.left + Layout::FastScale(2),
+      mTitleRect.top, &mTitleRect, mCaption);
 }
 
 void WndForm::SetCaption(const TCHAR *Value){
