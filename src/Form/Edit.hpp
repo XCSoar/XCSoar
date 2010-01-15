@@ -149,8 +149,8 @@ public:
    */
   WndProperty(ContainerControl *Parent, TCHAR *Name, TCHAR *Caption,
               int X, int Y, int Width, int Height, int CaptionWidth,
-              DataChangeCallback_t DataChangeNotify,
-              int MultiLine=false);
+              DataChangeCallback_t DataChangeNotify, int MultiLine = false);
+
   /** Destructor */
   ~WndProperty(void);
 
@@ -167,8 +167,20 @@ public:
 
   virtual bool on_unhandled_key(unsigned key_code);
 
+  /**
+   * The on_mouse_down event is called when the mouse is pressed over the button
+   * (derived from Window)
+   */
   virtual bool on_mouse_down(int x, int y);
+  /**
+   * The on_mouse_up event is called when the mouse is released over the button
+   * (derived from Window)
+   */
   virtual bool on_mouse_up(int x, int y);
+  /**
+   * The on_mouse_double event is called when the button is double clicked
+   * (derived from Window)
+   */
   virtual bool on_mouse_double(int x, int y);
 
   DataField *GetDataField(void) {
