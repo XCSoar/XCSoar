@@ -92,6 +92,11 @@ class WndProperty : public WindowControl {
     virtual bool on_killfocus();
   };
 
+public:
+  typedef int (*DataChangeCallback_t)(WindowControl *Sender, int Mode, int Value);
+  typedef void (*ClickUpCallback_t)(WindowControl *Sender);
+  typedef void (*ClickDownCallback_t)(WindowControl *Sender);
+
 private:
   /** Arrow left bitmap */
   static Bitmap hBmpLeft32;
@@ -114,10 +119,9 @@ private:
   /** from class PaintWindow */
   virtual void on_paint(Canvas &canvas);
 
-  void (*mOnClickUpNotify)(WindowControl *Sender);
-  void (*mOnClickDownNotify)(WindowControl *Sender);
-
-  int (*mOnDataChangeNotify)(WindowControl *Sender, int Mode, int Value);
+  DataChangeCallback_t mOnDataChangeNotify;
+  ClickUpCallback_t mOnClickUpNotify;
+  ClickDownCallback_t mOnClickDownNotify;
 
   int IncValue(void);
   int DecValue(void);
@@ -127,11 +131,8 @@ private:
   void UpdateButtonData(int Value);
 
 public:
-
   int CallSpecial(void);
   bool mDialogStyle;
-
-  typedef int (*DataChangeCallback_t)(WindowControl *Sender, int Mode, int Value);
 
   /**
    * Constructor of the WndProperty
@@ -148,8 +149,7 @@ public:
    */
   WndProperty(ContainerControl *Parent, TCHAR *Name, TCHAR *Caption,
               int X, int Y, int Width, int Height, int CaptionWidth,
-              int (*DataChangeNotify)(WindowControl *Sender,
-                                      int Mode, int Value),
+              DataChangeCallback_t DataChangeNotify,
               int MultiLine=false);
   /** Destructor */
   ~WndProperty(void);
