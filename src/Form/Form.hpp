@@ -51,6 +51,14 @@ class PeriodClock;
  */
 class WndForm: public ContainerControl
 {
+public:
+  typedef int (*TimerNotifyCallback_t)(WindowControl *Sender);
+  typedef bool (*KeyDownNotifyCallback_t)(WindowControl *Sender,
+      unsigned key_code);
+  typedef bool (*UserMsgNotifyCallback_t)(WindowControl *Sender, unsigned id);
+  typedef int (*LButtonUpNotifyCallback_t)(WindowControl *Sender,
+      WPARAM wParam, LPARAM lParam);
+
 protected:
   SingleWindow &main_window;
   int mModalResult;
@@ -65,9 +73,9 @@ protected:
   /** Coordinates of the titlebar */
   RECT mTitleRect;
 
-  int (*mOnTimerNotify)(WindowControl *Sender);
-  bool (*mOnKeyDownNotify)(WindowControl *Sender, unsigned key_code);
-  bool (*mOnUserMsgNotify)(WindowControl *Sender, unsigned id);
+  TimerNotifyCallback_t mOnTimerNotify;
+  KeyDownNotifyCallback_t mOnKeyDownNotify;
+  UserMsgNotifyCallback_t mOnUserMsgNotify;
 
   /**
    * The on_paint event is called when the button needs to be drawn
@@ -135,15 +143,11 @@ public:
   /** Set the font of the window (not titlebar) */
   const Font *SetFont(const Font &Value);
 
-  void SetKeyDownNotify(bool (*KeyDownNotify)(WindowControl *Sender,
-                                              unsigned key_code));
-  void SetLButtonUpNotify(int (*LButtonUpNotify)(WindowControl *Sender,
-                                                 WPARAM wParam, LPARAM lParam));
+  void SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify);
+  void SetLButtonUpNotify(LButtonUpNotifyCallback_t LButtonUpNotify);
+  void SetTimerNotify(TimerNotifyCallback_t OnTimerNotify);
+  void SetUserMsgNotify(UserMsgNotifyCallback_t OnUserMsgNotify);
 
-  void SetTimerNotify(int (*OnTimerNotify)(WindowControl *Sender));
-
-  void SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender,
-                                                unsigned id));
 private:
   static PeriodClock timeAnyOpenClose; // when any dlg opens or child closes
 };

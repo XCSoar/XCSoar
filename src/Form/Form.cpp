@@ -385,20 +385,19 @@ const Font *WndForm::SetFont(const Font &Value){
 }
 
 void
-WndForm::SetKeyDownNotify(bool (*KeyDownNotify)(WindowControl *Sender,
-                                                unsigned key_code))
+WndForm::SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify)
 {
   mOnKeyDownNotify = KeyDownNotify;
 }
 
 void
-WndForm::SetTimerNotify(int (*OnTimerNotify)(WindowControl *Sender))
+WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify)
 {
   mOnTimerNotify = OnTimerNotify;
 }
 
 void
-WndForm::SetUserMsgNotify(bool (*OnUserMsgNotify)(WindowControl *Sender, unsigned id))
+WndForm::SetUserMsgNotify(UserMsgNotifyCallback_t OnUserMsgNotify)
 {
   mOnUserMsgNotify = OnUserMsgNotify;
 }
