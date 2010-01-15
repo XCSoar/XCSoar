@@ -47,6 +47,9 @@ Copyright_License {
  */
 class WndButton : public WindowControl {
 public:
+  typedef void (*ClickNotifyCallback_t)(WindowControl *Sender);
+
+public:
   /**
    * Constructor of the WndButton class
    * @param Parent Parent window/ContainerControl
@@ -60,20 +63,18 @@ public:
    * when the button is clicked
    */
   WndButton(ContainerControl *Parent, const TCHAR *Name, const TCHAR *Caption,
-      int X, int Y, int Width, int Height, void
-      (*Function)(WindowControl *Sender) = NULL);
+      int X, int Y, int Width, int Height,
+      ClickNotifyCallback_t Function = NULL);
 
   /**
    * Sets the function that should be called when the button is pressed
    * @param Function Pointer to the function to be called
    */
   void
-  SetOnClickNotify(void (*Function)(WindowControl *Sender))
+  SetOnClickNotify(ClickNotifyCallback_t Function)
   {
     mOnClickNotify = Function;
   }
-
-  typedef void (*ClickNotifyCallback_t)(WindowControl *Sender);
 
 protected:
   /**
@@ -121,7 +122,7 @@ private:
   /** not used yet */
   bool mDefault;
   int mLastDrawTextHeight;
-  void (*mOnClickNotify)(WindowControl *Sender);
+  ClickNotifyCallback_t mOnClickNotify;
 };
 
 #endif

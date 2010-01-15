@@ -43,8 +43,8 @@ Copyright_License {
 #include "Interface.hpp"
 
 WndButton::WndButton(ContainerControl *Parent, const TCHAR *Name,
-    const TCHAR *Caption, int X, int Y, int Width, int Height, void
-    (*Function)(WindowControl *Sender)) :
+    const TCHAR *Caption, int X, int Y, int Width, int Height,
+    ClickNotifyCallback_t Function) :
   WindowControl(Parent, NULL, Name, X, Y, Width, Height),
   mDown(false),
   mDefault(false),
