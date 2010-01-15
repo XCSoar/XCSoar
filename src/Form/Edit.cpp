@@ -153,11 +153,12 @@ WndProperty::WndProperty(ContainerControl *Parent,
   mOnClickUpNotify = NULL;
   mOnClickDownNotify = NULL;
   mOnDataChangeNotify = DataChangeNotify;
+
   _tcscpy(mCaption, Caption);
   mDataField = NULL;
   mDialogStyle=false; // this is set by ::SetDataField()
 
-  if (mCaptionWidth != 0){
+  if (mCaptionWidth != 0) {
     mBitmapSize = Layout::Scale(32) / 2;
   } else {
     mBitmapSize = Layout::Scale(32) / 2;
@@ -167,8 +168,7 @@ WndProperty::WndProperty(ContainerControl *Parent,
 
   UpdateButtonData(mBitmapSize);
 
-  edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y,
-           MultiLine);
+  edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y, MultiLine);
   edit.install_wndproc();
 
   edit.set_font(*mhValueFont);
@@ -178,22 +178,23 @@ WndProperty::WndProperty(ContainerControl *Parent,
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
 
-  if (InstCount == 0){
+  if (InstCount == 0) {
     hBmpLeft32.load(IDB_DLGBUTTONLEFT32);
     hBmpRight32.load(IDB_DLGBUTTONRIGHT32);
   }
+
   InstCount++;
 }
 
-
-WndProperty::~WndProperty(void){
+WndProperty::~WndProperty(void)
+{
   InstCount--;
-  if (InstCount == 0){
+  if (InstCount == 0) {
     hBmpLeft32.reset();
     hBmpRight32.reset();
   }
 
-  if (mDataField != NULL){
+  if (mDataField != NULL) {
     if (!mDataField->Unuse()) {
       delete mDataField;
       mDataField = NULL;
@@ -213,25 +214,30 @@ WndProperty::GetCanFocus(bool forward)
   return w;
 }
 
-void WndProperty::SetText(const TCHAR *Value){
+void
+WndProperty::SetText(const TCHAR *Value)
+{
   edit.set_text(Value);
 }
 
-const Font *WndProperty::SetFont(const Font &Value){
+const Font *
+WndProperty::SetFont(const Font &Value)
+{
   const Font *res = GetFont();
-
   WindowControl::SetFont(Value);
 
   // todo, support value font
 
-  if (res != &Value){
+  if (res != &Value) {
     mhValueFont = &Value;
     edit.set_font(Value);
   }
   return res;
 }
 
-void WndProperty::UpdateButtonData(int Value){
+void
+WndProperty::UpdateButtonData(int Value)
+{
 
   if (Value == 0) // if combo is enabled
     mBitmapSize = 0;
@@ -240,20 +246,21 @@ void WndProperty::UpdateButtonData(int Value){
 
   const SIZE size = get_size();
 
-  if (mCaptionWidth != 0){
-    mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1) - mBitmapSize;
+  if (mCaptionWidth != 0) {
+    mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)
+        - mBitmapSize;
     mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);
     mEditPos.x = mCaptionWidth;
-    mEditPos.y = (DEFAULTBORDERPENWIDTH+1);
+    mEditPos.y = (DEFAULTBORDERPENWIDTH + 1);
   } else {
     mEditSize.x = size.cx - 2 * (DEFAULTBORDERPENWIDTH + 1 + mBitmapSize);
     mEditSize.y = size.cy / 2;
-    mEditPos.x = mBitmapSize + (DEFAULTBORDERPENWIDTH+2);
+    mEditPos.x = mBitmapSize + (DEFAULTBORDERPENWIDTH + 2);
     mEditPos.y = size.cy / 2 - 2 * (DEFAULTBORDERPENWIDTH + 1);
   }
 
-  mHitRectDown.left = mEditPos.x-mBitmapSize;
-  mHitRectDown.top = mEditPos.y + (mEditSize.y)/2 - (mBitmapSize/2);
+  mHitRectDown.left = mEditPos.x - mBitmapSize;
+  mHitRectDown.top = mEditPos.y + (mEditSize.y) / 2 - (mBitmapSize / 2);
   mHitRectDown.right = mHitRectDown.left + mBitmapSize;
   mHitRectDown.bottom = mHitRectDown.top + mBitmapSize;
 
@@ -261,30 +268,29 @@ void WndProperty::UpdateButtonData(int Value){
   mHitRectUp.top = mHitRectDown.top;
   mHitRectUp.right = mHitRectUp.left + mBitmapSize;
   mHitRectUp.bottom = mHitRectUp.top + mBitmapSize;
-
 }
 
-int WndProperty::SetButtonSize(int Value){
+int
+WndProperty::SetButtonSize(int Value)
+{
   int res = mBitmapSize;
 
-  if (mBitmapSize != Value){
-
+  if (mBitmapSize != Value) {
     UpdateButtonData(Value);
-
     edit.move(mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y);
-
     invalidate();
   }
+
   return res;
 }
 
-bool WndProperty::SetReadOnly(bool Value){
-
+bool
+WndProperty::SetReadOnly(bool Value)
+{
   bool res = GetReadOnly();
 
   if (GetReadOnly() != Value){
     WindowControl::SetReadOnly(Value);
-
     edit.set_read_only(Value);
   }
 
@@ -308,7 +314,7 @@ WndProperty::on_editor_killfocus()
 {
   if (mDataField != NULL) {
     TCHAR sTmp[128];
-    edit.get_text(sTmp, (sizeof(sTmp)/sizeof(TCHAR))-1);
+    edit.get_text(sTmp, (sizeof(sTmp) / sizeof(TCHAR)) - 1);
     mDataField->SetAsString(sTmp);
     mDataField->SetData();
     edit.set_text(mDataField->GetAsDisplayString());
@@ -321,13 +327,13 @@ WndProperty::on_editor_killfocus()
 bool
 WndProperty::on_unhandled_key(unsigned key_code)
 {
-  switch (key_code){
-    case VK_RIGHT:
-      IncValue();
-      return true;
-    case VK_LEFT:
-      DecValue();
-      return true;
+  switch (key_code) {
+  case VK_RIGHT:
+    IncValue();
+    return true;
+  case VK_LEFT:
+    DecValue();
+    return true;
   }
 
   return WindowControl::on_unhandled_key(key_code);
@@ -338,23 +344,18 @@ WndProperty::on_mouse_down(int x, int y)
 {
   POINT Pos;
 
-  if (mDialogStyle)
-  {
-    if (!GetReadOnly())  // when they click on the label
-    {
+  if (mDialogStyle) {
+    if (!GetReadOnly()) {
+      // when they click on the label
       dlgComboPicker(*(SingleWindow *)get_root_owner(), this);
-    }
-    else
-    {
+    } else {
       OnHelp(); // this would display xml file help on a read-only wndproperty if it exists
     }
-  }
-  else
-  {
-
-    if (!GetFocused()){
+  } else {
+    if (!GetFocused()) {
       if (!GetReadOnly())
         edit.set_focus();
+
       return true;
     }
 
@@ -363,18 +364,17 @@ WndProperty::on_mouse_down(int x, int y)
     //POINTSTOPOINT(Pos, MAKEPOINTS(lParam));
 
     mDownDown = (PtInRect(&mHitRectDown, Pos) != 0);
-
     if (mDownDown) {
       DecValue();
       invalidate(mHitRectDown);
     }
 
     mUpDown = (PtInRect(&mHitRectUp, Pos) != 0);
-
     if (mUpDown) {
       IncValue();
       invalidate(mHitRectUp);
     }
+
     set_capture();
   }
 
@@ -390,51 +390,50 @@ WndProperty::on_mouse_double(int x, int y)
 bool
 WndProperty::on_mouse_up(int x, int y)
 {
-  if (mDialogStyle)
-  {
-  }
-  else
-  {
-
-    if (mDownDown){
+  if (mDialogStyle) {
+  } else {
+    if (mDownDown) {
       mDownDown = false;
       invalidate(mHitRectDown);
     }
-    if (mUpDown){
+    if (mUpDown) {
       mUpDown = false;
       invalidate(mHitRectUp);
     }
-
   }
   release_capture();
   return true;
 }
 
-
-int WndProperty::CallSpecial(void){
-  if (mDataField != NULL){
+int
+WndProperty::CallSpecial(void)
+{
+  if (mDataField != NULL) {
     mDataField->Special();
     edit.set_text(mDataField->GetAsString());
   }
   return 0;
 }
 
-int WndProperty::IncValue(void){
-  if (mDataField != NULL){
+int
+WndProperty::IncValue(void)
+{
+  if (mDataField != NULL) {
     mDataField->Inc();
     edit.set_text(mDataField->GetAsString());
   }
   return 0;
 }
 
-int WndProperty::DecValue(void){
-  if (mDataField != NULL){
+int
+WndProperty::DecValue(void)
+{
+  if (mDataField != NULL) {
     mDataField->Dec();
     edit.set_text(mDataField->GetAsString());
   }
   return 0;
 }
-
 
 void
 WndProperty::on_paint(Canvas &canvas)
@@ -458,7 +457,7 @@ WndProperty::on_paint(Canvas &canvas)
 
   tsize = canvas.text_size(mCaption);
 
-  if (mCaptionWidth==0){
+  if (mCaptionWidth == 0) {
     org.x = mEditPos.x;
     org.y = mEditPos.y - tsize.cy;
   } else {
@@ -492,54 +491,46 @@ WndProperty::on_paint(Canvas &canvas)
   }
 }
 
+void
+WndProperty::RefreshDisplay()
+{
+  if (!mDataField)
+    return;
 
-void WndProperty::RefreshDisplay() {
-  if (!mDataField) return;
   if (GetFocused())
     edit.set_text(mDataField->GetAsString());
   else
     edit.set_text(mDataField->GetAsDisplayString());
 }
 
-
-DataField *WndProperty::SetDataField(DataField *Value){
+DataField *
+WndProperty::SetDataField(DataField *Value)
+{
   DataField *res = mDataField;
 
-  if (mDataField != Value){
-
-    if (mDataField!=NULL){
-
-      if (!mDataField->Unuse()){
-
-        delete(mDataField);
-
+  if (mDataField != Value) {
+    if (mDataField != NULL) {
+      if (!mDataField->Unuse()) {
+        delete (mDataField);
         res = NULL;
-
       }
-
     }
 
     Value->Use();
 
     mDataField = Value;
-
     mDataField->GetData();
 
     mDialogStyle = has_pointer() && mDataField->SupportCombo;
 
-    if (mDialogStyle)
-    {
+    if (mDialogStyle) {
       this->SetButtonSize(0);
-    }
-    else
-    {
+    } else {
       this->SetButtonSize(16);
     }
 
     RefreshDisplay();
-
   }
 
   return res;
-
 }
