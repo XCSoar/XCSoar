@@ -91,175 +91,174 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
     const FLARM_TRAFFIC &traffic = flarm.FLARM_Traffic[i];
 
     // if FLARM target i exists
-    if (traffic.ID!=0) {
-      // Save the location of the FLARM target
-      GEOPOINT target_loc;
-      target_loc = traffic.Location;
+    if (!traffic.defined())
+      continue;
 
-      // If Scaled mode is chosen, recalculate the
-      // targets virtual position using the scale factor
-      if ((SettingsMap().EnableFLARMMap == 2) && (scalefact > 1.0)) {
-        fixed distance;
-        fixed bearing;
+    // Save the location of the FLARM target
+    GEOPOINT target_loc = traffic.Location;
 
-        DistanceBearing(Basic().Location, target_loc, &distance, &bearing);
+    // If Scaled mode is chosen, recalculate the
+    // targets virtual position using the scale factor
+    if ((SettingsMap().EnableFLARMMap == 2) && (scalefact > 1.0)) {
+      fixed distance;
+      fixed bearing;
 
-        FindLatitudeLongitude(Basic().Location, bearing, distance * scalefact,
-            &target_loc);
-      }
+      DistanceBearing(Basic().Location, target_loc, &distance, &bearing);
 
-      // TODO feature: draw direction, rel height?
+      FindLatitudeLongitude(Basic().Location, bearing, distance * scalefact,
+                            &target_loc);
+    }
 
-      // Points for the screen coordinates for the icon, name and average climb
-      POINT sc, sc_name, sc_av;
+    // TODO feature: draw direction, rel height?
 
-      // If FLARM target not on the screen, move to the next one
-      if (!LonLat2ScreenIfVisible(target_loc, &sc)) {
-        continue;
-      }
+    // Points for the screen coordinates for the icon, name and average climb
+    POINT sc, sc_name, sc_av;
 
-      // Draw the name 16 points below the icon
-      sc_name = sc;
-      sc_name.y -= IBLSCALE(16);
+    // If FLARM target not on the screen, move to the next one
+    if (!LonLat2ScreenIfVisible(target_loc, &sc))
+      continue;
 
-      // Draw the average climb value above the icon
-      sc_av = sc;
-      sc_av.y += IBLSCALE(16);
+    // Draw the name 16 points below the icon
+    sc_name = sc;
+    sc_name.y -= IBLSCALE(16);
+
+    // Draw the average climb value above the icon
+    sc_av = sc;
+    sc_av.y += IBLSCALE(16);
 
 #ifndef FLARM_AVERAGE
-      if (traffic.HasName()) {
-        TextInBox(hDC, traffic.Name, sc.x+IBLSCALE(3),
-                  sc.y, 0, displaymode,
-                  true);
-      }
+    if (traffic.HasName()) {
+      TextInBox(hDC, traffic.Name, sc.x+IBLSCALE(3),
+                sc.y, 0, displaymode,
+                true);
+    }
 #else
-      TCHAR label_name[100];
-      TCHAR label_avg[100];
+    TCHAR label_name[100];
+    TCHAR label_avg[100];
 
-      sc_av.x += IBLSCALE(3);
+    sc_av.x += IBLSCALE(3);
 
-      if (traffic.HasName()) {
-        sc_name.y -= IBLSCALE(8);
-        _stprintf(label_name, TEXT("%s"), traffic.Name);
-      } else {
-        label_name[0]= _T('\0');
-      }
+    if (traffic.HasName()) {
+      sc_name.y -= IBLSCALE(8);
+      _stprintf(label_name, TEXT("%s"), traffic.Name);
+    } else {
+      label_name[0]= _T('\0');
+    }
 
-      if (traffic.Average30s >= 0.1) {
-        _stprintf(label_avg, TEXT("%.1f"),
-            LIFTMODIFY * traffic.Average30s);
-      } else {
-        label_avg[0]= _T('\0');
-      }
+    if (traffic.Average30s >= 0.1) {
+      _stprintf(label_avg, TEXT("%.1f"),
+                LIFTMODIFY * traffic.Average30s);
+    } else {
+      label_avg[0]= _T('\0');
+    }
 
 #ifndef NDEBUG
-      // for testing only!
-      _stprintf(label_avg, TEXT("2.3"));
-      _stprintf(label_name, TEXT("WUE"));
+    // for testing only!
+    _stprintf(label_avg, TEXT("2.3"));
+    _stprintf(label_name, TEXT("WUE"));
 #endif
 
-      // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
+    // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
-      int dx = (sc_av.x-Orig_Aircraft.x);
-      int dy = (sc_av.y-Orig_Aircraft.y);
+    int dx = (sc_av.x-Orig_Aircraft.x);
+    int dy = (sc_av.y-Orig_Aircraft.y);
 
-      // only draw labels if not close to aircraft
-      if (dx*dx+dy*dy > IBLSCALE(30)*IBLSCALE(30)) {
-        // Select the MapLabelFont and black color
-        canvas.select(MapLabelFont);
-        canvas.set_text_color(Color(0,0,0));
+    // only draw labels if not close to aircraft
+    if (dx*dx+dy*dy > IBLSCALE(30)*IBLSCALE(30)) {
+      // Select the MapLabelFont and black color
+      canvas.select(MapLabelFont);
+      canvas.set_text_color(Color(0,0,0));
 
-        // If FLARM callsign/name available draw it to the canvas
-        if (!string_is_empty(label_name))
-          canvas.text_opaque(sc_name.x, sc_name.y, label_name);
+      // If FLARM callsign/name available draw it to the canvas
+      if (!string_is_empty(label_name))
+        canvas.text_opaque(sc_name.x, sc_name.y, label_name);
 
-        // If average climb data available draw it to the canvas
-        if (!string_is_empty(label_avg)) {
-          SIZE tsize;
-          RECT brect;
+      // If average climb data available draw it to the canvas
+      if (!string_is_empty(label_avg)) {
+        SIZE tsize;
+        RECT brect;
 
-          // Calculate the size of the average climb indicator
-          tsize = canvas.text_size(label_avg);
-          brect.left = sc_av.x-2;
-          brect.right = brect.left+tsize.cx+6;
-          brect.top = sc_av.y+((tsize.cy+4)>>3)-2;
-          brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
+        // Calculate the size of the average climb indicator
+        tsize = canvas.text_size(label_avg);
+        brect.left = sc_av.x-2;
+        brect.right = brect.left+tsize.cx+6;
+        brect.top = sc_av.y+((tsize.cy+4)>>3)-2;
+        brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
-          // Determine the background color for the average climb indicator
-          float vmax = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
-          float vmin = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
+        // Determine the background color for the average climb indicator
+        float vmax = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
+        float vmin = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
 
-          float cv = traffic.Average30s;
-          if (cv < 0) {
-            cv /= (-vmin); // JMW fixed bug here
-          } else {
-            cv /= vmax;
-          }
+        float cv = traffic.Average30s;
+        if (cv < 0) {
+          cv /= (-vmin); // JMW fixed bug here
+        } else {
+          cv /= vmax;
+        }
 
-          int colourIndex = fSnailColour(cv);
-          // Select the appropriate background color determined before
-          canvas.select(MapGfx.hSnailPens[colourIndex]);
-          Brush hVarioBrush(MapGfx.hSnailColours[colourIndex]);
-          canvas.select(hVarioBrush);
+        int colourIndex = fSnailColour(cv);
+        // Select the appropriate background color determined before
+        canvas.select(MapGfx.hSnailPens[colourIndex]);
+        Brush hVarioBrush(MapGfx.hSnailColours[colourIndex]);
+        canvas.select(hVarioBrush);
 
-          // Draw the rounded background rectangle
-          canvas.round_rectangle(brect.left, brect.top,
-              brect.right, brect.bottom,
-              IBLSCALE(8), IBLSCALE(8));
+        // Draw the rounded background rectangle
+        canvas.round_rectangle(brect.left, brect.top,
+                               brect.right, brect.bottom,
+                               IBLSCALE(8), IBLSCALE(8));
 
 #ifdef WINDOWSPC
-          canvas.background_transparent();
-          canvas.text(sc_av.x, sc_av.y, label_avg);
+        canvas.background_transparent();
+        canvas.text(sc_av.x, sc_av.y, label_avg);
 #else
-          // Draw the average climb value on top
-          canvas.text_opaque(sc_av.x, sc_av.y, label_avg);
+        // Draw the average climb value on top
+        canvas.text_opaque(sc_av.x, sc_av.y, label_avg);
 #endif
-        }
       }
-#endif
-
-      // If FLARM alarm draw alarm icon below corresponding target
-      if ((traffic.AlarmLevel > 0)
-          && (traffic.AlarmLevel < 4)) {
-        draw_masked_bitmap(canvas, MapGfx.hFLARMTraffic, sc.x, sc.y, 10, 10, true);
-      }
-
-      // Fill the Arrow array with a normal arrow pointing north
-      Arrow[0].x = -4;
-      Arrow[0].y = 5;
-      Arrow[1].x = 0;
-      Arrow[1].y = -6;
-      Arrow[2].x = 4;
-      Arrow[2].y = 5;
-      Arrow[3].x = 0;
-      Arrow[3].y = 2;
-      Arrow[4].x = -4;
-      Arrow[4].y = 5;
-
-      // double vmag = max(1.0,min(15.0,traffic.Speed/5.0))*2;
-
-      // Select brush depending on AlarmLevel
-      switch (traffic.AlarmLevel) {
-      case 1:
-        canvas.select(yellowBrush);
-        break;
-      case 2:
-      case 3:
-        canvas.select(redBrush);
-        break;
-      case 0:
-      case 4:
-        canvas.select(greenBrush);
-        break;
-      }
-
-      // Rotate and shift the arrow to the right position and angle
-      PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                         traffic.TrackBearing - DisplayAngle);
-
-      // Draw the arrow
-      canvas.polygon(Arrow, 5);
     }
+#endif
+
+    // If FLARM alarm draw alarm icon below corresponding target
+    if ((traffic.AlarmLevel > 0)
+        && (traffic.AlarmLevel < 4)) {
+      draw_masked_bitmap(canvas, MapGfx.hFLARMTraffic, sc.x, sc.y, 10, 10, true);
+    }
+
+    // Fill the Arrow array with a normal arrow pointing north
+    Arrow[0].x = -4;
+    Arrow[0].y = 5;
+    Arrow[1].x = 0;
+    Arrow[1].y = -6;
+    Arrow[2].x = 4;
+    Arrow[2].y = 5;
+    Arrow[3].x = 0;
+    Arrow[3].y = 2;
+    Arrow[4].x = -4;
+    Arrow[4].y = 5;
+
+    // double vmag = max(1.0,min(15.0,traffic.Speed/5.0))*2;
+
+    // Select brush depending on AlarmLevel
+    switch (traffic.AlarmLevel) {
+    case 1:
+      canvas.select(yellowBrush);
+      break;
+    case 2:
+    case 3:
+      canvas.select(redBrush);
+      break;
+    case 0:
+    case 4:
+      canvas.select(greenBrush);
+      break;
+    }
+
+    // Rotate and shift the arrow to the right position and angle
+    PolygonRotateShift(Arrow, 5, sc.x, sc.y,
+                       traffic.TrackBearing - DisplayAngle);
+
+    // Draw the arrow
+    canvas.polygon(Arrow, 5);
   }
 }
 
