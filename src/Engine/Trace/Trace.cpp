@@ -122,7 +122,7 @@ Trace::find_next(const TracePoint& tp) const
 void
 Trace::erase(TraceTree::const_iterator& rit)
 {
-  /// @todo merge data for erased point
+  /// @todo merge data for erased point?
 
   TraceTree::const_iterator it_prev = find_prev(*rit);
   TraceTree::const_iterator it_next = find_next(*rit);

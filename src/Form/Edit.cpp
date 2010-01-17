@@ -526,11 +526,7 @@ DataField *WndProperty::SetDataField(DataField *Value){
 
     mDataField->GetData();
 
-    mDialogStyle = has_pointer();
-
-    if (mDataField->SupportCombo == false )
-      mDialogStyle=false;
-
+    mDialogStyle = has_pointer() && mDataField->SupportCombo;
 
     if (mDialogStyle)
     {
