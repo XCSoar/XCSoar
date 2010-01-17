@@ -380,26 +380,27 @@ GlideComputer::FLARM_ScanTraffic()
     return;
 
   // Iterate through all FLARM contacts
-  for (int flarm_slot = 0; flarm_slot < FLARM_MAX_TRAFFIC; flarm_slot++) {
+  for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; ++i) {
+    const FLARM_TRAFFIC &traffic = Basic().FLARM_Traffic[i];
+
     // If (FLARM contact found)
-    if (Basic().FLARM_Traffic[flarm_slot].defined()) {
+    if (traffic.defined()) {
       // JMW TODO: this is dangerous, it uses the task!
       // it should be done outside the parser/comms thread
 
       // If (FLARM contact == TeamMate)
-      if ((Basic().FLARM_Traffic[flarm_slot].ID == SettingsComputer().TeamFlarmIdTarget)
+      if ((traffic.ID == SettingsComputer().TeamFlarmIdTarget)
           && way_points.verify_index(SettingsComputer().TeamCodeRefWaypoint)) {
         double bearing;
         double distance;
 
         // Set Teammate location to FLARM contact location
-        SetCalculated().TeammateLocation
-            = Basic().FLARM_Traffic[flarm_slot].Location;
+        SetCalculated().TeammateLocation = traffic.Location;
 
         // Calculate distance and bearing from teammate to reference waypoint
         DistanceBearing(
             way_points.get(SettingsComputer().TeamCodeRefWaypoint).Location,
-            Basic().FLARM_Traffic[flarm_slot].Location, &distance, &bearing);
+            traffic.Location, &distance, &bearing);
 
         // Calculate TeamCode and save it in Calculated
         GetTeamCode(SetCalculated().TeammateCode, bearing, distance);
