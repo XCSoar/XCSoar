@@ -71,7 +71,7 @@ double FlarmCalculations::Average30s(long flarmId, double curTime, double curAlt
 bool IsFlarmTargetCNInRange(const FLARM_STATE &flarm, const long target_id)
 {
   bool FlarmTargetContact = false;
-  for(int z = 0; z < FLARM_MAX_TRAFFIC; z++) {
+  for(int z = 0; z < FLARM_STATE::FLARM_MAX_TRAFFIC; z++) {
     if (flarm.FLARM_Traffic[z].defined()) {
       if (flarm.FLARM_Traffic[z].ID == target_id) {
         FlarmTargetContact = true;

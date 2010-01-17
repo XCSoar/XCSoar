@@ -102,7 +102,7 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
   canvas.set_background_color(Color::WHITE);
 
   // Cycle through FLARM targets
-  for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
+  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     const FLARM_TRAFFIC &traffic = gps_info.flarm.FLARM_Traffic[i];
 
     if (!traffic.defined())

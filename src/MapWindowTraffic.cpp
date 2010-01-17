@@ -87,7 +87,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
     ? task->get_glide_polar().get_mc() : fixed_zero;
 
   // Circle through the FLARM targets
-  for (int i = 0; i < FLARM_MAX_TRAFFIC; i++) {
+  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
     const FLARM_TRAFFIC &traffic = flarm.FLARM_Traffic[i];
 
     // if FLARM target i exists

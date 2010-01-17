@@ -40,10 +40,13 @@ Copyright_License {
 #define XCSOAR_FLARM_STATE_HPP
 
 #include "FLARM/Traffic.hpp"
-#include "Sizes.h"
 
 struct FLARM_STATE
 {
+  enum {
+    FLARM_MAX_TRAFFIC = 15,
+  };
+
   /** Number of received FLARM devices */
   unsigned short FLARM_RX;
   /** Transmit status */

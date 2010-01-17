@@ -380,7 +380,7 @@ GlideComputer::FLARM_ScanTraffic()
     return;
 
   // Iterate through all FLARM contacts
-  for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; ++i) {
+  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     const FLARM_TRAFFIC &traffic = Basic().flarm.FLARM_Traffic[i];
 
     // If (FLARM contact found)

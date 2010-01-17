@@ -92,7 +92,7 @@ FlarmCursorCallback(unsigned i)
 static void
 OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  if (i >= FLARM_MAX_TRAFFIC)
+  if (i >= FLARM_STATE::FLARM_MAX_TRAFFIC)
     return;
 
   TCHAR tmp[100];
@@ -130,7 +130,7 @@ static void
 SelectAsTeamTrack()
 {
   unsigned index = wDetails->GetCursorIndex();
-  if (index >= FLARM_MAX_TRAFFIC)
+  if (index >= FLARM_STATE::FLARM_MAX_TRAFFIC)
     return;
 
   const FLARM_TRAFFIC &traffic =
@@ -166,7 +166,7 @@ OnSetCNClicked(WindowControl * Sender)
   (void)Sender;
 
   unsigned index = wDetails->GetCursorIndex();
-  if (index >= FLARM_MAX_TRAFFIC)
+  if (index >= FLARM_STATE::FLARM_MAX_TRAFFIC)
     return;
 
   const FLARM_TRAFFIC &traffic =

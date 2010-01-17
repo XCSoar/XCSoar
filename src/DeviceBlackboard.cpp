@@ -389,8 +389,8 @@ DeviceBlackboard::FLARM_ScanTraffic()
     return;
 
   // for each item in FLARM_Traffic
-  for (int flarm_slot=0; flarm_slot<FLARM_MAX_TRAFFIC; flarm_slot++) {
-    FLARM_TRAFFIC &traffic = flarm.FLARM_Traffic[flarm_slot];
+  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
+    FLARM_TRAFFIC &traffic = flarm.FLARM_Traffic[i];
 
     // if (FLARM_Traffic[flarm_slot] has data)
     // and if (Target currently without name)
