@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "XCSoar.h"
 #include "Message.h"
 #include "Profile.hpp"
 #include "Registry.hpp"

@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Formatter/LowWarning.hpp"
-#include "XCSoar.h"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
 #include "Interface.hpp"

@@ -59,7 +59,7 @@ Copyright_License {
 
 
 #include "Math/leastsqs.h"
-#include "XCSoar.h"
+
 #include <stdio.h>
 #include <math.h>
 

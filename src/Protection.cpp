@@ -36,10 +36,9 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
+#include "Protection.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow.h"
-#include "Protection.hpp"
 #include "SettingsUser.hpp"
 #include "Gauge/GaugeVario.hpp"
 #include "Interface.hpp"

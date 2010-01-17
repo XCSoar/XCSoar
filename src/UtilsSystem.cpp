@@ -38,8 +38,7 @@ Copyright_License {
 
 #include "UtilsSystem.hpp"
 #include "UtilsText.hpp"
-#include "XCSoar.h"
-#include <assert.h>
+#include "Defines.h"
 #include "Interface.hpp"
 #include "Asset.hpp"
 #include "Registry.hpp"
@@ -60,6 +59,8 @@ Copyright_License {
 #include "projects.h"
 #endif
 #endif
+
+#include <assert.h>
 
 #ifdef HAVE_POSIX
 #include <sys/statvfs.h>

@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "XCSoar.h"
 #include "Form/Button.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"

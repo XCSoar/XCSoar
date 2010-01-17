@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Formatter/WayPoint.hpp"
-#include "XCSoar.h"
+#include "Defines.h"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp" // for auto-setting of alternates.  Dangerous!
 #include "SettingsUser.hpp"

@@ -50,14 +50,13 @@
                      // to handle unicode files
 #endif
 
-#include <memory.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "xmlParser.h"
-#include "XCSoar.h"
 #include "Compatibility/string.h"
 
 #include <assert.h>
+#include <memory.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 bool XMLNode::GlobalError = false;
 

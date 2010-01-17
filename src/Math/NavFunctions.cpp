@@ -36,7 +36,6 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
 #include "Math/NavFunctions.hpp"
 #include "Compatibility/math.h"
 

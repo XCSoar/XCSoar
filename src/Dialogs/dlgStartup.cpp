@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "XCSoar.h"
+#include "resource.h"
 #include "Screen/Layout.hpp"
 #include "DataField/FileReader.hpp"
 #include "LogFile.hpp"

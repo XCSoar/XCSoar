@@ -36,9 +36,9 @@ Copyright_License {
 }
 */
 
-#include "XCSoar.h"
-#ifdef NEWFLARMDB
 #include "FlarmIdFile.h"
+
+#ifdef NEWFLARMDB
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 

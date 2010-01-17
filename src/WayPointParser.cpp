@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "WayPointParser.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 #include "SettingsComputer.hpp"

@@ -62,11 +62,9 @@ Copyright_License {
 
 */
 
-#include "XCSoar.h"
+#include "Screen/VOIMAGE.h"
 
 #if defined(WIN32) && !defined(CECORE) && !defined(GNAV)
-
-#include "Screen/VOIMAGE.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

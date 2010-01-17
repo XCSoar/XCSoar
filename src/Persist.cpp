@@ -39,7 +39,6 @@ Copyright_License {
 
 #include "Task/TaskManager.hpp"
 #include "Persist.hpp"
-#include "XCSoar.h"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "SettingsComputer.hpp"

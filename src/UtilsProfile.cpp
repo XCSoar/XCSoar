@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "UtilsText.hpp"
-#include "XCSoar.h"
+#include "Defines.h"
 #include "Registry.hpp"
 #include "Profile.hpp"
 #include "Protection.hpp"

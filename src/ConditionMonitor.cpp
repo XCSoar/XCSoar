@@ -38,8 +38,6 @@ Copyright_License {
 */
 
 #include "ConditionMonitor.hpp"
-#include "XCSoar.h"
-#include <math.h>
 #include "Math/Geometry.hpp"
 #include "Math/Units.h"
 #include "Message.h"
@@ -57,6 +55,8 @@ Copyright_License {
 #include "WayPoint.hpp"
 #include "WayPointList.hpp"
 #endif
+
+#include <math.h>
 
 // TODO: JMW: make this use GPSClock (code re-use)
 

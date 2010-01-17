@@ -41,7 +41,7 @@ Copyright_License {
  * @file XCSoar.cpp
  */
 
-#include "XCSoar.h"
+#include "resource.h"
 #include "Version.hpp"
 #include "Protection.hpp"
 #include "Components.hpp"

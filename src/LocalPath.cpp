@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "LocalPath.hpp"
-#include "XCSoar.h"
+#include "Defines.h"
 #include "Appearance.hpp"
 #include "Compatibility/path.h"
 #include "StringUtil.hpp"

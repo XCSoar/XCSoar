@@ -37,7 +37,6 @@
 */
 
 #include "LoggerImpl.hpp"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "Device/Port.hpp"

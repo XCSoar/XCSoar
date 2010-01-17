@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Formatter/Base.hpp"
-#include "XCSoar.h"
 #include "Math/FastMath.h"
 #include "Atmosphere.h"
 #include "Battery.h"

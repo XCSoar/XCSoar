@@ -39,7 +39,6 @@ Copyright_License {
 
 #include "Dialogs.h"
 #include "Language.hpp"
-#include "XCSoar.h"
 #include "Version.hpp"
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"

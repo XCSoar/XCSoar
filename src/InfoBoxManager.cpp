@@ -68,7 +68,6 @@ Copyright_License {
 #include "MapWindow.h"
 #include "Defines.h"
 #include "Components.hpp"
-#include "XCSoar.h"
 #include "StringUtil.hpp"
 
 #include <assert.h>

@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "SettingsComputer.hpp"
 #include "Audio/VegaVoice.h"
-#include "XCSoar.h"
 #include "Protection.hpp"
 #include "InputEvents.h"  // used for altair beep hack
 #include "Device/device.hpp"

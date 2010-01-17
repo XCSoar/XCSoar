@@ -40,7 +40,6 @@ Copyright_License {
 
 
 #include "WaveThread.h"
-#include "XCSoar.h"
 
 // CWaveInThread thread
 CWaveInThread::CWaveInThread()
