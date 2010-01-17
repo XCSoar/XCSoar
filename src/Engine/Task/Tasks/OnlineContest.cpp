@@ -13,12 +13,14 @@ OnlineContest::OnlineContest(const TaskEvents &te,
                              const TaskBehaviour &tb,
                              const GlidePolar &gp,
                              CommonStats& stats,
-                             const Trace& trace):
+                             const Trace& trace_full,
+                             const Trace& trace_sprint):
   m_task_events(te),
   m_task_behaviour(tb),
   m_glide_polar(gp),
   common_stats(stats),
-  m_trace(trace),
+  m_trace_full(trace_full),
+  m_trace_sprint(trace_sprint),
   olc_sprint(*this),
   olc_fai(*this),
   olc_classic(*this)
@@ -28,18 +30,29 @@ OnlineContest::OnlineContest(const TaskEvents &te,
 
 
 bool 
-OnlineContest::update_sample(const AIRCRAFT_STATE &state)
+OnlineContest::update_trace_sample(const AIRCRAFT_STATE &state,
+                                   TracePointVector& vec)
 {
-  if (m_trace_points.empty()) 
+  if (vec.empty())
     return false;
     
-  if (state.NavAltitude < m_trace_points.back().NavAltitude) {
+  if (state.NavAltitude < vec.back().NavAltitude) {
     // replace if lower even if not significant distance away
-    m_trace_points.back().NavAltitude = state.NavAltitude;
+    vec.back().NavAltitude = state.NavAltitude;
     return true;
   } else {
     return false;
   }
+}
+
+
+bool 
+OnlineContest::update_sample(const AIRCRAFT_STATE &state)
+{
+  bool retval = false;
+  retval |= update_trace_sample(state, m_trace_points_full);
+  retval |= update_trace_sample(state, m_trace_points_sprint);
+  return retval;
 }
 
 
@@ -69,8 +82,10 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
 void
 OnlineContest::update_trace()
 {
-  m_trace_points = m_trace.get_trace_points(300);
+  m_trace_points_full = m_trace_full.get_trace_points(300);
+  m_trace_points_sprint = m_trace_sprint.get_trace_points(300);
 }
+
 
 bool 
 OnlineContest::update_idle(const AIRCRAFT_STATE &state)
@@ -78,7 +93,7 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
   // \todo: possibly scan each type in a round robin fashion?
   bool retval = false;
 
-  if (m_trace_points.size()<10) {
+  if (m_trace_points_full.size()<10) {
     update_trace();
   }
 
@@ -96,9 +111,11 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 
   if (retval) {
 #ifdef DO_PRINT
-    printf("time %d size %d dist %g\n", state.Time.as_int(), 
-           m_trace_points.size(), 
+    printf("time %d size %d/%d dist %g\n", state.Time.as_int(), 
+           m_trace_points_full.size(), 
+           m_trace_points_sprint.size(), 
            common_stats.distance_olc.as_double());
+    print();
 #endif
   }
 
@@ -109,7 +126,8 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 void
 OnlineContest::reset()
 {
-  m_trace_points.clear();
+  m_trace_points_full.clear();
+  m_trace_points_sprint.clear();
   m_solution.clear();
   olc_sprint.reset();
   olc_fai.reset();
@@ -118,9 +136,9 @@ OnlineContest::reset()
 
 
 const TracePointVector& 
-OnlineContest::get_trace_points() const
+OnlineContest::get_trace_points(bool full_trace) const
 {
-  return m_trace_points;
+  return full_trace? m_trace_points_full: m_trace_points_sprint;
 }
 
 
@@ -138,18 +156,6 @@ OnlineContest::Accept(TaskPointVisitor& visitor,
   /// \todo - visit "OLCPoint"
 }
 
-
-void 
-OnlineContest::set_rank(const unsigned i, const unsigned d)
-{
-  m_trace_points[i].set_rank(d);
-}
-
-void 
-OnlineContest::reset_rank()
-{
-  ::reset_rank(m_trace_points);
-}
 
 /*
 

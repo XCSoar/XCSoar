@@ -61,7 +61,8 @@ public:
    */
   OLCDijkstra(OnlineContest& _olc, 
               const unsigned n_legs,
-              const unsigned finish_alt_diff = 3000);
+              const unsigned finish_alt_diff = 3000,
+              const bool full_trace=true);
 
   /**
    * Destructor, frees local variables
@@ -166,6 +167,8 @@ private:
   TracePointVector best_solution;
 
   virtual void add_start_edges();
+
+  const bool m_full_trace;
 };
 
 #endif

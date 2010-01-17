@@ -344,6 +344,9 @@ public:
 private:
   GlidePolar m_glide_polar;
 
+  Trace trace_full;
+  Trace trace_sprint;
+
   OrderedTask task_ordered;
 
   GotoTask task_goto;
@@ -372,8 +375,6 @@ private:
   TaskAdvance task_advance;
 
   CommonStats common_stats;
-
-  Trace trace;
 
   void update_common_stats(const AIRCRAFT_STATE &state);
   void update_common_stats_times(const AIRCRAFT_STATE &state);

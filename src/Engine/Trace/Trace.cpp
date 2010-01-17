@@ -9,9 +9,9 @@ const unsigned Trace::null_time = 0-1;
 Trace::Trace(const unsigned max_time,
              const unsigned recent_time,
              const unsigned max_points):
-  m_optimise_time(0),
+  m_optimise_time(null_time),
   m_recent_time(recent_time),
-  m_max_time(600),
+  m_max_time(max_time),
   m_max_points(max_points)
 {
 }
@@ -104,17 +104,21 @@ Trace::lowest_delta() const
 void 
 Trace::erase_earlier_than(unsigned min_time)
 {
-  for (TraceTree::const_iterator tr = trace_tree.begin();
-       tr != trace_tree.end(); ) {
-    
-    if (tr->time <= min_time) {
-      TraceTree::const_iterator tn = tr; tn++;
-      trace_tree.erase(tr);
-      tr = tn;
-    } else {
-      ++tr;
+  // note: this is slow but currently kdtree++ doesn't return a valid
+  // iterator after erase() so there's no easier way
+
+  bool found = false;
+  do {
+    found = false;
+    for (TraceTree::const_iterator tr = trace_tree.begin();
+         tr != trace_tree.end(); ++tr) {
+      if (tr->time < min_time) {
+        trace_tree.erase(tr);
+        found = true;
+        break;
+      }
     }
-  }
+  } while (found);
 
   distance_delta_map.erase(distance_delta_map.begin(), 
                            distance_delta_map.lower_bound(min_time));
@@ -127,20 +131,19 @@ Trace::erase_earlier_than(unsigned min_time)
 void
 Trace::trim_point_time()
 {
-  unsigned time_last = null_time;
-
   for (TraceDeltaMap::const_iterator it = distance_delta_map.begin(); 
        it != distance_delta_map.end(); ++it) {
 
-    if (inside_time_window(it->first)) {
+    const unsigned this_time = it->first;
 
-      if (time_last != null_time) {
-        erase_earlier_than(time_last);
-      }
+    if (inside_time_window(this_time)) {
+
+      erase_earlier_than(this_time);
+      distance_delta_map[this_time] = null_delta;
+      time_delta_map[this_time] = null_time;
 
       return;
     }
-    time_last = it->first;
   }
 }
 
@@ -156,11 +159,16 @@ Trace::trim_point_delta()
   unsigned lowest_dt = null_time;
   TraceTree::const_iterator candidate = trace_tree.end();
 
+  const unsigned min_time = distance_delta_map.begin()->first;
+
   for (TraceTree::const_iterator it = trace_tree.begin();
        it != trace_tree.end(); ++it) {
 
-    if (!inside_recent_time(it->time) && (distance_delta_map[it->time] == delta)) {
-      const unsigned dt = time_delta_map[it->time];
+    const unsigned this_time = it->time;
+    assert(this_time>=min_time);
+    
+    if (!inside_recent_time(this_time) && (distance_delta_map[this_time] == delta)) {
+      const unsigned dt = time_delta_map[this_time];
       if (dt < lowest_dt) {
         lowest_dt = dt;
         candidate = it;
@@ -253,7 +261,7 @@ Trace::clear()
 {
   trace_tree.clear();
   trace_tree.optimize();
-  m_optimise_time = 0;
+  m_optimise_time = null_time;
   m_last_point.time = null_time;
 
   distance_delta_map.clear();

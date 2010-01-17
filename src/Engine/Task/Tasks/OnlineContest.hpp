@@ -31,14 +31,16 @@ public:
    * @param tb Global task behaviour settings
    * @param gp Global glide polar used for navigation calculations
    * @param stats Common stats to write OLC info to
-   * @param trace Trace object containing flight history for scanning
+   * @param trace_full Trace object containing full flight history for scanning
+   * @param trace_sprint Trace object containing 2.5 hour flight history for scanning
    * 
    */
   OnlineContest(const TaskEvents &te, 
                 const TaskBehaviour &tb,
                 const GlidePolar &gp,
                 CommonStats &stats,
-                const Trace &trace);
+                const Trace &trace_full,
+                const Trace &trace_sprint);
 
 /** 
  * Update internal states when aircraft state advances.
@@ -74,7 +76,7 @@ public:
  * 
  * @return Vector of all trace points 
  */
-  const TracePointVector& get_trace_points() const;
+  const TracePointVector& get_trace_points(const bool full_trace=true) const;
 
 /** 
  * Retrieve olc solution vector
@@ -83,17 +85,18 @@ public:
  */
   const TracePointVector& get_olc_points() const;
 
-  void set_rank(const unsigned i, const unsigned d);
-  void reset_rank();
-
 private:
   const TaskEvents &m_task_events;
   const TaskBehaviour &m_task_behaviour;
   const GlidePolar &m_glide_polar;
   CommonStats &common_stats;
-  const Trace &m_trace;
 
-  TracePointVector m_trace_points;
+  const Trace &m_trace_full;
+  const Trace &m_trace_sprint;
+
+  TracePointVector m_trace_points_full;
+  TracePointVector m_trace_points_sprint;
+
   TracePointVector m_solution;
 
   bool run_olc(OLCDijkstra& dijkstra);
@@ -103,6 +106,9 @@ private:
   OLCClassic olc_classic;
 
   void update_trace();
+
+  bool update_trace_sample(const AIRCRAFT_STATE &state,
+                           TracePointVector& vec);
 
 public:
 #ifdef DO_PRINT

@@ -35,7 +35,7 @@
 */
 
 OLCSprint::OLCSprint(OnlineContest& _olc):
-  OLCDijkstra(_olc, 4, 0)
+  OLCDijkstra(_olc, 4, 0, false)
 {
 
 }

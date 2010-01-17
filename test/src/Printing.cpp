@@ -45,7 +45,7 @@ void TaskManager::print(const AIRCRAFT_STATE &state)
   if (active_task) 
     active_task->print(state);
 
-  trace.print(state.Location);
+  trace_full.print(state.Location);
 
   std::ofstream fs("results/res-stats-common.txt");
   fs << common_stats;
@@ -557,8 +557,20 @@ OnlineContest::print() const
   {
     std::ofstream fs("results/res-olc-trace.txt");
 
-    for (TracePointVector::const_iterator it = m_trace_points.begin();
-         it != m_trace_points.end(); ++it) {
+    for (TracePointVector::const_iterator it = m_trace_points_full.begin();
+         it != m_trace_points_full.end(); ++it) {
+      fs << it->get_location().Longitude << " " << it->get_location().Latitude 
+         << " " << it->NavAltitude << " " << it->time 
+         << " " << it->rank
+         << "\n";
+    }
+  }
+
+  {
+    std::ofstream fs("results/res-olc-trace_sprint.txt");
+
+    for (TracePointVector::const_iterator it = m_trace_points_sprint.begin();
+         it != m_trace_points_sprint.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
          << " " << it->rank

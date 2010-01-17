@@ -44,10 +44,12 @@ TaskManager::TaskManager(const TaskEvents &te,
                          const TaskBehaviour &tb,
                          const Waypoints &wps): 
   m_glide_polar(fixed_zero),
+  trace_full(),
+  trace_sprint(9000, 2, 300),
   task_ordered(te,tb,task_advance,m_glide_polar),
   task_goto(te,tb,task_advance,m_glide_polar),
   task_abort(te,tb,task_advance,m_glide_polar,wps),
-  task_olc(te,tb,m_glide_polar,common_stats,trace),
+  task_olc(te,tb,m_glide_polar,common_stats, trace_full, trace_sprint),
   task_behaviour(tb),
   factory_fai(task_ordered,tb),
   factory_aat(task_ordered,tb),
@@ -285,7 +287,8 @@ TaskManager::update(const AIRCRAFT_STATE &state,
     reset();
   }
 
-  trace.append(state);
+  trace_full.append(state);
+  trace_sprint.append(state);
 
   if (task_ordered.task_size()>1) {
     // always update ordered task
@@ -311,7 +314,8 @@ TaskManager::update_idle(const AIRCRAFT_STATE& state)
   // always update OLC
   bool retval = false;
 
-  retval |= trace.optimise_if_old();
+  retval |= trace_full.optimise_if_old();
+  retval |= trace_sprint.optimise_if_old();
 
   if (task_behaviour.enable_olc) {
     retval |= task_olc.update_idle(state);
@@ -400,7 +404,8 @@ TaskManager::reset()
   task_olc.reset();
   common_stats.reset();
   m_glide_polar.set_cruise_efficiency(fixed_one);
-  trace.clear();
+  trace_full.clear();
+  trace_sprint.clear();
 }
 
 TaskManager::Factory_t 
@@ -538,5 +543,5 @@ TracePointVector
 TaskManager::find_trace_points(const GEOPOINT &loc, const fixed range,
                                const unsigned mintime, const fixed resolution) const
 {
-  return trace.find_within_range(loc, range, mintime, resolution);
+  return trace_full.find_within_range(loc, range, mintime, resolution);
 }
