@@ -41,7 +41,6 @@ Copyright_License {
 
 #include "Poco/RWLock.h"
 #include "Screen/shapelib/mapshape.h"
-#include "Sizes.h"
 
 #include <windef.h> /* for RECT */
 
@@ -53,6 +52,11 @@ class TopologyWriter;
 
 class TopologyStore
 {
+  enum {
+    /** maximum number of topologies */
+    MAXTOPOLOGY = 20,
+  };
+
 public:
   TopologyStore(TopologyWriter* _marks):topo_marks(_marks) {};
   ~TopologyStore();
