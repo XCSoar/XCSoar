@@ -50,6 +50,15 @@ typedef struct _TERRAIN_CACHE
 
 
 class RasterMapCache: public RasterMap {
+  enum {
+    /** size of terrain cache */
+#ifdef WINDOWSPC
+    MAXTERRAINCACHE = 8192 * 2
+#else
+    MAXTERRAINCACHE = 4096,
+#endif
+  };
+
  public:
   RasterMapCache() {
     terraincacheefficiency=0;

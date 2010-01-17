@@ -67,13 +67,6 @@
 
 #define MENUBUTTONWIDTHRATIO 0.6
 
-// size of terrain cache
-#ifdef WINDOWSPC
-#define MAXTERRAINCACHE 8192*2
-#else
-#define MAXTERRAINCACHE 4096
-#endif
-
 // stepsize of pixel grid, should be multiple of 2
 #ifdef WINDOWSPC
 #define DTQUANT 6
