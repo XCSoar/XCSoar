@@ -254,8 +254,7 @@ WndButton::on_paint(Canvas &canvas)
       OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
 
     if (mCaption[0] == '<' || mCaption[0] == '>') {
-      int size = min((rc.right - rc.left) / 2, (rc.bottom - rc.top) / 2);
-      size *= 0.5;
+      int size = min(rc.right - rc.left, rc.bottom - rc.top) / 4;
 
       static POINT Arrow[4];
       Arrow[0].x = (rc.left + rc.right) / 2 + (mCaption[0] == '<' ? size : -size);
