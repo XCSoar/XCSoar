@@ -40,7 +40,7 @@ public:
       dsqr(get_flatLocation().Latitude-tp.get_flatLocation().Latitude);
   }
   unsigned approx_dist(const TracePoint& tp) const {
-    return sqrt(approx_sq_dist(tp));
+    return (unsigned)sqrt(approx_sq_dist(tp));
   }
 
   unsigned dt() const {
