@@ -159,7 +159,8 @@ private:
   bool recent(unsigned time) const;
 
   TraceTree trace_tree;
-  TraceDeltaMap delta_map;
+  TraceDeltaMap distance_delta_map;
+  TraceDeltaMap time_delta_map;
 
   TaskProjection task_projection;
 

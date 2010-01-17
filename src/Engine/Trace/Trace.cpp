@@ -1,5 +1,6 @@
 #include "Trace.hpp"
 #include "Navigation/Aircraft.hpp"
+#include <algorithm>
 
 Trace::Trace() :
   m_optimise_time(0)
@@ -27,7 +28,8 @@ Trace::append(const AIRCRAFT_STATE& state)
   m_last_point = tp;
 
   // update deltas.  Last point is always high delta
-  delta_map[tp.time] = 0-1;
+  distance_delta_map[tp.time] = 0-1;
+  time_delta_map[tp.time] = 0-1;
 
   TraceTree::const_iterator it_prev = find_prev(tp);
   if (it_prev != end()) {
@@ -48,9 +50,8 @@ Trace::update_delta(TraceTree::const_iterator it_prev,
   const unsigned d_this = it_prev->approx_dist(*it)+it->approx_dist(*it_next);
   const unsigned d_rem = it_prev->approx_dist(*it_next);
   const unsigned delta = d_this-d_rem;
-  delta_map[it->time] = delta;
-
-  /// @todo incorporate dt into ranking for fairness in distribution
+  distance_delta_map[it->time] = delta;
+  time_delta_map[it->time] = std::max(it->dt(), it_next->dt());
 }
 
 bool 
@@ -66,9 +67,9 @@ Trace::lowest_delta() const
 
   unsigned lowest = 0-1;
 
-  TraceDeltaMap::const_iterator it = delta_map.begin();
+  TraceDeltaMap::const_iterator it = distance_delta_map.begin();
 
-  for (++it; it != delta_map.end(); ++it) {
+  for (++it; it != distance_delta_map.end(); ++it) {
     if (recent(it->first)) {
       return lowest;
     }
@@ -84,15 +85,26 @@ Trace::trim_point()
 {
   // note this won't trim if recent
 
+  // if several points exist with equal deltas, this will remove the one
+  // with the smallest time step
+
   unsigned delta = lowest_delta();
+  unsigned lowest_dt = 0-1;
+  TraceTree::const_iterator candidate = trace_tree.end();
 
   for (TraceTree::const_iterator it = trace_tree.begin();
        it != trace_tree.end(); ++it) {
 
-    if (!recent(it->time) && (delta_map[it->time] == delta)) {
-      erase(it);
-      return;
+    if (!recent(it->time) && (distance_delta_map[it->time] == delta)) {
+      const unsigned dt = time_delta_map[it->time];
+      if (dt < lowest_dt) {
+        lowest_dt = dt;
+        candidate = it;
+      }
     }
+  }
+  if (candidate != trace_tree.end()) {
+    erase(candidate);
   }
 }
 
@@ -150,7 +162,8 @@ Trace::erase(TraceTree::const_iterator& rit)
   trace_tree.erase(rit);
   trace_tree.erase(it_next);
 
-  delta_map.erase(rit->time);
+  distance_delta_map.erase(rit->time);
+  time_delta_map.erase(rit->time);
 
   it_next = trace_tree.insert(tp_next);
 
@@ -166,6 +179,9 @@ Trace::clear()
   trace_tree.optimize();
   m_optimise_time = 0;
   m_last_point.time = -1;
+
+  distance_delta_map.clear();
+  time_delta_map.clear();
 }
 
 unsigned
