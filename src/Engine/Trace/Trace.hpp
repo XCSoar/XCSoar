@@ -43,6 +43,7 @@
 #include "Navigation/TaskProjection.hpp"
 #include <set>
 #include <list>
+#include <map>
 
 class AIRCRAFT_STATE;
 
@@ -149,14 +150,40 @@ public:
    */
   TracePointVector get_trace_points(const unsigned max_points) const;
 
+  typedef std::map<unsigned, unsigned> TraceDeltaMap;
+
 private:
   void thin_trace(TracePointList& vec, const unsigned range_sq) const;
+  void trim_point();
+  unsigned lowest_delta() const;
 
   TraceTree trace_tree;
+  TraceDeltaMap delta_map;
+
   TaskProjection task_projection;
 
   TracePoint m_last_point;
   unsigned m_optimise_time;
+
+  void erase(TraceTree::const_iterator& it);
+
+  /**
+   * Find item which precedes this item
+   *
+   * @return Iterator to item
+   */
+  TraceTree::const_iterator find_prev(const TracePoint& tp) const;
+
+  /**
+   * Find item which follows this item
+   *
+   * @return Iterator to item
+   */
+  TraceTree::const_iterator find_next(const TracePoint& tp) const;
+
+  void update_delta(TraceTree::const_iterator it_prev,
+                    TraceTree::const_iterator it,
+                    TraceTree::const_iterator it_next);
 
 public:
 #ifdef DO_PRINT

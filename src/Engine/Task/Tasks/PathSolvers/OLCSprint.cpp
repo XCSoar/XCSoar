@@ -49,9 +49,11 @@ OLCSprint::reset()
 bool 
 OLCSprint::admit_candidate(const ScanTaskPoint &candidate) const
 {
-  return (get_point(candidate).time <=
-          solution[0].time + 9000) &&
-    OLCDijkstra::admit_candidate(candidate);
+  if (candidate.first>0) {
+    if (get_point(candidate).time > solution[0].time + 9000)
+      return false;
+  }
+  return OLCDijkstra::admit_candidate(candidate);
 }
 
 fixed
@@ -92,6 +94,8 @@ OLCSprint::add_start_edges()
 
   ScanTaskPoint start(0, find_start());
   ScanTaskPoint finish(num_stages-1, n_points-1);
+
+  solution[0] = get_point(start);
 
   if (admit_candidate(finish)) {
     m_dijkstra.link(start, start, 0);

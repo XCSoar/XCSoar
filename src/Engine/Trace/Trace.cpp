@@ -23,16 +23,129 @@ Trace::append(const AIRCRAFT_STATE& state)
     return;
 
   tp.last_time = m_last_point.time;
-  trace_tree.insert(tp);
+  TraceTree::const_iterator it_this = trace_tree.insert(tp);
   m_last_point = tp;
+
+  // update deltas.  Last point is always high delta
+  delta_map[tp.time] = 0-1;
+
+  TraceTree::const_iterator it_prev = find_prev(tp);
+  if (it_prev != end()) {
+    update_delta(find_prev(*it_prev), it_prev, it_this);
+  }
+}
+
+void 
+Trace::update_delta(TraceTree::const_iterator it_prev,
+                    TraceTree::const_iterator it,
+                    TraceTree::const_iterator it_next)
+{
+  if ((it == end())
+      || (it_prev == end())
+      || (it_next == end()))
+    return;
+
+  const unsigned d_this = it_prev->approx_dist(*it)+it->approx_dist(*it_next);
+  const unsigned d_rem = it_prev->approx_dist(*it_next);
+  const unsigned delta = d_this-d_rem;
+  delta_map[it->time] = delta;
+}
+
+unsigned
+Trace::lowest_delta() const
+{
+  /// @todo don't trim if within x minutes
+
+  unsigned lowest = 0-1;
+
+  TraceDeltaMap::const_iterator it = delta_map.begin();
+
+  for (++it; it != delta_map.end(); ++it) {
+    if (it->second < lowest) {
+      lowest = it->second;
+    }
+  }
+  return lowest;
+}
+
+void
+Trace::trim_point()
+{
+  /// @todo don't trim if within x minutes
+
+  unsigned delta = lowest_delta();
+
+  for (TraceTree::const_iterator it = trace_tree.begin();
+       it != trace_tree.end(); ++it) {
+    if (delta_map[it->time] == delta) {
+      erase(it);
+      return;
+    }
+  }
 }
 
 void
 Trace::optimise()
 {
+  while (trace_tree.size()> 1000) {
+    trim_point();
+  }
+
   trace_tree.optimize();
   m_optimise_time = m_last_point.time;
 }
+
+Trace::TraceTree::const_iterator
+Trace::find_prev(const TracePoint& tp) const
+{
+  for (TraceTree::const_iterator it = trace_tree.begin();
+       it != trace_tree.end(); ++it) {
+    if (it->time == tp.last_time) {
+      return it;
+    }
+  }
+  return end();
+}
+
+Trace::TraceTree::const_iterator
+Trace::find_next(const TracePoint& tp) const
+{
+  for (TraceTree::const_iterator it = trace_tree.begin();
+       it != trace_tree.end(); ++it) {
+    if (it->last_time == tp.time) {
+      return it;
+    }
+  }
+  return end();
+}
+
+void
+Trace::erase(TraceTree::const_iterator& rit)
+{
+  /// @todo merge data for erased point
+
+  TraceTree::const_iterator it_prev = find_prev(*rit);
+  TraceTree::const_iterator it_next = find_next(*rit);
+
+  if ((it_prev == trace_tree.end()) || 
+      (it_next == trace_tree.end())) {
+    return;
+  }
+
+  TracePoint tp_next = *it_next;
+  tp_next.last_time = it_prev->time;
+
+  trace_tree.erase(rit);
+  trace_tree.erase(it_next);
+
+  delta_map.erase(rit->time);
+
+  it_next = trace_tree.insert(tp_next);
+
+  update_delta(find_prev(*it_prev), it_prev, it_next);
+  update_delta(it_prev, it_next, find_next(*it_next));
+}
+
 
 void
 Trace::clear()

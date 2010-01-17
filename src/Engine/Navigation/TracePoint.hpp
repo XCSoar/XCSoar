@@ -39,6 +39,9 @@ public:
     return dsqr(get_flatLocation().Longitude-tp.get_flatLocation().Longitude)+
       dsqr(get_flatLocation().Latitude-tp.get_flatLocation().Latitude);
   }
+  unsigned approx_dist(const TracePoint& tp) const {
+    return sqrt(approx_sq_dist(tp));
+  }
 
   /**
    * Function object used to provide access to coordinate values by kd-tree
@@ -68,6 +71,11 @@ public:
       return s1.time < s2.time;
     }
   };
+
+  bool operator==(TracePoint const& a) { 
+    return time == a.time; 
+  }
+
 };
 
 typedef std::vector<TracePoint> TracePointVector;
