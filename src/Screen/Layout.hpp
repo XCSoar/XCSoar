@@ -71,7 +71,7 @@ namespace Layout {
    */
   gcc_const
   static inline bool ScaleEnabled() {
-    return ScaleSupported() && dscale > 1;
+    return ScaleSupported() && (dscale > 1);
   }
 
   gcc_const
