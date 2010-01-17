@@ -309,6 +309,8 @@ void MapWindow::Render(Canvas &canvas, const RECT rc)
   RenderAreas(canvas, rc);
 
   // Render the snail trail
+  /// @todo trail should be drawn above task shaded sections
+
   RenderTrail(canvas, rc);
 
   DrawThermalEstimate(canvas);

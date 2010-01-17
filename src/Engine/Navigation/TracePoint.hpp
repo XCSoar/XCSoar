@@ -43,6 +43,10 @@ public:
     return sqrt(approx_sq_dist(tp));
   }
 
+  unsigned dt() const {
+    return time-last_time;
+  }
+
   /**
    * Function object used to provide access to coordinate values by kd-tree
    */

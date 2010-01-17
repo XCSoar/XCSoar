@@ -49,18 +49,29 @@ Trace::update_delta(TraceTree::const_iterator it_prev,
   const unsigned d_rem = it_prev->approx_dist(*it_next);
   const unsigned delta = d_this-d_rem;
   delta_map[it->time] = delta;
+
+  /// @todo incorporate dt into ranking for fairness in distribution
+}
+
+bool 
+Trace::recent(unsigned time) const
+{
+  return (time+300 >= m_last_point.time);
 }
 
 unsigned
 Trace::lowest_delta() const
 {
-  /// @todo don't trim if within x minutes
+  // note this won't calculate delta for recent
 
   unsigned lowest = 0-1;
 
   TraceDeltaMap::const_iterator it = delta_map.begin();
 
   for (++it; it != delta_map.end(); ++it) {
+    if (recent(it->first)) {
+      return lowest;
+    }
     if (it->second < lowest) {
       lowest = it->second;
     }
@@ -71,13 +82,14 @@ Trace::lowest_delta() const
 void
 Trace::trim_point()
 {
-  /// @todo don't trim if within x minutes
+  // note this won't trim if recent
 
   unsigned delta = lowest_delta();
 
   for (TraceTree::const_iterator it = trace_tree.begin();
        it != trace_tree.end(); ++it) {
-    if (delta_map[it->time] == delta) {
+
+    if (!recent(it->time) && (delta_map[it->time] == delta)) {
       erase(it);
       return;
     }

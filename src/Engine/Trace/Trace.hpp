@@ -156,6 +156,7 @@ private:
   void thin_trace(TracePointList& vec, const unsigned range_sq) const;
   void trim_point();
   unsigned lowest_delta() const;
+  bool recent(unsigned time) const;
 
   TraceTree trace_tree;
   TraceDeltaMap delta_map;

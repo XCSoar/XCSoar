@@ -135,6 +135,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = (LIFTMODIFY*Calculated().common_stats.current_mc*10).as_int()/10.0;
     break;
   case 11:
+    /// @todo this produces 0 if task not started! (bug)
     Value = DISTANCEMODIFY*Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
     Valid = Calculated().task_stats.task_valid;
     break;
