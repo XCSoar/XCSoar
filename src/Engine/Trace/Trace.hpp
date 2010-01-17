@@ -63,8 +63,12 @@ public:
   /**
    * Constructor.  Task projection is updated after first call to append().
    *
+   * @param max_time Time window size (seconds), null_time for unlimited
+   * @param recent_time Number of points to store at full resolution
    */
-  Trace();
+  Trace(const unsigned max_time = null_time,
+        const unsigned recent_time= 300,
+        const unsigned max_points = 1000);
 
   /**
    * Add trace to internal store.  Call optimise() periodically
@@ -154,9 +158,12 @@ public:
 
 private:
   void thin_trace(TracePointList& vec, const unsigned range_sq) const;
-  void trim_point();
+  void trim_point_delta();
+  void trim_point_time();
+
   unsigned lowest_delta() const;
-  bool recent(unsigned time) const;
+  bool inside_recent_time(unsigned time) const;
+  bool inside_time_window(unsigned time) const;
 
   TraceTree trace_tree;
   TraceDeltaMap distance_delta_map;
@@ -167,7 +174,12 @@ private:
   TracePoint m_last_point;
   unsigned m_optimise_time;
 
+  const unsigned m_recent_time;
+  const unsigned m_max_time;
+  const unsigned m_max_points;
+
   void erase(TraceTree::const_iterator& it);
+  void erase_earlier_than(unsigned time);
 
   /**
    * Find item which precedes this item
@@ -186,6 +198,9 @@ private:
   void update_delta(TraceTree::const_iterator it_prev,
                     TraceTree::const_iterator it,
                     TraceTree::const_iterator it_next);
+
+  static const unsigned null_delta;
+  static const unsigned null_time;
 
 public:
 #ifdef DO_PRINT
