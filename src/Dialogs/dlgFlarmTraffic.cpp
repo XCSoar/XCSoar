@@ -50,12 +50,10 @@
 static WndForm *wf = NULL;
 static WndListFrame *wDetails = NULL;
 
-static int GetActiveFlarmTrafficCount();
-
 static void
 Update()
 {
-  wDetails->SetLength(GetActiveFlarmTrafficCount());
+  wDetails->SetLength(XCSoarInterface::Basic().flarm.GetActiveTrafficCount());
   wDetails->invalidate();
 }
 
@@ -126,18 +124,6 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
 
   canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
       text);
-}
-
-static int
-GetActiveFlarmTrafficCount()
-{
-  int count = 0;
-  for (int i = 0; i < FLARM_MAX_TRAFFIC; i++) {
-    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
-      count++;
-    }
-  }
-  return count;
 }
 
 static void

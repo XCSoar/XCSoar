@@ -78,6 +78,16 @@ protected:
 
 public:
 
+  unsigned GetActiveTrafficCount() const {
+    unsigned count = 0;
+
+    for (unsigned i = 0; i < FLARM_MAX_TRAFFIC; i++)
+      if (FLARM_Traffic[i].defined())
+        ++count;
+
+    return count;
+  }
+
   /**
    * Looks up an item in the traffic list.
    *
