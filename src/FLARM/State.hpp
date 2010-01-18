@@ -81,6 +81,15 @@ protected:
 
 public:
 
+  /**
+   * Adds data from the specified object, unless already present in
+   * this one.
+   */
+  void complement(const FLARM_STATE &add) {
+    if (!FLARM_Available && add.FLARM_Available)
+      *this = add;
+  }
+
   unsigned GetActiveTrafficCount() const {
     unsigned count = 0;
 
