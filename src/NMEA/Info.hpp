@@ -64,6 +64,15 @@ struct SWITCH_INFO
   bool VarioCircling;
   bool FlapLanding;
   // bool Stall;
+
+  /**
+   * Adds data from the specified object, unless already present in
+   * this one.
+   */
+  void complement(const SWITCH_INFO &add) {
+    if (!Available && add.Available)
+      *this = add;
+  }
 };
 
 struct GPS_STATE
@@ -100,6 +109,15 @@ struct GPS_STATE
    * Did the simulator provide the GPS position?
    */
   bool Simulator;
+
+  /**
+   * Adds data from the specified object, unless already present in
+   * this one.
+   */
+  void complement(const GPS_STATE &add) {
+    if (add.Connected > Connected)
+      *this = add;
+  }
 };
 
 struct ACCELERATION_STATE
@@ -125,6 +143,19 @@ struct ACCELERATION_STATE
    * @see AccelerationAvailable
    */
   fixed Gload;
+
+  /**
+   * Adds data from the specified object, unless already present in
+   * this one.
+   */
+  void complement(const ACCELERATION_STATE &add) {
+    /* calculated: BankAngle, PitchAngle */
+
+    if (!Available && add.Available) {
+      Gload = add.Gload;
+      Available = add.Available;
+    }
+  }
 };
 
 
@@ -346,6 +377,87 @@ struct NMEA_INFO {
     return BaroAltitudeAvailable
       ? BaroAltitude
       : GPSAltitude;
+  }
+
+  /**
+   * Adds data from the specified object, unless already present in
+   * this one.
+   *
+   * Note that this does not copy calculated values which are managed
+   * outside of the NMEA parser.
+   */
+  void complement(const NMEA_INFO &add) {
+    gps.complement(add.gps);
+
+    acceleration.complement(add.acceleration);
+
+    /* calculated: flight */
+
+    if (add.gps.Connected > gps.Connected) {
+      gps = add.gps;
+      Location = add.Location;
+      TrackBearing = add.TrackBearing;
+      GroundSpeed = add.GroundSpeed;
+      GPSAltitude = add.GPSAltitude;
+      Time = add.Time;
+      DateTime = add.DateTime;
+    }
+
+    if (!AirspeedAvailable && add.AirspeedAvailable) {
+      TrueAirspeed = add.TrueAirspeed;
+      IndicatedAirspeed = add.IndicatedAirspeed;
+      AirspeedAvailable = true;
+    }
+
+    /* calculated: Heading, TurnRateWind, TurnRate,
+       NextTrackBearing */
+    /* calculated: TrueAirspeedEstimated */
+
+    if (!BaroAltitudeAvailable && add.BaroAltitudeAvailable) {
+      BaroAltitude = add.BaroAltitude;
+      BaroAltitudeAvailable = true;
+    }
+
+    /* calculated: EnergyHeight, TEAltitude, working_band_height,
+       NavAltitude,working_band_fraction, AltitudeAGL */
+
+    /* managed by DeviceBlackboard: pressure */
+
+    /* calculated: GliderSinkRate, GPSVario, GPSVarioTE */
+
+    if (!TotalEnergyVarioAvailable && add.TotalEnergyVarioAvailable) {
+      TotalEnergyVario = add.TotalEnergyVario;
+      TotalEnergyVarioAvailable = add.TotalEnergyVarioAvailable;
+    }
+
+    if (!NettoVarioAvailable && add.NettoVarioAvailable) {
+      NettoVario = add.NettoVario;
+      NettoVarioAvailable = add.NettoVarioAvailable;
+    }
+
+    // XXX MacCready, Ballast, Bugs
+
+    if (!ExternalWindAvailable && add.ExternalWindAvailable) {
+      wind = add.wind;
+      ExternalWindAvailable = add.ExternalWindAvailable;
+    }
+
+    if (!TemperatureAvailable && add.TemperatureAvailable) {
+      OutsideAirTemperature = add.OutsideAirTemperature;
+      TemperatureAvailable = add.TemperatureAvailable;
+    }
+
+    if (!HumidityAvailable && add.HumidityAvailable) {
+      RelativeHumidity = add.RelativeHumidity;
+      HumidityAvailable = add.HumidityAvailable;
+    }
+
+    if (SupplyBatteryVoltage <= 0.0 && add.SupplyBatteryVoltage > 0.0)
+      SupplyBatteryVoltage = add.SupplyBatteryVoltage;
+
+    SwitchState.complement(add.SwitchState);
+
+    flarm.complement(add.flarm);
   }
 };
 
