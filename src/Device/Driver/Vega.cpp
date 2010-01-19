@@ -298,12 +298,11 @@ PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->AccelX = _tcstod(ctemp, NULL) / 100.0;
+  double AccelX = _tcstod(ctemp, NULL) / 100.0;
   NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->AccelZ = _tcstod(ctemp, NULL) / 100.0;
+  double AccelZ = _tcstod(ctemp, NULL) / 100.0;
 
-  int mag = isqrt4((int)((GPS_INFO->AccelX*GPS_INFO->AccelX
-			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));
+  int mag = isqrt4((int)((AccelX * AccelX + AccelZ * AccelZ) * 10000));
   GPS_INFO->Gload = mag/100.0;
   GPS_INFO->AccelerationAvailable = true;
 
@@ -327,8 +326,7 @@ PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
                (double)GPS_INFO->BaroAltitude,
                (double)GPS_INFO->Vario,
                (double)GPS_INFO->NettoVario,
-               (double)GPS_INFO->AccelX,
-               (double)GPS_INFO->AccelZ);
+               AccelX, AccelZ);
   }
   GPS_INFO->VarioAvailable = true;
   //hasVega = true;

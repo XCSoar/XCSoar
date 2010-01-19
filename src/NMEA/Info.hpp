@@ -108,21 +108,8 @@ struct ACCELERATION_STATE
   /**
    * Is G-load information available?
    * @see Gload
-   * @see AccelX
-   * @see AccelY
    */
   bool AccelerationAvailable;
-
-  /**
-   * G-Load information of external device in X-direction (if available)
-   * @see AccelerationAvailable
-   */
-  double AccelX;
-  /**
-   * G-Load information of external device in Y-direction (if available)
-   * @see AccelerationAvailable
-   */
-  double AccelZ;
 };
 
 
