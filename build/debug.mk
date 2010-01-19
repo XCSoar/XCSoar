@@ -1,13 +1,15 @@
 ifeq ($(DEBUG),y)
-OPTIMIZE := -O0 -ggdb
+OPTIMIZE := -O0
 OPTIMIZE += -funit-at-a-time
-
-  ifneq ($(TARGET),UNIX)
-    # WINE works best with stabs debug symbols
-    OPTIMIZE += -gstabs
-  endif
 else
 OPTIMIZE := -O2 -DNDEBUG -Wuninitialized
+endif
+
+ifeq ($(TARGET),UNIX)
+  OPTIMIZE += -ggdb
+else
+  # WINE works best with stabs debug symbols
+  OPTIMIZE += -gstabs
 endif
 
 ifeq ($(PROFILE),y)
