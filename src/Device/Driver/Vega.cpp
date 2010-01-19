@@ -294,7 +294,6 @@ PDVDV(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 static bool
 PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  double flap;
   TCHAR ctemp[80];
 
   NMEAParser::ExtractParameter(String,ctemp,0);
@@ -306,8 +305,10 @@ PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->Gload = mag/100.0;
   GPS_INFO->AccelerationAvailable = true;
 
+  /*
   NMEAParser::ExtractParameter(String,ctemp,2);
-  flap = _tcstod(ctemp, NULL);
+  double flap = _tcstod(ctemp, NULL);
+  */
 
   NMEAParser::ExtractParameter(String,ctemp,3);
   GPS_INFO->StallRatio = _tcstod(ctemp, NULL) / 100.0;
