@@ -21,3 +21,4 @@ app_*.info
 Doc/html/*
 Doc/cloc.txt
 output
+perf.data
