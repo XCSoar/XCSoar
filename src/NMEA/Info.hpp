@@ -47,6 +47,8 @@ Copyright_License {
 
 struct SWITCH_INFO
 {
+  bool Available;
+
   bool AirbrakeLocked;
   bool FlapPositive;
   bool FlapNeutral;

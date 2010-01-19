@@ -73,6 +73,7 @@ DeviceBlackboard::Initialise()
   gps_info.NAVWarning = true;
 
   // Clear the SwitchStates
+  gps_info.SwitchState.Available = false;
   gps_info.SwitchState.AirbrakeLocked = false;
   gps_info.SwitchState.FlapPositive = false;
   gps_info.SwitchState.FlapNeutral = false;

@@ -111,6 +111,8 @@ PDSWC(const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   GPS_INFO->SupplyBatteryVoltage/= 10;
 
+  GPS_INFO->SwitchState.Available = true;
+
   GPS_INFO->SwitchState.AirbrakeLocked =
     (switchinputs & (1<<INPUT_BIT_AIRBRAKELOCKED))>0;
   GPS_INFO->SwitchState.FlapPositive =
