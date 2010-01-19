@@ -107,27 +107,6 @@ devHasBaroSource(void)
   return false;
 }
 
-bool
-devGetBaroAltitude(double *Value)
-{
-  // hack, just return GPS_INFO->BaroAltitude
-  if (Value == NULL)
-    return false;
-
-  if (device_blackboard.Basic().BaroAltitudeAvailable)
-    *Value = device_blackboard.Basic().BaroAltitude;
-
-  return true;
-
-  // ToDo
-  // more than one baro source may be available
-  // eg Altair (w. Logger) and intelligent vario
-  // - which source should be used?
-  // - whats happen if primary source fails
-  // - plausibility check? against second baro? or GPS alt?
-  // - whats happen if the diference is too big?
-}
-
 static bool
 devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
            DWORD speed, struct DeviceDescriptor *&nmeaout)

@@ -68,8 +68,6 @@ bool devIsBaroSource(const struct DeviceDescriptor *d);
 bool
 HaveCondorDevice();
 
-bool devGetBaroAltitude(double *Value);
-
 void devConnectionMonitor();
 
 void devStartup(const TCHAR *lpCmdLine);
