@@ -1,39 +1,39 @@
 TESTFAST = \
-	$(TEST_SRC_DIR)/test_olc.exe \
-	$(TEST_SRC_DIR)/test_fixed.exe \
-	$(TEST_SRC_DIR)/test_waypoints.exe \
-	$(TEST_SRC_DIR)/test_edittp.exe \
-	$(TEST_SRC_DIR)/test_pressure.exe \
-	$(TEST_SRC_DIR)/test_task.exe \
-	$(TEST_SRC_DIR)/test_mc.exe \
-	$(TEST_SRC_DIR)/test_modes.exe \
-	$(TEST_SRC_DIR)/test_automc.exe \
-	$(TEST_SRC_DIR)/test_trees.exe \
-	$(TEST_SRC_DIR)/test_acfilter.exe \
-	$(TEST_SRC_DIR)/test.exe \
-	$(TEST_SRC_DIR)/test_airspace.exe \
-	$(TEST_SRC_DIR)/test_highterrain.exe
+	$(TARGET_BIN_DIR)/test_olc$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_fixed$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_waypoints$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_edittp$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_pressure$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_task$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_mc$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_modes$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_automc$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_trees$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_acfilter$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_airspace$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_highterrain$(TARGET_EXEEXT)
 
 ifeq ($(HAVE_WIN32),y)
-TESTFAST += $(TEST_SRC_DIR)/test_win32.exe
+TESTFAST += $(TARGET_BIN_DIR)/test_win32$(TARGET_EXEEXT)
 endif
 
 TESTSLOW = \
-	$(TEST_SRC_DIR)/test_effectivemc.exe \
-	$(TEST_SRC_DIR)/test_randomtask.exe \
-	$(TEST_SRC_DIR)/test_vopt.exe \
-	$(TEST_SRC_DIR)/test_cruiseefficiency.exe \
-	$(TEST_SRC_DIR)/test_bestcruisetrack.exe \
-	$(TEST_SRC_DIR)/test_aat.exe \
-	$(TEST_SRC_DIR)/test_flight.exe
+	$(TARGET_BIN_DIR)/test_effectivemc$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_randomtask$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_vopt$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_cruiseefficiency$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_bestcruisetrack$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_aat$(TARGET_EXEEXT) \
+	$(TARGET_BIN_DIR)/test_flight$(TARGET_EXEEXT)
 
-TESTS = $(TESTFAST:.exe=-$(TARGET).exe) $(TESTSLOW:.exe=-$(TARGET).exe) 
+TESTS = $(TESTFAST) $(TESTSLOW)
 
-testslow:	$(TESTSLOW:.exe=-$(TARGET).exe)
-	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTSLOW:.exe=-$(TARGET).exe)
+testslow: $(TESTSLOW)
+	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTSLOW)
 
-testfast:	$(TESTFAST:.exe=-$(TARGET).exe)
-	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTFAST:.exe=-$(TARGET).exe)
+testfast: $(TESTFAST)
+	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTFAST)
 
 TESTLIBS = $(HARNESS_LIBS) \
 	   $(ENGINE_LIBS)
@@ -45,19 +45,19 @@ CPPFLAGS += -DHAVE_TAP
 endif
 
 $(TESTS): CPPFLAGS += $(TEST_CPPFLAGS)
-$(TESTS): $(TEST_SRC_DIR)/%-$(TARGET).exe: $(TEST_SRC_DIR)/%.cpp $(TESTLIBS)
-	@$(NQ)echo "  CXX/LN      $@"
-	$(Q)$(CXX) -o $@ $(cxx-flags) $(INCLUDES) $^ $(TARGET_LDLIBS)
+$(TESTS): $(TARGET_BIN_DIR)/%$(TARGET_EXEEXT): $(TARGET_OUTPUT_DIR)/test/src/%.o $(TESTLIBS) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 
 BUILDTESTS=\
-	test/t/01_test_tap.exe
+	$(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT)
 
 testtap: $(BUILDTESTS)
 	cd test && perl tools/testall.pl t/*
 
 # TODO generalise
-test/t/01_test_tap.exe: $(TEST_SRC_DIR)/01_test_tap.c
+$(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $(TARGET_BIN_DIR)/dirstamp
 	gcc -o $@ $<
 
 DEBUG_PROGRAM_NAMES = RunWayPointParser RunCanvas RunMapWindow RunDialog
