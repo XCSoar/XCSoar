@@ -203,11 +203,11 @@ PDAAV(const TCHAR *String, NMEA_INFO *GPS_INFO)
   (void)GPS_INFO;
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-//  unsigned short beepfrequency = (unsigned short)_tcstod(ctemp, NULL);
+  //unsigned short beepfrequency = (unsigned short)_tcstol(ctemp, NULL, 10);
   NMEAParser::ExtractParameter(String,ctemp,1);
-//  unsigned short soundfrequency = (unsigned short)_tcstod(ctemp, NULL);
+  //unsigned short soundfrequency = (unsigned short)_tcstol(ctemp, NULL, 10);
   NMEAParser::ExtractParameter(String,ctemp,2);
-//  unsigned char soundtype = (unsigned char)_tcstod(ctemp, NULL);
+  //unsigned char soundtype = (unsigned char)_tcstol(ctemp, NULL, 10);
 
   // Temporarily commented out - function as yet undefined
   //  audio_setconfig(beepfrequency, soundfrequency, soundtype);
@@ -232,7 +232,7 @@ PDVSC(const TCHAR *String, NMEA_INFO *GPS_INFO)
   }
 
   NMEAParser::ExtractParameter(String,ctemp,2);
-  long value =  (long)_tcstod(ctemp, NULL);
+  long value = _tcstol(ctemp, NULL,10);
   DWORD dwvalue;
 
   if (_tcscmp(name, _T("ToneDeadbandCruiseLow"))==0) {
@@ -354,10 +354,11 @@ PDVVT(const TCHAR *String, NMEA_INFO *GPS_INFO)
 static bool
 PDTSM(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  int   duration;
+  int duration;
+
   (void)GPS_INFO;
 
-  duration = (int)_tcstod(String, NULL);
+  duration = (int)_tcstol(String, NULL, 10);
 
   String = _tcschr(String, ',');
   if (String == NULL)
