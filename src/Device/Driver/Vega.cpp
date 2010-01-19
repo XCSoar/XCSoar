@@ -355,11 +355,11 @@ PDVVT(const TCHAR *String, NMEA_INFO *GPS_INFO)
 static bool
 PDTSM(const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  int duration;
-
   (void)GPS_INFO;
 
-  duration = (int)_tcstol(String, NULL, 10);
+  /*
+  int duration = (int)_tcstol(String, NULL, 10);
+  */
 
   String = _tcschr(String, ',');
   if (String == NULL)
