@@ -340,8 +340,8 @@ private:
     POINT p_end;
     m_map.LonLat2Screen(end, p_end);
 
-    const double ang = AngleLimit360(atan2(fixed(p_end.x - p_start.x),
-                                           fixed(p_start.y - p_end.y)) * fixed_rad_to_deg);
+    const fixed ang = AngleLimit360(atan2(fixed(p_end.x - p_start.x),
+                                          fixed(p_start.y - p_end.y)) * fixed_rad_to_deg);
     ScreenClosestPoint(p_start, p_end, m_map.GetOrigScreen(), &p_p, IBLSCALE(25));
     PolygonRotateShift(Arrow, 2, p_p.x, p_p.y, ang);
     Arrow[2] = Arrow[1];

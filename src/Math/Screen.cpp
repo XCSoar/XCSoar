@@ -135,7 +135,8 @@ void ScreenClosestPoint(const POINT &p1, const POINT &p2,
  * @param angle Angle of rotation
  */
 void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys,
-			const double angle) {
+                        fixed angle)
+{
   static double lastangle = -1;
   static int cost=1024, sint=0;
 

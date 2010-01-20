@@ -156,7 +156,7 @@ void MapWindow::DrawAircraft(Canvas &canvas)
 
       int n = sizeof(Aircraft)/sizeof(Aircraft[0]);
 
-      double angle = DisplayAircraftAngle+
+      const fixed angle = DisplayAircraftAngle+
 	(Basic().Heading-Basic().TrackBearing);
 
       PolygonRotateShift(Aircraft, n,

@@ -44,6 +44,7 @@ Copyright_License {
 #define XCSOAR_MATH_SCREEN_HPP
 
 #include "Compiler.h"
+#include "Math/fixed.hpp"
 
 #include <windef.h>
 
@@ -59,7 +60,7 @@ void ScreenClosestPoint(const POINT &p1, const POINT &p2,
                         const POINT &p3, POINT *p4, int offset);
 
 void PolygonRotateShift(POINT* poly, int n, int x, int y,
-                        double angle);
+                        fixed angle);
 
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
 
