@@ -505,8 +505,8 @@ ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc, bool fill)
 }
 
 int
-Segment(Canvas &canvas, long x, long y, int radius, RECT rc, double start,
-    double end, bool horizon)
+Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
+        fixed start, fixed end, bool horizon)
 {
   POINT pt[66];
   int i;
@@ -585,7 +585,7 @@ Segment(Canvas &canvas, long x, long y, int radius, RECT rc, double start,
  */
 int
 DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
-    double start, double end)
+        fixed start, fixed end)
 {
   POINT pt[66];
   int i;

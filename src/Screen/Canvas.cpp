@@ -77,7 +77,7 @@ Canvas::line_to(int x, int y)
 
 void
 Canvas::arc(int x, int y, unsigned radius, const RECT rc,
-            double start, double end)
+            fixed start, fixed end)
 {
   // XXX
   ::pieColor(surface, x, y, radius, start - 90, end - 90,
@@ -86,7 +86,7 @@ Canvas::arc(int x, int y, unsigned radius, const RECT rc,
 
 void
 Canvas::segment(int x, int y, unsigned radius, const RECT rc,
-                double start, double end, bool horizon)
+                fixed start, fixed end, bool horizon)
 {
   // XXX horizon
 
@@ -655,14 +655,14 @@ Canvas::autoclip_circle(int x, int y, unsigned radius, const RECT rc)
 
 void
 Canvas::arc(int x, int y, unsigned radius, const RECT rc,
-            double start, double end)
+            fixed start, fixed end)
 {
   ::DrawArc(*this, x, y, radius, rc, start, end);
 }
 
 void
 Canvas::segment(int x, int y, unsigned radius, const RECT rc,
-                double start, double end, bool horizon)
+                fixed start, fixed end, bool horizon)
 {
   ::Segment(*this, x, y, radius, rc, start, end, horizon);
 }

@@ -44,6 +44,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_UTIL_HPP
 #define XCSOAR_SCREEN_UTIL_HPP
 
+#include "Math/fixed.hpp"
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
@@ -61,12 +63,10 @@ ClippedCircle(Canvas &canvas, long x, long y, int radius, RECT rc,
               bool fill=true);
 
 int Segment(Canvas &canvas, long x, long y, int radius, RECT rc,
-	    double start,
-	    double end,
+            fixed start, fixed end,
             bool horizon= false);
 // VENTA3 DrawArc
 int DrawArc(Canvas &canvas, long x, long y, int radius, RECT rc,
-	    double start,
-	    double end);
+            fixed start, fixed end);
 
 #endif
