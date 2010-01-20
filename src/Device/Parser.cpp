@@ -675,7 +675,7 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   if (GPS_INFO->Speed > 1.0) {
     // JMW don't update bearing unless we're moving
-    GPS_INFO->TrackBearing = AngleLimit360(_tcstod(params[7], NULL));
+    GPS_INFO->TrackBearing = AngleLimit360(fixed(_tcstod(params[7], NULL)));
   }
 
   if (!GPS_INFO->Replay) {
