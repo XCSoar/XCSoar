@@ -61,6 +61,7 @@ class GaugeVario:
   public InstrumentBlackboard
 {
 private:
+  int nlength0, nlength1, nwidth, nline;
   int xoffset;
   int yoffset;
 
