@@ -39,6 +39,7 @@ Copyright_License {
 #define XCSOAR_MAPWINDOW_PROJECTION_H
 
 #include "Math/FastMath.h"
+#include "Math/FastRotation.hpp"
 #include "Units.hpp"
 #include "SettingsUser.hpp"
 #include "Screen/shapelib/mapprimitive.h"
@@ -73,7 +74,10 @@ class MapWindowProjection {
   POINT   GetOrigScreen(void) const { return Orig_Screen; }
   POINT   GetOrigAircraft(void) const { return Orig_Aircraft; }
   GEOPOINT GetPanLocation() const { return PanLocation; }
-  fixed  GetDisplayAngle() const { return DisplayAngle; }
+
+  fixed GetDisplayAngle() const {
+    return DisplayAngle.GetAngle();
+  }
 
   rectObj CalculateScreenBounds(const fixed scale) const;
 
@@ -134,7 +138,7 @@ class MapWindowProjection {
   GEOPOINT PanLocation;
   POINT  Orig_Screen, Orig_Aircraft;
 
-  fixed DisplayAngle;
+  FastIntegerRotation DisplayAngle;
   fixed DisplayAircraftAngle;
 
   // scale/display stuff

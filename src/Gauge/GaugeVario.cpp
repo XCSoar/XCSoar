@@ -306,25 +306,27 @@ void GaugeVario::RenderBg(Canvas &canvas) {
 }
 
 void GaugeVario::MakePolygon(const int i) {
-  double dx, dy;
   POINT *bit = getPolygon(i);
   POINT *bline = &lines[i+gmax];
 
-  dx = -xoffset+nlength0; dy = nwidth;
-  rotate(dx, dy, fixed(i));
-  bit[0].x = lround(dx+xoffset); bit[0].y = lround(dy*GlobalEllipse+yoffset+1);
+  const FastRotation r = FastRotation(fixed(i));
+  FastRotation::Pair p;
 
-  dx = -xoffset+nlength0; dy = -nwidth;
-  rotate(dx, dy, fixed(i));
-  bit[2].x = lround(dx+xoffset); bit[2].y = lround(dy*GlobalEllipse+yoffset+1);
+  p = r.Rotate(-xoffset + nlength0, nwidth);
+  bit[0].x = lround(p.first + xoffset);
+  bit[0].y = lround(p.second * GlobalEllipse + yoffset + 1);
 
-  dx = -xoffset+nlength1; dy = 0;
-  rotate(dx, dy, fixed(i));
-  bit[1].x = lround(dx+xoffset); bit[1].y = lround(dy*GlobalEllipse+yoffset+1);
+  p = r.Rotate(-xoffset + nlength0, -nwidth);
+  bit[2].x = lround(p.first + xoffset);
+  bit[2].y = lround(p.second * GlobalEllipse + yoffset + 1);
 
-  dx = -xoffset+nline; dy = 0;
-  rotate(dx, dy, fixed(i));
-  bline->x = lround(dx+xoffset); bline->y = lround(dy*GlobalEllipse+yoffset+1);
+  p = r.Rotate(-xoffset + nlength1, 0);
+  bit[1].x = lround(p.first + xoffset);
+  bit[1].y = lround(p.second * GlobalEllipse + yoffset + 1);
+
+  p = r.Rotate(-xoffset + nline, 0);
+  bline->x = lround(p.first + xoffset);
+  bline->y = lround(p.second * GlobalEllipse + yoffset + 1);
 }
 
 

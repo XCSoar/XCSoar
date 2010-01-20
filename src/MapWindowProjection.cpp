@@ -235,11 +235,11 @@ void MapWindowProjection::Screen2LonLat(const int &x,
                                         const int &y,
                                         GEOPOINT &g) const
 {
-  int sx = x-(int)Orig_Screen.x;
-  int sy = y-(int)Orig_Screen.y;
-  irotate(sx, sy, DisplayAngle);
-  g.Latitude= PanLocation.Latitude  - sy*InvDrawScale;
-  g.Longitude= PanLocation.Longitude + sx*invfastcosine(g.Latitude)*InvDrawScale;
+  const FastIntegerRotation::Pair p =
+    DisplayAngle.Rotate(x - Orig_Screen.x, y - Orig_Screen.y);
+  g.Latitude = PanLocation.Latitude - p.second * InvDrawScale;
+  g.Longitude = PanLocation.Longitude + p.first * invfastcosine(g.Latitude)
+    * InvDrawScale;
 }
 
 /**
@@ -252,13 +252,13 @@ MapWindowProjection::LonLat2Screen(const GEOPOINT &g,
                                    POINT &sc) const
 {
   const GEOPOINT d = PanLocation-g;
-  int Y = (d.Latitude*DrawScale).as_int();
-  int X = (d.Longitude*fastcosine(g.Latitude)*DrawScale).as_int();
+  const FastIntegerRotation::Pair p =
+    DisplayAngle.Rotate((d.Longitude * fastcosine(g.Latitude)
+                         * DrawScale).as_int(),
+                        (d.Latitude * DrawScale).as_int());
 
-  irotate(X, Y, DisplayAngle);
-
-  sc.x = Orig_Screen.x - X;
-  sc.y = Orig_Screen.y + Y;
+  sc.x = Orig_Screen.x - p.first;
+  sc.y = Orig_Screen.y + p.second;
 }
 
 /**
@@ -276,7 +276,7 @@ MapWindowProjection::LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
 {
   static fixed lastangle(-1);
   static int cost=1024, sint=0;
-  const fixed mDisplayAngle(DisplayAngle);
+  const fixed mDisplayAngle(GetDisplayAngle());
 
   if (mDisplayAngle != lastangle) {
     lastangle = mDisplayAngle;
@@ -319,7 +319,7 @@ MapWindowProjection::LonLat2Screen(const pointObj* const ptin,
 {
   static fixed lastangle(-1);
   static int cost=1024, sint=0;
-  const fixed mDisplayAngle(DisplayAngle);
+  const fixed mDisplayAngle(GetDisplayAngle());
 
   if(mDisplayAngle != lastangle) {
     lastangle = mDisplayAngle;
@@ -368,9 +368,9 @@ MapWindowProjection::CalculateOrientationNormal
 
     if (settings.DisplayOrientation == TRACKCIRCLE) {
       DisplayAngle = DerivedDrawInfo.task_stats.current_leg.solution_remaining.Vector.Bearing;
-      DisplayAircraftAngle = trackbearing-DisplayAngle;
+      DisplayAircraftAngle = trackbearing - DisplayAngle.GetAngle();
     } else {
-      DisplayAngle = 0.0;
+      DisplayAngle = fixed_zero;
       DisplayAircraftAngle = trackbearing;
     }
   } else {
@@ -379,7 +379,7 @@ MapWindowProjection::CalculateOrientationNormal
     DisplayAngle = trackbearing;
     DisplayAircraftAngle = 0.0;
   }
-  DisplayAngle = AngleLimit360(DisplayAngle);
+
   DisplayAircraftAngle = AngleLimit360(DisplayAircraftAngle);
 }
 
@@ -417,7 +417,7 @@ MapWindowProjection::CalculateOrientationTargetPan
     DisplayAircraftAngle = DrawInfo.TrackBearing;
   }
 #else
-    DisplayAngle = 0.0;
+  DisplayAngle.SetAngle(fixed_zero);
     DisplayAircraftAngle = DrawInfo.TrackBearing;
 #endif
 }

@@ -143,9 +143,12 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
     // JMW: nothing to do with map --- display for FLARM gauge always up
 
     fixed DisplayAngle = -gps_info.TrackBearing;
-    rotate(x, y, DisplayAngle); 	// or use .Heading? (no,
-                                        // because heading is not
-                                        // reliable)
+
+    // or use .Heading? (no, because heading is not reliable)
+    const FastRotation r(DisplayAngle);
+    FastRotation::Pair p = r.Rotate(x, y);
+    x = p.first;
+    y = p.second;
 
     double scale = RangeScale(d);
 

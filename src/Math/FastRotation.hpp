@@ -42,8 +42,89 @@ Copyright_License {
 #include "Compiler.h"
 #include "Math/fixed.hpp"
 
-void irotate(int &xin, int &yin, const fixed &angle);
+#include <utility>
 
-void rotate(double &xin, double &yin, const fixed &angle);
+/**
+ * Rotate coordinates around the zero origin.
+ */
+class FastRotation {
+  fixed angle;
+  double cost, sint;
+
+public:
+  typedef std::pair<double,double> Pair;
+
+  FastRotation():angle(fixed_zero), cost(1), sint(0) {}
+  FastRotation(fixed _angle):angle(9999) { SetAngle(_angle); }
+
+  fixed GetAngle() const {
+    return angle;
+  }
+
+  /**
+   * Sets the new angle, and precalculates the sine/cosine values.
+   *
+   * @param _angle an angle between 0 and 360
+   */
+  void SetAngle(fixed _angle);
+
+  void operator =(fixed _angle) {
+    SetAngle(_angle);
+  }
+
+  /**
+   * Rotates the point (xin, yin).
+   *
+   * @param x X value
+   * @param y Y value
+   * @return the rotated coordinates
+   */
+  gcc_pure
+  Pair Rotate(double x, double y) const;
+
+  gcc_pure
+  Pair Rotate(const Pair p) const {
+    return Rotate(p.first, p.second);
+  }
+};
+
+/**
+ * Same as #FastRotation, but works with integer coordinates.
+ */
+class FastIntegerRotation {
+  fixed angle;
+  int cost, sint;
+
+public:
+  typedef std::pair<int,int> Pair;
+
+  FastIntegerRotation():angle(0), cost(1024), sint(0) {}
+  FastIntegerRotation(fixed _angle):angle(99999) { SetAngle(_angle); }
+
+  fixed GetAngle() const {
+    return angle;
+  }
+
+  void SetAngle(fixed _angle);
+
+  void operator =(fixed _angle) {
+    SetAngle(_angle);
+  }
+
+  /**
+   * Rotates the point (xin, yin).
+   *
+   * @param x X value
+   * @param y Y value
+   * @return the rotated coordinates
+   */
+  gcc_pure
+  Pair Rotate(int x, int y) const;
+
+  gcc_pure
+  Pair Rotate(const Pair p) const {
+    return Rotate(p.first, p.second);
+  }
+};
 
 #endif

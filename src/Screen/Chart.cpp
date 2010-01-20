@@ -583,29 +583,25 @@ Chart::DrawArrow(const double x, const double y, const double mag,
     const fixed angle, const int Style)
 {
   POINT wv[2];
-  double dX, dY;
 
   wv[0].x = screenX(x);
   wv[0].y = screenY(y);
 
-  dX = mag;
-  dY = 0;
-  rotate(dX, dY, angle);
-  wv[1].x = (int)(wv[0].x + dX);
-  wv[1].y = (int)(wv[0].y + dY);
+  const FastRotation r(angle);
+  FastRotation::Pair p;
+
+  p = r.Rotate(mag, 0);
+  wv[1].x = (int)(wv[0].x + p.first);
+  wv[1].y = (int)(wv[0].y + p.second);
   StyleLine(wv[0], wv[1], Style);
 
-  dX = mag - 5;
-  dY = -3;
-  rotate(dX, dY, angle);
-  wv[1].x = (int)(wv[0].x + dX);
-  wv[1].y = (int)(wv[0].y + dY);
+  p = r.Rotate(mag - 5, -3);
+  wv[1].x = (int)(wv[0].x + p.first);
+  wv[1].y = (int)(wv[0].y + p.second);
   StyleLine(wv[0], wv[1], Style);
 
-  dX = mag - 5;
-  dY = 3;
-  rotate(dX, dY, angle);
-  wv[1].x = (int)(wv[0].x + dX);
-  wv[1].y = (int)(wv[0].y + dY);
+  p = r.Rotate(mag - 5, 3);
+  wv[1].x = (int)(wv[0].x + p.first);
+  wv[1].y = (int)(wv[0].y + p.second);
   StyleLine(wv[0], wv[1], Style);
 }

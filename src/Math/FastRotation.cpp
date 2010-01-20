@@ -42,55 +42,41 @@ Copyright_License {
 
 #include <math.h>
 
-/**
- * Rotates the point (xin, yin) by angle degrees around (0, 0)
- *
- * double based
- * @param xin X value
- * @param yin Y value
- * @param angle Rotation angle
- */
-void rotate(double &xin, double &yin, const fixed &angle)
+void
+FastRotation::SetAngle(fixed _angle)
 {
-  double x= xin;
-  double y= yin;
-  static fixed lastangle(0);
-  static double cost=1,sint=0;
+  _angle = AngleLimit360(_angle);
+  if (_angle == angle)
+    return;
 
-  if(angle != lastangle)
-    {
-      lastangle = angle;
-      cost = (double)fastcosine(angle);
-      sint = (double)fastsine(angle);
-    }
-  xin = x*cost - y*sint;
-  yin = y*cost + x*sint;
+  angle = _angle;
+  cost = fastcosine(angle);
+  sint = fastsine(angle);
 }
 
-
-/**
- * Rotates the point (xin, yin) by angle degrees around (0, 0)
- *
- * int based (angle as double)
- * @param xin X value
- * @param yin Y value
- * @param angle Rotation angle
- */
-void irotate(int &xin, int &yin, const fixed &angle)
+FastRotation::Pair
+FastRotation::Rotate(double x, double y) const
 {
-  int x= xin;
-  int y= yin;
-  static fixed lastangle(0);
-  static int cost=1024,sint=0;
+  return Pair(x * cost - y * sint, y * cost + x * sint);
+}
 
-  if(angle != lastangle)
-    {
-      lastangle = angle;
-      cost = ifastcosine(angle);
-      sint = ifastsine(angle);
-    }
-  xin = (x*cost - y*sint + 512)/1024;
-  yin = (y*cost + x*sint + 512)/1024;
+void
+FastIntegerRotation::SetAngle(fixed _angle)
+{
+  _angle = AngleLimit360(_angle);
+  if (_angle == angle)
+    return;
+
+  angle = _angle;
+  cost = ifastcosine(angle);
+  sint = ifastsine(angle);
+}
+
+FastIntegerRotation::Pair
+FastIntegerRotation::Rotate(int x, int y) const
+{
+  return Pair((x * cost - y * sint + 512) / 1024,
+              (y * cost + x * sint + 512) / 1024);
 }
 
 
