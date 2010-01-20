@@ -35,7 +35,6 @@
 }
  */
 #include "FlatLine.hpp"
-#include "Math/NavFunctions.hpp"
 
 #define sqr(x) ((x)*(x))
 #define sgn(x,y) (negative(x)? -y:y)

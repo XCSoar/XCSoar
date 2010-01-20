@@ -39,28 +39,6 @@ Copyright_License {
 #if !defined(NAVFUNCTIONS)
 #define NAVFUNCTIONS
 
-#include <math.h>
-#include "Math/Constants.h"
-
-//#define   BAM_270_DEG       0xc0000000L    // BAM representation of 270 deg
-//#define   BAM_180_DEG       0x80000000L    // BAM representation of 180 deg
-//#define   NOT_BAM_180_DEG   0x7fffffffL    // BAM representation of 180 deg-
-//#define   BAM_90_DEG        0x40000000L    // BAM representation of  90 deg
-//#define   MINUS_BAM_90_DEG  0xc0000000L    // BAM representation of -90 deg
-//#define   R                 3.43775e+05    // Radius of earth in 1/100 NM
-//#define   TWO_R             6.87550e+05    // Diameter of earth in 1/100 NM
-//#define   TWO_R_SQUARED     4.72725e+11    // TWO_R * TWO_R
-//#define   TWO_R_HP          6.87550e+07    // Diam. of earth in 1/10000 NM
-//#define   SQUARED_TWO_R_HP  4.72725e+15    // TWO_R_HP * TWO_R_HP
-//#define BAM_TO_RAD 1.462918079e-9          // BAM to radians
-//#define RAD_TO_BAM 6.835652757e+8          // Radians to BAM
-//#define RAD_TO_BAM_DIV_2  0.5*RAD_TO_BAM
-
-/** Diameter of earth in meters */
-#define EARTH_DIAMETER 12733426.0
-/** Diameter of earth in meters (squared) (EARTH_DIAMETER * EARTH_DIAMETER) */
-#define SQUARED_EARTH_DIAMETER 162140137697476.0
-
 void xXY_to_LL(double Lat_TP, double Lon_TP, double X_int, double Y_int,
     double *Lat, double *Lon);
 

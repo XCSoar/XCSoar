@@ -38,7 +38,6 @@
 #include <math.h>
 #include "Util/Quadratic.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Math/NavFunctions.hpp"
 
 /**
  * Quadratic function solver for MacCready theory constraint equation

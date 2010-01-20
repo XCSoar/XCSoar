@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Math/NavFunctions.hpp"
+#include "Math/Constants.h"
 #include "Compatibility/math.h"
 
 void

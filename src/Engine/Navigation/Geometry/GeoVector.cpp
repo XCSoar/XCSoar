@@ -36,7 +36,6 @@
  */
 #include "GeoVector.hpp"
 #include "Math/Earth.hpp"
-#include "Math/NavFunctions.hpp"
 #include "Math/Geometry.hpp"
 
 GeoVector::GeoVector(const GEOPOINT &source, const GEOPOINT &target,

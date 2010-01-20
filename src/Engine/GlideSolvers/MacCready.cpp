@@ -42,7 +42,6 @@
 #include "GlideState.hpp"
 #include "GlidePolar.hpp"
 #include "GlideResult.hpp"
-#include "Math/NavFunctions.hpp"
 #include "Navigation/Aircraft.hpp"
 
 static const fixed fixed_1mil(1.0e6);
