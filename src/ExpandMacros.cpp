@@ -40,7 +40,6 @@ Copyright_License {
 #include "Language.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Logger.h"
-#include "ReplayLogger.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "SettingsComputer.hpp"

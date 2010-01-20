@@ -38,7 +38,8 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Units.hpp"
-#include "ReplayLogger.hpp"
+#include "Components.hpp"
+#include "ReplayLoggerGlue.hpp"
 #include "DataField/FileReader.hpp"
 #include "MainWindow.hpp"
 
@@ -47,7 +48,7 @@ static WndForm *wf=NULL;
 
 static void OnStopClicked(WindowControl * Sender){
 	(void)Sender;
-  ReplayLogger::Stop();
+  replay.Stop();
 }
 
 static void OnStartClicked(WindowControl * Sender){
@@ -57,9 +58,9 @@ static void OnStartClicked(WindowControl * Sender){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    ReplayLogger::SetFilename(dfe->GetPathFile());
+    replay.SetFilename(dfe->GetPathFile());
   }
-  ReplayLogger::Start();
+  replay.Start();
 }
 
 
@@ -73,11 +74,11 @@ static void OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(ReplayLogger::TimeScale);
+      Sender->Set(replay.TimeScale);
     break;
     case DataField::daPut:
     case DataField::daChange:
-      ReplayLogger::TimeScale = Sender->GetAsFloat();
+      replay.TimeScale = Sender->GetAsFloat();
     break;
   }
 
@@ -105,7 +106,7 @@ void dlgLoggerReplayShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpRate"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(ReplayLogger::TimeScale);
+    wp->GetDataField()->SetAsFloat(replay.TimeScale);
     wp->RefreshDisplay();
   }
 
@@ -114,7 +115,7 @@ void dlgLoggerReplayShowModal(void){
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(_T("*.igc"));
-    dfe->Lookup(ReplayLogger::GetFilename());
+    dfe->Lookup(replay.GetFilename());
     wp->RefreshDisplay();
   }
 

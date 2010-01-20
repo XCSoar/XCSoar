@@ -52,6 +52,7 @@ class Airspaces;
 class AirspaceWarningManager;
 class TaskManager;
 class TaskBehaviour;
+class ReplayLoggerGlue;
 
 // other global objects
 extern Waypoints way_points;
@@ -59,6 +60,7 @@ extern Airspaces airspace_database;
 extern AirspaceWarningManager airspace_warning;
 extern TaskManager task_manager;
 extern TaskBehaviour task_behaviour;
+extern ReplayLoggerGlue replay;
 
 extern Marks *marks;
 extern TopologyStore *topology;
@@ -68,5 +70,6 @@ extern GlideComputer glide_computer;
 extern DrawThread *draw_thread;
 extern CalculationThread *calculation_thread;
 extern InstrumentThread *instrument_thread;
+
 
 #endif

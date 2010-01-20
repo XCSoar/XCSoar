@@ -36,27 +36,14 @@ Copyright_License {
 }
 */
 
-#ifndef REPLAY_LOGGER_HPP
-#define REPLAY_LOGGER_HPP
+#ifndef REPLAY_LOGGER_GLUE_HPP
+#define REPLAY_LOGGER_GLUE_HPP
 
-#include <tchar.h>
-#include <windef.h> /* for MAX_PATH */
-#include <stdio.h>
+#include "ReplayLogger.hpp"
 
-class GEOPOINT;
-
-class ReplayLogger
+class ReplayLoggerGlue: 
+  public ReplayLogger
 {
-public:
-  ReplayLogger();
-
-  bool Update();
-  void Stop();
-  void Start();
-  const TCHAR* GetFilename();
-  void SetFilename(const TCHAR *name);
-  double TimeScale;
-
 protected:
   virtual double get_time(const bool reset, const double mintime);
   virtual void on_reset();
@@ -64,20 +51,11 @@ protected:
   virtual void on_bad_file();
   virtual void on_advance(const GEOPOINT &loc,
                           const double speed, const double bearing,
-                          const double alt, const double baroalt, const double t) = 0;
+                          const double alt, const double baroalt, const double t);
+
   virtual bool ScanBuffer(const TCHAR *buffer, double *Time, double *Latitude,
                           double *Longitude, double *Altitude);
 
-  bool UpdateInternal();
-  bool ReadLine(TCHAR *buffer);
-  bool Enabled;
-
-  bool ReadPoint(double *Time, double *Latitude, double *Longitude,
-      double *Altitude);
-
-private:
-  TCHAR FileName[MAX_PATH];
-  FILE *fp;
 };
 
 #endif

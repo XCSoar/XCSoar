@@ -37,132 +37,10 @@
 */
 
 #include "ReplayLogger.hpp"
-#include "Logger.h"
-#include "Protection.hpp"
-#include "Dialogs/Message.hpp"
-#include "Language.hpp"
-#include "Device/Port.hpp"
-#include "SettingsTask.hpp"
-#include "Registry.hpp"
-#include "Math/Earth.hpp"
-#include "LogFile.hpp"
-#include "Asset.hpp"
+#include <algorithm>
+
+#include "Navigation/GeoPoint.hpp"
 #include "StringUtil.hpp"
-#include "UtilsText.hpp"
-#include "LocalPath.hpp"
-#include "Device/device.hpp"
-#include "InputEvents.h"
-#include "Compatibility/string.h"
-
-#include "DeviceBlackboard.hpp"
-#include "Components.hpp"
-
-bool
-ReplayLogger::ReadLine(TCHAR *buffer)
-{
-  static FILE *fp = NULL;
-
-  if (!buffer) {
-    if (fp) {
-      fclose(fp);
-      fp = NULL;
-    }
-    return false;
-  }
-
-  if (fp == NULL && !string_is_empty(FileName))
-    fp = _tfopen(FileName, _T("rt"));
-
-  if (fp == NULL) {
-    return false;
-  }
-
-  if (_fgetts(buffer, 200, fp) == NULL) {
-    _tcscat(buffer, TEXT("\0"));
-    return false;
-  }
-
-  return true;
-}
-
-
-bool
-ReplayLogger::ScanBuffer(const TCHAR *buffer, double *Time,
-    double *Latitude, double *Longitude, double *Altitude)
-{
-  int DegLat, DegLon;
-  int MinLat, MinLon;
-  TCHAR NoS, EoW;
-  int iAltitude;
-  int bAltitude;
-  int Hour=0;
-  int Minute=0;
-  int Second=0;
-
-  int lfound=0;
-  int found=0;
-
-  if ((lfound = _stscanf(buffer,
-      TEXT("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d"), &Hour, &Minute,
-      &Second, &DegLat, &MinLat, &NoS, &DegLon, &MinLon, &EoW, &iAltitude,
-      &bAltitude)) != EOF) {
-
-    if (lfound == 11) {
-      *Latitude = DegLat + MinLat / 60000.0;
-      if (NoS == _T('S')) {
-        *Latitude *= -1;
-      }
-
-      *Longitude = DegLon + MinLon / 60000.0;
-      if (EoW == _T('W')) {
-        *Longitude *= -1;
-      }
-      *Altitude = iAltitude;
-      *Time = Hour * 3600 + Minute * 60 + Second;
-    }
-  }
-
-  TCHAR event[200];
-  TCHAR misc[200];
-
-  found = _stscanf(buffer, TEXT("LPLT event=%[^ ] %[A-Za-z0-9 \\/().,]"),
-      event, misc);
-
-  if (found > 0) {
-    pt2Event fevent = InputEvents::findEvent(event);
-    if (fevent) {
-      if (found == 2) {
-        TCHAR *mmisc = StringMallocParse(misc);
-        fevent(mmisc);
-        free(mmisc);
-      } else {
-        fevent(TEXT("\0"));
-      }
-    }
-  }
-
-  return (lfound > 0);
-}
-
-bool
-ReplayLogger::ReadPoint(double *Time, double *Latitude, double *Longitude,
-    double *Altitude)
-{
-  TCHAR buffer[200];
-  bool found = false;
-
-  while (ReadLine(buffer) && !found) {
-    if (ScanBuffer(buffer, Time, Latitude, Longitude, Altitude)) {
-      found = true;
-    }
-  }
-
-  return found;
-}
-
-TCHAR ReplayLogger::FileName[MAX_PATH];
-bool ReplayLogger::Enabled = false;
-double ReplayLogger::TimeScale = 1.0;
 
 typedef struct _LOGGER_INTERP_POINT
 {
@@ -229,9 +107,9 @@ public:
 
     double u = (time - p[1].t) / (p[2].t - p[1].t);
 
-    double s0 = Distance(p[0].loc, p[1].loc);
+    double s0 = p[0].loc.distance(p[1].loc);
     s0 /= (p[1].t - p[0].t);
-    double s1 = Distance(p[1].loc, p[2].loc);
+    double s1 = p[1].loc.distance(p[2].loc);
     s1 /= (p[2].t - p[1].t);
 
     u = max(0.0, min(1.0,u));
@@ -313,9 +191,9 @@ public:
   }
 
   bool
-  NeedData(double tthis)
+  NeedData(double t_simulation)
   {
-    return (!Ready()) || (p[2].t <= tthis + 0.1);
+    return (!Ready()) || (p[2].t <= t_simulation + 0.1);
   }
 
 private:
@@ -323,56 +201,156 @@ private:
   double tzero;
 };
 
+
+
+ReplayLogger::ReplayLogger():
+  Enabled(false),
+  TimeScale(1.0),
+  fp(NULL)
+{
+
+}
+
+
+bool
+ReplayLogger::ReadLine(TCHAR *buffer)
+{
+  if (!buffer) {
+    if (fp) {
+      fclose(fp);
+      fp = NULL;
+    }
+    return false;
+  }
+
+  if (fp == NULL && !string_is_empty(FileName))
+    fp = _tfopen(FileName, _T("rt"));
+
+  if (fp == NULL) {
+    return false;
+  }
+
+  if (_fgetts(buffer, 200, fp) == NULL) {
+    _tcscat(buffer, TEXT("\0"));
+    return false;
+  }
+
+  return true;
+}
+
+
+bool
+ReplayLogger::ScanBuffer(const TCHAR *buffer, double *Time,
+    double *Latitude, double *Longitude, double *Altitude)
+{
+  int DegLat, DegLon;
+  int MinLat, MinLon;
+  TCHAR NoS, EoW;
+  int iAltitude;
+  int bAltitude;
+  int Hour=0;
+  int Minute=0;
+  int Second=0;
+  int lfound=0;
+
+  if ((lfound = _stscanf(buffer,
+      TEXT("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d"), &Hour, &Minute,
+      &Second, &DegLat, &MinLat, &NoS, &DegLon, &MinLon, &EoW, &iAltitude,
+      &bAltitude)) != EOF) {
+
+    if (lfound == 11) {
+      *Latitude = DegLat + MinLat / 60000.0;
+      if (NoS == _T('S')) {
+        *Latitude *= -1;
+      }
+
+      *Longitude = DegLon + MinLon / 60000.0;
+      if (EoW == _T('W')) {
+        *Longitude *= -1;
+      }
+      *Altitude = iAltitude;
+      *Time = Hour * 3600 + Minute * 60 + Second;
+      return (lfound > 0);
+    }
+  }
+  return false;
+}
+
+bool
+ReplayLogger::ReadPoint(double *Time, double *Latitude, double *Longitude,
+    double *Altitude)
+{
+  TCHAR buffer[200];
+  bool found = false;
+
+  while (ReadLine(buffer) && !found) {
+    if (ScanBuffer(buffer, Time, Latitude, Longitude, Altitude)) {
+      found = true;
+    }
+  }
+
+  return found;
+}
+
+
+double
+ReplayLogger::get_time(const bool reset,
+                       const double mintime)
+{
+  static double t_simulation = 0;
+  
+  if (reset) {
+    t_simulation = 0;
+  } else {
+    t_simulation++;
+  }
+  t_simulation = std::max(mintime, t_simulation);
+  return t_simulation;
+}
+
+void
+ReplayLogger::on_reset()
+{
+  // nothing
+}
+
+void
+ReplayLogger::on_stop()
+{
+  // nothing
+}
+
+void
+ReplayLogger::on_bad_file()
+{
+  // nothing
+}
+
 bool
 ReplayLogger::UpdateInternal()
 {
-  static bool init = true;
+  static bool initialised = false;
+  static bool finished = false;
+  static CatmullRomInterpolator cli;
+  static double t_simulation;
 
   if (!Enabled) {
-    init = true;
+    initialised = false;
     ReadLine(NULL); // close file
-    Enabled = true;
-  }
-
-  static CatmullRomInterpolator cli;
-
-  SYSTEMTIME st;
-  GetLocalTime(&st);
-  static double time_lstart = 0;
-
-  if (init) {
-    time_lstart = 0;
-  }
-
-  static double time = 0;
-  double deltatimereal;
-  static double tthis = 0;
-  static double tlast;
-
-  bool finished = false;
-
-  double timelast = time;
-  time = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond - time_lstart);
-  deltatimereal = time - timelast;
-
-  if (init) {
-    time_lstart = time;
-    time = 0;
-    deltatimereal = 0;
-    tthis = 0;
-    tlast = tthis;
+    finished = false;
     cli.Reset();
+    t_simulation = 0;
+    Enabled = true;
+    on_reset();
   }
-  tlast = tthis;
-  tthis += TimeScale * deltatimereal;
 
-  double mintime = cli.GetMinTime(); // li_lat.GetMinTime();
-  if (tthis < mintime) {
-    tthis = mintime;
-  }
+  const double t_simulation_last = t_simulation;
+  t_simulation = get_time(!initialised, cli.GetMinTime());
+
+  initialised = true;
 
   // if need a new point
-  while (cli.NeedData(tthis) && (!finished)) {
+  while (cli.NeedData(t_simulation) && (!finished)) {
     double t1, Lat1, Lon1, Alt1;
     finished = !ReadPoint(&t1, &Lat1, &Lon1, &Alt1);
 
@@ -386,22 +364,21 @@ ReplayLogger::UpdateInternal()
     double AltX1;
     GEOPOINT P0, P1;
 
-    cli.Interpolate(tthis, &P0.Longitude, &P0.Latitude, &AltX);
-    cli.Interpolate(tthis + 0.1, &P1.Longitude, &P1.Latitude, &AltX1);
+    cli.Interpolate(t_simulation, &P0.Longitude, &P0.Latitude, &AltX);
+    cli.Interpolate(t_simulation + 0.1, &P1.Longitude, &P1.Latitude, &AltX1);
 
-    SpeedX = cli.GetSpeed(tthis);
-    BearingX = Bearing(P0, P1);
+    SpeedX = cli.GetSpeed(t_simulation);
+    BearingX = P0.bearing(P1);
 
     if ((SpeedX > 0)
         && ((P0.Latitude != P1.Latitude) || (P0.Longitude != P1.Longitude))) {
-      if ((int)tthis != (int)tlast) {
-        device_blackboard.SetLocation(P0, SpeedX, BearingX, AltX, AltX, tthis);
-        TriggerGPSUpdate();
+      if ((int)t_simulation != (int)t_simulation_last) {
+        on_advance(P0, SpeedX, BearingX, AltX, AltX, t_simulation);
       }
     } else {
       // This is required in case the integrator fails,
       // which can occur due to parsing faults
-      tthis = cli.GetMaxTime();
+      t_simulation = cli.GetMaxTime();
     }
   }
 
@@ -409,7 +386,6 @@ ReplayLogger::UpdateInternal()
   if (finished) {
     Stop();
   }
-  init = false;
 
   return !finished;
 }
@@ -420,8 +396,7 @@ ReplayLogger::Stop(void)
   ReadLine(NULL); // close the file
 
   if (Enabled) {
-    device_blackboard.StopReplay();
-    logger.clearBuffer();
+    on_stop();
   }
 
   Enabled = false;
@@ -433,11 +408,9 @@ ReplayLogger::Start(void)
   if (Enabled)
     Stop();
 
-  logger.clearBuffer();
-
-  if (!UpdateInternal())
-    MessageBoxX(gettext(TEXT("Could not open IGC file!")),
-                gettext(TEXT("Flight replay")), MB_OK | MB_ICONINFORMATION);
+  if (!UpdateInternal()) {
+    on_bad_file();
+  }
 }
 
 const TCHAR*

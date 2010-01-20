@@ -40,7 +40,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Interface.hpp"
 #include "InputEvents.h"
-#include "ReplayLogger.hpp"
 #include "Device/device.hpp"
 #include "Device/All.hpp"
 #include "Dialogs.h"
@@ -56,6 +55,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "MainWindow.hpp"
 #include "Asset.hpp"
+#include "ReplayLoggerGlue.hpp"
 
 void
 ProcessTimer::HeapCompact()
@@ -207,9 +207,9 @@ void ProcessTimer::Process(void)
     itimeout++;
 
     // also service replay logger
-    if (ReplayLogger::Update()) {
+    if (replay.Update()) {
       if (Basic().MovementDetected) {
-        ReplayLogger::Stop();
+        replay.Stop();
       }
       device_blackboard.RaiseConnection();
       device_blackboard.SetNAVWarning(false);
@@ -225,7 +225,7 @@ void ProcessTimer::Process(void)
     if (m_clock.elapsed()<0) {
       m_clock.update();
     }
-    if (ReplayLogger::Update()) {
+    if (replay.Update()) {
       m_clock.update();
     } else if (m_clock.elapsed()>=1000) {
       m_clock.update();

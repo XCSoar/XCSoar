@@ -175,6 +175,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/LoggerImpl.cpp \
 	$(SRC)/LoggerSign.cpp \
 	$(SRC)/ReplayLogger.cpp \
+	$(SRC)/ReplayLoggerGlue.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
 	$(SRC)/ThermalLocator.cpp \
 	$(SRC)/WayPointParser.cpp \
