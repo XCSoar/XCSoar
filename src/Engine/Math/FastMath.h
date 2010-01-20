@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -38,37 +39,32 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FASTMATH_H
 #define XCSOAR_MATH_FASTMATH_H
 
+#include "Compiler.h"
 #include <math.h>
-
-//2^36 * 1.5,  (52-_shiftamt=36) uses limited precisicion to floor
-//16.16 fixed point representation,
 
 // =================================================================================
 // Real2Int
 // =================================================================================
-static inline int
+// 2^36 * 1.5,  (52-_shiftamt=36) uses limited precisicion to floor
+// 16.16 fixed point representation,
+
+gcc_const static inline int
 Real2Int(double val)
 {
-#if defined(WINDOWSPC) && defined(BROKEN)
+  #if defined(WINDOWSPC) && defined(BROKEN)
   // JMW this is broken?
   val += 68719476736.0*1.5;
   return *((long*)&val) >> 16;
-#else
+  #else
   return (int)val;
-#endif
+  #endif
 }
 
-static inline int
+gcc_const static inline int
 iround(double i)
 {
-  return Real2Int(floor(i+0.5));
+  return Real2Int(floor(i + 0.5));
 }
-
-/*
-static inline long lround(double i) {
-    return (long)(floor(i+0.5));
-}
-*/
 
 extern double COSTABLE[4096];
 extern double SINETABLE[4096];
@@ -76,10 +72,10 @@ extern double INVCOSINETABLE[4096];
 extern int ISINETABLE[4096];
 extern int ICOSTABLE[4096];
 
-#ifdef __MINGW32__
-#define DEG_TO_INT(x) ((unsigned short)(int)((x)*(65536.0/360.0)))>>4
+#ifdef __GNUC__
+  #define DEG_TO_INT(x) ((unsigned short)(int)((x)*(65536.0/360.0)))>>4
 #else
-#define DEG_TO_INT(x) ((unsigned short)((x)*(65536.0/360.0)))>>4
+  #define DEG_TO_INT(x) ((unsigned short)((x)*(65536.0/360.0)))>>4
 #endif
 
 #define invfastcosine(x) INVCOSINETABLE[DEG_TO_INT(x)]
@@ -90,20 +86,40 @@ extern int ICOSTABLE[4096];
 
 #ifdef __cplusplus
 
-inline unsigned int CombinedDivAndMod(unsigned int &lx) {
+#ifdef FIXED_MATH
+#include "Math/fixed.hpp"
+
+gcc_const static inline int
+iround(const fixed &x)
+{
+  return floor(x+fixed_half).as_int();
+}
+
+gcc_const static inline int
+Real2Int(const fixed& val)
+{
+  return val.as_int();
+}
+#endif
+
+inline unsigned int
+CombinedDivAndMod(unsigned int &lx)
+{
   unsigned int ox = lx & 0xff;
   // JMW no need to check max since overflow will result in
   // beyond max dimensions
-  lx = lx>>8;
+  lx = lx >> 8;
   return ox;
 }
 
-extern "C" {
+extern "C"
+{
 #endif
 
 // Fast trig functions
 void InitSineTable(void);
 
+gcc_const
 unsigned int isqrt4(unsigned long val);
 
 #ifdef __cplusplus
