@@ -265,11 +265,11 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
   canvas.background_opaque();
 
   _stprintf(text, TEXT("Weight %d kg"),
-      glide_polar.get_all_up_weight().as_int());
+            (int)glide_polar.get_all_up_weight());
   canvas.text_opaque(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(55), text);
 
   _stprintf(text, TEXT("Wing loading %.1f kg/m2"),
-      glide_polar.get_wing_loading().as_double());
+            (double)glide_polar.get_wing_loading());
   canvas.text_opaque(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(40), text);
 
   canvas.background_transparent();
@@ -838,25 +838,25 @@ FlightStatistics::CaptionPolar(TCHAR *sTmp, const GlidePolar& glide_polar) const
   if (Layout::landscape) {
     _stprintf(sTmp, TEXT("%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %d %s"),
 	      gettext(TEXT("Best LD")),
-	      glide_polar.get_bestLD().as_int(),
-	      (glide_polar.get_VbestLD()*SPEEDMODIFY).as_int(),
+              (int)glide_polar.get_bestLD(),
+              (int)(glide_polar.get_VbestLD()*SPEEDMODIFY),
 	      Units::GetHorizontalSpeedName(),
 	      gettext(TEXT("Min sink")),
-	      (glide_polar.get_Smin()*LIFTMODIFY).as_double(),
+              (double)(glide_polar.get_Smin() * LIFTMODIFY),
 	      Units::GetVerticalSpeedName(),
-	      (glide_polar.get_Vmin()*SPEEDMODIFY).as_int(),
+              (int)(glide_polar.get_Vmin()*SPEEDMODIFY),
 	      Units::GetHorizontalSpeedName()
 	      );
   } else {
     _stprintf(sTmp, TEXT("%s:\r\n  %d at %d %s\r\n%s:\r\n  %3.2f %s at %d %s"),
 	      gettext(TEXT("Best LD")),
-	      glide_polar.get_bestLD().as_int(),
-	      (glide_polar.get_VbestLD()*SPEEDMODIFY).as_int(),
+              (int)glide_polar.get_bestLD(),
+              (int)(glide_polar.get_VbestLD()*SPEEDMODIFY),
 	      Units::GetHorizontalSpeedName(),
 	      gettext(TEXT("Min sink")),
-	      (glide_polar.get_Smin()*LIFTMODIFY).as_double(),
+              (double)(glide_polar.get_Smin()*LIFTMODIFY),
 	      Units::GetVerticalSpeedName(),
-	      (glide_polar.get_Vmin()*SPEEDMODIFY).as_int(),
+              (int)(glide_polar.get_Vmin()*SPEEDMODIFY),
 	      Units::GetHorizontalSpeedName());
   }
 }

@@ -219,7 +219,7 @@ OLCDijkstra::save_solution()
   if (the_distance > best_distance) {
 #ifdef DO_PRINT
     printf("best dist %d from %d to %d s\n",
-        the_distance.as_int(), solution[0].time,
+           (int)the_distance, solution[0].time,
         solution[num_stages-1].time);
 #endif
     best_solution.clear();

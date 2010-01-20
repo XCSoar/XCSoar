@@ -373,7 +373,7 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 
     // right justified after waypoint flags
     _stprintf(sTmp, _T("%.0f%s"),
-              WayPointSelectInfo[i].Distance.as_double(),
+              (double)WayPointSelectInfo[i].Distance,
               Units::GetDistanceName());
     x2 = w0-w3-canvas.text_width(sTmp);
     canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), sTmp);

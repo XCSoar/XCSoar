@@ -111,10 +111,11 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 
   if (retval) {
 #ifdef DO_PRINT
-    printf("time %d size %d/%d dist %g\n", state.Time.as_int(), 
+    printf("time %d size %d/%d dist %g\n",
+           (int)state.Time,
            m_trace_points_full.size(), 
            m_trace_points_sprint.size(), 
-           common_stats.distance_olc.as_double());
+           (double)common_stats.distance_olc);
     print();
 #endif
   }

@@ -478,7 +478,8 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
   r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic(), glide_polar);
   wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
   if (wp) {
-    _stprintf(sTmp, _T("%.0f %s"), (r.AltitudeDifference * ALTITUDEMODIFY).as_double(), 
+    _stprintf(sTmp, _T("%.0f %s"),
+              (double)(r.AltitudeDifference * ALTITUDEMODIFY),
               Units::GetAltitudeName());
     wp->SetText(sTmp);
   }
@@ -490,7 +491,8 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
 
   wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
   if (wp) {
-    _stprintf(sTmp, _T("%.0f %s"), (r.AltitudeDifference * ALTITUDEMODIFY).as_double(), 
+    _stprintf(sTmp, _T("%.0f %s"),
+              (double)(r.AltitudeDifference * ALTITUDEMODIFY),
               Units::GetAltitudeName());
     wp->SetText(sTmp);
   }
@@ -501,7 +503,8 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
 
   wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
   if (wp) {
-    _stprintf(sTmp, _T("%.0f %s"), (r.AltitudeDifference * ALTITUDEMODIFY).as_double(), 
+    _stprintf(sTmp, _T("%.0f %s"),
+              (double)(r.AltitudeDifference * ALTITUDEMODIFY),
               Units::GetAltitudeName());
     wp->SetText(sTmp);
   }

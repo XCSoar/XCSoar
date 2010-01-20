@@ -221,7 +221,7 @@ DeviceBlackboard::ProcessSimulation()
         Basic().Speed,
         &SetBasic().Location);
     SetBasic().Time+= fixed_one;
-    long tsec = Basic().Time.as_long();
+    long tsec = (long)Basic().Time;
     SetBasic().Hour = tsec/3600;
     SetBasic().Minute = (tsec-Basic().Hour*3600)/60;
     SetBasic().Second = (tsec-Basic().Hour*3600-Basic().Minute*60);

@@ -203,7 +203,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       }
       if (task != NULL && SettingsComputer().BallastTimerActive) {
         _stprintf(TEMP,TEXT("BALLAST %d LITERS"),
-		  task->get_glide_polar().get_ballast_litres().as_int());
+                  (int)task->get_glide_polar().get_ballast_litres());
         _tcscat(ScaleInfo, TEMP);
       }
 

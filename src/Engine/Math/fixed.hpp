@@ -165,10 +165,22 @@ public:
     {
         return as_int();
     }
+
+    inline operator unsigned() const
+    {
+      return (unsigned)as_int();
+    }
+
     inline operator unsigned short() const
     {
         return as_unsigned_short();
     }
+
+    inline operator long() const
+    {
+      return as_long();
+    }
+
     float as_float() const
     {
         return m_nVal/(float)resolution;

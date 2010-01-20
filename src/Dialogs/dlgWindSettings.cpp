@@ -91,7 +91,7 @@ static void OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
   switch(Mode){
     case DataField::daGet:
       Sender->SetMax(SPEEDMODIFY*(200.0/TOKPH));
-      Sender->Set((SPEEDMODIFY*XCSoarInterface::Basic().WindSpeed).as_double());
+      Sender->Set((double)(SPEEDMODIFY * XCSoarInterface::Basic().WindSpeed));
     break;
     case DataField::daPut:
       UpdateWind(false);

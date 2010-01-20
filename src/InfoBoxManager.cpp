@@ -752,7 +752,7 @@ InfoBoxManager::DisplayInfoBox(void)
 
     // VENTA3 radial
     case 60:
-      _stprintf(sTmp, _T("%1.0d%s"), Calculated().common_stats.vector_home.Bearing.as_int(), _T(DEG));
+      _stprintf(sTmp, _T("%d%s"), (int)Calculated().common_stats.vector_home.Bearing, _T(DEG));
       InfoBoxes[i]->SetComment(sTmp);
       break;
 

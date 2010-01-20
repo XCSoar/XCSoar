@@ -294,7 +294,7 @@ GlideComputerAirData::Average30s()
     return;
   }
 
-  const unsigned Elapsed = (Basic().Time - LastBasic().Time).as_int();
+  const unsigned Elapsed = (unsigned)(Basic().Time - LastBasic().Time);
   for (unsigned i = 0; i < Elapsed; ++i) {
     if (vario_30s_filter.update(Basic().Vario)) {
       SetCalculated().Average30s =

@@ -12,7 +12,7 @@ TracePoint::TracePoint(const AIRCRAFT_STATE &state, const TaskProjection& tp):
     SearchPoint(state.Location, tp, true),
     ALTITUDE_STATE(state),
     VARIO_STATE(state),
-    time(state.Time.as_int()),
+    time((int)state.Time),
     rank(0),
     drift_factor(state.thermal_drift_factor())
 {

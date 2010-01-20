@@ -253,9 +253,9 @@ MapWindowProjection::LonLat2Screen(const GEOPOINT &g,
 {
   const GEOPOINT d = PanLocation-g;
   const FastIntegerRotation::Pair p =
-    DisplayAngle.Rotate((d.Longitude * fastcosine(g.Latitude)
-                         * DrawScale).as_int(),
-                        (d.Latitude * DrawScale).as_int());
+    DisplayAngle.Rotate((int)(d.Longitude * fastcosine(g.Latitude)
+                              * DrawScale),
+                        (int)(d.Latitude * DrawScale));
 
   sc.x = Orig_Screen.x - p.first;
   sc.y = Orig_Screen.y + p.second;

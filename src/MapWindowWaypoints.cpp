@@ -108,7 +108,7 @@ public:
 
           if (reachable) {
             AltArrivalAGL = (int)(ALTITUDEMODIFY *
-                                  r.AltitudeDifference.as_double());
+                                  (double)r.AltitudeDifference);
           }
 
           draw_alt = reachable;

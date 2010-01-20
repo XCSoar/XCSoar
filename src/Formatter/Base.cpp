@@ -131,7 +131,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = ALTITUDEMODIFY*Calculated().LastThermalGain;
     break;
   case 10:
-    Value = (LIFTMODIFY*Calculated().common_stats.current_mc*10).as_int()/10.0;
+    Value = (int)(LIFTMODIFY*Calculated().common_stats.current_mc*10) / 10.0;
     break;
   case 11:
     /// @todo this produces 0 if task not started! (bug)

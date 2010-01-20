@@ -207,7 +207,7 @@ static void Update(void){
       _stprintf(sTmp, _T("%s: %s (Mass %d kg)"),
                 gettext(_T("Analysis")),
                 gettext(_T("Glide Polar")),
-                task_manager.get_glide_polar().get_all_up_weight().as_int());
+                (int)task_manager.get_glide_polar().get_all_up_weight());
       wf->SetCaption(sTmp);
       fs.CaptionPolar(sTmp, task_manager.get_glide_polar());
       wInfo->SetCaption(sTmp);
@@ -242,28 +242,28 @@ static void Update(void){
     wf->SetCaption(sTmp);
 
     TCHAR timetext1[100];
-    Units::TimeToText(timetext1, XCSoarInterface::Calculated().common_stats.time_olc.as_int());
+    Units::TimeToText(timetext1, (int)XCSoarInterface::Calculated().common_stats.time_olc);
     if (Layout::landscape) {
       _stprintf(sTmp,
                 _T("%s:\r\n  %d %s\r\n%s: %s\r\n%s: %d %s\r\n"),
                 gettext(_T("Distance")),
-                (DISTANCEMODIFY*XCSoarInterface::Calculated().common_stats.distance_olc).as_int(),
+                (int)(DISTANCEMODIFY * XCSoarInterface::Calculated().common_stats.distance_olc),
                 Units::GetDistanceName(),
                 gettext(_T("Time")),
                 timetext1,
                 gettext(_T("Speed")),
-                (TASKSPEEDMODIFY*XCSoarInterface::Calculated().common_stats.speed_olc).as_int(),
+                (int)(TASKSPEEDMODIFY * XCSoarInterface::Calculated().common_stats.speed_olc),
                 Units::GetTaskSpeedName());
     } else {
       _stprintf(sTmp,
                 _T("%s: %d %s\r\n%s: %s\r\n%s: %d %s\r\n"),
                 gettext(_T("Distance")),
-                (DISTANCEMODIFY*XCSoarInterface::Calculated().common_stats.distance_olc).as_int(),
+                (int)(DISTANCEMODIFY * XCSoarInterface::Calculated().common_stats.distance_olc),
                 Units::GetDistanceName(),
                 gettext(_T("Time")),
                 timetext1,
                 gettext(_T("Speed")),
-                (TASKSPEEDMODIFY*XCSoarInterface::Calculated().common_stats.speed_olc).as_int(),
+                (int)(TASKSPEEDMODIFY * XCSoarInterface::Calculated().common_stats.speed_olc),
                 Units::GetTaskSpeedName());
     }
     wInfo->SetCaption(sTmp);

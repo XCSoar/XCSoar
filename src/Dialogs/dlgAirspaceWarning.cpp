@@ -262,8 +262,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
       warning->get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
 
     _stprintf(sTmp, _T("%d secs dist %d m"),
-              solution.elapsed_time.as_int(),
-              solution.distance.as_int());
+              (int)solution.elapsed_time,
+              (int)solution.distance);
 
     canvas.text_clipped(paint_rc.left + IBLSCALE(Col0Left),
                         paint_rc.top + IBLSCALE(TextTop + TextHeight),

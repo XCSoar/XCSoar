@@ -288,7 +288,7 @@ static void UpdateValuesTimes(void) {
   if (wp) {
     if (XCSoarInterface::Calculated().FlightTime>0) {
       Units::TimeToText(Temp,
-                        (int)TimeLocal((long)XCSoarInterface::Calculated().TakeOffTime.as_long()));
+                        (int)TimeLocal((long)XCSoarInterface::Calculated().TakeOffTime));
       wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));
@@ -300,7 +300,7 @@ static void UpdateValuesTimes(void) {
     if (!XCSoarInterface::Calculated().Flying) {
       Units::TimeToText(Temp,
                         (int)TimeLocal((long)(XCSoarInterface::Calculated().TakeOffTime
-                                              +XCSoarInterface::Calculated().FlightTime).as_long()));
+                                              + XCSoarInterface::Calculated().FlightTime)));
       wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));
@@ -353,7 +353,7 @@ static void UpdateValuesFlight(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpMaxHeightGain"));
   if (wp) {
     _stprintf(Temp, _T("%d %s"),
-              (XCSoarInterface::Calculated().MaxHeightGain*ALTITUDEMODIFY).as_int(),
+              (int)(XCSoarInterface::Calculated().MaxHeightGain * ALTITUDEMODIFY),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
@@ -368,7 +368,7 @@ static void UpdateValuesFlight(void) {
     }
     wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
     if (wp) {
-      _stprintf(Temp, _T("%d")_T(DEG), vec.Bearing.as_int());
+      _stprintf(Temp, _T("%d")_T(DEG), (int)vec.Bearing);
       wp->SetText(Temp);
     }
     wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
@@ -434,7 +434,7 @@ static void UpdateValuesRules(void) {
   if (wp) {
     if (XCSoarInterface::Calculated().TaskStartTime>0) {
       _stprintf(Temp, TEXT("%d %s"),
-                (TASKSPEEDMODIFY*XCSoarInterface::Calculated().TaskStartSpeed).as_int(),
+                (int)(TASKSPEEDMODIFY * XCSoarInterface::Calculated().TaskStartSpeed),
                 Units::GetTaskSpeedName());
       wp->SetText(Temp);
     } else {

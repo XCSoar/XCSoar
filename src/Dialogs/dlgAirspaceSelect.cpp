@@ -368,14 +368,14 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 
   // right justified after airspace type
   _stprintf(sTmp, _T("%d%s"),
-            AirspaceSelectInfo[i].Distance.as_int(),
+            (int)AirspaceSelectInfo[i].Distance,
             Units::GetDistanceName());
   x2 = w0 - w3 - canvas.text_width(sTmp);
   canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), sTmp);
     
   // right justified after distance
   _stprintf(sTmp, _T("%d")_T(DEG),  
-            AirspaceSelectInfo[i].Direction.as_int());
+            (int)AirspaceSelectInfo[i].Direction);
   x3 = w0 - canvas.text_width(sTmp);
   canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
 }

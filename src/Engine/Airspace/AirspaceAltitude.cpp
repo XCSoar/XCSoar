@@ -64,21 +64,21 @@ AIRSPACE_ALT::get_as_text(const bool concise) const
     if (!positive(AGL)) {
       oss << _T("GND");
     } else {
-      oss << AGL.as_int() << _T(" AGL");
+      oss << (int)AGL << _T(" AGL");
     }
     break;
   case abFL:
-    oss << _T("FL") << (fixed_10*FL).as_int();
+    oss << _T("FL") << (int)(fixed_10 * FL);
     break;
   case abMSL:
-    oss << Altitude.as_int();
+    oss << (int)Altitude;
     break;
   case abUndef:
   default:
     break;
   };
   if (!concise && Base!=abMSL && positive(Altitude)) {
-    oss << _T(" ") << Altitude.as_int();
+    oss << _T(" ") << (int)Altitude;
   }
   return oss.str();
 }

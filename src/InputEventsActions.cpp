@@ -841,7 +841,8 @@ InputEvents::eventMacCready(const TCHAR *misc)
     }
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    _stprintf(Temp,TEXT("%0.1f"), (task_manager.get_glide_polar().get_mc()*LIFTMODIFY).as_double());
+    _stprintf(Temp,TEXT("%0.1f"),
+              (double)(task_manager.get_glide_polar().get_mc() * LIFTMODIFY));
     Message::AddMessage(TEXT("MacCready "), Temp);
   }
 }

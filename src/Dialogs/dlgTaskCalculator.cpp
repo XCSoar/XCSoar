@@ -191,7 +191,7 @@ static void OnMacCreadyData(DataField *Sender,
     }
     break;
   case DataField::daGet:
-    Sender->Set((task_manager.get_glide_polar().get_mc()*LIFTMODIFY).as_double());
+    Sender->Set((double)(task_manager.get_glide_polar().get_mc() * LIFTMODIFY));
     break;
   case DataField::daPut:
   case DataField::daChange:
