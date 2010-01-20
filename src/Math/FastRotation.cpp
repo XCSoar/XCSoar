@@ -88,7 +88,9 @@ FastIntegerRotation::Rotate(int x, int y) const
  * @param is_signed Is the input angle signed?
  * @return True if between, False if not
  */
-bool AngleInRange(double Angle0, double Angle1, double x, bool is_signed) {
+bool
+AngleInRange(fixed Angle0, fixed Angle1, fixed x, bool is_signed)
+{
   Angle0 = AngleLimit360(Angle0);
   Angle1 = AngleLimit360(Angle1);
   x = AngleLimit360(x);
