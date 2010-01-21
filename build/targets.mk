@@ -227,19 +227,15 @@ ifeq ($(TARGET),PPC2002)
 endif
 
 ifeq ($(CONFIG_PC),y)
-  TARGET_CPPFLAGS += -D_WINDOWS -DWIN32 -DCECORE
+  TARGET_CPPFLAGS += -DCECORE
 
   ifeq ($(CONFIG_WINE),y)
     TARGET_CPPFLAGS += -D__WINE__
     # -mno-cygwin
-  else
-    TARGET_CPPFLAGS += -D_MBCS
   endif
 else
-  TARGET_CPPFLAGS += -D_ARM_
-
   ifeq ($(CONFIG_ALTAIR),y)
-    TARGET_CPPFLAGS +=-IPPC2005 -DGNAV
+    TARGET_CPPFLAGS += -DGNAV
     ifeq ($(ALTAIR_PORTRAIT),y)
       TARGET_CPPFLAGS += -DFORCEPORTRAIT
     endif
