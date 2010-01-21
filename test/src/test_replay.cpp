@@ -111,9 +111,9 @@ int main(int argc, char** argv)
 
   plan_tests(3);
 
+  ok(test_replay(OLC_Classic),"replay classic",0);
   ok(test_replay(OLC_Sprint),"replay sprint",0);
   ok(test_replay(OLC_FAI),"replay fai",0);
-  ok(test_replay(OLC_Classic),"replay classic",0);
 
   return exit_status();
 }
