@@ -1153,7 +1153,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   static TCHAR t_laa1[50];
-  _stprintf(t_laa1, _T("1,%d,%d,%d,2,DD927B,%d,0,0,0,1"), n1, e1, h1, t1);
+  _stprintf(t_laa1, (i < 70 ? _T("1") : _T("2"))_T(",%d,%d,%d,2,DD927B,%d,0,0,0,1"), n1, e1, h1, t1);
   static TCHAR t_laa2[50];
   _stprintf(t_laa2, _T("0,%d,%d,%d,2,DD9146,%d,0,0,0,1"), n2, e2, h2, t2);
 
