@@ -38,7 +38,7 @@
 #include <math.h>
 #include "Util/Tolerances.hpp"
 
-static const fixed fixed_ten;
+static const fixed fixed_ten(10);
 
 TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
                                      const unsigned activeTaskPoint,

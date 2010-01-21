@@ -145,7 +145,7 @@ GlideResult::calc_vspeed(const fixed inv_mc)
 fixed
 GlideResult::glide_angle_ground() const
 {
-  static const fixed fixed_100;
+  static const fixed fixed_100(100);
 
   if (positive(Vector.Distance)) {
     return HeightGlide / Vector.Distance;
