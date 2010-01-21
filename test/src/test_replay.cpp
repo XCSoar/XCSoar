@@ -98,6 +98,7 @@ test_replay(const OLCRules olc_type)
     }
     time_last = sim.state.Time;
   };
+  sim.Stop();
   return true;
 }
 

@@ -338,10 +338,10 @@ ReplayLogger::UpdateInternal()
     Enabled = true;
     on_reset();
   }
-  initialised = true;
 
   const int t_simulation_last = t_simulation;
   t_simulation = get_time(!initialised, cli.GetMinTime());
+  initialised = true;
   if ((int)t_simulation<= t_simulation_last) {
     return true;
   }
