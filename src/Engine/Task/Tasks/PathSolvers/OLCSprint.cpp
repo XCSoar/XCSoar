@@ -59,8 +59,6 @@ OLCSprint::admit_candidate(const ScanTaskPoint &candidate) const
 fixed
 OLCSprint::score(fixed& the_distance)  
 {
-  static const fixed fixed_9000(9000);
-
   const fixed dist = OLCDijkstra::score(the_distance);
 
   if (positive(dist)) {
