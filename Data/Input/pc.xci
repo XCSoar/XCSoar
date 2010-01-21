@@ -1008,9 +1008,8 @@ location=7
 mode=Info2
 type=key
 data=9
-event=FlarmTraffic
-event=Mode default
-label=FLARM\nTraffic
+event=ScreenModes toggleauxiliary
+label=Aux Info\n$(AuxInfoToggleActionName)
 location=8
 
 mode=Info2
