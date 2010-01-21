@@ -154,7 +154,7 @@ endif
 
 ifeq ($(CONFIG_PPC2002),y)
   CE_MAJOR := 3
-  CE_MINOR := 00
+  CE_MINOR := 10
   CE_PLATFORM := 310
   TARGET := PPC2002
   PCPU := ARM
