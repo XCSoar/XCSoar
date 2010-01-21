@@ -971,6 +971,7 @@ NMEAParser::PTAS1(const TCHAR *String, const TCHAR **params, size_t nparams,
 
 /**
  * Parses a PFLAU sentence
+ * (Operating status and priority intruder and obstacle data)
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
@@ -987,6 +988,8 @@ NMEAParser::PFLAU(const TCHAR *String, const TCHAR **params, size_t nparams,
   flarm.FLARM_Available = true;
   isFlarm = true;
 
+  // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
+  //   <RelativeVertical>,<RelativeDistance>(,<ID>)
   _stscanf(String,
       _T("%hu,%hu,%hu,%hu"),
       &flarm.FLARM_RX,
@@ -1013,6 +1016,7 @@ NMEAParser::PFLAU(const TCHAR *String, const TCHAR **params, size_t nparams,
 
 /**
  * Parses a PFLAA sentence
+ * (Data on other moving objects around)
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
@@ -1068,6 +1072,8 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   // set time of fix to current time
   flarm_slot->Time_Fix = GPS_INFO->Time;
 
+  // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
+  //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   _stscanf(String,
       _T("%hu,%lf,%lf,%lf,%hu,%lx,%lf,%lf,%lf,%lf,%hu"),
            &flarm_slot->AlarmLevel, // unsigned short 0
@@ -1112,15 +1118,19 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 #ifndef NDEBUG
 #ifndef GNAV
   static int i = 90;
+
+  // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
+  //   <RelativeVertical>,<RelativeDistance>(,<ID>)
+
+  // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
+  //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
+
   static TCHAR t1[] = _T("1,1,1,1");
   static TCHAR t2[] = _T("1,300,500,220,2,DD927B,0,-4.5,30,-1.4,1");
   static TCHAR t3[] = _T("0,0,1200,50,2,DD9146,270,-4.5,30,-1.4,1");
+
   //  static TCHAR b50[] = _T("0,.1,.0,0,0,1.06,0,-222");
   //  static TCHAR t4[] = _T("-3,500,1024,50");
-
-  //  ParseNMEAString_Internal(_T("$PTAS1,201,200,02583,000*2A"), GPS_INFO);
-  //  ParseNMEAString_Internal(_T("$GPRMC,082430.00,A,3744.09096,S,14426.16069,E,0.520294.90,301207,,,A*77"), GPS_INFO);
-  //  ParseNMEAString_Internal(_T("$GPGGA,082430.00,3744.09096,S,1426.16069,E,1,08,1.37,157.6,M,-4.9,M,,*5B"), GPS_INFO);
 
   i++;
 
