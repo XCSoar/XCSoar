@@ -1103,6 +1103,10 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   return false;
 }
 
+/**
+ * This function creates some simulated traffic for FLARM debugging
+ * @param GPS_INFO Pointer to the NMEA_INFO struct
+ */
 void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 	// QUESTION TB: should be moved to test folder!?
 #ifndef NDEBUG
