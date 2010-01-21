@@ -37,6 +37,7 @@
 #ifndef TASKMANAGER_H
 #define TASKMANAGER_H
 
+#include "Compiler.h"
 #include "Util/Serialisable.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Tasks/TaskInterface.hpp"
@@ -93,6 +94,7 @@ public:
  * 
  * @return Sequence number of task point
  */
+  gcc_pure
   unsigned getActiveTaskPointIndex() const;
 
 /** 
@@ -100,6 +102,7 @@ public:
  * 
  * @return TaskPoint of active task point, and 0 if no active task
  */
+  gcc_pure
   TaskPoint* getActiveTaskPoint() const;
 
 /**
@@ -108,6 +111,7 @@ public:
  *
  * @param index_offset offset (default 0)
  */
+  gcc_pure
   bool validTaskPoint(const int index_offset=0) const;
 
 /** 
@@ -205,6 +209,7 @@ public:
  * 
  * @return Statistics of active task
  */
+  gcc_pure
   const TaskStats& get_stats() const;
 
 /** 
@@ -212,6 +217,7 @@ public:
  * 
  * @return Statistics 
  */
+  gcc_pure
   const CommonStats& get_common_stats() const;
 
 /** 
@@ -219,6 +225,7 @@ public:
  * 
  * @return True if stats valid
  */
+  gcc_pure
   bool stats_valid() const;
 
 /** 
@@ -226,6 +233,7 @@ public:
  * 
  * @return Number of taskpoints in active task
  */
+  gcc_pure
   unsigned task_size() const;
 
 /** 
@@ -233,6 +241,7 @@ public:
  * 
  * @return True if task is valid
  */
+  gcc_pure
   bool check_ordered_task() const;
 
 /** 
@@ -240,6 +249,7 @@ public:
  * 
  * @return True if task is valid
  */
+  gcc_pure
   bool check_task() const;
 
 /** 
@@ -247,6 +257,7 @@ public:
  * 
  * @return Factory
  */
+  gcc_pure
   AbstractTaskFactory* get_factory() const;
 
 /** 
@@ -270,6 +281,7 @@ public:
  * 
  * @return Active task mode
  */
+  gcc_pure
   TaskMode_t get_mode() const;
 
 /** 
@@ -279,6 +291,7 @@ public:
  * 
  * @return True if modes match
  */
+  gcc_pure
   bool is_mode(const TaskMode_t the_mode) const;
 
 /** 
@@ -293,6 +306,7 @@ public:
  * 
  * @return Reference to glide polar
  */
+  gcc_pure
   const GlidePolar& get_glide_polar() const;
 
 /**
@@ -307,6 +321,7 @@ public:
  * 
  * @return Copy of glide polar 
  */
+  gcc_pure
   GlidePolar get_safety_polar() const;
 
 /**
@@ -328,6 +343,7 @@ public:
  * 
  * @return Vector of trace points selected for OLC
  */
+  gcc_pure
   const TracePointVector& get_olc_points() const;
 
 /** 
@@ -335,6 +351,7 @@ public:
  * 
  * @return Vector of trace points reduced for OLC
  */
+  gcc_pure
   const TracePointVector& get_trace_points() const;
 
 #ifdef DO_PRINT

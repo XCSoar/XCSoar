@@ -40,6 +40,7 @@
 #ifndef TASKPOINT_HPP
 #define TASKPOINT_HPP
 
+#include "Compiler.h"
 #include "Util/Serialisable.hpp"
 #include "Navigation/ReferencePoint.hpp"
 #include "Waypoint/Waypoint.hpp"
@@ -90,6 +91,7 @@ public:
  * 
  * @return Location 
  */
+  gcc_pure
   virtual const GEOPOINT& get_location_remaining() const;
 
 /** 
@@ -97,6 +99,7 @@ public:
  * 
  * @return Vector for task leg
  */  
+  gcc_pure
   virtual const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const = 0;
 
 /** 
@@ -151,6 +154,7 @@ public:
  * 
  * @return True if observation zone has been entered
  */
+  gcc_pure
   virtual bool has_entered() const = 0;
 
 /** 
@@ -177,6 +181,7 @@ public:
  * 
  * @return Minimum allowable elevation of task point
  */
+  gcc_pure
   virtual fixed get_elevation() const = 0;
 
 #ifdef DO_PRINT
