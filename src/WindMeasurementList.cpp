@@ -58,7 +58,9 @@ Copyright_License {
 #include "Math/FastMath.h"
 
 #include <stdlib.h>
-#include <windef.h> /* for min() */
+#include <algorithm>
+
+using std::min;
 
 WindMeasurementList::WindMeasurementList()
 {
