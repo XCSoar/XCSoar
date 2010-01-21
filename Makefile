@@ -40,6 +40,7 @@ endif
 include $(topdir)/build/flags.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
+include $(topdir)/build/tools.mk
 include $(topdir)/build/resource.mk
 include $(topdir)/build/generate.mk
 include $(topdir)/build/doco.mk
