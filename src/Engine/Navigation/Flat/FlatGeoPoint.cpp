@@ -38,6 +38,8 @@
 #include "Math/FastMath.h"
 #include <algorithm>
 
+using std::min;
+
 unsigned 
 FLAT_GEOPOINT::distance_to(const FLAT_GEOPOINT &sp) const
 {
