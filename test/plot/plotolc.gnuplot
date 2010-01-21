@@ -12,7 +12,6 @@ set style line 8 lt 2 lc rgb "red" lw 2
 
 
 plot \
-     'results/res-task.txt' using 1:2 with lines ls 6 title "OZ", \
      'results/res-olc-solution.txt' using 1:2 with linespoints ls 8 title "olc", \
      'results/res-sample.txt' using 2:3 with lines ls 1 title "sample"
 pause -1

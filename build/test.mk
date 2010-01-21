@@ -1,4 +1,5 @@
 TESTFAST = \
+	$(TARGET_BIN_DIR)/test_replay$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_olc$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_fixed$(TARGET_EXEEXT) \
 	$(TARGET_BIN_DIR)/test_waypoints$(TARGET_EXEEXT) \

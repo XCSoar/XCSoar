@@ -263,11 +263,11 @@ bool AircraftSim::advance(TaskManager &task_manager)  {
 }
 
 #ifdef DO_PRINT
-void AircraftSim::print(std::ostream &f4) {
-  f4 << state.Time << " " 
-     <<  state.Location.Longitude << " " 
-     <<  state.Location.Latitude << " "
-     <<  state.NavAltitude << "\n";
+void AircraftSim::print(std::ostream &f) {
+  f << state.Time << " " 
+    <<  state.Location.Longitude << " " 
+    <<  state.Location.Latitude << " "
+    <<  state.NavAltitude << "\n";
 }
 #endif
 

@@ -78,6 +78,8 @@ public:
   void
   Update(double t, double lon, double lat, double alt)
   {
+    if (num && (t<=p[num-1].t)) return;
+
     if (num < 4)
       num++;
 
@@ -117,50 +119,43 @@ public:
     return s1 * u + s0 * (1.0 - u);
   }
   void 
-  Interpolate(double time, fixed *lon, fixed *lat, double *alt) 
+  Interpolate(double time, GEOPOINT &loc, double &alt) 
   {
     if (!Ready()) {
-      *lon = p[num].loc.Longitude;
-      *lat = p[num].loc.Latitude;
-      *alt = p[num].alt;
+      loc = p[num].loc;
+      alt = p[num].alt;
       return;
     }
 
-    double t = 0.98;
-    double u = (time - p[1].t) / (p[2].t - p[1].t);
+    const double u = (time - p[1].t) / (p[2].t - p[1].t);
 
     if (u < 0.0) {
-      *lat = p[1].loc.Latitude;
-      *lon = p[1].loc.Longitude;
-      *alt = p[1].alt;
+      loc = p[1].loc;
+      alt = p[1].alt;
       return;
     }
 
     if (u > 1.0) {
-      *lat = p[2].loc.Latitude;
-      *lon = p[2].loc.Longitude;
-      *alt = p[2].alt;
+      loc = p[2].loc;
+      alt = p[2].alt;
       return;
     }
 
-    double u2 = u * u;
-    double u3 = u2 * u;
-    double c[4]= {-t * u3 + 2 * t * u2 - t * u,
-                  (2 - t) * u3 + (t - 3) * u2 + 1,
-                  (t - 2) * u3 + (3 - 2 * t) * u2 + t * u,
-                  t * u3 - t * u2};
-    /*
-      double c[4] = {-t*u+2*t*u2-t*u3,
-      1+(t-3)*u2+(2-t)*u3,
-      t*u+(3-2*t)*u2+(t-2)*u3,
-      -t*u2+t*u3};
-    */
+    const double t = 0.98;
+    const double u2 = u * u;
+    const double u3 = u2 * u;
+    const double c[4]= {-t * u3 + 2 * t * u2 - t * u,
+                        (2 - t) * u3 + (t - 3) * u2 + 1,
+                        (t - 2) * u3 + (3 - 2 * t) * u2 + t * u,
+                        t * u3 - t * u2};
 
-    *lat = (p[0].loc.Latitude*c[0] + p[1].loc.Latitude*c[1]
-            + p[2].loc.Latitude*c[2] + p[3].loc.Latitude*c[3]);
-    *lon = (p[0].loc.Longitude*c[0] + p[1].loc.Longitude*c[1]
-            + p[2].loc.Longitude*c[2] + p[3].loc.Longitude*c[3]);
-    *alt = (p[0].alt*c[0] + p[1].alt*c[1] + p[2].alt*c[2] + p[3].alt*c[3]);
+    loc.Latitude = (p[0].loc.Latitude*c[0] + p[1].loc.Latitude*c[1]
+                    + p[2].loc.Latitude*c[2] + p[3].loc.Latitude*c[3]);
+
+    loc.Longitude = (p[0].loc.Longitude*c[0] + p[1].loc.Longitude*c[1]
+                     + p[2].loc.Longitude*c[2] + p[3].loc.Longitude*c[3]);
+
+    alt = (p[0].alt*c[0] + p[1].alt*c[1] + p[2].alt*c[2] + p[3].alt*c[3]);
 
   }
 
@@ -193,7 +188,7 @@ public:
   bool
   NeedData(double t_simulation)
   {
-    return (!Ready()) || (p[2].t <= t_simulation + 0.1);
+    return !Ready() || (p[2].t <= t_simulation + 0.1);
   }
 
 private:
@@ -273,7 +268,7 @@ ReplayLogger::ScanBuffer(const TCHAR *buffer, double *Time,
       return (lfound > 0);
     }
   }
-  return false;
+  return lfound != EOF;
 }
 
 bool
@@ -343,15 +338,18 @@ ReplayLogger::UpdateInternal()
     Enabled = true;
     on_reset();
   }
-
-  const double t_simulation_last = t_simulation;
-  t_simulation = get_time(!initialised, cli.GetMinTime());
-
   initialised = true;
+
+  const int t_simulation_last = t_simulation;
+  t_simulation = get_time(!initialised, cli.GetMinTime());
+  if ((int)t_simulation<= t_simulation_last) {
+    return true;
+  }
 
   // if need a new point
   while (cli.NeedData(t_simulation) && (!finished)) {
-    double t1, Lat1, Lon1, Alt1;
+    double t1=0;
+    double Lat1, Lon1, Alt1;
     finished = !ReadPoint(&t1, &Lat1, &Lon1, &Alt1);
 
     if (!finished && (t1 > 0)) {
@@ -359,27 +357,20 @@ ReplayLogger::UpdateInternal()
     }
   }
 
+  if (t_simulation == 0) {
+    t_simulation = cli.GetMaxTime();
+  }
+
   if (!finished) {
     double AltX, SpeedX, BearingX;
-    double AltX1;
     GEOPOINT P0, P1;
 
-    cli.Interpolate(t_simulation, &P0.Longitude, &P0.Latitude, &AltX);
-    cli.Interpolate(t_simulation + 0.1, &P1.Longitude, &P1.Latitude, &AltX1);
+    cli.Interpolate(t_simulation, P0, AltX);
 
     SpeedX = cli.GetSpeed(t_simulation);
     BearingX = P0.bearing(P1);
 
-    if ((SpeedX > 0)
-        && ((P0.Latitude != P1.Latitude) || (P0.Longitude != P1.Longitude))) {
-      if ((int)t_simulation != (int)t_simulation_last) {
-        on_advance(P0, SpeedX, BearingX, AltX, AltX, t_simulation);
-      }
-    } else {
-      // This is required in case the integrator fails,
-      // which can occur due to parsing faults
-      t_simulation = cli.GetMaxTime();
-    }
+    on_advance(P0, SpeedX, BearingX, AltX, AltX, t_simulation);
   }
 
   // quit if finished.
