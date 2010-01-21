@@ -72,17 +72,47 @@ extern double INVCOSINETABLE[4096];
 extern int ISINETABLE[4096];
 extern int ICOSTABLE[4096];
 
-#ifdef __GNUC__
-  #define DEG_TO_INT(x) ((unsigned short)(int)((x)*(65536.0/360.0)))>>4
-#else
-  #define DEG_TO_INT(x) ((unsigned short)((x)*(65536.0/360.0)))>>4
-#endif
+gcc_const
+static inline int
+DEG_TO_INT(double x)
+{
+  return ((unsigned short)(x * (65536.0 / 360.0))) >> 4;
+}
 
-#define invfastcosine(x) INVCOSINETABLE[DEG_TO_INT(x)]
-#define ifastcosine(x) ICOSTABLE[DEG_TO_INT(x)]
-#define ifastsine(x) ISINETABLE[DEG_TO_INT(x)]
-#define fastcosine(x) COSTABLE[DEG_TO_INT(x)]
-#define fastsine(x) SINETABLE[DEG_TO_INT(x)]
+gcc_const
+static inline double
+invfastcosine(double x)
+{
+  return INVCOSINETABLE[DEG_TO_INT(x)];
+}
+
+gcc_const
+static inline int
+ifastsine(double x)
+{
+  return ISINETABLE[DEG_TO_INT(x)];
+}
+
+gcc_const
+static inline int
+ifastcosine(double x)
+{
+  return ICOSTABLE[DEG_TO_INT(x)];
+}
+
+gcc_const
+static inline double
+fastsine(double x)
+{
+  return SINETABLE[DEG_TO_INT(x)];
+}
+
+gcc_const
+static inline double
+fastcosine(double x)
+{
+  return COSTABLE[DEG_TO_INT(x)];
+}
 
 #ifdef __cplusplus
 
