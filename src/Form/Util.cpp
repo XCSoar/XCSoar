@@ -97,6 +97,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, double value)
   ctl->RefreshDisplay();
 }
 
+#ifdef FIXED_MATH
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
 {
@@ -109,6 +110,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
   ctl->GetDataField()->Set(value.as_double());
   ctl->RefreshDisplay();
 }
+#endif /* FIXED_MATH */
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
