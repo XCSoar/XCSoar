@@ -90,39 +90,37 @@ ifeq ($(CONFIG_PC),y)
 
   CPU := i586
   MCPU := -march=$(CPU)
-else
+endif
 
-  ifeq ($(CONFIG_WINE),y)
-    TCPATH := wine
-    CPU := i586
-    MCPU := -march=$(CPU)
+ifeq ($(CONFIG_WINE),y)
+  TCPATH := wine
+  CPU := i586
+  MCPU := -march=$(CPU)
+endif
+
+ifeq ($(HAVE_CE),y)
+  TCPATH := arm-mingw32ce-
+  CPU :=
+  MCPU :=
+
+  ifeq ($(XSCALE),y)
+    CPU := xscale
+    MCPU := -mcpu=$(CPU)
   endif
 
-  ifeq ($(HAVE_CE),y)
-    TCPATH := arm-mingw32ce-
+  ifeq ($(TARGET),PNA)
+    CPU := arm1136j-s
+    MCPU :=
+  endif
 
-    ifeq ($(XSCALE),y)
-      CPU := xscale
-      MCPU := -mcpu=$(CPU)
-    else
-      CPU :=
-      MCPU :=
-    endif
+  ifeq ($(CONFIG_PPC2002),y)
+    CPU := strongarm1110
+    MCPU := -mcpu=$(CPU)
+  endif
 
-    ifeq ($(TARGET),PNA)
-      CPU := arm1136j-s
-      MCPU :=
-    endif
-
-    ifeq ($(CONFIG_PPC2002),y)
-      CPU := strongarm1110
-      MCPU := -mcpu=$(CPU)
-    endif
-
-    ifeq ($(TARGET),PPC2000)
-      CPU := strongarm1110
-      MCPU := -mcpu=$(CPU)
-    endif
+  ifeq ($(TARGET),PPC2000)
+    CPU := strongarm1110
+    MCPU := -mcpu=$(CPU)
   endif
 endif
 
@@ -242,17 +240,17 @@ endif
 
 ifeq ($(CONFIG_PC),y)
   TARGET_CPPFLAGS += -DCECORE
+endif
 
-  ifeq ($(CONFIG_WINE),y)
-    TARGET_CPPFLAGS += -D__WINE__
-    # -mno-cygwin
-  endif
-else
-  ifeq ($(CONFIG_ALTAIR),y)
-    TARGET_CPPFLAGS += -DGNAV
-    ifeq ($(ALTAIR_PORTRAIT),y)
-      TARGET_CPPFLAGS += -DFORCEPORTRAIT
-    endif
+ifeq ($(CONFIG_WINE),y)
+  TARGET_CPPFLAGS += -D__WINE__
+  # -mno-cygwin
+endif
+
+ifeq ($(CONFIG_ALTAIR),y)
+  TARGET_CPPFLAGS += -DGNAV
+  ifeq ($(ALTAIR_PORTRAIT),y)
+    TARGET_CPPFLAGS += -DFORCEPORTRAIT
   endif
 endif
 
@@ -333,19 +331,23 @@ ifeq ($(HAVE_POSIX),y)
   TARGET_LDFLAGS += -lrt # for clock_gettime()
 endif
 
-ifeq ($(HAVE_WIN32),y)
-  ifeq ($(CONFIG_PC),y)
-    TARGET_LDLIBS := -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
-  else
-    TARGET_LDLIBS := -lcommctrl -lstdc++
-    ifeq ($(MINIMAL),n)
-      TARGET_LDLIBS += -laygshell
-      ifneq ($(TARGET),PNA)
-        TARGET_LDLIBS += -limgdecmp
-      endif
+ifeq ($(CONFIG_PC),y)
+  TARGET_LDLIBS := -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
+endif
+
+ifeq ($(HAVE_CE),y)
+  TARGET_LDLIBS := -lcommctrl -lstdc++
+
+  ifeq ($(MINIMAL),n)
+    TARGET_LDLIBS += -laygshell
+
+    ifneq ($(TARGET),PNA)
+      TARGET_LDLIBS += -limgdecmp
     endif
   endif
-else
+endif
+
+ifeq ($(TARGET),UNIX)
   TARGET_LDLIBS := -lstdc++ -lm
 endif
 
