@@ -12,7 +12,8 @@
 #
 #   ENABLE_SDL  If set to "y", the UI is drawn with libSDL.
 #
-#   DEBUG       If set to "y", the debugging version of XCSoar is built.
+#   DEBUG       If set to "y", the debugging version of XCSoar is built
+#               (default is "y")
 #
 #   V           Verbosity; 1 is the default, and prints terse information.
 #               0 means quiet, and 2 prints the full compiler commands.

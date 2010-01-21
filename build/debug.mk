@@ -1,3 +1,5 @@
+DEBUG ?= y
+
 ifeq ($(DEBUG),y)
 OPTIMIZE := -O0
 OPTIMIZE += -funit-at-a-time
