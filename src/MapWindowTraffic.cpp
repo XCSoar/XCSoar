@@ -247,6 +247,10 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       break;
     }
 
+    // Select black pen
+    static Pen BlackPen(IBLSCALE(1), Color::BLACK);
+    canvas.select(BlackPen);
+
     // Rotate and shift the arrow to the right position and angle
     PolygonRotateShift(Arrow, 5, sc.x, sc.y,
                        traffic.TrackBearing - GetDisplayAngle());
