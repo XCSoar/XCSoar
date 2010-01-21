@@ -3,8 +3,6 @@
 #include "harness_airspace.hpp"
 
 int main(int argc, char** argv) {
-  ::InitSineTable();
-
   // default arguments
   verbose=2;  
   

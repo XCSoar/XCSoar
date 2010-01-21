@@ -5,8 +5,6 @@
 extern AircraftStateFilter *aircraft_filter;
 
 int main(int argc, char** argv) {
-  ::InitSineTable();
-
   // default arguments
   verbose=1;  
   

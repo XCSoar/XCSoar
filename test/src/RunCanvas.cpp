@@ -269,8 +269,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         LPTSTR lpCmdLine, int nCmdShow)
 #endif
 {
-  InitSineTable();
-
 #ifdef WIN32
   CommonInterface::hInst = hInstance;
 

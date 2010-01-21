@@ -381,8 +381,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         LPTSTR lpCmdLine, int nCmdShow)
 #endif
 {
-  InitSineTable();
-
   LoadFiles();
 
 #ifdef WIN32

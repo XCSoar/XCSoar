@@ -279,9 +279,6 @@ bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
   MainWindow::register_class(hInst);
   MapWindow::register_class(hInst);
 
-  // Fill the fast(co)sine table
-  InitSineTable();
-
   PreloadInitialisation(true);
 
   // Send the SettingsMap to the DeviceBlackboard

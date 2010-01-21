@@ -66,11 +66,11 @@ iround(double i)
   return Real2Int(floor(i + 0.5));
 }
 
-extern double COSTABLE[4096];
-extern double SINETABLE[4096];
-extern double INVCOSINETABLE[4096];
-extern int ISINETABLE[4096];
-extern int ICOSTABLE[4096];
+extern const double COSTABLE[4096];
+extern const double SINETABLE[4096];
+extern const double INVCOSINETABLE[4096];
+extern const int ISINETABLE[4096];
+extern const int ICOSTABLE[4096];
 
 gcc_const
 static inline int
@@ -145,9 +145,6 @@ CombinedDivAndMod(unsigned int &lx)
 extern "C"
 {
 #endif
-
-// Fast trig functions
-void InitSineTable(void);
 
 gcc_const
 unsigned int isqrt4(unsigned long val);

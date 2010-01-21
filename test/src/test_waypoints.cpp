@@ -142,8 +142,6 @@ bool test_replace(Waypoints& waypoints, unsigned id)
 
 int main(int argc, char** argv)
 {
-  ::InitSineTable();
-
   if (!parse_args(argc,argv)) {
     return 0;
   }

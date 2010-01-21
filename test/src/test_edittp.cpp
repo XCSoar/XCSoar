@@ -166,8 +166,6 @@ public:
 
 
 int main(int argc, char** argv) {
-  ::InitSineTable();
-
   // default arguments
   verbose=1;  
   

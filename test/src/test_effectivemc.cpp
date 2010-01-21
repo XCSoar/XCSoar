@@ -3,8 +3,6 @@
 
 int main(int argc, char** argv) 
 {
-  ::InitSineTable();
-
   // default arguments
   bearing_noise=0;
   target_noise=0.1;

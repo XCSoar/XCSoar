@@ -3,8 +3,6 @@
 
 int main(int argc, char** argv) 
 {
-  ::InitSineTable();
-
   // default arguments
   target_noise=0.1;
   output_skip = 5;

@@ -5,8 +5,6 @@
 
 int main(int argc, char**argv)
 {
-  ::InitSineTable();
-
   bearing_noise=0;
   target_noise=0.1;
   turn_speed=5.0;

@@ -64,8 +64,6 @@ bool test_as(const unsigned n, std::ostream &fo) {
 
 
 int main(int argc, char** argv) {
-  ::InitSineTable();
-
   if (!parse_args(argc,argv)) {
     return 0;
   }
