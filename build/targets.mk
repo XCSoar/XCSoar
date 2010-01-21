@@ -181,16 +181,12 @@ ifeq ($(CONFIG_ALTAIR),y)
 endif
 
 ifeq ($(CONFIG_PC),y)
-  # armv4i
-  CE_MAJOR := 5
-  CE_MINOR := 00
+  WINVER = 0x0500
   TARGET := PC
 endif
 
 ifeq ($(CONFIG_WINE),y)
-  # armv4i
-  CE_MAJOR := 5
-  CE_MINOR := 00
+  WINVER = 0x0500
   TARGET := WINE
   CONFIG_PC := y
 endif
@@ -203,10 +199,14 @@ CE_PLATFORM := $(CE_MAJOR)$(CE_MINOR)
 TARGET_CPPFLAGS =
 TARGET_INCLUDES =
 
+ifneq ($(WINVER),)
+  TARGET_CPPFLAGS += -DWINVER=$(WINVER) -D_WIN32_WINDOWS=$(WINVER)
+  TARGET_CPPFLAGS += -D_WIN32_WINNT=$(WINVER) -D_WIN32_IE=$(WINVER)
+endif
+
 ifeq ($(HAVE_WIN32),y)
   ifeq ($(CONFIG_PC),y)
-    TARGET_CPPFLAGS += -D_WIN32_WINDOWS=$(CE_VERSION) -DWINVER=$(CE_VERSION) 
-    TARGET_CPPFLAGS += -D_WIN32_IE=$(CE_VERSION) -DWINDOWSPC=1
+    TARGET_CPPFLAGS += -DWINDOWSPC=1
   else
     TARGET_CPPFLAGS += -D_WIN32_WCE=$(CE_VERSION)
     TARGET_CPPFLAGS += -DWIN32_PLATFORM_PSPC=$(CE_PLATFORM)
@@ -307,13 +307,16 @@ endif
 TARGET_LDFLAGS =
 TARGET_LDLIBS =
 
+ifeq ($(TARGET),PC)
+  TARGET_LDFLAGS += -Wl,--major-subsystem-version=5
+  TARGET_LDFLAGS += -Wl,--minor-subsystem-version=00
+  TARGET_LDFLAGS += -Wl,-subsystem,windows
+endif
+
 ifeq ($(HAVE_WIN32),y)
-  ifneq ($(CONFIG_WINE),y)
+  ifeq ($(CONFIG_PC),n)
     TARGET_LDFLAGS := -Wl,--major-subsystem-version=$(CE_MAJOR)
     TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
-    ifeq ($(CONFIG_PC),y)
-      TARGET_LDFLAGS += -Wl,-subsystem,windows
-    endif
   endif
 endif
 
