@@ -1,3 +1,9 @@
+// use the full physical display resolution on WM<5.0
+HI_RES_AWARE CEUX MOVEABLE PURE
+BEGIN
+    0x0001
+END
+
 //Microsoft eMbedded Visual C++ generated resource script.
 //
 #include "resource.h"

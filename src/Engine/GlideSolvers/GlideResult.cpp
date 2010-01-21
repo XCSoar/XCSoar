@@ -37,7 +37,6 @@
 #include "GlideResult.hpp"
 #include "GlideState.hpp"
 #include <math.h>
-#include "Math/NavFunctions.hpp"
 #include "Navigation/Aircraft.hpp"
 
 GlideResult::GlideResult():

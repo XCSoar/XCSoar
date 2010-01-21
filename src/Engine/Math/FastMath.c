@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000 - 2009
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 
 	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -18,6 +18,7 @@ Copyright_License {
 	Tobias Lohner <tobias@lohner-net.de>
 	Mirek Jezek <mjezek@ipplc.cz>
 	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -36,11 +37,7 @@ Copyright_License {
 */
 
 #include "Math/FastMath.h"
-
-#ifndef DEG_TO_RAD
-#define DEG_TO_RAD 0.0174532925199432958
-#define RAD_TO_DEG 57.2957795131
-#endif
+#include "Math/Constants.h"
 
 double COSTABLE[4096];
 double SINETABLE[4096];
@@ -70,7 +67,7 @@ InitSineTable(void)
     ISINETABLE[i] = iround(sina * 1024);
     ICOSTABLE[i] = iround(cosa * 1024);
 
-    if ((cosa > 0) && (cosa < 1.0e-8))
+    if ((cosa >= 0) && (cosa < 1.0e-8))
       cosa = 1.0e-8;
 
     if ((cosa < 0) && (cosa > -1.0e-8))
@@ -87,15 +84,17 @@ InitSineTable(void)
  * @param val Value
  * @return Rounded square root of val
  */
-unsigned int isqrt4(unsigned long val) {
-  unsigned int temp, g=0;
+unsigned int
+isqrt4(unsigned long val)
+{
+  unsigned int temp, g = 0;
 
   if (val >= 0x40000000) {
     g = 0x8000;
     val -= 0x40000000;
   }
 
-#define INNER_MBGSQRT(s)                      \
+  #define INNER_MBGSQRT(s)                    \
   temp = (g << (s)) + (1 << ((s) * 2 - 2));   \
   if (val >= temp) {                          \
     g += 1 << ((s)-1);                        \
@@ -117,10 +116,11 @@ unsigned int isqrt4(unsigned long val) {
   INNER_MBGSQRT ( 3)
   INNER_MBGSQRT ( 2)
 
-#undef INNER_MBGSQRT
+  #undef INNER_MBGSQRT
 
-  temp = g+g+1;
-  if (val >= temp) g++;
+  temp = g + g + 1;
+  if (val >= temp)
+    g++;
 
   return g;
 }

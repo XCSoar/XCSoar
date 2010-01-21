@@ -68,7 +68,12 @@ static Color colTextBackgnd;
 
 GaugeVario::GaugeVario(ContainerWindow &parent,
                        int left, int top, unsigned width, unsigned height)
- :polys(NULL), lines(NULL)
+  :nlength0(Layout::Scale(Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle
+                          ? 15 : 13)),
+   nlength1(Layout::Scale(6)),
+   nwidth(Layout::Scale(4)),
+   nline(Layout::Scale(8)),
+  polys(NULL), lines(NULL)
 {
   diValueTop.InitDone = false;
   diValueMiddle.InitDone = false;
@@ -301,26 +306,9 @@ void GaugeVario::RenderBg(Canvas &canvas) {
 }
 
 void GaugeVario::MakePolygon(const int i) {
-  static bool InitDone = false;
-  static int nlength0, nlength1, nwidth, nline;
   double dx, dy;
   POINT *bit = getPolygon(i);
   POINT *bline = &lines[i+gmax];
-
-  if (!InitDone){
-    if (Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle) {
-      nlength0 = IBLSCALE(15); // was 18
-      nlength1 = IBLSCALE(6);
-      nwidth = IBLSCALE(4);  // was 3
-      nline = IBLSCALE(8);
-    } else {
-      nlength0 = IBLSCALE(13);
-      nlength1 = IBLSCALE(6);
-      nwidth = IBLSCALE(4);
-      nline = IBLSCALE(8);
-    }
-    InitDone = true;
-  }
 
   dx = -xoffset+nlength0; dy = nwidth;
   rotate(dx, dy, fixed(i));

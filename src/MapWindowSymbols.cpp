@@ -379,7 +379,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
     Arrow[i].y -= wmag;
 
   PolygonRotateShift(Arrow, 7, Start.x, Start.y,
-		     Basic().WindDirection-DisplayAngle);
+                     Basic().WindDirection - GetDisplayAngle());
   canvas.polygon(Arrow, 5);
 
   if (SettingsMap().WindArrowStyle==1) {
@@ -388,7 +388,7 @@ void MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT
       { 0, Layout::FastScale(-26 - min(20, wmag) * 3) },
     };
 
-    double angle = AngleLimit360(Basic().WindDirection-DisplayAngle);
+    double angle = AngleLimit360(Basic().WindDirection - GetDisplayAngle());
     for(i=0; i<2; i++) {
       protateshift(Tail[i], angle, Start.x, Start.y);
     }
@@ -683,7 +683,7 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
     canvas.select(MapGfx.hbCompass);
 
     // North arrow
-    PolygonRotateShift(Arrow, 5, Start.x, Start.y, -DisplayAngle);
+    PolygonRotateShift(Arrow, 5, Start.x, Start.y, - GetDisplayAngle());
     canvas.polygon(Arrow, 5);
 
   } else if (Appearance.CompassAppearance == apCompassAltA) {
@@ -692,7 +692,7 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
     static int lastRcRight = 0;
     static POINT Arrow[5] = { {0,-11}, {-5,9}, {0,3}, {5,9}, {0,-11}};
 
-    if (lastDisplayAngle != DisplayAngle || lastRcRight != rc.right){
+    if (lastDisplayAngle != GetDisplayAngle() || lastRcRight != rc.right){
 
       Arrow[0].x  = 0;
       Arrow[0].y  = -11;
@@ -710,9 +710,9 @@ void MapWindow::DrawCompass(Canvas &canvas, const RECT rc)
 
       // North arrow
       PolygonRotateShift(Arrow, 5, Start.x, Start.y,
-                         -DisplayAngle);
+                         - GetDisplayAngle());
 
-      lastDisplayAngle = DisplayAngle;
+      lastDisplayAngle = GetDisplayAngle();
       lastRcRight = rc.right;
     }
 
@@ -749,7 +749,8 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
     Arrow[5].y -= dy;
 
     PolygonRotateShift(Arrow, 7, Orig_Aircraft.x, Orig_Aircraft.y,
-                       Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing-DisplayAngle);
+                       Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
+                       - GetDisplayAngle());
 
     canvas.polygon(Arrow, 7);
 
@@ -761,7 +762,8 @@ void MapWindow::DrawBestCruiseTrack(Canvas &canvas)
 
     PolygonRotateShift(Arrow, sizeof(Arrow)/sizeof(Arrow[0]),
                        Orig_Aircraft.x, Orig_Aircraft.y,
-                       Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing-DisplayAngle);
+                       Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
+                       - GetDisplayAngle());
     canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
   }
 }
