@@ -49,6 +49,8 @@ Copyright_License {
 #include "Units.hpp"
 #include "resource.h"
 
+#include <stdio.h>
+
 #include <algorithm>
 
 using std::min;

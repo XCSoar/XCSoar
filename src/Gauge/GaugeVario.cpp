@@ -50,6 +50,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #ifndef _MSC_VER
 #include <algorithm>

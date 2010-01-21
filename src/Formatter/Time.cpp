@@ -41,6 +41,7 @@ Copyright_License {
 #include <stdlib.h>
 #include "Interface.hpp"
 
+#include <stdio.h>
 
 void FormatterTime::SecsToDisplayTime(int d) {
   bool negative = (d<0);
