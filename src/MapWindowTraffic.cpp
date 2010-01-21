@@ -127,11 +127,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
     sc_av.y += IBLSCALE(16);
 
 #ifndef FLARM_AVERAGE
-    if (traffic.HasName()) {
-      TextInBox(hDC, traffic.Name, sc.x+IBLSCALE(3),
-                sc.y, 0, displaymode,
-                true);
-    }
+    if (traffic.HasName())
+      TextInBox(hDC, traffic.Name, sc.x + IBLSCALE(3), sc.y, 0, displaymode, true);
 #else
     TCHAR label_name[100];
     TCHAR label_avg[100];
@@ -142,14 +139,13 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       sc_name.y -= IBLSCALE(8);
       _stprintf(label_name, TEXT("%s"), traffic.Name);
     } else {
-      label_name[0]= _T('\0');
+      label_name[0] = _T('\0');
     }
 
     if (traffic.Average30s >= 0.1) {
-      _stprintf(label_avg, TEXT("%.1f"),
-                LIFTMODIFY * traffic.Average30s);
+      _stprintf(label_avg, TEXT("%.1f"), LIFTMODIFY * traffic.Average30s);
     } else {
-      label_avg[0]= _T('\0');
+      label_avg[0] = _T('\0');
     }
 
 #ifndef NDEBUG
@@ -160,14 +156,14 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
     // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
-    int dx = (sc_av.x-Orig_Aircraft.x);
-    int dy = (sc_av.y-Orig_Aircraft.y);
+    int dx = (sc_av.x - Orig_Aircraft.x);
+    int dy = (sc_av.y - Orig_Aircraft.y);
 
     // only draw labels if not close to aircraft
-    if (dx*dx+dy*dy > IBLSCALE(30)*IBLSCALE(30)) {
+    if (dx * dx + dy * dy > IBLSCALE(30) * IBLSCALE(30)) {
       // Select the MapLabelFont and black color
       canvas.select(MapLabelFont);
-      canvas.set_text_color(Color(0,0,0));
+      canvas.set_text_color(Color(0, 0, 0));
 
       // If FLARM callsign/name available draw it to the canvas
       if (!string_is_empty(label_name))
@@ -180,21 +176,20 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
         // Calculate the size of the average climb indicator
         tsize = canvas.text_size(label_avg);
-        brect.left = sc_av.x-2;
-        brect.right = brect.left+tsize.cx+6;
-        brect.top = sc_av.y+((tsize.cy+4)>>3)-2;
-        brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
+        brect.left = sc_av.x - 2;
+        brect.right = brect.left + tsize.cx + 6;
+        brect.top = sc_av.y + ((tsize.cy + 4) >> 3) - 2;
+        brect.bottom = brect.top + 3 + tsize.cy - ((tsize.cy + 4) >> 3);
 
         // Determine the background color for the average climb indicator
-        float vmax = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
-        float vmin = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
+        float vmax = (float)(1.5 * min(5.0, max(MACCREADY, 0.5)));
+        float vmin = (float)(-1.5 * min(5.0, max(MACCREADY, 2.0)));
 
         float cv = traffic.Average30s;
-        if (cv < 0) {
+        if (cv < 0)
           cv /= (-vmin); // JMW fixed bug here
-        } else {
+        else
           cv /= vmax;
-        }
 
         int colourIndex = fSnailColour(cv);
         // Select the appropriate background color determined before
@@ -219,8 +214,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 #endif
 
     // If FLARM alarm draw alarm icon below corresponding target
-    if ((traffic.AlarmLevel > 0)
-        && (traffic.AlarmLevel < 4)) {
+    if ((traffic.AlarmLevel > 0) && (traffic.AlarmLevel < 4)) {
       draw_masked_bitmap(canvas, MapGfx.hFLARMTraffic, sc.x, sc.y, 10, 10, true);
     }
 
