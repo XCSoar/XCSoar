@@ -334,7 +334,9 @@ WndForm::on_paint(Canvas &canvas)
 
   // Calculate the titlebar coordinates
   CopyRect(&mTitleRect, &rcClient);
-  mTitleRect.bottom = mTitleRect.top + tsize.cy + Layout::FastScale(1);
+  mTitleRect.bottom = mTitleRect.top;
+  if (tsize.cy > 0)
+    mTitleRect.bottom += tsize.cy + Layout::FastScale(1);
 
   if (mClientWindow && !EqualRect(&mClientRect, &rcClient)) {
     // Calculate the ClientWindow coordinates
