@@ -45,7 +45,8 @@ Copyright_License {
 struct NMEA_INFO;
 class ContainerWindow;
 
-class GaugeFLARM : public BufferWindow {
+class GaugeFLARM: public BufferWindow
+{
 private:
   Bitmap hRoseBitMap;
   SIZE hRoseBitMapSize;
@@ -63,7 +64,8 @@ public:
   void RenderBg(Canvas &canvas);
   void Show(const bool enable_gauge);
   void TrafficPresent(bool traffic);
- private:
+
+private:
   int RangeScale(double d);
 };
 

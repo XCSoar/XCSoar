@@ -60,30 +60,30 @@ using std::max;
  * Returns the distance scaled at a quadratic(?) scale
  * @param d Distance to the own plane
  */
-int GaugeFLARM::RangeScale(double d) {
-  double drad = max(0.0,1.0-d/FLARMMAXRANGE);
-  return iround(radius*(1.0-drad*drad));
+int
+GaugeFLARM::RangeScale(double d)
+{
+  double drad = max(0.0, 1.0 - d / FLARMMAXRANGE);
+  return iround(radius * (1.0 - drad * drad));
 }
 
 /**
  * Draws the FLARM gauge background bitmap to the given canvas
  * @param canvas Canvas for painting
  */
-void GaugeFLARM::RenderBg(Canvas &canvas) {
+void
+GaugeFLARM::RenderBg(Canvas &canvas)
+{
   // Load the background bitmap
   BitmapCanvas hdcTemp(canvas, hRoseBitMap);
 
   // If it doesn't fit, make it fit
   if ((unsigned)hRoseBitMapSize.cx != canvas.get_width() ||
       (unsigned)hRoseBitMapSize.cy != canvas.get_height()) {
-    canvas.stretch(0, 0,
-                   canvas.get_width(),
-                   canvas.get_height(),
-                   hdcTemp,
+    canvas.stretch(0, 0, canvas.get_width(), canvas.get_height(), hdcTemp,
                    0, 0, hRoseBitMapSize.cx, hRoseBitMapSize.cy);
   } else {
-    canvas.copy(0, 0, canvas.get_width(), canvas.get_height(),
-                hdcTemp, 0, 0);
+    canvas.copy(0, 0, canvas.get_width(), canvas.get_height(), hdcTemp, 0, 0);
   }
 }
 
@@ -92,7 +92,8 @@ void GaugeFLARM::RenderBg(Canvas &canvas) {
  * @param canvas Canvas for drawing
  * @param gps_info NMEA_INFO struct containing the FLARM targets
  */
-void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
+void
+GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 {
   // TODO enhancement: support red/green Color blind pilots
 
@@ -126,8 +127,8 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
     double x, y;
     x = traffic.RelativeEast;
     y = -traffic.RelativeNorth;
-    double d = sqrt(x*x+y*y);
-    if (d>0) {
+    double d = sqrt(x * x + y * y);
+    if (d > 0) {
       x /= d;
       y /= d;
     } else {
@@ -135,12 +136,12 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
       y = 0;
     }
     double dh = traffic.RelativeAltitude;
-    double slope = atan2(dh,d)*2.0/M_PI; // (-1,1)
+    double slope = atan2(dh, d) * 2.0 / M_PI; // (-1,1)
 
-    slope = max(-1.0,min(1.0,slope*2)); // scale so 45 degrees or more=90
+    slope = max(-1.0, min(1.0, slope * 2)); // scale so 45 degrees or more=90
 
     // QUESTION TB: what about north up mode???
-    // JMW: nothing to do with map --- display for FLARM gauge always up
+    // JMW: nothing to do with map --- display for FLARM gauge is always track up
 
     fixed DisplayAngle = -gps_info.TrackBearing;
 
@@ -154,15 +155,13 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
     // Calculate screen coordinates
     POINT sc;
-    sc.x = center.x + iround(x*scale);
-    sc.y = center.y + iround(y*scale);
+    sc.x = center.x + iround(x * scale);
+    sc.y = center.y + iround(y * scale);
 
-    if (traffic.AlarmLevel > 0) {
+    if (traffic.AlarmLevel > 0)
       // Draw line through target
-      canvas.line(sc.x, sc.y,
-                  center.x + iround(radius*x),
-                  center.y + iround(radius*y));
-    }
+      canvas.line(sc.x, sc.y, center.x + iround(radius * x),
+                  center.y + iround(radius * y));
 
     // Create an arrow polygon
     POINT Arrow[5];
@@ -194,7 +193,7 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
       // Calculate size of the output string
       SIZE tsize = canvas.text_size(Buffer);
-      tsize.cx = (tsize.cx+IBLSCALE(6))/2;
+      tsize.cx = (tsize.cx + IBLSCALE(6)) / 2;
 
       // Draw string
       canvas.text(sc.x - tsize.cx + IBLSCALE(7),
@@ -206,24 +205,24 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
       // Prepare the triangular polygon
       POINT triangle[4];
-      triangle[0].x = 3;  // was  2
-      triangle[0].y = -3; // was -2
-      triangle[1].x = 6;  // was 4
+      triangle[0].x = 3;
+      triangle[0].y = -3;
+      triangle[1].x = 6;
       triangle[1].y = 1;
       triangle[2].x = 0;
       triangle[2].y = 1;
 
       // Flip = -1 for arrow pointing downwards
       short flip = 1;
-      if (relalt<0) {
+      if (relalt < 0) {
         flip = -1;
       }
 
       // Shift the arrow to the right position
-      for (int j=0; j<3; j++) {
-        triangle[j].x = sc.x+IBLSCALE(triangle[j].x)-tsize.cx;
-        triangle[j].y = sc.y+flip*IBLSCALE(triangle[j].y)
-          -tsize.cy/2-IBLSCALE(5);
+      for (int j = 0; j < 3; j++) {
+        triangle[j].x = sc.x + IBLSCALE(triangle[j].x) - tsize.cx;
+        triangle[j].y = sc.y + flip * IBLSCALE(triangle[j].y)
+                        - tsize.cy / 2 - IBLSCALE(5);
       }
       triangle[3].x = triangle[0].x;
       triangle[3].y = triangle[0].y;
@@ -238,7 +237,8 @@ void GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
  * Render the FLARM gauge to the buffer canvas
  * @param gps_info The NMEA_INFO struct containing the FLARM targets
  */
-void GaugeFLARM::Render(const NMEA_INFO &gps_info)
+void
+GaugeFLARM::Render(const NMEA_INFO &gps_info)
 {
   if (Visible) {
     // Render the background
@@ -266,8 +266,7 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
 {
   // start of new code for displaying FLARM window
 
-  set(parent, left, top, width, height,
-      false, false, false);
+  set(parent, left, top, width, height, false, false, false);
 
   center.x = get_hmiddle();
   center.y = get_vmiddle();
@@ -290,7 +289,9 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
  * Sets the Traffic field of the class to present
  * @param present New value for the Traffic field
  */
-void GaugeFLARM::TrafficPresent(bool present) {
+void
+GaugeFLARM::TrafficPresent(bool present)
+{
   Traffic = present;
 }
 
@@ -298,7 +299,9 @@ void GaugeFLARM::TrafficPresent(bool present) {
  * Shows or hides the FLARM gauge depending on enable_gauge
  * @param enable_gauge Enables the gauge if true, disables otherwise
  */
-void GaugeFLARM::Show(const bool enable_gauge) {
+void
+GaugeFLARM::Show(const bool enable_gauge)
+{
   Visible = ForceVisible || (Traffic && enable_gauge && !Suppress);
   static bool lastvisible = true;
   if (Visible && !lastvisible) {
