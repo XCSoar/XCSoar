@@ -1125,9 +1125,9 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
 
-  static TCHAR t1[] = _T("1,1,1,1");
-  static TCHAR t2[] = _T("1,300,500,220,2,DD927B,0,-4.5,30,-1.4,1");
-  static TCHAR t3[] = _T("0,0,1200,50,2,DD9146,270,-4.5,30,-1.4,1");
+  static TCHAR t_lau[] = _T("2,1,2,1");
+  static TCHAR t_laa1[] = _T("1,300,500,220,2,DD927B,0,-4.5,30,-1.4,1");
+  static TCHAR t_laa2[] = _T("0,0,1200,50,2,DD9146,270,-4.5,30,-1.4,1");
 
   //  static TCHAR b50[] = _T("0,.1,.0,0,0,1.06,0,-222");
   //  static TCHAR t4[] = _T("-3,500,1024,50");
@@ -1142,12 +1142,12 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
     TCHAR ctemp[MAX_NMEA_LEN];
     const TCHAR *params[MAX_NMEA_PARAMS];
     size_t nr;
-    nr = ExtractParameters(t1, ctemp, params, MAX_NMEA_PARAMS);
-    PFLAU(t1, params, nr, GPS_INFO->flarm);
-    nr = ExtractParameters(t2, ctemp, params, MAX_NMEA_PARAMS);
-    PFLAA(t2, params, nr, GPS_INFO);
-    nr = ExtractParameters(t3, ctemp, params, MAX_NMEA_PARAMS);
-    PFLAA(t3, params, nr, GPS_INFO);
+    nr = ExtractParameters(t_lau, ctemp, params, MAX_NMEA_PARAMS);
+    PFLAU(t_lau, params, nr, GPS_INFO->flarm);
+    nr = ExtractParameters(t_laa1, ctemp, params, MAX_NMEA_PARAMS);
+    PFLAA(t_laa1, params, nr, GPS_INFO);
+    nr = ExtractParameters(t_laa2, ctemp, params, MAX_NMEA_PARAMS);
+    PFLAA(t_laa2, params, nr, GPS_INFO);
   }
 #endif
 #endif
