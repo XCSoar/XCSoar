@@ -148,28 +148,24 @@ endif
 ifeq ($(TARGET),PPC2000)
   CE_MAJOR := 3
   CE_MINOR := 00
-  CE_PLATFORM := 300
   PCPU := ARM
 endif
 
 ifeq ($(CONFIG_PPC2002),y)
   CE_MAJOR := 3
   CE_MINOR := 10
-  CE_PLATFORM := 310
   TARGET := PPC2002
   PCPU := ARM
 endif
 ifeq ($(CONFIG_PPC2003),y)
   CE_MAJOR := 4
   CE_MINOR := 00
-  CE_PLATFORM := 400
   PCPU := ARMV4
 endif
 
 ifeq ($(CONFIG_WM5),y)
   CE_MAJOR := 5
   CE_MINOR := 00
-  CE_PLATFORM := 500
   PCPU := ARMV4
 endif
 
@@ -177,7 +173,6 @@ endif
 ifeq ($(CONFIG_ALTAIR),y)
   CE_MAJOR := 5
   CE_MINOR := 00
-  CE_PLATFORM := 500
   TARGET := ALTAIR
 
   ifeq ($(ALTAIR_PORTRAIT),y)
@@ -189,7 +184,6 @@ ifeq ($(CONFIG_PC),y)
   # armv4i
   CE_MAJOR := 5
   CE_MINOR := 00
-  CE_PLATFORM := 500
   TARGET := PC
 endif
 
@@ -197,12 +191,12 @@ ifeq ($(CONFIG_WINE),y)
   # armv4i
   CE_MAJOR := 5
   CE_MINOR := 00
-  CE_PLATFORM := 500
   TARGET := WINE
   CONFIG_PC := y
 endif
 
 CE_VERSION := 0x0$(CE_MAJOR)$(CE_MINOR)
+CE_PLATFORM := $(CE_MAJOR)$(CE_MINOR)
 
 ######## target definitions
 
