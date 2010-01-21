@@ -186,50 +186,51 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
     short relalt = iround(traffic.RelativeAltitude * ALTITUDEMODIFY / 100);
 
     // if (relative altitude is other than zero)
-    if (relalt != 0) {
-      // Write the relativ altitude devided by 100 to the Buffer
-      TCHAR Buffer[10];
-      _stprintf(Buffer, TEXT("%d"), abs(relalt));
+    if (relalt == 0)
+      continue;
 
-      // Calculate size of the output string
-      SIZE tsize = canvas.text_size(Buffer);
-      tsize.cx = (tsize.cx + IBLSCALE(6)) / 2;
+    // Write the relativ altitude devided by 100 to the Buffer
+    TCHAR Buffer[10];
+    _stprintf(Buffer, TEXT("%d"), abs(relalt));
 
-      // Draw string
-      canvas.text(sc.x - tsize.cx + IBLSCALE(7),
-                  sc.y - tsize.cy - IBLSCALE(5),
-                  Buffer);
+    // Calculate size of the output string
+    SIZE tsize = canvas.text_size(Buffer);
+    tsize.cx = (tsize.cx + IBLSCALE(6)) / 2;
 
-      // Set black brush for the up/down arrow
-      canvas.black_brush();
+    // Draw string
+    canvas.text(sc.x - tsize.cx + IBLSCALE(7),
+                sc.y - tsize.cy - IBLSCALE(5),
+                Buffer);
 
-      // Prepare the triangular polygon
-      POINT triangle[4];
-      triangle[0].x = 3;
-      triangle[0].y = -3;
-      triangle[1].x = 6;
-      triangle[1].y = 1;
-      triangle[2].x = 0;
-      triangle[2].y = 1;
+    // Set black brush for the up/down arrow
+    canvas.black_brush();
 
-      // Flip = -1 for arrow pointing downwards
-      short flip = 1;
-      if (relalt < 0) {
-        flip = -1;
-      }
+    // Prepare the triangular polygon
+    POINT triangle[4];
+    triangle[0].x = 3;
+    triangle[0].y = -3;
+    triangle[1].x = 6;
+    triangle[1].y = 1;
+    triangle[2].x = 0;
+    triangle[2].y = 1;
 
-      // Shift the arrow to the right position
-      for (int j = 0; j < 3; j++) {
-        triangle[j].x = sc.x + IBLSCALE(triangle[j].x) - tsize.cx;
-        triangle[j].y = sc.y + flip * IBLSCALE(triangle[j].y)
-                        - tsize.cy / 2 - IBLSCALE(5);
-      }
-      triangle[3].x = triangle[0].x;
-      triangle[3].y = triangle[0].y;
-
-      // Draw the arrow
-      canvas.polygon(triangle, 4);
+    // Flip = -1 for arrow pointing downwards
+    short flip = 1;
+    if (relalt < 0) {
+      flip = -1;
     }
+
+    // Shift the arrow to the right position
+    for (int j = 0; j < 3; j++) {
+      triangle[j].x = sc.x + IBLSCALE(triangle[j].x) - tsize.cx;
+      triangle[j].y = sc.y + flip * IBLSCALE(triangle[j].y)
+                      - tsize.cy / 2 - IBLSCALE(5);
+    }
+    triangle[3].x = triangle[0].x;
+    triangle[3].y = triangle[0].y;
+
+    // Draw the arrow
+    canvas.polygon(triangle, 4);
   }
 }
 
