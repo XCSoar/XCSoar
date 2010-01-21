@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-/*! \file
- * \brief Library for calculating on-screen coordinates
+/** @file
+ * @brief Library for calculating on-screen coordinates
  */
 
 #ifndef XCSOAR_MATH_SCREEN_HPP
