@@ -44,7 +44,7 @@ protected:
 
 
 bool 
-test_replay()
+test_replay(const OLCRules olc_type)
 {
 #ifdef DO_PRINT
   std::ofstream f("results/res-sample.txt");
@@ -56,7 +56,7 @@ test_replay()
 
   TaskBehaviour task_behaviour;
 
-  task_behaviour.olc_rules = OLC_Classic;
+  task_behaviour.olc_rules = olc_type;
   task_behaviour.enable_olc = true;
 
   TaskEventsPrint default_events(verbose);
@@ -82,12 +82,12 @@ test_replay()
   while (sim.Update()) {
     if (sim.state.Time>time_last) {
 
-#ifdef DO_PRINT
       task_manager.update(sim.state, state_last);
       task_manager.update_idle(sim.state);
   
       state_last = sim.state;
 
+#ifdef DO_PRINT
       if (do_print) {
         task_manager.print(sim.state);
         sim.print(f);
@@ -108,9 +108,12 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(1);
+  plan_tests(3);
 
-  ok(test_replay(),"replay",0);
+  ok(test_replay(OLC_Sprint),"replay sprint",0);
+  ok(test_replay(OLC_FAI),"replay fai",0);
+  ok(test_replay(OLC_Classic),"replay classic",0);
+
   return exit_status();
 }
 
