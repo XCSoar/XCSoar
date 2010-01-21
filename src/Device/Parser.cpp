@@ -1137,7 +1137,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   if (i > 100)
     i = 0;
 
-  if (i < 50) {
+  if (i < 80) {
     GPS_INFO->flarm.FLARM_Available = true;
     TCHAR ctemp[MAX_NMEA_LEN];
     const TCHAR *params[MAX_NMEA_PARAMS];
