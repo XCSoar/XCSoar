@@ -240,16 +240,17 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 void
 GaugeFLARM::Render(const NMEA_INFO &gps_info)
 {
-  if (Visible) {
-    // Render the background
-    RenderBg(get_canvas());
+  if (!Visible)
+    return;
 
-    // Render the traffic on top
-    RenderTraffic(get_canvas(), gps_info);
+  // Render the background
+  RenderBg(get_canvas());
 
-    // Draw buffer to the screen
-    invalidate();
-  }
+  // Render the traffic on top
+  RenderTraffic(get_canvas(), gps_info);
+
+  // Draw buffer to the screen
+  invalidate();
 }
 
 /**
