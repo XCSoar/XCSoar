@@ -1,0 +1,5 @@
+FIXED ?= $(HAVE_FPU)
+
+ifeq ($(FIXED),n)
+TARGET_CPPFLAGS += -DFIXED_MATH
+endif

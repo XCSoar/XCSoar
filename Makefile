@@ -20,6 +20,8 @@
 #   V           Verbosity; 1 is the default, and prints terse information.
 #               0 means quiet, and 2 prints the full compiler commands.
 #
+#   FIXED       "y" means use fixed point math (for FPU-less platforms)
+#
 
 .DEFAULT_GOAL := all
 
@@ -29,8 +31,9 @@ include $(topdir)/build/common.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
+include $(topdir)/build/options.mk
 
-CPPFLAGS += -DFLARM_AVERAGE -DFIXED_MATH -DDRAWLOAD
+CPPFLAGS += -DFLARM_AVERAGE -DDRAWLOAD
 
 ifeq ($(HAVE_WIN32),n)
 ifneq ($(TARGET),CYGWIN)

@@ -11,6 +11,7 @@ CONFIG_WINE := n
 ALTAIR_PORTRAIT := n
 CONFIG_PNA := n
 HAVE_CE := n
+HAVE_FPU := y
 MINIMAL := n
 XSCALE := n
 GTARGET := $(TARGET)
@@ -102,6 +103,7 @@ ifeq ($(HAVE_CE),y)
   TCPATH := arm-mingw32ce-
   CPU :=
   MCPU :=
+  HAVE_FPU := n
 
   ifeq ($(XSCALE),y)
     CPU := xscale
