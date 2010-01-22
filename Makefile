@@ -109,6 +109,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgAirspaceDetails.cpp \
 	$(SRC)/Dialogs/dlgAirspaceSelect.cpp \
 	$(SRC)/Dialogs/dlgAirspaceWarning.cpp \
+	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/dlgBasicSettings.cpp \
 	$(SRC)/Dialogs/dlgBrightness.cpp \
 	$(SRC)/Dialogs/dlgChecklist.cpp \
@@ -120,7 +121,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgLoggerReplay.cpp \
 	$(SRC)/Dialogs/dlgStartup.cpp \
-	$(SRC)/Dialogs/dlgStatistics.cpp \
 	$(SRC)/Dialogs/dlgStatus.cpp \
 	$(SRC)/Dialogs/dlgSwitches.cpp \
 	$(SRC)/Dialogs/dlgTaskCalculator.cpp \
