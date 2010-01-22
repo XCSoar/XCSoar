@@ -160,7 +160,7 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
     if (traffic.AlarmLevel > 0)
       // Draw line through target
-      canvas.line(center.x, center.y, center.x + iround(radius * x),
+      canvas.line(sc.x, sc.y, center.x + iround(radius * x),
                   center.y + iround(radius * y));
 
     // Create an arrow polygon
