@@ -577,6 +577,10 @@ InfoBox::Paint()
   buffer.fill_rectangle(0, mTitleChanged ? 0 : recTitle.bottom, mWidth,
       mHeight, mhBrushBk);
 
+  PaintTitle(buffer);
+  PaintComment(buffer);
+  PaintValue(buffer);
+
   if (mBorderKind != 0) {
     buffer.select(mhPenBorder);
 
@@ -600,10 +604,6 @@ InfoBox::Paint()
       buffer.line(0, mHeight - DEFAULTBORDERPENWIDTH, 0, -DEFAULTBORDERPENWIDTH);
     }
   }
-
-  PaintTitle(buffer);
-  PaintComment(buffer);
-  PaintValue(buffer);
 }
 
 void
