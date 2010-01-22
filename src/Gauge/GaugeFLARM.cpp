@@ -159,7 +159,13 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
     sc.y = center.y + iround(y * scale);
 
     if (traffic.AlarmLevel > 0)
-      // Draw line through target
+      // Draw line through target, from target to screen edge.
+      // This is deliberate: when targets are close, there is no point drawing
+      // a vector from the center to the target because it is not noticeable.
+      // Having a line from the target to the edge is immediately visible ---
+      // the first thing the pilot notices is the direction he needs to look,
+      // which of course is the most important thing.
+      //
       canvas.line(sc.x, sc.y, center.x + iround(radius * x),
                   center.y + iround(radius * y));
 
