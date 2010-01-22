@@ -60,18 +60,18 @@ Copyright_License {
 
 #define MAXPAGE 8
 
-static int page=0;
-static WndForm *wf=NULL;
-static WndOwnerDrawFrame *wGrid=NULL;
-static WndOwnerDrawFrame *wInfo=NULL;
-static WndButton *wCalc=NULL;
+static int page = 0;
+static WndForm *wf = NULL;
+static WndOwnerDrawFrame *wGrid = NULL;
+static WndOwnerDrawFrame *wInfo = NULL;
+static WndButton *wCalc = NULL;
 
-static void SetCalcCaption(const TCHAR* caption) {
-  if (wCalc) {
+static void
+SetCalcCaption(const TCHAR* caption)
+{
+  if (wCalc)
     wCalc->SetCaption(gettext(caption));
-  }
 }
-
 
 #define ANALYSIS_PAGE_BAROGRAPH    0
 #define ANALYSIS_PAGE_CLIMB        1
@@ -83,8 +83,8 @@ static void SetCalcCaption(const TCHAR* caption) {
 #define ANALYSIS_PAGE_OLC          7
 #define ANALYSIS_PAGE_AIRSPACE     8
 
-
-static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
+static void
+OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT rcgfx = Sender->get_client_rect();
 
@@ -100,8 +100,7 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
     SetCalcCaption(_T("Settings"));
-    fs.RenderBarograph(canvas, rcgfx,
-                       XCSoarInterface::Calculated());
+    fs.RenderBarograph(canvas, rcgfx, XCSoarInterface::Calculated());
     break;
   case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(_T("Task calc"));
@@ -111,15 +110,13 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_WIND:
     SetCalcCaption(_T("Set wind"));
-    fs.RenderWind(canvas, rcgfx,
-                  XCSoarInterface::Basic(),
+    fs.RenderWind(canvas, rcgfx, XCSoarInterface::Basic(),
                   glide_computer.windanalyser.windstore);
     break;
   case ANALYSIS_PAGE_POLAR:
     SetCalcCaption(_T("Settings"));
     terrain.Lock();
-    fs.RenderGlidePolar(canvas, rcgfx,
-                        XCSoarInterface::Calculated(),
+    fs.RenderGlidePolar(canvas, rcgfx, XCSoarInterface::Calculated(),
                         XCSoarInterface::SettingsComputer(),
                         task_manager.get_glide_polar());
     terrain.Unlock();
@@ -131,8 +128,7 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(_T("Task calc"));
     terrain.Lock();
-    fs.RenderTask(canvas, rcgfx,
-                  XCSoarInterface::Basic(),
+    fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
                   XCSoarInterface::SettingsMap(),
                   task_manager.get_trace_points());
@@ -141,26 +137,22 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(_T("Optimise"));
     terrain.Lock();
-    fs.RenderOLC(canvas, rcgfx,
-                  XCSoarInterface::Basic(),
-                  XCSoarInterface::SettingsComputer(),
+    fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
+                 XCSoarInterface::SettingsComputer(),
                  XCSoarInterface::SettingsMap(),
-                 task_manager.get_olc_points(),
-                 task_manager.get_trace_points());
+                 task_manager.get_olc_points(), task_manager.get_trace_points());
     terrain.Unlock();
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(_T("Warnings"));
-    fs.RenderAirspace(canvas, rcgfx,
-                      XCSoarInterface::Basic(),
+    fs.RenderAirspace(canvas, rcgfx, XCSoarInterface::Basic(),
                       XCSoarInterface::Calculated(),
                       XCSoarInterface::SettingsMap(),
                       airspace_database, terrain);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     SetCalcCaption(_T("Task calc"));
-    fs.RenderSpeed(canvas, rcgfx,
-                   XCSoarInterface::Calculated());
+    fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Calculated());
     break;
   default:
     // should never get here!
@@ -168,76 +160,68 @@ static void OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   }
 }
 
-
-
-static void Update(void){
+static void
+Update(void)
+{
   TCHAR sTmp[1000];
   //  WndProperty *wp;
 
   FlightStatistics &fs = glide_computer.GetFlightStats();
 
-  switch(page){
-    case ANALYSIS_PAGE_BAROGRAPH:
-      _stprintf(sTmp, _T("%s: %s"),
-                gettext(_T("Analysis")),
-                gettext(_T("Barograph")));
-      wf->SetCaption(sTmp);
-      fs.CaptionBarograph(sTmp);
-      wInfo->SetCaption(sTmp);
+  switch (page) {
+  case ANALYSIS_PAGE_BAROGRAPH:
+    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
+              gettext(_T("Barograph")));
+    wf->SetCaption(sTmp);
+    fs.CaptionBarograph(sTmp);
+    wInfo->SetCaption(sTmp);
 
     break;
-    case ANALYSIS_PAGE_CLIMB:
-      _stprintf(sTmp, _T("%s: %s"),
-                gettext(_T("Analysis")),
-                gettext(_T("Climb")));
-      wf->SetCaption(sTmp);
-      fs.CaptionClimb(sTmp);
-      wInfo->SetCaption(sTmp);
+  case ANALYSIS_PAGE_CLIMB:
+    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
+              gettext(_T("Climb")));
+    wf->SetCaption(sTmp);
+    fs.CaptionClimb(sTmp);
+    wInfo->SetCaption(sTmp);
 
     break;
-    case ANALYSIS_PAGE_WIND:
-      _stprintf(sTmp, _T("%s: %s"),
-                gettext(_T("Analysis")),
-                gettext(_T("Wind at Altitude")));
-      wf->SetCaption(sTmp);
-      _stprintf(sTmp, _T(" "));
-      wInfo->SetCaption(sTmp);
+  case ANALYSIS_PAGE_WIND:
+    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
+              gettext(_T("Wind at Altitude")));
+    wf->SetCaption(sTmp);
+    _stprintf(sTmp, _T(" "));
+    wInfo->SetCaption(sTmp);
     break;
-    case ANALYSIS_PAGE_POLAR:
-      _stprintf(sTmp, _T("%s: %s (Mass %d kg)"),
-                gettext(_T("Analysis")),
-                gettext(_T("Glide Polar")),
-                (int)task_manager.get_glide_polar().get_all_up_weight());
-      wf->SetCaption(sTmp);
-      fs.CaptionPolar(sTmp, task_manager.get_glide_polar());
-      wInfo->SetCaption(sTmp);
+  case ANALYSIS_PAGE_POLAR:
+    _stprintf(sTmp, _T("%s: %s (Mass %d kg)"), gettext(_T("Analysis")),
+              gettext(_T("Glide Polar")),
+              (int)task_manager.get_glide_polar().get_all_up_weight());
+    wf->SetCaption(sTmp);
+    fs.CaptionPolar(sTmp, task_manager.get_glide_polar());
+    wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
-    _stprintf(sTmp, _T("%s: %s"),
-              gettext(_T("Analysis")),
+    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Temp trace")));
     wf->SetCaption(sTmp);
     fs.CaptionTempTrace(sTmp);
     wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
-    _stprintf(sTmp, _T("%s: %s"),
-              gettext(_T("Analysis")),
+    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Task speed")));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(""));
     break;
   case ANALYSIS_PAGE_TASK:
-    _stprintf(sTmp, _T("%s: %s"),
-              gettext(_T("Analysis")),
+    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Task")));
     wf->SetCaption(sTmp);
     fs.CaptionTask(sTmp, XCSoarInterface::Calculated());
     wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_OLC:
-    _stprintf(sTmp, _T("%s: %s"),
-              gettext(_T("Analysis")),
+    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("OnLine Contest")));
     wf->SetCaption(sTmp);
 
@@ -269,8 +253,7 @@ static void Update(void){
     wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_AIRSPACE:
-    _stprintf(sTmp, _T("%s: %s"),
-              gettext(_T("Analysis")),
+    _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
               gettext(_T("Airspace")));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(" "));
@@ -281,34 +264,41 @@ static void Update(void){
 
   if (wGrid != NULL)
     wGrid->invalidate();
-
 }
 
-static void NextPage(int Step){
+static void
+NextPage(int Step)
+{
   page += Step;
+
   if (page > MAXPAGE)
     page = 0;
   if (page < 0)
     page = MAXPAGE;
+
   Update();
 }
 
-
-static void OnNextClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnNextClicked(WindowControl * Sender)
+{
+  (void)Sender;
   NextPage(+1);
 }
 
-static void OnPrevClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnPrevClicked(WindowControl * Sender)
+{
+  (void)Sender;
   NextPage(-1);
 }
 
-static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnCloseClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(mrOK);
 }
-
 
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
@@ -319,18 +309,16 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
     return false;
 
   switch (key_code) {
-    case VK_LEFT:
-    case '6':
-      ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-      NextPage(-1);
-      //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
+  case VK_LEFT:
+  case '6':
+    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
+    NextPage(-1);
     return true;
 
-    case VK_RIGHT:
-    case '7':
-      ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-      NextPage(+1);
-      //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
+  case VK_RIGHT:
+  case '7':
+    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
+    NextPage(+1);
     return true;
 
   default:
@@ -342,38 +330,36 @@ static void
 OnCalcClicked(WindowControl *Sender)
 {
   (void)Sender;
-  if (page==ANALYSIS_PAGE_BAROGRAPH) {
+  if (page == ANALYSIS_PAGE_BAROGRAPH) {
     dlgBasicSettingsShowModal();
   }
-  if (page==ANALYSIS_PAGE_CLIMB) {
+  if (page == ANALYSIS_PAGE_CLIMB) {
     wf->hide();
     dlgTaskCalculatorShowModal();
     wf->show();
   }
-  if (page==ANALYSIS_PAGE_WIND) {
+  if (page == ANALYSIS_PAGE_WIND) {
     dlgWindSettingsShowModal();
   }
-  if (page==ANALYSIS_PAGE_POLAR) {
+  if (page == ANALYSIS_PAGE_POLAR) {
     dlgBasicSettingsShowModal();
   }
-  if (page==ANALYSIS_PAGE_TEMPTRACE) {
+  if (page == ANALYSIS_PAGE_TEMPTRACE) {
     dlgBasicSettingsShowModal();
   }
-  if ((page==ANALYSIS_PAGE_TASK) || (page==ANALYSIS_PAGE_TASK_SPEED)) {
+  if ((page == ANALYSIS_PAGE_TASK) || (page == ANALYSIS_PAGE_TASK_SPEED)) {
     wf->hide();
     dlgTaskCalculatorShowModal();
     wf->show();
   }
-  if (page==ANALYSIS_PAGE_OLC) {
+  if (page == ANALYSIS_PAGE_OLC) {
     // nothing to do!
   }
-  if (page==ANALYSIS_PAGE_AIRSPACE) {
+  if (page == ANALYSIS_PAGE_AIRSPACE) {
     airspaceWarningEvent.trigger();
   }
   Update();
 }
-
-
 
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnAnalysisPaint),
@@ -383,41 +369,38 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
+void
+dlgAnalysisShowModal(void)
+{
 
-void dlgAnalysisShowModal(void){
+  wf = NULL;
+  wGrid = NULL;
+  wInfo = NULL;
+  wCalc = NULL;
 
-  wf=NULL;
-  wGrid=NULL;
-  wInfo=NULL;
-  wCalc=NULL;
+  if (!Layout::landscape)
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgAnalysis_L.xml"),
+                        XCSoarInterface::main_window, _T("IDR_XML_ANALYSIS_L"));
+  else
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgAnalysis.xml"),
+                        XCSoarInterface::main_window, _T("IDR_XML_ANALYSIS"));
 
-  if (!Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgAnalysis_L.xml"),
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_ANALYSIS_L"));
-  } else  {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgAnalysis.xml"),
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_ANALYSIS"));
-  }
-
-  if (!wf) return;
+  if (!wf)
+    return;
 
   wf->SetKeyDownNotify(FormKeyDown);
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
   wInfo = (WndOwnerDrawFrame*)wf->FindByName(_T("frmInfo"));
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
-
   wCalc = ((WndButton *)wf->FindByName(_T("cmdCalc")));
+
+  ((WndButton *)wf->FindByName(_T("cmdClose")))->
+      SetOnClickNotify(OnCloseClicked);
 
   Update();
 
   wf->ShowModal();
 
   delete wf;
-
   wf = NULL;
 }
