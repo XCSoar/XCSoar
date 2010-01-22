@@ -361,7 +361,10 @@ ReplayLogger::UpdateInternal()
     t_simulation = cli.GetMaxTime();
   }
 
-  if (!finished) {
+  if (finished) {
+    Stop();
+  } else {
+
     double Alt0;
     double Alt1;
     GEOPOINT P0, P1;
@@ -373,11 +376,6 @@ ReplayLogger::UpdateInternal()
     const double Bearing = P0.bearing(P1);
 
     on_advance(P0, Speed, Bearing, Alt0, Alt0, t_simulation);
-  }
-
-  // quit if finished.
-  if (finished) {
-    Stop();
   }
 
   return !finished;
