@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <getopt.h>
+#include <string>
 extern "C" {
 #include "tap.h"
 }
@@ -24,6 +25,7 @@ extern double start_alt;
 extern int terrain_height;
 extern bool enable_bestcruisetrack;
 const char* test_name(const char* in, int task_num, int wind_num);
+extern std::string replay_file;
 
 bool parse_args(int argc, char** argv);
 

@@ -56,6 +56,10 @@ OnlineContest::update_sample(const AIRCRAFT_STATE &state)
 }
 
 
+#ifdef INSTRUMENT_TASK
+extern long count_olc;
+#endif
+
 bool
 OnlineContest::run_olc(OLCDijkstra &dijkstra)
 {
@@ -71,6 +75,10 @@ OnlineContest::run_olc(OLCDijkstra &dijkstra)
     }
     dijkstra.copy_solution(m_solution);
     update_trace();
+
+#ifdef INSTRUMENT_TASK
+    count_olc++;
+#endif
 
     return true;
   } else {

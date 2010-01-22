@@ -13,7 +13,7 @@ OLCClassic::set_weightings()
   m_weightings.push_back(5);
   m_weightings.push_back(5);
   m_weightings.push_back(5);
-  m_weightings.push_back(4);
+  m_weightings.push_back(5);
   m_weightings.push_back(4);
   m_weightings.push_back(3);
 }

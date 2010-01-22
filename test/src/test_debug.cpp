@@ -18,7 +18,7 @@ double sink_factor = 1.0;
 double climb_factor = 1.0;
 double start_alt = 1500.0;
 int terrain_height = 1;
-
+std::string replay_file = "test/data/9crx3101.igc";
 bool enable_bestcruisetrack = false;
 
 #ifdef INSTRUMENT_TASK
@@ -28,6 +28,7 @@ long count_dijkstra_links = 0;
 long count_dijkstra_queries = 0;
 extern unsigned n_queries;
 extern unsigned count_distbearing;
+long count_olc = 0;
 #endif
 
 
@@ -41,6 +42,9 @@ void distance_counts() {
     if (n_queries>0) {
       printf("#     intersection tests/q %d\n",(unsigned)(count_intersections/n_queries));
       printf("#    (total queries %d)\n\n",n_queries);
+    }
+    if (count_olc>0) {
+      printf("#     q/olc_res %d\n",(unsigned)(n_queries/count_olc));
     }
     if (count_dijkstra_queries>0) {
       printf("#     dijkstra links/q %d\n", (unsigned)(count_dijkstra_links/count_dijkstra_queries));
@@ -118,12 +122,13 @@ bool parse_args(int argc, char** argv)
 	{"outputskip", required_argument,       0, 's'},
 	{"targetnoise", required_argument,       0, 't'},
 	{"turnspeed", required_argument,       0, 'r'},
+	{"igc", required_argument,       0, 'f'},
 	{0, 0, 0, 0}
       };
     /* getopt_long stores the option index here. */
     int option_index = 0;
     
-    int c = getopt_long (argc, argv, "s:v:i:n:t:r:a:",
+    int c = getopt_long (argc, argv, "s:v:i:n:t:r:a:f:",
                          long_options, &option_index);
     /* Detect the end of the options. */
     if (c == -1)
@@ -138,6 +143,9 @@ bool parse_args(int argc, char** argv)
       if (optarg)
 	printf (" with arg %s", optarg);
       printf ("\n");
+      break;
+    case 'f':
+      replay_file = optarg;
       break;
     case 'a':
       start_alt = atof(optarg);

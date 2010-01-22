@@ -67,7 +67,7 @@ test_replay(const OLCRules olc_type)
   task_manager.set_glide_polar(glide_polar);
 
   ReplayLoggerSim sim;
-  sim.SetFilename("test/data/9crx3101.igc");
+  sim.SetFilename(replay_file.c_str());
   sim.Start();
 
   bool do_print = verbose;
@@ -81,6 +81,8 @@ test_replay(const OLCRules olc_type)
 
   while (sim.Update()) {
     if (sim.state.Time>time_last) {
+
+      n_samples++;
 
       task_manager.update(sim.state, state_last);
       task_manager.update_idle(sim.state);
@@ -99,6 +101,11 @@ test_replay(const OLCRules olc_type)
     time_last = sim.state.Time;
   };
   sim.Stop();
+
+  if (verbose) {
+    distance_counts();
+  }
+
   return true;
 }
 

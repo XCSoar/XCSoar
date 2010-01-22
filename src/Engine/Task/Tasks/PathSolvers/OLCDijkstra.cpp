@@ -217,11 +217,6 @@ OLCDijkstra::save_solution()
 {
   const fixed the_distance = calc_distance();
   if (the_distance > best_distance) {
-#ifdef DO_PRINT
-    printf("best dist %d from %d to %d s\n",
-           (int)the_distance, solution[0].time,
-        solution[num_stages-1].time);
-#endif
     best_solution.clear();
     for (unsigned i = 0; i < num_stages; ++i) {
       best_solution.push_back(solution[i]);
