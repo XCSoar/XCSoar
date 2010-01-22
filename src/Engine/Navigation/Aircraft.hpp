@@ -135,6 +135,8 @@ struct VARIO_STATE
 
 struct FLYING_STATE
 {
+  FLYING_STATE();
+
   /** True if airborne, False otherwise */
   bool   Flying;
   /** Detects when glider is on ground for several seconds */

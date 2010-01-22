@@ -70,6 +70,11 @@ ALTITUDE_STATE::thermal_drift_factor() const
 }
 
 
+FLYING_STATE::FLYING_STATE()
+{
+  flying_state_reset();
+}
+
 void
 FLYING_STATE::flying_state_reset()
 {
