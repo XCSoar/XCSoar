@@ -1142,7 +1142,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   n1 = ifastsine(angle) / 2 - 200;
   e1 = ifastcosine(angle) / 1.5;
   t1 = AngleLimit360(-angle);
-  l = (i < 70 ? 1 : 2);
+  l = (i % 15 > 7 ? 1 : 2);
   static unsigned h2;
   static unsigned n2;
   static unsigned e2;
