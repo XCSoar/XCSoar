@@ -55,8 +55,8 @@ Copyright_License {
 // 4: infoboxes along left side
 // 5: infoboxes along right side
 // 6: infoboxes GNAV
-/*
 
+/*
 Screen
 640x480 landscape
 
@@ -64,20 +64,15 @@ Screen
 
 2/3 of width is map = 420
 leaving 220 = 110 control width
-
 */
 
 
 /*
-
 Button 0 (x,y,sx,sy)
 Button 1 (x,y,sx,sy)
 ...
-
 InfoBox 0 (x,y,sx,sy)
-
 */
-
 
 unsigned InfoBoxLayout::InfoBoxGeometry = 0;
 int InfoBoxLayout::ControlWidth;
@@ -90,9 +85,10 @@ bool geometrychanged = false;
 
 bool InfoBoxLayout::fullscreen = false;
 
-void InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc,
-				       int *x, int *y,
-                                       int *sizex, int *sizey) {
+void
+InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
+    int *sizex, int *sizey)
+{
   TCHAR reggeompx[50];
   TCHAR reggeompy[50];
   TCHAR reggeomsx[50];
@@ -103,118 +99,121 @@ void InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc,
   _stprintf(reggeomsx, TEXT("InfoBoxPositionSizeX%u"), i);
   _stprintf(reggeomsy, TEXT("InfoBoxPositionSizeY%u"), i);
 
-  GetFromRegistry(reggeompx,*x);
-  GetFromRegistry(reggeompy,*y);
-  GetFromRegistry(reggeomsx,*sizex);
-  GetFromRegistry(reggeomsy,*sizey);
+  GetFromRegistry(reggeompx, *x);
+  GetFromRegistry(reggeompy, *y);
+  GetFromRegistry(reggeomsx, *sizex);
+  GetFromRegistry(reggeomsy, *sizey);
 
-  if (*sizey != ControlHeight) {
+  if (*sizey != ControlHeight)
     geometrychanged = true;
-  }
-  if (*sizex != ControlWidth) {
+  if (*sizex != ControlWidth)
     geometrychanged = true;
-  }
 
-  if ((*sizex==0)||(*sizey==0)||geometrychanged) {
+  if ((*sizex == 0) || (*sizey == 0) || geometrychanged) {
     // not defined in registry so go with defaults
     // these will be saved back to registry
-
     switch (InfoBoxGeometry) {
     case 0:
-      if (i<numInfoWindows/2) {
-	*x = i*ControlWidth;
-	*y = rc.top;
+      if (i < numInfoWindows / 2) {
+        *x = i * ControlWidth;
+        *y = rc.top;
       } else {
-	*x = (i-numInfoWindows/2)*ControlWidth;
-	*y = rc.bottom-ControlHeight;
+        *x = (i - numInfoWindows / 2) * ControlWidth;
+        *y = rc.bottom - ControlHeight;
       }
       break;
+
     case 1:
-      if (i<numInfoWindows/2) {
-	*x = i*ControlWidth;
-	*y = rc.bottom-ControlHeight*2;
+      if (i < numInfoWindows / 2) {
+        *x = i * ControlWidth;
+        *y = rc.bottom - ControlHeight * 2;
       } else {
-	*x = (i-numInfoWindows/2)*ControlWidth;
-	*y = rc.bottom-ControlHeight;
+        *x = (i - numInfoWindows / 2) * ControlWidth;
+        *y = rc.bottom - ControlHeight;
       }
       break;
+
     case 2:
-      if (i<numInfoWindows/2) {
-	*x = i*ControlWidth;
-	*y = rc.top;;
+      if (i < numInfoWindows / 2) {
+        *x = i * ControlWidth;
+        *y = rc.top;
+        ;
       } else {
-	*x = (i-numInfoWindows/2)*ControlWidth;
-	*y = rc.top+ControlHeight;
+        *x = (i - numInfoWindows / 2) * ControlWidth;
+        *y = rc.top + ControlHeight;
       }
       break;
 
     case 3:
-      if (i<numInfoWindows/2) {
-	*x = rc.left;
-	*y = rc.top+ControlHeight*i;
+      if (i < numInfoWindows / 2) {
+        *x = rc.left;
+        *y = rc.top + ControlHeight * i;
       } else {
-	*x = rc.right-ControlWidth;
-	*y = rc.top+ControlHeight*(i-numInfoWindows/2);
+        *x = rc.right - ControlWidth;
+        *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
       }
       break;
+
     case 4:
-      if (i<numInfoWindows/2) {
-	*x = rc.left;
-	*y = rc.top+ControlHeight*i;
+      if (i < numInfoWindows / 2) {
+        *x = rc.left;
+        *y = rc.top + ControlHeight * i;
       } else {
-	*x = rc.left+ControlWidth;
-	*y = rc.top+ControlHeight*(i-numInfoWindows/2);
+        *x = rc.left + ControlWidth;
+        *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
       }
       break;
+
     case 5:
-      if (i<numInfoWindows/2) {
-	*x = rc.right-ControlWidth*2;
-	*y = rc.top+ControlHeight*i;
+      if (i < numInfoWindows / 2) {
+        *x = rc.right - ControlWidth * 2;
+        *y = rc.top + ControlHeight * i;
       } else {
-	*x = rc.right-ControlWidth;
-	*y = rc.top+ControlHeight*(i-numInfoWindows/2);
+        *x = rc.right - ControlWidth;
+        *y = rc.top + ControlHeight * (i - numInfoWindows / 2);
       }
       break;
+
     case 6:
-      if (i<3) {
-	*x = rc.right-ControlWidth*2;
-	*y = rc.top+ControlHeight*i;
+      if (i < 3) {
+        *x = rc.right - ControlWidth * 2;
+        *y = rc.top + ControlHeight * i;
       } else {
-	if (i<6) {
-	  *x = rc.right-ControlWidth*2;
-	  *y = rc.top+ControlHeight*(i-3)+ControlHeight*3;
-	} else {
-	  *x = rc.right-ControlWidth;
-	  *y = rc.top+ControlHeight*(i-6)+ControlHeight*3;
-	}
+        if (i < 6) {
+          *x = rc.right - ControlWidth * 2;
+          *y = rc.top + ControlHeight * (i - 3) + ControlHeight * 3;
+        } else {
+          *x = rc.right - ControlWidth;
+          *y = rc.top + ControlHeight * (i - 6) + ControlHeight * 3;
+        }
       }
       break;
+
     case 7:
-      *x = rc.right-ControlWidth;
-      *y = rc.top+ControlHeight*i;
+      *x = rc.right - ControlWidth;
+      *y = rc.top + ControlHeight * i;
       break;
     };
 
     *sizex = ControlWidth;
     *sizey = ControlHeight;
 
-    SetToRegistry(reggeompx,*x);
-    SetToRegistry(reggeompy,*y);
+    SetToRegistry(reggeompx, *x);
+    SetToRegistry(reggeompy, *y);
     SetToRegistry(reggeomsx, (int &)*sizex);
     SetToRegistry(reggeomsy, (int &)*sizey);
-
-  };
+  }
 }
-
 
 //
 // Paolo Ventafridda, VENTA-ADDON Geometry change in Config menu 11
 //
-void InfoBoxLayout::ScreenGeometry(RECT rc) {
+void
+InfoBoxLayout::ScreenGeometry(RECT rc)
+{
+  TCHAR szRegistryInfoBoxGeometry[] = TEXT("InfoBoxGeometry");
 
-  TCHAR szRegistryInfoBoxGeometry[]=  TEXT("InfoBoxGeometry");
-
-  GetFromRegistry(szRegistryInfoBoxGeometry,InfoBoxGeometry);
+  GetFromRegistry(szRegistryInfoBoxGeometry, InfoBoxGeometry);
 
 #if defined(PNA) || defined(FIVV)
 // VENTA-ADDON GEOM
@@ -230,31 +229,28 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   // JMW testing only
   geometrychanged = true;
 
-  if (rc.bottom<rc.right) {
+  if (rc.bottom < rc.right) {
     // landscape mode
-    if (InfoBoxGeometry<4) {
+    if (InfoBoxGeometry < 4) {
       geometrychanged = true;
 
       // JMW testing
       if (1) {
-	InfoBoxGeometry = 6;
+        InfoBoxGeometry = 6;
       } else {
-	InfoBoxGeometry+= 3;
+        InfoBoxGeometry += 3;
       }
     }
-
-  } else if (rc.bottom==rc.right) {
-    if (InfoBoxGeometry<7) {
+  } else if (rc.bottom == rc.right) {
+    if (InfoBoxGeometry < 7) {
       geometrychanged = true;
     }
     InfoBoxGeometry = 7;
-
   } else {
     // portrait mode
     gnav = false;
-    if (InfoBoxGeometry>=3) {
-      InfoBoxGeometry= 0;
-
+    if (InfoBoxGeometry >= 3) {
+      InfoBoxGeometry = 0;
       geometrychanged = true;
     }
   }
@@ -262,9 +258,8 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   SetToRegistry(szRegistryInfoBoxGeometry, (int &)InfoBoxGeometry);
 
   // JMW testing
-  if (InfoBoxGeometry==6) {
+  if (InfoBoxGeometry == 6)
     gnav = true;
-  }
 
   if (gnav) {
     numInfoWindows = 9;
@@ -275,133 +270,140 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   }
 }
 
-
-RECT InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
-
+RECT
+InfoBoxLayout::GetInfoBoxSizes(RECT rc)
+{
   RECT MapRect;
 
   switch (InfoBoxGeometry) {
-  case 0: // portrait
+  case 0:
+    // portrait
     // calculate control dimensions
-    ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
+    ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
     ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
+    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
-    MapRect.top = rc.top+ControlHeight;
+    MapRect.top = rc.top + ControlHeight;
     MapRect.left = rc.left;
-    MapRect.bottom = rc.bottom-ControlHeight;
+    MapRect.bottom = rc.bottom - ControlHeight;
     MapRect.right = rc.right;
     break;
 
-  case 1: // not used
+  case 1:
+    // not used
     // calculate control dimensions
 
-    ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
+    ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
     ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
+    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
     MapRect.top = rc.top;
     MapRect.left = rc.left;
-    MapRect.bottom = rc.bottom-ControlHeight*2;
+    MapRect.bottom = rc.bottom - ControlHeight * 2;
     MapRect.right = rc.right;
     break;
 
-  case 2: // not used
+  case 2:
+    // not used
     // calculate control dimensions
 
-    ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
+    ControlWidth = 2 * (rc.right - rc.left) / numInfoWindows;
     ControlHeight = (unsigned)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
+    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
-    MapRect.top = rc.top+ControlHeight*2;
+    MapRect.top = rc.top + ControlHeight * 2;
     MapRect.left = rc.left;
     MapRect.bottom = rc.bottom;
     MapRect.right = rc.right;
     break;
 
-  case 3: // not used
+  case 3:
+    // not used
     // calculate control dimensions
 
-    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
-    ControlHeight = (unsigned)(2*(rc.bottom - rc.top) / numInfoWindows);
-    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
+    ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
+    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
     MapRect.top = rc.top;
-    MapRect.left = rc.left+ControlWidth;
+    MapRect.left = rc.left + ControlWidth;
     MapRect.bottom = rc.bottom;
-    MapRect.right = rc.right-ControlWidth;
+    MapRect.right = rc.right - ControlWidth;
     break;
 
   case 4:
     // calculate control dimensions
 
-    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
-    ControlHeight = (unsigned)(2*(rc.bottom - rc.top) / numInfoWindows);
-    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
+    ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
+    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
     MapRect.top = rc.top;
-    MapRect.left = rc.left+ControlWidth*2;
+    MapRect.left = rc.left + ControlWidth * 2;
     MapRect.bottom = rc.bottom;
     MapRect.right = rc.right;
     break;
 
-  case 5: // not used
+  case 5:
+    // not used
     // calculate control dimensions
 
-    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
-    ControlHeight = (unsigned)(2*(rc.bottom - rc.top) / numInfoWindows);
-    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlWidth = (unsigned)((rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3);
+    ControlHeight = (unsigned)(2 * (rc.bottom - rc.top) / numInfoWindows);
+    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
     MapRect.top = rc.top;
     MapRect.left = rc.left;
     MapRect.bottom = rc.bottom;
-    MapRect.right = rc.right-ControlWidth*2;
+    MapRect.right = rc.right - ControlWidth * 2;
     break;
 
-  case 6: // landscape
+  case 6:
+    // landscape
     // calculate control dimensions
 
-    ControlHeight = (unsigned)((rc.bottom - rc.top)/6);
-    ControlWidth=(unsigned)(ControlHeight*1.44); // preserve relative shape
-    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlHeight = (unsigned)((rc.bottom - rc.top) / 6);
+    ControlWidth = (unsigned)(ControlHeight * 1.44); // preserve relative shape
+    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
     MapRect.top = rc.top;
     MapRect.left = rc.left;
     MapRect.bottom = rc.bottom;
-    MapRect.right = rc.right-ControlWidth*2;
+    MapRect.right = rc.right - ControlWidth * 2;
 
     break;
 
-  case 7: // square
+  case 7:
+    // square
     // calculate control dimensions
 
-    ControlWidth = (unsigned)((rc.right - rc.left)*0.2);
-    ControlHeight = (unsigned)((rc.bottom - rc.top)/5);
-    TitleHeight = (unsigned)(ControlHeight/TITLEHEIGHTRATIO);
+    ControlWidth = (unsigned)((rc.right - rc.left) * 0.2);
+    ControlHeight = (unsigned)((rc.bottom - rc.top) / 5);
+    TitleHeight = (unsigned)(ControlHeight / TITLEHEIGHTRATIO);
 
     // calculate small map screen size
 
     MapRect.top = rc.top;
     MapRect.left = rc.left;
     MapRect.bottom = rc.bottom;
-    MapRect.right = rc.right-ControlWidth;
+    MapRect.right = rc.right - ControlWidth;
 
     break;
   };
+
   return MapRect;
 }
-
