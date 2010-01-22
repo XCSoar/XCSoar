@@ -69,3 +69,62 @@ ALTITUDE_STATE::thermal_drift_factor() const
   return signum(AltitudeAGL/fixed_100);
 }
 
+
+void
+FLYING_STATE::flying_state_reset()
+{
+  TimeInFlight=0;
+  TimeOnGround=0;
+  Flying = false;
+  OnGround = false;
+}
+
+void
+FLYING_STATE::flying_state_moving()
+{
+  if (TimeInFlight<60) {
+    TimeInFlight++;
+  }
+  TimeOnGround= 0;
+  flying_state_check();
+}
+
+void
+FLYING_STATE::flying_state_stationary(const bool on_ground)
+{
+  if (TimeInFlight) {
+    TimeInFlight--;
+  }
+  if (on_ground) {
+    if (TimeOnGround<30)
+      TimeOnGround++;
+  }
+  flying_state_check();
+}
+
+
+void
+FLYING_STATE::flying_state_check()
+{
+  // Logic to detect takeoff and landing is as follows:
+  //   detect takeoff when above threshold speed for 10 seconds
+  //
+  //   detect landing when below threshold speed for 30 seconds
+  //
+  // @todo accuracy: make this more robust by making use of terrain height data
+  // if available
+
+  if (!Flying) {
+    // detect takeoff
+    if (TimeInFlight > 10) {
+      Flying = true;
+    }
+  } else {
+    // detect landing
+    if (TimeInFlight == 0) {
+      // have been stationary for a minute
+      Flying = false;
+    }
+  }
+  OnGround = (!Flying) && (TimeOnGround>10);
+}

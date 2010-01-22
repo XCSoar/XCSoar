@@ -84,6 +84,12 @@ test_replay(const OLCRules olc_type)
 
       n_samples++;
 
+      if (sim.state.Speed> glide_polar.get_Vtakeoff()) {
+        sim.state.flying_state_moving();
+      } else {
+        sim.state.flying_state_stationary();
+      }
+
       task_manager.update(sim.state, state_last);
       task_manager.update_idle(sim.state);
   

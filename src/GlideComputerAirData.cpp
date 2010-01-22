@@ -489,61 +489,9 @@ GlideComputerAirData::ProcessIdle()
 void
 GlideComputerAirData::TakeoffLanding()
 {
-  if (time_retreated()) {
-    SetCalculated().TimeInFlight=0;
-    SetCalculated().TimeOnGround=0;
-  }
-
   if (Basic().Speed>1.0) {
     // stop system from shutting down if moving
     XCSoarInterface::InterfaceTimeoutReset();
-  }
-
-  // GPS not lost
-  if (Basic().NAVWarning) {
-    return;
-  }
-
-  // Speed too high for being on the ground
-  if (Basic().Speed> glide_polar.get_Vtakeoff()) {
-    SetCalculated().TimeInFlight= LastCalculated().TimeInFlight+1;
-    SetCalculated().TimeOnGround= 0;
-  } else {
-    if (!Calculated().TerrainValid || (Basic().AltitudeAGL < 300)) {
-      SetCalculated().TimeInFlight = LastCalculated().TimeInFlight - 1;
-    }
-    SetCalculated().TimeOnGround= LastCalculated().TimeOnGround+1;
-  }
-
-  SetCalculated().TimeOnGround = min(30,max(0,Calculated().TimeOnGround));
-  SetCalculated().TimeInFlight = min(60,max(0,Calculated().TimeInFlight));
-
-  // JMW logic to detect takeoff and landing is as follows:
-  //   detect takeoff when above threshold speed for 10 seconds
-  //
-  //   detect landing when below threshold speed for 30 seconds
-  //
-  // TODO accuracy: make this more robust by making use of terrain height data
-  // if available
-
-  if (!Calculated().Flying) {
-    // detect takeoff
-    if (Calculated().TimeInFlight > 10) {
-      SetCalculated().Flying = true;
-    }
-    if (Calculated().TimeOnGround > 10) {
-      SetCalculated().OnGround = true;
-    }
-  } else {
-    // detect landing
-    if (Calculated().TimeInFlight == 0) {
-      // have been stationary for a minute
-      SetCalculated().Flying = false;
-    }
-  }
-
-  if (Calculated().TimeOnGround <= 10) {
-    SetCalculated().OnGround = false;
   }
 
   if (Calculated().Flying && !LastCalculated().Flying) {

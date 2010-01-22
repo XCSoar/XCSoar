@@ -227,6 +227,8 @@ bool AircraftSim::advance(TaskManager &task_manager)  {
   task_manager.update_idle(state);
   
   state_last = state;
+
+  state.flying_state_moving();
   
   if (!far(task_manager)) {
     wait_prompt(time());

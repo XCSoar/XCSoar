@@ -287,8 +287,10 @@ TaskManager::update(const AIRCRAFT_STATE &state,
     reset();
   }
 
-  trace_full.append(state);
-  trace_sprint.append(state);
+  if (state.Flying) {
+    trace_full.append(state);
+    trace_sprint.append(state);
+  }
 
   if (task_ordered.task_size()>1) {
     // always update ordered task
@@ -314,11 +316,13 @@ TaskManager::update_idle(const AIRCRAFT_STATE& state)
   // always update OLC
   bool retval = false;
 
-  retval |= trace_full.optimise_if_old();
-  retval |= trace_sprint.optimise_if_old();
+  if (state.Flying) {
+    retval |= trace_full.optimise_if_old();
+    retval |= trace_sprint.optimise_if_old();
 
-  if (task_behaviour.enable_olc) {
-    retval |= task_olc.update_idle(state);
+    if (task_behaviour.enable_olc) {
+      retval |= task_olc.update_idle(state);
+    }
   }
 
   if (active_task) {

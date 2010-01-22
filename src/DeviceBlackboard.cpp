@@ -415,6 +415,7 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
   SetSystemTime();
 
   // calculate fast data to complete aircraft state
+  FlightState(glide_polar);
   Wind();
   Heading();
   NavAltitude();
@@ -677,18 +678,36 @@ DeviceBlackboard::WorkingBand()
 }
 
 void
-DeviceBlackboard::AutoQNH(const GlidePolar& glide_polar)
+DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
+{
+  if (Basic().Time< LastBasic().Time) {
+    SetBasic().flying_state_reset();
+  }
+    // GPS not lost
+  if (Basic().NAVWarning) {
+    return;
+  }
+
+  // Speed too high for being on the ground
+  if (Basic().Speed> glide_polar.get_Vtakeoff()) {
+    SetBasic().flying_state_moving();
+  } else {
+    const bool on_ground = Calculated().TerrainValid && (Basic().AltitudeAGL < 300);
+    SetBasic().flying_state_stationary(on_ground);
+  }
+}
+
+void
+DeviceBlackboard::AutoQNH()
 {
   static int countdown_autoqnh = 0;
 
-  if (!Calculated().OnGround // must be on ground
+  if (!Basic().OnGround // must be on ground
       || !countdown_autoqnh    // only do it once
       || Basic().Replay       // never in replay mode
       || Basic().NAVWarning     // Reject if no valid GPS fix
       || !Basic().BaroAltitudeAvailable // Reject if no baro altitude
-      || !Calculated().TerrainValid // Reject if terrain height is invalid
-      || Basic().Speed > glide_polar.get_Vtakeoff()) {
-
+    ) {
     countdown_autoqnh= 10; // restart...
     return;
   }

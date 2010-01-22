@@ -133,11 +133,35 @@ struct VARIO_STATE
 };
 
 
+struct FLYING_STATE
+{
+  /** True if airborne, False otherwise */
+  bool   Flying;
+  /** Detects when glider is on ground for several seconds */
+  bool   OnGround;
+
+  /** Time of flight */
+  fixed FlightTime;
+  /** Time of takeoff */
+  fixed TakeOffTime;
+
+  void flying_state_reset();
+  void flying_state_moving();
+  void flying_state_stationary(const bool on_ground=false);
+
+private:
+  void flying_state_check();
+  int  TimeOnGround;
+  int  TimeInFlight;
+};
+
+
 struct AIRCRAFT_STATE: 
   public ALTITUDE_STATE,
   public SPEED_STATE,
   public VARIO_STATE,
-  public WIND_STATE
+  public WIND_STATE,
+  public FLYING_STATE
 {
   AIRCRAFT_STATE();
 

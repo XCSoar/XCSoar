@@ -171,20 +171,6 @@ struct THERMAL_BAND_INFO
   fixed ThermalProfileW[NUMTHERMALBUCKETS];
 };
 
-struct FLYING_INFO
-{
-  /** True if airborne, False otherwise */
-  int    Flying;
-  int    TimeOnGround;
-  int    TimeInFlight;
-  /** Detects when glider is on ground for several seconds */
-  bool OnGround;
-
-  /** Time of flight */
-  fixed FlightTime;
-  /** Time of takeoff */
-  fixed TakeOffTime;
-};
 
 struct THERMAL_LOCATOR_INFO
 {
@@ -221,7 +207,6 @@ struct DERIVED_INFO:
   public CLIMB_INFO,
   public CIRCLING_INFO,
   public TERRAIN_ALT_INFO,
-  public FLYING_INFO,
   public THERMAL_BAND_INFO,
   public THERMAL_LOCATOR_INFO,
   public TEAMCODE_INFO
