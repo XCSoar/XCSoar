@@ -3,18 +3,20 @@
   xmlns="http://www.dmg.org/PMML-3-0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
   <Header copyright="VADIS">
-     <Application name="RANK For &lt;you>" version="1.99beta" />
+    <Application name="RANK For &lt;you>" version="1.99beta" />
   </Header>
-  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+  <Extension extender="RANKF" name="keys">
+    <Key name="urn"></Key>
+  </Extension>
 
-<WndForm Name="frmFlarmTraffic" Type="Dialog" X="0" Y="0" Width="240" Height="320" Caption="Flarm Traffic" Font="3"  BackColor="0xDADBAB">
-
-  <WndListFrame Name="frmDetails" X="0" Y="0" Width="240" Height="260" ItemHeight=18 Font="3"/>
-
-  <WndButton Name="cmdClose" Caption="Close" X="5" Y="265" Width="56"  Height="28" Font="2" Tag="3" />
-  <WndButton Name="cmdTrack"  Caption="Track" X="80" Y="265" Width="60"  Height="28" Font="2" OnClickNotify="OnTrackClicked" Tag="1" />
-  <WndButton Name="cmdSetCN"  Caption="Set CN" X="150" Y="265" Width="60"  Height="28" Font="2" OnClickNotify="OnSetCNClicked" Tag="1" />
-
-</WndForm>
+  <WndForm Name="frmFlarmTraffic" Type="Dialog" X="0" Y="0" Width="240" Height="320" Caption="FLARM Traffic" Font="2" BackColor="0xDADBAB">
+    <WndButton Name="cmdDetails" Caption="Details" X="5" Y="242" Width="58" Height="28" Font="2" Tag="1" />
+    <WndButton Name="cmdZoomIn" Caption="+" X="65" Y="242" Width="28" Height="28" Font="2" Tag="2" />
+    <WndButton Name="cmdZoomOut" Caption="-" X="95" Y="242" Width="28" Height="28" Font="2" Tag="3" />
+    <WndButton Name="cmdClose" Caption="Close" X="5" Y="272" Width="58" Height="28" Font="2" Tag="6" />
+    <WndButton Name="cmdPrev" Caption="&lt;" X="65" Y="272" Width="28" Height="28" Font="2" Tag="4" />
+    <WndButton Name="cmdNext" Caption="&gt;" X="95" Y="272" Width="28" Height="28" Font="2" Tag="5" />
+    <WndOwnerDrawFrame Name="frmRadar" X="5" Y="6" Width="228" Height="230" Font="3" BackColor="0xFFFFFF">
+  </WndForm>
 
 </PMML>

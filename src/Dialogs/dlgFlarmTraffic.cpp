@@ -38,144 +38,122 @@
 
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Fonts.hpp"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
 #include "Blackboard.hpp"
 #include "UtilsFLARM.hpp"
 #include "Math/Earth.hpp"
+#include "Math/FastRotation.hpp"
+#include "Math/Screen.hpp"
 #include "MainWindow.hpp"
 
 #include <assert.h>
 
+#define FLARMMAXRANGE 2000
+
 static WndForm *wf = NULL;
-static WndListFrame *wDetails = NULL;
+static WndOwnerDrawFrame *wdf = NULL;
+static unsigned zoom = 0;
+static int selection = -1;
+static POINT radar_mid;
+static SIZE radar_size;
+
+static void
+NextTarget()
+{
+  for (int i = selection + 1; i < FLARM_STATE::FLARM_MAX_TRAFFIC; i++) {
+    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
+      selection = i;
+      return;
+    }
+  }
+  for (int i = 0; i < selection; i++) {
+    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
+      selection = i;
+      return;
+    }
+  }
+  selection = -1;
+}
+
+static void
+PrevTarget()
+{
+  for (int i = selection - 1; i >= 0; i--) {
+    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
+      selection = i;
+      return;
+    }
+  }
+  for (int i = FLARM_STATE::FLARM_MAX_TRAFFIC - 1; i > selection; i--) {
+    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined()) {
+      selection = i;
+      return;
+    }
+  }
+  selection = -1;
+}
+
+static void
+UpdateSelector()
+{
+  if (!XCSoarInterface::Basic().flarm.FLARM_Available ||
+      XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0) {
+    selection = -1;
+    return;
+  }
+
+  if (selection == -1 ||
+      !XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].defined())
+    NextTarget();
+}
 
 static void
 Update()
 {
-  wDetails->SetLength(XCSoarInterface::Basic().flarm.GetActiveTrafficCount());
-  wDetails->invalidate();
+  UpdateSelector();
+  wdf->invalidate();
 }
 
 static void
-FlarmCursorCallback(unsigned i)
-{
-  const FLARM_TRAFFIC &traffic =
-    XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
-
-  WndButton *set_cn_button = (WndButton *)wf->FindByName(_T("cmdSetCN"));
-  WndButton *track_button = (WndButton *)wf->FindByName(_T("cmdTrack"));
-
-  if (traffic.defined()) {
-    if (LookupFLARMDetails(traffic.ID) == NULL) {
-      // not existing en primary or secondary flarm id list
-      set_cn_button->SetCaption(_T("Set CN"));
-      set_cn_button->show();
-    } else {
-      // the id was found - is it from secondary list ?
-      int index = LookupSecondaryFLARMId(traffic.ID);
-
-      if (index != -1) {
-        set_cn_button->SetCaption(_T("Edit CN"));
-        set_cn_button->show();
-      } else
-        set_cn_button->hide();
-    }
-
-    track_button->show();
-  } else {
-    track_button->hide();
-    set_cn_button->hide();
-  }
-}
-
-static void
-OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
-{
-  if (i >= FLARM_STATE::FLARM_MAX_TRAFFIC)
-    return;
-
-  TCHAR tmp[100];
-  TCHAR text[100];
-
-  fixed range;
-  fixed bear;
-
-  const FLARM_TRAFFIC &traffic =
-    XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
-  if (!traffic.defined())
-    return;
-
-  DistanceBearing(XCSoarInterface::Basic().Location, traffic.Location,
-      &range, &bear);
-
-  _stprintf(tmp, _T("%3s %3ld %+3.1f %5ld"), traffic.Name,
-      (int)(SPEEDMODIFY * traffic.Speed),
-
-#ifdef FLARM_AVERAGE
-      LIFTMODIFY * traffic.Average30s,
-#else
-      0.0,
-#endif
-      (int)(ALTITUDEMODIFY * traffic.Altitude));
-
-  _stprintf(text, _T("%s %3.0lf %2.1f"), tmp, FIXED_DOUBLE(bear),
-      FIXED_DOUBLE(DISTANCEMODIFY * range));
-
-  canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-      text);
-}
-
-static void
-SelectAsTeamTrack()
-{
-  unsigned index = wDetails->GetCursorIndex();
-  if (index >= FLARM_STATE::FLARM_MAX_TRAFFIC)
-    return;
-
-  const FLARM_TRAFFIC &traffic =
-    XCSoarInterface::Basic().flarm.FLARM_Traffic[index];
-
-  if (!traffic.HasName()) {
-    XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
-  } else {
-    // copy the 3 first chars from the name
-    for (int z = 0; z < 3; z++)
-      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[z]
-        = traffic.Name[z];
-    XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
-  }
-
-  // now tracking !
-  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = traffic.ID;
-  XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
-  XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
-}
-
-static void
-OnTrackClicked(WindowControl * Sender)
+OnDetailsClicked(WindowControl * Sender)
 {
   (void)Sender;
-  SelectAsTeamTrack();
-  wf->SetModalResult(mrOK);
+  MessageBoxX(_T("This feature is not implemented yet."),
+              _T(""), MB_OK);
 }
 
 static void
-OnSetCNClicked(WindowControl * Sender)
+OnZoomInClicked(WindowControl * Sender)
 {
   (void)Sender;
+  MessageBoxX(_T("This feature is not implemented yet."),
+              _T(""), MB_OK);
+}
 
-  unsigned index = wDetails->GetCursorIndex();
-  if (index >= FLARM_STATE::FLARM_MAX_TRAFFIC)
-    return;
+static void
+OnZoomOutClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  MessageBoxX(_T("This feature is not implemented yet."),
+              _T(""), MB_OK);
+}
 
-  const FLARM_TRAFFIC &traffic =
-    XCSoarInterface::Basic().flarm.FLARM_Traffic[index];
+static void
+OnPrevClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  PrevTarget();
+  Update();
+}
 
-  TCHAR newName[21];
-  newName[0] = 0;
-  if (dlgTextEntryShowModal(newName, 4))
-    AddFlarmLookupItem(traffic.ID, newName, true);
+static void
+OnNextClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  NextTarget();
+  Update();
 }
 
 static void
@@ -193,11 +171,13 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   switch (key_code) {
   case VK_LEFT:
   case '6':
-    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
+    PrevTarget();
+    Update();
     return true;
   case VK_RIGHT:
   case '7':
-    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
+    NextTarget();
+    Update();
     return true;
 
   default:
@@ -213,15 +193,168 @@ OnTimerNotify(WindowControl * Sender)
   return 0;
 }
 
-static void
-OnListEnter(unsigned i)
+/**
+ * Returns the distance scaled at a quadratic(?) scale
+ * @param d Distance to the own plane
+ */
+static int
+RangeScale(double d)
 {
-  SelectAsTeamTrack();
+  double drad = max(0.0, 1.0 - d / FLARMMAXRANGE);
+  return iround(radar_size.cx * 0.5 * (1.0 - drad * drad));
+}
+
+static void
+PaintRadarNoTraffic(Canvas &canvas) {
+  static TCHAR str[] = _T("No Traffic");
+  SIZE ts = canvas.text_size(str);
+  canvas.select(StatisticsFont);
+  canvas.black_pen();
+  canvas.select(wdf->GetBackBrush());
+  canvas.text(radar_mid.x - (ts.cx / 2), radar_mid.y - (radar_size.cy / 4), str);
+}
+
+static void
+PaintRadarTraffic(Canvas &canvas) {
+  if (!XCSoarInterface::Basic().flarm.FLARM_Available ||
+      XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0) {
+    PaintRadarNoTraffic(canvas);
+    return;
+  }
+
+  static Brush hbWarning(Color(0xFF, 0xA2, 0x00));
+  static Brush hbAlarm(Color::RED);
+  static Brush hbStandard(Color::BLACK);
+  static Brush hbSelection(Color(0x12, 0xFF, 0x00));
+  static Pen hpWarning(Layout::FastScale(2), Color(0xFF, 0xA2, 0x00));
+  static Pen hpAlarm(Layout::FastScale(2), Color::RED);
+  static Pen hpStandard(Layout::FastScale(2), Color::BLACK);
+  static Pen hpSelection(Layout::FastScale(2), Color(0x12, 0xFF, 0x00));
+
+  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
+    const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
+
+    if (!traffic.defined())
+      continue;
+
+    double x, y;
+    x = traffic.RelativeEast;
+    y = -traffic.RelativeNorth;
+    double d = sqrt(x * x + y * y);
+    if (d > 0) {
+      x /= d;
+      y /= d;
+    } else {
+      x = 0;
+      y = 0;
+    }
+    double dh = traffic.RelativeAltitude;
+    double slope = atan2(dh, d) * 2.0 / M_PI; // (-1,1)
+
+    slope = max(-1.0, min(1.0, slope * 2)); // scale so 45 degrees or more=90
+
+    fixed DisplayAngle = -XCSoarInterface::Basic().TrackBearing;
+    // or use .Heading? (no, because heading is not reliable)
+    const FastRotation r(DisplayAngle);
+    FastRotation::Pair p = r.Rotate(x, y);
+    x = p.first;
+    y = p.second;
+
+    double scale = RangeScale(d);
+
+    // Calculate screen coordinates
+    POINT sc;
+    sc.x = radar_mid.x + iround(x * scale);
+    sc.y = radar_mid.y + iround(y * scale);
+
+    // Set the arrow color depending on alarm level
+    switch (traffic.AlarmLevel) {
+    case 1:
+      canvas.hollow_brush();
+      canvas.select(hpWarning);
+      canvas.circle(sc.x, sc.y, Layout::FastScale(16));
+      canvas.select(hbWarning);
+      break;
+    case 2:
+    case 3:
+      canvas.hollow_brush();
+      canvas.select(hpAlarm);
+      canvas.circle(sc.x, sc.y, Layout::FastScale(16));
+      canvas.circle(sc.x, sc.y, Layout::FastScale(22));
+      canvas.select(hbAlarm);
+      break;
+    case 0:
+    case 4:
+      canvas.select(hbStandard);
+      canvas.select(hpStandard);
+      break;
+    }
+
+    // Create an arrow polygon
+    POINT Arrow[5];
+    Arrow[0].x = -6;
+    Arrow[0].y = 8;
+    Arrow[1].x = 0;
+    Arrow[1].y = -10;
+    Arrow[2].x = 6;
+    Arrow[2].y = 8;
+    Arrow[3].x = 0;
+    Arrow[3].y = 5;
+    Arrow[4].x = -6;
+    Arrow[4].y = 8;
+
+    // Rotate and shift the arrow
+    PolygonRotateShift(Arrow, 5, sc.x, sc.y,
+                       traffic.TrackBearing + DisplayAngle);
+
+    // Draw the polygon
+    canvas.polygon(Arrow, 5);
+
+    // Paint selection circle
+    canvas.hollow_brush();
+    canvas.select(hpSelection);
+    if (static_cast<unsigned>(selection) == i)
+      canvas.circle(sc.x, sc.y, Layout::FastScale(19));
+  }
+}
+
+static void
+PaintRadarPlane(Canvas &canvas) {
+  static Pen hpPlane(IBLSCALE(2), Color::GRAY);
+  canvas.select(hpPlane);
+  canvas.line(radar_mid.x + Layout::FastScale(10),
+              radar_mid.y - Layout::FastScale(2),
+              radar_mid.x - Layout::FastScale(10),
+              radar_mid.y - Layout::FastScale(2));
+  canvas.line(radar_mid.x,
+              radar_mid.y - Layout::FastScale(6),
+              radar_mid.x,
+              radar_mid.y + Layout::FastScale(6));
+  canvas.line(radar_mid.x + Layout::FastScale(4),
+              radar_mid.y + Layout::FastScale(4),
+              radar_mid.x - Layout::FastScale(4),
+              radar_mid.y + Layout::FastScale(4));
+}
+
+static void
+PaintRadarBackground(Canvas &canvas) {
+  static Pen hpGray(Layout::FastScale(1), Color::GRAY);
+  canvas.select(wdf->GetBackBrush());
+  canvas.select(hpGray);
+  canvas.circle(radar_mid.x, radar_mid.y, radar_size.cx * 0.5);
+  canvas.circle(radar_mid.x, radar_mid.y, radar_size.cx * 0.25);
+}
+
+static void
+OnRadarPaint(WindowControl *Sender, Canvas &canvas)
+{
+  (void)zoom;
+  PaintRadarBackground(canvas);
+  PaintRadarPlane(canvas);
+  PaintRadarTraffic(canvas);
 }
 
 static CallBackTableEntry_t CallBackTable[] = {
-  DeclareCallBackEntry(OnTrackClicked),
-  DeclareCallBackEntry(OnSetCNClicked),
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
 };
@@ -229,36 +362,45 @@ static CallBackTableEntry_t CallBackTable[] = {
 void
 dlgFlarmTrafficShowModal(void)
 {
-  if (Layout::landscape) {
+  if (Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable, _T("dlgFlarmTraffic_L.xml"),
         XCSoarInterface::main_window, _T("IDR_XML_FLARMTRAFFIC_L"));
-  } else {
+  else
     wf = dlgLoadFromXML(CallBackTable, _T("dlgFlarmTraffic.xml"),
         XCSoarInterface::main_window, _T("IDR_XML_FLARMTRAFFIC"));
-  }
 
   if (!wf)
     return;
 
-  wf->SetKeyDownNotify(FormKeyDown);
+  wdf = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmRadar")));
+  wdf->SetOnPaintNotify(OnRadarPaint);
 
+  int size = min(wdf->get_height(), wdf->get_width());
+  radar_size.cx = size - Layout::FastScale(20);
+  radar_size.cy = size - Layout::FastScale(20);
+  radar_mid.x = wdf->get_width() / 2;
+  radar_mid.y = wdf->get_height() / 2;
+
+  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetTimerNotify(OnTimerNotify);
+
+  ((WndButton *)wf->FindByName(_T("cmdDetails")))->
+      SetOnClickNotify(OnDetailsClicked);
+  ((WndButton *)wf->FindByName(_T("cmdZoomIn")))->
+      SetOnClickNotify(OnZoomInClicked);
+  ((WndButton *)wf->FindByName(_T("cmdZoomOut")))->
+      SetOnClickNotify(OnZoomOutClicked);
+  ((WndButton *)wf->FindByName(_T("cmdPrev")))->
+      SetOnClickNotify(OnPrevClicked);
+  ((WndButton *)wf->FindByName(_T("cmdNext")))->
+      SetOnClickNotify(OnNextClicked);
   ((WndButton *)wf->FindByName(_T("cmdClose")))->
       SetOnClickNotify(OnCloseClicked);
 
-  wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
-  wDetails->SetActivateCallback(OnListEnter);
-  wDetails->SetCursorCallback(FlarmCursorCallback);
-  wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
-
-  wDetails->SetBorderKind(BORDERLEFT);
-
   Update();
-
-  wf->SetTimerNotify(OnTimerNotify);
 
   wf->ShowModal();
 
   delete wf;
   wf = NULL;
 }
-
