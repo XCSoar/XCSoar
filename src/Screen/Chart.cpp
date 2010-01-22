@@ -210,9 +210,9 @@ Chart::DrawLabel(const TCHAR *text, const double xv, const double yv)
   int x = (int)((xv - x_min) * xscale) + rc.left - tsize.cx / 2 + BORDER_X;
   int y = (int)((y_max - yv) * yscale) + rc.top - tsize.cy / 2;
 
-  canvas.background_opaque();
-  canvas.text_opaque(x, y, text);
   canvas.background_transparent();
+  canvas.text(x, y, text);
+  canvas.background_opaque();
 }
 
 void
@@ -226,9 +226,9 @@ Chart::DrawNoData()
   int x = (int)(rc.left + rc.right - tsize.cx) / 2;
   int y = (int)(rc.top + rc.bottom - tsize.cy) / 2;
 
-  canvas.background_opaque();
-  canvas.text_opaque(x, y, text);
   canvas.background_transparent();
+  canvas.text(x, y, text);
+  canvas.background_opaque();
 }
 
 void
