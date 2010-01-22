@@ -54,90 +54,88 @@ Copyright_License {
 struct FontHeightInfo;
 class Font;
 
-class InfoBox : public BufferWindow {
- public:
- private:
+class InfoBox: public BufferWindow
+{
+private:
+  int mX;
+  int mY;
+  int mWidth;
+  int mHeight;
+  int  mBorderKind;
+  Color mColorBack;
+  Color mColorFore;
+  Color mColorTitle;
+  Color mColorTitleBk;
+  Color mColorValue;
+  Color mColorValueBk;
+  Color mColorComment;
+  Color mColorCommentBk;
 
-    int mX;
-    int mY;
-    int mWidth;
-    int mHeight;
-    int  mBorderKind;
-    Color mColorBack;
-    Color mColorFore;
-    Color mColorTitle;
-    Color mColorTitleBk;
-    Color mColorValue;
-    Color mColorValueBk;
-    Color mColorComment;
-    Color mColorCommentBk;
+  Color mColorRed;
+  Color mColorBlue;
 
-    Color mColorRed;
-    Color mColorBlue;
+  bool mTitleChanged;
 
-    bool mTitleChanged;
+  Brush mhBrushBk;
+  Brush mhBrushBkSel;
+  Pen mhPenBorder;
+  Pen mhPenSelector;
+  TCHAR mTitle[TITLESIZE+1];
+  TCHAR mValue[VALUESIZE+1];
+  TCHAR mComment[COMMENTSIZE+1];
+  Units_t mValueUnit;
+  const Font *mphFontTitle;
+  const Font *mphFontValue;
+  const Font *mphFontComment;
+  const Font *valueFont;
+  struct FontHeightInfo *mpFontHeightTitle;
+  struct FontHeightInfo *mpFontHeightValue;
+  struct FontHeightInfo *mpFontHeightComment;
+  bool   mHasFocus;
 
-    Brush mhBrushBk;
-    Brush mhBrushBkSel;
-    Pen mhPenBorder;
-    Pen mhPenSelector;
-    TCHAR mTitle[TITLESIZE+1];
-    TCHAR mValue[VALUESIZE+1];
-    TCHAR mComment[COMMENTSIZE+1];
-    Units_t mValueUnit;
-    const Font *mphFontTitle;
-    const Font *mphFontValue;
-    const Font *mphFontComment;
-    const Font *valueFont;
-    struct FontHeightInfo *mpFontHeightTitle;
-    struct FontHeightInfo *mpFontHeightValue;
-    struct FontHeightInfo *mpFontHeightComment;
-    bool   mHasFocus;
+  /** a timer which returns keyboard focus back to the map window after a while */
+  timer_t focus_timer;
 
-    /** a timer which returns keyboard focus back to the map window
-        after a while */
-    timer_t focus_timer;
+  RECT   recTitle;
+  RECT   recValue;
+  RECT   recComment;
 
-    RECT   recTitle;
-    RECT   recValue;
-    RECT   recComment;
+  int color;
+  int colorBottom;
+  int colorTop;
+  int mBorderSize;
+  bool mSmallerFont;
 
-    int color;
-    int colorBottom;
-    int colorTop;
-    int mBorderSize;
-    bool mSmallerFont;
+  void InitializeDrawHelpers(void);
+  void PaintTitle(Canvas &canvas);
+  void PaintValue(Canvas &canvas);
+  void PaintComment(Canvas &canvas);
+  void PaintSelector(Canvas &canvas);
 
-    void InitializeDrawHelpers(void);
-    void PaintTitle(Canvas &canvas);
-    void PaintValue(Canvas &canvas);
-    void PaintComment(Canvas &canvas);
-    void PaintSelector(Canvas &canvas);
+  // LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+public:
+  void Paint();
+  void PaintFast(void);
+  void PaintInto(Canvas &dest, int xoff, int yoff, int width, int height);
 
-  public:
-    void Paint();
-    void PaintFast(void);
-    void PaintInto(Canvas &dest, int xoff, int yoff, int width, int height);
+  void SetValueUnit(Units_t Value);
+  void SetTitle(const TCHAR *Value);
+  void SetValue(const TCHAR *Value);
+  void SetComment(const TCHAR *Value);
+  void SetSmallerFont(bool smallerFont);
 
-    void SetValueUnit(Units_t Value);
-    void SetTitle(const TCHAR *Value);
-    void SetValue(const TCHAR *Value);
-    void SetComment(const TCHAR *Value);
-    void SetSmallerFont(bool smallerFont);
+  void SetFocus(bool Value);
 
-    void SetFocus(bool Value);
+  int GetBorderKind(void);
+  int SetBorderKind(int Value);
 
-    int GetBorderKind(void);
-    int SetBorderKind(int Value);
+  void SetColor(int Value);
+  void SetColorBottom(int Value);
+  void SetColorTop(int Value);
 
-    void SetColor(int Value);
-    void SetColorBottom(int Value);
-    void SetColorTop(int Value);
-
-    InfoBox(ContainerWindow &Parent, int X, int Y, int Width, int Height);
-    ~InfoBox(void);
+  InfoBox(ContainerWindow &Parent, int X, int Y, int Width, int Height);
+  ~InfoBox(void);
 
 protected:
   virtual bool on_key_down(unsigned key_code);
