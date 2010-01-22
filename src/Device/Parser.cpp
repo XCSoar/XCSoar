@@ -1137,10 +1137,12 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   static unsigned n1;
   static unsigned e1;
   static unsigned t1;
+  static unsigned l;
   h1 = ifastsine(angle) / 7;
   n1 = ifastsine(angle) / 2 - 200;
   e1 = ifastcosine(angle) / 1.5;
   t1 = AngleLimit360(-angle);
+  l = (i < 70 ? 1 : 2);
   static unsigned h2;
   static unsigned n2;
   static unsigned e2;
@@ -1153,7 +1155,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   static TCHAR t_laa1[50];
-  _stprintf(t_laa1, (i < 70 ? _T("1") : _T("2"))_T(",%d,%d,%d,2,DD927B,%d,0,0,0,1"), n1, e1, h1, t1);
+  _stprintf(t_laa1, _T("%d,%d,%d,%d,2,DD927B,%d,0,0,0,1"), l, n1, e1, h1, t1);
   static TCHAR t_laa2[50];
   _stprintf(t_laa2, _T("0,%d,%d,%d,2,DD9146,%d,0,0,0,1"), n2, e2, h2, t2);
 
