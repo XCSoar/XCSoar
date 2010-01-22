@@ -3355,14 +3355,6 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-#ifdef FIVV
-//  if ( XCSoarInterface::Calculated().OnGround == TRUE ) {
-//	  wp = (WndProperty*)wf->FindByName(_T("prpGPSAltitudeOffset")); // VENTA3
-//	  if (wp) GPSAltitudeOffset = wp->GetDataField()->GetAsInteger();
-//  }
-#endif
-
-
   if (COMPORTCHANGED) {
     WritePort1Settings(dwPortIndex1,dwSpeedIndex1);
     WritePort2Settings(dwPortIndex2,dwSpeedIndex2);

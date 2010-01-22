@@ -500,19 +500,19 @@ GlideComputerAirData::TakeoffLanding()
   }
 
   // GPS not lost
-  if (!Basic().NAVWarning) {
-    // Speed too high for being on the ground
-    if (Basic().Speed> glide_polar.get_Vtakeoff()) {
-      SetCalculated().TimeInFlight= LastCalculated().TimeInFlight+1;
-      SetCalculated().TimeOnGround= 0;
-    } else {
-      if ((Basic().AltitudeAGL < 300) && (Calculated().TerrainValid)) {
-        SetCalculated().TimeInFlight = LastCalculated().TimeInFlight - 1;
-      } else if (!Calculated().TerrainValid) {
-        SetCalculated().TimeInFlight = LastCalculated().TimeInFlight - 1;
-      }
-      SetCalculated().TimeOnGround= LastCalculated().TimeOnGround+1;
+  if (Basic().NAVWarning) {
+    return;
+  }
+
+  // Speed too high for being on the ground
+  if (Basic().Speed> glide_polar.get_Vtakeoff()) {
+    SetCalculated().TimeInFlight= LastCalculated().TimeInFlight+1;
+    SetCalculated().TimeOnGround= 0;
+  } else {
+    if (!Calculated().TerrainValid || (Basic().AltitudeAGL < 300)) {
+      SetCalculated().TimeInFlight = LastCalculated().TimeInFlight - 1;
     }
+    SetCalculated().TimeOnGround= LastCalculated().TimeOnGround+1;
   }
 
   SetCalculated().TimeOnGround = min(30,max(0,Calculated().TimeOnGround));
@@ -526,16 +526,11 @@ GlideComputerAirData::TakeoffLanding()
   // TODO accuracy: make this more robust by making use of terrain height data
   // if available
 
-  if ((Calculated().TimeOnGround <= 10) || (Basic().Replay)) {
-    // Don't allow 'OnGround' calculations if in IGC replay mode
-    SetCalculated().OnGround = false;
-  }
-
   if (!Calculated().Flying) {
     // detect takeoff
-    if (Calculated().TimeInFlight > 10)
-      OnTakeoff();
-
+    if (Calculated().TimeInFlight > 10) {
+      SetCalculated().Flying = true;
+    }
     if (Calculated().TimeOnGround > 10) {
       SetCalculated().OnGround = true;
     }
@@ -543,8 +538,18 @@ GlideComputerAirData::TakeoffLanding()
     // detect landing
     if (Calculated().TimeInFlight == 0) {
       // have been stationary for a minute
-      OnLanding();
+      SetCalculated().Flying = false;
     }
+  }
+
+  if (Calculated().TimeOnGround <= 10) {
+    SetCalculated().OnGround = false;
+  }
+
+  if (Calculated().Flying && !LastCalculated().Flying) {
+    OnTakeoff();
+  } else if (!Calculated().Flying && LastCalculated().Flying) {
+    OnLanding();
   }
 }
 
@@ -559,14 +564,11 @@ GlideComputerAirData::OnLanding()
     RestoreFinish();
   }
 #endif
-  SetCalculated().Flying = false;
 }
 
 void
 GlideComputerAirData::OnTakeoff()
 {
-  SetCalculated().Flying = true;
-
   // reset stats on takeoff
   ResetFlight();
 
