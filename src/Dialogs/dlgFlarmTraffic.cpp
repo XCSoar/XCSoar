@@ -54,11 +54,34 @@
 
 static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wdf = NULL;
-static unsigned zoom = 0;
+static unsigned zoom = 2;
 static int selection = -1;
 static POINT radar_mid;
 static SIZE radar_size;
 
+/**
+ * Zoom out one step
+ */
+static void
+ZoomOut()
+{
+  if (zoom < 4)
+    zoom++;
+}
+
+/**
+ * Zoom in one step
+ */
+static void
+ZoomIn()
+{
+  if (zoom > 0)
+    zoom--;
+}
+
+/**
+ * Tries to select the next target, if impossible selection = -1
+ */
 static void
 NextTarget()
 {
@@ -77,6 +100,9 @@ NextTarget()
   selection = -1;
 }
 
+/**
+ * Tries to select the previous target, if impossible selection = -1
+ */
 static void
 PrevTarget()
 {
@@ -95,6 +121,10 @@ PrevTarget()
   selection = -1;
 }
 
+/**
+ * Checks whether the selection is still on the valid target and if not tries
+ * to select the next one
+ */
 static void
 UpdateSelector()
 {
@@ -120,24 +150,21 @@ static void
 OnDetailsClicked(WindowControl * Sender)
 {
   (void)Sender;
-  MessageBoxX(_T("This feature is not implemented yet."),
-              _T(""), MB_OK);
+  MessageBoxX(_T("This feature is not implemented yet."), _T(""), MB_OK);
 }
 
 static void
 OnZoomInClicked(WindowControl * Sender)
 {
   (void)Sender;
-  MessageBoxX(_T("This feature is not implemented yet."),
-              _T(""), MB_OK);
+  ZoomIn();
 }
 
 static void
 OnZoomOutClicked(WindowControl * Sender)
 {
   (void)Sender;
-  MessageBoxX(_T("This feature is not implemented yet."),
-              _T(""), MB_OK);
+  ZoomOut();
 }
 
 static void
@@ -193,17 +220,38 @@ OnTimerNotify(WindowControl * Sender)
   return 0;
 }
 
-/**
- * Returns the distance scaled at a quadratic(?) scale
- * @param d Distance to the own plane
- */
-static int
-RangeScale(double d)
-{
-  double drad = max(0.0, 1.0 - d / FLARMMAXRANGE);
-  return iround(radar_size.cx * 0.5 * (1.0 - drad * drad));
+static double
+GetZoomDistance() {
+  switch (zoom) {
+    case 0:
+      return 500;
+    case 1:
+      return 1000;
+    case 3:
+      return 5000;
+    case 4:
+      return 10000;
+    case 2:
+    default:
+      return 2000;
+  }
 }
 
+/**
+ * Returns the distance to the own plane in pixels
+ * @param d Distance in meters to the own plane
+ */
+static double
+RangeScale(double d)
+{
+  d = d / GetZoomDistance();
+  return min(d, 1.0) * radar_size.cx * 0.5;
+}
+
+/**
+ * Paints a "No Traffic" sign on the given canvas
+ * @param canvas The canvas to paint on
+ */
 static void
 PaintRadarNoTraffic(Canvas &canvas) {
   static TCHAR str[] = _T("No Traffic");
@@ -214,6 +262,10 @@ PaintRadarNoTraffic(Canvas &canvas) {
   canvas.text(radar_mid.x - (ts.cx / 2), radar_mid.y - (radar_size.cy / 4), str);
 }
 
+/**
+ * Paints the traffic symbols on the given canvas
+ * @param canvas The canvas to paint on
+ */
 static void
 PaintRadarTraffic(Canvas &canvas) {
   if (!XCSoarInterface::Basic().flarm.FLARM_Available ||
@@ -231,16 +283,26 @@ PaintRadarTraffic(Canvas &canvas) {
   static Pen hpStandard(Layout::FastScale(2), Color::BLACK);
   static Pen hpSelection(Layout::FastScale(2), Color(0x12, 0xFF, 0x00));
 
+  // Iterate throught the traffic
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
 
+    // If FLARM target does not exist -> next one
     if (!traffic.defined())
       continue;
 
+    // Save rel. East/North
     double x, y;
     x = traffic.RelativeEast;
     y = -traffic.RelativeNorth;
+
+    // Calculate the distance in meters
     double d = sqrt(x * x + y * y);
+
+    // Calculate the distance in pixels
+    double scale = RangeScale(d);
+
+    // x and y are not between 0 and 1 (distance will be handled via scale)
     if (d > 0) {
       x /= d;
       y /= d;
@@ -248,19 +310,14 @@ PaintRadarTraffic(Canvas &canvas) {
       x = 0;
       y = 0;
     }
-    double dh = traffic.RelativeAltitude;
-    double slope = atan2(dh, d) * 2.0 / M_PI; // (-1,1)
 
-    slope = max(-1.0, min(1.0, slope * 2)); // scale so 45 degrees or more=90
-
+    // Rotate x and y to have a track up display
     fixed DisplayAngle = -XCSoarInterface::Basic().TrackBearing;
     // or use .Heading? (no, because heading is not reliable)
     const FastRotation r(DisplayAngle);
     FastRotation::Pair p = r.Rotate(x, y);
     x = p.first;
     y = p.second;
-
-    double scale = RangeScale(d);
 
     // Calculate screen coordinates
     POINT sc;
@@ -280,7 +337,7 @@ PaintRadarTraffic(Canvas &canvas) {
       canvas.hollow_brush();
       canvas.select(hpAlarm);
       canvas.circle(sc.x, sc.y, Layout::FastScale(16));
-      canvas.circle(sc.x, sc.y, Layout::FastScale(22));
+      canvas.circle(sc.x, sc.y, Layout::FastScale(19));
       canvas.select(hbAlarm);
       break;
     case 0:
@@ -288,6 +345,11 @@ PaintRadarTraffic(Canvas &canvas) {
       canvas.select(hbStandard);
       canvas.select(hpStandard);
       break;
+    }
+
+    if (static_cast<unsigned>(selection) == i) {
+      canvas.select(hpSelection);
+      canvas.select(hbSelection);
     }
 
     // Create an arrow polygon
@@ -309,15 +371,13 @@ PaintRadarTraffic(Canvas &canvas) {
 
     // Draw the polygon
     canvas.polygon(Arrow, 5);
-
-    // Paint selection circle
-    canvas.hollow_brush();
-    canvas.select(hpSelection);
-    if (static_cast<unsigned>(selection) == i)
-      canvas.circle(sc.x, sc.y, Layout::FastScale(19));
   }
 }
 
+/**
+ * Paint a plane symbol in the middle of the radar on the given canvas
+ * @param canvas The canvas to paint on
+ */
 static void
 PaintRadarPlane(Canvas &canvas) {
   static Pen hpPlane(IBLSCALE(2), Color::GRAY);
@@ -336,6 +396,10 @@ PaintRadarPlane(Canvas &canvas) {
               radar_mid.y + Layout::FastScale(4));
 }
 
+/**
+ * Paints the radar circle on the given canvas
+ * @param canvas The canvas to paint on
+ */
 static void
 PaintRadarBackground(Canvas &canvas) {
   static Pen hpGray(Layout::FastScale(1), Color::GRAY);
@@ -345,6 +409,11 @@ PaintRadarBackground(Canvas &canvas) {
   canvas.circle(radar_mid.x, radar_mid.y, radar_size.cx * 0.25);
 }
 
+/**
+ * This function is called when the Radar needs repainting.
+ * @param Sender WindowControl that send the "repaint" message
+ * @param canvas The canvas to paint on
+ */
 static void
 OnRadarPaint(WindowControl *Sender, Canvas &canvas)
 {
@@ -359,9 +428,13 @@ static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
+/**
+ * The function opens the FLARM Traffic dialog
+ */
 void
 dlgFlarmTrafficShowModal(void)
 {
+  // Load dialog from XML
   if (Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable, _T("dlgFlarmTraffic_L.xml"),
         XCSoarInterface::main_window, _T("IDR_XML_FLARMTRAFFIC_L"));
@@ -372,18 +445,23 @@ dlgFlarmTrafficShowModal(void)
   if (!wf)
     return;
 
+  // Set dialog events
+  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetTimerNotify(OnTimerNotify);
+
+  // Find Radar frame
   wdf = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmRadar")));
+  // Set Radar frame event
   wdf->SetOnPaintNotify(OnRadarPaint);
 
+  // Calculate Radar size
   int size = min(wdf->get_height(), wdf->get_width());
   radar_size.cx = size - Layout::FastScale(20);
   radar_size.cy = size - Layout::FastScale(20);
   radar_mid.x = wdf->get_width() / 2;
   radar_mid.y = wdf->get_height() / 2;
 
-  wf->SetKeyDownNotify(FormKeyDown);
-  wf->SetTimerNotify(OnTimerNotify);
-
+  // Set button events
   ((WndButton *)wf->FindByName(_T("cmdDetails")))->
       SetOnClickNotify(OnDetailsClicked);
   ((WndButton *)wf->FindByName(_T("cmdZoomIn")))->
@@ -397,10 +475,13 @@ dlgFlarmTrafficShowModal(void)
   ((WndButton *)wf->FindByName(_T("cmdClose")))->
       SetOnClickNotify(OnCloseClicked);
 
+  // Update Radar and Selection for the first time
   Update();
 
+  // Show the dialog
   wf->ShowModal();
 
+  // After dialog closed -> delete it
   delete wf;
   wf = NULL;
 }
