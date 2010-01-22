@@ -69,7 +69,7 @@ void FormatterTime::AssignValue(int i) {
     SecsToDisplayTime((int)Calculated().LastThermalTime);
     break;
   case 36:
-    SecsToDisplayTime((int)Calculated().FlightTime);
+    SecsToDisplayTime((int)Basic().FlightTime);
     break;
   case 39:
     SecsToDisplayTime(DetectCurrentTime(&Basic()));
@@ -94,7 +94,7 @@ void FormatterAATTime::AssignValue(int i) {
   double dd=0;
   if (task.getSettings().AATEnabled && task.ValidTaskPoint(task.getActiveIndex())) {
     dd = Calculated().TaskTimeToGo;
-    if ((Calculated().TaskStartTime>0.0) && (Calculated().Flying)
+    if ((Calculated().TaskStartTime>0.0) && (Basic().Flying)
         &&(task.getActiveIndex()>0)) {
       dd += Basic().Time-Calculated().TaskStartTime;
     }

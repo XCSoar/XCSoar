@@ -85,17 +85,17 @@ FLYING_STATE::flying_state_reset()
 }
 
 void
-FLYING_STATE::flying_state_moving()
+FLYING_STATE::flying_state_moving(const fixed time)
 {
   if (TimeInFlight<60) {
     TimeInFlight++;
   }
   TimeOnGround= 0;
-  flying_state_check();
+  flying_state_check(time);
 }
 
 void
-FLYING_STATE::flying_state_stationary(const bool on_ground)
+FLYING_STATE::flying_state_stationary(const fixed time, const bool on_ground)
 {
   if (TimeInFlight) {
     TimeInFlight--;
@@ -104,12 +104,12 @@ FLYING_STATE::flying_state_stationary(const bool on_ground)
     if (TimeOnGround<30)
       TimeOnGround++;
   }
-  flying_state_check();
+  flying_state_check(time);
 }
 
 
 void
-FLYING_STATE::flying_state_check()
+FLYING_STATE::flying_state_check(const fixed time)
 {
   // Logic to detect takeoff and landing is as follows:
   //   detect takeoff when above threshold speed for 10 seconds
@@ -123,8 +123,13 @@ FLYING_STATE::flying_state_check()
     // detect takeoff
     if (TimeInFlight > 10) {
       Flying = true;
+      TakeOffTime = time;
+      FlightTime = 0;
     }
   } else {
+
+    FlightTime = time-TakeOffTime;
+
     // detect landing
     if (TimeInFlight == 0) {
       // have been stationary for a minute
@@ -133,3 +138,4 @@ FLYING_STATE::flying_state_check()
   }
   OnGround = (!Flying) && (TimeOnGround>10);
 }
+

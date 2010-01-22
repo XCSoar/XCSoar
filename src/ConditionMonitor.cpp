@@ -72,7 +72,7 @@ public:
   void
   Update(const GlideComputer& cmp)
   {
-    if (!cmp.Calculated().Flying)
+    if (!cmp.Basic().Flying)
       return;
 
     bool restart = false;
@@ -155,7 +155,7 @@ protected:
     wind_mag = cmp.Basic().WindSpeed;
     wind_bearing = cmp.Basic().WindDirection;
 
-    if (!cmp.Calculated().Flying) {
+    if (!cmp.Basic().Flying) {
       last_wind_mag = wind_mag;
       last_wind_bearing = wind_bearing;
       return false;
@@ -208,7 +208,7 @@ protected:
   CheckCondition(const GlideComputer& cmp)
   {
 #ifdef OLD_TASK    
-    if (!cmp.Calculated().Flying || !task.Valid())
+    if (!cmp.Basic().Flying || !task.Valid())
       return false;
 
     // TODO: use low pass filter
@@ -277,7 +277,7 @@ protected:
   CheckCondition(const GlideComputer& cmp)
   {
 #ifdef OLD_TASK
-    if (!task.Valid() || !cmp.Calculated().Flying)
+    if (!task.Valid() || !cmp.Basic().Flying)
       return false;
 
     double sunsettime = sun.CalcSunTimes(task.getActiveLocation(),
@@ -329,7 +329,7 @@ protected:
 #ifdef OLD_TASK
     if (!task.getSettings().AATEnabled || !task.Valid()
         || task.TaskIsTemporary() || !(cmp.Calculated().ValidStart
-        && !cmp.Calculated().ValidFinish) || !cmp.Calculated().Flying)
+        && !cmp.Calculated().ValidFinish) || !cmp.Basic().Flying)
       return false;
 
     bool OnFinalWaypoint = !task.Valid();
@@ -377,7 +377,7 @@ protected:
   {
 #ifdef OLD_TASK
     if (!task.Valid()
-        || !cmp.Calculated().Flying
+        || !cmp.Basic().Flying
         || (task.getActiveIndex() > 0)
         || !task.ValidTaskPoint(task.getActiveIndex() + 1))
       return false;
@@ -431,7 +431,7 @@ protected:
   CheckCondition(const GlideComputer& cmp)
   {
 #ifdef OLD_TASK
-    if (!cmp.Calculated().Flying || !task.Valid())
+    if (!cmp.Basic().Flying || !task.Valid())
       return false;
 
     fgtt = !((cmp.Calculated().TerrainWarningLocation.Latitude == 0.0)

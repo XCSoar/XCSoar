@@ -93,8 +93,7 @@ public:
   /** Height of ground above MSL */
   static double hGround;
   static unsigned short last_level;
-  static void updateMeasurements(const NMEA_INFO &basic,
-      const DERIVED_INFO &calculated);
+  static void updateMeasurements(const NMEA_INFO &basic);
   static CuSondeLevel cslevels[CUSONDE_NUMLEVELS];
   static void findCloudBase(unsigned short level);
   static void findThermalHeight(unsigned short level);

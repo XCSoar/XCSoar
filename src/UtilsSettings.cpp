@@ -187,7 +187,7 @@ void SettingsLeave() {
 
 void SystemConfiguration(void) {
   if (!is_simulator() && XCSoarInterface::LockSettingsInFlight
-      && XCSoarInterface::Calculated().Flying) {
+      && XCSoarInterface::Basic().Flying) {
     Message::AddMessage(TEXT("Settings locked in flight"));
     return;
   }

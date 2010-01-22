@@ -62,9 +62,17 @@ GlideComputerBlackboard::ResetFlight(const bool full)
 {
   unsigned i;
 
+  /*
+    \todo also need to call flight_state_reset() on Basic() ?
+
+    calculated_info.Flying = false;
+    if (full) {
+      calculated_info.FlightTime = 0;
+      calculated_info.TakeOffTime = 0;
+    }
+  */
+
   if (full) {
-    calculated_info.FlightTime = 0;
-    calculated_info.TakeOffTime = 0;
     calculated_info.timeCruising = 0;
     calculated_info.timeCircling = 0;
     calculated_info.TotalHeightClimb = 0;
@@ -97,7 +105,6 @@ GlideComputerBlackboard::ResetFlight(const bool full)
     calculated_info.ThermalSources[i].LiftRate= -1.0;
   }
 
-  calculated_info.Flying = false;
   calculated_info.Circling = false;
   for (int i = 0; i <= NUMTERRAINSWEEPS; i++) {
     calculated_info.GlideFootPrint[i].Longitude = 0;
@@ -147,11 +154,12 @@ GlideComputerBlackboard::SaveFinish()
 void
 GlideComputerBlackboard::RestoreFinish()
 {
-  double flighttime = calculated_info.FlightTime;
-  double takeofftime = calculated_info.TakeOffTime;
+  FLYING_STATE flying_state = Basic();
+
   calculated_info = Finish_Derived_Info;
-  calculated_info.FlightTime = flighttime;
-  calculated_info.TakeOffTime = takeofftime;
+
+  // \todo restore flying state
+  //  SetBasic().flying_state = flying_state;
 }
 
 /**

@@ -419,7 +419,7 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
   Wind();
   Heading();
   NavAltitude();
-  AutoQNH(glide_polar);
+  AutoQNH();
 
   tick_fast(glide_polar);
 
@@ -489,7 +489,7 @@ DeviceBlackboard::Heading()
     x0 += fastsine(Basic().WindDirection)*Basic().WindSpeed;
     y0 += fastcosine(Basic().WindDirection)*Basic().WindSpeed;
 
-    if (!Calculated().Flying) {
+    if (!Basic().Flying) {
       // don't take wind into account when on ground
       SetBasic().Heading = Basic().TrackBearing;
     } else {
@@ -557,7 +557,7 @@ DeviceBlackboard::TurnRate()
 
   // Calculate turn rate
 
-  if (!Calculated().Flying) {
+  if (!Basic().Flying) {
     SetBasic().TurnRate = fixed_zero;
     SetBasic().NextTrackBearing = Basic().TrackBearing;
     return;
@@ -601,7 +601,7 @@ DeviceBlackboard::Dynamics()
   static const fixed fixed_inv_g(1.0/9.81);
   static const fixed fixed_small(0.001);
 
-  if (Calculated().Flying && 
+  if (Basic().Flying && 
       (positive(Basic().Speed) || positive(Basic().WindSpeed))) {
 
     // calculate turn rate in wind coordinates
@@ -690,10 +690,10 @@ DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
 
   // Speed too high for being on the ground
   if (Basic().Speed> glide_polar.get_Vtakeoff()) {
-    SetBasic().flying_state_moving();
+    SetBasic().flying_state_moving(Basic().Time);
   } else {
     const bool on_ground = Calculated().TerrainValid && (Basic().AltitudeAGL < 300);
-    SetBasic().flying_state_stationary(on_ground);
+    SetBasic().flying_state_stationary(Basic().Time,on_ground);
   }
 }
 

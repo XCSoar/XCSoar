@@ -132,7 +132,7 @@ GlideComputerAirData::ProcessBasic()
   SetCalculated().AdjustedAverageThermal = GetAverageThermal();
 
   if (Basic().VarioAvailable && !Basic().Replay) {
-    CalibrationUpdate(&Basic(), &Calculated());
+    CalibrationUpdate(&Basic());
   }
 }
 
@@ -145,11 +145,15 @@ GlideComputerAirData::ProcessVertical()
   Turning();
   Wind();
   ProcessThermalLocator();
-  CuSonde::updateMeasurements(Basic(), Calculated());
+  CuSonde::updateMeasurements(Basic());
   LastThermalStats();
   LD();
   CruiseLD();
-  SetCalculated().AverageLD = CalculateLDRotary(Calculated(), rotaryLD);
+
+  if (!Basic().OnGround && !Calculated().Circling) {
+    SetCalculated().AverageLD = CalculateLDRotary(rotaryLD);
+  }
+
   Average30s();
   AverageClimbRate();
   AverageThermal();
@@ -163,7 +167,7 @@ void
 GlideComputerAirData::Wind()
 {
 
-  if (!Calculated().Flying || !time_advanced())
+  if (!Basic().Flying || !time_advanced())
     return;
 
   if (Calculated().TurnMode == CLIMB)
@@ -324,7 +328,7 @@ GlideComputerAirData::AverageThermal()
 void
 GlideComputerAirData::MaxHeightGain()
 {
-  if (!Calculated().Flying)
+  if (!Basic().Flying)
     return;
 
   if (Calculated().MinAltitude > 0) {
@@ -363,13 +367,14 @@ GlideComputerAirData::LD()
 	       DistanceFlown,
 	       Basic().NavAltitude - LastBasic().NavAltitude, 0.1);
 
-    InsertLDRotary(Calculated(),
-		   &rotaryLD,(int)DistanceFlown,
-		   (int)Basic().NavAltitude);
+    if (!Basic().OnGround && !Calculated().Circling) {
+      InsertLDRotary(&rotaryLD,(int)DistanceFlown,
+                     (int)Basic().NavAltitude);
+    }
   }
 
   // LD instantaneous from vario, updated every reading..
-  if (Basic().VarioAvailable && Basic().AirspeedAvailable && Calculated().Flying) {
+  if (Basic().VarioAvailable && Basic().AirspeedAvailable && Basic().Flying) {
     SetCalculated().LDvario = UpdateLD(Calculated().LDvario,
 				       Basic().IndicatedAirspeed,
 				       -Basic().Vario,
@@ -462,11 +467,6 @@ GlideComputerAirData::FlightTimes()
     return false;
   }
 
-  double t = DetectStartTime(&Basic(), &Calculated());
-  if (t>0) {
-    SetCalculated().FlightTime = t;
-  }
-
   TakeoffLanding();
 
   return true;
@@ -494,9 +494,9 @@ GlideComputerAirData::TakeoffLanding()
     XCSoarInterface::InterfaceTimeoutReset();
   }
 
-  if (Calculated().Flying && !LastCalculated().Flying) {
+  if (Basic().Flying && !LastBasic().Flying) {
     OnTakeoff();
-  } else if (!Calculated().Flying && LastCalculated().Flying) {
+  } else if (!Basic().Flying && LastBasic().Flying) {
     OnLanding();
   }
 }
@@ -519,8 +519,6 @@ GlideComputerAirData::OnTakeoff()
 {
   // reset stats on takeoff
   ResetFlight();
-
-  SetCalculated().TakeOffTime = Basic().Time;
 
   // save stats in case we never finish
   SaveFinish();
@@ -681,7 +679,7 @@ GlideComputerAirData::Turning()
   static bool LEFT = false;
 
   // You can't be circling unless you're flying
-  if (!Calculated().Flying || !time_advanced())
+  if (!Basic().Flying || !time_advanced())
     return;
 
   // JMW limit rate to 50 deg per second otherwise a big spike

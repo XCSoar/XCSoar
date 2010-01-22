@@ -976,14 +976,14 @@ InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
     dlgVegaDemoShowModal();
   } else if (_tcscmp(misc, TEXT("zero"))==0) {
     // zero, no mixing
-    if (!Calculated().Flying) {
+    if (!Basic().Flying) {
       VarioWriteNMEA(TEXT("PDVSC,S,ZeroASI,1"));
     }
   } else if (_tcscmp(misc, TEXT("save")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
 
   // accel calibration
-  } else if (!Calculated().Flying) {
+  } else if (!Basic().Flying) {
     if (_tcscmp(misc, TEXT("X1"))==0)
       VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,1"));
     else if (_tcscmp(misc, TEXT("X2"))==0)

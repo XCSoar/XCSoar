@@ -584,7 +584,7 @@ WindZigZagCheckAirData(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
   static double bearingLast = 0;
 
   bool airdata_invalid = false;
-  if (!Calculated->Flying) {
+  if (!Basic->Flying) {
     airdata_invalid = true;
   } else if (fabs(Basic->TurnRate) > 20.0) {
     airdata_invalid = true;

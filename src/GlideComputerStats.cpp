@@ -100,11 +100,11 @@ GlideComputerStats::DoLogging()
     logger.LogPoint(Basic());
   }
 
-  if (Calculated().Flying) {
+  if (Basic().Flying) {
     if (stats_clock.check_advance(Basic().Time)) {
-      flightstats.AddAltitudeTerrain(Basic().Time - Calculated().TakeOffTime,
+      flightstats.AddAltitudeTerrain(Basic().FlightTime,
           Calculated().TerrainAlt);
-      flightstats.AddAltitude(Basic().Time - Calculated().TakeOffTime,
+      flightstats.AddAltitude(Basic().FlightTime,
           Basic().NavAltitude);
     }
   }
@@ -139,14 +139,14 @@ void
 GlideComputerStats::OnClimbBase(double StartAlt)
 {
   flightstats.AddClimbBase(Calculated().ClimbStartTime
-      - Calculated().TakeOffTime, StartAlt);
+      - Basic().TakeOffTime, StartAlt);
 }
 
 void
 GlideComputerStats::OnClimbCeiling()
 {
   flightstats.AddClimbCeiling(Calculated().CruiseStartTime
-      - Calculated().TakeOffTime, Calculated().CruiseStartAlt);
+      - Basic().TakeOffTime, Calculated().CruiseStartAlt);
 }
 
 /**

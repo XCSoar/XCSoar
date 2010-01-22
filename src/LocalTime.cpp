@@ -69,45 +69,6 @@ DetectCurrentTime(const NMEA_INFO *Basic)
   return TimeLocal(localtime);
 }
 
-/**
- * Saves the StartTime and calculates the time of flight
- * @param Basic Basic NMEA Data
- * @param Calculated Calculated Data
- * @return Time of flight or 0
- */
-int
-DetectStartTime(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
-{
-  // JMW added restart ability
-  //
-  // we want this to display landing time until next takeoff
-  static int starttime = -1;
-  static int lastflighttime = -1;
-
-  if (Calculated->Flying) {
-    if (starttime == -1) {
-      // hasn't been started yet
-      starttime = (int)Basic->Time;
-
-      lastflighttime = -1;
-    }
-    return (int)Basic->Time - starttime;
-  } else {
-    if (lastflighttime == -1) {
-      // hasn't been stopped yet
-      if (starttime >= 0) {
-        lastflighttime = (int)Basic->Time - starttime;
-      } else {
-        return 0; // no last flight time
-      }
-      // reset for next takeoff
-      starttime = -1;
-    }
-  }
-
-  // return last flighttime if it exists
-  return max(0, lastflighttime);
-}
 
 long
 GetUTCOffset()

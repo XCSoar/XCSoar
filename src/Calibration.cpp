@@ -101,9 +101,9 @@ void CalibrationSave(void) {
 }
 
 void
-CalibrationUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated)
+CalibrationUpdate(const NMEA_INFO *Basic)
 {
-  if (!Calculated->Flying) return;
+  if (!Basic->Flying) return;
   if ((!Basic->AirspeedAvailable) || (Basic->TrueAirspeed<=0)) {
     return;
   }

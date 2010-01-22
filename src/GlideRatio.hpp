@@ -41,8 +41,6 @@ Copyright_License {
 
 #include "Defines.h"
 
-struct NMEA_INFO;
-struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
 
 typedef enum{
@@ -67,10 +65,10 @@ typedef struct {
 void InitLDRotary(const SETTINGS_COMPUTER& settings, ldrotary_s *buf);
 
 void
-InsertLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf, int distance, int altitude);
+InsertLDRotary(ldrotary_s *buf, int distance, int altitude);
 
 int
-CalculateLDRotary(const DERIVED_INFO &calculated, const ldrotary_s &ld);
+CalculateLDRotary(const ldrotary_s &ld);
 
 // methods using low-pass filter
 

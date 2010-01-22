@@ -286,9 +286,9 @@ static void UpdateValuesTimes(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpTakeoffTime"));
   if (wp) {
-    if (XCSoarInterface::Calculated().FlightTime>0) {
+    if (XCSoarInterface::Basic().FlightTime>0) {
       Units::TimeToText(Temp,
-                        (int)TimeLocal((long)XCSoarInterface::Calculated().TakeOffTime));
+                        (int)TimeLocal((long)XCSoarInterface::Basic().TakeOffTime));
       wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));
@@ -297,10 +297,10 @@ static void UpdateValuesTimes(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpLandingTime"));
   if (wp) {
-    if (!XCSoarInterface::Calculated().Flying) {
+    if (!XCSoarInterface::Basic().Flying) {
       Units::TimeToText(Temp,
-                        (int)TimeLocal((long)(XCSoarInterface::Calculated().TakeOffTime
-                                              + XCSoarInterface::Calculated().FlightTime)));
+                        (int)TimeLocal((long)(XCSoarInterface::Basic().TakeOffTime
+                                              + XCSoarInterface::Basic().FlightTime)));
       wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));
@@ -309,8 +309,8 @@ static void UpdateValuesTimes(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlightTime"));
   if (wp) {
-    if (XCSoarInterface::Calculated().FlightTime > 0){
-      Units::TimeToText(Temp, (int)XCSoarInterface::Calculated().FlightTime);
+    if (XCSoarInterface::Basic().FlightTime > 0){
+      Units::TimeToText(Temp, (int)XCSoarInterface::Basic().FlightTime);
       wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));

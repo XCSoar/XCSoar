@@ -58,7 +58,7 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
  */
 void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer) {
 
-  if (!Calculated().Flying) return;
+  if (!Basic().Flying) return;
 
   buffer.background_transparent();
   buffer.set_background_color(Color::WHITE);
@@ -88,14 +88,14 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
   canvas.select(MapGfx.hpTerrainLineBg);
   canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   if ((SettingsComputer().FinalGlideTerrain==1) ||
-      ((!SettingsMap().EnableTerrain || !Calculated().Flying) &&
+      ((!SettingsMap().EnableTerrain || !Basic().Flying) &&
        (SettingsComputer().FinalGlideTerrain==2))) {
     canvas.select(MapGfx.hpTerrainLine);
     canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   }
 
 #ifdef OLD_TASK
-  if (Calculated().Flying && task != NULL && task->Valid()) {
+  if (Basic().Flying && task != NULL && task->Valid()) {
     if ((Calculated().TerrainWarningLocation.Latitude != 0.0)
         &&(Calculated().TerrainWarningLocation.Longitude != 0.0)) {
 

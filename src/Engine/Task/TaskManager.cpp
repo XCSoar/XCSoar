@@ -302,8 +302,10 @@ TaskManager::update(const AIRCRAFT_STATE &state,
     retval |= active_task->update(state, state_last);
   }
 
-  // always update OLC sampling task
-  retval |= task_olc.update_sample(state);
+  if (state.Flying) {
+    // always update OLC sampling task
+    retval |= task_olc.update_sample(state);
+  }
 
   update_common_stats(state);
 

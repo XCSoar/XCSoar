@@ -148,11 +148,11 @@ struct FLYING_STATE
   fixed TakeOffTime;
 
   void flying_state_reset();
-  void flying_state_moving();
-  void flying_state_stationary(const bool on_ground=false);
+  void flying_state_moving(const fixed time);
+  void flying_state_stationary(const fixed time, const bool on_ground=false);
 
 private:
-  void flying_state_check();
+  void flying_state_check(const fixed time);
   int  TimeOnGround;
   int  TimeInFlight;
 };

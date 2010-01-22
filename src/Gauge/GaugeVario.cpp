@@ -630,7 +630,7 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 
   // only draw speed command if flying and vario is not circling
   //
-  if ((Calculated().Flying)
+  if ((Basic().Flying)
       && (!is_simulator() || !Calculated().Circling)
       && !Basic().SwitchState.VarioCircling) {
     vdiff = (Calculated().V_stf - Basic().IndicatedAirspeed);

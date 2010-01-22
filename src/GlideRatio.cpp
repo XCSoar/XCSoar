@@ -87,13 +87,10 @@ InitLDRotary(const SETTINGS_COMPUTER& settings, ldrotary_s *buf)
 }
 
 void
-InsertLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf,
-    int distance, int altitude)
+InsertLDRotary(ldrotary_s *buf,
+               int distance, int altitude)
 {
   static short errs = 0;
-
-  if (calculated.OnGround || calculated.Circling)
-    return;
 
   if (distance < 3 || distance > 150) { // just ignore, no need to reset rotary
     if (errs > 2) {
@@ -123,13 +120,10 @@ InsertLDRotary(const DERIVED_INFO &calculated, ldrotary_s *buf,
  * returns 0 if invalid, 999 if too high
  */
 int
-CalculateLDRotary(const DERIVED_INFO &calculated, const ldrotary_s &bc)
+CalculateLDRotary(const ldrotary_s &bc)
 {
   int altdiff, eff;
   short bcold;
-
-  if (calculated.Circling || calculated.OnGround)
-    return 0;
 
   if (bc.start < 0)
     return 0;
