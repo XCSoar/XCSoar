@@ -187,7 +187,7 @@ TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
     common_stats.task_time_elapsed = task_ordered.get_stats().total.TimeElapsed;
 
   } else {
-    common_stats.reset();
+    common_stats.reset_task();
   }
 }
 

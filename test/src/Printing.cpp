@@ -47,6 +47,8 @@ void TaskManager::print(const AIRCRAFT_STATE &state)
 
   trace_full.print(state.Location);
 
+  task_olc.print();
+
   std::ofstream fs("results/res-stats-common.txt");
   fs << common_stats;
 }

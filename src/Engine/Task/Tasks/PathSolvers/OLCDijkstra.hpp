@@ -73,10 +73,14 @@ public:
    * Calculate the scored value of the OLC path
    *
    * @param the_distance output distance (m) of scored path
+   * @param the_speed output speed (m/s) of scored path
+   * @param the_time output time (s) of scored path
    *
    * @return Score (interpretation depends on OLC type)
    */
-  virtual fixed score(fixed &the_distance);
+  fixed score(fixed &the_distance,
+              fixed &the_speed,
+              fixed &the_time);
 
   /**
    * Copy the best OLC path solution
@@ -164,6 +168,9 @@ private:
 
   bool solution_found;
   fixed best_distance;
+  fixed best_speed;
+  fixed best_time;
+
   TracePointVector best_solution;
 
   virtual void add_start_edges();

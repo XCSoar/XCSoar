@@ -64,15 +64,9 @@ bool
 OnlineContest::run_olc(OLCDijkstra &dijkstra)
 {
   if (dijkstra.solve()) {
-    const fixed score = dijkstra.score(common_stats.distance_olc);
-    if (positive(score)) {
-      common_stats.time_olc = dijkstra.calc_time();
-      if (positive(common_stats.time_olc)) {
-        common_stats.speed_olc = dijkstra.calc_distance()/common_stats.time_olc;
-      } else {
-        common_stats.speed_olc = fixed_zero;
-      }
-    }
+    const fixed score = dijkstra.score(common_stats.distance_olc,
+                                       common_stats.speed_olc,
+                                       common_stats.time_olc);
     dijkstra.copy_solution(m_solution);
     update_trace();
 
@@ -119,12 +113,11 @@ OnlineContest::update_idle(const AIRCRAFT_STATE &state)
 
   if (retval) {
 #ifdef DO_PRINT
-    printf("time %d size %d/%d dist %g\n",
+    printf("# time %d size %d/%d dist %g\n",
            (int)state.Time,
            m_trace_points_full.size(), 
            m_trace_points_sprint.size(), 
            (double)common_stats.distance_olc);
-    print();
 #endif
   }
 

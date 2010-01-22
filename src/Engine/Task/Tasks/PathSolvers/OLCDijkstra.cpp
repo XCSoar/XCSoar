@@ -57,6 +57,8 @@ OLCDijkstra::OLCDijkstra(OnlineContest& _olc,
   m_finish_alt_diff(finish_alt_diff),
   m_dijkstra(ScanTaskPoint(0,0), false),
   best_distance(fixed_zero),
+  best_speed(fixed_zero),
+  best_time(fixed_zero),
   solution_found(false),
   m_full_trace(full_trace)
 {
@@ -121,14 +123,21 @@ OLCDijkstra::reset()
   n_points = 0;
   solution_found = false;
   best_distance = fixed_zero;
+  best_speed = fixed_zero;
+  best_time = fixed_zero;
 }
 
 fixed
-OLCDijkstra::score(fixed& the_distance)
+OLCDijkstra::score(fixed& the_distance,
+                   fixed& the_speed,
+                   fixed& the_time)
 {
   if (positive(calc_time())) {
     solution_found = true;
     the_distance = best_distance;
+    the_speed = best_speed;
+    the_time = best_time;
+
     return best_distance;
   } else {
     return fixed_zero;
@@ -222,6 +231,12 @@ OLCDijkstra::save_solution()
       best_solution.push_back(solution[i]);
     }
     best_distance = the_distance;
+    best_time = calc_time();
+    if (positive(best_time)) {
+      best_speed = best_distance/best_time;
+    } else {
+      best_speed = 0;
+    }
   }
 }
 

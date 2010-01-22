@@ -8,7 +8,7 @@ CommonStats::CommonStats():
 }
 
 void
-CommonStats::reset()
+CommonStats::reset_task()
 {
   landable_reachable = false;
   task_finished = false;
@@ -28,6 +28,12 @@ CommonStats::reset()
   next_is_last = false;
   previous_is_first = false;
 
+  clear_waypoints_in_task();
+}
+
+void
+CommonStats::reset()
+{
   V_block = fixed_zero;
   V_dolphin = fixed_zero;
 
@@ -40,7 +46,7 @@ CommonStats::reset()
   time_olc = fixed_zero;
   speed_olc = fixed_zero;
 
-  clear_waypoints_in_task();
+  reset_task();
 }
 
 void

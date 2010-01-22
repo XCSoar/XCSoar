@@ -90,10 +90,12 @@ test_replay(const OLCRules olc_type)
       state_last = sim.state;
 
 #ifdef DO_PRINT
-      if (do_print) {
-        task_manager.print(sim.state);
+      if (verbose) {
         sim.print(f);
         f.flush();
+      }
+      if (do_print) {
+        task_manager.print(sim.state);
       }
 #endif
       do_print = (++print_counter % output_skip ==0) && verbose;
@@ -101,6 +103,12 @@ test_replay(const OLCRules olc_type)
     time_last = sim.state.Time;
   };
   sim.Stop();
+
+  const CommonStats& stats = task_manager.get_common_stats();
+  printf("# OLC dist %g speed %g time %g\n",
+         (double)stats.distance_olc,
+         (double)(stats.speed_olc*3.6),
+         (double)stats.time_olc);
 
   if (verbose) {
     distance_counts();
@@ -112,6 +120,8 @@ test_replay(const OLCRules olc_type)
 
 int main(int argc, char** argv) 
 {
+  output_skip = 60;
+
   if (!parse_args(argc,argv)) {
     return 0;
   }

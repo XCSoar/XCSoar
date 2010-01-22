@@ -44,7 +44,7 @@ void distance_counts() {
       printf("#    (total queries %d)\n\n",n_queries);
     }
     if (count_olc>0) {
-      printf("#     q/olc_res %d\n",(unsigned)(n_queries/count_olc));
+      printf("#     q/olc_res %d\n",(unsigned)(n_samples/count_olc));
     }
     if (count_dijkstra_queries>0) {
       printf("#     dijkstra links/q %d\n", (unsigned)(count_dijkstra_links/count_dijkstra_queries));
@@ -61,6 +61,7 @@ void distance_counts() {
   n_queries = 0;
   count_distbearing = 0;
   count_mc = 0;
+  count_olc = 0;
 #endif
 }
 

@@ -83,10 +83,16 @@ public:
   bool is_waypoint_in_task(const Waypoint& wp) const;
 
 /** 
- * Reset the task as if never flown
+ * Reset the stats as if never flown
  * 
  */
   void reset();
+
+/** 
+ * Reset the task stats
+ * 
+ */
+  void reset_task();
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
