@@ -1,0 +1,11 @@
+
+01lz1hq1.igc
+- Classic 519.44 km speed 101.7 km/h duration 05:06:28
+- FAI dist 40.67 speed 8.05 km/h duration 05:03:12
+- Sprint 279.73 km 111.89 km/h duration 02:30:00
+
+9crx3101.igc
+- Classic 326.86 km speed 96.23 km/h duration 03:23:48
+- FAI 21.6 km, 13.1 km/h duration 01:38:55
+- Sprint 251.45 km speed 100.58 km/h duration 02:30:00
+
