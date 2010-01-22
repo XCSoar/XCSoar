@@ -145,9 +145,9 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
   infoUnselectedBrush.set(MapGfx.ColorUnselected);
   buttonBrush.set(MapGfx.ColorButton);
 
-  redBrush.set(Color::RED);
-  yellowBrush.set(Color::YELLOW);
-  greenBrush.set(Color::GREEN);
+  AlarmBrush.set(Color::RED);
+  WarningBrush.set(Color(0xFF, 0xA2, 0x00));
+  TrafficBrush.set(Color::GREEN);
 
   hBackgroundBrush.set(BackgroundColor);
 
@@ -385,9 +385,9 @@ ScreenGraphics::Destroy()
     hSnailPens[i].reset();
   }
 
-  greenBrush.reset();
-  yellowBrush.reset();
-  redBrush.reset();
+  TrafficBrush.reset();
+  WarningBrush.reset();
+  AlarmBrush.reset();
 
   infoSelectedBrush.reset();
   infoUnselectedBrush.reset();

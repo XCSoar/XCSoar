@@ -159,9 +159,9 @@ public:
   Bitmap hBmpUnitMpS;
 
   // used for flarm
-  Brush redBrush;
-  Brush yellowBrush;
-  Brush greenBrush;
+  Brush AlarmBrush;
+  Brush WarningBrush;
+  Brush TrafficBrush;
 
   // misc
   static const Color BackgroundColor;

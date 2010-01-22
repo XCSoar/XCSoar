@@ -78,9 +78,9 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   double scalefact = screenrange/6000.0;
 
   // Create the brushes for filling the arrow (red/yellow/green)
-  Brush redBrush(Color(0xFF,0x00,0x00));
-  Brush yellowBrush(Color(0xFF,0xFF,0x00));
-  Brush greenBrush(Color(0x00,0xFF,0x00));
+  Brush AlarmBrush(Color::RED);
+  Brush WarningBrush(Color(0xFF, 0xA2, 0x00));
+  Brush TrafficBrush(Color::GREEN);
 
   // Saves the McCready value
   const double MACCREADY = task != NULL
@@ -235,15 +235,15 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
     // Select brush depending on AlarmLevel
     switch (traffic.AlarmLevel) {
     case 1:
-      canvas.select(yellowBrush);
+      canvas.select(WarningBrush);
       break;
     case 2:
     case 3:
-      canvas.select(redBrush);
+      canvas.select(AlarmBrush);
       break;
     case 0:
     case 4:
-      canvas.select(greenBrush);
+      canvas.select(TrafficBrush);
       break;
     }
 

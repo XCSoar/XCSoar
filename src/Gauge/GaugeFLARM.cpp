@@ -112,15 +112,15 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
     // Set the arrow color depending on alarm level
     switch (traffic.AlarmLevel) {
     case 1:
-      canvas.select(MapGfx.yellowBrush);
+      canvas.select(MapGfx.WarningBrush);
       break;
     case 2:
     case 3:
-      canvas.select(MapGfx.redBrush);
+      canvas.select(MapGfx.AlarmBrush);
       break;
     case 0:
     case 4:
-      canvas.select(MapGfx.greenBrush);
+      canvas.select(MapGfx.TrafficBrush);
       break;
     }
 
