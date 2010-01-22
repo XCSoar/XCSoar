@@ -158,7 +158,7 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
     sc.x = center.x + iround(x * scale);
     sc.y = center.y + iround(y * scale);
 
-    if (traffic.AlarmLevel > 0)
+    if (traffic.AlarmLevel > 0) {
       // Draw line through target, from target to screen edge.
       // This is deliberate: when targets are close, there is no point drawing
       // a vector from the center to the target because it is not noticeable.
@@ -168,6 +168,10 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
       //
       canvas.line(sc.x, sc.y, center.x + iround(radius * x),
                   center.y + iround(radius * y));
+
+      // @todo: this should be width set by IBLSCALE, otherwise
+      // with default pen it is too thin to be visible on 640x480 displays 
+    }
 
     // Create an arrow polygon
     POINT Arrow[5];
