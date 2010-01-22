@@ -108,9 +108,11 @@ GlideComputerTask::ProcessBasicTask()
 //  task_behaviour.auto_mc=true;
     task_behaviour.enable_olc = true;
 
-    m_task.update(Basic(), LastBasic());
-    SetCalculated().task_stats = m_task.get_stats();
-    SetCalculated().common_stats = m_task.get_common_stats();
+    if (!Basic().NAVWarning) {
+      m_task.update(Basic(), LastBasic());
+      SetCalculated().task_stats = m_task.get_stats();
+      SetCalculated().common_stats = m_task.get_common_stats();
+    }
 
     if (SettingsComputer().EnableBlockSTF) {
       SetCalculated().V_stf = m_task.get_common_stats().V_block;
