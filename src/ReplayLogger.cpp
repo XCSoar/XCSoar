@@ -362,15 +362,17 @@ ReplayLogger::UpdateInternal()
   }
 
   if (!finished) {
-    double AltX, SpeedX, BearingX;
+    double Alt0;
+    double Alt1;
     GEOPOINT P0, P1;
 
-    cli.Interpolate(t_simulation, P0, AltX);
+    cli.Interpolate(t_simulation, P0, Alt0);
+    cli.Interpolate(t_simulation+0.1, P1, Alt1);
 
-    SpeedX = cli.GetSpeed(t_simulation);
-    BearingX = P0.bearing(P1);
+    const double Speed = cli.GetSpeed(t_simulation);
+    const double Bearing = P0.bearing(P1);
 
-    on_advance(P0, SpeedX, BearingX, AltX, AltX, t_simulation);
+    on_advance(P0, Speed, Bearing, Alt0, Alt0, t_simulation);
   }
 
   // quit if finished.

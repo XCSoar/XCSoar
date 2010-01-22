@@ -219,6 +219,10 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   }
   ts->scan_active(tps[activeTaskPoint]);
 
+  if (!state.Flying) {
+    return false;
+  }
+
   const int n_task = tps.size();
 
   if (!n_task) {
