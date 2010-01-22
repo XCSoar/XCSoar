@@ -78,9 +78,9 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
   double scalefact = screenrange/6000.0;
 
   // Create the brushes for filling the arrow (red/yellow/green)
-  Brush AlarmBrush(Color::RED);
-  Brush WarningBrush(Color(0xFF, 0xA2, 0x00));
-  Brush TrafficBrush(Color::GREEN);
+  static const Brush AlarmBrush(Color::RED);
+  static const Brush WarningBrush(Color(0xFF, 0xA2, 0x00));
+  static const Brush TrafficBrush(Color::GREEN);
 
   // Saves the McCready value
   const double MACCREADY = task != NULL
