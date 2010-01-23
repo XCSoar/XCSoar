@@ -110,19 +110,17 @@ GlideComputerTask::ProcessBasicTask()
 
     if (!Basic().NAVWarning) {
       m_task.update(Basic(), LastBasic());
-      SetCalculated().task_stats = m_task.get_stats();
-      SetCalculated().common_stats = m_task.get_common_stats();
-
-      SaveTaskSpeed(Calculated().task_stats.total.remaining_effective.get_speed_incremental());
     }
-
-    if (SettingsComputer().EnableBlockSTF) {
-      SetCalculated().V_stf = m_task.get_common_stats().V_block;
-    } else {
-      SetCalculated().V_stf = m_task.get_common_stats().V_dolphin;
-    }
-
     terrain.Unlock();
+  }
+
+  SetCalculated().task_stats = m_task.get_stats();
+  SetCalculated().common_stats = m_task.get_common_stats();
+
+  if (SettingsComputer().EnableBlockSTF) {
+    SetCalculated().V_stf = m_task.get_common_stats().V_block;
+  } else {
+    SetCalculated().V_stf = m_task.get_common_stats().V_dolphin;
   }
 
 #ifdef OLD_TASK

@@ -106,6 +106,7 @@ GlideComputerStats::DoLogging()
           Calculated().TerrainAlt);
       flightstats.AddAltitude(Basic().FlightTime,
           Basic().NavAltitude);
+      flightstats.SaveTaskSpeed(Calculated().task_stats.total.remaining_effective.get_speed_incremental());
     }
   }
 
@@ -119,12 +120,6 @@ GlideComputerStats::GetAverageThermal()
 
   mc_current = GlideComputerBlackboard::GetAverageThermal();
   return flightstats.AverageThermalAdjusted(mc_current, Calculated().Circling);
-}
-
-void
-GlideComputerStats::SaveTaskSpeed(double val)
-{
-  flightstats.SaveTaskSpeed(val);
 }
 
 void
