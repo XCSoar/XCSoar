@@ -65,7 +65,11 @@ Copyright_License {
  */
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-        LPTSTR lpCmdLine,
+#ifdef _WIN32_WCE
+        LPWSTR lpCmdLine,
+#else
+        LPSTR lpCmdLine2,
+#endif
         int nCmdShow)
 {
   (void)hPrevInstance;
@@ -77,6 +81,12 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   StartupStore(TEXT("Starting XCSoar %s\n"), XCSoar_VersionString);
 
   // Read options from the command line
+#ifndef _WIN32_WCE
+  /* on Windows (non-CE), the lpCmdLine argument is narrow, and we
+     have to use GetCommandLine() to get the UNICODE string */
+  LPCTSTR lpCmdLine = GetCommandLine();
+#endif
+
   XCSoarGetOpts(lpCmdLine);
 
 #ifndef ENABLE_SDL
