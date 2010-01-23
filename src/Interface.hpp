@@ -172,7 +172,7 @@ public:
 
   static void AfterStartup();
   static void Shutdown();
-  static bool Startup (HINSTANCE, LPTSTR lpCmdLine);
+  static bool Startup(HINSTANCE, LPCTSTR lpCmdLine);
 
   static void CreateProgressDialog(const TCHAR *text);
   static void CloseProgressDialog();

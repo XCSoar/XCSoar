@@ -671,7 +671,7 @@ void SetProfileFiles(const TCHAR *ex);
  * Reads and parses arguments/options from the command line
  * @param CommandLine not in use
  */
-void XCSoarGetOpts(LPTSTR CommandLine) {
+void XCSoarGetOpts(LPCTSTR CommandLine) {
   (void)CommandLine;
 // SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
 

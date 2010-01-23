@@ -50,7 +50,7 @@ void SetModelType();
 bool SetModelName(DWORD Temp);
 #endif
 
-void XCSoarGetOpts(LPTSTR CommandLine);
+void XCSoarGetOpts(LPCTSTR CommandLine);
 long CheckFreeRam(void);
 void MemCheckPoint();
 void MemLeakCheck();

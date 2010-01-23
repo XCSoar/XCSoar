@@ -257,7 +257,8 @@ void XCSoarInterface::AfterStartup() {
  * @param lpCmdLine Command line string
  * @return True if bootup successful, False otherwise
  */
-bool XCSoarInterface::Startup(HINSTANCE hInstance, LPTSTR lpCmdLine)
+bool
+XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 {
   // The title bar text
   TCHAR szTitle[MAX_LOADSTRING];
