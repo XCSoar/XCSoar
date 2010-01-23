@@ -144,20 +144,6 @@ GlideComputerTask::ProcessIdle()
   terrain.Unlock();
 }
 
-double
-GlideComputerTask::AATCloseBearing() const
-{
-#ifdef OLD_TASK
-  // ensure waypoint goes in direction of track if very close
-  TASK_POINT tp = task.getTaskPoint();
-  double course_bearing = Bearing(task.getActiveLocation(), Basic().Location)
-    + tp.AATTargetOffsetRadial;
-
-  return AngleLimit360(course_bearing);
-#else
-  return 0;
-#endif
-}
 
 double
 FAIFinishHeight(const SETTINGS_COMPUTER &settings,
@@ -1133,33 +1119,4 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
   GlidePolar::SetMacCready(LowPassFilter(mc_setting, mc_new, 0.15));
 #endif
 }
-
-
-#ifdef OLD_TASK
-
-// JMW this is slow way to do things...
-static bool
-CheckLandableReachableTerrain(const NMEA_INFO &Basic,
-    const DERIVED_INFO &Calculated, const SETTINGS_COMPUTER &settings,
-    double LegToGo, double LegBearing)
-{
-  bool out_of_range;
-
-  terrain.Lock();
-  double distance_soarable =
-    FinalGlideThroughTerrain(LegBearing,
-                             Basic, Calculated,
-                             settings, terrain,
-                             NULL,
-                             LegToGo, &out_of_range, NULL);
-  terrain.Unlock();
-
-  if ((out_of_range)||(distance_soarable> LegToGo)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-#endif
 

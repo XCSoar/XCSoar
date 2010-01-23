@@ -72,7 +72,6 @@ protected:
   virtual void AnnounceWayPointSwitch(bool do_advance)= 0;
   void InSector();
 private:
-  double AATCloseBearing() const;
   bool InTurnSector(const int the_turnpoint) const;
   bool InFinishSector(const int i);
   bool ValidFinish() const;

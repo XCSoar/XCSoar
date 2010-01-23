@@ -45,6 +45,9 @@
 /**
  * Abort task provides automatic management of a sorted list of task points
  * that are reachable or close to reachable, and landable (with airfields preferred).
+ *
+ * @todo
+ *  - should prefer landable points that are non-intersecting with terrain
  */
 class AbortTask : 
   public UnorderedTask 
