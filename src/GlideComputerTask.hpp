@@ -75,7 +75,6 @@ protected:
   // stuff for display
   void CalculateWaypointReachable(void);
 private:
-  void DistanceToHome();
   void DistanceToNext();
   void AltitudeRequired(const double mc_setting,
 			const double cruise_efficiency);

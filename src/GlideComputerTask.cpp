@@ -124,7 +124,6 @@ GlideComputerTask::ProcessBasicTask()
   }
 
 #ifdef OLD_TASK
-  DistanceToHome();
   DistanceToNext();
   AltitudeRequired(mc, ce);
   if (!targetManipEvent.test()) {
@@ -148,22 +147,6 @@ GlideComputerTask::ProcessIdle()
   terrain.Unlock();
 }
 
-// VENTA3 added radial
-void
-GlideComputerTask::DistanceToHome()
-{
-#ifdef OLD_TASK
-  if (!way_points.verify_index(SettingsComputer().HomeWaypoint)) {
-    SetCalculated().HomeDistance = 0.0;
-    SetCalculated().HomeRadial = 0.0; // VENTA3
-  } else {
-    DistanceBearing(way_points.get(SettingsComputer().HomeWaypoint).Location,
-                    Basic().Location,
-                    &SetCalculated().HomeDistance,
-                    &SetCalculated().HomeRadial);
-  }
-#endif
-}
 
 void
 GlideComputerTask::DistanceToNext()
