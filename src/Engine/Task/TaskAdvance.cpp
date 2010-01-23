@@ -42,7 +42,8 @@
 #include "Navigation/Aircraft.hpp"
 
 TaskAdvance::TaskAdvance():
-    armed(false),
+    m_armed(false),
+    m_request_armed(false),
     mode(ADVANCE_AUTO)
 {
 }
@@ -50,39 +51,57 @@ TaskAdvance::TaskAdvance():
 void
 TaskAdvance::reset()
 {
-  armed = false;
+  m_armed = false;
+  m_request_armed = false;
 }
 
 bool 
 TaskAdvance::ready_to_advance(const TaskPoint &tp,
                               const AIRCRAFT_STATE &state,
                               const bool x_enter, 
-                              const bool x_exit) const
+                              const bool x_exit)
 {
-  if (!mode_ready())
-    return false;
+  const bool m_mode_ready = mode_ready(tp);
+  const bool m_state_ready = state_ready(tp, state, x_enter, x_exit);
 
-  if (dynamic_cast<const StartPoint*>(&tp)) {
-    if (mode==ADVANCE_ARMSTART) {
-      return x_exit && armed;
-    } else {
-      return x_exit;
+  if ((mode==ADVANCE_ARM) || (mode==ADVANCE_ARMSTART)) {
+    if (m_state_ready && !m_mode_ready) {
+      m_request_armed = true;
+    }
+    if (m_armed) {
+      m_request_armed = false;
     }
   }
-  if (const AATPoint* ap = dynamic_cast<const AATPoint*>(&tp)) {
-    // advances if inside and has attained target range
-    return ap->has_entered() && ap->close_to_target(state);
+
+  return m_mode_ready && m_state_ready;
+}
+
+
+bool 
+TaskAdvance::state_ready(const TaskPoint &tp,
+                         const AIRCRAFT_STATE &state,
+                         const bool x_enter, 
+                         const bool x_exit) const
+{
+  if (dynamic_cast<const StartPoint*>(&tp)) {
+    return x_exit;
   }
-  if (const IntermediatePoint* ip = 
+  if (const AATPoint* ap = dynamic_cast<const AATPoint*>(&tp)) {
+    if (mode==ADVANCE_AUTO) {
+      return ap->has_entered() && ap->close_to_target(state);
+    } else {
+      return ap->has_entered();
+    }
+  } else if (const IntermediatePoint* ip = 
       dynamic_cast<const IntermediatePoint*>(&tp)) {
     return ip->has_entered();
   }
-  // can't advance other types (finish)
   return false;
 }
 
+
 bool
-TaskAdvance::mode_ready() const
+TaskAdvance::mode_ready(const TaskPoint &tp) const
 {
   switch (mode) {
   case ADVANCE_MANUAL:
@@ -90,9 +109,13 @@ TaskAdvance::mode_ready() const
   case ADVANCE_AUTO:
     return true;
   case ADVANCE_ARM:
-    return armed;
+    return m_armed;
   case ADVANCE_ARMSTART:
-    return true;
+    if (dynamic_cast<const StartPoint*>(&tp)) {
+      return m_armed;
+    } else {
+      return true;
+    }
   };
   return false;
 }

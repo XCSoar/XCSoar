@@ -73,7 +73,8 @@ public:
  */
   void set_armed(const bool do_armed) 
     {
-      armed = do_armed;
+      m_armed = do_armed;
+      m_request_armed = false;
     }
 
 /** 
@@ -83,7 +84,17 @@ public:
  */
   bool is_armed() const 
     {
-      return armed;
+      return m_armed;
+    }
+
+/** 
+ * Accessor for arm request state
+ * 
+ * @return True if arm requested
+ */
+  bool request_armed() const 
+    {
+      return m_request_armed;
     }
 
 /** 
@@ -93,8 +104,11 @@ public:
  */
   bool toggle_armed()
     {
-      armed = !armed;
-      return armed;
+      m_armed = !m_armed;
+      if (m_armed) {
+        m_request_armed = false;
+      }
+      return m_armed;
     }
 
 /** 
@@ -106,13 +120,14 @@ public:
  * @param state current aircraft state
  * @param x_enter whether this step transitioned enter to this tp
  * @param x_exit whether this step transitioned exit to this tp
+ * @param request_arm will be set if satisfied except not armed 
  * 
  * @return true if this tp is ready to advance
  */
   bool ready_to_advance(const TaskPoint &tp,
                         const AIRCRAFT_STATE &state,
                         const bool x_enter, 
-                        const bool x_exit) const;
+                        const bool x_exit);
 
 /** 
  * Set task advance mode
@@ -127,12 +142,30 @@ private:
 /** 
  * Determine whether mode allows auto-advance, without
  * knowledge about turnpoint or state characteristics
+ *
+ * @param tp The task point to check for satisfaction
  * 
  * @return True if this mode allows auto-advance
  */
-  bool mode_ready() const;
+  bool mode_ready(const TaskPoint &tp) const;
 
-  bool armed;                   /**< arm state */
+/** 
+ * Determine whether state is satisfied for a turnpoint
+ * 
+ * @param tp The task point to check for satisfaction
+ * @param state current aircraft state
+ * @param x_enter whether this step transitioned enter to this tp
+ * @param x_exit whether this step transitioned exit to this tp
+ * 
+ * @return true if this tp is ready to advance
+ */
+  bool state_ready(const TaskPoint &tp,
+                   const AIRCRAFT_STATE &state,
+                   const bool x_enter, 
+                   const bool x_exit) const;
+
+  bool m_armed;                   /**< arm state */
+  bool m_request_armed;                   /**< need to arm */
   TaskAdvanceMode_t mode;       /**< acive advance mode */
 };
 

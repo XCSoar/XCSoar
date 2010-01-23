@@ -244,30 +244,35 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
       transition_exit = true;
       task_events.transition_exit(*tps[i]);
     }
-
-    if ((i==(int)activeTaskPoint) && 
-      task_advance.ready_to_advance(*tps[i],
-                                    state,
-                                    transition_enter,
-                                    transition_exit)) {
-      task_advance.set_armed(false);
-
-      if (i+1<n_task) {
-
-        i++;
-        setActiveTaskPoint(i);
-        ts->scan_active(tps[activeTaskPoint]);
-
-        task_events.active_advanced(*tps[i],i);
-
-        // on sector exit, must update samples since start sector
-        // exit transition clears samples
-        full_update = true;
-      }
-    }
-
     if (tps[i]->update_sample(state, task_events)) {
       full_update = true;
+    }
+
+    if (i==(int)activeTaskPoint) {
+
+      const bool last_request_armed = task_advance.request_armed();
+
+      if (task_advance.ready_to_advance(*tps[i],
+                                        state,
+                                        transition_enter,
+                                        transition_exit)) {
+        task_advance.set_armed(false);
+        
+        if (i+1<n_task) {
+          
+          i++;
+          setActiveTaskPoint(i);
+          ts->scan_active(tps[activeTaskPoint]);
+          
+          task_events.active_advanced(*tps[i],i);
+          
+          // on sector exit, must update samples since start sector
+          // exit transition clears samples
+          full_update = true;
+        }
+      } else if (!last_request_armed && task_advance.request_armed()) {
+        task_events.request_arm(*tps[i]);
+      }
     }
   }
 

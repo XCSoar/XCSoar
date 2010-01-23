@@ -101,6 +101,16 @@ public:
  * @param error Text of error message
  */
   virtual void construction_error(const char* error) const {};
+
+
+/** 
+ * Called when a task point can be advanced but the advance needs
+ * to be armed
+ * 
+ * @param tp The taskpoint waiting to be armed
+ */
+  virtual void request_arm(const TaskPoint &tp) const {};
+
 };
 
 #endif
