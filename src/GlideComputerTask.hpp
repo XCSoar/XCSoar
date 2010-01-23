@@ -103,8 +103,6 @@ private:
   void AATStats();
   void CheckTransitionFinalGlide();
   void DebugTaskCalculations();
-  void TaskSpeed(const double this_maccready,
-		 const double cruise_efficiency);
   void LDNext();
   void CheckForceFinalGlide();
   double SpeedHeight();

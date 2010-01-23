@@ -112,6 +112,8 @@ GlideComputerTask::ProcessBasicTask()
       m_task.update(Basic(), LastBasic());
       SetCalculated().task_stats = m_task.get_stats();
       SetCalculated().common_stats = m_task.get_common_stats();
+
+      SaveTaskSpeed(Calculated().task_stats.total.remaining_effective.get_speed_incremental());
     }
 
     if (SettingsComputer().EnableBlockSTF) {
@@ -136,7 +138,6 @@ GlideComputerTask::ProcessBasicTask()
     AATStats();
     LegSpeed();
     LDNext();
-    TaskSpeed(mc, ce);
   }
 #endif
 }
@@ -1642,139 +1643,9 @@ GlideComputerTask::MacCreadyOrAvClimbRate(double this_maccready)
   return max(0.1, mc_val);
 }
 
-void
-GlideComputerTask::TaskSpeed(const double this_maccready,
-    const double cruise_efficiency)
-{
-#ifdef OLD_TASK
-  double TotalTime = 0, TotalDistance = 0, Vfinal = 0;
-
-  if (!task.Valid())
-    return;
-  if (task.TaskIsTemporary())
-    return;
-  if (Calculated().ValidFinish)
-    return;
-  if (!Calculated().Flying)
-    return;
-
-  // in case we leave early due to error
-  SetCalculated().TaskSpeedAchieved = 0;
-  SetCalculated().TaskSpeed = 0;
-
-  if (task.getActiveIndex() <= 0) { // no task speed before start
-    SetCalculated().TaskSpeedInstantaneous = 0;
-    return;
-  }
-
-  if (TaskAltitudeRequired(this_maccready, &Vfinal, &TotalTime, &TotalDistance,
-      cruise_efficiency)) {
-
-    double t0 = TotalTime;
-    // total time expected for task
-
-    double t1 = Basic().Time-Calculated().TaskStartTime;
-    // time elapsed since start
-
-    double d0 = TotalDistance;
-    // total task distance
-
-    double d1 = Calculated().TaskDistanceCovered;
-    // actual distance covered
-
-    double dr = Calculated().TaskDistanceToGo;
-    // distance remaining
-
-    double t2;
-    // equivalent time elapsed after final glide
-
-    double d2;
-    // equivalent distance travelled after final glide
-
-    double hf = FAIFinishHeight( -1);
-
-    double h0 = Calculated().TaskAltitudeRequiredFromStart-hf;
-    // total height required from start (takes safety arrival alt
-    // and finish waypoint altitude into account)
-
-    double h1 = max(0.0, Calculated().NavAltitude-hf);
-    // height above target
-
-    double dFinal;
-    // final glide distance
-
-    // equivalent speed
-    double v2, v1;
-
-    if ((t1<=0) || (d1<=0) || (d0<=0) || (t0<=0) || (h0<=0)) {
-      // haven't started yet or not a real task
-      SetCalculated().TaskSpeedInstantaneous = 0;
-      //?      Calculated().TaskSpeed = 0;
-      goto OnExit;
-    }
-
-    // JB's task speed...
-    double hx = max(0.0, SpeedHeight());
-    double t1mod = t1-hx/MacCreadyOrAvClimbRate(this_maccready);
-    // only valid if flown for 5 minutes or more
-    if (t1mod>300.0) {
-      SetCalculated().TaskSpeedAchieved = d1/t1mod;
-    } else {
-      SetCalculated().TaskSpeedAchieved = d1/t1;
-    }
-    SetCalculated().TaskSpeed = Calculated().TaskSpeedAchieved;
-
-    if (Vfinal <= 0) {
-      // can't reach target at current mc
-      goto OnExit;
-    }
-
-    // distance that can be usefully final glided from here
-    // (assumes average task glide angle of d0/h0)
-    // JMW TODO accuracy: make this more accurate by working out final glide
-    // through remaining turnpoints.  This will more correctly account
-    // for wind.
-
-    dFinal = min(dr, d0 * min(1.0, max(0.0, h1 / h0)));
-
-    if (Calculated().ValidFinish) {
-      dFinal = 0;
-    }
-
-    double dc = max(0.0, dr - dFinal);
-    // amount of extra distance to travel in cruise/climb before final glide
-
-    // equivalent distance to end of final glide
-    d2 = d1 + dFinal;
-
-    // time at end of final glide
-    t2 = t1 + dFinal / Vfinal;
-
-    // actual task speed achieved so far
-    v1 = d1 / t1;
-
-#ifdef OLDTASKSPEED
-    // average speed to end of final glide from here
-    v2 = d2/t2;
-    Calculated().TaskSpeed = max(v1,v2);
-#else
-    // average speed to end of final glide from here, weighted
-    // according to how much extra time would be spent in cruise/climb
-    // the closer dc (the difference between remaining distance and
-    // final glidable distance) gets to zero, the closer v2 approaches
-    // the average speed to end of final glide from here
-    // in other words, the more we consider the final glide part to have
-    // been earned.
-
-    // this will be bogus at fast starts though...
-    if (v1 > 0) {
-      v2 = (d1 + dc + dFinal) / (t1 + dc / v1 + dFinal / Vfinal);
-    } else {
-      v2 = (d1 + dFinal) / (t1 + dFinal / Vfinal);
-    }
-    SetCalculated().TaskSpeed = v2;
-#endif
-
+/*
+    // v1 = actual task speed achieved so far
+    // d1 = distance travelled
     double konst;
     if (logger.isTaskDeclared()) {
       konst = 1.0;
@@ -1789,126 +1660,8 @@ GlideComputerTask::TaskSpeed(const double this_maccready,
     }
 
     SetCalculated().TermikLigaPoints = termikLigaPoints;
+*/
 
-    if (time_advanced()) {
-      double dt = Basic().Time - LastBasic().Time;
-      // Calculate contribution to average task speed.
-      // This is equal to the change in virtual distance
-      // divided by the time step
-
-      // This is a novel concept.
-      // When climbing at the MC setting, this number should
-      // be similar to the estimated task speed.
-      // When climbing slowly or when flying off-course,
-      // this number will drop.
-      // In cruise at the optimum speed in zero lift, this
-      // number will be similar to the estimated task speed.
-
-      // A low pass filter is applied so it doesn't jump around
-      // too much when circling.
-
-      // If this number is higher than the overall task average speed,
-      // it means that the task average speed is increasing.
-
-      // When cruising in sink, this number will decrease.
-      // When cruising in lift, this number will increase.
-
-      // Therefore, it shows well whether at any time the glider
-      // is wasting time.
-
-      double mc_safe = max(0.1,this_maccready);
-      double Vstar = max(1.0,Calculated().VMacCready);
-      double vthis = (Calculated().LegDistanceCovered
-                      - LastCalculated().LegDistanceCovered) / dt;
-      vthis /= AirDensityRatio(Calculated().NavAltitude);
-
-      double ttg = max(1.0, Calculated().LegTimeToGo);
-      //      double Vav = d0/max(1.0,t0);
-      double Vrem = Calculated().LegDistanceToGo/ttg;
-      double Vref = Vrem; // Vav;
-      double sr = -GlidePolar::SinkRate(Vstar);
-      double height_diff = max(0.0, -Calculated().TaskAltitudeDifference);
-
-      if (Calculated().timeCircling > 30) {
-        mc_safe = max(this_maccready,
-            Calculated().TotalHeightClimb/Calculated().timeCircling);
-      }
-      // circling percentage during cruise/climb
-      double rho_cruise = max(0.0, min(1.0, mc_safe / (sr + mc_safe)));
-      double rho_climb = 1.0 - rho_cruise;
-      double time_climb = height_diff / mc_safe;
-
-      // calculate amount of time in cruise/climb glide
-      double rho_c = max(0.0, min(1.0, time_climb / ttg));
-
-      if (Calculated().FinalGlide) {
-        if (rho_climb>0) {
-          rho_c = max(0.0, min(1.0, rho_c / rho_climb));
-        }
-        if (!Calculated().Circling) {
-          if (Calculated().TaskAltitudeDifference>0) {
-            rho_climb *= rho_c;
-            rho_cruise *= rho_c;
-            // Vref = Vrem;
-          }
-        }
-      }
-
-      double w_comp = min(10.0, max(-10.0, Calculated().Vario / mc_safe));
-      double vdiff = vthis / Vstar + w_comp * rho_cruise + rho_climb;
-
-      if (vthis > SettingsComputer().SafetySpeed * 2) {
-        vdiff = 1.0;
-        // prevent funny numbers when starting mid-track
-      }
-      //      Calculated().Experimental = vdiff*100.0;
-
-      vdiff *= Vref;
-
-      if (t1 < 5) {
-        SetCalculated().TaskSpeedInstantaneous = vdiff;
-        // initialise
-      } else {
-        static double tsi_av = 0;
-        static int n_av = 0;
-        if ((task.getActiveIndex() == LastCalculated().ActiveTaskPoint)
-            && (Calculated().LegDistanceToGo > 1000.0)
-            && (Calculated().LegDistanceCovered > 1000.0)) {
-
-          SetCalculated().TaskSpeedInstantaneous =
-            LowPassFilter(Calculated().TaskSpeedInstantaneous, vdiff, 0.1);
-
-          // update stats
-          if (time_retreated()) {
-            tsi_av = 0;
-            n_av = 0;
-          } else if (n_av >= 60) {
-            tsi_av /= n_av;
-
-            SaveTaskSpeed(max((Basic().Time-Calculated().TaskStartTime)/3600.0,
-                max(0.0, min(100.0, tsi_av))));
-
-            tsi_av = 0;
-            n_av = 0;
-          }
-
-          tsi_av += Calculated().TaskSpeedInstantaneous;
-          n_av++;
-        } else {
-          SetCalculated().TaskSpeedInstantaneous =
-              LowPassFilter(Calculated().TaskSpeedInstantaneous, vdiff, 0.5);
-
-          //	  Calculated().TaskSpeedInstantaneous = vdiff;
-          tsi_av = 0;
-          n_av = 0;
-        }
-      }
-    }
-  }
- OnExit:
-  {};
-#endif
-}
 
 void
 GlideComputerTask::CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing)
