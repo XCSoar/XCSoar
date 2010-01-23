@@ -287,7 +287,6 @@ InfoBox::SetSmallerFont(bool smallerFont)
 void
 InfoBox::PaintTitle(Canvas &canvas)
 {
-
   if (!mTitleChanged)
     return;
 
@@ -578,6 +577,10 @@ InfoBox::Paint()
   buffer.fill_rectangle(0, mTitleChanged ? 0 : recTitle.bottom, mWidth,
       mHeight, mhBrushBk);
 
+  PaintTitle(buffer);
+  PaintComment(buffer);
+  PaintValue(buffer);
+
   if (mBorderKind != 0) {
     buffer.select(mhPenBorder);
 
@@ -601,10 +604,6 @@ InfoBox::Paint()
       buffer.line(0, mHeight - DEFAULTBORDERPENWIDTH, 0, -DEFAULTBORDERPENWIDTH);
     }
   }
-
-  PaintTitle(buffer);
-  PaintComment(buffer);
-  PaintValue(buffer);
 }
 
 void
@@ -665,9 +664,11 @@ InfoBox::InitializeDrawHelpers(void)
 bool
 InfoBox::on_key_down(unsigned key_code)
 {
+  // Get the input event_id of the event
   unsigned event_id = InputEvents::key_to_event(InputEvents::MODE_INFOBOX,
                                                 key_code);
   if (event_id > 0) {
+    // If input event exists -> process it
     InputEvents::processGo(event_id);
 
     // restart focus timer if not idle
@@ -687,9 +688,10 @@ InfoBox::on_mouse_down(int x, int y)
   // synthetic double click detection with no proximity , good for infoboxes
   static PeriodClock double_click;
 
+  // if double clicked -> show menu
   if (!double_click.check_always_update(DOUBLECLICKINTERVAL)) {
     #ifdef DEBUG_DBLCLK
-    DoStatusMessage(_T("synth DBLCLK InfoBox!")); // VENTA3
+    DoStatusMessage(_T("synth DBLCLK InfoBox!"));
     #endif
 
     InputEvents::ShowMenu();
@@ -700,6 +702,7 @@ InfoBox::on_mouse_down(int x, int y)
   DoStatusMessage(_T("BDOWN InfoBox")); // VENTA3
   #endif
 
+  // if single clicked -> focus the InfoBox
   set_focus();
   return true;
 }
@@ -723,20 +726,26 @@ InfoBox::on_mouse_double(int x, int y)
 void
 InfoBox::on_paint(Canvas &canvas)
 {
+  // Call the parent function
   BufferWindow::on_paint(canvas);
+  // Paint the selector
   PaintSelector(canvas);
 }
 
 bool
 InfoBox::on_setfocus()
 {
+  // Call the parent function
   BufferWindow::on_setfocus();
 
+  // Save the focus state
   mHasFocus = true;
 
-  /* automatically return focus back to MapWindow if idle */
+  // Start the focus-auto-return timer
+  // to automatically return focus back to MapWindow if idle
   focus_timer = set_timer(100, FOCUSTIMEOUTMAX * 500);
 
+  // Redraw fast to paint the selector
   PaintFast();
 
   return true;
@@ -745,13 +754,20 @@ InfoBox::on_setfocus()
 bool
 InfoBox::on_killfocus()
 {
+  // Call the parent function
+  // QUESTION TB: shouldn't it be BufferWindow::on_killfocus() ?!
   BufferWindow::on_setfocus();
+
+  // Save the unfocused state
   mHasFocus = false;
+
+  // Destroy the time if it exists
   if (focus_timer != 0) {
     kill_timer(focus_timer);
     focus_timer = 0;
   }
 
+  // Redraw fast to remove the selector
   PaintFast();
 
   return true;
