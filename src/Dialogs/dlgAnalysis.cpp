@@ -100,7 +100,7 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
     SetCalcCaption(_T("Settings"));
-    fs.RenderBarograph(canvas, rcgfx, XCSoarInterface::Calculated());
+    fs.RenderBarograph(canvas, rcgfx, XCSoarInterface::Basic(), task_manager);
     break;
   case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(_T("Task calc"));
@@ -152,7 +152,7 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     SetCalcCaption(_T("Task calc"));
-    fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Calculated());
+    fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(), task_manager);
     break;
   default:
     // should never get here!

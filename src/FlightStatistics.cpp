@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "FlightStatistics.hpp"
+#include "Task/TaskManager.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
@@ -54,7 +55,6 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "SettingsComputer.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-
 #include "GlideSolvers/GlidePolar.hpp"
 
 #ifndef _MSC_VER
@@ -87,7 +87,8 @@ void FlightStatistics::Reset() {
 
 void
 FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
-    const DERIVED_INFO &derived) const
+                                  const NMEA_INFO &nmea_info,
+                                  const TaskManager& task) const
 {
   Chart chart(canvas, rc);
 
@@ -113,6 +114,7 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
       }
     }
   }
+#endif
 
   Pen hpHorizonGround(Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR);
   Brush hbHorizonGround(Chart::GROUND_COLOUR);
@@ -133,18 +135,17 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
 
   chart.DrawXLabel(TEXT("t"));
   chart.DrawYLabel(TEXT("h"));
-#endif
 }
 
 void
 FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
-    const DERIVED_INFO &derived) const
+                   const NMEA_INFO &nmea_info,
+                   const TaskManager& task) const
 {
   Chart chart(canvas, rc);
 
-#ifdef OLD_TASK
   if ((Task_Speed.sum_n<2)
-      || !task.Valid()) {
+      || !task.check_ordered_task()) {
     chart.DrawNoData();
     return;
   }
@@ -155,6 +156,7 @@ FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
   chart.ScaleXFromValue(Task_Speed.x_min+1.0); // in case no data
   chart.ScaleXFromValue(Task_Speed.x_min);
 
+#ifdef OLD_TASK
   for(int j=1;task.ValidTaskPoint(j);j++) {
     if (LegStartTime[j]>=0) {
       double xx = (LegStartTime[j] - derived.TaskStartTime) / 3600.0;
@@ -165,6 +167,7 @@ FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
       }
     }
   }
+#endif
 
   chart.DrawXGrid(0.5, Task_Speed.x_min,
       Chart::STYLE_THINDASHPAPER, 0.5, true);
@@ -175,7 +178,6 @@ FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
 
   chart.DrawXLabel(TEXT("t"));
   chart.DrawYLabel(TEXT("V"));
-#endif
 }
 
 void
