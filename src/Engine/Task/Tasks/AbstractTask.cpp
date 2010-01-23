@@ -42,7 +42,7 @@
 #include "GlideSolvers/GlidePolar.hpp"
 
 
-AbstractTask::AbstractTask(const TaskEvents &te,
+AbstractTask::AbstractTask(TaskEvents &te,
                            const TaskBehaviour &tb,
                            TaskAdvance &ta,
                            GlidePolar &gp): 

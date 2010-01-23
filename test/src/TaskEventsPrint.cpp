@@ -42,7 +42,7 @@
 #endif
 
 void 
-TaskEventsPrint::transition_enter(const TaskPoint& tp) const
+TaskEventsPrint::transition_enter(const TaskPoint& tp) 
 {
   if (verbose) {
 #ifdef DO_PRINT
@@ -52,7 +52,7 @@ TaskEventsPrint::transition_enter(const TaskPoint& tp) const
 }
 
 void 
-TaskEventsPrint::transition_exit(const TaskPoint &tp) const
+TaskEventsPrint::transition_exit(const TaskPoint &tp) 
 {
   if (verbose) {
 #ifdef DO_PRINT
@@ -63,17 +63,7 @@ TaskEventsPrint::transition_exit(const TaskPoint &tp) const
 
 
 void 
-TaskEventsPrint::active_advanced(const TaskPoint &tp, const int i) const
-{
-  if (verbose) {
-#ifdef DO_PRINT
-    printf("#- advance to sector %d\n", i);
-#endif
-  }
-}
-
-void 
-TaskEventsPrint::active_changed(const TaskPoint &tp) const
+TaskEventsPrint::active_changed(const TaskPoint &tp) 
 {
   if (verbose) {
 #ifdef DO_PRINT
@@ -83,7 +73,7 @@ TaskEventsPrint::active_changed(const TaskPoint &tp) const
 }
 
 void 
-TaskEventsPrint::construction_error(const char* error) const
+TaskEventsPrint::construction_error(const char* error) 
 {
   if (verbose>2) {
 #ifdef DO_PRINT
@@ -95,7 +85,7 @@ TaskEventsPrint::construction_error(const char* error) const
 }
 
 void 
-TaskEventsPrint::warning_start_speed() const
+TaskEventsPrint::warning_start_speed() 
 {
   if (verbose) {
 #ifdef DO_PRINT
@@ -105,11 +95,42 @@ TaskEventsPrint::warning_start_speed() const
 }
 
 void 
-TaskEventsPrint::request_arm(const TaskPoint &tp) const 
+TaskEventsPrint::request_arm(const TaskPoint &tp)  
 {
   if (verbose) {
 #ifdef DO_PRINT
     printf("#- ready to advance\n");
+#endif
+  }
+}
+
+void 
+TaskEventsPrint::task_start() 
+{
+  if (verbose) {
+#ifdef DO_PRINT
+    printf("#- task started\n");
+#endif
+  }
+}
+
+void 
+TaskEventsPrint::task_finish() 
+{
+  if (verbose) {
+#ifdef DO_PRINT
+    printf("#- task finished\n");
+#endif
+  }
+}
+
+
+void 
+TaskEventsPrint::active_advanced(const TaskPoint &tp, const int i) 
+{
+  if (verbose) {
+#ifdef DO_PRINT
+    printf("#- advance to sector %d\n", i);
 #endif
   }
 }

@@ -89,6 +89,7 @@ Copyright_License {
 #include "AirspaceGlue.hpp"
 #include "Task/TaskManager.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "GlideComputerInterface.hpp"
 
 Marks *marks;
 TopologyStore *topology;
@@ -102,7 +103,7 @@ ReplayLoggerGlue replay;
 
 Waypoints way_points;
 TaskBehaviour task_behaviour;
-TaskEvents task_events;
+GlideComputerTaskEvents task_events;
 
 TaskManager task_manager(task_events,
                          task_behaviour,

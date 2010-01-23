@@ -7,26 +7,25 @@ mode=default
 type=gce
 data=TASK_START
 event=Beep 1
-event=StatusMessage Task start
+event=TaskTransition start
 
 mode=default
 type=gce
 data=TASK_FINISH
 event=Beep 1
-event=StatusMessage Task finish
+event=TaskTransition finish
 
 mode=default
 type=gce
 data=TASK_NEXTWAYPOINT
 event=Beep 1
-event=StatusMessage Next turnpoint
+event=TaskTransition next
 
 mode=default
 type=gce
 data=ARM_READY
 event=Beep 1
-event=StatusMessage In sector, arm advance when ready
-
+event=TaskTransition ready
 
 # -------------------
 # NMEA switches

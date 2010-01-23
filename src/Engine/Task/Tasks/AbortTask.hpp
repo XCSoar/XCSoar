@@ -67,7 +67,7 @@ public:
    * 
    * @return Initialised object (with nothing in task)
    */
-  AbortTask(const TaskEvents &te, 
+  AbortTask(TaskEvents &te, 
             const TaskBehaviour &tb,
             TaskAdvance &ta,
             GlidePolar &gp,

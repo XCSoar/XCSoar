@@ -42,7 +42,7 @@
 #include "TaskSolvers/TaskSolution.hpp"
 #include "Task/TaskEvents.hpp"
 
-AbortTask::AbortTask(const TaskEvents &te, 
+AbortTask::AbortTask(TaskEvents &te, 
                      const TaskBehaviour &tb,
                      TaskAdvance &ta,
                      GlidePolar &gp,

@@ -151,6 +151,7 @@ private:
   static void eventStatusMessage(const TCHAR *misc);
   static void eventTaskLoad(const TCHAR *misc);
   static void eventTaskSave(const TCHAR *misc);
+  static void eventTaskTransition(const TCHAR *misc);
   static void eventTerrainTopology(const TCHAR *misc);
   static void eventWaypointDetails(const TCHAR *misc);
   static void eventWind(const TCHAR *misc);

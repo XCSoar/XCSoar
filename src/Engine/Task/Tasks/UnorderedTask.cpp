@@ -40,7 +40,7 @@
 #include "TaskSolvers/TaskGlideRequired.hpp"
 #include "TaskSolvers/TaskSolution.hpp"
 
-UnorderedTask::UnorderedTask(const TaskEvents &te, 
+UnorderedTask::UnorderedTask(TaskEvents &te, 
                              const TaskBehaviour &tb,
                              TaskAdvance &ta,
                              GlidePolar &gp):

@@ -40,7 +40,7 @@
 
 // uses delegate pattern
 
-TaskManager::TaskManager(const TaskEvents &te,
+TaskManager::TaskManager(TaskEvents &te,
                          const TaskBehaviour &tb,
                          const Waypoints &wps): 
   m_glide_polar(fixed_zero),

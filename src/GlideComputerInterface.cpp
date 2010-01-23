@@ -37,54 +37,40 @@ Copyright_License {
 
 */
 
-#include "GlideComputer.hpp"
-#include "Units.hpp"
+#include "GlideComputerInterface.hpp"
 #include "InputEvents.h"
-#include "Message.h"
-#include "SettingsTask.hpp"
-#include "LocalTime.hpp"
 
-/**
- * Calls waypoint change events. Is called when waypoint is switched.
- */
+void 
+GlideComputerTaskEvents::transition_enter(const TaskPoint &tp) 
+{
 #ifdef OLD_TASK
-void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
-  if (task.getActiveIndex() == 0) {
-    // InputEvents::processGlideComputer(GCE_TASK_START);
-    // QUESTION JMW: why commented out?
-    TCHAR TempTime[40];
-    TCHAR TempAlt[40];
-    TCHAR TempSpeed[40];
-
-    Units::TimeToText(TempTime, (int)TimeLocal((int)Calculated().TaskStartTime));
-    _stprintf(TempAlt, TEXT("%.0f %s"),
-              Calculated().TaskStartAltitude*ALTITUDEMODIFY,
-              Units::GetAltitudeName());
-    _stprintf(TempSpeed, TEXT("%.0f %s"),
-	      Calculated().TaskStartSpeed*TASKSPEEDMODIFY,
-             Units::GetTaskSpeedName());
-
-    TCHAR TempAll[120];
-    _stprintf(TempAll, TEXT("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),
-          TempAlt, TempSpeed, TempTime);
-    Message::AddMessage(TEXT("Task Start"), TempAll);
-
-  // if (last waypoint and finish is valid) activate GCE_TASK_FINISH event
-  } else if (Calculated().ValidFinish && task.ActiveIsFinalWaypoint()) {
-    InputEvents::processGlideComputer(GCE_TASK_FINISH);
-
-  // else (= not first/not last waypoint) activate GCE_TASK_NEXTWAYPOINT event
-  } else {
-    InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
-  }
-
-  // TODO JMW: this should not happen here!
-  // TODO JMW: Task....
-  if (do_advance) {
-    task.advanceTaskPoint(SettingsComputer());
-  }
-  // set waypoint detail to active task WP
-
   GlideComputerStats::SetFastLogging();
-}
 #endif
+}
+
+void 
+GlideComputerTaskEvents::request_arm(const TaskPoint &tp) 
+{
+
+}
+
+
+void 
+GlideComputerTaskEvents::active_advanced(const TaskPoint &tp, const int i)
+{
+  InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
+}
+
+void 
+GlideComputerTaskEvents::task_start()
+{
+  InputEvents::processGlideComputer(GCE_TASK_START);
+}
+
+void 
+GlideComputerTaskEvents::task_finish()
+{
+  InputEvents::processGlideComputer(GCE_TASK_FINISH);
+}
+
+

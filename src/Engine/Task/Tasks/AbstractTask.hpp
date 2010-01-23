@@ -68,7 +68,7 @@ public:
    * 
    * @return Initialised object
    */
-  AbstractTask(const TaskEvents &te,
+  AbstractTask(TaskEvents &te,
                const TaskBehaviour &tb,
                TaskAdvance &ta,
                GlidePolar &gp);
@@ -388,7 +388,7 @@ protected:
   unsigned activeTaskPoint; /**< task point sequence index */
   unsigned activeTaskPoint_last; /**< task point sequence index at last update*/
   TaskStats stats; /**< statistics of this task */
-  const TaskEvents &task_events; /**< reference to task events (feedback) */
+  TaskEvents &task_events; /**< reference to task events (feedback) */
   TaskAdvance &task_advance; /**< reference to global advance mechanism */
   const TaskBehaviour &task_behaviour; /**< reference to task behaviour (settings) */
   GlidePolar &glide_polar; /**< reference to global glide polar */

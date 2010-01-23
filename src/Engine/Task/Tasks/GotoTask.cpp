@@ -39,7 +39,7 @@
 #include "BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
-GotoTask::GotoTask(const TaskEvents &te, 
+GotoTask::GotoTask(TaskEvents &te, 
                    const TaskBehaviour &tb,
                    TaskAdvance &ta,
                    GlidePolar &gp): 

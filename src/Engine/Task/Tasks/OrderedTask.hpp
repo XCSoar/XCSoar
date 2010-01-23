@@ -80,7 +80,7 @@ public:
    * 
    * @return Initialised object
    */
-  OrderedTask(const TaskEvents &te, 
+  OrderedTask(TaskEvents &te, 
               const TaskBehaviour &tb,
               TaskAdvance &ta,
               GlidePolar &gp);

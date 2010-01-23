@@ -59,7 +59,7 @@ public:
    * @return Initialised object (with no waypoint to go to)
    */
 
-  GotoTask(const TaskEvents &te, 
+  GotoTask(TaskEvents &te, 
            const TaskBehaviour &tb,
            TaskAdvance &ta,
            GlidePolar &gp);

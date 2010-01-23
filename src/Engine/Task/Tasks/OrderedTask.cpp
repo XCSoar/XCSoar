@@ -229,6 +229,9 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
     return false;
   }
 
+  const bool last_started = task_started();
+  const bool last_finished = task_finished();
+
   const int t_min = max(0,(int)activeTaskPoint-1);
   const int t_max = min(n_task-1, (int)activeTaskPoint+1);
   bool full_update = false;
@@ -280,6 +283,13 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
 
   stats.task_finished = task_finished();
   stats.task_started = task_started();
+
+  if (stats.task_started && !last_started) {
+    task_events.task_start();
+  }
+  if (stats.task_finished && !last_finished) {
+    task_events.task_finish();
+  }
 
   return full_update;
 }
@@ -644,7 +654,7 @@ OrderedTask::~OrderedTask()
 }
 
 
-OrderedTask::OrderedTask(const TaskEvents &te, 
+OrderedTask::OrderedTask(TaskEvents &te, 
                          const TaskBehaviour &tb,
                          TaskAdvance &ta,
                          GlidePolar &gp):

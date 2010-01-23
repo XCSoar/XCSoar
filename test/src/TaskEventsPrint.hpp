@@ -50,19 +50,23 @@ public:
     TaskEvents(),
     verbose(_verbose) {};
 
-  void transition_enter(const TaskPoint& tp) const;
+  void transition_enter(const TaskPoint& tp);
 
-  void transition_exit(const TaskPoint &tp) const;
+  void transition_exit(const TaskPoint &tp);
 
-  void active_advanced(const TaskPoint &tp, const int i) const;
+  void active_advanced(const TaskPoint &tp, const int i);
 
-  void active_changed(const TaskPoint &tp) const;
+  void active_changed(const TaskPoint &tp);
 
-  void warning_start_speed() const;
+  void warning_start_speed();
   
-  void construction_error(const char* error) const;
+  void construction_error(const char* error);
 
-  void request_arm(const TaskPoint &tp) const;
+  void request_arm(const TaskPoint &tp);
+
+  void task_start();
+
+  void task_finish();
 
   bool verbose; /**< Option to enable basic output on events (for testing) */
 };

@@ -78,7 +78,7 @@ public:
  * 
  * @return Initialised object
  */
-  TaskManager(const TaskEvents &te,
+  TaskManager(TaskEvents &te,
               const TaskBehaviour &tb,
               const Waypoints &wps);
 
