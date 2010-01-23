@@ -229,7 +229,7 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
     return false;
   }
 
-  const bool last_started = task_started();
+  bool last_started = task_started();
   const bool last_finished = task_finished();
 
   const int t_min = max(0,(int)activeTaskPoint-1);
@@ -246,6 +246,11 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
     if (tps[i]->transition_exit(state, state_last)) {
       transition_exit = true;
       task_events.transition_exit(*tps[i]);
+      
+      // detect restart
+      if ((i==0) && last_started) {
+        last_started = false;
+      }
     }
     if (tps[i]->update_sample(state, task_events)) {
       full_update = true;
