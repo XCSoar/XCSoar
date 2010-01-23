@@ -63,10 +63,10 @@ Copyright_License {
 /**
  * Main entry point for the whole XCSoar application
  */
-int WINAPI WinMain(     HINSTANCE hInstance,
-                        HINSTANCE hPrevInstance,
-                        LPTSTR    lpCmdLine,
-                        int       nCmdShow)
+int WINAPI
+WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+        LPTSTR lpCmdLine,
+        int nCmdShow)
 {
   (void)hPrevInstance;
   (void)nCmdShow;
@@ -87,11 +87,10 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   StartupStore(TEXT("Initialise application instance\n"));
 
   // Perform application initialization and run loop
-  if (XCSoarInterface::Startup (hInstance, lpCmdLine)) {
-    return CommonInterface::main_window.event_loop(IDC_XCSOAR);
-  } else {
-    return FALSE;
-  }
+  if (!XCSoarInterface::Startup(hInstance, lpCmdLine))
+    return 0;
+
+  return CommonInterface::main_window.event_loop(IDC_XCSOAR);
 }
 
 /*
