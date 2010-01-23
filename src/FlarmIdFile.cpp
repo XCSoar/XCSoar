@@ -66,7 +66,6 @@ FlarmIdFile::FlarmIdFile(void)
   //	     FILE_ATTRIBUTE_NORMAL, 0);
   FILE*	hFile = _wfopen(flarmIdFileName, TEXT("rt"));
 
-  TCHAR res[100];
   TCHAR text[50];
 
   DWORD fileLength;
