@@ -72,8 +72,6 @@ protected:
   virtual void AnnounceWayPointSwitch(bool do_advance)= 0;
   void InSector();
 private:
-  void AltitudeRequired(const double mc_setting,
-			const double cruise_efficiency);
   double AATCloseBearing() const;
   bool InTurnSector(const int the_turnpoint) const;
   bool InFinishSector(const int i);
@@ -89,20 +87,12 @@ private:
   void CheckFinish();
   void AddAATPoint(const unsigned taskwaypoint);
   void CheckInSector();
-  void TaskStatistics(const double this_maccready,
-		      const double cruise_efficiency);
   void TerrainWarning();
-  void AATStats_Time();
-  void AATStats_Distance();
-  void AATStats();
   void CheckTransitionFinalGlide();
   void DebugTaskCalculations();
   void LDNext();
   void CheckForceFinalGlide();
   double SpeedHeight();
-  bool TaskAltitudeRequired(double this_maccready, double *Vfinal,
-			    double *TotalTime, double *TotalDistance,
-			    const double cruise_efficiency);
   double MacCreadyOrAvClimbRate(double this_maccready);
   void CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing);
   // best alternate
