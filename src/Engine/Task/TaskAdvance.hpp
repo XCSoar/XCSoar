@@ -52,6 +52,11 @@ public:
   TaskAdvance();
 
 /**
+ * Resets as if never flown
+ */
+  void reset();
+
+/**
  * Advance mode
  */
   enum TaskAdvanceMode_t {

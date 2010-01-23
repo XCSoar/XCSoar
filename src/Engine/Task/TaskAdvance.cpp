@@ -47,6 +47,12 @@ TaskAdvance::TaskAdvance():
 {
 }
 
+void
+TaskAdvance::reset()
+{
+  armed = false;
+}
+
 bool 
 TaskAdvance::ready_to_advance(const TaskPoint &tp,
                               const AIRCRAFT_STATE &state,
@@ -65,13 +71,13 @@ TaskAdvance::ready_to_advance(const TaskPoint &tp,
   }
   if (const AATPoint* ap = dynamic_cast<const AATPoint*>(&tp)) {
     // advances if inside and has attained target range
-    return ap->isInSector(state) && ap->close_to_target(state);
+    return ap->has_entered() && ap->close_to_target(state);
   }
   if (const IntermediatePoint* ip = 
       dynamic_cast<const IntermediatePoint*>(&tp)) {
-    return ip->isInSector(state);
+    return ip->has_entered();
   }
-  // can't advance other types
+  // can't advance other types (finish)
   return false;
 }
 

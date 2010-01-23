@@ -480,6 +480,9 @@ void
 OrderedTask::setActiveTaskPoint(unsigned index)
 {
   if (index<tps.size()) {
+    if (activeTaskPoint != index) {
+      task_advance.set_armed(false);
+    }
     activeTaskPoint = index;
   }
 }
@@ -665,6 +668,7 @@ OrderedTask::reset()
   AbstractTask::reset();
   stats.task_finished = false;
   stats.task_started = false;
+  task_advance.reset();
 }
 
 
