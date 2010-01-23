@@ -73,13 +73,6 @@ void FlightStatistics::Reset() {
   Altitude_Ceiling.Reset();
   Task_Speed.Reset();
   Altitude_Terrain.Reset();
-
-#ifdef OLD_TASK
-  for (int j = 0; j < MAXTASKPOINTS; j++) {
-    LegStartTime[j] = -1;
-  }
-#endif
-
   Unlock();
 }
 
@@ -678,17 +671,13 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
 }
 
 void
-FlightStatistics::StartTask(double starttime)
+FlightStatistics::StartTask()
 {
-#ifdef OLD_TASK
   Lock();
-  LegStartTime[0] = starttime;
-  LegStartTime[1] = starttime;
   // JMW clear thermal climb average on task start
   ThermalAverage.Reset();
   Task_Speed.Reset();
   Unlock();
-#endif
 }
 
 void
@@ -733,19 +722,9 @@ FlightStatistics::AverageThermalAdjusted(const double mc_current,
 void
 FlightStatistics::SaveTaskSpeed(const double val)
 {
-  Task_Speed.LeastSquaresUpdate(val);
-}
-
-void
-FlightStatistics::SetLegStart(const int activewaypoint, const double time)
-{
-#ifdef OLD_TASK
   Lock();
-  if (LegStartTime[task.getActiveIndex()]<0) {
-    LegStartTime[task.getActiveIndex()] = time;
-  }
+  Task_Speed.LeastSquaresUpdate(val);
   Unlock();
-#endif
 }
 
 void

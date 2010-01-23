@@ -56,7 +56,6 @@ protected:
   virtual double GetAverageThermal();
 protected:
   virtual void SaveTaskSpeed(double val);
-  virtual void SetLegStart();
   virtual void OnClimbBase(double StartAlt);
   virtual void OnClimbCeiling();
   virtual void OnDepartedThermal();

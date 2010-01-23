@@ -82,7 +82,6 @@ void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
   // TODO JMW: Task....
   if (do_advance) {
     task.advanceTaskPoint(SettingsComputer());
-    SetLegStart();
   }
   // set waypoint detail to active task WP
 

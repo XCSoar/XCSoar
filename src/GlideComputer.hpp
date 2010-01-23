@@ -77,7 +77,6 @@ protected:
   virtual void StartTask(const bool do_advance, const bool do_announce);
   void DoLogging();
   virtual void SaveTaskSpeed(double val);
-  virtual void SetLegStart();
   virtual void AnnounceWayPointSwitch(bool do_advance);
   virtual void OnTakeoff();
   virtual void OnLanding();

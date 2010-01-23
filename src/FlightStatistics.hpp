@@ -60,12 +60,11 @@ class TaskManager;
 
 class FlightStatistics {
 public:
-  void StartTask(double starttime);
+  void StartTask();
   double AverageThermalAdjusted(const double wthis, const bool circling);
   void AddAltitude(const double tflight, const double alt);
   void AddAltitudeTerrain(const double tflight, const double terrainalt);
   void SaveTaskSpeed(const double val);
-  void SetLegStart(const int activewaypoint, const double time);
   void AddClimbBase(const double tflight, const double alt);
   void AddClimbCeiling(const double tflight, const double alt);
   void AddThermalAverage(const double v);
@@ -137,11 +136,6 @@ private:
   LeastSquares Altitude_Base;
   LeastSquares Altitude_Ceiling;
   LeastSquares Task_Speed;
-
-#ifdef OLD_TASK
-  double       LegStartTime[MAXTASKPOINTS];
-#endif
-
   LeastSquares Altitude_Terrain;
   Mutex mutexStats;
 

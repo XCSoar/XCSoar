@@ -216,12 +216,6 @@ GlideComputer::ValidStartSpeed(const DWORD Margin) const
 }
 
 
-void
-GlideComputer::SetLegStart()
-{
-  GlideComputerStats::SetLegStart();
-}
-
 #include "Math/NavFunctions.hpp" // used for team code
 #include "InputEvents.h"
 #include "SettingsComputer.hpp"

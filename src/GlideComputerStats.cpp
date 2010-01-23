@@ -68,7 +68,7 @@ GlideComputerStats::ResetFlight(const bool full)
 void
 GlideComputerStats::StartTask()
 {
-  flightstats.StartTask(Basic().Time);
+  flightstats.StartTask();
 }
 
 /**
@@ -125,14 +125,6 @@ void
 GlideComputerStats::SaveTaskSpeed(double val)
 {
   flightstats.SaveTaskSpeed(val);
-}
-
-void
-GlideComputerStats::SetLegStart()
-{
-#ifdef OLD_TASK
-  flightstats.SetLegStart(task.getActiveIndex(), Basic().Time);
-#endif
 }
 
 void
