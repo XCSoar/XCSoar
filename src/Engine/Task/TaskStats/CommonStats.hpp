@@ -29,6 +29,7 @@ public:
   CommonStats();
   
   bool landable_reachable; /**< Whether the task found landable reachable waypoints (aliases abort) */
+  bool task_started; /**< Whether the task is started (aliases ordered task) */
   bool task_finished; /**< Whether the task is finished (aliases ordered task) */
   fixed aat_time_remaining; /**< Time (s) until assigned minimum time is achieved */
   fixed aat_speed_remaining; /**< Speed to achieve remaining task in minimum assigned time (m/s), negative if already beyond minimum time */ 

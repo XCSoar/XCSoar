@@ -57,6 +57,7 @@ TaskStats::reset()
   distance_min = fixed_zero;
   distance_scored = fixed_zero;
   task_valid = false;
+  task_started = false;
   task_finished = false;
 }
 

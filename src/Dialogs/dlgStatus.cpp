@@ -400,13 +400,14 @@ static void UpdateValuesRules(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpValidStart"));
   if (wp) {
-    if (positive(XCSoarInterface::Calculated().common_stats.task_time_elapsed)) {
+    if (XCSoarInterface::Calculated().common_stats.task_started) {
       /// @todo proper task validity check
       wp->SetText(gettext(_T("TRUE")));
     } else {
       wp->SetText(gettext(_T("FALSE")));
     }
   }
+
   wp = (WndProperty*)wf->FindByName(_T("prpValidFinish"));
   if (wp) {
     if (XCSoarInterface::Calculated().common_stats.task_finished) {
@@ -418,7 +419,7 @@ static void UpdateValuesRules(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   if (wp) {
-    if (positive(XCSoarInterface::Calculated().common_stats.task_time_elapsed)) {
+    if (XCSoarInterface::Calculated().common_stats.task_started) {
       fixed the_time = XCSoarInterface::Calculated().task_stats.Time -
         XCSoarInterface::Calculated().common_stats.task_time_elapsed;
       Units::TimeToText(Temp, (int)TimeLocal(the_time));

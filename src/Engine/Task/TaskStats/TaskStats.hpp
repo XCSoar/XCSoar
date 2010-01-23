@@ -68,6 +68,7 @@ public:
   fixed distance_scored; /**< Scored distance (m) */
 
   bool task_valid; /**< Whether the task is navigable */
+  bool task_started; /**< Whether the task is started */
   bool task_finished; /**< Whether the task is finished */
 
 /** 

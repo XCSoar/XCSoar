@@ -11,6 +11,7 @@ void
 CommonStats::reset_task()
 {
   landable_reachable = false;
+  task_started = false;
   task_finished = false;
   aat_time_remaining = fixed_zero;
   aat_speed_remaining = -fixed_one;

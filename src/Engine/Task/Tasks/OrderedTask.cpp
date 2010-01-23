@@ -273,10 +273,8 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
 
   ts->scan_active(tps[activeTaskPoint]);
 
-  if ((activeTaskPoint+1 == tps.size()) && 
-      tps[activeTaskPoint]->has_entered()) {
-    stats.task_finished = true;
-  }
+  stats.task_finished = task_finished();
+  stats.task_started = task_started();
 
   return full_update;
 }
@@ -666,6 +664,7 @@ OrderedTask::reset()
   }
   AbstractTask::reset();
   stats.task_finished = false;
+  stats.task_started = false;
 }
 
 

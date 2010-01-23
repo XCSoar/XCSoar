@@ -163,6 +163,7 @@ void
 TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
 {
   if (task_ordered.task_size()>1) {
+    common_stats.task_started = task_ordered.get_stats().task_started;
     common_stats.task_finished = task_ordered.get_stats().task_finished;
 
     common_stats.aat_time_remaining = max(fixed_zero, task_behaviour.aat_min_time
