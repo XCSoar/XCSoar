@@ -101,29 +101,18 @@ endif
 
 ifeq ($(HAVE_CE),y)
   TCPATH := arm-mingw32ce-
-  CPU :=
-  MCPU :=
+  CPU := strongarm1110
   HAVE_FPU := n
 
   ifeq ($(XSCALE),y)
     CPU := xscale
-    MCPU := -mcpu=$(CPU)
   endif
 
   ifeq ($(TARGET),PNA)
     CPU := arm1136j-s
-    MCPU :=
   endif
 
-  ifeq ($(CONFIG_PPC2002),y)
-    CPU := strongarm1110
-    MCPU := -mcpu=$(CPU)
-  endif
-
-  ifeq ($(TARGET),PPC2000)
-    CPU := strongarm1110
-    MCPU := -mcpu=$(CPU)
-  endif
+  MCPU := -mcpu=$(CPU)
 endif
 
 ifeq ($(TARGET),UNIX)
