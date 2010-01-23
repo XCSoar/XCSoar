@@ -136,10 +136,6 @@ public:
    * Paints the InfoBox with borders, title, comment and value
    */
   void Paint();
-  /**
-   * Calls the on_paint event handler to paint the selector
-   */
-  void PaintFast(void);
   void PaintInto(Canvas &dest, int xoff, int yoff, int width, int height);
 
   /**

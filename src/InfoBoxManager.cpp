@@ -917,7 +917,7 @@ InfoBoxManager::Paint(void)
     full_window.hide();
 
     for (i = 0; i < numInfoWindows; i++)
-      InfoBoxes[i]->PaintFast();
+      InfoBoxes[i]->invalidate();
   } else {
     Canvas &canvas = full_window.get_canvas();
 

@@ -598,12 +598,6 @@ InfoBox::Paint()
 }
 
 void
-InfoBox::PaintFast(void)
-{
-  on_paint(PaintWindow::get_canvas());
-}
-
-void
 InfoBox::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
 {
   dest.stretch(xoff, yoff, width, height, get_canvas(), 0, 0, mWidth, mHeight);
@@ -726,7 +720,7 @@ InfoBox::on_setfocus()
   focus_timer = set_timer(100, FOCUSTIMEOUTMAX * 500);
 
   // Redraw fast to paint the selector
-  PaintFast();
+  invalidate();
 
   return true;
 }
@@ -748,7 +742,7 @@ InfoBox::on_killfocus()
   }
 
   // Redraw fast to remove the selector
-  PaintFast();
+  invalidate();
 
   return true;
 }
