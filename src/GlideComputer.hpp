@@ -62,11 +62,6 @@ public:
   void Initialise();
   bool ProcessGPS(); // returns true if idle needs processing
   virtual void ProcessIdle();
-  virtual bool InsideStartHeight(const DWORD Margin=0) const;
-  virtual bool ValidStartSpeed(const DWORD Margin=0) const;
-  virtual void ResetEnter() {
-    GlideComputerTask::ResetEnter();
-  }
 
   // TODO: make these const
   /** Returns the FlightStatistics object */
@@ -74,9 +69,7 @@ public:
 
 protected:
   VegaVoice    vegavoice;
-  virtual void StartTask(const bool do_advance, const bool do_announce);
   void DoLogging();
-  virtual void AnnounceWayPointSwitch(bool do_advance);
   virtual void OnTakeoff();
   virtual void OnLanding();
   virtual void OnSwitchClimbMode(bool isclimb, bool left);

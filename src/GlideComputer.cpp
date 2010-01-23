@@ -74,18 +74,6 @@ GlideComputer::ResetFlight(const bool full)
   GlideComputerStats::ResetFlight(full);
 }
 
-void
-GlideComputer::StartTask(const bool do_advance, const bool do_announce)
-{
-  //  GlideComputerBlackboard::StartTask();
-  GlideComputerStats::StartTask();
-
-  if (do_announce) {
-    AnnounceWayPointSwitch(do_advance);
-  } else {
-    GlideComputerTask::StartTask(do_advance, do_announce);
-  }
-}
 
 /**
  * Initializes the GlideComputer
@@ -190,18 +178,6 @@ GlideComputer::ProcessIdle()
   GlideComputerAirData::ProcessIdle();
   GlideComputerTask::ProcessIdle();
   SetCalculated().time_process_idle = clock.elapsed();
-}
-
-bool
-GlideComputer::InsideStartHeight(const DWORD Margin) const
-{
-  return GlideComputerTask::InsideStartHeight(Margin);
-}
-
-bool
-GlideComputer::ValidStartSpeed(const DWORD Margin) const
-{
-  return GlideComputerTask::ValidStartSpeed(Margin);
 }
 
 
@@ -393,3 +369,19 @@ GlideComputer::FLARM_ScanTraffic()
   }
 #endif
 }
+
+
+#ifdef OLD_TASK
+void
+GlideComputer::StartTask(const bool do_advance, const bool do_announce)
+{
+  //  GlideComputerBlackboard::StartTask();
+  GlideComputerStats::StartTask();
+
+  if (do_announce) {
+    AnnounceWayPointSwitch(do_advance);
+  } else {
+    GlideComputerTask::StartTask(do_advance, do_announce);
+  }
+}
+#endif

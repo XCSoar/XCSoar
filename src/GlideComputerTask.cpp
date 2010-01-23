@@ -81,16 +81,6 @@ GlideComputerTask::ResetFlight(const bool full)
 }
 
 
-void
-GlideComputerTask::StartTask(const bool do_advance, const bool do_announce)
-{
-#ifdef OLD_TASK
-  if (task.getActiveIndex()==0)
-    task.advanceTaskPoint(SettingsComputer());
-#endif
-}
-
-
 extern TaskBehaviour task_behaviour;
 
 void
@@ -144,627 +134,6 @@ GlideComputerTask::ProcessIdle()
   terrain.Unlock();
 }
 
-
-double
-FAIFinishHeight(const SETTINGS_COMPUTER &settings,
-                const DERIVED_INFO& Calculated, int wp)
-{
-#ifdef OLD_TASK
-  int FinalWayPoint = task.getFinalWaypoint();
-  if (wp == -1) {
-    wp = FinalWayPoint;
-  }
-  double wp_alt;
-  if(task.ValidTaskPoint(wp)) {
-    wp_alt = way_points.get(task.getWaypointIndex(wp)).Altitude;
-  } else {
-    wp_alt = 0;
-  }
-
-  if (!task.TaskIsTemporary() && (wp == FinalWayPoint)) {
-    if (task.getSettings().EnableFAIFinishHeight
-        && !task.getSettings().AATEnabled) {
-      return max(max((double)task.getSettings().FinishMinHeight,
-          settings.SafetyAltitudeArrival) + wp_alt,
-          Calculated.TaskStartAltitude-1000.0);
-    } else {
-      return max((double)task.getSettings().FinishMinHeight,
-          settings.SafetyAltitudeArrival) + wp_alt;
-    }
-  } else {
-    return wp_alt + settings.SafetyAltitudeArrival;
-  }
-#else 
-  return 0;
-#endif
-}
-
-double
-GlideComputerTask::FAIFinishHeight(int wp) const
-{
-  return ::FAIFinishHeight(SettingsComputer(), Calculated(), wp);
-}
-
-bool
-GlideComputerTask::InTurnSector(const int the_turnpoint) const
-{
-#ifdef OLD_TASK
-  double AircraftBearing;
-
-  if (!task.ValidTaskPoint(the_turnpoint))
-    return false;
-
-  if (task.getSettings().SectorType == 0) {
-    if(Calculated().WaypointDistance < task.getSettings().SectorRadius)
-      return true;
-
-  } else if (task.getSettings().SectorType>0) {
-    AircraftBearing = AngleLimit180(
-      Bearing(task.getTaskPointLocation(the_turnpoint), Basic().Location)
-      - task.getTaskPoint(the_turnpoint).Bisector);
-
-    if (task.getSettings().SectorType == 2) {
-      // JMW added german rules
-      if (Calculated().WaypointDistance < 500)
-        return true;
-    }
-    if ((AircraftBearing >= -45) && (AircraftBearing <= 45)) {
-      if (task.getSettings().SectorType == 1) {
-        if (Calculated().WaypointDistance < task.getSettings().SectorRadius)
-          return true;
-
-      } else {
-        // JMW added german rules
-        if(Calculated().WaypointDistance < 10000)
-          return true;
-      }
-    }
-  }
-#endif
-  return false;
-}
-
-bool
-GlideComputerTask::ValidFinish() const
-{
-#ifdef OLD_TASK
-  if ((task.getSettings().FinishMinHeight > 0)
-      &&(Calculated().TerrainValid)
-      &&(Calculated().AltitudeAGL < task.getSettings().FinishMinHeight))
-    return false;
-  else
-    return true;
-#else 
-  return false;
-#endif
-}
-
-bool
-GlideComputerTask::InFinishSector(const int i)
-{
-#ifdef OLD_TASK
-  double AircraftBearing;
-  double FirstPointDistance;
-  bool retval = false;
-
-  if (!ValidFinish())
-    return false;
-
-  // Finish invalid
-  if (!task.ValidTaskPoint(i))
-    return false;
-
-  // distance from aircraft to start point
-  DistanceBearing(Basic().Location,
-                  task.getTaskPointLocation(i),
-                  &FirstPointDistance,
-                  &AircraftBearing);
-
-  bool InFinishSector = LastCalculated().InFinishSector;
-
-  bool inrange = false;
-  inrange = (FirstPointDistance<task.getSettings().FinishRadius);
-  if (!inrange)
-    InFinishSector = false;
-
-  if (task.getSettings().FinishType == FINISH_CIRCLE) // Start Circle
-  {
-    retval = inrange;
-    goto OnExit;
-  }
-
-  // Finish line
-  AircraftBearing = AngleLimit180(AircraftBearing - task.getTaskPoint(i).InBound);
-
-  // JMW bugfix, was Bisector, which is invalid
-
-  bool approaching;
-  if (task.getSettings().FinishType == FINISH_LINE)
-    approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
-  else
-    // FAI 90 degree
-    approaching = !((AircraftBearing >= 135) || (AircraftBearing <= -135));
-
-  if (inrange) {
-    if (InFinishSector) {
-      // previously approaching the finish line
-      if (!approaching) {
-        // now moving away from finish line
-        InFinishSector = false;
-        retval = true;
-        goto OnExit;
-      }
-    } else {
-      if (approaching) {
-        // now approaching the finish line
-        InFinishSector = true;
-      }
-    }
-  } else {
-    InFinishSector = false;
-  }
-
- OnExit:
-  SetCalculated().InFinishSector = InFinishSector;
-  return retval;
-#else
-  return false;
-#endif
-}
-
-/*
-
-  Track 'TaskStarted' in Calculated info, so it can be
-  displayed in the task status dialog.
-
-  Must be reset at start of flight.
-
-  For multiple starts, after start has been passed, need
-  to set the first waypoint to the start waypoint and
-  then recalculate task stats.
-
-*/
-
-bool
-GlideComputerTask::ValidStartSpeed(const DWORD Margin) const
-{
-#ifdef OLD_TASK
-  if (task.getSettings().StartMaxSpeed == 0)
-    return true;
-
-  if (Basic().AirspeedAvailable) {
-    if (Basic().IndicatedAirspeed > (task.getSettings().StartMaxSpeed + Margin))
-      return false;
-  } else {
-    if (Basic().Speed > (task.getSettings().StartMaxSpeed + Margin))
-      return false;
-  }
-#endif
-  return true;
-}
-
-bool
-GlideComputerTask::InsideStartHeight(const DWORD Margin) const
-{
-#ifdef OLD_TASK
-  if (task.getSettings().StartMaxHeight == 0)
-    return true;
-
-  if (Calculated().TerrainValid)
-    return true;
-
-  if (task.getSettings().StartHeightRef == 0) {
-    if (Calculated().AltitudeAGL > (task.getSettings().StartMaxHeight + Margin))
-      return false;
-  } else {
-    if (Calculated().NavAltitude > (task.getSettings().StartMaxHeight + Margin))
-      return false;
-  }
-#endif
-  return true;
-}
-
-bool
-GlideComputerTask::InStartSector_Internal(int Index,
-					       double OutBound,
-					       bool &LastInSector)
-{
-#ifdef OLD_TASK
-  if (!way_points.verify_index(Index))
-    return false;
-
-  // No Task Loaded
-
-  double AircraftBearing;
-  double FirstPointDistance;
-
-  // distance from aircraft to start point
-  DistanceBearing(Basic().Location,
-                  way_points.get(Index).Location,
-                  &FirstPointDistance,
-                  &AircraftBearing);
-
-  bool inrange = false;
-  inrange = (FirstPointDistance < task.getSettings().StartRadius);
-
-  if (task.getSettings().StartType == START_CIRCLE)
-    return inrange;
-
-  // Start Line
-  AircraftBearing = AngleLimit180(AircraftBearing - OutBound);
-
-  // JMW bugfix, was Bisector, which is invalid
-
-  bool approaching;
-  if (task.getSettings().StartType == START_LINE) {
-    // Start line
-    approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
-  } else {
-    // FAI 90 degree
-    approaching = ((AircraftBearing >= -45) && (AircraftBearing <= 45));
-  }
-
-  if (inrange) {
-    return approaching;
-  } else {
-    // cheat fail of last because exited from side
-    LastInSector = false;
-  }
-#endif
-  return false;
-}
-
-bool
-GlideComputerTask::InStartSector(bool *CrossedStart)
-{
-#ifdef OLD_TASK
-  bool LastInStartSector = LastCalculated().InStartSector;
-
-  bool isInSector = false;
-  bool retval = false;
-
-  if (!Calculated().Flying || !task.Valid())
-    return false;
-
-  int wp_index = task.getWaypointIndex(0);
-
-  bool in_height = true;
-
-  if ((task.getActiveIndex() > 0) && !task.ValidTaskPoint(task.getActiveIndex() + 1)) {
-    // don't detect start if finish is selected
-    retval = false;
-    goto OnExit;
-  }
-
-  in_height = InsideStartHeight(task.getSettings().StartMaxHeightMargin);
-
-  if ((wp_index != Calculated().StartSectorWaypoint)
-      && (Calculated().StartSectorWaypoint >= 0)) {
-    LastInStartSector = false;
-    SetCalculated().StartSectorWaypoint = wp_index;
-  }
-
-  isInSector = in_height &
-      InStartSector_Internal(wp_index, task.getTaskPoint(0).OutBound,
-                             LastInStartSector);
-
-  *CrossedStart = LastInStartSector && !isInSector;
-  LastInStartSector = isInSector;
-  if (*CrossedStart) {
-    goto OnExit;
-  }
-
-  if (task.getSettings().EnableMultipleStartPoints) {
-    for (int i = 0; i < MAXSTARTPOINTS; i++) {
-      if (task_start_stats[i].Active && (task_start_points[i].Index>=0)
-          && (task_start_points[i].Index != wp_index)) {
-
-        retval = in_height & InStartSector_Internal(task_start_points[i].Index,
-						    task_start_points[i].OutBound,
-						    task_start_stats[i].InSector);
-        isInSector |= retval;
-
-        int index = task_start_points[i].Index;
-        *CrossedStart = task_start_stats[i].InSector && !retval;
-        task_start_stats[i].InSector = retval;
-        if (*CrossedStart) {
-          TASK_POINT tp = task.getTaskPoint(0);
-          if (tp.Index != index) {
-            tp.Index = index;
-            task.setTaskPoint(0, tp);
-            task.RefreshTask(SettingsComputer(), Basic());
-
-            LastInStartSector = false;
-            SetCalculated().StartSectorWaypoint = index;
-          }
-          goto OnExit;
-        }
-      }
-    }
-  }
-
- OnExit:
-  SetCalculated().InStartSector = LastInStartSector;
-  return isInSector;
-#else
-  return false;
-#endif
-}
-
-bool
-GlideComputerTask::ReadyToStart()
-{
-#ifdef OLD_TASK
-  if (!Calculated().Flying)
-    return false;
-
-  if (task.getSettings().AutoAdvance == AUTOADVANCE_AUTO)
-    return true;
-
-  if ((task.getSettings().AutoAdvance == AUTOADVANCE_ARM)
-      || (task.getSettings().AutoAdvance ==AUTOADVANCE_ARMSTART)) {
-    if (task.isAdvanceArmed())
-      return true;
-  }
-#endif
-  return false;
-}
-
-bool
-GlideComputerTask::ReadyToAdvance(bool reset, bool restart)
-{
-#ifdef OLD_TASK
-  bool say_ready = false;
-
-  SetCalculated().ActiveTaskPoint = task.getActiveIndex();
-
-  if (!Calculated().Flying) {
-    SetCalculated().ReadyWayPoint = -1;
-    return false;
-  }
-
-  if (task.getSettings().AutoAdvance == AUTOADVANCE_AUTO) {
-    if (reset)
-      task.setAdvanceArmed(false);
-
-    return true;
-  }
-
-  if (task.getSettings().AutoAdvance == AUTOADVANCE_ARM) {
-    if (task.isAdvanceArmed()) {
-      if (reset)
-        task.setAdvanceArmed(false);
-
-      return true;
-    } else {
-      say_ready = true;
-    }
-  }
-
-  if (task.getSettings().AutoAdvance== AUTOADVANCE_ARMSTART) {
-    if ((task.getActiveIndex() == 0) || restart) {
-      if (!task.isAdvanceArmed()) {
-        say_ready = true;
-      } else if (reset) {
-        task.setAdvanceArmed(false);
-        return true;
-      }
-    } else {
-      // JMW fixed 20070528
-      if (task.getActiveIndex() >0) {
-        if (reset)
-          task.setAdvanceArmed(false);
-
-        return true;
-      }
-    }
-  }
-
-  // see if we've gone back a waypoint (e.g. restart)
-  if (task.getActiveIndex() < LastCalculated().ActiveTaskPoint) {
-    SetCalculated().ReadyWayPoint = -1;
-  }
-
-  if (say_ready) {
-    if ((int)task.getActiveIndex() != LastCalculated().ReadyWayPoint) {
-      InputEvents::processGlideComputer(GCE_ARM_READY);
-      SetCalculated().ReadyWayPoint = task.getActiveIndex();
-    }
-  }
-#endif
-  return false;
-}
-
-void
-GlideComputerTask::CheckStart()
-{
-#ifdef OLD_TASK
-  bool StartCrossed = false;
-
-  if (InStartSector(&StartCrossed)) {
-    SetCalculated().IsInSector = true;
-
-    if (ReadyToStart()) {
-      aatdistance.AddPoint(Basic().Location, 0, AATCloseDistance());
-    }
-
-    // TODO: we are ready to start even when outside start rules but
-    // within margin
-    if (ValidStartSpeed(task.getSettings().StartMaxSpeedMargin)) {
-      ReadyToAdvance(false, true);
-    }
-    // TODO accuracy: monitor start speed throughout time in start sector
-  }
-
-  if (StartCrossed) {
-    // TODO: Check whether speed and height are within the rules or
-    // not (zero margin)
-    if(!task.ActiveIsFinalWaypoint() && ValidStartSpeed() && InsideStartHeight()) {
-      // This is set whether ready to advance or not, because it will
-      // appear in the flight log, so if it's valid, it's valid.
-      SetCalculated().ValidStart = true;
-
-      if (ReadyToAdvance(true, true)) {
-        task.setActiveIndex(0); // enforce this since it may be 1
-        StartTask(true, true);
-      }
-
-      if (Calculated().Flying) {
-        SetCalculated().ValidFinish = false;
-      }
-      // JMW TODO accuracy: This causes Vaverage to go bonkers
-      // if the user has already passed the start
-      // but selects the start
-
-      // Note: pilot must have armed advance
-      // for the start to be registered
-
-      // ToLo: If speed and height are outside the rules they must be
-      // within the margin...
-    } else {
-      if ((task.getActiveIndex()<=1)
-          && !task.ActiveIsFinalWaypoint()
-          && (Calculated().ValidStart==false)
-          && (Calculated().Flying)) {
-
-        // need to detect bad starts, just to get the statistics
-        // in case the bad start is the best available, or the user
-        // manually started
-        StartTask(false, false);
-        // Calculated().ValidStart = false;
-
-        bool startTaskAnyway = false;
-
-        if (ReadyToAdvance(true, true)) {
-
-	  /* JMW TODO THIS IS BAD!!! SEND AN EVENT TO THE GUI INSTEAD
-	     OF RUNNING A DIALOG FROM THE CALCULATIONS THREAD
-          //DoStatusMessage(TEXT("Start Anyway?"));
-          dlgStartTaskShowModal(&startTaskAnyway,
-                                Calculated().TaskStartTime,
-                                Calculated().TaskStartSpeed,
-                                Calculated().TaskStartAltitude);
-	  */
-          if (startTaskAnyway) {
-            task.setActiveIndex(0); // enforce this since it may be 1
-            StartTask(true, true);
-          }
-        }
-
-        SetCalculated().ValidStart = startTaskAnyway;
-
-        if (Calculated().Flying) {
-          SetCalculated().ValidFinish = false;
-        }
-
-        // TODO: Display infobox when only a bit over start rules
-      }
-    }
-  }
-#endif
-}
-
-
-void
-GlideComputerTask::CheckRestart()
-{
-#ifdef OLD_TASK
-  if((Basic().Time - Calculated().TaskStartTime < 3600)
-     && (task.getActiveIndex() <= 1)) {
-    CheckStart();
-  }
-#endif
-}
-
-void
-GlideComputerTask::CheckFinish()
-{
-#ifdef OLD_TASK
-  if (InFinishSector(task.getActiveIndex())) {
-    SetCalculated().IsInSector = true;
-    aatdistance.AddPoint(Basic().Location, task.getActiveIndex(),
-        AATCloseDistance());
-
-    if (!Calculated().ValidFinish) {
-      SetCalculated().ValidFinish = true;
-      AnnounceWayPointSwitch(false);
-      SaveFinish();
-    }
-  }
-#endif
-}
-
-void
-GlideComputerTask::AddAATPoint(const unsigned taskwaypoint)
-{
-#ifdef OLD_TASK
-  bool insector = false;
-  if (taskwaypoint > 0) {
-    if (task.getSettings().AATEnabled) {
-      insector = task.InAATTurnSector(Basic().Location, taskwaypoint);
-    } else {
-      insector = InTurnSector(taskwaypoint);
-    }
-
-    if(insector) {
-      if (taskwaypoint == task.getActiveIndex())
-        SetCalculated().IsInSector = true;
-
-      aatdistance.AddPoint(Basic().Location, taskwaypoint, AATCloseDistance());
-    }
-  }
-#endif
-}
-
-void
-GlideComputerTask::CheckInSector()
-{
-#ifdef OLD_TASK
-  if (task.getActiveIndex()>0)
-    AddAATPoint(task.getActiveIndex()-1);
-
-  AddAATPoint(task.getActiveIndex());
-
-  // JMW Start bug XXX
-
-  if (aatdistance.HasEntered(task.getActiveIndex())) {
-    if (ReadyToAdvance(true, false))
-      AnnounceWayPointSwitch(true);
-
-    if (Calculated().Flying)
-      SetCalculated().ValidFinish = false;
-  }
-#endif
-}
-
-/**
- * Checks whether the current location is in a
- * turnpoint sector
- */
-void
-GlideComputerTask::InSector()
-{
-#ifdef OLD_TASK
-  // Checks whether the active waypoint is valid
-  if (!task.Valid())
-    return;
-
-  SetCalculated().IsInSector = false;
-
-  if(task.getActiveIndex() == 0) {
-    CheckStart();
-  } else {
-    if (task.ActiveIsFinalWaypoint()) {
-      AddAATPoint(task.getActiveIndex() - 1);
-      CheckFinish();
-    } else {
-      CheckRestart();
-      if (task.getActiveIndex() > 0)
-        CheckInSector();
-    }
-  }
-#endif
-}
 
 void
 GlideComputerTask::LDNext()
@@ -971,13 +340,6 @@ GlideComputerTask::CheckFinalGlideThroughTerrain(double LegToGo, double LegBeari
 #endif
 }
 
-void
-GlideComputerTask::ResetEnter()
-{
-#ifdef OLD_TASK
-  aatdistance.ResetEnterTrigger(task.getActiveIndex());
-#endif
-}
 
 /**
  * Does the AutoMacCready calculations
@@ -1074,3 +436,278 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
 #endif
 }
 
+
+/////////////////////////////////
+
+
+/*
+
+  Track 'TaskStarted' in Calculated info, so it can be
+  displayed in the task status dialog.
+
+  Must be reset at start of flight.
+
+  For multiple starts, after start has been passed, need
+  to set the first waypoint to the start waypoint and
+  then recalculate task stats.
+
+*/
+
+#ifdef OLD_TASK
+
+void
+GlideComputerTask::StartTask(const bool do_advance, const bool do_announce)
+{
+  if (task.getActiveIndex()==0)
+    task.advanceTaskPoint(SettingsComputer());
+}
+
+bool
+GlideComputerTask::ValidFinish() const
+{
+  if ((task.getSettings().FinishMinHeight > 0)
+      &&(Calculated().TerrainValid)
+      &&(Calculated().AltitudeAGL < task.getSettings().FinishMinHeight))
+    return false;
+  else
+    return true;
+}
+
+
+bool
+GlideComputerTask::ValidStartSpeed(const DWORD Margin) const
+{
+  if (task.getSettings().StartMaxSpeed == 0)
+    return true;
+
+  if (Basic().AirspeedAvailable) {
+    if (Basic().IndicatedAirspeed > (task.getSettings().StartMaxSpeed + Margin))
+      return false;
+  } else {
+    if (Basic().Speed > (task.getSettings().StartMaxSpeed + Margin))
+      return false;
+  }
+  return true;
+}
+
+bool
+GlideComputerTask::InsideStartHeight(const DWORD Margin) const
+{
+  if (task.getSettings().StartMaxHeight == 0)
+    return true;
+
+  if (Calculated().TerrainValid)
+    return true;
+
+  if (task.getSettings().StartHeightRef == 0) {
+    if (Basic().AltitudeAGL > (task.getSettings().StartMaxHeight + Margin))
+      return false;
+  } else {
+    if (Basic().NavAltitude > (task.getSettings().StartMaxHeight + Margin))
+      return false;
+  }
+  return true;
+}
+
+
+void
+GlideComputerTask::ResetEnter()
+{
+  aatdistance.ResetEnterTrigger(task.getActiveIndex());
+}
+
+bool
+GlideComputerTask::ReadyToStart()
+{
+  if (!Calculated().Flying)
+    return false;
+
+  if (task.getSettings().AutoAdvance == AUTOADVANCE_AUTO)
+    return true;
+
+  if ((task.getSettings().AutoAdvance == AUTOADVANCE_ARM)
+      || (task.getSettings().AutoAdvance ==AUTOADVANCE_ARMSTART)) {
+    if (task.isAdvanceArmed())
+      return true;
+  }
+  return false;
+}
+
+bool
+GlideComputerTask::ReadyToAdvance(bool reset, bool restart)
+{
+  bool say_ready = false;
+
+  SetCalculated().ActiveTaskPoint = task.getActiveIndex();
+
+  if (!Calculated().Flying) {
+    SetCalculated().ReadyWayPoint = -1;
+    return false;
+  }
+
+  if (task.getSettings().AutoAdvance == AUTOADVANCE_AUTO) {
+    if (reset)
+      task.setAdvanceArmed(false);
+
+    return true;
+  }
+
+  if (task.getSettings().AutoAdvance == AUTOADVANCE_ARM) {
+    if (task.isAdvanceArmed()) {
+      if (reset)
+        task.setAdvanceArmed(false);
+
+      return true;
+    } else {
+      say_ready = true;
+    }
+  }
+
+  if (task.getSettings().AutoAdvance== AUTOADVANCE_ARMSTART) {
+    if ((task.getActiveIndex() == 0) || restart) {
+      if (!task.isAdvanceArmed()) {
+        say_ready = true;
+      } else if (reset) {
+        task.setAdvanceArmed(false);
+        return true;
+      }
+    } else {
+      // JMW fixed 20070528
+      if (task.getActiveIndex() >0) {
+        if (reset)
+          task.setAdvanceArmed(false);
+
+        return true;
+      }
+    }
+  }
+
+  // see if we've gone back a waypoint (e.g. restart)
+  if (task.getActiveIndex() < LastCalculated().ActiveTaskPoint) {
+    SetCalculated().ReadyWayPoint = -1;
+  }
+
+  if (say_ready) {
+    if ((int)task.getActiveIndex() != LastCalculated().ReadyWayPoint) {
+      InputEvents::processGlideComputer(GCE_ARM_READY);
+      SetCalculated().ReadyWayPoint = task.getActiveIndex();
+    }
+  }
+  return false;
+}
+
+void
+GlideComputerTask::CheckStart()
+{
+  bool StartCrossed = false;
+
+  if (InStartSector(&StartCrossed)) {
+    SetCalculated().IsInSector = true;
+
+    if (ReadyToStart()) {
+      aatdistance.AddPoint(Basic().Location, 0, AATCloseDistance());
+    }
+
+    // TODO: we are ready to start even when outside start rules but
+    // within margin
+    if (ValidStartSpeed(task.getSettings().StartMaxSpeedMargin)) {
+      ReadyToAdvance(false, true);
+    }
+    // TODO accuracy: monitor start speed throughout time in start sector
+  }
+
+  if (StartCrossed) {
+    // TODO: Check whether speed and height are within the rules or
+    // not (zero margin)
+    if(!task.ActiveIsFinalWaypoint() && ValidStartSpeed() && InsideStartHeight()) {
+      // This is set whether ready to advance or not, because it will
+      // appear in the flight log, so if it's valid, it's valid.
+      SetCalculated().ValidStart = true;
+
+      if (ReadyToAdvance(true, true)) {
+        task.setActiveIndex(0); // enforce this since it may be 1
+        StartTask(true, true);
+      }
+
+      if (Calculated().Flying) {
+        SetCalculated().ValidFinish = false;
+      }
+      // JMW TODO accuracy: This causes Vaverage to go bonkers
+      // if the user has already passed the start
+      // but selects the start
+
+      // Note: pilot must have armed advance
+      // for the start to be registered
+
+      // ToLo: If speed and height are outside the rules they must be
+      // within the margin...
+    } else {
+      if ((task.getActiveIndex()<=1)
+          && !task.ActiveIsFinalWaypoint()
+          && (Calculated().ValidStart==false)
+          && (Calculated().Flying)) {
+
+        // need to detect bad starts, just to get the statistics
+        // in case the bad start is the best available, or the user
+        // manually started
+        StartTask(false, false);
+        // Calculated().ValidStart = false;
+
+        bool startTaskAnyway = false;
+
+        if (ReadyToAdvance(true, true)) {
+
+	  /* JMW TODO THIS IS BAD!!! SEND AN EVENT TO THE GUI INSTEAD
+	     OF RUNNING A DIALOG FROM THE CALCULATIONS THREAD
+          //DoStatusMessage(TEXT("Start Anyway?"));
+          dlgStartTaskShowModal(&startTaskAnyway,
+                                Calculated().TaskStartTime,
+                                Calculated().TaskStartSpeed,
+                                Calculated().TaskStartAltitude);
+	  */
+          if (startTaskAnyway) {
+            task.setActiveIndex(0); // enforce this since it may be 1
+            StartTask(true, true);
+          }
+        }
+
+        SetCalculated().ValidStart = startTaskAnyway;
+
+        if (Calculated().Flying) {
+          SetCalculated().ValidFinish = false;
+        }
+
+        // TODO: Display infobox when only a bit over start rules
+      }
+    }
+  }
+}
+
+void
+GlideComputerTask::CheckRestart()
+{
+  if((Basic().Time - Calculated().TaskStartTime < 3600)
+     && (task.getActiveIndex() <= 1)) {
+    CheckStart();
+  }
+}
+
+void
+GlideComputerTask::CheckFinish()
+{
+  if (InFinishSector(task.getActiveIndex())) {
+    SetCalculated().IsInSector = true;
+    aatdistance.AddPoint(Basic().Location, task.getActiveIndex(),
+        AATCloseDistance());
+
+    if (!Calculated().ValidFinish) {
+      SetCalculated().ValidFinish = true;
+      AnnounceWayPointSwitch(false);
+      SaveFinish();
+    }
+  }
+}
+
+#endif
+
+// @todo: hook up ReadyToAdvance and AnnounceWayPointSwitch

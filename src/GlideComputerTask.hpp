@@ -59,33 +59,13 @@ public:
   GlideComputerTask(TaskManager& task);
 
   void DoAutoMacCready(double mc_setting);
-  virtual bool InsideStartHeight(const DWORD Margin=0) const;
-  virtual bool ValidStartSpeed(const DWORD Margin=0) const;
 protected:
   TaskManager &m_task;
 
   void Initialise() {}
   void ProcessBasicTask();
   void ResetFlight(const bool full=true);
-  virtual void StartTask(const bool do_advance,
-			 const bool do_announce);
-  virtual void AnnounceWayPointSwitch(bool do_advance)= 0;
-  void InSector();
 private:
-  bool InTurnSector(const int the_turnpoint) const;
-  bool InFinishSector(const int i);
-  bool ValidFinish() const;
-  bool InStartSector_Internal(int Index,
-			      double OutBound,
-			      bool &LastInSector);
-  bool InStartSector(bool *CrossedStart);
-  bool ReadyToStart();
-  bool ReadyToAdvance(bool reset=true, bool restart=false);
-  void CheckStart();
-  void CheckRestart();
-  void CheckFinish();
-  void AddAATPoint(const unsigned taskwaypoint);
-  void CheckInSector();
   void TerrainWarning();
   void CheckTransitionFinalGlide();
   void LDNext();
@@ -99,16 +79,7 @@ private:
   void SearchBestAlternate();
 protected:
   virtual void ProcessIdle();
-  double FAIFinishHeight(int wp) const;
-public:
-  virtual void ResetEnter();
-  double AATCloseDistance(void) const {
-    return max(fixed(100.0), Basic().Speed * 1.5);
-  }
 };
-
-double FAIFinishHeight(const SETTINGS_COMPUTER &settings,
-		       const DERIVED_INFO& Calculated, int wp);
 
 #endif
 

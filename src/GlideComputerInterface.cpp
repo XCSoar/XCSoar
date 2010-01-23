@@ -47,8 +47,8 @@ Copyright_License {
 /**
  * Calls waypoint change events. Is called when waypoint is switched.
  */
-void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
 #ifdef OLD_TASK
+void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
   if (task.getActiveIndex() == 0) {
     // InputEvents::processGlideComputer(GCE_TASK_START);
     // QUESTION JMW: why commented out?
@@ -85,6 +85,6 @@ void GlideComputer::AnnounceWayPointSwitch(bool do_advance) {
   }
   // set waypoint detail to active task WP
 
-#endif
   GlideComputerStats::SetFastLogging();
 }
+#endif

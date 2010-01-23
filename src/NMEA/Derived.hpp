@@ -224,7 +224,6 @@ struct DERIVED_INFO:
   bool IsInSector;
   bool IsInAirspace;
   bool InFinishSector;
-  bool InStartSector;
   int StartSectorWaypoint;
 
   fixed AverageClimbRate[200];
