@@ -69,7 +69,7 @@ StartPoint::set_neighbours(OrderedTaskPoint* _prev,
 
 bool 
 StartPoint::update_sample(const AIRCRAFT_STATE& state,
-                          const TaskEvents &task_events)
+                          TaskEvents &task_events)
 {
   if (isInSector(state)) {
     if (!m_task_behaviour.check_start_speed(state)) {

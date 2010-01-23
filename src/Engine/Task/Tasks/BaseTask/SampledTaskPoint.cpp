@@ -55,7 +55,7 @@ SampledTaskPoint::SampledTaskPoint(const TaskProjection& tp,
 
 bool 
 SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
-                                const TaskEvents &task_events)
+                                TaskEvents &task_events)
 {
   if (isInSector(state)) {
     // if sample is inside sample polygon

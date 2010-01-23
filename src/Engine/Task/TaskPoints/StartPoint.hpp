@@ -92,7 +92,7 @@ public:
  * @return True if internal state changed
  */
     bool update_sample(const AIRCRAFT_STATE& state,
-                       const TaskEvents &task_events);
+                       TaskEvents &task_events);
 
 /** 
  * Retrieve elevation of taskpoint, taking into account

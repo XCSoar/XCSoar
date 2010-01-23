@@ -51,7 +51,7 @@ AATPoint::get_location_remaining() const
 
 bool 
 AATPoint::update_sample(const AIRCRAFT_STATE& state,
-                        const TaskEvents &task_events) 
+                        TaskEvents &task_events) 
 {
   bool retval = OrderedTaskPoint::update_sample(state,task_events);
   if ((getActiveState() == CURRENT_ACTIVE) && (!m_target_locked)) {

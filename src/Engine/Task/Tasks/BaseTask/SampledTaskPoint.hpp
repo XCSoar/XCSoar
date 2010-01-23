@@ -122,7 +122,7 @@ public:
  * @return True if internal state changed
  */
   virtual bool update_sample(const AIRCRAFT_STATE& state,
-                             const TaskEvents &task_events);
+                             TaskEvents &task_events);
 
 /** 
  * Accessor for task projection
