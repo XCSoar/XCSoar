@@ -65,6 +65,10 @@ FlarmIdFile::FlarmIdFile(void)
   //	FILE_SHARE_READ, NULL, OPEN_EXISTING,
   //	     FILE_ATTRIBUTE_NORMAL, 0);
   FILE*	hFile = _wfopen(flarmIdFileName, TEXT("rt"));
+  if (hFile == NULL) {
+    //StartupStore(_T("Could not open file '%s'\n"), flarmIdFileName);
+    return;
+  }
 
   TCHAR text[50];
 
