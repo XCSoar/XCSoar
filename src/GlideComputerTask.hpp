@@ -123,8 +123,6 @@ private:
   void DoAlternates(int AltWaypoint);
   void SearchBestAlternate();
 protected:
-
-  virtual void SaveTaskSpeed(double val) = 0;
   virtual void ProcessIdle();
   double FAIFinishHeight(int wp) const;
 public:

@@ -166,15 +166,6 @@ GlideComputer::ProcessGPS()
   return true;
 }
 
-/**
- * Calls GlideComputerStats::SaveTaskSpeed(val)
- * @param val Task speed
- */
-void
-GlideComputer::SaveTaskSpeed(double val)
-{
-  GlideComputerStats::SaveTaskSpeed(val);
-}
 
 /**
  * Process slow calculations. Called by the CalculationThread.
