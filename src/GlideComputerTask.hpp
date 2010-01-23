@@ -88,10 +88,8 @@ private:
   void CheckInSector();
   void TerrainWarning();
   void CheckTransitionFinalGlide();
-  void DebugTaskCalculations();
   void LDNext();
   void CheckForceFinalGlide();
-  double SpeedHeight();
   double MacCreadyOrAvClimbRate(double this_maccready);
   void CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing);
   // best alternate

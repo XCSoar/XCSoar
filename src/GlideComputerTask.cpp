@@ -892,52 +892,6 @@ GlideComputerTask::CheckTransitionFinalGlide()
 #endif
 }
 
-double GlideComputerTask::SpeedHeight() {
-#ifdef OLD_TASK
-  if (Calculated().TaskDistanceToGo <= 0)
-    return 0;
-
-  // Fraction of task distance covered
-  double d_fraction = Calculated().TaskDistanceCovered /
-      (Calculated().TaskDistanceCovered + Calculated().TaskDistanceToGo);
-
-  double dh_start = Calculated().TaskStartAltitude;
-  double dh_finish = FAIFinishHeight(-1);
-
-  // Excess height
-  return Calculated().NavAltitude - (dh_start * (1.0 - d_fraction) + dh_finish * (d_fraction));
-#else
-  return 0;
-#endif
-}
-
-#ifdef DEBUGTASKSPEED
-void GlideComputerTask::DebugTaskCalculations()
-{
-  if ((Calculated().TaskStartTime>0)
-      && (Basic().Time-Calculated().TaskStartTime>0)) {
-      if (Calculated().Flying) {
-
-        double effective_mc = EffectiveMacCready();
-        DebugStore("%g %g %g %g %g %g %g %g %g %g %d %g %g # taskspeed\r\n",
-                Basic().Time-Calculated().TaskStartTime,
-                Calculated().TaskDistanceCovered,
-                Calculated().TaskDistanceToGo,
-                Calculated().TaskAltitudeRequired,
-                Calculated().NavAltitude,
-                Calculated().TaskSpeedAchieved,
-                Calculated().TaskSpeed,
-                Calculated().TaskSpeedInstantaneous,
-                MACCREADY,
-                effective_mc,
-                task.getActiveIndex(),
-                Calculated().DistanceVario,
-                Calculated().GPSVario);
-      }
-    }
-}
-#endif
-
 
 double
 GlideComputerTask::MacCreadyOrAvClimbRate(double this_maccready)
