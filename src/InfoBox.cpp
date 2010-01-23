@@ -172,15 +172,6 @@ InfoBox::~InfoBox(void){
 }
 
 void
-InfoBox::SetFocus(bool Value)
-{
-  if (mHasFocus != Value) {
-    mHasFocus = Value;
-    Paint();
-  }
-}
-
-void
 InfoBox::SetValueUnit(Units_t Value)
 {
   mValueUnit = Value;

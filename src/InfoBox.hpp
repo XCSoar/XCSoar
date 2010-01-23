@@ -164,12 +164,6 @@ public:
   void SetComment(const TCHAR *Value);
   void SetSmallerFont(bool smallerFont);
 
-  /**
-   * Sets the InfoBox focus property to the given value and repaints if needed
-   * @param Value
-   */
-  void SetFocus(bool Value);
-
   int GetBorderKind(void);
   int SetBorderKind(int Value);
 
