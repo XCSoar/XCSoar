@@ -62,6 +62,8 @@ public:
   
   void construction_error(const char* error) const;
 
+  void request_arm(const TaskPoint &tp) const;
+
   bool verbose; /**< Option to enable basic output on events (for testing) */
 };
 

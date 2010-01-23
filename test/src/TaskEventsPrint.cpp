@@ -103,3 +103,13 @@ TaskEventsPrint::warning_start_speed() const
 #endif
   }
 }
+
+void 
+TaskEventsPrint::request_arm(const TaskPoint &tp) const 
+{
+  if (verbose) {
+#ifdef DO_PRINT
+    printf("#- ready to advance\n");
+#endif
+  }
+}
