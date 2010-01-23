@@ -76,13 +76,13 @@ ifeq ($(CONFIG_PC),y)
   endif
 
   CPU := i586
-  MCPU := -mcpu=$(CPU)
+  MCPU := -march=$(CPU)
 else
 
   ifeq ($(CONFIG_WINE),y)
     TCPATH := wine
     CPU := i586
-    MCPU := -mcpu=$(CPU)
+    MCPU := -march=$(CPU)
   else
     TCPATH := arm-mingw32ce-
 
@@ -272,18 +272,10 @@ endif
 
 ####### compiler target
 
-ifeq ($(TARGET),UNIX)
-  TARGET_ARCH :=
-else
+TARGET_ARCH := $(MCPU)
 
-  ifeq ($(CONFIG_PC),y)
-    TARGET_ARCH := -mwindows -march=i586 -mms-bitfields
-  else
-    TARGET_ARCH := -mwin32 $(MCPU)
-  endif
-  ifeq ($(TARGET),CYGWIN)
-    TARGET_ARCH :=
-  endif
+ifeq ($(HAVE_WIN32),y)
+  TARGET_ARCH += -mwin32
 
   WINDRESFLAGS := -I$(SRC) $(TARGET_CPPFLAGS) -D_MINGW32_
   ifeq ($(CONFIG_ALTAIR),y)
@@ -291,8 +283,17 @@ else
   endif
 endif # UNIX
 
+ifeq ($(TARGET),PC)
+  TARGET_ARCH += -mwindows -mms-bitfields
+endif
+
 ifeq ($(TARGET),WINE)
+  TARGET_ARCH := $(filter-out -mwin32,$(TARGET_ARCH))
   TARGET_ARCH += -m32
+endif
+
+ifeq ($(TARGET),CYGWIN)
+  TARGET_ARCH :=
 endif
 
 ####### linker configuration
