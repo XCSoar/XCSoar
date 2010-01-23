@@ -64,9 +64,9 @@ bool
 OnlineContest::run_olc(OLCDijkstra &dijkstra)
 {
   if (dijkstra.solve()) {
-    const fixed score = dijkstra.score(common_stats.distance_olc,
-                                       common_stats.speed_olc,
-                                       common_stats.time_olc);
+    dijkstra.score(common_stats.distance_olc,
+                   common_stats.speed_olc,
+                   common_stats.time_olc);
     dijkstra.copy_solution(m_solution);
     update_trace();
 
