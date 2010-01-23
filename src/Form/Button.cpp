@@ -152,12 +152,6 @@ WndButton::on_mouse_double(int x, int y)
 bool
 WndButton::on_key_down(unsigned key_code)
 {
-#ifdef VENTA_DEBUG_EVENT
-  TCHAR ventabuffer[80];
-  wsprintf(ventabuffer,TEXT("ONKEYDOWN key_code=%d"), key_code); // VENTA-
-  DoStatusMessage(ventabuffer);
-#endif
-
   switch (key_code) {
 #ifdef GNAV
   // JMW added this to make data entry easier

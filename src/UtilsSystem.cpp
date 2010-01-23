@@ -775,11 +775,6 @@ void StartupLogFreeRamAndStorage() {
 
 
 WPARAM TranscodeKey(WPARAM wParam) {
-#ifdef VENTA_DEBUG_KEY
-  TCHAR ventabuffer[80];
-  _stprintf(ventabuffer,TEXT("WMKEY uMsg=%d wParam=%ld lParam=%ld"), uMsg, wParam,lParam);
-  DoStatusMessage(ventabuffer);
-#endif
 #if defined(PNA) // VENTA-ADDON HARDWARE KEYS TRANSCODING
 
   if ( GlobalModelType == MODELTYPE_PNA_HP31X )

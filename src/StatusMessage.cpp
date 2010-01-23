@@ -53,12 +53,8 @@ StatusMessageList::StatusMessageList()
   StatusMessageData[0].doStatus = true;
   StatusMessageData[0].doSound = true;
   StatusMessageData[0].sound = TEXT("IDR_WAV_DRIP");
+  StatusMessageData[0].delay_ms = 2500; // 2.5 s
   StatusMessageData_Size=1;
-#ifdef VENTA_DEBUG_EVENT // VENTA- longer statusmessage delay in event debug mode
-	StatusMessageData[0].delay_ms = 10000;  // 10 s
-#else
-    StatusMessageData[0].delay_ms = 2500; // 2.5 s
-#endif
 
   // Load up other defaults - allow overwrite in config file
 #include "Status_defaults.cpp"

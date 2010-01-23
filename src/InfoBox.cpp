@@ -690,17 +690,9 @@ InfoBox::on_mouse_down(int x, int y)
 
   // if double clicked -> show menu
   if (!double_click.check_always_update(DOUBLECLICKINTERVAL)) {
-    #ifdef DEBUG_DBLCLK
-    DoStatusMessage(_T("synth DBLCLK InfoBox!"));
-    #endif
-
     InputEvents::ShowMenu();
     return true;
   }
-
-  #ifdef DEBUG_DBLCLK
-  DoStatusMessage(_T("BDOWN InfoBox")); // VENTA3
-  #endif
 
   // if single clicked -> focus the InfoBox
   set_focus();
@@ -714,9 +706,6 @@ InfoBox::on_mouse_double(int x, int y)
     // JMW capture double click, so infoboxes double clicked also bring up menu
     // VENTA3: apparently this is working only on PC ! Disable it to let PC work
     // with same timeout of PDA and PNA versions with synthetic DBLCLK
-    #ifdef DEBUG_DBLCLK
-    DoStatusMessage(_T("DBLCLK InfoBox")); // VENTA3
-    #endif
     InputEvents::ShowMenu();
   }
 

@@ -39,8 +39,6 @@ Copyright_License {
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#include "Debug.h"				// DEBUG OPTIONS FOR EVERYONE
-
 #define   MONOCHROME_SCREEN     1             // optimize for monochrom screen
 #define   EXPERIMENTAL          0             // ????
 
@@ -116,8 +114,5 @@ Copyright_License {
  * Put here debug defines, so that other developers can activate them if needed.
 
 #define DRAWLOAD		// show cpu load (set also by DEBUG mode)
-#define DEBUG_DBLCLK		// show double click is being pressed
-#define VENTA_DEBUG_EVENT	// show key events, actually very few.
-#define VENTA_DEBUG_KEY		// activates scan key codes, so you know what an hardware key is mapped to
 
  */
