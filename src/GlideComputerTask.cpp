@@ -133,7 +133,6 @@ GlideComputerTask::ProcessBasicTask()
     DistanceCovered();
     TaskStatistics(mc, ce);
     AATStats();
-    LegSpeed();
     LDNext();
   }
 #endif

@@ -95,7 +95,6 @@ private:
   void CheckInSector();
   void TaskStatistics(const double this_maccready,
 		      const double cruise_efficiency);
-  void LegSpeed();
   void TerrainWarning();
   void AATStats_Time();
   void AATStats_Distance();
@@ -110,12 +109,6 @@ private:
 			    const double cruise_efficiency);
   double MacCreadyOrAvClimbRate(double this_maccready);
   void CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing);
-  // TODO: some of these can move into task class
-  // abort stuff
-  int CalculateWaypointApproxDistance(const POINT &screen,
-                                      const WAYPOINT &way_point);
-  double CalculateWaypointArrivalAltitude(const WAYPOINT &way_point,
-                                          WPCALC &calc);
   // best alternate
   void AlertBestAlternate(short soundmode);
   void DoBestAlternateSlow();
