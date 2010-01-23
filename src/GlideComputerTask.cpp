@@ -123,8 +123,10 @@ GlideComputerTask::ProcessBasicTask()
     SetCalculated().V_stf = m_task.get_common_stats().V_dolphin;
   }
 
+  SetCalculated().ZoomDistance = 
+    Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
+
 #ifdef OLD_TASK
-  DistanceToNext();
   AltitudeRequired(mc, ce);
   if (!targetManipEvent.test()) {
     // don't calculate these if optimise function being invoked or
@@ -146,40 +148,6 @@ GlideComputerTask::ProcessIdle()
   terrain.Unlock();
 }
 
-
-void
-GlideComputerTask::DistanceToNext()
-{
-#ifdef OLD_TASK
-  if(task.Valid()) {
-    DistanceBearing(Basic().Location, task.getActiveLocation(),
-        &SetCalculated().WaypointDistance, &SetCalculated().WaypointBearing);
-
-    SetCalculated().ZoomDistance = Calculated().WaypointDistance;
-
-    if ((Calculated().IsInSector) && (task.getActiveIndex() == 0)
-        && task.ValidTaskPoint(1) && !task.TaskIsTemporary()) {
-
-      // JMW set waypoint bearing to start direction if in start sector
-      SetCalculated().WaypointBearing =
-          Bearing(Basic().Location, task.getTargetLocation(1));
-    } else {
-      DistanceBearing(Basic().Location, task.getTargetLocation(),
-          &SetCalculated().WaypointDistance, &SetCalculated().WaypointBearing);
-
-      if (Calculated().WaypointDistance > AATCloseDistance() * 3.0)
-        SetCalculated().ZoomDistance =
-            max(Calculated().WaypointDistance, Calculated().ZoomDistance);
-      else
-        SetCalculated().WaypointBearing = AATCloseBearing();
-    }
-  } else {
-    SetCalculated().ZoomDistance = 0;
-    SetCalculated().WaypointDistance = 0;
-    SetCalculated().WaypointBearing = 0;
-  }
-#endif
-}
 
 void
 GlideComputerTask::AltitudeRequired(const double this_maccready,

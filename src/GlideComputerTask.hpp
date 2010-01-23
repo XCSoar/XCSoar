@@ -72,7 +72,6 @@ protected:
   virtual void AnnounceWayPointSwitch(bool do_advance)= 0;
   void InSector();
 private:
-  void DistanceToNext();
   void AltitudeRequired(const double mc_setting,
 			const double cruise_efficiency);
   double AATCloseBearing() const;
