@@ -59,6 +59,12 @@ class InfoBoxManager: public ActionInterface {
   static int getType(unsigned i);
   static void setType(unsigned i, char j);
   static void FocusOnWindow(unsigned i, bool selected);
+
+  /**
+   * Updates the layout and the displayed values of the #InfoBox.
+   */
+  static void Update(InfoBox &info_box, unsigned type, bool needupdate);
+
   static void DisplayInfoBox(void);
   static void InfoBoxDrawIfDirty();
   static void DestroyInfoBoxFormatters();

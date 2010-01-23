@@ -479,6 +479,311 @@ InfoBoxManager::Event_Change(int i)
 }
 
 void
+InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
+{
+  TCHAR sTmp[32];
+  int color = 0;
+
+  //
+  // Set Infobox title and middle value. Bottom line comes next
+  //
+  switch (type) {
+  case 67: // VENTA3 alternate1 and 2
+  case 68:
+  case 69:
+    if (type == 67)
+      ActiveAlternate = SettingsComputer().Alternate1;
+    else if (type == 68)
+      ActiveAlternate = SettingsComputer().Alternate2;
+#ifdef OLD_TASK
+    else
+      ActiveAlternate = Calculated().BestAlternate;
+#endif
+
+    info_box.SetSmallerFont(false);
+
+    if (ActiveAlternate != -1) {
+      info_box.SetTitle(Data_Options[type].Formatter->RenderTitle(&color));
+      info_box.SetColor(color);
+      info_box.SetValue(Data_Options[type].Formatter->Render(&color));
+      info_box.SetColor(color);
+    } else {
+      if (type == 67)
+        info_box.SetTitle(TEXT("Altern1"));
+      else if (type == 68)
+        info_box.SetTitle(TEXT("Altern2"));
+      else
+        info_box.SetTitle(TEXT("BestAltr"));
+
+      info_box.SetValue(TEXT("---"));
+      info_box.SetColor(-1);
+    }
+
+    if (needupdate)
+      info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
+
+    break;
+
+  case 55:
+    info_box.SetSmallerFont(true);
+
+    if (needupdate)
+      info_box.SetTitle(Data_Options[type].Title);
+
+    info_box.SetValue(Data_Options[type].Formatter->Render(&color));
+
+    // to be optimized!
+    if (needupdate)
+      info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
+
+    info_box.SetColor(color);
+
+    break;
+
+  case 14: // Next waypoint
+    info_box.SetSmallerFont(false);
+
+    if (Calculated().task_stats.task_valid) {
+      info_box.SetTitle(
+                              Data_Options[type].Formatter-> Render(&color));
+      info_box.SetColor(color);
+      info_box.SetValue(Data_Options[47].Formatter->Render(&color));
+    } else {
+      info_box.SetTitle(TEXT("Next"));
+      info_box.SetValue(TEXT("---"));
+      info_box.SetColor(-1);
+    }
+
+    if (needupdate)
+      info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
+    break;
+
+  default:
+    info_box.SetSmallerFont(false);
+
+    if (needupdate)
+      info_box.SetTitle(Data_Options[type].Title);
+
+    info_box.SetValue(Data_Options[type].Formatter->Render(&color));
+
+    // to be optimized!
+    if (needupdate)
+      info_box.SetValueUnit(Units::GetUserUnitByGroup(Data_Options[type].UnitGroup));
+
+    info_box.SetColor(color);
+  }
+
+  //
+  // Infobox bottom line
+  //
+  switch (type) {
+  case 14: // Next waypoint
+#ifdef OLD_TASK
+    if (theactive != -1) {
+      int index = task.getWaypointIndex();
+      if ((index >= 0) && way_points.verify_index(index))
+        info_box.SetComment(way_points.get(index).Comment);
+    }
+#endif
+    info_box.SetComment(TEXT(""));
+    break;
+
+  case 10:
+    if (SettingsComputer().auto_mc)
+      info_box.SetComment(TEXT("AUTO"));
+    else
+      info_box.SetComment(TEXT("MANUAL"));
+    break;
+
+  case 0: // GPS Alt
+    Units::FormatAlternateUserAltitude(Basic().GPSAltitude, sTmp, sizeof(sTmp)
+                                       / sizeof(sTmp[0]));
+    info_box.SetComment(sTmp);
+    break;
+
+  case 1: // AGL
+    Units::FormatAlternateUserAltitude(Basic().AltitudeAGL, sTmp,
+                                       sizeof(sTmp) / sizeof(sTmp[0]));
+    info_box.SetComment(sTmp);
+    break;
+
+  case 33:
+    Units::FormatAlternateUserAltitude(Basic().BaroAltitude, sTmp,
+                                       sizeof(sTmp) / sizeof(sTmp[0]));
+    info_box.SetComment(sTmp);
+    break;
+
+  case 27: // AAT time to go
+  case 36: // flight time
+  case 39: // current time
+  case 40: // gps time
+  case 41: // task time to go
+  case 42: // task time to go
+  case 45: // ete
+  case 46: // leg ete
+  case 62: // ete
+    if (Data_Options[type].Formatter->isValid()) {
+      info_box.SetComment(Data_Options[type].Formatter->GetCommentText());
+    } else {
+      info_box.SetComment(TEXT(""));
+    }
+    break;
+
+  case 43:
+    if (SettingsComputer().EnableBlockSTF) {
+      info_box.SetComment(TEXT("BLOCK"));
+    } else {
+      info_box.SetComment(TEXT("DOLPHIN"));
+    }
+    break;
+
+  case 55: // own team code
+    info_box.SetComment(Calculated().TeammateCode);
+
+    if (SettingsComputer().TeamFlarmTracking) {
+      if (IsFlarmTargetCNInRange(Basic().flarm,
+                                 SettingsComputer().TeamFlarmIdTarget)) {
+        info_box.SetColorBottom(2);
+      } else {
+        info_box.SetColorBottom(1);
+      }
+    } else {
+      info_box.SetColorBottom(0);
+    }
+    break;
+
+  case 56: // team bearing
+    if (SettingsComputer().TeamFlarmIdTarget != 0) {
+      if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
+        info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
+      } else {
+        info_box.SetComment(TEXT("???"));
+      }
+    } else {
+      info_box.SetComment(TEXT("---"));
+    }
+
+    if (IsFlarmTargetCNInRange(Basic().flarm,
+                               SettingsComputer().TeamFlarmIdTarget)) {
+      info_box.SetColorBottom(2);
+    } else {
+      info_box.SetColorBottom(1);
+    }
+    break;
+
+  case 57: // team bearing dif
+    if (SettingsComputer().TeamFlarmIdTarget != 0) {
+      if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
+        info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
+      } else {
+        info_box.SetComment(TEXT("???"));
+      }
+    } else {
+      info_box.SetComment(TEXT("---"));
+    }
+
+    if (IsFlarmTargetCNInRange(Basic().flarm,
+                               SettingsComputer().TeamFlarmIdTarget)) {
+      info_box.SetColorBottom(2);
+    } else {
+      info_box.SetColorBottom(1);
+    }
+    break;
+
+  case 58: // team range
+    if (SettingsComputer().TeamFlarmIdTarget != 0) {
+      if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
+        info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
+      } else {
+        info_box.SetComment(TEXT("???"));
+      }
+    } else {
+      info_box.SetComment(TEXT("---"));
+    }
+
+    if (IsFlarmTargetCNInRange(Basic().flarm,
+                               SettingsComputer().TeamFlarmIdTarget)) {
+      info_box.SetColorBottom(2);
+    } else {
+      info_box.SetColorBottom(1);
+    }
+    break;
+
+    // VENTA3 wind speed + bearing bottom line
+  case 25:
+    _stprintf(sTmp, _T("%1.0d%s"), (int)Basic().WindDirection, _T(DEG));
+    info_box.SetComment(sTmp);
+    break;
+
+    // VENTA3 radial
+  case 60:
+    _stprintf(sTmp, _T("%d%s"),
+              (int)Calculated().common_stats.vector_home.Bearing, _T(DEG));
+    info_box.SetComment(sTmp);
+    break;
+
+    // VENTA3 battery temperature under voltage. There is a good
+    // reason to see the temperature, if available: many PNA/PDA
+    // will switch OFF during flight under direct sunlight for
+    // several hours due to battery temperature too high!! The 314
+    // does!
+
+    // TODO: check temperature too high and set a warning flag to
+    // be used by an event or something
+#if !defined(GNAV) && !defined(WINDOWSPC) && !defined(HAVE_POSIX)
+  case 65:
+    if (PDABatteryTemperature > 0) {
+      _stprintf(sTmp, _T("%1.0d%SC"), (int)PDABatteryTemperature, _T(DEG));
+      info_box.SetComment(sTmp);
+    } else
+      info_box.SetComment(TEXT(""));
+    break;
+#endif
+
+    // VENTA3 alternates
+  case 67:
+  case 68:
+  case 69:
+    if (ActiveAlternate == -1) {
+      // should be redundant
+      info_box.SetComment(TEXT(""));
+      break;
+    }
+#ifdef OLD_TASK
+    if (FlipBoxValue == true) {
+      Units::FormatUserDistance(way_points.get_calc(ActiveAlternate).Distance,
+                                sTmp, sizeof(sTmp) / sizeof(sTmp[0]));
+      info_box.SetComment(sTmp);
+    } else {
+      Units::FormatUserArrival(way_points.get_calc(ActiveAlternate).AltArrival,
+                               sTmp, sizeof(sTmp) / sizeof(sTmp[0]));
+      info_box.SetComment(sTmp);
+    }
+#endif
+    break;
+
+  case 70: // QFE
+    /*
+    // Showing the diff value offset was just interesting ;-)
+    if (FlipBoxValue == true) {
+      //Units::FormatUserArrival(QFEAltitudeOffset,
+      Units::FormatUserAltitude(QFEAltitudeOffset,
+                                sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+                                info_box.SetComment(sTmp);
+    } else {
+    */
+
+    Units::FormatUserAltitude(Basic().GPSAltitude,
+                              sTmp, sizeof(sTmp) / sizeof(sTmp[0]));
+    info_box.SetComment(sTmp);
+    break;
+
+  default:
+    info_box.SetComment(TEXT(""));
+  }
+}
+
+void
 InfoBoxManager::DisplayInfoBox(void)
 {
   if (InfoBoxesHidden)
@@ -505,316 +810,9 @@ InfoBoxManager::DisplayInfoBox(void)
     DisplayType[i] = getType(i);
     Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
 
-    TCHAR sTmp[32];
-
-    int color = 0;
-
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i]) || first);
 
-    //
-    // Set Infobox title and middle value. Bottom line comes next
-    //
-    switch (DisplayType[i]) {
-
-    case 67: // VENTA3 alternate1 and 2
-    case 68:
-    case 69:
-      if (DisplayType[i] == 67)
-        ActiveAlternate = SettingsComputer().Alternate1;
-      else if (DisplayType[i] == 68)
-        ActiveAlternate = SettingsComputer().Alternate2;
-#ifdef OLD_TASK
-      else
-        ActiveAlternate = Calculated().BestAlternate;
-#endif
-
-      InfoBoxes[i]->SetSmallerFont(false);
-
-      if (ActiveAlternate != -1) {
-        InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Formatter-> RenderTitle(&color));
-        InfoBoxes[i]->SetColor(color);
-        InfoBoxes[i]->SetValue(Data_Options[DisplayType[i]].Formatter-> Render(&color));
-        InfoBoxes[i]->SetColor(color);
-      } else {
-        if (DisplayType[i] == 67)
-          InfoBoxes[i]->SetTitle(TEXT("Altern1"));
-        else if (DisplayType[i] == 68)
-          InfoBoxes[i]->SetTitle(TEXT("Altern2"));
-        else
-          InfoBoxes[i]->SetTitle(TEXT("BestAltr"));
-
-        InfoBoxes[i]->SetValue(TEXT("---"));
-        InfoBoxes[i]->SetColor(-1);
-      }
-
-      if (needupdate)
-        InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
-            Data_Options[DisplayType[i]].UnitGroup));
-
-      break;
-
-    case 55:
-      InfoBoxes[i]->SetSmallerFont(true);
-
-      if (needupdate)
-        InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
-
-      InfoBoxes[i]-> SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
-
-      // to be optimized!
-      if (needupdate)
-        InfoBoxes[i]-> SetValueUnit(Units::GetUserUnitByGroup(
-            Data_Options[DisplayType[i]].UnitGroup));
-
-      InfoBoxes[i]->SetColor(color);
-
-      break;
-
-    case 14: // Next waypoint
-      InfoBoxes[i]->SetSmallerFont(false);
-
-      if (Calculated().task_stats.task_valid) {
-        InfoBoxes[i]-> SetTitle(
-            Data_Options[DisplayType[i]].Formatter-> Render(&color));
-        InfoBoxes[i]->SetColor(color);
-        InfoBoxes[i]-> SetValue(Data_Options[47].Formatter->Render(&color));
-      } else {
-        InfoBoxes[i]->SetTitle(TEXT("Next"));
-        InfoBoxes[i]->SetValue(TEXT("---"));
-        InfoBoxes[i]->SetColor(-1);
-      }
-
-      if (needupdate)
-        InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
-            Data_Options[DisplayType[i]].UnitGroup));
-      break;
-
-    default:
-      InfoBoxes[i]->SetSmallerFont(false);
-
-      if (needupdate)
-        InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
-
-      InfoBoxes[i]-> SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
-
-      // to be optimized!
-      if (needupdate)
-        InfoBoxes[i]-> SetValueUnit(Units::GetUserUnitByGroup(
-            Data_Options[DisplayType[i]].UnitGroup));
-
-      InfoBoxes[i]->SetColor(color);
-    }
-
-    //
-    // Infobox bottom line
-    //
-    switch (DisplayType[i]) {
-    case 14: // Next waypoint
-#ifdef OLD_TASK
-      if (theactive != -1) {
-        int index = task.getWaypointIndex();
-        if ((index >= 0) && way_points.verify_index(index))
-          InfoBoxes[i]-> SetComment(way_points.get(index).Comment);
-      }
-#endif
-      InfoBoxes[i]->SetComment(TEXT(""));
-      break;
-
-    case 10:
-      if (SettingsComputer().auto_mc)
-        InfoBoxes[i]->SetComment(TEXT("AUTO"));
-      else
-        InfoBoxes[i]->SetComment(TEXT("MANUAL"));
-      break;
-
-    case 0: // GPS Alt
-      Units::FormatAlternateUserAltitude(Basic().GPSAltitude, sTmp, sizeof(sTmp)
-          / sizeof(sTmp[0]));
-      InfoBoxes[i]->SetComment(sTmp);
-      break;
-
-    case 1: // AGL
-      Units::FormatAlternateUserAltitude(Basic().AltitudeAGL, sTmp,
-          sizeof(sTmp) / sizeof(sTmp[0]));
-      InfoBoxes[i]->SetComment(sTmp);
-      break;
-
-    case 33:
-      Units::FormatAlternateUserAltitude(Basic().BaroAltitude, sTmp,
-          sizeof(sTmp) / sizeof(sTmp[0]));
-      InfoBoxes[i]->SetComment(sTmp);
-      break;
-
-    case 27: // AAT time to go
-    case 36: // flight time
-    case 39: // current time
-    case 40: // gps time
-    case 41: // task time to go
-    case 42: // task time to go
-    case 45: // ete
-    case 46: // leg ete
-    case 62: // ete
-      if (Data_Options[DisplayType[i]].Formatter->isValid()) {
-        InfoBoxes[i]-> SetComment(
-            Data_Options[DisplayType[i]].Formatter->GetCommentText());
-      } else {
-        InfoBoxes[i]-> SetComment(TEXT(""));
-      }
-      break;
-
-    case 43:
-      if (SettingsComputer().EnableBlockSTF) {
-        InfoBoxes[i]->SetComment(TEXT("BLOCK"));
-      } else {
-        InfoBoxes[i]->SetComment(TEXT("DOLPHIN"));
-      }
-      break;
-
-    case 55: // own team code
-      InfoBoxes[i]->SetComment(Calculated().TeammateCode);
-
-      if (SettingsComputer().TeamFlarmTracking) {
-        if (IsFlarmTargetCNInRange(Basic().flarm,
-            SettingsComputer().TeamFlarmIdTarget)) {
-          InfoBoxes[i]->SetColorBottom(2);
-        } else {
-          InfoBoxes[i]->SetColorBottom(1);
-        }
-      } else {
-        InfoBoxes[i]->SetColorBottom(0);
-      }
-      break;
-
-    case 56: // team bearing
-      if (SettingsComputer().TeamFlarmIdTarget != 0) {
-        if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
-          InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
-        } else {
-          InfoBoxes[i]->SetComment(TEXT("???"));
-        }
-      } else {
-        InfoBoxes[i]->SetComment(TEXT("---"));
-      }
-
-      if (IsFlarmTargetCNInRange(Basic().flarm,
-                                 SettingsComputer().TeamFlarmIdTarget)) {
-        InfoBoxes[i]->SetColorBottom(2);
-      } else {
-        InfoBoxes[i]->SetColorBottom(1);
-      }
-      break;
-
-    case 57: // team bearing dif
-      if (SettingsComputer().TeamFlarmIdTarget != 0) {
-        if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
-          InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
-        } else {
-          InfoBoxes[i]->SetComment(TEXT("???"));
-        }
-      } else {
-        InfoBoxes[i]->SetComment(TEXT("---"));
-      }
-
-      if (IsFlarmTargetCNInRange(Basic().flarm,
-                                 SettingsComputer().TeamFlarmIdTarget)) {
-        InfoBoxes[i]->SetColorBottom(2);
-      } else {
-        InfoBoxes[i]->SetColorBottom(1);
-      }
-      break;
-
-    case 58: // team range
-      if (SettingsComputer().TeamFlarmIdTarget != 0) {
-        if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
-          InfoBoxes[i]->SetComment(SettingsComputer().TeamFlarmCNTarget);
-        } else {
-          InfoBoxes[i]->SetComment(TEXT("???"));
-        }
-      } else {
-        InfoBoxes[i]->SetComment(TEXT("---"));
-      }
-
-      if (IsFlarmTargetCNInRange(Basic().flarm,
-                                 SettingsComputer().TeamFlarmIdTarget)) {
-        InfoBoxes[i]->SetColorBottom(2);
-      } else {
-        InfoBoxes[i]->SetColorBottom(1);
-      }
-      break;
-
-    // VENTA3 wind speed + bearing bottom line
-    case 25:
-      _stprintf(sTmp, _T("%1.0d%s"), (int)Basic().WindDirection, _T(DEG));
-      InfoBoxes[i]->SetComment(sTmp);
-      break;
-
-    // VENTA3 radial
-    case 60:
-      _stprintf(sTmp, _T("%d%s"), (int)Calculated().common_stats.vector_home.Bearing, _T(DEG));
-      InfoBoxes[i]->SetComment(sTmp);
-      break;
-
-    // VENTA3 battery temperature under voltage. There is a good
-    // reason to see the temperature, if available: many PNA/PDA
-    // will switch OFF during flight under direct sunlight for
-    // several hours due to battery temperature too high!! The 314
-    // does!
-
-    // TODO: check temperature too high and set a warning flag to
-    // be used by an event or something
-    #if !defined(GNAV) && !defined(WINDOWSPC) && !defined(HAVE_POSIX)
-    case 65:
-      if (PDABatteryTemperature > 0) {
-        _stprintf(sTmp, _T("%1.0d%SC"), (int)PDABatteryTemperature, _T(DEG));
-        InfoBoxes[i]->SetComment(sTmp);
-      } else
-        InfoBoxes[i]->SetComment(TEXT(""));
-      break;
-    #endif
-
-      // VENTA3 alternates
-    case 67:
-    case 68:
-    case 69:
-      if (ActiveAlternate == -1) {
-        // should be redundant
-        InfoBoxes[i]->SetComment(TEXT(""));
-        break;
-      }
-#ifdef OLD_TASK
-      if (FlipBoxValue == true) {
-        Units::FormatUserDistance(
-            way_points.get_calc(ActiveAlternate).Distance, sTmp, sizeof(sTmp)
-                / sizeof(sTmp[0]));
-        InfoBoxes[i]->SetComment(sTmp);
-      } else {
-        Units::FormatUserArrival(
-            way_points.get_calc(ActiveAlternate).AltArrival, sTmp, sizeof(sTmp)
-                / sizeof(sTmp[0]));
-        InfoBoxes[i]->SetComment(sTmp);
-      }
-#endif
-      break;
-
-    case 70: // QFE
-      /*
-       // Showing the diff value offset was just interesting ;-)
-       if (FlipBoxValue == true) {
-       //Units::FormatUserArrival(QFEAltitudeOffset,
-       Units::FormatUserAltitude(QFEAltitudeOffset,
-       sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-       InfoBoxes[i]->SetComment(sTmp);
-       } else {
-       */
-
-      Units::FormatUserAltitude(Basic().GPSAltitude, sTmp, sizeof(sTmp)
-          / sizeof(sTmp[0]));
-      InfoBoxes[i]->SetComment(sTmp);
-      break;
-
-    default:
-      InfoBoxes[i]->SetComment(TEXT(""));
-    }
+    Update(*InfoBoxes[i], DisplayType[i], needupdate);
 
     DisplayTypeLast[i] = DisplayType[i];
   }
