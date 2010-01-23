@@ -59,12 +59,6 @@ Copyright_License {
   #define DISABLEAUDIO
 #endif
 
-#ifdef __GNUC__
-  #ifndef WINDOWSPC
-    #define NEWFLARMDB
-  #endif
-#endif
-
 #ifdef WIN32_PLATFORM_PSPC /* Pocket PC */
   #if _WIN32_WCE == 300 /* Pocket PC 2000 (unsupported?) */
     #define OLDPPC

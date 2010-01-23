@@ -41,11 +41,9 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "Sizes.h"
-
-#ifdef NEWFLARMDB
 #include "FlarmIdFile.h"
+
 FlarmIdFile file;
-#endif
 
 int NumberOfFLARMNames = 0;
 
@@ -191,14 +189,12 @@ const TCHAR* LookupFLARMDetails(long id) {
       return FLARM_Names[index].Name;
     }
 
-#ifdef NEWFLARMDB
   // try to find flarm from FLARMNet.org File
   FlarmId* flarmId = file.GetFlarmIdItem(id);
   if (flarmId != NULL)
     {
       return flarmId->cn;
     }
-#endif
 
   return NULL;
 }
@@ -218,14 +214,12 @@ int LookupFLARMDetails(const TCHAR *cn)
       return FLARM_Names[index].ID;
     }
 
-#ifdef NEWFLARMDB
   // try to find flarm from FLARMNet.org File
   FlarmId* flarmId = file.GetFlarmIdItem(cn);
   if (flarmId != NULL)
     {
       return flarmId->GetId();
     }
-#endif
 
   return 0;
 }

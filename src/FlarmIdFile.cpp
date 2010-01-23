@@ -37,8 +37,6 @@ Copyright_License {
 */
 
 #include "FlarmIdFile.h"
-
-#ifdef NEWFLARMDB
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 
@@ -217,6 +215,3 @@ long FlarmId::GetId()
 
   return res;
 };
-
-
-#endif
