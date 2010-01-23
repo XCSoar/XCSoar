@@ -280,9 +280,6 @@ else
     TARGET_ARCH := -mwindows -march=i586 -mms-bitfields
   else
     TARGET_ARCH := -mwin32 $(MCPU)
-    ifeq ($(TARGET),PNA)
-      TARGET_ARCH := -mwin32
-    endif
   endif
   ifeq ($(TARGET),CYGWIN)
     TARGET_ARCH :=
