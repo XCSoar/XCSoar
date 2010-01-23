@@ -187,8 +187,6 @@ GlideComputer::ProcessIdle()
   // (snail trail, stats, olc, ...)
   DoLogging();
 
-  CalculateWaypointReachable();
-
   GlideComputerAirData::ProcessIdle();
   GlideComputerTask::ProcessIdle();
   SetCalculated().time_process_idle = clock.elapsed();
