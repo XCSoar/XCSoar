@@ -71,9 +71,6 @@ protected:
 			 const bool do_announce);
   virtual void AnnounceWayPointSwitch(bool do_advance)= 0;
   void InSector();
-
-  // stuff for display
-  void CalculateWaypointReachable(void);
 private:
   void DistanceToNext();
   void AltitudeRequired(const double mc_setting,
