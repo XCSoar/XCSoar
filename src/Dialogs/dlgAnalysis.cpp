@@ -97,16 +97,22 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 
   const FlightStatistics &fs = glide_computer.GetFlightStats();
 
+  terrain.Lock();
+  const TracePointVector trace = task_manager.get_trace_points();
+  const TracePointVector olc = task_manager.get_olc_points();
+  const GlidePolar glide_polar = task_manager.get_glide_polar();
+  terrain.Unlock();
+
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
     SetCalcCaption(_T("Settings"));
+    terrain.Lock();
     fs.RenderBarograph(canvas, rcgfx, XCSoarInterface::Basic(), task_manager);
+    terrain.Unlock();
     break;
   case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(_T("Task calc"));
-    terrain.Lock();
-    fs.RenderClimb(canvas, rcgfx, task_manager.get_glide_polar());
-    terrain.Unlock();
+    fs.RenderClimb(canvas, rcgfx, glide_polar);
     break;
   case ANALYSIS_PAGE_WIND:
     SetCalcCaption(_T("Set wind"));
@@ -115,11 +121,9 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_POLAR:
     SetCalcCaption(_T("Settings"));
-    terrain.Lock();
     fs.RenderGlidePolar(canvas, rcgfx, XCSoarInterface::Calculated(),
                         XCSoarInterface::SettingsComputer(),
-                        task_manager.get_glide_polar());
-    terrain.Unlock();
+                        glide_polar);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     SetCalcCaption(_T("Settings"));
@@ -127,21 +131,17 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(_T("Task calc"));
-    terrain.Lock();
     fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
                   XCSoarInterface::SettingsMap(),
-                  task_manager.get_trace_points());
-    terrain.Unlock();
+                  trace);
     break;
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(_T("Optimise"));
-    terrain.Lock();
     fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
                  XCSoarInterface::SettingsComputer(),
                  XCSoarInterface::SettingsMap(),
-                 task_manager.get_olc_points(), task_manager.get_trace_points());
-    terrain.Unlock();
+                 olc, trace);
     break;
   case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(_T("Warnings"));
@@ -152,7 +152,9 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     SetCalcCaption(_T("Task calc"));
+    terrain.Lock();
     fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(), task_manager);
+    terrain.Unlock();
     break;
   default:
     // should never get here!

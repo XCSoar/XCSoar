@@ -77,6 +77,89 @@ void FlightStatistics::Reset() {
 }
 
 #include "Screen/Chart.hpp"
+#include "Task/Visitors/TaskVisitor.hpp"
+#include "Task/Visitors/TaskPointVisitor.hpp"
+
+class ChartLegHelper:
+  public TaskPointVisitor
+{
+public:
+  ChartLegHelper(Chart& chart, const double start_time):
+    m_chart(chart),
+    m_start_time(start_time)
+    {
+    };
+
+  void Visit(const UnorderedTaskPoint& tp) {};
+
+  void Visit(const StartPoint& tp) {
+    if (tp.has_exited())
+      draw(tp);
+  };
+  void Visit(const FinishPoint& tp) {
+    if (tp.has_entered())
+      draw(tp);
+  };
+  void Visit(const AATPoint& tp) {
+    if (tp.has_entered())
+      draw(tp);
+  };
+  void Visit(const ASTPoint& tp) {
+    if (tp.has_entered())
+      draw(tp);
+  };
+private:
+  void draw(const OrderedTaskPoint& tp) {
+    double x = (tp.get_state_entered().Time - m_start_time) / 3600.0;
+    if (x>=0) {
+      m_chart.DrawLine(x, m_chart.getYmin(),
+                       x, m_chart.getYmax(),
+                       Chart::STYLE_REDTHICK);
+    }
+  }
+  Chart& m_chart;
+  const double m_start_time;
+};
+
+
+class ChartTaskHelper:
+  public TaskVisitor
+{
+public:
+  ChartTaskHelper(Chart& chart, const double start_time):
+    m_leg_visitor(chart, start_time)
+    {
+    };
+
+  void Visit(const AbortTask& task) {
+  };
+  void Visit(const OrderedTask& task) {
+    task.Accept(*this);
+  };
+  void Visit(const GotoTask& task) {
+  };
+private:
+  ChartLegHelper m_leg_visitor;
+};
+
+
+static void DrawLegs(Chart& chart,
+                     const TaskManager& task,
+                     const NMEA_INFO& basic,
+                     const bool task_relative)
+{
+  if (task.get_common_stats().task_started) {
+
+    const double start_time = task_relative? 
+      (basic.Time-task.get_common_stats().task_time_elapsed): 
+      (basic.TakeOffTime);
+
+    ChartTaskHelper visitor(chart, start_time);
+
+    task.ordered_Accept(visitor);
+  }
+}
+
 
 void
 FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
@@ -96,18 +179,7 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
   chart.ScaleXFromValue(Altitude.x_min + 1.0); // in case no data
   chart.ScaleXFromValue(Altitude.x_min);
 
-#ifdef OLD_TASK
-  for(int j=1; task.ValidTaskPoint(j);j++) {
-    if (LegStartTime[j]>=0) {
-      double xx = (LegStartTime[j] - derived.TakeOffTime) / 3600.0;
-      if (xx>=0) {
-        chart.DrawLine(xx, chart.getYmin(),
-            xx, chart.getYmax(),
-            Chart::STYLE_REDTHICK);
-      }
-    }
-  }
-#endif
+  DrawLegs(chart, task, nmea_info, false);
 
   Pen hpHorizonGround(Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR);
   Brush hbHorizonGround(Chart::GROUND_COLOUR);
@@ -149,18 +221,7 @@ FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
   chart.ScaleXFromValue(Task_Speed.x_min+1.0); // in case no data
   chart.ScaleXFromValue(Task_Speed.x_min);
 
-#ifdef OLD_TASK
-  for(int j=1;task.ValidTaskPoint(j);j++) {
-    if (LegStartTime[j]>=0) {
-      double xx = (LegStartTime[j] - derived.TaskStartTime) / 3600.0;
-      if (xx>=0) {
-        chart.DrawLine(xx, chart.getYmin(),
-            xx, chart.getYmax(),
-            Chart::STYLE_REDTHICK);
-      }
-    }
-  }
-#endif
+  DrawLegs(chart, task, nmea_info, true);
 
   chart.DrawXGrid(0.5, Task_Speed.x_min,
       Chart::STYLE_THINDASHPAPER, 0.5, true);

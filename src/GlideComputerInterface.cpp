@@ -51,9 +51,8 @@ GlideComputerTaskEvents::transition_enter(const TaskPoint &tp)
 void 
 GlideComputerTaskEvents::request_arm(const TaskPoint &tp) 
 {
-
+  InputEvents::processGlideComputer(GCE_ARM_READY);
 }
-
 
 void 
 GlideComputerTaskEvents::active_advanced(const TaskPoint &tp, const int i)
@@ -71,6 +70,7 @@ void
 GlideComputerTaskEvents::task_finish()
 {
   InputEvents::processGlideComputer(GCE_TASK_FINISH);
+  // @todo SaveFinish();
 }
 
 
