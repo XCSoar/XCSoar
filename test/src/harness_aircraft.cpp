@@ -45,6 +45,11 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   state.WindSpeed = 0.0;
   state.WindDirection = 0;
   state.Speed = 16.0;
+
+  // start with aircraft moving since this isn't a real replay (no time on ground)
+  for (unsigned i=0; i<10; i++) {
+    state.flying_state_moving(state.Time);
+  }
   
   bearing = 0;
   awp= 0;
