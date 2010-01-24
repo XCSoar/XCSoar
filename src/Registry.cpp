@@ -384,10 +384,8 @@ bool GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
   DWORD defaultVal;
 
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_ALL_ACCESS, &hKey);
-  if (hRes != ERROR_SUCCESS) {
-    RegCloseKey(hKey);
+  if (hRes != ERROR_SUCCESS)
     return hRes;
-  }
 
   defaultVal = pPos;
   dwSize = sizeof(DWORD);
@@ -522,10 +520,8 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 
   pPos[0]= '\0';
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_READ /*KEY_ALL_ACCESS*/, &hKey);
-  if (hRes != ERROR_SUCCESS) {
-    RegCloseKey(hKey);
+  if (hRes != ERROR_SUCCESS)
     return hRes;
-  }
 
   dwSize *= sizeof(pPos[0]);
 
