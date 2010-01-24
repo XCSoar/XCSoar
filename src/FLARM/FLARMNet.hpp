@@ -77,8 +77,8 @@ private:
 public:
   FlarmIdFile(void);
   ~FlarmIdFile(void);
-  FlarmId* GetFlarmIdItem(long id);
-  FlarmId* GetFlarmIdItem(const TCHAR *cn);
+  FlarmId *GetFlarmIdItem(long id);
+  FlarmId *GetFlarmIdItem(const TCHAR *cn);
 };
 
 #endif
