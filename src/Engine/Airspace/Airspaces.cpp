@@ -272,6 +272,7 @@ Airspaces::set_ground_levels(const RasterTerrain &terrain)
     GEOPOINT g = task_projection.unproject(c_flat);
 
     /*
+      @todo unfinished
     fixed h = terrain.lookup(g);
     v->set_ground_level(h);
     */
