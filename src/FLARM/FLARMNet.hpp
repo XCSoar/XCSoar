@@ -62,16 +62,12 @@ public:
   long GetId();
 };
 
-typedef FlarmId* FlarmIdptr;
-typedef std::map< long, FlarmIdptr > FlarmIdMap;
-
 /**
  * Handles the FLARMnet.org file
  */
-class FlarmIdFile
+class FlarmIdFile : protected std::map<long, FlarmId*>
 {
 private:
-  FlarmIdMap flarmIds;
   void GetAsString(HANDLE hFile, int charCount, TCHAR *res);
   void GetItem(HANDLE hFile, FlarmId *flarmId);
 public:

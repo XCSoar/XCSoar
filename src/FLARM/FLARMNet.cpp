@@ -43,7 +43,7 @@ Copyright_License {
 /**
  * Constructor of the FlarmIdFile class
  *
- * Reads the FLARMnet.org file and fills the flarmIds map
+ * Reads the FLARMnet.org file and fills the map
  */
 FlarmIdFile::FlarmIdFile(void)
 {
@@ -84,7 +84,7 @@ FlarmIdFile::FlarmIdFile(void)
 
     GetItem(hFile, flarmId);
 
-    flarmIds[flarmId->GetId()] = flarmId;
+    insert(value_type(flarmId->GetId(), flarmId));
 
     itemCount++;
   };
@@ -175,9 +175,9 @@ FlarmIdFile::GetAsString(HANDLE hFile, int charCount, TCHAR *res)
 FlarmId *
 FlarmIdFile::GetFlarmIdItem(long id)
 {
-  FlarmIdMap::iterator iterFind = flarmIds.find(id);
-  if (iterFind != flarmIds.end())
-    return flarmIds[id];
+  iterator i = find(id);
+  if (i != end())
+    return i->second;
 
   return NULL;
 }
@@ -191,8 +191,8 @@ FlarmId *
 FlarmIdFile::GetFlarmIdItem(const TCHAR *cn)
 {
   FlarmId *itemTemp = NULL;
-  FlarmIdMap::iterator iterFind = flarmIds.begin();
-  while (iterFind != flarmIds.end()) {
+  iterator iterFind = begin();
+  while (iterFind != end()) {
     itemTemp = (FlarmId*)(iterFind->second);
     if(wcscmp(itemTemp->cn, cn) == 0)
       return itemTemp;
