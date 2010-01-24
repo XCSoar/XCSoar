@@ -39,7 +39,11 @@ Copyright_License {
 #include "Version.hpp"
 #include "Language.hpp"
 
-#define VERSION "6.0~git"
+#ifndef GIT_COMMIT_ID
+#define GIT_COMMIT_ID
+#endif
+
+#define VERSION "6.0~git" GIT_COMMIT_ID
 
 #ifdef GNAV
   #define TARGET "Altair"
