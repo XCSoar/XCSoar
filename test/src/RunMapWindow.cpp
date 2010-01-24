@@ -378,7 +378,12 @@ int main(int argc, char **argv)
 #else
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-        LPTSTR lpCmdLine, int nCmdShow)
+#ifdef _WIN32_WCE
+        LPWSTR lpCmdLine,
+#else
+        LPSTR lpCmdLine2,
+#endif
+        int nCmdShow)
 #endif
 {
   LoadFiles();
