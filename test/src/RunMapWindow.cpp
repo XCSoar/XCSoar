@@ -148,8 +148,6 @@ bool XCSoarInterface::SetProgressStepSize(int nSize) {
   return false;
 }
 
-struct DeviceDescriptor DeviceList[NUMDEV];
-
 void InputEvents::ShowMenu() {}
 bool InputEvents::processKey(int key) {
   return false;
