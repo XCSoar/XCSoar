@@ -56,7 +56,7 @@ FLARMNetDatabase::FLARMNetDatabase(void)
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("data.fln"));
 
-  FILE* hFile = _wfopen(path, _T("rt"));
+  FILE* hFile = _tfopen(path, _T("rt"));
   if (hFile == NULL) {
     //StartupStore(_T("Could not open file '%s'\n"), path);
     return;
@@ -172,7 +172,7 @@ FLARMNetDatabase::Find(const TCHAR *cn) const
   const_iterator i = begin();
   while (i != end()) {
     const FLARMNetRecord *record = (const FLARMNetRecord *)(i->second);
-    if (wcscmp(record->cn, cn) == 0)
+    if (_tcscmp(record->cn, cn) == 0)
       return record;
 
     i++;
