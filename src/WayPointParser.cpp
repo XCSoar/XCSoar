@@ -330,17 +330,17 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
 
   ++input;
 
-  endptr = _tcschr(input, _T(','));
-  if (endptr != NULL) {
-    way_point.Name.assign(input, endptr - input);
+  const TCHAR *endptr2 = _tcschr(input, _T(','));
+  if (endptr2 != NULL) {
+    way_point.Name.assign(input, endptr2 - input);
 
-    input = endptr + 1;
-    endptr = _tcschr(input, '*');
-    if (endptr != NULL) {
-      way_point.Comment.assign(input, endptr - input);
+    input = endptr2 + 1;
+    endptr2 = _tcschr(input, '*');
+    if (endptr2 != NULL) {
+      way_point.Comment.assign(input, endptr2 - input);
 
       // if it is a home waypoint raise zoom level
-      way_point.Zoom = _tcstol(endptr + 1, NULL, 10);
+      way_point.Zoom = _tcstol(endptr2 + 1, NULL, 10);
     } else {
       way_point.Comment = input;
       way_point.Zoom = 0;
