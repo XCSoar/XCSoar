@@ -50,9 +50,6 @@ FlarmIdFile::FlarmIdFile(void)
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("data.fln"));
 
-  //hFile = CreateFile(flarmIdFileName, GENERIC_READ,
-  //	FILE_SHARE_READ, NULL, OPEN_EXISTING,
-  //	     FILE_ATTRIBUTE_NORMAL, 0);
   FILE* hFile = _wfopen(path, _T("rt"));
   if (hFile == NULL) {
     //StartupStore(_T("Could not open file '%s'\n"), path);
@@ -61,8 +58,6 @@ FlarmIdFile::FlarmIdFile(void)
 
   DWORD fileLength;
 
-  //GetFileSize(hFile, &fileLength);
-  //SetFilePointer(hFile, 7, NULL, FILE_BEGIN) ;
   fseek (hFile , 0 , SEEK_END);
   fileLength = ftell (hFile);
   fseek (hFile , 7 , SEEK_SET);
@@ -99,7 +94,6 @@ FlarmIdFile::GetItem(HANDLE hFile, FlarmId *flarmId)
   GetAsString(hFile, 7, flarmId->reg);
   GetAsString(hFile, 3, flarmId->cn);
   GetAsString(hFile, 7, flarmId->freq);
-  //SetFilePointer(hFile, 1, NULL, FILE_CURRENT) ;
 
   int i = 0;
   int maxSize = sizeof(flarmId->cn) / sizeof(TCHAR);
@@ -125,9 +119,7 @@ FlarmIdFile::GetAsString(HANDLE hFile, int charCount, TCHAR *res)
 {
   int bytesToRead = charCount * 2;
   char bytes[100];
-  //DWORD bytesRead;
 
-  //ReadFile(hFile, bytes, bytesToRead, &bytesRead, NULL);
   fread(bytes, 1, bytesToRead, (FILE*)hFile);
 
   TCHAR *curChar = res;
