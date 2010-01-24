@@ -233,7 +233,7 @@ devInit(const TCHAR *CommandLine)
   devInitOne(&DeviceList[0], 0, COMMPort[PortIndex1], dwSpeed[SpeedIndex1], pDevNmeaOut);
 
   if (PortIndex1 != PortIndex2)
-    devInitOne(&DeviceList[0], 1, COMMPort[PortIndex2], dwSpeed[SpeedIndex2], pDevNmeaOut);
+    devInitOne(&DeviceList[1], 1, COMMPort[PortIndex2], dwSpeed[SpeedIndex2], pDevNmeaOut);
 
   CommandLine = LOGGDEVCOMMANDLINE;
 
