@@ -284,9 +284,11 @@ public:
   AirspaceDetailsDialogVisitor(const SETTINGS_COMPUTER& _settings, 
                                const fixed& _altitude,
                                const AirspaceWarningCopy& warnings):
-    AirspaceVisitor(AirspaceMapVisible(_settings, _altitude, false, 
-                                       warnings)),
-    m_airspace(NULL) {};
+    visible(_settings, _altitude, false, warnings),
+    m_airspace(NULL)
+  {
+    m_predicate = &visible;
+  }
 
   void Visit(const AirspacePolygon& as) {
     visit_general(as);
@@ -308,6 +310,7 @@ public:
     return m_airspace != NULL;
   }
 private:
+  const AirspaceMapVisible visible;
   const AbstractAirspace *m_airspace;
 };
 
