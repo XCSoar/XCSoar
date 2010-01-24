@@ -118,7 +118,16 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
   if (Driver == NULL)
     return false;
 
-  const TCHAR *path = COMMPort[config.port_index];
+  const TCHAR *path = NULL;
+
+  switch (config.port_type) {
+  case DeviceConfig::SERIAL:
+    path = COMMPort[config.port_index];
+    break;
+  }
+
+  if (path == NULL)
+    return false;
 
   ComPort *Com = new ComPort(path, dwSpeed[config.speed_index],
                              device);

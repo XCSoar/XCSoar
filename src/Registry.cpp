@@ -592,11 +592,34 @@ MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
   return buffer;
 }
 
+static enum DeviceConfig::port_type
+StringToPortType(const TCHAR *value)
+{
+  if (_tcscmp(value, _T("serial")) == 0)
+    return DeviceConfig::SERIAL;
+
+  return DeviceConfig::SERIAL;
+}
+
+static enum DeviceConfig::port_type
+ReadPortType(unsigned n)
+{
+  TCHAR name[64], value[64];
+
+  MakeDeviceSettingName(name, CONF("Port"), n, _T("Type"));
+  if (!GetRegistryString(name, value, sizeof(value) / sizeof(value[0])))
+    return DeviceConfig::SERIAL;
+
+  return StringToPortType(value);
+}
+
 void
 ReadDeviceConfig(unsigned n, DeviceConfig &config)
 {
   TCHAR buffer[64];
   DWORD Temp=0;
+
+  config.port_type = ReadPortType(n);
 
   MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
   if (GetFromRegistryD(buffer, Temp) == ERROR_SUCCESS)
@@ -614,10 +637,36 @@ ReadDeviceConfig(unsigned n, DeviceConfig &config)
                     sizeof(config.driver_name) / sizeof(config.driver_name[0]));
 }
 
+static const TCHAR *
+PortTypeToString(enum DeviceConfig::port_type type)
+{
+  switch (type) {
+  case DeviceConfig::SERIAL:
+    return _T("serial");
+  }
+
+  return NULL;
+}
+
+static bool
+WritePortType(unsigned n, enum DeviceConfig::port_type type)
+{
+  const TCHAR *value = PortTypeToString(type);
+  if (value == NULL)
+    return false;
+
+  TCHAR name[64];
+
+  MakeDeviceSettingName(name, CONF("Port"), n, _T("Type"));
+  return SetRegistryString(name, value) == ERROR_SUCCESS;
+}
+
 void
 WriteDeviceConfig(unsigned n, const DeviceConfig &config)
 {
   TCHAR buffer[64];
+
+  WritePortType(n, config.port_type);
 
   MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
   SetToRegistry(buffer, config.port_index);

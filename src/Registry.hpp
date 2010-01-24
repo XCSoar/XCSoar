@@ -240,6 +240,15 @@ int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
 
 struct DeviceConfig {
+  enum port_type {
+    /**
+     * Serial port, i.e. COMx / RS-232.
+     */
+    SERIAL,
+  };
+
+  port_type port_type;
+
   unsigned port_index;
 
   unsigned speed_index;
