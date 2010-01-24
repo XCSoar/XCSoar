@@ -781,6 +781,8 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
   default:
     info_box.SetComment(TEXT(""));
   }
+
+  info_box.Paint();
 }
 
 void
@@ -908,8 +910,6 @@ void
 InfoBoxManager::Paint(void)
 {
   unsigned i;
-  for (i = 0; i < numInfoWindows; i++)
-    InfoBoxes[i]->Paint();
 
   if (!InfoBoxLayout::fullscreen) {
     full_window.hide();
