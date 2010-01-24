@@ -107,6 +107,36 @@ devHasBaroSource(void)
   return false;
 }
 
+/**
+ * Attempt to detect the GPS device.
+ *
+ * See http://msdn.microsoft.com/en-us/library/bb202042.aspx
+ */
+static bool
+detect_gps(TCHAR *path, size_t path_max_size)
+{
+#ifdef _WIN32_WCE
+  static const TCHAR *const gps_idm_key =
+    _T("System\\CurrentControlSet\\GPS Intermediate Driver\\Multiplexer");
+  static const TCHAR *const gps_idm_value = _T("DriverInterface");
+
+  HKEY hKey;
+  long result;
+
+  result = RegOpenKeyEx(HKEY_CURRENT_USER, gps_idm_key, 0, KEY_READ, &hKey);
+  if (result != ERROR_SUCCESS)
+    return false;
+
+  DWORD type, size = path_max_size;
+  result = RegQueryValueEx(hKey, gps_idm_value, 0, &type, (LPBYTE)path, &size);
+  RegCloseKey(hKey);
+
+  return result == ERROR_SUCCESS && type == REG_SZ;
+#else
+  return false;
+#endif
+}
+
 static bool
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
            DeviceDescriptor *&nmeaout)
@@ -119,10 +149,22 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
     return false;
 
   const TCHAR *path = NULL;
+  TCHAR buffer[MAX_PATH];
 
   switch (config.port_type) {
   case DeviceConfig::SERIAL:
     path = COMMPort[config.port_index];
+    break;
+
+  case DeviceConfig::AUTO:
+    if (!detect_gps(buffer, sizeof(buffer))) {
+      StartupStore(_T("no GPS detected\n"));
+      return false;
+    }
+
+    StartupStore(_T("GPS detected: %s\n"), buffer);
+
+    path = buffer;
     break;
   }
 

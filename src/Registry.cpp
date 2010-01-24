@@ -598,6 +598,9 @@ StringToPortType(const TCHAR *value)
   if (_tcscmp(value, _T("serial")) == 0)
     return DeviceConfig::SERIAL;
 
+  if (_tcscmp(value, _T("auto")) == 0)
+    return DeviceConfig::AUTO;
+
   return DeviceConfig::SERIAL;
 }
 
@@ -643,6 +646,9 @@ PortTypeToString(enum DeviceConfig::port_type type)
   switch (type) {
   case DeviceConfig::SERIAL:
     return _T("serial");
+
+  case DeviceConfig::AUTO:
+    return _T("auto");
   }
 
   return NULL;
