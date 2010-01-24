@@ -118,25 +118,21 @@ devInitOne(struct DeviceDescriptor *dev, const TCHAR *port,
     return false;
 
   const struct DeviceRegister *Driver = devGetDriver(driver_name);
+  if (Driver == NULL)
+    return false;
 
-  if (Driver) {
-    ComPort *Com = new ComPort(port, speed, *dev);
+  ComPort *Com = new ComPort(port, speed, *dev);
+  if (!Com->Open())
+    return false;
 
-    if (!Com->Open())
-      return false;
+  dev->Driver = Driver;
+  dev->Com = Com;
+  dev->Open();
 
-    dev->Driver = Driver;
+  dev->enable_baro = devIsBaroSource(dev) && !devHasBaroSource();
 
-    dev->Com = Com;
-
-    dev->Open();
-
-    dev->enable_baro = devIsBaroSource(dev) && !devHasBaroSource();
-
-    if (nmeaout == NULL && Driver->Flags & (1l << dfNmeaOut)) {
-      nmeaout = dev;
-    }
-  }
+  if (nmeaout == NULL && Driver->Flags & (1l << dfNmeaOut))
+    nmeaout = dev;
 
   return true;
 }
