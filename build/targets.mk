@@ -138,7 +138,6 @@ ifeq ($(TARGET),UNIX)
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
-  ENABLE_SDL := y
   HAVE_VASPRINTF := y
 endif
 
