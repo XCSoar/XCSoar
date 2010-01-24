@@ -105,6 +105,9 @@ static const struct {
   enum DeviceConfig::port_type type;
   const TCHAR *label;
 } port_types[] = {
+#ifdef _WIN32_WCE
+  { DeviceConfig::AUTO, _T("GPS Intermediate Driver") },
+#endif
   { DeviceConfig::SERIAL, NULL } /* sentinel */
 };
 
