@@ -33,6 +33,8 @@ include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
 include $(topdir)/build/options.mk
+include $(topdir)/build/sdl.mk
+include $(topdir)/build/gconf.mk
 
 CPPFLAGS += -DFLARM_AVERAGE -DDRAWLOAD
 
@@ -78,11 +80,12 @@ endif
 ######## compiler flags
 
 INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
+CPPFLAGS += $(SDL_CPPFLAGS) $(GCONF_CPPFLAGS)
 
 ####### linker configuration
 
 LDFLAGS = $(TARGET_LDFLAGS) $(FLAGS_PROFILE)
-LDLIBS = $(TARGET_LDLIBS)
+LDLIBS = $(TARGET_LDLIBS) $(SDL_LDLIBS) $(GCONF_LDLIBS)
 
 ####### sources
 
@@ -378,6 +381,14 @@ XCSOAR_SOURCES := \
 #	$(SRC)/WaveThread.cpp \
 
 
+ifeq ($(ENABLE_SDL),y)
+XCSOAR_SOURCES += $(SRC)/Screen/Timer.cpp
+else
+XCSOAR_SOURCES += \
+	$(SRC)/Screen/BufferCanvas.cpp \
+	$(SRC)/Screen/PaintCanvas.cpp
+endif
+
 XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
 XCSOAR_LDADD = \
 	$(ENGINE_LIBS) \
@@ -394,9 +405,6 @@ XCSOARSETUP_OBJS = $(call SRC_TO_OBJ,$(XCSOARSETUP_SOURCES))
 XCSOARLAUNCH_SOURCES = \
 	$(SRC)/XCSoarLaunch.c
 XCSOARLAUNCH_OBJS = $(call SRC_TO_OBJ,$(XCSOARLAUNCH_SOURCES))
-
-include $(topdir)/build/sdl.mk
-include $(topdir)/build/gconf.mk
 
 all: all-$(TARGET)
 
