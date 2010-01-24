@@ -1119,36 +1119,54 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 #ifndef GNAV
   static int i = 90;
 
+  i++;
+  if (i > 255)
+    i = 0;
+
+  //if (i > 80)
+  //  return;
+
+  static fixed angle;
+  angle = (i * 360) / 255;
+
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
+  static TCHAR t_lau[] = _T("2,1,2,1");
+
+  static unsigned h1;
+  static unsigned n1;
+  static unsigned e1;
+  static unsigned t1;
+  h1 = ifastsine(angle) / 7;
+  n1 = ifastsine(angle) / 2 - 200;
+  e1 = ifastcosine(angle) / 1.5;
+  t1 = AngleLimit360(-angle);
+  static unsigned h2;
+  static unsigned n2;
+  static unsigned e2;
+  static unsigned t2;
+  h2 = ifastcosine(angle) / 10;
+  n2 = ifastsine(AngleLimit360(angle+120)) / 1.2 + 300;
+  e2 = ifastcosine(AngleLimit360(angle+120)) + 500;
+  t2 = AngleLimit360(-angle-120);
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
+  static TCHAR t_laa1[50];
+  _stprintf(t_laa1, _T("1,%d,%d,%d,2,DD927B,%d,0,0,0,1"), n1, e1, h1, t1);
+  static TCHAR t_laa2[50];
+  _stprintf(t_laa2, _T("0,%d,%d,%d,2,DD9146,%d,0,0,0,1"), n2, e2, h2, t2);
 
-  static TCHAR t_lau[] = _T("2,1,2,1");
-  static TCHAR t_laa1[] = _T("1,300,500,220,2,DD927B,0,-4.5,30,-1.4,1");
-  static TCHAR t_laa2[] = _T("0,0,1200,50,2,DD9146,270,-4.5,30,-1.4,1");
-
-  //  static TCHAR b50[] = _T("0,.1,.0,0,0,1.06,0,-222");
-  //  static TCHAR t4[] = _T("-3,500,1024,50");
-
-  i++;
-
-  if (i > 100)
-    i = 0;
-
-  if (i < 80) {
-    GPS_INFO->flarm.FLARM_Available = true;
-    TCHAR ctemp[MAX_NMEA_LEN];
-    const TCHAR *params[MAX_NMEA_PARAMS];
-    size_t nr;
-    nr = ExtractParameters(t_lau, ctemp, params, MAX_NMEA_PARAMS);
-    PFLAU(t_lau, params, nr, GPS_INFO->flarm);
-    nr = ExtractParameters(t_laa1, ctemp, params, MAX_NMEA_PARAMS);
-    PFLAA(t_laa1, params, nr, GPS_INFO);
-    nr = ExtractParameters(t_laa2, ctemp, params, MAX_NMEA_PARAMS);
-    PFLAA(t_laa2, params, nr, GPS_INFO);
-  }
+  GPS_INFO->flarm.FLARM_Available = true;
+  TCHAR ctemp[MAX_NMEA_LEN];
+  const TCHAR *params[MAX_NMEA_PARAMS];
+  size_t nr;
+  nr = ExtractParameters(t_lau, ctemp, params, MAX_NMEA_PARAMS);
+  PFLAU(t_lau, params, nr, GPS_INFO->flarm);
+  nr = ExtractParameters(t_laa1, ctemp, params, MAX_NMEA_PARAMS);
+  PFLAA(t_laa1, params, nr, GPS_INFO);
+  nr = ExtractParameters(t_laa2, ctemp, params, MAX_NMEA_PARAMS);
+  PFLAA(t_laa2, params, nr, GPS_INFO);
 #endif
 #endif
 }
