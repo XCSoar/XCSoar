@@ -48,6 +48,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 #include <tchar.h>
+#include <stdio.h>
 
 #if defined(PNA) || defined(FIVV)
 int GlobalModelType = MODELTYPE_UNKNOWN;
