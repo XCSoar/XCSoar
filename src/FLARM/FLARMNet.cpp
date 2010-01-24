@@ -47,24 +47,15 @@ Copyright_License {
  */
 FlarmIdFile::FlarmIdFile(void)
 {
-  //HANDLE hFile;
   TCHAR path[MAX_PATH];
-
-  TCHAR flarmIdFileName[MAX_PATH];
-
-  LocalPath(path);
-
-  wsprintf(flarmIdFileName,
-	   TEXT("%s\\%s"),
-	   path,
-	   TEXT("data.fln"));
+  LocalPath(path, _T("data.fln"));
 
   //hFile = CreateFile(flarmIdFileName, GENERIC_READ,
   //	FILE_SHARE_READ, NULL, OPEN_EXISTING,
   //	     FILE_ATTRIBUTE_NORMAL, 0);
-  FILE*	hFile = _wfopen(flarmIdFileName, TEXT("rt"));
+  FILE* hFile = _wfopen(path, _T("rt"));
   if (hFile == NULL) {
-    //StartupStore(_T("Could not open file '%s'\n"), flarmIdFileName);
+    //StartupStore(_T("Could not open file '%s'\n"), path);
     return;
   }
 
