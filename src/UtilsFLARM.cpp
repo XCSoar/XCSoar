@@ -41,7 +41,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "Sizes.h"
-#include "FlarmIdFile.h"
+#include "FLARM/FLARMNet.hpp"
 
 static FlarmIdFile file;
 

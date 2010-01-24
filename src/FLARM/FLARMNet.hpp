@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef FLARMIDFILE_H
-#define FLARMIDFILE_H
+#ifndef XCSOAR_FLARM_NET_HPP
+#define XCSOAR_FLARM_NET_HPP
 
 #include <map>
 #include <stdio.h>

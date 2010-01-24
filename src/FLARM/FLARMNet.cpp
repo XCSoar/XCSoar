@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "FlarmIdFile.h"
+#include "FLARM/FLARMNet.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 
