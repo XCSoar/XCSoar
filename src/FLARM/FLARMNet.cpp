@@ -41,6 +41,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 static void
 LoadRecord(FILE *file, FLARMNetRecord *record);
@@ -137,10 +138,7 @@ LoadString(FILE *file, int charCount, TCHAR *res)
     tmp[1] = bytes[z+1];
     tmp[2] = 0;
 
-    int i;
-    sscanf(tmp, "%2x", &i);
-
-    *curChar = (unsigned char)i;
+    *curChar = (unsigned char)strtoul(tmp, NULL, 16);
     curChar ++;
   }
 
@@ -187,9 +185,5 @@ FLARMNetDatabase::Find(const TCHAR *cn)
 long
 FLARMNetRecord::GetId()
 {
-  long res;
-
-  swscanf(id, TEXT("%6x"), &res);
-
-  return res;
+  return _tcstoul(id, NULL, 16);
 };
