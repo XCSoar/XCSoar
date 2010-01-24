@@ -151,10 +151,10 @@ LoadString(FILE *file, int charCount, TCHAR *res)
  * @param id FLARM id
  * @return FLARMNetRecord object
  */
-FLARMNetRecord *
-FLARMNetDatabase::Find(long id)
+const FLARMNetRecord *
+FLARMNetDatabase::Find(long id) const
 {
-  iterator i = find(id);
+  const_iterator i = find(id);
   if (i != end())
     return i->second;
 
@@ -166,15 +166,14 @@ FLARMNetDatabase::Find(long id)
  * @param cn Callsign
  * @return FLARMNetRecord object
  */
-FLARMNetRecord *
-FLARMNetDatabase::Find(const TCHAR *cn)
+const FLARMNetRecord *
+FLARMNetDatabase::Find(const TCHAR *cn) const
 {
-  FLARMNetRecord *itemTemp = NULL;
-  iterator i = begin();
+  const_iterator i = begin();
   while (i != end()) {
-    itemTemp = (FLARMNetRecord *)(i->second);
-    if(wcscmp(itemTemp->cn, cn) == 0)
-      return itemTemp;
+    const FLARMNetRecord *record = (const FLARMNetRecord *)(i->second);
+    if (wcscmp(record->cn, cn) == 0)
+      return record;
 
     i++;
   }
@@ -183,7 +182,7 @@ FLARMNetDatabase::Find(const TCHAR *cn)
 }
 
 long
-FLARMNetRecord::GetId()
+FLARMNetRecord::GetId() const
 {
   return _tcstoul(id, NULL, 16);
 };

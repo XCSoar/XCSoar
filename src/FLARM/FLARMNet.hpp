@@ -55,7 +55,8 @@ public:
   TCHAR reg[8];         /**< Registration 7 bytes */
   TCHAR cn[4];          /**< Callsign 3 bytes */
   TCHAR freq[8];        /**< Radio frequency 6 bytes */
-  long GetId();
+
+  long GetId() const;
 };
 
 /**
@@ -65,8 +66,8 @@ class FLARMNetDatabase : protected std::map<long, FLARMNetRecord*>
 {
 public:
   FLARMNetDatabase(void);
-  FLARMNetRecord *Find(long id);
-  FLARMNetRecord *Find(const TCHAR *cn);
+  const FLARMNetRecord *Find(long id) const;
+  const FLARMNetRecord *Find(const TCHAR *cn) const;
 };
 
 #endif

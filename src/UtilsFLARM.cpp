@@ -187,7 +187,7 @@ LookupFLARMDetails(long id)
     return FLARM_Names[index].Name;
 
   // try to find flarm from FLARMNet.org File
-  FLARMNetRecord* record = flarm_net.Find(id);
+  const FLARMNetRecord *record = flarm_net.Find(id);
   if (record != NULL)
     return record->cn;
 
@@ -209,7 +209,7 @@ LookupFLARMDetails(const TCHAR *cn)
     return FLARM_Names[index].ID;
 
   // try to find flarm from FLARMNet.org File
-  FLARMNetRecord* record = flarm_net.Find(cn);
+  const FLARMNetRecord *record = flarm_net.Find(cn);
   if (record != NULL)
     return record->GetId();
 
