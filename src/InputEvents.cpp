@@ -1059,7 +1059,7 @@ InputEvents::ShowMenu()
 }
 
 #include "MapWindowProjection.hpp"
-#include "InfoBoxManager.h"
+#include "InfoBoxManager.hpp"
 
 void
 InputEvents::ProcessMenuTimer()

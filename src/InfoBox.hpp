@@ -35,8 +35,9 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef INFOBOX_H
-#define INFOBOX_H
+
+#ifndef XCSOAR_INFO_BOX_HPP
+#define XCSOAR_INFO_BOX_HPP
 
 #include "Units.hpp"
 #include "Screen/BufferWindow.hpp"

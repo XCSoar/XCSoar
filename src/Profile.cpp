@@ -42,7 +42,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "Math/Units.h"
 #include "Appearance.hpp"
-#include "InfoBoxManager.h"
+#include "InfoBoxManager.hpp"
 #include "GlideRatio.hpp"
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"

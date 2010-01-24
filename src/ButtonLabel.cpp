@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "ButtonLabel.hpp"
-#include "InfoBoxLayout.h"
+#include "InfoBoxLayout.hpp"
 #include "Language.hpp"
 #include "Screen/Animation.hpp"
 #include "Screen/Layout.hpp"

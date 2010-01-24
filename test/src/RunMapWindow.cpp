@@ -44,7 +44,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
-#include "InfoBoxLayout.h"
+#include "InfoBoxLayout.hpp"
 #include "Asset.hpp"
 #include "Logger.h"
 #include "RasterWeather.h"

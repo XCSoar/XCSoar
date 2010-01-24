@@ -42,8 +42,8 @@ Copyright_License {
 #include "Language.hpp"
 #include "Dialogs/Message.hpp"
 #include "StatusMessage.hpp"
-#include "InfoBoxManager.h"
-#include "InfoBoxLayout.h"
+#include "InfoBoxManager.hpp"
+#include "InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 

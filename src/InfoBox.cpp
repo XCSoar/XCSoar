@@ -36,7 +36,8 @@ Copyright_License {
 }
 */
 
-#include "InfoBox.h"
+#include "InfoBox.hpp"
+#include "InfoBoxManager.hpp"
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "InputEvents.h"

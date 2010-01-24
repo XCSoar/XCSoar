@@ -47,7 +47,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Message.h"
 #include "UtilsSystem.hpp"
-#include "InfoBoxManager.h"
+#include "InfoBoxManager.hpp"
 #include "MapWindow.h"
 #include "Math/Earth.hpp"
 #include "DeviceBlackboard.hpp"

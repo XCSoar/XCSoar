@@ -35,61 +35,27 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef INFOBOX_MANAGER_H
-#define INFOBOX_MANAGER_H
 
-#include "Screen/BufferWindow.hpp"
+#ifndef XCSOAR_INFO_BOX_LAYOUT_HPP
+#define XCSOAR_INFO_BOX_LAYOUT_HPP
 
 #include <windef.h>
 
-extern unsigned numInfoWindows;
-extern const unsigned NUMSELECTSTRINGS;
-
-#include "Interface.hpp"
-
-class InfoBox;
-
-class InfoBoxManager: public ActionInterface {
-  /** the window for displaying infoboxes full-screen */
-  static BufferWindow full_window;
-
- private:
-  static void ResetInfoBoxes(void);
-  static int getType(unsigned i);
-  static void setType(unsigned i, char j);
-  static void FocusOnWindow(unsigned i, bool selected);
-  static void DisplayInfoBox(void);
-  static void InfoBoxDrawIfDirty();
-  static void DestroyInfoBoxFormatters();
-  static int GetFocused();
+class InfoBoxLayout
+{
 public:
-  static void Event_Select(int i);
-  static void Event_Change(int i);
+  static bool fullscreen;
+  static bool gnav;
+  static unsigned InfoBoxGeometry;
+  static int ControlWidth, ControlHeight, TitleHeight;
+  static void ScreenGeometry(RECT rc);
 
-  static const TCHAR *GetTypeDescription(unsigned i);
-
-  static void ProcessKey(int keycode);
-  static bool Click(InfoBox &ib);
-
-  static bool Defocus(void);
-
-  static void ProcessTimer(void);
-  static void SetDirty(bool is_dirty);
-
-  static RECT Create(RECT rc);
-  static void Destroy(void);
-  static void Paint(void);
-  static void Show();
-  static void Hide();
-
-  static int getType(unsigned i, unsigned layer);
-  static void setType(unsigned i, char j, unsigned layer);
-
-  static int getTypeAll(unsigned i);
-  static void setTypeAll(unsigned i, unsigned j);
-
-  static bool IsFocus();
-  //
+public:
+  // used by manager
+  static void GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
+                                 int *sizex, int *sizey);
+  static RECT GetInfoBoxSizes(RECT rc);
 };
+
 
 #endif

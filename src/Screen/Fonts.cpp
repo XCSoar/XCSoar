@@ -39,7 +39,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "LogFile.hpp"
 #include "UtilsFont.hpp"
-#include "InfoBoxLayout.h"
+#include "InfoBoxLayout.hpp"
 #include "ButtonLabel.hpp"
 #include "Registry.hpp"
 #include "Asset.hpp"

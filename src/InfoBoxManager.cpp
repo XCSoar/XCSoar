@@ -37,12 +37,11 @@ Copyright_License {
 
 */
 
-#include "InfoBoxManager.h"
-#include "InfoBox.h"
+#include "InfoBoxManager.hpp"
+#include "InfoBox.hpp"
+#include "InfoBoxLayout.hpp"
 #include "Form/Control.hpp"
 #include "Protection.hpp"
-#include "InfoBox.h"
-#include "InfoBoxLayout.h"
 #include "Formatter/TeamCode.hpp"
 #include "Formatter/WayPoint.hpp"
 #include "Formatter/LowWarning.hpp"
