@@ -43,9 +43,9 @@ Copyright_License {
 #include "Sizes.h"
 #include "FlarmIdFile.h"
 
-FlarmIdFile file;
+static FlarmIdFile file;
 
-int NumberOfFLARMNames = 0;
+static int NumberOfFLARMNames = 0;
 
 typedef struct {
   long ID;
@@ -54,7 +54,7 @@ typedef struct {
 
 #define MAXFLARMNAMES 200
 
-FLARM_Names_t FLARM_Names[MAXFLARMNAMES];
+static FLARM_Names_t FLARM_Names[MAXFLARMNAMES];
 
 /**
  * Deletes all known FLARM names
