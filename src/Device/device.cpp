@@ -108,19 +108,16 @@ devHasBaroSource(void)
 }
 
 static bool
-devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
-           DWORD speed, struct DeviceDescriptor *&nmeaout)
+devInitOne(struct DeviceDescriptor *dev, const TCHAR *port,
+           DWORD speed, const TCHAR *driver_name,
+           struct DeviceDescriptor *&nmeaout)
 {
-  TCHAR DeviceName[DEVNAMESIZE];
-
   assert(dev != NULL);
 
   if (is_simulator())
     return false;
 
-  ReadDeviceSettings(index, DeviceName);
-
-  const struct DeviceRegister *Driver = devGetDriver(DeviceName);
+  const struct DeviceRegister *Driver = devGetDriver(driver_name);
 
   if (Driver) {
     ComPort *Com = new ComPort(port, speed, *dev);
@@ -227,13 +224,17 @@ devInit(const TCHAR *CommandLine)
     SpeedIndex2 = 2;
   }
 
-  ReadPort1Settings(&PortIndex1, &SpeedIndex1);
-  ReadPort2Settings(&PortIndex2, &SpeedIndex2);
+  TCHAR driver0[DEVNAMESIZE], driver1[DEVNAMESIZE];
 
-  devInitOne(&DeviceList[0], 0, COMMPort[PortIndex1], dwSpeed[SpeedIndex1], pDevNmeaOut);
+  ReadDeviceConfig(0, &PortIndex1, &SpeedIndex1, driver0);
+  ReadDeviceConfig(1, &PortIndex2, &SpeedIndex2, driver1);
+
+  devInitOne(&DeviceList[0], COMMPort[PortIndex1], dwSpeed[SpeedIndex1],
+             driver0, pDevNmeaOut);
 
   if (PortIndex1 != PortIndex2)
-    devInitOne(&DeviceList[1], 1, COMMPort[PortIndex2], dwSpeed[SpeedIndex2], pDevNmeaOut);
+    devInitOne(&DeviceList[1], COMMPort[PortIndex2], dwSpeed[SpeedIndex2],
+               driver1, pDevNmeaOut);
 
   CommandLine = LOGGDEVCOMMANDLINE;
 

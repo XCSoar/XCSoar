@@ -1161,8 +1161,8 @@ static void setVariables(void) {
 
   //  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
-  ReadPort1Settings(&dwPortIndex1,&dwSpeedIndex1);
-
+  TCHAR deviceName1[DEVNAMESIZE];
+  ReadDeviceConfig(0, &dwPortIndex1, &dwSpeedIndex1, deviceName1);
   wp = (WndProperty*)wf->FindByName(_T("prpComPort1"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1183,13 +1183,6 @@ static void setVariables(void) {
     }
     dfe->Set(dwSpeedIndex1);
     wp->RefreshDisplay();
-  }
-
-  TCHAR deviceName1[MAX_PATH];
-  TCHAR deviceName2[MAX_PATH];
-  if (is_simulator()) {
-    ReadDeviceSettings(0, deviceName1);
-    ReadDeviceSettings(1, deviceName2);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpComDevice1"));
@@ -1214,8 +1207,8 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  ReadPort2Settings(&dwPortIndex2,&dwSpeedIndex2);
-
+  TCHAR deviceName2[DEVNAMESIZE];
+  ReadDeviceConfig(1, &dwPortIndex2, &dwSpeedIndex2, deviceName2);
   wp = (WndProperty*)wf->FindByName(_T("prpComPort2"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -3310,8 +3303,6 @@ void dlgConfigurationShowModal(void){
       dwDeviceIndex1 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;
-
-      WriteDeviceSettings(0, devRegisterGetName(dwDeviceIndex1));
     }
   }
 
@@ -3339,8 +3330,6 @@ void dlgConfigurationShowModal(void){
       dwDeviceIndex2 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;
-
-      WriteDeviceSettings(1, devRegisterGetName(dwDeviceIndex2));
     }
   }
 
@@ -3356,8 +3345,10 @@ void dlgConfigurationShowModal(void){
   }
 
   if (COMPORTCHANGED) {
-    WritePort1Settings(dwPortIndex1,dwSpeedIndex1);
-    WritePort2Settings(dwPortIndex2,dwSpeedIndex2);
+    WriteDeviceConfig(0, dwPortIndex1, dwSpeedIndex1,
+                      devRegisterGetName(dwDeviceIndex1));
+    WriteDeviceConfig(1, dwPortIndex2, dwSpeedIndex2,
+                      devRegisterGetName(dwDeviceIndex2));
   }
 
   for (unsigned i = 0; i < 4; ++i) {

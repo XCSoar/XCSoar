@@ -44,13 +44,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
-void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex);
-void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex);
-void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex);
-void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex);
-void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex);
-
 extern const TCHAR szRegistryKey[];
 extern const TCHAR *szRegistryDisplayType[];
 extern const TCHAR *szRegistryColour[];
@@ -243,8 +236,13 @@ void SetRegistryAirspaceMode(int i);
 int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
 
-void ReadDeviceSettings(const int devIdx, TCHAR *Name);
-void WriteDeviceSettings(const int devIdx, const TCHAR *Name);
+void
+ReadDeviceConfig(unsigned n, DWORD *PortIndex, DWORD *SpeedIndex,
+                 TCHAR *Name);
+
+void
+WriteDeviceConfig(unsigned n, DWORD PortIndex, DWORD SpeedIndex,
+                  const TCHAR *Name);
 
 void SaveRegistryToFile(const TCHAR* szFile);
 void LoadRegistryFromFile(const TCHAR* szFile);

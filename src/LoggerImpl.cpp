@@ -426,7 +426,8 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
   if (is_simulator()) {
     _tcscpy(DeviceName, _T("Simulator"));
   } else {
-    ReadDeviceSettings(0, DeviceName);
+    DWORD port, speed;
+    ReadDeviceConfig(0, &port, &speed, DeviceName);
   }
   sprintf(temp, "HFGPS: %S\r\n", DeviceName);
   IGCWriteRecord(temp, szLoggerFileName);

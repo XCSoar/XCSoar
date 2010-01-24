@@ -167,9 +167,6 @@ const TCHAR szRegistryAlternate2[] = CONF("Alternate2");
 const TCHAR szRegistryLiftUnitsValue[] = CONF("Lift");
 const TCHAR szRegistryLatLonUnits[] = CONF("LatLonUnits");
 const TCHAR szRegistryPolarID[] = CONF("Polar"); // pL
-const TCHAR szRegistryPort1Index[] = CONF("PortIndex");
-const TCHAR szRegistryPort2Index[] = CONF("Port2Index");
-const TCHAR szRegistryPort3Index[] = CONF("Port3Index");
 const TCHAR szRegistryRegKey[] = CONF("RegKey");
 const TCHAR szRegistrySafetyAltitudeArrival[] = CONF("SafetyAltitudeArrival");
 const TCHAR szRegistrySafetyAltitudeBreakOff[] = CONF("SafetyAltitudeBreakOff");
@@ -180,9 +177,6 @@ const TCHAR szRegistrySnailTrail[] = CONF("SnailTrail");
 const TCHAR szRegistryTrailDrift[] = CONF("TrailDrift");
 const TCHAR szRegistryThermalLocator[] = CONF("ThermalLocator");
 const TCHAR szRegistryAnimation[] = CONF("Animation");
-const TCHAR szRegistrySpeed1Index[] = CONF("SpeedIndex");
-const TCHAR szRegistrySpeed2Index[] = CONF("Speed2Index");
-const TCHAR szRegistrySpeed3Index[] = CONF("Speed3Index");
 const TCHAR szRegistrySpeedUnitsValue[] = CONF("Speed");
 const TCHAR szRegistryTaskSpeedUnitsValue[] = CONF("TaskSpeed");
 const TCHAR szRegistryStartLine[] = CONF("StartLine");
@@ -218,10 +212,6 @@ const TCHAR szRegistryNettoSpeed[] = CONF("NettoSpeed");
 const TCHAR szRegistryAccelerometerZero[] = CONF("AccelerometerZero");
 const TCHAR szRegistryCDICruise[] = CONF("CDICruise");
 const TCHAR szRegistryCDICircling[] = CONF("CDICircling");
-
-const TCHAR szRegistryDeviceA[] = CONF("DeviceA");
-const TCHAR szRegistryDeviceB[] = CONF("DeviceB");
-const TCHAR szRegistryDeviceC[] = CONF("DeviceC");
 
 const TCHAR szRegistryAutoBlank[] = CONF("AutoBlank");
 const TCHAR szRegistryAutoBacklight[] = CONF("AutoBacklight");
@@ -577,60 +567,6 @@ HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 #endif /* !WIN32 */
 }
 
-void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex)
-{
-  DWORD Temp=0;
-
-  if(GetFromRegistryD(szRegistryPort1Index,Temp)==ERROR_SUCCESS)
-    (*PortIndex) = Temp;
-
-  if(GetFromRegistryD(szRegistrySpeed1Index,Temp)==ERROR_SUCCESS)
-    (*SpeedIndex) = Temp;
-}
-
-
-void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex)
-{
-  SetToRegistry(szRegistryPort1Index, PortIndex);
-  SetToRegistry(szRegistrySpeed1Index, SpeedIndex);
-}
-
-void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex)
-{
-  DWORD Temp=0;
-
-  if(GetFromRegistryD(szRegistryPort2Index,Temp)==ERROR_SUCCESS)
-    (*PortIndex) = Temp;
-
-  if(GetFromRegistryD(szRegistrySpeed2Index,Temp)==ERROR_SUCCESS)
-    (*SpeedIndex) = Temp;
-}
-
-
-void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex)
-{
-  SetToRegistry(szRegistryPort2Index, PortIndex);
-  SetToRegistry(szRegistrySpeed2Index, SpeedIndex);
-}
-
-void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex)
-{
-  DWORD Temp=0;
-
-  if(GetFromRegistryD(szRegistryPort3Index,Temp)==ERROR_SUCCESS)
-    (*PortIndex) = Temp;
-
-  if(GetFromRegistryD(szRegistrySpeed3Index,Temp)==ERROR_SUCCESS)
-    (*SpeedIndex) = Temp;
-}
-
-
-void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex)
-{
-  SetToRegistry(szRegistryPort3Index, PortIndex);
-  SetToRegistry(szRegistrySpeed3Index, SpeedIndex);
-}
-
 #define CheckIndex(x, i)    assert((i>=0) && (sizeof(x)/sizeof(x[0]) > (unsigned)i));
 
 void SetRegistryColour(int i, DWORD c)
@@ -649,37 +585,57 @@ void SetRegistryBrush(int i, DWORD c)
   SetToRegistry(szRegistryBrush[i] ,c) ;
 }
 
-void ReadDeviceSettings(const int devIdx, TCHAR *Name){
+const TCHAR *
+MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
+                      const TCHAR *suffix)
+{
+  _tcscpy(buffer, prefix);
+
+  if (n > 0)
+    _stprintf(buffer + _tcslen(buffer), _T("%u"), n + 1);
+
+  _tcscat(buffer, suffix);
+
+  return buffer;
+}
+
+void
+ReadDeviceConfig(unsigned n, DWORD *PortIndex, DWORD *SpeedIndex,
+                 TCHAR *Name)
+{
+  TCHAR buffer[64];
+  DWORD Temp=0;
+
+  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
+  if (GetFromRegistryD(buffer, Temp) == ERROR_SUCCESS)
+    (*PortIndex) = Temp;
+
+  MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
+  if (GetFromRegistryD(buffer, Temp) == ERROR_SUCCESS)
+    (*SpeedIndex) = Temp;
 
   Name[0] = '\0';
 
-  if (devIdx == 0){
-    GetRegistryString(szRegistryDeviceA , Name, DEVNAMESIZE);
-    return;
-  }
-
-  if (devIdx == 1){
-    GetRegistryString(szRegistryDeviceB , Name, DEVNAMESIZE);
-    return;
-  }
-
-  if (devIdx == 2){
-    GetRegistryString(szRegistryDeviceC , Name, DEVNAMESIZE);
-    return;
-  }
-
+  _tcscpy(buffer, CONF("DeviceA"));
+  buffer[_tcslen(buffer) - 1] += n;
+  GetRegistryString(buffer, Name, DEVNAMESIZE);
 }
 
-void WriteDeviceSettings(const int devIdx, const TCHAR *Name){
+void
+WriteDeviceConfig(unsigned n, DWORD PortIndex, DWORD SpeedIndex,
+                  const TCHAR *Name)
+{
+  TCHAR buffer[64];
 
-  if (devIdx == 0)
-    SetRegistryString(szRegistryDeviceA , Name);
+  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
+  SetToRegistry(buffer, PortIndex);
 
-  if (devIdx == 1)
-    SetRegistryString(szRegistryDeviceB , Name);
+  MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
+  SetToRegistry(buffer, SpeedIndex);
 
-  if (devIdx == 2)
-    SetRegistryString(szRegistryDeviceC , Name);
+  _tcscpy(buffer, CONF("DeviceA"));
+  buffer[_tcslen(buffer) - 1] += n;
+  SetRegistryString(buffer, Name);
 }
 
 // Registry file handling
