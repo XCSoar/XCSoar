@@ -102,6 +102,11 @@ OpenFLARMDetails()
   }
 
   fclose(file);
+
+  LocalPath(filename, _T("data.fln"));
+  unsigned num_records = flarm_net.LoadFile(filename);
+  if (num_records > 0)
+    StartupStore(_T("%u FlarmNet ids found\n"), num_records);
 }
 
 /**

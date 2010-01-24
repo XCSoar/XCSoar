@@ -65,7 +65,8 @@ public:
 class FLARMNetDatabase : protected std::map<long, FLARMNetRecord*>
 {
 public:
-  FLARMNetDatabase(void);
+  unsigned LoadFile(const TCHAR *path);
+
   const FLARMNetRecord *Find(long id) const;
   const FLARMNetRecord *Find(const TCHAR *cn) const;
 };

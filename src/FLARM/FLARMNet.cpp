@@ -37,8 +37,6 @@ Copyright_License {
 */
 
 #include "FLARM/FLARMNet.hpp"
-#include "LogFile.hpp"
-#include "LocalPath.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,20 +45,17 @@ static void
 LoadRecord(FILE *file, FLARMNetRecord *record);
 
 /**
- * Constructor of the FLARMNetDatabase class
- *
  * Reads the FLARMnet.org file and fills the map
+ *
+ * @param path the path of the file
+ * @return the number of records read from the file
  */
-FLARMNetDatabase::FLARMNetDatabase(void)
+unsigned
+FLARMNetDatabase::LoadFile(const TCHAR *path)
 {
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("data.fln"));
-
   FILE* hFile = _tfopen(path, _T("rt"));
-  if (hFile == NULL) {
-    //StartupStore(_T("Could not open file '%s'\n"), path);
-    return;
-  }
+  if (hFile == NULL)
+    return 0;
 
   long fileLength;
 
@@ -79,9 +74,9 @@ FLARMNetDatabase::FLARMNetDatabase(void)
     itemCount++;
   };
 
-  StartupStore(_T("%d FlarmNet ids found\n"), itemCount);
-
   fclose(hFile);
+
+  return itemCount;
 }
 
 static void
