@@ -1092,7 +1092,64 @@ static  DWORD Lift = 0;
 static  DWORD Altitude = 0; //default ft
 static  TCHAR temptext[MAX_PATH];
 
+static void
+SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
+                  int &driver_index,
+                  WndProperty *port_field, WndProperty *speed_field,
+                  WndProperty *driver_field)
+{
+  static const TCHAR *const COMMPort[] = {
+    _T("COM1"), _T("COM2"), _T("COM3"), _T("COM4"),
+    _T("COM5"), _T("COM6"), _T("COM7"), _T("COM8"),
+    _T("COM9"), _T("COM10"), _T("COM0")
+  };
 
+  static const TCHAR *const tSpeed[] = {
+    _T("1200"), _T("2400"), _T("4800"), _T("9600"),
+    _T("19200"), _T("38400"), _T("57600"), _T("115200")
+  };
+
+  if (port_field != NULL) {
+    DataFieldEnum *dfe = (DataFieldEnum *)port_field->GetDataField();
+    for (unsigned i = 0; i < 11; i++)
+      dfe->addEnumText(COMMPort[i]);
+
+    dfe->Set(config.port_index);
+    port_field->RefreshDisplay();
+  }
+
+  if (speed_field != NULL) {
+    DataFieldEnum *dfe = (DataFieldEnum *)speed_field->GetDataField();
+    for (unsigned i = 0; i < 8; i++)
+      dfe->addEnumText(tSpeed[i]);
+
+    dfe->Set(config.speed_index);
+    speed_field->RefreshDisplay();
+  }
+
+  if (driver_field) {
+    DataFieldEnum *dfe = (DataFieldEnum *)driver_field->GetDataField();
+
+    const TCHAR *DeviceName;
+    for (unsigned i = 0; (DeviceName = devRegisterGetName(i)) != NULL; i++) {
+      dfe->addEnumText(DeviceName);
+
+      if (!is_simulator()) {
+        if (device.IsDriver(DeviceName))
+            driver_index = i;
+      } else {
+        if (_tcscmp(DeviceName, config.driver_name) == 0)
+          driver_index = i;
+      }
+    }
+
+    dfe->Sort(1);
+    dfe->Set(driver_index);
+
+    driver_field->RefreshDisplay();
+  }
+
+}
 
 static void setVariables(void) {
   WndProperty *wp;
@@ -1145,110 +1202,20 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  const TCHAR *COMMPort[] = {
-    _T("COM1"), _T("COM2"), _T("COM3"), _T("COM4"),
-    _T("COM5"), _T("COM6"), _T("COM7"), _T("COM8"),
-    _T("COM9"), _T("COM10"), _T("COM0")
-  };
-
-  const TCHAR *tSpeed[] = {
-    _T("1200"), _T("2400"), _T("4800"), _T("9600"),
-    _T("19200"), _T("38400"), _T("57600"), _T("115200")
-  };
-
   //  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     ReadDeviceConfig(i, device_config[i]);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpComPort1"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    for (unsigned i = 0; i < 11; i++) {
-      dfe->addEnumText((COMMPort[i]));
-    }
-    dfe->Set(device_config[0].port_index);
-    wp->RefreshDisplay();
-  }
+  SetupDeviceFields(DeviceList[0], device_config[0], dwDeviceIndex1,
+                    (WndProperty*)wf->FindByName(_T("prpComPort1")),
+                    (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
+                    (WndProperty*)wf->FindByName(_T("prpComDevice1")));
 
-  wp = (WndProperty*)wf->FindByName(_T("prpComSpeed1"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    for (unsigned i = 0; i < 8; i++) {
-      dfe->addEnumText((tSpeed[i]));
-    }
-    dfe->Set(device_config[0].speed_index);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpComDevice1"));
-  if (wp) {
-    DeviceDescriptor &device = DeviceList[0];
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-
-    const TCHAR *DeviceName;
-    for (int i = 0; (DeviceName = devRegisterGetName(i)) != NULL; i++) {
-      dfe->addEnumText((DeviceName));
-      if (!is_simulator()) {
-        if (device.IsDriver(DeviceName))
-            dwDeviceIndex1 = i;
-      } else {
-        if (_tcscmp(DeviceName, device_config[0].driver_name) == 0)
-          dwDeviceIndex1 = i;
-      }
-    }
-    dfe->Sort(1);
-    dfe->Set(dwDeviceIndex1);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpComPort2"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    for (unsigned i = 0; i < 11; i++) {
-      dfe->addEnumText((COMMPort[i]));
-    }
-    dfe->Set(device_config[1].port_index);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpComSpeed2"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    for (unsigned i = 0; i < 8; i++) {
-      dfe->addEnumText((tSpeed[i]));
-    }
-    dfe->Set(device_config[1].speed_index);
-    wp->RefreshDisplay();
-  }
-
-
-  wp = (WndProperty*)wf->FindByName(_T("prpComDevice2"));
-  if (wp) {
-    DeviceDescriptor &device = DeviceList[1];
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-
-    const TCHAR *DeviceName;
-    for (int i = 0; (DeviceName = devRegisterGetName(i)) != NULL; i++) {
-      dfe->addEnumText((DeviceName));
-      if (!is_simulator()) {
-        if (device.IsDriver(DeviceName))
-          dwDeviceIndex2 = i;
-      } else {
-        if (_tcscmp(DeviceName, device_config[1].driver_name) == 0)
-          dwDeviceIndex2 = i;
-      }
-    }
-    dfe->Sort(1);
-    dfe->Set(dwDeviceIndex2);
-    wp->RefreshDisplay();
-  }
+  SetupDeviceFields(DeviceList[1], device_config[1], dwDeviceIndex2,
+                    (WndProperty*)wf->FindByName(_T("prpComPort2")),
+                    (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
+                    (WndProperty*)wf->FindByName(_T("prpComDevice2")));
 
   wp = (WndProperty*)wf->FindByName(_T("prpAirspaceDisplay"));
   if (wp) {
@@ -2199,8 +2166,34 @@ static void setVariables(void) {
   }
 }
 
+static bool
+FinishDeviceFields(DeviceConfig &config, int &driver_index,
+                   WndProperty *port_field, WndProperty *speed_field,
+                   WndProperty *driver_field)
+{
+  bool changed = false;
 
+  if (port_field != NULL &&
+      (int)config.port_index != port_field->GetDataField()->GetAsInteger()) {
+    config.port_index = port_field->GetDataField()->GetAsInteger();
+    changed = true;
+  }
 
+  if (speed_field != NULL &&
+      (int)config.speed_index != speed_field->GetDataField()->GetAsInteger()) {
+    config.speed_index = speed_field->GetDataField()->GetAsInteger();
+    changed = true;
+  }
+
+  if (driver_field != NULL &&
+      driver_index != driver_field->GetDataField()->GetAsInteger()) {
+    driver_index = driver_field->GetDataField()->GetAsInteger();
+    _tcscpy(config.driver_name, devRegisterGetName(driver_index));
+    changed = true;
+  }
+
+  return changed;
+}
 
 void dlgConfigurationShowModal(void){
 
@@ -3275,59 +3268,21 @@ void dlgConfigurationShowModal(void){
                                       szRegistryLoggerTimeStepCircling,
                                       XCSoarInterface::SetSettingsComputer().LoggerTimeStepCircling);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpComPort1"));
-  if (wp) {
-    if ((int)device_config[0].port_index != wp->GetDataField()->GetAsInteger()) {
-      device_config[0].port_index = wp->GetDataField()->GetAsInteger();
-      changed = true;
-      COMPORTCHANGED = true;
-    }
-  }
+  COMPORTCHANGED =
+    FinishDeviceFields(device_config[0], dwDeviceIndex1,
+                       (WndProperty*)wf->FindByName(_T("prpComPort1")),
+                       (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
+                       (WndProperty*)wf->FindByName(_T("prpComDevice1")));
 
-  wp = (WndProperty*)wf->FindByName(_T("prpComSpeed1"));
-  if (wp) {
-    if ((int)device_config[0].speed_index != wp->GetDataField()->GetAsInteger()) {
-      device_config[0].speed_index = wp->GetDataField()->GetAsInteger();
-      changed = true;
-      COMPORTCHANGED = true;
-    }
-  }
+  COMPORTCHANGED =
+    FinishDeviceFields(device_config[1], dwDeviceIndex2,
+                       (WndProperty*)wf->FindByName(_T("prpComPort2")),
+                       (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
+                       (WndProperty*)wf->FindByName(_T("prpComDevice2"))) ||
+    COMPORTCHANGED;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpComDevice1"));
-  if (wp) {
-    if (dwDeviceIndex1 != wp->GetDataField()->GetAsInteger()) {
-      dwDeviceIndex1 = wp->GetDataField()->GetAsInteger();
-      changed = true;
-      COMPORTCHANGED = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpComPort2"));
-  if (wp) {
-    if ((int)device_config[1].port_index != wp->GetDataField()->GetAsInteger()) {
-      device_config[1].port_index = wp->GetDataField()->GetAsInteger();
-      changed = true;
-      COMPORTCHANGED = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpComSpeed2"));
-  if (wp) {
-    if ((int)device_config[1].speed_index != wp->GetDataField()->GetAsInteger()) {
-      device_config[1].speed_index = wp->GetDataField()->GetAsInteger();
-      changed = true;
-      COMPORTCHANGED = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpComDevice2"));
-  if (wp) {
-    if (dwDeviceIndex2 != wp->GetDataField()->GetAsInteger()) {
-      dwDeviceIndex2 = wp->GetDataField()->GetAsInteger();
-      changed = true;
-      COMPORTCHANGED = true;
-    }
-  }
+  if (COMPORTCHANGED)
+    changed = true;
 
   wp = (WndProperty*)wf->FindByName(_T("prpSnailWidthScale"));
   if (wp) {
@@ -3342,8 +3297,6 @@ void dlgConfigurationShowModal(void){
 
   if (COMPORTCHANGED) {
     for (unsigned i = 0; i < NUMDEV; ++i) {
-      _tcscpy(device_config[i].driver_name,
-              devRegisterGetName(dwDeviceIndex1));
       WriteDeviceConfig(i, device_config[i]);
     }
   }
