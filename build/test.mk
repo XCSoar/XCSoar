@@ -66,7 +66,6 @@ DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRA
 
 RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPointParser.cpp \
-	$(SRC)/Math/FastMath.c \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
@@ -97,7 +96,6 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/Screen/Font.cpp \
 	$(SRC)/Screen/Util.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Math/FastMath.c \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -139,7 +137,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindowWaypoints.cpp \
 	$(SRC)/MapDrawHelper.cpp \
 	$(SRC)/Marks.cpp \
-	$(SRC)/Math/FastMath.c \
 	$(SRC)/Math/FastRotation.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/RasterMapJPG2000.cpp \
@@ -215,7 +212,6 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
-	$(SRC)/Math/FastMath.c \
 	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/Bitmap.cpp \
 	$(SRC)/Screen/Brush.cpp \
