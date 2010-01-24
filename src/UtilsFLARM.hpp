@@ -40,11 +40,22 @@ Copyright_License {
 
 #include <tchar.h>
 
-void OpenFLARMDetails();
-void CloseFLARMDetails();
-const TCHAR* LookupFLARMDetails(long id);
-int LookupFLARMDetails(const TCHAR *cn);
-bool AddFlarmLookupItem(int id, const TCHAR *name, bool saveFile);
-int LookupSecondaryFLARMId(int id);
+void
+OpenFLARMDetails();
+
+void
+CloseFLARMDetails();
+
+const TCHAR *
+LookupFLARMDetails(long id);
+
+int
+LookupFLARMDetails(const TCHAR *cn);
+
+bool
+AddFlarmLookupItem(int id, const TCHAR *name, bool saveFile);
+
+int
+LookupSecondaryFLARMId(int id);
 
 #endif

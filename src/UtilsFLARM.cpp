@@ -59,7 +59,9 @@ static FLARM_Names_t FLARM_Names[MAXFLARMNAMES];
 /**
  * Deletes all known FLARM names
  */
-void CloseFLARMDetails() {
+void
+CloseFLARMDetails()
+{
   int i;
   for (i=0; i<NumberOfFLARMNames; i++) {
     //    free(FLARM_Names[i]);
@@ -72,13 +74,14 @@ void CloseFLARMDetails() {
  * adds its entries as FlarmLookupItems
  * @see AddFlarmLookupItem
  */
-void OpenFLARMDetails() {
+void
+OpenFLARMDetails()
+{
   StartupStore(TEXT("OpenFLARMDetails\n"));
 
   // if (FLARM Details already there) delete them;
-  if (NumberOfFLARMNames) {
+  if (NumberOfFLARMNames)
     CloseFLARMDetails();
-  }
 
   TCHAR filename[MAX_PATH];
   LocalPath(filename, TEXT("xcsoar-flarm.txt"));
@@ -93,9 +96,8 @@ void OpenFLARMDetails() {
     TCHAR Name[MAX_PATH];
 
     if (_stscanf(line, TEXT("%lx=%s"), &id, Name) == 2) {
-      if (AddFlarmLookupItem(id, Name, false) == false) {
+      if (!AddFlarmLookupItem(id, Name, false))
         break; // cant add anymore items !
-      }
     }
   }
 
@@ -106,7 +108,8 @@ void OpenFLARMDetails() {
  * Saves XCSoars own FLARM details into the
  * corresponding file (xcsoar-flarm.txt)
  */
-void SaveFLARMDetails(void)
+void
+SaveFLARMDetails(void)
 {
   TCHAR filename[MAX_PATH];
   LocalPath(filename,TEXT("xcsoar-flarm.txt"));
@@ -118,22 +121,21 @@ void SaveFLARMDetails(void)
   TCHAR wsline[READLINE_LENGTH];
   char cline[READLINE_LENGTH];
 
-  for (int z = 0; z < NumberOfFLARMNames; z++)
-    {
-      _stprintf(wsline, _T("%lx=%s\r\n"),
-                FLARM_Names[z].ID, FLARM_Names[z].Name);
+  for (int z = 0; z < NumberOfFLARMNames; z++) {
+    _stprintf(wsline, _T("%lx=%s\r\n"),
+              FLARM_Names[z].ID, FLARM_Names[z].Name);
 
 #ifdef _UNICODE
-      WideCharToMultiByte( CP_ACP, 0, wsline,
-			   _tcslen(wsline)+1,
-			   cline,
-			   READLINE_LENGTH, NULL, NULL);
+    WideCharToMultiByte(CP_ACP, 0, wsline,
+                        _tcslen(wsline)+1,
+                        cline,
+                        READLINE_LENGTH, NULL, NULL);
 #else
-      strcpy(cline, wsline);
+    strcpy(cline, wsline);
 #endif
 
-      fputs(cline, file);
-    }
+    fputs(cline, file);
+  }
 
   fclose(file);
 }
@@ -144,15 +146,13 @@ void SaveFLARMDetails(void)
  * @param id FLARM id
  * @return Array id if found, otherwise -1
  */
-int LookupSecondaryFLARMId(int id)
+int
+LookupSecondaryFLARMId(int id)
 {
   for (int i=0; i<NumberOfFLARMNames; i++)
-    {
-      if (FLARM_Names[i].ID == id)
-	{
-	  return i;
-	}
-    }
+    if (FLARM_Names[i].ID == id)
+      return i;
+
   return -1;
 }
 
@@ -162,15 +162,13 @@ int LookupSecondaryFLARMId(int id)
  * @param cn Callsign
  * @return Array id if found, otherwise -1
  */
-int LookupSecondaryFLARMId(const TCHAR *cn)
+int
+LookupSecondaryFLARMId(const TCHAR *cn)
 {
   for (int i=0; i<NumberOfFLARMNames; i++)
-    {
-      if (_tcscmp(FLARM_Names[i].Name, cn) == 0)
-	{
-	  return i;
-	}
-    }
+    if (_tcscmp(FLARM_Names[i].Name, cn) == 0)
+      return i;
+
   return -1;
 }
 
@@ -180,21 +178,18 @@ int LookupSecondaryFLARMId(const TCHAR *cn)
  * @param id FLARM id
  * @return The corresponding callsign if found, otherwise NULL
  */
-const TCHAR* LookupFLARMDetails(long id) {
-
+const TCHAR *
+LookupFLARMDetails(long id)
+{
   // try to find flarm from userFile
   int index = LookupSecondaryFLARMId(id);
   if (index != -1)
-    {
-      return FLARM_Names[index].Name;
-    }
+    return FLARM_Names[index].Name;
 
   // try to find flarm from FLARMNet.org File
   FlarmId* flarmId = file.GetFlarmIdItem(id);
   if (flarmId != NULL)
-    {
-      return flarmId->cn;
-    }
+    return flarmId->cn;
 
   return NULL;
 }
@@ -205,21 +200,18 @@ const TCHAR* LookupFLARMDetails(long id) {
  * @param cn Callsign
  * @return The corresponding FLARM id if found, otherwise 0
  */
-int LookupFLARMDetails(const TCHAR *cn)
+int
+LookupFLARMDetails(const TCHAR *cn)
 {
   // try to find flarm from userFile
   int index = LookupSecondaryFLARMId(cn);
   if (index != -1)
-    {
-      return FLARM_Names[index].ID;
-    }
+    return FLARM_Names[index].ID;
 
   // try to find flarm from FLARMNet.org File
   FlarmId* flarmId = file.GetFlarmIdItem(cn);
   if (flarmId != NULL)
-    {
-      return flarmId->GetId();
-    }
+    return flarmId->GetId();
 
   return 0;
 }
@@ -233,7 +225,9 @@ int LookupFLARMDetails(const TCHAR *cn)
  * @param saveFile True = FLARM details file is saved after update
  * @return True if successfully added, False otherwise
  */
-bool AddFlarmLookupItem(int id, const TCHAR *name, bool saveFile) {
+bool
+AddFlarmLookupItem(int id, const TCHAR *name, bool saveFile)
+{
   int index = LookupSecondaryFLARMId(id);
 
   if (index == -1) {
@@ -254,6 +248,7 @@ bool AddFlarmLookupItem(int id, const TCHAR *name, bool saveFile) {
     if (saveFile) {
       SaveFLARMDetails();
     }
+
     return true;
   }
   return false;
