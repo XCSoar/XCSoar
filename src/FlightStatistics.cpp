@@ -134,7 +134,7 @@ public:
   void Visit(const AbortTask& task) {
   };
   void Visit(const OrderedTask& task) {
-    task.Accept(*this);
+    task.Accept(m_leg_visitor);
   };
   void Visit(const GotoTask& task) {
   };
