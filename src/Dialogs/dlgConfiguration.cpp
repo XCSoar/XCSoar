@@ -101,6 +101,16 @@ static const TCHAR *const captions[] = {
   _T("22 Experimental features"),
 };
 
+static const struct {
+  enum DeviceConfig::port_type type;
+  const TCHAR *label;
+} port_types[] = {
+  { DeviceConfig::SERIAL, NULL } /* sentinel */
+};
+
+static const unsigned num_port_types =
+  sizeof(port_types) / sizeof(port_types[0]) - 1;
+
 extern ldrotary_s rotaryLD;
 
 static SETTINGS_TASK settings_task;
@@ -1111,10 +1121,23 @@ SetupDeviceFields(const DeviceDescriptor &device, const DeviceConfig &config,
 
   if (port_field != NULL) {
     DataFieldEnum *dfe = (DataFieldEnum *)port_field->GetDataField();
+
+    for (unsigned i = 0; port_types[i].label != NULL; i++) {
+      dfe->addEnumText(gettext(port_types[i].label));
+
+      if (port_types[i].type == config.port_type)
+        dfe->Set(i);
+    }
+
     for (unsigned i = 0; i < 11; i++)
       dfe->addEnumText(COMMPort[i]);
 
-    dfe->Set(config.port_index);
+    switch (config.port_type) {
+    case DeviceConfig::SERIAL:
+      dfe->Set(config.port_index + num_port_types);
+      break;
+    }
+
     port_field->RefreshDisplay();
   }
 
@@ -2166,6 +2189,31 @@ static void setVariables(void) {
   }
 }
 
+/**
+ * @return true if the value has changed
+ */
+static bool
+FinishPortField(DeviceConfig &config, WndProperty &port_field)
+{
+  int value = port_field.GetDataField()->GetAsInteger();
+
+  if (value < (int)num_port_types) {
+    if (port_types[value].type == config.port_type)
+      return false;
+
+    config.port_type = port_types[value].type;
+    return true;
+  } else {
+    if (config.port_type == DeviceConfig::SERIAL &&
+        value == (int)config.port_index)
+      return false;
+
+    config.port_type = DeviceConfig::SERIAL;
+    config.port_index = value;
+    return true;
+  }
+}
+
 static bool
 FinishDeviceFields(DeviceConfig &config, int &driver_index,
                    WndProperty *port_field, WndProperty *speed_field,
@@ -2173,11 +2221,8 @@ FinishDeviceFields(DeviceConfig &config, int &driver_index,
 {
   bool changed = false;
 
-  if (port_field != NULL &&
-      (int)config.port_index != port_field->GetDataField()->GetAsInteger()) {
-    config.port_index = port_field->GetDataField()->GetAsInteger();
+  if (port_field != NULL && FinishPortField(config, *port_field))
     changed = true;
-  }
 
   if (speed_field != NULL &&
       (int)config.speed_index != speed_field->GetDataField()->GetAsInteger()) {
