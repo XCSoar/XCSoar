@@ -27,6 +27,7 @@
 
 topdir = .
 
+include $(topdir)/build/bool.mk
 include $(topdir)/build/common.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
