@@ -55,8 +55,10 @@ WndOwnerDrawFrame::on_paint(Canvas &canvas)
 {
   WindowControl::on_paint(canvas);
 
+  if (mOnPaintCallback == NULL)
+    return;
+
   canvas.select(*GetFont());
 
-  if (mOnPaintCallback != NULL)
-    (mOnPaintCallback)(this, canvas);
+  mOnPaintCallback(this, canvas);
 }
