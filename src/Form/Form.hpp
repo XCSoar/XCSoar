@@ -103,7 +103,6 @@ public:
   virtual ~WndForm();
 
   ContainerWindow &GetClientAreaWindow(void);
-  void AddClient(WindowControl *Client);
 
   int OnLButtonUp(WPARAM wParam, LPARAM lParam) {
     (void)wParam; (void)lParam;
