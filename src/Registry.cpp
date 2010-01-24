@@ -38,13 +38,13 @@ Copyright_License {
 
 #include "Registry.hpp"
 #include "StringUtil.hpp"
-#include "Device/Descriptor.hpp"
 #include "LogFile.hpp"
 #include "Defines.h"
 #include "Sizes.h"
 
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #ifndef WIN32
 #include <gconf/gconf.h>
@@ -600,42 +600,41 @@ MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
 }
 
 void
-ReadDeviceConfig(unsigned n, DWORD *PortIndex, DWORD *SpeedIndex,
-                 TCHAR *Name)
+ReadDeviceConfig(unsigned n, DeviceConfig &config)
 {
   TCHAR buffer[64];
   DWORD Temp=0;
 
   MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
   if (GetFromRegistryD(buffer, Temp) == ERROR_SUCCESS)
-    (*PortIndex) = Temp;
+    config.port_index = Temp;
 
   MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
   if (GetFromRegistryD(buffer, Temp) == ERROR_SUCCESS)
-    (*SpeedIndex) = Temp;
+    config.speed_index = Temp;
 
-  Name[0] = '\0';
+  config.driver_name[0] = '\0';
 
   _tcscpy(buffer, CONF("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
-  GetRegistryString(buffer, Name, DEVNAMESIZE);
+  GetRegistryString(buffer, config.driver_name,
+                    sizeof(config.driver_name) / sizeof(config.driver_name[0]));
 }
 
 void
-WriteDeviceConfig(unsigned n, DWORD PortIndex, DWORD SpeedIndex,
-                  const TCHAR *Name)
+WriteDeviceConfig(unsigned n, const DeviceConfig &config)
 {
   TCHAR buffer[64];
 
   MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
-  SetToRegistry(buffer, PortIndex);
+  SetToRegistry(buffer, config.port_index);
 
   MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
-  SetToRegistry(buffer, SpeedIndex);
+  SetToRegistry(buffer, config.speed_index);
 
   _tcscpy(buffer, CONF("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
-  SetRegistryString(buffer, Name);
+  SetRegistryString(buffer, config.driver_name);
 }
 
 // Registry file handling

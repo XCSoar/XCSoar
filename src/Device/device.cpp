@@ -224,17 +224,19 @@ devInit(const TCHAR *CommandLine)
     SpeedIndex2 = 2;
   }
 
-  TCHAR driver0[DEVNAMESIZE], driver1[DEVNAMESIZE];
+  DeviceConfig config[NUMDEV];
 
-  ReadDeviceConfig(0, &PortIndex1, &SpeedIndex1, driver0);
-  ReadDeviceConfig(1, &PortIndex2, &SpeedIndex2, driver1);
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    ReadDeviceConfig(i, config[i]);
 
-  devInitOne(&DeviceList[0], COMMPort[PortIndex1], dwSpeed[SpeedIndex1],
-             driver0, pDevNmeaOut);
+  devInitOne(&DeviceList[0], COMMPort[config[0].port_index],
+             dwSpeed[config[0].speed_index],
+             config[0].driver_name, pDevNmeaOut);
 
   if (PortIndex1 != PortIndex2)
-    devInitOne(&DeviceList[1], COMMPort[PortIndex2], dwSpeed[SpeedIndex2],
-               driver1, pDevNmeaOut);
+    devInitOne(&DeviceList[1], COMMPort[config[1].port_index],
+               dwSpeed[config[1].speed_index],
+               config[1].driver_name, pDevNmeaOut);
 
   CommandLine = LOGGDEVCOMMANDLINE;
 

@@ -236,13 +236,19 @@ void SetRegistryAirspaceMode(int i);
 int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
 
-void
-ReadDeviceConfig(unsigned n, DWORD *PortIndex, DWORD *SpeedIndex,
-                 TCHAR *Name);
+struct DeviceConfig {
+  unsigned port_index;
+
+  unsigned speed_index;
+
+  TCHAR driver_name[32];
+};
 
 void
-WriteDeviceConfig(unsigned n, DWORD PortIndex, DWORD SpeedIndex,
-                  const TCHAR *Name);
+ReadDeviceConfig(unsigned n, DeviceConfig &config);
+
+void
+WriteDeviceConfig(unsigned n, const DeviceConfig &config);
 
 void SaveRegistryToFile(const TCHAR* szFile);
 void LoadRegistryFromFile(const TCHAR* szFile);

@@ -422,14 +422,14 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
   sprintf(temp, "HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_VersionStringOld);
   IGCWriteRecord(temp, szLoggerFileName);
 
-  TCHAR DeviceName[DEVNAMESIZE];
+  DeviceConfig device_config;
   if (is_simulator()) {
-    _tcscpy(DeviceName, _T("Simulator"));
+    _tcscpy(device_config.driver_name, _T("Simulator"));
   } else {
-    DWORD port, speed;
-    ReadDeviceConfig(0, &port, &speed, DeviceName);
+    ReadDeviceConfig(0, device_config);
   }
-  sprintf(temp, "HFGPS: %S\r\n", DeviceName);
+
+  sprintf(temp, "HFGPS: %S\r\n", device_config.driver_name);
   IGCWriteRecord(temp, szLoggerFileName);
 
   IGCWriteRecord(datum, szLoggerFileName);
