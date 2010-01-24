@@ -77,6 +77,8 @@ ifeq ($(CONFIG_PNA),y)
 OUTPUTS := $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT)
 endif
 
+include $(topdir)/build/dist.mk
+
 ######## compiler flags
 
 INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
