@@ -76,6 +76,7 @@ typedef wchar_t TCHAR;
 #define _itot _itow
 #define _ttoi(x) wcstol((x), NULL, 10)
 #define _tcstol wcstol
+#define _tcstoul wcstoul
 #define _tcstod wcstod
 
 #define _istalpha iswalpha
@@ -115,6 +116,7 @@ typedef char TCHAR;
 #define _itot itoa
 #define _ttoi atoi
 #define _tcstol strtol
+#define _tcstoul strtoul
 #define _tcstod strtod
 #define _tcscspn strcspn
 
