@@ -527,7 +527,7 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
     return hRes;
   }
 
-  dwSize *= 2;
+  dwSize *= sizeof(pPos[0]);
 
   hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)pPos, &dwSize);
 
