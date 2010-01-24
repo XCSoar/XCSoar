@@ -108,18 +108,20 @@ devHasBaroSource(void)
 }
 
 static bool
-devInitOne(DeviceDescriptor &device, const TCHAR *port,
-           DWORD speed, const TCHAR *driver_name,
+devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
            DeviceDescriptor *&nmeaout)
 {
   if (is_simulator())
     return false;
 
-  const struct DeviceRegister *Driver = devGetDriver(driver_name);
+  const struct DeviceRegister *Driver = devGetDriver(config.driver_name);
   if (Driver == NULL)
     return false;
 
-  ComPort *Com = new ComPort(port, speed, device);
+  const TCHAR *path = COMMPort[config.port_index];
+
+  ComPort *Com = new ComPort(path, dwSpeed[config.speed_index],
+                             device);
   if (!Com->Open()) {
     delete Com;
     return false;
@@ -225,14 +227,10 @@ devInit(const TCHAR *CommandLine)
   for (unsigned i = 0; i < NUMDEV; ++i)
     ReadDeviceConfig(i, config[i]);
 
-  devInitOne(DeviceList[0], COMMPort[config[0].port_index],
-             dwSpeed[config[0].speed_index],
-             config[0].driver_name, pDevNmeaOut);
+  devInitOne(DeviceList[0], config[0], pDevNmeaOut);
 
   if (PortIndex1 != PortIndex2)
-    devInitOne(DeviceList[1], COMMPort[config[1].port_index],
-               dwSpeed[config[1].speed_index],
-               config[1].driver_name, pDevNmeaOut);
+    devInitOne(DeviceList[1], config[1], pDevNmeaOut);
 
   CommandLine = LOGGDEVCOMMANDLINE;
 
