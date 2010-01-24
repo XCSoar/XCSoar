@@ -353,7 +353,6 @@ InfoBoxManager::Event_Select(int i)
     main_window.map.set_focus();
   } else {
     InfoBoxes[i]->set_focus();
-    DisplayInfoBox();
   }
 }
 
