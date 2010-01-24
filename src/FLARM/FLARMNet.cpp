@@ -96,13 +96,6 @@ FlarmIdFile::FlarmIdFile(void)
 }
 
 /**
- * Destructor of the FlarmIdFile class
- */
-FlarmIdFile::~FlarmIdFile(void)
-{
-}
-
-/**
  * Reads next FLARMnet.org file entry and saves it
  * into the given flarmId
  * @param hFile File handle

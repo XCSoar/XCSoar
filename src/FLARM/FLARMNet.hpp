@@ -72,7 +72,6 @@ private:
   void GetItem(HANDLE hFile, FlarmId *flarmId);
 public:
   FlarmIdFile(void);
-  ~FlarmIdFile(void);
   FlarmId *GetFlarmIdItem(long id);
   FlarmId *GetFlarmIdItem(const TCHAR *cn);
 };
