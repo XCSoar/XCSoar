@@ -49,7 +49,6 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "SettingsUser.hpp"
-#include "InfoBoxLayout.h"
 #include "InputEvents.h"
 #include "Registry.hpp"
 #include "Interface.hpp"

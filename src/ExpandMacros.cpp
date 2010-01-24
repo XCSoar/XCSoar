@@ -46,7 +46,6 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "Components.hpp"
 #include "Compatibility/string.h"
-#include "InfoBoxManager.h"
 #include "SettingsUser.hpp"
 #include "Asset.hpp"
 #include "Waypoint/Waypoints.hpp"

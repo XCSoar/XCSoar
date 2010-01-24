@@ -53,7 +53,6 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Appearance.hpp"
 #include "Defines.h"
-#include "InfoBoxManager.h"
 #include "UtilsSystem.hpp"
 #include "Asset.hpp"
 

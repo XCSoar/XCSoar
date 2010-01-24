@@ -36,7 +36,6 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxManager.h"
 #include "Protection.hpp"
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"

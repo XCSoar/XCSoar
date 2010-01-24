@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "MapWindow.h"
-#include "InfoBoxLayout.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"

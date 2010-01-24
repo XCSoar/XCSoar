@@ -43,7 +43,6 @@ Copyright_License {
 #include "Screen/Animation.hpp"
 #include "Screen/Layout.hpp"
 #include "Registry.hpp"
-#include "InfoBox.h"
 
 #include <stdio.h>
 

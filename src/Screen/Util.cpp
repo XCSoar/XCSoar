@@ -42,7 +42,6 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Math/FastMath.h"
 #include "Screen/shapelib/mapprimitive.h"
-#include "InfoBoxLayout.h"
 #include "Asset.hpp" // for needclipping
 
 #include <tchar.h>

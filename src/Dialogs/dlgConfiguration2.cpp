@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "InfoBoxLayout.h"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
