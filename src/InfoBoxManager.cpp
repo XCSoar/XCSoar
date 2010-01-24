@@ -475,7 +475,9 @@ InfoBoxManager::Event_Change(int i)
   // TODO code: if i==0, go to default or reset
 
   setType(InfoFocus, j);
-  DisplayInfoBox();
+
+  Update(*InfoBoxes[InfoFocus], j, true);
+  Paint();
 }
 
 void
