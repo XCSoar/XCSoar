@@ -43,7 +43,7 @@ Copyright_License {
 #include "Sizes.h"
 #include "FLARM/FLARMNet.hpp"
 
-static FlarmIdFile file;
+static FLARMNetDatabase flarm_net;
 
 static int NumberOfFLARMNames = 0;
 
@@ -187,9 +187,9 @@ LookupFLARMDetails(long id)
     return FLARM_Names[index].Name;
 
   // try to find flarm from FLARMNet.org File
-  FlarmId* flarmId = file.GetFlarmIdItem(id);
-  if (flarmId != NULL)
-    return flarmId->cn;
+  FLARMNetRecord* record = flarm_net.Find(id);
+  if (record != NULL)
+    return record->cn;
 
   return NULL;
 }
@@ -209,9 +209,9 @@ LookupFLARMDetails(const TCHAR *cn)
     return FLARM_Names[index].ID;
 
   // try to find flarm from FLARMNet.org File
-  FlarmId* flarmId = file.GetFlarmIdItem(cn);
-  if (flarmId != NULL)
-    return flarmId->GetId();
+  FLARMNetRecord* record = flarm_net.Find(cn);
+  if (record != NULL)
+    return record->GetId();
 
   return 0;
 }

@@ -49,7 +49,7 @@ Copyright_License {
 /**
  * FLARMnet.org file entry
  */
-class FlarmId
+class FLARMNetRecord
 {
 public:
   TCHAR id[7];          /**< FLARM id 6 bytes */
@@ -65,15 +65,15 @@ public:
 /**
  * Handles the FLARMnet.org file
  */
-class FlarmIdFile : protected std::map<long, FlarmId*>
+class FLARMNetDatabase : protected std::map<long, FLARMNetRecord*>
 {
 private:
   void GetAsString(HANDLE hFile, int charCount, TCHAR *res);
-  void GetItem(HANDLE hFile, FlarmId *flarmId);
+  void GetItem(HANDLE hFile, FLARMNetRecord *flarmId);
 public:
-  FlarmIdFile(void);
-  FlarmId *GetFlarmIdItem(long id);
-  FlarmId *GetFlarmIdItem(const TCHAR *cn);
+  FLARMNetDatabase(void);
+  FLARMNetRecord *Find(long id);
+  FLARMNetRecord *Find(const TCHAR *cn);
 };
 
 #endif

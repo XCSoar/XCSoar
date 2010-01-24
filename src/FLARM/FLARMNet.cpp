@@ -41,11 +41,11 @@ Copyright_License {
 #include "LocalPath.hpp"
 
 /**
- * Constructor of the FlarmIdFile class
+ * Constructor of the FLARMNetDatabase class
  *
  * Reads the FLARMnet.org file and fills the map
  */
-FlarmIdFile::FlarmIdFile(void)
+FLARMNetDatabase::FLARMNetDatabase(void)
 {
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("data.fln"));
@@ -64,11 +64,11 @@ FlarmIdFile::FlarmIdFile(void)
 
   int itemCount = 0;
   while(fileLength - ftell(hFile) > 87) {
-    FlarmId *flarmId = new FlarmId;
+    FLARMNetRecord *record = new FLARMNetRecord;
 
-    GetItem(hFile, flarmId);
+    GetItem(hFile, record);
 
-    insert(value_type(flarmId->GetId(), flarmId));
+    insert(value_type(record->GetId(), record));
 
     itemCount++;
   };
@@ -80,26 +80,26 @@ FlarmIdFile::FlarmIdFile(void)
 
 /**
  * Reads next FLARMnet.org file entry and saves it
- * into the given flarmId
+ * into the given record
  * @param hFile File handle
- * @param flarmId Pointer to the FlarmId to be filled
+ * @param record Pointer to the FLARMNetRecord to be filled
  */
 void
-FlarmIdFile::GetItem(HANDLE hFile, FlarmId *flarmId)
+FLARMNetDatabase::GetItem(HANDLE hFile, FLARMNetRecord *record)
 {
-  GetAsString(hFile, 6, flarmId->id);
-  GetAsString(hFile, 21, flarmId->name);
-  GetAsString(hFile, 21, flarmId->airfield);
-  GetAsString(hFile, 21, flarmId->type);
-  GetAsString(hFile, 7, flarmId->reg);
-  GetAsString(hFile, 3, flarmId->cn);
-  GetAsString(hFile, 7, flarmId->freq);
+  GetAsString(hFile, 6, record->id);
+  GetAsString(hFile, 21, record->name);
+  GetAsString(hFile, 21, record->airfield);
+  GetAsString(hFile, 21, record->type);
+  GetAsString(hFile, 7, record->reg);
+  GetAsString(hFile, 3, record->cn);
+  GetAsString(hFile, 7, record->freq);
 
   int i = 0;
-  int maxSize = sizeof(flarmId->cn) / sizeof(TCHAR);
-  while(flarmId->cn[i] != 0 && i < maxSize) {
-    if (flarmId->cn[i] == 32)
-      flarmId->cn[i] = 0;
+  int maxSize = sizeof(record->cn) / sizeof(TCHAR);
+  while(record->cn[i] != 0 && i < maxSize) {
+    if (record->cn[i] == 32)
+      record->cn[i] = 0;
 
     i++;
   }
@@ -115,7 +115,7 @@ FlarmIdFile::GetItem(HANDLE hFile, FlarmId *flarmId)
  * @param res Pointer to be written in
  */
 void
-FlarmIdFile::GetAsString(HANDLE hFile, int charCount, TCHAR *res)
+FLARMNetDatabase::GetAsString(HANDLE hFile, int charCount, TCHAR *res)
 {
   int bytesToRead = charCount * 2;
   char bytes[100];
@@ -141,12 +141,12 @@ FlarmIdFile::GetAsString(HANDLE hFile, int charCount, TCHAR *res)
 }
 
 /**
- * Finds a FlarmId object based on the given FLARM id
+ * Finds a FLARMNetRecord object based on the given FLARM id
  * @param id FLARM id
- * @return FlarmId object
+ * @return FLARMNetRecord object
  */
-FlarmId *
-FlarmIdFile::GetFlarmIdItem(long id)
+FLARMNetRecord *
+FLARMNetDatabase::Find(long id)
 {
   iterator i = find(id);
   if (i != end())
@@ -156,28 +156,28 @@ FlarmIdFile::GetFlarmIdItem(long id)
 }
 
 /**
- * Finds a FlarmId object based on the given Callsign
+ * Finds a FLARMNetRecord object based on the given Callsign
  * @param cn Callsign
- * @return FlarmId object
+ * @return FLARMNetRecord object
  */
-FlarmId *
-FlarmIdFile::GetFlarmIdItem(const TCHAR *cn)
+FLARMNetRecord *
+FLARMNetDatabase::Find(const TCHAR *cn)
 {
-  FlarmId *itemTemp = NULL;
-  iterator iterFind = begin();
-  while (iterFind != end()) {
-    itemTemp = (FlarmId*)(iterFind->second);
+  FLARMNetRecord *itemTemp = NULL;
+  iterator i = begin();
+  while (i != end()) {
+    itemTemp = (FLARMNetRecord *)(i->second);
     if(wcscmp(itemTemp->cn, cn) == 0)
       return itemTemp;
 
-    iterFind++;
+    i++;
   }
 
   return NULL;
 }
 
 long
-FlarmId::GetId()
+FLARMNetRecord::GetId()
 {
   long res;
 
