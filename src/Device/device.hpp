@@ -48,18 +48,19 @@ Copyright_License {
 #include <stdio.h>
 
 class Mutex;
+class DeviceDescriptor;
 
 extern Mutex mutexComm;
 
-void devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *Text);
+void devWriteNMEAString(DeviceDescriptor &d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
 struct DeviceDescriptor *devVarioFindVega(void);
 
 bool devHasBaroSource(void);
-bool devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl);
-bool devIsLogger(const struct DeviceDescriptor *d);
-bool devIsGPSSource(const struct DeviceDescriptor *d);
-bool devIsBaroSource(const struct DeviceDescriptor *d);
+bool devDeclare(DeviceDescriptor &d, const struct Declaration *decl);
+bool devIsLogger(const DeviceDescriptor &d);
+bool devIsGPSSource(const DeviceDescriptor &d);
+bool devIsBaroSource(const DeviceDescriptor &d);
 
 /**
  * Returns true if at least one of the connected device is a Condor

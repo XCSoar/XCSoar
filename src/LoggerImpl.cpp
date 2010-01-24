@@ -545,12 +545,12 @@ bool
 LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev,
     const struct Declaration *decl)
 {
-  if (!devIsLogger(dev))
+  if (!devIsLogger(*dev))
     return false;
 
   if (MessageBoxX(gettext(_T("Declare Task?")),
                   dev->GetName(), MB_YESNO| MB_ICONQUESTION) == IDYES) {
-    if (devDeclare(dev, decl)) {
+    if (devDeclare(*dev, decl)) {
       MessageBoxX(gettext(_T("Task Declared!")),
                   dev->GetName(), MB_OK| MB_ICONINFORMATION);
       DeclaredToDevice = true;

@@ -108,12 +108,10 @@ devHasBaroSource(void)
 }
 
 static bool
-devInitOne(struct DeviceDescriptor *dev, const TCHAR *port,
+devInitOne(DeviceDescriptor &device, const TCHAR *port,
            DWORD speed, const TCHAR *driver_name,
-           struct DeviceDescriptor *&nmeaout)
+           DeviceDescriptor *&nmeaout)
 {
-  assert(dev != NULL);
-
   if (is_simulator())
     return false;
 
@@ -121,20 +119,20 @@ devInitOne(struct DeviceDescriptor *dev, const TCHAR *port,
   if (Driver == NULL)
     return false;
 
-  ComPort *Com = new ComPort(port, speed, *dev);
+  ComPort *Com = new ComPort(port, speed, device);
   if (!Com->Open()) {
     delete Com;
     return false;
   }
 
-  dev->Driver = Driver;
-  dev->Com = Com;
-  dev->Open();
+  device.Driver = Driver;
+  device.Com = Com;
+  device.Open();
 
-  dev->enable_baro = devIsBaroSource(dev) && !devHasBaroSource();
+  device.enable_baro = devIsBaroSource(device) && !devHasBaroSource();
 
   if (nmeaout == NULL && Driver->Flags & (1l << dfNmeaOut))
-    nmeaout = dev;
+    nmeaout = &device;
 
   return true;
 }
@@ -227,12 +225,12 @@ devInit(const TCHAR *CommandLine)
   for (unsigned i = 0; i < NUMDEV; ++i)
     ReadDeviceConfig(i, config[i]);
 
-  devInitOne(&DeviceList[0], COMMPort[config[0].port_index],
+  devInitOne(DeviceList[0], COMMPort[config[0].port_index],
              dwSpeed[config[0].speed_index],
              config[0].driver_name, pDevNmeaOut);
 
   if (PortIndex1 != PortIndex2)
-    devInitOne(&DeviceList[1], COMMPort[config[1].port_index],
+    devInitOne(DeviceList[1], COMMPort[config[1].port_index],
                dwSpeed[config[1].speed_index],
                config[1].driver_name, pDevNmeaOut);
 
@@ -250,42 +248,34 @@ devInit(const TCHAR *CommandLine)
 }
 
 bool
-devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
+devDeclare(DeviceDescriptor &d, const struct Declaration *decl)
 {
-  assert(d != NULL);
-
   if (is_simulator())
     return true;
 
   ScopeLock protect(mutexComm);
-  return d->Declare(decl);
+  return d.Declare(decl);
 }
 
 bool
-devIsLogger(const struct DeviceDescriptor *d)
+devIsLogger(const DeviceDescriptor &d)
 {
-  assert(d != NULL);
-
   ScopeLock protect(mutexComm);
-  return d->IsLogger();
+  return d.IsLogger();
 }
 
 bool
-devIsGPSSource(const struct DeviceDescriptor *d)
+devIsGPSSource(const DeviceDescriptor &d)
 {
-  assert(d != NULL);
-
   ScopeLock protect(mutexComm);
-  return d->IsGPSSource();
+  return d.IsGPSSource();
 }
 
 bool
-devIsBaroSource(const struct DeviceDescriptor *d)
+devIsBaroSource(const DeviceDescriptor &d)
 {
-  assert(d != NULL);
-
   ScopeLock protect(mutexComm);
-  return d->IsBaroSource();
+  return d.IsBaroSource();
 }
 
 bool
@@ -307,19 +297,17 @@ devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
 }
 
 void
-devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *text)
+devWriteNMEAString(DeviceDescriptor &d, const TCHAR *text)
 {
   TCHAR tmp[512];
 
-  assert(d != NULL);
-
-  if (d->Com == NULL)
+  if (d.Com == NULL)
     return;
 
   devFormatNMEAString(tmp, 512, text);
 
   ScopeLock protect(mutexComm);
-  d->Com->WriteString(tmp);
+  d.Com->WriteString(tmp);
 }
 
 void
