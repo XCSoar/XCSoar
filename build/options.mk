@@ -1,5 +1,5 @@
-FIXED ?= $(HAVE_FPU)
+FIXED ?= $(call bool_not,$(HAVE_FPU))
 
-ifeq ($(FIXED),n)
+ifeq ($(FIXED),y)
 TARGET_CPPFLAGS += -DFIXED_MATH
 endif
