@@ -28,3 +28,19 @@ trim(const tstring& StrToTrim)
   TrimmedString = StrToTrim.substr( First, Last );
   return TrimmedString;
 }
+
+tstring &
+trim_inplace(tstring &s)
+{
+  tstring::size_type n;
+
+  n = s.find_first_not_of(WHITESPACE);
+  if (n != tstring::npos)
+    s.erase(0, n);
+
+  n = s.find_last_not_of(WHITESPACE);
+  if (n != tstring::npos)
+    s.erase(n, s.length());
+
+  return s;
+}
