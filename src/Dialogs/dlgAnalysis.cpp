@@ -90,11 +90,6 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 
   // background is painted in the base-class
 
-  canvas.select(*Sender->GetFont());
-
-  canvas.background_transparent();
-  canvas.set_text_color(Sender->GetForeColor());
-
   const FlightStatistics &fs = glide_computer.GetFlightStats();
 
   terrain.Lock();
