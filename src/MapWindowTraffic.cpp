@@ -150,8 +150,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
 #ifndef NDEBUG
     // for testing only!
-    _stprintf(label_avg, TEXT("2.3"));
-    _stprintf(label_name, TEXT("WUE"));
+    //_stprintf(label_avg, TEXT("2.3"));
+    //_stprintf(label_name, TEXT("WUE"));
 #endif
 
     // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
