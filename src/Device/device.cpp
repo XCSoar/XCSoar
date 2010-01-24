@@ -122,8 +122,10 @@ devInitOne(struct DeviceDescriptor *dev, const TCHAR *port,
     return false;
 
   ComPort *Com = new ComPort(port, speed, *dev);
-  if (!Com->Open())
+  if (!Com->Open()) {
+    delete Com;
     return false;
+  }
 
   dev->Driver = Driver;
   dev->Com = Com;
