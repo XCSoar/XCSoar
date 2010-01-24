@@ -59,8 +59,6 @@ FlarmIdFile::FlarmIdFile(void)
     return;
   }
 
-  TCHAR text[50];
-
   DWORD fileLength;
 
   //GetFileSize(hFile, &fileLength);
@@ -80,8 +78,7 @@ FlarmIdFile::FlarmIdFile(void)
     itemCount++;
   };
 
-  wsprintf(text,TEXT("%d FlarmNet ids found\n"), itemCount);
-  StartupStore(text);
+  StartupStore(_T("%d FlarmNet ids found\n"), itemCount);
 
   fclose(hFile);
 }
