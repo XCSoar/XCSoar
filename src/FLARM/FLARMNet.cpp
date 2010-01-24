@@ -40,6 +40,11 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 
+#include <stdio.h>
+
+static void
+LoadRecord(FILE *file, FLARMNetRecord *record);
+
 /**
  * Constructor of the FLARMNetDatabase class
  *
@@ -56,7 +61,7 @@ FLARMNetDatabase::FLARMNetDatabase(void)
     return;
   }
 
-  DWORD fileLength;
+  long fileLength;
 
   fseek (hFile , 0 , SEEK_END);
   fileLength = ftell (hFile);
@@ -66,7 +71,7 @@ FLARMNetDatabase::FLARMNetDatabase(void)
   while(fileLength - ftell(hFile) > 87) {
     FLARMNetRecord *record = new FLARMNetRecord;
 
-    GetItem(hFile, record);
+    LoadRecord(hFile, record);
 
     insert(value_type(record->GetId(), record));
 
@@ -78,22 +83,25 @@ FLARMNetDatabase::FLARMNetDatabase(void)
   fclose(hFile);
 }
 
+static void
+LoadString(FILE *file, int charCount, TCHAR *res);
+
 /**
  * Reads next FLARMnet.org file entry and saves it
  * into the given record
- * @param hFile File handle
+ * @param file File handle
  * @param record Pointer to the FLARMNetRecord to be filled
  */
-void
-FLARMNetDatabase::GetItem(HANDLE hFile, FLARMNetRecord *record)
+static void
+LoadRecord(FILE *file, FLARMNetRecord *record)
 {
-  GetAsString(hFile, 6, record->id);
-  GetAsString(hFile, 21, record->name);
-  GetAsString(hFile, 21, record->airfield);
-  GetAsString(hFile, 21, record->type);
-  GetAsString(hFile, 7, record->reg);
-  GetAsString(hFile, 3, record->cn);
-  GetAsString(hFile, 7, record->freq);
+  LoadString(file, 6, record->id);
+  LoadString(file, 21, record->name);
+  LoadString(file, 21, record->airfield);
+  LoadString(file, 21, record->type);
+  LoadString(file, 7, record->reg);
+  LoadString(file, 3, record->cn);
+  LoadString(file, 7, record->freq);
 
   int i = 0;
   int maxSize = sizeof(record->cn) / sizeof(TCHAR);
@@ -104,23 +112,23 @@ FLARMNetDatabase::GetItem(HANDLE hFile, FLARMNetRecord *record)
     i++;
   }
 
-  fseek((FILE*)hFile, 1, SEEK_CUR);
+  fseek(file, 1, SEEK_CUR);
 }
 
 /**
  * Decodes the FLARMnet.org file and puts the wanted
  * characters into the res pointer
- * @param hFile File handle
+ * @param file File handle
  * @param charCount Number of character to decode
  * @param res Pointer to be written in
  */
-void
-FLARMNetDatabase::GetAsString(HANDLE hFile, int charCount, TCHAR *res)
+static void
+LoadString(FILE *file, int charCount, TCHAR *res)
 {
   int bytesToRead = charCount * 2;
   char bytes[100];
 
-  fread(bytes, 1, bytesToRead, (FILE*)hFile);
+  fread(bytes, 1, bytesToRead, file);
 
   TCHAR *curChar = res;
   for (int z = 0; z < bytesToRead; z += 2) {

@@ -40,11 +40,7 @@ Copyright_License {
 #define XCSOAR_FLARM_NET_HPP
 
 #include <map>
-#include <stdio.h>
 #include <tchar.h>
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 
 /**
  * FLARMnet.org file entry
@@ -67,9 +63,6 @@ public:
  */
 class FLARMNetDatabase : protected std::map<long, FLARMNetRecord*>
 {
-private:
-  void GetAsString(HANDLE hFile, int charCount, TCHAR *res);
-  void GetItem(HANDLE hFile, FLARMNetRecord *flarmId);
 public:
   FLARMNetDatabase(void);
   FLARMNetRecord *Find(long id);
