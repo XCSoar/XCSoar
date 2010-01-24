@@ -507,7 +507,8 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
  * @param pPos Pointer to the output buffer
  * @param dwSize Maximum size of the output buffer
  */
-BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+bool
+GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
 #ifdef WIN32
   HKEY    hKey;
@@ -521,14 +522,14 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   pPos[0]= '\0';
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_READ /*KEY_ALL_ACCESS*/, &hKey);
   if (hRes != ERROR_SUCCESS)
-    return hRes;
+    return false;
 
   dwSize *= sizeof(pPos[0]);
 
   hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)pPos, &dwSize);
 
   RegCloseKey(hKey);
-  return hRes;
+  return hRes == ERROR_SUCCESS;
 #else /* !WIN32 */
   return GConf().get(szRegValue, pPos, dwSize);
 #endif /* !WIN32 */
@@ -539,7 +540,8 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
  * @param szRegValue Name of the value that should be written
  * @param Pos Value that should be written
  */
-HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
+bool
+SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
 #ifdef WIN32
   HKEY    hKey;
@@ -548,12 +550,12 @@ HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 
   hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
   if (hRes != ERROR_SUCCESS)
-    return FALSE;
+    return false;
 
   hRes = RegSetValueEx(hKey, szRegValue,0,REG_SZ, (LPBYTE)Pos, (_tcslen(Pos)+1)*sizeof(TCHAR));
   RegCloseKey(hKey);
 
-  return hRes;
+  return hRes == ERROR_SUCCESS;
 #else /* !WIN32 */
   return GConf().set(szRegValue, Pos);
 #endif /* !WIN32 */

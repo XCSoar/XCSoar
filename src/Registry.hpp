@@ -223,8 +223,11 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal);	// JG
 HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal);	// JG
 #endif
 
-BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
-HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
+bool
+GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
+
+bool
+SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
 
 void
 SetRegistryStringIfAbsent(const TCHAR *name, const TCHAR *value);
