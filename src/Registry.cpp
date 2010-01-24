@@ -358,9 +358,9 @@ void StoreType(int Index,int the_type)
   SetToRegistry(szRegistryDisplayType[Index],(DWORD)the_type);
 }
 
-void SetRegistryStringIfAbsent(const TCHAR* name,
-			       const TCHAR* value) {
-
+void
+SetRegistryStringIfAbsent(const TCHAR* name, const TCHAR* value)
+{
   // VENTA force fonts registry rewrite in PNAs
 #if defined(PNA) || defined(FIVV) // VENTA TODO WARNING should really delete the key before creating it TODO
   SetRegistryString(name, value);
@@ -384,11 +384,10 @@ bool GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
   DWORD defaultVal;
 
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_ALL_ACCESS, &hKey);
-  if (hRes != ERROR_SUCCESS)
-    {
-      RegCloseKey(hKey);
-      return hRes;
-    }
+  if (hRes != ERROR_SUCCESS) {
+    RegCloseKey(hKey);
+    return hRes;
+  }
 
   defaultVal = pPos;
   dwSize = sizeof(DWORD);
@@ -488,19 +487,19 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 // Set bool value to registry as 1 or 0 - JG
 HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal)
 {
-	return SetToRegistry(szRegValue, bVal ? DWORD(1) : DWORD(0));
+  return SetToRegistry(szRegValue, bVal ? DWORD(1) : DWORD(0));
 }
 
 // Set int value to registry - JG
 HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal)
 {
-	return SetToRegistry(szRegValue, DWORD(nVal));
+  return SetToRegistry(szRegValue, DWORD(nVal));
 }
 
 #ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
 HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
 {
-	return SetToRegistry(szRegValue, DWORD(nVal));
+  return SetToRegistry(szRegValue, DWORD(nVal));
 }
 #endif
 
@@ -523,11 +522,10 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 
   pPos[0]= '\0';
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_READ /*KEY_ALL_ACCESS*/, &hKey);
-  if (hRes != ERROR_SUCCESS)
-    {
-      RegCloseKey(hKey);
-      return hRes;
-    }
+  if (hRes != ERROR_SUCCESS) {
+    RegCloseKey(hKey);
+    return hRes;
+  }
 
   dwSize *= 2;
 
@@ -554,9 +552,7 @@ HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 
   hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
   if (hRes != ERROR_SUCCESS)
-    {
-      return FALSE;
-    }
+    return FALSE;
 
   hRes = RegSetValueEx(hKey, szRegValue,0,REG_SZ, (LPBYTE)Pos, (_tcslen(Pos)+1)*sizeof(TCHAR));
   RegCloseKey(hKey);
@@ -567,11 +563,10 @@ HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 #endif /* !WIN32 */
 }
 
-#define CheckIndex(x, i)    assert((i>=0) && (sizeof(x)/sizeof(x[0]) > (unsigned)i));
+#define CheckIndex(x, i) assert(i >= 0 && (unsigned)i < sizeof(x) / sizeof(x[0]))
 
 void SetRegistryColour(int i, DWORD c)
 {
-
   CheckIndex(szRegistryColour, i);
 
   SetToRegistry(szRegistryColour[i] ,c) ;
@@ -682,21 +677,21 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
 #endif /* _UNICODE */
         if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"), wname, wvalue) == 2) {
           if (!string_is_empty(wname)) {
-	    SetRegistryString(wname, wvalue);
-	    found = true;
-	  }
+            SetRegistryString(wname, wvalue);
+            found = true;
+          }
         } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
           if (!string_is_empty(wname)) {
-	    SetToRegistry(wname, j);
-	    found = true;
-	  }
+            SetToRegistry(wname, j);
+            found = true;
+          }
         } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
           if (!string_is_empty(wname)) {
-	    SetRegistryString(wname, TEXT(""));
-	    found = true;
-	  }
+            SetRegistryString(wname, TEXT(""));
+            found = true;
+          }
         } else {
-	  //		assert(false);	// Invalid line reached
+          //		assert(false);	// Invalid line reached
         }
       }
 
@@ -704,39 +699,39 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
     } else {
       while (fgets(inval, nMaxValueValueSize, fp)) {
         if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
-	  if (strlen(name)>0) {
+          if (strlen(name)>0) {
 #ifdef _UNICODE
-	    mbstowcs(wname, name, strlen(name)+1);
-	    mbstowcs(wvalue, value, strlen(value)+1);
+            mbstowcs(wname, name, strlen(name)+1);
+            mbstowcs(wvalue, value, strlen(value)+1);
 #else
             strcpy(wname, name);
             strcpy(wvalue, value);
 #endif
-	    SetRegistryString(wname, wvalue);
-	    found = true;
-	  }
+            SetRegistryString(wname, wvalue);
+            found = true;
+          }
         } else if (sscanf(inval, "%[^#=\r\n ]=%d[\r\n]", name, &j) == 2) {
-	  if (strlen(name)>0) {
+          if (strlen(name)>0) {
 #ifdef _UNICODE
-	    mbstowcs(wname, name, strlen(name)+1);
+            mbstowcs(wname, name, strlen(name)+1);
 #else
             strcpy(wname, name);
 #endif
-	    SetToRegistry(wname, j);
-	    found = true;
-	  }
+            SetToRegistry(wname, j);
+            found = true;
+          }
         } else if (sscanf(inval, "%[^#=\r\n ]=\"\"[\r\n]", name) == 1) {
-	  if (strlen(name)>0) {
+          if (strlen(name)>0) {
 #ifdef _UNICODE
-	    mbstowcs(wname, name, strlen(name)+1);
+            mbstowcs(wname, name, strlen(name)+1);
 #else
             strcpy(wname, name);
 #endif
-	    SetRegistryString(wname, TEXT(""));
-	    found = true;
-	  }
+            SetRegistryString(wname, TEXT(""));
+            found = true;
+          }
         } else {
-	  //		assert(false);	// Invalid line reached
+          //		assert(false);	// Invalid line reached
         }
       }
     }
@@ -779,7 +774,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
 
   HKEY hkFrom;
   LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey,
-			    0, KEY_ALL_ACCESS, &hkFrom);
+                            0, KEY_ALL_ACCESS, &hkFrom);
 
   if (ERROR_SUCCESS != res) {
     return;
@@ -803,13 +798,13 @@ void SaveRegistryToFile(const TCHAR *szFile)
     lpstrName[0] = _T('\0'); // null terminate, just in case
 
     LONG res = ::RegEnumValue(hkFrom, i, lpstrName,
-			      &nNameSize, 0,
+                              &nNameSize, 0,
 #ifdef __GNUC__
-			      &nType, uValue.pValue,
+                              &nType, uValue.pValue,
 #else
-			      &nType, pValue,
+                              &nType, pValue,
 #endif
-			      &nValueSize);
+                              &nValueSize);
 
     if (ERROR_NO_MORE_ITEMS == res) {
       break;
@@ -827,43 +822,43 @@ void SaveRegistryToFile(const TCHAR *szFile)
 
       if (nType==4) { // data
 #ifdef __GNUC__
-	fprintf(fp,"%S=%d\r\n", lpstrName, uValue.dValue);
+        fprintf(fp, "%S=%d\r\n", lpstrName, uValue.dValue);
 #else
-	wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-	fprintf(fp,"%s=%d\r\n", sName, *((DWORD*)pValue));
+        wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+        fprintf(fp, "%s=%d\r\n", sName, *((DWORD*)pValue));
 #endif
       } else
-      // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
-      if (nType==1) { // text
-	if (nValueSize>0) {
+        // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
+        if (nType==1) { // text
+          if (nValueSize>0) {
 #ifdef __GNUC__
-	  uValue.pValue[nValueSize]= 0; // null terminate, just in case
-	  uValue.pValue[nValueSize+1]= 0; // null terminate, just in case
-          if (!string_is_empty((const TCHAR*)uValue.pValue)) {
-	    fprintf(fp,"%S=\"%S\"\r\n", lpstrName, uValue.pValue);
-	  } else {
-	    fprintf(fp,"%S=\"\"\r\n", lpstrName);
-	  }
+            uValue.pValue[nValueSize]= 0; // null terminate, just in case
+            uValue.pValue[nValueSize+1]= 0; // null terminate, just in case
+            if (!string_is_empty((const TCHAR*)uValue.pValue)) {
+              fprintf(fp, "%S=\"%S\"\r\n", lpstrName, uValue.pValue);
+            } else {
+              fprintf(fp, "%S=\"\"\r\n", lpstrName);
+            }
 #else
-          if (!string_is_empty((const TCHAR*)pValue)) {
-	    pValue[nValueSize]= 0; // null terminate, just in case
-	    pValue[nValueSize+1]= 0; // null terminate, just in case
-	    wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-	    wcstombs(sValue,(TCHAR*)pValue,nMaxKeyNameSize+1);
-	    fprintf(fp,"%s=\"%s\"\r\n", sName, sValue);
-	  } else {
-	    wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-	    fprintf(fp,"%s=\"\"\r\n", sName);
-	  }
+            if (!string_is_empty((const TCHAR*)pValue)) {
+              pValue[nValueSize]= 0; // null terminate, just in case
+              pValue[nValueSize+1]= 0; // null terminate, just in case
+              wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+              wcstombs(sValue,(TCHAR*)pValue,nMaxKeyNameSize+1);
+              fprintf(fp, "%s=\"%s\"\r\n", sName, sValue);
+            } else {
+              wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+              fprintf(fp, "%s=\"\"\r\n", sName);
+            }
 #endif
-	} else {
+          } else {
 #ifdef __GNUC__
-	  fprintf(fp,"%S=\"\"\r\n", lpstrName);
+            fprintf(fp, "%S=\"\"\r\n", lpstrName);
 #else
-	  fprintf(fp,"%s=\"\"\r\n", lpstrName);
+            fprintf(fp, "%s=\"\"\r\n", lpstrName);
 #endif
-	}
-      }
+          }
+        }
     }
 
   }
@@ -873,7 +868,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
 #endif
 
 #ifdef __GNUC__
-  fprintf(fp,"\r\n"); // end of file
+  fprintf(fp, "\r\n"); // end of file
 #endif
 
   fclose(fp);
