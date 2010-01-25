@@ -40,7 +40,7 @@ trim_inplace(tstring &s)
 
   n = s.find_last_not_of(WHITESPACE);
   if (n != tstring::npos)
-    s.erase(n, s.length());
+    s.erase(n + 1, s.length());
 
   return s;
 }
