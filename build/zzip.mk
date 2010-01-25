@@ -11,7 +11,7 @@ ZZIP = \
 	$(ZZIPSRC)/zip.c 		$(ZZIPSRC)/zstat.c \
 	$(ZZIPSRC)/zutil.c
 
-ZZIP_LIBS = $(TARGET_OUTPUT_DIR)/zzip-$(TARGET).a
+ZZIP_LIBS = $(TARGET_OUTPUT_DIR)/zzip.a
 
 $(ZZIP_LIBS): $(call SRC_TO_OBJ,$(ZZIP))
 	@$(NQ)echo "  AR      $@"
