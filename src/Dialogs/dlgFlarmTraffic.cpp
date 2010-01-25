@@ -445,13 +445,15 @@ PaintTrafficInfo(Canvas &canvas) {
   canvas.select(TitleSmallWindowFont);
 
   // Climb Rate
+  if (warning < 0) {
 #ifdef FLARM_AVERAGE
-  _stprintf(tmp, _T(" %+.1f m/s"), traffic.Average30s);
+    _stprintf(tmp, _T(" %+.1f m/s"), traffic.Average30s);
 #else
-  _stprintf(tmp, _T(" %+.1f m/s"), traffic.ClimbRate);
+    _stprintf(tmp, _T(" %+.1f m/s"), traffic.ClimbRate);
 #endif
-  sz = canvas.text_size(tmp);
-  canvas.text(rc.right - sz.cx, rc.top, tmp);
+    sz = canvas.text_size(tmp);
+    canvas.text(rc.right - sz.cx, rc.top, tmp);
+  }
 
   // Distance
   _stprintf(tmp, _T("%.0f m"), sqrt(traffic.RelativeEast * traffic.RelativeEast +
