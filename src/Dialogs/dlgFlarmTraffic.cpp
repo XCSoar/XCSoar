@@ -56,6 +56,7 @@ static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wdf = NULL;
 static unsigned zoom = 2;
 static int selection = -1;
+static int warning = -1;
 static POINT radar_mid;
 static SIZE radar_size;
 
@@ -139,10 +140,79 @@ UpdateSelector()
     NextTarget();
 }
 
+/**
+ * Itterates through the traffic array, finds the target with the highest
+ * alarm level and saves it to "warning".
+ */
+static void
+UpdateWarnings()
+{
+  bool found = false;
+
+  for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
+    // if Traffic[i] not defined -> goto next one
+    if (!XCSoarInterface::Basic().flarm.FLARM_Traffic[i].defined())
+      continue;
+
+    // if current target has no alarm -> goto next one
+    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[i].AlarmLevel == 0)
+      continue;
+
+    // remember that a warning exists
+    found = true;
+    // if it did not before -> save the id and goto next one
+    if (!XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined()) {
+      warning = i;
+      continue;
+    }
+
+    // if it did before and the other level was higher -> just goto next one
+    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].AlarmLevel >
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].AlarmLevel) {
+      continue;
+    }
+
+    // if the other level was lower -> save the id and goto next one
+    if (XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].AlarmLevel <
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].AlarmLevel) {
+      warning = i;
+      continue;
+    }
+
+    // if the levels match -> let the distance decide (smaller distance wins)
+    double dist_w = sqrt(
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeAltitude *
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeAltitude +
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeEast *
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeEast +
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeNorth *
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].RelativeNorth);
+    double dist_i = sqrt(
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeAltitude *
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeAltitude +
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeEast *
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeEast +
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeNorth *
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[i].RelativeNorth);
+
+    if (dist_w > dist_i) {
+      warning = i;
+    }
+  }
+
+  // If no warning was found -> set warning to -1
+  if (!found)
+    warning = -1;
+}
+
+/**
+ * This should be called when the radar needs to be repainted
+ */
 static void
 Update()
 {
   UpdateSelector();
+  UpdateWarnings();
   wdf->invalidate();
 }
 
@@ -331,15 +401,18 @@ PaintRadarTraffic(Canvas &canvas) {
   static Brush hbWarning(Color(0xFF, 0xA2, 0x00));
   static Brush hbAlarm(Color::RED);
   static Brush hbStandard(Color::BLACK);
-  static Brush hbSelection(Color(0x12, 0xFF, 0x00));
+  static Brush hbPassive(Color::GRAY);
+  static Brush hbSelection(Color::BLUE);
   static Pen hpWarning(Layout::FastScale(2), Color(0xFF, 0xA2, 0x00));
   static Pen hpAlarm(Layout::FastScale(2), Color::RED);
   static Pen hpStandard(Layout::FastScale(2), Color::BLACK);
-  static Pen hpSelection(Layout::FastScale(2), Color(0x12, 0xFF, 0x00));
+  static Pen hpPassive(Layout::FastScale(2), Color::GRAY);
+  static Pen hpSelection(Layout::FastScale(2), Color::BLUE);
 
   // Iterate through the traffic
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
-    const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
+    const FLARM_TRAFFIC &traffic =
+        XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
 
     // If FLARM target does not exist -> next one
     if (!traffic.defined())
@@ -396,14 +469,17 @@ PaintRadarTraffic(Canvas &canvas) {
       break;
     case 0:
     case 4:
-      canvas.select(hbStandard);
-      canvas.select(hpStandard);
+      if (XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined()) {
+        canvas.select(hbPassive);
+        canvas.select(hpPassive);
+      } else if (static_cast<unsigned> (selection) == i) {
+        canvas.select(hpSelection);
+        canvas.select(hbSelection);
+      } else {
+        canvas.select(hbStandard);
+        canvas.select(hpStandard);
+      }
       break;
-    }
-
-    if (static_cast<unsigned>(selection) == i) {
-      canvas.select(hpSelection);
-      canvas.select(hbSelection);
     }
 
     // Create an arrow polygon
