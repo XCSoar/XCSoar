@@ -42,7 +42,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Math/Units.h"
-#include "MainWindow.hpp"
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
 #include "Compatibility/vk.h"
@@ -410,12 +409,12 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-void dlgAirspaceWarningInit()
+void
+dlgAirspaceWarningInit(SingleWindow &parent)
 {
   wf = dlgLoadFromXML(CallBackTable,
                       _T("dlgAirspaceWarning.xml"),
-                      XCSoarInterface::main_window,
+                      parent,
                       _T("IDR_XML_AIRSPACEWARNING"));
   if (wf == NULL)
     return;

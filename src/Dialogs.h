@@ -52,7 +52,10 @@ class AbstractAirspace;
 void StartupScreen();
 
 void dlgAirspaceWarningShowDlg();
-void dlgAirspaceWarningInit();
+
+void
+dlgAirspaceWarningInit(SingleWindow &parent);
+
 void dlgAirspaceWarningDeInit();
 bool dlgAirspaceWarningIsEmpty();
 bool dlgAirspaceWarningVisible();
