@@ -60,6 +60,7 @@ include $(topdir)/build/jasper.mk
 include $(topdir)/build/compat.mk
 include $(topdir)/build/shapelib.mk
 include $(topdir)/build/task.mk
+include $(topdir)/build/screen.mk
 include $(topdir)/build/harness.mk
 
 include $(topdir)/build/test.mk
@@ -320,35 +321,13 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/Blank.cpp \
-	$(SRC)/Screen/ButtonWindow.cpp \
 	$(SRC)/Screen/Chart.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Screen/Graphics.cpp \
 	$(SRC)/Screen/Ramp.cpp \
-	$(SRC)/Screen/STScreenBuffer.cpp \
-	$(SRC)/Screen/Util.cpp \
-	$(SRC)/Screen/VOIMAGE.cpp \
-	$(SRC)/Screen/Bitmap.cpp \
-	$(SRC)/Screen/Brush.cpp \
-	$(SRC)/Screen/Canvas.cpp \
-	$(SRC)/Screen/Color.cpp \
-	$(SRC)/Screen/VirtualCanvas.cpp \
-	$(SRC)/Screen/BitmapCanvas.cpp \
-	$(SRC)/Screen/Font.cpp \
-	$(SRC)/Screen/Pen.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
-	$(SRC)/Screen/Window.cpp \
-	$(SRC)/Screen/BufferWindow.cpp \
-	$(SRC)/Screen/PaintWindow.cpp \
-	$(SRC)/Screen/MaskedPaintWindow.cpp \
-	$(SRC)/Screen/ContainerWindow.cpp \
-	$(SRC)/Screen/TextWindow.cpp \
-	$(SRC)/Screen/EditWindow.cpp \
-	$(SRC)/Screen/TopWindow.cpp \
-	$(SRC)/Screen/SingleWindow.cpp \
-	$(SRC)/Screen/Dialog.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	\
 	$(SRC)/Polar/Polar.cpp \
@@ -383,16 +362,9 @@ XCSOAR_SOURCES := \
 #	$(SRC)/WaveThread.cpp \
 
 
-ifeq ($(ENABLE_SDL),y)
-XCSOAR_SOURCES += $(SRC)/Screen/Timer.cpp
-else
-XCSOAR_SOURCES += \
-	$(SRC)/Screen/BufferCanvas.cpp \
-	$(SRC)/Screen/PaintCanvas.cpp
-endif
-
 XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
 XCSOAR_LDADD = \
+	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(SHAPELIB_LIBS) \
 	$(JASPER_LIBS) \
