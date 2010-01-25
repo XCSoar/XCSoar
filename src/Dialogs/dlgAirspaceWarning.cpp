@@ -83,15 +83,7 @@ AirspaceWarningCursorCallback(unsigned i)
 static void
 OnAirspaceListEnter(unsigned i)
 {
-  terrain.Lock();
-  AirspaceWarning* warning = airspace_warning.get_warning(wAirspaceList->GetCursorIndex());
-  if (warning) {
-    FocusAirspace = &warning->get_airspace();
-  } else {
-    FocusAirspace = NULL;
-    // error!
-  }
-  terrain.Unlock();
+  FocusAirspace = CursorAirspace;
 }
 
 
