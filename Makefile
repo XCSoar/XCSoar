@@ -62,6 +62,7 @@ include $(topdir)/build/shapelib.mk
 include $(topdir)/build/task.mk
 include $(topdir)/build/datafield.mk
 include $(topdir)/build/screen.mk
+include $(topdir)/build/form.mk
 include $(topdir)/build/harness.mk
 
 include $(topdir)/build/test.mk
@@ -220,19 +221,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/InputEventsActions.cpp \
 	$(SRC)/StatusMessage.cpp \
 	$(SRC)/PopupMessage.cpp \
-	$(SRC)/Form/Control.cpp \
-	$(SRC)/Form/Container.cpp \
-	$(SRC)/Form/Panel.cpp \
-	$(SRC)/Form/Form.cpp \
-	$(SRC)/Form/Button.cpp \
-	$(SRC)/Form/EventButton.cpp \
-	$(SRC)/Form/Frame.cpp \
-	$(SRC)/Form/Draw.cpp \
-	$(SRC)/Form/List.cpp \
-	$(SRC)/Form/ScrollBar.cpp \
-	$(SRC)/Form/Edit.cpp \
-	$(SRC)/Form/Tabbed.cpp \
-	$(SRC)/Form/Util.cpp \
 	$(SRC)/LogFile.cpp \
 	\
 	$(SRC)/MapDrawHelper.cpp \
@@ -358,6 +346,7 @@ XCSOAR_SOURCES := \
 XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
 XCSOAR_LDADD = \
 	$(DATA_FIELD_LIBS) \
+	$(FORM_LIBS) \
 	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(SHAPELIB_LIBS) \

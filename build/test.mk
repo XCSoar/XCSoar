@@ -180,18 +180,6 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Form/Control.cpp \
-	$(SRC)/Form/Container.cpp \
-	$(SRC)/Form/Panel.cpp \
-	$(SRC)/Form/Form.cpp \
-	$(SRC)/Form/Button.cpp \
-	$(SRC)/Form/EventButton.cpp \
-	$(SRC)/Form/Frame.cpp \
-	$(SRC)/Form/Draw.cpp \
-	$(SRC)/Form/List.cpp \
-	$(SRC)/Form/ScrollBar.cpp \
-	$(SRC)/Form/Edit.cpp \
-	$(SRC)/Form/Tabbed.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(TEST_SRC_DIR)/RunDialog.cpp \
@@ -200,6 +188,7 @@ RUN_DIALOG_SOURCES = \
 RUN_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_DIALOG_SOURCES))
 RUN_DIALOG_LDADD = \
 	$(DATA_FIELD_LIBS) \
+	$(FORM_LIBS) \
 	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(ZZIP_LIBS) \
