@@ -88,11 +88,14 @@ OnAirspaceListEnter(unsigned i)
 
 
 static void DoAck(int Ack) {
-  if (!FocusAirspace) {
-    FocusAirspace = CursorAirspace;
-  }
+  const AbstractAirspace *airspace = FocusAirspace == NULL
+    ? CursorAirspace
+    : FocusAirspace;
+  if (airspace == NULL)
+    return;
+
   terrain.Lock();
-  AirspaceWarning* warning = airspace_warning.get_warning_ptr(*FocusAirspace);
+  AirspaceWarning* warning = airspace_warning.get_warning_ptr(*airspace);
   if (warning) {
     switch(Ack) {
     case -1:
