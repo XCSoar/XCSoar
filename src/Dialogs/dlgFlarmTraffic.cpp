@@ -36,6 +36,14 @@
 }
 */
 
+/**
+ * @file
+ * @todo use user-specifies units, not metric
+ * @todo make targets selectable via mouse
+ * @todo details dialog
+ * @todo team mates
+ */
+
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
@@ -49,8 +57,6 @@
 #include "MainWindow.hpp"
 
 #include <assert.h>
-
-#define FLARMMAXRANGE 2000
 
 static const Color hcWarning(0xFF, 0xA2, 0x00);
 static const Color hcAlarm(0xFF, 0x00, 0x00);
