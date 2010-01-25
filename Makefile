@@ -168,7 +168,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/ConditionMonitor.cpp \
 	$(SRC)/Calibration.cpp \
-	$(SRC)/FlarmIdFile.cpp \
+	$(SRC)/FLARM/FLARMNet.cpp \
 	$(SRC)/FlarmCalculations.cpp \
 	$(SRC)/GlideComputer.cpp \
 	$(SRC)/GlideComputerBlackboard.cpp \

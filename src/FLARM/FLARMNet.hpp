@@ -36,20 +36,16 @@ Copyright_License {
 }
 */
 
-#ifndef FLARMIDFILE_H
-#define FLARMIDFILE_H
+#ifndef XCSOAR_FLARM_NET_HPP
+#define XCSOAR_FLARM_NET_HPP
 
 #include <map>
-#include <stdio.h>
 #include <tchar.h>
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 
 /**
  * FLARMnet.org file entry
  */
-class FlarmId
+class FLARMNetRecord
 {
 public:
   TCHAR id[7];          /**< FLARM id 6 bytes */
@@ -59,26 +55,20 @@ public:
   TCHAR reg[8];         /**< Registration 7 bytes */
   TCHAR cn[4];          /**< Callsign 3 bytes */
   TCHAR freq[8];        /**< Radio frequency 6 bytes */
-  long GetId();
-};
 
-typedef FlarmId* FlarmIdptr;
-typedef std::map< long, FlarmIdptr > FlarmIdMap;
+  long GetId() const;
+};
 
 /**
  * Handles the FLARMnet.org file
  */
-class FlarmIdFile
+class FLARMNetDatabase : protected std::map<long, FLARMNetRecord*>
 {
-private:
-  FlarmIdMap flarmIds;
-  void GetAsString(HANDLE hFile, int charCount, TCHAR *res);
-  void GetItem(HANDLE hFile, FlarmId *flarmId);
 public:
-  FlarmIdFile(void);
-  ~FlarmIdFile(void);
-  FlarmId* GetFlarmIdItem(long id);
-  FlarmId* GetFlarmIdItem(const TCHAR *cn);
+  unsigned LoadFile(const TCHAR *path);
+
+  const FLARMNetRecord *Find(long id) const;
+  const FLARMNetRecord *Find(const TCHAR *cn) const;
 };
 
 #endif
