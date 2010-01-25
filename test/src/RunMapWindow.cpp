@@ -324,6 +324,8 @@ LoadFiles()
 
     if (!ReadAirspace(airspace_database, path))
       StartupStore(TEXT("No airspace file 1\n"));
+
+    airspace_database.optimise();
   }
 }
 
