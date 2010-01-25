@@ -237,6 +237,33 @@ GetZoomDistance() {
   }
 }
 
+static void
+GetZoomDistanceString(TCHAR* str1, TCHAR* str2) {
+  switch (zoom) {
+    case 0:
+      _tcscpy(str1, _T("500 m"));
+      _tcscpy(str2, _T("250 m"));
+      break;
+    case 1:
+      _tcscpy(str1, _T("1.0 km"));
+      _tcscpy(str2, _T("500 m"));
+      break;
+    case 3:
+      _tcscpy(str1, _T("5.0 km"));
+      _tcscpy(str2, _T("2.5 km"));
+      break;
+    case 4:
+      _tcscpy(str1, _T("10.0 km"));
+      _tcscpy(str2, _T("5.0 km"));
+      break;
+    case 2:
+    default:
+      _tcscpy(str1, _T("2.0 km"));
+      _tcscpy(str2, _T("1.0 km"));
+      break;
+  }
+}
+
 /**
  * Returns the distance to the own plane in pixels
  * @param d Distance in meters to the own plane
@@ -405,8 +432,22 @@ PaintRadarBackground(Canvas &canvas) {
   static Pen hpGray(Layout::FastScale(1), Color::GRAY);
   canvas.select(wdf->GetBackBrush());
   canvas.select(hpGray);
+  canvas.set_text_color(Color::GRAY);
+
+  // Paint circles
   canvas.circle(radar_mid.x, radar_mid.y, radar_size.cx * 0.5);
   canvas.circle(radar_mid.x, radar_mid.y, radar_size.cx * 0.25);
+
+  // Paint zoom strings
+  static TCHAR str1[10], str2[10];
+  GetZoomDistanceString(str1, str2);
+  static SIZE sz1, sz2;
+  sz1 = canvas.text_size(str1);
+  canvas.text(radar_mid.x - sz1.cx / 2,
+              radar_mid.y + radar_size.cx * 0.5 - sz1.cy * 0.75, str1);
+  sz2 = canvas.text_size(str2);
+  canvas.text(radar_mid.x - sz2.cx / 2,
+              radar_mid.y + radar_size.cx * 0.25 - sz2.cy * 0.75, str2);
 }
 
 /**
