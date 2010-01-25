@@ -370,25 +370,25 @@ static void
 GetZoomDistanceString(TCHAR* str1, TCHAR* str2) {
   switch (zoom) {
     case 0:
-      _tcscpy(str1, _T("500 m"));
-      _tcscpy(str2, _T("250 m"));
+      _tcscpy(str1, _T(" 500 m "));
+      _tcscpy(str2, _T(" 250 m "));
       break;
     case 1:
-      _tcscpy(str1, _T("1.0 km"));
-      _tcscpy(str2, _T("500 m"));
+      _tcscpy(str1, _T(" 1.0 km "));
+      _tcscpy(str2, _T(" 500 m "));
       break;
     case 3:
-      _tcscpy(str1, _T("5.0 km"));
-      _tcscpy(str2, _T("2.5 km"));
+      _tcscpy(str1, _T(" 5.0 km "));
+      _tcscpy(str2, _T(" 2.5 km "));
       break;
     case 4:
-      _tcscpy(str1, _T("10.0 km"));
-      _tcscpy(str2, _T("5.0 km"));
+      _tcscpy(str1, _T(" 10.0 km "));
+      _tcscpy(str2, _T(" 5.0 km "));
       break;
     case 2:
     default:
-      _tcscpy(str1, _T("2.0 km"));
-      _tcscpy(str2, _T("1.0 km"));
+      _tcscpy(str1, _T(" 2.0 km "));
+      _tcscpy(str2, _T(" 1.0 km "));
       break;
   }
 }
@@ -430,21 +430,19 @@ PaintTrafficInfo(Canvas &canvas) {
   RECT rc;
   rc.left = min(radar_mid.x - radar_size.cx * 0.5,
                 radar_mid.y - radar_size.cy * 0.5);
-  rc.top = radar_mid.y - radar_size.cy * 0.5;
+  rc.top = rc.left;
   rc.right = 2 * radar_mid.x - rc.left;
   rc.bottom = 2 * radar_mid.y - rc.top;
 
   // Set the text color and background
   canvas.set_text_color(hcStandard);
-  canvas.background_transparent();
   canvas.select(TitleSmallWindowFont);
-  // TitleSmallWindowFont CDIWindowFont
 
   // Climb Rate
 #ifdef FLARM_AVERAGE
-  _stprintf(tmp, _T("%+.1f m/s"), traffic.Average30s);
+  _stprintf(tmp, _T(" %+.1f m/s"), traffic.Average30s);
 #else
-  _stprintf(tmp, _T("%+.1f m/s"), traffic.ClimbRate);
+  _stprintf(tmp, _T(" %+.1f m/s"), traffic.ClimbRate);
 #endif
   sz = canvas.text_size(tmp);
   canvas.text(rc.right - sz.cx, rc.top, tmp);
