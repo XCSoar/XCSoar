@@ -609,6 +609,30 @@ PaintRadarTraffic(Canvas &canvas) {
 
     // Draw the polygon
     canvas.polygon(Arrow, 5);
+
+#ifdef FLARM_AVERAGE
+    // if warning exists -> don't draw vertical speeds
+    if (warning >= 0)
+      continue;
+
+    // if vertical speed to small or negative -> skip this one
+    if (traffic.Average30s < 0.5)
+      continue;
+
+    // Select font and color
+    canvas.background_transparent();
+    canvas.select(MapWindowBoldFont);
+    if (static_cast<unsigned> (selection) == i)
+      canvas.set_text_color(hcSelection);
+    else
+      canvas.set_text_color(hcStandard);
+
+    // Draw vertical speed
+    TCHAR tmp[10];
+    _stprintf(tmp, _T("%+.1f"), traffic.Average30s);
+    SIZE sz = canvas.text_size(tmp);
+    canvas.text(sc.x + Layout::FastScale(10), sc.y - sz.cy * 0.5, tmp);
+#endif
   }
 }
 
