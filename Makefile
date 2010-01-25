@@ -60,6 +60,7 @@ include $(topdir)/build/jasper.mk
 include $(topdir)/build/compat.mk
 include $(topdir)/build/shapelib.mk
 include $(topdir)/build/task.mk
+include $(topdir)/build/datafield.mk
 include $(topdir)/build/screen.mk
 include $(topdir)/build/harness.mk
 
@@ -204,14 +205,6 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/AirfieldDetails.cpp \
 	$(SRC)/ButtonLabel.cpp \
-	$(SRC)/DataField/Base.cpp \
-	$(SRC)/DataField/Boolean.cpp \
-	$(SRC)/DataField/ComboList.cpp \
-	$(SRC)/DataField/Enum.cpp \
-	$(SRC)/DataField/FileReader.cpp \
-	$(SRC)/DataField/Float.cpp \
-	$(SRC)/DataField/Integer.cpp \
-	$(SRC)/DataField/String.cpp \
 	$(SRC)/Dialogs.cpp \
 	$(SRC)/ExpandMacros.cpp \
 	$(SRC)/Formatter/Base.cpp \
@@ -364,6 +357,7 @@ XCSOAR_SOURCES := \
 
 XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
 XCSOAR_LDADD = \
+	$(DATA_FIELD_LIBS) \
 	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(SHAPELIB_LIBS) \

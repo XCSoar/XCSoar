@@ -180,14 +180,6 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/DataField/Base.cpp \
-	$(SRC)/DataField/Boolean.cpp \
-	$(SRC)/DataField/ComboList.cpp \
-	$(SRC)/DataField/Enum.cpp \
-	$(SRC)/DataField/FileReader.cpp \
-	$(SRC)/DataField/Float.cpp \
-	$(SRC)/DataField/Integer.cpp \
-	$(SRC)/DataField/String.cpp \
 	$(SRC)/Form/Control.cpp \
 	$(SRC)/Form/Container.cpp \
 	$(SRC)/Form/Panel.cpp \
@@ -207,6 +199,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Compatibility/fmode.c
 RUN_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_DIALOG_SOURCES))
 RUN_DIALOG_LDADD = \
+	$(DATA_FIELD_LIBS) \
 	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(ZZIP_LIBS) \
