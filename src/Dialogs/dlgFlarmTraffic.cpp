@@ -310,7 +310,7 @@ PaintRadarTraffic(Canvas &canvas) {
   static Pen hpStandard(Layout::FastScale(2), Color::BLACK);
   static Pen hpSelection(Layout::FastScale(2), Color(0x12, 0xFF, 0x00));
 
-  // Iterate throught the traffic
+  // Iterate through the traffic
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     const FLARM_TRAFFIC &traffic = XCSoarInterface::Basic().flarm.FLARM_Traffic[i];
 
@@ -318,7 +318,7 @@ PaintRadarTraffic(Canvas &canvas) {
     if (!traffic.defined())
       continue;
 
-    // Save rel. East/North
+    // Save relative East/North
     double x, y;
     x = traffic.RelativeEast;
     y = -traffic.RelativeNorth;
