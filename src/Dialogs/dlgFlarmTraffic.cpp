@@ -405,6 +405,88 @@ RangeScale(double d)
 }
 
 /**
+ * Paints the basic info for the selected target on the given canvas
+ * @param canvas The canvas to paint on
+ */
+static void
+PaintTrafficInfo(Canvas &canvas) {
+  // Don't paint numbers if no plane selected
+  if (selection == -1 ||
+      !XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].defined())
+    return;
+
+  // Temporary string
+  TCHAR tmp[20];
+  // Temporary string size
+  SIZE sz;
+  // Shortcut to the selected traffic
+  FLARM_TRAFFIC traffic;
+  if (warning >= 0 &&
+      XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined())
+    traffic = XCSoarInterface::Basic().flarm.FLARM_Traffic[warning];
+  else
+    traffic = XCSoarInterface::Basic().flarm.FLARM_Traffic[selection];
+
+  RECT rc;
+  rc.left = min(radar_mid.x - radar_size.cx * 0.5,
+                radar_mid.y - radar_size.cy * 0.5);
+  rc.top = radar_mid.y - radar_size.cy * 0.5;
+  rc.right = 2 * radar_mid.x - rc.left;
+  rc.bottom = 2 * radar_mid.y - rc.top;
+
+  // Set the text color and background
+  canvas.set_text_color(hcStandard);
+  canvas.background_transparent();
+  canvas.select(TitleSmallWindowFont);
+  // TitleSmallWindowFont CDIWindowFont
+
+  // Climb Rate
+#ifdef FLARM_AVERAGE
+  _stprintf(tmp, _T("%+.1f m/s"), traffic.Average30s);
+#else
+  _stprintf(tmp, _T("%+.1f m/s"), traffic.ClimbRate);
+#endif
+  sz = canvas.text_size(tmp);
+  canvas.text(rc.right - sz.cx, rc.top, tmp);
+
+  // Distance
+  _stprintf(tmp, _T("%.0f m"), sqrt(traffic.RelativeEast * traffic.RelativeEast +
+                                    traffic.RelativeNorth * traffic.RelativeNorth));
+  sz = canvas.text_size(tmp);
+  canvas.text(rc.left, rc.bottom - sz.cy, tmp);
+
+  // Relative Height
+  _stprintf(tmp, _T("%+.0f m"), traffic.RelativeAltitude);
+  sz = canvas.text_size(tmp);
+  canvas.text(rc.right - sz.cx, rc.bottom - sz.cy, tmp);
+
+  // ID / Name
+  if (traffic.HasName()) {
+    canvas.select(InfoWindowFont);
+    switch (traffic.AlarmLevel) {
+    case 1:
+      canvas.set_text_color(hcWarning);
+      break;
+    case 2:
+    case 3:
+      canvas.set_text_color(hcAlarm);
+      break;
+    case 4:
+    case 0:
+    default:
+      canvas.set_text_color(hcSelection);
+      break;
+    }
+    _tcscpy(tmp, traffic.Name);
+  } else {
+    canvas.set_text_color(hcStandard);
+    _stprintf(tmp, _T("%lX"), traffic.ID);
+  }
+  canvas.text(rc.left, rc.top, tmp);
+
+}
+
+/**
  * Paints a "No Traffic" sign on the given canvas
  * @param canvas The canvas to paint on
  */
@@ -585,6 +667,7 @@ OnRadarPaint(WindowControl *Sender, Canvas &canvas)
   (void)zoom;
   PaintRadarBackground(canvas);
   PaintRadarPlane(canvas);
+  PaintTrafficInfo(canvas);
   PaintRadarTraffic(canvas);
 }
 
