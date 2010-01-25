@@ -275,6 +275,11 @@ static void
 OnPrevClicked(WindowControl * Sender)
 {
   (void)Sender;
+
+  // If warning is displayed -> prevent selector movement
+  if (warning >= 0)
+    return;
+
   PrevTarget();
   Update();
 }
@@ -286,6 +291,11 @@ static void
 OnNextClicked(WindowControl * Sender)
 {
   (void)Sender;
+
+  // If warning is displayed -> prevent selector movement
+  if (warning >= 0)
+    return;
+
   NextTarget();
   Update();
 }
