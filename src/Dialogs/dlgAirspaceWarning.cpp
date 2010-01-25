@@ -68,6 +68,19 @@ static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
 // just to get the lock OLD_TASK
 
 static void
+AirspaceWarningCursorCallback(unsigned i)
+{
+  terrain.Lock();
+
+  AirspaceWarning *warning = airspace_warning.get_warning(i);
+  CursorAirspace = warning != NULL
+    ? &warning->get_airspace()
+    : NULL;
+
+  terrain.Unlock();
+}
+
+static void
 OnAirspaceListEnter(unsigned i)
 {
   terrain.Lock();
@@ -196,9 +209,6 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 
   const AbstractAirspace& as = warning->get_airspace();
   const AirspaceInterceptSolution& solution = warning->get_solution();
-
-  if (i == wAirspaceList->GetCursorIndex())
-    CursorAirspace = &as;
 
   tstring sName = as.get_name_text(false);
   tstring sTop = as.get_top_text(true);
@@ -429,6 +439,7 @@ dlgAirspaceWarningInit(SingleWindow &parent)
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceWarningList"));
   wAirspaceList->SetPaintItemCallback(OnAirspaceListItemPaint);
+  wAirspaceList->SetCursorCallback(AirspaceWarningCursorCallback);
   wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
 }
 
