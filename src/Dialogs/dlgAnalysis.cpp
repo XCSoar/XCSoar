@@ -63,7 +63,7 @@ Copyright_License {
 static int page = 0;
 static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wGrid = NULL;
-static WndOwnerDrawFrame *wInfo = NULL;
+static WndFrame *wInfo;
 static WndButton *wCalc = NULL;
 
 static void
@@ -388,7 +388,7 @@ dlgAnalysisShowModal(void)
   wf->SetKeyDownNotify(FormKeyDown);
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
-  wInfo = (WndOwnerDrawFrame*)wf->FindByName(_T("frmInfo"));
+  wInfo = (WndFrame *)wf->FindByName(_T("frmInfo"));
   wCalc = ((WndButton *)wf->FindByName(_T("cmdCalc")));
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->
