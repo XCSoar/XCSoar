@@ -88,7 +88,7 @@ OnAirspaceListEnter(unsigned i)
 
 
 static void DoAck(int Ack) {
-  const AbstractAirspace *airspace = FocusAirspace == NULL
+  const AbstractAirspace *airspace = has_pointer() || FocusAirspace == NULL
     ? CursorAirspace
     : FocusAirspace;
   if (airspace == NULL)
@@ -435,7 +435,11 @@ dlgAirspaceWarningInit(SingleWindow &parent)
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceWarningList"));
   wAirspaceList->SetPaintItemCallback(OnAirspaceListItemPaint);
   wAirspaceList->SetCursorCallback(AirspaceWarningCursorCallback);
-  wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
+
+  if (!has_pointer())
+    /* on platforms without a pointing device (e.g. ALTAIR), allow
+       "focusing" an airspace by pressing enter */
+    wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
 }
 
 void dlgAirspaceWarningDeInit()
