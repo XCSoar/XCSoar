@@ -188,8 +188,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   if (!warning) {
     if (i == 0){
       _stprintf(sTmp, _T("%s"), gettext(_T("No Warnings")));
-      canvas.text_opaque(paint_rc.left + IBLSCALE(2),
-                         paint_rc.top + IBLSCALE(2), sTmp);
+      canvas.text(paint_rc.left + IBLSCALE(2),
+                  paint_rc.top + IBLSCALE(2), sTmp);
     }
     return;
   }
