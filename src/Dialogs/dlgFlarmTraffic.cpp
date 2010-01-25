@@ -52,27 +52,27 @@
 
 #define FLARMMAXRANGE 2000
 
-static Color hcWarning(0xFF, 0xA2, 0x00);
-static Color hcAlarm(0xFF, 0x00, 0x00);
-static Color hcStandard(0x00, 0x00, 0x00);
-static Color hcPassive(0x99, 0x99, 0x99);
-static Color hcSelection(0x00, 0x00, 0xFF);
-static Color hcBackground(0xFF, 0xFF, 0xFF);
-static Color hcRadar(0x55, 0x55, 0x55);
+static const Color hcWarning(0xFF, 0xA2, 0x00);
+static const Color hcAlarm(0xFF, 0x00, 0x00);
+static const Color hcStandard(0x00, 0x00, 0x00);
+static const Color hcPassive(0x99, 0x99, 0x99);
+static const Color hcSelection(0x00, 0x00, 0xFF);
+static const Color hcBackground(0xFF, 0xFF, 0xFF);
+static const Color hcRadar(0x55, 0x55, 0x55);
 
-static Brush hbWarning(hcWarning);
-static Brush hbAlarm(hcAlarm);
-static Brush hbStandard(hcStandard);
-static Brush hbPassive(hcPassive);
-static Brush hbSelection(hcSelection);
+static const Brush hbWarning(hcWarning);
+static const Brush hbAlarm(hcAlarm);
+static const Brush hbStandard(hcStandard);
+static const Brush hbPassive(hcPassive);
+static const Brush hbSelection(hcSelection);
 
-static Pen hpWarning(Layout::FastScale(2), hcWarning);
-static Pen hpAlarm(Layout::FastScale(2), hcAlarm);
-static Pen hpStandard(Layout::FastScale(2), hcStandard);
-static Pen hpPassive(Layout::FastScale(2), hcPassive);
-static Pen hpSelection(Layout::FastScale(2), hcSelection);
-static Pen hpPlane(Layout::FastScale(2), hcRadar);
-static Pen hpRadar(Layout::FastScale(1), hcRadar);
+static const Pen hpWarning(Layout::FastScale(2), hcWarning);
+static const Pen hpAlarm(Layout::FastScale(2), hcAlarm);
+static const Pen hpStandard(Layout::FastScale(2), hcStandard);
+static const Pen hpPassive(Layout::FastScale(2), hcPassive);
+static const Pen hpSelection(Layout::FastScale(2), hcSelection);
+static const Pen hpPlane(Layout::FastScale(2), hcRadar);
+static const Pen hpRadar(Layout::FastScale(1), hcRadar);
 
 static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wdf = NULL;
