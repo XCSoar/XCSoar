@@ -1142,22 +1142,22 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   n1 = ifastsine(angle) / 2 - 200;
   e1 = ifastcosine(angle) / 1.5;
   t1 = AngleLimit360(-angle);
-  l = (i % 15 > 7 ? 1 : 2);
+  l = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
   static unsigned h2;
   static unsigned n2;
   static unsigned e2;
   static unsigned t2;
   h2 = ifastcosine(angle) / 10;
-  n2 = ifastsine(AngleLimit360(angle+120)) / 1.2 + 300;
-  e2 = ifastcosine(AngleLimit360(angle+120)) + 500;
-  t2 = AngleLimit360(-angle-120);
+  n2 = ifastsine(AngleLimit360(angle + 120)) / 1.2 + 300;
+  e2 = ifastcosine(AngleLimit360(angle + 120)) + 500;
+  t2 = AngleLimit360(-angle - 120);
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   static TCHAR t_laa1[50];
   _stprintf(t_laa1, _T("%d,%d,%d,%d,2,DD927B,%d,0,0,0,1"), l, n1, e1, h1, t1);
   static TCHAR t_laa2[50];
-  _stprintf(t_laa2, _T("0,%d,%d,%d,2,DD9146,%d,0,0,0,1"), n2, e2, h2, t2);
+  _stprintf(t_laa2, _T("0,%d,%d,%d,2,AA9146,%d,0,0,0,1"), n2, e2, h2, t2);
 
   GPS_INFO->flarm.FLARM_Available = true;
   TCHAR ctemp[MAX_NMEA_LEN];
