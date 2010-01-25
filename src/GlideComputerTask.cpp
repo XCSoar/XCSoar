@@ -37,27 +37,14 @@ Copyright_License {
 
 */
 
-#include "Task/TaskManager.hpp"
-
 #include "GlideComputerTask.hpp"
-#include "Protection.hpp"
-#include "SettingsTask.hpp"
-#include "Math/Earth.hpp"
-#include "Math/Geometry.hpp"
-#include "Math/LowPassFilter.hpp"
+#include "Task/TaskManager.hpp"
 #include "RasterTerrain.h"
-#include "GlideRatio.hpp"
-#include "GlideTerrain.hpp"
-#include "Logger.h"
-#include "InputEvents.h"
 #include "Components.hpp"
-#include <assert.h>
 
-#ifndef _MSC_VER
 #include <algorithm>
-using std::min;
+
 using std::max;
-#endif
 
 // JMW TODO: abstract up to higher layer so a base copy of this won't
 // call any event
@@ -79,9 +66,6 @@ GlideComputerTask::ResetFlight(const bool full)
   m_task.reset();
   terrain.Unlock();
 }
-
-
-extern TaskBehaviour task_behaviour;
 
 void
 GlideComputerTask::ProcessBasicTask()
