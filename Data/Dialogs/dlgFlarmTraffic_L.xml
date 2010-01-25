@@ -16,7 +16,7 @@
     <WndButton Name="cmdPrev" Caption="&lt;" X="5" Y="160" Width="28" Height="28" Font="2" Tag="4" />
     <WndButton Name="cmdNext" Caption="&gt;" X="35" Y="160" Width="28" Height="28" Font="2" Tag="5" />
     <WndButton Name="cmdClose" Caption="Close" X="5" Y="190" Width="58" Height="28" Font="2" Tag="6" />
-    <WndOwnerDrawFrame Name="frmRadar" X="68" Y="5" Width="244" Height="214" Font="3" BackColor="0xFFFFFF">
+    <WndOwnerDrawFrame Name="frmRadar" X="68" Y="5" Width="244" Height="214" Font="1" BackColor="0xFFFFFF">
   </WndForm>
 
 </PMML>

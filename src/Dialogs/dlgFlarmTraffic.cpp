@@ -442,6 +442,7 @@ PaintRadarBackground(Canvas &canvas) {
   static TCHAR str1[10], str2[10];
   GetZoomDistanceString(str1, str2);
   static SIZE sz1, sz2;
+  canvas.select(MapWindowFont);
   sz1 = canvas.text_size(str1);
   canvas.text(radar_mid.x - sz1.cx / 2,
               radar_mid.y + radar_size.cx * 0.5 - sz1.cy * 0.75, str1);
