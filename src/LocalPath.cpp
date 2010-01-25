@@ -105,9 +105,13 @@ void LocalPath(TCHAR* buffer, const TCHAR* file, int loc) {
 
 
 void LocalPathS(char *buffer, const TCHAR* file, int loc) {
+#ifdef HAVE_POSIX
+  LocalPath(buffer,file,loc);
+#else
   TCHAR wbuffer[MAX_PATH];
   LocalPath(wbuffer,file,loc);
   sprintf(buffer,"%S",wbuffer);
+#endif
 }
 
 /**
