@@ -146,6 +146,9 @@ Update()
   wdf->invalidate();
 }
 
+/**
+ * This event handler is called when the "Details" button is pressed
+ */
 static void
 OnDetailsClicked(WindowControl * Sender)
 {
@@ -153,6 +156,9 @@ OnDetailsClicked(WindowControl * Sender)
   MessageBoxX(_T("This feature is not implemented yet."), _T(""), MB_OK);
 }
 
+/**
+ * This event handler is called when the "ZoomIn (+)" button is pressed
+ */
 static void
 OnZoomInClicked(WindowControl * Sender)
 {
@@ -160,6 +166,9 @@ OnZoomInClicked(WindowControl * Sender)
   ZoomIn();
 }
 
+/**
+ * This event handler is called when the "ZoomOut (-)" button is pressed
+ */
 static void
 OnZoomOutClicked(WindowControl * Sender)
 {
@@ -167,6 +176,9 @@ OnZoomOutClicked(WindowControl * Sender)
   ZoomOut();
 }
 
+/**
+ * This event handler is called when the "Prev (<)" button is pressed
+ */
 static void
 OnPrevClicked(WindowControl * Sender)
 {
@@ -175,6 +187,9 @@ OnPrevClicked(WindowControl * Sender)
   Update();
 }
 
+/**
+ * This event handler is called when the "Next (>)" button is pressed
+ */
 static void
 OnNextClicked(WindowControl * Sender)
 {
@@ -183,6 +198,9 @@ OnNextClicked(WindowControl * Sender)
   Update();
 }
 
+/**
+ * This event handler is called when the "Close" button is pressed
+ */
 static void
 OnCloseClicked(WindowControl * Sender)
 {
@@ -190,6 +208,11 @@ OnCloseClicked(WindowControl * Sender)
   wf->SetModalResult(mrOK);
 }
 
+/**
+ * This event handler is called when a key is pressed
+ * @param key_code The key code of the pressed key
+ * @return True if the event was handled, False otherwise
+ */
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
@@ -212,6 +235,10 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
+/**
+ * This event handler is called when the timer is activated and triggers the
+ * repainting of the radar
+ */
 static int
 OnTimerNotify(WindowControl * Sender)
 {
