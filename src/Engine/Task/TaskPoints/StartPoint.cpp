@@ -89,3 +89,13 @@ StartPoint::equals(const OrderedTaskPoint* other) const
     return false;
   }
 }
+
+const GEOPOINT&
+StartPoint::get_location_remaining() const
+{
+  if (has_exited()) {
+    return get_location_min();
+  } else {
+    return get_location();
+  }
+}

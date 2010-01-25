@@ -523,6 +523,10 @@ private:
  */
   void erase(unsigned i);
 
+  void update_start_transition(const AIRCRAFT_STATE &state,
+                               const bool transition_enter, 
+                               const bool transition_exit);
+
   OrderedTaskPointVector tps;
 
   StartPoint *ts;

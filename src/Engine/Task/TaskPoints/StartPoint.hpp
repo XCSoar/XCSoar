@@ -111,6 +111,9 @@ public:
  */
   bool equals(const OrderedTaskPoint* other) const;
 
+  const GEOPOINT&
+  get_location_remaining() const;
+
 private:
   bool enabled; /**< For future use with multiple start points, whether enabled */
 

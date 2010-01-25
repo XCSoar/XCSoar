@@ -252,6 +252,9 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
         last_started = false;
       }
     }
+    if (i==0) {
+      update_start_transition(state, transition_enter, transition_exit);
+    }
     if (tps[i]->update_sample(state, task_events)) {
       full_update = true;
     }
@@ -783,4 +786,18 @@ TaskProjection&
 OrderedTask::get_task_projection() 
 {
   return task_projection;
+}
+
+
+void
+OrderedTask::update_start_transition(const AIRCRAFT_STATE &state,
+                                     const bool transition_enter, 
+                                     const bool transition_exit)
+{
+  // reset on invalid transition
+
+  if (!ts->isInSector(state) 
+      && !ts->has_exited()) {
+    ts->reset();
+  }
 }
