@@ -52,6 +52,28 @@
 
 #define FLARMMAXRANGE 2000
 
+static Color hcWarning(0xFF, 0xA2, 0x00);
+static Color hcAlarm(0xFF, 0x00, 0x00);
+static Color hcStandard(0x00, 0x00, 0x00);
+static Color hcPassive(0x99, 0x99, 0x99);
+static Color hcSelection(0x00, 0x00, 0xFF);
+static Color hcBackground(0xFF, 0xFF, 0xFF);
+static Color hcRadar(0x55, 0x55, 0x55);
+
+static Brush hbWarning(hcWarning);
+static Brush hbAlarm(hcAlarm);
+static Brush hbStandard(hcStandard);
+static Brush hbPassive(hcPassive);
+static Brush hbSelection(hcSelection);
+
+static Pen hpWarning(Layout::FastScale(2), hcWarning);
+static Pen hpAlarm(Layout::FastScale(2), hcAlarm);
+static Pen hpStandard(Layout::FastScale(2), hcStandard);
+static Pen hpPassive(Layout::FastScale(2), hcPassive);
+static Pen hpSelection(Layout::FastScale(2), hcSelection);
+static Pen hpPlane(Layout::FastScale(2), hcRadar);
+static Pen hpRadar(Layout::FastScale(1), hcRadar);
+
 static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wdf = NULL;
 static unsigned zoom = 2;
@@ -383,6 +405,7 @@ PaintRadarNoTraffic(Canvas &canvas) {
   canvas.select(StatisticsFont);
   canvas.black_pen();
   canvas.select(wdf->GetBackBrush());
+  canvas.set_text_color(hcStandard);
   canvas.text(radar_mid.x - (ts.cx / 2), radar_mid.y - (radar_size.cy / 4), str);
 }
 
@@ -397,17 +420,6 @@ PaintRadarTraffic(Canvas &canvas) {
     PaintRadarNoTraffic(canvas);
     return;
   }
-
-  static Brush hbWarning(Color(0xFF, 0xA2, 0x00));
-  static Brush hbAlarm(Color::RED);
-  static Brush hbStandard(Color::BLACK);
-  static Brush hbPassive(Color::GRAY);
-  static Brush hbSelection(Color::BLUE);
-  static Pen hpWarning(Layout::FastScale(2), Color(0xFF, 0xA2, 0x00));
-  static Pen hpAlarm(Layout::FastScale(2), Color::RED);
-  static Pen hpStandard(Layout::FastScale(2), Color::BLACK);
-  static Pen hpPassive(Layout::FastScale(2), Color::GRAY);
-  static Pen hpSelection(Layout::FastScale(2), Color::BLUE);
 
   // Iterate through the traffic
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
@@ -510,7 +522,6 @@ PaintRadarTraffic(Canvas &canvas) {
  */
 static void
 PaintRadarPlane(Canvas &canvas) {
-  static Pen hpPlane(IBLSCALE(2), Color::GRAY);
   canvas.select(hpPlane);
   canvas.line(radar_mid.x + Layout::FastScale(10),
               radar_mid.y - Layout::FastScale(2),
@@ -532,10 +543,9 @@ PaintRadarPlane(Canvas &canvas) {
  */
 static void
 PaintRadarBackground(Canvas &canvas) {
-  static Pen hpGray(Layout::FastScale(1), Color::GRAY);
   canvas.select(wdf->GetBackBrush());
-  canvas.select(hpGray);
-  canvas.set_text_color(Color::GRAY);
+  canvas.select(hpRadar);
+  canvas.set_text_color(hcRadar);
 
   // Paint circles
   canvas.circle(radar_mid.x, radar_mid.y, radar_size.cx * 0.5);
