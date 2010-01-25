@@ -61,7 +61,7 @@ testtap: $(BUILDTESTS)
 $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $(TARGET_BIN_DIR)/dirstamp
 	gcc -o $@ $<
 
-DEBUG_PROGRAM_NAMES = RunWayPointParser RunCanvas RunMapWindow RunDialog
+DEBUG_PROGRAM_NAMES = RunWayPointParser RunCanvas RunMapWindow RunDialog RunAirspaceWarningDialog
 DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
 
 RUN_WAY_POINT_PARSER_SOURCES = \
@@ -194,6 +194,36 @@ RUN_DIALOG_LDADD = \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/RunDialog$(TARGET_EXEEXT): $(RUN_DIALOG_OBJS) $(RUN_DIALOG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
+	$(SRC)/xmlParser.cpp \
+	$(SRC)/Dialogs/XML.cpp \
+	$(SRC)/Dialogs/dlgComboPicker.cpp \
+	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(SRC)/Dialogs/dlgAirspaceWarning.cpp \
+	$(SRC)/AirspaceParser.cpp \
+	$(SRC)/Screen/Animation.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/shapelib/mapsearch.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Registry.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/StringUtil.cpp \
+	$(SRC)/UtilsText.cpp \
+	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
+RUN_AIRSPACE_WARNING_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_AIRSPACE_WARNING_DIALOG_SOURCES))
+RUN_AIRSPACE_WARNING_DIALOG_LDADD = \
+	$(DATA_FIELD_LIBS) \
+	$(FORM_LIBS) \
+	$(SCREEN_LIBS) \
+	$(ENGINE_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS) \
+	$(RESOURCE_BINARY)
+$(TARGET_BIN_DIR)/RunAirspaceWarningDialog$(TARGET_EXEEXT): $(RUN_AIRSPACE_WARNING_DIALOG_OBJS) $(RUN_AIRSPACE_WARNING_DIALOG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
