@@ -82,7 +82,7 @@ StartupStore(const TCHAR *Str, ...)
   va_end(ap);
 }
 
-BOOL
+bool
 GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
   return false;
@@ -93,7 +93,7 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal)
   return 0;
 }
 
-HRESULT
+bool
 SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   return 0;
