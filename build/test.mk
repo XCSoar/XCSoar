@@ -222,6 +222,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsText.cpp \
+	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
 RUN_AIRSPACE_WARNING_DIALOG_BIN = $(TARGET_BIN_DIR)/RunAirspaceWarningDialog$(TARGET_EXEEXT)
 RUN_AIRSPACE_WARNING_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_AIRSPACE_WARNING_DIALOG_SOURCES))

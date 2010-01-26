@@ -50,9 +50,19 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "GlideComputerInterface.hpp"
 #include "Task/TaskManager.hpp"
+#include "Screen/Blank.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
+
+#if defined(PNA) || defined(FIVV)
+int GlobalModelType = MODELTYPE_UNKNOWN;
+bool needclipping = false;
+#endif
+
+#ifdef HAVE_BLANK
+int DisplayTimeOut = 0;
+#endif
 
 bool
 FileExistsA(const char *FileName)
