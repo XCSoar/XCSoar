@@ -11,7 +11,7 @@ InstallDir = "%CE1%\%AppName%"
 [Strings]
 reg_path = Software\OpenSource\XCSoar
 LinkFilename1 = "XCSoar FLY"
-LinkFilename2 = "XCSoar SIM"
+LinkFilename2 SIM"
 
 [CEDevice.ARM]
 ProcessorType=2577
@@ -65,7 +65,6 @@ VersionMax = 32767.0
 
 [SourceDisksFiles]
 XCSoar.exe = 1
-XCSoarSimulator.exe = 2
 XCSoarLaunch.dll = 3
 XCSoarSetup.dll = 4
 DejaVuSansCondensed-BoldOblique2.ttf = 5
@@ -98,7 +97,6 @@ Links = 0,%CE11% ; "\Windows\Start Menu" directory
 
 [TheFiles]
 XCSoar.exe
-XCSoarSimulator.exe
 XCSoarSetup.dll
 GRecordDll.dll
 
@@ -134,4 +132,3 @@ HKLM,%reg_path%,InstallDir,0x00000000,%InstallDir%
 [Links]
 ; shortcut to a file, created in the standard destination path %CE11% (/Windows/Start Menu/)
 %LinkFilename1%,0,"XCSoar.exe",%CE11%
-%LinkFilename2%,0,"XCSoarSimulator.exe",%CE11%

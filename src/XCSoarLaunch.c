@@ -58,6 +58,7 @@ Copyright_License {
 **************************************************************************/
 
 #include <stdbool.h>
+#include <tchar.h>
 
 #define _INC_OLE
 
@@ -402,9 +403,9 @@ CreateFileList(void)
 
 
 
-  wsprintf(FileList[1].FileName, TEXT("%s\\XCSoarSimulator.exe"), installDir);
+  wsprintf(FileList[1].FileName, TEXT("%s\\XCSoar.exe"), installDir);
 
-  wsprintf(FileList[1].CommandLine, TEXT("%s\\XCSoarSimulator.exe"), installDir);
+  _tcscpy(FileList[1].CommandLine, TEXT("-simulator"));
 
 
 

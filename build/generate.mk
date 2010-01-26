@@ -25,9 +25,7 @@ $(XCI_HEADERS): $(OUT)/include/InputEvents_%.cpp: \
 	@mv $@.tmp $@
 
 T2E_OBJ = $(call SRC_TO_OBJ,$(SRC)/InputEvents.cpp)
-$(T2E_OBJ) $(T2E_OBJ:$(OBJ_SUFFIX)=-Simulator$(OBJ_SUFFIX)): \
-	$(XCI_HEADERS) \
-	$(OUT)/include/InputEvents_Text2Event.cpp
+$(T2E_OBJ): $(XCI_HEADERS) $(OUT)/include/InputEvents_Text2Event.cpp
 
 $(OUT)/include/Status_defaults.cpp: Data/Status/default.xcs \
 	Data/Status/xcs2cpp.pl $(OUT)/include/dirstamp
@@ -36,5 +34,4 @@ $(OUT)/include/Status_defaults.cpp: Data/Status/default.xcs \
 	@mv $@.tmp $@
 
 SM_OBJ = $(call SRC_TO_OBJ,$(SRC)/StatusMessage.cpp)
-$(SM_OBJ) $(SM_OBJ:$(OBJ_SUFFIX)=-Simulator$(OBJ_SUFFIX)): \
-	$(OUT)/include/Status_defaults.cpp
+$(SM_OBJ): $(OUT)/include/Status_defaults.cpp

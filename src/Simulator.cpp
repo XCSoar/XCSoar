@@ -36,33 +36,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SIMULATOR_H
-#define XCSOAR_SIMULATOR_H
-
-#if !defined(GNAV) && !defined(PNA)
-#define SIMULATOR_AVAILABLE
-#endif
+#include "Simulator.hpp"
 
 #ifdef SIMULATOR_AVAILABLE
 
-/**
- * Do not access this variable directly, use is_simulator() instead.
- */
-extern bool global_simulator_flag;
-
-#endif
-
-/**
- * Returns whether the simulator application is running
- * @return True if simulator, False if fly application
- */
-static inline bool is_simulator()
-{
-#ifdef SIMULATOR_AVAILABLE
-  return global_simulator_flag;
-#else
-  return false;
-#endif
-}
+bool global_simulator_flag;
 
 #endif

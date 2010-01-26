@@ -69,16 +69,7 @@ include $(topdir)/build/test.mk
 
 ######## output files
 
-OUTPUTS := $(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT) $(TARGET_BIN_DIR)/XCSoarSimulator$(TARGET_EXEEXT)
-ifeq ($(CONFIG_ALTAIR),y)
 OUTPUTS := $(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT)
-endif
-ifeq ($(ALTAIR_PORTRAIT),y)
-OUTPUTS := $(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT)
-endif
-ifeq ($(CONFIG_PNA),y)
-OUTPUTS := $(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT)
-endif
 
 include $(topdir)/build/dist.mk
 
@@ -266,6 +257,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Persist.cpp \
 	$(SRC)/FlightStatistics.cpp \
 	\
+	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Battery.c 		\
@@ -377,12 +369,10 @@ $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 SYNCE_PCP = synce-pcp
 SYNCE_PRM = synce-prm
 
-install: XCSoar.exe XCSoarSimulator.exe
+install: XCSoar.exe
 	@echo Copying to device...
 	-$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoar.exe'
-	-$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoarSimulator.exe'
 	$(SYNCE_PCP) XCSoar.exe ':/Program Files/XCSoar/XCSoar.exe'
-	$(SYNCE_PCP) XCSoarSimulator.exe ':/Program Files/XCSoar/XCSoarSimulator.exe'
 
 CABWIZ = wine 'c:\cabwiz\cabwiz.exe'
 
@@ -405,20 +395,11 @@ $(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT): $(TARGET_BIN_DIR)/XCSoar$(NOSTRIP_SUFF
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
 	$(Q)$(SIZE) $@
-
-$(TARGET_BIN_DIR)/XCSoarSimulator$(TARGET_EXEEXT): $(TARGET_BIN_DIR)/XCSoarSimulator$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
-	@$(NQ)echo "  STRIP   $@"
-	$(Q)$(STRIP) $< -o $@
-	$(Q)$(SIZE) $@
 endif
 
 $(TARGET_BIN_DIR)/XCSoar$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(SCREEN_LDLIBS) -o $@
-
-$(TARGET_BIN_DIR)/XCSoarSimulator$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS:$(OBJ_SUFFIX)=-Simulator$(OBJ_SUFFIX)) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
-	@$(NQ)echo "  LINK    $@"
-	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 $(XCSOARSETUP_OBJS) $(XCSOARLAUNCH_OBJS): CFLAGS += -Wno-missing-declarations -Wno-missing-prototypes
 
