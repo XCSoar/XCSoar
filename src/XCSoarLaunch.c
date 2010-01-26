@@ -258,8 +258,7 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 
   RegCloseKey(hKey);
 
-  return hRes == ERROR_SUCCESS
-
+  return hRes == ERROR_SUCCESS;
 }
 
 
