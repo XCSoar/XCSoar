@@ -63,41 +63,41 @@
 #define PROC_NAME(x) (x)
 #endif
 
-HINSTANCE GRecordDLLHandle = NULL;
+static HINSTANCE GRecordDLLHandle = NULL;
 
 // Procedures for explicitly loaded (optional) GRecord DLL
 typedef int (*GRRECORDGETVERSION)(TCHAR * szOut);
-GRRECORDGETVERSION GRecordGetVersion;
+static GRRECORDGETVERSION GRecordGetVersion;
 
 typedef int (*GRECORDINIT)(void);
-GRECORDINIT GRecordInit;
+static GRECORDINIT GRecordInit;
 
 typedef int (*GRECORDGETDIGESTMAXLEN)(void);
-GRECORDGETDIGESTMAXLEN GRecordGetDigestMaxLen;
+static GRECORDGETDIGESTMAXLEN GRecordGetDigestMaxLen;
 
 typedef int (*GRECORDAPPENDRECORDTOBUFFER)(TCHAR * szIn);
-GRECORDAPPENDRECORDTOBUFFER GRecordAppendRecordToBuffer;
+static GRECORDAPPENDRECORDTOBUFFER GRecordAppendRecordToBuffer;
 
 typedef int (*GRECORDFINALIZEBUFFER)(void);
-GRECORDFINALIZEBUFFER GRecordFinalizeBuffer;
+static GRECORDFINALIZEBUFFER GRecordFinalizeBuffer;
 
 typedef int (*GRECORDGETDIGEST)(TCHAR * szOut);
-GRECORDGETDIGEST GRecordGetDigest;
+static GRECORDGETDIGEST GRecordGetDigest;
 
 typedef int (*GRECORDSETFILENAME)(TCHAR * szIn);
-GRECORDSETFILENAME GRecordSetFileName;
+static GRECORDSETFILENAME GRecordSetFileName;
 
 typedef int (*GRECORDLOADFILETOBUFFER)(void);
-GRECORDLOADFILETOBUFFER GRecordLoadFileToBuffer;
+static GRECORDLOADFILETOBUFFER GRecordLoadFileToBuffer;
 
 typedef int (*GRECORDAPPENDGRECORDTOFILE)(BOOL bValid);
-GRECORDAPPENDGRECORDTOFILE GRecordAppendGRecordToFile;
+static GRECORDAPPENDGRECORDTOFILE GRecordAppendGRecordToFile;
 
 typedef int (*GRECORDREADGRECORDFROMFILE)(TCHAR szOutput[]);
-GRECORDREADGRECORDFROMFILE GRecordReadGRecordFromFile;
+static GRECORDREADGRECORDFROMFILE GRecordReadGRecordFromFile;
 
 typedef int (*GRECORDVERIFYGRECORDINFILE)(void);
-GRECORDVERIFYGRECORDINFILE GRecordVerifyGRecordInFile;
+static GRECORDVERIFYGRECORDINFILE GRecordVerifyGRecordInFile;
 
 /**
  * Checks whether the character c is a valid IGC character
