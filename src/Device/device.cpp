@@ -123,7 +123,7 @@ detect_gps(TCHAR *path, size_t path_max_size)
   HKEY hKey;
   long result;
 
-  result = RegOpenKeyEx(HKEY_CURRENT_USER, gps_idm_key, 0, KEY_READ, &hKey);
+  result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, gps_idm_key, 0, KEY_READ, &hKey);
   if (result != ERROR_SUCCESS)
     return false;
 
