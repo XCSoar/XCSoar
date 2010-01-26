@@ -114,34 +114,122 @@ private:
 public:
   static CoordinateFormats_t CoordinateFormat;
 
+  /**
+   * Returns the name of the given Unit
+   * @return The name of the given Unit (e.g. "km" or "ft")
+   */
   static const TCHAR *GetUnitName(Units_t Unit);
 
+  /**
+   * Returns the user-specified unit for a horizontal distance
+   * @return The user-specified unit for a horizontal distance
+   */
   static Units_t GetUserDistanceUnit(void);
+  /**
+   * Sets the user-specified unit for a horizontal distance
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserDistanceUnit(Units_t NewUnit);
 
+  /**
+   * Returns the user-specified unit for an altitude
+   * @return The user-specified unit for an altitude
+   */
   static Units_t GetUserAltitudeUnit(void);
+  /**
+   * Sets the user-specified unit for an altitude
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserAltitudeUnit(Units_t NewUnit);
 
+  /**
+   * Returns the user-specified unit for a horizontal speed
+   * @return The user-specified unit for a horizontal speed
+   */
   static Units_t GetUserHorizontalSpeedUnit(void);
+  /**
+   * Sets the user-specified unit for a horizontal speed
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserHorizontalSpeedUnit(Units_t NewUnit);
 
+  /**
+   * Returns the user-specified unit for a task speed
+   * @return The user-specified unit for a task speed
+   */
   static Units_t GetUserTaskSpeedUnit(void);
+  /**
+   * Sets the user-specified unit for a task speed
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserTaskSpeedUnit(Units_t NewUnit);
 
+  /**
+   * Returns the user-specified unit for a vertical speed
+   * @return The user-specified unit for a vertical speed
+   */
   static Units_t GetUserVerticalSpeedUnit(void);
+  /**
+   * Sets the user-specified unit for a vertical speed
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserVerticalSpeedUnit(Units_t NewUnit);
 
+  /**
+   * Returns the user-specified unit for a wind speed
+   * @return The user-specified unit for a wind speed
+   */
   static Units_t GetUserWindSpeedUnit(void);
+  /**
+   * Sets the user-specified unit for a wind speed
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserWindSpeedUnit(Units_t NewUnit);
 
   static Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
 
+  /**
+   * Converts a double-based Longitude to degrees, minute, seconds and a
+   * bool-based east variable
+   * @param Longitude The double-based Longitude to convert
+   * @param dd Degrees (pointer)
+   * @param mm Minutes (pointer)
+   * @param ss Seconds (pointer)
+   * @param east True if East, False if West (pointer)
+   */
   static void LongitudeToDMS(double Longitude,
                              int *dd, int *mm, int *ss, bool *east);
+  /**
+   * Converts a double-based Latitude to degrees, minute, seconds and a
+   * bool-based north variable
+   * @param Latitude The double-based Latitude to convert
+   * @param dd Degrees (pointer)
+   * @param mm Minutes (pointer)
+   * @param ss Seconds (pointer)
+   * @param north True if North, False if South (pointer)
+   */
   static void LatitudeToDMS(double Latitude,
                             int *dd, int *mm, int *ss, bool *north);
 
+  /**
+   * Converts a double-based Longitude into a formatted string
+   * @param Longitude The double-based Longitude
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   */
   static bool LongitudeToString(double Longitude, TCHAR *Buffer, size_t size);
+  /**
+   * Converts a double-based Latitude into a formatted string
+   * @param Latitude The double-based Latitude
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   */
   static bool LatitudeToString(double Latitude, TCHAR *Buffer, size_t size);
 
   static void NotifyUnitChanged(void);
