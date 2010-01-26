@@ -66,20 +66,6 @@ static const Color hcSelection(0x00, 0x00, 0xFF);
 static const Color hcBackground(0xFF, 0xFF, 0xFF);
 static const Color hcRadar(0x55, 0x55, 0x55);
 
-static const Brush hbWarning(hcWarning);
-static const Brush hbAlarm(hcAlarm);
-static const Brush hbStandard(hcStandard);
-static const Brush hbPassive(hcPassive);
-static const Brush hbSelection(hcSelection);
-
-static const Pen hpWarning(Layout::FastScale(2), hcWarning);
-static const Pen hpAlarm(Layout::FastScale(2), hcAlarm);
-static const Pen hpStandard(Layout::FastScale(2), hcStandard);
-static const Pen hpPassive(Layout::FastScale(2), hcPassive);
-static const Pen hpSelection(Layout::FastScale(2), hcSelection);
-static const Pen hpPlane(Layout::FastScale(2), hcRadar);
-static const Pen hpRadar(Layout::FastScale(1), hcRadar);
-
 static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wdf = NULL;
 static unsigned zoom = 2;
@@ -519,6 +505,18 @@ PaintRadarTraffic(Canvas &canvas) {
     return;
   }
 
+  static const Brush hbWarning(hcWarning);
+  static const Brush hbAlarm(hcAlarm);
+  static const Brush hbStandard(hcStandard);
+  static const Brush hbPassive(hcPassive);
+  static const Brush hbSelection(hcSelection);
+
+  static const Pen hpWarning(Layout::FastScale(2), hcWarning);
+  static const Pen hpAlarm(Layout::FastScale(2), hcAlarm);
+  static const Pen hpStandard(Layout::FastScale(2), hcStandard);
+  static const Pen hpPassive(Layout::FastScale(2), hcPassive);
+  static const Pen hpSelection(Layout::FastScale(2), hcSelection);
+
   // Iterate through the traffic
   for (unsigned i = 0; i < FLARM_STATE::FLARM_MAX_TRAFFIC; ++i) {
     const FLARM_TRAFFIC &traffic =
@@ -644,6 +642,8 @@ PaintRadarTraffic(Canvas &canvas) {
  */
 static void
 PaintRadarPlane(Canvas &canvas) {
+  static const Pen hpPlane(Layout::FastScale(2), hcRadar);
+
   canvas.select(hpPlane);
   canvas.line(radar_mid.x + Layout::FastScale(10),
               radar_mid.y - Layout::FastScale(2),
@@ -665,6 +665,8 @@ PaintRadarPlane(Canvas &canvas) {
  */
 static void
 PaintRadarBackground(Canvas &canvas) {
+  static const Pen hpRadar(1, hcRadar);
+
   canvas.select(wdf->GetBackBrush());
   canvas.select(hpRadar);
   canvas.set_text_color(hcRadar);
