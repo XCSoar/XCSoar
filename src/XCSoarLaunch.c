@@ -262,6 +262,7 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 }
 
 
+#ifdef USE_MASKS
 
 //////////////////////////////////////////////////
 
@@ -345,6 +346,7 @@ static HBITMAP CreateMaskBMP(HBITMAP hBMPOrig, COLORREF bgCol)
 
 }
 
+#endif
 
 
 static void
