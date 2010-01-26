@@ -40,17 +40,8 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_TASK_HPP
 
 #include "GlideComputerBlackboard.hpp"
-#include "GPSClock.hpp"
-
-#ifndef _MSC_VER
-#include <algorithm>
-using std::max;
-#endif
 
 class TaskManager;
-
-struct WAYPOINT;
-struct WPCALC;
 
 class GlideComputerTask: 
   virtual public GlideComputerBlackboard 

@@ -61,7 +61,7 @@ testtap: $(BUILDTESTS)
 $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $(TARGET_BIN_DIR)/dirstamp
 	gcc -o $@ $<
 
-DEBUG_PROGRAM_NAMES = RunWayPointParser RunCanvas RunMapWindow RunDialog
+DEBUG_PROGRAM_NAMES = RunWayPointParser RunCanvas RunMapWindow RunDialog RunAirspaceWarningDialog
 DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
 
 RUN_WAY_POINT_PARSER_SOURCES = \
@@ -81,31 +81,15 @@ $(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_CANVAS_SOURCES = \
-	$(SRC)/Screen/Window.cpp \
-	$(SRC)/Screen/PaintWindow.cpp \
-	$(SRC)/Screen/ContainerWindow.cpp \
-	$(SRC)/Screen/TopWindow.cpp \
-	$(SRC)/Screen/SingleWindow.cpp \
-	$(SRC)/Screen/ButtonWindow.cpp \
-	$(SRC)/Screen/Canvas.cpp \
-	$(SRC)/Screen/Color.cpp \
-	$(SRC)/Screen/VirtualCanvas.cpp \
-	$(SRC)/Screen/BufferCanvas.cpp \
-	$(SRC)/Screen/Pen.cpp \
-	$(SRC)/Screen/Brush.cpp \
-	$(SRC)/Screen/Font.cpp \
-	$(SRC)/Screen/Util.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
-ifneq ($(ENABLE_SDL),y)
-RUN_CANVAS_SOURCES += $(SRC)/Screen/PaintCanvas.cpp
-endif
 RUN_CANVAS_OBJS = $(call SRC_TO_OBJ,$(RUN_CANVAS_SOURCES))
 RUN_CANVAS_LDADD = \
+	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/RunCanvas$(TARGET_EXEEXT): $(RUN_CANVAS_OBJS) $(RUN_CANVAS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
@@ -147,31 +131,12 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/RasterWeather.cpp \
 	$(SRC)/Registry.cpp \
 	$(SRC)/Screen/Animation.cpp \
-	$(SRC)/Screen/Bitmap.cpp \
-	$(SRC)/Screen/BitmapCanvas.cpp \
-	$(SRC)/Screen/ContainerWindow.cpp \
-	$(SRC)/Screen/ButtonWindow.cpp \
-	$(SRC)/Screen/Canvas.cpp \
-	$(SRC)/Screen/Color.cpp \
-	$(SRC)/Screen/VirtualCanvas.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
-	$(SRC)/Screen/BufferCanvas.cpp \
-	$(SRC)/Screen/Pen.cpp \
-	$(SRC)/Screen/Brush.cpp \
-	$(SRC)/Screen/Font.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/Graphics.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Util.cpp \
-	$(SRC)/Screen/MaskedPaintWindow.cpp \
-	$(SRC)/Screen/PaintWindow.cpp \
 	$(SRC)/Screen/Ramp.cpp \
-	$(SRC)/Screen/STScreenBuffer.cpp \
-	$(SRC)/Screen/TextWindow.cpp \
-	$(SRC)/Screen/TopWindow.cpp \
-	$(SRC)/Screen/SingleWindow.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
-	$(SRC)/Screen/Window.cpp \
 	$(SRC)/Screen/shapelib/mapbits.cpp \
 	$(SRC)/Screen/shapelib/maperror.cpp \
 	$(SRC)/Screen/shapelib/mapprimitive.cpp \
@@ -194,11 +159,9 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/WayPointParser.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
-ifneq ($(ENABLE_SDL),y)
-RUN_MAP_WINDOW_SOURCES += $(SRC)/Screen/PaintCanvas.cpp
-endif
 RUN_MAP_WINDOW_OBJS = $(call SRC_TO_OBJ,$(RUN_MAP_WINDOW_SOURCES))
 RUN_MAP_WINDOW_LDADD = \
+	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(JASPER_LIBS) \
 	$(ZZIP_LIBS) \
@@ -213,64 +176,54 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
 	$(SRC)/Screen/Animation.cpp \
-	$(SRC)/Screen/Bitmap.cpp \
-	$(SRC)/Screen/Brush.cpp \
-	$(SRC)/Screen/Canvas.cpp \
-	$(SRC)/Screen/Color.cpp \
-	$(SRC)/Screen/VirtualCanvas.cpp \
-	$(SRC)/Screen/BitmapCanvas.cpp \
-	$(SRC)/Screen/Font.cpp \
-	$(SRC)/Screen/Pen.cpp \
-	$(SRC)/Screen/Window.cpp \
-	$(SRC)/Screen/BufferWindow.cpp \
-	$(SRC)/Screen/BufferCanvas.cpp \
-	$(SRC)/Screen/PaintWindow.cpp \
-	$(SRC)/Screen/ContainerWindow.cpp \
-	$(SRC)/Screen/TextWindow.cpp \
-	$(SRC)/Screen/EditWindow.cpp \
-	$(SRC)/Screen/TopWindow.cpp \
-	$(SRC)/Screen/SingleWindow.cpp \
-	$(SRC)/Screen/Util.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/DataField/Base.cpp \
-	$(SRC)/DataField/Boolean.cpp \
-	$(SRC)/DataField/ComboList.cpp \
-	$(SRC)/DataField/Enum.cpp \
-	$(SRC)/DataField/FileReader.cpp \
-	$(SRC)/DataField/Float.cpp \
-	$(SRC)/DataField/Integer.cpp \
-	$(SRC)/DataField/String.cpp \
-	$(SRC)/Form/Control.cpp \
-	$(SRC)/Form/Container.cpp \
-	$(SRC)/Form/Panel.cpp \
-	$(SRC)/Form/Form.cpp \
-	$(SRC)/Form/Button.cpp \
-	$(SRC)/Form/EventButton.cpp \
-	$(SRC)/Form/Frame.cpp \
-	$(SRC)/Form/Draw.cpp \
-	$(SRC)/Form/List.cpp \
-	$(SRC)/Form/ScrollBar.cpp \
-	$(SRC)/Form/Edit.cpp \
-	$(SRC)/Form/Tabbed.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(TEST_SRC_DIR)/RunDialog.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Compatibility/fmode.c
-ifeq ($(ENABLE_SDL),y)
-RUN_DIALOG_SOURCES += $(SRC)/Screen/Timer.cpp
-else
-RUN_DIALOG_SOURCES += $(SRC)/Screen/PaintCanvas.cpp
-endif
 RUN_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_DIALOG_SOURCES))
 RUN_DIALOG_LDADD = \
+	$(DATA_FIELD_LIBS) \
+	$(FORM_LIBS) \
+	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/RunDialog$(TARGET_EXEEXT): $(RUN_DIALOG_OBJS) $(RUN_DIALOG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
+	$(SRC)/xmlParser.cpp \
+	$(SRC)/Dialogs/XML.cpp \
+	$(SRC)/Dialogs/dlgComboPicker.cpp \
+	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(SRC)/Dialogs/dlgAirspaceWarning.cpp \
+	$(SRC)/AirspaceParser.cpp \
+	$(SRC)/Screen/Animation.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/shapelib/mapsearch.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Registry.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/StringUtil.cpp \
+	$(SRC)/UtilsText.cpp \
+	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
+RUN_AIRSPACE_WARNING_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_AIRSPACE_WARNING_DIALOG_SOURCES))
+RUN_AIRSPACE_WARNING_DIALOG_LDADD = \
+	$(DATA_FIELD_LIBS) \
+	$(FORM_LIBS) \
+	$(SCREEN_LIBS) \
+	$(ENGINE_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS) \
+	$(RESOURCE_BINARY)
+$(TARGET_BIN_DIR)/RunAirspaceWarningDialog$(TARGET_EXEEXT): $(RUN_AIRSPACE_WARNING_DIALOG_OBJS) $(RUN_AIRSPACE_WARNING_DIALOG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
