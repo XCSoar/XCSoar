@@ -252,8 +252,8 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
         last_started = false;
       }
     }
-    if (i==0) {
-      update_start_transition(state, transition_enter, transition_exit);
+    if ((activeTaskPoint==0) && (i==0)) {
+      update_start_transition(state);
     }
     if (tps[i]->update_sample(state, task_events)) {
       full_update = true;
@@ -760,6 +760,9 @@ OrderedTask::get_tp_search_points(unsigned tp) const
 void 
 OrderedTask::set_tp_search_min(unsigned tp, const SearchPoint &sol) 
 {
+  if (!tp && !tps[0]->has_exited()) 
+    return;
+
   tps[tp]->set_search_min(sol);
 }
 
@@ -790,14 +793,19 @@ OrderedTask::get_task_projection()
 
 
 void
-OrderedTask::update_start_transition(const AIRCRAFT_STATE &state,
-                                     const bool transition_enter, 
-                                     const bool transition_exit)
+OrderedTask::update_start_transition(const AIRCRAFT_STATE &state)
 {
-  // reset on invalid transition
+  if (ts->has_exited()) {
+    return;
+  }
 
-  if (!ts->isInSector(state) 
-      && !ts->has_exited()) {
+  if (ts->isInSector(state)) {
+    // @todo find boundary point that produces shortest
+    // distance from state to that point to next tp point
+    ts->find_best_start(state, *tps[1]);
+  } else {
+    // reset on invalid transition to outside
+    // point to nominal start point
     ts->reset();
   }
 }

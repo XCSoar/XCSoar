@@ -151,6 +151,13 @@ protected:
 
   const bool m_boundary_scored; /**< Whether boundaries are used in scoring distance, or just the reference point */
 
+  /** 
+   * Set minimum distance point based on location.
+   * 
+   * @param location Location of min point
+   */
+  void set_search_min(const GEOPOINT &location);
+
 private:
 
 /** 
@@ -201,9 +208,9 @@ private:
  * 
  * @param locmin Location of min distance node 
  */
-    void set_search_min(const SearchPoint &locmin) {
-      m_search_min = locmin;
-    }
+  void set_search_min(const SearchPoint &locmin) {
+    m_search_min = locmin;
+  }
 
   const TaskProjection &m_task_projection;
 
