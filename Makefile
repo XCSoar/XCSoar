@@ -384,12 +384,19 @@ install: XCSoar.exe XCSoarSimulator.exe
 	$(SYNCE_PCP) XCSoar.exe ':/Program Files/XCSoar/XCSoar.exe'
 	$(SYNCE_PCP) XCSoarSimulator.exe ':/Program Files/XCSoar/XCSoarSimulator.exe'
 
-cab:	XCSoar.exe XCSoarSimulator.exe
-	@echo Making cabs
-	cp XCSoar.exe $(GTARGET)/XCSoar/gcc/XCSoar.exe
-	cp XCSoarSimulator.exe $(GTARGET)/XCSoarSimulator/gcc/XCSoarSimulator.exe
-	wine $(GTARGET)/Cabwiz.exe XCSoar$(TARGET)-gcc.inf /cpu $(PCPU)
-	mv XCSoar$(TARGET)-gcc.$(PCPU).CAB XCSoar$(TARGET).$(PCPU).CAB
+CABWIZ = wine 'c:\cabwiz\cabwiz.exe'
+
+$(TARGET_BIN_DIR)/XCSoar.inf: build/cab.inf
+	$(Q)cp $< $@
+
+$(TARGET_BIN_DIR)/XCSoar.$(PCPU).CAB: $(TARGET_BIN_DIR)/XCSoar.inf $(OUTPUTS) $(TARGET_BIN_DIR)/XCSoarSetup.dll $(TARGET_BIN_DIR)/XCSoarLaunch.dll
+	@$(NQ)echo "  CAB     $@"
+	$(Q)cd $(TARGET_BIN_DIR) && $(CABWIZ) XCSoar.inf /cpu $(PCPU)
+
+$(TARGET_BIN_DIR)/XCSoar-$(TARGET).cab: $(TARGET_BIN_DIR)/XCSoar.$(PCPU).CAB
+	$(Q)mv $< $@
+
+cab: $(TARGET_BIN_DIR)/XCSoar-$(TARGET).cab
 
 #	wine ezsetup.exe -l english -i XCSoar$(TARGET).ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$(TARGET).exe
 
