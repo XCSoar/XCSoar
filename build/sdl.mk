@@ -1,4 +1,5 @@
-ENABLE_SDL ?= $(call bool_not,$(HAVE_WIN32))
+
+#ENABLE_SDL ?= $(call bool_not,$(HAVE_WIN32))
 
 ifeq ($(ENABLE_SDL),y)
 ifeq ($(TARGET),UNIX)
