@@ -183,9 +183,8 @@ LoggerImpl::DiskBufferFlush()
         buffer_G[j] = (TCHAR)LoggerDiskBuffer[i][j];
       }
 
-      if (!is_simulator() && LoggerGActive()) {
+      if (!Simulator && LoggerGActive())
         GRecordAppendRecordToBuffer(pbuffer_G);
-      }
     }
   }
 
@@ -400,9 +399,6 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
 void
 LoggerImpl::LoggerGInit()
 {
-  if (is_simulator())
-    return;
-
   // try to link DLL if it exists
   LinkGRecordDLL();
   if (LoggerGActive())

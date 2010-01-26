@@ -523,6 +523,7 @@ NMEAParser::GLL(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
     GPS_INFO->Location.Latitude = tmplat;
     GPS_INFO->Location.Longitude = tmplon;
+    GPS_INFO->Simulator = false;
   } else {
     // QUESTION TB: why conditional?
   }
@@ -669,6 +670,7 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
     GPS_INFO->Location.Latitude = tmplat;
     GPS_INFO->Location.Longitude = tmplon;
+    GPS_INFO->Simulator = false;
   }
 
   GPS_INFO->Speed = KNOTSTOMETRESSECONDS * speed;
@@ -779,6 +781,7 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
     GPS_INFO->Location.Latitude = tmplat;
     GPS_INFO->Location.Longitude = tmplon;
+    GPS_INFO->Simulator = false;
   }
 
   if (RMZAvailable) {

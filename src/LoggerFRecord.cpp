@@ -36,7 +36,6 @@ Copyright_License {
 }
 */
 #include "LoggerImpl.hpp"
-#include "Asset.hpp"
 #include "wcecompat/ts_string.h"
 #include <tchar.h>
 #include <stdio.h>
@@ -80,9 +79,6 @@ LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
                          double Time,
                          int NAVWarning)
 { 
-  if (is_simulator())
-    return;
-
   char szFRecord[MAX_IGC_BUFF];
   int eof=0;
   int iNumberSatellites=0;

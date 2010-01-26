@@ -94,6 +94,11 @@ struct GPS_STATE
 
   /** Is XCSoar in replay mode? */
   bool Replay;
+
+  /**
+   * Did the simulator provide the GPS position?
+   */
+  bool Simulator;
 };
 
 struct ACCELERATION_STATE
