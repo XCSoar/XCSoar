@@ -1,10 +1,9 @@
-
-#ENABLE_SDL ?= $(call bool_not,$(HAVE_WIN32))
+ENABLE_SDL ?= $(call bool_not,$(HAVE_WIN32))
 
 ifeq ($(ENABLE_SDL),y)
 ifeq ($(TARGET),UNIX)
-SDL_CPPFLAGS := $(shell pkg-config --cflags sdl)
-SDL_LDLIBS := $(shell pkg-config --libs sdl)
+SDL_CPPFLAGS := $(shell pkg-config --cflags sdl 2>/dev/null)
+SDL_LDLIBS := $(shell pkg-config --libs sdl 2>/dev/null)
 else
 SDL_CPPFLAGS := -I/usr/local/i586-mingw32msvc/include
 SDL_LDLIBS := -L/usr/local/i586-mingw32msvc/lib -lSDL

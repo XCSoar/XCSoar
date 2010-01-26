@@ -85,12 +85,12 @@ include $(topdir)/build/dist.mk
 ######## compiler flags
 
 INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
-CPPFLAGS += $(SDL_CPPFLAGS) $(GCONF_CPPFLAGS)
+CPPFLAGS += $(GCONF_CPPFLAGS)
 
 ####### linker configuration
 
 LDFLAGS = $(TARGET_LDFLAGS) $(FLAGS_PROFILE)
-LDLIBS = $(TARGET_LDLIBS) $(SDL_LDLIBS) $(GCONF_LDLIBS)
+LDLIBS = $(TARGET_LDLIBS) $(GCONF_LDLIBS)
 
 ####### sources
 
@@ -407,7 +407,7 @@ endif
 
 $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
-	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(SCREEN_LDLIBS) -o $@
 
 $(TARGET_BIN_DIR)/XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS:$(OBJ_SUFFIX)=-Simulator$(OBJ_SUFFIX)) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"

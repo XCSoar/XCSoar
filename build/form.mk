@@ -17,8 +17,11 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/Tabbed.cpp \
 	$(FORM_SRC_DIR)/Util.cpp
 
+FORM_OBJS = $(call SRC_TO_OBJ,$(FORM_SOURCES))
+
 FORM_LIBS = $(TARGET_OUTPUT_DIR)/form.a
 
-$(FORM_LIBS): $(call SRC_TO_OBJ,$(FORM_SOURCES))
+$(FORM_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(FORM_LIBS): $(FORM_OBJS)
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^
