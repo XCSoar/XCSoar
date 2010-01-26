@@ -100,9 +100,9 @@ Units_t Units::UserTaskSpeedUnit = unKiloMeterPerHour;
 void
 Units::LongitudeToDMS(double Longitude, int *dd, int *mm, int *ss, bool *east)
 {
-  int sign = Longitude < 0 ? 0 : 1;
-  Longitude = fabs(Longitude);
+  *east = (Longitude < 0 ? false : true);
 
+  Longitude = fabs(Longitude);
   *dd = (int)Longitude;
   Longitude = (Longitude - (*dd)) * 60.0;
   *mm = (int)(Longitude);
@@ -116,15 +116,14 @@ Units::LongitudeToDMS(double Longitude, int *dd, int *mm, int *ss, bool *east)
     (*dd)++;
     (*mm) -= 60;
   }
-  *east = (sign == 1);
 }
 
 void
 Units::LatitudeToDMS(double Latitude, int *dd, int *mm, int *ss, bool *north)
 {
-  int sign = Latitude < 0 ? 0 : 1;
-  Latitude = fabs(Latitude);
+  *north = (Latitude < 0 ? false : true);
 
+  Latitude = fabs(Latitude);
   *dd = (int)Latitude;
   Latitude = (Latitude - (*dd)) * 60.0;
   *mm = (int)(Latitude);
@@ -138,7 +137,6 @@ Units::LatitudeToDMS(double Latitude, int *dd, int *mm, int *ss, bool *north)
     (*dd)++;
     (*mm) -= 60;
   }
-  *north = (sign == 1);
 }
 
 bool
