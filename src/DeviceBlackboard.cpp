@@ -228,11 +228,9 @@ DeviceBlackboard::ProcessSimulation()
   SetBasic().Minute = (tsec-Basic().Hour*3600)/60;
   SetBasic().Second = (tsec-Basic().Hour*3600-Basic().Minute*60);
 
-#ifndef NDEBUG
   // use this to test FLARM parsing/display
-  if (!is_altair())
+  if (is_debug() && !is_altair())
     DeviceList[0].parser.TestRoutine(&SetBasic());
-#endif
 }
 
 /**
