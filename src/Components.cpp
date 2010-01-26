@@ -42,6 +42,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "UtilsProfile.hpp"
 #include "Asset.hpp"
+#include "Simulator.hpp"
 #include "InfoBox.hpp"
 #include "InfoBoxManager.hpp"
 #include "RasterTerrain.h"

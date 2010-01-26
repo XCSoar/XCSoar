@@ -53,10 +53,10 @@ Copyright_License {
 #include "Components.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Task/TaskManager.hpp"
+#include "Simulator.hpp"
 
 #include <stdlib.h>
 #include "FlarmCalculations.h"
-#include "Asset.hpp"
 
 #define m_max(a,b)	(((a)>(b))?(a):(b))
 // JMW added key codes,

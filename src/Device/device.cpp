@@ -54,6 +54,7 @@ Copyright_License {
 #include "NMEA/Checksum.h"
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
 #include "Asset.hpp"
+#include "Simulator.hpp"
 
 #include <assert.h>
 

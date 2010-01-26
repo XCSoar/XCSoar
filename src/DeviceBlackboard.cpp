@@ -50,6 +50,7 @@ Copyright_License {
 #include "Device/All.hpp"
 #include "Math/Constants.h"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Simulator.hpp"
 
 DeviceBlackboard device_blackboard;
 

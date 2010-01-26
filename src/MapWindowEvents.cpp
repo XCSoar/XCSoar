@@ -52,6 +52,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
+#include "Simulator.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Waypoint/Waypoints.hpp"
 
