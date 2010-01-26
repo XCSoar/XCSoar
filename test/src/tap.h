@@ -51,7 +51,7 @@
 			skip(n, fmt, ## __VA_ARGS__);	\
 			continue;			\
 		}
-#elif __STDC_VERSION__ >= 199901L /* __GNUC__ */
+#elif defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L /* __GNUC__ */
 # define ok(e, ...) ((e) ?						\
 		     _gen_result(1, __func__, __FILE__, __LINE__,	\
 				 __VA_ARGS__) :				\
