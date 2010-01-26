@@ -263,7 +263,6 @@ LoggerImpl::LinkGRecordDLL()
       // if any pointers don't link, disable entire library
       BOOL bLoadOK = true;
 
-#ifndef WINDOWSPC
       GRecordGetVersion = (GRRECORDGETVERSION)GetProcAddress(GRecordDLLHandle,
                                                              PROC_NAME("GRecordGetVersion"));
 
@@ -332,9 +331,6 @@ LoggerImpl::LinkGRecordDLL()
 
       GRecordVerifyGRecordInFile = (GRECORDVERIFYGRECORDINFILE)GetProcAddress(
           GRecordDLLHandle, PROC_NAME("GRecordVerifyGRecordInFile"));
-#else
-      GRecordVerifyGRecordInFile = NULL;
-#endif
 
       if (!GRecordVerifyGRecordInFile)
         bLoadOK=false;
