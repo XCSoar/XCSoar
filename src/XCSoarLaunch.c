@@ -120,11 +120,11 @@ Copyright_License {
 
 
 
-#if (WIN32_PLATFORM_PSPC < 500)
+/*#if (WIN32_PLATFORM_PSPC < 500)*/
 
 #define USE_MASKS
 
-#endif
+/*#endif*/
 
 
 
