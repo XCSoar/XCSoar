@@ -46,22 +46,24 @@ Copyright_License {
  * @param theta Input angle
  * @return Output angle (0-360 degrees)
  */
-fixed AngleLimit180(fixed theta);
+fixed AngleLimit180(const fixed &theta);
 
 /**
  * Limits the angle (theta) to -180 - +180 degrees
  * @param theta Input angle
  * @return Output angle (-180 - +180 degrees)
  */
-fixed AngleLimit360(fixed theta);
+fixed AngleLimit360(const fixed &theta);
 
-fixed BiSector(fixed InBound, fixed OutBound);
+fixed BiSector(const fixed &InBound, const fixed &OutBound);
+
+fixed HalfAngle(const fixed &Start, const fixed &End);
 
 /**
  * Rotate angle by 180 degrees and limit to 0 - 360 degrees
  * @param InBound Input angle
  * @return Output angle (0 - 360 degrees)
  */
-fixed Reciprocal(fixed InBound);
+fixed Reciprocal(const fixed &InBound);
 
 #endif
