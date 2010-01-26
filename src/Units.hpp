@@ -54,13 +54,12 @@ extern double DISTANCEMODIFY;
 extern double ALTITUDEMODIFY;
 extern double TASKSPEEDMODIFY;
 
-
 typedef enum {
-  cfDDMMSS=0,
+  cfDDMMSS = 0,
   cfDDMMSSss,
   cfDDMMmmm,
   cfDDdddd
-}CoordinateFormats_t;
+} CoordinateFormats_t;
 
 typedef enum {
   unUndef,
@@ -76,15 +75,14 @@ typedef enum {
   unFeet,
   unFligthLevel,
   unKelvin,
-  unGradCelcius,                    // K = C° + 273,15
+  unGradCelcius, // K = C° + 273,15
   unGradFahrenheit, // K = (°F + 459,67) / 1,8
 
   /**
    * The sentinel: the number of units in this enum.
    */
   unCount
-}Units_t;
-
+} Units_t;
 
 typedef enum {
   ugNone,
@@ -97,13 +95,13 @@ typedef enum {
 } UnitGroup_t;
 
 typedef struct{
-  const TCHAR   *Name;
-  double  ToUserFact;
-  double  ToUserOffset;
-}UnitDescriptor_t;
+  const TCHAR *Name;
+  double ToUserFact;
+  double ToUserOffset;
+} UnitDescriptor_t;
 
-class Units {
-
+class Units
+{
 private:
   static UnitDescriptor_t UnitDescriptors[unCount];
   static Units_t UserDistanceUnit;
@@ -114,7 +112,6 @@ private:
   static Units_t UserTaskSpeedUnit;
 
 public:
-
   static CoordinateFormats_t CoordinateFormat;
 
   static const TCHAR *GetUnitName(Units_t Unit);
@@ -140,15 +137,9 @@ public:
   static Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
 
   static void LongitudeToDMS(double Longitude,
-                             int *dd,
-                             int *mm,
-                             int *ss,
-                             bool *east);
+                             int *dd, int *mm, int *ss, bool *east);
   static void LatitudeToDMS(double Latitude,
-                            int *dd,
-                            int *mm,
-                            int *ss,
-                            bool *north);
+                            int *dd, int *mm, int *ss, bool *north);
 
   static bool LongitudeToString(double Longitude, TCHAR *Buffer, size_t size);
   static bool LatitudeToString(double Latitude, TCHAR *Buffer, size_t size);
@@ -156,13 +147,9 @@ public:
   static void NotifyUnitChanged(void);
 
   static const TCHAR *GetHorizontalSpeedName();
-
   static const TCHAR *GetVerticalSpeedName();
-
   static const TCHAR *GetDistanceName();
-
   static const TCHAR *GetAltitudeName();
-
   static const TCHAR *GetTaskSpeedName();
 
   static bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
@@ -178,8 +165,6 @@ public:
   static double ToSysDistance(double Distance);
 
   static void TimeToText(TCHAR* text, int d);
-
 };
 
 #endif
-
