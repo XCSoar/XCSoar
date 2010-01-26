@@ -240,16 +240,68 @@ public:
   static const TCHAR *GetAltitudeName();
   static const TCHAR *GetTaskSpeedName();
 
+  /**
+   * Converts a double-based Altitude into a formatted string
+   * @param Altitude The double-based Altitude
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
   static bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
+  /**
+   * Converts a double-based Altitude into a formatted string of the alternate
+   * altitude format
+   * @param Altitude The double-based Altitude
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
   static bool FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
-  static bool FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size); // VENTA3
+  /**
+   * Converts a double-based Arrival Altitude into a formatted string
+   * @param Altitude The double-based Arrival Altitude
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
+  static bool FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size);
+  /**
+   * Converts a double-based horizontal Distance into a formatted string
+   * @param Distance The double-based Distance
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
   static bool FormatUserDistance(double Distance, TCHAR *Buffer, size_t size);
-  static bool FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer, size_t size);
+  static bool FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
+                                 size_t size);
 
+  /**
+   * Converts an altitude from the system unit to the user-specified unit
+   * @param Altitude The altitude in system unit
+   * @return The altitude in user-specified unit
+   */
   static double ToUserAltitude(double Altitude);
+  /**
+   * Converts an altitude from the user-specified unit to the system unit
+   * @param Altitude The altitude in user-specified unit
+   * @return The altitude in system unit
+   */
   static double ToSysAltitude(double Altitude);
 
+  /**
+   * Converts a horizontal distance from the system unit to the
+   * user-specified unit
+   * @param Distance The distance in system unit
+   * @return The distance in user-specified unit
+   */
   static double ToUserDistance(double Distance);
+  /**
+   * Converts a horizontal distance from the user-specified unit to the
+   * system unit
+   * @param Distance The distance in user-specified unit
+   * @return The distance in system unit
+   */
   static double ToSysDistance(double Distance);
 
   static void TimeToText(TCHAR* text, int d);
