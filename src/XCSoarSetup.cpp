@@ -64,6 +64,25 @@ typedef enum {
 typedef enum {
   codeUNINSTALL_EXIT_DONE = 0
 } codeUNINSTALL_EXIT;
+
+/* disable C++ name mangling for exported functions */
+extern "C" {
+  DECLSPEC_EXPORT codeINSTALL_INIT
+  Install_Init(HWND hwndparent, BOOL ffirstcall, BOOL fpreviouslyinstalled,
+               LPCTSTR pszinstalldir);
+
+  DECLSPEC_EXPORT codeINSTALL_EXIT
+  Install_Exit(HWND hwndparent, LPCTSTR pszinstalldir,
+               WORD cfaileddirs, WORD cfailedfiles, WORD cfailedregkeys,
+               WORD cfailedregvals, WORD cfailedshortcuts);
+
+  DECLSPEC_EXPORT codeUNINSTALL_INIT
+  Uninstall_Init(HWND hwndparent, LPCTSTR pszinstalldir);
+
+  DECLSPEC_EXPORT codeUNINSTALL_EXIT
+  Uninstall_Exit(HWND hwndparent);
+};
+
 #else
 #if (WIN32_PLATFORM_PSPC == 1)
   #include <..\support\ActiveSync\inc\ce_setup.h>
