@@ -320,6 +320,36 @@ public:
    */
   static double ToSysDistance(double Distance);
 
+  /**
+   * Converts a horizontal speed from the system unit to the
+   * user-specified unit
+   * @param Distance The speed in system unit
+   * @return The speed in user-specified unit
+   */
+  static double ToUserSpeed(double Speed);
+  /**
+   * Converts a horizontal speed from the user-specified unit to the
+   * system unit
+   * @param Speed The speed in user-specified unit
+   * @return The speed in system unit
+   */
+  static double ToSysSpeed(double Speed);
+
+  /**
+   * Converts a vertical speed from the system unit to the
+   * user-specified unit
+   * @param Distance The speed in system unit
+   * @return The speed in user-specified unit
+   */
+  static double ToUserVSpeed(double Speed);
+  /**
+   * Converts a vertical speed from the user-specified unit to the
+   * system unit
+   * @param Speed The speed in user-specified unit
+   * @return The speed in system unit
+   */
+  static double ToSysVSpeed(double Speed);
+
   static void TimeToText(TCHAR* text, int d);
 };
 

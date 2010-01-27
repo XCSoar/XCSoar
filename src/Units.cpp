@@ -752,6 +752,38 @@ Units::ToSysDistance(double Distance)
   return Distance;
 }
 
+double
+Units::ToUserSpeed(double Speed)
+{
+  UnitDescriptor_t *pU = &UnitDescriptors[UserHorizontalSpeedUnit];
+  Speed = Speed * pU->ToUserFact;
+  return Speed;
+}
+
+double
+Units::ToSysSpeed(double Speed)
+{
+  UnitDescriptor_t *pU = &UnitDescriptors[UserHorizontalSpeedUnit];
+  Speed = Speed / pU->ToUserFact;
+  return Speed;
+}
+
+double
+Units::ToUserVSpeed(double Speed)
+{
+  UnitDescriptor_t *pU = &UnitDescriptors[UserVerticalSpeedUnit];
+  Speed = Speed * pU->ToUserFact;
+  return Speed;
+}
+
+double
+Units::ToSysVSpeed(double Speed)
+{
+  UnitDescriptor_t *pU = &UnitDescriptors[UserVerticalSpeedUnit];
+  Speed = Speed / pU->ToUserFact;
+  return Speed;
+}
+
 void
 Units::TimeToText(TCHAR* text, int d)
 {
