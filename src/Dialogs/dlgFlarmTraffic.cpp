@@ -75,26 +75,6 @@ static POINT radar_mid;
 static SIZE radar_size;
 
 /**
- * Zoom out one step
- */
-static void
-ZoomOut()
-{
-  if (zoom < 4)
-    zoom++;
-}
-
-/**
- * Zoom in one step
- */
-static void
-ZoomIn()
-{
-  if (zoom > 0)
-    zoom--;
-}
-
-/**
  * Tries to select the next target, if impossible selection = -1
  */
 static void
@@ -228,6 +208,30 @@ Update()
   UpdateSelector();
   UpdateWarnings();
   wdf->invalidate();
+}
+
+/**
+ * Zoom out one step
+ */
+static void
+ZoomOut()
+{
+  if (zoom < 4)
+    zoom++;
+
+  Update();
+}
+
+/**
+ * Zoom in one step
+ */
+static void
+ZoomIn()
+{
+  if (zoom > 0)
+    zoom--;
+
+  Update();
 }
 
 /**
