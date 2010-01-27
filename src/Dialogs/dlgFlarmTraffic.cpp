@@ -38,7 +38,6 @@
 
 /**
  * @file
- * @todo use user-specifies units, not metric
  * @todo make targets selectable via mouse
  * @todo details dialog
  * @todo team mates
