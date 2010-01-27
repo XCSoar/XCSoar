@@ -670,6 +670,7 @@ PaintRadarBackground(Canvas &canvas) {
   canvas.select(wdf->GetBackBrush());
   canvas.select(hpRadar);
   canvas.set_text_color(hcRadar);
+  canvas.background_opaque();
 
   // Paint circles
   canvas.circle(radar_mid.x, radar_mid.y, radar_size.cx * 0.5);
