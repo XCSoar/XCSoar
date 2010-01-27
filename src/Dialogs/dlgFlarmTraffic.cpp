@@ -433,22 +433,22 @@ PaintTrafficInfo(Canvas &canvas) {
   // Climb Rate
   if (warning < 0) {
 #ifdef FLARM_AVERAGE
-    _stprintf(tmp, _T(" %+.1f m/s"), traffic.Average30s);
+    Units::FormatUserVSpeed(traffic.Average30s, tmp, 20);
 #else
-    _stprintf(tmp, _T(" %+.1f m/s"), traffic.ClimbRate);
+    Units::FormatUserVSpeed(traffic.ClimbRate, tmp, 20);
 #endif
     sz = canvas.text_size(tmp);
     canvas.text(rc.right - sz.cx, rc.top, tmp);
   }
 
   // Distance
-  _stprintf(tmp, _T("%.0f m"), sqrt(traffic.RelativeEast * traffic.RelativeEast +
-                                    traffic.RelativeNorth * traffic.RelativeNorth));
+  Units::FormatUserDistance(sqrt(traffic.RelativeEast * traffic.RelativeEast
+      + traffic.RelativeNorth * traffic.RelativeNorth), tmp, 20);
   sz = canvas.text_size(tmp);
   canvas.text(rc.left, rc.bottom - sz.cy, tmp);
 
   // Relative Height
-  _stprintf(tmp, _T("%+.0f m"), traffic.RelativeAltitude);
+  Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 20);
   sz = canvas.text_size(tmp);
   canvas.text(rc.right - sz.cx, rc.bottom - sz.cy, tmp);
 
