@@ -50,6 +50,7 @@ Copyright_License {
 #include "Device/All.hpp"
 #include "Math/Constants.h"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Simulator.hpp"
 
 DeviceBlackboard device_blackboard;
 
@@ -71,6 +72,8 @@ DeviceBlackboard::Initialise()
 
   // Set the NAVWarning positive (assume not gps found yet)
   gps_info.NAVWarning = true;
+
+  gps_info.Simulator = false;
 
   // Clear the SwitchStates
   gps_info.SwitchState.Available = false;
@@ -122,6 +125,10 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
   ScopeLock protect(mutexBlackboard);
   SetBasic().Location = loc;
   SetBasic().GPSAltitude = alt;
+
+  /* enable the "Simulator" flag because this value was not provided
+     by a real GPS */
+  SetBasic().Simulator = true;
 }
 
 /**
@@ -217,6 +224,9 @@ DeviceBlackboard::ProcessSimulation()
     return;
 
   ScopeLock protect(mutexBlackboard);
+
+  SetBasic().Simulator = true;
+
   SetNAVWarning(false);
   FindLatitudeLongitude(Basic().Location,
                         Basic().TrackBearing,

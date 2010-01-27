@@ -351,10 +351,4 @@ enum {
   NE_COUNT = 132, // How many we have for arrays etc // XXX Increased arbitrarily for duplicates above
 };
 
-/*
-#ifdef _SIM_
-#define _INPUTDEBUG_
-#endif
-*/
-
 #endif

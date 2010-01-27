@@ -69,16 +69,7 @@ include $(topdir)/build/test.mk
 
 ######## output files
 
-OUTPUTS := $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT) $(TARGET_BIN_DIR)/XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT)
-ifeq ($(CONFIG_ALTAIR),y)
-OUTPUTS := $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT)
-endif
-ifeq ($(ALTAIR_PORTRAIT),y)
-OUTPUTS := $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT)
-endif
-ifeq ($(CONFIG_PNA),y)
-OUTPUTS := $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT)
-endif
+OUTPUTS := $(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT)
 
 include $(topdir)/build/dist.mk
 
@@ -266,6 +257,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Persist.cpp \
 	$(SRC)/FlightStatistics.cpp \
 	\
+	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Battery.c 		\
@@ -377,49 +369,58 @@ $(addprefix all-,$(TARGETS)): all-%: $(OUTPUTS)
 SYNCE_PCP = synce-pcp
 SYNCE_PRM = synce-prm
 
-install: XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
+install: XCSoar.exe
 	@echo Copying to device...
 	-$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoar.exe'
-	-$(SYNCE_PRM) ':/Program Files/XCSoar/XCSoarSimulator.exe'
-	$(SYNCE_PCP) XCSoar-$(TARGET).exe ':/Program Files/XCSoar/XCSoar.exe'
-	$(SYNCE_PCP) XCSoarSimulator-$(TARGET).exe ':/Program Files/XCSoar/XCSoarSimulator.exe'
+	$(SYNCE_PCP) XCSoar.exe ':/Program Files/XCSoar/XCSoar.exe'
 
-cab:	XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
-	@echo Making cabs
-	cp XCSoar-$(TARGET).exe $(GTARGET)/XCSoar/gcc/XCSoar.exe
-	cp XCSoarSimulator-$(TARGET).exe $(GTARGET)/XCSoarSimulator/gcc/XCSoarSimulator.exe
-	wine $(GTARGET)/Cabwiz.exe XCSoar$(TARGET)-gcc.inf /cpu $(PCPU)
-	mv XCSoar$(TARGET)-gcc.$(PCPU).CAB XCSoar$(TARGET).$(PCPU).CAB
+CABWIZ = wine 'c:\cabwiz\cabwiz.exe'
+
+$(TARGET_BIN_DIR)/XCSoar.inf: build/cab.inf
+	$(Q)cp $< $@
+
+$(TARGET_BIN_DIR)/XCSoar.$(PCPU).CAB: $(TARGET_BIN_DIR)/XCSoar.inf $(OUTPUTS) $(TARGET_BIN_DIR)/XCSoarSetup.dll $(TARGET_BIN_DIR)/XCSoarLaunch.dll
+	@$(NQ)echo "  CAB     $@"
+	$(Q)cd $(TARGET_BIN_DIR) && $(CABWIZ) XCSoar.inf /cpu $(PCPU)
+
+$(TARGET_BIN_DIR)/XCSoar-$(TARGET).cab: $(TARGET_BIN_DIR)/XCSoar.$(PCPU).CAB
+	$(Q)mv $< $@
+
+cab: $(TARGET_BIN_DIR)/XCSoar-$(TARGET).cab
 
 #	wine ezsetup.exe -l english -i XCSoar$(TARGET).ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$(TARGET).exe
 
 ifneq ($(NOSTRIP_SUFFIX),)
-$(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT): $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
-	@$(NQ)echo "  STRIP   $@"
-	$(Q)$(STRIP) $< -o $@
-	$(Q)$(SIZE) $@
-
-$(TARGET_BIN_DIR)/XCSoarSimulator-$(TARGET)$(TARGET_EXEEXT): $(TARGET_BIN_DIR)/XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
+$(TARGET_BIN_DIR)/XCSoar$(TARGET_EXEEXT): $(TARGET_BIN_DIR)/XCSoar$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
 	$(Q)$(SIZE) $@
 endif
 
-$(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+$(TARGET_BIN_DIR)/XCSoar$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(SCREEN_LDLIBS) -o $@
 
-$(TARGET_BIN_DIR)/XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS:$(OBJ_SUFFIX)=-Simulator$(OBJ_SUFFIX)) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
-	@$(NQ)echo "  LINK    $@"
-	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
-
 $(XCSOARSETUP_OBJS) $(XCSOARLAUNCH_OBJS): CFLAGS += -Wno-missing-declarations -Wno-missing-prototypes
 
-$(TARGET_BIN_DIR)/XCSoarSetup.dll: $(XCSOARSETUP_OBJS) | $(TARGET_BIN_DIR)/dirstamp
+$(TARGET_OUTPUT_DIR)/XCSoarSetup.e: $(SRC)/XcSoarSetup.def $(XCSOARSETUP_OBJS) | $(TARGET_BIN_DIR)/dirstamp
+	$(Q)$(DLLTOOL) -e $@ -d $^
+
+$(TARGET_BIN_DIR)/XCSoarSetup.dll: TARGET_LDLIBS =
+$(TARGET_BIN_DIR)/XCSoarSetup.dll: $(TARGET_OUTPUT_DIR)/XCSoarSetup.e $(XCSOARSETUP_OBJS) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  DLL     $@"
 	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 # JMW not tested yet, probably need to use dlltool?
 
-$(TARGET_BIN_DIR)/XCSoarLaunch.dll: $(XCSOARLAUNCH_OBJS) | $(TARGET_BIN_DIR)/dirstamp
+$(TARGET_OUTPUT_DIR)/XCSoarLaunch.e: $(SRC)/XCSoarLaunch.def $(XCSOARLAUNCH_OBJS) | $(TARGET_BIN_DIR)/dirstamp
+	$(Q)$(DLLTOOL) -e $@ -d $^
+
+$(TARGET_OUTPUT_DIR)/XCSoarLaunch.rsc: $(SRC)/XCSoarLaunch.rc | $(TARGET_OUTPUT_DIR)/dirstamp
+	@$(NQ)echo "  WINDRES $@"
+	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<
+
+$(TARGET_BIN_DIR)/XCSoarLaunch.dll: TARGET_LDLIBS = -laygshell
+$(TARGET_BIN_DIR)/XCSoarLaunch.dll: $(TARGET_OUTPUT_DIR)/XCSoarLaunch.e $(XCSOARLAUNCH_OBJS) $(TARGET_OUTPUT_DIR)/XCSoarLaunch.rsc | $(TARGET_BIN_DIR)/dirstamp
 	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o

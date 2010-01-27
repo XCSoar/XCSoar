@@ -45,7 +45,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "LogFile.hpp"
 #include "Message.h"
-#include "Asset.hpp"
+#include "Simulator.hpp"
 
 // GDI Escapes for ExtEscape()
 #define QUERYESCSUPPORT    8

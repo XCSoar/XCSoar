@@ -1,23 +1,30 @@
 [Version]
-Signature   = "$Windows NT$"    ; required as-is
-Provider    = "OpenSource"      ; full app name will be "<Provider> <AppName>"
-CESignature = "$Windows CE$"    ; required as-is
+Signature = "$Windows NT$"
+Provider = "OpenSource"
+CESignature = "$Windows CE$"
 
 [CEStrings]
-AppName     = "XCSoar"          ; full app name will be "<Provider> <AppName>"
-InstallDir  = "%CE1%\%AppName%"	; %CE1% = \Program Files\
-
-
+AppName = "XCSoar"
+; %CE1% = \Program Files\
+InstallDir = "%CE1%\%AppName%"
 
 [Strings]
 reg_path = Software\OpenSource\XCSoar
 LinkFilename1 = "XCSoar FLY"
-LinkFilename2 = "XCSoar SIM"
+LinkFilename2 SIM"
+
+[CEDevice.ARM]
+ProcessorType=2577
+VersionMin = 3.0
+VersionMax = 32767.0
 
 [CEDevice.ARMV4]
 ProcessorType=2577
 VersionMin = 3.0
 VersionMax = 32767.0
+
+; prevent warnings on screen resolution
+BuildMax = 0xE0000000
 
 [CEDevice.x86]
 ProcessorType = 0
@@ -34,27 +41,30 @@ ProcessorType = 10003
 VersionMin = 3.0
 VersionMax = 32767.0
 
-[SourceDisksNames.armv4]           ; CPU-dependent files
-1 = ,"ARM Files",,PPC2003\XCSoar\gcc
-2 = ,"ARM Files",,PPC2003\XCSoarSimulator\gcc
-3 = ,"ARM Files",,PPC2003\XCSoarLaunch\gcc
-4 = ,"ARM Files",,PPC2003\XCSoarSetup\gcc
-5 = ,"Font Files",,Common\Data\Fonts
-6 = ,"Input Files",,Common\Data\Input
-7 = ,"Language Files",,Common\Data\Language
-8 = ,"Polar Files",,Common\Data\Polar
-9 = ,"ARM Files",,PPC2003
+[SourceDisksNames.arm]
+1 = ,"ARM Files",,..\bin
+2 = ,"ARM Files",,..\bin
+3 = ,"ARM Files",,..\bin
+4 = ,"ARM Files",,..\bin
+5 = ,"Font Files",,..\..\..\Data\Fonts
+6 = ,"Input Files",,..\..\..\Data\Input
+7 = ,"Language Files",,..\..\..\Data\Language
+8 = ,"Polar Files",,..\..\..\Data\Polar
+9 = ,"ARM Files",,..\..\..\PPC2002
 
-
-[SourceDisksNames.x86]
-1 = ,"PPC30 X86 Files",,X86EMDbg
-
-;[SourceDisksNames.sh3]
-;1 = ,"PPC30 SH3 Files",,SH3Rel
+[SourceDisksNames.armv4]
+1 = ,"ARM Files",,..\bin
+2 = ,"ARM Files",,..\bin
+3 = ,"ARM Files",,..\bin
+4 = ,"ARM Files",,..\bin
+5 = ,"Font Files",,..\..\..\Data\Fonts
+6 = ,"Input Files",,..\..\..\Data\Input
+7 = ,"Language Files",,..\..\..\Data\Language
+8 = ,"Polar Files",,..\..\..\Data\Polar
+9 = ,"ARM Files",,..\..\..\PPC2003
 
 [SourceDisksFiles]
 XCSoar.exe = 1
-XCSoarSimulator.exe = 2
 XCSoarLaunch.dll = 3
 XCSoarSetup.dll = 4
 DejaVuSansCondensed-BoldOblique2.ttf = 5
@@ -71,25 +81,22 @@ cobra.plr = 8
 GRecordDll.dll = 9
 
 [DefaultInstall]
-CopyFiles   = TheFiles,Files.Windows,Files.Fonts,Files.Language,Files.Input,Files.Polar
-AddReg = AddRegistry
+CopyFiles = TheFiles,Files.Windows,Files.Fonts,Files.Language,Files.Input,Files.Polar
 CEShortcuts = Links
+AddReg = AddRegistry
 CESetupDLL=XCSoarSetup.dll
 
 [DestinationDirs]
-Files.Windows       = 0,%CE2%           ; "\Windows" directory
-Files.Fonts         = 0,%CE15%           ; "\Windows\Fonts" directory
-TheFiles    = 0, %InstallDir%
-Files.Language    = 0, "%CE5%\XCSoarData"
-Files.Input    = 0, "%CE5%\XCSoarData"
-Files.Polar    = 0, "%CE5%\XCSoarData"
-Links          = 0,%CE11%           ; "\Windows\Start Menu" directory
+Files.Windows = 0,%CE2% ; "\Windows" directory
+Files.Fonts = 0,%CE15% ; "\Windows\Fonts" directory
+TheFiles = 0, %InstallDir%
+Files.Language = 0, "%CE5%\XCSoarData"
+Files.Input = 0, "%CE5%\XCSoarData"
+Files.Polar = 0, "%CE5%\XCSoarData"
+Links = 0,%CE11% ; "\Windows\Start Menu" directory
 
-
-;File copy list.
 [TheFiles]
 XCSoar.exe
-XCSoarSimulator.exe
 XCSoarSetup.dll
 GRecordDll.dll
 
@@ -122,9 +129,6 @@ HKLM,\Software\Microsoft\Today\Items\%AppName%,Options,0x00010001,0
 HKLM,\Software\Microsoft\Today\Items\%AppName%,DLL,0x00000002,"\Windows\XCSoarLaunch.dll"
 HKLM,%reg_path%,InstallDir,0x00000000,%InstallDir%
 
-
 [Links]
+; shortcut to a file, created in the standard destination path %CE11% (/Windows/Start Menu/)
 %LinkFilename1%,0,"XCSoar.exe",%CE11%
-%LinkFilename2%,0,"XCSoarSimulator.exe",%CE11%
-;; shortcut to a file, created in the standard destination path %CE11% (/Windows/Start Menu/)
-

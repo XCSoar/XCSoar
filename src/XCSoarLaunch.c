@@ -57,7 +57,8 @@ Copyright_License {
 
 **************************************************************************/
 
-
+#include <stdbool.h>
+#include <tchar.h>
 
 #define _INC_OLE
 
@@ -78,15 +79,19 @@ Copyright_License {
 #include "resource-launch.h"
 #include "Compiler.h"
 
-
-
 /**************************************************************************
 
 	Define
 
 **************************************************************************/
 
+#ifndef SHRG_RETURNCMD
+#define SHRG_RETURNCMD 1
+#endif
 
+#ifndef GN_CONTEXTMENU
+#define GN_CONTEXTMENU 1000
+#endif
 
 #define WINDOW_TITLE			TEXT("XCSoarLaunch")
 
@@ -120,11 +125,11 @@ Copyright_License {
 
 
 
-#if (WIN32_PLATFORM_PSPC < 500)
+/*#if (WIN32_PLATFORM_PSPC < 500)*/
 
 #define USE_MASKS
 
-#endif
+/*#endif*/
 
 
 
@@ -258,11 +263,11 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 
   RegCloseKey(hKey);
 
-  return hRes == ERROR_SUCCESS
-
+  return hRes == ERROR_SUCCESS;
 }
 
 
+#ifdef USE_MASKS
 
 //////////////////////////////////////////////////
 
@@ -346,6 +351,7 @@ static HBITMAP CreateMaskBMP(HBITMAP hBMPOrig, COLORREF bgCol)
 
 }
 
+#endif
 
 
 static void
@@ -397,9 +403,9 @@ CreateFileList(void)
 
 
 
-  wsprintf(FileList[1].FileName, TEXT("%s\\XCSoarSimulator.exe"), installDir);
+  wsprintf(FileList[1].FileName, TEXT("%s\\XCSoar.exe"), installDir);
 
-  wsprintf(FileList[1].CommandLine, TEXT("%s\\XCSoarSimulator.exe"), installDir);
+  _tcscpy(FileList[1].CommandLine, TEXT("-simulator"));
 
 
 
@@ -932,9 +938,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 	PAINTSTRUCT ps;
 
-#ifndef __MINGW32__
 	SHRGINFO rg;
-#endif
 
 	int x, y;
 
@@ -1026,8 +1030,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 		UpdateWindow(hWnd);
 
-
-#ifndef __MINGW32__
 		rg.cbSize = sizeof(SHRGINFO);
 
 		rg.hwndClient = hWnd;
@@ -1043,8 +1045,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 #else
 
 		rg.dwFlags = SHRG_RETURNCMD;
-
-#endif
 
 		if(SelItem != -1 && SHRecognizeGesture(&rg) == GN_CONTEXTMENU){
 

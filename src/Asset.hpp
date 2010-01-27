@@ -206,19 +206,6 @@ static inline bool is_altair()
 }
 
 /**
- * Returns whether the simulator application is running
- * @return True if simulator, False if fly application
- */
-static inline bool is_simulator()
-{
-#ifdef _SIM_
-  return true;
-#else
-  return false;
-#endif
-}
-
-/**
  * Returns whether the application is compiled in "FIVV" mode
  * (enables old experimental code)
  * @return True if compiled in "FIVV" mode, False otherwise

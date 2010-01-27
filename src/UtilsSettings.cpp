@@ -53,7 +53,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language.hpp"
 #include "LogFile.hpp"
-#include "Asset.hpp"
+#include "Simulator.hpp"
 #include "DrawThread.hpp"
 #include "CalculationThread.hpp"
 #include "AirspaceGlue.hpp"

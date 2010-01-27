@@ -73,6 +73,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "WayPointParser.h"
 #include "StringUtil.hpp"
+#include "Simulator.hpp"
 
 #include <assert.h>
 

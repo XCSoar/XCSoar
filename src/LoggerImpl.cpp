@@ -56,6 +56,7 @@
 LoggerImpl::LoggerImpl():
   LoggerActive(false),
   DeclaredToDevice(false),
+  Simulator(false),
   NumLoggerPreTakeoffBuffered(0),
   LoggerDiskBufferCount(0),
   frecord_clock(270.0) // 4.5 minutes)
@@ -132,6 +133,9 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
   // Logger off
   LoggerActive = false;
 
+  if (gps_info.Simulator)
+    Simulator = true;
+
   // Make space for logger file, if unsuccessful -> cancel
   if (!LoggerClearFreeSpace(gps_info))
     return;
@@ -142,7 +146,7 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
   Unlock();
 
   // Write GRecord
-  if (!is_simulator() && LoggerGActive())
+  if (!Simulator && LoggerGActive())
     LoggerGStop(szLoggerFileName);
 
   NumLoggerPreTakeoffBuffered = 0;
@@ -211,8 +215,13 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   double MinLat, MinLon;
   char NoS, EoW;
 
-  LogFRecordToFile(gps_info.SatelliteIDs, gps_info.Hour, gps_info.Minute,
-      gps_info.Second, gps_info.Time, gps_info.NAVWarning);
+  if (gps_info.Simulator)
+    /* if at least one GPS fix comes from the simulator, disable
+       signing */
+    Simulator = true;
+  else
+    LogFRecordToFile(gps_info.SatelliteIDs, gps_info.Hour, gps_info.Minute,
+                     gps_info.Second, gps_info.Time, gps_info.NAVWarning);
 
   if ((gps_info.GPSAltitude < -100) || (gps_info.BaroAltitude < -100)
       || gps_info.NAVWarning) {
@@ -325,7 +334,10 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   DiskBufferReset();
   Unlock();
 
-  LoggerGInit();
+  Simulator = gps_info.Simulator;
+  if (!Simulator)
+    LoggerGInit();
+
   ResetFRecord();
 
   for (i = 1; i < 99; i++) {
@@ -423,7 +435,7 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
   IGCWriteRecord(temp, szLoggerFileName);
 
   DeviceConfig device_config;
-  if (is_simulator()) {
+  if (gps_info.Simulator) {
     _tcscpy(device_config.driver_name, _T("Simulator"));
   } else {
     ReadDeviceConfig(0, device_config);

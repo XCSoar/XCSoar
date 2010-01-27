@@ -41,7 +41,7 @@ Copyright_License {
 #include "Device/Descriptor.hpp"
 #include "Device/device.hpp"
 #include "Thread/Mutex.hpp"
-#include "Asset.hpp"
+#include "Simulator.hpp"
 
 void
 devTick()

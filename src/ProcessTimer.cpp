@@ -55,6 +55,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "MainWindow.hpp"
 #include "Asset.hpp"
+#include "Simulator.hpp"
 #include "ReplayLoggerGlue.hpp"
 
 void

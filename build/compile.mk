@@ -4,6 +4,7 @@ EXE := $(findstring .exe,$(MAKE))
 AR = $(TCPATH)ar$(EXE)
 CXX = $(TCPATH)g++$(EXE)
 CC = $(TCPATH)gcc$(EXE)
+DLLTOOL = $(TCPATH)dlltool$(EXE)
 SIZE = $(TCPATH)size$(EXE)
 STRIP = $(TCPATH)strip$(EXE)
 WINDRES = $(TCPATH)windres$(EXE)
@@ -55,11 +56,3 @@ $(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c $(TARGET_OUTPUT_DIR)/%/../dirstamp
 $(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) -c -o $@ $(cxx-flags) $<
-
-$(TARGET_OUTPUT_DIR)/%-Simulator$(OBJ_SUFFIX): %.c $(TARGET_OUTPUT_DIR)/%/../dirstamp
-	@$(NQ)echo "  CC      $@"
-	$(Q)$(CC) -c -o $@ $(cc-flags) -D_SIM_ $<
-
-$(TARGET_OUTPUT_DIR)/%-Simulator$(OBJ_SUFFIX): %.cpp $(TARGET_OUTPUT_DIR)/%/../dirstamp
-	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) -c -o $@ $(cxx-flags) -D_SIM_ $<

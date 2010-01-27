@@ -44,6 +44,7 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
+#include "Simulator.hpp"
 
 #ifdef PNA
 #include "LogFile.hpp"
@@ -677,6 +678,10 @@ void XCSoarGetOpts(LPCTSTR CommandLine) {
 
   TCHAR extrnProfileFile[MAX_PATH];
   extrnProfileFile[0] = 0;
+
+#ifdef SIMULATOR_AVAILABLE
+  global_simulator_flag = _tcsstr(CommandLine, TEXT("-simulator")) != NULL;
+#endif
 
 #ifdef WINDOWSPC
   SCREENWIDTH=640;

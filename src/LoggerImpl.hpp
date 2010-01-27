@@ -141,6 +141,14 @@ private:
 private:
   bool LoggerActive;
   bool DeclaredToDevice;
+
+  /**
+   * If at least one GPS fix came from the simulator
+   * (NMEA_INFO.Simulator), the this flag is true, and signing is
+   * disabled.
+   */
+  bool Simulator;
+
   TCHAR szLoggerFileName[MAX_PATH];
   char szLoggerFileName_c[MAX_PATH];
   int NumLoggerPreTakeoffBuffered;
