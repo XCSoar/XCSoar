@@ -247,6 +247,7 @@ WndButton::on_paint(Canvas &canvas)
     if (mDown)
       OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
 
+    // Draw arrow symbols instead of < and >
     if (mCaption[0] == '<' || mCaption[0] == '>') {
       int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
@@ -260,13 +261,53 @@ WndButton::on_paint(Canvas &canvas)
       Arrow[3].x = Arrow[0].x;
       Arrow[3].y = Arrow[0].y;
 
-      static Pen p;
-      p.set(0, Color(0x00, 0x00, 0x00));
+      static Pen p(0, Color(0x00, 0x00, 0x00));
       canvas.select(p);
-      static Brush b;
-      b.set(Color(0x00, 0x00, 0x00));
+      static Brush b(Color(0x00, 0x00, 0x00));
       canvas.select(b);
+
       canvas.polygon(Arrow, 4);
+
+      return;
+    }
+
+    // Draw symbols instead of + and -
+    if (mCaption[0] == '+' || mCaption[0] == '-') {
+      int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
+
+      static POINT Arrow[5];
+      Arrow[0].x = (rc.left + rc.right) / 2 - size;
+      Arrow[0].y = (rc.top + rc.bottom) / 2 - size / 3;
+      Arrow[1].x = (rc.left + rc.right) / 2 - size;
+      Arrow[1].y = (rc.top + rc.bottom) / 2 + size / 3;
+      Arrow[2].x = (rc.left + rc.right) / 2 + size;
+      Arrow[2].y = (rc.top + rc.bottom) / 2 + size / 3;
+      Arrow[3].x = (rc.left + rc.right) / 2 + size;
+      Arrow[3].y = (rc.top + rc.bottom) / 2 - size / 3;
+      Arrow[4].x = Arrow[0].x;
+      Arrow[4].y = Arrow[0].y;
+
+      static Pen p(0, Color(0x00, 0x00, 0x00));
+      canvas.select(p);
+      static Brush b(Color(0x00, 0x00, 0x00));
+      canvas.select(b);
+
+      canvas.polygon(Arrow, 4);
+
+      if (mCaption[0] == '+') {
+        Arrow[0].x = (rc.left + rc.right) / 2 - size / 3;
+        Arrow[0].y = (rc.top + rc.bottom) / 2 - size;
+        Arrow[1].x = (rc.left + rc.right) / 2 - size / 3;
+        Arrow[1].y = (rc.top + rc.bottom) / 2 + size;
+        Arrow[2].x = (rc.left + rc.right) / 2 + size / 3;
+        Arrow[2].y = (rc.top + rc.bottom) / 2 + size;
+        Arrow[3].x = (rc.left + rc.right) / 2 + size / 3;
+        Arrow[3].y = (rc.top + rc.bottom) / 2 - size;
+        Arrow[4].x = Arrow[0].x;
+        Arrow[4].y = Arrow[0].y;
+
+        canvas.polygon(Arrow, 4);
+      }
 
       return;
     }
@@ -274,6 +315,7 @@ WndButton::on_paint(Canvas &canvas)
     // Vertical middle alignment
     rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
 
+    // Draw the button caption
     canvas.formatted_text(&rc, mCaption,
         DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
   }

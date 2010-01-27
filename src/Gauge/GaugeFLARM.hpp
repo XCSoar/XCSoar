@@ -65,6 +65,8 @@ public:
   void Show(const bool enable_gauge);
   void TrafficPresent(bool traffic);
 
+  bool on_mouse_down(int x, int y);
+
 private:
   int RangeScale(double d);
 };

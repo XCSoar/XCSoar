@@ -503,7 +503,8 @@ Units::GetTaskSpeedName()
 }
 
 bool
-Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size)
+Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
+                          bool IncludeUnit)
 {
   int prec;
   TCHAR sTmp[32];
@@ -515,7 +516,10 @@ Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size)
   // prec = max(prec, 0);
   prec = 0;
 
-  _stprintf(sTmp, _T("%.*f%s"), prec, Altitude, pU->Name);
+  if (IncludeUnit)
+    _stprintf(sTmp, _T("%.*f%s"), prec, Altitude, pU->Name);
+  else
+    _stprintf(sTmp, _T("%.*f"), prec, Altitude);
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
@@ -528,7 +532,8 @@ Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size)
 }
 
 bool
-Units::FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size)
+Units::FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
+                                   bool IncludeUnit)
 {
   Units_t saveUnit = UserAltitudeUnit;
   bool res;
@@ -538,7 +543,7 @@ Units::FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size)
   if (saveUnit == unFeet)
     UserAltitudeUnit = unMeter;
 
-  res = FormatUserAltitude(Altitude, Buffer, size);
+  res = FormatUserAltitude(Altitude, Buffer, size, IncludeUnit);
 
   UserAltitudeUnit = saveUnit;
 
@@ -546,8 +551,11 @@ Units::FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size)
 }
 
 // JMW, what does this do?
+// TB: It seems to be the same as FormatUserAltitude() but it includes the
+//     sign (+/-) in the output (see _stprintf())
 bool
-Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size)
+Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size,
+                         bool IncludeUnit)
 {
   int prec;
   TCHAR sTmp[32];
@@ -559,7 +567,10 @@ Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size)
   // prec = max(prec, 0);
   prec = 0;
 
-  _stprintf(sTmp, _T("%+.*f%s"), prec, Altitude, pU->Name);
+  if (IncludeUnit)
+    _stprintf(sTmp, _T("%+.*f%s"), prec, Altitude, pU->Name);
+  else
+    _stprintf(sTmp, _T("%+.*f"), prec, Altitude);
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
@@ -572,7 +583,8 @@ Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size)
 }
 
 bool
-Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size)
+Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
+                          bool IncludeUnit)
 {
   int prec;
   double value;
@@ -609,7 +621,10 @@ Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size)
     }
   }
 
-  _stprintf(sTmp, _T("%.*f%s"), prec, value, pU->Name);
+  if (IncludeUnit)
+    _stprintf(sTmp, _T("%.*f%s"), prec, value, pU->Name);
+  else
+    _stprintf(sTmp, _T("%.*f"), prec, value);
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
@@ -623,7 +638,7 @@ Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size)
 
 bool
 Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
-                          size_t size)
+                          size_t size, bool IncludeUnit)
 {
   int prec;
   double value;
@@ -660,8 +675,63 @@ Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
     }
   }
 
-  // _stprintf(sTmp, _T("%.*f%s"), prec, value, pU->Name);
-  _stprintf(sTmp, _T("%.*f"), prec, value);
+  if (IncludeUnit)
+    _stprintf(sTmp, _T("%.*f%s"), prec, value, pU->Name);
+  else
+    _stprintf(sTmp, _T("%.*f"), prec, value);
+
+  if (_tcslen(sTmp) < size - 1) {
+    _tcscpy(Buffer, sTmp);
+    return true;
+  } else {
+    _tcsncpy(Buffer, sTmp, size);
+    Buffer[size - 1] = '\0';
+    return false;
+  }
+}
+
+bool
+Units::FormatUserSpeed(double Speed, TCHAR *Buffer, size_t size,
+                       bool IncludeUnit)
+{
+  int prec;
+  TCHAR sTmp[32];
+  UnitDescriptor_t *pU = &UnitDescriptors[UserHorizontalSpeedUnit];
+
+  Speed = Speed * pU->ToUserFact;
+
+  prec = 0;
+  if (Speed < 100)
+    prec = 1;
+
+  if (IncludeUnit)
+    _stprintf(sTmp, _T("%.*f%s"), prec, Speed, pU->Name);
+  else
+    _stprintf(sTmp, _T("%.*f"), prec, Speed);
+
+  if (_tcslen(sTmp) < size - 1) {
+    _tcscpy(Buffer, sTmp);
+    return true;
+  } else {
+    _tcsncpy(Buffer, sTmp, size);
+    Buffer[size - 1] = '\0';
+    return false;
+  }
+}
+
+bool
+Units::FormatUserVSpeed(double Speed, TCHAR *Buffer, size_t size,
+                        bool IncludeUnit)
+{
+  TCHAR sTmp[32];
+  UnitDescriptor_t *pU = &UnitDescriptors[UserVerticalSpeedUnit];
+
+  Speed = Speed * pU->ToUserFact;
+
+  if (IncludeUnit)
+    _stprintf(sTmp, _T("%+.1f%s"), Speed, pU->Name);
+  else
+    _stprintf(sTmp, _T("%+.1f"), Speed);
 
   if (_tcslen(sTmp) < size - 1) {
     _tcscpy(Buffer, sTmp);
@@ -703,6 +773,38 @@ Units::ToSysDistance(double Distance)
   UnitDescriptor_t *pU = &UnitDescriptors[UserDistanceUnit];
   Distance = Distance / pU->ToUserFact; // + pU->ToUserOffset;
   return Distance;
+}
+
+double
+Units::ToUserSpeed(double Speed)
+{
+  UnitDescriptor_t *pU = &UnitDescriptors[UserHorizontalSpeedUnit];
+  Speed = Speed * pU->ToUserFact;
+  return Speed;
+}
+
+double
+Units::ToSysSpeed(double Speed)
+{
+  UnitDescriptor_t *pU = &UnitDescriptors[UserHorizontalSpeedUnit];
+  Speed = Speed / pU->ToUserFact;
+  return Speed;
+}
+
+double
+Units::ToUserVSpeed(double Speed)
+{
+  UnitDescriptor_t *pU = &UnitDescriptors[UserVerticalSpeedUnit];
+  Speed = Speed * pU->ToUserFact;
+  return Speed;
+}
+
+double
+Units::ToSysVSpeed(double Speed)
+{
+  UnitDescriptor_t *pU = &UnitDescriptors[UserVerticalSpeedUnit];
+  Speed = Speed / pU->ToUserFact;
+  return Speed;
 }
 
 void

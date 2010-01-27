@@ -48,6 +48,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Units.hpp"
 #include "resource.h"
+#include "Dialogs.h"
 
 #include <stdio.h>
 
@@ -325,4 +326,18 @@ GaugeFLARM::Show(const bool enable_gauge)
     hide();
   }
   lastvisible = Visible;
+}
+
+/**
+ * This function is called when the mouse is pressed on the FLARM gauge and
+ * opens the FLARM Traffic dialog
+ * @param x x-Coordinate of the click
+ * @param y x-Coordinate of the click
+ * @return
+ */
+bool
+GaugeFLARM::on_mouse_down(int x, int y)
+{
+  dlgFlarmTrafficShowModal();
+  return true;
 }

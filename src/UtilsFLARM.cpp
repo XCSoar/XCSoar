@@ -63,8 +63,8 @@ void
 CloseFLARMDetails()
 {
   int i;
-  for (i=0; i<NumberOfFLARMNames; i++) {
-    //    free(FLARM_Names[i]);
+  for (i = 0; i < NumberOfFLARMNames; i++) {
+    // free(FLARM_Names[i]);
   }
   NumberOfFLARMNames = 0;
 }
@@ -106,7 +106,7 @@ OpenFLARMDetails()
   LocalPath(filename, _T("data.fln"));
   unsigned num_records = flarm_net.LoadFile(filename);
   if (num_records > 0)
-    StartupStore(_T("%u FlarmNet ids found\n"), num_records);
+    StartupStore(_T("%u FLARMnet ids found\n"), num_records);
 }
 
 /**
@@ -117,7 +117,7 @@ void
 SaveFLARMDetails(void)
 {
   TCHAR filename[MAX_PATH];
-  LocalPath(filename,TEXT("xcsoar-flarm.txt"));
+  LocalPath(filename, TEXT("xcsoar-flarm.txt"));
 
   FILE *file = _tfopen(filename, TEXT("wt"));
   if (file == NULL)
@@ -154,7 +154,7 @@ SaveFLARMDetails(void)
 int
 LookupSecondaryFLARMId(int id)
 {
-  for (int i=0; i<NumberOfFLARMNames; i++)
+  for (int i = 0; i < NumberOfFLARMNames; i++)
     if (FLARM_Names[i].ID == id)
       return i;
 
@@ -170,7 +170,7 @@ LookupSecondaryFLARMId(int id)
 int
 LookupSecondaryFLARMId(const TCHAR *cn)
 {
-  for (int i=0; i<NumberOfFLARMNames; i++)
+  for (int i = 0; i < NumberOfFLARMNames; i++)
     if (_tcscmp(FLARM_Names[i].Name, cn) == 0)
       return i;
 
