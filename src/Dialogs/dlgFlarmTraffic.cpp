@@ -415,6 +415,7 @@ PaintTrafficInfo(Canvas &canvas) {
   // Set the text color and background
   canvas.set_text_color(hcStandard);
   canvas.select(TitleSmallWindowFont);
+  canvas.background_transparent();
 
   // Climb Rate
   if (warning < 0) {
