@@ -78,15 +78,19 @@ Copyright_License {
 #include "resource-launch.h"
 #include "Compiler.h"
 
-
-
 /**************************************************************************
 
 	Define
 
 **************************************************************************/
 
+#ifndef SHRG_RETURNCMD
+#define SHRG_RETURNCMD 1
+#endif
 
+#ifndef GN_CONTEXTMENU
+#define GN_CONTEXTMENU 1000
+#endif
 
 #define WINDOW_TITLE			TEXT("XCSoarLaunch")
 
@@ -933,9 +937,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 	PAINTSTRUCT ps;
 
-#ifndef __MINGW32__
 	SHRGINFO rg;
-#endif
 
 	int x, y;
 
@@ -1027,8 +1029,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 		UpdateWindow(hWnd);
 
-
-#ifndef __MINGW32__
 		rg.cbSize = sizeof(SHRGINFO);
 
 		rg.hwndClient = hWnd;
@@ -1044,8 +1044,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 #else
 
 		rg.dwFlags = SHRG_RETURNCMD;
-
-#endif
 
 		if(SelItem != -1 && SHRecognizeGesture(&rg) == GN_CONTEXTMENU){
 
