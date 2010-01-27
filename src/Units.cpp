@@ -675,6 +675,51 @@ Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
   }
 }
 
+bool
+Units::FormatUserSpeed(double Speed, TCHAR *Buffer, size_t size)
+{
+  int prec;
+  TCHAR sTmp[32];
+  UnitDescriptor_t *pU = &UnitDescriptors[UserHorizontalSpeedUnit];
+
+  Speed = Speed * pU->ToUserFact;
+
+  prec = 0;
+  if (Speed < 100)
+    prec = 1;
+
+  _stprintf(sTmp, _T("%.*f%s"), prec, Speed, pU->Name);
+
+  if (_tcslen(sTmp) < size - 1) {
+    _tcscpy(Buffer, sTmp);
+    return true;
+  } else {
+    _tcsncpy(Buffer, sTmp, size);
+    Buffer[size - 1] = '\0';
+    return false;
+  }
+}
+
+bool
+Units::FormatUserVSpeed(double Speed, TCHAR *Buffer, size_t size)
+{
+  TCHAR sTmp[32];
+  UnitDescriptor_t *pU = &UnitDescriptors[UserVerticalSpeedUnit];
+
+  Speed = Speed * pU->ToUserFact;
+
+  _stprintf(sTmp, _T("%+.1f%s"), Speed, pU->Name);
+
+  if (_tcslen(sTmp) < size - 1) {
+    _tcscpy(Buffer, sTmp);
+    return true;
+  } else {
+    _tcsncpy(Buffer, sTmp, size);
+    Buffer[size - 1] = '\0';
+    return false;
+  }
+}
+
 double
 Units::ToUserAltitude(double Altitude)
 {

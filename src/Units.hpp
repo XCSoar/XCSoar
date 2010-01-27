@@ -275,6 +275,22 @@ public:
   static bool FormatUserDistance(double Distance, TCHAR *Buffer, size_t size);
   static bool FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
                                  size_t size);
+  /**
+   * Converts a double-based Speed into a formatted string
+   * @param Speed The double-based Speed
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
+  static bool FormatUserSpeed(double Altitude, TCHAR *Buffer, size_t size);
+  /**
+   * Converts a double-based vertical Speed into a formatted string
+   * @param Speed The double-based vertical Speed
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
+  static bool FormatUserVSpeed(double Altitude, TCHAR *Buffer, size_t size);
 
   /**
    * Converts an altitude from the system unit to the user-specified unit
