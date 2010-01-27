@@ -546,6 +546,8 @@ Units::FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size)
 }
 
 // JMW, what does this do?
+// TB: It seems to be the same as FormatUserAltitude() but it includes the
+//     sign (+/-) in the output (see _stprintf())
 bool
 Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size)
 {
