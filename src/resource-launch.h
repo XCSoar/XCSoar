@@ -10,8 +10,6 @@
 #define IDD_DIALOG_TOOLTIP              106
 #define IDI_ICON_XCSOAR                 107
 #define IDI_ICON_XCSOARSIMULATOR        108
-#define IDB_XCSOAR                      109
-#define IDB_XCSOARSIMULATOR             110
 #define IDD_TODAY_CUSTOM                500
 #define IDC_LIST_FILE                   1000
 #define IDC_BUTTON_ADD                  1002
