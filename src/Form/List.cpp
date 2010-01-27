@@ -292,18 +292,27 @@ WndListFrame::SelectItemFromScreen(int xPos, int yPos)
 {
   (void)xPos;
 
-  // yPos is offset within ListEntry item!
-  int index = yPos / item_height;
+  // If mouse was clicked above the list items -> cancel
+  if (yPos < 0)
+    return;
 
-  if (index >= 0 && index + relative_cursor < length) {
-    if ((unsigned)index == relative_cursor) {
-      if (ActivateCallback != NULL)
-        ActivateCallback(GetCursorIndex());
+  // Calculate the item the user clicked on
+  unsigned index = yPos / item_height + origin;
+  if (index >= length)
+    return;
 
-      invalidate();
-    } else {
-      SetCursorIndex(origin + index);
-    }
+  if (index == GetCursorIndex()) {
+    // If item was already selected
+    // -> call event handler
+    if (ActivateCallback != NULL)
+      ActivateCallback(index);
+
+    // -> and redraw
+    invalidate();
+  } else {
+    // If item was not selected before
+    // -> select it
+    SetCursorIndex(index);
   }
 }
 
