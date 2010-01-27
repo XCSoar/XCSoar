@@ -363,30 +363,12 @@ GetZoomDistance() {
 }
 
 static void
-GetZoomDistanceString(TCHAR* str1, TCHAR* str2) {
-  switch (zoom) {
-    case 0:
-      _tcscpy(str1, _T(" 500 m "));
-      _tcscpy(str2, _T(" 250 m "));
-      break;
-    case 1:
-      _tcscpy(str1, _T(" 1.0 km "));
-      _tcscpy(str2, _T(" 500 m "));
-      break;
-    case 3:
-      _tcscpy(str1, _T(" 5.0 km "));
-      _tcscpy(str2, _T(" 2.5 km "));
-      break;
-    case 4:
-      _tcscpy(str1, _T(" 10.0 km "));
-      _tcscpy(str2, _T(" 5.0 km "));
-      break;
-    case 2:
-    default:
-      _tcscpy(str1, _T(" 2.0 km "));
-      _tcscpy(str2, _T(" 1.0 km "));
-      break;
-  }
+GetZoomDistanceString(TCHAR* str1, TCHAR* str2, unsigned size) {
+  double z = GetZoomDistance();
+  double z_half = z * 0.5;
+
+  Units::FormatUserDistance(z, str1, size);
+  Units::FormatUserDistance(z_half, str2, size);
 }
 
 /**
@@ -682,7 +664,7 @@ PaintRadarBackground(Canvas &canvas) {
 
   // Paint zoom strings
   static TCHAR str1[10], str2[10];
-  GetZoomDistanceString(str1, str2);
+  GetZoomDistanceString(str1, str2, 10);
   static SIZE sz1, sz2;
   canvas.select(MapWindowFont);
   sz1 = canvas.text_size(str1);
