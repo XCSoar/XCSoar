@@ -412,7 +412,20 @@ PaintTrafficInfo(Canvas &canvas) {
   rc.bottom = 2 * radar_mid.y - rc.top;
 
   // Set the text color and background
-  canvas.set_text_color(hcStandard);
+  switch (traffic.AlarmLevel) {
+  case 1:
+    canvas.set_text_color(hcWarning);
+    break;
+  case 2:
+  case 3:
+    canvas.set_text_color(hcAlarm);
+    break;
+  case 4:
+  case 0:
+  default:
+    canvas.set_text_color(hcStandard);
+    break;
+  }
   canvas.select(TitleSmallWindowFont);
   canvas.background_transparent();
 
@@ -441,27 +454,13 @@ PaintTrafficInfo(Canvas &canvas) {
   // ID / Name
   if (traffic.HasName()) {
     canvas.select(InfoWindowFont);
-    switch (traffic.AlarmLevel) {
-    case 1:
-      canvas.set_text_color(hcWarning);
-      break;
-    case 2:
-    case 3:
-      canvas.set_text_color(hcAlarm);
-      break;
-    case 4:
-    case 0:
-    default:
+    if (traffic.AlarmLevel < 1)
       canvas.set_text_color(hcSelection);
-      break;
-    }
     _tcscpy(tmp, traffic.Name);
   } else {
-    canvas.set_text_color(hcStandard);
     _stprintf(tmp, _T("%lX"), traffic.ID);
   }
   canvas.text(rc.left, rc.top, tmp);
-
 }
 
 /**
