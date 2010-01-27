@@ -247,7 +247,8 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
+  static bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
+                                 bool IncludeUnit = true);
   /**
    * Converts a double-based Altitude into a formatted string of the alternate
    * altitude format
@@ -256,7 +257,8 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
+  static bool FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer,
+                                          size_t size, bool IncludeUnit = true);
   /**
    * Converts a double-based Arrival Altitude into a formatted string
    * @param Altitude The double-based Arrival Altitude
@@ -264,7 +266,8 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size);
+  static bool FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size,
+                                bool IncludeUnit = true);
   /**
    * Converts a double-based horizontal Distance into a formatted string
    * @param Distance The double-based Distance
@@ -272,9 +275,10 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatUserDistance(double Distance, TCHAR *Buffer, size_t size);
+  static bool FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
+                                 bool IncludeUnit = true);
   static bool FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
-                                 size_t size);
+                                 size_t size, bool IncludeUnit = true);
   /**
    * Converts a double-based Speed into a formatted string
    * @param Speed The double-based Speed
@@ -282,7 +286,8 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatUserSpeed(double Altitude, TCHAR *Buffer, size_t size);
+  static bool FormatUserSpeed(double Altitude, TCHAR *Buffer, size_t size,
+                              bool IncludeUnit = true);
   /**
    * Converts a double-based vertical Speed into a formatted string
    * @param Speed The double-based vertical Speed
@@ -290,7 +295,8 @@ public:
    * @param size Size of the Buffer
    * @return True if Buffer long enough, False otherwise
    */
-  static bool FormatUserVSpeed(double Altitude, TCHAR *Buffer, size_t size);
+  static bool FormatUserVSpeed(double Altitude, TCHAR *Buffer, size_t size,
+                               bool IncludeUnit = true);
 
   /**
    * Converts an altitude from the system unit to the user-specified unit

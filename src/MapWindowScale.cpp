@@ -140,7 +140,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
 
     canvas.select(MapWindowBoldFont);
     Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
-                              sizeof(ScaleInfo)/sizeof(TCHAR));
+                              sizeof(ScaleInfo)/sizeof(TCHAR), false);
     SIZE TextSize = canvas.text_size(ScaleInfo);
     LastMapWidth = (int)MapWidth;
 
