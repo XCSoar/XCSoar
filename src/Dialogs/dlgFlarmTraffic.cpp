@@ -629,7 +629,7 @@ PaintRadarTraffic(Canvas &canvas) {
 
     // Draw vertical speed
     TCHAR tmp[10];
-    _stprintf(tmp, _T("%+.1f"), Units::ToUserVSpeed(traffic.Average30s));
+    Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
     SIZE sz = canvas.text_size(tmp);
     canvas.text(sc.x + Layout::FastScale(11), sc.y - sz.cy * 0.5, tmp);
 #endif
