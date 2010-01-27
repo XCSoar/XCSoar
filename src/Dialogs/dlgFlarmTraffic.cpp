@@ -155,7 +155,7 @@ UpdateSelector()
 }
 
 /**
- * Itterates through the traffic array, finds the target with the highest
+ * Iterates through the traffic array, finds the target with the highest
  * alarm level and saves it to "warning".
  */
 static void
