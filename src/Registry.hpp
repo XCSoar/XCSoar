@@ -44,13 +44,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
-void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex);
-void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex);
-void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex);
-void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex);
-void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex);
-
 extern const TCHAR szRegistryKey[];
 extern const TCHAR *szRegistryDisplayType[];
 extern const TCHAR *szRegistryColour[];
@@ -230,8 +223,11 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal);	// JG
 HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal);	// JG
 #endif
 
-BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
-HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
+bool
+GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
+
+bool
+SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
 
 void
 SetRegistryStringIfAbsent(const TCHAR *name, const TCHAR *value);
@@ -243,8 +239,37 @@ void SetRegistryAirspaceMode(int i);
 int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
 
-void ReadDeviceSettings(const int devIdx, TCHAR *Name);
-void WriteDeviceSettings(const int devIdx, const TCHAR *Name);
+struct DeviceConfig {
+  enum port_type {
+    /**
+     * Serial port, i.e. COMx / RS-232.
+     */
+    SERIAL,
+
+    /**
+     * Attempt to auto-discover the GPS source.
+     *
+     * On Windows CE, this opens the GPS Intermediate Driver
+     * Multiplexer:
+     * http://msdn.microsoft.com/en-us/library/bb202042.aspx
+     */
+    AUTO,
+  };
+
+  port_type port_type;
+
+  unsigned port_index;
+
+  unsigned speed_index;
+
+  TCHAR driver_name[32];
+};
+
+void
+ReadDeviceConfig(unsigned n, DeviceConfig &config);
+
+void
+WriteDeviceConfig(unsigned n, const DeviceConfig &config);
 
 void SaveRegistryToFile(const TCHAR* szFile);
 void LoadRegistryFromFile(const TCHAR* szFile);

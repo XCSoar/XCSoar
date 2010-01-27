@@ -218,7 +218,7 @@ TCHAR installDir[BUF_SIZE];
 
 
 
-static BOOL
+static bool
 GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
 
@@ -248,7 +248,7 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 
       RegCloseKey(hKey);
 
-      return FALSE;
+      return false;
 
     }
 
@@ -258,7 +258,7 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 
   RegCloseKey(hKey);
 
-  return hRes;
+  return hRes == ERROR_SUCCESS
 
 }
 

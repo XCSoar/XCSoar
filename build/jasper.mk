@@ -18,7 +18,7 @@ JASPER = \
 	$(JASSRC)/jpc/jpc_tagtree.c	$(JASSRC)/jpc/jpc_tsfb.c \
 	$(JASSRC)/jpc/jpc_util.c 	$(JASSRC)/jpc/RasterTile.cpp
 
-JASPER_LIBS = $(TARGET_OUTPUT_DIR)/jasper-$(TARGET).a
+JASPER_LIBS = $(TARGET_OUTPUT_DIR)/jasper.a
 
 $(JASPER_LIBS): $(call SRC_TO_OBJ,$(JASPER))
 	@$(NQ)echo "  AR      $@"

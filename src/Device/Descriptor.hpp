@@ -51,8 +51,6 @@ class Device;
 struct AtmosphericPressure;
 struct DeviceRegister;
 
-#define DEVNAMESIZE  32
-
 class DeviceDescriptor : public ComPort::Handler {
 public:
   FILE  *fhLogFile;

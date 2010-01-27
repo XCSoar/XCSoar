@@ -159,3 +159,11 @@ SampledTaskPoint::get_sample_points() const
 {
   return m_sampled_points;
 }
+
+
+void 
+SampledTaskPoint::set_search_min(const GEOPOINT &location)
+{
+  SearchPoint sp(location, m_task_projection, false);
+  set_search_min(sp);
+}

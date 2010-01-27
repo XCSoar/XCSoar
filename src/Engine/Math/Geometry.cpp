@@ -47,15 +47,17 @@ Copyright_License {
  * @return Output angle (0-360 degrees)
  */
 fixed
-AngleLimit360(fixed theta)
+AngleLimit360(const fixed &theta)
 {
-  while (theta < fixed_zero)
-    theta += fixed_360;
+  fixed retval = theta;
 
-  while (theta > fixed_360)
-    theta -= fixed_360;
+  while (retval < fixed_zero)
+    retval += fixed_360;
 
-  return theta;
+  while (retval > fixed_360)
+    retval -= fixed_360;
+
+  return retval;
 }
 
 /**
@@ -64,15 +66,16 @@ AngleLimit360(fixed theta)
  * @return Output angle (-180 - +180 degrees)
  */
 fixed
-AngleLimit180(fixed theta)
+AngleLimit180(const fixed &theta)
 {
-  while (theta < -fixed_180)
-    theta += fixed_360;
+  fixed retval = theta;
+  while (retval < -fixed_180)
+    retval += fixed_360;
 
-  while (theta > fixed_180)
-    theta -= fixed_360;
+  while (retval > fixed_180)
+    retval -= fixed_360;
 
-  return theta;
+  return retval;
 }
 
 /**
@@ -81,32 +84,32 @@ AngleLimit180(fixed theta)
  * @return Output angle (0 - 360 degrees)
  */
 fixed
-Reciprocal(fixed InBound)
+Reciprocal(const fixed &InBound)
 {
   return AngleLimit360(InBound + fixed_180);
 }
 
 fixed
-BiSector(fixed InBound, fixed OutBound)
+BiSector(const fixed &InBound, const fixed &OutBound)
 {
-  fixed result;
+  return HalfAngle(Reciprocal(InBound), OutBound);
+}
 
-  InBound = Reciprocal(InBound);
-
-  if (InBound == OutBound) {
-    result = Reciprocal(InBound);
-  } else if (InBound > OutBound) {
-    if ((InBound - OutBound) < fixed_180)
-      result = Reciprocal((InBound + OutBound) * fixed_half);
+fixed
+HalfAngle(const fixed &Start, const fixed &End)
+{
+  if (Start == End) {
+    return Reciprocal(Start);
+  } else if (Start > End) {
+    if ((Start - End) < fixed_180)
+      return Reciprocal((Start + End) * fixed_half);
     else
-      result = (InBound + OutBound) * fixed_half;
+      return (Start + End) * fixed_half;
   } else {
-    if ((OutBound - InBound) < fixed_180)
-      result = Reciprocal((InBound + OutBound) * fixed_half);
+    if ((End - Start) < fixed_180)
+      return Reciprocal((Start + End) * fixed_half);
     else
-      result = (InBound + OutBound) * fixed_half;
+      return (Start + End) * fixed_half;
   }
-
-  return result;
 }
 

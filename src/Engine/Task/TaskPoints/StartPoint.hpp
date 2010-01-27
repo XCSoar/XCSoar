@@ -111,6 +111,17 @@ public:
  */
   bool equals(const OrderedTaskPoint* other) const;
 
+/** 
+ * Search for the min point on the boundary from
+ * the aircraft state to the next point.  Should only
+ * be performed when the aircraft state is inside the sector
+ * 
+ * @param state Current aircraft state
+ * @param next Next task point following the start
+ */
+  void find_best_start(const AIRCRAFT_STATE &state,
+                       const OrderedTaskPoint& next);
+
 private:
   bool enabled; /**< For future use with multiple start points, whether enabled */
 

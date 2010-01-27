@@ -35,17 +35,22 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Internal.hpp"
-#include "Screen/Blank.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "wcecompat/ts_string.h"
-#include "Screen/Layout.hpp"
-#include "UtilsSystem.hpp"
-#include "InputEvents.h"
-#include "PopupMessage.hpp"
+#include "Interface.hpp"
+#include "Dialogs.h"
 #include "MapWindow.h"
-#include "StatusMessage.hpp"
-#include "Asset.hpp"
+#include "InputEvents.h"
+#include "UtilsSystem.hpp"
+#include "LocalPath.hpp"
+#include "wcecompat/ts_string.h"
+#include "Registry.hpp"
+#include "RasterTerrain.h"
+#include "AirspaceParser.hpp"
+#include "Airspace/AirspaceWarningManager.hpp"
+#include "Waypoint/Waypoints.hpp"
+#include "GlideComputerInterface.hpp"
+#include "Task/TaskManager.hpp"
+#include "Screen/Blank.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -65,22 +70,20 @@ FileExistsA(const char *FileName)
   FILE *file = fopen(FileName, "r");
   if (file != NULL) {
     fclose(file);
-    return(true);
+    return true;
   }
+
   return false;
 }
 
 void
-LocalPath(TCHAR *buf, const TCHAR* file, int loc)
+StartupStore(const TCHAR *Str, ...)
 {
-  _tcscpy(buf, file);
-}
+  va_list ap;
 
-void
-LocalPathS(char *buf, const TCHAR* file, int loc)
-{
-  strcpy(buf, (const char *)file);
-  //unicode2ascii(file, buf);
+  va_start(ap, Str);
+  _vftprintf(stderr, Str, ap);
+  va_end(ap);
 }
 
 const TCHAR *
@@ -95,8 +98,18 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   return -1;
 }
 
-void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText)
+bool XCSoarInterface::Debounce() { return false; }
+void XCSoarInterface::InterfaceTimeoutReset(void) {}
+
+void
+XCSoarInterface::CreateProgressDialog(const TCHAR* text)
 {
+  _ftprintf(stderr, _T("%s\n"), text);
+}
+
+void XCSoarInterface::StepProgressDialog(void) {}
+bool XCSoarInterface::SetProgressStepSize(int nSize) {
+  return false;
 }
 
 pt2Event
@@ -105,10 +118,10 @@ InputEvents::findEvent(const TCHAR *)
   return NULL;
 }
 
-void
-PopupMessage::BlockRender(bool doblock)
-{
-}
+RasterTerrain terrain;
+
+void RasterTerrain::Lock(void) {}
+void RasterTerrain::Unlock(void) {}
 
 #ifndef ENABLE_SDL
 bool
@@ -118,21 +131,46 @@ MapWindow::identify(HWND hWnd)
 }
 #endif /* !ENABLE_SDL */
 
-StatusMessageList::StatusMessageList() {}
-
 HINSTANCE CommonInterface::hInst;
 bool CommonInterface::EnableAnimation;
-
-static const StatusMessageList messages;
-
-bool XCSoarInterface::Debounce() { return false; }
-void XCSoarInterface::InterfaceTimeoutReset(void) {}
 
 Font MapWindowFont;
 Font MapWindowBoldFont;
 Font TitleWindowFont;
 Font CDIWindowFont;
 Font InfoWindowFont;
+
+Waypoints way_points;
+TaskBehaviour task_behaviour;
+TaskEvents task_events;
+
+TaskManager task_manager(task_events,
+                         task_behaviour,
+                         way_points);
+
+Airspaces airspace_database;
+
+AIRCRAFT_STATE ac_state; // dummy
+
+AirspaceWarningManager airspace_warning(airspace_database,
+                                        ac_state,
+                                        task_manager);
+
+static void
+LoadFiles()
+{
+  TCHAR tpath[MAX_PATH];
+  GetRegistryString(szRegistryAirspaceFile, tpath, MAX_PATH);
+  if (tpath[0] != 0) {
+    ExpandLocalPath(tpath);
+
+    char path[MAX_PATH];
+    unicode2ascii(tpath, path, sizeof(path));
+
+    ReadAirspace(airspace_database, path);
+    airspace_database.optimise();
+  }
+}
 
 #ifndef WIN32
 int main(int argc, char **argv)
@@ -148,37 +186,27 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 {
 #ifdef WIN32
-#ifndef _WIN32_WCE
-  /* on Windows (non-CE), the lpCmdLine argument is narrow, and we
-     have to use GetCommandLine() to get the UNICODE string */
-  LPCTSTR lpCmdLine = GetCommandLine();
-#endif
-
   CommonInterface::hInst = hInstance;
-
   PaintWindow::register_class(hInstance);
-#else
-  const TCHAR *lpCmdLine = argv[1];
-
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s XMLFILE\n", argv[0]);
-    return 1;
-  }
 #endif
+
+  LoadFiles();
+
+  Airspaces::AirspaceTree::const_iterator it = airspace_database.begin();
+
+  AirspaceInterceptSolution ais;
+  for (unsigned i = 0; i < 5 && it != airspace_database.end(); ++i, ++it)
+    airspace_warning.get_warning(*it->get_airspace())
+      .update_solution((AirspaceWarning::AirspaceWarningState)i, ais);
 
   SingleWindow main_window;
-  main_window.set(_T("STATIC"), _T("RunDialog"),
+  main_window.set(_T("STATIC"), _T("RunAirspaceWarningDialog"),
                   0, 0, 640, 480);
   main_window.show();
 
-  WndForm *form = dlgLoadFromXML(NULL, lpCmdLine, main_window);
-  if (form == NULL) {
-    fprintf(stderr, "Failed to load XML file\n");
-    return 1;
-  }
-
-  form->ShowModal();
-  delete form;
+  dlgAirspaceWarningInit(main_window);
+  dlgAirspaceWarningShowDlg();
+  dlgAirspaceWarningDeInit();
 
   return 0;
 }

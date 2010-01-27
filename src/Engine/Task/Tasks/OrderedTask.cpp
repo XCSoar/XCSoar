@@ -252,6 +252,9 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
         last_started = false;
       }
     }
+    if ((activeTaskPoint==0) && (i==0)) {
+      update_start_transition(state);
+    }
     if (tps[i]->update_sample(state, task_events)) {
       full_update = true;
     }
@@ -534,6 +537,9 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
   TaskMacCreadyRemaining tm(tps,activeTaskPoint, polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution(aircraft);
+  if (activeTaskPoint==0) {
+    leg.Vector = GeoVector(aircraft.Location, ts->get_location_remaining());
+  }
 }
 
 void
@@ -754,6 +760,9 @@ OrderedTask::get_tp_search_points(unsigned tp) const
 void 
 OrderedTask::set_tp_search_min(unsigned tp, const SearchPoint &sol) 
 {
+  if (!tp && !tps[0]->has_exited()) 
+    return;
+
   tps[tp]->set_search_min(sol);
 }
 
@@ -780,4 +789,23 @@ TaskProjection&
 OrderedTask::get_task_projection() 
 {
   return task_projection;
+}
+
+
+void
+OrderedTask::update_start_transition(const AIRCRAFT_STATE &state)
+{
+  if (ts->has_exited()) {
+    return;
+  }
+
+  if (ts->isInSector(state)) {
+    // @todo find boundary point that produces shortest
+    // distance from state to that point to next tp point
+    ts->find_best_start(state, *tps[1]);
+  } else {
+    // reset on invalid transition to outside
+    // point to nominal start point
+    ts->reset();
+  }
 }

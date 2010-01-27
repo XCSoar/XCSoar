@@ -37,27 +37,14 @@ Copyright_License {
 
 */
 
-#include "Task/TaskManager.hpp"
-
 #include "GlideComputerTask.hpp"
-#include "Protection.hpp"
-#include "SettingsTask.hpp"
-#include "Math/Earth.hpp"
-#include "Math/Geometry.hpp"
-#include "Math/LowPassFilter.hpp"
+#include "Task/TaskManager.hpp"
 #include "RasterTerrain.h"
-#include "GlideRatio.hpp"
-#include "GlideTerrain.hpp"
-#include "Logger.h"
-#include "InputEvents.h"
 #include "Components.hpp"
-#include <assert.h>
 
-#ifndef _MSC_VER
 #include <algorithm>
-using std::min;
+
 using std::max;
-#endif
 
 // JMW TODO: abstract up to higher layer so a base copy of this won't
 // call any event
@@ -80,13 +67,12 @@ GlideComputerTask::ResetFlight(const bool full)
   terrain.Unlock();
 }
 
-
-extern TaskBehaviour task_behaviour;
-
 void
 GlideComputerTask::ProcessBasicTask()
 {
-  if (Basic().Time != LastBasic().Time) {
+  const NMEA_INFO &basic = Basic();
+
+  if (basic.Time != LastBasic().Time) {
     terrain.Lock();
 
   // JMW TODO OLD_TASK, this is a hack
@@ -98,8 +84,8 @@ GlideComputerTask::ProcessBasicTask()
 //  task_behaviour.auto_mc=true;
     task_behaviour.enable_olc = true;
 
-    if (!Basic().NAVWarning) {
-      m_task.update(Basic(), LastBasic());
+    if (!basic.NAVWarning) {
+      m_task.update(basic, LastBasic());
     }
     terrain.Unlock();
   }
@@ -375,15 +361,16 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
   // if (on task, on final glide and activated at settings)
   } else if (((SettingsComputer().AutoMacCreadyMode == 0)
       || (SettingsComputer().AutoMacCreadyMode == 2)) && is_final_glide) {
+    const NMEA_INFO &basic = Basic();
 
     // QUESTION TB: time_remaining until what? and why 9000???
-    double time_remaining = Basic().Time - Calculated().TaskStartTime - 9000;
+    double time_remaining = basic.Time - Calculated().TaskStartTime - 9000;
 
     if (SettingsComputer().EnableOLC && (SettingsComputer().OLCRules == 0)
         && (Calculated().NavAltitude > Calculated().TaskStartAltitude)
         && (time_remaining > 0)) {
 
-      mc_new = MacCreadyTimeLimit(Basic(), Calculated(),
+      mc_new = MacCreadyTimeLimit(basic, Calculated(),
           Calculated().WaypointBearing, time_remaining,
           Calculated().TaskStartAltitude);
 
@@ -397,7 +384,7 @@ GlideComputerTask::DoAutoMacCready(double mc_setting)
           - FAIFinishHeight(task.getActiveIndex()))
           / (Calculated().WaypointDistance + 1);
 
-      double mc_pirker = PirkerAnalysis(Basic(), Calculated(),
+      double mc_pirker = PirkerAnalysis(basic, Calculated(),
           Calculated().WaypointBearing, slope);
 
       mc_pirker = max(0.0, mc_pirker);
@@ -480,11 +467,13 @@ GlideComputerTask::ValidStartSpeed(const DWORD Margin) const
   if (task.getSettings().StartMaxSpeed == 0)
     return true;
 
-  if (Basic().AirspeedAvailable) {
-    if (Basic().IndicatedAirspeed > (task.getSettings().StartMaxSpeed + Margin))
+  const NMEA_INFO &basic = Basic();
+
+  if (basic.AirspeedAvailable) {
+    if (basic.IndicatedAirspeed > (task.getSettings().StartMaxSpeed + Margin))
       return false;
   } else {
-    if (Basic().Speed > (task.getSettings().StartMaxSpeed + Margin))
+    if (basic.Speed > (task.getSettings().StartMaxSpeed + Margin))
       return false;
   }
   return true;

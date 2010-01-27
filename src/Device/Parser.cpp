@@ -1114,9 +1114,6 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
  * @param GPS_INFO Pointer to the NMEA_INFO struct
  */
 void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
-	// QUESTION TB: should be moved to test folder!?
-#ifndef NDEBUG
-#ifndef GNAV
   static int i = 90;
 
   i++;
@@ -1169,8 +1166,6 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   PFLAA(t_laa1, params, nr, GPS_INFO);
   nr = ExtractParameters(t_laa2, ctemp, params, MAX_NMEA_PARAMS);
   PFLAA(t_laa2, params, nr, GPS_INFO);
-#endif
-#endif
 }
 
 bool EnableLogNMEA = false;

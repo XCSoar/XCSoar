@@ -129,6 +129,18 @@ SetGlobalEllipse(float value)
 #endif
 
 /**
+ * Returns whether this is a debug build.
+ */
+static inline bool is_debug()
+{
+#ifdef NDEBUG
+  return false;
+#else
+  return true;
+#endif
+}
+
+/**
  * Returns whether the application is running on an embedded platform.
  * @return True if host hardware is an embedded platform, False otherwise
  */

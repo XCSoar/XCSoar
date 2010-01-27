@@ -45,6 +45,11 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 #include <SDL/SDL_endian.h>
+
+  #ifdef WIN32
+    #define WIN32_LEAN_AND_MEAN
+    #include <windows.h>
+  #endif
 #endif
 
 #include <assert.h>

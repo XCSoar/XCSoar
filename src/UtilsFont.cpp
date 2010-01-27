@@ -119,8 +119,7 @@ void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf) {
   assert(Name[0] != '\0');
   assert(lplf != NULL);
 
-  if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0) {
+  if (GetRegistryString(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
     propGetFontSettingsFromString(Buffer, lplf);
-  }
 }
 

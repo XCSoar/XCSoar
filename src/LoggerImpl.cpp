@@ -422,13 +422,14 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
   sprintf(temp, "HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_VersionStringOld);
   IGCWriteRecord(temp, szLoggerFileName);
 
-  TCHAR DeviceName[DEVNAMESIZE];
+  DeviceConfig device_config;
   if (is_simulator()) {
-    _tcscpy(DeviceName, _T("Simulator"));
+    _tcscpy(device_config.driver_name, _T("Simulator"));
   } else {
-    ReadDeviceSettings(0, DeviceName);
+    ReadDeviceConfig(0, device_config);
   }
-  sprintf(temp, "HFGPS: %S\r\n", DeviceName);
+
+  sprintf(temp, "HFGPS: %S\r\n", device_config.driver_name);
   IGCWriteRecord(temp, szLoggerFileName);
 
   IGCWriteRecord(datum, szLoggerFileName);
@@ -544,12 +545,12 @@ bool
 LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev,
     const struct Declaration *decl)
 {
-  if (!devIsLogger(dev))
+  if (!devIsLogger(*dev))
     return false;
 
   if (MessageBoxX(gettext(_T("Declare Task?")),
                   dev->GetName(), MB_YESNO| MB_ICONQUESTION) == IDYES) {
-    if (devDeclare(dev, decl)) {
+    if (devDeclare(*dev, decl)) {
       MessageBoxX(gettext(_T("Task Declared!")),
                   dev->GetName(), MB_OK| MB_ICONINFORMATION);
       DeclaredToDevice = true;

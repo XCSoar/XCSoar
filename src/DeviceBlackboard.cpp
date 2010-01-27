@@ -213,25 +213,24 @@ DeviceBlackboard::RaiseConnection()
 void
 DeviceBlackboard::ProcessSimulation()
 {
-  if (is_simulator()) {
-    ScopeLock protect(mutexBlackboard);
-    SetNAVWarning(false);
-    FindLatitudeLongitude(Basic().Location,
-        Basic().TrackBearing,
-        Basic().Speed,
-        &SetBasic().Location);
-    SetBasic().Time+= fixed_one;
-    long tsec = (long)Basic().Time;
-    SetBasic().Hour = tsec/3600;
-    SetBasic().Minute = (tsec-Basic().Hour*3600)/60;
-    SetBasic().Second = (tsec-Basic().Hour*3600-Basic().Minute*60);
+  if (!is_simulator())
+    return;
 
-    #ifndef NDEBUG
-      // use this to test FLARM parsing/display
-    if (!is_altair())
-        DeviceList[0].parser.TestRoutine(&SetBasic());
-    #endif
-  }
+  ScopeLock protect(mutexBlackboard);
+  SetNAVWarning(false);
+  FindLatitudeLongitude(Basic().Location,
+                        Basic().TrackBearing,
+                        Basic().Speed,
+                        &SetBasic().Location);
+  SetBasic().Time+= fixed_one;
+  long tsec = (long)Basic().Time;
+  SetBasic().Hour = tsec/3600;
+  SetBasic().Minute = (tsec-Basic().Hour*3600)/60;
+  SetBasic().Second = (tsec-Basic().Hour*3600-Basic().Minute*60);
+
+  // use this to test FLARM parsing/display
+  if (is_debug() && !is_altair())
+    DeviceList[0].parser.TestRoutine(&SetBasic());
 }
 
 /**

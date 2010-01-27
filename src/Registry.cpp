@@ -38,13 +38,13 @@ Copyright_License {
 
 #include "Registry.hpp"
 #include "StringUtil.hpp"
-#include "Device/Descriptor.hpp"
 #include "LogFile.hpp"
 #include "Defines.h"
 #include "Sizes.h"
 
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #ifndef WIN32
 #include <gconf/gconf.h>
@@ -167,9 +167,6 @@ const TCHAR szRegistryAlternate2[] = CONF("Alternate2");
 const TCHAR szRegistryLiftUnitsValue[] = CONF("Lift");
 const TCHAR szRegistryLatLonUnits[] = CONF("LatLonUnits");
 const TCHAR szRegistryPolarID[] = CONF("Polar"); // pL
-const TCHAR szRegistryPort1Index[] = CONF("PortIndex");
-const TCHAR szRegistryPort2Index[] = CONF("Port2Index");
-const TCHAR szRegistryPort3Index[] = CONF("Port3Index");
 const TCHAR szRegistryRegKey[] = CONF("RegKey");
 const TCHAR szRegistrySafetyAltitudeArrival[] = CONF("SafetyAltitudeArrival");
 const TCHAR szRegistrySafetyAltitudeBreakOff[] = CONF("SafetyAltitudeBreakOff");
@@ -180,9 +177,6 @@ const TCHAR szRegistrySnailTrail[] = CONF("SnailTrail");
 const TCHAR szRegistryTrailDrift[] = CONF("TrailDrift");
 const TCHAR szRegistryThermalLocator[] = CONF("ThermalLocator");
 const TCHAR szRegistryAnimation[] = CONF("Animation");
-const TCHAR szRegistrySpeed1Index[] = CONF("SpeedIndex");
-const TCHAR szRegistrySpeed2Index[] = CONF("Speed2Index");
-const TCHAR szRegistrySpeed3Index[] = CONF("Speed3Index");
 const TCHAR szRegistrySpeedUnitsValue[] = CONF("Speed");
 const TCHAR szRegistryTaskSpeedUnitsValue[] = CONF("TaskSpeed");
 const TCHAR szRegistryStartLine[] = CONF("StartLine");
@@ -218,10 +212,6 @@ const TCHAR szRegistryNettoSpeed[] = CONF("NettoSpeed");
 const TCHAR szRegistryAccelerometerZero[] = CONF("AccelerometerZero");
 const TCHAR szRegistryCDICruise[] = CONF("CDICruise");
 const TCHAR szRegistryCDICircling[] = CONF("CDICircling");
-
-const TCHAR szRegistryDeviceA[] = CONF("DeviceA");
-const TCHAR szRegistryDeviceB[] = CONF("DeviceB");
-const TCHAR szRegistryDeviceC[] = CONF("DeviceC");
 
 const TCHAR szRegistryAutoBlank[] = CONF("AutoBlank");
 const TCHAR szRegistryAutoBacklight[] = CONF("AutoBacklight");
@@ -368,9 +358,9 @@ void StoreType(int Index,int the_type)
   SetToRegistry(szRegistryDisplayType[Index],(DWORD)the_type);
 }
 
-void SetRegistryStringIfAbsent(const TCHAR* name,
-			       const TCHAR* value) {
-
+void
+SetRegistryStringIfAbsent(const TCHAR* name, const TCHAR* value)
+{
   // VENTA force fonts registry rewrite in PNAs
 #if defined(PNA) || defined(FIVV) // VENTA TODO WARNING should really delete the key before creating it TODO
   SetRegistryString(name, value);
@@ -395,10 +385,7 @@ bool GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
 
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_ALL_ACCESS, &hKey);
   if (hRes != ERROR_SUCCESS)
-    {
-      RegCloseKey(hKey);
-      return hRes;
-    }
+    return hRes;
 
   defaultVal = pPos;
   dwSize = sizeof(DWORD);
@@ -498,19 +485,19 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 // Set bool value to registry as 1 or 0 - JG
 HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal)
 {
-	return SetToRegistry(szRegValue, bVal ? DWORD(1) : DWORD(0));
+  return SetToRegistry(szRegValue, bVal ? DWORD(1) : DWORD(0));
 }
 
 // Set int value to registry - JG
 HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal)
 {
-	return SetToRegistry(szRegValue, DWORD(nVal));
+  return SetToRegistry(szRegValue, DWORD(nVal));
 }
 
 #ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
 HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
 {
-	return SetToRegistry(szRegValue, DWORD(nVal));
+  return SetToRegistry(szRegValue, DWORD(nVal));
 }
 #endif
 
@@ -520,7 +507,8 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
  * @param pPos Pointer to the output buffer
  * @param dwSize Maximum size of the output buffer
  */
-BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+bool
+GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
 #ifdef WIN32
   HKEY    hKey;
@@ -534,17 +522,14 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   pPos[0]= '\0';
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_READ /*KEY_ALL_ACCESS*/, &hKey);
   if (hRes != ERROR_SUCCESS)
-    {
-      RegCloseKey(hKey);
-      return hRes;
-    }
+    return false;
 
-  dwSize *= 2;
+  dwSize *= sizeof(pPos[0]);
 
   hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)pPos, &dwSize);
 
   RegCloseKey(hKey);
-  return hRes;
+  return hRes == ERROR_SUCCESS;
 #else /* !WIN32 */
   return GConf().get(szRegValue, pPos, dwSize);
 #endif /* !WIN32 */
@@ -555,7 +540,8 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
  * @param szRegValue Name of the value that should be written
  * @param Pos Value that should be written
  */
-HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
+bool
+SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
 #ifdef WIN32
   HKEY    hKey;
@@ -564,78 +550,21 @@ HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 
   hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
   if (hRes != ERROR_SUCCESS)
-    {
-      return FALSE;
-    }
+    return false;
 
   hRes = RegSetValueEx(hKey, szRegValue,0,REG_SZ, (LPBYTE)Pos, (_tcslen(Pos)+1)*sizeof(TCHAR));
   RegCloseKey(hKey);
 
-  return hRes;
+  return hRes == ERROR_SUCCESS;
 #else /* !WIN32 */
   return GConf().set(szRegValue, Pos);
 #endif /* !WIN32 */
 }
 
-void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex)
-{
-  DWORD Temp=0;
-
-  if(GetFromRegistryD(szRegistryPort1Index,Temp)==ERROR_SUCCESS)
-    (*PortIndex) = Temp;
-
-  if(GetFromRegistryD(szRegistrySpeed1Index,Temp)==ERROR_SUCCESS)
-    (*SpeedIndex) = Temp;
-}
-
-
-void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex)
-{
-  SetToRegistry(szRegistryPort1Index, PortIndex);
-  SetToRegistry(szRegistrySpeed1Index, SpeedIndex);
-}
-
-void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex)
-{
-  DWORD Temp=0;
-
-  if(GetFromRegistryD(szRegistryPort2Index,Temp)==ERROR_SUCCESS)
-    (*PortIndex) = Temp;
-
-  if(GetFromRegistryD(szRegistrySpeed2Index,Temp)==ERROR_SUCCESS)
-    (*SpeedIndex) = Temp;
-}
-
-
-void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex)
-{
-  SetToRegistry(szRegistryPort2Index, PortIndex);
-  SetToRegistry(szRegistrySpeed2Index, SpeedIndex);
-}
-
-void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex)
-{
-  DWORD Temp=0;
-
-  if(GetFromRegistryD(szRegistryPort3Index,Temp)==ERROR_SUCCESS)
-    (*PortIndex) = Temp;
-
-  if(GetFromRegistryD(szRegistrySpeed3Index,Temp)==ERROR_SUCCESS)
-    (*SpeedIndex) = Temp;
-}
-
-
-void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex)
-{
-  SetToRegistry(szRegistryPort3Index, PortIndex);
-  SetToRegistry(szRegistrySpeed3Index, SpeedIndex);
-}
-
-#define CheckIndex(x, i)    assert((i>=0) && (sizeof(x)/sizeof(x[0]) > (unsigned)i));
+#define CheckIndex(x, i) assert(i >= 0 && (unsigned)i < sizeof(x) / sizeof(x[0]))
 
 void SetRegistryColour(int i, DWORD c)
 {
-
   CheckIndex(szRegistryColour, i);
 
   SetToRegistry(szRegistryColour[i] ,c) ;
@@ -649,37 +578,111 @@ void SetRegistryBrush(int i, DWORD c)
   SetToRegistry(szRegistryBrush[i] ,c) ;
 }
 
-void ReadDeviceSettings(const int devIdx, TCHAR *Name){
+const TCHAR *
+MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
+                      const TCHAR *suffix)
+{
+  _tcscpy(buffer, prefix);
 
-  Name[0] = '\0';
+  if (n > 0)
+    _stprintf(buffer + _tcslen(buffer), _T("%u"), n + 1);
 
-  if (devIdx == 0){
-    GetRegistryString(szRegistryDeviceA , Name, DEVNAMESIZE);
-    return;
-  }
+  _tcscat(buffer, suffix);
 
-  if (devIdx == 1){
-    GetRegistryString(szRegistryDeviceB , Name, DEVNAMESIZE);
-    return;
-  }
-
-  if (devIdx == 2){
-    GetRegistryString(szRegistryDeviceC , Name, DEVNAMESIZE);
-    return;
-  }
-
+  return buffer;
 }
 
-void WriteDeviceSettings(const int devIdx, const TCHAR *Name){
+static enum DeviceConfig::port_type
+StringToPortType(const TCHAR *value)
+{
+  if (_tcscmp(value, _T("serial")) == 0)
+    return DeviceConfig::SERIAL;
 
-  if (devIdx == 0)
-    SetRegistryString(szRegistryDeviceA , Name);
+  if (_tcscmp(value, _T("auto")) == 0)
+    return DeviceConfig::AUTO;
 
-  if (devIdx == 1)
-    SetRegistryString(szRegistryDeviceB , Name);
+  return DeviceConfig::SERIAL;
+}
 
-  if (devIdx == 2)
-    SetRegistryString(szRegistryDeviceC , Name);
+static enum DeviceConfig::port_type
+ReadPortType(unsigned n)
+{
+  TCHAR name[64], value[64];
+
+  MakeDeviceSettingName(name, CONF("Port"), n, _T("Type"));
+  if (!GetRegistryString(name, value, sizeof(value) / sizeof(value[0])))
+    return DeviceConfig::SERIAL;
+
+  return StringToPortType(value);
+}
+
+void
+ReadDeviceConfig(unsigned n, DeviceConfig &config)
+{
+  TCHAR buffer[64];
+  DWORD Temp=0;
+
+  config.port_type = ReadPortType(n);
+
+  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
+  if (GetFromRegistryD(buffer, Temp) == ERROR_SUCCESS)
+    config.port_index = Temp;
+
+  MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
+  if (GetFromRegistryD(buffer, Temp) == ERROR_SUCCESS)
+    config.speed_index = Temp;
+
+  config.driver_name[0] = '\0';
+
+  _tcscpy(buffer, CONF("DeviceA"));
+  buffer[_tcslen(buffer) - 1] += n;
+  GetRegistryString(buffer, config.driver_name,
+                    sizeof(config.driver_name) / sizeof(config.driver_name[0]));
+}
+
+static const TCHAR *
+PortTypeToString(enum DeviceConfig::port_type type)
+{
+  switch (type) {
+  case DeviceConfig::SERIAL:
+    return _T("serial");
+
+  case DeviceConfig::AUTO:
+    return _T("auto");
+  }
+
+  return NULL;
+}
+
+static bool
+WritePortType(unsigned n, enum DeviceConfig::port_type type)
+{
+  const TCHAR *value = PortTypeToString(type);
+  if (value == NULL)
+    return false;
+
+  TCHAR name[64];
+
+  MakeDeviceSettingName(name, CONF("Port"), n, _T("Type"));
+  return SetRegistryString(name, value) == ERROR_SUCCESS;
+}
+
+void
+WriteDeviceConfig(unsigned n, const DeviceConfig &config)
+{
+  TCHAR buffer[64];
+
+  WritePortType(n, config.port_type);
+
+  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
+  SetToRegistry(buffer, config.port_index);
+
+  MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
+  SetToRegistry(buffer, config.speed_index);
+
+  _tcscpy(buffer, CONF("DeviceA"));
+  buffer[_tcslen(buffer) - 1] += n;
+  SetRegistryString(buffer, config.driver_name);
 }
 
 // Registry file handling
@@ -727,21 +730,21 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
 #endif /* _UNICODE */
         if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"), wname, wvalue) == 2) {
           if (!string_is_empty(wname)) {
-	    SetRegistryString(wname, wvalue);
-	    found = true;
-	  }
+            SetRegistryString(wname, wvalue);
+            found = true;
+          }
         } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
           if (!string_is_empty(wname)) {
-	    SetToRegistry(wname, j);
-	    found = true;
-	  }
+            SetToRegistry(wname, j);
+            found = true;
+          }
         } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
           if (!string_is_empty(wname)) {
-	    SetRegistryString(wname, TEXT(""));
-	    found = true;
-	  }
+            SetRegistryString(wname, TEXT(""));
+            found = true;
+          }
         } else {
-	  //		assert(false);	// Invalid line reached
+          //		assert(false);	// Invalid line reached
         }
       }
 
@@ -749,39 +752,39 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
     } else {
       while (fgets(inval, nMaxValueValueSize, fp)) {
         if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
-	  if (strlen(name)>0) {
+          if (strlen(name)>0) {
 #ifdef _UNICODE
-	    mbstowcs(wname, name, strlen(name)+1);
-	    mbstowcs(wvalue, value, strlen(value)+1);
+            mbstowcs(wname, name, strlen(name)+1);
+            mbstowcs(wvalue, value, strlen(value)+1);
 #else
             strcpy(wname, name);
             strcpy(wvalue, value);
 #endif
-	    SetRegistryString(wname, wvalue);
-	    found = true;
-	  }
+            SetRegistryString(wname, wvalue);
+            found = true;
+          }
         } else if (sscanf(inval, "%[^#=\r\n ]=%d[\r\n]", name, &j) == 2) {
-	  if (strlen(name)>0) {
+          if (strlen(name)>0) {
 #ifdef _UNICODE
-	    mbstowcs(wname, name, strlen(name)+1);
+            mbstowcs(wname, name, strlen(name)+1);
 #else
             strcpy(wname, name);
 #endif
-	    SetToRegistry(wname, j);
-	    found = true;
-	  }
+            SetToRegistry(wname, j);
+            found = true;
+          }
         } else if (sscanf(inval, "%[^#=\r\n ]=\"\"[\r\n]", name) == 1) {
-	  if (strlen(name)>0) {
+          if (strlen(name)>0) {
 #ifdef _UNICODE
-	    mbstowcs(wname, name, strlen(name)+1);
+            mbstowcs(wname, name, strlen(name)+1);
 #else
             strcpy(wname, name);
 #endif
-	    SetRegistryString(wname, TEXT(""));
-	    found = true;
-	  }
+            SetRegistryString(wname, TEXT(""));
+            found = true;
+          }
         } else {
-	  //		assert(false);	// Invalid line reached
+          //		assert(false);	// Invalid line reached
         }
       }
     }
@@ -824,7 +827,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
 
   HKEY hkFrom;
   LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey,
-			    0, KEY_ALL_ACCESS, &hkFrom);
+                            0, KEY_ALL_ACCESS, &hkFrom);
 
   if (ERROR_SUCCESS != res) {
     return;
@@ -848,13 +851,13 @@ void SaveRegistryToFile(const TCHAR *szFile)
     lpstrName[0] = _T('\0'); // null terminate, just in case
 
     LONG res = ::RegEnumValue(hkFrom, i, lpstrName,
-			      &nNameSize, 0,
+                              &nNameSize, 0,
 #ifdef __GNUC__
-			      &nType, uValue.pValue,
+                              &nType, uValue.pValue,
 #else
-			      &nType, pValue,
+                              &nType, pValue,
 #endif
-			      &nValueSize);
+                              &nValueSize);
 
     if (ERROR_NO_MORE_ITEMS == res) {
       break;
@@ -872,43 +875,43 @@ void SaveRegistryToFile(const TCHAR *szFile)
 
       if (nType==4) { // data
 #ifdef __GNUC__
-	fprintf(fp,"%S=%d\r\n", lpstrName, uValue.dValue);
+        fprintf(fp, "%S=%d\r\n", lpstrName, uValue.dValue);
 #else
-	wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-	fprintf(fp,"%s=%d\r\n", sName, *((DWORD*)pValue));
+        wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+        fprintf(fp, "%s=%d\r\n", sName, *((DWORD*)pValue));
 #endif
       } else
-      // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
-      if (nType==1) { // text
-	if (nValueSize>0) {
+        // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
+        if (nType==1) { // text
+          if (nValueSize>0) {
 #ifdef __GNUC__
-	  uValue.pValue[nValueSize]= 0; // null terminate, just in case
-	  uValue.pValue[nValueSize+1]= 0; // null terminate, just in case
-          if (!string_is_empty((const TCHAR*)uValue.pValue)) {
-	    fprintf(fp,"%S=\"%S\"\r\n", lpstrName, uValue.pValue);
-	  } else {
-	    fprintf(fp,"%S=\"\"\r\n", lpstrName);
-	  }
+            uValue.pValue[nValueSize]= 0; // null terminate, just in case
+            uValue.pValue[nValueSize+1]= 0; // null terminate, just in case
+            if (!string_is_empty((const TCHAR*)uValue.pValue)) {
+              fprintf(fp, "%S=\"%S\"\r\n", lpstrName, uValue.pValue);
+            } else {
+              fprintf(fp, "%S=\"\"\r\n", lpstrName);
+            }
 #else
-          if (!string_is_empty((const TCHAR*)pValue)) {
-	    pValue[nValueSize]= 0; // null terminate, just in case
-	    pValue[nValueSize+1]= 0; // null terminate, just in case
-	    wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-	    wcstombs(sValue,(TCHAR*)pValue,nMaxKeyNameSize+1);
-	    fprintf(fp,"%s=\"%s\"\r\n", sName, sValue);
-	  } else {
-	    wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-	    fprintf(fp,"%s=\"\"\r\n", sName);
-	  }
+            if (!string_is_empty((const TCHAR*)pValue)) {
+              pValue[nValueSize]= 0; // null terminate, just in case
+              pValue[nValueSize+1]= 0; // null terminate, just in case
+              wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+              wcstombs(sValue,(TCHAR*)pValue,nMaxKeyNameSize+1);
+              fprintf(fp, "%s=\"%s\"\r\n", sName, sValue);
+            } else {
+              wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+              fprintf(fp, "%s=\"\"\r\n", sName);
+            }
 #endif
-	} else {
+          } else {
 #ifdef __GNUC__
-	  fprintf(fp,"%S=\"\"\r\n", lpstrName);
+            fprintf(fp, "%S=\"\"\r\n", lpstrName);
 #else
-	  fprintf(fp,"%s=\"\"\r\n", lpstrName);
+            fprintf(fp, "%s=\"\"\r\n", lpstrName);
 #endif
-	}
-      }
+          }
+        }
     }
 
   }
@@ -918,7 +921,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
 #endif
 
 #ifdef __GNUC__
-  fprintf(fp,"\r\n"); // end of file
+  fprintf(fp, "\r\n"); // end of file
 #endif
 
   fclose(fp);

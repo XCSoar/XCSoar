@@ -42,7 +42,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Math/Units.h"
-#include "MainWindow.hpp"
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
 #include "Compatibility/vk.h"
@@ -69,26 +68,34 @@ static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
 // just to get the lock OLD_TASK
 
 static void
-OnAirspaceListEnter(unsigned i)
+AirspaceWarningCursorCallback(unsigned i)
 {
   terrain.Lock();
-  AirspaceWarning* warning = airspace_warning.get_warning(wAirspaceList->GetCursorIndex());
-  if (warning) {
-    FocusAirspace = &warning->get_airspace();
-  } else {
-    FocusAirspace = NULL;
-    // error!
-  }
+
+  AirspaceWarning *warning = airspace_warning.get_warning(i);
+  CursorAirspace = warning != NULL
+    ? &warning->get_airspace()
+    : NULL;
+
   terrain.Unlock();
+}
+
+static void
+OnAirspaceListEnter(unsigned i)
+{
+  FocusAirspace = CursorAirspace;
 }
 
 
 static void DoAck(int Ack) {
-  if (!FocusAirspace) {
-    FocusAirspace = CursorAirspace;
-  }
+  const AbstractAirspace *airspace = has_pointer() || FocusAirspace == NULL
+    ? CursorAirspace
+    : FocusAirspace;
+  if (airspace == NULL)
+    return;
+
   terrain.Lock();
-  AirspaceWarning* warning = airspace_warning.get_warning_ptr(*FocusAirspace);
+  AirspaceWarning* warning = airspace_warning.get_warning_ptr(*airspace);
   if (warning) {
     switch(Ack) {
     case -1:
@@ -189,17 +196,14 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   if (!warning) {
     if (i == 0){
       _stprintf(sTmp, _T("%s"), gettext(_T("No Warnings")));
-      canvas.text_opaque(paint_rc.left + IBLSCALE(2),
-                         paint_rc.top + IBLSCALE(2), sTmp);
+      canvas.text(paint_rc.left + IBLSCALE(2),
+                  paint_rc.top + IBLSCALE(2), sTmp);
     }
     return;
   }
 
   const AbstractAirspace& as = warning->get_airspace();
   const AirspaceInterceptSolution& solution = warning->get_solution();
-
-  if (i == wAirspaceList->GetCursorIndex())
-    CursorAirspace = &as;
 
   tstring sName = as.get_name_text(false);
   tstring sTop = as.get_top_text(true);
@@ -410,12 +414,12 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-void dlgAirspaceWarningInit()
+void
+dlgAirspaceWarningInit(SingleWindow &parent)
 {
   wf = dlgLoadFromXML(CallBackTable,
                       _T("dlgAirspaceWarning.xml"),
-                      XCSoarInterface::main_window,
+                      parent,
                       _T("IDR_XML_AIRSPACEWARNING"));
   if (wf == NULL)
     return;
@@ -430,7 +434,12 @@ void dlgAirspaceWarningInit()
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceWarningList"));
   wAirspaceList->SetPaintItemCallback(OnAirspaceListItemPaint);
-  wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
+  wAirspaceList->SetCursorCallback(AirspaceWarningCursorCallback);
+
+  if (!has_pointer())
+    /* on platforms without a pointing device (e.g. ALTAIR), allow
+       "focusing" an airspace by pressing enter */
+    wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
 }
 
 void dlgAirspaceWarningDeInit()

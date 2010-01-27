@@ -130,8 +130,7 @@ int propGetScaleList(fixed *List, size_t Size){
   SetRegistryString(Name,
    TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
 
-  if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0){
-
+  if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR))) {
     pToken = _tcstok_r(Buffer, TEXT(","), &pWClast);
 
     while(Idx < (int)Size && pToken != NULL){

@@ -94,14 +94,6 @@ WndForm::GetClientAreaWindow(void)
     return *this;
 }
 
-
-void WndForm::AddClient(WindowControl *Client){      // add client window
-  if (mClientWindow != NULL){
-    mClientWindow->AddClient(Client); // add it to the clientarea window
-  } else
-    ContainerControl::AddClient(Client);
-}
-
 bool
 WndForm::on_destroy()
 {

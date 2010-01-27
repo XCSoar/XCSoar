@@ -138,7 +138,7 @@ private:
       canvas.segment(get_hmiddle(), get_vmiddle(),
                      min(get_width(), get_height()) / 3,
                      get_client_rect(),
-                     0, 90,
+                     fixed_zero, fixed(90),
                      false);
       label = _T("segment 0-90 horizon=false");
       break;
@@ -147,7 +147,7 @@ private:
       canvas.segment(get_hmiddle(), get_vmiddle(),
                      min(get_width(), get_height()) / 3,
                      get_client_rect(),
-                     45, 180,
+                     fixed(45), fixed_180,
                      true);
       label = _T("segment 45-180 horizon=true");
       break;
@@ -266,7 +266,12 @@ int main(int argc, char **argv)
 #else
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-        LPTSTR lpCmdLine, int nCmdShow)
+#ifdef _WIN32_WCE
+        LPWSTR lpCmdLine,
+#else
+        LPSTR lpCmdLine2,
+#endif
+        int nCmdShow)
 #endif
 {
 #ifdef WIN32

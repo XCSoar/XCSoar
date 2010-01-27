@@ -37,6 +37,8 @@
 
 #include "StartPoint.hpp"
 #include "Task/TaskEvents.hpp"
+#include "Util/ZeroFinder.hpp"
+#include "Math/Earth.hpp"
 #include <assert.h>
 
 StartPoint::StartPoint(ObservationZonePoint* _oz,
@@ -88,4 +90,42 @@ StartPoint::equals(const OrderedTaskPoint* other) const
   } else {
     return false;
   }
+}
+
+
+void 
+StartPoint::find_best_start(const AIRCRAFT_STATE &state,
+                            const OrderedTaskPoint& next)
+{
+  class StartPointBestStart: public ZeroFinder {
+  public:
+    StartPointBestStart(const StartPoint& ts,
+                        const GEOPOINT &loc_from,
+                        const GEOPOINT &loc_to):
+      ZeroFinder(fixed_zero, fixed_one, fixed(0.01)),
+      m_start(ts),
+      m_loc_from(loc_from),
+      m_loc_to(loc_to) {};
+
+    fixed f(const fixed p) {
+      return ::DoubleDistance(m_loc_from,parametric(p),m_loc_to);
+    }
+
+    GEOPOINT solve() {
+      const fixed p = find_min(fixed_half);
+      return parametric(p);
+    }
+  private:
+    GEOPOINT parametric(const fixed p) {
+      return m_start.get_boundary_parametric(p);
+    }
+    const StartPoint& m_start;
+    const GEOPOINT m_loc_from;
+    const GEOPOINT m_loc_to;
+
+  };
+
+  StartPointBestStart solver(*this, state.Location,
+                             next.get_location_remaining());
+  set_search_min(solver.solve());
 }

@@ -73,9 +73,6 @@ static void
 OnTextPaint(WindowControl *Sender, Canvas &canvas)
 {
   // background is painted in the base-class
-  canvas.select(*Sender->GetFont());
-  canvas.background_transparent();
-  canvas.set_text_color(Sender->GetForeColor());
 
   // Do the actual painting of the text
 

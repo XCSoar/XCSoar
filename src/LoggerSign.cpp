@@ -52,44 +52,52 @@
 #include "UtilsSystem.hpp" // for FileExistsW()
 #include "UtilsText.hpp" // for ConvertToC()
 
-
 #include <assert.h>
+#include <tchar.h>
 
-HINSTANCE GRecordDLLHandle = NULL;
+/* the GetProcAddress() prototype differs between Windows CE and
+   desktop Windows */
+#ifdef _WIN32_WCE
+#define PROC_NAME(x) _T(x)
+#else
+#define PROC_NAME(x) (x)
+#endif
+
+static HINSTANCE GRecordDLLHandle = NULL;
 
 // Procedures for explicitly loaded (optional) GRecord DLL
 typedef int (*GRRECORDGETVERSION)(TCHAR * szOut);
-GRRECORDGETVERSION GRecordGetVersion;
+static GRRECORDGETVERSION GRecordGetVersion;
 
 typedef int (*GRECORDINIT)(void);
-GRECORDINIT GRecordInit;
+static GRECORDINIT GRecordInit;
 
 typedef int (*GRECORDGETDIGESTMAXLEN)(void);
-GRECORDGETDIGESTMAXLEN GRecordGetDigestMaxLen;
+static GRECORDGETDIGESTMAXLEN GRecordGetDigestMaxLen;
 
 typedef int (*GRECORDAPPENDRECORDTOBUFFER)(TCHAR * szIn);
-GRECORDAPPENDRECORDTOBUFFER GRecordAppendRecordToBuffer;
+static GRECORDAPPENDRECORDTOBUFFER GRecordAppendRecordToBuffer;
 
 typedef int (*GRECORDFINALIZEBUFFER)(void);
-GRECORDFINALIZEBUFFER GRecordFinalizeBuffer;
+static GRECORDFINALIZEBUFFER GRecordFinalizeBuffer;
 
 typedef int (*GRECORDGETDIGEST)(TCHAR * szOut);
-GRECORDGETDIGEST GRecordGetDigest;
+static GRECORDGETDIGEST GRecordGetDigest;
 
 typedef int (*GRECORDSETFILENAME)(TCHAR * szIn);
-GRECORDSETFILENAME GRecordSetFileName;
+static GRECORDSETFILENAME GRecordSetFileName;
 
 typedef int (*GRECORDLOADFILETOBUFFER)(void);
-GRECORDLOADFILETOBUFFER GRecordLoadFileToBuffer;
+static GRECORDLOADFILETOBUFFER GRecordLoadFileToBuffer;
 
 typedef int (*GRECORDAPPENDGRECORDTOFILE)(BOOL bValid);
-GRECORDAPPENDGRECORDTOFILE GRecordAppendGRecordToFile;
+static GRECORDAPPENDGRECORDTOFILE GRecordAppendGRecordToFile;
 
 typedef int (*GRECORDREADGRECORDFROMFILE)(TCHAR szOutput[]);
-GRECORDREADGRECORDFROMFILE GRecordReadGRecordFromFile;
+static GRECORDREADGRECORDFROMFILE GRecordReadGRecordFromFile;
 
 typedef int (*GRECORDVERIFYGRECORDINFILE)(void);
-GRECORDVERIFYGRECORDINFILE GRecordVerifyGRecordInFile;
+static GRECORDVERIFYGRECORDINFILE GRecordVerifyGRecordInFile;
 
 /**
  * Checks whether the character c is a valid IGC character
@@ -255,9 +263,8 @@ LoggerImpl::LinkGRecordDLL()
       // if any pointers don't link, disable entire library
       BOOL bLoadOK = true;
 
-#ifndef WINDOWSPC
       GRecordGetVersion = (GRRECORDGETVERSION)GetProcAddress(GRecordDLLHandle,
-          TEXT("GRecordGetVersion"));
+                                                             PROC_NAME("GRecordGetVersion"));
 
       // read version for log
       if (!GRecordGetVersion) {
@@ -268,65 +275,62 @@ LoggerImpl::LinkGRecordDLL()
       }
 
       GRecordInit = (GRECORDINIT)GetProcAddress(GRecordDLLHandle,
-          TEXT("GRecordInit"));
+                                                PROC_NAME("GRecordInit"));
 
       if (!GRecordInit)
         bLoadOK = false;
 
       GRecordGetDigestMaxLen = (GRECORDGETDIGESTMAXLEN)GetProcAddress(
-          GRecordDLLHandle, TEXT("GRecordGetDigestMaxLen"));
+          GRecordDLLHandle, PROC_NAME("GRecordGetDigestMaxLen"));
 
       if (!GRecordGetDigestMaxLen)
         bLoadOK = false;
 
       GRecordAppendRecordToBuffer
           = (GRECORDAPPENDRECORDTOBUFFER)GetProcAddress(GRecordDLLHandle,
-              TEXT("GRecordAppendRecordToBuffer"));
+              PROC_NAME("GRecordAppendRecordToBuffer"));
 
       if (!GRecordAppendRecordToBuffer)
         bLoadOK = false;
 
       GRecordFinalizeBuffer = (GRECORDFINALIZEBUFFER)GetProcAddress(
-          GRecordDLLHandle, TEXT("GRecordFinalizeBuffer"));
+          GRecordDLLHandle, PROC_NAME("GRecordFinalizeBuffer"));
 
       if (!GRecordFinalizeBuffer)
         bLoadOK = false;
 
       GRecordGetDigest = (GRECORDGETDIGEST)GetProcAddress(GRecordDLLHandle,
-          TEXT("GRecordGetDigest"));
+          PROC_NAME("GRecordGetDigest"));
 
       if (!GRecordGetDigest)
         bLoadOK = false;
 
       GRecordSetFileName = (GRECORDSETFILENAME)GetProcAddress(GRecordDLLHandle,
-          TEXT("GRecordSetFileName"));
+          PROC_NAME("GRecordSetFileName"));
 
       if (!GRecordSetFileName)
         bLoadOK = false;
 
       GRecordLoadFileToBuffer = (GRECORDLOADFILETOBUFFER)GetProcAddress(
-          GRecordDLLHandle, TEXT("GRecordLoadFileToBuffer"));
+          GRecordDLLHandle, PROC_NAME("GRecordLoadFileToBuffer"));
 
       if (!GRecordLoadFileToBuffer)
         bLoadOK = false;
 
       GRecordAppendGRecordToFile = (GRECORDAPPENDGRECORDTOFILE)GetProcAddress(
-          GRecordDLLHandle, TEXT("GRecordAppendGRecordToFile"));
+          GRecordDLLHandle, PROC_NAME("GRecordAppendGRecordToFile"));
 
       if (!GRecordAppendGRecordToFile)
         bLoadOK = false;
 
       GRecordReadGRecordFromFile = (GRECORDREADGRECORDFROMFILE)GetProcAddress(
-          GRecordDLLHandle, TEXT("GRecordReadGRecordFromFile"));
+          GRecordDLLHandle, PROC_NAME("GRecordReadGRecordFromFile"));
 
       if (!GRecordReadGRecordFromFile)
         bLoadOK = false;
 
       GRecordVerifyGRecordInFile = (GRECORDVERIFYGRECORDINFILE)GetProcAddress(
-          GRecordDLLHandle, TEXT("GRecordVerifyGRecordInFile"));
-#else
-      GRecordVerifyGRecordInFile = NULL;
-#endif
+          GRecordDLLHandle, PROC_NAME("GRecordVerifyGRecordInFile"));
 
       if (!GRecordVerifyGRecordInFile)
         bLoadOK=false;

@@ -50,6 +50,11 @@ public:
                     int Width, int Height,
                     OnPaintCallback_t OnPaintCallback);
 
+  /**
+   * Sets the callback which actually paints the window.  The
+   * background is cleared before, and all configured fonts and colors
+   * have been set in the #Canvas.
+   */
   void SetOnPaintNotify(OnPaintCallback_t OnPaintCallback) {
     mOnPaintCallback = OnPaintCallback;
   }

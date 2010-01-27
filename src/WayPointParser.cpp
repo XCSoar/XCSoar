@@ -330,35 +330,30 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
 
   ++input;
 
-  {
-    tstring text = input;
-    size_t end = text.find_first_of(TEXT(",")); 
-    if (!end) {
-      return false;
-    }
-    way_point.Name = trim(text.substr(0, end));
-  }
+  const TCHAR *endptr2 = _tcschr(input, _T(','));
+  if (endptr2 != NULL) {
+    way_point.Name.assign(input, endptr2 - input);
 
-  endptr = _tcschr(input, _T(','));
-  if (endptr != NULL) {
-    input = endptr + 1;
-    endptr = _tcschr(input, '*');
-    if (endptr != NULL) {
+    input = endptr2 + 1;
+    endptr2 = _tcschr(input, '*');
+    if (endptr2 != NULL) {
+      way_point.Comment.assign(input, endptr2 - input);
+
       // if it is a home waypoint raise zoom level
-      way_point.Zoom = _tcstol(endptr + 1, NULL, 10);
+      way_point.Zoom = _tcstol(endptr2 + 1, NULL, 10);
     } else {
+      way_point.Comment = input;
       way_point.Zoom = 0;
     }
-    if (endptr>input) {
-      tstring text = input;
-      way_point.Comment = trim(text.substr(0,endptr-input));
-    } else {
-      way_point.Comment = trim(input);
-    }
+
+    trim_inplace(way_point.Comment);
   } else {
+    way_point.Name = input;
     way_point.Comment.clear();
     way_point.Zoom = 0;
   }
+
+  trim_inplace(way_point.Name);
 
   if (way_point.Altitude <= 0 && terrain != NULL)
     WaypointAltitudeFromTerrain(way_point, *terrain);

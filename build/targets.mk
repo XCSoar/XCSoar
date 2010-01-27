@@ -108,10 +108,6 @@ ifeq ($(HAVE_CE),y)
     CPU := xscale
   endif
 
-  ifeq ($(TARGET),PNA)
-    CPU := arm1136j-s
-  endif
-
   MCPU := -mcpu=$(CPU)
 endif
 
@@ -138,7 +134,6 @@ ifeq ($(TARGET),UNIX)
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
-  ENABLE_SDL := y
   HAVE_VASPRINTF := y
 endif
 

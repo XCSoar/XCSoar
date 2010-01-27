@@ -11,7 +11,7 @@
 
   <WndOwnerDrawFrame Name="frmGrid" X=0 Y=2 Width=235 Height=200 Font=0 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnAnalysisPaint" />
 
-  <WndOwnerDrawFrame Name="frmInfo" X=90 Y=205 Width=130 Height=100 Font=2 ForeColor=0x000000 _BackColor=0xFFFFFF/>
+  <WndFrame Name="frmInfo" X=90 Y=205 Width=130 Height=100 Font=2 ForeColor=0x000000 _BackColor=0xFFFFFF/>
 
   <WndButton Name="cmdCalc"  Caption="Calc" X=5 Y=210 Width=80  Height=28 Font=2 OnClickNotify="OnCalcClicked" />
   <WndButton Name="cmdNext"  Caption="&gt;" X=48 Y=240 Width=37  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />

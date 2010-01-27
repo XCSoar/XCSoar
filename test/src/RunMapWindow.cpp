@@ -148,8 +148,6 @@ bool XCSoarInterface::SetProgressStepSize(int nSize) {
   return false;
 }
 
-struct DeviceDescriptor DeviceList[NUMDEV];
-
 void InputEvents::ShowMenu() {}
 bool InputEvents::processKey(int key) {
   return false;
@@ -326,6 +324,8 @@ LoadFiles()
 
     if (!ReadAirspace(airspace_database, path))
       StartupStore(TEXT("No airspace file 1\n"));
+
+    airspace_database.optimise();
   }
 }
 
@@ -378,7 +378,12 @@ int main(int argc, char **argv)
 #else
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-        LPTSTR lpCmdLine, int nCmdShow)
+#ifdef _WIN32_WCE
+        LPWSTR lpCmdLine,
+#else
+        LPSTR lpCmdLine2,
+#endif
+        int nCmdShow)
 #endif
 {
   LoadFiles();

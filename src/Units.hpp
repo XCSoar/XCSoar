@@ -54,13 +54,12 @@ extern double DISTANCEMODIFY;
 extern double ALTITUDEMODIFY;
 extern double TASKSPEEDMODIFY;
 
-
 typedef enum {
-  cfDDMMSS=0,
+  cfDDMMSS = 0,
   cfDDMMSSss,
   cfDDMMmmm,
   cfDDdddd
-}CoordinateFormats_t;
+} CoordinateFormats_t;
 
 typedef enum {
   unUndef,
@@ -76,15 +75,14 @@ typedef enum {
   unFeet,
   unFligthLevel,
   unKelvin,
-  unGradCelcius,                    // K = C° + 273,15
+  unGradCelcius, // K = C° + 273,15
   unGradFahrenheit, // K = (°F + 459,67) / 1,8
 
   /**
    * The sentinel: the number of units in this enum.
    */
   unCount
-}Units_t;
-
+} Units_t;
 
 typedef enum {
   ugNone,
@@ -97,13 +95,13 @@ typedef enum {
 } UnitGroup_t;
 
 typedef struct{
-  const TCHAR   *Name;
-  double  ToUserFact;
-  double  ToUserOffset;
-}UnitDescriptor_t;
+  const TCHAR *Name;
+  double ToUserFact;
+  double ToUserOffset;
+} UnitDescriptor_t;
 
-class Units {
-
+class Units
+{
 private:
   static UnitDescriptor_t UnitDescriptors[unCount];
   static Units_t UserDistanceUnit;
@@ -114,72 +112,199 @@ private:
   static Units_t UserTaskSpeedUnit;
 
 public:
-
   static CoordinateFormats_t CoordinateFormat;
 
+  /**
+   * Returns the name of the given Unit
+   * @return The name of the given Unit (e.g. "km" or "ft")
+   */
   static const TCHAR *GetUnitName(Units_t Unit);
 
+  /**
+   * Returns the user-specified unit for a horizontal distance
+   * @return The user-specified unit for a horizontal distance
+   */
   static Units_t GetUserDistanceUnit(void);
+  /**
+   * Sets the user-specified unit for a horizontal distance
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserDistanceUnit(Units_t NewUnit);
 
+  /**
+   * Returns the user-specified unit for an altitude
+   * @return The user-specified unit for an altitude
+   */
   static Units_t GetUserAltitudeUnit(void);
+  /**
+   * Sets the user-specified unit for an altitude
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserAltitudeUnit(Units_t NewUnit);
 
+  /**
+   * Returns the user-specified unit for a horizontal speed
+   * @return The user-specified unit for a horizontal speed
+   */
   static Units_t GetUserHorizontalSpeedUnit(void);
+  /**
+   * Sets the user-specified unit for a horizontal speed
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserHorizontalSpeedUnit(Units_t NewUnit);
 
+  /**
+   * Returns the user-specified unit for a task speed
+   * @return The user-specified unit for a task speed
+   */
   static Units_t GetUserTaskSpeedUnit(void);
+  /**
+   * Sets the user-specified unit for a task speed
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserTaskSpeedUnit(Units_t NewUnit);
 
+  /**
+   * Returns the user-specified unit for a vertical speed
+   * @return The user-specified unit for a vertical speed
+   */
   static Units_t GetUserVerticalSpeedUnit(void);
+  /**
+   * Sets the user-specified unit for a vertical speed
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserVerticalSpeedUnit(Units_t NewUnit);
 
+  /**
+   * Returns the user-specified unit for a wind speed
+   * @return The user-specified unit for a wind speed
+   */
   static Units_t GetUserWindSpeedUnit(void);
+  /**
+   * Sets the user-specified unit for a wind speed
+   * @param NewUnit The new unit
+   * @return The old unit
+   */
   static Units_t SetUserWindSpeedUnit(Units_t NewUnit);
 
   static Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
 
+  /**
+   * Converts a double-based Longitude to degrees, minute, seconds and a
+   * bool-based east variable
+   * @param Longitude The double-based Longitude to convert
+   * @param dd Degrees (pointer)
+   * @param mm Minutes (pointer)
+   * @param ss Seconds (pointer)
+   * @param east True if East, False if West (pointer)
+   */
   static void LongitudeToDMS(double Longitude,
-                             int *dd,
-                             int *mm,
-                             int *ss,
-                             bool *east);
+                             int *dd, int *mm, int *ss, bool *east);
+  /**
+   * Converts a double-based Latitude to degrees, minute, seconds and a
+   * bool-based north variable
+   * @param Latitude The double-based Latitude to convert
+   * @param dd Degrees (pointer)
+   * @param mm Minutes (pointer)
+   * @param ss Seconds (pointer)
+   * @param north True if North, False if South (pointer)
+   */
   static void LatitudeToDMS(double Latitude,
-                            int *dd,
-                            int *mm,
-                            int *ss,
-                            bool *north);
+                            int *dd, int *mm, int *ss, bool *north);
 
+  /**
+   * Converts a double-based Longitude into a formatted string
+   * @param Longitude The double-based Longitude
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   */
   static bool LongitudeToString(double Longitude, TCHAR *Buffer, size_t size);
+  /**
+   * Converts a double-based Latitude into a formatted string
+   * @param Latitude The double-based Latitude
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   */
   static bool LatitudeToString(double Latitude, TCHAR *Buffer, size_t size);
 
   static void NotifyUnitChanged(void);
 
   static const TCHAR *GetHorizontalSpeedName();
-
   static const TCHAR *GetVerticalSpeedName();
-
   static const TCHAR *GetDistanceName();
-
   static const TCHAR *GetAltitudeName();
-
   static const TCHAR *GetTaskSpeedName();
 
+  /**
+   * Converts a double-based Altitude into a formatted string
+   * @param Altitude The double-based Altitude
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
   static bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
+  /**
+   * Converts a double-based Altitude into a formatted string of the alternate
+   * altitude format
+   * @param Altitude The double-based Altitude
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
   static bool FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
-  static bool FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size); // VENTA3
+  /**
+   * Converts a double-based Arrival Altitude into a formatted string
+   * @param Altitude The double-based Arrival Altitude
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
+  static bool FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size);
+  /**
+   * Converts a double-based horizontal Distance into a formatted string
+   * @param Distance The double-based Distance
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
   static bool FormatUserDistance(double Distance, TCHAR *Buffer, size_t size);
-  static bool FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer, size_t size);
+  static bool FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
+                                 size_t size);
 
+  /**
+   * Converts an altitude from the system unit to the user-specified unit
+   * @param Altitude The altitude in system unit
+   * @return The altitude in user-specified unit
+   */
   static double ToUserAltitude(double Altitude);
+  /**
+   * Converts an altitude from the user-specified unit to the system unit
+   * @param Altitude The altitude in user-specified unit
+   * @return The altitude in system unit
+   */
   static double ToSysAltitude(double Altitude);
 
+  /**
+   * Converts a horizontal distance from the system unit to the
+   * user-specified unit
+   * @param Distance The distance in system unit
+   * @return The distance in user-specified unit
+   */
   static double ToUserDistance(double Distance);
+  /**
+   * Converts a horizontal distance from the user-specified unit to the
+   * system unit
+   * @param Distance The distance in user-specified unit
+   * @return The distance in system unit
+   */
   static double ToSysDistance(double Distance);
 
   static void TimeToText(TCHAR* text, int d);
-
 };
 
 #endif
-

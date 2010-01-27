@@ -107,39 +107,85 @@ devHasBaroSource(void)
   return false;
 }
 
+/**
+ * Attempt to detect the GPS device.
+ *
+ * See http://msdn.microsoft.com/en-us/library/bb202042.aspx
+ */
 static bool
-devInitOne(struct DeviceDescriptor *dev, int index, const TCHAR *port,
-           DWORD speed, struct DeviceDescriptor *&nmeaout)
+detect_gps(TCHAR *path, size_t path_max_size)
 {
-  TCHAR DeviceName[DEVNAMESIZE];
+#ifdef _WIN32_WCE
+  static const TCHAR *const gps_idm_key =
+    _T("System\\CurrentControlSet\\GPS Intermediate Driver\\Multiplexer");
+  static const TCHAR *const gps_idm_value = _T("DriverInterface");
 
-  assert(dev != NULL);
+  HKEY hKey;
+  long result;
 
+  result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, gps_idm_key, 0, KEY_READ, &hKey);
+  if (result != ERROR_SUCCESS)
+    return false;
+
+  DWORD type, size = path_max_size;
+  result = RegQueryValueEx(hKey, gps_idm_value, 0, &type, (LPBYTE)path, &size);
+  RegCloseKey(hKey);
+
+  return result == ERROR_SUCCESS && type == REG_SZ;
+#else
+  return false;
+#endif
+}
+
+static bool
+devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
+           DeviceDescriptor *&nmeaout)
+{
   if (is_simulator())
     return false;
 
-  ReadDeviceSettings(index, DeviceName);
+  const struct DeviceRegister *Driver = devGetDriver(config.driver_name);
+  if (Driver == NULL)
+    return false;
 
-  const struct DeviceRegister *Driver = devGetDriver(DeviceName);
+  const TCHAR *path = NULL;
+  TCHAR buffer[MAX_PATH];
 
-  if (Driver) {
-    ComPort *Com = new ComPort(port, speed, *dev);
+  switch (config.port_type) {
+  case DeviceConfig::SERIAL:
+    path = COMMPort[config.port_index];
+    break;
 
-    if (!Com->Open())
+  case DeviceConfig::AUTO:
+    if (!detect_gps(buffer, sizeof(buffer))) {
+      StartupStore(_T("no GPS detected\n"));
       return false;
-
-    dev->Driver = Driver;
-
-    dev->Com = Com;
-
-    dev->Open();
-
-    dev->enable_baro = devIsBaroSource(dev) && !devHasBaroSource();
-
-    if (nmeaout == NULL && Driver->Flags & (1l << dfNmeaOut)) {
-      nmeaout = dev;
     }
+
+    StartupStore(_T("GPS detected: %s\n"), buffer);
+
+    path = buffer;
+    break;
   }
+
+  if (path == NULL)
+    return false;
+
+  ComPort *Com = new ComPort(path, dwSpeed[config.speed_index],
+                             device);
+  if (!Com->Open()) {
+    delete Com;
+    return false;
+  }
+
+  device.Driver = Driver;
+  device.Com = Com;
+  device.Open();
+
+  device.enable_baro = devIsBaroSource(device) && !devHasBaroSource();
+
+  if (nmeaout == NULL && Driver->Flags & (1l << dfNmeaOut))
+    nmeaout = &device;
 
   return true;
 }
@@ -227,13 +273,15 @@ devInit(const TCHAR *CommandLine)
     SpeedIndex2 = 2;
   }
 
-  ReadPort1Settings(&PortIndex1, &SpeedIndex1);
-  ReadPort2Settings(&PortIndex2, &SpeedIndex2);
+  DeviceConfig config[NUMDEV];
 
-  devInitOne(&DeviceList[0], 0, COMMPort[PortIndex1], dwSpeed[SpeedIndex1], pDevNmeaOut);
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    ReadDeviceConfig(i, config[i]);
+
+  devInitOne(DeviceList[0], config[0], pDevNmeaOut);
 
   if (PortIndex1 != PortIndex2)
-    devInitOne(&DeviceList[1], 1, COMMPort[PortIndex2], dwSpeed[SpeedIndex2], pDevNmeaOut);
+    devInitOne(DeviceList[1], config[1], pDevNmeaOut);
 
   CommandLine = LOGGDEVCOMMANDLINE;
 
@@ -249,42 +297,34 @@ devInit(const TCHAR *CommandLine)
 }
 
 bool
-devDeclare(struct DeviceDescriptor *d, const struct Declaration *decl)
+devDeclare(DeviceDescriptor &d, const struct Declaration *decl)
 {
-  assert(d != NULL);
-
   if (is_simulator())
     return true;
 
   ScopeLock protect(mutexComm);
-  return d->Declare(decl);
+  return d.Declare(decl);
 }
 
 bool
-devIsLogger(const struct DeviceDescriptor *d)
+devIsLogger(const DeviceDescriptor &d)
 {
-  assert(d != NULL);
-
   ScopeLock protect(mutexComm);
-  return d->IsLogger();
+  return d.IsLogger();
 }
 
 bool
-devIsGPSSource(const struct DeviceDescriptor *d)
+devIsGPSSource(const DeviceDescriptor &d)
 {
-  assert(d != NULL);
-
   ScopeLock protect(mutexComm);
-  return d->IsGPSSource();
+  return d.IsGPSSource();
 }
 
 bool
-devIsBaroSource(const struct DeviceDescriptor *d)
+devIsBaroSource(const DeviceDescriptor &d)
 {
-  assert(d != NULL);
-
   ScopeLock protect(mutexComm);
-  return d->IsBaroSource();
+  return d.IsBaroSource();
 }
 
 bool
@@ -306,19 +346,17 @@ devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
 }
 
 void
-devWriteNMEAString(struct DeviceDescriptor *d, const TCHAR *text)
+devWriteNMEAString(DeviceDescriptor &d, const TCHAR *text)
 {
   TCHAR tmp[512];
 
-  assert(d != NULL);
-
-  if (d->Com == NULL)
+  if (d.Com == NULL)
     return;
 
   devFormatNMEAString(tmp, 512, text);
 
   ScopeLock protect(mutexComm);
-  d->Com->WriteString(tmp);
+  d.Com->WriteString(tmp);
 }
 
 void

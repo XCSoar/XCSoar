@@ -33,6 +33,8 @@ include $(topdir)/build/targets.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
 include $(topdir)/build/options.mk
+include $(topdir)/build/sdl.mk
+include $(topdir)/build/gconf.mk
 
 CPPFLAGS += -DFLARM_AVERAGE -DDRAWLOAD
 
@@ -58,6 +60,9 @@ include $(topdir)/build/jasper.mk
 include $(topdir)/build/compat.mk
 include $(topdir)/build/shapelib.mk
 include $(topdir)/build/task.mk
+include $(topdir)/build/datafield.mk
+include $(topdir)/build/screen.mk
+include $(topdir)/build/form.mk
 include $(topdir)/build/harness.mk
 
 include $(topdir)/build/test.mk
@@ -75,14 +80,17 @@ ifeq ($(CONFIG_PNA),y)
 OUTPUTS := $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(TARGET_EXEEXT)
 endif
 
+include $(topdir)/build/dist.mk
+
 ######## compiler flags
 
 INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
+CPPFLAGS += $(GCONF_CPPFLAGS)
 
 ####### linker configuration
 
 LDFLAGS = $(TARGET_LDFLAGS) $(FLAGS_PROFILE)
-LDLIBS = $(TARGET_LDLIBS)
+LDLIBS = $(TARGET_LDLIBS) $(GCONF_LDLIBS)
 
 ####### sources
 
@@ -198,14 +206,6 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/AirfieldDetails.cpp \
 	$(SRC)/ButtonLabel.cpp \
-	$(SRC)/DataField/Base.cpp \
-	$(SRC)/DataField/Boolean.cpp \
-	$(SRC)/DataField/ComboList.cpp \
-	$(SRC)/DataField/Enum.cpp \
-	$(SRC)/DataField/FileReader.cpp \
-	$(SRC)/DataField/Float.cpp \
-	$(SRC)/DataField/Integer.cpp \
-	$(SRC)/DataField/String.cpp \
 	$(SRC)/Dialogs.cpp \
 	$(SRC)/ExpandMacros.cpp \
 	$(SRC)/Formatter/Base.cpp \
@@ -221,19 +221,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/InputEventsActions.cpp \
 	$(SRC)/StatusMessage.cpp \
 	$(SRC)/PopupMessage.cpp \
-	$(SRC)/Form/Control.cpp \
-	$(SRC)/Form/Container.cpp \
-	$(SRC)/Form/Panel.cpp \
-	$(SRC)/Form/Form.cpp \
-	$(SRC)/Form/Button.cpp \
-	$(SRC)/Form/EventButton.cpp \
-	$(SRC)/Form/Frame.cpp \
-	$(SRC)/Form/Draw.cpp \
-	$(SRC)/Form/List.cpp \
-	$(SRC)/Form/ScrollBar.cpp \
-	$(SRC)/Form/Edit.cpp \
-	$(SRC)/Form/Tabbed.cpp \
-	$(SRC)/Form/Util.cpp \
 	$(SRC)/LogFile.cpp \
 	\
 	$(SRC)/MapDrawHelper.cpp \
@@ -315,35 +302,13 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/Blank.cpp \
-	$(SRC)/Screen/ButtonWindow.cpp \
 	$(SRC)/Screen/Chart.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Screen/Graphics.cpp \
 	$(SRC)/Screen/Ramp.cpp \
-	$(SRC)/Screen/STScreenBuffer.cpp \
-	$(SRC)/Screen/Util.cpp \
-	$(SRC)/Screen/VOIMAGE.cpp \
-	$(SRC)/Screen/Bitmap.cpp \
-	$(SRC)/Screen/Brush.cpp \
-	$(SRC)/Screen/Canvas.cpp \
-	$(SRC)/Screen/Color.cpp \
-	$(SRC)/Screen/VirtualCanvas.cpp \
-	$(SRC)/Screen/BitmapCanvas.cpp \
-	$(SRC)/Screen/Font.cpp \
-	$(SRC)/Screen/Pen.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
-	$(SRC)/Screen/Window.cpp \
-	$(SRC)/Screen/BufferWindow.cpp \
-	$(SRC)/Screen/PaintWindow.cpp \
-	$(SRC)/Screen/MaskedPaintWindow.cpp \
-	$(SRC)/Screen/ContainerWindow.cpp \
-	$(SRC)/Screen/TextWindow.cpp \
-	$(SRC)/Screen/EditWindow.cpp \
-	$(SRC)/Screen/TopWindow.cpp \
-	$(SRC)/Screen/SingleWindow.cpp \
-	$(SRC)/Screen/Dialog.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	\
 	$(SRC)/Polar/Polar.cpp \
@@ -380,6 +345,9 @@ XCSOAR_SOURCES := \
 
 XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
 XCSOAR_LDADD = \
+	$(DATA_FIELD_LIBS) \
+	$(FORM_LIBS) \
+	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(SHAPELIB_LIBS) \
 	$(JASPER_LIBS) \
@@ -394,9 +362,6 @@ XCSOARSETUP_OBJS = $(call SRC_TO_OBJ,$(XCSOARSETUP_SOURCES))
 XCSOARLAUNCH_SOURCES = \
 	$(SRC)/XCSoarLaunch.c
 XCSOARLAUNCH_OBJS = $(call SRC_TO_OBJ,$(XCSOARLAUNCH_SOURCES))
-
-include $(topdir)/build/sdl.mk
-include $(topdir)/build/gconf.mk
 
 all: all-$(TARGET)
 
@@ -442,7 +407,7 @@ endif
 
 $(TARGET_BIN_DIR)/XCSoar-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
-	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(SCREEN_LDLIBS) -o $@
 
 $(TARGET_BIN_DIR)/XCSoarSimulator-$(TARGET)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS:$(OBJ_SUFFIX)=-Simulator$(OBJ_SUFFIX)) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"

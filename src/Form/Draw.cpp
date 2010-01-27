@@ -55,8 +55,13 @@ WndOwnerDrawFrame::on_paint(Canvas &canvas)
 {
   WindowControl::on_paint(canvas);
 
-  canvas.select(*GetFont());
+  if (mOnPaintCallback == NULL)
+    return;
 
-  if (mOnPaintCallback != NULL)
-    (mOnPaintCallback)(this, canvas);
+  canvas.select(*GetFont());
+  canvas.set_text_color(GetForeColor());
+  canvas.set_background_color(GetBackColor());
+  canvas.background_transparent();
+
+  mOnPaintCallback(this, canvas);
 }

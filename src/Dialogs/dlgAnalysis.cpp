@@ -63,7 +63,7 @@ Copyright_License {
 static int page = 0;
 static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wGrid = NULL;
-static WndOwnerDrawFrame *wInfo = NULL;
+static WndFrame *wInfo;
 static WndButton *wCalc = NULL;
 
 static void
@@ -89,11 +89,6 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   RECT rcgfx = Sender->get_client_rect();
 
   // background is painted in the base-class
-
-  canvas.select(*Sender->GetFont());
-
-  canvas.background_transparent();
-  canvas.set_text_color(Sender->GetForeColor());
 
   const FlightStatistics &fs = glide_computer.GetFlightStats();
 
@@ -393,7 +388,7 @@ dlgAnalysisShowModal(void)
   wf->SetKeyDownNotify(FormKeyDown);
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
-  wInfo = (WndOwnerDrawFrame*)wf->FindByName(_T("frmInfo"));
+  wInfo = (WndFrame *)wf->FindByName(_T("frmInfo"));
   wCalc = ((WndButton *)wf->FindByName(_T("cmdCalc")));
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->

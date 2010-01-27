@@ -16,4 +16,7 @@ typedef std::ostringstream tstringstream;
 
 tstring trim(const tstring& the_string);
 
+tstring &
+trim_inplace(tstring &s);
+
 #endif
