@@ -300,5 +300,6 @@ dlgBasicSettingsShowModal()
   }
 
   delete wf;
+  wf = NULL;
 }
 
