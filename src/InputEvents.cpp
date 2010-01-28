@@ -713,10 +713,8 @@ InputEvents::processButton(int bindex)
   if (!Debounce()) return true;
   */
 
-  if (ButtonLabel::hWndButtonWindow[bindex].is_enabled()) {
-    ButtonLabel::AnimateButton(bindex);
-    processGo(item.event);
-  }
+  ButtonLabel::AnimateButton(bindex);
+  processGo(item.event);
 
   // experimental: update button text, macro may change the label
   if (lastMode == getModeID() && item.label != NULL
