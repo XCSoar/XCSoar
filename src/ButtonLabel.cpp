@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "ButtonLabel.hpp"
-#include "InfoBoxLayout.hpp"
 #include "Language.hpp"
 #include "Screen/Animation.hpp"
 #include "Screen/Layout.hpp"
@@ -48,8 +47,6 @@ Copyright_License {
 #include <assert.h>
 
 MenuButton ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
-
-unsigned ButtonLabel::ButtonLabelGeometry = 0;
 
 bool
 MenuButton::on_mouse_up(int x, int y)
@@ -68,8 +65,9 @@ ButtonLabel::GetButtonPosition(unsigned i, RECT rc, int *x, int *y,
   int hwidth = (rc.right - rc.left) / 4;
   int hheight = (rc.bottom - rc.top) / 4;
 
-  switch (ButtonLabelGeometry) {
-  case 0: // portrait
+  if (hheight > hwidth) {
+    // portrait
+
     if (i == 0) {
       *sizex = IBLSCALE(52);
       *sizey = IBLSCALE(37);
@@ -94,9 +92,9 @@ ButtonLabel::GetButtonPosition(unsigned i, RECT rc, int *x, int *y,
         *y = rc.top + (i - 5) * k / 6 + (*sizey / 2 + IBLSCALE(3));
       }
     }
-    break;
+  } else {
+    // landscape
 
-  case 1: // landscape
     hwidth = (rc.right - rc.left) / 5;
     hheight = (rc.bottom - rc.top) / 5;
 
@@ -116,7 +114,6 @@ ButtonLabel::GetButtonPosition(unsigned i, RECT rc, int *x, int *y,
       *x = rc.left + hwidth * (i - 5);
       *y = (rc.bottom - (*sizey));
     }
-    break;
   }
 }
 
@@ -124,11 +121,6 @@ void
 ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
 {
   int x, y, xsize, ysize;
-
-  if (InfoBoxLayout::gnav)
-    ButtonLabelGeometry = 1;
-  else
-    ButtonLabelGeometry = 0;
 
   for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);

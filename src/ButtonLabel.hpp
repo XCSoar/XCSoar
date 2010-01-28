@@ -67,7 +67,6 @@ public:
     NUMBUTTONLABELS = Menu::MAX_ITEMS,
   };
 
-  static unsigned ButtonLabelGeometry;
   static MenuButton hWndButtonWindow[NUMBUTTONLABELS];
 
 protected:
