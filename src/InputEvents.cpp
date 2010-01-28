@@ -606,25 +606,6 @@ void
 InputEvents::makeLabel(int mode_id, const TCHAR* label, int location, int event_id)
 {
 
-  // int i;
-
-  /*
-  // experimental, dont work because after loaded default strings are static, after loading
-  //               from file some strings are static some not
-  // add code for overwrite existing mode,location label
-  for (i=0; i<ModeLabel_count[mode_id]; i++){
-    if (ModeLabel[mode_id][i].location == location && ModeLabel[mode_id][i].event == event_id){
-      if (ModeLabel[mode_id][i].label != NULL && ModeLabel[mode_id][i].label != label){
-        TCHAR *pC;
-        pC = ModeLabel[mode_id][i].label;
-        free(ModeLabel[mode_id][i].label);
-      }
-      ModeLabel[mode_id][i].label = label;
-      return;
-    }
-  }
-  */
-
   if ((mode_id >= 0) && (mode_id < MAX_MODE) && (ModeLabel_count[mode_id] < MAX_LABEL)) {
     ModeLabel[mode_id][ModeLabel_count[mode_id]].label = label;
     ModeLabel[mode_id][ModeLabel_count[mode_id]].location = location;
@@ -683,21 +664,6 @@ InputEvents::setMode(mode mode)
   ButtonLabel::SetLabelText(0, NULL);
 
   drawButtons(current_mode);
-  /*
-  // Set button labels
-  int i;
-  for (i = 0; i < ModeLabel_count[thismode]; i++) {
-    // JMW removed requirement that label has to be non-null
-    if (// (ModeLabel[thismode][i].label != NULL) &&
-	(ModeLabel[thismode][i].location > 0)) {
-
-      ButtonLabel::SetLabelText(
-				ModeLabel[thismode][i].location,
-				ModeLabel[thismode][i].label
-				);
-    }
-  }
-  */
 }
 
 void
