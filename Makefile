@@ -196,6 +196,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Gauge/GaugeVario.cpp \
 	\
 	$(SRC)/AirfieldDetails.cpp \
+	$(SRC)/MenuData.cpp \
 	$(SRC)/ButtonLabel.cpp \
 	$(SRC)/Dialogs.cpp \
 	$(SRC)/ExpandMacros.cpp \

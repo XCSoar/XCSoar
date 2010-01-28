@@ -36,54 +36,49 @@ Copyright_License {
 }
 */
 
-#ifndef BUTTON_LABEL_HPP
-#define BUTTON_LABEL_HPP
+#ifndef XCSOAR_MENU_DATA_HPP
+#define XCSOAR_MENU_DATA_HPP
 
-#include "Screen/TextWindow.hpp"
-#include "Interface.hpp"
-#include "MenuData.hpp"
+#include <tchar.h>
 
-class ContainerWindow;
-
-class MenuButton: public TextWindow
-{
+/**
+ * Data of an item in the mode menu.
+ */
+class MenuItem {
 public:
-  void
-  set(ContainerWindow &parent, int left, int top, unsigned width,
-      unsigned height, bool visible)
-  {
-    TextWindow::set(parent, left, top, width, height, true, true, visible, true, true);
-    install_wndproc();
-  }
-
-  virtual bool on_mouse_up(int x, int y);
+  const TCHAR *label;
+  int location;
+  int event;
 };
 
-class ButtonLabel: public ActionInterface
-{
+/**
+ * A container for MenuItem objects.
+ */
+class Menu {
 public:
-  enum
-  {
-    NUMBUTTONLABELS = Menu::MAX_ITEMS,
+  enum {
+    MAX_ITEMS = 32,
   };
 
-  static unsigned ButtonLabelGeometry;
-  static MenuButton hWndButtonWindow[NUMBUTTONLABELS];
-  static bool ButtonVisible[NUMBUTTONLABELS];
-
 protected:
-  static void GetButtonPosition(unsigned i, RECT rc, int *x, int *y,
-      int *sizex, int *sizey);
+  MenuItem items[MAX_ITEMS];
+  unsigned num_items;
 
 public:
-  static void CreateButtonLabels(ContainerWindow &parent, const RECT rc);
-  static void AnimateButton(unsigned i);
-  static void SetFont(const Font &Font);
-  static void Destroy();
-  static void SetLabelText(unsigned i, const TCHAR *text);
-  static int Find(const Window &window);
+  Menu():num_items(0) {}
 
-  static bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
+  unsigned Count() const {
+    return num_items;
+  }
+
+  const MenuItem &operator[](unsigned i) const {
+    return items[i];
+  }
+
+  void Add(const TCHAR *label, int location, int event_id);
+
+  int FindByLocation(int location) const;
+  int FindByEvent(int event) const;
 };
 
 #endif

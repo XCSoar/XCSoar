@@ -36,54 +36,37 @@ Copyright_License {
 }
 */
 
-#ifndef BUTTON_LABEL_HPP
-#define BUTTON_LABEL_HPP
-
-#include "Screen/TextWindow.hpp"
-#include "Interface.hpp"
 #include "MenuData.hpp"
 
-class ContainerWindow;
-
-class MenuButton: public TextWindow
+void
+Menu::Add(const TCHAR *label, int location, int event_id)
 {
-public:
-  void
-  set(ContainerWindow &parent, int left, int top, unsigned width,
-      unsigned height, bool visible)
-  {
-    TextWindow::set(parent, left, top, width, height, true, true, visible, true, true);
-    install_wndproc();
-  }
+  if (num_items >= MAX_ITEMS)
+    return;
 
-  virtual bool on_mouse_up(int x, int y);
-};
+  MenuItem &item = items[num_items++];
 
-class ButtonLabel: public ActionInterface
+  item.label = label;
+  item.location = location;
+  item.event = event_id;
+}
+
+int
+Menu::FindByLocation(int location) const
 {
-public:
-  enum
-  {
-    NUMBUTTONLABELS = Menu::MAX_ITEMS,
-  };
+  for (unsigned i = 0; i < num_items; ++i)
+    if (items[i].location == location)
+      return i;
 
-  static unsigned ButtonLabelGeometry;
-  static MenuButton hWndButtonWindow[NUMBUTTONLABELS];
-  static bool ButtonVisible[NUMBUTTONLABELS];
+  return -1;
+}
 
-protected:
-  static void GetButtonPosition(unsigned i, RECT rc, int *x, int *y,
-      int *sizex, int *sizey);
+int
+Menu::FindByEvent(int event) const
+{
+  for (unsigned i = 0; i < num_items; ++i)
+    if (items[i].event == event)
+      return i;
 
-public:
-  static void CreateButtonLabels(ContainerWindow &parent, const RECT rc);
-  static void AnimateButton(unsigned i);
-  static void SetFont(const Font &Font);
-  static void Destroy();
-  static void SetLabelText(unsigned i, const TCHAR *text);
-  static int Find(const Window &window);
-
-  static bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
-};
-
-#endif
+  return -1;
+}

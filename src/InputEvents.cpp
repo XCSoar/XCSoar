@@ -69,6 +69,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
 #include "Asset.hpp"
+#include "MenuData.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -79,7 +80,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #define MAX_MODE_STRING 25
 #define MAX_KEY 255
 #define MAX_EVENTS 2048
-#define MAX_LABEL ButtonLabel::NUMBUTTONLABELS
 
 /*
   TODO code - All of this input_Errors code needs to be removed and
@@ -134,15 +134,7 @@ static EventSTRUCT Events[MAX_EVENTS];
 // How many have we defined
 static int Events_count;
 
-// Labels - defined per mode
-typedef struct {
-  const TCHAR *label;
-  int location;
-  int event;
-} ModeLabelSTRUCT;
-
-static ModeLabelSTRUCT ModeLabel[MAX_MODE][MAX_LABEL];
-static int ModeLabel_count[MAX_MODE];	       // Where are we up to in this mode...
+static Menu menus[MAX_MODE];
 
 #define MAX_GCE_QUEUE 10
 static int GCE_Queue[MAX_GCE_QUEUE];
@@ -264,8 +256,6 @@ InputEvents::readFile()
       memset(&Key2Event, 0, sizeof(Key2Event));
       memset(&GC2Event, 0, sizeof(GC2Event));
       memset(&Events, 0, sizeof(Events));
-      memset(&ModeLabel, 0, sizeof(ModeLabel));
-      memset(&ModeLabel_count, 0, sizeof(ModeLabel_count));
       Events_count = 0;
     }
 
@@ -605,15 +595,10 @@ InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next
 void
 InputEvents::makeLabel(int mode_id, const TCHAR* label, int location, int event_id)
 {
+  assert(mode_id >= 0);
+  assert(mode_id < MAX_MODE);
 
-  if ((mode_id >= 0) && (mode_id < MAX_MODE) && (ModeLabel_count[mode_id] < MAX_LABEL)) {
-    ModeLabel[mode_id][ModeLabel_count[mode_id]].label = label;
-    ModeLabel[mode_id][ModeLabel_count[mode_id]].location = location;
-    ModeLabel[mode_id][ModeLabel_count[mode_id]].event = event_id;
-    ModeLabel_count[mode_id]++;
-  } else {
-    assert(0);
-  }
+  menus[mode_id].Add(label, location, event_id);
 }
 
 // Return 0 for anything else - should probably return -1 !
@@ -686,16 +671,15 @@ InputEvents::setMode(const TCHAR *mode)
 void
 InputEvents::drawButtons(mode Mode)
 {
-  int i;
-
   if (!globalRunningEvent.test())
     return;
 
-  for (i = 0; i < ModeLabel_count[Mode]; i++) {
-    if ((ModeLabel[Mode][i].location > 0)) {
-      ButtonLabel::SetLabelText(ModeLabel[Mode][i].location,
-          ModeLabel[Mode][i].label);
-    }
+  const Menu &menu = menus[Mode];
+  for (unsigned i = 0; i < menu.Count(); ++i) {
+    const MenuItem &item = menu[i];
+
+    if (item.location > 0)
+      ButtonLabel::SetLabelText(item.location, item.label);
   }
 }
 
@@ -716,38 +700,30 @@ InputEvents::processButton(int bindex)
   if (!globalRunningEvent.test())
     return false;
 
-  mode thismode = getModeID();
+  mode lastMode = getModeID();
+  const Menu &menu = menus[lastMode];
+  int i = menu.FindByLocation(bindex);
+  if (i < 0)
+    return false;
 
-  int i;
-  // Note - reverse order - last one wins
-  for (i = ModeLabel_count[thismode]; i >= 0; i--) {
-    if ((ModeLabel[thismode][i].location == bindex)) {
-      // && (ModeLabel[thismode][i].label != NULL)
-      // JMW removed requirement of having a label!
+  const MenuItem &item = menu[i];
 
-      mode lastMode = thismode;
+  /* JMW illegal, should be done by gui handler loop
+  // JMW need a debounce method here..
+  if (!Debounce()) return true;
+  */
 
-      /* JMW illegal, should be done by gui handler loop
-      // JMW need a debounce method here..
-      if (!Debounce()) return true;
-      */
-
-      if (ButtonLabel::hWndButtonWindow[bindex].is_enabled()) {
-        ButtonLabel::AnimateButton(bindex);
-        processGo(ModeLabel[thismode][i].event);
-      }
-
-      // experimental: update button text, macro may change the label
-      if ((lastMode == getModeID()) && (ModeLabel[thismode][i].label != NULL)
-          && (ButtonLabel::ButtonVisible[bindex])) {
-        drawButtons(thismode);
-      }
-
-      return true;
-    }
+  if (ButtonLabel::hWndButtonWindow[bindex].is_enabled()) {
+    ButtonLabel::AnimateButton(bindex);
+    processGo(item.event);
   }
 
-  return false;
+  // experimental: update button text, macro may change the label
+  if (lastMode == getModeID() && item.label != NULL
+      && ButtonLabel::ButtonVisible[bindex])
+    drawButtons(lastMode);
+
+  return true;
 }
 
 unsigned
@@ -796,15 +772,13 @@ InputEvents::processKey(int dWord)
   // JMW should be done by gui handler
   // if (!Debounce()) return true;
 
-  int i;
-  for (i = ModeLabel_count[mode]; i >= 0; i--) {
-    if ((ModeLabel[mode][i].event == event_id)) {
-      bindex = ModeLabel[mode][i].location;
-      pLabelText = ModeLabel[mode][i].label;
-      if (bindex > 0) {
-        ButtonLabel::AnimateButton(bindex);
-      }
-    }
+  const Menu &menu = menus[mode];
+  int i = menu.FindByEvent(event_id);
+  if (i >= 0 && menu[i].location > 0) {
+    bindex = menu[i].location;
+    pLabelText = menu[i].label;
+    if (bindex > 0)
+      ButtonLabel::AnimateButton(bindex);
   }
 
   if (bindex < 0 || ButtonLabel::hWndButtonWindow[bindex].is_enabled())
