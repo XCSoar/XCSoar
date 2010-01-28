@@ -197,6 +197,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/AirfieldDetails.cpp \
 	$(SRC)/MenuData.cpp \
+	$(SRC)/MenuBar.cpp \
 	$(SRC)/ButtonLabel.cpp \
 	$(SRC)/Dialogs.cpp \
 	$(SRC)/ExpandMacros.cpp \

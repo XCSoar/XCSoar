@@ -778,7 +778,7 @@ InputEvents::processKey(int dWord)
       ButtonLabel::AnimateButton(bindex);
   }
 
-  if (bindex < 0 || ButtonLabel::hWndButtonWindow[bindex].is_enabled())
+  if (bindex < 0 || ButtonLabel::IsEnabled(bindex))
     InputEvents::processGo(event_id);
 
   // experimental: update button text, macro may change the value

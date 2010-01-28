@@ -36,45 +36,47 @@ Copyright_License {
 }
 */
 
-#ifndef BUTTON_LABEL_HPP
-#define BUTTON_LABEL_HPP
+#ifndef XCSOAR_MENU_BAR_HPP
+#define XCSOAR_MENU_BAR_HPP
 
-#include "Screen/TextWindow.hpp"
-#include "Interface.hpp"
-#include "MenuData.hpp"
+#include "ButtonLabel.hpp"
 
+#include <tchar.h>
+
+class Window;
 class ContainerWindow;
-class MenuBar;
 
-class MenuButton: public TextWindow
-{
+/**
+ * A container for menu buttons.
+ */
+class MenuBar {
 public:
-  void
-  set(ContainerWindow &parent, int left, int top, unsigned width,
-      unsigned height, bool visible)
-  {
-    TextWindow::set(parent, left, top, width, height, true, true, visible, true, true);
-    install_wndproc();
+  enum {
+    MAX_BUTTONS = 32,
+  };
+
+  MenuButton buttons[MAX_BUTTONS];
+
+public:
+  MenuBar(ContainerWindow &parent);
+
+public:
+  void SetFont(const Font &font);
+  void ShowButton(unsigned i, bool enabled, const TCHAR *text);
+  void HideButton(unsigned i);
+
+  bool IsButtonEnabled(unsigned i) const {
+    return buttons[i].is_enabled();
   }
 
-  virtual bool on_mouse_up(int x, int y);
-};
+  /**
+   * Finds a button.
+   *
+   * @return the button index, or -1 if not found
+   */
+  int Find(const Window &window) const;
 
-class ButtonLabel: public ActionInterface
-{
-protected:
-  static MenuBar *bar;
-
-public:
-  static void CreateButtonLabels(ContainerWindow &parent);
-  static void AnimateButton(unsigned i);
-  static void SetFont(const Font &Font);
-  static void Destroy();
-  static void SetLabelText(unsigned i, const TCHAR *text);
-  static bool IsEnabled(unsigned i);
-  static int Find(const Window &window);
-
-  static bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
+  void AnimateButton(unsigned i);
 };
 
 #endif
