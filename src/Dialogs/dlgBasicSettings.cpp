@@ -52,75 +52,81 @@ Copyright_License {
 
 #include <math.h>
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
 static bool changed = false;
 
-static void OnCloseClicked(WindowControl * Sender){
+static void
+OnCloseClicked(WindowControl * Sender)
+{
   (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
-static void OnBallastDump(WindowControl *Sender){
-(void)Sender;
- XCSoarInterface::SetSettingsComputer().BallastTimerActive=
-   !XCSoarInterface::SettingsComputer().BallastTimerActive;
- wf->SetModalResult(mrOK);
+static void
+OnBallastDump(WindowControl *Sender)
+{
+  (void)Sender;
+
+  XCSoarInterface::SetSettingsComputer().BallastTimerActive
+      = !XCSoarInterface::SettingsComputer().BallastTimerActive;
+
+  wf->SetModalResult(mrOK);
 }
 
-
-static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void
+OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
   WndProperty* wp;
 
-  switch(Mode){
-    case DataField::daGet:
-      Sender->Set(FIXED_DOUBLE(XCSoarInterface::Basic().pressure.get_QNH()));
+  switch (Mode) {
+  case DataField::daGet:
+    Sender->Set(FIXED_DOUBLE(XCSoarInterface::Basic().pressure.get_QNH()));
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      fixed QNH(Sender->GetAsFloat());
-
-      device_blackboard.SetQNH(QNH);
-      wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
-      if (wp) {
-	wp->GetDataField()->
-	  SetAsFloat(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
-	wp->RefreshDisplay();
-      }
+  case DataField::daPut:
+  case DataField::daChange:
+    fixed QNH(Sender->GetAsFloat());
+    device_blackboard.SetQNH(QNH);
+    wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
+    if (wp) {
+      wp->GetDataField()-> SetAsFloat(Units::ToUserAltitude(
+          XCSoarInterface::Basic().BaroAltitude));
+      wp->RefreshDisplay();
+    }
     break;
   }
-
 }
 
-
 // TODO bug: Check, this isn't updating properly?
-static void OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode){
-  switch(Mode){
-    case DataField::daGet:
-      Sender->Set(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
+static void
+OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  switch (Mode) {
+  case DataField::daGet:
+    Sender->Set(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
     break;
-    case DataField::daPut:
+  case DataField::daPut:
     break;
-    case DataField::daChange:
+  case DataField::daChange:
     break;
   }
 }
 
 GlidePolar* glide_polar = NULL;
 
-
-static void SetAltitude()
+static void
+SetAltitude()
 {
   static double altlast = -2;
-  if (fabs(XCSoarInterface::Basic().BaroAltitude-altlast)>1) {
+  if (fabs(XCSoarInterface::Basic().BaroAltitude - altlast) > 1) {
     WndProperty* wp;
     wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
     if (wp) {
       if (!XCSoarInterface::Basic().BaroAltitudeAvailable) {
         wp->hide();
       } else {
-        wp->GetDataField()->
-          SetAsFloat(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
+        wp->GetDataField()-> SetAsFloat(Units::ToUserAltitude(
+            XCSoarInterface::Basic().BaroAltitude));
         wp->RefreshDisplay();
       }
     }
@@ -128,15 +134,15 @@ static void SetAltitude()
   altlast = XCSoarInterface::Basic().BaroAltitude;
 }
 
-
-static void SetBallast(void) 
+static void
+SetBallast(void)
 {
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpBallastPercent"));
   if (wp) {
     if (glide_polar->is_ballastable()) {
-      wp->GetDataField()->SetAsFloat(glide_polar->get_ballast()*100);
+      wp->GetDataField()->SetAsFloat(glide_polar->get_ballast() * 100);
     } else {
       wp->hide();
     }
@@ -163,36 +169,42 @@ static void SetBallast(void)
   }
 }
 
-static int OnTimerNotify(WindowControl * Sender) 
+static int
+OnTimerNotify(WindowControl * Sender)
 {
   (void)Sender;
+
   SetBallast();
   SetAltitude();
+
   return 0;
 }
 
-static void SetButtons()
+static void
+SetButtons()
 {
   WndButton* wb;
 
   if ((wb = (WndButton *)wf->FindByName(_T("buttonDumpBallast"))) != NULL) {
-    wb->set_visible(!XCSoarInterface::SettingsComputer().BallastTimerActive && 
-                    glide_polar->is_ballastable());
+    wb->set_visible(!XCSoarInterface::SettingsComputer().BallastTimerActive
+                    && glide_polar->is_ballastable());
   }
   if ((wb = (WndButton *)wf->FindByName(_T("buttonStopDump"))) != NULL) {
-    wb->set_visible(XCSoarInterface::SettingsComputer().BallastTimerActive &&
-                    glide_polar->is_ballastable());
+    wb->set_visible(XCSoarInterface::SettingsComputer().BallastTimerActive
+                    && glide_polar->is_ballastable());
   }
 }
 
-static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void
+OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
   static double lastRead = -1;
 
-  switch(Mode){
+  switch (Mode) {
   case DataField::daSpecial:
-    if (glide_polar->get_ballast()>0.01) {
+    if (glide_polar->get_ballast() > 0.01) {
       XCSoarInterface::SetSettingsComputer().BallastTimerActive =
-	!XCSoarInterface::SettingsComputer().BallastTimerActive;
+          !XCSoarInterface::SettingsComputer().BallastTimerActive;
     } else {
       XCSoarInterface::SetSettingsComputer().BallastTimerActive = false;
     }
@@ -200,12 +212,12 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
     break;
   case DataField::daGet:
     lastRead = glide_polar->get_ballast();
-    Sender->SetAsFloat(glide_polar->get_ballast()*100);
+    Sender->SetAsFloat(glide_polar->get_ballast() * 100);
     break;
   case DataField::daChange:
   case DataField::daPut:
-    if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
-      lastRead = Sender->GetAsFloat()/100.0;
+    if (fabs(lastRead - Sender->GetAsFloat() / 100.0) >= 0.005) {
+      lastRead = Sender->GetAsFloat() / 100.0;
       glide_polar->set_ballast(fixed(lastRead));
       changed = true;
       SetBallast();
@@ -214,46 +226,48 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
   }
 }
 
-static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void
+OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
   static double lastRead = -1;
 
-  switch(Mode){
-    case DataField::daGet:
-      lastRead = glide_polar->get_bugs();
-      Sender->Set(lastRead*100);
+  switch (Mode) {
+  case DataField::daGet:
+    lastRead = glide_polar->get_bugs();
+    Sender->Set(lastRead * 100);
     break;
-    case DataField::daChange:
-    case DataField::daPut:
-      if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
-        lastRead = Sender->GetAsFloat()/100.0;
-        glide_polar->set_bugs(fixed(lastRead));
-      }
+  case DataField::daChange:
+  case DataField::daPut:
+    if (fabs(lastRead - Sender->GetAsFloat() / 100.0) >= 0.005) {
+      lastRead = Sender->GetAsFloat() / 100.0;
+      glide_polar->set_bugs(fixed(lastRead));
+    }
     break;
   }
 
 }
 
-
-static void OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void
+OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
   static double lastRead = -1;
 
-  switch(Mode){
-    case DataField::daGet:
-      lastRead = CuSonde::maxGroundTemperature;
-      Sender->Set(CuSonde::maxGroundTemperature);
+  switch (Mode) {
+  case DataField::daGet:
+    lastRead = CuSonde::maxGroundTemperature;
+    Sender->Set(CuSonde::maxGroundTemperature);
     break;
-    case DataField::daChange:
-    case DataField::daPut:
-      if (fabs(lastRead-Sender->GetAsFloat()) >= 1.0){
-        lastRead = Sender->GetAsFloat();
-        CuSonde::setForecastTemperature(Sender->GetAsFloat());
-      }
+  case DataField::daChange:
+  case DataField::daPut:
+    if (fabs(lastRead - Sender->GetAsFloat()) >= 1.0) {
+      lastRead = Sender->GetAsFloat();
+      CuSonde::setForecastTemperature(Sender->GetAsFloat());
+    }
     break;
   }
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnBugsData),
   DeclareCallBackEntry(OnTempData),
   DeclareCallBackEntry(OnBallastData),
@@ -264,16 +278,14 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-void dlgBasicSettingsShowModal() 
+void
+dlgBasicSettingsShowModal()
 {
   GlidePolar gp_copy = task_manager.get_glide_polar();
   glide_polar = &gp_copy;
 
-  wf = dlgLoadFromXML(CallBackTable,
-                      _T("dlgBasicSettings.xml"),
-		      XCSoarInterface::main_window,
-		      _T("IDR_XML_BASICSETTINGS"));
+  wf = dlgLoadFromXML(CallBackTable, _T("dlgBasicSettings.xml"),
+      XCSoarInterface::main_window, _T("IDR_XML_BASICSETTINGS"));
   if (wf == NULL)
     return;
 
@@ -281,7 +293,7 @@ void dlgBasicSettingsShowModal()
 
   wf->SetTimerNotify(OnTimerNotify);
 
-  OnTimerNotify(NULL);
+  OnTimerNotify( NULL);
 
   if ((wf->ShowModal() == mrOK) && changed) {
     task_manager.set_glide_polar(gp_copy);
