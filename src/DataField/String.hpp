@@ -43,28 +43,32 @@ Copyright_License {
 
 #define EDITSTRINGSIZE 32
 
-class DataFieldString:public DataField{
+class DataFieldString: public DataField
+{
+private:
+  TCHAR mValue[EDITSTRINGSIZE];
 
-  private:
-    TCHAR mValue[EDITSTRINGSIZE];
-
-  public:
-    DataFieldString(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                    const TCHAR *Default,
-                    DataAccessCallback_t OnDataAccess):
-      DataField(EditFormat, DisplayFormat, OnDataAccess){
-      _tcscpy(mValue, Default);
-      SupportCombo=false;
-    };
+public:
+  DataFieldString(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
+                  const TCHAR *Default,
+                  DataAccessCallback_t OnDataAccess) :
+    DataField(EditFormat, DisplayFormat, OnDataAccess) {
+    _tcscpy(mValue, Default);
+    SupportCombo = false;
+  }
 
   virtual const TCHAR *SetAsString(const TCHAR *Value);
+
   #if defined(__BORLANDC__)
   #pragma warn -hid
   #endif
+
   void Set(const TCHAR *Value);
+
   #if defined(__BORLANDC__)
   #pragma warn +hid
   #endif
+
   virtual const TCHAR *GetAsString(void) const;
 };
 

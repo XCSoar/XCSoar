@@ -42,15 +42,17 @@ const TCHAR *
 DataFieldString::SetAsString(const TCHAR *Value)
 {
   _tcscpy(mValue, Value);
-  return(mValue);
+  return mValue;
 }
 
-void DataFieldString::Set(const TCHAR *Value){
+void
+DataFieldString::Set(const TCHAR *Value)
+{
   _tcscpy(mValue, Value);
 }
 
 const TCHAR *
 DataFieldString::GetAsString(void) const
 {
-  return(mValue);
+  return mValue;
 }
