@@ -511,7 +511,7 @@ DataFieldFileReaderCompare(const void *elem1, const void *elem2)
 void
 DataFieldFileReader::Sort(void)
 {
-  qsort(fields+1, nFiles-1, sizeof(DataFieldFileReaderEntry),
+  qsort(fields + 1, nFiles - 1, sizeof(DataFieldFileReaderEntry),
         DataFieldFileReaderCompare);
 }
 

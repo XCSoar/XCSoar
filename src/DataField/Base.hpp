@@ -49,25 +49,26 @@ Copyright_License {
 #define UNITSIZE 10
 #define OUTBUFFERSIZE 128
 
-class DataField{
+class DataField
+{
 
-  public:
+public:
 
-    typedef enum{
-     daGet,
-     daPut,
-     daChange,
-     daInc,
-     daDec,
-     daSpecial,
-    }DataAccessKind_t;
+  typedef enum
+  {
+    daGet,
+    daPut,
+    daChange,
+    daInc,
+    daDec,
+    daSpecial,
+  } DataAccessKind_t;
 
-    typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
+  typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
 
-    DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-	      void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)=NULL);
-    virtual ~DataField(void){};
-
+  DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
+            void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode) = NULL);
+  virtual ~DataField(void){};
 
   virtual void Special(void);
   virtual void Inc(void);
@@ -87,52 +88,61 @@ class DataField{
   virtual double SetAsFloat(double Value);
   virtual const TCHAR *SetAsString(const TCHAR *Value);
 
-  virtual void Set(bool Value){ (void)Value; };
-  virtual void Set(int Value){ (void)Value;};
-  virtual void Set(unsigned Value){ Set((int)Value); };
-  virtual void Set(double Value){ (void)Value; };
-  virtual void Set(const TCHAR *Value){ (void)Value; };
+  virtual void Set(bool Value){ (void)Value; }
+  virtual void Set(int Value){ (void)Value; }
+  virtual void Set(unsigned Value){ Set((int)Value); }
+  virtual void Set(double Value){ (void)Value; }
+  virtual void Set(const TCHAR *Value){ (void)Value; }
 
-  virtual int SetMin(int Value){(void)Value; return(0);};
-  virtual double SetMin(double Value){(void)Value; return(false);};
+  virtual int SetMin(int Value){(void)Value; return 0; }
+  virtual double SetMin(double Value){(void)Value; return false; }
 
-  virtual int SetMax(int Value){(void)Value; return(0);};
-  virtual double SetMax(double Value){(void)Value; return(0);};
+  virtual int SetMax(int Value){(void)Value; return 0; }
+  virtual double SetMax(double Value){(void)Value; return 0; }
   void SetUnits(const TCHAR *text) { _tcscpy(mUnits, text); }
 
-  void Use(void){
+  void
+  Use(void)
+  {
     mUsageCounter++;
   }
 
-  int Unuse(void){
+  int
+  Unuse(void)
+  {
     mUsageCounter--;
-    return(mUsageCounter);
+    return mUsageCounter;
   }
 
   void SetDisplayFormat(TCHAR *Value);
-  void SetDisableSpeedUp(bool bDisable) {mDisableSpeedup=bDisable;}  // allows combolist to iterate all values
-  bool GetDisableSpeedUp(void) {return mDisableSpeedup;}
-  void SetDetachGUI(bool bDetachGUI) {mDetachGUI=bDetachGUI;}  // allows combolist to iterate all values w/out triggering external events
-  bool GetDetachGUI(void) {return mDetachGUI;}
-  virtual int CreateComboList(void) {return 0;};
-  ComboList* GetCombo(void) { return &mComboList;}
-  virtual int SetFromCombo(int iDataFieldIndex, TCHAR *sValue) {return SetAsInteger(iDataFieldIndex);};
+  void SetDisableSpeedUp(bool bDisable) { mDisableSpeedup=bDisable; }  // allows combolist to iterate all values
+  bool GetDisableSpeedUp(void) { return mDisableSpeedup; }
+  void SetDetachGUI(bool bDetachGUI) { mDetachGUI = bDetachGUI; }  // allows combolist to iterate all values w/out triggering external events
+  bool GetDetachGUI(void) { return mDetachGUI; }
+  virtual int CreateComboList(void) { return 0; }
+  ComboList* GetCombo(void) { return &mComboList; }
+
+  virtual int
+  SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
+  {
+    return SetAsInteger(iDataFieldIndex);
+  }
+
   void CopyString(TCHAR * szStringOut, bool bFormatted);
   bool SupportCombo;  // all Types dataField support combolist except DataFieldString.
-  protected:
-    void (*mOnDataAccess)(DataField *Sender, DataAccessKind_t Mode);
-    TCHAR mEditFormat[FORMATSIZE+1];
-    TCHAR mDisplayFormat[FORMATSIZE+1];
-    TCHAR mUnits[UNITSIZE+1];
-    ComboList mComboList;
-    int CreateComboListStepping(void);
 
-  private:
+protected:
+  void (*mOnDataAccess)(DataField *Sender, DataAccessKind_t Mode);
+  TCHAR mEditFormat[FORMATSIZE + 1];
+  TCHAR mDisplayFormat[FORMATSIZE + 1];
+  TCHAR mUnits[UNITSIZE + 1];
+  ComboList mComboList;
+  int CreateComboListStepping(void);
 
-    int mUsageCounter;
-    bool mDisableSpeedup;
-    bool mDetachGUI;
-
+private:
+  int mUsageCounter;
+  bool mDisableSpeedup;
+  bool mDetachGUI;
 };
 
 #endif
