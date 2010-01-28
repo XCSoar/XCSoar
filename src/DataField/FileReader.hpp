@@ -43,37 +43,57 @@ Copyright_License {
 
 #include <stdlib.h>
 
+/** Maximum of files in the list */
 #define DFE_MAX_FILES 100
 
+/** FileList item */
 typedef struct
 {
+  /** Filename */
   TCHAR *mTextFile;
+  /** Path including Filename */
   TCHAR *mTextPathFile;
 } DataFieldFileReaderEntry;
 
 class DataFieldFileReader: public DataField
 {
 private:
+  /** Number of files to choose from */
   unsigned int nFiles;
+  /** Index of the active file */
   unsigned int mValue;
+  /** FileList item array */
   DataFieldFileReaderEntry fields[DFE_MAX_FILES];
 
 public:
+  /**
+   * Constructor of the DataFieldFileReader class
+   * @param EditFormat
+   * @param DisplayFormat
+   * @param OnDataAccess
+   */
   DataFieldFileReader(const TCHAR *EditFormat,
 		      const TCHAR *DisplayFormat,
 		      void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
     DataField(EditFormat, DisplayFormat, OnDataAccess) {
+    // Set selection to zero
     mValue = 0;
+    // Fill first entry -> always exists and is blank
     fields[0].mTextFile = NULL;
-    fields[0].mTextPathFile = NULL; // first entry always exists and is blank
+    fields[0].mTextPathFile = NULL;
+    // Number of choosable files is now 1
     nFiles = 1;
 
+    // This type of DataField supports the combolist
     SupportCombo = true;
     (mOnDataAccess)(this, daGet);
   }
 
+  /** Deconstructor */
   ~DataFieldFileReader()
   {
+    // Iterate through the file array and delete
+    // everything except the first entry
     for (unsigned int i = 1; i < nFiles; i++) {
       if (fields[i].mTextFile) {
         free(fields[i].mTextFile);
@@ -87,27 +107,69 @@ public:
     nFiles = 1;
   }
 
+  /** Move the selection up (+1) */
   void Inc(void);
+  /** Move the selection down (-1) */
   void Dec(void);
+  /**
+   * Prepares the ComboList items
+   * @return The number of items in the ComboList
+   */
   int CreateComboList(void);
 
   void addFile(const TCHAR *fname, const TCHAR *fpname);
   bool checkFilter(const TCHAR *fname, const TCHAR* filter);
+
+  /**
+   * Returns the number of files in the list
+   * @return The number of files in the list
+   */
   int GetNumFiles(void) const;
 
+  /**
+   * Returns the selection index in integer format
+   * @return The selection index in integer format
+   */
   virtual int GetAsInteger(void) const;
+
+  /**
+   * Returns the selection title (filename)
+   * @return The selection title (filename)
+   */
   virtual const TCHAR *GetAsString(void) const;
 
+  /**
+   * Iterates through the file list and tries to find an item where the path
+   * is equal to the given text, if found the selection is changed to
+   * that item
+   * @param text PathFile to search for
+   */
   void Lookup(const TCHAR* text);
+
+  /**
+   * Returns the PathFile of the currently selected item
+   * @return The PathFile of the currently selected item
+   */
   const TCHAR *GetPathFile(void) const;
 
   #if defined(__BORLANDC__)
   #pragma warn -hid
   #endif
+
+  /**
+   * Sets the selection to the given index
+   * @param Value The array index to select
+   */
   void Set(int Value);
+
   #if defined(__BORLANDC__)
   #pragma warn +hid
   #endif
+
+  /**
+   * @see Set()
+   * @return The index that was set (min: 0 / max: nFiles)
+   */
   int SetAsInteger(int Value);
 
   void Sort();

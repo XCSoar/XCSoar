@@ -53,6 +53,11 @@ Copyright_License {
 #include <fnmatch.h>
 #endif
 
+/**
+ * Checks whether the given string str equals "." or ".."
+ * @param str The string to check
+ * @return True if string equals "." or ".."
+ */
 bool
 IsDots(const TCHAR* str)
 {
