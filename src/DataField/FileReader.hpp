@@ -117,7 +117,19 @@ public:
    */
   int CreateComboList(void);
 
+  /**
+   * Adds a filename/filepath couple to the filelist
+   * @param fname The filename
+   * @param fpname The filepath
+   */
   void addFile(const TCHAR *fname, const TCHAR *fpname);
+
+  /**
+   * Checks whether the given filename (fname) matches the given filter
+   * @param fname The filename to check
+   * @param filter The filter used for checking
+   * @return True if file matches the filter, False otherwise
+   */
   bool checkFilter(const TCHAR *fname, const TCHAR* filter);
 
   /**
@@ -172,6 +184,7 @@ public:
    */
   int SetAsInteger(int Value);
 
+  /** Sorts the filelist by filenames */
   void Sort();
   void ScanDirectoryTop(const TCHAR *filter);
 

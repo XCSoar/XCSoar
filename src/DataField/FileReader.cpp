@@ -378,8 +378,11 @@ DataFieldFileReader::Lookup(const TCHAR *Text)
 {
   int i = 0;
   mValue = 0;
+  // Iterate through the filelist
   for (i = 1; i < (int)nFiles; i++) {
+    // If Text == pathfile
     if (_tcscmp(Text, fields[i].mTextPathFile) == 0) {
+      // -> set selection to current element
       mValue = i;
     }
   }
@@ -508,6 +511,7 @@ DataFieldFileReader::Dec(void)
 static int _cdecl
 DataFieldFileReaderCompare(const void *elem1, const void *elem2)
 {
+  // Compare by filename
   return _tcscmp(((DataFieldFileReaderEntry*)elem1)->mTextFile,
                  ((DataFieldFileReaderEntry*)elem2)->mTextFile);
 }
@@ -515,6 +519,7 @@ DataFieldFileReaderCompare(const void *elem1, const void *elem2)
 void
 DataFieldFileReader::Sort(void)
 {
+  // Sort the filelist (except for the first (empty) element)
   qsort(fields + 1, nFiles - 1, sizeof(DataFieldFileReaderEntry),
         DataFieldFileReaderCompare);
 }
