@@ -717,8 +717,7 @@ InputEvents::processButton(int bindex)
   processGo(item.event);
 
   // experimental: update button text, macro may change the label
-  if (lastMode == getModeID() && item.label != NULL
-      && ButtonLabel::ButtonVisible[bindex])
+  if (lastMode == getModeID() && item.label != NULL)
     drawButtons(lastMode);
 
   return true;
@@ -783,10 +782,8 @@ InputEvents::processKey(int dWord)
     InputEvents::processGo(event_id);
 
   // experimental: update button text, macro may change the value
-  if ((lastMode == getModeID()) && (bindex > 0) && (pLabelText != NULL)
-      && ButtonLabel::ButtonVisible[bindex]) {
+  if (lastMode == getModeID() && bindex > 0 && pLabelText != NULL)
     drawButtons(lastMode);
-  }
 
   return true;
 }

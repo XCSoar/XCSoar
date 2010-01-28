@@ -69,7 +69,6 @@ public:
 
   static unsigned ButtonLabelGeometry;
   static MenuButton hWndButtonWindow[NUMBUTTONLABELS];
-  static bool ButtonVisible[NUMBUTTONLABELS];
 
 protected:
   static void GetButtonPosition(unsigned i, RECT rc, int *x, int *y,

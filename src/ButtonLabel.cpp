@@ -49,7 +49,6 @@ Copyright_License {
 #include <assert.h>
 
 MenuButton ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
-bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
 
 unsigned ButtonLabel::ButtonLabelGeometry = 0;
 
@@ -165,8 +164,6 @@ ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
   for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
     hWndButtonWindow[i].set(parent, x, y, xsize, ysize, false);
-
-    ButtonVisible[i] = false;
   }
 }
 
@@ -181,10 +178,8 @@ ButtonLabel::SetFont(const Font &Font)
 void
 ButtonLabel::Destroy()
 {
-  for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {
+  for (unsigned i = 0; i < NUMBUTTONLABELS; i++)
     hWndButtonWindow[i].reset();
-    ButtonVisible[i] = false;
-  }
 }
 
 void
@@ -194,7 +189,6 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
 
   if ((text == NULL) || (*text == _T('\0')) || (*text == _T(' '))) {
     hWndButtonWindow[index].hide();
-    ButtonVisible[index] = false;
   } else {
     TCHAR s[100];
 
@@ -203,12 +197,9 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
 
     if ((s[0] == _T('\0')) || (s[0] == _T(' '))) {
       hWndButtonWindow[index].hide();
-      ButtonVisible[index] = false;
     } else {
       hWndButtonWindow[index].set_text(gettext(s));
       hWndButtonWindow[index].show_on_top();
-
-      ButtonVisible[index] = true;
     }
   }
 }
@@ -231,7 +222,7 @@ ButtonLabel::AnimateButton(unsigned i)
   RECT mRc, aniRect;
   mRc = hWndButtonWindow[i].get_screen_position();
 
-  if (ButtonVisible[i]) {
+  if (hWndButtonWindow[i].is_visible()) {
     aniRect.top = (mRc.top * 5 + mRc.bottom) / 6;
     aniRect.left = (mRc.left * 5 + mRc.right) / 6;
     aniRect.right = (mRc.left + mRc.right * 5) / 6;
