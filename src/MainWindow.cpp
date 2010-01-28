@@ -93,7 +93,7 @@ MainWindow::set(LPCTSTR text,
   RECT rcsmall = InfoBoxManager::Create(rc);
 
   StartupStore(TEXT("Create button labels\n"));
-  ButtonLabel::CreateButtonLabels(*this, rc);
+  ButtonLabel::CreateButtonLabels(*this);
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
 
   StartupStore(TEXT("Initialise fonts\n"));

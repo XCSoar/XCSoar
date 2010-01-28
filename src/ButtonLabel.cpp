@@ -40,6 +40,7 @@ Copyright_License {
 #include "Language.hpp"
 #include "Screen/Animation.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/ContainerWindow.hpp"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
 #include "Asset.hpp"
@@ -118,8 +119,10 @@ ButtonLabel::GetButtonPosition(unsigned i, RECT rc, int *x, int *y,
 }
 
 void
-ButtonLabel::CreateButtonLabels(ContainerWindow &parent, const RECT rc)
+ButtonLabel::CreateButtonLabels(ContainerWindow &parent)
 {
+  const RECT rc = parent.get_client_rect();
+
   int x, y, xsize, ysize;
 
   for (unsigned i = 0; i < NUMBUTTONLABELS; i++) {

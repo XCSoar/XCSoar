@@ -74,7 +74,7 @@ protected:
       int *sizex, int *sizey);
 
 public:
-  static void CreateButtonLabels(ContainerWindow &parent, const RECT rc);
+  static void CreateButtonLabels(ContainerWindow &parent);
   static void AnimateButton(unsigned i);
   static void SetFont(const Font &Font);
   static void Destroy();
