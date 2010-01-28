@@ -56,6 +56,20 @@ static WndForm *wf = NULL;
 
 static bool changed = false;
 
+GlidePolar* glide_polar = NULL;
+
+static void
+SetButtons()
+{
+  WndButton* wb;
+
+  if ((wb = (WndButton *)wf->FindByName(_T("cmdDump"))) != NULL) {
+    wb->set_visible(glide_polar->is_ballastable());
+    wb->SetCaption(XCSoarInterface::SettingsComputer().BallastTimerActive ?
+        _T("Stop") : _T("Dump"));
+  }
+}
+
 static void
 OnCloseClicked(WindowControl * Sender)
 {
@@ -71,7 +85,7 @@ OnBallastDump(WindowControl *Sender)
   XCSoarInterface::SetSettingsComputer().BallastTimerActive
       = !XCSoarInterface::SettingsComputer().BallastTimerActive;
 
-  wf->SetModalResult(mrOK);
+  SetButtons();
 }
 
 static void
@@ -111,8 +125,6 @@ OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode)
     break;
   }
 }
-
-GlidePolar* glide_polar = NULL;
 
 static void
 SetAltitude()
@@ -178,21 +190,6 @@ OnTimerNotify(WindowControl * Sender)
   SetAltitude();
 
   return 0;
-}
-
-static void
-SetButtons()
-{
-  WndButton* wb;
-
-  if ((wb = (WndButton *)wf->FindByName(_T("buttonDumpBallast"))) != NULL) {
-    wb->set_visible(!XCSoarInterface::SettingsComputer().BallastTimerActive
-                    && glide_polar->is_ballastable());
-  }
-  if ((wb = (WndButton *)wf->FindByName(_T("buttonStopDump"))) != NULL) {
-    wb->set_visible(XCSoarInterface::SettingsComputer().BallastTimerActive
-                    && glide_polar->is_ballastable());
-  }
 }
 
 static void
@@ -293,7 +290,9 @@ dlgBasicSettingsShowModal()
 
   wf->SetTimerNotify(OnTimerNotify);
 
-  OnTimerNotify( NULL);
+  OnTimerNotify(NULL);
+
+  SetButtons();
 
   if ((wf->ShowModal() == mrOK) && changed) {
     task_manager.set_glide_polar(gp_copy);
