@@ -48,12 +48,10 @@ Copyright_License {
 #include "RasterTerrain.h" // OLD_TASK just for locking
 
 #include <math.h>
-
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::min;
 using std::max;
-#endif
 
 #define fSnailColour(cv) max(0,min(NUMSNAILCOLORS-1, (int)((cv + fixed_one) * fixed_half * NUMSNAILCOLORS)))
 

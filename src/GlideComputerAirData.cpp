@@ -66,12 +66,10 @@ Copyright_License {
 
 #include "GlideSolvers/GlidePolar.hpp"
 
-
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::min;
 using std::max;
-#endif
 
 #define MinTurnRate  4
 #define CruiseClimbSwitch 15

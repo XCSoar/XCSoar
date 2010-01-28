@@ -49,10 +49,9 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::max;
-#endif
 
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;

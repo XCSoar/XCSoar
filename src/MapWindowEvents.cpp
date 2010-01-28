@@ -56,11 +56,10 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Waypoint/Waypoints.hpp"
 
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::min;
 using std::max;
-#endif
 
 // Interface/touchscreen callbacks
 

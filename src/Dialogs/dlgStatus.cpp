@@ -56,12 +56,10 @@ Copyright_License {
 #include "Navigation/Geometry/GeoVector.hpp"
 
 #include <assert.h>
-
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::min;
 using std::max;
-#endif
 
 static WndForm *wf=NULL;
 static TabbedControl *tabbed;

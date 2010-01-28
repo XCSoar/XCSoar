@@ -52,11 +52,10 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::min;
 using std::max;
-#endif
 
 static Color colTextGray;
 static Color colText;
