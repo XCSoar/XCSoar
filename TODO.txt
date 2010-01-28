@@ -1,72 +1,14 @@
-Work To Do, Outstanding Items:
-
-Altair autoshutdown on no activity for 15 minutes
-Incorporate Lar's snail trail work, teamcode position
-
-Dynamic label: Abort task, Arm Start/Sector
-Check terrain model
-
-Set home/teamcode in configuration settings?
-Check key repeat, hardware dependent?
-Logger timestamp, logger on landing
-Altairsync updates -- copy from/to deep ToAltair
-
-- Try to fit wind speed/direction in one infobox?
-- Maybe have different fonts in infoboxes
-- Document online contest
-- Document thermal locator
-
-- Detect when `circling' but not in thermal (e.g. ridge, wave), in order
-  to disable trail drift and thermal centering drift calculations.
-- When wind changes, de-value older wind estimates so they don't
-   affect the new conditions.
-- Warble sounds
-- Profile selector not getting in before everything is initialised!
-  --> inverse infoboxes
-- Auto Mc not updating when final glide forced early
-  --> due to pirker function not working across more than one point to go
-- AAT segment line for targets bug, not always in sector, and range not
-  always going to be increasing.  Need better logic here.
-- Arm advance:
-    if press again after advance and still in sector,
-    restart that waypoint; or if on waypoint 1, restart the task
-    Also display green button with "Arm Advance" if task isn't started
-- Task details dialog: start details and details on each waypoint
-
-John Buchanan feedback:
- - Tie circling mode to vario
-   -- Need extra flag to indicate to Vega that XCSoar is getting
-      its mode from it, not the other way around?
-      --> slave mode, but don't bugger wind calculations
- - Vario gauge
-   -- Needle showing overshoot, needs faster animation
-   -- No need to show gross, when showing only some items, make text bigger
-
-Documentation:
-- Start/Finish line: 'radius' parameter is half line width
-- Explain more about task starting, valid task starts etc
-- Update configuration screenshots and text
-- Make sure all release note info is in the manual.
-- Better description of prioritisation of messages
-- Better description of speed command sounds
-- Better description of auto mc
-- Better description of how to add new tasks
-
-Waypoint editing:
-- Create new waypoint at current location or pan location
-- Create waypoints for major/minor towns (particular ones or all)
-- Scan waypoints for duplicates (close within a range), don't remove
-  duplicates if they are different types (airfield vs non-airfield)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! PLEASE DO NOT ADD ITEMS TO THIS FILE, USE OUR TRAC SYSTEM INSTEAD !!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     (http://www.xcsoar.org/trac/)
 
 ===========
 TASK SYSTEM
 ===========
 
 - Task system
-  - File save/load to contain all info
-  - XML based task file
   - Have separate Arm modes for AAT and non-AAT modes?
-  - Display start speed/altitude/time in task status dialog
   - Different ways of calculating average speed
     - Based on manual input or task average
   - Add 'PanTo' waypoint function, to pan towards the selected waypoint
@@ -74,13 +16,10 @@ TASK SYSTEM
 - AAT support:
   - More accurate calculation of ETA etc with respect to final glide fraction
   - Calculator, What if I leave now?
-- Additional waypoint info:
-  - Info from ERSA or other sources for airfields
-    -- Runways (preferred runway given wind)
-    -- Runway diagram?  --> get from DAFIF data.
 - Task statistics
   - Need to track average speed and time spent on each leg for statistics
     review after flight.
+- Task abort, when many airfields available, sort along task direction
 
 =====================
 AIRSPACE AND WARNINGS
@@ -89,8 +28,6 @@ AIRSPACE AND WARNINGS
 - Airspace
   - ** (Feature request 1399775) configurable border thickness
   - Sort nearest above/below
-  - Monitoring function (distance/bearing to nearest airspace or exit),
-     with associated infoboxes?
 - Warnings and voice prompts (issued directly and passed to Vega, gce?)
   - Final glide through terrain
   - Distance to waypoint readout
@@ -98,10 +35,7 @@ AIRSPACE AND WARNINGS
   - Airspace
   - Fast descent freezing
   - Implement the Vega protocol in XCSoar
-  - (Feature request 1394440) Gear warning
-  - (Feature request 1233220) Sunset warning
   - Terrain out of range
-
 
 ==============
 GLIDE COMPUTER
@@ -111,7 +45,6 @@ GLIDE COMPUTER
   - Compass wind estimator
 - Flight modes
   - (Feature request 1459280) user-commanded flight modes
-  - Externally (vario or switch) forced climb/cruise
   - In climb stats page, show direction of circling
 - Pirker analysis:
   - Given a height available, what maccready gives zero arrival altitude?
@@ -137,20 +70,19 @@ GLIDE COMPUTER
   - Currently, wind calculation will fail if going backwards
   - Can detect this from rapid change in heading (approx 180 degrees)
   - If we know roughly the wind, can estimate what the glider heading is.
+- Detect when `circling' but not in thermal (e.g. ridge, wave), in order
+  to disable trail drift and thermal centering drift calculations.
 - Ballast
   - Allow entry of pilot weight, recalculation of ballast limits
-  - Trim calculations/display
 
 ===================
 MARKS AND WAYPOINTS
 ===================
 
-- Marker system
-   - (Feature request 1281642) Mark to waypoint, mark to waypointfile
-   - Allow users to toggle whether marked points get deleted on startup
 - Waypoints
-  - Generate waypoints from towns (builtupa, miscpopp)
   - Cursor keys to allow moving to next waypoints in direction of cursor.
+  - Scan waypoints for duplicates (close within a range), don't remove
+    duplicates if they are different types (airfield vs non-airfield)
 
 ===========================
 MAP, GAUGE AND ICON DISPLAY
@@ -158,15 +90,11 @@ MAP, GAUGE AND ICON DISPLAY
 
 - Info icons/symbols
   - GPS signal strength --> could be good for status dialog.
-  - FLARM traffic (use FLARM logo?)
 - Display elements
-  - Add (optional) track line particularly if not in north up mode
   - Speed to fly bars visibility in fullscreen
-  - (Feature request 1281820) configurable glider icon
 - Terrain rendering
   - (Feature request 1370830) display satellite weather imagery on map
   - Predefined brightness/contrast settings
-  - Configuration of various colour ramps
   - (Idea) Draw land use with pattern, for areas of forrest or crop fields
      -- Do this with pattern brush over top of normal terrain/topo
 - Gauges
@@ -176,12 +104,10 @@ MAP, GAUGE AND ICON DISPLAY
 CONFIGURATION
 =============
 
-- Dialogs:
-  - Config: display blanking, other missing items?
-  - Configuration option for checklist and flarm filename
 - Fonts
   - Adjustable font for long infoboxes (especially time)
-  - (Feature request 1374130) Font customisation in settings (font type, size)
+- Configuration wizard?
+- Set home/teamcode in configuration settings?
 
 ==============
 USER INTERFACE
@@ -190,19 +116,15 @@ USER INTERFACE
 - Status messages
   - Colored status messages?
 - Miscellaneous UI
-  - (Bug 1368752) Infoboxes cropped on square displays
   - Password protect on settings
-  - Implement cursor moveable by arrow keys for waypoint/airspace selection
-    and to move/edit waypoints.
 - Input events
   - Timed buttons (pass time of button press to processKey and support
-  threshold passing in InputEvents - eg: Set long press as nnn ms -
-  over that is long press, under is short) (assume for simplicity that
-  we still only press single buttons at a time - thus time last
-  button.
+    threshold passing in InputEvents - eg: Set long press as nnn ms -
+    over that is long press, under is short) (assume for simplicity that
+    we still only press single buttons at a time - thus time last
+    button.
   - Consider support of double click (harder...)
-- (Idea) Multiple Auxiliary infobox pages, so user can configure for each mode,
-  two sets of navboxes and cycle between them?  Maybe too much.
+- Check key repeat, hardware dependent?
 
 =====================
 SYSTEM/INFRASTRUCTURE
@@ -218,19 +140,26 @@ SYSTEM/INFRASTRUCTURE
 - Comms
   - Robustness for PC version, currently hanging on restart
   - Need 3 ports for full support of Altair.
-  - Simple output terminal for COM ports (allow users to check serial
-    connnections are working correctly).
 - Battery management
   - Low battery exit is not working, fix it.
   - Improved notification of battery level - not just simulator.
     (exit should still only be the simulator)
   - Notify the user (via GCE to Input) of switching between AC and Battery mode
-- Files:
-  - Proper filename extensions
-  - ** (Feature request 1379262) Configurable output file path
+  - Altair autoshutdown on no activity for 15 minutes
 - Profiles:
   - Need profile save page
-  - Filtering, so user can load any of:
-    -- Aircraft settings
-    -- Competition/task settings
-    -- Locality settings (terrain, topo, airspace, waypoints)
+
+=============
+DOCUMENTATION
+=============
+    
+- Start/Finish line: 'radius' parameter is half line width
+- Explain more about task starting, valid task starts etc
+- Update configuration screenshots and text
+- Make sure all release note info is in the manual.
+- Better description of prioritisation of messages
+- Better description of speed command sounds
+- Better description of auto mc
+- Better description of how to add new tasks
+- Document online contest
+- Document thermal locator 
