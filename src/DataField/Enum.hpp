@@ -43,36 +43,35 @@ Copyright_License {
 
 #define DFE_MAX_ENUMS 100
 
-typedef struct {
+typedef struct
+{
   TCHAR *mText;
   unsigned int index;
 } DataFieldEnumEntry;
 
-class DataFieldEnum: public DataField {
+class DataFieldEnum: public DataField
+{
+private:
+  unsigned int nEnums;
+  unsigned int mValue;
+  DataFieldEnumEntry mEntries[DFE_MAX_ENUMS];
 
-  private:
-    unsigned int nEnums;
-    unsigned int mValue;
-    DataFieldEnumEntry mEntries[DFE_MAX_ENUMS];
+public:
+  DataFieldEnum(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
+                int Default, DataAccessCallback_t OnDataAccess) :
+    DataField(EditFormat, DisplayFormat, OnDataAccess) {
+    SupportCombo = true;
 
-  public:
-    DataFieldEnum(const TCHAR *EditFormat,
-		  const TCHAR *DisplayFormat,
-		  int Default,
-		  DataAccessCallback_t OnDataAccess):
-      DataField(EditFormat, DisplayFormat, OnDataAccess){
-      SupportCombo=true;
+    if (Default >= 0)
+      mValue = Default;
+    else
+      mValue = 0;
 
-      if (Default>=0)
-	{ mValue = Default; }
-      else
-	{mValue = 0;}
-      nEnums = 0;
-      if (mOnDataAccess) {
-	(mOnDataAccess)(this, daGet);
-      }
-    };
-      ~DataFieldEnum();
+    nEnums = 0;
+    if (mOnDataAccess)
+      (mOnDataAccess)(this, daGet);
+  }
+  ~DataFieldEnum();
 
   void Inc(void);
   void Dec(void);
@@ -86,10 +85,13 @@ class DataFieldEnum: public DataField {
   #if defined(__BORLANDC__)
   #pragma warn -hid
   #endif
+
   void Set(int Value);
+
   #if defined(__BORLANDC__)
   #pragma warn +hid
   #endif
+
   int SetAsInteger(int Value);
   void Sort(int startindex=0);
 };
