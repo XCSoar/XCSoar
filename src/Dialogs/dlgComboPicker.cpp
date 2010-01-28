@@ -122,8 +122,8 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
   // prevents multiple instances
   if (bInComboPicker)
     return 0;
-  else
-    bInComboPicker = true;
+
+  bInComboPicker = true;
 
   while (bOpenCombo) {
     assert(theProperty != NULL);
