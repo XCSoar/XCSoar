@@ -45,7 +45,7 @@ Copyright_License {
 
 #include <assert.h>
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
 static WndProperty *wComboPopupWndProperty;
 static DataField *ComboPopupDataField;
@@ -53,7 +53,7 @@ static ComboList *ComboListPopup;
 static WndListFrame *wComboPopupListFrame;
 
 static TCHAR sSavedInitialValue[ComboPopupITEMMAX];
-static int iSavedInitialDataIndex=-1;
+static int iSavedInitialDataIndex = -1;
 
 static void
 OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
@@ -66,7 +66,9 @@ OnPaintComboPopupListItem(Canvas &canvas, const RECT rc, unsigned i)
                       ComboListPopup->ComboPopupItemList[i]->StringValueFormatted);
 }
 
-static void OnHelpClicked(WindowControl * Sender){
+static void
+OnHelpClicked(WindowControl * Sender)
+{
   (void)Sender;
 
   int i = wComboPopupListFrame->GetCursorIndex();
@@ -80,24 +82,28 @@ static void OnHelpClicked(WindowControl * Sender){
   wComboPopupWndProperty->OnHelp();
 }
 
-static void OnCloseClicked(WindowControl * Sender){
+static void
+OnCloseClicked(WindowControl * Sender)
+{
   (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static void
 OnComboPopupListEnter(unsigned i)
-{ // double-click on item -- NOT in callback table because added manually
+{
+  // double-click on item -- NOT in callback table because added manually
   OnCloseClicked(wf);
 }
 
-static void OnCancelClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnCancelClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(mrCancel);
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnHelpClicked),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnCancelClicked),
@@ -107,108 +113,103 @@ static CallBackTableEntry_t CallBackTable[]={
 int
 dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
 {
-  static bool bInComboPicker=false;
-  bool bInitialPage=true;
-  bool bOpenCombo=true; // used to exit loop (optionally reruns combo with
-                        //lower/higher index of items for int/float
+  static bool bInComboPicker = false;
+  bool bInitialPage = true;
+  // used to exit loop (optionally reruns combo with
+  // lower/higher index of items for int/float
+  bool bOpenCombo = true;
 
-  if (bInComboPicker) // prevents multiple instances
+  // prevents multiple instances
+  if (bInComboPicker)
     return 0;
   else
-    bInComboPicker=true;
+    bInComboPicker = true;
 
-  while (bOpenCombo)
-  {
-    assert(theProperty!=NULL);
+  while (bOpenCombo) {
+    assert(theProperty != NULL);
     wComboPopupWndProperty = theProperty;
 
-
     if (!Layout::landscape) {
-      wf = dlgLoadFromXML(CallBackTable,
-                          _T("dlgComboPicker_L.xml"),
-                          parent,
+      wf = dlgLoadFromXML(CallBackTable, _T("dlgComboPicker_L.xml"), parent,
                           _T("IDR_XML_COMBOPICKER_L"));
     } else {
-      wf = dlgLoadFromXML(CallBackTable,
-                          _T("dlgWayComboPicker.xml"),
-                          parent,
+      wf = dlgLoadFromXML(CallBackTable, _T("dlgWayComboPicker.xml"), parent,
                           _T("IDR_XML_COMBOPICKER"));
     }
 
-    if (!wf) return -1;
+    if (!wf)
+      return -1;
 
-    assert(wf!=NULL);
+    assert(wf != NULL);
     //assert(wf->GetWidth() <1200);  // sometimes we have a bogus window, setfocus goes nuts
 
     wf->SetCaption(theProperty->GetCaption());
 
     wComboPopupListFrame =
       (WndListFrame*)wf->FindByName(_T("frmComboPopupList"));
-    assert(wComboPopupListFrame!=NULL);
-    wComboPopupListFrame->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERRIGHT|BORDERBOTTOM);
+    assert(wComboPopupListFrame != NULL);
+    wComboPopupListFrame->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERRIGHT |
+        BORDERBOTTOM);
     wComboPopupListFrame->SetActivateCallback(OnComboPopupListEnter);
     wComboPopupListFrame->SetPaintItemCallback(OnPaintComboPopupListItem);
 
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();
     ComboListPopup = ComboPopupDataField->GetCombo();
-    assert(ComboPopupDataField!=NULL);
+    assert(ComboPopupDataField != NULL);
 
     ComboPopupDataField->CreateComboList();
     wComboPopupListFrame->SetLength(ComboListPopup->ComboPopupItemCount);
     wComboPopupListFrame->SetCursorIndex(ComboListPopup->ComboPopupItemSavedIndex);
     if (bInitialPage) { // save values for "Cancel" from first page only
-      bInitialPage=false;
-      iSavedInitialDataIndex=ComboListPopup->ComboPopupItemList[ComboListPopup->ComboPopupItemSavedIndex]->DataFieldIndex;
-      ComboPopupDataField->CopyString(sSavedInitialValue,false);
+      bInitialPage = false;
+      iSavedInitialDataIndex = ComboListPopup->
+          ComboPopupItemList[ComboListPopup->ComboPopupItemSavedIndex]->
+          DataFieldIndex;
+      ComboPopupDataField->CopyString(sSavedInitialValue, false);
     }
 
+    int idx = (wf->ShowModal() == mrOK ?
+               (int)wComboPopupListFrame->GetCursorIndex() :
+               -1);
 
-    int idx = wf->ShowModal() == mrOK
-      ? (int)wComboPopupListFrame->GetCursorIndex()
-      : -1;
+    bOpenCombo = false; //tell  combo to exit loop after close
 
-    bOpenCombo=false;  //tell  combo to exit loop after close
-
-    if (idx >= 0 && idx < ComboListPopup->ComboPopupItemCount) // OK/Select
-    {
-      if (ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex
-                          ==ComboPopupReopenMOREDataIndex)
-      { // we're last in list and the want more past end of list so select last real list item and reopen
-        ComboPopupDataField->SetDetachGUI(true);  // we'll reopen, so don't call xcsoar data changed routine yet
+    if (idx >= 0 && idx < ComboListPopup->ComboPopupItemCount) {
+      // OK/Select
+      if (ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex ==
+          ComboPopupReopenMOREDataIndex) {
+        // we're last in list and the want more past end of list so select last real list item and reopen
+        ComboPopupDataField->SetDetachGUI(true);
+        // we'll reopen, so don't call xcsoar data changed routine yet
         --idx;
-        bOpenCombo=true; // reopen combo with new selected index at center
-      }
-      else if (ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex
-                          ==ComboPopupReopenLESSDataIndex) // same as above but lower items needed
-      {
+        bOpenCombo = true; // reopen combo with new selected index at center
+      } else if (ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex ==
+                 ComboPopupReopenLESSDataIndex) {
+        // same as above but lower items needed
         ComboPopupDataField->SetDetachGUI(true);
         ++idx;
-        bOpenCombo=true;
+        bOpenCombo = true;
       }
       int iDataIndex = ComboListPopup->ComboPopupItemList[idx]->DataFieldIndex;
       ComboPopupDataField->SetFromCombo(iDataIndex,
-        ComboListPopup->ComboPopupItemList[idx]->StringValue);
-    }
-    else // Cancel
-    { // if we've detached the GUI during the load, then there is nothing to do here
-      assert(iSavedInitialDataIndex >=0);
-      if (iSavedInitialDataIndex >=0) {
+          ComboListPopup->ComboPopupItemList[idx]->StringValue);
+    } else {
+      // Cancel
+      // if we've detached the GUI during the load, then there is nothing to do here
+      assert(iSavedInitialDataIndex >= 0);
+      if (iSavedInitialDataIndex >= 0)
         // use statics here - saved from first page if multiple were used
-        ComboPopupDataField->SetFromCombo(iSavedInitialDataIndex, sSavedInitialValue);
-      }
+        ComboPopupDataField->SetFromCombo(iSavedInitialDataIndex,
+            sSavedInitialValue);
     }
-
 
     wComboPopupWndProperty->RefreshDisplay();
     ComboListPopup->FreeComboPopupItemList();
 
     delete wf;
-
     wf = NULL;
+  } // loop reopen combo if <<More>>  or <<Less>> picked
 
-  } // loop reopen combo if <<More>> << LESS>> picked
-
-  bInComboPicker=false;
+  bInComboPicker = false;
   return 1;
-
 }
