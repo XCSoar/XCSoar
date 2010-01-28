@@ -14,6 +14,8 @@
 #include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeVario.hpp"
 #include "Gauge/GaugeCDI.hpp"
+#include "MenuBar.hpp"
+#include "InputEvents.h"
 
 #ifdef WINDOWSPC
 #include "Asset.hpp" /* for SCREENWIDTH and SCREENHEIGHT */
@@ -121,19 +123,14 @@ MainWindow::set(LPCTSTR text,
 
 // Windows event handlers
 
-Brush *
-MainWindow::on_color(Window &window, Canvas &canvas)
+bool
+MainWindow::on_command(unsigned id, unsigned code)
 {
-  int i = ButtonLabel::Find(window);
-  if (i >= 0) {
-    canvas.set_background_color(MapGfx.ColorButton);
-    canvas.set_text_color(window.is_enabled()
-                          ? MapGfx.ColorBlack
-                          : MapGfx.ColorMidGrey);
-    return &MapGfx.buttonBrush;
-  }
-
-  return SingleWindow::on_color(window, canvas);
+  if (id >= MenuBar::FIRST_ID && id <= MenuBar::LAST_ID) {
+    InputEvents::processButton(id - MenuBar::FIRST_ID);
+    return true;
+  } else
+    return SingleWindow::on_command(id, code);
 }
 
 bool

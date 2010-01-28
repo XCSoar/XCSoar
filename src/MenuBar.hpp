@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_MENU_BAR_HPP
 #define XCSOAR_MENU_BAR_HPP
 
-#include "ButtonLabel.hpp"
+#include "Screen/ButtonWindow.hpp"
 
 #include <tchar.h>
 
@@ -53,9 +53,11 @@ class MenuBar {
 public:
   enum {
     MAX_BUTTONS = 32,
+    FIRST_ID = 0x5000,
+    LAST_ID = FIRST_ID + MAX_BUTTONS - 1,
   };
 
-  MenuButton buttons[MAX_BUTTONS];
+  ButtonWindow buttons[MAX_BUTTONS];
 
 public:
   MenuBar(ContainerWindow &parent);
@@ -68,13 +70,6 @@ public:
   bool IsButtonEnabled(unsigned i) const {
     return buttons[i].is_enabled();
   }
-
-  /**
-   * Finds a button.
-   *
-   * @return the button index, or -1 if not found
-   */
-  int Find(const Window &window) const;
 
   void AnimateButton(unsigned i);
 };

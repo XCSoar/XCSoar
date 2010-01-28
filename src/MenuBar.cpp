@@ -108,7 +108,8 @@ MenuBar::MenuBar(ContainerWindow &parent)
 
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
-    buttons[i].set(parent, x, y, xsize, ysize, false);
+    buttons[i].set(parent, _T(""), FIRST_ID + i, x, y, xsize, ysize,
+                   false, false, true);
   }
 }
 
@@ -124,7 +125,7 @@ MenuBar::ShowButton(unsigned i, bool enabled, const TCHAR *text)
 {
   assert(i < MAX_BUTTONS);
 
-  MenuButton &button = buttons[i];
+  ButtonWindow &button = buttons[i];
 
   button.set_text(text);
   button.set_enabled(enabled);
@@ -137,16 +138,6 @@ MenuBar::HideButton(unsigned i)
   assert(i < MAX_BUTTONS);
 
   buttons[i].hide();
-}
-
-int
-MenuBar::Find(const Window &window) const
-{
-  for (unsigned i = 0; i < MAX_BUTTONS; i++)
-    if (&window == (const Window *)&buttons[i])
-      return i;
-
-  return -1;
 }
 
 void

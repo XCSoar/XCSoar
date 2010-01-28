@@ -46,20 +46,6 @@ Copyright_License {
 class ContainerWindow;
 class MenuBar;
 
-class MenuButton: public TextWindow
-{
-public:
-  void
-  set(ContainerWindow &parent, int left, int top, unsigned width,
-      unsigned height, bool visible)
-  {
-    TextWindow::set(parent, left, top, width, height, true, true, visible, true, true);
-    install_wndproc();
-  }
-
-  virtual bool on_mouse_up(int x, int y);
-};
-
 class ButtonLabel: public ActionInterface
 {
 protected:
@@ -72,7 +58,6 @@ public:
   static void Destroy();
   static void SetLabelText(unsigned i, const TCHAR *text);
   static bool IsEnabled(unsigned i);
-  static int Find(const Window &window);
 
   static bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
 };

@@ -89,7 +89,6 @@ public:
 
   Brush infoSelectedBrush;
   Brush infoUnselectedBrush;
-  Brush buttonBrush;
 
   Pen hSnailPens[NUMSNAILCOLORS];
   Color hSnailColours[NUMSNAILCOLORS];
@@ -181,7 +180,6 @@ public:
   static const Color ColorUnselected;
   static const Color ColorWarning;
   static const Color ColorOK;
-  static const Color ColorButton;
   static const Color ColorBlack;
   static const Color ColorMidGrey;
 };

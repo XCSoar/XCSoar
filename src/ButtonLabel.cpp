@@ -39,21 +39,10 @@ Copyright_License {
 #include "ButtonLabel.hpp"
 #include "MenuBar.hpp"
 #include "Language.hpp"
-#include "InputEvents.h"
 
 #include <assert.h>
 
 MenuBar *ButtonLabel::bar;
-
-bool
-MenuButton::on_mouse_up(int x, int y)
-{
-  int i = ButtonLabel::Find(*this);
-  if (i >= 0)
-    InputEvents::processButton(i);
-
-  return true;
-}
 
 void
 ButtonLabel::CreateButtonLabels(ContainerWindow &parent)
@@ -95,12 +84,6 @@ bool
 ButtonLabel::IsEnabled(unsigned i)
 {
   return bar->IsButtonEnabled(i);
-}
-
-int
-ButtonLabel::Find(const Window &window)
-{
-  return bar->Find(window);
 }
 
 void
