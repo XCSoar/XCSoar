@@ -49,19 +49,19 @@ static bool DataFieldKeyUp = false;
 bool
 DataFieldInteger::GetAsBoolean(void) const
 {
-  return(mValue != 0);
+  return (mValue != 0);
 }
 
 int
 DataFieldInteger::GetAsInteger(void) const
 {
-  return(mValue);
+  return mValue;
 }
 
 double
 DataFieldInteger::GetAsFloat(void) const
 {
-  return(mValue);
+  return mValue;
 }
 
 const TCHAR *
@@ -69,7 +69,7 @@ DataFieldInteger::GetAsString(void) const
 {
   TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, mEditFormat, mValue);
-  return(mOutBuf);
+  return mOutBuf;
 }
 
 const TCHAR *
@@ -77,40 +77,48 @@ DataFieldInteger::GetAsDisplayString(void) const
 {
   TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
   _stprintf(mOutBuf, mDisplayFormat, mValue, mUnits);
-  return(mOutBuf);
+  return mOutBuf;
 }
 
-
-void DataFieldInteger::Set(int Value){
+void
+DataFieldInteger::Set(int Value)
+{
   mValue = Value;
 }
 
-bool DataFieldInteger::SetAsBoolean(bool Value){
+bool
+DataFieldInteger::SetAsBoolean(bool Value)
+{
   bool res = GetAsBoolean();
   if (Value)
     SetAsInteger(1);
   else
     SetAsInteger(0);
-  return(res);
+  return res;
 }
 
-int DataFieldInteger::SetAsInteger(int Value){
+int
+DataFieldInteger::SetAsInteger(int Value)
+{
   int res = mValue;
   if (Value < mMin)
     Value = mMin;
   if (Value > mMax)
     Value = mMax;
-  if (mValue != Value){
+  if (mValue != Value) {
     mValue = Value;
-    if (!GetDetachGUI()) (mOnDataAccess)(this, daChange);
+    if (!GetDetachGUI())
+      (mOnDataAccess)(this, daChange);
   }
-  return(res);
+  return res;
 }
 
-double DataFieldInteger::SetAsFloat(double Value){
+double
+DataFieldInteger::SetAsFloat(double Value)
+{
   double res = GetAsFloat();
   SetAsInteger(iround(Value));
-  return(res);
+  return res;
 }
 
 const TCHAR *
@@ -118,19 +126,25 @@ DataFieldInteger::SetAsString(const TCHAR *Value)
 {
   const TCHAR *res = GetAsString();
   SetAsInteger(_ttoi(Value));
-  return(res);
+  return res;
 }
 
-void DataFieldInteger::Inc(void){
-  SetAsInteger(mValue + mStep*SpeedUp(true));
+void
+DataFieldInteger::Inc(void)
+{
+  SetAsInteger(mValue + mStep * SpeedUp(true));
 }
 
-void DataFieldInteger::Dec(void){
-  SetAsInteger(mValue - mStep*SpeedUp(false));
+void
+DataFieldInteger::Dec(void)
+{
+  SetAsInteger(mValue - mStep * SpeedUp(false));
 }
 
-int DataFieldInteger::SpeedUp(bool keyup){
-  int res=1;
+int
+DataFieldInteger::SpeedUp(bool keyup)
+{
+  int res = 1;
 
   if (is_altair())
     return res;
@@ -147,21 +161,21 @@ int DataFieldInteger::SpeedUp(bool keyup){
 
   if (!last_step.check(200)) {
     mSpeedup++;
-
-    if (mSpeedup > 5){
+    if (mSpeedup > 5) {
       res = 10;
-
       last_step.update_offset(350);
-      return(res);
-
+      return (res);
     }
   } else
     mSpeedup = 0;
 
   last_step.update();
 
-  return(res);
+  return res;
 }
-int DataFieldInteger::CreateComboList(void) {
+
+int
+DataFieldInteger::CreateComboList(void)
+{
   return CreateComboListStepping();
 }

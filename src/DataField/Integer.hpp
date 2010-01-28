@@ -42,31 +42,32 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "PeriodClock.hpp"
 
-class DataFieldInteger:public DataField{
-
-  private:
-    int mValue;
-    int mMin;
-    int mMax;
-    int mStep;
+class DataFieldInteger: public DataField
+{
+private:
+  int mValue;
+  int mMin;
+  int mMax;
+  int mStep;
   PeriodClock last_step;
-    int mSpeedup;
-    TCHAR mOutBuf[OUTBUFFERSIZE+1];
+  int mSpeedup;
+  TCHAR mOutBuf[OUTBUFFERSIZE + 1];
 
-  protected:
-    int SpeedUp(bool keyup);
-  public:
-    DataFieldInteger(TCHAR *EditFormat, TCHAR *DisplayFormat, int Min, int Max, int Default, int Step, DataAccessCallback_t OnDataAccess):
-      DataField(EditFormat, DisplayFormat, OnDataAccess){
-      mMin = Min;
-      mMax = Max;
-      mValue = Default;
-      mStep = Step;
+protected:
+  int SpeedUp(bool keyup);
 
-      SupportCombo=true;
-     (mOnDataAccess)(this, daGet);
+public:
+  DataFieldInteger(TCHAR *EditFormat, TCHAR *DisplayFormat, int Min, int Max,
+                   int Default, int Step, DataAccessCallback_t OnDataAccess) :
+    DataField(EditFormat, DisplayFormat, OnDataAccess) {
+    mMin = Min;
+    mMax = Max;
+    mValue = Default;
+    mStep = Step;
 
-    };
+    SupportCombo = true;
+    (mOnDataAccess)(this, daGet);
+  }
 
   void Inc(void);
   void Dec(void);
@@ -81,12 +82,15 @@ class DataFieldInteger:public DataField{
   #if defined(__BORLANDC__)
   #pragma warn -hid
   #endif
+
   void Set(int Value);
-  int SetMin(int Value){mMin=Value; return(mMin);};
-  int SetMax(int Value){mMax=Value; return(mMax);};
+  int SetMin(int Value) { mMin = Value; return mMin; }
+  int SetMax(int Value) { mMax = Value; return mMax; }
+
   #if defined(__BORLANDC__)
   #pragma warn +hid
   #endif
+
   bool SetAsBoolean(bool Value);
   int SetAsInteger(int Value);
   double SetAsFloat(double Value);
