@@ -74,18 +74,19 @@ IsDots(const TCHAR* str)
 bool
 IsInternalFile(const TCHAR* str)
 {
-  if (!_tcscmp(str, TEXT("xcsoar-checklist.txt")))
-    return true;
-  if (!_tcscmp(str, TEXT("xcsoar-flarm.txt")))
-    return true;
-  if (!_tcscmp(str, TEXT("xcsoar-marks.txt")))
-    return true;
-  if (!_tcscmp(str, TEXT("xcsoar-persist.log")))
-    return true;
-  if (!_tcscmp(str, TEXT("xcsoar-registry.prf")))
-    return true;
-  if (!_tcscmp(str, TEXT("xcsoar-startup.log")))
-    return true;
+  const TCHAR* const ifiles[] = {
+    _T("xcsoar-checklist.txt"),
+    _T("xcsoar-flarm.txt"),
+    _T("xcsoar-marks.txt"),
+    _T("xcsoar-persist.log"),
+    _T("xcsoar-registry.prf"),
+    _T("xcsoar-startup.log"),
+    NULL
+  };
+
+  for (unsigned i = 0; ifiles[i] != NULL; i++)
+    if (!_tcscmp(str, ifiles[i]))
+      return true;
 
   return false;
 }
