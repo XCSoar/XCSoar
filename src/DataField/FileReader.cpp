@@ -66,6 +66,30 @@ IsDots(const TCHAR* str)
   return true;
 }
 
+/**
+ * Checks whether the given string str equals a xcsoar internal file's filename
+ * @param str The string to check
+ * @return True if string equals a xcsoar internal file's filename
+ */
+bool
+IsInternalFile(const TCHAR* str)
+{
+  if (!_tcscmp(str, TEXT("xcsoar-checklist.txt")))
+    return true;
+  if (!_tcscmp(str, TEXT("xcsoar-flarm.txt")))
+    return true;
+  if (!_tcscmp(str, TEXT("xcsoar-marks.txt")))
+    return true;
+  if (!_tcscmp(str, TEXT("xcsoar-persist.log")))
+    return true;
+  if (!_tcscmp(str, TEXT("xcsoar-registry.prf")))
+    return true;
+  if (!_tcscmp(str, TEXT("xcsoar-startup.log")))
+    return true;
+
+  return false;
+}
+
 int
 DataFieldFileReader::GetAsInteger(void) const
 {
@@ -179,6 +203,8 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
   while ((ent = readdir(dir)) != NULL) {
     if (IsDots(ent->d_name))
       continue;
+    if (IsInternalFile(ent->d_name))
+      continue;
 
     _tcscpy(FileName + FileNameLength, ent->d_name);
 
@@ -217,7 +243,8 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
 
   _tcscpy(FileName, DirPath);
 
-  if (!IsDots(FindFileData.cFileName)) {
+  if (!IsDots(FindFileData.cFileName) &&
+      !IsInternalFile(FindFileData.cFileName)) {
     _tcscat(FileName, FindFileData.cFileName);
 
     if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -235,6 +262,8 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
   while (bSearch) { // until we finds an entry
     if (FindNextFile(hFind, &FindFileData)) {
       if (IsDots(FindFileData.cFileName))
+        continue;
+      if (IsInternalFile(FindFileData.cFileName))
         continue;
       if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
         // we have found a directory, recurse
@@ -295,7 +324,8 @@ DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter)
   _tcscpy(DirPath, FileName);
 
   // found first one
-  if (!IsDots(FindFileData.cFileName)) {
+  if (!IsDots(FindFileData.cFileName) &&
+      !IsInternalFile(FindFileData.cFileName)) {
     _tcscat(FileName, FindFileData.cFileName);
 
     if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -313,6 +343,8 @@ DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter)
   while (bSearch) { // until we finds an entry
     if (FindNextFile(hFind, &FindFileData)) {
       if (IsDots(FindFileData.cFileName))
+        continue;
+      if (IsInternalFile(FindFileData.cFileName))
         continue;
       _tcscat(FileName, FindFileData.cFileName);
 
