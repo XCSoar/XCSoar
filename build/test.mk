@@ -61,6 +61,8 @@ testtap: $(BUILDTESTS)
 $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $(TARGET_BIN_DIR)/dirstamp
 	gcc -o $@ $<
 
+
+
 DEBUG_PROGRAM_NAMES = RunWayPointParser RunCanvas RunMapWindow RunDialog RunAirspaceWarningDialog
 DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
 
@@ -70,9 +72,14 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/Compatibility/fmode.c \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
+	$(TEST_SRC_DIR)/FakeRegistry.cpp \
 	$(TEST_SRC_DIR)/RunWayPointParser.cpp
 RUN_WAY_POINT_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_WAY_POINT_PARSER_SOURCES))
 RUN_WAY_POINT_PARSER_LDADD = \
+	$(FAKE_LIBS) \
 	$(ENGINE_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
@@ -90,6 +97,7 @@ RUN_CANVAS_SOURCES = \
 RUN_CANVAS_OBJS = $(call SRC_TO_OBJ,$(RUN_CANVAS_SOURCES))
 RUN_CANVAS_BIN = $(TARGET_BIN_DIR)/RunCanvas$(TARGET_EXEEXT)
 RUN_CANVAS_LDADD = \
+	$(FAKE_LIBS) \
 	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(COMPAT_LIBS)
@@ -166,10 +174,14 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/WayPointParser.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Simulator.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 RUN_MAP_WINDOW_OBJS = $(call SRC_TO_OBJ,$(RUN_MAP_WINDOW_SOURCES))
 RUN_MAP_WINDOW_BIN = $(TARGET_BIN_DIR)/RunMapWindow$(TARGET_EXEEXT)
 RUN_MAP_WINDOW_LDADD = \
+	$(FAKE_LIBS) \
 	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(JASPER_LIBS) \
@@ -194,12 +206,14 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunDialog.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Compatibility/fmode.c
 RUN_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_DIALOG_SOURCES))
 RUN_DIALOG_BIN = $(TARGET_BIN_DIR)/RunDialog$(TARGET_EXEEXT)
 RUN_DIALOG_LDADD = \
+	$(FAKE_LIBS) \
 	$(DATA_FIELD_LIBS) \
 	$(FORM_LIBS) \
 	$(SCREEN_LIBS) \
@@ -233,10 +247,14 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
 RUN_AIRSPACE_WARNING_DIALOG_BIN = $(TARGET_BIN_DIR)/RunAirspaceWarningDialog$(TARGET_EXEEXT)
 RUN_AIRSPACE_WARNING_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_AIRSPACE_WARNING_DIALOG_SOURCES))
 RUN_AIRSPACE_WARNING_DIALOG_LDADD = \
+	$(FAKE_LIBS) \
 	$(DATA_FIELD_LIBS) \
 	$(FORM_LIBS) \
 	$(SCREEN_LIBS) \

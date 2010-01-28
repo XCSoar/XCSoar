@@ -71,12 +71,6 @@ LocalPathS(char *buf, const TCHAR* file, int loc)
   //unicode2ascii(file, buf);
 }
 
-const TCHAR *
-gettext(const TCHAR *text)
-{
-  return text;
-}
-
 int WINAPI
 MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 {

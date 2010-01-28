@@ -69,22 +69,6 @@ int DisplayTimeOut = 0;
 
 int InfoBoxLayout::ControlWidth = 100;
 
-void
-StartupStore(const TCHAR *Str, ...)
-{
-  va_list ap;
-
-  va_start(ap, Str);
-  _vftprintf(stderr, Str, ap);
-  va_end(ap);
-}
-
-const TCHAR *
-gettext(const TCHAR *text)
-{
-  return text;
-}
-
 int WINAPI
 MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 {
@@ -93,17 +77,6 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
 bool XCSoarInterface::Debounce() { return false; }
 void XCSoarInterface::InterfaceTimeoutReset(void) {}
-
-void
-XCSoarInterface::CreateProgressDialog(const TCHAR* text)
-{
-  _ftprintf(stderr, _T("%s\n"), text);
-}
-
-void XCSoarInterface::StepProgressDialog(void) {}
-bool XCSoarInterface::SetProgressStepSize(int nSize) {
-  return false;
-}
 
 pt2Event
 InputEvents::findEvent(const TCHAR *)
