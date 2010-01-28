@@ -60,7 +60,7 @@ class DataFieldFloat:public DataField{
 
 
   public:
-    DataFieldFloat(TCHAR *EditFormat, TCHAR *DisplayFormat, double Min, double Max, double Default, double Step, int Fine, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
+    DataFieldFloat(TCHAR *EditFormat, TCHAR *DisplayFormat, double Min, double Max, double Default, double Step, int Fine, DataAccessCallback_t OnDataAccess):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
       mMin = Min;
       mMax = Max;

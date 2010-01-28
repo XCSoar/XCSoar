@@ -59,8 +59,7 @@ class DataFieldEnum: public DataField {
     DataFieldEnum(const TCHAR *EditFormat,
 		  const TCHAR *DisplayFormat,
 		  int Default,
-		  void(*OnDataAccess)(DataField *Sender,
-				      DataAccessKind_t Mode)):
+		  DataAccessCallback_t OnDataAccess):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
       SupportCombo=true;
 

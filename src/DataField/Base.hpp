@@ -67,7 +67,7 @@ public:
   typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
 
   DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-            void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode) = NULL);
+            DataAccessCallback_t OnDataAccess = NULL);
   virtual ~DataField(void){};
 
   virtual void Special(void);
@@ -132,7 +132,7 @@ public:
   bool SupportCombo;  // all Types dataField support combolist except DataFieldString.
 
 protected:
-  void (*mOnDataAccess)(DataField *Sender, DataAccessKind_t Mode);
+  DataAccessCallback_t mOnDataAccess;
   TCHAR mEditFormat[FORMATSIZE + 1];
   TCHAR mDisplayFormat[FORMATSIZE + 1];
   TCHAR mUnits[UNITSIZE + 1];

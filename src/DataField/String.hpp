@@ -51,8 +51,7 @@ class DataFieldString:public DataField{
   public:
     DataFieldString(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
                     const TCHAR *Default,
-                    void(*OnDataAccess)(DataField *Sender,
-                                        DataAccessKind_t Mode)):
+                    DataAccessCallback_t OnDataAccess):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
       _tcscpy(mValue, Default);
       SupportCombo=false;

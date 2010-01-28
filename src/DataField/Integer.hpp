@@ -56,7 +56,7 @@ class DataFieldInteger:public DataField{
   protected:
     int SpeedUp(bool keyup);
   public:
-    DataFieldInteger(TCHAR *EditFormat, TCHAR *DisplayFormat, int Min, int Max, int Default, int Step, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
+    DataFieldInteger(TCHAR *EditFormat, TCHAR *DisplayFormat, int Min, int Max, int Default, int Step, DataAccessCallback_t OnDataAccess):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
       mMin = Min;
       mMax = Max;

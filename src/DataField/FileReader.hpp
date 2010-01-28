@@ -74,7 +74,7 @@ public:
    */
   DataFieldFileReader(const TCHAR *EditFormat,
 		      const TCHAR *DisplayFormat,
-		      void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
+		      DataAccessCallback_t OnDataAccess):
     DataField(EditFormat, DisplayFormat, OnDataAccess) {
     // Set selection to zero
     mValue = 0;

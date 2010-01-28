@@ -52,8 +52,7 @@ class DataFieldBoolean:public DataField{
     DataFieldBoolean(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
                      int Default,
                      const TCHAR *TextTrue, const TCHAR *TextFalse,
-                     void(*OnDataAccess)(DataField *Sender,
-                                         DataAccessKind_t Mode)):
+                     DataAccessCallback_t OnDataAccess):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
 		  if (Default) {mValue=true;} else {mValue=false;}
       _tcscpy(mTextTrue, TextTrue);

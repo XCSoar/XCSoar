@@ -138,7 +138,7 @@ __Dummy(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 DataField::DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-		     void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)){
+                     DataAccessCallback_t OnDataAccess){
   mUsageCounter = 0;
   mOnDataAccess = OnDataAccess;
 
