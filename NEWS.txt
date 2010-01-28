@@ -2,41 +2,6 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-TODO items in code are marked as:
-- enhancement
-- bug
-- accuracy
-- feature
-- code cleanup/robustness
-
-IGC Logger:
-  must have unique serial number, make and type, version number
-  must mark where declaration is changed in-flight
-  header: HF TAKEOFF
-  Pilot Event Marker: PEV
-  should be on for a while prior to takeoff and off for a while after
-  landing, to mark the ground level.
-  PEVs should also activate fast-fix (for how long?)
-  add C lines at waypoint events: START, TURN, TURN AREA, FINISH
-  C lines are causing problems when blank, as reported by Deniz
-
-
-Todo:
-- Start status message
-- Quick fgtt by polygon interior fit from airspace (possible performance improvement)
-- Next wpt infobox
-- Configuration wizard?
-- Use soft keyboard for text filters
-- Task abort, when many airfields available, sort along task direction
-- Nearest airspace scan logic
-- Airspace below display on final glide
-- Pilot weight correction
-- Unballasted weight display
-- "Force landscape" setting in config
-- Fix OLC distance further calcs
-- put globals into their own class
-- Time-penalty based scaling of speed command errors
-
 Changes from 5.2.2:
 PAOLO:
 - colorful vario gauge by Paolo (for FIVV only)
@@ -1360,16 +1325,3 @@ Fixed buges and code improvements
 - Fast loading of airspace at startup using binary file
 - Wind calculation more reliable
 - Fast loading of all startup files
-
-
-
-/////////////
-Random notes
-Others
-- Terrain/topology on (if no terrain/topology available)
-- Mc - (if already at zero)
-- Logger replay if no IGC on disk
-- message repeate (if queue is empty) --> always sometthing
-- mark location if not flying  --> sometimes want to put marker on launch point
-
-    zip -u -n jp2 -n shx test.xcm topology.tpl terrain.jp2 *.shx *.shp *.dbf *.prj airfields.txt
