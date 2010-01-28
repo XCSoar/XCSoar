@@ -38,100 +38,111 @@ Copyright_License {
 
 #include "DataField/Boolean.hpp"
 
-int DataFieldBoolean::CreateComboList(void) {
-  int i=0;
-  mComboList.ComboPopupItemList[i] = mComboList.CreateItem(i,
-                                                  i,
-                                                  mTextFalse,
-                                                  mTextFalse);
+int
+DataFieldBoolean::CreateComboList(void)
+{
+  int i = 0;
+  mComboList.ComboPopupItemList[i] =
+      mComboList.CreateItem(i, i, mTextFalse, mTextFalse);
 
-  i=1;
-  mComboList.ComboPopupItemList[i] = mComboList.CreateItem(i,
-                                                  i,
-                                                  mTextTrue,
-                                                  mTextTrue);
-  mComboList.ComboPopupItemCount=2;
-  mComboList.ComboPopupItemSavedIndex=GetAsInteger();
+  i = 1;
+  mComboList.ComboPopupItemList[i] =
+      mComboList.CreateItem(i, i, mTextTrue, mTextTrue);
+
+  mComboList.ComboPopupItemCount = 2;
+  mComboList.ComboPopupItemSavedIndex = GetAsInteger();
   return mComboList.ComboPopupItemCount;
 }
 
 bool
 DataFieldBoolean::GetAsBoolean(void) const
 {
-  return(mValue);
+  return mValue;
 }
 
 int
 DataFieldBoolean::GetAsInteger(void) const
 {
   if (mValue)
-    return(1);
+    return 1;
   else
-    return(0);
+    return 0;
 }
 
 double
 DataFieldBoolean::GetAsFloat(void) const
 {
   if (mValue)
-    return(1.0);
+    return 1.0;
   else
-    return(0.0);
+    return 0.0;
 }
 
 const TCHAR *
 DataFieldBoolean::GetAsString(void) const
 {
   if (mValue)
-    return(mTextTrue);
+    return mTextTrue;
   else
-    return(mTextFalse);
+    return mTextFalse;
 }
 
-
-void DataFieldBoolean::Set(bool Value){
+void
+DataFieldBoolean::Set(bool Value)
+{
   mValue = Value;
 }
 
-bool DataFieldBoolean::SetAsBoolean(bool Value){
+bool
+DataFieldBoolean::SetAsBoolean(bool Value)
+{
   bool res = mValue;
-  if (mValue != Value){
+  if (mValue != Value) {
     mValue = Value;
-    if (!GetDetachGUI()) (mOnDataAccess)(this, daChange);
+    if (!GetDetachGUI())
+      (mOnDataAccess)(this, daChange);
   }
-  return(res);
+  return res;
 }
 
-int DataFieldBoolean::SetAsInteger(int Value){
+int
+DataFieldBoolean::SetAsInteger(int Value)
+{
   int res = GetAsInteger();
-  if (GetAsInteger() != Value){
-    SetAsBoolean(!(Value==0));
+  if (GetAsInteger() != Value) {
+    SetAsBoolean(!(Value == 0));
   }
-  return(res);
+  return res;
 }
 
-double DataFieldBoolean::SetAsFloat(double Value){
+double
+DataFieldBoolean::SetAsFloat(double Value)
+{
   double res = GetAsFloat();
-  if (GetAsFloat() != Value){
-    SetAsBoolean(!(Value==0.0));
+  if (GetAsFloat() != Value) {
+    SetAsBoolean(!(Value == 0.0));
   }
-  return(res);
+  return res;
 }
 
 const TCHAR *
 DataFieldBoolean::SetAsString(const TCHAR *Value)
 {
   const TCHAR *res = GetAsString();
-  if (_tcscmp(res, Value) != 0){
+  if (_tcscmp(res, Value) != 0) {
     SetAsBoolean(_tcscmp(Value, mTextTrue) == 0);
   }
-  return(res);
+  return res;
 }
 
-void DataFieldBoolean::Inc(void){
+void
+DataFieldBoolean::Inc(void)
+{
   SetAsBoolean(!GetAsBoolean());
 }
 
-void DataFieldBoolean::Dec(void){
+void
+DataFieldBoolean::Dec(void)
+{
   SetAsBoolean(!GetAsBoolean());
 }

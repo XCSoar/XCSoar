@@ -41,27 +41,29 @@ Copyright_License {
 
 #include "DataField/Base.hpp"
 
-class DataFieldBoolean:public DataField{
+class DataFieldBoolean: public DataField
+{
+private:
+  bool mValue;
+  TCHAR mTextTrue[FORMATSIZE+1];
+  TCHAR mTextFalse[FORMATSIZE+1];
 
-  private:
-    bool mValue;
-    TCHAR mTextTrue[FORMATSIZE+1];
-    TCHAR mTextFalse[FORMATSIZE+1];
+public:
+  DataFieldBoolean(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
+                   int Default, const TCHAR *TextTrue, const TCHAR *TextFalse,
+                   DataAccessCallback_t OnDataAccess) :
+    DataField(EditFormat, DisplayFormat, OnDataAccess) {
+    if (Default)
+      mValue = true;
+    else
+      mValue = false;
 
-  public:
-    DataFieldBoolean(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                     int Default,
-                     const TCHAR *TextTrue, const TCHAR *TextFalse,
-                     DataAccessCallback_t OnDataAccess):
-      DataField(EditFormat, DisplayFormat, OnDataAccess){
-		  if (Default) {mValue=true;} else {mValue=false;}
-      _tcscpy(mTextTrue, TextTrue);
-      _tcscpy(mTextFalse, TextFalse);
-      SupportCombo=true;
+    _tcscpy(mTextTrue, TextTrue);
+    _tcscpy(mTextFalse, TextFalse);
+    SupportCombo = true;
 
-     (mOnDataAccess)(this, daGet);
-
-    };
+    (mOnDataAccess)(this, daGet);
+  }
 
   void Inc(void);
   void Dec(void);
@@ -72,25 +74,29 @@ class DataFieldBoolean:public DataField{
   virtual double GetAsFloat(void) const;
   virtual const TCHAR *GetAsString(void) const;
 
-  virtual void Set(int Value){
-    if (Value>0)
+  virtual void
+  Set(int Value)
+  {
+    if (Value > 0)
       Set(true);
     else
       Set(false);
-  };
+  }
 
   #if defined(__BORLANDC__)
   #pragma warn -hid
   #endif
+
   void Set(bool Value);
+
   #if defined(__BORLANDC__)
   #pragma warn +hid
   #endif
+
   bool SetAsBoolean(bool Value);
   int SetAsInteger(int Value);
   double SetAsFloat(double Value);
   virtual const TCHAR *SetAsString(const TCHAR *Value);
-
 };
 
 #endif
