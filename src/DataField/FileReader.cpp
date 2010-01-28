@@ -452,17 +452,21 @@ void
 DataFieldFileReader::addFile(const TCHAR *Text, const TCHAR *PText)
 {
   // TODO enhancement: remove duplicates?
-  if (nFiles < DFE_MAX_FILES) {
-    fields[nFiles].mTextFile =
-        (TCHAR*)malloc((_tcslen(Text) + 1) * sizeof(TCHAR));
-    _tcscpy(fields[nFiles].mTextFile, Text);
 
-    fields[nFiles].mTextPathFile =
-        (TCHAR*)malloc((_tcslen(PText) + 1) * sizeof(TCHAR));
-    _tcscpy(fields[nFiles].mTextPathFile, PText);
+  // if too many files -> cancel
+  if (nFiles >= DFE_MAX_FILES)
+    return;
 
-    nFiles++;
-  }
+  // Allocate memory for the filename and copy it from Text
+  fields[nFiles].mTextFile = (TCHAR*)malloc((_tcslen(Text) + 1) * sizeof(TCHAR));
+  _tcscpy(fields[nFiles].mTextFile, Text);
+
+  // Allocate memory for the filepath and copy it from PText
+  fields[nFiles].mTextPathFile = (TCHAR*)malloc((_tcslen(PText) + 1) * sizeof(TCHAR));
+  _tcscpy(fields[nFiles].mTextPathFile, PText);
+
+  // Increment the number of files in the list
+  nFiles++;
 }
 
 const TCHAR *
