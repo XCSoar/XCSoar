@@ -51,9 +51,7 @@ Copyright_License {
 
 class DataField
 {
-
 public:
-
   typedef enum
   {
     daGet,
@@ -68,7 +66,7 @@ public:
 
   DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
             DataAccessCallback_t OnDataAccess = NULL);
-  virtual ~DataField(void){};
+  virtual ~DataField(void) {}
 
   virtual void Special(void);
   virtual void Inc(void);
@@ -94,10 +92,10 @@ public:
   virtual void Set(double Value){ (void)Value; }
   virtual void Set(const TCHAR *Value){ (void)Value; }
 
-  virtual int SetMin(int Value){(void)Value; return 0; }
-  virtual double SetMin(double Value){(void)Value; return false; }
+  virtual int SetMin(int Value){ (void)Value; return 0; }
+  virtual double SetMin(double Value){ (void)Value; return false; }
 
-  virtual int SetMax(int Value){(void)Value; return 0; }
+  virtual int SetMax(int Value){ (void)Value; return 0; }
   virtual double SetMax(double Value){(void)Value; return 0; }
   void SetUnits(const TCHAR *text) { _tcscpy(mUnits, text); }
 
@@ -115,9 +113,11 @@ public:
   }
 
   void SetDisplayFormat(TCHAR *Value);
-  void SetDisableSpeedUp(bool bDisable) { mDisableSpeedup=bDisable; }  // allows combolist to iterate all values
+  // allows combolist to iterate all values
+  void SetDisableSpeedUp(bool bDisable) { mDisableSpeedup = bDisable; }
   bool GetDisableSpeedUp(void) { return mDisableSpeedup; }
-  void SetDetachGUI(bool bDetachGUI) { mDetachGUI = bDetachGUI; }  // allows combolist to iterate all values w/out triggering external events
+  // allows combolist to iterate all values w/out triggering external events
+  void SetDetachGUI(bool bDetachGUI) { mDetachGUI = bDetachGUI; }
   bool GetDetachGUI(void) { return mDetachGUI; }
   virtual int CreateComboList(void) { return 0; }
   ComboList* GetCombo(void) { return &mComboList; }
