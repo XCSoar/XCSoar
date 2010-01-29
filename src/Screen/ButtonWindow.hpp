@@ -59,7 +59,8 @@ public:
 
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           int left, int top, unsigned width, unsigned height);
+           int left, int top, unsigned width, unsigned height,
+           bool visible=true, bool tabstop=true, bool multiline=false);
 
   void set_text(const TCHAR *_text) {
     assert_none_locked();
@@ -79,7 +80,6 @@ protected:
 #include "Screen/Window.hpp"
 
 #include <tchar.h>
-#include <commctrl.h>
 
 /**
  * A clickable button.
@@ -87,12 +87,8 @@ protected:
 class ButtonWindow : public Window {
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           int left, int top, unsigned width, unsigned height) {
-    Window::set(&parent, WC_BUTTON, text,
-                left, top, width, height);
-
-    ::SetWindowLong(hWnd, GWL_ID, id);
-  }
+           int left, int top, unsigned width, unsigned height,
+           bool visible=true, bool tabstop=true, bool multiline=false);
 
   void set_text(const TCHAR *text) {
     assert_none_locked();
