@@ -42,13 +42,14 @@ Copyright_License {
 #ifdef ENABLE_SDL
 
 #include "Screen/PaintWindow.hpp"
+#include "Util/tstring.hpp"
 
 /**
  * A clickable button.
  */
 class ButtonWindow : public PaintWindow
 {
-  const TCHAR *text;
+  tstring text;
   unsigned id;
   bool down;
   Font font;
