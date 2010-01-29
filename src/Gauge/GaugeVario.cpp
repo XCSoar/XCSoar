@@ -120,12 +120,10 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   blueBrush.set(theblueColor);
   yellowBrush.set(theyellowColor);
   greenBrush.set(thegreenColor);
-  magentaBrush.set(themagentaColor);
   redPen.set(1, theredColor);
   bluePen.set(1, theblueColor);
   yellowPen.set(1, theyellowColor);
   greenPen.set(1, thegreenColor);
-  magentaPen.set(1, themagentaColor);
   redThickPen.set(IBLSCALE(5), theredColor);
   blueThickPen.set(IBLSCALE(5), theblueColor);
 

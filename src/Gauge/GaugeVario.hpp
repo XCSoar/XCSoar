@@ -69,12 +69,10 @@ private:
   Brush blueBrush;
   Brush yellowBrush;
   Brush greenBrush;
-  Brush magentaBrush;
   Pen redPen;
   Pen bluePen;
   Pen yellowPen;
   Pen greenPen;
-  Pen magentaPen;
   Pen redThickPen;
   Pen blueThickPen;
   Pen blankThickPen;
