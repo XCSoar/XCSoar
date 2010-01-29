@@ -50,17 +50,20 @@ typedef struct{
 } CallBackTableEntry_t;
 
 typedef enum {
-    eDialogFullWidth=0,  // cover screen, stretch controls horizontally
-    eDialogScaled=1,  // stretch only frame to maintain aspect ratio
-    eDialogScaledCentered=2, // like 1 but center dialog in screen
-    eDialogFixed=3 // don't adjust at all (same as !Layout::ScaleSupported())
+  // cover screen, stretch controls horizontally
+  eDialogFullWidth = 0,
+  // stretch only frame to maintain aspect ratio
+  eDialogScaled = 1,
+  // like 1 but center dialog in screen
+  eDialogScaledCentered = 2,
+  eDialogFixed = 3
+// don't adjust at all (same as !Layout::ScaleSupported())
 } DialogStyle_t;
 
 extern DialogStyle_t g_eDialogStyle;
 
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable,
-                        const TCHAR *FileName,
-                        SingleWindow &Parent,
-                        const TCHAR *resource=NULL);
+                        const TCHAR *FileName, SingleWindow &Parent,
+                        const TCHAR *resource = NULL);
 
 #endif
