@@ -364,7 +364,6 @@ void GaugeVario::RenderClimb(Canvas &canvas)
       canvas.white_brush();
       canvas.white_pen();
     }
-    canvas.background_opaque();
 
     canvas.rectangle(x, y, x + IBLSCALE(12), y + IBLSCALE(12));
   } else {
@@ -648,7 +647,6 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
       canvas.white_brush();
       canvas.white_pen();
     }
-    canvas.background_opaque();
 
     // ToDo sgi optimize
 
