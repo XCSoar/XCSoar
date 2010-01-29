@@ -244,74 +244,70 @@ xmlLoadFromResource(const TCHAR* lpName, LPCTSTR tag, XMLResults *pResults)
 #if !defined(UNDER_CE) && !defined(WINDOWSPC)
       if (!IsTextUnicode(buf, min(l, 10000), NULL)) {
 #endif
-          LPTSTR b2=(LPTSTR)malloc(l*2+2);
-          MultiByteToWideChar(CP_ACP,          // code page
-                              MB_PRECOMPOSED,  // character-type options
-                              buf,             // string to map
-                              l,               // number of bytes in string
-                              b2,              // wide-character buffer
-                              l*2+2);          // size of buffer
-          free(buf);
-          buf=(char*)b2;
-          buf[l*2]= 0;
-          buf[l*2+1]= 0;
+        LPTSTR b2 = (LPTSTR)malloc(l * 2 + 2);
+        MultiByteToWideChar(CP_ACP,          // code page
+                            MB_PRECOMPOSED,  // character-type options
+                            buf,             // string to map
+                            l,               // number of bytes in string
+                            b2,              // wide-character buffer
+                            l * 2 + 2);      // size of buffer
+        free(buf);
+        buf = (char*)b2;
+        buf[l * 2] = 0;
+        buf[l * 2 + 1] = 0;
 #if !defined(UNDER_CE) && !defined(WINDOWSPC)
-        }
+      }
 #endif
 #else
       if (IsTextUnicode(buf, min(l, 10000), NULL)) {
-          l>>=1;
-          LPTSTR b2=(LPTSTR)malloc(l+2);
-          WideCharToMultiByte(CP_ACP,                      // code page
-                              0,                           // performance and mapping flags
-                              (const WCHAR*)buf,           // wide-character string
-                              l,                           // number of chars in string
-                              b2,                          // buffer for new string
-                              l+2,                         // size of buffer
-                              NULL,                        // default for unmappable chars
-                              NULL                         // set when default char used
-                              );
-          free(buf);
-          buf=(char*)b2;
-        }
+        l >>= 1;
+        LPTSTR b2 = (LPTSTR)malloc(l + 2);
+        WideCharToMultiByte(CP_ACP,                      // code page
+                            0,                           // performance and mapping flags
+                            (const WCHAR*)buf,           // wide-character string
+                            l,                           // number of chars in string
+                            b2,                          // buffer for new string
+                            l + 2,                       // size of buffer
+                            NULL,                        // default for unmappable chars
+                            NULL                         // set when default char used
+                            );
+        free(buf);
+        buf = (char*)b2;
+      }
 #endif
 #endif
 
-      XMLNode x=XMLNode::parseString((LPTSTR)buf,tag,pResults);
+      XMLNode x = XMLNode::parseString((LPTSTR)buf, tag, pResults);
 
       free(buf);
       return x;
     }
   }
-  MessageBoxX(gettext(_T("Can't lock resource")),
-              gettext(_T("Dialog error")),
-              MB_OK|MB_ICONEXCLAMATION);
+
+  MessageBoxX(gettext(_T("Can't lock resource")), gettext(_T("Dialog error")),
+              MB_OK | MB_ICONEXCLAMATION);
+
   return XMLNode::emptyXMLNode;
 }
 
-
-
-static XMLNode xmlOpenResourceHelper(const TCHAR *lpszXML, LPCTSTR tag)
+static XMLNode
+xmlOpenResourceHelper(const TCHAR *lpszXML, LPCTSTR tag)
 {
-    XMLResults pResults;
+  XMLResults pResults;
 
-    pResults.error = eXMLErrorNone;
-    XMLNode::GlobalError = false;
-    XMLNode xnode=xmlLoadFromResource(lpszXML, tag, &pResults);
-    if (pResults.error != eXMLErrorNone)
-    {
-      XMLNode::GlobalError = true;
-      TCHAR errortext[100];
-      _stprintf(errortext,_T("%s %i %i"), XMLNode::getError(pResults.error),
-                pResults.nLine, pResults.nColumn);
+  pResults.error = eXMLErrorNone;
+  XMLNode::GlobalError = false;
+  XMLNode xnode = xmlLoadFromResource(lpszXML, tag, &pResults);
+  if (pResults.error != eXMLErrorNone) {
+    XMLNode::GlobalError = true;
+    TCHAR errortext[100];
+    _stprintf(errortext,_T("%s %i %i"), XMLNode::getError(pResults.error),
+              pResults.nLine, pResults.nColumn);
 
-      MessageBoxX(errortext,
-                  gettext(_T("Dialog error")),
-                  MB_OK|MB_ICONEXCLAMATION);
-        // was exit(255);
-
-    }
-    return xnode;
+    MessageBoxX(errortext, gettext(_T("Dialog error")),
+                MB_OK | MB_ICONEXCLAMATION);
+  }
+  return xnode;
 }
 
 #endif /* WIN32 */
