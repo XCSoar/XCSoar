@@ -405,60 +405,60 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
   FontMap[3] = &CDIWindowFont;
   FontMap[4] = &InfoWindowFont;
 
-  if (!xNode.isEmpty()) {
-    int X, Y, Width, Height, Font;
-    TCHAR sTmp[128];
-    TCHAR Name[64];
-
-    DialogStyle_t eDialogStyle = GetDialogStyle(&xNode);
-
-    const RECT rc = Parent.get_client_rect();
-    CalcWidthStretch(&xNode, rc, eDialogStyle);
-
-    GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height, &Font,
-                                 sTmp, eDialogStyle);
-
-    switch (eDialogStyle) {
-    case eDialogFullWidth:
-      X = rc.top;
-      Y = rc.bottom;
-      Width = rc.right - rc.left; // stretch form to full width of screen
-      Height = rc.bottom - rc.top;
-      X = 0;
-      Y = 0;
-      break;
-    case eDialogScaled:
-      break;
-    case eDialogScaledCentered:
-      X = (rc.right - rc.left) / 2; // center form horizontally on screen
-      break;
-    case eDialogFixed:
-      break;
-    }
-
-    theForm = new WndForm(Parent, Name, sTmp, X, Y, Width, Height);
-
-    if (Font != -1)
-      theForm->SetTitleFont(*FontMap[Font]);
-
-    if (Font != -1)
-      theForm->SetFont(*FontMap[Font]);
-
-    LoadColors(*theForm, xNode);
-
-    LoadChildrenFromXML(theForm, LookUpTable, &xNode, Font, eDialogStyle);
-
-    if (XMLNode::GlobalError) {
-      MessageBoxX(gettext(_T("Error in loading XML dialog")),
-                  gettext(_T("Dialog error")), MB_OK | MB_ICONEXCLAMATION);
-
-      delete theForm;
-      return NULL;
-    }
-  } else {
+  if (xNode.isEmpty()) {
     MessageBoxX(gettext(_T("Error in loading XML dialog")),
                 gettext(_T("Dialog error")), MB_OK | MB_ICONEXCLAMATION);
 
+    return NULL;
+  }
+
+  int X, Y, Width, Height, Font;
+  TCHAR sTmp[128];
+  TCHAR Name[64];
+
+  DialogStyle_t eDialogStyle = GetDialogStyle(&xNode);
+
+  const RECT rc = Parent.get_client_rect();
+  CalcWidthStretch(&xNode, rc, eDialogStyle);
+
+  GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height, &Font,
+                               sTmp, eDialogStyle);
+
+  switch (eDialogStyle) {
+  case eDialogFullWidth:
+    X = rc.top;
+    Y = rc.bottom;
+    Width = rc.right - rc.left; // stretch form to full width of screen
+    Height = rc.bottom - rc.top;
+    X = 0;
+    Y = 0;
+    break;
+  case eDialogScaled:
+    break;
+  case eDialogScaledCentered:
+    X = (rc.right - rc.left) / 2; // center form horizontally on screen
+    break;
+  case eDialogFixed:
+    break;
+  }
+
+  theForm = new WndForm(Parent, Name, sTmp, X, Y, Width, Height);
+
+  if (Font != -1)
+    theForm->SetTitleFont(*FontMap[Font]);
+
+  if (Font != -1)
+    theForm->SetFont(*FontMap[Font]);
+
+  LoadColors(*theForm, xNode);
+
+  LoadChildrenFromXML(theForm, LookUpTable, &xNode, Font, eDialogStyle);
+
+  if (XMLNode::GlobalError) {
+    MessageBoxX(gettext(_T("Error in loading XML dialog")),
+                gettext(_T("Dialog error")), MB_OK | MB_ICONEXCLAMATION);
+
+    delete theForm;
     return NULL;
   }
 
