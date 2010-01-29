@@ -75,6 +75,13 @@ DialogStyle_t g_eDialogStyle = eDialogFullWidth;
 
 using std::min;
 
+/**
+ * Converts a String into an Integer and returns
+ * the default value if String = NULL
+ * @param String The String to parse
+ * @param Default The default return value
+ * @return The parsed Integer value
+ */
 static long
 StringToIntDflt(const TCHAR *String, long Default)
 {
@@ -83,6 +90,13 @@ StringToIntDflt(const TCHAR *String, long Default)
   return _tcstol(String, NULL, 0);
 }
 
+/**
+ * Converts a String into a Float and returns
+ * the default value if String = NULL
+ * @param String The String to parse
+ * @param Default The default return value
+ * @return The parsed Float value
+ */
 static double
 StringToFloatDflt(const TCHAR *String, double Default)
 {
@@ -91,6 +105,12 @@ StringToFloatDflt(const TCHAR *String, double Default)
   return _tcstod(String, NULL);
 }
 
+/**
+ * Returns the default value if String = NULL
+ * @param String The String to parse
+ * @param Default The default return value
+ * @return The output String
+ */
 static const TCHAR *
 StringToStringDflt(const TCHAR *String, const TCHAR *Default)
 {
@@ -99,6 +119,12 @@ StringToStringDflt(const TCHAR *String, const TCHAR *Default)
   return String;
 }
 
+/**
+ * Converts a String into a Color and sets
+ * a default value if String = NULL
+ * @param String The String to parse
+ * @param color The color (output)
+ */
 static bool
 StringToColor(const TCHAR *String, Color &color)
 {
@@ -110,6 +136,11 @@ StringToColor(const TCHAR *String, Color &color)
   return true;
 }
 
+/**
+ * Returns the dialog style property ("Popup") of the given node
+ * @param xNode The node to check
+ * @return Dialog style (DialogStyle_t), Default = FullWidth
+ */
 static DialogStyle_t
 GetDialogStyle(XMLNode *xNode) 
 {
@@ -124,21 +155,36 @@ static int
 Scale_Dlg_Width(const int x, const DialogStyle_t eDialogStyle) 
 {
   if (!Layout::ScaleSupported())
+    // todo: return x; ?!
     return Layout::Scale(x);
 
   if (eDialogStyle == eDialogFullWidth)
     // stretch width to fill screen horizontally
-    return (int) ((x)*g_ddlgScaleWidth);
+    return (int)(x * g_ddlgScaleWidth);
   else
     return Layout::Scale(x);
 }
 
-// Popup = 1 says don't stretch to cover entire screen
+/**
+ * This function reads the following parameters from the XML Node and
+ * saves them as Control properties:
+ * Name, x-, y-Coordinate, Width, Height, Font and Caption
+ * @param Node The XML Node that represents the Control
+ * @param Name Name of the Control (pointer)
+ * @param X x-Coordinate of the Control (pointer)
+ * @param Y y-Coordinate of the Control (pointer)
+ * @param Width Width of the Control (pointer)
+ * @param Height Height of the Control (pointer)
+ * @param Font Font of the Control (pointer)
+ * @param Caption Caption of the Control (pointer)
+ * @param eDialogStyle Dialog style of the Form
+ */
 static void
 GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
                              int *Width, int *Height, int *Font,
                              TCHAR *Caption, const DialogStyle_t eDialogStyle)
 {
+  // Calculate x- and y-Coordinate
   *X = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("X")), 0),
                        eDialogStyle);
   *Y = StringToIntDflt(Node->getAttribute(_T("Y")), 0);
@@ -146,6 +192,7 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
     (*Y) = Layout::Scale(*Y);
   }
 
+  // Calculate width and height
   *Width = Scale_Dlg_Width(StringToIntDflt(Node->getAttribute(_T("Width")), 50),
                            eDialogStyle);
   *Height = StringToIntDflt(Node->getAttribute(_T("Height")), 50);
@@ -153,13 +200,18 @@ GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y,
     (*Height) = Layout::Scale(*Height);
   }
 
+  // Determine font style
   *Font = StringToIntDflt(Node->getAttribute(_T("Font")), -1);
+
+  // Determine name and caption
   _tcscpy(Name, StringToStringDflt(Node->getAttribute(_T("Name")), _T("")));
   _tcscpy(Caption, StringToStringDflt(Node->getAttribute(_T("Caption")), _T("")));
 
   // TODO code: Temporary double handling to
   // fix "const unsigned short*" to "unsigned short *" problem
-  _tcscpy(Caption,gettext(Caption));
+
+  // Translate caption
+  _tcscpy(Caption, gettext(Caption));
 }
 
 static void *
@@ -290,6 +342,12 @@ xmlLoadFromResource(const TCHAR* lpName, LPCTSTR tag, XMLResults *pResults)
   return XMLNode::emptyXMLNode;
 }
 
+/**
+ * Tries to load an XML file from the resources
+ * @param lpszXML The resource name
+ * @param tag (?)
+ * @return The parsed XMLNode
+ */
 static XMLNode
 xmlOpenResourceHelper(const TCHAR *lpszXML, LPCTSTR tag)
 {
@@ -312,40 +370,46 @@ xmlOpenResourceHelper(const TCHAR *lpszXML, LPCTSTR tag)
 
 #endif /* WIN32 */
 
+/**
+ * This function searches for the given (file)name and if not found
+ * resource and returns the main XMLNode
+ * @param name File to search for
+ * @param resource Resource to search for
+ * @return The main XMLNode
+ */
 static const XMLNode
 load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
 {
   XMLNode xMainNode;
 
-/* -> filename is allready localized
-#ifndef WINDOWSPC
-  xMainNode=XMLNode::openFileHelper(FileName ,_T("PMML"));
-#else
-  char winname[200];
-  sprintf(winname,"C:\\XCSoar%s",FileName);
-  xMainNode=XMLNode::openFileHelper(winname ,_T("PMML"));
-#endif
-*/
-
+  // Get filepath
   char FileName[MAX_PATH];
   LocalPathS(FileName, name);
 
-  //sgi use window API calls to check if
-  //file exists, this will suppress
-  //CodeGuard warnings on callinf
-  //fopen(<unexisting file>)
+  // If file exists -> Load XML from file
   if (FileExistsA(FileName))
     xMainNode = XMLNode::openFileHelper(FileName, _T("PMML"));
 
 #ifdef WIN32
+
+  // If XML file hasn't been loaded
   if (xMainNode.isEmpty())
+    // and resource exists
     if (resource)
+      // -> Load XML from resource
       xMainNode = xmlOpenResourceHelper(resource, _T("PMML"));
-#endif /* WIN32 */
+
+#endif
 
   return xMainNode;
 }
 
+/**
+ * Loads the color information from the XMLNode and sets the fore- and
+ * background color of the given WindowControl
+ * @param wc The WindowControl
+ * @param node The XMLNode
+ */
 static void
 LoadColors(WindowControl &wc, const XMLNode &node)
 {
@@ -369,23 +433,31 @@ CalcWidthStretch(XMLNode *xNode, const RECT rc, const DialogStyle_t eDialogStyle
     g_ddlgScaleWidth = Layout::Scale(1); // retain dialog geometry
 }
 
+/**
+ * This function returns a WndForm created either from the ressources or
+ * from the XML file in XCSoarData(if found)
+ * @param LookUpTable The CallBackTable
+ * @param FileName The XML filename to search for in XCSoarData
+ * @param Parent The parent window (e.g. XCSoarInterface::main_window)
+ * @param resource The resource to look for
+ * @return The WndForm object
+ */
 WndForm *
 dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
                SingleWindow &Parent, const TCHAR* resource)
 {
 
   WndForm *theForm = NULL;
-  //  TCHAR sFileName[128];
 
   // assert(main_window == Parent);  // Airspace warning has MapWindow as parent,
   // ist that ok?  JMW: No, I think that it is better to use main UI thread for
   // everything.  See changes regarding RequestAirspaceDialog in AirspaceWarning.cpp
 
-  // this open and parse the XML file:
-
+  // Find XML file or resource and load XML data out of it
   XMLNode xMainNode = load_xml_file_or_resource(FileName, resource);
 
   // TODO code: put in error checking here and get rid of exits in xmlParser
+  // If XML error occurred -> Error messagebox + cancel
   if (xMainNode.isEmpty()) {
     MessageBoxX(gettext(_T("Error in loading XML dialog")),
                 gettext(_T("Dialog error")), MB_OK | MB_ICONEXCLAMATION);
@@ -393,6 +465,7 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
     return NULL;
   }
 
+  // Get the first child node of the type "WndForm"
   XMLNode xNode = xMainNode.getChildNode(_T("WndForm"));
 
   FontMap[0] = &TitleWindowFont;
@@ -401,6 +474,7 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
   FontMap[3] = &CDIWindowFont;
   FontMap[4] = &InfoWindowFont;
 
+  // If Node does not exists -> Error messagebox + cancel
   if (xNode.isEmpty()) {
     MessageBoxX(gettext(_T("Error in loading XML dialog")),
                 gettext(_T("Dialog error")), MB_OK | MB_ICONEXCLAMATION);
@@ -412,14 +486,19 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
   TCHAR sTmp[128];
   TCHAR Name[64];
 
+  // todo: this dialog style stuff seems a little weird...
+
+  // Determine the dialog style of the dialog
   DialogStyle_t eDialogStyle = GetDialogStyle(&xNode);
 
+  // Determine the dialog size
   const RECT rc = Parent.get_client_rect();
   CalcWidthStretch(&xNode, rc, eDialogStyle);
 
   GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height, &Font,
                                sTmp, eDialogStyle);
 
+  // Correct dialog size and position for dialog style
   switch (eDialogStyle) {
   case eDialogFullWidth:
     X = rc.top;
@@ -438,18 +517,23 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
     break;
   }
 
+  // Create the dialog
   theForm = new WndForm(Parent, Name, sTmp, X, Y, Width, Height);
 
+  // Sets Fonts
   if (Font != -1)
     theForm->SetTitleFont(*FontMap[Font]);
 
   if (Font != -1)
     theForm->SetFont(*FontMap[Font]);
 
+  // Set fore- and background colors
   LoadColors(*theForm, xNode);
 
+  // Load the children controls
   LoadChildrenFromXML(theForm, LookUpTable, &xNode, Font, eDialogStyle);
 
+  // If XML error occurred -> Error messagebox + cancel
   if (XMLNode::GlobalError) {
     MessageBoxX(gettext(_T("Error in loading XML dialog")),
                 gettext(_T("Dialog error")), MB_OK | MB_ICONEXCLAMATION);
@@ -458,6 +542,7 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
     return NULL;
   }
 
+  // Return the created form
   return theForm;
 }
 
@@ -517,6 +602,15 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
   return NULL;
 }
 
+/**
+ * Creates a control from the given XMLNode as a child of the given parent
+ * ContainerControl.
+ * @param Parent The parent ContainerControl
+ * @param LookUpTable The parent CallBackTable
+ * @param node The XMLNode that represents the control
+ * @param ParentFont The parent's font array index
+ * @param eDialogStyle The parent's dialog style
+ */
 static void
 LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
           XMLNode node, int ParentFont, const DialogStyle_t eDialogStyle)
@@ -529,14 +623,21 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
 
   WindowControl *WC = NULL;
 
+  // Determine name, coordinates, width, height,
+  // font and caption of the control
   GetDefaultWindowControlProps(&node, Name, &X, &Y, &Width, &Height,
                                &Font, Caption, eDialogStyle);
 
+  // Determine whether the control is visible on startup (default = visible)
   Visible = StringToIntDflt(node.getAttribute(_T("Visible")), 1) == 1;
 
+  // Determine the control's font (default = parent's font)
   Font = StringToIntDflt(node.getAttribute(_T("Font")), ParentFont);
+
+  // Determine the control's border kind (default = 0)
   Border = StringToIntDflt(node.getAttribute(_T("Border")), 0);
 
+  // PropertyControl (WndProperty)
   if (_tcscmp(node.getName(), _T("WndProperty")) == 0) {
     WndProperty *W;
     int CaptionWidth;
@@ -545,54 +646,71 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
     int ReadOnly;
     int MultiLine;
 
+    // Determine the width of the caption field
     CaptionWidth = 
       Scale_Dlg_Width(StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0),
                       eDialogStyle);
 
+    // Determine whether the control is multiline or readonly
     MultiLine = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
     ReadOnly = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
 
+    // Load the event callback properties
     _tcscpy(DataNotifyCallback,
             StringToStringDflt(node.getAttribute(_T("OnDataNotify")), _T("")));
 
     _tcscpy(OnHelpCallback,
             StringToStringDflt(node.getAttribute(_T("OnHelp")), _T("")));
 
+    // Load the caption
+    // todo: duplicate?!
     _tcscpy(Caption,
             StringToStringDflt(node.getAttribute(_T("Caption")), _T("")));
 
     // TODO code: Temporary double handling to fix "const unsigned
     // short *" to "unsigned short *" problem
+    // Translate the caption
     _tcscpy(Caption, gettext(Caption));
 
+    // Create the Property Control
     WC = W = new WndProperty(Parent, Name, Caption, X, Y, Width, Height,
                              CaptionWidth,
                              (WndProperty::DataChangeCallback_t)
                              CallBackLookup(LookUpTable, DataNotifyCallback),
                              MultiLine);
 
+    // Set the help function event callback
     W->SetOnHelpCallback((WindowControl::OnHelpCallback_t)
                          CallBackLookup(LookUpTable, OnHelpCallback));
 
+    // Load the help text
     W->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")), _T("")));
 
     Caption[0] = '\0';
+
+    // Set the control as readonly, if wanted
     W->SetReadOnly(ReadOnly != 0);
 
+    // If the control has (at least) one DataField child control
     if (node.nChildNode(_T("DataField")) > 0){
+      // -> Load the first DataField control
       DataField *data_field =
         LoadDataField(node.getChildNode(_T("DataField"), 0),
                       LookUpTable, eDialogStyle);
 
       if (data_field != NULL)
+        // Tell the Property control about the DataField control
         W->SetDataField(data_field);
     }
 
+  // ButtonControl (WndButton)
   } else if (_tcscmp(node.getName(), _T("WndButton")) == 0) {
+    // Determine ClickCallback function
     TCHAR ClickCallback[128];
     _tcscpy(ClickCallback,
             StringToStringDflt(node.getAttribute(_T("OnClickNotify")), _T("")));
 
+    // Create the ButtonControl
     WC = new WndButton(Parent, Name, Caption, X, Y, Width, Height,
                        (WndButton::ClickNotifyCallback_t)
                        CallBackLookup(LookUpTable, ClickCallback));
@@ -600,6 +718,7 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
     Caption[0] = '\0';
 
 #ifndef ALTAIRSYNC
+  // EventButtonControl (WndEventButton) not used yet
   } else if (_tcscmp(node.getName(), _T("WndEventButton")) == 0) {
     TCHAR iename[100];
     TCHAR ieparameters[100];
@@ -608,70 +727,99 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
     _tcscpy(ieparameters,
             StringToStringDflt(node.getAttribute(_T("Parameters")), _T("")));
 
+    // Create the EventButtonControl
     WC = new WndEventButton(Parent, Name, Caption, X, Y, Width, Height,
                             iename, ieparameters);
 
     Caption[0] = '\0';
 #endif
 
+  // PanelControl (WndPanel)
   } else if (_tcscmp(node.getName(), _T("Panel")) == 0) {
+    // Create the PanelControl
     PanelControl *frame = new PanelControl(Parent, Name, X, Y, Width, Height);
     WC = frame;
 
-    // recursivly create dialog
+    // Load children controls from the XMLNode
     LoadChildrenFromXML(frame, LookUpTable, &node, ParentFont, eDialogStyle);
 
+  // DrawControl (WndOwnerDrawFrame)
   } else if (_tcscmp(node.getName(), _T("WndOwnerDrawFrame")) == 0) {
+    // Determine DrawCallback function
     TCHAR PaintCallback[128];
-
     _tcscpy(PaintCallback,
             StringToStringDflt(node.getAttribute(_T("OnPaint")), _T("")));
 
+    // Create the DrawControl
     WC = new WndOwnerDrawFrame(Parent, Name, X, Y, Width, Height,
                                (WndOwnerDrawFrame::OnPaintCallback_t)
                                CallBackLookup(LookUpTable, PaintCallback));
 
+  // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("WndFrame")) == 0){
+    // Create the FrameControl
     WC = new WndFrame(Parent, Name, X, Y, Width, Height);
 
+  // ListBoxControl (WndListFrame)
   } else if (_tcscmp(node.getName(), _T("WndListFrame")) == 0){
+    // Determine ItemHeight of the list items
     unsigned item_height =
       Layout::Scale(StringToIntDflt(node.getAttribute(_T("ItemHeight")), 18));
 
+    // Create the ListBoxControl
     WC = new WndListFrame(Parent, Name, X, Y, Width, Height, item_height);
 
+  // TabControl (Tabbed)
   } else if (_tcscmp(node.getName(), _T("Tabbed")) == 0) {
+    // Create the TabControl
     TabbedControl *tabbed = new TabbedControl(Parent, Name, X, Y, Width, Height);
     WC = tabbed;
 
-    // recursivly create dialog
+    // Load children controls from the XMLNode
     LoadChildrenFromXML(tabbed, LookUpTable, &node, ParentFont, eDialogStyle);
   }
 
-  if (WC != NULL){
+  // If WindowControl has been created
+  if (WC != NULL) {
+    // Set the font style
     if (Font != -1)
       WC->SetFont(FontMap[Font]);
 
+    // Set the fore- and background color
     LoadColors(*WC, node);
 
+    // If control is invisible -> hide it
     if (!Visible)
       WC->hide();
 
+    // If caption hasn't been set -> set it
     if (Caption[0] != '\0')
       WC->SetCaption(Caption);
 
+    // Set the border kind
     if (Border != 0)
       WC->SetBorderKind(Border);
   }
 }
 
+/**
+ * Loads the Parent's children Controls from the given XMLNode
+ * @param Parent The parent control
+ * @param LookUpTable The parents CallBackTable
+ * @param Node The XMLNode that represents the parent control
+ * @param ParentFont The parent's font array index
+ * @param eDialogStyle The parent's dialog style
+ */
 static void
 LoadChildrenFromXML(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
                     XMLNode *Node, int ParentFont, const DialogStyle_t eDialogStyle)
 {
+  // Get the number of childnodes
   int Count = Node->nChildNode();
 
+  // Iterate through the childnodes
   for (int i = 0; i < Count; i++)
+    // Load each child control from the child nodes
     LoadChild(Parent, LookUpTable, Node->getChildNode(i), ParentFont,
               eDialogStyle);
 }
