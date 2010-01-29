@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<PMML version="3.0"
-  xmlns="http://www.dmg.org/PMML-3-0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
-  <Header copyright="VADIS">
-     <Application name="RANK For &lt;you>" version="1.99beta" />
-  </Header>
-  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
 <WndForm Name="frmWayPointSelect" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Select Waypoint" Font=2  BackColor=0xDADBAB>
-
   <WndFrame X=0 Y=0 Width=100 Height=20 Font=2 Caption="Filter..." />
+
   <WndProperty Name="prpFltName"      Caption="Name"      X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
   </WndProperty>
+
   <WndProperty Name="prpFltDistance"  Caption="Distance"  X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
   </WndProperty>
+
   <WndProperty Name="prpFltDirection" Caption="Direction" X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </WndProperty>
@@ -28,5 +23,3 @@
 
   <WndListFrame Name=frmWayPointList X=102 Y=0 Width=215 Height=222 ItemHeight=18 Font=2/>
 </WndForm>
-
-</PMML>

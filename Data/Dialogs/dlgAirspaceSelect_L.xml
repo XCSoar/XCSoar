@@ -1,31 +1,25 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<PMML version="3.0"
-  xmlns="http://www.dmg.org/PMML-3-0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
-  <Header copyright="VADIS">
-     <Application name="RANK For &lt;you>" version="1.99beta" />
-  </Header>
-  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
 <WndForm Name="frmAirspaceSelect" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Select Airspace" Font=2  BackColor=0xDADBAB>
-
   <WndFrame X=0 Y=0 Width=100 Height=20 Font=2 Caption="Filter..." />
+
   <WndButton Name="cmdClose" Caption="Close" X=100 Y=0 Width=60  Height=28 Font=2 Tag=3 />
 
   <WndProperty Name="prpFltName"      Caption="Name"      X=2 Y=32  Width=98 Height=40 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
   </WndProperty>
+
   <WndProperty Name="prpFltType" Caption="Type" X=100 Y=32  Width=98 Height=40 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
   </WndProperty>
+
   <WndProperty Name="prpFltDistance"  Caption="Distance"  X=2 Y=74  Width=98 Height=40 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
   </WndProperty>
+
   <WndProperty Name="prpFltDirection" Caption="Direction" X=100 Y=74  Width=98 Height=40 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </WndProperty>
 
   <WndListFrame Name=frmAirspaceList X=0 Y=116 Width=238 Height=190 ItemHeight=18 Font=2/>
 </WndForm>
-
-</PMML>

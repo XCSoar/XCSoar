@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<PMML version="3.0"
-  xmlns="http://www.dmg.org/PMML-3-0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
-  <Header copyright="VADIS">
-     <Application name="RANK For &lt;you>" version="1.99beta" />
-  </Header>
-  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
 <WndForm Name="frmAirspaceWarning" Type="Dialog" X=2 Y=2 Width=236 Height=172 Caption="Airspace Warnings" Font=2 BackColor=0xDADBAB>
-
   <WndListFrame Name=frmAirspaceWarningList X=0 Y=2 Width=234 Height=110 ItemHeight=30 Font=2/>
 
   <WndButton   name="cmdAckOutside" Caption="ACK Warn"    X=1   Y=114 width=46 height=36 Font=2 OnClickNotify="OnAck1Clicked"/>
+
   <WndButton   name="cmdAck"        Caption="ACK Space"   X=47  Y=114 width=46 height=36 Font=2 OnClickNotify="OnAckClicked"/>
+
   <WndButton   Caption="ACK Day"  			  X=93  Y=114 width=46 height=36 Font=2 OnClickNotify="OnAck2Clicked"/>
+
   <WndButton   Caption="Enable"                           X=140 Y=114 width=48 height=36 Font=2 OnClickNotify="OnEnableClicked"/>
+
   <WndButton   Caption="Close"                            X=189 Y=114 width=45 height=36 Font=2 OnClickNotify="OnCloseClicked"/>
-
 </WndForm>
-
-</PMML>

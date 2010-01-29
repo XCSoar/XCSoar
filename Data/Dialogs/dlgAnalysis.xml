@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<PMML version="3.0"
-  xmlns="http://www.dmg.org/PMML-3-0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
-  <Header copyright="VADIS">
-     <Application name="RANK For &lt;you>" version="1.99beta" />
-  </Header>
-  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
 <WndForm Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Analysis" Font=2  BackColor=0xDADBAB>
-
   <WndOwnerDrawFrame Name="frmGrid" X=90 Y=2 Width=224 Height=218 Font=0 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnAnalysisPaint" />
 
   <WndFrame Name="frmInfo" X=0 Y=5 Width=90 Height=120 Font=2 ForeColor=0x000000 _BackColor=0xFFFFFF/>
 
   <WndButton Name="cmdCalc"  Caption="Calc" X=5 Y=130 Width=80  Height=28 Font=2 OnClickNotify="OnCalcClicked" />
+
   <WndButton Name="cmdPrev"  Caption="&lt;" X=5 Y=160 Width=37  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
+
   <WndButton Name="cmdNext"  Caption="&gt;" X=48 Y=160 Width=37  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
+
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=80  Height=28 Font=2 Tag=3 />
-
 </WndForm>
-
-</PMML>

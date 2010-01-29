@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<PMML version="3.0"
-  xmlns="http://www.dmg.org/PMML-3-0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
-  <Header copyright="VADIS">
-     <Application name="RANK For &lt;you>" version="1.99beta" />
-  </Header>
-  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
 <WndForm Name="frmTaskCalculator" Type="Dialog" X=5 Y=0 Width=240 Height=240 Caption="Task Calculator" Font=2  BackColor=0xDADBAB>
-
   <WndButton   Caption="OK"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
   <WndButton   Caption="Cancel"    X=55 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnCancelClicked" Tag=2/>
+
   <WndButton  Name="Optimise" Caption="Optimise"    X=108 Y=2 Width=65  Height=22 Font=2 OnClickNotify="OnOptimiseClicked" Tag=3/>
   <WndButton  Name="Target" Caption="Target"    X=175 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnTargetClicked" Tag=4/>
 
@@ -49,7 +42,4 @@
   <WndProperty Name="prpCruiseEfficiency" Caption="Cruise efficiency"      X=2 Y=-1   Width=238 Height=22 CaptionWidth=150 Font=2 Help="Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  Pressing ENTER on this dialog will estimate the cruise efficiency according to the current flight history with the set Mc value.">
     <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=75 Max=150 Step=2 OnDataAccess="OnCruiseEfficiencyData"/>
   </WndProperty>
-
 </WndForm>
-
-</PMML>

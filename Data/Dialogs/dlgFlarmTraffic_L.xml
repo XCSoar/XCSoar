@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<PMML version="3.0"
-  xmlns="http://www.dmg.org/PMML-3-0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
-  <Header copyright="VADIS">
-    <Application name="RANK For &lt;you>" version="1.99beta" />
-  </Header>
-  <Extension extender="RANKF" name="keys">
-    <Key name="urn"></Key>
-  </Extension>
 
-  <WndForm Name="frmFlarmTraffic" Type="Dialog" X="0" Y="0" Width="320" Height="240" Caption="FLARM Traffic" Font="2" BackColor="0xDADBAB">
-    <WndButton Name="cmdDetails" Caption="Details" X="3" Y="103" Width="58" Height="28" Font="2" Tag="1" />
-    <WndButton Name="cmdZoomIn" Caption="+" X="3" Y="133" Width="28" Height="28" Font="2" Tag="2" />
-    <WndButton Name="cmdZoomOut" Caption="-" X="33" Y="133" Width="28" Height="28" Font="2" Tag="3" />
-    <WndButton Name="cmdPrev" Caption="&lt;" X="3" Y="163" Width="28" Height="28" Font="2" Tag="4" />
-    <WndButton Name="cmdNext" Caption="&gt;" X="33" Y="163" Width="28" Height="28" Font="2" Tag="5" />
-    <WndButton Name="cmdClose" Caption="Close" X="3" Y="193" Width="58" Height="28" Font="2" Tag="6" />
-    <WndOwnerDrawFrame Name="frmRadar" X="65" Y="5" Width="247" Height="214" Font="1" BackColor="0xFFFFFF">
-  </WndForm>
-
-</PMML>
-
+<WndForm Name="frmFlarmTraffic" Type="Dialog" X="0" Y="0" Width="320" Height="240" Caption="FLARM Traffic" Font="2" BackColor="0xDADBAB">
+  <WndButton Name="cmdDetails" Caption="Details" X="3" Y="103" Width="58" Height="28" Font="2" Tag="1" />
+  <WndButton Name="cmdZoomIn" Caption="+" X="3" Y="133" Width="28" Height="28" Font="2" Tag="2" />
+  <WndButton Name="cmdZoomOut" Caption="-" X="33" Y="133" Width="28" Height="28" Font="2" Tag="3" />
+  <WndButton Name="cmdPrev" Caption="&lt;" X="3" Y="163" Width="28" Height="28" Font="2" Tag="4" />
+  <WndButton Name="cmdNext" Caption="&gt;" X="33" Y="163" Width="28" Height="28" Font="2" Tag="5" />
+  <WndButton Name="cmdClose" Caption="Close" X="3" Y="193" Width="58" Height="28" Font="2" Tag="6" />
+  <WndOwnerDrawFrame Name="frmRadar" X="65" Y="5" Width="247" Height="214" Font="1" BackColor="0xFFFFFF">
+</WndForm>

@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<PMML version="3.0"
-  xmlns="http://www.dmg.org/PMML-3-0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
-  <Header copyright="VADIS">
-     <Application name="RANK For &lt;you>" version="1.99beta" />
-  </Header>
-  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
 <WndForm Name="frmAirspace" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Airspace" Font=2  BackColor=0xDADBAB>
+  <WndButton   Name="cmdClose" Caption="Close" X=5 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnCloseClicked"/>
 
-  <WndButton   Name="cmdClose" Caption="Close"    X=5 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnCloseClicked"/>
-
-  <WndButton   Name="cmdLookup" Caption="Lookup"    X=85 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnLookupClicked"/>
+  <WndButton   Name="cmdLookup" Caption="Lookup" X=85 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnLookupClicked"/>
 
   <WndListFrame Name="frmAirspaceList" X=0 Y=0 Width=238 Height=250 ItemHeight=18 Font=2/>
 </WndForm>
-
-</PMML>
