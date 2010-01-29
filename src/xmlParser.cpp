@@ -1231,18 +1231,30 @@ CountLinesAndColumns(LPCTSTR lpXML, int nUpto, XMLResults *pResults)
   }
 }
 
-// Parse XML and return the root element.
+/**
+ * Parses the given XML String (lpszXML) and returns the main XMLNode
+ * @param lpszXML XML String
+ * @param tag (?)
+ * @param pResults XMLResult object to write in on error or success
+ * @return The main XMLNode or empty XMLNode on error
+ */
 XMLNode
 XMLNode::parseString(LPCTSTR lpszXML, LPCTSTR tag, XMLResults *pResults)
 {
+  // If String is empty
   if (!lpszXML) {
+    // If XMLResults object exists
     if (pResults) {
+      // -> Save the error type
       pResults->error = eXMLErrorNoElements;
       pResults->nLine = 0;
       pResults->nColumn = 0;
     }
+
+    // -> Return empty XMLNode
     return emptyXMLNode;
   }
+
   static struct ClearTag tags[] = {
       { _T("<![CDATA["), _T("]]>") },
       { _T("<PRE>"),     _T("</PRE>") },
@@ -1259,25 +1271,34 @@ XMLNode::parseString(LPCTSTR lpszXML, LPCTSTR tag, XMLResults *pResults)
   xml.lpXML = lpszXML;
   xml.pClrTags = tags;
 
-  // Create header element
+  // Fill the XMLNode xnode with the parsed data of xml
   xnode.ParseXMLElement(&xml);
   error = xml.error;
 
-  // If an error occurred
+  // If no error occurred
   if (error == eXMLErrorNone) {
+    // If tag exists
     if (tag && _tcslen(tag)) {
       XMLNode nodeTmp;
       int i = 0;
+      // -> search the childnodes for a node of type = tag
       while (i < xnode.nChildNode()) {
         nodeTmp = xnode.getChildNode(i);
+
+        // if found -> break
         if (_tcsicmp(nodeTmp.getName(), tag) == 0)
           break;
+
+        // if <?xml...> tag -> take that node as root and
+        // search again inside of it
         if (nodeTmp.isDeclaration()) {
           xnode = nodeTmp;
           i = 0;
         } else
           i++;
       }
+
+      // todo: i will never be smaller then zero
       if (i < 0) {
         if (pResults) {
           pResults->error = eXMLErrorTagNotFound;
@@ -1286,45 +1307,74 @@ XMLNode::parseString(LPCTSTR lpszXML, LPCTSTR tag, XMLResults *pResults)
         }
         return emptyXMLNode;
       }
+
+      // Set the node (= tag) as new main node
       xnode = nodeTmp;
     }
   } else {
-    // Cleanup: this will destroy all the nodes
+    // If error occurred -> later return empty node
     xnode = emptyXMLNode;
   }
 
-  // If we have been given somewhere to place results
+  // If an XMLResults object exists
+  // -> save the result (error/success)
   if (pResults) {
     pResults->error = error;
 
     // If we have an error
     if (error != eXMLErrorNone) {
-      // Find which line and column it starts on.
+      // Find which line and column it starts on and
+      // save it in the XMLResults object
       CountLinesAndColumns(xml.lpXML, xml.nIndex, pResults);
     }
   }
+
+  // Return the node (empty, main or child of main that equals tag)
   return xnode;
 }
 
+/**
+* Opens the file given by the filepath in lpszXML and returns the main node.
+* (Includes error handling)
+ * @param filename Filepath to the XML file to parse
+ * @param tag (?)
+ * @param pResults Pointer to the XMLResults object to fill on error or success
+ * @return The main XMLNode or an empty node on error
+ */
 XMLNode
 XMLNode::parseFile(const char *filename, LPCTSTR tag, XMLResults *pResults)
 {
+  // Open the file for reading
   FILE *f = fopen(filename, "rb");
+
+  // If file can't be read
   if (f == NULL) {
+    // If XMLResults object exists
     if (pResults) {
+      // -> Save the error type into it
       pResults->error = eXMLErrorFileNotFound;
       pResults->nLine = 0;
       pResults->nColumn = 0;
     }
+
+    // -> Return empty XMLNode
     return emptyXMLNode;
   }
+
+  // Get filelength (l)
   fseek(f, 0, SEEK_END);
   int l = ftell(f);
+
+  // Read the whole(!) file into a buffer string
   fseek(f, 0, SEEK_SET);
   char *buf = (char*)malloc(l + 1);
   assert(buf);
   fread(buf, l, 1, f);
+
+  // Close the file
   fclose(f);
+
+  // Terminate the buffer string
   buf[l] = 0;
   l++;
 
@@ -1367,19 +1417,36 @@ XMLNode::parseFile(const char *filename, LPCTSTR tag, XMLResults *pResults)
 #endif
 #endif
 
+  // Parse the string and get the main XMLNode
   XMLNode x = parseString((LPTSTR)buf, tag, pResults);
+
+  // Free the buffer memory
   free(buf);
+
+  // Return the main XMLNode
   return x;
 }
 
+/**
+ * Opens the file given by the filepath in lpszXML and returns the main node.
+ * (Includes error handling)
+ * @param lpszXML Filepath to the XML file to parse
+ * @param tag (?)
+ * @return The main XMLNode
+ */
 XMLNode
 XMLNode::openFileHelper(const char *lpszXML, LPCTSTR tag)
 {
   XMLResults pResults;
   XMLNode::GlobalError = false;
+
+  // Parse the file and get the main XMLNode
   XMLNode xnode = XMLNode::parseFile(lpszXML, tag, &pResults);
+
+  // If error appeared
   if (pResults.error != eXMLErrorNone) {
 
+    // In debug mode -> Log error to stdout
 #ifndef NDEBUG
     printf("XML Parsing error inside file '%s'.\n"
 #ifdef _UNICODE
@@ -1399,9 +1466,11 @@ XMLNode::openFileHelper(const char *lpszXML, LPCTSTR tag)
     }
 #endif
 
+    // Remember Error
     XMLNode::GlobalError = true;
-    // was exit(255);
   }
+
+  // Return the parsed node or empty node on error
   return xnode;
 }
 
