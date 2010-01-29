@@ -465,8 +465,16 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
     return NULL;
   }
 
-  // Get the first child node of the type "WndForm"
-  XMLNode xNode = xMainNode.getChildNode(_T("WndForm"));
+  XMLNode xNode;
+
+  // If the main XMLNode is of type "WndForm"
+  if (_tcsicmp(xMainNode.getName(), _T("WndForm")) == 0)
+    // -> save it as the dialog node
+    xNode = xMainNode;
+  else
+    // Get the first child node of the type "WndForm"
+    // and save it as the dialog node
+    xNode = xMainNode.getChildNode(_T("WndForm"));
 
   FontMap[0] = &TitleWindowFont;
   FontMap[1] = &MapWindowFont;
