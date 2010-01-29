@@ -610,11 +610,11 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
         canvas.white_brush();
       canvas.white_pen();
       canvas.rectangle(x, y, x + IBLSCALE(1) + TextSize.cx,
-                       y + Appearance.MapWindowBoldFont.CapitalHeight + IBLSCALE(2));
+                       y + MapWindowBoldFont.get_capital_height() + IBLSCALE(2));
 
       canvas.text(x + IBLSCALE(1),
-          y + Appearance.MapWindowBoldFont.CapitalHeight -
-          Appearance.MapWindowBoldFont.AscentHeight + IBLSCALE(1), Value);
+                  y + MapWindowBoldFont.get_capital_height() -
+                  MapWindowBoldFont.get_ascent_height() + IBLSCALE(1), Value);
 
       const UnitSymbol *unit_symbol = GetUnitSymbol(
           Units::GetUserAltitudeUnit());

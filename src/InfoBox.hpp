@@ -52,7 +52,6 @@ Copyright_License {
 #define VALUESIZE    32
 #define COMMENTSIZE  32
 
-struct FontHeightInfo;
 class Font;
 
 class InfoBox: public BufferWindow
@@ -89,9 +88,6 @@ private:
   const Font *mphFontValue;
   const Font *mphFontComment;
   const Font *valueFont;
-  struct FontHeightInfo *mpFontHeightTitle;
-  struct FontHeightInfo *mpFontHeightValue;
-  struct FontHeightInfo *mpFontHeightComment;
   bool   mHasFocus;
 
   /** a timer which returns keyboard focus back to the map window after a while */

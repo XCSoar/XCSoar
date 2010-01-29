@@ -124,8 +124,6 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
   buffer_canvas.resize(width, height);
   stencil_canvas.resize(width, height);
 
-  SetFontInfoAll(get_canvas());
-
   return true;
 }
 

@@ -46,7 +46,18 @@ Font::set(const char *file, int ptsize)
   reset();
 
   font = TTF_OpenFont(file, ptsize);
-  return font != NULL;
+  if (font == NULL)
+    return false;
+
+  height = TTF_FontHeight(font);
+  ascent_height = TTF_FontAscent(font);
+
+  int miny, maxy;
+  TTF_GlyphMetrics(font, 'M', NULL, NULL, &miny, &maxy, NULL);
+
+  capital_height = maxy - miny + 1;
+
+  return true;
 }
 
 void
@@ -60,6 +71,10 @@ Font::reset()
 
 #else /* !ENABLE_SDL */
 
+#include "Screen/PaintWindow.hpp"
+#include "Screen/BufferCanvas.hpp"
+#include "Asset.hpp"
+
 bool
 Font::set(const LOGFONT *lplf)
 {
@@ -72,6 +87,53 @@ Font::set(const LOGFONT *lplf)
   if (GetObjectType(font) != OBJ_FONT) {
     reset();
     return false;
+  }
+
+  WindowCanvas root_canvas(NULL, 1, 1);
+  VirtualCanvas canvas(root_canvas, 1, 1);
+  canvas.select(*this);
+
+  TEXTMETRIC tm;
+  ::GetTextMetrics(canvas, &tm);
+
+  height = tm.tmHeight;
+  ascent_height = tm.tmAscent;
+
+  if (is_altair()) {
+    // JMW: don't know why we need this in GNAV, but we do.
+
+    BufferCanvas buffer(root_canvas, tm.tmAveCharWidth, tm.tmHeight);
+    const HWColor white = canvas.map(Color::WHITE);
+
+    buffer.background_opaque();
+    buffer.set_background_color(Color::WHITE);
+    buffer.set_text_color(Color::BLACK);
+    buffer.select(*this);
+
+    RECT rec;
+    rec.left = 0;
+    rec.top = 0;
+    rec.right = tm.tmAveCharWidth;
+    rec.bottom = tm.tmHeight;
+    buffer.text_opaque(0, 0, &rec, _T("M"));
+
+    int top = tm.tmHeight, bottom = 0;
+
+    for (int x = 0; x < tm.tmAveCharWidth; ++x) {
+      for (int y = 0; y < tm.tmHeight; ++y) {
+        if (buffer.get_pixel(x, y) != white) {
+          if (top > y)
+            top = y;
+          if (bottom < y)
+            bottom = y;
+        }
+      }
+    }
+
+    capital_height = bottom - top + 1;
+  } else {
+    // This works for PPC
+    capital_height = tm.tmAscent - 1 - tm.tmHeight / 10;
   }
 
   return true;
