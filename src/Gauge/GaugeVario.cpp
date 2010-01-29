@@ -376,13 +376,11 @@ void GaugeVario::RenderClimb(Canvas &canvas)
 
 void GaugeVario::RenderZero(Canvas &canvas)
 {
-  if (Appearance.InverseInfoBox){
-    canvas.white_brush();
+  if (Appearance.InverseInfoBox)
     canvas.white_pen();
-  } else {
-    canvas.black_brush();
+  else
     canvas.black_pen();
-  }
+
   canvas.line(0, yoffset, IBLSCALE(17), yoffset);
   canvas.line(0, yoffset + 1, IBLSCALE(17), yoffset + 1);
 }
