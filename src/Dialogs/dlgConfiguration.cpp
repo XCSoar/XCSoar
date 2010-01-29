@@ -2019,6 +2019,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(_T("Imhof 12")));
     dfe->addEnumText(gettext(_T("Imhof Atlas")));
     dfe->addEnumText(gettext(_T("ICAO")));
+    dfe->addEnumText(gettext(_T("Grey")));
     dfe->Set(XCSoarInterface::SettingsMap().TerrainRamp);
     wp->RefreshDisplay();
   }

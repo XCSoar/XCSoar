@@ -152,7 +152,7 @@ const COLORRAMP weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
 };
 
 
-const COLORRAMP terrain_colors[7][NUM_COLOR_RAMP_LEVELS] = {
+const COLORRAMP terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
   {
     {0,           0x70, 0xc0, 0xa7},
     {250,         0xca, 0xe7, 0xb9},
@@ -257,6 +257,21 @@ const COLORRAMP terrain_colors[7][NUM_COLOR_RAMP_LEVELS] = {
     {2000,        253, 107, 100},
     {2499,        253, 107, 100},
     {2500,        255, 255, 255}
+  },
+  { // Grey
+    {0,           220, 220, 220},
+    {100,         220, 220, 220},
+    {200,         220, 220, 220},
+    {300,         220, 220, 220},
+    {500,         220, 220, 220},
+    {700,         220, 220, 220},
+    {1000,        220, 220, 220},
+    {1250,        220, 220, 220},
+    {1500,        220, 220, 220},
+    {1750,        220, 220, 220},
+    {2000,        220, 220, 220},
+    {2250,        220, 220, 220},
+    {2500,        220, 220, 220}
   }
 };
 
