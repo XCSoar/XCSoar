@@ -244,7 +244,7 @@ static Font *FontMap[5] = {
 #ifdef WIN32
 
 static XMLNode
-xmlLoadFromResource(const TCHAR* lpName, LPCTSTR tag, XMLResults *pResults)
+xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
 {
   LPTSTR lpRes;
   HRSRC hResInfo;
@@ -329,7 +329,7 @@ xmlLoadFromResource(const TCHAR* lpName, LPCTSTR tag, XMLResults *pResults)
 #endif
 #endif
 
-      XMLNode x = XMLNode::parseString((LPTSTR)buf, tag, pResults);
+      XMLNode x = XMLNode::parseString((LPTSTR)buf, pResults);
 
       free(buf);
       return x;
@@ -349,13 +349,13 @@ xmlLoadFromResource(const TCHAR* lpName, LPCTSTR tag, XMLResults *pResults)
  * @return The parsed XMLNode
  */
 static XMLNode
-xmlOpenResourceHelper(const TCHAR *lpszXML, LPCTSTR tag)
+xmlOpenResourceHelper(const TCHAR *lpszXML)
 {
   XMLResults pResults;
 
   pResults.error = eXMLErrorNone;
   XMLNode::GlobalError = false;
-  XMLNode xnode = xmlLoadFromResource(lpszXML, tag, &pResults);
+  XMLNode xnode = xmlLoadFromResource(lpszXML, &pResults);
   if (pResults.error != eXMLErrorNone) {
     XMLNode::GlobalError = true;
     TCHAR errortext[100];
@@ -388,7 +388,7 @@ load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
 
   // If file exists -> Load XML from file
   if (FileExistsA(FileName))
-    xMainNode = XMLNode::openFileHelper(FileName, _T("PMML"));
+    xMainNode = XMLNode::openFileHelper(FileName);
 
 #ifdef WIN32
 
@@ -397,7 +397,7 @@ load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
     // and resource exists
     if (resource)
       // -> Load XML from resource
-      xMainNode = xmlOpenResourceHelper(resource, _T("PMML"));
+      xMainNode = xmlOpenResourceHelper(resource);
 
 #endif
 

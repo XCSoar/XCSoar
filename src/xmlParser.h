@@ -73,8 +73,7 @@ typedef enum XMLError
   eXMLErrorUnexpectedToken,
   eXMLErrorInvalidTag,
   eXMLErrorNoElements,
-  eXMLErrorFileNotFound,
-  eXMLErrorTagNotFound
+  eXMLErrorFileNotFound
 } XMLError;
 
 // Enumeration used to manage type of data. Use in conjonction with structure XMLNodeContents
@@ -139,9 +138,9 @@ public:
   // You must create your first instance of XMLNode with these 3 parse functions:
   // (see complete explanation of parameters below)
 
-  static XMLNode parseString   (LPCTSTR     lpszXML, LPCTSTR tag=NULL, XMLResults *pResults=NULL);
-  static XMLNode parseFile     (const char *lpszXML, LPCTSTR tag=NULL, XMLResults *pResults=NULL);
-  static XMLNode openFileHelper(const char *lpszXML, LPCTSTR tag);
+  static XMLNode parseString   (LPCTSTR     lpszXML, XMLResults *pResults=NULL);
+  static XMLNode parseFile     (const char *lpszXML, XMLResults *pResults=NULL);
+  static XMLNode openFileHelper(const char *lpszXML);
 
   // The tag parameter should be the name of the first tag inside the XML file.
   // If the tag parameter is omitted, the 3 functions return a node that represents
