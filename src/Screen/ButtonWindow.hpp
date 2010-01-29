@@ -61,6 +61,13 @@ public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
            int left, int top, unsigned width, unsigned height);
 
+  void set_text(const TCHAR *_text) {
+    assert_none_locked();
+
+    text = _text;
+    invalidate();
+  }
+
 protected:
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
@@ -85,6 +92,12 @@ public:
                 left, top, width, height);
 
     ::SetWindowLong(hWnd, GWL_ID, id);
+  }
+
+  void set_text(const TCHAR *text) {
+    assert_none_locked();
+
+    ::SetWindowText(hWnd, text);
   }
 };
 
