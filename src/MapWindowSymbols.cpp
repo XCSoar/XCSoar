@@ -601,8 +601,9 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
       //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
       int x = GlideBar[2].x + IBLSCALE(1);
 
-      _stprintf(Value, TEXT("%1.0f"), Units::ToUserAltitude(
-          Calculated().task_stats.total.solution_remaining.AltitudeDifference));
+      _stprintf(Value, TEXT("%1.0f"), Units::ToUserUnit(
+          Calculated().task_stats.total.solution_remaining.AltitudeDifference,
+          Units::UserAltitudeUnit));
 
       canvas.select(MapWindowBoldFont);
       TextSize = canvas.text_size(Value);

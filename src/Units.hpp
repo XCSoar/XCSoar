@@ -104,14 +104,14 @@ class Units
 {
 private:
   static UnitDescriptor_t UnitDescriptors[unCount];
+
+public:
   static Units_t UserDistanceUnit;
   static Units_t UserAltitudeUnit;
   static Units_t UserHorizontalSpeedUnit;
   static Units_t UserVerticalSpeedUnit;
   static Units_t UserWindSpeedUnit;
   static Units_t UserTaskSpeedUnit;
-
-public:
   static CoordinateFormats_t CoordinateFormat;
 
   /**
@@ -299,62 +299,17 @@ public:
                                bool IncludeUnit = true);
 
   /**
-   * Converts an altitude from the system unit to the user-specified unit
-   * @param Altitude The altitude in system unit
-   * @return The altitude in user-specified unit
+   * Converts a Value from the system unit to the user-specified unit
+   * @param Value The value in system unit
+   * @return The value in user-specified unit
    */
-  static double ToUserAltitude(double Altitude);
+  static double ToUserUnit(double Value, Units_t Unit);
   /**
-   * Converts an altitude from the user-specified unit to the system unit
-   * @param Altitude The altitude in user-specified unit
-   * @return The altitude in system unit
+   * Converts a Value from the user-specified unit to the system unit
+   * @param Value The value in user-specified unit
+   * @return The value in system unit
    */
-  static double ToSysAltitude(double Altitude);
-
-  /**
-   * Converts a horizontal distance from the system unit to the
-   * user-specified unit
-   * @param Distance The distance in system unit
-   * @return The distance in user-specified unit
-   */
-  static double ToUserDistance(double Distance);
-  /**
-   * Converts a horizontal distance from the user-specified unit to the
-   * system unit
-   * @param Distance The distance in user-specified unit
-   * @return The distance in system unit
-   */
-  static double ToSysDistance(double Distance);
-
-  /**
-   * Converts a horizontal speed from the system unit to the
-   * user-specified unit
-   * @param Distance The speed in system unit
-   * @return The speed in user-specified unit
-   */
-  static double ToUserSpeed(double Speed);
-  /**
-   * Converts a horizontal speed from the user-specified unit to the
-   * system unit
-   * @param Speed The speed in user-specified unit
-   * @return The speed in system unit
-   */
-  static double ToSysSpeed(double Speed);
-
-  /**
-   * Converts a vertical speed from the system unit to the
-   * user-specified unit
-   * @param Distance The speed in system unit
-   * @return The speed in user-specified unit
-   */
-  static double ToUserVSpeed(double Speed);
-  /**
-   * Converts a vertical speed from the user-specified unit to the
-   * system unit
-   * @param Speed The speed in user-specified unit
-   * @return The speed in system unit
-   */
-  static double ToSysVSpeed(double Speed);
+  static double ToSysUnit(double Value, Units_t Unit);
 
   static void TimeToText(TCHAR* text, int d);
 };

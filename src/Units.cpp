@@ -744,67 +744,19 @@ Units::FormatUserVSpeed(double Speed, TCHAR *Buffer, size_t size,
 }
 
 double
-Units::ToUserAltitude(double Altitude)
+Units::ToUserUnit(double Value, Units_t Unit)
 {
-  UnitDescriptor_t *pU = &UnitDescriptors[UserAltitudeUnit];
-  Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
-  return Altitude;
+  UnitDescriptor_t *pU = &UnitDescriptors[Unit];
+  Value *= pU->ToUserFact; // + pU->ToUserOffset;
+  return Value;
 }
 
 double
-Units::ToSysAltitude(double Altitude)
+Units::ToSysUnit(double Value, Units_t Unit)
 {
-  UnitDescriptor_t *pU = &UnitDescriptors[UserAltitudeUnit];
-  Altitude = Altitude / pU->ToUserFact; // + pU->ToUserOffset;
-  return Altitude;
-}
-
-double
-Units::ToUserDistance(double Distance)
-{
-  UnitDescriptor_t *pU = &UnitDescriptors[UserDistanceUnit];
-  Distance = Distance * pU->ToUserFact; // + pU->ToUserOffset;
-  return Distance;
-}
-
-double
-Units::ToSysDistance(double Distance)
-{
-  UnitDescriptor_t *pU = &UnitDescriptors[UserDistanceUnit];
-  Distance = Distance / pU->ToUserFact; // + pU->ToUserOffset;
-  return Distance;
-}
-
-double
-Units::ToUserSpeed(double Speed)
-{
-  UnitDescriptor_t *pU = &UnitDescriptors[UserHorizontalSpeedUnit];
-  Speed = Speed * pU->ToUserFact;
-  return Speed;
-}
-
-double
-Units::ToSysSpeed(double Speed)
-{
-  UnitDescriptor_t *pU = &UnitDescriptors[UserHorizontalSpeedUnit];
-  Speed = Speed / pU->ToUserFact;
-  return Speed;
-}
-
-double
-Units::ToUserVSpeed(double Speed)
-{
-  UnitDescriptor_t *pU = &UnitDescriptors[UserVerticalSpeedUnit];
-  Speed = Speed * pU->ToUserFact;
-  return Speed;
-}
-
-double
-Units::ToSysVSpeed(double Speed)
-{
-  UnitDescriptor_t *pU = &UnitDescriptors[UserVerticalSpeedUnit];
-  Speed = Speed / pU->ToUserFact;
-  return Speed;
+  UnitDescriptor_t *pU = &UnitDescriptors[Unit];
+  Value /= pU->ToUserFact; // + pU->ToUserOffset;
+  return Value;
 }
 
 void
