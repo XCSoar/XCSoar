@@ -60,14 +60,6 @@ public:
     PaintWindow::set(parent, cls, left, top, width, height);
   }
 
-  void set(ContainerWindow *parent,
-           int left, int top, unsigned width, unsigned height,
-           bool center = false, bool notify = false, bool show = true,
-           bool tabstop = false, bool border = false) {
-    PaintWindow::set(parent, left, top, width, height,
-                     center, notify, show, tabstop, border);
-  }
-
   void set(ContainerWindow &parent,
            int left, int top, unsigned width, unsigned height,
            bool center = false, bool notify = false, bool show = true,
