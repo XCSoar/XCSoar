@@ -78,6 +78,12 @@ public:
    */
   virtual void reset();
 
+  /** 
+   * Reset the auto Mc calculator
+   * 
+   */
+  void reset_auto_mc();
+
 /** 
  * Retrieves the active task point sequence.
  * 
@@ -136,6 +142,9 @@ public:
  * @return True if internal state changed
  */
   virtual bool update_idle(const AIRCRAFT_STATE& state_now);
+
+  bool update_auto_mc(const AIRCRAFT_STATE& state_now,
+                      const fixed fallback_mc);
 
 /** 
  * Check if task is valid.  Calls task_event methods on failure.
@@ -415,6 +424,7 @@ private:
   void update_stats_times(const AIRCRAFT_STATE &);
   void update_stats_speeds(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   void update_stats_glide(const AIRCRAFT_STATE &state);
+  void update_flight_mode();
 
   Filter mc_lpf; /**< low pass filter on best MC calculations */
   Filter ce_lpf; /**< low pass filter on cruise efficiency calculations */

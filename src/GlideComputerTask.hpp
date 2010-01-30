@@ -49,7 +49,6 @@ class GlideComputerTask:
 public:
   GlideComputerTask(TaskManager& task);
 
-  void DoAutoMacCready(double mc_setting);
 protected:
   TaskManager &m_task;
 
@@ -58,10 +57,7 @@ protected:
   void ResetFlight(const bool full=true);
 private:
   void TerrainWarning();
-  void CheckTransitionFinalGlide();
   void LDNext();
-  void CheckForceFinalGlide();
-  double MacCreadyOrAvClimbRate(double this_maccready);
   void CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing);
   // best alternate
   void AlertBestAlternate(short soundmode);

@@ -123,6 +123,12 @@ public:
  */
   virtual void task_finish() {};
 
+/** 
+ * Called when flight mode changes
+ * 
+ */
+  virtual void transition_flight_mode(const bool is_final) {};
+
 };
 
 #endif

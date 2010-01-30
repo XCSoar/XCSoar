@@ -49,8 +49,6 @@ using std::max;
 // JMW TODO: abstract up to higher layer so a base copy of this won't
 // call any event
 
-bool ForceFinalGlide= false;
-
 
 GlideComputerTask::GlideComputerTask(TaskManager& task): 
   m_task(task) 
@@ -86,6 +84,7 @@ GlideComputerTask::ProcessBasicTask()
 
     if (!basic.NAVWarning) {
       m_task.update(basic, LastBasic());
+      m_task.update_auto_mc(Basic(), Calculated().AdjustedAverageThermal);
     }
     terrain.Unlock();
   }
@@ -106,7 +105,6 @@ GlideComputerTask::ProcessBasicTask()
   if (!targetManipEvent.test()) {
     // don't calculate these if optimise function being invoked or
     // target is being adjusted
-    CheckTransitionFinalGlide();
     LDNext();
   }
 #endif
@@ -175,33 +173,6 @@ GlideComputerTask::LDNext()
 #endif
 }
 
-void
-GlideComputerTask::CheckForceFinalGlide()
-{
-#ifdef OLD_TASK
-  // Auto Force Final Glide forces final glide display mode
-  // if above final glide...
-  if (task.isTaskAborted()) {
-    ForceFinalGlide = false;
-  } else {
-    if (SettingsComputer().AutoForceFinalGlide) {
-      if (!Calculated().FinalGlide) {
-        if (Calculated().TaskAltitudeDifference>120)
-          ForceFinalGlide = true;
-        else
-          ForceFinalGlide = false;
-
-      } else {
-        if (Calculated().TaskAltitudeDifference<-120)
-          ForceFinalGlide = false;
-        else
-          ForceFinalGlide = true;
-      }
-    }
-  }
-#endif
-}
-
 
 void
 GlideComputerTask::TerrainWarning()
@@ -217,62 +188,9 @@ GlideComputerTask::TerrainWarning()
   CheckFinalGlideThroughTerrain(Calculated().LegDistanceToGo, Bearing(
       Basic().Location, task.getTargetLocation()));
 
-  CheckForceFinalGlide();
 #endif
 }
 
-
-void
-GlideComputerTask::CheckTransitionFinalGlide()
-{
-#ifdef OLD_TASK
-  if (!task.Valid()) {
-    SetCalculated().FinalGlide = 0;
-    return;
-  }
-
-  const unsigned FinalWayPoint = task.getFinalWaypoint();
-  // update final glide mode status
-  if ((task.getActiveIndex() == FinalWayPoint) || ForceFinalGlide) {
-    if (Calculated().FinalGlide == 0)
-      InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE);
-
-    SetCalculated().FinalGlide = 1;
-  } else {
-    if (Calculated().FinalGlide == 1)
-      InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
-
-    SetCalculated().FinalGlide = 0;
-  }
-#endif
-}
-
-
-double
-GlideComputerTask::MacCreadyOrAvClimbRate(double this_maccready)
-{
-  double mc_val = this_maccready;
-  bool is_final_glide = false;
-
-#ifdef OLD_TASK
-  if (Calculated().FinalGlide)
-    is_final_glide = true;
-#endif
-
-  // when calculating 'achieved' task speed, need to use Mc if
-  // not in final glide, or if in final glide mode and using
-  // auto Mc, use the average climb rate achieved so far.
-
-  if ((mc_val < 0.1)
-      || (SettingsComputer().auto_mc
-          && ((SettingsComputer().AutoMacCreadyMode == 0)
-              || ((SettingsComputer().AutoMacCreadyMode == 2) && (is_final_glide))))) {
-
-    mc_val = Calculated().AdjustedAverageThermal;
-  }
-
-  return max(0.1, mc_val);
-}
 
 /*
     // v1 = actual task speed achieved so far
@@ -323,103 +241,6 @@ GlideComputerTask::CheckFinalGlideThroughTerrain(double LegToGo, double LegBeari
     SetCalculated().TerrainWarningLocation.Latitude = 0.0;
     SetCalculated().TerrainWarningLocation.Longitude = 0.0;
   }
-#endif
-}
-
-
-/**
- * Does the AutoMacCready calculations
- * @param mc_setting The old MacCready setting
- */
-void
-GlideComputerTask::DoAutoMacCready(double mc_setting)
-{
-#ifdef OLD_TASK
-  bool is_final_glide = false;
-
-  // if (AutoMacCready disabled) cancel calculation
-  if (!SettingsComputer().auto_mc)
-    return;
-
-  double mc_new = mc_setting;
-  static bool first_mc = true;
-
-  // QUESTION TB: what about final glide around a turnpoint?
-  if (Calculated().FinalGlide && task.ActiveIsFinalWaypoint()) {
-    is_final_glide = true;
-  } else {
-    first_mc = true;
-  }
-
-  // if (not on Task)
-  if (!task.Valid()) {
-    if (Calculated().AdjustedAverageThermal>0) {
-      // use the average climb speed of the last thermal
-      mc_new = Calculated().AdjustedAverageThermal;
-    }
-
-  // if (on task, on final glide and activated at settings)
-  } else if (((SettingsComputer().AutoMacCreadyMode == 0)
-      || (SettingsComputer().AutoMacCreadyMode == 2)) && is_final_glide) {
-    const NMEA_INFO &basic = Basic();
-
-    // QUESTION TB: time_remaining until what? and why 9000???
-    double time_remaining = basic.Time - Calculated().TaskStartTime - 9000;
-
-    if (SettingsComputer().EnableOLC && (SettingsComputer().OLCRules == 0)
-        && (Calculated().NavAltitude > Calculated().TaskStartAltitude)
-        && (time_remaining > 0)) {
-
-      mc_new = MacCreadyTimeLimit(basic, Calculated(),
-          Calculated().WaypointBearing, time_remaining,
-          Calculated().TaskStartAltitude);
-
-    } else if (Calculated().TaskAltitudeDifference0 > 0) {
-
-      // only change if above final glide with zero Mc
-      // otherwise when we are well below, it will wind Mc back to
-      // zero
-
-      double slope = (Calculated().NavAltitude + Calculated().EnergyHeight
-          - FAIFinishHeight(task.getActiveIndex()))
-          / (Calculated().WaypointDistance + 1);
-
-      double mc_pirker = PirkerAnalysis(basic, Calculated(),
-          Calculated().WaypointBearing, slope);
-
-      mc_pirker = max(0.0, mc_pirker);
-
-      if (first_mc) {
-        // don't allow Mc to wind down to zero when first achieving
-        // final glide; but do allow it to wind down after that
-        if (mc_pirker >= mc_new) {
-          mc_new = mc_pirker;
-          first_mc = false;
-        } else if (SettingsComputer().AutoMacCreadyMode == 2) {
-          // revert to averager based auto Mc
-          if (Calculated().AdjustedAverageThermal > 0)
-            mc_new = Calculated().AdjustedAverageThermal;
-        }
-      } else {
-        mc_new = mc_pirker;
-      }
-    } else {
-      // below final glide at zero Mc, never achieved final glide
-      if (first_mc && (SettingsComputer().AutoMacCreadyMode == 2)) {
-        // revert to averager based auto Mc
-        if (Calculated().AdjustedAverageThermal > 0)
-          mc_new = Calculated().AdjustedAverageThermal;
-      }
-    }
-  } else if ((SettingsComputer().AutoMacCreadyMode == 1)
-      || ((SettingsComputer().AutoMacCreadyMode == 2) && !is_final_glide)) {
-    if (Calculated().AdjustedAverageThermal > 0)
-      // use the average climb speed of the last thermal
-      mc_new = Calculated().AdjustedAverageThermal;
-  }
-
-  // use a filter to prevent jumping of the MacCready setting
-  GlidePolar::SetMacCready(LowPassFilter(mc_setting, mc_new, 0.15));
 #endif
 }
 

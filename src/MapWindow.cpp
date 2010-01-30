@@ -408,7 +408,7 @@ void MapWindow::ApplyScreenSize() {
   case dmNone:
     if (Calculated().Circling){
       DisplayMode = dmCircling;
-    } else if (Calculated().FinalGlide){
+    } else if (Calculated().task_stats.flight_mode_final_glide){
       DisplayMode = dmFinalGlide;
     } else
       DisplayMode = dmCruise;

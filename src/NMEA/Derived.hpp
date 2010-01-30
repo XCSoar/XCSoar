@@ -218,8 +218,6 @@ struct DERIVED_INFO:
   /** Wind bearing */
   fixed WindBearing_estimated;
 
-  bool FinalGlide; /**< Used for display mode */
-
   // reflects whether aircraft is in a start/finish/aat/turn sector
   bool IsInSector;
   bool IsInAirspace;

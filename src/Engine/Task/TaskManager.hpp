@@ -211,6 +211,9 @@ public:
  */
   bool update_idle(const AIRCRAFT_STATE &state);
 
+  bool update_auto_mc(const AIRCRAFT_STATE& state_now,
+                      const fixed fallback_mc);
+
 /** 
  * Accessor for statistics of active task
  * 

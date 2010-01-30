@@ -71,12 +71,21 @@ public:
   bool task_started; /**< Whether the task is started */
   bool task_finished; /**< Whether the task is finished */
   bool has_targets; /**< Whether the task has adjustable targets */
+  bool flight_mode_final_glide; /**< Whether the task is appoximately in final glide */
 
 /** 
  * Reset each element (for incremental speeds).
  * 
  */
   void reset();
+
+/** 
+ * Convenience function, determines if remaining task is in final glide
+ * 
+ * @param approx If true, gives 100m margin 
+ * @return True if is mode changed
+ */
+  bool calc_flight_mode(const bool approx= true);
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 

@@ -59,6 +59,14 @@ public:
   bool optimise_targets_range; /**< Option to enable positionining of AAT targets to achieve desired AAT minimum task time */
   bool optimise_targets_bearing; /**< Option to enable positioning of AAT targets at optimal point on isoline */
   bool auto_mc; /**< Option to enable calculation and setting of auto MacCready */
+
+  enum AutoMCMode_t {
+    AUTOMC_FINALGLIDE = 0, /**< Final glide only */
+    AUTOMC_CLIMBAVERAGE, /**< Climb average */
+    AUTOMC_BOTH /**< Final glide if above FG, else climb average */
+  };
+  AutoMCMode_t auto_mc_mode; /**< Options for auto MC calculations */
+  
   bool calc_cruise_efficiency; /**< Option to enable calculation of cruise efficiency */
   bool calc_effective_mc; /**< Option to enable calculation of effective mc */
   bool calc_glide_required; /**< Option to enable calculation of required sink rate for final glide */

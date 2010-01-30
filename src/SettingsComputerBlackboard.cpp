@@ -41,7 +41,6 @@ Copyright_License {
 SettingsComputerBlackboard::SettingsComputerBlackboard()
 {
   settings_computer.AutoWindMode= D_AUTOWIND_CIRCLING;
-  settings_computer.AutoMacCreadyMode = 0;
   settings_computer.SafetyAltitudeArrival = 500;
   settings_computer.SafetyAltitudeBreakoff = 700;
   settings_computer.SafetyAltitudeTerrain = 200;

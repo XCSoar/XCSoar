@@ -248,8 +248,8 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
     if (!Calculated().task_stats.task_valid
-        && ((SettingsComputer().AutoMacCreadyMode==0)
-	    || (SettingsComputer().AutoMacCreadyMode==2))) {
+        && ((SettingsComputer().auto_mc_mode==TaskBehaviour::AUTOMC_FINALGLIDE)
+	    || (SettingsComputer().auto_mc_mode==TaskBehaviour::AUTOMC_BOTH))) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);

@@ -40,7 +40,7 @@
 #include "BaseTask/TaskPoint.hpp"
 #include "Util/Gradient.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-
+#include "Task/TaskEvents.hpp"
 
 AbstractTask::AbstractTask(TaskEvents &te,
                            const TaskBehaviour &tb,
@@ -59,26 +59,44 @@ AbstractTask::AbstractTask(TaskEvents &te,
 {
 }
 
+bool 
+AbstractTask::update_auto_mc(const AIRCRAFT_STATE& state,
+                             fixed fallback_mc)
+{
+  if (!positive(fallback_mc)) {
+    fallback_mc = glide_polar.get_mc();
+  }
+
+  if (!task_started()) {
+    reset_auto_mc();
+    return false;
+  }
+
+  if (task_behaviour.auto_mc_mode==TaskBehaviour::AUTOMC_CLIMBAVERAGE) {
+    trigger_auto = false;
+  } else {
+
+    const fixed mc_found = calc_mc_best(state);
+    if (mc_found > stats.mc_best) {
+      trigger_auto = true;
+    }
+    if (trigger_auto) {
+      stats.mc_best = mc_lpf.update(mc_found);
+      glide_polar.set_mc(stats.mc_best);
+    }
+  }
+
+  if (!trigger_auto) {
+    stats.mc_best = mc_lpf.reset(fallback_mc);
+  }
+  return trigger_auto;
+}
+
 
 bool 
 AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 {
   bool retval = false;
-  if (task_started() && task_behaviour.auto_mc) {
-    fixed mc_found = calc_mc_best(state);
-    if (trigger_auto || (mc_found > stats.mc_best)) {
-      trigger_auto = true;
-      stats.mc_best = mc_lpf.update(mc_found);
-      glide_polar.set_mc(stats.mc_best);
-    } else {
-      stats.mc_best = mc_lpf.reset(glide_polar.get_mc());
-    }
-
-    retval = true;
-  } else {
-    trigger_auto = false;
-    stats.mc_best = mc_lpf.reset(glide_polar.get_mc());
-  }
 
   if (task_started() && task_behaviour.calc_cruise_efficiency) {
     stats.cruise_efficiency = ce_lpf.update(calc_cruise_efficiency(state));
@@ -204,6 +222,8 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
 
   update_stats_speeds(state, state_last);
 
+  update_flight_mode();
+
   activeTaskPoint_last = activeTaskPoint;
 
   return sample_updated || full_update;
@@ -242,12 +262,18 @@ AbstractTask::update_stats_times(const AIRCRAFT_STATE &state)
   }
 }
 
+void
+AbstractTask::reset_auto_mc()
+{
+  stats.mc_best = mc_lpf.reset(glide_polar.get_mc());
+  trigger_auto = false;
+}
+
 
 void 
 AbstractTask::reset()
 {
-  mc_lpf.reset(glide_polar.get_mc());
-  trigger_auto = false;
+  reset_auto_mc();
   activeTaskPoint_last = 0-1;
   ce_lpf.reset(1.0);
   stats.reset();
@@ -274,4 +300,15 @@ fixed
 AbstractTask::calc_effective_mc(const AIRCRAFT_STATE &state_now) 
 {
   return glide_polar.get_mc();
+}
+
+
+void
+AbstractTask::update_flight_mode()
+{
+  const bool changed = stats.calc_flight_mode();
+  if (!changed) 
+    return;
+
+  task_events.transition_flight_mode(stats.flight_mode_final_glide);
 }

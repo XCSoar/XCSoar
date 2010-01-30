@@ -230,6 +230,7 @@ bool AircraftSim::advance(TaskManager &task_manager)  {
 
   task_manager.update(state, state_last);
   task_manager.update_idle(state);
+  task_manager.update_auto_mc(state, 0.0);
   
   state_last = state;
 

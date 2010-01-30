@@ -153,14 +153,6 @@ struct SETTINGS_HEIGHT_MARGINS {
 };
 
 struct SETTINGS_FEATURES {
-  /**
-   * AutoMacCready calculation mode
-   * 0: Final glide only
-   * 1: Set to average if in climb mode
-   * 2: Average if in climb mode, final glide in final glide mode
-   */
-  int AutoMacCreadyMode;
-
   /** Calculate final glide over terrain */
   int FinalGlideTerrain;
 

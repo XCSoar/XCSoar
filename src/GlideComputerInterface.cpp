@@ -73,4 +73,13 @@ GlideComputerTaskEvents::task_finish()
   // @todo SaveFinish();
 }
 
+void
+GlideComputerTaskEvents::transition_flight_mode(const bool is_final)
+{
+  if (is_final) {
+    InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE);
+  } else {
+    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
+  }
+}
 

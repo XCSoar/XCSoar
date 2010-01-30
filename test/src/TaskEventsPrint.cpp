@@ -134,3 +134,17 @@ TaskEventsPrint::active_advanced(const TaskPoint &tp, const int i)
 #endif
   }
 }
+
+void 
+TaskEventsPrint::transition_flight_mode(const bool is_final)
+{
+  if (verbose) {
+#ifdef DO_PRINT
+    if (is_final) {
+      printf("#- flight mode final glide \n");
+    } else {
+      printf("#- flight mode cruise \n");
+    }
+#endif
+  }
+}

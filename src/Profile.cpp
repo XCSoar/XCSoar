@@ -585,7 +585,7 @@ Profile::ReadRegistrySettings()
 
 #ifdef OLD_TASK
   GetFromRegistry(szRegistryAutoMcMode,
-		  SetSettingsComputer().AutoMacCreadyMode);
+		  SetSettingsComputer().auto_mc_mode);
 #endif
   GetFromRegistry(szRegistryWaypointsOutOfRange,
 		  WaypointsOutOfRange);

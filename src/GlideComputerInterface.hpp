@@ -16,6 +16,8 @@ public:
   void task_start();
 
   void task_finish();
+
+  void transition_flight_mode(const bool is_final);
 };
 
 #endif
