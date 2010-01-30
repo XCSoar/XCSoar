@@ -41,6 +41,7 @@ Copyright_License {
 #include "Task/TaskManager.hpp"
 #include "RasterTerrain.h"
 #include "Components.hpp"
+#include "GlideTerrain.hpp"
 
 #include <algorithm>
 
@@ -91,6 +92,8 @@ GlideComputerTask::ProcessBasicTask()
 
   SetCalculated().task_stats = m_task.get_stats();
   SetCalculated().common_stats = m_task.get_common_stats();
+
+  TerrainWarning();
 
   if (SettingsComputer().EnableBlockSTF) {
     SetCalculated().V_stf = m_task.get_common_stats().V_block;
@@ -173,25 +176,6 @@ GlideComputerTask::LDNext()
 #endif
 }
 
-
-void
-GlideComputerTask::TerrainWarning()
-{
-#ifdef OLD_TASK
-  if (!task.Valid()) {
-    SetCalculated().TerrainWarningLocation.Latitude = 0.0;
-    SetCalculated().TerrainWarningLocation.Longitude = 0.0;
-    CheckFinalGlideThroughTerrain(0.0, 0.0);
-    return;
-  }
-
-  CheckFinalGlideThroughTerrain(Calculated().LegDistanceToGo, Bearing(
-      Basic().Location, task.getTargetLocation()));
-
-#endif
-}
-
-
 /*
     // v1 = actual task speed achieved so far
     // d1 = distance travelled
@@ -213,35 +197,45 @@ GlideComputerTask::TerrainWarning()
 
 
 void
-GlideComputerTask::CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing)
+GlideComputerTask::TerrainWarning()
 {
-#ifdef OLD_TASK
-  // Final glide through terrain updates
-  if (Calculated().FinalGlide) {
+  terrain.Lock();
+  GlideTerrain g_terrain(SettingsComputer(), terrain);
 
-    GEOPOINT loc;
-    bool out_of_range;
+  AIRCRAFT_STATE state = Basic();
+  bool do_calc = true;
 
-    terrain.Lock();
-    double distance_soarable =
-      FinalGlideThroughTerrain(LegBearing,
-                               Basic(), Calculated(),
-                               SettingsComputer(), terrain,
-                               &loc,
-                               LegToGo, &out_of_range, NULL);
-    terrain.Unlock();
+  GEOPOINT null_point;
+  const TaskStats& stats = Calculated().task_stats;
+  const GlideResult& current = stats.current_leg.solution_remaining;
 
-    if ((!out_of_range)&&(distance_soarable< LegToGo)) {
-      SetCalculated().TerrainWarningLocation = loc;
-    } else {
-      SetCalculated().TerrainWarningLocation.Latitude = 0.0;
-      SetCalculated().TerrainWarningLocation.Longitude = 0.0;
-    }
+  SetCalculated().TerrainWarningLocation = null_point;
+
+  if (!stats.task_valid) {
+    g_terrain.set_max_range(fixed(max(fixed(20000.0), 
+                                      MapProjection().GetScreenDistanceMeters())));
   } else {
-    SetCalculated().TerrainWarningLocation.Latitude = 0.0;
-    SetCalculated().TerrainWarningLocation.Longitude = 0.0;
+    state.TrackBearing = current.Vector.Bearing;
+    g_terrain.set_max_range(current.Vector.Distance);
+    // DistanceToFinal
+
+    if (current.DistanceToFinal >= current.Vector.Distance) {
+      do_calc = false;
+    } else {
+      state.Location = current.location_at_final(state.Location);
+    }
   }
-#endif
+
+  if (do_calc) {
+    TerrainIntersection its = 
+      g_terrain.find_intersection(Basic(), 
+                                  m_task.get_glide_polar());
+    if (!its.out_of_range) {
+      SetCalculated().TerrainWarningLocation = its.location;
+    }
+  }
+
+  terrain.Unlock();
 }
 
 

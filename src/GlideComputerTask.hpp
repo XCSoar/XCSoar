@@ -58,7 +58,6 @@ protected:
 private:
   void TerrainWarning();
   void LDNext();
-  void CheckFinalGlideThroughTerrain(double LegToGo, double LegBearing);
   // best alternate
   void AlertBestAlternate(short soundmode);
   void DoBestAlternateSlow();

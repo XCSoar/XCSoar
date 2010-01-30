@@ -436,10 +436,6 @@ GlideComputerAirData::TerrainHeight()
     SetCalculated().TerrainAlt = Alt;
   }
 
-  if (!SettingsComputer().FinalGlideTerrain) {
-    SetCalculated().TerrainBase = Calculated().TerrainAlt;
-  }
-
 }
 
 
@@ -542,14 +538,15 @@ GlideComputerAirData::AirspaceWarning()
 void
 GlideComputerAirData::TerrainFootprint(double screen_range)
 {
-  if (!SettingsComputer().FinalGlideTerrain)
+  // initialise base
+  SetCalculated().TerrainBase = Calculated().TerrainAlt;
+
+  if (!SettingsComputer().FinalGlideTerrain) 
     return;
 
   // estimate max range (only interested in at most one screen
   // distance away) except we need to scan for terrain base, so 20km
   // search minimum is required
-
-  SetCalculated().TerrainBase = Calculated().TerrainAlt;
 
   terrain.Lock();
   GlideTerrain g_terrain(SettingsComputer(), terrain);
