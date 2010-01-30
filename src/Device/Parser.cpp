@@ -1123,8 +1123,8 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   if (i > 255)
     i = 0;
 
-  //if (i > 80)
-  //  return;
+  if (i > 80)
+    return;
 
   static fixed angle;
   angle = (i * 360) / 255;
