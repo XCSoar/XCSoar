@@ -192,7 +192,8 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
   }
     
   retval.out_of_range = true;
-  GeoVector long_vec(max(glide_max_range,max_range)*fixed_two, state.TrackBearing);
+  GeoVector long_vec(max(glide_max_range,max_range)*fixed_two, 
+                     state.TrackBearing);
   retval.location = long_vec.end_point(state.Location);
   return retval;
 }
@@ -200,7 +201,9 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
 fixed 
 GlideTerrain::h_terrain(const GEOPOINT& loc) 
 {
-  return max(fixed_zero, fixed(m_terrain.GetTerrainHeight(loc, *rounding)))+SafetyAltitudeTerrain;
+  return max(fixed_zero, 
+             fixed(m_terrain.GetTerrainHeight(loc, *rounding)))
+    +SafetyAltitudeTerrain;
 }
 
 
