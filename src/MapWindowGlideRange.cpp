@@ -56,8 +56,8 @@ void MapWindow::CalculateScreenPositionsGroundline(void) {
  * @param rc The area to draw in
  * @param buffer The drawing buffer
  */
-void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer) {
-
+void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer) 
+{
   if (!Basic().Flying) return;
 
   buffer.background_transparent();
@@ -94,17 +94,14 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
     canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
   }
 
-#ifdef OLD_TASK
-  if (Basic().Flying && task != NULL && task->Valid()) {
-    if ((Calculated().TerrainWarningLocation.Latitude != 0.0)
-        &&(Calculated().TerrainWarningLocation.Longitude != 0.0)) {
+  if (!Basic().Flying) return;
 
-      draw_masked_bitmap_if_visible(canvas, MapGfx.hTerrainWarning,
-				    Calculated().TerrainWarningLocation,
-				    10, 10);
-    }
+  if ((Calculated().TerrainWarningLocation.Latitude != 0.0)
+      &&(Calculated().TerrainWarningLocation.Longitude != 0.0)) {
+    
+    draw_masked_bitmap_if_visible(canvas, MapGfx.hTerrainWarning,
+                                  Calculated().TerrainWarningLocation,
+                                  10, 10);
   }
-#endif
-
 }
 
