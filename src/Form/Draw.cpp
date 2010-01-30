@@ -41,8 +41,9 @@ Copyright_License {
 
 WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl *Owner, TCHAR *Name,
                                      int X, int Y, int Width, int Height,
+                                     const WindowStyle style,
                                      OnPaintCallback_t OnPaintCallback)
-  :WindowControl(Owner, NULL, Name, X, Y, Width, Height),
+  :WindowControl(Owner, NULL, Name, X, Y, Width, Height, style),
    mOnPaintCallback(OnPaintCallback)
 {
   mCaption[0] = '\0';

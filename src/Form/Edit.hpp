@@ -167,7 +167,9 @@ public:
    */
   WndProperty(ContainerControl *Parent, TCHAR *Name, TCHAR *Caption,
               int X, int Y, int Width, int Height, int CaptionWidth,
-              DataChangeCallback_t DataChangeNotify, int MultiLine = false);
+              const WindowStyle style,
+              const EditWindowStyle edit_style,
+              DataChangeCallback_t DataChangeNotify);
 
   /** Destructor */
   ~WndProperty(void);

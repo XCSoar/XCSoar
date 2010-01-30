@@ -985,7 +985,10 @@ InfoBoxManager::Create(RECT rc)
   sizex=rc.right-rc.left;
   sizey=rc.bottom-rc.top;
 
-  full_window.set(main_window, xoff, yoff, sizex, sizey, false, false, false);
+  WindowStyle style;
+  style.hide();
+
+  full_window.set(main_window, xoff, yoff, sizex, sizey, style);
 
   // create infobox windows
   for (unsigned i = 0; i < numInfoWindows; i++) {

@@ -92,6 +92,9 @@ void
 TopWindow::set(const TCHAR *cls, const TCHAR *text,
                 int left, int top, unsigned width, unsigned height)
 {
+  WindowStyle style;
+  style.popup();
+
 #ifdef ENABLE_SDL
   int ret;
 
@@ -104,22 +107,13 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
     fprintf(stderr, "TTF_Init() has failed: %s\n", TTF_GetError());
 
   screen.set();
-  ContainerWindow::set(NULL, 0, 0, width, height);
+  ContainerWindow::set(NULL, cls, 0, 0, width, height, style);
 
   char text2[512];
   unicode2ascii(text, text2);
   ::SDL_WM_SetCaption(text2, NULL);
 #else /* !ENABLE_SDL */
-
-  ContainerWindow * top_parent = NULL;
-  DWORD 			style = (DWORD)(WS_SYSMENU|WS_CLIPCHILDREN|WS_CLIPSIBLINGS);
-
-  #if defined(sim_top_window_override)
-	extern void sim_top_window_override(ContainerWindow * &parent, int &left, int &top, unsigned &width, unsigned &height, DWORD &style);
-	sim_top_window_override(top_parent, left, top, width, height, style);
-  #endif
-
-  Window::set(top_parent, cls, text, left, top, width, height, style);
+  Window::set(NULL, cls, text, left, top, width, height, style);
 
 #if defined(GNAV) && !defined(PCGNAV)
   // TODO code: release the handle?

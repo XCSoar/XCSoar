@@ -90,7 +90,7 @@ InfoBox::InfoBox(ContainerWindow &parent, int X, int Y, int Width, int Height)
   colorTop = 0;
   colorBottom = 0;
 
-  set(parent, mX, mY, mWidth, mHeight, true, true);
+  set(parent, mX, mY, mWidth, mHeight);
 
   Color fgColor, bkColor, bkColorSel;
 

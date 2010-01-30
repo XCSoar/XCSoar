@@ -60,7 +60,7 @@ Window::~Window()
 void
 Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
             int left, int top, unsigned width, unsigned height,
-            DWORD style, DWORD ex_style)
+            const WindowStyle window_style)
 {
 #ifdef ENABLE_SDL
   this->parent = parent;
@@ -73,6 +73,13 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
 
   on_create();
 #else /* !ENABLE_SDL */
+  DWORD style = window_style.style, ex_style = window_style.ex_style;
+
+  if (model_is_hp31x() && (style & WS_BORDER) != 0) {
+    ex_style |= WS_EX_CLIENTEDGE;
+    style |= WS_THICKFRAME;
+  }
+
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
                           left, top, width, height,
                           parent != NULL ? parent->hWnd : NULL,
@@ -82,56 +89,6 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
      out-of-memory (we can't do anything useful) or if we passed wrong
      arguments - which is a bug */
   assert(hWnd != NULL);
-#endif /* !ENABLE_SDL */
-}
-
-void
-Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
-            int left, int top, unsigned width, unsigned height,
-            bool center, bool notify, bool show,
-            bool tabstop, bool border)
-{
-#ifdef ENABLE_SDL
-  this->parent = parent;
-  this->left = left;
-  this->top = top;
-  canvas.set(width, height);
-
-  if (parent != NULL)
-    parent->add_child(*this);
-
-  on_create();
-#else /* !ENABLE_SDL */
-  DWORD ex_style = 0;
-  DWORD style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-
-  if (parent == NULL)
-    style |= WS_POPUP;
-  else
-    style |= WS_CHILD;
-
-  if (show)
-    style |= WS_VISIBLE;
-
-  if (center)
-    style |= SS_CENTER;
-
-  if (notify)
-    style |= SS_NOTIFY;
-
-  if (tabstop)
-    style |= WS_TABSTOP;
-
-  if (border) {
-    style |= WS_BORDER;
-
-    if (model_is_hp31x()) {
-      ex_style |= WS_EX_CLIENTEDGE;
-      style |= WS_THICKFRAME;
-    }
-  }
-
-  set(parent, cls, text, left, top, width, height, style, ex_style);
 #endif /* !ENABLE_SDL */
 }
 

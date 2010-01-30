@@ -50,8 +50,9 @@ PeriodClock WndForm::timeAnyOpenClose;
 
 WndForm::WndForm(SingleWindow &_main_window,
                  const TCHAR *Name, const TCHAR *Caption,
-                 int X, int Y, int Width, int Height):
-  ContainerControl(NULL, &_main_window, Name, X, Y, Width, Height, false),
+                 int X, int Y, int Width, int Height,
+                 const WindowStyle style):
+  ContainerControl(NULL, &_main_window, Name, X, Y, Width, Height, style),
   main_window(_main_window),
   mModalResult(0),
   mColorTitle(Color::YELLOW),
@@ -61,7 +62,8 @@ WndForm::WndForm(SingleWindow &_main_window,
 {
   // Create ClientWindow
   mClientWindow = new ContainerControl(this, this,
-                                       TEXT(""), 20, 20, Width, Height);
+                                       TEXT(""), 20, 20, Width, Height,
+                                       WindowStyle());
   mClientWindow->SetBackColor(GetBackColor());
 
   mClientRect.top=0;

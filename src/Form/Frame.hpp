@@ -44,7 +44,8 @@ Copyright_License {
 class WndFrame : public WindowControl {
 public:
   WndFrame(ContainerControl *Owner, const TCHAR *Name,
-           int X, int Y, int Width, int Height);
+           int X, int Y, int Width, int Height,
+           const WindowStyle style=WindowStyle());
 
   void SetCaption(const TCHAR *Value);
 

@@ -48,6 +48,7 @@ public:
 
   WndOwnerDrawFrame(ContainerControl *Owner, TCHAR *Name, int X, int Y,
                     int Width, int Height,
+                    const WindowStyle style,
                     OnPaintCallback_t OnPaintCallback);
 
   /**

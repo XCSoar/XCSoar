@@ -261,6 +261,7 @@ public:
    */
   WndListFrame(ContainerControl *Owner, const TCHAR *Name,
                int X, int Y, int Width, int Height,
+               const WindowStyle style,
                unsigned _item_height);
 
   /** Sets the function to call when a ListItem is chosen */

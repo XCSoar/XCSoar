@@ -79,7 +79,10 @@ public:
    * @param Visible Visibility of the Control
    */
   WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
-      const TCHAR *Name, int X, int Y, int Width, int Height, bool Visible = true);
+                const TCHAR *Name,
+                int X, int Y, int Width, int Height,
+                const WindowStyle style);
+
   /** Destructor */
   virtual ~WindowControl(void);
 

@@ -44,8 +44,9 @@ Copyright_License {
 
 WndButton::WndButton(ContainerControl *Parent, const TCHAR *Name,
     const TCHAR *Caption, int X, int Y, int Width, int Height,
+                     const WindowStyle style,
     ClickNotifyCallback_t Function) :
-  WindowControl(Parent, NULL, Name, X, Y, Width, Height),
+  WindowControl(Parent, NULL, Name, X, Y, Width, Height, style),
   mDown(false),
   mDefault(false),
   mLastDrawTextHeight(-1),

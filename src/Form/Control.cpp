@@ -77,7 +77,9 @@ KeyTimer(bool isdown, unsigned thekey)
 }
 
 WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
-    const TCHAR *Name, int X, int Y, int Width, int Height, bool Visible) :
+                             const TCHAR *Name,
+                             int X, int Y, int Width, int Height,
+                             const WindowStyle style) :
     mOwner(Owner),
     mBorderKind(0), //BORDERRIGHT | BORDERBOTTOM;
     mColorBack(Color::WHITE),
@@ -110,7 +112,7 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
     initialized = true;
   }
 
-  set(Parent, X, Y, Width, Height, false, false, Visible, false, false);
+  set(*Parent, X, Y, Width, Height, style);
 
   // Add the Control as a client of its parent
   if (mOwner != NULL)

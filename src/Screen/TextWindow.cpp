@@ -41,12 +41,11 @@ Copyright_License {
 #include <commctrl.h>
 
 void
-TextWindow::set(ContainerWindow &parent,
+TextWindow::set(ContainerWindow &parent, const TCHAR *text,
                 int left, int top, unsigned width, unsigned height,
-                bool center, bool notify, bool show,
-                bool tabstop, bool border)
+                const TextWindowStyle style)
 {
-  Window::set(&parent, WC_STATIC, NULL,
+  Window::set(&parent, WC_STATIC, text,
               left, top, width, height,
-              center, notify, show, tabstop, border);
+              style);
 }

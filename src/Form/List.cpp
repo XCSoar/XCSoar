@@ -49,8 +49,9 @@ using std::max;
 
 WndListFrame::WndListFrame(ContainerControl *Owner, const TCHAR *Name,
                            int X, int Y, int Width, int Height,
+                           const WindowStyle style,
                            unsigned _item_height):
-  WindowControl(Owner, NULL, Name, X, Y, Width, Height),
+  WindowControl(Owner, NULL, Name, X, Y, Width, Height, style),
   item_height(_item_height),
   length(0), origin(0), items_visible(Height / item_height),
   relative_cursor(0),

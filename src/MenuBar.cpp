@@ -106,10 +106,14 @@ MenuBar::MenuBar(ContainerWindow &parent)
   const RECT rc = parent.get_client_rect();
   int x, y, xsize, ysize;
 
+  ButtonWindowStyle style;
+  style.hide();
+  style.multiline();
+
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
     buttons[i].set(parent, _T(""), FIRST_ID + i, x, y, xsize, ysize,
-                   false, false, true);
+                   style);
   }
 }
 

@@ -46,12 +46,11 @@ Copyright_License {
 void
 ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
                   int left, int top, unsigned width, unsigned height,
-                  bool visible, bool tabstop, bool multiline)
+                  const ButtonWindowStyle style)
 {
   reset();
 
-  PaintWindow::set(&parent, left, top, width, height,
-                   true, false, visible);
+  PaintWindow::set(parent, left, top, width, height, style);
 
   this->text = text;
   this->id = id;
@@ -101,23 +100,11 @@ ButtonWindow::on_paint(Canvas &canvas)
 void
 ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
                   int left, int top, unsigned width, unsigned height,
-                  bool visible, bool tabstop, bool multiline)
+                  const ButtonWindowStyle style)
 {
-  DWORD ex_style = 0;
-  DWORD style = WS_CHILD | BS_PUSHBUTTON | BS_CENTER | BS_VCENTER;
-
-  if (visible)
-    style |= WS_VISIBLE;
-
-  if (tabstop)
-    style |= WS_TABSTOP;
-
-  if (multiline)
-    style |= BS_MULTILINE;
-
   Window::set(&parent, WC_BUTTON, text,
               left, top, width, height,
-              style, ex_style);
+              style);
 
   ::SetWindowLong(hWnd, GWL_ID, id);
 }

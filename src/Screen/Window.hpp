@@ -50,6 +50,71 @@ Copyright_License {
 class ContainerWindow;
 
 /**
+ * A portable wrapper for describing a window's style settings on
+ * creation.
+ */
+class WindowStyle {
+#ifdef ENABLE_SDL
+protected:
+  bool visible;
+
+public:
+  WindowStyle():visible(true) {}
+
+#else /* !ENABLE_SDL */
+protected:
+  DWORD style, ex_style;
+
+public:
+  WindowStyle()
+    :style(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
+     ex_style(0) {}
+#endif /* !ENABLE_SDL */
+
+  void hide() {
+#ifdef ENABLE_SDL
+    visible = false;
+#else
+    style &= ~WS_VISIBLE;
+#endif
+  }
+
+  void tab_stop() {
+#ifndef ENABLE_SDL
+    style |= WS_TABSTOP;
+#endif
+  }
+
+  void border() {
+#ifndef ENABLE_SDL
+    style |= WS_BORDER;
+#endif
+  }
+
+  void sunken_edge() {
+    border();
+#ifndef ENABLE_SDL
+    ex_style |= WS_EX_CLIENTEDGE;
+#endif
+  }
+
+  void vscroll() {
+#ifndef ENABLE_SDL
+    style |= WS_VSCROLL;
+#endif
+  }
+
+  void popup() {
+#ifndef ENABLE_SDL
+    style &= ~WS_CHILD;
+    style |= WS_SYSMENU;
+#endif
+  }
+
+  friend class Window;
+};
+
+/**
  * A Window is a portion on the screen which displays something, and
  * which optionally interacts with the user.  To draw custom graphics
  * into a Window, derive your class from #PaintWindow.
@@ -154,12 +219,7 @@ public:
 
   void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
            int left, int top, unsigned width, unsigned height,
-           DWORD style, DWORD ex_style=0);
-
-  void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
-           int left, int top, unsigned width, unsigned height,
-           bool center = false, bool notify = false, bool show = true,
-           bool tabstop = false, bool border = false);
+           const WindowStyle window_style=WindowStyle());
 
 #ifndef ENABLE_SDL
   void created(HWND _hWnd);

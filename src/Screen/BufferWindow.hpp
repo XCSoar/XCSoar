@@ -56,16 +56,15 @@ public:
 
 #ifndef ENABLE_SDL
   void set(ContainerWindow &parent, const TCHAR *cls,
-           int left, int top, unsigned width, unsigned height) {
-    PaintWindow::set(parent, cls, left, top, width, height);
+           int left, int top, unsigned width, unsigned height,
+           const WindowStyle style=WindowStyle()) {
+    PaintWindow::set(parent, cls, left, top, width, height, style);
   }
 
   void set(ContainerWindow &parent,
            int left, int top, unsigned width, unsigned height,
-           bool center = false, bool notify = false, bool show = true,
-           bool tabstop = false, bool border = false) {
-    PaintWindow::set(parent, left, top, width, height,
-                     center, notify, show, tabstop, border);
+           const WindowStyle style=WindowStyle()) {
+    PaintWindow::set(parent, left, top, width, height, style);
   }
 
   Canvas &get_canvas() {

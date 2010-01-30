@@ -84,8 +84,10 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
 
   StartupStore(TEXT("Create Vario\n"));
 
-  set(parent, left, top, width, height,
-      false, false, false);
+  WindowStyle style;
+  style.hide();
+
+  set(parent, left, top, width, height, style);
 
   // load vario scale
   if (Units::GetUserVerticalSpeedUnit()==unKnots) {

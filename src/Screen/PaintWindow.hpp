@@ -86,20 +86,24 @@ public:
 
   static bool register_class(HINSTANCE hInstance);
 
-  void set(ContainerWindow &parent, const TCHAR *cls,
-           int left, int top, unsigned width, unsigned height) {
-    Window::set(&parent, cls, NULL, left, top, width, height);
+  void set(ContainerWindow *parent, const TCHAR *cls,
+           int left, int top, unsigned width, unsigned height,
+           const WindowStyle style=WindowStyle()) {
+    Window::set(parent, cls, NULL,
+                left, top, width, height, style);
   }
 
-  void set(ContainerWindow *parent,
+  void set(ContainerWindow &parent, const TCHAR *cls,
            int left, int top, unsigned width, unsigned height,
-           bool center = false, bool notify = false, bool show = true,
-           bool tabstop = false, bool border = false);
+           const WindowStyle style=WindowStyle()) {
+    set(&parent, cls, left, top, width, height, style);
+  }
 
   void set(ContainerWindow &parent,
            int left, int top, unsigned width, unsigned height,
-           bool center = false, bool notify = false, bool show = true,
-           bool tabstop = false, bool border = false);
+           const WindowStyle style=WindowStyle()) {
+    set(parent, _T("PaintWindow"), left, top, width, height, style);
+  }
 
   Canvas &get_canvas() {
     return canvas;

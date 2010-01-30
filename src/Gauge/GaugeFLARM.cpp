@@ -281,7 +281,10 @@ GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
 {
   // start of new code for displaying FLARM window
 
-  set(parent, left, top, width, height, false, false, false);
+  WindowStyle style;
+  style.hide();
+
+  set(parent, left, top, width, height, style);
 
   center.x = get_hmiddle();
   center.y = get_vmiddle();

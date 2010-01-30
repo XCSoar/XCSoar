@@ -39,8 +39,9 @@ Copyright_License {
 #include "Form/Frame.hpp"
 
 WndFrame::WndFrame(ContainerControl *Owner, const TCHAR *Name,
-                   int X, int Y, int Width, int Height)
-  :WindowControl(Owner, NULL, Name, X, Y, Width, Height),
+                   int X, int Y, int Width, int Height,
+                   const WindowStyle style)
+  :WindowControl(Owner, NULL, Name, X, Y, Width, Height, style),
    mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
   SetForeColor(GetOwner()->GetForeColor());

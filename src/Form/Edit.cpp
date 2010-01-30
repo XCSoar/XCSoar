@@ -141,11 +141,13 @@ WndProperty::WndProperty(ContainerControl *Parent,
                          int X, int Y,
                          int Width, int Height,
                          int CaptionWidth,
-                         DataChangeCallback_t DataChangeNotify,
-                         int MultiLine)
+                         const WindowStyle style,
+                         const EditWindowStyle edit_style,
+                         DataChangeCallback_t DataChangeNotify)
   :WindowControl(Parent,
                  NULL /*Parent->GetHandle()*/,
-                 Name, X, Y, Width, Height),
+                 Name, X, Y, Width, Height,
+                 style),
    edit(this),
    mhValueFont(GetFont()),
    mCaptionWidth(CaptionWidth),
@@ -171,7 +173,7 @@ WndProperty::WndProperty(ContainerControl *Parent,
 
   UpdateButtonData(mBitmapSize);
 
-  edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y, MultiLine);
+  edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y, edit_style);
   edit.install_wndproc();
 
   edit.set_font(*mhValueFont);

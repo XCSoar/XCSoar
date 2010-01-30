@@ -78,8 +78,17 @@ void
 PopupMessage::set(const RECT _rc)
 {
   rc = _rc;
-  set_ro_ml(parent, rc.left, rc.top,
-            rc.right - rc.left, rc.bottom - rc.top);
+
+  EditWindowStyle style;
+  style.border();
+  style.center();
+  style.multiline();
+  style.read_only();
+
+  EditWindow::set(parent, rc.left, rc.top,
+                  rc.right - rc.left, rc.bottom - rc.top,
+                  style);
+
   set_font(MapWindowBoldFont);
   install_wndproc();
 }

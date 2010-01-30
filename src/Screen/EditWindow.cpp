@@ -37,58 +37,17 @@ Copyright_License {
 */
 
 #include "Screen/EditWindow.hpp"
-#include "Asset.hpp"
-
-#ifdef PNA
-#include "Appearance.hpp" // for GlobalModelType
-#endif
 
 #include <commctrl.h>
+
+#if defined(ENABLE_SDL) && !defined(WC_EDIT)
+#define WC_EDIT _T("Edit")
+#endif
 
 void
 EditWindow::set(ContainerWindow &parent, int left, int top,
                 unsigned width, unsigned height,
-                bool multiline)
-{
-#ifdef ENABLE_SDL
-  // XXX
-  Window::set(&parent, NULL, NULL,
-              left, top, width, height);
-#else /* !ENABLE_SDL */
-  DWORD style = WS_BORDER | WS_VISIBLE | WS_CHILD
-    | ES_LEFT
-    | WS_CLIPCHILDREN
-    | WS_CLIPSIBLINGS;
-  DWORD ex_style = 0;
-
-  if (multiline)
-    style |= ES_MULTILINE | WS_VSCROLL;
-  else
-    style |= ES_AUTOHSCROLL;
-
-  if (model_is_hp31x())
-    ex_style |= WS_EX_CLIENTEDGE;
-
+                const EditWindowStyle style) {
   Window::set(&parent, WC_EDIT, NULL,
-              left, top, width, height, style, ex_style);
-#endif /* !ENABLE_SDL */
-}
-
-void
-EditWindow::set_ro_ml(ContainerWindow &parent, int left, int top,
-                      unsigned width, unsigned height)
-{
-#ifdef ENABLE_SDL
-  // XXX
-  Window::set(&parent, NULL, NULL,
-              left, top, width, height);
-#else /* !ENABLE_SDL */
-  DWORD style = WS_BORDER | WS_CHILD
-    | ES_CENTER | ES_MULTILINE | ES_READONLY
-    | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-  DWORD ex_style = 0;
-
-  Window::set(&parent, WC_EDIT, NULL,
-              left, top, width, height, style, ex_style);
-#endif /* !ENABLE_SDL */
+              left, top, width, height, style);
 }

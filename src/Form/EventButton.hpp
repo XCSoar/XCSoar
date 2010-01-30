@@ -49,6 +49,7 @@ class WndEventButton : public WndButton {
 public:
   WndEventButton(ContainerControl *Parent, const TCHAR *Name, const TCHAR *Caption,
                  int X, int Y, int Width, int Height,
+                 const WindowStyle style,
                  const TCHAR *ename,
                  const TCHAR *eparameters);
   ~WndEventButton();

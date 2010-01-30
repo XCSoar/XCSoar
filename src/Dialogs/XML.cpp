@@ -526,7 +526,10 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
   }
 
   // Create the dialog
-  theForm = new WndForm(Parent, Name, sTmp, X, Y, Width, Height);
+  WindowStyle style;
+  style.hide();
+
+  theForm = new WndForm(Parent, Name, sTmp, X, Y, Width, Height, style);
 
   // Sets Fonts
   if (Font != -1)
@@ -681,11 +684,21 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
     _tcscpy(Caption, gettext(Caption));
 
     // Create the Property Control
+
+    EditWindowStyle edit_style;
+    edit_style.border();
+
+    if (MultiLine) {
+      edit_style.multiline();
+      edit_style.vscroll();
+    }
+
     WC = W = new WndProperty(Parent, Name, Caption, X, Y, Width, Height,
                              CaptionWidth,
+                             WindowStyle(),
+                             edit_style,
                              (WndProperty::DataChangeCallback_t)
-                             CallBackLookup(LookUpTable, DataNotifyCallback),
-                             MultiLine);
+                             CallBackLookup(LookUpTable, DataNotifyCallback));
 
     // Set the help function event callback
     W->SetOnHelpCallback((WindowControl::OnHelpCallback_t)
@@ -720,6 +733,7 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
 
     // Create the ButtonControl
     WC = new WndButton(Parent, Name, Caption, X, Y, Width, Height,
+                       WindowStyle(),
                        (WndButton::ClickNotifyCallback_t)
                        CallBackLookup(LookUpTable, ClickCallback));
 
@@ -737,6 +751,7 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
 
     // Create the EventButtonControl
     WC = new WndEventButton(Parent, Name, Caption, X, Y, Width, Height,
+                            WindowStyle(),
                             iename, ieparameters);
 
     Caption[0] = '\0';
@@ -760,13 +775,15 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
 
     // Create the DrawControl
     WC = new WndOwnerDrawFrame(Parent, Name, X, Y, Width, Height,
+                               WindowStyle(),
                                (WndOwnerDrawFrame::OnPaintCallback_t)
                                CallBackLookup(LookUpTable, PaintCallback));
 
   // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("WndFrame")) == 0){
     // Create the FrameControl
-    WC = new WndFrame(Parent, Name, X, Y, Width, Height);
+    WC = new WndFrame(Parent, Name, X, Y, Width, Height,
+                      WindowStyle());
 
   // ListBoxControl (WndListFrame)
   } else if (_tcscmp(node.getName(), _T("WndListFrame")) == 0){
@@ -775,7 +792,9 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
       Layout::Scale(StringToIntDflt(node.getAttribute(_T("ItemHeight")), 18));
 
     // Create the ListBoxControl
-    WC = new WndListFrame(Parent, Name, X, Y, Width, Height, item_height);
+    WC = new WndListFrame(Parent, Name, X, Y, Width, Height,
+                          WindowStyle(),
+                          item_height);
 
   // TabControl (Tabbed)
   } else if (_tcscmp(node.getName(), _T("Tabbed")) == 0) {

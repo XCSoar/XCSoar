@@ -56,7 +56,8 @@ public:
    * @param height Height of the Control
    */
   PanelControl(ContainerControl *owner, const TCHAR *name,
-               int x, int y, unsigned width, unsigned height);
+               int x, int y, unsigned width, unsigned height,
+               const WindowStyle style=WindowStyle());
 };
 
 #endif

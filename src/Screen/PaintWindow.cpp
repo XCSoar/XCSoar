@@ -102,27 +102,6 @@ PaintWindow::register_class(HINSTANCE hInstance)
 #endif /* !ENABLE_SDL */
 }
 
-void
-PaintWindow::set(ContainerWindow *parent,
-                 int left, int top, unsigned width, unsigned height,
-                 bool center, bool notify, bool show,
-                 bool tabstop, bool border)
-{
-  Window::set(parent, TEXT("PaintWindow"), NULL,
-              left, top, width, height,
-              center, notify, show, tabstop, border);
-}
-
-void
-PaintWindow::set(ContainerWindow &parent,
-                 int left, int top, unsigned width, unsigned height,
-                 bool center, bool notify, bool show,
-                 bool tabstop, bool border)
-{
-  set(&parent, left, top, width, height,
-      center, notify, show, tabstop, border);
-}
-
 #ifndef ENABLE_SDL
 
 bool

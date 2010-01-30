@@ -50,7 +50,7 @@ GaugeCDI::GaugeCDI(ContainerWindow &parent)
   // start of new code for displaying CDI window
   StartupStore(TEXT("Create CDI\n"));
 
-  set(parent,
+  set(parent, NULL,
       (int)(InfoBoxLayout::ControlWidth * 0.6),
       (int)(InfoBoxLayout::ControlHeight + 1),
       (int)(InfoBoxLayout::ControlWidth * 2.8),

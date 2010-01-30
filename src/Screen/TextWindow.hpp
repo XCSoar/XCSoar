@@ -41,15 +41,28 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
+class TextWindowStyle : public WindowStyle {
+  void center() {
+#ifndef ENABLE_SDL
+    style |= SS_CENTER;
+#endif
+  }
+
+  void notify() {
+#ifndef ENABLE_SDL
+    style |= SS_NOTIFY;
+#endif
+  }
+};
+
 /**
  * A window which renders static text.
  */
 class TextWindow : public Window {
 public:
-  void set(ContainerWindow &parent,
+  void set(ContainerWindow &parent, const TCHAR *text,
            int left, int top, unsigned width, unsigned height,
-           bool center = false, bool notify = false, bool show = true,
-           bool tabstop = false, bool border = false);
+           const TextWindowStyle style=TextWindowStyle());
 
   void set_text(const TCHAR *text) {
     assert_none_locked();

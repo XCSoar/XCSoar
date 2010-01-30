@@ -97,7 +97,8 @@ public:
    * @param Height Height of the Window
    */
   WndForm(SingleWindow &_main_window, const TCHAR *Name, const TCHAR *Caption,
-          int X, int Y, int Width, int Height);
+          int X, int Y, int Width, int Height,
+          const WindowStyle style);
 
   /** Destructor */
   virtual ~WndForm();

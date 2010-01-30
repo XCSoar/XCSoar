@@ -67,8 +67,8 @@ public:
    */
   ContainerControl(ContainerControl *owner, ContainerWindow *parent,
                    const TCHAR *name, int x, int y, int width, int height,
-                   bool visible = true)
-    :WindowControl(owner, parent, name, x, y, width, height, visible),
+                   const WindowStyle style)
+    :WindowControl(owner, parent, name, x, y, width, height, style),
      mClientCount(0) {}
   /** Destructor */
   virtual ~ContainerControl();

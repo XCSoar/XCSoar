@@ -64,6 +64,7 @@ public:
    */
   WndButton(ContainerControl *Parent, const TCHAR *Name, const TCHAR *Caption,
       int X, int Y, int Width, int Height,
+            const WindowStyle style,
       ClickNotifyCallback_t Function = NULL);
 
   /**

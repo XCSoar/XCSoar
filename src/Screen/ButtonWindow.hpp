@@ -39,6 +39,23 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BUTTON_WINDOW_HXX
 #define XCSOAR_SCREEN_BUTTON_WINDOW_HXX
 
+#include <Screen/Window.hpp>
+
+class ButtonWindowStyle : public WindowStyle {
+public:
+  ButtonWindowStyle() {
+#ifndef ENABLE_SDL
+    style |= BS_PUSHBUTTON | BS_CENTER | BS_VCENTER;
+#endif
+  }
+
+  void multiline() {
+#ifndef ENABLE_SDL
+    style |= BS_MULTILINE;
+#endif
+  }
+};
+
 #ifdef ENABLE_SDL
 
 #include "Screen/PaintWindow.hpp"
@@ -60,7 +77,7 @@ public:
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
            int left, int top, unsigned width, unsigned height,
-           bool visible=true, bool tabstop=true, bool multiline=false);
+           const ButtonWindowStyle style=ButtonWindowStyle());
 
   void set_text(const TCHAR *_text) {
     assert_none_locked();
@@ -88,7 +105,7 @@ class ButtonWindow : public Window {
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
            int left, int top, unsigned width, unsigned height,
-           bool visible=true, bool tabstop=true, bool multiline=false);
+           const ButtonWindowStyle style=ButtonWindowStyle());
 
   void set_text(const TCHAR *text) {
     assert_none_locked();

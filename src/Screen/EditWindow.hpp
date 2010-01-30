@@ -41,6 +41,35 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
+class EditWindowStyle : public WindowStyle {
+public:
+  EditWindowStyle() {
+#ifndef ENABLE_SDL
+    style |= ES_LEFT | ES_AUTOHSCROLL;
+#endif
+  }
+
+  void read_only() {
+#ifndef ENABLE_SDL
+    style |= ES_READONLY;
+#endif
+  }
+
+  void multiline() {
+#ifndef ENABLE_SDL
+    style &= ~ES_AUTOHSCROLL;
+    style |= ES_MULTILINE;
+#endif
+  }
+
+  void center() {
+#ifndef ENABLE_SDL
+    style &= ~ES_LEFT;
+    style |= ES_CENTER;
+#endif
+  }
+};
+
 /**
  * A simple text editor widget.
  */
@@ -48,13 +77,7 @@ class EditWindow : public Window {
 public:
   void set(ContainerWindow &parent, int left, int top,
            unsigned width, unsigned height,
-           bool multiline = false);
-
-  /**
-   * Temporary solution for Message.cpp.
-   */
-  void set_ro_ml(ContainerWindow &parent, int left, int top,
-                 unsigned width, unsigned height);
+           const EditWindowStyle style);
 
   unsigned get_row_count() const {
     assert_none_locked();
