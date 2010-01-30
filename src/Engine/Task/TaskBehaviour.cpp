@@ -51,29 +51,31 @@ TaskBehaviour::all_off()
 
 
 bool 
-TaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state) const
+TaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state,
+                                 const bool with_margin) const
 {
-  // @todo implement margin
-
-  if (positive(start_max_speed) && (state.Speed>start_max_speed)) {
-    return false;
-  } else {
+  if (start_max_speed==0)
     return true;
-  }
+
+  const fixed margin = with_margin? start_max_speed_margin:fixed_zero;
+
+  return state.Speed <= start_max_speed+margin;
 }
 
-bool 
-TaskBehaviour::check_start_height(const AIRCRAFT_STATE &state) const
-{
-  // @todo implement margin, hookup to insector/transition checks
 
+bool 
+TaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
+                                  const bool with_margin) const
+{
   if (start_max_height==0)
     return true;
 
+  const unsigned margin = with_margin? start_max_height_margin:0;
+
   if (start_max_height_ref>0) {
-    return state.NavAltitude <= start_max_height;
+    return state.NavAltitude <= start_max_height+margin;
   } else {
-    return state.AltitudeAGL <= start_max_height;
+    return state.AltitudeAGL <= start_max_height+margin;
   }
 }
 

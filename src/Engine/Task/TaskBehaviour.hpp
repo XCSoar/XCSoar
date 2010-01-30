@@ -102,7 +102,8 @@ public:
  * 
  * @return True if within limits
  */
-  bool check_start_speed(const AIRCRAFT_STATE &state) const;
+  bool check_start_speed(const AIRCRAFT_STATE &state, 
+                         const bool with_margin=false) const;
 
 /** 
  * Check whether aircraft height is within start height limit
@@ -111,7 +112,8 @@ public:
  * 
  * @return True if within limits
  */
-  bool check_start_height(const AIRCRAFT_STATE &state) const;
+  bool check_start_height(const AIRCRAFT_STATE &state,
+                          const bool with_margin=false) const;
 };
 
 #endif

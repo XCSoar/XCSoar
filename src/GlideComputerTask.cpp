@@ -123,6 +123,38 @@ GlideComputerTask::ProcessIdle()
 
 
 void
+GlideComputerTask::TerrainWarning()
+{
+  terrain.Lock();
+  GlideTerrain g_terrain(SettingsComputer(), terrain);
+
+  AIRCRAFT_STATE state = Basic();
+
+  GEOPOINT null_point;
+  const TaskStats& stats = Calculated().task_stats;
+  const GlideResult& current = stats.current_leg.solution_remaining;
+
+  SetCalculated().TerrainWarningLocation = null_point;
+
+  TerrainIntersection its(null_point);
+
+  if (!stats.task_valid) {
+    g_terrain.set_max_range(fixed(max(fixed(20000.0), 
+                                      MapProjection().GetScreenDistanceMeters())));
+    its = g_terrain.find_intersection(state, m_task.get_glide_polar());
+  } else {
+    its = g_terrain.find_intersection(state, current, m_task.get_glide_polar());
+  }
+
+  if (!its.out_of_range) {
+    SetCalculated().TerrainWarningLocation = its.location;
+  }
+
+  terrain.Unlock();
+}
+
+
+void
 GlideComputerTask::LDNext()
 {
 #ifdef OLD_TASK
@@ -195,39 +227,6 @@ GlideComputerTask::LDNext()
     SetCalculated().TermikLigaPoints = termikLigaPoints;
 */
 
-
-void
-GlideComputerTask::TerrainWarning()
-{
-  terrain.Lock();
-  GlideTerrain g_terrain(SettingsComputer(), terrain);
-
-  AIRCRAFT_STATE state = Basic();
-
-  GEOPOINT null_point;
-  const TaskStats& stats = Calculated().task_stats;
-  const GlideResult& current = stats.current_leg.solution_remaining;
-
-  SetCalculated().TerrainWarningLocation = null_point;
-
-  TerrainIntersection its(null_point);
-
-  if (!stats.task_valid) {
-    g_terrain.set_max_range(fixed(max(fixed(20000.0), 
-                                      MapProjection().GetScreenDistanceMeters())));
-    its = g_terrain.find_intersection(state, m_task.get_glide_polar());
-  } else {
-    its = g_terrain.find_intersection(state, current, m_task.get_glide_polar());
-  }
-
-  if (!its.out_of_range) {
-    SetCalculated().TerrainWarningLocation = its.location;
-  }
-
-  terrain.Unlock();
-}
-
-
 /////////////////////////////////
 
 
@@ -257,43 +256,6 @@ GlideComputerTask::ValidFinish() const
     return true;
 }
 
-
-bool
-GlideComputerTask::ValidStartSpeed(const DWORD Margin) const
-{
-  if (task.getSettings().StartMaxSpeed == 0)
-    return true;
-
-  const NMEA_INFO &basic = Basic();
-
-  if (basic.AirspeedAvailable) {
-    if (basic.IndicatedAirspeed > (task.getSettings().StartMaxSpeed + Margin))
-      return false;
-  } else {
-    if (basic.Speed > (task.getSettings().StartMaxSpeed + Margin))
-      return false;
-  }
-  return true;
-}
-
-bool
-GlideComputerTask::InsideStartHeight(const DWORD Margin) const
-{
-  if (task.getSettings().StartMaxHeight == 0)
-    return true;
-
-  if (Calculated().TerrainValid)
-    return true;
-
-  if (task.getSettings().StartHeightRef == 0) {
-    if (Basic().AltitudeAGL > (task.getSettings().StartMaxHeight + Margin))
-      return false;
-  } else {
-    if (Basic().NavAltitude > (task.getSettings().StartMaxHeight + Margin))
-      return false;
-  }
-  return true;
-}
 
 void
 GlideComputerTask::CheckStart()
