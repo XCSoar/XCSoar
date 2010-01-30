@@ -8,8 +8,6 @@
 /**
  *  Class used for simplified/idealised performace
  *  of aircraft speed as a function of glide slope.
- *  \todo method to derive this data from glide polar
- *  \todo specialisation based on recent trajectory
  */
 class AirspaceAircraftPerformance {
 public:

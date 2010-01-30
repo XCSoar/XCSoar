@@ -52,10 +52,9 @@ public:
   /** 
    * Constructor.  For testing, pts vector is a cloud of points,
    * and the airspace polygon becomes the convex hull border.
-   * \todo remove convex hack for testing
    *
    * @param pts Vector representing border
-   * @param prune If true, converts border to convex hull of points
+   * @param prune If true, converts border to convex hull of points (for testing only)
    *
    * @return Initialised airspace object
    */

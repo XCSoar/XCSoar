@@ -51,10 +51,6 @@ FAITaskFactory::FAITaskFactory(OrderedTask& _task,
 bool 
 FAITaskFactory::validate()
 {
-  /**
-   * \todo
-   * - adjustment to finish height if FAI finish height is on
-   */
 
   if (!m_task.has_start() || !m_task.has_finish()) {
     return false;
