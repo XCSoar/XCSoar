@@ -89,8 +89,12 @@ static void RefreshCalculator(void) {
   // update outputs
   wp = (WndProperty*)wf->FindByName(_T("prpAATTime"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::SettingsComputer().aat_min_time/60);
-    wp->RefreshDisplay();
+    if (XCSoarInterface::Calculated().task_stats.has_targets) {
+      wp->GetDataField()->SetAsFloat(XCSoarInterface::SettingsComputer().aat_min_time/60);
+      wp->RefreshDisplay();
+    } else {
+      wp->hide();
+    }
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
