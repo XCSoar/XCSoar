@@ -686,7 +686,7 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
     // Create the Property Control
 
     EditWindowStyle edit_style;
-    edit_style.border();
+    edit_style.sunken_edge();
 
     if (MultiLine) {
       edit_style.multiline();
