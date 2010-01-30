@@ -82,7 +82,7 @@ SampledTaskPoint::update_sample(const AIRCRAFT_STATE& state,
 void 
 SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last) 
 {
-  if (!m_sampled_points.empty()) {
+  if (has_sampled()) {
     m_sampled_points.clear();
     SearchPoint sp(ref_last.Location, m_task_projection, true);
     m_sampled_points.push_back(sp);
@@ -138,7 +138,7 @@ SampledTaskPoint::get_search_points() const
   if (search_boundary_points()) {
     return m_boundary_points;
   } else {
-    if (m_sampled_points.empty()) {
+    if (!has_sampled()) {
       if (search_nominal_if_unsampled()) {
         // this adds a point in case the waypoint was skipped
         // this is a crude way of handling the situation --- may be best
@@ -166,4 +166,11 @@ SampledTaskPoint::set_search_min(const GEOPOINT &location)
 {
   SearchPoint sp(location, m_task_projection, false);
   set_search_min(sp);
+}
+
+
+bool 
+SampledTaskPoint::has_sampled() const
+{
+  return !m_sampled_points.empty();
 }

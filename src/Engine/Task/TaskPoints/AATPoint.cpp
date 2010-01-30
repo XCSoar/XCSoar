@@ -43,7 +43,11 @@ const GEOPOINT&
 AATPoint::get_location_remaining() const
 {
   if (getActiveState() == BEFORE_ACTIVE) {
-    return get_location_max();
+    if (has_sampled()) {
+      return get_location_max();
+    } else {
+      return get_location_min();
+    }
   } else {
     return m_target_location;
   }

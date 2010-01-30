@@ -280,6 +280,14 @@ protected:
   void set_tp_search_max(unsigned tp, const SearchPoint &sol);
 
 /** 
+ * Set task point's minimum distance achieved value
+ * 
+ * @param tp Index of task point to set min
+ * @param sol Search point found to be minimum distance
+ */
+  void set_tp_search_achieved(unsigned tp, const SearchPoint &sol);
+
+/** 
  * Scan task for valid start/finish points
  * 
  * @return True if start and finish found

@@ -124,6 +124,8 @@ public:
   virtual bool update_sample(const AIRCRAFT_STATE& state,
                              TaskEvents &task_events);
 
+  bool has_sampled() const;
+
 /** 
  * Accessor for task projection
  * 

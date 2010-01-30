@@ -767,6 +767,14 @@ OrderedTask::set_tp_search_min(unsigned tp, const SearchPoint &sol)
 }
 
 void 
+OrderedTask::set_tp_search_achieved(unsigned tp, const SearchPoint &sol) 
+{
+  if (tps[tp]->has_sampled()) {
+    set_tp_search_min(tp, sol);
+  }
+}
+
+void 
 OrderedTask::set_tp_search_max(unsigned tp, const SearchPoint &sol) 
 {
   tps[tp]->set_search_max(sol);

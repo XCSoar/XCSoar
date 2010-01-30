@@ -128,7 +128,7 @@ TaskDijkstra::save_max()
   for (unsigned j=0; j!=num_stages; ++j) {
     task.set_tp_search_max(j, solution[j]);
     if (j<=active_stage) {
-      task.set_tp_search_min(j, solution[j]);
+      task.set_tp_search_achieved(j, solution[j]);
     }
   }
 }
