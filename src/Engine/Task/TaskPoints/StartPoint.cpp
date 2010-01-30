@@ -129,3 +129,34 @@ StartPoint::find_best_start(const AIRCRAFT_STATE &state,
                              next.get_location_remaining());
   set_search_min(solver.solve());
 }
+
+
+bool 
+StartPoint::isInSector(const AIRCRAFT_STATE &state) const
+{
+  if (!ObservationZoneClient::isInSector(state)) 
+    return false;
+
+  return m_task_behaviour.check_start_height(state);  
+}
+
+bool 
+StartPoint::check_transition_exit(const AIRCRAFT_STATE & ref_now, 
+                                  const AIRCRAFT_STATE & ref_last) const
+{
+  const bool now_in_height = m_task_behaviour.check_start_height(ref_now);
+  const bool last_in_height = m_task_behaviour.check_start_height(ref_last);
+
+  if (now_in_height && last_in_height) {
+    // both within height limit, so use normal location checks
+    return ObservationZone::check_transition_exit(ref_now, ref_last);
+  }
+  if (!transition_constraint(ref_now, ref_last)) {
+    // don't allow vertical crossings for line OZ's
+    return false;
+  }
+
+  // transition inside sector to above 
+  return !now_in_height && last_in_height 
+    && ObservationZoneClient::isInSector(ref_last);
+}

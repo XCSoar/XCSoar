@@ -68,7 +68,7 @@ public:
  * @return True if constraints are satisfied
  */
   virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
-                                     const AIRCRAFT_STATE & ref_last) = 0;
+                                     const AIRCRAFT_STATE & ref_last) const = 0;
 
   /** 
    * Check if aircraft has transitioned to inside sector
@@ -78,8 +78,8 @@ public:
    *
    * @return True if aircraft now inside (and was outside)
    */
-    virtual bool transition_enter(const AIRCRAFT_STATE & ref_now, 
-                                  const AIRCRAFT_STATE & ref_last) {
+    virtual bool check_transition_enter(const AIRCRAFT_STATE & ref_now, 
+                                  const AIRCRAFT_STATE & ref_last) const {
         return isInSector(ref_now) && !isInSector(ref_last)
           && transition_constraint(ref_now, ref_last);
     };
@@ -92,9 +92,9 @@ public:
    *
    * @return True if aircraft now outside (and was inside)
    */
-    virtual bool transition_exit(const AIRCRAFT_STATE & ref_now, 
-                                 const AIRCRAFT_STATE & ref_last) {
-        return transition_enter(ref_last, ref_now);
+    virtual bool check_transition_exit(const AIRCRAFT_STATE & ref_now, 
+                                       const AIRCRAFT_STATE & ref_last) const {
+        return check_transition_enter(ref_last, ref_now);
     }  
 
 /** 

@@ -84,6 +84,28 @@ public:
                         OrderedTaskPoint* next);
 
 /** 
+ * Test whether aircraft is inside observation zone.
+ * 
+ * @param ref Aircraft state to test
+ * 
+ * @return True if aircraft is inside observation zone
+ */
+  bool isInSector(const AIRCRAFT_STATE &ref) const;
+
+
+  /** 
+   * Check if aircraft has transitioned to outside sector
+   * This allows for exit through top of sector.
+   * 
+   * @param ref_now Current aircraft state
+   * @param ref_last Previous aircraft state
+   *
+   * @return True if aircraft now outside (and was inside)
+   */
+  bool check_transition_exit(const AIRCRAFT_STATE & ref_now, 
+                             const AIRCRAFT_STATE & ref_last) const;
+
+/** 
  * Update sample, specialisation to check start speed/height
  *
  * @param state Aircraft state

@@ -105,7 +105,7 @@ public:
  * @return True if constraints are satisfied
  */
   virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
-                                     const AIRCRAFT_STATE & ref_last) {
+                                     const AIRCRAFT_STATE & ref_last) const {
     return true;
   }
 
