@@ -50,6 +50,7 @@ Copyright_License {
 
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "GlideSolvers/GlideResult.hpp"
 
 TerrainIntersection::TerrainIntersection(const GEOPOINT& start):
   location(start),
@@ -200,4 +201,109 @@ fixed
 GlideTerrain::h_terrain(const GEOPOINT& loc) 
 {
   return max(fixed_zero, fixed(m_terrain.GetTerrainHeight(loc, *rounding)))+SafetyAltitudeTerrain;
+}
+
+
+TerrainIntersection 
+GlideTerrain::find_intersection(const AIRCRAFT_STATE &state) 
+{
+  TerrainIntersection retval(state.Location);
+
+  if (!valid() || !positive(max_range)) {
+    // no terrain!
+    return retval;
+  }
+
+  GEOPOINT loc= state.Location, last_loc = loc;
+  const fixed altitude = state.NavAltitude;
+  fixed h = h_terrain(loc);
+  fixed dh = altitude - h;
+  fixed last_dh = dh;
+
+  if (!positive(dh)) {
+    return retval;
+  }
+  
+  fixed f_scale = fixed_one/NUMFINALGLIDETERRAIN;
+  
+  // find grid
+  const GeoVector vec(max_range*f_scale, state.TrackBearing);
+  const GEOPOINT delta_ll = vec.end_point(state.Location)-state.Location;
+  
+  for (int i=1; i<=NUMFINALGLIDETERRAIN; ++i) {
+    fixed f;
+    const fixed fi = i*f_scale;
+    // fraction of glide_max_range
+    
+    if (positive(max_range)&&(fi>=fixed_one)) {
+      // early exit
+      retval.out_of_range = true;
+      return retval;
+    }
+    
+    // find lat, lon of point of interest
+    loc += delta_ll;
+    
+    // find height over terrain
+    h = h_terrain(loc);
+    dh = altitude - h;
+    
+    if (positive(dh) && positive(h)) {
+      TerrainBase = min(TerrainBase, h);
+    }
+    
+    bool solution_found = false;
+    
+    if (!positive(dh)) {
+      if ((dh<last_dh) && positive(last_dh)) {
+        f = max(fixed_zero,min(fixed_one,(-last_dh)/(dh-last_dh)));
+      } else {
+        f = fixed_zero;
+      }
+      solution_found = true;
+    }
+    if (solution_found) {
+      retval.location = last_loc.interpolate(loc, f);
+      retval.range = retval.location.distance(state.Location);
+      retval.altitude = h; // approximation
+      return retval;
+    }
+    last_dh = dh;
+    last_loc = loc;
+  }
+    
+  retval.out_of_range = true;
+  GeoVector long_vec(max_range*fixed_two, state.TrackBearing);
+  retval.location = long_vec.end_point(state.Location);
+  return retval;
+}
+
+
+TerrainIntersection 
+GlideTerrain::find_intersection(const AIRCRAFT_STATE &basic,
+                                const GlideResult& solution,
+                                const GlidePolar& polar)
+{
+  AIRCRAFT_STATE state = basic;
+  state.TrackBearing = solution.Vector.Bearing;
+
+  if (solution.DistanceToFinal >= solution.Vector.Distance) {
+    // entire result is in cruise
+
+    set_max_range(solution.Vector.Distance);
+    return find_intersection(state);
+  }
+
+  // search for cruise part first
+  set_max_range(solution.DistanceToFinal);
+  TerrainIntersection its = find_intersection(state);
+  if (!its.out_of_range) {
+    return its;
+  }
+
+  // now search for glide part
+  state.Location = solution.location_at_final(state.Location);
+  set_max_range(solution.Vector.Distance-solution.DistanceToFinal);
+  return find_intersection(state, polar);
+
 }

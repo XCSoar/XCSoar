@@ -203,7 +203,6 @@ GlideComputerTask::TerrainWarning()
   GlideTerrain g_terrain(SettingsComputer(), terrain);
 
   AIRCRAFT_STATE state = Basic();
-  bool do_calc = true;
 
   GEOPOINT null_point;
   const TaskStats& stats = Calculated().task_stats;
@@ -211,28 +210,18 @@ GlideComputerTask::TerrainWarning()
 
   SetCalculated().TerrainWarningLocation = null_point;
 
+  TerrainIntersection its(null_point);
+
   if (!stats.task_valid) {
     g_terrain.set_max_range(fixed(max(fixed(20000.0), 
                                       MapProjection().GetScreenDistanceMeters())));
+    its = g_terrain.find_intersection(state, m_task.get_glide_polar());
   } else {
-    state.TrackBearing = current.Vector.Bearing;
-    // DistanceToFinal
-
-    if (current.DistanceToFinal >= current.Vector.Distance) {
-      do_calc = false;
-    } else {
-      g_terrain.set_max_range(current.Vector.Distance-current.DistanceToFinal);
-      state.Location = current.location_at_final(state.Location);
-    }
+    its = g_terrain.find_intersection(state, current, m_task.get_glide_polar());
   }
 
-  if (do_calc) {
-    TerrainIntersection its = 
-      g_terrain.find_intersection(state, 
-                                  m_task.get_glide_polar());
-    if (!its.out_of_range) {
-      SetCalculated().TerrainWarningLocation = its.location;
-    }
+  if (!its.out_of_range) {
+    SetCalculated().TerrainWarningLocation = its.location;
   }
 
   terrain.Unlock();

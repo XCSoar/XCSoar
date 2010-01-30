@@ -45,6 +45,7 @@ class AIRCRAFT_STATE;
 struct SETTINGS_COMPUTER;
 class RasterTerrain;
 class GlidePolar;
+class GlideResult;
 class RasterRounding;
 
 #include "Math/fixed.hpp"
@@ -74,8 +75,38 @@ public:
 
   bool valid() const;
 
+  /** 
+   * Find intersection for pure glide
+   * 
+   * @param basic State of aircraft at origin
+   * @param polar Glide polar for descent
+   * 
+   * @return Intersection
+   */
   TerrainIntersection find_intersection(const AIRCRAFT_STATE &basic,
-                                        const GlidePolar &polar);
+                                        const GlidePolar& polar);
+
+  /** 
+   * Find intersection for cruise (no height loss)
+   * 
+   * @param basic State of aircraft at origin
+   * 
+   * @return Intersection
+   */
+  TerrainIntersection find_intersection(const AIRCRAFT_STATE &basic);
+
+  /** 
+   * Find intersection for compound glide solution
+   * 
+   * @param basic State of aircraft at origin
+   * @param solution Glide solution describing cruise-climb and descent
+   * @param polar Glide polar for descent portion
+   * 
+   * @return Intersection
+   */
+  TerrainIntersection find_intersection(const AIRCRAFT_STATE &basic,
+                                        const GlideResult& solution,
+                                        const GlidePolar& polar);
 
 private:
   fixed h_terrain(const GEOPOINT& loc);
