@@ -51,14 +51,11 @@ MaskedPaintWindow::~MaskedPaintWindow()
 }
 
 void
-MaskedPaintWindow::set(ContainerWindow *parent,
-                 int left, int top, unsigned width, unsigned height,
-                 bool center, bool notify, bool show,
-                 bool tabstop, bool border)
+MaskedPaintWindow::set(ContainerWindow &parent, const TCHAR *cls,
+                       int left, int top, unsigned width, unsigned height)
 {
   mask_canvas.reset();
-  PaintWindow::set(parent, left, top, width, height, center, notify, show,
-		   tabstop, border);
+  PaintWindow::set(parent, cls, left, top, width, height);
   if (!mask_canvas.defined())
     mask_canvas.set(get_canvas());
 }
