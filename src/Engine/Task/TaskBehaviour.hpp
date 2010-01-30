@@ -69,6 +69,11 @@ public:
   fixed safety_height_terrain; /**< Minimum height above terrain for arrival height at non-landable waypoint (m) */
   fixed safety_height_arrival; /**< Minimum height above terrain for arrival height at landable waypoint (m) */
   fixed start_max_speed; /**< Maximum ground speed (m/s) allowed in start sector */
+  fixed start_max_speed_margin; /**< Margin in maximum ground speed (m/s) allowed in start sector */
+  unsigned start_max_height; /**< Maximum height (m) allowed in start sector */
+  unsigned start_max_height_ref; /**< Reference for max start height (0=AGL, 1=abs) */
+  unsigned start_max_height_margin; /**< Margin in maximum height (m) allowed in start sector */
+
   fixed risk_gamma; /**< Compensation factor for risk at low altitude */
 
   bool enable_olc; /**< Whether to do online OLC optimisation */
@@ -90,6 +95,15 @@ public:
  * @return True if within limits
  */
   bool check_start_speed(const AIRCRAFT_STATE &state) const;
+
+/** 
+ * Check whether aircraft height is within start height limit
+ * 
+ * @param state Aircraft state
+ * 
+ * @return True if within limits
+ */
+  bool check_start_height(const AIRCRAFT_STATE &state) const;
 };
 
 #endif

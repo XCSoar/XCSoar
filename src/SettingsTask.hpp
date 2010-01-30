@@ -79,16 +79,9 @@ struct SETTINGS_TASK {
   unsigned StartRadius;
   FinishSectorType_t FinishType;
   unsigned FinishRadius;
-  double AATTaskLength;
-  bool AATEnabled;
   bool EnableMultipleStartPoints;
   bool EnableFAIFinishHeight;
   unsigned FinishMinHeight;
-  unsigned StartMaxHeight;
-  unsigned StartMaxHeightMargin;
-  unsigned StartMaxSpeed;
-  unsigned StartMaxSpeedMargin;
-  int  StartHeightRef;
 };
 
 #endif

@@ -49,15 +49,34 @@ TaskBehaviour::all_off()
   enable_olc = false;
 }
 
+
 bool 
 TaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state) const
 {
+  // @todo implement margin
+
   if (positive(start_max_speed) && (state.Speed>start_max_speed)) {
     return false;
   } else {
     return true;
   }
 }
+
+bool 
+TaskBehaviour::check_start_height(const AIRCRAFT_STATE &state) const
+{
+  // @todo implement margin, hookup to insector/transition checks
+
+  if (start_max_height==0)
+    return true;
+
+  if (start_max_height_ref>0) {
+    return state.NavAltitude <= start_max_height;
+  } else {
+    return state.AltitudeAGL <= start_max_height;
+  }
+}
+
 
 TaskBehaviour::TaskBehaviour():
     optimise_targets_range(true),
@@ -72,6 +91,10 @@ TaskBehaviour::TaskBehaviour():
     safety_height_terrain(150.0),
     safety_height_arrival(300.0),
     start_max_speed(60.0),
+    start_max_height(0),
+    start_max_height_ref(0),
+    start_max_speed_margin(0.0),
+    start_max_height_margin(0),
     risk_gamma(0.0),
     enable_olc(false),
     olc_rules(OLC_Sprint),

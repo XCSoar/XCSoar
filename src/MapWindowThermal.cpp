@@ -91,6 +91,8 @@ MapWindow::DrawThermalEstimate(Canvas &canvas)
   }
 }
 
+#include "RasterTerrain.h" // OLD_TASK just for locking
+
 
 void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 {
@@ -118,24 +120,25 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
     +Calculated().TerrainBase;
   h = Basic().NavAltitude-hoffset;
 
-  bool draw_start_height = 
-#ifdef OLD_TASK
-    task != NULL && task->getActiveIndex() == 0 &&
-    task->ValidTaskPoint(0) && task->getSettings().StartMaxHeight != 0 &&
-#endif
-    Calculated().TerrainValid;
+  bool draw_start_height = false;
   double hstart=0;
 
-#ifdef OLD_TASK
-  if (task != NULL && draw_start_height) {
-    if (task->getSettings().StartHeightRef == 0) {
-      hstart = task->getSettings().StartMaxHeight+Calculated().TerrainAlt;
-    } else {
-      hstart = task->getSettings().StartMaxHeight;
+  if (task != NULL) {
+    // JMW OLD_TASK temporary locking
+    terrain->Lock();
+    draw_start_height = Calculated().common_stats.ordered_valid
+      && (SettingsComputer().start_max_height != 0)
+      && Calculated().TerrainValid;
+    if (draw_start_height) {
+      if (SettingsComputer().start_max_height_ref == 0) {
+        hstart = SettingsComputer().start_max_height+Calculated().TerrainAlt;
+      } else {
+        hstart = SettingsComputer().start_max_height;
+      }
+      hstart -= hoffset;
     }
-    hstart -= hoffset;
+    terrain->Unlock();
   }
-#endif
 
   // calculate top/bottom height
   maxh = max(h, mth);

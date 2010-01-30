@@ -2135,14 +2135,14 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxHeight*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().start_max_height*ALTITUDEMODIFY));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeightMargin"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxHeightMargin*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().start_max_height_margin*ALTITUDEMODIFY));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -2153,20 +2153,20 @@ static void setVariables(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(_T("AGL")));
     dfe->addEnumText(gettext(_T("MSL")));
-    dfe->Set(settings_task.StartHeightRef);
+    dfe->Set(XCSoarInterface::SettingsComputer().start_max_height_ref);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxSpeed*SPEEDMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().start_max_speed*SPEEDMODIFY));
     wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeedMargin"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxSpeedMargin*SPEEDMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().start_max_speed_margin*SPEEDMODIFY));
     wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
     wp->RefreshDisplay();
   }
@@ -3254,9 +3254,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if ((int)settings_task.StartMaxHeight != ival) {
-      settings_task.StartMaxHeight = ival;
-      SetToRegistry(szRegistryStartMaxHeight,settings_task.StartMaxHeight);
+    if ((int)XCSoarInterface::SettingsComputer().start_max_height != ival) {
+      XCSoarInterface::SetSettingsComputer().start_max_height = ival;
+      SetToRegistry(szRegistryStartMaxHeight, 
+                    XCSoarInterface::SettingsComputer().start_max_height);
       changed = true;
       taskchanged = true;
     }
@@ -3265,18 +3266,23 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeightMargin"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if ((int)settings_task.StartMaxHeightMargin != ival) {
-      settings_task.StartMaxHeightMargin = ival;
-      SetToRegistry(szRegistryStartMaxHeightMargin,settings_task.StartMaxHeightMargin);
+    if ((int)XCSoarInterface::SettingsComputer().start_max_height_margin != ival) {
+      XCSoarInterface::SetSettingsComputer().start_max_height_margin = ival;
+      SetToRegistry(szRegistryStartMaxHeightMargin,
+                    XCSoarInterface::SettingsComputer().start_max_height_margin);
       changed = true;
       taskchanged = true;
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
   if (wp) {
-    if (settings_task.StartHeightRef != wp->GetDataField()->GetAsInteger()) {
-      settings_task.StartHeightRef = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryStartHeightRef, settings_task.StartHeightRef);
+    if (XCSoarInterface::SettingsComputer().start_max_height_ref 
+        != (unsigned)wp->GetDataField()->GetAsInteger()) {
+
+      XCSoarInterface::SetSettingsComputer().start_max_height_ref = 
+        wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryStartHeightRef, 
+                    XCSoarInterface::SettingsComputer().start_max_height_ref);
       changed = true;
       taskchanged = true;
     }
@@ -3285,9 +3291,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
-    if ((int)settings_task.StartMaxSpeed != ival) {
-      settings_task.StartMaxSpeed = ival;
-      SetToRegistry(szRegistryStartMaxSpeed,settings_task.StartMaxSpeed);
+    if ((int)XCSoarInterface::SetSettingsComputer().start_max_speed != ival) {
+      XCSoarInterface::SetSettingsComputer().start_max_speed = ival;
+      SetToRegistry(szRegistryStartMaxSpeed,
+                    (int)XCSoarInterface::SettingsComputer().start_max_speed);
       changed = true;
       taskchanged = true;
     }
@@ -3296,9 +3303,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeedMargin"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
-    if ((int)settings_task.StartMaxSpeedMargin != ival) {
-      settings_task.StartMaxSpeedMargin = ival;
-      SetToRegistry(szRegistryStartMaxSpeedMargin,settings_task.StartMaxSpeedMargin);
+    if ((int)XCSoarInterface::SettingsComputer().start_max_speed_margin != ival) {
+      XCSoarInterface::SetSettingsComputer().start_max_speed_margin = ival;
+      SetToRegistry(szRegistryStartMaxSpeedMargin,
+                    (int)XCSoarInterface::SettingsComputer().start_max_speed_margin);
       changed = true;
       taskchanged = true;
     }
