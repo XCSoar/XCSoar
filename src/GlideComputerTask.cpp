@@ -216,19 +216,19 @@ GlideComputerTask::TerrainWarning()
                                       MapProjection().GetScreenDistanceMeters())));
   } else {
     state.TrackBearing = current.Vector.Bearing;
-    g_terrain.set_max_range(current.Vector.Distance);
     // DistanceToFinal
 
     if (current.DistanceToFinal >= current.Vector.Distance) {
       do_calc = false;
     } else {
+      g_terrain.set_max_range(current.Vector.Distance-current.DistanceToFinal);
       state.Location = current.location_at_final(state.Location);
     }
   }
 
   if (do_calc) {
     TerrainIntersection its = 
-      g_terrain.find_intersection(Basic(), 
+      g_terrain.find_intersection(state, 
                                   m_task.get_glide_polar());
     if (!its.out_of_range) {
       SetCalculated().TerrainWarningLocation = its.location;
