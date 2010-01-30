@@ -44,11 +44,9 @@ Copyright_License {
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <algorithm>
 
-#ifndef _MSC_VER
-  #include <algorithm>
-  using std::max;
-#endif
+using std::max;
 
 int
 TimeLocal(int localtime)

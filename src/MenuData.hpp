@@ -36,56 +36,49 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAIN_WINDOW_HXX
-#define XCSOAR_MAIN_WINDOW_HXX
+#ifndef XCSOAR_MENU_DATA_HPP
+#define XCSOAR_MENU_DATA_HPP
 
-#include "Screen/SingleWindow.hpp"
-#include "MapWindow.h"
-#include "PopupMessage.hpp"
-
-class GaugeVario;
-class GaugeFLARM;
-class StatusMessageList;
+#include <tchar.h>
 
 /**
- * The XCSoar main window.
+ * Data of an item in the mode menu.
  */
-class MainWindow : public SingleWindow {
+class MenuItem {
 public:
-  MapWindow map;
-  GaugeVario *vario;
-  GaugeFLARM *flarm;
-  PopupMessage popup;
+  const TCHAR *label;
+  int location;
+  int event;
+};
 
-private:
-  timer_t timer_id;
-
+/**
+ * A container for MenuItem objects.
+ */
+class Menu {
 public:
-  MainWindow(const StatusMessageList &status_messages)
-    :vario(NULL), flarm(NULL), popup(status_messages, *this) {}
-  virtual ~MainWindow();
-
-  static bool find(LPCTSTR text) {
-    return TopWindow::find(_T("XCSoarMain"), text);
-  }
-
-  static bool register_class(HINSTANCE hInstance);
-
-  void set(LPCTSTR text,
-           int left, int top, unsigned width, unsigned height);
-
-  void reset() {
-    map.reset();
-    TopWindow::reset();
-  }
+  enum {
+    MAX_ITEMS = 32,
+  };
 
 protected:
-  virtual bool on_command(unsigned id, unsigned code);
-  bool on_activate();
-  bool on_timer(timer_t id);
-  bool on_create();
-  bool on_destroy();
-  bool on_close();
+  MenuItem items[MAX_ITEMS];
+  unsigned num_items;
+
+public:
+  Menu():num_items(0) {}
+
+  unsigned Count() const {
+    return num_items;
+  }
+
+  const MenuItem &operator[](unsigned i) const {
+    return items[i];
+  }
+
+  void Add(const TCHAR *label, int location, int event_id);
+
+  int FindByLocation(int location) const;
+  int FindByEvent(int event) const;
 };
 
 #endif

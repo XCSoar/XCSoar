@@ -56,11 +56,10 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Waypoint/Waypoints.hpp"
 
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::min;
 using std::max;
-#endif
 
 // Interface/touchscreen callbacks
 
@@ -124,8 +123,6 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
   draw_canvas.resize(width, height);
   buffer_canvas.resize(width, height);
   stencil_canvas.resize(width, height);
-
-  SetFontInfoAll(get_canvas());
 
   return true;
 }

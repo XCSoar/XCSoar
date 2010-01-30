@@ -46,12 +46,6 @@ Copyright_License {
   #include <windows.h>
 #endif
 
-struct FontHeightInfo {
-  int Height;
-  int AscentHeight;
-  int CapitalHeight;
-};
-
 /**
  * A font loaded from storage.  It is used by #Canvas to draw text.
  */
@@ -62,6 +56,8 @@ protected:
   #else
   HFONT font;
   #endif
+
+  unsigned height, ascent_height, capital_height;
 
 public:
   Font():font(NULL) {}
@@ -92,6 +88,18 @@ public:
     return font;
   }
   #endif
+
+  unsigned get_height() const {
+    return height;
+  }
+
+  unsigned get_ascent_height() const {
+    return ascent_height;
+  }
+
+  unsigned get_capital_height() const {
+    return capital_height;
+  }
 };
 
 #endif

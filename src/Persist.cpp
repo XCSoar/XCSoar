@@ -51,11 +51,10 @@ Copyright_License {
 #include "Asset.hpp"
 #include <stdio.h>
 
-#ifndef _MSC_VER
-  #include <algorithm>
-  using std::min;
-  using std::max;
-#endif
+#include <algorithm>
+
+using std::min;
+using std::max;
 
 static TCHAR szCalculationsPersistFileName[MAX_PATH];
 static TCHAR szCalculationsPersistDirectory[MAX_PATH];

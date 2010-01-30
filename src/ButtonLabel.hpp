@@ -41,46 +41,23 @@ Copyright_License {
 
 #include "Screen/TextWindow.hpp"
 #include "Interface.hpp"
+#include "MenuData.hpp"
 
 class ContainerWindow;
-
-class MenuButton: public TextWindow
-{
-public:
-  void
-  set(ContainerWindow &parent, int left, int top, unsigned width,
-      unsigned height, bool visible)
-  {
-    TextWindow::set(parent, left, top, width, height, true, true, visible, true, true);
-    install_wndproc();
-  }
-
-  virtual bool on_mouse_up(int x, int y);
-};
+class MenuBar;
 
 class ButtonLabel: public ActionInterface
 {
-public:
-  enum
-  {
-    NUMBUTTONLABELS = 32
-  };
-
-  static unsigned ButtonLabelGeometry;
-  static MenuButton hWndButtonWindow[NUMBUTTONLABELS];
-  static bool ButtonVisible[NUMBUTTONLABELS];
-
 protected:
-  static void GetButtonPosition(unsigned i, RECT rc, int *x, int *y,
-      int *sizex, int *sizey);
+  static MenuBar *bar;
 
 public:
-  static void CreateButtonLabels(ContainerWindow &parent, const RECT rc);
+  static void CreateButtonLabels(ContainerWindow &parent);
   static void AnimateButton(unsigned i);
   static void SetFont(const Font &Font);
   static void Destroy();
   static void SetLabelText(unsigned i, const TCHAR *text);
-  static int Find(const Window &window);
+  static bool IsEnabled(unsigned i);
 
   static bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
 };

@@ -42,11 +42,9 @@ Copyright_License {
 
 #include <math.h>
 #include <stdlib.h> /* for abs() */
-
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::max;
-#endif
 
 unsigned short CuSonde::last_level=0;
 double CuSonde::thermalHeight = 0;

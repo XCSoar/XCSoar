@@ -65,7 +65,4 @@ extern Font StatisticsFont;
 
 extern int UseCustomFonts;
 
-void SetFontInfo(Canvas &canvas, struct FontHeightInfo *FontHeightInfo);
-void SetFontInfoAll(const Canvas &real_canvas);
-
 #endif

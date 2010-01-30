@@ -62,11 +62,9 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 #include <stdlib.h>
-
-#ifndef _MSC_VER
 #include <algorithm>
+
 using std::min;
-#endif
 
 /*
 About Windanalysation

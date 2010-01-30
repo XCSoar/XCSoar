@@ -137,14 +137,6 @@ struct Appearance {
   FlightModeIconAppearance_t FlightModeIcon;
   POINT FlightModeOffset;
   CompassAppearance_t CompassAppearance;
-  struct FontHeightInfo TitleWindowFont;
-  struct FontHeightInfo MapWindowFont;
-  struct FontHeightInfo MapWindowBoldFont;
-  struct FontHeightInfo InfoWindowFont;
-  struct FontHeightInfo CDIWindowFont;
-  struct FontHeightInfo StatisticsFont;
-  struct FontHeightInfo MapLabelFont; // VENTA6 added
-  struct FontHeightInfo TitleSmallWindowFont;
   BestCruiseTrack_t BestCruiseTrack;
   Aircraft_t Aircraft;
   bool DontShowSpeedToFly;

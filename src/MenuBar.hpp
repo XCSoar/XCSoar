@@ -36,56 +36,42 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAIN_WINDOW_HXX
-#define XCSOAR_MAIN_WINDOW_HXX
+#ifndef XCSOAR_MENU_BAR_HPP
+#define XCSOAR_MENU_BAR_HPP
 
-#include "Screen/SingleWindow.hpp"
-#include "MapWindow.h"
-#include "PopupMessage.hpp"
+#include "Screen/ButtonWindow.hpp"
 
-class GaugeVario;
-class GaugeFLARM;
-class StatusMessageList;
+#include <tchar.h>
+
+class Window;
+class ContainerWindow;
 
 /**
- * The XCSoar main window.
+ * A container for menu buttons.
  */
-class MainWindow : public SingleWindow {
+class MenuBar {
 public:
-  MapWindow map;
-  GaugeVario *vario;
-  GaugeFLARM *flarm;
-  PopupMessage popup;
+  enum {
+    MAX_BUTTONS = 32,
+    FIRST_ID = 0x5000,
+    LAST_ID = FIRST_ID + MAX_BUTTONS - 1,
+  };
 
-private:
-  timer_t timer_id;
+  ButtonWindow buttons[MAX_BUTTONS];
 
 public:
-  MainWindow(const StatusMessageList &status_messages)
-    :vario(NULL), flarm(NULL), popup(status_messages, *this) {}
-  virtual ~MainWindow();
+  MenuBar(ContainerWindow &parent);
 
-  static bool find(LPCTSTR text) {
-    return TopWindow::find(_T("XCSoarMain"), text);
+public:
+  void SetFont(const Font &font);
+  void ShowButton(unsigned i, bool enabled, const TCHAR *text);
+  void HideButton(unsigned i);
+
+  bool IsButtonEnabled(unsigned i) const {
+    return buttons[i].is_enabled();
   }
 
-  static bool register_class(HINSTANCE hInstance);
-
-  void set(LPCTSTR text,
-           int left, int top, unsigned width, unsigned height);
-
-  void reset() {
-    map.reset();
-    TopWindow::reset();
-  }
-
-protected:
-  virtual bool on_command(unsigned id, unsigned code);
-  bool on_activate();
-  bool on_timer(timer_t id);
-  bool on_create();
-  bool on_destroy();
-  bool on_close();
+  void AnimateButton(unsigned i);
 };
 
 #endif

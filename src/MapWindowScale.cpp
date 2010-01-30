@@ -144,7 +144,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
     SIZE TextSize = canvas.text_size(ScaleInfo);
     LastMapWidth = (int)MapWidth;
 
-    Height = Appearance.MapWindowBoldFont.CapitalHeight+IBLSCALE(2);
+    Height = MapWindowBoldFont.get_capital_height() + IBLSCALE(2);
     // 2: add 1pix border
 
     canvas.white_brush();
@@ -158,7 +158,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       canvas.set_text_color(Color(0, 0, 0));
 
     canvas.text(IBLSCALE(7),
-                rc.bottom - Appearance.MapWindowBoldFont.AscentHeight - IBLSCALE(1),
+                rc.bottom - MapWindowBoldFont.get_ascent_height() - IBLSCALE(1),
                 ScaleInfo);
 
     draw_bitmap(canvas, MapGfx.hBmpMapScale,
@@ -182,7 +182,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
     }
 
     int y = rc.bottom-Height-
-      (Appearance.TitleWindowFont.AscentHeight+IBLSCALE(2));
+      (TitleWindowFont.get_ascent_height() + IBLSCALE(2));
     if (!ScaleChangeFeedback){
       // bool FontSelected = false;
       // TODO code: gettext these
@@ -218,7 +218,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
         canvas.select(TitleWindowFont);
         // FontSelected = true;
         canvas.text(IBLSCALE(1), y, ScaleInfo);
-        y -= (Appearance.TitleWindowFont.CapitalHeight+IBLSCALE(1));
+        y -= (TitleWindowFont.get_capital_height() + IBLSCALE(1));
       }
     }
 

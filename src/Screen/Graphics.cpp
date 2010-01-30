@@ -95,7 +95,6 @@ const Color ScreenGraphics::ColorSelected = Color(0xC0, 0xC0, 0xC0);
 const Color ScreenGraphics::ColorUnselected = Color(0xFF, 0xFF, 0xFF);
 const Color ScreenGraphics::ColorWarning = Color(0xFF, 0x00, 0x00);
 const Color ScreenGraphics::ColorOK = Color(0x00, 0x00, 0xFF);
-const Color ScreenGraphics::ColorButton = Color(0xA0, 0xE0, 0xA0);
 const Color ScreenGraphics::ColorBlack = Color(0x00, 0x00, 0x00);
 const Color ScreenGraphics::ColorMidGrey = Color(0x80, 0x80, 0x80);
 
@@ -143,7 +142,6 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
 
   infoSelectedBrush.set(MapGfx.ColorSelected);
   infoUnselectedBrush.set(MapGfx.ColorUnselected);
-  buttonBrush.set(MapGfx.ColorButton);
 
   AlarmBrush.set(Color::RED);
   WarningBrush.set(Color(0xFF, 0xA2, 0x00));
@@ -391,7 +389,6 @@ ScreenGraphics::Destroy()
 
   infoSelectedBrush.reset();
   infoUnselectedBrush.reset();
-  buttonBrush.reset();
 
   UnloadUnitSymbols();
 }

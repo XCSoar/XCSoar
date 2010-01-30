@@ -36,56 +36,37 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAIN_WINDOW_HXX
-#define XCSOAR_MAIN_WINDOW_HXX
+#include "MenuData.hpp"
 
-#include "Screen/SingleWindow.hpp"
-#include "MapWindow.h"
-#include "PopupMessage.hpp"
+void
+Menu::Add(const TCHAR *label, int location, int event_id)
+{
+  if (num_items >= MAX_ITEMS)
+    return;
 
-class GaugeVario;
-class GaugeFLARM;
-class StatusMessageList;
+  MenuItem &item = items[num_items++];
 
-/**
- * The XCSoar main window.
- */
-class MainWindow : public SingleWindow {
-public:
-  MapWindow map;
-  GaugeVario *vario;
-  GaugeFLARM *flarm;
-  PopupMessage popup;
+  item.label = label;
+  item.location = location;
+  item.event = event_id;
+}
 
-private:
-  timer_t timer_id;
+int
+Menu::FindByLocation(int location) const
+{
+  for (unsigned i = 0; i < num_items; ++i)
+    if (items[i].location == location)
+      return i;
 
-public:
-  MainWindow(const StatusMessageList &status_messages)
-    :vario(NULL), flarm(NULL), popup(status_messages, *this) {}
-  virtual ~MainWindow();
+  return -1;
+}
 
-  static bool find(LPCTSTR text) {
-    return TopWindow::find(_T("XCSoarMain"), text);
-  }
+int
+Menu::FindByEvent(int event) const
+{
+  for (unsigned i = 0; i < num_items; ++i)
+    if (items[i].event == event)
+      return i;
 
-  static bool register_class(HINSTANCE hInstance);
-
-  void set(LPCTSTR text,
-           int left, int top, unsigned width, unsigned height);
-
-  void reset() {
-    map.reset();
-    TopWindow::reset();
-  }
-
-protected:
-  virtual bool on_command(unsigned id, unsigned code);
-  bool on_activate();
-  bool on_timer(timer_t id);
-  bool on_create();
-  bool on_destroy();
-  bool on_close();
-};
-
-#endif
+  return -1;
+}
