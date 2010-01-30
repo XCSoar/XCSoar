@@ -105,6 +105,16 @@ TaskManager::getActiveTaskPointIndex() const
   }
 }
 
+void 
+TaskManager::incrementActiveTaskPoint(int offset)
+{
+  if (active_task) {
+    unsigned i = getActiveTaskPointIndex();
+    setActiveTaskPoint(i+offset);
+  }
+}
+
+
 TaskPoint* 
 TaskManager::getActiveTaskPoint() const
 {

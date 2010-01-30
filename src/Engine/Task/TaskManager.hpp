@@ -83,6 +83,13 @@ public:
               const Waypoints &wps);
 
 /** 
+ * Increments active taskpoint sequence for active task
+ * 
+ * @param offset Offset value
+ */
+  void incrementActiveTaskPoint(int offset);
+
+/** 
  * Sets active taskpoint sequence for active task
  * 
  * @param index Sequence number of task point

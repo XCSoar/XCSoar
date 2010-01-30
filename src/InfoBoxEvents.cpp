@@ -354,39 +354,20 @@ ActionInterface::on_key_ForecastTemperature(int UpDown)
 void
 ActionInterface::on_key_Waypoint(int UpDown)
 {
-
-#ifdef OLD_TASK
   if (UpDown>0) {
-    task.advanceTaskPoint(SettingsComputer());
-  } else if ((UpDown == 2) && (task.ValidTaskPoint(0))) {
-      // No more, try first
-
-      /* ****DISABLED****
-         if(task.getActiveIndex() == 0)	{
-         // TODO bug: allow restart
-         // TODO bug: make this work only for manual
-
-         // TODO bug: This should trigger reset of flight stats, but
-         // should ask first...
-         if (Calculated().TaskStartTime==0) {
-         Calculated().TaskStartTime = Basic().Time ;
-         }
-         }
-      AdvanceArmed = false;
-      task.getActiveIndex() = 0;
-      */
-      /* JMW illegal
-         Calculated().LegStartTime = Basic().Time ;
-      */
+    task_manager.incrementActiveTaskPoint(1);
   } else if (UpDown<0){
-    task.retreatTaskPoint(SettingsComputer(), Basic());
+    task_manager.incrementActiveTaskPoint(-1);
   } else if (UpDown==0) {
-    task.setSelected();
-
     ScopePopupBlock block(main_window.popup);
-    dlgWayPointDetailsShowModal(way_point);
+    const TaskPoint *tp = task_manager.getActiveTaskPoint();
+    if (tp) {
+      const Waypoint* wp = &tp->get_waypoint();
+      if (wp) {
+        dlgWayPointDetailsShowModal(*wp);
+      }
+    }
   }
-#endif
 }
 
 
