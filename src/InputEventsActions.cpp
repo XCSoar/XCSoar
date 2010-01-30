@@ -606,49 +606,52 @@ InputEvents::eventChangeInfoBoxType(const TCHAR *misc)
 void
 InputEvents::eventArmAdvance(const TCHAR *misc)
 {
-#ifdef OLD_TASK
-  if (task.getSettings().AutoAdvance >= 2) {
+  const TaskAdvance::TaskAdvanceMode_t mode = 
+    task_manager.get_task_advance().get_mode();
+
+  if ((mode == TaskAdvance::ADVANCE_ARM) 
+      || (mode==TaskAdvance::ADVANCE_ARMSTART)) {
     if (_tcscmp(misc, TEXT("on")) == 0) {
-      task.setAdvanceArmed(true);
-    }
-    if (_tcscmp(misc, TEXT("off")) == 0) {
-      task.setAdvanceArmed(false);
-    }
-    if (_tcscmp(misc, TEXT("toggle")) == 0) {
-      task.setAdvanceArmed(!task.isAdvanceArmed());
+      task_manager.get_task_advance().set_armed(true);
+    } else if (_tcscmp(misc, TEXT("off")) == 0) {
+      task_manager.get_task_advance().set_armed(false);
+    } else if (_tcscmp(misc, TEXT("toggle")) == 0) {
+      task_manager.get_task_advance().toggle_armed();
     }
   }
   if (_tcscmp(misc, TEXT("show")) == 0) {
-    switch (task.getSettings().AutoAdvance) {
-    case 0:
-      Message::AddMessage(TEXT("Auto Advance: Manual"));
+    switch (mode) {
+    case TaskAdvance::ADVANCE_MANUAL:
+      Message::AddMessage(TEXT("Advance: Manual"));
       break;
-    case 1:
-      Message::AddMessage(TEXT("Auto Advance: Automatic"));
+    case TaskAdvance::ADVANCE_AUTO:
+      Message::AddMessage(TEXT("Advance: Automatic"));
       break;
-    case 2:
-      if (task.isAdvanceArmed()) {
-        Message::AddMessage(TEXT("Auto Advance: ARMED"));
+    case TaskAdvance::ADVANCE_ARM:
+      if (task_manager.get_task_advance().is_armed()) {
+        Message::AddMessage(TEXT("Advance: ARMED"));
       } else {
-        Message::AddMessage(TEXT("Auto Advance: DISARMED"));
+        Message::AddMessage(TEXT("Advance: DISARMED"));
       }
       break;
     case 3:
-      if (task.getActiveIndex() < 2) { // past start (but can re-start)
-        if (task.isAdvanceArmed()) {
-          Message::AddMessage(TEXT("Auto Advance: ARMED"));
+      if (Calculated().common_stats.previous_is_first
+          || !Calculated().common_stats.active_has_previous) { 
+        // past start (but can re-start)
+
+        if (task_manager.get_task_advance().is_armed()) {
+          Message::AddMessage(TEXT("Advance: ARMED"));
         } else {
-          Message::AddMessage(TEXT("Auto Advance: DISARMED"));
+          Message::AddMessage(TEXT("Advance: DISARMED"));
         }
       } else {
-        Message::AddMessage(TEXT("Auto Advance: Automatic"));
+        Message::AddMessage(TEXT("Advance: Automatic"));
       }
       break;
     default:
       break;
     }
   }
-#endif
 }
 
 // DoInfoKey

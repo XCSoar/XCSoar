@@ -137,7 +137,16 @@ public:
   void set_mode(TaskAdvanceMode_t the_mode) {
     mode = the_mode;
   }
- 
+
+/** 
+ * Get task advance mode
+ * 
+ * @return Current task advance mode
+ */
+  TaskAdvanceMode_t get_mode() const {
+    return mode;
+  }
+
 private:
 /** 
  * Determine whether mode allows auto-advance, without

@@ -52,6 +52,8 @@ Copyright_License {
 #include "Airspace/Airspaces.hpp"
 #include "Task/TaskManager.hpp"
 
+#include "RasterTerrain.h" // OLD_TASK just for locking
+
 #include <stdlib.h>
 
 /**
@@ -189,21 +191,27 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 #endif
   }
 
-#ifdef OLD_TASK
   if (_tcsstr(OutBuffer, TEXT("$(AdvanceArmed)"))) {
-    switch (task.getSettings().AutoAdvance) {
-    case 0:
-      ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(manual)"), Size);
+
+    // JMW OLD_TASK temporary locking
+    terrain.Lock();
+    
+    switch (task_manager.get_task_advance().get_mode()) {
+    case TaskAdvance::ADVANCE_MANUAL:
+      ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
+                      TEXT("(manual)"), Size);
       invalid = true;
       break;
-    case 1:
-      ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(auto)"), Size);
+    case TaskAdvance::ADVANCE_AUTO:
+      ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
+                      TEXT("(auto)"), Size);
       invalid = true;
       break;
-    case 2:
-      if (task.getActiveIndex()>0) {
-        if (task.ValidTaskPoint(task.getActiveIndex()+1)) {
-          CondReplaceInString(task.isAdvanceArmed(), OutBuffer, TEXT("$(AdvanceArmed)"),
+    case TaskAdvance::ADVANCE_ARM:
+      if (Calculated().common_stats.active_has_previous) {
+        if (Calculated().common_stats.active_has_next) {
+          CondReplaceInString(task_manager.get_task_advance().is_armed(), 
+                              OutBuffer, TEXT("$(AdvanceArmed)"),
                               TEXT("Cancel"), TEXT("TURN"), Size);
         } else {
           ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"),
@@ -211,27 +219,32 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
           invalid = true;
         }
       } else {
-        CondReplaceInString(task.isAdvanceArmed(), OutBuffer, TEXT("$(AdvanceArmed)"),
+        CondReplaceInString(task_manager.get_task_advance().is_armed(), 
+                            OutBuffer, TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("START"), Size);
       }
       break;
-    case 3:
-      if (task.getActiveIndex()==0) {
-        CondReplaceInString(task.isAdvanceArmed(), OutBuffer, TEXT("$(AdvanceArmed)"),
+    case TaskAdvance::ADVANCE_ARMSTART:
+      if (!Calculated().common_stats.active_has_previous) {
+        CondReplaceInString(task_manager.get_task_advance().is_armed(), 
+                            OutBuffer, TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("START"), Size);
-      } else if (task.getActiveIndex()==1) {
-        CondReplaceInString(task.isAdvanceArmed(), OutBuffer, TEXT("$(AdvanceArmed)"),
+      } else if (Calculated().common_stats.previous_is_first) {
+        CondReplaceInString(task_manager.get_task_advance().is_armed(), 
+                            OutBuffer, 
+                            TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("RESTART"), Size);
       } else {
-        ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(auto)"), Size);
+        ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
+                        TEXT("(auto)"), Size);
         invalid = true;
       }
-      // TODO bug: no need to arm finish
     default:
       break;
     }
+    // JMW OLD_TASK temporary locking
+    terrain.Unlock();
   }
-#endif
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
     if (!Calculated().task_stats.task_valid
