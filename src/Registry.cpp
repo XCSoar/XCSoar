@@ -262,7 +262,6 @@ const TCHAR szRegistryEnableFLARMGauge[] = CONF("EnableFLARMGauge");
 const TCHAR szRegistryFLARMGaugeBearing[] = CONF("FLARMGaugeBearing");
 const TCHAR szRegistryGliderScreenPosition[] = CONF("GliderScreenPosition");
 const TCHAR szRegistrySetSystemTimeFromGPS[] = CONF("SetSystemTimeFromGPS");
-const TCHAR szRegistryAutoForceFinalGlide[] = CONF("AutoForceFinalGlide");
 
 const TCHAR szRegistryVoiceClimbRate[] = CONF("VoiceClimbRate");
 const TCHAR szRegistryVoiceTerrain[] = CONF("VoiceTerrain");

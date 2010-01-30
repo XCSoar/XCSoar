@@ -632,8 +632,6 @@ Profile::ReadRegistrySettings()
 		  SetSettingsComputer().BallastSecsToEmpty);
   GetFromRegistry(szRegistrySetSystemTimeFromGPS,
 		  SetSettingsMap().SetSystemTimeFromGPS);
-  GetFromRegistry(szRegistryAutoForceFinalGlide,
-		  SetSettingsComputer().AutoForceFinalGlide);
   GetFromRegistry(szRegistryUseCustomFonts,
 		  UseCustomFonts);
   GetFromRegistry(szRegistryVoiceClimbRate,

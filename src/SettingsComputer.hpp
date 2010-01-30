@@ -163,9 +163,6 @@ struct SETTINGS_FEATURES {
   bool EnableNavBaroAltitude;
 
   int EnableThermalLocator;
-
-  /** Display mode in final glide if in final glide prior to last turnpoint */
-  bool AutoForceFinalGlide;
 };
 
 

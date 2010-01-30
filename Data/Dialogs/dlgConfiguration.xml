@@ -208,11 +208,6 @@
         <DataField name="" DataType="boolean" />
       </WndProperty>
     
-      <WndProperty Name="prpAutoForceFinalGlide" Caption="Auto Force Final Glide*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
-        Help="This option enables automatic forcing of final glide mode if the aircraft is above final glide prior to reaching the penultimate waypoint.  Forcing final glide early can also be performed manually from the task menu.">
-        <DataField name="" DataType="boolean" />
-      </WndProperty>
-    
       <WndProperty Name="prpEnableNavBaroAltitude" Caption="Nav by baro altitude*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
         Help="When enabled and if connected to a barometric altimeter, barometric altitude is used for all navigation functions. Otherwise GPS altitude is used.">
         <DataField name="" DataType="boolean" />

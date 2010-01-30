@@ -1422,8 +1422,6 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  LoadFormProperty(*wf, _T("prpAutoForceFinalGlide"),
-                   XCSoarInterface::SettingsComputer().AutoForceFinalGlide);
   LoadFormProperty(*wf, _T("prpBlockSTF"),
                    XCSoarInterface::SettingsComputer().EnableBlockSTF);
   LoadFormProperty(*wf, _T("prpFAIFinishHeight"),
@@ -2566,10 +2564,6 @@ void dlgConfigurationShowModal(void){
       changed = true;
     }
   }
-
-  changed |= SetValueRegistryOnChange(wf, _T("prpAutoForceFinalGlide"),
-                                      szRegistryAutoForceFinalGlide,
-                                      XCSoarInterface::SetSettingsComputer().AutoForceFinalGlide);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableNavBaroAltitude"),
                                       szRegistryEnableNavBaroAltitude,

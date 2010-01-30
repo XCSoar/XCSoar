@@ -158,7 +158,6 @@ extern const TCHAR szRegistryThermalLocator[];
 extern const TCHAR szRegistryGliderScreenPosition[];
 extern const TCHAR szRegistryAnimation[];
 extern const TCHAR szRegistrySetSystemTimeFromGPS[];
-extern const TCHAR szRegistryAutoForceFinalGlide[];
 
 extern const TCHAR szRegistryVoiceClimbRate[];
 extern const TCHAR szRegistryVoiceTerrain[];
