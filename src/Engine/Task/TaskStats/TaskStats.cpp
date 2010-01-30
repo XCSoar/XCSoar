@@ -61,14 +61,17 @@ TaskStats::reset()
   task_finished = false;
   has_targets = false;
   flight_mode_final_glide = false;
+  flight_mode_height_margin = 120;
 }
 
 bool 
-TaskStats::calc_flight_mode(const bool approx)
+TaskStats::calc_flight_mode()
 {
-  const int margin = approx? 120:0;
+  const int margin = (flight_mode_final_glide? 1:-1)*flight_mode_height_margin;
+
   const bool this_is_final = 
     (total.solution_remaining.AltitudeDifference+margin>0);
+
   const bool changed = (flight_mode_final_glide != this_is_final);
 
   flight_mode_final_glide = this_is_final;
