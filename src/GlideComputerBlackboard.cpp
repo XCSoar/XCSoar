@@ -128,11 +128,6 @@ GlideComputerBlackboard::StartTask()
   calculated_info.CruiseStartAlt = gps_info.NavAltitude;
   calculated_info.CruiseStartTime = gps_info.Time;
 
-  // JMW TODO accuracy: Get time from aatdistance module since this is
-  // more accurate
-
-  calculated_info.AverageThermal = 0; // VNT for some reason looked uninitialised
-
   // JMW reset time cruising/time circling stats on task start
   calculated_info.timeCircling = 0;
   calculated_info.timeCruising = 0;

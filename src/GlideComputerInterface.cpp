@@ -64,6 +64,10 @@ void
 GlideComputerTaskEvents::task_start()
 {
   InputEvents::processGlideComputer(GCE_TASK_START);
+#ifdef OLD_TASK
+  GlideComputerBlackboard::StartTask();
+  GlideComputerStats::StartTask();
+#endif
 }
 
 void 

@@ -246,13 +246,6 @@ GlideComputerTask::TerrainWarning()
 
 #ifdef OLD_TASK
 
-void
-GlideComputerTask::StartTask(const bool do_advance, const bool do_announce)
-{
-  if (task.getActiveIndex()==0)
-    task.advanceTaskPoint(SettingsComputer());
-}
-
 bool
 GlideComputerTask::ValidFinish() const
 {

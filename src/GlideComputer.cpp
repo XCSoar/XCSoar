@@ -371,17 +371,3 @@ GlideComputer::FLARM_ScanTraffic()
 }
 
 
-#ifdef OLD_TASK
-void
-GlideComputer::StartTask(const bool do_advance, const bool do_announce)
-{
-  //  GlideComputerBlackboard::StartTask();
-  GlideComputerStats::StartTask();
-
-  if (do_announce) {
-    AnnounceWayPointSwitch(do_advance);
-  } else {
-    GlideComputerTask::StartTask(do_advance, do_announce);
-  }
-}
-#endif

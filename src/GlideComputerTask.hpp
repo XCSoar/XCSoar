@@ -58,11 +58,6 @@ protected:
 private:
   void TerrainWarning();
   void LDNext();
-  // best alternate
-  void AlertBestAlternate(short soundmode);
-  void DoBestAlternateSlow();
-  void DoAlternates(int AltWaypoint);
-  void SearchBestAlternate();
 protected:
   virtual void ProcessIdle();
 };
