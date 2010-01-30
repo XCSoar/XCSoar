@@ -67,7 +67,7 @@ AbstractTask::update_auto_mc(const AIRCRAFT_STATE& state,
     fallback_mc = glide_polar.get_mc();
   }
 
-  if (!task_started()) {
+  if (!task_started() || !task_behaviour.auto_mc) {
     reset_auto_mc();
     return false;
   }
