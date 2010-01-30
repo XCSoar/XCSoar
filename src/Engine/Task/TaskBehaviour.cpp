@@ -37,6 +37,34 @@
 #include "Navigation/Aircraft.hpp"
 #include "TaskBehaviour.hpp"
 
+TaskBehaviour::TaskBehaviour():
+    optimise_targets_range(true),
+    optimise_targets_bearing(true),
+    auto_mc(false),
+    auto_mc_mode(AUTOMC_BOTH),
+    calc_cruise_efficiency(true),
+    calc_effective_mc(true),
+    calc_glide_required(true),
+    goto_nonlandable(true),
+    task_scored(true),
+    aat_min_time(3600*5.35),
+    safety_height_terrain(150.0),
+    safety_height_arrival(300.0),
+    start_max_speed(60.0),
+    start_max_height(0),
+    start_max_height_ref(0),
+    start_max_speed_margin(0.0),
+    start_max_height_margin(0),
+    finish_min_height(0),
+    risk_gamma(0.0),
+    enable_olc(false),
+    olc_rules(OLC_Sprint),
+    olc_handicap(100),
+    fai_finish(false)
+{
+}
+
+
 void
 TaskBehaviour::all_off()
 {
@@ -80,28 +108,12 @@ TaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
 }
 
 
-TaskBehaviour::TaskBehaviour():
-    optimise_targets_range(true),
-    optimise_targets_bearing(true),
-    auto_mc(false),
-    auto_mc_mode(AUTOMC_BOTH),
-    calc_cruise_efficiency(true),
-    calc_effective_mc(true),
-    calc_glide_required(true),
-    goto_nonlandable(true),
-    task_scored(true),
-    aat_min_time(3600*5.35),
-    safety_height_terrain(150.0),
-    safety_height_arrival(300.0),
-    start_max_speed(60.0),
-    start_max_height(0),
-    start_max_height_ref(0),
-    start_max_speed_margin(0.0),
-    start_max_height_margin(0),
-    risk_gamma(0.0),
-    enable_olc(false),
-    olc_rules(OLC_Sprint),
-    olc_handicap(100)
+bool 
+TaskBehaviour::check_finish_height(const AIRCRAFT_STATE &state) const
 {
+  if (finish_min_height==0)
+    return true;
+
+  return state.AltitudeAGL >= finish_min_height;
 }
 

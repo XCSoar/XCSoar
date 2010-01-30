@@ -292,9 +292,14 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   stats.task_finished = task_finished();
   stats.task_started = task_started();
 
+  if (stats.task_started) {
+    tf->set_fai_finish_height(get_start_state().NavAltitude-1000);
+  }
+
   if (stats.task_started && !last_started) {
     task_events.task_start();
   }
+
   if (stats.task_finished && !last_finished) {
     task_events.task_finish();
   }
@@ -848,4 +853,14 @@ OrderedTask::has_targets() const
     if (tps[i]->has_target()) return true;
   }
   return false;
+}
+
+fixed
+OrderedTask::get_finish_height() const
+{
+  if (tf) {
+    return tf->get_elevation();
+  } else {
+    return fixed_zero;
+  }
 }

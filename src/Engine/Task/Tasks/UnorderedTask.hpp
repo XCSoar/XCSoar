@@ -60,6 +60,8 @@ public:
                 TaskAdvance &ta,
                 GlidePolar &gp);
 
+  fixed get_finish_height() const;
+
 protected:
 
   bool check_task() const;

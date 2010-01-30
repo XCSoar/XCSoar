@@ -245,18 +245,6 @@ GlideComputerTask::LDNext()
 
 #ifdef OLD_TASK
 
-bool
-GlideComputerTask::ValidFinish() const
-{
-  if ((task.getSettings().FinishMinHeight > 0)
-      &&(Calculated().TerrainValid)
-      &&(Calculated().AltitudeAGL < task.getSettings().FinishMinHeight))
-    return false;
-  else
-    return true;
-}
-
-
 void
 GlideComputerTask::CheckStart()
 {

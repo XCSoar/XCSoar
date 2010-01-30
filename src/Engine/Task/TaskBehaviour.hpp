@@ -81,6 +81,7 @@ public:
   unsigned start_max_height; /**< Maximum height (m) allowed in start sector */
   unsigned start_max_height_ref; /**< Reference for max start height (0=AGL, 1=abs) */
   unsigned start_max_height_margin; /**< Margin in maximum height (m) allowed in start sector */
+  unsigned finish_min_height; /**< Minimum height AGL (m) allowed to finish */
 
   fixed risk_gamma; /**< Compensation factor for risk at low altitude */
 
@@ -88,6 +89,7 @@ public:
 
   OLCRules olc_rules; /**< Rule set to scan for in OLC */
   unsigned olc_handicap; /**< Handicap factor */
+  bool fai_finish; /**< Whether ordered task finish requires FAI height rule */
 
 /** 
  * Convenience function (used primarily for testing) to disable
@@ -114,6 +116,15 @@ public:
  */
   bool check_start_height(const AIRCRAFT_STATE &state,
                           const bool with_margin=false) const;
+
+/** 
+ * Check whether aircraft height is within finish height limit
+ * 
+ * @param state Aircraft state
+ * 
+ * @return True if within limits
+ */
+  bool check_finish_height(const AIRCRAFT_STATE &state) const;
 };
 
 #endif

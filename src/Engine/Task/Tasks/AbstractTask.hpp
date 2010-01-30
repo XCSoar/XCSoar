@@ -152,6 +152,11 @@ public:
  * @return True if task is valid
  */
   virtual bool check_task() const = 0;
+
+  /**
+   * Return required arrival height of final point in task
+   */
+  virtual fixed get_finish_height() const = 0;
     
 protected:
 

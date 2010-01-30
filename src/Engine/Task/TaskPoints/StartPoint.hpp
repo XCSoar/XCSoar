@@ -55,7 +55,9 @@
  * - gate start time?
  * - enabled/disabled for multiple start points
  */
-class StartPoint : public OrderedTaskPoint {
+class StartPoint: 
+  public OrderedTaskPoint 
+{
 public:
 /** 
  * Constructor.  Sets task area to non-scorable; distances

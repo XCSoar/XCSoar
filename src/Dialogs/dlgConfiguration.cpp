@@ -1425,7 +1425,7 @@ static void setVariables(void) {
   LoadFormProperty(*wf, _T("prpBlockSTF"),
                    XCSoarInterface::SettingsComputer().EnableBlockSTF);
   LoadFormProperty(*wf, _T("prpFAIFinishHeight"),
-                   settings_task.EnableFAIFinishHeight);
+                   XCSoarInterface::SettingsComputer().fai_finish);
 
   wp = (WndProperty*)wf->FindByName(_T("prpOLCRules"));
   if (wp) {
@@ -2646,9 +2646,11 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpFAIFinishHeight"));
   if (wp) {
-    if (settings_task.EnableFAIFinishHeight != (wp->GetDataField()->GetAsInteger()>0)) {
-      settings_task.EnableFAIFinishHeight = (wp->GetDataField()->GetAsInteger()>0);
-      SetToRegistry(szRegistryFAIFinishHeight, settings_task.EnableFAIFinishHeight);
+    if (XCSoarInterface::SettingsComputer().fai_finish 
+        != (wp->GetDataField()->GetAsInteger()>0)) {
+      XCSoarInterface::SetSettingsComputer().fai_finish = (wp->GetDataField()->GetAsInteger()>0);
+      SetToRegistry(szRegistryFAIFinishHeight, 
+                    XCSoarInterface::SettingsComputer().fai_finish);
       changed = true;
       taskchanged = true;
     }

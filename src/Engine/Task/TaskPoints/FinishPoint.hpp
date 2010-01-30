@@ -69,11 +69,12 @@ public:
  * 
  * @return Partially-initialised object
  */
-    FinishPoint(ObservationZonePoint* _oz,
-                const TaskProjection& tp,
-                const Waypoint & wp,
-                const TaskBehaviour& tb) : 
-      OrderedTaskPoint(_oz,tp,wp,tb) { };
+  FinishPoint(ObservationZonePoint* _oz,
+              const TaskProjection& tp,
+              const Waypoint & wp,
+              const TaskBehaviour& tb);
+
+  void reset();
 
 /** 
  * Set previous/next taskpoints in sequence.
@@ -86,10 +87,31 @@ public:
                       OrderedTaskPoint* next);
 
 /** 
+ * Test whether aircraft is inside observation zone.
+ * 
+ * @param ref Aircraft state to test
+ * 
+ * @return True if aircraft is inside observation zone
+ */
+  bool isInSector(const AIRCRAFT_STATE &ref) const;
+
+  /** 
+   * Check if aircraft has transitioned to inside sector
+   * This ensures entry only when in height limits
+   * 
+   * @param ref_now Current aircraft state
+   * @param ref_last Previous aircraft state
+   *
+   * @return True if aircraft now inside (and was outside)
+   */
+  bool check_transition_enter(const AIRCRAFT_STATE & ref_now, 
+                              const AIRCRAFT_STATE & ref_last) const;
+
+/** 
  * Retrieve elevation of taskpoint, taking into account
  * rules and safety margins.
  * 
- * @return Minimum allowable elevation of start point
+ * @return Minimum allowable elevation of finish point
  */
   fixed get_elevation() const;
 
@@ -102,11 +124,17 @@ public:
  */
   bool equals(const OrderedTaskPoint* other) const;
 
+  void set_fai_finish_height(const fixed height);
+
 private:
   bool score_first_entry() const {
     return true;
   }
   bool entry_precondition() const;
+
+  fixed fai_finish_height;
+
+  bool is_in_height_limit(const AIRCRAFT_STATE &state) const;
 
 public:
   DEFINE_VISITABLE()

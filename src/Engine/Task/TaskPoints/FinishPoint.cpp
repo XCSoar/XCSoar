@@ -39,6 +39,22 @@
 #include <stdlib.h>
 #include <assert.h>
 
+FinishPoint::FinishPoint(ObservationZonePoint* _oz,
+                         const TaskProjection& tp,
+                         const Waypoint & wp,
+                         const TaskBehaviour& tb) : 
+  OrderedTaskPoint(_oz,tp,wp,tb),
+  fai_finish_height(fixed_zero)
+{ 
+}
+
+void 
+FinishPoint::reset()
+{
+  OrderedTaskPoint::reset();
+  fai_finish_height = fixed_zero;
+}
+
 bool 
 FinishPoint::entry_precondition() const
 {
@@ -48,7 +64,14 @@ FinishPoint::entry_precondition() const
 fixed
 FinishPoint::get_elevation() const
 {
-  return m_elevation+m_task_behaviour.safety_height_arrival;
+  const fixed nominal_elevation = m_elevation
+    +m_task_behaviour.safety_height_arrival;
+
+  if (m_task_behaviour.fai_finish) {
+    return max(nominal_elevation, fai_finish_height);
+  } else {
+    return nominal_elevation;
+  }
 }
 
 
@@ -69,4 +92,46 @@ FinishPoint::equals(const OrderedTaskPoint* other) const
   } else {
     return false;
   }
+}
+
+void 
+FinishPoint::set_fai_finish_height(const fixed height)
+{
+  fai_finish_height = max(fixed_zero, height);
+}
+
+bool 
+FinishPoint::isInSector(const AIRCRAFT_STATE &state) const
+{
+  if (!ObservationZoneClient::isInSector(state)) 
+    return false;
+
+  return is_in_height_limit(state);
+}
+
+bool
+FinishPoint::is_in_height_limit(const AIRCRAFT_STATE &state) const
+{
+  if (!m_task_behaviour.check_finish_height(state)) 
+    return false;
+
+  if (m_task_behaviour.fai_finish) {
+    return state.NavAltitude > fai_finish_height;
+  }
+  return true;
+}
+
+
+bool 
+FinishPoint::check_transition_enter(const AIRCRAFT_STATE & ref_now, 
+                                    const AIRCRAFT_STATE & ref_last) const
+{
+  const bool now_in_height = is_in_height_limit(ref_now);
+  const bool last_in_height = is_in_height_limit(ref_last);
+
+  if (now_in_height && last_in_height) {
+    // both within height limit, so use normal location checks
+    return ObservationZone::check_transition_enter(ref_now, ref_last);
+  }
+  return false;
 }

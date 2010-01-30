@@ -183,3 +183,12 @@ UnorderedTask::calc_gradient(const AIRCRAFT_STATE &state)
   return leg_gradient(state);
 }
 
+fixed
+UnorderedTask::get_finish_height() const
+{
+  TaskPoint *tp = getActiveTaskPoint();
+  if (!tp) {
+    return fixed_zero;
+  }
+  return tp->get_elevation();
+}

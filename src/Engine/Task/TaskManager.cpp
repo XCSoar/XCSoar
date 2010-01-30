@@ -577,6 +577,15 @@ TaskManager::get_finish_state() const
   return task_ordered.get_finish_state();
 }
 
+fixed 
+TaskManager::get_finish_height() const
+{
+  if (active_task) {
+    return active_task->get_finish_height();
+  } else {
+    return fixed_zero;
+  }
+}
 
 bool 
 TaskManager::update_auto_mc(const AIRCRAFT_STATE& state_now,

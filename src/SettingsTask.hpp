@@ -80,7 +80,6 @@ struct SETTINGS_TASK {
   FinishSectorType_t FinishType;
   unsigned FinishRadius;
   bool EnableMultipleStartPoints;
-  bool EnableFAIFinishHeight;
   unsigned FinishMinHeight;
 };
 

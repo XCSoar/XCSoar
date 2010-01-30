@@ -378,6 +378,11 @@ public:
  */
   AIRCRAFT_STATE get_finish_state() const;
 
+  /**
+   * Return required arrival height of final point in task
+   */
+  fixed get_finish_height() const;
+
 #ifdef DO_PRINT
   void print(const AIRCRAFT_STATE &location);
 #endif

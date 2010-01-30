@@ -451,6 +451,14 @@ static void UpdateValuesRules(void) {
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpFinishAlt"));
+  if (wp) {
+    _stprintf(Temp, _T("%.0f %s"),
+              (double)(task_manager.get_finish_height()*ALTITUDEMODIFY),
+              Units::GetAltitudeName());
+    wp->SetText(Temp);
+  }
+
 #ifdef OLD_TASK
   wp = (WndProperty*)wf->FindByName(_T("prpStartPoint"));
   if (wp) {
@@ -460,17 +468,6 @@ static void UpdateValuesRules(void) {
     } else {
       wp->SetText(_T(""));
     }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFinishAlt"));
-  if (wp) {
-    double finish_min =
-      FAIFinishHeight(XCSoarInterface::SettingsComputer(),
-                      XCSoarInterface::Calculated(), -1);
-    _stprintf(Temp, _T("%.0f %s"),
-              finish_min*ALTITUDEMODIFY,
-              Units::GetAltitudeName());
-    wp->SetText(Temp);
   }
 #endif
 

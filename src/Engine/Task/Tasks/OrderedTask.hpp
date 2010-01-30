@@ -265,6 +265,8 @@ public:
  */
   AIRCRAFT_STATE get_finish_state() const;
 
+  fixed get_finish_height() const;
+
 protected:
 
   bool has_targets() const;
