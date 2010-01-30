@@ -108,6 +108,7 @@ MenuBar::MenuBar(ContainerWindow &parent)
 
   ButtonWindowStyle style;
   style.hide();
+  style.border();
   style.multiline();
 
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
