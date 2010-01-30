@@ -114,6 +114,7 @@ public:
     return true;
   }
 
+
 /** 
  * Update internal states as flight progresses.  This may perform
  * callbacks to the task_events, and advance the active task point
@@ -382,6 +383,11 @@ protected:
                                       DistanceRemainingStat &leg_remaining_effective,
                                       const fixed total_t_elapsed,
                                       const fixed leg_t_elapsed) = 0;
+
+  /**
+   * Determines whether the task has adjustable targets
+   */
+  virtual bool has_targets() const = 0;
 
 protected:
 

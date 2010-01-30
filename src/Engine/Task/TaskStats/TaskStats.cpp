@@ -59,5 +59,6 @@ TaskStats::reset()
   task_valid = false;
   task_started = false;
   task_finished = false;
+  has_targets = false;
 }
 

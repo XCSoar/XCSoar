@@ -105,6 +105,7 @@ protected:
 
   fixed calc_gradient(const AIRCRAFT_STATE &state_now);
 
+  bool has_targets() const { return false; }
 }; 
 
 #endif

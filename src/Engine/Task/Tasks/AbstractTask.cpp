@@ -188,6 +188,7 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
 {
 
   stats.task_valid = check_task();
+  stats.has_targets = has_targets();
 
   const bool full_update = 
     check_transitions(state, state_last) ||

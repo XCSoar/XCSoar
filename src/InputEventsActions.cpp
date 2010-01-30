@@ -1870,26 +1870,24 @@ void
 InputEvents::eventTaskTransition(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("start")) == 0) {
-#ifdef OLD_TASK
+    AIRCRAFT_STATE start_state = task_manager.get_start_state();
+
     TCHAR TempTime[40];
     TCHAR TempAlt[40];
     TCHAR TempSpeed[40];
     
-    Units::TimeToText(TempTime, (int)TimeLocal((int)Calculated().TaskStartTime));
+    Units::TimeToText(TempTime, (int)TimeLocal((int)start_state.Time));
     _stprintf(TempAlt, TEXT("%.0f %s"),
-              Calculated().TaskStartAltitude*ALTITUDEMODIFY,
+              (double)(start_state.NavAltitude*ALTITUDEMODIFY),
               Units::GetAltitudeName());
     _stprintf(TempSpeed, TEXT("%.0f %s"),
-              Calculated().TaskStartSpeed*TASKSPEEDMODIFY,
+              (double)(start_state.Speed*TASKSPEEDMODIFY),
               Units::GetTaskSpeedName());
     
     TCHAR TempAll[120];
     _stprintf(TempAll, TEXT("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),
               TempAlt, TempSpeed, TempTime);
     Message::AddMessage(TEXT("Task Start"), TempAll);
-#else
-    Message::AddMessage(TEXT("Task Start"));
-#endif
   } else if (_tcscmp(misc, TEXT("tp")) == 0) {
     Message::AddMessage(TEXT("Next turnpoint"));
   } else if (_tcscmp(misc, TEXT("finish")) == 0) {

@@ -70,6 +70,7 @@ public:
   bool task_valid; /**< Whether the task is navigable */
   bool task_started; /**< Whether the task is started */
   bool task_finished; /**< Whether the task is finished */
+  bool has_targets; /**< Whether the task has adjustable targets */
 
 /** 
  * Reset each element (for incremental speeds).

@@ -60,7 +60,7 @@ OrderedTask::update_geometry()
     return;
   }
 
-  for (unsigned i=0; i<tps.size(); i++) {
+  for (unsigned i=0; i<tps.size(); ++i) {
     if (i==0) {
       task_projection.reset(tps[i]->get_location());
     } else {
@@ -816,4 +816,36 @@ OrderedTask::update_start_transition(const AIRCRAFT_STATE &state)
     // point to nominal start point
     ts->reset();
   }
+}
+
+
+AIRCRAFT_STATE 
+OrderedTask::get_start_state() const
+{
+  if (has_start() && task_started()) 
+    return ts->get_state_entered();
+  else {
+    AIRCRAFT_STATE null_state;
+    return null_state;
+  }
+}
+
+AIRCRAFT_STATE 
+OrderedTask::get_finish_state() const
+{
+  if (has_finish() && task_finished()) 
+    return tf->get_state_entered();
+  else {
+    AIRCRAFT_STATE null_state;
+    return null_state;
+  }
+}
+
+bool
+OrderedTask::has_targets() const
+{
+  for (unsigned i=0; i<tps.size(); ++i) {
+    if (tps[i]->has_target()) return true;
+  }
+  return false;
 }

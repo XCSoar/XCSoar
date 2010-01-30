@@ -36,6 +36,8 @@ Copyright_License {
 }
 */
 
+#include "Task/TaskManager.hpp"
+
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
@@ -52,10 +54,6 @@ Copyright_License {
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-
-#ifdef OLD_TASK
-#include "Task.h"
-#endif
 
 #include <assert.h>
 
@@ -297,7 +295,8 @@ static void UpdateValuesTimes(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpLandingTime"));
   if (wp) {
-    if (!XCSoarInterface::Basic().Flying) {
+    if (!XCSoarInterface::Basic().Flying && 
+        (XCSoarInterface::Basic().FlightTime>0)) {
       Units::TimeToText(Temp,
                         (int)TimeLocal((long)(XCSoarInterface::Basic().TakeOffTime
                                               + XCSoarInterface::Basic().FlightTime)));
@@ -417,25 +416,23 @@ static void UpdateValuesRules(void) {
     }
   }
 
+  AIRCRAFT_STATE start_state = task_manager.get_start_state();
+
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   if (wp) {
     if (XCSoarInterface::Calculated().common_stats.task_started) {
-      fixed the_time = XCSoarInterface::Calculated().task_stats.Time -
-        XCSoarInterface::Calculated().common_stats.task_time_elapsed;
-      Units::TimeToText(Temp, (int)TimeLocal(the_time));
+      Units::TimeToText(Temp, (int)TimeLocal(start_state.Time));
       wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));
     }
   }
 
-#ifdef OLD_TASK
-
   wp = (WndProperty*)wf->FindByName(_T("prpStartSpeed"));
   if (wp) {
-    if (XCSoarInterface::Calculated().TaskStartTime>0) {
+    if (XCSoarInterface::Calculated().common_stats.task_started) {
       _stprintf(Temp, TEXT("%d %s"),
-                (int)(TASKSPEEDMODIFY * XCSoarInterface::Calculated().TaskStartSpeed),
+                (int)(TASKSPEEDMODIFY * start_state.Speed),
                 Units::GetTaskSpeedName());
       wp->SetText(Temp);
     } else {
@@ -444,23 +441,24 @@ static void UpdateValuesRules(void) {
   }
   // StartMaxHeight, StartMaxSpeed;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartPoint"));
+  wp = (WndProperty*)wf->FindByName(_T("prpStartHeight"));
   if (wp) {
-    int wp_index = task.getWaypointIndex(0);
-    if (wp_index>=0) {
-      wp->SetText(way_points.get(wp_index).Name);
+    if (XCSoarInterface::Calculated().common_stats.task_started) {
+      _stprintf(Temp, _T("%.0f %s"),
+                (double)(start_state.NavAltitude*ALTITUDEMODIFY),
+                Units::GetAltitudeName());
+      wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartHeight"));
+#ifdef OLD_TASK
+  wp = (WndProperty*)wf->FindByName(_T("prpStartPoint"));
   if (wp) {
-    if (XCSoarInterface::Calculated().TaskStartTime>0) {
-      _stprintf(Temp, _T("%.0f %s"),
-                (XCSoarInterface::Calculated().TaskStartAltitude)*ALTITUDEMODIFY,
-                Units::GetAltitudeName());
-      wp->SetText(Temp);
+    int wp_index = task.getWaypointIndex(0);
+    if (wp_index>=0) {
+      wp->SetText(way_points.get(wp_index).Name);
     } else {
       wp->SetText(_T(""));
     }
@@ -485,28 +483,29 @@ static void UpdateValuesTask(void) {
   WndProperty *wp;
   TCHAR Temp[80];
 
-#ifdef OLD_TASK
   wp = (WndProperty*)wf->FindByName(_T("prpTaskTime"));
-  Units::TimeToText(Temp, (int)task.getSettings().AATTaskLength*60);
+  Units::TimeToText(Temp, 
+                    (int)XCSoarInterface::SettingsComputer().aat_min_time);
   if (wp) {
-    if (!task.getSettings().AATEnabled) {
-      wp->hide();
-    } else {
+    if (XCSoarInterface::Calculated().task_stats.has_targets) {
       wp->SetText(Temp);
+    } else {
+      wp->hide();
     }
   }
-#endif
 
   wp = (WndProperty*)wf->FindByName(_T("prpETETime"));
   if (wp) {
-    Units::TimeToText(Temp, XCSoarInterface::Calculated().task_stats.total.TimeElapsed
+    Units::TimeToText(Temp, 
+                      XCSoarInterface::Calculated().task_stats.total.TimeElapsed
                       +XCSoarInterface::Calculated().task_stats.total.TimeRemaining);
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRemainingTime"));
   if (wp) {
-    Units::TimeToText(Temp, XCSoarInterface::Calculated().task_stats.total.TimeRemaining);
+    Units::TimeToText(Temp, 
+                      XCSoarInterface::Calculated().task_stats.total.TimeRemaining);
     wp->SetText(Temp);
   }
 

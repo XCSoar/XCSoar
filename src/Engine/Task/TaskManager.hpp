@@ -361,6 +361,20 @@ public:
   gcc_pure
   const TracePointVector& get_trace_points() const;
 
+/**
+ * Accesses ordered task start state
+ * 
+ * @return State at task start (or null state if not started)
+ */
+  AIRCRAFT_STATE get_start_state() const;
+
+/**
+ * Accesses ordered task finish state
+ * 
+ * @return State at task finish (or null state if not finished)
+ */
+  AIRCRAFT_STATE get_finish_state() const;
+
 #ifdef DO_PRINT
   void print(const AIRCRAFT_STATE &location);
 #endif

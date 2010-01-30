@@ -562,3 +562,17 @@ TaskManager::find_trace_points(const GEOPOINT &loc, const fixed range,
 {
   return trace_full.find_within_range(loc, range, mintime, resolution);
 }
+
+
+AIRCRAFT_STATE 
+TaskManager::get_start_state() const
+{
+  return task_ordered.get_start_state();
+}
+
+
+AIRCRAFT_STATE 
+TaskManager::get_finish_state() const
+{
+  return task_ordered.get_finish_state();
+}

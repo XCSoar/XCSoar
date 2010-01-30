@@ -251,7 +251,23 @@ public:
  */
   TaskProjection& get_task_projection();
 
+/**
+ * Accesses task start state
+ * 
+ * @return State at task start (or null state if not started)
+ */
+  AIRCRAFT_STATE get_start_state() const;
+
+/**
+ * Accesses task finish state
+ * 
+ * @return State at task finish (or null state if not finished)
+ */
+  AIRCRAFT_STATE get_finish_state() const;
+
 protected:
+
+  bool has_targets() const;
 
 /** 
  * Retrieve vector of search points to be used in max/min distance
