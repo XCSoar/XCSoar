@@ -143,9 +143,7 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
 
     slope = max(-1.0, min(1.0, slope * 2)); // scale so 45 degrees or more=90
 
-    // QUESTION TB: what about north up mode???
-    // JMW: nothing to do with map --- display for FLARM gauge is always track up
-
+    // display for FLARM gauge is always track up
     fixed DisplayAngle = -gps_info.TrackBearing;
 
     // or use .Heading? (no, because heading is not reliable)

@@ -360,6 +360,10 @@ FlightStatistics::RenderOLC(Canvas &canvas, const RECT rc,
     const SETTINGS_MAP &settings_map, const TracePointVector& olc,
     const TracePointVector& trace) const
 {
+  // note: braces used here just to delineate separate main steps of
+  // this function.  It's useful to ensure things are done in the right
+  // order rather than having a monolithic block of code.
+
   Chart chart(canvas, rc);
 
   if (trace.size() < 2) {
@@ -367,7 +371,7 @@ FlightStatistics::RenderOLC(Canvas &canvas, const RECT rc,
     return;
   }
 
-  // QUESTION TB: braces?? why?
+
   { // set scale
     chart.ResetScale();
     ExpandToTrace(chart, trace);

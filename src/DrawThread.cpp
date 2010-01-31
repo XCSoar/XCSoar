@@ -67,6 +67,10 @@ DrawThread::ExchangeBlackboard()
 void
 DrawThread::run()
 {
+  // bounds_dirty maintains the status of whether the map
+  // bounds have changed and there are pending idle calls
+  // to be run in the map.
+
   bool bounds_dirty = false;
 
   // wait until the startup is finished
@@ -86,8 +90,8 @@ DrawThread::run()
   // second time draw
   map.DrawThreadLoop();
 
-  // QUESTION TB: any reason for the do-loop here instead of while?
   // circle until application is closed
+  // (use of do-while ensures at least one execution before exit)
   do {
     if (drawTriggerEvent.wait(MIN_WAIT_TIME)) {
 
@@ -128,7 +132,6 @@ DrawThread::run()
 
       continue;
 
-    // QUESTION TB: what's the point of bounds_dirty?!
     } else if (bounds_dirty) {
       // take control (or wait for the resume())
       running.wait();

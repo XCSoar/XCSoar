@@ -103,13 +103,12 @@ WndButton::on_mouse_down(int x, int y)
   // Button is now pressed
   mDown = true;
 
-  if (!GetFocused())
+  if (GetFocused())
+    // If button has focus -> repaint
+    invalidate();
+  else
     // If button not yet focused -> give focus to the button
     set_focus();
-  else
-    // If button has focus -> repaint
-    // QUESTION TB: why not invalidate() if focus is set!?
-    invalidate();
 
   set_capture();
 

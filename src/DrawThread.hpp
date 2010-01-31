@@ -43,12 +43,15 @@ Copyright_License {
 #include "Thread/Trigger.hpp"
 
 class MapWindow;
-
-// QUESTION TB: ehm... why??
 class GaugeFLARM;
 
 /**
  * The DrawThread handles the rendering and drawing on the screen.
+ * The Map and GaugeFLARM both are triggered on GPS updates synchronously, 
+ * which is why they are both handled by this thread.  The GaugeVario is
+ * triggered on vario data which may be faster than GPS updates, which is
+ * why it is not handled by this thread.
+ * 
  */
 class DrawThread : public Thread {
   /**
