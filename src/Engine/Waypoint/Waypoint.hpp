@@ -53,14 +53,14 @@ class TaskProjection;
  * present for compatibility
  */
 struct WaypointFlags {
-  unsigned int Airport:1;      /**< If waypoint is an airport/airfield */
-  unsigned int TurnPoint:1;    /**< If waypoint can be used as a turnpoint */
-  unsigned int LandPoint:1;    /**< If waypoint can be landed at */
-  unsigned int Home:1;         /**< If waypoint is to be used as home */
-  unsigned int StartPoint:1;   /**< If waypoint is marked as a potential start point */
-  unsigned int FinishPoint:1;  /**< If waypoint is marked as a potential finish point */
-  unsigned int Restricted:1;   /**< If waypoint is marked for restricted access (unused?) */
-  unsigned int WaypointFlag:1; /**< ??? */
+  bool Airport:1;      /**< If waypoint is an airport/airfield */
+  bool TurnPoint:1;    /**< If waypoint can be used as a turnpoint */
+  bool LandPoint:1;    /**< If waypoint can be landed at */
+  bool Home:1;         /**< If waypoint is to be used as home */
+  bool StartPoint:1;   /**< If waypoint is marked as a potential start point */
+  bool FinishPoint:1;  /**< If waypoint is marked as a potential finish point */
+  bool Restricted:1;   /**< If waypoint is marked for restricted access (unused?) */
+  bool WaypointFlag:1; /**< ??? */
 };
 
 /**

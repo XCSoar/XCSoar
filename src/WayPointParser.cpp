@@ -410,14 +410,14 @@ ParseAngle(const TCHAR *input, fixed *value_r, TCHAR **endptr_r)
 static void
 ParseFlags(const TCHAR *input, const TCHAR **endptr_r, Waypoint &waypoint)
 {
-  waypoint.Flags.Airport = 0;
-  waypoint.Flags.TurnPoint = 0;
-  waypoint.Flags.LandPoint = 0;
-  waypoint.Flags.Home = 0;
-  waypoint.Flags.StartPoint = 0;
-  waypoint.Flags.FinishPoint = 0;
-  waypoint.Flags.Restricted = 0;
-  waypoint.Flags.WaypointFlag = 0;
+  waypoint.Flags.Airport = false;
+  waypoint.Flags.TurnPoint = false;
+  waypoint.Flags.LandPoint = false;
+  waypoint.Flags.Home = false;
+  waypoint.Flags.StartPoint = false;
+  waypoint.Flags.FinishPoint = false;
+  waypoint.Flags.Restricted = false;
+  waypoint.Flags.WaypointFlag = false;
 
   while (_istalpha(*input)) {
     switch (*input++) {
