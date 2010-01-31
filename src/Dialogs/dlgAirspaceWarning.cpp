@@ -210,34 +210,12 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   tstring sType = as.get_type_text(true);
 
   const int TextHeight = 12, TextTop = 1;
-  const int Col0Left = 3, Col1Left = 120;
+  const int Col0Left = 3, Col1Left = 120, Col2Left = 200;
 
-  RECT         rc;
   RECT         rcTextClip;
-  Brush *hBrushBk = NULL;
     
-  rc = rcTextClip = paint_rc;
+  rcTextClip = paint_rc;
   rcTextClip.right = IBLSCALE(Col1Left - 2);
-
-  InflateRect(&rc, IBLSCALE(-2), IBLSCALE(-2));
-
-  { // background colour
-    if (warning->get_warning_state() == AirspaceWarning::WARNING_INSIDE) {
-      if (warning->get_ack_expired())
-        hBrushBk = &hBrushInsideBk;
-      else
-        hBrushBk = &hBrushInsideAckBk;
-    } else if (warning->get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
-      if (warning->get_ack_expired())
-        hBrushBk = &hBrushNearBk;
-      else
-        hBrushBk = &hBrushNearAckBk;
-    }
-
-    if (hBrushBk != NULL) {
-      canvas.fill_rectangle(rc, *hBrushBk);
-    }
-  }
 
   canvas.set_text_color(warning->get_ack_expired()
                         ? wAirspaceList->GetForeColor()
@@ -271,7 +249,49 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
                         paint_rc.top + IBLSCALE(TextTop + TextHeight),
                         rcTextClip, sTmp);
   }
-  
+
+  /* draw the warning state indicator */
+
+  Brush *state_brush;
+  const TCHAR *state_text;
+
+  if (warning->get_warning_state() == AirspaceWarning::WARNING_INSIDE) {
+    if (warning->get_ack_expired())
+      state_brush = &hBrushInsideBk;
+    else
+      state_brush = &hBrushInsideAckBk;
+    state_text = _T("inside");
+  } else if (warning->get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
+    if (warning->get_ack_expired())
+      state_brush = &hBrushNearBk;
+    else
+      state_brush = &hBrushNearAckBk;
+    state_text = _T("near");
+  } else {
+    state_brush = NULL;
+    state_text = NULL;
+  }
+
+  const SIZE state_text_size = canvas.text_size(state_text != NULL
+                                                ? state_text : _T("W"));
+
+  if (state_brush != NULL) {
+    /* colored background */
+    RECT rc;
+
+    rc.left = paint_rc.left + Layout::FastScale(Col2Left);
+    rc.top = paint_rc.top + Layout::FastScale(2);
+    rc.right = rc.left + state_text_size.cx + Layout::FastScale(4);
+    rc.bottom = paint_rc.bottom - Layout::FastScale(2);
+
+    canvas.fill_rectangle(rc, *state_brush);
+  }
+
+  if (state_text != NULL)
+    canvas.text(paint_rc.left + Layout::FastScale(Col2Left + 2),
+                (paint_rc.bottom + paint_rc.top - state_text_size.cy) / 2,
+                state_text);
+
 /*  
   
   TCHAR sAckIndicator[6] = _T(" -++*");
