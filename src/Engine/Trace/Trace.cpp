@@ -298,11 +298,23 @@ Trace::end() const
 class TracePointSetFilterInserter
 {
 public:
-  TracePointSetFilterInserter(TracePointSet& the_set, const unsigned _min_time = 0) :
+  /** 
+   * Constructor
+   * 
+   * @param the_set Set to add to
+   * @param _min_time Min time (before which to ignore samples), (s)
+   */
+  TracePointSetFilterInserter(TracePointSet& the_set, 
+                              const unsigned _min_time = 0) :
     m_set(&the_set), min_time(_min_time)
   {
   }
 
+  /** 
+   * Set operator; adds point to set if time satisfied
+   *
+   * @return Reference to this
+   */
   TracePointSetFilterInserter& operator=(const TracePoint& val) {
     if (val.time>=min_time)
       m_set->insert(val);
@@ -310,10 +322,22 @@ public:
     return *this;
   }
 
+  /** 
+   * Dummy dereference operator
+   *
+   * @return Reference to this
+   */
   TracePointSetFilterInserter& operator*() {
     return *this;
   }
 
+  /** 
+   * Dummy increment operator
+   * 
+   * @param x N to increment
+   * 
+   * @return Reference to this
+   */
   TracePointSetFilterInserter& operator++(const int x) {
     return *this;
   }
