@@ -211,6 +211,14 @@ public:
  */
   bool update_idle(const AIRCRAFT_STATE &state);
 
+  /** 
+   * Update auto MC.  Internally uses TaskBehaviour to determine settings
+   * 
+   * @param state_now Current state
+   * @param fallback_mc MC value (m/s) to use if algorithm fails or not active
+   * 
+   * @return True if MC updated
+   */
   bool update_auto_mc(const AIRCRAFT_STATE& state_now,
                       const fixed fallback_mc);
 

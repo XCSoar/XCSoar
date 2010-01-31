@@ -5,6 +5,10 @@
 #include "Aircraft.hpp"
 #include <vector>
 
+/**
+ * Class for points used in traces (snail trail, OLC scans)
+ * Internally, keeps track of predecessors as a kind of a linked-list
+ */
 class TracePoint:
   public SearchPoint,
   public ALTITUDE_STATE,
@@ -18,18 +22,19 @@ public:
  */
   TracePoint():time(0-1),last_time(0-1) {};
 
+/** 
+ * Constructor for actual trace points
+ * 
+ * @param state State of aircraft
+ * @param tp Projection used internally
+ * 
+ * @return Initialised object
+ */  
   TracePoint(const AIRCRAFT_STATE &state, const TaskProjection& tp);
 
-  unsigned time;
-  unsigned rank;
-  unsigned last_time;
-  fixed drift_factor;
-
-  void set_rank(const unsigned d) {
-    if (d>rank) {
-      rank = d;
-    }
-  }
+  unsigned time; /**< Time of sample */
+  unsigned last_time; /**< Time of sample prior to this */
+  fixed drift_factor; /**< Thermal drift factor */
 
   unsigned dsqr(const int d) const {
     return d*d;
@@ -70,12 +75,22 @@ public:
     };
   };
 
+  /**
+   * Structure for STL sorting by time
+   */
   struct time_sort {
     bool operator()(const TracePoint& s1, const TracePoint& s2) {
       return s1.time < s2.time;
     }
   };
 
+  /** 
+   * Test match based on time (since time of a sample must be unique)
+   * 
+   * @param a Point to compare to
+   * 
+   * @return True if time matches
+   */
   bool operator==(TracePoint const& a) { 
     return time == a.time; 
   }

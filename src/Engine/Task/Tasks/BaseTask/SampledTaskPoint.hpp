@@ -124,6 +124,12 @@ public:
   virtual bool update_sample(const AIRCRAFT_STATE& state,
                              TaskEvents &task_events);
 
+  /** 
+   * Test if the task point has recorded presence of the aircraft
+   * in this sector
+   * 
+   * @return True if sample present
+   */
   bool has_sampled() const;
 
 /** 

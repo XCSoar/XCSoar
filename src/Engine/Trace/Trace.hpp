@@ -54,8 +54,8 @@ typedef std::list<TracePoint> TracePointList;
  * Container for traces using kd-tree representation internally for fast 
  * geospatial lookups.
  *
- * @todo consider partial thinning, maintenance of separate stores or some
- *       kind of LOD algorithm; currently this does slow down on long flights
+ * This also uses a smart thinning algorithm to limit the number of items
+ * in the store.
  */
 class Trace: private NonCopyable 
 {
@@ -65,6 +65,7 @@ public:
    *
    * @param max_time Time window size (seconds), null_time for unlimited
    * @param recent_time Number of points to store at full resolution
+   * @param max_points Maximum number of points that can be stored
    */
   Trace(const unsigned max_time = null_time,
         const unsigned recent_time= 300,
@@ -154,9 +155,9 @@ public:
    */
   TracePointVector get_trace_points(const unsigned max_points) const;
 
+private:
   typedef std::map<unsigned, unsigned> TraceDeltaMap;
 
-private:
   void thin_trace(TracePointList& vec, const unsigned range_sq) const;
   void trim_point_delta();
   void trim_point_time();

@@ -43,6 +43,8 @@ struct AIRCRAFT_STATE;
 
 #include "Math/fixed.hpp"
 
+class Polar;
+
 /**
  * Class implementing basic glide polar performance model
  * 
@@ -64,8 +66,6 @@ struct AIRCRAFT_STATE;
  * \todo
  * - currently the polar itself and Vmax is hard-coded
  */
-class Polar;
-
 class GlidePolar
 {
   friend void setGlidePolar(const Polar& polar, GlidePolar& gp);

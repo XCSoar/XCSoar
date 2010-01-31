@@ -39,6 +39,9 @@
 
 #include "OLCDijkstra.hpp"
 
+/**
+ * Specialisation of OLC Dijkstra for OLC Classic rules
+ */
 class OLCClassic: 
   public OLCDijkstra
 {

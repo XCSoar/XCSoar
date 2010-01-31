@@ -111,6 +111,9 @@ ItoV(int i)
   return max(0, min(i, NUM_V_POINTS - 1)) * V_SCALE / (NUM_V_POINTS - 1);
 }
 
+/**
+ * Class for points used in ZigZag wind algorithm
+ */
 class ZigZagPoint
 {
 public:

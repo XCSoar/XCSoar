@@ -124,6 +124,11 @@ public:
  */
   bool equals(const OrderedTaskPoint* other) const;
 
+  /** 
+   * Set FAI finish height
+   * 
+   * @param height FAI finish height (m) 
+   */
   void set_fai_finish_height(const fixed height);
 
 private:

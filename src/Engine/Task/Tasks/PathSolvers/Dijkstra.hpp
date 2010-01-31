@@ -82,6 +82,10 @@ public:
     push(n,n,0);
   };
 
+  /** 
+   * Clears the queues
+   * 
+   */
   void clear() {
     while (!q.empty()) {
       q.pop();

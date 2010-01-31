@@ -39,6 +39,9 @@
 
 #include "OLCDijkstra.hpp"
 
+/**
+ * Specialisation of OLC Dijkstra for OLC FAI (triangle) rules
+ */
 class OLCFAI: 
   public OLCDijkstra
 {

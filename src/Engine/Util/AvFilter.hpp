@@ -80,9 +80,9 @@ public:
   virtual void reset();
 
 protected:
-  std::vector<double> x;
-  unsigned n;
-  unsigned n_max; // ideally const but then non-copyable
+  std::vector<double> x; /**< Values stored */
+  unsigned n; /**< Number of taps */
+  unsigned n_max; /**< Maximum number of taps (ideally const but then non-copyable) */
 };
 
 #endif

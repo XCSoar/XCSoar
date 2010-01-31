@@ -60,11 +60,15 @@ public:
   bool optimise_targets_bearing; /**< Option to enable positioning of AAT targets at optimal point on isoline */
   bool auto_mc; /**< Option to enable calculation and setting of auto MacCready */
 
+  /**
+   * Enumeration of auto MC modes
+   */
   enum AutoMCMode_t {
     AUTOMC_FINALGLIDE = 0, /**< Final glide only */
     AUTOMC_CLIMBAVERAGE, /**< Climb average */
     AUTOMC_BOTH /**< Final glide if above FG, else climb average */
   };
+
   AutoMCMode_t auto_mc_mode; /**< Options for auto MC calculations */
   
   bool calc_cruise_efficiency; /**< Option to enable calculation of cruise efficiency */
@@ -101,6 +105,7 @@ public:
  * Check whether aircraft speed is within start speed limits
  * 
  * @param state Aircraft state
+ * @param with_margin Whether to use margin for minor rule violation
  * 
  * @return True if within limits
  */
@@ -111,6 +116,7 @@ public:
  * Check whether aircraft height is within start height limit
  * 
  * @param state Aircraft state
+ * @param with_margin Whether to use margin for minor rule violation
  * 
  * @return True if within limits
  */

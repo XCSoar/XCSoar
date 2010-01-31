@@ -19,6 +19,9 @@ class GlidePolar;
 class CommonStats;
 class Trace;
 
+/**
+ * Special task holder for Online Contest calculations
+ */
 class OnlineContest:
   public BaseVisitable<> 
 {

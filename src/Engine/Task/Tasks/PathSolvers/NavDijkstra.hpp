@@ -25,7 +25,13 @@ class NavDijkstra:
   private NonCopyable 
 {
 public:
-
+  /** 
+   * Constructor
+   * 
+   * @param _num_stages Number of stages in search
+   * 
+   * @return Initialised object
+   */
   NavDijkstra(const unsigned _num_stages):
     num_stages(_num_stages)
     {

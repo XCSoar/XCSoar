@@ -292,6 +292,9 @@ Trace::end() const
   return trace_tree.end();
 }
 
+/**
+ * Utility class to add tracepoints satisfying a time range to a set
+ */
 class TracePointSetFilterInserter
 {
 public:

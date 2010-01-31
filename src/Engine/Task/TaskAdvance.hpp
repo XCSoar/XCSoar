@@ -120,7 +120,6 @@ public:
  * @param state current aircraft state
  * @param x_enter whether this step transitioned enter to this tp
  * @param x_exit whether this step transitioned exit to this tp
- * @param request_arm will be set if satisfied except not armed 
  * 
  * @return true if this tp is ready to advance
  */

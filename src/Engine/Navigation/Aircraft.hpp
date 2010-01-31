@@ -80,6 +80,9 @@ struct SPEED_STATE
 };
 
 
+/**
+ * Structure for altitude-related state data
+ */
 struct ALTITUDE_STATE 
 {
   ALTITUDE_STATE();
@@ -102,6 +105,9 @@ struct ALTITUDE_STATE
 };
 
 
+/**
+ * Structure for wind state data 
+ */
 struct WIND_STATE 
 {
   //##############
@@ -113,6 +119,9 @@ struct WIND_STATE
 };
 
 
+/**
+ * Structure for variometer data
+ */
 struct VARIO_STATE
 {
   //###########
@@ -132,7 +141,9 @@ struct VARIO_STATE
   fixed NettoVario;
 };
 
-
+/**
+ * Structure for flying state (takeoff/landing)
+ */
 struct FLYING_STATE
 {
   FLYING_STATE();
@@ -147,8 +158,24 @@ struct FLYING_STATE
   /** Time of takeoff */
   fixed TakeOffTime;
 
+  /**
+   * Reset flying state as if never flown
+   */
   void flying_state_reset();
+
+  /**
+   * Update flying state when moving 
+   *
+   * @param time Time the aircraft is moving
+   */
   void flying_state_moving(const fixed time);
+
+  /**
+   * Update flying state when stationary 
+   *
+   * @param time Time the aircraft is stationary
+   * @param on_ground Whether the aircraft is known to be on the ground
+   */
   void flying_state_stationary(const fixed time, const bool on_ground=false);
 
 private:
@@ -158,6 +185,9 @@ private:
 };
 
 
+/**
+ * Compound structure defining an aircraft state
+ */
 struct AIRCRAFT_STATE: 
   public ALTITUDE_STATE,
   public SPEED_STATE,

@@ -39,6 +39,9 @@
 
 #include "OLCDijkstra.hpp"
 
+/**
+ * Specialisation of Dijkstra for OLC Sprint (also known as OLC League) rules
+ */
 class OLCSprint: 
   public OLCDijkstra
 {
