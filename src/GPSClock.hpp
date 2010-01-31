@@ -39,6 +39,9 @@ Copyright_License {
 #ifndef XCSOAR_GPS_CLOCK_HPP
 #define XCSOAR_GPS_CLOCK_HPP
 
+/**
+ * Class for GPS-time based time intervals
+ */
 class GPSClock {
 private:
   double last;
@@ -97,7 +100,7 @@ public:
     if (check_reverse(now)) {
       return -1;
     }
-    // QUESTION TB: does that make sense?! seems to me like if(true) {...}
+    // check if time has advanced past dt
     if (now-last>=dt) {
       last= now;
       return dt;
