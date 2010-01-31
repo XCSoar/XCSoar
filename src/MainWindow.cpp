@@ -100,6 +100,7 @@ MainWindow::set(LPCTSTR text,
 
   StartupStore(TEXT("Initialise fonts\n"));
   InitialiseFonts(rc);
+  ButtonLabel::SetFont(MapWindowBoldFont);
 
   map.set(*this, rcsmall, rc);
   map.set_font(MapWindowFont);

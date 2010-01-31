@@ -234,8 +234,6 @@ CheckFreeRam(void)
   return 64 * 1024 * 1024;
 }
 
-void ButtonLabel::SetFont(const Font &Font) {}
-
 class TestWindow : public SingleWindow {
 public:
   MapWindow map;

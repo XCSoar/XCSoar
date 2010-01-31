@@ -653,9 +653,6 @@ void InitialiseFonts(RECT rc)
                         szRegistryFontTitleSmallWindowFont,
                         autoTitleSmallWindowLogFont,
                         NULL);
-
-  ButtonLabel::SetFont(MapWindowBoldFont);
-
 }
 
 void DeleteFonts() {
