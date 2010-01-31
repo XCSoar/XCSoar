@@ -52,7 +52,6 @@ Copyright_License {
 #include "UtilsProfile.hpp"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
-#include "MapWindowProjection.hpp"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
 #include "LogFile.hpp"

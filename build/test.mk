@@ -106,6 +106,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Globals.cpp \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/Projection.cpp \
+	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/MapWindow.cpp \
 	$(SRC)/MapWindowAirspace.cpp \
 	$(SRC)/MapWindowBlackboard.cpp \
@@ -123,6 +125,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindowTrail.cpp \
 	$(SRC)/MapWindowWaypoints.cpp \
 	$(SRC)/MapDrawHelper.cpp \
+	$(SRC)/RenderTask.cpp \
+	$(SRC)/RenderTaskPoint.cpp \
 	$(SRC)/Marks.cpp \
 	$(SRC)/Math/FastRotation.cpp \
 	$(SRC)/Math/Screen.cpp \
