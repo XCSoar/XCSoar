@@ -52,9 +52,6 @@ AbortTask::AbortTask(TaskEvents &te,
   waypoints(wps),
   polar_safety(gp)
 {
-  // default MC value 
-  /// @todo get safety mc value from settings
-  polar_safety.set_mc(fixed_one);
 }
 
 AbortTask::~AbortTask()
@@ -116,7 +113,7 @@ AbortTask::abort_range(const AIRCRAFT_STATE &state)
 GlidePolar
 AbortTask::get_safety_polar() const
 {
-  fixed mc_safety = polar_safety.get_mc();
+  const fixed mc_safety = task_behaviour.get_safety_mc(glide_polar.get_mc());
   GlidePolar polar = glide_polar;
   polar.set_mc(mc_safety);
   return polar;

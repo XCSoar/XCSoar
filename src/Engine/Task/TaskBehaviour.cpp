@@ -60,7 +60,9 @@ TaskBehaviour::TaskBehaviour():
     enable_olc(false),
     olc_rules(OLC_Sprint),
     olc_handicap(100),
-    fai_finish(false)
+    fai_finish(false),
+    safety_mc(fixed_one),
+    safety_mc_use_current(false)
 {
 }
 
@@ -117,3 +119,12 @@ TaskBehaviour::check_finish_height(const AIRCRAFT_STATE &state) const
   return state.AltitudeAGL >= finish_min_height;
 }
 
+
+fixed 
+TaskBehaviour::get_safety_mc(const fixed fallback_mc) const
+{
+  if (safety_mc_use_current) 
+    return fallback_mc;
+  else
+    return safety_mc;
+}

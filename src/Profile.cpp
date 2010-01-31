@@ -657,11 +657,11 @@ Profile::ReadRegistrySettings()
   GetFromRegistry(szRegistryLoggerTimeStepCircling,
 		  SetSettingsComputer().LoggerTimeStepCircling);
   GetFromRegistry(szRegistryAbortSafetyUseCurrent,
-		  SetSettingsComputer().AbortSafetyUseCurrent);
+		  SetSettingsComputer().safety_mc_use_current);
 
-  Temp = iround(SettingsComputer().SafetyMacCready * 10);
+  Temp = iround(SettingsComputer().safety_mc * 10);
   GetFromRegistryD(szRegistrySafetyMacCready, Temp);
-  SetSettingsComputer().SafetyMacCready = Temp / 10.0;
+  SetSettingsComputer().safety_mc = Temp / 10.0;
 
   GetFromRegistry(szRegistryUserLevel, UserLevel);
 

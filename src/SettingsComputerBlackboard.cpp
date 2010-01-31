@@ -118,7 +118,5 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.SafetySpeed = 70.0;
   settings_computer.BallastSecsToEmpty  = 120;
   settings_computer.BallastTimerActive = false;
-  settings_computer.SafetyMacCready = 1.0;
-  settings_computer.AbortSafetyUseCurrent = false;
 }
 

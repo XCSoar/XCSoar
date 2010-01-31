@@ -1543,13 +1543,13 @@ static void setVariables(void) {
   LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
                    XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
   LoadFormProperty(*wf, _T("prpAbortSafetyUseCurrent"),
-                   XCSoarInterface::SettingsComputer().AbortSafetyUseCurrent);
+                   XCSoarInterface::SettingsComputer().safety_mc_use_current);
   LoadFormProperty(*wf, _T("prpDisableAutoLogger"),
                    !XCSoarInterface::SettingsComputer().DisableAutoLogger);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
-    wp->GetDataField()->Set(XCSoarInterface::SettingsComputer().SafetyMacCready*LIFTMODIFY);
+    wp->GetDataField()->Set((double)(XCSoarInterface::SettingsComputer().safety_mc*LIFTMODIFY));
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
     wp->RefreshDisplay();
   }
@@ -2321,7 +2321,7 @@ void dlgConfigurationShowModal(void){
 
   changed |= SetValueRegistryOnChange(wf, _T("prpAbortSafetyUseCurrent"),
                                       szRegistryAbortSafetyUseCurrent,
-                                      XCSoarInterface::SetSettingsComputer().AbortSafetyUseCurrent);
+                                      XCSoarInterface::SetSettingsComputer().safety_mc_use_current);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpDisableAutoLogger"));
   if (wp) { // GUI label is "Enable Auto Logger"
@@ -2334,15 +2334,16 @@ void dlgConfigurationShowModal(void){
       changed = true;
     }
   }
+
   double val;
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
-    val = wp->GetDataField()->GetAsFloat()/LIFTMODIFY;
-    if (XCSoarInterface::SettingsComputer().SafetyMacCready != val) {
-      XCSoarInterface::SetSettingsComputer().SafetyMacCready = val;
+    double val = (wp->GetDataField()->GetAsFloat()/LIFTMODIFY);
+    if (XCSoarInterface::SettingsComputer().safety_mc != val) {
+      XCSoarInterface::SetSettingsComputer().safety_mc = val;
       SetToRegistry(szRegistrySafetyMacCready,
-                    iround(XCSoarInterface::SettingsComputer().SafetyMacCready*10));
+                    iround(XCSoarInterface::SettingsComputer().safety_mc*10));
       changed = true;
     }
   }

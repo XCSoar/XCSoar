@@ -95,6 +95,9 @@ public:
   unsigned olc_handicap; /**< Handicap factor */
   bool fai_finish; /**< Whether ordered task finish requires FAI height rule */
 
+  fixed safety_mc; /**< Safety MacCready value (m/s) used by abort task */
+  bool safety_mc_use_current; /**< Whether to use safety mc value or current task polar MC */
+
 /** 
  * Convenience function (used primarily for testing) to disable
  * all expensive task behaviour functions.
@@ -131,6 +134,15 @@ public:
  * @return True if within limits
  */
   bool check_finish_height(const AIRCRAFT_STATE &state) const;
+
+/** 
+ * Return safety MC value (based on options)
+ * 
+ * @param fallback_mc Current glide polar mc value (m/s) 
+ *
+ * @return Safety MC value (m/s)
+ */
+  fixed get_safety_mc(const fixed fallback_mc) const;
 };
 
 #endif

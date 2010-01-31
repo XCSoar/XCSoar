@@ -93,8 +93,6 @@ struct SETTINGS_POLAR {
   // polar info
   int BallastSecsToEmpty;
   bool BallastTimerActive;
-  double SafetyMacCready;
-  bool AbortSafetyUseCurrent;
 };
 
 
