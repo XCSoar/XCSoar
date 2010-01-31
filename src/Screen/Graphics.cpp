@@ -51,7 +51,6 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "MapWindow.h"
 #include "resource.h"
-#include "options.h" /* for IBLSCALE() */
 
 #define NUMSNAILRAMP 6
 
@@ -183,11 +182,7 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
   }
   hAboveTerrainBrush.set(hAboveTerrainBitmap);
 
-#if (MONOCHROME_SCREEN > 0)
   hbWind.set(Color(0x80, 0x80, 0x80));
-#else
-  hbWind.set(Color(0x80, 0x80, 0x80));
-#endif
 
   hBmpMapScale.load(IDB_MAPSCALE_A);
   hBrushFlyingModeAbort.set(Color::RED);
@@ -195,11 +190,9 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
   hBmpThermalSource.load(IDB_THERMALSOURCE);
   hBmpTarget.load(IDB_TARGET);
 
-#if (MONOCHROME_SCREEN > 0)
-  hbCompass.set(Color::WHITE);
-#else
-  hbCompass.set(Color(0x40, 0x40, 0xFF));
-#endif
+  hbCompass.set(has_colors()
+                ? Color(0x40, 0x40, 0xFF)
+                : Color::WHITE);
 
   hbThermalBand.set(Color(0x80, 0x80, 0xFF));
   hbBestCruiseTrack.set(Color::BLUE);
@@ -240,22 +233,14 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
     hpAircraftBorder.set(IBLSCALE(1), Color::BLACK);
   }
 
-#if (MONOCHROME_SCREEN > 0)
-  hpWind.set(IBLSCALE(2), Color::BLACK);
-#else
-  hpWind.set(IBLSCALE(2), Color::RED);
-#endif
+  hpWind.set(IBLSCALE(2), has_colors() ? Color::RED : Color::BLACK);
 
   hpWindThick.set(IBLSCALE(4), Color(255, 220, 220));
 
   hpBearing.set(IBLSCALE(2), Color(0, 0, 0));
   hpBestCruiseTrack.set(IBLSCALE(1), Color::BLUE);
-#if (MONOCHROME_SCREEN > 0)
-  hpCompass.set(IBLSCALE(1), Color::BLACK);
-  //hpCompass.set(1, Color(0xff,0xff,0xff));
-#else
-  hpCompass.set(IBLSCALE(1), Color(0xcf, 0xcf, 0xFF));
-#endif
+  hpCompass.set(IBLSCALE(1), has_colors()
+                ? Color(0xcf, 0xcf, 0xFF) : Color::BLACK);
   hpThermalBand.set(IBLSCALE(2), Color(0x40, 0x40, 0xFF));
   hpThermalBandGlider.set(IBLSCALE(2), Color(0x00, 0x00, 0x30));
 
