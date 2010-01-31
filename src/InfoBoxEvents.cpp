@@ -131,7 +131,7 @@ ActionInterface::on_key_Altitude(int UpDown)
   if (!is_simulator())
     return;
 
-  fixed fixed_step = fixed(100 / ALTITUDEMODIFY);
+  fixed fixed_step = (fixed)Units::ToSysUnit(100, Units::UserAltitudeUnit);
 
   if (UpDown == 1)
     device_blackboard.SetAltitude(Basic().GPSAltitude + fixed_step);
@@ -195,7 +195,7 @@ ActionInterface::on_key_Speed(int UpDown)
   if (!is_simulator())
     return;
 
-  fixed fixed_step = fixed(10 / SPEEDMODIFY);
+  fixed fixed_step = (fixed)Units::ToSysUnit(10, Units::UserHorizontalSpeedUnit);
 
   if (UpDown == 1)
     device_blackboard.SetSpeed(Basic().Speed + fixed_step);
