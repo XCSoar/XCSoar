@@ -42,6 +42,11 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 
+VirtualCanvas::VirtualCanvas(unsigned _width, unsigned _height)
+{
+  set(_width, _height);
+}
+
 VirtualCanvas::VirtualCanvas(const Canvas &canvas,
                              unsigned _width, unsigned _height)
 {
@@ -49,6 +54,11 @@ VirtualCanvas::VirtualCanvas(const Canvas &canvas,
 }
 
 #else /* !ENABLE_SDL */
+
+VirtualCanvas::VirtualCanvas(unsigned _width, unsigned _height)
+  :Canvas(::CreateCompatibleDC(NULL), _width, _height)
+{
+}
 
 VirtualCanvas::VirtualCanvas(const Canvas &canvas,
                              unsigned _width, unsigned _height)

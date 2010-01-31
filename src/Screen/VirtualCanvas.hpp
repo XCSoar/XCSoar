@@ -49,6 +49,7 @@ Copyright_License {
 class VirtualCanvas : public Canvas {
 public:
   VirtualCanvas() {}
+  VirtualCanvas(unsigned _width, unsigned _height);
   VirtualCanvas(const Canvas &canvas, unsigned _width, unsigned _height);
   ~VirtualCanvas();
 
