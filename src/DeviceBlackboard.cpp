@@ -503,7 +503,7 @@ DeviceBlackboard::Heading()
     }
 
     // calculate estimated true airspeed
-    SetBasic().TrueAirspeedEstimated = sqrt(x0*x0+y0*y0);
+    SetBasic().TrueAirspeedEstimated = hypot(x0, y0);
 
   } else {
     SetBasic().Heading = Basic().TrackBearing;

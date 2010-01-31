@@ -94,7 +94,7 @@ IntermediatePoint(GEOPOINT loc1, GEOPOINT loc2, fixed dthis, fixed dtotal)
   const fixed z = A * sinLoc1Latitude + B * sinLoc2Latitude;
 
   GEOPOINT loc3;
-  loc3.Latitude = atan2(z, sqrt(x * x + y * y)) * fixed_rad_to_deg;
+  loc3.Latitude = atan2(z, hypot(x, y)) * fixed_rad_to_deg;
   loc3.Longitude = atan2(y, x) * fixed_rad_to_deg;
 
 #ifdef INSTRUMENT_TASK

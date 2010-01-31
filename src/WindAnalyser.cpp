@@ -121,7 +121,7 @@ WindAnalyser::~WindAnalyser()
 double
 Magnitude(Vector v)
 {
-  double d = sqrt(v.x * v.x + v.y * v.y);
+  double d = hypot(v.x, v.y);
   return d;
 }
 
@@ -374,7 +374,7 @@ WindAnalyser::_calcWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
     phase = ((i + jmax) % numwindsamples) * M_PI * 2.0 / numwindsamples;
     wx = cos(phase) * av + mag;
     wy = sin(phase) * av;
-    cmag = sqrt(wx * wx + wy * wy) - windsamples[i].mag;
+    cmag = hypot(wx, wy) - windsamples[i].mag;
     rthis += cmag * cmag;
   }
 

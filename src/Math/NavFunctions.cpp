@@ -191,7 +191,7 @@ xVxVy_to_Crs_Spd(double Vx, double Vy, double *Crs, double *Spd)
 
   *Crs = ((double)((RAD_TO_DEG * 0.5 * atan2((double)Vx, (double)Vy)) + 0.5)) * 0.5;
 
-  Tmp_Spd = (double)(sqrt(((double)Vx * (double)Vx) + ((double)Vy * (double)Vy)) + 0.5);
+  Tmp_Spd = (double)(hypot((double)Vx, (double)Vy) + 0.5);
   *Spd = Tmp_Spd;
 }
 

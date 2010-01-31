@@ -103,7 +103,7 @@ AircraftStateFilter::update(const AIRCRAFT_STATE& state)
 fixed 
 AircraftStateFilter::get_speed() const
 {
-  return sqrt(m_vx*m_vx+m_vy*m_vy);
+  return hypot(m_vx, m_vy);
 }
 
 fixed 

@@ -236,7 +236,7 @@ CalcTeamMatePos(double ownBear, double ownDist, double mateBear,
 	// Calculate range
 	double Xs = ownDist * sin(ownBear) - mateDist * sin(mateBear);
   double Ys = ownDist * cos(ownBear) - mateDist * cos(mateBear);
-	double range = sqrt((Xs * Xs) + (Ys * Ys));
+  double range = hypot(Xs, Ys);
 	*distToMate = range;
 
 	// Trivial solutions for bearing calculation
