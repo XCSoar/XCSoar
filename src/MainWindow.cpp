@@ -99,7 +99,7 @@ MainWindow::set(LPCTSTR text,
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
 
   StartupStore(TEXT("Initialise fonts\n"));
-  InitialiseFonts(get_canvas(), rc);
+  InitialiseFonts(rc);
 
   map.set(*this, rcsmall, rc);
   map.set_font(MapWindowFont);
