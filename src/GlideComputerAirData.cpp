@@ -405,12 +405,12 @@ GlideComputerAirData::CruiseLD()
 
 
 /**
- * Reads the current terrain height and calculates the altitude over terrain
+ * Reads the current terrain height
  */
 void
 GlideComputerAirData::TerrainHeight()
 {
-  short Alt = -1;
+  short Alt = TERRAIN_INVALID;
 
   terrain.Lock();
   if (terrain.GetMap()) {
@@ -420,20 +420,8 @@ GlideComputerAirData::TerrainHeight()
   }
   terrain.Unlock();
 
-  if (Alt < 0) {
-    Alt = 0;
-    // QUESTION TB: this can't work right?!
-    if (Alt <= TERRAIN_INVALID) {
-      SetCalculated().TerrainValid = false;
-    } else {
-      SetCalculated().TerrainValid = true;
-    }
-    SetCalculated().TerrainAlt = 0;
-  } else {
-    SetCalculated().TerrainValid = true;
-    SetCalculated().TerrainAlt = Alt;
-  }
-
+  SetCalculated().TerrainValid = (Alt > TERRAIN_INVALID);
+  SetCalculated().TerrainAlt = std::max((short)0, Alt);
 }
 
 
