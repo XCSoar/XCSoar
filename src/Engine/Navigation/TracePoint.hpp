@@ -36,18 +36,36 @@ public:
   unsigned last_time; /**< Time of sample prior to this */
   fixed drift_factor; /**< Thermal drift factor */
 
-  unsigned dsqr(const int d) const {
-    return d*d;
-  }
-
+  /** 
+   * Calculate approximate squared (flat projected) distance between this point
+   * and another
+   * 
+   * @param tp Point to calculate distance to
+   * 
+   * @return Approximate squared distance
+   */
   unsigned approx_sq_dist(const TracePoint& tp) const {
     return dsqr(get_flatLocation().Longitude-tp.get_flatLocation().Longitude)+
       dsqr(get_flatLocation().Latitude-tp.get_flatLocation().Latitude);
   }
+
+  /** 
+   * Calculate approximate (flat projected) distance between this point
+   * and another
+   * 
+   * @param tp Point to calculate distance to
+   * 
+   * @return Approximate distance
+   */
   unsigned approx_dist(const TracePoint& tp) const {
     return (unsigned)sqrt(approx_sq_dist(tp));
   }
 
+  /** 
+   * Calculate time step of this point from previous
+   * 
+   * @return Time step (s)
+   */
   unsigned dt() const {
     return time-last_time;
   }
@@ -79,6 +97,11 @@ public:
    * Structure for STL sorting by time
    */
   struct time_sort {
+    /** 
+     * Comparison operator
+     * 
+     * @return True if s1 is earlier than s2
+     */
     bool operator()(const TracePoint& s1, const TracePoint& s2) {
       return s1.time < s2.time;
     }
@@ -95,6 +118,10 @@ public:
     return time == a.time; 
   }
 
+private:
+  unsigned dsqr(const int d) const {
+    return d*d;
+  }
 };
 
 typedef std::vector<TracePoint> TracePointVector;
