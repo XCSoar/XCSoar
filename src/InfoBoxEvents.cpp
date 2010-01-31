@@ -192,20 +192,19 @@ ActionInterface::on_key_BestAlternate(int UpDown)
 void
 ActionInterface::on_key_Speed(int UpDown)
 {
+  if (!is_simulator())
+    return;
+
   fixed fixed_step = fixed(10 / SPEEDMODIFY);
 
-  if (is_simulator()) {
-    if(UpDown==1)
-      device_blackboard.SetSpeed(Basic().Speed+fixed_step);
-    else if (UpDown==-1) {
-      device_blackboard.SetSpeed(m_max(fixed_zero,Basic().Speed-fixed_step));
-    } else if (UpDown==-2) {
-      on_key_Direction(-1);
-    } else if (UpDown==2) {
-      on_key_Direction(1);
-    }
-  }
-  return;
+  if (UpDown == 1)
+    device_blackboard.SetSpeed(Basic().Speed + fixed_step);
+  else if (UpDown == -1)
+    device_blackboard.SetSpeed(m_max(fixed_zero, Basic().Speed - fixed_step));
+  else if (UpDown == -2)
+    on_key_Direction(-1);
+  else if (UpDown == 2)
+    on_key_Direction(1);
 }
 
 
