@@ -161,8 +161,6 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic)
 
   // if (no level transition yet) wait for transition
   if (abs(level - last_level) == 0) {
-    // QUESTION TB: no need for next line?!
-    last_level = level;
     return;
   }
 
@@ -171,6 +169,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic)
 
   // if (going up)
   if (level > last_level) {
+    // we round down (level) because of potential lag of temp sensor
     cslevels[level].updateTemps(basic.RelativeHumidity, basic.OutsideAirTemperature);
     cslevels[level].updateThermalIndex(level);
 
@@ -181,7 +180,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic)
 
   // if (going down)
   } else {
-    // QUESTION TB: why level+1 and not level?
+    // we round up (level+1) because of potential lag of temp sensor
     cslevels[level + 1].updateTemps(basic.RelativeHumidity,
         basic.OutsideAirTemperature);
     cslevels[level + 1].updateThermalIndex((unsigned short)(level + 1));
@@ -302,9 +301,8 @@ CuSondeLevel::updateTemps(double rh, double t)
   logEx = 0.66077 + 7.5 * t / (237.3 + t) + (log10(rh) - 2);
   adewpoint = (logEx - 0.66077) * 237.3 / (0.66077 + 7.5 - logEx);
 
-  // QUESTION TB: if(0) ??????
   // update statistics
-  if (0) {
+  if (0) { // averaging method disabled for now
     nmeasurements++;
     dewpoint = (adewpoint + dewpoint * (nmeasurements - 1)) / nmeasurements;
     airTemp = (t + airTemp * (nmeasurements - 1)) / nmeasurements;

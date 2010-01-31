@@ -525,7 +525,7 @@ NMEAParser::GLL(const TCHAR *String, const TCHAR **params, size_t nparams,
     GPS_INFO->Location.Longitude = tmplon;
     GPS_INFO->Simulator = false;
   } else {
-    // QUESTION TB: why conditional?
+    // data is likely to be invalid (happens on first fix with some GPSs)
   }
 
   return true;

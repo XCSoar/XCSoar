@@ -178,8 +178,9 @@ DeviceBlackboard::SetNAVWarning(bool val)
   ScopeLock protect(mutexBlackboard);
   SetBasic().NAVWarning = val;
   if (!val) {
-    // QUESTION TB: what going on here?
-    // externally forced
+    // if NavWarning is false, since this is externally forced
+    // by the simulator, we also set the number of satelites used
+    // as a simulated value
     SetBasic().SatellitesUsed = 6;
   }
 }
@@ -352,16 +353,12 @@ DeviceBlackboard::SetSystemTime() {
     SYSTEMTIME sysTime;
     ::GetSystemTime(&sysTime);
 
-    // QUESTION TB: why do we save hours, mins and secs?!
-    int hours = (int)Basic().Hour;
-    int mins = (int)Basic().Minute;
-    int secs = (int)Basic().Second;
     sysTime.wYear = (unsigned short)Basic().Year;
     sysTime.wMonth = (unsigned short)Basic().Month;
     sysTime.wDay = (unsigned short)Basic().Day;
-    sysTime.wHour = (unsigned short)hours;
-    sysTime.wMinute = (unsigned short)mins;
-    sysTime.wSecond = (unsigned short)secs;
+    sysTime.wHour = (unsigned short)Basic().Hour;
+    sysTime.wMinute = (unsigned short)Basic().Minute;
+    sysTime.wSecond = (unsigned short)Basic().Second;
     sysTime.wMilliseconds = 0;
     sysTimeInitialised = (::SetSystemTime(&sysTime)==true);
 
