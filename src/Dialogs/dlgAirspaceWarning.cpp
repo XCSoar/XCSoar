@@ -240,9 +240,9 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
     }
   }
 
-  if (!warning->get_ack_expired()){
-    canvas.set_text_color(Color::GRAY);
-  }
+  canvas.set_text_color(warning->get_ack_expired()
+                        ? wAirspaceList->GetForeColor()
+                        : Color::GRAY);
 
   { // name, altitude info
     _stprintf(sTmp, _T("%-20s"), sName.c_str());
