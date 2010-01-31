@@ -92,7 +92,7 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
 
   const FlightStatistics &fs = glide_computer.GetFlightStats();
 
-  terrain.Lock();
+  terrain.Lock(); // OLD_TASK temporary locking
   const TracePointVector trace = task_manager.get_trace_points();
   const TracePointVector olc = task_manager.get_olc_points();
   const GlidePolar glide_polar = task_manager.get_glide_polar();
@@ -126,10 +126,13 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(_T("Task calc"));
+    terrain.Lock(); // OLD_TASK temporary locking
     fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
                   XCSoarInterface::SettingsMap(),
+                  task_manager,
                   trace);
+    terrain.Unlock();
     break;
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(_T("Optimise"));
@@ -147,7 +150,7 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     SetCalcCaption(_T("Task calc"));
-    terrain.Lock();
+    terrain.Lock(); // OLD_TASK temporary locking
     fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(), task_manager);
     terrain.Unlock();
     break;

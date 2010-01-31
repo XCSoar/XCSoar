@@ -41,11 +41,7 @@ Copyright_License {
 #include "Task/Visitors/TaskVisitor.hpp"
 #include "MapDrawHelper.hpp"
 
-#include "RenderTaskPoint.hpp"
-// class RenderTaskPoint
-
-class NMEA_INFO;
-class MapWindow;
+class RenderTaskPoint;
 class AbstractTask;
 class AbortTask;
 class OrderedTask;
@@ -57,16 +53,13 @@ class RenderTask:
 {
 public:
   RenderTask(MapDrawHelper &_helper,
-             bool draw_bearing,
-             const NMEA_INFO& state,
-             MapWindow& map);
-
-  void draw_layers(const AbstractTask& task);
+             RenderTaskPoint& _tpv);
   void Visit(const AbortTask& task);
   void Visit(const OrderedTask& task);
   void Visit(const GotoTask& task);
-private:
-  RenderTaskPoint tpv;
+protected:
+  void draw_layers(const AbstractTask& task);
+  RenderTaskPoint &tpv;
 };
 
 #endif

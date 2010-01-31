@@ -241,8 +241,7 @@ MapWindowProjection::CalculateOrigin
 fixed
 MapWindowProjection::GetScreenDistanceMeters() const
 {
-  return DistancePixelsToMeters(max(MapRectBig.right-MapRectBig.left,
-				    MapRectBig.bottom-MapRectBig.top));
+  return DistancePixelsToMeters(max_dimension(MapRectBig));
 }
 
 int

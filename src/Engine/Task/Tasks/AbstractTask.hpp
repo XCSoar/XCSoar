@@ -165,6 +165,24 @@ public:
    * Return required arrival height of final point in task
    */
   virtual fixed get_finish_height() const = 0;
+
+  /** 
+   * Find location of center of task (for rendering purposes)
+   * 
+   * @param fallback_location Location to use if no valid task
+   * 
+   * @return Location of center of task
+   */
+  virtual GEOPOINT get_task_center(const GEOPOINT& fallback_location) const = 0;
+
+  /** 
+   * Find approximate radius of task from center to edge (for rendering purposes)
+   * 
+   * @param fallback_location Location to use if no valid task
+   * 
+   * @return Radius (m) from center to edge of task
+   */
+  virtual fixed get_task_radius(const GEOPOINT& fallback_location) const = 0;
     
 protected:
 

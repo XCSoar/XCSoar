@@ -2,15 +2,16 @@
 #include "RenderTaskPoint.hpp"
 #include "Screen/Graphics.hpp"
 #include "Projection.hpp"
-#include "MapWindow.h"
 #include "Task/TaskPoints/AATIsolineSegment.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/Screen.hpp"
+#include "RenderObservationZone.hpp"
+#include "NMEA/Info.hpp"
 
-RenderTaskPoint::RenderTaskPoint(MapDrawHelper &_helper, 
+RenderTaskPoint::RenderTaskPoint(MapDrawHelper &_helper,
+                                 RenderObservationZone &_ozv,
                                  const bool draw_bearing,
-                                 const NMEA_INFO &state,
-                                 MapWindow& map)
+                                 const NMEA_INFO &state)
   :MapDrawHelper(_helper),
    m_draw_bearing(draw_bearing),
    pen_leg_active(Pen::DASH, IBLSCALE(2), MapGfx.TaskColor),
@@ -18,11 +19,10 @@ RenderTaskPoint::RenderTaskPoint(MapDrawHelper &_helper,
    pen_leg_arrow(Pen::SOLID, IBLSCALE(1), MapGfx.TaskColor),
    pen_isoline(Pen::SOLID, IBLSCALE(2), Color(0,0,255)), 
    m_index(0),
-   ozv(*this),
+   ozv(_ozv),
    m_active_index(0),
    m_layer(0),
-   m_state(state),
-   m_map(map)
+   m_state(state)
 {
 }
 
@@ -185,10 +185,12 @@ RenderTaskPoint::draw_target(const TaskPoint &tp)
 {
   if (!do_draw_target(tp)) 
     return;
-  
+
+/*  
   m_map.draw_masked_bitmap_if_visible(m_buffer, MapGfx.hBmpTarget,
                                       tp.get_location_remaining(),
                                       10, 10);
+*/
 }
 
 void 

@@ -609,3 +609,24 @@ TaskManager::update_auto_mc(const AIRCRAFT_STATE& state_now,
   }
   return false;
 }
+
+GEOPOINT
+TaskManager::get_task_center(const GEOPOINT& fallback_location) const
+{
+  if (active_task) {
+    return active_task->get_task_center(fallback_location);
+  } else {
+    return fallback_location;
+  }
+}
+
+fixed
+TaskManager::get_task_radius(const GEOPOINT& fallback_location) const
+{
+  if (active_task) {
+    return active_task->get_task_radius(fallback_location);
+  } else {
+    return fixed_zero;
+  }
+}
+

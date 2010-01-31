@@ -109,8 +109,6 @@ public:
     m_oz->Accept(visitor);
   }
 
-protected:
-
 /** 
  * Calculate boundary point from parametric border
  * 
@@ -122,6 +120,8 @@ protected:
   {
     return m_oz->get_boundary_parametric(t);
   }
+
+protected:
 
 /** 
  * Check transition constraints 

@@ -139,6 +139,20 @@ public:
  */
   fixed fproject_range(const GEOPOINT &tp, const fixed range) const;
 
+  /** 
+   * Return center point (projection reference)
+   * 
+   * @return Center point of task projection
+   */
+  const GEOPOINT& get_center() const;
+  
+  /** 
+   * Calculate radius of points used in task projection
+   * 
+   * @return Radius (m) from center to edge
+   */
+  fixed get_radius() const; 
+
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
                                    const TaskProjection& task_projection);

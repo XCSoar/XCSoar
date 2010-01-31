@@ -283,3 +283,11 @@ Projection::CalculateScreenBounds(const fixed scale) const
   Orig_Screen.y = (rc.bottom + rc.top)/2;
   UpdateScreenBounds();
 */
+
+
+long
+Projection::max_dimension(const RECT &rc) const
+{
+  return std::max(rc.right-rc.left, rc.bottom-rc.top);
+}
+

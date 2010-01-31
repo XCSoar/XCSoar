@@ -66,6 +66,11 @@ OrderedTask::update_geometry()
     } else {
       task_projection.scan_location(tps[i]->get_location());
     }
+    static const fixed fixed_steps(0.05);
+
+    for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps) {
+      task_projection.scan_location(tps[i]->get_boundary_parametric(t));
+    }
   }
   task_projection.update_fast();
 
@@ -862,5 +867,26 @@ OrderedTask::get_finish_height() const
     return tf->get_elevation();
   } else {
     return fixed_zero;
+  }
+}
+
+
+GEOPOINT 
+OrderedTask::get_task_center(const GEOPOINT& fallback_location) const
+{
+  if (!has_start() || !tps[0]) {
+    return fallback_location;
+  } else {
+    return task_projection.get_center();
+  }
+}
+
+fixed 
+OrderedTask::get_task_radius(const GEOPOINT& fallback_location) const
+{ 
+  if (!has_start() || !tps[0]) {
+    return fixed_zero;
+  } else {
+    return task_projection.get_radius();
   }
 }

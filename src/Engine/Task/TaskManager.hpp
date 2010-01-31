@@ -391,6 +391,24 @@ public:
    */
   fixed get_finish_height() const;
 
+  /** 
+   * Find location of center of task (for rendering purposes)
+   * 
+   * @param fallback_location Location to use if no task active
+   * 
+   * @return Location of center of task
+   */
+  GEOPOINT get_task_center(const GEOPOINT& fallback_location) const;
+
+  /** 
+   * Find approximate radius of task from center to edge (for rendering purposes)
+   * 
+   * @param fallback_location Location to use if no task active
+   * 
+   * @return Radius (m) from center to edge of task
+   */
+  fixed get_task_radius(const GEOPOINT& fallback_location) const;
+
 #ifdef DO_PRINT
   void print(const AIRCRAFT_STATE &location);
 #endif

@@ -3,13 +3,12 @@
 #include "Task/Tasks/GotoTask.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/Tasks/AbortTask.hpp"
+#include "RenderTaskPoint.hpp"
 
 RenderTask::RenderTask(MapDrawHelper &_helper,
-                       bool draw_bearing,
-                       const NMEA_INFO& state,
-                       MapWindow& map):
+                       RenderTaskPoint& _tpv):
   MapDrawHelper(_helper),
-  tpv(*this, draw_bearing, state, map)
+  tpv(_tpv)
 {
 }
 

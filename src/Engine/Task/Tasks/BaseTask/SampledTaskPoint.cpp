@@ -174,3 +174,5 @@ SampledTaskPoint::has_sampled() const
 {
   return !m_sampled_points.empty();
 }
+
+

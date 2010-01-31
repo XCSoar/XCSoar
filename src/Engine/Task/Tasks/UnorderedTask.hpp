@@ -62,6 +62,9 @@ public:
 
   fixed get_finish_height() const;
 
+  virtual GEOPOINT get_task_center(const GEOPOINT& fallback_location) const;
+  virtual fixed get_task_radius(const GEOPOINT& fallback_location) const;
+
 protected:
 
   bool check_task() const;

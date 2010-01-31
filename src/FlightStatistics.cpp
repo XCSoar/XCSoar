@@ -41,6 +41,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/BufferCanvas.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
@@ -56,6 +57,11 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Projection.hpp"
+#include "RenderTask.hpp"
+#include "RenderTaskPoint.hpp"
+#include "RenderObservationZone.hpp"
+#include "MapDrawHelper.hpp"
 
 #include <algorithm>
 
@@ -269,9 +275,11 @@ FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc,
 }
 
 void
-FlightStatistics::RenderGlidePolar(Canvas &canvas, const RECT rc,
-    const DERIVED_INFO &derived, const SETTINGS_COMPUTER &settings_computer,
-    const GlidePolar& glide_polar) const
+FlightStatistics::RenderGlidePolar(Canvas &canvas, 
+                                   const RECT rc,
+                                   const DERIVED_INFO &derived, 
+                                   const SETTINGS_COMPUTER &settings_computer,
+                                   const GlidePolar& glide_polar) const
 {
   int i;
   Chart chart(canvas, rc);
@@ -399,17 +407,52 @@ FlightStatistics::RenderOLC(Canvas &canvas, const RECT rc,
   }
 }
 
+
+class ChartProjection:
+  public Projection
+{
+public:
+  ChartProjection(const RECT &rc, 
+                  const GEOPOINT &center,
+                  const fixed radius):
+    Projection() {
+
+    SetScaleMetersToScreen(max_dimension(rc)/(radius*fixed_two));
+    PanLocation = center;
+    MapRect = rc;
+    Orig_Screen.x = (rc.left + rc.right)/2;
+    Orig_Screen.y = (rc.bottom + rc.top)/2;
+    UpdateScreenBounds();
+  }
+};
+
 void
 FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
-    const NMEA_INFO &nmea_info, const SETTINGS_COMPUTER &settings_computer,
-    const SETTINGS_MAP &settings_map, const TracePointVector& trace) const
+                             const NMEA_INFO &nmea_info, 
+                             const SETTINGS_COMPUTER &settings_computer,
+                             const SETTINGS_MAP &settings_map, 
+                             const TaskManager& task,
+                             const TracePointVector& trace) const
 {
-/*
-	chart.DrawLine(x1, y1, x2, y2,
-		       Chart::STYLE_DASHGREEN);
-	  chart.DrawLine(x1, y1, x2, y2,
-			 Chart::STYLE_REDTHICK);
-*/
+  Chart chart(canvas, rc);
+
+  BufferCanvas buffer;
+  BufferCanvas stencil;
+
+  buffer.set(canvas);
+  stencil.set(canvas);
+
+  const GEOPOINT center = task.get_task_center(nmea_info.Location);
+  const fixed range = max(fixed(1e3), task.get_task_radius(nmea_info.Location)); 
+
+  ChartProjection proj(rc, center, range);
+
+  MapDrawHelper helper(canvas, buffer, stencil, proj, rc,
+                       settings_map);
+  RenderObservationZone ozv(helper);
+  RenderTaskPoint tpv(helper, ozv, false, nmea_info);
+  ::RenderTask dv(helper, tpv);
+  task.Accept(dv); 
 }
 
 void

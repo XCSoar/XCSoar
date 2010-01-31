@@ -192,3 +192,25 @@ UnorderedTask::get_finish_height() const
   }
   return tp->get_elevation();
 }
+
+GEOPOINT 
+UnorderedTask::get_task_center(const GEOPOINT& fallback_location) const
+{
+  TaskPoint *tp = getActiveTaskPoint();
+  if (!tp) {
+    return fallback_location;
+  } else {
+    return tp->get_location().interpolate(fallback_location, fixed_half);
+  }
+}
+
+fixed 
+UnorderedTask::get_task_radius(const GEOPOINT& fallback_location) const
+{
+  TaskPoint *tp = getActiveTaskPoint();
+  if (!tp) {
+    return fixed_zero;
+  } else {
+    return tp->get_location().distance(fallback_location)*fixed_half;
+  }
+}

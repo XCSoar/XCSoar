@@ -41,11 +41,8 @@ Copyright_License {
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "MapDrawHelper.hpp"
 
-#include "RenderObservationZone.hpp"
-// class RenderObservationZone;
-
+class RenderObservationZone;
 class NMEA_INFO;
-class MapWindow;
 
 class RenderTaskPoint:
   public TaskPointVisitor,
@@ -53,9 +50,9 @@ class RenderTaskPoint:
 {
 public:
   RenderTaskPoint(MapDrawHelper &_helper, 
-                const bool draw_bearing,
-                const NMEA_INFO &state,
-                  MapWindow& map);
+                  RenderObservationZone &_ozv,
+                  const bool draw_bearing,
+                  const NMEA_INFO &state);
 
   void Visit(const UnorderedTaskPoint& tp);
   void Visit(const StartPoint& tp);
@@ -74,7 +71,7 @@ protected:
   bool do_draw_target(const TaskPoint &tp);
   bool do_draw_isoline(const TaskPoint &tp);
   void draw_bearing(const TaskPoint &tp);
-  void draw_target(const TaskPoint &tp);
+  virtual void draw_target(const TaskPoint &tp);
   void draw_task_line(const GEOPOINT& start, const GEOPOINT& end);
   void draw_isoline(const AATPoint& tp);
   void draw_samples(const OrderedTaskPoint& tp);
@@ -87,11 +84,10 @@ protected:
   const Pen pen_isoline;
   GEOPOINT m_last_point;
   unsigned m_index;
-  RenderObservationZone ozv;
+  RenderObservationZone &ozv;
   unsigned m_active_index;
   unsigned m_layer;
   const NMEA_INFO& m_state;
-  MapWindow& m_map;
 };
 
 

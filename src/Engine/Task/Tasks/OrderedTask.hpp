@@ -267,6 +267,9 @@ public:
 
   fixed get_finish_height() const;
 
+  GEOPOINT get_task_center(const GEOPOINT& fallback_location) const;
+  fixed get_task_radius(const GEOPOINT& fallback_location) const;
+
 protected:
 
   bool has_targets() const;

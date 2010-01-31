@@ -136,3 +136,17 @@ TaskProjection::project_range(const GEOPOINT &tp, const fixed range) const
   return (int)(fproject_range(tp,range)+fixed_half);
 }
 
+const GEOPOINT&
+TaskProjection::get_center() const
+{
+  return location_mid;
+}
+
+fixed
+TaskProjection::get_radius() const
+{
+  /// @todo this is approximate (probably ok for rendering purposes)
+
+  return max(location_mid.distance(location_max),
+             location_mid.distance(location_min));
+}

@@ -48,8 +48,37 @@ Copyright_License {
 #include <math.h>
 
 #include "RenderTask.hpp"
+#include "RenderTaskPoint.hpp"
+#include "RenderObservationZone.hpp"
 
 #include "RasterTerrain.h" // OLD_TASK just for locking
+
+class RenderTaskPointMap:
+  public RenderTaskPoint
+{
+public:
+  RenderTaskPointMap(MapDrawHelper &_helper, 
+                     RenderObservationZone &_ozv,
+                     const bool draw_bearing,
+                     const NMEA_INFO &state,
+                     MapWindow& map):
+    RenderTaskPoint(_helper, _ozv, draw_bearing, state),
+    m_map(map) {};
+
+protected:
+  void draw_target(const TaskPoint &tp) 
+    {
+      if (!do_draw_target(tp)) 
+        return;
+      
+      m_map.draw_masked_bitmap_if_visible(m_buffer, MapGfx.hBmpTarget,
+                                          tp.get_location_remaining(),
+                                          10, 10);
+    }
+
+private:
+  MapWindow& m_map;
+};
 
 void
 MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
@@ -66,7 +95,9 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
   {
     MapDrawHelper helper(canvas, buffer, stencil_canvas, *this, rc,
                          SettingsMap());
-    RenderTask dv(helper, draw_bearing, Basic(), *this);
+    RenderObservationZone ozv(helper);
+    RenderTaskPointMap tpv(helper, ozv, draw_bearing, Basic(), *this);
+    RenderTask dv(helper, tpv);
     task->Accept(dv); 
   }
   terrain->Unlock();

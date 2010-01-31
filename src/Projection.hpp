@@ -96,6 +96,8 @@ protected:
   FastIntegerRotation DisplayAngle;
   RECT   MapRect;
 
+  long max_dimension(const RECT &rc) const;
+
   void UpdateScreenBounds();
 private:
   fixed DrawScale;
