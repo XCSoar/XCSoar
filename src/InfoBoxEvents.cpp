@@ -58,7 +58,10 @@ Copyright_License {
 #include <stdlib.h>
 #include "FlarmCalculations.h"
 
-#define m_max(a,b)	(((a)>(b))?(a):(b))
+#include <algorithm>
+
+using std::max;
+
 // JMW added key codes,
 // so -1 down
 //     1 up
@@ -136,8 +139,8 @@ ActionInterface::on_key_Altitude(int UpDown)
   if (UpDown == 1)
     device_blackboard.SetAltitude(Basic().GPSAltitude + fixed_step);
   else if (UpDown == -1)
-    device_blackboard.SetAltitude(m_max(fixed_zero,
-                                        Basic().GPSAltitude - fixed_step));
+    device_blackboard.SetAltitude(max(fixed_zero,
+                                      Basic().GPSAltitude - fixed_step));
   else if (UpDown == -2)
     on_key_Direction(-1);
   else if (UpDown == 2)
@@ -200,7 +203,7 @@ ActionInterface::on_key_Speed(int UpDown)
   if (UpDown == 1)
     device_blackboard.SetSpeed(Basic().Speed + fixed_step);
   else if (UpDown == -1)
-    device_blackboard.SetSpeed(m_max(fixed_zero, Basic().Speed - fixed_step));
+    device_blackboard.SetSpeed(max(fixed_zero, Basic().Speed - fixed_step));
   else if (UpDown == -2)
     on_key_Direction(-1);
   else if (UpDown == 2)
