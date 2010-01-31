@@ -348,3 +348,4 @@ AbortTask::get_vector_home(const AIRCRAFT_STATE &state) const
     return null_vector;
   }
 }
+

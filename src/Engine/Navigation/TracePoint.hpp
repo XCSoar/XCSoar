@@ -126,7 +126,10 @@ private:
 
 typedef std::vector<TracePoint> TracePointVector;
 
-void reset_rank(TracePointVector& vec);
+class TaskProjection;
+
+TaskProjection get_bounds(const TracePointVector& vec,
+                          const GEOPOINT &fallback_location);
 
 #endif
 

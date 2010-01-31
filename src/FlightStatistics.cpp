@@ -336,6 +336,47 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas,
   canvas.text_opaque(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(40), text);
 }
 
+
+class ChartProjection:
+  public Projection
+{
+public:
+  ChartProjection(const RECT &rc,
+                  const TaskManager& task,
+                  const GEOPOINT &fallback_loc) 
+    {
+      const GEOPOINT center = task.get_task_center(fallback_loc);
+      const fixed radius = max(fixed(1e3), task.get_task_radius(fallback_loc)); 
+      set_projection(rc, center, radius);
+    }
+
+  ChartProjection(const RECT &rc,
+                  const TracePointVector& trace,
+                  const GEOPOINT &fallback_loc) 
+    {
+      const TaskProjection proj = get_bounds(trace, fallback_loc);
+      const GEOPOINT center = proj.get_center();
+      const fixed radius = max(fixed(1e3), proj.get_radius()); 
+      set_projection(rc, center, radius);
+    }
+
+private:
+
+  void set_projection(const RECT &rc, 
+                      const GEOPOINT &center,
+                      const fixed radius)
+    {
+      SetScaleMetersToScreen(max_dimension(rc)/(radius*fixed_two));
+      PanLocation = center;
+      MapRect = rc;
+      Orig_Screen.x = (rc.left + rc.right)/2;
+      Orig_Screen.y = (rc.bottom + rc.top)/2;
+      UpdateScreenBounds();
+    }
+
+};
+
+
 void
 FlightStatistics::ExpandToTrace(Chart &chart, const TracePointVector& trace) const
 {
@@ -408,24 +449,6 @@ FlightStatistics::RenderOLC(Canvas &canvas, const RECT rc,
 }
 
 
-class ChartProjection:
-  public Projection
-{
-public:
-  ChartProjection(const RECT &rc, 
-                  const GEOPOINT &center,
-                  const fixed radius):
-    Projection() {
-
-    SetScaleMetersToScreen(max_dimension(rc)/(radius*fixed_two));
-    PanLocation = center;
-    MapRect = rc;
-    Orig_Screen.x = (rc.left + rc.right)/2;
-    Orig_Screen.y = (rc.bottom + rc.top)/2;
-    UpdateScreenBounds();
-  }
-};
-
 void
 FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
                              const NMEA_INFO &nmea_info, 
@@ -442,10 +465,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
   buffer.set(canvas);
   stencil.set(canvas);
 
-  const GEOPOINT center = task.get_task_center(nmea_info.Location);
-  const fixed range = max(fixed(1e3), task.get_task_radius(nmea_info.Location)); 
-
-  ChartProjection proj(rc, center, range);
+  ChartProjection proj(rc, task, nmea_info.Location);
 
   MapDrawHelper helper(canvas, buffer, stencil, proj, rc,
                        settings_map);
