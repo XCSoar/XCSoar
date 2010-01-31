@@ -119,9 +119,7 @@ XCSoarInterface::ReceiveMapProjection()
 void
 ActionInterface::SendSettingsMap(const bool trigger_draw)
 {
-
-  // QUESTION TB: what is trigger_draw?
-  // JMW: is asks for an immediate exchange of blackboard data
+  // trigger_draw: asks for an immediate exchange of blackboard data
   // (via ProcessTimer()) rather than waiting for the idle timer every 500ms
 
   if (trigger_draw) {

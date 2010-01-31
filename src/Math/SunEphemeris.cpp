@@ -75,16 +75,14 @@ SunEphemeris::FNday(int y, int m, int d, float h)
 
 /**
  * The function below returns an angle in the range 0 to 2*PI
- * @param x Angle to be converted
+ * @param x Angle to be converted (amount of a full circle)
  * @return an angle in the range 0 to 2*PI
  * @see http://www.sci.fi/~benefon/azimalt.cpp
  */
 double
 SunEphemeris::FNrange(double x)
 {
-  // QUESTION TB: DEG_TO_RAD?!
-
-  double b = 0.5 * x / M_PI;
+  const double b = 0.5 * x / M_PI;
   double a = 2.0 * M_PI * (b - (long)(b));
 
   if (a < 0)
@@ -175,7 +173,7 @@ SunEphemeris::FNsun(double d)
  * @param Basic NMEA_INFO for current date
  * @param Calculated DERIVED_INFO (not yet used)
  * @param TimeZone The timezone
- * @return Always 0
+ * @return Sunset time
  */
 double
 SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
@@ -288,7 +286,7 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
       printf("Civil twilight: ");
       showhrmn(EveningTwilight);  puts("\n");
   */
-  // QUESTION TB: why not just void?
 
+  // return TimeOfSunSet since this is most commonly what is requested
   return TimeOfSunSet;
 }

@@ -181,7 +181,7 @@ ReadWinPilotPolar(Polar &polar)
       }__finally
 #endif
 
-      // QUESTION TB: why braces?!
+      // QUESTION TB: why braces?! Answer: Scope/readibility/personal pref
       {
         fclose(file);
       }
