@@ -371,9 +371,10 @@ ClipPolygon(Canvas &canvas, const POINT *m_ptin, unsigned int inLength,
   }
 }
 
-// QUESTION TB: what about fast(co)sine?! produces the same data i think...
 /**
  * Coordinates of the sine-function (x-Coordinates of a circle)
+ * Even though this data is available from the fast(co)sine, it is faster to have a local small array since we will
+ * be iterating through this directly.  Iterating through fast(co)sine requires more operations.
  */
 static const double xcoords[64] = {
   0,			0.09801714,		0.195090322,	0.290284677,	0.382683432,	0.471396737,	0.555570233,	0.634393284,

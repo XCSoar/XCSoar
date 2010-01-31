@@ -726,7 +726,6 @@ bool
 InfoBox::on_killfocus()
 {
   // Call the parent function
-  // QUESTION TB: shouldn't it be BufferWindow::on_killfocus() ?!
   BufferWindow::on_killfocus();
 
   // Save the unfocused state

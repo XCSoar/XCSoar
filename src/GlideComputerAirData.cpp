@@ -613,8 +613,8 @@ GlideComputerAirData::PercentCircling(const double Rate)
     // Add the Vario signal to the total climb height
     SetCalculated().TotalHeightClimb += Basic().GPSVario;
 
-    // QUESTION TB: should the thermal band function really be called here
-    // instead of in the Turning() function
+    // call ThermalBand function here because it is then explicitly
+    // tied to same condition as %circling calculations
     ThermalBand();
   } else {
     // Add one second to the cruise time
@@ -659,8 +659,6 @@ GlideComputerAirData::ProcessThermalLocator()
 void
 GlideComputerAirData::Turning()
 {
-  static bool LEFT = false;
-
   // You can't be circling unless you're flying
   if (!Basic().Flying || !time_advanced())
     return;
@@ -685,20 +683,10 @@ GlideComputerAirData::Turning()
   SetCalculated().SmoothedTurnRate = Rate;
 
   // Determine which direction we are circling
+  bool LEFT = false;
   if(Rate < 0) {
-    // QUESTION TB: why not just LEFT = true; ?!
-    if (LEFT) {
-      // OK, already going left
-    } else {
-      LEFT = true;
-    }
+    LEFT= true;
     Rate *= -1;
-  } else {
-    if (!LEFT) {
-      // OK, already going right
-    } else {
-      LEFT = false;
-    }
   }
 
   // Calculate circling time percentage and call thermal band calculation
@@ -723,10 +711,7 @@ GlideComputerAirData::Turning()
       SetCalculated().TurnStartEnergyHeight = Basic().EnergyHeight;
       SetCalculated().TurnMode = WAITCLIMB;
     }
-    if (forcecircling) {
-      // QUESTION TB: this is useless/done before ?!
-      SetCalculated().TurnMode = WAITCLIMB;
-    } else {
+    if (!forcecircling) {
       break;
     }
 
@@ -750,7 +735,7 @@ GlideComputerAirData::Turning()
             + Calculated().TurnStartEnergyHeight;
         SetCalculated().ClimbStartTime = Calculated().TurnStartTime;
 
-        // QUESTION TB: what is this?
+        // set altitude for start of circling (as base of climb)
         OnClimbBase(Calculated().TurnStartAltitude);
 
         // consider code: InputEvents GCE - Move this to InputEvents
@@ -777,10 +762,7 @@ GlideComputerAirData::Turning()
       // JMW Transition to cruise, due to not properly turning
       SetCalculated().TurnMode = WAITCRUISE;
     }
-    if (forcecruise) {
-      // QUESTION TB: see above
-      SetCalculated().TurnMode = WAITCRUISE;
-    } else {
+    if (!forcecruise) {
       break;
     }
 
