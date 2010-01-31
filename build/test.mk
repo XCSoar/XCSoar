@@ -63,7 +63,9 @@ $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $
 
 DEBUG_PROGRAM_NAMES = \
 	RunWayPointParser RunDeviceDriver \
-	RunCanvas RunMapWindow RunDialog RunAirspaceWarningDialog
+	RunCanvas RunMapWindow RunDialog \
+	RunAirspaceWarningDialog \
+	RunTaskEditorDialog
 DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
 
 RUN_WAY_POINT_PARSER_SOURCES = \
@@ -314,6 +316,59 @@ RUN_AIRSPACE_WARNING_DIALOG_LDADD = \
 $(RUN_AIRSPACE_WARNING_DIALOG_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(RUN_AIRSPACE_WARNING_DIALOG_BIN): LDLIBS += $(SCREEN_LDLIBS)
 $(RUN_AIRSPACE_WARNING_DIALOG_BIN): $(RUN_AIRSPACE_WARNING_DIALOG_OBJS) $(RUN_AIRSPACE_WARNING_DIALOG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_TASK_EDITOR_DIALOG_SOURCES = \
+	$(SRC)/Poco/RWLock.cpp \
+	$(SRC)/xmlParser.cpp \
+	$(SRC)/Appearance.cpp \
+	$(SRC)/Dialogs/XML.cpp \
+	$(SRC)/Dialogs/dlgComboPicker.cpp \
+	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(SRC)/Dialogs/dlgTaskOverview.cpp \
+	$(SRC)/Dialogs/dlgWayPointSelect.cpp \
+	$(SRC)/Dialogs/dlgWayPointDetails.cpp \
+	$(SRC)/Dialogs/dlgTaskWaypoint.cpp \
+	$(SRC)/Math/SunEphemeris.cpp \
+	$(SRC)/LocalTime.cpp \
+	$(SRC)/AirspaceParser.cpp \
+	$(SRC)/Screen/Animation.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Screen/shapelib/mapsearch.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Registry.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/StringUtil.cpp \
+	$(SRC)/UtilsText.cpp \
+	$(SRC)/UtilsFont.cpp \
+	$(SRC)/UtilsFile.cpp \
+	$(SRC)/Units.cpp \
+	$(SRC)/WayPointParser.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeInterface.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
+	$(TEST_SRC_DIR)/RunTaskEditorDialog.cpp
+RUN_TASK_EDITOR_DIALOG_BIN = $(TARGET_BIN_DIR)/RunTaskEditorDialog$(TARGET_EXEEXT)
+RUN_TASK_EDITOR_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_TASK_EDITOR_DIALOG_SOURCES))
+RUN_TASK_EDITOR_DIALOG_LDADD = \
+	$(FAKE_LIBS) \
+	$(DATA_FIELD_LIBS) \
+	$(FORM_LIBS) \
+	$(SCREEN_LIBS) \
+	$(ENGINE_LIBS) \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS) \
+	$(RESOURCE_BINARY)
+$(RUN_TASK_EDITOR_DIALOG_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(RUN_TASK_EDITOR_DIALOG_BIN): LDLIBS += $(SCREEN_LDLIBS)
+$(RUN_TASK_EDITOR_DIALOG_BIN): $(RUN_TASK_EDITOR_DIALOG_OBJS) $(RUN_TASK_EDITOR_DIALOG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

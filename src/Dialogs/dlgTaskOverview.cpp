@@ -39,23 +39,23 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "Protection.hpp"
-#include "Calculations.h" // for RefreshTaskStatistics()
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
-#include "TaskFile.hpp"
 #include "Logger.hpp"
-#include "MacCready.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "LocalPath.hpp"
 #include "DataField/FileReader.hpp"
-#include "WayPointList.hpp"
 #include "Components.hpp"
-#include "Task.h"
 #include "StringUtil.hpp"
+#include "Task/TaskManager.hpp"
+#include "Task/TaskPoints/StartPoint.cpp"
+#include "Task/TaskPoints/FinishPoint.cpp"
+#include "Task/Visitors/TaskVisitor.hpp"
 
 #include <assert.h>
 
+static SingleWindow *parent_window;
 static WndForm *wf=NULL;
 static WndFrame *wfAdvanced=NULL;
 static WndListFrame *wTaskList=NULL;
@@ -67,22 +67,40 @@ static int LowLimit=0;
 static double lengthtotal = 0.0;
 static bool fai_ok = false;
 
+static const OrderedTask *ordered_task;
+
+class FindOrderedTask : public TaskVisitor {
+public:
+  const OrderedTask *ordered_task;
+
+  void Visit(const AbortTask &task) {}
+
+  void Visit(const OrderedTask &task) {
+    ordered_task = &task;
+  }
+
+  void Visit(const GotoTask &task) {}
+};
+
 static void UpdateFilePointer(void) {
   WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
+#ifdef OLD_TASK
     if (!string_is_empty(task.getTaskFilename())) {
       dfe->Lookup(task.getTaskFilename());
     } else {
       dfe->Set(0);
     }
+#endif
     wp->RefreshDisplay();
   }
 }
 
 
 static void UpdateCaption (void) {
+#ifdef OLD_TASK
   TCHAR title[MAX_PATH];
   TCHAR name[MAX_PATH];
   int len = _tcslen(task.getTaskFilename());
@@ -115,6 +133,7 @@ static void UpdateCaption (void) {
   }
 
   wf->SetCaption(title);
+#endif
 }
 
 
@@ -129,16 +148,16 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
   int w2 = canvas.text_width(_T("  000")_T(DEG));
 
   int p1 = w0-w1-w2; // Layout::FastScale(125)
-  int p2 = w0-w2; // Layout::FastScale(175)
+  //int p2 = w0-w2; // Layout::FastScale(175)
 
   if (DrawListIndex < n){
-    int i = LowLimit + DrawListIndex;
+    unsigned i = DrawListIndex;
 
-    if (!task.ValidTaskPoint(i))
+    const OrderedTaskPoint *tp = ordered_task->getTaskPoint(i);
+    if (tp == NULL)
       return;
 
-    TASK_POINT tp = task.getTaskPoint(i);
-
+#ifdef OLD_TASK
     if (Layout::landscape &&
         task.getSettings().AATEnabled && task.ValidTaskPoint(i+1) && (i>0)) {
       if (tp.AATType==0) {
@@ -151,30 +170,45 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
                   tp.AATSectorRadius*DISTANCEMODIFY);
       }
     } else {
-      _stprintf(sTmp, _T("%s"),
-                way_points.get(tp.Index).Name);
+#endif
+      const TCHAR *suffix;
+
+      if (dynamic_cast<const StartPoint*>(tp) != NULL)
+        suffix = _T(" (start)");
+      else if (dynamic_cast<const FinishPoint*>(tp) != NULL)
+        suffix = _T(" (finish)");
+      else
+        suffix = _T("");
+      _stprintf(sTmp, _T("%s%s"),
+                tp->get_waypoint().Name.c_str(), suffix);
+#ifdef OLD_TASK
     }
+#endif
 
     canvas.text_clipped(rc.left + Layout::FastScale(2),
                         rc.top + Layout::FastScale(2),
                         p1 - Layout::FastScale(4), sTmp);
 
-    _stprintf(sTmp, _T("%.0f %s"),
-              tp.LegDistance*DISTANCEMODIFY,
-              Units::GetDistanceName());
+    Units::FormatUserDistance(tp->scan_distance_nominal(), sTmp,
+                              sizeof(sTmp) / sizeof(sTmp[0]));
     canvas.text(rc.left + p1 + w1 - canvas.text_width(sTmp),
                 rc.top + Layout::FastScale(2), sTmp);
 
+#ifdef OLD_TASK
     _stprintf(sTmp, _T("%d")_T(DEG),  iround(tp.InBound));
     canvas.text(rc.left + p2 + w2 - canvas.text_width(sTmp),
                 rc.top + Layout::FastScale(2), sTmp);
+#endif
   } else if (DrawListIndex==n) {
     _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 sTmp);
-  } else if ((DrawListIndex==n+1) && task.ValidTaskPoint(0)) {
+  } else if ((DrawListIndex==n+1) && ordered_task != NULL &&
+             ordered_task->task_size() > 0) {
 
+#ifdef OLD_TASK
     if (!task.getSettings().AATEnabled) {
+#endif
       _stprintf(sTmp, gettext(_T("Total:")));
       canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                   sTmp);
@@ -189,6 +223,7 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 
       canvas.text(rc.left + p1 + w1 - canvas.text_width(sTmp),
                   rc.top + Layout::FastScale(2), sTmp);
+#ifdef OLD_TASK
     } else {
 
       double d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
@@ -206,11 +241,13 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
       canvas.text(rc.left + Layout::FastScale(2),
                   rc.top + Layout::FastScale(2), sTmp);
     }
+#endif
   }
 }
 
 
 static void OverviewRefreshTask(void) {
+#ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
 
@@ -252,6 +289,17 @@ static void OverviewRefreshTask(void) {
   }
 
   LowLimit =0;
+#else
+  FindOrderedTask find;
+  task_manager.ordered_Accept(find);
+  ordered_task = find.ordered_task;
+
+  LowLimit = 0;
+  UpLimit = ordered_task != NULL
+    ? ordered_task->task_size()
+    : 0;
+#endif
+
   wTaskList->SetLength(UpLimit - LowLimit + 1);
   wTaskList->invalidate();
 
@@ -266,13 +314,19 @@ static void UpdateAdvanced(void) {
   }
 }
 
-
 static void
 OnTaskListEnter(unsigned ItemIndex)
 {
-  bool isfinish = false;
+  if (UpLimit > 0 && ItemIndex < (unsigned)UpLimit) {
+    const OrderedTaskPoint *tp = ordered_task->getTaskPoint(ItemIndex);
+    if (tp == NULL)
+      return;
 
-  if ((int)ItemIndex >= UpLimit || (UpLimit==0)) {
+    AbstractTaskFactory *factory = task_manager.get_factory();
+    dlgTaskWaypointShowModal(*parent_window, *factory, ItemIndex, *tp, false);
+  } else {
+    bool isfinish = false;
+
     if ((int)ItemIndex >= UpLimit)
       ItemIndex= UpLimit;
 
@@ -289,37 +343,22 @@ OnTaskListEnter(unsigned ItemIndex)
         }
       }
 
-      {
-        TASK_POINT tp = task.getTaskPoint(ItemIndex);
+      const Waypoint *wp = dlgWayPointSelect(*parent_window,
+                                             XCSoarInterface::Basic().Location);
+      if (wp == NULL)
+        return;
 
-        if (ItemIndex>0) {
-          tp.Index = task.getWaypointIndex(0);
-        } else {
-          if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
-            tp.Index = XCSoarInterface::SettingsComputer().HomeWaypoint;
-          } else {
-            tp.Index = -1;
-          }
-        }
-        task.setTaskPoint(ItemIndex, tp);
+      AbstractTaskFactory *factory = task_manager.get_factory();
+      OrderedTaskPoint *tp =
+        factory->createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
+      if (tp == NULL)
+        return;
+
+      if (!factory->append(tp, false)) {
+        //fprintf(stderr, "Failed to append turn point\n");
       }
 
-      int res;
-      res = dlgWayPointSelect(XCSoarInterface::main_window,
-                              XCSoarInterface::Basic().Location);
-      {
-        TASK_POINT tp = task.getTaskPoint(ItemIndex);
-        if (res != -1){
-          tp.Index = res;
-        }
-        tp.AATTargetOffsetRadius = 0.0;
-        tp.AATTargetOffsetRadial = 0.0;
-        tp.AATTargetLocked = false;
-        tp.AATSectorRadius = task.getSettings().SectorRadius;
-        tp.AATCircleRadius = task.getSettings().SectorRadius;
-        task.setTaskPoint(ItemIndex, tp);
-      }
-
+#ifdef OLD_TASK
       if (ItemIndex==0) {
 	dlgTaskWaypointShowModal(ItemIndex, 0, true); // start waypoint
       } else if (isfinish) {
@@ -330,19 +369,11 @@ OnTaskListEnter(unsigned ItemIndex)
           dlgTaskWaypointShowModal(ItemIndex, 1, true); // normal waypoint
         }
       }
-      OverviewRefreshTask();
+#endif
     }
-    return;
   }
-  if (ItemIndex==0) {
-    dlgTaskWaypointShowModal(ItemIndex, 0); // start waypoint
-  } else if ((int)ItemIndex == UpLimit - 1) {
-    dlgTaskWaypointShowModal(ItemIndex, 2); // finish waypoint
-  } else {
-    dlgTaskWaypointShowModal(ItemIndex, 1); // turnpoint
-  }
-  OverviewRefreshTask();
 
+  OverviewRefreshTask();
 }
 
 static void OnCloseClicked(WindowControl * Sender){
@@ -358,12 +389,14 @@ OnClearClicked(WindowControl *Sender)
   if (MessageBoxX(gettext(_T("Clear the task?")),
                   gettext(_T("Clear task")),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
+#ifdef OLD_TASK
     if (logger.CheckDeclaration()) {
       task.ClearTask();
       UpdateFilePointer();
       OverviewRefreshTask();
       UpdateCaption();
     }
+#endif
   }
 }
 
@@ -373,7 +406,7 @@ OnCalcClicked(WindowControl *Sender)
   (void)Sender;
 
   wf->hide();
-  dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
+  dlgTaskCalculatorShowModal(*parent_window);
   OverviewRefreshTask();
   wf->show();
 }
@@ -393,8 +426,10 @@ OnDeclareClicked(WindowControl *Sender)
 {
 	(void)Sender;
 
+#ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
+#endif
 
   logger.LoggerDeviceDeclare();
 
@@ -404,6 +439,7 @@ OnDeclareClicked(WindowControl *Sender)
 static void
 OnSaveClicked(WindowControl * Sender)
 {
+#ifdef OLD_TASK
   (void)Sender;
 
   int file_index;
@@ -464,6 +500,7 @@ OnSaveClicked(WindowControl * Sender)
 
   task.SaveTask(dfe->GetPathFile());
   UpdateCaption();
+#endif
 }
 
 
@@ -472,6 +509,7 @@ OnLoadClicked(WindowControl *Sender)
 {
   (void)Sender;
 
+#ifdef OLD_TASK
   WndProperty* wp;
   DataFieldFileReader *dfe;
 
@@ -487,6 +525,7 @@ OnLoadClicked(WindowControl *Sender)
     UpdateFilePointer();
     UpdateCaption();
   }
+#endif
 }
 
 static void
@@ -510,8 +549,10 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-void dlgTaskOverviewShowModal(void){
+void
+dlgTaskOverviewShowModal(SingleWindow &parent)
+{
+  parent_window = &parent;
 
   UpLimit = 0;
   LowLimit = 0;
@@ -523,12 +564,12 @@ void dlgTaskOverviewShowModal(void){
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskOverview_L.xml"),
-                        XCSoarInterface::main_window,
+                        parent,
                         _T("IDR_XML_TASKOVERVIEW_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskOverview.xml"),
-                        XCSoarInterface::main_window,
+                        parent,
                         _T("IDR_XML_TASKOVERVIEW"));
   }
 
@@ -572,8 +613,10 @@ void dlgTaskOverviewShowModal(void){
 
   // now retrieve back the properties...
 
+#ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
+#endif
 
   delete wf;
 

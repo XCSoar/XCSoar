@@ -48,6 +48,8 @@ class Waypoint;
 class Waypoints;
 class Airspaces;
 class AbstractAirspace;
+class AbstractTaskFactory;
+class OrderedTaskPoint;
 
 void StartupScreen();
 
@@ -93,8 +95,17 @@ void dlgAnalysisShowModal();
 void dlgStatusShowModal(int page);
 
 void dlgSwitchesShowModal();
-void dlgTaskWaypointShowModal(int itemindex, int type, bool addonly = false);
-void dlgTaskOverviewShowModal();
+
+void
+dlgTaskWaypointShowModal(SingleWindow &parent,
+                         AbstractTaskFactory &task_factory,
+                         unsigned task_point_position,
+                         const OrderedTaskPoint &task_point,
+                         bool addonly);
+
+void
+dlgTaskOverviewShowModal(SingleWindow &parent);
+
 void dlgVoiceShowModal();
 
 void
