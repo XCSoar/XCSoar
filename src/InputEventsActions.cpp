@@ -842,8 +842,9 @@ InputEvents::eventMacCready(const TCHAR *misc)
     }
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    _stprintf(Temp,TEXT("%0.1f"),
-              (double)(task_manager.get_glide_polar().get_mc() * LIFTMODIFY));
+    _stprintf(Temp, TEXT("%0.1f"),
+              Units::ToUserUnit(task_manager.get_glide_polar().get_mc(),
+                                Units::UserVerticalSpeedUnit));
     Message::AddMessage(TEXT("MacCready "), Temp);
   }
 }
@@ -1876,10 +1877,10 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     
     Units::TimeToText(TempTime, (int)TimeLocal((int)start_state.Time));
     _stprintf(TempAlt, TEXT("%.0f %s"),
-              (double)(start_state.NavAltitude*ALTITUDEMODIFY),
+              Units::ToUserUnit(start_state.NavAltitude, Units::UserAltitudeUnit),
               Units::GetAltitudeName());
     _stprintf(TempSpeed, TEXT("%.0f %s"),
-              (double)(start_state.Speed*TASKSPEEDMODIFY),
+              Units::ToUserUnit(start_state.Speed, Units::UserTaskSpeedUnit),
               Units::GetTaskSpeedName());
     
     TCHAR TempAll[120];
