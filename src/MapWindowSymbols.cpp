@@ -368,7 +368,8 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
     canvas.line(Tail[0], Tail[1]);
   }
 
-  _stprintf(sTmp, TEXT("%i"), iround(Basic().WindSpeed * SPEEDMODIFY));
+  _stprintf(sTmp, TEXT("%i"), iround(Units::ToUserUnit(Basic().WindSpeed,
+                                                       Units::UserWindSpeedUnit)));
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 }; // JMW test {2 | 16};
   if (Arrow[5].y >= Arrow[6].y) {
