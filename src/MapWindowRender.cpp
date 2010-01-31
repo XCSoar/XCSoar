@@ -181,7 +181,7 @@ void MapWindow::RenderTrail(Canvas &canvas, const RECT rc)
  * @param canvas The drawing canvas
  * @param rc The area to draw in
  */
-void MapWindow::RenderTask(Canvas &canvas, const RECT rc)
+void MapWindow::RenderTaskElements(Canvas &canvas, const RECT rc)
 {
   if (task != NULL && task->check_task()) {
     DrawTask(canvas, rc, buffer_canvas);
@@ -316,7 +316,7 @@ void MapWindow::Render(Canvas &canvas, const RECT rc)
   DrawThermalEstimate(canvas);
 
   // Render task and waypoints
-  RenderTask(canvas, rc);
+  RenderTaskElements(canvas, rc);
 
   RenderGlide(canvas, rc);
 

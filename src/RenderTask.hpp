@@ -35,59 +35,38 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef MAP_DRAW_HELPER_HPP
-#define MAP_DRAW_HELPER_HPP
+#if !defined(XCSOAR_RENDER_TASK_HPP)
+#define XCSOAR_RENDER_TASK_HPP
 
-#include "Navigation/SearchPointVector.hpp"
-#include "Screen/Graphics.hpp"
-#include "Screen/Layout.hpp"
+#include "Task/Visitors/TaskVisitor.hpp"
+#include "MapDrawHelper.hpp"
 
-class Canvas;
-class Projection;
-class SETTINGS_MAP;
+#include "RenderTaskPoint.hpp"
+// class RenderTaskPoint
 
-class MapDrawHelper 
+class NMEA_INFO;
+class MapWindow;
+class AbstractTask;
+class AbortTask;
+class OrderedTask;
+class GotoTask;
+
+class RenderTask: 
+  public TaskVisitor,
+  public MapDrawHelper
 {
 public:
-  MapDrawHelper(Canvas &_canvas, 
-                Canvas &_buffer, 
-                Canvas &_stencil, 
-                Projection &_proj,
-                const RECT &_rc,
-                const SETTINGS_MAP& settings_map);
+  RenderTask(MapDrawHelper &_helper,
+             bool draw_bearing,
+             const NMEA_INFO& state,
+             MapWindow& map);
 
-  MapDrawHelper(MapDrawHelper &_that);
-
-  ~MapDrawHelper();
-
-  Canvas &m_canvas;
-  Canvas &m_buffer;
-  Canvas &m_stencil;
-  Projection& m_proj;
-  const RECT& m_rc;
-  bool m_buffer_drawn;
-  bool m_use_stencil;
-
-protected:
-  const SETTINGS_MAP& m_settings_map;
-
-  void draw_great_circle(Canvas& the_canvas, const GEOPOINT &from,
-                         const GEOPOINT &to);
-
-  void draw_search_point_vector(Canvas& the_canvas, const SearchPointVector& points);
-
-  void draw_circle(Canvas& the_canvas, const POINT& center, unsigned radius);
-
-  void buffer_render_finish();
-
-  void buffer_render_start();
-
-  void clear_buffer();
-
-  bool add_if_visible(std::vector<POINT>& screen, const GEOPOINT& pt) const;
-  void add(std::vector<POINT>& screen, const GEOPOINT& pt) const;
-
+  void draw_layers(const AbstractTask& task);
+  void Visit(const AbortTask& task);
+  void Visit(const OrderedTask& task);
+  void Visit(const GotoTask& task);
+private:
+  RenderTaskPoint tpv;
 };
-
 
 #endif

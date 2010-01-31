@@ -52,7 +52,8 @@ Copyright_License {
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningVisitor.hpp"
 
-class AirspaceWarningCopy: public AirspaceWarningVisitor
+class AirspaceWarningCopy: 
+  public AirspaceWarningVisitor
 {
 public:
   void Visit(const AirspaceWarning& as) {
@@ -139,14 +140,16 @@ class AirspaceVisitorMap:
   public MapDrawHelper
 {
 public:
-  AirspaceVisitorMap(MapDrawHelper &_helper, const AirspaceWarningCopy& warnings):
+  AirspaceVisitorMap(MapDrawHelper &_helper, const AirspaceWarningCopy& warnings,
+                     const SETTINGS_COMPUTER& settings_computer,
+                     const NMEA_INFO& state):
     MapDrawHelper(_helper),
     m_warnings(warnings),
     m_border(false),
     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
     pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)),
-    visible(m_map.SettingsComputer(),
-            m_map.Basic().GetAnyAltitude(),
+    visible(settings_computer,
+            state.GetAnyAltitude(),
             m_border,
             warnings)
     {
@@ -158,8 +161,8 @@ public:
     set_buffer_pens(airspace);
 
     POINT center;
-    m_map.LonLat2Screen(airspace.get_center(),center);
-    unsigned radius = m_map.DistanceMetersToScreen(airspace.get_radius());
+    m_proj.LonLat2Screen(airspace.get_center(),center);
+    unsigned radius = m_proj.DistanceMetersToScreen(airspace.get_radius());
     draw_circle(m_buffer, center, radius);
   }
 
@@ -183,7 +186,7 @@ private:
 
   void set_buffer_pens(const AbstractAirspace &airspace) {
     if (m_border) {
-      if (m_map.SettingsMap().bAirspaceBlackOutline)
+      if (m_settings_map.bAirspaceBlackOutline)
         m_buffer.black_pen();
       else
         m_buffer.select(MapGfx.hAirspacePens[airspace.get_type()]);
@@ -201,10 +204,10 @@ private:
       } else {
 
         // this color is used as the black bit
-        m_buffer.set_text_color(MapGfx.Colours[m_map.SettingsMap().
+        m_buffer.set_text_color(MapGfx.Colours[m_settings_map.
                                                iAirspaceColour[airspace.get_type()]]);
         // get brush, can be solid or a 1bpp bitmap
-        m_buffer.select(MapGfx.hAirspaceBrushes[m_map.SettingsMap().
+        m_buffer.select(MapGfx.hAirspaceBrushes[m_settings_map.
                                                 iAirspaceBrush[airspace.get_type()]]);
         m_buffer.white_pen();
 
@@ -259,8 +262,9 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
     AirspaceWarningCopy awc;
     airspace_warning.visit_warnings(awc);
 
-    MapDrawHelper helper (canvas, buffer, stencil_canvas, *this, GetMapRect());
-    AirspaceVisitorMap v(helper, awc);
+    MapDrawHelper helper (canvas, buffer, stencil_canvas, *this, 
+                          GetMapRect(), SettingsMap());
+    AirspaceVisitorMap v(helper, awc, SettingsComputer(), Basic());
 
     // JMW TODO wasteful to draw twice, can't it be drawn once?
     // we are using two draws so borders go on top of everything

@@ -270,7 +270,7 @@ class MapWindow
   void RenderMapLayer(Canvas &canvas, const RECT rc);
   void RenderAreas(Canvas &canvas, const RECT rc);
   void RenderTrail(Canvas &canvas, const RECT rc);
-  void RenderTask(Canvas &canvas, const RECT rc);
+  void RenderTaskElements(Canvas &canvas, const RECT rc);
   void RenderGlide(Canvas &canvas, const RECT rc);
   void RenderAirborne(Canvas &canvas, const RECT rc);
   void RenderSymbology_upper(Canvas &canvas, const RECT rc);

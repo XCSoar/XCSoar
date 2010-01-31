@@ -1,18 +1,21 @@
 #include "MapDrawHelper.hpp"
-#include "MapWindow.h"
+#include "Projection.hpp"
+#include "SettingsUser.hpp"
 
 MapDrawHelper::MapDrawHelper(Canvas &_canvas, 
                              Canvas &_buffer, 
                              Canvas &_stencil, 
-                             MapWindow &_map,
-                             const RECT &_rc):
+                             Projection &_proj,
+                             const RECT &_rc,
+                             const SETTINGS_MAP& settings_map):
   m_canvas(_canvas),
   m_buffer(_buffer),
   m_stencil(_stencil),
-  m_map(_map),
+  m_proj(_proj),
   m_rc(_rc),
   m_buffer_drawn(false),
-  m_use_stencil(false) 
+  m_use_stencil(false),
+  m_settings_map(settings_map)
 {
 }
 
@@ -20,10 +23,11 @@ MapDrawHelper::MapDrawHelper(MapDrawHelper &_that):
   m_canvas(_that.m_canvas),
   m_buffer(_that.m_buffer),
   m_stencil(_that.m_stencil),
-  m_map(_that.m_map),
+  m_proj(_that.m_proj),
   m_rc(_that.m_rc),
   m_buffer_drawn(_that.m_buffer_drawn),
-  m_use_stencil(_that.m_use_stencil) 
+  m_use_stencil(_that.m_use_stencil),
+  m_settings_map(_that.m_settings_map)
 {
 }
 
@@ -35,14 +39,14 @@ void
 MapDrawHelper::add(std::vector<POINT>& screen, const GEOPOINT& pt) const
 {
   POINT sc;
-  m_map.LonLat2Screen(pt, sc);
+  m_proj.LonLat2Screen(pt, sc);
   screen.push_back(sc);
 }
 
 bool 
 MapDrawHelper::add_if_visible(std::vector<POINT>& screen, const GEOPOINT& pt) const
 {
-  if (!m_map.LonLatVisible(pt)) {
+  if (!m_proj.LonLatVisible(pt)) {
     add(screen, pt);
     return true;
   } else {
@@ -59,7 +63,7 @@ MapDrawHelper::draw_great_circle(Canvas& the_canvas, const GEOPOINT &from,
     return;
   }
 /*
-  const fixed sc_distance = min(m_map.GetScreenDistanceMeters()/2, distance/4);
+  const fixed sc_distance = min(m_proj.GetScreenDistanceMeters()/2, distance/4);
   std::vector<POINT> screen;
   bool visible = add_if_visible(screen, from);
   GEOPOINT p_last = from;
@@ -67,7 +71,7 @@ MapDrawHelper::draw_great_circle(Canvas& the_canvas, const GEOPOINT &from,
     const GEOPOINT p =  from.interpolate(to, t/distance); 
 //          from.intermediate_point(to, t);
     
-    if (m_map.LonLatVisible(p)) {
+    if (m_proj.LonLatVisible(p)) {
       if (!visible) {
         add(screen, p_last);
       }

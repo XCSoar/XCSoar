@@ -218,6 +218,9 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/MapDrawHelper.cpp \
 	$(SRC)/Projection.cpp \
+	$(SRC)/RenderObservationZone.cpp \
+	$(SRC)/RenderTaskPoint.cpp \
+	$(SRC)/RenderTask.cpp \
 	$(SRC)/MapWindow.cpp \
 	$(SRC)/MapWindowAirspace.cpp \
 	$(SRC)/MapWindowEvents.cpp \
