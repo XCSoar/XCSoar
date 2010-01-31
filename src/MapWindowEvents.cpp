@@ -132,9 +132,10 @@ bool MapWindow::on_create()
   if (!MaskedPaintWindow::on_create())
     return false;
 
-  draw_canvas.set(get_canvas());
-  buffer_canvas.set(get_canvas());
-  stencil_canvas.set(get_canvas());
+  WindowCanvas canvas(*this);
+  draw_canvas.set(canvas);
+  buffer_canvas.set(canvas);
+  stencil_canvas.set(canvas);
   return true;
 }
 

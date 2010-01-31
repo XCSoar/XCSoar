@@ -109,10 +109,11 @@ public:
   virtual Window *get_focused_window();
 
   void expose_child(const Window &child) {
+    const WindowCanvas child_canvas(const_cast<Window &>(child));
     canvas.copy(child.get_left(), child.get_top(),
-                child.get_canvas().get_width(),
-                child.get_canvas().get_height(),
-                child.get_canvas(), 0, 0);
+                child_canvas.get_width(),
+                child_canvas.get_height(),
+                child_canvas, 0, 0);
     expose(child.get_position());
   }
 #endif /* ENABLE_SDL */

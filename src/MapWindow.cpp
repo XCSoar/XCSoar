@@ -254,7 +254,8 @@ MapWindow::DrawThreadLoop(void)
 
   if (BigZoom) {
     // quickly draw zoom level on top
-    DrawMapScale(get_canvas(), MapRect, true);
+    WindowCanvas canvas(*this);
+    DrawMapScale(canvas, MapRect, true);
   }
 
   // Render the moving map

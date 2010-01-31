@@ -57,7 +57,7 @@ MaskedPaintWindow::set(ContainerWindow &parent, const TCHAR *cls,
   mask_canvas.reset();
   PaintWindow::set(parent, cls, left, top, width, height);
   if (!mask_canvas.defined())
-    mask_canvas.set(get_canvas());
+    mask_canvas.set(WindowCanvas(*this));
 }
 
 #ifndef ENABLE_SDL
@@ -78,7 +78,7 @@ MaskedPaintWindow::on_create()
   if (!PaintWindow::on_create())
     return false;
 
-  mask_canvas.set(get_canvas());
+  mask_canvas.set(WindowCanvas(*this));
   return true;
 }
 

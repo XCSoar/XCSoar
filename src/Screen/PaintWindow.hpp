@@ -42,28 +42,31 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Window.hpp"
 
-#ifdef ENABLE_SDL
-#define WindowCanvas BufferCanvas
-#else /* !ENABLE_SDL */
+class PaintWindow;
 
 /**
- * A #Canvas implementation which allows you to draw into WIN32 window
- * handle (HWND).  Use #PaintCanvas instead to implement WM_PAINT.
+ * A #Canvas implementation which allows you to draw directly into a
+ * #PaintWindow, outside of the PaintWindow::on_paint().
  */
 class WindowCanvas : public Canvas {
+#ifdef ENABLE_SDL
+public:
+  explicit WindowCanvas(Window &window)
+    :Canvas(window.canvas.surface) {}
+
+#else /* !ENABLE_SDL */
+
 protected:
   HWND wnd;
 
 public:
-  WindowCanvas() {}
-  WindowCanvas(HWND _wnd, unsigned width, unsigned height);
-  ~WindowCanvas();
+  explicit WindowCanvas(PaintWindow &window);
 
-  void set(HWND _wnd, unsigned _width, unsigned _height);
-  void reset();
-};
-
+  ~WindowCanvas() {
+    ::ReleaseDC(wnd, dc);
+  }
 #endif /* !ENABLE_SDL */
+};
 
 class ContainerWindow;
 
@@ -72,11 +75,6 @@ class ContainerWindow;
  * whenever you want to draw something.
  */
 class PaintWindow : public Window {
-private:
-#ifndef ENABLE_SDL
-  WindowCanvas canvas;
-#endif
-
 private:
   /* hide this method */
   void install_wndproc();
@@ -105,20 +103,12 @@ public:
     set(parent, _T("PaintWindow"), left, top, width, height, style);
   }
 
-  Canvas &get_canvas() {
-    return canvas;
-  }
-
-  const Canvas &get_canvas() const {
-    return canvas;
-  }
-
   unsigned get_width() const {
-    return canvas.get_width();
+    return get_size().cx;
   }
 
   unsigned get_height() const {
-    return canvas.get_height();
+    return get_size().cy;
   }
 
   int get_left() const {
@@ -152,7 +142,8 @@ public:
   void invalidate() {
 #ifdef ENABLE_SDL
     // XXX
-    on_paint(get_canvas());
+    WindowCanvas canvas(*this);
+    on_paint(canvas);
     expose();
 #else /* !ENABLE_SDL */
     ::InvalidateRect(hWnd, NULL, false);
@@ -176,7 +167,8 @@ public:
 
 #ifdef ENABLE_SDL
     // XXX
-    on_paint(get_canvas());
+    WindowCanvas canvas(*this);
+    on_paint(canvas);
     expose();
 #else /* !ENABLE_SDL */
     ::UpdateWindow(hWnd);
@@ -195,13 +187,6 @@ public:
 #endif /* !ENABLE_SDL */
 
 protected:
-#ifndef ENABLE_SDL
-  virtual bool on_create();
-  virtual bool on_destroy();
-
-  virtual bool on_resize(unsigned width, unsigned height);
-#endif /* !ENABLE_SDL */
-
   virtual bool on_erase(Canvas &canvas);
   virtual void on_paint(Canvas &canvas);
 

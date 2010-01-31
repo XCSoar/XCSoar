@@ -50,27 +50,9 @@ Copyright_License {
 
 #ifndef ENABLE_SDL
 
-WindowCanvas::WindowCanvas(HWND _wnd, unsigned width, unsigned height)
-  :Canvas(::GetDC(_wnd), width, height), wnd(_wnd) {}
-
-WindowCanvas::~WindowCanvas()
-{
-  reset();
-}
-
-void WindowCanvas::set(HWND _wnd, unsigned _width, unsigned _height)
-{
-  assert(_wnd != NULL);
-
-  reset();
-  Canvas::set(GetDC(_wnd), _width, _height);
-}
-
-void WindowCanvas::reset()
-{
-  if (dc != NULL)
-    ::ReleaseDC(wnd, dc);
-}
+WindowCanvas::WindowCanvas(PaintWindow &window)
+  :Canvas(::GetDC(window), window.get_width(), window.get_height()),
+   wnd(window) {}
 
 #endif /* !ENABLE_SDL */
 
@@ -101,39 +83,6 @@ PaintWindow::register_class(HINSTANCE hInstance)
   return RegisterClass(&wc) != 0;
 #endif /* !ENABLE_SDL */
 }
-
-#ifndef ENABLE_SDL
-
-bool
-PaintWindow::on_create()
-{
-  assert(!canvas.defined());
-
-  if (!Window::on_create())
-    return false;
-
-  canvas.set(hWnd, 1, 1);
-  return true;
-}
-
-bool
-PaintWindow::on_destroy()
-{
-  Window::on_destroy();
-
-  canvas.reset();
-  return true;
-}
-
-bool
-PaintWindow::on_resize(unsigned width, unsigned height)
-{
-  Window::on_resize(width, height);
-  canvas.resize(width, height);
-  return true;
-}
-
-#endif /* !ENABLE_SDL */
 
 bool
 PaintWindow::on_erase(Canvas &canvas)

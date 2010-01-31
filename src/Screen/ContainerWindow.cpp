@@ -127,10 +127,11 @@ ContainerWindow::on_paint(Canvas &canvas)
     Window &child = **i;
     child.paint();
 
+    WindowCanvas child_canvas(child);
     canvas.copy(child.get_left(), child.get_top(),
-                child.get_canvas().get_width(),
-                child.get_canvas().get_height(),
-                child.get_canvas(), 0, 0);
+                child_canvas.get_width(),
+                child_canvas.get_height(),
+                child_canvas, 0, 0);
   }
 }
 

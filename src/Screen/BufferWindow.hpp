@@ -80,14 +80,7 @@ public:
    * Copies the buffer to the specified canvas.
    */
   void commit_buffer(Canvas &dest) {
-    dest.copy(get_canvas());
-  }
-
-  /**
-   * Copies the buffer to the underlying device.
-   */
-  void commit_buffer() {
-    commit_buffer(PaintWindow::get_canvas());
+    dest.copy(buffer);
   }
 
 protected:

@@ -60,6 +60,8 @@ Copyright_License {
 #undef TRANSPARENT
 
 class Canvas {
+  friend class WindowCanvas;
+
 protected:
   SDL_Surface *surface;
   Pen pen;

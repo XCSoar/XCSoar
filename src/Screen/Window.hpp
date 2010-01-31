@@ -129,6 +129,7 @@ class Window {
 public:
 #ifdef ENABLE_SDL
   friend class SDLTimer;
+  friend class WindowCanvas;
   typedef SDLTimer *timer_t;
 #else
   typedef UINT_PTR timer_t;
@@ -216,10 +217,6 @@ public:
 
   int get_vmiddle() const {
     return (get_top() + get_bottom()) / 2;
-  }
-
-  const Canvas &get_canvas() const {
-    return canvas;
   }
 #endif
 

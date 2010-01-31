@@ -221,9 +221,10 @@ protected:
 
     case ID_BUFFER:
       buffered = !buffered;
-      if (buffered)
-        buffer.set(get_canvas(), get_width(), get_height());
-      else
+      if (buffered) {
+        WindowCanvas canvas(*this);
+        buffer.set(canvas, canvas.get_width(), canvas.get_height());
+      } else
         buffer.reset();
       update();
       return true;
