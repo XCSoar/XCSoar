@@ -1601,6 +1601,11 @@ inline fixed sqrt(fixed const& x)
     return x.sqrt();
 }
 
+inline fixed hypot(fixed x, fixed y)
+{
+  return sqrt(x * x + y * y);
+}
+
 inline fixed exp(fixed const& x)
 {
     return x.exp();
