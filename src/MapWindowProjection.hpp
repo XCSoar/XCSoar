@@ -35,17 +35,13 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_MAPWINDOW_PROJECTION_H)
-#define XCSOAR_MAPWINDOW_PROJECTION_H
+#if !defined(XCSOAR_MAPWINDOW_PROJECTION_HPP)
+#define XCSOAR_MAPWINDOW_PROJECTION_HPP
 
-#include "Math/FastMath.h"
-#include "Math/FastRotation.hpp"
+#include "Projection.hpp"
 #include "Units.hpp"
 #include "SettingsUser.hpp"
-#include "Screen/shapelib/mapprimitive.h"
 #include "Sizes.h"
-#include "Navigation/GeoPoint.hpp"
-#include <windef.h>
 #include "Math/fixed.hpp"
 
 struct NMEA_INFO;
@@ -54,38 +50,15 @@ struct SETTINGS_COMPUTER;
 class Waypoint;
 class Canvas;
 
-class MapWindowProjection {
+
+class MapWindowProjection:
+  public Projection
+{
  public:
   MapWindowProjection();
 
-  // used by terrain renderer, topology and airspace
-
-  void    Screen2LonLat(const int &x, const int &y,
-                        GEOPOINT &location) const;
-
-  void    LonLat2Screen(const GEOPOINT &location,
-                        POINT &sc) const;
-  void    LonLat2Screen(const GEOPOINT *ptin, POINT *ptout,
-                        unsigned n, unsigned skip) const;
-  void    LonLat2Screen(const pointObj* const ptin, POINT *ptout,
-                        const int n,
-                        const int skip) const;
-
-  POINT   GetOrigScreen(void) const { return Orig_Screen; }
-  POINT   GetOrigAircraft(void) const { return Orig_Aircraft; }
-  GEOPOINT GetPanLocation() const { return PanLocation; }
-
-  fixed GetDisplayAngle() const {
-    return DisplayAngle.GetAngle();
-  }
-
-  rectObj CalculateScreenBounds(const fixed scale) const;
-
   fixed  GetScreenDistanceMeters(void) const;
 
-  fixed GetScreenScaleToLonLat() const {
-    return InvDrawScale;
-  }
   fixed GetMapScaleUser() const { // Topology
     return MapScale;
   }
@@ -95,9 +68,8 @@ class MapWindowProjection {
   RECT GetMapRectBig() const {
     return MapRectBig;
   }
-  RECT GetMapRect() const {
-    return MapRect;
-  }
+
+  POINT   GetOrigAircraft(void) const { return Orig_Aircraft; }
 
   // used by waypoint nearest routine
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
@@ -114,31 +86,16 @@ class MapWindowProjection {
     return DisplayMode;
   }
 
-  unsigned DistanceMetersToScreen(const fixed x) {
-    return iround(_scale_meters_to_screen*x);
-  }
-
-  bool LonLat2ScreenIfVisible(const GEOPOINT &loc,
-			      POINT *sc) const;
-
-  bool LonLatVisible(const GEOPOINT &loc) const;
-
  protected:
   DisplayMode_t DisplayMode;
 
   // helpers
-  bool PointVisible(const POINT &P) const;
   bool PointInRect(const double &x, const double &y,
 		   const rectObj &bounds) const;
 
-  rectObj   screenbounds_latlon;
   RECT   MapRectSmall;
   RECT   MapRectBig;
-  RECT   MapRect;
-  GEOPOINT PanLocation;
-  POINT  Orig_Screen, Orig_Aircraft;
 
-  FastIntegerRotation DisplayAngle;
   fixed DisplayAircraftAngle;
 
   // scale/display stuff
@@ -168,9 +125,6 @@ class MapWindowProjection {
   fixed GetRequestedMapScale() const {
     return _RequestedMapScale;
   }
-  fixed GetLonLatToScreenScale() const {
-    return DrawScale;
-  }
   bool IsOriginCentered() const {
     return _origin_centered;
   }
@@ -183,12 +137,9 @@ public:
   }
   fixed StepMapScale(int Step);
 
- private:
+private:
+  POINT Orig_Aircraft;
 
-  fixed DrawScale;
-  fixed InvDrawScale;
-
-  fixed _scale_meters_to_screen; // speedup
   fixed MapScale;
   fixed _RequestedMapScale;
 

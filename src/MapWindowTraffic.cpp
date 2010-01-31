@@ -156,8 +156,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
 
     // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
-    int dx = (sc_av.x - Orig_Aircraft.x);
-    int dy = (sc_av.y - Orig_Aircraft.y);
+    int dx = (sc_av.x - GetOrigAircraft().x);
+    int dy = (sc_av.y - GetOrigAircraft().y);
 
     // only draw labels if not close to aircraft
     if (dx * dx + dy * dy > IBLSCALE(30) * IBLSCALE(30)) {

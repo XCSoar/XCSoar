@@ -146,7 +146,7 @@ MapWindow::DrawTrail(Canvas &canvas)
     }
     last_time = it->time;
   }
-  canvas.line_to(Orig_Aircraft.x, Orig_Aircraft.y);
+  canvas.line_to(GetOrigAircraft().x, GetOrigAircraft().y);
 
 #ifdef TIME_TRAIL
   printf("B: %d\n", clock.elapsed());

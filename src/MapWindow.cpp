@@ -87,8 +87,9 @@ MapWindow::~MapWindow()
 }
 
 void
-MapWindow::set(ContainerWindow &parent, const RECT _MapRectSmall,
-    const RECT _MapRectBig)
+MapWindow::set(ContainerWindow &parent, 
+               const RECT _MapRectSmall,
+               const RECT _MapRectBig)
 {
   MapRectSmall = _MapRectSmall;
   MapRect = MapRectBig = _MapRectBig;

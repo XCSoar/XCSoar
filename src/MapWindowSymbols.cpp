@@ -102,8 +102,8 @@ MapWindow::DrawAircraft(Canvas &canvas)
     canvas.select(hbAircraftSolidBg);
     canvas.select(MapGfx.hpAircraft);
 
-    PolygonRotateShift(Aircraft, NUMAIRCRAFTPOINTS, Orig_Aircraft.x+1,
-                       Orig_Aircraft.y+1, DisplayAircraftAngle +
+    PolygonRotateShift(Aircraft, NUMAIRCRAFTPOINTS, GetOrigAircraft().x+1,
+                       GetOrigAircraft().y+1, DisplayAircraftAngle +
                        (Basic().Heading - Basic().TrackBearing));
 
     canvas.polygon(Aircraft, NUMAIRCRAFTPOINTS);
@@ -155,7 +155,7 @@ MapWindow::DrawAircraft(Canvas &canvas)
     const fixed angle = DisplayAircraftAngle +
                         (Basic().Heading - Basic().TrackBearing);
 
-    PolygonRotateShift(Aircraft, n, Orig_Aircraft.x - 1, Orig_Aircraft.y, angle);
+    PolygonRotateShift(Aircraft, n, GetOrigAircraft().x - 1, GetOrigAircraft().y, angle);
 
     canvas.select(MapGfx.hpAircraft);
     canvas.polygon(Aircraft, n);
@@ -704,7 +704,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas)
     Arrow[4].y -= dy;
     Arrow[5].y -= dy;
 
-    PolygonRotateShift(Arrow, 7, Orig_Aircraft.x, Orig_Aircraft.y,
+    PolygonRotateShift(Arrow, 7, GetOrigAircraft().x, GetOrigAircraft().y,
         Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
         - GetDisplayAngle());
 
@@ -714,7 +714,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas)
                       { 6, -62 }, { 1, -62 }, { 1, -40 }, { -1, -40 } };
 
     PolygonRotateShift(Arrow, sizeof(Arrow) / sizeof(Arrow[0]),
-        Orig_Aircraft.x, Orig_Aircraft.y,
+        GetOrigAircraft().x, GetOrigAircraft().y,
         Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
         - GetDisplayAngle());
 

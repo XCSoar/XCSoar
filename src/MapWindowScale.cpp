@@ -84,7 +84,7 @@ void MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
   int barsize = iround(findMapScaleBarSize(rc));
 
   Start.x = rc.right-1;
-  for (Start.y=Orig_Aircraft.y; Start.y<rc.bottom+barsize; Start.y+= barsize) {
+  for (Start.y=GetOrigAircraft().y; Start.y<rc.bottom+barsize; Start.y+= barsize) {
     if (color) {
       canvas.white_pen();
     } else {
@@ -101,7 +101,7 @@ void MapWindow::DrawMapScale2(Canvas &canvas, const RECT rc)
 
   color = true;
   first = true;
-  for (Start.y=Orig_Aircraft.y; Start.y>rc.top-barsize; Start.y-= barsize) {
+  for (Start.y=GetOrigAircraft().y; Start.y>rc.top-barsize; Start.y-= barsize) {
     if (color) {
       canvas.white_pen();
     } else {

@@ -217,6 +217,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/LogFile.cpp \
 	\
 	$(SRC)/MapDrawHelper.cpp \
+	$(SRC)/Projection.cpp \
 	$(SRC)/MapWindow.cpp \
 	$(SRC)/MapWindowAirspace.cpp \
 	$(SRC)/MapWindowEvents.cpp \
