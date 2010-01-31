@@ -78,11 +78,11 @@ GlideComputerStats::StartTask()
 bool
 GlideComputerStats::DoLogging()
 {
-  // QUESTION TB: put that in seperate function?!
-
-  // prevent bad fixes from being logged or added to OLC store
-  if (Distance(Basic().Location, LastBasic().Location) > 200.0)
+  /// @todo consider putting this sanity check inside Parser
+  if (Distance(Basic().Location, LastBasic().Location) > 200.0) {
+    // prevent bad fixes from being logged or added to OLC store
     return false;
+  }
 
   // log points more often in circling mode
   if (Calculated().Circling) {
