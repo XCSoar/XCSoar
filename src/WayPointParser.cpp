@@ -77,7 +77,10 @@ static int globalFileNum = 0;
 static bool ParseWayPointString(Waypoint &way_point, const TCHAR *input,
     const RasterTerrain *terrain);
 static bool ParseAngle(const TCHAR *input, fixed *value_r, TCHAR **endptr_r);
-static void ParseFlags(const TCHAR *input, const TCHAR **endptr_r, Waypoint& waypoint);
+
+static void
+ParseFlags(const TCHAR *input, const TCHAR **endptr_r, WaypointFlags &flags);
+
 static bool ParseAltitude(const TCHAR *input, fixed *altitude_r, TCHAR **endptr_r);
 
 static TCHAR TempString[READLINE_LENGTH];
@@ -324,7 +327,7 @@ ParseWayPointString(Waypoint &way_point, const TCHAR *input,
 
   input = endptr + 1;
 
-  ParseFlags(input, &input, way_point);
+  ParseFlags(input, &input, way_point.Flags);
   if (*input != _T(','))
     return false;
 
@@ -408,49 +411,49 @@ ParseAngle(const TCHAR *input, fixed *value_r, TCHAR **endptr_r)
 }
 
 static void
-ParseFlags(const TCHAR *input, const TCHAR **endptr_r, Waypoint &waypoint)
+ParseFlags(const TCHAR *input, const TCHAR **endptr_r, WaypointFlags &flags)
 {
-  waypoint.Flags.Airport = false;
-  waypoint.Flags.TurnPoint = false;
-  waypoint.Flags.LandPoint = false;
-  waypoint.Flags.Home = false;
-  waypoint.Flags.StartPoint = false;
-  waypoint.Flags.FinishPoint = false;
-  waypoint.Flags.Restricted = false;
-  waypoint.Flags.WaypointFlag = false;
+  flags.Airport = false;
+  flags.TurnPoint = false;
+  flags.LandPoint = false;
+  flags.Home = false;
+  flags.StartPoint = false;
+  flags.FinishPoint = false;
+  flags.Restricted = false;
+  flags.WaypointFlag = false;
 
   while (_istalpha(*input)) {
     switch (*input++) {
     case 'A':
-      waypoint.Flags.Airport = true;
+      flags.Airport = true;
       break;
 
     case 'T':
-      waypoint.Flags.TurnPoint = true;
+      flags.TurnPoint = true;
       break;
 
     case 'L':
-      waypoint.Flags.LandPoint = true;
+      flags.LandPoint = true;
       break;
 
     case 'H':
-      waypoint.Flags.Home = true;
+      flags.Home = true;
       break;
 
     case 'S':
-      waypoint.Flags.StartPoint = true;
+      flags.StartPoint = true;
       break;
 
     case 'F':
-      waypoint.Flags.FinishPoint = true;
+      flags.FinishPoint = true;
       break;
 
     case 'R':
-      waypoint.Flags.Restricted = true;
+      flags.Restricted = true;
       break;
 
     case 'W':
-      waypoint.Flags.WaypointFlag = true;
+      flags.WaypointFlag = true;
       break;
     }
   }
