@@ -209,10 +209,9 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   tstring sBase = as.get_base_text(true);
   tstring sType = as.get_type_text(true);
 
-  int          TextHeight = 12;
-  int          TextTop = 1;
-  int          Col0Left = 3;
-  int          Col1Left = 120;
+  const int TextHeight = 12, TextTop = 1;
+  const int Col0Left = 3, Col1Left = 120;
+
   RECT         rc;
   RECT         rcTextClip;
   Brush *hBrushBk = NULL;
