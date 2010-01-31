@@ -320,7 +320,7 @@ InitialiseFontsHardCoded(RECT rc,
 }
 
 static void
-InitialiseFontsAuto(Canvas &canvas, RECT rc,
+InitialiseFontsAuto(RECT rc,
                     LOGFONT *ptrautoInfoWindowLogFont,
                     LOGFONT *ptrautoTitleWindowLogFont,
                     LOGFONT *ptrautoMapWindowLogFont,
@@ -387,6 +387,7 @@ InitialiseFontsAuto(Canvas &canvas, RECT rc,
 
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
+  VirtualCanvas canvas(1, 1);
   SIZE tsize;
   do {
     HFONT TempWindowFont;
@@ -527,7 +528,7 @@ InitialiseFontsAuto(Canvas &canvas, RECT rc,
 //  TitleSmallWindowFont = CreateFontIndirect (&logfont);
 
 
-void InitialiseFonts(Canvas &canvas, RECT rc)
+void InitialiseFonts(RECT rc)
 { //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
 
   InfoWindowFont.reset();
@@ -549,7 +550,7 @@ void InitialiseFonts(Canvas &canvas, RECT rc)
   memset ((char *)&autoStatisticsLogFont, 0, sizeof (LOGFONT));
 
 
-  InitialiseFontsAuto(canvas, rc,
+  InitialiseFontsAuto(rc,
                         &autoInfoWindowLogFont,
                         &autoTitleWindowLogFont,
                         &autoMapWindowLogFont,
@@ -652,9 +653,6 @@ void InitialiseFonts(Canvas &canvas, RECT rc)
                         szRegistryFontTitleSmallWindowFont,
                         autoTitleSmallWindowLogFont,
                         NULL);
-
-  ButtonLabel::SetFont(MapWindowBoldFont);
-
 }
 
 void DeleteFonts() {

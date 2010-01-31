@@ -110,12 +110,6 @@ XCSoarInterface::StepProgressDialog(void)
 {
 }
 
-bool
-MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
-{
-  return true;
-}
-
 void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
                                      const double alt)
@@ -141,7 +135,9 @@ RasterTerrain::WaypointIsInTerrainRange(const GEOPOINT &location) const
   return true;
 }
 
+Projection::Projection() {}
 MapWindowProjection::MapWindowProjection() {}
+
 SettingsComputerBlackboard::SettingsComputerBlackboard() {}
 SettingsMapBlackboard::SettingsMapBlackboard() {}
 

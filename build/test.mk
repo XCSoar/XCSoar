@@ -106,6 +106,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Globals.cpp \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/Projection.cpp \
+	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/MapWindow.cpp \
 	$(SRC)/MapWindowAirspace.cpp \
 	$(SRC)/MapWindowBlackboard.cpp \
@@ -123,6 +125,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindowTrail.cpp \
 	$(SRC)/MapWindowWaypoints.cpp \
 	$(SRC)/MapDrawHelper.cpp \
+	$(SRC)/RenderTask.cpp \
+	$(SRC)/RenderTaskPoint.cpp \
 	$(SRC)/Marks.cpp \
 	$(SRC)/Math/FastRotation.cpp \
 	$(SRC)/Math/Screen.cpp \
@@ -216,6 +220,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/AirspaceParser.cpp \
 	$(SRC)/Screen/Animation.cpp \
 	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -223,6 +228,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsText.cpp \
+	$(SRC)/UtilsFont.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp

@@ -238,6 +238,16 @@ static inline bool has_pointer()
   return !is_altair();
 }
 
+/**
+ * Does this device have a display with colors?
+ *
+ * XXX not yet implemented!
+ */
+static inline bool has_colors()
+{
+  return true;
+}
+
 // This could be also used for PDA in landscape..
 typedef enum
 {

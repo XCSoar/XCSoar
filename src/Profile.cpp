@@ -48,14 +48,13 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Dialogs/XML.hpp"
 
-#define CheckIndex(x, i) do {} while (false) // XXX
+#define CheckIndex(x, i) do {} while (false)
 
 extern int WaypointsOutOfRange;
 
 static void
 DefaultRegistrySettingsAltair()
 {
-  // RLD left GNAV Altair settings untouched.
   // these are redundant b/c they're also added to "InitialiseFontsHardCoded"
   SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
       TEXT("24,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
@@ -96,17 +95,17 @@ CheckInfoTypes()
   bool iszero_aux = true;
 
   for (i = 0; i < MAXINFOWINDOWS; ++i) {
-    iszero_fg  &= (InfoBoxManager::getType(i, 2)==0);
-    iszero_aux &= (InfoBoxManager::getType(i, 3)==0);
+    iszero_fg &= (InfoBoxManager::getType(i, 2) == 0);
+    iszero_aux &= (InfoBoxManager::getType(i, 3) == 0);
   }
+
   if (iszero_fg || iszero_aux) {
     for (i = 0; i < MAXINFOWINDOWS; ++i) {
-      if (iszero_fg) {
+      if (iszero_fg)
         InfoBoxManager::setType(i, InfoBoxManager::getType(i, 1), 2);
-      }
-      if (iszero_aux) {
+      if (iszero_aux)
         InfoBoxManager::setType(i, InfoBoxManager::getType(i, 1), 3);
-      }
+
       StoreType(i, InfoBoxManager::getTypeAll(i));
     }
   }
@@ -360,7 +359,6 @@ Profile::ReadRegistrySettings()
   GetFromRegistry(szRegistryHomeWaypoint,
       SetSettingsComputer().HomeWaypoint);
 
-  // VENTA3
   Temp = SettingsComputer().Alternate1;
   if (GetFromRegistryD(szRegistryAlternate1, Temp) == ERROR_SUCCESS) {
     // TODO: for portrait no need to force alternate calculations here.
@@ -380,7 +378,6 @@ Profile::ReadRegistrySettings()
     SetSettingsComputer().Alternate2 = -1;
     SetSettingsComputer().EnableAlternate2 = false;
   }
-
 
   GetFromRegistry(szRegistrySnailWidthScale,
 		  SetSettingsMap().SnailWidthScale);
@@ -412,24 +409,8 @@ Profile::ReadRegistrySettings()
   GetFromRegistry(szRegistrySoundModes,
 		  SetSettingsComputer().EnableSoundModes);
 
-  /* no longer used
-  Temp = 500;
-  GetFromRegistry(szRegistryNettoSpeed,&Temp);
-  NettoSpeed = Temp;
-  */
-
   SetSettingsMap().EnableCDICruise = 0;
   SetSettingsMap().EnableCDICircling = 0;
-
-  /* JMW temporarily disabled these because they are not updated for 4.7+
-  Temp = 0;
-  GetFromRegistry(szRegistryCDICruise,&Temp);
-  EnableCDICruise = (Temp == 1);
-
-  Temp = 0;
-  GetFromRegistry(szRegistryCDICircling,&Temp);
-  EnableCDICircling = (Temp == 1);
-  */
 
 #ifdef HAVE_BLANK
   GetFromRegistry(szRegistryAutoBlank,
@@ -455,12 +436,6 @@ Profile::ReadRegistrySettings()
   GetFromRegistryD(szRegistryAverEffTime,Temp);
   SetSettingsComputer().AverEffTime = Temp;
 
-  /*
-  Temp = 0;
-  GetFromRegistry(szRegistryVarioGauge,&Temp);
-  EnableVarioGauge = (Temp == 1);
-  */
-
 #if defined(GNAV) || defined(PCGNAV)
   Temp = 0;
 #else
@@ -483,7 +458,7 @@ Profile::ReadRegistrySettings()
   // new appearance variables
 
   //Temp = Appearance.IndFinalGlide;
-  Temp = (IndFinalGlide_t)fgFinalGlideDefault; // VNT9 default
+  Temp = (IndFinalGlide_t)fgFinalGlideDefault;
   GetFromRegistryD(szRegistryAppIndFinalGlide, Temp);
   Appearance.IndFinalGlide = (IndFinalGlide_t)Temp;
 
@@ -510,8 +485,7 @@ Profile::ReadRegistrySettings()
   GetFromRegistryD(szRegistryAppCompassAppearance, Temp);
   Appearance.CompassAppearance = (CompassAppearance_t)Temp;
 
-  //Temp = Appearance.InfoBoxBorder;
-  Temp = (InfoBoxBorderAppearance_t)apIbBox; // VNT9 default
+  Temp = (InfoBoxBorderAppearance_t)apIbBox;
   GetFromRegistryD(szRegistryAppInfoBoxBorder, Temp);
   Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
 
@@ -544,7 +518,7 @@ Profile::ReadRegistrySettings()
     StartupStore(TEXT("No special regsets for this PDA\n")); // VENTA2
   }
 
-// VENTA-ADDON Model change
+  // VENTA-ADDON Model change
   Temp = Appearance.InfoBoxModel;
   GetFromRegistryD(szRegistryAppInfoBoxModel, Temp);
   Appearance.InfoBoxModel = (InfoBoxModelAppearance_t)Temp;
@@ -601,9 +575,8 @@ Profile::ReadRegistrySettings()
 
   GetFromRegistry(szRegistryUTCOffset,
 		  SetSettingsComputer().UTCOffset);
-  if (SettingsComputer().UTCOffset > 12 * 3600) {
+  if (SettingsComputer().UTCOffset > 12 * 3600)
     SetSettingsComputer().UTCOffset -= 24 * 3600;
-  }
 
   GetFromRegistry(szRegistryBlockSTF,
 		  SetSettingsComputer().EnableBlockSTF);
@@ -669,7 +642,7 @@ Profile::ReadRegistrySettings()
   GetFromRegistryD(szRegistryRiskGamma, Temp);
   SetSettingsComputer().risk_gamma = Temp / 10.0;
 
-  Temp = (CompassAppearance_t)apCompassAltA; // VNT9 default
+  Temp = (CompassAppearance_t)apCompassAltA;
   GetFromRegistryD(szRegistryWindArrowStyle, Temp);
   SetSettingsMap().WindArrowStyle = Temp;
 
@@ -705,7 +678,6 @@ Profile::SaveSoundSettings()
   SetToRegistry(szRegistrySoundTask, SettingsComputer().EnableSoundTask);
   SetToRegistry(szRegistrySoundModes, SettingsComputer().EnableSoundModes);
 }
-
 
 void
 Profile::SaveWindToRegistry()

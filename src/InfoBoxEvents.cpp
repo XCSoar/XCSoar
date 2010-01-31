@@ -58,7 +58,10 @@ Copyright_License {
 #include <stdlib.h>
 #include "FlarmCalculations.h"
 
-#define m_max(a,b)	(((a)>(b))?(a):(b))
+#include <algorithm>
+
+using std::max;
+
 // JMW added key codes,
 // so -1 down
 //     1 up
@@ -128,19 +131,20 @@ ActionInterface::on_key_TeamCode(int UpDown)
 void
 ActionInterface::on_key_Altitude(int UpDown)
 {
-  fixed fixed_step = fixed(100 / ALTITUDEMODIFY);
-  if (is_simulator()) {
-    if(UpDown==1) {
-      device_blackboard.SetAltitude(Basic().GPSAltitude+fixed_step);
-    } else if (UpDown==-1) {
-      device_blackboard.SetAltitude(m_max(fixed_zero,Basic().GPSAltitude-fixed_step));
-    } else if (UpDown==-2) {
-      on_key_Direction(-1);
-    } else if (UpDown==2) {
-      on_key_Direction(1);
-    }
-  }
-  return;
+  if (!is_simulator())
+    return;
+
+  fixed fixed_step = (fixed)Units::ToSysUnit(100, Units::UserAltitudeUnit);
+
+  if (UpDown == 1)
+    device_blackboard.SetAltitude(Basic().GPSAltitude + fixed_step);
+  else if (UpDown == -1)
+    device_blackboard.SetAltitude(max(fixed_zero,
+                                      Basic().GPSAltitude - fixed_step));
+  else if (UpDown == -2)
+    on_key_Direction(-1);
+  else if (UpDown == 2)
+    on_key_Direction(1);
 }
 
 // VENTA3 Alternates processing updown
@@ -191,20 +195,19 @@ ActionInterface::on_key_BestAlternate(int UpDown)
 void
 ActionInterface::on_key_Speed(int UpDown)
 {
-  fixed fixed_step = fixed(10 / SPEEDMODIFY);
+  if (!is_simulator())
+    return;
 
-  if (is_simulator()) {
-    if(UpDown==1)
-      device_blackboard.SetSpeed(Basic().Speed+fixed_step);
-    else if (UpDown==-1) {
-      device_blackboard.SetSpeed(m_max(fixed_zero,Basic().Speed-fixed_step));
-    } else if (UpDown==-2) {
-      on_key_Direction(-1);
-    } else if (UpDown==2) {
-      on_key_Direction(1);
-    }
-  }
-  return;
+  fixed fixed_step = (fixed)Units::ToSysUnit(10, Units::UserHorizontalSpeedUnit);
+
+  if (UpDown == 1)
+    device_blackboard.SetSpeed(Basic().Speed + fixed_step);
+  else if (UpDown == -1)
+    device_blackboard.SetSpeed(max(fixed_zero, Basic().Speed - fixed_step));
+  else if (UpDown == -2)
+    on_key_Direction(-1);
+  else if (UpDown == 2)
+    on_key_Direction(1);
 }
 
 

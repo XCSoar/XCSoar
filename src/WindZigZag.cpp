@@ -541,7 +541,7 @@ void TestZigZag(double V_wind, double theta_wind) {
     double V_gps_x = V_tas * sin(theta_glider) - V_wind*sin(theta_wind);
     double V_gps_y = V_tas * cos(theta_glider) - V_wind*cos(theta_wind);
 
-    V_gps = sqrt(V_gps_x*V_gps_x+V_gps_y*V_gps_y);
+    V_gps = hypot(V_gps_x, V_gps_y);
     theta_gps = atan2(V_gps_x,V_gps_y);
 
     myzigzag.AddPoint(t, V_tas, V_gps, theta_gps);

@@ -41,7 +41,8 @@ Copyright_License {
 
 #include "Interface.hpp"
 
-class Profile: public XCSoarInterface {
+class Profile: public XCSoarInterface
+{
 public:
   static void ReadRegistrySettings(void);
   static void RestoreRegistry(void);
@@ -50,6 +51,7 @@ public:
   static void SaveWindToRegistry();
   static void LoadWindFromRegistry();
   static void SetRegistryAirspaceMode(int i);
+
 private:
   static int GetRegistryAirspaceMode(int i);
 };

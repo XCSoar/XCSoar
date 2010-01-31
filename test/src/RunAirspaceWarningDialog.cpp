@@ -36,6 +36,7 @@ Copyright_License {
 */
 
 #include "Screen/SingleWindow.hpp"
+#include "Screen/Fonts.hpp"
 #include "Interface.hpp"
 #include "Dialogs.h"
 #include "MapWindow.h"
@@ -51,6 +52,8 @@ Copyright_License {
 #include "GlideComputerInterface.hpp"
 #include "Task/TaskManager.hpp"
 #include "Screen/Blank.hpp"
+#include "InfoBoxLayout.hpp"
+#include "Screen/Layout.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -63,6 +66,8 @@ bool needclipping = false;
 #ifdef HAVE_BLANK
 int DisplayTimeOut = 0;
 #endif
+
+int InfoBoxLayout::ControlWidth = 100;
 
 bool
 FileExistsA(const char *FileName)
@@ -134,12 +139,6 @@ MapWindow::identify(HWND hWnd)
 HINSTANCE CommonInterface::hInst;
 bool CommonInterface::EnableAnimation;
 
-Font MapWindowFont;
-Font MapWindowBoldFont;
-Font TitleWindowFont;
-Font CDIWindowFont;
-Font InfoWindowFont;
-
 Waypoints way_points;
 TaskBehaviour task_behaviour;
 TaskEvents task_events;
@@ -203,6 +202,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.set(_T("STATIC"), _T("RunAirspaceWarningDialog"),
                   0, 0, 640, 480);
   main_window.show();
+
+  Layout::Initalize(640, 480);
+  InitialiseFonts(main_window.get_client_rect());
 
   dlgAirspaceWarningInit(main_window);
   dlgAirspaceWarningShowDlg();

@@ -130,7 +130,7 @@ GaugeFLARM::RenderTraffic(Canvas &canvas, const NMEA_INFO &gps_info)
     double x, y;
     x = traffic.RelativeEast;
     y = -traffic.RelativeNorth;
-    double d = sqrt(x * x + y * y);
+    double d = hypot(x, y);
     if (d > 0) {
       x /= d;
       y /= d;

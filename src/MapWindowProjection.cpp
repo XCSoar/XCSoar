@@ -322,7 +322,8 @@ void MapWindowProjection::ModifyMapScale
     LimitMapScale(_RequestedMapScale, settings_map);
   MapScale = _RequestedMapScale;
 
-  SetScaleMetersToScreen(GetMapResolutionFactor()*DISTANCEMODIFY/MapScale);
+  SetScaleMetersToScreen((fixed)Units::ToUserUnit(GetMapResolutionFactor() /
+                                           MapScale, Units::UserDistanceUnit));
 }
 
 
@@ -357,7 +358,8 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   if (settings_map.TargetPan) {
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
-    _RequestedMapScale = LimitMapScale(wpd*DISTANCEMODIFY/4.0, settings_map);
+    _RequestedMapScale = LimitMapScale((fixed)Units::ToUserUnit(wpd / 4.0,
+        Units::UserDistanceUnit), settings_map);
     ModifyMapScale(settings_map);
     return;
   }
@@ -377,8 +379,8 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
       AutoZoomFactor = 4;
     }
 
-    if((wpd < ( AutoZoomFactor * MapScale/DISTANCEMODIFY))
-       || (StartingAutoMapScale==0.0)) {
+    if((wpd < Units::ToSysUnit(AutoZoomFactor * MapScale, Units::UserDistanceUnit))
+       || (StartingAutoMapScale == 0.0)) {
       // waypoint is too close, so zoom in
       // OR just turned waypoint
 
@@ -391,8 +393,8 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
 
       // set scale exactly so that waypoint distance is the zoom factor
       // across the screen
-      _RequestedMapScale =
-	LimitMapScale(wpd*DISTANCEMODIFY/ AutoZoomFactor, settings_map);
+      _RequestedMapScale = LimitMapScale((fixed)Units::ToUserUnit(
+          wpd / AutoZoomFactor, Units::UserDistanceUnit), settings_map);
       ModifyMapScale(settings_map);
 
     }

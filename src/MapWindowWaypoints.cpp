@@ -107,8 +107,8 @@ public:
           reachable = r.glide_reachable();
 
           if (reachable) {
-            AltArrivalAGL = (int)(ALTITUDEMODIFY *
-                                  (double)r.AltitudeDifference);
+            AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
+                                                   Units::UserAltitudeUnit);
           }
 
           draw_alt = reachable;

@@ -127,177 +127,477 @@ typedef struct _SCREEN_INFO
 //   Nav 11,12,13,15,16,17,18,27,28,29,30,31
 //   Waypoint 14,36,39,40,41,42,45,46
 static const SCREEN_INFO Data_Options[] = {
-          // 0
-	  {ugAltitude,        TEXT("Height GPS"), TEXT("H GPS"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_Altitude, 1, 33},
-	  // 1
-	  {ugAltitude,        TEXT("Height AGL"), TEXT("H AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), ActionInterface::on_key_None, 20, 0},
-	  // 2
-	  {ugVerticalSpeed,   TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new FormatterLowWarning(TEXT("%-2.1f"),0.0), ActionInterface::on_key_None, 7, 44},
-	  // 3
+  // 0
+  { ugAltitude, _T("Height GPS"), _T("H GPS"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_Altitude,
+    1, 33,
+  },
+  // 1
+  { ugAltitude, _T("Height AGL"), _T("H AGL"),
+    new FormatterLowWarning(_T("%2.0f"),0.0),
+    ActionInterface::on_key_None,
+    20, 0,
+  },
+  // 2
+  { ugVerticalSpeed, _T("Thermal last 30 sec"), _T("TC 30s"),
+    new FormatterLowWarning(_T("%-2.1f"),0.0),
+    ActionInterface::on_key_None,
+    7, 44,
+  },
+  // 3
+  { ugNone, _T("Bearing"), _T("Bearing"),
 #ifdef FIVV
-	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), ActionInterface::on_key_None, 6, 54},
+    new InfoBoxFormatter(_T("%2.0f")_T(DEG)),
 #else
-	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), ActionInterface::on_key_None, 6, 54},
+    new InfoBoxFormatter(_T("%2.0f")_T(DEG)_T("T")),
 #endif
-	  // 4
-	  {ugNone,            TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 5, 38},
-	  // 5
-	  {ugNone,            TEXT("L/D cruise"), TEXT("L/D Cru"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 19, 4},
-	  // 6
-	  {ugHorizontalSpeed, TEXT("Speed ground"), TEXT("V Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_Speed, 23, 3},
-	  // 7
-	  {ugVerticalSpeed,   TEXT("Last Thermal Average"), TEXT("TL Avg"), new InfoBoxFormatter(TEXT("%-2.1f")), ActionInterface::on_key_None, 8, 2},
-	  // 8
-	  {ugAltitude,        TEXT("Last Thermal Gain"), TEXT("TL Gain"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 9, 7},
-	  // 9
-	  {ugNone,            TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), ActionInterface::on_key_None, 21, 8},
-	  // 10
-	  {ugVerticalSpeed,   TEXT("MacCready Setting"), TEXT("MacCready"), new InfoBoxFormatter(TEXT("%2.1f")), ActionInterface::on_key_MacCready, 34, 43},
-	  // 11
-	  {ugDistance,        TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), ActionInterface::on_key_None, 12, 31},
-	  // 12
-	  {ugAltitude,        TEXT("Next Altitude Difference"), TEXT("WP AltD"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 13, 11},
-	  // 13
-	  {ugAltitude,        TEXT("Next Altitude Required"), TEXT("WP AltR"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 15, 12},
-	  // 14
-	  {ugNone,            TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), ActionInterface::on_key_Waypoint, 36, 46},
-	  // 15
-	  {ugAltitude,        TEXT("Final Altitude Difference"), TEXT("Fin AltD"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 16, 13},
-	  // 16
-	  {ugAltitude,        TEXT("Final Altitude Required"), TEXT("Fin AltR"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 17, 15},
-	  // 17
-	  {ugTaskSpeed, TEXT("Speed Task Average"), TEXT("V Task Av"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 18, 16},
-	  // 18
-	  {ugDistance,        TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 27, 17},
-	  // 19
-	  {ugNone,            TEXT("Final LD"), TEXT("Fin LD"), new InfoBoxFormatter(TEXT("%1.0f")), ActionInterface::on_key_None, 38, 5},
-	  // 20
-	  {ugAltitude,        TEXT("Terrain Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 33, 1},
-	  // 21
-	  {ugVerticalSpeed,   TEXT("Thermal Average"), TEXT("TC Avg"), new FormatterLowWarning(TEXT("%-2.1f"),0.0), ActionInterface::on_key_None, 22, 9},
-	  // 22
-	  {ugAltitude,        TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 24, 21},
-	  // 23
+    ActionInterface::on_key_None,
+    6, 54,
+  },
+  // 4
+  { ugNone, _T("L/D instantaneous"), _T("L/D Inst"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    5, 38,
+  },
+  // 5
+  { ugNone, _T("L/D cruise"), _T("L/D Cru"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    19, 4,
+  },
+  // 6
+  { ugHorizontalSpeed, _T("Speed ground"), _T("V Gnd"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_Speed,
+    23, 3,
+  },
+  // 7
+  { ugVerticalSpeed, _T("Last Thermal Average"), _T("TL Avg"),
+    new InfoBoxFormatter(_T("%-2.1f")),
+    ActionInterface::on_key_None,
+    8, 2,
+  },
+  // 8
+  { ugAltitude, _T("Last Thermal Gain"), _T("TL Gain"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    9, 7,
+  },
+  // 9
+  { ugNone, _T("Last Thermal Time"), _T("TL Time"),
+    new FormatterTime(_T("%04.0f")),
+    ActionInterface::on_key_None,
+    21, 8,
+  },
+  // 10
+  { ugVerticalSpeed, _T("MacCready Setting"), _T("MacCready"),
+    new InfoBoxFormatter(_T("%2.1f")),
+    ActionInterface::on_key_MacCready,
+    34, 43,
+  },
+  // 11
+  { ugDistance, _T("Next Distance"), _T("WP Dist"),
+    new InfoBoxFormatter(_T("%2.1f")),
+    ActionInterface::on_key_None,
+    12, 31,
+  },
+  // 12
+  { ugAltitude, _T("Next Altitude Difference"), _T("WP AltD"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    13, 11,
+  },
+  // 13
+  { ugAltitude, _T("Next Altitude Required"), _T("WP AltR"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    15, 12,
+  },
+  // 14
+  { ugNone, _T("Next Waypoint"), _T("Next"),
+    new FormatterWaypoint(_T("\0")),
+    ActionInterface::on_key_Waypoint,
+    36, 46,
+  },
+  // 15
+  { ugAltitude, _T("Final Altitude Difference"), _T("Fin AltD"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    16, 13,
+  },
+  // 16
+  { ugAltitude, _T("Final Altitude Required"), _T("Fin AltR"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    17, 15,
+  },
+  // 17
+  { ugTaskSpeed, _T("Speed Task Average"), _T("V Task Av"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    18, 16,
+  },
+  // 18
+  { ugDistance, _T("Final Distance"), _T("Fin Dis"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    27, 17,
+  },
+  // 19
+  { ugNone, _T("Final LD"), _T("Fin LD"),
+    new InfoBoxFormatter(_T("%1.0f")),
+    ActionInterface::on_key_None,
+    38, 5,
+  },
+  // 20
+  { ugAltitude, _T("Terrain Elevation"), _T("H Gnd"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    33, 1,
+  },
+  // 21
+  { ugVerticalSpeed, _T("Thermal Average"), _T("TC Avg"),
+    new FormatterLowWarning(_T("%-2.1f"),0.0),
+    ActionInterface::on_key_None,
+    22, 9,
+  },
+  // 22
+  { ugAltitude, _T("Thermal Gain"), _T("TC Gain"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    24, 21,
+  },
+  // 23
+  { ugNone, _T("Track"), _T("Track"),
 #ifdef FIVV
-	  {ugNone,            TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), ActionInterface::on_key_Direction, 32, 6},
+    new InfoBoxFormatter(_T("%2.0f")_T(DEG)),
 #else
-	  {ugNone,            TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), ActionInterface::on_key_Direction, 32, 6},
+    new InfoBoxFormatter(_T("%2.0f")_T(DEG)_T("T")),
 #endif
-	  // 24
-	  {ugVerticalSpeed,   TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), ActionInterface::on_key_None, 44, 22},
-	  // 25
-	  {ugWindSpeed,       TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_WindSpeed, 26, 50},
-	  // 26
+    ActionInterface::on_key_Direction,
+    32, 6,
+  },
+  // 24
+  { ugVerticalSpeed, _T("Vario"), _T("Vario"),
+    new InfoBoxFormatter(_T("%-2.1f")),
+    ActionInterface::on_key_None,
+    44, 22,
+  },
+  // 25
+  { ugWindSpeed, _T("Wind Speed"), _T("Wind V"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_WindSpeed,
+    26, 50,
+  },
+  // 26
+  { ugNone, _T("Wind Bearing"), _T("Wind B"),
 #ifdef FIVV
-	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), ActionInterface::on_key_WindDirection, 48, 25},
+    new InfoBoxFormatter(_T("%2.0f")_T(DEG)),
 #else
-	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), ActionInterface::on_key_WindDirection, 48, 25},
+    new InfoBoxFormatter(_T("%2.0f")_T(DEG)_T("T")),
 #endif
-	  // 27
-	  {ugNone,            TEXT("AA Time"), TEXT("AA Time"), new FormatterAATTime(TEXT("%2.0f")), ActionInterface::on_key_None, 28, 18},
-	  // 28
-	  {ugDistance,        TEXT("AA Distance Max"), TEXT("AA Dmax"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 29, 27},
-	  // 29
-	  {ugDistance,        TEXT("AA Distance Min"), TEXT("AA Dmin"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 30, 28},
-	  // 30
-	  {ugTaskSpeed, TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 31, 29},
-	  // 31
-	  {ugTaskSpeed, TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 51, 30},
-	  // 32
-	  {ugHorizontalSpeed, TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_Airspeed, 37, 23},
-	  // 33
-	  {ugAltitude,        TEXT("Pressure Altitude"), TEXT("H Baro"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 0, 20},
-	  // 34
-	  {ugHorizontalSpeed, TEXT("Speed MacCready"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 35, 10},
-	  // 35
-	  {ugNone,            TEXT("Percentage climb"), TEXT("% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 43, 34},
-	  // 36
-	  {ugNone,            TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), ActionInterface::on_key_None, 39, 14},
-	  // 37
-	  {ugNone,            TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), ActionInterface::on_key_Accelerometer, 47, 32},
-	  // 38
-	  {ugNone,            TEXT("Next LD"), TEXT("WP LD"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 53, 19},
-	  // 39
-	  {ugNone,            TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), ActionInterface::on_key_None, 40, 36},
-	  // 40
-	  {ugNone,            TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), ActionInterface::on_key_None, 41, 39},
-	  // 41
-	  {ugNone,            TEXT("Task Time To Go"), TEXT("Fin ETE"), new FormatterAATTime(TEXT("%04.0f")), ActionInterface::on_key_None, 42, 40},
-	  // 42
-	  {ugNone,            TEXT("Next Time To Go"), TEXT("WP ETE"), new FormatterAATTime(TEXT("%04.0f")), ActionInterface::on_key_None, 45, 41},
-	  // 43
-	  {ugHorizontalSpeed, TEXT("Speed Dolphin"), TEXT("V Opt"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 10, 35},
-	  // 44
-	  {ugVerticalSpeed,   TEXT("Netto Vario"), TEXT("Netto"), new InfoBoxFormatter(TEXT("%-2.1f")), ActionInterface::on_key_None, 2, 24},
-	  // 45
-	  {ugNone,            TEXT("Task Arrival Time"), TEXT("Fin ETA"), new FormatterAATTime(TEXT("%04.0f")), ActionInterface::on_key_None, 46, 42},
-	  // 46
-	  {ugNone,            TEXT("Next Arrival Time"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), ActionInterface::on_key_None, 14, 45},
-	  // 47
-	  {ugNone,            TEXT("Bearing Difference"), TEXT("Brng D"), new FormatterDiffBearing(TEXT("")), ActionInterface::on_key_None, 54, 37},
-	  // 48
-	  {ugNone,            TEXT("Outside Air Temperature"), TEXT("OAT"), new InfoBoxFormatter(TEXT("%2.1f")TEXT(DEG)), ActionInterface::on_key_None, 49, 26},
-	  // 49
-	  {ugNone,            TEXT("Relative Humidity"), TEXT("RelHum"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 50, 48},
-	  // 50
-	  {ugNone,            TEXT("Forecast Temperature"), TEXT("MaxTemp"), new InfoBoxFormatter(TEXT("%2.1f")TEXT(DEG)), ActionInterface::on_key_ForecastTemperature, 49, 25},
-	  // 51
-	  {ugDistance,        TEXT("AA Distance Tgt"), TEXT("AA Dtgt"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 52, 31},
-	  // 52
-	  {ugTaskSpeed, TEXT("AA Speed Tgt"), TEXT("AA Vtgt"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 11, 51},
-	  // 53
-	  {ugNone,            TEXT("L/D vario"), TEXT("L/D vario"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 4, 38},
-	  // 54
-	  {ugHorizontalSpeed, TEXT("Airspeed TAS"), TEXT("V TAS"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_Airspeed, 3, 47},
-	  // 55
-	  {ugNone,            TEXT("Own Team Code"), TEXT("TeamCode"), new FormatterTeamCode(TEXT("\0")), ActionInterface::on_key_TeamCode, 56, 54},
-	  // 56
+    ActionInterface::on_key_WindDirection,
+    48, 25,
+  },
+  // 27
+  { ugNone, _T("AA Time"), _T("AA Time"),
+    new FormatterAATTime(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    28, 18,
+  },
+  // 28
+  { ugDistance, _T("AA Distance Max"), _T("AA Dmax"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    29, 27,
+  },
+  // 29
+  { ugDistance, _T("AA Distance Min"), _T("AA Dmin"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    30, 28,
+  },
+  // 30
+  { ugTaskSpeed, _T("AA Speed Max"), _T("AA Vmax"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    31, 29,
+  },
+  // 31
+  { ugTaskSpeed, _T("AA Speed Min"), _T("AA Vmin"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    51, 30,
+  },
+  // 32
+  { ugHorizontalSpeed, _T("Airspeed IAS"), _T("V IAS"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_Airspeed,
+    37, 23,
+  },
+  // 33
+  { ugAltitude, _T("Pressure Altitude"), _T("H Baro"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    0, 20,
+  },
+  // 34
+  { ugHorizontalSpeed, _T("Speed MacCready"), _T("V Mc"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    35, 10,
+  },
+  // 35
+  { ugNone, _T("Percentage climb"), _T("% Climb"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    43, 34,
+  },
+  // 36
+  { ugNone, _T("Time of flight"), _T("Time flt"),
+    new FormatterTime(_T("%04.0f")),
+    ActionInterface::on_key_None,
+    39, 14,
+  },
+  // 37
+  { ugNone, _T("G load"), _T("G"),
+    new InfoBoxFormatter(_T("%2.2f")),
+    ActionInterface::on_key_Accelerometer,
+    47, 32,
+  },
+  // 38
+  { ugNone, _T("Next LD"), _T("WP LD"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    53, 19,
+  },
+  // 39
+  { ugNone, _T("Time local"), _T("Time loc"),
+    new FormatterTime(_T("%04.0f")),
+    ActionInterface::on_key_None,
+    40, 36,
+  },
+  // 40
+  { ugNone, _T("Time UTC"), _T("Time UTC"),
+    new FormatterTime(_T("%04.0f")),
+    ActionInterface::on_key_None,
+    41, 39,
+  },
+  // 41
+  { ugNone, _T("Task Time To Go"), _T("Fin ETE"),
+    new FormatterAATTime(_T("%04.0f")),
+    ActionInterface::on_key_None,
+    42, 40,
+  },
+  // 42
+  { ugNone, _T("Next Time To Go"), _T("WP ETE"),
+    new FormatterAATTime(_T("%04.0f")),
+    ActionInterface::on_key_None,
+    45, 41,
+  },
+  // 43
+  { ugHorizontalSpeed, _T("Speed Dolphin"), _T("V Opt"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    10, 35,
+  },
+  // 44
+  { ugVerticalSpeed, _T("Netto Vario"), _T("Netto"),
+    new InfoBoxFormatter(_T("%-2.1f")),
+    ActionInterface::on_key_None,
+    2, 24,
+  },
+  // 45
+  { ugNone, _T("Task Arrival Time"), _T("Fin ETA"),
+    new FormatterAATTime(_T("%04.0f")),
+    ActionInterface::on_key_None,
+    46, 42,
+  },
+  // 46
+  { ugNone, _T("Next Arrival Time"), _T("WP ETA"),
+    new FormatterTime(_T("%04.0f")),
+    ActionInterface::on_key_None,
+    14, 45,
+  },
+  // 47
+  { ugNone, _T("Bearing Difference"), _T("Brng D"),
+    new FormatterDiffBearing(_T("")),
+    ActionInterface::on_key_None,
+    54, 37,
+  },
+  // 48
+  { ugNone, _T("Outside Air Temperature"), _T("OAT"),
+    new InfoBoxFormatter(_T("%2.1f")_T(DEG)),
+    ActionInterface::on_key_None,
+    49, 26,
+  },
+  // 49
+  { ugNone, _T("Relative Humidity"), _T("RelHum"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    50, 48,
+  },
+  // 50
+  { ugNone, _T("Forecast Temperature"), _T("MaxTemp"),
+    new InfoBoxFormatter(_T("%2.1f")_T(DEG)),
+    ActionInterface::on_key_ForecastTemperature, 
+    49, 25,
+  },
+  // 51
+  { ugDistance, _T("AA Distance Tgt"), _T("AA Dtgt"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    52, 31,
+  },
+  // 52
+  { ugTaskSpeed, _T("AA Speed Tgt"), _T("AA Vtgt"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    11, 51,
+  },
+  // 53
+  { ugNone, _T("L/D vario"), _T("L/D vario"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    4, 38,
+  },
+  // 54
+  { ugHorizontalSpeed, _T("Airspeed TAS"), _T("V TAS"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_Airspeed,
+    3, 47,
+  },
+  // 55
+  { ugNone, _T("Own Team Code"), _T("TeamCode"),
+    new FormatterTeamCode(_T("\0")),
+    ActionInterface::on_key_TeamCode,
+    56, 54,
+  },
+  // 56
+  { ugNone, _T("Team Bearing"), _T("Tm Brng"),
 #ifdef FIVV
-	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)), ActionInterface::on_key_None, 57, 55},
+    new InfoBoxFormatter(_T("%2.0f")_T(DEG)),
 #else
-	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), ActionInterface::on_key_None, 57, 55},
+    new InfoBoxFormatter(_T("%2.0f")_T(DEG)_T("T")),
 #endif
-	  // 57
-	  {ugNone,            TEXT("Team Bearing Diff"), TEXT("Team Bd"), new FormatterDiffTeamBearing(TEXT("")), ActionInterface::on_key_None, 58, 56},
-	  // 58
-	  {ugNone,            TEXT("Team Range"), TEXT("Team Dis"), new InfoBoxFormatter(TEXT("%2.1f")), ActionInterface::on_key_None, 55, 57},
-          // 59
-	  {ugTaskSpeed, TEXT("Speed Task Instantaneous"), TEXT("V Tsk Ins"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 18, 16},
-          // 60
-	  {ugDistance, TEXT("Distance Home"), TEXT("Home Dis"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 18, 16},
-	  // 61
-	  {ugTaskSpeed, TEXT("Speed Task Achieved"), TEXT("V Tsk Ach"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 18, 16},
-          // 62
-	  {ugNone,            TEXT("AA Delta Time"), TEXT("AA dT"), new FormatterAATTime(TEXT("%2.0f")), ActionInterface::on_key_None, 28, 18},
-          // 63
-	  {ugVerticalSpeed,   TEXT("Thermal All"), TEXT("TC All"), new InfoBoxFormatter(TEXT("%-2.1f")), ActionInterface::on_key_None, 8, 2},
-          // 64
-	  {ugVerticalSpeed,   TEXT("Distance Vario"), TEXT("D Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), ActionInterface::on_key_None, 8, 2},
-	  // 65
+    ActionInterface::on_key_None,
+    57, 55,
+  },
+  // 57
+  { ugNone, _T("Team Bearing Diff"), _T("Team Bd"),
+    new FormatterDiffTeamBearing(_T("")),
+    ActionInterface::on_key_None,
+    58, 56,
+  },
+  // 58
+  { ugNone, _T("Team Range"), _T("Team Dis"),
+    new InfoBoxFormatter(_T("%2.1f")),
+    ActionInterface::on_key_None,
+    55, 57,
+  },
+  // 59
+  { ugTaskSpeed, _T("Speed Task Instantaneous"), _T("V Tsk Ins"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    18, 16,
+  },
+  // 60
+  { ugDistance, _T("Distance Home"), _T("Home Dis"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    18, 16,
+  },
+  // 61
+  { ugTaskSpeed, _T("Speed Task Achieved"), _T("V Tsk Ach"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    18, 16,
+  },
+  // 62
+  { ugNone, _T("AA Delta Time"), _T("AA dT"),
+    new FormatterAATTime(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    28, 18,
+  },
+  // 63
+  { ugVerticalSpeed, _T("Thermal All"), _T("TC All"),
+    new InfoBoxFormatter(_T("%-2.1f")),
+    ActionInterface::on_key_None,
+    8, 2,
+  },
+  // 64
+  { ugVerticalSpeed, _T("Distance Vario"), _T("D Vario"),
+    new InfoBoxFormatter(_T("%-2.1f")),
+    ActionInterface::on_key_None,
+    8, 2,
+  },
+  // 65
 #ifndef GNAV
-	  {ugNone,            TEXT("Battery Percent"), TEXT("Battery"), new InfoBoxFormatter(TEXT("%2.0f%%")), ActionInterface::on_key_None, 49, 26},
+  { ugNone, _T("Battery Percent"), _T("Battery"),
+    new InfoBoxFormatter(_T("%2.0f%%")),
+    ActionInterface::on_key_None,
+    49, 26,
+  },
 #else
-	  {ugNone,            TEXT("Battery Voltage"), TEXT("Battery"), new InfoBoxFormatter(TEXT("%2.1fV")), ActionInterface::on_key_None, 49, 26},
+  { ugNone, _T("Battery Voltage"), _T("Battery"),
+    new InfoBoxFormatter(_T("%2.1fV")),
+    ActionInterface::on_key_None,
+    49, 26,
+  },
 #endif
-	  // 66  VENTA-ADDON added Final GR
-	  // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
-	  {ugNone,            TEXT("Final GR"), TEXT("Fin GR"), new InfoBoxFormatter(TEXT("%1.1f")), ActionInterface::on_key_None, 38, 5},
+  // 66  VENTA-ADDON added Final GR
+  // VENTA-TODO: fix those 38,5 numbers to point correctly menu items
+  { ugNone, _T("Final GR"), _T("Fin GR"),
+    new InfoBoxFormatter(_T("%1.1f")),
+    ActionInterface::on_key_None,
+    38, 5,
+  },
 
-	  // 67 VENTA3-ADDON Alternate1 destinations infoboxes  TODO> fix 36 46 to something correct
-	  {ugNone,            TEXT("Alternate1 GR"), TEXT("Altern 1"), new FormatterAlternate(TEXT("\0")), ActionInterface::on_key_Alternate1, 36, 46},
-	  // 68 Alternate 2
-	  {ugNone,            TEXT("Alternate2 GR"), TEXT("Altern 2"), new FormatterAlternate(TEXT("\0")), ActionInterface::on_key_Alternate2, 36, 46},
-	  // 69 BestAlternate aka BestLanding
-	  {ugNone,            TEXT("Best Alternate"), TEXT("BestAltn"), new FormatterAlternate(TEXT("\0")), ActionInterface::on_key_BestAlternate, 36, 46},
-          // 70
-	  {ugAltitude,        TEXT("QFE GPS"), TEXT("QFE GPS"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 1, 33},
-          // 71 TODO FIX those 19,4 values
-	  {ugNone,            TEXT("L/D Average"), TEXT("L/D Avg"), new InfoBoxFormatter(TEXT("%2.0f")), ActionInterface::on_key_None, 19, 4},
-	  // 72 //
-	  {ugNone,   TEXT("Experimental1"), TEXT("Exp1"), new InfoBoxFormatter(TEXT("%-2.1f")), ActionInterface::on_key_None, 8, 2},
-	  // 73 //
-	  {ugNone,   TEXT("Experimental2"), TEXT("Exp2"), new InfoBoxFormatter(TEXT("%-2.1f")), ActionInterface::on_key_None, 8, 2},
-	};
+  // 67 VENTA3-ADDON Alternate1 destinations infoboxes  TODO> fix 36 46 to something correct
+  { ugNone, _T("Alternate1 GR"), _T("Altern 1"),
+    new FormatterAlternate(_T("\0")),
+    ActionInterface::on_key_Alternate1,
+    36, 46,
+  },
+  // 68 Alternate 2
+  { ugNone, _T("Alternate2 GR"), _T("Altern 2"),
+    new FormatterAlternate(_T("\0")),
+    ActionInterface::on_key_Alternate2,
+    36, 46,
+  },
+  // 69 BestAlternate aka BestLanding
+  { ugNone, _T("Best Alternate"), _T("BestAltn"),
+    new FormatterAlternate(_T("\0")),
+    ActionInterface::on_key_BestAlternate,
+    36, 46,
+  },
+  // 70
+  { ugAltitude, _T("QFE GPS"), _T("QFE GPS"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    1, 33,
+  },
+  // 71 TODO FIX those 19,4 values
+  { ugNone, _T("L/D Average"), _T("L/D Avg"),
+    new InfoBoxFormatter(_T("%2.0f")),
+    ActionInterface::on_key_None,
+    19, 4,
+  },
+  // 72 //
+  { ugNone, _T("Experimental1"), _T("Exp1"),
+    new InfoBoxFormatter(_T("%-2.1f")),
+    ActionInterface::on_key_None,
+    8, 2,
+  },
+  // 73 //
+  { ugNone, _T("Experimental2"), _T("Exp2"),
+    new InfoBoxFormatter(_T("%-2.1f")),
+    ActionInterface::on_key_None,
+    8, 2,
+  },
+};
 
 const unsigned NUMSELECTSTRINGS = 74;
 
@@ -511,13 +811,13 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
       info_box.SetColor(color);
     } else {
       if (type == 67)
-        info_box.SetTitle(TEXT("Altern1"));
+        info_box.SetTitle(_T("Altern1"));
       else if (type == 68)
-        info_box.SetTitle(TEXT("Altern2"));
+        info_box.SetTitle(_T("Altern2"));
       else
-        info_box.SetTitle(TEXT("BestAltr"));
+        info_box.SetTitle(_T("BestAltr"));
 
-      info_box.SetValue(TEXT("---"));
+      info_box.SetValue(_T("---"));
       info_box.SetColor(-1);
     }
 
@@ -551,8 +851,8 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
       info_box.SetColor(color);
       info_box.SetValue(Data_Options[47].Formatter->Render(&color));
     } else {
-      info_box.SetTitle(TEXT("Next"));
-      info_box.SetValue(TEXT("---"));
+      info_box.SetTitle(_T("Next"));
+      info_box.SetValue(_T("---"));
       info_box.SetColor(-1);
     }
 
@@ -587,14 +887,14 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
         info_box.SetComment(way_points.get(index).Comment);
     }
 #endif
-    info_box.SetComment(TEXT(""));
+    info_box.SetComment(_T(""));
     break;
 
   case 10:
     if (SettingsComputer().auto_mc)
-      info_box.SetComment(TEXT("AUTO"));
+      info_box.SetComment(_T("AUTO"));
     else
-      info_box.SetComment(TEXT("MANUAL"));
+      info_box.SetComment(_T("MANUAL"));
     break;
 
   case 0: // GPS Alt
@@ -627,15 +927,15 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
     if (Data_Options[type].Formatter->isValid()) {
       info_box.SetComment(Data_Options[type].Formatter->GetCommentText());
     } else {
-      info_box.SetComment(TEXT(""));
+      info_box.SetComment(_T(""));
     }
     break;
 
   case 43:
     if (SettingsComputer().EnableBlockSTF) {
-      info_box.SetComment(TEXT("BLOCK"));
+      info_box.SetComment(_T("BLOCK"));
     } else {
-      info_box.SetComment(TEXT("DOLPHIN"));
+      info_box.SetComment(_T("DOLPHIN"));
     }
     break;
 
@@ -659,10 +959,10 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
       if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
         info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
       } else {
-        info_box.SetComment(TEXT("???"));
+        info_box.SetComment(_T("???"));
       }
     } else {
-      info_box.SetComment(TEXT("---"));
+      info_box.SetComment(_T("---"));
     }
 
     if (IsFlarmTargetCNInRange(Basic().flarm,
@@ -678,10 +978,10 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
       if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
         info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
       } else {
-        info_box.SetComment(TEXT("???"));
+        info_box.SetComment(_T("???"));
       }
     } else {
-      info_box.SetComment(TEXT("---"));
+      info_box.SetComment(_T("---"));
     }
 
     if (IsFlarmTargetCNInRange(Basic().flarm,
@@ -697,10 +997,10 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
       if (!string_is_empty(SettingsComputer().TeamFlarmCNTarget)) {
         info_box.SetComment(SettingsComputer().TeamFlarmCNTarget);
       } else {
-        info_box.SetComment(TEXT("???"));
+        info_box.SetComment(_T("???"));
       }
     } else {
-      info_box.SetComment(TEXT("---"));
+      info_box.SetComment(_T("---"));
     }
 
     if (IsFlarmTargetCNInRange(Basic().flarm,
@@ -738,7 +1038,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
       _stprintf(sTmp, _T("%1.0d%SC"), (int)PDABatteryTemperature, _T(DEG));
       info_box.SetComment(sTmp);
     } else
-      info_box.SetComment(TEXT(""));
+      info_box.SetComment(_T(""));
     break;
 #endif
 
@@ -748,7 +1048,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
   case 69:
     if (ActiveAlternate == -1) {
       // should be redundant
-      info_box.SetComment(TEXT(""));
+      info_box.SetComment(_T(""));
       break;
     }
 #ifdef OLD_TASK
@@ -781,7 +1081,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
     break;
 
   default:
-    info_box.SetComment(TEXT(""));
+    info_box.SetComment(_T(""));
   }
 
   info_box.Paint();

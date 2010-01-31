@@ -136,7 +136,7 @@ GlideState::drifted_distance(const fixed t_cl) const
   const fixed dx = Vector.Distance * sintb - aw * sinwd;
   const fixed dy = Vector.Distance * costb - aw * coswd;
 
-  return sqrt(dx * dx + dy * dy);
+  return hypot(dx, dy);
 
   // ??   task.Bearing = RAD_TO_DEG*(atan2(dx,dy));
 }

@@ -140,7 +140,7 @@ void
 WindStore::NewWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
     Vector &wind)
 {
-  double mag = sqrt(wind.x * wind.x + wind.y * wind.y);
+  double mag = hypot(wind.x, wind.y);
   double bearing;
 
   if (wind.y == 0 && wind.x == 0)

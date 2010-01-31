@@ -61,7 +61,7 @@ GetButtonPosition(unsigned i, RECT rc, int *x, int *y, int *sizex, int *sizey)
       *sizex = IBLSCALE(52);
       *sizey = IBLSCALE(40);
       *x = rc.left + 3 + hwidth * (i - 1);
-      *y = rc.bottom - (*sizey);
+      *y = rc.bottom - *sizey - 3;
     } else {
       *sizex = IBLSCALE(80);
       *sizey = IBLSCALE(40);
@@ -96,7 +96,7 @@ GetButtonPosition(unsigned i, RECT rc, int *x, int *y, int *sizex, int *sizey)
       *sizex = IBLSCALE(60);
       *sizey = is_altair() ? IBLSCALE(40) : IBLSCALE(35);
       *x = rc.left + hwidth * (i - 5);
-      *y = (rc.bottom - (*sizey));
+      *y = rc.bottom - *sizey - 3;
     }
   }
 }

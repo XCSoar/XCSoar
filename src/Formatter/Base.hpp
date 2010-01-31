@@ -43,16 +43,18 @@ Copyright_License {
 #include <tchar.h>
 #include "Interface.hpp"
 
-class InfoBoxFormatter: public CommonInterface {
- public:
+class InfoBoxFormatter: public CommonInterface
+{
+public:
   InfoBoxFormatter(const TCHAR *theformat);
 
   virtual const TCHAR *Render(int *color);
-  virtual const TCHAR *RenderTitle(int *color); // VENTA3
+  virtual const TCHAR *RenderTitle(int *color);
   void RenderInvalid(int *color);
+
   bool Valid;
   double Value;
-  TCHAR Format[FORMAT_SIZE+1];
+  TCHAR Format[FORMAT_SIZE + 1];
   TCHAR Text[100];
   TCHAR CommentText[100];
 

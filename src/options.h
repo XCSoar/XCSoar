@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#define   MONOCHROME_SCREEN     1             // optimize for monochrom screen
 #define   EXPERIMENTAL          0             // ????
 
 #define   LOGGDEVCOMMANDLINE    NULL          // device in-stream logger command line

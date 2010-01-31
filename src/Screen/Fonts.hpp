@@ -43,7 +43,6 @@ Copyright_License {
 
 struct FontHeightInfo;
 class Font;
-class Canvas;
 
 void DeleteFonts();
 
@@ -52,7 +51,7 @@ void InitializeOneFont(Font *theFont,
                        LOGFONT autoLogFont,
                        LOGFONT *LogFontUsed);
 
-void InitialiseFonts(Canvas &canvas, RECT rc);
+void InitialiseFonts(RECT rc);
 
 extern Font InfoWindowFont;
 extern Font TitleWindowFont;

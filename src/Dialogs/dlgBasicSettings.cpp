@@ -103,8 +103,8 @@ OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode)
     device_blackboard.SetQNH(QNH);
     wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
     if (wp) {
-      wp->GetDataField()-> SetAsFloat(Units::ToUserAltitude(
-          XCSoarInterface::Basic().BaroAltitude));
+      wp->GetDataField()-> SetAsFloat(Units::ToUserUnit(
+          XCSoarInterface::Basic().BaroAltitude, Units::UserAltitudeUnit));
       wp->RefreshDisplay();
     }
     break;
@@ -117,7 +117,8 @@ OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
   case DataField::daGet:
-    Sender->Set(Units::ToUserAltitude(XCSoarInterface::Basic().BaroAltitude));
+    Sender->Set(Units::ToUserUnit(XCSoarInterface::Basic().BaroAltitude,
+                                  Units::UserAltitudeUnit));
     break;
   case DataField::daPut:
     break;
@@ -137,8 +138,8 @@ SetAltitude()
       if (!XCSoarInterface::Basic().BaroAltitudeAvailable) {
         wp->hide();
       } else {
-        wp->GetDataField()-> SetAsFloat(Units::ToUserAltitude(
-            XCSoarInterface::Basic().BaroAltitude));
+        wp->GetDataField()-> SetAsFloat(Units::ToUserUnit(
+            XCSoarInterface::Basic().BaroAltitude, Units::UserAltitudeUnit));
         wp->RefreshDisplay();
       }
     }
