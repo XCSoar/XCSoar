@@ -63,17 +63,25 @@
 #define PROC_NAME(x) (x)
 #endif
 
+#ifdef WIN32
+
 static HINSTANCE GRecordDLLHandle = NULL;
 
 // Procedures for explicitly loaded (optional) GRecord DLL
 typedef int (*GRRECORDGETVERSION)(TCHAR * szOut);
 static GRRECORDGETVERSION GRecordGetVersion;
 
+#endif /* !WIN32 */
+
 typedef int (*GRECORDINIT)(void);
 static GRECORDINIT GRecordInit;
 
+#ifdef WIN32
+
 typedef int (*GRECORDGETDIGESTMAXLEN)(void);
 static GRECORDGETDIGESTMAXLEN GRecordGetDigestMaxLen;
+
+#endif /* !WIN32 */
 
 typedef int (*GRECORDAPPENDRECORDTOBUFFER)(TCHAR * szIn);
 static GRECORDAPPENDRECORDTOBUFFER GRecordAppendRecordToBuffer;
@@ -93,11 +101,15 @@ static GRECORDLOADFILETOBUFFER GRecordLoadFileToBuffer;
 typedef int (*GRECORDAPPENDGRECORDTOFILE)(BOOL bValid);
 static GRECORDAPPENDGRECORDTOFILE GRecordAppendGRecordToFile;
 
+#ifdef WIN32
+
 typedef int (*GRECORDREADGRECORDFROMFILE)(TCHAR szOutput[]);
 static GRECORDREADGRECORDFROMFILE GRecordReadGRecordFromFile;
 
 typedef int (*GRECORDVERIFYGRECORDINFILE)(void);
 static GRECORDVERIFYGRECORDINFILE GRecordVerifyGRecordInFile;
+
+#endif /* !WIN32 */
 
 /**
  * Checks whether the character c is a valid IGC character
@@ -236,6 +248,7 @@ LoggerImpl::DiskBufferReset()
 void
 LoggerImpl::LinkGRecordDLL()
 {
+#ifdef WIN32
   static bool bFirstTime = true;
   TCHAR szLoadResults [100];
   TCHAR szGRecordVersion[100];
@@ -350,6 +363,7 @@ LoggerImpl::LinkGRecordDLL()
 
     StartupStore(szLoadResults);
   }
+#endif
 }
 
 /**
@@ -359,9 +373,11 @@ LoggerImpl::LinkGRecordDLL()
 bool
 LoggerImpl::LoggerGActive() const
 {
+#ifdef WIN32
   if (GRecordDLLHandle)
     return true;
   else
+#endif
     return false;
 }
 
