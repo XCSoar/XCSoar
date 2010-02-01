@@ -117,8 +117,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
   // Add the Control as a client of its parent
   if (mOwner != NULL)
     mOwner->AddClient(this);
-
-  get_canvas().background_transparent();
 }
 
 WindowControl::~WindowControl(void)
