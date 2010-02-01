@@ -61,9 +61,13 @@ WndForm::WndForm(SingleWindow &_main_window,
   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL), mOnUserMsgNotify(NULL)
 {
   // Create ClientWindow
+
+  WindowStyle client_style;
+  client_style.control_parent();
+
   mClientWindow = new ContainerControl(this, this,
                                        TEXT(""), 20, 20, Width, Height,
-                                       WindowStyle());
+                                       client_style);
   mClientWindow->SetBackColor(GetBackColor());
 
   mClientRect.top=0;
