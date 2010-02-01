@@ -63,7 +63,7 @@ using std::max;
 PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
                            ContainerWindow &_parent)
   :startTime(::GetTickCount()), status_messages(_status_messages),
-   parent(_parent), hidden(true),
+   parent(_parent),
    nvisible(0), block_ref(0)
 {
   for (unsigned i = 0; i < MAXMESSAGES; i++) {
@@ -109,18 +109,15 @@ void PopupMessage::Resize() {
   //  RECT mRc;
 
   if (size==0) {
-    if (!hidden) {
-      Unlock();
-      hide();
-      Lock();
+    Unlock();
+    hide();
+    Lock();
 
-      // animation
-      //      GetWindowRect(hWndMessageWindow, &mRc);
-      //      SetSourceRectangle(mRc);
-      //      mRc.top=0; mRc.bottom=0;
-      //      DrawWireRects(&mRc, 5);
-    }
-    hidden = true;
+    // animation
+    //      GetWindowRect(hWndMessageWindow, &mRc);
+    //      SetSourceRectangle(mRc);
+    //      mRc.top=0; mRc.bottom=0;
+    //      DrawWireRects(&mRc, 5);
   } else {
     Unlock();
 
@@ -153,7 +150,7 @@ void PopupMessage::Resize() {
       rthis.bottom = midy+h2;
     }
     /*
-    if (hidden) {
+    if (!is_visible) {
       RECT bigrect;
       GetWindowRect(hWndMapWindow, &bigrect);
       GetWindowRect(hWndMessageWindow, &mRc);
@@ -170,8 +167,6 @@ void PopupMessage::Resize() {
     show();
 
     Lock();
-
-    hidden = false;
   }
 
 }

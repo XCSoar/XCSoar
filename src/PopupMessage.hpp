@@ -91,7 +91,6 @@ private:
   ContainerWindow &parent;
   RECT rc; // maximum message size
   EditWindow window;
-  bool hidden;
 
   Mutex mutex;
   struct singleMessage messages[MAXMESSAGES];
