@@ -104,11 +104,10 @@ PopupMessage::on_mouse_down(int x, int y)
 }
 
 void PopupMessage::Resize() {
-  int size = _tcslen(msgText);
   RECT rthis;
   //  RECT mRc;
 
-  if (size==0) {
+  if (*msgText == _T('\0')) {
     Unlock();
     hide();
     Lock();
