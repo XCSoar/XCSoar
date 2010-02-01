@@ -53,6 +53,10 @@
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
 
+#ifdef HAVE_POSIX
+#include <unistd.h>
+#endif
+
 const struct LoggerImpl::LoggerPreTakeoffBuffer &
 LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
 {
@@ -289,7 +293,6 @@ void
 LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     const SETTINGS_COMPUTER &settings, const TCHAR *astrAssetNumber)
 {
-  HANDLE hFile;
   int i;
   TCHAR path[MAX_PATH];
 
@@ -357,12 +360,15 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 
     }
 
-    hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL,
-        CREATE_NEW, FILE_ATTRIBUTE_NORMAL, 0);
-    if (hFile != INVALID_HANDLE_VALUE) {
+    FILE *file = _tfopen(szLoggerFileName, _T("w"));
+    if (file != NULL) {
       // file did not already exist, and could be created
-      CloseHandle(hFile);
+      fclose(file);
+#ifdef HAVE_POSIX
+      _tunlink(szLoggerFileName);
+#else
       DeleteFile(szLoggerFileName);
+#endif
       break;
     }
   }

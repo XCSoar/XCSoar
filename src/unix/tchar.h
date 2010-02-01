@@ -74,6 +74,10 @@ typedef wchar_t TCHAR;
 #define _TEOF EOF
 #define _fgetts fgetws
 #define _stscanf swscanf
+
+#define _tremove _wremove
+#define _tunlink _wunlink
+
 #define _tcstok wcstok
 //#define _totupper XXX
 #define _itot _itow
@@ -123,6 +127,10 @@ typedef char TCHAR;
 #define _TEOF EOF
 #define _fgetts fgets
 #define _stscanf sscanf
+
+#define _tremove remove
+#define _tunlink unlink
+
 #define _tcstok strtok
 #define _totupper toupper
 #define _itot itoa
