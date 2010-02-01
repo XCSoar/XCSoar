@@ -85,6 +85,12 @@ public:
 #endif
   }
 
+  void control_parent() {
+#ifndef ENABLE_SDL
+    ex_style |= WS_EX_CONTROLPARENT;
+#endif
+  }
+
   void border() {
 #ifndef ENABLE_SDL
     style |= WS_BORDER;
