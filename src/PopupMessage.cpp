@@ -40,6 +40,7 @@ Copyright_License {
 
 #include "PopupMessage.hpp"
 #include "Protection.hpp"
+#include "Screen/VirtualCanvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
@@ -118,7 +119,9 @@ void PopupMessage::Resize() {
   } else {
     set_text(msgText);
 
-    SIZE tsize = parent.get_canvas().text_size(msgText);
+    VirtualCanvas canvas(1, 1);
+    canvas.select(MapWindowBoldFont);
+    SIZE tsize = canvas.text_size(msgText);
 
     int linecount = max((unsigned)nvisible, max((unsigned)1, get_row_count()));
 
