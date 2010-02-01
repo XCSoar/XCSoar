@@ -64,9 +64,7 @@ void MapWindow::RenderStart(Canvas &canvas, const RECT rc)
   // Calculate screen positions of the final glide groundline
   CalculateScreenPositionsGroundline();
 
-  if (BigZoom) {
-    BigZoom = false;
-  }
+  BigZoom = false;
 }
 
 /**
@@ -140,9 +138,7 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
       DrawTerrainAbove(canvas, rc, buffer_canvas);
     }
 
-    if (BigZoom) {
-      BigZoom = false;
-    }
+    BigZoom = false;
   }
 
   if (topology != NULL && SettingsMap().EnableTopology)
