@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Form/Frame.hpp"
+#include "Screen/VirtualCanvas.hpp"
 
 WndFrame::WndFrame(ContainerControl *Owner, const TCHAR *Name,
                    int X, int Y, int Width, int Height,
@@ -73,7 +74,7 @@ WndFrame::GetTextHeight()
   RECT rc = get_client_rect();
   ::InflateRect(&rc, -2, -2); // todo border width
 
-  Canvas &canvas = get_canvas();
+  VirtualCanvas canvas(1, 1);
   canvas.select(*GetFont());
   canvas.formatted_text(&rc, mCaption, mCaptionStyle | DT_CALCRECT);
 
