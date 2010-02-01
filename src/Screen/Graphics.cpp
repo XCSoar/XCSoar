@@ -133,6 +133,8 @@ void
 ScreenGraphics::Initialise(HINSTANCE hInstance,
     const SETTINGS_MAP &settings_map)
 {
+  /// @todo enhancement: support red/green color blind pilots with adjusted colour scheme
+
   int i;
 
   StartupStore(TEXT("Initialise graphics\n"));
@@ -247,7 +249,6 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
   hpFinalGlideBelow.set(IBLSCALE(1), Color(0xFF, 0xA0, 0xA0));
   hpFinalGlideBelowLandable.set(IBLSCALE(1), Color(255, 196, 0));
 
-  // TODO enhancement: support red/green Color blind
   hpFinalGlideAbove.set(IBLSCALE(1), Color(0xA0, 0xFF, 0xA0));
 
   hpSpeedSlow.set(IBLSCALE(1), Color::RED);
