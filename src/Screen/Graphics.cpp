@@ -233,7 +233,7 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
     hpAircraftBorder.set(IBLSCALE(1), Color::BLACK);
   }
 
-  hpWind.set(IBLSCALE(2), has_colors() ? Color::RED : Color::BLACK);
+  hpWind.set(IBLSCALE(2), Color::BLACK);
 
   hpWindThick.set(IBLSCALE(4), Color(255, 220, 220));
 
