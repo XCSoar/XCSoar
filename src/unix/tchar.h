@@ -111,6 +111,12 @@ typedef char TCHAR;
 #define _tcsncat strncat
 #define TEXT(x) x
 #define _T(x) x
+#define _TDIR DIR
+#define _topendir opendir
+#define _tclosedir closedir
+#define _treaddir readdir
+#define _tdirent dirent
+#define _tstat stat
 #define _tfopen fopen
 #define _fgetts fgets
 #define _stscanf sscanf
