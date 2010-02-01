@@ -377,37 +377,32 @@ private:
 };
 
 
-void
-FlightStatistics::ExpandToTrace(Chart &chart, const TracePointVector& trace) const
+static void
+DrawTrace(Chart &chart, 
+          const ChartProjection& proj,
+          const TracePointVector& trace,
+          Chart::Style style) 
 {
-  if (trace.empty())
-    return;
-
+  POINT last;
   for (TracePointVector::const_iterator it = trace.begin(); it != trace.end(); ++it) {
-    chart.ScaleXFromValue(it->get_location().Longitude);
-    chart.ScaleYFromValue(it->get_location().Latitude);
-  }
-}
+    POINT sc;
+    proj.LonLat2Screen(it->get_location(), sc);
 
-void
-FlightStatistics::DrawTrace(Chart &chart, const TracePointVector& trace,
-    unsigned style) const
-{
-  GEOPOINT last;
-  for (TracePointVector::const_iterator it = trace.begin(); it != trace.end(); ++it) {
     if (it != trace.begin()) {
-      chart.DrawLine(it->get_location().Longitude, it->get_location().Latitude,
-          last.Longitude, last.Latitude, (Chart::Style)style);
+      chart.StyleLine(sc, last, style);
     }
-    last = it->get_location();
+    last = sc;
   }
 }
 
 void
-FlightStatistics::RenderOLC(Canvas &canvas, const RECT rc,
-    const NMEA_INFO &nmea_info, const SETTINGS_COMPUTER &settings_computer,
-    const SETTINGS_MAP &settings_map, const TracePointVector& olc,
-    const TracePointVector& trace) const
+FlightStatistics::RenderOLC(Canvas &canvas, 
+                            const RECT rc,
+                            const NMEA_INFO &nmea_info, 
+                            const SETTINGS_COMPUTER &settings_computer,
+                            const SETTINGS_MAP &settings_map, 
+                            const TracePointVector& olc,
+                            const TracePointVector& trace) const
 {
   // note: braces used here just to delineate separate main steps of
   // this function.  It's useful to ensure things are done in the right
@@ -420,31 +415,14 @@ FlightStatistics::RenderOLC(Canvas &canvas, const RECT rc,
     return;
   }
 
+  ChartProjection proj(rc, olc, nmea_info.Location);
 
-  { // set scale
-    chart.ResetScale();
-    ExpandToTrace(chart, trace);
-    ExpandToTrace(chart, olc);
+  DrawTrace(chart, proj, trace, Chart::STYLE_MEDIUMBLACK);
+  DrawTrace(chart, proj, olc, Chart::STYLE_REDTHICK);
 
-    chart.ScaleXFromValue(nmea_info.Location.Longitude);
-    chart.ScaleYFromValue(nmea_info.Location.Latitude);
-
-    chart.ScaleMakeSquare();
-  }
-
-  { // background
-    chart.DrawXGrid(1.0, 0, Chart::STYLE_THINDASHPAPER, 1.0, false);
-    chart.DrawYGrid(1.0, 0, Chart::STYLE_THINDASHPAPER, 1.0, false);
-  }
-
-  { // draw contents
-    DrawTrace(chart, trace, (unsigned)Chart::STYLE_MEDIUMBLACK);
-    DrawTrace(chart, olc, (unsigned)Chart::STYLE_REDTHICK);
-  }
-
-  { // draw aircraft on top
-    chart.DrawLabel(TEXT("+"), nmea_info.Location.Longitude,
-        nmea_info.Location.Latitude);
+  { /// @todo draw aircraft on top
+//    chart.DrawLabel(TEXT("+"), nmea_info.Location.Longitude,
+//        nmea_info.Location.Latitude);
   }
 }
 
@@ -458,6 +436,11 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
                              const TracePointVector& trace) const
 {
   Chart chart(canvas, rc);
+
+  if (!task.check_task()) {
+    chart.DrawNoData();
+    return;
+  }
 
   BufferCanvas buffer;
   BufferCanvas stencil;
@@ -474,6 +457,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
   ::RenderTask dv(helper, tpv);
   task.Accept(dv); 
 }
+
 
 void
 FlightStatistics::RenderTemperature(Canvas &canvas, const RECT rc) const
@@ -983,7 +967,7 @@ void
 FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
 {
 #ifdef OLD_TASK
-  if (!task.Valid()) {
+  if (!task.check_task()) {
     _stprintf(sTmp, gettext(TEXT("No task")));
   } else {
     TCHAR timetext1[100];

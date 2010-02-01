@@ -127,9 +127,6 @@ public:
   void CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const;
 
 private:
-  void ExpandToTrace(Chart &chart, const TracePointVector& trace) const;
-  void DrawTrace(Chart &chart, const TracePointVector& trace, unsigned style) const;
-
   LeastSquares ThermalAverage;
   LeastSquares Wind_x;
   LeastSquares Wind_y;
