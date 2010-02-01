@@ -629,7 +629,7 @@ LoggerImpl::CheckDeclaration(void)
 }
 
 static FILETIME
-LogFileDate(const NMEA_INFO &gps_info, TCHAR* filename)
+LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
 {
   FILETIME ft;
   ft.dwLowDateTime = 0;
@@ -703,7 +703,7 @@ LogFileDate(const NMEA_INFO &gps_info, TCHAR* filename)
 
 static bool
 LogFileIsOlder(const NMEA_INFO &gps_info,
-    TCHAR *oldestname, TCHAR *thisname)
+               const TCHAR *oldestname, const TCHAR *thisname)
 {
   FILETIME ftold = LogFileDate(gps_info, oldestname);
   FILETIME ftnew = LogFileDate(gps_info, thisname);
@@ -717,7 +717,7 @@ LogFileIsOlder(const NMEA_INFO &gps_info,
  * @return True if a file was found and deleted, False otherwise
  */
 static bool
-DeleteOldestIGCFile(const NMEA_INFO &gps_info, TCHAR *pathname)
+DeleteOldestIGCFile(const NMEA_INFO &gps_info, const TCHAR *pathname)
 {
   HANDLE hFind; // file handle
   WIN32_FIND_DATA FindFileData;
