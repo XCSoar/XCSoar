@@ -66,8 +66,9 @@ static void ShowCursor(WndProperty * wp)
     if (cursor < 1) {
       iCursorX=0;
     }else {
-      wp->get_canvas().select(*wp->GetFont());
-      iCursorX = wp->get_canvas().text_width(edittext);
+      VirtualCanvas canvas(1, 1);
+      canvas.select(*wp->GetFont());
+      iCursorX = canvas.text_width(edittext);
     }
     wb->move(iCursorX, wp->get_position().bottom - Layout::FastScale(3));
   }
