@@ -84,6 +84,7 @@ PopupMessage::set(const RECT _rc)
   style.center();
   style.multiline();
   style.read_only();
+  style.hide();
 
   EditWindow::set(parent, rc.left, rc.top,
                   rc.right - rc.left, rc.bottom - rc.top,
