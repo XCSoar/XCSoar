@@ -108,9 +108,7 @@ void PopupMessage::Resize() {
   //  RECT mRc;
 
   if (*msgText == _T('\0')) {
-    Unlock();
     hide();
-    Lock();
 
     // animation
     //      GetWindowRect(hWndMessageWindow, &mRc);
@@ -118,8 +116,6 @@ void PopupMessage::Resize() {
     //      mRc.top=0; mRc.bottom=0;
     //      DrawWireRects(&mRc, 5);
   } else {
-    Unlock();
-
     set_text(msgText);
 
     SIZE tsize = parent.get_canvas().text_size(msgText);
@@ -164,8 +160,6 @@ void PopupMessage::Resize() {
          rthis.bottom - rthis.top);
     bring_to_top();
     show();
-
-    Lock();
   }
 
 }
@@ -229,13 +223,15 @@ bool PopupMessage::Render() {
   static bool doresize= false;
 
   if (!changed) {
+    Unlock();
+
     if (doresize) {
       doresize = false;
       // do one extra resize after display so we are sure we get all
       // the text (workaround bug in getlinecount)
       Resize();
     }
-    Unlock(); return false;
+    return false;
   }
 
   // ok, we've changed the visible messages, so need to regenerate the
@@ -258,9 +254,11 @@ bool PopupMessage::Render() {
     nvisible++;
 
   }
-  Resize();
 
   Unlock();
+
+  Resize();
+
   return true;
 }
 
