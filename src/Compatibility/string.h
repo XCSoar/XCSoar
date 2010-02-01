@@ -63,7 +63,6 @@ _strupr(char *p)
   #define _istalnum isalnum
 #endif
 
-#define towupper toupper
 #define _strnicmp strncasecmp
 #define _strdup strdup
 

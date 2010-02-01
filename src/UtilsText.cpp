@@ -553,7 +553,7 @@ ConvToUpper(TCHAR *str)
     return;
 
   for (; *str; ++str)
-    *str = towupper(*str);
+    *str = _totupper(*str);
 }
 
 bool
