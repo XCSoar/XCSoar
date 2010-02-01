@@ -45,6 +45,7 @@
 #include "Asset.hpp"
 #include "UtilsText.hpp"
 #include "UtilsSystem.hpp"
+#include "UtilsFile.hpp"
 #include "LocalPath.hpp"
 #include "Device/device.hpp"
 #include "Device/Descriptor.hpp"
@@ -57,6 +58,9 @@
 #include <unistd.h>
 #endif
 #include <time.h>
+#include <dirent.h>
+#include <sys/types.h>
+#include <tchar.h>
 
 const struct LoggerImpl::LoggerPreTakeoffBuffer &
 LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
@@ -695,43 +699,29 @@ LogFileIsOlder(const NMEA_INFO &gps_info,
 static bool
 DeleteOldestIGCFile(const NMEA_INFO &gps_info, const TCHAR *pathname)
 {
-  HANDLE hFind; // file handle
-  WIN32_FIND_DATA FindFileData;
   TCHAR oldestname[MAX_PATH];
-  TCHAR searchpath[MAX_PATH];
   TCHAR fullname[MAX_PATH];
-  _stprintf(searchpath, _T("%s*"), pathname);
 
-  hFind = FindFirstFile(searchpath, &FindFileData); // find the first file
-  if(hFind == INVALID_HANDLE_VALUE)
+  _TDIR *dir = _topendir(pathname);
+  if (dir == NULL)
     return false;
 
-  if(!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-    if (!MatchesExtension(FindFileData.cFileName, _T(".igc"))
-        && !MatchesExtension(FindFileData.cFileName, _T(".IGC")))
-      return false;
+  _tdirent *ent;
+  while ((ent = _treaddir(dir)) != NULL) {
+    if (!MatchesExtension(ent->d_name, _T(".igc")) &&
+        !MatchesExtension(ent->d_name, _T(".IGC")))
+      continue;
 
-      // do something...
-      _tcscpy(oldestname, FindFileData.cFileName);
+    _tcscpy(fullname, pathname);
+    _tcscpy(fullname, ent->d_name);
+
+    if (FileExists(fullname) &&
+        LogFileIsOlder(gps_info, oldestname, ent->d_name))
+      // we have a new oldest name
+      _tcscpy(oldestname, ent->d_name);
   }
 
-  bool bSearch = true;
-  // until we scanned all files
-  while (bSearch) {
-    if (FindNextFile(hFind, &FindFileData)) {
-      if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-          && (MatchesExtension(FindFileData.cFileName, _T(".igc"))
-              || (MatchesExtension(FindFileData.cFileName, _T(".IGC"))))) {
-        if (LogFileIsOlder(gps_info, oldestname, FindFileData.cFileName)) {
-          _tcscpy(oldestname, FindFileData.cFileName);
-          // we have a new oldest name
-        }
-      }
-    } else {
-      bSearch = false;
-    }
-  }
-  FindClose(hFind); // closing file handle
+  _tclosedir(dir);
 
   // now, delete the file...
   _stprintf(fullname, _T("%s%s"), pathname, oldestname);
