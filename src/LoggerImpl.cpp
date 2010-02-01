@@ -56,6 +56,7 @@
 #ifdef HAVE_POSIX
 #include <unistd.h>
 #endif
+#include <time.h>
 
 const struct LoggerImpl::LoggerPreTakeoffBuffer &
 LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
@@ -609,15 +610,10 @@ LoggerImpl::CheckDeclaration(void)
   }
 }
 
-static FILETIME
+static time_t
 LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
 {
-  FILETIME ft;
-  ft.dwLowDateTime = 0;
-  ft.dwHighDateTime = 0;
-
   TCHAR asset[MAX_PATH];
-  SYSTEMTIME st;
   unsigned short year, month, day, num;
   int matches;
   // scan for long filename
@@ -630,15 +626,15 @@ LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
                     &num);
 
   if (matches == 5) {
-    st.wYear = year;
-    st.wMonth = month;
-    st.wDay = day;
-    st.wHour = num;
-    st.wMinute = 0;
-    st.wSecond = 0;
-    st.wMilliseconds = 0;
-    SystemTimeToFileTime(&st, &ft);
-    return ft;
+    struct tm tm;
+    tm.tm_sec = 0;
+    tm.tm_min = 0;
+    tm.tm_hour = num;
+    tm.tm_mday = day;
+    tm.tm_mon = month - 1;
+    tm.tm_year = year - 1900;
+    tm.tm_isdst = -1;
+    return mktime(&tm);
   }
 
   TCHAR cyear, cmonth, cday, cflight;
@@ -659,15 +655,16 @@ LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
     if (yearthis > iyear) {
       yearthis -= 10;
     }
-    st.wYear = yearthis;
-    st.wMonth = IGCCharToNum(cmonth);
-    st.wDay = IGCCharToNum(cday);
-    st.wHour = IGCCharToNum(cflight);
-    st.wMinute = 0;
-    st.wSecond = 0;
-    st.wMilliseconds = 0;
-    SystemTimeToFileTime(&st, &ft);
-    return ft;
+
+    struct tm tm;
+    tm.tm_sec = 0;
+    tm.tm_min = 0;
+    tm.tm_hour = IGCCharToNum(cflight);
+    tm.tm_mday = IGCCharToNum(cday);
+    tm.tm_mon = IGCCharToNum(cmonth) - 1;
+    tm.tm_year = yearthis - 1900;
+    tm.tm_isdst = -1;
+    return mktime(&tm);
     /*
       YMDCXXXF.IGC
       Y: Year, 0 to 9 cycling every 10 years
@@ -679,16 +676,14 @@ LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
     */
   }
 
-  return ft;
+  return 0;
 }
 
 static bool
 LogFileIsOlder(const NMEA_INFO &gps_info,
                const TCHAR *oldestname, const TCHAR *thisname)
 {
-  FILETIME ftold = LogFileDate(gps_info, oldestname);
-  FILETIME ftnew = LogFileDate(gps_info, thisname);
-  return (CompareFileTime(&ftold, &ftnew) > 0);
+  return LogFileDate(gps_info, oldestname) > LogFileDate(gps_info, thisname);
 }
 
 /**
