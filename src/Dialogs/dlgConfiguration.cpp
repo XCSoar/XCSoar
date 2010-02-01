@@ -243,7 +243,7 @@ static void OnSetupDeviceAClicked(WindowControl * Sender){
   // this is a hack to get the dialog to retain focus because
   // the progress dialog in the vario configuration somehow causes
   // focus problems
-  wf->FocusNext(NULL);
+  Sender->set_focus();
 }
 
 
@@ -255,7 +255,7 @@ static void OnSetupDeviceBClicked(WindowControl * Sender){
   // this is a hack to get the dialog to retain focus because
   // the progress dialog in the vario configuration somehow causes
   // focus problems
-  wf->FocusNext(NULL);
+  Sender->set_focus();
 }
 
 static void

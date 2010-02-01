@@ -127,20 +127,6 @@ WindowControl::~WindowControl(void)
   }
 }
 
-Window *
-WindowControl::GetCanFocus(bool forward)
-{
-  (void)forward;
-
-  if (!is_visible())
-    return NULL;
-
-  if (mCanFocus && !mReadOnly)
-    return this;
-
-  return NULL;
-}
-
 void
 WindowControl::FilterAdvanced(bool advanced)
 {
@@ -417,18 +403,6 @@ WindowControl::on_unhandled_key(unsigned key_code)
 {
   if (mOwner != NULL && mOwner->on_unhandled_key(key_code))
     return true;
-
-  if (mOwner != NULL && mHasFocus) {
-    switch (key_code) {
-    case VK_UP:
-      mOwner->FocusPrev(this);
-      return true;
-
-    case VK_DOWN:
-      mOwner->FocusNext(this);
-      return true;
-    }
-  }
 
   return false;
 }

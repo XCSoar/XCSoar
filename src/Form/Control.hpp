@@ -130,11 +130,7 @@ public:
    * @return True if the Control is focused at the moment, False otherwise
    */
   bool GetFocused(void) { return mHasFocus; }
-  /**
-   * Checks whether the Control can be focused and if so returns itself
-   * @return NULL if the Control can not be focused, itself otherwise
-   */
-  virtual Window *GetCanFocus(bool forward);
+
   /**
    * If the given Value is true, the Control will be able to get focused
    * @param Value Whether the Control can be focused or not

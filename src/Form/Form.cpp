@@ -209,8 +209,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   oldFocusHwnd = ::GetFocus();
 #endif /* !ENABLE_SDL */
   set_focus();
-
-  FocusNext(NULL);
+  focus_first_control();
 
 #ifndef ENABLE_SDL
   bool hastimed = false;
@@ -422,6 +421,15 @@ WndForm::on_unhandled_key(unsigned key_code)
   switch (key_code) {
   case VK_ESCAPE:
     SetModalResult(mrCancel);
+    return true;
+
+  case VK_UP:
+    focus_previous_control();
+    return true;
+
+  case VK_DOWN:
+  case VK_TAB:
+    focus_next_control();
     return true;
   }
 

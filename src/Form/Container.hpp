@@ -97,23 +97,11 @@ public:
   }
 
   /**
-   * Checks whether the ContainerControl or any of its ClientControls
-   * can have the focus and returns the Window of the first one that can.
-   * @param forward Searches forward if true, backward if false
-   * @return see above
-   */
-  virtual Window *GetCanFocus(bool forward);
-
-  /**
    * Shows/Hides the ClientControls depending on the given value of advanced and
    * whether their caption includes an asterisk.
    * @param advanced True if advanced mode activated
    */
   virtual void FilterAdvanced(bool advanced);
-
-public:
-  Window *FocusNext(WindowControl *Sender);
-  Window *FocusPrev(WindowControl *Sender);
 };
 
 #endif

@@ -213,16 +213,6 @@ WndProperty::~WndProperty(void)
   }
 }
 
-Window *
-WndProperty::GetCanFocus(bool forward)
-{
-  Window *w = WindowControl::GetCanFocus(forward);
-  if (w == this)
-    return &edit;
-
-  return w;
-}
-
 void
 WndProperty::SetText(const TCHAR *Value)
 {
