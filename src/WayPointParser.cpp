@@ -590,48 +590,50 @@ ReadWaypoints(Waypoints &way_points, const RasterTerrain *terrain)
   way_points.optimise();
 }
 
+/**
+ * This functions checks if the home, alternate 1/2 and teamcode waypoint
+ * indices exist and if necessary tries to find new ones in the waypoint list
+ * @param way_points Waypoint list
+ * @param terrain RasterTerrain (for placing the aircraft
+ * in the middle of the terrain if no home was found)
+ * @param settings SETTING_COMPUTER (for determining the
+ * special waypoint indices)
+ * @param reset This should be true if the waypoint file was changed,
+ * it resets all special waypoints indices
+ * @param set_location If true, the SetStartupLocation function will be called
+ */
 void
 SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
         SETTINGS_COMPUTER &settings,
         const bool reset, const bool set_location)
 {
+  // @todo: call this on file change
   StartupStore(TEXT("SetHome\n"));
 
   // check invalid home waypoint or forced reset due to file change
-  // VENTA3
   if (reset || way_points.empty() ||
       !way_points.lookup_id(settings.HomeWaypoint)) {
-    settings.HomeWaypoint = -1;
-  }
-
-  // VENTA3 -- reset Alternates
-  if (reset
-      || !way_points.lookup_id(settings.Alternate1)
-      || !way_points.lookup_id(settings.Alternate2)) {
-    settings.Alternate1= -1;
-    settings.Alternate2= -1;
-  }
-
-  // check invalid task ref waypoint or forced reset due to file change
-  if (reset || !way_points.lookup_id(settings.TeamCodeRefWaypoint)) 
-    settings.TeamCodeRefWaypoint = -1;
-
-  if (!way_points.lookup_id(settings.HomeWaypoint)) {
     // search for home in waypoint list, if we don't have a home
     settings.HomeWaypoint = -1;
 
-    if (settings.HomeWaypoint == -1) {
-      const Waypoint* wp = way_points.find_home();
-      if (wp) {
-        settings.HomeWaypoint = wp->id;
-      }
-    }
+    const Waypoint* wp = way_points.find_home();
+    if (wp)
+      settings.HomeWaypoint = wp->id;
   }
 
-  // set team code reference waypoint if we don't have one
-  if (settings.TeamCodeRefWaypoint == -1)
-    settings.TeamCodeRefWaypoint = settings.HomeWaypoint;
+  // reset Alternates
+  if (reset || way_points.empty() ||
+      !way_points.lookup_id(settings.Alternate1) ||
+      !way_points.lookup_id(settings.Alternate2)) {
+    settings.Alternate1 = -1;
+    settings.Alternate2 = -1;
+  }
 
+  // check invalid task ref waypoint or forced reset due to file change
+  if (reset || way_points.empty() ||
+      !way_points.lookup_id(settings.TeamCodeRefWaypoint))
+    // set team code reference waypoint if we don't have one
+    settings.TeamCodeRefWaypoint = settings.HomeWaypoint;
 
   if (set_location) {
     if (const Waypoint *wp = way_points.lookup_id(settings.HomeWaypoint)) {
