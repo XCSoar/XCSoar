@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 
 // TARGET STUFF
 

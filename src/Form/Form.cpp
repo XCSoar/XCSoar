@@ -41,7 +41,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "Asset.hpp"
 #include "Interface.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Screen/Animation.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"

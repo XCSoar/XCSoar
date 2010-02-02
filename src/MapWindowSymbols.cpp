@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"

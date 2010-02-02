@@ -45,7 +45,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Math/Units.h"
 #include "MainWindow.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Components.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 

@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Screen/Graphics.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Dialogs.h"

@@ -39,7 +39,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Interface.hpp"
 #include "Dialogs.h"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "InputEvents.h"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"

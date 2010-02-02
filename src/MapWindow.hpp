@@ -35,8 +35,9 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_MAPWINDOW_H)
-#define XCSOAR_MAPWINDOW_H
+
+#ifndef XCSOAR_MAP_WINDOW_HPP
+#define XCSOAR_MAP_WINDOW_HPP
 
 #include "MapWindowProjection.hpp"
 #include "MapWindowTimer.hpp"

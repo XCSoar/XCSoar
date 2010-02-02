@@ -40,7 +40,7 @@ Copyright_License {
 #define XCSOAR_MAIN_WINDOW_HXX
 
 #include "Screen/SingleWindow.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "PopupMessage.hpp"
 
 class GaugeVario;

@@ -44,7 +44,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"
 #include "DataField/Base.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
 

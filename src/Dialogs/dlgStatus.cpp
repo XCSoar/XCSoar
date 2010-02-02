@@ -49,7 +49,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "LocalTime.hpp"
 #include "MainWindow.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "GlideComputer.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"

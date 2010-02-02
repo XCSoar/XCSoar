@@ -45,7 +45,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Calculations.h"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Math/Geometry.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"

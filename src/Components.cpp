@@ -64,7 +64,7 @@ Copyright_License {
 #include "AirfieldDetails.h"
 #include "Screen/Fonts.hpp"
 #include "DeviceBlackboard.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Marks.h"
 #include "Device/device.hpp"
 #include "TopologyStore.h"

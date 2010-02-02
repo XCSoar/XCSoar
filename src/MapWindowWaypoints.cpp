@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Screen/Graphics.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"

@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "DrawThread.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"

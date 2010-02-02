@@ -64,7 +64,7 @@ Copyright_License {
 #include "FlarmCalculations.h"
 #include "UtilsSystem.hpp"
 #include "MainWindow.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Defines.h"
 #include "Components.hpp"
 #include "StringUtil.hpp"

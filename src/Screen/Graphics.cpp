@@ -49,7 +49,7 @@ Copyright_License {
 #include "SettingsAirspace.hpp"
 #include "Units.hpp"
 #include "Screen/LabelBlock.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "resource.h"
 
 #define NUMSNAILRAMP 6

@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Task/TaskManager.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"

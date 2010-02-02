@@ -152,7 +152,7 @@ PopupAnalysis()
 
 
 #include "Interface.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Waypoint/Waypoints.hpp"
 
 /**

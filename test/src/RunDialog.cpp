@@ -43,7 +43,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "InputEvents.h"
 #include "PopupMessage.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "StatusMessage.hpp"
 #include "Asset.hpp"
 

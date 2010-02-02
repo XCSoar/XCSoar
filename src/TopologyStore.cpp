@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "TopologyStore.h"
 #include "Protection.hpp"
-#include "MapWindow.h"
+#include "MapWindow.hpp"
 #include "Topology.h"
 #include "Dialogs.h"
 #include "Language.hpp"
