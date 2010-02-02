@@ -60,9 +60,9 @@ public:
   RenderTaskPointMap(MapDrawHelper &_helper, 
                      RenderObservationZone &_ozv,
                      const bool draw_bearing,
-                     const NMEA_INFO &state,
+                     const GEOPOINT location,
                      MapWindow& map):
-    RenderTaskPoint(_helper, _ozv, draw_bearing, state),
+    RenderTaskPoint(_helper, _ozv, draw_bearing, location),
     m_map(map) {};
 
 protected:
@@ -96,7 +96,7 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
     MapDrawHelper helper(canvas, buffer, stencil_canvas, *this, rc,
                          SettingsMap());
     RenderObservationZone ozv(helper);
-    RenderTaskPointMap tpv(helper, ozv, draw_bearing, Basic(), *this);
+    RenderTaskPointMap tpv(helper, ozv, draw_bearing, Basic().Location, *this);
     RenderTask dv(tpv);
     task->Accept(dv); 
   }

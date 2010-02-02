@@ -11,7 +11,7 @@
 RenderTaskPoint::RenderTaskPoint(MapDrawHelper &_helper,
                                  RenderObservationZone &_ozv,
                                  const bool draw_bearing,
-                                 const NMEA_INFO &state)
+                                 const GEOPOINT location)
   :MapDrawHelper(_helper),
    m_draw_bearing(draw_bearing),
    pen_leg_active(Pen::DASH, IBLSCALE(2), MapGfx.TaskColor),
@@ -22,7 +22,7 @@ RenderTaskPoint::RenderTaskPoint(MapDrawHelper &_helper,
    ozv(_ozv),
    m_active_index(0),
    m_layer(0),
-   m_state(state)
+   m_location(location)
 {
 }
 
@@ -39,7 +39,7 @@ RenderTaskPoint::Visit(const UnorderedTaskPoint& tp)
   buffer_render_start();
   
   if (m_layer == 1) {
-    draw_task_line(m_state.Location, tp.get_location_remaining());
+    draw_task_line(m_location, tp.get_location_remaining());
   }
   if (m_layer == 3) {
     draw_bearing(tp);
@@ -176,7 +176,7 @@ RenderTaskPoint::draw_bearing(const TaskPoint &tp)
     return;
   
   m_buffer.select(MapGfx.hpBearing);
-  draw_great_circle(m_buffer, m_state.Location, 
+  draw_great_circle(m_buffer, m_location,
                     tp.get_location_remaining());
 }
 

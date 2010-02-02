@@ -42,7 +42,6 @@ Copyright_License {
 #include "MapDrawHelper.hpp"
 
 class RenderObservationZone;
-class NMEA_INFO;
 
 class RenderTaskPoint:
   public TaskPointVisitor,
@@ -52,7 +51,7 @@ public:
   RenderTaskPoint(MapDrawHelper &_helper, 
                   RenderObservationZone &_ozv,
                   const bool draw_bearing,
-                  const NMEA_INFO &state);
+                  const GEOPOINT location);
 
   void Visit(const UnorderedTaskPoint& tp);
   void Visit(const StartPoint& tp);
@@ -87,7 +86,7 @@ protected:
   RenderObservationZone &ozv;
   unsigned m_active_index;
   unsigned m_layer;
-  const NMEA_INFO& m_state;
+  const GEOPOINT m_location;
 };
 
 

@@ -453,7 +453,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
   MapDrawHelper helper(canvas, buffer, stencil, proj, rc,
                        settings_map);
   RenderObservationZone ozv(helper);
-  RenderTaskPoint tpv(helper, ozv, false, nmea_info);
+  RenderTaskPoint tpv(helper, ozv, false, nmea_info.Location);
   ::RenderTask dv(tpv);
   task.Accept(dv); 
 }
