@@ -40,13 +40,13 @@
 GEOPOINT 
 GEOPOINT::parametric(const GEOPOINT &delta, const fixed t) const
 {
-  return (*this)+delta*t;
+  return (*this) + delta * t;
 }
 
 GEOPOINT 
 GEOPOINT::interpolate(const GEOPOINT &end, const fixed t) const
 {
-  return (*this)+(end-(*this))*t;
+  return (*this) + (end - (*this)) * t;
 }
 
 fixed
@@ -77,13 +77,12 @@ GEOPOINT::equals(const GEOPOINT &other) const
 bool 
 GEOPOINT::sort(const GEOPOINT &sp) const
 {
-  if (Longitude<sp.Longitude) {
+  if (Longitude < sp.Longitude)
     return false;
-  } else if (Longitude==sp.Longitude) {
-    return Latitude>sp.Latitude;
-  } else {
+  else if (Longitude == sp.Longitude)
+    return Latitude > sp.Latitude;
+  else
     return true;
-  }
 }
 
 
@@ -91,15 +90,15 @@ GEOPOINT
 GEOPOINT::intermediate_point(const GEOPOINT &destination, 
                              const fixed distance) const
 {
-/* slow way */
+  /* slow way */
   return ::IntermediatePoint(*this, destination, distance);
-/* fast way (linear interpolation)
+  /* fast way (linear interpolation)
   GEOPOINT end = end_point(source);
-  if (Distance>fixed_zero) {
-    fixed t = distance/Distance;
-    return source+(end-source)*t;
+  if (Distance > fixed_zero) {
+    fixed t = distance / Distance;
+    return source + (end - source) * t;
   } else {
     return source;
   }
-*/
+  */
 }
