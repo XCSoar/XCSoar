@@ -93,7 +93,9 @@ DeviceBlackboard::Initialise()
   // Set GPS assumed time to system time
   SYSTEMTIME pda_time;
   GetSystemTime(&pda_time);
-  gps_info.Time  = pda_time.wHour*3600+pda_time.wMinute*60+pda_time.wSecond;
+  gps_info.Time = pda_time.wHour * 3600 +
+                  pda_time.wMinute * 60 +
+                  pda_time.wSecond;
   gps_info.Year  = pda_time.wYear;
   gps_info.Month = pda_time.wMonth;
   gps_info.Day	 = pda_time.wDay;
@@ -119,15 +121,14 @@ DeviceBlackboard::Initialise()
  * @param alt New altitude
  */
 void
-DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
-				     const double alt)
+DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt)
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().Location = loc;
   SetBasic().GPSAltitude = alt;
 
-  /* enable the "Simulator" flag because this value was not provided
-     by a real GPS */
+  // enable the "Simulator" flag because this value was not provided
+  // by a real GPS
   SetBasic().Simulator = true;
 }
 
