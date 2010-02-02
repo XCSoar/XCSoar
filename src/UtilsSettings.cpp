@@ -97,7 +97,8 @@ void SettingsEnter() {
 }
 
 void SettingsLeave() {
-  if (!globalRunningEvent.test()) return;
+  if (!globalRunningEvent.test())
+    return;
 
   XCSoarInterface::main_window.map.set_focus();
 
@@ -117,7 +118,7 @@ void SettingsLeave() {
   if (DevicePortChanged) { printf("DevicePortChanged\n"); }
 */
 
-  if(MapFileChanged) {
+  if (MapFileChanged) {
     AirspaceFileChanged = true;
     AirfieldFileChanged = true;
     WaypointFileChanged = true;
@@ -125,9 +126,8 @@ void SettingsLeave() {
     TopologyFileChanged = true;
   }
 
-  if((WaypointFileChanged) || (TerrainFileChanged) || (AirfieldFileChanged)) {
-
-    XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
+  if ((WaypointFileChanged) || (TerrainFileChanged) || (AirfieldFileChanged)) {
+    XCSoarInterface::CreateProgressDialog(gettext(_T("Loading Terrain File...")));
     XCSoarInterface::SetProgressStepSize(2);
 
     // re-load terrain
@@ -152,7 +152,7 @@ void SettingsLeave() {
     topology->Open();
   }
 
-  if(AirspaceFileChanged) {
+  if (AirspaceFileChanged) {
     CloseAirspace(airspace_database, airspace_warning);
     ReadAirspace(airspace_database, &terrain, XCSoarInterface::Basic().pressure);
   }
@@ -168,26 +168,26 @@ void SettingsLeave() {
       || AirspaceFileChanged
       || WaypointFileChanged
       || TerrainFileChanged
-      || TopologyFileChanged
-      ) {
+      || TopologyFileChanged) {
     XCSoarInterface::CloseProgressDialog();
     XCSoarInterface::main_window.map.set_focus();
   }
 
   calculation_thread->resume();
 
-  if(DevicePortChanged) {
+  if (DevicePortChanged)
     devRestart();
-  }
 
   draw_thread->resume();
-  // allow map and calculations threads to continue on their merry way
+  // allow map and calculations threads to continue
 }
 
-
-void SystemConfiguration(void) {
-  if (!is_simulator() && XCSoarInterface::LockSettingsInFlight
-      && XCSoarInterface::Basic().Flying) {
+void
+SystemConfiguration()
+{
+  if (!is_simulator() &&
+      XCSoarInterface::LockSettingsInFlight &&
+      XCSoarInterface::Basic().Flying) {
     Message::AddMessage(TEXT("Settings locked in flight"));
     return;
   }
