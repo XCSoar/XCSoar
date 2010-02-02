@@ -58,7 +58,7 @@ TimeLocal(int localtime)
 int
 DetectCurrentTime(const NMEA_INFO *Basic)
 {
-  int localtime = (int)(Basic->Time);
+  int localtime = (int)(Basic->aircraft.Time);
   return TimeLocal(localtime);
 }
 

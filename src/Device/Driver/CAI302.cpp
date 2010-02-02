@@ -554,9 +554,9 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
   NMEAParser::ExtractParameter(String,ctemp,1);
   GPS_INFO->ExternalWindAvailable = true;
-  GPS_INFO->WindSpeed = _tcstod(ctemp, NULL) / 10.0;
+  GPS_INFO->aircraft.WindSpeed = _tcstod(ctemp, NULL) / 10.0;
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->WindDirection = _tcstod(ctemp, NULL);
+  GPS_INFO->aircraft.WindDirection = _tcstod(ctemp, NULL);
 
 
   NMEAParser::ExtractParameter(String,ctemp,4);
@@ -573,11 +573,12 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
   NMEAParser::ExtractParameter(String,ctemp,6);
   GPS_INFO->AirspeedAvailable = true;
-  GPS_INFO->TrueAirspeed = _tcstod(ctemp, NULL) / 100.0;
+  GPS_INFO->aircraft.TrueAirspeed = _tcstod(ctemp, NULL) / 100.0;
 
   NMEAParser::ExtractParameter(String,ctemp,7);
   GPS_INFO->VarioAvailable = true;
-  GPS_INFO->Vario = ((_tcstod(ctemp, NULL) - 200.0) / 10.0) * KNOTSTOMETRESSECONDS;
+  GPS_INFO->aircraft.Vario = ((_tcstod(ctemp, NULL) - 200.0) / 10.0)
+    * KNOTSTOMETRESSECONDS;
 
   NMEAParser::ExtractParameter(String,ctemp,10);
   GPS_INFO->MacCready = (_tcstod(ctemp, NULL) / 10.0) * KNOTSTOMETRESSECONDS;

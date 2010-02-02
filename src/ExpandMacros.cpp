@@ -267,7 +267,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckReplay)"))) {
-    if (!Basic().Replay && Basic().MovementDetected) {
+    if (!Basic().gps.Replay && Basic().gps.MovementDetected) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckReplay)"), TEXT(""), Size);
@@ -280,7 +280,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckSettingsLockout)"))) {
     if (!is_simulator() && XCSoarInterface::LockSettingsInFlight &&
-        Basic().Flying) {
+        Basic().aircraft.Flying) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckSettingsLockout)"), TEXT(""), Size);

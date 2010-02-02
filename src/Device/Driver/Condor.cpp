@@ -145,8 +145,9 @@ cLXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   NMEAParser::ExtractParameter(String,ctemp,2);
   fixed alt(_tcstod(ctemp, NULL));
 
-  GPS_INFO->IndicatedAirspeed = airspeed/GPS_INFO->pressure.AirDensityRatio(alt);
-  GPS_INFO->TrueAirspeed = airspeed;
+  GPS_INFO->aircraft.IndicatedAirspeed =
+    airspeed/GPS_INFO->pressure.AirDensityRatio(alt);
+  GPS_INFO->aircraft.TrueAirspeed = airspeed;
 
   if (enable_baro) {
     GPS_INFO->BaroAltitudeAvailable = true;
@@ -154,7 +155,7 @@ cLXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   }
 
   NMEAParser::ExtractParameter(String,ctemp,3);
-  GPS_INFO->Vario = _tcstod(ctemp, NULL);
+  GPS_INFO->aircraft.Vario = _tcstod(ctemp, NULL);
 
   GPS_INFO->AirspeedAvailable = true;
   GPS_INFO->VarioAvailable = true;

@@ -100,7 +100,8 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 1:
-    Value = Units::ToUserUnit(Basic().AltitudeAGL, Units::UserAltitudeUnit);
+    Value = Units::ToUserUnit(Basic().aircraft.AltitudeAGL,
+                              Units::UserAltitudeUnit);
     Valid = Calculated().TerrainValid;
     break;
 
@@ -135,7 +136,8 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 6:
-    Value = Units::ToUserUnit(Basic().Speed, Units::UserHorizontalSpeedUnit);
+    Value = Units::ToUserUnit(Basic().aircraft.Speed,
+                              Units::UserHorizontalSpeedUnit);
     break;
 
   case 7:
@@ -243,19 +245,21 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 23:
-    Value = Basic().TrackBearing;
+    Value = Basic().aircraft.TrackBearing;
     break;
 
   case 24:
-    Value = Units::ToUserUnit(Basic().Vario, Units::UserVerticalSpeedUnit);
+    Value = Units::ToUserUnit(Basic().aircraft.Vario,
+                              Units::UserVerticalSpeedUnit);
     break;
 
   case 25:
-    Value = Units::ToUserUnit(Basic().WindSpeed, Units::UserWindSpeedUnit);
+    Value = Units::ToUserUnit(Basic().aircraft.WindSpeed,
+                              Units::UserWindSpeedUnit);
     break;
 
   case 26:
-    Value = Basic().WindDirection;
+    Value = Basic().aircraft.WindDirection;
     break;
 
   case 28:
@@ -286,7 +290,7 @@ InfoBoxFormatter::AssignValue(int i)
 
   case 32:
     Valid = Basic().AirspeedAvailable;
-    Value = Units::ToUserUnit(Basic().IndicatedAirspeed,
+    Value = Units::ToUserUnit(Basic().aircraft.IndicatedAirspeed,
                               Units::UserHorizontalSpeedUnit);
     break;
 
@@ -305,8 +309,8 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 37:
-    Valid = Basic().AccelerationAvailable;
-    Value = Basic().Gload;
+    Valid = Basic().acceleration.Available;
+    Value = Basic().aircraft.Gload;
     break;
 
   case 38:
@@ -325,7 +329,8 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 44:
-    Value = Units::ToUserUnit(Basic().NettoVario, Units::UserVerticalSpeedUnit);
+    Value = Units::ToUserUnit(Basic().aircraft.NettoVario,
+                              Units::UserVerticalSpeedUnit);
     break;
 
   case 48:
@@ -365,7 +370,7 @@ InfoBoxFormatter::AssignValue(int i)
 
   case 54:
     Valid = Basic().AirspeedAvailable;
-    Value = Units::ToUserUnit(Basic().TrueAirspeed,
+    Value = Units::ToUserUnit(Basic().aircraft.TrueAirspeed,
                               Units::UserHorizontalSpeedUnit);
     break;
 

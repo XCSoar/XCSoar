@@ -331,6 +331,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
                          const DERIVED_INFO *Calculated,
 			 const SETTINGS_COMPUTER &settings)
 {
+  const fixed Time = Basic->aircraft.Time;
   TCHAR text[80];
 
   switch(id) {
@@ -349,7 +350,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       // Later: "AVERAGE THREE POINT FOUR"
       _stprintf(text, _T(",%d"), VWI_CIRCLING);
       TextToDigitsSmall(text, Calculated->Average30s*LIFTMODIFY);
-      DoSend(Basic->Time, text);
+      DoSend(Time, text);
       return true;
     }
     break;
@@ -380,7 +381,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
 
               _stprintf(text, _T(",%d"), VWI_PLUS);
 	      TextToDigitsLarge(text, Calculated->WaypointDistance*DISTANCEMODIFY);
-	      DoSend(Basic->Time, text);
+              DoSend(Time, text);
 	      return true;
       } else {
 
@@ -397,7 +398,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
                     _stprintf(text, _T(",%d"), VWI_BELOW);
 	          }
 	          TextToDigitsHuge(text, fabs(tad));
-	          DoSend(Basic->Time, text);
+                  DoSend(Time, text);
 	          return true;
 	        }
 	      }
@@ -426,7 +427,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       // Now: "INFO"
       // Later: "NEW WAYPOINT"
       _stprintf(text, _T(",%d"), VWI_INFO);
-      DoSend(Basic->Time, text);
+      DoSend(Time, text);
       return true;
     }
 #endif
@@ -439,7 +440,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       // Now: INFO
       // Later: "INSIDE SECTOR"
       _stprintf(text, _T(",%d"), VWI_INFO);
-      DoSend(Basic->Time, text);
+      DoSend(Time, text);
       return true;
     }
     break;
@@ -453,7 +454,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       // Later give distance/height/direction?
       // Later: "WARNING AIRSPACE ABOVE"
       _stprintf(text, _T(",%d,%d,0"), VWI_WARNING, VWI_AIRSPACE);
-      DoSend(Basic->Time, text);
+      DoSend(Time, text);
       return true;
     }
     break;

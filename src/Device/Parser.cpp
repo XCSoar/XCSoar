@@ -419,7 +419,7 @@ NMEAParser::TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO)
     StartDay = -1; // reset search for the first day
     return false;
   } else {
-    GPS_INFO->Time = ThisTime;
+    GPS_INFO->aircraft.Time = ThisTime;
     LastTime = ThisTime;
     return true;
   }
@@ -455,7 +455,7 @@ NMEAParser::GSA(const TCHAR *String, const TCHAR **params, size_t nparams,
 {
   int iSatelliteCount = 0;
 
-  if (GPS_INFO->Replay)
+  if (GPS_INFO->gps.Replay)
     return true;
 
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
@@ -463,8 +463,8 @@ NMEAParser::GSA(const TCHAR *String, const TCHAR **params, size_t nparams,
   for (int i = 0; i < MAXSATELLITES; i++) {
     if (3 + i < (int)nparams) {
       // 2 because params is 0-index
-      GPS_INFO->SatelliteIDs[i] = (int)(_tcstod(params[2 + i], NULL));
-      if (GPS_INFO->SatelliteIDs[i] > 0)
+      GPS_INFO->gps.SatelliteIDs[i] = (int)(_tcstod(params[2 + i], NULL));
+      if (GPS_INFO->gps.SatelliteIDs[i] > 0)
         iSatelliteCount++;
     }
   }
@@ -502,11 +502,11 @@ NMEAParser::GLL(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!activeGPS)
     return true;
 
-  if (GPS_INFO->Replay)
+  if (GPS_INFO->gps.Replay)
     // block actual GPS signal
     return true;
 
-  GPS_INFO->NAVWarning = !gpsValid;
+  GPS_INFO->gps.NAVWarning = !gpsValid;
 
   double ThisTime = TimeModify(_tcstod(params[4], NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
@@ -522,9 +522,9 @@ NMEAParser::GLL(const TCHAR *String, const TCHAR **params, size_t nparams,
   tmplon = EastOrWest(tmplon, params[3][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = tmplat;
-    GPS_INFO->Location.Longitude = tmplon;
-    GPS_INFO->Simulator = false;
+    GPS_INFO->aircraft.Location.Latitude = tmplat;
+    GPS_INFO->aircraft.Location.Longitude = tmplon;
+    GPS_INFO->gps.Simulator = false;
   } else {
     // data is likely to be invalid (happens on first fix with some GPSs)
   }
@@ -622,7 +622,9 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   gpsValid = !NAVWarn(params[1][0]);
 
-  GPS_INFO->Connected = 2;
+  GPS_STATE &gps = GPS_INFO->gps;
+
+  gps.Connected = 2;
 
   if (!activeGPS)
     return true;
@@ -630,19 +632,18 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   double speed = _tcstod(params[6], NULL);
 
   if (speed > 2.0) {
-    GPS_INFO->MovementDetected = true;
-    if (GPS_INFO->Replay) {
+    gps.MovementDetected = true;
+    if (gps.Replay) {
       return true;
     }
   } else {
-    GPS_INFO->MovementDetected = false;
-    if (GPS_INFO->Replay) {
+    gps.MovementDetected = false;
+    if (gps.Replay)
       // block actual GPS signal if not moving and a log is being replayed
       return true;
-    }
   }
 
-  GPS_INFO->NAVWarning = !gpsValid;
+  gps.NAVWarning = !gpsValid;
 
   // JMW get date info first so TimeModify is accurate
   TCHAR date_buffer[9];
@@ -669,19 +670,20 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   tmplon = EastOrWest(tmplon, params[5][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = tmplat;
-    GPS_INFO->Location.Longitude = tmplon;
-    GPS_INFO->Simulator = false;
+    GPS_INFO->aircraft.Location.Latitude = tmplat;
+    GPS_INFO->aircraft.Location.Longitude = tmplon;
+    gps.Simulator = false;
   }
 
-  GPS_INFO->Speed = KNOTSTOMETRESSECONDS * speed;
+  GPS_INFO->aircraft.Speed = KNOTSTOMETRESSECONDS * speed;
 
-  if (GPS_INFO->Speed > 1.0) {
+  if (GPS_INFO->aircraft.Speed > fixed_one) {
     // JMW don't update bearing unless we're moving
-    GPS_INFO->TrackBearing = AngleLimit360(fixed(_tcstod(params[7], NULL)));
+    GPS_INFO->aircraft.TrackBearing = AngleLimit360(fixed(_tcstod(params[7],
+                                                                  NULL)));
   }
 
-  if (!GPS_INFO->Replay) {
+  if (!gps.Replay) {
     if (RMZAvailable) {
       // JMW changed from Altitude to BaroAltitude
       GPS_INFO->BaroAltitudeAvailable = true;
@@ -696,9 +698,9 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!GGAAvailable) {
     // update SatInUse, some GPS receiver don't emit GGA sentence
     if (!gpsValid)
-      GPS_INFO->SatellitesUsed = 0;
+      gps.SatellitesUsed = 0;
     else
-      GPS_INFO->SatellitesUsed = -1;
+      gps.SatellitesUsed = -1;
   }
 
   // say we are updated every time we get this,
@@ -752,7 +754,9 @@ bool
 NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
     NMEA_INFO *GPS_INFO)
 {
-  if (GPS_INFO->Replay)
+  GPS_STATE &gps = GPS_INFO->gps;
+
+  if (gps.Replay)
     return true;
 
   GGAAvailable = true;
@@ -764,7 +768,7 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   if (!activeGPS)
     return true;
 
-  GPS_INFO->SatellitesUsed = (int)(min(16.0, _tcstod(params[6], NULL)));
+  gps.SatellitesUsed = (int)(min(16.0, _tcstod(params[6], NULL)));
 
   double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
@@ -780,9 +784,9 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   tmplon = EastOrWest(tmplon, params[4][0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Location.Latitude = tmplat;
-    GPS_INFO->Location.Longitude = tmplon;
-    GPS_INFO->Simulator = false;
+    GPS_INFO->aircraft.Location.Latitude = tmplat;
+    GPS_INFO->aircraft.Location.Longitude = tmplon;
+    gps.Simulator = false;
   }
 
   if (RMZAvailable) {
@@ -813,7 +817,7 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
     //
     if (!HaveCondorDevice()) {
       // JMW TODO really need to know the actual device..
-      GeoidSeparation = LookupGeoidSeparation(GPS_INFO->Location);
+      GeoidSeparation = LookupGeoidSeparation(GPS_INFO->aircraft.Location);
       GPS_INFO->GPSAltitude -= GeoidSeparation;
     }
   }
@@ -839,7 +843,7 @@ NMEAParser::RMZ(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   if (!devHasBaroSource()) {
     // JMW no in-built baro sources, so use this generic one
-    if (!GPS_INFO->Replay) {
+    if (!GPS_INFO->gps.Replay) {
       GPS_INFO->BaroAltitudeAvailable = true;
       GPS_INFO->BaroAltitude = RMZAltitude;
     }
@@ -885,7 +889,7 @@ NMEAParser::RMA(const TCHAR *String, const TCHAR **params, size_t nparams,
   GPS_INFO->BaroAltitudeAvailable = true;
 
   if (!devHasBaroSource()) {
-    if (!GPS_INFO->Replay) {
+    if (!GPS_INFO->gps.Replay) {
       // JMW no in-built baro sources, so use this generic one
       GPS_INFO->BaroAltitudeAvailable = true;
       GPS_INFO->BaroAltitude = RMAAltitude;
@@ -958,13 +962,13 @@ NMEAParser::PTAS1(const TCHAR *String, const TCHAR **params, size_t nparams,
   vtas = _tcstod(params[3], NULL) / TOKNOTS;
 
   GPS_INFO->AirspeedAvailable = true;
-  GPS_INFO->TrueAirspeed = vtas;
+  GPS_INFO->aircraft.TrueAirspeed = vtas;
   GPS_INFO->VarioAvailable = true;
-  GPS_INFO->Vario = wnet;
+  GPS_INFO->aircraft.Vario = wnet;
   GPS_INFO->BaroAltitudeAvailable = true;
   GPS_INFO->BaroAltitude =
       GPS_INFO->pressure.AltitudeToQNHAltitude(fixed(baralt));
-  GPS_INFO->IndicatedAirspeed =
+  GPS_INFO->aircraft.IndicatedAirspeed =
       vtas / GPS_INFO->pressure.AirDensityRatio(fixed(baralt));
 
   TriggerVarioUpdate();
@@ -1040,13 +1044,13 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   fixed delta_lat(0.01);
   fixed delta_lon(0.01);
 
-  GEOPOINT plat = GPS_INFO->Location;
+  GEOPOINT plat = GPS_INFO->aircraft.Location;
   plat.Latitude += delta_lat;
-  GEOPOINT plon = GPS_INFO->Location;
+  GEOPOINT plon = GPS_INFO->aircraft.Location;
   plon.Longitude += delta_lon;
 
-  double dlat = Distance(GPS_INFO->Location, plat);
-  double dlon = Distance(GPS_INFO->Location, plon);
+  double dlat = Distance(GPS_INFO->aircraft.Location, plat);
+  double dlon = Distance(GPS_INFO->aircraft.Location, plon);
 
   double FLARM_NorthingToLatitude;
   double FLARM_EastingToLongitude;
@@ -1073,7 +1077,7 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
   }
 
   // set time of fix to current time
-  flarm_slot->Time_Fix = GPS_INFO->Time;
+  flarm_slot->Time_Fix = GPS_INFO->aircraft.Time;
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
@@ -1093,18 +1097,18 @@ NMEAParser::PFLAA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   // 1 relativenorth, meters
   flarm_slot->Location.Latitude = flarm_slot->RelativeNorth
-      * FLARM_NorthingToLatitude + GPS_INFO->Location.Latitude;
+      * FLARM_NorthingToLatitude + GPS_INFO->aircraft.Location.Latitude;
 
   // 2 relativeeast, meters
   flarm_slot->Location.Longitude = flarm_slot->RelativeEast
-      * FLARM_EastingToLongitude + GPS_INFO->Location.Longitude;
+      * FLARM_EastingToLongitude + GPS_INFO->aircraft.Location.Longitude;
 
   // alt
   flarm_slot->Altitude = flarm_slot->RelativeAltitude + GPS_INFO->GPSAltitude;
 
 #ifdef FLARM_AVERAGE
   flarm_slot->Average30s = flarmCalculations.Average30s(flarm_slot->ID,
-                                                        GPS_INFO->Time,
+                                                        GPS_INFO->aircraft.Time,
                                                         flarm_slot->Altitude);
 #endif
 

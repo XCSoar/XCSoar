@@ -182,13 +182,13 @@ DeviceDescriptor::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO)
   }
 
   if (device != NULL && device->ParseNMEA(String, GPS_INFO, enable_baro)) {
-    GPS_INFO->Connected = 2;
+    GPS_INFO->gps.Connected = 2;
     return true;
   }
 
   if (String[0] == '$') { // Additional "if" to find GPS strings
     if (parser.ParseNMEAString_Internal(String, GPS_INFO)) {
-      GPS_INFO->Connected = 2;
+      GPS_INFO->gps.Connected = 2;
       return true;
     }
   }

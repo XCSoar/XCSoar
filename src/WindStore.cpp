@@ -84,7 +84,8 @@ WindStore::SlotMeasurement(const NMEA_INFO *nmeaInfo,
     DERIVED_INFO *derivedInfo, Vector windvector, int quality)
 {
   updated = true;
-  windlist->addMeasurement(nmeaInfo->Time, windvector, nmeaInfo->GPSAltitude, quality);
+  windlist->addMeasurement(nmeaInfo->aircraft.Time, windvector,
+                           nmeaInfo->GPSAltitude, quality);
   //we may have a new wind value, so make sure it's emitted if needed!
   recalculateWind(nmeaInfo, derivedInfo);
 }
@@ -119,8 +120,8 @@ void
 WindStore::recalculateWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
 {
   bool found;
-  Vector CurWind =
-      windlist->getWind(nmeaInfo->Time, nmeaInfo->GPSAltitude, &found);
+  Vector CurWind = windlist->getWind(nmeaInfo->aircraft.Time,
+                                     nmeaInfo->GPSAltitude, &found);
 
   if (found) {
     if ((fabs(CurWind.x - _lastWind.x) > 1.0)

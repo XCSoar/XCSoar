@@ -116,18 +116,19 @@ struct ACCELERATION_STATE
    * Is G-load information available?
    * @see Gload
    */
-  bool AccelerationAvailable;
+  bool Available;
 };
 
 
 /**
  * A struct that holds all the parsed data read from the connected devices
  */
-struct NMEA_INFO: 
-  public GPS_STATE,
-  public AIRCRAFT_STATE,
-  public ACCELERATION_STATE
-{
+struct NMEA_INFO {
+  GPS_STATE gps;
+
+  AIRCRAFT_STATE aircraft;
+
+  ACCELERATION_STATE acceleration;
 
   /** Bearing including wind factor */
   fixed Heading;

@@ -334,12 +334,12 @@ GenerateBlackboard(MapWindow &map)
   SETTINGS_COMPUTER settings_computer;
 
   memset(&nmea_info, 0, sizeof(nmea_info));
-  nmea_info.Connected = 2;
-  nmea_info.SatellitesUsed = 4;
-  nmea_info.Location.Latitude = 51.2;
-  nmea_info.Location.Longitude = 7.7;
-  nmea_info.TrackBearing = 90;
-  nmea_info.Speed = 50;
+  nmea_info.gps.Connected = 2;
+  nmea_info.gps.SatellitesUsed = 4;
+  nmea_info.aircraft.Location.Latitude = 51.2;
+  nmea_info.aircraft.Location.Longitude = 7.7;
+  nmea_info.aircraft.TrackBearing = 90;
+  nmea_info.aircraft.Speed = 50;
   nmea_info.GPSAltitude = 1500;
 
   memset(&derived_info, 0, sizeof(derived_info));
@@ -347,7 +347,7 @@ GenerateBlackboard(MapWindow &map)
 
   memset(&settings_computer, 0, sizeof(settings_computer));
 
-  terrain.ServiceFullReload(nmea_info.Location);
+  terrain.ServiceFullReload(nmea_info.aircraft.Location);
 
   for (unsigned i = 0; i <AIRSPACECLASSCOUNT; ++i)
     settings_computer.iAirspaceMode[i] = 3;

@@ -88,7 +88,7 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
 
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
-  const bool draw_bearing = Basic().Connected;
+  const bool draw_bearing = Basic().gps.Connected;
 
   // JMW OLD_TASK temporary locking
   terrain->Lock(); 
@@ -96,7 +96,8 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
     MapDrawHelper helper(canvas, buffer, stencil_canvas, *this, rc,
                          SettingsMap());
     RenderObservationZone ozv(helper);
-    RenderTaskPointMap tpv(helper, ozv, draw_bearing, Basic().Location, *this);
+    RenderTaskPointMap tpv(helper, ozv, draw_bearing,
+                           Basic().aircraft.Location, *this);
     RenderTask dv(tpv);
     task->Accept(dv); 
   }

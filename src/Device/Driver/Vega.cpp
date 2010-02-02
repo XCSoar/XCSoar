@@ -261,14 +261,14 @@ PDVDV(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   TCHAR ctemp[80];
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->Vario = _tcstod(ctemp, NULL) / 10.0;
+  GPS_INFO->aircraft.Vario = _tcstod(ctemp, NULL) / 10.0;
 
   NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->IndicatedAirspeed = _tcstod(ctemp, NULL) / 10.0;
+  GPS_INFO->aircraft.IndicatedAirspeed = _tcstod(ctemp, NULL) / 10.0;
 
   NMEAParser::ExtractParameter(String,ctemp,2);
-  GPS_INFO->TrueAirspeed = _tcstod(ctemp, NULL) *
-    GPS_INFO->IndicatedAirspeed / 1024.0;
+  GPS_INFO->aircraft.TrueAirspeed = _tcstod(ctemp, NULL) *
+    GPS_INFO->aircraft.IndicatedAirspeed / 1024.0;
 
   //hasVega = true;
   GPS_INFO->VarioAvailable = true;
@@ -302,8 +302,8 @@ PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
   double AccelZ = _tcstod(ctemp, NULL) / 100.0;
 
   int mag = isqrt4((int)((AccelX * AccelX + AccelZ * AccelZ) * 10000));
-  GPS_INFO->Gload = mag/100.0;
-  GPS_INFO->AccelerationAvailable = true;
+  GPS_INFO->aircraft.Gload = mag/100.0;
+  GPS_INFO->acceleration.Available = true;
 
   /*
   NMEAParser::ExtractParameter(String,ctemp,2);
@@ -316,17 +316,17 @@ PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
   NMEAParser::ExtractParameter(String,ctemp,4);
   if (ctemp[0] != '\0') {
     GPS_INFO->NettoVarioAvailable = true;
-    GPS_INFO->NettoVario = _tcstod(ctemp, NULL) / 10.0;
+    GPS_INFO->aircraft.NettoVario = _tcstod(ctemp, NULL) / 10.0;
   } else {
     GPS_INFO->NettoVarioAvailable = false;
   }
 
   if (device_blackboard.SettingsComputer().EnableCalibration) {
     DebugStore("%g %g %g %g %g %g #te net\r\n",
-               (double)GPS_INFO->IndicatedAirspeed,
+               (double)GPS_INFO->aircraft.IndicatedAirspeed,
                (double)GPS_INFO->BaroAltitude,
-               (double)GPS_INFO->Vario,
-               (double)GPS_INFO->NettoVario,
+               (double)GPS_INFO->aircraft.Vario,
+               (double)GPS_INFO->aircraft.NettoVario,
                AccelX, AccelZ);
   }
   GPS_INFO->VarioAvailable = true;

@@ -131,14 +131,14 @@ int ProcessTimer::ConnectionProcessTimer(int itimeout) {
   // declarations RB
   //
 
-  if (!Basic().Connected) {
+  if (!Basic().gps.Connected) {
     // if gps is not connected, set navwarning to true so
     // calculations flight timers don't get updated
     device_blackboard.SetNAVWarning(true);
   }
   bool connected_now = device_blackboard.LowerConnection();
 
-  if (connected_now && Basic().NAVWarning) {
+  if (connected_now && Basic().gps.NAVWarning) {
 
     if (!wait_lock) {
       // waiting for lock first time
@@ -209,7 +209,7 @@ void ProcessTimer::Process(void)
 
     // also service replay logger
     if (replay.Update()) {
-      if (Basic().MovementDetected) {
+      if (Basic().gps.MovementDetected) {
         replay.Stop();
       }
       device_blackboard.RaiseConnection();

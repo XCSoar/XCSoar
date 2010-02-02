@@ -45,7 +45,7 @@ Copyright_License {
 void MapWindow::CalculateScreenPositionsThermalSources() {
   for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
     if (Calculated().ThermalSources[i].LiftRate>0) {
-      double dh = Basic().NavAltitude
+      double dh = Basic().aircraft.NavAltitude
         -Calculated().ThermalSources[i].GroundHeight;
       if (dh<0) {
         ThermalSources[i].Visible = false;
@@ -55,8 +55,8 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
       double t = -dh/Calculated().ThermalSources[i].LiftRate;
       GEOPOINT loc;
       FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
-                            Basic().WindDirection,
-                            Basic().WindSpeed*t,
+                            Basic().aircraft.WindDirection,
+                            Basic().aircraft.WindSpeed * t,
                             &loc);
       ThermalSources[i].Visible =
 	LonLat2ScreenIfVisible(loc, &ThermalSources[i].Screen);
@@ -118,7 +118,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   // calculate height above safety altitude
   double hoffset = SettingsComputer().SafetyAltitudeBreakoff
     +Calculated().TerrainBase;
-  h = Basic().NavAltitude-hoffset;
+  h = Basic().aircraft.NavAltitude - hoffset;
 
   bool draw_start_height = false;
   double hstart=0;

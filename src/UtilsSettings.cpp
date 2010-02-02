@@ -144,7 +144,7 @@ void SettingsLeave() {
           WaypointFileChanged);
     }
 
-    terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
+    terrain.ServiceFullReload(XCSoarInterface::Basic().aircraft.Location);
   }
 
   if (TopologyFileChanged) {
@@ -187,7 +187,7 @@ SystemConfiguration()
 {
   if (!is_simulator() &&
       XCSoarInterface::LockSettingsInFlight &&
-      XCSoarInterface::Basic().Flying) {
+      XCSoarInterface::Basic().aircraft.Flying) {
     Message::AddMessage(TEXT("Settings locked in flight"));
     return;
   }

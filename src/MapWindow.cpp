@@ -207,7 +207,7 @@ MapWindow::Idle(const bool do_force)
       }
     case 1:
       if (terrain != NULL && terrain_idle.dirty) {
-        terrain->ServiceTerrainCenter(Basic().Location);
+        terrain->ServiceTerrainCenter(Basic().aircraft.Location);
         terrain->ServiceCache();
 
         if (!do_force) {
@@ -218,7 +218,7 @@ MapWindow::Idle(const bool do_force)
       }
     case 2:
       if (weather != NULL && rasp_idle.dirty) {
-        weather->SetViewCenter(Basic().Location);
+        weather->SetViewCenter(Basic().aircraft.Location);
         if (!do_force) {
           // JMW this currently isn't working with the smart bounds
           rasp_idle.dirty = false;

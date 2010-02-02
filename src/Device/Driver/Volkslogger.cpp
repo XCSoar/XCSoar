@@ -75,6 +75,7 @@ public:
 static bool
 vl_PGCS1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 {
+  GPS_STATE &gps = GPS_INFO->gps;
 
   TCHAR ctemp[80];
 
@@ -102,8 +103,8 @@ vl_PGCS1(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
 
   // nSatellites = (int)(min(12,HexStrToDouble(ctemp, NULL)));
 
-  if (GPS_INFO->SatellitesUsed <= 0) {
-    GPS_INFO->SatellitesUsed = 4;
+  if (gps.SatellitesUsed <= 0) {
+    gps.SatellitesUsed = 4;
     // just to make XCSoar quit complaining.  VL doesn't tell how many
     // satellites it uses.  Without this XCSoar won't do wind
     // measurements.

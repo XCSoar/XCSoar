@@ -112,7 +112,7 @@ PZAN2(const TCHAR *String, NMEA_INFO *GPS_INFO)
 
   NMEAParser::ExtractParameter(String,ctemp,1);
   wnet = (_tcstod(ctemp, NULL) - 10000) / 100; // cm/s
-  GPS_INFO->Vario = wnet;
+  GPS_INFO->aircraft.Vario = wnet;
 
   if (GPS_INFO->BaroAltitudeAvailable) {
     vias = vtas/GPS_INFO->pressure.AirDensityRatio(GPS_INFO->BaroAltitude);
@@ -121,8 +121,8 @@ PZAN2(const TCHAR *String, NMEA_INFO *GPS_INFO)
   }
 
   GPS_INFO->AirspeedAvailable = true;
-  GPS_INFO->TrueAirspeed = vtas;
-  GPS_INFO->IndicatedAirspeed = vias;
+  GPS_INFO->aircraft.TrueAirspeed = vtas;
+  GPS_INFO->aircraft.IndicatedAirspeed = vias;
   GPS_INFO->VarioAvailable = true;
 
   TriggerVarioUpdate();

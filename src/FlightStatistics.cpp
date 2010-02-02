@@ -155,9 +155,9 @@ static void DrawLegs(Chart& chart,
 {
   if (task.get_common_stats().task_started) {
 
-    const double start_time = task_relative? 
-      (basic.Time-task.get_common_stats().task_time_elapsed): 
-      (basic.TakeOffTime);
+    const double start_time = task_relative
+      ? basic.aircraft.Time - task.get_common_stats().task_time_elapsed
+      : basic.aircraft.TakeOffTime;
 
     ChartTaskHelper visitor(chart, start_time);
 
@@ -415,7 +415,7 @@ FlightStatistics::RenderOLC(Canvas &canvas,
     return;
   }
 
-  ChartProjection proj(rc, olc, nmea_info.Location);
+  ChartProjection proj(rc, olc, nmea_info.aircraft.Location);
 
   DrawTrace(chart, proj, trace, Chart::STYLE_MEDIUMBLACK);
   DrawTrace(chart, proj, olc, Chart::STYLE_REDTHICK);
@@ -448,12 +448,12 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
   buffer.set(canvas);
   stencil.set(canvas);
 
-  ChartProjection proj(rc, task, nmea_info.Location);
+  ChartProjection proj(rc, task, nmea_info.aircraft.Location);
 
   MapDrawHelper helper(canvas, buffer, stencil, proj, rc,
                        settings_map);
   RenderObservationZone ozv(helper);
-  RenderTaskPoint tpv(helper, ozv, false, nmea_info.Location);
+  RenderTaskPoint tpv(helper, ozv, false, nmea_info.aircraft.Location);
   ::RenderTask dv(tpv);
   task.Accept(dv); 
 }
@@ -557,7 +557,7 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
     h = (Altitude_Ceiling.y_max - Altitude_Base.y_min) *
         i / (double)(numsteps - 1) + Altitude_Base.y_min;
 
-    wind = wind_store.GetWind(nmea_info.Time, h, &found);
+    wind = wind_store.GetWind(nmea_info.aircraft.Time, h, &found);
     mag = hypot(wind.x, wind.y);
 
     windstats_mag.LeastSquaresUpdate(mag, h);
@@ -587,7 +587,7 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
     h = (Altitude_Ceiling.y_max - Altitude_Base.y_min) * hfact
         + Altitude_Base.y_min;
 
-    wind = wind_store.GetWind(nmea_info.Time, h, &found);
+    wind = wind_store.GetWind(nmea_info.aircraft.Time, h, &found);
     if (windstats_mag.x_max == 0)
       windstats_mag.x_max = 1; // prevent /0 problems
     wind.x /= windstats_mag.x_max;
@@ -690,8 +690,8 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   static const fixed range(50000); // 50 km
   fixed hmin = max(fixed_zero, nmea_info.GPSAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), nmea_info.GPSAltitude + fixed(1000));
-  const GEOPOINT p_start = nmea_info.Location;
-  const GeoVector vec(range, nmea_info.TrackBearing);
+  const GEOPOINT p_start = nmea_info.aircraft.Location;
+  const GeoVector vec(range, nmea_info.aircraft.TrackBearing);
   const GEOPOINT p_end = vec.end_point(p_start);
 
   Chart chart(canvas, rc);
@@ -740,8 +740,8 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   terrain.Unlock();
 
   // draw aircraft trend line
-  if (nmea_info.Speed > 10.0) {
-    fixed t = range / nmea_info.Speed;
+  if (nmea_info.aircraft.Speed > 10.0) {
+    fixed t = range / nmea_info.aircraft.Speed;
     chart.DrawLine(0, nmea_info.GPSAltitude, range,
         nmea_info.GPSAltitude + derived.Average30s * t, Chart::STYLE_BLUETHIN);
   }

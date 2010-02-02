@@ -117,9 +117,11 @@ static CallBackTableEntry_t CallBackTable[]={
 static bool first = true;
 
 static void UpdateValuesSystem() {
-  static unsigned extGPSCONNECT_last = XCSoarInterface::Basic().Connected;
-  static int NAVWarning_last = XCSoarInterface::Basic().NAVWarning;
-  static int SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
+  static const GPS_STATE &gps = XCSoarInterface::Basic().gps;
+
+  static unsigned extGPSCONNECT_last = gps.Connected;
+  static int NAVWarning_last = gps.NAVWarning;
+  static int SatellitesUsed_last = gps.SatellitesUsed;
   static int VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
   static int FLARM_Available_last = XCSoarInterface::Basic().flarm.FLARM_Available;
   static bool LoggerActive_last = logger.isLoggerActive();
@@ -128,9 +130,9 @@ static void UpdateValuesSystem() {
   static int PDABatteryPercent_last = PDABatteryPercent;
 
   if (first ||
-      (extGPSCONNECT_last != XCSoarInterface::Basic().Connected) ||
-      (NAVWarning_last != XCSoarInterface::Basic().NAVWarning) ||
-      (SatellitesUsed_last != XCSoarInterface::Basic().SatellitesUsed) ||
+      (extGPSCONNECT_last != gps.Connected) ||
+      (NAVWarning_last != gps.NAVWarning) ||
+      (SatellitesUsed_last != gps.SatellitesUsed) ||
       (VarioAvailable_last != XCSoarInterface::Basic().VarioAvailable) ||
       (FLARM_Available_last != XCSoarInterface::Basic().flarm.FLARM_Available) ||
       (LoggerActive_last != logger.isLoggerActive()) ||
@@ -139,9 +141,9 @@ static void UpdateValuesSystem() {
       (PDABatteryPercent_last != PDABatteryPercent)) {
     first = false;
 
-    extGPSCONNECT_last = XCSoarInterface::Basic().Connected;
-    NAVWarning_last = XCSoarInterface::Basic().NAVWarning;
-    SatellitesUsed_last = XCSoarInterface::Basic().SatellitesUsed;
+    extGPSCONNECT_last = gps.Connected;
+    NAVWarning_last = gps.NAVWarning;
+    SatellitesUsed_last = gps.SatellitesUsed;
     VarioAvailable_last = XCSoarInterface::Basic().VarioAvailable;
     FLARM_Available_last = XCSoarInterface::Basic().flarm.FLARM_Available;
     LoggerActive_last = logger.isLoggerActive();
@@ -159,11 +161,11 @@ static void UpdateValuesSystem() {
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpGPS"));
   if (wp) {
-    if (XCSoarInterface::Basic().Connected) {
-      if (XCSoarInterface::Basic().NAVWarning) {
+    if (gps.Connected) {
+      if (gps.NAVWarning) {
         wp->SetText(gettext(_T("Fix invalid")));
       } else {
-        if (XCSoarInterface::Basic().SatellitesUsed==0) {
+        if (gps.SatellitesUsed == 0) {
           wp->SetText(gettext(_T("No fix")));
         } else {
           wp->SetText(gettext(_T("3D fix")));
@@ -173,8 +175,8 @@ static void UpdateValuesSystem() {
 
       wp = (WndProperty*)wf->FindByName(_T("prpNumSat"));
       if (wp) {
-        if (XCSoarInterface::Basic().SatellitesUsed >= 0) {  // known numer of sats
-          _stprintf(Temp,_T("%d"),XCSoarInterface::Basic().SatellitesUsed);
+        if (gps.SatellitesUsed >= 0) { // known number of sats
+          _stprintf(Temp,_T("%d"), gps.SatellitesUsed);
         } else { // valid but unknown number of sats
           _stprintf(Temp,_T(">3"));
         }
@@ -282,9 +284,9 @@ static void UpdateValuesTimes(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpTakeoffTime"));
   if (wp) {
-    if (XCSoarInterface::Basic().FlightTime>0) {
+    if (XCSoarInterface::Basic().aircraft.FlightTime > 0) {
       Units::TimeToText(Temp,
-                        (int)TimeLocal((long)XCSoarInterface::Basic().TakeOffTime));
+                        (int)TimeLocal((long)XCSoarInterface::Basic().aircraft.TakeOffTime));
       wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));
@@ -293,11 +295,11 @@ static void UpdateValuesTimes(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpLandingTime"));
   if (wp) {
-    if (!XCSoarInterface::Basic().Flying && 
-        (XCSoarInterface::Basic().FlightTime>0)) {
+    if (!XCSoarInterface::Basic().aircraft.Flying &&
+        XCSoarInterface::Basic().aircraft.FlightTime > 0) {
       Units::TimeToText(Temp,
-                        (int)TimeLocal((long)(XCSoarInterface::Basic().TakeOffTime
-                                              + XCSoarInterface::Basic().FlightTime)));
+                        (int)TimeLocal((long)(XCSoarInterface::Basic().aircraft.TakeOffTime
+                                              + XCSoarInterface::Basic().aircraft.FlightTime)));
       wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));
@@ -306,8 +308,8 @@ static void UpdateValuesTimes(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlightTime"));
   if (wp) {
-    if (XCSoarInterface::Basic().FlightTime > 0){
-      Units::TimeToText(Temp, (int)XCSoarInterface::Basic().FlightTime);
+    if (XCSoarInterface::Basic().aircraft.FlightTime > 0){
+      Units::TimeToText(Temp, (int)XCSoarInterface::Basic().aircraft.FlightTime);
       wp->SetText(Temp);
     } else {
       wp->SetText(_T(""));
@@ -324,9 +326,9 @@ static void UpdateValuesFlight(void) {
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
-  Units::LongitudeToString(XCSoarInterface::Basic().Location.Longitude,
+  Units::LongitudeToString(XCSoarInterface::Basic().aircraft.Location.Longitude,
                            sLongitude, sizeof(sLongitude)-1);
-  Units::LatitudeToString(XCSoarInterface::Basic().Location.Latitude,
+  Units::LatitudeToString(XCSoarInterface::Basic().aircraft.Location.Latitude,
                           sLatitude, sizeof(sLatitude)-1);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLongitude"));
@@ -357,7 +359,8 @@ static void UpdateValuesFlight(void) {
 
   if (nearest_waypoint) {
 
-    GeoVector vec(XCSoarInterface::Basic().Location, nearest_waypoint->Location);
+    GeoVector vec(XCSoarInterface::Basic().aircraft.Location,
+                  nearest_waypoint->Location);
 
     wp = (WndProperty*)wf->FindByName(_T("prpNear"));
     if (wp) {
@@ -591,7 +594,7 @@ void dlgStatusShowModal(int start_page){
     }
   }
 
-  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().Location);
+  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().aircraft.Location);
 
   UpdateValuesSystem();
   UpdateValuesFlight();

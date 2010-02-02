@@ -100,12 +100,11 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
        Calculated().TerrainValid && terrain->isTerrainLoaded()) ||
       (weather != NULL && weather->GetParameter() != 0)) {
     double sunelevation = 40.0;
-    double sunazimuth = GetDisplayAngle() - Basic().WindDirection;
+    double sunazimuth = GetDisplayAngle() - Basic().aircraft.WindDirection;
 
     // draw sun from constant angle if very low wind speed
-    if (Basic().WindSpeed<0.5) {
+    if (Basic().aircraft.WindSpeed < 0.5)
       sunazimuth = GetDisplayAngle() + 45.0;
-    }
 
     // if (dirtyEvent.test()) {
     //   // map has been dirtied since we started drawing, so hurry up
@@ -128,8 +127,8 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
 
       // Draw the terrain
       terrain_renderer->Draw(canvas, *this, sunazimuth,
-                             sunelevation, Basic().Location,
-                             (int)Basic().Time,
+                             sunelevation, Basic().aircraft.Location,
+                             (int)Basic().aircraft.Time,
                              BigZoom);
     }
 
@@ -231,7 +230,7 @@ void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
   }
 
   // Finally, draw you!
-  if (Basic().Connected) {
+  if (Basic().gps.Connected) {
     DrawAircraft(canvas);
   }
 }
@@ -265,7 +264,7 @@ void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
   DrawThermalBand(canvas, rc);
   DrawFinalGlide(canvas,rc);
   //  DrawSpeedToFly(canvas, rc);
-  DrawGPSStatus(canvas, rc, data);
+  DrawGPSStatus(canvas, rc, data.gps);
 }
 
 /**
@@ -275,7 +274,7 @@ void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
 {
-  if (Basic().Connected) {
+  if (Basic().gps.Connected) {
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
 #ifdef OLD_TASK
     DrawProjectedTrack(canvas);

@@ -904,7 +904,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
     break;
 
   case 1: // AGL
-    Units::FormatAlternateUserAltitude(Basic().AltitudeAGL, sTmp,
+    Units::FormatAlternateUserAltitude(Basic().aircraft.AltitudeAGL, sTmp,
                                        sizeof(sTmp) / sizeof(sTmp[0]));
     info_box.SetComment(sTmp);
     break;
@@ -1013,7 +1013,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
 
     // VENTA3 wind speed + bearing bottom line
   case 25:
-    _stprintf(sTmp, _T("%d%s"), (int)Basic().WindDirection, _T(DEG));
+    _stprintf(sTmp, _T("%d%s"), (int)Basic().aircraft.WindDirection, _T(DEG));
     info_box.SetComment(sTmp);
     break;
 
@@ -1185,9 +1185,9 @@ InfoBoxManager::ProcessTimer(void)
 {
   static double lasttime;
 
-  if (Basic().Time != lasttime) {
+  if (Basic().aircraft.Time != lasttime) {
     SetDirty(true);
-    lasttime = Basic().Time;
+    lasttime = Basic().aircraft.Time;
   }
   InfoBoxDrawIfDirty();
   LastFlipBoxTime++;

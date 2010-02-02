@@ -446,7 +446,7 @@ void dlgAirspaceSelect(void) {
   XCSoarInterface::StartHourglassCursor();
 
   UpLimit = 0;
-  GEOPOINT Location = XCSoarInterface::Basic().Location;
+  GEOPOINT Location = XCSoarInterface::Basic().aircraft.Location;
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,

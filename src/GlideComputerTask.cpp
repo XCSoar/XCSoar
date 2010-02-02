@@ -71,7 +71,7 @@ GlideComputerTask::ProcessBasicTask()
 {
   const NMEA_INFO &basic = Basic();
 
-  if (basic.Time != LastBasic().Time) {
+  if (basic.aircraft.Time != LastBasic().aircraft.Time) {
     terrain.Lock();
 
   // JMW TODO OLD_TASK, this is a hack
@@ -83,9 +83,10 @@ GlideComputerTask::ProcessBasicTask()
 //  task_behaviour.auto_mc=true;
     task_behaviour.enable_olc = true;
 
-    if (!basic.NAVWarning) {
-      m_task.update(basic, LastBasic());
-      m_task.update_auto_mc(Basic(), Calculated().AdjustedAverageThermal);
+    if (!basic.gps.NAVWarning) {
+      m_task.update(basic.aircraft, LastBasic().aircraft);
+      m_task.update_auto_mc(Basic().aircraft,
+                            Calculated().AdjustedAverageThermal);
     }
     terrain.Unlock();
   }
@@ -117,7 +118,7 @@ void
 GlideComputerTask::ProcessIdle()
 {
   terrain.Lock();
-  m_task.update_idle(Basic());
+  m_task.update_idle(Basic().aircraft);
   terrain.Unlock();
 }
 
@@ -128,7 +129,7 @@ GlideComputerTask::TerrainWarning()
   terrain.Lock();
   GlideTerrain g_terrain(SettingsComputer(), terrain);
 
-  AIRCRAFT_STATE state = Basic();
+  AIRCRAFT_STATE state = Basic().aircraft;
 
   GEOPOINT null_point;
   const TaskStats& stats = Calculated().task_stats;

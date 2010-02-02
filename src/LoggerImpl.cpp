@@ -56,7 +56,7 @@
 const struct LoggerImpl::LoggerPreTakeoffBuffer &
 LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
 {
-  Location = src.Location;
+  Location = src.aircraft.Location;
   Altitude = src.GPSAltitude;
   BaroAltitude = src.GetAltitudeBaroPreferred();
 
@@ -66,12 +66,12 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
   Year = src.Year;
   Month = src.Month;
   Day = src.Day;
-  Time = src.Time;
+  Time = src.aircraft.Time;
 
-  NAVWarning = src.NAVWarning;
+  NAVWarning = src.gps.NAVWarning;
 
   for (int iSat = 0; iSat < MAXSATELLITES; iSat++)
-    SatelliteIDs[iSat] = src.SatelliteIDs[iSat];
+    SatelliteIDs[iSat] = src.gps.SatelliteIDs[iSat];
 
   return *this;
 }
@@ -156,7 +156,7 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
   // Logger off
   LoggerActive = false;
 
-  if (gps_info.Simulator)
+  if (gps_info.gps.Simulator)
     Simulator = true;
 
   // Make space for logger file, if unsuccessful -> cancel
@@ -203,21 +203,22 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   double MinLat, MinLon;
   char NoS, EoW;
 
-  if (gps_info.Simulator)
+  if (gps_info.gps.Simulator)
     /* if at least one GPS fix comes from the simulator, disable
        signing */
     Simulator = true;
   else
-    LogFRecordToFile(gps_info.SatelliteIDs, gps_info.Hour, gps_info.Minute,
-                     gps_info.Second, gps_info.Time, gps_info.NAVWarning);
+    LogFRecordToFile(gps_info.gps.SatelliteIDs, gps_info.Hour, gps_info.Minute,
+                     gps_info.Second, gps_info.aircraft.Time,
+                     gps_info.gps.NAVWarning);
 
   if ((gps_info.GPSAltitude < -100) || (gps_info.BaroAltitude < -100)
-      || gps_info.NAVWarning) {
+      || gps_info.gps.NAVWarning) {
     return;
   }
 
-  DegLat = (int)gps_info.Location.Latitude;
-  MinLat = gps_info.Location.Latitude - DegLat;
+  DegLat = (int)gps_info.aircraft.Location.Latitude;
+  MinLat = gps_info.aircraft.Location.Latitude - DegLat;
   NoS = 'N';
   if ((MinLat < 0) || ((MinLat - DegLat == 0) && (DegLat < 0))) {
     NoS = 'S';
@@ -227,8 +228,8 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   MinLat *= 60;
   MinLat *= 1000;
 
-  DegLon = (int)gps_info.Location.Longitude;
-  MinLon = gps_info.Location.Longitude - DegLon;
+  DegLon = (int)gps_info.aircraft.Location.Longitude;
+  MinLon = gps_info.aircraft.Location.Longitude - DegLon;
   EoW = 'E';
   if ((MinLon < 0) || ((MinLon - DegLon == 0) && (DegLon < 0))) {
     EoW = 'W';
@@ -254,7 +255,7 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
   } else if (NumLoggerPreTakeoffBuffered) {
     for (int i = 0; i < NumLoggerPreTakeoffBuffered; i++) {
       NMEA_INFO tmp_info;
-      tmp_info.Location = LoggerPreTakeoffBuffer[i].Location;
+      tmp_info.aircraft.Location = LoggerPreTakeoffBuffer[i].Location;
       tmp_info.GPSAltitude = LoggerPreTakeoffBuffer[i].Altitude;
       tmp_info.BaroAltitude = LoggerPreTakeoffBuffer[i].BaroAltitude;
       tmp_info.Hour = LoggerPreTakeoffBuffer[i].Hour;
@@ -263,11 +264,12 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
       tmp_info.Year = LoggerPreTakeoffBuffer[i].Year;
       tmp_info.Month = LoggerPreTakeoffBuffer[i].Month;
       tmp_info.Day = LoggerPreTakeoffBuffer[i].Day;
-      tmp_info.Time = LoggerPreTakeoffBuffer[i].Time;
-      tmp_info.NAVWarning = LoggerPreTakeoffBuffer[i].NAVWarning;
+      tmp_info.aircraft.Time = LoggerPreTakeoffBuffer[i].Time;
+      tmp_info.gps.NAVWarning = LoggerPreTakeoffBuffer[i].NAVWarning;
 
       for (int iSat = 0; iSat < MAXSATELLITES; iSat++)
-        tmp_info.SatelliteIDs[iSat] = LoggerPreTakeoffBuffer[i].SatelliteIDs[iSat];
+        tmp_info.gps.SatelliteIDs[iSat] =
+          LoggerPreTakeoffBuffer[i].SatelliteIDs[iSat];
 
       LogPointToFile(tmp_info);
     }
@@ -321,7 +323,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   DiskBufferReset();
   Unlock();
 
-  Simulator = gps_info.Simulator;
+  Simulator = gps_info.gps.Simulator;
   if (!Simulator)
     LoggerGInit();
 
@@ -422,7 +424,7 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
   IGCWriteRecord(temp, szLoggerFileName);
 
   DeviceConfig device_config;
-  if (gps_info.Simulator) {
+  if (gps_info.gps.Simulator) {
     _tcscpy(device_config.driver_name, _T("Simulator"));
   } else {
     ReadDeviceConfig(0, device_config);
@@ -831,7 +833,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
   if (LoggerActive)
     return;
 
-  if (gps_info.Replay) {
+  if (gps_info.gps.Replay) {
     guiStopLogger(gps_info, true);
     return;
   }

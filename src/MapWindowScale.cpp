@@ -198,7 +198,7 @@ void MapWindow::DrawMapScale(Canvas &canvas, const RECT rc /* the Map Rect*/,
       if (SettingsMap().EnableAuxiliaryInfo) {
         _tcscat(ScaleInfo, TEXT("AUX "));
       }
-      if (Basic().Replay) {
+      if (Basic().gps.Replay) {
         _tcscat(ScaleInfo, TEXT("REPLAY "));
       }
       if (task != NULL && SettingsComputer().BallastTimerActive) {

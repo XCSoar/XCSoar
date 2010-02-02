@@ -103,7 +103,8 @@ public:
         if ((map.SettingsMap().DeclutterLabels<1) || intask) {
 
           UnorderedTaskPoint t(way_point, map.SettingsComputer());
-          GlideResult r = TaskSolution::glide_solution_remaining(t, map.Basic(), glide_polar);
+          GlideResult r = TaskSolution::glide_solution_remaining(t, map.Basic().aircraft,
+                                                                 glide_polar);
           reachable = r.glide_reachable();
 
           if (reachable) {

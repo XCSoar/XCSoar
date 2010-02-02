@@ -70,13 +70,13 @@ void FormatterTime::AssignValue(int i) {
     SecsToDisplayTime((int)Calculated().LastThermalTime);
     break;
   case 36:
-    SecsToDisplayTime((int)Basic().FlightTime);
+    SecsToDisplayTime((int)Basic().aircraft.FlightTime);
     break;
   case 39:
     SecsToDisplayTime(DetectCurrentTime(&Basic()));
     break;
   case 40:
-    SecsToDisplayTime((int)(Basic().Time));
+    SecsToDisplayTime((int)Basic().aircraft.Time);
     break;
   case 46:
     SecsToDisplayTime((int)(Calculated().task_stats.current_leg.solution_remaining.TimeElapsed

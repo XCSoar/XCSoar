@@ -136,13 +136,15 @@ WindAnalyser::slot_newSample(const NMEA_INFO *nmeaInfo,
     // only work if we are in active mode
     return;
 
+  const AIRCRAFT_STATE &aircraft = nmeaInfo->aircraft;
+
   Vector curVector;
 
   bool fullCircle = false;
 
   // Circle detection
   if (lastHeading) {
-    int diff = (int)nmeaInfo->TrackBearing - lastHeading;
+    int diff = (int)aircraft.TrackBearing - lastHeading;
 
     if (diff > 180)
       diff -= 360;
@@ -152,7 +154,7 @@ WindAnalyser::slot_newSample(const NMEA_INFO *nmeaInfo,
     diff = abs(diff);
     circleDeg += diff;
   }
-  lastHeading = (int)nmeaInfo->TrackBearing;
+  lastHeading = (int)aircraft.TrackBearing;
 
   if (circleDeg >= 360) {
     //full circle made!
@@ -163,11 +165,11 @@ WindAnalyser::slot_newSample(const NMEA_INFO *nmeaInfo,
     //to determine the quality)
   }
 
-  curVector.x = nmeaInfo->Speed * cos(nmeaInfo->TrackBearing * M_PI / 180.0);
-  curVector.y = nmeaInfo->Speed * sin(nmeaInfo->TrackBearing * M_PI / 180.0);
+  curVector.x = aircraft.Speed * cos(aircraft.TrackBearing * M_PI / 180.0);
+  curVector.y = aircraft.Speed * sin(aircraft.TrackBearing * M_PI / 180.0);
 
   windsamples[numwindsamples].v = curVector;
-  windsamples[numwindsamples].t = nmeaInfo->Time;
+  windsamples[numwindsamples].t = aircraft.Time;
   windsamples[numwindsamples].mag = Magnitude(curVector);
 
   if (numwindsamples < MAXWINDSAMPLES - 1) {
@@ -177,12 +179,12 @@ WindAnalyser::slot_newSample(const NMEA_INFO *nmeaInfo,
     // or use circular buffer
   }
 
-  if ((nmeaInfo->Speed < Magnitude(minVector)) || first) {
+  if ((aircraft.Speed < Magnitude(minVector)) || first) {
     minVector.x = curVector.x;
     minVector.y = curVector.y;
   }
 
-  if ((nmeaInfo->Speed > Magnitude(maxVector)) || first) {
+  if ((aircraft.Speed > Magnitude(maxVector)) || first) {
     maxVector.x = curVector.x;
     maxVector.y = curVector.y;
   }
@@ -211,14 +213,14 @@ WindAnalyser::slot_newSample(const NMEA_INFO *nmeaInfo,
       startcircle--;
 
     if (startcircle == 1) {
-      climbstartpos.x = nmeaInfo->Location.Longitude;
-      climbstartpos.y = nmeaInfo->Location.Latitude;
-      climbstarttime = nmeaInfo->Time;
+      climbstartpos.x = aircraft.Location.Longitude;
+      climbstartpos.y = aircraft.Location.Latitude;
+      climbstarttime = aircraft.Time;
       startcircle = 0;
     }
-    climbendpos.x = nmeaInfo->Location.Longitude;
-    climbendpos.y = nmeaInfo->Location.Latitude;
-    climbendtime = nmeaInfo->Time;
+    climbendpos.x = aircraft.Location.Longitude;
+    climbendpos.y = aircraft.Location.Latitude;
+    climbendtime = aircraft.Time;
 
     //no need to reset fullCircle, it will automaticly be reset in the next itteration.
   }
@@ -275,7 +277,7 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO *nmeaInfo,
 
   // initialize analyser-parameters
   startmarker = marker;
-  startheading = (int)nmeaInfo->TrackBearing;
+  startheading = (int)nmeaInfo->aircraft.TrackBearing;
   active = true;
   first = true;
   numwindsamples = 0;

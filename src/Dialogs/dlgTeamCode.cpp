@@ -60,7 +60,7 @@ Update()
 
   if (XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint >= 0) {
     double Value = XCSoarInterface::Calculated().TeammateBearing
-        - XCSoarInterface::Basic().TrackBearing;
+        - XCSoarInterface::Basic().aircraft.TrackBearing;
 
     if (Value < -180.0)
       Value += 360.0;
