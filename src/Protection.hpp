@@ -51,17 +51,17 @@ void CreateCalculationThread(void);
 
 // changed only in config or by user interface
 // used in settings dialog
-extern bool COMPORTCHANGED;
-extern bool AIRSPACEFILECHANGED;
-extern bool WAYPOINTFILECHANGED;
-extern bool TERRAINFILECHANGED;
-extern bool AIRFIELDFILECHANGED;
-extern bool TOPOLOGYFILECHANGED;
-extern bool POLARFILECHANGED;
-extern bool LANGUAGEFILECHANGED;
-extern bool STATUSFILECHANGED;
-extern bool INPUTFILECHANGED;
-extern bool MAPFILECHANGED;
+extern bool DevicePortChanged;
+extern bool AirspaceFileChanged;
+extern bool WaypointFileChanged;
+extern bool TerrainFileChanged;
+extern bool AirfieldFileChanged;
+extern bool TopologyFileChanged;
+extern bool PolarFileChanged;
+extern bool LanguageFileChanged;
+extern bool StatusFileChanged;
+extern bool InputFileChanged;
+extern bool MapFileChanged;
 
 extern Trigger drawTriggerEvent;
 extern Trigger closeTriggerEvent;

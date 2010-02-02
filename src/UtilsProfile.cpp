@@ -104,12 +104,12 @@ void ReadProfile(const TCHAR *szFile)
 {
   LoadRegistryFromFile(szFile);
 
-  WAYPOINTFILECHANGED = true;
-  TERRAINFILECHANGED = true;
-  TOPOLOGYFILECHANGED = true;
-  AIRSPACEFILECHANGED = true;
-  AIRFIELDFILECHANGED = true;
-  POLARFILECHANGED = true;
+  WaypointFileChanged = true;
+  TerrainFileChanged = true;
+  TopologyFileChanged = true;
+  AirspaceFileChanged = true;
+  AirfieldFileChanged = true;
+  PolarFileChanged = true;
 
   // assuming all is ok, we can...
   Profile::ReadRegistrySettings();

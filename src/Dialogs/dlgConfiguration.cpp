@@ -921,7 +921,7 @@ static void AskWaypointSave(void) {
 
       WaypointWriteFiles(way_points, XCSoarInterface::SettingsComputer());
 
-      WAYPOINTFILECHANGED= true;
+      WaypointFileChanged= true;
       changed = true;
 
     }
@@ -929,7 +929,7 @@ static void AskWaypointSave(void) {
 
     WaypointWriteFiles(way_points, XCSoarInterface::SettingsComputer());
 
-    WAYPOINTFILECHANGED= true;
+    WaypointFileChanged= true;
     changed = true;
   }
   waypointneedsave = false;
@@ -2379,7 +2379,7 @@ void dlgConfigurationShowModal(void){
     if (XCSoarInterface::SettingsComputer().POLARID != (unsigned)wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::SetSettingsComputer().POLARID = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryPolarID, (int &)XCSoarInterface::SettingsComputer().POLARID);
-      POLARFILECHANGED = true;
+      PolarFileChanged = true;
       changed = true;
     }
   }
@@ -2558,7 +2558,7 @@ void dlgConfigurationShowModal(void){
     if (WaypointsOutOfRange != wp->GetDataField()->GetAsInteger()) {
       WaypointsOutOfRange = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryWaypointsOutOfRange, WaypointsOutOfRange);
-      WAYPOINTFILECHANGED= true;
+      WaypointFileChanged= true;
       changed = true;
     }
   }
@@ -2674,7 +2674,7 @@ void dlgConfigurationShowModal(void){
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szPolarFile)) {
       SetRegistryString(szRegistryPolarFile, temptext);
-      POLARFILECHANGED = true;
+      PolarFileChanged = true;
       changed = true;
     }
   }
@@ -2687,7 +2687,7 @@ void dlgConfigurationShowModal(void){
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szWaypointFile)) {
       SetRegistryString(szRegistryWayPointFile, temptext);
-      WAYPOINTFILECHANGED= true;
+      WaypointFileChanged= true;
       changed = true;
     }
   }
@@ -2700,7 +2700,7 @@ void dlgConfigurationShowModal(void){
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAdditionalWaypointFile)) {
       SetRegistryString(szRegistryAdditionalWayPointFile, temptext);
-      WAYPOINTFILECHANGED= true;
+      WaypointFileChanged= true;
       changed = true;
     }
   }
@@ -2713,7 +2713,7 @@ void dlgConfigurationShowModal(void){
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAirspaceFile)) {
       SetRegistryString(szRegistryAirspaceFile, temptext);
-      AIRSPACEFILECHANGED= true;
+      AirspaceFileChanged= true;
       changed = true;
     }
   }
@@ -2726,7 +2726,7 @@ void dlgConfigurationShowModal(void){
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAdditionalAirspaceFile)) {
       SetRegistryString(szRegistryAdditionalAirspaceFile, temptext);
-      AIRSPACEFILECHANGED= true;
+      AirspaceFileChanged= true;
       changed = true;
     }
   }
@@ -2739,7 +2739,7 @@ void dlgConfigurationShowModal(void){
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szMapFile)) {
       SetRegistryString(szRegistryMapFile, temptext);
-      MAPFILECHANGED= true;
+      MapFileChanged= true;
       changed = true;
     }
   }
@@ -2752,7 +2752,7 @@ void dlgConfigurationShowModal(void){
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szTerrainFile)) {
       SetRegistryString(szRegistryTerrainFile, temptext);
-      TERRAINFILECHANGED= true;
+      TerrainFileChanged= true;
       changed = true;
     }
   }
@@ -2765,7 +2765,7 @@ void dlgConfigurationShowModal(void){
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szTopologyFile)) {
       SetRegistryString(szRegistryTopologyFile, temptext);
-      TOPOLOGYFILECHANGED= true;
+      TopologyFileChanged= true;
       changed = true;
     }
   }
@@ -2778,7 +2778,7 @@ void dlgConfigurationShowModal(void){
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAirfieldFile)) {
       SetRegistryString(szRegistryAirfieldFile, temptext);
-      AIRFIELDFILECHANGED= true;
+      AirfieldFileChanged= true;
       changed = true;
     }
   }
@@ -3323,20 +3323,20 @@ void dlgConfigurationShowModal(void){
                                       szRegistryLoggerTimeStepCircling,
                                       XCSoarInterface::SetSettingsComputer().LoggerTimeStepCircling);
 
-  COMPORTCHANGED =
+  DevicePortChanged =
     FinishDeviceFields(device_config[0], dwDeviceIndex1,
                        (WndProperty*)wf->FindByName(_T("prpComPort1")),
                        (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
                        (WndProperty*)wf->FindByName(_T("prpComDevice1")));
 
-  COMPORTCHANGED =
+  DevicePortChanged =
     FinishDeviceFields(device_config[1], dwDeviceIndex2,
                        (WndProperty*)wf->FindByName(_T("prpComPort2")),
                        (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
                        (WndProperty*)wf->FindByName(_T("prpComDevice2"))) ||
-    COMPORTCHANGED;
+    DevicePortChanged;
 
-  if (COMPORTCHANGED)
+  if (DevicePortChanged)
     changed = true;
 
   wp = (WndProperty*)wf->FindByName(_T("prpSnailWidthScale"));
@@ -3350,7 +3350,7 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-  if (COMPORTCHANGED) {
+  if (DevicePortChanged) {
     for (unsigned i = 0; i < NUMDEV; ++i) {
       WriteDeviceConfig(i, device_config[i]);
     }
@@ -3382,7 +3382,7 @@ void dlgConfigurationShowModal(void){
 #endif
   }
 
-  if (!is_embedded() && COMPORTCHANGED) {
+  if (!is_embedded() && DevicePortChanged) {
     requirerestart = true;
   }
 

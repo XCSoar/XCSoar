@@ -66,34 +66,34 @@ Copyright_License {
   #include "Polar/Polar.hpp"
 #endif
 
-bool COMPORTCHANGED = false;
-bool MAPFILECHANGED = false;
-bool AIRSPACEFILECHANGED = false;
-bool AIRFIELDFILECHANGED = false;
-bool WAYPOINTFILECHANGED = false;
-bool TERRAINFILECHANGED = false;
-bool TOPOLOGYFILECHANGED = false;
-bool POLARFILECHANGED = false;
-bool LANGUAGEFILECHANGED = false;
-bool STATUSFILECHANGED = false;
-bool INPUTFILECHANGED = false;
+bool DevicePortChanged = false;
+bool MapFileChanged = false;
+bool AirspaceFileChanged = false;
+bool AirfieldFileChanged = false;
+bool WaypointFileChanged = false;
+bool TerrainFileChanged = false;
+bool TopologyFileChanged = false;
+bool PolarFileChanged = false;
+bool LanguageFileChanged = false;
+bool StatusFileChanged = false;
+bool InputFileChanged = false;
 
 void SettingsEnter() {
   draw_thread->suspend();
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed (also prevents drawing)
 
-  MAPFILECHANGED = false;
-  AIRSPACEFILECHANGED = false;
-  AIRFIELDFILECHANGED = false;
-  WAYPOINTFILECHANGED = false;
-  TERRAINFILECHANGED = false;
-  TOPOLOGYFILECHANGED = false;
-  POLARFILECHANGED = false;
-  LANGUAGEFILECHANGED = false;
-  STATUSFILECHANGED = false;
-  INPUTFILECHANGED = false;
-  COMPORTCHANGED = false;
+  MapFileChanged = false;
+  AirspaceFileChanged = false;
+  AirfieldFileChanged = false;
+  WaypointFileChanged = false;
+  TerrainFileChanged = false;
+  TopologyFileChanged = false;
+  PolarFileChanged = false;
+  LanguageFileChanged = false;
+  StatusFileChanged = false;
+  InputFileChanged = false;
+  DevicePortChanged = false;
 }
 
 void SettingsLeave() {
@@ -104,28 +104,28 @@ void SettingsLeave() {
   calculation_thread->suspend();
 
 /*
-  if (MAPFILECHANGED) { printf("MAPFILECHANGED\n"); }
-  if (AIRSPACEFILECHANGED) { printf("AIRSPACEFILECHANGED\n"); }
-  if (AIRFIELDFILECHANGED) { printf("AIRFIELDFILECHANGED\n"); }
-  if (WAYPOINTFILECHANGED) { printf("WAYPOINTFILECHANGED\n"); }
-  if (TERRAINFILECHANGED) { printf("TERRAINFILECHANGED\n"); }
-  if (TOPOLOGYFILECHANGED) { printf("TOPOLOGYFILECHANGED\n"); }
-  if (POLARFILECHANGED) { printf("POLARFILECHANGED\n"); }
-  if (LANGUAGEFILECHANGED) { printf("LANGUAGEFILECHANGED\n"); }
-  if (STATUSFILECHANGED) { printf("STATUSFILECHANGED\n"); }
-  if (INPUTFILECHANGED) { printf("INPUTFILECHANGED\n"); }
-  if (COMPORTCHANGED) { printf("COMPORTCHANGED\n"); }
+  if (MapFileChanged) { printf("MapFileChanged\n"); }
+  if (AirspaceFileChanged) { printf("AirspaceFileChanged\n"); }
+  if (AirfieldFileChanged) { printf("AirfieldFileChanged\n"); }
+  if (WaypointFileChanged) { printf("WaypointFileChanged\n"); }
+  if (TerrainFileChanged) { printf("TerrainFileChanged\n"); }
+  if (TopologyFileChanged) { printf("TopologyFileChanged\n"); }
+  if (PolarFileChanged) { printf("PolarFileChanged\n"); }
+  if (LanguageFileChanged) { printf("LanguageFileChanged\n"); }
+  if (StatusFileChanged) { printf("StatusFileChanged\n"); }
+  if (InputFileChanged) { printf("InputFileChanged\n"); }
+  if (DevicePortChanged) { printf("DevicePortChanged\n"); }
 */
 
-  if(MAPFILECHANGED) {
-    AIRSPACEFILECHANGED = true;
-    AIRFIELDFILECHANGED = true;
-    WAYPOINTFILECHANGED = true;
-    TERRAINFILECHANGED = true;
-    TOPOLOGYFILECHANGED = true;
+  if(MapFileChanged) {
+    AirspaceFileChanged = true;
+    AirfieldFileChanged = true;
+    WaypointFileChanged = true;
+    TerrainFileChanged = true;
+    TopologyFileChanged = true;
   }
 
-  if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED) || (AIRFIELDFILECHANGED)) {
+  if((WaypointFileChanged) || (TerrainFileChanged) || (AirfieldFileChanged)) {
 
     XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
     XCSoarInterface::SetProgressStepSize(2);
@@ -139,36 +139,36 @@ void SettingsLeave() {
     ReadAirfieldFile();
 
     // re-set home
-    if (WAYPOINTFILECHANGED || TERRAINFILECHANGED) {
+    if (WaypointFileChanged || TerrainFileChanged) {
       SetHome(way_points, &terrain, XCSoarInterface::SetSettingsComputer(),
-          WAYPOINTFILECHANGED);
+          WaypointFileChanged);
     }
 
     terrain.ServiceFullReload(XCSoarInterface::Basic().Location);
   }
 
-  if (TOPOLOGYFILECHANGED) {
+  if (TopologyFileChanged) {
     topology->Close();
     topology->Open();
   }
 
-  if(AIRSPACEFILECHANGED) {
+  if(AirspaceFileChanged) {
     CloseAirspace(airspace_database, airspace_warning);
     ReadAirspace(airspace_database, &terrain, XCSoarInterface::Basic().pressure);
   }
 
-  if (POLARFILECHANGED) {
+  if (PolarFileChanged) {
     GlidePolar gp = task_manager.get_glide_polar();
     if (LoadPolarById(XCSoarInterface::SettingsComputer(), gp)) {
       task_manager.set_glide_polar(gp);
     }
   }
 
-  if (AIRFIELDFILECHANGED
-      || AIRSPACEFILECHANGED
-      || WAYPOINTFILECHANGED
-      || TERRAINFILECHANGED
-      || TOPOLOGYFILECHANGED
+  if (AirfieldFileChanged
+      || AirspaceFileChanged
+      || WaypointFileChanged
+      || TerrainFileChanged
+      || TopologyFileChanged
       ) {
     XCSoarInterface::CloseProgressDialog();
     XCSoarInterface::main_window.map.set_focus();
@@ -176,7 +176,7 @@ void SettingsLeave() {
 
   calculation_thread->resume();
 
-  if(COMPORTCHANGED) {
+  if(DevicePortChanged) {
     devRestart();
   }
 
