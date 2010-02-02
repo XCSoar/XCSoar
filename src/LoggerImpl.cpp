@@ -163,10 +163,8 @@ LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
     NumLoggerPreTakeoffBuffered++;
   }
 
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Latitude =
-      gps_info.Location.Latitude;
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Longitude =
-      gps_info.Location.Longitude;
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Location =
+      gps_info.Location;
 
   LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Altitude =
       gps_info.GPSAltitude;
@@ -266,8 +264,7 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
   } else if (NumLoggerPreTakeoffBuffered) {
     for (int i = 0; i < NumLoggerPreTakeoffBuffered; i++) {
       NMEA_INFO tmp_info;
-      tmp_info.Location.Latitude = LoggerPreTakeoffBuffer[i].Latitude;
-      tmp_info.Location.Longitude = LoggerPreTakeoffBuffer[i].Longitude;
+      tmp_info.Location = LoggerPreTakeoffBuffer[i].Location;
       tmp_info.GPSAltitude = LoggerPreTakeoffBuffer[i].Altitude;
       tmp_info.BaroAltitude = LoggerPreTakeoffBuffer[i].BaroAltitude;
       tmp_info.Hour = LoggerPreTakeoffBuffer[i].Hour;

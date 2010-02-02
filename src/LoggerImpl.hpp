@@ -42,6 +42,8 @@ Copyright_License {
 #include "Sizes.h"
 #include "GPSClock.hpp"
 #include "Poco/RWLock.h"
+#include "Poco/RWLock.h"
+#include "Navigation/GeoPoint.hpp"
 
 #include <tchar.h>
 #include <windef.h>
@@ -54,8 +56,7 @@ struct SETTINGS_COMPUTER;
 struct Declaration;
 
 typedef struct LoggerPreTakeoffBuffer {
-  double Latitude;
-  double Longitude;
+  GEOPOINT Location;
   double Altitude;
   double BaroAltitude;
   short Day;
