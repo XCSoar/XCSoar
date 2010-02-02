@@ -40,16 +40,19 @@
 #include "GeoPoint.hpp"
 
 /**
- * Structure containing basic aircraft data used for navigation.
+ * @file
+ * Structures containing basic aircraft data used for navigation.
  * Typically this will be updated only by the GPS devices or by
  * a simulator.
  *
- * Copies of the state are made in some TaskPoint types so this should be
+ * Copies of the states are made in some TaskPoint types so this should be
  * kept fairly small.  If extra data is required to be saved by the GPS
  * device, then this structure itself should be contained within a larger one.
- *
  */
 
+/**
+ * Structure for speed-related state data
+ */
 struct SPEED_STATE 
 {
   //############
@@ -79,7 +82,6 @@ struct SPEED_STATE
   fixed IndicatedAirspeed;
 };
 
-
 /**
  * Structure for altitude-related state data
  */
@@ -104,7 +106,6 @@ struct ALTITUDE_STATE
   fixed thermal_drift_factor() const;
 };
 
-
 /**
  * Structure for wind state data 
  */
@@ -117,7 +118,6 @@ struct WIND_STATE
   fixed WindSpeed; /**< Wind speed (m/s); must be positive */
   fixed WindDirection; /**< Direction of travel of wind (degrees) */
 };
-
 
 /**
  * Structure for variometer data
@@ -184,7 +184,6 @@ private:
   int  TimeInFlight;
 };
 
-
 /**
  * Compound structure defining an aircraft state
  */
@@ -220,23 +219,19 @@ struct AIRCRAFT_STATE:
    * or estimated (assuming balanced turn) 
    * @see AccelerationAvailable
    */
-
   fixed Gload;
 
-
-  /** Accessor for the aircraft location
-   */
+  /** Accessor for the aircraft location */
   const GEOPOINT& get_location() const {
     return Location;
-  };
+  }
 
 /**
  * Calculate predicted state in future.
- * Assumes aircraft will continue along current TrackBearing and Speed  
- *
+ * Assumes aircraft will continue along current TrackBearing and Speed with
+ * constant climb speed
  * @param in_time Time step for extrapolation (s)
  * @return Predicted aircraft state in in_time seconds
- *
  */
   AIRCRAFT_STATE get_predicted_state(const fixed& in_time) const;
 };

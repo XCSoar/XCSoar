@@ -34,41 +34,37 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-
 
 AIRCRAFT_STATE 
 AIRCRAFT_STATE::get_predicted_state(const fixed &in_time) const
 {
   AIRCRAFT_STATE state_next = *this;
-  GeoVector vec(Speed*in_time, TrackBearing);
+  GeoVector vec(Speed * in_time, TrackBearing);
   state_next.Location = vec.end_point(Location);
-  state_next.NavAltitude += Vario*in_time;
+  state_next.NavAltitude += Vario * in_time;
   return state_next;
 }
-
 
 AIRCRAFT_STATE::AIRCRAFT_STATE():
   ALTITUDE_STATE(),
   Gload(fixed_one)
 {
-
 }
 
 ALTITUDE_STATE::ALTITUDE_STATE():
   working_band_fraction(fixed_one)
 {
-
 }
 
 fixed 
 ALTITUDE_STATE::thermal_drift_factor() const
 {
   static const fixed fixed_100(100);
-  return signum(AltitudeAGL/fixed_100);
+  return signum(AltitudeAGL / fixed_100);
 }
-
 
 FLYING_STATE::FLYING_STATE()
 {
@@ -78,8 +74,8 @@ FLYING_STATE::FLYING_STATE()
 void
 FLYING_STATE::flying_state_reset()
 {
-  TimeInFlight=0;
-  TimeOnGround=0;
+  TimeInFlight = 0;
+  TimeOnGround = 0;
   Flying = false;
   OnGround = false;
 }
@@ -87,26 +83,24 @@ FLYING_STATE::flying_state_reset()
 void
 FLYING_STATE::flying_state_moving(const fixed time)
 {
-  if (TimeInFlight<60) {
+  if (TimeInFlight < 60)
     TimeInFlight++;
-  }
-  TimeOnGround= 0;
+
+  TimeOnGround = 0;
   flying_state_check(time);
 }
 
 void
 FLYING_STATE::flying_state_stationary(const fixed time, const bool on_ground)
 {
-  if (TimeInFlight) {
+  if (TimeInFlight)
     TimeInFlight--;
-  }
-  if (on_ground) {
-    if (TimeOnGround<30)
-      TimeOnGround++;
-  }
+
+  if (on_ground && TimeOnGround<30)
+    TimeOnGround++;
+
   flying_state_check(time);
 }
-
 
 void
 FLYING_STATE::flying_state_check(const fixed time)
@@ -127,8 +121,8 @@ FLYING_STATE::flying_state_check(const fixed time)
       FlightTime = 0;
     }
   } else {
-
-    FlightTime = time-TakeOffTime;
+    // update time of flight
+    FlightTime = time - TakeOffTime;
 
     // detect landing
     if (TimeInFlight == 0) {
@@ -136,6 +130,5 @@ FLYING_STATE::flying_state_check(const fixed time)
       Flying = false;
     }
   }
-  OnGround = (!Flying) && (TimeOnGround>10);
+  OnGround = (!Flying) && (TimeOnGround > 10);
 }
-
