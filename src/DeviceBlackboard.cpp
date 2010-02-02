@@ -473,8 +473,7 @@ void
 DeviceBlackboard::NavAltitude()
 {
   if (!SettingsComputer().EnableNavBaroAltitude
-      || !Basic().BaroAltitudeAvailable 
-      || Basic().Replay) {
+      || !Basic().BaroAltitudeAvailable) {
     SetBasic().NavAltitude = Basic().GPSAltitude;
   } else {
     SetBasic().NavAltitude = Basic().BaroAltitude;
