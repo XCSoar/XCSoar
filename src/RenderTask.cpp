@@ -5,10 +5,8 @@
 #include "Task/Tasks/AbortTask.hpp"
 #include "RenderTaskPoint.hpp"
 
-RenderTask::RenderTask(MapDrawHelper &_helper,
-                       RenderTaskPoint& _tpv):
-  MapDrawHelper(_helper),
-  tpv(_tpv)
+RenderTask::RenderTask(RenderTaskPoint& _tpv)
+  :tpv(_tpv)
 {
 }
 

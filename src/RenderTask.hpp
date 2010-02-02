@@ -39,7 +39,6 @@ Copyright_License {
 #define XCSOAR_RENDER_TASK_HPP
 
 #include "Task/Visitors/TaskVisitor.hpp"
-#include "MapDrawHelper.hpp"
 
 class RenderTaskPoint;
 class AbstractTask;
@@ -48,12 +47,10 @@ class OrderedTask;
 class GotoTask;
 
 class RenderTask: 
-  public TaskVisitor,
-  public MapDrawHelper
+  public TaskVisitor
 {
 public:
-  RenderTask(MapDrawHelper &_helper,
-             RenderTaskPoint& _tpv);
+  RenderTask(RenderTaskPoint& _tpv);
   void Visit(const AbortTask& task);
   void Visit(const OrderedTask& task);
   void Visit(const GotoTask& task);
