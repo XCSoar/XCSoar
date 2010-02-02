@@ -150,13 +150,18 @@ DeviceBlackboard::SetLocation(const GEOPOINT &loc,
 			      const double alt, const double baroalt, const double t)
 {
   ScopeLock protect(mutexBlackboard);
+  SetBasic().AccelerationAvailable = false;
   SetBasic().Location = loc;
   SetBasic().Speed = speed;
   SetBasic().IndicatedAirspeed = speed; // cheat
   SetBasic().TrackBearing = bearing;
+  SetBasic().AirspeedAvailable = false;
   SetBasic().GPSAltitude = alt;
   SetBasic().BaroAltitude = baroalt;
   SetBasic().Time = t;
+  SetBasic().VarioAvailable = false;
+  SetBasic().NettoVarioAvailable = false;
+  SetBasic().ExternalWindAvailable = false;
   SetBasic().Replay = true;
 };
 
@@ -458,9 +463,8 @@ DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
   SetBasic().GliderSinkRate = 
     -glide_polar.SinkRate(Basic().IndicatedAirspeed, Basic().Gload);
 
-  if (!Basic().NettoVarioAvailable || Basic().Replay) {
+  if (!Basic().NettoVarioAvailable)
     SetBasic().NettoVario = Basic().Vario - Basic().GliderSinkRate;
-  }
 }
 
 
@@ -510,7 +514,7 @@ DeviceBlackboard::Heading()
     SetBasic().TrueAirspeedEstimated = 0.0;
   }
 
-  if (!Basic().AirspeedAvailable || Basic().Replay) {
+  if (!Basic().AirspeedAvailable) {
     SetBasic().TrueAirspeed = Basic().TrueAirspeedEstimated;
     SetBasic().IndicatedAirspeed = Basic().TrueAirspeed
       /Basic().pressure.AirDensityRatio(Basic().GetAnyAltitude());
@@ -536,16 +540,15 @@ DeviceBlackboard::Vario()
     SetBasic().GPSVarioTE = GainTE / dT;
   }
 
-  if (!Basic().VarioAvailable || Basic().Replay) {
+  if (!Basic().VarioAvailable)
     SetBasic().Vario = Basic().GPSVario;
-  }
 }
 
 
 void
 DeviceBlackboard::Wind()
 {
-  if (!Basic().ExternalWindAvailable || Basic().Replay) {
+  if (!Basic().ExternalWindAvailable) {
     SetBasic().WindSpeed = Calculated().WindSpeed_estimated;
     SetBasic().WindDirection = Calculated().WindBearing_estimated;
   }
@@ -624,9 +627,8 @@ DeviceBlackboard::Dynamics()
 
     SetBasic().BankAngle = fixed_rad_to_deg * angle;
 
-    if (!Basic().AccelerationAvailable || Basic().Replay) {
+    if (!Basic().AccelerationAvailable)
       SetBasic().Gload = fixed_one / max(fixed_small, fabs(cos(angle)));
-    }
 
     // estimate pitch angle (assuming balanced turn)
     SetBasic().PitchAngle = fixed_rad_to_deg *
@@ -638,9 +640,8 @@ DeviceBlackboard::Dynamics()
     SetBasic().PitchAngle = fixed_zero;
     SetBasic().TurnRateWind = fixed_zero;
 
-    if (!Basic().AccelerationAvailable || Basic().Replay) {
+    if (!Basic().AccelerationAvailable)
       SetBasic().Gload = fixed_one;
-    }
   }
 }
 
