@@ -43,7 +43,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "Logger.h"
+#include "Logger.hpp"
 #include "Math/Earth.hpp"
 #include "GPSClock.hpp"
 #ifdef OLD_TASK

@@ -44,7 +44,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/Constants.h"
-#include "Logger.h"
+#include "Logger.hpp"
 #include "Language.hpp"
 #include "Appearance.hpp"
 #include "Task/TaskManager.hpp"

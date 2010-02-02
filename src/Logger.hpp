@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_LOGGER_H)
-#define XCSOAR_LOGGER_H
+#ifndef XCSOAR_LOGGER_HPP
+#define XCSOAR_LOGGER_HPP
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

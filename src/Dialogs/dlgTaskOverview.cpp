@@ -43,7 +43,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsTask.hpp"
 #include "TaskFile.hpp"
-#include "Logger.h"
+#include "Logger.hpp"
 #include "MacCready.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"

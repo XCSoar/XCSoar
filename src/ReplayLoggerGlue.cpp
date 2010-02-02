@@ -37,7 +37,7 @@
 */
 
 #include "ReplayLoggerGlue.hpp"
-#include "Logger.h"
+#include "Logger.hpp"
 #include "Protection.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"

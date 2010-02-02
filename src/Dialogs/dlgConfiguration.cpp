@@ -48,7 +48,7 @@ Copyright_License {
 #include "Gauge/GaugeFLARM.hpp"
 #include "LocalPath.hpp"
 #include "UtilsProfile.hpp"
-#include "Logger.h"
+#include "Logger.hpp"
 #include "Device/Register.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"

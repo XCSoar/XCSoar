@@ -44,7 +44,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Atmosphere.h"
 #include "UtilsSystem.hpp"
-#include "Logger.h"
+#include "Logger.hpp"
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
 #include "Components.hpp"
