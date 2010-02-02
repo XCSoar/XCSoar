@@ -244,6 +244,8 @@ void MapWindow::RenderAirborne(Canvas &canvas, const RECT rc)
  */
 void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
 {
+  const NMEA_INFO &data = Basic();
+
   // overlays
   DrawCDI();
 
@@ -263,7 +265,7 @@ void MapWindow::RenderSymbology_upper(Canvas &canvas, const RECT rc)
   DrawThermalBand(canvas, rc);
   DrawFinalGlide(canvas,rc);
   //  DrawSpeedToFly(canvas, rc);
-  DrawGPSStatus(canvas, rc);
+  DrawGPSStatus(canvas, rc, data);
 }
 
 /**

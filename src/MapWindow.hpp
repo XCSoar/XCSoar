@@ -205,7 +205,7 @@ class MapWindow
   void DrawWaypoints(Canvas &canvas);
 
   void DrawFlightMode(Canvas &canvas, const RECT rc);
-  void DrawGPSStatus(Canvas &canvas, const RECT rc);
+  void DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps);
   void DrawTrail(Canvas &canvas);
   void DrawTeammate(Canvas &canvas);
   void DrawOffTrackIndicator(Canvas &canvas);
