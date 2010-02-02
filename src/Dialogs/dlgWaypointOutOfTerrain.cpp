@@ -41,30 +41,37 @@ Copyright_License {
 #include "WayPointParser.h"
 #include "MainWindow.hpp"
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 
-static void OnYesClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnYesClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(wpTerrainBoundsYes);
 }
 
-static void OnYesAllClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnYesAllClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(wpTerrainBoundsYesAll);
 }
 
-static void OnNoClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnNoClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(wpTerrainBoundsNo);
 }
 
-static void OnNoAllClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnNoAllClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(wpTerrainBoundsNoAll);
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnYesClicked),
   DeclareCallBackEntry(OnYesAllClicked),
   DeclareCallBackEntry(OnNoClicked),
@@ -72,8 +79,9 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-int dlgWaypointOutOfTerrain(const TCHAR *Message){
-
+int
+dlgWaypointOutOfTerrain(const TCHAR *Message)
+{
   WndFrame* wfrm;
   int res = 0;
 
@@ -81,41 +89,27 @@ int dlgWaypointOutOfTerrain(const TCHAR *Message){
   __try{
 #endif
 
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgWaypointOutOfTerrain.xml"),
-		        XCSoarInterface::main_window,
-		        _T("IDR_XML_WAYPOINTTERRAIN"));
+  wf = dlgLoadFromXML(CallBackTable, _T("dlgWaypointOutOfTerrain.xml"),
+                      XCSoarInterface::main_window,
+                      _T("IDR_XML_WAYPOINTTERRAIN"));
+  if (!wf)
+    return 0;
 
-    if (wf) {
+  wfrm = (WndFrame*)wf->FindByName(_T("frmWaypointOutOfTerrainText"));
 
+  wfrm->SetCaption(Message);
+  wfrm->SetCaptionStyle(DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
 
-      wfrm = (WndFrame*)wf->FindByName(_T("frmWaypointOutOfTerrainText"));
-
-      wfrm->SetCaption(Message);
-      wfrm->SetCaptionStyle(
-          DT_EXPANDTABS
-        | DT_CENTER
-        | DT_NOCLIP
-        | DT_WORDBREAK);
-
-
-      res = wf->ShowModal();
-      delete wf;
-
-    }
-
-    wf = NULL;
+  res = wf->ShowModal();
+  delete wf;
 
 #ifdef HAVEEXCEPTIONS
-  }__except(EXCEPTION_EXECUTE_HANDLER ){
-
+  } __except(EXCEPTION_EXECUTE_HANDLER) {
     res = 0;
     // ToDo: log that problem
-
   };
 #endif
 
-  return(res);
-
+  return res;
 }
 
