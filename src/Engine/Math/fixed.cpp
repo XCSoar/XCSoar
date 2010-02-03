@@ -29,6 +29,7 @@ extern fixed const fixed_deg_to_rad(3.1415926/180.0);
 extern fixed const fixed_rad_to_deg(180.0/3.1415926);
 extern fixed const fixed_360(360);
 extern fixed const fixed_180(180);
+extern fixed const fixed_90(90);
 
 
 fixed& fixed::operator%=(fixed const& other)

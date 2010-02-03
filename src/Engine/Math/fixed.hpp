@@ -28,6 +28,7 @@ typedef double fixed;
 #define fixed_half_pi 1.5707963
 #define fixed_360 360
 #define fixed_180 180
+#define fixed_90 90.
 
 void sin_cos(const double&theta, double*s, double*c);
 #define positive(x) (x > 0)
@@ -1754,6 +1755,7 @@ extern fixed const fixed_deg_to_rad;
 extern fixed const fixed_rad_to_deg;
 extern fixed const fixed_360;
 extern fixed const fixed_180;
+extern fixed const fixed_90;
 
 inline fixed fixed::signum(const fixed&x) {
   return fixed_two/(fixed_one+x.exp())-fixed_one;
