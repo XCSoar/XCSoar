@@ -53,6 +53,29 @@
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
 
+const struct LoggerImpl::LoggerPreTakeoffBuffer &
+LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
+{
+  Location = src.Location;
+  Altitude = src.GPSAltitude;
+  BaroAltitude = src.GetAnyAltitude();
+
+  Hour = src.Hour;
+  Minute = src.Minute;
+  Second = src.Second;
+  Year = src.Year;
+  Month = src.Month;
+  Day = src.Day;
+  Time = src.Time;
+
+  NAVWarning = src.NAVWarning;
+
+  for (int iSat = 0; iSat < MAXSATELLITES; iSat++)
+    SatelliteIDs[iSat] = src.SatelliteIDs[iSat];
+
+  return *this;
+}
+
 LoggerImpl::LoggerImpl():
   LoggerActive(false),
   DeclaredToDevice(false),
@@ -163,40 +186,7 @@ LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
     NumLoggerPreTakeoffBuffered++;
   }
 
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Location =
-      gps_info.Location;
-
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Altitude =
-      gps_info.GPSAltitude;
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].BaroAltitude =
-      gps_info.BaroAltitude;
-
-  if (!gps_info.BaroAltitudeAvailable) {
-    LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].BaroAltitude =
-        gps_info.GPSAltitude;
-  }
-
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Hour =
-      gps_info.Hour;
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Minute =
-      gps_info.Minute;
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Second =
-      gps_info.Second;
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Year =
-      gps_info.Year;
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Month =
-      gps_info.Month;
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Day =
-      gps_info.Day;
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].Time =
-      gps_info.Time;
-
-  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].NAVWarning =
-      gps_info.NAVWarning;
-
-  for (int iSat = 0; iSat < MAXSATELLITES; iSat++)
-    LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered-1].SatelliteIDs[iSat] =
-      gps_info.SatelliteIDs[iSat];
+  LoggerPreTakeoffBuffer[NumLoggerPreTakeoffBuffered - 1] = gps_info;
 
   // This is the first point that will be output to file.
   // Declaration must happen before this, so must save this time.

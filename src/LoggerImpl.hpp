@@ -72,6 +72,8 @@ public:
     int SatelliteIDs[MAXSATELLITES];
     double Time;
     int NAVWarning;
+
+    const struct LoggerPreTakeoffBuffer &operator=(const NMEA_INFO &src);
   };
 
 public:
