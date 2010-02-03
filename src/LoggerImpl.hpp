@@ -48,29 +48,32 @@ Copyright_License {
 #include <tchar.h>
 #include <windef.h>
 
-#define LOGGER_PRETAKEOFF_BUFFER_MAX 60
-#define LOGGER_DISK_BUFFER_NUM_RECS 10
-
 struct NMEA_INFO;
 struct SETTINGS_COMPUTER;
 struct Declaration;
 
-typedef struct LoggerPreTakeoffBuffer {
-  GEOPOINT Location;
-  double Altitude;
-  double BaroAltitude;
-  short Day;
-  short Month;
-  short Year;
-  short Hour;
-  short Minute;
-  short Second;
-  int SatelliteIDs[MAXSATELLITES];
-  double Time;
-  int NAVWarning;
-} LoggerPreTakeoffBuffer_T;
-
 class LoggerImpl {
+public:
+  enum {
+    LOGGER_PRETAKEOFF_BUFFER_MAX = 60,
+    LOGGER_DISK_BUFFER_NUM_RECS = 10,
+  };
+
+  struct LoggerPreTakeoffBuffer {
+    GEOPOINT Location;
+    double Altitude;
+    double BaroAltitude;
+    short Day;
+    short Month;
+    short Year;
+    short Hour;
+    short Minute;
+    short Second;
+    int SatelliteIDs[MAXSATELLITES];
+    double Time;
+    int NAVWarning;
+  };
+
 public:
   LoggerImpl();
 
@@ -153,8 +156,8 @@ private:
   TCHAR szLoggerFileName[MAX_PATH];
   char szLoggerFileName_c[MAX_PATH];
   int NumLoggerPreTakeoffBuffered;
-  LoggerPreTakeoffBuffer_T FirstPoint;
-  LoggerPreTakeoffBuffer_T LoggerPreTakeoffBuffer[LOGGER_PRETAKEOFF_BUFFER_MAX];
+  LoggerPreTakeoffBuffer FirstPoint;
+  LoggerPreTakeoffBuffer LoggerPreTakeoffBuffer[LOGGER_PRETAKEOFF_BUFFER_MAX];
 
   /* stdio buffering is bad on wince3.0:
    * it appends up to 1024 NULLs at the end of the file if PDA power fails
