@@ -194,8 +194,7 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
   Month = Basic.Month;
   Year = Basic.Year;
   Day = Basic.Day;
-  Hour = ((int)Basic.Time) / 3600;
-  Hour = (Hour % 24);
+  Hour = Basic.Hour;
 
   DaysToJ2000 = FNday(Year, Month, Day, (float)Hour);
 
