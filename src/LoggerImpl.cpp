@@ -61,6 +61,7 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <tchar.h>
+#include <algorithm>
 
 const struct LoggerImpl::LoggerPreTakeoffBuffer &
 LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
@@ -74,8 +75,8 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
 
   NAVWarning = src.gps.NAVWarning;
 
-  for (int iSat = 0; iSat < MAXSATELLITES; iSat++)
-    SatelliteIDs[iSat] = src.gps.SatelliteIDs[iSat];
+  std::copy(src.gps.SatelliteIDs, src.gps.SatelliteIDs + MAXSATELLITES,
+            SatelliteIDs);
 
   return *this;
 }
