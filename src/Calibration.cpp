@@ -53,9 +53,9 @@ using std::max;
 #define NUM_CAL_VARIO 101
 #define NUM_CAL_VSPEED 50
 
-static double calibration_tevario_val[NUM_CAL_SPEED][NUM_CAL_VARIO];
+static fixed calibration_tevario_val[NUM_CAL_SPEED][NUM_CAL_VARIO];
 static unsigned int calibration_tevario_num[NUM_CAL_SPEED][NUM_CAL_VARIO];
-static double calibration_speed_val[NUM_CAL_VSPEED];
+static fixed calibration_speed_val[NUM_CAL_VSPEED];
 static unsigned int calibration_speed_num[NUM_CAL_VSPEED];
 
 void CalibrationInit(void) {
@@ -106,8 +106,8 @@ CalibrationUpdate(const NMEA_INFO *Basic)
   if ((!Basic->AirspeedAvailable) || (Basic->TrueAirspeed<=0)) {
     return;
   }
-  double ias_to_tas = Basic->TrueAirspeed/
-    max(fixed(1.0), Basic->IndicatedAirspeed);
+  fixed ias_to_tas = Basic->TrueAirspeed /
+    max(fixed_one, Basic->IndicatedAirspeed);
 
   // Vario calibration info
   int index_te_vario = lround(Basic->GPSVarioTE*10)+50;
@@ -122,7 +122,7 @@ CalibrationUpdate(const NMEA_INFO *Basic)
     return;
 
   calibration_tevario_val[index_speed][index_te_vario] +=
-    (double)Basic->Vario*ias_to_tas;
+    Basic->Vario * ias_to_tas;
   calibration_tevario_num[index_speed][index_te_vario] ++;
 
   // ASI calibration info
@@ -132,7 +132,7 @@ CalibrationUpdate(const NMEA_INFO *Basic)
   if (index_vspeed>= NUM_CAL_VSPEED)
     return;
 
-  calibration_speed_val[index_vspeed] += (double)Basic->TrueAirspeedEstimated;
+  calibration_speed_val[index_vspeed] += Basic->TrueAirspeedEstimated;
   calibration_speed_num[index_vspeed] ++;
 
 }
