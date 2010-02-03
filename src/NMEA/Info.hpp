@@ -290,7 +290,7 @@ struct NMEA_INFO:
    * Returns the barometric altitude, and falls back to the GPS
    * altitude.
    */
-  fixed GetAnyAltitude() const {
+  fixed GetAltitudeBaroPreferred() const {
     return BaroAltitudeAvailable
       ? BaroAltitude
       : GPSAltitude;

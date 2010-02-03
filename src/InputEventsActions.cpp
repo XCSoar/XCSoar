@@ -1238,7 +1238,8 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
     return;
   }
 
-  AirspaceVisible visible (SettingsComputer(), Basic().GetAnyAltitude());
+  AirspaceVisible visible(SettingsComputer(),
+                          Basic().GetAltitudeBaroPreferred());
   AirspaceAircraftPerformanceSimple perf;
   AirspaceSoonestSort ans(Basic(), perf, fixed(1800), visible);
 

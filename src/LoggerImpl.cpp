@@ -58,7 +58,7 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
 {
   Location = src.Location;
   Altitude = src.GPSAltitude;
-  BaroAltitude = src.GetAnyAltitude();
+  BaroAltitude = src.GetAltitudeBaroPreferred();
 
   Hour = src.Hour;
   Minute = src.Minute;

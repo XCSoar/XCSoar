@@ -149,7 +149,7 @@ public:
     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
     pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00)),
     visible(settings_computer,
-            state.GetAnyAltitude(),
+            state.GetAltitudeBaroPreferred(),
             m_border,
             warnings)
     {
@@ -331,7 +331,7 @@ MapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
   airspace_warning.visit_warnings(awc);
 
   AirspaceDetailsDialogVisitor airspace_copy_popup(SettingsComputer(),
-                                                   Basic().GetAnyAltitude(),
+                                                   Basic().GetAltitudeBaroPreferred(),
                                                    awc);
 
   airspace_database->visit_within_range(location, fixed(100.0),
