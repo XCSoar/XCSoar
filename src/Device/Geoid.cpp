@@ -43,6 +43,7 @@ Copyright_License {
  */
 
 #include "Device/Geoid.h"
+#include "Engine/Math/Geometry.hpp"
 #include "Interface.hpp"
 
 #include <windows.h>
@@ -121,26 +122,21 @@ CloseGeoid(void)
  * @param lon Longitude
  * @return The geoid separation
  */
-double
-LookupGeoidSeparation(double lat, double lon)
+fixed
+LookupGeoidSeparation(const GEOPOINT pt)
 {
   if (!egm96data)
-    return 0.0;
+    return fixed_zero;
 
   int ilat, ilon;
-  ilat = iround((90.0 - lat) / 2.0);
-  // TODO: TB: use limit180
-  if (lon < 0)
-    lon += 360.0;
-
-  ilon = iround(lon/2.0);
+  ilat = iround((fixed_90 - pt.Latitude) / fixed_two);
+  ilon = iround(AngleLimit360(pt.Longitude) / fixed_two);
 
   int offset = ilat * 180 + ilon;
   if (offset >= EGM96SIZE)
-    return 0.0;
+    return fixed_zero;
   if (offset < 0)
-    return 0.0;
+    return fixed_zero;
 
-  double val = (double)(egm96data[offset]) - 127;
-  return val;
+  return fixed((int)egm96data[offset] - 127);
 }

@@ -796,7 +796,7 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
   // "Altitude" should always be GPS Altitude.
   GPS_INFO->GPSAltitude = ParseAltitude(params[8], params[9]);
 
-  double GeoidSeparation;
+  fixed GeoidSeparation;
   if (!string_is_empty(params[10])) {
     // No real need to parse this value,
     // but we do assume that no correction is required in this case
@@ -812,9 +812,8 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
     //
     if (!HaveCondorDevice()) {
       // JMW TODO really need to know the actual device..
-      GeoidSeparation = LookupGeoidSeparation(GPS_INFO->Location.Latitude,
-          GPS_INFO->Location.Longitude);
-      GPS_INFO->GPSAltitude -= fixed(GeoidSeparation);
+      GeoidSeparation = LookupGeoidSeparation(GPS_INFO->Location);
+      GPS_INFO->GPSAltitude -= GeoidSeparation;
     }
   }
 
