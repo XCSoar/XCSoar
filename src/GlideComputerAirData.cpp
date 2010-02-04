@@ -539,7 +539,7 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
 
   g_terrain.set_max_range(fixed(max(20000.0, screen_range)));
   
-  const fixed d_bearing = fixed_360/NUMTERRAINSWEEPS;
+  const fixed d_bearing = fixed_360 / TERRAIN_ALT_INFO::NUMTERRAINSWEEPS;
 
   unsigned i=0;
 

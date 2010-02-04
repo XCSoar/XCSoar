@@ -48,6 +48,7 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "MapWindowBlackboard.hpp"
 #include "PeriodClock.hpp"
+#include "NMEA/Derived.hpp"
 
 #include <vector>
 
@@ -171,7 +172,7 @@ class MapWindow
   GEOPOINT      TargetDrag_Location;
   int           TargetDrag_State;
 
-  POINT         Groundline[NUMTERRAINSWEEPS+1];
+  POINT         Groundline[TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1];
 
   ZoomClimb_t    zoomclimb;
 

@@ -77,9 +77,6 @@
 // ratio of smoothed bitmap size to pixel grid
 #define OVS 2
 
-// number of radials to do range footprint calculation on
-#define NUMTERRAINSWEEPS 20
-
 // number of points along final glide to scan for terrain
 #define NUMFINALGLIDETERRAIN 30
 

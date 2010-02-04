@@ -151,6 +151,11 @@ struct CIRCLING_INFO
 
 struct TERRAIN_ALT_INFO
 {
+  enum {
+    /** number of radials to do range footprint calculation on */
+    NUMTERRAINSWEEPS = 20,
+  };
+
   /** Terrain altitude */
   fixed TerrainAlt;
   /** True if terrain is valid, False otherwise */

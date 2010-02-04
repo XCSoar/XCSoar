@@ -45,7 +45,7 @@ Copyright_License {
 void MapWindow::CalculateScreenPositionsGroundline(void) {
   if (SettingsComputer().FinalGlideTerrain) {
     LonLat2Screen(Calculated().GlideFootPrint,
-		  Groundline, NUMTERRAINSWEEPS+1, 1);
+                  Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS+1, 1);
   }
 }
 
@@ -70,7 +70,7 @@ void MapWindow::DrawTerrainAbove(Canvas &canvas, const RECT rc, Canvas &buffer)
 
   buffer.white_pen();
   buffer.white_brush();
-  buffer.polygon(Groundline, NUMTERRAINSWEEPS + 1);
+  buffer.polygon(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
 
   // need to do this to prevent drawing of colored outline
   buffer.white_pen();
@@ -86,12 +86,12 @@ void
 MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
 {
   canvas.select(MapGfx.hpTerrainLineBg);
-  canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
+  canvas.polyline(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
   if ((SettingsComputer().FinalGlideTerrain==1) ||
       ((!SettingsMap().EnableTerrain || !Basic().Flying) &&
        (SettingsComputer().FinalGlideTerrain==2))) {
     canvas.select(MapGfx.hpTerrainLine);
-    canvas.polyline(Groundline, NUMTERRAINSWEEPS + 1);
+    canvas.polyline(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
   }
 
   if (!Basic().Flying) return;
