@@ -62,6 +62,7 @@ Copyright_License {
 #endif
 
 #include <assert.h>
+#include <tchar.h>
 
 #ifdef HAVE_POSIX
 #include <sys/statvfs.h>
@@ -199,7 +200,7 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
 
 
 bool FileExistsW(const TCHAR *FileName){
-  FILE *file = _tfopen(FileName, TEXT("r"));
+  FILE *file = _tfopen(FileName, _T("r"));
   if (file == NULL)
     return(false);
 
@@ -300,7 +301,7 @@ void SmartGlobalModelType() {
 void SetModelType() {
 
   TCHAR sTmp[100];
-  TCHAR szRegistryInfoBoxModel[]= TEXT("AppInfoBoxModel");
+  TCHAR szRegistryInfoBoxModel[] = _T("AppInfoBoxModel");
   int Temp = 0;
 
   GetFromRegistry(szRegistryInfoBoxModel, Temp);
@@ -384,11 +385,11 @@ const TCHAR *gmfpathname ()
   TCHAR  *p;
 
   if (GetModuleFileName(NULL, gmfpathname_buffer, MAXPATHBASENAME) <= 0) {
-//    StartupStore(TEXT("CRITIC- gmfpathname returned null GetModuleFileName\n")); // rob bughunt
+//    StartupStore(_T("CRITIC- gmfpathname returned null GetModuleFileName\n")); // rob bughunt
     return(_T("\\ERROR_01\\") );
   }
   if (gmfpathname_buffer[0] != '\\' ) {
-//   StartupStore(TEXT("CRITIC- gmfpathname starting without a leading backslash\n"));
+//   StartupStore(_T("CRITIC- gmfpathname starting without a leading backslash\n"));
     return(_T("\\ERROR_02\\"));
   }
   gmfpathname_buffer[MAXPATHBASENAME-1] = '\0';	// truncate for safety
@@ -397,7 +398,7 @@ const TCHAR *gmfpathname ()
     if ( *p == '\\' ) break;	// search for the very first "\"
 
   if ( *p == '\0') {
-//    StartupStore(TEXT("CRITIC- gmfpathname no backslash found\n"));
+//    StartupStore(_T("CRITIC- gmfpathname no backslash found\n"));
     return(_T("\\ERROR_03\\"));
   }
   *++p = '\0';
@@ -415,11 +416,11 @@ const TCHAR *gmfbasename()
   TCHAR *p, *lp;
 
   if (GetModuleFileName(NULL, gmfbasename_buffer, MAXPATHBASENAME) <= 0) {
-    StartupStore(TEXT("CRITIC- gmfbasename returned null GetModuleFileName\n"));
+    StartupStore(_T("CRITIC- gmfbasename returned null GetModuleFileName\n"));
     return(_T("ERROR_04") );
   }
   if (gmfbasename_buffer[0] != '\\' ) {
-    StartupStore(TEXT("CRITIC- gmfbasename starting without a leading backslash\n"));
+    StartupStore(_T("CRITIC- gmfbasename starting without a leading backslash\n"));
     return(_T("ERROR_05"));
   }
   for (p=gmfbasename_buffer+1, lp=NULL; *p != '\0'; p++)
@@ -446,11 +447,11 @@ int GetGlobalModelName ()
   _tcscpy(GlobalModelName, _T(""));
 
   if (GetModuleFileName(NULL, modelname_buffer, MAXPATHBASENAME) <= 0) {
-    StartupStore(TEXT("CRITIC- GetGlobalFileName returned NULL\n"));
+    StartupStore(_T("CRITIC- GetGlobalFileName returned NULL\n"));
     return 0;
   }
   if (modelname_buffer[0] != '\\' ) {
-    StartupStore(TEXT("CRITIC- GetGlobalFileName starting without a leading backslash\n"));
+    StartupStore(_T("CRITIC- GetGlobalFileName starting without a leading backslash\n"));
     return 0;
   }
   for (p=modelname_buffer+1, lp=NULL; *p != '\0'; p++)
@@ -536,7 +537,7 @@ bool SetBacklight() // VENTA4
 
   RegCloseKey(hKey); if (doevent==false) return false;
 
-  HANDLE BLEvent = CreateEvent(NULL, false, false, TEXT("BacklightChangeEvent"));
+  HANDLE BLEvent = CreateEvent(NULL, false, false, _T("BacklightChangeEvent"));
   if ( SetEvent(BLEvent) == 0) doevent=false;
   	else CloseHandle(BLEvent);
   return doevent;
@@ -611,30 +612,30 @@ short InstallFonts() {
   TCHAR srcfile[MAX_PATH];
   TCHAR dstfile[MAX_PATH];
 
-  _stprintf(srcdir,TEXT("%s%S\\Fonts"),gmfpathname(), XCSDATADIR );
-  _stprintf(dstdir,TEXT("\\Windows\\Fonts"),gmfpathname() );
+  _stprintf(srcdir,_T("%s%S\\Fonts"),gmfpathname(), XCSDATADIR );
+  _stprintf(dstdir,_T("\\Windows\\Fonts"),gmfpathname() );
 
 
   if (  GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY) return 1;
   if (  GetFileAttributes(dstdir) != FILE_ATTRIBUTE_DIRECTORY) return 2;
 
-  _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed2.ttf"),srcdir);
-  _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed2.ttf"),dstdir);
+  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed2.ttf"),srcdir);
+  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed2.ttf"),dstdir);
   //if (  GetFileAttributes(srcfile) != FILE_ATTRIBUTE_NORMAL) return 3;
   if (  GetFileAttributes(dstfile) != 0xffffffff ) return 4;
   if ( !CopyFile(srcfile, dstfile, true)) return 5;
 
   // From now on we attempt to copy without overwriting
-  _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-Bold2.ttf"),srcdir);
-  _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-Bold2.ttf"),dstdir);
+  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-Bold2.ttf"),srcdir);
+  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-Bold2.ttf"),dstdir);
   CopyFile(srcfile,dstfile,true);
 
-  _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),srcdir);
-  _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),dstdir);
+  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),srcdir);
+  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),dstdir);
   CopyFile(srcfile,dstfile,true);
 
-  _stprintf(srcfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),srcdir);
-  _stprintf(dstfile,TEXT("%s\\DejaVuSansCondensed-Oblique2.ttf"),dstdir);
+  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-Oblique2.ttf"),srcdir);
+  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-Oblique2.ttf"),dstdir);
   CopyFile(srcfile,dstfile,true);
 
   return 0;
@@ -647,7 +648,7 @@ short InstallFonts() {
 bool CheckDataDir() {
 	TCHAR srcdir[MAX_PATH];
 
-	_stprintf(srcdir,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
+        _stprintf(srcdir,_T("%s%S"),gmfpathname(), XCSDATADIR );
 	if (  GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY) return false;
 	return true;
 }
@@ -663,7 +664,7 @@ bool CheckDataDir() {
 bool CheckRegistryProfile() {
 	TCHAR srcpath[MAX_PATH];
 	if ( GlobalModelType == MODELTYPE_PNA_HP31X ) return false;
-	_stprintf(srcpath,TEXT("%s%S\\%S"),gmfpathname(), XCSDATADIR , XCSPROFILE);
+        _stprintf(srcpath,_T("%s%S\\%S"),gmfpathname(), XCSDATADIR , XCSPROFILE);
 	if (  GetFileAttributes(srcpath) == 0xffffffff) return false;
 	return true;
 }
@@ -677,13 +678,13 @@ void SetProfileFiles(const TCHAR *ex);
  * @param CommandLine not in use
  */
 void XCSoarGetOpts(LPCTSTR CommandLine) {
-// SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
+// SaveRegistryToFile(_T("iPAQ File Store\xcsoar-registry.prf"));
 
   TCHAR extrnProfileFile[MAX_PATH];
   extrnProfileFile[0] = 0;
 
 #ifdef SIMULATOR_AVAILABLE
-  global_simulator_flag = _tcsstr(CommandLine, TEXT("-simulator")) != NULL;
+  global_simulator_flag = _tcsstr(CommandLine, _T("-simulator")) != NULL;
 #endif
 
 #ifdef WINDOWSPC
@@ -703,7 +704,7 @@ void XCSoarGetOpts(LPCTSTR CommandLine) {
 
   const TCHAR *pC, *pCe;
 
-  pC = _tcsstr(CommandLine, TEXT("-profile="));
+  pC = _tcsstr(CommandLine, _T("-profile="));
   if (pC != NULL){
     pC += strlen("-profile=");
     if (*pC == '"'){
@@ -721,49 +722,49 @@ void XCSoarGetOpts(LPCTSTR CommandLine) {
     }
   }
 #ifdef WINDOWSPC
-  pC = _tcsstr(CommandLine, TEXT("-800x480"));
+  pC = _tcsstr(CommandLine, _T("-800x480"));
   if (pC != NULL){
     SCREENWIDTH=800;
     SCREENHEIGHT=480;
   }
 
-  pC = _tcsstr(CommandLine, TEXT("-480x272"));
+  pC = _tcsstr(CommandLine, _T("-480x272"));
   if (pC != NULL){
     SCREENWIDTH=480;
     SCREENHEIGHT=272;
   }
 
-  pC = _tcsstr(CommandLine, TEXT("-480x234"));
+  pC = _tcsstr(CommandLine, _T("-480x234"));
   if (pC != NULL){
     SCREENWIDTH=480;
     SCREENHEIGHT=234;
   }
 
-  pC = _tcsstr(CommandLine, TEXT("-portrait"));
+  pC = _tcsstr(CommandLine, _T("-portrait"));
   if (pC != NULL){
     SCREENWIDTH=480;
     SCREENHEIGHT=640;
   }
 
-  pC = _tcsstr(CommandLine, TEXT("-square"));
+  pC = _tcsstr(CommandLine, _T("-square"));
   if (pC != NULL){
     SCREENWIDTH=480;
     SCREENHEIGHT=480;
   }
 
-  pC = _tcsstr(CommandLine, TEXT("-small"));
+  pC = _tcsstr(CommandLine, _T("-small"));
   if (pC != NULL){
     SCREENWIDTH/= 2;
     SCREENHEIGHT/= 2;
   }
 
-  pC = _tcsstr(CommandLine, TEXT("-320x240"));
+  pC = _tcsstr(CommandLine, _T("-320x240"));
   if (pC != NULL){
     SCREENWIDTH=320;
     SCREENHEIGHT=240;
   }
 
-  pC = _tcsstr(CommandLine, TEXT("-240x320"));
+  pC = _tcsstr(CommandLine, _T("-240x320"));
   if (pC != NULL){
     SCREENWIDTH=240;
     SCREENHEIGHT=320;
@@ -780,7 +781,7 @@ void StartupLogFreeRamAndStorage() {
   TCHAR buffer[MAX_PATH];
   LocalPath(buffer);
   int freestorage = FindFreeSpace(buffer);
-  StartupStore(TEXT("Free ram %d\nFree storage %d\n"), freeram, freestorage);
+  StartupStore(_T("Free ram %d\nFree storage %d\n"), freeram, freestorage);
 }
 
 
