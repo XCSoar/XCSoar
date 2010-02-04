@@ -74,6 +74,7 @@ int SCREENHEIGHT=480;
 #endif
 
 long CheckFreeRam(void) {
+#ifdef WIN32
   MEMORYSTATUS    memInfo;
   // Program memory
   memInfo.dwLength = sizeof(memInfo);
@@ -84,6 +85,9 @@ long CheckFreeRam(void) {
   //	   memInfo.dwTotalPhys- memInfo.dwAvailPhys);
 
   return memInfo.dwAvailPhys;
+#else /* !WIN32 */
+  return 64 * 1024 * 1024; // XXX
+#endif /* !WIN32 */
 }
 
 #ifdef WINDOWSPC
