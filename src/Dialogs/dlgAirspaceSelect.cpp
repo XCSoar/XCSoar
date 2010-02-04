@@ -51,8 +51,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
-static GEOPOINT Location;
-
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
 
@@ -448,7 +446,7 @@ void dlgAirspaceSelect(void) {
   XCSoarInterface::StartHourglassCursor();
 
   UpLimit = 0;
-  Location = XCSoarInterface::Basic().Location;
+  GEOPOINT Location = XCSoarInterface::Basic().Location;
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
