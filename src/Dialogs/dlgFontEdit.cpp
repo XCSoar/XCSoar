@@ -116,6 +116,7 @@ static void RedrawSampleFont(void)
     NewLogFont.lfPitchAndFamily=wp->GetDataField()->GetAsInteger();
   }
 
+#ifndef ENABLE_SDL
   wp = (WndProperty*)wf->FindByName(_T("prpFontTrueType"));
   if(wp) {
     if ( wp->GetDataField()->GetAsBoolean() ) {
@@ -125,6 +126,7 @@ static void RedrawSampleFont(void)
       NewLogFont.lfQuality = NONANTIALIASED_QUALITY;
     }
   }
+#endif /* !ENABLE_SDL */
 
 #ifdef ENABLE_SDL
   // XXX
@@ -390,6 +392,7 @@ void LoadGUI()
     wp->RefreshDisplay();
   }
 
+#ifndef ENABLE_SDL
   wp = (WndProperty*)wf->FindByName(_T("prpFontTrueType"));
   if (wp) {
     DataFieldBoolean* dfb;
@@ -400,6 +403,7 @@ void LoadGUI()
     }
     wp->RefreshDisplay();
   }
+#endif /* !ENABLE_SDL */
 
   IsInitialized=true;
 
