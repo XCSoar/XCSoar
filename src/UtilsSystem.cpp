@@ -677,7 +677,6 @@ void SetProfileFiles(const TCHAR *ex);
  * @param CommandLine not in use
  */
 void XCSoarGetOpts(LPCTSTR CommandLine) {
-  (void)CommandLine;
 // SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
 
   TCHAR extrnProfileFile[MAX_PATH];
@@ -702,72 +701,74 @@ void XCSoarGetOpts(LPCTSTR CommandLine) {
   return; // don't do anything for PDA platforms
 #endif
 
-  TCHAR *MyCommandLine = GetCommandLine();
+  const TCHAR *pC, *pCe;
 
-  if (MyCommandLine != NULL){
-    TCHAR *pC, *pCe;
+  pC = _tcsstr(CommandLine, TEXT("-profile="));
+  if (pC != NULL){
+    pC += strlen("-profile=");
+    if (*pC == '"'){
+      pC++;
+      pCe = pC;
+      while (*pCe != '"' && *pCe != '\0') pCe++;
+    } else{
+      pCe = pC;
+      while (*pCe != ' ' && *pCe != '\0') pCe++;
+    }
+    if (pCe != NULL && pCe-1 > pC){
 
-    pC = _tcsstr(MyCommandLine, TEXT("-profile="));
-    if (pC != NULL){
-      pC += strlen("-profile=");
-      if (*pC == '"'){
-        pC++;
-        pCe = pC;
-        while (*pCe != '"' && *pCe != '\0') pCe++;
-      } else{
-        pCe = pC;
-        while (*pCe != ' ' && *pCe != '\0') pCe++;
-      }
-      if (pCe != NULL && pCe-1 > pC){
-
-        _tcsncpy(extrnProfileFile, pC, pCe-pC);
-        extrnProfileFile[pCe-pC] = '\0';
-      }
+      _tcsncpy(extrnProfileFile, pC, pCe-pC);
+      extrnProfileFile[pCe-pC] = '\0';
     }
-#ifdef WINDOWSPC
-    pC = _tcsstr(MyCommandLine, TEXT("-800x480"));
-    if (pC != NULL){
-      SCREENWIDTH=800;
-      SCREENHEIGHT=480;
-    }
-    pC = _tcsstr(MyCommandLine, TEXT("-480x272"));
-    if (pC != NULL){
-      SCREENWIDTH=480;
-      SCREENHEIGHT=272;
-    }
-    pC = _tcsstr(MyCommandLine, TEXT("-480x234"));
-    if (pC != NULL){
-      SCREENWIDTH=480;
-      SCREENHEIGHT=234;
-    }
-    pC = _tcsstr(MyCommandLine, TEXT("-portrait"));
-    if (pC != NULL){
-      SCREENWIDTH=480;
-      SCREENHEIGHT=640;
-    }
-    pC = _tcsstr(MyCommandLine, TEXT("-square"));
-    if (pC != NULL){
-      SCREENWIDTH=480;
-      SCREENHEIGHT=480;
-    }
-    pC = _tcsstr(MyCommandLine, TEXT("-small"));
-    if (pC != NULL){
-      SCREENWIDTH/= 2;
-      SCREENHEIGHT/= 2;
-    }
-    pC = _tcsstr(MyCommandLine, TEXT("-320x240"));
-    if (pC != NULL){
-      SCREENWIDTH=320;
-      SCREENHEIGHT=240;
-    }
-    pC = _tcsstr(MyCommandLine, TEXT("-240x320"));
-    if (pC != NULL){
-      SCREENWIDTH=240;
-      SCREENHEIGHT=320;
-    }
-
-#endif
   }
+#ifdef WINDOWSPC
+  pC = _tcsstr(CommandLine, TEXT("-800x480"));
+  if (pC != NULL){
+    SCREENWIDTH=800;
+    SCREENHEIGHT=480;
+  }
+
+  pC = _tcsstr(CommandLine, TEXT("-480x272"));
+  if (pC != NULL){
+    SCREENWIDTH=480;
+    SCREENHEIGHT=272;
+  }
+
+  pC = _tcsstr(CommandLine, TEXT("-480x234"));
+  if (pC != NULL){
+    SCREENWIDTH=480;
+    SCREENHEIGHT=234;
+  }
+
+  pC = _tcsstr(CommandLine, TEXT("-portrait"));
+  if (pC != NULL){
+    SCREENWIDTH=480;
+    SCREENHEIGHT=640;
+  }
+
+  pC = _tcsstr(CommandLine, TEXT("-square"));
+  if (pC != NULL){
+    SCREENWIDTH=480;
+    SCREENHEIGHT=480;
+  }
+
+  pC = _tcsstr(CommandLine, TEXT("-small"));
+  if (pC != NULL){
+    SCREENWIDTH/= 2;
+    SCREENHEIGHT/= 2;
+  }
+
+  pC = _tcsstr(CommandLine, TEXT("-320x240"));
+  if (pC != NULL){
+    SCREENWIDTH=320;
+    SCREENHEIGHT=240;
+  }
+
+  pC = _tcsstr(CommandLine, TEXT("-240x320"));
+  if (pC != NULL){
+    SCREENWIDTH=240;
+    SCREENHEIGHT=320;
+  }
+#endif
 
   SetProfileFiles(extrnProfileFile);
 
