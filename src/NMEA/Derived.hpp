@@ -44,6 +44,8 @@ Copyright_License {
 #include "Task/TaskStats/TaskStats.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
 
+#include <tchar.h>
+
 #define NUMTHERMALBUCKETS 10
 #define MAX_THERMAL_SOURCES 20
 
