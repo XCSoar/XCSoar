@@ -365,36 +365,36 @@ MixedFormatToDegrees(double mixed)
  * @return Seconds-based FixTime
  */
 double
-NMEAParser::TimeModify(double FixTime, NMEA_INFO* GPS_INFO)
+NMEAParser::TimeModify(double FixTime, BrokenDateTime &date_time)
 {
   double hours, mins, secs;
 
   // Calculate Hour
   hours = FixTime / 10000;
-  GPS_INFO->Hour = (int)hours;
+  date_time.hour = (int)hours;
 
   // Calculate Minute
   mins = FixTime / 100;
-  mins = mins - (GPS_INFO->Hour * 100);
-  GPS_INFO->Minute = (int)mins;
+  mins = mins - date_time.hour * 100;
+  date_time.minute = (int)mins;
 
   // Calculate Second
-  secs = FixTime - (GPS_INFO->Hour * 10000) - (GPS_INFO->Minute * 100);
-  GPS_INFO->Second = (int)secs;
+  secs = FixTime - (date_time.hour * 10000) - (date_time.minute * 100);
+  date_time.second = (int)secs;
 
   // FixTime is now seconds-based instead of mixed format
-  FixTime = secs + (GPS_INFO->Minute * 60) + (GPS_INFO->Hour * 3600);
+  FixTime = secs + (date_time.minute * 60) + (date_time.hour * 3600);
 
   // If (StartDay not yet set and available) set StartDate;
-  if ((StartDay == -1) && (GPS_INFO->Day != 0))
-    StartDay = GPS_INFO->Day;
+  if ((StartDay == -1) && (date_time.day != 0))
+    StartDay = date_time.day;
 
   if (StartDay != -1) {
-    if (GPS_INFO->Day < StartDay)
+    if (date_time.day < StartDay)
       // detect change of month (e.g. day=1, startday=31)
-      StartDay = GPS_INFO->Day - 1;
+      StartDay = date_time.day - 1;
 
-    int day_difference = GPS_INFO->Day - StartDay;
+    int day_difference = date_time.day - StartDay;
     if (day_difference > 0)
       // Add seconds to fix time so time doesn't wrap around when
       // going past midnight in UTC
@@ -508,7 +508,7 @@ NMEAParser::GLL(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   GPS_INFO->gps.NAVWarning = !gpsValid;
 
-  double ThisTime = TimeModify(_tcstod(params[4], NULL), GPS_INFO);
+  double ThisTime = TimeModify(_tcstod(params[4], NULL), GPS_INFO->DateTime);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 
@@ -650,13 +650,13 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
   _tcsncpy(date_buffer, params[8], sizeof(date_buffer) - 1);
   date_buffer[sizeof(date_buffer) - 1] = 0;
 
-  GPS_INFO->Year = _tcstol(&date_buffer[4], &Stop, 10) + 2000;
+  GPS_INFO->DateTime.year = _tcstol(&date_buffer[4], &Stop, 10) + 2000;
   date_buffer[4] = '\0';
-  GPS_INFO->Month = _tcstol(&date_buffer[2], &Stop, 10);
+  GPS_INFO->DateTime.month = _tcstol(&date_buffer[2], &Stop, 10);
   date_buffer[2] = '\0';
-  GPS_INFO->Day = _tcstol(&date_buffer[0], &Stop, 10);
+  GPS_INFO->DateTime.day = _tcstol(&date_buffer[0], &Stop, 10);
 
-  double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO);
+  double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO->DateTime);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 
@@ -770,7 +770,7 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   gps.SatellitesUsed = (int)(min(16.0, _tcstod(params[6], NULL)));
 
-  double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO);
+  double ThisTime = TimeModify(_tcstod(params[0], NULL), GPS_INFO->DateTime);
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return false;
 

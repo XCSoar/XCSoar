@@ -96,12 +96,12 @@ DeviceBlackboard::Initialise()
   gps_info.aircraft.Time = pda_time.wHour * 3600 +
                   pda_time.wMinute * 60 +
                   pda_time.wSecond;
-  gps_info.Year  = pda_time.wYear;
-  gps_info.Month = pda_time.wMonth;
-  gps_info.Day	 = pda_time.wDay;
-  gps_info.Hour  = pda_time.wHour;
-  gps_info.Minute = pda_time.wMinute;
-  gps_info.Second = pda_time.wSecond;
+  gps_info.DateTime.year = pda_time.wYear;
+  gps_info.DateTime.month = pda_time.wMonth;
+  gps_info.DateTime.day = pda_time.wDay;
+  gps_info.DateTime.hour = pda_time.wHour;
+  gps_info.DateTime.minute = pda_time.wMinute;
+  gps_info.DateTime.second = pda_time.wSecond;
 
   if (is_simulator()) {
     #ifdef _SIM_STARTUPSPEED
@@ -238,9 +238,10 @@ DeviceBlackboard::ProcessSimulation()
                         &SetBasic().aircraft.Location);
   SetBasic().aircraft.Time += fixed_one;
   long tsec = (long)Basic().aircraft.Time;
-  SetBasic().Hour = tsec/3600;
-  SetBasic().Minute = (tsec-Basic().Hour*3600)/60;
-  SetBasic().Second = (tsec-Basic().Hour*3600-Basic().Minute*60);
+  SetBasic().DateTime.hour = tsec / 3600;
+  SetBasic().DateTime.minute = (tsec - Basic().DateTime.hour * 3600) / 60;
+  SetBasic().DateTime.second = tsec-Basic().DateTime.hour * 3600
+    - Basic().DateTime.minute * 60;
 
   // use this to test FLARM parsing/display
   if (is_debug() && !is_altair())
@@ -359,12 +360,12 @@ DeviceBlackboard::SetSystemTime() {
     SYSTEMTIME sysTime;
     ::GetSystemTime(&sysTime);
 
-    sysTime.wYear = (unsigned short)Basic().Year;
-    sysTime.wMonth = (unsigned short)Basic().Month;
-    sysTime.wDay = (unsigned short)Basic().Day;
-    sysTime.wHour = (unsigned short)Basic().Hour;
-    sysTime.wMinute = (unsigned short)Basic().Minute;
-    sysTime.wSecond = (unsigned short)Basic().Second;
+    sysTime.wYear = (unsigned short)Basic().DateTime.year;
+    sysTime.wMonth = (unsigned short)Basic().DateTime.month;
+    sysTime.wDay = (unsigned short)Basic().DateTime.day;
+    sysTime.wHour = (unsigned short)Basic().DateTime.hour;
+    sysTime.wMinute = (unsigned short)Basic().DateTime.minute;
+    sysTime.wSecond = (unsigned short)Basic().DateTime.second;
     sysTime.wMilliseconds = 0;
     sysTimeInitialised = (::SetSystemTime(&sysTime)==true);
 

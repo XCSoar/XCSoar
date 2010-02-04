@@ -35,30 +35,56 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef SUN_EPHEMERIS_HPP
-#define SUN_EPHEMERIS_HPP
 
-struct NMEA_INFO;
-struct DERIVED_INFO;
-struct GEOPOINT;
-struct BrokenDateTime;
+#ifndef XCSOAR_DATE_TIME_HPP
+#define XCSOAR_DATE_TIME_HPP
 
-class SunEphemeris {
-  double L, g, DayLength;
+#include <stdint.h>
 
-  double FNday (int y, int m, int d, float h);
-  double FNrange (double x);
-  double f0(double lat, double declin);
-  double f1(double lat, double declin);
-  double FNsun (double d);
-  void showhrmn(double dhr);
+/**
+ * A broken-down representation of a date.
+ */
+struct BrokenDate {
+  /**
+   * Absolute year, e.g. "2010".
+   */
+  uint16_t year;
 
- public:
-  double MorningTwilight, altmax, TimeOfNoon, TimeOfSunSet, TimeOfSunRise, EveningTwilight;
+  /**
+   * Month number, 1-12.
+   */
+  uint8_t month;
 
-  double CalcSunTimes(const GEOPOINT &location,
-                      const BrokenDateTime &date_time,
-                      double TimeZone);
+  /**
+   * Day of month, 1-31.
+   */
+  uint8_t day;
+};
+
+/**
+ * A broken-down representation of a time.
+ */
+struct BrokenTime {
+  /**
+   * Hour of day, 0-23.
+   */
+  uint8_t hour;
+
+  /**
+   * Minute, 0-59.
+   */
+  uint8_t minute;
+
+  /**
+   * Second, 0-59.
+   */
+  uint8_t second;
+};
+
+/**
+ * A broken-down representation of date and time.
+ */
+struct BrokenDateTime : public BrokenDate, public BrokenTime {
 };
 
 #endif

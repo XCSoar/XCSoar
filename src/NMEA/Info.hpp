@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_INFO_H
 #define XCSOAR_NMEA_INFO_H
 
+#include "DateTime.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -191,18 +192,8 @@ struct NMEA_INFO {
   //   Time
   //##########
 
-  /** GPS time (hours) */
-  int Hour;
-  /** GPS time (minutes) */
-  int Minute;
-  /**< GPS time (seconds) */
-  int Second;
-  /**< GPS date (month) */
-  int Month;
-  /**< GPS date (day) */
-  int Day;
-  /**< GPS date (year) */
-  int Year;
+  /** GPS date and time */
+  BrokenDateTime DateTime;
 
   //###########
   //   Vario

@@ -60,12 +60,7 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
   Altitude = src.GPSAltitude;
   BaroAltitude = src.GetAltitudeBaroPreferred();
 
-  Hour = src.Hour;
-  Minute = src.Minute;
-  Second = src.Second;
-  Year = src.Year;
-  Month = src.Month;
-  Day = src.Day;
+  DateTime = src.DateTime;
   Time = src.aircraft.Time;
 
   NAVWarning = src.gps.NAVWarning;
@@ -208,8 +203,8 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
        signing */
     Simulator = true;
   else
-    LogFRecordToFile(gps_info.gps.SatelliteIDs, gps_info.Hour, gps_info.Minute,
-                     gps_info.Second, gps_info.aircraft.Time,
+    LogFRecordToFile(gps_info.gps.SatelliteIDs,
+                     gps_info.DateTime, gps_info.aircraft.Time,
                      gps_info.gps.NAVWarning);
 
   if ((gps_info.GPSAltitude < -100) || (gps_info.BaroAltitude < -100)
@@ -239,8 +234,9 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   MinLon *= 60;
   MinLon *= 1000;
 
-  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n",
-          gps_info.Hour, gps_info.Minute, gps_info.Second,
+  sprintf(szBRecord,"B%02u%02u%02u%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n",
+          gps_info.DateTime.hour, gps_info.DateTime.minute,
+          gps_info.DateTime.second,
           DegLat, MinLat, NoS, DegLon, MinLon, EoW,
           (int)gps_info.BaroAltitude,(int)gps_info.GPSAltitude);
 
@@ -258,12 +254,7 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
       tmp_info.aircraft.Location = LoggerPreTakeoffBuffer[i].Location;
       tmp_info.GPSAltitude = LoggerPreTakeoffBuffer[i].Altitude;
       tmp_info.BaroAltitude = LoggerPreTakeoffBuffer[i].BaroAltitude;
-      tmp_info.Hour = LoggerPreTakeoffBuffer[i].Hour;
-      tmp_info.Minute = LoggerPreTakeoffBuffer[i].Minute;
-      tmp_info.Second = LoggerPreTakeoffBuffer[i].Second;
-      tmp_info.Year = LoggerPreTakeoffBuffer[i].Year;
-      tmp_info.Month = LoggerPreTakeoffBuffer[i].Month;
-      tmp_info.Day = LoggerPreTakeoffBuffer[i].Day;
+      tmp_info.DateTime = LoggerPreTakeoffBuffer[i].DateTime;
       tmp_info.aircraft.Time = LoggerPreTakeoffBuffer[i].Time;
       tmp_info.gps.NAVWarning = LoggerPreTakeoffBuffer[i].NAVWarning;
 
@@ -337,11 +328,11 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     if (!settings.LoggerShortName) {
       // Long file name
       _stprintf(szLoggerFileName,
-                _T("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
+                _T("%s\\%04u-%02u-%02u-XCS-%c%c%c-%02d.IGC"),
           path,
-          gps_info.Year,
-          gps_info.Month,
-          gps_info.Day,
+                gps_info.DateTime.year,
+                gps_info.DateTime.month,
+                gps_info.DateTime.day,
           strAssetNumber[0],
           strAssetNumber[1],
           strAssetNumber[2],
@@ -349,9 +340,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     } else {
       // Short file name
       TCHAR cyear, cmonth, cday, cflight;
-      cyear = NumToIGCChar((int)gps_info.Year % 10);
-      cmonth = NumToIGCChar(gps_info.Month);
-      cday = NumToIGCChar(gps_info.Day);
+      cyear = NumToIGCChar((int)gps_info.DateTime.year % 10);
+      cmonth = NumToIGCChar(gps_info.DateTime.month);
+      cday = NumToIGCChar(gps_info.DateTime.day);
       cflight = NumToIGCChar(i);
       _stprintf(szLoggerFileName,
                 _T("%s\\%c%c%cX%c%c%c%c.IGC"),
@@ -402,10 +393,10 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
       strAssetNumber[2]);
   IGCWriteRecord(temp, szLoggerFileName);
 
-  sprintf(temp, "HFDTE%02d%02d%02d\r\n",
-      gps_info.Day,
-      gps_info.Month,
-      gps_info.Year % 100);
+  sprintf(temp, "HFDTE%02u%02u%02u\r\n",
+          gps_info.DateTime.day,
+          gps_info.DateTime.month,
+          gps_info.DateTime.year % 100);
   IGCWriteRecord(temp, szLoggerFileName);
 
   GetRegistryString(szRegistryPilotName, PilotName, 100);
@@ -445,12 +436,7 @@ LoggerImpl::StartDeclaration(const NMEA_INFO &gps_info, const int ntp)
   char temp[100];
 
   if (NumLoggerPreTakeoffBuffered == 0) {
-    FirstPoint.Year = gps_info.Year;
-    FirstPoint.Month = gps_info.Month;
-    FirstPoint.Day = gps_info.Day;
-    FirstPoint.Hour = gps_info.Hour;
-    FirstPoint.Minute = gps_info.Minute;
-    FirstPoint.Second = gps_info.Second;
+    FirstPoint.DateTime = gps_info.DateTime;
   }
 
   // JMW added task start declaration line
@@ -458,14 +444,14 @@ LoggerImpl::StartDeclaration(const NMEA_INFO &gps_info, const int ntp)
   // LGCSTKF013945TAKEOFF DETECTED
 
   // IGC GNSS specification 3.6.1
-  sprintf(temp, "C%02d%02d%02d%02d%02d%02d0000000000%02d\r\n",
+  sprintf(temp, "C%02u%02u%02u%02u%02u%02u0000000000%02d\r\n",
       // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
-      FirstPoint.Day,
-      FirstPoint.Month,
-      FirstPoint.Year % 100,
-      FirstPoint.Hour,
-      FirstPoint.Minute,
-      FirstPoint.Second,
+          FirstPoint.DateTime.day,
+          FirstPoint.DateTime.month,
+          FirstPoint.DateTime.year % 100,
+          FirstPoint.DateTime.hour,
+          FirstPoint.DateTime.minute,
+          FirstPoint.DateTime.second,
       ntp-2);
 
   IGCWriteRecord(temp, szLoggerFileName);
@@ -660,7 +646,7 @@ LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
 		     &cflight);
 
   if (matches == 5) {
-    int iyear = (int)gps_info.Year;
+    int iyear = (int)gps_info.DateTime.year;
     int syear = iyear % 10;
     int yearzero = iyear - syear;
     int yearthis = IGCCharToNum(cyear) + yearzero;

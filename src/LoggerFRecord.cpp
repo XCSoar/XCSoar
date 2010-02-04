@@ -73,17 +73,15 @@ LoggerImpl::ResetFRecord(void)
 }
 void
 LoggerImpl::LogFRecordToFile(const int SatelliteIDs[],
-                         short Hour, 
-                         short Minute, 
-                         short Second, 
-                         double Time,
+                             const BrokenTime broken_time, double Time,
                          int NAVWarning)
 { 
   char szFRecord[MAX_IGC_BUFF];
   int eof=0;
   int iNumberSatellites=0;
   
-  sprintf(szFRecord,"F%02d%02d%02d", Hour, Minute, Second);
+  sprintf(szFRecord,"F%02u%02u%02u",
+          broken_time.hour, broken_time.minute, broken_time.second);
   eof=7;
 
   for (int i=0; i < MAXSATELLITES; i++){

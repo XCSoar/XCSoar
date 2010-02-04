@@ -43,8 +43,8 @@ Copyright_License {
 
 #include "Math/SunEphemeris.hpp"
 #include "Math/Constants.h"
-#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
+#include "DateTime.hpp"
 
 // Sun radius in degrees (?)
 #define SUN_DIAMETER 0.53
@@ -176,7 +176,8 @@ SunEphemeris::FNsun(double d)
  * @return Sunset time
  */
 double
-SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
+SunEphemeris::CalcSunTimes(const GEOPOINT &Location,
+                           const BrokenDateTime &date_time,
                            const double TimeZone)
 {
   //float intz;
@@ -189,10 +190,10 @@ SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
   // JG Removed simulator conditional code, since GPS_INFO now set up
   // from system time.
 
-  Month = Basic.Month;
-  Year = Basic.Year;
-  Day = Basic.Day;
-  Hour = Basic.Hour;
+  Month = date_time.month;
+  Year = date_time.year;
+  Day = date_time.day;
+  Hour = date_time.hour % 24;
 
   DaysToJ2000 = FNday(Year, Month, Day, (float)Hour);
 

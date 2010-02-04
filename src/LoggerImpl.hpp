@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_LOGGER_IMPL_HPP
 
 #include "Sizes.h"
+#include "DateTime.hpp"
 #include "GPSClock.hpp"
 #include "Poco/RWLock.h"
 #include "Poco/RWLock.h"
@@ -63,12 +64,7 @@ public:
     GEOPOINT Location;
     double Altitude;
     double BaroAltitude;
-    short Day;
-    short Month;
-    short Year;
-    short Hour;
-    short Minute;
-    short Second;
+    BrokenDateTime DateTime;
     int SatelliteIDs[MAXSATELLITES];
     double Time;
     int NAVWarning;
@@ -133,10 +129,7 @@ private:
   
 private:
   void LogFRecordToFile(const int SatelliteIDs[],
-                        short Hour,
-                        short Minute,
-                        short Second,
-                        double Time,
+                        const BrokenTime broken_time, double Time,
                         int NAVWarning);
   void ResetFRecord(void);
   int LastFRecordValid;

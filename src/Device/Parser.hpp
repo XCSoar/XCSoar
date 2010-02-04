@@ -43,6 +43,7 @@ Copyright_License {
 
 struct FLARM_STATE;
 struct NMEA_INFO;
+struct BrokenDateTime;
 
 class NMEAParser
 {
@@ -84,7 +85,7 @@ private:
   double LastTime;
 
   bool TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO);
-  static double TimeModify(double FixTime, NMEA_INFO* info);
+  static double TimeModify(double FixTime, BrokenDateTime &date_time);
 
   bool GLL(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
   bool GGA(const TCHAR *String, const TCHAR **, size_t, NMEA_INFO *GPS_INFO);
