@@ -39,10 +39,9 @@ Copyright_License {
 #ifndef VEGAVOICE_H
 #define VEGAVOICE_H
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
 #include "Thread/Mutex.hpp"
+
+#include <tchar.h>
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
