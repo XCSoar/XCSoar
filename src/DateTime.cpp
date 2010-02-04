@@ -36,64 +36,80 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATE_TIME_HPP
-#define XCSOAR_DATE_TIME_HPP
+#include "DateTime.hpp"
 
-#include <stdint.h>
-
-/**
- * A broken-down representation of a date.
- */
-struct BrokenDate {
-  /**
-   * Absolute year, e.g. "2010".
-   */
-  uint16_t year;
-
-  /**
-   * Month number, 1-12.
-   */
-  uint8_t month;
-
-  /**
-   * Day of month, 1-31.
-   */
-  uint8_t day;
-};
-
-/**
- * A broken-down representation of a time.
- */
-struct BrokenTime {
-  /**
-   * Hour of day, 0-23.
-   */
-  uint8_t hour;
-
-  /**
-   * Minute, 0-59.
-   */
-  uint8_t minute;
-
-  /**
-   * Second, 0-59.
-   */
-  uint8_t second;
-};
-
-/**
- * A broken-down representation of date and time.
- */
-struct BrokenDateTime : public BrokenDate, public BrokenTime {
-  /**
-   * Returns the current date and time, in UTC.
-   */
-  static const BrokenDateTime NowUTC();
-
-  /**
-   * Returns the current date and time, in the current time zone.
-   */
-  static const BrokenDateTime NowLocal();
-};
-
+#ifdef HAVE_POSIX
+#include <time.h>
+#else
+#include <windows.h>
 #endif
+
+#ifdef HAVE_POSIX
+
+static const BrokenDateTime
+ToBrokenDateTime(const struct tm &tm)
+{
+  BrokenDateTime dt;
+
+  dt.year = tm.tm_year + 1900;
+  dt.month = tm.tm_mon + 1;
+  dt.day = tm.tm_mday;
+  dt.hour = tm.tm_hour;
+  dt.minute = tm.tm_min;
+  dt.second = tm.tm_sec;
+
+  return dt;
+}
+
+#else /* !HAVE_POSIX */
+
+static const BrokenDateTime
+ToBrokenDateTime(const SYSTEMTIME st)
+{
+  BrokenDateTime dt;
+
+  dt.year = st.wYear;
+  dt.month = st.wMonth;
+  dt.day = st.wDay;
+  dt.hour = st.wHour;
+  dt.minute = st.wMinute;
+  dt.second = st.wSecond;
+
+  return dt;
+}
+
+#endif /* !HAVE_POSIX */
+
+const BrokenDateTime
+BrokenDateTime::NowUTC()
+{
+#ifdef HAVE_POSIX
+  time_t t = time(NULL);
+  struct tm tm;
+  gmtime_r(&t, &tm);
+
+  return ToBrokenDateTime(tm);
+#else /* !HAVE_POSIX */
+  SYSTEMTIME st;
+  GetSystemTime(&st);
+
+  return ToBrokenDateTime(st);
+#endif /* !HAVE_POSIX */
+}
+
+const BrokenDateTime
+BrokenDateTime::NowLocal()
+{
+#ifdef HAVE_POSIX
+  time_t t = time(NULL);
+  struct tm tm;
+  localtime_r(&t, &tm);
+
+  return ToBrokenDateTime(tm);
+#else /* !HAVE_POSIX */
+  SYSTEMTIME st;
+  GetLocalTime(&st);
+
+  return ToBrokenDateTime(st);
+#endif /* !HAVE_POSIX */
+}

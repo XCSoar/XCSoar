@@ -91,17 +91,10 @@ DeviceBlackboard::Initialise()
   gps_info.SwitchState.VarioCircling = false;
 
   // Set GPS assumed time to system time
-  SYSTEMTIME pda_time;
-  GetSystemTime(&pda_time);
-  gps_info.aircraft.Time = pda_time.wHour * 3600 +
-                  pda_time.wMinute * 60 +
-                  pda_time.wSecond;
-  gps_info.DateTime.year = pda_time.wYear;
-  gps_info.DateTime.month = pda_time.wMonth;
-  gps_info.DateTime.day = pda_time.wDay;
-  gps_info.DateTime.hour = pda_time.wHour;
-  gps_info.DateTime.minute = pda_time.wMinute;
-  gps_info.DateTime.second = pda_time.wSecond;
+  gps_info.DateTime = BrokenDateTime::NowUTC();
+  gps_info.aircraft.Time = gps_info.DateTime.hour * 3600 +
+                  gps_info.DateTime.minute * 60 +
+                  gps_info.DateTime.second;
 
   if (is_simulator()) {
     #ifdef _SIM_STARTUPSPEED
