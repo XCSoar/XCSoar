@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_PORT_HPP
 #define XCSOAR_DEVICE_PORT_HPP
 
+#include <Thread/Thread.hpp>
+
 #include <windows.h>
 
 #define NMEA_BUF_SIZE 100
@@ -46,7 +48,7 @@ Copyright_License {
 // Forward declaration
 struct DeviceDescriptor;
 
-class ComPort
+class ComPort : protected Thread
 {
 public:
   /**
@@ -96,12 +98,11 @@ public:
   int GetChar();
   int Read(void *Buffer, size_t Size);
 
-private:
-  static DWORD WINAPI ThreadProc(LPVOID);
-  DWORD ReadThread();
+protected:
+  virtual void run();
 
+private:
   HANDLE hPort;
-  HANDLE hReadThread;
   DWORD dwMask;
   TCHAR sPortName[8];
   bool CloseThread;

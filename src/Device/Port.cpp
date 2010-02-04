@@ -68,7 +68,7 @@ ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *fmt, ...)
 ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
   :handler(_handler),
    baud_rate(_baud_rate),
-   hPort(INVALID_HANDLE_VALUE), hReadThread(NULL),
+   hPort(INVALID_HANDLE_VALUE),
    dwMask(0),
    CloseThread(false)
 {
@@ -214,19 +214,11 @@ ComPort::Flush(void)
       | PURGE_RXCLEAR);
 }
 
-DWORD WINAPI
-ComPort::ThreadProc(LPVOID prt)
-{
-  ComPort *port = (ComPort *)prt;
-  port->ReadThread();
-  return 0;
-}
-
 /* **********************************************************************
   PortReadThread (LPVOID lpvoid)
 ********************************************************************** */
-DWORD
-ComPort::ReadThread()
+void
+ComPort::run()
 {
   DWORD dwCommModemStatus, dwBytesTransferred;
   BYTE inbuf[1024];
@@ -291,8 +283,6 @@ ComPort::ReadThread()
   }
 
   Flush();
-
-  return 0;
 }
 
 /* **********************************************************************
@@ -356,7 +346,7 @@ ComPort::StopRxThread()
 {
   if (hPort == INVALID_HANDLE_VALUE)
     return false;
-  if (hReadThread == NULL)
+  if (!Thread::defined())
     return true;
 
   CloseThread = true;
@@ -371,18 +361,16 @@ ComPort::StopRxThread()
     SetCommMask(hPort, dwMask);
   }
 
-  bool terminated = ::WaitForSingleObject(hReadThread, 20000) == WAIT_OBJECT_0;
+  bool terminated = Thread::join(20000);
 
   if (!terminated) {
     if (is_embedded())
       ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"), sPortName,
                             gettext(_T("RX Thread not Terminated!")));
     else
-      TerminateThread(hReadThread, 0);
+      Thread::terminate();
+    Thread::join();
   }
-
-  CloseHandle(hReadThread);
-  hReadThread = NULL;
 
   return terminated;
 }
@@ -392,26 +380,12 @@ ComPort::StopRxThread()
 bool
 ComPort::StartRxThread(void)
 {
-  DWORD dwThreadID, dwError;
-
   if (hPort == INVALID_HANDLE_VALUE)
     return false;
 
   CloseThread = false;
 
-  // Create a read thread for reading data from the communication port.
-  if ((hReadThread =
-      CreateThread(NULL, 0, ThreadProc, this, 0, &dwThreadID)) != NULL) {
-    //THREAD_PRIORITY_ABOVE_NORMAL
-    SetThreadPriority(hReadThread, THREAD_PRIORITY_NORMAL);
-  } else {
-    // Could not create the read thread.
-    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
-              gettext(_T("Unable to Start RX Thread on Port")), sPortName);
-    dwError = GetLastError();
-    return false;
-  }
-
+  Thread::start();
   return true;
 }
 
