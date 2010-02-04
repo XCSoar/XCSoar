@@ -70,6 +70,8 @@ typedef wchar_t TCHAR;
 #define _tcsncat wcsncat
 #define TEXT(x) (L ## x)
 #define _T(x) (L ## x)
+
+#define _TEOF EOF
 #define _fgetts fgetws
 #define _stscanf swscanf
 #define _tcstok wcstok
@@ -118,6 +120,7 @@ typedef char TCHAR;
 #define _tdirent dirent
 #define _tstat stat
 #define _tfopen fopen
+#define _TEOF EOF
 #define _fgetts fgets
 #define _stscanf sscanf
 #define _tcstok strtok
