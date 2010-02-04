@@ -153,7 +153,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/shapelib/mapxbase.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
-	$(SRC)/SnailTrail.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/TerrainRenderer.cpp \
 	$(SRC)/Thread/Debug.cpp \
