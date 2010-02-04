@@ -177,10 +177,8 @@ SunEphemeris::FNsun(double d)
  */
 double
 SunEphemeris::CalcSunTimes(const GEOPOINT &Location, const NMEA_INFO &Basic,
-    const DERIVED_INFO &Calculated, const double TimeZone)
+                           const double TimeZone)
 {
-  (void)Calculated;
-
   //float intz;
   double DaysToJ2000, Lambda;
   double Obliquity, Alpha, Delta, LL, equation, HourAngle, HourAngleTwilight, TwilightHours;

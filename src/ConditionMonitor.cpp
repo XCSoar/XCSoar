@@ -281,7 +281,7 @@ protected:
       return false;
 
     double sunsettime = sun.CalcSunTimes(task.getActiveLocation(),
-        cmp.Basic(), cmp.Calculated(), GetUTCOffset() / 3600);
+        cmp.Basic(), GetUTCOffset() / 3600);
     double d1 = (cmp.Calculated().TaskTimeToGo
         + DetectCurrentTime(&cmp.Basic())) / 3600;
     double d0 = (DetectCurrentTime(&cmp.Basic())) / 3600;

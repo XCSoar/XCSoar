@@ -445,7 +445,7 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
   SunEphemeris sun;
   sunsettime = sun.CalcSunTimes
     (selected_waypoint->Location,
-     XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
+     XCSoarInterface::Basic(),
      GetUTCOffset()/3600);
 
   sunsethours = (int)sunsettime;

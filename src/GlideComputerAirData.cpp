@@ -946,6 +946,6 @@ GlideComputerAirData::ThermalBand()
 void
 GlideComputerAirData::ProcessSun()
 {
-  sun.CalcSunTimes(Basic().Location, Basic(), Calculated(), GetUTCOffset() / 3600);
+  sun.CalcSunTimes(Basic().Location, Basic(), GetUTCOffset() / 3600);
   SetCalculated().TimeSunset = sun.TimeOfSunSet;
 }
