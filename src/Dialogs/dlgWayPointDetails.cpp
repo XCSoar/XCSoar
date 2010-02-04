@@ -590,8 +590,9 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
 
 #ifndef CECORE
 #ifndef GNAV
-  hasimage1 = jpgimage1.Load(wImage->get_canvas(), path_modis);
-  hasimage2 = jpgimage2.Load(wImage->get_canvas(), path_google);
+  VirtualCanvas reference_canvas;
+  hasimage1 = jpgimage1.Load(reference_canvas, path_modis);
+  hasimage2 = jpgimage2.Load(reference_canvas, path_google);
 #endif
 #endif
 
