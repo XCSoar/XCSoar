@@ -198,13 +198,13 @@ ParseLogOption(DeviceDescriptor &device, const TCHAR *CommandLine,
   assert(CommandLine != NULL);
   assert(option != NULL);
 
-  TCHAR *start = _tcsstr(CommandLine, option);
+  const TCHAR *start = _tcsstr(CommandLine, option);
   if (start == NULL)
     return;
 
   start += _tcslen(option);
 
-  TCHAR *end;
+  const TCHAR *end;
   if (*start == '"') {
     start++;
 
