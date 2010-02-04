@@ -66,6 +66,7 @@ DetectCurrentTime(const NMEA_INFO *Basic)
 long
 GetUTCOffset()
 {
+#ifdef WIN32
   if (is_altair() || !is_embedded())
     return XCSoarInterface::SettingsComputer().UTCOffset;
 
@@ -85,5 +86,9 @@ GetUTCOffset()
   }
 
   return utcoffset;
+#else /* !WIN32 */
+  // XXX
+  return XCSoarInterface::SettingsComputer().UTCOffset;
+#endif /* !WIN32 */
 }
 
