@@ -62,10 +62,8 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifndef CECORE
-  #ifndef GNAV
+#if defined(_WIN32_WCE) && !defined(GNAV)
     #include "Screen/VOIMAGE.h"
-  #endif
 #endif
 
 static int page = 0;
@@ -79,11 +77,9 @@ static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
 static const Waypoint *selected_waypoint = NULL;
 
-#ifndef CECORE
-  #ifndef GNAV
+#if defined(_WIN32_WCE) && !defined(GNAV)
     static CVOImage jpgimage1;
     static CVOImage jpgimage2;
-  #endif
 #endif
 
 static TCHAR path_modis[MAX_PATH];
@@ -372,15 +368,13 @@ OnImagePaint(WindowControl *Sender, Canvas &canvas)
 {
   (void)Sender;
 
-  #ifndef CECORE
-  #ifndef GNAV
+#if defined(_WIN32_WCE) && !defined(GNAV)
   if (page == 4)
     jpgimage1.Draw(canvas, 0, 0, -1, -1);
 
   if (page == 5)
     jpgimage2.Draw(canvas, 0, 0, -1, -1);
-  #endif
-  #endif
+#endif
 }
 
 static CallBackTableEntry_t CallBackTable[] = {
@@ -588,12 +582,10 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
   if (wb)
     wb->SetOnClickNotify(OnRemoveFromTaskClicked);
 
-#ifndef CECORE
-#ifndef GNAV
+#if defined(_WIN32_WCE) && !defined(GNAV)
   VirtualCanvas reference_canvas;
   hasimage1 = jpgimage1.Load(reference_canvas, path_modis);
   hasimage2 = jpgimage2.Load(reference_canvas, path_google);
-#endif
 #endif
 
   page = 0;

@@ -29,9 +29,11 @@ ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Timer.cpp
 else
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/VOIMAGE.cpp \
 	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/PaintCanvas.cpp
+ifeq ($(HAVE_CE)$(CONFIG_ALTAIR),yn)
+SCREEN_SOURCES += $(SCREEN_SRC_DIR)/VOIMAGE.cpp
+endif
 endif
 
 SCREEN_OBJS = $(call SRC_TO_OBJ,$(SCREEN_SOURCES))

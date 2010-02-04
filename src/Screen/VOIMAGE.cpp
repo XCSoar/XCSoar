@@ -64,7 +64,7 @@ Copyright_License {
 
 #include "Screen/VOIMAGE.h"
 
-#if defined(WIN32) && !defined(CECORE) && !defined(GNAV)
+#if defined(_WIN32_WCE) && !defined(GNAV)
 
 #ifdef _DEBUG
 #undef THIS_FILE
