@@ -105,7 +105,6 @@ private:
   DWORD dwMask;
   TCHAR sPortName[8];
   bool CloseThread;
-  bool fRxThreadTerminated;
 
   TCHAR BuildingString[NMEA_BUF_SIZE];
   int bi;

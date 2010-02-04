@@ -70,7 +70,7 @@ ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
    baud_rate(_baud_rate),
    hPort(INVALID_HANDLE_VALUE), hReadThread(NULL),
    dwMask(0),
-   CloseThread(false), fRxThreadTerminated(true)
+   CloseThread(false)
 {
   assert(path != NULL);
 
@@ -240,8 +240,6 @@ ComPort::ReadThread()
   if (is_embedded())
     SetCommMask(hPort, dwMask);
 
-  fRxThreadTerminated = false;
-
   while ((hPort != INVALID_HANDLE_VALUE) && (!closeTriggerEvent.test())
       && (!CloseThread)) {
 
@@ -293,8 +291,6 @@ ComPort::ReadThread()
   }
 
   Flush();
-
-  fRxThreadTerminated = true;
 
   return 0;
 }
@@ -360,12 +356,10 @@ ComPort::StopRxThread()
 {
   if (hPort == INVALID_HANDLE_VALUE)
     return false;
-  if (fRxThreadTerminated)
+  if (hReadThread == NULL)
     return true;
 
   CloseThread = true;
-
-  DWORD tm = GetTickCount() + 20000l;
 
   if (is_embedded()) {
     Flush();
@@ -377,11 +371,9 @@ ComPort::StopRxThread()
     SetCommMask(hPort, dwMask);
   }
 
-  while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0) {
-    Sleep(10);
-  }
+  bool terminated = ::WaitForSingleObject(hReadThread, 20000) == WAIT_OBJECT_0;
 
-  if (!fRxThreadTerminated) {
+  if (!terminated) {
     if (is_embedded())
       ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"), sPortName,
                             gettext(_T("RX Thread not Terminated!")));
@@ -390,8 +382,9 @@ ComPort::StopRxThread()
   }
 
   CloseHandle(hReadThread);
+  hReadThread = NULL;
 
-  return fRxThreadTerminated;
+  return terminated;
 }
 
 // Restart Rx Thread
