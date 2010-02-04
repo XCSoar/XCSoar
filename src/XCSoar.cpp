@@ -50,6 +50,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Asset.hpp"
 #include "Interface.hpp"
+#include "Compiler.h"
 
 #ifndef ENABLE_SDL
 #include <commctrl.h>
@@ -66,15 +67,12 @@ Copyright_License {
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
+        gcc_unused LPWSTR lpCmdLine,
 #else
-        LPSTR lpCmdLine2,
+        gcc_unused LPSTR lpCmdLine2,
 #endif
         int nCmdShow)
 {
-  (void)hPrevInstance;
-  (void)nCmdShow;
-
   InitAsset();
 
   // Write startup note + version to logfile
