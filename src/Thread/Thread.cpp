@@ -40,6 +40,10 @@ Copyright_License {
 
 #include <assert.h>
 
+#ifdef HAVE_POSIX
+#include <signal.h>
+#endif
+
 #include "LogFile.hpp"
 
 Thread::~Thread()
@@ -98,6 +102,21 @@ Thread::join(unsigned timeout_ms)
   ::CloseHandle(handle);
   handle = NULL;
   return result;
+#endif
+}
+
+void
+Thread::terminate()
+{
+#ifdef HAVE_POSIX
+  assert(m_defined);
+
+  // XXX implement this properly
+  pthread_kill(handle, SIGTERM);
+#else
+  assert(handle != NULL);
+
+  TerminateThread(handle, 0);
 #endif
 }
 

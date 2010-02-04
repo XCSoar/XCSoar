@@ -76,6 +76,8 @@ public:
   void join();
   bool join(unsigned timeout_ms);
 
+  void terminate();
+
 protected:
   virtual void run() = 0;
 
