@@ -50,7 +50,6 @@ Copyright_License {
 
 static const bool bBigEndian = BYTE_ORDER == BIG_ENDIAN;
 
-int FileExistsA(char *FileName);
 /* -------------------------------------------------------------------- */
 /*      If the following is 0.5, nodes will be split in half.  If it    */
 /*      is 0.6 then each subnode will contain 60% of the parent         */
@@ -135,11 +134,7 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
     pszFullname = (char *) malloc(strlen(pszBasename) + 5);
     sprintf( pszFullname, "%s%s", pszBasename, MS_INDEX_EXTENSION);
 
-    if (FileExistsA(pszFullname))  // prevent codegurad warnings (open unexisting file for reading)
-      psTree->zfp = zzip_fopen(pszFullname, "rb" );
-    else
-      psTree->zfp = NULL;
-
+    psTree->zfp = zzip_fopen(pszFullname, "rb" );
 
     msFree(pszBasename); // don't need these any more
     msFree(pszFullname);
