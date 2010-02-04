@@ -53,6 +53,7 @@ Copyright_License {
 #include <math.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <algorithm>
 
@@ -1171,7 +1172,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
 }
 
 bool EnableLogNMEA = false;
-HANDLE nmeaLogFile = INVALID_HANDLE_VALUE;
+FILE *nmeaLogFile = NULL;
 
 /**
  * Logs NMEA string to log file
@@ -1181,21 +1182,19 @@ void
 LogNMEA(const TCHAR* text)
 {
   if (!EnableLogNMEA) {
-    if (nmeaLogFile != INVALID_HANDLE_VALUE) {
-      CloseHandle(nmeaLogFile);
-      nmeaLogFile = INVALID_HANDLE_VALUE;
+    if (nmeaLogFile != NULL) {
+      fclose(nmeaLogFile);
+      nmeaLogFile = NULL;
     }
 
     return;
   }
 
-  DWORD dwBytesRead;
-
-  if (nmeaLogFile == INVALID_HANDLE_VALUE) {
-    nmeaLogFile = CreateFile(_T("\\SD Card\\xcsoar-nmea.log"), GENERIC_WRITE,
-        FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+  if (nmeaLogFile == NULL) {
+    nmeaLogFile = _tfopen(_T("\\SD Card\\xcsoar-nmea.log"), _T("w"));
+    if (nmeaLogFile == NULL)
+      return;
   }
 
-  WriteFile(nmeaLogFile, text, _tcslen(text) * sizeof(TCHAR), &dwBytesRead,
-      (OVERLAPPED *)NULL);
+  fwrite(text, sizeof(text[0]), _tcslen(text), nmeaLogFile);
 }
