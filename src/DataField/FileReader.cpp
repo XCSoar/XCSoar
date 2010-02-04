@@ -214,7 +214,7 @@ DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter)
 
     if (S_ISDIR(st.st_mode))
       ScanDirectories(FileName, filter);
-    else if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, 0))
+    else if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, 0) == 0)
       addFile(ent->d_name, FileName);
   }
 #else /* !HAVE_POSIX */
