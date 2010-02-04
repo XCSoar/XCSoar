@@ -46,7 +46,7 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-#ifndef WINDOWSPC
+#ifdef _WIN32_WCE
 #include "aygshell.h"
 #endif
 
@@ -66,10 +66,10 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   RECT rcp = get_client_rect();
 
   move(rc.left, rc.top, rcp.right - rcp.left, rcp.bottom - rcp.top);
-#else
-#ifndef GNAV
-  SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
 #endif
+
+#if defined(_WIN32_WCE) && !defined(GNAV)
+  SHFullScreen(hWnd, SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
 #endif
 
   set_range(0, 100);
