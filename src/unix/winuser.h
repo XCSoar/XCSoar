@@ -71,6 +71,28 @@ enum {
 };
 
 enum {
+  IDCANCEL,
+  IDYES,
+};
+
+enum {
+  MB_OKCANCEL,
+  MB_OK,
+  MB_ICONINFORMATION,
+  MB_ICONWARNING,
+  MB_ICONEXCLAMATION,
+  MB_YESNO,
+  MB_ICONQUESTION,
+  MB_ICONERROR,
+};
+
+enum {
+  MF_CHECKED,
+  MF_UNCHECKED,
+  MF_BYCOMMAND,
+};
+
+enum {
   WM_ERASEBKGND,
   WM_PAINT,
   WM_SIZE,

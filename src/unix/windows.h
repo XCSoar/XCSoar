@@ -47,19 +47,6 @@ Copyright_License {
 
 LRESULT DefWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
-enum {
-  IDCANCEL = 0,
-  MB_OKCANCEL = 0,
-  MB_OK = 0,
-  MB_ICONINFORMATION = 0,
-  MB_ICONWARNING = 0,
-  MB_ICONEXCLAMATION = 0,
-  MB_YESNO = 0,
-  MB_ICONQUESTION = 0,
-  IDYES = 0,
-  MB_ICONERROR = 0,
-};
-
 static inline DWORD
 GetTickCount(void)
 {
@@ -195,12 +182,6 @@ static inline void Sleep(unsigned ms)
 }
 
 typedef HANDLE HMENU;
-
-enum {
-  MF_CHECKED,
-  MF_UNCHECKED,
-  MF_BYCOMMAND,
-};
 
 static inline void CheckMenuItem(HMENU h, int id, unsigned flags) {}
 
