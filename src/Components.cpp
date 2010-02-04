@@ -268,7 +268,11 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   hInst = hInstance;
 
   // IDS_APP_TITLE = XCSoar (see XCSoar.rc)
+#ifdef WIN32
   LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+#else
+  _tcscpy(szTitle, "XCSoar");
+#endif
 
   //If it is already running, then focus on the window
   if (MainWindow::find(szTitle))
