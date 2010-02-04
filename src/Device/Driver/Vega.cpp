@@ -397,7 +397,7 @@ VegaDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
   if(_tcsncmp(_T("$PDVSD"), String, 6)==0)
     {
       TCHAR cptext[80];
-      wsprintf(cptext,_T("%s"), &String[7]);
+      _stprintf(cptext,_T("%s"), &String[7]);
       // TODO code: JMW (from Scott)
       // 	Either use something like
       // 		DoStatusMessage(_T("Vario Message"), cptext);
@@ -439,13 +439,13 @@ _VarioWriteSettings(ComPort *port)
 {
     TCHAR mcbuf[100];
 
-    wsprintf(mcbuf, _T("PDVMC,%d,%d,%d,%d,%d"),
-	     iround(device_blackboard.Calculated().common_stats.current_mc*10),
-	     iround(device_blackboard.Calculated().V_stf*10),
-	     device_blackboard.Calculated().Circling,
-	     iround(device_blackboard.Calculated().TerrainAlt),
-	     10132); // JMW 20080716 bug
-	     //	     iround(QNH*10));
+    _stprintf(mcbuf, _T("PDVMC,%d,%d,%d,%d,%d"),
+              iround(device_blackboard.Calculated().common_stats.current_mc*10),
+              iround(device_blackboard.Calculated().V_stf*10),
+              device_blackboard.Calculated().Circling,
+              iround(device_blackboard.Calculated().TerrainAlt),
+              10132); // JMW 20080716 bug
+              // iround(QNH*10));
 
     PortWriteNMEA(port, mcbuf);
 }
