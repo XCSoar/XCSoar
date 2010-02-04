@@ -2207,6 +2207,8 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
     config.port_type = port_types[value].type;
     return true;
   } else {
+    value -= num_port_types;
+
     if (config.port_type == DeviceConfig::SERIAL &&
         value == (int)config.port_index)
       return false;
