@@ -40,7 +40,6 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "wcecompat/ts_string.h"
 #include "Screen/Layout.hpp"
-#include "UtilsSystem.hpp"
 #include "InputEvents.h"
 #include "PopupMessage.hpp"
 #include "MapWindow.hpp"
@@ -58,17 +57,6 @@ bool needclipping = false;
 #ifdef HAVE_BLANK
 int DisplayTimeOut = 0;
 #endif
-
-bool
-FileExistsA(const char *FileName)
-{
-  FILE *file = fopen(FileName, "r");
-  if (file != NULL) {
-    fclose(file);
-    return(true);
-  }
-  return false;
-}
 
 void
 LocalPath(TCHAR *buf, const TCHAR* file, int loc)

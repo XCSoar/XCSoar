@@ -97,17 +97,6 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt) {}
 
 void Profile::StoreRegistry(void) {}
 
-bool
-FileExistsA(const char *FileName)
-{
-  FILE *file = fopen(FileName, "r");
-  if (file != NULL) {
-    fclose(file);
-    return(true);
-  }
-  return false;
-}
-
 Trigger drawTriggerEvent(TEXT("drawTriggerEvent"),false);
 Trigger targetManipEvent(TEXT("targetManip"));
 

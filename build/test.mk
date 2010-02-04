@@ -162,6 +162,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Units.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
+	$(SRC)/UtilsFile.cpp \
 	$(SRC)/WayPointParser.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Simulator.cpp \
@@ -191,6 +192,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/UtilsText.cpp \
+	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(TEST_SRC_DIR)/RunDialog.cpp \
 	$(SRC)/Compatibility/string.c \
@@ -228,6 +230,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
+	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp

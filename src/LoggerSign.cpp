@@ -49,7 +49,7 @@
 #include "Device/device.hpp"
 #include "InputEvents.h"
 #include "Compatibility/string.h"
-#include "UtilsSystem.hpp" // for FileExistsW()
+#include "UtilsFile.hpp"
 #include "UtilsText.hpp" // for ConvertToC()
 
 #include <assert.h>

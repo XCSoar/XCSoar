@@ -275,6 +275,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Units.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsFLARM.cpp \
+	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsProfile.cpp \
 	$(SRC)/UtilsSettings.cpp \

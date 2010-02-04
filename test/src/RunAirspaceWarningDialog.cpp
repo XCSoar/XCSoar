@@ -69,18 +69,6 @@ int DisplayTimeOut = 0;
 
 int InfoBoxLayout::ControlWidth = 100;
 
-bool
-FileExistsA(const char *FileName)
-{
-  FILE *file = fopen(FileName, "r");
-  if (file != NULL) {
-    fclose(file);
-    return true;
-  }
-
-  return false;
-}
-
 void
 StartupStore(const TCHAR *Str, ...)
 {

@@ -198,29 +198,6 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
 #endif /* !HAVE_POSIX */
 }
 
-
-bool FileExistsW(const TCHAR *FileName){
-  FILE *file = _tfopen(FileName, _T("r"));
-  if (file == NULL)
-    return(false);
-
-  fclose(file);
-
-  return(true);
-
-}
-
-bool FileExistsA(const char *FileName){
-  FILE *file = fopen(FileName, "r");
-  if (file != NULL) {
-    fclose(file);
-    return(true);
-  }
-  return false;
-}
-
-
-
 bool RotateScreen() {
 #ifdef DM_DISPLAYORIENTATION
   //
