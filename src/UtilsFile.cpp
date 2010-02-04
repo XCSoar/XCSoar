@@ -40,7 +40,9 @@ Copyright_License {
 
 #include <stdio.h>
 
-bool FileExistsW(const TCHAR *FileName){
+bool
+FileExists(const TCHAR *FileName)
+{
   FILE *file = _tfopen(FileName, _T("r"));
   if (file == NULL)
     return(false);
@@ -51,7 +53,10 @@ bool FileExistsW(const TCHAR *FileName){
 
 }
 
-bool FileExistsA(const char *FileName){
+#ifdef _UNICODE
+bool
+FileExists(const char *FileName)
+{
   FILE *file = fopen(FileName, "r");
   if (file != NULL) {
     fclose(file);
@@ -59,3 +64,4 @@ bool FileExistsA(const char *FileName){
   }
   return false;
 }
+#endif

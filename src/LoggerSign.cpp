@@ -259,7 +259,7 @@ LoggerImpl::LinkGRecordDLL()
 
     StartupStore(TEXT("Searching for GRecordDLL\n"));
     if (is_altair()) {
-      if (FileExistsW(TEXT("\\NOR Flash\\GRecordDLL.dat"))) {
+      if (FileExists(TEXT("\\NOR Flash\\GRecordDLL.dat"))) {
         StartupStore(TEXT("Updating GRecordDLL.DLL\n"));
         DeleteFile(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
         MoveFile(TEXT("\\NOR Flash\\GRecordDLL.dat"),

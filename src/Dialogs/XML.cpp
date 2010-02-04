@@ -387,7 +387,7 @@ load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
   LocalPathS(FileName, name);
 
   // If file exists -> Load XML from file
-  if (FileExistsA(FileName))
+  if (FileExists(FileName))
     xMainNode = XMLNode::openFileHelper(FileName);
 
 #ifdef WIN32

@@ -41,13 +41,12 @@ Copyright_License {
 
 #include <tchar.h>
 
-bool FileExistsW(const TCHAR *FileName);
-bool FileExistsA(const char *FileName);
+bool
+FileExists(const TCHAR *FileName);
 
 #ifdef _UNICODE
-#define FileExists FileExistsW
-#else
-#define FileExists FileExistsA
+bool
+FileExists(const char *FileName);
 #endif
 
 #endif
