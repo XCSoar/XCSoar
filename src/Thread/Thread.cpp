@@ -84,6 +84,23 @@ Thread::join()
   handle = NULL;
 }
 
+bool
+Thread::join(unsigned timeout_ms)
+{
+#ifdef HAVE_POSIX
+  // XXX timeout not implemented with pthread
+  join();
+  return true;
+#else
+  assert(handle != NULL);
+
+  bool result = ::WaitForSingleObject(handle, timeout_ms) == WAIT_OBJECT_0;
+  ::CloseHandle(handle);
+  handle = NULL;
+  return result;
+#endif
+}
+
 #ifdef HAVE_POSIX
 
 void *
