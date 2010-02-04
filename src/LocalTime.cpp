@@ -39,13 +39,9 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "Interface.hpp"
 #include "NMEA/Info.hpp"
-#include "NMEA/Derived.hpp"
 #include "Asset.hpp"
 
 #include <windows.h>
-#include <algorithm>
-
-using std::max;
 
 int
 TimeLocal(int localtime)
