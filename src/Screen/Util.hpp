@@ -46,7 +46,6 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 class Canvas;

@@ -206,6 +206,7 @@ ifeq ($(HAVE_CE),y)
 endif
 
 ifeq ($(HAVE_WIN32),y)
+  TARGET_CPPFLAGS += -DWIN32_LEAN_AND_MEAN
   ifeq ($(CONFIG_PC),y)
     TARGET_CPPFLAGS += -DWINDOWSPC=1
   endif

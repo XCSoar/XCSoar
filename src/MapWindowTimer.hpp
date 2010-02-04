@@ -38,7 +38,6 @@ Copyright_License {
 #ifndef MAP_WINDOW_TIMER_HPP
 #define MAP_WINDOW_TIMER_HPP
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 /**

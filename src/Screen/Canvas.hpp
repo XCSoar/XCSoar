@@ -45,9 +45,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
 #include <tchar.h>
 
 #ifdef ENABLE_SDL

@@ -43,7 +43,6 @@ Copyright_License {
 #include <SDL/SDL_video.h>
 #include <windef.h>
 #else
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
 

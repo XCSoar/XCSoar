@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_ANIMATION_HPP
 #define XCSOAR_SCREEN_ANIMATION_HPP
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 void SetSourceRectangle(RECT fromRect);

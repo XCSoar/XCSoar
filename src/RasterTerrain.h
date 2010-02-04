@@ -42,7 +42,6 @@ Copyright_License {
 #include "Sizes.h"
 #include "Navigation/GeoPoint.hpp"
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 class RasterMap;

@@ -46,7 +46,6 @@ Copyright_License {
 #ifndef XCSOAR_COMPAT_GDI_H
 #define XCSOAR_COMPAT_GDI_H
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #ifdef HAVE_MSVCRT

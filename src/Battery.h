@@ -44,7 +44,6 @@ Copyright_License {
 extern int PDABatteryTemperature;
 extern int PDABatteryPercent;
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 // Battery status for SIMULATOR mode

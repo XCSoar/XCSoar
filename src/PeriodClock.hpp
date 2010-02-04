@@ -42,7 +42,6 @@ Copyright_License {
 #ifdef HAVE_POSIX
 #include <time.h>
 #else /* !HAVE_POSIX */
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif /* !HAVE_POSIX */
 

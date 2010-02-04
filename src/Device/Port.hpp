@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_PORT_HPP
 #define XCSOAR_DEVICE_PORT_HPP
 
-#define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers
 #include <windows.h>
 
 #define NMEA_BUF_SIZE 100

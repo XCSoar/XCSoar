@@ -39,7 +39,6 @@ Copyright_License {
 #ifndef XCSOAR_UTILS_FONT_HPP
 #define XCSOAR_UTILS_FONT_HPP
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
 

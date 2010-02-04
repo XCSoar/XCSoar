@@ -42,7 +42,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/BufferCanvas.hpp"
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 /**

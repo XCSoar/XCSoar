@@ -42,7 +42,6 @@ Copyright_License {
 #ifdef ENABLE_SDL
   #include <SDL/SDL_ttf.h>
 #else
-  #define WIN32_LEAN_AND_MEAN
   #include <windows.h>
 #endif
 

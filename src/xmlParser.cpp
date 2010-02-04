@@ -45,7 +45,6 @@
  ****************************************************************************
  */
 #if defined(WIN32) || defined(UNDER_CE)
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 #include <windows.h> // to have IsTextUnicode, MultiByteToWideChar, WideCharToMultiByte
                      // to handle unicode files
 #endif
