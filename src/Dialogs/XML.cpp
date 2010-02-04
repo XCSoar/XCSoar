@@ -691,7 +691,13 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
 
     EditWindowStyle edit_style;
     edit_style.tab_stop();
-    edit_style.sunken_edge();
+
+    if (is_embedded())
+      /* sunken edge doesn't fit well on the tiny screen of an
+         embedded device */
+      edit_style.border();
+    else
+      edit_style.sunken_edge();
 
     if (MultiLine) {
       edit_style.multiline();
