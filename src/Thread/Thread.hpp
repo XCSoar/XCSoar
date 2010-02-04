@@ -51,13 +51,26 @@ Copyright_License {
 class Thread {
 #ifdef HAVE_POSIX
   pthread_t handle;
+  bool m_defined;
 #else
   HANDLE handle;
 #endif
 
 public:
+#ifdef HAVE_POSIX
+  Thread():m_defined(false) {}
+#else
   Thread():handle(NULL) {}
+#endif
   virtual ~Thread();
+
+  bool defined() const {
+#ifdef HAVE_POSIX
+    return m_defined;
+#else
+    return handle != NULL;
+#endif
+  }
 
   bool start();
   void join();

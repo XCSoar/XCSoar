@@ -54,7 +54,9 @@ bool
 Thread::start()
 {
 #ifdef HAVE_POSIX
-  return pthread_create(&handle, NULL, thread_proc, this) == 0;
+  assert(!m_defined);
+
+  return m_defined = pthread_create(&handle, NULL, thread_proc, this) == 0;
 #else
   assert(handle == NULL);
 
@@ -68,12 +70,18 @@ void
 Thread::join()
 {
 #ifdef HAVE_POSIX
+  assert(m_defined);
+
   pthread_join(handle, NULL);
+  m_defined = false;
 #else
   assert(handle != NULL);
 
   ::WaitForSingleObject(handle, INFINITE);
+  ::CloseHandle(handle);
 #endif
+
+  handle = NULL;
 }
 
 #ifdef HAVE_POSIX
