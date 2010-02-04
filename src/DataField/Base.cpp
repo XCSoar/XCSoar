@@ -38,9 +38,10 @@ Copyright_License {
 
 #include "DataField/Base.hpp"
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h> // for min()
 #include <math.h>
+#include <algorithm>
+
+using std::min;
 
 void
 DataField::Special(void)
@@ -251,8 +252,8 @@ DataField::CreateComboListStepping(void)
     // this data index item is checked on close of dialog
     mComboList.ComboPopupItemList[mComboList.ComboPopupItemCount]
         = mComboList.CreateItem(mComboList.ComboPopupItemCount,
-            (int)ComboPopupReopenLESSDataIndex, TEXT("<<More Items>>"),
-            TEXT("<<More Items>>"));
+            (int)ComboPopupReopenLESSDataIndex, _T("<<More Items>>"),
+            _T("<<More Items>>"));
     mComboList.ComboPopupItemCount += 1;
   }
 
@@ -309,8 +310,8 @@ DataField::CreateComboListStepping(void)
     // this data index item is checked on close of dialog
     mComboList.ComboPopupItemList[mComboList.ComboPopupItemCount]
         = mComboList.CreateItem(mComboList.ComboPopupItemCount,
-            (int)ComboPopupReopenMOREDataIndex, TEXT("<<More Items>>"),
-            TEXT("<<More Items>>"));
+            (int)ComboPopupReopenMOREDataIndex, _T("<<More Items>>"),
+            _T("<<More Items>>"));
 
     mComboList.ComboPopupItemCount += 1;
   }
