@@ -43,7 +43,12 @@ Copyright_License {
 #include "Message.h"
 #include "Asset.hpp"
 
+#ifdef HAVE_POSIX
+#include <time.h>
+#else /* !HAVE_POSIX */
 #include <windows.h>
+#endif /* !HAVE_POSIX */
+
 #include <tchar.h>
 #include <stdio.h>
 
@@ -68,8 +73,12 @@ ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *fmt, ...)
 ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
   :handler(_handler),
    baud_rate(_baud_rate),
+#ifdef HAVE_POSIX
+   fd(-1),
+#else
    hPort(INVALID_HANDLE_VALUE),
    dwMask(0),
+#endif
    CloseThread(false)
 {
   assert(path != NULL);
@@ -80,6 +89,14 @@ ComPort::ComPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
 bool
 ComPort::Open()
 {
+#ifdef HAVE_POSIX
+  fd = open(sPortName, O_RDWR|O_NOCTTY);
+  if (fd < 0) {
+    ComPort_StatusMessage(MB_OK|MB_ICONINFORMATION, NULL, _T("%s %s"),
+                          gettext(_T("Unable to open port")), sPortName);
+    return false;
+  }
+#else /* !HAVE_POSIX */
   DWORD dwError;
   DCB PortDCB;
 
@@ -168,10 +185,16 @@ ComPort::Open()
   // SETRTS: Sends the RTS (request-to-send) signal.
   EscapeCommFunction(hPort, SETDTR);
   EscapeCommFunction(hPort, SETRTS);
+#endif /* !HAVE_POSIX */
 
   if (!StartRxThread()){
+#ifdef HAVE_POSIX
+    close(fd);
+    fd = -1;
+#else /* !HAVE_POSIX */
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
+#endif /* !HAVE_POSIX */
 
     if (!is_embedded())
       Sleep(2000); // needed for windows bug
@@ -189,6 +212,12 @@ ComPort::Open()
 void
 ComPort::PutChar(BYTE Byte)
 {
+#ifdef HAVE_POSIX
+  if (fd < 0)
+    return;
+
+  write(fd, &Byte, sizeof(Byte));
+#else /* !HAVE_POSIX */
   if (hPort == INVALID_HANDLE_VALUE)
     return;
 
@@ -204,14 +233,19 @@ ComPort::PutChar(BYTE Byte)
     // WriteFile failed. Report error.
     dwError = GetLastError();
   }
+#endif /* !HAVE_POSIX */
 }
 
 
 void
 ComPort::Flush(void)
 {
+#ifdef HAVE_POSIX
+  // XXX
+#else /* !HAVE_POSIX */
   PurgeComm(hPort, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR
       | PURGE_RXCLEAR);
+#endif /* !HAVE_POSIX */
 }
 
 /* **********************************************************************
@@ -220,6 +254,20 @@ ComPort::Flush(void)
 void
 ComPort::run()
 {
+#ifdef HAVE_POSIX
+  static const struct timespec yield = { 0, 50000000 };
+
+  char buffer[1024];
+
+  while (fd >= 0 && closeTriggerEvent.test() && !CloseThread) {
+    ssize_t nbytes = read(fd, buffer, sizeof(buffer));
+    if (globalRunningEvent.test()) // ignore everything until started
+      for (ssize_t i = 0; i < nbytes; ++i)
+        ProcessChar(buffer[i]);
+
+    nanosleep(&yield, NULL); // XXX use poll()
+  }
+#else /* !HAVE_POSIX */
   DWORD dwCommModemStatus, dwBytesTransferred;
   BYTE inbuf[1024];
 
@@ -281,6 +329,7 @@ ComPort::run()
     // Retrieve modem control-register values.
     GetCommModemStatus(hPort, &dwCommModemStatus);
   }
+#endif /* !HAVE_POSIX */
 
   Flush();
 }
@@ -291,6 +340,16 @@ ComPort::run()
 bool
 ComPort::Close()
 {
+#ifdef HAVE_POSIX
+  if (fd < 0)
+    return true;
+
+  StopRxThread();
+
+  close(fd);
+  fd = -1;
+  return true;
+#else /* !HAVE_POSIX */
   DWORD dwError;
 
   if (hPort != INVALID_HANDLE_VALUE) {
@@ -313,11 +372,18 @@ ComPort::Close()
   }
 
   return false;
+#endif /* !HAVE_POSIX */
 }
 
 void
 ComPort::WriteString(const TCHAR *Text)
 {
+#ifdef HAVE_POSIX
+  if (fd < 0)
+    return;
+
+  write(fd, Text, _tcslen(Text) * sizeof(Text[0]));
+#else /* !HAVE_POSIX */
   char tmp[512];
   DWORD written, error;
 
@@ -337,6 +403,7 @@ ComPort::WriteString(const TCHAR *Text)
   if (--len <= 0 || !WriteFile(hPort, tmp, len, &written, NULL))
     // WriteFile failed, report error
     error = GetLastError();
+#endif /* !HAVE_POSIX */
 }
 
 // Stop Rx Thread
@@ -344,13 +411,20 @@ ComPort::WriteString(const TCHAR *Text)
 bool
 ComPort::StopRxThread()
 {
+#ifdef HAVE_POSIX
+  if (fd < 0)
+    return false;
+#else /* !HAVE_POSIX */
   if (hPort == INVALID_HANDLE_VALUE)
     return false;
+#endif /* !HAVE_POSIX */
+
   if (!Thread::defined())
     return true;
 
   CloseThread = true;
 
+#ifndef HAVE_POSIX
   if (is_embedded()) {
     Flush();
     // setting the comm event mask with the same value
@@ -360,6 +434,7 @@ ComPort::StopRxThread()
        to cancel the WaitCommEvent */
     SetCommMask(hPort, dwMask);
   }
+#endif /* !HAVE_POSIX */
 
   bool terminated = Thread::join(20000);
 
@@ -380,8 +455,13 @@ ComPort::StopRxThread()
 bool
 ComPort::StartRxThread(void)
 {
+#ifdef HAVE_POSIX
+  if (fd < 0)
+    return false;
+#else /* !HAVE_POSIX */
   if (hPort == INVALID_HANDLE_VALUE)
     return false;
+#endif /* !HAVE_POSIX */
 
   CloseThread = false;
 
@@ -394,6 +474,16 @@ ComPort::StartRxThread(void)
 int
 ComPort::GetChar(void)
 {
+#ifdef HAVE_POSIX
+  if (fd < 0)
+    return EOF;
+
+  char buffer;
+  if (read(fd, &buffer, sizeof(buffer)) != 1)
+    return EOF;
+
+  return buffer;
+#else /* !HAVE_POSIX */
   BYTE  inbuf[2];
   DWORD dwBytesTransferred;
 
@@ -404,6 +494,7 @@ ComPort::GetChar(void)
     if (dwBytesTransferred == 1)
       return inbuf[0];
   }
+#endif /* !HAVE_POSIX */
 
   return EOF;
 }
@@ -414,6 +505,9 @@ ComPort::GetChar(void)
 int
 ComPort::SetRxTimeout(int Timeout)
 {
+#ifdef HAVE_POSIX
+  return Timeout; // XXX
+#else /* !HAVE_POSIX */
   COMMTIMEOUTS CommTimeouts;
   int result;
   DWORD dwError;
@@ -460,11 +554,15 @@ ComPort::SetRxTimeout(int Timeout)
   }
 
   return result;
+#endif /* !HAVE_POSIX */
 }
 
 unsigned long
 ComPort::SetBaudrate(unsigned long BaudRate)
 {
+#ifdef HAVE_POSIX
+  return BaudRate; // XXX
+#else /* !HAVE_POSIX */
   COMSTAT ComStat;
   DCB PortDCB;
   DWORD dwErrors;
@@ -488,11 +586,18 @@ ComPort::SetBaudrate(unsigned long BaudRate)
     return 0;
 
   return result;
+#endif /* !HAVE_POSIX */
 }
 
 int
 ComPort::Read(void *Buffer, size_t Size)
 {
+#ifdef HAVE_POSIX
+  if (fd < 0)
+    return -1;
+
+  return read(fd, Buffer, Size);
+#else /* !HAVE_POSIX */
   DWORD dwBytesTransferred;
 
   if (hPort == INVALID_HANDLE_VALUE)
@@ -502,6 +607,7 @@ ComPort::Read(void *Buffer, size_t Size)
     return dwBytesTransferred;
 
   return -1;
+#endif /* !HAVE_POSIX */
 }
 
 void

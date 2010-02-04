@@ -102,9 +102,14 @@ protected:
   virtual void run();
 
 private:
+#ifdef HAVE_POSIX
+  int fd;
+#else /* !HAVE_POSIX */
   HANDLE hPort;
   DWORD dwMask;
-  TCHAR sPortName[8];
+#endif /* !HAVE_POSIX */
+
+  TCHAR sPortName[64];
   bool CloseThread;
 
   TCHAR BuildingString[NMEA_BUF_SIZE];
