@@ -221,9 +221,7 @@ bool FileExistsA(const char *FileName){
 
 
 bool RotateScreen() {
-#ifdef WINDOWSPC
-  return false;
-#else
+#ifdef DM_DISPLAYORIENTATION
   //
   // Change the orientation of the screen
   //
@@ -244,6 +242,8 @@ bool RotateScreen() {
   } else {
     return false;
   }
+#else
+  return false;
 #endif
 }
 
