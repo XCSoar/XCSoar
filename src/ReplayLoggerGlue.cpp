@@ -55,6 +55,8 @@
 #include "Compatibility/string.h"
 #include "DeviceBlackboard.hpp"
 #include "Components.hpp"
+#include "PeriodClock.hpp"
+
 #include <algorithm>
 
 bool
@@ -94,26 +96,18 @@ double
 ReplayLoggerGlue::get_time(const bool reset,
                            const double mintime)
 {
-  static double time_real_start;
-  static double time_real;
+  static PeriodClock clock;
   static double t_simulation;
   
   if (reset) {
-    time_real_start = 0;
-    time_real = 0;
+    clock.reset();
     t_simulation = 0;
   }
   
-  const double time_real_last = time_real;
-  SYSTEMTIME st;
-  GetLocalTime(&st);
-  time_real = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond - time_real_start);
-  
   if (reset) {
-    time_real_start = time_real;
     t_simulation = 0;
   } else {
-    t_simulation += TimeScale * (time_real-time_real_last);
+    t_simulation += TimeScale * max(clock.elapsed(), 0) / 1000.0;
   }
   
   t_simulation = std::max(mintime, t_simulation);
