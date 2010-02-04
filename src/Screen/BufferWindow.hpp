@@ -66,21 +66,29 @@ public:
            const WindowStyle style=WindowStyle()) {
     PaintWindow::set(parent, left, top, width, height, style);
   }
+#endif /* !ENABLE_SDL */
 
   Canvas &get_canvas() {
+#ifdef ENABLE_SDL
+    return canvas;
+#else
     return buffer;
+#endif
   }
 
   const Canvas &get_canvas() const {
+#ifdef ENABLE_SDL
+    return canvas;
+#else
     return buffer;
+#endif
   }
-#endif /* !ENABLE_SDL */
 
   /**
    * Copies the buffer to the specified canvas.
    */
   void commit_buffer(Canvas &dest) {
-    dest.copy(buffer);
+    dest.copy(get_canvas());
   }
 
 protected:
