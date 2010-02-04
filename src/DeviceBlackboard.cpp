@@ -349,6 +349,7 @@ DeviceBlackboard::SetSystemTime() {
   if (is_simulator())
     return;
 
+#ifdef HAVE_WIN32
   // Altair doesn't have a battery-backed up realtime clock,
   // so as soon as we get a fix for the first time, set the
   // system clock to the GPS time.
@@ -382,6 +383,9 @@ DeviceBlackboard::SetSystemTime() {
 #endif
     sysTimeInitialised =true;
   }
+#else
+  // XXX
+#endif
 }
 
 /**
