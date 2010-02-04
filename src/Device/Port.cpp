@@ -41,6 +41,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Message.h"
+#include "Asset.hpp"
 
 #include <windows.h>
 #include <tchar.h>
@@ -145,9 +146,10 @@ ComPort::Open()
     // Could not create the read thread.
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
-#ifdef WINDOWSPC
-    Sleep(2000); // needed for windows bug
-#endif
+
+    if (!is_embedded())
+      Sleep(2000); // needed for windows bug
+
     // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
     ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
@@ -171,9 +173,8 @@ ComPort::Open()
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
 
-#ifdef WINDOWSPC
-    Sleep(2000); // needed for windows bug
-#endif
+    if (!is_embedded())
+      Sleep(2000); // needed for windows bug
 
     return false;
   }
@@ -236,33 +237,31 @@ ComPort::ReadThread()
   // Specify a set of events to be monitored for the port.
   dwMask = EV_RXFLAG | EV_CTS | EV_DSR | EV_RING | EV_RXCHAR;
 
-#if !defined(WINDOWSPC) || (WINDOWSPC == 0)
-  SetCommMask(hPort, dwMask);
-#endif
+  if (is_embedded())
+    SetCommMask(hPort, dwMask);
 
   fRxThreadTerminated = false;
 
   while ((hPort != INVALID_HANDLE_VALUE) && (!closeTriggerEvent.test())
       && (!CloseThread)) {
 
-#ifdef WINDOWSPC
-    Sleep(50); // ToDo rewrite the whole driver to use overlaped IO
-    // on W2K or higher
-#else
-    // Wait for an event to occur for the port.
-    if (!WaitCommEvent(hPort, &dwCommModemStatus, 0)) {
-      // error reading from port
-      Sleep(100);
+    if (is_embedded()) {
+      // Wait for an event to occur for the port.
+      if (!WaitCommEvent(hPort, &dwCommModemStatus, 0))
+        // error reading from port
+        Sleep(100);
+    } else {
+      Sleep(50); // ToDo rewrite the whole driver to use overlaped IO
+      // on W2K or higher
+
+      dwCommModemStatus = EV_RXFLAG;
+      dwCommModemStatus = EV_RXCHAR;
     }
-#endif
 
     // Re-specify the set of events to be monitored for the port.
     //    SetCommMask(hPort, dwMask1);
 
-#if !defined(WINDOWSPC) || (WINDOWSPC == 0)
-    if ((dwCommModemStatus & EV_RXFLAG) || (dwCommModemStatus & EV_RXCHAR))
-#endif
-    {
+    if ((dwCommModemStatus & EV_RXFLAG) || (dwCommModemStatus & EV_RXCHAR)) {
 
       // Loop for waiting for the data.
       do {
@@ -319,10 +318,8 @@ ComPort::Close()
       dwError = GetLastError();
       return false;
     } else {
-
-#ifdef WINDOWSPC
-      Sleep(2000); // needed for windows bug
-#endif
+      if (!is_embedded())
+        Sleep(2000); // needed for windows bug
 
       hPort = INVALID_HANDLE_VALUE;
       return true;
@@ -370,33 +367,27 @@ ComPort::StopRxThread()
 
   DWORD tm = GetTickCount() + 20000l;
 
-#ifdef WINDOWSPC
+  if (is_embedded()) {
+    Flush();
+    // setting the comm event mask with the same value
+    //  GetCommMask(hPort, &dwMask);
+
+    /* will cancel any WaitCommEvent!  this is a documented CE trick
+       to cancel the WaitCommEvent */
+    SetCommMask(hPort, dwMask);
+  }
+
   while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0) {
     Sleep(10);
   }
 
   if (!fRxThreadTerminated) {
-    TerminateThread(hReadThread, 0);
+    if (is_embedded())
+      ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"), sPortName,
+                            gettext(_T("RX Thread not Terminated!")));
+    else
+      TerminateThread(hReadThread, 0);
   }
-#else
-  Flush();
-  // setting the comm event mask with the same value
-  //  GetCommMask(hPort, &dwMask);
-  SetCommMask(hPort, dwMask);          // will cancel any
-                                        // WaitCommEvent!  this is a
-                                        // documented CE trick to
-                                        // cancel the WaitCommEvent
-  while (!fRxThreadTerminated && (long)(GetTickCount()-tm) < 1000) {
-    Sleep(10);
-  }
-
-  if (!fRxThreadTerminated) {
-//#if COMMDEBUG > 0
-    ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"), sPortName,
-                          gettext(_T("RX Thread not Terminated!")));
-//#endif
-  }
-#endif
 
   CloseHandle(hReadThread);
 
@@ -492,9 +483,8 @@ ComPort::SetRxTimeout(int Timeout)
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
 
-#ifdef WINDOWSPC
-    Sleep(2000); // needed for windows bug
-#endif
+    if (!is_embedded())
+      Sleep(2000); // needed for windows bug
 
     ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
                  gettext(_T("Unable to Set Serial Port Timers")), sPortName);
