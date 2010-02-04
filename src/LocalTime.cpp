@@ -66,7 +66,7 @@ DetectCurrentTime(const NMEA_INFO *Basic)
 long
 GetUTCOffset()
 {
-  if (is_altair())
+  if (is_altair() || !is_embedded())
     return XCSoarInterface::SettingsComputer().UTCOffset;
 
   long utcoffset = 0;
@@ -84,10 +84,6 @@ GetUTCOffset()
     utcoffset -= TimeZoneInformation.DaylightBias * 60;
   }
 
-  #ifdef WINDOWSPC
-  return XCSoarInterface::SettingsComputer().UTCOffset;
-  #else
   return utcoffset;
-  #endif
 }
 
