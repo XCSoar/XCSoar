@@ -377,8 +377,6 @@ ComPort::StopRxThread()
 
   if (!fRxThreadTerminated) {
     TerminateThread(hReadThread, 0);
-  } else {
-    CloseHandle(hReadThread);
   }
 #else
   Flush();
@@ -397,10 +395,10 @@ ComPort::StopRxThread()
     ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"), sPortName,
                           gettext(_T("RX Thread not Terminated!")));
 //#endif
-  } else {
-    CloseHandle(hReadThread);
   }
 #endif
+
+  CloseHandle(hReadThread);
 
   return fRxThreadTerminated;
 }
@@ -422,8 +420,6 @@ ComPort::StartRxThread(void)
       CreateThread(NULL, 0, ThreadProc, this, 0, &dwThreadID)) != NULL) {
     //THREAD_PRIORITY_ABOVE_NORMAL
     SetThreadPriority(hReadThread, THREAD_PRIORITY_NORMAL);
-
-    //???? JMW Why close it here?    CloseHandle(hReadThread);
   } else {
     // Could not create the read thread.
     ComPort_StatusMessage(MB_OK, _T("Error"), _T("%s %s"),
