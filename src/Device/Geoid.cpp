@@ -61,6 +61,7 @@ unsigned char* egm96data= NULL;
 void
 OpenGeoid(void)
 {
+#ifdef WIN32
   const TCHAR *lpRes;
   HRSRC hResInfo;
   HGLOBAL hRes;
@@ -98,8 +99,9 @@ OpenGeoid(void)
       return;
     }
   }
-
-  return;
+#else /* !WIN32 */
+  // XXX we have no resources on UNIX
+#endif /* !WIN32 */
 }
 
 /**
