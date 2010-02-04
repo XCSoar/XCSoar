@@ -64,6 +64,9 @@ Copyright_License {
 /**
  * Main entry point for the whole XCSoar application
  */
+#ifndef WIN32
+int main(int argc, char **argv)
+#else
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #ifdef _WIN32_WCE
@@ -72,6 +75,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         gcc_unused LPSTR lpCmdLine2,
 #endif
         int nCmdShow)
+#endif
 {
   InitAsset();
 
@@ -79,7 +83,10 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   StartupStore(TEXT("Starting XCSoar %s\n"), XCSoar_VersionString);
 
   // Read options from the command line
-#ifndef _WIN32_WCE
+#ifndef WIN32
+  HINSTANCE hInstance = NULL;
+  LPCTSTR lpCmdLine = argc >= 2 ? argv[1] : _T("");
+#elif !defined(_WIN32_WCE)
   /* on Windows (non-CE), the lpCmdLine argument is narrow, and we
      have to use GetCommandLine() to get the UNICODE string */
   LPCTSTR lpCmdLine = GetCommandLine();
