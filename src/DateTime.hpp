@@ -82,7 +82,7 @@ struct BrokenTime {
 };
 
 /**
- * A broken-down representation of date and time.
+ * A broken-down representation of system date and time.
  */
 struct BrokenDateTime : public BrokenDate, public BrokenTime {
   /**
