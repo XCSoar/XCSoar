@@ -1659,6 +1659,7 @@ static void setVariables(void) {
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(_T("*.dat"));
     dfe->ScanDirectoryTop(_T("*.xcw"));
+    dfe->ScanDirectoryTop(_T("*.cup"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
@@ -1673,6 +1674,7 @@ static void setVariables(void) {
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(_T("*.dat"));
     dfe->ScanDirectoryTop(_T("*.xcw"));
+    dfe->ScanDirectoryTop(_T("*.cup"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }

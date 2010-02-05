@@ -64,7 +64,8 @@ void SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
     const bool set_location = false);
 
 enum WayPointFileType {
-  ftWinPilot
+  ftWinPilot,
+  ftSeeYou
 };
 
 /**
@@ -128,6 +129,8 @@ public:
     switch (filetype) {
     case ftWinPilot:
       return true;
+    case ftSeeYou:
+      return false;
     default:
       return false;
     }
@@ -173,6 +176,19 @@ private:
   tstring composeAngleWinPilot(const fixed& src, const bool lat);
   tstring composeAltitudeWinPilot(const fixed& src);
   tstring composeFlagsWinPilot(const WaypointFlags& src);
+
+  // SeeYou parsers
+  /**
+   * Parses a SeeYou waypoint file line
+   * @see parseLine()
+   * @see http://data.naviter.si/docs/cup_format.pdf
+   */
+  bool parseLineSeeYou(const TCHAR* line, const unsigned linenum,
+                       Waypoints &way_points, const RasterTerrain *terrain);
+  bool parseStringSeeYou(const TCHAR* src, tstring& dest);
+  bool parseAngleSeeYou(const TCHAR* src, fixed& dest, const bool lat);
+  bool parseAltitudeSeeYou(const TCHAR* src, fixed& dest);
+  bool parseStyleSeeYou(const TCHAR* src, WaypointFlags& dest);
 
   // Helper functions
   void setDefaultFlags(WaypointFlags& dest, bool turnpoint = true);
