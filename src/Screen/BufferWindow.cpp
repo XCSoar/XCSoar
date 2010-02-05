@@ -51,7 +51,8 @@ BufferWindow::on_create()
   if (!PaintWindow::on_create())
     return false;
 
-  buffer.set(WindowCanvas(*this), get_width(), get_height());
+  WindowCanvas a_canvas(*this);
+  buffer.set(a_canvas, get_width(), get_height());
   return true;
 }
 
