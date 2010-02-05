@@ -1660,6 +1660,7 @@ static void setVariables(void) {
     dfe->ScanDirectoryTop(_T("*.dat"));
     dfe->ScanDirectoryTop(_T("*.xcw"));
     dfe->ScanDirectoryTop(_T("*.cup"));
+    dfe->ScanDirectoryTop(_T("*.wpz"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
@@ -1675,6 +1676,7 @@ static void setVariables(void) {
     dfe->ScanDirectoryTop(_T("*.dat"));
     dfe->ScanDirectoryTop(_T("*.xcw"));
     dfe->ScanDirectoryTop(_T("*.cup"));
+    dfe->ScanDirectoryTop(_T("*.wpz"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
