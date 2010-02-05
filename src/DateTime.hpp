@@ -82,16 +82,16 @@ struct BrokenTime {
 };
 
 /**
- * A broken-down representation of system date and time.
+ * A broken-down representation of date and time.
  */
 struct BrokenDateTime : public BrokenDate, public BrokenTime {
   /**
-   * Returns the current date and time, in UTC.
+   * Returns the current system date and time, in UTC.
    */
   static const BrokenDateTime NowUTC();
 
   /**
-   * Returns the current date and time, in the current time zone.
+   * Returns the current system date and time, in the current time zone.
    */
   static const BrokenDateTime NowLocal();
 };
