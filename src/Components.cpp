@@ -356,7 +356,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   terrain.OpenTerrain();
 
   // Read the waypoint files
-  ReadWaypoints(way_points, &terrain);
+  WayPointParser::ReadWaypoints(way_points, &terrain);
 
   // Read and parse the airfield info file
   ReadAirfieldFile();
