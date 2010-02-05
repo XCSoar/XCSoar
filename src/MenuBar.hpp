@@ -57,7 +57,24 @@ public:
     LAST_ID = FIRST_ID + MAX_BUTTONS - 1,
   };
 
-  ButtonWindow buttons[MAX_BUTTONS];
+protected:
+  class Button : public ButtonWindow {
+#ifndef ENABLE_SDL
+  public:
+    void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
+             int left, int top, unsigned width, unsigned height,
+             const ButtonWindowStyle style=ButtonWindowStyle()) {
+      ButtonWindow::set(parent, text, id, left, top, width, height, style);
+      install_wndproc();
+    }
+
+  protected:
+    virtual LRESULT on_message(HWND hWnd, UINT message,
+                               WPARAM wParam, LPARAM lParam);
+#endif
+  };
+
+  Button buttons[MAX_BUTTONS];
 
 public:
   MenuBar(ContainerWindow &parent);
