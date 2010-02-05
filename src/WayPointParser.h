@@ -65,7 +65,8 @@ void SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
 
 enum WayPointFileType {
   ftWinPilot,
-  ftSeeYou
+  ftSeeYou,
+  ftZander
 };
 
 /**
@@ -131,6 +132,8 @@ public:
       return true;
     case ftSeeYou:
       return false;
+    case ftZander:
+      return false;
     default:
       return false;
     }
@@ -189,6 +192,18 @@ private:
   bool parseAngleSeeYou(const TCHAR* src, fixed& dest, const bool lat);
   bool parseAltitudeSeeYou(const TCHAR* src, fixed& dest);
   bool parseStyleSeeYou(const TCHAR* src, WaypointFlags& dest);
+
+  // Zander parsers
+  /**
+   * Parses a Zander waypoint file line
+   * @see parseLine()
+   */
+  bool parseLineZander(const TCHAR* line, const unsigned linenum,
+                       Waypoints &way_points, const RasterTerrain *terrain);
+  bool parseStringZander(const TCHAR* src, tstring& dest);
+  bool parseAngleZander(const TCHAR* src, fixed& dest, const bool lat);
+  bool parseAltitudeZander(const TCHAR* src, fixed& dest);
+  bool parseFlagsZander(const TCHAR* src, WaypointFlags& dest);
 
   // Helper functions
   void setDefaultFlags(WaypointFlags& dest, bool turnpoint = true);

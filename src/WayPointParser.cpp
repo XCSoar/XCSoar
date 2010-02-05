@@ -330,6 +330,12 @@ WayPointParser::SetFile(TCHAR* filename, bool returnOnFileMissing, int filenum)
     return true;
   }
 
+  // If Zander waypoint file -> save type and return true
+  if (MatchesExtension(filename, _T(".wpz"))) {
+    filetype = ftZander;
+    return true;
+  }
+
   // If unknown file -> clear and return false
   ClearFile();
   return false;
@@ -427,6 +433,8 @@ WayPointParser::parseLine(const TCHAR* line, unsigned linenum,
       return parseLineWinPilot(line, linenum, way_points, terrain);
     case ftSeeYou:
       return parseLineSeeYou(line, linenum, way_points, terrain);
+    case ftZander:
+      return parseLineZander(line, linenum, way_points, terrain);
   }
 
   return false;
@@ -935,6 +943,177 @@ WayPointParser::parseStyleSeeYou(const TCHAR* src, WaypointFlags& dest)
   // Update flags
   dest.LandPoint = (style == 3);
   dest.Airport = (style >= 2 && style <= 5);
+
+  return true;
+}
+
+bool
+WayPointParser::parseLineZander(const TCHAR* line, const unsigned linenum,
+    Waypoints &way_points, const RasterTerrain *terrain)
+{
+  // If (end-of-file or comment)
+  if (line[0] == '\0' || line[0] == 0x1a ||
+      _tcsstr(line, _T("**")) == line ||
+      _tcsstr(line, _T("*")) == line)
+    // -> return without error condition
+    return true;
+
+  size_t len = _tcslen(line);
+  if (len < 34)
+    return false;
+
+  // Create new waypoint (not appended to the waypoint list yet)
+  Waypoint new_waypoint = way_points.create(GEOPOINT(fixed_zero, fixed_zero));
+  // Set FileNumber
+  new_waypoint.FileNum = filenum;
+  // Set Zoom to zero as default
+  new_waypoint.Zoom = 0;
+  // Set flags to false as default
+  setDefaultFlags(new_waypoint.Flags, true);
+
+  // Name
+  if (!parseStringZander(line, new_waypoint.Name))
+    return false;
+
+  // Latitude
+  if (!parseAngleZander(line + 13, new_waypoint.Location.Latitude, true))
+    return false;
+
+  // Longitude
+  if (!parseAngleZander(line + 21, new_waypoint.Location.Longitude, false))
+    return false;
+
+  // Altitude
+  /// @todo configurable behaviour
+  bool alt_ok = parseAltitudeZander(line + 30, new_waypoint.Altitude);
+  // Load waypoint altitude from terrain
+  double t_alt = AltitudeFromTerrain(new_waypoint.Location, *terrain);
+  if (t_alt == TERRAIN_INVALID) {
+    if (!alt_ok)
+      new_waypoint.Altitude = fixed_zero;
+  } else { // TERRAIN_VALID
+    if (!alt_ok || abs((fixed)t_alt - new_waypoint.Altitude) > 100)
+    new_waypoint.Altitude = (fixed)t_alt;
+  }
+
+  // Description
+  if (len > 35)
+    parseStringZander(line + 35, new_waypoint.Comment);
+
+  // Flags
+  if (len > 45)
+    parseFlagsZander(line + 45, new_waypoint.Flags);
+
+  // if waypoint out of terrain range and should not be included
+  // -> return without error condition
+  if (terrain != NULL && !checkWaypointInTerrainRange(new_waypoint, *terrain))
+    return true;
+
+  // Append the new waypoint to the waypoint list and
+  // return successful line parse
+  way_points.append(new_waypoint);
+  return true;
+}
+
+bool
+WayPointParser::parseStringZander(const TCHAR* src, tstring& dest)
+{
+  if (src[0] == 0)
+    return true;
+
+  dest.assign(src);
+
+  size_t found = dest.find_first_of(_T(" \t\0"));
+  if (found != tstring::npos)
+    dest = dest.substr(0, found);
+
+  trim_inplace(dest);
+  return true;
+}
+
+bool
+WayPointParser::parseAngleZander(const TCHAR* src, fixed& dest, const bool lat)
+{
+  double val;
+  char sign = 0;
+
+  // Parse string
+  int s =_stscanf(src, _T("%lf%c"), &val, &sign);
+  // Hack: the E sign for east is interpreted as exponential sign
+  if (!(s == 2 || (s == 1 && sign == 0)))
+    return false;
+
+  // Calculate angle
+  unsigned deg = (int)(val * 0.0001);
+  unsigned min = (int)((val - deg * 10000) * 0.01);
+  unsigned sec = iround((int)val % 100);
+  val = deg + ((fixed)min / 60) + ((fixed)sec / 3600);
+
+  // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
+  val = std::min(val, (lat ? 90.0 : 180.0));
+
+  // Make angle negative if southern/western hemisphere
+  if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
+    val *= -1;
+
+  // Save angle
+  dest = (fixed)val;
+  return true;
+}
+
+bool
+WayPointParser::parseAltitudeZander(const TCHAR* src, fixed& dest)
+{
+  double val;
+
+  // Parse string
+  if (_stscanf(src, _T("%lf"), &val) != 1)
+    return false;
+
+  dest = (fixed)val;
+  return true;
+}
+
+bool
+WayPointParser::parseFlagsZander(const TCHAR* src, WaypointFlags& dest)
+{
+  // WP = Waypoint
+  // HA = Home Field
+  // WA = WP + Airfield
+  // LF = Landing Field
+  // WL = WP + Landing Field
+  // RA = Restricted
+
+  dest.TurnPoint = false;
+
+  if ((src[0] == 'W' || src[0] == 'w') &&
+      (src[1] == 'P' || src[1] == 'p')) {
+    dest.TurnPoint = true;
+  }
+  else if ((src[0] == 'H' || src[0] == 'h') &&
+           (src[1] == 'A' || src[1] == 'a')) {
+    dest.TurnPoint = true;
+    dest.Airport = true;
+    dest.Home = true;
+  }
+  else if ((src[0] == 'W' || src[0] == 'w') &&
+           (src[1] == 'A' || src[1] == 'a')) {
+    dest.TurnPoint = true;
+    dest.Airport = true;
+  }
+  else if ((src[0] == 'L' || src[0] == 'l') &&
+           (src[1] == 'F' || src[1] == 'f')) {
+    dest.LandPoint = true;
+  }
+  else if ((src[0] == 'W' || src[0] == 'w') &&
+           (src[1] == 'L' || src[1] == 'l')) {
+    dest.TurnPoint = true;
+    dest.LandPoint = true;
+  }
+  else if ((src[0] == 'R' || src[0] == 'r') &&
+           (src[1] == 'A' || src[1] == 'a')) {
+    dest.Restricted = true;
+  }
 
   return true;
 }
