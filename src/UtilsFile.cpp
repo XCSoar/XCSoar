@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "UtilsFile.hpp"
+#include "zzip/zzip.h"
 
 #include <stdio.h>
 
@@ -45,12 +46,10 @@ FileExists(const TCHAR *FileName)
 {
   FILE *file = _tfopen(FileName, _T("r"));
   if (file == NULL)
-    return(false);
+    return false;
 
   fclose(file);
-
-  return(true);
-
+  return true;
 }
 
 #ifdef _UNICODE
@@ -58,10 +57,22 @@ bool
 FileExists(const char *FileName)
 {
   FILE *file = fopen(FileName, "r");
-  if (file != NULL) {
-    fclose(file);
-    return(true);
-  }
-  return false;
+  if (file == NULL)
+    return false;
+
+  fclose(file);
+  return true;
 }
 #endif
+
+bool
+FileExistsZipped(const char *FileName)
+{
+  ZZIP_FILE *file = zzip_fopen(FileName, "r");
+  if (file == NULL)
+    return false;
+
+  zzip_fclose(file);
+
+  return true;
+}

@@ -49,4 +49,6 @@ bool
 FileExists(const char *FileName);
 #endif
 
+bool FileExistsZipped(const char *FileName);
+
 #endif

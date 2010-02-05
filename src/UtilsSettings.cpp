@@ -135,7 +135,7 @@ void SettingsLeave() {
     terrain.OpenTerrain();
 
     // re-load waypoints
-    ReadWaypoints(way_points, &terrain);
+    WayPointParser::ReadWaypoints(way_points, &terrain);
     ReadAirfieldFile();
 
     // re-set home

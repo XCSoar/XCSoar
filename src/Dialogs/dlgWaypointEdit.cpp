@@ -421,11 +421,10 @@ static void GetValues(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
     ss = wp->GetDataField()->GetAsInteger();
-    if (ss==0) {
-      WaypointAltitudeFromTerrain(*global_wpt, terrain);
-    } else {
-      global_wpt->Altitude = ss/ALTITUDEMODIFY;
-    }
+
+    global_wpt->Altitude = (ss == 0 ?
+        WayPointParser::AltitudeFromTerrain(global_wpt->Location, terrain) :
+        Units::ToSysUnit(ss, Units::UserAltitudeUnit));
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));

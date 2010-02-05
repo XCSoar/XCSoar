@@ -913,25 +913,23 @@ static void OnWaypointEditClicked(WindowControl * Sender){
 }
 
 static void AskWaypointSave(void) {
-  if (WaypointsOutOfRange==2) {
-
+  /// @todo terrain check???
+  if (WayPointParser::WaypointsOutOfRangeSetting == 2) {
     if(MessageBoxX(gettext(_T("Waypoints excluded, save anyway?")),
                    gettext(_T("Waypoints outside terrain")),
-                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
-
-      WaypointWriteFiles(way_points, XCSoarInterface::SettingsComputer());
+                   MB_YESNO | MB_ICONQUESTION) == IDYES) {
+      WayPointParser::SaveWaypoints(way_points);
 
       WaypointFileChanged= true;
       changed = true;
-
     }
   } else {
-
-    WaypointWriteFiles(way_points, XCSoarInterface::SettingsComputer());
+    WayPointParser::SaveWaypoints(way_points);
 
     WaypointFileChanged= true;
     changed = true;
   }
+
   waypointneedsave = false;
 }
 
@@ -1418,7 +1416,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(_T("Ask")));
     dfe->addEnumText(gettext(_T("Include")));
     dfe->addEnumText(gettext(_T("Exclude")));
-    wp->GetDataField()->Set(WaypointsOutOfRange);
+    wp->GetDataField()->Set(WayPointParser::WaypointsOutOfRangeSetting);
     wp->RefreshDisplay();
   }
 
@@ -2557,10 +2555,15 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointsOutOfRange"));
   if (wp) {
-    if (WaypointsOutOfRange != wp->GetDataField()->GetAsInteger()) {
-      WaypointsOutOfRange = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryWaypointsOutOfRange, WaypointsOutOfRange);
-      WaypointFileChanged= true;
+    if (WayPointParser::WaypointsOutOfRangeSetting !=
+        wp->GetDataField()->GetAsInteger()) {
+      WayPointParser::WaypointsOutOfRangeSetting =
+        wp->GetDataField()->GetAsInteger();
+
+      SetToRegistry(szRegistryWaypointsOutOfRange,
+                    WayPointParser::WaypointsOutOfRangeSetting);
+
+      WaypointFileChanged = true;
       changed = true;
     }
   }
