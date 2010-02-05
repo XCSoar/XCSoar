@@ -68,7 +68,7 @@ AIRSPACE_ALT::get_as_text(const bool concise) const
     }
     break;
   case abFL:
-    oss << _T("FL") << (int)(fixed_10 * FL);
+    oss << _T("FL") << (int)FL;
     break;
   case abMSL:
     oss << (int)Altitude;
