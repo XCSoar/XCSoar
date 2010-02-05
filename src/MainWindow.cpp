@@ -145,6 +145,20 @@ MainWindow::on_activate()
 }
 
 bool
+MainWindow::on_setfocus()
+{
+  if (!has_dialog()) {
+    /* the main window should never have the keyboard focus; if we
+       happen to get the focus despite of that, forward it to the map
+       window to make keyboard shortcuts work */
+    map.set_focus();
+    return true;
+  }
+
+  return SingleWindow::on_setfocus();
+}
+
+bool
 MainWindow::on_timer(timer_t id)
 {
   if (id != timer_id)
