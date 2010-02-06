@@ -24,7 +24,7 @@
  * @author André Somers
  */
 
-#include "Vector.h"
+#include "Vector.hpp"
 
 struct WindMeasurement
 {

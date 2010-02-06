@@ -51,7 +51,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "RasterTerrain.h"
 #include "RasterMap.h"
-#include "WindStore.h"
+#include "WindStore.hpp"
 #include "Language.hpp"
 #include "Atmosphere.h"
 #include "SettingsComputer.hpp"

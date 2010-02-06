@@ -18,7 +18,7 @@
 #ifndef WINDSTORE_H
 #define WINDSTORE_H
 
-#include "WindMeasurementList.h"
+#include "WindMeasurementList.hpp"
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
