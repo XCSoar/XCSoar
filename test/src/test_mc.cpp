@@ -63,7 +63,7 @@ void test_glide_alt(const fixed h, const fixed W,
   ac.NavAltitude = h;
 
   GeoVector vect(fixed(400.0), fixed_zero);
-  GlideState gs (vect,fixed_zero,ac);
+  GlideState gs(vect, fixed_zero, ac.NavAltitude, ac);
   GlideResult gr = polar.solve(gs);
   hfile << h << " " 
         << gr.AltitudeDifference << " "
@@ -94,7 +94,7 @@ void test_glide_stf(const fixed h, const fixed W,
   ac.NettoVario = S;
 
   GeoVector vect(fixed(400.0), fixed_zero);
-  GlideState gs (vect,fixed_zero,ac);
+  GlideState gs(vect, fixed_zero, ac.NavAltitude, ac);
   GlideResult gr = polar.solve(gs);
 
   fixed Vstf = polar.speed_to_fly(ac, gr, false);
@@ -199,7 +199,7 @@ void test_glide_cb(const fixed h, const fixed W,
   ac.NavAltitude = h;
 
   GeoVector vect(fixed(400.0), fixed_zero);
-  GlideState gs (vect, fixed_zero, ac);
+  GlideState gs (vect, fixed_zero, ac.NavAltitude, ac);
   GlideResult gr = polar.solve(gs);
 
   gr.calc_deferred(ac);

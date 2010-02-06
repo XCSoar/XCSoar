@@ -89,24 +89,24 @@ GlideState::calc_ave_speed(const fixed Veff) const
 
 // dummy task
 GlideState::GlideState(const GeoVector &vector, const fixed htarget,
-    const AIRCRAFT_STATE &aircraft) :
+                       fixed altitude, const WIND_STATE &wind) :
   Vector(vector),
-  MinHeight(htarget)
+  MinHeight(htarget),
+  AltitudeDifference(altitude - MinHeight)
 {
-  calc_speedups(aircraft);
+  calc_speedups(wind);
 }
 
 void
-GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
+GlideState::calc_speedups(const WIND_STATE &wind)
 {
-  AltitudeDifference = (aircraft.NavAltitude - MinHeight);
-  if (positive(aircraft.WindSpeed)) {
-    WindDirection = aircraft.WindDirection;
-    EffectiveWindSpeed = aircraft.WindSpeed;
-    const fixed theta = fixed_180 + aircraft.WindDirection - Vector.Bearing;
+  if (positive(wind.WindSpeed)) {
+    WindDirection = wind.WindDirection;
+    EffectiveWindSpeed = wind.WindSpeed;
+    const fixed theta = fixed_180 + wind.WindDirection - Vector.Bearing;
     EffectiveWindAngle = theta;
-    wsq_ = aircraft.WindSpeed * aircraft.WindSpeed;
-    HeadWind = -aircraft.WindSpeed * cos(fixed_deg_to_rad * theta);
+    wsq_ = wind.WindSpeed * wind.WindSpeed;
+    HeadWind = -wind.WindSpeed * cos(fixed_deg_to_rad * theta);
     dwcostheta_ = fixed_two * HeadWind;
   } else {
     WindDirection = fixed_zero;
