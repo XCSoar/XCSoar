@@ -177,15 +177,11 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
     // or use circular buffer
   }
 
-  if ((aircraft.Speed < Magnitude(minVector)) || first) {
-    minVector.x = curVector.x;
-    minVector.y = curVector.y;
-  }
+  if ((aircraft.Speed < Magnitude(minVector)) || first)
+    minVector = curVector;
 
-  if ((aircraft.Speed > Magnitude(maxVector)) || first) {
-    maxVector.x = curVector.x;
-    maxVector.y = curVector.y;
-  }
+  if ((aircraft.Speed > Magnitude(maxVector)) || first)
+    maxVector = curVector;
 
   if (fullCircle) { //we have completed a full circle!
     if (numwindsamples < MAXWINDSAMPLES - 1)
@@ -199,10 +195,7 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
     v.x = (maxVector.x - minVector.x) / 2;
     v.y = (maxVector.y - minVector.y) / 2;
 
-    minVector.x = v.x;
-    minVector.y = v.y;
-    maxVector.x = v.x;
-    maxVector.y = v.y;
+    minVector = maxVector = v;
 
     first = true;
     numwindsamples = 0;
