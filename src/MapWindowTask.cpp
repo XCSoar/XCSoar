@@ -97,7 +97,7 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
                          SettingsMap());
     RenderObservationZone ozv(helper);
     RenderTaskPointMap tpv(helper, ozv, draw_bearing,
-                           Basic().aircraft.Location, *this);
+                           Basic().Location, *this);
     RenderTask dv(tpv);
     task->Accept(dv); 
   }

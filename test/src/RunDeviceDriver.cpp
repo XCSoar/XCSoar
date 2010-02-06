@@ -200,15 +200,15 @@ Dump(const NMEA_INFO &basic)
 
   if (basic.gps.Connected == 2) {
     printf("Position=");
-    Dump(basic.aircraft.Location);
+    Dump(basic.Location);
     printf("\n");
   }
 
   if (basic.AirspeedAvailable) {
-    printf("GroundSpeed=%d\n", (int)basic.aircraft.Speed);
-    printf("TrueAirspeed=%d\n", (int)basic.aircraft.TrueAirspeed);
+    printf("GroundSpeed=%d\n", (int)basic.GroundSpeed);
+    printf("TrueAirspeed=%d\n", (int)basic.TrueAirspeed);
     printf("IndicatedAirspeed=%d\n",
-           (int)basic.aircraft.IndicatedAirspeed);
+           (int)basic.IndicatedAirspeed);
   }
 
   if (basic.gps.Connected == 2)
@@ -217,15 +217,14 @@ Dump(const NMEA_INFO &basic)
   if (basic.BaroAltitudeAvailable)
     printf("BaroAltitude=%d\n", (int)basic.BaroAltitude);
 
-  if (basic.VarioAvailable)
-    printf("TotalEnergyVario=%.1f\n", (double)basic.aircraft.Vario);
+  if (basic.TotalEnergyVarioAvailable)
+    printf("TotalEnergyVario=%.1f\n", (double)basic.TotalEnergyVario);
 
   if (basic.NettoVarioAvailable)
-    printf("NettoVario=%.1f\n", (double)basic.aircraft.NettoVario);
+    printf("NettoVario=%.1f\n", (double)basic.NettoVario);
 
   if (basic.ExternalWindAvailable)
-    printf("Wind=%d/%d\n", (int)basic.aircraft.wind.bearing,
-           (int)basic.aircraft.wind.norm);
+    printf("Wind=%d/%d\n", (int)basic.wind.bearing, (int)basic.wind.norm);
 
   if (basic.TemperatureAvailable)
     printf("OutsideAirTemperature=%d\n", (int)basic.OutsideAirTemperature);

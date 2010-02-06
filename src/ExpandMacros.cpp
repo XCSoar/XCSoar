@@ -280,7 +280,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckSettingsLockout)"))) {
     if (!is_simulator() && XCSoarInterface::LockSettingsInFlight &&
-        Basic().aircraft.Flying) {
+        Basic().flight.Flying) {
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckSettingsLockout)"), TEXT(""), Size);

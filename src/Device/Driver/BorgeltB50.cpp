@@ -177,10 +177,10 @@ PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
   }
 
   GPS_INFO->AirspeedAvailable = true;
-  GPS_INFO->aircraft.IndicatedAirspeed = vias;
-  GPS_INFO->aircraft.TrueAirspeed = vtas;
-  GPS_INFO->VarioAvailable = true;
-  GPS_INFO->aircraft.Vario = wnet;
+  GPS_INFO->IndicatedAirspeed = vias;
+  GPS_INFO->TrueAirspeed = vtas;
+  GPS_INFO->TotalEnergyVarioAvailable = true;
+  GPS_INFO->TotalEnergyVario = wnet;
 
   TriggerVarioUpdate();
 

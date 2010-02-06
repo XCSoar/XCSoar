@@ -331,7 +331,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
                          const DERIVED_INFO *Calculated,
 			 const SETTINGS_COMPUTER &settings)
 {
-  const fixed Time = Basic->aircraft.Time;
+  const fixed Time = Basic->Time;
   TCHAR text[80];
 
   switch(id) {

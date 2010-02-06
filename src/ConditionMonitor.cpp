@@ -72,11 +72,11 @@ public:
   void
   Update(const GlideComputer& cmp)
   {
-    if (!cmp.Basic().aircraft.Flying)
+    if (!cmp.Basic().flight.Flying)
       return;
 
     bool restart = false;
-    const fixed Time = cmp.Basic().aircraft.Time;
+    const fixed Time = cmp.Basic().Time;
     if (Ready_Time_Check(Time, &restart)) {
       LastTime_Check = Time;
       if (CheckCondition(cmp)) {
@@ -151,9 +151,9 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    wind = cmp.Basic().aircraft.wind;
+    wind = cmp.Basic().wind;
 
-    if (!cmp.Basic().aircraft.Flying) {
+    if (!cmp.Basic().flight.Flying) {
       last_wind = wind;
       return false;
     }

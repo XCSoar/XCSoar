@@ -100,7 +100,7 @@ MapWindowProjection::CalculateOrientationNormal
  const SETTINGS_MAP &settings)
 
 {
-  fixed trackbearing = DrawInfo.aircraft.TrackBearing;
+  fixed trackbearing = DrawInfo.TrackBearing;
 
   if( (settings.DisplayOrientation == NORTHUP)
       ||
@@ -166,7 +166,7 @@ MapWindowProjection::CalculateOrientationTargetPan
   }
 #else
   DisplayAngle.SetAngle(fixed_zero);
-    DisplayAircraftAngle = DrawInfo.aircraft.TrackBearing;
+    DisplayAircraftAngle = DrawInfo.TrackBearing;
 #endif
 }
 
@@ -212,26 +212,26 @@ MapWindowProjection::CalculateOrigin
         POINT screen;
         LonLat2Screen(PanLocation, screen);
 
-        LonLat2Screen(DrawInfo.aircraft.Location, Orig_Aircraft);
+        LonLat2Screen(DrawInfo.Location, Orig_Aircraft);
 
         if ((fabs((double)Orig_Aircraft.x-screen.x)<(rc.right-rc.left)/3)
             && (fabs((double)Orig_Aircraft.y-screen.y)<(rc.bottom-rc.top)/3)) {
 
         } else {
           // out of bounds, center on aircraft
-          PanLocation = DrawInfo.aircraft.Location;
+          PanLocation = DrawInfo.Location;
         }
       } else {
         // out of bounds, center on aircraft
-        PanLocation = DrawInfo.aircraft.Location;
+        PanLocation = DrawInfo.Location;
       }
     } else {
       // Pan is off
-      PanLocation = DrawInfo.aircraft.Location;
+      PanLocation = DrawInfo.Location;
     }
   }
 
-  LonLat2Screen(DrawInfo.aircraft.Location,
+  LonLat2Screen(DrawInfo.Location,
                 Orig_Aircraft);
 
   UpdateScreenBounds();

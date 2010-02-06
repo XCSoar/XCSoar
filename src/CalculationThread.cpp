@@ -101,7 +101,7 @@ CalculationThread::run()
       // inform map new data is ready
       drawTriggerEvent.trigger();
 
-      if (!glide_computer->Basic().VarioAvailable) {
+      if (!glide_computer->Basic().TotalEnergyVarioAvailable) {
         TriggerVarioUpdate(); // emulate vario update
       }
 

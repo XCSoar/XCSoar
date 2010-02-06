@@ -124,9 +124,9 @@ GlideComputerBlackboard::ResetFlight(const bool full)
 void
 GlideComputerBlackboard::StartTask()
 {
-  calculated_info.CruiseStartLocation = gps_info.aircraft.Location;
-  calculated_info.CruiseStartAlt = gps_info.aircraft.NavAltitude;
-  calculated_info.CruiseStartTime = gps_info.aircraft.Time;
+  calculated_info.CruiseStartLocation = gps_info.Location;
+  calculated_info.CruiseStartAlt = gps_info.NavAltitude;
+  calculated_info.CruiseStartTime = gps_info.Time;
 
   // JMW reset time cruising/time circling stats on task start
   calculated_info.timeCircling = 0;
@@ -149,7 +149,7 @@ GlideComputerBlackboard::SaveFinish()
 void
 GlideComputerBlackboard::RestoreFinish()
 {
-  FLYING_STATE flying_state = Basic().aircraft;
+  FLYING_STATE flying_state = Basic().flight;
 
   calculated_info = Finish_Derived_Info;
 
@@ -176,12 +176,12 @@ GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info)
 {
   _time_retreated = false;
 
-  if (nmea_info.aircraft.Time < gps_info.aircraft.Time) {
+  if (nmea_info.Time < gps_info.Time) {
     // backwards in time, so reset last
     last_gps_info = nmea_info;
     last_calculated_info = calculated_info;
     _time_retreated = true;
-  } else if (nmea_info.aircraft.Time > gps_info.aircraft.Time) {
+  } else if (nmea_info.Time > gps_info.Time) {
     // forwards in time, so save state
     last_gps_info = gps_info;
     last_calculated_info = calculated_info;

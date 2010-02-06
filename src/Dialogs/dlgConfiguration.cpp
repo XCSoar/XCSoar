@@ -790,7 +790,7 @@ static void SetLocalTime(void) {
   WndProperty* wp;
   TCHAR temp[20];
   Units::TimeToText(temp,
-                    (int)TimeLocal((int)(XCSoarInterface::Basic().aircraft.Time)));
+                    (int)TimeLocal((int)(XCSoarInterface::Basic().Time)));
 
   wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
   if (wp) {
@@ -883,7 +883,7 @@ extern void OnInfoBoxHelp(WindowControl * Sender);
 static void OnWaypointNewClicked(WindowControl * Sender){
   (void)Sender;
 
-  Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().aircraft.Location);
+  Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
   if (dlgWaypointEditShowModal(edit_waypoint)) {
     if (edit_waypoint.Name.size()) {
       way_points.append(edit_waypoint);
@@ -896,7 +896,7 @@ static void OnWaypointNewClicked(WindowControl * Sender){
 static void OnWaypointEditClicked(WindowControl * Sender){
   (void)Sender;
 
-  const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::Basic().aircraft.Location);
+  const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::Basic().Location);
   if (way_point){
     if (way_points.get_writable(*way_point)) {
       Waypoint wp_copy = *way_point;

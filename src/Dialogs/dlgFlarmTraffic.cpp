@@ -532,7 +532,7 @@ PaintRadarTraffic(Canvas &canvas) {
     }
 
     // Rotate x and y to have a track up display
-    fixed DisplayAngle = -XCSoarInterface::Basic().aircraft.TrackBearing;
+    fixed DisplayAngle = -XCSoarInterface::Basic().TrackBearing;
     // or use .Heading? (no, because heading is not reliable)
     const FastRotation r(DisplayAngle);
     FastRotation::Pair p = r.Rotate(x, y);

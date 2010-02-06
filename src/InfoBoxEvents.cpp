@@ -203,10 +203,10 @@ ActionInterface::on_key_Speed(int UpDown)
   fixed fixed_step = (fixed)Units::ToSysUnit(10, Units::UserHorizontalSpeedUnit);
 
   if (UpDown == 1)
-    device_blackboard.SetSpeed(Basic().aircraft.Speed + fixed_step);
+    device_blackboard.SetSpeed(Basic().GroundSpeed + fixed_step);
   else if (UpDown == -1)
     device_blackboard.SetSpeed(max(fixed_zero,
-                                   Basic().aircraft.Speed - fixed_step));
+                                   Basic().GroundSpeed - fixed_step));
   else if (UpDown == -2)
     on_key_Direction(-1);
   else if (UpDown == 2)
@@ -288,9 +288,9 @@ ActionInterface::on_key_Direction(int UpDown)
 {
   if (is_simulator()) {
     if(UpDown==1) {
-      device_blackboard.SetTrackBearing(Basic().aircraft.TrackBearing + 5);
+      device_blackboard.SetTrackBearing(Basic().TrackBearing + 5);
     } else if (UpDown==-1) {
-      device_blackboard.SetTrackBearing(Basic().aircraft.TrackBearing - 5);
+      device_blackboard.SetTrackBearing(Basic().TrackBearing - 5);
     }
   }
   return;

@@ -449,7 +449,7 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
   ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);
 
   fixed distance, bearing;
-  DistanceBearing(XCSoarInterface::Basic().aircraft.Location,
+  DistanceBearing(XCSoarInterface::Basic().Location,
                   selected_waypoint->Location,
                   &distance,
                   &bearing);
@@ -469,8 +469,9 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
 
   // alt reqd at current mc
 
-  r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic().aircraft,
-                                             glide_polar);
+  const AIRCRAFT_STATE aircraft_state =
+    ToAircraftState(XCSoarInterface::Basic());
+  r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
   wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
   if (wp) {
     _stprintf(sTmp, _T("%.0f %s"),
@@ -482,9 +483,7 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
   // alt reqd at mc 0
 
   glide_polar.set_mc(fixed_zero);
-  r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic().aircraft,
-                                             glide_polar);
-
+  r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
   wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
   if (wp) {
     _stprintf(sTmp, _T("%.0f %s"),
@@ -495,9 +494,7 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
 
   // alt reqd at safety mc
 
-  r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic().aircraft,
-                                             safety_polar);
-
+  r = TaskSolution::glide_solution_remaining(t, aircraft_state, safety_polar);
   wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
   if (wp) {
     _stprintf(sTmp, _T("%.0f %s"),

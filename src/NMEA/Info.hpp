@@ -118,6 +118,13 @@ struct ACCELERATION_STATE
    * @see Gload
    */
   bool Available;
+
+  /**
+   * G-Load information of external device (if available)
+   * or estimated (assuming balanced turn) 
+   * @see AccelerationAvailable
+   */
+  fixed Gload;
 };
 
 
@@ -127,9 +134,15 @@ struct ACCELERATION_STATE
 struct NMEA_INFO {
   GPS_STATE gps;
 
-  AIRCRAFT_STATE aircraft;
-
   ACCELERATION_STATE acceleration;
+
+  FLYING_STATE flight;
+
+  /** location of aircraft */
+  GEOPOINT Location;
+
+  /** track angle in degrees true */
+  fixed TrackBearing;
 
   /** Bearing including wind factor */
   fixed Heading;
@@ -153,6 +166,28 @@ struct NMEA_INFO {
    * @see TrueAirspeed in Aircraft
    */
   bool AirspeedAvailable;
+
+  /**
+   * Speed over ground in m/s
+   * @see TrueAirspeed
+   * @see IndicatedAirspeed
+   */
+  fixed GroundSpeed; 
+
+  /**
+   * True air speed (m/s)
+   * @see Speed
+   * @see IndicatedAirspeed
+   */
+  fixed TrueAirspeed;
+
+  /**
+   * Indicated air speed (m/s)
+   * @see Speed
+   * @see TrueAirspeed
+   * @see AirDensityRatio
+   */
+  fixed IndicatedAirspeed;
 
   fixed TrueAirspeedEstimated;
 
@@ -183,6 +218,15 @@ struct NMEA_INFO {
   /** Height above working band/safety (m) */
   fixed working_band_height;
 
+  /** Altitude used for navigation (GPS or Baro) */
+  fixed NavAltitude;
+
+  /** Fraction of working band height */
+  fixed working_band_fraction;
+
+  /** Altitude over terrain */
+  fixed AltitudeAGL;
+
   /**
    * Troposhere atmosphere model for QNH correction
    */
@@ -191,6 +235,8 @@ struct NMEA_INFO {
   //##########
   //   Time
   //##########
+
+  fixed Time; /**< global time (seconds UTC) */
 
   /** GPS date and time */
   BrokenDateTime DateTime;
@@ -208,15 +254,27 @@ struct NMEA_INFO {
 
   /**
    * Is an external vario signal available?
-   * @see Vario
+   * @see TotalEnergyVario
    */
-  bool VarioAvailable;
+  bool TotalEnergyVarioAvailable;
 
   /**
    * Is an external netto vario signal available?
    * @see NettoVario
    */
   bool NettoVarioAvailable;
+
+  /**
+   * Rate of change of total energy of aircraft (m/s, up positive)
+   * @see TotalEnergyVarioAvailable
+   */
+  fixed TotalEnergyVario;
+
+  /**
+   * Vertical speed of air mass (m/s, up positive)
+   * @see NettoVarioAvailable
+   */
+  fixed NettoVario;
 
   //##############
   //   Settings
@@ -241,6 +299,8 @@ struct NMEA_INFO {
    * @see ExternalWindDirection
    */
   bool ExternalWindAvailable;
+
+  SpeedVector wind;
 
   /**
    * Is temperature information available?
@@ -288,5 +348,37 @@ struct NMEA_INFO {
       : GPSAltitude;
   }
 };
+
+static inline const AIRCRAFT_STATE
+ToAircraftState(const NMEA_INFO &info)
+{
+  AIRCRAFT_STATE aircraft;
+
+  /* SPEED_STATE */
+  aircraft.Speed = info.GroundSpeed;
+  aircraft.TrueAirspeed = info.TrueAirspeed;
+  aircraft.IndicatedAirspeed = info.IndicatedAirspeed;
+
+  /* ALTITUDE_STATE */
+  aircraft.NavAltitude = info.NavAltitude;
+  aircraft.working_band_fraction = info.working_band_fraction;
+  aircraft.AltitudeAGL = info.AltitudeAGL;
+
+  /* VARIO_INFO */
+  aircraft.Vario = info.TotalEnergyVario;
+  aircraft.NettoVario = info.NettoVario;
+
+  /* FLYING_STATE */
+  (FLYING_STATE &)aircraft = info.flight;
+
+  /* AIRCRAFT_STATE */
+  aircraft.Time = info.Time;
+  aircraft.Location = info.Location;
+  aircraft.TrackBearing = info.TrackBearing;
+  aircraft.Gload = info.acceleration.Gload;
+  aircraft.wind = info.wind;
+
+  return aircraft;
+}
 
 #endif

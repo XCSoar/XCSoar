@@ -92,7 +92,7 @@ DeviceBlackboard::Initialise()
 
   // Set GPS assumed time to system time
   gps_info.DateTime = BrokenDateTime::NowUTC();
-  gps_info.aircraft.Time = gps_info.DateTime.hour * 3600 +
+  gps_info.Time = gps_info.DateTime.hour * 3600 +
                   gps_info.DateTime.minute * 60 +
                   gps_info.DateTime.second;
 
@@ -117,7 +117,7 @@ void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().aircraft.Location = loc;
+  SetBasic().Location = loc;
   SetBasic().GPSAltitude = alt;
 
   // enable the "Simulator" flag because this value was not provided
@@ -144,15 +144,15 @@ DeviceBlackboard::SetLocation(const GEOPOINT &loc,
 {
   ScopeLock protect(mutexBlackboard);
   SetBasic().acceleration.Available = false;
-  SetBasic().aircraft.Location = loc;
-  SetBasic().aircraft.Speed = speed;
-  SetBasic().aircraft.IndicatedAirspeed = speed; // cheat
-  SetBasic().aircraft.TrackBearing = bearing;
+  SetBasic().Location = loc;
+  SetBasic().GroundSpeed = speed;
+  SetBasic().IndicatedAirspeed = speed; // cheat
+  SetBasic().TrackBearing = bearing;
   SetBasic().AirspeedAvailable = false;
   SetBasic().GPSAltitude = alt;
   SetBasic().BaroAltitude = baroalt;
-  SetBasic().aircraft.Time = t;
-  SetBasic().VarioAvailable = false;
+  SetBasic().Time = t;
+  SetBasic().TotalEnergyVarioAvailable = false;
   SetBasic().NettoVarioAvailable = false;
   SetBasic().ExternalWindAvailable = false;
   SetBasic().gps.Replay = true;
@@ -163,7 +163,7 @@ DeviceBlackboard::SetLocation(const GEOPOINT &loc,
  */
 void DeviceBlackboard::StopReplay() {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().aircraft.Speed = 0;
+  SetBasic().GroundSpeed = fixed_zero;
   SetBasic().gps.Replay = false;
 }
 
@@ -225,12 +225,12 @@ DeviceBlackboard::ProcessSimulation()
   SetBasic().gps.Simulator = true;
 
   SetNAVWarning(false);
-  FindLatitudeLongitude(Basic().aircraft.Location,
-                        Basic().aircraft.TrackBearing,
-                        Basic().aircraft.Speed,
-                        &SetBasic().aircraft.Location);
-  SetBasic().aircraft.Time += fixed_one;
-  long tsec = (long)Basic().aircraft.Time;
+  FindLatitudeLongitude(Basic().Location,
+                        Basic().TrackBearing,
+                        Basic().GroundSpeed,
+                        &SetBasic().Location);
+  SetBasic().Time += fixed_one;
+  long tsec = (long)Basic().Time;
   SetBasic().DateTime.hour = tsec / 3600;
   SetBasic().DateTime.minute = (tsec - Basic().DateTime.hour * 3600) / 60;
   SetBasic().DateTime.second = tsec-Basic().DateTime.hour * 3600
@@ -251,8 +251,8 @@ void
 DeviceBlackboard::SetSpeed(fixed val)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().aircraft.Speed = val;
-  SetBasic().aircraft.IndicatedAirspeed = val;
+  SetBasic().GroundSpeed = val;
+  SetBasic().IndicatedAirspeed = val;
 }
 
 /**
@@ -265,7 +265,7 @@ void
 DeviceBlackboard::SetTrackBearing(fixed val)
 {
   ScopeLock protect(mutexBlackboard);
-  SetBasic().aircraft.TrackBearing = AngleLimit360(val);
+  SetBasic().TrackBearing = AngleLimit360(val);
 }
 
 /**
@@ -327,7 +327,7 @@ DeviceBlackboard::ReadSettingsMap(const SETTINGS_MAP
 void
 DeviceBlackboard::FLARM_RefreshSlots() {
   FLARM_STATE &flarm_state = SetBasic().flarm;
-  flarm_state.Refresh(Basic().aircraft.Time);
+  flarm_state.Refresh(Basic().Time);
 }
 
 /**
@@ -432,9 +432,9 @@ DeviceBlackboard::tick(const GlidePolar& glide_polar)
 
   tick_fast(glide_polar);
 
-  if (Basic().aircraft.Time!= LastBasic().aircraft.Time) {
+  if (Basic().Time!= LastBasic().Time) {
 
-    if (Basic().aircraft.Time > LastBasic().aircraft.Time) {
+    if (Basic().Time > LastBasic().Time) {
       TurnRate();
       Dynamics();
     }
@@ -458,11 +458,11 @@ void
 DeviceBlackboard::NettoVario(const GlidePolar& glide_polar)
 {
   SetBasic().GliderSinkRate = 
-    - glide_polar.SinkRate(Basic().aircraft.IndicatedAirspeed,
-                           Basic().aircraft.Gload);
+    - glide_polar.SinkRate(Basic().IndicatedAirspeed,
+                           Basic().acceleration.Gload);
 
   if (!Basic().NettoVarioAvailable)
-    SetBasic().aircraft.NettoVario = Basic().aircraft.Vario
+    SetBasic().NettoVario = Basic().TotalEnergyVario
       - Basic().GliderSinkRate;
 }
 
@@ -477,11 +477,11 @@ DeviceBlackboard::NavAltitude()
 {
   if (!SettingsComputer().EnableNavBaroAltitude
       || !Basic().BaroAltitudeAvailable) {
-    SetBasic().aircraft.NavAltitude = Basic().GPSAltitude;
+    SetBasic().NavAltitude = Basic().GPSAltitude;
   } else {
-    SetBasic().aircraft.NavAltitude = Basic().BaroAltitude;
+    SetBasic().NavAltitude = Basic().BaroAltitude;
   }
-  SetBasic().aircraft.AltitudeAGL = Basic().aircraft.NavAltitude
+  SetBasic().AltitudeAGL = Basic().NavAltitude
     - Calculated().TerrainAlt;
 }
 
@@ -492,20 +492,18 @@ DeviceBlackboard::NavAltitude()
 void
 DeviceBlackboard::Heading()
 {
-  AIRCRAFT_STATE &aircraft = SetBasic().aircraft;
-  const SpeedVector wind = aircraft.wind;
+  const SpeedVector wind = Basic().wind;
 
-  if ((aircraft.Speed > 0) || wind.is_non_zero()) {
-    fixed x0 = fastsine(aircraft.TrackBearing)
-      * aircraft.Speed;
-    fixed y0 = fastcosine(aircraft.TrackBearing)
-      * aircraft.Speed;
+  if ((Basic().GroundSpeed > 0) || wind.is_non_zero()) {
+    fixed x0 = fastsine(Basic().TrackBearing) * Basic().GroundSpeed;
+    fixed y0 = fastcosine(Basic().TrackBearing)
+      * Basic().GroundSpeed;
     x0 += fastsine(wind.bearing) * wind.norm;
     y0 += fastcosine(wind.bearing) * wind.norm;
 
-    if (!aircraft.Flying) {
+    if (!Basic().flight.Flying) {
       // don't take wind into account when on ground
-      SetBasic().Heading = aircraft.TrackBearing;
+      SetBasic().Heading = Basic().TrackBearing;
     } else {
       SetBasic().Heading = AngleLimit360(atan2(x0, y0) * RAD_TO_DEG);
     }
@@ -514,13 +512,13 @@ DeviceBlackboard::Heading()
     SetBasic().TrueAirspeedEstimated = hypot(x0, y0);
 
   } else {
-    SetBasic().Heading = aircraft.TrackBearing;
+    SetBasic().Heading = Basic().TrackBearing;
     SetBasic().TrueAirspeedEstimated = 0.0;
   }
 
   if (!Basic().AirspeedAvailable) {
-    aircraft.TrueAirspeed = Basic().TrueAirspeedEstimated;
-    aircraft.IndicatedAirspeed = aircraft.TrueAirspeed
+    SetBasic().TrueAirspeed = Basic().TrueAirspeedEstimated;
+    SetBasic().IndicatedAirspeed = Basic().TrueAirspeed
       /Basic().pressure.AirDensityRatio(Basic().GetAltitudeBaroPreferred());
   }
 }
@@ -533,11 +531,10 @@ void
 DeviceBlackboard::Vario()
 {
   // Calculate time passed since last calculation
-  const fixed dT = Basic().aircraft.Time - LastBasic().aircraft.Time;
+  const fixed dT = Basic().Time - LastBasic().Time;
 
   if (positive(dT)) {
-    const fixed Gain = Basic().aircraft.NavAltitude
-      - LastBasic().aircraft.NavAltitude;
+    const fixed Gain = Basic().NavAltitude - LastBasic().NavAltitude;
     const fixed GainTE = Basic().TEAltitude - LastBasic().TEAltitude;
 
     // estimate value from GPS
@@ -545,8 +542,8 @@ DeviceBlackboard::Vario()
     SetBasic().GPSVarioTE = GainTE / dT;
   }
 
-  if (!Basic().VarioAvailable)
-    SetBasic().aircraft.Vario = Basic().GPSVario;
+  if (!Basic().TotalEnergyVarioAvailable)
+    SetBasic().TotalEnergyVario = Basic().GPSVario;
 }
 
 
@@ -554,7 +551,7 @@ void
 DeviceBlackboard::Wind()
 {
   if (!Basic().ExternalWindAvailable)
-    SetBasic().aircraft.wind = Calculated().estimated_wind;
+    SetBasic().wind = Calculated().estimated_wind;
 }
 
 /**
@@ -565,19 +562,18 @@ void
 DeviceBlackboard::TurnRate()
 {
   // Calculate time passed since last calculation
-  const fixed dT = Basic().aircraft.Time - LastBasic().aircraft.Time;
+  const fixed dT = Basic().Time - LastBasic().Time;
 
   // Calculate turn rate
 
-  if (!Basic().aircraft.Flying) {
+  if (!Basic().flight.Flying) {
     SetBasic().TurnRate = fixed_zero;
-    SetBasic().NextTrackBearing = Basic().aircraft.TrackBearing;
+    SetBasic().NextTrackBearing = Basic().TrackBearing;
     return;
   }
 
   SetBasic().TurnRate =
-    AngleLimit180(Basic().aircraft.TrackBearing
-                  - LastBasic().aircraft.TrackBearing) / dT;
+    AngleLimit180(Basic().TrackBearing - LastBasic().TrackBearing) / dT;
 
   // if (time passed is less then 2 seconds) time step okay
   if (dT < fixed_two) {
@@ -588,7 +584,7 @@ DeviceBlackboard::TurnRate()
     // QUESTION TB: shouldn't dtlead be = 1, for one second?!
     static const fixed dtlead(0.3);
 
-    const fixed calc_bearing = Basic().aircraft.TrackBearing + dtlead
+    const fixed calc_bearing = Basic().TrackBearing + dtlead
       * (Basic().TurnRate + fixed_half * dtlead * dRate);
 
     // b_new = b_old + Rate * t + 0.5 * dRate * t * t
@@ -599,7 +595,7 @@ DeviceBlackboard::TurnRate()
   } else {
 
     // Time step too big, so just take the last measurement
-    SetBasic().NextTrackBearing = Basic().aircraft.TrackBearing;
+    SetBasic().NextTrackBearing = Basic().TrackBearing;
   }
 }
 
@@ -614,12 +610,12 @@ DeviceBlackboard::Dynamics()
   static const fixed fixed_inv_g(1.0/9.81);
   static const fixed fixed_small(0.001);
 
-  if (Basic().aircraft.Flying &&
-      (positive(Basic().aircraft.Speed) ||
-       Basic().aircraft.wind.is_non_zero())) {
+  if (Basic().flight.Flying &&
+      (positive(Basic().GroundSpeed) ||
+       Basic().wind.is_non_zero())) {
 
     // calculate turn rate in wind coordinates
-    const fixed dT = Basic().aircraft.Time - LastBasic().aircraft.Time;
+    const fixed dT = Basic().Time - LastBasic().Time;
 
     if (positive(dT)) {
       SetBasic().TurnRateWind =
@@ -628,18 +624,18 @@ DeviceBlackboard::Dynamics()
 
     // estimate bank angle (assuming balanced turn)
     const fixed angle = atan(fixed_deg_to_rad * Basic().TurnRateWind
-        * Basic().aircraft.TrueAirspeed * fixed_inv_g);
+        * Basic().TrueAirspeed * fixed_inv_g);
 
     SetBasic().acceleration.BankAngle = fixed_rad_to_deg * angle;
 
     if (!Basic().acceleration.Available)
-      SetBasic().aircraft.Gload = fixed_one
+      SetBasic().acceleration.Gload = fixed_one
         / max(fixed_small, fabs(cos(angle)));
 
     // estimate pitch angle (assuming balanced turn)
     SetBasic().acceleration.PitchAngle = fixed_rad_to_deg *
-      atan2(Basic().GPSVario - Basic().aircraft.Vario,
-            Basic().aircraft.TrueAirspeed);
+      atan2(Basic().GPSVario - Basic().TotalEnergyVario,
+            Basic().TrueAirspeed);
 
   } else {
     SetBasic().acceleration.BankAngle = fixed_zero;
@@ -647,7 +643,7 @@ DeviceBlackboard::Dynamics()
     SetBasic().TurnRateWind = fixed_zero;
 
     if (!Basic().acceleration.Available)
-      SetBasic().aircraft.Gload = fixed_one;
+      SetBasic().acceleration.Gload = fixed_one;
   }
 }
 
@@ -665,8 +661,9 @@ DeviceBlackboard::EnergyHeight()
   static const fixed fixed_inv_2g (1.0/(2.0*9.81));
 
   const fixed V_target = Calculated().common_stats.V_block * ias_to_tas;
-  SetBasic().EnergyHeight = (Basic().aircraft.TrueAirspeed * Basic().aircraft.TrueAirspeed - V_target * V_target) * fixed_inv_2g;
-  SetBasic().TEAltitude = Basic().aircraft.NavAltitude + Basic().EnergyHeight;
+  SetBasic().EnergyHeight = (Basic().TrueAirspeed * Basic().TrueAirspeed
+                             - V_target * V_target) * fixed_inv_2g;
+  SetBasic().TEAltitude = Basic().NavAltitude + Basic().EnergyHeight;
 }
 
 
@@ -680,23 +677,23 @@ DeviceBlackboard::WorkingBand()
   SetBasic().working_band_height = working_band_height;
   
   if (negative(SetBasic().working_band_height)) {
-    SetBasic().aircraft.working_band_fraction = fixed_zero;
+    SetBasic().working_band_fraction = fixed_zero;
     return;
   }
   const fixed max_height = Calculated().MaxThermalHeight;
   if (positive(max_height)) {
-    SetBasic().aircraft.working_band_fraction =
+    SetBasic().working_band_fraction =
       working_band_height / max_height;
   } else {
-    SetBasic().aircraft.working_band_fraction = fixed_one;
+    SetBasic().working_band_fraction = fixed_one;
   }
 }
 
 void
 DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
 {
-  if (Basic().aircraft.Time < LastBasic().aircraft.Time) {
-    SetBasic().aircraft.flying_state_reset();
+  if (Basic().Time < LastBasic().Time) {
+    SetBasic().flight.flying_state_reset();
   }
     // GPS not lost
   if (Basic().gps.NAVWarning) {
@@ -704,12 +701,12 @@ DeviceBlackboard::FlightState(const GlidePolar& glide_polar)
   }
 
   // Speed too high for being on the ground
-  if (Basic().aircraft.Speed > glide_polar.get_Vtakeoff()) {
-    SetBasic().aircraft.flying_state_moving(Basic().aircraft.Time);
+  if (Basic().GroundSpeed > glide_polar.get_Vtakeoff()) {
+    SetBasic().flight.flying_state_moving(Basic().Time);
   } else {
     const bool on_ground = Calculated().TerrainValid &&
-      Basic().aircraft.AltitudeAGL < 300;
-    SetBasic().aircraft.flying_state_stationary(Basic().aircraft.Time, on_ground);
+      Basic().AltitudeAGL < 300;
+    SetBasic().flight.flying_state_stationary(Basic().Time, on_ground);
   }
 }
 
@@ -718,7 +715,7 @@ DeviceBlackboard::AutoQNH()
 {
   static int countdown_autoqnh = 0;
 
-  if (!Basic().aircraft.OnGround // must be on ground
+  if (!Basic().flight.OnGround // must be on ground
       || !countdown_autoqnh    // only do it once
       || Basic().gps.Replay // never in replay mode
       || Basic().gps.NAVWarning // Reject if no valid GPS fix

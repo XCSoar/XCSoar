@@ -102,16 +102,16 @@ void CalibrationSave(void) {
 void
 CalibrationUpdate(const NMEA_INFO *Basic)
 {
-  if (!Basic->aircraft.Flying ||
-      !Basic->AirspeedAvailable || Basic->aircraft.TrueAirspeed <= 0)
+  if (!Basic->flight.Flying ||
+      !Basic->AirspeedAvailable || Basic->TrueAirspeed <= 0)
     return;
 
-  fixed ias_to_tas = Basic->aircraft.TrueAirspeed /
-    max(fixed_one, Basic->aircraft.IndicatedAirspeed);
+  fixed ias_to_tas = Basic->TrueAirspeed /
+    max(fixed_one, Basic->IndicatedAirspeed);
 
   // Vario calibration info
   int index_te_vario = lround(Basic->GPSVarioTE*10)+50;
-  int index_speed = lround((Basic->aircraft.TrueAirspeed - 20) / 2);
+  int index_speed = lround((Basic->TrueAirspeed - 20) / 2);
   if (index_te_vario < 0)
     return;
   if (index_te_vario >= NUM_CAL_VARIO)
@@ -122,11 +122,11 @@ CalibrationUpdate(const NMEA_INFO *Basic)
     return;
 
   calibration_tevario_val[index_speed][index_te_vario] +=
-    Basic->aircraft.Vario * ias_to_tas;
+    Basic->TotalEnergyVario * ias_to_tas;
   calibration_tevario_num[index_speed][index_te_vario] ++;
 
   // ASI calibration info
-  int index_vspeed = lround(Basic->aircraft.TrueAirspeed - 20);
+  int index_vspeed = lround(Basic->TrueAirspeed - 20);
   if (index_vspeed<0)
     return;
   if (index_vspeed>= NUM_CAL_VSPEED)

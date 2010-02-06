@@ -229,7 +229,7 @@ const TCHAR *FormatterDiffBearing::Render(int *color) {
     Valid = true;
 
     Value = Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing 
-      -  Basic().aircraft.TrackBearing;
+      -  Basic().TrackBearing;
 
     // TODO use AngleLimit180
     if (Value < -180.0)

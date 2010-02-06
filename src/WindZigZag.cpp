@@ -587,19 +587,19 @@ WindZigZagCheckAirData(const NMEA_INFO &basic)
   static double bearingLast = 0;
 
   bool airdata_invalid = false;
-  if (!basic.aircraft.Flying) {
+  if (!basic.flight.Flying) {
     airdata_invalid = true;
   } else if (fabs(basic.TurnRate) > 20.0) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - turn rate\n");
 #endif
-  } else if (fabs(basic.aircraft.Speed) < 2.5) {
+  } else if (fabs(basic.GroundSpeed) < 2.5) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - ground speed\n");
 #endif
-  } else if (fabs(basic.aircraft.Gload - 1.0) > 0.3) {
+  } else if (fabs(basic.acceleration.Gload - 1.0) > 0.3) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
     DebugStore("zigzag airdata invalid - acceleration\n");
@@ -607,16 +607,16 @@ WindZigZagCheckAirData(const NMEA_INFO &basic)
   }
 
   if (airdata_invalid) {
-    tLast = basic.aircraft.Time; // blackout for SAMPLE_RATE seconds
+    tLast = basic.Time; // blackout for SAMPLE_RATE seconds
     return false;
   }
 
-  if (basic.aircraft.Time < tLast + SAMPLE_RATE &&
-      fabs(bearingLast - basic.aircraft.TrackBearing) < 10.0) {
+  if (basic.Time < tLast + SAMPLE_RATE &&
+      fabs(bearingLast - basic.TrackBearing) < 10.0) {
     return false;
   } else {
-    tLast = basic.aircraft.Time;
-    bearingLast = basic.aircraft.TrackBearing;
+    tLast = basic.Time;
+    bearingLast = basic.TrackBearing;
   }
 
   return true;
@@ -639,41 +639,41 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
 
   // TODO accuracy: correct TAS for vertical speed if dynamic pullup
 
-  if ((basic.aircraft.Time <= tLastEstimate) || (tLastEstimate == -1))
-    tLastEstimate = basic.aircraft.Time - UPDATE_RATE;
+  if ((basic.Time <= tLastEstimate) || (tLastEstimate == -1))
+    tLastEstimate = basic.Time - UPDATE_RATE;
 
   if (!WindZigZagCheckAirData(basic))
     return 0;
 
   // ok to add a point
 
-  myzigzag.AddPoint(basic.aircraft.Time,
-                    basic.aircraft.TrueAirspeed, basic.aircraft.Speed,
-                    basic.aircraft.TrackBearing * DEGTORAD);
+  myzigzag.AddPoint(basic.Time,
+                    basic.TrueAirspeed, basic.GroundSpeed,
+                    basic.TrackBearing * DEGTORAD);
 
   #ifdef DEBUG_ZIGZAG_A
   DebugStore("%f %03.0f %03.0f %03.0f # zigpoint\n",
-      basic.aircraft.Time,
-      basic.aircraft.TrueAirspeed,
-      basic.aircraft.Speed,
-      basic.aircraft.TrackBearing);
+             basic.Time,
+             basic.TrueAirspeed,
+             basic.GroundSpeed,
+             basic.TrackBearing);
   #endif
 
   // don't update wind from zigzag more often than
   // every UPDATE_RATE seconds, so it is balanced with respect
   // to circling
-  if (basic.aircraft.Time < tLastEstimate + UPDATE_RATE)
+  if (basic.Time < tLastEstimate + UPDATE_RATE)
     return 0;
 
-  double V_wind_estimate = basic.aircraft.wind.norm;
-  double theta_wind_estimate = basic.aircraft.wind.bearing * DEGTORAD;
+  double V_wind_estimate = basic.wind.norm;
+  double theta_wind_estimate = basic.wind.bearing * DEGTORAD;
   double percent_error = myzigzag.StartSearch(V_wind_estimate, theta_wind_estimate);
 
   // Check spread of zig-zag manoeuver
-  if (!myzigzag.CheckSpread(basic.aircraft.Time, percent_error))
+  if (!myzigzag.CheckSpread(basic.Time, percent_error))
     return 0;
 
-  double v_error = percent_error * basic.aircraft.TrueAirspeed / 100.0;
+  double v_error = percent_error * basic.TrueAirspeed / 100.0;
 
   if (v_error < 0.5) {
     // don't refine search if error is small
@@ -687,7 +687,7 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
 
   if (myzigzag.Estimate(&V_wind_estimate, &theta_wind_estimate, &percent_error)) {
     // ok, we have made an update
-    tLastEstimate = basic.aircraft.Time;
+    tLastEstimate = basic.Time;
 
     theta_wind_estimate /= DEGTORAD;
 
@@ -707,11 +707,11 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
 
     #ifdef DEBUG_ZIGZAG
     DebugStore("%f %3.1f %03.0f %3.1f %03.0f %f %d # zigzag\n",
-               (double)basic.aircraft.Time,
+               (double)basic.Time,
             V_wind_estimate,
             theta_wind_estimate,
-               (double)basic.aircraft.wind.norm,
-               (double)basic.aircraft.wind.bearing,
+               (double)basic.wind.norm,
+               (double)basic.wind.bearing,
             percent_error,
             quality);
     #endif

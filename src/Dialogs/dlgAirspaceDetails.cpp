@@ -121,7 +121,7 @@ SetValues(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
-    const GEOPOINT &ac_loc = XCSoarInterface::Basic().aircraft.Location;
+    const GEOPOINT &ac_loc = XCSoarInterface::Basic().Location;
     const GEOPOINT closest_loc = airspace->closest_point(ac_loc);
     const GeoVector vec(ac_loc, closest_loc);
     TCHAR buf[80];
