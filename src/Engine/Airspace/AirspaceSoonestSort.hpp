@@ -26,7 +26,8 @@ public:
                       const AirspaceAircraftPerformance &perf,
                       const fixed max_time = fixed(1.0e6),
                       const AirspacePredicate &condition=AirspacePredicate::always_true):
-    AirspaceNearestSort(state, condition),
+    AirspaceNearestSort(state.Location, condition),
+    m_state(state),
     m_perf(perf),
     m_max_time(max_time) {};
 
@@ -62,6 +63,7 @@ public:
 protected:
 
 private:
+  const AIRCRAFT_STATE &m_state;
   const AirspaceAircraftPerformance &m_perf;
   const fixed& m_max_time;
 };

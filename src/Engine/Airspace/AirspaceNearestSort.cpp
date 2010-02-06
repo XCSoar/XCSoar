@@ -6,7 +6,7 @@ void
 AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
                                     const fixed range)
 {
-  Airspaces::AirspaceVector vectors = airspaces.scan_range(m_state.Location,
+  Airspaces::AirspaceVector vectors = airspaces.scan_range(m_location,
                                                            range,
                                                            m_condition);
 
@@ -25,13 +25,13 @@ AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
 AirspaceInterceptSolution
 AirspaceNearestSort::solve_intercept(const AbstractAirspace &a) const
 {
-  if (a.inside(m_state.Location)) {
+  if (a.inside(m_location)) {
     AirspaceInterceptSolution null_sol;
     return null_sol;
   } else {
     AirspaceInterceptSolution sol;
-    sol.location = a.closest_point(m_state.Location);
-    sol.distance = sol.location.distance(m_state.Location);
+    sol.location = a.closest_point(m_location);
+    sol.distance = sol.location.distance(m_location);
     return sol;
   }
 }

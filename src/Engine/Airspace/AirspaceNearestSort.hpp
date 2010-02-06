@@ -25,10 +25,9 @@ public:
  * 
  * @return Initialised object
  */
-  AirspaceNearestSort(const AIRCRAFT_STATE &state,
+  AirspaceNearestSort(const GEOPOINT _location,
                       const AirspacePredicate &condition=AirspacePredicate::always_true):
-    m_state(state),
-    m_location(state.Location),
+    m_location(_location),
     m_condition(condition),
     m_reverse(false) {};
 
@@ -84,8 +83,7 @@ public:
 
 protected:
 
-  const AIRCRAFT_STATE &m_state; /**< State of observer for queries */
-  const GEOPOINT &m_location; /**< Location of observer for queries */
+  const GEOPOINT m_location; /**< Location of observer for queries */
   const AirspacePredicate &m_condition; /**< Condition to be applied to queries */
 
 private:
