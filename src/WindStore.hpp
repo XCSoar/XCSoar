@@ -60,11 +60,11 @@ public:
    */
   void NewWind(const NMEA_INFO *basic, DERIVED_INFO *derived, Vector& wind);
 
-  const Vector GetWind(double Time, double h, bool *found) const;
+  const Vector GetWind(fixed Time, fixed h, bool *found) const;
 
 private:
   Vector _lastWind;
-  double _lastAltitude;
+  fixed _lastAltitude;
   WindMeasurementList * windlist;
 
   /**

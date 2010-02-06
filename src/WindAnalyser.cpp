@@ -118,11 +118,10 @@ WindAnalyser::~WindAnalyser()
 {
 }
 
-double
+static fixed
 Magnitude(Vector v)
 {
-  double d = hypot(v.x, v.y);
-  return d;
+  return hypot(v.x, v.y);
 }
 
 /**
@@ -287,7 +286,7 @@ void
 WindAnalyser::_calcWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
 {
   int i;
-  double av = 0;
+  fixed av = fixed_zero;
 
   if (!numwindsamples)
     return;
@@ -304,14 +303,14 @@ WindAnalyser::_calcWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
   av /= numwindsamples;
 
   // find zero time for times above average
-  double rthisp;
+  fixed rthisp;
   int j;
   int ithis = 0;
-  double rthismax = 0;
-  double rthismin = 0;
+  fixed rthismax = fixed_zero;
+  fixed rthismin = fixed_zero;
   int jmax = -1;
   int jmin = -1;
-  double rpoint;
+  fixed rpoint;
   int idiff;
 
   for (j = 0; j < numwindsamples; j++) {
@@ -350,14 +349,14 @@ WindAnalyser::_calcWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
 
   // attempt to fit cycloid
 
-  double phase;
-  double mag = 0.5 * (windsamples[jmax].mag - windsamples[jmin].mag);
-  double wx, wy;
-  double cmag;
-  double rthis = 0;
+  fixed phase;
+  fixed mag = fixed_half * (windsamples[jmax].mag - windsamples[jmin].mag);
+  fixed wx, wy;
+  fixed cmag;
+  fixed rthis = fixed_zero;
 
   for (i = 0; i < numwindsamples; i++) {
-    phase = ((i + jmax) % numwindsamples) * M_PI * 2.0 / numwindsamples;
+    phase = ((i + jmax) % numwindsamples) * fixed_two_pi / numwindsamples;
     wx = cos(phase) * av + mag;
     wy = sin(phase) * av;
     cmag = hypot(wx, wy) - windsamples[i].mag;
@@ -409,7 +408,7 @@ WindAnalyser::slot_newEstimate(const NMEA_INFO *nmeaInfo,
   else
     type = "wind circling";
 
-  DebugStore("%f %f %d # %s\n", a.x, a.y, quality, type);
+  DebugStore("%f %f %d # %s\n", (double)a.x, (double)a.y, quality, type);
   #endif
 
   windstore.SlotMeasurement(nmeaInfo, derivedInfo, a, quality);

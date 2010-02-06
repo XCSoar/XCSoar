@@ -39,9 +39,11 @@ Copyright_License {
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include "Engine/Math/fixed.hpp"
+
 struct Vector {
-  double x;
-  double y;
+  fixed x;
+  fixed y;
 };
 
 #endif

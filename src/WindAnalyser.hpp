@@ -30,8 +30,8 @@ class WindSample
 {
 public:
   Vector v;
-  double t;
-  double mag;
+  fixed t;
+  fixed mag;
 };
 
 #define MAXWINDSAMPLES 50
@@ -93,8 +93,8 @@ private:
 
   Vector climbstartpos;
   Vector climbendpos;
-  double climbstarttime;
-  double climbendtime;
+  fixed climbstarttime;
+  fixed climbendtime;
 
   WindSample windsamples[MAXWINDSAMPLES];
   int numwindsamples;

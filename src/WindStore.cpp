@@ -98,7 +98,7 @@ WindStore::SlotMeasurement(const NMEA_INFO *nmeaInfo,
 void
 WindStore::SlotAltitude(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
 {
-  if ((fabs(nmeaInfo->GPSAltitude - _lastAltitude) > 100.0) || (updated)) {
+  if ((fabs(nmeaInfo->GPSAltitude - _lastAltitude) > fixed(100)) || updated) {
     //only recalculate if there is a significant change
     recalculateWind(nmeaInfo, derivedInfo);
 
@@ -108,7 +108,7 @@ WindStore::SlotAltitude(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
 }
 
 const Vector
-WindStore::GetWind(double Time, double h, bool *found) const
+WindStore::GetWind(fixed Time, fixed h, bool *found) const
 {
   return windlist->getWind(Time, h, found);
 }
@@ -141,11 +141,11 @@ void
 WindStore::NewWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
     Vector &wind)
 {
-  double mag = hypot(wind.x, wind.y);
-  double bearing;
+  fixed mag = hypot(wind.x, wind.y);
+  fixed bearing;
 
-  if (wind.y == 0 && wind.x == 0)
-    bearing = 0;
+  if (wind.y == fixed_zero && wind.x == fixed_zero)
+    bearing = fixed_zero;
   else
     bearing = atan2(wind.y, wind.x) * RAD_TO_DEG;
 
@@ -153,7 +153,7 @@ WindStore::NewWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
     derivedInfo->WindSpeed_estimated = mag;
 
     if (bearing < 0)
-      bearing += 360;
+      bearing += fixed_360;
 
     derivedInfo->WindBearing_estimated = bearing;
   } else {
