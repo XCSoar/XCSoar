@@ -553,10 +553,8 @@ DeviceBlackboard::Vario()
 void
 DeviceBlackboard::Wind()
 {
-  if (!Basic().ExternalWindAvailable) {
-    SetBasic().aircraft.wind.norm = Calculated().WindSpeed_estimated;
-    SetBasic().aircraft.wind.bearing = Calculated().WindBearing_estimated;
-  }
+  if (!Basic().ExternalWindAvailable)
+    SetBasic().aircraft.wind = Calculated().estimated_wind;
 }
 
 /**

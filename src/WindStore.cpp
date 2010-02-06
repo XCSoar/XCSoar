@@ -150,12 +150,10 @@ WindStore::NewWind(const NMEA_INFO &info, DERIVED_INFO &derived,
     bearing = atan2(wind.y, wind.x) * RAD_TO_DEG;
 
   if (mag < 30) { // limit to reasonable values
-    derived.WindSpeed_estimated = mag;
-
     if (bearing < 0)
       bearing += fixed_360;
 
-    derived.WindBearing_estimated = bearing;
+    derived.estimated_wind = SpeedVector(bearing, mag);
   } else {
     // TODO code: give warning, wind estimate bogus or very strong!
   }
