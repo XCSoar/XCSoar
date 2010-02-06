@@ -283,22 +283,6 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO *nmeaInfo,
   numwindsamples = 0;
 }
 
-double
-angleDiff(Vector a, Vector b)
-{
-  double a1 = atan2(a.y, a.x) * 180.0 / M_PI;
-  double a2 = atan2(b.y, b.x) * 180.0 / M_PI;
-  double c = a1 - a2;
-
-  while (c < -180)
-    c += 360;
-
-  while (c > 180)
-    c -= 360;
-
-  return c;
-}
-
 void
 WindAnalyser::_calcWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
 {
