@@ -186,14 +186,8 @@ GlideComputerAirData::Wind()
 			       &zz_wind_speed,
 			       &zz_wind_bearing);
 
-    if (quality > 0) {
+    if (quality > 0)
       SetWindEstimate(zz_wind_speed, zz_wind_bearing, quality);
-      Vector v_wind;
-      v_wind.x = zz_wind_speed*cos(zz_wind_bearing*DEG_TO_RAD);
-      v_wind.y = zz_wind_speed*sin(zz_wind_bearing*DEG_TO_RAD);
-
-      windanalyser.slot_newEstimate(&Basic(), &SetCalculated(), v_wind, quality);
-    }
   }
 }
 
@@ -232,8 +226,8 @@ GlideComputerAirData::SetWindEstimate(const double wind_speed,
     const double wind_bearing, const int quality)
 {
   Vector v_wind;
-  v_wind.x = wind_speed*cos(wind_bearing*M_PI/180.0);
-  v_wind.y = wind_speed*sin(wind_bearing*M_PI/180.0);
+  v_wind.x = wind_speed * cos(wind_bearing * DEG_TO_RAD);
+  v_wind.y = wind_speed * sin(wind_bearing * DEG_TO_RAD);
 
   windanalyser.slot_newEstimate(&Basic(), &SetCalculated(), v_wind, quality);
 }
