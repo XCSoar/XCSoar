@@ -128,14 +128,13 @@ Magnitude(Vector v)
  * Called if a new sample is available in the samplelist.
  */
 void
-WindAnalyser::slot_newSample(const NMEA_INFO *nmeaInfo,
-    DERIVED_INFO *derivedInfo)
+WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
 {
   if (!active)
     // only work if we are in active mode
     return;
 
-  const AIRCRAFT_STATE &aircraft = nmeaInfo->aircraft;
+  const AIRCRAFT_STATE &aircraft = info.aircraft;
 
   Vector curVector;
 
@@ -191,7 +190,7 @@ WindAnalyser::slot_newSample(const NMEA_INFO *nmeaInfo,
   if (fullCircle) { //we have completed a full circle!
     if (numwindsamples < MAXWINDSAMPLES - 1)
       // calculate the wind for this circle, only if it is valid
-      _calcWind(nmeaInfo, derivedInfo);
+      _calcWind(info, derived);
 
     fullCircle = false;
 
@@ -225,22 +224,22 @@ WindAnalyser::slot_newSample(const NMEA_INFO *nmeaInfo,
   }
 
   first = false;
-  windstore.SlotAltitude(nmeaInfo, derivedInfo);
+  windstore.SlotAltitude(info, derived);
 }
 
 void
-WindAnalyser::slot_Altitude(const NMEA_INFO *nmeaInfo,
-    DERIVED_INFO *derivedInfo)
+WindAnalyser::slot_Altitude(const NMEA_INFO &info, DERIVED_INFO &derived)
 {
-  windstore.SlotAltitude(nmeaInfo, derivedInfo);
+  windstore.SlotAltitude(info, derived);
 }
 
 /**
  * Called if the flightmode changes
  */
 void
-WindAnalyser::slot_newFlightMode(const NMEA_INFO *nmeaInfo,
-    const DERIVED_INFO *derivedInfo, bool left, int marker)
+WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
+                                 const DERIVED_INFO &derived,
+                                 bool left, int marker)
 {
   // we are inactive by default
   active = false;
@@ -253,7 +252,7 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO *nmeaInfo,
   startcircle = 3; // ignore first two circles in thermal drift calcs
 
   circleDeg = 0;
-  if (derivedInfo->Circling) {
+  if (derived.Circling) {
     if (left) {
       circleLeft = true;
       curModeOK = true;
@@ -276,14 +275,14 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO *nmeaInfo,
 
   // initialize analyser-parameters
   startmarker = marker;
-  startheading = (int)nmeaInfo->aircraft.TrackBearing;
+  startheading = (int)info.aircraft.TrackBearing;
   active = true;
   first = true;
   numwindsamples = 0;
 }
 
 void
-WindAnalyser::_calcWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
+WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
 {
   int i;
   fixed av = fixed_zero;
@@ -393,12 +392,13 @@ WindAnalyser::_calcWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
 
   if (a.x * a.x + a.y * a.y < 30 * 30)
     // limit to reasonable values (60 knots), reject otherwise
-    slot_newEstimate(nmeaInfo, derivedInfo, a, quality);
+    slot_newEstimate(info, derived, a, quality);
 }
 
 void
-WindAnalyser::slot_newEstimate(const NMEA_INFO *nmeaInfo,
-    DERIVED_INFO *derivedInfo, Vector a, int quality)
+WindAnalyser::slot_newEstimate(const NMEA_INFO &info,
+                               DERIVED_INFO &derived,
+                               Vector a, int quality)
 {
   #ifdef DEBUG_WIND
   const char *type;
@@ -411,5 +411,5 @@ WindAnalyser::slot_newEstimate(const NMEA_INFO *nmeaInfo,
   DebugStore("%f %f %d # %s\n", (double)a.x, (double)a.y, quality, type);
   #endif
 
-  windstore.SlotMeasurement(nmeaInfo, derivedInfo, a, quality);
+  windstore.SlotMeasurement(info, derived, a, quality);
 }

@@ -182,7 +182,7 @@ GlideComputerAirData::Wind()
     double zz_wind_speed;
     double zz_wind_bearing;
     int quality;
-    quality = WindZigZagUpdate(&Basic(), &Calculated(),
+    quality = WindZigZagUpdate(Basic(), Calculated(),
 			       &zz_wind_speed,
 			       &zz_wind_bearing);
 
@@ -198,7 +198,7 @@ void
 GlideComputerAirData::DoWindCirclingMode(const bool left)
 {
   if ((SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING) == D_AUTOWIND_CIRCLING)
-    windanalyser.slot_newFlightMode(&Basic(), &Calculated(), left, 0);
+    windanalyser.slot_newFlightMode(Basic(), Calculated(), left, 0);
 }
 
 /**
@@ -208,7 +208,7 @@ void
 GlideComputerAirData::DoWindCirclingSample()
 {
   if ((SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING) == D_AUTOWIND_CIRCLING)
-    windanalyser.slot_newSample(&Basic(), &SetCalculated());
+    windanalyser.slot_newSample(Basic(), SetCalculated());
 }
 
 /**
@@ -218,7 +218,7 @@ void
 GlideComputerAirData::DoWindCirclingAltitude()
 {
   if (SettingsComputer().AutoWindMode > 0)
-    windanalyser.slot_Altitude(&Basic(), &SetCalculated());
+    windanalyser.slot_Altitude(Basic(), SetCalculated());
 }
 
 void
@@ -229,7 +229,7 @@ GlideComputerAirData::SetWindEstimate(const double wind_speed,
   v_wind.x = wind_speed * cos(wind_bearing * DEG_TO_RAD);
   v_wind.y = wind_speed * sin(wind_bearing * DEG_TO_RAD);
 
-  windanalyser.slot_newEstimate(&Basic(), &SetCalculated(), v_wind, quality);
+  windanalyser.slot_newEstimate(Basic(), SetCalculated(), v_wind, quality);
 }
 
 void

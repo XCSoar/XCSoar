@@ -42,7 +42,8 @@ Copyright_License {
 struct NMEA_INFO;
 struct DERIVED_INFO;
 
-int WindZigZagUpdate(const NMEA_INFO* Basic, const DERIVED_INFO* Calculated,
-    double *zzwindspeed, double *zzwindbearing);
+int
+WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
+                 double *zzwindspeed, double *zzwindbearing);
 
 #endif
