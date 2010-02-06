@@ -94,7 +94,7 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
   unsigned int total_quality = 0;
   unsigned int quality = 0, q_quality = 0, a_quality = 0, t_quality = 0;
 
-  Vector result;
+  Vector result(fixed_zero, fixed_zero);
   WindMeasurement * m;
   int now = (int)(Time);
   fixed altdiff = fixed_zero;
@@ -102,8 +102,6 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
 
   *found = false;
 
-  result.x = 0;
-  result.y = 0;
   fixed override_time(1.1);
   bool overridden = false;
 
@@ -163,8 +161,8 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
 
   if (total_quality > 0) {
     *found = true;
-    result.x = result.x / (int)total_quality;
-    result.y = result.y / (int)total_quality;
+    result = Vector(result.x / (int)total_quality,
+                    result.y / (int)total_quality);
   }
 
   return result;

@@ -39,11 +39,21 @@ Copyright_License {
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include "Engine/Math/Constants.h"
 #include "Engine/Math/fixed.hpp"
+#include "Engine/Navigation/SpeedVector.hpp"
 
 struct Vector {
   fixed x;
   fixed y;
+
+  Vector() {}
+
+  Vector(fixed _x, fixed _y):x(_x), y(_y) {}
+
+  Vector(const SpeedVector speed)
+    :x(speed.norm * cos(speed.bearing * DEG_TO_RAD)),
+     y(speed.norm * sin(speed.bearing * DEG_TO_RAD)) {}
 };
 
 #endif

@@ -225,9 +225,7 @@ void
 GlideComputerAirData::SetWindEstimate(const double wind_speed,
     const double wind_bearing, const int quality)
 {
-  Vector v_wind;
-  v_wind.x = wind_speed * cos(wind_bearing * DEG_TO_RAD);
-  v_wind.y = wind_speed * sin(wind_bearing * DEG_TO_RAD);
+  Vector v_wind = Vector(SpeedVector(fixed(wind_bearing), fixed(wind_speed)));
 
   windanalyser.slot_newEstimate(Basic(), SetCalculated(), v_wind, quality);
 }

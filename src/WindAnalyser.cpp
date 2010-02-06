@@ -163,8 +163,7 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
     //to determine the quality)
   }
 
-  curVector.x = aircraft.Speed * cos(aircraft.TrackBearing * M_PI / 180.0);
-  curVector.y = aircraft.Speed * sin(aircraft.TrackBearing * M_PI / 180.0);
+  curVector = Vector(SpeedVector(aircraft.TrackBearing, aircraft.Speed));
 
   windsamples[numwindsamples].v = curVector;
   windsamples[numwindsamples].t = aircraft.Time;
@@ -191,11 +190,9 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
     fullCircle = false;
 
     // should set each vector to average
-    Vector v;
-    v.x = (maxVector.x - minVector.x) / 2;
-    v.y = (maxVector.y - minVector.y) / 2;
 
-    minVector = maxVector = v;
+    minVector = maxVector = Vector((maxVector.x - minVector.x) / 2,
+                                   (maxVector.y - minVector.y) / 2);
 
     first = true;
     numwindsamples = 0;
@@ -204,13 +201,14 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
       startcircle--;
 
     if (startcircle == 1) {
-      climbstartpos.x = aircraft.Location.Longitude;
-      climbstartpos.y = aircraft.Location.Latitude;
+      climbstartpos = Vector(aircraft.Location.Longitude,
+                             aircraft.Location.Latitude);
       climbstarttime = aircraft.Time;
       startcircle = 0;
     }
-    climbendpos.x = aircraft.Location.Longitude;
-    climbendpos.y = aircraft.Location.Latitude;
+
+    climbendpos = Vector(aircraft.Location.Longitude,
+                         aircraft.Location.Latitude);
     climbendtime = aircraft.Time;
 
     //no need to reset fullCircle, it will automaticly be reset in the next itteration.
@@ -374,10 +372,8 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
 
   quality = min(quality, 5); //5 is maximum quality, make sure we honour that.
 
-  Vector a;
-
-  a.x = -mag * maxVector.x / windsamples[jmax].mag;
-  a.y = -mag * maxVector.y / windsamples[jmax].mag;
+  Vector a(-mag * maxVector.x / windsamples[jmax].mag,
+           -mag * maxVector.y / windsamples[jmax].mag);
 
   if (quality < 1)
     //measurment quality too low
