@@ -49,7 +49,6 @@ Copyright_License {
 #include "RasterMap.h"
 #include "LogFile.hpp"
 #include "Waypoint/Waypoints.hpp"
-
 #include "UtilsFile.hpp"
 #include "Units.hpp"
 
@@ -213,12 +212,14 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
 
   // ### MAP/THIRD FILE ###
 
+  // If no waypoint file loaded yet
   if (!loaded) {
+    // Get the map filename
     GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
     _tcscat(szFile, TEXT("/"));
     _tcscat(szFile, TEXT("waypoints.xcw"));
 
-    // If waypoint file exists
+    // If waypoint file inside map file exists
     if (parser.SetFile(szFile, true, 2)) {
       // parse the file
       if (parser.Parse(way_points, terrain)) {
@@ -226,20 +227,21 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
         printf("save\n");
         SetRegistryString(szRegistryWayPointFile, szFile);
 
-        loaded = true;
-
         // Set waypoints writable flag
         way_points.set_file0_writable(false);
+        loaded = true;
       } else {
-        StartupStore(TEXT("Parse error in waypoint file 3\n"));
+        StartupStore(TEXT("Parse error in map waypoint file\n"));
       }
     } else {
-      StartupStore(TEXT("No waypoint file 3\n"));
+      StartupStore(TEXT("No waypoint file in the map file\n"));
     }
   }
 
+  // Optimise the waypoint list after attaching new waypoints
   way_points.optimise();
 
+  // Return whether waypoints have been loaded into the waypoint list
   return loaded;
 }
 
@@ -283,6 +285,7 @@ WayPointParser::SaveWaypoints(Waypoints &way_points)
 void
 WayPointParser::CloseWaypoints(Waypoints &way_points)
 {
+  // Clear the waypoint list
   way_points.clear();
 }
 
@@ -303,6 +306,7 @@ WayPointParser::SetFile(TCHAR* filename, bool returnOnFileMissing, int filenum)
   // and convert it to filepath
   ExpandLocalPath(file);
 
+  // Convert the filepath from unicode to ascii for zzip files
   char path_ascii[MAX_PATH];
   unicode2ascii(file, path_ascii, sizeof(path_ascii));
 
@@ -313,6 +317,8 @@ WayPointParser::SetFile(TCHAR* filename, bool returnOnFileMissing, int filenum)
     ClearFile();
     return false;
   }
+
+  // If file does not exist but exists inside map file -> save compressed flag
   if (!FileExists(file) &&
       FileExistsZipped(path_ascii))
     compressed = true;
@@ -351,11 +357,13 @@ WayPointParser::ClearFile()
 bool
 WayPointParser::Parse(Waypoints &way_points, const RasterTerrain *terrain)
 {
+  // If no file loaded yet -> return false
   if (file[0] == 0)
     return false;
 
   TCHAR line[255];
 
+  // If normal file
   if (!compressed) {
     // Try to open waypoint file
     FILE *fp;
@@ -363,25 +371,29 @@ WayPointParser::Parse(Waypoints &way_points, const RasterTerrain *terrain)
     if (fp == NULL)
       return false;
 
+    // Read through the lines of the file
     for (unsigned i = 0; ReadStringX(fp, 255, line); i++) {
-      // parse line
+      // and parse them
       parseLine(line, i, way_points, terrain);
     }
 
     fclose(fp);
+
+  // If compressed file inside map file
   } else {
     // convert path to ascii
     char path_ascii[MAX_PATH];
     unicode2ascii(file, path_ascii, sizeof(path_ascii));
 
-    // Try to open waypoint file inside map file
+    // Try to open compressed waypoint file inside map file
     ZZIP_FILE *fp;
     fp = zzip_fopen(path_ascii, "rt");
     if (fp == NULL)
       return false;
 
+    // Read through the lines of the file
     for (unsigned i = 0; ReadString(fp, 255, line); i++) {
-      // parse line
+      // and parse them
       parseLine(line, i, way_points, terrain);
     }
 
@@ -404,20 +416,23 @@ WayPointParser::Save(Waypoints &way_points)
   if (compressed)
     return false;
 
-  // Try to open waypoint file
+  // Try to open waypoint file for writing
   FILE *fp;
   fp = _tfopen(file, _T("wt"));
   if (fp == NULL)
     return false;
 
+  // Call the saveFile function depending on the file type
   switch (filetype) {
     case ftWinPilot:
       saveFileWinPilot(fp, way_points);
       break;
   }
 
+  // Close the file
   fclose(fp);
 
+  // and tell everyone we saved successfully
   return true;
 }
 
@@ -425,9 +440,7 @@ bool
 WayPointParser::parseLine(const TCHAR* line, unsigned linenum,
     Waypoints &way_points, const RasterTerrain *terrain)
 {
-  (void)line;
-  (void)linenum;
-
+  // Hand the parsing over to the right parser depending on the file type
   switch (filetype) {
     case ftWinPilot:
       return parseLineWinPilot(line, linenum, way_points, terrain);
@@ -437,6 +450,7 @@ WayPointParser::parseLine(const TCHAR* line, unsigned linenum,
       return parseLineZander(line, linenum, way_points, terrain);
   }
 
+  // Return false if the file type is not known
   return false;
 }
 
@@ -514,6 +528,7 @@ WayPointParser::parseLineWinPilot(const TCHAR* line, const unsigned linenum,
 bool
 WayPointParser::parseStringWinPilot(const TCHAR* src, tstring& dest)
 {
+  // Just assign and trim it
   dest.assign(src);
   trim_inplace(dest);
   return true;
@@ -537,12 +552,13 @@ WayPointParser::parseAngleWinPilot(const TCHAR* src, fixed& dest, const bool lat
     // Calculate angle
     val = deg + (fixed)min / 60 + (fixed)sec / 3600;
   } else {
-    // Parse unsual string
+    // Parse usual string
     s =_stscanf(src, _T("%u:%lf%c"), &deg, &val, &sign);
     // Hack: the E sign for east is interpreted as exponential sign
     if (!(s == 3 || (s == 2 && sign == 0)))
       return false;
 
+    // Calculate angle
     unsigned minfrac = iround((val - (int)val) * 1000);
     min = (int)val;
     val = deg + ((fixed)min + (fixed)minfrac / 1000) / 60;
@@ -574,6 +590,7 @@ WayPointParser::parseAltitudeWinPilot(const TCHAR* src, fixed& dest)
   if (unit == 'F' || unit == 'f')
     val = Units::ToSysUnit(val, unFeet);
 
+  // Save altitude
   dest = (fixed)val;
   return true;
 }
@@ -633,6 +650,9 @@ WayPointParser::parseFlagsWinPilot(const TCHAR* src, WaypointFlags& dest)
 void
 WayPointParser::saveFileWinPilot(FILE *fp, const Waypoints &way_points)
 {
+  // Iterate through the waypoint list and save each waypoint
+  // into the file defined by fp
+  /// @todo JMW: iteration ordered by ID would be preferred
   for (Waypoints::WaypointTree::const_iterator it = way_points.begin();
        it != way_points.end(); it++) {
     const Waypoint& wp = it->get_waypoint();
@@ -644,21 +664,29 @@ WayPointParser::saveFileWinPilot(FILE *fp, const Waypoints &way_points)
 tstring
 WayPointParser::composeLineWinPilot(const Waypoint& wp)
 {
+  // Prepare waypoint id
   TCHAR buf[10];
   _stprintf(buf, _T("%u"), wp.id);
 
+  // Attach the waypoint id to the output
   tstring dest = buf;
   dest += _T(",");
+  // Attach the latitude to the output
   dest += composeAngleWinPilot(wp.Location.Latitude, true);
   dest += _T(",");
+  // Attach the longitude id to the output
   dest += composeAngleWinPilot(wp.Location.Longitude, false);
   dest += _T(",");
+  // Attach the altitude id to the output
   dest += composeAltitudeWinPilot(wp.Altitude);
   dest += _T(",");
+  // Attach the waypoint flags to the output
   dest += composeFlagsWinPilot(wp.Flags);
   dest += _T(",");
+  // Attach the waypoint name to the output
   dest += wp.Name;
   dest += _T(",");
+  // Attach the waypoint description to the output
   dest += wp.Comment;
   return dest;
 }
@@ -669,12 +697,16 @@ WayPointParser::composeAngleWinPilot(const fixed& src, const bool lat)
   TCHAR buffer[20];
   bool negative = src < 0;
 
+  // Calculate degrees, minutes and seconds
   int deg = fabs(src);
   int min = (fabs(src) - deg) * 60;
   int sec = (((fabs(src) - deg) * 60) - min) * 60;
+
+  // Save them into the buffer string
   _stprintf(buffer, (lat ? _T("%02d:%02d:%02d") : _T("%03d:%02d:%02d")),
             deg, min, sec);
 
+  // Attach the buffer string to the output
   tstring dest = buffer;
   if (lat)
     dest += (negative ? _T("S") : _T("N"));
@@ -687,10 +719,13 @@ WayPointParser::composeAngleWinPilot(const fixed& src, const bool lat)
 tstring
 WayPointParser::composeAltitudeWinPilot(const fixed& src)
 {
+  // Save the formatted altitude into the buffer string
   TCHAR buf[10];
   _stprintf(buf, _T("%d"), (int)src);
 
+  // Attach the buffer string to the output string
   tstring dest = buf;
+  // Attach the unit to the output string
   dest += _T("M");
   return dest;
 }
@@ -747,11 +782,13 @@ WayPointParser::parseLineSeeYou(const TCHAR* line, const unsigned linenum,
     return true;
 
   // Parse first line holding field order
+  /// @todo linenum == 0 should be the first
+  /// (not ignored) line, not just line 0
   if (linenum == 0) {
     // Get fields
     n_params = extractParameters(line, ctemp, params, 20);
 
-    // Iterate through fields and save order
+    // Iterate through fields and save the field order
     for (unsigned i = 0; i < n_params; i++) {
       const TCHAR* value = params[i];
 
@@ -783,7 +820,7 @@ WayPointParser::parseLineSeeYou(const TCHAR* line, const unsigned linenum,
     return true;
   }
 
-  // Ignore tasks, etc.
+  // If task marker is reached ignore all following lines
   if (_tcsstr(line, _T("-----Related Tasks-----")) == line)
     ignore_following = true;
   if (ignore_following)
@@ -800,6 +837,8 @@ WayPointParser::parseLineSeeYou(const TCHAR* line, const unsigned linenum,
 
   // Get fields
   n_params = extractParameters(line, ctemp, params, 20);
+
+  // Check if the basic fields are provided
   if (iName >= n_params)
     return false;
   if (iLatitude >= n_params)
@@ -842,12 +881,16 @@ WayPointParser::parseLineSeeYou(const TCHAR* line, const unsigned linenum,
   if (iStyle < n_params)
     parseStyleSeeYou(params[iStyle], new_waypoint.Flags);
 
+  // If the Style attribute did not state that this is an airport
   if (!new_waypoint.Flags.Airport) {
+    // -> parse the runway length
     fixed rwlen;
     // Runway length (e.g. 546.0m)
     if (iRWLen < n_params && parseAltitudeSeeYou(params[iRWLen], rwlen)) {
+      // If runway length is between 100m and 300m -> landpoint
       if (rwlen > 100 && rwlen <= 300)
         new_waypoint.Flags.LandPoint = true;
+      // If runway length is higher then 300m -> airport
       if (rwlen > 300)
         new_waypoint.Flags.Airport = true;
     }
@@ -922,6 +965,7 @@ WayPointParser::parseAltitudeSeeYou(const TCHAR* src, fixed& dest)
   if (unit == 'F' || unit == 'f')
     val = Units::ToSysUnit(val, unFeet);
 
+  // Save altitude
   dest = (fixed)val;
   return true;
 }
@@ -958,7 +1002,9 @@ WayPointParser::parseLineZander(const TCHAR* line, const unsigned linenum,
     // -> return without error condition
     return true;
 
+  // Determine the length of the line
   size_t len = _tcslen(line);
+  // If less then 34 characters -> something is wrong -> cancel
   if (len < 34)
     return false;
 
@@ -971,19 +1017,19 @@ WayPointParser::parseLineZander(const TCHAR* line, const unsigned linenum,
   // Set flags to false as default
   setDefaultFlags(new_waypoint.Flags, true);
 
-  // Name
+  // Name (Characters 0-12)
   if (!parseStringZander(line, new_waypoint.Name))
     return false;
 
-  // Latitude
+  // Latitude (Characters 13-20 // DDMMSS(N/S))
   if (!parseAngleZander(line + 13, new_waypoint.Location.Latitude, true))
     return false;
 
-  // Longitude
+  // Longitude (Characters 21-29 // DDDMMSS(E/W))
   if (!parseAngleZander(line + 21, new_waypoint.Location.Longitude, false))
     return false;
 
-  // Altitude
+  // Altitude (Characters 30-34 // e.g. 1561 (in meters))
   /// @todo configurable behaviour
   bool alt_ok = parseAltitudeZander(line + 30, new_waypoint.Altitude);
   // Load waypoint altitude from terrain
@@ -996,11 +1042,11 @@ WayPointParser::parseLineZander(const TCHAR* line, const unsigned linenum,
     new_waypoint.Altitude = (fixed)t_alt;
   }
 
-  // Description
+  // Description (Characters 35-44)
   if (len > 35)
     parseStringZander(line + 35, new_waypoint.Comment);
 
-  // Flags
+  // Flags (Characters 45-49)
   if (len > 45)
     parseFlagsZander(line + 45, new_waypoint.Flags);
 
@@ -1023,6 +1069,7 @@ WayPointParser::parseStringZander(const TCHAR* src, tstring& dest)
 
   dest.assign(src);
 
+  // Cut the string after the first space, tab or null character
   size_t found = dest.find_first_of(_T(" \t\0"));
   if (found != tstring::npos)
     dest = dest.substr(0, found);
@@ -1070,6 +1117,7 @@ WayPointParser::parseAltitudeZander(const TCHAR* src, fixed& dest)
   if (_stscanf(src, _T("%lf"), &val) != 1)
     return false;
 
+  // Save altitude
   dest = (fixed)val;
   return true;
 }
@@ -1084,6 +1132,8 @@ WayPointParser::parseFlagsZander(const TCHAR* src, WaypointFlags& dest)
   // WL = WP + Landing Field
   // RA = Restricted
 
+  // If flags field exists (this function isn't called otherwise)
+  // -> turnpoint needs to be declared as one
   dest.TurnPoint = false;
 
   if ((src[0] == 'W' || src[0] == 'w') &&
@@ -1211,12 +1261,15 @@ WayPointParser::AltitudeFromTerrain(GEOPOINT &location,
 {
   double alt = TERRAIN_INVALID;
 
+  // If terrain not loaded yet -> return INVALID
   if (!terrain.GetMap())
     return TERRAIN_INVALID;
 
+  // Get terrain height
   RasterRounding rounding(*terrain.GetMap(), 0, 0);
   alt = terrain.GetTerrainHeight(location, rounding);
 
+  // If terrain altitude okay -> return terrain altitude
   if (alt > TERRAIN_INVALID)
     return alt;
 
