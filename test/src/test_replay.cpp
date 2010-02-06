@@ -92,7 +92,7 @@ test_replay(const OLCRules olc_type)
 
       task_manager.update(sim.state, state_last);
       task_manager.update_idle(sim.state);
-      task_manager.update_auto_mc(state, 0.0);
+      task_manager.update_auto_mc(sim.state, fixed_zero);
   
       state_last = sim.state;
 
