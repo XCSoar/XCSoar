@@ -36,6 +36,7 @@ Copyright_License {
 }
 */
 
+
 #ifndef WAYPOINTPARSER_HPP
 #define WAYPOINTPARSER_HPP
 
@@ -118,6 +119,11 @@ public:
     return SetFile(filename, true, filenum) && Parse(way_points, terrain);
   }
 
+  /**
+   * Saves the given waypoint list into the waypoint file provided by SetFile()
+   * @param way_points The waypoint list to save
+   * @return True if saving was successful, False otherwise
+   */
   bool Save(Waypoints &way_points);
   /**
    * Calls SetFile() and Save() afterwards
@@ -174,6 +180,11 @@ private:
   bool parseFlagsWinPilot(const TCHAR* src, WaypointFlags& dest);
 
   // WinPilot/Cambridge composers
+  /**
+   * Saves waypoint list to a WinPilot waypoint file
+   * @param fp Pointer to the file
+   * @param way_points The waypoint list to save into the file
+   */
   void saveFileWinPilot(FILE *fp, const Waypoints &way_points);
   tstring composeLineWinPilot(const Waypoint& wp);
   tstring composeAngleWinPilot(const fixed& src, const bool lat);
