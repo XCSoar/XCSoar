@@ -157,13 +157,13 @@ public:
   /** 
    * Search for airspaces within range of the aircraft.
    * 
-   * @param state state of aircraft, from which to search
+   * @param location location of aircraft, from which to search
    * @param range distance in meters of search radius
    * @param condition condition to be applied to matches
    * 
    * @return vector of airspaces intersecting search radius
    */
-  const AirspaceVector scan_range(const AIRCRAFT_STATE &state, 
+  const AirspaceVector scan_range(const GEOPOINT location,
                                   const fixed range,
                                   const AirspacePredicate &condition
                                   =AirspacePredicate::always_true) const;
@@ -171,12 +171,12 @@ public:
   /** 
    * Search for airspaces nearest to the aircraft.
    * 
-   * @param state state of aircraft, from which to search
+   * @param location location of aircraft, from which to search
    * @param condition condition to be applied to matches
    * 
    * @return single nearest airspace if external, or all airspaces enclosing the aircraft
    */
-  const AirspaceVector scan_nearest(const AIRCRAFT_STATE &state,
+  const AirspaceVector scan_nearest(const GEOPOINT location,
                                     const AirspacePredicate &condition
                                     =AirspacePredicate::always_true) const;
 

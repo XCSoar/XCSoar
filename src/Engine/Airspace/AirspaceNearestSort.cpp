@@ -6,7 +6,7 @@ void
 AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
                                     const fixed range)
 {
-  Airspaces::AirspaceVector vectors = airspaces.scan_range(m_state,
+  Airspaces::AirspaceVector vectors = airspaces.scan_range(m_state.Location,
                                                            range,
                                                            m_condition);
 

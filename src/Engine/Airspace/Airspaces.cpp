@@ -100,10 +100,10 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
 // SCAN METHODS
 
 const Airspaces::AirspaceVector
-Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
+Airspaces::scan_nearest(const GEOPOINT location,
                         const AirspacePredicate &condition) const 
 {
-  Airspace bb_target(state.Location, task_projection);
+  Airspace bb_target(location, task_projection);
 
   std::pair<AirspaceTree::const_iterator, double> 
     found = airspace_tree.find_nearest(bb_target);
@@ -117,7 +117,7 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
     // also should do scan_range with range = 0 since there
     // could be more than one with zero dist
     if (found.second == 0) {
-      return scan_range(state, fixed_zero, condition);
+      return scan_range(location, fixed_zero, condition);
     } else {
       if (condition(*found.first->get_airspace()))
         res.push_back(*found.first);
@@ -128,12 +128,12 @@ Airspaces::scan_nearest(const AIRCRAFT_STATE &state,
 }
 
 const Airspaces::AirspaceVector
-Airspaces::scan_range(const AIRCRAFT_STATE &state, 
+Airspaces::scan_range(const GEOPOINT location,
                       const fixed range,
                       const AirspacePredicate &condition) const
 {
-  Airspace bb_target(state.Location, task_projection);
-  int mrange = task_projection.project_range(state.Location, range);
+  Airspace bb_target(location, task_projection);
+  int mrange = task_projection.project_range(location, range);
   
   std::deque< Airspace > vectors;
   airspace_tree.find_within_range(bb_target, -mrange, std::back_inserter(vectors));
@@ -151,7 +151,7 @@ Airspaces::scan_range(const AIRCRAFT_STATE &state,
     if ((*v).distance(bb_target)> range)
       continue;
 
-    if ((*v).inside(state.Location) || (range>0))
+    if ((*v).inside(location) || (range>0))
       res.push_back(*v);
   }
 

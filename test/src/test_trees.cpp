@@ -57,7 +57,7 @@ bool test_as(const unsigned n, std::ostream &fo) {
   print_queries(n, fo);
   fo.flush();
 
-  airspaces.scan_range(state, fixed(20000.0));
+  airspaces.scan_range(state.Location, fixed(20000.0));
 
   return true;
 }
