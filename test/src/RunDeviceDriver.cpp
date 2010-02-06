@@ -224,8 +224,8 @@ Dump(const NMEA_INFO &basic)
     printf("NettoVario=%.1f\n", (double)basic.aircraft.NettoVario);
 
   if (basic.ExternalWindAvailable)
-    printf("Wind=%d/%d\n", (int)basic.aircraft.WindDirection,
-           (int)basic.aircraft.WindSpeed);
+    printf("Wind=%d/%d\n", (int)basic.aircraft.wind.bearing,
+           (int)basic.aircraft.wind.norm);
 
   if (basic.TemperatureAvailable)
     printf("OutsideAirTemperature=%d\n", (int)basic.OutsideAirTemperature);

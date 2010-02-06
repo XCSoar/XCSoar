@@ -683,9 +683,9 @@ void
 Profile::SaveWindToRegistry()
 {
   DWORD Temp;
-  Temp = iround(Basic().aircraft.WindSpeed);
+  Temp = iround(Basic().aircraft.wind.norm);
   SetToRegistry(szRegistryWindSpeed, Temp);
-  Temp = iround(Basic().aircraft.WindDirection);
+  Temp = iround(Basic().aircraft.wind.bearing);
   SetToRegistry(szRegistryWindBearing, Temp);
   //TODO  SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing);
 }

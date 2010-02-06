@@ -493,16 +493,15 @@ void
 DeviceBlackboard::Heading()
 {
   AIRCRAFT_STATE &aircraft = SetBasic().aircraft;
+  const SpeedVector wind = aircraft.wind;
 
-  if ((aircraft.Speed > 0) || (aircraft.WindSpeed > 0)) {
+  if ((aircraft.Speed > 0) || wind.is_non_zero()) {
     fixed x0 = fastsine(aircraft.TrackBearing)
       * aircraft.Speed;
     fixed y0 = fastcosine(aircraft.TrackBearing)
       * aircraft.Speed;
-    x0 += fastsine(aircraft.WindDirection)
-      * aircraft.WindSpeed;
-    y0 += fastcosine(aircraft.WindDirection)
-      * aircraft.WindSpeed;
+    x0 += fastsine(wind.bearing) * wind.norm;
+    y0 += fastcosine(wind.bearing) * wind.norm;
 
     if (!aircraft.Flying) {
       // don't take wind into account when on ground
@@ -555,8 +554,8 @@ void
 DeviceBlackboard::Wind()
 {
   if (!Basic().ExternalWindAvailable) {
-    SetBasic().aircraft.WindSpeed = Calculated().WindSpeed_estimated;
-    SetBasic().aircraft.WindDirection = Calculated().WindBearing_estimated;
+    SetBasic().aircraft.wind.norm = Calculated().WindSpeed_estimated;
+    SetBasic().aircraft.wind.bearing = Calculated().WindBearing_estimated;
   }
 }
 
@@ -619,7 +618,7 @@ DeviceBlackboard::Dynamics()
 
   if (Basic().aircraft.Flying &&
       (positive(Basic().aircraft.Speed) ||
-       positive(Basic().aircraft.WindSpeed))) {
+       Basic().aircraft.wind.is_non_zero())) {
 
     // calculate turn rate in wind coordinates
     const fixed dT = Basic().aircraft.Time - LastBasic().aircraft.Time;

@@ -254,12 +254,12 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 25:
-    Value = Units::ToUserUnit(Basic().aircraft.WindSpeed,
+    Value = Units::ToUserUnit(Basic().aircraft.wind.norm,
                               Units::UserWindSpeedUnit);
     break;
 
   case 26:
-    Value = Basic().aircraft.WindDirection;
+    Value = Basic().aircraft.wind.bearing;
     break;
 
   case 28:

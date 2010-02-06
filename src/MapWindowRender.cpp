@@ -100,10 +100,9 @@ void MapWindow::RenderMapLayer(Canvas &canvas, const RECT rc)
        Calculated().TerrainValid && terrain->isTerrainLoaded()) ||
       (weather != NULL && weather->GetParameter() != 0)) {
     double sunelevation = 40.0;
-    double sunazimuth = GetDisplayAngle() - Basic().aircraft.WindDirection;
-
+    double sunazimuth = GetDisplayAngle() - Basic().aircraft.wind.bearing;
     // draw sun from constant angle if very low wind speed
-    if (Basic().aircraft.WindSpeed < 0.5)
+    if (Basic().aircraft.wind.norm < 0.5)
       sunazimuth = GetDisplayAngle() + 45.0;
 
     // if (dirtyEvent.test()) {

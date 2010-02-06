@@ -46,6 +46,7 @@ Copyright_License {
 #include "Math/leastsqs.h"
 #include "Thread/Mutex.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "Navigation/SpeedVector.hpp"
 
 class ThermalLocator_Point {
 public:
@@ -82,7 +83,7 @@ public:
   void AddPoint(const fixed t, const GEOPOINT &location, const fixed w);
   void Update(const fixed t_0,
       const GEOPOINT &location_0,
-      const fixed wind_speed, const fixed wind_bearing,
+              const SpeedVector wind,
       const fixed trackbearing,
       GEOPOINT *Thermal_Location,
       fixed *Thermal_W,
@@ -93,8 +94,7 @@ public:
   void EstimateThermalBase(const GEOPOINT Thermal_Location,
       const fixed altitude,
       const fixed wthermal,
-      const fixed wind_speed,
-      const fixed wind_bearing,
+                           const SpeedVector wind,
       GEOPOINT *ground_location,
       fixed *ground_alt);
 

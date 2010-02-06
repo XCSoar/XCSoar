@@ -145,30 +145,26 @@ public:
   {
     Interval_Notification = 60 * 5;
     Interval_Check = 10;
-    wind_mag = 0;
-    wind_bearing = 0;
   }
 
 protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    wind_mag = cmp.Basic().aircraft.WindSpeed;
-    wind_bearing = cmp.Basic().aircraft.WindDirection;
+    wind = cmp.Basic().aircraft.wind;
 
     if (!cmp.Basic().aircraft.Flying) {
-      last_wind_mag = wind_mag;
-      last_wind_bearing = wind_bearing;
+      last_wind = wind;
       return false;
     }
 
-    fixed mag_change = fabs(wind_mag - last_wind_mag);
-    fixed dir_change = fabs(AngleLimit180(wind_bearing - last_wind_bearing));
+    fixed mag_change = fabs(wind.norm - last_wind.norm);
+    fixed dir_change = fabs(AngleLimit180(wind.bearing - last_wind.bearing));
 
     if (mag_change > 5 / TOKNOTS)
       return true;
 
-    if ((wind_mag > 10 / TOKNOTS) && (dir_change > 45))
+    if ((wind.norm > 10 / TOKNOTS) && (dir_change > 45))
       return true;
 
     return false;
@@ -183,15 +179,12 @@ protected:
   void
   SaveLast(void)
   {
-    last_wind_mag = wind_mag;
-    last_wind_bearing = wind_bearing;
+    last_wind = wind;
   }
 
 private:
-  fixed wind_mag;
-  fixed wind_bearing;
-  fixed last_wind_mag;
-  fixed last_wind_bearing;
+  SpeedVector wind;
+  SpeedVector last_wind;
 };
 
 class ConditionMonitorFinalGlide: public ConditionMonitor

@@ -106,8 +106,8 @@ MapWindow::DrawTrail(Canvas &canvas)
     GEOPOINT tp1;
 
     FindLatitudeLongitude(Basic().aircraft.Location,
-                          Basic().aircraft.WindDirection,
-                          Basic().aircraft.WindSpeed,
+                          Basic().aircraft.wind.bearing,
+                          Basic().aircraft.wind.norm,
                           &tp1);
     traildrift = Basic().aircraft.Location - tp1;
   }

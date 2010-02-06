@@ -424,14 +424,14 @@ GlidePolar::get_Vtakeoff() const
 fixed
 GlidePolar::get_ld_over_ground(const AIRCRAFT_STATE &state) const
 {
-  if (!positive(state.WindSpeed))
+  if (state.wind.is_zero())
     return bestLD;
 
   const fixed c_theta = -cos(fixed_deg_to_rad *
-      (state.WindDirection - state.TrackBearing));
+      (state.wind.bearing - state.TrackBearing));
 
-  Quadratic q(-fixed_two * state.WindSpeed * c_theta,
-      state.WindSpeed * state.WindSpeed - bestLD * bestLD);
+  Quadratic q(-fixed_two * state.wind.norm * c_theta,
+              state.wind.norm * state.wind.norm - bestLD * bestLD);
 
   if (q.check())
     return max(fixed_zero, q.solution_max());

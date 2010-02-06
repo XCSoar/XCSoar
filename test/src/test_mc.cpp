@@ -54,16 +54,16 @@ void test_glide_alt(const fixed h, const fixed W,
   polar.set_mc(fixed_one);
 
   AIRCRAFT_STATE ac;
-  ac.WindSpeed = fabs(W);
+  ac.wind.norm = fabs(W);
   if (W<0) {
-    ac.WindDirection = 180+Wangle;
+    ac.wind.bearing = 180+Wangle;
   } else {
-    ac.WindDirection = Wangle;
+    ac.wind.bearing = Wangle;
   }
   ac.NavAltitude = h;
 
   GeoVector vect(fixed(400.0), fixed_zero);
-  GlideState gs(vect, fixed_zero, ac.NavAltitude, ac);
+  GlideState gs(vect, fixed_zero, ac.NavAltitude, ac.wind);
   GlideResult gr = polar.solve(gs);
   hfile << h << " " 
         << gr.AltitudeDifference << " "
@@ -84,17 +84,17 @@ void test_glide_stf(const fixed h, const fixed W,
   polar.set_mc(fixed_one);
 
   AIRCRAFT_STATE ac;
-  ac.WindSpeed = fabs(W);
+  ac.wind.norm = fabs(W);
   if (W<0) {
-    ac.WindDirection = 180+Wangle;
+    ac.wind.bearing = 180+Wangle;
   } else {
-    ac.WindDirection = Wangle;
+    ac.wind.bearing = Wangle;
   }
   ac.NavAltitude = h;
   ac.NettoVario = S;
 
   GeoVector vect(fixed(400.0), fixed_zero);
-  GlideState gs(vect, fixed_zero, ac.NavAltitude, ac);
+  GlideState gs(vect, fixed_zero, ac.NavAltitude, ac.wind);
   GlideResult gr = polar.solve(gs);
 
   fixed Vstf = polar.speed_to_fly(ac, gr, false);
@@ -190,16 +190,16 @@ void test_glide_cb(const fixed h, const fixed W,
   GlidePolar polar(fixed_one);
 
   AIRCRAFT_STATE ac;
-  ac.WindSpeed = fabs(W);
+  ac.wind.norm = fabs(W);
   if (W<0) {
-    ac.WindDirection = 180+Wangle;
+    ac.wind.bearing = 180+Wangle;
   } else {
-    ac.WindDirection = Wangle;
+    ac.wind.bearing = Wangle;
   }
   ac.NavAltitude = h;
 
   GeoVector vect(fixed(400.0), fixed_zero);
-  GlideState gs (vect, fixed_zero, ac.NavAltitude, ac);
+  GlideState gs (vect, fixed_zero, ac.NavAltitude, ac.wind);
   GlideResult gr = polar.solve(gs);
 
   gr.calc_deferred(ac);

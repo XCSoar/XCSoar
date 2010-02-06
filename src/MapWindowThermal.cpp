@@ -55,8 +55,8 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
       double t = -dh/Calculated().ThermalSources[i].LiftRate;
       GEOPOINT loc;
       FindLatitudeLongitude(Calculated().ThermalSources[i].Location,
-                            Basic().aircraft.WindDirection,
-                            Basic().aircraft.WindSpeed * t,
+                            Basic().aircraft.wind.bearing,
+                            Basic().aircraft.wind.norm * t,
                             &loc);
       ThermalSources[i].Visible =
 	LonLat2ScreenIfVisible(loc, &ThermalSources[i].Screen);

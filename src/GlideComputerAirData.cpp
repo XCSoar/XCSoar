@@ -643,8 +643,7 @@ GlideComputerAirData::ProcessThermalLocator()
                             Basic().aircraft.NettoVario);
 
     thermallocator.Update(Basic().aircraft.Time, Basic().aircraft.Location,
-                          Basic().aircraft.WindSpeed,
-                          Basic().aircraft.WindDirection,
+                          Basic().aircraft.wind,
                           Basic().aircraft.TrackBearing,
         &SetCalculated().ThermalEstimate_Location,
         &SetCalculated().ThermalEstimate_W, &SetCalculated().ThermalEstimate_R);
@@ -816,8 +815,7 @@ GlideComputerAirData::ThermalSources()
   thermallocator.EstimateThermalBase(Calculated().ThermalEstimate_Location,
                                      Basic().aircraft.NavAltitude,
                                      Calculated().LastThermalAverage,
-                                     Basic().aircraft.WindSpeed,
-                                     Basic().aircraft.WindDirection,
+                                     Basic().aircraft.wind,
                                      &ground_location,
       &ground_altitude);
 

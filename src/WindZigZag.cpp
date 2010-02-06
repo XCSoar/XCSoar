@@ -665,8 +665,8 @@ WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
   if (Basic->aircraft.Time < tLastEstimate + UPDATE_RATE)
     return 0;
 
-  double V_wind_estimate = Basic->aircraft.WindSpeed;
-  double theta_wind_estimate = Basic->aircraft.WindDirection * DEGTORAD;
+  double V_wind_estimate = Basic->aircraft.wind.norm;
+  double theta_wind_estimate = Basic->aircraft.wind.bearing * DEGTORAD;
   double percent_error = myzigzag.StartSearch(V_wind_estimate, theta_wind_estimate);
 
   // Check spread of zig-zag manoeuver
@@ -710,8 +710,8 @@ WindZigZagUpdate(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
                (double)Basic->aircraft.Time,
             V_wind_estimate,
             theta_wind_estimate,
-               (double)Basic->aircraft.WindSpeed,
-               (double)Basic->aircraft.WindDirection,
+               (double)Basic->aircraft.wind.norm,
+               (double)Basic->aircraft.wind.bearing,
             percent_error,
             quality);
     #endif

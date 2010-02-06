@@ -1013,7 +1013,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
 
     // VENTA3 wind speed + bearing bottom line
   case 25:
-    _stprintf(sTmp, _T("%d%s"), (int)Basic().aircraft.WindDirection, _T(DEG));
+    _stprintf(sTmp, _T("%d%s"), (int)Basic().aircraft.wind.bearing, _T(DEG));
     info_box.SetComment(sTmp);
     break;
 

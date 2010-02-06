@@ -65,8 +65,8 @@ static void UpdateWind(bool set) {
   if (wp) {
     wb = wp->GetDataField()->GetAsFloat();
   }
-  if ((ws != XCSoarInterface::Basic().aircraft.WindSpeed)
-      ||(wb != XCSoarInterface::Basic().aircraft.WindDirection)) {
+  if ((ws != XCSoarInterface::Basic().aircraft.wind.norm)
+      ||(wb != XCSoarInterface::Basic().aircraft.wind.bearing)) {
     /* JMW illegal
     if (set) {
       SetWindEstimate(ws, wb);
@@ -91,7 +91,7 @@ static void OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
   switch(Mode){
     case DataField::daGet:
       Sender->SetMax(SPEEDMODIFY*(200.0/TOKPH));
-      Sender->Set((double)(SPEEDMODIFY * XCSoarInterface::Basic().aircraft.WindSpeed));
+      Sender->Set((double)(SPEEDMODIFY * XCSoarInterface::Basic().aircraft.wind.norm));
     break;
     case DataField::daPut:
       UpdateWind(false);
@@ -108,7 +108,7 @@ static void OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t M
 
   switch(Mode){
     case DataField::daGet:
-      lastWind = XCSoarInterface::Basic().aircraft.WindDirection;
+      lastWind = XCSoarInterface::Basic().aircraft.wind.bearing;
       if (lastWind < 0.5)
         lastWind = 360.0;
       Sender->Set(lastWind);

@@ -554,9 +554,9 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
   NMEAParser::ExtractParameter(String,ctemp,1);
   GPS_INFO->ExternalWindAvailable = true;
-  GPS_INFO->aircraft.WindSpeed = _tcstod(ctemp, NULL) / 10.0;
+  GPS_INFO->aircraft.wind.norm = _tcstod(ctemp, NULL) / 10.0;
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->aircraft.WindDirection = _tcstod(ctemp, NULL);
+  GPS_INFO->aircraft.wind.bearing = _tcstod(ctemp, NULL);
 
 
   NMEAParser::ExtractParameter(String,ctemp,4);
