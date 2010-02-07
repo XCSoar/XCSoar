@@ -44,7 +44,7 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "Math/FastMath.h"
 #include "Dialogs.h"
-#include "Message.h"
+#include "Message.hpp"
 #include "Atmosphere.h"
 #include "Battery.h"
 #include "Registry.hpp"

@@ -40,7 +40,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
-#include "Message.h"
+#include "Message.hpp"
 #include "Registry.hpp"
 #include "DeviceBlackboard.hpp"
 #include "InputEvents.h"

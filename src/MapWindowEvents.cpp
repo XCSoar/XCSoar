@@ -43,7 +43,7 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "Protection.hpp"
 #include "InputEvents.h"
-#include "Message.h"
+#include "Message.hpp"
 #include "Dialogs.h"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"

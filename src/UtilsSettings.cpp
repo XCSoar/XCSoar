@@ -46,7 +46,7 @@ Copyright_License {
 #include "TopologyStore.h"
 #include "Dialogs.h"
 #include "Device/device.hpp"
-#include "Message.h"
+#include "Message.hpp"
 #include "Polar/Loader.hpp"
 #include "TopologyStore.h"
 #include "Components.hpp"

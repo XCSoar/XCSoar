@@ -40,7 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "Message.h"
+#include "Message.hpp"
 #include "Asset.hpp"
 
 #ifdef HAVE_POSIX

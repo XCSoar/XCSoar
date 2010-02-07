@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef MESSAGE_H
-#define MESSAGE_H
+#ifndef XCSOAR_MESSAGE_HPP
+#define XCSOAR_MESSAGE_HPP
 
 #include "MainWindow.hpp"
 
