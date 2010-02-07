@@ -50,6 +50,7 @@ Copyright_License {
 #include "Task/TaskManager.hpp"
 
 #include <stdlib.h>
+#include <stdio.h>
 
 void
 MapWindow::DrawCrossHairs(Canvas &canvas)

@@ -48,6 +48,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <algorithm>
 

@@ -46,6 +46,7 @@ Copyright_License {
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 // JMW OLD_TASK TODO: add visitor for task to draw task waypoints
 // (can use same class WaypointVisitorMap)

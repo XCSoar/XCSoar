@@ -54,6 +54,8 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Task/TaskManager.hpp"
 #include "Simulator.hpp"
+#include "PopupMessage.hpp"
+#include "MainWindow.hpp"
 
 #include <stdlib.h>
 #include "FlarmCalculations.h"

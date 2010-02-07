@@ -45,10 +45,12 @@ Copyright_License {
 
 #ifdef HAVE_POSIX
 #include <time.h>
+#include <fcntl.h>
 #else /* !HAVE_POSIX */
 #include <windows.h>
 #endif /* !HAVE_POSIX */
 
+#include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
 

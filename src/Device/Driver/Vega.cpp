@@ -48,6 +48,7 @@ Copyright_License {
 
 #include <tchar.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include <algorithm>
 
