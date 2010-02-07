@@ -61,9 +61,9 @@ testtap: $(BUILDTESTS)
 $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $(TARGET_BIN_DIR)/dirstamp
 	gcc -o $@ $<
 
-
-
-DEBUG_PROGRAM_NAMES = RunWayPointParser RunCanvas RunMapWindow RunDialog RunAirspaceWarningDialog
+DEBUG_PROGRAM_NAMES = \
+	RunWayPointParser RunDeviceDriver \
+	RunCanvas RunMapWindow RunDialog RunAirspaceWarningDialog
 DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
 
 RUN_WAY_POINT_PARSER_SOURCES = \
@@ -84,6 +84,33 @@ RUN_WAY_POINT_PARSER_LDADD = \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS) $(RUN_WAY_POINT_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_DEVICE_DRIVER_SOURCES = \
+	$(SRC)/UtilsText.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Register.cpp \
+	$(SRC)/Device/Parser.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Descriptor.cpp \
+	$(SRC)/Device/FLARM.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/FlarmCalculations.cpp \
+	$(SRC)/ClimbAverageCalculator.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
+	$(TEST_SRC_DIR)/FakeRegistry.cpp \
+	$(TEST_SRC_DIR)/RunDeviceDriver.cpp
+RUN_DEVICE_DRIVER_OBJS = $(call SRC_TO_OBJ,$(RUN_DEVICE_DRIVER_SOURCES))
+RUN_DEVICE_DRIVER_LDADD = \
+	$(ZZIP_LIBS) \
+	$(ENGINE_LIBS) \
+	$(DRIVER_LIBS) \
+	$(COMPAT_LIBS)
+$(TARGET_BIN_DIR)/RunDeviceDriver$(TARGET_EXEEXT): $(RUN_DEVICE_DRIVER_OBJS) $(RUN_DEVICE_DRIVER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
