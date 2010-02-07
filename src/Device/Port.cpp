@@ -40,15 +40,17 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "Message.h"
+#include "Message.hpp"
 #include "Asset.hpp"
 
 #ifdef HAVE_POSIX
 #include <time.h>
+#include <fcntl.h>
 #else /* !HAVE_POSIX */
 #include <windows.h>
 #endif /* !HAVE_POSIX */
 
+#include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
 

@@ -55,7 +55,7 @@ Copyright_License {
 }
 */
 
-#include "WindStore.h"
+#include "WindStore.hpp"
 #include "Math/Constants.h"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
@@ -80,14 +80,14 @@ WindStore::~WindStore()
  * important in the end result and stay in the store longer.
  */
 void
-WindStore::SlotMeasurement(const NMEA_INFO *nmeaInfo,
-    DERIVED_INFO *derivedInfo, Vector windvector, int quality)
+WindStore::SlotMeasurement(const NMEA_INFO &info, DERIVED_INFO &derived,
+                           Vector windvector, int quality)
 {
   updated = true;
-  windlist->addMeasurement(nmeaInfo->aircraft.Time, windvector,
-                           nmeaInfo->GPSAltitude, quality);
+  windlist->addMeasurement(info.Time, windvector,
+                           info.GPSAltitude, quality);
   //we may have a new wind value, so make sure it's emitted if needed!
-  recalculateWind(nmeaInfo, derivedInfo);
+  recalculateWind(info, derived);
 }
 
 /**
@@ -96,19 +96,19 @@ WindStore::SlotMeasurement(const NMEA_INFO *nmeaInfo,
  * NewWind signal.
  */
 void
-WindStore::SlotAltitude(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
+WindStore::SlotAltitude(const NMEA_INFO &info, DERIVED_INFO &derived)
 {
-  if ((fabs(nmeaInfo->GPSAltitude - _lastAltitude) > 100.0) || (updated)) {
+  if ((fabs(info.GPSAltitude - _lastAltitude) > fixed(100)) || updated) {
     //only recalculate if there is a significant change
-    recalculateWind(nmeaInfo, derivedInfo);
+    recalculateWind(info, derived);
 
     updated = false;
-    _lastAltitude = nmeaInfo->GPSAltitude;
+    _lastAltitude = info.GPSAltitude;
   }
 }
 
 const Vector
-WindStore::GetWind(double Time, double h, bool *found) const
+WindStore::GetWind(fixed Time, fixed h, bool *found) const
 {
   return windlist->getWind(Time, h, found);
 }
@@ -117,11 +117,10 @@ WindStore::GetWind(double Time, double h, bool *found) const
   * May result in a NewWind signal. */
 
 void
-WindStore::recalculateWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
+WindStore::recalculateWind(const NMEA_INFO &info, DERIVED_INFO &derived)
 {
   bool found;
-  Vector CurWind = windlist->getWind(nmeaInfo->aircraft.Time,
-                                     nmeaInfo->GPSAltitude, &found);
+  Vector CurWind = windlist->getWind(info.Time, info.GPSAltitude, &found);
 
   if (found) {
     if ((fabs(CurWind.x - _lastWind.x) > 1.0)
@@ -130,32 +129,30 @@ WindStore::recalculateWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo)
       _lastWind = CurWind;
 
       updated = false;
-      _lastAltitude = nmeaInfo->GPSAltitude;
+      _lastAltitude = info.GPSAltitude;
 
-      NewWind(nmeaInfo, derivedInfo, CurWind);
+      NewWind(info, derived, CurWind);
     }
   } // otherwise, don't change anything
 }
 
 void
-WindStore::NewWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
+WindStore::NewWind(const NMEA_INFO &info, DERIVED_INFO &derived,
     Vector &wind)
 {
-  double mag = hypot(wind.x, wind.y);
-  double bearing;
+  fixed mag = hypot(wind.x, wind.y);
+  fixed bearing;
 
-  if (wind.y == 0 && wind.x == 0)
-    bearing = 0;
+  if (wind.y == fixed_zero && wind.x == fixed_zero)
+    bearing = fixed_zero;
   else
     bearing = atan2(wind.y, wind.x) * RAD_TO_DEG;
 
   if (mag < 30) { // limit to reasonable values
-    derivedInfo->WindSpeed_estimated = mag;
-
     if (bearing < 0)
-      bearing += 360;
+      bearing += fixed_360;
 
-    derivedInfo->WindBearing_estimated = bearing;
+    derived.estimated_wind = SpeedVector(bearing, mag);
   } else {
     // TODO code: give warning, wind estimate bogus or very strong!
   }

@@ -79,7 +79,7 @@ bool
 GlideComputerStats::DoLogging()
 {
   /// @todo consider putting this sanity check inside Parser
-  if (Distance(Basic().aircraft.Location, LastBasic().aircraft.Location) > 200.0)
+  if (Distance(Basic().Location, LastBasic().Location) > 200.0)
     // prevent bad fixes from being logged or added to OLC store
     return false;
 
@@ -95,15 +95,15 @@ GlideComputerStats::DoLogging()
     FastLogNum--;
   }
 
-  if (log_clock.check_advance(Basic().aircraft.Time))
+  if (log_clock.check_advance(Basic().Time))
     logger.LogPoint(Basic());
 
-  if (Basic().aircraft.Flying) {
-    if (stats_clock.check_advance(Basic().aircraft.Time)) {
-      flightstats.AddAltitudeTerrain(Basic().aircraft.FlightTime,
+  if (Basic().flight.Flying) {
+    if (stats_clock.check_advance(Basic().Time)) {
+      flightstats.AddAltitudeTerrain(Basic().flight.FlightTime,
           Calculated().TerrainAlt);
-      flightstats.AddAltitude(Basic().aircraft.FlightTime,
-                              Basic().aircraft.NavAltitude);
+      flightstats.AddAltitude(Basic().flight.FlightTime,
+                              Basic().NavAltitude);
       flightstats.SaveTaskSpeed(Calculated().task_stats.total.remaining_effective.get_speed_incremental());
     }
   }
@@ -124,14 +124,14 @@ void
 GlideComputerStats::OnClimbBase(double StartAlt)
 {
   flightstats.AddClimbBase(Calculated().ClimbStartTime
-                           - Basic().aircraft.TakeOffTime, StartAlt);
+                           - Basic().flight.TakeOffTime, StartAlt);
 }
 
 void
 GlideComputerStats::OnClimbCeiling()
 {
   flightstats.AddClimbCeiling(Calculated().CruiseStartTime
-                              - Basic().aircraft.TakeOffTime,
+                              - Basic().flight.TakeOffTime,
                               Calculated().CruiseStartAlt);
 }
 

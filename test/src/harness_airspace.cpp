@@ -261,7 +261,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
 {
   const fixed range(20000.0);
 
-  const std::vector<Airspace> vn = airspaces.scan_nearest(state);
+  const std::vector<Airspace> vn = airspaces.scan_nearest(state.Location);
   AirspaceVisitorPrint pvn("results/res-bb-nearest.txt",
                            do_report);
   pvn.for_each(vn);
@@ -299,7 +299,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
   }
 
   {
-    AirspaceNearestSort ans(state);
+    AirspaceNearestSort ans(state.Location);
     const AbstractAirspace* as = ans.find_nearest(airspaces, range);
     if (do_report) {
       std::ofstream fout("results/res-bb-sortednearest.txt");

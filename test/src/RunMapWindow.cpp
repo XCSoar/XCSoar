@@ -72,6 +72,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
+#include "LogFile.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -124,17 +125,6 @@ int InfoBoxLayout::ControlWidth;
 bool CommonInterface::VirtualKeys=false;
 HINSTANCE CommonInterface::hInst;
 void XCSoarInterface::InterfaceTimeoutReset(void) {}
-
-void
-XCSoarInterface::CreateProgressDialog(const TCHAR* text)
-{
-  _ftprintf(stderr, _T("%s\n"), text);
-}
-
-void XCSoarInterface::StepProgressDialog(void) {}
-bool XCSoarInterface::SetProgressStepSize(int nSize) {
-  return false;
-}
 
 void InputEvents::ShowMenu() {}
 bool InputEvents::processKey(int key) {
@@ -192,22 +182,6 @@ int WINAPI
 MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 {
   return -1;
-}
-
-void
-StartupStore(const TCHAR *Str, ...)
-{
-  va_list ap;
-
-  va_start(ap, Str);
-  _vftprintf(stderr, Str, ap);
-  va_end(ap);
-}
-
-const TCHAR *
-gettext(const TCHAR *text)
-{
-  return text;
 }
 
 int

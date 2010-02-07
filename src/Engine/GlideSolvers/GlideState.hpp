@@ -37,8 +37,8 @@
 #ifndef GLIDESTATE_HPP
 #define GLIDESTATE_HPP
 
+#include "Navigation/SpeedVector.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-struct AIRCRAFT_STATE;
 
 /**
  * Class used to define a glide/navigation task
@@ -52,20 +52,21 @@ struct GlideState
    *
    * @param vector Specified vector for task
    * @param htarget Height of target (m above MSL)
-   * @param aircraft Aircraft state
+   * @param altitude the altitude of the aircraft
+   * @param wind the wind vector
    *
    * @return Initialised glide task
    */
   GlideState(const GeoVector &vector, const fixed htarget,
-      const AIRCRAFT_STATE &aircraft);
+             fixed altitude, const SpeedVector wind);
 
   /**
    * Calculate internal quantities to reduce computation time
    * by clients of this class
    *
-   * @param aircraft Aircraft state
+   * @param wind the wind vector
    */
-  void calc_speedups(const AIRCRAFT_STATE &aircraft);
+  void calc_speedups(const SpeedVector wind);
 
   /**
    * Calculates average cross-country speed from effective

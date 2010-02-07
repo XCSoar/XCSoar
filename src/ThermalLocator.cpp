@@ -120,7 +120,7 @@ ThermalLocator::AddPoint(const fixed t, const GEOPOINT &location, const fixed w)
 
 void
 ThermalLocator::Update(const fixed t_0, const GEOPOINT &location_0,
-    const fixed wind_speed, const fixed wind_bearing, const fixed trackbearing,
+                       const SpeedVector wind, const fixed trackbearing,
     GEOPOINT *Thermal_Location, fixed *Thermal_W, fixed *Thermal_R)
 {
   ScopeLock protect(mutexThermalLocator);
@@ -133,7 +133,7 @@ ThermalLocator::Update(const fixed t_0, const GEOPOINT &location_0,
 
   GEOPOINT dloc;
 
-  FindLatitudeLongitude(location_0, wind_bearing, wind_speed, &dloc);
+  FindLatitudeLongitude(location_0, wind.bearing, wind.norm, &dloc);
 
   fixed traildrift_lat = (location_0.Latitude - dloc.Latitude);
   fixed traildrift_lon = (location_0.Longitude - dloc.Longitude);
@@ -266,8 +266,9 @@ ThermalLocator::Drift(fixed t_0, fixed longitude_0, fixed latitude_0,
 
 void
 ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
-    const fixed altitude, const fixed wthermal, const fixed wind_speed,
-    const fixed wind_bearing, GEOPOINT *ground_location, fixed *ground_alt)
+                                    const fixed altitude, const fixed wthermal,
+                                    const SpeedVector wind,
+                                    GEOPOINT *ground_location, fixed *ground_alt)
 {
   ScopeLock protect(mutexThermalLocator);
 
@@ -287,12 +288,13 @@ ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
   terrain.Lock();
 
   GEOPOINT loc;
-  FindLatitudeLongitude(Thermal_Location, wind_bearing, wind_speed * dt, &loc);
+  FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * dt, &loc);
   fixed Xrounding = fabs(loc.Longitude - Thermal_Location.Longitude) / 2;
   fixed Yrounding = fabs(loc.Latitude - Thermal_Location.Latitude) / 2;
 
   for (fixed t = fixed_zero; t <= Tmax; t += dt) {
-    FindLatitudeLongitude(Thermal_Location, wind_bearing, wind_speed * t, &loc);
+    FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * t,
+                          &loc);
 
     fixed hthermal = altitude - wthermal * t;
     fixed hground = fixed_zero;
@@ -305,7 +307,8 @@ ThermalLocator::EstimateThermalBase(const GEOPOINT Thermal_Location,
     fixed dh = hthermal - hground;
     if (dh < 0) {
       t = t + dh / wthermal;
-      FindLatitudeLongitude(Thermal_Location, wind_bearing, wind_speed * t, &loc);
+      FindLatitudeLongitude(Thermal_Location, wind.bearing, wind.norm * t,
+                            &loc);
       break;
     }
   }

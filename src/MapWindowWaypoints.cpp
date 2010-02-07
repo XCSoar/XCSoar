@@ -46,6 +46,7 @@ Copyright_License {
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 
 #include <assert.h>
+#include <stdio.h>
 
 // JMW OLD_TASK TODO: add visitor for task to draw task waypoints
 // (can use same class WaypointVisitorMap)
@@ -102,9 +103,11 @@ public:
       
         if ((map.SettingsMap().DeclutterLabels<1) || intask) {
 
+          const AIRCRAFT_STATE aircraft_state = ToAircraftState(map.Basic());
           UnorderedTaskPoint t(way_point, map.SettingsComputer());
-          GlideResult r = TaskSolution::glide_solution_remaining(t, map.Basic().aircraft,
-                                                                 glide_polar);
+          GlideResult r =
+            TaskSolution::glide_solution_remaining(t, aircraft_state,
+                                                   glide_polar);
           reachable = r.glide_reachable();
 
           if (reachable) {

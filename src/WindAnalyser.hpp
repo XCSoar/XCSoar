@@ -18,8 +18,8 @@
 #ifndef WINDANALYSER_H
 #define WINDANALYSER_H
 
-#include "Vector.h"
-#include "WindStore.h"
+#include "Vector.hpp"
+#include "WindStore.hpp"
 
 /**
  * The windanalyser analyses the list of flightsamples looking
@@ -30,8 +30,8 @@ class WindSample
 {
 public:
   Vector v;
-  double t;
-  double mag;
+  fixed t;
+  fixed mag;
 };
 
 #define MAXWINDSAMPLES 50
@@ -55,18 +55,18 @@ public:
   /**
    * Called if the flightmode changes
    */
-  void slot_newFlightMode(const NMEA_INFO *nmeaInfo,
-      const DERIVED_INFO *derivedInfo, bool left, int);
+  void slot_newFlightMode(const NMEA_INFO &info, const DERIVED_INFO &derived,
+                          bool left, int marker);
 
   /**
    * Called if a new sample is available in the samplelist.
    */
-  void slot_newSample(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo);
+  void slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived);
 
   // used to update output if altitude changes
-  void slot_Altitude(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo);
+  void slot_Altitude(const NMEA_INFO &info, DERIVED_INFO &derived);
 
-  void slot_newEstimate(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
+  void slot_newEstimate(const NMEA_INFO &info, DERIVED_INFO &derived,
       Vector v, int quality);
 
   //void calcThermalDrift();
@@ -93,14 +93,14 @@ private:
 
   Vector climbstartpos;
   Vector climbendpos;
-  double climbstarttime;
-  double climbendtime;
+  fixed climbstarttime;
+  fixed climbendtime;
 
   WindSample windsamples[MAXWINDSAMPLES];
   int numwindsamples;
 
 private:
-  void _calcWind(const NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo);
+  void _calcWind(const NMEA_INFO &info, DERIVED_INFO &derived);
 };
 
 #endif

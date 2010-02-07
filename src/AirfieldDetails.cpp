@@ -202,7 +202,7 @@ ParseAirfieldDetails()
   int k = 0;
 
   WaypointSorter waypoints_filter(way_points,
-                                  XCSoarInterface::Basic().aircraft.Location,
+                                  XCSoarInterface::Basic().Location,
                                   fixed_one);
   WaypointSelectInfoVector airports = waypoints_filter.get_list();
   waypoints_filter.filter_airport(airports);

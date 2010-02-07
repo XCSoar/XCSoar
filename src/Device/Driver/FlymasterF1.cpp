@@ -92,10 +92,10 @@ VARIO(const TCHAR *String, NMEA_INFO *GPS_INFO)
   fixed ps(_tcstod(ctemp, NULL));
   GPS_INFO->BaroAltitude = GPS_INFO->pressure.StaticPressureToQNHAltitude(ps*100);
   NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->aircraft.Vario = _tcstod(ctemp, NULL) / 10.0;
+  GPS_INFO->TotalEnergyVario = _tcstod(ctemp, NULL) / 10.0;
+  GPS_INFO->TotalEnergyVarioAvailable = true;
   // JMW vario is in dm/s
 
-  GPS_INFO->VarioAvailable = true;
   GPS_INFO->BaroAltitudeAvailable = true;
 
   TriggerVarioUpdate();

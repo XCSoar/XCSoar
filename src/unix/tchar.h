@@ -54,6 +54,7 @@ typedef wchar_t TCHAR;
 #define _vsntprintf wsnprintf
 #define _ftprintf fwprintf
 #define _vftprintf vfwprintf
+#define _fputts fputws
 #define _tcsdup wcsdup
 #define _tcscpy wcscpy
 #define tcslen wcslen
@@ -101,6 +102,7 @@ typedef char TCHAR;
 #define _vsntprintf snprintf
 #define _ftprintf fprintf
 #define _vftprintf vfprintf
+#define _fputts fputs
 #define _tcsdup strdup
 #define _tcscpy strcpy
 #define tcslen strlen

@@ -62,7 +62,7 @@ Copyright_License {
 
 #include <assert.h>
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
+#if defined(_WIN32_WCE) && !defined(GNAV) && !defined(PNA)
     #include "Screen/VOIMAGE.h"
 #endif
 
@@ -77,7 +77,7 @@ static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
 static const Waypoint *selected_waypoint = NULL;
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
+#if defined(_WIN32_WCE) && !defined(GNAV) && !defined(PNA)
     static CVOImage jpgimage1;
     static CVOImage jpgimage2;
 #endif
@@ -368,7 +368,7 @@ OnImagePaint(WindowControl *Sender, Canvas &canvas)
 {
   (void)Sender;
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
+#if defined(_WIN32_WCE) && !defined(GNAV) && !defined(PNA)
   if (page == 4)
     jpgimage1.Draw(canvas, 0, 0, -1, -1);
 
@@ -449,7 +449,7 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
   ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);
 
   fixed distance, bearing;
-  DistanceBearing(XCSoarInterface::Basic().aircraft.Location,
+  DistanceBearing(XCSoarInterface::Basic().Location,
                   selected_waypoint->Location,
                   &distance,
                   &bearing);
@@ -469,8 +469,9 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
 
   // alt reqd at current mc
 
-  r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic().aircraft,
-                                             glide_polar);
+  const AIRCRAFT_STATE aircraft_state =
+    ToAircraftState(XCSoarInterface::Basic());
+  r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
   wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
   if (wp) {
     _stprintf(sTmp, _T("%.0f %s"),
@@ -482,9 +483,7 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
   // alt reqd at mc 0
 
   glide_polar.set_mc(fixed_zero);
-  r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic().aircraft,
-                                             glide_polar);
-
+  r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
   wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
   if (wp) {
     _stprintf(sTmp, _T("%.0f %s"),
@@ -495,9 +494,7 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
 
   // alt reqd at safety mc
 
-  r = TaskSolution::glide_solution_remaining(t, XCSoarInterface::Basic().aircraft,
-                                             safety_polar);
-
+  r = TaskSolution::glide_solution_remaining(t, aircraft_state, safety_polar);
   wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
   if (wp) {
     _stprintf(sTmp, _T("%.0f %s"),
@@ -585,7 +582,7 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
   if (wb)
     wb->SetOnClickNotify(OnRemoveFromTaskClicked);
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
+#if defined(_WIN32_WCE) && !defined(GNAV) && !defined(PNA)
   VirtualCanvas reference_canvas;
   hasimage1 = jpgimage1.Load(reference_canvas, path_modis);
   hasimage2 = jpgimage2.Load(reference_canvas, path_google);

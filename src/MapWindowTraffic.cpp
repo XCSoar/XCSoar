@@ -45,6 +45,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "StringUtil.hpp"
 
+#include <stdio.h>
+
 #define fSnailColour(cv) max((short)0, min((short)(NUMSNAILCOLORS-1), (short)((cv+1.0)/2.0*NUMSNAILCOLORS)))
 
 /**
@@ -103,10 +105,10 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
       fixed distance;
       fixed bearing;
 
-      DistanceBearing(Basic().aircraft.Location, target_loc,
+      DistanceBearing(Basic().Location, target_loc,
                       &distance, &bearing);
 
-      FindLatitudeLongitude(Basic().aircraft.Location, bearing,
+      FindLatitudeLongitude(Basic().Location, bearing,
                             distance * scalefact,
                             &target_loc);
     }

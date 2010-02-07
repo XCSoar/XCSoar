@@ -136,7 +136,7 @@ void
 CuSonde::updateMeasurements(const NMEA_INFO &basic)
 {
   // if (not flying) nothing to update...
-  if (!basic.aircraft.Flying)
+  if (!basic.flight.Flying)
     return;
 
   // if (no temperature or humidity available) nothing to update...
@@ -165,7 +165,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic)
   }
 
   // calculate ground height
-  hGround = basic.aircraft.AltitudeAGL;
+  hGround = basic.AltitudeAGL;
 
   // if (going up)
   if (level > last_level) {

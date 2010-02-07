@@ -34,40 +34,43 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+
 */
 
-#ifndef MESSAGE_H
-#define MESSAGE_H
+#ifndef XCSOAR_SPEED_VECTOR_HPP
+#define XCSOAR_SPEED_VECTOR_HPP
 
-#include "MainWindow.hpp"
+#include "Math/fixed.hpp"
 
-class StatusMessageList;
+/**
+ * An object describing the speed vector in a two dimensional surface.
+ */
+struct SpeedVector {
+  /**
+   * The direction of the vector in degrees (0..360).
+   */
+  fixed bearing;
 
-class Message : public PopupMessage {
- public:
-  Message();
+  /**
+   * The norm of the vector [m/s].
+   */
+  fixed norm;
 
-  static bool Render() {
-    return main_window.popup.Render();
+  SpeedVector():bearing(fixed_zero), norm(fixed_zero) {}
+  SpeedVector(fixed _bearing, fixed _norm):bearing(_bearing), norm(_norm) {}
+
+  /**
+   * Returns true if the norm of the vector is zero.
+   */
+  bool is_zero() const {
+    return !is_non_zero();
   }
 
-  static void AddMessage(DWORD tshow, int type, TCHAR *Text) {
-    main_window.popup.AddMessage(tshow, type, Text);
-  }
-
-  static void AddMessage(const TCHAR* text, const TCHAR *data=NULL) {
-    main_window.popup.AddMessage(text, data);
-  }
-
-  // repeats last non-visible message of specified type (or any message
-  // type=0)
-  static void Repeat(int type) {
-    main_window.popup.Repeat(type);
-  }
-
-  // clears all visible messages (of specified type or if type=0, all)
-  static bool Acknowledge(int type) {
-    return main_window.popup.Acknowledge(type);
+  /**
+   * Returns true if the norm of the vector is non-zero.
+   */
+  bool is_non_zero() const {
+    return positive(norm);
   }
 };
 

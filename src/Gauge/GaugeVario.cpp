@@ -206,7 +206,7 @@ void GaugeVario::Render() {
     InitDone = true;
   }
 
-  vval = Basic().aircraft.Vario;
+  vval = Basic().TotalEnergyVario;
 
   double vvaldisplay = min(99.9,max(-99.9,vval*LIFTMODIFY));
 
@@ -606,7 +606,7 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
   #define  DeltaVlimit 16.0
 
   if (!Basic().gps.Simulator && !(Basic().AirspeedAvailable &&
-                                  Basic().VarioAvailable))
+                                  Basic().TotalEnergyVarioAvailable))
     return;
 
   static double lastVdiff;
@@ -625,10 +625,10 @@ void GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 
   // only draw speed command if flying and vario is not circling
   //
-  if ((Basic().aircraft.Flying)
+  if ((Basic().flight.Flying)
       && (!Basic().gps.Simulator || !Calculated().Circling)
       && !Basic().SwitchState.VarioCircling) {
-    vdiff = Calculated().V_stf - Basic().aircraft.IndicatedAirspeed;
+    vdiff = Calculated().V_stf - Basic().IndicatedAirspeed;
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
     vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;
   } else

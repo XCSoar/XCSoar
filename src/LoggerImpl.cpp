@@ -65,12 +65,12 @@
 const struct LoggerImpl::LoggerPreTakeoffBuffer &
 LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
 {
-  Location = src.aircraft.Location;
+  Location = src.Location;
   Altitude = src.GPSAltitude;
   BaroAltitude = src.GetAltitudeBaroPreferred();
 
   DateTime = src.DateTime;
-  Time = src.aircraft.Time;
+  Time = src.Time;
 
   NAVWarning = src.gps.NAVWarning;
 
@@ -213,7 +213,7 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
     Simulator = true;
   else
     LogFRecordToFile(gps_info.gps.SatelliteIDs,
-                     gps_info.DateTime, gps_info.aircraft.Time,
+                     gps_info.DateTime, gps_info.Time,
                      gps_info.gps.NAVWarning);
 
   if ((gps_info.GPSAltitude < -100) || (gps_info.BaroAltitude < -100)
@@ -221,8 +221,8 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
     return;
   }
 
-  DegLat = (int)gps_info.aircraft.Location.Latitude;
-  MinLat = gps_info.aircraft.Location.Latitude - DegLat;
+  DegLat = (int)gps_info.Location.Latitude;
+  MinLat = gps_info.Location.Latitude - DegLat;
   NoS = 'N';
   if ((MinLat < 0) || ((MinLat - DegLat == 0) && (DegLat < 0))) {
     NoS = 'S';
@@ -232,8 +232,8 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   MinLat *= 60;
   MinLat *= 1000;
 
-  DegLon = (int)gps_info.aircraft.Location.Longitude;
-  MinLon = gps_info.aircraft.Location.Longitude - DegLon;
+  DegLon = (int)gps_info.Location.Longitude;
+  MinLon = gps_info.Location.Longitude - DegLon;
   EoW = 'E';
   if ((MinLon < 0) || ((MinLon - DegLon == 0) && (DegLon < 0))) {
     EoW = 'W';
@@ -260,11 +260,11 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
   } else if (NumLoggerPreTakeoffBuffered) {
     for (int i = 0; i < NumLoggerPreTakeoffBuffered; i++) {
       NMEA_INFO tmp_info;
-      tmp_info.aircraft.Location = LoggerPreTakeoffBuffer[i].Location;
+      tmp_info.Location = LoggerPreTakeoffBuffer[i].Location;
       tmp_info.GPSAltitude = LoggerPreTakeoffBuffer[i].Altitude;
       tmp_info.BaroAltitude = LoggerPreTakeoffBuffer[i].BaroAltitude;
       tmp_info.DateTime = LoggerPreTakeoffBuffer[i].DateTime;
-      tmp_info.aircraft.Time = LoggerPreTakeoffBuffer[i].Time;
+      tmp_info.Time = LoggerPreTakeoffBuffer[i].Time;
       tmp_info.gps.NAVWarning = LoggerPreTakeoffBuffer[i].NAVWarning;
 
       for (int iSat = 0; iSat < MAXSATELLITES; iSat++)

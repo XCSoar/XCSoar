@@ -39,9 +39,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "RasterTerrain.h"
 #include "Thread/Mutex.hpp"
-#include "Language.hpp"
 #include "Interface.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "Dialogs.h"
 #include "DeviceBlackboard.hpp"
@@ -56,58 +54,12 @@ Copyright_License {
    mean even more and more depencies */
 
 Mutex mutexTaskData;
-const TCHAR szRegistryWayPointFile[] = _T("");
-const TCHAR szRegistryAdditionalWayPointFile[] = _T("");
-const TCHAR szRegistryWaypointsOutOfRange[] = _T("");
-const TCHAR szRegistryMapFile[] = _T("");
-const TCHAR szRegistryAlternate1[] = _T("");
-const TCHAR szRegistryAlternate2[] = _T("");
-const TCHAR szRegistryHomeWaypoint[] = _T("");
-const TCHAR szRegistryTeamcodeRefWaypoint[] = _T("");
 DeviceBlackboard device_blackboard;
 
 int WINAPI
 MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 {
   return -1;
-}
-
-void
-StartupStore(const TCHAR *Str, ...)
-{
-  va_list ap;
-
-  va_start(ap, Str);
-  _vftprintf(stderr, Str, ap);
-  va_end(ap);
-}
-
-bool
-GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
-{
-  return false;
-}
-
-HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal)
-{
-  return 0;
-}
-
-bool
-SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
-{
-  return 0;
-}
-
-void
-XCSoarInterface::CreateProgressDialog(const TCHAR* text)
-{
-  _ftprintf(stderr, _T("%s\n"), text);
-}
-
-void
-XCSoarInterface::StepProgressDialog(void)
-{
 }
 
 void
@@ -150,12 +102,6 @@ int
 dlgWaypointOutOfTerrain(const TCHAR *Message)
 {
   return -1;
-}
-
-const TCHAR *
-gettext(const TCHAR *text)
-{
-  return text;
 }
 
 int main(int argc, char **argv)

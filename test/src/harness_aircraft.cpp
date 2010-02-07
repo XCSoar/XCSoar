@@ -42,8 +42,8 @@ AircraftSim::AircraftSim(int _test_num, const TaskManager& task_manager,
   state_last.Location = w[0];
   state.NavAltitude = start_alt;
   state.Time = 0.0;
-  state.WindSpeed = 0.0;
-  state.WindDirection = 0;
+  state.wind.norm = 0.0;
+  state.wind.bearing = 0;
   state.Speed = 16.0;
 
   // start with aircraft moving since this isn't a real replay (no time on ground)
@@ -209,7 +209,7 @@ GEOPOINT AircraftSim::endpoint(const fixed bear) const
 {
   GEOPOINT ref;
   ref = GeoVector(state.TrueAirspeed,bear).end_point(state.Location);
-  return GeoVector(state.WindSpeed,state.WindDirection+fixed_180).end_point(ref);
+  return GeoVector(state.wind.norm, state.wind.bearing + fixed_180).end_point(ref);
 }
 
 void AircraftSim::integrate() {
@@ -230,7 +230,7 @@ bool AircraftSim::advance(TaskManager &task_manager)  {
 
   task_manager.update(state, state_last);
   task_manager.update_idle(state);
-  task_manager.update_auto_mc(state, 0.0);
+  task_manager.update_auto_mc(state, fixed_zero);
   
   state_last = state;
 
@@ -287,6 +287,6 @@ fixed AircraftSim::time() {
 void 
 AircraftSim::set_wind(const double speed, const double direction) 
 {
-  state.WindSpeed = speed;
-  state.WindDirection = direction;
+  state.wind.norm = speed;
+  state.wind.bearing = direction;
 }

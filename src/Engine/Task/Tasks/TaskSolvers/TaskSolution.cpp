@@ -46,7 +46,7 @@ TaskSolution::glide_solution_remaining(const TaskPoint& taskpoint,
 {
   GlideState gs(taskpoint.get_vector_remaining(ac),
                 max(minH,taskpoint.get_elevation()),
-                ac);
+                ac.NavAltitude, ac.wind);
   return polar.solve(gs);
 }
 
@@ -58,7 +58,7 @@ TaskSolution::glide_solution_planned(const TaskPoint& taskpoint,
 {
   GlideState gs(taskpoint.get_vector_planned(),
                 max(minH,taskpoint.get_elevation()),
-                ac);
+                ac.NavAltitude, ac.wind);
   return polar.solve(gs);
 }
 
@@ -75,7 +75,7 @@ TaskSolution::glide_solution_travelled(const TaskPoint& taskpoint,
   } else {
     GlideState gs(vec,
                   max(minH,taskpoint.get_elevation()),
-                  ac);
+                  ac.NavAltitude, ac.wind);
     return polar.solve(gs);
   }
 }
@@ -88,6 +88,6 @@ TaskSolution::glide_solution_sink(const TaskPoint& taskpoint,
 {
   GlideState gs(taskpoint.get_vector_remaining(ac),
                 taskpoint.get_elevation(),
-                ac);
+                ac.NavAltitude, ac.wind);
   return polar.solve_sink(gs,S);
 }

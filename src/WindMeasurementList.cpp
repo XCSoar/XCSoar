@@ -54,7 +54,7 @@ Copyright_License {
 }
 */
 
-#include "WindMeasurementList.h"
+#include "WindMeasurementList.hpp"
 #include "Math/FastMath.h"
 
 #include <stdlib.h>
@@ -80,7 +80,7 @@ WindMeasurementList::~WindMeasurementList()
  * too low quality data).
  */
 const Vector
-WindMeasurementList::getWind(double Time, double alt, bool *found) const
+WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
 {
   //relative weight for each factor
   #define REL_FACTOR_QUALITY 100
@@ -94,23 +94,21 @@ WindMeasurementList::getWind(double Time, double alt, bool *found) const
   unsigned int total_quality = 0;
   unsigned int quality = 0, q_quality = 0, a_quality = 0, t_quality = 0;
 
-  Vector result;
+  Vector result(fixed_zero, fixed_zero);
   WindMeasurement * m;
   int now = (int)(Time);
-  double altdiff = 0;
-  double timediff = 0;
+  fixed altdiff = fixed_zero;
+  fixed timediff = fixed_zero;
 
   *found = false;
 
-  result.x = 0;
-  result.y = 0;
-  double override_time = 1.1;
+  fixed override_time(1.1);
   bool overridden = false;
 
   for (unsigned i = 0; i < nummeasurementlist; i++) {
     m = measurementlist[i];
     altdiff = (alt - m->altitude) * 1.0 / altRange;
-    timediff = fabs((double)(now - m->time) / timeRange);
+    timediff = fabs(fixed(now - m->time) / timeRange);
 
     if ((fabs(altdiff) < 1.0) && (timediff < 1.0)) {
       // measurement quality
@@ -121,7 +119,7 @@ WindMeasurementList::getWind(double Time, double alt, bool *found) const
       a_quality = iround(((2.0 / (altdiff * altdiff + 1.0)) - 1.0)
           * REL_FACTOR_ALTITUDE);
 
-      double k = 0.0025;
+      fixed k(0.0025);
 
       // factor in timedifference. Maximum difference is 1 hours.
       t_quality = iround(k * (1.0 - timediff) / (timediff * timediff + k)
@@ -163,8 +161,8 @@ WindMeasurementList::getWind(double Time, double alt, bool *found) const
 
   if (total_quality > 0) {
     *found = true;
-    result.x = result.x / (int)total_quality;
-    result.y = result.y / (int)total_quality;
+    result = Vector(result.x / (int)total_quality,
+                    result.y / (int)total_quality);
   }
 
   return result;
@@ -174,7 +172,7 @@ WindMeasurementList::getWind(double Time, double alt, bool *found) const
  * Adds the windvector vector with quality quality to the list.
  */
 void
-WindMeasurementList::addMeasurement(double Time, Vector vector, double alt,
+WindMeasurementList::addMeasurement(fixed Time, Vector vector, fixed alt,
     int quality)
 {
   unsigned index;
@@ -205,7 +203,7 @@ WindMeasurementList::addMeasurement(double Time, Vector vector, double alt,
  * removed if the list is too full. Reimplemented from LimitedList.
  */
 unsigned
-WindMeasurementList::getLeastImportantItem(double Time)
+WindMeasurementList::getLeastImportantItem(fixed Time)
 {
   int maxscore = 0;
   int score = 0;
@@ -218,7 +216,7 @@ WindMeasurementList::getLeastImportantItem(double Time)
     //quality-point (scale: 1 to 5) is equal to 10 minutes.
 
     score = 600 * (6 - measurementlist[i]->quality);
-    score += (int)(Time - (double)measurementlist[i]->time);
+    score += (int)(Time - measurementlist[i]->time);
     if (score > maxscore) {
       maxscore = score;
       founditem = i;

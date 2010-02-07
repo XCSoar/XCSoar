@@ -229,7 +229,7 @@ void XCSoarInterface::AfterStartup() {
 
   // Create default task if none exists
   StartupStore(TEXT("Create default task\n"));
-  task_manager.default_task(Basic().aircraft.Location);
+  task_manager.default_task(Basic().Location);
 
 #ifndef OLD_TASK
   test_task(); // for testing only
@@ -368,17 +368,19 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   ReadBlackboardBasic(device_blackboard.Basic());
 
   CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
-  terrain.ServiceFullReload(Basic().aircraft.Location);
+  terrain.ServiceFullReload(Basic().Location);
 
   // Scan for weather forecast
   CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
   StartupStore(TEXT("RASP load\n"));
-  RASP.ScanAll(Basic().aircraft.Location);
+  RASP.ScanAll(Basic().Location);
 
   // Reads the airspace files
   ReadAirspace(airspace_database, &terrain, Basic().pressure);
 
-  airspace_warning.reset(device_blackboard.Basic().aircraft);
+  const AIRCRAFT_STATE aircraft_state =
+    ToAircraftState(device_blackboard.Basic());
+  airspace_warning.reset(aircraft_state);
 
   // Read the FLARM details file
   OpenFLARMDetails();

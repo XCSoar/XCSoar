@@ -58,6 +58,7 @@ include $(topdir)/build/doco.mk
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk
 include $(topdir)/build/compat.mk
+include $(topdir)/build/driver.mk
 include $(topdir)/build/shapelib.mk
 include $(topdir)/build/task.mk
 include $(topdir)/build/datafield.mk
@@ -84,24 +85,6 @@ LDFLAGS = $(TARGET_LDFLAGS) $(FLAGS_PROFILE)
 LDLIBS = $(TARGET_LDLIBS) $(GCONF_LDLIBS)
 
 ####### sources
-
-DRIVER_SOURCES = \
-	$(SRC)/Device/Driver/AltairPro.cpp \
-	$(SRC)/Device/Driver/BorgeltB50.cpp \
-	$(SRC)/Device/Driver/CAI302.cpp \
-	$(SRC)/Device/Driver/CaiGpsNav.cpp \
-	$(SRC)/Device/Driver/Condor.cpp \
-	$(SRC)/Device/Driver/EW.cpp \
-	$(SRC)/Device/Driver/EWMicroRecorder.cpp \
-	$(SRC)/Device/Driver/FlymasterF1.cpp \
-	$(SRC)/Device/Driver/Generic.cpp \
-	$(SRC)/Device/Driver/LX.cpp \
-	$(SRC)/Device/Driver/NmeaOut.cpp \
-	$(SRC)/Device/Driver/PosiGraph.cpp \
-	$(SRC)/Device/Driver/Vega.cpp \
-	$(SRC)/Device/Driver/Volkslogger.cpp \
-	$(SRC)/Device/Driver/XCOM760.cpp \
-	$(SRC)/Device/Driver/Zander.cpp
 
 DIALOG_SOURCES = \
 	$(SRC)/Dialogs/XML.cpp \
@@ -140,18 +123,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgWayPointSelect.cpp \
 	$(SRC)/Dialogs/dlgWindSettings.cpp \
 	$(SRC)/Dialogs/dlgFontEdit.cpp \
-
-VOLKSLOGGER_SOURCES = \
-	$(SRC)/Device/Volkslogger/dbbconv.cpp \
-	$(SRC)/Device/Volkslogger/grecord.cpp \
-	$(SRC)/Device/Volkslogger/vlapi2.cpp \
-	$(SRC)/Device/Volkslogger/vlapihlp.cpp \
-	$(SRC)/Device/Volkslogger/vlapisys_win.cpp \
-	$(SRC)/Device/Volkslogger/vlconv.cpp
-
-ifeq ($(HAVE_MSVCRT),n)
-VOLKSLOGGER_SOURCES += $(SRC)/Device/Volkslogger/vlutils.cpp
-endif
 
 
 XCSOAR_SOURCES := \
@@ -215,6 +186,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InputEventsActions.cpp \
 	$(SRC)/StatusMessage.cpp \
 	$(SRC)/PopupMessage.cpp \
+	$(SRC)/Message.cpp \
 	$(SRC)/LogFile.cpp \
 	\
 	$(SRC)/MapDrawHelper.cpp \
@@ -335,8 +307,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Port.cpp \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Internal.cpp \
-	$(DRIVER_SOURCES) \
-	$(VOLKSLOGGER_SOURCES) \
 	$(DIALOG_SOURCES)
 
 #	$(SRC)/VarioSound.cpp \
@@ -348,6 +318,7 @@ XCSOAR_LDADD = \
 	$(DATA_FIELD_LIBS) \
 	$(FORM_LIBS) \
 	$(SCREEN_LIBS) \
+	$(DRIVER_LIBS) \
 	$(ENGINE_LIBS) \
 	$(SHAPELIB_LIBS) \
 	$(JASPER_LIBS) \

@@ -55,7 +55,7 @@ public:
   const DERIVED_INFO& LastCalculated() const { return last_calculated_info; }
 protected:
   bool time_advanced() {
-    return Basic().aircraft.Time - LastBasic().aircraft.Time > 0;
+    return Basic().Time - LastBasic().Time > 0;
   }
   /**
    * @see GlideComputerBlackboard::ReadBlackboard()

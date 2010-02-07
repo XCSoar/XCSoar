@@ -46,6 +46,7 @@ Copyright_License {
 #include "RasterWeather.h"
 
 #include <math.h>
+#include <stdio.h>
 
 double MapWindow::findMapScaleBarSize(const RECT rc) {
   double pixelsize = DistanceScreenToUser(1); // units/pixel

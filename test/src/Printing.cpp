@@ -563,7 +563,6 @@ OnlineContest::print() const
          it != m_trace_points_full.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
-         << " " << it->rank
          << "\n";
     }
   }
@@ -575,7 +574,6 @@ OnlineContest::print() const
          it != m_trace_points_sprint.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
          << " " << it->NavAltitude << " " << it->time 
-         << " " << it->rank
          << "\n";
     }
   }

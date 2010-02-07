@@ -50,6 +50,7 @@ Copyright_License {
 #include "Task/TaskManager.hpp"
 
 #include <stdlib.h>
+#include <stdio.h>
 
 void
 MapWindow::DrawCrossHairs(Canvas &canvas)
@@ -104,7 +105,7 @@ MapWindow::DrawAircraft(Canvas &canvas)
 
     PolygonRotateShift(Aircraft, NUMAIRCRAFTPOINTS, GetOrigAircraft().x+1,
                        GetOrigAircraft().y+1, DisplayAircraftAngle +
-                       (Basic().Heading - Basic().aircraft.TrackBearing));
+                       (Basic().Heading - Basic().TrackBearing));
 
     canvas.polygon(Aircraft, NUMAIRCRAFTPOINTS);
 
@@ -153,7 +154,7 @@ MapWindow::DrawAircraft(Canvas &canvas)
       int n = sizeof(Aircraft) / sizeof(Aircraft[0]);
 
     const fixed angle = DisplayAircraftAngle +
-                        (Basic().Heading - Basic().aircraft.TrackBearing);
+                        (Basic().Heading - Basic().TrackBearing);
 
     PolygonRotateShift(Aircraft, n, GetOrigAircraft().x - 1, GetOrigAircraft().y, angle);
 
@@ -214,8 +215,8 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
 
   if (!Appearance.DontShowLoggerIndicator) {
     // has GPS time advanced?
-    if (Basic().aircraft.Time <= LastTime) {
-      LastTime = Basic().aircraft.Time;
+    if (Basic().Time <= LastTime) {
+      LastTime = Basic().Time;
     } else {
       flip = !flip;
 
@@ -313,7 +314,9 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
   TCHAR sTmp[12];
   static SIZE tsize = { 0, 0 };
 
-  if (Basic().aircraft.WindSpeed < 1)
+  const SpeedVector wind = Basic().wind;
+
+  if (wind.norm < fixed_one)
     // JMW don't bother drawing it if not significant
     return;
 
@@ -326,7 +329,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
   canvas.select(MapGfx.hpWind);
   canvas.select(MapGfx.hbWind);
 
-  int wmag = iround(4.0 * Basic().aircraft.WindSpeed);
+  int wmag = iround(4.0 * wind.norm);
 
   Start.y = Orig.y;
   Start.x = Orig.x;
@@ -347,7 +350,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
     Arrow[i].y -= wmag;
 
   PolygonRotateShift(Arrow, 7, Start.x, Start.y,
-                     Basic().aircraft.WindDirection - GetDisplayAngle());
+                     wind.bearing - GetDisplayAngle());
 
   canvas.polygon(Arrow, 5);
 
@@ -357,8 +360,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
       { 0, Layout::FastScale(-26 - min(20, wmag) * 3) },
     };
 
-    double angle = AngleLimit360(Basic().aircraft.WindDirection
-                                 - GetDisplayAngle());
+    double angle = AngleLimit360(wind.bearing - GetDisplayAngle());
     for (i = 0; i < 2; i++) {
       protateshift(Tail[i], angle, Start.x, Start.y);
     }
@@ -370,8 +372,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
   }
 
   _stprintf(sTmp, TEXT("%i"),
-            iround(Units::ToUserUnit(Basic().aircraft.WindSpeed,
-                                     Units::UserWindSpeedUnit)));
+            iround(Units::ToUserUnit(wind.norm, Units::UserWindSpeedUnit)));
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 }; // JMW test {2 | 16};
   if (Arrow[5].y >= Arrow[6].y) {
@@ -737,7 +738,7 @@ void MapWindow::DrawCDI() {
 
   if (dodrawcdi) {
     cdi->show_on_top();
-    cdi->Update(Basic().aircraft.TrackBearing,
+    cdi->Update(Basic().TrackBearing,
         Calculated().task_stats.current_leg.solution_remaining.Vector.Bearing);
   } else {
     cdi->hide();

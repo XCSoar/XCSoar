@@ -71,7 +71,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "SettingsUser.hpp"
 #include "Math/FastMath.h"
 #include "Dialogs.h"
-#include "Message.h"
+#include "Message.hpp"
 #include "Marks.h"
 #include "InfoBoxLayout.hpp"
 #include "InfoBoxManager.hpp"
@@ -129,7 +129,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
   if (_tcscmp(misc, TEXT("reset")) == 0) {
     marks->Reset();
   } else {
-    marks->MarkLocation(Basic().aircraft.Location);
+    marks->MarkLocation(Basic().Location);
   }
 }
 
@@ -552,7 +552,7 @@ InputEvents::eventClearStatusMessages(const TCHAR *misc)
 {
   (void)misc;
   // TODO enhancement: allow selection of specific messages (here we are acknowledging all)
-  Message::Acknowledge(0);
+  main_window.popup.Acknowledge(0);
 }
 
 void
@@ -783,7 +783,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
     }
   } else if (_tcscmp(misc, TEXT("select")) == 0) {
     ScopePopupBlock block(main_window.popup);
-    wp = dlgWayPointSelect(Basic().aircraft.Location);
+    wp = dlgWayPointSelect(Basic().Location);
   }
   if (wp) {
     ScopePopupBlock block(main_window.popup);
@@ -795,7 +795,7 @@ void
 InputEvents::eventGotoLookup(const TCHAR *misc)
 {
   ScopePopupBlock block(main_window.popup);
-  const Waypoint* wp = dlgWayPointSelect(Basic().aircraft.Location);
+  const Waypoint* wp = dlgWayPointSelect(Basic().Location);
   if (wp) {
     task_manager.do_goto(*wp);
   }
@@ -978,14 +978,14 @@ InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
     dlgVegaDemoShowModal();
   } else if (_tcscmp(misc, TEXT("zero"))==0) {
     // zero, no mixing
-    if (!Basic().aircraft.Flying) {
+    if (!Basic().flight.Flying) {
       VarioWriteNMEA(TEXT("PDVSC,S,ZeroASI,1"));
     }
   } else if (_tcscmp(misc, TEXT("save")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
 
   // accel calibration
-  } else if (!Basic().aircraft.Flying) {
+  } else if (!Basic().flight.Flying) {
     if (_tcscmp(misc, TEXT("X1"))==0)
       VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,1"));
     else if (_tcscmp(misc, TEXT("X2"))==0)
@@ -1214,7 +1214,7 @@ InputEvents::eventRepeatStatusMessage(const TCHAR *misc)
   (void)misc;
   // new interface
   // TODO enhancement: display only by type specified in misc field
-  Message::Repeat(0);
+  main_window.popup.Repeat(0);
 }
 
 // NearestAirspaceDetails
@@ -1238,10 +1238,11 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
     return;
   }
 
+  const AIRCRAFT_STATE aircraft_state = ToAircraftState(Basic());
   AirspaceVisible visible(SettingsComputer(),
                           Basic().GetAltitudeBaroPreferred());
   AirspaceAircraftPerformanceSimple perf;
-  AirspaceSoonestSort ans(Basic().aircraft, perf, fixed(1800), visible);
+  AirspaceSoonestSort ans(aircraft_state, perf, fixed(1800), visible);
 
   const AbstractAirspace* as = ans.find_nearest(airspace_database);
   if (!as) {
@@ -1252,7 +1253,7 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
   dlgAirspaceDetails(*as);
 
   // clear previous warning if any
-  Message::Acknowledge(Message::MSG_AIRSPACE);
+  main_window.popup.Acknowledge(PopupMessage::MSG_AIRSPACE);
 
   // TODO code: No control via status data (ala DoStatusMEssage)
   // - can we change this?
@@ -1268,11 +1269,11 @@ InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("aircraft")) == 0)
     // big range..
-    PopupNearestWaypointDetails(way_points, Basic().aircraft.Location,
+    PopupNearestWaypointDetails(way_points, Basic().Location,
                                 1.0e5, false);
   else if (_tcscmp(misc, TEXT("pan")) == 0)
     // big range..
-    PopupNearestWaypointDetails(way_points, Basic().aircraft.Location,
+    PopupNearestWaypointDetails(way_points, Basic().Location,
                                 1.0e5, true);
 }
 
@@ -1620,7 +1621,7 @@ void
 InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
   ScopePopupBlock block(main_window.popup);
-  Waypoint edit_waypoint = way_points.create(Basic().aircraft.Location);
+  Waypoint edit_waypoint = way_points.create(Basic().Location);
   if (dlgWaypointEditShowModal(edit_waypoint)) {
     if (edit_waypoint.Name.size()) {
       way_points.append(edit_waypoint);
@@ -1779,7 +1780,7 @@ InputEvents::sub_Pan(int vswitch)
 
   if (SettingsMap().EnablePan != oldPan) {
     if (SettingsMap().EnablePan) {
-      SetSettingsMap().PanLocation = Basic().aircraft.Location;
+      SetSettingsMap().PanLocation = Basic().Location;
       setMode(MODE_PAN);
     } else {
       setMode(MODE_DEFAULT);

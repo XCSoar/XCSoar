@@ -24,14 +24,14 @@
  * @author André Somers
  */
 
-#include "Vector.h"
+#include "Vector.hpp"
 
 struct WindMeasurement
 {
   Vector vector;
   int quality;
   long time;
-  double altitude;
+  fixed altitude;
 };
 
 /** maximum number of windmeasurements in the list. */
@@ -48,10 +48,10 @@ public:
    * if no valid vector could be calculated (for instance: too little or
    * too low quality data).
    */
-  const Vector getWind(double Time, double alt, bool *found) const;
+  const Vector getWind(fixed Time, fixed alt, bool *found) const;
 
   /** Adds the windvector vector with quality quality to the list. */
-  void addMeasurement(double Time, Vector vector, double alt, int quality);
+  void addMeasurement(fixed Time, Vector vector, fixed alt, int quality);
 
 protected:
   WindMeasurement *measurementlist[MAX_MEASUREMENTS];
@@ -61,7 +61,7 @@ protected:
    * getLeastImportantItem is called to identify the item that should be
    * removed if the list is too full. Reimplemented from LimitedList.
    */
-  virtual unsigned int getLeastImportantItem(double Time);
+  virtual unsigned int getLeastImportantItem(fixed Time);
 
  private:
 };

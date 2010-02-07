@@ -37,7 +37,7 @@
 #include "GlideState.hpp"
 #include <math.h>
 #include "Util/Quadratic.hpp"
-#include "Navigation/Aircraft.hpp"
+#include "Navigation/SpeedVector.hpp"
 
 /**
  * Quadratic function solver for MacCready theory constraint equation
@@ -89,24 +89,24 @@ GlideState::calc_ave_speed(const fixed Veff) const
 
 // dummy task
 GlideState::GlideState(const GeoVector &vector, const fixed htarget,
-    const AIRCRAFT_STATE &aircraft) :
+                       fixed altitude, const SpeedVector wind) :
   Vector(vector),
-  MinHeight(htarget)
+  MinHeight(htarget),
+  AltitudeDifference(altitude - MinHeight)
 {
-  calc_speedups(aircraft);
+  calc_speedups(wind);
 }
 
 void
-GlideState::calc_speedups(const AIRCRAFT_STATE &aircraft)
+GlideState::calc_speedups(const SpeedVector wind)
 {
-  AltitudeDifference = (aircraft.NavAltitude - MinHeight);
-  if (positive(aircraft.WindSpeed)) {
-    WindDirection = aircraft.WindDirection;
-    EffectiveWindSpeed = aircraft.WindSpeed;
-    const fixed theta = fixed_180 + aircraft.WindDirection - Vector.Bearing;
+  if (positive(wind.norm)) {
+    WindDirection = wind.bearing;
+    EffectiveWindSpeed = wind.norm;
+    const fixed theta = fixed_180 + wind.bearing - Vector.Bearing;
     EffectiveWindAngle = theta;
-    wsq_ = aircraft.WindSpeed * aircraft.WindSpeed;
-    HeadWind = -aircraft.WindSpeed * cos(fixed_deg_to_rad * theta);
+    wsq_ = wind.norm * wind.norm;
+    HeadWind = -wind.norm * cos(fixed_deg_to_rad * theta);
     dwcostheta_ = fixed_two * HeadWind;
   } else {
     WindDirection = fixed_zero;

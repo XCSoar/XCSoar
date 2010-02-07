@@ -459,7 +459,9 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
   HDC hdc;
   PAINTSTRUCT ps;
+#if _WIN32_WCE >= 0x0420
   SHRGINFO rg;
+#endif
   int x, y;
   int i;
 
@@ -501,6 +503,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
     return FALSE;
 
+#if _WIN32_WCE >= 0x0420
 	case WM_LBUTTONDOWN:
     SelItem = Point2Item(LOWORD(lParam), HIWORD(lParam));
     InvalidateRect(hWnd, NULL, FALSE);
@@ -538,6 +541,7 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 #endif
 		SetCapture(hWnd);
     break;
+#endif
 
   case WM_LBUTTONUP:
     ShowWindow(hToolTip, SW_HIDE);

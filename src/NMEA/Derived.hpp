@@ -41,6 +41,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "Navigation/SpeedVector.hpp"
 #include "Task/TaskStats/TaskStats.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
 
@@ -221,9 +222,7 @@ struct DERIVED_INFO:
   fixed V_stf; /**< Speed to fly block/dolphin (m/s) */
 
   /** Wind speed */
-  fixed WindSpeed_estimated;
-  /** Wind bearing */
-  fixed WindBearing_estimated;
+  SpeedVector estimated_wind;
 
   // reflects whether aircraft is in a start/finish/aat/turn sector
   bool IsInSector;

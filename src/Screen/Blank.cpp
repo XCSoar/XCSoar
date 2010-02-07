@@ -44,7 +44,7 @@ Copyright_License {
 #include "Battery.h"
 #include "Dialogs.h"
 #include "LogFile.hpp"
-#include "Message.h"
+#include "Message.hpp"
 #include "Simulator.hpp"
 
 // GDI Escapes for ExtEscape()

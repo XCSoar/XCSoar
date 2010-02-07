@@ -38,6 +38,7 @@
 #define AIRCRAFT_HPP
 
 #include "GeoPoint.hpp"
+#include "SpeedVector.hpp"
 
 /**
  * @file
@@ -104,19 +105,6 @@ struct ALTITUDE_STATE
 
   /** Thermal drift factor */
   fixed thermal_drift_factor() const;
-};
-
-/**
- * Structure for wind state data 
- */
-struct WIND_STATE 
-{
-  //##############
-  //   Wind
-  //##############
-
-  fixed WindSpeed; /**< Wind speed (m/s); must be positive */
-  fixed WindDirection; /**< Direction of travel of wind (degrees) */
 };
 
 /**
@@ -191,7 +179,6 @@ struct AIRCRAFT_STATE:
   public ALTITUDE_STATE,
   public SPEED_STATE,
   public VARIO_STATE,
-  public WIND_STATE,
   public FLYING_STATE
 {
   AIRCRAFT_STATE();
@@ -225,6 +212,8 @@ struct AIRCRAFT_STATE:
   const GEOPOINT& get_location() const {
     return Location;
   }
+
+  SpeedVector wind;
 
 /**
  * Calculate predicted state in future.

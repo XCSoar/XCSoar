@@ -66,14 +66,14 @@ MapWindow::DrawTrail(Canvas &canvas)
   unsigned min_time = 0;
 
   if (DisplayMode == dmCircling) {
-    min_time = max(0, (int)Basic().aircraft.Time - 600);
+    min_time = max(0, (int)Basic().Time - 600);
   } else {
     switch(SettingsMap().TrailActive) {
     case 1:
-      min_time = max(0, (int)Basic().aircraft.Time - 3600);
+      min_time = max(0, (int)Basic().Time - 3600);
       break;
     case 2:
-      min_time = max(0, (int)Basic().aircraft.Time - 600);
+      min_time = max(0, (int)Basic().Time - 600);
       break;
     case 0:
       min_time = 0; // full
@@ -105,11 +105,11 @@ MapWindow::DrawTrail(Canvas &canvas)
   if (SettingsMap().EnableTrailDrift && (DisplayMode == dmCircling)) {
     GEOPOINT tp1;
 
-    FindLatitudeLongitude(Basic().aircraft.Location,
-                          Basic().aircraft.WindDirection,
-                          Basic().aircraft.WindSpeed,
+    FindLatitudeLongitude(Basic().Location,
+                          Basic().wind.bearing,
+                          Basic().wind.norm,
                           &tp1);
-    traildrift = Basic().aircraft.Location - tp1;
+    traildrift = Basic().Location - tp1;
   }
 
   fixed vario_max = fixed(0.75);
@@ -130,7 +130,7 @@ MapWindow::DrawTrail(Canvas &canvas)
        it != trace.end(); ++it) {
 
     POINT pt;
-    const fixed dt = (Basic().aircraft.Time - it->time) * it->drift_factor;
+    const fixed dt = (Basic().Time - it->time) * it->drift_factor;
     LonLat2Screen(it->get_location().parametric(traildrift, dt), pt);
 
     if (it->last_time != last_time) {
