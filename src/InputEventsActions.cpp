@@ -552,7 +552,7 @@ InputEvents::eventClearStatusMessages(const TCHAR *misc)
 {
   (void)misc;
   // TODO enhancement: allow selection of specific messages (here we are acknowledging all)
-  Message::Acknowledge(0);
+  main_window.popup.Acknowledge(0);
 }
 
 void
@@ -1214,7 +1214,7 @@ InputEvents::eventRepeatStatusMessage(const TCHAR *misc)
   (void)misc;
   // new interface
   // TODO enhancement: display only by type specified in misc field
-  Message::Repeat(0);
+  main_window.popup.Repeat(0);
 }
 
 // NearestAirspaceDetails
@@ -1252,7 +1252,7 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
   dlgAirspaceDetails(*as);
 
   // clear previous warning if any
-  Message::Acknowledge(Message::MSG_AIRSPACE);
+  main_window.popup.Acknowledge(PopupMessage::MSG_AIRSPACE);
 
   // TODO code: No control via status data (ala DoStatusMEssage)
   // - can we change this?

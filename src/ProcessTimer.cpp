@@ -45,7 +45,6 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Screen/Blank.hpp"
 #include "SettingsUser.hpp"
-#include "Message.h"
 #include "UtilsSystem.hpp"
 #include "InfoBoxManager.hpp"
 #include "MapWindow.hpp"
@@ -82,7 +81,7 @@ ProcessTimer::MessageProcessTimer()
 {
   // don't display messages if airspace warning dialog is active
   if (!dlgAirspaceWarningVisible()) {
-    if (Message::Render()) {
+    if (main_window.popup.Render()) {
       // turn screen on if blanked and receive a new message
       ResetDisplayTimeOut();
     }

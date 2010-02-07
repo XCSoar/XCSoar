@@ -41,33 +41,12 @@ Copyright_License {
 
 #include "MainWindow.hpp"
 
-class StatusMessageList;
-
 class Message : public PopupMessage {
  public:
   Message();
 
-  static bool Render() {
-    return main_window.popup.Render();
-  }
-
-  static void AddMessage(DWORD tshow, int type, TCHAR *Text) {
-    main_window.popup.AddMessage(tshow, type, Text);
-  }
-
   static void AddMessage(const TCHAR* text, const TCHAR *data=NULL) {
     main_window.popup.AddMessage(text, data);
-  }
-
-  // repeats last non-visible message of specified type (or any message
-  // type=0)
-  static void Repeat(int type) {
-    main_window.popup.Repeat(type);
-  }
-
-  // clears all visible messages (of specified type or if type=0, all)
-  static bool Acknowledge(int type) {
-    return main_window.popup.Acknowledge(type);
   }
 };
 
