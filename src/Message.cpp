@@ -36,13 +36,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MESSAGE_HPP
-#define XCSOAR_MESSAGE_HPP
+#include "Message.hpp"
+#include "MainWindow.hpp"
 
-#include <tchar.h>
-
-namespace Message {
-  void AddMessage(const TCHAR* text, const TCHAR *data=NULL);
-};
-
-#endif
+void
+Message::AddMessage(const TCHAR* text, const TCHAR *data)
+{
+  CommonInterface::main_window.popup.AddMessage(text, data);
+}

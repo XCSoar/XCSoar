@@ -215,6 +215,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InputEventsActions.cpp \
 	$(SRC)/StatusMessage.cpp \
 	$(SRC)/PopupMessage.cpp \
+	$(SRC)/Message.cpp \
 	$(SRC)/LogFile.cpp \
 	\
 	$(SRC)/MapDrawHelper.cpp \
