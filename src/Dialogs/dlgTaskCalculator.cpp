@@ -278,7 +278,9 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-void dlgTaskCalculatorShowModal(void){
+void
+dlgTaskCalculatorShowModal(SingleWindow &parent)
+{
   wf = dlgLoadFromXML(CallBackTable,
                       _T("dlgTaskCalculator.xml"),
 		      XCSoarInterface::main_window,

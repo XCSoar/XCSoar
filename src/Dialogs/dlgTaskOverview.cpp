@@ -372,7 +372,7 @@ OnCalcClicked(WindowControl *Sender)
   (void)Sender;
 
   wf->hide();
-  dlgTaskCalculatorShowModal();
+  dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
   OverviewRefreshTask();
   wf->show();
 }
