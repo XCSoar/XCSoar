@@ -158,7 +158,6 @@ ActionInterface::on_key_Alternate1(int UpDown)
      if ( SettingsComputer().Alternate1 <0 ) return;
      task.setSelected(SettingsComputer().Alternate1);
 
-     ScopePopupBlock block(main_window.popup);
      dlgWayPointDetailsShowModal(way_point);
   }
 #endif
@@ -173,7 +172,6 @@ ActionInterface::on_key_Alternate2(int UpDown)
        return;
      task.setSelected(SettingsComputer().Alternate2);
 
-     ScopePopupBlock block(main_window.popup);
      dlgWayPointDetailsShowModal(way_point);
   }
 #endif
@@ -188,7 +186,6 @@ ActionInterface::on_key_BestAlternate(int UpDown)
        return;
      task.setSelected(Calculated().BestAlternate);
 
-     ScopePopupBlock block(main_window.popup);
      dlgWayPointDetailsShowModal(way_point);
   }
 #endif
@@ -365,7 +362,6 @@ ActionInterface::on_key_Waypoint(int UpDown)
   } else if (UpDown<0){
     task_manager.incrementActiveTaskPoint(-1);
   } else if (UpDown==0) {
-    ScopePopupBlock block(main_window.popup);
     const TaskPoint *tp = task_manager.getActiveTaskPoint();
     if (tp) {
       const Waypoint* wp = &tp->get_waypoint();

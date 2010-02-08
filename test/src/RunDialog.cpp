@@ -41,7 +41,6 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 #include "Screen/Layout.hpp"
 #include "InputEvents.h"
-#include "PopupMessage.hpp"
 #include "MapWindow.hpp"
 #include "StatusMessage.hpp"
 #include "Asset.hpp"
@@ -74,11 +73,6 @@ pt2Event
 InputEvents::findEvent(const TCHAR *)
 {
   return NULL;
-}
-
-void
-PopupMessage::BlockRender(bool doblock)
-{
 }
 
 #ifndef ENABLE_SDL

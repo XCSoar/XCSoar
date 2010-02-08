@@ -700,7 +700,6 @@ void
 InputEvents::eventChecklist(const TCHAR *misc)
 {
   (void)misc;
-  ScopePopupBlock block(main_window.popup);
   dlgChecklistShowModal();
 }
 
@@ -711,7 +710,6 @@ void
 InputEvents::eventFlarmTraffic(const TCHAR *misc)
 {
   (void)misc;
-  ScopePopupBlock block(main_window.popup);
   dlgFlarmTrafficShowModal();
 }
 
@@ -722,7 +720,6 @@ void
 InputEvents::eventCalculator(const TCHAR *misc)
 {
   (void)misc;
-  ScopePopupBlock block(main_window.popup);
   dlgTaskCalculatorShowModal(main_window);
 }
 
@@ -736,7 +733,6 @@ InputEvents::eventCalculator(const TCHAR *misc)
 void
 InputEvents::eventStatus(const TCHAR *misc)
 {
-  ScopePopupBlock block(main_window.popup);
   if (_tcscmp(misc, TEXT("system")) == 0) {
     dlgStatusShowModal(1);
   } else if (_tcscmp(misc, TEXT("task")) == 0) {
@@ -782,11 +778,9 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
       return;
     }
   } else if (_tcscmp(misc, TEXT("select")) == 0) {
-    ScopePopupBlock block(main_window.popup);
     wp = dlgWayPointSelect(Basic().Location);
   }
   if (wp) {
-    ScopePopupBlock block(main_window.popup);
     dlgWayPointDetailsShowModal(*wp);
   }
 }
@@ -794,7 +788,6 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 void
 InputEvents::eventGotoLookup(const TCHAR *misc)
 {
-  ScopePopupBlock block(main_window.popup);
   const Waypoint* wp = dlgWayPointSelect(Basic().Location);
   if (wp) {
     task_manager.do_goto(*wp);
@@ -974,7 +967,6 @@ InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
       naccel = 0;
 
   } else if (_tcscmp(misc, TEXT("xdemo")) == 0) {
-    ScopePopupBlock block(main_window.popup);
     dlgVegaDemoShowModal();
   } else if (_tcscmp(misc, TEXT("zero"))==0) {
     // zero, no mixing
@@ -1249,7 +1241,6 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
     return;
   } 
 
-  ScopePopupBlock block(main_window.popup);
   dlgAirspaceDetails(*as);
 
   // clear previous warning if any
@@ -1359,8 +1350,6 @@ void SystemConfiguration(void);
 void
 InputEvents::eventSetup(const TCHAR *misc)
 {
-  ScopePopupBlock block(main_window.popup);
-
   if (_tcscmp(misc, TEXT("Basic")) == 0)
     dlgBasicSettingsShowModal();
   else if (_tcscmp(misc, TEXT("Wind")) == 0)
@@ -1575,7 +1564,6 @@ InputEvents::eventBrightness(const TCHAR *misc)
 {
   (void)misc;
 
-  ScopePopupBlock block(main_window.popup);
   dlgBrightnessShowModal();
 }
 
@@ -1620,7 +1608,6 @@ InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
 void
 InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
-  ScopePopupBlock block(main_window.popup);
   Waypoint edit_waypoint = way_points.create(Basic().Location);
   if (dlgWaypointEditShowModal(edit_waypoint)) {
     if (edit_waypoint.Name.size()) {
