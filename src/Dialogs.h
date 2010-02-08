@@ -80,7 +80,10 @@ void dlgVegaDemoShowModal();
 bool dlgConfigurationVarioShowModal();
 void dlgLoggerReplayShowModal();
 void dlgStartupShowModal();
-void dlgTaskCalculatorShowModal();
+
+void
+dlgTaskCalculatorShowModal(SingleWindow &parent);
+
 void dlgWindSettingsShowModal();
 void dlgStartTaskShowModal(bool *validStart, double Time, double Speed,
     double Altitude);

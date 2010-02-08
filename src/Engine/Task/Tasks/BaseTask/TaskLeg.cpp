@@ -255,7 +255,7 @@ TaskLeg::scan_distance_planned()
 
 
 fixed 
-TaskLeg::scan_distance_max() 
+TaskLeg::scan_distance_max() const
 {
   return leg_distance_max()
     +(next()? next()->scan_distance_max():fixed_zero);
@@ -263,7 +263,7 @@ TaskLeg::scan_distance_max()
 
 
 fixed 
-TaskLeg::scan_distance_min() 
+TaskLeg::scan_distance_min() const
 {
   return leg_distance_min()
     +(next()? next()->scan_distance_min():fixed_zero);
@@ -271,14 +271,14 @@ TaskLeg::scan_distance_min()
 
 
 fixed 
-TaskLeg::scan_distance_nominal() 
+TaskLeg::scan_distance_nominal() const
 {
   return leg_distance_nominal()
     +(next()? next()->scan_distance_nominal():fixed_zero);
 }
 
 fixed 
-TaskLeg::scan_distance_scored(const GEOPOINT &ref) 
+TaskLeg::scan_distance_scored(const GEOPOINT &ref) const
 {
   return leg_distance_scored(ref)
     +(next()? next()->scan_distance_scored(ref):fixed_zero);

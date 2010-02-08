@@ -335,7 +335,7 @@ OnCalcClicked(WindowControl *Sender)
   }
   if (page == ANALYSIS_PAGE_CLIMB) {
     wf->hide();
-    dlgTaskCalculatorShowModal();
+    dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
     wf->show();
   }
   if (page == ANALYSIS_PAGE_WIND) {
@@ -349,7 +349,7 @@ OnCalcClicked(WindowControl *Sender)
   }
   if ((page == ANALYSIS_PAGE_TASK) || (page == ANALYSIS_PAGE_TASK_SPEED)) {
     wf->hide();
-    dlgTaskCalculatorShowModal();
+    dlgTaskCalculatorShowModal(XCSoarInterface::main_window);
     wf->show();
   }
   if (page == ANALYSIS_PAGE_OLC) {

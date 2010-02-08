@@ -63,6 +63,9 @@ Copyright_License {
 #define gcc_unused __attribute__((unused))
 #define gcc_warn_unused_result __attribute__((warn_unused_result))
 
+#define gcc_likely(x) __builtin_expect (!!(x), 1)
+#define gcc_unlikely(x) __builtin_expect (!!(x), 0)
+
 #else /* ! GCC_VERSION >= 30000 */
 
 /* generic C compiler */
@@ -78,6 +81,9 @@ Copyright_License {
 #define gcc_sentinel
 #define gcc_unused
 #define gcc_warn_unused_result
+
+#define gcc_likely(x) (x)
+#define gcc_unlikely(x) (x)
 
 #endif /* ! GCC_VERSION >= 30000 */
 

@@ -71,7 +71,7 @@ public:
  * 
  * @return Distance (m) of nominal task
  */
-  fixed scan_distance_nominal();
+  fixed scan_distance_nominal() const;
 
 /** 
  * Calculate distance of planned task (sum of distances from each leg's
@@ -89,7 +89,7 @@ public:
  * 
  * @return Distance (m) of maximum achievable task
  */
-  fixed scan_distance_max();
+  fixed scan_distance_max() const;
 
 /** 
  * Calculate distance of minimum achievable task (sum of distances from
@@ -98,7 +98,7 @@ public:
  *
  * @return Distance (m) of minimum achievable task
  */
-  fixed scan_distance_min();
+  fixed scan_distance_min() const;
 
 /** 
  * Calculate distance of planned task (sum of distances from aircraft to
@@ -118,7 +118,7 @@ public:
  * 
  * @return Distance (m) achieved adjusted for scoring
  */
-  fixed scan_distance_scored(const GEOPOINT &ref);
+  fixed scan_distance_scored(const GEOPOINT &ref) const;
 
 /** 
  * Calculate distance of achieved part of task.
