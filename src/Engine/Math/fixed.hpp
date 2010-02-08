@@ -253,7 +253,7 @@ public:
     fixed log() const;
     fixed& operator%=(fixed const& other);
     fixed& operator*=(fixed const& val);
-    fixed& operator/=(fixed const& val);
+    fixed& operator/=(fixed const divisor);
     fixed& operator-=(fixed const& val)
     {
         m_nVal -= val.m_nVal;

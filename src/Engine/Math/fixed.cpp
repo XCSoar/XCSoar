@@ -3,6 +3,8 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // (C) Copyright 2007 Anthony Williams
 #include "fixed.hpp"
+#include "Compiler.h"
+
 #ifndef FIXED_MATH
 
 void sin_cos(const double&theta, double*s, double*c)
@@ -72,59 +74,42 @@ fixed& fixed::operator*=(fixed const& val)
 }
 
 
-fixed& fixed::operator/=(fixed const& divisor)
+fixed& fixed::operator/=(fixed const divisor)
 {
-    if( !divisor.m_nVal)
-    {
-        m_nVal=fixed_max.m_nVal;
-    }
-    else
-    {
-        bool const negate_this=(m_nVal<0);
-        bool const negate_divisor=(divisor.m_nVal<0);
-        bool const negate=negate_this ^ negate_divisor;
-        uvalue_t a=negate_this?-m_nVal:m_nVal;
-        uvalue_t b=negate_divisor?-divisor.m_nVal:divisor.m_nVal;
+  /* This is an approximate fixed point division.  Problem was: for
+     doing fixed point division, we have to shift the numerator left
+     by "resolution_shift" bits, and divide by then denominator then;
+     the first shift would however overflow.  Solution: shift as many
+     bytes left as long as the highest-order bit doesn't get lost, and
+     apply the remaining bits as a "right shift" to the denominator.
+     The result is approximately the same, and for XCSoar, we can
+     neglect the error. */
 
-        uvalue_t res=0;
-    
-        uvalue_t temp=b;
-        bool const a_large=a>b;
-        unsigned shift=resolution_shift;
+  enum {
+    /** number of bits in a value_f */
+    bits = sizeof(value_t) * 8,
+  };
 
-        if(a_large)
-        {
-            uvalue_t const half_a=a>>1;
-            while(temp<half_a)
-            {
-                temp<<=1;
-                ++shift;
-            }
-        }
-        uvalue_t d=1LL<<shift;
-        if(a_large)
-        {
-            a-=temp;
-            res+=d;
-        }
+  unsigned shift = resolution_shift;
+  value_t numerator = m_nVal, denominator = divisor.m_nVal;
 
-        while(a && temp && shift)
-        {
-            unsigned right_shift=0;
-            while(right_shift<shift && (temp>a))
-            {
-                temp>>=1;
-                ++right_shift;
-            }
-            d>>=right_shift;
-            shift-=right_shift;
-            a-=temp;
-            res+=d;
-        }
-        m_nVal=(negate?-(value_t)res:res);
-    }
-    
-    return *this;
+  /* shift the numerator left by as many multiple of 7 bits as possible */
+  while (shift >= 7 &&
+         /* check the most significant 8 bits; we can shift by at
+            least 7 bits if there is either 0xff or 0x00 */
+         (((numerator >> (bits - 8)) + 1) & 0xfe) == 0) {
+    shift -= 7;
+    numerator <<= 7;
+  }
+
+  /* apply the remaining bits to the denominator */
+  denominator >>= shift;
+
+  /* now do the real division */
+  m_nVal = gcc_likely(denominator != 0)
+    ? numerator / denominator
+    : fixed_max.m_nVal;
+  return *this;
 }
 
 
