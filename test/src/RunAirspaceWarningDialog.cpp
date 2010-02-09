@@ -54,6 +54,7 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
+#include "SettingsUser.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -165,7 +166,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.show();
 
   Layout::Initalize(640, 480);
-  InitialiseFonts(main_window.get_client_rect());
+  InitialiseFonts(Appearance, main_window.get_client_rect());
 
   dlgAirspaceWarningInit(main_window);
   dlgAirspaceWarningShowDlg();

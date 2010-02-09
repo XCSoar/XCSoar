@@ -16,6 +16,7 @@
 #include "Gauge/GaugeCDI.hpp"
 #include "MenuBar.hpp"
 #include "InputEvents.h"
+#include "SettingsUser.hpp"
 
 #ifdef WINDOWSPC
 #include "Asset.hpp" /* for SCREENWIDTH and SCREENHEIGHT */
@@ -99,7 +100,7 @@ MainWindow::set(LPCTSTR text,
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
 
   StartupStore(TEXT("Initialise fonts\n"));
-  InitialiseFonts(rc);
+  InitialiseFonts(Appearance, rc);
   ButtonLabel::SetFont(MapWindowBoldFont);
 
   map.set(*this, rcsmall, rc);
