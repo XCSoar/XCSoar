@@ -54,29 +54,16 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
+#include "SettingsUser.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
-
-#if defined(PNA) || defined(FIVV)
-int GlobalModelType = MODELTYPE_UNKNOWN;
-bool needclipping = false;
-#endif
 
 #ifdef HAVE_BLANK
 int DisplayTimeOut = 0;
 #endif
 
 int InfoBoxLayout::ControlWidth = 100;
-
-int WINAPI
-MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
-{
-  return -1;
-}
-
-bool XCSoarInterface::Debounce() { return false; }
-void XCSoarInterface::InterfaceTimeoutReset(void) {}
 
 pt2Event
 InputEvents::findEvent(const TCHAR *)
@@ -96,9 +83,6 @@ MapWindow::identify(HWND hWnd)
   return false;
 }
 #endif /* !ENABLE_SDL */
-
-HINSTANCE CommonInterface::hInst;
-bool CommonInterface::EnableAnimation;
 
 Waypoints way_points;
 TaskBehaviour task_behaviour;
@@ -165,7 +149,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.show();
 
   Layout::Initalize(640, 480);
-  InitialiseFonts(main_window.get_client_rect());
+  InitialiseFonts(Appearance, main_window.get_client_rect());
 
   dlgAirspaceWarningInit(main_window);
   dlgAirspaceWarningShowDlg();

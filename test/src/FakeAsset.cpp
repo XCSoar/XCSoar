@@ -35,49 +35,14 @@ Copyright_License {
 }
 */
 
-#include "Registry.hpp"
+#include "Asset.hpp"
 
-const TCHAR szRegistryWayPointFile[] = _T("");
-const TCHAR szRegistryAdditionalWayPointFile[] = _T("");
-const TCHAR szRegistryWaypointsOutOfRange[] = _T("");
-const TCHAR szRegistryMapFile[] = _T("");
-const TCHAR szRegistryAlternate1[] = _T("");
-const TCHAR szRegistryAlternate2[] = _T("");
-const TCHAR szRegistryHomeWaypoint[] = _T("");
-const TCHAR szRegistryTeamcodeRefWaypoint[] = _T("");
+#include <windef.h> // for MAX_PATH
 
-bool
-GetFromRegistry(const TCHAR *szRegValue, int &pPos)
-{
-  return false;
-}
+#if defined(PNA) || defined(FIVV)
 
-bool
-GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
-{
-  return false;
-}
+int GlobalModelType = MODELTYPE_UNKNOWN;
+TCHAR GlobalModelName[MAX_PATH];
+float GlobalEllipse = 1.1f;
 
-HRESULT
-SetToRegistry(const TCHAR *szRegValue, int nVal)
-{
-  return 0;
-}
-
-HRESULT
-SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
-{
-  return 0;
-}
-
-HRESULT
-SetToRegistry(const TCHAR *szRegValue, unsigned long nVal)
-{
-  return 0;
-}
-
-bool
-SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
-{
-  return 0;
-}
+#endif

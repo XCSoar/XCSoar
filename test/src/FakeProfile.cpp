@@ -35,49 +35,12 @@ Copyright_License {
 }
 */
 
-#include "Registry.hpp"
+#include "Profile.hpp"
+#include "UtilsProfile.hpp"
 
-const TCHAR szRegistryWayPointFile[] = _T("");
-const TCHAR szRegistryAdditionalWayPointFile[] = _T("");
-const TCHAR szRegistryWaypointsOutOfRange[] = _T("");
-const TCHAR szRegistryMapFile[] = _T("");
-const TCHAR szRegistryAlternate1[] = _T("");
-const TCHAR szRegistryAlternate2[] = _T("");
-const TCHAR szRegistryHomeWaypoint[] = _T("");
-const TCHAR szRegistryTeamcodeRefWaypoint[] = _T("");
-
-bool
-GetFromRegistry(const TCHAR *szRegValue, int &pPos)
+void
+Profile::StoreRegistry(void)
 {
-  return false;
 }
 
-bool
-GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
-{
-  return false;
-}
-
-HRESULT
-SetToRegistry(const TCHAR *szRegValue, int nVal)
-{
-  return 0;
-}
-
-HRESULT
-SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
-{
-  return 0;
-}
-
-HRESULT
-SetToRegistry(const TCHAR *szRegValue, unsigned long nVal)
-{
-  return 0;
-}
-
-bool
-SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
-{
-  return 0;
-}
+void SetProfileFiles(const TCHAR *override) {}

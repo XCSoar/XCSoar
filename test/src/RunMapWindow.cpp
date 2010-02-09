@@ -45,13 +45,11 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "InfoBoxLayout.hpp"
-#include "Asset.hpp"
 #include "Logger.hpp"
 #include "RasterWeather.h"
 #include "RasterTerrain.h"
 #include "UtilsSystem.hpp"
 #include "UtilsProfile.hpp"
-#include "Profile.hpp"
 #include "LocalTime.hpp"
 #include "LocalPath.hpp"
 #include "WayPointParser.h"
@@ -79,11 +77,6 @@ Copyright_License {
 using std::min;
 #endif
 
-#if defined(PNA) || defined(FIVV)
-int GlobalModelType = MODELTYPE_UNKNOWN;
-bool needclipping = false;
-#endif
-
 #ifdef HAVE_BLANK
 int DisplayTimeOut;
 #endif
@@ -95,8 +88,6 @@ void DeviceBlackboard::SetSpeed(fixed val) {}
 
 void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt) {}
-
-void Profile::StoreRegistry(void) {}
 
 Trigger drawTriggerEvent(TEXT("drawTriggerEvent"),false);
 Trigger targetManipEvent(TEXT("targetManip"));
@@ -122,10 +113,6 @@ Logger logger;
 
 int InfoBoxLayout::ControlWidth;
 
-bool CommonInterface::VirtualKeys=false;
-HINSTANCE CommonInterface::hInst;
-void XCSoarInterface::InterfaceTimeoutReset(void) {}
-
 void InputEvents::ShowMenu() {}
 bool InputEvents::processKey(int key) {
   return false;
@@ -143,10 +130,6 @@ int
 propGetScaleList(fixed *List, size_t Size)
 {
   return 0;
-}
-
-WPARAM TranscodeKey(WPARAM wParam) {
-  return wParam;
 }
 
 bool
@@ -178,22 +161,10 @@ bool PlayResource(const TCHAR* lpName)
   return false;
 }
 
-int WINAPI
-MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
-{
-  return -1;
-}
-
 int
 TimeLocal(int d)
 {
   return d;
-}
-
-long
-CheckFreeRam(void)
-{
-  return 64 * 1024 * 1024;
 }
 
 class TestWindow : public SingleWindow {
@@ -242,12 +213,6 @@ public:
     map.set_terrain(&terrain);
   }
 };
-
-void
-ActionInterface::SignalShutdown(bool force)
-{
-  // XXX
-}
 
 void TriggerGPSUpdate() {}
 
@@ -299,10 +264,10 @@ GenerateBlackboard(MapWindow &map)
   memset(&nmea_info, 0, sizeof(nmea_info));
   nmea_info.gps.Connected = 2;
   nmea_info.gps.SatellitesUsed = 4;
-  nmea_info.aircraft.Location.Latitude = 51.2;
-  nmea_info.aircraft.Location.Longitude = 7.7;
-  nmea_info.aircraft.TrackBearing = 90;
-  nmea_info.aircraft.Speed = 50;
+  nmea_info.Location.Latitude = 51.2;
+  nmea_info.Location.Longitude = 7.7;
+  nmea_info.TrackBearing = 90;
+  nmea_info.GroundSpeed = 50;
   nmea_info.GPSAltitude = 1500;
 
   memset(&derived_info, 0, sizeof(derived_info));
@@ -310,7 +275,7 @@ GenerateBlackboard(MapWindow &map)
 
   memset(&settings_computer, 0, sizeof(settings_computer));
 
-  terrain.ServiceFullReload(nmea_info.aircraft.Location);
+  terrain.ServiceFullReload(nmea_info.Location);
 
   for (unsigned i = 0; i <AIRSPACECLASSCOUNT; ++i)
     settings_computer.iAirspaceMode[i] = 3;

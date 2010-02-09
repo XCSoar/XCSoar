@@ -40,7 +40,6 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Thread/Mutex.hpp"
 #include "Interface.hpp"
-#include "Profile.hpp"
 #include "Dialogs.h"
 #include "DeviceBlackboard.hpp"
 #include "wcecompat/ts_string.h"
@@ -55,12 +54,6 @@ Copyright_License {
 
 Mutex mutexTaskData;
 DeviceBlackboard device_blackboard;
-
-int WINAPI
-MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
-{
-  return -1;
-}
 
 void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc,
@@ -92,11 +85,6 @@ MapWindowProjection::MapWindowProjection() {}
 
 SettingsComputerBlackboard::SettingsComputerBlackboard() {}
 SettingsMapBlackboard::SettingsMapBlackboard() {}
-
-void
-Profile::StoreRegistry(void)
-{
-}
 
 int
 dlgWaypointOutOfTerrain(const TCHAR *Message)

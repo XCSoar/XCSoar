@@ -40,6 +40,7 @@ Copyright_License {
 
 #include <windows.h>
 
+struct Appearance;
 struct FontHeightInfo;
 class Font;
 
@@ -50,7 +51,8 @@ void InitializeOneFont(Font *theFont,
                        LOGFONT autoLogFont,
                        LOGFONT *LogFontUsed);
 
-void InitialiseFonts(RECT rc);
+void
+InitialiseFonts(const struct Appearance &appearance, RECT rc);
 
 extern Font InfoWindowFont;
 extern Font TitleWindowFont;

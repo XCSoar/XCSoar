@@ -45,7 +45,6 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/VirtualCanvas.hpp"
-#include "SettingsUser.hpp"
 #include "Appearance.hpp"
 
 #include <stdio.h>
@@ -141,7 +140,7 @@ void InitializeOneFont(Font *theFont,
 }
 
 static void
-InitialiseFontsHardCoded(RECT rc,
+InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc,
                          LOGFONT *ptrhardInfoWindowLogFont,
                          LOGFONT *ptrhardTitleWindowLogFont,
                          LOGFONT *ptrhardMapWindowLogFont,
@@ -219,7 +218,7 @@ InitialiseFontsHardCoded(RECT rc,
       propGetFontSettingsFromString(TEXT("20,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardStatisticsLogFont);//  (RLD is this used?)
       propGetFontSettingsFromString(TEXT("18,0,0,0,400,0,0,0,0,0,0,3,2,Tahoma"), ptrhardMapWindowLogFont);
       propGetFontSettingsFromString(TEXT("16,0,0,0,500,0,0,0,0,0,0,3,2,TahomaBD"), ptrhardMapWindowBoldLogFont);
-      if (Appearance.InfoBoxGeom == 5)
+      if (appearance.InfoBoxGeom == 5)
         // We don't use vario gauge in landscape geo5 anymore.. but doesn't hurt.
         SetGlobalEllipse(1.32f);
       else
@@ -240,7 +239,7 @@ InitialiseFontsHardCoded(RECT rc,
 
     else if (ScreenSize==(ScreenSize_t)ss800x480) {// e.g. ipaq 31x {
 
-      switch (Appearance.InfoBoxGeom) {
+      switch (appearance.InfoBoxGeom) {
       case 0:
       case 1:
       case 2:
@@ -527,8 +526,8 @@ InitialiseFontsAuto(RECT rc,
 //  propGetFontSettings(TEXT("TeamCodeFont"), &logfont);
 //  TitleSmallWindowFont = CreateFontIndirect (&logfont);
 
-
-void InitialiseFonts(RECT rc)
+void
+InitialiseFonts(const struct Appearance &appearance, RECT rc)
 { //this routine must be called only at start/restart of XCSoar b/c there are many pointers to these fonts
 
   InfoWindowFont.reset();
@@ -579,7 +578,7 @@ void InitialiseFonts(RECT rc)
   memset ((char *)&hardMapLabelLogFont, 0, sizeof (LOGFONT));
   memset ((char *)&hardStatisticsLogFont, 0, sizeof (LOGFONT));
 
-  InitialiseFontsHardCoded(rc,
+  InitialiseFontsHardCoded(appearance, rc,
                         &hardInfoWindowLogFont,
                         &hardTitleWindowLogFont,
                         &hardMapWindowLogFont,
