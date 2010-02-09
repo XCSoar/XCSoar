@@ -305,7 +305,8 @@ OnTaskListEnter(unsigned ItemIndex)
       }
 
       int res;
-      res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
+      res = dlgWayPointSelect(XCSoarInterface::main_window,
+                              XCSoarInterface::Basic().Location);
       {
         TASK_POINT tp = task.getTaskPoint(ItemIndex);
         if (res != -1){

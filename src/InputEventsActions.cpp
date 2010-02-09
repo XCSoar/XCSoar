@@ -778,7 +778,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
       return;
     }
   } else if (_tcscmp(misc, TEXT("select")) == 0) {
-    wp = dlgWayPointSelect(Basic().Location);
+    wp = dlgWayPointSelect(main_window, Basic().Location);
   }
   if (wp) {
     dlgWayPointDetailsShowModal(*wp);
@@ -788,7 +788,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 void
 InputEvents::eventGotoLookup(const TCHAR *misc)
 {
-  const Waypoint* wp = dlgWayPointSelect(Basic().Location);
+  const Waypoint* wp = dlgWayPointSelect(main_window, Basic().Location);
   if (wp) {
     task_manager.do_goto(*wp);
   }

@@ -896,7 +896,8 @@ static void OnWaypointNewClicked(WindowControl * Sender){
 static void OnWaypointEditClicked(WindowControl * Sender){
   (void)Sender;
 
-  const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::Basic().Location);
+  const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::main_window,
+                                                XCSoarInterface::Basic().Location);
   if (way_point){
     if (way_points.get_writable(*way_point)) {
       Waypoint wp_copy = *way_point;
