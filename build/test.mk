@@ -72,8 +72,10 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/Compatibility/fmode.c \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
 	$(TEST_SRC_DIR)/FakeRegistry.cpp \
 	$(TEST_SRC_DIR)/RunWayPointParser.cpp
@@ -120,6 +122,8 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
 RUN_CANVAS_OBJS = $(call SRC_TO_OBJ,$(RUN_CANVAS_SOURCES))
 RUN_CANVAS_BIN = $(TARGET_BIN_DIR)/RunCanvas$(TARGET_EXEEXT)
@@ -201,8 +205,12 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/WayPointParser.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Simulator.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 RUN_MAP_WINDOW_OBJS = $(call SRC_TO_OBJ,$(RUN_MAP_WINDOW_SOURCES))
@@ -233,6 +241,9 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunDialog.cpp \
 	$(SRC)/Compatibility/string.c \
@@ -275,6 +286,9 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \

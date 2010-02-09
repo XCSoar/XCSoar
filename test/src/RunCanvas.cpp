@@ -48,17 +48,9 @@ Copyright_License {
 using std::min;
 #endif
 
-#if defined(PNA) || defined(FIVV)
-int GlobalModelType = MODELTYPE_UNKNOWN;
-bool needclipping = false;
-#endif
-
 #ifdef HAVE_BLANK
 int DisplayTimeOut;
 #endif
-
-HINSTANCE CommonInterface::hInst;
-void XCSoarInterface::InterfaceTimeoutReset(void) {}
 
 class TestWindow : public SingleWindow {
   ButtonWindow buffer_button, close_button;

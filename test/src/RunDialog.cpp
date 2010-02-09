@@ -49,11 +49,6 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-#if defined(PNA) || defined(FIVV)
-int GlobalModelType = MODELTYPE_UNKNOWN;
-bool needclipping = false;
-#endif
-
 #ifdef HAVE_BLANK
 int DisplayTimeOut = 0;
 #endif
@@ -69,12 +64,6 @@ LocalPathS(char *buf, const TCHAR* file, int loc)
 {
   strcpy(buf, (const char *)file);
   //unicode2ascii(file, buf);
-}
-
-int WINAPI
-MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
-{
-  return -1;
 }
 
 void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText)
@@ -102,13 +91,7 @@ MapWindow::identify(HWND hWnd)
 
 StatusMessageList::StatusMessageList() {}
 
-HINSTANCE CommonInterface::hInst;
-bool CommonInterface::EnableAnimation;
-
 static const StatusMessageList messages;
-
-bool XCSoarInterface::Debounce() { return false; }
-void XCSoarInterface::InterfaceTimeoutReset(void) {}
 
 Font MapWindowFont;
 Font MapWindowBoldFont;

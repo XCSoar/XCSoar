@@ -59,25 +59,11 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-#if defined(PNA) || defined(FIVV)
-int GlobalModelType = MODELTYPE_UNKNOWN;
-bool needclipping = false;
-#endif
-
 #ifdef HAVE_BLANK
 int DisplayTimeOut = 0;
 #endif
 
 int InfoBoxLayout::ControlWidth = 100;
-
-int WINAPI
-MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
-{
-  return -1;
-}
-
-bool XCSoarInterface::Debounce() { return false; }
-void XCSoarInterface::InterfaceTimeoutReset(void) {}
 
 pt2Event
 InputEvents::findEvent(const TCHAR *)
@@ -97,9 +83,6 @@ MapWindow::identify(HWND hWnd)
   return false;
 }
 #endif /* !ENABLE_SDL */
-
-HINSTANCE CommonInterface::hInst;
-bool CommonInterface::EnableAnimation;
 
 Waypoints way_points;
 TaskBehaviour task_behaviour;

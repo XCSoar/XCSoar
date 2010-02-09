@@ -45,13 +45,11 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "InfoBoxLayout.hpp"
-#include "Asset.hpp"
 #include "Logger.hpp"
 #include "RasterWeather.h"
 #include "RasterTerrain.h"
 #include "UtilsSystem.hpp"
 #include "UtilsProfile.hpp"
-#include "Profile.hpp"
 #include "LocalTime.hpp"
 #include "LocalPath.hpp"
 #include "WayPointParser.h"
@@ -79,11 +77,6 @@ Copyright_License {
 using std::min;
 #endif
 
-#if defined(PNA) || defined(FIVV)
-int GlobalModelType = MODELTYPE_UNKNOWN;
-bool needclipping = false;
-#endif
-
 #ifdef HAVE_BLANK
 int DisplayTimeOut;
 #endif
@@ -95,8 +88,6 @@ void DeviceBlackboard::SetSpeed(fixed val) {}
 
 void
 DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt) {}
-
-void Profile::StoreRegistry(void) {}
 
 Trigger drawTriggerEvent(TEXT("drawTriggerEvent"),false);
 Trigger targetManipEvent(TEXT("targetManip"));
@@ -121,10 +112,6 @@ static RasterTerrain terrain;
 Logger logger;
 
 int InfoBoxLayout::ControlWidth;
-
-bool CommonInterface::VirtualKeys=false;
-HINSTANCE CommonInterface::hInst;
-void XCSoarInterface::InterfaceTimeoutReset(void) {}
 
 void InputEvents::ShowMenu() {}
 bool InputEvents::processKey(int key) {
@@ -176,12 +163,6 @@ Logger::isLoggerActive()
 bool PlayResource(const TCHAR* lpName)
 {
   return false;
-}
-
-int WINAPI
-MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
-{
-  return -1;
 }
 
 int
@@ -242,12 +223,6 @@ public:
     map.set_terrain(&terrain);
   }
 };
-
-void
-ActionInterface::SignalShutdown(bool force)
-{
-  // XXX
-}
 
 void TriggerGPSUpdate() {}
 
