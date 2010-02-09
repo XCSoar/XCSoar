@@ -46,16 +46,9 @@
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
-#include "Protection.hpp"
-#include "SettingsComputer.hpp"
-#include "Blackboard.hpp"
-#include "UtilsFLARM.hpp"
-#include "Math/Earth.hpp"
 #include "Math/FastRotation.hpp"
 #include "Math/Screen.hpp"
 #include "MainWindow.hpp"
-
-#include <assert.h>
 
 static const Color hcWarning(0xFF, 0xA2, 0x00);
 static const Color hcAlarm(0xFF, 0x00, 0x00);
