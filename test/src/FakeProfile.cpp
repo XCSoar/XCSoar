@@ -36,8 +36,11 @@ Copyright_License {
 */
 
 #include "Profile.hpp"
+#include "UtilsProfile.hpp"
 
 void
 Profile::StoreRegistry(void)
 {
 }
+
+void SetProfileFiles(const TCHAR *override) {}

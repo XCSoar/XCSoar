@@ -47,6 +47,12 @@ const TCHAR szRegistryHomeWaypoint[] = _T("");
 const TCHAR szRegistryTeamcodeRefWaypoint[] = _T("");
 
 bool
+GetFromRegistry(const TCHAR *szRegValue, int &pPos)
+{
+  return false;
+}
+
+bool
 GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
   return false;

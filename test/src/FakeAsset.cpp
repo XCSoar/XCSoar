@@ -37,8 +37,12 @@ Copyright_License {
 
 #include "Asset.hpp"
 
+#include <windef.h> // for MAX_PATH
+
 #if defined(PNA) || defined(FIVV)
 
 int GlobalModelType = MODELTYPE_UNKNOWN;
+TCHAR GlobalModelName[MAX_PATH];
+float GlobalEllipse = 1.1f;
 
 #endif

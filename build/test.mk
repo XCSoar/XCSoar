@@ -69,10 +69,14 @@ DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRA
 RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPointParser.cpp \
 	$(SRC)/UtilsText.cpp \
+	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
+	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/fmode.c \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
@@ -202,6 +206,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
+	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/WayPointParser.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Simulator.cpp \
@@ -284,6 +289,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
+	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
@@ -291,6 +297,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
 RUN_AIRSPACE_WARNING_DIALOG_BIN = $(TARGET_BIN_DIR)/RunAirspaceWarningDialog$(TARGET_EXEEXT)

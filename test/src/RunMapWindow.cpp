@@ -132,10 +132,6 @@ propGetScaleList(fixed *List, size_t Size)
   return 0;
 }
 
-WPARAM TranscodeKey(WPARAM wParam) {
-  return wParam;
-}
-
 bool
 PopupNearestWaypointDetails(const Waypoints &way_points,
                             const GEOPOINT &location, double range, bool pan)
@@ -169,12 +165,6 @@ int
 TimeLocal(int d)
 {
   return d;
-}
-
-long
-CheckFreeRam(void)
-{
-  return 64 * 1024 * 1024;
 }
 
 class TestWindow : public SingleWindow {
