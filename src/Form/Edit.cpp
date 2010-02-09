@@ -352,7 +352,13 @@ WndProperty::on_mouse_down(int x, int y)
   if (mDialogStyle) {
     if (!GetReadOnly()) {
       // when they click on the label
-      dlgComboPicker(*(SingleWindow *)get_root_owner(), this);
+      SingleWindow *root = (SingleWindow *)get_root_owner();
+
+      /* if this asserton fails, then there no valid root window could
+         be found - maybe it didn't register its wndproc? */
+      assert(root != NULL);
+
+      dlgComboPicker(*root, this);
     } else {
       OnHelp(); // this would display xml file help on a read-only wndproperty if it exists
     }
