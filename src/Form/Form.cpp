@@ -80,6 +80,9 @@ WndForm::WndForm(SingleWindow &_main_window,
   if (Caption != NULL)
     _tcscpy(mCaption, Caption);
 
+#if defined(WIN32) && !defined(NDEBUG)
+  ::SetWindowText(hWnd, Caption);
+#endif
 }
 
 WndForm::~WndForm()

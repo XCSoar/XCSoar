@@ -61,6 +61,10 @@ WndButton::WndButton(ContainerControl *Parent, const TCHAR *Name,
 
   // copy the buttons caption to the mCaption field
   _tcscpy(mCaption, Caption);
+
+#if defined(WIN32) && !defined(NDEBUG)
+  ::SetWindowText(hWnd, Caption);
+#endif
 }
 
 bool

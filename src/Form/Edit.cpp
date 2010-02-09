@@ -178,6 +178,10 @@ WndProperty::WndProperty(ContainerControl *Parent,
 
   edit.set_font(*mhValueFont);
 
+#if defined(WIN32) && !defined(NDEBUG)
+  ::SetWindowText(hWnd, Caption);
+#endif
+
   mCanFocus = true;
 
   SetForeColor(GetOwner()->GetForeColor());
