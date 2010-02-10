@@ -82,8 +82,8 @@ protected:
                              WPARAM wParam, LPARAM lParam);
 #endif
 
-#ifdef ENABLE_SDL
 public:
+#ifdef ENABLE_SDL
   void add_child(Window &child) {
     children.push_back(&child);
   }
@@ -117,6 +117,24 @@ public:
     expose(child.get_position());
   }
 #endif /* ENABLE_SDL */
+
+  /**
+   * Sets the keyboard focus on the first descendant window which has
+   * the WindowStyle::tab_stop() attribute.
+   */
+  void focus_first_control();
+
+  /**
+   * Sets the keyboard focus on the next descendant window which has
+   * the WindowStyle::tab_stop() attribute.
+   */
+  void focus_next_control();
+
+  /**
+   * Sets the keyboard focus on the previous descendant window which
+   * has the WindowStyle::tab_stop() attribute.
+   */
+  void focus_previous_control();
 };
 
 #endif
