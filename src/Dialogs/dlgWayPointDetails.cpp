@@ -384,7 +384,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 };
 
 void 
-dlgWayPointDetailsShowModal(const Waypoint& way_point)
+dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
 {
   selected_waypoint = &way_point;
 
@@ -396,10 +396,10 @@ dlgWayPointDetailsShowModal(const Waypoint& way_point)
 
   if (!Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable, _T("dlgWayPointDetails_L.xml"),
-        XCSoarInterface::main_window, _T("IDR_XML_WAYPOINTDETAILS_L"));
+                        parent, _T("IDR_XML_WAYPOINTDETAILS_L"));
   else
     wf = dlgLoadFromXML(CallBackTable, _T("dlgWayPointDetails.xml"),
-        XCSoarInterface::main_window, _T("IDR_XML_WAYPOINTDETAILS"));
+                        parent, _T("IDR_XML_WAYPOINTDETAILS"));
 
   nTextLines = 0;
 

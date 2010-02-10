@@ -781,7 +781,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
     wp = dlgWayPointSelect(main_window, Basic().Location);
   }
   if (wp) {
-    dlgWayPointDetailsShowModal(*wp);
+    dlgWayPointDetailsShowModal(main_window, *wp);
   }
 }
 

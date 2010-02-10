@@ -158,7 +158,7 @@ ActionInterface::on_key_Alternate1(int UpDown)
      if ( SettingsComputer().Alternate1 <0 ) return;
      task.setSelected(SettingsComputer().Alternate1);
 
-     dlgWayPointDetailsShowModal(way_point);
+     dlgWayPointDetailsShowModal(main_window, way_point);
   }
 #endif
 }
@@ -366,7 +366,7 @@ ActionInterface::on_key_Waypoint(int UpDown)
     if (tp) {
       const Waypoint* wp = &tp->get_waypoint();
       if (wp) {
-        dlgWayPointDetailsShowModal(*wp);
+        dlgWayPointDetailsShowModal(main_window, *wp);
       }
     }
   }

@@ -181,7 +181,7 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
                                            fixed(range));
   }
   if (way_point) {
-    dlgWayPointDetailsShowModal(*way_point);
+    dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *way_point);
     return true;
   }
   return false;
