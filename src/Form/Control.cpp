@@ -89,7 +89,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
     mOnHelpCallback(NULL),
     mReadOnly(false), mHasFocus(false),
     mBorderSize(1),
-    mCanFocus(false),
     mPaintSelector(true)
 {
   // Clear the caption
@@ -188,19 +187,10 @@ WindowControl::SetFocused(bool Value)
   if (mHasFocus != Value) {
     mHasFocus = Value;
 
-    if (mCanFocus)
-      // todo, only paint the selector edges
-      invalidate();
+    // todo, only paint the selector edges
+    invalidate();
   }
 
-  return res;
-}
-
-bool
-WindowControl::SetCanFocus(bool Value)
-{
-  bool res = mCanFocus;
-  mCanFocus = Value;
   return res;
 }
 
@@ -295,9 +285,8 @@ WindowControl::PaintSelector(Canvas &canvas, const RECT rc)
 void
 WindowControl::PaintSelector(Canvas &canvas)
 {
-  if (mPaintSelector && mCanFocus && mHasFocus) {
+  if (mPaintSelector && mHasFocus)
     PaintSelector(canvas, get_client_rect());
-  }
 }
 
 int
@@ -347,7 +336,7 @@ WindowControl::on_paint(Canvas &canvas)
   const RECT rc = get_client_rect();
 
   // JMW added highlighting, useful for lists
-  if (mPaintSelector && mCanFocus && mHasFocus) {
+  if (mPaintSelector && mHasFocus) {
     Color ff = GetBackColor().highlight();
     Brush brush(ff);
     canvas.fill_rectangle(rc, brush);

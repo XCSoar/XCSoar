@@ -132,13 +132,6 @@ public:
   bool GetFocused(void) { return mHasFocus; }
 
   /**
-   * If the given Value is true, the Control will be able to get focused
-   * @param Value Whether the Control can be focused or not
-   * @return The old value
-   */
-  bool SetCanFocus(bool Value);
-
-  /**
    * Returns whether this is a read-only Control
    * @return True if this is a read-only Control, False otherwise
    */
@@ -300,8 +293,6 @@ public:
   virtual void FilterAdvanced(bool advanced);
 
 protected:
-  /** If true, the Control can get focused */
-  bool mCanFocus;
   /** Caption/Text of the Control */
   TCHAR mCaption[254];
   /** If true, the "Selector" is not painted */

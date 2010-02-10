@@ -153,8 +153,6 @@ WndProperty::WndProperty(ContainerControl *Parent,
    mCaptionWidth(CaptionWidth),
    mDownDown(false), mUpDown(false)
 {
-  SetCanFocus(true);
-
   mOnClickUpNotify = NULL;
   mOnClickDownNotify = NULL;
   mOnDataChangeNotify = DataChangeNotify;
@@ -181,8 +179,6 @@ WndProperty::WndProperty(ContainerControl *Parent,
 #if defined(WIN32) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
 #endif
-
-  mCanFocus = true;
 
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
