@@ -388,12 +388,6 @@ Color WndForm::SetBackColor(Color Value)
   return ContainerControl::SetBackColor(Value);
 }
 
-const Font *WndForm::SetFont(const Font &Value){
-  if (mClientWindow)
-    mClientWindow->SetFont(Value);
-  return ContainerControl::SetFont(Value);
-}
-
 void
 WndForm::SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify)
 {

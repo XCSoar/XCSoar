@@ -195,8 +195,6 @@ public:
   Color SetForeColor(Color Value);
   /** Set the background color of the window */
   Color SetBackColor(Color Value);
-  /** Set the font of the window (not titlebar) */
-  const Font *SetFont(const Font &Value);
 
   void SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify);
   void SetTimerNotify(TimerNotifyCallback_t OnTimerNotify);
