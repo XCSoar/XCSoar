@@ -333,8 +333,6 @@ private:
   /** True if the Control has been focused right now */
   bool mHasFocus;
 
-  int mBorderSize;
-
   /** True if the default brushes and pens are already initialized */
   static bool initialized;
   /** The default Brush for painting the background */

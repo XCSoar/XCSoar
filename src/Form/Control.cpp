@@ -88,7 +88,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
     mHelpText(NULL),
     mOnHelpCallback(NULL),
     mReadOnly(false), mHasFocus(false),
-    mBorderSize(1),
     mPaintSelector(true)
 {
   // Clear the caption
