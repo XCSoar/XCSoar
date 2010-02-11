@@ -270,22 +270,6 @@ public:
   }
 
   /**
-   * Checks whether the given Name is equal to the Control's Name
-   * @param Name Name of the Control that is searched
-   * @return The Control if equal, otherwise NULL
-   */
-  virtual WindowControl *FindByName(const TCHAR *Name);
-
-  /**
-   * Checks whether the given Name is equal to the Control's Name
-   * @param Name Name of the Control that is searched
-   * @return The Control if equal, otherwise NULL
-   */
-  const WindowControl *FindByName(const TCHAR *Name) const {
-    return const_cast<WindowControl *>(this)->FindByName(Name);
-  }
-
-  /**
    * Shows/Hides the WindowControl depending on the given value of advanced and
    * whether the caption includes an asterisk.
    * @param advanced True if advanced mode activated

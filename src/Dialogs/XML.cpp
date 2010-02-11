@@ -231,7 +231,8 @@ CallBackLookup(CallBackTableEntry_t *LookUpTable, TCHAR *Name)
 }
 
 static void
-LoadChildrenFromXML(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
+LoadChildrenFromXML(WndForm &form, ContainerControl *Parent,
+                    CallBackTableEntry_t *LookUpTable,
                     XMLNode *Node, int Font, const DialogStyle_t eDialogStyle);
 
 static Font *FontMap[5] = {
@@ -544,7 +545,8 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
   LoadColors(*theForm, xNode);
 
   // Load the children controls
-  LoadChildrenFromXML(theForm, LookUpTable, &xNode, Font, eDialogStyle);
+  LoadChildrenFromXML(*theForm, theForm, LookUpTable, &xNode,
+                      Font, eDialogStyle);
 
   // If XML error occurred -> Error messagebox + cancel
   if (XMLNode::GlobalError) {
@@ -618,6 +620,8 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
 /**
  * Creates a control from the given XMLNode as a child of the given parent
  * ContainerControl.
+ *
+ * @param form the WndForm object
  * @param Parent The parent ContainerControl
  * @param LookUpTable The parent CallBackTable
  * @param node The XMLNode that represents the control
@@ -625,7 +629,8 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
  * @param eDialogStyle The parent's dialog style
  */
 static void
-LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
+LoadChild(WndForm &form, ContainerControl *Parent,
+          CallBackTableEntry_t *LookUpTable,
           XMLNode node, int ParentFont, const DialogStyle_t eDialogStyle)
 {
   int X, Y, Width, Height, Font;
@@ -808,7 +813,8 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
     WC = frame;
 
     // Load children controls from the XMLNode
-    LoadChildrenFromXML(frame, LookUpTable, &node, ParentFont, eDialogStyle);
+    LoadChildrenFromXML(form, frame, LookUpTable, &node,
+                        ParentFont, eDialogStyle);
 
   // DrawControl (WndOwnerDrawFrame)
   } else if (_tcscmp(node.getName(), _T("WndOwnerDrawFrame")) == 0) {
@@ -856,7 +862,8 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
     WC = tabbed;
 
     // Load children controls from the XMLNode
-    LoadChildrenFromXML(tabbed, LookUpTable, &node, ParentFont, eDialogStyle);
+    LoadChildrenFromXML(form, tabbed, LookUpTable, &node,
+                        ParentFont, eDialogStyle);
   }
 
   // If WindowControl has been created
@@ -879,11 +886,16 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
     // Set the border kind
     if (Border != 0)
       WC->SetBorderKind(Border);
+
+    if (Name[0] != '\0')
+      form.AddNamed(Name, WC);
   }
 }
 
 /**
  * Loads the Parent's children Controls from the given XMLNode
+ *
+ * @param form the WndForm object
  * @param Parent The parent control
  * @param LookUpTable The parents CallBackTable
  * @param Node The XMLNode that represents the parent control
@@ -891,7 +903,8 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
  * @param eDialogStyle The parent's dialog style
  */
 static void
-LoadChildrenFromXML(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
+LoadChildrenFromXML(WndForm &form, ContainerControl *Parent,
+                    CallBackTableEntry_t *LookUpTable,
                     XMLNode *Node, int ParentFont, const DialogStyle_t eDialogStyle)
 {
   // Get the number of childnodes
@@ -900,6 +913,6 @@ LoadChildrenFromXML(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
   // Iterate through the childnodes
   for (int i = 0; i < Count; i++)
     // Load each child control from the child nodes
-    LoadChild(Parent, LookUpTable, Node->getChildNode(i), ParentFont,
+    LoadChild(form, Parent, LookUpTable, Node->getChildNode(i), ParentFont,
               eDialogStyle);
 }

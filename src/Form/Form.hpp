@@ -41,6 +41,9 @@ Copyright_License {
 
 #include "Form/Container.hpp"
 #include "Dialogs.h"
+#include "Util/tstring.hpp"
+
+#include <map>
 
 class SingleWindow;
 class PeriodClock;
@@ -51,10 +54,25 @@ class PeriodClock;
  */
 class WndForm: public ContainerControl
 {
+  struct tstring_less_than {
+    bool operator()(const tstring &a, const tstring &b) const
+    {
+      return a.compare(b) < 0;
+    }
+  };
+
+  typedef std::map<tstring, Window *, tstring_less_than> name_to_window_t;
+
 public:
   typedef int (*TimerNotifyCallback_t)(WindowControl *Sender);
   typedef bool (*KeyDownNotifyCallback_t)(WindowControl *Sender,
       unsigned key_code);
+
+private:
+  /**
+   * Mapping of control names to #Window objects.
+   */
+  name_to_window_t name_to_window;
 
 protected:
   SingleWindow &main_window;
@@ -100,6 +118,37 @@ public:
   virtual ~WndForm();
 
   ContainerWindow &GetClientAreaWindow(void);
+
+  /**
+   * Adds a #Window to the name-to-window map.
+   */
+  void AddNamed(const TCHAR *name, Window *window) {
+    name_to_window[name] = window;
+  }
+
+  /**
+   * Finds the ancestor window with the specified name.
+   *
+   * @param name the name of the #Window that is searched
+   * @return the Window, or NULL if not found
+   */
+  Window *FindByName(const TCHAR *name) {
+    return name_to_window[name];
+  }
+
+  /**
+   * Finds the ancestor window with the specified name.
+   *
+   * @param name the name of the #Window that is searched
+   * @return the Window, or NULL if not found
+   */
+  virtual const Window *FindByName(const TCHAR *name) const {
+    name_to_window_t::const_iterator i = name_to_window.find(name);
+    if (i == name_to_window.end())
+      return NULL;
+
+    return i->second;
+  }
 
   int GetModalResult(void) { return mModalResult; }
   int SetModalResult(int Value) {

@@ -85,22 +85,6 @@ public:
   virtual void AddClient(WindowControl *Client);
 
   /**
-   * Searches for a ClientControl with the given Name
-   * @param Name Name of the ClientControl to search for
-   * @return The ClientControl if found, otherwise NULL
-   */
-  virtual WindowControl *FindByName(const TCHAR *Name);
-
-  /**
-   * Searches for a ClientControl with the given Name
-   * @param Name Name of the ClientControl to search for
-   * @return The ClientControl if found, otherwise NULL
-   */
-  const WindowControl *FindByName(const TCHAR *Name) const {
-    return const_cast<ContainerControl *>(this)->FindByName(Name);
-  }
-
-  /**
    * Shows/Hides the ClientControls depending on the given value of advanced and
    * whether their caption includes an asterisk.
    * @param advanced True if advanced mode activated

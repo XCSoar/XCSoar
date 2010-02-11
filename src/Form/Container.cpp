@@ -77,24 +77,6 @@ ContainerControl::AddClient(WindowControl *Client)
   */
 }
 
-WindowControl *
-ContainerControl::FindByName(const TCHAR *Name)
-{
-  // Check whether the ContainerControl itself has the given Name
-  WindowControl *w = WindowControl::FindByName(Name);
-  if (w != NULL)
-    return w;
-
-  // Search for ClientControls with the given Name
-  for (unsigned i = 0; i < mClientCount; i++) {
-    w = mClients[i]->FindByName(Name);
-    if (w != NULL)
-      return w;
-  }
-
-  return NULL;
-}
-
 void
 ContainerControl::FilterAdvanced(bool advanced)
 {

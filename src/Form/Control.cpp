@@ -136,15 +136,6 @@ WindowControl::FilterAdvanced(bool advanced)
   }
 }
 
-WindowControl *
-WindowControl::FindByName(const TCHAR *Name)
-{
-  if (_tcscmp(mName, Name) == 0)
-    return this;
-
-  return NULL;
-}
-
 void
 WindowControl::SetHelpText(const TCHAR *Value)
 {
