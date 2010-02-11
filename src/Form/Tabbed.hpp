@@ -43,6 +43,11 @@ Copyright_License {
 
 class TabbedControl : public ContainerControl {
 protected:
+  /** Array of ClientControls */
+  Window *mClients[50];
+  /** Number of ClientControls */
+  unsigned mClientCount;
+
   unsigned current;
 
 public:

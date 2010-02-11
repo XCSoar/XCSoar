@@ -48,11 +48,6 @@ Copyright_License {
  */
 class ContainerControl : public WindowControl {
 protected:
-  /** Array of ClientControls */
-  WindowControl *mClients[50];
-  /** Number of ClientControls */
-  unsigned mClientCount;
-
   /** the bottom of the most recently added child window */
   int bottom_most;
 

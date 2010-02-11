@@ -44,7 +44,7 @@ TabbedControl::TabbedControl(ContainerControl *owner,
                              int x, int y, unsigned width, unsigned height,
                              const WindowStyle style)
   :ContainerControl(owner, NULL, x, y, width, height, style),
-   current(0)
+   mClientCount(0), current(0)
 {
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
@@ -55,11 +55,13 @@ TabbedControl::AddClient(WindowControl *w)
 {
   ContainerControl::AddClient(w);
 
+  if (mClientCount != current)
+    w->hide();
+
+  mClients[mClientCount++] = w;
+
   const RECT rc = get_client_rect();
   w->move(rc.left, rc.top, rc.right, rc.bottom);
-
-  if (mClientCount - 1 != current)
-    w->hide();
 }
 
 void

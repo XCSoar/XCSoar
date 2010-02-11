@@ -41,10 +41,6 @@ Copyright_License {
 void
 ContainerControl::AddClient(WindowControl *Client)
 {
-  // Add the ClientControl to the array
-  mClients[mClientCount] = Client;
-  mClientCount++;
-
   // Set the client font to the ContainerControl font
   Client->SetFont(GetFont());
 
