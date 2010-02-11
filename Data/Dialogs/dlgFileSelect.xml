@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmFileSelect" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="File browser" Font=2>
+<WndForm Name="frmFileSelect" X=0 Y=0 Width=320 Height=240 Caption="File browser" Font=2>
   <WndButton Name="cmdClose" Caption="Close" X=2 Y=0 Width=56  Height=28 Font=2 Tag=3 OnClickNotify="OnFileCloseClicked"/>
   
   <WndProperty Name="prpFltType"      Caption="File type"      X=60 Y=0  Width=190 Height=28 CaptionWidth=70 Font=2>

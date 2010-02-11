@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTextEntry_Keyboard" Type="Dialog" X="0" Y="0" Width="240" Height="320" Caption="Edit text" Font="2">
+<WndForm Name="frmTextEntry_Keyboard" X="0" Y="0" Width="240" Height="320" Caption="Edit text" Font="2">
   <WndProperty Name="prpText"  Caption=""   X="0" Y="2" Width="190" Height="22" CaptionWidth="1" Font="2" ReadOnly="1" />
 
   <WndButton Name="Cursor"  Caption="-"    X="0" Y="25" Width="8"  Height="5" Font="2" Readonly="1"/>

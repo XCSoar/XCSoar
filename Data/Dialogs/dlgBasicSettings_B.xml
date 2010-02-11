@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmBasicSettingBig" Type="Dialog" X=5 Y=5 Width=230 Height=220 Caption="Basic Settings" Font=2>
+<WndForm Name="frmBasicSettingBig" X=5 Y=5 Width=230 Height=220 Caption="Basic Settings" Font=2>
   <WndProperty Caption="QNH"      X=2 Y=2   Width=222 Height=38 CaptionWidth=100 Font=4>
     <DataField name="" DataType="double" DisplayFormat="%.1fhPa" EditFormat="%.1f" Min=850 Max=1300 Step=0.1 OnDataAccess="OnQnhData"/>
   </WndProperty>

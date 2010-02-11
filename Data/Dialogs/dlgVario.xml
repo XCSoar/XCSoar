@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmVario" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Vario Configuration" Font=2>
+<WndForm Name="frmVario" X=0 Y=0 Width=320 Height=240 Caption="Vario Configuration" Font=2>
   <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
   <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 Tag=3 />

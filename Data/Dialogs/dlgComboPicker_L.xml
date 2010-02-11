@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmComboPopup" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Picker" Font=2>
+<WndForm Name="frmComboPopup" X=0 Y=0 Width=240 Height=320 Caption="Picker" Font=2>
   <WndButton Name="cmdClose"  Caption="Select"    X=5 Y=260 Width=70  Height=35 Font=2 OnClickNotify="OnCloseClicked"/>
 
   <WndButton  Name="cmdCancel"  Caption="Cancel"    X=82 Y=260 Width=70  Height=35 Font=2 OnClickNotify="OnCancelClicked"/>

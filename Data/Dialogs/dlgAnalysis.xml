@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Analysis" Font=2>
+<WndForm X=0 Y=0 Width=320 Height=240 Caption="Analysis" Font=2>
   <WndOwnerDrawFrame Name="frmGrid" X=90 Y=2 Width=224 Height=218 Font=0 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnAnalysisPaint" />
 
   <WndFrame Name="frmInfo" X=0 Y=5 Width=90 Height=120 Font=2 ForeColor=0x000000 _BackColor=0xFFFFFF/>
