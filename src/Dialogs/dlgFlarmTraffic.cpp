@@ -60,6 +60,7 @@ static const Color hcAlarm(0xFF, 0x00, 0x00);
 static const Color hcStandard(0x00, 0x00, 0x00);
 static const Color hcPassive(0x99, 0x99, 0x99);
 static const Color hcSelection(0x00, 0x00, 0xFF);
+static const Color hcTeam(0x74, 0xFF, 0x00);
 static const Color hcBackground(0xFF, 0xFF, 0xFF);
 static const Color hcRadar(0x55, 0x55, 0x55);
 
@@ -452,8 +453,13 @@ PaintTrafficInfo(Canvas &canvas) {
   // ID / Name
   if (traffic.HasName()) {
     canvas.select(InfoWindowFont);
-    if (traffic.AlarmLevel < 1)
-      canvas.set_text_color(hcSelection);
+    if (traffic.AlarmLevel < 1) {
+      if (XCSoarInterface::SettingsComputer().TeamFlarmTracking &&
+          traffic.ID == XCSoarInterface::SettingsComputer().TeamFlarmIdTarget)
+        canvas.set_text_color(hcTeam);
+      else
+        canvas.set_text_color(hcSelection);
+    }
     _tcscpy(tmp, traffic.Name);
   } else {
     _stprintf(tmp, _T("%lX"), traffic.ID);
@@ -493,6 +499,7 @@ PaintRadarTraffic(Canvas &canvas) {
   static const Brush hbStandard(hcStandard);
   static const Brush hbPassive(hcPassive);
   static const Brush hbSelection(hcSelection);
+  static const Brush hbTeam(hcTeam);
 
   static const Pen hpWarning(Layout::FastScale(2), hcWarning);
   static const Pen hpAlarm(Layout::FastScale(2), hcAlarm);
@@ -563,12 +570,18 @@ PaintRadarTraffic(Canvas &canvas) {
       if (XCSoarInterface::Basic().flarm.FLARM_Traffic[warning].defined()) {
         canvas.select(hbPassive);
         canvas.select(hpPassive);
-      } else if (static_cast<unsigned> (selection) == i) {
-        canvas.select(hpSelection);
-        canvas.select(hbSelection);
       } else {
-        canvas.select(hbStandard);
-        canvas.select(hpStandard);
+        if (static_cast<unsigned> (selection) == i) {
+          canvas.select(hpSelection);
+          canvas.select(hbSelection);
+        } else {
+          canvas.select(hbStandard);
+          canvas.select(hpStandard);
+        }
+        if (XCSoarInterface::SettingsComputer().TeamFlarmTracking &&
+            traffic.ID == XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) {
+          canvas.select(hbTeam);
+        }
       }
       break;
     }
