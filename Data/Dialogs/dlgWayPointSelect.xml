@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmWayPointSelect" X=0 Y=0 Width=320 Height=240 Caption="Select Waypoint" Font=2>
+<WndForm Name="frmWayPointSelect" Width=320 Height=240 Caption="Select Waypoint" Font=2>
   <WndFrame X=0 Y=0 Width=100 Height=20 Font=2 Caption="Filter..." />
 
   <WndProperty Name="prpFltName"      Caption="Name"      X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2>

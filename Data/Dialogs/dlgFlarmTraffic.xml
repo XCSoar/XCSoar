@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmFlarmTraffic" X="0" Y="0" Width="240" Height="320" Caption="FLARM Traffic" Font="2">
+<WndForm Name="frmFlarmTraffic" Width="240" Height="320" Caption="FLARM Traffic" Font="2">
   <WndButton Name="cmdDetails" Caption="Details" X="3" Y="242" Width="58" Height="28" Font="2" Tag="1" />
   <WndButton Name="cmdZoomIn" Caption="+" X="63" Y="242" Width="28" Height="28" Font="2" Tag="2" />
   <WndButton Name="cmdZoomOut" Caption="-" X="93" Y="242" Width="28" Height="28" Font="2" Tag="3" />

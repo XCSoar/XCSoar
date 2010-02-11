@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmHelp" X=0 Y=0 Width=320 Height=240 Caption="Help" Font=2>
+<WndForm Name="frmHelp" Width=320 Height=240 Caption="Help" Font=2>
   <WndButton   Caption="Close"    X=2 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
 
   <WndProperty Name="prpHelpText"  Caption="" X=62 Y=5 Width=255 Height=210 CaptionWidth=10 Font=2 ReadOnly=1 MultiLine="1"/>

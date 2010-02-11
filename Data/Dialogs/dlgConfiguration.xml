@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmConfiguration" X=0 Y=0 Width=320 Height=240 Caption="Configuration" Font=2>
+<WndForm Name="frmConfiguration" Width=320 Height=240 Caption="Configuration" Font=2>
   <WndProperty Name="prpUserLevel" Caption="" X=0 Y=5  Width=70 Height=28 CaptionWidth=15 Font=2 Help="Sets the level of detail of the configuration settings.
 [Basic]: Only basic settings are shown.
 [Expert]: Basic and advanced settings are shown.">
