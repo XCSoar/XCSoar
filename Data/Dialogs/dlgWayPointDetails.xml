@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmWayPointInfo" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Waypoint Info" Font=2  BackColor=0xDADBAB>
+<WndForm Name="frmWayPointInfo" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Waypoint Info" Font=2>
   <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
 
   <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmConfiguration" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Configuration" Font=2  BackColor=0xDADBAB>
+<WndForm Name="frmConfiguration" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Configuration" Font=2>
   <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
   <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=270 Width=60  Height=28 Font=2 Tag=3 />
@@ -84,7 +84,7 @@
         <DataField name="" DataType="boolean"/>
       </WndProperty>
     
-      <WndProperty Name="prpWarningTime" Caption="Warning time*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot." >
+      <WndProperty Name="prpWarningTime" Caption="Warning time*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot.">
         <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=10 Max=1000 Step=5/>
       </WndProperty>
     

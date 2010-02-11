@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmStartTaskRegular" Type="Dialog" X=5 Y=5 Width=143 Height=133 Caption="Task Start" Font=2 BackColor=0xDADBAB>
+<WndForm Name="frmStartTaskRegular" Type="Dialog" X=5 Y=5 Width=143 Height=133 Caption="Task Start" Font=2>
   <WndProperty Name="prpTime" Caption="Time"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2 ReadOnly=1 Help="" />
 
   <WndProperty Name="prpSpeed" Caption="Speed"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2 ReadOnly=1 Help="" />

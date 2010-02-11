@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmConfiguration" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Configuration" Font=2  BackColor=0xDADBAB>
+<WndForm Name="frmConfiguration" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Configuration" Font=2>
   <WndProperty Name="prpUserLevel" Caption="" X=0 Y=5  Width=70 Height=28 CaptionWidth=15 Font=2 Help="Sets the level of detail of the configuration settings.
 [Basic]: Only basic settings are shown.
 [Expert]: Basic and advanced settings are shown.">
@@ -81,7 +81,7 @@
         <DataField name="" DataType="boolean" />
       </WndProperty>
     
-      <WndProperty Name="prpWarningTime" Caption="Warning time*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot." >
+      <WndProperty Name="prpWarningTime" Caption="Warning time*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot.">
         <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=10 Max=1000 Step=5 />
       </WndProperty>
     
@@ -116,7 +116,7 @@
   [North up when circling] Track-up in cruise and north-up when circling.
   [Target up when circling] Track-up in cruise and the bearing to next waypoint up when circling.
   [North/track] North-up in cruise, glider track-track up in circling
-  " >
+  ">
         <DataField name="" DataType="enum"  Min=0 Max=50 Step=1 />
       </WndProperty>
   

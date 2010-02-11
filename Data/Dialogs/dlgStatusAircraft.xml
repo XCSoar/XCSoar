@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Type="Dialog" X=5 Y=5 Width=251 Height=231 Caption="Aircraft Status" Font=2 BackColor=0xDADBAB>
+<WndForm Type="Dialog" X=5 Y=5 Width=251 Height=231 Caption="Aircraft Status" Font=2>
   <WndProperty Name="prpLongitude" Caption="Longitude" X=2 Y=2  Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpLatitude"  Caption="Latitude"  X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpFlightTime"    Caption="Flight time"    X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />

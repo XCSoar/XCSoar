@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTaskOverview" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Task Overview" Font=2  BackColor=0xDADBAB>
+<WndForm Name="frmTaskOverview" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Task Overview" Font=2>
   <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=2 Width=49  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
   <WndButton  Name="cmdClear" Caption="Clear"    X=51 Y=2 Width=49  Height=22 Font=2 OnClickNotify="OnClearClicked"/>
 
@@ -10,7 +10,7 @@
 
   <WndButton   Name="cmdFile" Caption="Advanced.."    X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnAdvancedClicked"/>
 
-  <Panel Name="frmAdvanced" X=104 Y=0 Width=130 Height=68 Font=2 >
+  <Panel Name="frmAdvanced" X=104 Y=0 Width=130 Height=68 Font=2>
   
     <WndButton  Name="cmdCalc"  Caption="Calc" X=2 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCalcClicked" Tag=4 />
     <WndButton  Name="cmdDeclare" Caption="Declare"    X=65 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnDeclareClicked"/>

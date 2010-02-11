@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmStartup" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="XCSoar" Font=2  BackColor=0xDADBAB>
+<WndForm Name="frmStartup" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="XCSoar" Font=2>
   <WndOwnerDrawFrame Name="frmSplash" X=0 Y=2 Width=318 Height=163 Font=0 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnSplashPaint" />
 
   <aWndProperty Name="prpDisclaimer"   Caption=""       X=2 Y=2  Width=318 Height=148 CaptionWidth=2 Font=3 ReadOnly=1 MultiLine=1/>

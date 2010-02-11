@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmWayPointSelect" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Select Waypoint" Font=2  BackColor=0xDADBAB>
+<WndForm Name="frmWayPointSelect" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Select Waypoint" Font=2>
   <WndFrame X=0 Y=0 Width=100 Height=20 Font=2 Caption="Filter..." />
 
-  <WndProperty Name="prpFltName"      Caption="Name"      X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltName"      Caption="Name"      X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2>
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
   </WndProperty>
 
-  <WndProperty Name="prpFltDistance"  Caption="Distance"  X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltDistance"  Caption="Distance"  X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2>
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
   </WndProperty>
 
-  <WndProperty Name="prpFltDirection" Caption="Direction" X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltDirection" Caption="Direction" X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2>
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </WndProperty>
 
-  <WndProperty Name="prpFltType" Caption="Type" X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltType" Caption="Type" X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2>
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
   </WndProperty>
 
