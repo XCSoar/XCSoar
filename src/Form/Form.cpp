@@ -58,7 +58,7 @@ WndForm::WndForm(SingleWindow &_main_window,
   mColorTitle(Color::YELLOW),
   mhTitleFont(GetFont()),
   mClientWindow(NULL),
-  mOnTimerNotify(NULL), mOnKeyDownNotify(NULL), mOnUserMsgNotify(NULL)
+  mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
 {
   // Create ClientWindow
 
@@ -128,15 +128,6 @@ WndForm::on_timer(timer_t id)
     return true;
   } else
     return ContainerControl::on_timer(id);
-}
-
-bool
-WndForm::on_user(unsigned id)
-{
-  if (mOnUserMsgNotify != NULL && mOnUserMsgNotify(this, id))
-    return true;
-
-  return ContainerControl::on_user(id);
 }
 
 const Font *
@@ -402,12 +393,6 @@ void
 WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify)
 {
   mOnTimerNotify = OnTimerNotify;
-}
-
-void
-WndForm::SetUserMsgNotify(UserMsgNotifyCallback_t OnUserMsgNotify)
-{
-  mOnUserMsgNotify = OnUserMsgNotify;
 }
 
 // normal form stuff (nonmodal)

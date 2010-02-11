@@ -55,9 +55,6 @@ public:
   typedef int (*TimerNotifyCallback_t)(WindowControl *Sender);
   typedef bool (*KeyDownNotifyCallback_t)(WindowControl *Sender,
       unsigned key_code);
-  typedef bool (*UserMsgNotifyCallback_t)(WindowControl *Sender, unsigned id);
-  typedef int (*LButtonUpNotifyCallback_t)(WindowControl *Sender,
-      WPARAM wParam, LPARAM lParam);
 
 protected:
   SingleWindow &main_window;
@@ -75,7 +72,6 @@ protected:
 
   TimerNotifyCallback_t mOnTimerNotify;
   KeyDownNotifyCallback_t mOnKeyDownNotify;
-  UserMsgNotifyCallback_t mOnUserMsgNotify;
 
   /**
    * The on_paint event is called when the button needs to be drawn
@@ -105,13 +101,6 @@ public:
 
   ContainerWindow &GetClientAreaWindow(void);
 
-  int OnLButtonUp(WPARAM wParam, LPARAM lParam) {
-    (void)wParam; (void)lParam;
-    return 0;
-  }
-
-  DWORD enterTime;
-
   int GetModalResult(void) { return mModalResult; }
   int SetModalResult(int Value) {
     mModalResult = Value;
@@ -123,7 +112,6 @@ public:
 
   int ShowModal(bool bEnableMap);
   int ShowModal(void);
-  void Show(void);
 
   /** Set the titlebar text */
   void SetCaption(const TCHAR *Value);
@@ -133,7 +121,6 @@ public:
   /** from class Window */
   virtual bool on_destroy();
   virtual bool on_timer(timer_t id);
-  virtual bool on_user(unsigned id);
 
   /** Set the foreground color of the window */
   Color SetForeColor(Color Value);
@@ -143,9 +130,7 @@ public:
   const Font *SetFont(const Font &Value);
 
   void SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify);
-  void SetLButtonUpNotify(LButtonUpNotifyCallback_t LButtonUpNotify);
   void SetTimerNotify(TimerNotifyCallback_t OnTimerNotify);
-  void SetUserMsgNotify(UserMsgNotifyCallback_t OnUserMsgNotify);
 
 private:
   static PeriodClock timeAnyOpenClose; // when any dlg opens or child closes
