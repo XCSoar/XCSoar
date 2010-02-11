@@ -112,6 +112,14 @@ WndForm::GetClientAreaWindow(void)
     return *this;
 }
 
+void
+WndForm::FilterAdvanced(bool advanced)
+{
+  for (window_list_t::const_iterator i = advanced_windows.begin();
+       i != advanced_windows.end(); ++i)
+    (*i)->set_visible(advanced);
+}
+
 bool
 WndForm::on_destroy()
 {

@@ -655,6 +655,8 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   // Determine the control's border kind (default = 0)
   Border = StringToIntDflt(node.getAttribute(_T("Border")), 0);
 
+  bool advanced = _tcschr(Caption, _T('*')) != NULL;
+
   // PropertyControl (WndProperty)
   if (_tcscmp(node.getName(), _T("WndProperty")) == 0) {
     WndProperty *W;
@@ -889,6 +891,9 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     if (Name[0] != '\0')
       form.AddNamed(Name, WC);
+
+    if (advanced)
+      form.AddAdvanced(WC);
   }
 }
 

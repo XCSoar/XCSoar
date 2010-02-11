@@ -44,6 +44,7 @@ Copyright_License {
 #include "Util/tstring.hpp"
 
 #include <map>
+#include <list>
 
 class SingleWindow;
 class PeriodClock;
@@ -61,6 +62,7 @@ class WndForm: public ContainerControl
     }
   };
 
+  typedef std::list<Window *> window_list_t;
   typedef std::map<tstring, Window *, tstring_less_than> name_to_window_t;
 
 public:
@@ -73,6 +75,11 @@ private:
    * Mapping of control names to #Window objects.
    */
   name_to_window_t name_to_window;
+
+  /**
+   * List of windows which should only be visible in "advanced" mode.
+   */
+  window_list_t advanced_windows;
 
 protected:
   SingleWindow &main_window;
@@ -148,6 +155,20 @@ public:
 
     return i->second;
   }
+
+  /**
+   * Adds a #Window to the "advanced window list" (#advanced_windows).
+   */
+  void AddAdvanced(Window *window) {
+    advanced_windows.push_back(window);
+  }
+
+  /**
+   * Shows/Hides the ClientControls depending on the given value of advanced and
+   * whether their caption includes an asterisk.
+   * @param advanced True if advanced mode activated
+   */
+  void FilterAdvanced(bool advanced);
 
   int GetModalResult(void) { return mModalResult; }
   int SetModalResult(int Value) {

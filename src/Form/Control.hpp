@@ -267,13 +267,6 @@ public:
     mPaintSelector = Value;
   }
 
-  /**
-   * Shows/Hides the WindowControl depending on the given value of advanced and
-   * whether the caption includes an asterisk.
-   * @param advanced True if advanced mode activated
-   */
-  virtual void FilterAdvanced(bool advanced);
-
 protected:
   /** Caption/Text of the Control */
   TCHAR mCaption[254];

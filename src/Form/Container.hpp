@@ -82,13 +82,6 @@ public:
    * @param Client A WindowControl to add as a ClientControl
    */
   virtual void AddClient(WindowControl *Client);
-
-  /**
-   * Shows/Hides the ClientControls depending on the given value of advanced and
-   * whether their caption includes an asterisk.
-   * @param advanced True if advanced mode activated
-   */
-  virtual void FilterAdvanced(bool advanced);
 };
 
 #endif

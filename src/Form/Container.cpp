@@ -76,14 +76,3 @@ ContainerControl::AddClient(WindowControl *Client)
   }
   */
 }
-
-void
-ContainerControl::FilterAdvanced(bool advanced)
-{
-  // Call the base function
-  WindowControl::FilterAdvanced(advanced);
-
-  // Call FilterAdvanced for every ClientControl
-  for (unsigned i = 0; i < mClientCount; i++)
-    mClients[i]->FilterAdvanced(advanced);
-}

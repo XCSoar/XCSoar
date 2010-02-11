@@ -119,17 +119,6 @@ WindowControl::~WindowControl(void)
 }
 
 void
-WindowControl::FilterAdvanced(bool advanced)
-{
-  if (_tcsstr(mCaption, TEXT("*")) != NULL) {
-    if (advanced)
-      show();
-    else
-      hide();
-  }
-}
-
-void
 WindowControl::SetHelpText(const TCHAR *Value)
 {
   if (mHelpText) {
