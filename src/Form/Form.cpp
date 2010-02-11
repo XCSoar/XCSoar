@@ -100,6 +100,12 @@ WndForm::~WndForm()
      our own on_destroy() method won't be called (during object
      destruction, this object loses its identity) */
   reset();
+
+  for (window_list_t::iterator i = destruct_windows.begin();
+       i != destruct_windows.end(); ++i)
+    delete *i;
+
+  delete mClientWindow;
 }
 
 ContainerWindow &

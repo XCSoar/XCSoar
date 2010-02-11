@@ -71,10 +71,7 @@ public:
                    int x, int y, int width, int height,
                    const WindowStyle style)
     :WindowControl(owner, parent, x, y, width, height, style),
-     mClientCount(0),
      bottom_most(0) {}
-  /** Destructor */
-  virtual ~ContainerControl();
 
 public:
   /**

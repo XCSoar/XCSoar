@@ -215,6 +215,9 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   // Show MessageBox and save result
   res = wf->ShowModal();
 
+  delete wText;
+  for (int i = 0; i < ButtonCount; ++i)
+    delete wButtons[i];
   delete wf;
 
 #ifdef ALTAIRSYNC

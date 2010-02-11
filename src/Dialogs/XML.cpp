@@ -889,6 +889,8 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     if (Border != 0)
       WC->SetBorderKind(Border);
 
+    form.AddDestruct(WC);
+
     if (Name[0] != '\0')
       form.AddNamed(Name, WC);
 

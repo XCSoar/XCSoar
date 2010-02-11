@@ -38,13 +38,6 @@ Copyright_License {
 
 #include "Form/Container.hpp"
 
-ContainerControl::~ContainerControl()
-{
-  // Delete all ClientControls
-  for (int i = mClientCount - 1; i >= 0; i--)
-    delete mClients[i];
-}
-
 void
 ContainerControl::AddClient(WindowControl *Client)
 {

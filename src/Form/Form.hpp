@@ -72,6 +72,12 @@ public:
 
 private:
   /**
+   * List of windows which will be deleted by the destructor of this
+   * class.
+   */
+  window_list_t destruct_windows;
+
+  /**
    * Mapping of control names to #Window objects.
    */
   name_to_window_t name_to_window;
@@ -124,6 +130,16 @@ public:
   virtual ~WndForm();
 
   ContainerWindow &GetClientAreaWindow(void);
+
+  /**
+   * Add a #Window to the "destruct" list: the object will be deleted
+   * by the destructor of this class.  This means that the caller
+   * doesn't have to keep track of the specified Window, because this
+   * WndForm is now responsible for freeing memory.
+   */
+  void AddDestruct(Window *window) {
+    destruct_windows.push_front(window);
+  }
 
   /**
    * Adds a #Window to the name-to-window map.
