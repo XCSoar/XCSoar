@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTaskOverview" Width=240 Height=320 Caption="Task Overview" Font=2>
+<WndForm Name="frmTaskOverview" Width=240 Height=320 Caption="Task Overview">
   <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=2 Width=49  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
   <WndButton  Name="cmdClear" Caption="Clear"    X=51 Y=2 Width=49  Height=22 Font=2 OnClickNotify="OnClearClicked"/>
 

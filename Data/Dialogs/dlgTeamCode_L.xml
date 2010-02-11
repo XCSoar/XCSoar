@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTeamCode" Width="206" Height="240" Caption="Team code" Font="2">
+<WndForm Name="frmTeamCode" Width="206" Height="240" Caption="Team code">
   <WndProperty Name="prpOwnCode" Caption="Own code:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
 
   <WndProperty Name="prpMateCode" Caption="Mate code:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />

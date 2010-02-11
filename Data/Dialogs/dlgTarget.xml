@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTarget" X=200 Y=0 Width=119 Height=240 Caption="Target" Font=2 Popup=1>
+<WndForm Name="frmTarget" X=200 Y=0 Width=119 Height=240 Caption="Target" Popup=1>
   <WndButton  Name="btnOK" Caption="OK"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
 
   <WndProperty Name="prpTaskPoint" Caption="Tp" X=2 Y=-1   Width=115 Height=24 CaptionWidth=30 Font=2

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmTaskRules" Width=240 Height=240 Caption="Task Rules" Font=2>
+<WndForm Name="frmTaskRules" Width=240 Height=240 Caption="Task Rules">
   <WndButton   Caption="Close"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnCloseClicked" Tag=1/>
 
   <WndProperty Name="prpStartMaxSpeed" Caption="Start max speed"      X=2 Y=-1   Width=236 Height=22 CaptionWidth=150 Font=2

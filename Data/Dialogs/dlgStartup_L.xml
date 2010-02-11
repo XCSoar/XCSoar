@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmStartup" Width=240 Height=320 Caption="XCSoar" Font=2>
+<WndForm Name="frmStartup" Width=240 Height=320 Caption="XCSoar">
   <WndOwnerDrawFrame Name="frmSplash" X=0 Y=2 Width=240 Height=123 Font=0 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnSplashPaint" />
 
   <WndButton Name="cmdClose" Caption="Accept" X=2 Y=-1 Width=230  Height=30 Font=2 Tag=3 />

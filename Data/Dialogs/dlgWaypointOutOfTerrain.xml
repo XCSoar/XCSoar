@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmWaypointOutOfTerrain" X=30 Y=55 Width=200 Height=120 Caption="Waypoint Parser" Font=2>
+<WndForm Name="frmWaypointOutOfTerrain" X=30 Y=55 Width=200 Height=120 Caption="Waypoint Parser">
   <WndFrame Name="frmWaypointOutOfTerrainText" X=0 Y=0 Width=200 Height=80 Font=2 />
 
   <WndButton   Caption="Yes"      X=4   Y=74 width=35 height=22 Font=2 OnClickNotify="OnYesClicked"/>

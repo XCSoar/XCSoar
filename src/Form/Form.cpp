@@ -45,6 +45,7 @@ Copyright_License {
 #include "Screen/Animation.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Fonts.hpp"
 
 PeriodClock WndForm::timeAnyOpenClose;
 
@@ -65,6 +66,8 @@ WndForm::WndForm(SingleWindow &_main_window,
   WindowStyle client_style;
   client_style.control_parent();
   SetBackColor(Color(0xDA, 0xDB, 0xAB));
+  SetFont(MapWindowBoldFont);
+  SetTitleFont(MapWindowBoldFont);
 
   mClientWindow = new ContainerControl(this, this,
                                        TEXT(""), 20, 20, Width, Height,
