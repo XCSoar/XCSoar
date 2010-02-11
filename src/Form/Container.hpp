@@ -61,7 +61,6 @@ public:
    * Constructor for the ContainerControl class
    * @param owner
    * @param parent
-   * @param name Name of the ContainerControl
    * @param x x-Coordinate of the ContainerControl
    * @param y y-Coordinate of the ContainerControl
    * @param width Width of the ContainerControl
@@ -69,9 +68,9 @@ public:
    * @param visible True if the ContainerControl should be visible, False if not
    */
   ContainerControl(ContainerControl *owner, ContainerWindow *parent,
-                   const TCHAR *name, int x, int y, int width, int height,
+                   int x, int y, int width, int height,
                    const WindowStyle style)
-    :WindowControl(owner, parent, name, x, y, width, height, style),
+    :WindowControl(owner, parent, x, y, width, height, style),
      mClientCount(0),
      bottom_most(0) {}
   /** Destructor */

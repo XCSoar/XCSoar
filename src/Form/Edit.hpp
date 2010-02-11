@@ -155,7 +155,6 @@ public:
   /**
    * Constructor of the WndProperty
    * @param Parent The parent ContainerControl
-   * @param Name Name of the Control
    * @param Caption Caption of the Control
    * @param X x-Coordinate of the Control
    * @param Y y-Coordinate of the Control
@@ -165,7 +164,7 @@ public:
    * @param DataChangeNotify Function to call when the data changed
    * @param MultiLine If true, the Control can handle mutliple lines
    */
-  WndProperty(ContainerControl *Parent, TCHAR *Name, TCHAR *Caption,
+  WndProperty(ContainerControl *Parent, TCHAR *Caption,
               int X, int Y, int Width, int Height, int CaptionWidth,
               const WindowStyle style,
               const EditWindowStyle edit_style,

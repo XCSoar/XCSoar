@@ -38,10 +38,10 @@ Copyright_License {
 
 #include "Form/Panel.hpp"
 
-PanelControl::PanelControl(ContainerControl *owner, const TCHAR *name,
+PanelControl::PanelControl(ContainerControl *owner,
                            int x, int y, unsigned width, unsigned height,
                            const WindowStyle style)
-  :ContainerControl(owner, NULL, name, x, y, width, height, style)
+  :ContainerControl(owner, NULL, x, y, width, height, style)
 {
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());

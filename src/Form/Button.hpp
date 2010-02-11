@@ -53,7 +53,6 @@ public:
   /**
    * Constructor of the WndButton class
    * @param Parent Parent window/ContainerControl
-   * @param Name Name of the button
    * @param Caption Text on the button
    * @param X x-Coordinate relative to the parent
    * @param Y y-Coordinate relative to the parent
@@ -62,7 +61,7 @@ public:
    * @param Function The function that should be called
    * when the button is clicked
    */
-  WndButton(ContainerControl *Parent, const TCHAR *Name, const TCHAR *Caption,
+  WndButton(ContainerControl *Parent, const TCHAR *Caption,
       int X, int Y, int Width, int Height,
             const WindowStyle style,
       ClickNotifyCallback_t Function = NULL);

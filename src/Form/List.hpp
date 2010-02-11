@@ -252,14 +252,13 @@ public:
   /**
    * Constructor of the WndListFrame class
    * @param Owner Parent ContainerControl
-   * @param Name Name of the ListFrameControl
    * @param X x-Coordinate of the ListFrameControl
    * @param Y y-Coordinate of the ListFrameControl
    * @param Width Width of the ListFrameControl
    * @param Height Height of the ListFrameControl
    * @param _item_height Height of an item of the ListFrameControl
    */
-  WndListFrame(ContainerControl *Owner, const TCHAR *Name,
+  WndListFrame(ContainerControl *Owner,
                int X, int Y, int Width, int Height,
                const WindowStyle style,
                unsigned _item_height);

@@ -103,14 +103,13 @@ public:
   /**
    * Constructor of the WndForm class
    * @param _main_window
-   * @param Name Name of the Window
    * @param Caption Titlebar text of the Window
    * @param X x-Coordinate of the Window
    * @param Y y-Coordinate of the Window
    * @param Width Width of the Window
    * @param Height Height of the Window
    */
-  WndForm(SingleWindow &_main_window, const TCHAR *Name, const TCHAR *Caption,
+  WndForm(SingleWindow &_main_window, const TCHAR *Caption,
           int X, int Y, int Width, int Height,
           const WindowStyle style);
 

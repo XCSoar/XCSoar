@@ -532,7 +532,7 @@ dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const TCHAR *FileName,
   style.hide();
   style.control_parent();
 
-  theForm = new WndForm(Parent, Name, sTmp, X, Y, Width, Height, style);
+  theForm = new WndForm(Parent, sTmp, X, Y, Width, Height, style);
 
   // Sets Fonts
   if (Font != -1)
@@ -711,7 +711,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
       edit_style.vscroll();
     }
 
-    WC = W = new WndProperty(Parent, Name, Caption, X, Y, Width, Height,
+    WC = W = new WndProperty(Parent, Caption, X, Y, Width, Height,
                              CaptionWidth,
                              style, edit_style,
                              (WndProperty::DataChangeCallback_t)
@@ -753,7 +753,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     WindowStyle style;
     style.tab_stop();
 
-    WC = new WndButton(Parent, Name, Caption, X, Y, Width, Height,
+    WC = new WndButton(Parent, Caption, X, Y, Width, Height,
                        style,
                        (WndButton::ClickNotifyCallback_t)
                        CallBackLookup(LookUpTable, ClickCallback));
@@ -772,7 +772,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     WindowStyle style;
     style.tab_stop();
 
-    WC = new WndSymbolButton(Parent, Name, Caption, X, Y, Width, Height,
+    WC = new WndSymbolButton(Parent, Caption, X, Y, Width, Height,
                              style,
                              (WndButton::ClickNotifyCallback_t)
                              CallBackLookup(LookUpTable, ClickCallback));
@@ -794,7 +794,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     WindowStyle style;
     style.tab_stop();
 
-    WC = new WndEventButton(Parent, Name, Caption, X, Y, Width, Height,
+    WC = new WndEventButton(Parent, Caption, X, Y, Width, Height,
                             style,
                             iename, ieparameters);
 
@@ -808,7 +808,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     WindowStyle style;
     style.control_parent();
 
-    PanelControl *frame = new PanelControl(Parent, Name,
+    PanelControl *frame = new PanelControl(Parent,
                                            X, Y, Width, Height, style);
     WC = frame;
 
@@ -824,7 +824,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
             StringToStringDflt(node.getAttribute(_T("OnPaint")), _T("")));
 
     // Create the DrawControl
-    WC = new WndOwnerDrawFrame(Parent, Name, X, Y, Width, Height,
+    WC = new WndOwnerDrawFrame(Parent, X, Y, Width, Height,
                                WindowStyle(),
                                (WndOwnerDrawFrame::OnPaintCallback_t)
                                CallBackLookup(LookUpTable, PaintCallback));
@@ -832,7 +832,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("WndFrame")) == 0){
     // Create the FrameControl
-    WC = new WndFrame(Parent, Name, X, Y, Width, Height,
+    WC = new WndFrame(Parent, X, Y, Width, Height,
                       WindowStyle());
 
   // ListBoxControl (WndListFrame)
@@ -846,7 +846,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     WindowStyle style;
     style.tab_stop();
 
-    WC = new WndListFrame(Parent, Name, X, Y, Width, Height,
+    WC = new WndListFrame(Parent, X, Y, Width, Height,
                           style,
                           item_height);
 
@@ -857,7 +857,7 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     WindowStyle style;
     style.control_parent();
 
-    TabbedControl *tabbed = new TabbedControl(Parent, Name,
+    TabbedControl *tabbed = new TabbedControl(Parent,
                                               X, Y, Width, Height, style);
     WC = tabbed;
 

@@ -136,7 +136,6 @@ Bitmap WndProperty::hBmpRight32;
 int WndProperty::InstCount = 0;
 
 WndProperty::WndProperty(ContainerControl *Parent,
-                         TCHAR *Name,
                          TCHAR *Caption,
                          int X, int Y,
                          int Width, int Height,
@@ -146,7 +145,7 @@ WndProperty::WndProperty(ContainerControl *Parent,
                          DataChangeCallback_t DataChangeNotify)
   :WindowControl(Parent,
                  NULL /*Parent->GetHandle()*/,
-                 Name, X, Y, Width, Height,
+                 X, Y, Width, Height,
                  style),
    edit(this),
    mhValueFont(GetFont()),

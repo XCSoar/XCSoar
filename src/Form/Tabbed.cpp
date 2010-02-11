@@ -40,10 +40,10 @@ Copyright_License {
 
 #include <assert.h>
 
-TabbedControl::TabbedControl(ContainerControl *owner, const TCHAR *name,
+TabbedControl::TabbedControl(ContainerControl *owner,
                              int x, int y, unsigned width, unsigned height,
                              const WindowStyle style)
-  :ContainerControl(owner, NULL, name, x, y, width, height, style),
+  :ContainerControl(owner, NULL, x, y, width, height, style),
    current(0)
 {
   SetForeColor(GetOwner()->GetForeColor());

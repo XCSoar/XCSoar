@@ -77,7 +77,6 @@ KeyTimer(bool isdown, unsigned thekey)
 }
 
 WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
-                             const TCHAR *Name,
                              int X, int Y, int Width, int Height,
                              const WindowStyle style) :
     mOwner(Owner),
@@ -95,12 +94,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
 
   if ((Parent == NULL) && (mOwner != NULL))
     Parent = (ContainerWindow *)&mOwner->GetClientAreaWindow();
-
-  // Save the Name of the Control
-  if (Name != NULL)
-    _tcscpy(mName, Name); // todo size check
-  else
-    mName[0] = '\0';
 
   // If not done already -> initialize default brushes and pens
   if (!initialized) {

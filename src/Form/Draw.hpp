@@ -46,8 +46,8 @@ public:
 
   typedef void (*OnPaintCallback_t)(WindowControl *Sender, Canvas &canvas);
 
-  WndOwnerDrawFrame(ContainerControl *Owner, TCHAR *Name, int X, int Y,
-                    int Width, int Height,
+  WndOwnerDrawFrame(ContainerControl *Owner,
+                    int X, int Y, int Width, int Height,
                     const WindowStyle style,
                     OnPaintCallback_t OnPaintCallback);
 

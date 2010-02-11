@@ -46,7 +46,7 @@ protected:
   unsigned current;
 
 public:
-  TabbedControl(ContainerControl *owner, const TCHAR *name,
+  TabbedControl(ContainerControl *owner,
                 int x, int y, unsigned width, unsigned height,
                 const WindowStyle style=WindowStyle());
 

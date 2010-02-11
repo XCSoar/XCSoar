@@ -49,13 +49,12 @@ public:
   /**
    * Constructor of the PanelControl class
    * @param owner Parent ContainerControl
-   * @param name Name of the Control
    * @param x x-Coordinate of the Control
    * @param y y-Coordinate of the Control
    * @param width Width of the Control
    * @param height Height of the Control
    */
-  PanelControl(ContainerControl *owner, const TCHAR *name,
+  PanelControl(ContainerControl *owner,
                int x, int y, unsigned width, unsigned height,
                const WindowStyle style=WindowStyle());
 };

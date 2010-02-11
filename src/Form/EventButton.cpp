@@ -62,13 +62,13 @@ WndEventButton::~WndEventButton() {
 }
 
 
-WndEventButton::WndEventButton(ContainerControl *Parent, const TCHAR *Name,
+WndEventButton::WndEventButton(ContainerControl *Parent,
 			       const TCHAR *Caption,
 			       int X, int Y, int Width, int Height,
                                const WindowStyle style,
 			       const TCHAR* ename,
 			       const TCHAR* theparameters):
-  WndButton(Parent,Name,Caption,X,Y,Width,Height,
+  WndButton(Parent, Caption, X, Y, Width, Height,
             style,
 	    WndEventButton_OnClickNotify)
 {

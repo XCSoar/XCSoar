@@ -39,11 +39,11 @@ Copyright_License {
 #include "Form/Draw.hpp"
 #include "Form/Container.hpp"
 
-WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl *Owner, TCHAR *Name,
+WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl *Owner,
                                      int X, int Y, int Width, int Height,
                                      const WindowStyle style,
                                      OnPaintCallback_t OnPaintCallback)
-  :WindowControl(Owner, NULL, Name, X, Y, Width, Height, style),
+  :WindowControl(Owner, NULL, X, Y, Width, Height, style),
    mOnPaintCallback(OnPaintCallback)
 {
   mCaption[0] = '\0';
