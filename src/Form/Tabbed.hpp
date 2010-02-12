@@ -54,7 +54,7 @@ public:
                 const WindowStyle style=WindowStyle());
 
 public:
-  virtual void AddClient(WindowControl *w);
+  virtual void AddClient(Window *w);
 
 public:
   unsigned GetCurrentPage() const {

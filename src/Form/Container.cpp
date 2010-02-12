@@ -39,7 +39,7 @@ Copyright_License {
 #include "Form/Container.hpp"
 
 void
-ContainerControl::AddClient(WindowControl *Client)
+ContainerControl::AddClient(Window *Client)
 {
   // If the client doesn't know where to go
   // -> move it below the previous one

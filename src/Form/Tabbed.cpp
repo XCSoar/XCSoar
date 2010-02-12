@@ -51,7 +51,7 @@ TabbedControl::TabbedControl(ContainerControl *owner,
 }
 
 void
-TabbedControl::AddClient(WindowControl *w)
+TabbedControl::AddClient(Window *w)
 {
   ContainerControl::AddClient(w);
 

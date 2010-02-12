@@ -71,9 +71,9 @@ public:
 public:
   /**
    * Add a ClientControl to the ContainerControl
-   * @param Client A WindowControl to add as a ClientControl
+   * @param Client A Window to add
    */
-  virtual void AddClient(WindowControl *Client);
+  virtual void AddClient(Window *Client);
 };
 
 #endif
