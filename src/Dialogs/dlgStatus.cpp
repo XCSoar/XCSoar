@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Task/TaskManager.hpp"
-
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
@@ -54,6 +53,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 #include <algorithm>
@@ -66,8 +66,9 @@ static TabbedControl *tabbed;
 static bool multi_page = false;
 static int status_page = 0;
 
-static void OnCloseClicked(WindowControl * Sender){
-  (void)Sender;
+static void
+OnCloseClicked(gcc_unused WndButton &button)
+{
   wf->SetModalResult(mrOK);
 }
 

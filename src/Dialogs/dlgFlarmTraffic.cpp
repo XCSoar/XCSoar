@@ -54,6 +54,7 @@
 #include "Math/FastRotation.hpp"
 #include "Math/Screen.hpp"
 #include "MainWindow.hpp"
+#include "Compiler.h"
 
 static const Color hcWarning(0xFF, 0xA2, 0x00);
 static const Color hcAlarm(0xFF, 0x00, 0x00);
@@ -236,9 +237,8 @@ ZoomIn()
  * This event handler is called when the "Details" button is pressed
  */
 static void
-OnDetailsClicked(WindowControl * Sender)
+OnDetailsClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
   MessageBoxX(_T("This feature is not implemented yet."), _T(""), MB_OK);
 }
 
@@ -246,9 +246,8 @@ OnDetailsClicked(WindowControl * Sender)
  * This event handler is called when the "ZoomIn (+)" button is pressed
  */
 static void
-OnZoomInClicked(WindowControl * Sender)
+OnZoomInClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
   ZoomIn();
 }
 
@@ -256,9 +255,8 @@ OnZoomInClicked(WindowControl * Sender)
  * This event handler is called when the "ZoomOut (-)" button is pressed
  */
 static void
-OnZoomOutClicked(WindowControl * Sender)
+OnZoomOutClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
   ZoomOut();
 }
 
@@ -266,10 +264,8 @@ OnZoomOutClicked(WindowControl * Sender)
  * This event handler is called when the "Prev (<)" button is pressed
  */
 static void
-OnPrevClicked(WindowControl * Sender)
+OnPrevClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
-
   // If warning is displayed -> prevent selector movement
   if (warning >= 0)
     return;
@@ -282,10 +278,8 @@ OnPrevClicked(WindowControl * Sender)
  * This event handler is called when the "Next (>)" button is pressed
  */
 static void
-OnNextClicked(WindowControl * Sender)
+OnNextClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
-
   // If warning is displayed -> prevent selector movement
   if (warning >= 0)
     return;
@@ -298,9 +292,8 @@ OnNextClicked(WindowControl * Sender)
  * This event handler is called when the "Close" button is pressed
  */
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 

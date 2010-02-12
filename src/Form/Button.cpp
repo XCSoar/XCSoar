@@ -89,7 +89,7 @@ WndButton::on_mouse_up(int x, int y)
     SetSourceRectangle(mRc);
 
     // Call the OnClick function
-    (mOnClickNotify)(this);
+    mOnClickNotify(*this);
   }
 
   return true;
@@ -199,7 +199,7 @@ WndButton::on_key_up(unsigned key_code)
         SetSourceRectangle(mRc);
 
         // Call the OnClick function
-        (mOnClickNotify)(this);
+        mOnClickNotify(*this);
       }
     }
 

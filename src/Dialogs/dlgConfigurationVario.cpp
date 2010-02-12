@@ -44,6 +44,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
 #include "Simulator.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 
@@ -561,8 +562,9 @@ static void OnPrevClicked(WindowControl * Sender){
   PageSwitched();
 }
 
-static void OnCloseClicked(WindowControl * Sender){
-  (void)Sender;
+static void
+OnCloseClicked(gcc_unused WndButton &button)
+{
   UpdateParameters(false);  // 20060801:sgi make shure changes are
                             // sent to device
   wf->SetModalResult(mrOK);

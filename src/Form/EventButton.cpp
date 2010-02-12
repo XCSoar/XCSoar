@@ -43,9 +43,11 @@ Copyright_License {
 
 #ifndef ALTAIRSYNC
 
-void WndEventButton_OnClickNotify(WindowControl *Sender) {
-  WndEventButton *wb = (WndEventButton*)Sender;
-  wb->CallEvent();
+static void
+WndEventButton_OnClickNotify(WndButton &button)
+{
+  WndEventButton &wb = (WndEventButton &)button;
+  wb.CallEvent();
 }
 
 void WndEventButton::CallEvent() {

@@ -43,6 +43,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Defines.h"
 #include "StringUtil.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 
@@ -119,18 +120,21 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
                 text + nstart, nlen);
 }
 
-static void OnNextClicked(WindowControl * Sender){
-  (void)Sender;
+static void
+OnNextClicked(gcc_unused WndButton &button)
+{
   NextPage(+1);
 }
 
-static void OnPrevClicked(WindowControl * Sender){
-  (void)Sender;
+static void
+OnPrevClicked(gcc_unused WndButton &button)
+{
   NextPage(-1);
 }
 
-static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnCloseClicked(gcc_unused WndButton &button)
+{
   wf->SetModalResult(mrOK);
 }
 

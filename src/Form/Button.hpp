@@ -47,7 +47,7 @@ Copyright_License {
  */
 class WndButton : public WindowControl {
 public:
-  typedef void (*ClickNotifyCallback_t)(WindowControl *Sender);
+  typedef void (*ClickNotifyCallback_t)(WndButton &button);
 
 public:
   /**

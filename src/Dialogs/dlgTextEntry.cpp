@@ -62,8 +62,9 @@ static TCHAR EntryLetters[] = _T(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 
 #define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
 
-static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnCloseClicked(gcc_unused WndButton &button)
+{
   wf->SetModalResult(mrOK);
 }
 
@@ -187,24 +188,28 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 
-static void OnLeftClicked(WindowControl * Sender){
-  (void)Sender;
-  FormKeyDown(Sender, VK_LEFT);
+static void
+OnLeftClicked(WndButton &button)
+{
+  FormKeyDown(&button, VK_LEFT);
 }
 
-static void OnRightClicked(WindowControl * Sender){
-  (void)Sender;
-  FormKeyDown(Sender, VK_RIGHT);
+static void
+OnRightClicked(WndButton &button)
+{
+  FormKeyDown(&button, VK_RIGHT);
 }
 
-static void OnUpClicked(WindowControl * Sender){
-  (void)Sender;
-  FormKeyDown(Sender, VK_UP);
+static void
+OnUpClicked(WndButton &button)
+{
+  FormKeyDown(&button, VK_UP);
 }
 
-static void OnDownClicked(WindowControl * Sender){
-  (void)Sender;
-  FormKeyDown(Sender, VK_DOWN);
+static void
+OnDownClicked(WndButton &button)
+{
+  FormKeyDown(&button, VK_DOWN);
 }
 
 

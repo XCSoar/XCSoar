@@ -35,8 +35,8 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "Task/TaskManager.hpp"
 
+#include "Task/TaskManager.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
@@ -53,12 +53,11 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
-
-
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 
@@ -186,23 +185,20 @@ OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 }
 
 static void
-OnNextClicked(WindowControl * Sender)
+OnNextClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
   NextPage(+1);
 }
 
 static void
-OnPrevClicked(WindowControl * Sender)
+OnPrevClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
   NextPage(-1);
 }
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
@@ -231,10 +227,8 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 }
 
 static void
-OnGotoClicked(WindowControl * Sender)
+OnGotoClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
-
   if (selected_waypoint) {
     task_manager.do_goto(*selected_waypoint);
   }
@@ -243,9 +237,8 @@ OnGotoClicked(WindowControl * Sender)
 }
 
 static void
-OnReplaceClicked(WindowControl * Sender)
+OnReplaceClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
 #ifdef OLD_TASK
   task.ReplaceWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
       XCSoarInterface::Basic());
@@ -256,9 +249,8 @@ OnReplaceClicked(WindowControl * Sender)
 }
 
 static void 
-OnNewHomeClicked(WindowControl * Sender)
+OnNewHomeClicked(gcc_unused WndButton &button)
 {
-	(void)Sender;
   XCSoarInterface::SetSettingsComputer().HomeWaypoint = selected_waypoint->id;
   SetToRegistry(szRegistryHomeWaypoint, XCSoarInterface::SettingsComputer().HomeWaypoint);
 #ifdef OLD_TASK
@@ -270,9 +262,8 @@ OnNewHomeClicked(WindowControl * Sender)
 
 // VENTA3
 static void 
-OnSetAlternate1Clicked(WindowControl * Sender)
+OnSetAlternate1Clicked(gcc_unused WndButton &button)
 {
-	(void)Sender;
   XCSoarInterface::SetSettingsComputer().Alternate1 = selected_waypoint->id;
   SetToRegistry(szRegistryAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
 #ifdef OLD_TASK
@@ -283,9 +274,8 @@ OnSetAlternate1Clicked(WindowControl * Sender)
 }
 
 static void 
-OnSetAlternate2Clicked(WindowControl * Sender)
+OnSetAlternate2Clicked(gcc_unused WndButton &button)
 {
-	(void)Sender;
   XCSoarInterface::SetSettingsComputer().Alternate2 = selected_waypoint->id;
   SetToRegistry(szRegistryAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
 #ifdef OLD_TASK
@@ -296,9 +286,8 @@ OnSetAlternate2Clicked(WindowControl * Sender)
 }
 
 static void
-OnClearAlternatesClicked(WindowControl * Sender)
+OnClearAlternatesClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
   XCSoarInterface::SetSettingsComputer().Alternate1 = -1;
   XCSoarInterface::SetSettingsComputer().EnableAlternate1 = false;
   XCSoarInterface::SetSettingsComputer().Alternate2 = -1;
@@ -316,9 +305,8 @@ OnClearAlternatesClicked(WindowControl * Sender)
 }
 
 static void
-OnTeamCodeClicked(WindowControl * Sender)
+OnTeamCodeClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
 #ifdef OLD_TASK
   XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = SelectedWaypoint;
   SetToRegistry(szRegistryTeamcodeRefWaypoint,
@@ -329,9 +317,8 @@ OnTeamCodeClicked(WindowControl * Sender)
 }
 
 static void
-OnInsertInTaskClicked(WindowControl * Sender)
+OnInsertInTaskClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
 #ifdef OLD_TASK
   task.InsertWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
       XCSoarInterface::Basic());
@@ -342,9 +329,8 @@ OnInsertInTaskClicked(WindowControl * Sender)
 }
 
 static void
-OnAppendInTaskClicked(WindowControl * Sender)
+OnAppendInTaskClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
 #ifdef OLD_TASK
   task.InsertWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
       XCSoarInterface::Basic(), true);
@@ -353,9 +339,8 @@ OnAppendInTaskClicked(WindowControl * Sender)
 }
 
 static void
-OnRemoveFromTaskClicked(WindowControl * Sender)
+OnRemoveFromTaskClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
 #ifdef OLD_TASK
   task.RemoveWaypoint(SelectedWaypoint, XCSoarInterface::SettingsComputer(),
       XCSoarInterface::Basic());

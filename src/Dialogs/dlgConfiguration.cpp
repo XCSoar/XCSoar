@@ -74,6 +74,7 @@ Copyright_License {
 #include "WayPointParser.h"
 #include "StringUtil.hpp"
 #include "Simulator.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 
@@ -235,27 +236,27 @@ SetupDevice(DeviceDescriptor &device)
   changed = dlgConfigurationVarioShowModal();
 }
 
-static void OnSetupDeviceAClicked(WindowControl * Sender){
-  (void)Sender;
-
+static void
+OnSetupDeviceAClicked(WndButton &button)
+{
   SetupDevice(DeviceList[0]);
 
   // this is a hack to get the dialog to retain focus because
   // the progress dialog in the vario configuration somehow causes
   // focus problems
-  Sender->set_focus();
+  button.set_focus();
 }
 
 
-static void OnSetupDeviceBClicked(WindowControl * Sender){
-  (void)Sender;
-
+static void
+OnSetupDeviceBClicked(WndButton &button)
+{
   SetupDevice(DeviceList[1]);
 
   // this is a hack to get the dialog to retain focus because
   // the progress dialog in the vario configuration somehow causes
   // focus problems
-  Sender->set_focus();
+  button.set_focus();
 }
 
 static void
@@ -521,7 +522,9 @@ static void GetFontDescription(TCHAR Description[], const TCHAR * prpName, int i
   }
 }
 
-static void OnEditInfoWindowFontClicked(WindowControl *Sender) {
+static void
+OnEditInfoWindowFontClicked(gcc_unused WndButton &button)
+{
   // updates registry for font info and updates LogFont values
 #define MAX_EDITFONT_DESC_LEN 100
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
@@ -534,7 +537,9 @@ static void OnEditInfoWindowFontClicked(WindowControl *Sender) {
   }
 }
 
-static void OnEditTitleWindowFontClicked(WindowControl *Sender) {
+static void
+OnEditTitleWindowFontClicked(gcc_unused WndButton &button)
+{
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpTitleWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
@@ -544,7 +549,10 @@ static void OnEditTitleWindowFontClicked(WindowControl *Sender) {
     RefreshFonts();
   }
 }
-static void OnEditMapWindowFontClicked(WindowControl *Sender) {
+
+static void
+OnEditMapWindowFontClicked(gcc_unused WndButton &button)
+{
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpMapWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
@@ -554,7 +562,10 @@ static void OnEditMapWindowFontClicked(WindowControl *Sender) {
     RefreshFonts();
   }
 }
-static void OnEditTitleSmallWindowFontClicked(WindowControl *Sender) {
+
+static void
+OnEditTitleSmallWindowFontClicked(gcc_unused WndButton &button)
+{
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpTitleSmallWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
@@ -564,7 +575,10 @@ static void OnEditTitleSmallWindowFontClicked(WindowControl *Sender) {
     RefreshFonts();
   }
 }
-static void OnEditMapWindowBoldFontClicked(WindowControl *Sender) {
+
+static void
+OnEditMapWindowBoldFontClicked(gcc_unused WndButton &button)
+{
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpMapWindowBoldFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
@@ -574,7 +588,10 @@ static void OnEditMapWindowBoldFontClicked(WindowControl *Sender) {
     RefreshFonts();
   }
 }
-static void OnEditCDIWindowFontClicked(WindowControl *Sender) {
+
+static void
+OnEditCDIWindowFontClicked(gcc_unused WndButton &button)
+{
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpCDIWindowFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
@@ -584,7 +601,10 @@ static void OnEditCDIWindowFontClicked(WindowControl *Sender) {
     RefreshFonts();
   }
 }
-static void OnEditMapLabelFontClicked(WindowControl *Sender) {
+
+static void
+OnEditMapLabelFontClicked(gcc_unused WndButton &button)
+{
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpMapLabelFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
@@ -594,7 +614,10 @@ static void OnEditMapLabelFontClicked(WindowControl *Sender) {
     RefreshFonts();
   }
 }
-static void OnEditStatisticsFontClicked(WindowControl *Sender) {
+
+static void
+OnEditStatisticsFontClicked(gcc_unused WndButton &button)
+{
   TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
   GetFontDescription(FontDesc, _T("prpStatisticsFont"), MAX_EDITFONT_DESC_LEN);
   if (dlgFontEditShowModal(FontDesc,
@@ -605,9 +628,9 @@ static void OnEditStatisticsFontClicked(WindowControl *Sender) {
   }
 }
 
-
-static void OnAircraftRegoClicked(WindowControl *Sender) {
-  (void)Sender;
+static void
+OnAircraftRegoClicked(gcc_unused WndButton &button)
+{
   TCHAR Temp[100];
   if (buttonAircraftRego) {
     GetRegistryString(szRegistryAircraftRego,Temp,100);
@@ -619,9 +642,9 @@ static void OnAircraftRegoClicked(WindowControl *Sender) {
   UpdateButtons();
 }
 
-
-static void OnAircraftTypeClicked(WindowControl *Sender) {
-  (void)Sender;
+static void
+OnAircraftTypeClicked(gcc_unused WndButton &button)
+{
   TCHAR Temp[100];
   if (buttonAircraftType) {
     GetRegistryString(szRegistryAircraftType,Temp,100);
@@ -633,9 +656,9 @@ static void OnAircraftTypeClicked(WindowControl *Sender) {
   UpdateButtons();
 }
 
-
-static void OnPilotNameClicked(WindowControl *Sender) {
-  (void)Sender;
+static void
+OnPilotNameClicked(gcc_unused WndButton &button)
+{
   TCHAR Temp[100];
   if (buttonPilotName) {
     GetRegistryString(szRegistryPilotName,Temp,100);
@@ -647,9 +670,9 @@ static void OnPilotNameClicked(WindowControl *Sender) {
   UpdateButtons();
 }
 
-
-static void OnLoggerIDClicked(WindowControl *Sender) {
-  (void)Sender;
+static void
+OnLoggerIDClicked(gcc_unused WndButton &button)
+{
   TCHAR Temp[100];
   if (buttonLoggerID) {
     GetRegistryString(szRegistryLoggerID,Temp,100);
@@ -662,31 +685,35 @@ static void OnLoggerIDClicked(WindowControl *Sender) {
   UpdateButtons();
 }
 
-
-static void OnAirspaceColoursClicked(WindowControl * Sender){
-  (void)Sender;
+static void
+OnAirspaceColoursClicked(gcc_unused WndButton &button)
+{
   dlgAirspaceShowModal(true);
 }
 
-static void OnAirspaceModeClicked(WindowControl * Sender){
-  (void)Sender;
+static void
+OnAirspaceModeClicked(gcc_unused WndButton &button)
+{
   dlgAirspaceShowModal(false);
 }
 
-static void OnNextClicked(WindowControl * Sender){
-  (void)Sender;
+static void
+OnNextClicked(gcc_unused WndButton &button)
+{
   configuration_tabbed->NextPage();
   PageSwitched();
 }
 
-static void OnPrevClicked(WindowControl * Sender){
-  (void)Sender;
+static void
+OnPrevClicked(gcc_unused WndButton &button)
+{
   configuration_tabbed->PreviousPage();
   PageSwitched();
 }
 
-static void OnCloseClicked(WindowControl * Sender){
-  (void)Sender;
+static void
+OnCloseClicked(gcc_unused WndButton &button)
+{
   wf->SetModalResult(mrOK);
 }
 
@@ -718,8 +745,9 @@ static void InfoBoxPropName(TCHAR *name, int item, int mode) {
   _tcscat(name,buf);
 }
 
-static void OnCopy(WindowControl *Sender) {
-  (void)Sender;
+static void
+OnCopy(gcc_unused WndButton &button)
+{
   int mode = page2mode();
   TCHAR name[80];
   if ((mode<0)||(mode>3)) {
@@ -736,8 +764,9 @@ static void OnCopy(WindowControl *Sender) {
   }
 }
 
-static void OnPaste(WindowControl *Sender) {
-  (void)Sender;
+static void
+OnPaste(gcc_unused WndButton &button)
+{
   int mode = page2mode();
   TCHAR name[80];
   if ((mode<0)||(mode>3)||(cpyInfoBox[0]<0)) {

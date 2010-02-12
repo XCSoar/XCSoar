@@ -47,6 +47,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -379,8 +380,9 @@ OnPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 }
 
 
-static void OnWPSCloseClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnWPSCloseClicked(gcc_unused WndButton &button)
+{
   wf->SetModalResult(mrCancel);
 }
 

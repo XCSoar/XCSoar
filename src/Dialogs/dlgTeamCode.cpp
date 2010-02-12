@@ -44,11 +44,10 @@
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 #include "StringUtil.hpp"
+#include "TeamCodeCalculation.h"
+#include "Compiler.h"
 
 static WndForm *wf=NULL;
-
-
-#include "TeamCodeCalculation.h"
 
 static void
 Update()
@@ -111,7 +110,7 @@ Update()
 }
 
 static void
-OnCodeClicked(WindowControl *Sender)
+OnCodeClicked(gcc_unused WndButton &button)
 {
   TCHAR newTeammateCode[10];
   _tcsncpy(newTeammateCode, XCSoarInterface::SettingsComputer().TeammateCode,
@@ -135,10 +134,8 @@ OnCodeClicked(WindowControl *Sender)
 }
 
 static void
-OnFlarmLockClicked(WindowControl * Sender)
+OnFlarmLockClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
-
   TCHAR newTeamFlarmCNTarget[4];
   _tcsncpy(newTeamFlarmCNTarget,
       XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget, 4);

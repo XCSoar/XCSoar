@@ -66,9 +66,9 @@ FindForm(WindowControl *w)
  * This event is triggered when a button of the MessageBox is pressed
  */
 static void
-OnButtonClick(WindowControl * Sender)
+OnButtonClick(WndButton &button)
 {
-  FindForm(Sender)->SetModalResult(Sender->GetTag());
+  FindForm(&button)->SetModalResult(button.GetTag());
 }
 
 // Message Box Replacement

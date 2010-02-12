@@ -53,7 +53,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Components.hpp"
 #include "Protection.hpp"
-
+#include "Compiler.h"
 #include "GlideSolvers/GlidePolar.hpp"
 
 #include "RasterTerrain.h" // OLD_TASK for temporary locking of task_manager
@@ -294,9 +294,8 @@ OnPrevClicked(WindowControl * Sender)
 }
 
 static void
-OnCloseClicked(WindowControl * Sender)
+OnCloseClicked(gcc_unused WndButton &button)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 

@@ -48,6 +48,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "StringUtil.hpp"
+#include "Compiler.h"
+
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "RasterTerrain.h"
 #endif
@@ -83,8 +85,9 @@ static void UpdateButtons(void) {
 }
 
 
-static void OnNameClicked(WindowControl *Sender) {
-	(void)Sender;
+static void
+OnNameClicked(gcc_unused WndButton &button)
+{
   if (buttonName) {
     TCHAR buff[NAME_SIZE+1];
     _stprintf(buff, TEXT("%s"), global_wpt->Name.c_str());
@@ -94,9 +97,9 @@ static void OnNameClicked(WindowControl *Sender) {
   UpdateButtons();
 }
 
-
-static void OnCommentClicked(WindowControl *Sender) {
-	(void)Sender;
+static void
+OnCommentClicked(gcc_unused WndButton &button)
+{
   if (buttonComment) {
     TCHAR buff[COMMENT_SIZE+1];
     _stprintf(buff, TEXT("%s"), global_wpt->Comment.c_str());

@@ -47,6 +47,7 @@ Copyright_License {
 #include "Version.hpp"
 #include "Asset.hpp"
 #include "StringUtil.hpp"
+#include "Compiler.h"
 
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wSplash=NULL;
@@ -59,8 +60,9 @@ OnSplashPaint(WindowControl *Sender, Canvas &canvas)
   canvas.stretch(bitmap_canvas, 0, 0, 318, 163);
 }
 
-static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+static void
+OnCloseClicked(gcc_unused WndButton &button)
+{
   wf->SetModalResult(mrOK);
 }
 
