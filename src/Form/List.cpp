@@ -59,7 +59,6 @@ WndListFrame::WndListFrame(ContainerControl *Owner, const TCHAR *Name,
   CursorCallback(NULL),
   PaintItemCallback(NULL)
 {
-  SetCanFocus(true);
   SetPaintSelector(false);
 
   mCaption[0] = '\0';

@@ -45,7 +45,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-class ContainerWindow;
+class SingleWindow;
 class StatusMessageList;
 
 /**
@@ -88,7 +88,7 @@ private:
 
   const StatusMessageList &status_messages;
 
-  ContainerWindow &parent;
+  SingleWindow &parent;
   RECT rc; // maximum message size
   EditWindow window;
 
@@ -97,11 +97,10 @@ private:
   TCHAR msgText[2000];
 
   unsigned nvisible;
-  unsigned block_ref;
 
 public:
   PopupMessage(const StatusMessageList &_status_messages,
-               ContainerWindow &_parent);
+               SingleWindow &_parent);
 
   void set(const RECT _rc);
 
@@ -133,28 +132,9 @@ public:
    */
   bool Acknowledge(int type);
 
-  void BlockRender(bool doblock);
-
  private:
   void Resize();
   int GetEmptySlot();
-};
-
-class ScopePopupBlock {
-  PopupMessage &popup;
-
-public:
-  ScopePopupBlock(PopupMessage &_popup):popup(_popup) {
-#ifndef ALTAIRSYNC
-    popup.BlockRender(true);
-#endif
-  }
-
-  ~ScopePopupBlock() {
-#ifndef ALTAIRSYNC
-    popup.BlockRender(false);
-#endif
-  }
 };
 
 #endif

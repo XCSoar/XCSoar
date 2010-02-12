@@ -94,38 +94,6 @@ ContainerControl::FindByName(const TCHAR *Name)
   return NULL;
 }
 
-Window *
-ContainerControl::GetCanFocus(bool forward)
-{
-  // If the ContainerControl is not visible it can't be focused
-  if (!is_visible())
-    return NULL;
-
-  // If the ContainerControl itself can be focused
-  // -> return it
-  Window *w = WindowControl::GetCanFocus(forward);
-  if (w != NULL)
-    return w;
-
-  // Check whether any of the ClientControls can be focused
-  if (forward) {
-    for (unsigned idx = 0; idx < mClientCount; ++idx) {
-      Window *w = mClients[idx]->GetCanFocus(forward);
-      if (w != NULL)
-        return w;
-    }
-  } else {
-    for (int idx = mClientCount - 1; idx >= 0; --idx) {
-      Window *w = mClients[idx]->GetCanFocus(forward);
-      if (w != NULL)
-        return w;
-    }
-  }
-
-  // If nothing was found -> return NULL
-  return NULL;
-}
-
 void
 ContainerControl::FilterAdvanced(bool advanced)
 {
@@ -135,60 +103,4 @@ ContainerControl::FilterAdvanced(bool advanced)
   // Call FilterAdvanced for every ClientControl
   for (unsigned i = 0; i < mClientCount; i++)
     mClients[i]->FilterAdvanced(advanced);
-}
-
-Window *
-ContainerControl::FocusNext(WindowControl *Sender)
-{
-  unsigned idx;
-  Window *W;
-
-  if (Sender != NULL) {
-    for (idx = 0; idx < mClientCount; idx++)
-      if (mClients[idx] == Sender)
-        break;
-
-    idx++;
-  } else
-    idx = 0;
-
-  for (; idx < mClientCount; idx++) {
-    if ((W = mClients[idx]->GetCanFocus(true)) != NULL) {
-      W->set_focus();
-      return W;
-    }
-  }
-
-  if (GetOwner() != NULL)
-    return GetOwner()->FocusNext(this);
-
-  return NULL;
-}
-
-Window *
-ContainerControl::FocusPrev(WindowControl *Sender)
-{
-  int idx;
-  Window *W;
-
-  if (Sender != NULL) {
-    for (idx = 0; (unsigned)idx < mClientCount; idx++) {
-      if (mClients[idx] == Sender)
-        break;
-    }
-    idx--;
-  } else
-    idx = mClientCount - 1;
-
-  for (; idx >= 0; idx--) {
-    if ((W = mClients[idx]->GetCanFocus(false)) != NULL) {
-      W->set_focus();
-      return W;
-    }
-  }
-
-  if (GetOwner() != NULL)
-    return GetOwner()->FocusPrev(this);
-
-  return NULL;
 }

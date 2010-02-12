@@ -48,6 +48,8 @@ class Waypoint;
 class Waypoints;
 class Airspaces;
 class AbstractAirspace;
+class AbstractTaskFactory;
+class OrderedTaskPoint;
 
 void StartupScreen();
 
@@ -65,9 +67,10 @@ int dlgAirspacePatternsShowModal();
 void dlgAirspaceShowModal(bool colored);
 void dlgAirspaceSelect();
 
-const Waypoint* dlgWayPointSelect(const GEOPOINT &location, 
-                                  const int type=-1, 
-                                  const int FilterNear=0);
+const Waypoint *
+dlgWayPointSelect(SingleWindow &parent,
+                  const GEOPOINT &location,
+                  const int type=-1, const int FilterNear=0);
 
 void dlgBasicSettingsShowModal();
 void dlgBrightnessShowModal();
@@ -92,10 +95,22 @@ void dlgAnalysisShowModal();
 void dlgStatusShowModal(int page);
 
 void dlgSwitchesShowModal();
-void dlgTaskWaypointShowModal(int itemindex, int type, bool addonly = false);
-void dlgTaskOverviewShowModal();
+
+void
+dlgTaskWaypointShowModal(SingleWindow &parent,
+                         AbstractTaskFactory &task_factory,
+                         unsigned task_point_position,
+                         const OrderedTaskPoint &task_point,
+                         bool addonly);
+
+void
+dlgTaskOverviewShowModal(SingleWindow &parent);
+
 void dlgVoiceShowModal();
-void dlgWayPointDetailsShowModal(const Waypoint& waypoint);
+
+void
+dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint);
+
 bool dlgTextEntryShowModal(TCHAR *text, int width = 0);
 void dlgTeamCodeShowModal();
 void dlgStartPointShowModal();

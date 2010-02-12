@@ -39,22 +39,27 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "SettingsTask.hpp"
-#include "Logger.h"
+#include "Logger.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
-#include "WayPointList.hpp"
+#include "Waypoint/Waypoint.hpp"
 #include "Components.hpp"
-#include "Task.h"
+#include "Task/TaskManager.hpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/FinishPoint.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
 
 #include <assert.h>
 
-static unsigned twItemIndex= 0;
+static SingleWindow *parent_window;
+static AbstractTaskFactory *task_factory;
+static unsigned task_point_position;
+static const OrderedTaskPoint *task_point;
+
 static WndForm *wf=NULL;
-static int twType = 0; // start, turnpoint, finish
-static SETTINGS_TASK settings_task;
 
 static WndFrame *wStart=NULL;
 static WndFrame *wTurnpoint=NULL;
@@ -63,31 +68,23 @@ static WndFrame *wFinish=NULL;
 
 static void UpdateCaption(void) {
   TCHAR sTmp[128];
-  TCHAR title[128];
-  if (task.ValidTaskPoint(twItemIndex)) {
-    switch (twType) {
-    case 0:
-      _stprintf(title, gettext(_T("Start")));
-      break;
-    case 1:
-      _stprintf(title, gettext(_T("Turnpoint")));
-      break;
-    case 2:
-      _stprintf(title, gettext(_T("Finish")));
-      break;
-    };
-    _stprintf(sTmp, _T("%s: %s"), title, task.getWaypoint(twItemIndex).Name);
-    wf->SetCaption(sTmp);
-  } else {
-    wf->SetCaption(gettext(_T("(invalid)")));
-  }
+  const TCHAR *title;
+
+  if (dynamic_cast<const StartPoint*>(task_point) != NULL)
+    title = _T("Start");
+  else if (dynamic_cast<const FinishPoint*>(task_point) != NULL)
+    title = _T("Finish");
+  else
+    title = _T("Turnpoint");
+
+  _stprintf(sTmp, _T("%s: %s"),
+            title, task_point->get_waypoint().Name.c_str());
+
+  wf->SetCaption(sTmp);
 }
 
-
-
-
-
 static void SetValues(bool first=false) {
+#ifdef OLD_TASK
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskFinishLine"));
@@ -196,12 +193,14 @@ static void SetValues(bool first=false) {
     wb->set_visible(settings_task.EnableMultipleStartPoints != 0);
   }
 
+#endif
 }
 
 #define CHECK_CHANGED(a,b) if (a != b) { changed = true; a = b; }
 #define CHECK_CHANGEDU(a,b) if ((int)a != b) { changed = true; a = b; }
 
 static void GetWaypointValues(void) {
+#ifdef OLD_TASK
   WndProperty* wp;
   bool changed = false;
 
@@ -251,10 +250,12 @@ static void GetWaypointValues(void) {
       task.SetTaskModified();
     }
   }
+#endif
 }
 
 
 static void SetWaypointValues(bool first=false) {
+#ifdef OLD_TASK
   WndProperty* wp;
 
   TASK_POINT tp = task.getTaskPoint(twItemIndex);
@@ -304,11 +305,12 @@ static void SetWaypointValues(bool first=false) {
     wp->set_visible(tp.AATType > 0);
     wp->RefreshDisplay();
   }
-
+#endif
 }
 
 
 static void ReadValues(void) {
+#ifdef OLD_TASK
   WndProperty* wp;
   bool changed = false;
 
@@ -386,6 +388,7 @@ static void ReadValues(void) {
     task.setSettings(settings_task);
     task.SetTaskModified();
   }
+#endif
 }
 
 static void OnAATEnabled(DataField *Sender, DataField::DataAccessKind_t Mode) {
@@ -402,31 +405,43 @@ static void OnAATEnabled(DataField *Sender, DataField::DataAccessKind_t Mode) {
   }
 }
 
+OrderedTaskPoint *
+CloneWithWaypoint(const OrderedTaskPoint *old, const Waypoint &wp)
+{
+  assert(old != NULL);
 
+  OrderedTaskPoint *tp;
+
+  if (dynamic_cast<const StartPoint*>(old) != NULL)
+    tp = task_factory->createStart(AbstractTaskFactory::START_SECTOR, wp);
+  else if (dynamic_cast<const FinishPoint*>(old) != NULL)
+    tp = task_factory->createFinish(AbstractTaskFactory::FINISH_SECTOR, wp);
+  else
+    tp = task_factory->createIntermediate(wp);
+
+  return tp;
+}
 
 static void OnSelectClicked(WindowControl * Sender){
 	(void)Sender;
-  int res;
-  res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
-  if (res != -1){
-    task.setSelected(res);
-    TASK_POINT tp = task.getTaskPoint(twItemIndex);
-    if (tp.Index != res) {
-      if (logger.CheckDeclaration()) {
 
-	tp.Index = res;
-        tp.AATSectorRadius = settings_task.SectorRadius;
-        tp.AATCircleRadius = settings_task.SectorRadius;
-        tp.AATTargetOffsetRadius = 0.0;
-        tp.AATTargetOffsetRadial = 0.0;
-        tp.AATTargetLocked = false;
-        task.setTaskPoint(twItemIndex, tp);
-        task.SetTaskModified();
+  const Waypoint *wp = dlgWayPointSelect(*parent_window,
+                                         XCSoarInterface::Basic().Location);
+  if (wp == NULL)
+    return;
 
-      }
-    }
-    UpdateCaption();
-  };
+  OrderedTaskPoint *tp = CloneWithWaypoint(task_point, *wp);
+  if (tp == NULL)
+    return;
+
+  if (!task_factory->replace(tp, task_point_position)) {
+    delete tp;
+    return;
+  }
+
+  task_point = tp;
+  UpdateCaption();
+  SetValues();
 }
 
 static void OnCloseClicked(WindowControl * Sender){
@@ -436,37 +451,43 @@ static void OnCloseClicked(WindowControl * Sender){
 
 static void OnStartPointClicked(WindowControl * Sender){
 	(void)Sender;
-  dlgStartPointShowModal();
+        //dlgStartPointShowModal();
 }
 
 
 static void OnMoveAfterClicked(WindowControl * Sender){
 	(void)Sender;
+#ifdef OLD_TASK
   task.SwapWaypoint(twItemIndex, XCSoarInterface::SettingsComputer(),
                      XCSoarInterface::Basic());
   SetWaypointValues();
   wf->SetModalResult(mrOK);
+#endif
 }
 
 static void OnMoveBeforeClicked(WindowControl * Sender){
 	(void)Sender;
+#ifdef OLD_TASK
   task.SwapWaypoint(twItemIndex - 1, XCSoarInterface::SettingsComputer(),
                     XCSoarInterface::Basic());
   SetWaypointValues();
   wf->SetModalResult(mrOK);
+#endif
 }
 
 static void OnDetailsClicked(WindowControl * Sender){
   (void)Sender;
-//  task.setSelected(task.getWaypointIndex(twItemIndex));
-  dlgWayPointDetailsShowModal(way_point);
+
+  dlgWayPointDetailsShowModal(*parent_window, task_point->get_waypoint());
 }
 
 static void OnRemoveClicked(WindowControl * Sender) {
 	(void)Sender;
-  task.RemoveTaskPoint(twItemIndex, XCSoarInterface::SettingsComputer(),
-                       XCSoarInterface::Basic());
-  SetWaypointValues();
+
+  if (!task_factory->remove(task_point_position))
+    return;
+
+  task_point = NULL;
   wf->SetModalResult(mrOK);
 }
 
@@ -474,9 +495,11 @@ static void OnRemoveClicked(WindowControl * Sender) {
 static void OnTaskRulesClicked(WindowControl * Sender){
   (void)Sender;
   wf->hide();
+#ifdef OLD_TASK
   if (dlgTaskRules()) {
     task.SetTaskModified();
   }
+#endif
   wf->show();
 }
 
@@ -494,31 +517,32 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
-  wf = NULL;
+void
+dlgTaskWaypointShowModal(SingleWindow &parent,
+                         AbstractTaskFactory &_task_factory,
+                         unsigned _task_point_position,
+                         const OrderedTaskPoint &_task_point,
+                         bool addonly)
+{
+  parent_window = &parent;
+  task_factory = &_task_factory;
+  task_point_position = _task_point_position;
+  task_point = &_task_point;
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskWaypoint_L.xml"),
-                        XCSoarInterface::main_window,
+                        parent,
                         _T("IDR_XML_TASKWAYPOINT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgTaskWaypoint.xml"),
-                        XCSoarInterface::main_window,
+                        parent,
                         _T("IDR_XML_TASKWAYPOINT"));
   }
 
-  twItemIndex = itemindex;
-  twType = tasktype;
-
-  if (!wf) return;
-
-  assert(wf!=NULL);
-  //  wf->SetKeyDownNotify(FormKeyDown);
-
-  settings_task = task.getSettings();
+  if (wf == NULL)
+    return;
 
   wStart     = ((WndFrame *)wf->FindByName(_T("frmStart")));
   wTurnpoint = ((WndFrame *)wf->FindByName(_T("frmTurnpoint")));
@@ -553,6 +577,7 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
       wb->hide();
     }
   } else {
+#ifdef OLD_TASK
     if (!task.ValidTaskPoint(twItemIndex-1)) {
       wb = (WndButton *)wf->FindByName(_T("butUp"));
       if (wb) {
@@ -565,29 +590,31 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
         wb->hide();
       }
     }
+#endif
   }
 
   SetWaypointValues(true);
 
-  switch (twType) {
-    case 0:
-      wStart->show();
-      wTurnpoint->hide();
-      wAATTurnpoint->hide();
-      wFinish->hide();
-      break;
-    case 1:
-      wStart->hide();
-      wTurnpoint->set_visible(!settings_task.AATEnabled);
-      wAATTurnpoint->set_visible(settings_task.AATEnabled);
-      wFinish->hide();
-    break;
-    case 2:
-      wStart->hide();
-      wTurnpoint->hide();
-      wAATTurnpoint->hide();
-      wFinish->show();
-    break;
+  if (dynamic_cast<const StartPoint*>(task_point) != NULL) {
+    wStart->show();
+    wTurnpoint->hide();
+    wAATTurnpoint->hide();
+    wFinish->hide();
+  } else if (dynamic_cast<const FinishPoint*>(task_point) != NULL) {
+    wStart->hide();
+    wTurnpoint->hide();
+    wAATTurnpoint->hide();
+    wFinish->show();
+  } else if (dynamic_cast<const AATPoint*>(task_point) != NULL) {
+    wStart->hide();
+    wTurnpoint->hide();
+    wAATTurnpoint->show();
+    wFinish->hide();
+  } else {
+    wStart->hide();
+    wTurnpoint->show();
+    wAATTurnpoint->hide();
+    wFinish->hide();
   }
 
   // set properties...

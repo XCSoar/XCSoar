@@ -38,6 +38,11 @@
 
 /**
  * @file
+ * The FLARM Traffic dialog displaying a radar screen with the moving
+ * FLARM targets in track up orientation. The target can be selected and basic
+ * information is given on the selected target. When a warning/alarm is present
+ * the target with the highest alarm level is automatically selected and
+ * highlighted in orange or red (depending on the level)
  * @todo make targets selectable via mouse
  * @todo details dialog
  * @todo team mates
@@ -46,16 +51,9 @@
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
-#include "Protection.hpp"
-#include "SettingsComputer.hpp"
-#include "Blackboard.hpp"
-#include "UtilsFLARM.hpp"
-#include "Math/Earth.hpp"
 #include "Math/FastRotation.hpp"
 #include "Math/Screen.hpp"
 #include "MainWindow.hpp"
-
-#include <assert.h>
 
 static const Color hcWarning(0xFF, 0xA2, 0x00);
 static const Color hcAlarm(0xFF, 0x00, 0x00);
@@ -698,7 +696,7 @@ static CallBackTableEntry_t CallBackTable[] = {
  * The function opens the FLARM Traffic dialog
  */
 void
-dlgFlarmTrafficShowModal(void)
+dlgFlarmTrafficShowModal()
 {
   // Load dialog from XML
   if (Layout::landscape)
@@ -749,5 +747,4 @@ dlgFlarmTrafficShowModal(void)
 
   // After dialog closed -> delete it
   delete wf;
-  wf = NULL;
 }

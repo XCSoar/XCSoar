@@ -109,6 +109,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgStartup.cpp \
 	$(SRC)/Dialogs/dlgStatus.cpp \
 	$(SRC)/Dialogs/dlgSwitches.cpp \
+	$(SRC)/Dialogs/dlgTaskOverview.cpp \
+	$(SRC)/Dialogs/dlgTaskWaypoint.cpp \
 	$(SRC)/Dialogs/dlgTaskCalculator.cpp \
 	$(SRC)/Dialogs/dlgTeamCode.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \

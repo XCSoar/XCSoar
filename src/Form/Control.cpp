@@ -88,8 +88,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
     mHelpText(NULL),
     mOnHelpCallback(NULL),
     mReadOnly(false), mHasFocus(false),
-    mBorderSize(1),
-    mCanFocus(false),
     mPaintSelector(true)
 {
   // Clear the caption
@@ -125,20 +123,6 @@ WindowControl::~WindowControl(void)
     free(mHelpText);
     mHelpText = NULL;
   }
-}
-
-Window *
-WindowControl::GetCanFocus(bool forward)
-{
-  (void)forward;
-
-  if (!is_visible())
-    return NULL;
-
-  if (mCanFocus && !mReadOnly)
-    return this;
-
-  return NULL;
 }
 
 void
@@ -202,19 +186,10 @@ WindowControl::SetFocused(bool Value)
   if (mHasFocus != Value) {
     mHasFocus = Value;
 
-    if (mCanFocus)
-      // todo, only paint the selector edges
-      invalidate();
+    // todo, only paint the selector edges
+    invalidate();
   }
 
-  return res;
-}
-
-bool
-WindowControl::SetCanFocus(bool Value)
-{
-  bool res = mCanFocus;
-  mCanFocus = Value;
   return res;
 }
 
@@ -309,9 +284,8 @@ WindowControl::PaintSelector(Canvas &canvas, const RECT rc)
 void
 WindowControl::PaintSelector(Canvas &canvas)
 {
-  if (mPaintSelector && mCanFocus && mHasFocus) {
+  if (mPaintSelector && mHasFocus)
     PaintSelector(canvas, get_client_rect());
-  }
 }
 
 int
@@ -361,7 +335,7 @@ WindowControl::on_paint(Canvas &canvas)
   const RECT rc = get_client_rect();
 
   // JMW added highlighting, useful for lists
-  if (mPaintSelector && mCanFocus && mHasFocus) {
+  if (mPaintSelector && mHasFocus) {
     Color ff = GetBackColor().highlight();
     Brush brush(ff);
     canvas.fill_rectangle(rc, brush);
@@ -417,18 +391,6 @@ WindowControl::on_unhandled_key(unsigned key_code)
 {
   if (mOwner != NULL && mOwner->on_unhandled_key(key_code))
     return true;
-
-  if (mOwner != NULL && mHasFocus) {
-    switch (key_code) {
-    case VK_UP:
-      mOwner->FocusPrev(this);
-      return true;
-
-    case VK_DOWN:
-      mOwner->FocusNext(this);
-      return true;
-    }
-  }
 
   return false;
 }

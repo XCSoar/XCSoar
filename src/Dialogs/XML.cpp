@@ -690,7 +690,8 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
     style.control_parent();
 
     EditWindowStyle edit_style;
-    edit_style.tab_stop();
+    if (!ReadOnly)
+      edit_style.tab_stop();
 
     if (is_embedded())
       /* sunken edge doesn't fit well on the tiny screen of an

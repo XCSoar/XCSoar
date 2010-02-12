@@ -38,8 +38,6 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Math/Earth.hpp"
-#include "MainWindow.hpp"
-#include "Blackboard.hpp"
 #include "Screen/Layout.hpp"
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
@@ -455,7 +453,8 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 const Waypoint* 
-dlgWayPointSelect(const GEOPOINT &location, 
+dlgWayPointSelect(SingleWindow &parent,
+                  const GEOPOINT &location,
                   const int type, const int FilterNear)
 {
   UpLimit = 0;
@@ -472,12 +471,12 @@ dlgWayPointSelect(const GEOPOINT &location,
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgWayPointSelect_L.xml"),
-                        XCSoarInterface::main_window,
+                        parent,
                         _T("IDR_XML_WAYPOINTSELECT_L"));
   } else {
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgWayPointSelect.xml"),
-                        XCSoarInterface::main_window,
+                        parent,
                         _T("IDR_XML_WAYPOINTSELECT"));
   }
 

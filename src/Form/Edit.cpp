@@ -153,8 +153,6 @@ WndProperty::WndProperty(ContainerControl *Parent,
    mCaptionWidth(CaptionWidth),
    mDownDown(false), mUpDown(false)
 {
-  SetCanFocus(true);
-
   mOnClickUpNotify = NULL;
   mOnClickDownNotify = NULL;
   mOnDataChangeNotify = DataChangeNotify;
@@ -178,7 +176,9 @@ WndProperty::WndProperty(ContainerControl *Parent,
 
   edit.set_font(*mhValueFont);
 
-  mCanFocus = true;
+#if defined(WIN32) && !defined(NDEBUG)
+  ::SetWindowText(hWnd, Caption);
+#endif
 
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
@@ -207,16 +207,6 @@ WndProperty::~WndProperty(void)
       assert(0);
     }
   }
-}
-
-Window *
-WndProperty::GetCanFocus(bool forward)
-{
-  Window *w = WindowControl::GetCanFocus(forward);
-  if (w == this)
-    return &edit;
-
-  return w;
 }
 
 void
@@ -352,7 +342,13 @@ WndProperty::on_mouse_down(int x, int y)
   if (mDialogStyle) {
     if (!GetReadOnly()) {
       // when they click on the label
-      dlgComboPicker(*(SingleWindow *)get_root_owner(), this);
+      SingleWindow *root = (SingleWindow *)get_root_owner();
+
+      /* if this asserton fails, then there no valid root window could
+         be found - maybe it didn't register its wndproc? */
+      assert(root != NULL);
+
+      dlgComboPicker(*root, this);
     } else {
       OnHelp(); // this would display xml file help on a read-only wndproperty if it exists
     }

@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "FLARM/FLARMNet.hpp"
+#include "UtilsText.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -134,11 +135,13 @@ LoadString(FILE *file, int charCount, TCHAR *res)
     tmp[2] = 0;
 
     *curChar = (unsigned char)strtoul(tmp, NULL, 16);
-    curChar ++;
+    curChar++;
   }
 
   *curChar = 0;
 
+  // Trim the string of any additional spaces
+  StringChomp(res);
 }
 
 /**

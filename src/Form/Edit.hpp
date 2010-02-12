@@ -174,12 +174,6 @@ public:
   /** Destructor */
   ~WndProperty(void);
 
-  /**
-   * Checks whether the Control can be focused and if so returns the Editor
-   * @return NULL if the Control can not be focused, the Editor otherwise
-   */
-  virtual Window *GetCanFocus(bool forward);
-
   void on_editor_setfocus();
   void on_editor_killfocus();
 

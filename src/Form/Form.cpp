@@ -58,7 +58,7 @@ WndForm::WndForm(SingleWindow &_main_window,
   mColorTitle(Color::YELLOW),
   mhTitleFont(GetFont()),
   mClientWindow(NULL),
-  mOnTimerNotify(NULL), mOnKeyDownNotify(NULL), mOnUserMsgNotify(NULL)
+  mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
 {
   // Create ClientWindow
 
@@ -70,6 +70,12 @@ WndForm::WndForm(SingleWindow &_main_window,
                                        client_style);
   mClientWindow->SetBackColor(GetBackColor());
 
+  /* remove the mClientWindow from the client list, so it doesn't
+     interfere with the auto-layout in AddClient(); without this hack,
+     the "bottom" of the previous control is always the very bottom of
+     the whole form */
+  mClientCount = 0;
+
   mClientRect.top=0;
   mClientRect.left=0;
   mClientRect.bottom=Width;
@@ -80,6 +86,9 @@ WndForm::WndForm(SingleWindow &_main_window,
   if (Caption != NULL)
     _tcscpy(mCaption, Caption);
 
+#if defined(WIN32) && !defined(NDEBUG)
+  ::SetWindowText(hWnd, Caption);
+#endif
 }
 
 WndForm::~WndForm()
@@ -119,15 +128,6 @@ WndForm::on_timer(timer_t id)
     return true;
   } else
     return ContainerControl::on_timer(id);
-}
-
-bool
-WndForm::on_user(unsigned id)
-{
-  if (mOnUserMsgNotify != NULL && mOnUserMsgNotify(this, id))
-    return true;
-
-  return ContainerControl::on_user(id);
 }
 
 const Font *
@@ -200,8 +200,7 @@ int WndForm::ShowModal(bool bEnableMap) {
   oldFocusHwnd = ::GetFocus();
 #endif /* !ENABLE_SDL */
   set_focus();
-
-  FocusNext(NULL);
+  focus_first_control();
 
 #ifndef ENABLE_SDL
   bool hastimed = false;
@@ -396,12 +395,6 @@ WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify)
   mOnTimerNotify = OnTimerNotify;
 }
 
-void
-WndForm::SetUserMsgNotify(UserMsgNotifyCallback_t OnUserMsgNotify)
-{
-  mOnUserMsgNotify = OnUserMsgNotify;
-}
-
 // normal form stuff (nonmodal)
 
 bool
@@ -413,6 +406,15 @@ WndForm::on_unhandled_key(unsigned key_code)
   switch (key_code) {
   case VK_ESCAPE:
     SetModalResult(mrCancel);
+    return true;
+
+  case VK_UP:
+    focus_previous_control();
+    return true;
+
+  case VK_DOWN:
+  case VK_TAB:
+    focus_next_control();
     return true;
   }
 

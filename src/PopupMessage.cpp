@@ -42,7 +42,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/ContainerWindow.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
 #include "Registry.hpp"
@@ -62,10 +62,10 @@ using std::min;
 using std::max;
 
 PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
-                           ContainerWindow &_parent)
+                           SingleWindow &_parent)
   :startTime(::GetTickCount()), status_messages(_status_messages),
    parent(_parent),
-   nvisible(0), block_ref(0)
+   nvisible(0)
 {
   for (unsigned i = 0; i < MAXMESSAGES; i++) {
     messages[i].text[0]= _T('\0');
@@ -167,25 +167,11 @@ void PopupMessage::Resize() {
 
 }
 
-
-void PopupMessage::BlockRender(bool doblock) {
-  Lock();
-  if (doblock) {
-    block_ref++;
-  } else {
-    block_ref--;
-  }
-  // TODO code: add blocked time to messages' timers so they come
-  // up once unblocked.
-  Unlock();
-}
-
-
 bool PopupMessage::Render() {
   if (!globalRunningEvent.test()) return false;
 
   Lock();
-  if (block_ref) {
+  if (parent.has_dialog()) {
     Unlock();
     return false;
   }
