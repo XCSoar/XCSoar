@@ -117,9 +117,10 @@ protected:
    */
   virtual void on_paint(Canvas &canvas);
 
-private:
   /** True if the button is currently pressed */
   bool mDown;
+
+private:
   /** not used yet */
   bool mDefault;
   int mLastDrawTextHeight;
