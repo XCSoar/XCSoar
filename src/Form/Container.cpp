@@ -41,9 +41,6 @@ Copyright_License {
 void
 ContainerControl::AddClient(WindowControl *Client)
 {
-  // Set the client font to the ContainerControl font
-  Client->SetFont(GetFont());
-
   // If the client doesn't know where to go
   // -> move it below the previous one
   if (Client->get_position().top == -1)
