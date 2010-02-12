@@ -148,8 +148,6 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
     wComboPopupListFrame =
       (WndListFrame*)wf->FindByName(_T("frmComboPopupList"));
     assert(wComboPopupListFrame != NULL);
-    wComboPopupListFrame->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERRIGHT |
-        BORDERBOTTOM);
     wComboPopupListFrame->SetActivateCallback(OnComboPopupListEnter);
     wComboPopupListFrame->SetPaintItemCallback(OnPaintComboPopupListItem);
 

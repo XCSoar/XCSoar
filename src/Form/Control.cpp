@@ -48,7 +48,6 @@ Copyright_License {
 
 bool WindowControl::initialized;
 Brush WindowControl::hBrushDefaultBk;
-Pen WindowControl::hPenDefaultBorder;
 Pen WindowControl::hPenDefaultSelector;
 
 // returns true if it is a long press,
@@ -80,7 +79,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
                              int X, int Y, int Width, int Height,
                              const WindowStyle style) :
     mOwner(Owner),
-    mBorderKind(0), //BORDERRIGHT | BORDERBOTTOM;
     mColorBack(Color::WHITE),
     mColorFore(Color::BLACK),
     mhFont(&MapWindowFont),
@@ -98,7 +96,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
   // If not done already -> initialize default brushes and pens
   if (!initialized) {
     hBrushDefaultBk.set(mColorBack);
-    hPenDefaultBorder.set(DEFAULTBORDERPENWIDTH, mColorFore);
     hPenDefaultSelector.set(DEFAULTBORDERPENWIDTH + 2, mColorFore);
     initialized = true;
   }
@@ -163,19 +160,6 @@ WindowControl::SetFocused(bool Value)
     mHasFocus = Value;
 
     // todo, only paint the selector edges
-    invalidate();
-  }
-
-  return res;
-}
-
-int
-WindowControl::SetBorderKind(int Value)
-{
-  int res = mBorderKind;
-
-  if (mBorderKind != Value) {
-    mBorderKind = Value;
     invalidate();
   }
 
@@ -309,24 +293,6 @@ WindowControl::on_paint(Canvas &canvas)
 #endif
   } else
     canvas.fill_rectangle(rc, GetBackBrush());
-
-  if (mBorderKind != 0) {
-    const RECT rc = get_client_rect();
-
-    canvas.select(GetBorderPen());
-
-    if (mBorderKind & BORDERTOP)
-      canvas.line(rc.left, rc.top, rc.right, rc.top);
-
-    if (mBorderKind & BORDERRIGHT)
-      canvas.line(rc.right - 1, rc.top, rc.right - 1, rc.bottom);
-
-    if (mBorderKind & BORDERBOTTOM)
-      canvas.line(rc.right - 1, rc.bottom - 1, rc.left - 1, rc.bottom - 1);
-
-    if (mBorderKind & BORDERLEFT)
-      canvas.line(rc.left, rc.bottom - 1, rc.left, rc.top - 1);
-  }
 
   PaintSelector(canvas);
 

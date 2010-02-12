@@ -290,7 +290,6 @@ void dlgChecklistShowModal(void){
   wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
   assert(wDetails!=NULL);
 
-  wDetails->SetBorderKind(BORDERLEFT);
   wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
 
   page = 0;

@@ -3,5 +3,5 @@
 <WndForm Name="frmAirspacePatterns" Width=320 Height=240 Caption="Select pattern">
   <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=2 Width=98  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
 
-  <WndListFrame Name="frmAirspacePatternsList" X=102 Y=0 Width=215 Height=222 ItemHeight=18 Font=2/>
+  <WndListFrame Name="frmAirspacePatternsList" X=102 Y=0 Width=215 Height=222 ItemHeight=18 Font=2 Border="1"/>
 </WndForm>

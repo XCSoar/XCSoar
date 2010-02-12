@@ -5,5 +5,5 @@
 
   <WndButton   Name="cmdLookup" Caption="Lookup"    X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnLookupClicked"/>
 
-  <WndListFrame Name="frmAirspaceList" X=102 Y=0 Width=215 Height=222 ItemHeight=18 Font=2/>
+  <WndListFrame Name="frmAirspaceList" X=102 Y=0 Width=215 Height=222 ItemHeight=18 Font=2 Border="1"/>
 </WndForm>

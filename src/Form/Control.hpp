@@ -130,18 +130,6 @@ public:
   bool GetFocused(void) { return mHasFocus; }
 
   /**
-   * Returns the border kind
-   * @return The border kind
-   */
-  int GetBorderKind(void) { return mBorderKind; }
-  /**
-   * Sets the border kind
-   * @param Value The new border kind
-   * @return The old border kind
-   */
-  int SetBorderKind(int Value);
-
-  /**
    * Returns the Control's font
    * @return The Control's font
    */
@@ -189,14 +177,6 @@ public:
    */
   Brush &GetBackBrush(void) {
     return mhBrushBk.defined() ? mhBrushBk : hBrushDefaultBk;
-  }
-
-  /**
-   * Returns the pen for drawing borders
-   * @return The pen for drawing borders
-   */
-  Pen &GetBorderPen(void) {
-    return mhPenBorder.defined() ? mhPenBorder : hPenDefaultBorder;
   }
 
   /**
@@ -252,15 +232,13 @@ protected:
 private:
   /** Parent ContainerControl */
   ContainerControl *mOwner;
-  int mBorderKind;
+
   /** Background color */
   Color mColorBack;
   /** Foreground color */
   Color mColorFore;
   /** Brush for painting the background */
   Brush mhBrushBk;
-  /** Pen for drawing borders */
-  Pen mhPenBorder;
   /** Pen for drawing the "Selector" */
   Pen mhPenSelector;
   /** Font of the Control */
@@ -277,8 +255,6 @@ private:
   static bool initialized;
   /** The default Brush for painting the background */
   static Brush hBrushDefaultBk;
-  /** The default Pen for drawing borders */
-  static Pen hPenDefaultBorder;
   /** The default Pen for drawing the "Selector" */
   static Pen hPenDefaultSelector;
 };

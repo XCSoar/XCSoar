@@ -584,7 +584,6 @@ dlgTaskOverviewShowModal(SingleWindow &parent)
 
   wTaskList = (WndListFrame*)wf->FindByName(_T("frmTaskList"));
   assert(wTaskList!=NULL);
-  wTaskList->SetBorderKind(BORDERLEFT);
   wTaskList->SetActivateCallback(OnTaskListEnter);
   wTaskList->SetPaintItemCallback(OnTaskPaintListItem);
 

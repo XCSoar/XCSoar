@@ -170,7 +170,6 @@ dlgAirspaceShowModal(bool coloredit)
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
   assert(wAirspaceList != NULL);
-  wAirspaceList->SetBorderKind(BORDERLEFT);
   wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
   wAirspaceList->SetPaintItemCallback(OnAirspacePaintListItem);
   wAirspaceList->SetLength(AIRSPACECLASSCOUNT);

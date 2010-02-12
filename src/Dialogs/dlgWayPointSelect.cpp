@@ -494,7 +494,6 @@ dlgWayPointSelect(SingleWindow &parent,
 
   wWayPointList = (WndListFrame*)wf->FindByName(_T("frmWayPointList"));
   assert(wWayPointList!=NULL);
-  wWayPointList->SetBorderKind(BORDERLEFT);
   wWayPointList->SetActivateCallback(OnWaypointListEnter);
   wWayPointList->SetPaintItemCallback(OnPaintListItem);
 

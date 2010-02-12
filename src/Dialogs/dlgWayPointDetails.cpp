@@ -514,12 +514,6 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   wp->SetText(way_point.Details);
   */
 
-  wInfo->SetBorderKind(BORDERLEFT);
-  wCommand->SetBorderKind(BORDERLEFT);
-  wSpecial->SetBorderKind(BORDERLEFT);
-  wImage->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERBOTTOM | BORDERRIGHT);
-  wDetails->SetBorderKind(BORDERLEFT);
-
   wCommand->hide();
   wSpecial->hide();
   wImage->SetCaption(gettext(_T("Blank!")));

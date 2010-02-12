@@ -105,7 +105,6 @@ dlgAirspaceColoursShowModal(void)
   wAirspaceColoursList = (WndListFrame*)wf->FindByName(
       _T("frmAirspaceColoursList"));
   assert(wAirspaceColoursList != NULL);
-  wAirspaceColoursList->SetBorderKind(BORDERLEFT);
   wAirspaceColoursList->SetActivateCallback(OnAirspaceColoursListEnter);
   wAirspaceColoursList->SetPaintItemCallback(OnAirspaceColoursPaintListItem);
   wAirspaceColoursList->SetLength(NUMAIRSPACECOLORS);

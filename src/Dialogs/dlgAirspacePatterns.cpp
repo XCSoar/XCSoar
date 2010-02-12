@@ -102,7 +102,6 @@ int dlgAirspacePatternsShowModal(void){
   WndListFrame *wAirspacePatternsList =
     (WndListFrame*)wf->FindByName(_T("frmAirspacePatternsList"));
   assert(wAirspacePatternsList!=NULL);
-  wAirspacePatternsList->SetBorderKind(BORDERLEFT);
   wAirspacePatternsList->SetActivateCallback(OnAirspacePatternsListEnter);
   wAirspacePatternsList->SetPaintItemCallback(OnAirspacePatternsPaintListItem);
   wAirspacePatternsList->SetLength(NUMAIRSPACEBRUSHES);

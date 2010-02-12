@@ -23,5 +23,5 @@
     <WndButton  Name="cmdSave" Caption="Save"    X=65 Y=46 Width=60  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
   </Panel>
 
-  <WndListFrame Name="frmTaskList" X=0 Y=-1 Width=230 Height=220 ItemHeight=18 Font=2/>
+  <WndListFrame Name="frmTaskList" X=0 Y=-1 Width=230 Height=220 ItemHeight=18 Font=2 Border="1"/>
 </WndForm>

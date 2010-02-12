@@ -329,7 +329,7 @@ WndForm::on_paint(Canvas &canvas)
   RECT rcClient = get_client_rect();
 
   // Select default pen and brush
-  canvas.select(GetBorderPen());
+  canvas.black_pen();
   canvas.select(GetBackBrush());
 
   // Draw the borders

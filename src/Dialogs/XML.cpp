@@ -637,7 +637,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   TCHAR Caption[128];
   TCHAR Name[64];
   bool Visible;
-  int Border;
 
   WindowControl *WC = NULL;
 
@@ -652,8 +651,10 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   // Determine the control's font (default = parent's font)
   Font = StringToIntDflt(node.getAttribute(_T("Font")), ParentFont);
 
-  // Determine the control's border kind (default = 0)
-  Border = StringToIntDflt(node.getAttribute(_T("Border")), 0);
+  WindowStyle style;
+
+  if (StringToIntDflt(node.getAttribute(_T("Border")), 0))
+    style.border();
 
   bool advanced = _tcschr(Caption, _T('*')) != NULL;
 
@@ -694,7 +695,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     // Create the Property Control
 
-    WindowStyle style;
     style.control_parent();
 
     EditWindowStyle edit_style;
@@ -751,7 +751,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     // Create the ButtonControl
 
-    WindowStyle style;
     style.tab_stop();
 
     WC = new WndButton(Parent, Caption, X, Y, Width, Height,
@@ -770,7 +769,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     // Create the SymbolButtonControl
 
-    WindowStyle style;
     style.tab_stop();
 
     WC = new WndSymbolButton(Parent, Caption, X, Y, Width, Height,
@@ -792,7 +790,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     // Create the EventButtonControl
 
-    WindowStyle style;
     style.tab_stop();
 
     WC = new WndEventButton(Parent, Caption, X, Y, Width, Height,
@@ -806,7 +803,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   } else if (_tcscmp(node.getName(), _T("Panel")) == 0) {
     // Create the PanelControl
 
-    WindowStyle style;
     style.control_parent();
 
     PanelControl *frame = new PanelControl(Parent,
@@ -844,7 +840,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
 
     // Create the ListBoxControl
 
-    WindowStyle style;
     style.tab_stop();
 
     WC = new WndListFrame(Parent, X, Y, Width, Height,
@@ -855,7 +850,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
   } else if (_tcscmp(node.getName(), _T("Tabbed")) == 0) {
     // Create the TabControl
 
-    WindowStyle style;
     style.control_parent();
 
     TabbedControl *tabbed = new TabbedControl(Parent,
@@ -883,10 +877,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     // If caption hasn't been set -> set it
     if (Caption[0] != '\0')
       WC->SetCaption(Caption);
-
-    // Set the border kind
-    if (Border != 0)
-      WC->SetBorderKind(Border);
 
     form.AddDestruct(WC);
 
