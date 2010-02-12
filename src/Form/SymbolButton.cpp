@@ -99,33 +99,15 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (!_tcscmp(mCaption, _T("+")) || !_tcscmp(mCaption, _T("-"))) {
     int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
-    static POINT Arrow[5];
-    Arrow[0].x = (rc.left + rc.right) / 2 - size;
-    Arrow[0].y = (rc.top + rc.bottom) / 2 - size / 3;
-    Arrow[1].x = (rc.left + rc.right) / 2 - size;
-    Arrow[1].y = (rc.top + rc.bottom) / 2 + size / 3;
-    Arrow[2].x = (rc.left + rc.right) / 2 + size;
-    Arrow[2].y = (rc.top + rc.bottom) / 2 + size / 3;
-    Arrow[3].x = (rc.left + rc.right) / 2 + size;
-    Arrow[3].y = (rc.top + rc.bottom) / 2 - size / 3;
-    Arrow[4].x = Arrow[0].x;
-    Arrow[4].y = Arrow[0].y;
+    canvas.rectangle((rc.left + rc.right) / 2 - size,
+                     (rc.top + rc.bottom) / 2 - size / 3,
+                     (rc.left + rc.right) / 2 + size,
+                     (rc.top + rc.bottom) / 2 + size / 3);
 
-    canvas.polygon(Arrow, 5);
-
-    if (!_tcscmp(mCaption, _T("+"))) {
-      Arrow[0].x = (rc.left + rc.right) / 2 - size / 3;
-      Arrow[0].y = (rc.top + rc.bottom) / 2 - size;
-      Arrow[1].x = (rc.left + rc.right) / 2 - size / 3;
-      Arrow[1].y = (rc.top + rc.bottom) / 2 + size;
-      Arrow[2].x = (rc.left + rc.right) / 2 + size / 3;
-      Arrow[2].y = (rc.top + rc.bottom) / 2 + size;
-      Arrow[3].x = (rc.left + rc.right) / 2 + size / 3;
-      Arrow[3].y = (rc.top + rc.bottom) / 2 - size;
-      Arrow[4].x = Arrow[0].x;
-      Arrow[4].y = Arrow[0].y;
-
-      canvas.polygon(Arrow, 5);
-    }
+    if (!_tcscmp(mCaption, _T("+")))
+      canvas.rectangle((rc.left + rc.right) / 2 - size / 3,
+                       (rc.top + rc.bottom) / 2 - size,
+                       (rc.left + rc.right) / 2 + size / 3,
+                       (rc.top + rc.bottom) / 2 + size);
   }
 }
