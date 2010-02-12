@@ -56,6 +56,7 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Form/Edit.hpp"
 #include "Form/EventButton.hpp"
+#include "Form/SymbolButton.hpp"
 #include "Form/Draw.hpp"
 #include "Form/List.hpp"
 #include "Form/Tabbed.hpp"
@@ -751,6 +752,25 @@ LoadChild(ContainerControl *Parent, CallBackTableEntry_t *LookUpTable,
                        style,
                        (WndButton::ClickNotifyCallback_t)
                        CallBackLookup(LookUpTable, ClickCallback));
+
+    Caption[0] = '\0';
+
+  // SymbolButtonControl (WndSymbolButton) not used yet
+  } else if (_tcscmp(node.getName(), _T("WndSymbolButton")) == 0) {
+    // Determine ClickCallback function
+    TCHAR ClickCallback[128];
+    _tcscpy(ClickCallback,
+            StringToStringDflt(node.getAttribute(_T("OnClickNotify")), _T("")));
+
+    // Create the SymbolButtonControl
+
+    WindowStyle style;
+    style.tab_stop();
+
+    WC = new WndSymbolButton(Parent, Name, Caption, X, Y, Width, Height,
+                             style,
+                             (WndButton::ClickNotifyCallback_t)
+                             CallBackLookup(LookUpTable, ClickCallback));
 
     Caption[0] = '\0';
 

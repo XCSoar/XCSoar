@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmVario" Width=320 Height=240 Caption="Vario Configuration">
-  <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
-  <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
+  <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
+  <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 Tag=3 />
   <WndButton Name="cmdDemo"  Caption="Demo" X=5 Y=60 Width=60  Height=28 Font=2 OnClickNotify="OnDemoClicked" Tag=2 />
   <WndButton Name="cmdSave"  Caption="Save" X=5 Y=90 Width=60  Height=28 Font=2 OnClickNotify="OnSaveClicked" Tag=1 />
