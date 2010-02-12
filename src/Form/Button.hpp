@@ -67,6 +67,24 @@ public:
       ClickNotifyCallback_t Function = NULL);
 
   /**
+   * Return the tag of the Control
+   * @return The tag of the Control
+   */
+  int GetTag() const {
+    return mTag;
+  }
+
+  /**
+   * Sets the tag of the Control
+   * @param Value The new tag of the Control
+   * @return If successful the new tag of the Control
+   */
+  int SetTag(int Value) {
+    mTag = Value;
+    return mTag;
+  }
+
+  /**
    * Sets the function that should be called when the button is pressed
    * @param Function Pointer to the function to be called
    */
@@ -120,6 +138,9 @@ protected:
   bool mDown;
 
 private:
+  /** Tag of the Control */
+  int mTag;
+
   /** not used yet */
   bool mDefault;
   int mLastDrawTextHeight;

@@ -243,21 +243,6 @@ public:
   ContainerControl *GetOwner(void) { return mOwner; }
 
   /**
-   * Return the tag of the Control
-   * @return The tag of the Control
-   */
-  int GetTag(void) { return mTag; }
-  /**
-   * Sets the tag of the Control
-   * @param Value The new tag of the Control
-   * @return If successful the new tag of the Control
-   */
-  int SetTag(int Value) {
-    mTag = Value;
-    return mTag;
-  }
-
-  /**
    * Sets whether to draw the "Selector" or not
    * @param Value If false, the "Selector" will be drawn
    */
@@ -297,8 +282,6 @@ private:
 
   OnHelpCallback_t mOnHelpCallback;
 
-  /** Tag of the Control */
-  int mTag;
   /** Whether the Control is read-only */
   bool mReadOnly;
   /** True if the Control has been focused right now */
