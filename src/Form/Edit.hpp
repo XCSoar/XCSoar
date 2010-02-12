@@ -111,8 +111,6 @@ private:
   POINT mEditSize;
   /** Position of the Editor Control */
   POINT mEditPos;
-  /** Font of the Editor Control */
-  const Font *mhValueFont;
   /** Size of the "up" and "down" buttons */
   int  mBitmapSize;
   /** Width reserved for the caption of the Control */

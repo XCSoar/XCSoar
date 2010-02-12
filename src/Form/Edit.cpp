@@ -148,7 +148,6 @@ WndProperty::WndProperty(ContainerControl *Parent,
                  X, Y, Width, Height,
                  style),
    edit(this),
-   mhValueFont(GetFont()),
    mCaptionWidth(CaptionWidth),
    mDownDown(false), mUpDown(false)
 {
@@ -173,7 +172,7 @@ WndProperty::WndProperty(ContainerControl *Parent,
   edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y, edit_style);
   edit.install_wndproc();
 
-  edit.set_font(*mhValueFont);
+  edit.set_font(*GetFont());
 
 #if defined(WIN32) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
@@ -220,12 +219,7 @@ WndProperty::SetFont(const Font &Value)
   const Font *res = GetFont();
   WindowControl::SetFont(Value);
 
-  // todo, support value font
-
-  if (res != &Value) {
-    mhValueFont = &Value;
-    edit.set_font(Value);
-  }
+  edit.set_font(Value);
   return res;
 }
 
