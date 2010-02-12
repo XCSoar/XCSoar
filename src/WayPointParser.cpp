@@ -499,7 +499,9 @@ WayPointParser::parseLineWinPilot(const TCHAR* line, const unsigned linenum,
   /// @todo configurable behaviour
   bool alt_ok = parseAltitudeWinPilot(params[3], new_waypoint.Altitude);
   // Load waypoint altitude from terrain
-  double t_alt = AltitudeFromTerrain(new_waypoint.Location, *terrain);
+  double t_alt = terrain != NULL
+    ? AltitudeFromTerrain(new_waypoint.Location, *terrain)
+    : TERRAIN_INVALID;
   if (t_alt == TERRAIN_INVALID) {
     if (!alt_ok)
       new_waypoint.Altitude = fixed_zero;
@@ -862,7 +864,9 @@ WayPointParser::parseLineSeeYou(const TCHAR* line, const unsigned linenum,
   /// @todo configurable behaviour
   bool alt_ok = parseAltitudeSeeYou(params[iElevation], new_waypoint.Altitude);
   // Load waypoint altitude from terrain
-  double t_alt = AltitudeFromTerrain(new_waypoint.Location, *terrain);
+  double t_alt = terrain != NULL
+    ? AltitudeFromTerrain(new_waypoint.Location, *terrain)
+    : TERRAIN_INVALID;
   if (t_alt == TERRAIN_INVALID) {
     if (!alt_ok)
       new_waypoint.Altitude = fixed_zero;
@@ -1033,7 +1037,9 @@ WayPointParser::parseLineZander(const TCHAR* line, const unsigned linenum,
   /// @todo configurable behaviour
   bool alt_ok = parseAltitudeZander(line + 30, new_waypoint.Altitude);
   // Load waypoint altitude from terrain
-  double t_alt = AltitudeFromTerrain(new_waypoint.Location, *terrain);
+  double t_alt = terrain != NULL
+    ? AltitudeFromTerrain(new_waypoint.Location, *terrain)
+    : TERRAIN_INVALID;
   if (t_alt == TERRAIN_INVALID) {
     if (!alt_ok)
       new_waypoint.Altitude = fixed_zero;
