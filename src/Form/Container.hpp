@@ -69,6 +69,8 @@ public:
      bottom_most(0) {}
 
 public:
+  virtual ContainerWindow &GetClientAreaWindow();
+
   /**
    * Add a ClientControl to the ContainerControl
    * @param Client A Window to add

@@ -38,6 +38,12 @@ Copyright_License {
 
 #include "Form/Container.hpp"
 
+ContainerWindow &
+ContainerControl::GetClientAreaWindow()
+{
+  return *this;
+}
+
 void
 ContainerControl::AddClient(Window *Client)
 {

@@ -236,8 +236,6 @@ public:
    */
   void SetHelpText(const TCHAR *Value);
 
-  virtual ContainerWindow &GetClientAreaWindow(void) { return *this; }
-
   /**
    * Returns the parent ContainerControl
    * @return The parent ContainerControl
