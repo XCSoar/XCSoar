@@ -569,6 +569,18 @@ public:
       ? get_unchecked(hWnd)
       : NULL;
   }
+
+  LONG get_window_long(int nIndex) const {
+    return ::GetWindowLong(hWnd, nIndex);
+  }
+
+  LONG get_window_style() const {
+    return get_window_long(GWL_STYLE);
+  }
+
+  LONG get_window_ex_style() const {
+    return get_window_long(GWL_EXSTYLE);
+  }
 #endif
 
   void send_command(const Window &from) {
