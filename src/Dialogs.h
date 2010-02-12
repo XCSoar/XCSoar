@@ -145,6 +145,7 @@ bool dlgWaypointEditShowModal(Waypoint &way_point);
 void dlgWeatherShowModal();
 void dlgTarget();
 void dlgFlarmTrafficShowModal();
+void dlgFlarmTrafficDetailsShowModal(long id);
 bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0);
 void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
 

@@ -44,8 +44,6 @@
  * the target with the highest alarm level is automatically selected and
  * highlighted in orange or red (depending on the level)
  * @todo make targets selectable via mouse
- * @todo details dialog
- * @todo team mates
  */
 
 #include "Dialogs/Internal.hpp"
@@ -239,7 +237,19 @@ ZoomIn()
 static void
 OnDetailsClicked(gcc_unused WndButton &button)
 {
-  MessageBoxX(_T("This feature is not implemented yet."), _T(""), MB_OK);
+
+  // If warning is displayed -> prevent from opening details dialog
+  if (warning >= 0)
+    return;
+
+  // Don't open the details dialog if no plane selected
+  if (selection == -1 ||
+      !XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].defined())
+    return;
+
+  // Show the details dialog
+  dlgFlarmTrafficDetailsShowModal(
+      XCSoarInterface::Basic().flarm.FLARM_Traffic[selection].ID);
 }
 
 /**

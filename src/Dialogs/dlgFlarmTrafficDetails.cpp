@@ -1,0 +1,320 @@
+/*
+  Copyright_License {
+
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+
+	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
+	Scott Penrose <scottp@dd.com.au>
+	John Wharington <jwharington@gmail.com>
+	Lars H <lars_hn@hotmail.com>
+	Rob Dunning <rob@raspberryridgesheepfarm.com>
+	Russell King <rmk@arm.linux.org.uk>
+	Paolo Ventafridda <coolwind@email.it>
+	Tobias Lohner <tobias@lohner-net.de>
+	Mirek Jezek <mjezek@ipplc.cz>
+	Max Kellermann <max@duempel.org>
+	Tobias Bieniek <tobias.bieniek@gmx.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+*/
+
+/**
+ * @file
+ * The FLARM Traffic Details dialog displaying extended information about
+ * the FLARM targets from the FLARMnet database
+ * @todo Button that opens the Waypoint details dialog of the
+ * home airport (if found in FLARMnet and local waypoint database)
+ */
+
+#include "Dialogs/Internal.hpp"
+#include "FLARM/FLARMNet.hpp"
+#include "UtilsFLARM.hpp"
+#include "Screen/Layout.hpp"
+#include "Engine/Math/Geometry.hpp"
+#include "Engine/Math/Earth.hpp"
+#include "LocalPath.hpp"
+#include "MainWindow.hpp"
+#include "Components.hpp"
+
+#include <math.h>
+
+static WndForm *wf = NULL;
+static long target_id;
+
+/**
+ * Updates all the dialogs fields, that are changing frequently.
+ * e.g. climb speed, distance, height
+ */
+void UpdateChanging() {
+  TCHAR tmp[20];
+  const FLARM_TRAFFIC* target =
+      XCSoarInterface::Basic().flarm.FindTraffic(target_id);
+
+  // If target moved out of range -> return
+  if (!target || !target->defined())
+    return;
+
+  fixed distance;
+  fixed dir;
+  DistanceBearing(XCSoarInterface::Basic().Location, target->Location,
+      &distance, &dir);
+
+  // Fill distance field
+  Units::FormatUserDistance((double)distance, tmp, 20);
+  ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);
+
+  // Fill horizontal direction field
+  dir -= XCSoarInterface::Basic().TrackBearing;
+  dir = AngleLimit180(dir);
+  if (dir > 1)
+    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)dir);
+  else if (dir < -1)
+    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-dir);
+  else
+    _tcscpy(tmp, _T("«»"));
+  ((WndProperty *)wf->FindByName(_T("prpDirectionH")))->SetText(tmp);
+
+  // Fill altitude field
+  Units::FormatUserAltitude(target->Altitude, tmp, 20);
+  ((WndProperty *)wf->FindByName(_T("prpAltitude")))->SetText(tmp);
+
+  // Fill vertical direction field
+  dir = (fixed)atan2(target->RelativeAltitude, distance);
+  dir *=  fixed_180 / M_PI;
+  dir = AngleLimit180(dir);
+  if (dir > 1 || dir < -1)
+    _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir);
+  else
+    _stprintf(tmp, _T("--"), (double)dir);
+  ((WndProperty *)wf->FindByName(_T("prpDirectionV")))->SetText(tmp);
+
+  // Fill climb speed field
+#ifdef FLARM_AVERAGE
+  Units::FormatUserVSpeed(target->Average30s, tmp, 20);
+#else
+  Units::FormatUserVSpeed(target->ClimbRate, tmp, 20);
+#endif
+  ((WndProperty *)wf->FindByName(_T("prpVSpeed")))->SetText(tmp);
+}
+
+/**
+ * Updates all the dialogs fields.
+ * Should be called on dialog opening as it closes the dialog when the
+ * target does not exist.
+ */
+void Update() {
+  TCHAR tmp[200];
+  const FLARM_TRAFFIC* target =
+      XCSoarInterface::Basic().flarm.FindTraffic(target_id);
+
+  // If target is out of range
+  if (!target)
+    wf->SetModalResult(mrCancel);
+
+  // Set the dialog caption
+  _stprintf(tmp, _T("FLARM Traffic Details (%lX)"), target->ID);
+  wf->SetCaption(tmp);
+
+  // Try to find the target in the FLARMnet database
+  /// @todo: make this code a little more usable
+  TCHAR filename[MAX_PATH];
+  FLARMNetDatabase flarm_net;
+  LocalPath(filename, _T("data.fln"));
+  flarm_net.LoadFile(filename);
+  const FLARMNetRecord *record = flarm_net.Find(target_id);
+  if (record) {
+    // Fill the pilot name field
+    _tcscpy(tmp, record->name);
+    ((WndProperty *)wf->FindByName(_T("prpPilot")))->SetText(tmp);
+
+    // Fill the frequency field
+    _tcscpy(tmp, record->freq);
+    _tcscat(tmp, _T("MHz"));
+    ((WndProperty *)wf->FindByName(_T("prpFrequency")))->SetText(tmp);
+
+    // Fill the home airfield field
+    _tcscpy(tmp, record->airfield);
+    ((WndProperty *)wf->FindByName(_T("prpAirport")))->SetText(tmp);
+
+    // Fill the plane type field
+    _tcscpy(tmp, record->type);
+    ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(tmp);
+  } else {
+    // Fill the pilot name field
+    ((WndProperty *)wf->FindByName(_T("prpPilot")))->SetText(_T("--"));
+
+    // Fill the frequency field
+    ((WndProperty *)wf->FindByName(_T("prpFrequency")))->SetText(_T("--"));
+
+    // Fill the home airfield field
+    ((WndProperty *)wf->FindByName(_T("prpAirport")))->SetText(_T("--"));
+
+    // Fill the plane type field
+    ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(_T("--"));
+  }
+
+  // Fill the callsign field (+ registration)
+  // note: don't use target->Name here since it is not updated
+  //       yet if it was changed
+  const TCHAR* cs = LookupFLARMDetails(target_id);
+  if (cs != NULL && cs[0] != 0) {
+    _tcscpy(tmp, cs);
+    if (record) {
+      _tcscat(tmp, _T(" ("));
+      _tcscat(tmp, record->reg);
+      _tcscat(tmp, _T(")"));
+    }
+  } else
+    _tcscpy(tmp, _T("--"));
+  ((WndProperty *)wf->FindByName(_T("prpCallsign")))->SetText(tmp);
+
+  // Enable/Disable callsign button
+  if (!target->HasName()) {
+    // callsign not existing
+    ((WndButton *)wf->FindByName(_T("cmdCallsign")))->set_enabled(true);
+  } else {
+    // the callsign exists - is it from secondary list ?
+    if (LookupSecondaryFLARMId(target->ID) != -1)
+      ((WndButton *)wf->FindByName(_T("cmdCallsign")))->set_enabled(true);
+    else
+      ((WndButton *)wf->FindByName(_T("cmdCallsign")))->set_enabled(false);
+  }
+
+  // Update the frequently changing fields too
+  UpdateChanging();
+}
+
+/**
+ * This event handler is called when the timer is activated and triggers the
+ * update of the variable fields of the dialog
+ */
+static int
+OnTimerNotify(WindowControl * Sender)
+{
+  (void)Sender;
+  UpdateChanging();
+  return 0;
+}
+
+/**
+ * This event handler is called when the "Close" button is pressed
+ */
+static void
+OnCloseClicked(WndButton &Sender)
+{
+  (void)Sender;
+  wf->SetModalResult(mrOK);
+}
+
+/**
+ * This event handler is called when the "Team" button is pressed
+ */
+static void
+OnTeamClicked(WndButton &Sender)
+{
+  (void)Sender;
+
+  // Ask for confirmation
+  if (MessageBoxX(_T("Do you want to set this FLARM contact as your ")
+      _T("new teammate?"), _T("New Teammate"), MB_YESNO) == IDNO)
+    return;
+
+  const FLARM_TRAFFIC* target =
+      XCSoarInterface::Basic().flarm.FindTraffic(target_id);
+
+  // Set the Teammate callsign
+  if (!target->HasName()) {
+    XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+  } else {
+    // copy the 3 first chars from the name
+    _tcsncpy(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget,
+             target->Name, 3);
+
+    XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
+  }
+
+  // Start tracking
+  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = target->ID;
+  XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
+  XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
+
+  // Close the dialog
+  wf->SetModalResult(mrOK);
+}
+
+/**
+ * This event handler is called when the "Change Callsign" button is pressed
+ */
+static void
+OnCallsignClicked(WndButton &Sender)
+{
+  (void)Sender;
+
+  TCHAR newName[21];
+  newName[0] = 0;
+  if (dlgTextEntryShowModal(newName, 4))
+    AddFlarmLookupItem(target_id, newName, true);
+
+  Update();
+}
+
+static CallBackTableEntry_t CallBackTable[] = {
+  DeclareCallBackEntry(OnTimerNotify),
+  DeclareCallBackEntry(NULL)
+};
+
+/**
+ * The function opens the FLARM Traffic Details dialog
+ */
+void
+dlgFlarmTrafficDetailsShowModal(long id)
+{
+  target_id = id;
+
+  // Load dialog from XML
+  if (Layout::landscape)
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgFlarmTrafficDetails_L.xml"),
+        XCSoarInterface::main_window, _T("IDR_XML_FLARMTRAFFICDETAILS_L"));
+  else
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgFlarmTrafficDetails.xml"),
+        XCSoarInterface::main_window, _T("IDR_XML_FLARMTRAFFICDETAILS"));
+
+  if (!wf)
+    return;
+
+  // Set dialog events
+  wf->SetTimerNotify(OnTimerNotify);
+  ((WndButton *)wf->FindByName(_T("cmdClose")))->
+      SetOnClickNotify(OnCloseClicked);
+  ((WndButton *)wf->FindByName(_T("cmdSetAsTeamMate")))->
+      SetOnClickNotify(OnTeamClicked);
+  ((WndButton *)wf->FindByName(_T("cmdCallsign")))->
+      SetOnClickNotify(OnCallsignClicked);
+
+  // Update fields for the first time
+  Update();
+
+  // Show the dialog
+  wf->ShowModal();
+
+  // After dialog closed -> delete it
+  delete wf;
+}
