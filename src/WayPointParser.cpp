@@ -172,7 +172,6 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
     // parse the file
     if (parser.Parse(way_points, terrain)) {
       // reset the registry to the actual file name
-      printf("save\n");
       SetRegistryString(szRegistryWayPointFile, szFile);
 
       // Set waypoints writable flag
@@ -197,7 +196,6 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
     // parse the file
     if (parser.Parse(way_points, terrain)) {
       // reset the registry to the actual file name
-      printf("save\n");
       SetRegistryString(szRegistryWayPointFile, szFile);
 
       // Set waypoints writable flag
@@ -224,7 +222,6 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
       // parse the file
       if (parser.Parse(way_points, terrain)) {
         // reset the registry to the actual file name
-        printf("save\n");
         SetRegistryString(szRegistryWayPointFile, szFile);
 
         // Set waypoints writable flag
