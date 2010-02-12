@@ -237,7 +237,7 @@ LoadFiles()
 
   terrain.OpenTerrain();
 
-  ReadWaypoints(way_points, &terrain);
+  WayPointParser::ReadWaypoints(way_points, &terrain);
 
   TCHAR tpath[MAX_PATH];
   GetRegistryString(szRegistryAirspaceFile, tpath, MAX_PATH);

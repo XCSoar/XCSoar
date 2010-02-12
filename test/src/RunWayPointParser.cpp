@@ -43,6 +43,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "DeviceBlackboard.hpp"
 #include "wcecompat/ts_string.h"
+#include "Units.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -92,6 +93,12 @@ dlgWaypointOutOfTerrain(const TCHAR *Message)
   return -1;
 }
 
+double
+Units::ToSysUnit(double Value, Units_t Unit)
+{
+  return Value;
+}
+
 int main(int argc, char **argv)
 {
   if (argc != 2) {
@@ -103,7 +110,17 @@ int main(int argc, char **argv)
   Waypoints way_points;
 
   ascii2unicode(argv[1], path);
-  ReadWayPointFile(path, way_points, NULL);
+
+  WayPointParser parser;
+  if (!parser.SetFile(path, false)) {
+    fprintf(stderr, "WayPointParser::SetFile() has failed\n");
+    return 1;
+  }
+
+  if (!parser.Parse(way_points, NULL)) {
+    fprintf(stderr, "WayPointParser::Parse() has failed\n");
+    return 1;
+  }
 
   way_points.optimise();
   printf("Size %d\n", way_points.size());

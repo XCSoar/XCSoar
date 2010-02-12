@@ -72,6 +72,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPointParser.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsSystem.cpp \
+	$(SRC)/UtilsFile.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/Simulator.cpp \

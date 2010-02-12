@@ -149,7 +149,7 @@ TaskManager task_manager(task_events,
 static void
 LoadFiles()
 {
-  ReadWaypoints(way_points, &terrain);
+  WayPointParser::ReadWaypoints(way_points, &terrain);
 }
 
 static void
