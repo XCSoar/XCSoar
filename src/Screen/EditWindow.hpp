@@ -118,6 +118,14 @@ public:
 #endif /* !ENABLE_SDL */
   }
 
+  bool is_read_only() const {
+#ifdef ENABLE_SDL
+    return false; // XXX
+#else /* !ENABLE_SDL */
+    return (get_window_style() & ES_READONLY) != 0;
+#endif
+  }
+
   void set_selection(int start, int end) {
     assert_none_locked();
 
