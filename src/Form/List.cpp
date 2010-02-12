@@ -47,6 +47,10 @@ Copyright_License {
 using std::min;
 using std::max;
 
+const Color WndListFrame::text_color = Color::BLACK;
+const Color WndListFrame::background_color = Color::WHITE;
+const Color WndListFrame::selected_background_color = Color::LIGHT_GRAY;
+
 WndListFrame::WndListFrame(ContainerControl *Owner,
                            int X, int Y, int Width, int Height,
                            const WindowStyle style,
@@ -60,8 +64,8 @@ WndListFrame::WndListFrame(ContainerControl *Owner,
   PaintItemCallback(NULL)
 {
   mCaption[0] = '\0';
-  SetForeColor(Owner->GetForeColor());
-  SetBackColor(Owner->GetBackColor());
+  SetForeColor(text_color);
+  SetBackColor(background_color);
 }
 
 void
@@ -105,7 +109,7 @@ WndListFrame::on_paint(Canvas &canvas)
 
     for (unsigned i = 0; i < items_visible + 1; i++) {
       if (has_focus() && i == relative_cursor) {
-        Brush brush(GetBackColor().highlight());
+        Brush brush(selected_background_color);
         canvas.fill_rectangle(rc, brush);
       }
 

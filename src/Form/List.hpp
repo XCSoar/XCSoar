@@ -49,6 +49,10 @@ class ContainerControl;
  * WindowControl class.
  */
 class WndListFrame : public WindowControl {
+  static const Color text_color;
+  static const Color background_color;
+  static const Color selected_background_color;
+
   class ScrollBar {
     /** Top button bitmap */
     Bitmap hScrollBarBitmapTop;
