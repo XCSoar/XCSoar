@@ -44,7 +44,7 @@ TabbedControl::TabbedControl(ContainerControl *owner,
                              int x, int y, unsigned width, unsigned height,
                              const WindowStyle style)
   :ContainerControl(owner, NULL, x, y, width, height, style),
-   mClientCount(0), current(0)
+   current(0)
 {
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
@@ -55,10 +55,10 @@ TabbedControl::AddClient(WindowControl *w)
 {
   ContainerControl::AddClient(w);
 
-  if (mClientCount != current)
+  if (current != tabs.size())
     w->hide();
 
-  mClients[mClientCount++] = w;
+  tabs.push_back(w);
 
   const RECT rc = get_client_rect();
   w->move(rc.left, rc.top, rc.right, rc.bottom);
@@ -67,34 +67,34 @@ TabbedControl::AddClient(WindowControl *w)
 void
 TabbedControl::SetCurrentPage(unsigned i)
 {
-  assert(i < mClientCount);
+  assert(i < tabs.size());
 
   if (i == current)
     return;
 
-  mClients[current]->hide();
+  tabs[current]->hide();
   current = i;
-  mClients[current]->show();
+  tabs[current]->show();
 }
 
 void
 TabbedControl::NextPage()
 {
-  if (mClientCount < 2)
+  if (tabs.size() < 2)
     return;
 
-  assert(current < mClientCount);
+  assert(current < tabs.size());
 
-  SetCurrentPage((current + 1) % mClientCount);
+  SetCurrentPage((current + 1) % tabs.size());
 }
 
 void
 TabbedControl::PreviousPage()
 {
-  if (mClientCount < 2)
+  if (tabs.size() < 2)
     return;
 
-  assert(current < mClientCount);
+  assert(current < tabs.size());
 
-  SetCurrentPage((current + mClientCount - 1) % mClientCount);
+  SetCurrentPage((current + tabs.size() - 1) % tabs.size());
 }

@@ -41,13 +41,11 @@ Copyright_License {
 
 #include "Form/Container.hpp"
 
+#include <vector>
+
 class TabbedControl : public ContainerControl {
 protected:
-  /** Array of ClientControls */
-  Window *mClients[50];
-  /** Number of ClientControls */
-  unsigned mClientCount;
-
+  std::vector<Window *> tabs;
   unsigned current;
 
 public:
