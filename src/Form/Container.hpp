@@ -53,6 +53,9 @@ protected:
   /** Number of ClientControls */
   unsigned mClientCount;
 
+  /** the bottom of the most recently added child window */
+  int bottom_most;
+
 public:
   /**
    * Constructor for the ContainerControl class
@@ -69,7 +72,8 @@ public:
                    const TCHAR *name, int x, int y, int width, int height,
                    const WindowStyle style)
     :WindowControl(owner, parent, name, x, y, width, height, style),
-     mClientCount(0) {}
+     mClientCount(0),
+     bottom_most(0) {}
   /** Destructor */
   virtual ~ContainerControl();
 

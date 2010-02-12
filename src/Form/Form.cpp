@@ -74,11 +74,10 @@ WndForm::WndForm(SingleWindow &_main_window,
                                        client_style);
   mClientWindow->SetBackColor(GetBackColor());
 
-  /* remove the mClientWindow from the client list, so it doesn't
-     interfere with the auto-layout in AddClient(); without this hack,
-     the "bottom" of the previous control is always the very bottom of
-     the whole form */
-  mClientCount = 0;
+  /* reset bottom_most, which has been modified by the mClientWindow;
+     without this hack, the "bottom" of the previous control is always
+     the very bottom of the whole form */
+  bottom_most = 0;
 
   mClientRect.top=0;
   mClientRect.left=0;

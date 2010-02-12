@@ -57,9 +57,10 @@ ContainerControl::AddClient(WindowControl *Client)
 
   // If the client doesn't know where to go
   // -> move it below the previous one
-  if (Client->get_position().top == -1 && mClientCount > 1)
-    Client->move(Client->get_position().left,
-                 mClients[mClientCount - 2]->get_position().bottom);
+  if (Client->get_position().top == -1)
+    Client->move(Client->get_position().left, bottom_most);
+
+  bottom_most = Client->get_position().bottom;
 
   /*
   // TODO code: also allow autosizing of height/width to maximum of parent
