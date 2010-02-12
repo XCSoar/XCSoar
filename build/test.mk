@@ -70,6 +70,9 @@ DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRA
 
 RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPointParser.cpp \
+	$(SRC)/WayPointParserWinPilot.cpp \
+	$(SRC)/WayPointParserSeeYou.cpp \
+	$(SRC)/WayPointParserZander.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsFile.cpp \
