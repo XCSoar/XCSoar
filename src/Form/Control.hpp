@@ -130,18 +130,6 @@ public:
   bool GetFocused(void) { return mHasFocus; }
 
   /**
-   * Returns whether this is a read-only Control
-   * @return True if this is a read-only Control, False otherwise
-   */
-  bool GetReadOnly(void) { return mReadOnly; }
-  /**
-   * Sets whether this is a read-only Control
-   * @param Value Whether this is a read-only Control
-   * @return The old value
-   */
-  bool SetReadOnly(bool Value);
-
-  /**
    * Returns the border kind
    * @return The border kind
    */
@@ -282,8 +270,6 @@ private:
 
   OnHelpCallback_t mOnHelpCallback;
 
-  /** Whether the Control is read-only */
-  bool mReadOnly;
   /** True if the Control has been focused right now */
   bool mHasFocus;
 

@@ -176,13 +176,6 @@ public:
   void on_editor_setfocus();
   void on_editor_killfocus();
 
-  /**
-   * Sets the read-only attribute of the Control to the given Value
-   * @param Value If true, the Control will be read only
-   * @return The old value
-   */
-  bool SetReadOnly(bool Value);
-
   void RefreshDisplay(void);
 
   const Font *SetFont(const Font &font);

@@ -698,7 +698,9 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     style.control_parent();
 
     EditWindowStyle edit_style;
-    if (!ReadOnly)
+    if (ReadOnly)
+      edit_style.read_only();
+    else
       edit_style.tab_stop();
 
     if (is_embedded())
@@ -727,9 +729,6 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     W->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")), _T("")));
 
     Caption[0] = '\0';
-
-    // Set the control as readonly, if wanted
-    W->SetReadOnly(ReadOnly != 0);
 
     // If the control has (at least) one DataField child control
     if (node.nChildNode(_T("DataField")) > 0){

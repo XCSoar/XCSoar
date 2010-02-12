@@ -86,7 +86,7 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
     mhFont(&MapWindowFont),
     mHelpText(NULL),
     mOnHelpCallback(NULL),
-    mReadOnly(false), mHasFocus(false),
+    mHasFocus(false),
     mPaintSelector(true)
 {
   // Clear the caption
@@ -192,19 +192,6 @@ WindowControl::SetFont(const Font &Value)
     mhFont = &Value;
     invalidate();
   }
-  return res;
-}
-
-bool
-WindowControl::SetReadOnly(bool Value)
-{
-  bool res = mReadOnly;
-
-  if (mReadOnly != Value) {
-    mReadOnly = Value;
-    invalidate();
-  }
-
   return res;
 }
 

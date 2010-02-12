@@ -61,7 +61,7 @@ WndProperty::Editor::on_mouse_down(int x, int y)
 
   // If the Control is read-only -> drop this event,
   // so the default handler doesn't obtain the focus
-  if (parent->GetReadOnly())
+  if (is_read_only())
     return true;
 
 #endif
@@ -278,19 +278,6 @@ WndProperty::SetButtonSize(int Value)
   return res;
 }
 
-bool
-WndProperty::SetReadOnly(bool Value)
-{
-  bool res = GetReadOnly();
-
-  if (GetReadOnly() != Value){
-    WindowControl::SetReadOnly(Value);
-    edit.set_read_only(Value);
-  }
-
-  return res;
-}
-
 void
 WndProperty::on_editor_setfocus()
 {
@@ -339,7 +326,7 @@ WndProperty::on_mouse_down(int x, int y)
   POINT Pos;
 
   if (mDialogStyle) {
-    if (!GetReadOnly()) {
+    if (!edit.is_read_only()) {
       // when they click on the label
       SingleWindow *root = (SingleWindow *)get_root_owner();
 
@@ -353,7 +340,7 @@ WndProperty::on_mouse_down(int x, int y)
     }
   } else {
     if (!GetFocused()) {
-      if (!GetReadOnly())
+      if (!edit.is_read_only())
         edit.set_focus();
 
       return true;
@@ -474,7 +461,7 @@ WndProperty::on_paint(Canvas &canvas)
 
   // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
   // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
-  if (!mDialogStyle && GetFocused() && !GetReadOnly()) {
+  if (!mDialogStyle && GetFocused() && !edit.is_read_only()) {
     BitmapCanvas bitmap_canvas(canvas);
 
     bitmap_canvas.select(hBmpLeft32);
