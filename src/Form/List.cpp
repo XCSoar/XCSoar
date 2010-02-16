@@ -62,6 +62,8 @@ WndListFrame::WndListFrame(ContainerControl *Owner,
   SetPaintSelector(false);
 
   mCaption[0] = '\0';
+  SetForeColor(GetOwner()->GetForeColor());
+  SetBackColor(GetOwner()->GetBackColor());
 }
 
 void
@@ -105,7 +107,7 @@ WndListFrame::on_paint(Canvas &canvas)
 
     for (unsigned i = 0; i < items_visible; i++) {
       if (GetFocused() && i == relative_cursor) {
-        Brush brush(Color::LIGHT_GRAY);
+        Brush brush(GetBackColor().highlight());
         canvas.fill_rectangle(rc, brush);
       }
 
