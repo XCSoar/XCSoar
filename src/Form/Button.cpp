@@ -52,11 +52,12 @@ WndButton::WndButton(ContainerControl *Parent,
   mLastDrawTextHeight(-1),
   mOnClickNotify(Function)
 {
-  // fore- and background color should be derived from the parent control
+  // initial fore- and background color should be derived
+  // from the parent control
   SetForeColor(Parent->GetForeColor());
   SetBackColor(Parent->GetBackColor());
 
-  // copy the buttons caption to the mCaption field
+  // copy the buttons initial caption to the mCaption field
   _tcscpy(mCaption, Caption);
 
 #if defined(WIN32) && !defined(NDEBUG)
@@ -123,9 +124,8 @@ WndButton::on_mouse_move(int x, int y, unsigned keys)
   if (!has_capture())
     return WindowControl::on_mouse_move(x, y, keys);
 
-  bool in = in_client_rect(x, y);
-
   // If button is currently pressed and mouse cursor is moving on top of it
+  bool in = in_client_rect(x, y);
   if (in != mDown) {
     mDown = in;
     invalidate();
