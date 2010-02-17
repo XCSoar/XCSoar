@@ -47,24 +47,4 @@ ContainerControl::GetClientAreaWindow()
 void
 ContainerControl::AddClient(Window *Client)
 {
-  // If the client doesn't know where to go
-  // -> move it below the previous one
-  if (Client->get_position().top == -1)
-    Client->move(Client->get_position().left, bottom_most);
-
-  bottom_most = Client->get_position().bottom;
-
-  /*
-  // TODO code: also allow autosizing of height/width to maximum of parent
-
-  if (Client->mHeight == -1){
-    // maximum height
-    Client->mHeight = mHeight - Client->mY;
-    SetWindowPos(Client->GetHandle(), 0,
-                 Client->mX, Client->mY,
-                 Client->mWidth, Client->mHeight,
-                 SWP_NOSIZE | SWP_NOZORDER
-                 | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
-  }
-  */
 }

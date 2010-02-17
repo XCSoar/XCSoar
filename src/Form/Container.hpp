@@ -47,10 +47,6 @@ Copyright_License {
  * It is for example the base class for WndForm.
  */
 class ContainerControl : public WindowControl {
-protected:
-  /** the bottom of the most recently added child window */
-  int bottom_most;
-
 public:
   /**
    * Constructor for the ContainerControl class
@@ -65,8 +61,7 @@ public:
   ContainerControl(ContainerControl *owner, ContainerWindow *parent,
                    int x, int y, int width, int height,
                    const WindowStyle style)
-    :WindowControl(owner, parent, x, y, width, height, style),
-     bottom_most(0) {}
+    :WindowControl(owner, parent, x, y, width, height, style) {}
 
 public:
   virtual ContainerWindow &GetClientAreaWindow();

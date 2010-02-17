@@ -628,7 +628,7 @@ LoadDataField(XMLNode node, CallBackTableEntry_t *LookUpTable,
  * @param ParentFont The parent's font array index
  * @param eDialogStyle The parent's dialog style
  */
-static void
+static Window *
 LoadChild(WndForm &form, ContainerControl *Parent,
           CallBackTableEntry_t *LookUpTable,
           XMLNode node, int ParentFont, const DialogStyle_t eDialogStyle)
@@ -886,6 +886,8 @@ LoadChild(WndForm &form, ContainerControl *Parent,
     if (advanced)
       form.AddAdvanced(WC);
   }
+
+  return WC;
 }
 
 /**
@@ -906,9 +908,22 @@ LoadChildrenFromXML(WndForm &form, ContainerControl *Parent,
   // Get the number of childnodes
   int Count = Node->nChildNode();
 
+  unsigned bottom_most = 0;
+
   // Iterate through the childnodes
-  for (int i = 0; i < Count; i++)
+  for (int i = 0; i < Count; i++) {
     // Load each child control from the child nodes
-    LoadChild(form, Parent, LookUpTable, Node->getChildNode(i), ParentFont,
-              eDialogStyle);
+    Window *window = LoadChild(form, Parent, LookUpTable,
+                               Node->getChildNode(i), ParentFont,
+                               eDialogStyle);
+    if (window == NULL)
+      continue;
+
+    // If the client doesn't know where to go
+    // -> move it below the previous one
+    if (window->get_position().top == -1)
+      window->move(window->get_position().left, bottom_most);
+
+    bottom_most = window->get_position().bottom;
+  }
 }
