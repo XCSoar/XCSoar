@@ -229,32 +229,33 @@ WndButton::on_paint(Canvas &canvas)
   canvas.draw_button(rc, mDown);
 
   // If button has text on it
-  if (mCaption != NULL && mCaption[0] != '\0') {
-    // Set drawing colors
-    canvas.set_text_color(GetForeColor());
-    canvas.background_transparent();
+  if (mCaption == NULL || mCaption[0] == '\0')
+    return;
 
-    // Set drawing font
-    canvas.select(*GetFont());
+  // Set drawing colors
+  canvas.set_text_color(GetForeColor());
+  canvas.background_transparent();
 
-    if (mLastDrawTextHeight < 0) {
-      // Calculate the text height and save it for the future
-      RECT rc_t = rc;
-      canvas.formatted_text(&rc_t, mCaption,
-          DT_CALCRECT | DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
+  // Set drawing font
+  canvas.select(*GetFont());
 
-      mLastDrawTextHeight = rc_t.bottom - rc_t.top;
-    }
+  if (mLastDrawTextHeight < 0) {
+    // Calculate the text height and save it for the future
+    RECT rc_t = rc;
+    canvas.formatted_text(&rc_t, mCaption,
+        DT_CALCRECT | DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
 
-    // If button is pressed, offset the text for 3D effect
-    if (mDown)
-      OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
-
-    // Vertical middle alignment
-    rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
-
-    // Draw the button caption
-    canvas.formatted_text(&rc, mCaption,
-        DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
+    mLastDrawTextHeight = rc_t.bottom - rc_t.top;
   }
+
+  // If button is pressed, offset the text for 3D effect
+  if (mDown)
+    OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
+
+  // Vertical middle alignment
+  rc.top += (canvas.get_height() - 4 - mLastDrawTextHeight) / 2;
+
+  // Draw the button caption
+  canvas.formatted_text(&rc, mCaption,
+      DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
 }
