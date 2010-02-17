@@ -53,6 +53,9 @@ class ContainerControl;
  */
 class WindowControl : public ContainerWindow {
 public:
+  typedef void (*OnHelpCallback_t)(WindowControl *Sender);
+
+public:
   /**
    * Constructor of the WindowControl class
    * @param Owner
@@ -103,8 +106,6 @@ public:
    * @return
    */
   virtual int OnHelp();
-
-  typedef void (*OnHelpCallback_t)(WindowControl *Sender);
 
   /**
    * Sets the function that should be called when the help button is pressed
