@@ -45,8 +45,8 @@ WndFrame::WndFrame(ContainerControl *Owner,
   :WindowControl(Owner, NULL, X, Y, Width, Height, style),
    mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
-  SetForeColor(GetOwner()->GetForeColor());
-  SetBackColor(GetOwner()->GetBackColor());
+  SetForeColor(Owner->GetForeColor());
+  SetBackColor(Owner->GetBackColor());
 }
 
 void WndFrame::SetCaption(const TCHAR *Value){

@@ -53,8 +53,8 @@ WndButton::WndButton(ContainerControl *Parent,
   mOnClickNotify(Function)
 {
   // fore- and background color should be derived from the parent control
-  SetForeColor(GetOwner()->GetForeColor());
-  SetBackColor(GetOwner()->GetBackColor());
+  SetForeColor(Parent->GetForeColor());
+  SetBackColor(Parent->GetBackColor());
 
   // copy the buttons caption to the mCaption field
   _tcscpy(mCaption, Caption);

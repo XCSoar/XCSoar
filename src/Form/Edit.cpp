@@ -178,8 +178,8 @@ WndProperty::WndProperty(ContainerControl *Parent,
   ::SetWindowText(hWnd, Caption);
 #endif
 
-  SetForeColor(GetOwner()->GetForeColor());
-  SetBackColor(GetOwner()->GetBackColor());
+  SetForeColor(Parent->GetForeColor());
+  SetBackColor(Parent->GetBackColor());
 
   if (InstCount == 0) {
     hBmpLeft32.load(IDB_DLGBUTTONLEFT32);

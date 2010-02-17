@@ -46,8 +46,8 @@ TabbedControl::TabbedControl(ContainerControl *owner,
   :ContainerControl(owner, NULL, x, y, width, height, style),
    current(0)
 {
-  SetForeColor(GetOwner()->GetForeColor());
-  SetBackColor(GetOwner()->GetBackColor());
+  SetForeColor(owner->GetForeColor());
+  SetBackColor(owner->GetBackColor());
 }
 
 void

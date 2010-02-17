@@ -43,8 +43,8 @@ PanelControl::PanelControl(ContainerControl *owner,
                            const WindowStyle style)
   :ContainerControl(owner, NULL, x, y, width, height, style)
 {
-  SetForeColor(GetOwner()->GetForeColor());
-  SetBackColor(GetOwner()->GetBackColor());
+  SetForeColor(owner->GetForeColor());
+  SetBackColor(owner->GetBackColor());
 }
 
 void

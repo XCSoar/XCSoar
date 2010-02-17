@@ -60,8 +60,8 @@ WndListFrame::WndListFrame(ContainerControl *Owner,
   PaintItemCallback(NULL)
 {
   mCaption[0] = '\0';
-  SetForeColor(GetOwner()->GetForeColor());
-  SetBackColor(GetOwner()->GetBackColor());
+  SetForeColor(Owner->GetForeColor());
+  SetBackColor(Owner->GetBackColor());
 }
 
 void
