@@ -42,6 +42,14 @@ Copyright_License {
 #include "Units.hpp"
 #include "Screen/BufferWindow.hpp"
 
+typedef enum {
+  bkNone,
+  bkTop,
+  bkRight,
+  bkBottom,
+  bkLeft
+} BorderKind_t;
+
 #define BORDERTOP    (1<<bkTop)
 #define BORDERRIGHT  (1<<bkRight)
 #define BORDERBOTTOM (1<<bkBottom)

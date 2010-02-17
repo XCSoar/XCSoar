@@ -46,20 +46,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-#define BORDERTOP    (1<<bkTop)
-#define BORDERRIGHT  (1<<bkRight)
-#define BORDERBOTTOM (1<<bkBottom)
-#define BORDERLEFT   (1<<bkLeft)
-
 class ContainerControl;
-
-typedef enum {
-  bkNone,
-  bkTop,
-  bkRight,
-  bkBottom,
-  bkLeft
-} BorderKind_t;
 
 /**
  * The WindowControl class is the base class for every other control
