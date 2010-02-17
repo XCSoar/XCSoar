@@ -92,6 +92,11 @@ public:
     mOnClickNotify = Function;
   }
 
+  /**
+   * Sets the Caption/Text of the Control and resets the cached text height
+   * (derived from WindowControl)
+   * @param Value The new Caption/Text of the Control
+   */
   virtual void SetCaption(const TCHAR *Value);
 
 protected:
@@ -141,7 +146,16 @@ private:
   /** Tag of the Control */
   int mTag;
 
+  /**
+   * Height of the drawn caption
+   * (this is used to speed up the drawing process)
+   */
   int mLastDrawTextHeight;
+
+  /**
+   * The callback-function that should be called when the button is pressed
+   * @see SetOnClickNotify()
+   */
   ClickNotifyCallback_t mOnClickNotify;
 };
 
