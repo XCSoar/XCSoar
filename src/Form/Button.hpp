@@ -77,11 +77,9 @@ public:
   /**
    * Sets the tag of the Button
    * @param Value The new tag of the Button
-   * @return If successful the new tag of the Button
    */
-  int SetTag(int Value) {
+  void SetTag(int Value) {
     mTag = Value;
-    return mTag;
   }
 
   /**
