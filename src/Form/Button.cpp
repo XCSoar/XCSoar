@@ -48,7 +48,6 @@ WndButton::WndButton(ContainerControl *Parent,
     ClickNotifyCallback_t Function) :
   WindowControl(Parent, NULL, X, Y, Width, Height, style),
   mDown(false),
-  mDefault(false),
   mLastDrawTextHeight(-1),
   mOnClickNotify(Function)
 {

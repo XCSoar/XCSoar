@@ -139,8 +139,6 @@ private:
   /** Tag of the Control */
   int mTag;
 
-  /** not used yet */
-  bool mDefault;
   int mLastDrawTextHeight;
   ClickNotifyCallback_t mOnClickNotify;
 };
