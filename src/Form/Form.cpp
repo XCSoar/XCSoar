@@ -328,10 +328,6 @@ WndForm::on_paint(Canvas &canvas)
   // Get window coordinates
   RECT rcClient = get_client_rect();
 
-  // Select default pen and brush
-  canvas.black_pen();
-  canvas.select(GetBackBrush());
-
   // Draw the borders
   canvas.raised_edge(rcClient);
 
