@@ -47,6 +47,14 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 
+void
+WndForm::ClientAreaWindow::on_paint(Canvas &canvas)
+{
+  canvas.fill_rectangle(get_client_rect(), background);
+
+  ContainerWindow::on_paint(canvas);
+}
+
 PeriodClock WndForm::timeAnyOpenClose;
 
 WndForm::WndForm(SingleWindow &_main_window,
@@ -58,26 +66,18 @@ WndForm::WndForm(SingleWindow &_main_window,
   mModalResult(0),
   mColorTitle(Color::YELLOW),
   mhTitleFont(GetFont()),
-  mClientWindow(NULL),
   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
 {
   // Create ClientWindow
 
-  WindowStyle client_style;
-  client_style.control_parent();
   SetBackColor(Color(0xDA, 0xDB, 0xAB));
   SetFont(MapWindowBoldFont);
   SetTitleFont(MapWindowBoldFont);
 
-  mClientWindow = new ContainerControl(this, this,
-                                       20, 20, Width, Height,
-                                       client_style);
-  mClientWindow->SetBackColor(GetBackColor());
-
-  /* reset bottom_most, which has been modified by the mClientWindow;
-     without this hack, the "bottom" of the previous control is always
-     the very bottom of the whole form */
-  bottom_most = 0;
+  WindowStyle client_style;
+  client_style.control_parent();
+  client_area.set(*this, 0, 20, Width, Height, client_style);
+  client_area.SetBackColor(GetBackColor());
 
   mClientRect.top=0;
   mClientRect.left=0;
@@ -104,18 +104,12 @@ WndForm::~WndForm()
   for (window_list_t::iterator i = destruct_windows.begin();
        i != destruct_windows.end(); ++i)
     delete *i;
-
-  delete mClientWindow;
 }
 
 ContainerWindow &
 WndForm::GetClientAreaWindow(void)
 {
-
-  if (mClientWindow != NULL)
-    return *mClientWindow;
-  else
-    return *this;
+  return client_area;
 }
 
 void
@@ -348,12 +342,12 @@ WndForm::on_paint(Canvas &canvas)
   if (tsize.cy > 0)
     mTitleRect.bottom += tsize.cy + Layout::FastScale(1);
 
-  if (mClientWindow && !EqualRect(&mClientRect, &rcClient)) {
+  if (!EqualRect(&mClientRect, &rcClient)) {
     // Calculate the ClientWindow coordinates
     rcClient.top += tsize.cy + Layout::FastScale(1);
 
     // Move the ClientWindow to the new coordinates
-    mClientWindow->move(rcClient.left, rcClient.top,
+    client_area.move(rcClient.left, rcClient.top,
         (rcClient.right - rcClient.left), (rcClient.bottom - rcClient.top));
 
     // Save the new coordinates
@@ -378,8 +372,7 @@ void WndForm::SetCaption(const TCHAR *Value){
 
 Color WndForm::SetBackColor(Color Value)
 {
-  if (mClientWindow)
-  mClientWindow->SetBackColor(Value);
+  client_area.SetBackColor(Value);
   return ContainerControl::SetBackColor(Value);
 }
 

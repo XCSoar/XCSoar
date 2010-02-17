@@ -65,6 +65,18 @@ class WndForm: public ContainerControl
   typedef std::list<Window *> window_list_t;
   typedef std::map<tstring, Window *, tstring_less_than> name_to_window_t;
 
+  class ClientAreaWindow : public ContainerWindow {
+    Brush background;
+
+  public:
+    void SetBackColor(Color color) {
+      background.set(color);
+    }
+
+  protected:
+    virtual void on_paint(Canvas &canvas);
+  };
+
 public:
   typedef int (*TimerNotifyCallback_t)(WindowControl *Sender);
   typedef bool (*KeyDownNotifyCallback_t)(WindowControl *Sender,
@@ -95,7 +107,7 @@ protected:
   /** Font of the titlebar */
   const Font *mhTitleFont;
   /** The ClientWindow */
-  ContainerControl *mClientWindow;
+  ClientAreaWindow client_area;
   /** Coordinates of the ClientWindow */
   RECT mClientRect;
   /** Coordinates of the titlebar */
