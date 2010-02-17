@@ -92,6 +92,8 @@ public:
     mOnClickNotify = Function;
   }
 
+  virtual void SetCaption(const TCHAR *Value);
+
 protected:
   /**
    * The on_mouse_up event is called when the mouse is released over the button

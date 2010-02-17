@@ -258,3 +258,11 @@ WndButton::on_paint(Canvas &canvas)
   canvas.formatted_text(&rc, mCaption,
       DT_EXPANDTABS | DT_CENTER | DT_NOCLIP | DT_WORDBREAK);
 }
+
+void
+WndButton::SetCaption(const TCHAR *Value)
+{
+  WindowControl::SetCaption(Value);
+  mLastDrawTextHeight = -1;
+}
+
