@@ -43,9 +43,10 @@ Copyright_License {
 
 #ifndef ALTAIRSYNC
 
-typedef void (*webpt2Event)(const TCHAR *);
-
 class WndEventButton : public WndButton {
+public:
+  typedef void (*webpt2Event)(const TCHAR *);
+
 public:
   WndEventButton(ContainerControl *Parent, const TCHAR *Caption,
                  int X, int Y, int Width, int Height,
@@ -53,8 +54,9 @@ public:
                  const TCHAR *ename,
                  const TCHAR *eparameters);
   ~WndEventButton();
-public:
+
   void CallEvent(void);
+
 private:
   webpt2Event inputEvent;
   TCHAR *parameters;
