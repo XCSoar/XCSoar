@@ -425,14 +425,6 @@ WndProperty::on_paint(Canvas &canvas)
   WindowControl::on_paint(canvas);
 
   canvas.set_text_color(GetForeColor());
-
-#ifdef WINDOWSPC
-  // JMW make it look nice on wine
-  if (!GetFocused()) {
-    canvas.set_background_color(GetBackColor());
-  }
-#endif
-
   canvas.background_transparent();
   canvas.select(*GetFont());
 
@@ -451,7 +443,7 @@ WndProperty::on_paint(Canvas &canvas)
 
   // JMW TODO: use stretch functions for bigger displays, since these icons are too small for them.
 
-  canvas.text_opaque(org.x, org.y, mCaption);
+  canvas.text(org.x, org.y, mCaption);
 
   // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
   // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
