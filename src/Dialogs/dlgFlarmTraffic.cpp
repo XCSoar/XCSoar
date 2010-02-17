@@ -469,8 +469,6 @@ PaintRadarNoTraffic(Canvas &canvas) {
   static TCHAR str[] = _T("No Traffic");
   canvas.select(StatisticsFont);
   SIZE ts = canvas.text_size(str);
-  canvas.black_pen();
-  canvas.select(wdf->GetBackBrush());
   canvas.set_text_color(hcStandard);
   canvas.text(radar_mid.x - (ts.cx / 2), radar_mid.y - (radar_size.cy / 4), str);
 }
@@ -656,10 +654,9 @@ static void
 PaintRadarBackground(Canvas &canvas) {
   static const Pen hpRadar(1, hcRadar);
 
-  canvas.select(wdf->GetBackBrush());
+  canvas.hollow_brush();
   canvas.select(hpRadar);
   canvas.set_text_color(hcRadar);
-  canvas.background_opaque();
 
   // Paint circles
   canvas.circle(radar_mid.x, radar_mid.y, radar_size.cx * 0.5);
