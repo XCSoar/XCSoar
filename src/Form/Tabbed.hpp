@@ -44,19 +44,13 @@ Copyright_License {
 #include <vector>
 
 class TabbedControl : public ContainerControl {
-protected:
-  std::vector<Window *> tabs;
-  unsigned current;
-
 public:
   TabbedControl(ContainerControl *owner,
                 int x, int y, unsigned width, unsigned height,
                 const WindowStyle style=WindowStyle());
 
-public:
   virtual void AddClient(Window *w);
 
-public:
   unsigned GetCurrentPage() const {
     return current;
   }
@@ -64,6 +58,10 @@ public:
   void SetCurrentPage(unsigned i);
   void NextPage();
   void PreviousPage();
+
+protected:
+  std::vector<Window *> tabs;
+  unsigned current;
 };
 
 #endif
