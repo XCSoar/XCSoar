@@ -70,29 +70,46 @@ public:
   /** Destructor */
   virtual ~WindowControl(void);
 
+  /**
+   * The on_setfocus event is called when the control gets focused
+   * (derived from Window)
+   */
   virtual bool on_setfocus();
+  /**
+   * The on_killfocus event is called when the control loses the focus
+   * (derived from Window)
+   */
   virtual bool on_killfocus();
 
   virtual bool on_unhandled_key(unsigned key_code);
 
   /**
    * The on_key_down event is called when a key is pressed while the
-   * button is focused
+   * control is focused
    * (derived from Window)
    */
   virtual bool on_key_down(unsigned key_code);
 
   /**
    * The on_key_up event is called when a key is released while the
-   * button is focused
+   * control is focused
    * (derived from Window)
    */
   virtual bool on_key_up(unsigned key_code);
 
+  /**
+   * Opens up a help dialog if a help text exists, or otherwise calls the
+   * function defined by mOnHelpCallback
+   * @return
+   */
   virtual int OnHelp();
 
   typedef void (*OnHelpCallback_t)(WindowControl *Sender);
 
+  /**
+   * Sets the function that should be called when the help button is pressed
+   * @param Function Pointer to the function to be called
+   */
   void SetOnHelpCallback(OnHelpCallback_t Function) {
     mOnHelpCallback = Function;
   }
@@ -185,19 +202,27 @@ private:
   Color mColorBack;
   /** Foreground color */
   Color mColorFore;
+
   /** Brush for painting the background */
   Brush mhBrushBk;
+  /** The default Brush for painting the background */
+  static Brush hBrushDefaultBk;
+
   /** Font of the Control */
   const Font *mhFont;
+
   /** Helptext of the Control */
   TCHAR *mHelpText;
 
+  /**
+   * The callback-function that should be called when the help button is
+   * pressed while the control has focus
+   * @see SetOnHelpCallback()
+   */
   OnHelpCallback_t mOnHelpCallback;
 
   /** True if the default brushes and pens are already initialized */
   static bool initialized;
-  /** The default Brush for painting the background */
-  static Brush hBrushDefaultBk;
 };
 
 #endif
