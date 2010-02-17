@@ -97,59 +97,7 @@ public:
   typedef void (*ClickUpCallback_t)(WindowControl *Sender);
   typedef void (*ClickDownCallback_t)(WindowControl *Sender);
 
-private:
-  /** Arrow left bitmap */
-  static Bitmap hBmpLeft32;
-  /** Arrow right bitmap */
-  static Bitmap hBmpRight32;
-  /** Instance counter */
-  static int InstCount;
-
-  /** Editor Control */
-  Editor edit;
-  /** Size of the Editor Control */
-  POINT mEditSize;
-  /** Position of the Editor Control */
-  POINT mEditPos;
-  /** Size of the "up" and "down" buttons */
-  int  mBitmapSize;
-  /** Width reserved for the caption of the Control */
-  int  mCaptionWidth;
-  /** Coordinates of the "up" button */
-  RECT mHitRectUp;
-  /** Coordinates of the "down" button */
-  RECT mHitRectDown;
-  /** True if the "down" button is currently pressed */
-  bool mDownDown;
-  /** True if the "up" button is currently pressed */
-  bool mUpDown;
-
-  /**
-   * The on_paint event is called when the button needs to be drawn
-   * (derived from PaintWindow)
-   */
-  virtual void on_paint(Canvas &canvas);
-
-  /** Function to call when the Editor data has changed */
-  DataChangeCallback_t mOnDataChangeNotify;
-  /** Function to call when the "up" button has been pressed */
-  ClickUpCallback_t mOnClickUpNotify;
-  /** Function to call when the "down" button has been pressed */
-  ClickDownCallback_t mOnClickDownNotify;
-
-  /** Increases the Editor value */
-  int IncValue(void);
-  /** Decreases the Editor value */
-  int DecValue(void);
-
-  DataField *mDataField;
-
-  void UpdateButtonData(int Value);
-
 public:
-  int CallSpecial(void);
-  bool mDialogStyle;
-
   /**
    * Constructor of the WndProperty
    * @param Parent The parent ContainerControl
@@ -170,6 +118,9 @@ public:
 
   /** Destructor */
   ~WndProperty(void);
+
+  int CallSpecial(void);
+  bool mDialogStyle;
 
   void on_editor_setfocus();
   void on_editor_killfocus();
@@ -220,6 +171,55 @@ public:
    */
   void SetText(const TCHAR *Value);
   int SetButtonSize(int Value);
+
+private:
+  /** Arrow left bitmap */
+  static Bitmap hBmpLeft32;
+  /** Arrow right bitmap */
+  static Bitmap hBmpRight32;
+  /** Instance counter */
+  static int InstCount;
+
+  /** Editor Control */
+  Editor edit;
+  /** Size of the Editor Control */
+  POINT mEditSize;
+  /** Position of the Editor Control */
+  POINT mEditPos;
+  /** Size of the "up" and "down" buttons */
+  int  mBitmapSize;
+  /** Width reserved for the caption of the Control */
+  int  mCaptionWidth;
+  /** Coordinates of the "up" button */
+  RECT mHitRectUp;
+  /** Coordinates of the "down" button */
+  RECT mHitRectDown;
+  /** True if the "down" button is currently pressed */
+  bool mDownDown;
+  /** True if the "up" button is currently pressed */
+  bool mUpDown;
+
+  /**
+   * The on_paint event is called when the button needs to be drawn
+   * (derived from PaintWindow)
+   */
+  virtual void on_paint(Canvas &canvas);
+
+  /** Function to call when the Editor data has changed */
+  DataChangeCallback_t mOnDataChangeNotify;
+  /** Function to call when the "up" button has been pressed */
+  ClickUpCallback_t mOnClickUpNotify;
+  /** Function to call when the "down" button has been pressed */
+  ClickDownCallback_t mOnClickDownNotify;
+
+  /** Increases the Editor value */
+  int IncValue(void);
+  /** Decreases the Editor value */
+  int DecValue(void);
+
+  DataField *mDataField;
+
+  void UpdateButtonData(int Value);
 };
 
 #endif
