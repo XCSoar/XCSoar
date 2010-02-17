@@ -59,9 +59,6 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (mCaption == NULL || mCaption[0] == '\0')
     return;
 
-  // Set drawing font
-  canvas.select(*GetFont());
-
   // If button is pressed, offset the text for 3D effect
   if (mDown)
     OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
