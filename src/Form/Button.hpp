@@ -67,17 +67,17 @@ public:
       ClickNotifyCallback_t Function = NULL);
 
   /**
-   * Return the tag of the Control
-   * @return The tag of the Control
+   * Return the tag of the Button
+   * @return The tag of the Button
    */
   int GetTag() const {
     return mTag;
   }
 
   /**
-   * Sets the tag of the Control
-   * @param Value The new tag of the Control
-   * @return If successful the new tag of the Control
+   * Sets the tag of the Button
+   * @param Value The new tag of the Button
+   * @return If successful the new tag of the Button
    */
   int SetTag(int Value) {
     mTag = Value;
