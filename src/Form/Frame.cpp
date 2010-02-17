@@ -86,20 +86,17 @@ WndFrame::on_paint(Canvas &canvas)
 {
   canvas.fill_rectangle(get_client_rect(), GetBackBrush());
 
-  if (mCaption[0] != 0){
-    canvas.set_text_color(GetForeColor());
-    canvas.set_background_color(GetBackColor());
-    canvas.background_transparent();
+  if (mCaption[0] == 0)
+    return;
 
-    canvas.select(*GetFont());
+  canvas.set_text_color(GetForeColor());
+  canvas.set_background_color(GetBackColor());
+  canvas.background_transparent();
 
-    RECT rc = get_client_rect();
-    InflateRect(&rc, -2, -2); // todo border width
+  canvas.select(*GetFont());
 
-//    h = rc.bottom - rc.top;
+  RECT rc = get_client_rect();
+  InflateRect(&rc, -2, -2); // todo border width
 
-    canvas.formatted_text(&rc, mCaption,
-      mCaptionStyle // | DT_CALCRECT
-    );
-  }
+  canvas.formatted_text(&rc, mCaption, mCaptionStyle);
 }
