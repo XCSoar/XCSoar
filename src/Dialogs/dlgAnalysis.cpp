@@ -304,9 +304,6 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
   (void)Sender;
 
-  if (wGrid->GetFocused())
-    return false;
-
   switch (key_code) {
   case VK_LEFT:
   case '6':
