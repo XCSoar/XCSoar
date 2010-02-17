@@ -467,8 +467,8 @@ PaintTrafficInfo(Canvas &canvas) {
 static void
 PaintRadarNoTraffic(Canvas &canvas) {
   static TCHAR str[] = _T("No Traffic");
-  SIZE ts = canvas.text_size(str);
   canvas.select(StatisticsFont);
+  SIZE ts = canvas.text_size(str);
   canvas.black_pen();
   canvas.select(wdf->GetBackBrush());
   canvas.set_text_color(hcStandard);
