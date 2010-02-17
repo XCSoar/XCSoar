@@ -57,7 +57,6 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value)
   ctl->RefreshDisplay();
 }
 
-
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, int value)
 {

@@ -57,7 +57,6 @@ void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, int value);
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, unsigned int value);
-
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, double value);
 
