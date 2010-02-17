@@ -229,7 +229,6 @@ WndButton::on_paint(Canvas &canvas)
   if (mCaption != NULL && mCaption[0] != '\0') {
     // Set drawing colors
     canvas.set_text_color(GetForeColor());
-    canvas.set_background_color(GetBackColor());
     canvas.background_transparent();
 
     // Set drawing font

@@ -59,10 +59,6 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (mCaption == NULL || mCaption[0] == '\0')
     return;
 
-  // Set drawing colors
-  canvas.set_background_color(GetBackColor());
-  canvas.background_transparent();
-
   // Set drawing font
   canvas.select(*GetFont());
 
