@@ -19,7 +19,7 @@
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
   </WndProperty>
 
-  <WndButton Name="cmdClose" Caption="Close" X=2 Y=190 Width=60  Height=28 Font=2 Tag=3 />
+  <WndButton Name="cmdClose" Caption="Close" X=2 Y=190 Width=60  Height=28 Font=2 />
 
   <WndListFrame Name=frmWayPointList X=102 Y=0 Width=215 Height=222 ItemHeight=18 Font=2 Border="1"/>
 </WndForm>

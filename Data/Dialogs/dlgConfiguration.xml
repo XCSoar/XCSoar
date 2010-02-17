@@ -294,7 +294,7 @@
           <DataField name="" DataType="enum"  Min=0 Max=50 Step=1 />
         </WndProperty>
   
-        <WndButton Name="cmdSetupDeviceA" Caption="Setup ..." X=1 Y=43 Width=70  Height=24 Font=2 Tag=4 OnClickNotify="OnSetupDeviceAClicked" />
+        <WndButton Name="cmdSetupDeviceA" Caption="Setup ..." X=1 Y=43 Width=70  Height=24 Font=2 OnClickNotify="OnSetupDeviceAClicked" />
       </Panel>
   
       <Panel Name="frmComm2" X=0 Y=69 Width=250 Height=68 Font=2 Border=30>
@@ -313,7 +313,7 @@
           <DataField name="" DataType="enum"  Min=0 Max=50 Step=1 />
         </WndProperty>
   
-        <WndButton Name="cmdSetupDeviceB" Caption="Setup ..." X=1 Y=43 Width=70  Height=24 Font=2 Tag=4 OnClickNotify="OnSetupDeviceBClicked" />
+        <WndButton Name="cmdSetupDeviceB" Caption="Setup ..." X=1 Y=43 Width=70  Height=24 Font=2 OnClickNotify="OnSetupDeviceBClicked" />
       </Panel>
   
       <WndProperty Name="prpSetSystemTimeFromGPS" Caption="Use GPS time"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
@@ -789,13 +789,13 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
     </Panel>
   
     <Panel Name="frmWaypointEdit" X=70 Y=0 Width=250 Height=222 Font=2>
-      <WndButton Name="cmdWaypointNew" Caption="New" X=50 Y=-1 Width=100  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointNewClicked" />
+      <WndButton Name="cmdWaypointNew" Caption="New" X=50 Y=-1 Width=100  Height=28 Font=2 OnClickNotify="OnWaypointNewClicked" />
   
-      <WndButton Name="cmdWaypointEdit" Caption="Edit" X=50 Y=-1 Width=100  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointEditClicked" />
+      <WndButton Name="cmdWaypointEdit" Caption="Edit" X=50 Y=-1 Width=100  Height=28 Font=2 OnClickNotify="OnWaypointEditClicked" />
     
-      <WndButton Name="cmdWaypointSave" Caption="Save" X=50 Y=-1 Width=100  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointSaveClicked" />
+      <WndButton Name="cmdWaypointSave" Caption="Save" X=50 Y=-1 Width=100  Height=28 Font=2 OnClickNotify="OnWaypointSaveClicked" />
     
-      <WndButton Name="cmdWaypointDelete" Caption="Delete" X=50 Y=-1 Width=100  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointDeleteClicked" />
+      <WndButton Name="cmdWaypointDelete" Caption="Delete" X=50 Y=-1 Width=100  Height=28 Font=2 OnClickNotify="OnWaypointDeleteClicked" />
     </Panel>
   
     <Panel Name="frmSpecials" X=70 Y=0 Width=250 Height=222 Font=2>
@@ -832,7 +832,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
     </Panel>
   </Tabbed>
 
-  <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0 />
-  <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
-  <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 Tag=3 />
+  <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" />
+  <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" />
+  <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 />
 </WndForm>

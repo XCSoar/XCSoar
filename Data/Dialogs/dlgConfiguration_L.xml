@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmConfiguration" Width=240 Height=320 Caption="Configuration">
-  <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=35 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
-  <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=0 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
-  <WndButton Name="cmdClose" Caption="Close" X=5 Y=270 Width=60  Height=28 Font=2 Tag=3 />
+  <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=35 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" />
+  <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=0 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" />
+  <WndButton Name="cmdClose" Caption="Close" X=5 Y=270 Width=60  Height=28 Font=2 />
 
   <WndProperty Name="prpUserLevel" Caption="" X=70 Y=270  Width=100 Height=28 CaptionWidth=15 Font=2 Help="Sets the level of detail of the configuration settings.
 [Basic]: Only basic settings are shown.
@@ -295,7 +295,7 @@
           <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
         </WndProperty>
   
-        <WndButton Name="cmdSetupDeviceA" Caption="Setup ..." X=1 Y=43 Width=70  Height=24 Font=2 Tag=4 OnClickNotify="OnSetupDeviceAClicked" />
+        <WndButton Name="cmdSetupDeviceA" Caption="Setup ..." X=1 Y=43 Width=70  Height=24 Font=2 OnClickNotify="OnSetupDeviceAClicked" />
       </Panel>
   
       <Panel Name="frmComm" X=0 Y=69 Width=240 Height=68 Font=2 Border=30>
@@ -316,7 +316,7 @@
           <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
         </WndProperty>
   
-        <WndButton Name="cmdSetupDeviceB" Caption="Setup ..." X=1 Y=43 Width=70  Height=24 Font=2 Tag=4 OnClickNotify="OnSetupDeviceBClicked" />  
+        <WndButton Name="cmdSetupDeviceB" Caption="Setup ..." X=1 Y=43 Width=70  Height=24 Font=2 OnClickNotify="OnSetupDeviceBClicked" />  
       </Panel>
   
       <WndProperty Name="prpSetSystemTimeFromGPS" Caption="Use GPS time"      X=62 Y=-1   Width=173 Height=22 CaptionWidth=80 Font=2
@@ -781,10 +781,10 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
     </Panel>
   
     <Panel Name="frmWaypointEdit" X=0 Y=0 Width=240 Height=222 Font=2>
-      <WndButton Name="cmdWaypointNew" Caption="New" X=50 Y=-1 Width=150  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointNewClicked" />
-      <WndButton Name="cmdWaypointEdit" Caption="Edit" X=50 Y=-1 Width=150  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointEditClicked" />
-      <WndButton Name="cmdWaypointSave" Caption="Save" X=50 Y=-1 Width=150  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointSaveClicked" />
-      <WndButton Name="cmdWaypointDelete" Caption="Delete" X=50 Y=-1 Width=150  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointDeleteClicked" />
+      <WndButton Name="cmdWaypointNew" Caption="New" X=50 Y=-1 Width=150  Height=28 Font=2 OnClickNotify="OnWaypointNewClicked" />
+      <WndButton Name="cmdWaypointEdit" Caption="Edit" X=50 Y=-1 Width=150  Height=28 Font=2 OnClickNotify="OnWaypointEditClicked" />
+      <WndButton Name="cmdWaypointSave" Caption="Save" X=50 Y=-1 Width=150  Height=28 Font=2 OnClickNotify="OnWaypointSaveClicked" />
+      <WndButton Name="cmdWaypointDelete" Caption="Delete" X=50 Y=-1 Width=150  Height=28 Font=2 OnClickNotify="OnWaypointDeleteClicked" />
     </Panel>
   
     <Panel Name="frmSpecials" X=0 Y=0 Width=240 Height=222 Font=2>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmFileSelect" Width=320 Height=240 Caption="File browser">
-  <WndButton Name="cmdClose" Caption="Close" X=2 Y=0 Width=56  Height=28 Font=2 Tag=3 OnClickNotify="OnFileCloseClicked"/>
+  <WndButton Name="cmdClose" Caption="Close" X=2 Y=0 Width=56  Height=28 Font=2 OnClickNotify="OnFileCloseClicked"/>
   
   <WndProperty Name="prpFltType"      Caption="File type"      X=60 Y=0  Width=190 Height=28 CaptionWidth=70 Font=2>
     <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
   </WndProperty>
   
-  <WndButton Name="cmdRefresh" Caption="Refresh" X=252 Y=0 Width=66  Height=28 Font=2 Tag=1 OnClickNotify="OnRefreshClicked"/>
+  <WndButton Name="cmdRefresh" Caption="Refresh" X=252 Y=0 Width=66  Height=28 Font=2 OnClickNotify="OnRefreshClicked"/>
   
   <WndProperty Name="prpStorageFree" Caption="Free" X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 ReadOnly=1>
     <DataField name="" DataType="double" DisplayFormat="%.0f kb" EditFormat="%.0f" ReadOnly=1/>

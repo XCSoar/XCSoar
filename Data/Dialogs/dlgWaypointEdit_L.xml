@@ -3,9 +3,9 @@
 <WndForm Name="frmWaypointEdit" Width=240 Height=320 Caption="Waypoint Editor">
   <WndButton   Caption="Close"    X=5 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnCloseClicked"/>
 
-  <WndButton Name="cmdName" Caption="Name: " X=2 Y=0 Width=230  Height=28 Font=2 Tag=4 />
+  <WndButton Name="cmdName" Caption="Name: " X=2 Y=0 Width=230  Height=28 Font=2 />
 
-  <WndButton Name="cmdComment" Caption="Comment: " X=2 Y=-1 Width=230  Height=28 Font=2 Tag=4 />
+  <WndButton Name="cmdComment" Caption="Comment: " X=2 Y=-1 Width=230  Height=28 Font=2 />
 
   <WndProperty Name="prpLongitudeSign" Caption="Lon" X=2 Y=70 Width=65 Height=28 CaptionWidth=28 Font=2>
     <DataField name="" DataType="enum" Min=0 Max=1 Step=1/>

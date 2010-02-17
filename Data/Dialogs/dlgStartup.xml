@@ -5,7 +5,7 @@
 
   <aWndProperty Name="prpDisclaimer"   Caption=""       X=2 Y=2  Width=318 Height=148 CaptionWidth=2 Font=3 ReadOnly=1 MultiLine=1/>
 
-  <WndButton Name="cmdClose" Caption="Accept" X=2 Y=-1 Width=314  Height=30 Font=2 Tag=3 />
+  <WndButton Name="cmdClose" Caption="Accept" X=2 Y=-1 Width=314  Height=30 Font=2 />
 
   <WndProperty Name="prpProfile" Caption="Profile"      X=2 Y=-1   Width=314 Height=25 CaptionWidth=60 Font=2>
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>

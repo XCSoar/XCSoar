@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm Name="frmVario" Width=240 Height=320 Caption="Vario Configuration">
-  <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=35 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
-  <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=0 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
-  <WndButton Name="cmdClose" Caption="Close" X=5 Y=270 Width=60  Height=28 Font=2 Tag=3 />
+  <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=35 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" />
+  <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=0 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" />
+  <WndButton Name="cmdClose" Caption="Close" X=5 Y=270 Width=60  Height=28 Font=2 />
 
-  <WndButton Name="cmdDemo"  Caption="Demo" X=70 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnDemoClicked" Tag=2 />
-  <WndButton Name="cmdSave"  Caption="Save" X=140 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnSaveClicked" Tag=1 />
+  <WndButton Name="cmdDemo"  Caption="Demo" X=70 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnDemoClicked" />
+  <WndButton Name="cmdSave"  Caption="Save" X=140 Y=270 Width=60  Height=28 Font=2 OnClickNotify="OnSaveClicked" />
 
   <Tabbed Name="tabbed" X=0 Y=0 Width=235 Height=222>
     <Panel Name="frmHardware" X=0 Y=0 Width=235 Height=222 Font=2>

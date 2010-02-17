@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <WndForm X=5 Y=5 Width=240 Height=231 Caption="Status">
-  <WndButton Name="cmdClose" Caption="Close" X=2 Y=2 Width=60  Height=28 Font=2 Tag=3 />
-  <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=165 Y=2 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
-  <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=202 Y=2 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
+  <WndButton Name="cmdClose" Caption="Close" X=2 Y=2 Width=60  Height=28 Font=2 />
+  <WndSymbolButton Name="cmdPrev"  Caption="&lt;" X=165 Y=2 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" />
+  <WndSymbolButton Name="cmdNext"  Caption="&gt;" X=202 Y=2 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" />
 
   <Tabbed Name="tabbed" X=0 Y=32 Width=230 Height=200>
     <Panel Name="frmStatusFlight" X=0 Y=32 Width=230 Height=200 Font=2>

@@ -3,7 +3,7 @@
 <WndForm Name="frmAirspaceSelect" Width=240 Height=320 Caption="Select Airspace">
   <WndFrame X=0 Y=0 Width=100 Height=20 Font=2 Caption="Filter..." />
 
-  <WndButton Name="cmdClose" Caption="Close" X=100 Y=0 Width=60  Height=28 Font=2 Tag=3 />
+  <WndButton Name="cmdClose" Caption="Close" X=100 Y=0 Width=60  Height=28 Font=2 />
 
   <WndProperty Name="prpFltName"      Caption="Name"      X=2 Y=32  Width=98 Height=40 CaptionWidth=0 Font=2>
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
