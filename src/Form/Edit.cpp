@@ -280,8 +280,7 @@ WndProperty::on_editor_setfocus()
     edit.set_text(mDataField->GetAsString());
   }
 
-  if (!GetFocused())
-    SetFocused(true);
+  invalidate();
 }
 
 void
@@ -295,8 +294,7 @@ WndProperty::on_editor_killfocus()
     edit.set_text(mDataField->GetAsDisplayString());
   }
 
-  if (GetFocused())
-    SetFocused(false);
+  invalidate();
 }
 
 bool
@@ -333,7 +331,7 @@ WndProperty::on_mouse_down(int x, int y)
       OnHelp(); // this would display xml file help on a read-only wndproperty if it exists
     }
   } else {
-    if (!GetFocused()) {
+    if (!edit.has_focus()) {
       if (!edit.is_read_only())
         edit.set_focus();
 
@@ -455,7 +453,7 @@ WndProperty::on_paint(Canvas &canvas)
 
   // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
   // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
-  if (!mDialogStyle && GetFocused() && !edit.is_read_only()) {
+  if (!mDialogStyle && edit.has_focus() && !edit.is_read_only()) {
     BitmapCanvas bitmap_canvas(canvas);
 
     bitmap_canvas.select(hBmpLeft32);
@@ -478,7 +476,7 @@ WndProperty::RefreshDisplay()
   if (!mDataField)
     return;
 
-  if (GetFocused())
+  if (edit.has_focus())
     edit.set_text(mDataField->GetAsString());
   else
     edit.set_text(mDataField->GetAsDisplayString());

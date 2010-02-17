@@ -104,7 +104,7 @@ WndListFrame::on_paint(Canvas &canvas)
     canvas.select(*GetFont());
 
     for (unsigned i = 0; i < items_visible; i++) {
-      if (GetFocused() && i == relative_cursor) {
+      if (has_focus() && i == relative_cursor) {
         Brush brush(GetBackColor().highlight());
         canvas.fill_rectangle(rc, brush);
       }
@@ -344,7 +344,7 @@ WndListFrame::on_mouse_down(int x, int y)
   Pos.y = y;
 
   // If possible -> Give focus to the Control
-  if (!GetFocused())
+  if (!has_focus())
     set_focus();
 
   if (scroll_bar.in_slider(Pos)) {

@@ -98,18 +98,6 @@ public:
   }
 
   /**
-   * Tells the Control that it is focused now and returns the old value
-   * @param Value Whether the Control is focused at the moment
-   * @return The old value
-   */
-  bool SetFocused(bool Value);
-  /**
-   * Checks whether the Control is focused at the moment
-   * @return True if the Control is focused at the moment, False otherwise
-   */
-  bool GetFocused(void) { return mHasFocus; }
-
-  /**
    * Returns the Control's font
    * @return The Control's font
    */
@@ -205,9 +193,6 @@ private:
   TCHAR *mHelpText;
 
   OnHelpCallback_t mOnHelpCallback;
-
-  /** True if the Control has been focused right now */
-  bool mHasFocus;
 
   /** True if the default brushes and pens are already initialized */
   static bool initialized;

@@ -82,8 +82,7 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
     mColorFore(Color::BLACK),
     mhFont(&MapWindowFont),
     mHelpText(NULL),
-    mOnHelpCallback(NULL),
-    mHasFocus(false)
+    mOnHelpCallback(NULL)
 {
   // Clear the caption
   mCaption[0] = '\0';
@@ -146,21 +145,6 @@ WindowControl::SetCaption(const TCHAR *Value)
     _tcscpy(mCaption, Value);
     invalidate();
   }
-}
-
-bool
-WindowControl::SetFocused(bool Value)
-{
-  bool res = mHasFocus;
-
-  if (mHasFocus != Value) {
-    mHasFocus = Value;
-
-    // todo, only paint the selector edges
-    invalidate();
-  }
-
-  return res;
 }
 
 const Font *
@@ -271,7 +255,7 @@ bool
 WindowControl::on_setfocus()
 {
   ContainerWindow::on_setfocus();
-  SetFocused(true);
+  invalidate();
   return true;
 }
 
@@ -279,7 +263,7 @@ bool
 WindowControl::on_killfocus()
 {
   ContainerWindow::on_killfocus();
-  SetFocused(false);
+  invalidate();
   return true;
 }
 
