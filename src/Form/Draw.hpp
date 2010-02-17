@@ -41,11 +41,15 @@ Copyright_License {
 
 #include "Form/Control.hpp"
 
+/**
+ * This class is used for creating custom drawn content.
+ * It is based on the WindowControl class.
+ */
 class WndOwnerDrawFrame : public WindowControl {
 public:
-
   typedef void (*OnPaintCallback_t)(WindowControl *Sender, Canvas &canvas);
 
+public:
   WndOwnerDrawFrame(ContainerControl *Owner,
                     int X, int Y, int Width, int Height,
                     const WindowStyle style,
@@ -61,7 +65,10 @@ public:
   }
 
 protected:
-
+  /**
+   * The callback function for painting the content of the control
+   * @see SetOnPaintNotify()
+   */
   OnPaintCallback_t mOnPaintCallback;
 
   /** from class PaintWindow */
