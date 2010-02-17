@@ -182,12 +182,6 @@ public:
    */
   void SetHelpText(const TCHAR *Value);
 
-  /**
-   * Returns the parent ContainerControl
-   * @return The parent ContainerControl
-   */
-  ContainerControl *GetOwner(void) { return mOwner; }
-
 protected:
   /** Caption/Text of the Control */
   TCHAR mCaption[254];
