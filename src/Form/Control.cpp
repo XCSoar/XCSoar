@@ -48,7 +48,6 @@ Copyright_License {
 
 bool WindowControl::initialized;
 Brush WindowControl::hBrushDefaultBk;
-Pen WindowControl::hPenDefaultSelector;
 
 // returns true if it is a long press,
 // otherwise returns false
@@ -96,7 +95,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
   // If not done already -> initialize default brushes and pens
   if (!initialized) {
     hBrushDefaultBk.set(mColorBack);
-    hPenDefaultSelector.set(DEFAULTBORDERPENWIDTH + 2, mColorFore);
     initialized = true;
   }
 
@@ -209,7 +207,8 @@ WindowControl::SetBackColor(Color Value)
 void
 WindowControl::PaintSelector(Canvas &canvas, const RECT rc)
 {
-  canvas.select(hPenDefaultSelector);
+  const Pen pen(DEFAULTBORDERPENWIDTH + 2, Color::BLACK);
+  canvas.select(pen);
 
   canvas.two_lines(rc.right - SELECTORWIDTH - 1, rc.top,
                    rc.right - 1, rc.top,

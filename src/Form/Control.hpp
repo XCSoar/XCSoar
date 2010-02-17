@@ -41,7 +41,6 @@ Copyright_License {
 
 #include "Screen/Color.hpp"
 #include "Screen/Brush.hpp"
-#include "Screen/Pen.hpp"
 #include "Screen/ContainerWindow.hpp"
 
 #include <tchar.h>
@@ -167,14 +166,6 @@ public:
   }
 
   /**
-   * Returns the pen for drawing the "Selector"
-   * @return The pen for drawing the "Selector"
-   */
-  Pen &GetSelectorPen(void) {
-    return mhPenSelector.defined() ? mhPenSelector : hPenDefaultSelector;
-  }
-
-  /**
    * Returns the Caption/Text of the Control
    * @return The Caption/Text of the Control
    */
@@ -226,8 +217,6 @@ private:
   Color mColorFore;
   /** Brush for painting the background */
   Brush mhBrushBk;
-  /** Pen for drawing the "Selector" */
-  Pen mhPenSelector;
   /** Font of the Control */
   const Font *mhFont;
   /** Helptext of the Control */
@@ -242,8 +231,6 @@ private:
   static bool initialized;
   /** The default Brush for painting the background */
   static Brush hBrushDefaultBk;
-  /** The default Pen for drawing the "Selector" */
-  static Pen hPenDefaultSelector;
 };
 
 #endif
