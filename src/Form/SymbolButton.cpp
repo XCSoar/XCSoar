@@ -70,9 +70,9 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (mDown)
     OffsetRect(&rc, Layout::FastScale(1), Layout::FastScale(1));
 
-  static Pen p(0, GetForeColor());
+  const Pen p(0, GetForeColor());
   canvas.select(p);
-  static Brush b(GetForeColor());
+  const Brush b(GetForeColor());
   canvas.select(b);
 
   // Draw arrow symbols instead of < and >
