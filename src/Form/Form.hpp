@@ -207,8 +207,6 @@ public:
   virtual bool on_destroy();
   virtual bool on_timer(timer_t id);
 
-  /** Set the foreground color of the window */
-  Color SetForeColor(Color Value);
   /** Set the background color of the window */
   Color SetBackColor(Color Value);
 

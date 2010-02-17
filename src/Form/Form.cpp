@@ -376,13 +376,6 @@ void WndForm::SetCaption(const TCHAR *Value){
 
 }
 
-Color WndForm::SetForeColor(Color Value)
-{
-  if (mClientWindow)
-    mClientWindow->SetForeColor(Value);
-  return ContainerControl::SetForeColor(Value);
-}
-
 Color WndForm::SetBackColor(Color Value)
 {
   if (mClientWindow)
