@@ -59,8 +59,6 @@ WndListFrame::WndListFrame(ContainerControl *Owner,
   CursorCallback(NULL),
   PaintItemCallback(NULL)
 {
-  SetPaintSelector(false);
-
   mCaption[0] = '\0';
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
@@ -91,7 +89,7 @@ WndListFrame::on_resize(unsigned width, unsigned height)
 void
 WndListFrame::on_paint(Canvas &canvas)
 {
-  WindowControl::on_paint(canvas);
+  canvas.fill_rectangle(get_client_rect(), GetBackBrush());
 
   if (PaintItemCallback != NULL) {
     // paint using the PaintItemCallback

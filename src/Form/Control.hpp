@@ -89,12 +89,6 @@ public:
    */
   virtual bool on_key_up(unsigned key_code);
 
-  /**
-   * The on_paint event is called when the WindowControl needs to be drawn
-   * (derived from PaintWindow)
-   */
-  virtual void on_paint(Canvas &canvas);
-
   virtual int OnHelp();
 
   typedef void (*OnHelpCallback_t)(WindowControl *Sender);
@@ -188,24 +182,12 @@ public:
    */
   ContainerControl *GetOwner(void) { return mOwner; }
 
-  /**
-   * Sets whether to draw the "Selector" or not
-   * @param Value If false, the "Selector" will be drawn
-   */
-  void SetPaintSelector(bool Value) {
-    mPaintSelector = Value;
-  }
-
 protected:
   /** Caption/Text of the Control */
   TCHAR mCaption[254];
-  /** If true, the "Selector" is not painted */
-  bool mPaintSelector;
 
   /** Paints the "Selector" */
   void PaintSelector(Canvas &canvas, const RECT rc);
-  /** Paints the "Selector", but checks first if it should be painted */
-  void PaintSelector(Canvas &canvas);
 
 private:
   /** Parent ContainerControl */

@@ -46,3 +46,11 @@ PanelControl::PanelControl(ContainerControl *owner,
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
 }
+
+void
+PanelControl::on_paint(Canvas &canvas)
+{
+  canvas.fill_rectangle(get_client_rect(), GetBackBrush());
+
+  ContainerControl::on_paint(canvas);
+}

@@ -54,7 +54,7 @@ WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerControl *Owner,
 void
 WndOwnerDrawFrame::on_paint(Canvas &canvas)
 {
-  WindowControl::on_paint(canvas);
+  canvas.fill_rectangle(get_client_rect(), GetBackBrush());
 
   if (mOnPaintCallback == NULL)
     return;

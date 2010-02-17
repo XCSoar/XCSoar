@@ -83,8 +83,7 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
     mhFont(&MapWindowFont),
     mHelpText(NULL),
     mOnHelpCallback(NULL),
-    mHasFocus(false),
-    mPaintSelector(true)
+    mHasFocus(false)
 {
   // Clear the caption
   mCaption[0] = '\0';
@@ -227,13 +226,6 @@ WindowControl::PaintSelector(Canvas &canvas, const RECT rc)
                    rc.left + SELECTORWIDTH + 1, rc.top);
 }
 
-void
-WindowControl::PaintSelector(Canvas &canvas)
-{
-  if (mPaintSelector && mHasFocus)
-    PaintSelector(canvas, get_client_rect());
-}
-
 int
 WindowControl::OnHelp()
 {
@@ -273,29 +265,6 @@ WindowControl::on_key_up(unsigned key_code)
     return true;
 
   return ContainerWindow::on_key_up(key_code);
-}
-
-void
-WindowControl::on_paint(Canvas &canvas)
-{
-  const RECT rc = get_client_rect();
-
-  // JMW added highlighting, useful for lists
-  if (mPaintSelector && mHasFocus) {
-    Color ff = GetBackColor().highlight();
-    Brush brush(ff);
-    canvas.fill_rectangle(rc, brush);
-
-#ifdef WINDOWSPC
-    // JMW make it look nice on wine
-    canvas.set_background_color(ff);
-#endif
-  } else
-    canvas.fill_rectangle(rc, GetBackBrush());
-
-  PaintSelector(canvas);
-
-  ContainerWindow::on_paint(canvas);
 }
 
 bool

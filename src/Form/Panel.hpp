@@ -57,6 +57,9 @@ public:
   PanelControl(ContainerControl *owner,
                int x, int y, unsigned width, unsigned height,
                const WindowStyle style=WindowStyle());
+
+protected:
+  void on_paint(Canvas &canvas);
 };
 
 #endif

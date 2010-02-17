@@ -45,11 +45,14 @@ Copyright_License {
 void
 WndSymbolButton::on_paint(Canvas &canvas)
 {
-  // Call parent on_paint function (selector/focus)
-  WindowControl::on_paint(canvas);
+  /* background and selector */
+  RECT rc = get_client_rect();
+  canvas.fill_rectangle(rc, GetBackBrush());
+
+  if (has_focus())
+    PaintSelector(canvas, get_client_rect());
 
   // Get button RECT and shrink it to make room for the selector/focus
-  RECT rc = get_client_rect();
   InflateRect(&rc, -2, -2); // todo border width
 
   // Draw button to the background

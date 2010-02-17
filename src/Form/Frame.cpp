@@ -84,7 +84,7 @@ WndFrame::GetTextHeight()
 void
 WndFrame::on_paint(Canvas &canvas)
 {
-  WindowControl::on_paint(canvas);
+  canvas.fill_rectangle(get_client_rect(), GetBackBrush());
 
   if (mCaption[0] != 0){
     canvas.set_text_color(GetForeColor());
