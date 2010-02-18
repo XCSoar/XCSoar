@@ -53,8 +53,6 @@ TabbedControl::TabbedControl(ContainerControl *owner,
 void
 TabbedControl::AddClient(Window *w)
 {
-  ContainerControl::AddClient(w);
-
   if (current != tabs.size())
     w->hide();
 

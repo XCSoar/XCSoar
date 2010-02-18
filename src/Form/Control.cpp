@@ -93,8 +93,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
   // Add the Control as a client of its parent
   if (mOwner != NULL) {
     SetFont(mOwner->GetFont());
-
-    mOwner->AddClient(this);
   }
 }
 

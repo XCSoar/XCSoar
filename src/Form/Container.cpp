@@ -43,8 +43,3 @@ ContainerControl::GetClientAreaWindow()
 {
   return *this;
 }
-
-void
-ContainerControl::AddClient(Window *Client)
-{
-}

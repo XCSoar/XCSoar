@@ -856,9 +856,16 @@ LoadChild(WndForm &form, ContainerControl *Parent,
                                               X, Y, Width, Height, style);
     WC = tabbed;
 
-    // Load children controls from the XMLNode
-    LoadChildrenFromXML(form, tabbed, LookUpTable, &node,
-                        ParentFont, eDialogStyle);
+    const unsigned n = node.nChildNode();
+    for (unsigned i = 0; i < n; ++i) {
+      // Load each child control from the child nodes
+      Window *window = LoadChild(form, tabbed, LookUpTable,
+                                 node.getChildNode(i), ParentFont,
+                                 eDialogStyle);
+      if (window != NULL)
+        tabbed->AddClient(window);
+        continue;
+    }
   }
 
   // If WindowControl has been created

@@ -49,7 +49,7 @@ public:
                 int x, int y, unsigned width, unsigned height,
                 const WindowStyle style=WindowStyle());
 
-  virtual void AddClient(Window *w);
+  void AddClient(Window *w);
 
   unsigned GetCurrentPage() const {
     return current;
