@@ -181,25 +181,25 @@ WndButton::on_key_up(unsigned key_code)
 #endif
   case VK_RETURN:
   case VK_SPACE:
+    if (!mDown)
+      return true;
+
+    // Button is not pressed anymore
+    mDown = false;
+    invalidate();
+
     // Return if button was not pressed long enough
     if (!XCSoarInterface::Debounce())
       return true; // prevent false trigger
 
-    // If button was pressed before
-    if (mDown) {
-      // "Release" button via keys
-      mDown = false;
-      // Repaint the button
-      invalidate();
+    // "Release" button via keys
+    if (mOnClickNotify != NULL) {
+      // Save the button coordinates for possible animation
+      RECT mRc = get_screen_position();
+      SetSourceRectangle(mRc);
 
-      if (mOnClickNotify != NULL) {
-        // Save the button coordinates for possible animation
-        RECT mRc = get_screen_position();
-        SetSourceRectangle(mRc);
-
-        // Call the OnClick function
-        mOnClickNotify(*this);
-      }
+      // Call the OnClick function
+      mOnClickNotify(*this);
     }
 
     return true;
