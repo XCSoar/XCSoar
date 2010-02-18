@@ -49,27 +49,23 @@ Copyright_License {
 #include <assert.h>
 #include <limits.h>
 
-static WndForm *
-FindForm(WindowControl *w)
-{
-  assert(w != NULL);
+class ModalResultButton : public WndButton {
+  WndForm &form;
+  int result;
 
-  while (true) {
-    WindowControl *parent = w->GetOwner();
-    if (parent == NULL)
-      return (WndForm *)w;
-    w = parent;
+public:
+  ModalResultButton(ContainerControl *Parent, const TCHAR *Caption,
+                    int X, int Y, int Width, int Height,
+                    const WindowStyle style,
+                    WndForm &_form, int _result)
+    :WndButton(Parent, Caption, X, Y, Width, Height, style),
+     form(_form), result(_result) {}
+
+protected:
+  virtual void on_click() {
+    form.SetModalResult(result);
   }
-}
-
-/**
- * This event is triggered when a button of the MessageBox is pressed
- */
-static void
-OnButtonClick(WndButton &button)
-{
-  FindForm(&button)->SetModalResult(button.GetTag());
-}
+};
 
 // Message Box Replacement
 /**
@@ -149,60 +145,53 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   uType = uType & 0x000f;
   if (uType == MB_OK || uType == MB_OKCANCEL) {
     wButtons[ButtonCount] =
-      new WndButton(wf, gettext(_T("OK")), 0, y, w, h,
-                    button_style, OnButtonClick);
+      new ModalResultButton(wf, gettext(_T("OK")), 0, y, w, h,
+                            button_style, *wf, IDOK);
 
-    wButtons[ButtonCount]->SetTag(IDOK);
     ButtonCount++;
   }
 
   if (uType == MB_YESNO || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-        new WndButton(wf, gettext(_T("Yes")), 0, y, w, h,
-                      button_style, OnButtonClick);
+      new ModalResultButton(wf, gettext(_T("Yes")), 0, y, w, h,
+                            button_style, *wf, IDYES);
 
-    wButtons[ButtonCount]->SetTag(IDYES);
     ButtonCount++;
 
     wButtons[ButtonCount] =
-        new WndButton(wf, gettext(_T("No")), 0, y, w, h,
-                      button_style, OnButtonClick);
+      new ModalResultButton(wf, gettext(_T("No")), 0, y, w, h,
+                            button_style, *wf, IDNO);
 
-    wButtons[ButtonCount]->SetTag(IDNO);
     ButtonCount++;
   }
 
   if (uType == MB_ABORTRETRYIGNORE || uType == MB_RETRYCANCEL) {
     wButtons[ButtonCount] =
-        new WndButton(wf, gettext(_T("Retry")), 0, y, w, h,
-                      button_style, OnButtonClick);
+      new ModalResultButton(wf, gettext(_T("Retry")), 0, y, w, h,
+                            button_style, *wf, IDRETRY);
 
-    wButtons[ButtonCount]->SetTag(IDRETRY);
     ButtonCount++;
   }
 
   if (uType == MB_OKCANCEL || uType == MB_RETRYCANCEL || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-        new WndButton(wf, gettext(_T("Cancel")), 0, y, w, h,
-                      button_style, OnButtonClick);
+      new ModalResultButton(wf, gettext(_T("Cancel")), 0, y, w, h,
+                            button_style, *wf, IDCANCEL);
 
-    wButtons[ButtonCount]->SetTag(IDCANCEL);
     ButtonCount++;
   }
 
   if (uType == MB_ABORTRETRYIGNORE) {
     wButtons[ButtonCount] =
-        new WndButton(wf, gettext(_T("Abort")), 0, y, w, h,
-                      button_style, OnButtonClick);
+      new ModalResultButton(wf, gettext(_T("Abort")), 0, y, w, h,
+                            button_style, *wf, IDABORT);
 
-    wButtons[ButtonCount]->SetTag(IDABORT);
     ButtonCount++;
 
     wButtons[ButtonCount] =
-        new WndButton(wf, gettext(_T("Ignore")), 0, y, w, h,
-                      button_style, OnButtonClick);
+      new ModalResultButton(wf, gettext(_T("Ignore")), 0, y, w, h,
+                            button_style, *wf, IDIGNORE);
 
-    wButtons[ButtonCount]->SetTag(IDIGNORE);
     ButtonCount++;
   }
 
