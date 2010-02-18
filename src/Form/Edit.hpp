@@ -129,8 +129,6 @@ public:
 
   const Font *SetFont(const Font &font);
 
-  virtual bool on_unhandled_key(unsigned key_code);
-
   /**
    * The on_mouse_down event is called when the mouse is pressed over the button
    * (derived from Window)

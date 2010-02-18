@@ -90,6 +90,15 @@ WndProperty::Editor::on_key_down(unsigned key_code)
     }
   }
 
+  switch (key_code) {
+  case VK_RIGHT:
+    parent->IncValue();
+    return true;
+  case VK_LEFT:
+    parent->DecValue();
+    return true;
+  }
+
   return EditWindow::on_key_down(key_code) ||
     parent->on_unhandled_key(key_code);
 }
@@ -295,21 +304,6 @@ WndProperty::on_editor_killfocus()
   }
 
   invalidate();
-}
-
-bool
-WndProperty::on_unhandled_key(unsigned key_code)
-{
-  switch (key_code) {
-  case VK_RIGHT:
-    IncValue();
-    return true;
-  case VK_LEFT:
-    DecValue();
-    return true;
-  }
-
-  return WindowControl::on_unhandled_key(key_code);
 }
 
 bool
