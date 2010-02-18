@@ -89,11 +89,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
     Parent = (ContainerWindow *)&mOwner->GetClientAreaWindow();
 
   set(*Parent, X, Y, Width, Height, style);
-
-  // Add the Control as a client of its parent
-  if (mOwner != NULL) {
-    SetFont(mOwner->GetFont());
-  }
 }
 
 WindowControl::~WindowControl(void)
