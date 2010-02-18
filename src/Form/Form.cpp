@@ -272,21 +272,20 @@ int WndForm::ShowModal(bool bEnableMap) {
         hastimed = true;
     }
 
+    if (is_embedded() && msg.message == WM_LBUTTONUP &&
+        !timeAnyOpenClose.check(OPENCLOSESUPPRESSTIME))
+      /* prevents child click from being repeat-handled by parent if
+         buttons overlap */
+      continue;
+
     if (msg.message == WM_KEYDOWN && mOnKeyDownNotify != NULL &&
         mOnKeyDownNotify(this, msg.wParam))
       continue;
 
     TranslateMessage(&msg);
-    if (msg.message != WM_LBUTTONUP ||
-        // prevents child click from being repeat-handled by parent
-        // if buttons overlap
-        WndForm::timeAnyOpenClose.elapsed() > OPENCLOSESUPPRESSTIME) {
-      assert_none_locked();
-
-      DispatchMessage(&msg);
-
-      assert_none_locked();
-    }
+    assert_none_locked();
+    DispatchMessage(&msg);
+    assert_none_locked();
   } // End Modal Loop
 #endif /* !ENABLE_SDL */
 
