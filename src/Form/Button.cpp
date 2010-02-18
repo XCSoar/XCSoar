@@ -64,6 +64,14 @@ WndButton::WndButton(ContainerControl *Parent,
 #endif
 }
 
+void
+WndButton::on_click()
+{
+  // Call the OnClick function
+  if (mOnClickNotify != NULL)
+    mOnClickNotify(*this);
+}
+
 bool
 WndButton::on_mouse_up(int x, int y)
 {
@@ -83,14 +91,11 @@ WndButton::on_mouse_up(int x, int y)
   // Repainting needed
   invalidate();
 
-  if (mOnClickNotify != NULL) {
-    // Save the button coordinates for possible animation
-    RECT mRc = get_screen_position();
-    SetSourceRectangle(mRc);
+  // Save the button coordinates for possible animation
+  RECT mRc = get_screen_position();
+  SetSourceRectangle(mRc);
 
-    // Call the OnClick function
-    mOnClickNotify(*this);
-  }
+  on_click();
 
   return true;
 }
@@ -192,15 +197,11 @@ WndButton::on_key_up(unsigned key_code)
     if (!XCSoarInterface::Debounce())
       return true; // prevent false trigger
 
-    // "Release" button via keys
-    if (mOnClickNotify != NULL) {
-      // Save the button coordinates for possible animation
-      RECT mRc = get_screen_position();
-      SetSourceRectangle(mRc);
+    // Save the button coordinates for possible animation
+    RECT mRc = get_screen_position();
+    SetSourceRectangle(mRc);
 
-      // Call the OnClick function
-      mOnClickNotify(*this);
-    }
+    on_click();
 
     return true;
   }

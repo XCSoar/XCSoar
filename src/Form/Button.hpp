@@ -101,6 +101,13 @@ public:
 
 protected:
   /**
+   * Called when the button is clicked (either by mouse or by
+   * keyboard).  The default implementation invokes the OnClick
+   * callback.
+   */
+  virtual void on_click();
+
+  /**
    * The on_mouse_up event is called when the mouse is released over the button
    * (derived from Window)
    */
