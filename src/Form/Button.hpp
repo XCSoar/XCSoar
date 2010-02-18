@@ -67,22 +67,6 @@ public:
       ClickNotifyCallback_t Function = NULL);
 
   /**
-   * Return the tag of the Button
-   * @return The tag of the Button
-   */
-  int GetTag() const {
-    return mTag;
-  }
-
-  /**
-   * Sets the tag of the Button
-   * @param Value The new tag of the Button
-   */
-  void SetTag(int Value) {
-    mTag = Value;
-  }
-
-  /**
    * Sets the function that should be called when the button is pressed
    * @param Function Pointer to the function to be called
    */
@@ -150,9 +134,6 @@ protected:
   bool mDown;
 
 private:
-  /** Tag of the Control */
-  int mTag;
-
   /**
    * Height of the drawn caption
    * (this is used to speed up the drawing process)
