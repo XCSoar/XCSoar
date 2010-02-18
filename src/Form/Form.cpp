@@ -392,9 +392,6 @@ WndForm::SetTimerNotify(TimerNotifyCallback_t OnTimerNotify)
 bool
 WndForm::on_unhandled_key(unsigned key_code)
 {
-  if (mOnKeyDownNotify != NULL && mOnKeyDownNotify(this, key_code))
-    return true;
-
   switch (key_code) {
   case VK_ESCAPE:
     SetModalResult(mrCancel);
