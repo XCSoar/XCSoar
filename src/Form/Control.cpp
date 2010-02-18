@@ -46,9 +46,6 @@ Copyright_License {
 
 #include <stdlib.h>
 
-bool WindowControl::initialized;
-Brush WindowControl::hBrushDefaultBk;
-
 // returns true if it is a long press,
 // otherwise returns false
 bool
@@ -80,6 +77,7 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
     mOwner(Owner),
     mColorBack(Color::WHITE),
     mColorFore(Color::BLACK),
+    mhBrushBk(mColorBack),
     mhFont(&MapWindowFont),
     mHelpText(NULL),
     mOnHelpCallback(NULL)
@@ -89,12 +87,6 @@ WindowControl::WindowControl(ContainerControl *Owner, ContainerWindow *Parent,
 
   if ((Parent == NULL) && (mOwner != NULL))
     Parent = (ContainerWindow *)&mOwner->GetClientAreaWindow();
-
-  // If not done already -> initialize default brushes and pens
-  if (!initialized) {
-    hBrushDefaultBk.set(mColorBack);
-    initialized = true;
-  }
 
   set(*Parent, X, Y, Width, Height, style);
 

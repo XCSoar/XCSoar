@@ -162,7 +162,7 @@ public:
    * @return The brush for painting the background
    */
   Brush &GetBackBrush(void) {
-    return mhBrushBk.defined() ? mhBrushBk : hBrushDefaultBk;
+    return mhBrushBk;
   }
 
   /**
@@ -200,8 +200,6 @@ private:
 
   /** Brush for painting the background */
   Brush mhBrushBk;
-  /** The default Brush for painting the background */
-  static Brush hBrushDefaultBk;
 
   /** Font of the Control */
   const Font *mhFont;
@@ -215,9 +213,6 @@ private:
    * @see SetOnHelpCallback()
    */
   OnHelpCallback_t mOnHelpCallback;
-
-  /** True if the default brushes and pens are already initialized */
-  static bool initialized;
 };
 
 #endif
