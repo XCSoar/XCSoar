@@ -49,58 +49,62 @@ Copyright_License {
 #include <assert.h>
 
 #ifdef ENABLE_UNUSED_CODE
-void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
-    int len;
-    char ctempFile[MAX_PATH];
-    TCHAR tempFile[MAX_PATH];
-    DWORD dwBytesWritten;
-    int i;
+void
+WriteFileRegistryString(HANDLE hFile, TCHAR *instring)
+{
+  int len;
+  char ctempFile[MAX_PATH];
+  TCHAR tempFile[MAX_PATH];
+  DWORD dwBytesWritten;
+  int i;
 
-    tempFile[0]=0;
-    for (i=0; i<MAX_PATH; i++) {
-      tempFile[i]= 0;
-    }
-    GetRegistryString(instring, tempFile, MAX_PATH);
+  tempFile[0] = 0;
+  for (i = 0; i < MAX_PATH; i++)
+    tempFile[i] = 0;
+
+  GetRegistryString(instring, tempFile, MAX_PATH);
+
 #ifdef _UNICODE
-    WideCharToMultiByte( CP_ACP, 0, tempFile,
-			 _tcslen(tempFile)+1,
-			 ctempFile,
-			 MAX_PATH, NULL, NULL);
+  WideCharToMultiByte(CP_ACP, 0, tempFile, _tcslen(tempFile) + 1,
+                      ctempFile, MAX_PATH, NULL, NULL);
 #else
-    strcpy(ctempFile, tempFile);
+  strcpy(ctempFile, tempFile);
 #endif
-    for (i=0; i<MAX_PATH; i++) {
-      if (ctempFile[i]=='\?') {
-	ctempFile[i]=0;
-      }
-    }
-    len = strlen(ctempFile)+1;
-    ctempFile[len-1]= '\n';
-    WriteFile(hFile,ctempFile,len, &dwBytesWritten, (OVERLAPPED *)NULL);
+
+  for (i = 0; i < MAX_PATH; i++)
+    if (ctempFile[i] == '\?')
+      ctempFile[i] = 0;
+
+  len = strlen(ctempFile) + 1;
+  ctempFile[len - 1] = '\n';
+  WriteFile(hFile, ctempFile, len, &dwBytesWritten, (OVERLAPPED *)NULL);
 }
 #endif /* ENABLE_UNUSED_CODE */
 
-void WriteProfile(const TCHAR *szFile)
+void
+WriteProfile(const TCHAR *szFile)
 {
   SaveRegistryToFile(szFile);
 }
 
 #ifdef ENABLE_UNUSED_CODE
-void ReadFileRegistryString(HANDLE hFile, TCHAR *instring) {
-    int i;
-    TCHAR tempFile[MAX_PATH];
+void
+ReadFileRegistryString(HANDLE hFile, TCHAR *instring)
+{
+  int i;
+  TCHAR tempFile[MAX_PATH];
 
-    for (i=0; i<MAX_PATH; i++) {
-      tempFile[i]= 0;
-    }
-    ReadString(hFile, MAX_PATH, tempFile);
-    tempFile[_tcslen(tempFile)]= 0;
-    SetRegistryString(instring, tempFile);
+  for (i = 0; i < MAX_PATH; i++)
+    tempFile[i] = 0;
+
+  ReadString(hFile, MAX_PATH, tempFile);
+  tempFile[_tcslen(tempFile)] = 0;
+  SetRegistryString(instring, tempFile);
 }
 #endif /* ENABLE_UNUSED_CODE */
 
-
-void ReadProfile(const TCHAR *szFile)
+void
+ReadProfile(const TCHAR *szFile)
 {
   LoadRegistryFromFile(szFile);
 
@@ -115,28 +119,28 @@ void ReadProfile(const TCHAR *szFile)
   Profile::ReadRegistrySettings();
 }
 
-
-int propGetScaleList(fixed *List, size_t Size){
+int
+propGetScaleList(fixed *List, size_t Size)
+{
   static const TCHAR Name[] = TEXT("ScaleList");
   TCHAR Buffer[128];
   TCHAR *pWClast, *pToken;
-  int   Idx = 0;
-  double vlast=0;
+  int Idx = 0;
+  double vlast = 0;
   double val;
 
   assert(List != NULL);
   assert(Size > 0);
 
-  SetRegistryString(Name,
-   TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
+  SetRegistryString(Name, TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
 
-  if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR))) {
+  if (GetRegistryString(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR))) {
     pToken = _tcstok_r(Buffer, TEXT(","), &pWClast);
 
-    while(Idx < (int)Size && pToken != NULL){
+    while (Idx < (int)Size && pToken != NULL) {
       val = _tcstod(pToken, NULL);
-      if (Idx>0) {
-        List[Idx] = (val+vlast)/2;
+      if (Idx > 0) {
+        List[Idx] = (val + vlast) / 2;
         Idx++;
       }
       List[Idx] = val;
@@ -145,64 +149,68 @@ int propGetScaleList(fixed *List, size_t Size){
       pToken = _tcstok_r(NULL, TEXT(","), &pWClast);
     }
 
-    return(Idx);
-
+    return Idx;
   } else {
-    return(0);
+    return 0;
   }
-
 }
-
 
 TCHAR startProfileFile[MAX_PATH];
 TCHAR defaultProfileFile[MAX_PATH];
 TCHAR failsafeProfileFile[MAX_PATH];
 
-void Profile::RestoreRegistry(void) {
+void
+Profile::RestoreRegistry(void)
+{
   StartupStore(TEXT("Restore registry\n"));
   // load registry backup if it exists
   LoadRegistryFromFile(failsafeProfileFile);
   LoadRegistryFromFile(startProfileFile);
 }
 
-void Profile::StoreRegistry(void) {
+void
+Profile::StoreRegistry(void)
+{
   StartupStore(TEXT("Store registry\n"));
   // save registry backup first (try a few places)
   SaveRegistryToFile(startProfileFile);
   SaveRegistryToFile(defaultProfileFile);
 }
 
-void SetProfileFiles(const TCHAR *override) {
+void
+SetProfileFiles(const TCHAR *override)
+{
   if (is_altair())
     LocalPath(defaultProfileFile, TEXT("config/xcsoar-registry.prf"));
   else
     LocalPath(defaultProfileFile, TEXT(XCSPROFILE));
 
   // LocalPath(failsafeProfileFile,TEXT("xcsoar-registry.prf")); VENTA4
-  LocalPath(failsafeProfileFile,TEXT(XCSPROFILE));
+  LocalPath(failsafeProfileFile, TEXT(XCSPROFILE));
   _tcscpy(startProfileFile, defaultProfileFile);
 
   if (!string_is_empty(override))
-    _tcsncpy(startProfileFile, override, MAX_PATH-1);
+    _tcsncpy(startProfileFile, override, MAX_PATH - 1);
 }
 
 #ifdef PNA
-void CleanRegistry()
+void
+CleanRegistry()
 {
-   HKEY tKey;
-   RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey ,0,0,&tKey);
+  HKEY tKey;
+  RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, 0, &tKey);
 
-   RegDeleteValue(tKey,_T("CDIWindowFont"));
-   RegDeleteValue(tKey,_T("InfoWindowFont"));
-   RegDeleteValue(tKey,_T("MapLabelFont"));
-   RegDeleteValue(tKey,_T("MapWindowBoldFont"));
-   RegDeleteValue(tKey,_T("MapWindowFont"));
-   RegDeleteValue(tKey,_T("StatisticsFont"));
-   RegDeleteValue(tKey,_T("TitleSmallWindowFont"));
-   RegDeleteValue(tKey,_T("TitleWindowFont"));
-   RegDeleteValue(tKey,_T("BugsBallastFont"));
-   RegDeleteValue(tKey,_T("TeamCodeFont"));
+  RegDeleteValue(tKey, _T("CDIWindowFont"));
+  RegDeleteValue(tKey, _T("InfoWindowFont"));
+  RegDeleteValue(tKey, _T("MapLabelFont"));
+  RegDeleteValue(tKey, _T("MapWindowBoldFont"));
+  RegDeleteValue(tKey, _T("MapWindowFont"));
+  RegDeleteValue(tKey, _T("StatisticsFont"));
+  RegDeleteValue(tKey, _T("TitleSmallWindowFont"));
+  RegDeleteValue(tKey, _T("TitleWindowFont"));
+  RegDeleteValue(tKey, _T("BugsBallastFont"));
+  RegDeleteValue(tKey, _T("TeamCodeFont"));
 
-   RegCloseKey(tKey);
+  RegCloseKey(tKey);
 }
 #endif
