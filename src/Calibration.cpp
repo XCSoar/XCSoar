@@ -113,20 +113,17 @@ CalibrationUpdate(const NMEA_INFO *Basic)
       Basic->TrueAirspeed <= 0)
     return;
 
-  fixed ias_to_tas = Basic->TrueAirspeed /
-                     max(fixed_one, Basic->IndicatedAirspeed);
-
   // Vario calibration info
   int index_te_vario = lround(Basic->GPSVarioTE * 10) + 50;
+  if (index_te_vario < 0 || index_te_vario >= NUM_CAL_VARIO)
+    return;
+
   int index_speed = lround((Basic->TrueAirspeed - 20) / 2);
-  if (index_te_vario < 0)
+  if (index_speed < 0 || index_speed >= NUM_CAL_SPEED)
     return;
-  if (index_te_vario >= NUM_CAL_VARIO)
-    return;
-  if (index_speed < 0)
-    return;
-  if (index_speed >= NUM_CAL_SPEED)
-    return;
+
+  fixed ias_to_tas = Basic->TrueAirspeed /
+                     max(fixed_one, Basic->IndicatedAirspeed);
 
   calibration_tevario_val[index_speed][index_te_vario] +=
     Basic->TotalEnergyVario * ias_to_tas;
@@ -134,9 +131,7 @@ CalibrationUpdate(const NMEA_INFO *Basic)
 
   // ASI calibration info
   int index_vspeed = lround(Basic->TrueAirspeed - 20);
-  if (index_vspeed < 0)
-    return;
-  if (index_vspeed >= NUM_CAL_VSPEED)
+  if (index_vspeed < 0 || index_vspeed >= NUM_CAL_VSPEED)
     return;
 
   calibration_speed_val[index_vspeed] += Basic->TrueAirspeedEstimated;
