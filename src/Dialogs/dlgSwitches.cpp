@@ -45,110 +45,98 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 
-
 static void UpdateValues() {
+  const SWITCH_INFO &switches = XCSoarInterface::Basic().SwitchState;
+
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpFlapLanding"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.FlapLanding) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.FlapLanding);
+    if (wp->GetDataField()->GetAsBoolean() != switches.FlapLanding) {
+      wp->GetDataField()->Set(switches.FlapLanding);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpAirbrakeExtended"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.AirbrakeLocked) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.AirbrakeLocked);
+    if (wp->GetDataField()->GetAsBoolean() != switches.AirbrakeLocked) {
+      wp->GetDataField()->Set(switches.AirbrakeLocked);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpFlapPositive"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.FlapPositive) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.FlapPositive);
+    if (wp->GetDataField()->GetAsBoolean() != switches.FlapPositive) {
+      wp->GetDataField()->Set(switches.FlapPositive);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpFlapNeutral"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.FlapNeutral) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.FlapNeutral);
+    if (wp->GetDataField()->GetAsBoolean() != switches.FlapNeutral) {
+      wp->GetDataField()->Set(switches.FlapNeutral);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpFlapNegative"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.FlapNegative) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.FlapNegative);
+    if (wp->GetDataField()->GetAsBoolean() != switches.FlapNegative) {
+      wp->GetDataField()->Set(switches.FlapNegative);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpGearExtended"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.GearExtended) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.GearExtended);
+    if (wp->GetDataField()->GetAsBoolean() != switches.GearExtended) {
+      wp->GetDataField()->Set(switches.GearExtended);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpAcknowledge"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.Acknowledge) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.Acknowledge);
+    if (wp->GetDataField()->GetAsBoolean() != switches.Acknowledge) {
+      wp->GetDataField()->Set(switches.Acknowledge);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpRepeat"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.Repeat) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.Repeat);
+    if (wp->GetDataField()->GetAsBoolean() != switches.Repeat) {
+      wp->GetDataField()->Set(switches.Repeat);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedCommand"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.SpeedCommand) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.SpeedCommand);
+    if (wp->GetDataField()->GetAsBoolean() != switches.SpeedCommand) {
+      wp->GetDataField()->Set(switches.SpeedCommand);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpUserSwitchUp"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.UserSwitchUp) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.UserSwitchUp);
+    if (wp->GetDataField()->GetAsBoolean() != switches.UserSwitchUp) {
+      wp->GetDataField()->Set(switches.UserSwitchUp);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpUserSwitchMiddle"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.UserSwitchMiddle) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.UserSwitchMiddle);
+    if (wp->GetDataField()->GetAsBoolean() != switches.UserSwitchMiddle) {
+      wp->GetDataField()->Set(switches.UserSwitchMiddle);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpUserSwitchDown"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.UserSwitchDown) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.UserSwitchDown);
+    if (wp->GetDataField()->GetAsBoolean() != switches.UserSwitchDown) {
+      wp->GetDataField()->Set(switches.UserSwitchDown);
       wp->RefreshDisplay();
     }
   }
   wp = (WndProperty*)wf->FindByName(_T("prpVarioCircling"));
   if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	XCSoarInterface::Basic().SwitchState.VarioCircling) {
-      wp->GetDataField()->Set(XCSoarInterface::Basic().SwitchState.VarioCircling);
+    if (wp->GetDataField()->GetAsBoolean() != switches.VarioCircling) {
+      wp->GetDataField()->Set(switches.VarioCircling);
       wp->RefreshDisplay();
     }
   }
