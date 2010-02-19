@@ -273,7 +273,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   _tcscpy(szTitle, "XCSoar");
 #endif
 
-  //If it is already running, then focus on the window
+  //If XCSoar is already running, stop this instance
   if (MainWindow::find(szTitle))
     return false;
 
