@@ -58,43 +58,48 @@ static unsigned int calibration_tevario_num[NUM_CAL_SPEED][NUM_CAL_VARIO];
 static fixed calibration_speed_val[NUM_CAL_VSPEED];
 static unsigned int calibration_speed_num[NUM_CAL_VSPEED];
 
-void CalibrationInit(void) {
-  int i, j;
-  for (i=0; i< NUM_CAL_SPEED; i++) {
-    for (j=0; j< NUM_CAL_VARIO; j++) {
+void
+CalibrationInit(void)
+{
+  for (int i = 0; i < NUM_CAL_SPEED; i++) {
+    for (int j = 0; j < NUM_CAL_VARIO; j++) {
       calibration_tevario_val[i][j] = 0;
       calibration_tevario_num[i][j] = 0;
     }
   }
-  for (i=0; i< NUM_CAL_VSPEED; i++) {
+
+  for (int i = 0; i < NUM_CAL_VSPEED; i++) {
     calibration_speed_val[i] = 0;
     calibration_speed_num[i] = 0;
   }
 }
 
-
-void CalibrationSave(void) {
-  int i, j;
+void
+CalibrationSave(void)
+{
   double v, w = 0, wav;
+
   LogStartUp(_T("Calibration data for TE vario\n"));
-  for (i=0; i< NUM_CAL_SPEED; i++) {
-    for (j=0; j< NUM_CAL_VARIO; j++) {
-      if (calibration_tevario_num[i][j]>0) {
-        v = i*2.0+20.0;
-        w = (j-50.0)/10.0;
-        wav = calibration_tevario_val[i][j]/calibration_tevario_num[i][j];
+
+  for (int i = 0; i < NUM_CAL_SPEED; i++) {
+    for (int j = 0; j < NUM_CAL_VARIO; j++) {
+      if (calibration_tevario_num[i][j] > 0) {
+        v = i * 2.0 + 20.0;
+        w = (j - 50.0) / 10.0;
+        wav = calibration_tevario_val[i][j] / calibration_tevario_num[i][j];
         LogStartUp(_T("%g %g %g %d\n"), v, w, wav,
-                  calibration_tevario_num[i][j]);
+                   calibration_tevario_num[i][j]);
       }
     }
   }
+
   LogStartUp(_T("Calibration data for ASI\n"));
-  for (i=0; i< NUM_CAL_VSPEED; i++) {
-    if (calibration_speed_num[i]>0) {
-      v = i+20.0;
-      wav = calibration_speed_val[i]/calibration_speed_num[i];
-      LogStartUp(_T("%g %g %g %d\n"), v, w, wav,
-                calibration_speed_num[i]);
+
+  for (int i = 0; i < NUM_CAL_VSPEED; i++) {
+    if (calibration_speed_num[i] > 0) {
+      v = i + 20.0;
+      wav = calibration_speed_val[i] / calibration_speed_num[i];
+      LogStartUp(_T("%g %g %g %d\n"), v, w, wav, calibration_speed_num[i]);
     }
   }
 }
@@ -103,36 +108,36 @@ void
 CalibrationUpdate(const NMEA_INFO *Basic)
 {
   if (!Basic->flight.Flying ||
-      !Basic->AirspeedAvailable || Basic->TrueAirspeed <= 0)
+      !Basic->AirspeedAvailable ||
+      Basic->TrueAirspeed <= 0)
     return;
 
   fixed ias_to_tas = Basic->TrueAirspeed /
-    max(fixed_one, Basic->IndicatedAirspeed);
+                     max(fixed_one, Basic->IndicatedAirspeed);
 
   // Vario calibration info
-  int index_te_vario = lround(Basic->GPSVarioTE*10)+50;
+  int index_te_vario = lround(Basic->GPSVarioTE * 10) + 50;
   int index_speed = lround((Basic->TrueAirspeed - 20) / 2);
   if (index_te_vario < 0)
     return;
   if (index_te_vario >= NUM_CAL_VARIO)
     return;
-  if (index_speed<0)
+  if (index_speed < 0)
     return;
-  if (index_speed>= NUM_CAL_SPEED)
+  if (index_speed >= NUM_CAL_SPEED)
     return;
 
   calibration_tevario_val[index_speed][index_te_vario] +=
     Basic->TotalEnergyVario * ias_to_tas;
-  calibration_tevario_num[index_speed][index_te_vario] ++;
+  calibration_tevario_num[index_speed][index_te_vario]++;
 
   // ASI calibration info
   int index_vspeed = lround(Basic->TrueAirspeed - 20);
-  if (index_vspeed<0)
+  if (index_vspeed < 0)
     return;
-  if (index_vspeed>= NUM_CAL_VSPEED)
+  if (index_vspeed >= NUM_CAL_VSPEED)
     return;
 
   calibration_speed_val[index_vspeed] += Basic->TrueAirspeedEstimated;
-  calibration_speed_num[index_vspeed] ++;
-
+  calibration_speed_num[index_vspeed]++;
 }

@@ -43,10 +43,7 @@ struct NMEA_INFO;
 struct DERIVED_INFO;
 
 void CalibrationInit(void);
-
-void
-CalibrationUpdate(const NMEA_INFO *Basic);
-
+void CalibrationUpdate(const NMEA_INFO *Basic);
 void CalibrationSave(void);
 
 #endif
