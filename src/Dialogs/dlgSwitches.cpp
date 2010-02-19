@@ -45,101 +45,36 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 
+static void
+Update(const TCHAR *name, bool value)
+{
+  WndProperty *wp = (WndProperty*)wf->FindByName(name);
+  if (wp == NULL)
+    return;
+
+  DataField *df = wp->GetDataField();
+  if (df->GetAsBoolean() != value) {
+    wp->GetDataField()->Set(value);
+    wp->RefreshDisplay();
+  }
+}
+
 static void UpdateValues() {
   const SWITCH_INFO &switches = XCSoarInterface::Basic().SwitchState;
 
-  WndProperty* wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpFlapLanding"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.FlapLanding) {
-      wp->GetDataField()->Set(switches.FlapLanding);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpAirbrakeExtended"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.AirbrakeLocked) {
-      wp->GetDataField()->Set(switches.AirbrakeLocked);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpFlapPositive"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.FlapPositive) {
-      wp->GetDataField()->Set(switches.FlapPositive);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpFlapNeutral"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.FlapNeutral) {
-      wp->GetDataField()->Set(switches.FlapNeutral);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpFlapNegative"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.FlapNegative) {
-      wp->GetDataField()->Set(switches.FlapNegative);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpGearExtended"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.GearExtended) {
-      wp->GetDataField()->Set(switches.GearExtended);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpAcknowledge"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.Acknowledge) {
-      wp->GetDataField()->Set(switches.Acknowledge);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpRepeat"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.Repeat) {
-      wp->GetDataField()->Set(switches.Repeat);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpSpeedCommand"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.SpeedCommand) {
-      wp->GetDataField()->Set(switches.SpeedCommand);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpUserSwitchUp"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.UserSwitchUp) {
-      wp->GetDataField()->Set(switches.UserSwitchUp);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpUserSwitchMiddle"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.UserSwitchMiddle) {
-      wp->GetDataField()->Set(switches.UserSwitchMiddle);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpUserSwitchDown"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.UserSwitchDown) {
-      wp->GetDataField()->Set(switches.UserSwitchDown);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpVarioCircling"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() != switches.VarioCircling) {
-      wp->GetDataField()->Set(switches.VarioCircling);
-      wp->RefreshDisplay();
-    }
-  }
+  Update(_T("prpFlapLanding"), switches.FlapLanding);
+  Update(_T("prpAirbrakeExtended"), switches.AirbrakeLocked);
+  Update(_T("prpFlapPositive"), switches.FlapPositive);
+  Update(_T("prpFlapNeutral"), switches.FlapNeutral);
+  Update(_T("prpFlapNegative"), switches.FlapNegative);
+  Update(_T("prpGearExtended"), switches.GearExtended);
+  Update(_T("prpAcknowledge"), switches.Acknowledge);
+  Update(_T("prpRepeat"), switches.Repeat);
+  Update(_T("prpSpeedCommand"), switches.SpeedCommand);
+  Update(_T("prpUserSwitchUp"), switches.UserSwitchUp);
+  Update(_T("prpUserSwitchMiddle"), switches.UserSwitchMiddle);
+  Update(_T("prpUserSwitchDown"), switches.UserSwitchDown);
+  Update(_T("prpVarioCircling"), switches.VarioCircling);
 }
 
 static int OnTimerNotify(WindowControl * Sender) {
