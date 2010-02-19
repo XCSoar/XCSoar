@@ -83,24 +83,25 @@ CalibrationSave(void)
 
   for (int i = 0; i < NUM_CAL_SPEED; i++) {
     for (int j = 0; j < NUM_CAL_VARIO; j++) {
-      if (calibration_tevario_num[i][j] > 0) {
-        v = i * 2.0 + 20.0;
-        w = (j - 50.0) / 10.0;
-        wav = calibration_tevario_val[i][j] / calibration_tevario_num[i][j];
-        LogStartUp(_T("%g %g %g %d\n"), v, w, wav,
-                   calibration_tevario_num[i][j]);
-      }
+      if (calibration_tevario_num[i][j] <= 0)
+        continue;
+
+      v = i * 2.0 + 20.0;
+      w = (j - 50.0) / 10.0;
+      wav = calibration_tevario_val[i][j] / calibration_tevario_num[i][j];
+      LogStartUp(_T("%g %g %g %d\n"), v, w, wav, calibration_tevario_num[i][j]);
     }
   }
 
   LogStartUp(_T("Calibration data for ASI\n"));
 
   for (int i = 0; i < NUM_CAL_VSPEED; i++) {
-    if (calibration_speed_num[i] > 0) {
-      v = i + 20.0;
-      wav = calibration_speed_val[i] / calibration_speed_num[i];
-      LogStartUp(_T("%g %g %g %d\n"), v, w, wav, calibration_speed_num[i]);
-    }
+    if (calibration_speed_num[i] <= 0)
+      continue;
+
+    v = i + 20.0;
+    wav = calibration_speed_val[i] / calibration_speed_num[i];
+    LogStartUp(_T("%g %g %g %d\n"), v, w, wav, calibration_speed_num[i]);
   }
 }
 
