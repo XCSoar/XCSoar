@@ -315,7 +315,7 @@ public:
     double spread = CheckValidity(time);
     if (spread < 0) {
       #ifdef DEBUG_ZIGZAG_A
-      LogDebug("zigzag time invalid\n");
+      LogDebug(_T("zigzag time invalid\n"));
       #endif
 
       return false;
@@ -331,7 +331,7 @@ public:
       // invalid if really circling or if not enough zig-zag
 
       #ifdef DEBUG_ZIGZAG_A
-      LogDebug("zigzag spread invalid %03.1f\n", spread);
+      LogDebug(_T("zigzag spread invalid %03.1f\n"), spread);
       #endif
 
       return false;
@@ -556,7 +556,7 @@ void TestZigZag(double V_wind, double theta_wind) {
     percent_error = myzigzag.StartSearch(V_wind_estimate, theta_wind_estimate);
     myzigzag.Estimate(&V_wind_estimate, &theta_wind_estimate, &percent_error);
 
-    LogDebug("%2.1f %2.1f %03.0f %03.0f %2.1f # test zigzag\n",
+    LogDebug(_T("%2.1f %2.1f %03.0f %03.0f %2.1f # test zigzag\n"),
             V_wind,
             V_wind_estimate,
             theta_wind/DEGTORAD,
@@ -592,17 +592,17 @@ WindZigZagCheckAirData(const NMEA_INFO &basic)
   } else if (fabs(basic.TurnRate) > 20.0) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
-    LogDebug("zigzag airdata invalid - turn rate\n");
+    LogDebug(_T("zigzag airdata invalid - turn rate\n"));
 #endif
   } else if (fabs(basic.GroundSpeed) < 2.5) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
-    LogDebug("zigzag airdata invalid - ground speed\n");
+    LogDebug(_T("zigzag airdata invalid - ground speed\n"));
 #endif
   } else if (fabs(basic.acceleration.Gload - 1.0) > 0.3) {
     airdata_invalid = true;
 #ifdef DEBUG_ZIGZAG_A
-    LogDebug("zigzag airdata invalid - acceleration\n");
+    LogDebug(_T("zigzag airdata invalid - acceleration\n"));
 #endif
   }
 
@@ -679,7 +679,7 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
     // don't refine search if error is small
 
     #ifdef DEBUG_ZIGZAG
-    LogDebug("zigzag error small %02.0f %03.1f\n", percent_error, v_error);
+    LogDebug(_T("zigzag error small %02.0f %03.1f\n"), percent_error, v_error);
     #endif
 
     return 0;
@@ -706,7 +706,7 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
     }
 
     #ifdef DEBUG_ZIGZAG
-    LogDebug("%f %3.1f %03.0f %3.1f %03.0f %f %d # zigzag\n",
+    LogDebug(_T("%f %3.1f %03.0f %3.1f %03.0f %f %d # zigzag\n"),
                (double)basic.Time,
             V_wind_estimate,
             theta_wind_estimate,
@@ -719,7 +719,7 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
     return quality;
   } else {
     #ifdef DEBUG_ZIGZAG
-    LogDebug("zigzag estimate failed to improve\n");
+    LogDebug(_T("zigzag estimate failed to improve\n"));
     #endif
   }
 

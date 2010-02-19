@@ -51,7 +51,7 @@ LogStartUp(const TCHAR *fmt, ...)
 }
 
 void
-LogDebug(const char *fmt, ...)
+LogDebug(const TCHAR *fmt, ...)
 {
   va_list ap;
 

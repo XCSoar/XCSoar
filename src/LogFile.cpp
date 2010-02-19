@@ -53,25 +53,26 @@ static Mutex mutexLogFile;
  * @param Str String to be logged
  */
 void
-LogDebug(const char *Str, ...)
+LogDebug(const TCHAR *Str, ...)
 {
   static bool initialised = false;
   TCHAR szFileName[] = _T("xcsoar-debug.log");
 
-  char buf[MAX_PATH];
+  TCHAR buf[MAX_PATH];
   va_list ap;
-  int len;
 
   va_start(ap, Str);
-  len = vsprintf(buf, Str, ap);
+  _vstprintf(buf, Str, ap);
   va_end(ap);
 
   mutexLogFile.Lock();
 
-  FILE *stream;
-  stream = _tfopen(szFileName, (initialised ? _T("a+") : _T("w")));
-  fwrite(buf, len, 1, stream);
-  fclose(stream);
+  FILE *stream = NULL;
+  stream = _tfopen(szFileName, (initialised ? _T("ab+") : _T("wb")));
+  if (stream != NULL) {
+    fprintf(stream, "%S", buf);
+    fclose(stream);
+  }
 
   mutexLogFile.Unlock();
 

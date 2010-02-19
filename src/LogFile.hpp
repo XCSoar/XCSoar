@@ -43,7 +43,7 @@ Copyright_License {
 
 #if !defined(NDEBUG) && !defined(GNAV)
 
-void LogDebug(const char *Str, ...);
+void LogDebug(const TCHAR *Str, ...);
 
 #else /* NDEBUG */
 
