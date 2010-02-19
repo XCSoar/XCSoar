@@ -48,8 +48,6 @@ Copyright_License {
 
 struct SWITCH_INFO
 {
-  bool Available;
-
   bool AirbrakeLocked;
   bool FlapPositive;
   bool FlapNeutral;
@@ -64,15 +62,6 @@ struct SWITCH_INFO
   bool VarioCircling;
   bool FlapLanding;
   // bool Stall;
-
-  /**
-   * Adds data from the specified object, unless already present in
-   * this one.
-   */
-  void complement(const SWITCH_INFO &add) {
-    if (!Available && add.Available)
-      *this = add;
-  }
 };
 
 struct GPS_STATE
@@ -378,6 +367,8 @@ struct NMEA_INFO {
   /** Battery supply voltage information (if available) */
   double SupplyBatteryVoltage;
 
+  bool SwitchStateAvailable;
+
   /** Switch state of the user inputs */
   SWITCH_INFO SwitchState;
 
@@ -471,7 +462,8 @@ struct NMEA_INFO {
     if (SupplyBatteryVoltage <= 0.0 && add.SupplyBatteryVoltage > 0.0)
       SupplyBatteryVoltage = add.SupplyBatteryVoltage;
 
-    SwitchState.complement(add.SwitchState);
+    if (!SwitchStateAvailable && add.SwitchStateAvailable)
+      SwitchState = add.SwitchState;
 
     flarm.complement(add.flarm);
   }

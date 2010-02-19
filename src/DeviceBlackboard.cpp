@@ -76,7 +76,7 @@ DeviceBlackboard::Initialise()
   gps_info.gps.Simulator = false;
 
   // Clear the SwitchStates
-  gps_info.SwitchState.Available = false;
+  gps_info.SwitchStateAvailable = false;
   gps_info.SwitchState.AirbrakeLocked = false;
   gps_info.SwitchState.FlapPositive = false;
   gps_info.SwitchState.FlapNeutral = false;
