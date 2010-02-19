@@ -236,7 +236,7 @@ CuSonde::findThermalHeight(unsigned short level)
     thermalHeight = dthermalheight;
 
 #ifdef DEBUG_CUSONDE
-    DebugStore("%g # thermal height \r\n", thermalHeight);
+    LogDebug("%g # thermal height \r\n", thermalHeight);
 #endif
   }
 }
@@ -283,7 +283,7 @@ CuSonde::findCloudBase(unsigned short level)
     cloudBase = dcloudbase;
 
 #ifdef DEBUG_CUSONDE
-    DebugStore("%g # cloud base \r\n", cloudBase);
+    LogDebug("%g # cloud base \r\n", cloudBase);
 #endif
   }
 }
@@ -340,7 +340,7 @@ CuSondeLevel::updateThermalIndex(unsigned short level, bool newdata)
 
 #ifdef DEBUG_CUSONDE
   if (newdata) {
-    DebugStore("%g %g %g %g # temp measurement \r\n",
+    LogDebug("%g %g %g %g # temp measurement \r\n",
         hlevel, airTemp, dewpoint, thermalIndex);
   }
 #endif

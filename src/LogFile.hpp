@@ -43,13 +43,13 @@ Copyright_License {
 
 #if !defined(NDEBUG) && !defined(GNAV)
 
-void DebugStore(const char *Str, ...);
+void LogDebug(const char *Str, ...);
 
 #else /* NDEBUG */
 
 /* not using an empty inline function here because we don't want to
    evaluate the parameters */
-#define DebugStore(...)
+#define LogDebug(...)
 
 #endif /* NDEBUG */
 

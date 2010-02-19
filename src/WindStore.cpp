@@ -158,7 +158,7 @@ WindStore::NewWind(const NMEA_INFO &info, DERIVED_INFO &derived,
   }
 
   #ifdef DEBUG_WIND
-  DebugStore("%f %f 0 # wind estimate\n", wind.x, wind.y);
+  LogDebug("%f %f 0 # wind estimate\n", wind.x, wind.y);
   #endif
 
 }

@@ -493,7 +493,7 @@ bool OLCOptimizer::Optimize(const SETTINGS_COMPUTER &settings, bool isflying,
 
   if (retval) {
 #ifdef DEBUG_OLC
-    DebugStore("%d %d # OLC\n", pnts, GetTickCount()-tm);
+    LogDebug("%d %d # OLC\n", pnts, GetTickCount()-tm);
 #endif
   }
 

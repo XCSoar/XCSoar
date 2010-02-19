@@ -53,7 +53,7 @@ static Mutex mutexLogFile;
  * @param Str String to be logged
  */
 void
-DebugStore(const char *Str, ...)
+LogDebug(const char *Str, ...)
 {
   char buf[MAX_PATH];
   va_list ap;

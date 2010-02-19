@@ -172,7 +172,7 @@ ThermalLocator::Update(const fixed t_0, const GEOPOINT &location_0,
     // if (d > 200.0) {
     // big shift detected
 
-    DebugStore("%f %f %f %f %f # center2 \n",
+    LogDebug("%f %f %f %f %f # center2 \n",
         *Thermal_Longitude,
         *Thermal_Latitude,
         Thermal_Longitude0,

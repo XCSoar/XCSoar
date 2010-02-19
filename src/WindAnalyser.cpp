@@ -395,7 +395,7 @@ WindAnalyser::slot_newEstimate(const NMEA_INFO &info,
   else
     type = "wind circling";
 
-  DebugStore("%f %f %d # %s\n", (double)a.x, (double)a.y, quality, type);
+  LogDebug("%f %f %d # %s\n", (double)a.x, (double)a.y, quality, type);
   #endif
 
   windstore.SlotMeasurement(info, derived, a, quality);
