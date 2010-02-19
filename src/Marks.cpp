@@ -57,7 +57,7 @@ Copyright_License {
 Marks::Marks(const char* name, const SETTINGS_COMPUTER &_settings_computer)
   :topo_marks(name, Color(0xD0,0xD0,0xD0)),
    settings_computer(_settings_computer) {
-  StartupStore(TEXT("Initialise marks\n"));
+  LogStartUp(TEXT("Initialise marks\n"));
   topo_marks.scaleThreshold = 30.0;
   topo_marks.loadBitmap(IDB_MARK);
   Reset();
@@ -76,7 +76,7 @@ void Marks::Reset() {
 }
 
 Marks::~Marks() {
-  StartupStore(TEXT("CloseMarks\n"));
+  LogStartUp(TEXT("CloseMarks\n"));
   Poco::ScopedRWLock protect(lock, true);
   topo_marks.DeleteFiles();
 }

@@ -248,7 +248,7 @@ LoadFiles()
     unicode2ascii(tpath, path, sizeof(path));
 
     if (!ReadAirspace(airspace_database, path))
-      StartupStore(TEXT("No airspace file 1\n"));
+      LogStartUp(TEXT("No airspace file 1\n"));
 
     airspace_database.optimise();
   }

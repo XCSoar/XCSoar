@@ -82,7 +82,7 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   diLabelMiddle.InitDone = false;
   diLabelBottom.InitDone = false;
 
-  StartupStore(TEXT("Create Vario\n"));
+  LogStartUp(TEXT("Create Vario\n"));
 
   WindowStyle style;
   style.hide();

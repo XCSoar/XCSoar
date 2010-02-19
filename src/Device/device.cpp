@@ -159,11 +159,11 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
 
   case DeviceConfig::AUTO:
     if (!detect_gps(buffer, sizeof(buffer))) {
-      StartupStore(_T("no GPS detected\n"));
+      LogStartUp(_T("no GPS detected\n"));
       return false;
     }
 
-    StartupStore(_T("GPS detected: %s\n"), buffer);
+    LogStartUp(_T("GPS detected: %s\n"), buffer);
 
     path = buffer;
     break;
@@ -382,7 +382,7 @@ devVarioFindVega(void)
 void
 devStartup(const TCHAR *lpCmdLine)
 {
-  StartupStore(_T("Register serial devices\n"));
+  LogStartUp(_T("Register serial devices\n"));
 
   devInit(lpCmdLine);
 }
@@ -393,7 +393,7 @@ devShutdown()
   int i;
 
   // Stop COM devices
-  StartupStore(_T("Stop COM devices\n"));
+  LogStartUp(_T("Stop COM devices\n"));
 
   for (i = 0; i < NUMDEV; i++) {
     DeviceList[i].Close();
@@ -417,7 +417,7 @@ devRestart()
   #endif
   */
 
-  StartupStore(_T("RestartCommPorts\n"));
+  LogStartUp(_T("RestartCommPorts\n"));
 
   ScopeLock protect(mutexComm);
 

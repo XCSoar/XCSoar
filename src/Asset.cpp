@@ -76,7 +76,7 @@ void ReadAssetNumber(void)
   memset(strAssetNumber, 0, MAX_LOADSTRING*sizeof(TCHAR));
   // JMW clear this first just to be safe.
 
-  StartupStore(TEXT("Asset ID: "));
+  LogStartUp(TEXT("Asset ID: "));
 
 #ifdef WINDOWSPC
   return;
@@ -92,29 +92,29 @@ void ReadAssetNumber(void)
       ifound++;
     }
     if (ifound>=3) {
-      StartupStore(strAssetNumber);
-      StartupStore(TEXT(" (reg)\n"));
+      LogStartUp(strAssetNumber);
+      LogStartUp(TEXT(" (reg)\n"));
       return;
     }
   }
 
   if(strAssetNumber[0] != '\0') {
-    StartupStore(strAssetNumber);
-    StartupStore(TEXT(" (?)\n"));
+    LogStartUp(strAssetNumber);
+    LogStartUp(TEXT(" (?)\n"));
     return;
   }
 
   ReadCompaqID();
   if(strAssetNumber[0] != '\0') {
-    StartupStore(strAssetNumber);
-    StartupStore(TEXT(" (compaq)\n"));
+    LogStartUp(strAssetNumber);
+    LogStartUp(TEXT(" (compaq)\n"));
     return;
   }
 
   ReadUUID();
   if(strAssetNumber[0] != '\0') {
-    StartupStore(strAssetNumber);
-    StartupStore(TEXT(" (uuid)\n"));
+    LogStartUp(strAssetNumber);
+    LogStartUp(TEXT(" (uuid)\n"));
     return;
   }
 
@@ -122,8 +122,8 @@ void ReadAssetNumber(void)
   strAssetNumber[1]= _T('A');
   strAssetNumber[2]= _T('A');
 
-  StartupStore(strAssetNumber);
-  StartupStore(TEXT(" (fallback)\n"));
+  LogStartUp(strAssetNumber);
+  LogStartUp(TEXT(" (fallback)\n"));
 
   return;
 }
@@ -359,14 +359,14 @@ void InitAsset() {
   //#ifndef PNA
 
     bool datadir=CheckDataDir();
-    if (datadir) StartupStore(TEXT("XCSoarData directory found.\n"));
-    else StartupStore(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
+    if (datadir) LogStartUp(TEXT("XCSoarData directory found.\n"));
+    else LogStartUp(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
 
-    StartupStore(TEXT("Check for installing fonts\n"));
+    LogStartUp(TEXT("Check for installing fonts\n"));
     short didfonts=InstallFonts();  // check if really did it, and maybe restart
     TCHAR nTmp[100];
     _stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)\n"), didfonts);
-    StartupStore(nTmp);
+    LogStartUp(nTmp);
 
     //#endif
   #endif

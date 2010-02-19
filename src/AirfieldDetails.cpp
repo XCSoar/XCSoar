@@ -268,7 +268,7 @@ ParseAirfieldDetails()
 void
 ReadAirfieldFile()
 {
-  StartupStore(TEXT("ReadAirfieldFile\n"));
+  LogStartUp(TEXT("ReadAirfieldFile\n"));
   XCSoarInterface::CreateProgressDialog(
       gettext(TEXT("Loading Airfield Details File...")));
 

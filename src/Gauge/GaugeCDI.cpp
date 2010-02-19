@@ -48,7 +48,7 @@ Copyright_License {
 GaugeCDI::GaugeCDI(ContainerWindow &parent)
 {
   // start of new code for displaying CDI window
-  StartupStore(TEXT("Create CDI\n"));
+  LogStartUp(TEXT("Create CDI\n"));
 
   set(parent, NULL,
       (int)(InfoBoxLayout::ControlWidth * 0.6),

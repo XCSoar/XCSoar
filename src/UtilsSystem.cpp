@@ -286,7 +286,7 @@ void SetModelType() {
   if ( SetModelName(Temp) != true ) {
 
     _stprintf(sTmp,_T("SetModelType ERROR! ModelName returned invalid value <%d> from Registry!\n"), Temp);
-    StartupStore(sTmp);
+    LogStartUp(sTmp);
     GlobalModelType=MODELTYPE_PNA_PNA;
 
   } else {
@@ -295,7 +295,7 @@ void SetModelType() {
   }
 
   _stprintf(sTmp,_T("SetModelType: Name=<%s> Type=%d\n"),GlobalModelName, GlobalModelType);
-  StartupStore(sTmp);
+  LogStartUp(sTmp);
 }
 
 // Parse a MODELTYPE value and set the equivalent model name.
@@ -362,11 +362,11 @@ const TCHAR *gmfpathname ()
   TCHAR  *p;
 
   if (GetModuleFileName(NULL, gmfpathname_buffer, MAXPATHBASENAME) <= 0) {
-//    StartupStore(_T("CRITIC- gmfpathname returned null GetModuleFileName\n")); // rob bughunt
+//    LogStartUp(_T("CRITIC- gmfpathname returned null GetModuleFileName\n")); // rob bughunt
     return(_T("\\ERROR_01\\") );
   }
   if (gmfpathname_buffer[0] != '\\' ) {
-//   StartupStore(_T("CRITIC- gmfpathname starting without a leading backslash\n"));
+//   LogStartUp(_T("CRITIC- gmfpathname starting without a leading backslash\n"));
     return(_T("\\ERROR_02\\"));
   }
   gmfpathname_buffer[MAXPATHBASENAME-1] = '\0';	// truncate for safety
@@ -375,7 +375,7 @@ const TCHAR *gmfpathname ()
     if ( *p == '\\' ) break;	// search for the very first "\"
 
   if ( *p == '\0') {
-//    StartupStore(_T("CRITIC- gmfpathname no backslash found\n"));
+//    LogStartUp(_T("CRITIC- gmfpathname no backslash found\n"));
     return(_T("\\ERROR_03\\"));
   }
   *++p = '\0';
@@ -393,11 +393,11 @@ const TCHAR *gmfbasename()
   TCHAR *p, *lp;
 
   if (GetModuleFileName(NULL, gmfbasename_buffer, MAXPATHBASENAME) <= 0) {
-    StartupStore(_T("CRITIC- gmfbasename returned null GetModuleFileName\n"));
+    LogStartUp(_T("CRITIC- gmfbasename returned null GetModuleFileName\n"));
     return(_T("ERROR_04") );
   }
   if (gmfbasename_buffer[0] != '\\' ) {
-    StartupStore(_T("CRITIC- gmfbasename starting without a leading backslash\n"));
+    LogStartUp(_T("CRITIC- gmfbasename starting without a leading backslash\n"));
     return(_T("ERROR_05"));
   }
   for (p=gmfbasename_buffer+1, lp=NULL; *p != '\0'; p++)
@@ -424,11 +424,11 @@ int GetGlobalModelName ()
   _tcscpy(GlobalModelName, _T(""));
 
   if (GetModuleFileName(NULL, modelname_buffer, MAXPATHBASENAME) <= 0) {
-    StartupStore(_T("CRITIC- GetGlobalFileName returned NULL\n"));
+    LogStartUp(_T("CRITIC- GetGlobalFileName returned NULL\n"));
     return 0;
   }
   if (modelname_buffer[0] != '\\' ) {
-    StartupStore(_T("CRITIC- GetGlobalFileName starting without a leading backslash\n"));
+    LogStartUp(_T("CRITIC- GetGlobalFileName starting without a leading backslash\n"));
     return 0;
   }
   for (p=modelname_buffer+1, lp=NULL; *p != '\0'; p++)
@@ -758,7 +758,7 @@ void StartupLogFreeRamAndStorage() {
   TCHAR buffer[MAX_PATH];
   LocalPath(buffer);
   int freestorage = FindFreeSpace(buffer);
-  StartupStore(_T("Free ram %d\nFree storage %d\n"), freeram, freestorage);
+  LogStartUp(_T("Free ram %d\nFree storage %d\n"), freeram, freestorage);
 }
 
 

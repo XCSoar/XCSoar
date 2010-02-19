@@ -384,7 +384,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   _tcsncpy(szMessage, _T("Logger Started: "), MAX_PATH);
   _tcsncat(szMessage, szLoggerFileName, MAX_PATH);
   _tcsncat(szMessage, _T("\r\n"), MAX_PATH);
-  StartupStore(szMessage);
+  LogStartUp(szMessage);
 
   return;
 }
@@ -793,10 +793,10 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
     }
   }
   if (kbfree >= LOGGER_MINFREESTORAGE) {
-    StartupStore(_T("LoggerFreeSpace returned: true\r\n"));
+    LogStartUp(_T("LoggerFreeSpace returned: true\r\n"));
     return true;
   } else {
-    StartupStore(_T("LoggerFreeSpace returned: false\r\n"));
+    LogStartUp(_T("LoggerFreeSpace returned: false\r\n"));
     return false;
   }
 }
@@ -854,7 +854,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
     } else {
       MessageBoxX(gettext(_T("Logger inactive, insufficient storage!")),
                   gettext(_T("Logger Error")), MB_OK| MB_ICONERROR);
-      StartupStore(_T("Logger not started: Insufficient Storage\r\n"));
+      LogStartUp(_T("Logger not started: Insufficient Storage\r\n"));
     }
   }
 }

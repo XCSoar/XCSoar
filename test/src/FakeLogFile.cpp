@@ -41,7 +41,7 @@ Copyright_License {
 #include <cstdio>
 
 void
-StartupStore(const TCHAR *fmt, ...)
+LogStartUp(const TCHAR *fmt, ...)
 {
   va_list ap;
 

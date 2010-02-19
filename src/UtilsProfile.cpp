@@ -161,7 +161,7 @@ TCHAR failsafeProfileFile[MAX_PATH];
 void
 Profile::RestoreRegistry(void)
 {
-  StartupStore(TEXT("Restore registry\n"));
+  LogStartUp(TEXT("Restore registry\n"));
   // load registry backup if it exists
   LoadRegistryFromFile(failsafeProfileFile);
   LoadRegistryFromFile(startProfileFile);
@@ -170,7 +170,7 @@ Profile::RestoreRegistry(void)
 void
 Profile::StoreRegistry(void)
 {
-  StartupStore(TEXT("Store registry\n"));
+  LogStartUp(TEXT("Store registry\n"));
   // save registry backup first (try a few places)
   SaveRegistryToFile(startProfileFile);
   SaveRegistryToFile(defaultProfileFile);

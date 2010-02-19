@@ -1391,7 +1391,7 @@ InputEvents::eventDLLExecute(const TCHAR *misc)
   #ifdef WIN32
   // LoadLibrary(TEXT("test.dll"));
 
-  StartupStore(TEXT("%s\n"), misc);
+  LogStartUp(TEXT("%s\n"), misc);
 
   TCHAR data[MAX_PATH];
   TCHAR* dll_name;

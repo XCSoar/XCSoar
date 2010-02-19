@@ -257,10 +257,10 @@ LoggerImpl::LinkGRecordDLL()
   if ((GRecordDLLHandle == NULL) && bFirstTime) {
     bFirstTime = false;
 
-    StartupStore(TEXT("Searching for GRecordDLL\n"));
+    LogStartUp(TEXT("Searching for GRecordDLL\n"));
     if (is_altair()) {
       if (FileExists(TEXT("\\NOR Flash\\GRecordDLL.dat"))) {
-        StartupStore(TEXT("Updating GRecordDLL.DLL\n"));
+        LogStartUp(TEXT("Updating GRecordDLL.DLL\n"));
         DeleteFile(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
         MoveFile(TEXT("\\NOR Flash\\GRecordDLL.dat"),
             TEXT("\\NOR Flash\\GRecordDLL.DLL"));
@@ -361,7 +361,7 @@ LoggerImpl::LinkGRecordDLL()
       _tcscpy(szLoadResults, TEXT("Can't load GRecordDLL\n"));
     }
 
-    StartupStore(szLoadResults);
+    LogStartUp(szLoadResults);
   }
 #endif
 }

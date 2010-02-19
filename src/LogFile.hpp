@@ -53,6 +53,6 @@ void DebugStore(const char *Str, ...);
 
 #endif /* NDEBUG */
 
-void StartupStore(const TCHAR *Str, ...);
+void LogStartUp(const TCHAR *Str, ...);
 
 #endif

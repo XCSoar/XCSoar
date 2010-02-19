@@ -89,7 +89,7 @@ void BlankDisplay(bool doblank) {
  		BatteryInfo.BatteryCurrent, BatteryInfo.BatteryAverageCurrent,
  		BatteryInfo.BatterymAHourConsumed,
 		BatteryInfo.BatteryTemperature, BatteryInfo.BatteryLifeTime, BatteryInfo.BatteryFullLifeTime);
-	StartupStore( vtemp );
+	LogStartUp( vtemp );
  */
   }
 
@@ -129,7 +129,7 @@ void BlankDisplay(bool doblank) {
 
       if (BatteryInfo.acStatus==0) {
         if (is_simulator() && (PDABatteryPercent < BATTERY_EXIT)) {
-          StartupStore(TEXT("Battery low exit...\n"));
+          LogStartUp(TEXT("Battery low exit...\n"));
           // TODO feature: Warning message on battery shutdown
           XCSoarInterface::SignalShutdown(true);
         } else {

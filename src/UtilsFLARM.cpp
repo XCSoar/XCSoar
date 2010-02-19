@@ -77,7 +77,7 @@ CloseFLARMDetails()
 void
 OpenFLARMDetails()
 {
-  StartupStore(TEXT("OpenFLARMDetails\n"));
+  LogStartUp(TEXT("OpenFLARMDetails\n"));
 
   // if (FLARM Details already there) delete them;
   if (NumberOfFLARMNames)
@@ -106,7 +106,7 @@ OpenFLARMDetails()
   LocalPath(filename, _T("data.fln"));
   unsigned num_records = flarm_net.LoadFile(filename);
   if (num_records > 0)
-    StartupStore(_T("%u FLARMnet ids found\n"), num_records);
+    LogStartUp(_T("%u FLARMnet ids found\n"), num_records);
 }
 
 /**

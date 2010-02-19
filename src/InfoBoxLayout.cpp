@@ -221,7 +221,7 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
   unsigned Temp = 0;
   GetFromRegistry(szRegistryInfoBoxGeom, Temp);
   if (InfoBoxGeometry != Temp) {
-    StartupStore(_T("Geometry was changed in config, applying\n"));
+    LogStartUp(_T("Geometry was changed in config, applying\n"));
     InfoBoxGeometry=Temp;
   }
 #endif

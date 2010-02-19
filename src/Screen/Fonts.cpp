@@ -205,7 +205,7 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc,
   if (ScreenSize==0) {
     _stprintf(tbuf, _T("--- ERROR UNKNOWN RESOLUTION %dx%d !\r\n"),
               iWidth, iHeight);
-	StartupStore(tbuf);
+	LogStartUp(tbuf);
   }
 
   if (is_pna()) {

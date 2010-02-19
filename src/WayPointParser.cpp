@@ -85,7 +85,7 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
         SETTINGS_COMPUTER &settings,
         const bool reset, const bool set_location)
 {
-  StartupStore(TEXT("SetHome\n"));
+  LogStartUp(TEXT("SetHome\n"));
 
   // check invalid home waypoint or forced reset due to file change
   if (reset || way_points.empty() ||
@@ -115,13 +115,13 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
   if (set_location) {
     if (const Waypoint *wp = way_points.lookup_id(settings.HomeWaypoint)) {
       // OK, passed all checks now
-      StartupStore(TEXT("Start at home waypoint\n"));
+      LogStartUp(TEXT("Start at home waypoint\n"));
       device_blackboard.SetStartupLocation(wp->Location, wp->Altitude);
     } else if (terrain != NULL) {
       // no home at all, so set it from center of terrain if available
       GEOPOINT loc;
       if (terrain->GetTerrainCenter(&loc)) {
-        StartupStore(TEXT("Start at terrain center\n"));
+        LogStartUp(TEXT("Start at terrain center\n"));
         device_blackboard.SetStartupLocation(loc, 0);
       }
     }
@@ -143,7 +143,7 @@ bool
 WayPointParser::ReadWaypoints(Waypoints &way_points,
                               const RasterTerrain *terrain)
 {
-  StartupStore(TEXT("ReadWaypoints\n"));
+  LogStartUp(TEXT("ReadWaypoints\n"));
 
   bool found = false;
   TCHAR szFile[MAX_PATH];
@@ -182,10 +182,10 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
       // Set waypoints writable flag
       way_points.set_file0_writable(wp_file0->IsWritable());
     } else {
-      StartupStore(TEXT("Parse error in waypoint file 1\n"));
+      LogStartUp(TEXT("Parse error in waypoint file 1\n"));
     }
   } else {
-    StartupStore(TEXT("No waypoint file 1\n"));
+    LogStartUp(TEXT("No waypoint file 1\n"));
   }
 
   // ### SECOND FILE ###
@@ -204,10 +204,10 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
       SetRegistryString(szRegistryAdditionalWayPointFile, szFile);
       found = true;
     } else {
-      StartupStore(TEXT("Parse error in waypoint file 2\n"));
+      LogStartUp(TEXT("Parse error in waypoint file 2\n"));
     }
   } else {
-    StartupStore(TEXT("No waypoint file 2\n"));
+    LogStartUp(TEXT("No waypoint file 2\n"));
   }
 
   // ### MAP/THIRD FILE ###
@@ -227,10 +227,10 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
       if (wp_file2->Parse(way_points, terrain)) {
         found = true;
       } else {
-        StartupStore(TEXT("Parse error in map waypoint file\n"));
+        LogStartUp(TEXT("Parse error in map waypoint file\n"));
       }
     } else {
-      StartupStore(TEXT("No waypoint file in the map file\n"));
+      LogStartUp(TEXT("No waypoint file in the map file\n"));
     }
   }
 
@@ -245,23 +245,23 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
 void
 WayPointParser::SaveWaypoints(Waypoints &way_points)
 {
-  StartupStore(TEXT("SaveWaypoints\n"));
+  LogStartUp(TEXT("SaveWaypoints\n"));
 
   // ### FIRST FILE ###
   if (wp_file0) {
     if (!wp_file0->Save(way_points)) {
-      StartupStore(TEXT("Save error in waypoint file 1\n"));
+      LogStartUp(TEXT("Save error in waypoint file 1\n"));
     } else {
-      StartupStore(TEXT("Waypoint file 1 can not be written\n"));
+      LogStartUp(TEXT("Waypoint file 1 can not be written\n"));
     }
   }
 
   // ### SECOND FILE ###
   if (wp_file1) {
     if (!wp_file1->Save(way_points)) {
-      StartupStore(TEXT("Save error in waypoint file 2\n"));
+      LogStartUp(TEXT("Save error in waypoint file 2\n"));
     } else {
-      StartupStore(TEXT("Waypoint file 2 can not be written\n"));
+      LogStartUp(TEXT("Waypoint file 2 can not be written\n"));
     }
   }
 }

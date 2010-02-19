@@ -156,7 +156,7 @@ const TCHAR* gettext(const TCHAR* text) {
  * Reads the selected LanguageFile into the cache
  */
 void ReadLanguageFile() {
-  StartupStore(TEXT("Loading language file\n"));
+  LogStartUp(TEXT("Loading language file\n"));
 
   TCHAR szFile1[MAX_PATH];
   FILE *fp=NULL;

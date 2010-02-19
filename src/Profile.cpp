@@ -123,7 +123,7 @@ Profile::ReadRegistrySettings()
   DWORD Temp = 0;
   int i;
 
-  StartupStore(TEXT("Read registry settings\n"));
+  LogStartUp(TEXT("Read registry settings\n"));
 
   if (is_altair())
     DefaultRegistrySettingsAltair();
@@ -501,22 +501,22 @@ Profile::ReadRegistrySettings()
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
     // key transcoding for this one
-    StartupStore(TEXT("Loading HP31X settings\n"));
+    LogStartUp(TEXT("Loading HP31X settings\n"));
   } else if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
-    StartupStore(TEXT("Loading PN6000 settings\n"));
+    LogStartUp(TEXT("Loading PN6000 settings\n"));
     // key transcoding for this one
   } else if (GlobalModelType == MODELTYPE_PNA_MIO ) {
-    StartupStore(TEXT("Loading MIO settings\n"));
+    LogStartUp(TEXT("Loading MIO settings\n"));
     // currently no special settings from MIO but need to handle hw keys
   } else if (GlobalModelType == MODELTYPE_PNA_NOKIA_500 ) {
-    StartupStore(TEXT("Loading Nokia500 settings\n"));
+    LogStartUp(TEXT("Loading Nokia500 settings\n"));
     // key transcoding is made
   } else if (GlobalModelType == MODELTYPE_PNA_MEDION_P5 ) {
-    StartupStore(TEXT("Loading Medion settings\n"));
+    LogStartUp(TEXT("Loading Medion settings\n"));
   } else if (GlobalModelType == MODELTYPE_PNA_PNA ) {
-    StartupStore(TEXT("Loading default PNA settings\n"));
+    LogStartUp(TEXT("Loading default PNA settings\n"));
   } else {
-    StartupStore(TEXT("No special regsets for this PDA\n")); // VENTA2
+    LogStartUp(TEXT("No special regsets for this PDA\n")); // VENTA2
   }
 
   // VENTA-ADDON Model change
@@ -694,7 +694,7 @@ Profile::SaveWindToRegistry()
 void
 Profile::LoadWindFromRegistry()
 {
-  StartupStore(TEXT("Load wind from registry\n"));
+  LogStartUp(TEXT("Load wind from registry\n"));
 
   /* JMW incomplete
   DWORD Temp;

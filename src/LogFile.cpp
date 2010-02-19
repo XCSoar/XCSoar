@@ -88,7 +88,7 @@ DebugStore(const char *Str, ...)
  * @param Str String to be logged
  */
 void
-StartupStore(const TCHAR *Str, ...)
+LogStartUp(const TCHAR *Str, ...)
 {
   TCHAR buf[MAX_PATH];
   va_list ap;

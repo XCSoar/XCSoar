@@ -209,21 +209,21 @@ XCSoarInterface::AfterStartup()
 
   first = false;
 
-  StartupStore(TEXT("ProgramStarted=3\n"));
+  LogStartUp(TEXT("ProgramStarted=3\n"));
   StartupLogFreeRamAndStorage();
 
   status_messages.Startup(true);
 
   if (is_simulator()) {
-    StartupStore(TEXT("GCE_STARTUP_SIMULATOR\n"));
+    LogStartUp(TEXT("GCE_STARTUP_SIMULATOR\n"));
     InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
   } else {
-    StartupStore(TEXT("GCE_STARTUP_REAL\n"));
+    LogStartUp(TEXT("GCE_STARTUP_REAL\n"));
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
   // Create default task if none exists
-  StartupStore(TEXT("Create default task\n"));
+  LogStartUp(TEXT("Create default task\n"));
   task_manager.default_task(Basic().Location);
 
 #ifndef OLD_TASK
@@ -232,7 +232,7 @@ XCSoarInterface::AfterStartup()
 
   task_manager.resume();
 
-  StartupStore(TEXT("CloseProgressDialog\n"));
+  LogStartUp(TEXT("CloseProgressDialog\n"));
   CloseProgressDialog();
 
   main_window.full_screen();
@@ -285,7 +285,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   SendSettingsMap();
 
   // Creates the main window
-  StartupStore(TEXT("Create main window\n"));
+  LogStartUp(TEXT("Create main window\n"));
   RECT WindowSize = SystemWindowSize();
   main_window.set(szTitle,
                   WindowSize.left, WindowSize.top,
@@ -302,7 +302,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   topology = new TopologyStore(marks->GetTopology());
 
   // Show the main and map windows
-  StartupStore(TEXT("Create map window\n"));
+  LogStartUp(TEXT("Create map window\n"));
   main_window.show();
   main_window.map.show();
 
@@ -345,7 +345,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   // Read the terrain file
   CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
   SetProgressStepSize(2);
-  StartupStore(TEXT("OpenTerrain\n"));
+  LogStartUp(TEXT("OpenTerrain\n"));
   terrain.OpenTerrain();
 
   // Read the waypoint files
@@ -365,7 +365,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 
   // Scan for weather forecast
   CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
-  StartupStore(TEXT("RASP load\n"));
+  LogStartUp(TEXT("RASP load\n"));
   RASP.ScanAll(Basic().Location);
 
   // Reads the airspace files
@@ -394,7 +394,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 
 /*
   -- Reset polar in case devices need the data
-  StartupStore(TEXT("GlidePolar::UpdatePolar\n"));
+  LogStartUp(TEXT("GlidePolar::UpdatePolar\n"));
   GlidePolar::UpdatePolar(true, SettingsComputer());
 
   This should be done inside devStartup if it is really required
@@ -414,26 +414,26 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   // Finally ready to go.. all structures must be present before this.
 
   // Create the drawing thread
-  StartupStore(TEXT("CreateDrawingThread\n"));
+  LogStartUp(TEXT("CreateDrawingThread\n"));
   draw_thread = new DrawThread(main_window.map, main_window.flarm);
   draw_thread->start();
 
   // Show the infoboxes
-  StartupStore(TEXT("ShowInfoBoxes\n"));
+  LogStartUp(TEXT("ShowInfoBoxes\n"));
   InfoBoxManager::Show();
 
   // Create the calculation thread
-  StartupStore(TEXT("CreateCalculationThread\n"));
+  LogStartUp(TEXT("CreateCalculationThread\n"));
   CreateCalculationThread();
 
   // Initialise the airspace warning dialog
-  StartupStore(TEXT("dlgAirspaceWarningInit\n"));
+  LogStartUp(TEXT("dlgAirspaceWarningInit\n"));
   dlgAirspaceWarningInit(main_window);
 
   // Find unique ID of this PDA
   ReadAssetNumber();
 
-  StartupStore(TEXT("ProgramStarted\n"));
+  LogStartUp(TEXT("ProgramStarted\n"));
 
   // Give focus to the map
   main_window.map.set_focus();
@@ -457,7 +457,7 @@ XCSoarInterface::Shutdown(void)
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
   StartHourglassCursor();
 
-  StartupStore(TEXT("Entering shutdown...\n"));
+  LogStartUp(TEXT("Entering shutdown...\n"));
   StartupLogFreeRamAndStorage();
 
   // turn off all displays
@@ -473,7 +473,7 @@ XCSoarInterface::Shutdown(void)
 
   // Stop sound
 
-  StartupStore(TEXT("SaveSoundSettings\n"));
+  LogStartUp(TEXT("SaveSoundSettings\n"));
   Profile::SaveSoundSettings();
 
 #ifndef DISABLEAUDIOVARIO
@@ -484,48 +484,48 @@ XCSoarInterface::Shutdown(void)
   // Stop drawing
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 
-  StartupStore(TEXT("CloseDrawingThread\n"));
+  LogStartUp(TEXT("CloseDrawingThread\n"));
   closeTriggerEvent.trigger();
 
   calculation_thread->join();
-  StartupStore(TEXT("- calculation thread returned\n"));
+  LogStartUp(TEXT("- calculation thread returned\n"));
 
   instrument_thread->join();
-  StartupStore(TEXT("- instrument thread returned\n"));
+  LogStartUp(TEXT("- instrument thread returned\n"));
 
   draw_thread->join();
-  StartupStore(TEXT("- draw thread returned\n"));
+  LogStartUp(TEXT("- draw thread returned\n"));
 
   delete draw_thread;
 
   // Clear data
 
-  StartupStore(TEXT("dlgAirspaceWarningDeInit\n"));
+  LogStartUp(TEXT("dlgAirspaceWarningDeInit\n"));
   dlgAirspaceWarningDeInit();
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
 
-  StartupStore(TEXT("Resume abort task\n"));
+  LogStartUp(TEXT("Resume abort task\n"));
   task_manager.resume();
 
 #ifdef OLD_TASK
-  StartupStore(TEXT("Save default task\n"));
+  LogStartUp(TEXT("Save default task\n"));
   task_manager.save_default();
 #endif
 
-  StartupStore(TEXT("Close airspace\n"));
+  LogStartUp(TEXT("Close airspace\n"));
   CloseAirspace(airspace_database, airspace_warning);
 
-  StartupStore(TEXT("Close waypoints\n"));
+  LogStartUp(TEXT("Close waypoints\n"));
   way_points.clear();
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 
-  StartupStore(TEXT("CloseTerrainTopology\n"));
+  LogStartUp(TEXT("CloseTerrainTopology\n"));
 
   RASP.Close();
 
-  StartupStore(TEXT("CloseTerrain\n"));
+  LogStartUp(TEXT("CloseTerrain\n"));
   terrain.CloseTerrain();
 
   delete topology;
@@ -539,7 +539,7 @@ XCSoarInterface::Shutdown(void)
 #endif
 
   if (is_altair()) {
-    StartupStore(TEXT("Altair shutdown\n"));
+    LogStartUp(TEXT("Altair shutdown\n"));
     Sleep(2500);
     StopHourglassCursor();
     InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
@@ -551,32 +551,32 @@ XCSoarInterface::Shutdown(void)
 
   // Kill windows
 
-  StartupStore(TEXT("Destroy Info Boxes\n"));
+  LogStartUp(TEXT("Destroy Info Boxes\n"));
   InfoBoxManager::Destroy();
 
-  StartupStore(TEXT("Destroy Button Labels\n"));
+  LogStartUp(TEXT("Destroy Button Labels\n"));
   ButtonLabel::Destroy();
 
   // Kill graphics objects
-  StartupStore(TEXT("Delete Objects\n"));
+  LogStartUp(TEXT("Delete Objects\n"));
   DeleteFonts();
 
-  StartupStore(TEXT("Close Progress Dialog\n"));
+  LogStartUp(TEXT("Close Progress Dialog\n"));
   CloseProgressDialog();
 
   CloseGeoid();
 
-  StartupStore(TEXT("Close Windows - main \n"));
+  LogStartUp(TEXT("Close Windows - main \n"));
   main_window.reset();
-  StartupStore(TEXT("Close Graphics\n"));
+  LogStartUp(TEXT("Close Graphics\n"));
   MapGfx.Destroy();
 
 #ifdef DEBUG_TRANSLATIONS
-  StartupStore(TEXT("Writing missing translations\n"));
+  LogStartUp(TEXT("Writing missing translations\n"));
   WriteMissingTranslations();
 #endif
 
   StartupLogFreeRamAndStorage();
-  StartupStore(TEXT("Finished shutdown\n"));
+  LogStartUp(TEXT("Finished shutdown\n"));
   StopHourglassCursor();
 }
