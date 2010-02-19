@@ -47,6 +47,21 @@ Copyright_License {
 
 static Mutex mutexLogFile;
 
+void
+LogToFile(const TCHAR *file, const bool attach, const TCHAR *str)
+{
+  mutexLogFile.Lock();
+
+  FILE *stream = NULL;
+  stream = _tfopen(file, (attach ? _T("ab+") : _T("wb")));
+  if (stream != NULL) {
+    fprintf(stream, "%S", str);
+    fclose(stream);
+  }
+
+  mutexLogFile.Unlock();
+}
+
 #if !defined(NDEBUG) && !defined(GNAV)
 /**
  * Saves the given string (Str) to the debug logfile
@@ -65,16 +80,7 @@ LogDebug(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
-  mutexLogFile.Lock();
-
-  FILE *stream = NULL;
-  stream = _tfopen(szFileName, (initialised ? _T("ab+") : _T("wb")));
-  if (stream != NULL) {
-    fprintf(stream, "%S", buf);
-    fclose(stream);
-  }
-
-  mutexLogFile.Unlock();
+  LogToFile(szFileName, initialised, buf);
 
   if (!initialised)
     initialised = true;
@@ -105,16 +111,7 @@ LogStartUp(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
-  mutexLogFile.Lock();
-
-  FILE *stream = NULL;
-  stream = _tfopen(szFileName, (initialised ? _T("ab+") : _T("wb")));
-  if (stream != NULL) {
-    fprintf(stream, "%S", buf);
-    fclose(stream);
-  }
-
-  mutexLogFile.Unlock();
+  LogToFile(szFileName, initialised, buf);
 
   if (!initialised)
     initialised = true;
