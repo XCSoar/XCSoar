@@ -87,6 +87,16 @@ LogDebug(const char *Str, ...)
 void
 LogStartUp(const TCHAR *Str, ...)
 {
+  static bool initialised = false;
+  static TCHAR szFileName[MAX_PATH];
+
+  if (!initialised) {
+    if (is_altair())
+      LocalPath(szFileName, _T("persist/xcsoar-startup.log"));
+    else
+      LocalPath(szFileName, _T("xcsoar-startup.log"));
+  }
+
   TCHAR buf[MAX_PATH];
   va_list ap;
 
@@ -96,29 +106,15 @@ LogStartUp(const TCHAR *Str, ...)
 
   mutexLogFile.Lock();
 
-  FILE *startupStoreFile = NULL;
-  static TCHAR szFileName[MAX_PATH];
-
-  static bool initialised = false;
-  if (!initialised) {
-    if (is_altair())
-      LocalPath(szFileName, _T("persist/xcsoar-startup.log"));
-    else
-      LocalPath(szFileName, _T("xcsoar-startup.log"));
-
-    startupStoreFile = _tfopen(szFileName, _T("wb"));
-    if (startupStoreFile) {
-      fclose(startupStoreFile);
-    }
-
-    initialised = true;
-  }
-
-  startupStoreFile = _tfopen(szFileName, _T("ab+"));
-  if (startupStoreFile != NULL) {
-    fprintf(startupStoreFile, "%S", buf);
-    fclose(startupStoreFile);
+  FILE *stream = NULL;
+  stream = _tfopen(szFileName, (initialised ? _T("ab+") : _T("wb")));
+  if (stream != NULL) {
+    fprintf(stream, "%S", buf);
+    fclose(stream);
   }
 
   mutexLogFile.Unlock();
+
+  if (!initialised)
+    initialised = true;
 }
