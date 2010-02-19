@@ -43,7 +43,7 @@ Copyright_License {
 #define GIT_COMMIT_ID
 #endif
 
-#define VERSION "6.0~git" GIT_COMMIT_ID
+#define VERSION "6.0"
 
 #ifdef GNAV
   #define TARGET "Altair"
@@ -64,8 +64,10 @@ Copyright_License {
   #define VERSION_SUFFIX ""
 #endif
 
+#define GIT_SUFFIX "~git#" GIT_COMMIT_ID
+
 const TCHAR XCSoar_Version[] = _T(VERSION);
 const TCHAR XCSoar_VersionLong[] = _T(VERSION VERSION_SUFFIX);
 const TCHAR XCSoar_VersionString[] = _T(VERSION VERSION_SUFFIX "-" TARGET);
 const TCHAR XCSoar_VersionStringOld[] = _T(TARGET " " VERSION VERSION_SUFFIX " " __DATE__);
-const TCHAR XCSoar_ProductToken[] = _T("XCSoar v" VERSION VERSION_SUFFIX "-" TARGET);
+const TCHAR XCSoar_ProductToken[] = _T("XCSoar v" VERSION VERSION_SUFFIX "-" TARGET GIT_SUFFIX);
