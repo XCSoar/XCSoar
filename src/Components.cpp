@@ -95,23 +95,25 @@ Marks *marks;
 TopologyStore *topology;
 RasterTerrain terrain;
 RasterWeather RASP;
+
 DrawThread *draw_thread;
 CalculationThread *calculation_thread;
 InstrumentThread *instrument_thread;
-Logger logger; // global
+
+Logger logger;
 ReplayLoggerGlue replay;
 
 Waypoints way_points;
+
 TaskBehaviour task_behaviour;
 GlideComputerTaskEvents task_events;
-
 TaskManager task_manager(task_events,
                          task_behaviour,
                          way_points);
 
-Airspaces airspace_database;
+AIRCRAFT_STATE ac_state;
 
-AIRCRAFT_STATE ac_state; // dummy
+Airspaces airspace_database;
 
 AirspaceWarningManager airspace_warning(airspace_database,
                                         ac_state,
@@ -121,8 +123,9 @@ GlideComputer glide_computer(task_manager,
                              airspace_warning,
                              airspace_database);
 
-void test_task() {
-
+void
+test_task()
+{
   GlidePolar glide_polar = task_manager.get_glide_polar();
   glide_polar.set_mc(fixed_two);
   task_manager.set_glide_polar(glide_polar);
@@ -136,42 +139,39 @@ void test_task() {
 
   wp = way_points.lookup_name(_T("BENALLA"));
   if (wp) {
-    tp = fact->createStart(AbstractTaskFactory::START_LINE,*wp);
-    fact->append(tp,false);
+    tp = fact->createStart(AbstractTaskFactory::START_LINE, *wp);
+    fact->append(tp, false);
   }
 
   wp = way_points.lookup_name(_T("Goorambat"));
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
-    fact->append(tp,false);
+    tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER, *wp);
+    fact->append(tp, false);
   }
 
   wp = way_points.lookup_name(_T("Glenrowan"));
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
-    fact->append(tp,false);
+    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
+    fact->append(tp, false);
   }
 
   wp = way_points.lookup_name(_T("BENALLA"));
   if (wp) {
-    tp = fact->createFinish(AbstractTaskFactory::FINISH_LINE,*wp);
-    fact->append(tp,false);
+    tp = fact->createFinish(AbstractTaskFactory::FINISH_LINE, *wp);
+    fact->append(tp, false);
   }
 
   task_manager.setActiveTaskPoint(0);
   task_manager.resume();
-
 }
 
-
-
-
-void XCSoarInterface::PreloadInitialisation(bool ask) {
-  if (ask) {
-    #ifdef PNA
-      CleanRegistry(); // VENTA2-FIX for PNA we can't delete all registries..by now
-    #endif
-  }
+void
+XCSoarInterface::PreloadInitialisation(bool ask)
+{
+#ifdef PNA
+  if (ask)
+    CleanRegistry();
+#endif
 
   SetToRegistry(TEXT("XCV"), 1);
 
@@ -179,23 +179,18 @@ void XCSoarInterface::PreloadInitialisation(bool ask) {
   ReadLanguageFile();
 #endif
 
-  // Registry (early)
-
   if (ask) {
     Profile::RestoreRegistry();
     Profile::ReadRegistrySettings();
-
-    // CreateProgressDialog(gettext(TEXT("Initialising")));
-
   } else {
     dlgStartupShowModal();
+
     Profile::RestoreRegistry();
     Profile::ReadRegistrySettings();
 
     CreateProgressDialog(gettext(TEXT("Initialising")));
   }
 
-  // Interface (before interface)
   if (!ask) {
 #ifndef DEBUG_TRANSLATIONS
     ReadLanguageFile();
@@ -203,15 +198,15 @@ void XCSoarInterface::PreloadInitialisation(bool ask) {
     status_messages.LoadFile();
     InputEvents::readFile();
   }
-
 }
 
-
-void XCSoarInterface::AfterStartup() {
+void
+XCSoarInterface::AfterStartup()
+{
   static bool first = true;
-  if (!first) {
+  if (!first)
     return;
-  }
+
   first = false;
 
   StartupStore(TEXT("ProgramStarted=3\n"));
@@ -249,7 +244,6 @@ void XCSoarInterface::AfterStartup() {
   InputEvents::showErrors();
 #endif
 }
-
 
 /**
  * "Boots" up XCSoar
@@ -294,12 +288,11 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   StartupStore(TEXT("Create main window\n"));
   RECT WindowSize = SystemWindowSize();
   main_window.set(szTitle,
-		  WindowSize.left, WindowSize.top,
-		  WindowSize.right, WindowSize.bottom);
+                  WindowSize.left, WindowSize.top,
+                  WindowSize.right, WindowSize.bottom);
 
-  if (!main_window.defined()) {
+  if (!main_window.defined())
     return false;
-  }
 
   // Initialize DeviceBlackboard
   device_blackboard.Initialise();
@@ -331,7 +324,9 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   task_manager.reset();
 
   glide_computer.Initialise();
-  logger.LinkGRecordDLL(); // try to link DLL if it exists
+
+  // try to link DLL if it exists
+  logger.LinkGRecordDLL();
 
   // Load the EGM96 geoid data
   OpenGeoid();
@@ -340,11 +335,9 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 
   Profile::LoadWindFromRegistry();
 
-  // TODO TB: seems to be out of date?!
   GlidePolar gp = task_manager.get_glide_polar();
-  if (LoadPolarById(SettingsComputer(), gp)) {
+  if (LoadPolarById(SettingsComputer(), gp))
     task_manager.set_glide_polar(gp);
-  }
 
   // Read the topology file(s)
   topology->Open();
@@ -405,7 +398,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   GlidePolar::UpdatePolar(true, SettingsComputer());
 
   This should be done inside devStartup if it is really required
-
 */
 
   CreateProgressDialog(gettext(TEXT("Initialising display")));
@@ -459,8 +451,9 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   return true;
 }
 
-
-void XCSoarInterface::Shutdown(void) {
+void
+XCSoarInterface::Shutdown(void)
+{
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
   StartHourglassCursor();
 
@@ -472,7 +465,7 @@ void XCSoarInterface::Shutdown(void) {
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving logs...")));
   // stop logger
-  logger.guiStopLogger(Basic(),true);
+  logger.guiStopLogger(Basic(), true);
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving profile...")));
   // Save settings
@@ -540,7 +533,7 @@ void XCSoarInterface::Shutdown(void) {
 
   devShutdown();
 
-  SaveCalculationsPersist(Basic(),Calculated());
+  SaveCalculationsPersist(Basic(), Calculated());
 #if (EXPERIMENTAL > 0)
   //  CalibrationSave();
 #endif
@@ -550,9 +543,8 @@ void XCSoarInterface::Shutdown(void) {
     Sleep(2500);
     StopHourglassCursor();
     InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
-    while(1) {
+    while (true)
       Sleep(100); // free time up for processor to perform shutdown
-    }
   }
 
   CloseFLARMDetails();
@@ -565,14 +557,11 @@ void XCSoarInterface::Shutdown(void) {
   StartupStore(TEXT("Destroy Button Labels\n"));
   ButtonLabel::Destroy();
 
-  StartupStore(TEXT("Delete Objects\n"));
-
   // Kill graphics objects
-
+  StartupStore(TEXT("Delete Objects\n"));
   DeleteFonts();
 
   StartupStore(TEXT("Close Progress Dialog\n"));
-
   CloseProgressDialog();
 
   CloseGeoid();
@@ -590,7 +579,4 @@ void XCSoarInterface::Shutdown(void) {
   StartupLogFreeRamAndStorage();
   StartupStore(TEXT("Finished shutdown\n"));
   StopHourglassCursor();
-
 }
-
-

@@ -61,7 +61,6 @@ extern AirspaceWarningManager airspace_warning;
 extern TaskManager task_manager;
 extern TaskBehaviour task_behaviour;
 extern ReplayLoggerGlue replay;
-
 extern Marks *marks;
 extern TopologyStore *topology;
 extern RasterTerrain terrain;
@@ -70,6 +69,5 @@ extern GlideComputer glide_computer;
 extern DrawThread *draw_thread;
 extern CalculationThread *calculation_thread;
 extern InstrumentThread *instrument_thread;
-
 
 #endif
