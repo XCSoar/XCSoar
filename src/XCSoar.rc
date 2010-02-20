@@ -298,21 +298,6 @@ IDR_XML_COMBOPICKER     XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgComboPicker.
 
 IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "Bitmaps/egm96s.dem"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
-
-STRINGTABLE DISCARDABLE
-BEGIN
-    IDS_CONNECTWAIT         "testing testing testing"
-END
-
-STRINGTABLE DISCARDABLE
-BEGIN
-    IDS_LOCKWAIT            "Waiting for Valid GPS Fix"
-END
-
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -371,128 +356,6 @@ IDB_UNIT_FPM            BITMAP  DISCARDABLE     "Bitmaps/UnitFeetPerMinute.bmp"
 IDB_UNIT_KMH            BITMAP  DISCARDABLE     "Bitmaps/UnitKMH.bmp"
 IDB_UNIT_MPH            BITMAP  DISCARDABLE     "Bitmaps/UnitMPH.bmp"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Menubar
-//
-
-IDM_MENU MENU DISCARDABLE
-BEGIN
-    POPUP "Menu"
-    BEGIN
-        POPUP "File"
-        BEGIN
-            MENUITEM "&About",                      IDM_FILE_ABOUT
-            MENUITEM "&Register",                   IDM_FILE_REGISTER
-            MENUITEM "&Lock",                       IDM_FILE_LOCK
-            MENUITEM "Logger",                      IDM_FILE_LOGGER
-            POPUP "&Profile"
-            BEGIN
-                MENUITEM "&Load",                       IDM_FILE_PROFILE_LOAD
-
-                MENUITEM "&Save",                       IDM_FILE_PROFILE_SAVE
-
-            END
-            MENUITEM "&Exit",                       IDM_FILE_EXIT
-        END
-        MENUITEM "Bugs + Ballast",              IDM_BUGSBALLAST
-        MENUITEM "Pressure",                    IDM_PRESSURE
-        POPUP "Task"
-        BEGIN
-            MENUITEM "Task",                        IDM_TASK_TASK
-            MENUITEM "AAT",                         IDM_TASK_ASSIGNEDAREA
-        END
-        POPUP "Settings"
-        BEGIN
-            POPUP "Airspace"
-            BEGIN
-                MENUITEM "Display",                     IDM_SETTINGS_AIRSPACE_DISPLAY
-
-                MENUITEM "Colours",                     IDM_SETTINGS_AIRSPACE_COLOUR
-
-                MENUITEM "Warnings",                    IDM_SETTINGS_AIRSPACE_WARNINGS
-
-            END
-            MENUITEM "COM Port",                    IDM_SETTINGS_COMM
-            MENUITEM "&Display",                    IDM_SETTINGS_DISPLAY
-            POPUP "&Files"
-            BEGIN
-                MENUITEM "&Airspace",                   IDM_SETTINGS_FILES_AIRSPACE
-
-                MENUITEM "Terrain",                     IDM_SETTINGS_FILES_TERRAIN
-
-                MENUITEM "&Waypoints",                  IDM_SETTINGS_FILES_WAYPOINTS
-
-            END
-            MENUITEM "&Final Glide",                IDM_SETTINGS_FGLIDE
-            MENUITEM "&Polar",                      IDM_SETTINGS_POLAR
-            POPUP "&Task"
-            BEGIN
-                MENUITEM "&Start Line",                 IDM_SETTINGS_TASK_START
-
-                MENUITEM "&Turn Points",                IDM_SETTINGS_TASK_TURN
-
-            END
-            MENUITEM "&Units",                      IDM_SETTINGS_UNITS
-        END
-    END
-END
-
-IDM_MENU1 MENU DISCARDABLE
-BEGIN
-    POPUP "File"
-    BEGIN
-        MENUITEM "&About",                      IDM_FILE_ABOUT
-        MENUITEM "&Register",                   IDM_FILE_REGISTER
-        MENUITEM "&Lock",                       IDM_FILE_LOCK
-        MENUITEM "Logger",                      IDM_FILE_LOGGER
-        POPUP "&Profile"
-        BEGIN
-            MENUITEM "&Load",                       IDM_FILE_PROFILE_LOAD
-            MENUITEM "&Save",                       IDM_FILE_PROFILE_SAVE
-        END
-        MENUITEM "&Exit",                       IDM_FILE_EXIT
-    END
-    MENUITEM "Bugs Balst",                  IDM_BUGSBALLAST
-    MENUITEM "Pressure",                    IDM_PRESSURE
-    POPUP "Task"
-    BEGIN
-        MENUITEM "Task",                        IDM_TASK_TASK
-        MENUITEM "AAT",                         IDM_TASK_ASSIGNEDAREA
-    END
-    POPUP "Settings"
-    BEGIN
-        POPUP "Airspace"
-        BEGIN
-            MENUITEM "Display",                     IDM_SETTINGS_AIRSPACE_DISPLAY
-
-            MENUITEM "Colours",                     IDM_SETTINGS_AIRSPACE_COLOUR
-
-            MENUITEM "Warnings",                    IDM_SETTINGS_AIRSPACE_WARNINGS
-
-        END
-        MENUITEM "COM Port",                    IDM_SETTINGS_COMM
-        MENUITEM "&Display",                    IDM_SETTINGS_DISPLAY
-        POPUP "&Files"
-        BEGIN
-            MENUITEM "&Airspace",                   IDM_SETTINGS_FILES_AIRSPACE
-
-            MENUITEM "Terrain",                     IDM_SETTINGS_FILES_TERRAIN
-
-            MENUITEM "&Waypoints",                  IDM_SETTINGS_FILES_WAYPOINTS
-
-        END
-        MENUITEM "&Final Glide",                IDM_SETTINGS_FGLIDE
-        MENUITEM "&Polar",                      IDM_SETTINGS_POLAR
-        POPUP "&Task"
-        BEGIN
-            MENUITEM "&Start Line",                 IDM_SETTINGS_TASK_START
-            MENUITEM "&Turn Points",                IDM_SETTINGS_TASK_TURN
-        END
-        MENUITEM "&Units",                      IDM_SETTINGS_UNITS
-    END
-END
-
 #endif    // English (U.K.) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -518,36 +381,6 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
 IDR_FAIL                WAVE    DISCARDABLE     "Bitmaps/Fail.wav"
 IDR_INSERT              WAVE    DISCARDABLE     "Bitmaps/Insert.wav"
 IDR_REMOVE              WAVE    DISCARDABLE     "Bitmaps/Remove.wav"
-
-
-IDD_SPLASH DIALOG DISCARDABLE  0, 0, 139, 172
-STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE
-FONT 8, "System"
-BEGIN
-    CONTROL         244,IDC_SPLASH,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,7,31,125,102
-END
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE
-BEGIN
-    IDD_SPLASH, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 132
-        TOPMARGIN, 1
-        BOTTOMMARGIN, 170
-    END
-END
-#endif    // APSTUDIO_INVOKED
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
