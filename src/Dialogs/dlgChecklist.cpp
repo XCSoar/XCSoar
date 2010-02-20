@@ -50,36 +50,36 @@ Copyright_License {
 #define MAXTITLE 200
 #define MAXDETAILS 5000
 
-static int page=0;
-static WndForm *wf=NULL;
-static WndListFrame *wDetails=NULL;
+static int page = 0;
+static WndForm *wf = NULL;
+static WndListFrame *wDetails = NULL;
 
 #define MAXLINES 100
 #define MAXLISTS 20
 static int LineOffsets[MAXLINES];
 static unsigned nTextLines;
-static int nLists=0;
+static int nLists = 0;
 static TCHAR *ChecklistText[MAXDETAILS];
 static TCHAR *ChecklistTitle[MAXTITLE];
 
-static void NextPage(int Step){
+static void
+NextPage(int Step)
+{
   TCHAR buffer[80];
-  page += Step;
-  if (page>=nLists) {
-    page=0;
-  }
-  if (page<0) {
-    page= nLists-1;
-  }
 
-  nTextLines = TextToLineOffsets(ChecklistText[page],
-				 LineOffsets,
-				 MAXLINES);
+  page += Step;
+  if (page >= nLists)
+    page = 0;
+  if (page < 0)
+    page = nLists - 1;
+
+  nTextLines = TextToLineOffsets(ChecklistText[page], LineOffsets, MAXLINES);
 
   _stprintf(buffer, gettext(_T("Checklist")));
 
-  if (ChecklistTitle[page] && !string_is_empty(ChecklistTitle[page])
-      && (_tcslen(ChecklistTitle[page])<60)) {
+  if (ChecklistTitle[page] &&
+      !string_is_empty(ChecklistTitle[page]) &&
+      _tcslen(ChecklistTitle[page]) < 60) {
     _tcscat(buffer, _T(": "));
     _tcscat(buffer, ChecklistTitle[page]);
   }
@@ -88,7 +88,6 @@ static void NextPage(int Step){
   wDetails->SetLength(nTextLines - 1);
   wDetails->invalidate();
 }
-
 
 static void
 OnPaintDetailsListItem(Canvas &canvas, const RECT rc, unsigned i)
@@ -141,21 +140,19 @@ OnCloseClicked(gcc_unused WndButton &button)
 static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
-	(void)Sender;
+  (void)Sender;
 
   switch (key_code) {
     case VK_LEFT:
     case '6':
       ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
       NextPage(-1);
-      //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
     return true;
 
     case VK_RIGHT:
     case '7':
       ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
       NextPage(+1);
-      //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:
@@ -163,7 +160,7 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(NULL)
@@ -180,15 +177,17 @@ addChecklist(const TCHAR *name, const TCHAR *details)
   nLists++;
 }
 
-void LoadChecklist(void) {
+void
+LoadChecklist(void)
+{
   nLists = 0;
   if (ChecklistText[0]) {
     free(ChecklistText[0]);
-    ChecklistText[0]= NULL;
+    ChecklistText[0] = NULL;
   }
   if (ChecklistTitle[0]) {
     free(ChecklistTitle[0]);
-    ChecklistTitle[0]= NULL;
+    ChecklistTitle[0] = NULL;
   }
 
   TCHAR filename[MAX_PATH];
@@ -196,111 +195,101 @@ void LoadChecklist(void) {
 
   FILE *file = _tfopen(filename, _T("rt"));
   if (file == NULL)
-    {
-      return;
-    }
+    return;
 
   TCHAR TempString[MAXTITLE];
   TCHAR Details[MAXDETAILS];
   TCHAR Name[100];
   BOOL inDetails = FALSE;
   int i;
-//  int k=0;
 
-  Details[0]= 0;
-  Name[0]= 0;
-  TempString[0]=0;
+  Details[0] = 0;
+  Name[0] = 0;
+  TempString[0] = 0;
 
-  while (ReadStringX(file, MAXTITLE, TempString))
-    {
-      int len = _tcslen(TempString);
-      if (len>0) {
-	// JMW strip extra \r if it exists
-	if (TempString[len-1]=='\r') {
-	  TempString[len-1]= 0;
-	}
-      }
-
-      if(TempString[0]=='[') { // Look for start
-
-	if (inDetails) {
-	  _tcscat(Details,_T("\r\n"));
-	  addChecklist(Name, Details);
-	  Details[0]= 0;
-	  Name[0]= 0;
-	}
-
-	// extract name
-	for (i=1; i<MAXTITLE; i++) {
-	  if (TempString[i]==']') {
-	    break;
-	  }
-	  Name[i-1]= TempString[i];
-	}
-	Name[i-1]= 0;
-
-	inDetails = TRUE;
-
-      } else {
-	// append text to details string
-	_tcsncat(Details,TempString,MAXDETAILS-2);
-	_tcscat(Details,_T("\r\n"));
-	// TODO code: check the string is not too long
+  while (ReadStringX(file, MAXTITLE, TempString)) {
+    int len = _tcslen(TempString);
+    if (len > 0) {
+      // JMW strip extra \r if it exists
+      if (TempString[len - 1] == '\r') {
+        TempString[len - 1] = 0;
       }
     }
 
+    // Look for start
+    if (TempString[0] == '[') {
+      if (inDetails) {
+        _tcscat(Details, _T("\r\n"));
+        addChecklist(Name, Details);
+        Details[0] = 0;
+        Name[0] = 0;
+      }
+
+      // extract name
+      for (i = 1; i < MAXTITLE; i++) {
+        if (TempString[i] == ']')
+          break;
+
+        Name[i - 1] = TempString[i];
+      }
+      Name[i - 1] = 0;
+
+      inDetails = true;
+    } else {
+      // append text to details string
+      _tcsncat(Details, TempString, MAXDETAILS - 2);
+      _tcscat(Details, _T("\r\n"));
+      // TODO code: check the string is not too long
+    }
+  }
+
   if (inDetails) {
-    _tcscat(Details,_T("\r\n"));
+    _tcscat(Details, _T("\r\n"));
     addChecklist(Name, Details);
   }
 
   fclose(file);
 }
 
-
-void dlgChecklistShowModal(void){
-  static bool first=true;
+void
+dlgChecklistShowModal(void)
+{
+  static bool first = true;
   if (first) {
     LoadChecklist();
-    first=false;
+    first = false;
   }
 
-  //  WndProperty *wp;
-
-  if (!Layout::landscape) {
+  /// @todo: check the files loaded here (L != landscape)
+  if (!Layout::landscape)
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgChecklist_L.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_CHECKLIST_L"));
-  } else {
+  else
     wf = dlgLoadFromXML(CallBackTable,
                         _T("dlgChecklist.xml"),
                         XCSoarInterface::main_window,
                         _T("IDR_XML_CHECKLIST"));
-  }
+  if (!wf)
+    return;
 
   nTextLines = 0;
-
-  if (!wf) return;
 
   wf->SetKeyDownNotify(FormKeyDown);
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
-  assert(wDetails!=NULL);
+  assert(wDetails != NULL);
 
   wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
 
   page = 0;
-
   NextPage(0); // JMW just to turn proper pages on/off
 
   wf->ShowModal();
 
   delete wf;
-
-  wf = NULL;
-
 }
 
