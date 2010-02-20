@@ -169,9 +169,8 @@ unsigned long FindFreeSpace(const TCHAR *path) {
 			 &TotalNumberOfBytes,
 			 &TotalNumberOfFreeBytes)) {
     return FreeBytesAvailableToCaller.LowPart/1024;
-  } else {
+  } else
     return 0;
-  }
 #endif /* !HAVE_POSIX */
 }
 
@@ -192,9 +191,9 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
   if ((fattr != 0xFFFFFFFF) &&
       (fattr & FILE_ATTRIBUTE_DIRECTORY)) {
     // directory exists
-  } else {
+  } else
     CreateDirectory(fullname, NULL);
-  }
+
 #endif /* !HAVE_POSIX */
 }
 
@@ -207,7 +206,7 @@ bool RotateScreen() {
     DEVMODE DeviceMode;
 
     memset(&DeviceMode, 0, sizeof(DeviceMode));
-    DeviceMode.dmSize=sizeof(DeviceMode);
+    DeviceMode.dmSize = sizeof(DeviceMode);
     DeviceMode.dmFields = DM_DISPLAYORIENTATION;
     DeviceMode.dmDisplayOrientation = DMDO_90;
     //Put your desired position right here.
@@ -228,7 +227,6 @@ bool RotateScreen() {
 
 #ifdef PNA
 // VENTA-ADDON MODELTYPE
-
 //
 //	Check if the model type is encoded in the executable file name
 //
@@ -239,62 +237,54 @@ bool RotateScreen() {
 //  a model type to be used, just in case. The model types may not follow strictly those in
 //  config menu, nor be updated. Does'nt hurt though.
 //
-void SmartGlobalModelType() {
+void
+SmartGlobalModelType()
+{
+  GlobalModelType = MODELTYPE_PNA; // default for ifdef PNA by now!
 
-	GlobalModelType=MODELTYPE_PNA;	// default for ifdef PNA by now!
+	if (GetGlobalModelName()) {
+    ConvToUpper(GlobalModelName);
 
-	if ( GetGlobalModelName() )
-	{
-		ConvToUpper(GlobalModelName);
-
-		if ( !_tcscmp(GlobalModelName,_T("PNA"))) {
-					GlobalModelType=MODELTYPE_PNA_PNA;
-					_tcscpy(GlobalModelName,_T("GENERIC") );
-		}
-		else
-			if ( !_tcscmp(GlobalModelName,_T("HP31X")))	{
-					GlobalModelType=MODELTYPE_PNA_HP31X;
-			}
-		else
-			if ( !_tcscmp(GlobalModelName,_T("PN6000"))) {
-					GlobalModelType=MODELTYPE_PNA_PN6000;
-			}
-		else
-			if ( !_tcscmp(GlobalModelName,_T("MIO"))) {
-					GlobalModelType=MODELTYPE_PNA_MIO;
-			}
-		else
-			_tcscpy(GlobalModelName,_T("UNKNOWN") );
-	} else
-		_tcscpy(GlobalModelName, _T("UNKNOWN") );
+    if (!_tcscmp(GlobalModelName, _T("PNA"))) {
+      GlobalModelType = MODELTYPE_PNA_PNA;
+      _tcscpy(GlobalModelName, _T("GENERIC"));
+    } else if (!_tcscmp(GlobalModelName, _T("HP31X"))) {
+      GlobalModelType = MODELTYPE_PNA_HP31X;
+    } else if (!_tcscmp(GlobalModelName, _T("PN6000"))) {
+      GlobalModelType = MODELTYPE_PNA_PN6000;
+    } else if (!_tcscmp(GlobalModelName, _T("MIO"))) {
+      GlobalModelType = MODELTYPE_PNA_MIO;
+    } else
+      _tcscpy(GlobalModelName, _T("UNKNOWN"));
+  } else
+    _tcscpy(GlobalModelName, _T("UNKNOWN"));
 }
-
 
 //
 // Retrieve from the registry the previous set model type
 // This value is defined in xcsoar.h , example> MODELTYPE_PNA_HP31X
 // is equivalent to a value=10201 (defined in the header file)
 //
-void SetModelType() {
-
+void
+SetModelType()
+{
   TCHAR sTmp[100];
   TCHAR szRegistryInfoBoxModel[] = _T("AppInfoBoxModel");
   int Temp = 0;
 
   GetFromRegistry(szRegistryInfoBoxModel, Temp);
 
-  if ( SetModelName(Temp) != true ) {
-
-    _stprintf(sTmp,_T("SetModelType ERROR! ModelName returned invalid value <%d> from Registry!\n"), Temp);
+  if (SetModelName(Temp) != true) {
+    _stprintf(sTmp, _T("SetModelType ERROR! ModelName returned")
+              _T("invalid value <%d> from Registry!\n"), Temp);
     LogStartUp(sTmp);
-    GlobalModelType=MODELTYPE_PNA_PNA;
-
+    GlobalModelType = MODELTYPE_PNA_PNA;
   } else {
-
     GlobalModelType = Temp;
   }
 
-  _stprintf(sTmp,_T("SetModelType: Name=<%s> Type=%d\n"),GlobalModelName, GlobalModelType);
+  _stprintf(sTmp, _T("SetModelType: Name=<%s> Type=%d\n"), GlobalModelName,
+      GlobalModelType);
   LogStartUp(sTmp);
 }
 
@@ -302,34 +292,38 @@ void SetModelType() {
 // If the modeltype is invalid or not yet handled, assume that
 // the user changed it in the registry or in the profile, and
 // correct the error returning false: this will force a Generic Type.
-
-bool SetModelName(DWORD Temp) {
+bool
+SetModelName(DWORD Temp)
+{
   switch (Temp) {
   case MODELTYPE_PNA_PNA:
-    _tcscpy(GlobalModelName,_T("GENERIC"));
+    _tcscpy(GlobalModelName, _T("GENERIC"));
     return true;
-    break;
+
   case MODELTYPE_PNA_HP31X:
-    _tcscpy(GlobalModelName,_T("HP31X"));
+    _tcscpy(GlobalModelName, _T("HP31X"));
     return true;
-    break;
+
   case MODELTYPE_PNA_PN6000:
-    _tcscpy(GlobalModelName,_T("PN6000"));
+    _tcscpy(GlobalModelName, _T("PN6000"));
     return true;
+
   case MODELTYPE_PNA_MIO:
-    _tcscpy(GlobalModelName,_T("MIO"));
+    _tcscpy(GlobalModelName, _T("MIO"));
     return true;
-  case  MODELTYPE_PNA_MEDION_P5:
-    _tcscpy(GlobalModelName,_T("MEDION P5"));
+
+  case MODELTYPE_PNA_MEDION_P5:
+    _tcscpy(GlobalModelName, _T("MEDION P5"));
     return true;
+
   case MODELTYPE_PNA_NOKIA_500:
-    _tcscpy(GlobalModelName,_T("NOKIA500"));
+    _tcscpy(GlobalModelName, _T("NOKIA500"));
     return true;
+
   default:
-    _tcscpy(GlobalModelName,_T("UNKNOWN"));
+    _tcscpy(GlobalModelName, _T("UNKNOWN"));
     return false;
   }
-
 }
 
 #endif
@@ -338,7 +332,6 @@ bool SetModelName(DWORD Temp) {
 #if defined(PNA) || defined(FIVV)  // VENTA-ADDON gmfpathname & C.
 
 /*
-	Paolo Ventafridda 1 feb 08
 	Get pathname & c. from GetModuleFilename (gmf)
 	In case of problems, always return \ERRORxx\  as path name
 	It will be displayed at startup and users will know that
@@ -351,63 +344,61 @@ bool SetModelName(DWORD Temp) {
 
 #define MAXPATHBASENAME MAX_PATH
 
-/*
- * gmfpathname returns the pathname of the current executed program, with leading and trailing slash
- * example:  \sdmmc\   \SD CARD\
+/**
+ * gmfpathname returns the pathname of the current executed program, with
+ * leading and trailing slash
+ * examples:  \sdmmc\   \SD CARD\
  * In case of double slash, it is assumed currently as a single "\" .
  */
-const TCHAR *gmfpathname ()
+const TCHAR*
+gmfpathname()
 {
   static TCHAR gmfpathname_buffer[MAXPATHBASENAME];
-  TCHAR  *p;
+  TCHAR *p;
 
-  if (GetModuleFileName(NULL, gmfpathname_buffer, MAXPATHBASENAME) <= 0) {
-//    LogStartUp(_T("CRITIC- gmfpathname returned null GetModuleFileName\n")); // rob bughunt
+  if (GetModuleFileName(NULL, gmfpathname_buffer, MAXPATHBASENAME) <= 0)
     return(_T("\\ERROR_01\\") );
-  }
-  if (gmfpathname_buffer[0] != '\\' ) {
-//   LogStartUp(_T("CRITIC- gmfpathname starting without a leading backslash\n"));
+
+  if (gmfpathname_buffer[0] != '\\' )
     return(_T("\\ERROR_02\\"));
-  }
-  gmfpathname_buffer[MAXPATHBASENAME-1] = '\0';	// truncate for safety
 
-  for (p=gmfpathname_buffer+1; *p != '\0'; p++)
-    if ( *p == '\\' ) break;	// search for the very first "\"
+  // truncate for safety
+  gmfpathname_buffer[MAXPATHBASENAME - 1] = '\0';
 
-  if ( *p == '\0') {
-//    LogStartUp(_T("CRITIC- gmfpathname no backslash found\n"));
-    return(_T("\\ERROR_03\\"));
-  }
+  for (p = gmfpathname_buffer + 1; *p != '\0'; p++)
+    // search for the very first "\"
+    if (*p == '\\')
+      break;
+
+  if (*p == '\0')
+    return (_T("\\ERROR_03\\"));
+
   *++p = '\0';
 
   return gmfpathname_buffer;
 }
 
-/*
+/**
  * gmfbasename returns the filename of the current executed program, without leading path.
  * Example:  xcsoar.exe
  */
-const TCHAR *gmfbasename()
+const TCHAR*
+gmfbasename()
 {
   static TCHAR gmfbasename_buffer[MAXPATHBASENAME];
   TCHAR *p, *lp;
 
-  if (GetModuleFileName(NULL, gmfbasename_buffer, MAXPATHBASENAME) <= 0) {
-    LogStartUp(_T("CRITIC- gmfbasename returned null GetModuleFileName\n"));
-    return(_T("ERROR_04") );
+  if (GetModuleFileName(NULL, gmfbasename_buffer, MAXPATHBASENAME) <= 0)
+    return _T("ERROR_04");
+
+  if (gmfbasename_buffer[0] != '\\')
+    return _T("ERROR_05");
+
+  for (p = gmfbasename_buffer + 1, lp = NULL; *p != '\0'; p++) {
+    if (*p == '\\')
+      lp = ++p;
   }
-  if (gmfbasename_buffer[0] != '\\' ) {
-    LogStartUp(_T("CRITIC- gmfbasename starting without a leading backslash\n"));
-    return(_T("ERROR_05"));
-  }
-  for (p=gmfbasename_buffer+1, lp=NULL; *p != '\0'; p++)
-    {
-      if ( *p == '\\' ) {
-	lp=++p;
-	continue;
-      }
-    }
-  return  lp;
+  return lp;
 }
 
 /*
@@ -416,63 +407,60 @@ const TCHAR *gmfbasename()
  *	considered a modelname
  *  Returns 0 if failed, 1 if name found
  */
-int GetGlobalModelName ()
+int
+GetGlobalModelName()
 {
   TCHAR modelname_buffer[MAXPATHBASENAME];
   TCHAR *p, *lp, *np;
 
   _tcscpy(GlobalModelName, _T(""));
 
-  if (GetModuleFileName(NULL, modelname_buffer, MAXPATHBASENAME) <= 0) {
-    LogStartUp(_T("CRITIC- GetGlobalFileName returned NULL\n"));
+  if (GetModuleFileName(NULL, modelname_buffer, MAXPATHBASENAME) <= 0)
     return 0;
-  }
-  if (modelname_buffer[0] != '\\' ) {
-    LogStartUp(_T("CRITIC- GetGlobalFileName starting without a leading backslash\n"));
+
+  if (modelname_buffer[0] != '\\' )
     return 0;
+
+  for (p = modelname_buffer + 1, lp = NULL; *p != '\0'; p++) {
+    if (*p == '\\')
+      lp = ++p;
   }
-  for (p=modelname_buffer+1, lp=NULL; *p != '\0'; p++)
-    {
-      if ( *p == '\\' ) {
-	lp=++p;
-	continue;
-      }
-    } // assuming \sd\path\xcsoar_pna.exe  we are now at \xcsoar..
+  // assuming \sd\path\xcsoar_pna.exe  we are now at \xcsoar..
 
-  for (p=lp, np=NULL; *p != '\0'; p++)
-    {
-      if (*p == '_' ) {
-	np=++p;
-	break;
-      }
-    } // assuming xcsoar_pna.exe we are now at _pna..
-
-  if ( np == NULL ) {
-    return 0;	// VENTA2-bugfix , null deleted
+  for (p = lp, np = NULL; *p != '\0'; p++) {
+    if (*p == '_') {
+      np = ++p;
+      break;
+    }
   }
+  // assuming xcsoar_pna.exe we are now at _pna..
 
-  for ( p=np, lp=NULL; *p != '\0'; p++)
-    {
-      if (*p == '.' ) {
-	lp=p;
-	break;
-      }
-    } // we found the . in pna.exe
+  if (np == NULL)
+    return 0;
 
-  if (lp == NULL) return 0; // VENTA2-bugfix null return
-  *lp='\0'; // we cut .exe
+  for (p = np, lp = NULL; *p != '\0'; p++) {
+    if (*p == '.') {
+      lp = p;
+      break;
+    }
+  } // we found the . in pna.exe
+
+  if (lp == NULL)
+    return 0;
+
+  // we cut .exe
+  *lp = '\0';
 
   _tcscpy(GlobalModelName, np);
 
   return 1;  // we say ok
-
 }
 
 #endif   // PNA
 
 
 #ifdef PNA
-/* Paolo Ventafridda Apr 23th 2009 VENTA4
+/**
  * SetBacklight for PNA devices. There is no standard way of managing backlight on CE,
  * and every device may have different value names and settings. Microsoft did not set
  * a standard and thus we need a custom solution for each device.
@@ -480,50 +468,65 @@ int GetGlobalModelName ()
  * We do this in XCSoar.cpp at the beginning, no need to make these settings configurable:
  * max brightness and no timeout if on power is the rule. Otherwise, do it manually..
  */
-bool SetBacklight() // VENTA4
+bool SetBacklight()
 {
-  HKEY    hKey;
-  DWORD   Disp=0;
+  HKEY hKey;
+  DWORD Disp = 0;
   HRESULT hRes;
-  bool doevent=false;
+  bool doevent = false;
 
-  if (CommonInterface::EnableAutoBacklight == false ) return false;
+  if (CommonInterface::EnableAutoBacklight == false)
+    return false;
 
-  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, _T("ControlPanel\\Backlight"), 0,  0, &hKey);
-  if (hRes != ERROR_SUCCESS) return false;
+  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, _T("ControlPanel\\Backlight"), 0, 0, &hKey);
+  if (hRes != ERROR_SUCCESS)
+    return false;
 
-  switch (GlobalModelType)
-  {
-	case MODELTYPE_PNA_HP31X:
+  switch (GlobalModelType) {
+  case MODELTYPE_PNA_HP31X:
+    // max backlight
+    Disp = 20;
 
-		Disp=20; // max backlight
-		// currently we ignore hres, if registry entries are spoiled out user is already in deep troubles
-		hRes = RegSetValueEx(hKey, _T("BackLightCurrentACLevel"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
-		hRes = RegSetValueEx(hKey, _T("BackLightCurrentBatteryLevel"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
-		hRes = RegSetValueEx(hKey, _T("TotalLevels"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
-		Disp=0;
-		hRes = RegSetValueEx(hKey, _T("UseExt"),0,REG_DWORD, (LPBYTE)&Disp, sizeof(DWORD));
-		RegDeleteValue(hKey,_T("ACTimeout"));
-		doevent=true;
-		break;
+    // currently we ignore hres, if registry entries are
+    // spoiled out user is already in deep troubles
+    hRes = RegSetValueEx(hKey, _T("BackLightCurrentACLevel"), 0, REG_DWORD,
+                         (LPBYTE) & Disp, sizeof(DWORD));
+    hRes = RegSetValueEx(hKey, _T("BackLightCurrentBatteryLevel"), 0,
+                         REG_DWORD, (LPBYTE) & Disp, sizeof(DWORD));
+    hRes = RegSetValueEx(hKey, _T("TotalLevels"), 0, REG_DWORD,
+                         (LPBYTE) & Disp, sizeof(DWORD));
 
-	default:
-		doevent=false;
-		break;
+    Disp = 0;
+    hRes = RegSetValueEx(hKey, _T("UseExt"), 0, REG_DWORD,
+                         (LPBYTE) & Disp, sizeof(DWORD));
+
+    RegDeleteValue(hKey, _T("ACTimeout"));
+    doevent = true;
+    break;
+
+  default:
+    doevent = false;
+    break;
   }
 
-  RegCloseKey(hKey); if (doevent==false) return false;
+  RegCloseKey(hKey);
+  if (doevent == false)
+    return false;
 
   HANDLE BLEvent = CreateEvent(NULL, false, false, _T("BacklightChangeEvent"));
-  if ( SetEvent(BLEvent) == 0) doevent=false;
-  	else CloseHandle(BLEvent);
+  if (SetEvent(BLEvent) == 0)
+    doevent = false;
+  else
+    CloseHandle(BLEvent);
+
   return doevent;
 }
 
-bool SetSoundVolume() // VENTA4
+bool
+SetSoundVolume()
 {
-
-  if (CommonInterface::EnableAutoSoundVolume == false ) return false;
+  if (CommonInterface::EnableAutoSoundVolume == false)
+    return false;
 
 /*
  * This does not work, dunno why
@@ -560,7 +563,6 @@ bool SetSoundVolume() // VENTA4
   return true;
 }
 
-
 #endif
 
 #if defined(FIVV) || defined(PNA)
@@ -575,45 +577,47 @@ bool SetSoundVolume() // VENTA4
  *
  * These are currently fonts used by PDA:
  *
-	DejaVuSansCondensed2.ttf
-	DejaVuSansCondensed-Bold2.ttf
-	DejaVuSansCondensed-BoldOblique2.ttf
-	DejaVuSansCondensed-Oblique2.ttf
- *
- *
+ * DejaVuSansCondensed2.ttf
+ * DejaVuSansCondensed-Bold2.ttf
+ * DejaVuSansCondensed-BoldOblique2.ttf
+ * DejaVuSansCondensed-Oblique2.ttf
  */
-short InstallFonts() {
-
+short
+InstallFonts()
+{
   TCHAR srcdir[MAX_PATH];
   TCHAR dstdir[MAX_PATH];
   TCHAR srcfile[MAX_PATH];
   TCHAR dstfile[MAX_PATH];
 
-  _stprintf(srcdir,_T("%s%S\\Fonts"),gmfpathname(), XCSDATADIR );
-  _stprintf(dstdir,_T("\\Windows\\Fonts"),gmfpathname() );
+  _stprintf(srcdir, _T("%s%S\\Fonts"), gmfpathname(), XCSDATADIR);
+  _stprintf(dstdir, _T("\\Windows\\Fonts"), gmfpathname());
 
 
-  if (  GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY) return 1;
-  if (  GetFileAttributes(dstdir) != FILE_ATTRIBUTE_DIRECTORY) return 2;
+  if (GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY)
+    return 1;
+  if (GetFileAttributes(dstdir) != FILE_ATTRIBUTE_DIRECTORY)
+    return 2;
 
-  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed2.ttf"),srcdir);
-  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed2.ttf"),dstdir);
-  //if (  GetFileAttributes(srcfile) != FILE_ATTRIBUTE_NORMAL) return 3;
-  if (  GetFileAttributes(dstfile) != 0xffffffff ) return 4;
-  if ( !CopyFile(srcfile, dstfile, true)) return 5;
+  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed2.ttf"), srcdir);
+  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed2.ttf"), dstdir);
+  if (GetFileAttributes(dstfile) != 0xffffffff)
+    return 4;
+  if (!CopyFile(srcfile, dstfile, true))
+    return 5;
 
   // From now on we attempt to copy without overwriting
-  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-Bold2.ttf"),srcdir);
-  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-Bold2.ttf"),dstdir);
-  CopyFile(srcfile,dstfile,true);
+  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-Bold2.ttf"), srcdir);
+  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-Bold2.ttf"), dstdir);
+  CopyFile(srcfile, dstfile, true);
 
-  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),srcdir);
-  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-BoldOblique2.ttf"),dstdir);
-  CopyFile(srcfile,dstfile,true);
+  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-BoldOblique2.ttf"), srcdir);
+  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-BoldOblique2.ttf"), dstdir);
+  CopyFile(srcfile, dstfile, true);
 
-  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-Oblique2.ttf"),srcdir);
-  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-Oblique2.ttf"),dstdir);
-  CopyFile(srcfile,dstfile,true);
+  _stprintf(srcfile,_T("%s\\DejaVuSansCondensed-Oblique2.ttf"), srcdir);
+  _stprintf(dstfile,_T("%s\\DejaVuSansCondensed-Oblique2.ttf"), dstdir);
+  CopyFile(srcfile, dstfile, true);
 
   return 0;
 }
@@ -655,8 +659,6 @@ void SetProfileFiles(const TCHAR *ex);
  * @param CommandLine not in use
  */
 void XCSoarGetOpts(LPCTSTR CommandLine) {
-// SaveRegistryToFile(_T("iPAQ File Store\xcsoar-registry.prf"));
-
   TCHAR extrnProfileFile[MAX_PATH];
   extrnProfileFile[0] = 0;
 
@@ -665,15 +667,15 @@ void XCSoarGetOpts(LPCTSTR CommandLine) {
 #endif
 
 #ifdef WINDOWSPC
-  SCREENWIDTH=640;
-  SCREENHEIGHT=480;
+  SCREENWIDTH = 640;
+  SCREENHEIGHT = 480;
 
-#if defined(SCREENWIDTH_)
-  SCREENWIDTH=SCREENWIDTH_;
-#endif
-#if defined(SCREENHEIGHT_)
-  SCREENHEIGHT=SCREENHEIGHT_;
-#endif
+  #if defined(SCREENWIDTH_)
+  SCREENWIDTH = SCREENWIDTH_;
+  #endif
+  #if defined(SCREENHEIGHT_)
+  SCREENHEIGHT = SCREENHEIGHT_;
+  #endif
 
 #else
   return; // don't do anything for PDA platforms
@@ -700,130 +702,128 @@ void XCSoarGetOpts(LPCTSTR CommandLine) {
   }
 #ifdef WINDOWSPC
   pC = _tcsstr(CommandLine, _T("-800x480"));
-  if (pC != NULL){
-    SCREENWIDTH=800;
-    SCREENHEIGHT=480;
+  if (pC != NULL) {
+    SCREENWIDTH = 800;
+    SCREENHEIGHT = 480;
   }
 
   pC = _tcsstr(CommandLine, _T("-480x272"));
-  if (pC != NULL){
-    SCREENWIDTH=480;
-    SCREENHEIGHT=272;
+  if (pC != NULL) {
+    SCREENWIDTH = 480;
+    SCREENHEIGHT = 272;
   }
 
   pC = _tcsstr(CommandLine, _T("-480x234"));
-  if (pC != NULL){
-    SCREENWIDTH=480;
-    SCREENHEIGHT=234;
+  if (pC != NULL) {
+    SCREENWIDTH = 480;
+    SCREENHEIGHT = 234;
   }
 
   pC = _tcsstr(CommandLine, _T("-portrait"));
-  if (pC != NULL){
-    SCREENWIDTH=480;
-    SCREENHEIGHT=640;
+  if (pC != NULL) {
+    SCREENWIDTH = 480;
+    SCREENHEIGHT = 640;
   }
 
   pC = _tcsstr(CommandLine, _T("-square"));
-  if (pC != NULL){
-    SCREENWIDTH=480;
-    SCREENHEIGHT=480;
+  if (pC != NULL) {
+    SCREENWIDTH = 480;
+    SCREENHEIGHT = 480;
   }
 
   pC = _tcsstr(CommandLine, _T("-small"));
-  if (pC != NULL){
-    SCREENWIDTH/= 2;
-    SCREENHEIGHT/= 2;
+  if (pC != NULL) {
+    SCREENWIDTH /= 2;
+    SCREENHEIGHT /= 2;
   }
 
   pC = _tcsstr(CommandLine, _T("-320x240"));
-  if (pC != NULL){
-    SCREENWIDTH=320;
-    SCREENHEIGHT=240;
+  if (pC != NULL) {
+    SCREENWIDTH = 320;
+    SCREENHEIGHT = 240;
   }
 
   pC = _tcsstr(CommandLine, _T("-240x320"));
-  if (pC != NULL){
-    SCREENWIDTH=240;
-    SCREENHEIGHT=320;
+  if (pC != NULL) {
+    SCREENWIDTH = 240;
+    SCREENHEIGHT = 320;
   }
 #endif
 
   SetProfileFiles(extrnProfileFile);
-
 }
 
-
-void StartupLogFreeRamAndStorage() {
-  int freeram = CheckFreeRam()/1024;
+void
+StartupLogFreeRamAndStorage()
+{
+  int freeram = CheckFreeRam() / 1024;
   TCHAR buffer[MAX_PATH];
   LocalPath(buffer);
   int freestorage = FindFreeSpace(buffer);
   LogStartUp(_T("Free ram %d\nFree storage %d\n"), freeram, freestorage);
 }
 
+WPARAM
+TranscodeKey(WPARAM wParam)
+{
+#ifdef PNA
+  // VENTA-ADDON HARDWARE KEYS TRANSCODING
 
-WPARAM TranscodeKey(WPARAM wParam) {
-#if defined(PNA) // VENTA-ADDON HARDWARE KEYS TRANSCODING
-
-  if ( GlobalModelType == MODELTYPE_PNA_HP31X )
-    {
+  if (GlobalModelType == MODELTYPE_PNA_HP31X) {
       //		if (wParam == 0x7b) wParam=0xc1;  // VK_APP1
-      if (wParam == 0x7b) wParam=0x1b;  // VK_ESCAPE
+      if (wParam == 0x7b)
+        // VK_ESCAPE
+        wParam = 0x1b;
       //		if (wParam == 0x7b) wParam=0x27;  // VK_RIGHT
       //		if (wParam == 0x7b) wParam=0x25;  // VK_LEFT
+  } else if (GlobalModelType == MODELTYPE_PNA_PN6000) {
+    switch(wParam) {
+    case 0x79:					// Upper Silver key short press
+      wParam = 0xc1;	// F10 -> APP1
+      break;
+    case 0x7b:					// Lower Silver key short press
+      wParam = 0xc2;	// F12 -> APP2
+      break;
+    case 0x72:					// Back key plus
+      wParam = 0xc3;	// F3  -> APP3
+      break;
+    case 0x71:					// Back key minus
+      wParam = 0xc4;	// F2  -> APP4
+      break;
+    case 0x7a:					// Upper silver key LONG press
+      wParam = 0x70;	// F11 -> F1
+      break;
+    case 0x7c:					// Lower silver key LONG press
+      wParam = 0x71;	// F13 -> F2
+      break;
     }
-  else if ( GlobalModelType == MODELTYPE_PNA_PN6000 )
-    {
-      switch(wParam) {
-      case 0x79:					// Upper Silver key short press
-	wParam = 0xc1;	// F10 -> APP1
-	break;
-      case 0x7b:					// Lower Silver key short press
-	wParam = 0xc2;	// F12 -> APP2
-	break;
-      case 0x72:					// Back key plus
-	wParam = 0xc3;	// F3  -> APP3
-	break;
-      case 0x71:					// Back key minus
-	wParam = 0xc4;	// F2  -> APP4
-	break;
-      case 0x7a:					// Upper silver key LONG press
-	wParam = 0x70;	// F11 -> F1
-	break;
-      case 0x7c:					// Lower silver key LONG press
-	wParam = 0x71;	// F13 -> F2
-	break;
-      }
+  } else if (GlobalModelType == MODELTYPE_PNA_NOKIA_500) {
+    switch(wParam) {
+    case 0xc1:
+      wParam = 0x0d;	// middle key = enter
+      break;
+    case 0xc5:
+      wParam = 0x26;	// + key = pg Up
+      break;
+    case 0xc6:
+      wParam = 0x28;	// - key = pg Down
+      break;
     }
-  else if ( GlobalModelType == MODELTYPE_PNA_NOKIA_500 )
-    {
-      switch(wParam) {
-      case 0xc1:
-	wParam = 0x0d;	// middle key = enter
-	break;
-      case 0xc5:
-	wParam = 0x26;	// + key = pg Up
-	break;
-      case 0xc6:
-	wParam = 0x28;	// - key = pg Down
-	break;
-      }
+  } else if (GlobalModelType == MODELTYPE_PNA_MEDION_P5) {
+    switch(wParam) {
+    case 0x79:
+      wParam = 0x0d;	// middle key = enter
+      break;
+    case 0x75:
+      wParam = 0x26;	// + key = pg Up
+      break;
+    case 0x76:
+      wParam = 0x28;	// - key = pg Down
+      break;
     }
-  else if ( GlobalModelType == MODELTYPE_PNA_MEDION_P5 )
-    {
-      switch(wParam) {
-      case 0x79:
-	wParam = 0x0d;	// middle key = enter
-	break;
-      case 0x75:
-	wParam = 0x26;	// + key = pg Up
-	break;
-      case 0x76:
-	wParam = 0x28;	// - key = pg Down
-	break;
-      }
-    }
+  }
 #endif
+
   return wParam;
 }
 
@@ -833,24 +833,27 @@ WPARAM TranscodeKey(WPARAM wParam) {
  */
 RECT SystemWindowSize(void) {
   RECT WindowSize;
+
 #ifdef WINDOWSPC
-  WindowSize.right = SCREENWIDTH
-    + 2*GetSystemMetrics( SM_CXFIXEDFRAME);
+  WindowSize.right = SCREENWIDTH + 2 * GetSystemMetrics(SM_CXFIXEDFRAME);
   WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - WindowSize.right) / 2;
-  WindowSize.bottom = SCREENHEIGHT
-    + 2*GetSystemMetrics( SM_CYFIXEDFRAME) + GetSystemMetrics(SM_CYCAPTION);
+  WindowSize.bottom = SCREENHEIGHT + 2 * GetSystemMetrics(SM_CYFIXEDFRAME) +
+                      GetSystemMetrics(SM_CYCAPTION);
   WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
 #else
   WindowSize.left = 0;
   WindowSize.top = 0;
-#ifdef WIN32
+
+  #ifdef WIN32
   WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
   WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
-#else /* !WIN32 */
+  #else /* !WIN32 */
   // XXX implement this properly for SDL/UNIX
   WindowSize.right = 640;
   WindowSize.bottom = 480;
-#endif /* !WIN32 */
+  #endif /* !WIN32 */
+
 #endif
+
   return WindowSize;
 }
