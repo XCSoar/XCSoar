@@ -447,25 +447,26 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 void
 XCSoarInterface::Shutdown(void)
 {
+  // Show progress dialog
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
   StartHourglassCursor();
 
+  // Log shutdown information
   LogStartUp(TEXT("Entering shutdown...\n"));
   StartupLogFreeRamAndStorage();
 
-  // turn off all displays
+  // Turn off all displays
   globalRunningEvent.reset();
 
+  // Stop logger and save igc file
   CreateProgressDialog(gettext(TEXT("Shutdown, saving logs...")));
-  // stop logger
   logger.guiStopLogger(Basic(), true);
 
+  // Save settings to profile
   CreateProgressDialog(gettext(TEXT("Shutdown, saving profile...")));
-  // Save settings
   Profile::StoreRegistry();
 
   // Stop sound
-
   LogStartUp(TEXT("SaveSoundSettings\n"));
   Profile::SaveSoundSettings();
 
@@ -474,30 +475,31 @@ XCSoarInterface::Shutdown(void)
   //  VarioSound_Close();
 #endif
 
-  // Stop drawing
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 
+  // Stop threads
   LogStartUp(TEXT("CloseDrawingThread\n"));
   closeTriggerEvent.trigger();
 
+  // Wait for the calculations thread to finish
   calculation_thread->join();
   LogStartUp(TEXT("- calculation thread returned\n"));
 
+  //  Wait for the instruments thread to finish
   instrument_thread->join();
   LogStartUp(TEXT("- instrument thread returned\n"));
 
+  //  Wait for the drawing thread to finish
   draw_thread->join();
   LogStartUp(TEXT("- draw thread returned\n"));
-
   delete draw_thread;
 
-  // Clear data
-
+  // Close the AirspaceWarning dialog if still open
   LogStartUp(TEXT("dlgAirspaceWarningDeInit\n"));
   dlgAirspaceWarningDeInit();
 
+  // Save the task for the next time
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
-
   LogStartUp(TEXT("Resume abort task\n"));
   task_manager.resume();
 
@@ -506,26 +508,31 @@ XCSoarInterface::Shutdown(void)
   task_manager.save_default();
 #endif
 
+  // Clear airspace database
   LogStartUp(TEXT("Close airspace\n"));
   CloseAirspace(airspace_database, airspace_warning);
 
+  // Clear waypoint database
   LogStartUp(TEXT("Close waypoints\n"));
   way_points.clear();
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 
-  LogStartUp(TEXT("CloseTerrainTopology\n"));
-
+  // Clear weather database
+  LogStartUp(TEXT("CloseRASP\n"));
   RASP.Close();
 
+  // Clear terrain database
   LogStartUp(TEXT("CloseTerrain\n"));
   terrain.CloseTerrain();
 
   delete topology;
   delete marks;
 
+  // Close any device connections
   devShutdown();
 
+  // Save everything in the persistent memory file
   SaveCalculationsPersist(Basic(), Calculated());
 #if (EXPERIMENTAL > 0)
   //  CalibrationSave();
@@ -540,10 +547,10 @@ XCSoarInterface::Shutdown(void)
       Sleep(100); // free time up for processor to perform shutdown
   }
 
+  // Clear the FLARM database
   CloseFLARMDetails();
 
   // Kill windows
-
   LogStartUp(TEXT("Destroy Info Boxes\n"));
   InfoBoxManager::Destroy();
 
@@ -554,13 +561,16 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(TEXT("Delete Objects\n"));
   DeleteFonts();
 
+  // Close the progress dialog
   LogStartUp(TEXT("Close Progress Dialog\n"));
   CloseProgressDialog();
 
+  // Clear the EGM96 database
   CloseGeoid();
 
   LogStartUp(TEXT("Close Windows - main \n"));
   main_window.reset();
+
   LogStartUp(TEXT("Close Graphics\n"));
   MapGfx.Destroy();
 
@@ -570,6 +580,7 @@ XCSoarInterface::Shutdown(void)
 #endif
 
   StartupLogFreeRamAndStorage();
+
   LogStartUp(TEXT("Finished shutdown\n"));
   StopHourglassCursor();
 }
