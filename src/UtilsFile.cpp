@@ -80,12 +80,15 @@ FileExistsZipped(const char *FileName)
 bool
 MatchesExtension(const TCHAR *filename, const TCHAR* extension)
 {
+  // Search for extension
   const TCHAR *ptr;
-
   ptr = _tcsstr(filename, extension);
 
+  // If the extension is not at the end of the filename
   if (ptr != filename + _tcslen(filename) - _tcslen(extension))
+    // -> does not match
     return false;
 
+  // else -> filename matches extension
   return true;
 }

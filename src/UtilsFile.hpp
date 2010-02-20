@@ -51,6 +51,12 @@ FileExists(const char *FileName);
 
 bool FileExistsZipped(const char *FileName);
 
+/**
+ * Checks whether the given filename matches the given extension
+ * @param filename Filename to check
+ * @param extension Extension to check against (e.g. .xcm)
+ * @return True if filename matches the given extension, False otherwise
+ */
 bool MatchesExtension(const TCHAR *filename, const TCHAR* extension);
 
 #endif
