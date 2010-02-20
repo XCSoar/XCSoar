@@ -80,13 +80,13 @@ std::map<TCHAR*, TCHAR*, lessTCHAR<TCHAR*> > unusedTranslations;
  */
 void WriteMissingTranslations() {
   std::map<TCHAR*, TCHAR*, lessTCHAR<TCHAR*> >::iterator
-    s=unusedTranslations.begin(),e=unusedTranslations.end();
+    s = unusedTranslations.begin(), e = unusedTranslations.end();
 
   TCHAR szFile1[MAX_PATH] = TEXT("%LOCAL_PATH%\\\\localization_todo.xcl\0");
-  FILE *fp=NULL;
+  FILE *fp = NULL;
 
   ExpandLocalPath(szFile1);
-  fp  = _tfopen(szFile1, TEXT("w+"));
+  fp = _tfopen(szFile1, TEXT("w+"));
 
   if (fp != NULL) {
     while (s != e) {
@@ -124,16 +124,19 @@ void WriteMissingTranslations() {
  * @param text The text to search for
  * @return The translation if found, otherwise the text itself
  */
-const TCHAR* gettext(const TCHAR* text) {
+const TCHAR*
+gettext(const TCHAR* text)
+{
   // TODO enhancement: Fast search of text strings
 
   int i;
 
   // return if nothing to do
-  if (_tcscmp(text, _T("")) == 0) return (const TCHAR*)text;
+  if (_tcscmp(text, _T("")) == 0)
+    return (const TCHAR*)text;
 
   //find a translation
-  for (i=0; i<GetTextData_Size; i++) {
+  for (i = 0; i < GetTextData_Size; i++) {
     // skip if key is empty
     if (!text || !GetTextData[i].key)
       continue;
@@ -155,11 +158,13 @@ const TCHAR* gettext(const TCHAR* text) {
 /**
  * Reads the selected LanguageFile into the cache
  */
-void ReadLanguageFile() {
+void
+ReadLanguageFile()
+{
   LogStartUp(TEXT("Loading language file\n"));
 
   TCHAR szFile1[MAX_PATH];
-  FILE *fp=NULL;
+  FILE *fp = NULL;
 
   // Read the language filename from the registry
   GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
@@ -171,10 +176,10 @@ void ReadLanguageFile() {
 
   // If the language file is not set use the default one
   if (string_is_empty(szFile1))
-    _tcscpy(szFile1,TEXT("default.xcl"));
+    _tcscpy(szFile1, TEXT("default.xcl"));
 
   // Open the language file
-  fp  = _tfopen(szFile1, TEXT("rt"));
+  fp = _tfopen(szFile1, TEXT("rt"));
 
   // Return if file error
   if (fp == NULL)
@@ -182,17 +187,18 @@ void ReadLanguageFile() {
 
   // TODO code: Safer sizes, strings etc - use C++ (can scanf restrict length?)
   TCHAR buffer[2049]; // key from scanf
-  TCHAR key[2049];    // key from scanf
-  TCHAR value[2049];  // value from scanf
-  int found;          // Entries found from scanf
+  TCHAR key[2049]; // key from scanf
+  TCHAR value[2049]; // value from scanf
+  int found; // Entries found from scanf
 
   // Read from the file
-  while ((GetTextData_Size < MAXSTATUSMESSAGECACHE)
-      && _fgetts(buffer, 2048, fp)
-      && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)) {
+  while ((GetTextData_Size < MAXSTATUSMESSAGECACHE) &&
+         _fgetts(buffer, 2048, fp) &&
+         ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)) {
 
     // Check valid line?
-    if ((found != 2) || key[0] == 0 || value[0] == 0) continue;
+    if ((found != 2) || key[0] == 0 || value[0] == 0)
+      continue;
 
     // Save parsed translation to the cache
     GetTextData[GetTextData_Size].key = StringMallocParse(key);
@@ -208,4 +214,3 @@ void ReadLanguageFile() {
 
   fclose(fp);
 }
-
