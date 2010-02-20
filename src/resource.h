@@ -2,7 +2,6 @@
 // Microsoft Developer Studio generated include file.
 // Used by XCSoar.rc
 //
-#define IDS_APP_TITLE                   1
 #define IDC_XCSOAR                      3
 #define IDS_CONNECTWAIT                 4
 #define IDI_XCSOAR                      101

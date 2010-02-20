@@ -254,20 +254,13 @@ XCSoarInterface::AfterStartup()
 bool
 XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 {
-  // The title bar text
-  TCHAR szTitle[MAX_LOADSTRING];
+  // Set the application title to "XCSoar"
+  TCHAR szTitle[] = _T("XCSoar");
 
   // Store instance handle in our global variable
   hInst = hInstance;
 
-  // IDS_APP_TITLE = XCSoar (see XCSoar.rc)
-#ifdef WIN32
-  LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-#else
-  _tcscpy(szTitle, "XCSoar");
-#endif
-
-  //If XCSoar is already running, stop this instance
+  //If "XCSoar" is already running, stop this instance
   if (MainWindow::find(szTitle))
     return false;
 
