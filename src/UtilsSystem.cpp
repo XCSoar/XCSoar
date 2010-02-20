@@ -342,8 +342,6 @@ SetModelName(DWORD Temp)
 	These are temporary solutions to be improved
  */
 
-#define MAXPATHBASENAME MAX_PATH
-
 /**
  * gmfpathname returns the pathname of the current executed program, with
  * leading and trailing slash
@@ -353,17 +351,17 @@ SetModelName(DWORD Temp)
 const TCHAR*
 gmfpathname()
 {
-  static TCHAR gmfpathname_buffer[MAXPATHBASENAME];
+  static TCHAR gmfpathname_buffer[MAX_PATH];
   TCHAR *p;
 
-  if (GetModuleFileName(NULL, gmfpathname_buffer, MAXPATHBASENAME) <= 0)
+  if (GetModuleFileName(NULL, gmfpathname_buffer, MAX_PATH) <= 0)
     return(_T("\\ERROR_01\\") );
 
   if (gmfpathname_buffer[0] != '\\' )
     return(_T("\\ERROR_02\\"));
 
   // truncate for safety
-  gmfpathname_buffer[MAXPATHBASENAME - 1] = '\0';
+  gmfpathname_buffer[MAX_PATH - 1] = '\0';
 
   for (p = gmfpathname_buffer + 1; *p != '\0'; p++)
     // search for the very first "\"
@@ -385,10 +383,10 @@ gmfpathname()
 const TCHAR*
 gmfbasename()
 {
-  static TCHAR gmfbasename_buffer[MAXPATHBASENAME];
+  static TCHAR gmfbasename_buffer[MAX_PATH];
   TCHAR *p, *lp;
 
-  if (GetModuleFileName(NULL, gmfbasename_buffer, MAXPATHBASENAME) <= 0)
+  if (GetModuleFileName(NULL, gmfbasename_buffer, MAX_PATH) <= 0)
     return _T("ERROR_04");
 
   if (gmfbasename_buffer[0] != '\\')
@@ -410,12 +408,12 @@ gmfbasename()
 int
 GetGlobalModelName()
 {
-  TCHAR modelname_buffer[MAXPATHBASENAME];
+  TCHAR modelname_buffer[MAX_PATH];
   TCHAR *p, *lp, *np;
 
   _tcscpy(GlobalModelName, _T(""));
 
-  if (GetModuleFileName(NULL, modelname_buffer, MAXPATHBASENAME) <= 0)
+  if (GetModuleFileName(NULL, modelname_buffer, MAX_PATH) <= 0)
     return 0;
 
   if (modelname_buffer[0] != '\\' )
