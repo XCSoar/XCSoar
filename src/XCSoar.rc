@@ -10,7 +10,12 @@ END
 #include "newres.h"
 #undef APSTUDIO_READONLY_SYMBOLS
 
+
+// --- Icons ---
+
 IDI_XCSOAR              ICON    DISCARDABLE     "Bitmaps/xcsoarswift.ico"
+
+// --- Bitmaps ---
 
 IDB_AIRSPACE0           BITMAP  DISCARDABLE     "Bitmaps/airspace0.bmp"
 IDB_AIRSPACE1           BITMAP  DISCARDABLE     "Bitmaps/airspace1.bmp"
@@ -82,6 +87,8 @@ IDB_SCROLLBARFILL       BITMAP  DISCARDABLE     "Bitmaps/scrollbarFill.bmp"
 IDB_OBSTACLE            BITMAP  DISCARDABLE     "Bitmaps/Obstacle.bmp"
 IDB_AIRSPACEI           BITMAP  DISCARDABLE     "Bitmaps/airspacei.bmp"
 
+// --- Audio ---
+
 IDR_FAIL                WAVE    DISCARDABLE     "Bitmaps/Fail.wav"
 IDR_INSERT              WAVE    DISCARDABLE     "Bitmaps/Insert.wav"
 IDR_REMOVE              WAVE    DISCARDABLE     "Bitmaps/Remove.wav"
@@ -97,6 +104,7 @@ IDR_WAV_CLICK			      WAVE	  DISCARDABLE		  "Bitmaps/coolwindclick.wav"
 IDR_WAV_BELL			      WAVE	  DISCARDABLE		  "Bitmaps/bell.wav"
 #endif
 
+// --- XML Dialogs ---
 IDR_XML_AIRSPACE        XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgAirspace.xml"
 IDR_XML_AIRSPACECOLOURS XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgAirspaceColours.xml"
 IDR_XML_AIRSPACEPATTERNS XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgAirspacePatterns.xml"
@@ -162,8 +170,11 @@ IDR_XML_VARIO_L         XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgVario_L.xml"
 IDR_XML_COMBOPICKER_L   XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgComboPicker_L.xml"
 IDR_XML_COMBOPICKER     XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgComboPicker.xml"
 
+// --- EGM96 Raster Data --- 
+
 IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "Bitmaps/egm96s.dem"
 
+// --- Progress Dialog ---
 IDD_PROGRESS DIALOG DISCARDABLE  0, 0, 132, 153
 STYLE DS_CENTER | WS_CHILD | WS_VISIBLE
 FONT 10, "System"
