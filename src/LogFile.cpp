@@ -39,7 +39,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Thread/Mutex.hpp"
 #include "LocalPath.hpp"
-#include "Interface.hpp"
 #include "Asset.hpp"
 
 #include <stdio.h>
