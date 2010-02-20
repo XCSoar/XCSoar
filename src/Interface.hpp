@@ -111,8 +111,10 @@ public:
   static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {
     blackboard.ReadBlackboardCalculated(derived_info);
   }
+
 private:
   static InterfaceBlackboard blackboard;
+
 public:
   // settings
   static bool VirtualKeys;
@@ -122,15 +124,16 @@ public:
   static bool EnableAnimation;
 };
 
-
 class ActionInterface: public CommonInterface {
 public:
   // settings
   static int  MenuTimeoutMax;
+
 protected:
   static void DisplayModes();
   static void SendSettingsComputer();
-  static void SendSettingsMap(const bool trigger_draw=false);
+  static void SendSettingsMap(const bool trigger_draw = false);
+
 public:
   // ideally these should be protected
   static void on_key_None(int UpDown);
@@ -142,9 +145,9 @@ public:
   static void on_key_Speed(int UpDown);
   static void on_key_Direction(int UpDown);
   static void on_key_Altitude(int UpDown);
-  static void on_key_Alternate1(int UpDown); // VENTA3
-  static void on_key_Alternate2(int UpDown); // VENTA3
-  static void on_key_BestAlternate(int UpDown); // VENTA3
+  static void on_key_Alternate1(int UpDown);
+  static void on_key_Alternate2(int UpDown);
+  static void on_key_BestAlternate(int UpDown);
   static void on_key_Airspeed(int UpDown);
   static void on_key_TeamCode(int UpDown);
   static void on_key_ForecastTemperature(int UpDown);
@@ -153,15 +156,16 @@ public:
   static void SignalShutdown(bool force);
   static bool LockSettingsInFlight;
   static unsigned UserLevel;
+
 private:
   static HCURSOR oldCursor;
 };
-
 
 class XCSoarInterface: public ActionInterface {
 public:
   // settings
   static unsigned debounceTimeout;
+
 public:
   static bool Debounce();
 
@@ -182,6 +186,7 @@ public:
   static void ExchangeBlackboard();
   static void ReceiveMapProjection();
   static void ReceiveBlackboard();
+
 private:
   static void PreloadInitialisation(bool ask);
   static ProgressWindow *progress_window;

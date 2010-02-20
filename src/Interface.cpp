@@ -58,13 +58,13 @@ StatusMessageList CommonInterface::status_messages;
 MainWindow CommonInterface::main_window(status_messages);
 
 // settings used only by interface thread scope
-bool CommonInterface::VirtualKeys=false;
+bool CommonInterface::VirtualKeys = false;
 bool ActionInterface::LockSettingsInFlight = true;
-unsigned  ActionInterface::UserLevel=0; // used by dlgConfiguration
-unsigned XCSoarInterface::debounceTimeout=200;
+unsigned ActionInterface::UserLevel = 0; // used by dlgConfiguration
+unsigned XCSoarInterface::debounceTimeout = 200;
 int ActionInterface::MenuTimeoutMax = MENUTIMEOUTMAX;
-bool CommonInterface::EnableAutoBacklight=true;
-bool CommonInterface::EnableAutoSoundVolume=true;
+bool CommonInterface::EnableAutoBacklight = true;
+bool CommonInterface::EnableAutoSoundVolume = true;
 int CommonInterface::ActiveAlternate = -1;
 bool CommonInterface::EnableAnimation = false;
 
@@ -89,9 +89,8 @@ XCSoarInterface::ReceiveBlackboard()
   ReadBlackboardBasic(device_blackboard.Basic());
   ReadBlackboardCalculated(device_blackboard.Calculated());
 
-  if (Calculated().TeammateCodeValid) {
+  if (Calculated().TeammateCodeValid)
     SetSettingsComputer().TeammateCodeValid = true;
-  }
 }
 
 void
@@ -131,9 +130,9 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
   ScopeLock protect(mutexBlackboard);
   device_blackboard.ReadSettingsMap(SettingsMap());
 
-  if (trigger_draw) {
+  if (trigger_draw)
     drawTriggerEvent.trigger();
-  }
+
   // TODO: trigger refresh if the settings are changed
 }
 
@@ -141,7 +140,7 @@ bool
 XCSoarInterface::InterfaceTimeoutZero(void)
 {
   ScopeLock protect(mutexInterfaceTimeout);
-  return (interface_timeout==0);
+  return (interface_timeout == 0);
 }
 
 void
@@ -164,19 +163,21 @@ XCSoarInterface::InterfaceTimeoutCheck(void)
   return false;
 }
 
-void ActionInterface::SignalShutdown(bool force) {
+void
+ActionInterface::SignalShutdown(bool force)
+{
   doForceShutdown = force;
   main_window.close(); // signals close
 }
 
-bool XCSoarInterface::CheckShutdown(void) {
+bool
+XCSoarInterface::CheckShutdown(void)
+{
   bool retval = false;
   if (!ShutdownRequested) {
     ShutdownRequested = true;
-    if(doForceShutdown ||
-       (MessageBoxX(gettext(TEXT("Quit program?")),
-                    gettext(TEXT("XCSoar")),
-                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
+    if (doForceShutdown || (MessageBoxX(gettext(TEXT("Quit program?")),
+        gettext(TEXT("XCSoar")), MB_YESNO | MB_ICONQUESTION) == IDYES)) {
       retval = true;
     } else {
       retval = false;
@@ -202,11 +203,10 @@ XCSoarInterface::Debounce(void)
   ResetDisplayTimeOut();
   InterfaceTimeoutReset();
 
-  if (SettingsMap().ScreenBlanked) {
+  if (SettingsMap().ScreenBlanked)
     // prevent key presses working if screen is blanked,
     // so a key press just triggers turning the display on again
     return false;
-  }
 
   return fps_last.check_update(debounceTimeout);
 }
@@ -216,7 +216,9 @@ XCSoarInterface::Debounce(void)
  * display orientation and the infobox layout
  * @return True if vario gauge should be drawn, False otherwise
  */
-bool vario_visible() {
+bool
+vario_visible()
+{
   bool gaugeVarioInPortrait = is_altair();
   bool enable_gauge;
 
@@ -228,8 +230,7 @@ bool vario_visible() {
   // requiring a restyle!
 
   if (InfoBoxLayout::gnav) {
-    if (Layout::landscape &&
-        (InfoBoxLayout::InfoBoxGeometry == 5))
+    if (Layout::landscape && (InfoBoxLayout::InfoBoxGeometry == 5))
       enable_gauge = false;
     else
       enable_gauge = true;
@@ -239,9 +240,8 @@ bool vario_visible() {
 
  // Disable vario gauge in geometry 5 landscape mode, leave 8 boxes on
  // the right
-  if (Layout::landscape
-      && (InfoBoxLayout::InfoBoxGeometry == 5))
-    return false; // VENTA3
+  if (Layout::landscape && (InfoBoxLayout::InfoBoxGeometry == 5))
+    return false;
 
   if (gaugeVarioInPortrait || Layout::landscape)
     return enable_gauge;
@@ -262,11 +262,10 @@ ActionInterface::DisplayModes()
   SetSettingsMap().EnableVarioGauge = vario_visible() && !SettingsMap().FullScreen;
 
   if (main_window.vario) {
-    if (!SettingsMap().ScreenBlanked && SettingsMap().EnableVarioGauge) {
+    if (!SettingsMap().ScreenBlanked && SettingsMap().EnableVarioGauge)
       main_window.vario->show();
-    } else {
+    else
       main_window.vario->hide();
-    }
   }
 
   if (Basic().flarm.NewTraffic) {
@@ -276,9 +275,8 @@ ActionInterface::DisplayModes()
       gauge_flarm->Suppress = false;
   }
 
-  if (SettingsMap().FullScreen) {
+  if (SettingsMap().FullScreen)
     InfoBoxManager::Hide();
-  } else {
+  else
     InfoBoxManager::Show();
-  }
 }
