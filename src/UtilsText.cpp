@@ -555,16 +555,3 @@ ConvToUpper(TCHAR *str)
   for (; *str; ++str)
     *str = _totupper(*str);
 }
-
-bool
-MatchesExtension(const TCHAR *filename, const TCHAR* extension)
-{
-  const TCHAR *ptr;
-
-  ptr = _tcsstr(filename, extension);
-
-  if (ptr != filename + _tcslen(filename) - _tcslen(extension))
-    return false;
-
-  return true;
-}

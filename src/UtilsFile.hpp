@@ -51,4 +51,6 @@ FileExists(const char *FileName);
 
 bool FileExistsZipped(const char *FileName);
 
+bool MatchesExtension(const TCHAR *filename, const TCHAR* extension);
+
 #endif
