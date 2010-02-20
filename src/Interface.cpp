@@ -173,18 +173,21 @@ ActionInterface::SignalShutdown(bool force)
 bool
 XCSoarInterface::CheckShutdown(void)
 {
+  if (ShutdownRequested)
+    return false;
+
   bool retval = false;
-  if (!ShutdownRequested) {
-    ShutdownRequested = true;
-    if (doForceShutdown || (MessageBoxX(gettext(TEXT("Quit program?")),
-        gettext(TEXT("XCSoar")), MB_YESNO | MB_ICONQUESTION) == IDYES)) {
-      retval = true;
-    } else {
-      retval = false;
-    }
-    doForceShutdown = false;
-    ShutdownRequested = false;
-  }
+  ShutdownRequested = true;
+  if (doForceShutdown ||
+      MessageBoxX(gettext(TEXT("Quit program?")), gettext(TEXT("XCSoar")),
+                  MB_YESNO | MB_ICONQUESTION) == IDYES)
+    retval = true;
+  else
+    retval = false;
+
+  doForceShutdown = false;
+  ShutdownRequested = false;
+
   return retval;
 }
 
