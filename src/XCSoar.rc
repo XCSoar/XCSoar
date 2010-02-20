@@ -1,8 +1,6 @@
-// use the full physical display resolution on WM<5.0
-HI_RES_AWARE CEUX MOVEABLE PURE
-BEGIN
-    0x0001
-END
+// Enables High Resolution Legacy Support on Windows Mobile devices (> WM 5.0)
+// (see http://msdn.microsoft.com/en-us/library/ms889982.aspx)
+HI_RES_AWARE CEUX {1}
 
 #include "resource.h"
 
