@@ -64,71 +64,71 @@ class TaskVisitor;
  *  of navigation tasks.  Hides details of these AbstractTasks behind a facade.
  */
 class TaskManager: 
- public TaskInterface,
- public Serialisable,
+  public TaskInterface,
+  public Serialisable,
   private NonCopyable
 {
 public:
-/** 
- * Constructor for task manager
- * 
- * @param te Task events callback object
- * @param tb Task behaviour options
- * @param wps Waypoint system for use by AbortTask
- * 
- * @return Initialised object
- */
+  /**
+   * Constructor for task manager
+   *
+   * @param te Task events callback object
+   * @param tb Task behaviour options
+   * @param wps Waypoint system for use by AbortTask
+   *
+   * @return Initialised object
+   */
   TaskManager(TaskEvents &te,
               const TaskBehaviour &tb,
               const Waypoints &wps);
 
-/** 
- * Increments active taskpoint sequence for active task
- * 
- * @param offset Offset value
- */
+  /**
+   * Increments active taskpoint sequence for active task
+   *
+   * @param offset Offset value
+   */
   void incrementActiveTaskPoint(int offset);
 
-/** 
- * Sets active taskpoint sequence for active task
- * 
- * @param index Sequence number of task point
- */
+  /**
+   * Sets active taskpoint sequence for active task
+   *
+   * @param index Sequence number of task point
+   */
   void setActiveTaskPoint(unsigned index);
 
-/** 
- * Accessor for active taskpoint sequence for active task
- * 
- * @return Sequence number of task point
- */
+  /**
+   * Accessor for active taskpoint sequence for active task
+   *
+   * @return Sequence number of task point
+   */
   gcc_pure
   unsigned getActiveTaskPointIndex() const;
 
-/** 
- * Accessor of current task point of active task
- * 
- * @return TaskPoint of active task point, and 0 if no active task
- */
+  /**
+   * Accessor of current task point of active task
+   *
+   * @return TaskPoint of active task point, and 0 if no active task
+   */
   gcc_pure
   TaskPoint* getActiveTaskPoint() const;
 
-/**
- * Determine whether active task point optionally shifted points to
- * a valid task point.
- *
- * @param index_offset offset (default 0)
- */
+  /**
+   * Determine whether active task point optionally shifted points to
+   * a valid task point.
+   *
+   * @param index_offset offset (default 0)
+   */
   gcc_pure
-  bool validTaskPoint(const int index_offset=0) const;
+  bool validTaskPoint(const int index_offset = 0) const;
 
-/** 
- * Get a random point in the task OZ (for testing simulation route)
- * 
- * @param index Index sequence of task point
- * @param mag proportional magnitude of error from center (0-1)
- * 
- * @return Location of point
- */
+  /**
+   * Get a random point in the task OZ (for testing simulation route)
+   *
+   * @param index Index sequence of task point
+   * @param mag proportional magnitude of error from center (0-1)
+   *
+   * @return Location of point
+   */
   GEOPOINT random_point_in_task(const unsigned index,
                                 const fixed mag=fixed_one) const;
 
@@ -136,7 +136,7 @@ public:
    * Enumeration of task modes
    */
   enum TaskMode_t {
-    MODE_NULL=0,
+    MODE_NULL = 0,
     MODE_ORDERED,
     MODE_ABORT,
     MODE_GOTO
@@ -147,68 +147,61 @@ public:
    * types of ordered task that can be created.
    */
   enum Factory_t {
-    FACTORY_FAI=0,
+    FACTORY_FAI = 0,
     FACTORY_AAT,
     FACTORY_MIXED
   };
 
-  /** 
-   * Reset the tasks (as if never flown)
-   * 
-   */
+  /** Reset the tasks (as if never flown) */
   void reset();
 
-/** 
- * Set active task to abort mode.
- * 
- */
+  /** Set active task to abort mode. */
   void abort();
 
-/** 
- * Sets active task to ordered task (or goto if none exists) after
- * goto or aborting.
- * 
- */
+  /**
+   * Sets active task to ordered task (or goto if none exists) after
+   * goto or aborting.
+   */
   void resume();
 
-/** 
- * Sets active task to go to mode, to specified waypoint
- * 
- * @param wp Waypoint to go to
- * @return True if successful
- */
+  /**
+   * Sets active task to go to mode, to specified waypoint
+   *
+   * @param wp Waypoint to go to
+   * @return True if successful
+   */
   bool do_goto(const Waypoint & wp);
 
-/** 
- * Create a default task if no task is available
- * 
- * @param loc Location of aircraft at start
- * @param force Force creation of default task even if a task is present
- */
+  /**
+   * Create a default task if no task is available
+   *
+   * @param loc Location of aircraft at start
+   * @param force Force creation of default task even if a task is present
+   */
   void default_task(const GEOPOINT loc, const bool force=false);
 
-/** 
- * Updates internal state of task given new aircraft.
- * Only essential calculations are performed here;
- * other calculations and housekeeping may be performed
- * by update_idle
- * 
- * @param state_now Current aircraft state
- * @param state_last Aircraft state at last update 
- * @return True if internal state changed
- */
+  /**
+   * Updates internal state of task given new aircraft.
+   * Only essential calculations are performed here;
+   * other calculations and housekeeping may be performed
+   * by update_idle
+   *
+   * @param state_now Current aircraft state
+   * @param state_last Aircraft state at last update
+   * @return True if internal state changed
+   */
   bool update(const AIRCRAFT_STATE &state_now, 
               const AIRCRAFT_STATE &state_last);
 
-/** 
- * Updates internal state of task to produce
- * auxiliary information or to perform slow house-keeping
- * functions that are non-essential.
- * 
- * @param state Current aircraft state
- * 
- * @return True if internal state changed
- */
+  /**
+   * Updates internal state of task to produce
+   * auxiliary information or to perform slow house-keeping
+   * functions that are non-essential.
+   *
+   * @param state Current aircraft state
+   *
+   * @return True if internal state changed
+   */
   bool update_idle(const AIRCRAFT_STATE &state);
 
   /** 
@@ -222,168 +215,168 @@ public:
   bool update_auto_mc(const AIRCRAFT_STATE& state_now,
                       const fixed fallback_mc);
 
-/** 
- * Accessor for statistics of active task
- * 
- * @return Statistics of active task
- */
+  /**
+   * Accessor for statistics of active task
+   *
+   * @return Statistics of active task
+   */
   gcc_pure
   const TaskStats& get_stats() const;
 
-/** 
- * Accessor for common statistics 
- * 
- * @return Statistics 
- */
+  /**
+   * Accessor for common statistics
+   *
+   * @return Statistics
+   */
   gcc_pure
   const CommonStats& get_common_stats() const;
 
-/** 
- * Convenience function, determines whether stats are valid
- * 
- * @return True if stats valid
- */
+  /**
+   * Convenience function, determines whether stats are valid
+   *
+   * @return True if stats valid
+   */
   gcc_pure
   bool stats_valid() const;
 
-/** 
- * Size of active task
- * 
- * @return Number of taskpoints in active task
- */
+  /**
+   * Size of active task
+   *
+   * @return Number of taskpoints in active task
+   */
   gcc_pure
   unsigned task_size() const;
 
-/** 
- * Check whether ordered task is valid
- * 
- * @return True if task is valid
- */
+  /**
+   * Check whether ordered task is valid
+   *
+   * @return True if task is valid
+   */
   gcc_pure
   bool check_ordered_task() const;
 
-/** 
- * Check whether active task is valid
- * 
- * @return True if task is valid
- */
+  /**
+   * Check whether active task is valid
+   *
+   * @return True if task is valid
+   */
   gcc_pure
   bool check_task() const;
 
-/** 
- * Accessor for factory system for constructing tasks
- * 
- * @return Factory
- */
+  /**
+   * Accessor for factory system for constructing tasks
+   *
+   * @return Factory
+   */
   gcc_pure
   AbstractTaskFactory* get_factory() const;
 
-/** 
- * Set type of task factory to be used for constructing tasks
- * 
- * @param _factory Type of task
- * 
- * @return Type of task
- */
+  /**
+   * Set type of task factory to be used for constructing tasks
+   *
+   * @param _factory Type of task
+   *
+   * @return Type of task
+   */
   Factory_t set_factory(const Factory_t _factory);
 
-/** 
- * Accessor for task advance system
- * 
- * @return Task advance mechanism
- */
+  /**
+   * Accessor for task advance system
+   *
+   * @return Task advance mechanism
+   */
   TaskAdvance& get_task_advance();
 
-/** 
- * Access active task mode
- * 
- * @return Active task mode
- */
+  /**
+   * Access active task mode
+   *
+   * @return Active task mode
+   */
   gcc_pure
   TaskMode_t get_mode() const;
 
-/** 
- * Determine if the active mode is a particular mode
- * 
- * @param the_mode Mode to compare against
- * 
- * @return True if modes match
- */
+  /**
+   * Determine if the active mode is a particular mode
+   *
+   * @param the_mode Mode to compare against
+   *
+   * @return True if modes match
+   */
   gcc_pure
   bool is_mode(const TaskMode_t the_mode) const;
 
-/** 
- * Retrieve copy of glide polar used by task system
- * 
- * @return Copy of glide polar 
- */
+  /**
+   * Retrieve copy of glide polar used by task system
+   *
+   * @return Copy of glide polar
+   */
   GlidePolar get_glide_polar();
 
-/** 
- * Retrieves glide polar used by task system
- * 
- * @return Reference to glide polar
- */
+  /**
+   * Retrieves glide polar used by task system
+   *
+   * @return Reference to glide polar
+   */
   gcc_pure
   const GlidePolar& get_glide_polar() const;
 
-/**
- * Update glide polar used by task system
- *
- * @param glide_polar The polar to set to
- */
+  /**
+   * Update glide polar used by task system
+   *
+   * @param glide_polar The polar to set to
+   */
   void set_glide_polar(const GlidePolar& glide_polar);
 
-/** 
- * Retrieve copy of safety glide polar used by task system
- * 
- * @return Copy of glide polar 
- */
+  /**
+   * Retrieve copy of safety glide polar used by task system
+   *
+   * @return Copy of glide polar
+   */
   gcc_pure
   GlidePolar get_safety_polar() const;
 
-/**
- * Update safety polar used by task system
- *
- * @param glide_polar The polar to set to
- */
+  /**
+   * Update safety polar used by task system
+   *
+   * @param glide_polar The polar to set to
+   */
   void set_safety_polar(const GlidePolar& glide_polar);
 
-/** 
- * Retrieve trace vector
- * 
- */
+  /**
+   * Retrieve trace vector
+   *
+   */
   TracePointVector find_trace_points(const GEOPOINT &loc, const fixed range,
                                      const unsigned mintime, const fixed resolution) const;
 
-/** 
- * Retrieve olc solution vector
- * 
- * @return Vector of trace points selected for OLC
- */
+  /**
+   * Retrieve olc solution vector
+   *
+   * @return Vector of trace points selected for OLC
+   */
   gcc_pure
   const TracePointVector& get_olc_points() const;
 
-/** 
- * Retrieve olc trace vector
- * 
- * @return Vector of trace points reduced for OLC
- */
+  /**
+   * Retrieve olc trace vector
+   *
+   * @return Vector of trace points reduced for OLC
+   */
   gcc_pure
   const TracePointVector& get_trace_points() const;
 
-/**
- * Accesses ordered task start state
- * 
- * @return State at task start (or null state if not started)
- */
+  /**
+   * Accesses ordered task start state
+   *
+   * @return State at task start (or null state if not started)
+   */
   AIRCRAFT_STATE get_start_state() const;
 
-/**
- * Accesses ordered task finish state
- * 
- * @return State at task finish (or null state if not finished)
- */
+  /**
+   * Accesses ordered task finish state
+   *
+   * @return State at task finish (or null state if not finished)
+   */
   AIRCRAFT_STATE get_finish_state() const;
 
   /**
