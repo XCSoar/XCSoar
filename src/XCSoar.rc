@@ -4,39 +4,12 @@ BEGIN
     0x0001
 END
 
-//Microsoft eMbedded Visual C++ generated resource script.
-//
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
-/////////////////////////////////////////////////////////////////////////////
-//
-// Generated from the TEXTINCLUDE 2 resource.
-//
 #include "newres.h"
-
-/////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
-/////////////////////////////////////////////////////////////////////////////
-// Neutral (Default) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUD)
-#ifdef _WIN32
-#ifndef WINDOWSPC
-#ifndef _MINGW32_
-LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
-#endif
-#endif
-#pragma code_page(1252)
-#endif //_WIN32
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// WAVE
-//
-
-// VENTA-ADDON
 #ifndef GNAV
 IDR_WAV_TASKTURNPOINT   WAVE    DISCARDABLE     "Bitmaps/task-turnpoint.wav"
 IDR_WAV_DRIP            WAVE    DISCARDABLE     "Bitmaps/beep-drip.wav"
@@ -48,44 +21,8 @@ IDR_WAV_CLICK			WAVE	DISCARDABLE		"Bitmaps/coolwindclick.wav"
 IDR_WAV_BELL			WAVE	DISCARDABLE		"Bitmaps/bell.wav"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
 IDI_XCSOAR              ICON    DISCARDABLE     "Bitmaps/xcsoarswift.ico"
 IDI_XCSOARS             ICON    DISCARDABLE     "Bitmaps/xcsoarswift.ico"
-#endif    // Neutral (Default) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-#ifdef _WIN32
-#ifndef WINDOWSPC
-#ifndef _MINGW32_
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
-#endif
-#endif
-#pragma code_page(1252)
-#endif //_WIN32
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
 
 IDD_PROGRESS DIALOG DISCARDABLE  0, 0, 132, 153
 STYLE DS_CENTER | WS_CHILD | WS_VISIBLE
@@ -100,7 +37,6 @@ BEGIN
 			WS_EX_CLIENTEDGE,
                     4,141,124,8
 END
-
 
 IDD_PROGRESS_LANDSCAPE DIALOG DISCARDABLE  0, 0, 158, 121
 STYLE DS_CENTER | WS_CHILD | WS_VISIBLE | WS_GROUP
@@ -121,13 +57,6 @@ BEGIN
                     SS_CENTERIMAGE
 END
 
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
 
 #ifdef APSTUDIO_INVOKED
 GUIDELINES DESIGNINFO DISCARDABLE
@@ -151,10 +80,6 @@ END
 
 
 #ifdef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// TEXTINCLUDE
-//
 
 1 TEXTINCLUDE DISCARDABLE
 BEGIN
@@ -176,21 +101,10 @@ END
 #endif    // APSTUDIO_INVOKED
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Accelerator
-//
-
 IDC_XCSOAR ACCELERATORS DISCARDABLE
 BEGIN
     "Q",            IDOK,                   VIRTKEY, CONTROL, NOINVERT
 END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
 
 IDB_ABORT               BITMAP  DISCARDABLE     "Bitmaps/abort.bmp"
 IDB_LOGGER              BITMAP  DISCARDABLE     "Bitmaps/logging.bmp"
@@ -220,10 +134,6 @@ IDB_SCROLLBARBOT        BITMAP  DISCARDABLE     "Bitmaps/scrollbarBot.bmp"
 IDB_SCROLLBARFILL       BITMAP  DISCARDABLE     "Bitmaps/scrollbarFill.bmp"
 IDB_OBSTACLE            BITMAP  DISCARDABLE     "Bitmaps/Obstacle.bmp"
 IDB_AIRSPACEI           BITMAP  DISCARDABLE     "Bitmaps/airspacei.bmp"
-/////////////////////////////////////////////////////////////////////////////
-//
-// XMLDIALOG
-//
 
 IDR_XML_AIRSPACE        XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgAirspace.xml"
 IDR_XML_AIRSPACECOLOURS XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgAirspaceColours.xml"
@@ -291,35 +201,7 @@ IDR_XML_VARIO_L         XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgVario_L.xml"
 IDR_XML_COMBOPICKER_L   XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgComboPicker_L.xml"
 IDR_XML_COMBOPICKER     XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgComboPicker.xml"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RASTERDATA
-//
-
 IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "Bitmaps/egm96s.dem"
-
-#endif    // English (U.S.) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// English (U.K.) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
-#ifdef _WIN32
-#ifndef WINDOWSPC
-#ifndef _MINGW32_
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
-#endif
-#endif
-#pragma code_page(1252)
-#endif //_WIN32
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
 
 IDB_LANDABLE            BITMAP  DISCARDABLE     "Bitmaps/Landable.bmp"
 IDB_REACHABLE           BITMAP  DISCARDABLE     "Bitmaps/Reachable.bmp"
@@ -356,45 +238,11 @@ IDB_UNIT_FPM            BITMAP  DISCARDABLE     "Bitmaps/UnitFeetPerMinute.bmp"
 IDB_UNIT_KMH            BITMAP  DISCARDABLE     "Bitmaps/UnitKMH.bmp"
 IDB_UNIT_MPH            BITMAP  DISCARDABLE     "Bitmaps/UnitMPH.bmp"
 
-#endif    // English (U.K.) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// English (Australia) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENA)
-#ifdef _WIN32
-#ifndef WINDOWSPC
-#ifndef _MINGW32_
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
-#endif
-#endif
-#pragma code_page(1252)
-#endif //_WIN32
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// WAVE
-//
-
 IDR_FAIL                WAVE    DISCARDABLE     "Bitmaps/Fail.wav"
 IDR_INSERT              WAVE    DISCARDABLE     "Bitmaps/Insert.wav"
 IDR_REMOVE              WAVE    DISCARDABLE     "Bitmaps/Remove.wav"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
 IDI_XCSOARSWIFT         ICON    DISCARDABLE     "Bitmaps/xcsoarswift.ico"
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
 
 IDB_AIRSPACE0           BITMAP  DISCARDABLE     "Bitmaps/airspace0.bmp"
 IDB_AIRSPACE1           BITMAP  DISCARDABLE     "Bitmaps/airspace1.bmp"
@@ -403,18 +251,3 @@ IDB_DISCLAIMER          BITMAP  DISCARDABLE     "Bitmaps/startupdisclaimer.bmp"
 IDB_SWIFT               BITMAP  DISCARDABLE     "Bitmaps/xcsoarswiftsplash.bmp"
 IDB_GPSSTATUS1          BITMAP  DISCARDABLE     "Bitmaps/20x20_gpslost_1.bmp"
 IDB_GPSSTATUS2          BITMAP  DISCARDABLE     "Bitmaps/20x20_gpslost_2.bmp"
-#endif    // English (Australia) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-
-#ifndef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// Generated from the TEXTINCLUDE 3 resource.
-//
-
-
-/////////////////////////////////////////////////////////////////////////////
-#endif    // not APSTUDIO_INVOKED
-
