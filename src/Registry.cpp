@@ -352,7 +352,8 @@ public:
 
 #endif /* !WIN32 */
 
-void StoreType(int Index,int the_type)
+void
+StoreType(int Index, int the_type)
 {
   SetToRegistry(szRegistryDisplayType[Index],(DWORD)the_type);
 }
@@ -365,16 +366,16 @@ SetRegistryStringIfAbsent(const TCHAR* name, const TCHAR* value)
   SetRegistryString(name, value);
 #else
   TCHAR temp[MAX_PATH];
-  if (GetRegistryString(name, temp, MAX_PATH)) {  // 0==ERROR_SUCCESS
+  if (GetRegistryString(name, temp, MAX_PATH))
     SetRegistryString(name, value);
-  }
 #endif
 }
 
 //
 // NOTE: all registry variables are unsigned!
 //
-bool GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
+bool
+GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
 {  // returns 0 on SUCCESS, else the non-zero error code
 #ifdef WIN32
   HKEY    hKey;
@@ -404,61 +405,63 @@ bool GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
 #endif /* !WIN32 */
 }
 
-
-bool GetFromRegistry(const TCHAR *szRegValue, int &pPos)
+bool
+GetFromRegistry(const TCHAR *szRegValue, int &pPos)
 {
   DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
+  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS)
     pPos = Temp;
-  }
+
   return res;
 }
 
-bool GetFromRegistry(const TCHAR *szRegValue, short &pPos)
+bool
+GetFromRegistry(const TCHAR *szRegValue, short &pPos)
 {
   DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
+  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS)
     pPos = Temp;
-  }
+
   return res;
 }
 
-bool GetFromRegistry(const TCHAR *szRegValue, bool &pPos)
+bool
+GetFromRegistry(const TCHAR *szRegValue, bool &pPos)
 {
   DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
-    pPos = Temp>0;
-  }
+  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS)
+    pPos = Temp > 0;
+
   return res;
 }
 
-bool GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
+bool
+GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
 {
   DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
+  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS)
     pPos = Temp;
-  }
+
   return res;
 }
 
-bool GetFromRegistry(const TCHAR *szRegValue, double &pPos)
+bool
+GetFromRegistry(const TCHAR *szRegValue, double &pPos)
 {
   DWORD Temp = (DWORD)pPos;
   long res;
-  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS) {
+  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS)
     pPos = (double)Temp;
-  }
+
   return res;
 }
 
-
-// Implement your code to save value to the registry
-
-HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
+HRESULT
+SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 {
 #ifdef WIN32
   HKEY    hKey;
@@ -482,19 +485,22 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 }
 
 // Set bool value to registry as 1 or 0 - JG
-HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal)
+HRESULT
+SetToRegistry(const TCHAR *szRegValue, bool bVal)
 {
   return SetToRegistry(szRegValue, bVal ? DWORD(1) : DWORD(0));
 }
 
 // Set int value to registry - JG
-HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal)
+HRESULT
+SetToRegistry(const TCHAR *szRegValue, int nVal)
 {
   return SetToRegistry(szRegValue, DWORD(nVal));
 }
 
 #ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
-HRESULT SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
+HRESULT
+SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
 {
   return SetToRegistry(szRegValue, DWORD(nVal));
 }
@@ -562,19 +568,20 @@ SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 
 #define CheckIndex(x, i) assert(i >= 0 && (unsigned)i < sizeof(x) / sizeof(x[0]))
 
-void SetRegistryColour(int i, DWORD c)
+void
+SetRegistryColour(int i, DWORD c)
 {
   CheckIndex(szRegistryColour, i);
 
-  SetToRegistry(szRegistryColour[i] ,c) ;
+  SetToRegistry(szRegistryColour[i], c);
 }
 
-
-void SetRegistryBrush(int i, DWORD c)
+void
+SetRegistryBrush(int i, DWORD c)
 {
   CheckIndex(szRegistryBrush, i);
 
-  SetToRegistry(szRegistryBrush[i] ,c) ;
+  SetToRegistry(szRegistryBrush[i], c);
 }
 
 const TCHAR *
@@ -691,25 +698,25 @@ const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6; // max regkey name is
 const static size_t nMaxClassSize = MAX_PATH + 6;
 const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 
-static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
+static bool
+LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide = true)
 {
   LogStartUp(TEXT("Loading registry from %s\n"), szFile);
   bool found = false;
-  FILE *fp=NULL;
+  FILE *fp = NULL;
   if (!string_is_empty(szFile))
 #ifndef __GNUC__
-    if (wide) {
+    if (wide)
       fp = _tfopen(szFile, TEXT("rb"));
-    } else {
+    else
       fp = _tfopen(szFile, TEXT("rt"));
-    }
 #else
-    fp = _tfopen(szFile, TEXT("rb"));    //20060515:sgi add b
+  fp = _tfopen(szFile, TEXT("rb")); //20060515:sgi add b
 #endif
-  if(fp == NULL) {
+  if (fp == NULL)
     // error
     return false;
-  }
+
   TCHAR winval[nMaxValueValueSize];
   TCHAR wname[nMaxValueValueSize];
   TCHAR wvalue[nMaxValueValueSize];
@@ -719,74 +726,79 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
   char inval[nMaxValueValueSize];
   char name [nMaxValueValueSize];
   char value [nMaxValueValueSize];
-    if (wide) {
+
+  if (wide) {
 #endif
-      while (_fgetts(winval, nMaxValueValueSize, fp)) {
+
+  while (_fgetts(winval, nMaxValueValueSize, fp)) {
+
 #ifdef _UNICODE
-        if (winval[0] > 255) { // not reading corectly, probably narrow file.
-          break;
-        }
+    if (winval[0] > 255)
+      // not reading corectly, probably narrow file.
+      break;
 #endif /* _UNICODE */
-        if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"), wname, wvalue) == 2) {
-          if (!string_is_empty(wname)) {
-            SetRegistryString(wname, wvalue);
-            found = true;
-          }
-        } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
-          if (!string_is_empty(wname)) {
-            SetToRegistry(wname, j);
-            found = true;
-          }
-        } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
-          if (!string_is_empty(wname)) {
-            SetRegistryString(wname, TEXT(""));
-            found = true;
-          }
-        } else {
-          //		assert(false);	// Invalid line reached
-        }
+
+    if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"),
+                 wname, wvalue) == 2) {
+      if (!string_is_empty(wname)) {
+        SetRegistryString(wname, wvalue);
+        found = true;
       }
+    } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
+      if (!string_is_empty(wname)) {
+        SetToRegistry(wname, j);
+        found = true;
+      }
+    } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
+      if (!string_is_empty(wname)) {
+        SetRegistryString(wname, TEXT(""));
+        found = true;
+      }
+    } else {
+      // assert(false);	// Invalid line reached
+    }
+  }
 
 #ifdef __GNUC__
-    } else {
-      while (fgets(inval, nMaxValueValueSize, fp)) {
-        if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
-          if (strlen(name)>0) {
+  } else {
+  while (fgets(inval, nMaxValueValueSize, fp)) {
+    if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
+      if (strlen(name)>0) {
 #ifdef _UNICODE
-            mbstowcs(wname, name, strlen(name)+1);
-            mbstowcs(wvalue, value, strlen(value)+1);
+        mbstowcs(wname, name, strlen(name)+1);
+        mbstowcs(wvalue, value, strlen(value)+1);
 #else
-            strcpy(wname, name);
-            strcpy(wvalue, value);
+        strcpy(wname, name);
+        strcpy(wvalue, value);
 #endif
-            SetRegistryString(wname, wvalue);
-            found = true;
-          }
-        } else if (sscanf(inval, "%[^#=\r\n ]=%d[\r\n]", name, &j) == 2) {
-          if (strlen(name)>0) {
-#ifdef _UNICODE
-            mbstowcs(wname, name, strlen(name)+1);
-#else
-            strcpy(wname, name);
-#endif
-            SetToRegistry(wname, j);
-            found = true;
-          }
-        } else if (sscanf(inval, "%[^#=\r\n ]=\"\"[\r\n]", name) == 1) {
-          if (strlen(name)>0) {
-#ifdef _UNICODE
-            mbstowcs(wname, name, strlen(name)+1);
-#else
-            strcpy(wname, name);
-#endif
-            SetRegistryString(wname, TEXT(""));
-            found = true;
-          }
-        } else {
-          //		assert(false);	// Invalid line reached
-        }
+        SetRegistryString(wname, wvalue);
+        found = true;
       }
+    } else if (sscanf(inval, "%[^#=\r\n ]=%d[\r\n]", name, &j) == 2) {
+      if (strlen(name)>0) {
+#ifdef _UNICODE
+        mbstowcs(wname, name, strlen(name)+1);
+#else
+        strcpy(wname, name);
+#endif
+        SetToRegistry(wname, j);
+        found = true;
+      }
+    } else if (sscanf(inval, "%[^#=\r\n ]=\"\"[\r\n]", name) == 1) {
+      if (strlen(name)>0) {
+#ifdef _UNICODE
+        mbstowcs(wname, name, strlen(name)+1);
+#else
+        strcpy(wname, name);
+#endif
+        SetRegistryString(wname, TEXT(""));
+        found = true;
+      }
+    } else {
+      // assert(false);	// Invalid line reached
     }
+  }
+}
 #endif
 
   fclose(fp);
@@ -794,19 +806,24 @@ static bool LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide=true)
   return found;
 }
 
-void LoadRegistryFromFile(const TCHAR *szFile) {
+void
+LoadRegistryFromFile(const TCHAR *szFile)
+{
 #ifndef __GNUC__
-  if (!LoadRegistryFromFile_inner(szFile,true)) { // legacy, wide chars
-    LoadRegistryFromFile_inner(szFile,false);       // new, non-wide chars
-  }
+  // legacy, wide chars
+  if (!LoadRegistryFromFile_inner(szFile,true))
+    // new, non-wide chars
+    LoadRegistryFromFile_inner(szFile,false);
 #else
-  if (!LoadRegistryFromFile_inner(szFile,false)) { // new, non-wide chars
-    LoadRegistryFromFile_inner(szFile,true);       // legacy, wide chars
-  }
+  // new, non-wide chars
+  if (!LoadRegistryFromFile_inner(szFile,false))
+    // legacy, wide chars
+    LoadRegistryFromFile_inner(szFile,true);
 #endif
 }
 
-void SaveRegistryToFile(const TCHAR *szFile)
+void
+SaveRegistryToFile(const TCHAR *szFile)
 {
 #ifdef WIN32
   TCHAR lpstrName[nMaxKeyNameSize+1];
@@ -828,11 +845,10 @@ void SaveRegistryToFile(const TCHAR *szFile)
   LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey,
                             0, KEY_ALL_ACCESS, &hkFrom);
 
-  if (ERROR_SUCCESS != res) {
+  if (ERROR_SUCCESS != res)
     return;
-  }
 
-  FILE *fp=NULL;
+  FILE *fp = NULL;
   if (!string_is_empty(szFile))
     fp = _tfopen(szFile, TEXT("wb"));  //20060515:sgi add b
   if(fp == NULL) {
@@ -845,7 +861,7 @@ void SaveRegistryToFile(const TCHAR *szFile)
     DWORD nType;
     DWORD nValueSize = nMaxValueValueSize;
     DWORD nNameSize = nMaxKeyNameSize;
-//    DWORD nClassSize = nMaxClassSize;
+    // DWORD nClassSize = nMaxClassSize;
 
     lpstrName[0] = _T('\0'); // null terminate, just in case
 
@@ -858,14 +874,15 @@ void SaveRegistryToFile(const TCHAR *szFile)
 #endif
                               &nValueSize);
 
-    if (ERROR_NO_MORE_ITEMS == res) {
+    if (ERROR_NO_MORE_ITEMS == res)
       break;
-    }
-    if ((nNameSize<=0)||(nNameSize>nMaxKeyNameSize)) {
-      continue; // in case things get wierd
-    }
 
-    lpstrName[nNameSize] = _T('\0'); // null terminate, just in case
+    if ((nNameSize <= 0) || (nNameSize > nMaxKeyNameSize))
+      // in case things get weird
+      continue;
+
+    // null terminate, just in case
+    lpstrName[nNameSize] = _T('\0');
 
     if (_tcslen(lpstrName)>1) {
 
@@ -879,40 +896,38 @@ void SaveRegistryToFile(const TCHAR *szFile)
         wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
         fprintf(fp, "%s=%d\r\n", sName, *((DWORD*)pValue));
 #endif
-      } else
+      } else if (nType == 1) {
+        // text
         // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
-        if (nType==1) { // text
-          if (nValueSize>0) {
+        if (nValueSize > 0) {
 #ifdef __GNUC__
-            uValue.pValue[nValueSize]= 0; // null terminate, just in case
-            uValue.pValue[nValueSize+1]= 0; // null terminate, just in case
-            if (!string_is_empty((const TCHAR*)uValue.pValue)) {
-              fprintf(fp, "%S=\"%S\"\r\n", lpstrName, uValue.pValue);
-            } else {
-              fprintf(fp, "%S=\"\"\r\n", lpstrName);
-            }
-#else
-            if (!string_is_empty((const TCHAR*)pValue)) {
-              pValue[nValueSize]= 0; // null terminate, just in case
-              pValue[nValueSize+1]= 0; // null terminate, just in case
-              wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-              wcstombs(sValue,(TCHAR*)pValue,nMaxKeyNameSize+1);
-              fprintf(fp, "%s=\"%s\"\r\n", sName, sValue);
-            } else {
-              wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-              fprintf(fp, "%s=\"\"\r\n", sName);
-            }
-#endif
-          } else {
-#ifdef __GNUC__
+          uValue.pValue[nValueSize] = 0; // null terminate, just in case
+          uValue.pValue[nValueSize + 1] = 0; // null terminate, just in case
+          if (!string_is_empty((const TCHAR*)uValue.pValue))
+            fprintf(fp, "%S=\"%S\"\r\n", lpstrName, uValue.pValue);
+          else
             fprintf(fp, "%S=\"\"\r\n", lpstrName);
 #else
-            fprintf(fp, "%s=\"\"\r\n", lpstrName);
-#endif
+          if (!string_is_empty((const TCHAR*)pValue)) {
+            pValue[nValueSize]= 0; // null terminate, just in case
+            pValue[nValueSize+1]= 0; // null terminate, just in case
+            wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+            wcstombs(sValue,(TCHAR*)pValue,nMaxKeyNameSize+1);
+            fprintf(fp, "%s=\"%s\"\r\n", sName, sValue);
+          } else {
+            wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+            fprintf(fp, "%s=\"\"\r\n", sName);
           }
+#endif
+        } else {
+#ifdef __GNUC__
+          fprintf(fp, "%S=\"\"\r\n", lpstrName);
+#else
+          fprintf(fp, "%s=\"\"\r\n", lpstrName);
+#endif
         }
+      }
     }
-
   }
 #ifdef __GNUC__
   // JMW why flush agressively?
