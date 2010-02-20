@@ -179,15 +179,20 @@ Profile::StoreRegistry(void)
 void
 SetProfileFiles(const TCHAR *override)
 {
+  // Set the default profile file
   if (is_altair())
     LocalPath(defaultProfileFile, TEXT("config/xcsoar-registry.prf"));
   else
     LocalPath(defaultProfileFile, TEXT(XCSPROFILE));
 
-  // LocalPath(failsafeProfileFile,TEXT("xcsoar-registry.prf")); VENTA4
+  // Set the failsafe profile file
   LocalPath(failsafeProfileFile, TEXT(XCSPROFILE));
+
+  // Set the profile file to load at startup
+  // -> to the default file
   _tcscpy(startProfileFile, defaultProfileFile);
 
+  // -> to the given filename (if exists)
   if (!string_is_empty(override))
     _tcsncpy(startProfileFile, override, MAX_PATH - 1);
 }
