@@ -16,12 +16,10 @@
 #define IDB_TOWN                        218
 #define IDB_MARK                        219
 #define IDB_TERRAINWARNING              220
-#define IDI_XCSOARS                     223
 #define IDB_AIRSPACE                    235
 #define IDB_AIRSPACE0                   240
 #define IDB_AIRSPACE1                   241
 #define IDB_AIRSPACE2                   242
-#define IDI_XCSOARSWIFT                 250
 #define IDB_SWIFT                       251
 #define IDB_GPSSTATUS1                  256
 #define IDB_GPSSTATUS2                  257

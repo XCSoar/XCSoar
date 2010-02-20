@@ -56,7 +56,7 @@ MainWindow::register_class(HINSTANCE hInstance)
 #if defined(GNAV) && !defined(PCGNAV)
   wc.hIcon = NULL;
 #else
-  wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
+  wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOAR));
 #endif
   wc.hCursor                    = 0;
   wc.hbrBackground              = (HBRUSH) GetStockObject(WHITE_BRUSH);

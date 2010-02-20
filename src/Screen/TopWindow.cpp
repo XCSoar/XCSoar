@@ -43,7 +43,7 @@ Copyright_License {
 #else /* !ENABLE_SDL */
 #include "Interface.hpp" /* for XCSoarInterface::hInst */
 #if defined(GNAV) && !defined(PCGNAV)
-#include "resource.h" /* for IDI_XCSOARSWIFT */
+#include "resource.h" /* for IDI_XCSOAR */
 #endif
 #endif /* !ENABLE_SDL */
 
@@ -118,7 +118,7 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
 #if defined(GNAV) && !defined(PCGNAV)
   // TODO code: release the handle?
   HANDLE hTmp = LoadIcon(XCSoarInterface::hInst,
-                         MAKEINTRESOURCE(IDI_XCSOARSWIFT));
+                         MAKEINTRESOURCE(IDI_XCSOAR));
   SendMessage(hWnd, WM_SETICON,
 	      (WPARAM)ICON_BIG, (LPARAM)hTmp);
   SendMessage(hWnd, WM_SETICON,

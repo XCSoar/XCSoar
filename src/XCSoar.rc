@@ -11,8 +11,6 @@ END
 #undef APSTUDIO_READONLY_SYMBOLS
 
 IDI_XCSOAR              ICON    DISCARDABLE     "Bitmaps/xcsoarswift.ico"
-IDI_XCSOARS             ICON    DISCARDABLE     "Bitmaps/xcsoarswift.ico"
-IDI_XCSOARSWIFT         ICON    DISCARDABLE     "Bitmaps/xcsoarswift.ico"
 
 IDB_AIRSPACE0           BITMAP  DISCARDABLE     "Bitmaps/airspace0.bmp"
 IDB_AIRSPACE1           BITMAP  DISCARDABLE     "Bitmaps/airspace1.bmp"
