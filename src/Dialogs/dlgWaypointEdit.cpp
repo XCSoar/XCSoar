@@ -40,7 +40,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "InputEvents.h"
 #include "Screen/Layout.hpp"
-#include "WayPointParser.h"
+#include "WayPointFile.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
@@ -426,7 +426,7 @@ static void GetValues(void) {
     ss = wp->GetDataField()->GetAsInteger();
 
     global_wpt->Altitude = (ss == 0 ?
-        WayPointParser::AltitudeFromTerrain(global_wpt->Location, terrain) :
+        WayPointFile::AltitudeFromTerrain(global_wpt->Location, terrain) :
         Units::ToSysUnit(ss, Units::UserAltitudeUnit));
   }
 

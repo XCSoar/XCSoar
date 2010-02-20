@@ -36,13 +36,13 @@ Copyright_License {
 }
 */
 
-#include "WayPointParser.h"
+#include "WayPointFileSeeYou.hpp"
 #include "Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "RasterTerrain.h"
 
 bool
-WayPointParser::parseLineSeeYou(const TCHAR* line, const unsigned linenum,
+WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     Waypoints &way_points, const RasterTerrain *terrain)
 {
   TCHAR ctemp[255];
@@ -108,14 +108,7 @@ WayPointParser::parseLineSeeYou(const TCHAR* line, const unsigned linenum,
   if (ignore_following)
     return true;
 
-  // Create new waypoint (not appended to the waypoint list yet)
-  Waypoint new_waypoint = way_points.create(GEOPOINT(fixed_zero, fixed_zero));
-  // Set FileNumber
-  new_waypoint.FileNum = filenum;
-  // Set Zoom to zero as default
-  new_waypoint.Zoom = 0;
-  // Set flags to false as default
-  setDefaultFlags(new_waypoint.Flags);
+  Waypoint new_waypoint = way_points.create_from_file(file_num);
 
   // Get fields
   n_params = extractParameters(line, ctemp, params, 20);
@@ -129,48 +122,38 @@ WayPointParser::parseLineSeeYou(const TCHAR* line, const unsigned linenum,
     return false;
 
   // Name (e.g. "Some Turnpoint", with quotes)
-  if (!parseStringSeeYou(params[iName], new_waypoint.Name))
+  if (!parseString(params[iName], new_waypoint.Name))
     return false;
 
   // Latitude (e.g. 5115.900N)
-  if (!parseAngleSeeYou(params[iLatitude], new_waypoint.Location.Latitude, true))
+  if (!parseAngle(params[iLatitude], new_waypoint.Location.Latitude, true))
     return false;
 
   // Longitude (e.g. 00715.900W)
-  if (!parseAngleSeeYou(params[iLongitude], new_waypoint.Location.Longitude, false))
+  if (!parseAngle(params[iLongitude], new_waypoint.Location.Longitude, false))
     return false;
 
   // Elevation (e.g. 458.0m)
   /// @todo configurable behaviour
-  bool alt_ok = parseAltitudeSeeYou(params[iElevation], new_waypoint.Altitude);
-  // Load waypoint altitude from terrain
-  double t_alt = terrain != NULL
-    ? AltitudeFromTerrain(new_waypoint.Location, *terrain)
-    : TERRAIN_INVALID;
-  if (t_alt == TERRAIN_INVALID) {
-    if (!alt_ok)
-      new_waypoint.Altitude = fixed_zero;
-  } else { // TERRAIN_VALID
-    if (!alt_ok || abs((fixed)t_alt - new_waypoint.Altitude) > 100)
-      new_waypoint.Altitude = (fixed)t_alt;
-  }
+  bool alt_ok = parseAltitude(params[iElevation], new_waypoint.Altitude);
+  check_altitude(new_waypoint, terrain, alt_ok);
 
   // Description (e.g. "Some Turnpoint", with quotes)
   /// @todo include frequency and rwdir/len
   if (iDescription < n_params)
-    parseStringSeeYou(params[iDescription], new_waypoint.Comment);
+    parseString(params[iDescription], new_waypoint.Comment);
 
   // Style (e.g. 5)
   /// @todo include peaks with peak symbols etc.
   if (iStyle < n_params)
-    parseStyleSeeYou(params[iStyle], new_waypoint.Flags);
+    parseStyle(params[iStyle], new_waypoint.Flags);
 
   // If the Style attribute did not state that this is an airport
   if (!new_waypoint.Flags.Airport) {
     // -> parse the runway length
     fixed rwlen;
     // Runway length (e.g. 546.0m)
-    if (iRWLen < n_params && parseAltitudeSeeYou(params[iRWLen], rwlen)) {
+    if (iRWLen < n_params && parseAltitude(params[iRWLen], rwlen)) {
       // If runway length is between 100m and 300m -> landpoint
       if (rwlen > 100 && rwlen <= 300)
         new_waypoint.Flags.LandPoint = true;
@@ -180,19 +163,12 @@ WayPointParser::parseLineSeeYou(const TCHAR* line, const unsigned linenum,
     }
   }
 
-  // if waypoint out of terrain range and should not be included
-  // -> return without error condition
-  if (terrain != NULL && !checkWaypointInTerrainRange(new_waypoint, *terrain))
-    return true;
-
-  // Append the new waypoint to the waypoint list and
-  // return successful line parse
-  way_points.append(new_waypoint);
+  add_waypoint_if_in_range(way_points, new_waypoint, terrain);
   return true;
 }
 
 bool
-WayPointParser::parseStringSeeYou(const TCHAR* src, tstring& dest)
+WayPointFileSeeYou::parseString(const TCHAR* src, tstring& dest)
 {
   dest.assign(src);
 
@@ -206,7 +182,7 @@ WayPointParser::parseStringSeeYou(const TCHAR* src, tstring& dest)
 }
 
 bool
-WayPointParser::parseAngleSeeYou(const TCHAR* src, fixed& dest, const bool lat)
+WayPointFileSeeYou::parseAngle(const TCHAR* src, fixed& dest, const bool lat)
 {
   double val;
   char sign = 0;
@@ -236,7 +212,7 @@ WayPointParser::parseAngleSeeYou(const TCHAR* src, fixed& dest, const bool lat)
 }
 
 bool
-WayPointParser::parseAltitudeSeeYou(const TCHAR* src, fixed& dest)
+WayPointFileSeeYou::parseAltitude(const TCHAR* src, fixed& dest)
 {
   double val;
   char unit;
@@ -255,7 +231,7 @@ WayPointParser::parseAltitudeSeeYou(const TCHAR* src, fixed& dest)
 }
 
 bool
-WayPointParser::parseStyleSeeYou(const TCHAR* src, WaypointFlags& dest)
+WayPointFileSeeYou::parseStyle(const TCHAR* src, WaypointFlags& dest)
 {
   // 1 - Normal
   // 2 - AirfieldGrass

@@ -160,9 +160,10 @@ XCSOAR_SOURCES := \
 	$(SRC)/TeamCodeCalculation.cpp \
 	$(SRC)/ThermalLocator.cpp \
 	$(SRC)/WayPointParser.cpp \
-	$(SRC)/WayPointParserWinPilot.cpp \
-	$(SRC)/WayPointParserSeeYou.cpp \
-	$(SRC)/WayPointParserZander.cpp \
+	$(SRC)/WayPointFile.cpp \
+	$(SRC)/WayPointFileWinPilot.cpp \
+	$(SRC)/WayPointFileSeeYou.cpp \
+	$(SRC)/WayPointFileZander.cpp \
 	$(SRC)/WindAnalyser.cpp \
 	$(SRC)/WindMeasurementList.cpp \
 	$(SRC)/WindStore.cpp \

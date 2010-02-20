@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Units.hpp"
-#include "WayPointParser.h"
+#include "WayPointFile.hpp"
 #include "MainWindow.hpp"
 
 static WndForm *wf = NULL;

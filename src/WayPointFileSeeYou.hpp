@@ -37,51 +37,37 @@ Copyright_License {
 */
 
 
-#ifndef WAYPOINTPARSER_HPP
-#define WAYPOINTPARSER_HPP
+#ifndef WAYPOINTFILESEEYOU_HPP
+#define WAYPOINTFILESEEYOU_HPP
 
-#include "Engine/Math/fixed.hpp"
-#include "Engine/Waypoint/Waypoint.hpp"
+#include "WayPointFile.hpp"
 
-#include <tchar.h>
-
-
-class Waypoints;
-class RasterTerrain;
-
-struct Waypoint;
-struct GEOPOINT;
-struct SETTINGS_COMPUTER;
-
-
-void SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
-    SETTINGS_COMPUTER &settings, const bool reset,
-    const bool set_location = false);
-
-class WayPointFile;
-
-
-/**
- * This class is used to parse different waypoint files
- */
-class WayPointParser {
+class WayPointFileSeeYou: 
+  public WayPointFile 
+{
 public:
+  WayPointFileSeeYou(const TCHAR* file_name, const int _file_num,
+                     const bool _compressed=false): WayPointFile(file_name,
+                                                                 _file_num,
+                                                                 _compressed) {};
 
+protected:
   /**
-   * Reads the waypoints out of the two waypoint files and appends them to the
-   * specified waypoint list
-   * @param way_points The waypoint list to fill
-   * @param terrain RasterTerrain (for automatic waypoint height)
+   * Parses a SeeYou waypoint file line
+   * @see parseLine()
+   * @see http://data.naviter.si/docs/cup_format.pdf
    */
-  static bool ReadWaypoints(Waypoints &way_points,
-                            const RasterTerrain *terrain);
-  static void SaveWaypoints(Waypoints &way_points);
-  static void CloseWaypoints(Waypoints &way_points);
+  bool parseLine(const TCHAR* line, const unsigned linenum,
+                 Waypoints &way_points, const RasterTerrain *terrain);
+
+  bool IsWritable() { return false; }
 
 private:
-  static WayPointFile *wp_file0;
-  static WayPointFile *wp_file1;
-  static WayPointFile *wp_file2;
+  bool parseString(const TCHAR* src, tstring& dest);
+  bool parseAngle(const TCHAR* src, fixed& dest, const bool lat);
+  bool parseAltitude(const TCHAR* src, fixed& dest);
+  bool parseFlags(const TCHAR* src, WaypointFlags& dest);
+  bool parseStyle(const TCHAR* src, WaypointFlags& dest);
 };
 
 #endif

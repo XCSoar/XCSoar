@@ -72,6 +72,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "WayPointParser.h"
+#include "WayPointFile.hpp"
 #include "StringUtil.hpp"
 #include "Simulator.hpp"
 #include "Compiler.h"
@@ -944,7 +945,7 @@ static void OnWaypointEditClicked(WindowControl * Sender){
 
 static void AskWaypointSave(void) {
   /// @todo terrain check???
-  if (WayPointParser::WaypointsOutOfRangeSetting == 2) {
+  if (WayPointFile::WaypointsOutOfRangeSetting == 2) {
     if(MessageBoxX(gettext(_T("Waypoints excluded, save anyway?")),
                    gettext(_T("Waypoints outside terrain")),
                    MB_YESNO | MB_ICONQUESTION) == IDYES) {
@@ -1446,7 +1447,7 @@ static void setVariables(void) {
     dfe->addEnumText(gettext(_T("Ask")));
     dfe->addEnumText(gettext(_T("Include")));
     dfe->addEnumText(gettext(_T("Exclude")));
-    wp->GetDataField()->Set(WayPointParser::WaypointsOutOfRangeSetting);
+    wp->GetDataField()->Set(WayPointFile::WaypointsOutOfRangeSetting);
     wp->RefreshDisplay();
   }
 
@@ -2589,13 +2590,13 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointsOutOfRange"));
   if (wp) {
-    if (WayPointParser::WaypointsOutOfRangeSetting !=
+    if (WayPointFile::WaypointsOutOfRangeSetting !=
         wp->GetDataField()->GetAsInteger()) {
-      WayPointParser::WaypointsOutOfRangeSetting =
+      WayPointFile::WaypointsOutOfRangeSetting =
         wp->GetDataField()->GetAsInteger();
 
       SetToRegistry(szRegistryWaypointsOutOfRange,
-                    WayPointParser::WaypointsOutOfRangeSetting);
+                    WayPointFile::WaypointsOutOfRangeSetting);
 
       WaypointFileChanged = true;
       changed = true;

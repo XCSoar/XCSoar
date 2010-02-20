@@ -36,14 +36,14 @@ Copyright_License {
 }
 */
 
-#include "WayPointParser.h"
+#include "WayPointFileWinPilot.hpp"
 #include "Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "RasterTerrain.h"
 
 bool
-WayPointParser::parseLineWinPilot(const TCHAR* line, const unsigned linenum,
-    Waypoints &way_points, const RasterTerrain *terrain)
+WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
+                                Waypoints &way_points, const RasterTerrain *terrain)
 {
   TCHAR ctemp[255];
   const TCHAR *params[20];
@@ -56,14 +56,7 @@ WayPointParser::parseLineWinPilot(const TCHAR* line, const unsigned linenum,
     // -> return without error condition
     return true;
 
-  // Create new waypoint (not appended to the waypoint list yet)
-  Waypoint new_waypoint = way_points.create(GEOPOINT(fixed_zero, fixed_zero));
-  // Set FileNumber
-  new_waypoint.FileNum = filenum;
-  // Set Zoom to zero as default
-  new_waypoint.Zoom = 0;
-  // Set flags to false as default
-  setDefaultFlags(new_waypoint.Flags, false);
+  Waypoint new_waypoint = way_points.create_from_file(file_num);
 
   // Get fields
   n_params = extractParameters(line, ctemp, params, 20);
@@ -71,51 +64,35 @@ WayPointParser::parseLineWinPilot(const TCHAR* line, const unsigned linenum,
     return false;
 
   // Name (e.g. KAMPLI)
-  if (!parseStringWinPilot(params[5], new_waypoint.Name))
+  if (!parseString(params[5], new_waypoint.Name))
     return false;
 
   // Latitude (e.g. 51:15.900N)
-  if (!parseAngleWinPilot(params[1], new_waypoint.Location.Latitude, true))
+  if (!parseAngle(params[1], new_waypoint.Location.Latitude, true))
     return false;
 
   // Longitude (e.g. 00715.900W)
-  if (!parseAngleWinPilot(params[2], new_waypoint.Location.Longitude, false))
+  if (!parseAngle(params[2], new_waypoint.Location.Longitude, false))
     return false;
 
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
-  bool alt_ok = parseAltitudeWinPilot(params[3], new_waypoint.Altitude);
-  // Load waypoint altitude from terrain
-  double t_alt = terrain != NULL
-    ? AltitudeFromTerrain(new_waypoint.Location, *terrain)
-    : TERRAIN_INVALID;
-  if (t_alt == TERRAIN_INVALID) {
-    if (!alt_ok)
-      new_waypoint.Altitude = fixed_zero;
-  } else { // TERRAIN_VALID
-    if (!alt_ok || abs((fixed)t_alt - new_waypoint.Altitude) > 100)
-    new_waypoint.Altitude = (fixed)t_alt;
-  }
+  bool alt_ok = parseAltitude(params[3], new_waypoint.Altitude);
+  check_altitude(new_waypoint, terrain, alt_ok);
 
   // Description (e.g. 119.750 Airport)
-  parseStringWinPilot(params[6], new_waypoint.Comment);
+  parseString(params[6], new_waypoint.Comment);
 
   // Waypoint Flags (e.g. AT)
-  parseFlagsWinPilot(params[4], new_waypoint.Flags);
+  parseFlags(params[4], new_waypoint.Flags);
 
-  // if waypoint out of terrain range and should not be included
-  // -> return without error condition
-  if (terrain != NULL && !checkWaypointInTerrainRange(new_waypoint, *terrain))
-    return true;
-
-  // Append the new waypoint to the waypoint list and
-  // return successful line parse
-  way_points.append(new_waypoint);
+  add_waypoint_if_in_range(way_points, new_waypoint, terrain);
   return true;
 }
 
+
 bool
-WayPointParser::parseStringWinPilot(const TCHAR* src, tstring& dest)
+WayPointFileWinPilot::parseString(const TCHAR* src, tstring& dest)
 {
   // Just assign and trim it
   dest.assign(src);
@@ -124,7 +101,7 @@ WayPointParser::parseStringWinPilot(const TCHAR* src, tstring& dest)
 }
 
 bool
-WayPointParser::parseAngleWinPilot(const TCHAR* src, fixed& dest, const bool lat)
+WayPointFileWinPilot::parseAngle(const TCHAR* src, fixed& dest, const bool lat)
 {
   // Two format variants:
   // 51:47.841N (DD:MM.mmm // the usual)
@@ -166,7 +143,7 @@ WayPointParser::parseAngleWinPilot(const TCHAR* src, fixed& dest, const bool lat
 }
 
 bool
-WayPointParser::parseAltitudeWinPilot(const TCHAR* src, fixed& dest)
+WayPointFileWinPilot::parseAltitude(const TCHAR* src, fixed& dest)
 {
   double val;
   char unit;
@@ -185,7 +162,7 @@ WayPointParser::parseAltitudeWinPilot(const TCHAR* src, fixed& dest)
 }
 
 bool
-WayPointParser::parseFlagsWinPilot(const TCHAR* src, WaypointFlags& dest)
+WayPointFileWinPilot::parseFlags(const TCHAR* src, WaypointFlags& dest)
 {
   // A = Airport
   // T = Turnpoint
@@ -237,7 +214,7 @@ WayPointParser::parseFlagsWinPilot(const TCHAR* src, WaypointFlags& dest)
 }
 
 void
-WayPointParser::saveFileWinPilot(FILE *fp, const Waypoints &way_points)
+WayPointFileWinPilot::saveFile(FILE *fp, const Waypoints &way_points)
 {
   // Iterate through the waypoint list and save each waypoint
   // into the file defined by fp
@@ -245,13 +222,13 @@ WayPointParser::saveFileWinPilot(FILE *fp, const Waypoints &way_points)
   for (Waypoints::WaypointTree::const_iterator it = way_points.begin();
        it != way_points.end(); it++) {
     const Waypoint& wp = it->get_waypoint();
-    if (wp.FileNum == filenum)
-      _ftprintf(fp, _T("%s\n"), composeLineWinPilot(wp).c_str());
+    if (wp.FileNum == file_num)
+      _ftprintf(fp, _T("%s\n"), composeLine(wp).c_str());
   }
 }
 
 tstring
-WayPointParser::composeLineWinPilot(const Waypoint& wp)
+WayPointFileWinPilot::composeLine(const Waypoint& wp)
 {
   // Prepare waypoint id
   TCHAR buf[10];
@@ -261,16 +238,16 @@ WayPointParser::composeLineWinPilot(const Waypoint& wp)
   tstring dest = buf;
   dest += _T(",");
   // Attach the latitude to the output
-  dest += composeAngleWinPilot(wp.Location.Latitude, true);
+  dest += composeAngle(wp.Location.Latitude, true);
   dest += _T(",");
   // Attach the longitude id to the output
-  dest += composeAngleWinPilot(wp.Location.Longitude, false);
+  dest += composeAngle(wp.Location.Longitude, false);
   dest += _T(",");
   // Attach the altitude id to the output
-  dest += composeAltitudeWinPilot(wp.Altitude);
+  dest += composeAltitude(wp.Altitude);
   dest += _T(",");
   // Attach the waypoint flags to the output
-  dest += composeFlagsWinPilot(wp.Flags);
+  dest += composeFlags(wp.Flags);
   dest += _T(",");
   // Attach the waypoint name to the output
   dest += wp.Name;
@@ -281,7 +258,7 @@ WayPointParser::composeLineWinPilot(const Waypoint& wp)
 }
 
 tstring
-WayPointParser::composeAngleWinPilot(const fixed& src, const bool lat)
+WayPointFileWinPilot::composeAngle(const fixed& src, const bool lat)
 {
   TCHAR buffer[20];
   bool negative = src < 0;
@@ -306,7 +283,7 @@ WayPointParser::composeAngleWinPilot(const fixed& src, const bool lat)
 }
 
 tstring
-WayPointParser::composeAltitudeWinPilot(const fixed& src)
+WayPointFileWinPilot::composeAltitude(const fixed& src)
 {
   // Save the formatted altitude into the buffer string
   TCHAR buf[10];
@@ -320,7 +297,7 @@ WayPointParser::composeAltitudeWinPilot(const fixed& src)
 }
 
 tstring
-WayPointParser::composeFlagsWinPilot(const WaypointFlags& src)
+WayPointFileWinPilot::composeFlags(const WaypointFlags& src)
 {
   tstring dest = _T("");
 

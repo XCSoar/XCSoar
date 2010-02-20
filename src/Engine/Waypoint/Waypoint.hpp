@@ -61,6 +61,13 @@ struct WaypointFlags {
   bool FinishPoint:1;  /**< If waypoint is marked as a potential finish point */
   bool Restricted:1;   /**< If waypoint is marked for restricted access (unused?) */
   bool WaypointFlag:1; /**< ??? */
+
+/** 
+ * Set default flags (all off except turnpoint)
+ * 
+ * @param turnpoint Whether the waypoint is a turnpoint
+ */
+  void setDefaultFlags(bool turnpoint);
 };
 
 /**
@@ -78,9 +85,10 @@ public:
   /**
    * Constructor for real waypoints
    *
+   * @param is_turnpoint Whether newly created waypoint is a turnpoint
    * @return Uninitialised object
    */
-  Waypoint() {};
+  Waypoint(const bool is_turnpoint= false);
 
   unsigned id; /**< Unique id */
   GEOPOINT Location; /**< Geodetic location */

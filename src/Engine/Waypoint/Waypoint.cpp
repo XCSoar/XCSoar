@@ -36,3 +36,22 @@
  */
 
 #include "Waypoint.hpp"
+
+void
+WaypointFlags::setDefaultFlags(bool turnpoint)
+{
+  Airport = false;
+  TurnPoint = turnpoint;
+  LandPoint = false;
+  Home = false;
+  StartPoint = false;
+  FinishPoint = false;
+  Restricted = false;
+  WaypointFlag = false;
+}
+
+Waypoint::Waypoint(const bool is_turnpoint):
+  Zoom(0)
+{
+  Flags.setDefaultFlags(is_turnpoint);
+}

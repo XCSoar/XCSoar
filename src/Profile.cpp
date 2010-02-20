@@ -47,7 +47,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Asset.hpp"
 #include "Dialogs/XML.hpp"
-#include "WayPointParser.h"
+#include "WayPointFile.hpp"
 
 #define CheckIndex(x, i) do {} while (false)
 
@@ -563,7 +563,7 @@ Profile::ReadRegistrySettings()
 		  SetSettingsComputer().auto_mc_mode);
 #endif
   GetFromRegistry(szRegistryWaypointsOutOfRange,
-                  WayPointParser::WaypointsOutOfRangeSetting);
+                  WayPointFile::WaypointsOutOfRangeSetting);
   {
     unsigned t = SettingsComputer().olc_rules;
     GetFromRegistry(szRegistryOLCRules, t);

@@ -36,13 +36,13 @@ Copyright_License {
 }
 */
 
-#include "WayPointParser.h"
+#include "WayPointFileZander.hpp"
 #include "Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "RasterTerrain.h"
 
 bool
-WayPointParser::parseLineZander(const TCHAR* line, const unsigned linenum,
+WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
     Waypoints &way_points, const RasterTerrain *terrain)
 {
   // If (end-of-file or comment)
@@ -58,63 +58,40 @@ WayPointParser::parseLineZander(const TCHAR* line, const unsigned linenum,
   if (len < 34)
     return false;
 
-  // Create new waypoint (not appended to the waypoint list yet)
-  Waypoint new_waypoint = way_points.create(GEOPOINT(fixed_zero, fixed_zero));
-  // Set FileNumber
-  new_waypoint.FileNum = filenum;
-  // Set Zoom to zero as default
-  new_waypoint.Zoom = 0;
-  // Set flags to false as default
-  setDefaultFlags(new_waypoint.Flags, true);
+  Waypoint new_waypoint = way_points.create_from_file(file_num);
 
   // Name (Characters 0-12)
-  if (!parseStringZander(line, new_waypoint.Name))
+  if (!parseString(line, new_waypoint.Name))
     return false;
 
   // Latitude (Characters 13-20 // DDMMSS(N/S))
-  if (!parseAngleZander(line + 13, new_waypoint.Location.Latitude, true))
+  if (!parseAngle(line + 13, new_waypoint.Location.Latitude, true))
     return false;
 
   // Longitude (Characters 21-29 // DDDMMSS(E/W))
-  if (!parseAngleZander(line + 21, new_waypoint.Location.Longitude, false))
+  if (!parseAngle(line + 21, new_waypoint.Location.Longitude, false))
     return false;
 
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))
   /// @todo configurable behaviour
-  bool alt_ok = parseAltitudeZander(line + 30, new_waypoint.Altitude);
-  // Load waypoint altitude from terrain
-  double t_alt = terrain != NULL
-    ? AltitudeFromTerrain(new_waypoint.Location, *terrain)
-    : TERRAIN_INVALID;
-  if (t_alt == TERRAIN_INVALID) {
-    if (!alt_ok)
-      new_waypoint.Altitude = fixed_zero;
-  } else { // TERRAIN_VALID
-    if (!alt_ok || abs((fixed)t_alt - new_waypoint.Altitude) > 100)
-    new_waypoint.Altitude = (fixed)t_alt;
-  }
+  bool alt_ok = parseAltitude(line + 30, new_waypoint.Altitude);
+  check_altitude(new_waypoint, terrain, alt_ok);
 
   // Description (Characters 35-44)
   if (len > 35)
-    parseStringZander(line + 35, new_waypoint.Comment);
+    parseString(line + 35, new_waypoint.Comment);
 
   // Flags (Characters 45-49)
   if (len > 45)
-    parseFlagsZander(line + 45, new_waypoint.Flags);
+    parseFlags(line + 45, new_waypoint.Flags);
 
-  // if waypoint out of terrain range and should not be included
-  // -> return without error condition
-  if (terrain != NULL && !checkWaypointInTerrainRange(new_waypoint, *terrain))
-    return true;
-
-  // Append the new waypoint to the waypoint list and
-  // return successful line parse
-  way_points.append(new_waypoint);
+  add_waypoint_if_in_range(way_points, new_waypoint, terrain);
   return true;
 }
 
+
 bool
-WayPointParser::parseStringZander(const TCHAR* src, tstring& dest)
+WayPointFileZander::parseString(const TCHAR* src, tstring& dest)
 {
   if (src[0] == 0)
     return true;
@@ -131,7 +108,7 @@ WayPointParser::parseStringZander(const TCHAR* src, tstring& dest)
 }
 
 bool
-WayPointParser::parseAngleZander(const TCHAR* src, fixed& dest, const bool lat)
+WayPointFileZander::parseAngle(const TCHAR* src, fixed& dest, const bool lat)
 {
   double val;
   char sign = 0;
@@ -161,7 +138,7 @@ WayPointParser::parseAngleZander(const TCHAR* src, fixed& dest, const bool lat)
 }
 
 bool
-WayPointParser::parseAltitudeZander(const TCHAR* src, fixed& dest)
+WayPointFileZander::parseAltitude(const TCHAR* src, fixed& dest)
 {
   double val;
 
@@ -175,7 +152,7 @@ WayPointParser::parseAltitudeZander(const TCHAR* src, fixed& dest)
 }
 
 bool
-WayPointParser::parseFlagsZander(const TCHAR* src, WaypointFlags& dest)
+WayPointFileZander::parseFlags(const TCHAR* src, WaypointFlags& dest)
 {
   // WP = Waypoint
   // HA = Home Field
