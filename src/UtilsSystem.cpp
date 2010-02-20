@@ -846,7 +846,7 @@ RECT SystemWindowSize(void) {
   WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
   WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
   #else /* !WIN32 */
-  // XXX implement this properly for SDL/UNIX
+  /// @todo implement this properly for SDL/UNIX
   WindowSize.right = 640;
   WindowSize.bottom = 480;
   #endif /* !WIN32 */
