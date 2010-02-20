@@ -45,7 +45,7 @@ Copyright_License {
 /**
  * Strips trailing whitespace.
  */
-void StringChomp(TCHAR *p);
+void TrimRight(TCHAR *p);
 
 bool ReadString(ZZIP_FILE* zFile, size_t Max, TCHAR *String);
 bool ReadStringX(FILE *fp, size_t Max, TCHAR *String);

@@ -46,7 +46,7 @@ Copyright_License {
 #include <windef.h>
 
 void
-StringChomp(TCHAR *p)
+TrimRight(TCHAR *p)
 {
   size_t length = _tcslen(p);
 
@@ -215,7 +215,7 @@ ReadStringX(FILE *fp, size_t Max, TCHAR *String)
   }
 
   if (_fgetts(String, Max, fp) != NULL) { // 20060512/sgi change 200 to max
-    StringChomp(String);
+    TrimRight(String);
     return true;
   }
 

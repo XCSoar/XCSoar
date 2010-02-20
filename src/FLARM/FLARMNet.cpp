@@ -141,7 +141,7 @@ LoadString(FILE *file, int charCount, TCHAR *res)
   *curChar = 0;
 
   // Trim the string of any additional spaces
-  StringChomp(res);
+  TrimRight(res);
 }
 
 /**
