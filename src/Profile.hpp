@@ -51,6 +51,7 @@ public:
   static void SaveWindToRegistry();
   static void LoadWindFromRegistry();
   static void SetRegistryAirspaceMode(int i);
+  static void SetFiles(const TCHAR* override);
 
 private:
   static int GetRegistryAirspaceMode(int i);

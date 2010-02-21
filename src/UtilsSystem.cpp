@@ -45,6 +45,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Simulator.hpp"
+#include "Profile.hpp"
 
 #ifdef PNA
 #include "LogFile.hpp"
@@ -650,8 +651,6 @@ bool CheckRegistryProfile() {
 #endif
 
 
-void SetProfileFiles(const TCHAR *ex);
-
 /**
  * Reads and parses arguments/options from the command line
  * @param CommandLine not in use
@@ -748,7 +747,7 @@ void XCSoarGetOpts(LPCTSTR CommandLine) {
   }
 #endif
 
-  SetProfileFiles(extrnProfileFile);
+  Profile::SetFiles(extrnProfileFile);
 }
 
 void
