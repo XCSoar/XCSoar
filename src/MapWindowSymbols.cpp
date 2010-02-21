@@ -583,8 +583,9 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
 
     if (Appearance.IndFinalGlide == fgFinalGlideDefault) {
 
-      _stprintf(Value, TEXT("%1.0f "), ALTITUDEMODIFY *
-                FIXED_DOUBLE(Calculated().task_stats.total.solution_remaining.AltitudeDifference));
+      _stprintf(Value, TEXT("%1.0f "), Units::ToUserUnit(
+          Calculated().task_stats.total.solution_remaining.AltitudeDifference,
+          Units::UserAltitudeUnit));
 
       if (Offset >= 0) {
         Offset = GlideBar[2].y + Offset + IBLSCALE(5);

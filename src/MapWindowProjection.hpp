@@ -63,7 +63,7 @@ class MapWindowProjection:
     return MapScale;
   }
   fixed GetMapScaleKM() const {
-    return Units::ToSysUnit(MapScale * 0.001, Units::UserDistanceUnit);
+    return (fixed)Units::ToSysUnit(MapScale * 0.001, Units::UserDistanceUnit);
   }
   RECT GetMapRectBig() const {
     return MapRectBig;
