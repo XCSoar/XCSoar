@@ -292,9 +292,8 @@ static void SetValues(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(
-				   iround(global_wpt->Altitude
-					  *ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(
+        Units::ToUserUnit(global_wpt->Altitude, Units::UserAltitudeUnit)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
