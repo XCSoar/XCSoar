@@ -48,7 +48,7 @@ void FormatterLowWarning::AssignValue(int i) {
   InfoBoxFormatter::AssignValue(i);
   switch (i) {
   case 1:
-    minimum = ALTITUDEMODIFY*SettingsComputer().SafetyAltitudeTerrain;
+    minimum = Units::ToUserUnit(SettingsComputer().SafetyAltitudeTerrain, Units::UserAltitudeUnit);
     break;
   case 2:
     minimum = 0.5*LIFTMODIFY*Calculated().common_stats.current_risk_mc;
