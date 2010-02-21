@@ -96,18 +96,18 @@ InfoBoxFormatter::AssignValue(int i)
 {
   switch (i) {
   case 0:
-    Value = Units::ToUserUnit(Basic().GPSAltitude, Units::UserAltitudeUnit);
+    Value = Units::ToUserUnit(Basic().GPSAltitude, Units::AltitudeUnit);
     break;
 
   case 1:
     Value = Units::ToUserUnit(Basic().AltitudeAGL,
-                              Units::UserAltitudeUnit);
+                              Units::AltitudeUnit);
     Valid = Calculated().TerrainValid;
     break;
 
   case 2:
     Value = Units::ToUserUnit(Calculated().Average30s,
-                              Units::UserVerticalSpeedUnit);
+                              Units::VerticalSpeedUnit);
     break;
 
   case 3:
@@ -137,43 +137,43 @@ InfoBoxFormatter::AssignValue(int i)
 
   case 6:
     Value = Units::ToUserUnit(Basic().GroundSpeed,
-                              Units::UserHorizontalSpeedUnit);
+                              Units::SpeedUnit);
     break;
 
   case 7:
     Value = Units::ToUserUnit(Calculated().LastThermalAverage,
-                              Units::UserVerticalSpeedUnit);
+                              Units::VerticalSpeedUnit);
     break;
 
   case 8:
     Value = Units::ToUserUnit(Calculated().LastThermalGain,
-                              Units::UserVerticalSpeedUnit);
+                              Units::VerticalSpeedUnit);
     break;
 
   case 10:
     Value = (int)Units::ToUserUnit(Calculated().common_stats.current_mc * 10,
-                                   Units::UserVerticalSpeedUnit) / 10.0;
+                                   Units::VerticalSpeedUnit) / 10.0;
     break;
 
   case 11:
     /// @todo this produces 0 if task not started! (bug)
     Value = Units::ToUserUnit(Calculated().task_stats.current_leg.
                               solution_remaining.Vector.Distance,
-                              Units::UserDistanceUnit);
+                              Units::DistanceUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
   case 12:
     Value = Units::ToUserUnit(Calculated().task_stats.current_leg.
                               solution_remaining.AltitudeDifference,
-                              Units::UserAltitudeUnit);
+                              Units::AltitudeUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
   case 13:
     Value = Units::ToUserUnit(Calculated().task_stats.current_leg.
                               solution_remaining.AltitudeRequired,
-                              Units::UserAltitudeUnit);
+                              Units::AltitudeUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
@@ -184,21 +184,21 @@ InfoBoxFormatter::AssignValue(int i)
   case 15:
     Value = Units::ToUserUnit(Calculated().task_stats.total.
                               solution_remaining.AltitudeDifference,
-                              Units::UserAltitudeUnit);
+                              Units::AltitudeUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
   case 16:
     Value = Units::ToUserUnit(Calculated().task_stats.total.
                               solution_remaining.AltitudeRequired,
-                              Units::UserAltitudeUnit);
+                              Units::AltitudeUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
   case 17:
     Value = Units::ToUserUnit(Calculated().task_stats.total.
                               remaining.get_speed(),
-                              Units::UserTaskSpeedUnit);
+                              Units::TaskSpeedUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
@@ -206,11 +206,11 @@ InfoBoxFormatter::AssignValue(int i)
     if (Calculated().common_stats.task_finished)
       Value = Units::ToUserUnit(Calculated().task_stats.current_leg.
                                 solution_remaining.Vector.Distance,
-                                Units::UserDistanceUnit);
+                                Units::DistanceUnit);
     else
       Value = Units::ToUserUnit(Calculated().task_stats.total.
                                 remaining.get_distance(),
-                                Units::UserDistanceUnit);
+                                Units::DistanceUnit);
 
     Valid = Calculated().task_stats.task_valid;
     break;
@@ -231,17 +231,17 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 20:
-    Value = Units::ToUserUnit(Calculated().TerrainAlt, Units::UserAltitudeUnit);
+    Value = Units::ToUserUnit(Calculated().TerrainAlt, Units::AltitudeUnit);
     Valid = Calculated().TerrainValid;
     break;
 
   case 21:
     Value = Units::ToUserUnit(Calculated().AverageThermal,
-                              Units::UserVerticalSpeedUnit);
+                              Units::VerticalSpeedUnit);
     break;
 
   case 22:
-    Value = Units::ToUserUnit(Calculated().ThermalGain, Units::UserAltitudeUnit);
+    Value = Units::ToUserUnit(Calculated().ThermalGain, Units::AltitudeUnit);
     break;
 
   case 23:
@@ -250,12 +250,12 @@ InfoBoxFormatter::AssignValue(int i)
 
   case 24:
     Value = Units::ToUserUnit(Basic().TotalEnergyVario,
-                              Units::UserVerticalSpeedUnit);
+                              Units::VerticalSpeedUnit);
     break;
 
   case 25:
     Value = Units::ToUserUnit(Basic().wind.norm,
-                              Units::UserWindSpeedUnit);
+                              Units::WindSpeedUnit);
     break;
 
   case 26:
@@ -264,26 +264,26 @@ InfoBoxFormatter::AssignValue(int i)
 
   case 28:
     Value = Units::ToUserUnit(Calculated().task_stats.distance_max,
-                              Units::UserDistanceUnit);
+                              Units::DistanceUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
   case 29:
     Value = Units::ToUserUnit(Calculated().task_stats.distance_min,
-                              Units::UserDistanceUnit);
+                              Units::DistanceUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
   case 30:
     Value = Units::ToUserUnit(Calculated().common_stats.aat_speed_max,
-                              Units::UserTaskSpeedUnit);
+                              Units::TaskSpeedUnit);
     Valid = Calculated().task_stats.task_valid &&
             positive(Calculated().common_stats.aat_speed_max);
     break;
 
   case 31:
     Value = Units::ToUserUnit(Calculated().common_stats.aat_speed_min,
-                              Units::UserTaskSpeedUnit);
+                              Units::TaskSpeedUnit);
     Valid = Calculated().task_stats.task_valid &&
             positive(Calculated().common_stats.aat_speed_min);
     break;
@@ -291,17 +291,17 @@ InfoBoxFormatter::AssignValue(int i)
   case 32:
     Valid = Basic().AirspeedAvailable;
     Value = Units::ToUserUnit(Basic().IndicatedAirspeed,
-                              Units::UserHorizontalSpeedUnit);
+                              Units::SpeedUnit);
     break;
 
   case 33:
     Valid = Basic().BaroAltitudeAvailable;
-    Value = Units::ToUserUnit(Basic().BaroAltitude, Units::UserAltitudeUnit);
+    Value = Units::ToUserUnit(Basic().BaroAltitude, Units::AltitudeUnit);
     break;
 
   case 34:
     Value = Units::ToUserUnit(Calculated().common_stats.V_block,
-                              Units::UserHorizontalSpeedUnit);
+                              Units::SpeedUnit);
     break;
 
   case 35:
@@ -325,12 +325,12 @@ InfoBoxFormatter::AssignValue(int i)
     break;
 
   case 43:
-    Value = Units::ToUserUnit(Calculated().V_stf, Units::UserHorizontalSpeedUnit);
+    Value = Units::ToUserUnit(Calculated().V_stf, Units::SpeedUnit);
     break;
 
   case 44:
     Value = Units::ToUserUnit(Basic().NettoVario,
-                              Units::UserVerticalSpeedUnit);
+                              Units::VerticalSpeedUnit);
     break;
 
   case 48:
@@ -348,13 +348,13 @@ InfoBoxFormatter::AssignValue(int i)
   case 51:
     Value = Units::ToUserUnit(Calculated().task_stats.total.
                               planned.get_distance(),
-                              Units::UserDistanceUnit);
+                              Units::DistanceUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
   case 52:
     Value = Units::ToUserUnit(Calculated().common_stats.aat_speed_remaining,
-                              Units::UserTaskSpeedUnit);
+                              Units::TaskSpeedUnit);
     Valid = Calculated().task_stats.task_valid &&
             positive(Calculated().common_stats.aat_speed_remaining);
     break;
@@ -371,7 +371,7 @@ InfoBoxFormatter::AssignValue(int i)
   case 54:
     Valid = Basic().AirspeedAvailable;
     Value = Units::ToUserUnit(Basic().TrueAirspeed,
-                              Units::UserHorizontalSpeedUnit);
+                              Units::SpeedUnit);
     break;
 
   case 56: // team bearing
@@ -381,7 +381,7 @@ InfoBoxFormatter::AssignValue(int i)
   case 58: // team range
     if (SettingsComputer().TeammateCodeValid) {
       Value = Units::ToUserUnit(Calculated().TeammateRange,
-                                Units::UserDistanceUnit);
+                                Units::DistanceUnit);
       if (Value > 100)
         _tcscpy(Format, _T("%.0lf"));
       else
@@ -394,20 +394,20 @@ InfoBoxFormatter::AssignValue(int i)
   case 59:
     Value = Units::ToUserUnit(Calculated().task_stats.total.
                               remaining_effective.get_speed_incremental(),
-                              Units::UserTaskSpeedUnit);
+                              Units::TaskSpeedUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
   case 60:
     Value = Units::ToUserUnit(Calculated().common_stats.vector_home.Distance,
-                              Units::UserDistanceUnit);
+                              Units::DistanceUnit);
     Valid = true;
     break;
 
   case 61:
     Value = Units::ToUserUnit(Calculated().task_stats.total.
                               remaining_effective.get_speed(),
-                              Units::UserTaskSpeedUnit);
+                              Units::TaskSpeedUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
@@ -415,7 +415,7 @@ InfoBoxFormatter::AssignValue(int i)
     if (Calculated().timeCircling > 0) {
       Value = Units::ToUserUnit(Calculated().TotalHeightClimb /
                                 Calculated().timeCircling,
-                                Units::UserVerticalSpeedUnit);
+                                Units::VerticalSpeedUnit);
       Valid = true;
     } else {
       Value = 0.0;
@@ -425,7 +425,7 @@ InfoBoxFormatter::AssignValue(int i)
 
   case 64:
     Value = Units::ToUserUnit(Calculated().task_stats.total.vario.get_value(),
-                              Units::UserVerticalSpeedUnit);
+                              Units::VerticalSpeedUnit);
     Valid = Calculated().task_stats.task_valid;
     break;
 
@@ -470,9 +470,9 @@ InfoBoxFormatter::AssignValue(int i)
   case 70:	// QFE
 #ifdef OLD_TASK
     Value = Units::ToUserUnit(Basic().GPSAltitude - QFEAltitudeOffset,
-                              Units::UserAltitudeUnit);
+                              Units::AltitudeUnit);
 #else
-    Value = Units::ToUserUnit(Basic().GPSAltitude, Units::UserAltitudeUnit);
+    Value = Units::ToUserUnit(Basic().GPSAltitude, Units::AltitudeUnit);
 #endif
     break;
 

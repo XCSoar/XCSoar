@@ -293,7 +293,7 @@ static void SetValues(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(
-        Units::ToUserUnit(global_wpt->Altitude, Units::UserAltitudeUnit)));
+        Units::ToUserUnit(global_wpt->Altitude, Units::AltitudeUnit)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -426,7 +426,7 @@ static void GetValues(void) {
 
     global_wpt->Altitude = (ss == 0 ?
         WayPointFile::AltitudeFromTerrain(global_wpt->Location, terrain) :
-        Units::ToSysUnit(ss, Units::UserAltitudeUnit));
+        Units::ToSysUnit(ss, Units::AltitudeUnit));
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));

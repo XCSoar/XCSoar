@@ -90,12 +90,12 @@ UnitDescriptor_t Units::UnitDescriptors[] = {
   { _T(DEG)_T("F"), 1.8, -459.67}
 };
 
-Units_t Units::UserDistanceUnit = unKiloMeter;
-Units_t Units::UserAltitudeUnit = unMeter;
-Units_t Units::UserHorizontalSpeedUnit = unKiloMeterPerHour;
-Units_t Units::UserVerticalSpeedUnit = unMeterPerSecond;
-Units_t Units::UserWindSpeedUnit = unKiloMeterPerHour;
-Units_t Units::UserTaskSpeedUnit = unKiloMeterPerHour;
+Units_t Units::DistanceUnit = unKiloMeter;
+Units_t Units::AltitudeUnit = unMeter;
+Units_t Units::SpeedUnit = unKiloMeterPerHour;
+Units_t Units::VerticalSpeedUnit = unMeterPerSecond;
+Units_t Units::WindSpeedUnit = unKiloMeterPerHour;
+Units_t Units::TaskSpeedUnit = unKiloMeterPerHour;
 
 void
 Units::LongitudeToDMS(double Longitude, int *dd, int *mm, int *ss, bool *east)
@@ -305,15 +305,15 @@ Units::GetUnitName(Units_t Unit)
 Units_t
 Units::GetUserDistanceUnit(void)
 {
-  return UserDistanceUnit;
+  return DistanceUnit;
 }
 
 Units_t
 Units::SetUserDistanceUnit(Units_t NewUnit)
 {
-  Units_t last = UserDistanceUnit;
-  if (UserDistanceUnit != NewUnit) {
-    UserDistanceUnit = NewUnit;
+  Units_t last = DistanceUnit;
+  if (DistanceUnit != NewUnit) {
+    DistanceUnit = NewUnit;
     NotifyUnitChanged();
   }
   return last;
@@ -322,15 +322,15 @@ Units::SetUserDistanceUnit(Units_t NewUnit)
 Units_t
 Units::GetUserAltitudeUnit(void)
 {
-  return UserAltitudeUnit;
+  return AltitudeUnit;
 }
 
 Units_t
 Units::SetUserAltitudeUnit(Units_t NewUnit)
 {
-  Units_t last = UserAltitudeUnit;
-  if (UserAltitudeUnit != NewUnit) {
-    UserAltitudeUnit = NewUnit;
+  Units_t last = AltitudeUnit;
+  if (AltitudeUnit != NewUnit) {
+    AltitudeUnit = NewUnit;
     NotifyUnitChanged();
   }
   return last;
@@ -339,15 +339,15 @@ Units::SetUserAltitudeUnit(Units_t NewUnit)
 Units_t
 Units::GetUserHorizontalSpeedUnit(void)
 {
-  return UserHorizontalSpeedUnit;
+  return SpeedUnit;
 }
 
 Units_t
 Units::SetUserHorizontalSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = UserHorizontalSpeedUnit;
-  if (UserHorizontalSpeedUnit != NewUnit) {
-    UserHorizontalSpeedUnit = NewUnit;
+  Units_t last = SpeedUnit;
+  if (SpeedUnit != NewUnit) {
+    SpeedUnit = NewUnit;
     NotifyUnitChanged();
   }
   return last;
@@ -356,15 +356,15 @@ Units::SetUserHorizontalSpeedUnit(Units_t NewUnit)
 Units_t
 Units::GetUserTaskSpeedUnit(void)
 {
-  return UserTaskSpeedUnit;
+  return TaskSpeedUnit;
 }
 
 Units_t
 Units::SetUserTaskSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = UserTaskSpeedUnit;
-  if (UserTaskSpeedUnit != NewUnit) {
-    UserTaskSpeedUnit = NewUnit;
+  Units_t last = TaskSpeedUnit;
+  if (TaskSpeedUnit != NewUnit) {
+    TaskSpeedUnit = NewUnit;
     NotifyUnitChanged();
   }
   return last;
@@ -373,15 +373,15 @@ Units::SetUserTaskSpeedUnit(Units_t NewUnit)
 Units_t
 Units::GetUserVerticalSpeedUnit(void)
 {
-  return UserVerticalSpeedUnit;
+  return VerticalSpeedUnit;
 }
 
 Units_t
 Units::SetUserVerticalSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = UserVerticalSpeedUnit;
-  if (UserVerticalSpeedUnit != NewUnit) {
-    UserVerticalSpeedUnit = NewUnit;
+  Units_t last = VerticalSpeedUnit;
+  if (VerticalSpeedUnit != NewUnit) {
+    VerticalSpeedUnit = NewUnit;
     NotifyUnitChanged();
   }
   return last;
@@ -390,15 +390,15 @@ Units::SetUserVerticalSpeedUnit(Units_t NewUnit)
 Units_t
 Units::GetUserWindSpeedUnit(void)
 {
-  return UserWindSpeedUnit;
+  return WindSpeedUnit;
 }
 
 Units_t
 Units::SetUserWindSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = UserWindSpeedUnit;
-  if (UserWindSpeedUnit != NewUnit) {
-    UserWindSpeedUnit = NewUnit;
+  Units_t last = WindSpeedUnit;
+  if (WindSpeedUnit != NewUnit) {
+    WindSpeedUnit = NewUnit;
     NotifyUnitChanged();
   }
   return last;
@@ -508,7 +508,7 @@ Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
 {
   int prec;
   TCHAR sTmp[32];
-  UnitDescriptor_t *pU = &UnitDescriptors[UserAltitudeUnit];
+  UnitDescriptor_t *pU = &UnitDescriptors[AltitudeUnit];
 
   Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
 
@@ -535,17 +535,17 @@ bool
 Units::FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size,
                                    bool IncludeUnit)
 {
-  Units_t saveUnit = UserAltitudeUnit;
+  Units_t saveUnit = AltitudeUnit;
   bool res;
 
   if (saveUnit == unMeter)
-    UserAltitudeUnit = unFeet;
+    AltitudeUnit = unFeet;
   if (saveUnit == unFeet)
-    UserAltitudeUnit = unMeter;
+    AltitudeUnit = unMeter;
 
   res = FormatUserAltitude(Altitude, Buffer, size, IncludeUnit);
 
-  UserAltitudeUnit = saveUnit;
+  AltitudeUnit = saveUnit;
 
   return res;
 }
@@ -559,7 +559,7 @@ Units::FormatUserArrival(double Altitude, TCHAR *Buffer, size_t size,
 {
   int prec;
   TCHAR sTmp[32];
-  UnitDescriptor_t *pU = &UnitDescriptors[UserAltitudeUnit];
+  UnitDescriptor_t *pU = &UnitDescriptors[AltitudeUnit];
 
   Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
 
@@ -590,7 +590,7 @@ Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
   double value;
   TCHAR sTmp[32];
 
-  UnitDescriptor_t *pU = &UnitDescriptors[UserDistanceUnit];
+  UnitDescriptor_t *pU = &UnitDescriptors[DistanceUnit];
 
   value = Distance * pU->ToUserFact; // + pU->ToUserOffset;
 
@@ -602,20 +602,20 @@ Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size,
     prec = 2;
   else {
     prec = 3;
-    if (UserDistanceUnit == unKiloMeter) {
+    if (DistanceUnit == unKiloMeter) {
       prec = 0;
       pU = &UnitDescriptors[unMeter];
       value = Distance * pU->ToUserFact;
     }
-    if (UserDistanceUnit == unNauticalMiles ||
-        UserDistanceUnit == unStatuteMiles) {
+    if (DistanceUnit == unNauticalMiles ||
+        DistanceUnit == unStatuteMiles) {
       pU = &UnitDescriptors[unFeet];
       value = Distance * pU->ToUserFact;
       if (value < 1000) {
         prec = 0;
       } else {
         prec = 1;
-        pU = &UnitDescriptors[UserDistanceUnit];
+        pU = &UnitDescriptors[DistanceUnit];
         value = Distance * pU->ToUserFact;
       }
     }
@@ -644,29 +644,29 @@ Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer,
   double value;
   TCHAR sTmp[32];
 
-  UnitDescriptor_t *pU = &UnitDescriptors[UserDistanceUnit];
+  UnitDescriptor_t *pU = &UnitDescriptors[DistanceUnit];
 
   if (Unit != NULL)
-    *Unit = UserDistanceUnit;
+    *Unit = DistanceUnit;
 
   value = Distance * pU->ToUserFact; // + pU->ToUserOffset;
 
   if (value >= 9.999)
     prec = 0;
-  else if ((UserDistanceUnit == unKiloMeter && value >= 0.999) ||
-           (UserDistanceUnit != unKiloMeter && value >= 0.160))
+  else if ((DistanceUnit == unKiloMeter && value >= 0.999) ||
+           (DistanceUnit != unKiloMeter && value >= 0.160))
     prec = 1;
   else {
     prec = 2;
-    if (UserDistanceUnit == unKiloMeter) {
+    if (DistanceUnit == unKiloMeter) {
       prec = 0;
       if (Unit != NULL)
         *Unit = unMeter;
       pU = &UnitDescriptors[unMeter];
       value = Distance * pU->ToUserFact;
     }
-    if (UserDistanceUnit == unNauticalMiles ||
-        UserDistanceUnit == unStatuteMiles) {
+    if (DistanceUnit == unNauticalMiles ||
+        DistanceUnit == unStatuteMiles) {
       prec = 0;
       if (Unit != NULL)
         *Unit = unFeet;
@@ -696,7 +696,7 @@ Units::FormatUserSpeed(double Speed, TCHAR *Buffer, size_t size,
 {
   int prec;
   TCHAR sTmp[32];
-  UnitDescriptor_t *pU = &UnitDescriptors[UserHorizontalSpeedUnit];
+  UnitDescriptor_t *pU = &UnitDescriptors[SpeedUnit];
 
   Speed = Speed * pU->ToUserFact;
 
@@ -724,7 +724,7 @@ Units::FormatUserVSpeed(double Speed, TCHAR *Buffer, size_t size,
                         bool IncludeUnit)
 {
   TCHAR sTmp[32];
-  UnitDescriptor_t *pU = &UnitDescriptors[UserVerticalSpeedUnit];
+  UnitDescriptor_t *pU = &UnitDescriptors[VerticalSpeedUnit];
 
   Speed = Speed * pU->ToUserFact;
 

@@ -106,12 +106,12 @@ private:
   static UnitDescriptor_t UnitDescriptors[unCount];
 
 public:
-  static Units_t UserDistanceUnit;
-  static Units_t UserAltitudeUnit;
-  static Units_t UserHorizontalSpeedUnit;
-  static Units_t UserVerticalSpeedUnit;
-  static Units_t UserWindSpeedUnit;
-  static Units_t UserTaskSpeedUnit;
+  static Units_t DistanceUnit;
+  static Units_t AltitudeUnit;
+  static Units_t SpeedUnit;
+  static Units_t VerticalSpeedUnit;
+  static Units_t WindSpeedUnit;
+  static Units_t TaskSpeedUnit;
   static CoordinateFormats_t CoordinateFormat;
 
   /**

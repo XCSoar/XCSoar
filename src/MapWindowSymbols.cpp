@@ -372,7 +372,7 @@ MapWindow::DrawWindAtAircraft2(Canvas &canvas, const POINT Orig, const RECT rc)
   }
 
   _stprintf(sTmp, TEXT("%i"),
-            iround(Units::ToUserUnit(wind.norm, Units::UserWindSpeedUnit)));
+            iround(Units::ToUserUnit(wind.norm, Units::WindSpeedUnit)));
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 }; // JMW test {2 | 16};
   if (Arrow[5].y >= Arrow[6].y) {
@@ -585,7 +585,7 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
 
       _stprintf(Value, TEXT("%1.0f "), Units::ToUserUnit(
           Calculated().task_stats.total.solution_remaining.AltitudeDifference,
-          Units::UserAltitudeUnit));
+          Units::AltitudeUnit));
 
       if (Offset >= 0) {
         Offset = GlideBar[2].y + Offset + IBLSCALE(5);
@@ -610,7 +610,7 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
 
       _stprintf(Value, TEXT("%1.0f"), Units::ToUserUnit(
           Calculated().task_stats.total.solution_remaining.AltitudeDifference,
-          Units::UserAltitudeUnit));
+          Units::AltitudeUnit));
 
       canvas.select(MapWindowBoldFont);
       TextSize = canvas.text_size(Value);

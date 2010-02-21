@@ -149,7 +149,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas)
     if (traffic.Average30s >= 0.1) {
       _stprintf(label_avg, TEXT("%.1f"),
                 Units::ToUserUnit(traffic.Average30s,
-                                  Units::UserVerticalSpeedUnit));
+                                  Units::VerticalSpeedUnit));
     } else {
       label_avg[0] = _T('\0');
     }

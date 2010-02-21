@@ -482,7 +482,7 @@ void dlgAirspaceSelect(void) {
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
 
   AirspaceSorter g_airspace_sorter(airspace_database, Location, fixed(
-      Units::ToUserUnit(1, Units::UserDistanceUnit)));
+      Units::ToUserUnit(1, Units::DistanceUnit)));
   airspace_sorter = &g_airspace_sorter;
 
   UpdateList();

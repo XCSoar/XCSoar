@@ -398,7 +398,7 @@ XShapeLabel::renderSpecial(Canvas &canvas, LabelBlock &label_block, int x, int y
 
     Temp[0] = '0';
     dTemp = _tcstod(Temp, NULL);
-    dTemp = Units::ToUserUnit(dTemp, Units::UserAltitudeUnit);
+    dTemp = Units::ToUserUnit(dTemp, Units::AltitudeUnit);
     if (dTemp > 999)
       _stprintf(Temp, TEXT("%.1f"), (dTemp / 1000));
     else

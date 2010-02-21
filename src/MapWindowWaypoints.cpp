@@ -112,7 +112,7 @@ public:
 
           if (reachable) {
             AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
-                                                   Units::UserAltitudeUnit);
+                                                   Units::AltitudeUnit);
           }
 
           draw_alt = reachable;
