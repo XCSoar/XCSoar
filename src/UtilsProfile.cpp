@@ -37,14 +37,10 @@ Copyright_License {
 */
 
 #include "UtilsText.hpp"
-#include "Defines.h"
 #include "Registry.hpp"
 #include "Profile.hpp"
 #include "Protection.hpp"
-#include "LogFile.hpp"
-#include "LocalPath.hpp"
 #include "Asset.hpp"
-#include "StringUtil.hpp"
 
 #include <assert.h>
 
