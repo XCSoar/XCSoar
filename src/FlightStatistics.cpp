@@ -197,7 +197,8 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
   canvas.white_brush();
 
   chart.DrawXGrid(0.5, Altitude.x_min, Chart::STYLE_THINDASHPAPER, 0.5, true);
-  chart.DrawYGrid(1000/ALTITUDEMODIFY, 0, Chart::STYLE_THINDASHPAPER, 1000, true);
+  chart.DrawYGrid(Units::ToSysUnit(1000, Units::UserAltitudeUnit), 0,
+                  Chart::STYLE_THINDASHPAPER, 1000, true);
   chart.DrawLineGraph(Altitude, Chart::STYLE_MEDIUMBLACK);
 
   chart.DrawTrend(Altitude_Base, Chart::STYLE_BLUETHIN);
@@ -229,9 +230,9 @@ FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
   DrawLegs(chart, task, nmea_info, true);
 
   chart.DrawXGrid(0.5, Task_Speed.x_min,
-      Chart::STYLE_THINDASHPAPER, 0.5, true);
-  chart.DrawYGrid(10/TASKSPEEDMODIFY, 0, Chart::STYLE_THINDASHPAPER,
-      10, true);
+                  Chart::STYLE_THINDASHPAPER, 0.5, true);
+  chart.DrawYGrid(Units::ToSysUnit(10, Units::UserTaskSpeedUnit), 0,
+                  Chart::STYLE_THINDASHPAPER, 10, true);
   chart.DrawLineGraph(Task_Speed, Chart::STYLE_MEDIUMBLACK);
   chart.DrawTrend(Task_Speed, Chart::STYLE_BLUETHIN);
 
@@ -259,7 +260,8 @@ FlightStatistics::RenderClimb(Canvas &canvas, const RECT rc,
   chart.ScaleXFromValue(-1);
   chart.ScaleXFromValue(ThermalAverage.sum_n);
 
-  chart.DrawYGrid(1.0 / LIFTMODIFY, 0, Chart::STYLE_THINDASHPAPER, 1.0, true);
+  chart.DrawYGrid(Units::ToSysUnit(1.0, Units::UserVerticalSpeedUnit), 0,
+                  Chart::STYLE_THINDASHPAPER, 1.0, true);
   chart.DrawBarChart(ThermalAverage);
 
   chart.DrawLine(0, MACCREADY, ThermalAverage.sum_n, MACCREADY,
@@ -289,8 +291,10 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas,
   chart.ScaleXFromValue(glide_polar.get_Vmin() * 0.8);
   chart.ScaleXFromValue(glide_polar.get_Vmax() + 2);
 
-  chart.DrawXGrid(10.0 / SPEEDMODIFY, 0, Chart::STYLE_THINDASHPAPER, 10.0, true);
-  chart.DrawYGrid(1.0 / LIFTMODIFY, 0, Chart::STYLE_THINDASHPAPER, 1.0, true);
+  chart.DrawXGrid(Units::ToSysUnit(10.0, Units::UserHorizontalSpeedUnit), 0,
+                  Chart::STYLE_THINDASHPAPER, 10.0, true);
+  chart.DrawYGrid(Units::ToSysUnit(1.0, Units::UserVerticalSpeedUnit), 0,
+                  Chart::STYLE_THINDASHPAPER, 1.0, true);
 
   double sinkrate0, sinkrate1;
   double v0 = 0, v1;
@@ -569,9 +573,10 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 
   chart.ScaleYFromData(windstats_mag);
 
-  chart.DrawXGrid(5 / SPEEDMODIFY, 0, Chart::STYLE_THINDASHPAPER, 5.0, true);
-  chart.DrawYGrid(1000 / ALTITUDEMODIFY, 0, Chart::STYLE_THINDASHPAPER, 1000.0,
-      true);
+  chart.DrawXGrid(Units::ToSysUnit(5, Units::UserHorizontalSpeedUnit), 0,
+                  Chart::STYLE_THINDASHPAPER, 5.0, true);
+  chart.DrawYGrid(Units::ToSysUnit(1000, Units::UserAltitudeUnit), 0,
+                  Chart::STYLE_THINDASHPAPER, 1000.0, true);
   chart.DrawLineGraph(windstats_mag, Chart::STYLE_MEDIUMBLACK);
 
 #define WINDVECTORMAG 25
@@ -771,10 +776,10 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
     canvas.white_brush();
     canvas.set_text_color(Color(0xff, 0xff, 0xff));
 
-    chart.DrawXGrid(5.0 / DISTANCEMODIFY, 0, Chart::STYLE_THINDASHPAPER,
-        5.0, true);
-    chart.DrawYGrid(1000.0 / ALTITUDEMODIFY, 0, Chart::STYLE_THINDASHPAPER,
-        1000.0, true);
+    chart.DrawXGrid(Units::ToSysUnit(5.0, Units::UserDistanceUnit), 0,
+                    Chart::STYLE_THINDASHPAPER, 5.0, true);
+    chart.DrawYGrid(Units::ToSysUnit(1000.0, Units::UserAltitudeUnit), 0,
+                    Chart::STYLE_THINDASHPAPER, 1000.0, true);
 
     chart.DrawXLabel(TEXT("D"));
     chart.DrawYLabel(TEXT("h"));
@@ -880,19 +885,19 @@ FlightStatistics::CaptionBarograph(TCHAR *sTmp)
     _stprintf(sTmp, TEXT("\0"));
   } else if (Altitude_Ceiling.sum_n<4) {
     _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s"),
-	      gettext(TEXT("Working band")),
-	      Altitude_Base.y_ave*ALTITUDEMODIFY,
-	      Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
-	      Units::GetAltitudeName());
+              gettext(TEXT("Working band")),
+              Units::ToUserUnit(Altitude_Base.y_ave, Units::UserAltitudeUnit),
+              Units::ToUserUnit(Altitude_Ceiling.y_ave, Units::UserAltitudeUnit),
+              Units::GetAltitudeName());
   } else {
     _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
-	      gettext(TEXT("Working band")),
-	      Altitude_Base.y_ave*ALTITUDEMODIFY,
-              Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
-	      Units::GetAltitudeName(),
-	      gettext(TEXT("Ceiling trend")),
-	      Altitude_Ceiling.m*ALTITUDEMODIFY,
-	      Units::GetAltitudeName());
+              gettext(TEXT("Working band")),
+              Units::ToUserUnit(Altitude_Base.y_ave, Units::UserAltitudeUnit),
+              Units::ToUserUnit(Altitude_Ceiling.y_ave, Units::UserAltitudeUnit),
+              Units::GetAltitudeName(),
+              gettext(TEXT("Ceiling trend")),
+              Units::ToUserUnit(Altitude_Ceiling.m, Units::UserAltitudeUnit),
+              Units::GetAltitudeName());
   }
   Unlock();
 }
@@ -906,16 +911,16 @@ FlightStatistics::CaptionClimb(TCHAR* sTmp)
   } else if (ThermalAverage.sum_n==1) {
     _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s"),
 	      gettext(TEXT("Av climb")),
-	      ThermalAverage.y_ave*LIFTMODIFY,
+	      Units::ToUserUnit(ThermalAverage.y_ave, Units::UserVerticalSpeedUnit),
 	      Units::GetVerticalSpeedName()
 	      );
   } else {
     _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
 	      gettext(TEXT("Av climb")),
-	      ThermalAverage.y_ave*LIFTMODIFY,
+	      Units::ToUserUnit(ThermalAverage.y_ave, Units::UserVerticalSpeedUnit),
 	      Units::GetVerticalSpeedName(),
 	      gettext(TEXT("Climb trend")),
-	      ThermalAverage.m*LIFTMODIFY,
+	      Units::ToUserUnit(ThermalAverage.m, Units::UserVerticalSpeedUnit),
 	      Units::GetVerticalSpeedName()
 	      );
   }
@@ -928,25 +933,29 @@ FlightStatistics::CaptionPolar(TCHAR *sTmp, const GlidePolar& glide_polar) const
   if (Layout::landscape) {
     _stprintf(sTmp, TEXT("%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %d %s"),
 	      gettext(TEXT("Best LD")),
-              (int)glide_polar.get_bestLD(),
-              (int)(glide_polar.get_VbestLD()*SPEEDMODIFY),
+	      (int)glide_polar.get_bestLD(),
+        (int)(Units::ToUserUnit(glide_polar.get_VbestLD(),
+                                Units::UserHorizontalSpeedUnit)),
 	      Units::GetHorizontalSpeedName(),
 	      gettext(TEXT("Min sink")),
-              (double)(glide_polar.get_Smin() * LIFTMODIFY),
+	      Units::ToUserUnit(glide_polar.get_Smin(), Units::UserVerticalSpeedUnit),
 	      Units::GetVerticalSpeedName(),
-              (int)(glide_polar.get_Vmin()*SPEEDMODIFY),
+        (int)(Units::ToUserUnit(glide_polar.get_Vmin(),
+                                Units::UserHorizontalSpeedUnit)),
 	      Units::GetHorizontalSpeedName()
 	      );
   } else {
     _stprintf(sTmp, TEXT("%s:\r\n  %d at %d %s\r\n%s:\r\n  %3.2f %s at %d %s"),
 	      gettext(TEXT("Best LD")),
-              (int)glide_polar.get_bestLD(),
-              (int)(glide_polar.get_VbestLD()*SPEEDMODIFY),
+        (int)glide_polar.get_bestLD(),
+        (int)(Units::ToUserUnit(glide_polar.get_VbestLD(),
+                                Units::UserHorizontalSpeedUnit)),
 	      Units::GetHorizontalSpeedName(),
 	      gettext(TEXT("Min sink")),
-              (double)(glide_polar.get_Smin()*LIFTMODIFY),
+        Units::ToUserUnit(glide_polar.get_Smin(), Units::UserVerticalSpeedUnit),
 	      Units::GetVerticalSpeedName(),
-              (int)(glide_polar.get_Vmin()*SPEEDMODIFY),
+        (int)(Units::ToUserUnit(glide_polar.get_Vmin(),
+                                Units::UserHorizontalSpeedUnit)),
 	      Units::GetHorizontalSpeedName());
   }
 }
@@ -956,10 +965,10 @@ FlightStatistics::CaptionTempTrace(TCHAR *sTmp) const
 {
   _stprintf(sTmp, TEXT("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
 	    gettext(TEXT("Thermal height")),
-	    CuSonde::thermalHeight*ALTITUDEMODIFY,
+	    Units::ToUserUnit(CuSonde::thermalHeight, Units::UserAltitudeUnit),
 	    Units::GetAltitudeName(),
 	    gettext(TEXT("Cloud base")),
-	    CuSonde::cloudBase*ALTITUDEMODIFY,
+	    Units::ToUserUnit(CuSonde::cloudBase, Units::UserAltitudeUnit),
 	    Units::GetAltitudeName());
 }
 
@@ -984,10 +993,10 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
                     gettext(TEXT("AAT to go")),
 		  timetext2,
 		  gettext(TEXT("Distance to go")),
-                  DISTANCEMODIFY * derived.AATTargetDistance,
+		  Units::ToUserUnit(derived.AATTargetDistance, Units::UserDistanceUnit),
 		  Units::GetDistanceName(),
 		  gettext(TEXT("Target speed")),
-                  TASKSPEEDMODIFY * derived.AATTargetSpeed,
+		  Units::ToUserUnit(derived.AATTargetSpeed, Units::UserTaskSpeedUnit),
 		  Units::GetTaskSpeedName()
 		  );
       } else {
@@ -998,10 +1007,10 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
 		  gettext(TEXT("AAT to go")),
 		  timetext2,
 		  gettext(TEXT("Distance to go")),
-                  DISTANCEMODIFY * derived.AATTargetDistance,
+      Units::ToUserUnit(derived.AATTargetDistance, Units::UserDistanceUnit),
 		  Units::GetDistanceName(),
 		  gettext(TEXT("Target speed")),
-                  TASKSPEEDMODIFY * derived.AATTargetSpeed,
+		      Units::ToUserUnit(derived.AATTargetSpeed, Units::UserTaskSpeedUnit),
 		  Units::GetTaskSpeedName()
 		  );
       }
@@ -1011,7 +1020,7 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
 		gettext(TEXT("Task to go")),
 		timetext1,
 		gettext(TEXT("Distance to go")),
-                DISTANCEMODIFY * derived.TaskDistanceToGo,
+		Units::ToUserUnit(derived.TaskDistanceToGo, Units::UserDistanceUnit),
 		Units::GetDistanceName());
     }
   }
