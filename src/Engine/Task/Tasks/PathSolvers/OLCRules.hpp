@@ -4,7 +4,7 @@
 #include "Util/tstring.hpp"
 
 enum OLCRules {
-  OLC_Sprint=0,
+  OLC_Sprint = 0,
   OLC_FAI,
   OLC_Classic
 };

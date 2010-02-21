@@ -1,8 +1,9 @@
 #include "OLCRules.hpp"
 
-tstring rule_as_text(OLCRules the_rule)
+tstring
+rule_as_text(OLCRules the_rule)
 {
-  switch(the_rule) {
+  switch (the_rule) {
   case OLC_Sprint:
     return tstring(_T("Sprint"));
   case OLC_FAI:
