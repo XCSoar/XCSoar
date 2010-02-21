@@ -200,6 +200,7 @@ MessageBoxX(LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   // Move buttons to the right positions
   for (i = 0; i < ButtonCount; i++) {
+    wButtons[i]->SetFont(&MapWindowBoldFont);
     wButtons[i]->move(x, y);
     x += d;
   }
