@@ -159,18 +159,18 @@ TCHAR defaultProfileFile[MAX_PATH];
 TCHAR failsafeProfileFile[MAX_PATH];
 
 void
-Profile::RestoreRegistry(void)
+Profile::Load(void)
 {
-  LogStartUp(TEXT("Restore registry\n"));
+  LogStartUp(TEXT("Load profile\n"));
   // load registry backup if it exists
   LoadRegistryFromFile(failsafeProfileFile);
   LoadRegistryFromFile(startProfileFile);
 }
 
 void
-Profile::StoreRegistry(void)
+Profile::Save(void)
 {
-  LogStartUp(TEXT("Store registry\n"));
+  LogStartUp(TEXT("Save profile\n"));
   // save registry backup first (try a few places)
   SaveRegistryToFile(startProfileFile);
   SaveRegistryToFile(defaultProfileFile);

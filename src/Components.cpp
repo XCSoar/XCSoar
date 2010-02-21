@@ -180,12 +180,12 @@ XCSoarInterface::PreloadInitialisation(bool ask)
 #endif
 
   if (ask) {
-    Profile::RestoreRegistry();
+    Profile::Load();
     Profile::ReadRegistrySettings();
   } else {
     dlgStartupShowModal();
 
-    Profile::RestoreRegistry();
+    Profile::Load();
     Profile::ReadRegistrySettings();
 
     CreateProgressDialog(gettext(TEXT("Initialising")));
@@ -464,7 +464,7 @@ XCSoarInterface::Shutdown(void)
 
   // Save settings to profile
   CreateProgressDialog(gettext(TEXT("Shutdown, saving profile...")));
-  Profile::StoreRegistry();
+  Profile::Save();
 
   // Stop sound
   LogStartUp(TEXT("SaveSoundSettings\n"));

@@ -39,7 +39,7 @@ Copyright_License {
 #include "UtilsProfile.hpp"
 
 void
-Profile::StoreRegistry(void)
+Profile::Save(void)
 {
 }
 

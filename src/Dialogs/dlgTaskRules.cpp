@@ -209,7 +209,7 @@ bool dlgTaskRules(void){
 
     task.setSettings(settings_task);
 
-    Profile::StoreRegistry();
+    Profile::Save();
 
     MessageBoxX (
 		 gettext(_T("Changes to configuration saved.")),

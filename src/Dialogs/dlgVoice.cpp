@@ -121,7 +121,7 @@ void dlgVoiceShowModal(void){
   changed = SaveFromForm(*wf, XCSoarInterface::SetSettingsComputer());
   
   if (changed) {
-    Profile::StoreRegistry();
+    Profile::Save();
 
     MessageBoxX(gettext(_T("Changes to configuration saved.")),
 		 _T(""), MB_OK);

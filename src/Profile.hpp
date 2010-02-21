@@ -45,8 +45,8 @@ class Profile: public XCSoarInterface
 {
 public:
   static void ReadRegistrySettings(void);
-  static void RestoreRegistry(void);
-  static void StoreRegistry(void);
+  static void Load(void);
+  static void Save(void);
   static void SaveSoundSettings();
   static void SaveWindToRegistry();
   static void LoadWindFromRegistry();

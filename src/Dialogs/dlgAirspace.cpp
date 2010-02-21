@@ -180,7 +180,7 @@ dlgAirspaceShowModal(bool coloredit)
 
   // now retrieve back the properties...
   if (changed) {
-    Profile::StoreRegistry();
+    Profile::Save();
     Message::AddMessage(_T("Configuration saved"));
   }
 

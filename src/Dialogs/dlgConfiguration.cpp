@@ -3427,7 +3427,7 @@ void dlgConfigurationShowModal(void){
   }
 
   if (changed) {
-    Profile::StoreRegistry();
+    Profile::Save();
 
     if (!requirerestart) {
       MessageBoxX(gettext(_T("Changes to configuration saved.")),
