@@ -200,7 +200,6 @@ Profile::ReadRegistrySettings()
     break;
   }
 
-  TaskSpeed = 2;
   GetFromRegistryD(szRegistryTaskSpeedUnitsValue, TaskSpeed);
   switch (TaskSpeed) {
   case 0:
