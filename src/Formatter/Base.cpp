@@ -499,7 +499,8 @@ InfoBoxFormatter::AssignValue(int i)
   /* TODO feature: add extra infoboxes from Lars
   case 68: // distance flown
     if (Calculated().TaskDistanceCovered != 0) {
-      Value = DISTANCEMODIFY * Calculated().TaskDistanceCovered;
+      Value = Units::ToUserUnit(Calculated().TaskDistanceCovered,
+                                Units::DistanceUnit);
       Valid = true;
     } else {
       Value = 0.0;
