@@ -46,7 +46,4 @@ Copyright_License {
 #define TOMPH   (double)2.237
 #define TOKPH   (double)3.6
 
-#define TONAUTICALMILES (double)0.00053996
-#define TOMILES         (double)0.0006214
-
 #endif
