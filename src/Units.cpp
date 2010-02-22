@@ -37,12 +37,8 @@ Copyright_License {
 */
 
 // TODO code: units stuff
-// - check buffer size in LongitudeToString and LattiditudeToString
-// - convertion function
-// - fill up UnitDescriptors with convertion factors
-// - registry re-store
+// - check buffer size in LongitudeToString and LatiditudeToString
 // - unit dialog support
-
 
 //default       EU   UK   US   AUS
 //altitude      m    ft   ft   m
@@ -54,7 +50,6 @@ Copyright_License {
 #include "Units.hpp"
 
 #include <stdio.h>
-//#include <assert.h>
 
 #include "resource.h"
 #include "SettingsUser.hpp"
@@ -182,7 +177,7 @@ Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size)
     }
     // Save the string to the Buffer
     _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%02d'%02d\""), EW[sign],
-        dd, mm, ss);
+              dd, mm, ss);
     break;
 
   case cfDDMMSSss:
@@ -195,7 +190,7 @@ Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size)
     Longitude = (Longitude - mm) * 60.0;
     // Save the string to the Buffer
     _stprintf(Buffer, _T("%c%03d")_T(DEG)_T("%02d'%05.2f\""), EW[sign],
-        dd, mm, Longitude);
+              dd, mm, Longitude);
     break;
 
   case cfDDMMmmm:
@@ -213,8 +208,7 @@ Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size)
     break;
 
   default:
-    //      assert(false /* undefined coordinateformat */);
-    break;
+    return false;
   }
 
   return true;
@@ -251,7 +245,7 @@ Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size)
     }
     // Save the string to the Buffer
     _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%02d'%02d\""), EW[sign],
-        dd, mm, ss);
+              dd, mm, ss);
     break;
 
   case cfDDMMSSss:
@@ -264,7 +258,7 @@ Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size)
     Latitude = (Latitude - mm) * 60.0;
     // Save the string to the Buffer
     _stprintf(Buffer, _T("%c%02d")_T(DEG)_T("%02d'%05.2f\""), EW[sign],
-        dd, mm, Latitude);
+              dd, mm, Latitude);
     break;
 
   case cfDDMMmmm:
@@ -282,8 +276,7 @@ Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size)
     break;
 
   default:
-    // assert(false /* undefined coordinateformat */);
-    break;
+    return false;
   }
 
   return true;
@@ -292,9 +285,6 @@ Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size)
 const TCHAR *
 Units::GetUnitName(Units_t Unit)
 {
-  //  return(gettext(UnitDescriptors[Unit].Name));
-  // JMW adjusted this because units are pretty standard internationally
-  // so don't need different names in different languages.
   return UnitDescriptors[Unit].Name;
 }
 
@@ -408,21 +398,21 @@ Units::GetUserUnitByGroup(UnitGroup_t UnitGroup)
 {
   switch (UnitGroup) {
   case ugNone:
-    return (unUndef);
+    return unUndef;
   case ugDistance:
-    return (GetUserDistanceUnit());
+    return GetUserDistanceUnit();
   case ugAltitude:
-    return (GetUserAltitudeUnit());
+    return GetUserAltitudeUnit();
   case ugHorizontalSpeed:
-    return (GetUserSpeedUnit());
+    return GetUserSpeedUnit();
   case ugVerticalSpeed:
-    return (GetUserVerticalSpeedUnit());
+    return GetUserVerticalSpeedUnit();
   case ugWindSpeed:
-    return (GetUserWindSpeedUnit());
+    return GetUserWindSpeedUnit();
   case ugTaskSpeed:
-    return (GetUserTaskSpeedUnit());
+    return GetUserTaskSpeedUnit();
   default:
-    return (unUndef);
+    return unUndef;
   }
 }
 
@@ -722,9 +712,8 @@ Units::TimeToText(TCHAR* text, int d)
   hours = (dd / 3600);
   mins = (dd / 60 - hours * 60);
   hours = hours % 24;
-  if (negative) {
+  if (negative)
     _stprintf(text, _T("-%02d:%02d"), hours, mins);
-  } else {
+  else
     _stprintf(text, _T("%02d:%02d"), hours, mins);
-  }
 }
