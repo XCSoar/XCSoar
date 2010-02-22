@@ -2650,11 +2650,10 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsLatLon"));
   if (wp) {
-    if ((int)Units::CoordinateFormat != wp->GetDataField()->GetAsInteger()) {
-      Units::CoordinateFormat = (CoordinateFormats_t)
-        wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryLatLonUnits, Units::CoordinateFormat);
-      requirerestart = true;
+    if ((int)Units::GetCoordinateFormat() != wp->GetDataField()->GetAsInteger()) {
+      Units::SetCoordinateFormat(
+          (CoordinateFormats_t)wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryLatLonUnits, Units::GetCoordinateFormat());
       changed = true;
     }
   }
