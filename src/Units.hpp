@@ -311,6 +311,54 @@ public:
    */
   static double ToSysUnit(double Value, Units_t Unit);
 
+  static double ToUserAltitude(double Value) {
+    return ToUserUnit(Value, AltitudeUnit);
+  }
+
+  static double ToSysAltitude(double Value) {
+    return ToSysUnit(Value, AltitudeUnit);
+  }
+
+  static double ToUserDistance(double Value) {
+    return ToUserUnit(Value, DistanceUnit);
+  }
+
+  static double ToSysDistance(double Value) {
+    return ToSysUnit(Value, DistanceUnit);
+  }
+
+  static double ToUserSpeed(double Value) {
+    return ToUserUnit(Value, SpeedUnit);
+  }
+
+  static double ToSysSpeed(double Value) {
+    return ToSysUnit(Value, SpeedUnit);
+  }
+
+  static double ToUserVSpeed(double Value) {
+    return ToUserUnit(Value, VerticalSpeedUnit);
+  }
+
+  static double ToSysVSpeed(double Value) {
+    return ToSysUnit(Value, VerticalSpeedUnit);
+  }
+
+  static double ToUserTaskSpeed(double Value) {
+    return ToUserUnit(Value, TaskSpeedUnit);
+  }
+
+  static double ToSysTaskSpeed(double Value) {
+    return ToSysUnit(Value, TaskSpeedUnit);
+  }
+
+  static double ToUserWindSpeed(double Value) {
+    return ToUserUnit(Value, WindSpeedUnit);
+  }
+
+  static double ToSysWindSpeed(double Value) {
+    return ToSysUnit(Value, WindSpeedUnit);
+  }
+
   static void TimeToText(TCHAR* text, int d);
 };
 
