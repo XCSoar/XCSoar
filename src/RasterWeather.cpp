@@ -286,31 +286,45 @@ void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
   case 0:
     return;
   case 1: // wstar
-    _stprintf(Buffer, TEXT("%.1f%s"), ((val-200)/100.0)*LIFTMODIFY, Units::GetVerticalSpeedName());
+    _stprintf(Buffer, TEXT("%.1f%s"),
+              Units::ToUserUnit((val - 200) / 100.0, Units::VerticalSpeedUnit),
+              Units::GetVerticalSpeedName());
     return;
   case 2: // blwindspd
-    _stprintf(Buffer, TEXT("%.0f%s"), (val/100.0)*SPEEDMODIFY, Units::GetHorizontalSpeedName());
+    _stprintf(Buffer, TEXT("%.0f%s"),
+              Units::ToUserUnit(val / 100.0, Units::SpeedUnit),
+              Units::GetHorizontalSpeedName());
     return;
   case 3: // hbl
-    _stprintf(Buffer, TEXT("%.0f%s"), val*ALTITUDEMODIFY, Units::GetAltitudeName());
+    _stprintf(Buffer, TEXT("%.0f%s"),
+              Units::ToUserUnit(val, Units::AltitudeUnit),
+              Units::GetAltitudeName());
     return;
   case 4: // dwcrit
-    _stprintf(Buffer, TEXT("%.0f%s"), val*ALTITUDEMODIFY, Units::GetAltitudeName());
+    _stprintf(Buffer, TEXT("%.0f%s"),
+              Units::ToUserUnit(val, Units::AltitudeUnit),
+              Units::GetAltitudeName());
     return;
   case 5: // blcloudpct
-    _stprintf(Buffer, TEXT("%d%%"), (int)max(0,min(100, (int)val)));
+    _stprintf(Buffer, TEXT("%d%%"), (int)max(0, min(100, (int)val)));
     return;
   case 6: // sfctemp
-    _stprintf(Buffer, TEXT("%d")TEXT(DEG), iround(val*0.5-20.0));
+    _stprintf(Buffer, TEXT("%d")TEXT(DEG), iround(val * 0.5 - 20.0));
     return;
   case 7: // hwcrit
-    _stprintf(Buffer, TEXT("%.0f%s"), val*ALTITUDEMODIFY, Units::GetAltitudeName());
+    _stprintf(Buffer, TEXT("%.0f%s"),
+              Units::ToUserUnit(val, Units::AltitudeUnit),
+              Units::GetAltitudeName());
     return;
   case 8: // wblmaxmin
-    _stprintf(Buffer, TEXT("%.1f%s"), ((val-200)/100.0)*LIFTMODIFY, Units::GetVerticalSpeedName());
+    _stprintf(Buffer, TEXT("%.1f%s"),
+              Units::ToUserUnit(((val-200)/100.0), Units::VerticalSpeedUnit),
+              Units::GetVerticalSpeedName());
     return;
   case 9: // blcwbase
-    _stprintf(Buffer, TEXT("%.0f%s"), val*ALTITUDEMODIFY, Units::GetAltitudeName());
+    _stprintf(Buffer, TEXT("%.0f%s"),
+              Units::ToUserUnit(val, Units::AltitudeUnit),
+              Units::GetAltitudeName());
     return;
   default:
     // error!
