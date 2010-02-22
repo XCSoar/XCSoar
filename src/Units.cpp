@@ -67,11 +67,6 @@ Copyright_License {
 CoordinateFormats_t Units::CoordinateFormat;
 
 //SI to Local Units
-double SPEEDMODIFY = TOKNOTS;
-double LIFTMODIFY = TOKNOTS;
-double DISTANCEMODIFY = TONAUTICALMILES;
-double ALTITUDEMODIFY = TOFEET;
-double TASKSPEEDMODIFY = TOKPH;
 
 UnitDescriptor_t Units::UnitDescriptors[] = {
   { NULL, 1, 0 },
@@ -312,10 +307,8 @@ Units_t
 Units::SetUserDistanceUnit(Units_t NewUnit)
 {
   Units_t last = DistanceUnit;
-  if (DistanceUnit != NewUnit) {
+  if (DistanceUnit != NewUnit)
     DistanceUnit = NewUnit;
-    NotifyUnitChanged();
-  }
   return last;
 }
 
@@ -329,10 +322,8 @@ Units_t
 Units::SetUserAltitudeUnit(Units_t NewUnit)
 {
   Units_t last = AltitudeUnit;
-  if (AltitudeUnit != NewUnit) {
+  if (AltitudeUnit != NewUnit)
     AltitudeUnit = NewUnit;
-    NotifyUnitChanged();
-  }
   return last;
 }
 
@@ -346,10 +337,8 @@ Units_t
 Units::SetUserSpeedUnit(Units_t NewUnit)
 {
   Units_t last = SpeedUnit;
-  if (SpeedUnit != NewUnit) {
+  if (SpeedUnit != NewUnit)
     SpeedUnit = NewUnit;
-    NotifyUnitChanged();
-  }
   return last;
 }
 
@@ -363,10 +352,8 @@ Units_t
 Units::SetUserTaskSpeedUnit(Units_t NewUnit)
 {
   Units_t last = TaskSpeedUnit;
-  if (TaskSpeedUnit != NewUnit) {
+  if (TaskSpeedUnit != NewUnit)
     TaskSpeedUnit = NewUnit;
-    NotifyUnitChanged();
-  }
   return last;
 }
 
@@ -380,10 +367,8 @@ Units_t
 Units::SetUserVerticalSpeedUnit(Units_t NewUnit)
 {
   Units_t last = VerticalSpeedUnit;
-  if (VerticalSpeedUnit != NewUnit) {
+  if (VerticalSpeedUnit != NewUnit)
     VerticalSpeedUnit = NewUnit;
-    NotifyUnitChanged();
-  }
   return last;
 }
 
@@ -397,10 +382,8 @@ Units_t
 Units::SetUserWindSpeedUnit(Units_t NewUnit)
 {
   Units_t last = WindSpeedUnit;
-  if (WindSpeedUnit != NewUnit) {
+  if (WindSpeedUnit != NewUnit)
     WindSpeedUnit = NewUnit;
-    NotifyUnitChanged();
-  }
   return last;
 }
 
@@ -424,51 +407,6 @@ Units::GetUserUnitByGroup(UnitGroup_t UnitGroup)
     return (GetUserTaskSpeedUnit());
   default:
     return (unUndef);
-  }
-}
-
-void
-Units::NotifyUnitChanged(void)
-{
-  // todo
-
-  if (SPEEDMODIFY == TOMPH) {
-    SetUserSpeedUnit(unStatuteMilesPerHour);
-    SetUserWindSpeedUnit(unStatuteMilesPerHour);
-  } else if (SPEEDMODIFY == TOKNOTS) {
-    SetUserSpeedUnit(unKnots);
-    SetUserWindSpeedUnit(unKnots);
-  } else if (SPEEDMODIFY == TOKPH) {
-    SetUserSpeedUnit(unKiloMeterPerHour);
-    SetUserWindSpeedUnit(unKiloMeterPerHour);
-  }
-
-  if (DISTANCEMODIFY == TOMILES) {
-    SetUserDistanceUnit(unStatuteMiles);
-  } else if (DISTANCEMODIFY == TONAUTICALMILES) {
-    SetUserDistanceUnit(unNauticalMiles);
-  } else if (DISTANCEMODIFY == TOKILOMETER) {
-    SetUserDistanceUnit(unKiloMeter);
-  }
-
-  if (ALTITUDEMODIFY == TOFEET) {
-    SetUserAltitudeUnit(unFeet);
-  } else if (ALTITUDEMODIFY == TOMETER) {
-    SetUserAltitudeUnit(unMeter);
-  }
-
-  if (LIFTMODIFY == TOKNOTS) {
-    SetUserVerticalSpeedUnit(unKnots);
-  } else if (LIFTMODIFY==TOMETER) {
-    SetUserVerticalSpeedUnit(unMeterPerSecond);
-  }
-
-  if (TASKSPEEDMODIFY == TOMPH) {
-    SetUserTaskSpeedUnit(unStatuteMilesPerHour);
-  } else if (TASKSPEEDMODIFY == TOKNOTS) {
-    SetUserTaskSpeedUnit(unKnots);
-  } else if (TASKSPEEDMODIFY == TOKPH) {
-    SetUserTaskSpeedUnit(unKiloMeterPerHour);
   }
 }
 

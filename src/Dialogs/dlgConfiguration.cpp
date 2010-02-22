@@ -2628,7 +2628,6 @@ void dlgConfigurationShowModal(void){
     if ((int)Speed != wp->GetDataField()->GetAsInteger()) {
       Speed = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistrySpeedUnitsValue, Speed);
-      Units::NotifyUnitChanged();
       requirerestart = true;
       changed = true;
     }
@@ -2640,7 +2639,6 @@ void dlgConfigurationShowModal(void){
       Units::CoordinateFormat = (CoordinateFormats_t)
         wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryLatLonUnits, Units::CoordinateFormat);
-      Units::NotifyUnitChanged();
       requirerestart = true;
       changed = true;
     }
@@ -2651,7 +2649,6 @@ void dlgConfigurationShowModal(void){
     if ((int)TaskSpeed != wp->GetDataField()->GetAsInteger()) {
       TaskSpeed = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryTaskSpeedUnitsValue, TaskSpeed);
-      Units::NotifyUnitChanged();
       requirerestart = true;
       changed = true;
     }
@@ -2662,7 +2659,6 @@ void dlgConfigurationShowModal(void){
     if ((int)Distance != wp->GetDataField()->GetAsInteger()) {
       Distance = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryDistanceUnitsValue, Distance);
-      Units::NotifyUnitChanged();
       requirerestart = true;
       changed = true;
     }
@@ -2673,7 +2669,6 @@ void dlgConfigurationShowModal(void){
     if ((int)Lift != wp->GetDataField()->GetAsInteger()) {
       Lift = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryLiftUnitsValue, Lift);
-      Units::NotifyUnitChanged();
       requirerestart = true;
       changed = true;
     }
@@ -2684,7 +2679,6 @@ void dlgConfigurationShowModal(void){
     if ((int)Altitude != wp->GetDataField()->GetAsInteger()) {
       Altitude = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryAltitudeUnitsValue, Altitude);
-      Units::NotifyUnitChanged();
       changed = true;
       requirerestart = true;
     }

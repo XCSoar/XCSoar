@@ -50,6 +50,7 @@ Copyright_License {
 #include "WayPointFile.hpp"
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
+#include "Units.hpp"
 
 #define CheckIndex(x, i) do {} while (false)
 
@@ -185,13 +186,17 @@ Profile::ReadRegistrySettings()
   GetFromRegistryD(szRegistrySpeedUnitsValue, Speed);
   switch (Speed) {
   case 0:
-    SPEEDMODIFY = TOMPH;
+    Units::SetUserSpeedUnit(unStatuteMilesPerHour);
+    Units::SetUserWindSpeedUnit(unStatuteMilesPerHour);
     break;
   case 1:
-    SPEEDMODIFY = TOKNOTS;
+    Units::SetUserSpeedUnit(unKnots);
+    Units::SetUserWindSpeedUnit(unKnots);
     break;
   case 2:
-    SPEEDMODIFY = TOKPH;
+  default:
+    Units::SetUserSpeedUnit(unKiloMeterPerHour);
+    Units::SetUserWindSpeedUnit(unKiloMeterPerHour);
     break;
   }
 
@@ -199,50 +204,52 @@ Profile::ReadRegistrySettings()
   GetFromRegistryD(szRegistryTaskSpeedUnitsValue, TaskSpeed);
   switch (TaskSpeed) {
   case 0:
-    TASKSPEEDMODIFY = TOMPH;
+    Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
     break;
   case 1:
-    TASKSPEEDMODIFY = TOKNOTS;
+    Units::SetUserTaskSpeedUnit(unKnots);
     break;
   case 2:
-    TASKSPEEDMODIFY = TOKPH;
+  default:
+    Units::SetUserTaskSpeedUnit(unKiloMeterPerHour);
     break;
   }
 
   GetFromRegistryD(szRegistryDistanceUnitsValue,Distance);
   switch (Distance) {
   case 0:
-    DISTANCEMODIFY = TOMILES;
+    Units::SetUserDistanceUnit(unStatuteMiles);
     break;
   case 1:
-    DISTANCEMODIFY = TONAUTICALMILES;
+    Units::SetUserDistanceUnit(unNauticalMiles);
     break;
   case 2:
-    DISTANCEMODIFY = TOKILOMETER;
+  default:
+    Units::SetUserDistanceUnit(unKiloMeter);
     break;
   }
 
   GetFromRegistryD(szRegistryAltitudeUnitsValue, Altitude);
   switch (Altitude) {
   case 0:
-    ALTITUDEMODIFY = TOFEET;
+    Units::SetUserAltitudeUnit(unFeet);
     break;
   case 1:
-    ALTITUDEMODIFY = TOMETER;
+  default:
+    Units::SetUserAltitudeUnit(unMeter);
     break;
   }
 
   GetFromRegistryD(szRegistryLiftUnitsValue, Lift);
   switch (Lift) {
   case 0:
-    LIFTMODIFY = TOKNOTS;
+    Units::SetUserVerticalSpeedUnit(unKnots);
     break;
   case 1:
-    LIFTMODIFY = TOMETER;
+  default:
+    Units::SetUserVerticalSpeedUnit(unMeterPerSecond);
     break;
   }
-
-  Units::NotifyUnitChanged();
 
   for (i = 0; i < MAXINFOWINDOWS; i++) {
     Temp = InfoBoxManager::getTypeAll(i);

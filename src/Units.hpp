@@ -47,13 +47,6 @@ Copyright_License {
 #define DEG "°"
 #endif
 
-// units
-extern double SPEEDMODIFY;
-extern double LIFTMODIFY;
-extern double DISTANCEMODIFY;
-extern double ALTITUDEMODIFY;
-extern double TASKSPEEDMODIFY;
-
 typedef enum {
   cfDDMMSS = 0,
   cfDDMMSSss,
