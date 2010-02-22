@@ -688,6 +688,12 @@ Units::FormatUserVSpeed(double Speed, TCHAR *Buffer, size_t size,
 }
 
 double
+Units::ConvertUnits(double Value, Units_t From, Units_t To)
+{
+  return ToUserUnit(ToSysUnit(Value, From), To);
+}
+
+double
 Units::ToUserUnit(double Value, Units_t Unit)
 {
   UnitDescriptor_t *pU = &UnitDescriptors[Unit];
