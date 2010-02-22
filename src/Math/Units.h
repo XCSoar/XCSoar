@@ -50,6 +50,5 @@ Copyright_License {
 #define TOMILES         (double)0.0006214
 #define TOKILOMETER     (double)0.001
 #define TOFEET          (double)3.281
-#define TOMETER         (double)1.0
 
 #endif
