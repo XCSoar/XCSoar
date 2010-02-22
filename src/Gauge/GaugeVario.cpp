@@ -206,23 +206,26 @@ void GaugeVario::Render() {
     InitDone = true;
   }
 
-  vval = Basic().TotalEnergyVario;
+  vval = Units::ToUserUnit(Basic().TotalEnergyVario, Units::VerticalSpeedUnit);
 
-  double vvaldisplay = min(99.9,max(-99.9,vval*LIFTMODIFY));
+  double vvaldisplay = min(99.9, max(-99.9, vval));
 
   if (Appearance.GaugeVarioAvgText) {
     // JMW averager now displays netto average if not circling
     if (!Calculated().Circling) {
       RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
-		  Calculated().NettoAverage30s*LIFTMODIFY, TEXT("NetAvg"));
+                  Units::ToUserUnit(Calculated().NettoAverage30s,
+                                    Units::VerticalSpeedUnit), TEXT("NetAvg"));
     } else {
       RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
-		  Calculated().Average30s*LIFTMODIFY, TEXT("Avg"));
+                  Units::ToUserUnit(Calculated().Average30s,
+                                    Units::VerticalSpeedUnit), TEXT("Avg"));
     }
   }
 
   if (Appearance.GaugeVarioMc) {
-    double mc = Calculated().common_stats.current_mc*LIFTMODIFY;
+    double mc = Units::ToUserUnit(Calculated().common_stats.current_mc,
+                                  Units::VerticalSpeedUnit);
     if (SettingsComputer().auto_mc)
       RenderValue(canvas, orgBottom.x, orgBottom.y,
 		  &diValueBottom, &diLabelBottom,
@@ -388,14 +391,17 @@ int  GaugeVario::ValueToNeedlePos(double Value) {
   static int degrees_per_unit;
   int i;
   if (!InitDone){
-    degrees_per_unit =
-      (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
-    gmax =
-      max(80,(int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY))+2);
+    degrees_per_unit = (int)((GAUGEVARIOSWEEP * 0.5) /
+                             Units::ToUserUnit(GAUGEVARIORANGE,
+                                               Units::VerticalSpeedUnit));
+    gmax = max(80, (int)(degrees_per_unit *
+                         Units::ToUserUnit(GAUGEVARIORANGE,
+                                           Units::VerticalSpeedUnit)) + 2);
     MakeAllPolygons();
     InitDone = true;
   };
-  i = iround(Value*degrees_per_unit*LIFTMODIFY);
+  i = iround(Units::ToUserUnit(Value * degrees_per_unit,
+                               Units::VerticalSpeedUnit));
   i = min(gmax,max(-gmax,i));
   return i;
 }

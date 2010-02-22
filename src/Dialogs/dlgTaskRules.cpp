@@ -117,21 +117,24 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(settings_task.FinishMinHeight*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserUnit(
+        settings_task.FinishMinHeight, Units::AltitudeUnit)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxHeight*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserUnit(
+        settings_task.StartMaxHeight, Units::AltitudeUnit)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(settings_task.StartMaxSpeed*SPEEDMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserUnit(
+        settings_task.StartMaxSpeed, Units::SpeedUnit)));
     wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
     wp->RefreshDisplay();
   }

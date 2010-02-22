@@ -231,23 +231,23 @@ Update(void)
       _stprintf(sTmp,
                 _T("%s:\r\n  %d %s\r\n%s: %s\r\n%s: %d %s\r\n"),
                 gettext(_T("Distance")),
-                (int)(DISTANCEMODIFY * XCSoarInterface::Calculated().common_stats.distance_olc),
+                (int)Units::ToUserUnit(XCSoarInterface::Calculated().common_stats.distance_olc, Units::DistanceUnit),
                 Units::GetDistanceName(),
                 gettext(_T("Time")),
                 timetext1,
                 gettext(_T("Speed")),
-                (int)(TASKSPEEDMODIFY * XCSoarInterface::Calculated().common_stats.speed_olc),
+                (int)Units::ToUserUnit(XCSoarInterface::Calculated().common_stats.speed_olc, Units::TaskSpeedUnit),
                 Units::GetTaskSpeedName());
     } else {
       _stprintf(sTmp,
                 _T("%s: %d %s\r\n%s: %s\r\n%s: %d %s\r\n"),
                 gettext(_T("Distance")),
-                (int)(DISTANCEMODIFY * XCSoarInterface::Calculated().common_stats.distance_olc),
+                (int)Units::ToUserUnit(XCSoarInterface::Calculated().common_stats.distance_olc, Units::DistanceUnit),
                 Units::GetDistanceName(),
                 gettext(_T("Time")),
                 timetext1,
                 gettext(_T("Speed")),
-                (int)(TASKSPEEDMODIFY * XCSoarInterface::Calculated().common_stats.speed_olc),
+                (int)Units::ToUserUnit(XCSoarInterface::Calculated().common_stats.speed_olc, Units::TaskSpeedUnit),
                 Units::GetTaskSpeedName());
     }
     wInfo->SetCaption(sTmp);

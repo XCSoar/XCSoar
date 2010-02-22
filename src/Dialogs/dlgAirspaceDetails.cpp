@@ -125,7 +125,8 @@ SetValues(void)
     const GEOPOINT closest_loc = airspace->closest_point(ac_loc);
     const GeoVector vec(ac_loc, closest_loc);
     TCHAR buf[80];
-    _stprintf(buf,_T("%d%s"), (int)(vec.Distance * DISTANCEMODIFY),
+    _stprintf(buf, _T("%d%s"),
+              (int)Units::ToUserUnit(vec.Distance, Units::DistanceUnit),
               Units::GetDistanceName());
     wp->SetText(buf);
     wp->RefreshDisplay();

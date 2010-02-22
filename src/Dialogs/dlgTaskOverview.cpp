@@ -163,11 +163,11 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
       if (tp.AATType==0) {
         _stprintf(sTmp, _T("%s %.1f"),
                   way_points.get(tp.Index).Name,
-                  tp.AATCircleRadius*DISTANCEMODIFY);
+                  Units::ToUserUnit(tp.AATCircleRadius, Units::DistanceUnit));
       } else {
         _stprintf(sTmp, _T("%s %.1f"),
                   way_points.get(tp.Index).Name,
-                  tp.AATSectorRadius*DISTANCEMODIFY);
+                  Units::ToUserUnit(tp.AATSectorRadius, Units::DistanceUnit));
       }
     } else {
 #endif
@@ -214,10 +214,12 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
                   sTmp);
 
       if (fai_ok) {
-        _stprintf(sTmp, _T("%.0f %s FAI"), lengthtotal*DISTANCEMODIFY,
+        _stprintf(sTmp, _T("%.0f %s FAI"),
+                  Units::ToUserUnit(lengthtotal, Units::DistanceUnit),
                   Units::GetDistanceName());
       } else {
-        _stprintf(sTmp, _T("%.0f %s"), lengthtotal*DISTANCEMODIFY,
+        _stprintf(sTmp, _T("%.0f %s"),
+                  Units::ToUserUnit(lengthtotal, Units::DistanceUnit),
                   Units::GetDistanceName());
       }
 
@@ -235,8 +237,8 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
       _stprintf(sTmp, _T("%s %.0f min %.0f (%.0f) %s"),
                 gettext(_T("Total:")),
                 task.getSettings().AATTaskLength*1.0,
-                DISTANCEMODIFY*lengthtotal,
-                DISTANCEMODIFY*d1,
+                Units::ToUserUnit(lengthtotal, Units::DistanceUnit),
+                Units::ToUserUnit(d1, Units::DistanceUnit),
                 Units::GetDistanceName());
       canvas.text(rc.left + Layout::FastScale(2),
                   rc.top + Layout::FastScale(2), sTmp);
