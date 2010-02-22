@@ -306,12 +306,14 @@ public:
   /**
    * Converts a Value from the system unit to the user-specified unit
    * @param Value The value in system unit
+   * @param Unit The destination unit
    * @return The value in user-specified unit
    */
   static double ToUserUnit(double Value, Units_t Unit);
   /**
    * Converts a Value from the user-specified unit to the system unit
    * @param Value The value in user-specified unit
+   * @param Unit The source unit
    * @return The value in system unit
    */
   static double ToSysUnit(double Value, Units_t Unit);
