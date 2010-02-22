@@ -66,7 +66,7 @@ typedef enum {
   unFeetPerMinutes,
   unMeter,
   unFeet,
-  unFligthLevel,
+  unFlightLevel,
   unKelvin,
   unGradCelcius, // K = C° + 273,15
   unGradFahrenheit, // K = (°F + 459,67) / 1,8

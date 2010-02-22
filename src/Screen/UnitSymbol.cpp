@@ -67,7 +67,7 @@ LoadUnitSymbols()
   unit_symbols[unFeetPerMinutes].load(IDB_UNIT_FPM, 5, 11);
   unit_symbols[unMeter].load(IDB_UNIT_M, 5, 11);
   unit_symbols[unFeet].load(IDB_UNIT_FT, 5, 11);
-  unit_symbols[unFligthLevel].load(IDB_UNIT_FL, 5, 11);
+  unit_symbols[unFlightLevel].load(IDB_UNIT_FL, 5, 11);
   unit_symbols[unKelvin].load(IDB_UNIT_DegK, 5, 11);
   unit_symbols[unGradCelcius].load(IDB_UNIT_DegC, 5, 11);
   unit_symbols[unGradFahrenheit].load(IDB_UNIT_DegF, 5, 11);
