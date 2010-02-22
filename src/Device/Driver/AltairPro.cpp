@@ -40,6 +40,7 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Math/Units.h"
 #include "NMEA/Info.hpp"
+#include "Units.hpp"
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -89,7 +90,7 @@ AltairProDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
     // get <unit>
 
     if (*String == 'f' || *String== 'F')
-      lastAlt /= TOFEET;
+      lastAlt = Units::ToSysUnit(lastAlt, unFeet);
 
     if (enable_baro) {
       GPS_INFO->BaroAltitudeAvailable = true;

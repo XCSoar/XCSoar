@@ -598,7 +598,7 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
 
     else if ((_tcscmp(pToken, TEXT("FT")) == 0)
              || (_tcscmp(pToken, TEXT("F")) == 0)){
-      Alt->Altitude = Alt->Altitude/TOFEET;
+      Alt->Altitude = Units::ToSysUnit(Alt->Altitude, unFeet);
       fHasUnit = true;
     }
 
@@ -622,7 +622,7 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
         // warning! multiple base tags
       }
       Alt->Base = abFL;
-      Alt->FL = (Alt->Altitude * TOFEET) / 100;
+      Alt->FL = Units::ToUserUnit(Alt->Altitude, unFlightLevel);
     }
 
     else if (_tcscmp(pToken, TEXT("UNL")) == 0) {
@@ -639,8 +639,8 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
   if (!fHasUnit && (Alt->Base != abFL)) {
     // ToDo warning! no unit defined use feet or user alt unit
     // Alt->Altitude = Units::ToSysAltitude(Alt->Altitude);
-    Alt->Altitude = Alt->Altitude/TOFEET;
-    Alt->AGL = Alt->AGL/TOFEET;
+    Alt->Altitude = Units::ToSysUnit(Alt->Altitude, unFeet);
+    Alt->AGL = Units::ToSysUnit(Alt->AGL, unFeet);
   }
 
   if (Alt->Base == abUndef) {

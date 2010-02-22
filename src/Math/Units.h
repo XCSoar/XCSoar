@@ -49,6 +49,5 @@ Copyright_License {
 #define TONAUTICALMILES (double)0.00053996
 #define TOMILES         (double)0.0006214
 #define TOKILOMETER     (double)0.001
-#define TOFEET          (double)3.281
 
 #endif

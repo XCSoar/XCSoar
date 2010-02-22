@@ -331,7 +331,7 @@ NMEAParser::ParseAltitude(const TCHAR *value, const TCHAR *format)
   double alt = _tcstod(value, NULL);
 
   if (format[0] == _T('f') || format[0] == _T('F'))
-    alt /= TOFEET;
+    alt = Units::ToSysUnit(alt, unFeet);
 
   return alt;
 }
@@ -956,9 +956,9 @@ NMEAParser::PTAS1(const TCHAR *String, const TCHAR **params, size_t nparams,
 {
   double wnet, baralt, vtas;
 
-  wnet = (_tcstod(params[0], NULL) - 200) / (10 * TOKNOTS);
-  baralt = max(0.0, (_tcstod(params[2], NULL) - 2000) / TOFEET);
-  vtas = _tcstod(params[3], NULL) / TOKNOTS;
+  wnet = Units::ToSysUnit((_tcstod(params[0], NULL) - 200) * 0.1, unKnots);
+  baralt = max(0.0, Units::ToSysUnit(_tcstod(params[2], NULL) - 2000, unFeet));
+  vtas = Units::ToSysUnit(_tcstod(params[3], NULL), unKnots);
 
   GPS_INFO->AirspeedAvailable = true;
   GPS_INFO->TrueAirspeed = vtas;
