@@ -293,7 +293,7 @@ void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
   case 2: // blwindspd
     _stprintf(Buffer, TEXT("%.0f%s"),
               Units::ToUserUnit(val / 100.0, Units::SpeedUnit),
-              Units::GetHorizontalSpeedName());
+              Units::GetSpeedName());
     return;
   case 3: // hbl
     _stprintf(Buffer, TEXT("%.0f%s"),

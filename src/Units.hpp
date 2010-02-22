@@ -148,13 +148,13 @@ public:
    * Returns the user-specified unit for a horizontal speed
    * @return The user-specified unit for a horizontal speed
    */
-  static Units_t GetUserHorizontalSpeedUnit(void);
+  static Units_t GetUserSpeedUnit(void);
   /**
    * Sets the user-specified unit for a horizontal speed
    * @param NewUnit The new unit
    * @return The old unit
    */
-  static Units_t SetUserHorizontalSpeedUnit(Units_t NewUnit);
+  static Units_t SetUserSpeedUnit(Units_t NewUnit);
 
   /**
    * Returns the user-specified unit for a task speed
@@ -234,7 +234,7 @@ public:
 
   static void NotifyUnitChanged(void);
 
-  static const TCHAR *GetHorizontalSpeedName();
+  static const TCHAR *GetSpeedName();
   static const TCHAR *GetVerticalSpeedName();
   static const TCHAR *GetDistanceName();
   static const TCHAR *GetAltitudeName();

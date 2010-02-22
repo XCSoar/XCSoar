@@ -146,7 +146,7 @@ void dlgWindSettingsShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp) {
-    wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
+    wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 

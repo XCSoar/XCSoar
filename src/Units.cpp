@@ -337,13 +337,13 @@ Units::SetUserAltitudeUnit(Units_t NewUnit)
 }
 
 Units_t
-Units::GetUserHorizontalSpeedUnit(void)
+Units::GetUserSpeedUnit(void)
 {
   return SpeedUnit;
 }
 
 Units_t
-Units::SetUserHorizontalSpeedUnit(Units_t NewUnit)
+Units::SetUserSpeedUnit(Units_t NewUnit)
 {
   Units_t last = SpeedUnit;
   if (SpeedUnit != NewUnit) {
@@ -415,7 +415,7 @@ Units::GetUserUnitByGroup(UnitGroup_t UnitGroup)
   case ugAltitude:
     return (GetUserAltitudeUnit());
   case ugHorizontalSpeed:
-    return (GetUserHorizontalSpeedUnit());
+    return (GetUserSpeedUnit());
   case ugVerticalSpeed:
     return (GetUserVerticalSpeedUnit());
   case ugWindSpeed:
@@ -433,13 +433,13 @@ Units::NotifyUnitChanged(void)
   // todo
 
   if (SPEEDMODIFY == TOMPH) {
-    SetUserHorizontalSpeedUnit(unStatuteMilesPerHour);
+    SetUserSpeedUnit(unStatuteMilesPerHour);
     SetUserWindSpeedUnit(unStatuteMilesPerHour);
   } else if (SPEEDMODIFY == TOKNOTS) {
-    SetUserHorizontalSpeedUnit(unKnots);
+    SetUserSpeedUnit(unKnots);
     SetUserWindSpeedUnit(unKnots);
   } else if (SPEEDMODIFY == TOKPH) {
-    SetUserHorizontalSpeedUnit(unKiloMeterPerHour);
+    SetUserSpeedUnit(unKiloMeterPerHour);
     SetUserWindSpeedUnit(unKiloMeterPerHour);
   }
 
@@ -473,9 +473,9 @@ Units::NotifyUnitChanged(void)
 }
 
 const TCHAR *
-Units::GetHorizontalSpeedName()
+Units::GetSpeedName()
 {
-  return GetUnitName(GetUserHorizontalSpeedUnit());
+  return GetUnitName(GetUserSpeedUnit());
 }
 
 const TCHAR *

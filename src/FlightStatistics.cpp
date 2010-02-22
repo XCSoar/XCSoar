@@ -936,13 +936,13 @@ FlightStatistics::CaptionPolar(TCHAR *sTmp, const GlidePolar& glide_polar) const
 	      (int)glide_polar.get_bestLD(),
         (int)(Units::ToUserUnit(glide_polar.get_VbestLD(),
                                 Units::SpeedUnit)),
-	      Units::GetHorizontalSpeedName(),
+	      Units::GetSpeedName(),
 	      gettext(TEXT("Min sink")),
 	      Units::ToUserUnit(glide_polar.get_Smin(), Units::VerticalSpeedUnit),
 	      Units::GetVerticalSpeedName(),
         (int)(Units::ToUserUnit(glide_polar.get_Vmin(),
                                 Units::SpeedUnit)),
-	      Units::GetHorizontalSpeedName()
+	      Units::GetSpeedName()
 	      );
   } else {
     _stprintf(sTmp, TEXT("%s:\r\n  %d at %d %s\r\n%s:\r\n  %3.2f %s at %d %s"),
@@ -950,13 +950,13 @@ FlightStatistics::CaptionPolar(TCHAR *sTmp, const GlidePolar& glide_polar) const
         (int)glide_polar.get_bestLD(),
         (int)(Units::ToUserUnit(glide_polar.get_VbestLD(),
                                 Units::SpeedUnit)),
-	      Units::GetHorizontalSpeedName(),
+	      Units::GetSpeedName(),
 	      gettext(TEXT("Min sink")),
         Units::ToUserUnit(glide_polar.get_Smin(), Units::VerticalSpeedUnit),
 	      Units::GetVerticalSpeedName(),
         (int)(Units::ToUserUnit(glide_polar.get_Vmin(),
                                 Units::SpeedUnit)),
-	      Units::GetHorizontalSpeedName());
+	      Units::GetSpeedName());
   }
 }
 

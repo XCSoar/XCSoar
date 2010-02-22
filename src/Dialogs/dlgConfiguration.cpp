@@ -1613,7 +1613,7 @@ static void setVariables(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpMaxManoeuveringSpeed"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(SPEEDMODIFY*XCSoarInterface::SettingsComputer().SafetySpeed));
-    wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
+    wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 
@@ -2191,14 +2191,14 @@ static void setVariables(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().start_max_speed*SPEEDMODIFY));
-    wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
+    wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeedMargin"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().start_max_speed_margin*SPEEDMODIFY));
-    wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
+    wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 

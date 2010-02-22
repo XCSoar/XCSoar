@@ -147,7 +147,7 @@ void dlgVegaDemoShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoV"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(VegaDemoV*SPEEDMODIFY);
-    wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
+    wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 

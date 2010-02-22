@@ -135,7 +135,7 @@ static void setVariables(void) {
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(Units::ToUserUnit(
         settings_task.StartMaxSpeed, Units::SpeedUnit)));
-    wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
+    wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 }
