@@ -2628,8 +2628,23 @@ void dlgConfigurationShowModal(void){
     if ((int)Speed != wp->GetDataField()->GetAsInteger()) {
       Speed = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistrySpeedUnitsValue, Speed);
-      requirerestart = true;
       changed = true;
+
+      switch (Speed) {
+      case 0:
+        Units::SetUserSpeedUnit(unStatuteMilesPerHour);
+        Units::SetUserWindSpeedUnit(unStatuteMilesPerHour);
+        break;
+      case 1:
+        Units::SetUserSpeedUnit(unKnots);
+        Units::SetUserWindSpeedUnit(unKnots);
+        break;
+      case 2:
+      default:
+        Units::SetUserSpeedUnit(unKiloMeterPerHour);
+        Units::SetUserWindSpeedUnit(unKiloMeterPerHour);
+        break;
+      }
     }
   }
 
@@ -2649,8 +2664,20 @@ void dlgConfigurationShowModal(void){
     if ((int)TaskSpeed != wp->GetDataField()->GetAsInteger()) {
       TaskSpeed = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryTaskSpeedUnitsValue, TaskSpeed);
-      requirerestart = true;
       changed = true;
+
+      switch (TaskSpeed) {
+      case 0:
+        Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
+        break;
+      case 1:
+        Units::SetUserTaskSpeedUnit(unKnots);
+        break;
+      case 2:
+      default:
+        Units::SetUserTaskSpeedUnit(unKiloMeterPerHour);
+        break;
+      }
     }
   }
 
@@ -2659,8 +2686,20 @@ void dlgConfigurationShowModal(void){
     if ((int)Distance != wp->GetDataField()->GetAsInteger()) {
       Distance = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryDistanceUnitsValue, Distance);
-      requirerestart = true;
       changed = true;
+
+      switch (Distance) {
+      case 0:
+        Units::SetUserDistanceUnit(unStatuteMiles);
+        break;
+      case 1:
+        Units::SetUserDistanceUnit(unNauticalMiles);
+        break;
+      case 2:
+      default:
+        Units::SetUserDistanceUnit(unKiloMeter);
+        break;
+      }
     }
   }
 
@@ -2669,8 +2708,17 @@ void dlgConfigurationShowModal(void){
     if ((int)Lift != wp->GetDataField()->GetAsInteger()) {
       Lift = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryLiftUnitsValue, Lift);
-      requirerestart = true;
       changed = true;
+
+      switch (Lift) {
+      case 0:
+        Units::SetUserVerticalSpeedUnit(unKnots);
+        break;
+      case 1:
+      default:
+        Units::SetUserVerticalSpeedUnit(unMeterPerSecond);
+        break;
+      }
     }
   }
 
@@ -2680,7 +2728,16 @@ void dlgConfigurationShowModal(void){
       Altitude = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryAltitudeUnitsValue, Altitude);
       changed = true;
-      requirerestart = true;
+
+      switch (Altitude) {
+      case 0:
+        Units::SetUserAltitudeUnit(unFeet);
+        break;
+      case 1:
+      default:
+        Units::SetUserAltitudeUnit(unMeter);
+        break;
+      }
     }
   }
 
