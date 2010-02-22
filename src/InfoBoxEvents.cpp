@@ -259,10 +259,10 @@ void	ActionInterface::on_key_WindSpeed(int UpDown)
 {
 /* JMW ILLEGAL/incomplete
 	if(UpDown==1)
-		Calculated().WindSpeed += (1/SPEEDMODIFY);
+		Calculated().WindSpeed += Units::ToSysUnit(1, Units::SpeedUnit);
 	else if (UpDown== -1)
 	{
-		Calculated().WindSpeed -= (1/SPEEDMODIFY);
+		Calculated().WindSpeed -= Units::ToSysUnit(1, Units::SpeedUnit);
 		if(Calculated().WindSpeed < 0)
 			Calculated().WindSpeed = 0;
 	}
