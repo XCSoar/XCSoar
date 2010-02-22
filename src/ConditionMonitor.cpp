@@ -161,10 +161,10 @@ protected:
     fixed mag_change = fabs(wind.norm - last_wind.norm);
     fixed dir_change = fabs(AngleLimit180(wind.bearing - last_wind.bearing));
 
-    if (mag_change > 5 / TOKNOTS)
+    if (mag_change > Units::ToSysUnit(5, unKnots))
       return true;
 
-    if ((wind.norm > 10 / TOKNOTS) && (dir_change > 45))
+    if ((wind.norm > Units::ToSysUnit(10, unKnots)) && (dir_change > 45))
       return true;
 
     return false;

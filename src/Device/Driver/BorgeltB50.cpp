@@ -40,7 +40,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
-#include "Math/Units.h"
+#include "Units.hpp"
 #include "NMEA/Info.hpp"
 
 #include <tchar.h>
@@ -122,19 +122,19 @@ PBB50(const TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
 
   NMEAParser::ExtractParameter(String,ctemp,0);
-  vtas = _tcstod(ctemp, NULL) / TOKNOTS;
+  vtas = Units::ToSysUnit(_tcstod(ctemp, NULL), unKnots);
 
   NMEAParser::ExtractParameter(String,ctemp,1);
-  wnet = _tcstod(ctemp, NULL) / TOKNOTS;
+  wnet = Units::ToSysUnit(_tcstod(ctemp, NULL), unKnots);
 
   NMEAParser::ExtractParameter(String,ctemp,2);
-  GPS_INFO->MacCready = _tcstod(ctemp, NULL) / TOKNOTS;
+  GPS_INFO->MacCready = Units::ToSysUnit(_tcstod(ctemp, NULL), unKnots);
 
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///  oldGlidePolar::SetMacCready(GPS_INFO->MacCready);
 
   NMEAParser::ExtractParameter(String,ctemp,3);
-  vias = sqrt(_tcstod(ctemp, NULL)) / TOKNOTS;
+  vias = Units::ToSysUnit(sqrt(_tcstod(ctemp, NULL)), unKnots);
 
   // RMN: Changed bugs-calculation, swapped ballast and bugs to suit
   // the B50-string for Borgelt, it's % degradation, for us, it is %
