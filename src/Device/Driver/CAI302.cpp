@@ -48,7 +48,7 @@ Copyright_License {
 #include "Device/Port.hpp"
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
-#include "Math/Units.h"
+#include "Units.hpp"
 #include "NMEA/Info.hpp"
 
 #include <tchar.h>
@@ -195,7 +195,8 @@ CAI302Device::PutMacCready(double MacCready)
 {
   TCHAR  szTmp[32];
 
-  _stprintf(szTmp, _T("!g,m%d\r\n"), int(((MacCready * 10) / KNOTSTOMETRESSECONDS) + 0.5));
+  _stprintf(szTmp, _T("!g,m%d\r\n"), int(Units::ToUserUnit(
+      MacCready * 10, unKnots) + 0.5));
 
   port->WriteString(szTmp);
 
@@ -577,11 +578,11 @@ cai_w(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
   NMEAParser::ExtractParameter(String,ctemp,7);
   GPS_INFO->TotalEnergyVarioAvailable = true;
-  GPS_INFO->TotalEnergyVario = ((_tcstod(ctemp, NULL) - 200.0) / 10.0)
-    * KNOTSTOMETRESSECONDS;
+  GPS_INFO->TotalEnergyVario = Units::ToSysUnit(
+      (_tcstod(ctemp, NULL) - 200.0) / 10.0, unKnots);
 
   NMEAParser::ExtractParameter(String,ctemp,10);
-  GPS_INFO->MacCready = (_tcstod(ctemp, NULL) / 10.0) * KNOTSTOMETRESSECONDS;
+  GPS_INFO->MacCready = Units::ToSysUnit(_tcstod(ctemp, NULL) / 10.0, unKnots);
   if (MacCreadyUpdateTimeout <= 0) {
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///    oldGlidePolar::SetMacCready(GPS_INFO->MacCready);

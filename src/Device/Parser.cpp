@@ -583,7 +583,7 @@ NMEAParser::RMB(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   GPS_INFO->WaypointDistance = NAUTICALMILESTOMETRES * _tcstod(params[9], NULL);
   GPS_INFO->WaypointBearing = _tcstod(params[10], NULL);
-  GPS_INFO->WaypointSpeed = KNOTSTOMETRESSECONDS * _tcstod(params[11], NULL);
+  GPS_INFO->WaypointSpeed =  Units::ToSysUnit(_tcstod(params[11], NULL), unKnots);
   */
 
   return true;
@@ -675,7 +675,7 @@ NMEAParser::RMC(const TCHAR *String, const TCHAR **params, size_t nparams,
     gps.Simulator = false;
   }
 
-  GPS_INFO->GroundSpeed = KNOTSTOMETRESSECONDS * speed;
+  GPS_INFO->GroundSpeed = Units::ToSysUnit(speed, unKnots);
 
   if (GPS_INFO->GroundSpeed > fixed_one) {
     // JMW don't update bearing unless we're moving

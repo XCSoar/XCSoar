@@ -40,7 +40,6 @@ Copyright_License {
 #define XCSOAR_MATH_UNITS_H
 
 #define NAUTICALMILESTOMETRES (double)1851.96
-#define KNOTSTOMETRESSECONDS (double)0.5144
 
 #define TOKNOTS (double)1.944
 #define TOMPH   (double)2.237
