@@ -48,34 +48,32 @@ void FormatterLowWarning::AssignValue(int i) {
   InfoBoxFormatter::AssignValue(i);
   switch (i) {
   case 1:
-    minimum = Units::ToUserUnit(SettingsComputer().SafetyAltitudeTerrain, Units::AltitudeUnit);
+    minimum = Units::ToUserUnit(SettingsComputer().SafetyAltitudeTerrain,
+                                Units::AltitudeUnit);
     break;
   case 2:
-    minimum = 0.5*LIFTMODIFY*Calculated().common_stats.current_risk_mc;
+    minimum = Units::ToUserUnit(0.5 * Calculated().common_stats.current_risk_mc,
+                                Units::VerticalSpeedUnit);
     break;
   case 21:
-    minimum = 0.667*LIFTMODIFY*Calculated().common_stats.current_risk_mc;
-    break;
-  default:
+    minimum = Units::ToUserUnit(0.667 * Calculated().common_stats.current_risk_mc,
+                                Units::VerticalSpeedUnit);
     break;
   }
 }
 
 
 const TCHAR *FormatterLowWarning::Render(int *color) {
-
   if (Valid) {
-    _stprintf(Text,
-              Format,
-              Value );
-    if (Value<minimum) {
-      *color = 1; // red
-    } else {
+    _stprintf(Text, Format, Value);
+    if (Value < minimum)
+      // red
+      *color = 1;
+    else
       *color = 0;
-    }
   } else {
     RenderInvalid(color);
   }
-  return(Text);
+  return Text;
 }
 
