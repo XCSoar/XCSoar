@@ -349,7 +349,8 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       // Now: "CIRCLING THREE FOUR"
       // Later: "AVERAGE THREE POINT FOUR"
       _stprintf(text, _T(",%d"), VWI_CIRCLING);
-      TextToDigitsSmall(text, Calculated->Average30s*LIFTMODIFY);
+      TextToDigitsSmall(text, Units::ToUserUnit(Calculated->Average30s,
+                                                Units::VerticalSpeedUnit));
       DoSend(Time, text);
       return true;
     }
@@ -375,12 +376,14 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       // in final glide mode, e.g.
       // "WAYPOINT BELOW TWO HUNDRED"
 
-      if (Calculated->WaypointDistance*DISTANCEMODIFY<20.0) {
+      if (Units::ToUserUnit(Calculated->WaypointDistance,
+                            Units::DistanceUnit) < 20.0) {
 
 	      if (!settings.EnableVoiceWaypointDistance) return false;
 
               _stprintf(text, _T(",%d"), VWI_PLUS);
-	      TextToDigitsLarge(text, Calculated->WaypointDistance*DISTANCEMODIFY);
+	      TextToDigitsLarge(text, Units::ToUserUnit(Calculated->WaypointDistance,
+                                                  Units::DistanceUnit));
               DoSend(Time, text);
 	      return true;
       } else {
@@ -390,7 +393,8 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
 	        if (!settings.EnableVoiceTaskAltitudeDifference) return false;
 
 	        // TODO feature: BELOW FOUR HUNDRED
-	        double tad = Calculated->TaskAltitudeDifference*ALTITUDEMODIFY;
+	        double tad = Units::ToUserUnit(Calculated->TaskAltitudeDifference,
+                                         Units::AltitudeUnit);
 	        if (fabs(tad)>100) {
 	          if (tad>0) {
                     _stprintf(text, _T(",%d"), VWI_ABOVE);
