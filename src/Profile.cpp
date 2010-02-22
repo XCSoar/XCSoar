@@ -181,7 +181,7 @@ Profile::ReadRegistrySettings()
 
   Temp = 0;
   GetFromRegistryD(szRegistryLatLonUnits, Temp);
-  Units::CoordinateFormat = (CoordinateFormats_t)Temp;
+  Units::SetCoordinateFormat((CoordinateFormats_t)Temp);
 
   GetFromRegistryD(szRegistrySpeedUnitsValue, Speed);
   switch (Speed) {

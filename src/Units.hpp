@@ -114,6 +114,18 @@ public:
   static const TCHAR *GetUnitName(Units_t Unit);
 
   /**
+   * Returns the user-specified coordinate format
+   * @return The user-specified coordinate format
+   */
+  static CoordinateFormats_t GetCoordinateFormat(void);
+  /**
+   * Sets the user-specified coordinate format
+   * @param NewUnit The new coordinate format
+   * @return The old coordinate format
+   */
+  static CoordinateFormats_t SetCoordinateFormat(CoordinateFormats_t NewFormat);
+
+  /**
    * Returns the user-specified unit for a horizontal distance
    * @return The user-specified unit for a horizontal distance
    */

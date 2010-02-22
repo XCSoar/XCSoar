@@ -111,7 +111,7 @@ OnCommentClicked(gcc_unused WndButton &button)
 
 static void SetUnits(void) {
   WndProperty* wp;
-  switch (Units::CoordinateFormat) {
+  switch (Units::GetCoordinateFormat()) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
@@ -202,7 +202,7 @@ static void SetValues(void) {
     wp->RefreshDisplay();
   }
 
-  switch (Units::CoordinateFormat) {
+  switch (Units::GetCoordinateFormat()) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
@@ -255,7 +255,7 @@ static void SetValues(void) {
     wp->RefreshDisplay();
   }
 
-  switch (Units::CoordinateFormat) {
+  switch (Units::GetCoordinateFormat()) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
@@ -335,7 +335,7 @@ static void GetValues(void) {
     dd = wp->GetDataField()->GetAsInteger();
   }
 
-  switch (Units::CoordinateFormat) {
+  switch (Units::GetCoordinateFormat()) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
@@ -382,7 +382,7 @@ static void GetValues(void) {
     dd = wp->GetDataField()->GetAsInteger();
   }
 
-  switch (Units::CoordinateFormat) {
+  switch (Units::GetCoordinateFormat()) {
   case 0: // ("DDMMSS");
   case 1: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));

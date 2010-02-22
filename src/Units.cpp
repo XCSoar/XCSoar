@@ -298,6 +298,21 @@ Units::GetUnitName(Units_t Unit)
   return UnitDescriptors[Unit].Name;
 }
 
+CoordinateFormats_t
+Units::GetCoordinateFormat()
+{
+  return CoordinateFormat;
+}
+
+CoordinateFormats_t
+Units::SetCoordinateFormat(CoordinateFormats_t NewFormat)
+{
+  CoordinateFormats_t last = CoordinateFormat;
+  if (CoordinateFormat != NewFormat)
+    CoordinateFormat = NewFormat;
+  return last;
+}
+
 Units_t
 Units::GetUserDistanceUnit(void)
 {

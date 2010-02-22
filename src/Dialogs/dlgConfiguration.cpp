@@ -1498,7 +1498,7 @@ static void setVariables(void) {
     dfe->addEnumText(_T("DDMMSS.ss"));
     dfe->addEnumText(_T("DDMM.mmm"));
     dfe->addEnumText(_T("DD.dddd"));
-    dfe->Set(Units::CoordinateFormat);
+    dfe->Set(Units::GetCoordinateFormat());
     wp->RefreshDisplay();
   }
 
