@@ -501,7 +501,7 @@ dlgWayPointSelect(SingleWindow &parent,
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
 
-  WaypointSorter g_waypoint_sorter(way_points, location, fixed(DISTANCEMODIFY));
+  WaypointSorter g_waypoint_sorter(way_points, location, fixed(Units::ToUserDistance(1)));
   waypoint_sorter = &g_waypoint_sorter;
   
   UpdateList();

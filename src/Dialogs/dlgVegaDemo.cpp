@@ -80,7 +80,7 @@ static void OnVegaDemoW(DataField *Sender,
     break;
     case DataField::daPut:
     case DataField::daChange:
-      VegaDemoW = Sender->GetAsFloat()/LIFTMODIFY;
+      VegaDemoW = Units::ToSysVSpeed(Sender->GetAsFloat());
       VegaWriteDemo();
     break;
   }
@@ -94,7 +94,7 @@ static void OnVegaDemoV(DataField *Sender,
     break;
     case DataField::daPut:
     case DataField::daChange:
-      VegaDemoV = Sender->GetAsFloat()/SPEEDMODIFY;
+      VegaDemoV = Units::ToSysSpeed(Sender->GetAsFloat());
       VegaWriteDemo();
     break;
   }
@@ -139,14 +139,14 @@ void dlgVegaDemoShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoW"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(VegaDemoW*LIFTMODIFY);
+    wp->GetDataField()->SetAsFloat(Units::ToUserVSpeed(VegaDemoW));
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpVegaDemoV"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(VegaDemoV*SPEEDMODIFY);
+    wp->GetDataField()->SetAsFloat(Units::ToUserVSpeed(VegaDemoV));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }

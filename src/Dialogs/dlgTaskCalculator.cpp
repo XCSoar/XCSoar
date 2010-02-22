@@ -97,7 +97,8 @@ static void RefreshCalculator(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::Calculated().task_stats.total.solution_planned.Vector.Distance*DISTANCEMODIFY);
+    wp->GetDataField()->SetAsFloat(Units::ToUserDistance(
+        XCSoarInterface::Calculated().task_stats.total.solution_planned.Vector.Distance));
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
@@ -111,7 +112,7 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpEffectiveMacCready"));
   if (wp) {
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
-    wp->GetDataField()->SetAsFloat(emc*LIFTMODIFY);
+    wp->GetDataField()->SetAsFloat(Units::ToUserVSpeed(emc));
     wp->RefreshDisplay();
   }
 
@@ -136,14 +137,16 @@ static void RefreshCalculator(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::Calculated().task_stats.total.remaining_effective.get_speed()*TASKSPEEDMODIFY);
+    wp->GetDataField()->SetAsFloat(Units::ToUserTaskSpeed(
+        XCSoarInterface::Calculated().task_stats.total.remaining_effective.get_speed()));
     wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(XCSoarInterface::Calculated().task_stats.total.travelled.get_speed()*TASKSPEEDMODIFY);
+    wp->GetDataField()->SetAsFloat(Units::ToUserTaskSpeed(
+        XCSoarInterface::Calculated().task_stats.total.travelled.get_speed()));
     wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
     wp->RefreshDisplay();
   }
@@ -185,7 +188,7 @@ static void OnMacCreadyData(DataField *Sender,
     if (XCSoarInterface::Calculated().timeCircling>0) {
       MACCREADY = XCSoarInterface::Calculated().TotalHeightClimb
 	/XCSoarInterface::Calculated().timeCircling;
-      Sender->Set(MACCREADY*LIFTMODIFY);
+      Sender->Set(Units::ToUserVSpeed(MACCREADY));
 #ifdef OLD_TASK
       GlidePolar::SetMacCready(MACCREADY);
 #endif
@@ -193,11 +196,11 @@ static void OnMacCreadyData(DataField *Sender,
     }
     break;
   case DataField::daGet:
-    Sender->Set((double)(task_manager.get_glide_polar().get_mc() * LIFTMODIFY));
+    Sender->Set(Units::ToUserVSpeed(task_manager.get_glide_polar().get_mc()));
     break;
   case DataField::daPut:
   case DataField::daChange:
-    MACCREADY = Sender->GetAsFloat()/LIFTMODIFY;
+    MACCREADY = Units::ToSysVSpeed(Sender->GetAsFloat());
 #ifdef OLD_TASK
     GlidePolar::SetMacCready(MACCREADY);
 #endif

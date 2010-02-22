@@ -1292,14 +1292,16 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpClipAltitude"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SetSettingsComputer().ClipAltitude*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
+        XCSoarInterface::SetSettingsComputer().ClipAltitude)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAltWarningMargin"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SetSettingsComputer().AltWarningMargin*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
+        XCSoarInterface::SetSettingsComputer().AltWarningMargin)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -1374,21 +1376,24 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeArrival"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SafetyAltitudeArrival));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
+        XCSoarInterface::SettingsComputer().SafetyAltitudeArrival)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeBreakoff"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
+        XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeTerrain"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
+        XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -1578,7 +1583,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
-    wp->GetDataField()->Set((double)(XCSoarInterface::SettingsComputer().safety_mc*LIFTMODIFY));
+    wp->GetDataField()->Set(Units::ToUserVSpeed(XCSoarInterface::SettingsComputer().safety_mc));
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
     wp->RefreshDisplay();
   }
@@ -1612,7 +1617,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpMaxManoeuveringSpeed"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(SPEEDMODIFY*XCSoarInterface::SettingsComputer().SafetySpeed));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(XCSoarInterface::SettingsComputer().SafetySpeed)));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
@@ -2104,7 +2109,8 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskFinishRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(lround(settings_task.FinishRadius*DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
+    wp->GetDataField()->SetAsFloat(lround(Units::ToUserDistance(
+        settings_task.FinishRadius) * DISTANCE_ROUNDING) / DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
@@ -2122,7 +2128,8 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskStartRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(lround(settings_task.StartRadius*DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
+    wp->GetDataField()->SetAsFloat(lround(Units::ToUserDistance(
+        settings_task.StartRadius) * DISTANCE_ROUNDING) / DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
@@ -2140,7 +2147,8 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskSectorRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(lround(settings_task.SectorRadius*DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
+    wp->GetDataField()->SetAsFloat(lround(Units::ToUserDistance(
+        settings_task.SectorRadius) * DISTANCE_ROUNDING) / DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
@@ -2159,21 +2167,21 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(settings_task.FinishMinHeight*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(settings_task.FinishMinHeight)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().start_max_height*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(XCSoarInterface::SettingsComputer().start_max_height)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeightMargin"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().start_max_height_margin*ALTITUDEMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(XCSoarInterface::SettingsComputer().start_max_height_margin)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -2190,14 +2198,14 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().start_max_speed*SPEEDMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(XCSoarInterface::SettingsComputer().start_max_speed)));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeedMargin"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(XCSoarInterface::SettingsComputer().start_max_speed_margin*SPEEDMODIFY));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(XCSoarInterface::SettingsComputer().start_max_speed_margin)));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
@@ -2371,7 +2379,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
-    double val = (wp->GetDataField()->GetAsFloat()/LIFTMODIFY);
+    double val = Units::ToSysVSpeed(wp->GetDataField()->GetAsFloat());
     if (XCSoarInterface::SettingsComputer().safety_mc != val) {
       XCSoarInterface::SetSettingsComputer().safety_mc = val;
       SetToRegistry(szRegistrySafetyMacCready,
@@ -2475,7 +2483,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpClipAltitude"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SetSettingsComputer().ClipAltitude != ival) {
       XCSoarInterface::SetSettingsComputer().ClipAltitude = ival;
       SetToRegistry(szRegistryClipAlt,XCSoarInterface::SetSettingsComputer().ClipAltitude);  // fixed 20060430/sgi was szRegistryAltMode
@@ -2485,7 +2493,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpAltWarningMargin"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SetSettingsComputer().AltWarningMargin != ival) {
       XCSoarInterface::SetSettingsComputer().AltWarningMargin = ival;
       SetToRegistry(szRegistryAltMargin,XCSoarInterface::SetSettingsComputer().AltWarningMargin);
@@ -2542,7 +2550,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeArrival"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if (XCSoarInterface::SettingsComputer().SafetyAltitudeArrival != ival) {
       XCSoarInterface::SetSettingsComputer().SafetyAltitudeArrival = ival;
       SetToRegistry(szRegistrySafetyAltitudeArrival,
@@ -2553,7 +2561,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeBreakoff"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if (XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff != ival) {
       XCSoarInterface::SetSettingsComputer().SafetyAltitudeBreakoff = ival;
       SetToRegistry(szRegistrySafetyAltitudeBreakOff,
@@ -2564,7 +2572,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeTerrain"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if (XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain != ival) {
       XCSoarInterface::SetSettingsComputer().SafetyAltitudeTerrain = ival;
       SetToRegistry(szRegistrySafetyAltitudeTerrain,
@@ -2868,7 +2876,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpMaxManoeuveringSpeed"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
+    ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
     if (XCSoarInterface::SettingsComputer().SafetySpeed != ival) {
       XCSoarInterface::SetSettingsComputer().SafetySpeed = ival;
       SetToRegistry(szRegistrySafteySpeed,(DWORD)XCSoarInterface::SettingsComputer().SafetySpeed);
@@ -2888,7 +2896,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskFinishRadius"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
+    ival = iround(Units::ToSysDistance(wp->GetDataField()->GetAsFloat()));
     if ((int)settings_task.FinishRadius != ival) {
       settings_task.FinishRadius = ival;
       SetToRegistry(szRegistryFinishRadius,settings_task.FinishRadius);
@@ -2909,7 +2917,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskStartRadius"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
+    ival = iround(Units::ToSysDistance(wp->GetDataField()->GetAsFloat()));
     if ((int)settings_task.StartRadius != ival) {
       settings_task.StartRadius = ival;
       SetToRegistry(szRegistryStartRadius,settings_task.StartRadius);
@@ -2930,7 +2938,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskSectorRadius"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
+    ival = iround(Units::ToSysDistance(wp->GetDataField()->GetAsFloat()));
     if ((int)settings_task.SectorRadius != ival) {
       settings_task.SectorRadius = ival;
       SetToRegistry(szRegistrySectorRadius,settings_task.SectorRadius);
@@ -3279,7 +3287,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)settings_task.FinishMinHeight != ival) {
       settings_task.FinishMinHeight = ival;
       SetToRegistry(szRegistryFinishMinHeight,settings_task.FinishMinHeight);
@@ -3290,7 +3298,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SettingsComputer().start_max_height != ival) {
       XCSoarInterface::SetSettingsComputer().start_max_height = ival;
       SetToRegistry(szRegistryStartMaxHeight, 
@@ -3302,7 +3310,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeightMargin"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SettingsComputer().start_max_height_margin != ival) {
       XCSoarInterface::SetSettingsComputer().start_max_height_margin = ival;
       SetToRegistry(szRegistryStartMaxHeightMargin,
@@ -3327,7 +3335,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
+    ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SetSettingsComputer().start_max_speed != ival) {
       XCSoarInterface::SetSettingsComputer().start_max_speed = ival;
       SetToRegistry(szRegistryStartMaxSpeed,
@@ -3339,7 +3347,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeedMargin"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
+    ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SettingsComputer().start_max_speed_margin != ival) {
       XCSoarInterface::SetSettingsComputer().start_max_speed_margin = ival;
       SetToRegistry(szRegistryStartMaxSpeedMargin,

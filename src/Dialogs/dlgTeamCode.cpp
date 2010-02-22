@@ -90,7 +90,7 @@ Update()
   }
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(teammateRange * DISTANCEMODIFY);
+    wp->GetDataField()->SetAsFloat(Units::ToUserDistance(teammateRange));
     wp->RefreshDisplay();
   }
 

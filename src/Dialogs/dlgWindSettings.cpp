@@ -59,7 +59,7 @@ static void UpdateWind(bool set) {
   double ws = 0.0, wb = 0.0;
   wp = (WndProperty*)wf->FindByName(_T("prpSpeed"));
   if (wp) {
-    ws = wp->GetDataField()->GetAsFloat()/SPEEDMODIFY;
+    ws = Units::ToSysSpeed(wp->GetDataField()->GetAsFloat());
   }
   wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
   if (wp) {
@@ -90,8 +90,9 @@ static void OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
   switch(Mode){
     case DataField::daGet:
-      Sender->SetMax(SPEEDMODIFY*(200.0/TOKPH));
-      Sender->Set((double)(SPEEDMODIFY * XCSoarInterface::Basic().wind.norm));
+      /// @todo TOKPH shouldn't be here...
+      Sender->SetMax(Units::ToUserWindSpeed(200.0/TOKPH));
+      Sender->Set(Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
     break;
     case DataField::daPut:
       UpdateWind(false);

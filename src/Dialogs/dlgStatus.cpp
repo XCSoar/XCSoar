@@ -346,7 +346,7 @@ static void UpdateValuesFlight(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   if (wp) {
     _stprintf(Temp, _T("%.0f %s"),
-              (double)XCSoarInterface::Basic().GPSAltitude*ALTITUDEMODIFY,
+              Units::ToUserAltitude(XCSoarInterface::Basic().GPSAltitude),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
@@ -354,7 +354,7 @@ static void UpdateValuesFlight(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpMaxHeightGain"));
   if (wp) {
     _stprintf(Temp, _T("%d %s"),
-              (int)(XCSoarInterface::Calculated().MaxHeightGain * ALTITUDEMODIFY),
+              (int)Units::ToUserAltitude(XCSoarInterface::Calculated().MaxHeightGain),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
@@ -435,7 +435,7 @@ static void UpdateValuesRules(void) {
   if (wp) {
     if (XCSoarInterface::Calculated().common_stats.task_started) {
       _stprintf(Temp, TEXT("%d %s"),
-                (int)(TASKSPEEDMODIFY * start_state.Speed),
+                (int)Units::ToUserTaskSpeed(start_state.Speed),
                 Units::GetTaskSpeedName());
       wp->SetText(Temp);
     } else {
@@ -448,7 +448,7 @@ static void UpdateValuesRules(void) {
   if (wp) {
     if (XCSoarInterface::Calculated().common_stats.task_started) {
       _stprintf(Temp, _T("%.0f %s"),
-                (double)(start_state.NavAltitude*ALTITUDEMODIFY),
+                Units::ToUserAltitude(start_state.NavAltitude),
                 Units::GetAltitudeName());
       wp->SetText(Temp);
     } else {
@@ -459,7 +459,7 @@ static void UpdateValuesRules(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpFinishAlt"));
   if (wp) {
     _stprintf(Temp, _T("%.0f %s"),
-              (double)(task_manager.get_finish_height()*ALTITUDEMODIFY),
+              Units::ToUserAltitude(task_manager.get_finish_height()),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
@@ -511,35 +511,32 @@ static void UpdateValuesTask(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskDistance"));
   if (wp) {
-    _stprintf(Temp, _T("%.0f %s"), DISTANCEMODIFY*
-              XCSoarInterface::Calculated().task_stats.total.planned.get_distance(),
+    _stprintf(Temp, _T("%.0f %s"), Units::ToUserDistance(
+              XCSoarInterface::Calculated().task_stats.total.planned.get_distance()),
               Units::GetDistanceName());
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRemainingDistance"));
   if (wp) {
-    _stprintf(Temp, _T("%.0f %s"),
-              DISTANCEMODIFY*
-              XCSoarInterface::Calculated().task_stats.total.remaining.get_distance(),
+    _stprintf(Temp, _T("%.0f %s"), Units::ToUserDistance(
+              XCSoarInterface::Calculated().task_stats.total.remaining.get_distance()),
               Units::GetDistanceName());
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpEstimatedSpeed"));
   if (wp) {
-    _stprintf(Temp, _T("%.0f %s"),
-              TASKSPEEDMODIFY*
-              XCSoarInterface::Calculated().task_stats.total.planned.get_speed(),
+    _stprintf(Temp, _T("%.0f %s"), Units::ToUserTaskSpeed(
+              XCSoarInterface::Calculated().task_stats.total.planned.get_speed()),
               Units::GetTaskSpeedName());
     wp->SetText(Temp);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpAverageSpeed"));
   if (wp) {
-    _stprintf(Temp, _T("%.0f %s"),
-              TASKSPEEDMODIFY*
-              XCSoarInterface::Calculated().task_stats.total.travelled.get_speed(),
+    _stprintf(Temp, _T("%.0f %s"), Units::ToUserTaskSpeed(
+              XCSoarInterface::Calculated().task_stats.total.travelled.get_speed()),
               Units::GetTaskSpeedName());
     wp->SetText(Temp);
   }

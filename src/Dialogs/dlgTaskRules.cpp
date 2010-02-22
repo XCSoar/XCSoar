@@ -178,7 +178,7 @@ bool dlgTaskRules(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)settings_task.FinishMinHeight != ival) {
       settings_task.FinishMinHeight = ival;
       SetToRegistry(szRegistryFinishMinHeight,settings_task.FinishMinHeight);
@@ -188,7 +188,7 @@ bool dlgTaskRules(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)settings_task.StartMaxHeight != ival) {
       settings_task.StartMaxHeight = ival;
       SetToRegistry(szRegistryStartMaxHeight,settings_task.StartMaxHeight);
@@ -198,7 +198,7 @@ bool dlgTaskRules(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
+    ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
     if ((int)settings_task.StartMaxSpeed != ival) {
       settings_task.StartMaxSpeed = ival;
       SetToRegistry(szRegistryStartMaxSpeed,settings_task.StartMaxSpeed);
