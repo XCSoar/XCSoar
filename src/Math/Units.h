@@ -39,6 +39,4 @@ Copyright_License {
 #ifndef XCSOAR_MATH_UNITS_H
 #define XCSOAR_MATH_UNITS_H
 
-#define NAUTICALMILESTOMETRES (double)1851.96
-
 #endif

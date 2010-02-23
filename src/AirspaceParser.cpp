@@ -282,7 +282,7 @@ ParseLine(Airspaces &airspace_database, int nLineType)
     break;
 
   case k_nLtDC:
-    temp_area.Radius = _tcstod(&TempString[2], NULL)* NAUTICALMILESTOMETRES;
+    temp_area.Radius = Units::ToSysUnit(_tcstod(&TempString[2], NULL), unNauticalMiles);
     temp_area.AddCircle(airspace_database);
     temp_area.reset();
     break;
@@ -661,7 +661,7 @@ CalculateSector(TCHAR *Text)
   static const fixed fixed_75 = fixed(7.5);
   static const fixed fixed_5 = fixed(5);
 
-  Radius = NAUTICALMILESTOMETRES * _tcstod(&Text[2], &Stop);
+  Radius = Units::ToSysUnit(_tcstod(&Text[2], &Stop), unNauticalMiles);
   StartBearing = _tcstod(&Stop[1], &Stop);
   EndBearing = _tcstod(&Stop[1], &Stop);
 
