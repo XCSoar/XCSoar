@@ -44,7 +44,6 @@ Copyright_License {
 #include "Registry.hpp"
 #include "Profile.hpp"
 #include "DataField/Enum.hpp"
-#include "Math/Units.h"
 #include "MainWindow.hpp"
 
 static WndForm *wf=NULL;

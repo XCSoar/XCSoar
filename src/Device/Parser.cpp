@@ -44,7 +44,6 @@ Copyright_License {
 #include "Device/Geoid.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
-#include "Math/Units.h"
 #include "NMEA/Info.hpp"
 #include "NMEA/Checksum.h"
 #include "StringUtil.hpp"

@@ -44,7 +44,6 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "Math/Earth.hpp"
-#include "Math/Units.h"
 #include "options.h"
 #include "Compatibility/string.h"
 #include "Math/Geometry.hpp"

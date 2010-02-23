@@ -41,7 +41,6 @@ Copyright_License {
 #include "Units.hpp"
 #include "Protection.hpp"
 #include "Math/FastMath.h"
-#include "Math/Units.h"
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
 #include "Compatibility/vk.h"

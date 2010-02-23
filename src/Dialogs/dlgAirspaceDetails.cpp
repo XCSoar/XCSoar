@@ -43,7 +43,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
-#include "Math/Units.h"
 #include "MainWindow.hpp"
 #include "MapWindow.hpp"
 #include "Components.hpp"

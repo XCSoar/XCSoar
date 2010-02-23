@@ -39,7 +39,6 @@ Copyright_License {
 
 #include "ConditionMonitor.hpp"
 #include "Math/Geometry.hpp"
-#include "Math/Units.h"
 #include "Message.hpp"
 #include "Device/device.hpp"
 #include "SettingsTask.hpp"

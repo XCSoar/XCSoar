@@ -40,7 +40,6 @@ Copyright_License {
 #include "Registry.hpp"
 #include "LogFile.hpp"
 #include "SettingsTask.hpp"
-#include "Math/Units.h"
 #include "Appearance.hpp"
 #include "InfoBoxManager.hpp"
 #include "GlideRatio.hpp"
