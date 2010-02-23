@@ -43,4 +43,7 @@ Profile::Save(void)
 {
 }
 
-void SetProfileFiles(const TCHAR *override) {}
+void
+Profile::SetFiles(const TCHAR* override)
+{
+}
