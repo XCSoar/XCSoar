@@ -216,6 +216,10 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/WayPointParser.cpp \
+	$(SRC)/WayPointFile.cpp \
+	$(SRC)/WayPointFileWinPilot.cpp \
+	$(SRC)/WayPointFileSeeYou.cpp \
+	$(SRC)/WayPointFileZander.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Simulator.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
