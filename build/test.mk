@@ -102,6 +102,7 @@ $(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS
 
 RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/UtilsText.cpp \
+	$(SRC)/Units.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
