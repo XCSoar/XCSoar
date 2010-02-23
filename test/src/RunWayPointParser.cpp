@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "WayPointParser.h"
+#include "WayPointFile.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "RasterTerrain.h"
 #include "Thread/Mutex.hpp"
@@ -111,13 +111,14 @@ int main(int argc, char **argv)
 
   ascii2unicode(argv[1], path);
 
-  WayPointParser parser;
-  if (!parser.SetFile(path, false)) {
+  WayPointFile* parser = NULL;
+  parser = WayPointFile::create(path, 0);
+  if (!parser) {
     fprintf(stderr, "WayPointParser::SetFile() has failed\n");
     return 1;
   }
 
-  if (!parser.Parse(way_points, NULL)) {
+  if (!parser->Parse(way_points, NULL)) {
     fprintf(stderr, "WayPointParser::Parse() has failed\n");
     return 1;
   }
