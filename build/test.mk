@@ -284,6 +284,7 @@ $(RUN_DIALOG_BIN): $(RUN_DIALOG_OBJS) $(RUN_DIALOG_LDADD) | $(TARGET_BIN_DIR)/di
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Appearance.cpp \
+	$(SRC)/Units.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
