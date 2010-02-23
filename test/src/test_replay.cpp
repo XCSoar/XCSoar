@@ -3,6 +3,7 @@
 #include "TaskEventsPrint.hpp"
 #include "ReplayLogger.hpp"
 #include "Task/TaskManager.hpp"
+#include "UtilsText.hpp"
 #ifdef DO_PRINT
 #include <fstream>
 #endif
@@ -67,7 +68,9 @@ test_replay(const OLCRules olc_type)
   task_manager.set_glide_polar(glide_polar);
 
   ReplayLoggerSim sim;
-  sim.SetFilename(replay_file.c_str());
+  TCHAR szFilename[MAX_PATH];
+  ConvertCToT(szFilename, replay_file.c_str());
+  sim.SetFilename(szFilename);
   sim.Start();
 
   bool do_print = verbose;
