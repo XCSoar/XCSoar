@@ -56,6 +56,6 @@ LogDebug(const TCHAR *fmt, ...)
   va_list ap;
 
   va_start(ap, fmt);
-  vfprintf(stderr, fmt, ap);
+  _vftprintf(stderr, fmt, ap);
   va_end(ap);
 }
