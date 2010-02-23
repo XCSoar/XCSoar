@@ -358,6 +358,10 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/WayPointParser.cpp \
+	$(SRC)/WayPointFile.cpp \
+	$(SRC)/WayPointFileWinPilot.cpp \
+	$(SRC)/WayPointFileSeeYou.cpp \
+	$(SRC)/WayPointFileZander.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
