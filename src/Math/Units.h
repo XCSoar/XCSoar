@@ -42,6 +42,5 @@ Copyright_License {
 #define NAUTICALMILESTOMETRES (double)1851.96
 
 #define TOMPH   (double)2.237
-#define TOKPH   (double)3.6
 
 #endif

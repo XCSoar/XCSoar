@@ -90,8 +90,7 @@ static void OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
   switch(Mode){
     case DataField::daGet:
-      /// @todo TOKPH shouldn't be here...
-      Sender->SetMax(Units::ToUserWindSpeed(200.0/TOKPH));
+      Sender->SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(200.0, unKiloMeterPerHour)));
       Sender->Set(Units::ToUserWindSpeed(XCSoarInterface::Basic().wind.norm));
     break;
     case DataField::daPut:

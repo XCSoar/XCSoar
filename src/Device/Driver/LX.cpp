@@ -40,7 +40,7 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Device/Parser.hpp"
 #include "Protection.hpp"
-#include "Math/Units.h"
+#include "Units.hpp"
 #include "NMEA/Info.hpp"
 
 #include <tchar.h>
@@ -129,7 +129,7 @@ LXWP0(const TCHAR *String, NMEA_INFO *GPS_INFO, bool enable_baro)
   */
 
   NMEAParser::ExtractParameter(String, ctemp, 1);
-  fixed airspeed(_tcstod(ctemp, NULL) / TOKPH);
+  fixed airspeed(Units::ToSysUnit(_tcstod(ctemp, NULL), unKiloMeterPerHour));
 
   NMEAParser::ExtractParameter(String, ctemp, 2);
   fixed alt(_tcstod(ctemp, NULL));
