@@ -655,7 +655,7 @@ bool CheckRegistryProfile() {
  * Reads and parses arguments/options from the command line
  * @param CommandLine not in use
  */
-void XCSoarGetOpts(LPCTSTR CommandLine) {
+void ParseCommandLine(LPCTSTR CommandLine) {
   TCHAR extrnProfileFile[MAX_PATH];
   extrnProfileFile[0] = 0;
 

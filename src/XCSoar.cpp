@@ -92,7 +92,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LPCTSTR lpCmdLine = GetCommandLine();
 #endif
 
-  XCSoarGetOpts(lpCmdLine);
+  ParseCommandLine(lpCmdLine);
 
 #ifndef ENABLE_SDL
   InitCommonControls();
