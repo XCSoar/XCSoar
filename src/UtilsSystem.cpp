@@ -71,13 +71,13 @@ Copyright_License {
 #endif
 
 #ifdef WINDOWSPC
-int SCREENWIDTH=640;
-int SCREENHEIGHT=480;
+int SCREENWIDTH = 640;
+int SCREENHEIGHT = 480;
 #endif
 
 long CheckFreeRam(void) {
 #ifdef WIN32
-  MEMORYSTATUS    memInfo;
+  MEMORYSTATUS memInfo;
   // Program memory
   memInfo.dwLength = sizeof(memInfo);
   GlobalMemoryStatus(&memInfo);
@@ -102,7 +102,7 @@ void MemCheckPoint()
 {
 #ifdef WINDOWSPC
 #ifdef _DEBUG
-  _CrtMemCheckpoint( &memstate_s1 );
+  _CrtMemCheckpoint(&memstate_s1);
 #endif
 #endif
 }
@@ -113,10 +113,10 @@ void MemLeakCheck() {
   _CrtMemState memstate_s2, memstate_s3;
 
    // Store a 2nd memory checkpoint in s2
-   _CrtMemCheckpoint( &memstate_s2 );
+   _CrtMemCheckpoint(&memstate_s2);
 
-   if ( _CrtMemDifference( &memstate_s3, &memstate_s1, &memstate_s2 ) ) {
-     _CrtMemDumpStatistics( &memstate_s3 );
+   if ( _CrtMemDifference(&memstate_s3, &memstate_s1, &memstate_s2)) {
+     _CrtMemDumpStatistics(&memstate_s3);
      _CrtMemDumpAllObjectsSince(&memstate_s1);
    }
 
@@ -130,22 +130,20 @@ void MemLeakCheck() {
 // automatic defragmentation.
 void MyCompactHeaps() {
 #ifdef WIN32
-#if defined(WINDOWSPC)||(defined(GNAV) && !defined(__GNUC__))
-  HeapCompact(GetProcessHeap(),0);
+#if defined(WINDOWSPC) || (defined(GNAV) && !defined(__GNUC__))
+  HeapCompact(GetProcessHeap(), 0);
 #else
   typedef DWORD (_stdcall *CompactAllHeapsFn) (void);
   static CompactAllHeapsFn CompactAllHeaps = NULL;
-  static bool init=false;
+  static bool init = false;
   if (!init) {
     // get the pointer to the function
-    CompactAllHeaps = (CompactAllHeapsFn)
-      GetProcAddress(LoadLibrary(_T("coredll.dll")),
-		     _T("CompactAllHeaps"));
-    init=true;
+    CompactAllHeaps = (CompactAllHeapsFn)GetProcAddress(
+        LoadLibrary(_T("coredll.dll")), _T("CompactAllHeaps"));
+    init = true;
   }
-  if (CompactAllHeaps) {
+  if (CompactAllHeaps)
     CompactAllHeaps();
-  }
 #endif
 #endif /* WIN32 */
 }
@@ -166,10 +164,10 @@ unsigned long FindFreeSpace(const TCHAR *path) {
   ULARGE_INTEGER TotalNumberOfBytes;
   ULARGE_INTEGER TotalNumberOfFreeBytes;
   if (GetDiskFreeSpaceEx(path,
-			 &FreeBytesAvailableToCaller,
-			 &TotalNumberOfBytes,
-			 &TotalNumberOfFreeBytes)) {
-    return FreeBytesAvailableToCaller.LowPart/1024;
+                         &FreeBytesAvailableToCaller,
+                         &TotalNumberOfBytes,
+                         &TotalNumberOfFreeBytes)) {
+    return FreeBytesAvailableToCaller.LowPart / 1024;
   } else
     return 0;
 #endif /* !HAVE_POSIX */
@@ -198,7 +196,9 @@ void CreateDirectoryIfAbsent(const TCHAR *filename) {
 #endif /* !HAVE_POSIX */
 }
 
-bool RotateScreen() {
+bool
+RotateScreen()
+{
 #ifdef DM_DISPLAYORIENTATION
   //
   // Change the orientation of the screen
@@ -467,7 +467,8 @@ GetGlobalModelName()
  * We do this in XCSoar.cpp at the beginning, no need to make these settings configurable:
  * max brightness and no timeout if on power is the rule. Otherwise, do it manually..
  */
-bool SetBacklight()
+bool
+SetBacklight()
 {
   HKEY hKey;
   DWORD Disp = 0;
@@ -627,9 +628,10 @@ InstallFonts()
  */
 bool CheckDataDir() {
 	TCHAR srcdir[MAX_PATH];
+  _stprintf(srcdir, _T("%s%S"), gmfpathname(), XCSDATADIR);
 
-        _stprintf(srcdir,_T("%s%S"),gmfpathname(), XCSDATADIR );
-	if (  GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY) return false;
+  if (GetFileAttributes(srcdir) != FILE_ATTRIBUTE_DIRECTORY)
+	  return false;
 	return true;
 }
 
@@ -643,9 +645,13 @@ bool CheckDataDir() {
  */
 bool CheckRegistryProfile() {
 	TCHAR srcpath[MAX_PATH];
-	if ( GlobalModelType == MODELTYPE_PNA_HP31X ) return false;
-        _stprintf(srcpath,_T("%s%S\\%S"),gmfpathname(), XCSDATADIR , XCSPROFILE);
-	if (  GetFileAttributes(srcpath) == 0xffffffff) return false;
+	if (GlobalModelType == MODELTYPE_PNA_HP31X)
+	  return false;
+
+	_stprintf(srcpath,_T("%s%S\\%S"),gmfpathname(), XCSDATADIR , XCSPROFILE);
+
+	if (GetFileAttributes(srcpath) == 0xffffffff)
+	  return false;
 	return true;
 }
 #endif
@@ -655,7 +661,9 @@ bool CheckRegistryProfile() {
  * Reads and parses arguments/options from the command line
  * @param CommandLine not in use
  */
-void ParseCommandLine(LPCTSTR CommandLine) {
+void
+ParseCommandLine(LPCTSTR CommandLine)
+{
   TCHAR extrnProfileFile[MAX_PATH];
   extrnProfileFile[0] = 0;
 
@@ -681,22 +689,24 @@ void ParseCommandLine(LPCTSTR CommandLine) {
   const TCHAR *pC, *pCe;
 
   pC = _tcsstr(CommandLine, _T("-profile="));
-  if (pC != NULL){
+  if (pC != NULL) {
     pC += strlen("-profile=");
-    if (*pC == '"'){
+    if (*pC == '"') {
       pC++;
       pCe = pC;
-      while (*pCe != '"' && *pCe != '\0') pCe++;
-    } else{
+      while (*pCe != '"' && *pCe != '\0')
+        pCe++;
+    } else {
       pCe = pC;
-      while (*pCe != ' ' && *pCe != '\0') pCe++;
+      while (*pCe != ' ' && *pCe != '\0')
+        pCe++;
     }
-    if (pCe != NULL && pCe-1 > pC){
-
-      _tcsncpy(extrnProfileFile, pC, pCe-pC);
-      extrnProfileFile[pCe-pC] = '\0';
+    if (pCe != NULL && pCe - 1 > pC) {
+      _tcsncpy(extrnProfileFile, pC, pCe - pC);
+      extrnProfileFile[pCe - pC] = '\0';
     }
   }
+
 #ifdef WINDOWSPC
   pC = _tcsstr(CommandLine, _T("-800x480"));
   if (pC != NULL) {
@@ -773,12 +783,24 @@ TranscodeKey(WPARAM wParam)
   // VENTA-ADDON HARDWARE KEYS TRANSCODING
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X) {
-      //		if (wParam == 0x7b) wParam=0xc1;  // VK_APP1
+      /*
+      if (wParam == 0x7b)
+        // VK_APP1
+        wParam = 0xc1;
+      */
+
       if (wParam == 0x7b)
         // VK_ESCAPE
         wParam = 0x1b;
-      //		if (wParam == 0x7b) wParam=0x27;  // VK_RIGHT
-      //		if (wParam == 0x7b) wParam=0x25;  // VK_LEFT
+
+      /*
+      if (wParam == 0x7b)
+        // VK_RIGHT
+        wParam = 0x27;
+      if (wParam == 0x7b)
+        // VK_LEFT
+        wParam=0x25;
+      */
   } else if (GlobalModelType == MODELTYPE_PNA_PN6000) {
     switch(wParam) {
     case 0x79:					// Upper Silver key short press
