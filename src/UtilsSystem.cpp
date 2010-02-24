@@ -745,6 +745,12 @@ void ParseCommandLine(LPCTSTR CommandLine) {
     SCREENWIDTH = 240;
     SCREENHEIGHT = 320;
   }
+
+  pC = _tcsstr(CommandLine, _T("-240x240"));
+  if (pC != NULL) {
+    SCREENWIDTH = 240;
+    SCREENHEIGHT = 240;
+  }
 #endif
 
   Profile::SetFiles(extrnProfileFile);
