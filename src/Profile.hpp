@@ -44,16 +44,48 @@ Copyright_License {
 class Profile: public XCSoarInterface
 {
 public:
+  /**
+   * Reads the profile settings from the registry and adjusts the
+   * application settings
+   */
   static void ReadRegistrySettings(void);
+  /**
+   * Loads the profile files into the registry
+   */
   static void Load(void);
+  /**
+   * Saves the registry into the profile files
+   */
   static void Save(void);
+  /**
+   * Saves the sound settings to the registry
+   */
   static void SaveSoundSettings();
+  /**
+   * Saves the wind settings to the registry
+   */
   static void SaveWindToRegistry();
+  /**
+   * Loads the wind settings from the registry
+   */
   static void LoadWindFromRegistry();
+  /**
+   * Saves the airspace mode setting to the registry
+   * @param i Airspace class index
+   */
   static void SetRegistryAirspaceMode(int i);
+  /**
+   * Sets the files to load when calling Load()
+   * @param override NULL or file to load when calling Load()
+   */
   static void SetFiles(const TCHAR* override);
 
 private:
+  /**
+   * Reads the airspace mode setting from the registry
+   * @param i Airspace class index
+   * @return The mode
+   */
   static int GetRegistryAirspaceMode(int i);
 };
 
