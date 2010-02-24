@@ -58,7 +58,8 @@ typedef struct _THERMAL_SOURCE_VIEW
   bool Visible;
 } THERMAL_SOURCE_VIEW;
 
-struct ZoomClimb_t {
+struct ZoomClimb_t
+{
   fixed CruiseMapScale;
   fixed ClimbMapScale;
   bool last_isclimb;
@@ -96,7 +97,7 @@ class MapWindow
 
   GaugeCDI *cdi;
 
- public:
+public:
   MapWindow();
   virtual ~MapWindow();
 
@@ -153,7 +154,7 @@ class MapWindow
     return *this;
   };
 
- private:
+private:
 
   void DrawThreadLoop ();
   void DrawThreadInitialise (void);
@@ -243,7 +244,7 @@ class MapWindow
   BufferCanvas stencil_canvas;
 
   LabelBlock label_block;
- public:
+public:
   bool checkLabelBlock(RECT rc);
   LabelBlock *getLabelBlock() {
     return &label_block;
@@ -254,7 +255,8 @@ class MapWindow
 				     unsigned width,
 				     unsigned height,
 				     POINT *sc=NULL);
- protected:
+
+protected:
   virtual bool on_create();
   virtual bool on_destroy();
   virtual bool on_resize(unsigned width, unsigned height);
@@ -266,7 +268,8 @@ class MapWindow
   virtual bool on_key_down(unsigned key_code);
   virtual void on_paint(Canvas& canvas);
   virtual bool on_setfocus();
- private:
+
+private:
   void RenderStart(Canvas &canvas, const RECT rc);
   void RenderBackground(Canvas &canvas, const RECT rc);
   void RenderMapLayer(Canvas &canvas, const RECT rc);

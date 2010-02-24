@@ -63,40 +63,42 @@ using std::max;
 
 // Interface/touchscreen callbacks
 
-/*
-	Virtual Key Manager by Paolo Ventafridda
-
-	Returns 0 if invalid virtual scan code, otherwise a valid
-	transcoded keycode.
-
+/**
+ * Virtual Key Manager
+ * @param X
+ * @param Y
+ * @param keytime
+ * @param vkmode
+ * @return 0 if invalid virtual scan code, otherwise a valid transcoded keycode
  */
-int MapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
-
-// 0 is always thermal mode, and does not account
+int
+MapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode)
+{
+  // 0 is always thermal mode, and does not account
 #define MAXBOTTOMMODES 5
 #define VKTIMELONG 1500
 
 #ifdef DEBUG_PROCVK
   TCHAR buf[100];
-  wsprintf(buf,_T("R=%d,%d,%d,%d, X=%d Y=%d kt=%ld"),
-	   MapRect.left, MapRect.top,
-	   MapRect.right, MapRect.bottom,
-	   X,Y,keytime);
+  wsprintf(buf, _T("R=%d,%d,%d,%d, X=%d Y=%d kt=%ld"),
+           MapRect.left, MapRect.top,
+           MapRect.right, MapRect.bottom,
+           X, Y, keytime);
   DoStatusMessage(buf);
 #endif
 
-  short sizeup=MapRect.bottom-MapRect.top;
-  short yup=(sizeup/3)+MapRect.top;
-  short ydown=MapRect.bottom-(sizeup/3);
+  short sizeup = MapRect.bottom - MapRect.top;
+  short yup = (sizeup / 3) + MapRect.top;
+  short ydown = MapRect.bottom - (sizeup / 3);
 
-  if (Y<yup) {
-    if (keytime>=VKTIMELONG)
+  if (Y < yup) {
+    if (keytime >= VKTIMELONG)
       return 0xc1;
     else
       return 38;
   }
-  if (Y>ydown) {
-    if (keytime>=VKTIMELONG)
+  if (Y > ydown) {
+    if (keytime >= VKTIMELONG)
       return 0xc2;
     else
       return 40;
@@ -112,12 +114,14 @@ int MapWindow::ProcessVirtualKey(int X, int Y, long keytime, short vkmode) {
    return 0; // ignore it
   */
   return 13;
-//	}
+
   Message::AddMessage(_T("VirtualKey Error"));
   return 0;
 }
 
-bool MapWindow::on_resize(unsigned width, unsigned height) {
+bool
+MapWindow::on_resize(unsigned width, unsigned height)
+{
   MaskedPaintWindow::on_resize(width, height);
 
   draw_canvas.resize(width, height);
@@ -127,7 +131,8 @@ bool MapWindow::on_resize(unsigned width, unsigned height) {
   return true;
 }
 
-bool MapWindow::on_create()
+bool
+MapWindow::on_create()
 {
   if (!MaskedPaintWindow::on_create())
     return false;
@@ -139,7 +144,8 @@ bool MapWindow::on_create()
   return true;
 }
 
-bool MapWindow::on_destroy()
+bool
+MapWindow::on_destroy()
 {
   draw_canvas.reset();
   buffer_canvas.reset();
@@ -149,7 +155,9 @@ bool MapWindow::on_destroy()
   return true;
 }
 
-void MapWindow::on_paint(Canvas& _canvas) {
+void
+MapWindow::on_paint(Canvas& _canvas)
+{
   mutexBuffer.Lock();
   _canvas.copy(draw_canvas);
   mutexBuffer.Unlock();
@@ -161,8 +169,7 @@ MapWindow::on_setfocus()
   MaskedPaintWindow::on_setfocus();
 
   if (InputEvents::getModeID() == InputEvents::MODE_INFOBOX)
-    /* the focus comes from the info box; restore the "default"
-       mode */
+    // the focus comes from the info box; restore the "default" mode
     InputEvents::setMode(InputEvents::MODE_DEFAULT);
 
   return true;
@@ -170,9 +177,10 @@ MapWindow::on_setfocus()
 
 static GEOPOINT LLstart;
 static int XstartScreen, YstartScreen;
-static bool ignorenext=true;
+static bool ignorenext = true;
 
-bool MapWindow::on_mouse_double(int x, int y)
+bool
+MapWindow::on_mouse_double(int x, int y)
 {
   // Added by ARH to show menu button when mapwindow is double clicked.
   //
@@ -189,8 +197,10 @@ bool
 MapWindow::on_mouse_move(int x, int y, unsigned keys)
 {
 #ifdef OLD_TASK
-  if (task != NULL && task->getSettings().AATEnabled &&
-      SettingsMap().TargetPan && (TargetDrag_State>0)) {
+  if (task != NULL &&
+      task->getSettings().AATEnabled &&
+      SettingsMap().TargetPan &&
+      (TargetDrag_State > 0)) {
     // target follows "finger" so easier to drop near edge of
     // sector
     if (TargetDrag_State == 1) {
@@ -212,13 +222,16 @@ MapWindow::on_mouse_move(int x, int y, unsigned keys)
     }
   }
 #endif
+
   return MaskedPaintWindow::on_mouse_move(x, y, keys);
 }
 
-bool MapWindow::on_mouse_down(int x, int y)
+bool
+MapWindow::on_mouse_down(int x, int y)
 {
   mouse_down_clock.update();
-  if (ignorenext) return true;
+  if (ignorenext)
+    return true;
 
   set_focus();
 
@@ -230,32 +243,33 @@ bool MapWindow::on_mouse_down(int x, int y)
   YstartScreen = y;
 
 #ifdef OLD_TASK
-
-  if (task != NULL && task->getSettings().AATEnabled &&
+  if (task != NULL &&
+      task->getSettings().AATEnabled &&
       SettingsMap().TargetPan) {
     if (task->ValidTaskPoint(SettingsMap().TargetPanIndex)) {
       POINT tscreen;
       LonLat2Screen(task->getTargetLocation(SettingsMap().TargetPanIndex),
-		    tscreen);
-      double distance = isqrt4((long)((XstartScreen-tscreen.x)
-			       * (XstartScreen-tscreen.x)
-			       + (YstartScreen-tscreen.y)
-			       * (YstartScreen-tscreen.y)))
-        / Layout::scale;
+                    tscreen);
+      double distance = isqrt4((long)((XstartScreen - tscreen.x) *
+                                      (XstartScreen - tscreen.x) +
+                                      (YstartScreen - tscreen.y) *
+                                      (YstartScreen - tscreen.y)));
+      distance /= Layout::scale;
 
-      if (distance<10) {
+      if (distance < 10)
         TargetDrag_State = 1;
-      }
     }
   }
 #endif
+
   return true;
 }
 
-bool MapWindow::on_mouse_up(int x, int y)
+bool
+MapWindow::on_mouse_up(int x, int y)
 {
   if (ignorenext) {
-    ignorenext=false;
+    ignorenext = false;
     return true;
   }
 
@@ -274,72 +288,74 @@ bool MapWindow::on_mouse_up(int x, int y)
     return true; // should be impossible
   }
 
-  double distance = isqrt4((long)((XstartScreen-x)*(XstartScreen-x)+
-			   (YstartScreen-y)*(YstartScreen-y)))
-    / Layout::scale;
+  double distance = isqrt4((long)((XstartScreen - x) *
+                                  (XstartScreen - x) +
+                                  (YstartScreen - y) *
+                                  (YstartScreen - y)));
+  distance /= Layout::scale;
 
 #ifdef DEBUG_VIRTUALKEYS
-  TCHAR buf[80]; char sbuf[80];
+  TCHAR buf[80];
+  char sbuf[80];
   sprintf(sbuf,"%.0f",distance);
-  _stprintf(buf,_T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),
-	    x,y,sbuf,dwUpTime,dwDownTime,dwInterval);
+  _stprintf(buf, _T("XY=%d,%d dist=%S Up=%ld Down=%ld Int=%ld"),
+            x, y, sbuf, dwUpTime, dwDownTime, dwInterval);
   Message::AddMessage(buf);
 #endif
 
   // Caution, timed clicks from PC with a mouse are different
   // from real touchscreen devices
 
-  if ((distance<50)
-       && (CommonInterface::VirtualKeys==(VirtualKeys_t)vkEnabled)
-       && (dwInterval>= DOUBLECLICKINTERVAL)) {
-    unsigned wParam=ProcessVirtualKey(x,y,dwInterval,0);
-    if (wParam==0) {
+  if ((distance < 50) &&
+      (CommonInterface::VirtualKeys==(VirtualKeys_t)vkEnabled) &&
+      (dwInterval>= DOUBLECLICKINTERVAL)) {
+    unsigned wParam = ProcessVirtualKey(x, y, dwInterval, 0);
+    if (wParam == 0) {
 #ifdef DEBUG_VIRTUALKEYS
       Message::AddMessage(_T("E02 INVALID Virtual Key!"));
 #endif
       return true;
     }
-    //    dwDownTime= 0L;
-    //    InputEvents::processKey(wParam);
-    //    return;
   }
 
   GEOPOINT G;
   Screen2LonLat(x, y, G);
 
 #ifdef OLD_TASK
-
-  if (task != NULL && task->getSettings().AATEnabled && my_target_pan &&
+  if (task != NULL &&
+      task->getSettings().AATEnabled &&
+      my_target_pan &&
       TargetDrag_State > 0) {
     TargetDrag_State = 2;
-    if (task->InAATTurnSector(G, SettingsMap().TargetPanIndex)) {
+    if (task->InAATTurnSector(G, SettingsMap().TargetPanIndex))
       // if release mouse out of sector, don't update w/ bad coords
       TargetDrag_Location = G;
-    }
+
     return true;
   }
 #endif
 
-  if (!my_target_pan && SettingsMap().EnablePan && (distance>IBLSCALE(36))) {
+  if (!my_target_pan && SettingsMap().EnablePan && (distance > IBLSCALE(36))) {
     // JMW broken!
-    PanLocation.Longitude += LLstart.Longitude-G.Longitude;
-    PanLocation.Latitude  += LLstart.Latitude-G.Latitude;
+    PanLocation.Longitude += LLstart.Longitude - G.Longitude;
+    PanLocation.Latitude += LLstart.Latitude - G.Latitude;
     RefreshMap();
     return true;
   }
 
-  if (is_simulator() && (dwInterval>50)) {
-    if (!Basic().gps.Replay && !my_target_pan && (distance>IBLSCALE(36))) {
+  if (is_simulator() && (dwInterval > 50)) {
+    if (!Basic().gps.Replay && !my_target_pan && (distance > IBLSCALE(36))) {
       // This drag moves the aircraft (changes speed and direction)
       const fixed oldbearing = Basic().TrackBearing;
-      const fixed minspeed = 1.1 * (task != NULL ? task->get_glide_polar() : GlidePolar(fixed_zero)).get_Vmin();
+      const fixed minspeed = 1.1 * (task != NULL ?
+                                    task->get_glide_polar() :
+                                    GlidePolar(fixed_zero)).get_Vmin();
       const fixed newbearing = Bearing(LLstart, G);
-      if ((fabs(AngleLimit180(fixed(newbearing - oldbearing))) < 30)
-          || (Basic().GroundSpeed < minspeed)) {
+      if ((fabs(AngleLimit180(fixed(newbearing - oldbearing))) < 30) ||
+          (Basic().GroundSpeed < minspeed))
+        device_blackboard.SetSpeed(min(fixed(100.0),
+                                   max(minspeed, fixed(distance / 3))));
 
-        device_blackboard.SetSpeed(min(fixed(100.0), max(minspeed,
-                                                         fixed(distance / 3))));
-      }
       device_blackboard.SetTrackBearing(newbearing);
       // change bearing without changing speed if direction change > 30
       // 20080815 JMW prevent dragging to stop glider
@@ -351,38 +367,30 @@ bool MapWindow::on_mouse_up(int x, int y)
   }
 
   if (!my_target_pan) {
-    if (CommonInterface::VirtualKeys==(VirtualKeys_t)vkEnabled) {
-      if(dwInterval < VKSHORTCLICK) {
-        //100ms is NOT enough for a short click since GetTickCount
-        //is OEM custom!
-
+    if (CommonInterface::VirtualKeys == (VirtualKeys_t)vkEnabled) {
+      if (dwInterval < VKSHORTCLICK) {
+        // 100ms is NOT enough for a short click since GetTickCount is OEM custom!
         if (way_points != NULL &&
             PopupNearestWaypointDetails(*way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }
-
       } else {
-        if (airspace_database != NULL &&
-            AirspaceDetailsAtPoint(LLstart))
+        if (airspace_database != NULL && AirspaceDetailsAtPoint(LLstart))
           return true;
       }
-
     } else {
       if(dwInterval < AIRSPACECLICK) { // original and untouched interval
-
         if (way_points != NULL &&
             PopupNearestWaypointDetails(*way_points, LLstart,
 					DistancePixelsToMeters(IBLSCALE(10)), false)) {
           return true;
         }
-
       } else {
         if (airspace_database != NULL &&
             AirspaceDetailsAtPoint(LLstart))
           return true;
       }
-
     } // VK enabled
   } // !TargetPan
 
@@ -402,13 +410,14 @@ MapWindow::on_mouse_wheel(int delta)
   return true;
 }
 
-bool MapWindow::on_key_down(unsigned key_code)
+bool
+MapWindow::on_key_down(unsigned key_code)
 {
   // VENTA-TODO careful here, keyup no more trapped for PNA.
   // Forbidden usage of keypress timing.
 
   key_code = TranscodeKey(key_code);
-  if (is_altair() && key_code == 0xF5){
+  if (is_altair() && key_code == 0xF5) {
     XCSoarInterface::SignalShutdown(false);
     return true;
   }
