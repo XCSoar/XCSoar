@@ -74,6 +74,7 @@ typedef wchar_t TCHAR;
 
 #define _TEOF EOF
 #define _fgetts fgetws
+#define _fputts fputws
 #define _stscanf swscanf
 
 #define _tremove _wremove
@@ -128,6 +129,7 @@ typedef char TCHAR;
 #define _tfopen fopen
 #define _TEOF EOF
 #define _fgetts fgets
+#define _fputts fputs
 #define _stscanf sscanf
 
 #define _tremove remove
