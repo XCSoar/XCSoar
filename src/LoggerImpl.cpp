@@ -53,6 +53,7 @@
 #include "Compatibility/string.h"
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
+#include "Simulator.hpp"
 
 #ifdef HAVE_POSIX
 #include <unistd.h>
@@ -210,7 +211,7 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   double MinLat, MinLon;
   char NoS, EoW;
 
-  if (gps_info.gps.Simulator)
+  if (gps_info.gps.Simulator || is_simulator())
     /* if at least one GPS fix comes from the simulator, disable
        signing */
     Simulator = true;
