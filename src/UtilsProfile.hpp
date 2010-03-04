@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_UTILS_PROFILE_HPP)
+#ifndef XCSOAR_UTILS_PROFILE_HPP
 #define XCSOAR_UTILS_PROFILE_HPP
 
 #ifdef PNA
