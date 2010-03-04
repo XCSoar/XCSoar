@@ -43,7 +43,6 @@
 #include "Language.hpp"
 #include "Device/Port.hpp"
 #include "SettingsTask.hpp"
-#include "Registry.hpp"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"

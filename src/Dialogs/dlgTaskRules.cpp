@@ -41,7 +41,6 @@ Copyright_License {
 #include "SettingsTask.hpp"
 #include "UtilsProfile.hpp"
 #include "Profile.hpp"
-#include "Registry.hpp"
 #include "Math/FastMath.h"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"

@@ -50,7 +50,6 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "SettingsUser.hpp"
 #include "InputEvents.h"
-#include "Registry.hpp"
 #include "Interface.hpp"
 #include "Asset.hpp"
 

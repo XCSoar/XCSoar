@@ -52,7 +52,6 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
-#include "Registry.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"
 #include "SettingsTask.hpp"

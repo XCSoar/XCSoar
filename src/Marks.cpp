@@ -43,7 +43,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "SettingsUser.hpp"
 #include "Compatibility/string.h"
-#include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "Audio/Sound.hpp"
 #include "LogFile.hpp"

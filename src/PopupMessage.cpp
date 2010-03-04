@@ -45,7 +45,6 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
-#include "Registry.hpp"
 #include "UtilsText.hpp"
 #include "Audio/Sound.hpp"
 #include "LogFile.hpp"

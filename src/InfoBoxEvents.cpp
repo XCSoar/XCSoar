@@ -47,7 +47,6 @@ Copyright_License {
 #include "Message.hpp"
 #include "Atmosphere.h"
 #include "Battery.h"
-#include "Registry.hpp"
 #include "MapWindow.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
