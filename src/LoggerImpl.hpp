@@ -136,6 +136,10 @@ private:
   char szLastFRecord[MAX_IGC_BUFF];
   bool DetectFRecordChange;
   GPSClock frecord_clock;
+  const char * GetHFFXARecord(void);
+  const char * GetIRecord(void);
+  double GetEPE(const NMEA_INFO& gps_info);
+  int GetSIU(const NMEA_INFO& gps_info);
 
 private:
   bool LoggerActive;

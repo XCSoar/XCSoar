@@ -153,6 +153,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/GlideTerrain.cpp \
 	$(SRC)/Logger.cpp \
 	$(SRC)/LoggerFRecord.cpp \
+	$(SRC)/LoggerEPE.cpp \
 	$(SRC)/LoggerImpl.cpp \
 	$(SRC)/LoggerSign.cpp \
 	$(SRC)/ReplayLogger.cpp \

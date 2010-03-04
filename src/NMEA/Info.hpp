@@ -93,11 +93,27 @@ struct GPS_STATE
   /** GPS fix not valid */
   int NAVWarning;
 
+  /**
+   * FixQuality
+   * 1 = GPS fix (SPS)
+   * 2 = DGPS fix
+   * 3 = PPS fix
+   * 4 = Real Time Kinematic
+   * 5 = Float RTK
+   * 6 = estimated (dead reckoning) (2.3 feature)
+   * 7 = Manual input mode
+   * 8 = Simulation mode
+   */
+  int FixQuality;
+
   /** Number of satellites used for gps fix */
   int SatellitesUsed;
 
   /** GPS Satellite ids */
   int SatelliteIDs[MAXSATELLITES];
+
+  /** Horizontal dilution of precision */
+  double HDOP;
 
   /** Is the GPS unit moving? (Speed > 2.0) */
   bool MovementDetected;

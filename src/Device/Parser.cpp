@@ -759,6 +759,10 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
 
   GGAAvailable = true;
 
+  gps.FixQuality = (int)(_tcstod(params[5], NULL));
+  if (gps.FixQuality != 1 && gps.FixQuality != 2)
+    gpsValid = false;
+
   nSatellites = (int)(min(16.0, _tcstod(params[6], NULL)));
   if (nSatellites == 0)
     gpsValid = false;
@@ -786,6 +790,8 @@ NMEAParser::GGA(const TCHAR *String, const TCHAR **params, size_t nparams,
     GPS_INFO->Location.Longitude = tmplon;
     gps.Simulator = false;
   }
+
+  gps.HDOP = (double)(_tcstod(params[7], NULL));
 
   if (RMZAvailable) {
     GPS_INFO->BaroAltitudeAvailable = true;

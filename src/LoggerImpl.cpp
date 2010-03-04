@@ -53,6 +53,7 @@
 #include "Compatibility/string.h"
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
+#include "Simulator.hpp"
 
 #ifdef HAVE_POSIX
 #include <unistd.h>
@@ -203,12 +204,14 @@ void
 LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
 {
   char szBRecord[500];
+  int iSIU=GetSIU(gps_info);
+  double dEPE=GetEPE(gps_info);
 
   int DegLat, DegLon;
   double MinLat, MinLon;
   char NoS, EoW;
 
-  if (gps_info.gps.Simulator)
+  if (gps_info.gps.Simulator || is_simulator())
     /* if at least one GPS fix comes from the simulator, disable
        signing */
     Simulator = true;
@@ -244,11 +247,11 @@ LoggerImpl::LogPointToFile(const NMEA_INFO& gps_info)
   MinLon *= 60;
   MinLon *= 1000;
 
-  sprintf(szBRecord,"B%02u%02u%02u%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n",
+  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d%03d%02d\r\n",
           gps_info.DateTime.hour, gps_info.DateTime.minute,
           gps_info.DateTime.second,
           DegLat, MinLat, NoS, DegLon, MinLon, EoW,
-          (int)gps_info.BaroAltitude,(int)gps_info.GPSAltitude);
+          (int)gps_info.BaroAltitude,(int)gps_info.GPSAltitude,(int)dEPE,iSIU);
 
   IGCWriteRecord(szBRecord, szLoggerFileName);
 }
@@ -411,6 +414,8 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
           gps_info.DateTime.year % 100);
   IGCWriteRecord(temp, szLoggerFileName);
 
+  IGCWriteRecord(GetHFFXARecord(), szLoggerFileName);
+
   GetRegistryString(szRegistryPilotName, PilotName, 100);
   sprintf(temp, "HFPLTPILOT:%S\r\n", PilotName);
   IGCWriteRecord(temp, szLoggerFileName);
@@ -437,6 +442,8 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
   IGCWriteRecord(temp, szLoggerFileName);
 
   IGCWriteRecord(datum, szLoggerFileName);
+
+  IGCWriteRecord(GetIRecord(), szLoggerFileName);
 }
 
 void
