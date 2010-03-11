@@ -40,6 +40,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "RasterTerrain.h"
+#include "TextWriter.hpp"
 
 bool
 WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
@@ -214,7 +215,7 @@ WayPointFileWinPilot::parseFlags(const TCHAR* src, WaypointFlags& dest)
 }
 
 void
-WayPointFileWinPilot::saveFile(FILE *fp, const Waypoints &way_points)
+WayPointFileWinPilot::saveFile(TextWriter &writer, const Waypoints &way_points)
 {
   // Iterate through the waypoint list and save each waypoint
   // into the file defined by fp
@@ -223,7 +224,7 @@ WayPointFileWinPilot::saveFile(FILE *fp, const Waypoints &way_points)
        it != way_points.end(); it++) {
     const Waypoint& wp = it->get_waypoint();
     if (wp.FileNum == file_num)
-      _ftprintf(fp, _T("%s\n"), composeLine(wp).c_str());
+      writer.writeln(composeLine(wp).c_str());
   }
 }
 

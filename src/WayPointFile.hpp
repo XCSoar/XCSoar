@@ -46,6 +46,7 @@ Copyright_License {
 #include <tchar.h>
 class Waypoints;
 class RasterTerrain;
+class TextWriter;
 
 #define wpTerrainBoundsYes    100
 #define wpTerrainBoundsYesAll 101
@@ -116,7 +117,7 @@ protected:
   virtual bool parseLine(const TCHAR* line, unsigned linenum,
                          Waypoints &way_points, const RasterTerrain *terrain) = 0;
 
-  virtual void saveFile(FILE *fp, const Waypoints &way_points) {};
+  virtual void saveFile(TextWriter &writer, const Waypoints &way_points) {};
 
   // Helper functions
 

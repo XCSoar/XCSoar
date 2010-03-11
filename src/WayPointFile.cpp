@@ -48,6 +48,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "UtilsFile.hpp"
+#include "TextReader.hpp"
+#include "TextWriter.hpp"
 
 #include "wcecompat/ts_string.h"
 
@@ -213,24 +215,19 @@ WayPointFile::Parse(Waypoints &way_points, const RasterTerrain *terrain)
   if (file[0] == 0)
     return false;
 
-  TCHAR line[255];
-
   // If normal file
   if (!compressed) {
     // Try to open waypoint file
-    FILE *fp;
-    fp = _tfopen(file, _T("rt"));
-    if (fp == NULL)
+    TextReader reader(file);
+    if (reader.error())
       return false;
 
     // Read through the lines of the file
-    for (unsigned i = 0; ReadStringX(fp, 255, line); i++) {
+    TCHAR *line;
+    for (unsigned i = 0; (line = reader.read_tchar_line()) != NULL; i++) {
       // and parse them
       parseLine(line, i, way_points, terrain);
     }
-
-    fclose(fp);
-
   // If compressed file inside map file
   } else {
     // convert path to ascii
@@ -244,6 +241,7 @@ WayPointFile::Parse(Waypoints &way_points, const RasterTerrain *terrain)
       return false;
 
     // Read through the lines of the file
+    TCHAR line[255];
     for (unsigned i = 0; ReadString(fp, 255, line); i++) {
       // and parse them
       parseLine(line, i, way_points, terrain);
@@ -269,15 +267,11 @@ WayPointFile::Save(Waypoints &way_points)
     return false;
 
   // Try to open waypoint file for writing
-  FILE *fp;
-  fp = _tfopen(file, _T("wt"));
-  if (fp == NULL)
+  TextWriter writer(file);
+  if (writer.error())
     return false;
 
-  saveFile(fp, way_points);
-
-  // Close the file
-  fclose(fp);
+  saveFile(writer, way_points);
 
   // and tell everyone we saved successfully
   return true;
