@@ -48,7 +48,6 @@ Copyright_License {
 void TrimRight(TCHAR *p);
 
 bool ReadString(ZZIP_FILE* zFile, size_t Max, TCHAR *String);
-bool ReadStringX(FILE *fp, size_t Max, TCHAR *String);
 
 void
 PExtractParameter(const TCHAR *Source, TCHAR *Destination,
