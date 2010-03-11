@@ -42,6 +42,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
+#include "TextReader.hpp"
 
 #include <stdio.h>
 
@@ -66,7 +67,6 @@ StatusMessageList::LoadFile()
   LogStartUp(TEXT("Loading status file\n"));
 
   TCHAR szFile1[MAX_PATH];
-  FILE *fp=NULL;
 
   // Open file from registry
   GetRegistryString(szRegistryStatusFile, szFile1, MAX_PATH);
@@ -74,15 +74,15 @@ StatusMessageList::LoadFile()
 
   SetRegistryString(szRegistryStatusFile, TEXT("\0"));
 
-  if (!string_is_empty(szFile1))
-    fp  = _tfopen(szFile1, TEXT("rt"));
+  if (string_is_empty(szFile1))
+    return;
 
+  TextReader reader(szFile1);
   // Unable to open file
-  if (fp == NULL)
+  if (reader.error())
     return;
 
   // TODO code: Safer sizes, strings etc - use C++ (can scanf restrict length?)
-  TCHAR buffer[2049];	// Buffer for all
   TCHAR key[2049];	// key from scanf
   TCHAR value[2049];	// value from scanf
   int ms;				// Found ms for delay
@@ -95,9 +95,10 @@ StatusMessageList::LoadFile()
   some_data = false;
 
   /* Read from the file */
+  const TCHAR *buffer;
   while (
 	 (StatusMessageData_Size < MAXSTATUSMESSAGECACHE)
-	 && _fgetts(buffer, 2048, fp)
+         && (buffer = reader.read_tchar_line()) != NULL
 	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
 	 ) {
     // Check valid line? If not valid, assume next record (primative, but works ok!)
@@ -148,8 +149,6 @@ StatusMessageList::LoadFile()
   // file was ok, so save it to registry
   ContractLocalPath(szFile1);
   SetRegistryString(szRegistryStatusFile, szFile1);
-
-  fclose(fp);
 }
 
 void
