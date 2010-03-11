@@ -43,6 +43,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Defines.h"
 #include "StringUtil.hpp"
+#include "TextReader.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -193,11 +194,10 @@ LoadChecklist(void)
   TCHAR filename[MAX_PATH];
   LocalPath(filename, _T(XCSCHKLIST));
 
-  FILE *file = _tfopen(filename, _T("rt"));
-  if (file == NULL)
+  TextReader reader(filename);
+  if (reader.error())
     return;
 
-  TCHAR TempString[MAXTITLE];
   TCHAR Details[MAXDETAILS];
   TCHAR Name[100];
   BOOL inDetails = FALSE;
@@ -205,17 +205,9 @@ LoadChecklist(void)
 
   Details[0] = 0;
   Name[0] = 0;
-  TempString[0] = 0;
 
-  while (ReadStringX(file, MAXTITLE, TempString)) {
-    int len = _tcslen(TempString);
-    if (len > 0) {
-      // JMW strip extra \r if it exists
-      if (TempString[len - 1] == '\r') {
-        TempString[len - 1] = 0;
-      }
-    }
-
+  TCHAR *TempString;
+  while ((TempString = reader.read_tchar_line()) != NULL) {
     // Look for start
     if (TempString[0] == '[') {
       if (inDetails) {
@@ -247,8 +239,6 @@ LoadChecklist(void)
     _tcscat(Details, _T("\r\n"));
     addChecklist(Name, Details);
   }
-
-  fclose(file);
 }
 
 void
