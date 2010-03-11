@@ -134,9 +134,6 @@ ReadWinPilotPolar(Polar &polar)
 #ifdef HAVEEXCEPTIONS
       __try{
 #endif
-      int *p=NULL; // test, force an exception
-      p=0;
-
         while(ReadStringX(file,READLINE_LENGTH,TempString) && (!foundline)){
 
           if(_tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
