@@ -42,6 +42,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Sizes.h"
 #include "FLARM/FLARMNet.hpp"
+#include "TextReader.hpp"
+#include "TextWriter.hpp"
 
 static FLARMNetDatabase flarm_net;
 
@@ -86,22 +88,21 @@ OpenFLARMDetails()
   TCHAR filename[MAX_PATH];
   LocalPath(filename, TEXT("xcsoar-flarm.txt"));
 
-  FILE *file = _tfopen(filename, TEXT("rt"));
-  if (file == NULL)
+  TextReader reader(filename);
+  if (reader.error())
     return;
 
-  TCHAR line[READLINE_LENGTH];
-  while (ReadStringX(file, READLINE_LENGTH, line)) {
+  const TCHAR *line;
+  while ((line = reader.read_tchar_line()) != NULL) {
     long id;
     TCHAR Name[MAX_PATH];
 
     if (_stscanf(line, TEXT("%lx=%s"), &id, Name) == 2) {
+      TrimRight(Name);
       if (!AddFlarmLookupItem(id, Name, false))
         break; // cant add anymore items !
     }
   }
-
-  fclose(file);
 
   LocalPath(filename, _T("data.fln"));
   unsigned num_records = flarm_net.LoadFile(filename);
@@ -119,30 +120,13 @@ SaveFLARMDetails(void)
   TCHAR filename[MAX_PATH];
   LocalPath(filename, TEXT("xcsoar-flarm.txt"));
 
-  FILE *file = _tfopen(filename, TEXT("wt"));
-  if (file == NULL)
+  TextWriter writer(filename);
+  if (writer.error())
     return;
 
-  TCHAR wsline[READLINE_LENGTH];
-  char cline[READLINE_LENGTH];
-
-  for (int z = 0; z < NumberOfFLARMNames; z++) {
-    _stprintf(wsline, _T("%lx=%s\r\n"),
-              FLARM_Names[z].ID, FLARM_Names[z].Name);
-
-#ifdef _UNICODE
-    WideCharToMultiByte(CP_ACP, 0, wsline,
-                        _tcslen(wsline)+1,
-                        cline,
-                        READLINE_LENGTH, NULL, NULL);
-#else
-    strcpy(cline, wsline);
-#endif
-
-    fputs(cline, file);
-  }
-
-  fclose(file);
+  for (int z = 0; z < NumberOfFLARMNames; z++)
+    writer.printfln(_T("%lx=%s"),
+                    FLARM_Names[z].ID, FLARM_Names[z].Name);
 }
 
 /**
