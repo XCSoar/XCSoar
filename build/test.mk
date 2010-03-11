@@ -63,11 +63,45 @@ $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $
 	gcc -o $@ $<
 
 DEBUG_PROGRAM_NAMES = \
+	DumpTextFile WriteTextFile RunTextWriter \
 	RunWayPointParser RunDeviceDriver \
 	RunCanvas RunMapWindow RunDialog \
 	RunAirspaceWarningDialog \
 	RunTaskEditorDialog
 DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
+
+DUMP_TEXT_FILE_SOURCES = \
+	$(SRC)/TextReader.cpp \
+	$(TEST_SRC_DIR)/DumpTextFile.cpp
+DUMP_TEXT_FILE_OBJS = $(call SRC_TO_OBJ,$(DUMP_TEXT_FILE_SOURCES))
+DUMP_TEXT_FILE_LDADD = \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
+$(TARGET_BIN_DIR)/DumpTextFile$(TARGET_EXEEXT): $(DUMP_TEXT_FILE_OBJS) $(DUMP_TEXT_FILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+WRITE_TEXT_FILE_SOURCES = \
+	$(SRC)/TextWriter.cpp \
+	$(TEST_SRC_DIR)/WriteTextFile.cpp
+WRITE_TEXT_FILE_OBJS = $(call SRC_TO_OBJ,$(WRITE_TEXT_FILE_SOURCES))
+WRITE_TEXT_FILE_LDADD = \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
+$(TARGET_BIN_DIR)/WriteTextFile$(TARGET_EXEEXT): $(WRITE_TEXT_FILE_OBJS) $(WRITE_TEXT_FILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_TEXT_WRITER_SOURCES = \
+	$(SRC)/TextWriter.cpp \
+	$(TEST_SRC_DIR)/RunTextWriter.cpp
+RUN_TEXT_WRITER_OBJS = $(call SRC_TO_OBJ,$(RUN_TEXT_WRITER_SOURCES))
+RUN_TEXT_WRITER_LDADD = \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
+$(TARGET_BIN_DIR)/RunTextWriter$(TARGET_EXEEXT): $(RUN_TEXT_WRITER_OBJS) $(RUN_TEXT_WRITER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPointFile.cpp \

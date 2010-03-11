@@ -268,6 +268,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsText.cpp \
+	$(SRC)/TextReader.cpp \
+	$(SRC)/TextWriter.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
