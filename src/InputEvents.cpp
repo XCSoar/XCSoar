@@ -70,6 +70,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "StringUtil.hpp"
 #include "Asset.hpp"
 #include "MenuData.hpp"
+#include "TextReader.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -201,23 +202,21 @@ InputEvents::readFile()
 
   // Read in user defined configuration file
   TCHAR szFile1[MAX_PATH];
-  FILE *fp = NULL;
 
   // Open file from registry
   GetRegistryString(szRegistryInputFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
   SetRegistryString(szRegistryInputFile, TEXT("\0"));
 
-  if (!string_is_empty(szFile1))
-    fp = _tfopen(szFile1, TEXT("rt"));
+  if (string_is_empty(szFile1))
+    return;
 
-  if (fp == NULL)
+  TextReader reader(szFile1);
+  if (reader.error())
     return;
 
   // TODO code - Safer sizes, strings etc - use C++ (can scanf restrict length?)
 
-  // Buffer for all
-  TCHAR buffer[2049];
   // key from scanf
   TCHAR key[2049];
   // value from scanf
@@ -245,7 +244,8 @@ InputEvents::readFile()
   // TODO code: What about \r - as in \r\n ?
   // TODO code: Note that ^# does not allow # in key - might be required (probably not)
   //   Better way is to separate the check for # and the scanf
-  while (_fgetts(buffer, 2048, fp)
+  TCHAR *buffer;
+  while ((buffer = reader.read_tchar_line()) != NULL
          && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)) {
 
     line++;
@@ -260,7 +260,7 @@ InputEvents::readFile()
     }
 
     // Check valid line? If not valid, assume next record (primative, but works ok!)
-    if ((buffer[0] == '\r') || (buffer[0] == '\n') || (buffer[0] == '\0')) {
+    if (buffer[0] == _T('\0')) {
       // General checks before continue...
       if (some_data && (d_mode != NULL) && (_tcscmp(d_mode, TEXT("")) != 0)) {
 
@@ -451,8 +451,6 @@ InputEvents::readFile()
   // file was ok, so save it to registry
   ContractLocalPath(szFile1);
   SetRegistryString(szRegistryInputFile, szFile1);
-
-  fclose(fp);
 }
 
 #ifdef _INPUTDEBUG_
