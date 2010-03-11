@@ -127,10 +127,6 @@ ReadWinPilotPolar(Polar &polar)
     GetRegistryString(szRegistryPolarFile, szFile, MAX_PATH);
     ExpandLocalPath(szFile);
 
-    #ifndef HAVEEXCEPTIONS
-    SetRegistryString(szRegistryPolarFile, TEXT("\0"));
-    #endif
-
     file = _tfopen(szFile, TEXT("rt"));
 
     if (file != NULL) {
@@ -170,12 +166,6 @@ ReadWinPilotPolar(Polar &polar)
 
               foundline = true;
             }
-        }
-
-        // file was OK, so save it
-        if (foundline) {
-          ContractLocalPath(szFile);
-          SetRegistryString(szRegistryPolarFile, szFile);
         }
 #ifdef HAVEEXCEPTIONS
       }__finally
