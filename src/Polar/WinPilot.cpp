@@ -108,69 +108,52 @@ ReadWinPilotPolar(Polar &polar)
   double POLARV[3];
   double POLARW[3];
   double ww[2];
-  bool foundline = false;
 
-#ifdef HAVEEXCEPTIONS
-  __try{
-#endif
+  ww[0]= 403.0; // 383
+  ww[1]= 101.0; // 121
+  POLARV[0]= 115.03;
+  POLARW[0]= -0.86;
+  POLARV[1]= 174.04;
+  POLARW[1]= -1.76;
+  POLARV[2]= 212.72;
+  POLARW[2]= -3.4;
 
-    ww[0]= 403.0; // 383
-    ww[1]= 101.0; // 121
-    POLARV[0]= 115.03;
-    POLARW[0]= -0.86;
-    POLARV[1]= 174.04;
-    POLARW[1]= -1.76;
-    POLARV[2]= 212.72;
-    POLARW[2]= -3.4;
+  GetRegistryString(szRegistryPolarFile, szFile, MAX_PATH);
+  ExpandLocalPath(szFile);
 
-    GetRegistryString(szRegistryPolarFile, szFile, MAX_PATH);
-    ExpandLocalPath(szFile);
+  TextReader reader(szFile);
+  if (reader.error())
+    return false;
 
+  const TCHAR *line;
+  while ((line = reader.read_tchar_line()) != NULL) {
+    if (line[0] != _T('*')) { /* not a comment */
+      PExtractParameter(line, ctemp, 0);
+      ww[0] = _tcstod(ctemp, NULL);
 
-    TextReader reader(szFile);
-    if (!reader.error()) {
-#ifdef HAVEEXCEPTIONS
-      __try{
-#endif
-        const TCHAR *TempString;
-        while ((TempString = reader.read_tchar_line()) != NULL && !foundline) {
-          if(_tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
-            {
-              PExtractParameter(TempString, ctemp, 0);
-              ww[0] = _tcstod(ctemp, NULL);
+      PExtractParameter(line, ctemp, 1);
+      ww[1] = _tcstod(ctemp, NULL);
 
-              PExtractParameter(TempString, ctemp, 1);
-              ww[1] = _tcstod(ctemp, NULL);
+      PExtractParameter(line, ctemp, 2);
+      POLARV[0] = _tcstod(ctemp, NULL);
+      PExtractParameter(line, ctemp, 3);
+      POLARW[0] = _tcstod(ctemp, NULL);
 
-              PExtractParameter(TempString, ctemp, 2);
-              POLARV[0] = _tcstod(ctemp, NULL);
-              PExtractParameter(TempString, ctemp, 3);
-              POLARW[0] = _tcstod(ctemp, NULL);
+      PExtractParameter(line, ctemp, 4);
+      POLARV[1] = _tcstod(ctemp, NULL);
+      PExtractParameter(line, ctemp, 5);
+      POLARW[1] = _tcstod(ctemp, NULL);
 
-              PExtractParameter(TempString, ctemp, 4);
-              POLARV[1] = _tcstod(ctemp, NULL);
-              PExtractParameter(TempString, ctemp, 5);
-              POLARW[1] = _tcstod(ctemp, NULL);
+      PExtractParameter(line, ctemp, 6);
+      POLARV[2] = _tcstod(ctemp, NULL);
+      PExtractParameter(line, ctemp, 7);
+      POLARW[2] = _tcstod(ctemp, NULL);
 
-              PExtractParameter(TempString, ctemp, 6);
-              POLARV[2] = _tcstod(ctemp, NULL);
-              PExtractParameter(TempString, ctemp, 7);
-              POLARW[2] = _tcstod(ctemp, NULL);
+      PolarWinPilot2XCSoar(polar, POLARV, POLARW, ww);
 
-              PolarWinPilot2XCSoar(polar, POLARV, POLARW, ww);
-
-              foundline = true;
-            }
-        }
-#ifdef HAVEEXCEPTIONS
-      }__finally
-#endif
+      return true;
     }
-#ifdef HAVEEXCEPTIONS
-  }__except(EXCEPTION_EXECUTE_HANDLER){
-    foundline = false;
   }
-#endif
-  return(foundline);
 
+  return false;
 }
