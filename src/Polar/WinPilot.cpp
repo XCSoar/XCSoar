@@ -39,6 +39,7 @@ Copyright_License {
 #include "Polar/WinPilot.hpp"
 #include "Polar/Polar.hpp"
 #include "UtilsText.hpp"
+#include "TextReader.hpp"
 #include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "Sizes.h"
@@ -103,8 +104,6 @@ ReadWinPilotPolar(Polar &polar)
 {
   TCHAR szFile[MAX_PATH];
   TCHAR ctemp[80];
-  TCHAR TempString[READLINE_LENGTH+1];
-  FILE *file;
 
   double POLARV[3];
   double POLARW[3];
@@ -127,15 +126,14 @@ ReadWinPilotPolar(Polar &polar)
     GetRegistryString(szRegistryPolarFile, szFile, MAX_PATH);
     ExpandLocalPath(szFile);
 
-    file = _tfopen(szFile, TEXT("rt"));
 
-    if (file != NULL) {
-
+    TextReader reader(szFile);
+    if (!reader.error()) {
 #ifdef HAVEEXCEPTIONS
       __try{
 #endif
-        while(ReadStringX(file,READLINE_LENGTH,TempString) && (!foundline)){
-
+        const TCHAR *TempString;
+        while ((TempString = reader.read_tchar_line()) != NULL && !foundline) {
           if(_tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
             {
               PExtractParameter(TempString, ctemp, 0);
@@ -167,11 +165,6 @@ ReadWinPilotPolar(Polar &polar)
 #ifdef HAVEEXCEPTIONS
       }__finally
 #endif
-
-      // QUESTION TB: why braces?! Answer: Scope/readibility/personal pref
-      {
-        fclose(file);
-      }
     }
 #ifdef HAVEEXCEPTIONS
   }__except(EXCEPTION_EXECUTE_HANDLER){
