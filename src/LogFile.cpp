@@ -40,24 +40,13 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "LocalPath.hpp"
 #include "Asset.hpp"
+#include "UtilsText.hpp"
+#include "TextWriter.hpp"
 
 #include <stdio.h>
 #include <stdarg.h>
 
 static Mutex mutexLogFile;
-
-void
-LogToFile(const TCHAR *file, const bool attach, const TCHAR *str)
-{
-  ScopeLock lock(mutexLogFile);
-
-  FILE *stream = NULL;
-  stream = _tfopen(file, (attach ? _T("ab+") : _T("wb")));
-  if (stream != NULL) {
-    fprintf(stream, "%S", str);
-    fclose(stream);
-  }
-}
 
 #if !defined(NDEBUG) && !defined(GNAV)
 /**
@@ -77,7 +66,13 @@ LogDebug(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
-  LogToFile(szFileName, initialised, buf);
+  /* let TextWriter do the end-of-line marker */
+  TrimRight(buf);
+
+  ScopeLock lock(mutexLogFile);
+  TextWriter writer(szFileName, initialised);
+  if (!writer.error())
+    writer.writeln(buf);
 
   if (!initialised)
     initialised = true;
@@ -108,7 +103,13 @@ LogStartUp(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
-  LogToFile(szFileName, initialised, buf);
+  /* let TextWriter do the end-of-line marker */
+  TrimRight(buf);
+
+  ScopeLock lock(mutexLogFile);
+  TextWriter writer(szFileName, initialised);
+  if (!writer.error())
+    writer.writeln(buf);
 
   if (!initialised)
     initialised = true;
