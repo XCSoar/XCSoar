@@ -49,7 +49,7 @@ static Mutex mutexLogFile;
 void
 LogToFile(const TCHAR *file, const bool attach, const TCHAR *str)
 {
-  mutexLogFile.Lock();
+  ScopeLock lock(mutexLogFile);
 
   FILE *stream = NULL;
   stream = _tfopen(file, (attach ? _T("ab+") : _T("wb")));
@@ -57,8 +57,6 @@ LogToFile(const TCHAR *file, const bool attach, const TCHAR *str)
     fprintf(stream, "%S", str);
     fclose(stream);
   }
-
-  mutexLogFile.Unlock();
 }
 
 #if !defined(NDEBUG) && !defined(GNAV)
