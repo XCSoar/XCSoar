@@ -72,6 +72,7 @@ public:
   AirspaceTree::const_iterator end() const;
 
   unsigned size() const;
+  bool airspace_empty() const;
 
   void clear();
 

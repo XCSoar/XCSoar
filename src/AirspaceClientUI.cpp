@@ -153,3 +153,9 @@ AirspaceClientUI::acknowledge_day(const AbstractAirspace& airspace,
   airspace_warning.acknowledge_day(airspace, set);
 }
 
+bool 
+AirspaceClientUI::airspace_empty() const
+{
+  ScopeLock lock(mutex);
+  return airspaces.empty();
+}

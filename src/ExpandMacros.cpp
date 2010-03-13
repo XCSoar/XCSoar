@@ -49,7 +49,7 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Simulator.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Airspace/Airspaces.hpp"
+#include "AirspaceClientUI.hpp"
 #include "TaskClientUI.hpp"
 
 #include <stdlib.h>
@@ -104,7 +104,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   if (_tcsstr(OutBuffer, TEXT("$(")) == NULL) return false;
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckAirspace)"))) {
-    if (airspace_database.empty())
+    if (airspace_ui.airspace_empty())
       invalid = true;
 
     ReplaceInString(OutBuffer, TEXT("$(CheckAirspace)"), TEXT(""), Size);
