@@ -51,7 +51,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "DeviceBlackboard.hpp"
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 #include "Simulator.hpp"
 #include "PopupMessage.hpp"
 #include "MainWindow.hpp"
@@ -296,24 +296,23 @@ ActionInterface::on_key_Direction(int UpDown)
 void
 ActionInterface::on_key_MacCready(int UpDown)
 {
-  double MACCREADY = task_manager.get_glide_polar().get_mc();
+  GlidePolar polar = task_ui.get_glide_polar();
+  double MACCREADY = polar.get_mc();
   if(UpDown==1) {
     MACCREADY += (double)0.1;
     if (MACCREADY>5.0) { // JMW added sensible limit
       MACCREADY=5.0;
     }
-    GlidePolar polar = task_manager.get_glide_polar();
     polar.set_mc(fixed(MACCREADY));
-    task_manager.set_glide_polar(polar);
+    task_ui.set_glide_polar(polar);
   }
   else if(UpDown==-1) {
     MACCREADY -= (double)0.1;
     if(MACCREADY < 0) {
       MACCREADY = 0;
     }
-    GlidePolar polar = task_manager.get_glide_polar();
     polar.set_mc(fixed(MACCREADY));
-    task_manager.set_glide_polar(polar);
+    task_ui.set_glide_polar(polar);
   }
  else if (UpDown==0)
     {
@@ -357,16 +356,13 @@ void
 ActionInterface::on_key_Waypoint(int UpDown)
 {
   if (UpDown>0) {
-    task_manager.incrementActiveTaskPoint(1);
+    task_ui.incrementActiveTaskPoint(1);
   } else if (UpDown<0){
-    task_manager.incrementActiveTaskPoint(-1);
+    task_ui.incrementActiveTaskPoint(-1);
   } else if (UpDown==0) {
-    const TaskPoint *tp = task_manager.getActiveTaskPoint();
-    if (tp) {
-      const Waypoint* wp = &tp->get_waypoint();
-      if (wp) {
-        dlgWayPointDetailsShowModal(main_window, *wp);
-      }
+    const Waypoint *wp = task_ui.getActiveWaypoint();
+    if (wp) {
+      dlgWayPointDetailsShowModal(main_window, *wp);
     }
   }
 }

@@ -36,8 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Task/TaskManager.hpp"
-
+#include "TaskClientUI.hpp"
 #include "MapWindow.hpp"
 #include "Protection.hpp"
 #include "Screen/Graphics.hpp"
@@ -50,8 +49,6 @@ Copyright_License {
 #include "RenderTask.hpp"
 #include "RenderTaskPoint.hpp"
 #include "RenderObservationZone.hpp"
-
-#include "RasterTerrain.h" // OLD_TASK just for locking
 
 class RenderTaskPointMap:
   public RenderTaskPoint
@@ -90,8 +87,6 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
    but we can still draw targets */
   const bool draw_bearing = Basic().gps.Connected;
 
-  // JMW OLD_TASK temporary locking
-  terrain->Lock(); 
   {
     MapDrawHelper helper(canvas, buffer, stencil_canvas, *this, rc,
                          SettingsMap());
@@ -101,7 +96,6 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
     RenderTask dv(tpv);
     task->Accept(dv); 
   }
-  terrain->Unlock();
 }
 
 #ifdef OLD_TASK

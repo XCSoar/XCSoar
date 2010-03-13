@@ -37,8 +37,6 @@ Copyright_License {
 
 */
 
-#include "Task/TaskManager.hpp"
-
 #include "GlideComputerAirData.hpp"
 #include "WindZigZag.h"
 #include "WindAnalyser.hpp"
@@ -64,7 +62,9 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "GPSClock.hpp"
 
+#include "TaskClientCalc.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "AirspaceClientCalc.hpp"
 
 #include <algorithm>
 
@@ -77,17 +77,15 @@ using std::max;
 #define THERMAL_TIME_MIN 45.0
 
 
-GlideComputerAirData::GlideComputerAirData(AirspaceWarningManager& as_manager,
-                                           Airspaces& _airspaces,
-  const TaskManager& _task):
-  m_airspace_warning(as_manager),
-  m_airspaces(_airspaces),
+GlideComputerAirData::GlideComputerAirData(AirspaceClientCalc& airspace,
+                                           TaskClientCalc& _task):
+  m_airspace(airspace),
   airspace_clock(2.0), // scan airspace every 2 seconds
   ballast_clock(5),  // only update every 5 seconds to stop flooding
 		    // the devices
   vario_30s_filter(30),
   netto_30s_filter(30),
-  glide_polar(_task.get_glide_polar())
+  GlideComputerBlackboard(_task)
 {
   InitLDRotary(SettingsComputer(), &rotaryLD);
 
@@ -96,18 +94,11 @@ GlideComputerAirData::GlideComputerAirData(AirspaceWarningManager& as_manager,
 }
 
 
-const GlidePolar& 
-GlideComputerAirData::get_glide_polar() const
-{
-  return glide_polar;
-}
-
-
 void
 GlideComputerAirData::ResetFlight(const bool full)
 {
   const AIRCRAFT_STATE as = ToAircraftState(Basic());
-  m_airspace_warning.reset(as);
+  m_airspace.reset_warning(as);
 
   vario_30s_filter.reset();
   netto_30s_filter.reset();
@@ -178,7 +169,7 @@ GlideComputerAirData::Wind()
   // update zigzag wind
   if (((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG) == D_AUTOWIND_ZIGZAG)
       && !Basic().gps.Replay
-      && (Basic().TrueAirspeed > glide_polar.get_Vtakeoff())) {
+      && (Basic().TrueAirspeed > m_task.get_glide_polar().get_Vtakeoff())) {
     double zz_wind_speed;
     double zz_wind_bearing;
     int quality;
@@ -508,15 +499,11 @@ GlideComputerAirData::OnTakeoff()
 void
 GlideComputerAirData::AirspaceWarning()
 {
-  // JMW OLD_TASK this locking is just for now since we don't have any protection
-  terrain.Lock();
-  m_airspaces.set_flight_levels(Basic().pressure);
+  m_airspace.set_flight_levels(Basic().pressure);
 
   const AIRCRAFT_STATE as = ToAircraftState(Basic());
-  if (m_airspace_warning.update(as))
+  if (m_airspace.update_warning(as))
     airspaceWarningEvent.trigger();
-
-  terrain.Unlock();
 }
 
 
@@ -532,6 +519,8 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   // estimate max range (only interested in at most one screen
   // distance away) except we need to scan for terrain base, so 20km
   // search minimum is required
+
+  GlidePolar glide_polar = m_task.get_glide_polar();
 
   terrain.Lock();
   GlideTerrain g_terrain(SettingsComputer(), terrain);
@@ -567,6 +556,7 @@ GlideComputerAirData::BallastDump()
     return;
   }
 
+  GlidePolar glide_polar = m_task.get_glide_polar();
   double BALLAST = glide_polar.get_ballast();
   double percent_per_second =
       1.0 / max(10.0, (double)SettingsComputer().BallastSecsToEmpty);
@@ -576,10 +566,8 @@ GlideComputerAirData::BallastDump()
     /// TODO SettingsComputer().BallastTimerActive = false;
     BALLAST = 0.0;
   }
-#ifdef OLD_TASK
-  glide_polar.set_ballast(BALLAST);
-  task.set_glide_polar(glide_polar);
-#endif
+  glide_polar.set_ballast((fixed)BALLAST);
+  m_task.set_glide_polar(glide_polar);
 }
 
 void
@@ -951,4 +939,11 @@ GlideComputerAirData::ProcessSun()
   sun.CalcSunTimes(Basic().Location, Basic().DateTime,
                    GetUTCOffset() / 3600);
   SetCalculated().TimeSunset = sun.TimeOfSunSet;
+}
+
+
+GlidePolar 
+GlideComputerAirData::get_glide_polar() const
+{
+  return m_task.get_glide_polar();
 }

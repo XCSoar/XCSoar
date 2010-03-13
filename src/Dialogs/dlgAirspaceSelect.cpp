@@ -46,6 +46,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "MapWindow.hpp"
 #include "Components.hpp"
+#include "AirspaceClientUI.hpp"
 #include "Screen/Layout.hpp"
 #include "Compiler.h"
 
@@ -481,7 +482,7 @@ void dlgAirspaceSelect(void) {
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
 
-  AirspaceSorter g_airspace_sorter(airspace_database, Location, fixed(
+  AirspaceSorter g_airspace_sorter(airspace_ui, Location, fixed(
       Units::ToUserUnit(1, Units::DistanceUnit)));
   airspace_sorter = &g_airspace_sorter;
 

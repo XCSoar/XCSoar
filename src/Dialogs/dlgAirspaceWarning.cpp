@@ -36,7 +36,6 @@ Copyright_License {
 }
 */
 
-#include "Airspace/AirspaceWarningManager.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Units.hpp"
 #include "Protection.hpp"
@@ -44,7 +43,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
 #include "Compatibility/vk.h"
-
+#include "AirspaceClientUI.hpp"
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -63,20 +62,13 @@ static Brush hBrushNearAckBk;
 static const AbstractAirspace* CursorAirspace = NULL; // Current list cursor airspace
 static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
 
-#include "RasterTerrain.h"
-// just to get the lock OLD_TASK
-
 static void
 AirspaceWarningCursorCallback(unsigned i)
 {
-  terrain.Lock();
-
-  AirspaceWarning *warning = airspace_warning.get_warning(i);
+  AirspaceWarning *warning = airspace_ui.get_warning(i);
   CursorAirspace = warning != NULL
     ? &warning->get_airspace()
     : NULL;
-
-  terrain.Unlock();
 }
 
 static void
@@ -93,8 +85,7 @@ static void DoAck(int Ack) {
   if (airspace == NULL)
     return;
 
-  terrain.Lock();
-  AirspaceWarning* warning = airspace_warning.get_warning_ptr(*airspace);
+  AirspaceWarning* warning = airspace_ui.get_warning_ptr(*airspace);
   if (warning) {
     switch(Ack) {
     case -1:
@@ -115,7 +106,6 @@ static void DoAck(int Ack) {
     };
     wAirspaceList->invalidate();
   }
-  terrain.Unlock();
 }
 
 static void OnAckClicked(WindowControl * Sender){
@@ -188,9 +178,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 {
   TCHAR sTmp[128];
 
-  terrain.Lock();
-  const AirspaceWarning* warning = airspace_warning.get_warning(i);
-  terrain.Unlock();
+  const AirspaceWarning* warning = airspace_ui.get_warning(i);
 
   if (!warning) {
     if (i == 0){
@@ -358,17 +346,15 @@ static bool
 update_list()
 {
   // JMW OLD_TASK this locking is just for now since we don't have any protection
-  terrain.Lock();
-  unsigned Count = airspace_warning.size();
+  unsigned Count = airspace_ui.warning_size();
   if (Count) {
     wAirspaceList->SetLength(std::max((unsigned)1, Count));
     if (CursorAirspace) {
-      wAirspaceList->SetCursorIndex(airspace_warning.get_warning_index(*CursorAirspace));
+      wAirspaceList->SetCursorIndex(airspace_ui.get_warning_index(*CursorAirspace));
     } else {
       wAirspaceList->SetCursorIndex(0);
     }
   }
-  terrain.Unlock();
 
   if (!Count) {
     if (wf && wf->is_visible()) {
@@ -397,11 +383,7 @@ bool dlgAirspaceWarningVisible()
 
 bool dlgAirspaceWarningIsEmpty() 
 {
-  // JMW OLD_TASK this locking is just for now since we don't have any protection
-  terrain.Lock();
-  bool retval = airspace_warning.empty();
-  terrain.Unlock();
-  return retval;
+  return airspace_ui.warning_empty();
 }
 
 

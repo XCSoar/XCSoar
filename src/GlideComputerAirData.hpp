@@ -45,22 +45,21 @@ Copyright_License {
 #include "WindAnalyser.hpp"
 #include "GPSClock.hpp"
 #include "Math/SunEphemeris.hpp"
-#include "Airspace/AirspaceWarningManager.hpp"
 #include "Util/WindowFilter.hpp"
 
 class GlidePolar;
+class AirspaceClientCalc;
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
 
-class TaskManager;
+class TaskClientCalc;
 
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
-  GlideComputerAirData(AirspaceWarningManager& as_manager,
-                       Airspaces& airspaces,
-                       const TaskManager& _task);
+  GlideComputerAirData(AirspaceClientCalc& airspace,
+                       TaskClientCalc& _task);
 
   ldrotary_s           rotaryLD;
   SunEphemeris sun;
@@ -71,13 +70,12 @@ public:
 		       const int quality=3); // JMW check
   WindAnalyser   windanalyser; // JMW TODO, private and lock-protected
 
-  const GlidePolar& get_glide_polar() const;
+  GlidePolar get_glide_polar() const;
 
 private:
   ThermalLocator thermallocator;
 protected:
-  AirspaceWarningManager &m_airspace_warning;
-  Airspaces &m_airspaces;
+  AirspaceClientCalc &m_airspace;
 
   void ResetFlight(const bool full=true);
   void Initialise();
@@ -119,8 +117,6 @@ private:
 
   WindowFilter vario_30s_filter;
   WindowFilter netto_30s_filter;
-
-  const GlidePolar& glide_polar;
 };
 
 #endif

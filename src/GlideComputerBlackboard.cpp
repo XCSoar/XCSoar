@@ -46,6 +46,13 @@ Copyright_License {
 
 //#include "Persist.hpp"
 
+GlideComputerBlackboard::GlideComputerBlackboard(TaskClientCalc& task):
+  m_task(task)
+{
+
+}
+
+
 /**
  * Initializes the GlideComputerBlackboard
  */

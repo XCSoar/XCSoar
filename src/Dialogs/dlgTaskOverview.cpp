@@ -48,7 +48,7 @@ Copyright_License {
 #include "DataField/FileReader.hpp"
 #include "Components.hpp"
 #include "StringUtil.hpp"
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 #include "Task/TaskPoints/StartPoint.cpp"
 #include "Task/TaskPoints/FinishPoint.cpp"
 #include "Task/Visitors/TaskVisitor.hpp"
@@ -293,7 +293,7 @@ static void OverviewRefreshTask(void) {
   LowLimit =0;
 #else
   FindOrderedTask find;
-  task_manager.ordered_Accept(find);
+  task_ui.ordered_Accept(find);
   ordered_task = find.ordered_task;
 
   LowLimit = 0;
@@ -324,7 +324,7 @@ OnTaskListEnter(unsigned ItemIndex)
     if (tp == NULL)
       return;
 
-    AbstractTaskFactory *factory = task_manager.get_factory();
+    AbstractTaskFactory *factory = task_ui.get_factory();
     dlgTaskWaypointShowModal(*parent_window, *factory, ItemIndex, *tp, false);
   } else {
     bool isfinish = false;
@@ -350,7 +350,7 @@ OnTaskListEnter(unsigned ItemIndex)
       if (wp == NULL)
         return;
 
-      AbstractTaskFactory *factory = task_manager.get_factory();
+      AbstractTaskFactory *factory = task_ui.get_factory();
       OrderedTaskPoint *tp =
         factory->createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
       if (tp == NULL)

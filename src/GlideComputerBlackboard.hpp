@@ -42,6 +42,7 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsComputerBlackboard.hpp"
 #include "MapProjectionBlackboard.hpp"
+#include "TaskClientCalc.hpp"
 
 class GlideComputerBlackboard:
   public BaseBlackboard,
@@ -49,11 +50,15 @@ class GlideComputerBlackboard:
   public MapProjectionBlackboard
 {
 public:
+  GlideComputerBlackboard(TaskClientCalc& task);
+
   void ReadBlackboard(const NMEA_INFO &nmea_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
   const NMEA_INFO& LastBasic() const { return last_gps_info; }
   const DERIVED_INFO& LastCalculated() const { return last_calculated_info; }
 protected:
+  TaskClientCalc &m_task;
+
   bool time_advanced() {
     return Basic().Time - LastBasic().Time > 0;
   }

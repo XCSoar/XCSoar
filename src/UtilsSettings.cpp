@@ -58,7 +58,7 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "AirspaceGlue.hpp"
 #include "WayPointParser.h"
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -153,14 +153,14 @@ void SettingsLeave() {
   }
 
   if (AirspaceFileChanged) {
-    CloseAirspace(airspace_database, airspace_warning);
-    ReadAirspace(airspace_database, &terrain, XCSoarInterface::Basic().pressure);
+    CloseAirspace(airspace_ui);
+    ReadAirspace(airspace_ui, &terrain, XCSoarInterface::Basic().pressure);
   }
 
   if (PolarFileChanged) {
-    GlidePolar gp = task_manager.get_glide_polar();
+    GlidePolar gp = task_ui.get_glide_polar();
     if (LoadPolarById(XCSoarInterface::SettingsComputer(), gp)) {
-      task_manager.set_glide_polar(gp);
+      task_ui.set_glide_polar(gp);
     }
   }
 

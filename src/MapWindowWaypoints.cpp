@@ -41,7 +41,6 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Task/TaskManager.hpp"
 #include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 
@@ -269,8 +268,7 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
   MapWaypointLabelClear();
 
   WaypointVisitorMap v(*this, canvas,
-                       task != NULL ? task->get_glide_polar()
-                       : GlidePolar(fixed_zero));
+                       get_glide_polar());
   way_points->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
 
   // OLD_TASK -> new TODO, also draw waypoints in task 

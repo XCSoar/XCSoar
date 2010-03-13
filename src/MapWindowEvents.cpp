@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 
 #include "MapWindow.hpp"
 #include "UtilsSystem.hpp"
@@ -376,7 +376,7 @@ MapWindow::on_mouse_up(int x, int y)
           return true;
         }
       } else {
-        if (airspace_database != NULL && AirspaceDetailsAtPoint(LLstart))
+        if (m_airspace != NULL && AirspaceDetailsAtPoint(LLstart))
           return true;
       }
     } else {
@@ -387,7 +387,7 @@ MapWindow::on_mouse_up(int x, int y)
           return true;
         }
       } else {
-        if (airspace_database != NULL &&
+        if (m_airspace != NULL &&
             AirspaceDetailsAtPoint(LLstart))
           return true;
       }

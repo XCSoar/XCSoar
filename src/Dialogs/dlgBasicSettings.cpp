@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
@@ -279,7 +279,7 @@ static CallBackTableEntry_t CallBackTable[] = {
 void
 dlgBasicSettingsShowModal()
 {
-  GlidePolar gp_copy = task_manager.get_glide_polar();
+  GlidePolar gp_copy = task_ui.get_glide_polar();
   glide_polar = &gp_copy;
 
   wf = dlgLoadFromXML(CallBackTable, _T("dlgBasicSettings.xml"),
@@ -296,7 +296,7 @@ dlgBasicSettingsShowModal()
   SetButtons();
 
   if ((wf->ShowModal() == mrOK) && changed) {
-    task_manager.set_glide_polar(gp_copy);
+    task_ui.set_glide_polar(gp_copy);
   }
 
   delete wf;

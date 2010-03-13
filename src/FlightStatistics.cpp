@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "FlightStatistics.hpp"
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
@@ -149,14 +149,15 @@ private:
 
 
 static void DrawLegs(Chart& chart,
-                     const TaskManager& task,
+                     const TaskClientUI& task,
                      const NMEA_INFO& basic,
+                     const DERIVED_INFO& calculated,
                      const bool task_relative)
 {
-  if (task.get_common_stats().task_started) {
+  if (calculated.common_stats.task_started) {
 
     const double start_time = task_relative
-      ? basic.Time - task.get_common_stats().task_time_elapsed
+      ? basic.Time - calculated.common_stats.task_time_elapsed
       : basic.flight.TakeOffTime;
 
     ChartTaskHelper visitor(chart, start_time);
@@ -169,7 +170,8 @@ static void DrawLegs(Chart& chart,
 void
 FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
                                   const NMEA_INFO &nmea_info,
-                                  const TaskManager& task) const
+                                  const DERIVED_INFO &derived_info,
+                                  const TaskClientUI& task) const
 {
   Chart chart(canvas, rc);
 
@@ -184,7 +186,7 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
   chart.ScaleXFromValue(Altitude.x_min + 1.0); // in case no data
   chart.ScaleXFromValue(Altitude.x_min);
 
-  DrawLegs(chart, task, nmea_info, false);
+  DrawLegs(chart, task, nmea_info, derived_info, false);
 
   Pen hpHorizonGround(Pen::SOLID, IBLSCALE(1), Chart::GROUND_COLOUR);
   Brush hbHorizonGround(Chart::GROUND_COLOUR);
@@ -210,8 +212,9 @@ FlightStatistics::RenderBarograph(Canvas &canvas, const RECT rc,
 
 void
 FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
-                   const NMEA_INFO &nmea_info,
-                   const TaskManager& task) const
+                              const NMEA_INFO &nmea_info,
+                              const DERIVED_INFO &derived_info,
+                              const TaskClientUI& task) const
 {
   Chart chart(canvas, rc);
 
@@ -227,7 +230,7 @@ FlightStatistics::RenderSpeed(Canvas &canvas, const RECT rc,
   chart.ScaleXFromValue(Task_Speed.x_min+1.0); // in case no data
   chart.ScaleXFromValue(Task_Speed.x_min);
 
-  DrawLegs(chart, task, nmea_info, true);
+  DrawLegs(chart, task, nmea_info, derived_info, true);
 
   chart.DrawXGrid(0.5, Task_Speed.x_min,
                   Chart::STYLE_THINDASHPAPER, 0.5, true);
@@ -346,7 +349,7 @@ class ChartProjection:
 {
 public:
   ChartProjection(const RECT &rc,
-                  const TaskManager& task,
+                  const TaskClientUI& task,
                   const GEOPOINT &fallback_loc) 
     {
       const GEOPOINT center = task.get_task_center(fallback_loc);
@@ -436,7 +439,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
                              const NMEA_INFO &nmea_info, 
                              const SETTINGS_COMPUTER &settings_computer,
                              const SETTINGS_MAP &settings_map, 
-                             const TaskManager& task,
+                             const TaskClientUI& task,
                              const TracePointVector& trace) const
 {
   Chart chart(canvas, rc);
@@ -612,9 +615,10 @@ FlightStatistics::RenderWind(Canvas &canvas, const RECT rc,
 }
 
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
-#include "Airspace/Airspaces.hpp"
+#include "AirspaceClientUI.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
+
 
 class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
 {
@@ -687,10 +691,13 @@ private:
 };
 
 void
-FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
-    const NMEA_INFO &nmea_info, const DERIVED_INFO &derived,
-    const SETTINGS_MAP &settings_map, const Airspaces &airspace_database,
-    RasterTerrain &terrain) const
+FlightStatistics::RenderAirspace(Canvas &canvas, 
+                                 const RECT rc,
+                                 const NMEA_INFO &nmea_info, 
+                                 const DERIVED_INFO &derived,
+                                 const SETTINGS_MAP &settings_map, 
+                                 const AirspaceClientUI &airspace_database,
+                                 RasterTerrain &terrain) const
 {
   static const fixed range(50000); // 50 km
   fixed hmin = max(fixed_zero, nmea_info.GPSAltitude - fixed(3300));
@@ -706,11 +713,11 @@ FlightStatistics::RenderAirspace(Canvas &canvas, const RECT rc,
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
 
-  terrain.Lock();
-
   // draw airspaces
   AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map, p_start);
   airspace_database.visit_intersecting(p_start, vec, ivisitor);
+
+  terrain.Lock();
 
   // draw terrain
   if (terrain.GetMap()) {

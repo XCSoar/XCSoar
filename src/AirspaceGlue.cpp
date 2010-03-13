@@ -38,8 +38,7 @@ Copyright_License {
 
 #include "AirspaceGlue.hpp"
 #include "AirspaceParser.hpp"
-#include "Airspace/Airspaces.hpp"
-#include "Airspace/AirspaceWarningManager.hpp"
+#include "AirspaceClientUI.hpp"
 #include "Registry.hpp"
 #include "RasterTerrain.h"
 #include "LocalPath.hpp"
@@ -47,8 +46,9 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 
 void
-ReadAirspace(Airspaces &airspace_database, RasterTerrain *terrain,
-  const AtmosphericPressure &press)
+ReadAirspace(AirspaceClientUI &airspace, 
+             RasterTerrain *terrain,
+             const AtmosphericPressure &press)
 {
   TCHAR tpath[MAX_PATH];
 
@@ -65,7 +65,7 @@ ReadAirspace(Airspaces &airspace_database, RasterTerrain *terrain,
     char path[MAX_PATH];
     unicode2ascii(tpath, path, sizeof(path));
 
-    if (!ReadAirspace(airspace_database, path)) {
+    if (!airspace.read(path)) {
       LogStartUp(TEXT("No airspace file 1\n"));
     } else {
       airspace_ok =  true;
@@ -90,7 +90,7 @@ ReadAirspace(Airspaces &airspace_database, RasterTerrain *terrain,
     char path[MAX_PATH];
     unicode2ascii(tpath, path, sizeof(path));
 
-    if (!ReadAirspace(airspace_database, path)) {
+    if (!airspace.read(path)) {
       LogStartUp(TEXT("No airspace file 2\n"));
     } else {
       airspace_ok = true;
@@ -98,24 +98,14 @@ ReadAirspace(Airspaces &airspace_database, RasterTerrain *terrain,
   }
 
   if (airspace_ok) {
-    airspace_database.optimise();
-
-    airspace_database.set_flight_levels(press);
-    
-    if (terrain != NULL) {
-      terrain->Lock();
-      airspace_database.set_ground_levels(*terrain);
-      terrain->Unlock();
-    }
+    airspace.finalise_after_loading(terrain, press);
   } else {
-    airspace_database.clear(); // there was a problem
+    airspace.clear(); // there was a problem
   }
 }
 
 void 
-CloseAirspace(Airspaces &airspace_database,
-              AirspaceWarningManager& airspace_warning) 
+CloseAirspace(AirspaceClientUI &airspace) 
 {
-  airspace_warning.clear();
-  airspace_database.clear();
+  airspace.clear();
 }

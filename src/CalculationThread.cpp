@@ -76,7 +76,7 @@ CalculationThread::run()
     // update and transfer master info to glide computer
     mutexBlackboard.Lock();
     {
-      const GlidePolar& glide_polar = glide_computer->get_glide_polar();
+      GlidePolar glide_polar = glide_computer->get_glide_polar();
 
       // if (new GPS data available)
       if (gps_updated) {

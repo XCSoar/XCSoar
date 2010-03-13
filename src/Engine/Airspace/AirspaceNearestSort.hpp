@@ -8,7 +8,7 @@
 #include "Airspace.hpp"
 
 class AirspaceVisitor;
-class Airspaces;
+class AirspacesInterface;
 
 /**
  *  Class to sort nearest airspaces by distance to closest point.
@@ -39,7 +39,7 @@ public:
  * 
  * @return Nearest match (measured by metric) within range
  */
-  const AbstractAirspace* find_nearest(const Airspaces &airspaces,
+  const AbstractAirspace* find_nearest(const AirspacesInterface &airspaces,
                                        const fixed range);
 
 /** 
@@ -50,7 +50,7 @@ public:
  * @param visitor Visitor to apply to matches, in sorted order
  * @param range Maximum range of search
  */
-  void visit_sorted(const Airspaces &airspaces,
+  void visit_sorted(const AirspacesInterface &airspaces,
                     AirspaceVisitor &visitor,
                     const fixed range);
 
@@ -88,7 +88,7 @@ protected:
 
 private:
 
-  void populate_queue(const Airspaces &airspaces,
+  void populate_queue(const AirspacesInterface &airspaces,
                       const fixed range);
 
   typedef std::pair<AirspaceInterceptSolution, Airspace> AirspaceSolutionItem;

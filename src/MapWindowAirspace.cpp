@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "Screen/Graphics.hpp"
-#include "Airspace/Airspaces.hpp"
+#include "AirspaceClientUI.hpp"
 #include "Dialogs.h"
 #include "Screen/Layout.hpp"
 
@@ -243,8 +243,6 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas)
   }
 }
 
-#include "RasterTerrain.h" // OLD_TASK for temporary locking
-
 /**
  * Draws the airspace to the given canvas
  * @param canvas The drawing canvas
@@ -253,14 +251,12 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas)
 void
 MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
 {
-  if (airspace_database == NULL)
+  if (m_airspace == NULL)
     return;
 
   {
-    terrain->Lock(); // JMW OLD_TASK locking is temporary
-
     AirspaceWarningCopy awc;
-    airspace_warning.visit_warnings(awc);
+    m_airspace->visit_warnings(awc);
 
     MapDrawHelper helper (canvas, buffer, stencil_canvas, *this, 
                           GetMapRect(), SettingsMap());
@@ -270,11 +266,10 @@ MapWindow::DrawAirspace(Canvas &canvas, Canvas &buffer)
     // we are using two draws so borders go on top of everything
     
     v.set_border(false);
-    airspace_database->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
+    m_airspace->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
     v.set_border(true);
-    airspace_database->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
+    m_airspace->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
     v.draw_intercepts();
-    terrain->Unlock();
 
     m_airspace_intersections = awc.get_locations();
   }
@@ -322,22 +317,18 @@ private:
 bool
 MapWindow::AirspaceDetailsAtPoint(const GEOPOINT &location) const
 {
-  if (airspace_database == NULL)
+  if (m_airspace == NULL)
     return false;
 
-  terrain->Lock(); // JMW OLD_TASK locking is temporary
-
   AirspaceWarningCopy awc;
-  airspace_warning.visit_warnings(awc);
+  m_airspace->visit_warnings(awc);
 
   AirspaceDetailsDialogVisitor airspace_copy_popup(SettingsComputer(),
                                                    Basic().GetAltitudeBaroPreferred(),
                                                    awc);
 
-  airspace_database->visit_within_range(location, fixed(100.0),
-                                        airspace_copy_popup);
-
-  terrain->Unlock();
+  m_airspace->visit_within_range(location, fixed(100.0),
+                                 airspace_copy_popup);
 
   airspace_copy_popup.display();
 

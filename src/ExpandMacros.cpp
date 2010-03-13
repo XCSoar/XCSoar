@@ -50,9 +50,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Airspace/Airspaces.hpp"
-#include "Task/TaskManager.hpp"
-
-#include "RasterTerrain.h" // OLD_TASK just for locking
+#include "TaskClientUI.hpp"
 
 #include <stdlib.h>
 
@@ -193,10 +191,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
 
   if (_tcsstr(OutBuffer, TEXT("$(AdvanceArmed)"))) {
 
-    // JMW OLD_TASK temporary locking
-    terrain.Lock();
-    
-    switch (task_manager.get_task_advance().get_mode()) {
+    switch (task_ui.get_advance_mode()) {
     case TaskAdvance::ADVANCE_MANUAL:
       ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
                       TEXT("(manual)"), Size);
@@ -210,7 +205,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     case TaskAdvance::ADVANCE_ARM:
       if (Calculated().common_stats.active_has_previous) {
         if (Calculated().common_stats.active_has_next) {
-          CondReplaceInString(task_manager.get_task_advance().is_armed(), 
+          CondReplaceInString(task_ui.is_advance_armed(), 
                               OutBuffer, TEXT("$(AdvanceArmed)"),
                               TEXT("Cancel"), TEXT("TURN"), Size);
         } else {
@@ -219,18 +214,18 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
           invalid = true;
         }
       } else {
-        CondReplaceInString(task_manager.get_task_advance().is_armed(), 
+        CondReplaceInString(task_ui.is_advance_armed(), 
                             OutBuffer, TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("START"), Size);
       }
       break;
     case TaskAdvance::ADVANCE_ARMSTART:
       if (!Calculated().common_stats.active_has_previous) {
-        CondReplaceInString(task_manager.get_task_advance().is_armed(), 
+        CondReplaceInString(task_ui.is_advance_armed(), 
                             OutBuffer, TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("START"), Size);
       } else if (Calculated().common_stats.previous_is_first) {
-        CondReplaceInString(task_manager.get_task_advance().is_armed(), 
+        CondReplaceInString(task_ui.is_advance_armed(), 
                             OutBuffer, 
                             TEXT("$(AdvanceArmed)"),
                             TEXT("Cancel"), TEXT("RESTART"), Size);
@@ -242,8 +237,6 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
     default:
       break;
     }
-    // JMW OLD_TASK temporary locking
-    terrain.Unlock();
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {

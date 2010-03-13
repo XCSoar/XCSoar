@@ -1,7 +1,7 @@
 #ifndef AIRSPACE_SORTER_HPP
 #define AIRSPACE_SORTER_HPP
 
-#include "Airspace/Airspaces.hpp"
+#include "Airspace/AirspacesInterface.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include <vector>
 
@@ -33,7 +33,7 @@ public:
  * @param Location Location of aircraft at time of query
  * @param distance_factor Units factor to apply to distance calculations
  */
-  AirspaceSorter(const Airspaces &_airspaces, 
+  AirspaceSorter(const AirspacesInterface &_airspaces, 
                  const GEOPOINT &Location,
                  const fixed distance_factor);
 

@@ -52,11 +52,11 @@ struct SETTINGS_MAP;
 class Canvas;
 class OLCOptimizer;
 class WindStore;
-class Airspaces;
+class AirspaceClientUI;
 class RasterTerrain;
 class GlidePolar;
 class Chart;
-class TaskManager;
+class TaskClientUI;
 
 class FlightStatistics {
 public:
@@ -74,12 +74,13 @@ public:
   void RenderAirspace(Canvas &canvas, const RECT rc,
                       const NMEA_INFO &nmea_info, const DERIVED_INFO &derived,
                       const SETTINGS_MAP &settings_map,
-                      const Airspaces &airspace_database,
+                      const AirspaceClientUI &airspace_database,
                       RasterTerrain &terrain) const;
 
   void RenderBarograph(Canvas &canvas, const RECT rc,
                        const NMEA_INFO &nmea_info,
-                       const TaskManager& task) const;
+                       const DERIVED_INFO &derived_info,
+                       const TaskClientUI& task) const;
 
   void RenderClimb(Canvas &canvas, const RECT rc,
                    const GlidePolar& glide_polar) const;
@@ -112,12 +113,13 @@ public:
                   const NMEA_INFO &nmea_info,
                   const SETTINGS_COMPUTER &settings_computer,
                   const SETTINGS_MAP &settings_map,
-                  const TaskManager& task,
+                  const TaskClientUI& task,
                   const TracePointVector& trace) const;
 
   void RenderSpeed(Canvas &canvas, const RECT rc,
                    const NMEA_INFO &nmea_info,
-                   const TaskManager& task) const;
+                   const DERIVED_INFO &derived_info,
+                   const TaskClientUI& task) const;
 
   void CaptionBarograph(TCHAR *sTmp);
   void CaptionClimb(TCHAR* sTmp);

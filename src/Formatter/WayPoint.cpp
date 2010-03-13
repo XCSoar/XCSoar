@@ -46,12 +46,11 @@ Copyright_License {
 #include <stdio.h>
 #include "Interface.hpp"
 
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 
 const TCHAR *FormatterWaypoint::Render(int *color) {
 
-  if (TaskPoint* tp = task_manager.getActiveTaskPoint()) {
-    const Waypoint& way_point = tp->get_waypoint();
+  if (const Waypoint* way_point = task_ui.getActiveWaypoint()) {
 
     if (Calculated().task_stats.current_leg.solution_remaining.is_final_glide()) {
       *color = 2; // blue text
@@ -60,16 +59,16 @@ const TCHAR *FormatterWaypoint::Render(int *color) {
     }
     if ( SettingsMap().DisplayTextType == DISPLAYFIRSTTHREE)
     {
-      _tcsncpy(Text, way_point.Name.c_str(),3);
+      _tcsncpy(Text, way_point->Name.c_str(),3);
       Text[3] = '\0';
     }
     else if( SettingsMap().DisplayTextType == DISPLAYNUMBER)
     {
-      _stprintf(Text,_T("%d"), way_point.id );
+      _stprintf(Text,_T("%d"), way_point->id );
     }
     else
     {
-      _tcsncpy(Text, way_point.Name.c_str(),
+      _tcsncpy(Text, way_point->Name.c_str(),
                (sizeof(Text)/sizeof(TCHAR))-1);
       Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
     }

@@ -46,17 +46,17 @@ Copyright_License {
 #include "TeamCodeCalculation.h"
 #include "Components.hpp"
 #include "PeriodClock.hpp"
-#include "Task/TaskManager.hpp"
 
 /**
  * Constructor of the GlideComputer class
  * @return
  */
-GlideComputer::GlideComputer(TaskManager &task,
-                             AirspaceWarningManager& as_manager,
-                             Airspaces& _airspaces):
-  GlideComputerAirData(as_manager, _airspaces, task),
-  GlideComputerTask(task)
+GlideComputer::GlideComputer(TaskClientCalc &task,
+                             AirspaceClientCalc& airspace):
+  GlideComputerAirData(airspace, task),
+  GlideComputerTask(task),
+  GlideComputerStats(task),
+  GlideComputerBlackboard(task)
 {
 
 }

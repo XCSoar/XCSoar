@@ -44,7 +44,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 #include "Components.hpp"
 
 #include <math.h>
@@ -196,7 +196,7 @@ static void OnMacCreadyData(DataField *Sender,
     }
     break;
   case DataField::daGet:
-    Sender->Set(Units::ToUserVSpeed(task_manager.get_glide_polar().get_mc()));
+    Sender->Set(Units::ToUserVSpeed(task_ui.get_glide_polar().get_mc()));
     break;
   case DataField::daPut:
   case DataField::daChange:
@@ -235,7 +235,7 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 
 static void OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode) {
-  double clast = task_manager.get_glide_polar().get_cruise_efficiency();
+  double clast = task_ui.get_glide_polar().get_cruise_efficiency();
   (void)clast; // unused for now
 
   switch(Mode){
@@ -291,10 +291,11 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
 
   if (!wf) return;
 
-  double MACCREADY_enter = task_manager.get_glide_polar().get_mc();
+  GlidePolar polar = task_ui.get_glide_polar();
+  double MACCREADY_enter = polar.get_mc();
   (void)MACCREADY_enter; // unused for now
 
-  double CRUISE_EFFICIENCY_enter = task_manager.get_glide_polar().get_cruise_efficiency();
+  double CRUISE_EFFICIENCY_enter = polar.get_cruise_efficiency();
 
   emc = XCSoarInterface::Calculated().task_stats.effective_mc;
 
@@ -323,6 +324,7 @@ dlgTaskCalculatorShowModal(SingleWindow &parent)
     GlidePolar::SetCruiseEfficiency(CRUISE_EFFICIENCY_enter);
 #endif
   }
+
   delete wf;
   wf = NULL;
 }

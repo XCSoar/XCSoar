@@ -36,9 +36,9 @@ Copyright_License {
 }
 */
 
-#include "Task/TaskManager.hpp"
 
 #include "Dialogs/Internal.hpp"
+#include "TaskClientUI.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsTask.hpp"
 #include "Math/FastMath.h"
@@ -54,9 +54,6 @@ Copyright_License {
 #include "Components.hpp"
 #include "Protection.hpp"
 #include "Compiler.h"
-#include "GlideSolvers/GlidePolar.hpp"
-
-#include "RasterTerrain.h" // OLD_TASK for temporary locking of task_manager
 
 #define MAXPAGE 8
 
@@ -91,19 +88,15 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
   // background is painted in the base-class
 
   const FlightStatistics &fs = glide_computer.GetFlightStats();
-
-  terrain.Lock(); // OLD_TASK temporary locking
-  const TracePointVector trace = task_manager.get_trace_points();
-  const TracePointVector olc = task_manager.get_olc_points();
-  const GlidePolar glide_polar = task_manager.get_glide_polar();
-  terrain.Unlock();
+  const TracePointVector trace = task_ui.get_trace_points();
+  const TracePointVector olc = task_ui.get_olc_points();
+  const GlidePolar glide_polar = task_ui.get_glide_polar();
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
     SetCalcCaption(_T("Settings"));
-    terrain.Lock();
-    fs.RenderBarograph(canvas, rcgfx, XCSoarInterface::Basic(), task_manager);
-    terrain.Unlock();
+    fs.RenderBarograph(canvas, rcgfx, XCSoarInterface::Basic(), 
+                       XCSoarInterface::Calculated(), task_ui);
     break;
   case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(_T("Task calc"));
@@ -126,13 +119,11 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     break;
   case ANALYSIS_PAGE_TASK:
     SetCalcCaption(_T("Task calc"));
-    terrain.Lock(); // OLD_TASK temporary locking
     fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
                   XCSoarInterface::SettingsComputer(),
                   XCSoarInterface::SettingsMap(),
-                  task_manager,
+                  task_ui,
                   trace);
-    terrain.Unlock();
     break;
   case ANALYSIS_PAGE_OLC:
     SetCalcCaption(_T("Optimise"));
@@ -146,13 +137,12 @@ OnAnalysisPaint(WindowControl *Sender, Canvas &canvas)
     fs.RenderAirspace(canvas, rcgfx, XCSoarInterface::Basic(),
                       XCSoarInterface::Calculated(),
                       XCSoarInterface::SettingsMap(),
-                      airspace_database, terrain);
+                      airspace_ui, terrain);
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     SetCalcCaption(_T("Task calc"));
-    terrain.Lock(); // OLD_TASK temporary locking
-    fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(), task_manager);
-    terrain.Unlock();
+    fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(), 
+                   XCSoarInterface::Calculated(), task_ui);
     break;
   default:
     // should never get here!
@@ -167,6 +157,7 @@ Update(void)
   //  WndProperty *wp;
 
   FlightStatistics &fs = glide_computer.GetFlightStats();
+  GlidePolar polar = task_ui.get_glide_polar();
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -195,9 +186,9 @@ Update(void)
   case ANALYSIS_PAGE_POLAR:
     _stprintf(sTmp, _T("%s: %s (Mass %d kg)"), gettext(_T("Analysis")),
               gettext(_T("Glide Polar")),
-              (int)task_manager.get_glide_polar().get_all_up_weight());
+              (int)polar.get_all_up_weight());
     wf->SetCaption(sTmp);
-    fs.CaptionPolar(sTmp, task_manager.get_glide_polar());
+    fs.CaptionPolar(sTmp, polar);
     wInfo->SetCaption(sTmp);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:

@@ -50,9 +50,10 @@ Copyright_License {
 #include "Task.h"
 #endif
 
-GlideComputerStats::GlideComputerStats() :
+GlideComputerStats::GlideComputerStats(TaskClientCalc &task) :
   log_clock(5.0),
-  stats_clock(60.0)
+  stats_clock(60.0),
+  GlideComputerBlackboard(task)
 {
 
 }

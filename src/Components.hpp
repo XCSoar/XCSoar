@@ -48,17 +48,15 @@ class DrawThread;
 class CalculationThread;
 class InstrumentThread;
 class Waypoints;
-class Airspaces;
-class AirspaceWarningManager;
-class TaskManager;
+class AirspaceClientUI;
+class TaskClientUI;
 class TaskBehaviour;
 class ReplayLoggerGlue;
 
 // other global objects
 extern Waypoints way_points;
-extern Airspaces airspace_database;
-extern AirspaceWarningManager airspace_warning;
-extern TaskManager task_manager;
+extern AirspaceClientUI airspace_ui;
+extern TaskClientUI task_ui;
 extern TaskBehaviour task_behaviour;
 extern ReplayLoggerGlue replay;
 extern Marks *marks;

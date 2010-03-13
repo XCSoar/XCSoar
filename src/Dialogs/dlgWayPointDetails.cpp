@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
@@ -230,7 +230,7 @@ static void
 OnGotoClicked(gcc_unused WndButton &button)
 {
   if (selected_waypoint) {
-    task_manager.do_goto(*selected_waypoint);
+    task_ui.do_goto(*selected_waypoint);
   }
 
   wf->SetModalResult(mrOK);
@@ -446,8 +446,8 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   _stprintf(sTmp, _T("%d")_T(DEG), iround(bearing));
   ((WndProperty *)wf->FindByName(_T("prpBearing"))) ->SetText(sTmp);
 
-  GlidePolar glide_polar = task_manager.get_glide_polar();
-  GlidePolar safety_polar = task_manager.get_safety_polar();
+  GlidePolar glide_polar = task_ui.get_glide_polar();
+  GlidePolar safety_polar = task_ui.get_safety_polar();
 
   UnorderedTaskPoint t(way_point, XCSoarInterface::SettingsComputer());
   GlideResult r;

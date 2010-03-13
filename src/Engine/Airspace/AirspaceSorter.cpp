@@ -2,12 +2,13 @@
 #include <algorithm>
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Math/Geometry.hpp"
+#include "Airspace/Airspaces.hpp"
 
-
-AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
+AirspaceSorter::AirspaceSorter(const AirspacesInterface &airspaces,
                                const GEOPOINT &Location,
                                const fixed distance_factor)
 {
+  airspaces.lock();
   m_airspaces_all.reserve(airspaces.size());
 
   for (Airspaces::AirspaceTree::const_iterator it = airspaces.begin();
@@ -35,6 +36,8 @@ AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
 
     m_airspaces_all.push_back(info);
   }
+  airspaces.unlock();
+
   sort_name(m_airspaces_all);
 }
 

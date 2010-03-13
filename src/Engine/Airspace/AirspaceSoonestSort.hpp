@@ -58,7 +58,7 @@ public:
  * 
  * @return Soonest arrival time airspace
  */
-  const AbstractAirspace* find_nearest(const Airspaces &airspaces);
+  const AbstractAirspace* find_nearest(const AirspacesInterface &airspaces);
 
 protected:
 

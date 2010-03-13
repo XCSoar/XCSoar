@@ -47,7 +47,7 @@ Copyright_License {
 #include "Logger.hpp"
 #include "Language.hpp"
 #include "Appearance.hpp"
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -244,7 +244,7 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
   if (Appearance.FlightModeIcon == apFlightModeIconDefault) {
     Bitmap *bmp;
 
-    if (task != NULL && task->is_mode(TaskManager::MODE_ABORT))
+    if (task != NULL && (task->get_mode() == TaskManager::MODE_ABORT))
       bmp = &MapGfx.hAbort;
     else if (DisplayMode == dmCircling)
       bmp = &MapGfx.hClimb;
@@ -283,7 +283,7 @@ MapWindow::DrawFlightMode(Canvas &canvas, const RECT rc)
       SetPoint(2, Center.x - IBLSCALE(4), Center.y - IBLSCALE(8));
     }
 
-    if (task != NULL && task->is_mode(TaskManager::MODE_ABORT))
+    if (task != NULL && (task->get_mode() == TaskManager::MODE_ABORT))
       canvas.select(MapGfx.hBrushFlyingModeAbort);
     else
       canvas.select(MapGfx.hbCompass);

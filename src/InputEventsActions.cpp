@@ -92,7 +92,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Asset.hpp"
 
 #include "Waypoint/Waypoints.hpp"
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -605,16 +605,16 @@ void
 InputEvents::eventArmAdvance(const TCHAR *misc)
 {
   const TaskAdvance::TaskAdvanceMode_t mode = 
-    task_manager.get_task_advance().get_mode();
+    task_ui.get_advance_mode();
 
   if ((mode == TaskAdvance::ADVANCE_ARM) 
       || (mode==TaskAdvance::ADVANCE_ARMSTART)) {
     if (_tcscmp(misc, TEXT("on")) == 0) {
-      task_manager.get_task_advance().set_armed(true);
+      task_ui.set_advance_armed(true);
     } else if (_tcscmp(misc, TEXT("off")) == 0) {
-      task_manager.get_task_advance().set_armed(false);
+      task_ui.set_advance_armed(false);
     } else if (_tcscmp(misc, TEXT("toggle")) == 0) {
-      task_manager.get_task_advance().toggle_armed();
+      task_ui.toggle_advance_armed();
     }
   }
   if (_tcscmp(misc, TEXT("show")) == 0) {
@@ -626,7 +626,7 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
       Message::AddMessage(TEXT("Advance: Automatic"));
       break;
     case TaskAdvance::ADVANCE_ARM:
-      if (task_manager.get_task_advance().is_armed()) {
+      if (task_ui.is_advance_armed()) {
         Message::AddMessage(TEXT("Advance: ARMED"));
       } else {
         Message::AddMessage(TEXT("Advance: DISARMED"));
@@ -637,7 +637,7 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
           || !Calculated().common_stats.active_has_previous) { 
         // past start (but can re-start)
 
-        if (task_manager.get_task_advance().is_armed()) {
+        if (task_ui.is_advance_armed()) {
           Message::AddMessage(TEXT("Advance: ARMED"));
         } else {
           Message::AddMessage(TEXT("Advance: DISARMED"));
@@ -769,10 +769,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
 
-    const TaskPoint *tp = task_manager.getActiveTaskPoint();
-    if (tp) {
-      wp = &tp->get_waypoint();
-    }
+    wp = task_ui.getActiveWaypoint();
     if (!wp) {
       Message::AddMessage(TEXT("No Active Waypoint!"));
       return;
@@ -790,7 +787,7 @@ InputEvents::eventGotoLookup(const TCHAR *misc)
 {
   const Waypoint* wp = dlgWayPointSelect(main_window, Basic().Location);
   if (wp) {
-    task_manager.do_goto(*wp);
+    task_ui.do_goto(*wp);
   }
 }
 
@@ -836,7 +833,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp, TEXT("%0.1f"),
-              Units::ToUserUnit(task_manager.get_glide_polar().get_mc(),
+              Units::ToUserUnit(task_ui.get_glide_polar().get_mc(),
                                 Units::VerticalSpeedUnit));
     Message::AddMessage(TEXT("MacCready "), Temp);
   }
@@ -1044,32 +1041,38 @@ void
 InputEvents::eventAbortTask(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("abort")) == 0)
-    task_manager.abort();
+    task_ui.abort();
   else if (_tcscmp(misc, TEXT("resume")) == 0)
-    task_manager.resume();
+    task_ui.resume();
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (task_manager.is_mode(TaskManager::MODE_ABORT))
+    switch (task_ui.get_mode()) {
+    case TaskManager::MODE_ABORT:
       Message::AddMessage(TEXT("Task Aborted"));
-    else if (task_manager.is_mode(TaskManager::MODE_GOTO)) 
+      break;
+    case TaskManager::MODE_GOTO:
       Message::AddMessage(TEXT("Task Goto"));
-    else if (task_manager.is_mode(TaskManager::MODE_ORDERED)) 
+      break;
+    case TaskManager::MODE_ORDERED:
       Message::AddMessage(TEXT("Task Ordered"));
-    else
+      break;
+    default:
       Message::AddMessage(TEXT("No Task"));    
+    }
   } else {
     // toggle
-    if (task_manager.is_mode(TaskManager::MODE_ORDERED)) 
-      task_manager.abort();
-    else if (task_manager.is_mode(TaskManager::MODE_GOTO)) {
-      if (task_manager.check_ordered_task()) {
-        task_manager.resume();
-      } else {
-        task_manager.abort();
-      }
-    } else if (task_manager.is_mode(TaskManager::MODE_ABORT))
-      task_manager.resume();
-    else 
-      task_manager.abort();
+    switch (task_ui.get_mode()) {
+    case TaskManager::MODE_ORDERED:
+      task_ui.abort();
+      break;
+    case TaskManager::MODE_GOTO:
+      task_ui.resume();
+      break;
+    case TaskManager::MODE_ABORT:
+      task_ui.resume();
+      break;
+    default:
+      break;
+    }
   }
 }
 
@@ -1083,7 +1086,8 @@ InputEvents::eventAbortTask(const TCHAR *misc)
 void
 InputEvents::eventBugs(const TCHAR *misc)
 {
-  double BUGS = task_manager.get_glide_polar().get_bugs();
+  GlidePolar polar = task_ui.get_glide_polar();
+  double BUGS = polar.get_bugs();
   double oldBugs = BUGS;
 
   if (_tcscmp(misc, TEXT("up")) == 0)
@@ -1102,9 +1106,8 @@ InputEvents::eventBugs(const TCHAR *misc)
 
   if (BUGS != oldBugs) {
     BUGS = min(1.0, max(0.5, BUGS));
-    GlidePolar polar = task_manager.get_glide_polar();
     polar.set_bugs(fixed(BUGS));
-    task_manager.set_glide_polar(polar);
+    task_ui.set_glide_polar(polar);
   }
 }
 
@@ -1118,7 +1121,8 @@ InputEvents::eventBugs(const TCHAR *misc)
 void
 InputEvents::eventBallast(const TCHAR *misc)
 {
-  double BALLAST = task_manager.get_glide_polar().get_ballast();
+  GlidePolar polar = task_ui.get_glide_polar();
+  double BALLAST = polar.get_ballast();
   double oldBallast = BALLAST;
 
   if (_tcscmp(misc, TEXT("up")) == 0)
@@ -1137,9 +1141,8 @@ InputEvents::eventBallast(const TCHAR *misc)
 
   if (BALLAST != oldBallast) {
     BALLAST = min(1.0,max(0.0,BALLAST));
-    GlidePolar polar = task_manager.get_glide_polar();
     polar.set_ballast(fixed(BALLAST));
-    task_manager.set_glide_polar(polar);
+    task_ui.set_glide_polar(polar);
   }
 }
 
@@ -1217,7 +1220,7 @@ InputEvents::eventRepeatStatusMessage(const TCHAR *misc)
 // to the nearest exit to the airspace.
 
 #include "AirspaceVisibility.hpp"
-#include "Airspace/Airspaces.hpp"
+#include "AirspaceClientUI.hpp"
 #include "Airspace/AirspaceSoonestSort.hpp"
 
 void 
@@ -1236,7 +1239,7 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
   AirspaceAircraftPerformanceSimple perf;
   AirspaceSoonestSort ans(aircraft_state, perf, fixed(1800), visible);
 
-  const AbstractAirspace* as = ans.find_nearest(airspace_database);
+  const AbstractAirspace* as = ans.find_nearest(airspace_ui);
   if (!as) {
     return;
   } 
@@ -1856,7 +1859,7 @@ void
 InputEvents::eventTaskTransition(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("start")) == 0) {
-    AIRCRAFT_STATE start_state = task_manager.get_start_state();
+    AIRCRAFT_STATE start_state = task_ui.get_start_state();
 
     TCHAR TempTime[40];
     TCHAR TempAlt[40];

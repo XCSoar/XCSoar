@@ -74,8 +74,9 @@ class Marks;
 class GaugeCDI;
 class Waypoints;
 class Waypoint;
-class Airspaces;
-class TaskManager;
+class AirspaceClientUI;
+class TaskClientUI;
+class GlidePolar;
 
 class MapWindow
 : public MaskedPaintWindow,
@@ -90,8 +91,8 @@ class MapWindow
   RasterTerrain *terrain;
   RasterWeather *weather;
   TerrainRenderer *terrain_renderer;
-  Airspaces *airspace_database;
-  TaskManager *task;
+  AirspaceClientUI *m_airspace;
+  TaskClientUI *task;
 
   Marks *marks;
 
@@ -118,12 +119,12 @@ public:
     way_points = _way_points;
   }
 
-  void set_task(TaskManager *_task) {
+  void set_task(TaskClientUI *_task) {
     task = _task;
   }
 
-  void set_airspaces(Airspaces *_airspace_database) {
-    airspace_database = _airspace_database;
+  void set_airspaces(AirspaceClientUI *_airspace) {
+    m_airspace = _airspace;
   }
 
   void set_topology(TopologyStore *_topology);
@@ -270,6 +271,8 @@ protected:
   virtual bool on_setfocus();
 
 private:
+  GlidePolar get_glide_polar() const;
+
   void RenderStart(Canvas &canvas, const RECT rc);
   void RenderBackground(Canvas &canvas, const RECT rc);
   void RenderMapLayer(Canvas &canvas, const RECT rc);

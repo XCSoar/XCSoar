@@ -130,6 +130,13 @@ DIALOG_SOURCES = \
 XCSOAR_SOURCES := \
 	$(SRC)/Globals.cpp \
 	\
+	$(SRC)/AirspaceClient.cpp \
+	$(SRC)/AirspaceClientUI.cpp \
+	$(SRC)/AirspaceClientCalc.cpp \
+	$(SRC)/TaskClient.cpp \
+	$(SRC)/TaskClientUI.cpp \
+	$(SRC)/TaskClientCalc.cpp \
+	\
 	$(SRC)/Poco/RWLock.cpp \
 	\
 	$(SRC)/AirspaceGlue.cpp \

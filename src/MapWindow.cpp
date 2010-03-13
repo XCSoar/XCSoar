@@ -45,6 +45,7 @@ Copyright_License {
 #include "RasterWeather.h"
 #include "Gauge/GaugeCDI.hpp"
 #include "Protection.hpp"
+#include "TaskClientUI.hpp"
 
 #include <tchar.h>
 
@@ -59,7 +60,7 @@ MapWindow::MapWindow()
   :MapWindowProjection(),
    way_points(NULL),
    topology(NULL), terrain(NULL), weather(NULL), terrain_renderer(NULL),
-   airspace_database(NULL), task(NULL),
+   m_airspace(NULL), task(NULL),
    marks(NULL), 
    cdi(NULL),
    TargetDrag_State(0),
@@ -436,4 +437,12 @@ bool MapWindow::draw_masked_bitmap_if_visible(Canvas &canvas,
     return true;
   }
   return false;
+}
+
+
+GlidePolar 
+MapWindow::get_glide_polar() const
+{
+  return task != NULL ? task->get_glide_polar()
+    : GlidePolar(fixed_zero);
 }

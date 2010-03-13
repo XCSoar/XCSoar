@@ -36,11 +36,11 @@ Copyright_License {
 }
 */
 
-#include "Task/TaskManager.hpp"
 #include "MapWindow.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 
 void MapWindow::CalculateScreenPositionsThermalSources() {
   for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
@@ -91,8 +91,6 @@ MapWindow::DrawThermalEstimate(Canvas &canvas)
   }
 }
 
-#include "RasterTerrain.h" // OLD_TASK just for locking
-
 
 void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 {
@@ -123,21 +121,16 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   bool draw_start_height = false;
   double hstart=0;
 
-  if (task != NULL) {
-    // JMW OLD_TASK temporary locking
-    terrain->Lock();
-    draw_start_height = Calculated().common_stats.ordered_valid
-      && (SettingsComputer().start_max_height != 0)
-      && Calculated().TerrainValid;
-    if (draw_start_height) {
-      if (SettingsComputer().start_max_height_ref == 0) {
-        hstart = SettingsComputer().start_max_height+Calculated().TerrainAlt;
-      } else {
-        hstart = SettingsComputer().start_max_height;
-      }
-      hstart -= hoffset;
+  draw_start_height = Calculated().common_stats.ordered_valid
+    && (SettingsComputer().start_max_height != 0)
+    && Calculated().TerrainValid;
+  if (draw_start_height) {
+    if (SettingsComputer().start_max_height_ref == 0) {
+      hstart = SettingsComputer().start_max_height+Calculated().TerrainAlt;
+    } else {
+      hstart = SettingsComputer().start_max_height;
     }
-    terrain->Unlock();
+    hstart -= hoffset;
   }
 
   // calculate top/bottom height
@@ -164,8 +157,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   // calculate averages
   int numtherm = 0;
 
-  const double mc = task != NULL
-    ? task->get_glide_polar().get_mc() : fixed_zero;
+  const double mc = get_glide_polar().get_mc();
   Wmax = max(0.5,mc);
 
   for (i=0; i<NUMTHERMALBUCKETS; i++) {

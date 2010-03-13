@@ -43,9 +43,11 @@ Copyright_License {
 #include "FlightStatistics.hpp"
 #include "GPSClock.hpp"
 
+class TaskClientUI;
+
 class GlideComputerStats: virtual public GlideComputerBlackboard {
 public:
-  GlideComputerStats();
+  GlideComputerStats(TaskClientCalc &task);
   FlightStatistics     flightstats;
 protected:
   void ResetFlight(const bool full=true);

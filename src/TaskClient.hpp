@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,49 +33,28 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
+#ifndef TASKCLIENT_HPP
+#define TASKCLIENT_HPP
 
-#if !defined(XCSOAR_GLIDECOMPUTER_HPP)
-#define XCSOAR_GLIDECOMPUTER_HPP
+#include "Thread/Mutex.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 
-#include "Audio/VegaVoice.h"
-#include "GPSClock.hpp"
-#include "GlideComputerAirData.hpp"
-#include "GlideComputerStats.hpp"
-#include "GlideComputerTask.hpp"
+class TaskManager;
 
-// TODO: replace copy constructors so copies of these structures
-// do not replicate the large items or items that should be singletons
-// OR: just make them static?
-
-class GlideComputer:
-    public GlideComputerAirData, GlideComputerTask, GlideComputerStats
+class TaskClient 
 {
 public:
-  GlideComputer(TaskClientCalc& task,
-                AirspaceClientCalc& airspace);
+  TaskClient(TaskManager& tm);
 
-  void ResetFlight(const bool full=true);
-  void Initialise();
-  bool ProcessGPS(); // returns true if idle needs processing
-  virtual void ProcessIdle();
-
-  // TODO: make these const
-  /** Returns the FlightStatistics object */
-  FlightStatistics &GetFlightStats() { return flightstats; }
+// common accessors for ui and calc clients
+  GlidePolar get_glide_polar() const;
+  void set_glide_polar(const GlidePolar& glide_polar);
 
 protected:
-  VegaVoice    vegavoice;
-  void DoLogging();
-  virtual void OnTakeoff();
-  virtual void OnLanding();
-  virtual void OnSwitchClimbMode(bool isclimb, bool left);
-  virtual void OnDepartedThermal();
-
-private:
-  void CalculateTeammateBearingRange();
-  void CalculateOwnTeamCode();
-  void FLARM_ScanTraffic();
+  TaskManager& task_manager;
+  static Mutex mutex;
 };
+
 
 #endif

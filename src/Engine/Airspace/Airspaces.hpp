@@ -37,30 +37,24 @@
 #ifndef AIRSPACES_HPP
 #define AIRSPACES_HPP
 
+#include "AirspacesInterface.hpp"
 #include "Util/NonCopyable.hpp"
-#include <kdtree++/kdtree.hpp>
-#include "Airspace.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include <deque>
 
-class AirspaceVisitor;
-class AirspaceIntersectionVisitor;
-
 class RasterTerrain;
 class AtmosphericPressure;
-
-#include "AirspacePredicate.hpp"
 
 /**
  * Container for airspaces using kd-tree representation internally for fast 
  * geospatial lookups.
  */
+
 class Airspaces:
+  public AirspacesInterface,
   private NonCopyable
 {
 public:
-  typedef std::vector<Airspace> AirspaceVector; /**< Vector of airspaces (used internally) */
-
   /** 
    * Constructor.
    * Note this class can't safely be copied (yet)
@@ -113,7 +107,6 @@ public:
  * @return True if no airspace stored
  */
   bool empty() const;
-
 
   /** 
    * Set terrain altitude for all AGL-referenced airspace altitudes 
@@ -192,15 +185,6 @@ public:
                                    const AirspacePredicate &condition
                                    =AirspacePredicate::always_true) const;
 
-  /**
-   * Type of KD-tree data structure for airspace container
-   */
-  typedef KDTree::KDTree<4, 
-                         Airspace, 
-                         FlatBoundingBox::kd_get_bounds,
-                         FlatBoundingBox::kd_distance
-                         > AirspaceTree;
-
 /** 
  * Access first airspace in store, for use in iterators.
  * 
@@ -214,6 +198,9 @@ public:
  * @return End airspace in store
  */
   AirspaceTree::const_iterator end() const;
+
+  void lock() const {};
+  void unlock() const {};
 
 private:
 

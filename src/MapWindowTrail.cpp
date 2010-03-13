@@ -36,17 +36,13 @@ Copyright_License {
 }
 */
 
-#include "Task/TaskManager.hpp"
-
+#include "TaskClientUI.hpp"
 #include "MapWindow.hpp"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Util.hpp"
 #include "Screen/Graphics.hpp"
-
-#include "RasterTerrain.h" // OLD_TASK just for locking
-
 #include <math.h>
 #include <algorithm>
 
@@ -86,12 +82,10 @@ MapWindow::DrawTrail(Canvas &canvas)
   clock.update();
 #endif
 
-  terrain->Lock(); 
   TracePointVector trace = task->find_trace_points(GetPanLocation(),
                                                    fixed(GetScreenDistanceMeters()), 
                                                    min_time, 
                                                    fixed(DistancePixelsToMeters(3)));
-  terrain->Unlock();
 
 #ifdef TIME_TRAIL
   printf("A: %d\n", clock.elapsed());

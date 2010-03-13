@@ -38,7 +38,7 @@ Copyright_License {
 */
 
 #include "GlideComputerTask.hpp"
-#include "Task/TaskManager.hpp"
+#include "TaskClientCalc.hpp"
 #include "RasterTerrain.h"
 #include "Components.hpp"
 #include "GlideTerrain.hpp"
@@ -51,8 +51,8 @@ using std::max;
 // call any event
 
 
-GlideComputerTask::GlideComputerTask(TaskManager& task): 
-  m_task(task) 
+GlideComputerTask::GlideComputerTask(TaskClientCalc& task): 
+  GlideComputerBlackboard(task) 
 {
 
 }
@@ -61,9 +61,7 @@ GlideComputerTask::GlideComputerTask(TaskManager& task):
 void
 GlideComputerTask::ResetFlight(const bool full)
 {
-  terrain.Lock();
   m_task.reset();
-  terrain.Unlock();
 }
 
 void
@@ -72,7 +70,6 @@ GlideComputerTask::ProcessBasicTask()
   const NMEA_INFO &basic = Basic();
 
   if (basic.Time != LastBasic().Time) {
-    terrain.Lock();
 
   // JMW TODO OLD_TASK, this is a hack
     task_behaviour = SettingsComputer();
@@ -91,7 +88,6 @@ GlideComputerTask::ProcessBasicTask()
       m_task.update_auto_mc(current_as,
                             Calculated().AdjustedAverageThermal);
     }
-    terrain.Unlock();
   }
 
   SetCalculated().task_stats = m_task.get_stats();
@@ -100,9 +96,9 @@ GlideComputerTask::ProcessBasicTask()
   TerrainWarning();
 
   if (SettingsComputer().EnableBlockSTF) {
-    SetCalculated().V_stf = m_task.get_common_stats().V_block;
+    SetCalculated().V_stf = Calculated().common_stats.V_block;
   } else {
-    SetCalculated().V_stf = m_task.get_common_stats().V_dolphin;
+    SetCalculated().V_stf = Calculated().common_stats.V_dolphin;
   }
 
   SetCalculated().ZoomDistance = 
@@ -122,9 +118,7 @@ GlideComputerTask::ProcessIdle()
 {
   const AIRCRAFT_STATE as = ToAircraftState(Basic());
 
-  terrain.Lock();
   m_task.update_idle(as);
-  terrain.Unlock();
 }
 
 
@@ -132,6 +126,7 @@ void
 GlideComputerTask::TerrainWarning()
 {
   const AIRCRAFT_STATE state = ToAircraftState(Basic());
+  GlidePolar polar = m_task.get_glide_polar();
 
   terrain.Lock();
   GlideTerrain g_terrain(SettingsComputer(), terrain);
@@ -146,9 +141,9 @@ GlideComputerTask::TerrainWarning()
   if (!stats.task_valid) {
     g_terrain.set_max_range(fixed(max(fixed(20000.0), 
                                       MapProjection().GetScreenDistanceMeters())));
-    its = g_terrain.find_intersection(state, m_task.get_glide_polar());
+    its = g_terrain.find_intersection(state, polar);
   } else {
-    its = g_terrain.find_intersection(state, current, m_task.get_glide_polar());
+    its = g_terrain.find_intersection(state, current, polar);
   }
 
   if (!its.out_of_range) {

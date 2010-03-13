@@ -84,10 +84,16 @@ Copyright_License {
 
 #include "Waypoint/Waypoints.hpp"
 #include "WayPointParser.h"
+
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"
+#include "AirspaceClientUI.hpp"
+#include "AirspaceClientCalc.hpp"
 #include "AirspaceGlue.hpp"
+
 #include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
+#include "TaskClientCalc.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideComputerInterface.hpp"
 
@@ -111,6 +117,9 @@ TaskManager task_manager(task_events,
                          task_behaviour,
                          way_points);
 
+TaskClientUI task_ui(task_manager);
+TaskClientCalc task_calc(task_manager);
+
 AIRCRAFT_STATE ac_state;
 
 Airspaces airspace_database;
@@ -119,9 +128,14 @@ AirspaceWarningManager airspace_warning(airspace_database,
                                         ac_state,
                                         task_manager);
 
-GlideComputer glide_computer(task_manager, 
-                             airspace_warning,
-                             airspace_database);
+AirspaceClientUI airspace_ui(airspace_database,
+                             airspace_warning);
+
+AirspaceClientCalc airspace_calc(airspace_database,
+                                 airspace_warning);
+
+GlideComputer glide_computer(task_calc,
+                             airspace_calc);
 
 void
 test_task()
@@ -362,7 +376,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   RASP.ScanAll(Basic().Location);
 
   // Reads the airspace files
-  ReadAirspace(airspace_database, &terrain, Basic().pressure);
+  ReadAirspace(airspace_ui, &terrain, Basic().pressure);
 
   const AIRCRAFT_STATE aircraft_state =
     ToAircraftState(device_blackboard.Basic());
@@ -396,8 +410,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   CreateProgressDialog(gettext(TEXT("Initialising display")));
 
   main_window.map.set_way_points(&way_points);
-  main_window.map.set_task(&task_manager);
-  main_window.map.set_airspaces(&airspace_database);
+  main_window.map.set_task(&task_ui);
+  main_window.map.set_airspaces(&airspace_ui);
 
   main_window.map.set_topology(topology);
   main_window.map.set_terrain(&terrain);
@@ -510,7 +524,7 @@ XCSoarInterface::Shutdown(void)
 
   // Clear airspace database
   LogStartUp(TEXT("Close airspace\n"));
-  CloseAirspace(airspace_database, airspace_warning);
+  CloseAirspace(airspace_ui);
 
   // Clear waypoint database
   LogStartUp(TEXT("Close waypoints\n"));

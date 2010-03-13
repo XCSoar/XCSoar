@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "Task/TaskManager.hpp"
+#include "TaskClientUI.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
@@ -419,7 +419,7 @@ static void UpdateValuesRules(void) {
     }
   }
 
-  AIRCRAFT_STATE start_state = task_manager.get_start_state();
+  AIRCRAFT_STATE start_state = task_ui.get_start_state();
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   if (wp) {
@@ -459,7 +459,7 @@ static void UpdateValuesRules(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpFinishAlt"));
   if (wp) {
     _stprintf(Temp, _T("%.0f %s"),
-              Units::ToUserAltitude(task_manager.get_finish_height()),
+              Units::ToUserAltitude(task_ui.get_finish_height()),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
