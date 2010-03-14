@@ -451,23 +451,19 @@ static void OnStartPointClicked(WindowControl * Sender){
 
 
 static void OnMoveAfterClicked(WindowControl * Sender){
-	(void)Sender;
-#ifdef OLD_TASK
-  task.SwapWaypoint(twItemIndex, XCSoarInterface::SettingsComputer(),
-                     XCSoarInterface::Basic());
+  (void)Sender;
+  if (!task_factory->swap(task_point_position, true))
+    return;
   SetWaypointValues();
   wf->SetModalResult(mrOK);
-#endif
 }
 
 static void OnMoveBeforeClicked(WindowControl * Sender){
-	(void)Sender;
-#ifdef OLD_TASK
-  task.SwapWaypoint(twItemIndex - 1, XCSoarInterface::SettingsComputer(),
-                    XCSoarInterface::Basic());
+  (void)Sender;
+  if (!task_factory->swap(task_point_position-1, true))
+    return;
   SetWaypointValues();
   wf->SetModalResult(mrOK);
-#endif
 }
 
 static void OnDetailsClicked(WindowControl * Sender){

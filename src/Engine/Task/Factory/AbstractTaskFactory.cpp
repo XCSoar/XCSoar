@@ -109,9 +109,11 @@ private:
 
 
 OrderedTaskPoint* 
-AbstractTaskFactory::clone(const OrderedTaskPoint& tp, const Waypoint* waypoint) const
+AbstractTaskFactory::clone(const OrderedTaskPoint& tp, 
+                           const Waypoint* waypoint) const
 {
-  TaskPointCloneVisitor tpcv(m_behaviour, m_task.get_task_projection(), waypoint);
+  TaskPointCloneVisitor tpcv(m_behaviour, 
+                             m_task.get_task_projection(), waypoint);
   return tpcv.Visit(tp);
 }
 
@@ -404,4 +406,24 @@ AbstractTaskFactory::has_entered(unsigned position) const
   } else {
     return true;
   }
+}
+
+
+bool 
+AbstractTaskFactory::swap(const unsigned position,
+                          const bool auto_mutate)
+{
+  if (m_task.task_size()<=1) 
+    return false;
+  if (position >= m_task.task_size()-1)
+    return false;
+
+  const OrderedTaskPoint* orig = m_task.getTaskPoint(position+1);
+  OrderedTaskPoint* copy = clone(*orig, &orig->get_waypoint());
+  bool retval = insert(copy, position, auto_mutate);
+  if (!retval) {
+    delete copy;
+    return false;
+  }
+  return remove(position+2, auto_mutate);
 }

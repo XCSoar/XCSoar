@@ -351,27 +351,30 @@ OnTaskListEnter(unsigned ItemIndex)
         return;
 
       AbstractTaskFactory *factory = task_ui.get_factory();
-      OrderedTaskPoint *tp =
-        factory->createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
+      OrderedTaskPoint *tp;
+      if (ItemIndex==0) {
+        tp = factory->createStart(AbstractTaskFactory::START_LINE, *wp);
+      } else if (isfinish) {
+        tp = factory->createFinish(AbstractTaskFactory::FINISH_LINE, *wp);
+      } else {
+        tp = factory->createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
+      }
+
       if (tp == NULL)
         return;
 
-      if (!factory->append(tp, false)) {
+      if (!factory->append(tp, true)) {
         //fprintf(stderr, "Failed to append turn point\n");
+        return;
       }
 
-#ifdef OLD_TASK
       if (ItemIndex==0) {
-	dlgTaskWaypointShowModal(ItemIndex, 0, true); // start waypoint
+        dlgTaskWaypointShowModal(*parent_window, *factory, 0, *tp, true);
       } else if (isfinish) {
-        dlgTaskWaypointShowModal(ItemIndex, 2, true); // finish waypoint
+        dlgTaskWaypointShowModal(*parent_window, *factory, 2, *tp, true);
       } else {
-        if (task.getSettings().AATEnabled) {
-          // only need to set properties for finish
-          dlgTaskWaypointShowModal(ItemIndex, 1, true); // normal waypoint
-        }
+        dlgTaskWaypointShowModal(*parent_window, *factory, 1, *tp, true);
       }
-#endif
     }
   }
 

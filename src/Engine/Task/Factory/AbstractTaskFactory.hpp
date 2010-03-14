@@ -160,6 +160,19 @@ public:
               const bool auto_mutate=true);
 
 /** 
+ * Swap taskpoint and its successor in ordered task.
+ * May fail if the candidate is the wrong type.
+ * Does nothing (but returns true) if replacement is equivalent
+ * Ownership is transferred to this object.
+ * 
+ * @param position Index in task sequence of task point to replace
+ * @param auto_mutate Modify task point types automatically to retain validity
+ * 
+ * @return True on success
+ */
+  bool swap(const unsigned position, const bool auto_mutate=true);
+
+/** 
  * Provide list of start types valid for later passing to createStart()
  * 
  * @return list of valid start types
