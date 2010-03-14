@@ -51,6 +51,9 @@ public:
   GlidePolar get_glide_polar() const;
   void set_glide_polar(const GlidePolar& glide_polar);
 
+  static void lock();
+  static void unlock();
+
 protected:
   TaskManager& task_manager;
   static Mutex mutex;

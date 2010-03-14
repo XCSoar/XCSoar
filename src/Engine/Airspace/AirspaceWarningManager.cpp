@@ -107,11 +107,11 @@ AirspaceWarningManager::get_warning_ptr(const AbstractAirspace& airspace)
   return NULL;
 }
 
-AirspaceWarning* 
-AirspaceWarningManager::get_warning(const unsigned index)
+const AirspaceWarning* 
+AirspaceWarningManager::get_warning(const unsigned index) const
 {
   unsigned i=0;
-  for (AirspaceWarningList::iterator it = m_warnings.begin();
+  for (AirspaceWarningList::const_iterator it = m_warnings.begin();
        it != m_warnings.end(); ++it, ++i) {
     if (i==index) {
       return &(*it);

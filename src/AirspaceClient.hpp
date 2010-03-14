@@ -37,7 +37,7 @@
 #ifndef AIRSPACECLIENT_HPP
 #define AIRSPACECLIENT_HPP
 
-#include "Thread/Mutex.hpp"
+#include "Poco/RWLock.h"
 class Airspaces;
 class AirspaceWarningManager;
 
@@ -54,7 +54,7 @@ protected:
   Airspaces& airspaces;
   AirspaceWarningManager& airspace_warning;
 
-  static Mutex mutex;
+  static Poco::RWLock mutex;
 };
 
 

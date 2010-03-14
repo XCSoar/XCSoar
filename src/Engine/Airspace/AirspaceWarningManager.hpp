@@ -126,7 +126,7 @@ public:
  * 
  * @return Pointer to airspace warning item (or NULL if not found)
  */
-  AirspaceWarning* get_warning(const unsigned index);
+  const AirspaceWarning* get_warning(const unsigned index) const;
 
 /** 
  * Find corresponding airspace warning item in store by airspace 

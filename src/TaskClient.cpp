@@ -24,3 +24,15 @@ TaskClient::set_glide_polar(const GlidePolar& glide_polar)
   task_manager.set_glide_polar(glide_polar);
 }
 
+
+void
+TaskClient::lock()
+{
+  mutex.Lock();
+}
+
+void
+TaskClient::unlock()
+{
+  mutex.Unlock();
+}

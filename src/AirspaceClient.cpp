@@ -1,3 +1,4 @@
 #include "AirspaceClient.hpp"
 
-Mutex AirspaceClient::mutex;
+Poco::RWLock AirspaceClient::mutex;
+

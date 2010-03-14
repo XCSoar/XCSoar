@@ -65,8 +65,8 @@ static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
 static void
 AirspaceWarningCursorCallback(unsigned i)
 {
-  AirspaceWarning *warning = airspace_ui.get_warning(i);
-  CursorAirspace = warning != NULL
+  const AirspaceWarning *warning = airspace_ui.get_warning(i);
+  CursorAirspace = (warning != NULL)
     ? &warning->get_airspace()
     : NULL;
 }
@@ -82,30 +82,28 @@ static void DoAck(int Ack) {
   const AbstractAirspace *airspace = has_pointer() || FocusAirspace == NULL
     ? CursorAirspace
     : FocusAirspace;
+
   if (airspace == NULL)
     return;
 
-  AirspaceWarning* warning = airspace_ui.get_warning_ptr(*airspace);
-  if (warning) {
-    switch(Ack) {
-    case -1:
-      warning->acknowledge_warning(true);
-      break;
-    case 0:
-      warning->acknowledge_warning(false);
-      warning->acknowledge_day(false);
-      break;
-    case 3:
-      warning->acknowledge_inside(true);
-      break;
-    case 4:
-      warning->acknowledge_day(true);
-      break;
-    default:
-      break;
-    };
-    wAirspaceList->invalidate();
-  }
+  switch(Ack) {
+  case -1:
+    airspace_ui.acknowledge_warning(*airspace, true);
+    break;
+  case 0:
+    airspace_ui.acknowledge_warning(*airspace, false);
+    airspace_ui.acknowledge_day(*airspace, false);
+    break;
+  case 3:
+    airspace_ui.acknowledge_inside(*airspace, true);
+    break;
+  case 4:
+    airspace_ui.acknowledge_day(*airspace, true);
+    break;
+  default:
+    break;
+  };
+  wAirspaceList->invalidate();
 }
 
 static void OnAckClicked(WindowControl * Sender){
@@ -178,9 +176,9 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 {
   TCHAR sTmp[128];
 
-  const AirspaceWarning* warning = airspace_ui.get_warning(i);
+  const AirspaceWarning* _warning = airspace_ui.get_warning(i);
 
-  if (!warning) {
+  if (!_warning) {
     if (i == 0){
       _stprintf(sTmp, _T("%s"), gettext(_T("No Warnings")));
       canvas.text(paint_rc.left + IBLSCALE(2),
@@ -188,9 +186,10 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
     }
     return;
   }
+  const AirspaceWarning warning = *_warning;
 
-  const AbstractAirspace& as = warning->get_airspace();
-  const AirspaceInterceptSolution& solution = warning->get_solution();
+  const AbstractAirspace& as = warning.get_airspace();
+  const AirspaceInterceptSolution& solution = warning.get_solution();
 
   tstring sName = as.get_name_text(false);
   tstring sTop = as.get_top_text(true);
@@ -205,7 +204,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   rcTextClip = paint_rc;
   rcTextClip.right = IBLSCALE(Col1Left - 2);
 
-  canvas.set_text_color(warning->get_ack_expired()
+  canvas.set_text_color(warning.get_ack_expired()
                         ? wAirspaceList->GetForeColor()
                         : Color::GRAY);
 
@@ -226,8 +225,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
                 sTmp);
   }
 
-  if (warning->get_warning_state() != AirspaceWarning::WARNING_INSIDE &&
-      warning->get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
+  if (warning.get_warning_state() != AirspaceWarning::WARNING_INSIDE &&
+      warning.get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
 
     _stprintf(sTmp, _T("%d secs dist %d m"),
               (int)solution.elapsed_time,
@@ -243,14 +242,14 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
   Brush *state_brush;
   const TCHAR *state_text;
 
-  if (warning->get_warning_state() == AirspaceWarning::WARNING_INSIDE) {
-    if (warning->get_ack_expired())
+  if (warning.get_warning_state() == AirspaceWarning::WARNING_INSIDE) {
+    if (warning.get_ack_expired())
       state_brush = &hBrushInsideBk;
     else
       state_brush = &hBrushInsideAckBk;
     state_text = _T("inside");
-  } else if (warning->get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
-    if (warning->get_ack_expired())
+  } else if (warning.get_warning_state() > AirspaceWarning::WARNING_CLEAR) {
+    if (warning.get_ack_expired())
       state_brush = &hBrushNearBk;
     else
       state_brush = &hBrushNearAckBk;
@@ -345,7 +344,6 @@ OnAirspaceListItemPaint(Canvas &canvas, const RECT paint_rc, unsigned i)
 static bool
 update_list()
 {
-  // JMW OLD_TASK this locking is just for now since we don't have any protection
   unsigned Count = airspace_ui.warning_size();
   if (Count) {
     wAirspaceList->SetLength(std::max((unsigned)1, Count));
@@ -353,6 +351,9 @@ update_list()
       wAirspaceList->SetCursorIndex(airspace_ui.get_warning_index(*CursorAirspace));
     } else {
       wAirspaceList->SetCursorIndex(0);
+    }
+    if (Count==1) {
+      AirspaceWarningCursorCallback(0);
     }
   }
 

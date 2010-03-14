@@ -88,10 +88,14 @@ public:
 
   void acknowledge_day(const AbstractAirspace& airspace,
                        const bool set=true);
+  void acknowledge_warning(const AbstractAirspace& airspace,
+                           const bool set=true);
+  void acknowledge_inside(const AbstractAirspace& airspace,
+                          const bool set=true);
 
   AirspaceWarning& get_warning(const AbstractAirspace& airspace);
-  AirspaceWarning* get_warning(const unsigned index);
-  AirspaceWarning* get_warning_ptr(const AbstractAirspace& airspace);
+  const AirspaceWarning* get_warning(const unsigned index) const;
+
   size_t warning_size() const;
   bool warning_empty() const;
   int get_warning_index(const AbstractAirspace& airspace) const;
