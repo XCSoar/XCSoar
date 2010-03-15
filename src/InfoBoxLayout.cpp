@@ -44,6 +44,7 @@ Copyright_License {
 #include "Screen/Animation.hpp"
 #include "Screen/Layout.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 
 #include <stdio.h>
 
@@ -99,10 +100,10 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
   _stprintf(reggeomsx, TEXT("InfoBoxPositionSizeX%u"), i);
   _stprintf(reggeomsy, TEXT("InfoBoxPositionSizeY%u"), i);
 
-  GetFromRegistry(reggeompx, *x);
-  GetFromRegistry(reggeompy, *y);
-  GetFromRegistry(reggeomsx, *sizex);
-  GetFromRegistry(reggeomsy, *sizey);
+  Profile::Get(reggeompx, *x);
+  Profile::Get(reggeompy, *y);
+  Profile::Get(reggeomsx, *sizex);
+  Profile::Get(reggeomsy, *sizey);
 
   if (*sizey != ControlHeight)
     geometrychanged = true;
@@ -213,13 +214,13 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
 {
   TCHAR szProfileInfoBoxGeometry[] = TEXT("InfoBoxGeometry");
 
-  GetFromRegistry(szProfileInfoBoxGeometry, InfoBoxGeometry);
+  Profile::Get(szProfileInfoBoxGeometry, InfoBoxGeometry);
 
 #if defined(PNA) || defined(FIVV)
 // VENTA-ADDON GEOM
   static const TCHAR szProfileInfoBoxGeom[]=  TEXT("AppInfoBoxGeom");
   unsigned Temp = 0;
-  GetFromRegistry(szProfileInfoBoxGeom, Temp);
+  Profile::Get(szProfileInfoBoxGeom, Temp);
   if (InfoBoxGeometry != Temp) {
     LogStartUp(_T("Geometry was changed in config, applying"));
     InfoBoxGeometry=Temp;

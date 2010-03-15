@@ -272,7 +272,7 @@ SetModelType()
   TCHAR szProfileInfoBoxModel[] = _T("AppInfoBoxModel");
   int Temp = 0;
 
-  GetFromRegistry(szProfileInfoBoxModel, Temp);
+  Profile::Get(szProfileInfoBoxModel, Temp);
 
   if (SetModelName(Temp) != true) {
     LogStartUp(_T("SetModelType ERROR! ModelName returned")

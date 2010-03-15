@@ -41,6 +41,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Device/device.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
 #include "Simulator.hpp"
@@ -123,7 +124,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
     return true;
   }
 
-  if (!(GetFromRegistry(fullname, lvalue) == ERROR_SUCCESS)) {
+  if (!(Profile::Get(fullname, lvalue) == ERROR_SUCCESS)) {
     // vario hasn't set the value in the registry yet,
     // so no sensible defaults
     return false;
@@ -144,7 +145,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
     }
   }
 
-  if (GetFromRegistry(updatename, updated) == ERROR_SUCCESS) {
+  if (Profile::Get(updatename, updated) == ERROR_SUCCESS) {
     if (updated == 1) {
       // value is updated externally, so set the property and can proceed
       // to editing values

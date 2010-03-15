@@ -1475,7 +1475,7 @@ static void setVariables(void) {
   LoadFormProperty(*wf, _T("prpHandicap"),
                    XCSoarInterface::SettingsComputer().olc_handicap);
 
-  if(GetFromRegistry(szProfileSpeedUnitsValue,Speed)!=ERROR_SUCCESS) {
+  if(Profile::Get(szProfileSpeedUnitsValue,Speed)!=ERROR_SUCCESS) {
     SetToRegistry(szProfileSpeedUnitsValue, Speed);
     changed = true;
   }
@@ -1502,7 +1502,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistry(szProfileTaskSpeedUnitsValue,TaskSpeed)!=ERROR_SUCCESS) {
+  if(Profile::Get(szProfileTaskSpeedUnitsValue,TaskSpeed)!=ERROR_SUCCESS) {
     SetToRegistry(szProfileTaskSpeedUnitsValue, TaskSpeed);
     changed = true;
   }
@@ -1517,7 +1517,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistry(szProfileDistanceUnitsValue,Distance)!=ERROR_SUCCESS) {
+  if(Profile::Get(szProfileDistanceUnitsValue,Distance)!=ERROR_SUCCESS) {
     SetToRegistry(szProfileDistanceUnitsValue, Distance);
     changed = true;
   }
@@ -1532,7 +1532,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistry(szProfileAltitudeUnitsValue,Altitude)!=ERROR_SUCCESS) {
+  if(Profile::Get(szProfileAltitudeUnitsValue,Altitude)!=ERROR_SUCCESS) {
     SetToRegistry(szProfileAltitudeUnitsValue, Altitude);
     changed = true;
   }
@@ -1546,7 +1546,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistry(szProfileLiftUnitsValue,Lift)!=ERROR_SUCCESS) {
+  if(Profile::Get(szProfileLiftUnitsValue,Lift)!=ERROR_SUCCESS) {
     SetToRegistry(szProfileLiftUnitsValue, Lift);
     changed = true;
   }
