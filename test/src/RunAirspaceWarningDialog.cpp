@@ -99,7 +99,7 @@ static void
 LoadFiles()
 {
   TCHAR tpath[MAX_PATH];
-  GetRegistryString(szRegistryAirspaceFile, tpath, MAX_PATH);
+  GetRegistryString(szProfileAirspaceFile, tpath, MAX_PATH);
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 

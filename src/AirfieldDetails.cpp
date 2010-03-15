@@ -68,15 +68,15 @@ OpenAirfieldDetails()
 
   zAirfieldDetails = NULL;
 
-  GetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
+  GetRegistryString(szProfileAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
 
   if (!string_is_empty(szAirfieldDetailsFile)) {
     ExpandLocalPath(szAirfieldDetailsFile);
     unicode2ascii(szAirfieldDetailsFile, zfilename, MAX_PATH);
-    SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
+    SetRegistryString(szProfileAirfieldFile, TEXT("\0"));
   } else {
     static TCHAR szFile[MAX_PATH];
-    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    GetRegistryString(szProfileMapFile, szFile, MAX_PATH);
     if (!string_is_empty(szFile)) {
       ExpandLocalPath(szFile);
       _tcscat(szFile,TEXT("/airfields.txt"));
@@ -101,7 +101,7 @@ CloseAirfieldDetails()
   }
   // file was OK, so save the registry
   ContractLocalPath(szAirfieldDetailsFile);
-  SetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile);
+  SetRegistryString(szProfileAirfieldFile, szAirfieldDetailsFile);
 
   zzip_fclose(zAirfieldDetails);
   zAirfieldDetails = NULL;

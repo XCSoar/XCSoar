@@ -132,57 +132,57 @@ Profile::ReadRegistrySettings()
 
 #ifdef OLD_TASK
   SETTINGS_TASK settings_task = task.getSettings();
-  GetFromRegistry(szRegistryFinishMinHeight,
+  GetFromRegistry(szProfileFinishMinHeight,
 		  settings_task.FinishMinHeight);
-  GetFromRegistry(szRegistryStartHeightRef,
+  GetFromRegistry(szProfileStartHeightRef,
 		  settings_task.StartHeightRef);
-  GetFromRegistry(szRegistryStartMaxHeight,
+  GetFromRegistry(szProfileStartMaxHeight,
 		  settings_task.StartMaxHeight);
-  GetFromRegistry(szRegistryStartMaxHeightMargin,
+  GetFromRegistry(szProfileStartMaxHeightMargin,
 		  settings_task.StartMaxHeightMargin);
-  GetFromRegistry(szRegistryStartMaxSpeed,
+  GetFromRegistry(szProfileStartMaxSpeed,
 		  settings_task.StartMaxSpeed);
-  GetFromRegistry(szRegistryStartMaxSpeedMargin,
+  GetFromRegistry(szProfileStartMaxSpeedMargin,
 		  settings_task.StartMaxSpeedMargin);
 
   Temp = settings_task.SectorType;
-  GetFromRegistryD(szRegistryFAISector, Temp);
+  GetFromRegistryD(szProfileFAISector, Temp);
   settings_task.SectorType = (ASTSectorType_t)Temp;
 
   Temp = settings_task.StartType;
-  GetFromRegistryD(szRegistryStartLine, Temp);
+  GetFromRegistryD(szProfileStartLine, Temp);
   settings_task.StartType = (StartSectorType_t)Temp;
 
   Temp = settings_task.FinishType;
-  GetFromRegistryD(szRegistryFinishLine, Temp);
+  GetFromRegistryD(szProfileFinishLine, Temp);
   settings_task.FinishType = (FinishSectorType_t)Temp;
 
-  GetFromRegistry(szRegistrySectorRadius,
+  GetFromRegistry(szProfileSectorRadius,
       settings_task.SectorRadius);
 
-  GetFromRegistry(szRegistryStartRadius,
+  GetFromRegistry(szProfileStartRadius,
       settings_task.StartRadius);
-  GetFromRegistry(szRegistryFinishRadius,
+  GetFromRegistry(szProfileFinishRadius,
       settings_task.FinishRadius);
 
   Temp = settings_task.AutoAdvance;
-  GetFromRegistryD(szRegistryAutoAdvance, Temp);
+  GetFromRegistryD(szProfileAutoAdvance, Temp);
   settings_task.AutoAdvance = (AutoAdvanceMode_t)Temp;
 
-  GetFromRegistry(szRegistryFAIFinishHeight,
+  GetFromRegistry(szProfileFAIFinishHeight,
 		  settings_task.EnableFAIFinishHeight);
   task.setSettings(settings_task);
 
   for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
-    GetFromRegistry(szRegistryAirspacePriority[i], AirspacePriority[i]);
+    GetFromRegistry(szProfileAirspacePriority[i], AirspacePriority[i]);
   }
 #endif
 
   Temp = 0;
-  GetFromRegistryD(szRegistryLatLonUnits, Temp);
+  GetFromRegistryD(szProfileLatLonUnits, Temp);
   Units::SetCoordinateFormat((CoordinateFormats_t)Temp);
 
-  GetFromRegistryD(szRegistrySpeedUnitsValue, Speed);
+  GetFromRegistryD(szProfileSpeedUnitsValue, Speed);
   switch (Speed) {
   case 0:
     Units::SetUserSpeedUnit(unStatuteMilesPerHour);
@@ -199,7 +199,7 @@ Profile::ReadRegistrySettings()
     break;
   }
 
-  GetFromRegistryD(szRegistryTaskSpeedUnitsValue, TaskSpeed);
+  GetFromRegistryD(szProfileTaskSpeedUnitsValue, TaskSpeed);
   switch (TaskSpeed) {
   case 0:
     Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
@@ -213,7 +213,7 @@ Profile::ReadRegistrySettings()
     break;
   }
 
-  GetFromRegistryD(szRegistryDistanceUnitsValue,Distance);
+  GetFromRegistryD(szProfileDistanceUnitsValue,Distance);
   switch (Distance) {
   case 0:
     Units::SetUserDistanceUnit(unStatuteMiles);
@@ -227,7 +227,7 @@ Profile::ReadRegistrySettings()
     break;
   }
 
-  GetFromRegistryD(szRegistryAltitudeUnitsValue, Altitude);
+  GetFromRegistryD(szProfileAltitudeUnitsValue, Altitude);
   switch (Altitude) {
   case 0:
     Units::SetUserAltitudeUnit(unFeet);
@@ -238,7 +238,7 @@ Profile::ReadRegistrySettings()
     break;
   }
 
-  GetFromRegistryD(szRegistryLiftUnitsValue, Lift);
+  GetFromRegistryD(szProfileLiftUnitsValue, Lift);
   switch (Lift) {
   case 0:
     Units::SetUserVerticalSpeedUnit(unKnots);
@@ -251,7 +251,7 @@ Profile::ReadRegistrySettings()
 
   for (i = 0; i < MAXINFOWINDOWS; i++) {
     Temp = InfoBoxManager::getTypeAll(i);
-    GetFromRegistryD(szRegistryDisplayType[i], Temp);
+    GetFromRegistryD(szProfileDisplayType[i], Temp);
     InfoBoxManager::setTypeAll(i, Temp);
   }
 
@@ -259,7 +259,7 @@ Profile::ReadRegistrySettings()
   CheckInfoTypes();
 
   Temp = SetSettingsMap().DisplayOrientation;
-  GetFromRegistryD(szRegistryDisplayUpValue, Temp);
+  GetFromRegistryD(szProfileDisplayUpValue, Temp);
   switch (Temp) {
   case TRACKUP:
     SetSettingsMap().DisplayOrientation = TRACKUP;
@@ -279,7 +279,7 @@ Profile::ReadRegistrySettings()
   }
 
   Temp = SetSettingsMap().DisplayTextType;
-  GetFromRegistryD(szRegistryDisplayText, Temp);
+  GetFromRegistryD(szProfileDisplayText, Temp);
   switch (Temp) {
   case 0:
     SetSettingsMap().DisplayTextType = DISPLAYNAME;
@@ -302,32 +302,32 @@ Profile::ReadRegistrySettings()
   }
 
   Temp = SetSettingsComputer().AltitudeMode;
-  GetFromRegistryD(szRegistryAltMode, Temp);
+  GetFromRegistryD(szProfileAltMode, Temp);
   SetSettingsComputer().AltitudeMode = (AirspaceDisplayMode_t)Temp;
 
-  GetFromRegistry(szRegistryClipAlt,
+  GetFromRegistry(szProfileClipAlt,
       SetSettingsComputer().ClipAltitude);
-  GetFromRegistry(szRegistryAltMargin,
+  GetFromRegistry(szProfileAltMargin,
       SetSettingsComputer().AltWarningMargin);
 
-  GetFromRegistry(szRegistrySafetyAltitudeArrival,
+  GetFromRegistry(szProfileSafetyAltitudeArrival,
 		  SetSettingsComputer().SafetyAltitudeArrival);
-  GetFromRegistry(szRegistrySafetyAltitudeBreakOff,
+  GetFromRegistry(szProfileSafetyAltitudeBreakOff,
 		  SetSettingsComputer().SafetyAltitudeBreakoff);
-  GetFromRegistry(szRegistrySafetyAltitudeTerrain,
+  GetFromRegistry(szProfileSafetyAltitudeTerrain,
 		  SetSettingsComputer().SafetyAltitudeTerrain);
-  GetFromRegistry(szRegistrySafteySpeed,
+  GetFromRegistry(szProfileSafteySpeed,
 		  SetSettingsComputer().SafetySpeed);
-  GetFromRegistry(szRegistryPolarID, 
+  GetFromRegistry(szProfilePolarID, 
                   SetSettingsComputer().POLARID);
 
-  GetRegistryString(szRegistryRegKey, strRegKey, 65);
+  GetRegistryString(szProfileRegKey, strRegKey, 65);
 
   for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
     SetSettingsComputer().iAirspaceMode[i] = GetRegistryAirspaceMode(i);
 
-    GetFromRegistry(szRegistryBrush[i], SetSettingsMap().iAirspaceBrush[i]);
-    GetFromRegistry(szRegistryColour[i], SetSettingsMap().iAirspaceColour[i]);
+    GetFromRegistry(szProfileBrush[i], SetSettingsMap().iAirspaceBrush[i]);
+    GetFromRegistry(szProfileColour[i], SetSettingsMap().iAirspaceColour[i]);
     if (SettingsMap().iAirspaceColour[i] >= NUMAIRSPACECOLORS) {
       SetSettingsMap().iAirspaceColour[i] = 0;
     }
@@ -336,39 +336,39 @@ Profile::ReadRegistrySettings()
     }
   }
 
-  GetFromRegistry(szRegistryAirspaceBlackOutline,
+  GetFromRegistry(szProfileAirspaceBlackOutline,
 		  SetSettingsMap().bAirspaceBlackOutline);
-  GetFromRegistry(szRegistrySnailTrail,
+  GetFromRegistry(szProfileSnailTrail,
 		  SetSettingsMap().TrailActive);
 
-  GetFromRegistry(szRegistryTrailDrift,
+  GetFromRegistry(szProfileTrailDrift,
 		  SetSettingsMap().EnableTrailDrift);
 
-  GetFromRegistry(szRegistryThermalLocator,
+  GetFromRegistry(szProfileThermalLocator,
 		  SetSettingsComputer().EnableThermalLocator);
 
-  GetFromRegistry(szRegistryAnimation, EnableAnimation);
+  GetFromRegistry(szProfileAnimation, EnableAnimation);
 
-  GetFromRegistry(szRegistryDrawTopology,
+  GetFromRegistry(szProfileDrawTopology,
 		  SetSettingsMap().EnableTopology);
 
-  GetFromRegistry(szRegistryDrawTerrain,
+  GetFromRegistry(szProfileDrawTerrain,
 		  SetSettingsMap().EnableTerrain);
 
-  GetFromRegistry(szRegistryFinalGlideTerrain,
+  GetFromRegistry(szProfileFinalGlideTerrain,
 		  SetSettingsComputer().FinalGlideTerrain);
 
-  GetFromRegistry(szRegistryAutoWind,
+  GetFromRegistry(szProfileAutoWind,
 		  SetSettingsComputer().AutoWindMode);
 
-  GetFromRegistry(szRegistryCircleZoom,
+  GetFromRegistry(szProfileCircleZoom,
 		  SetSettingsMap().CircleZoom);
 
-  GetFromRegistry(szRegistryHomeWaypoint,
+  GetFromRegistry(szProfileHomeWaypoint,
       SetSettingsComputer().HomeWaypoint);
 
   Temp = SettingsComputer().Alternate1;
-  if (GetFromRegistryD(szRegistryAlternate1, Temp) == ERROR_SUCCESS) {
+  if (GetFromRegistryD(szProfileAlternate1, Temp) == ERROR_SUCCESS) {
     // TODO: for portrait no need to force alternate calculations here.
     // Infobox will trigger them on if visible..
     SetSettingsComputer().Alternate1 = Temp;
@@ -379,7 +379,7 @@ Profile::ReadRegistrySettings()
   }
 
   Temp = SettingsComputer().Alternate2;
-  if (GetFromRegistryD(szRegistryAlternate2, Temp) == ERROR_SUCCESS) {
+  if (GetFromRegistryD(szProfileAlternate2, Temp) == ERROR_SUCCESS) {
     SetSettingsComputer().Alternate2 = Temp;
     SetSettingsComputer().EnableAlternate2 = true;
   } else {
@@ -387,49 +387,49 @@ Profile::ReadRegistrySettings()
     SetSettingsComputer().EnableAlternate2 = false;
   }
 
-  GetFromRegistry(szRegistrySnailWidthScale,
+  GetFromRegistry(szProfileSnailWidthScale,
 		  SetSettingsMap().SnailWidthScale);
 
-  GetFromRegistry(szRegistryTeamcodeRefWaypoint,
+  GetFromRegistry(szProfileTeamcodeRefWaypoint,
 		  SetSettingsComputer().TeamCodeRefWaypoint);
 
-  GetFromRegistry(szRegistryAirspaceWarning,
+  GetFromRegistry(szProfileAirspaceWarning,
 		  SetSettingsComputer().EnableAirspaceWarnings);
 
-  GetFromRegistry(szRegistryWarningTime,
+  GetFromRegistry(szProfileWarningTime,
 		  SetSettingsComputer().WarningTime);
 
-  GetFromRegistry(szRegistryAcknowledgementTime,
+  GetFromRegistry(szProfileAcknowledgementTime,
 		  SetSettingsComputer().AcknowledgementTime);
 
-  GetFromRegistry(szRegistrySoundVolume,
+  GetFromRegistry(szProfileSoundVolume,
 		  SetSettingsComputer().SoundVolume);
 
-  GetFromRegistry(szRegistrySoundDeadband,
+  GetFromRegistry(szProfileSoundDeadband,
 		  SetSettingsComputer().SoundDeadband);
 
-  GetFromRegistry(szRegistrySoundAudioVario,
+  GetFromRegistry(szProfileSoundAudioVario,
 		  SetSettingsComputer().EnableSoundVario);
 
-  GetFromRegistry(szRegistrySoundTask,
+  GetFromRegistry(szProfileSoundTask,
 		  SetSettingsComputer().EnableSoundTask);
 
-  GetFromRegistry(szRegistrySoundModes,
+  GetFromRegistry(szProfileSoundModes,
 		  SetSettingsComputer().EnableSoundModes);
 
   SetSettingsMap().EnableCDICruise = 0;
   SetSettingsMap().EnableCDICircling = 0;
 
 #ifdef HAVE_BLANK
-  GetFromRegistry(szRegistryAutoBlank,
+  GetFromRegistry(szProfileAutoBlank,
 		  SetSettingsMap().EnableAutoBlank);
 #endif
 
-  GetFromRegistry(szRegistryAutoBacklight,
+  GetFromRegistry(szProfileAutoBacklight,
 		  EnableAutoBacklight);
-  GetFromRegistry(szRegistryAutoSoundVolume,
+  GetFromRegistry(szProfileAutoSoundVolume,
 		  EnableAutoSoundVolume);
-  GetFromRegistry(szRegistryExtendedVisualGlide,
+  GetFromRegistry(szProfileExtendedVisualGlide,
 		  SetSettingsMap().ExtendedVisualGlide);
 
 #ifdef PNA
@@ -437,11 +437,11 @@ Profile::ReadRegistrySettings()
 #else
   Temp = 0;
 #endif
-  GetFromRegistryD(szRegistryVirtualKeys,Temp);
+  GetFromRegistryD(szProfileVirtualKeys,Temp);
   VirtualKeys = Temp;
 
   Temp = (AverEffTime_t)ae2minutes;
-  GetFromRegistryD(szRegistryAverEffTime,Temp);
+  GetFromRegistryD(szProfileAverEffTime,Temp);
   SetSettingsComputer().AverEffTime = Temp;
 
 #if defined(GNAV) || defined(PCGNAV)
@@ -449,17 +449,17 @@ Profile::ReadRegistrySettings()
 #else
   Temp = 250;
 #endif
-  GetFromRegistryD(szRegistryDebounceTimeout, Temp);
+  GetFromRegistryD(szProfileDebounceTimeout, Temp);
   debounceTimeout = Temp;
 
   /* JMW broken
   Temp = 100;
-  GetFromRegistry(szRegistryAccelerometerZero, Temp);
+  GetFromRegistry(szProfileAccelerometerZero, Temp);
   AccelerometerZero = Temp;
   if (AccelerometerZero==0.0) {
     AccelerometerZero= 100.0;
     Temp = 100;
-    SetToRegistry(szRegistryAccelerometerZero, Temp);
+    SetToRegistry(szProfileAccelerometerZero, Temp);
   }
   */
 
@@ -467,34 +467,34 @@ Profile::ReadRegistrySettings()
 
   //Temp = Appearance.IndFinalGlide;
   Temp = (IndFinalGlide_t)fgFinalGlideDefault;
-  GetFromRegistryD(szRegistryAppIndFinalGlide, Temp);
+  GetFromRegistryD(szProfileAppIndFinalGlide, Temp);
   Appearance.IndFinalGlide = (IndFinalGlide_t)Temp;
 
   Temp = Appearance.IndLandable;
-  GetFromRegistryD(szRegistryAppIndLandable, Temp);
+  GetFromRegistryD(szProfileAppIndLandable, Temp);
   Appearance.IndLandable = (IndLandable_t)Temp;
 
-  GetFromRegistry(szRegistryAppInverseInfoBox,
+  GetFromRegistry(szProfileAppInverseInfoBox,
 		  Appearance.InverseInfoBox);
-  GetFromRegistry(szRegistryAppGaugeVarioSpeedToFly,
+  GetFromRegistry(szProfileAppGaugeVarioSpeedToFly,
 		  Appearance.GaugeVarioSpeedToFly);
-  GetFromRegistry(szRegistryAppGaugeVarioAvgText,
+  GetFromRegistry(szProfileAppGaugeVarioAvgText,
 		  Appearance.GaugeVarioAvgText);
-  GetFromRegistry(szRegistryAppGaugeVarioMc,
+  GetFromRegistry(szProfileAppGaugeVarioMc,
 		  Appearance.GaugeVarioMc);
-  GetFromRegistry(szRegistryAppGaugeVarioBugs,
+  GetFromRegistry(szProfileAppGaugeVarioBugs,
 		  Appearance.GaugeVarioBugs);
-  GetFromRegistry(szRegistryAppGaugeVarioBallast,
+  GetFromRegistry(szProfileAppGaugeVarioBallast,
 		  Appearance.GaugeVarioBallast);
-  GetFromRegistry(szRegistryAppGaugeVarioGross,
+  GetFromRegistry(szProfileAppGaugeVarioGross,
 		  Appearance.GaugeVarioGross);
 
   Temp = Appearance.CompassAppearance;
-  GetFromRegistryD(szRegistryAppCompassAppearance, Temp);
+  GetFromRegistryD(szProfileAppCompassAppearance, Temp);
   Appearance.CompassAppearance = (CompassAppearance_t)Temp;
 
   Temp = (InfoBoxBorderAppearance_t)apIbBox;
-  GetFromRegistryD(szRegistryAppInfoBoxBorder, Temp);
+  GetFromRegistryD(szProfileAppInfoBoxBorder, Temp);
   Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
 
   // VENTA2-ADDON Geometry change and PNA custom font settings
@@ -503,7 +503,7 @@ Profile::ReadRegistrySettings()
   // know the screen geometry, in the registry!
 #if defined(PNA) || defined(FIVV)
   Temp = Appearance.InfoBoxGeom;
-  GetFromRegistryD(szRegistryAppInfoBoxGeom, Temp);
+  GetFromRegistryD(szProfileAppInfoBoxGeom, Temp);
   Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)Temp;
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
@@ -528,27 +528,27 @@ Profile::ReadRegistrySettings()
 
   // VENTA-ADDON Model change
   Temp = Appearance.InfoBoxModel;
-  GetFromRegistryD(szRegistryAppInfoBoxModel, Temp);
+  GetFromRegistryD(szProfileAppInfoBoxModel, Temp);
   Appearance.InfoBoxModel = (InfoBoxModelAppearance_t)Temp;
 #endif
 
   Temp = Appearance.StateMessageAlign;
-  GetFromRegistryD(szRegistryAppStatusMessageAlignment, Temp);
+  GetFromRegistryD(szProfileAppStatusMessageAlignment, Temp);
   Appearance.StateMessageAlign = (StateMessageAlign_t)Temp;
 
   Temp = Appearance.TextInputStyle;
-  GetFromRegistryD(szRegistryAppTextInputStyle, Temp);
+  GetFromRegistryD(szProfileAppTextInputStyle, Temp);
   Appearance.TextInputStyle = (TextInputStyle_t)Temp;
 
   Temp = g_eDialogStyle;
-  GetFromRegistryD(szRegistryAppDialogStyle, Temp);
+  GetFromRegistryD(szProfileAppDialogStyle, Temp);
   g_eDialogStyle = (DialogStyle_t)Temp;
 
-  GetFromRegistry(szRegistryAppDefaultMapWidth,
+  GetFromRegistry(szProfileAppDefaultMapWidth,
 		  Appearance.DefaultMapWidth);
-  GetFromRegistry(szRegistryAppInfoBoxColors,
+  GetFromRegistry(szProfileAppInfoBoxColors,
 		  Appearance.InfoBoxColors);
-  GetFromRegistry(szRegistryAppAveNeedle,
+  GetFromRegistry(szProfileAppAveNeedle,
 		  Appearance.GaugeVarioAveNeedle);
 
   // StateMessageAlign : center, topleft
@@ -566,95 +566,95 @@ Profile::ReadRegistrySettings()
   // IndLandable
 
 #ifdef OLD_TASK
-  GetFromRegistry(szRegistryAutoMcMode,
+  GetFromRegistry(szProfileAutoMcMode,
 		  SetSettingsComputer().auto_mc_mode);
 #endif
-  GetFromRegistry(szRegistryWaypointsOutOfRange,
+  GetFromRegistry(szProfileWaypointsOutOfRange,
                   WayPointFile::WaypointsOutOfRangeSetting);
   {
     unsigned t = SettingsComputer().olc_rules;
-    GetFromRegistry(szRegistryOLCRules, t);
+    GetFromRegistry(szProfileOLCRules, t);
     SetSettingsComputer().olc_rules = (OLCRules)t;
   }
-  GetFromRegistry(szRegistryHandicap,
+  GetFromRegistry(szProfileHandicap,
 		  SetSettingsComputer().olc_handicap);
-  GetFromRegistry(szRegistryEnableExternalTriggerCruise,
+  GetFromRegistry(szProfileEnableExternalTriggerCruise,
 		  SetSettingsComputer().EnableExternalTriggerCruise);
 
-  GetFromRegistry(szRegistryUTCOffset,
+  GetFromRegistry(szProfileUTCOffset,
 		  SetSettingsComputer().UTCOffset);
   if (SettingsComputer().UTCOffset > 12 * 3600)
     SetSettingsComputer().UTCOffset -= 24 * 3600;
 
-  GetFromRegistry(szRegistryBlockSTF,
+  GetFromRegistry(szProfileBlockSTF,
 		  SetSettingsComputer().EnableBlockSTF);
-  GetFromRegistry(szRegistryAutoZoom,
+  GetFromRegistry(szProfileAutoZoom,
 		  SetSettingsMap().AutoZoom);
-  GetFromRegistry(szRegistryMenuTimeout,
+  GetFromRegistry(szProfileMenuTimeout,
 		  MenuTimeoutMax);
-  GetFromRegistry(szRegistryLockSettingsInFlight,
+  GetFromRegistry(szProfileLockSettingsInFlight,
 		  LockSettingsInFlight);
-  GetFromRegistry(szRegistryLoggerShort,
+  GetFromRegistry(szProfileLoggerShort,
 		  SetSettingsComputer().LoggerShortName);
-  GetFromRegistry(szRegistryEnableFLARMMap,
+  GetFromRegistry(szProfileEnableFLARMMap,
 		  SetSettingsMap().EnableFLARMMap);
-  GetFromRegistry(szRegistryEnableFLARMGauge,
+  GetFromRegistry(szProfileEnableFLARMGauge,
 		  SetSettingsMap().EnableFLARMGauge);
-  GetFromRegistry(szRegistryTerrainContrast,
+  GetFromRegistry(szProfileTerrainContrast,
 		  SetSettingsMap().TerrainContrast);
-  GetFromRegistry(szRegistryTerrainBrightness,
+  GetFromRegistry(szProfileTerrainBrightness,
 		  SetSettingsMap().TerrainBrightness);
-  GetFromRegistry(szRegistryTerrainRamp,
+  GetFromRegistry(szProfileTerrainRamp,
 		  SetSettingsMap().TerrainRamp);
 
-  GetFromRegistry(szRegistryGliderScreenPosition,
+  GetFromRegistry(szProfileGliderScreenPosition,
 		  SetSettingsMap().GliderScreenPosition);
-  GetFromRegistry(szRegistryBallastSecsToEmpty,
+  GetFromRegistry(szProfileBallastSecsToEmpty,
 		  SetSettingsComputer().BallastSecsToEmpty);
-  GetFromRegistry(szRegistrySetSystemTimeFromGPS,
+  GetFromRegistry(szProfileSetSystemTimeFromGPS,
 		  SetSettingsMap().SetSystemTimeFromGPS);
-  GetFromRegistry(szRegistryUseCustomFonts,
+  GetFromRegistry(szProfileUseCustomFonts,
 		  UseCustomFonts);
-  GetFromRegistry(szRegistryVoiceClimbRate,
+  GetFromRegistry(szProfileVoiceClimbRate,
 		  SetSettingsComputer().EnableVoiceClimbRate);
-  GetFromRegistry(szRegistryVoiceTerrain,
+  GetFromRegistry(szProfileVoiceTerrain,
 		  SetSettingsComputer().EnableVoiceTerrain);
-  GetFromRegistry(szRegistryVoiceWaypointDistance,
+  GetFromRegistry(szProfileVoiceWaypointDistance,
 		  SetSettingsComputer().EnableVoiceWaypointDistance);
-  GetFromRegistry(szRegistryVoiceTaskAltitudeDifference,
+  GetFromRegistry(szProfileVoiceTaskAltitudeDifference,
 		  SetSettingsComputer().EnableVoiceTaskAltitudeDifference);
-  GetFromRegistry(szRegistryVoiceMacCready,
+  GetFromRegistry(szProfileVoiceMacCready,
 		  SetSettingsComputer().EnableVoiceMacCready);
-  GetFromRegistry(szRegistryVoiceNewWaypoint,
+  GetFromRegistry(szProfileVoiceNewWaypoint,
 		  SetSettingsComputer().EnableVoiceNewWaypoint);
-  GetFromRegistry(szRegistryVoiceInSector,
+  GetFromRegistry(szProfileVoiceInSector,
 		  SetSettingsComputer().EnableVoiceInSector);
-  GetFromRegistry(szRegistryVoiceAirspace,
+  GetFromRegistry(szProfileVoiceAirspace,
 		  SetSettingsComputer().EnableVoiceAirspace);
-  GetFromRegistry(szRegistryEnableNavBaroAltitude,
+  GetFromRegistry(szProfileEnableNavBaroAltitude,
 		  SetSettingsComputer().EnableNavBaroAltitude);
-  GetFromRegistry(szRegistryLoggerTimeStepCruise,
+  GetFromRegistry(szProfileLoggerTimeStepCruise,
 		  SetSettingsComputer().LoggerTimeStepCruise);
-  GetFromRegistry(szRegistryLoggerTimeStepCircling,
+  GetFromRegistry(szProfileLoggerTimeStepCircling,
 		  SetSettingsComputer().LoggerTimeStepCircling);
-  GetFromRegistry(szRegistryAbortSafetyUseCurrent,
+  GetFromRegistry(szProfileAbortSafetyUseCurrent,
 		  SetSettingsComputer().safety_mc_use_current);
 
   Temp = iround(SettingsComputer().safety_mc * 10);
-  GetFromRegistryD(szRegistrySafetyMacCready, Temp);
+  GetFromRegistryD(szProfileSafetyMacCready, Temp);
   SetSettingsComputer().safety_mc = Temp / 10.0;
 
-  GetFromRegistry(szRegistryUserLevel, UserLevel);
+  GetFromRegistry(szProfileUserLevel, UserLevel);
 
   Temp = iround(SettingsComputer().risk_gamma * 10);
-  GetFromRegistryD(szRegistryRiskGamma, Temp);
+  GetFromRegistryD(szProfileRiskGamma, Temp);
   SetSettingsComputer().risk_gamma = Temp / 10.0;
 
   Temp = (CompassAppearance_t)apCompassAltA;
-  GetFromRegistryD(szRegistryWindArrowStyle, Temp);
+  GetFromRegistryD(szProfileWindArrowStyle, Temp);
   SetSettingsMap().WindArrowStyle = Temp;
 
-  GetFromRegistry(szRegistryDisableAutoLogger,
+  GetFromRegistry(szProfileDisableAutoLogger,
 		  SetSettingsComputer().DisableAutoLogger);
 }
 
@@ -662,29 +662,29 @@ void
 Profile::SetRegistryAirspaceMode(int i)
 {
   CheckIndex(SetSettingsComputer().iAirspaceMode, i);
-  CheckIndex(szRegistryAirspaceMode, i);
+  CheckIndex(szProfileAirspaceMode, i);
 
   DWORD val = SettingsComputer().iAirspaceMode[i];
-  SetToRegistry(szRegistryAirspaceMode[i], val);
+  SetToRegistry(szProfileAirspaceMode[i], val);
 }
 
 int
 Profile::GetRegistryAirspaceMode(int i)
 {
   DWORD Temp = 3; // display + warnings
-  CheckIndex(szRegistryAirspaceMode, i);
-  GetFromRegistryD(szRegistryAirspaceMode[i], Temp);
+  CheckIndex(szProfileAirspaceMode, i);
+  GetFromRegistryD(szProfileAirspaceMode[i], Temp);
   return Temp;
 }
 
 void
 Profile::SaveSoundSettings()
 {
-  SetToRegistry(szRegistrySoundVolume, (DWORD)SettingsComputer().SoundVolume);
-  SetToRegistry(szRegistrySoundDeadband, (DWORD)SettingsComputer().SoundDeadband);
-  SetToRegistry(szRegistrySoundAudioVario, SettingsComputer().EnableSoundVario);
-  SetToRegistry(szRegistrySoundTask, SettingsComputer().EnableSoundTask);
-  SetToRegistry(szRegistrySoundModes, SettingsComputer().EnableSoundModes);
+  SetToRegistry(szProfileSoundVolume, (DWORD)SettingsComputer().SoundVolume);
+  SetToRegistry(szProfileSoundDeadband, (DWORD)SettingsComputer().SoundDeadband);
+  SetToRegistry(szProfileSoundAudioVario, SettingsComputer().EnableSoundVario);
+  SetToRegistry(szProfileSoundTask, SettingsComputer().EnableSoundTask);
+  SetToRegistry(szProfileSoundModes, SettingsComputer().EnableSoundModes);
 }
 
 void
@@ -692,9 +692,9 @@ Profile::SaveWindToRegistry()
 {
   DWORD Temp;
   Temp = iround(Basic().wind.norm);
-  SetToRegistry(szRegistryWindSpeed, Temp);
+  SetToRegistry(szProfileWindSpeed, Temp);
   Temp = iround(Basic().wind.bearing);
-  SetToRegistry(szRegistryWindBearing, Temp);
+  SetToRegistry(szProfileWindBearing, Temp);
   //TODO  SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing);
 }
 
@@ -706,10 +706,10 @@ Profile::LoadWindFromRegistry()
   /* JMW incomplete
   DWORD Temp;
   Temp=0;
-  GetFromRegistry(szRegistryWindSpeed,&Temp);
+  GetFromRegistry(szProfileWindSpeed,&Temp);
   Calculated().WindSpeed = Temp;
   Temp=0;
-  GetFromRegistry(szRegistryWindBearing,&Temp);
+  GetFromRegistry(szProfileWindBearing,&Temp);
   Calculated().WindBearing = Temp;
   */
 }

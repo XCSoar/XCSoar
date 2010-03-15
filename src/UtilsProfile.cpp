@@ -155,7 +155,7 @@ void
 CleanRegistry()
 {
   HKEY tKey;
-  RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, 0, &tKey);
+  RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, 0, &tKey);
 
   RegDeleteValue(tKey, _T("CDIWindowFont"));
   RegDeleteValue(tKey, _T("InfoWindowFont"));

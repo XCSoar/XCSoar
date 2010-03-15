@@ -81,25 +81,25 @@ SaveFromForm(const WndForm &form, SETTINGS_COMPUTER &settings)
   return
     SaveFormProperty(form, _T("prpVoiceClimbRate"),
                      settings.EnableVoiceClimbRate,
-                     szRegistryVoiceClimbRate) ||
+                     szProfileVoiceClimbRate) ||
     SaveFormProperty(form, _T("prpVoiceTerrain"),
-                     settings.EnableVoiceTerrain, szRegistryVoiceTerrain) ||
+                     settings.EnableVoiceTerrain, szProfileVoiceTerrain) ||
     SaveFormProperty(form, _T("prpVoiceWaypointDistance"),
                      settings.EnableVoiceWaypointDistance,
-                     szRegistryVoiceWaypointDistance) ||
+                     szProfileVoiceWaypointDistance) ||
     SaveFormProperty(form, _T("prpVoiceTaskAltitudeDifference"),
                      settings.EnableVoiceTaskAltitudeDifference,
-                     szRegistryVoiceTaskAltitudeDifference) ||
+                     szProfileVoiceTaskAltitudeDifference) ||
     SaveFormProperty(form, _T("prpVoiceMacCready"),
                      settings.EnableVoiceMacCready,
-                     szRegistryVoiceMacCready) ||
+                     szProfileVoiceMacCready) ||
     SaveFormProperty(form, _T("prpVoiceNewWaypoint"),
                      settings.EnableVoiceNewWaypoint,
-                     szRegistryVoiceNewWaypoint) ||
+                     szProfileVoiceNewWaypoint) ||
     SaveFormProperty(form, _T("prpVoiceInSector"),
-                     settings.EnableVoiceInSector, szRegistryVoiceInSector) ||
+                     settings.EnableVoiceInSector, szProfileVoiceInSector) ||
     SaveFormProperty(form, _T("prpVoiceAirspace"),
-                     settings.EnableVoiceAirspace, szRegistryVoiceAirspace);
+                     settings.EnableVoiceAirspace, szProfileVoiceAirspace);
 }
 
 

@@ -252,7 +252,7 @@ static void
 OnNewHomeClicked(gcc_unused WndButton &button)
 {
   XCSoarInterface::SetSettingsComputer().HomeWaypoint = selected_waypoint->id;
-  SetToRegistry(szRegistryHomeWaypoint, XCSoarInterface::SettingsComputer().HomeWaypoint);
+  SetToRegistry(szProfileHomeWaypoint, XCSoarInterface::SettingsComputer().HomeWaypoint);
 #ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
@@ -265,7 +265,7 @@ static void
 OnSetAlternate1Clicked(gcc_unused WndButton &button)
 {
   XCSoarInterface::SetSettingsComputer().Alternate1 = selected_waypoint->id;
-  SetToRegistry(szRegistryAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
+  SetToRegistry(szProfileAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
 #ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
@@ -277,7 +277,7 @@ static void
 OnSetAlternate2Clicked(gcc_unused WndButton &button)
 {
   XCSoarInterface::SetSettingsComputer().Alternate2 = selected_waypoint->id;
-  SetToRegistry(szRegistryAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
+  SetToRegistry(szProfileAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
 #ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
@@ -292,9 +292,9 @@ OnClearAlternatesClicked(gcc_unused WndButton &button)
   XCSoarInterface::SetSettingsComputer().EnableAlternate1 = false;
   XCSoarInterface::SetSettingsComputer().Alternate2 = -1;
   XCSoarInterface::SetSettingsComputer().EnableAlternate2 = false;
-  SetToRegistry(szRegistryAlternate1,
+  SetToRegistry(szProfileAlternate1,
       XCSoarInterface::SettingsComputer().Alternate1);
-  SetToRegistry(szRegistryAlternate2,
+  SetToRegistry(szProfileAlternate2,
       XCSoarInterface::SettingsComputer().Alternate2);
 #ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
@@ -309,7 +309,7 @@ OnTeamCodeClicked(gcc_unused WndButton &button)
 {
 #ifdef OLD_TASK
   XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = SelectedWaypoint;
-  SetToRegistry(szRegistryTeamcodeRefWaypoint,
+  SetToRegistry(szProfileTeamcodeRefWaypoint,
       XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint);
 #endif
 
@@ -391,7 +391,7 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   if (!wf)
     return;
 
-  GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
+  GetRegistryString(szProfileWayPointFile, szWaypointFile, MAX_PATH);
   ExpandLocalPath(szWaypointFile);
   ExtractDirectory(Directory, szWaypointFile);
 

@@ -80,7 +80,7 @@ void ReadAssetNumber(void)
   return;
 #endif
 
-  GetRegistryString(szRegistryLoggerID, val, 100);
+  GetRegistryString(szProfileLoggerID, val, 100);
   int ifound = 0;
   int len = _tcslen(val);
   for (int i = 0; i < len; i++) {

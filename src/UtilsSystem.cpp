@@ -269,10 +269,10 @@ SmartGlobalModelType()
 void
 SetModelType()
 {
-  TCHAR szRegistryInfoBoxModel[] = _T("AppInfoBoxModel");
+  TCHAR szProfileInfoBoxModel[] = _T("AppInfoBoxModel");
   int Temp = 0;
 
-  GetFromRegistry(szRegistryInfoBoxModel, Temp);
+  GetFromRegistry(szProfileInfoBoxModel, Temp);
 
   if (SetModelName(Temp) != true) {
     LogStartUp(_T("SetModelType ERROR! ModelName returned")

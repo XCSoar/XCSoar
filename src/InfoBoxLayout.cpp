@@ -211,15 +211,15 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
 void
 InfoBoxLayout::ScreenGeometry(RECT rc)
 {
-  TCHAR szRegistryInfoBoxGeometry[] = TEXT("InfoBoxGeometry");
+  TCHAR szProfileInfoBoxGeometry[] = TEXT("InfoBoxGeometry");
 
-  GetFromRegistry(szRegistryInfoBoxGeometry, InfoBoxGeometry);
+  GetFromRegistry(szProfileInfoBoxGeometry, InfoBoxGeometry);
 
 #if defined(PNA) || defined(FIVV)
 // VENTA-ADDON GEOM
-  static const TCHAR szRegistryInfoBoxGeom[]=  TEXT("AppInfoBoxGeom");
+  static const TCHAR szProfileInfoBoxGeom[]=  TEXT("AppInfoBoxGeom");
   unsigned Temp = 0;
-  GetFromRegistry(szRegistryInfoBoxGeom, Temp);
+  GetFromRegistry(szProfileInfoBoxGeom, Temp);
   if (InfoBoxGeometry != Temp) {
     LogStartUp(_T("Geometry was changed in config, applying"));
     InfoBoxGeometry=Temp;
@@ -255,7 +255,7 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
     }
   }
 
-  SetToRegistry(szRegistryInfoBoxGeometry, (int &)InfoBoxGeometry);
+  SetToRegistry(szProfileInfoBoxGeometry, (int &)InfoBoxGeometry);
 
   // JMW testing
   if (InfoBoxGeometry == 6)

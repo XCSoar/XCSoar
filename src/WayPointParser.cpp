@@ -132,10 +132,10 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
   //
   // VENTA3> this is probably useless, since HomeWayPoint &c were currently
   //         just loaded from registry.
-  SetToRegistry(szRegistryHomeWaypoint,settings.HomeWaypoint);
-  SetToRegistry(szRegistryAlternate1,settings.Alternate1);
-  SetToRegistry(szRegistryAlternate2,settings.Alternate2);
-  SetToRegistry(szRegistryTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
+  SetToRegistry(szProfileHomeWaypoint,settings.HomeWaypoint);
+  SetToRegistry(szProfileAlternate1,settings.Alternate1);
+  SetToRegistry(szProfileAlternate2,settings.Alternate2);
+  SetToRegistry(szProfileTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
 }
 
 
@@ -165,9 +165,9 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
   // ### FIRST FILE ###
 
   // Get first waypoint filename
-  GetRegistryString(szRegistryWayPointFile, szFile, MAX_PATH);
+  GetRegistryString(szProfileWayPointFile, szFile, MAX_PATH);
   // and clear registry setting (if loading goes totally wrong)
-  SetRegistryString(szRegistryWayPointFile, TEXT("\0"));
+  SetRegistryString(szProfileWayPointFile, TEXT("\0"));
 
   wp_file0 = WayPointFile::create(szFile, 0);
 
@@ -176,7 +176,7 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
     // parse the file
     if (wp_file0->Parse(way_points, terrain)) {
       // reset the registry to the actual file name
-      SetRegistryString(szRegistryWayPointFile, szFile);
+      SetRegistryString(szProfileWayPointFile, szFile);
 
       found = true;
       // Set waypoints writable flag
@@ -191,9 +191,9 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
   // ### SECOND FILE ###
 
   // Get second waypoint filename
-  GetRegistryString(szRegistryAdditionalWayPointFile, szFile, MAX_PATH);
+  GetRegistryString(szProfileAdditionalWayPointFile, szFile, MAX_PATH);
   // and clear registry setting (if loading goes totally wrong)
-  SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));
+  SetRegistryString(szProfileAdditionalWayPointFile, TEXT("\0"));
 
   wp_file1 = WayPointFile::create(szFile, 1);
   // If waypoint file exists
@@ -201,7 +201,7 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
     // parse the file
     if (wp_file1->Parse(way_points, terrain)) {
       // reset the registry to the actual file name
-      SetRegistryString(szRegistryAdditionalWayPointFile, szFile);
+      SetRegistryString(szProfileAdditionalWayPointFile, szFile);
       found = true;
     } else {
       LogStartUp(TEXT("Parse error in waypoint file 2"));
@@ -215,7 +215,7 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
   // If no waypoint file found yet
   if (!found) {
     // Get the map filename
-    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    GetRegistryString(szProfileMapFile, szFile, MAX_PATH);
     _tcscat(szFile, TEXT("/"));
     _tcscat(szFile, TEXT("waypoints.xcw"));
 

@@ -187,12 +187,12 @@ WayPointFile::checkWaypointInTerrainRange(const Waypoint &way_point,
   // Execute result
   switch (WaypointOutOfTerrainRangeDialogResult) {
   case wpTerrainBoundsYesAll:
-    SetToRegistry(szRegistryWaypointsOutOfRange, 1);
+    SetToRegistry(szProfileWaypointsOutOfRange, 1);
     Profile::Save();
     return true;
 
   case wpTerrainBoundsNoAll:
-    SetToRegistry(szRegistryWaypointsOutOfRange, 2);
+    SetToRegistry(szProfileWaypointsOutOfRange, 2);
     Profile::Save();
     return false;
 

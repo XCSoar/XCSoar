@@ -164,13 +164,13 @@ bool dlgTaskRules(void){
   int ival;
 
   changed |= SetValueRegistryOnChange(wf, _T("prpFAIFinishHeight"),
-				      szRegistryFAIFinishHeight,
+				      szProfileFAIFinishHeight,
 				      settings_task.EnableFAIFinishHeight);
   changed |= SetValueRegistryOnChange(wf, _T("prpStartHeightRef"),
-				      szRegistryStartHeightRef,
+				      szProfileStartHeightRef,
 				      settings_task.StartHeightRef);
   changed |= SetValueRegistryOnChange(wf, _T("prpOLCRules"),
-				      szRegistryOLCRules,
+				      szProfileOLCRules,
 				      XCSoarInterface::SetSettingsComputer().OLCRules);
   changed |= SetValueOnChange(wf, _T("prpOLCEnabled"),
 			      XCSoarInterface::SetSettingsComputer().EnableOLC);
@@ -180,7 +180,7 @@ bool dlgTaskRules(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)settings_task.FinishMinHeight != ival) {
       settings_task.FinishMinHeight = ival;
-      SetToRegistry(szRegistryFinishMinHeight,settings_task.FinishMinHeight);
+      SetToRegistry(szProfileFinishMinHeight,settings_task.FinishMinHeight);
       changed = true;
     }
   }
@@ -190,7 +190,7 @@ bool dlgTaskRules(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)settings_task.StartMaxHeight != ival) {
       settings_task.StartMaxHeight = ival;
-      SetToRegistry(szRegistryStartMaxHeight,settings_task.StartMaxHeight);
+      SetToRegistry(szProfileStartMaxHeight,settings_task.StartMaxHeight);
       changed = true;
     }
   }
@@ -200,7 +200,7 @@ bool dlgTaskRules(void){
     ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
     if ((int)settings_task.StartMaxSpeed != ival) {
       settings_task.StartMaxSpeed = ival;
-      SetToRegistry(szRegistryStartMaxSpeed,settings_task.StartMaxSpeed);
+      SetToRegistry(szProfileStartMaxSpeed,settings_task.StartMaxSpeed);
       changed = true;
     }
   }

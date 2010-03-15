@@ -134,7 +134,7 @@ static void RedrawSampleFont(void)
   NewFont.set(&NewLogFont);
 #endif /* !ENABLE_SDL */
 
-  if ( _tcscmp(OriginalFontRegKey, szRegistryFontMapWindowBoldFont) == 0 ) {
+  if ( _tcscmp(OriginalFontRegKey, szProfileFontMapWindowBoldFont) == 0 ) {
     wf->SetFont(NewFont);
     wf->SetTitleFont(NewFont);
   }
