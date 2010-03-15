@@ -230,8 +230,8 @@ SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
 void
 SetRegistryStringIfAbsent(const TCHAR *name, const TCHAR *value);
 
-void SetRegistryColour(int i, DWORD c);
-void SetRegistryBrush(int i, DWORD c);
+void SetRegistryColour(int i, int c);
+void SetRegistryBrush(int i, int c);
 void SetRegistryAirspacePriority(int i);
 void SetRegistryAirspaceMode(int i);
 int GetRegistryAirspaceMode(int i);

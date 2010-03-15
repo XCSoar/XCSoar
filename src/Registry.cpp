@@ -355,7 +355,7 @@ public:
 void
 StoreType(int Index, int the_type)
 {
-  SetToRegistry(szProfileDisplayType[Index], (DWORD)the_type);
+  SetToRegistry(szProfileDisplayType[Index], the_type);
 }
 
 void
@@ -584,14 +584,14 @@ SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 #define CheckIndex(x, i) assert(i >= 0 && (unsigned)i < sizeof(x) / sizeof(x[0]))
 
 void
-SetRegistryColour(int i, DWORD c)
+SetRegistryColour(int i, int c)
 {
   CheckIndex(szProfileColour, i);
   SetToRegistry(szProfileColour[i], c);
 }
 
 void
-SetRegistryBrush(int i, DWORD c)
+SetRegistryBrush(int i, int c)
 {
   CheckIndex(szProfileBrush, i);
   SetToRegistry(szProfileBrush[i], c);
