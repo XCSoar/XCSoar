@@ -355,7 +355,7 @@ public:
 void
 StoreType(int Index, int the_type)
 {
-  SetToRegistry(szProfileDisplayType[Index],(DWORD)the_type);
+  SetToRegistry(szProfileDisplayType[Index], (DWORD)the_type);
 }
 
 void
@@ -376,11 +376,13 @@ SetRegistryStringIfAbsent(const TCHAR* name, const TCHAR* value)
 //
 bool
 GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
-{  // returns 0 on SUCCESS, else the non-zero error code
+{
+// returns 0 on SUCCESS, else the non-zero error code
 #ifdef WIN32
-  HKEY    hKey;
-  DWORD    dwSize, dwType;
-  long    hRes;
+
+  HKEY hKey;
+  DWORD dwSize, dwType;
+  long hRes;
   DWORD defaultVal;
 
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, KEY_ALL_ACCESS, &hKey);
@@ -389,19 +391,22 @@ GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
 
   defaultVal = pPos;
   dwSize = sizeof(DWORD);
-  hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)&pPos, &dwSize);
-  if (hRes != ERROR_SUCCESS) {
+  hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE) & pPos, &dwSize);
+  if (hRes != ERROR_SUCCESS)
     pPos = defaultVal;
-  }
+
   RegCloseKey(hKey);
   return hRes;
+
 #else /* !WIN32 */
+
   int value;
   if (!GConf().get(szRegValue, value))
     return false;
 
   pPos = (DWORD)value;
   return true;
+
 #endif /* !WIN32 */
 }
 
@@ -464,34 +469,37 @@ HRESULT
 SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 {
 #ifdef WIN32
-  HKEY    hKey;
-  DWORD    Disp;
+
+  HKEY hKey;
+  DWORD Disp;
   HRESULT hRes;
 
   hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
-  if (hRes != ERROR_SUCCESS) {
+  if (hRes != ERROR_SUCCESS)
     return FALSE;
-  }
 
-  hRes = RegSetValueEx(hKey, szRegValue,0,REG_DWORD, (LPBYTE)&Pos, sizeof(DWORD));
+  hRes = RegSetValueEx(hKey, szRegValue, 0, REG_DWORD, (LPBYTE)&Pos,
+                       sizeof(DWORD));
   RegCloseKey(hKey);
 
   return hRes;
-#else /* !WIN32 */
-  GConf().set(szRegValue, (int)Pos);
 
+#else /* !WIN32 */
+
+  GConf().set(szRegValue, (int)Pos);
   return 0;
+
 #endif /* !WIN32 */
 }
 
-// Set bool value to registry as 1 or 0 - JG
+// Set bool value to registry as 1 or 0
 HRESULT
 SetToRegistry(const TCHAR *szRegValue, bool bVal)
 {
   return SetToRegistry(szRegValue, bVal ? DWORD(1) : DWORD(0));
 }
 
-// Set int value to registry - JG
+// Set int value to registry
 HRESULT
 SetToRegistry(const TCHAR *szRegValue, int nVal)
 {
@@ -516,16 +524,18 @@ bool
 GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
 #ifdef WIN32
-  HKEY    hKey;
-  DWORD   dwType = REG_SZ;
-  long    hRes;
+
+  HKEY hKey;
+  DWORD dwType = REG_SZ;
+  long hRes;
   unsigned int i;
-  for (i=0; i<dwSize; i++) {
-    pPos[i]=0;
+  for (i = 0; i < dwSize; i++) {
+    pPos[i] = 0;
   }
 
   pPos[0]= '\0';
-  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, KEY_READ /*KEY_ALL_ACCESS*/, &hKey);
+  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0,
+                      KEY_READ, &hKey);
   if (hRes != ERROR_SUCCESS)
     return false;
 
@@ -535,6 +545,7 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 
   RegCloseKey(hKey);
   return hRes == ERROR_SUCCESS;
+
 #else /* !WIN32 */
   return GConf().get(szRegValue, pPos, dwSize);
 #endif /* !WIN32 */
@@ -549,18 +560,22 @@ bool
 SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
 #ifdef WIN32
+
   HKEY    hKey;
   DWORD    Disp;
   HRESULT hRes;
 
-  hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
+  hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, NULL, 0,
+                        KEY_ALL_ACCESS, NULL, &hKey, &Disp);
   if (hRes != ERROR_SUCCESS)
     return false;
 
-  hRes = RegSetValueEx(hKey, szRegValue,0,REG_SZ, (LPBYTE)Pos, (_tcslen(Pos)+1)*sizeof(TCHAR));
+  hRes = RegSetValueEx(hKey, szRegValue, 0, REG_SZ, (LPBYTE)Pos,
+                       (_tcslen(Pos) + 1) * sizeof(TCHAR));
   RegCloseKey(hKey);
 
   return hRes == ERROR_SUCCESS;
+
 #else /* !WIN32 */
   return GConf().set(szRegValue, Pos);
 #endif /* !WIN32 */
@@ -572,7 +587,6 @@ void
 SetRegistryColour(int i, DWORD c)
 {
   CheckIndex(szProfileColour, i);
-
   SetToRegistry(szProfileColour[i], c);
 }
 
@@ -580,7 +594,6 @@ void
 SetRegistryBrush(int i, DWORD c)
 {
   CheckIndex(szProfileBrush, i);
-
   SetToRegistry(szProfileBrush[i], c);
 }
 
@@ -850,14 +863,14 @@ SaveRegistryToFile(const TCHAR *szFile)
 
   FILE *fp = NULL;
   if (!string_is_empty(szFile))
-    fp = _tfopen(szFile, TEXT("wb"));  //20060515:sgi add b
+    fp = _tfopen(szFile, TEXT("wb"));
   if(fp == NULL) {
     // error
     ::RegCloseKey(hkFrom);
     return;
   }
 
-  for (int i = 0;;i++) {
+  for (int i = 0;; i++) {
     DWORD nType;
     DWORD nValueSize = nMaxValueValueSize;
     DWORD nNameSize = nMaxKeyNameSize;
@@ -884,16 +897,15 @@ SaveRegistryToFile(const TCHAR *szFile)
     // null terminate, just in case
     lpstrName[nNameSize] = _T('\0');
 
-    if (_tcslen(lpstrName)>1) {
-
+    if (_tcslen(lpstrName) > 1) {
       // type 1 text
       // type 4 integer (valuesize 4)
 
-      if (nType==4) { // data
+      if (nType == 4) { // data
 #ifdef __GNUC__
         fprintf(fp, "%S=%d\r\n", lpstrName, uValue.dValue);
 #else
-        wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+        wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
         fprintf(fp, "%s=%d\r\n", sName, *((DWORD*)pValue));
 #endif
       } else if (nType == 1) {
@@ -909,13 +921,13 @@ SaveRegistryToFile(const TCHAR *szFile)
             fprintf(fp, "%S=\"\"\r\n", lpstrName);
 #else
           if (!string_is_empty((const TCHAR*)pValue)) {
-            pValue[nValueSize]= 0; // null terminate, just in case
-            pValue[nValueSize+1]= 0; // null terminate, just in case
-            wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-            wcstombs(sValue,(TCHAR*)pValue,nMaxKeyNameSize+1);
+            pValue[nValueSize] = 0; // null terminate, just in case
+            pValue[nValueSize + 1] = 0; // null terminate, just in case
+            wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
+            wcstombs(sValue, (TCHAR*)pValue, nMaxKeyNameSize + 1);
             fprintf(fp, "%s=\"%s\"\r\n", sName, sValue);
           } else {
-            wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
+            wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
             fprintf(fp, "%s=\"\"\r\n", sName);
           }
 #endif
