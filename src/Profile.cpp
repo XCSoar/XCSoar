@@ -674,8 +674,8 @@ Profile::GetRegistryAirspaceMode(int i)
 void
 Profile::SaveSoundSettings()
 {
-  SetToRegistry(szProfileSoundVolume, (DWORD)SettingsComputer().SoundVolume);
-  SetToRegistry(szProfileSoundDeadband, (DWORD)SettingsComputer().SoundDeadband);
+  SetToRegistry(szProfileSoundVolume, SettingsComputer().SoundVolume);
+  SetToRegistry(szProfileSoundDeadband, SettingsComputer().SoundDeadband);
   SetToRegistry(szProfileSoundAudioVario, SettingsComputer().EnableSoundVario);
   SetToRegistry(szProfileSoundTask, SettingsComputer().EnableSoundTask);
   SetToRegistry(szProfileSoundModes, SettingsComputer().EnableSoundModes);
@@ -684,7 +684,7 @@ Profile::SaveSoundSettings()
 void
 Profile::SaveWindToRegistry()
 {
-  DWORD Temp;
+  int Temp;
   Temp = iround(Basic().wind.norm);
   SetToRegistry(szProfileWindSpeed, Temp);
   Temp = iround(Basic().wind.bearing);
