@@ -117,11 +117,11 @@ CheckInfoTypes()
 void
 Profile::ReadRegistrySettings()
 {
-  DWORD Speed = 0;
-  DWORD Distance = 0;
-  DWORD TaskSpeed = 0;
-  DWORD Lift = 0;
-  DWORD Altitude = 0;
+  unsigned Speed = 0;
+  unsigned Distance = 0;
+  unsigned TaskSpeed = 0;
+  unsigned Lift = 0;
+  unsigned Altitude = 0;
   DWORD Temp = 0;
   int i;
 
@@ -182,7 +182,7 @@ Profile::ReadRegistrySettings()
   GetFromRegistryD(szProfileLatLonUnits, Temp);
   Units::SetCoordinateFormat((CoordinateFormats_t)Temp);
 
-  GetFromRegistryD(szProfileSpeedUnitsValue, Speed);
+  GetFromRegistry(szProfileSpeedUnitsValue, Speed);
   switch (Speed) {
   case 0:
     Units::SetUserSpeedUnit(unStatuteMilesPerHour);
@@ -199,7 +199,7 @@ Profile::ReadRegistrySettings()
     break;
   }
 
-  GetFromRegistryD(szProfileTaskSpeedUnitsValue, TaskSpeed);
+  GetFromRegistry(szProfileTaskSpeedUnitsValue, TaskSpeed);
   switch (TaskSpeed) {
   case 0:
     Units::SetUserTaskSpeedUnit(unStatuteMilesPerHour);
@@ -213,7 +213,7 @@ Profile::ReadRegistrySettings()
     break;
   }
 
-  GetFromRegistryD(szProfileDistanceUnitsValue,Distance);
+  GetFromRegistry(szProfileDistanceUnitsValue,Distance);
   switch (Distance) {
   case 0:
     Units::SetUserDistanceUnit(unStatuteMiles);
@@ -227,7 +227,7 @@ Profile::ReadRegistrySettings()
     break;
   }
 
-  GetFromRegistryD(szProfileAltitudeUnitsValue, Altitude);
+  GetFromRegistry(szProfileAltitudeUnitsValue, Altitude);
   switch (Altitude) {
   case 0:
     Units::SetUserAltitudeUnit(unFeet);
@@ -238,7 +238,7 @@ Profile::ReadRegistrySettings()
     break;
   }
 
-  GetFromRegistryD(szProfileLiftUnitsValue, Lift);
+  GetFromRegistry(szProfileLiftUnitsValue, Lift);
   switch (Lift) {
   case 0:
     Units::SetUserVerticalSpeedUnit(unKnots);
