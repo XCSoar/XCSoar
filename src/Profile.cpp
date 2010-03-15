@@ -756,3 +756,33 @@ Profile::SetFiles(const TCHAR* override)
   if (!string_is_empty(override))
     _tcsncpy(startProfileFile, override, MAX_PATH - 1);
 }
+
+bool
+Profile::Get(const TCHAR *szRegValue, int &pPos)
+{
+  return GetFromRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, short &pPos)
+{
+  return GetFromRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, bool &pPos)
+{
+  return GetFromRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, unsigned &pPos)
+{
+  return GetFromRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, double &pPos)
+{
+  return GetFromRegistry(szRegValue, pPos);
+}

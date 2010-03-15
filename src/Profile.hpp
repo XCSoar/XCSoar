@@ -80,6 +80,12 @@ public:
    */
   static void SetFiles(const TCHAR* override);
 
+  static bool Get(const TCHAR *szRegValue, int &pPos);
+  static bool Get(const TCHAR *szRegValue, short &pPos);
+  static bool Get(const TCHAR *szRegValue, bool &pPos);
+  static bool Get(const TCHAR *szRegValue, unsigned &pPos);
+  static bool Get(const TCHAR *szRegValue, double &pPos);
+
 private:
   /**
    * Reads the airspace mode setting from the registry
