@@ -51,8 +51,6 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Units.hpp"
 
-#define CheckIndex(x, i) do {} while (false)
-
 extern int WaypointsOutOfRange;
 
 static void
@@ -661,9 +659,6 @@ Profile::Use()
 void
 Profile::SetRegistryAirspaceMode(int i)
 {
-  CheckIndex(SetSettingsComputer().iAirspaceMode, i);
-  CheckIndex(szProfileAirspaceMode, i);
-
   DWORD val = SettingsComputer().iAirspaceMode[i];
   SetToRegistry(szProfileAirspaceMode[i], val);
 }
@@ -672,7 +667,6 @@ int
 Profile::GetRegistryAirspaceMode(int i)
 {
   int Temp = 3; // display + warnings
-  CheckIndex(szProfileAirspaceMode, i);
   Profile::Get(szProfileAirspaceMode[i], Temp);
   return Temp;
 }
