@@ -659,7 +659,7 @@ Profile::Use()
 void
 Profile::SetRegistryAirspaceMode(int i)
 {
-  DWORD val = SettingsComputer().iAirspaceMode[i];
+  int val = SettingsComputer().iAirspaceMode[i];
   SetToRegistry(szProfileAirspaceMode[i], val);
 }
 
