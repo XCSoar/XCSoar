@@ -122,7 +122,7 @@ Profile::ReadRegistrySettings()
   unsigned TaskSpeed = 0;
   unsigned Lift = 0;
   unsigned Altitude = 0;
-  DWORD Temp = 0;
+  unsigned Temp = 0;
   int i;
 
   LogStartUp(TEXT("Read registry settings"));
@@ -179,7 +179,7 @@ Profile::ReadRegistrySettings()
 #endif
 
   Temp = 0;
-  GetFromRegistryD(szProfileLatLonUnits, Temp);
+  GetFromRegistry(szProfileLatLonUnits, Temp);
   Units::SetCoordinateFormat((CoordinateFormats_t)Temp);
 
   GetFromRegistry(szProfileSpeedUnitsValue, Speed);
@@ -251,7 +251,7 @@ Profile::ReadRegistrySettings()
 
   for (i = 0; i < MAXINFOWINDOWS; i++) {
     Temp = InfoBoxManager::getTypeAll(i);
-    GetFromRegistryD(szProfileDisplayType[i], Temp);
+    GetFromRegistry(szProfileDisplayType[i], Temp);
     InfoBoxManager::setTypeAll(i, Temp);
   }
 
@@ -259,7 +259,7 @@ Profile::ReadRegistrySettings()
   CheckInfoTypes();
 
   Temp = SetSettingsMap().DisplayOrientation;
-  GetFromRegistryD(szProfileDisplayUpValue, Temp);
+  GetFromRegistry(szProfileDisplayUpValue, Temp);
   switch (Temp) {
   case TRACKUP:
     SetSettingsMap().DisplayOrientation = TRACKUP;
@@ -279,7 +279,7 @@ Profile::ReadRegistrySettings()
   }
 
   Temp = SetSettingsMap().DisplayTextType;
-  GetFromRegistryD(szProfileDisplayText, Temp);
+  GetFromRegistry(szProfileDisplayText, Temp);
   switch (Temp) {
   case 0:
     SetSettingsMap().DisplayTextType = DISPLAYNAME;
@@ -302,7 +302,7 @@ Profile::ReadRegistrySettings()
   }
 
   Temp = SetSettingsComputer().AltitudeMode;
-  GetFromRegistryD(szProfileAltMode, Temp);
+  GetFromRegistry(szProfileAltMode, Temp);
   SetSettingsComputer().AltitudeMode = (AirspaceDisplayMode_t)Temp;
 
   GetFromRegistry(szProfileClipAlt,
@@ -368,7 +368,7 @@ Profile::ReadRegistrySettings()
       SetSettingsComputer().HomeWaypoint);
 
   Temp = SettingsComputer().Alternate1;
-  if (GetFromRegistryD(szProfileAlternate1, Temp) == ERROR_SUCCESS) {
+  if (GetFromRegistry(szProfileAlternate1, Temp) == ERROR_SUCCESS) {
     // TODO: for portrait no need to force alternate calculations here.
     // Infobox will trigger them on if visible..
     SetSettingsComputer().Alternate1 = Temp;
@@ -379,7 +379,7 @@ Profile::ReadRegistrySettings()
   }
 
   Temp = SettingsComputer().Alternate2;
-  if (GetFromRegistryD(szProfileAlternate2, Temp) == ERROR_SUCCESS) {
+  if (GetFromRegistry(szProfileAlternate2, Temp) == ERROR_SUCCESS) {
     SetSettingsComputer().Alternate2 = Temp;
     SetSettingsComputer().EnableAlternate2 = true;
   } else {
@@ -437,11 +437,11 @@ Profile::ReadRegistrySettings()
 #else
   Temp = 0;
 #endif
-  GetFromRegistryD(szProfileVirtualKeys,Temp);
+  GetFromRegistry(szProfileVirtualKeys,Temp);
   VirtualKeys = Temp;
 
   Temp = (AverEffTime_t)ae2minutes;
-  GetFromRegistryD(szProfileAverEffTime,Temp);
+  GetFromRegistry(szProfileAverEffTime,Temp);
   SetSettingsComputer().AverEffTime = Temp;
 
 #if defined(GNAV) || defined(PCGNAV)
@@ -449,7 +449,7 @@ Profile::ReadRegistrySettings()
 #else
   Temp = 250;
 #endif
-  GetFromRegistryD(szProfileDebounceTimeout, Temp);
+  GetFromRegistry(szProfileDebounceTimeout, Temp);
   debounceTimeout = Temp;
 
   /* JMW broken
@@ -467,11 +467,11 @@ Profile::ReadRegistrySettings()
 
   //Temp = Appearance.IndFinalGlide;
   Temp = (IndFinalGlide_t)fgFinalGlideDefault;
-  GetFromRegistryD(szProfileAppIndFinalGlide, Temp);
+  GetFromRegistry(szProfileAppIndFinalGlide, Temp);
   Appearance.IndFinalGlide = (IndFinalGlide_t)Temp;
 
   Temp = Appearance.IndLandable;
-  GetFromRegistryD(szProfileAppIndLandable, Temp);
+  GetFromRegistry(szProfileAppIndLandable, Temp);
   Appearance.IndLandable = (IndLandable_t)Temp;
 
   GetFromRegistry(szProfileAppInverseInfoBox,
@@ -490,11 +490,11 @@ Profile::ReadRegistrySettings()
 		  Appearance.GaugeVarioGross);
 
   Temp = Appearance.CompassAppearance;
-  GetFromRegistryD(szProfileAppCompassAppearance, Temp);
+  GetFromRegistry(szProfileAppCompassAppearance, Temp);
   Appearance.CompassAppearance = (CompassAppearance_t)Temp;
 
   Temp = (InfoBoxBorderAppearance_t)apIbBox;
-  GetFromRegistryD(szProfileAppInfoBoxBorder, Temp);
+  GetFromRegistry(szProfileAppInfoBoxBorder, Temp);
   Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
 
   // VENTA2-ADDON Geometry change and PNA custom font settings
@@ -503,7 +503,7 @@ Profile::ReadRegistrySettings()
   // know the screen geometry, in the registry!
 #if defined(PNA) || defined(FIVV)
   Temp = Appearance.InfoBoxGeom;
-  GetFromRegistryD(szProfileAppInfoBoxGeom, Temp);
+  GetFromRegistry(szProfileAppInfoBoxGeom, Temp);
   Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)Temp;
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
@@ -528,20 +528,20 @@ Profile::ReadRegistrySettings()
 
   // VENTA-ADDON Model change
   Temp = Appearance.InfoBoxModel;
-  GetFromRegistryD(szProfileAppInfoBoxModel, Temp);
+  GetFromRegistry(szProfileAppInfoBoxModel, Temp);
   Appearance.InfoBoxModel = (InfoBoxModelAppearance_t)Temp;
 #endif
 
   Temp = Appearance.StateMessageAlign;
-  GetFromRegistryD(szProfileAppStatusMessageAlignment, Temp);
+  GetFromRegistry(szProfileAppStatusMessageAlignment, Temp);
   Appearance.StateMessageAlign = (StateMessageAlign_t)Temp;
 
   Temp = Appearance.TextInputStyle;
-  GetFromRegistryD(szProfileAppTextInputStyle, Temp);
+  GetFromRegistry(szProfileAppTextInputStyle, Temp);
   Appearance.TextInputStyle = (TextInputStyle_t)Temp;
 
   Temp = g_eDialogStyle;
-  GetFromRegistryD(szProfileAppDialogStyle, Temp);
+  GetFromRegistry(szProfileAppDialogStyle, Temp);
   g_eDialogStyle = (DialogStyle_t)Temp;
 
   GetFromRegistry(szProfileAppDefaultMapWidth,
@@ -641,17 +641,17 @@ Profile::ReadRegistrySettings()
 		  SetSettingsComputer().safety_mc_use_current);
 
   Temp = iround(SettingsComputer().safety_mc * 10);
-  GetFromRegistryD(szProfileSafetyMacCready, Temp);
+  GetFromRegistry(szProfileSafetyMacCready, Temp);
   SetSettingsComputer().safety_mc = Temp / 10.0;
 
   GetFromRegistry(szProfileUserLevel, UserLevel);
 
   Temp = iround(SettingsComputer().risk_gamma * 10);
-  GetFromRegistryD(szProfileRiskGamma, Temp);
+  GetFromRegistry(szProfileRiskGamma, Temp);
   SetSettingsComputer().risk_gamma = Temp / 10.0;
 
   Temp = (CompassAppearance_t)apCompassAltA;
-  GetFromRegistryD(szProfileWindArrowStyle, Temp);
+  GetFromRegistry(szProfileWindArrowStyle, Temp);
   SetSettingsMap().WindArrowStyle = Temp;
 
   GetFromRegistry(szProfileDisableAutoLogger,
