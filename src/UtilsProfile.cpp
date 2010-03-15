@@ -112,7 +112,7 @@ ReadProfile(const TCHAR *szFile)
   PolarFileChanged = true;
 
   // assuming all is ok, we can...
-  Profile::ReadRegistrySettings();
+  Profile::Use();
 }
 
 int

@@ -115,7 +115,7 @@ CheckInfoTypes()
 }
 
 void
-Profile::ReadRegistrySettings()
+Profile::Use()
 {
   unsigned Speed = 0;
   unsigned Distance = 0;

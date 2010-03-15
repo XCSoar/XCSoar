@@ -198,12 +198,12 @@ XCSoarInterface::PreloadInitialisation(bool ask)
 
   if (ask) {
     Profile::Load();
-    Profile::ReadRegistrySettings();
+    Profile::Use();
   } else {
     dlgStartupShowModal();
 
     Profile::Load();
-    Profile::ReadRegistrySettings();
+    Profile::Use();
 
     CreateProgressDialog(gettext(TEXT("Initialising")));
   }

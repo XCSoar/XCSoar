@@ -48,7 +48,7 @@ public:
    * Reads the profile settings from the registry and adjusts the
    * application settings
    */
-  static void ReadRegistrySettings(void);
+  static void Use(void);
   /**
    * Loads the profile files into the registry
    */
