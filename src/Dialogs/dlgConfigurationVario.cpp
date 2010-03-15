@@ -81,7 +81,7 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
   TCHAR fullname[100];
   TCHAR propname[100];
   TCHAR requesttext[100];
-  DWORD updated=0;
+  unsigned updated=0;
   unsigned newval=0;
   unsigned lvalue=0;
 
@@ -145,7 +145,7 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
     }
   }
 
-  if (GetFromRegistryD(updatename, updated)==ERROR_SUCCESS) {
+  if (GetFromRegistry(updatename, updated)==ERROR_SUCCESS) {
 
     if (updated==1) {
       // value is updated externally, so set the property and can proceed
