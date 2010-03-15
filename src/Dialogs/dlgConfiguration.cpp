@@ -1128,11 +1128,11 @@ static TCHAR szMapFile[MAX_PATH];
 static DeviceConfig device_config[NUMDEV];
 static  int dwDeviceIndex1=0;
 static  int dwDeviceIndex2=0;
-static  DWORD Speed = 1; // default is knots
-static  DWORD TaskSpeed = 2; // default is kph
-static  DWORD Distance = 2; // default is km
-static  DWORD Lift = 0;
-static  DWORD Altitude = 0; //default ft
+static int Speed = 1; // default is knots
+static int TaskSpeed = 2; // default is kph
+static int Distance = 2; // default is km
+static int Lift = 0;
+static int Altitude = 0; //default ft
 static  TCHAR temptext[MAX_PATH];
 
 static void
@@ -1475,7 +1475,7 @@ static void setVariables(void) {
   LoadFormProperty(*wf, _T("prpHandicap"),
                    XCSoarInterface::SettingsComputer().olc_handicap);
 
-  if(GetFromRegistryD(szProfileSpeedUnitsValue,Speed)!=ERROR_SUCCESS) {
+  if(GetFromRegistry(szProfileSpeedUnitsValue,Speed)!=ERROR_SUCCESS) {
     SetToRegistry(szProfileSpeedUnitsValue, Speed);
     changed = true;
   }
@@ -1502,7 +1502,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistryD(szProfileTaskSpeedUnitsValue,TaskSpeed)!=ERROR_SUCCESS) {
+  if(GetFromRegistry(szProfileTaskSpeedUnitsValue,TaskSpeed)!=ERROR_SUCCESS) {
     SetToRegistry(szProfileTaskSpeedUnitsValue, TaskSpeed);
     changed = true;
   }
@@ -1517,7 +1517,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistryD(szProfileDistanceUnitsValue,Distance)!=ERROR_SUCCESS) {
+  if(GetFromRegistry(szProfileDistanceUnitsValue,Distance)!=ERROR_SUCCESS) {
     SetToRegistry(szProfileDistanceUnitsValue, Distance);
     changed = true;
   }
@@ -1532,7 +1532,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistryD(szProfileAltitudeUnitsValue,Altitude)!=ERROR_SUCCESS) {
+  if(GetFromRegistry(szProfileAltitudeUnitsValue,Altitude)!=ERROR_SUCCESS) {
     SetToRegistry(szProfileAltitudeUnitsValue, Altitude);
     changed = true;
   }
@@ -1546,7 +1546,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(GetFromRegistryD(szProfileLiftUnitsValue,Lift)!=ERROR_SUCCESS) {
+  if(GetFromRegistry(szProfileLiftUnitsValue,Lift)!=ERROR_SUCCESS) {
     SetToRegistry(szProfileLiftUnitsValue, Lift);
     changed = true;
   }
