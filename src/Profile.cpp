@@ -671,9 +671,9 @@ Profile::SetRegistryAirspaceMode(int i)
 int
 Profile::GetRegistryAirspaceMode(int i)
 {
-  DWORD Temp = 3; // display + warnings
+  int Temp = 3; // display + warnings
   CheckIndex(szProfileAirspaceMode, i);
-  GetFromRegistryD(szProfileAirspaceMode[i], Temp);
+  GetFromRegistry(szProfileAirspaceMode[i], Temp);
   return Temp;
 }
 
