@@ -626,16 +626,16 @@ void
 ReadDeviceConfig(unsigned n, DeviceConfig &config)
 {
   TCHAR buffer[64];
-  DWORD Temp=0;
+  unsigned Temp = 0;
 
   config.port_type = ReadPortType(n);
 
   MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
-  if (GetFromRegistryD(buffer, Temp) == ERROR_SUCCESS)
+  if (GetFromRegistry(buffer, Temp) == ERROR_SUCCESS)
     config.port_index = Temp;
 
   MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
-  if (GetFromRegistryD(buffer, Temp) == ERROR_SUCCESS)
+  if (GetFromRegistry(buffer, Temp) == ERROR_SUCCESS)
     config.speed_index = Temp;
 
   config.driver_name[0] = '\0';
