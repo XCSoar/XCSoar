@@ -780,3 +780,33 @@ Profile::Get(const TCHAR *szRegValue, double &pPos)
 {
   return GetFromRegistry(szRegValue, pPos);
 }
+
+bool
+Profile::Set(const TCHAR *szRegValue, int pPos)
+{
+  return SetToRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, short pPos)
+{
+  return SetToRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, bool pPos)
+{
+  return SetToRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, unsigned pPos)
+{
+  return SetToRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, double pPos)
+{
+  return SetToRegistry(szRegValue, (DWORD)pPos);
+}
