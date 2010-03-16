@@ -41,6 +41,7 @@ Copyright_License {
 #include "Profile.hpp"
 #include "Protection.hpp"
 #include "Asset.hpp"
+#include "Engine/Math/fixed.hpp"
 
 #include <assert.h>
 
