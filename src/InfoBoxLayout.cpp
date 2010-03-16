@@ -199,10 +199,10 @@ InfoBoxLayout::GetInfoBoxPosition(unsigned i, RECT rc, int *x, int *y,
     *sizex = ControlWidth;
     *sizey = ControlHeight;
 
-    SetToRegistry(reggeompx, *x);
-    SetToRegistry(reggeompy, *y);
-    SetToRegistry(reggeomsx, (int &)*sizex);
-    SetToRegistry(reggeomsy, (int &)*sizey);
+    Profile::Set(reggeompx, *x);
+    Profile::Set(reggeompy, *y);
+    Profile::Set(reggeomsx, (int &)*sizex);
+    Profile::Set(reggeomsy, (int &)*sizey);
   }
 }
 
@@ -256,7 +256,7 @@ InfoBoxLayout::ScreenGeometry(RECT rc)
     }
   }
 
-  SetToRegistry(szProfileInfoBoxGeometry, (int &)InfoBoxGeometry);
+  Profile::Set(szProfileInfoBoxGeometry, (int &)InfoBoxGeometry);
 
   // JMW testing
   if (InfoBoxGeometry == 6)

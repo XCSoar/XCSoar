@@ -132,10 +132,10 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
   //
   // VENTA3> this is probably useless, since HomeWayPoint &c were currently
   //         just loaded from registry.
-  SetToRegistry(szProfileHomeWaypoint,settings.HomeWaypoint);
-  SetToRegistry(szProfileAlternate1,settings.Alternate1);
-  SetToRegistry(szProfileAlternate2,settings.Alternate2);
-  SetToRegistry(szProfileTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
+  Profile::Set(szProfileHomeWaypoint,settings.HomeWaypoint);
+  Profile::Set(szProfileAlternate1,settings.Alternate1);
+  Profile::Set(szProfileAlternate2,settings.Alternate2);
+  Profile::Set(szProfileTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
 }
 
 

@@ -300,7 +300,7 @@ static void OnUserLevel(DataField *Sender, DataField::DataAccessKind_t Mode){
           (int)XCSoarInterface::UserLevel) {
         XCSoarInterface::UserLevel = wp->GetDataField()->GetAsInteger();
         changed = true;
-        SetToRegistry(szProfileUserLevel,(int)XCSoarInterface::UserLevel);
+        Profile::Set(szProfileUserLevel,(int)XCSoarInterface::UserLevel);
         wf->FilterAdvanced(XCSoarInterface::UserLevel>0);
       }
     }
@@ -1476,7 +1476,7 @@ static void setVariables(void) {
                    XCSoarInterface::SettingsComputer().olc_handicap);
 
   if(Profile::Get(szProfileSpeedUnitsValue,Speed)!=ERROR_SUCCESS) {
-    SetToRegistry(szProfileSpeedUnitsValue, Speed);
+    Profile::Set(szProfileSpeedUnitsValue, Speed);
     changed = true;
   }
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsSpeed"));
@@ -1503,7 +1503,7 @@ static void setVariables(void) {
   }
 
   if(Profile::Get(szProfileTaskSpeedUnitsValue,TaskSpeed)!=ERROR_SUCCESS) {
-    SetToRegistry(szProfileTaskSpeedUnitsValue, TaskSpeed);
+    Profile::Set(szProfileTaskSpeedUnitsValue, TaskSpeed);
     changed = true;
   }
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsTaskSpeed"));
@@ -1518,7 +1518,7 @@ static void setVariables(void) {
   }
 
   if(Profile::Get(szProfileDistanceUnitsValue,Distance)!=ERROR_SUCCESS) {
-    SetToRegistry(szProfileDistanceUnitsValue, Distance);
+    Profile::Set(szProfileDistanceUnitsValue, Distance);
     changed = true;
   }
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsDistance"));
@@ -1533,7 +1533,7 @@ static void setVariables(void) {
   }
 
   if(Profile::Get(szProfileAltitudeUnitsValue,Altitude)!=ERROR_SUCCESS) {
-    SetToRegistry(szProfileAltitudeUnitsValue, Altitude);
+    Profile::Set(szProfileAltitudeUnitsValue, Altitude);
     changed = true;
   }
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsAltitude"));
@@ -1547,7 +1547,7 @@ static void setVariables(void) {
   }
 
   if(Profile::Get(szProfileLiftUnitsValue,Lift)!=ERROR_SUCCESS) {
-    SetToRegistry(szProfileLiftUnitsValue, Lift);
+    Profile::Set(szProfileLiftUnitsValue, Lift);
     changed = true;
   }
   wp = (WndProperty*)wf->FindByName(_T("prpUnitsLift"));
@@ -2369,7 +2369,7 @@ void dlgConfigurationShowModal(void){
         != wp->GetDataField()->GetAsBoolean()) {
       XCSoarInterface::SetSettingsComputer().DisableAutoLogger =
         !(wp->GetDataField()->GetAsBoolean());
-      SetToRegistry(szProfileDisableAutoLogger,
+      Profile::Set(szProfileDisableAutoLogger,
                     XCSoarInterface::SetSettingsComputer().DisableAutoLogger);
       changed = true;
     }
@@ -2382,7 +2382,7 @@ void dlgConfigurationShowModal(void){
     double val = Units::ToSysVSpeed(wp->GetDataField()->GetAsFloat());
     if (XCSoarInterface::SettingsComputer().safety_mc != val) {
       XCSoarInterface::SetSettingsComputer().safety_mc = val;
-      SetToRegistry(szProfileSafetyMacCready,
+      Profile::Set(szProfileSafetyMacCready,
                     iround(XCSoarInterface::SettingsComputer().safety_mc*10));
       changed = true;
     }
@@ -2393,7 +2393,7 @@ void dlgConfigurationShowModal(void){
     val = wp->GetDataField()->GetAsFloat();
     if (XCSoarInterface::SettingsComputer().risk_gamma != val) {
       XCSoarInterface::SetSettingsComputer().risk_gamma = val;
-      SetToRegistry(szProfileRiskGamma,
+      Profile::Set(szProfileRiskGamma,
                     iround(XCSoarInterface::SettingsComputer().risk_gamma*10));
       changed = true;
     }
@@ -2421,7 +2421,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (XCSoarInterface::SettingsComputer().POLARID != (unsigned)wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::SetSettingsComputer().POLARID = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfilePolarID, (int &)XCSoarInterface::SettingsComputer().POLARID);
+      Profile::Set(szProfilePolarID, (int &)XCSoarInterface::SettingsComputer().POLARID);
       PolarFileChanged = true;
       changed = true;
     }
@@ -2452,7 +2452,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)XCSoarInterface::debounceTimeout != wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::debounceTimeout = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileDebounceTimeout, (int)XCSoarInterface::debounceTimeout);
+      Profile::Set(szProfileDebounceTimeout, (int)XCSoarInterface::debounceTimeout);
       changed = true;
     }
   }
@@ -2476,7 +2476,7 @@ void dlgConfigurationShowModal(void){
       // have to do this because registry variables can't be negative!
       int lival = XCSoarInterface::SettingsComputer().UTCOffset;
       if (lival<0) { lival+= 24*3600; }
-      SetToRegistry(szProfileUTCOffset, lival);
+      Profile::Set(szProfileUTCOffset, lival);
       changed = true;
     }
   }
@@ -2486,7 +2486,7 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SetSettingsComputer().ClipAltitude != ival) {
       XCSoarInterface::SetSettingsComputer().ClipAltitude = ival;
-      SetToRegistry(szProfileClipAlt,XCSoarInterface::SetSettingsComputer().ClipAltitude);  // fixed 20060430/sgi was szProfileAltMode
+      Profile::Set(szProfileClipAlt,XCSoarInterface::SetSettingsComputer().ClipAltitude);  // fixed 20060430/sgi was szProfileAltMode
       changed = true;
     }
   }
@@ -2496,7 +2496,7 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SetSettingsComputer().AltWarningMargin != ival) {
       XCSoarInterface::SetSettingsComputer().AltWarningMargin = ival;
-      SetToRegistry(szProfileAltMargin,XCSoarInterface::SetSettingsComputer().AltWarningMargin);
+      Profile::Set(szProfileAltMargin,XCSoarInterface::SetSettingsComputer().AltWarningMargin);
       changed = true;
     }
   }
@@ -2533,7 +2533,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (XCSoarInterface::SettingsMap().DisplayOrientation != wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::SetSettingsMap().DisplayOrientation = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileDisplayUpValue,
+      Profile::Set(szProfileDisplayUpValue,
                     XCSoarInterface::SettingsMap().DisplayOrientation);
       changed = true;
     }
@@ -2543,7 +2543,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (XCSoarInterface::MenuTimeoutMax != wp->GetDataField()->GetAsInteger()*2) {
       XCSoarInterface::MenuTimeoutMax = wp->GetDataField()->GetAsInteger()*2;
-      SetToRegistry(szProfileMenuTimeout,XCSoarInterface::MenuTimeoutMax);
+      Profile::Set(szProfileMenuTimeout,XCSoarInterface::MenuTimeoutMax);
       changed = true;
     }
   }
@@ -2553,8 +2553,8 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if (XCSoarInterface::SettingsComputer().SafetyAltitudeArrival != ival) {
       XCSoarInterface::SetSettingsComputer().SafetyAltitudeArrival = ival;
-      SetToRegistry(szProfileSafetyAltitudeArrival,
-                    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeArrival);
+      Profile::Set(szProfileSafetyAltitudeArrival,
+                    XCSoarInterface::SettingsComputer().SafetyAltitudeArrival);
       changed = true;
     }
   }
@@ -2564,8 +2564,8 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if (XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff != ival) {
       XCSoarInterface::SetSettingsComputer().SafetyAltitudeBreakoff = ival;
-      SetToRegistry(szProfileSafetyAltitudeBreakOff,
-                    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff);
+      Profile::Set(szProfileSafetyAltitudeBreakOff,
+                    XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff);
       changed = true;
     }
   }
@@ -2575,8 +2575,8 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if (XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain != ival) {
       XCSoarInterface::SetSettingsComputer().SafetyAltitudeTerrain = ival;
-      SetToRegistry(szProfileSafetyAltitudeTerrain,
-                    (DWORD)XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain);
+      Profile::Set(szProfileSafetyAltitudeTerrain,
+                    XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain);
       changed = true;
     }
   }
@@ -2603,7 +2603,7 @@ void dlgConfigurationShowModal(void){
       WayPointFile::WaypointsOutOfRangeSetting =
         wp->GetDataField()->GetAsInteger();
 
-      SetToRegistry(szProfileWaypointsOutOfRange,
+      Profile::Set(szProfileWaypointsOutOfRange,
                     WayPointFile::WaypointsOutOfRangeSetting);
 
       WaypointFileChanged = true;
@@ -2627,7 +2627,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)Speed != wp->GetDataField()->GetAsInteger()) {
       Speed = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileSpeedUnitsValue, Speed);
+      Profile::Set(szProfileSpeedUnitsValue, Speed);
       changed = true;
 
       switch (Speed) {
@@ -2653,7 +2653,7 @@ void dlgConfigurationShowModal(void){
     if ((int)Units::GetCoordinateFormat() != wp->GetDataField()->GetAsInteger()) {
       Units::SetCoordinateFormat(
           (CoordinateFormats_t)wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szProfileLatLonUnits, Units::GetCoordinateFormat());
+      Profile::Set(szProfileLatLonUnits, Units::GetCoordinateFormat());
       changed = true;
     }
   }
@@ -2662,7 +2662,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)TaskSpeed != wp->GetDataField()->GetAsInteger()) {
       TaskSpeed = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileTaskSpeedUnitsValue, TaskSpeed);
+      Profile::Set(szProfileTaskSpeedUnitsValue, TaskSpeed);
       changed = true;
 
       switch (TaskSpeed) {
@@ -2684,7 +2684,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)Distance != wp->GetDataField()->GetAsInteger()) {
       Distance = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileDistanceUnitsValue, Distance);
+      Profile::Set(szProfileDistanceUnitsValue, Distance);
       changed = true;
 
       switch (Distance) {
@@ -2706,7 +2706,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)Lift != wp->GetDataField()->GetAsInteger()) {
       Lift = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileLiftUnitsValue, Lift);
+      Profile::Set(szProfileLiftUnitsValue, Lift);
       changed = true;
 
       switch (Lift) {
@@ -2725,7 +2725,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)Altitude != wp->GetDataField()->GetAsInteger()) {
       Altitude = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileAltitudeUnitsValue, Altitude);
+      Profile::Set(szProfileAltitudeUnitsValue, Altitude);
       changed = true;
 
       switch (Altitude) {
@@ -2745,7 +2745,7 @@ void dlgConfigurationShowModal(void){
     if (XCSoarInterface::SettingsComputer().fai_finish 
         != (wp->GetDataField()->GetAsInteger()>0)) {
       XCSoarInterface::SetSettingsComputer().fai_finish = (wp->GetDataField()->GetAsInteger()>0);
-      SetToRegistry(szProfileFAIFinishHeight, 
+      Profile::Set(szProfileFAIFinishHeight, 
                     XCSoarInterface::SettingsComputer().fai_finish);
       changed = true;
       taskchanged = true;
@@ -2929,7 +2929,8 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
     if (XCSoarInterface::SettingsComputer().SafetySpeed != ival) {
       XCSoarInterface::SetSettingsComputer().SafetySpeed = ival;
-      SetToRegistry(szProfileSafteySpeed,(DWORD)XCSoarInterface::SettingsComputer().SafetySpeed);
+      Profile::Set(szProfileSafteySpeed,
+                    XCSoarInterface::SettingsComputer().SafetySpeed);
       changed = true;
     }
   }
@@ -2938,7 +2939,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)settings_task.FinishType != wp->GetDataField()->GetAsInteger()) {
       settings_task.FinishType = (FinishSectorType_t)wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileFinishLine,settings_task.FinishType);
+      Profile::Set(szProfileFinishLine,settings_task.FinishType);
       changed = true;
       taskchanged = true;
     }
@@ -2949,7 +2950,7 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysDistance(wp->GetDataField()->GetAsFloat()));
     if ((int)settings_task.FinishRadius != ival) {
       settings_task.FinishRadius = ival;
-      SetToRegistry(szProfileFinishRadius,settings_task.FinishRadius);
+      Profile::Set(szProfileFinishRadius,settings_task.FinishRadius);
       changed = true;
       taskchanged = true;
     }
@@ -2959,7 +2960,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)settings_task.StartType != wp->GetDataField()->GetAsInteger()) {
       settings_task.StartType = (StartSectorType_t)wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileStartLine,settings_task.StartType);
+      Profile::Set(szProfileStartLine,settings_task.StartType);
       changed = true;
       taskchanged = true;
     }
@@ -2970,7 +2971,7 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysDistance(wp->GetDataField()->GetAsFloat()));
     if ((int)settings_task.StartRadius != ival) {
       settings_task.StartRadius = ival;
-      SetToRegistry(szProfileStartRadius,settings_task.StartRadius);
+      Profile::Set(szProfileStartRadius,settings_task.StartRadius);
       changed = true;
       taskchanged = true;
     }
@@ -2980,7 +2981,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)settings_task.SectorType != wp->GetDataField()->GetAsInteger()) {
       settings_task.SectorType = (ASTSectorType_t)wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileFAISector,settings_task.SectorType);
+      Profile::Set(szProfileFAISector,settings_task.SectorType);
       changed = true;
       taskchanged = true;
     }
@@ -2991,7 +2992,7 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysDistance(wp->GetDataField()->GetAsFloat()));
     if ((int)settings_task.SectorRadius != ival) {
       settings_task.SectorRadius = ival;
-      SetToRegistry(szProfileSectorRadius,settings_task.SectorRadius);
+      Profile::Set(szProfileSectorRadius,settings_task.SectorRadius);
       changed = true;
       taskchanged = true;
     }
@@ -3001,7 +3002,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (Appearance.IndFinalGlide != (IndFinalGlide_t)(wp->GetDataField()->GetAsInteger())) {
       Appearance.IndFinalGlide = (IndFinalGlide_t)(wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szProfileAppIndFinalGlide,(DWORD)(Appearance.IndFinalGlide));
+      Profile::Set(szProfileAppIndFinalGlide, Appearance.IndFinalGlide);
       changed = true;
     }
   }
@@ -3012,8 +3013,8 @@ void dlgConfigurationShowModal(void){
         (wp->GetDataField()->GetAsInteger())) {
       Appearance.CompassAppearance = (CompassAppearance_t)
         (wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szProfileAppCompassAppearance,
-                    (DWORD)(Appearance.CompassAppearance));
+      Profile::Set(szProfileAppCompassAppearance,
+                    Appearance.CompassAppearance);
       changed = true;
       requirerestart = true;
     }
@@ -3025,8 +3026,8 @@ void dlgConfigurationShowModal(void){
         (wp->GetDataField()->GetAsInteger())) {
       Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)
         (wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szProfileAppInfoBoxBorder,
-                    (DWORD)(Appearance.InfoBoxBorder));
+      Profile::Set(szProfileAppInfoBoxBorder,
+                    Appearance.InfoBoxBorder);
       changed = true;
       requirerestart = true;
     }
@@ -3038,8 +3039,8 @@ void dlgConfigurationShowModal(void){
         (wp->GetDataField()->GetAsInteger())) {
       XCSoarInterface::SetSettingsMap().ExtendedVisualGlide = (ExtendedVisualGlide_t)
         (wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szProfileExtendedVisualGlide,
-                    (DWORD)(XCSoarInterface::SettingsMap().ExtendedVisualGlide));
+      Profile::Set(szProfileExtendedVisualGlide,
+                    XCSoarInterface::SettingsMap().ExtendedVisualGlide);
       changed = true;
     }
   }
@@ -3049,8 +3050,8 @@ void dlgConfigurationShowModal(void){
         (wp->GetDataField()->GetAsInteger())) {
       CommonInterface::VirtualKeys = (VirtualKeys_t)
         (wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szProfileVirtualKeys,
-                    (DWORD)(CommonInterface::VirtualKeys));
+      Profile::Set(szProfileVirtualKeys,
+                    CommonInterface::VirtualKeys);
       changed = true;
     }
   }
@@ -3061,8 +3062,8 @@ void dlgConfigurationShowModal(void){
         (wp->GetDataField()->GetAsInteger())) {
       XCSoarInterface::SetSettingsComputer().AverEffTime =
         (wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szProfileAverEffTime,
-                    (DWORD)(XCSoarInterface::SettingsComputer().AverEffTime));
+      Profile::Set(szProfileAverEffTime,
+                    XCSoarInterface::SettingsComputer().AverEffTime);
       changed = true;
       requirerestart = true;
     }
@@ -3077,8 +3078,8 @@ void dlgConfigurationShowModal(void){
         (wp->GetDataField()->GetAsInteger())) {
       Appearance.InfoBoxGeom = (InfoBoxGeomAppearance_t)
         (wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szProfileAppInfoBoxGeom,
-                    (DWORD)(Appearance.InfoBoxGeom));
+      Profile::Set(szProfileAppInfoBoxGeom,
+                    Appearance.InfoBoxGeom);
       changed = true;
       requirerestart = true;
     }
@@ -3119,7 +3120,7 @@ void dlgConfigurationShowModal(void){
         break;
 
       }
-      SetToRegistry(szProfileAppInfoBoxModel,
+      Profile::Set(szProfileAppInfoBoxModel,
                     GlobalModelType);
       changed = true;
       requirerestart = true;
@@ -3134,7 +3135,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldBoolean * dfb = (DataFieldBoolean*) wp->GetDataField();
     if (dfb) {
-      SetToRegistry(szProfileUseCustomFonts, dfb->GetAsInteger());
+      Profile::Set(szProfileUseCustomFonts, dfb->GetAsInteger());
       UseCustomFonts = dfb->GetAsInteger(); // global var
     }
   }
@@ -3161,8 +3162,8 @@ void dlgConfigurationShowModal(void){
         (wp->GetDataField()->GetAsInteger())) {
       Appearance.StateMessageAlign = (StateMessageAlign_t)
         (wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szProfileAppStatusMessageAlignment,
-                    (DWORD)(Appearance.StateMessageAlign));
+      Profile::Set(szProfileAppStatusMessageAlignment,
+                    Appearance.StateMessageAlign);
       changed = true;
     }
   }
@@ -3173,7 +3174,7 @@ void dlgConfigurationShowModal(void){
       if (Appearance.TextInputStyle != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger()))
         {
           Appearance.TextInputStyle = (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
-          SetToRegistry(szProfileAppTextInputStyle, (DWORD)(Appearance.TextInputStyle));
+          Profile::Set(szProfileAppTextInputStyle, Appearance.TextInputStyle);
           changed = true;
         }
     }
@@ -3184,7 +3185,7 @@ void dlgConfigurationShowModal(void){
       if (g_eDialogStyle != (DialogStyle_t)(wp->GetDataField()->GetAsInteger()))
         {
           g_eDialogStyle = (DialogStyle_t)(wp->GetDataField()->GetAsInteger());
-          SetToRegistry(szProfileAppDialogStyle, (DWORD)(g_eDialogStyle));
+          Profile::Set(szProfileAppDialogStyle, g_eDialogStyle);
           changed = true;
         }
     }
@@ -3193,7 +3194,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (Appearance.IndLandable != (IndLandable_t)(wp->GetDataField()->GetAsInteger())) {
       Appearance.IndLandable = (IndLandable_t)(wp->GetDataField()->GetAsInteger());
-      SetToRegistry(szProfileAppIndLandable,(DWORD)(Appearance.IndLandable));
+      Profile::Set(szProfileAppIndLandable, Appearance.IndLandable);
       changed = true;
       requirerestart = true;
     }
@@ -3207,7 +3208,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)(Appearance.InverseInfoBox) != wp->GetDataField()->GetAsInteger()) {
       Appearance.InverseInfoBox = (wp->GetDataField()->GetAsInteger() != 0);
-      SetToRegistry(szProfileAppInverseInfoBox,Appearance.InverseInfoBox);
+      Profile::Set(szProfileAppInverseInfoBox,Appearance.InverseInfoBox);
       requirerestart = true;
       changed = true;
     }
@@ -3221,7 +3222,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)(Appearance.DefaultMapWidth) != wp->GetDataField()->GetAsInteger()) {
       Appearance.DefaultMapWidth = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileAppDefaultMapWidth,Appearance.DefaultMapWidth);
+      Profile::Set(szProfileAppDefaultMapWidth,Appearance.DefaultMapWidth);
       requirerestart = true;
       changed = true;
     }
@@ -3233,7 +3234,7 @@ void dlgConfigurationShowModal(void){
         wp->GetDataField()->GetAsInteger()) {
       Appearance.GaugeVarioAveNeedle =
         (wp->GetDataField()->GetAsInteger() != 0);
-      SetToRegistry(szProfileAppAveNeedle,Appearance.GaugeVarioAveNeedle);
+      Profile::Set(szProfileAppAveNeedle,Appearance.GaugeVarioAveNeedle);
       changed = true;
     }
   }
@@ -3242,7 +3243,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)(Appearance.InfoBoxColors) != wp->GetDataField()->GetAsInteger()) {
       Appearance.InfoBoxColors = (wp->GetDataField()->GetAsInteger() != 0);
-      SetToRegistry(szProfileAppInfoBoxColors,Appearance.InfoBoxColors);
+      Profile::Set(szProfileAppInfoBoxColors,Appearance.InfoBoxColors);
       requirerestart = true;
       changed = true;
     }
@@ -3252,7 +3253,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)(Appearance.GaugeVarioSpeedToFly) != wp->GetDataField()->GetAsInteger()) {
       Appearance.GaugeVarioSpeedToFly = (wp->GetDataField()->GetAsInteger() != 0);
-      SetToRegistry(szProfileAppGaugeVarioSpeedToFly,Appearance.GaugeVarioSpeedToFly);
+      Profile::Set(szProfileAppGaugeVarioSpeedToFly,Appearance.GaugeVarioSpeedToFly);
       changed = true;
       requirerestart = true;
     }
@@ -3262,7 +3263,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)Appearance.GaugeVarioAvgText != wp->GetDataField()->GetAsInteger()) {
       Appearance.GaugeVarioAvgText = (wp->GetDataField()->GetAsInteger() != 0);
-      SetToRegistry(szProfileAppGaugeVarioAvgText,Appearance.GaugeVarioAvgText);
+      Profile::Set(szProfileAppGaugeVarioAvgText,Appearance.GaugeVarioAvgText);
       changed = true;
       requirerestart = true;
     }
@@ -3272,7 +3273,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)Appearance.GaugeVarioGross != wp->GetDataField()->GetAsInteger()) {
       Appearance.GaugeVarioGross = (wp->GetDataField()->GetAsInteger() != 0);
-      SetToRegistry(szProfileAppGaugeVarioGross,Appearance.GaugeVarioGross);
+      Profile::Set(szProfileAppGaugeVarioGross,Appearance.GaugeVarioGross);
       changed = true;
       requirerestart = true;
     }
@@ -3295,7 +3296,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (XCSoarInterface::SettingsMap().EnableAutoBlank != (wp->GetDataField()->GetAsInteger()!=0)) {
       XCSoarInterface::SetSettingsMap().EnableAutoBlank = (wp->GetDataField()->GetAsInteger() != 0);
-      SetToRegistry(szProfileAutoBlank, XCSoarInterface::SettingsMap().EnableAutoBlank);
+      Profile::Set(szProfileAutoBlank, XCSoarInterface::SettingsMap().EnableAutoBlank);
       changed = true;
     }
   }
@@ -3314,7 +3315,7 @@ void dlgConfigurationShowModal(void){
     if (iround(XCSoarInterface::SettingsMap().TerrainContrast*100/255) !=
         wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::SetSettingsMap().TerrainContrast = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
-      SetToRegistry(szProfileTerrainContrast,XCSoarInterface::SettingsMap().TerrainContrast);
+      Profile::Set(szProfileTerrainContrast,XCSoarInterface::SettingsMap().TerrainContrast);
       changed = true;
     }
   }
@@ -3324,7 +3325,7 @@ void dlgConfigurationShowModal(void){
     if (iround(XCSoarInterface::SettingsMap().TerrainBrightness*100/255) !=
         wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::SetSettingsMap().TerrainBrightness = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
-      SetToRegistry(szProfileTerrainBrightness,
+      Profile::Set(szProfileTerrainBrightness,
                     XCSoarInterface::SettingsMap().TerrainBrightness);
       changed = true;
     }
@@ -3340,7 +3341,7 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)settings_task.FinishMinHeight != ival) {
       settings_task.FinishMinHeight = ival;
-      SetToRegistry(szProfileFinishMinHeight,settings_task.FinishMinHeight);
+      Profile::Set(szProfileFinishMinHeight,settings_task.FinishMinHeight);
       changed = true;
       taskchanged = true;
     }
@@ -3351,7 +3352,7 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SettingsComputer().start_max_height != ival) {
       XCSoarInterface::SetSettingsComputer().start_max_height = ival;
-      SetToRegistry(szProfileStartMaxHeight, 
+      Profile::Set(szProfileStartMaxHeight, 
                     XCSoarInterface::SettingsComputer().start_max_height);
       changed = true;
       taskchanged = true;
@@ -3363,7 +3364,7 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SettingsComputer().start_max_height_margin != ival) {
       XCSoarInterface::SetSettingsComputer().start_max_height_margin = ival;
-      SetToRegistry(szProfileStartMaxHeightMargin,
+      Profile::Set(szProfileStartMaxHeightMargin,
                     XCSoarInterface::SettingsComputer().start_max_height_margin);
       changed = true;
       taskchanged = true;
@@ -3376,7 +3377,7 @@ void dlgConfigurationShowModal(void){
 
       XCSoarInterface::SetSettingsComputer().start_max_height_ref = 
         wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileStartHeightRef, 
+      Profile::Set(szProfileStartHeightRef, 
                     XCSoarInterface::SettingsComputer().start_max_height_ref);
       changed = true;
       taskchanged = true;
@@ -3388,7 +3389,7 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SetSettingsComputer().start_max_speed != ival) {
       XCSoarInterface::SetSettingsComputer().start_max_speed = ival;
-      SetToRegistry(szProfileStartMaxSpeed,
+      Profile::Set(szProfileStartMaxSpeed,
                     (int)XCSoarInterface::SettingsComputer().start_max_speed);
       changed = true;
       taskchanged = true;
@@ -3400,7 +3401,7 @@ void dlgConfigurationShowModal(void){
     ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
     if ((int)XCSoarInterface::SettingsComputer().start_max_speed_margin != ival) {
       XCSoarInterface::SetSettingsComputer().start_max_speed_margin = ival;
-      SetToRegistry(szProfileStartMaxSpeedMargin,
+      Profile::Set(szProfileStartMaxSpeedMargin,
                     (int)XCSoarInterface::SettingsComputer().start_max_speed_margin);
       changed = true;
       taskchanged = true;
@@ -3441,7 +3442,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (XCSoarInterface::SettingsMap().SnailWidthScale != wp->GetDataField()->GetAsInteger()) {
       XCSoarInterface::SetSettingsMap().SnailWidthScale = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szProfileSnailWidthScale,
+      Profile::Set(szProfileSnailWidthScale,
                     XCSoarInterface::SettingsMap().SnailWidthScale);
       changed = true;
       requirerestart = true;

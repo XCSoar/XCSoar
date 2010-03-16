@@ -41,6 +41,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
 #include "UtilsText.hpp"
@@ -252,7 +253,7 @@ static void
 OnNewHomeClicked(gcc_unused WndButton &button)
 {
   XCSoarInterface::SetSettingsComputer().HomeWaypoint = selected_waypoint->id;
-  SetToRegistry(szProfileHomeWaypoint, XCSoarInterface::SettingsComputer().HomeWaypoint);
+  Profile::Set(szProfileHomeWaypoint, XCSoarInterface::SettingsComputer().HomeWaypoint);
 #ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
@@ -265,7 +266,7 @@ static void
 OnSetAlternate1Clicked(gcc_unused WndButton &button)
 {
   XCSoarInterface::SetSettingsComputer().Alternate1 = selected_waypoint->id;
-  SetToRegistry(szProfileAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
+  Profile::Set(szProfileAlternate1, XCSoarInterface::SettingsComputer().Alternate1);
 #ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
@@ -277,7 +278,7 @@ static void
 OnSetAlternate2Clicked(gcc_unused WndButton &button)
 {
   XCSoarInterface::SetSettingsComputer().Alternate2 = selected_waypoint->id;
-  SetToRegistry(szProfileAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
+  Profile::Set(szProfileAlternate2, XCSoarInterface::SettingsComputer().Alternate2);
 #ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
                    XCSoarInterface::Basic());
@@ -292,9 +293,9 @@ OnClearAlternatesClicked(gcc_unused WndButton &button)
   XCSoarInterface::SetSettingsComputer().EnableAlternate1 = false;
   XCSoarInterface::SetSettingsComputer().Alternate2 = -1;
   XCSoarInterface::SetSettingsComputer().EnableAlternate2 = false;
-  SetToRegistry(szProfileAlternate1,
+  Profile::Set(szProfileAlternate1,
       XCSoarInterface::SettingsComputer().Alternate1);
-  SetToRegistry(szProfileAlternate2,
+  Profile::Set(szProfileAlternate2,
       XCSoarInterface::SettingsComputer().Alternate2);
 #ifdef OLD_TASK
   task.RefreshTask(XCSoarInterface::SettingsComputer(),
@@ -309,7 +310,7 @@ OnTeamCodeClicked(gcc_unused WndButton &button)
 {
 #ifdef OLD_TASK
   XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = SelectedWaypoint;
-  SetToRegistry(szProfileTeamcodeRefWaypoint,
+  Profile::Set(szProfileTeamcodeRefWaypoint,
       XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint);
 #endif
 

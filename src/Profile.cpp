@@ -457,7 +457,7 @@ Profile::Use()
   if (AccelerometerZero==0.0) {
     AccelerometerZero= 100.0;
     Temp = 100;
-    SetToRegistry(szProfileAccelerometerZero, Temp);
+    Profile::Set(szProfileAccelerometerZero, Temp);
   }
   */
 
@@ -660,7 +660,7 @@ void
 Profile::SetRegistryAirspaceMode(int i)
 {
   int val = SettingsComputer().iAirspaceMode[i];
-  SetToRegistry(szProfileAirspaceMode[i], val);
+  Profile::Set(szProfileAirspaceMode[i], val);
 }
 
 int
@@ -674,11 +674,11 @@ Profile::GetRegistryAirspaceMode(int i)
 void
 Profile::SaveSoundSettings()
 {
-  SetToRegistry(szProfileSoundVolume, SettingsComputer().SoundVolume);
-  SetToRegistry(szProfileSoundDeadband, SettingsComputer().SoundDeadband);
-  SetToRegistry(szProfileSoundAudioVario, SettingsComputer().EnableSoundVario);
-  SetToRegistry(szProfileSoundTask, SettingsComputer().EnableSoundTask);
-  SetToRegistry(szProfileSoundModes, SettingsComputer().EnableSoundModes);
+  Profile::Set(szProfileSoundVolume, SettingsComputer().SoundVolume);
+  Profile::Set(szProfileSoundDeadband, SettingsComputer().SoundDeadband);
+  Profile::Set(szProfileSoundAudioVario, SettingsComputer().EnableSoundVario);
+  Profile::Set(szProfileSoundTask, SettingsComputer().EnableSoundTask);
+  Profile::Set(szProfileSoundModes, SettingsComputer().EnableSoundModes);
 }
 
 void
@@ -686,9 +686,9 @@ Profile::SaveWindToRegistry()
 {
   int Temp;
   Temp = iround(Basic().wind.norm);
-  SetToRegistry(szProfileWindSpeed, Temp);
+  Profile::Set(szProfileWindSpeed, Temp);
   Temp = iround(Basic().wind.bearing);
-  SetToRegistry(szProfileWindBearing, Temp);
+  Profile::Set(szProfileWindBearing, Temp);
   //TODO  SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing);
 }
 

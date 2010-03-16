@@ -190,7 +190,7 @@ XCSoarInterface::PreloadInitialisation(bool ask)
     CleanRegistry();
 #endif
 
-  SetToRegistry(TEXT("XCV"), 1);
+  Profile::Set(TEXT("XCV"), 1);
 
 #ifdef DEBUG_TRANSLATIONS
   ReadLanguageFile();

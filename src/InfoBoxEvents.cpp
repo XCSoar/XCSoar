@@ -221,7 +221,7 @@ ActionInterface::on_key_Accelerometer(int UpDown)
       AccelerometerZero = 100;
     }
     Temp = (int)AccelerometerZero;
-    SetToRegistry(szProfileAccelerometerZero,Temp);
+    Profile::Set(szProfileAccelerometerZero,Temp);
     */
   }
 }

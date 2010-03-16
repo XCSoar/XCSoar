@@ -41,6 +41,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "DataField/Base.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 
 #include <assert.h>
 
@@ -127,6 +128,6 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
     return false;
 
   value = new_value;
-  SetToRegistry(registry_name, new_value);
+  Profile::Set(registry_name, new_value);
   return true;
 }

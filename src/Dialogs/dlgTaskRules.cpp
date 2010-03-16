@@ -180,7 +180,7 @@ bool dlgTaskRules(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)settings_task.FinishMinHeight != ival) {
       settings_task.FinishMinHeight = ival;
-      SetToRegistry(szProfileFinishMinHeight,settings_task.FinishMinHeight);
+      Profile::Set(szProfileFinishMinHeight,settings_task.FinishMinHeight);
       changed = true;
     }
   }
@@ -190,7 +190,7 @@ bool dlgTaskRules(void){
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
     if ((int)settings_task.StartMaxHeight != ival) {
       settings_task.StartMaxHeight = ival;
-      SetToRegistry(szProfileStartMaxHeight,settings_task.StartMaxHeight);
+      Profile::Set(szProfileStartMaxHeight,settings_task.StartMaxHeight);
       changed = true;
     }
   }
@@ -200,7 +200,7 @@ bool dlgTaskRules(void){
     ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
     if ((int)settings_task.StartMaxSpeed != ival) {
       settings_task.StartMaxSpeed = ival;
-      SetToRegistry(szProfileStartMaxSpeed,settings_task.StartMaxSpeed);
+      Profile::Set(szProfileStartMaxSpeed,settings_task.StartMaxSpeed);
       changed = true;
     }
   }

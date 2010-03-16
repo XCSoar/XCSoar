@@ -99,7 +99,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
   _stprintf(propname, _T("prp%s"), name);
 
   if (first) {
-    SetToRegistry(updatename, 0);
+    Profile::Set(updatename, 0);
     // we are not ready, haven't received value from vario
     // (do request here)
     _stprintf(requesttext, _T("PDVSC,R,%s"), name);
@@ -149,7 +149,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
     if (updated == 1) {
       // value is updated externally, so set the property and can proceed
       // to editing values
-      SetToRegistry(updatename, 2);
+      Profile::Set(updatename, 2);
 
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
@@ -162,8 +162,8 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
         newval = (wp->GetDataField()->GetAsInteger());
         if (newval != lvalue) {
           // value has changed
-          SetToRegistry(updatename, 2);
-          SetToRegistry(fullname, (DWORD)lvalue);
+          Profile::Set(updatename, 2);
+          Profile::Set(fullname, lvalue);
 
           changed = true;
 

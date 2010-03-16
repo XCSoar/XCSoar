@@ -47,3 +47,9 @@ void
 Profile::SetFiles(const TCHAR* override)
 {
 }
+
+bool
+Profile::Set(const TCHAR *szRegValue, int pPos)
+{
+  return false;
+}
