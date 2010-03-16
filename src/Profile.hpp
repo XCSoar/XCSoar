@@ -39,9 +39,9 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_HPP
 #define XCSOAR_PROFILE_HPP
 
-#include "Interface.hpp"
+#include <tchar.h>
 
-class Profile: public XCSoarInterface
+class Profile
 {
 public:
   /**
