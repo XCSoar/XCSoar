@@ -1,7 +1,10 @@
-#Thu Jan 14 21:06:07 CET 2010
+#Tue Mar 16 23:56:16 CET 2010
 eclipse.preferences.version=1
 environment/project/0.697445322=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="PATH" operation\="append" value\="C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin"/>\r\n</environment>\r\n
 environment/project/0.697445322.381966687=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="PATH" operation\="append" value\="C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin"/>\r\n</environment>\r\n
+environment/project/0.697445322.381966687.1829290776=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="PATH" operation\="append" value\="C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin"/>\r\n</environment>\r\n
+environment/project/0.697445322.381966687.1829290776.1755796292=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="PATH" operation\="append" value\="C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin"/>\r\n</environment>\r\n
+environment/project/0.697445322.381966687.1829290776.1755796292.339025141=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="PATH" operation\="append" value\="C\:\\msysgit\\mingw\\bin;C\:\\msysgit\\bin"/>\r\n</environment>\r\n
 org.eclipse.cdt.core.formatter.alignment_for_arguments_in_method_invocation=16
 org.eclipse.cdt.core.formatter.alignment_for_base_clause_in_type_declaration=80
 org.eclipse.cdt.core.formatter.alignment_for_compact_if=0
