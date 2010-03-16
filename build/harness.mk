@@ -1,5 +1,6 @@
 TEST_SRC = \
 	$(SRC)/ReplayLogger.cpp \
+	$(SRC)/UtilsText.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/test_debug.cpp \
 	$(TEST_SRC_DIR)/harness_aircraft.cpp \

@@ -97,6 +97,17 @@ ButtonWindow::on_paint(Canvas &canvas)
 
 #include <commctrl.h>
 
+#include <stdio.h>
+
+class Canvas;
+
+bool 
+ButtonWindow::on_erase(Canvas &canvas)
+{
+  return true;
+}
+
+
 void
 ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
                   int left, int top, unsigned width, unsigned height,

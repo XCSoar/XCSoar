@@ -37,6 +37,7 @@ testfast: $(TESTFAST)
 	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTFAST)
 
 TESTLIBS = $(HARNESS_LIBS) \
+	   $(ZZIP_LIBS) \
 	   $(ENGINE_LIBS)
 
 ifeq ($(HAVE_WIN32),n)
