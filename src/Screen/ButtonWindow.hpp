@@ -90,7 +90,6 @@ protected:
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual void on_paint(Canvas &canvas);
-  virtual bool on_erase(Canvas &canvas);
 };
 
 #else /* !ENABLE_SDL */
@@ -98,8 +97,6 @@ protected:
 #include "Screen/Window.hpp"
 
 #include <tchar.h>
-
-class Canvas;
 
 /**
  * A clickable button.
@@ -115,9 +112,6 @@ public:
 
     ::SetWindowText(hWnd, text);
   }
-
-protected:
-  virtual bool on_erase(Canvas &canvas);
 };
 
 #endif /* !ENABLE_SDL */

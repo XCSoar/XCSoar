@@ -106,9 +106,6 @@ LRESULT
 MenuBar::Button::on_message(HWND hWnd, UINT message,
                             WPARAM wParam, LPARAM lParam)
 {
-  COLORREF ColorButton = RGB(0xA0,0xE0,0xA0);
-  static HBRUSH hBrushButton = (HBRUSH)CreateSolidBrush(ColorButton);
-
   switch (message) {
   case WM_CAPTURECHANGED:
     if (lParam == 0)
@@ -121,7 +118,6 @@ MenuBar::Button::on_message(HWND hWnd, UINT message,
 
   return ButtonWindow::on_message(hWnd, message, wParam, lParam);
 }
-
 #endif
 
 MenuBar::MenuBar(ContainerWindow &parent)
