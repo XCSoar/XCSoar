@@ -337,8 +337,8 @@ MapWindow::on_mouse_up(int x, int y)
 
   if (!my_target_pan && SettingsMap().EnablePan && (distance > IBLSCALE(36))) {
     // JMW broken!
-    PanLocation.Longitude += LLstart.Longitude - G.Longitude;
-    PanLocation.Latitude += LLstart.Latitude - G.Latitude;
+    XCSoarInterface::SetSettingsMap().PanLocation.Longitude += LLstart.Longitude - G.Longitude;
+    XCSoarInterface::SetSettingsMap().PanLocation.Latitude += LLstart.Latitude - G.Latitude;
     RefreshMap();
     return true;
   }
