@@ -185,7 +185,7 @@ TopologyStore::Open()
   unicode2ascii(szFile, zfilename, MAX_PATH);
   zFile = zzip_fopen(zfilename, "rt");
   if (!zFile) {
-    LogStartUp(TEXT("No topology file\n%s\n"), szFile);
+    LogStartUp(TEXT("No topology file: %s\n"), szFile);
     return;
   }
 

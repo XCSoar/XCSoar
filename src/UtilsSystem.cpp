@@ -773,7 +773,7 @@ StartupLogFreeRamAndStorage()
   TCHAR buffer[MAX_PATH];
   LocalPath(buffer);
   int freestorage = FindFreeSpace(buffer);
-  LogStartUp(_T("Free ram %d\nFree storage %d\n"), freeram, freestorage);
+  LogStartUp(_T("Free ram %d; free storage %d\n"), freeram, freestorage);
 }
 
 WPARAM
