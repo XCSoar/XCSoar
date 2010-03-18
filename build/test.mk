@@ -189,6 +189,8 @@ $(RUN_CANVAS_BIN): $(RUN_CANVAS_OBJS) $(RUN_CANVAS_LDADD) | $(TARGET_BIN_DIR)/di
 
 RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
+	$(SRC)/AirspaceClient.cpp \
+	$(SRC)/AirspaceClientUI.cpp \
 	$(SRC)/AirspaceParser.cpp \
 	$(SRC)/AirspaceVisibility.cpp \
 	$(SRC)/Appearance.cpp \
@@ -242,6 +244,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/StringUtil.cpp \
+	$(SRC)/TaskClient.cpp \
+	$(SRC)/TaskClientUI.cpp \
 	$(SRC)/TerrainRenderer.cpp \
 	$(SRC)/TextReader.cpp \
 	$(SRC)/TextWriter.cpp \
@@ -321,7 +325,10 @@ $(RUN_DIALOG_BIN): $(RUN_DIALOG_OBJS) $(RUN_DIALOG_LDADD) | $(TARGET_BIN_DIR)/di
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
+	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/xmlParser.cpp \
+	$(SRC)/AirspaceClient.cpp \
+	$(SRC)/AirspaceClientUI.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Units.cpp \
 	$(SRC)/Dialogs/XML.cpp \
@@ -373,6 +380,8 @@ $(RUN_AIRSPACE_WARNING_DIALOG_BIN): $(RUN_AIRSPACE_WARNING_DIALOG_OBJS) $(RUN_AI
 RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/xmlParser.cpp \
+	$(SRC)/AirspaceClient.cpp \
+	$(SRC)/AirspaceClientUI.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/dlgComboPicker.cpp \
@@ -388,6 +397,8 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
+	$(SRC)/TaskClient.cpp \
+	$(SRC)/TaskClientUI.cpp \
 	$(SRC)/TextReader.cpp \
 	$(SRC)/TextWriter.cpp \
 	$(SRC)/Thread/Debug.cpp \

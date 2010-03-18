@@ -64,6 +64,7 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "ButtonLabel.hpp"
 #include "DeviceBlackboard.hpp"
+#include "AirspaceClientUI.hpp"
 #include "AirspaceParser.hpp"
 #include "Registry.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -92,26 +93,31 @@ DeviceBlackboard::SetStartupLocation(const GEOPOINT &loc, const double alt) {}
 Trigger drawTriggerEvent(TEXT("drawTriggerEvent"),false);
 Trigger targetManipEvent(TEXT("targetManip"));
 
-Waypoints way_points;
+static Waypoints way_points;
 
-TaskBehaviour task_behaviour;
-TaskEvents task_events;
+static TaskBehaviour task_behaviour;
+static TaskEvents task_events;
 
-TaskManager task_manager(task_events,
-                         task_behaviour,
-                         way_points);
+static TaskManager task_manager(task_events,
+                                task_behaviour,
+                                way_points);
 
-Airspaces airspace_database;
+static Airspaces airspace_database;
 
-AIRCRAFT_STATE ac_state; // dummy
+static AIRCRAFT_STATE ac_state; // dummy
 
-AirspaceWarningManager airspace_warning(airspace_database, ac_state,
-                                        task_manager);
+static AirspaceWarningManager airspace_warning(airspace_database, ac_state,
+                                               task_manager);
+
+static AirspaceClientUI airspace_ui(airspace_database, airspace_warning);
+
 static TopologyStore *topology;
 static RasterTerrain terrain;
 Logger logger;
 
 int InfoBoxLayout::ControlWidth;
+
+InterfaceBlackboard CommonInterface::blackboard;
 
 void InputEvents::ShowMenu() {}
 bool InputEvents::processKey(int key) {
@@ -208,7 +214,7 @@ public:
     RECT rc = get_client_rect();
     map.set(*this, rc, rc);
     map.set_way_points(&way_points);
-    map.set_airspaces(&airspace_database);
+    map.set_airspaces(&airspace_ui);
     map.set_topology(topology);
     map.set_terrain(&terrain);
   }

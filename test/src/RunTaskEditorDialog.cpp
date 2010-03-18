@@ -46,6 +46,8 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 #include "RasterTerrain.h"
 #include "WayPointParser.h"
+#include "AirspaceClientUI.hpp"
+#include "TaskClientUI.hpp"
 #include "Task/TaskManager.hpp"
 #include "Screen/Blank.hpp"
 #include "InfoBoxLayout.hpp"
@@ -53,6 +55,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Logger.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
+#include "Engine/Airspace/AirspaceWarningManager.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -114,7 +118,7 @@ SettingsComputerBlackboard::SettingsComputerBlackboard() {}
 SettingsMapBlackboard::SettingsMapBlackboard() {}
 
 DeviceBlackboard device_blackboard;
-RasterTerrain terrain;
+static RasterTerrain terrain;
 Logger logger;
 
 InterfaceBlackboard CommonInterface::blackboard;
@@ -139,12 +143,19 @@ void dlgAnalysisShowModal(void) {}
 void dlgTaskCalculatorShowModal(SingleWindow &parent) {}
 
 Waypoints way_points;
-TaskBehaviour task_behaviour;
-TaskEvents task_events;
+static TaskBehaviour task_behaviour;
+static TaskEvents task_events;
+static TaskManager task_manager(task_events, task_behaviour, way_points);
+TaskClientUI task_ui(task_manager);
 
-TaskManager task_manager(task_events,
-                         task_behaviour,
-                         way_points);
+static Airspaces airspace_database;
+
+static AIRCRAFT_STATE ac_state; // dummy
+
+static AirspaceWarningManager airspace_warning(airspace_database, ac_state,
+                                               task_manager);
+
+AirspaceClientUI airspace_ui(airspace_database, airspace_warning);
 
 static void
 LoadFiles()

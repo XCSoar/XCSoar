@@ -46,6 +46,7 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 #include "Registry.hpp"
 #include "RasterTerrain.h"
+#include "AirspaceClientUI.hpp"
 #include "AirspaceParser.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -71,8 +72,6 @@ InputEvents::findEvent(const TCHAR *)
   return NULL;
 }
 
-RasterTerrain terrain;
-
 void RasterTerrain::Lock(void) {}
 void RasterTerrain::Unlock(void) {}
 
@@ -84,21 +83,17 @@ MapWindow::identify(HWND hWnd)
 }
 #endif /* !ENABLE_SDL */
 
-Waypoints way_points;
-TaskBehaviour task_behaviour;
-TaskEvents task_events;
+static Waypoints way_points;
+static TaskBehaviour task_behaviour;
+static TaskEvents task_events;
+static TaskManager task_manager(task_events, task_behaviour, way_points);
 
-TaskManager task_manager(task_events,
-                         task_behaviour,
-                         way_points);
+static Airspaces airspace_database;
+static AIRCRAFT_STATE ac_state; // dummy
+static AirspaceWarningManager airspace_warning(airspace_database,
+                                               ac_state, task_manager);
 
-Airspaces airspace_database;
-
-AIRCRAFT_STATE ac_state; // dummy
-
-AirspaceWarningManager airspace_warning(airspace_database,
-                                        ac_state,
-                                        task_manager);
+AirspaceClientUI airspace_ui(airspace_database, airspace_warning);
 
 static void
 LoadFiles()
