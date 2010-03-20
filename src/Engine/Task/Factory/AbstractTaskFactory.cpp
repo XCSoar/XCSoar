@@ -51,10 +51,10 @@
  */
 class TaskPointCloneVisitor: 
   public BaseVisitor,
-  public Visitor<StartPoint>,
-  public Visitor<ASTPoint>,
-  public Visitor<AATPoint>,
-  public Visitor<FinishPoint>
+  public ConstVisitor<StartPoint>,
+  public ConstVisitor<ASTPoint>,
+  public ConstVisitor<AATPoint>,
+  public ConstVisitor<FinishPoint>
 {
 public:
   /**

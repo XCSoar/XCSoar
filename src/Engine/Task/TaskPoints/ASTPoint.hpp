@@ -80,7 +80,7 @@ public:
   bool equals(const OrderedTaskPoint* other) const;
 
 public:
-  DEFINE_VISITABLE()
+  DEFINE_CONSTVISITABLE()
 
 };
 

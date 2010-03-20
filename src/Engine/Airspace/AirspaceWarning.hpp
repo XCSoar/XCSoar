@@ -46,7 +46,7 @@
  * - use settings for acknowledgement time
  */
 class AirspaceWarning: 
-  public BaseVisitable<>
+  public BaseConstVisitable<>
 {
 public:
 
@@ -205,7 +205,7 @@ public:
                                    const AirspaceWarning& aw);
 #endif
 
-  DEFINE_VISITABLE()
+  DEFINE_CONSTVISITABLE()
 };
 
 #endif

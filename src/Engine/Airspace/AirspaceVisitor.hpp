@@ -50,8 +50,8 @@ class AirspaceCircle;
  */
 class AirspaceVisitor:
   public TreeVisitor<Airspace>,
-  public Visitor<AirspacePolygon>, 
-  public Visitor<AirspaceCircle>
+  public ConstVisitor<AirspacePolygon>, 
+  public ConstVisitor<AirspaceCircle>
 {
 public:
 

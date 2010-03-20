@@ -142,7 +142,7 @@ private:
   bool is_in_height_limit(const AIRCRAFT_STATE &state) const;
 
 public:
-  DEFINE_VISITABLE()
+  DEFINE_CONSTVISITABLE()
 };
 
 #endif

@@ -126,7 +126,7 @@ public:
                                    const AirspacePolygon& as);
 #endif
 
-  DEFINE_VISITABLE()
+  DEFINE_CONSTVISITABLE()
 };
 
 #endif

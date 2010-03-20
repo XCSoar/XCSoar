@@ -476,6 +476,6 @@ public:
  * @param reverse Perform scan in reverse sequence
  */
   virtual void Accept(TaskPointVisitor& visitor, const bool reverse=false) const = 0;
-  DEFINE_VISITABLE()
+  DEFINE_CONSTVISITABLE()
 };
 #endif //ABSTRACTTASK_H

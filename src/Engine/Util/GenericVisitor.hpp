@@ -60,7 +60,7 @@ public:
  * Generic visitor
  */
 template <class T, typename R = void>
-class Visitor
+class ConstVisitor
 {
 public:
   /** Return type, available for clients */
@@ -115,7 +115,7 @@ public:
  * Class from which to inherit for a class to be visitable
  */
 template <typename R = void>
-class BaseVisitable
+class BaseConstVisitable
 {
 public:
   /** Accessible to clients */
@@ -124,7 +124,7 @@ public:
   /**
    * Destructor
    */
-  virtual ~BaseVisitable() {}
+  virtual ~BaseConstVisitable() {}
 
   /**
    * Double-dispatch abstract accept method for items that
@@ -148,14 +148,14 @@ protected:
   AcceptImpl(const T& visited, BaseVisitor& guest)
   {
     // Apply the acyclic visitor
-    if (Visitor<T>* p = dynamic_cast<Visitor<T>*>(&guest))
+    if (ConstVisitor<T>* p = dynamic_cast<ConstVisitor<T>*>(&guest))
       return p->Visit(visited);
 
     return ReturnType();
   }
 };
 
-#define DEFINE_VISITABLE() \
+#define DEFINE_CONSTVISITABLE() \
   virtual ReturnType Accept(BaseVisitor& guest) const \
   { return AcceptImpl(*this, guest); }
 

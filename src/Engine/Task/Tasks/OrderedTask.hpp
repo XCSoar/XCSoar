@@ -584,7 +584,7 @@ public:
  */
   void Accept(TaskPointVisitor& visitor, const bool reverse=false) const;
 
-  DEFINE_VISITABLE()
+  DEFINE_CONSTVISITABLE()
 };
 
 #endif //ORDEREDTASK_H

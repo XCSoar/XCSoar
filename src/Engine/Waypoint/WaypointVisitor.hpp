@@ -45,7 +45,7 @@
  */
 class WaypointVisitor:
   public TreeVisitor<Waypoint>,
-  public Visitor<Waypoint> 
+  public ConstVisitor<Waypoint> 
 {
 private:    
 };

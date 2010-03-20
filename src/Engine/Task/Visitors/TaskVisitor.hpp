@@ -48,9 +48,9 @@ class GotoTask;
  */
 class TaskVisitor:
   public BaseVisitor,
-  public Visitor<OrderedTask>,
-  public Visitor<AbortTask>,
-  public Visitor<GotoTask>
+  public ConstVisitor<OrderedTask>,
+  public ConstVisitor<AbortTask>,
+  public ConstVisitor<GotoTask>
 {
 };
 

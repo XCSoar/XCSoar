@@ -23,7 +23,7 @@ class Trace;
  * Special task holder for Online Contest calculations
  */
 class OnlineContest:
-  public BaseVisitable<> 
+  public BaseConstVisitable<> 
 {
 public:
 
@@ -129,7 +129,7 @@ public:
  */
   void Accept(TaskPointVisitor& visitor, const bool reverse=false) const;
 
-  DEFINE_VISITABLE()
+  DEFINE_CONSTVISITABLE()
 };
 
 #endif

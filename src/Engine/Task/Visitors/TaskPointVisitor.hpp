@@ -50,11 +50,11 @@
  */
 class TaskPointVisitor:
   public BaseVisitor,
-  public Visitor<UnorderedTaskPoint>,
-  public Visitor<StartPoint>,
-  public Visitor<ASTPoint>,
-  public Visitor<AATPoint>,
-  public Visitor<FinishPoint>
+  public ConstVisitor<UnorderedTaskPoint>,
+  public ConstVisitor<StartPoint>,
+  public ConstVisitor<ASTPoint>,
+  public ConstVisitor<AATPoint>,
+  public ConstVisitor<FinishPoint>
 {
 };
 

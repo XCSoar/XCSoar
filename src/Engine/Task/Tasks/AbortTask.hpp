@@ -289,7 +289,7 @@ public:
  * \todo reverse not implemented yet
  */
   void Accept(TaskPointVisitor& visitor, const bool reverse=false) const;
-  DEFINE_VISITABLE()
+  DEFINE_CONSTVISITABLE()
 };
 
 #endif //ABORTTASK_H

@@ -46,7 +46,7 @@ extern long count_intersections;
 /**
  * Container accessor to allow a WaypointVisitor to visit WaypointEnvelopes 
  */
-class WaypointEnvelopeVisitor: public Visitor<WaypointEnvelope>
+class WaypointEnvelopeVisitor: public ConstVisitor<WaypointEnvelope>
 {
 public:
   /**

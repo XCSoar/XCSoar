@@ -55,7 +55,7 @@ class AtmosphericPressure;
  */
 class Airspace: 
   public FlatBoundingBox,
-  public BaseVisitable<>
+  public BaseConstVisitable<>
 {
 public:
 

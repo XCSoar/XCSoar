@@ -153,7 +153,7 @@ private:
     return true;
   }
 public:
-  DEFINE_VISITABLE()
+  DEFINE_CONSTVISITABLE()
 };
 
 #endif

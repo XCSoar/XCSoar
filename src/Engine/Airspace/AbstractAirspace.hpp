@@ -59,7 +59,7 @@ typedef std::vector< std::pair<GEOPOINT,GEOPOINT> > AirspaceIntersectionVector;
  * Abstract base class for airspace regions
  */
 class AbstractAirspace:
-  public BaseVisitable<>
+  public BaseConstVisitable<>
 {
 public:
 
@@ -325,7 +325,7 @@ private:
                                                  const bool lower=true) const;
 
 public:
-  DEFINE_VISITABLE()
+  DEFINE_CONSTVISITABLE()
 };
 
 #endif

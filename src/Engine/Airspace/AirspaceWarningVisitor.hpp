@@ -8,7 +8,7 @@
  */
 class AirspaceWarningVisitor:
   public BaseVisitor,
-  public Visitor<AirspaceWarning>
+  public ConstVisitor<AirspaceWarning>
 {
 public:
 

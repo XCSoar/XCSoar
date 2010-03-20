@@ -79,7 +79,7 @@ struct WaypointFlags {
  * - consider having a static factory method provide the ID automatically
  *   so we know they will be unique.
  */
-class Waypoint: public BaseVisitable<>
+class Waypoint: public BaseConstVisitable<>
 {
 public:
   /**
@@ -125,7 +125,7 @@ public:
   }
 
 public:
-  DEFINE_VISITABLE()
+  DEFINE_CONSTVISITABLE()
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, const Waypoint& wp);
