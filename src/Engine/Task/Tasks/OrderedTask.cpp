@@ -907,27 +907,27 @@ OrderedTask::clone(TaskEvents &te,
   return new_task;
 }
 
-void
-OrderedTask::commit(const OrderedTask& other)
+bool
+OrderedTask::commit(const OrderedTask& that)
 {
   bool modified = false;
-  for (unsigned i=0; i<other.task_size(); ++i) {
+  for (unsigned i=0; i<that.task_size(); ++i) {
     if (i>= task_size()) {
-      // new task is larger than old
-      append(other.tps[i]->clone(task_behaviour,
+      // that task is larger than this
+      append(that.tps[i]->clone(task_behaviour,
                                  get_task_projection()));
       modified = true;
-    } else if (!tps[i]->equals(other.tps[i])) {
-      // new task point is changed
-      replace(other.tps[i]->clone(task_behaviour,
+    } else if (!tps[i]->equals(that.tps[i])) {
+      // that task point is changed
+      replace(that.tps[i]->clone(task_behaviour,
                                   get_task_projection()),
         i);
       modified = true;
     }
   }
 
-  // remove if new task is smaller than old one
-  while (task_size() > other.task_size()) {
+  // remove if that task is smaller than this one
+  while (task_size() > that.task_size()) {
     remove(task_size()-1);
     modified = true;
   }
@@ -936,6 +936,7 @@ OrderedTask::commit(const OrderedTask& other)
     // @todo also re-scan task sample state,
     // potentially resetting task
   }
+  return modified;
 }
 
 

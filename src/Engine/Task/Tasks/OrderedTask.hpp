@@ -112,8 +112,9 @@ public:
    * Copy task into this task
    *
    * @param other OrderedTask to copy
+   * @return True if this task changed
    */
-  void commit(const OrderedTask& other);
+  bool commit(const OrderedTask& other);
 
 /** 
  * Retrieves the active task point sequence.
