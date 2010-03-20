@@ -273,16 +273,6 @@ public:
    */
   bool has_entered(unsigned index) const;
 
-/** 
- * Clone an object with optional shift of waypoint
- * 
- * @param tp Object to clone
- * @param wp New waypoint of clone.  If NULL, uses waypoint of object
- * 
- * @return Cloned object
- */
-  OrderedTaskPoint* clone(const OrderedTaskPoint& tp, const Waypoint* wp) const;
-
 protected:
 /** 
  * Test whether a candidate object is of correct type to be added/replaced/etc

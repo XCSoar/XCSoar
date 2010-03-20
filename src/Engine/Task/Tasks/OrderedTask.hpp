@@ -92,6 +92,29 @@ public:
    */
   void reset();
 
+  /**
+   * Create a clone of the task. 
+   * Caller is responsible for destruction.
+   *
+   * @param te Task events
+   * @param tb Task behaviour
+   * @param ta Task advance
+   * @param gp Glide Polar
+   *
+   * @return Initialised object
+   */
+  OrderedTask* clone(TaskEvents &te, 
+                     const TaskBehaviour &tb,
+                     TaskAdvance &ta,
+                     GlidePolar &gp) const;
+
+  /**
+   * Copy task into this task
+   *
+   * @param other OrderedTask to copy
+   */
+  void commit(const OrderedTask& other);
+
 /** 
  * Retrieves the active task point sequence.
  * 

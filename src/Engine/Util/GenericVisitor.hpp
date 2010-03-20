@@ -75,6 +75,22 @@ public:
   virtual ReturnType Visit(const T&) = 0;
 };
 
+template <class T, typename R = void>
+class Visitor
+{
+public:
+  /** Return type, available for clients */
+  typedef R ReturnType;
+
+  /**
+   * Abstract visit method; this prototype method is called
+   * on accepting instances.
+   *
+   * @return Return value of visitor
+   */
+  virtual ReturnType Visit(T&) = 0;
+};
+
 /**
  * Special visitor that can visit items within a kd-tree
  */
@@ -155,8 +171,57 @@ protected:
   }
 };
 
+
+/**
+ * Class from which to inherit for a class to be visitable
+ */
+template <typename R = void>
+class BaseVisitable
+{
+public:
+  /** Accessible to clients */
+  typedef R ReturnType;
+
+  /**
+   * Destructor
+   */
+  virtual ~BaseVisitable() {}
+
+  /**
+   * Double-dispatch abstract accept method for items that
+   * can be visited.
+   *
+   * @return Return value of Visitor
+   */
+  virtual R Accept(BaseVisitor&) = 0;
+
+protected:
+  /**
+   * Dispatcher for visitor-visitable double dispatch system
+   *
+   * @param visited Item to be visited
+   * @param guest Guest visitor to be called on visited item
+   *
+   * @return Return value of guest
+   */
+  template<class T>
+  static ReturnType
+  AcceptImpl(T& visited, BaseVisitor& guest)
+  {
+    // Apply the acyclic visitor
+    if (Visitor<T>* p = dynamic_cast<Visitor<T>*>(&guest))
+      return p->Visit(visited);
+
+    return ReturnType();
+  }
+};
+
 #define DEFINE_CONSTVISITABLE() \
   virtual ReturnType Accept(BaseVisitor& guest) const \
+  { return AcceptImpl(*this, guest); }
+
+#define DEFINE_VISITABLE() \
+  virtual ReturnType Accept(BaseVisitor& guest) \
   { return AcceptImpl(*this, guest); }
 
 #endif

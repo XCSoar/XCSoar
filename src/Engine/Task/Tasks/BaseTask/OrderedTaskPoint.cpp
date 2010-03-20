@@ -35,6 +35,7 @@
 }
  */
 #include "OrderedTaskPoint.hpp"
+#include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Math/Earth.hpp"
 #include <assert.h>
 #include <math.h>
@@ -157,3 +158,75 @@ OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
     get_oz()->equals(other->get_oz());
 }
 
+
+/**
+ * Experimental class for cloning task points
+ */
+class TaskPointCloneVisitor: 
+  public BaseVisitor,
+  public ConstVisitor<StartPoint>,
+  public ConstVisitor<ASTPoint>,
+  public ConstVisitor<AATPoint>,
+  public ConstVisitor<FinishPoint>
+{
+public:
+  /**
+   * Constructor
+   * @param tb 
+   * @param tp
+   * @param _wp Waypoint to shift the task point to
+   */
+  TaskPointCloneVisitor(const TaskBehaviour& tb,
+                        const TaskProjection &tp,
+                        const Waypoint *_wp):
+    m_task_behaviour(tb),
+    m_task_projection(tp),
+    m_retval(NULL),
+    m_waypoint(_wp)
+    {}
+  /**
+   * Visit a single taskpoint, making a copy
+   * @param taskpoint The TP to clone
+   * @return Clone of the TP, shifted to the new waypoint
+   */
+  OrderedTaskPoint* Visit(const OrderedTaskPoint &taskpoint) {
+    if (!m_waypoint) {
+      m_waypoint = &taskpoint.get_waypoint();
+    }
+    taskpoint.Accept(*this);
+    return m_retval;
+  }
+  
+private:
+  virtual void Visit(const FinishPoint& tp) {
+    m_retval= new FinishPoint(tp.get_oz()->clone(&m_waypoint->Location),
+                              m_task_projection,*m_waypoint,m_task_behaviour);
+  }
+  virtual void Visit(const StartPoint& tp) {
+    m_retval= new StartPoint(tp.get_oz()->clone(&m_waypoint->Location),
+                             m_task_projection,*m_waypoint,m_task_behaviour);
+  }
+  virtual void Visit(const AATPoint& tp) {
+    m_retval= new AATPoint(tp.get_oz()->clone(&m_waypoint->Location),
+                           m_task_projection,*m_waypoint,m_task_behaviour);
+  }
+  virtual void Visit(const ASTPoint& tp) {
+    m_retval= new ASTPoint(tp.get_oz()->clone(&m_waypoint->Location),
+                           m_task_projection,*m_waypoint,m_task_behaviour);
+  }
+  const TaskBehaviour &m_task_behaviour;
+  const TaskProjection &m_task_projection;
+  OrderedTaskPoint* m_retval;
+  const Waypoint* m_waypoint;
+};
+
+
+OrderedTaskPoint* 
+OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
+                        const TaskProjection &task_projection,
+                        const Waypoint* waypoint) const
+{
+  TaskPointCloneVisitor tpcv(task_behaviour, 
+                             task_projection, waypoint);
+  return tpcv.Visit(*this);
+}

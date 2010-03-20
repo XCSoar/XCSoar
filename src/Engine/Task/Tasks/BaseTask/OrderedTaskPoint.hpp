@@ -78,6 +78,18 @@ public:
 
   virtual ~OrderedTaskPoint() {}
 
+  /**
+   * Create a clone of the task point. 
+   * Caller is responsible for destruction.
+   *
+   * @param task_behaviour Task behaviour of clone
+   * @param task_projection Task projection of clone
+   * @param wp Waypoint to shift to (or NULL)
+   */
+  OrderedTaskPoint* clone(const TaskBehaviour &task_behaviour,
+                          const TaskProjection &task_projection,
+                          const Waypoint* waypoint=NULL) const;
+
   /** 
    * Call this when any geometry or OZ parameters are changed
    * 
