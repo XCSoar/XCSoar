@@ -139,7 +139,7 @@ TaskManager::validTaskPoint(const int index_offset) const
  * Convenience class to find waypoints in task unobtrusively
  *
  */
-class WaypointLister: public TaskPointVisitor
+class WaypointLister: public TaskPointConstVisitor
 {
 public:
   /**
@@ -630,3 +630,18 @@ TaskManager::get_task_radius(const GEOPOINT& fallback_location) const
   }
 }
 
+
+OrderedTask* 
+TaskManager::clone(TaskEvents &te, 
+                   const TaskBehaviour &tb,
+                   TaskAdvance &ta,
+                   GlidePolar &gp) const
+{
+  return task_ordered.clone(te, tb, ta, gp);
+}
+
+bool 
+TaskManager::commit(const OrderedTask& other)
+{
+  return task_ordered.commit(other);
+}

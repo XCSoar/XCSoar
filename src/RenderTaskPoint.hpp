@@ -44,7 +44,7 @@ Copyright_License {
 class RenderObservationZone;
 
 class RenderTaskPoint:
-  public TaskPointVisitor,
+  public TaskPointConstVisitor,
   public MapDrawHelper
 {
 public:

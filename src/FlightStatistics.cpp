@@ -86,7 +86,7 @@ void FlightStatistics::Reset() {
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
 class ChartLegHelper:
-  public TaskPointVisitor
+  public TaskPointConstVisitor
 {
 public:
   ChartLegHelper(Chart& chart, const double start_time):

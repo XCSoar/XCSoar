@@ -165,6 +165,27 @@ public:
 };
 */
 
+bool test_edit(TaskManager& task, const TaskBehaviour &task_behaviour) 
+{
+  TaskEventsPrint edit_events(verbose);
+  TaskAdvance task_advance;
+  GlidePolar glide_polar = task.get_glide_polar();
+  OrderedTask* task_copy = task.clone(edit_events,
+                                      task_behaviour, 
+                                      task_advance,
+                                      glide_polar);
+
+
+  task_copy->remove(1);
+
+  task.commit(*task_copy);
+
+  task_report(task, "AFTER EDIT\n");
+
+  delete task_copy;
+  return true;
+}
+
 int main(int argc, char** argv) {
   // default arguments
   verbose=1;  
@@ -185,6 +206,11 @@ int main(int argc, char** argv) {
                            waypoints);
   task_manager.set_glide_polar(glide_polar);
   test_task(task_manager, waypoints, 0);
+
+  plan_tests(1);
+
+  ok(test_edit(task_manager, task_behaviour),
+     "edit task", 0);
 
 /*
   plan_tests(task_manager.task_size());

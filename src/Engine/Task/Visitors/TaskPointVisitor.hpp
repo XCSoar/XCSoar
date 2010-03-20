@@ -48,7 +48,7 @@
 /**
  * Generic visitor for task points (for double-dispatch)
  */
-class TaskPointVisitor:
+class TaskPointConstVisitor:
   public BaseVisitor,
   public ConstVisitor<UnorderedTaskPoint>,
   public ConstVisitor<StartPoint>,

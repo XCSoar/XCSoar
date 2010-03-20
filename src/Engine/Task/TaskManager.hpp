@@ -282,6 +282,30 @@ public:
   Factory_t set_factory(const Factory_t _factory);
 
   /**
+   * Create a clone of the task. 
+   * Caller is responsible for destruction.
+   *
+   * @param te Task events
+   * @param tb Task behaviour
+   * @param ta Task advance
+   * @param gp Glide Polar
+   *
+   * @return Initialised object
+   */
+  OrderedTask* clone(TaskEvents &te, 
+                     const TaskBehaviour &tb,
+                     TaskAdvance &ta,
+                     GlidePolar &gp) const;
+
+  /**
+   * Copy task into this task
+   *
+   * @param other OrderedTask to copy
+   * @return True if this task changed
+   */
+  bool commit(const OrderedTask& other);
+
+  /**
    * Accessor for task advance system
    *
    * @return Task advance mechanism

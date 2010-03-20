@@ -686,7 +686,7 @@ OrderedTask::OrderedTask(TaskEvents &te,
 }
 
 void 
-OrderedTask::Accept(TaskPointVisitor& visitor, const bool reverse) const
+OrderedTask::Accept(TaskPointConstVisitor& visitor, const bool reverse) const
 {
   for (OrderedTaskPointVector::const_iterator it = tps.begin(); it!= tps.end(); it++) {
     (*it)->Accept(visitor);
@@ -911,6 +911,13 @@ bool
 OrderedTask::commit(const OrderedTask& that)
 {
   bool modified = false;
+
+  // remove if that task is smaller than this one
+  while (task_size() > that.task_size()) {
+    remove(task_size()-1);
+    modified = true;
+  }
+
   for (unsigned i=0; i<that.task_size(); ++i) {
     if (i>= task_size()) {
       // that task is larger than this
@@ -926,11 +933,6 @@ OrderedTask::commit(const OrderedTask& that)
     }
   }
 
-  // remove if that task is smaller than this one
-  while (task_size() > that.task_size()) {
-    remove(task_size()-1);
-    modified = true;
-  }
   if (modified) {
     update_geometry();
     // @todo also re-scan task sample state,
