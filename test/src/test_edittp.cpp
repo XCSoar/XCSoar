@@ -11,7 +11,7 @@
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
 
-
+/*
 class TaskPointEdit: public TaskPointVisitor
 {
 public:
@@ -94,7 +94,7 @@ public:
       return true;
 
     } else {
-      return true; /* don't actually do anything */
+      return true; // don't actually do anything 
       // must be a new point, create one for editing
       // (assuming here have asked if it is a finish or intermediate point,
       // and the waypoint)
@@ -163,7 +163,7 @@ public:
   AbstractTaskFactory *fact;
   const Waypoints &waypoints;
 };
-
+*/
 
 int main(int argc, char** argv) {
   // default arguments
@@ -186,6 +186,7 @@ int main(int argc, char** argv) {
   task_manager.set_glide_polar(glide_polar);
   test_task(task_manager, waypoints, 0);
 
+/*
   plan_tests(task_manager.task_size());
 
   // here goes, example, edit all task points
@@ -194,7 +195,7 @@ int main(int argc, char** argv) {
     ok(ste.edit(i),"edit tp",0);
     task_report(task_manager, "edit tp\n");
   }
-
+*/
   return exit_status();
 }
 
