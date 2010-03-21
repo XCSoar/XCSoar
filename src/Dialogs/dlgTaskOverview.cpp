@@ -586,7 +586,9 @@ dlgTaskOverviewShowModal(SingleWindow &parent)
 
   wf->ShowModal();
 
-  task_ui.task_commit(*ordered_task);
+  if (ordered_task->check_task()) {
+    task_ui.task_commit(*ordered_task);
+  }
 
   delete wf;
 
