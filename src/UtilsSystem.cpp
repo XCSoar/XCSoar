@@ -269,24 +269,21 @@ SmartGlobalModelType()
 void
 SetModelType()
 {
-  TCHAR sTmp[100];
   TCHAR szRegistryInfoBoxModel[] = _T("AppInfoBoxModel");
   int Temp = 0;
 
   GetFromRegistry(szRegistryInfoBoxModel, Temp);
 
   if (SetModelName(Temp) != true) {
-    _stprintf(sTmp, _T("SetModelType ERROR! ModelName returned")
-              _T("invalid value <%d> from Registry!"), Temp);
-    LogStartUp(sTmp);
+    LogStartUp(_T("SetModelType ERROR! ModelName returned")
+               _T("invalid value <%d> from Registry!"), Temp);
     GlobalModelType = MODELTYPE_PNA_PNA;
   } else {
     GlobalModelType = Temp;
   }
 
-  _stprintf(sTmp, _T("SetModelType: Name=<%s> Type=%d"), GlobalModelName,
-      GlobalModelType);
-  LogStartUp(sTmp);
+  LogStartUp(_T("SetModelType: Name=<%s> Type=%d"), GlobalModelName,
+             GlobalModelType);
 }
 
 // Parse a MODELTYPE value and set the equivalent model name.

@@ -364,9 +364,7 @@ void InitAsset() {
 
     LogStartUp(TEXT("Check for installing fonts"));
     short didfonts=InstallFonts();  // check if really did it, and maybe restart
-    TCHAR nTmp[100];
-    _stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)"), didfonts);
-    LogStartUp(nTmp);
+    LogStartUp(_T("InstallFonts() result=%d (0=installed >0 not installed)"), didfonts);
 
     //#endif
   #endif

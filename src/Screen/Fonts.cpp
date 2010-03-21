@@ -201,12 +201,8 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc,
   if (iWidth == 640 && iHeight == 480) ScreenSize=(ScreenSize_t)ss640x480; //   VGA
   if (iWidth == 800 && iHeight == 480) ScreenSize=(ScreenSize_t)ss800x480; //  WVGA
 
-  TCHAR tbuf[80];
-  if (ScreenSize==0) {
-    _stprintf(tbuf, _T("--- ERROR UNKNOWN RESOLUTION %dx%d !"),
-              iWidth, iHeight);
-	LogStartUp(tbuf);
-  }
+  if (ScreenSize == 0)
+	  LogStartUp(_T("--- ERROR UNKNOWN RESOLUTION %dx%d !"), iWidth, iHeight);
 
   if (is_pna()) {
     if (ScreenSize==(ScreenSize_t)ss480x272) { // WQVGA  e.g. MIO
