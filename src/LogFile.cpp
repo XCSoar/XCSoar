@@ -56,7 +56,14 @@ void
 LogDebug(const TCHAR *Str, ...)
 {
   static bool initialised = false;
-  TCHAR szFileName[] = _T("xcsoar-debug.log");
+  static TCHAR szFileName[MAX_PATH];
+
+  if (!initialised) {
+    if (is_altair())
+      LocalPath(szFileName, _T("persist/xcsoar-debug.log"));
+    else
+      LocalPath(szFileName, _T("xcsoar-debug.log"));
+  }
 
   TCHAR buf[MAX_PATH];
   va_list ap;
