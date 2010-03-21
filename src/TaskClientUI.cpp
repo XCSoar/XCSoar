@@ -169,14 +169,6 @@ TaskClientUI::ordered_CAccept(BaseVisitor& visitor) const
   task_manager.ordered_CAccept(visitor);
 }
 
-AbstractTaskFactory&
-TaskClientUI::get_factory() const
-{
-  ScopeLock lock(mutex);
-  return task_manager.get_factory();
-}
-
-
 TracePointVector 
 TaskClientUI::find_trace_points(const GEOPOINT &loc, 
                                 const fixed range,

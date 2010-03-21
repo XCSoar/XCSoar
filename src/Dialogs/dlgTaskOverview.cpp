@@ -69,19 +69,6 @@ static bool fai_ok = false;
 
 static const OrderedTask *ordered_task;
 
-class FindOrderedTask : public TaskVisitor {
-public:
-  const OrderedTask *ordered_task;
-
-  void Visit(const AbortTask &task) {}
-
-  void Visit(const OrderedTask &task) {
-    ordered_task = &task;
-  }
-
-  void Visit(const GotoTask &task) {}
-};
-
 static void UpdateFilePointer(void) {
   WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpFile"));
   if (wp) {
@@ -292,10 +279,6 @@ static void OverviewRefreshTask(void) {
 
   LowLimit =0;
 #else
-  FindOrderedTask find;
-  task_ui.ordered_CAccept(find);
-  ordered_task = find.ordered_task;
-
   LowLimit = 0;
   UpLimit = ordered_task != NULL
     ? ordered_task->task_size()
@@ -324,7 +307,7 @@ OnTaskListEnter(unsigned ItemIndex)
     if (tp == NULL)
       return;
 
-    AbstractTaskFactory &factory = task_ui.get_factory();
+    AbstractTaskFactory &factory = ordered_task->get_factory();
     dlgTaskWaypointShowModal(*parent_window, factory, ItemIndex, *tp, false);
   } else {
     bool is_finish = false;
@@ -350,7 +333,7 @@ OnTaskListEnter(unsigned ItemIndex)
       if (wp == NULL)
         return;
 
-      AbstractTaskFactory &factory = task_ui.get_factory();
+      AbstractTaskFactory &factory = ordered_task->get_factory();
       OrderedTaskPoint *tp;
       if (ItemIndex==0) {
         tp = factory.createStart(AbstractTaskFactory::START_LINE, *wp);
@@ -582,6 +565,8 @@ dlgTaskOverviewShowModal(SingleWindow &parent)
 
   assert(wf!=NULL);
 
+  ordered_task = task_ui.task_clone();
+
   UpdateCaption();
 
   wfAdvanced = ((WndFrame *)wf->FindByName(_T("frmAdvanced")));
@@ -615,12 +600,7 @@ dlgTaskOverviewShowModal(SingleWindow &parent)
 
   wf->ShowModal();
 
-  // now retrieve back the properties...
-
-#ifdef OLD_TASK
-  task.RefreshTask(XCSoarInterface::SettingsComputer(),
-                   XCSoarInterface::Basic());
-#endif
+  task_ui.task_commit(*ordered_task);
 
   delete wf;
 
