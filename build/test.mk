@@ -341,6 +341,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/TextReader.cpp \
+	$(SRC)/TextWriter.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \

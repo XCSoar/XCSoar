@@ -41,6 +41,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Defines.h"
 #include "Sizes.h"
+#include "TextWriter.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -857,19 +858,16 @@ SaveRegistryToFile(const TCHAR *szFile)
   if (string_is_empty(szFile))
     return;
 
-  FILE *fp = NULL;
-  fp = _tfopen(szFile, TEXT("wb"));
-  if(fp == NULL)
+  TextWriter writer(szFile);
+  if (writer.error())
     return;
 
   HKEY hkFrom;
   LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey,
                             0, KEY_ALL_ACCESS, &hkFrom);
 
-  if (ERROR_SUCCESS != res) {
+  if (ERROR_SUCCESS != res)
     return;
-    fclose(fp);
-  }
 
   for (int i = 0;; i++) {
     DWORD nType;
@@ -904,10 +902,10 @@ SaveRegistryToFile(const TCHAR *szFile)
 
       if (nType == 4) { // data
 #ifdef __GNUC__
-        fprintf(fp, "%S=%d\r\n", lpstrName, uValue.dValue);
+        writer.printfln(_T("%s=%d"), lpstrName, uValue.dValue);
 #else
         wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
-        fprintf(fp, "%s=%d\r\n", sName, *((DWORD*)pValue));
+        writer.printfln(_T("%s=%d"), sName, *((DWORD*)pValue));
 #endif
       } else if (nType == 1) {
         // text
@@ -917,41 +915,27 @@ SaveRegistryToFile(const TCHAR *szFile)
           uValue.pValue[nValueSize] = 0; // null terminate, just in case
           uValue.pValue[nValueSize + 1] = 0; // null terminate, just in case
           if (!string_is_empty((const TCHAR*)uValue.pValue))
-            fprintf(fp, "%S=\"%S\"\r\n", lpstrName, uValue.pValue);
+            writer.printfln(_T("%s=\"%s\""), lpstrName, uValue.pValue);
           else
-            fprintf(fp, "%S=\"\"\r\n", lpstrName);
+            writer.printfln(_T("%s=\"\""), lpstrName);
 #else
           if (!string_is_empty((const TCHAR*)pValue)) {
             pValue[nValueSize] = 0; // null terminate, just in case
             pValue[nValueSize + 1] = 0; // null terminate, just in case
             wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
             wcstombs(sValue, (TCHAR*)pValue, nMaxKeyNameSize + 1);
-            fprintf(fp, "%s=\"%s\"\r\n", sName, sValue);
+            writer.printfln(_T("%s=\"%s\""), sName, sValue);
           } else {
             wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
-            fprintf(fp, "%s=\"\"\r\n", sName);
+            writer.printfln(_T("%s=\"\""), sName);
           }
 #endif
         } else {
-#ifdef __GNUC__
-          fprintf(fp, "%S=\"\"\r\n", lpstrName);
-#else
-          fprintf(fp, "%s=\"\"\r\n", lpstrName);
-#endif
+          writer.printfln(_T("%s=\"\""), lpstrName);
         }
       }
     }
   }
-#ifdef __GNUC__
-  // JMW why flush agressively?
-  fflush(fp);
-#endif
-
-#ifdef __GNUC__
-  fprintf(fp, "\r\n"); // end of file
-#endif
-
-  fclose(fp);
 
   ::RegCloseKey(hkFrom);
 #else /* !WIN32 */
