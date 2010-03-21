@@ -743,7 +743,7 @@ Profile::SetFiles(const TCHAR* override)
 {
   // Set the default profile file
   if (is_altair())
-    LocalPath(defaultProfileFile, _T("config/xcsoar-registry.prf"));
+    LocalPath(defaultProfileFile, _T("config/")_T(XCSPROFILE));
   else
     LocalPath(defaultProfileFile, _T(XCSPROFILE));
 
