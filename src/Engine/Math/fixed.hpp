@@ -28,7 +28,7 @@ typedef double fixed;
 #define fixed_half_pi 1.5707963
 #define fixed_360 360
 #define fixed_180 180
-#define fixed_90 90.
+#define fixed_90 90
 
 void sin_cos(const double&theta, double*s, double*c);
 #define positive(x) (x > 0)
