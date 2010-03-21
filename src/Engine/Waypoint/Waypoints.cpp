@@ -73,7 +73,7 @@ public:
   void
   Visit(const WaypointEnvelope& as)
   {
-    as.get_waypoint().Accept(*waypoint_visitor);
+    as.get_waypoint().CAccept(*waypoint_visitor);
   }
 
 private:

@@ -53,7 +53,7 @@ class TaskPoint;
 class ObservationZonePoint : public ReferencePoint, 
                              public ObservationZone,
                              public NonCopyable,
-                             public BaseConstVisitable<> 
+                             public BaseVisitable<>
 {
 public:
 /** 
@@ -110,7 +110,7 @@ public:
 /**
  * Defines as a visitor 
  */
-  DEFINE_CONSTVISITABLE();
+  DEFINE_VISITABLE();
 };
 
 #endif

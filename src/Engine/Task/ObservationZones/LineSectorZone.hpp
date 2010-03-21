@@ -122,7 +122,7 @@ public:
 
   bool equals(const ObservationZonePoint* other) const;
 public:
-  DEFINE_CONSTVISITABLE();
+  DEFINE_VISITABLE();
 };
 
 #endif

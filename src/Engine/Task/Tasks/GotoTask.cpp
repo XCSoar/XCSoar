@@ -106,10 +106,10 @@ GotoTask::do_goto(const Waypoint & wp)
 }
 
 void 
-GotoTask::Accept(TaskPointVisitor& visitor, const bool reverse) const
+GotoTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
 {
   if (tp) {
-    tp->Accept(visitor);
+    tp->CAccept(visitor);
   }
 }
 

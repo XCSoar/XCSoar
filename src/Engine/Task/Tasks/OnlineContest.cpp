@@ -152,8 +152,8 @@ OnlineContest::get_olc_points() const
 
 
 void 
-OnlineContest::Accept(TaskPointVisitor& visitor, 
-                      const bool reverse) const
+OnlineContest::tp_CAccept(TaskPointConstVisitor& visitor, 
+                       const bool reverse) const
 {
   /// \todo - visit "OLCPoint"
 }

@@ -194,7 +194,7 @@ private:
   fixed StartRadial;
   fixed EndRadial;
 public:
-  DEFINE_CONSTVISITABLE();
+  DEFINE_VISITABLE();
 };
 
 #endif

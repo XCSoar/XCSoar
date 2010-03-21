@@ -77,8 +77,8 @@ public:
   GEOPOINT get_task_center(const GEOPOINT& fallback_location) const;
   fixed get_task_radius(const GEOPOINT& fallback_location) const;
 
-  void Accept(BaseVisitor& visitor) const;
-  void ordered_Accept(BaseVisitor& visitor) const;
+  void CAccept(BaseVisitor& visitor) const;
+  void ordered_CAccept(BaseVisitor& visitor) const;
 
   AbstractTaskFactory* get_factory();
 

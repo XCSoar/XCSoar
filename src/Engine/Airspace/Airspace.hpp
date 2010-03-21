@@ -193,7 +193,7 @@ public:
    * 
    * @param v Visitor to accept
    */
-  void Accept(BaseVisitor &v) const;
+  void CAccept(BaseVisitor &v) const;
 };
 
 #endif

@@ -46,7 +46,7 @@
 #include "Util/GenericVisitor.hpp"
 
 /**
- * Generic visitor for task points (for double-dispatch)
+ * Generic visitor for const task points (for double-dispatch)
  */
 class TaskPointConstVisitor:
   public BaseVisitor,
@@ -57,5 +57,18 @@ class TaskPointConstVisitor:
   public ConstVisitor<FinishPoint>
 {
 };
+
+/**
+ * Generic visitor for task points (for double-dispatch)
+ */
+class TaskPointVisitor:
+  public BaseVisitor,
+  public Visitor<StartPoint>,
+  public Visitor<ASTPoint>,
+  public Visitor<AATPoint>,
+  public Visitor<FinishPoint>
+{
+};
+
 
 #endif

@@ -139,7 +139,7 @@ public:
   void Visit(const AbortTask& task) {
   };
   void Visit(const OrderedTask& task) {
-    task.Accept(m_leg_visitor);
+    task.tp_CAccept(m_leg_visitor);
   };
   void Visit(const GotoTask& task) {
   };
@@ -162,7 +162,7 @@ static void DrawLegs(Chart& chart,
 
     ChartTaskHelper visitor(chart, start_time);
 
-    task.ordered_Accept(visitor);
+    task.ordered_CAccept(visitor);
   }
 }
 
@@ -462,7 +462,7 @@ FlightStatistics::RenderTask(Canvas &canvas, const RECT rc,
   RenderObservationZone ozv(helper);
   RenderTaskPoint tpv(helper, ozv, false, nmea_info.Location);
   ::RenderTask dv(tpv);
-  task.Accept(dv); 
+  task.CAccept(dv); 
 }
 
 

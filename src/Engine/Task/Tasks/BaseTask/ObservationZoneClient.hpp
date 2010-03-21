@@ -40,11 +40,13 @@
 #include "ObservationZonePoint.hpp"
 
 class ObservationZoneVisitor;
+class ObservationZoneConstVisitor;
 
 /**
  * Class holding an ObzervationZonePoint, directing calls to it
  */
-class ObservationZoneClient: public virtual ObservationZone
+class ObservationZoneClient: 
+  public virtual ObservationZone
 {
 public:
   /**
@@ -105,9 +107,8 @@ public:
  * 
  * @param visitor Visitor to apply
  */
-  void Accept_oz(BaseVisitor& visitor) const {
-    m_oz->Accept(visitor);
-  }
+  void CAccept_oz(ObservationZoneConstVisitor& visitor) const;
+  void Accept_oz(ObservationZoneVisitor& visitor);
 
 /** 
  * Calculate boundary point from parametric border

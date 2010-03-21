@@ -97,10 +97,10 @@ Airspace::intersects(const GEOPOINT& g1,
 
 
 void
-Airspace::Accept(BaseVisitor &visitor) const
+Airspace::CAccept(BaseVisitor &visitor) const
 {
   if (pimpl_airspace) {
-    pimpl_airspace->Accept(visitor);
+    pimpl_airspace->CAccept(visitor);
   }
 }
 

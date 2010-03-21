@@ -42,6 +42,7 @@
 #include "Util/Filter.hpp"
 
 class TaskPointConstVisitor;
+class TaskPointVisitor;
 class AbortTask;
 class TaskBehaviour;
 class TaskEvents;
@@ -475,7 +476,8 @@ public:
  * @param visitor Visitor to accept
  * @param reverse Perform scan in reverse sequence
  */
-  virtual void Accept(TaskPointConstVisitor& visitor, const bool reverse=false) const = 0;
-  DEFINE_CONSTVISITABLE()
+  virtual void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const = 0;
+  virtual void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) = 0;
+  DEFINE_VISITABLE()
 };
 #endif //ABSTRACTTASK_H

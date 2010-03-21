@@ -46,6 +46,7 @@
 #include "GlideSolvers/MacCready.hpp"
 
 class OrderedTaskPoint;
+class TaskPointVisitor;
 
 /**
  * A task comprising an ordered sequence of task points, each with
@@ -606,9 +607,10 @@ public:
  *
  * \todo reverse not implemented yet
  */
-  void Accept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+  void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+  void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false);
 
-  DEFINE_CONSTVISITABLE()
+  DEFINE_VISITABLE()
 };
 
 #endif //ORDEREDTASK_H

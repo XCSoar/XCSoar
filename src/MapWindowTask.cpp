@@ -94,7 +94,7 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
     RenderTaskPointMap tpv(helper, ozv, draw_bearing,
                            Basic().Location, *this);
     RenderTask dv(tpv);
-    task->Accept(dv); 
+    task->CAccept(dv); 
   }
 }
 

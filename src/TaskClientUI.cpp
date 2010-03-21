@@ -156,17 +156,17 @@ TaskClientUI::get_task_radius(const GEOPOINT& fallback_location) const
 
 
 void 
-TaskClientUI::Accept(BaseVisitor& visitor) const
+TaskClientUI::CAccept(BaseVisitor& visitor) const
 {
   ScopeLock lock(mutex);
-  task_manager.Accept(visitor);
+  task_manager.CAccept(visitor);
 }
 
 void 
-TaskClientUI::ordered_Accept(BaseVisitor& visitor) const
+TaskClientUI::ordered_CAccept(BaseVisitor& visitor) const
 {
   ScopeLock lock(mutex);
-  task_manager.ordered_Accept(visitor);
+  task_manager.ordered_CAccept(visitor);
 }
 
 

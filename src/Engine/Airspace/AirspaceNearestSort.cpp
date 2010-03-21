@@ -66,7 +66,7 @@ AirspaceNearestSort::visit_sorted(const AirspacesInterface &airspaces,
   populate_queue(airspaces, range);
 
   while (!m_q.empty()) {
-    m_q.top().second.second.get_airspace()->Accept(visitor);
+    m_q.top().second.second.get_airspace()->CAccept(visitor);
     m_q.pop();
   } 
 }

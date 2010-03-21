@@ -53,7 +53,7 @@ class TaskPoint;
  *  methods that will be common to all tasks.
  */
 class TaskInterface:
-  public BaseConstVisitable<> 
+  public BaseVisitable<> 
 {
 public:
 

@@ -63,7 +63,7 @@ Airspaces::visit_within_range(const GEOPOINT &loc,
     if (!visitor.condition(*v))
       continue;
 
-    v->Accept(visitor);
+    v->CAccept(visitor);
   }
 }
 
@@ -93,7 +93,7 @@ Airspaces::visit_intersecting(const GEOPOINT &loc,
       continue;
 
     if (visitor.set_intersections(v->intersects(loc, vec)))
-      v->Accept(visitor);
+      v->CAccept(visitor);
   }
 }
 

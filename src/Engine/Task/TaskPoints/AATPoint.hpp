@@ -229,7 +229,7 @@ private:
   bool equals(const OrderedTaskPoint* other) const;
 
 public:
-  DEFINE_CONSTVISITABLE()
+  DEFINE_VISITABLE()
 };
 
 #endif

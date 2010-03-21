@@ -59,7 +59,7 @@
 class TaskPoint : 
   public ReferencePoint, 
   public Serialisable,
-  public BaseConstVisitable<>
+  public BaseVisitable<>
 {
 
 public:
@@ -194,7 +194,7 @@ protected:
 private:
   const Waypoint m_waypoint; /**< local copy of waypoint */
 public:
-  DEFINE_CONSTVISITABLE()
+  DEFINE_VISITABLE()
 };
 
 #endif

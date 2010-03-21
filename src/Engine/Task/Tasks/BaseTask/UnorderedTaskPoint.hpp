@@ -73,7 +73,7 @@ public:
   fixed get_elevation() const;
 
 public:
-  DEFINE_CONSTVISITABLE()
+  DEFINE_VISITABLE()
 };
 
 #endif

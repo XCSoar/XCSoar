@@ -46,12 +46,22 @@
 /**
  * Generic visitor for observation zones (for double-dispatch)
  */
-class ObservationZoneVisitor:
+class ObservationZoneConstVisitor:
   public BaseVisitor,
   public ConstVisitor<FAISectorZone>,
   public ConstVisitor<SectorZone>,
   public ConstVisitor<LineSectorZone>,
   public ConstVisitor<CylinderZone>
+{
+
+};
+
+class ObservationZoneVisitor:
+  public BaseVisitor,
+  public Visitor<FAISectorZone>,
+  public Visitor<SectorZone>,
+  public Visitor<LineSectorZone>,
+  public Visitor<CylinderZone>
 {
 
 };

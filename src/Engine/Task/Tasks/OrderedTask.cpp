@@ -686,9 +686,19 @@ OrderedTask::OrderedTask(TaskEvents &te,
 }
 
 void 
-OrderedTask::Accept(TaskPointConstVisitor& visitor, const bool reverse) const
+OrderedTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
 {
-  for (OrderedTaskPointVector::const_iterator it = tps.begin(); it!= tps.end(); it++) {
+  for (OrderedTaskPointVector::const_iterator it = tps.begin(); 
+       it!= tps.end(); ++it) {
+    (*it)->CAccept(visitor);
+  }
+}
+
+void 
+OrderedTask::tp_Accept(TaskPointVisitor& visitor, const bool reverse)
+{
+  for (OrderedTaskPointVector::iterator it = tps.begin(); 
+       it!= tps.end(); ++it) {
     (*it)->Accept(visitor);
   }
 }

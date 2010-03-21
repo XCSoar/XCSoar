@@ -8,7 +8,7 @@
 
 #include "harness_waypoints.hpp"
 
-class ObservationZoneVisitorPrint: public ObservationZoneVisitor
+class ObservationZoneVisitorPrint: public ObservationZoneConstVisitor
 {
 public:
   virtual void Visit(const FAISectorZone& oz) {
@@ -25,7 +25,7 @@ public:
   }
 };
 
-class TaskPointVisitorPrint: public TaskPointVisitor
+class TaskPointVisitorPrint: public TaskPointConstVisitor
 {
 public:
   virtual void Visit(const UnorderedTaskPoint& tp) {
@@ -33,23 +33,23 @@ public:
   }
   virtual void Visit(const OrderedTaskPoint& tp) {
     printf("# got an otp\n");
-    tp.Accept_oz(ozv);
+    tp.CAccept_oz(ozv);
   }
   virtual void Visit(const FinishPoint& tp) {
     printf("# got an ftp\n");
-    tp.Accept_oz(ozv);
+    tp.CAccept_oz(ozv);
   }
   virtual void Visit(const StartPoint& tp) {
     printf("# got an stp\n");
-    tp.Accept_oz(ozv);
+    tp.CAccept_oz(ozv);
   }
   virtual void Visit(const AATPoint& tp) {
     printf("# got an aat\n");
-    tp.Accept_oz(ozv);
+    tp.CAccept_oz(ozv);
   }
   virtual void Visit(const ASTPoint& tp) {
     printf("# got an ast\n");
-    tp.Accept_oz(ozv);
+    tp.CAccept_oz(ozv);
   }
 private:
   ObservationZoneVisitorPrint ozv;
@@ -60,12 +60,12 @@ class TaskVisitorPrint: public TaskVisitor
 public:
   virtual void Visit(const AbortTask& task) {
     printf("# task is abort\n");
-    task.Accept(tpv);
+    task.tp_CAccept(tpv);
     print_distances(task);
   };
   virtual void Visit(const OrderedTask& task) {
     printf("# task is ordered\n");
-    task.Accept(tpv);
+    task.tp_CAccept(tpv);
     print_distances(task);
     if (task.get_stats().distance_max>task.get_stats().distance_min) {
       printf("# - dist max %g\n", (double)task.get_stats().distance_max);
@@ -74,7 +74,7 @@ public:
   };
   virtual void Visit(const GotoTask& task) {
     printf("# task is goto\n");
-    task.Accept(tpv);
+    task.tp_CAccept(tpv);
     print_distances(task);
   };
   virtual void print_distances(const AbstractTask& task) {
@@ -91,7 +91,7 @@ void task_report(TaskManager& task_manager, const char* text)
 #ifdef DO_PRINT
     TaskVisitorPrint tv;
     printf("%s",text);
-    task_manager.Accept(tv);
+    task_manager.CAccept(tv);
     task_manager.print(ac);
 #endif
   }

@@ -42,7 +42,7 @@ Copyright_License {
 #include "MapDrawHelper.hpp"
 
 class RenderObservationZone: 
-  public ObservationZoneVisitor, 
+  public ObservationZoneConstVisitor, 
   public MapDrawHelper
 {
 public:

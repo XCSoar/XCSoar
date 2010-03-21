@@ -193,7 +193,7 @@ public:
     if (!m_waypoint) {
       m_waypoint = &taskpoint.get_waypoint();
     }
-    taskpoint.Accept(*this);
+    taskpoint.CAccept(*this);
     return m_retval;
   }
   

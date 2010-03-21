@@ -293,7 +293,7 @@ static void OverviewRefreshTask(void) {
   LowLimit =0;
 #else
   FindOrderedTask find;
-  task_ui.ordered_Accept(find);
+  task_ui.ordered_CAccept(find);
   ordered_task = find.ordered_task;
 
   LowLimit = 0;

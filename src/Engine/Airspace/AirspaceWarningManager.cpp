@@ -358,7 +358,7 @@ AirspaceWarningManager::visit_warnings(AirspaceWarningVisitor& visitor) const
 {
   for (AirspaceWarningList::const_iterator it = m_warnings.begin();
        it != m_warnings.end(); ++it) {
-    it->Accept(visitor);
+    it->CAccept(visitor);
   }
 }
 

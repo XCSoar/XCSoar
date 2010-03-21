@@ -148,9 +148,10 @@ public:
  *
  * \todo reverse not implemented yet
  */
-  void Accept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+  void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+  void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) {};
 
-  DEFINE_CONSTVISITABLE()
+  DEFINE_VISITABLE()
 };
 
 #endif //GOTOTASK_H

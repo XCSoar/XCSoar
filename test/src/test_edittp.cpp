@@ -9,7 +9,7 @@
 
 
 #include "Task/Visitors/TaskPointVisitor.hpp"
-
+#include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 /*
 class TaskPointEdit: public TaskPointVisitor
@@ -165,6 +165,50 @@ public:
 };
 */
 
+class ObservationZoneEdit: public ObservationZoneVisitor
+{
+public:
+  ObservationZoneEdit() {};
+
+private:
+  virtual void Visit(FAISectorZone& tp) {
+    // nothing to edit
+  }
+  virtual void Visit(SectorZone& tp) {
+    // radius, radials
+  }
+  virtual void Visit(LineSectorZone& tp) {
+    // length
+    tp.setLength(fixed(1000));
+  }
+  virtual void Visit(CylinderZone& tp) {
+    // radius
+    tp.setRadius(fixed(2000));
+  }
+};
+
+
+class TaskPointEdit: public TaskPointVisitor
+{
+public:
+  TaskPointEdit() {};
+
+private:
+  virtual void Visit(FinishPoint& tp) {
+  }
+  virtual void Visit(StartPoint& tp) {
+    ObservationZoneEdit ozv;
+    tp.Accept_oz(ozv);
+  }
+  virtual void Visit(AATPoint& tp) {
+    ObservationZoneEdit ozv;
+    tp.Accept_oz(ozv);
+  }
+  virtual void Visit(ASTPoint& tp) {
+  }
+};
+
+
 bool test_edit(TaskManager& task, const TaskBehaviour &task_behaviour) 
 {
   TaskEventsPrint edit_events(verbose);
@@ -176,7 +220,10 @@ bool test_edit(TaskManager& task, const TaskBehaviour &task_behaviour)
                                       glide_polar);
 
 
-  task_copy->remove(1);
+//  task_copy->remove(2);
+
+  TaskPointEdit tpv;
+  task_copy->tp_Accept(tpv);
 
   task.commit(*task_copy);
 

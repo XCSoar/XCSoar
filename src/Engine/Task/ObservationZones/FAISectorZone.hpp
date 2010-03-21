@@ -82,7 +82,7 @@ public:
 /**
  * Defines as a visitor 
  */
-  DEFINE_CONSTVISITABLE();
+  DEFINE_VISITABLE();
 };
 
 #endif

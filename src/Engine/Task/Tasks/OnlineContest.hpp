@@ -15,6 +15,7 @@ class TaskPoint;
 class TaskEvents;
 class TaskBehaviour;
 class TaskPointVisitor;
+class TaskPointConstVisitor;
 class GlidePolar;
 class CommonStats;
 class Trace;
@@ -23,7 +24,7 @@ class Trace;
  * Special task holder for Online Contest calculations
  */
 class OnlineContest:
-  public BaseConstVisitable<> 
+  public BaseVisitable<> 
 {
 public:
 
@@ -127,9 +128,10 @@ public:
  *
  * \todo reverse not implemented yet
  */
-  void Accept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+  void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+  void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) {};
 
-  DEFINE_CONSTVISITABLE()
+  DEFINE_VISITABLE()
 };
 
 #endif

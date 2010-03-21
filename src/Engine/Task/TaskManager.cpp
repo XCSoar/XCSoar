@@ -217,10 +217,10 @@ TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
 
   WaypointLister lister(common_stats);
   if (common_stats.ordered_valid) {
-    task_ordered.Accept(lister);
+    task_ordered.CAccept(lister);
   }
   if (active_task && (active_task != &task_ordered)) {
-    active_task->Accept(lister);
+    active_task->CAccept(lister);
   }
 }
 
@@ -401,13 +401,25 @@ TaskManager::check_ordered_task() const
 }
 
 void
-TaskManager::Accept(BaseVisitor& visitor) const
+TaskManager::CAccept(BaseVisitor& visitor) const
+{
+  if (active_task) active_task->CAccept(visitor);
+}
+
+void
+TaskManager::ordered_CAccept(BaseVisitor& visitor) const
+{
+  task_ordered.CAccept(visitor);
+}
+
+void
+TaskManager::Accept(BaseVisitor& visitor) 
 {
   if (active_task) active_task->Accept(visitor);
 }
 
 void
-TaskManager::ordered_Accept(BaseVisitor& visitor) const
+TaskManager::ordered_Accept(BaseVisitor& visitor) 
 {
   task_ordered.Accept(visitor);
 }

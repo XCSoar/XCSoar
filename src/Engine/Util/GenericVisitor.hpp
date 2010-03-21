@@ -112,7 +112,7 @@ public:
   for_each(const TVector &v)
   {
     for (TVectorIterator i = v.begin(); i != v.end(); i++) {
-      i->Accept(*this);
+      i->CAccept(*this);
     }
   }
 
@@ -123,9 +123,10 @@ public:
   void
   operator()(const T& as)
   {
-    as.Accept(*this);
+    as.CAccept(*this);
   }
 };
+
 
 /**
  * Class from which to inherit for a class to be visitable
@@ -148,7 +149,7 @@ public:
    *
    * @return Return value of Visitor
    */
-  virtual R Accept(BaseVisitor&) const = 0;
+  virtual R CAccept(BaseVisitor&) const = 0;
 
 protected:
   /**
@@ -161,7 +162,7 @@ protected:
    */
   template<class T>
   static ReturnType
-  AcceptImpl(const T& visited, BaseVisitor& guest)
+  CAcceptImpl(const T& visited, BaseVisitor& guest)
   {
     // Apply the acyclic visitor
     if (ConstVisitor<T>* p = dynamic_cast<ConstVisitor<T>*>(&guest))
@@ -169,23 +170,15 @@ protected:
 
     return ReturnType();
   }
+
 };
 
-
-/**
- * Class from which to inherit for a class to be visitable
- */
 template <typename R = void>
-class BaseVisitable
+class BaseVisitable: public BaseConstVisitable<R>
 {
 public:
   /** Accessible to clients */
   typedef R ReturnType;
-
-  /**
-   * Destructor
-   */
-  virtual ~BaseVisitable() {}
 
   /**
    * Double-dispatch abstract accept method for items that
@@ -216,12 +209,15 @@ protected:
   }
 };
 
+
 #define DEFINE_CONSTVISITABLE() \
-  virtual ReturnType Accept(BaseVisitor& guest) const \
-  { return AcceptImpl(*this, guest); }
+  virtual ReturnType CAccept(BaseVisitor& guest) const \
+  { return CAcceptImpl(*this, guest); }
 
 #define DEFINE_VISITABLE() \
   virtual ReturnType Accept(BaseVisitor& guest) \
-  { return AcceptImpl(*this, guest); }
+  { return AcceptImpl(*this, guest); } \
+  virtual ReturnType CAccept(BaseVisitor& guest) const \
+  { return CAcceptImpl(*this, guest); }
 
 #endif

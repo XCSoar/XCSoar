@@ -79,7 +79,8 @@ struct WaypointFlags {
  * - consider having a static factory method provide the ID automatically
  *   so we know they will be unique.
  */
-class Waypoint: public BaseConstVisitable<>
+class Waypoint: 
+  public BaseConstVisitable<>
 {
 public:
   /**

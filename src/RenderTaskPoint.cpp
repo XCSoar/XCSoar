@@ -51,7 +51,7 @@ void
 RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp) 
 {
   buffer_render_start();
-  
+
   if (m_layer == 0) {
     draw_oz_background(tp);
     draw_samples(tp);
@@ -279,7 +279,7 @@ RenderTaskPoint::draw_oz_background(const OrderedTaskPoint& tp)
   ozv.set_past(point_past());
   ozv.set_current(point_current());
   ozv.set_background(true);
-  tp.Accept_oz(ozv);
+  tp.CAccept_oz(ozv);
 }
 
 void 
@@ -288,5 +288,5 @@ RenderTaskPoint::draw_oz_foreground(const OrderedTaskPoint& tp)
   ozv.set_past(point_past());
   ozv.set_current(point_current());
   ozv.set_background(false);
-  tp.Accept_oz(ozv);
+  tp.CAccept_oz(ozv);
 }
