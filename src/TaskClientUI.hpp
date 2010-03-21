@@ -45,8 +45,13 @@
 class TaskClientUI: public TaskClient
 {
 public:
-  TaskClientUI(TaskManager& tm):
-    TaskClient(tm) {};
+  TaskClientUI(TaskManager& tm,
+               const TaskBehaviour& tb,
+               TaskEvents& te):
+    TaskClient(tm),
+    task_behaviour(tb),
+    task_events(te),
+    glide_polar(tm.get_glide_polar()) {};
 
   TaskAdvance::TaskAdvanceMode_t get_advance_mode() const;
   void set_advance_mode(TaskAdvance::TaskAdvanceMode_t the_mode);
@@ -87,6 +92,22 @@ public:
                                      const unsigned mintime, 
                                      const fixed resolution) const;
 
+  // 
+  OrderedTask* task_clone();
+
+  /**
+   * Copy task into this task
+   *
+   * @param other OrderedTask to copy
+   * @return True if this task changed
+   */
+  bool task_commit(const OrderedTask& that);
+
+protected:
+  const TaskBehaviour &task_behaviour;
+  TaskEvents &task_events;
+  GlidePolar glide_polar;
+  TaskAdvance task_advance;
 };
 
 

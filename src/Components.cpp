@@ -113,11 +113,15 @@ Waypoints way_points;
 
 TaskBehaviour task_behaviour;
 GlideComputerTaskEvents task_events;
+
 TaskManager task_manager(task_events,
                          task_behaviour,
                          way_points);
 
-TaskClientUI task_ui(task_manager);
+TaskClientUI task_ui(task_manager, XCSoarInterface::SettingsComputer(),
+                     task_events);
+/// @todo JMW have ui-specific task_events! Don't use glide computer's events
+
 TaskClientCalc task_calc(task_manager);
 
 AIRCRAFT_STATE ac_state;

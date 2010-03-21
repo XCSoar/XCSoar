@@ -292,7 +292,7 @@ public:
    * @param other OrderedTask to copy
    * @return True if this task changed
    */
-  bool commit(const OrderedTask& other);
+  bool commit(const OrderedTask& that);
 
   /**
    * Accessor for task advance system

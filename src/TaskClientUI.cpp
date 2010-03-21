@@ -187,3 +187,21 @@ TaskClientUI::find_trace_points(const GEOPOINT &loc,
   return task_manager.find_trace_points(loc, range, mintime, resolution);
 }
 
+OrderedTask*
+TaskClientUI::task_clone()
+{
+  ScopeLock lock(mutex);
+  task_advance = task_manager.get_task_advance();
+  glide_polar = task_manager.get_glide_polar();
+  return task_manager.clone(task_events,
+                            task_behaviour,
+                            task_advance,
+                            glide_polar);
+}
+
+bool
+TaskClientUI::task_commit(const OrderedTask& that)
+{
+  ScopeLock lock(mutex);
+  return task_manager.commit(that);
+}
