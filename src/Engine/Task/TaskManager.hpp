@@ -52,14 +52,11 @@
 #include "TaskEvents.hpp"
 #include "TaskBehaviour.hpp"
 #include "TaskAdvance.hpp"
-#include "Factory/FAITaskFactory.hpp"
-#include "Factory/AATTaskFactory.hpp"
-#include "Factory/MixedTaskFactory.hpp"
 #include "Trace/Trace.hpp"
+#include "Factory/AbstractTaskFactory.hpp"
 
 class Waypoints;
 class TaskVisitor;
-
 /**
  *  Main interface exposed to clients for providing access to common types
  *  of navigation tasks.  Hides details of these AbstractTasks behind a facade.
@@ -82,6 +79,8 @@ public:
   TaskManager(TaskEvents &te,
               const TaskBehaviour &tb,
               const Waypoints &wps);
+
+  ~TaskManager();
 
   /**
    * Increments active taskpoint sequence for active task
@@ -141,16 +140,6 @@ public:
     MODE_ORDERED,
     MODE_ABORT,
     MODE_GOTO
-  };
-
-  /**
-   * Enumeration of factory types.  This is the set of
-   * types of ordered task that can be created.
-   */
-  enum Factory_t {
-    FACTORY_FAI = 0,
-    FACTORY_AAT,
-    FACTORY_MIXED
   };
 
   /** Reset the tasks (as if never flown) */
@@ -270,7 +259,7 @@ public:
    * @return Factory
    */
   gcc_pure
-  AbstractTaskFactory* get_factory() const;
+  AbstractTaskFactory& get_factory() const;
 
   /**
    * Set type of task factory to be used for constructing tasks
@@ -279,7 +268,7 @@ public:
    *
    * @return Type of task
    */
-  Factory_t set_factory(const Factory_t _factory);
+  OrderedTask::Factory_t set_factory(const OrderedTask::Factory_t _factory);
 
   /**
    * Create a clone of the task. 
@@ -447,16 +436,8 @@ private:
 
   const TaskBehaviour &task_behaviour;
 
-  FAITaskFactory factory_fai;
-
-  AATTaskFactory factory_aat;
-
-  MixedTaskFactory factory_mixed;
-
   TaskMode_t mode;
   AbstractTask* active_task;
-  Factory_t factory_mode;
-  AbstractTaskFactory* active_factory;
     
   const TaskStats null_stats;
 

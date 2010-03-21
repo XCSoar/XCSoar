@@ -40,6 +40,7 @@
 
 // uses delegate pattern
 
+
 TaskManager::TaskManager(TaskEvents &te,
                          const TaskBehaviour &tb,
                          const Waypoints &wps): 
@@ -51,13 +52,12 @@ TaskManager::TaskManager(TaskEvents &te,
   task_abort(te,tb,task_advance,m_glide_polar,wps),
   task_olc(te,tb,m_glide_polar,common_stats, trace_full, trace_sprint),
   task_behaviour(tb),
-  factory_fai(task_ordered,tb),
-  factory_aat(task_ordered,tb),
-  factory_mixed(task_ordered,tb),
   mode(MODE_NULL),
-  active_task(NULL),
-  factory_mode(FACTORY_FAI),
-  active_factory(&factory_fai)
+  active_task(NULL)
+{
+}
+
+TaskManager::~TaskManager()
 {
 }
 
@@ -437,30 +437,6 @@ TaskManager::reset()
   trace_sprint.clear();
 }
 
-TaskManager::Factory_t 
-TaskManager::set_factory(const Factory_t the_factory)
-{
-  if ((the_factory != factory_mode) && (the_factory != FACTORY_MIXED)) {
-    // can switch from anything to mixed, otherwise need reset
-    task_ordered.reset();
-
-    /// @todo call into task_events to ask if reset is desired on factory change
-  }
-  factory_mode = the_factory;
-  switch (factory_mode) {
-  case FACTORY_FAI:
-    active_factory = &factory_fai;
-    break;
-  case FACTORY_AAT:
-    active_factory = &factory_aat;
-    break;
-  case FACTORY_MIXED:
-    active_factory = &factory_mixed;
-    break;
-  };
-  return factory_mode;
-}
-
 
 unsigned 
 TaskManager::task_size() const
@@ -534,11 +510,6 @@ TaskManager::get_task_advance()
   return task_advance;
 }
 
-AbstractTaskFactory* 
-TaskManager::get_factory() const 
-{
-  return active_factory;
-}
 
 bool 
 TaskManager::stats_valid() const 
@@ -656,4 +627,20 @@ bool
 TaskManager::commit(const OrderedTask& other)
 {
   return task_ordered.commit(other);
+}
+
+
+//////////////////
+
+AbstractTaskFactory& 
+TaskManager::get_factory() const 
+{
+  return task_ordered.get_factory();
+}
+
+
+OrderedTask::Factory_t 
+TaskManager::set_factory(const OrderedTask::Factory_t the_factory)
+{
+  return task_ordered.set_factory(the_factory);
 }

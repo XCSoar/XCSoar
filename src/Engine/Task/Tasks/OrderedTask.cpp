@@ -51,6 +51,11 @@
 #include "TaskSolvers/TaskOptTarget.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
+#include "Task/Factory/FAITaskFactory.hpp"
+#include "Task/Factory/AATTaskFactory.hpp"
+#include "Task/Factory/MixedTaskFactory.hpp"
+
+
 void
 OrderedTask::update_geometry() 
 {
@@ -672,6 +677,7 @@ OrderedTask::~OrderedTask()
     delete *v;
     tps.erase(v);
   }
+  delete active_factory;
 }
 
 
@@ -681,8 +687,11 @@ OrderedTask::OrderedTask(TaskEvents &te,
                          GlidePolar &gp):
   AbstractTask(te, tb, ta, gp),
   ts(NULL),
-  tf(NULL)
+  tf(NULL),
+  factory_mode(FACTORY_FAI),
+  active_factory(NULL)
 {
+  active_factory = new FAITaskFactory(*this, task_behaviour);
 }
 
 void 
@@ -909,6 +918,7 @@ OrderedTask::clone(TaskEvents &te,
                    GlidePolar &gp) const
 {
   OrderedTask* new_task = new OrderedTask(te, tb, ta, gp);
+  new_task->set_factory(factory_mode);
   for (unsigned i=0; i<tps.size(); ++i) {
     new_task->append(tps[i]->clone(tb, 
                                    new_task->get_task_projection()));
@@ -921,6 +931,9 @@ bool
 OrderedTask::commit(const OrderedTask& that)
 {
   bool modified = false;
+
+  // change mode to that one 
+  set_factory(that.factory_mode);
 
   // remove if that task is smaller than this one
   while (task_size() > that.task_size()) {
@@ -952,3 +965,54 @@ OrderedTask::commit(const OrderedTask& that)
 }
 
 
+bool
+OrderedTask::relocate(const unsigned position, const Waypoint& waypoint) 
+{
+  if (position>= task_size()) return false;
+
+  OrderedTaskPoint *new_tp = tps[position]->clone(task_behaviour,
+                                                  task_projection,
+                                                  &waypoint);
+  return replace(new_tp, position);
+}
+
+
+AbstractTaskFactory& 
+OrderedTask::get_factory() const 
+{
+  return *active_factory;
+}
+
+
+OrderedTask::Factory_t 
+OrderedTask::set_factory(const Factory_t the_factory)
+{
+  // detect no change
+  if (factory_mode == the_factory) {
+    return factory_mode;
+  }
+
+  if (the_factory != FACTORY_MIXED) {
+    // can switch from anything to mixed, otherwise need reset
+    reset();
+
+    /// @todo call into task_events to ask if reset is desired on
+    /// factory change
+  }
+  factory_mode = the_factory;
+
+  delete active_factory;
+
+  switch (factory_mode) {
+  case FACTORY_FAI:
+    active_factory = new FAITaskFactory(*this, task_behaviour);
+    break;
+  case FACTORY_AAT:
+    active_factory = new AATTaskFactory(*this, task_behaviour);
+    break;
+  case FACTORY_MIXED:
+    active_factory = new MixedTaskFactory(*this, task_behaviour);
+    break;
+  };
+  return factory_mode;
+}

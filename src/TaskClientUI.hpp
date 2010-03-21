@@ -80,7 +80,7 @@ public:
   void CAccept(BaseVisitor& visitor) const;
   void ordered_CAccept(BaseVisitor& visitor) const;
 
-  AbstractTaskFactory* get_factory();
+  AbstractTaskFactory& get_factory() const;
 
   TracePointVector find_trace_points(const GEOPOINT &loc, 
                                      const fixed range,

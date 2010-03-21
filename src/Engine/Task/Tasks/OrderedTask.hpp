@@ -47,6 +47,7 @@
 
 class OrderedTaskPoint;
 class TaskPointVisitor;
+class AbstractTaskFactory;
 
 /**
  * A task comprising an ordered sequence of task points, each with
@@ -86,6 +87,33 @@ public:
               TaskAdvance &ta,
               GlidePolar &gp);
   ~OrderedTask();
+
+  /**
+   * Enumeration of factory types.  This is the set of
+   * types of ordered task that can be created.
+   */
+  enum Factory_t {
+    FACTORY_FAI = 0,
+    FACTORY_AAT,
+    FACTORY_MIXED
+  };
+
+  /**
+   * Accessor for factory system for constructing tasks
+   *
+   * @return Factory
+   */
+  gcc_pure
+  AbstractTaskFactory& get_factory() const;
+
+  /**
+   * Set type of task factory to be used for constructing tasks
+   *
+   * @param _factory Type of task
+   *
+   * @return Type of task
+   */
+  Factory_t set_factory(const Factory_t _factory);
 
   /** 
    * Reset the task (as if never flown)
@@ -216,6 +244,16 @@ public:
  * @return True on success
  */
   bool remove(const unsigned position);
+
+/** 
+ * Relocate a task point to a new location
+ * 
+ * @param position Index in task sequence of task point to replace
+ * @param waypoint Waypoint of replacement
+ * 
+ * @return True on success
+ */
+  bool relocate(const unsigned position, const Waypoint& waypoint);
 
 /** 
  * Check if task is valid.  Calls task_event methods on failure.
@@ -591,6 +629,9 @@ private:
                                const GEOPOINT &location_last) const;
 
   GEOPOINT m_location_min_last;
+
+  Factory_t factory_mode;
+  AbstractTaskFactory* active_factory;
 
 public:
 

@@ -324,10 +324,10 @@ OnTaskListEnter(unsigned ItemIndex)
     if (tp == NULL)
       return;
 
-    AbstractTaskFactory *factory = task_ui.get_factory();
-    dlgTaskWaypointShowModal(*parent_window, *factory, ItemIndex, *tp, false);
+    AbstractTaskFactory &factory = task_ui.get_factory();
+    dlgTaskWaypointShowModal(*parent_window, factory, ItemIndex, *tp, false);
   } else {
-    bool isfinish = false;
+    bool is_finish = false;
 
     if ((int)ItemIndex >= UpLimit)
       ItemIndex= UpLimit;
@@ -339,9 +339,9 @@ OnTaskListEnter(unsigned ItemIndex)
         if (MessageBoxX(gettext(_T("Will this be the finish?")),
                         gettext(_T("Add Waypoint")),
                         MB_YESNO|MB_ICONQUESTION) == IDYES) {
-          isfinish = true;
+          is_finish = true;
         } else {
-          isfinish = false;
+          is_finish = false;
         }
       }
 
@@ -350,30 +350,30 @@ OnTaskListEnter(unsigned ItemIndex)
       if (wp == NULL)
         return;
 
-      AbstractTaskFactory *factory = task_ui.get_factory();
+      AbstractTaskFactory &factory = task_ui.get_factory();
       OrderedTaskPoint *tp;
       if (ItemIndex==0) {
-        tp = factory->createStart(AbstractTaskFactory::START_LINE, *wp);
-      } else if (isfinish) {
-        tp = factory->createFinish(AbstractTaskFactory::FINISH_LINE, *wp);
+        tp = factory.createStart(AbstractTaskFactory::START_LINE, *wp);
+      } else if (is_finish) {
+        tp = factory.createFinish(AbstractTaskFactory::FINISH_LINE, *wp);
       } else {
-        tp = factory->createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
+        tp = factory.createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
       }
 
       if (tp == NULL)
         return;
 
-      if (!factory->append(tp, true)) {
+      if (!factory.append(tp, true)) {
         //fprintf(stderr, "Failed to append turn point\n");
         return;
       }
 
       if (ItemIndex==0) {
-        dlgTaskWaypointShowModal(*parent_window, *factory, 0, *tp, true);
-      } else if (isfinish) {
-        dlgTaskWaypointShowModal(*parent_window, *factory, 2, *tp, true);
+        dlgTaskWaypointShowModal(*parent_window, factory, 0, *tp, true);
+      } else if (is_finish) {
+        dlgTaskWaypointShowModal(*parent_window, factory, 2, *tp, true);
       } else {
-        dlgTaskWaypointShowModal(*parent_window, *factory, 1, *tp, true);
+        dlgTaskWaypointShowModal(*parent_window, factory, 1, *tp, true);
       }
     }
   }

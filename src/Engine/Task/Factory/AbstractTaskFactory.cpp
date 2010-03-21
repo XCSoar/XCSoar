@@ -356,3 +356,12 @@ AbstractTaskFactory::swap(const unsigned position,
   }
   return remove(position+2, auto_mutate);
 }
+
+
+const OrderedTaskPoint&
+AbstractTaskFactory::relocate(const unsigned position, 
+                              const Waypoint& waypoint)
+{
+  m_task.relocate(position, waypoint);  
+  return *m_task.getTaskPoint(position);
+}

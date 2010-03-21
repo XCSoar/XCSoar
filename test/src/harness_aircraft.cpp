@@ -71,8 +71,8 @@ GEOPOINT AircraftSim::target(TaskManager &task_manager) {
 
 bool AircraftSim::far(TaskManager &task_manager) {
 
-  AbstractTaskFactory *fact = task_manager.get_factory();
-  bool entered = fact->has_entered(awp);
+  AbstractTaskFactory &fact = task_manager.get_factory();
+  bool entered = fact.has_entered(awp);
 
   if (task_manager.task_size()==1) {
     // cheat for non-ordered tasks

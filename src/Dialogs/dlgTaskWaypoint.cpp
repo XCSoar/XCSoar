@@ -400,23 +400,6 @@ static void OnAATEnabled(DataField *Sender, DataField::DataAccessKind_t Mode) {
   }
 }
 
-OrderedTaskPoint *
-CloneWithWaypoint(const OrderedTaskPoint *old, const Waypoint &wp)
-{
-  assert(old != NULL);
-
-  OrderedTaskPoint *tp;
-
-  if (dynamic_cast<const StartPoint*>(old) != NULL)
-    tp = task_factory->createStart(AbstractTaskFactory::START_SECTOR, wp);
-  else if (dynamic_cast<const FinishPoint*>(old) != NULL)
-    tp = task_factory->createFinish(AbstractTaskFactory::FINISH_SECTOR, wp);
-  else
-    tp = task_factory->createIntermediate(wp);
-
-  return tp;
-}
-
 static void OnSelectClicked(WindowControl * Sender){
 	(void)Sender;
 
@@ -425,16 +408,7 @@ static void OnSelectClicked(WindowControl * Sender){
   if (wp == NULL)
     return;
 
-  OrderedTaskPoint *tp = CloneWithWaypoint(task_point, *wp);
-  if (tp == NULL)
-    return;
-
-  if (!task_factory->replace(tp, task_point_position)) {
-    delete tp;
-    return;
-  }
-
-  task_point = tp;
+  task_point = &task_factory->relocate(task_point_position, *wp);
   UpdateCaption();
   SetValues();
 }
@@ -445,8 +419,8 @@ static void OnCloseClicked(WindowControl * Sender){
 }
 
 static void OnStartPointClicked(WindowControl * Sender){
-	(void)Sender;
-        //dlgStartPointShowModal();
+  (void)Sender;
+  //dlgStartPointShowModal();
 }
 
 

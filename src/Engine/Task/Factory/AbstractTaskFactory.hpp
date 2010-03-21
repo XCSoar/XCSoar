@@ -173,6 +173,16 @@ public:
   bool swap(const unsigned position, const bool auto_mutate=true);
 
 /** 
+ * Relocate a task point to a new location
+ * 
+ * @param position Index in task sequence of task point to replace
+ * @param waypoint Waypoint of replacement
+ * 
+ * @return New taskpoint (or old one if failed)
+ */
+  const OrderedTaskPoint& relocate(const unsigned position, const Waypoint& waypoint);
+
+/** 
  * Provide list of start types valid for later passing to createStart()
  * 
  * @return list of valid start types

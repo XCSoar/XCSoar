@@ -144,35 +144,34 @@ test_task()
   glide_polar.set_mc(fixed_two);
   task_manager.set_glide_polar(glide_polar);
 
-  AbstractTaskFactory *fact;
   OrderedTaskPoint *tp;
   const Waypoint *wp;
 
-  task_manager.set_factory(TaskManager::FACTORY_MIXED);
-  fact = task_manager.get_factory();
+  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  AbstractTaskFactory &fact = task_manager.get_factory();
 
   wp = way_points.lookup_name(_T("BENALLA"));
   if (wp) {
-    tp = fact->createStart(AbstractTaskFactory::START_LINE, *wp);
-    fact->append(tp, false);
+    tp = fact.createStart(AbstractTaskFactory::START_LINE, *wp);
+    fact.append(tp, false);
   }
 
   wp = way_points.lookup_name(_T("Goorambat"));
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER, *wp);
-    fact->append(tp, false);
+    tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER, *wp);
+    fact.append(tp, false);
   }
 
   wp = way_points.lookup_name(_T("Glenrowan"));
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
-    fact->append(tp, false);
+    tp = fact.createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
+    fact.append(tp, false);
   }
 
   wp = way_points.lookup_name(_T("BENALLA"));
   if (wp) {
-    tp = fact->createFinish(AbstractTaskFactory::FINISH_LINE, *wp);
-    fact->append(tp, false);
+    tp = fact.createFinish(AbstractTaskFactory::FINISH_LINE, *wp);
+    fact.append(tp, false);
   }
 
   task_manager.setActiveTaskPoint(0);

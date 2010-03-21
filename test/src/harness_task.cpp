@@ -107,25 +107,25 @@ bool test_task_manip(TaskManager& task_manager,
   if (!test_task_mixed(task_manager, waypoints)) {
     return false;
   }
-  AbstractTaskFactory *fact = task_manager.get_factory();
+  AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# removing tp 2\n");
-  if (!fact->remove(2)) {
+  if (!fact.remove(2)) {
     return false;
   }
 
   task_report(task_manager, "# removing tp 0\n");
-  if (!fact->remove(0)) {
+  if (!fact.remove(0)) {
     return false;
   }
 
   task_report(task_manager, "# removing tp -1 (illegal)\n");
-  if (fact->remove(0-1)) {
+  if (fact.remove(0-1)) {
     return false;
   }
 
   task_report(task_manager, "# removing tp 50 (illegal)\n");
-  if (fact->remove(50)) {
+  if (fact.remove(50)) {
     return false;
   }
 
@@ -135,69 +135,69 @@ bool test_task_manip(TaskManager& task_manager,
   task_report(task_manager, "# inserting at 3\n");
   wp = waypoints.lookup_id(3);
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
-    if (!fact->insert(tp,3)) return false;
+    tp = fact.createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
+    if (!fact.insert(tp,3)) return false;
   }
 
   task_report(task_manager, "# auto-replacing at 2 (no morph)\n");
   wp = waypoints.lookup_id(9);
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
-    if (!fact->replace(tp,2)) return false;
+    tp = fact.createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
+    if (!fact.replace(tp,2)) return false;
   }
 
   task_report(task_manager, "# auto-replacing at 2 (morph)\n");
   wp = waypoints.lookup_id(9);
   if (wp) {
-    tp = fact->createStart(*wp);
-    if (!fact->replace(tp,2)) return false;
+    tp = fact.createStart(*wp);
+    if (!fact.replace(tp,2)) return false;
   }
 
   task_report(task_manager, "# auto-replacing at 0 (morph this)\n");
   wp = waypoints.lookup_id(12);
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::FAI_SECTOR,*wp);
-    if (!fact->replace(tp,0)) return false;
+    tp = fact.createIntermediate(AbstractTaskFactory::FAI_SECTOR,*wp);
+    if (!fact.replace(tp,0)) return false;
   }
 
   task_report(task_manager, "# auto-replacing at end (morph this)\n");
   wp = waypoints.lookup_id(14);
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
-    if (!fact->replace(tp,task_manager.task_size()-1)) return false;
+    tp = fact.createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
+    if (!fact.replace(tp,task_manager.task_size()-1)) return false;
   }
 
   task_report(task_manager, "# removing finish point\n");
-  if (!fact->remove(task_manager.task_size()-1)) {
+  if (!fact.remove(task_manager.task_size()-1)) {
     return false;
   }
 
   task_report(task_manager, "# inserting at 50 (equivalent to append)\n");
   wp = waypoints.lookup_id(8);
   if (wp) {
-    tp = fact->createFinish(*wp);
-    if (!fact->insert(tp,50)) return false;
+    tp = fact.createFinish(*wp);
+    if (!fact.insert(tp,50)) return false;
   }
 
   task_report(task_manager, "# inserting at 0 (morph this)\n");
   wp = waypoints.lookup_id(3);
   if (wp) {
-    tp = fact->createFinish(*wp);
-    if (!fact->insert(tp,0)) return false;
+    tp = fact.createFinish(*wp);
+    if (!fact.insert(tp,0)) return false;
   }
 
   task_report(task_manager, "# inserting at 2 (morph this)\n");
   wp = waypoints.lookup_id(4);
   if (wp) {
-    tp = fact->createStart(*wp);
-    if (!fact->insert(tp,2)) return false;
+    tp = fact.createStart(*wp);
+    if (!fact.insert(tp,2)) return false;
   }
 
   task_report(task_manager, "# inserting at 2 (direct)\n");
   wp = waypoints.lookup_id(6);
   if (wp) {
-    tp = fact->createIntermediate(*wp);
-    if (!fact->insert(tp,2,false)) return false;
+    tp = fact.createIntermediate(*wp);
+    if (!fact.insert(tp,2,false)) return false;
   }
 
   task_report(task_manager, "# checking task\n");
@@ -216,23 +216,21 @@ bool test_task_manip(TaskManager& task_manager,
 bool test_task_mixed(TaskManager& task_manager,
                      const Waypoints &waypoints)
 {
-
-  AbstractTaskFactory *fact;
   OrderedTaskPoint *tp;
   const Waypoint *wp;
 
-  task_manager.set_factory(TaskManager::FACTORY_MIXED);
-  fact = task_manager.get_factory();
+  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    tp = fact->createStart(AbstractTaskFactory::START_LINE,*wp);
+    tp = fact.createStart(AbstractTaskFactory::START_LINE,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
       cz->setRadius(fixed(5000.0));
       tp->update_oz();
     }
-    if (!fact->append(tp,false)) return false;
+    if (!fact.append(tp,false)) return false;
   } else {
     return false;
   }
@@ -243,48 +241,48 @@ bool test_task_mixed(TaskManager& task_manager,
   task_report(task_manager, "# adding intermdiate\n");
   wp = waypoints.lookup_id(2);
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::FAI_SECTOR,*wp);
-    if (!fact->append(tp,false)) return false;
+    tp = fact.createIntermediate(AbstractTaskFactory::FAI_SECTOR,*wp);
+    if (!fact.append(tp,false)) return false;
   }
 
   task_report(task_manager, "# adding intermdiate\n");
   wp = waypoints.lookup_id(3);
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
+    tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
       cz->setRadius(fixed(30000.0));
       tp->update_oz();
     }
-    if (!fact->append(tp,false)) return false;
+    if (!fact.append(tp,false)) return false;
   }
 
   task_report(task_manager, "# adding intermdiate\n");
   wp = waypoints.lookup_id(4);
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
-    if (!fact->append(tp,false)) return false;
+    tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
+    if (!fact.append(tp,false)) return false;
   }
 
   task_report(task_manager, "# adding intermdiate\n");
   wp = waypoints.lookup_id(5);
   if (wp) {
-    tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
+    tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
       cz->setRadius(fixed(30000.0));
       tp->update_oz();
     }
-    if (!fact->append(tp,false)) return false;
+    if (!fact.append(tp,false)) return false;
   }
 
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    tp = fact->createFinish(AbstractTaskFactory::FINISH_SECTOR,*wp);
-    if (!fact->append(tp,false)) return false;
+    tp = fact.createFinish(AbstractTaskFactory::FINISH_SECTOR,*wp);
+    if (!fact.append(tp,false)) return false;
   }
 
   task_report(task_manager, "# checking task\n");
-  if (!fact->validate()) {
+  if (!fact.validate()) {
     return false;
   }
 
@@ -298,14 +296,14 @@ bool test_task_mixed(TaskManager& task_manager,
 bool test_task_fai(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
-  task_manager.set_factory(TaskManager::FACTORY_FAI);
-  AbstractTaskFactory *fact = task_manager.get_factory();
+  task_manager.set_factory(OrderedTask::FACTORY_FAI);
+  AbstractTaskFactory &fact = task_manager.get_factory();
   const Waypoint *wp;
 
   task_report(task_manager, "# adding start\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    if (!fact->append(fact->createStart(*wp))) {
+    if (!fact.append(fact.createStart(*wp))) {
       return false;
     }
   }
@@ -316,7 +314,7 @@ bool test_task_fai(TaskManager& task_manager,
   task_report(task_manager, "# adding intermdiate\n");
   wp = waypoints.lookup_id(2);
   if (wp) {
-    if (!fact->append(fact->createIntermediate(*wp),false)) {
+    if (!fact.append(fact.createIntermediate(*wp),false)) {
       return false;
     }
   }
@@ -324,7 +322,7 @@ bool test_task_fai(TaskManager& task_manager,
   task_report(task_manager, "# adding intermdiate\n");
   wp = waypoints.lookup_id(3);
   if (wp) {
-    if (!fact->append(fact->createIntermediate(*wp),false)) {
+    if (!fact.append(fact.createIntermediate(*wp),false)) {
       return false;
     }
   }
@@ -332,13 +330,13 @@ bool test_task_fai(TaskManager& task_manager,
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    if (!fact->append(fact->createFinish(*wp),false)) {
+    if (!fact.append(fact.createFinish(*wp),false)) {
       return false;
     }
   }
 
   task_report(task_manager, "# checking task\n");
-  if (!fact->validate()) {
+  if (!fact.validate()) {
     return false;
   }
 
@@ -352,14 +350,14 @@ bool test_task_fai(TaskManager& task_manager,
 bool test_task_aat(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
-  task_manager.set_factory(TaskManager::FACTORY_AAT);
-  AbstractTaskFactory *fact = task_manager.get_factory();
+  task_manager.set_factory(OrderedTask::FACTORY_AAT);
+  AbstractTaskFactory &fact = task_manager.get_factory();
   const Waypoint *wp;
 
   task_report(task_manager, "# adding start\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    if (!fact->append(fact->createStart(*wp),false)) {
+    if (!fact.append(fact.createStart(*wp),false)) {
       return false;
     }
   }
@@ -370,12 +368,12 @@ bool test_task_aat(TaskManager& task_manager,
   task_report(task_manager, "# adding intermediate\n");
   wp = waypoints.lookup_id(2);
   if (wp) {
-    OrderedTaskPoint* tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
+    OrderedTaskPoint* tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
       cz->setRadius(fixed(30000.0));
       tp->update_oz();
     }
-    if (!fact->append(tp,false)) {
+    if (!fact.append(tp,false)) {
       return false;
     }
   }
@@ -383,12 +381,12 @@ bool test_task_aat(TaskManager& task_manager,
   task_report(task_manager, "# adding intermediate\n");
   wp = waypoints.lookup_id(3);
   if (wp) {
-    OrderedTaskPoint* tp = fact->createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
+    OrderedTaskPoint* tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
       cz->setRadius(fixed(40000.0));
       tp->update_oz();
     }
-    if (!fact->append(tp,false)) {
+    if (!fact.append(tp,false)) {
       return false;
     }
   }
@@ -396,13 +394,13 @@ bool test_task_aat(TaskManager& task_manager,
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    if (!fact->append(fact->createFinish(*wp),false)) {
+    if (!fact.append(fact.createFinish(*wp),false)) {
       return false;
     }
   }
 
   task_report(task_manager, "# checking task..\n");
-  if (!fact->validate()) {
+  if (!fact.validate()) {
     return false;
   }
 
@@ -416,16 +414,15 @@ bool test_task_aat(TaskManager& task_manager,
 bool test_task_or(TaskManager& task_manager,
                      const Waypoints &waypoints)
 {
-  AbstractTaskFactory *fact;
   const Waypoint *wp;
 
-  task_manager.set_factory(TaskManager::FACTORY_MIXED);
-  fact = task_manager.get_factory();
+  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    if (!fact->append(fact->createStart(*wp))) {
+    if (!fact.append(fact.createStart(*wp))) {
       return false;
     }
   }
@@ -436,7 +433,7 @@ bool test_task_or(TaskManager& task_manager,
   task_report(task_manager, "# adding intermediate\n");
   wp = waypoints.lookup_id(2);
   if (wp) {
-    if (!fact->append(fact->createIntermediate(*wp))) {
+    if (!fact.append(fact.createIntermediate(*wp))) {
       return false;
     }
   }
@@ -444,13 +441,13 @@ bool test_task_or(TaskManager& task_manager,
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    if (!fact->append(fact->createFinish(*wp))) {
+    if (!fact.append(fact.createFinish(*wp))) {
       return false;
     }
   }
 
   task_report(task_manager, "# checking task..\n");
-  if (!fact->validate()) {
+  if (!fact.validate()) {
     return false;
   }
 
@@ -465,16 +462,15 @@ bool test_task_or(TaskManager& task_manager,
 bool test_task_dash(TaskManager& task_manager,
                     const Waypoints &waypoints)
 {
-  AbstractTaskFactory *fact;
   const Waypoint *wp;
 
-  task_manager.set_factory(TaskManager::FACTORY_MIXED);
-  fact = task_manager.get_factory();
+  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    if (!fact->append(fact->createStart(*wp))) {
+    if (!fact.append(fact.createStart(*wp))) {
       return false;
     }
   }
@@ -485,13 +481,13 @@ bool test_task_dash(TaskManager& task_manager,
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.lookup_id(3);
   if (wp) {
-    if (!fact->append(fact->createFinish(*wp))) {
+    if (!fact.append(fact.createFinish(*wp))) {
       return false;
     }
   }
 
   task_report(task_manager, "# checking task..\n");
-  if (!fact->validate()) {
+  if (!fact.validate()) {
     return false;
   }
 
@@ -506,16 +502,15 @@ bool test_task_dash(TaskManager& task_manager,
 bool test_task_fg(TaskManager& task_manager,
                   const Waypoints &waypoints)
 {
-  AbstractTaskFactory *fact;
   const Waypoint *wp;
 
-  task_manager.set_factory(TaskManager::FACTORY_MIXED);
-  fact = task_manager.get_factory();
+  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
   wp = waypoints.lookup_id(1);
   if (wp) {
-    if (!fact->append(fact->createStart(*wp))) {
+    if (!fact.append(fact.createStart(*wp))) {
       return false;
     }
   }
@@ -526,13 +521,13 @@ bool test_task_fg(TaskManager& task_manager,
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.lookup_id(6);
   if (wp) {
-    if (!fact->append(fact->createFinish(*wp))) {
+    if (!fact.append(fact.createFinish(*wp))) {
       return false;
     }
   }
 
   task_report(task_manager, "# checking task..\n");
-  if (!fact->validate()) {
+  if (!fact.validate()) {
     return false;
   }
 
@@ -557,26 +552,25 @@ bool test_task_random(TaskManager& task_manager,
                       const Waypoints &waypoints,
                       const unsigned num_points)
 {
-  AbstractTaskFactory *fact;
   const Waypoint *wp;
 
   OrderedTaskPoint *tp;
 
-  task_manager.set_factory(TaskManager::FACTORY_MIXED);
-  fact = task_manager.get_factory();
+  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  AbstractTaskFactory &fact = task_manager.get_factory();
 
   task_report(task_manager, "# adding start\n");
   wp = random_waypoint(waypoints);
   if (wp) {
     AbstractTaskFactory::LegalStartType_t s = 
-      fact->getStartTypes()[(rand() % fact->getStartTypes().size())];
+      fact.getStartTypes()[(rand() % fact.getStartTypes().size())];
 
-    tp = fact->createStart(s,*wp);
+    tp = fact.createStart(s,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
       cz->setRadius(fixed(500.0));
       tp->update_oz();
     }
-    if (!fact->append(tp,false)) {
+    if (!fact.append(tp,false)) {
       return false;
     }
   }
@@ -589,14 +583,14 @@ bool test_task_random(TaskManager& task_manager,
     wp = random_waypoint(waypoints);
     if (wp) {
       AbstractTaskFactory::LegalIntermediateType_t s = 
-        fact->getIntermediateTypes()[(rand() % fact->getIntermediateTypes().size())];
+        fact.getIntermediateTypes()[(rand() % fact.getIntermediateTypes().size())];
 
-      tp = fact->createIntermediate(s,*wp);
+      tp = fact.createIntermediate(s,*wp);
       if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
         cz->setRadius(fixed(500.0));
         tp->update_oz();
       }
-      if (!fact->append(tp,false)) {
+      if (!fact.append(tp,false)) {
         return false;
       }
     }
@@ -606,20 +600,20 @@ bool test_task_random(TaskManager& task_manager,
   wp = random_waypoint(waypoints);
   if (wp) {
     AbstractTaskFactory::LegalFinishType_t s = 
-      fact->getFinishTypes()[(rand() % fact->getFinishTypes().size())];
+      fact.getFinishTypes()[(rand() % fact.getFinishTypes().size())];
 
-    tp = fact->createFinish(s,*wp);
+    tp = fact.createFinish(s,*wp);
     if (CylinderZone* cz = dynamic_cast<CylinderZone*>(tp->get_oz())) {
       cz->setRadius(fixed(500.0));
       tp->update_oz();
     }
-    if (!fact->append(tp,false)) {
+    if (!fact.append(tp,false)) {
       return false;
     }
   }
 
   task_report(task_manager, "# validating task..\n");
-  if (!fact->validate()) {
+  if (!fact.validate()) {
     return false;
   }
   task_report(task_manager, "# checking task..\n");
