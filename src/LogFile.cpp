@@ -40,7 +40,6 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "LocalPath.hpp"
 #include "Asset.hpp"
-#include "UtilsText.hpp"
 #include "TextWriter.hpp"
 
 #include <stdio.h>
@@ -65,9 +64,6 @@ LogDebug(const TCHAR *Str, ...)
   va_start(ap, Str);
   _vstprintf(buf, Str, ap);
   va_end(ap);
-
-  /* let TextWriter do the end-of-line marker */
-  TrimRight(buf);
 
   ScopeLock lock(mutexLogFile);
   TextWriter writer(szFileName, initialised);
@@ -102,9 +98,6 @@ LogStartUp(const TCHAR *Str, ...)
   va_start(ap, Str);
   _vstprintf(buf, Str, ap);
   va_end(ap);
-
-  /* let TextWriter do the end-of-line marker */
-  TrimRight(buf);
 
   ScopeLock lock(mutexLogFile);
   TextWriter writer(szFileName, initialised);
