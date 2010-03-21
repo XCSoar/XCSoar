@@ -76,8 +76,6 @@ void ReadAssetNumber(void)
   memset(strAssetNumber, 0, MAX_LOADSTRING*sizeof(TCHAR));
   // JMW clear this first just to be safe.
 
-  LogStartUp(TEXT("Asset ID: "));
-
 #ifdef WINDOWSPC
   return;
 #endif
@@ -91,30 +89,26 @@ void ReadAssetNumber(void)
       strAssetNumber[ifound]= val[i];
       ifound++;
     }
-    if (ifound>=3) {
-      LogStartUp(strAssetNumber);
-      LogStartUp(TEXT(" (reg)"));
+    if (ifound >= 3) {
+      LogStartUp(_T("Asset ID: %s (reg)"), strAssetNumber);
       return;
     }
   }
 
   if(strAssetNumber[0] != '\0') {
-    LogStartUp(strAssetNumber);
-    LogStartUp(TEXT(" (?)"));
+    LogStartUp(_T("Asset ID: %s (?)"), strAssetNumber);
     return;
   }
 
   ReadCompaqID();
   if(strAssetNumber[0] != '\0') {
-    LogStartUp(strAssetNumber);
-    LogStartUp(TEXT(" (compaq)"));
+    LogStartUp(_T("Asset ID: %s (compaq)"), strAssetNumber);
     return;
   }
 
   ReadUUID();
   if(strAssetNumber[0] != '\0') {
-    LogStartUp(strAssetNumber);
-    LogStartUp(TEXT(" (uuid)"));
+    LogStartUp(_T("Asset ID: %s (uuid)"), strAssetNumber);
     return;
   }
 
@@ -122,8 +116,7 @@ void ReadAssetNumber(void)
   strAssetNumber[1]= _T('A');
   strAssetNumber[2]= _T('A');
 
-  LogStartUp(strAssetNumber);
-  LogStartUp(TEXT(" (fallback)"));
+  LogStartUp(_T("Asset ID: %s (fallback)"), strAssetNumber);
 
   return;
 }
