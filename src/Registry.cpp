@@ -713,18 +713,16 @@ const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6; // max regkey name is
 const static size_t nMaxClassSize = MAX_PATH + 6;
 const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 
-static bool
-LoadRegistryFromFile_inner(const TCHAR *szFile)
+void
+LoadRegistryFromFile(const TCHAR *szFile)
 {
   if (string_is_empty(szFile))
-    return false;
-
-  bool found = false;
+    return;
 
   LogStartUp(TEXT("Loading registry from %s"), szFile);
   TextReader reader(szFile);
   if (reader.error())
-    return false;
+    return;
 
   const TCHAR *winval;
   TCHAR wname[nMaxValueValueSize];
@@ -734,32 +732,18 @@ LoadRegistryFromFile_inner(const TCHAR *szFile)
   while ((winval = reader.read_tchar_line()) != NULL) {
     if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"),
                  wname, wvalue) == 2) {
-      if (!string_is_empty(wname)) {
+      if (!string_is_empty(wname))
         SetRegistryString(wname, wvalue);
-        found = true;
-      }
     } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
-      if (!string_is_empty(wname)) {
+      if (!string_is_empty(wname))
         SetToRegistry(wname, j);
-        found = true;
-      }
     } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
-      if (!string_is_empty(wname)) {
+      if (!string_is_empty(wname))
         SetRegistryString(wname, TEXT(""));
-        found = true;
-      }
     } else {
-      // assert(false);	// Invalid line reached
+      // assert(false); // Invalid line reached
     }
   }
-
-  return found;
-}
-
-void
-LoadRegistryFromFile(const TCHAR *szFile)
-{
-  LoadRegistryFromFile_inner(szFile);
 }
 
 void
