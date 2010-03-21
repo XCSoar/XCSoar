@@ -132,6 +132,12 @@ public:
  */
   fixed scan_distance_travelled(const GEOPOINT &ref);
 
+  fixed leg_distance_max() const;
+  
+  fixed leg_distance_min() const;
+
+  fixed leg_distance_nominal() const;
+
 protected:
   GeoVector vector_travelled; /**< Saved vector for current leg's travelled route */
   GeoVector vector_remaining; /**< Saved vector for current leg's remaining route */
@@ -151,12 +157,6 @@ private:
   GeoVector leg_vector_travelled(const GEOPOINT &ref) const;
   
   GeoVector leg_vector_remaining(const GEOPOINT &ref) const;
-  
-  fixed leg_distance_max() const;
-  
-  fixed leg_distance_min() const;
-
-  fixed leg_distance_nominal() const;
 
   fixed leg_distance_scored(const GEOPOINT &ref) const;
 

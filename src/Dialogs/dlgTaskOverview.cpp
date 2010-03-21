@@ -64,9 +64,6 @@ static bool showAdvanced= false;
 static int UpLimit=0;
 static int LowLimit=0;
 
-static double lengthtotal = 0.0;
-static bool fai_ok = false;
-
 static const OrderedTask *ordered_task;
 
 static void UpdateFilePointer(void) {
@@ -176,7 +173,7 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
                         rc.top + Layout::FastScale(2),
                         p1 - Layout::FastScale(4), sTmp);
 
-    Units::FormatUserDistance(tp->scan_distance_nominal(), sTmp,
+    Units::FormatUserDistance(tp->leg_distance_nominal(), sTmp,
                               sizeof(sTmp) / sizeof(sTmp[0]));
     canvas.text(rc.left + p1 + w1 - canvas.text_width(sTmp),
                 rc.top + Layout::FastScale(2), sTmp);
@@ -193,12 +190,16 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
   } else if ((DrawListIndex==n+1) && ordered_task != NULL &&
              ordered_task->task_size() > 0) {
 
+    const double lengthtotal = ordered_task->get_stats().total.planned.get_distance();
+
 #ifdef OLD_TASK
     if (!task.getSettings().AATEnabled) {
 #endif
       _stprintf(sTmp, gettext(_T("Total:")));
       canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                   sTmp);
+
+      bool fai_ok = false; /// @todo task type
 
       if (fai_ok) {
         _stprintf(sTmp, _T("%.0f %s FAI"),
@@ -244,25 +245,10 @@ static void OverviewRefreshTask(void) {
   // Only need to refresh info where the removal happened
   // as the order of other taskpoints hasn't changed
   UpLimit = 0;
-  lengthtotal = 0;
 
   for (i=0; task.ValidTaskPoint(i); i++) {
-    lengthtotal += task.getTaskPoint(i).LegDistance;
     UpLimit = i+1;
   }
-  // Simple FAI 2004 triangle rules
-  fai_ok = true;
-  if (lengthtotal>0) {
-    for (i=0; task.ValidTaskPoint(i); i++) {
-      double lrat = task.getTaskPoint(i).LengthPercent;
-      if ((lrat>0.45)||(lrat<0.10)) {
-        fai_ok = false;
-      }
-    }
-  } else {
-    fai_ok = false;
-  }
-
   RefreshTaskStatistics();
 
   WndProperty* wp;
