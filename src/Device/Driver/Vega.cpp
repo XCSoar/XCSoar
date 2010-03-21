@@ -323,7 +323,7 @@ PDVDS(const TCHAR *String, NMEA_INFO *GPS_INFO)
   }
 
   if (device_blackboard.SettingsComputer().EnableCalibration) {
-    LogDebug(_T("%g %g %g %g %g %g #te net\r\n"),
+    LogDebug(_T("%g %g %g %g %g %g #te net"),
                (double)GPS_INFO->IndicatedAirspeed,
                (double)GPS_INFO->BaroAltitude,
                (double)GPS_INFO->TotalEnergyVario,
