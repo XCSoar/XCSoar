@@ -89,6 +89,10 @@ OrderedTask::update_geometry()
     if (!ts->has_entered()) {
       GEOPOINT loc = ts->get_location();
       update_stats_distances(loc, true);
+      if (has_finish()) {
+        /// @todo: call AbstractTask::update stats methods with fake state
+        /// so stats are updated
+      }
     }
   }
 }

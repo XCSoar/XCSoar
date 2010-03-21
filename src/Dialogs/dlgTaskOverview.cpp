@@ -77,6 +77,8 @@ static void UpdateFilePointer(void) {
     } else {
       dfe->Set(0);
     }
+#else
+    dfe->Set(0);
 #endif
     wp->RefreshDisplay();
   }
@@ -84,13 +86,19 @@ static void UpdateFilePointer(void) {
 
 
 static void UpdateCaption (void) {
+  const TCHAR* filename = 
 #ifdef OLD_TASK
+    task.getTaskFilename();
+#else
+    _T("no filename");
+#endif
+
   TCHAR title[MAX_PATH];
   TCHAR name[MAX_PATH];
-  int len = _tcslen(task.getTaskFilename());
+  int len = _tcslen(filename);
   if (len>0) {
     int index = 0;
-    const TCHAR *src = task.getTaskFilename();
+    const TCHAR *src = filename;
     while ((*src != _T('\0')) && (*src != _T('.'))) {
       if ((*src == _T('\\')) || (*src == _T('/'))) {
         index = 0;
@@ -111,13 +119,13 @@ static void UpdateCaption (void) {
     _stprintf(title, _T("%s"),
               gettext(_T("Task Overview")));
   }
-
+#ifdef OLD_TASK
   if (task.isTaskModified()) {
     _tcscat(title, _T(" *"));
   }
+#endif
 
   wf->SetCaption(title);
-#endif
 }
 
 
@@ -189,20 +197,15 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 
 
 static void OverviewRefreshTask(void) {
-#ifdef OLD_TASK
   /// @todo task estimated time
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));
   if (wp) {
-    double dd = XCSoarInterface::Calculated().TaskTimeToGo;
-    if ((XCSoarInterface::Calculated().TaskStartTime>0.0)&&(XCSoarInterface::Calculated().Flying)) {
-      dd += XCSoarInterface::Basic().Time-XCSoarInterface::Calculated().TaskStartTime;
-    }
+    const double dd = ordered_task->get_stats().total.TimePlanned;
     wp->GetDataField()->SetAsFloat(dd/60.0);
     wp->RefreshDisplay();
   }
-#endif
 
   LowLimit = 0;
   UpLimit = ordered_task != NULL
@@ -301,14 +304,14 @@ OnClearClicked(WindowControl *Sender)
   if (MessageBoxX(gettext(_T("Clear the task?")),
                   gettext(_T("Clear task")),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
-#ifdef OLD_TASK
     if (logger.CheckDeclaration()) {
+#ifdef OLD_TASK
       task.ClearTask();
+#endif
       UpdateFilePointer();
       OverviewRefreshTask();
       UpdateCaption();
     }
-#endif
   }
 }
 
@@ -429,7 +432,6 @@ OnLoadClicked(WindowControl *Sender)
 {
   (void)Sender;
 
-#ifdef OLD_TASK
   WndProperty* wp;
   DataFieldFileReader *dfe;
 
@@ -439,13 +441,14 @@ OnLoadClicked(WindowControl *Sender)
   int file_index = dfe->GetAsInteger();
 
   if (file_index>0) {
+#ifdef OLD_TASK
     task.LoadNewTask(dfe->GetPathFile(), XCSoarInterface::SettingsComputer(),
                      XCSoarInterface::Basic());
+#endif
     OverviewRefreshTask();
     UpdateFilePointer();
     UpdateCaption();
   }
-#endif
 }
 
 static void
