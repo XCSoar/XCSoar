@@ -854,20 +854,21 @@ SaveRegistryToFile(const TCHAR *szFile)
 
 #endif
 
+  if (string_is_empty(szFile))
+    return;
+
+  FILE *fp = NULL;
+  fp = _tfopen(szFile, TEXT("wb"));
+  if(fp == NULL)
+    return;
+
   HKEY hkFrom;
   LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey,
                             0, KEY_ALL_ACCESS, &hkFrom);
 
-  if (ERROR_SUCCESS != res)
+  if (ERROR_SUCCESS != res) {
     return;
-
-  FILE *fp = NULL;
-  if (!string_is_empty(szFile))
-    fp = _tfopen(szFile, TEXT("wb"));
-  if(fp == NULL) {
-    // error
-    ::RegCloseKey(hkFrom);
-    return;
+    fclose(fp);
   }
 
   for (int i = 0;; i++) {
