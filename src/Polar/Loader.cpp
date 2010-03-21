@@ -80,7 +80,7 @@ setGlidePolar(const Polar &polar, GlidePolar& gp)
 static bool
 LoadPolarById_internal(Polar& polar, const SETTINGS_POLAR &settings)
 {
-  LogStartUp(_T("Load polar\n"));
+  LogStartUp(_T("Load polar"));
   if (LoadPolarById2(settings.POLARID, polar))
     return true;
 

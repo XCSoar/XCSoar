@@ -75,7 +75,7 @@ extern TCHAR startProfileFile[];
 
 void dlgStartupShowModal(void){
   WndProperty* wp;
-  LogStartUp(_T("Startup dialog\n"));
+  LogStartUp(_T("Startup dialog"));
 
   if (!Layout::landscape) {
     wf = dlgLoadFromXML(CallBackTable,

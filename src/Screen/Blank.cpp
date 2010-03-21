@@ -84,7 +84,7 @@ void BlankDisplay(bool doblank) {
 	// All you need to display extra Battery informations...
 
 	TCHAR vtemp[1000];
-	_stprintf(vtemp,_T("Battpercent=%d Volt=%d Curr=%d AvCurr=%d mAhC=%d Temp=%d Lifetime=%d Fulllife=%d\n"),
+	_stprintf(vtemp,_T("Battpercent=%d Volt=%d Curr=%d AvCurr=%d mAhC=%d Temp=%d Lifetime=%d Fulllife=%d"),
  		BatteryInfo.BatteryLifePercent, BatteryInfo.BatteryVoltage,
  		BatteryInfo.BatteryCurrent, BatteryInfo.BatteryAverageCurrent,
  		BatteryInfo.BatterymAHourConsumed,
@@ -129,7 +129,7 @@ void BlankDisplay(bool doblank) {
 
       if (BatteryInfo.acStatus==0) {
         if (is_simulator() && (PDABatteryPercent < BATTERY_EXIT)) {
-          LogStartUp(TEXT("Battery low exit...\n"));
+          LogStartUp(TEXT("Battery low exit..."));
           // TODO feature: Warning message on battery shutdown
           XCSoarInterface::SignalShutdown(true);
         } else {

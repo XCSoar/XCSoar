@@ -137,7 +137,7 @@ ScreenGraphics::Initialise(HINSTANCE hInstance,
 
   int i;
 
-  LogStartUp(TEXT("Initialise graphics\n"));
+  LogStartUp(TEXT("Initialise graphics"));
 
   LoadUnitSymbols();
 

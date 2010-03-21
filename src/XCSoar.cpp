@@ -80,7 +80,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   InitAsset();
 
   // Write startup note + version to logfile
-  LogStartUp(TEXT("Starting XCSoar %s\n"), XCSoar_VersionString);
+  LogStartUp(TEXT("Starting XCSoar %s"), XCSoar_VersionString);
 
   // Read options from the command line
 #ifndef WIN32
@@ -99,7 +99,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif /* !ENABLE_SDL */
 
   // Write initialization note to logfile
-  LogStartUp(TEXT("Initialise application instance\n"));
+  LogStartUp(TEXT("Initialise application instance"));
 
   // Perform application initialization and run loop
   if (!XCSoarInterface::Startup(hInstance, lpCmdLine))

@@ -162,7 +162,7 @@ static TempAirspaceType temp_area;
 static bool
 ReadAirspace(Airspaces &airspace_database, ZZIP_FILE *fp)
 {
-  LogStartUp(TEXT("ReadAirspace\n"));
+  LogStartUp(TEXT("ReadAirspace"));
   int	Tock = 0;
   DWORD	dwStep;
   DWORD	dwPos;

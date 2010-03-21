@@ -125,7 +125,7 @@ Profile::ReadRegistrySettings()
   DWORD Temp = 0;
   int i;
 
-  LogStartUp(TEXT("Read registry settings\n"));
+  LogStartUp(TEXT("Read registry settings"));
 
   if (is_altair())
     DefaultRegistrySettingsAltair();
@@ -508,22 +508,22 @@ Profile::ReadRegistrySettings()
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
     // key transcoding for this one
-    LogStartUp(TEXT("Loading HP31X settings\n"));
+    LogStartUp(TEXT("Loading HP31X settings"));
   } else if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
-    LogStartUp(TEXT("Loading PN6000 settings\n"));
+    LogStartUp(TEXT("Loading PN6000 settings"));
     // key transcoding for this one
   } else if (GlobalModelType == MODELTYPE_PNA_MIO ) {
-    LogStartUp(TEXT("Loading MIO settings\n"));
+    LogStartUp(TEXT("Loading MIO settings"));
     // currently no special settings from MIO but need to handle hw keys
   } else if (GlobalModelType == MODELTYPE_PNA_NOKIA_500 ) {
-    LogStartUp(TEXT("Loading Nokia500 settings\n"));
+    LogStartUp(TEXT("Loading Nokia500 settings"));
     // key transcoding is made
   } else if (GlobalModelType == MODELTYPE_PNA_MEDION_P5 ) {
-    LogStartUp(TEXT("Loading Medion settings\n"));
+    LogStartUp(TEXT("Loading Medion settings"));
   } else if (GlobalModelType == MODELTYPE_PNA_PNA ) {
-    LogStartUp(TEXT("Loading default PNA settings\n"));
+    LogStartUp(TEXT("Loading default PNA settings"));
   } else {
-    LogStartUp(TEXT("No special regsets for this PDA\n")); // VENTA2
+    LogStartUp(TEXT("No special regsets for this PDA"));
   }
 
   // VENTA-ADDON Model change
@@ -701,7 +701,7 @@ Profile::SaveWindToRegistry()
 void
 Profile::LoadWindFromRegistry()
 {
-  LogStartUp(TEXT("Load wind from registry\n"));
+  LogStartUp(TEXT("Load wind from registry"));
 
   /* JMW incomplete
   DWORD Temp;
@@ -721,7 +721,7 @@ TCHAR failsafeProfileFile[MAX_PATH];
 void
 Profile::Load(void)
 {
-  LogStartUp(TEXT("Load profile\n"));
+  LogStartUp(TEXT("Load profile"));
   // load registry backup if it exists
   LoadRegistryFromFile(failsafeProfileFile);
   LoadRegistryFromFile(startProfileFile);
@@ -730,7 +730,7 @@ Profile::Load(void)
 void
 Profile::Save(void)
 {
-  LogStartUp(TEXT("Save profile\n"));
+  LogStartUp(TEXT("Save profile"));
   // save registry backup first (try a few places)
   SaveRegistryToFile(startProfileFile);
   SaveRegistryToFile(defaultProfileFile);

@@ -64,7 +64,7 @@ StatusMessageList::StatusMessageList()
 void
 StatusMessageList::LoadFile()
 {
-  LogStartUp(TEXT("Loading status file\n"));
+  LogStartUp(TEXT("Loading status file"));
 
   TCHAR szFile1[MAX_PATH];
 

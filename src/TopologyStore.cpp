@@ -115,7 +115,7 @@ TopologyStore::~TopologyStore()
 void
 TopologyStore::Close()
 {
-  LogStartUp(TEXT("CloseTopology\n"));
+  LogStartUp(TEXT("CloseTopology"));
 
   Poco::ScopedRWLock protect(lock, true);
 
@@ -145,7 +145,7 @@ TopologyStore::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
 void
 TopologyStore::Open()
 {
-  LogStartUp(TEXT("OpenTopology\n"));
+  LogStartUp(TEXT("OpenTopology"));
 
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Topology File...")));
 
@@ -185,7 +185,7 @@ TopologyStore::Open()
   unicode2ascii(szFile, zfilename, MAX_PATH);
   zFile = zzip_fopen(zfilename, "rt");
   if (!zFile) {
-    LogStartUp(TEXT("No topology file: %s\n"), szFile);
+    LogStartUp(TEXT("No topology file: %s"), szFile);
     return;
   }
 

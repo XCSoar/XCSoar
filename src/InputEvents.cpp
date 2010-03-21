@@ -169,7 +169,7 @@ Mutex InputEvents::mutexEventQueue;
 void
 InputEvents::readFile()
 {
-  LogStartUp(TEXT("Loading input events file\n"));
+  LogStartUp(TEXT("Loading input events file"));
 
   // clear the GCE and NMEA queues
   mutexEventQueue.Lock();

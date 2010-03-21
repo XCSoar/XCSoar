@@ -161,7 +161,7 @@ gettext(const TCHAR* text)
 void
 ReadLanguageFile()
 {
-  LogStartUp(TEXT("Loading language file\n"));
+  LogStartUp(TEXT("Loading language file"));
 
   TCHAR szFile1[MAX_PATH];
   FILE *fp = NULL;

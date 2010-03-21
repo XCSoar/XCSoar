@@ -66,7 +66,7 @@ ReadAirspace(AirspaceClientUI &airspace,
     unicode2ascii(tpath, path, sizeof(path));
 
     if (!airspace.read(path)) {
-      LogStartUp(TEXT("No airspace file 1\n"));
+      LogStartUp(TEXT("No airspace file 1"));
     } else {
       airspace_ok =  true;
     }
@@ -91,7 +91,7 @@ ReadAirspace(AirspaceClientUI &airspace,
     unicode2ascii(tpath, path, sizeof(path));
 
     if (!airspace.read(path)) {
-      LogStartUp(TEXT("No airspace file 2\n"));
+      LogStartUp(TEXT("No airspace file 2"));
     } else {
       airspace_ok = true;
     }

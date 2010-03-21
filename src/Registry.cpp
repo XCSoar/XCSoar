@@ -701,7 +701,7 @@ const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 static bool
 LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide = true)
 {
-  LogStartUp(TEXT("Loading registry from %s\n"), szFile);
+  LogStartUp(TEXT("Loading registry from %s"), szFile);
   bool found = false;
   FILE *fp = NULL;
   if (!string_is_empty(szFile))

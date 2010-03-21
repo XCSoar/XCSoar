@@ -277,14 +277,14 @@ SetModelType()
 
   if (SetModelName(Temp) != true) {
     _stprintf(sTmp, _T("SetModelType ERROR! ModelName returned")
-              _T("invalid value <%d> from Registry!\n"), Temp);
+              _T("invalid value <%d> from Registry!"), Temp);
     LogStartUp(sTmp);
     GlobalModelType = MODELTYPE_PNA_PNA;
   } else {
     GlobalModelType = Temp;
   }
 
-  _stprintf(sTmp, _T("SetModelType: Name=<%s> Type=%d\n"), GlobalModelName,
+  _stprintf(sTmp, _T("SetModelType: Name=<%s> Type=%d"), GlobalModelName,
       GlobalModelType);
   LogStartUp(sTmp);
 }
@@ -773,7 +773,7 @@ StartupLogFreeRamAndStorage()
   TCHAR buffer[MAX_PATH];
   LocalPath(buffer);
   int freestorage = FindFreeSpace(buffer);
-  LogStartUp(_T("Free ram %d; free storage %d\n"), freeram, freestorage);
+  LogStartUp(_T("Free ram %d; free storage %d"), freeram, freestorage);
 }
 
 WPARAM

@@ -93,28 +93,28 @@ void ReadAssetNumber(void)
     }
     if (ifound>=3) {
       LogStartUp(strAssetNumber);
-      LogStartUp(TEXT(" (reg)\n"));
+      LogStartUp(TEXT(" (reg)"));
       return;
     }
   }
 
   if(strAssetNumber[0] != '\0') {
     LogStartUp(strAssetNumber);
-    LogStartUp(TEXT(" (?)\n"));
+    LogStartUp(TEXT(" (?)"));
     return;
   }
 
   ReadCompaqID();
   if(strAssetNumber[0] != '\0') {
     LogStartUp(strAssetNumber);
-    LogStartUp(TEXT(" (compaq)\n"));
+    LogStartUp(TEXT(" (compaq)"));
     return;
   }
 
   ReadUUID();
   if(strAssetNumber[0] != '\0') {
     LogStartUp(strAssetNumber);
-    LogStartUp(TEXT(" (uuid)\n"));
+    LogStartUp(TEXT(" (uuid)"));
     return;
   }
 
@@ -123,7 +123,7 @@ void ReadAssetNumber(void)
   strAssetNumber[2]= _T('A');
 
   LogStartUp(strAssetNumber);
-  LogStartUp(TEXT(" (fallback)\n"));
+  LogStartUp(TEXT(" (fallback)"));
 
   return;
 }
@@ -359,13 +359,13 @@ void InitAsset() {
   //#ifndef PNA
 
     bool datadir=CheckDataDir();
-    if (datadir) LogStartUp(TEXT("XCSoarData directory found.\n"));
-    else LogStartUp(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!\n"));
+    if (datadir) LogStartUp(TEXT("XCSoarData directory found."));
+    else LogStartUp(TEXT("ERROR: NO XCSOARDATA DIRECTORY FOUND!"));
 
-    LogStartUp(TEXT("Check for installing fonts\n"));
+    LogStartUp(TEXT("Check for installing fonts"));
     short didfonts=InstallFonts();  // check if really did it, and maybe restart
     TCHAR nTmp[100];
-    _stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)\n"), didfonts);
+    _stprintf(nTmp,TEXT("InstallFonts() result=%d (0=installed >0 not installed)"), didfonts);
     LogStartUp(nTmp);
 
     //#endif

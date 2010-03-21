@@ -203,7 +203,7 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc,
 
   TCHAR tbuf[80];
   if (ScreenSize==0) {
-    _stprintf(tbuf, _T("--- ERROR UNKNOWN RESOLUTION %dx%d !\r\n"),
+    _stprintf(tbuf, _T("--- ERROR UNKNOWN RESOLUTION %dx%d !"),
               iWidth, iHeight);
 	LogStartUp(tbuf);
   }
