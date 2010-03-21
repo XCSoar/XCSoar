@@ -57,31 +57,31 @@ static void
 DefaultRegistrySettingsAltair()
 {
   // these are redundant b/c they're also added to "InitialiseFontsHardCoded"
-  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
-      TEXT("24,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
-      TEXT("10,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicNineCond"));
-  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
-      TEXT("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
-  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
-      TEXT("13,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicTwelveCond"));
-  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
-      TEXT("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
-      TEXT("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
-      TEXT("15,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  SetRegistryStringIfAbsent(TEXT("BugsBallastFont"),
-      TEXT("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  SetRegistryStringIfAbsent(TEXT("AirspacePressFont"),
-      TEXT("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  SetRegistryStringIfAbsent(TEXT("AirspaceColourDlgFont"),
-      TEXT("14,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(TEXT("TeamCodeFont"),
-      TEXT("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
+  SetRegistryStringIfAbsent(_T("InfoWindowFont"),
+      _T("24,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
+  SetRegistryStringIfAbsent(_T("TitleWindowFont"),
+      _T("10,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicNineCond"));
+  SetRegistryStringIfAbsent(_T("CDIWindowFont"),
+      _T("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
+  SetRegistryStringIfAbsent(_T("MapLabelFont"),
+      _T("13,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicTwelveCond"));
+  SetRegistryStringIfAbsent(_T("StatisticsFont"),
+      _T("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
+  SetRegistryStringIfAbsent(_T("MapWindowFont"),
+      _T("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
+  SetRegistryStringIfAbsent(_T("MapWindowBoldFont"),
+      _T("15,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
+  SetRegistryStringIfAbsent(_T("BugsBallastFont"),
+      _T("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
+  SetRegistryStringIfAbsent(_T("AirspacePressFont"),
+      _T("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
+  SetRegistryStringIfAbsent(_T("AirspaceColourDlgFont"),
+      _T("14,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(_T("TeamCodeFont"),
+      _T("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
 #if 0
-  SetRegistryStringIfAbsent(TEXT("ScaleList"),
-      TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
+  SetRegistryStringIfAbsent(_T("ScaleList"),
+      _T("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
 #endif
 }
 
@@ -123,7 +123,7 @@ Profile::Use()
   unsigned Temp = 0;
   int i;
 
-  LogStartUp(TEXT("Read registry settings"));
+  LogStartUp(_T("Read registry settings"));
 
   if (is_altair())
     DefaultRegistrySettingsAltair();
@@ -509,22 +509,22 @@ Profile::Use()
 
   if (GlobalModelType == MODELTYPE_PNA_HP31X ) {
     // key transcoding for this one
-    LogStartUp(TEXT("Loading HP31X settings"));
+    LogStartUp(_T("Loading HP31X settings"));
   } else if (GlobalModelType == MODELTYPE_PNA_PN6000 ) {
-    LogStartUp(TEXT("Loading PN6000 settings"));
+    LogStartUp(_T("Loading PN6000 settings"));
     // key transcoding for this one
   } else if (GlobalModelType == MODELTYPE_PNA_MIO ) {
-    LogStartUp(TEXT("Loading MIO settings"));
+    LogStartUp(_T("Loading MIO settings"));
     // currently no special settings from MIO but need to handle hw keys
   } else if (GlobalModelType == MODELTYPE_PNA_NOKIA_500 ) {
-    LogStartUp(TEXT("Loading Nokia500 settings"));
+    LogStartUp(_T("Loading Nokia500 settings"));
     // key transcoding is made
   } else if (GlobalModelType == MODELTYPE_PNA_MEDION_P5 ) {
-    LogStartUp(TEXT("Loading Medion settings"));
+    LogStartUp(_T("Loading Medion settings"));
   } else if (GlobalModelType == MODELTYPE_PNA_PNA ) {
-    LogStartUp(TEXT("Loading default PNA settings"));
+    LogStartUp(_T("Loading default PNA settings"));
   } else {
-    LogStartUp(TEXT("No special regsets for this PDA"));
+    LogStartUp(_T("No special regsets for this PDA"));
   }
 
   // VENTA-ADDON Model change
@@ -703,7 +703,7 @@ Profile::SaveWindToRegistry()
 void
 Profile::LoadWindFromRegistry()
 {
-  LogStartUp(TEXT("Load wind from registry"));
+  LogStartUp(_T("Load wind from registry"));
 
   /* JMW incomplete
   DWORD Temp;
@@ -723,7 +723,7 @@ TCHAR failsafeProfileFile[MAX_PATH];
 void
 Profile::Load(void)
 {
-  LogStartUp(TEXT("Load profile"));
+  LogStartUp(_T("Load profile"));
   // load registry backup if it exists
   LoadRegistryFromFile(failsafeProfileFile);
   LoadRegistryFromFile(startProfileFile);
@@ -732,7 +732,7 @@ Profile::Load(void)
 void
 Profile::Save(void)
 {
-  LogStartUp(TEXT("Save profile"));
+  LogStartUp(_T("Save profile"));
   // save registry backup first (try a few places)
   SaveRegistryToFile(startProfileFile);
   SaveRegistryToFile(defaultProfileFile);
@@ -743,12 +743,12 @@ Profile::SetFiles(const TCHAR* override)
 {
   // Set the default profile file
   if (is_altair())
-    LocalPath(defaultProfileFile, TEXT("config/xcsoar-registry.prf"));
+    LocalPath(defaultProfileFile, _T("config/xcsoar-registry.prf"));
   else
-    LocalPath(defaultProfileFile, TEXT(XCSPROFILE));
+    LocalPath(defaultProfileFile, _T(XCSPROFILE));
 
   // Set the failsafe profile file
-  LocalPath(failsafeProfileFile, TEXT(XCSPROFILE));
+  LocalPath(failsafeProfileFile, _T(XCSPROFILE));
 
   // Set the profile file to load at startup
   // -> to the default file
