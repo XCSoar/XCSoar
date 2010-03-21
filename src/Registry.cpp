@@ -41,6 +41,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Defines.h"
 #include "Sizes.h"
+#include "TextReader.hpp"
 #include "TextWriter.hpp"
 
 #include <assert.h>
@@ -713,45 +714,24 @@ const static size_t nMaxClassSize = MAX_PATH + 6;
 const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 
 static bool
-LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide = true)
+LoadRegistryFromFile_inner(const TCHAR *szFile)
 {
-  LogStartUp(TEXT("Loading registry from %s"), szFile);
-  bool found = false;
-  FILE *fp = NULL;
-  if (!string_is_empty(szFile))
-#ifndef __GNUC__
-    if (wide)
-      fp = _tfopen(szFile, TEXT("rb"));
-    else
-      fp = _tfopen(szFile, TEXT("rt"));
-#else
-  fp = _tfopen(szFile, TEXT("rb")); //20060515:sgi add b
-#endif
-  if (fp == NULL)
-    // error
+  if (string_is_empty(szFile))
     return false;
 
-  TCHAR winval[nMaxValueValueSize];
+  bool found = false;
+
+  LogStartUp(TEXT("Loading registry from %s"), szFile);
+  TextReader reader(szFile);
+  if (reader.error())
+    return false;
+
+  const TCHAR *winval;
   TCHAR wname[nMaxValueValueSize];
   TCHAR wvalue[nMaxValueValueSize];
   int j;
 
-#ifdef __GNUC__
-  char inval[nMaxValueValueSize];
-  char name [nMaxValueValueSize];
-  char value [nMaxValueValueSize];
-
-  if (wide) {
-#endif
-
-  while (_fgetts(winval, nMaxValueValueSize, fp)) {
-
-#ifdef _UNICODE
-    if (winval[0] > 255)
-      // not reading corectly, probably narrow file.
-      break;
-#endif /* _UNICODE */
-
+  while ((winval = reader.read_tchar_line()) != NULL) {
     if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"),
                  wname, wvalue) == 2) {
       if (!string_is_empty(wname)) {
@@ -773,67 +753,13 @@ LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide = true)
     }
   }
 
-#ifdef __GNUC__
-  } else {
-  while (fgets(inval, nMaxValueValueSize, fp)) {
-    if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
-      if (strlen(name)>0) {
-#ifdef _UNICODE
-        mbstowcs(wname, name, strlen(name)+1);
-        mbstowcs(wvalue, value, strlen(value)+1);
-#else
-        strcpy(wname, name);
-        strcpy(wvalue, value);
-#endif
-        SetRegistryString(wname, wvalue);
-        found = true;
-      }
-    } else if (sscanf(inval, "%[^#=\r\n ]=%d[\r\n]", name, &j) == 2) {
-      if (strlen(name)>0) {
-#ifdef _UNICODE
-        mbstowcs(wname, name, strlen(name)+1);
-#else
-        strcpy(wname, name);
-#endif
-        SetToRegistry(wname, j);
-        found = true;
-      }
-    } else if (sscanf(inval, "%[^#=\r\n ]=\"\"[\r\n]", name) == 1) {
-      if (strlen(name)>0) {
-#ifdef _UNICODE
-        mbstowcs(wname, name, strlen(name)+1);
-#else
-        strcpy(wname, name);
-#endif
-        SetRegistryString(wname, TEXT(""));
-        found = true;
-      }
-    } else {
-      // assert(false);	// Invalid line reached
-    }
-  }
-}
-#endif
-
-  fclose(fp);
-
   return found;
 }
 
 void
 LoadRegistryFromFile(const TCHAR *szFile)
 {
-#ifndef __GNUC__
-  // legacy, wide chars
-  if (!LoadRegistryFromFile_inner(szFile,true))
-    // new, non-wide chars
-    LoadRegistryFromFile_inner(szFile,false);
-#else
-  // new, non-wide chars
-  if (!LoadRegistryFromFile_inner(szFile,false))
-    // legacy, wide chars
-    LoadRegistryFromFile_inner(szFile,true);
-#endif
+  LoadRegistryFromFile_inner(szFile);
 }
 
 void
