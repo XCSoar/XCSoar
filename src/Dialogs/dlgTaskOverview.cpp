@@ -141,34 +141,16 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
     if (tp == NULL)
       return;
 
-#ifdef OLD_TASK
-    if (Layout::landscape &&
-        task.getSettings().AATEnabled && task.ValidTaskPoint(i+1) && (i>0)) {
-      if (tp.AATType==0) {
-        _stprintf(sTmp, _T("%s %.1f"),
-                  way_points.get(tp.Index).Name,
-                  Units::ToUserUnit(tp.AATCircleRadius, Units::DistanceUnit));
-      } else {
-        _stprintf(sTmp, _T("%s %.1f"),
-                  way_points.get(tp.Index).Name,
-                  Units::ToUserUnit(tp.AATSectorRadius, Units::DistanceUnit));
-      }
-    } else {
-#endif
-      const TCHAR *suffix;
+    const TCHAR *suffix = _T("");
 
-      if (dynamic_cast<const StartPoint*>(tp) != NULL)
-        suffix = _T(" (start)");
-      else if (dynamic_cast<const FinishPoint*>(tp) != NULL)
-        suffix = _T(" (finish)");
-      else
-        suffix = _T("");
-      _stprintf(sTmp, _T("%s%s"),
-                tp->get_waypoint().Name.c_str(), suffix);
-#ifdef OLD_TASK
-    }
-#endif
+    if (dynamic_cast<const StartPoint*>(tp) != NULL)
+      suffix = _T(" (start)");
+    else if (dynamic_cast<const FinishPoint*>(tp) != NULL)
+      suffix = _T(" (finish)");
 
+    _stprintf(sTmp, _T("%s%s"),
+              tp->get_waypoint().Name.c_str(), suffix);
+    
     canvas.text_clipped(rc.left + Layout::FastScale(2),
                         rc.top + Layout::FastScale(2),
                         p1 - Layout::FastScale(4), sTmp);
@@ -178,79 +160,37 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
     canvas.text(rc.left + p1 + w1 - canvas.text_width(sTmp),
                 rc.top + Layout::FastScale(2), sTmp);
 
-#ifdef OLD_TASK
-    _stprintf(sTmp, _T("%d")_T(DEG),  iround(tp.InBound));
-    canvas.text(rc.left + p2 + w2 - canvas.text_width(sTmp),
-                rc.top + Layout::FastScale(2), sTmp);
-#endif
+    /// @todo: display bearing, and aat radius
+    /// @todo task type (e.g. FAI etc)
+
   } else if (DrawListIndex==n) {
     _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 sTmp);
-  } else if ((DrawListIndex==n+1) && ordered_task != NULL &&
-             ordered_task->task_size() > 0) {
+  } else if ((DrawListIndex==n+1) &&
+             (ordered_task->task_size() > 1)) {
 
     const double lengthtotal = ordered_task->get_stats().total.planned.get_distance();
 
-#ifdef OLD_TASK
-    if (!task.getSettings().AATEnabled) {
-#endif
-      _stprintf(sTmp, gettext(_T("Total:")));
-      canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-                  sTmp);
+    _stprintf(sTmp, gettext(_T("Total:")));
+    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
+                sTmp);
 
-      bool fai_ok = false; /// @todo task type
+    _stprintf(sTmp, _T("%.0f %s"),
+              Units::ToUserUnit(lengthtotal, Units::DistanceUnit),
+              Units::GetDistanceName());
 
-      if (fai_ok) {
-        _stprintf(sTmp, _T("%.0f %s FAI"),
-                  Units::ToUserUnit(lengthtotal, Units::DistanceUnit),
-                  Units::GetDistanceName());
-      } else {
-        _stprintf(sTmp, _T("%.0f %s"),
-                  Units::ToUserUnit(lengthtotal, Units::DistanceUnit),
-                  Units::GetDistanceName());
-      }
+    /// @todo: AAT min/max distance 
 
-      canvas.text(rc.left + p1 + w1 - canvas.text_width(sTmp),
+    canvas.text(rc.left + p1 + w1 - canvas.text_width(sTmp),
                   rc.top + Layout::FastScale(2), sTmp);
-#ifdef OLD_TASK
-    } else {
-
-      double d1 = (XCSoarInterface::Calculated().TaskDistanceToGo
-                   +XCSoarInterface::Calculated().TaskDistanceCovered);
-      if (d1==0.0) {
-        d1 = XCSoarInterface::Calculated().AATTargetDistance;
-      }
-
-      _stprintf(sTmp, _T("%s %.0f min %.0f (%.0f) %s"),
-                gettext(_T("Total:")),
-                task.getSettings().AATTaskLength*1.0,
-                Units::ToUserUnit(lengthtotal, Units::DistanceUnit),
-                Units::ToUserUnit(d1, Units::DistanceUnit),
-                Units::GetDistanceName());
-      canvas.text(rc.left + Layout::FastScale(2),
-                  rc.top + Layout::FastScale(2), sTmp);
-    }
-#endif
   }
 }
 
 
 static void OverviewRefreshTask(void) {
 #ifdef OLD_TASK
-  task.RefreshTask(XCSoarInterface::SettingsComputer(),
-                   XCSoarInterface::Basic());
-
-  int i;
-  // Only need to refresh info where the removal happened
-  // as the order of other taskpoints hasn't changed
-  UpLimit = 0;
-
-  for (i=0; task.ValidTaskPoint(i); i++) {
-    UpLimit = i+1;
-  }
-  RefreshTaskStatistics();
-
+  /// @todo task estimated time
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));
@@ -262,14 +202,12 @@ static void OverviewRefreshTask(void) {
     wp->GetDataField()->SetAsFloat(dd/60.0);
     wp->RefreshDisplay();
   }
+#endif
 
-  LowLimit =0;
-#else
   LowLimit = 0;
   UpLimit = ordered_task != NULL
     ? ordered_task->task_size()
     : 0;
-#endif
 
   wTaskList->SetLength(UpLimit - LowLimit + 1);
   wTaskList->invalidate();
@@ -395,17 +333,25 @@ OnAnalysisClicked(WindowControl *Sender)
   wf->show();
 }
 
+static bool
+CommitTaskChanges()
+{
+  if (ordered_task->check_task()) {
+    task_ui.task_commit(*ordered_task);
+    return true;
+  }
+  return false;
+}
+
 static void
 OnDeclareClicked(WindowControl *Sender)
 {
-	(void)Sender;
+  (void)Sender;
+  if (CommitTaskChanges()) {
+    logger.LoggerDeviceDeclare();
+  }
 
-#ifdef OLD_TASK
-  task.RefreshTask(XCSoarInterface::SettingsComputer(),
-                   XCSoarInterface::Basic());
-#endif
-
-  logger.LoggerDeviceDeclare();
+  /// @todo: give it the copy, so no need to lock
 
   // do something here.
 }
@@ -511,6 +457,7 @@ OnAdvancedClicked(WindowControl *Sender)
   UpdateAdvanced();
 }
 
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnDeclareClicked),
   DeclareCallBackEntry(OnCalcClicked),
@@ -586,9 +533,7 @@ dlgTaskOverviewShowModal(SingleWindow &parent)
 
   wf->ShowModal();
 
-  if (ordered_task->check_task()) {
-    task_ui.task_commit(*ordered_task);
-  }
+  CommitTaskChanges();
 
   delete wf;
 
