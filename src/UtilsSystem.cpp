@@ -665,7 +665,17 @@ ParseCommandLine(LPCTSTR CommandLine)
   extrnProfileFile[0] = 0;
 
 #ifdef SIMULATOR_AVAILABLE
-  global_simulator_flag = _tcsstr(CommandLine, _T("-simulator")) != NULL;
+  bool bSimTemp=false;
+  bSimTemp = _tcsstr(CommandLine, _T("-simulator")) != NULL;
+  if (bSimTemp) {
+    global_simulator_flag=true;
+    sim_set_in_cmd_line_flag=true;
+  }
+  bSimTemp = _tcsstr(CommandLine, _T("-fly")) != NULL;
+  if (bSimTemp) {
+    global_simulator_flag=false;
+    sim_set_in_cmd_line_flag=true;
+  }
 #endif
 
 #ifdef WINDOWSPC
