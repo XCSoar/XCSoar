@@ -218,6 +218,14 @@ public:
   int get_vmiddle() const {
     return (get_top() + get_bottom()) / 2;
   }
+#else /* !ENABLE_SDL */
+  unsigned get_width() const {
+    return get_size().cx;
+  }
+
+  unsigned get_height() const {
+    return get_size().cy;
+  }
 #endif
 
   void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,

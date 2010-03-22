@@ -103,14 +103,6 @@ public:
     set(parent, _T("PaintWindow"), left, top, width, height, style);
   }
 
-  unsigned get_width() const {
-    return get_size().cx;
-  }
-
-  unsigned get_height() const {
-    return get_size().cy;
-  }
-
   int get_left() const {
     return 0;
   }
