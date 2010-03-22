@@ -83,6 +83,8 @@ void dlgVegaDemoShowModal();
 bool dlgConfigurationVarioShowModal();
 void dlgLoggerReplayShowModal();
 void dlgStartupShowModal();
+void dlgSimulatorPromptShowModal();
+
 
 void
 dlgTaskCalculatorShowModal(SingleWindow &parent);
