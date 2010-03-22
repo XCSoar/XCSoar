@@ -304,6 +304,13 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
   if (!main_window.defined())
     return false;
 
+#ifdef SIMULATOR_AVAILABLE
+  // prompt for simulator if not set by command line argument "-simulator" or "-fly"
+  if (!sim_set_in_cmd_line_flag) {
+    dlgSimulatorPromptShowModal();
+  }
+#endif
+
   // Initialize DeviceBlackboard
   device_blackboard.Initialise();
 
