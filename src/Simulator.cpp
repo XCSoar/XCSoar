@@ -41,5 +41,5 @@ Copyright_License {
 #ifdef SIMULATOR_AVAILABLE
 
 bool global_simulator_flag;
-
+bool sim_set_in_cmd_line_flag;
 #endif
