@@ -97,6 +97,10 @@ public:
     return text;
   }
 
+  bool is_down() const {
+    return down;
+  }
+
 protected:
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
@@ -107,6 +111,7 @@ protected:
 
 #include "Screen/Window.hpp"
 
+#include <windowsx.h>
 #include <tchar.h>
 
 /**
@@ -125,6 +130,10 @@ public:
   }
 
   const tstring get_text() const;
+
+  bool is_down() const {
+    return (Button_GetState(hWnd) & BST_PUSHED) != 0;
+  }
 };
 
 #endif /* !ENABLE_SDL */

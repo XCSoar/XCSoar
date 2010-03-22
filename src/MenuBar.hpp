@@ -59,11 +59,20 @@ public:
 
 protected:
   class Button : public ButtonWindow {
+#ifdef GREEN_MENU
+  protected:
+    virtual void on_paint(Canvas &canvas);
+#endif
+
 #ifndef ENABLE_SDL
   public:
     void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
              int left, int top, unsigned width, unsigned height,
-             const ButtonWindowStyle style=ButtonWindowStyle()) {
+             ButtonWindowStyle style=ButtonWindowStyle()) {
+#ifdef GREEN_MENU
+      style.enable_custom_painting();
+#endif
+
       ButtonWindow::set(parent, text, id, left, top, width, height, style);
       install_wndproc();
     }
