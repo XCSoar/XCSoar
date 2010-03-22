@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_SIMULATOR_H
 #define XCSOAR_SIMULATOR_H
 
-#if !defined(GNAV) && !defined(PNA)
+#if !defined(GNAV)
 #define SIMULATOR_AVAILABLE
 #endif
 
