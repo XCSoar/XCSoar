@@ -41,6 +41,9 @@ Copyright_License {
 #include "Screen/Animation.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
+#include "resource.h"
+#include "Dialogs/Internal.hpp"
+#include "MainWindow.hpp"
 
 void
 WndSymbolButton::on_paint(Canvas &canvas)
@@ -106,4 +109,21 @@ WndSymbolButton::on_paint(Canvas &canvas)
                        (rc.left + rc.right) / 2 + size / 3,
                        (rc.top + rc.bottom) / 2 + size);
   }
+
+  // Draw Fly bitmap
+  if (!_tcscmp(mCaption, _T("Fly"))) {
+
+    Bitmap launcher1_bitmap(IDB_LAUNCHER1);
+    BitmapCanvas bitmap_canvas(canvas, launcher1_bitmap);
+    canvas.stretch(bitmap_canvas, 0, 0, 112, 30);
+  }
+
+  // Draw Simulator bitmap
+  if (!_tcscmp(mCaption, _T("Simulator"))) {
+
+    Bitmap launcher2_bitmap(IDB_LAUNCHER2);
+    BitmapCanvas bitmap_canvas(canvas, launcher2_bitmap);
+    canvas.stretch(bitmap_canvas, 0, 0, 112, 30);
+  }
+
 }
