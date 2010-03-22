@@ -42,6 +42,10 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Asset.hpp"
 
+#ifndef ENABLE_SDL
+#include "Screen/PaintCanvas.hpp"
+#endif /* !ENABLE_SDL */
+
 #ifdef PNA
 #include "Appearance.hpp" // for GlobalModelType
 #endif
@@ -79,6 +83,9 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
     ex_style |= WS_EX_CLIENTEDGE;
     style |= WS_THICKFRAME;
   }
+
+  if (window_style.custom_painting)
+    enable_custom_painting();
 
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
                           left, top, width, height,
@@ -335,15 +342,24 @@ Window::on_user(unsigned id)
   return false;
 }
 
+bool
+Window::on_erase(Canvas &canvas)
+{
+  /* if on_paint() is implemented, then don't erase the background;
+     on_paint() will paint on top */
 #ifdef ENABLE_SDL
+  return false;
+#else
+  return custom_painting;
+#endif
+}
 
 void
 Window::on_paint(Canvas &canvas)
 {
-  /* to be implemented by a subclass */
-  /* this is not an abstract method yet until the OO transition of all
-     SDL Window users is complete */
 }
+
+#ifdef ENABLE_SDL
 
 bool
 Window::on_event(const SDL_Event &event)
@@ -473,6 +489,22 @@ Window::on_message(HWND _hWnd, UINT message,
   case WM_TIMER:
     if (on_timer(wParam))
       return 0;
+    break;
+
+  case WM_ERASEBKGND:
+    {
+      Canvas canvas((HDC)wParam, get_width(), get_height());
+      if (on_erase(canvas))
+        return 0;
+    }
+    break;
+
+  case WM_PAINT:
+    if (custom_painting) {
+      PaintCanvas canvas(*this);
+      on_paint(canvas);
+      return 0;
+    }
     break;
   }
 

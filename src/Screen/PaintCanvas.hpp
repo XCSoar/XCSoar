@@ -45,7 +45,7 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 
-class PaintWindow;
+class Window;
 
 /**
  * A #Canvas implementation to use during WM_PAINT.  Use this class
@@ -53,11 +53,11 @@ class PaintWindow;
  */
 class PaintCanvas : public Canvas {
 private:
-  PaintWindow &window;
+  Window &window;
   PAINTSTRUCT ps;
 
 public:
-  PaintCanvas(PaintWindow &_window);
+  PaintCanvas(Window &_window);
   ~PaintCanvas();
 };
 

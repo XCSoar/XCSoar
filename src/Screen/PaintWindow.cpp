@@ -38,10 +38,6 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 
-#ifndef ENABLE_SDL
-#include "Screen/PaintCanvas.hpp"
-#endif /* !ENABLE_SDL */
-
 #ifdef ENABLE_SDL
 #include "Screen/ContainerWindow.hpp"
 #endif /* ENABLE_SDL */
@@ -73,49 +69,6 @@ PaintWindow::register_class(HINSTANCE hInstance)
   return RegisterClass(&wc) != 0;
 #endif /* !ENABLE_SDL */
 }
-
-bool
-PaintWindow::on_erase(Canvas &canvas)
-{
-  // we don't need one, we just paint over the top
-  return true;
-}
-
-void
-PaintWindow::on_paint(Canvas &canvas)
-{
-  /* to be implemented by a subclass */
-  /* this is not an abstract method yet until the OO transition of all
-     PaintWindow users is complete */
-}
-
-#ifndef ENABLE_SDL
-
-LRESULT
-PaintWindow::on_message(HWND hWnd, UINT message,
-                        WPARAM wParam, LPARAM lParam)
-{
-  switch (message) {
-  case WM_ERASEBKGND:
-    {
-      Canvas canvas((HDC)wParam, get_width(), get_height());
-      if (on_erase(canvas))
-        return 0;
-    }
-    break;
-
-  case WM_PAINT:
-    {
-      PaintCanvas canvas(*this);
-      on_paint(canvas);
-    }
-    return 0;
-  }
-
-  return Window::on_message(hWnd, message, wParam, lParam);
-}
-
-#endif /* !ENABLE_SDL */
 
 bool PaintWindow::register_class(HINSTANCE hInstance, const TCHAR* szWindowClass) {
   // not defined!

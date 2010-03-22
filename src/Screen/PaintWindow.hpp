@@ -54,6 +54,10 @@ private:
   void install_wndproc();
 
 public:
+  PaintWindow() {
+    enable_custom_painting();
+  }
+
   virtual ~PaintWindow();
 
   static bool register_class(HINSTANCE hInstance);
@@ -140,25 +144,7 @@ public:
 #endif /* !ENABLE_SDL */
   }
 
-#ifndef ENABLE_SDL
-  HDC BeginPaint(PAINTSTRUCT *ps) {
-    return ::BeginPaint(hWnd, ps);
-  }
-
-  void EndPaint(PAINTSTRUCT *ps) {
-    ::EndPaint(hWnd, ps);
-  }
-#endif /* !ENABLE_SDL */
-
 protected:
-  virtual bool on_erase(Canvas &canvas);
-  virtual void on_paint(Canvas &canvas);
-
-#ifndef ENABLE_SDL
-  virtual LRESULT on_message(HWND hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
-#endif /* !ENABLE_SDL */
-
   virtual bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
 };
 

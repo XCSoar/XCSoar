@@ -37,9 +37,9 @@ Copyright_License {
 */
 
 #include "Screen/PaintCanvas.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "Screen/Window.hpp"
 
-PaintCanvas::PaintCanvas(PaintWindow &_window)
+PaintCanvas::PaintCanvas(Window &_window)
   :window(_window)
 {
   HDC hDC = window.BeginPaint(&ps);
