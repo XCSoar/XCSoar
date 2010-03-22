@@ -214,7 +214,7 @@ CreateFileList(void)
   lstrcpy(FileList[0].Name, TEXT("XCSoar"));
 
   wsprintf(FileList[0].FileName, TEXT("%s\\XCSoar.exe"), installDir);
-  wsprintf(FileList[0].CommandLine, TEXT("%s\\XCSoar.exe"), installDir);
+  _tcscpy(FileList[0].CommandLine, TEXT("-fly"));
   lstrcpy(FileList[0].Description, TEXT("Start XCSoar in flight mode"));
 
   if (FileList[0].bitmap == NULL)
