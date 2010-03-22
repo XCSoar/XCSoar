@@ -36,48 +36,13 @@ Copyright_License {
 }
 */
 
-#include "Screen/BufferWindow.hpp"
 #include "Screen/WindowCanvas.hpp"
-
-BufferWindow::~BufferWindow()
-{
-  reset();
-}
+#include "Screen/PaintWindow.hpp"
 
 #ifndef ENABLE_SDL
 
-bool
-BufferWindow::on_create()
-{
-  if (!PaintWindow::on_create())
-    return false;
-
-  WindowCanvas a_canvas(*this);
-  buffer.set(a_canvas, get_width(), get_height());
-  return true;
-}
-
-bool
-BufferWindow::on_destroy()
-{
-  PaintWindow::on_destroy();
-
-  buffer.reset();
-  return true;
-}
-
-bool
-BufferWindow::on_resize(unsigned width, unsigned height)
-{
-  buffer.resize(width, height);
-  PaintWindow::on_resize(width, height);
-  return true;
-}
+WindowCanvas::WindowCanvas(PaintWindow &window)
+  :Canvas(::GetDC(window), window.get_width(), window.get_height()),
+   wnd(window) {}
 
 #endif /* !ENABLE_SDL */
-
-void
-BufferWindow::on_paint(Canvas &canvas)
-{
-  commit_buffer(canvas);
-}

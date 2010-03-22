@@ -42,32 +42,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Window.hpp"
 
-class PaintWindow;
-
-/**
- * A #Canvas implementation which allows you to draw directly into a
- * #PaintWindow, outside of the PaintWindow::on_paint().
- */
-class WindowCanvas : public Canvas {
-#ifdef ENABLE_SDL
-public:
-  explicit WindowCanvas(Window &window)
-    :Canvas(window.canvas.surface) {}
-
-#else /* !ENABLE_SDL */
-
-protected:
-  HWND wnd;
-
-public:
-  explicit WindowCanvas(PaintWindow &window);
-
-  ~WindowCanvas() {
-    ::ReleaseDC(wnd, dc);
-  }
-#endif /* !ENABLE_SDL */
-};
-
 class ContainerWindow;
 
 /**
@@ -134,7 +108,6 @@ public:
   void invalidate() {
 #ifdef ENABLE_SDL
     // XXX
-    WindowCanvas canvas(*this);
     on_paint(canvas);
     expose();
 #else /* !ENABLE_SDL */
@@ -159,7 +132,6 @@ public:
 
 #ifdef ENABLE_SDL
     // XXX
-    WindowCanvas canvas(*this);
     on_paint(canvas);
     expose();
 #else /* !ENABLE_SDL */

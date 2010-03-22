@@ -46,16 +46,6 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #endif /* ENABLE_SDL */
 
-#include <assert.h>
-
-#ifndef ENABLE_SDL
-
-WindowCanvas::WindowCanvas(PaintWindow &window)
-  :Canvas(::GetDC(window), window.get_width(), window.get_height()),
-   wnd(window) {}
-
-#endif /* !ENABLE_SDL */
-
 PaintWindow::~PaintWindow()
 {
   reset();

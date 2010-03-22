@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/WindowCanvas.hpp"
 
 #ifdef ENABLE_SDL
 
@@ -178,6 +179,17 @@ ContainerWindow::get_focused_window()
     return active_child->get_focused_window();
 
   return NULL;
+}
+
+void
+ContainerWindow::expose_child(const Window &child)
+{
+  const WindowCanvas child_canvas(const_cast<Window &>(child));
+  canvas.copy(child.get_left(), child.get_top(),
+              child_canvas.get_width(),
+              child_canvas.get_height(),
+              child_canvas, 0, 0);
+  expose(child.get_position());
 }
 
 #else /* !ENABLE_SDL */

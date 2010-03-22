@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Screen/MaskedPaintWindow.hpp"
+#include "Screen/WindowCanvas.hpp"
 #include "Screen/BitmapCanvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Canvas.hpp"

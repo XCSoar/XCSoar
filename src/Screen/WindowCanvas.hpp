@@ -36,48 +36,36 @@ Copyright_License {
 }
 */
 
-#include "Screen/BufferWindow.hpp"
-#include "Screen/WindowCanvas.hpp"
+#ifndef XCSOAR_SCREEN_WINDOW_CANVAS_HXX
+#define XCSOAR_SCREEN_WINDOW_CANVAS_HXX
 
-BufferWindow::~BufferWindow()
-{
-  reset();
-}
+#include "Screen/Window.hpp"
+#include "Screen/Canvas.hpp"
 
-#ifndef ENABLE_SDL
+class PaintWindow;
 
-bool
-BufferWindow::on_create()
-{
-  if (!PaintWindow::on_create())
-    return false;
+/**
+ * A #Canvas implementation which allows you to draw directly into a
+ * #PaintWindow, outside of the PaintWindow::on_paint().
+ */
+class WindowCanvas : public Canvas {
+#ifdef ENABLE_SDL
+public:
+  explicit WindowCanvas(Window &window)
+    :Canvas(window.canvas.surface) {}
 
-  WindowCanvas a_canvas(*this);
-  buffer.set(a_canvas, get_width(), get_height());
-  return true;
-}
+#else /* !ENABLE_SDL */
 
-bool
-BufferWindow::on_destroy()
-{
-  PaintWindow::on_destroy();
+protected:
+  HWND wnd;
 
-  buffer.reset();
-  return true;
-}
+public:
+  explicit WindowCanvas(PaintWindow &window);
 
-bool
-BufferWindow::on_resize(unsigned width, unsigned height)
-{
-  buffer.resize(width, height);
-  PaintWindow::on_resize(width, height);
-  return true;
-}
-
+  ~WindowCanvas() {
+    ::ReleaseDC(wnd, dc);
+  }
 #endif /* !ENABLE_SDL */
+};
 
-void
-BufferWindow::on_paint(Canvas &canvas)
-{
-  commit_buffer(canvas);
-}
+#endif
