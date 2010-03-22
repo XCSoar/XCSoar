@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<WndForm Name="frmComboPopup" Width=240 Height=320 Caption="XCSoar">
+
+
+  <WndFrame X=8 Y=80 Width=310 Height=20 Font=2 Caption="What do you want to do:" />
+  <WndSymbolButton Name="cmdFly"  Caption="Fly"    			 X=8  Y=110 Width=112  Height=30 Font=2 OnClickNotify="OnFlyClicked"/>
+  <WndSymbolButton Name="cmdSimulator"  Caption="Simulator"  X=120 Y=110 Width=112  Height=30 Font=2 OnClickNotify="OnSimulatorClicked"/>
+
+</WndForm>
