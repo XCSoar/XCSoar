@@ -55,6 +55,13 @@ public:
     style |= BS_MULTILINE;
 #endif
   }
+
+  void enable_custom_painting() {
+    WindowStyle::enable_custom_painting();
+#ifndef ENABLE_SDL
+    style |= BS_OWNERDRAW;
+#endif
+  }
 };
 
 #ifdef ENABLE_SDL
