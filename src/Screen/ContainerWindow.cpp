@@ -200,16 +200,18 @@ ContainerWindow::on_message(HWND hWnd, UINT message,
 {
   switch (message) {
   case WM_CTLCOLORSTATIC:
-    Window *window = Window::get((HWND)lParam);
-    if (window == NULL)
-      break;
+    {
+      Window *window = Window::get((HWND)lParam);
+      if (window == NULL)
+        break;
 
-    Canvas canvas((HDC)wParam, 1, 1);
-    Brush *brush = on_color(*window, canvas);
-    if (brush == NULL)
-      break;
+      Canvas canvas((HDC)wParam, 1, 1);
+      Brush *brush = on_color(*window, canvas);
+      if (brush == NULL)
+        break;
 
-    return (LRESULT)brush->native();
+      return (LRESULT)brush->native();
+    }
   };
 
   return PaintWindow::on_message(hWnd, message, wParam, lParam);
