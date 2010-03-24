@@ -212,6 +212,22 @@ ContainerWindow::on_message(HWND hWnd, UINT message,
 
       return (LRESULT)brush->native();
     }
+
+  case WM_DRAWITEM:
+    /* forward WM_DRAWITEM to the child window who sent this
+       message */
+    {
+      const DRAWITEMSTRUCT *di = (const DRAWITEMSTRUCT *)lParam;
+
+      Window *window = Window::get(di->hwndItem);
+      if (window == NULL)
+        break;
+
+      Canvas canvas(di->hDC, di->rcItem.right - di->rcItem.left,
+                    di->rcItem.bottom - di->rcItem.top);
+      window->on_paint(canvas);
+      return TRUE;
+    }
   };
 
   return PaintWindow::on_message(hWnd, message, wParam, lParam);

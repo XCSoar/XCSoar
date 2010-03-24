@@ -134,6 +134,8 @@ public:
  * into a Window, derive your class from #PaintWindow.
  */
 class Window {
+  friend class ContainerWindow;
+
 public:
 #ifdef ENABLE_SDL
   friend class SDLTimer;
