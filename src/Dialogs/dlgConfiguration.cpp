@@ -1107,7 +1107,7 @@ static void GetInfoBoxSelector(unsigned item, int mode)
         InfoBoxManager::setType(item, itnew, 3);
         break;
       };
-      StoreType(item, InfoBoxManager::getTypeAll(item));
+      Profile::SetInfoBoxes(item, InfoBoxManager::getTypeAll(item));
     }
   }
 }

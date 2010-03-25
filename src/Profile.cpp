@@ -259,7 +259,7 @@ CheckInfoTypes()
     if (iszero_aux)
       InfoBoxManager::setType(i, InfoBoxManager::getType(i, 1), 3);
 
-    StoreType(i, InfoBoxManager::getTypeAll(i));
+    Profile::SetInfoBoxes(i, InfoBoxManager::getTypeAll(i));
   }
 }
 
@@ -914,3 +914,8 @@ Profile::SetAirspaceBrush(int i, int c)
   Profile::Set(szProfileBrush[i], c);
 }
 
+void
+Profile::SetInfoBoxes(int Index, int the_type)
+{
+  Profile::Set(szProfileDisplayType[Index], the_type);
+}

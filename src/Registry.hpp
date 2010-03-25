@@ -64,8 +64,6 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
 bool
 SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
 
-void StoreType(int Index,int InfoType);
-
 struct DeviceConfig {
   enum port_type {
     /**

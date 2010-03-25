@@ -97,12 +97,6 @@ public:
 
 #endif /* !WIN32 */
 
-void
-StoreType(int Index, int the_type)
-{
-  Profile::Set(szProfileDisplayType[Index], the_type);
-}
-
 //
 // NOTE: all registry variables are unsigned!
 //
