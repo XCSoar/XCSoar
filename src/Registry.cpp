@@ -787,14 +787,13 @@ SaveRegistryToFile(const TCHAR *szFile)
 
     lpstrName[0] = _T('\0'); // null terminate, just in case
 
-    LONG res = ::RegEnumValue(hkFrom, i, lpstrName,
-                              &nNameSize, 0,
+    res = ::RegEnumValue(hkFrom, i, lpstrName, &nNameSize, 0, &nType,
 #ifdef __GNUC__
-                              &nType, uValue.pValue,
+                         uValue.pValue,
 #else
-                              &nType, pValue,
+                         pValue,
 #endif
-                              &nValueSize);
+                         &nValueSize);
 
     if (ERROR_NO_MORE_ITEMS == res)
       break;
