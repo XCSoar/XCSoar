@@ -45,60 +45,11 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef ENABLE_UNUSED_CODE
-void
-WriteFileRegistryString(HANDLE hFile, TCHAR *instring)
-{
-  int len;
-  char ctempFile[MAX_PATH];
-  TCHAR tempFile[MAX_PATH];
-  DWORD dwBytesWritten;
-  int i;
-
-  tempFile[0] = 0;
-  for (i = 0; i < MAX_PATH; i++)
-    tempFile[i] = 0;
-
-  GetRegistryString(instring, tempFile, MAX_PATH);
-
-#ifdef _UNICODE
-  WideCharToMultiByte(CP_ACP, 0, tempFile, _tcslen(tempFile) + 1,
-                      ctempFile, MAX_PATH, NULL, NULL);
-#else
-  strcpy(ctempFile, tempFile);
-#endif
-
-  for (i = 0; i < MAX_PATH; i++)
-    if (ctempFile[i] == '\?')
-      ctempFile[i] = 0;
-
-  len = strlen(ctempFile) + 1;
-  ctempFile[len - 1] = '\n';
-  WriteFile(hFile, ctempFile, len, &dwBytesWritten, (OVERLAPPED *)NULL);
-}
-#endif /* ENABLE_UNUSED_CODE */
-
 void
 WriteProfile(const TCHAR *szFile)
 {
   Profile::SaveFile(szFile);
 }
-
-#ifdef ENABLE_UNUSED_CODE
-void
-ReadFileRegistryString(HANDLE hFile, TCHAR *instring)
-{
-  int i;
-  TCHAR tempFile[MAX_PATH];
-
-  for (i = 0; i < MAX_PATH; i++)
-    tempFile[i] = 0;
-
-  ReadString(hFile, MAX_PATH, tempFile);
-  tempFile[_tcslen(tempFile)] = 0;
-  SetRegistryString(instring, tempFile);
-}
-#endif /* ENABLE_UNUSED_CODE */
 
 void
 ReadProfile(const TCHAR *szFile)
