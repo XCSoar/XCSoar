@@ -111,7 +111,7 @@ SetRegistryStringIfAbsent(const TCHAR* name, const TCHAR* value)
   SetRegistryString(name, value);
 #else
   TCHAR temp[MAX_PATH];
-  if (GetRegistryString(name, temp, MAX_PATH))
+  if (!GetRegistryString(name, temp, MAX_PATH))
     SetRegistryString(name, value);
 #endif
 }
