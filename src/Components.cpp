@@ -185,11 +185,6 @@ test_task()
 void
 XCSoarInterface::PreloadInitialisation(bool ask)
 {
-#ifdef PNA
-  if (ask)
-    CleanRegistry();
-#endif
-
   Profile::Set(TEXT("XCV"), 1);
 
 #ifdef DEBUG_TRANSLATIONS

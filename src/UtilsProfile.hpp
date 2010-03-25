@@ -41,10 +41,6 @@ Copyright_License {
 
 #include "Engine/Math/fixed.hpp"
 
-#ifdef PNA
-void CleanRegistry(); // VENTA2-ADDON cleanregistrykeyA
-#endif
-
 void WriteProfile(const TCHAR *szFile);
 void ReadProfile(const TCHAR *szFile);
 int propGetScaleList(fixed *List, size_t Size);

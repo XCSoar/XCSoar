@@ -101,25 +101,3 @@ propGetScaleList(fixed *List, size_t Size)
 
   return Idx;
 }
-
-#ifdef PNA
-void
-CleanRegistry()
-{
-  HKEY tKey;
-  RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, 0, &tKey);
-
-  RegDeleteValue(tKey, _T("CDIWindowFont"));
-  RegDeleteValue(tKey, _T("InfoWindowFont"));
-  RegDeleteValue(tKey, _T("MapLabelFont"));
-  RegDeleteValue(tKey, _T("MapWindowBoldFont"));
-  RegDeleteValue(tKey, _T("MapWindowFont"));
-  RegDeleteValue(tKey, _T("StatisticsFont"));
-  RegDeleteValue(tKey, _T("TitleSmallWindowFont"));
-  RegDeleteValue(tKey, _T("TitleWindowFont"));
-  RegDeleteValue(tKey, _T("BugsBallastFont"));
-  RegDeleteValue(tKey, _T("TeamCodeFont"));
-
-  RegCloseKey(tKey);
-}
-#endif
