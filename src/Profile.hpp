@@ -46,45 +46,44 @@ Copyright_License {
 namespace Profile
 {
   /**
-   * Reads the profile settings from the registry and adjusts the
-   * application settings
+   * Adjusts the application settings according to the profile settings
    */
   void Use();
   /**
-   * Loads the profile files into the registry
+   * Loads the profile files
    */
   void Load();
   /**
-   * Loads the given profile file into the registry
+   * Loads the given profile file
    */
   void LoadFile(const TCHAR *szFile);
   /**
-   * Saves the registry into the profile files
+   * Saves the profile into the profile files
    */
   void Save();
   /**
-   * Saves the registry into the given profile file
+   * Saves the profile into the given profile file
    */
   void SaveFile(const TCHAR *szFile);
   /**
-   * Saves the sound settings to the registry
+   * Saves the sound settings to the profile
    */
   void SetSoundSettings();
   /**
-   * Saves the wind settings to the registry
+   * Saves the wind settings to the profile
    */
   void SetWind();
   /**
-   * Loads the wind settings from the registry
+   * Loads the wind settings from the profile
    */
   void GetWind();
   /**
-   * Saves the airspace mode setting to the registry
+   * Saves the airspace mode setting to the profile
    * @param i Airspace class index
    */
   void SetRegistryAirspaceMode(int i);
   /**
-   * Sets the files to load when calling Load()
+   * Sets the profile files to load when calling Load()
    * @param override NULL or file to load when calling Load()
    */
   void SetFiles(const TCHAR* override);
@@ -102,7 +101,7 @@ namespace Profile
   bool Set(const TCHAR *szRegValue, double pPos);
 
   /**
-   * Reads the airspace mode setting from the registry
+   * Reads the airspace mode setting from the profile
    * @param i Airspace class index
    * @return The mode
    */
