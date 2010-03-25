@@ -48,14 +48,85 @@ Profile::SetFiles(const TCHAR* override)
 {
 }
 
+int
+Profile::GetScaleList(fixed *List, size_t Size)
+{
+  return 0;
+}
+bool
+Profile::Get(const TCHAR *szRegValue, int &pPos)
+{
+  return false;
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, short &pPos)
+{
+  return false;
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, bool &pPos)
+{
+  return false;
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, unsigned &pPos)
+{
+  return false;
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, double &pPos)
+{
+  return false;
+}
+
+bool
+Profile::GetString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+{
+  return false;
+}
+
 bool
 Profile::Set(const TCHAR *szRegValue, int pPos)
 {
   return false;
 }
 
-int
-Profile::GetScaleList(fixed *List, size_t Size)
+bool
+Profile::Set(const TCHAR *szRegValue, short pPos)
 {
-  return 0;
+  return false;
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, bool pPos)
+{
+  return false;
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, unsigned pPos)
+{
+  return false;
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, double pPos)
+{
+  return false;
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, long pPos)
+{
+  return false;
+}
+
+bool
+Profile::SetString(const TCHAR *szRegValue, const TCHAR *Pos)
+{
+  return false;
 }
