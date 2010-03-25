@@ -814,13 +814,15 @@ SaveRegistryToFile(const TCHAR *szFile)
     if (_tcslen(lpstrName) <= 1)
       continue;
 
+#ifndef __GNUC__
+    wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
+#endif
 
     if (nType == REG_DWORD) {
       // If the subkey type is DWORD
 #ifdef __GNUC__
       writer.printfln(_T("%s=%d"), lpstrName, uValue.dValue);
 #else
-      wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
       writer.printfln(_T("%s=%d"), sName, *((DWORD*)pValue));
 #endif
     } else if (nType == REG_SZ) {
@@ -854,12 +856,10 @@ SaveRegistryToFile(const TCHAR *szFile)
       // If the value string is not empty
       if (!string_is_empty((const TCHAR*)pValue)) {
         // -> write the value to the output file
-        wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
         wcstombs(sValue, (TCHAR*)pValue, nMaxKeyNameSize + 1);
         writer.printfln(_T("%s=\"%s\""), sName, sValue);
       } else {
         // otherwise -> write ="" to the output file
-        wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
         writer.printfln(_T("%s=\"\""), sName);
       }
 #endif
