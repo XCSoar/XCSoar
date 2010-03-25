@@ -313,18 +313,6 @@ SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 #endif /* !WIN32 */
 }
 
-void
-SetRegistryColour(int i, int c)
-{
-  Profile::Set(szProfileColour[i], c);
-}
-
-void
-SetRegistryBrush(int i, int c)
-{
-  Profile::Set(szProfileBrush[i], c);
-}
-
 const TCHAR *
 MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
                       const TCHAR *suffix)

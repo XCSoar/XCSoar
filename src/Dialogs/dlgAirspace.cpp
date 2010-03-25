@@ -111,7 +111,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
     int c = dlgAirspaceColoursShowModal();
     if (c >= 0) {
       XCSoarInterface::SetSettingsMap().iAirspaceColour[ItemIndex] = c;
-      SetRegistryColour(ItemIndex,
+      Profile::SetAirspaceColor(ItemIndex,
           XCSoarInterface::SettingsMap().iAirspaceColour[ItemIndex]);
       changed = true;
     }
@@ -119,7 +119,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
     int p = dlgAirspacePatternsShowModal();
     if (p >= 0) {
       XCSoarInterface::SetSettingsMap().iAirspaceBrush[ItemIndex] = p;
-      SetRegistryBrush(ItemIndex,
+      Profile::SetAirspaceBrush(ItemIndex,
           XCSoarInterface::SettingsMap().iAirspaceBrush[ItemIndex]);
       changed = true;
     }

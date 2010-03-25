@@ -901,3 +901,16 @@ Profile::GetScaleList(fixed *List, size_t Size)
 
   return Idx;
 }
+
+void
+Profile::SetAirspaceColor(int i, int c)
+{
+  Profile::Set(szProfileColour[i], c);
+}
+
+void
+Profile::SetAirspaceBrush(int i, int c)
+{
+  Profile::Set(szProfileBrush[i], c);
+}
+

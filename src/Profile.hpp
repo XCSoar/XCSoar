@@ -114,6 +114,9 @@ namespace Profile
   int GetRegistryAirspaceMode(int i);
 
   int GetScaleList(fixed *List, size_t Size);
+
+  void SetAirspaceColor(int i, int c);
+  void SetAirspaceBrush(int i, int c);
 };
 
 #endif
