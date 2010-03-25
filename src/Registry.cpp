@@ -751,7 +751,6 @@ SaveRegistryToFile(const TCHAR *szFile)
 {
 #ifdef WIN32
   TCHAR lpstrName[nMaxKeyNameSize+1];
-  //  TCHAR lpstrClass[nMaxClassSize+1];
 #ifdef __GNUC__
   union {
     BYTE pValue[nMaxValueValueSize+4];
@@ -762,31 +761,37 @@ SaveRegistryToFile(const TCHAR *szFile)
 
   char sName[MAX_PATH];
   char sValue[MAX_PATH];
-
 #endif
 
+  // If no file is given -> return
   if (string_is_empty(szFile))
     return;
 
+  // Try to open the file for writing
   TextWriter writer(szFile);
+  // ... on error -> return
   if (writer.error())
     return;
 
+  // Try to open the XCSoar registry key
   HKEY hkFrom;
   LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey,
                             0, KEY_ALL_ACCESS, &hkFrom);
-
+  // ... on error -> return
   if (ERROR_SUCCESS != res)
     return;
 
+  // Iterate through the registry subkeys
   for (int i = 0;; i++) {
     DWORD nType;
+    // Reset the buffer sizes
     DWORD nValueSize = nMaxValueValueSize;
     DWORD nNameSize = nMaxKeyNameSize;
-    // DWORD nClassSize = nMaxClassSize;
 
-    lpstrName[0] = _T('\0'); // null terminate, just in case
+    // Reset the key-name buffer
+    lpstrName[0] = _T('\0');
 
+    // Get i-th subkey from the registry key defined by hkFrom
     res = ::RegEnumValue(hkFrom, i, lpstrName, &nNameSize, 0, &nType,
 #ifdef __GNUC__
                          uValue.pValue,
@@ -795,17 +800,23 @@ SaveRegistryToFile(const TCHAR *szFile)
 #endif
                          &nValueSize);
 
+    // If we iterated to the end of the subkey "array" -> quit the for-loop
     if (ERROR_NO_MORE_ITEMS == res)
       break;
 
+    // If the size of the name is <= 0 or the buffer is to small
+    // -> skip this subkey
     if ((nNameSize <= 0) || (nNameSize > nMaxKeyNameSize))
-      // in case things get weird
       continue;
 
+    // If the string length of the name is smaller then one character
+    // -> skip this subkey
     if (_tcslen(lpstrName) <= 1)
       continue;
 
-    if (nType == REG_DWORD) { // data
+
+    if (nType == REG_DWORD) {
+      // If the subkey type is DWORD
 #ifdef __GNUC__
       writer.printfln(_T("%s=%d"), lpstrName, uValue.dValue);
 #else
@@ -813,30 +824,41 @@ SaveRegistryToFile(const TCHAR *szFile)
       writer.printfln(_T("%s=%d"), sName, *((DWORD*)pValue));
 #endif
     } else if (nType == REG_SZ) {
-      // text
+      // If the subkey type is STRING
 
+      // If the value is empty
       if (nValueSize <= 0) {
+        // -> write ="" to the output file an continue with the next subkey
         writer.printfln(_T("%s=\"\""), lpstrName);
         continue;
       }
 
-      // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
+      /// @todo SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
 #ifdef __GNUC__
-      uValue.pValue[nValueSize] = 0; // null terminate, just in case
-      uValue.pValue[nValueSize + 1] = 0; // null terminate, just in case
+      // Force null-termination
+      uValue.pValue[nValueSize] = 0;
+      uValue.pValue[nValueSize + 1] = 0;
+
+      // If the value string is not empty
       if (!string_is_empty((const TCHAR*)uValue.pValue))
+        // -> write the value to the output file
         writer.printfln(_T("%s=\"%s\""), lpstrName, uValue.pValue);
       else
+        // otherwise -> write ="" to the output file
         writer.printfln(_T("%s=\"\""), lpstrName);
 #else
+      // Force null-termination
       pValue[nValueSize] = 0; // null terminate, just in case
       pValue[nValueSize + 1] = 0; // null terminate, just in case
 
+      // If the value string is not empty
       if (!string_is_empty((const TCHAR*)pValue)) {
+        // -> write the value to the output file
         wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
         wcstombs(sValue, (TCHAR*)pValue, nMaxKeyNameSize + 1);
         writer.printfln(_T("%s=\"%s\""), sName, sValue);
       } else {
+        // otherwise -> write ="" to the output file
         wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
         writer.printfln(_T("%s=\"\""), sName);
       }
@@ -844,6 +866,7 @@ SaveRegistryToFile(const TCHAR *szFile)
     }
   }
 
+  // Close the XCSoar registry key
   ::RegCloseKey(hkFrom);
 #else /* !WIN32 */
   // XXX implement
