@@ -103,19 +103,6 @@ StoreType(int Index, int the_type)
   Profile::Set(szProfileDisplayType[Index], the_type);
 }
 
-void
-SetRegistryStringIfAbsent(const TCHAR* name, const TCHAR* value)
-{
-  // VENTA force fonts registry rewrite in PNAs
-#if defined(PNA) || defined(FIVV) // VENTA TODO WARNING should really delete the key before creating it TODO
-  SetRegistryString(name, value);
-#else
-  TCHAR temp[MAX_PATH];
-  if (!GetRegistryString(name, temp, MAX_PATH))
-    SetRegistryString(name, value);
-#endif
-}
-
 //
 // NOTE: all registry variables are unsigned!
 //

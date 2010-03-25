@@ -64,9 +64,6 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
 bool
 SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
 
-void
-SetRegistryStringIfAbsent(const TCHAR *name, const TCHAR *value);
-
 void SetRegistryColour(int i, int c);
 void SetRegistryBrush(int i, int c);
 void SetRegistryAirspacePriority(int i);
