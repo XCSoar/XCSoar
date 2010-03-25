@@ -829,9 +829,10 @@ SaveRegistryToFile(const TCHAR *szFile)
       else
         writer.printfln(_T("%s=\"\""), lpstrName);
 #else
+      pValue[nValueSize] = 0; // null terminate, just in case
+      pValue[nValueSize + 1] = 0; // null terminate, just in case
+
       if (!string_is_empty((const TCHAR*)pValue)) {
-        pValue[nValueSize] = 0; // null terminate, just in case
-        pValue[nValueSize + 1] = 0; // null terminate, just in case
         wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
         wcstombs(sValue, (TCHAR*)pValue, nMaxKeyNameSize + 1);
         writer.printfln(_T("%s=\"%s\""), sName, sValue);
