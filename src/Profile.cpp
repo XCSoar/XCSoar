@@ -679,7 +679,7 @@ Profile::GetRegistryAirspaceMode(int i)
 }
 
 void
-Profile::SaveSoundSettings()
+Profile::SetSoundSettings()
 {
   Profile::Set(szProfileSoundVolume,
                XCSoarInterface::SettingsComputer().SoundVolume);

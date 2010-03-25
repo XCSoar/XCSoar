@@ -69,7 +69,7 @@ namespace Profile
   /**
    * Saves the sound settings to the registry
    */
-  void SaveSoundSettings();
+  void SetSoundSettings();
   /**
    * Saves the wind settings to the registry
    */

@@ -487,7 +487,7 @@ XCSoarInterface::Shutdown(void)
 
   // Stop sound
   LogStartUp(TEXT("SaveSoundSettings"));
-  Profile::SaveSoundSettings();
+  Profile::SetSoundSettings();
 
 #ifndef DISABLEAUDIOVARIO
   //  VarioSound_EnableSound(false);
