@@ -301,12 +301,6 @@ InitAsset()
     #endif
   }
 
-  // VENTA2- delete registries at startup, but not on PC!
-  #if defined(FIVV) && (!defined(WINDOWSPC) || WINDOWSPC == 0)
-  if (!is_pna())
-    RegDeleteKey(HKEY_CURRENT_USER, _T(REGKEYNAME));
-  #endif
-
   #ifdef PNA
   // VENTA2-ADDON MODEL TYPE
   /*
