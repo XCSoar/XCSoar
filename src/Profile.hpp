@@ -73,7 +73,7 @@ namespace Profile
   /**
    * Saves the wind settings to the registry
    */
-  void SaveWindToRegistry();
+  void SetWind();
   /**
    * Loads the wind settings from the registry
    */

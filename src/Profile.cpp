@@ -694,7 +694,7 @@ Profile::SaveSoundSettings()
 }
 
 void
-Profile::SaveWindToRegistry()
+Profile::SetWind()
 {
   int Temp;
   Temp = iround(XCSoarInterface::Basic().wind.norm);

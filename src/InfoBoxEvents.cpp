@@ -248,7 +248,7 @@ ActionInterface::on_key_WindDirection(int UpDown)
     } else if (UpDown == 0) {
     glide_computer.SetWindEstimate(Calculated().WindSpeed,
 				   Calculated().WindBearing);
-    SaveWindToRegistry();
+    Profile::SetWind();
   }
   return;
 */
@@ -273,7 +273,7 @@ void	ActionInterface::on_key_WindSpeed(int UpDown)
 	} else if (UpDown == 0) {
           glide_computer.SetWindEstimate(Calculated().WindSpeed,
 					 Calculated().WindBearing);
-	  SaveWindToRegistry();
+	  Profile::SetWind();
 	}
 */
 	return;
