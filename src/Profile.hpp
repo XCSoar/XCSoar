@@ -61,6 +61,10 @@ namespace Profile
    */
   void Save();
   /**
+   * Saves the registry into the given profile file
+   */
+  void SaveFile(const TCHAR *szFile);
+  /**
    * Saves the sound settings to the registry
    */
   void SaveSoundSettings();

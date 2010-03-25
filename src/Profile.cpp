@@ -742,11 +742,22 @@ Profile::LoadFile(const TCHAR *szFile)
 void
 Profile::Save()
 {
-  LogStartUp(_T("Save profile"));
+  LogStartUp(_T("Saving profiles"));
   // save registry backup first (try a few places)
-  SaveRegistryToFile(startProfileFile);
-  SaveRegistryToFile(defaultProfileFile);
+  SaveFile(startProfileFile);
+  SaveFile(defaultProfileFile);
 }
+
+void
+Profile::SaveFile(const TCHAR *szFile)
+{
+  if (string_is_empty(szFile))
+    return;
+
+  LogStartUp(TEXT("Saving profile to %s"), szFile);
+  SaveRegistryToFile(szFile);
+}
+
 
 void
 Profile::SetFiles(const TCHAR* override)
