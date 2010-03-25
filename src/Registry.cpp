@@ -100,7 +100,7 @@ public:
 void
 StoreType(int Index, int the_type)
 {
-  SetToRegistry(szProfileDisplayType[Index], the_type);
+  Profile::Set(szProfileDisplayType[Index], the_type);
 }
 
 void
@@ -329,13 +329,13 @@ SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 void
 SetRegistryColour(int i, int c)
 {
-  SetToRegistry(szProfileColour[i], c);
+  Profile::Set(szProfileColour[i], c);
 }
 
 void
 SetRegistryBrush(int i, int c)
 {
-  SetToRegistry(szProfileBrush[i], c);
+  Profile::Set(szProfileBrush[i], c);
 }
 
 const TCHAR *
@@ -435,10 +435,10 @@ WriteDeviceConfig(unsigned n, const DeviceConfig &config)
   WritePortType(n, config.port_type);
 
   MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
-  SetToRegistry(buffer, config.port_index);
+  Profile::Set(buffer, config.port_index);
 
   MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
-  SetToRegistry(buffer, config.speed_index);
+  Profile::Set(buffer, config.speed_index);
 
   _tcscpy(buffer, CONF("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
