@@ -810,14 +810,14 @@ SaveRegistryToFile(const TCHAR *szFile)
       // type 1 text
       // type 4 integer (valuesize 4)
 
-      if (nType == 4) { // data
+      if (nType == REG_DWORD) { // data
 #ifdef __GNUC__
         writer.printfln(_T("%s=%d"), lpstrName, uValue.dValue);
 #else
         wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
         writer.printfln(_T("%s=%d"), sName, *((DWORD*)pValue));
 #endif
-      } else if (nType == 1) {
+      } else if (nType == REG_SZ) {
         // text
         // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
         if (nValueSize > 0) {
