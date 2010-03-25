@@ -37,15 +37,12 @@ Copyright_License {
 */
 
 #include "LogFile.hpp"
-#include "Thread/Mutex.hpp"
 #include "LocalPath.hpp"
 #include "Asset.hpp"
 #include "TextWriter.hpp"
 
 #include <stdio.h>
 #include <stdarg.h>
-
-static Mutex mutexLogFile;
 
 #if !defined(NDEBUG) && !defined(GNAV)
 /**
@@ -72,7 +69,6 @@ LogDebug(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
-  ScopeLock lock(mutexLogFile);
   TextWriter writer(szFileName, initialised);
   if (!writer.error())
     writer.writeln(buf);
@@ -106,7 +102,6 @@ LogStartUp(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
-  ScopeLock lock(mutexLogFile);
   TextWriter writer(szFileName, initialised);
   if (!writer.error())
     writer.writeln(buf);
