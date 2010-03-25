@@ -45,28 +45,6 @@ Copyright_License {
 
 #include <assert.h>
 
-void
-WriteProfile(const TCHAR *szFile)
-{
-  Profile::SaveFile(szFile);
-}
-
-void
-ReadProfile(const TCHAR *szFile)
-{
-  Profile::LoadFile(szFile);
-
-  WaypointFileChanged = true;
-  TerrainFileChanged = true;
-  TopologyFileChanged = true;
-  AirspaceFileChanged = true;
-  AirfieldFileChanged = true;
-  PolarFileChanged = true;
-
-  // assuming all is ok, we can...
-  Profile::Use();
-}
-
 int
 propGetScaleList(fixed *List, size_t Size)
 {

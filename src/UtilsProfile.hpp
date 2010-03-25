@@ -41,8 +41,6 @@ Copyright_License {
 
 #include "Engine/Math/fixed.hpp"
 
-void WriteProfile(const TCHAR *szFile);
-void ReadProfile(const TCHAR *szFile);
 int propGetScaleList(fixed *List, size_t Size);
 
 #endif

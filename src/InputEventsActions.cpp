@@ -1316,8 +1316,19 @@ InputEvents::eventTaskSave(const TCHAR *misc)
 void
 InputEvents::eventProfileLoad(const TCHAR *misc)
 {
-  if (!string_is_empty(misc))
-    ReadProfile(misc);
+  if (!string_is_empty(misc)) {
+    Profile::LoadFile(misc);
+
+    WaypointFileChanged = true;
+    TerrainFileChanged = true;
+    TopologyFileChanged = true;
+    AirspaceFileChanged = true;
+    AirfieldFileChanged = true;
+    PolarFileChanged = true;
+
+    // assuming all is ok, we can...
+    Profile::Use();
+  }
 }
 
 // ProfileSave
@@ -1326,7 +1337,7 @@ void
 InputEvents::eventProfileSave(const TCHAR *misc)
 {
   if (!string_is_empty(misc))
-    WriteProfile(misc);
+    Profile::SaveFile(misc);
 }
 
 void
