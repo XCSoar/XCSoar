@@ -42,6 +42,7 @@ Copyright_License {
 #include "InfoBoxLayout.hpp"
 #include "ButtonLabel.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "Asset.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/VirtualCanvas.hpp"

@@ -45,6 +45,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "wcecompat/ts_string.h"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "RasterTerrain.h"
 #include "AirspaceClientUI.hpp"
 #include "AirspaceParser.hpp"

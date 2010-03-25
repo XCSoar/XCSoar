@@ -112,6 +112,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsFile.cpp \
+	$(SRC)/UtilsProfile.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/Simulator.cpp \
@@ -258,6 +259,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSystem.cpp \
+	$(SRC)/UtilsProfile.cpp \
 	$(SRC)/WayPointParser.cpp \
 	$(SRC)/WayPointFile.cpp \
 	$(SRC)/WayPointFileWinPilot.cpp \
@@ -351,6 +353,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSystem.cpp \
+	$(SRC)/UtilsProfile.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \

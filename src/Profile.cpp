@@ -50,6 +50,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "UtilsText.hpp"
+#include "UtilsProfile.hpp"
 #include "Units.hpp"
 
 #include <assert.h>

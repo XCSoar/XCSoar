@@ -39,6 +39,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "Math/FastMath.h"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "RasterMapRaw.hpp"
 #include "RasterMapCache.hpp"

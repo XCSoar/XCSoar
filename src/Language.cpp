@@ -43,6 +43,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "Sizes.h"
 
 /**

@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Integer.hpp"

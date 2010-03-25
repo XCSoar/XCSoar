@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Asset.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "UtilsText.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"

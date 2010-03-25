@@ -40,6 +40,7 @@ Copyright_License {
 #include "AirspaceParser.hpp"
 #include "AirspaceClientUI.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "RasterTerrain.h"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
