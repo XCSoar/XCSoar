@@ -93,22 +93,22 @@ namespace Profile
    */
   void SetFiles(const TCHAR* override);
 
-  bool Get(const TCHAR *szRegValue, int &pPos);
-  bool Get(const TCHAR *szRegValue, short &pPos);
-  bool Get(const TCHAR *szRegValue, bool &pPos);
-  bool Get(const TCHAR *szRegValue, unsigned &pPos);
-  bool Get(const TCHAR *szRegValue, double &pPos);
-  bool Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
+  bool Get(const TCHAR *key, int &value);
+  bool Get(const TCHAR *key, short &value);
+  bool Get(const TCHAR *key, bool &value);
+  bool Get(const TCHAR *key, unsigned &value);
+  bool Get(const TCHAR *key, double &value);
+  bool Get(const TCHAR *key, TCHAR *value, DWORD dwSize);
 
-  bool Set(const TCHAR *szRegValue, int pPos);
-  bool Set(const TCHAR *szRegValue, short pPos);
-  bool Set(const TCHAR *szRegValue, bool pPos);
-  bool Set(const TCHAR *szRegValue, unsigned pPos);
-  bool Set(const TCHAR *szRegValue, double pPos);
-  bool Set(const TCHAR *szRegValue, long pPos);
-  bool Set(const TCHAR *szRegValue, const TCHAR *Pos);
+  bool Set(const TCHAR *key, int value);
+  bool Set(const TCHAR *key, short value);
+  bool Set(const TCHAR *key, bool value);
+  bool Set(const TCHAR *key, unsigned value);
+  bool Set(const TCHAR *key, double value);
+  bool Set(const TCHAR *key, long value);
+  bool Set(const TCHAR *key, const TCHAR *value);
 
-  void SetStringIfAbsent(const TCHAR *szRegValue, const TCHAR *Pos);
+  void SetStringIfAbsent(const TCHAR *key, const TCHAR *value);
 
   /**
    * Adjusts the application settings according to the profile settings

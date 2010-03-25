@@ -122,89 +122,89 @@ Profile::SetFiles(const TCHAR* override)
 }
 
 bool
-Profile::Get(const TCHAR *szRegValue, int &pPos)
+Profile::Get(const TCHAR *key, int &value)
 {
-  return GetFromRegistry(szRegValue, pPos);
+  return GetFromRegistry(key, value);
 }
 
 bool
-Profile::Get(const TCHAR *szRegValue, short &pPos)
+Profile::Get(const TCHAR *key, short &value)
 {
-  return GetFromRegistry(szRegValue, pPos);
+  return GetFromRegistry(key, value);
 }
 
 bool
-Profile::Get(const TCHAR *szRegValue, bool &pPos)
+Profile::Get(const TCHAR *key, bool &value)
 {
-  return GetFromRegistry(szRegValue, pPos);
+  return GetFromRegistry(key, value);
 }
 
 bool
-Profile::Get(const TCHAR *szRegValue, unsigned &pPos)
+Profile::Get(const TCHAR *key, unsigned &value)
 {
-  return GetFromRegistry(szRegValue, pPos);
+  return GetFromRegistry(key, value);
 }
 
 bool
-Profile::Get(const TCHAR *szRegValue, double &pPos)
+Profile::Get(const TCHAR *key, double &value)
 {
-  return GetFromRegistry(szRegValue, pPos);
+  return GetFromRegistry(key, value);
 }
 
 bool
-Profile::Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+Profile::Get(const TCHAR *key, TCHAR *value, DWORD dwSize)
 {
-  return GetRegistryString(szRegValue, pPos, dwSize);
+  return GetRegistryString(key, value, dwSize);
 }
 
 bool
-Profile::Set(const TCHAR *szRegValue, int pPos)
+Profile::Set(const TCHAR *key, int value)
 {
-  return SetToRegistry(szRegValue, pPos);
+  return SetToRegistry(key, value);
 }
 
 bool
-Profile::Set(const TCHAR *szRegValue, short pPos)
+Profile::Set(const TCHAR *key, short value)
 {
-  return SetToRegistry(szRegValue, pPos);
+  return SetToRegistry(key, value);
 }
 
 bool
-Profile::Set(const TCHAR *szRegValue, bool pPos)
+Profile::Set(const TCHAR *key, bool value)
 {
-  return SetToRegistry(szRegValue, pPos);
+  return SetToRegistry(key, value);
 }
 
 bool
-Profile::Set(const TCHAR *szRegValue, unsigned pPos)
+Profile::Set(const TCHAR *key, unsigned value)
 {
-  return SetToRegistry(szRegValue, pPos);
+  return SetToRegistry(key, value);
 }
 
 bool
-Profile::Set(const TCHAR *szRegValue, double pPos)
+Profile::Set(const TCHAR *key, double value)
 {
-  return SetToRegistry(szRegValue, (DWORD)pPos);
+  return SetToRegistry(key, (DWORD)value);
 }
 
 bool
-Profile::Set(const TCHAR *szRegValue, long pPos)
+Profile::Set(const TCHAR *key, long value)
 {
-  return SetToRegistry(szRegValue, (unsigned long)pPos);
+  return SetToRegistry(key, (unsigned long)value);
 }
 
 bool
-Profile::Set(const TCHAR *szRegValue, const TCHAR *Pos)
+Profile::Set(const TCHAR *key, const TCHAR *value)
 {
-  return SetRegistryString(szRegValue, Pos);
+  return SetRegistryString(key, value);
 }
 
 void
-Profile::SetStringIfAbsent(const TCHAR *szRegValue, const TCHAR *Pos)
+Profile::SetStringIfAbsent(const TCHAR *key, const TCHAR *value)
 {
   TCHAR temp[MAX_PATH];
-  if (!Get(szRegValue, temp, MAX_PATH))
-    Set(szRegValue, Pos);
+  if (!Get(key, temp, MAX_PATH))
+    Set(key, value);
 }
 
 static void
