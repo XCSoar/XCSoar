@@ -814,30 +814,32 @@ SaveRegistryToFile(const TCHAR *szFile)
 #endif
     } else if (nType == REG_SZ) {
       // text
-      // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
-      if (nValueSize > 0) {
-#ifdef __GNUC__
-        uValue.pValue[nValueSize] = 0; // null terminate, just in case
-        uValue.pValue[nValueSize + 1] = 0; // null terminate, just in case
-        if (!string_is_empty((const TCHAR*)uValue.pValue))
-          writer.printfln(_T("%s=\"%s\""), lpstrName, uValue.pValue);
-        else
-          writer.printfln(_T("%s=\"\""), lpstrName);
-#else
-        if (!string_is_empty((const TCHAR*)pValue)) {
-          pValue[nValueSize] = 0; // null terminate, just in case
-          pValue[nValueSize + 1] = 0; // null terminate, just in case
-          wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
-          wcstombs(sValue, (TCHAR*)pValue, nMaxKeyNameSize + 1);
-          writer.printfln(_T("%s=\"%s\""), sName, sValue);
-        } else {
-          wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
-          writer.printfln(_T("%s=\"\""), sName);
-        }
-#endif
-      } else {
+
+      if (nValueSize <= 0) {
         writer.printfln(_T("%s=\"\""), lpstrName);
+        continue;
       }
+
+      // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
+#ifdef __GNUC__
+      uValue.pValue[nValueSize] = 0; // null terminate, just in case
+      uValue.pValue[nValueSize + 1] = 0; // null terminate, just in case
+      if (!string_is_empty((const TCHAR*)uValue.pValue))
+        writer.printfln(_T("%s=\"%s\""), lpstrName, uValue.pValue);
+      else
+        writer.printfln(_T("%s=\"\""), lpstrName);
+#else
+      if (!string_is_empty((const TCHAR*)pValue)) {
+        pValue[nValueSize] = 0; // null terminate, just in case
+        pValue[nValueSize + 1] = 0; // null terminate, just in case
+        wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
+        wcstombs(sValue, (TCHAR*)pValue, nMaxKeyNameSize + 1);
+        writer.printfln(_T("%s=\"%s\""), sName, sValue);
+      } else {
+        wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
+        writer.printfln(_T("%s=\"\""), sName);
+      }
+#endif
     }
   }
 
