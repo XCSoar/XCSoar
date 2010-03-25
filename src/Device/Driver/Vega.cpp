@@ -42,6 +42,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Message.hpp"
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "DeviceBlackboard.hpp"
 #include "InputEvents.h"
 #include "LogFile.hpp"
@@ -224,31 +225,28 @@ PDVSC(const TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR responsetype[10];
   (void)GPS_INFO;
 
-  NMEAParser::ExtractParameter(String,responsetype,0);
-  NMEAParser::ExtractParameter(String,name,1);
+  NMEAParser::ExtractParameter(String, responsetype, 0);
+  NMEAParser::ExtractParameter(String, name, 1);
 
-  if (_tcscmp(name, _T("ERROR")) == 0){
+  if (_tcscmp(name, _T("ERROR")) == 0)
     // ignore error responses...
     return true;
-  }
 
-  NMEAParser::ExtractParameter(String,ctemp,2);
-  long value = _tcstol(ctemp, NULL,10);
-  DWORD dwvalue;
+  NMEAParser::ExtractParameter(String, ctemp, 2);
+  long value = _tcstol(ctemp, NULL, 10);
 
-  if (_tcscmp(name, _T("ToneDeadbandCruiseLow"))==0) {
+  if (_tcscmp(name, _T("ToneDeadbandCruiseLow")) == 0)
     value = max(value, -value);
-  }
-  if (_tcscmp(name, _T("ToneDeadbandCirclingLow"))==0) {
+  if (_tcscmp(name, _T("ToneDeadbandCirclingLow")) == 0)
     value = max(value, -value);
-  }
 
   TCHAR regname[100];
+
   _stprintf(regname, _T("Vega%sUpdated"), name);
-  SetToRegistry(regname, 1);
+  Profile::Set(regname, 1);
+
   _stprintf(regname, _T("Vega%s"), name);
-  dwvalue = *((DWORD*)&value);
-  SetToRegistry(regname, dwvalue);
+  Profile::Set(regname, value);
 
   return true;
 }
