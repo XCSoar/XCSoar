@@ -61,32 +61,28 @@ static void
 DefaultRegistrySettingsAltair()
 {
   // these are redundant b/c they're also added to "InitialiseFontsHardCoded"
-  SetRegistryStringIfAbsent(_T("InfoWindowFont"),
+  Profile::SetStringIfAbsent(_T("InfoWindowFont"),
       _T("24,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  SetRegistryStringIfAbsent(_T("TitleWindowFont"),
+  Profile::SetStringIfAbsent(_T("TitleWindowFont"),
       _T("10,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicNineCond"));
-  SetRegistryStringIfAbsent(_T("CDIWindowFont"),
+  Profile::SetStringIfAbsent(_T("CDIWindowFont"),
       _T("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
-  SetRegistryStringIfAbsent(_T("MapLabelFont"),
+  Profile::SetStringIfAbsent(_T("MapLabelFont"),
       _T("13,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicTwelveCond"));
-  SetRegistryStringIfAbsent(_T("StatisticsFont"),
+  Profile::SetStringIfAbsent(_T("StatisticsFont"),
       _T("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  SetRegistryStringIfAbsent(_T("MapWindowFont"),
+  Profile::SetStringIfAbsent(_T("MapWindowFont"),
       _T("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  SetRegistryStringIfAbsent(_T("MapWindowBoldFont"),
+  Profile::SetStringIfAbsent(_T("MapWindowBoldFont"),
       _T("15,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
-  SetRegistryStringIfAbsent(_T("BugsBallastFont"),
+  Profile::SetStringIfAbsent(_T("BugsBallastFont"),
       _T("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  SetRegistryStringIfAbsent(_T("AirspacePressFont"),
+  Profile::SetStringIfAbsent(_T("AirspacePressFont"),
       _T("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
-  SetRegistryStringIfAbsent(_T("AirspaceColourDlgFont"),
+  Profile::SetStringIfAbsent(_T("AirspaceColourDlgFont"),
       _T("14,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
-  SetRegistryStringIfAbsent(_T("TeamCodeFont"),
+  Profile::SetStringIfAbsent(_T("TeamCodeFont"),
       _T("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
-#if 0
-  SetRegistryStringIfAbsent(_T("ScaleList"),
-      _T("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
-#endif
 }
 
 // This function checks to see if Final Glide mode infoboxes have been
