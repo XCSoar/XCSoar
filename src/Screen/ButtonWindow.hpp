@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_BUTTON_WINDOW_HXX
 
 #include <Screen/Window.hpp>
+#include "Util/tstring.hpp"
 
 class ButtonWindowStyle : public WindowStyle {
 public:
@@ -59,7 +60,6 @@ public:
 #ifdef ENABLE_SDL
 
 #include "Screen/PaintWindow.hpp"
-#include "Util/tstring.hpp"
 
 /**
  * A clickable button.
@@ -84,6 +84,10 @@ public:
 
     text = _text;
     invalidate();
+  }
+
+  const tstring &get_text() const {
+    return text;
   }
 
 protected:
@@ -112,6 +116,8 @@ public:
 
     ::SetWindowText(hWnd, text);
   }
+
+  const tstring get_text() const;
 };
 
 #endif /* !ENABLE_SDL */

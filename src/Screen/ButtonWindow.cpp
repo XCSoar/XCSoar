@@ -109,4 +109,14 @@ ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
   ::SetWindowLong(hWnd, GWL_ID, id);
 }
 
+const tstring
+ButtonWindow::get_text() const
+{
+  TCHAR buffer[256]; /* should be large enough for buttons */
+
+  int length = GetWindowText(hWnd, buffer,
+                             sizeof(buffer) / sizeof(buffer[0]));
+  return tstring(buffer, length);
+}
+
 #endif /* !ENABLE_SDL */
