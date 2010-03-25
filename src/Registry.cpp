@@ -802,9 +802,6 @@ SaveRegistryToFile(const TCHAR *szFile)
       // in case things get weird
       continue;
 
-    // null terminate, just in case
-    lpstrName[nNameSize] = _T('\0');
-
     if (_tcslen(lpstrName) > 1) {
       // type 1 text
       // type 4 integer (valuesize 4)
