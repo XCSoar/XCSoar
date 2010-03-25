@@ -848,6 +848,12 @@ Profile::Set(const TCHAR *szRegValue, double pPos)
 }
 
 bool
+Profile::Set(const TCHAR *szRegValue, long pPos)
+{
+  return SetToRegistry(szRegValue, (unsigned long)pPos);
+}
+
+bool
 Profile::SetString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   return SetRegistryString(szRegValue, Pos);

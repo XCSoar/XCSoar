@@ -101,6 +101,7 @@ namespace Profile
   bool Set(const TCHAR *szRegValue, bool pPos);
   bool Set(const TCHAR *szRegValue, unsigned pPos);
   bool Set(const TCHAR *szRegValue, double pPos);
+  bool Set(const TCHAR *szRegValue, long pPos);
   bool SetString(const TCHAR *szRegValue, const TCHAR *Pos);
 
   void SetStringIfAbsent(const TCHAR *szRegValue, const TCHAR *Pos);
