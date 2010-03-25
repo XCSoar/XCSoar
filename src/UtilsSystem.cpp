@@ -41,7 +41,6 @@ Copyright_License {
 #include "Defines.h"
 #include "Interface.hpp"
 #include "Asset.hpp"
-#include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Simulator.hpp"

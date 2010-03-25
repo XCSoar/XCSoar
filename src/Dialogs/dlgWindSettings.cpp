@@ -41,7 +41,6 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"

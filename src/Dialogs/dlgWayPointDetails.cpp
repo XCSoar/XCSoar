@@ -40,7 +40,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"

@@ -40,7 +40,6 @@ Copyright_License {
 #include "Units.hpp"
 #include "ProfileKeys.hpp"
 #include "Profile.hpp"
-#include "Registry.hpp"
 #include "Audio/VegaVoice.h"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"

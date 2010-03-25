@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Dialogs/dlgHelpers.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Form.hpp"

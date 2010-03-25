@@ -39,7 +39,6 @@ Copyright_License {
 #include "UtilsFont.hpp"
 #include "UtilsText.hpp"
 #include "Profile.hpp"
-#include "Registry.hpp"
 
 #include <assert.h>
 #include <stdlib.h> /* for strtol() */

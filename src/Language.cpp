@@ -42,7 +42,6 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "Sizes.h"
 

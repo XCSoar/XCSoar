@@ -37,7 +37,6 @@ Copyright_License {
 */
 
 #include "Components.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "Interface.hpp"
 #include "ProfileKeys.hpp"

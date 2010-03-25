@@ -43,7 +43,6 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "Screen/Animation.hpp"
 #include "Screen/Layout.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 
 #include <stdio.h>

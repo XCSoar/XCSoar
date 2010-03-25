@@ -40,7 +40,6 @@
 #include "Version.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"

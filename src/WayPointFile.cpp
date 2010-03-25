@@ -44,7 +44,6 @@ Copyright_License {
 #include "Profile.hpp"
 #include "UtilsText.hpp"
 #include "Language.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"

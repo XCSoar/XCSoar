@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "WayPointParser.h"
 #include "DeviceBlackboard.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"

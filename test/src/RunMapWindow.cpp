@@ -66,7 +66,6 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "AirspaceClientUI.hpp"
 #include "AirspaceParser.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"

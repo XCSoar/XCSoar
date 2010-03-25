@@ -41,7 +41,6 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Protection.hpp"
 #include "Message.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "DeviceBlackboard.hpp"
 #include "InputEvents.h"

@@ -40,7 +40,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Edit.hpp"
 #include "DataField/Base.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 
 #include <assert.h>

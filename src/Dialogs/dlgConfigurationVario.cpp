@@ -40,7 +40,6 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Screen/Layout.hpp"
 #include "Device/device.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"

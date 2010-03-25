@@ -50,7 +50,6 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "Registry.hpp"
 #include "NMEA/Checksum.h"
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
 #include "Asset.hpp"

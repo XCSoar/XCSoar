@@ -40,7 +40,6 @@ Copyright_License {
 #include "Polar/Polar.hpp"
 #include "UtilsText.hpp"
 #include "TextReader.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "Sizes.h"

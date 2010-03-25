@@ -41,7 +41,6 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "SettingsTask.hpp"
 #include "Language.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"

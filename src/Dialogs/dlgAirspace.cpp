@@ -39,7 +39,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "../Message.hpp"
 #include "Profile.hpp"
-#include "Registry.hpp"
 #include "ProfileKeys.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
