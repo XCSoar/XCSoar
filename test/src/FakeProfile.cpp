@@ -53,3 +53,9 @@ Profile::Set(const TCHAR *szRegValue, int pPos)
 {
   return false;
 }
+
+int
+Profile::GetScaleList(fixed *List, size_t Size)
+{
+  return 0;
+}

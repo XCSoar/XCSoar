@@ -39,6 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_HPP
 #define XCSOAR_PROFILE_HPP
 
+#include "Engine/Math/fixed.hpp"
 #include <tchar.h>
 
 namespace Profile
@@ -105,6 +106,8 @@ namespace Profile
    * @return The mode
    */
   int GetRegistryAirspaceMode(int i);
+
+  int GetScaleList(fixed *List, size_t Size);
 };
 
 #endif

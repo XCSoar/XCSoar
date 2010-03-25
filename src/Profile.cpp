@@ -49,7 +49,10 @@ Copyright_License {
 #include "WayPointFile.hpp"
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
+#include "UtilsText.hpp"
 #include "Units.hpp"
+
+#include <assert.h>
 
 extern int WaypointsOutOfRange;
 
@@ -838,4 +841,39 @@ bool
 Profile::Set(const TCHAR *szRegValue, double pPos)
 {
   return SetToRegistry(szRegValue, (DWORD)pPos);
+}
+
+int
+Profile::GetScaleList(fixed *List, size_t Size)
+{
+  static const TCHAR Name[] = TEXT("ScaleList");
+  TCHAR Buffer[128];
+  TCHAR *pWClast, *pToken;
+  int Idx = 0;
+  double vlast = 0;
+  double val;
+
+  assert(List != NULL);
+  assert(Size > 0);
+
+  SetRegistryString(Name, TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
+
+  if (!GetRegistryString(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
+    return 0;
+
+  pToken = _tcstok_r(Buffer, TEXT(","), &pWClast);
+
+  while (Idx < (int)Size && pToken != NULL) {
+    val = _tcstod(pToken, NULL);
+    if (Idx > 0) {
+      List[Idx] = (val + vlast) / 2;
+      Idx++;
+    }
+    List[Idx] = val;
+    Idx++;
+    vlast = val;
+    pToken = _tcstok_r(NULL, TEXT(","), &pWClast);
+  }
+
+  return Idx;
 }

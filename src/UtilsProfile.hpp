@@ -39,8 +39,4 @@ Copyright_License {
 #ifndef XCSOAR_UTILS_PROFILE_HPP
 #define XCSOAR_UTILS_PROFILE_HPP
 
-#include "Engine/Math/fixed.hpp"
-
-int propGetScaleList(fixed *List, size_t Size);
-
 #endif
