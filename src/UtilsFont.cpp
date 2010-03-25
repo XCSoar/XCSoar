@@ -120,7 +120,7 @@ void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf) {
   assert(Name[0] != '\0');
   assert(lplf != NULL);
 
-  if (Profile::GetString(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
+  if (Profile::Get(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
     propGetFontSettingsFromString(Buffer, lplf);
 }
 

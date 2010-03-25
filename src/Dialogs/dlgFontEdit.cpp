@@ -273,7 +273,7 @@ void SaveValues(const TCHAR * FontRegKey )
                         NewLogFont.lfQuality,
                         NewLogFont.lfPitchAndFamily,
                         NewLogFont.lfFaceName);
-  Profile::SetString(FontRegKey, sValue);
+  Profile::Set(FontRegKey, sValue);
 }
 
 void InitGUI(const TCHAR * FontDescription)

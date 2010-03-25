@@ -152,7 +152,7 @@ Profile::Get(const TCHAR *szRegValue, double &pPos)
 }
 
 bool
-Profile::GetString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+Profile::Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
   return GetRegistryString(szRegValue, pPos, dwSize);
 }
@@ -194,7 +194,7 @@ Profile::Set(const TCHAR *szRegValue, long pPos)
 }
 
 bool
-Profile::SetString(const TCHAR *szRegValue, const TCHAR *Pos)
+Profile::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   return SetRegistryString(szRegValue, Pos);
 }
@@ -203,8 +203,8 @@ void
 Profile::SetStringIfAbsent(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   TCHAR temp[MAX_PATH];
-  if (!GetString(szRegValue, temp, MAX_PATH))
-    SetString(szRegValue, Pos);
+  if (!Get(szRegValue, temp, MAX_PATH))
+    Set(szRegValue, Pos);
 }
 
 static void
@@ -470,7 +470,7 @@ Profile::Use()
   Profile::Get(szProfilePolarID, 
       XCSoarInterface::SetSettingsComputer().POLARID);
 
-  Profile::GetString(szProfileRegKey, strRegKey, 65);
+  Profile::Get(szProfileRegKey, strRegKey, 65);
 
   for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
     XCSoarInterface::SetSettingsComputer().iAirspaceMode[i] =
@@ -867,7 +867,7 @@ Profile::GetScaleList(fixed *List, size_t Size)
 
   SetRegistryString(Name, TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
 
-  if (!Profile::GetString(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
+  if (!Profile::Get(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
     return 0;
 
   pToken = _tcstok_r(Buffer, TEXT(","), &pWClast);

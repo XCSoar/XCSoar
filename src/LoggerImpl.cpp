@@ -410,15 +410,15 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
 
   IGCWriteRecord(GetHFFXARecord(), szLoggerFileName);
 
-  Profile::GetString(szProfilePilotName, PilotName, 100);
+  Profile::Get(szProfilePilotName, PilotName, 100);
   sprintf(temp, "HFPLTPILOT:%S\r\n", PilotName);
   IGCWriteRecord(temp, szLoggerFileName);
 
-  Profile::GetString(szProfileAircraftType, AircraftType, 100);
+  Profile::Get(szProfileAircraftType, AircraftType, 100);
   sprintf(temp, "HFGTYGLIDERTYPE:%S\r\n", AircraftType);
   IGCWriteRecord(temp, szLoggerFileName);
 
-  Profile::GetString(szProfileAircraftRego, AircraftRego, 100);
+  Profile::Get(szProfileAircraftRego, AircraftRego, 100);
   sprintf(temp, "HFGIDGLIDERID:%S\r\n", AircraftRego);
   IGCWriteRecord(temp, szLoggerFileName);
 
@@ -570,9 +570,9 @@ LoggerImpl::LoggerDeviceDeclare()
   bool found_logger = false;
   struct Declaration Decl;
 
-  Profile::GetString(szProfilePilotName, Decl.PilotName, 64);
-  Profile::GetString(szProfileAircraftType, Decl.AircraftType, 32);
-  Profile::GetString(szProfileAircraftRego, Decl.AircraftRego, 32);
+  Profile::Get(szProfilePilotName, Decl.PilotName, 64);
+  Profile::Get(szProfileAircraftType, Decl.AircraftType, 32);
+  Profile::Get(szProfileAircraftRego, Decl.AircraftRego, 32);
 
 #ifdef OLD_TASK
   for (unsigned i = 0; task.ValidTaskPoint(i); i++) {

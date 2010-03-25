@@ -165,9 +165,9 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
   // ### FIRST FILE ###
 
   // Get first waypoint filename
-  Profile::GetString(szProfileWayPointFile, szFile, MAX_PATH);
+  Profile::Get(szProfileWayPointFile, szFile, MAX_PATH);
   // and clear registry setting (if loading goes totally wrong)
-  Profile::SetString(szProfileWayPointFile, TEXT("\0"));
+  Profile::Set(szProfileWayPointFile, TEXT("\0"));
 
   wp_file0 = WayPointFile::create(szFile, 0);
 
@@ -176,7 +176,7 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
     // parse the file
     if (wp_file0->Parse(way_points, terrain)) {
       // reset the registry to the actual file name
-      Profile::SetString(szProfileWayPointFile, szFile);
+      Profile::Set(szProfileWayPointFile, szFile);
 
       found = true;
       // Set waypoints writable flag
@@ -191,9 +191,9 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
   // ### SECOND FILE ###
 
   // Get second waypoint filename
-  Profile::GetString(szProfileAdditionalWayPointFile, szFile, MAX_PATH);
+  Profile::Get(szProfileAdditionalWayPointFile, szFile, MAX_PATH);
   // and clear registry setting (if loading goes totally wrong)
-  Profile::SetString(szProfileAdditionalWayPointFile, TEXT("\0"));
+  Profile::Set(szProfileAdditionalWayPointFile, TEXT("\0"));
 
   wp_file1 = WayPointFile::create(szFile, 1);
   // If waypoint file exists
@@ -201,7 +201,7 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
     // parse the file
     if (wp_file1->Parse(way_points, terrain)) {
       // reset the registry to the actual file name
-      Profile::SetString(szProfileAdditionalWayPointFile, szFile);
+      Profile::Set(szProfileAdditionalWayPointFile, szFile);
       found = true;
     } else {
       LogStartUp(TEXT("Parse error in waypoint file 2"));
@@ -215,7 +215,7 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
   // If no waypoint file found yet
   if (!found) {
     // Get the map filename
-    Profile::GetString(szProfileMapFile, szFile, MAX_PATH);
+    Profile::Get(szProfileMapFile, szFile, MAX_PATH);
     _tcscat(szFile, TEXT("/"));
     _tcscat(szFile, TEXT("waypoints.xcw"));
 

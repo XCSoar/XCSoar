@@ -84,7 +84,7 @@ Profile::Get(const TCHAR *szRegValue, double &pPos)
 }
 
 bool
-Profile::GetString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+Profile::Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
   return false;
 }
@@ -126,7 +126,7 @@ Profile::Set(const TCHAR *szRegValue, long pPos)
 }
 
 bool
-Profile::SetString(const TCHAR *szRegValue, const TCHAR *Pos)
+Profile::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   return false;
 }

@@ -81,7 +81,7 @@ void ReadAssetNumber(void)
   return;
 #endif
 
-  Profile::GetString(szProfileLoggerID, val, 100);
+  Profile::Get(szProfileLoggerID, val, 100);
   int ifound = 0;
   int len = _tcslen(val);
   for (int i = 0; i < len; i++) {
