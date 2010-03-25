@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Sizes.h"
 #include "Defines.h"
-#include "UtilsProfile.hpp"
+#include "ProfileKeys.hpp"
 
 const TCHAR szProfileKey[] = CONF(REGKEYNAME);
 const TCHAR *szProfileDisplayType[MAXINFOWINDOWS] = {

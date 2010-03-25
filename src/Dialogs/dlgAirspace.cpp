@@ -40,7 +40,7 @@ Copyright_License {
 #include "../Message.hpp"
 #include "Profile.hpp"
 #include "Registry.hpp"
-#include "UtilsProfile.hpp"
+#include "ProfileKeys.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"

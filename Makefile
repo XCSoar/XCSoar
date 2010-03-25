@@ -265,7 +265,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/UtilsFLARM.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsFont.cpp \
-	$(SRC)/UtilsProfile.cpp \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsText.cpp \
@@ -278,6 +277,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Compatibility/string.c 	\
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
