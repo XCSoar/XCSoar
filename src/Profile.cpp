@@ -723,10 +723,20 @@ TCHAR failsafeProfileFile[MAX_PATH];
 void
 Profile::Load()
 {
-  LogStartUp(_T("Load profile"));
+  LogStartUp(_T("Loading profiles"));
   // load registry backup if it exists
-  LoadRegistryFromFile(failsafeProfileFile);
-  LoadRegistryFromFile(startProfileFile);
+  LoadFile(failsafeProfileFile);
+  LoadFile(startProfileFile);
+}
+
+void
+Profile::LoadFile(const TCHAR *szFile)
+{
+  if (string_is_empty(szFile))
+    return;
+
+  LogStartUp(TEXT("Loading profile from %s"), szFile);
+  LoadRegistryFromFile(szFile);
 }
 
 void

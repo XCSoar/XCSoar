@@ -53,6 +53,10 @@ namespace Profile
    */
   void Load();
   /**
+   * Loads the given profile file into the registry
+   */
+  void LoadFile(const TCHAR *szFile);
+  /**
    * Saves the registry into the profile files
    */
   void Save();
