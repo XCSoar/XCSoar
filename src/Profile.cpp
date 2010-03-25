@@ -705,7 +705,7 @@ Profile::SetWind()
 }
 
 void
-Profile::LoadWindFromRegistry()
+Profile::GetWind()
 {
   LogStartUp(_T("Load wind from registry"));
 

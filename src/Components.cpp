@@ -345,7 +345,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 
   PreloadInitialisation(false);
 
-  Profile::LoadWindFromRegistry();
+  Profile::GetWind();
 
   GlidePolar gp = task_manager.get_glide_polar();
   if (LoadPolarById(SettingsComputer(), gp))

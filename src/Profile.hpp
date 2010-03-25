@@ -77,7 +77,7 @@ namespace Profile
   /**
    * Loads the wind settings from the registry
    */
-  void LoadWindFromRegistry();
+  void GetWind();
   /**
    * Saves the airspace mode setting to the registry
    * @param i Airspace class index
