@@ -82,7 +82,7 @@ namespace Profile
    * Saves the airspace mode setting to the profile
    * @param i Airspace class index
    */
-  void SetRegistryAirspaceMode(int i);
+  void SetAirspaceMode(int i);
   /**
    * Sets the profile files to load when calling Load()
    * @param override NULL or file to load when calling Load()
@@ -111,7 +111,7 @@ namespace Profile
    * @param i Airspace class index
    * @return The mode
    */
-  int GetRegistryAirspaceMode(int i);
+  int GetAirspaceMode(int i);
 
   int GetScaleList(fixed *List, size_t Size);
 

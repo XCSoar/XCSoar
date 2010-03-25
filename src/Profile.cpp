@@ -324,7 +324,7 @@ Profile::Use()
 
   for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
     XCSoarInterface::SetSettingsComputer().iAirspaceMode[i] =
-        GetRegistryAirspaceMode(i);
+        GetAirspaceMode(i);
 
     Profile::Get(szProfileBrush[i],
         XCSoarInterface::SetSettingsMap().iAirspaceBrush[i]);
@@ -661,14 +661,14 @@ Profile::Use()
 }
 
 void
-Profile::SetRegistryAirspaceMode(int i)
+Profile::SetAirspaceMode(int i)
 {
   int val = XCSoarInterface::SettingsComputer().iAirspaceMode[i];
   Profile::Set(szProfileAirspaceMode[i], val);
 }
 
 int
-Profile::GetRegistryAirspaceMode(int i)
+Profile::GetAirspaceMode(int i)
 {
   int Temp = 3; // display + warnings
   Profile::Get(szProfileAirspaceMode[i], Temp);

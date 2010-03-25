@@ -126,7 +126,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
   } else {
     int v = (XCSoarInterface::SettingsComputer().iAirspaceMode[ItemIndex] + 1) % 4;
     XCSoarInterface::SetSettingsComputer().iAirspaceMode[ItemIndex] = v;
-    Profile::SetRegistryAirspaceMode(ItemIndex);
+    Profile::SetAirspaceMode(ItemIndex);
     changed = true;
   }
 }
