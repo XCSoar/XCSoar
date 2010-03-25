@@ -64,9 +64,6 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
 bool
 SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
 
-void SetRegistryAirspacePriority(int i);
-void SetRegistryAirspaceMode(int i);
-int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
 
 struct DeviceConfig {
