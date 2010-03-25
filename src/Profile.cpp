@@ -856,6 +856,14 @@ Profile::SetString(const TCHAR *szRegValue, const TCHAR *Pos)
   return SetRegistryString(szRegValue, Pos);
 }
 
+void
+Profile::SetStringIfAbsent(const TCHAR *szRegValue, const TCHAR *Pos)
+{
+  TCHAR temp[MAX_PATH];
+  if (!GetString(szRegValue, temp, MAX_PATH))
+    SetString(szRegValue, Pos);
+}
+
 int
 Profile::GetScaleList(fixed *List, size_t Size)
 {

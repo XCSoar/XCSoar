@@ -103,6 +103,8 @@ namespace Profile
   bool Set(const TCHAR *szRegValue, double pPos);
   bool SetString(const TCHAR *szRegValue, const TCHAR *Pos);
 
+  void SetStringIfAbsent(const TCHAR *szRegValue, const TCHAR *Pos);
+
   /**
    * Reads the airspace mode setting from the profile
    * @param i Airspace class index
