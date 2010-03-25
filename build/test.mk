@@ -196,7 +196,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/AirspaceParser.cpp \
 	$(SRC)/AirspaceVisibility.cpp \
 	$(SRC)/Appearance.cpp \
-	$(SRC)/Globals.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/RenderObservationZone.cpp \

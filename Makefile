@@ -130,8 +130,6 @@ DIALOG_SOURCES = \
 
 
 XCSOAR_SOURCES := \
-	$(SRC)/Globals.cpp \
-	\
 	$(SRC)/AirspaceClient.cpp \
 	$(SRC)/AirspaceClientUI.cpp \
 	$(SRC)/AirspaceClientCalc.cpp \
