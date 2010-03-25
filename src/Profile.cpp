@@ -57,6 +57,156 @@ Copyright_License {
 
 extern int WaypointsOutOfRange;
 
+TCHAR startProfileFile[MAX_PATH];
+TCHAR defaultProfileFile[MAX_PATH];
+TCHAR failsafeProfileFile[MAX_PATH];
+
+void
+Profile::Load()
+{
+  LogStartUp(_T("Loading profiles"));
+  // load registry backup if it exists
+  LoadFile(failsafeProfileFile);
+  LoadFile(startProfileFile);
+}
+
+void
+Profile::LoadFile(const TCHAR *szFile)
+{
+  if (string_is_empty(szFile))
+    return;
+
+  LogStartUp(TEXT("Loading profile from %s"), szFile);
+  LoadRegistryFromFile(szFile);
+}
+
+void
+Profile::Save()
+{
+  LogStartUp(_T("Saving profiles"));
+  // save registry backup first (try a few places)
+  SaveFile(startProfileFile);
+  SaveFile(defaultProfileFile);
+}
+
+void
+Profile::SaveFile(const TCHAR *szFile)
+{
+  if (string_is_empty(szFile))
+    return;
+
+  LogStartUp(TEXT("Saving profile to %s"), szFile);
+  SaveRegistryToFile(szFile);
+}
+
+
+void
+Profile::SetFiles(const TCHAR* override)
+{
+  // Set the default profile file
+  if (is_altair())
+    LocalPath(defaultProfileFile, _T("config/")_T(XCSPROFILE));
+  else
+    LocalPath(defaultProfileFile, _T(XCSPROFILE));
+
+  // Set the failsafe profile file
+  LocalPath(failsafeProfileFile, _T(XCSPROFILE));
+
+  // Set the profile file to load at startup
+  // -> to the default file
+  _tcscpy(startProfileFile, defaultProfileFile);
+
+  // -> to the given filename (if exists)
+  if (!string_is_empty(override))
+    _tcsncpy(startProfileFile, override, MAX_PATH - 1);
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, int &pPos)
+{
+  return GetFromRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, short &pPos)
+{
+  return GetFromRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, bool &pPos)
+{
+  return GetFromRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, unsigned &pPos)
+{
+  return GetFromRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Get(const TCHAR *szRegValue, double &pPos)
+{
+  return GetFromRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::GetString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+{
+  return GetRegistryString(szRegValue, pPos, dwSize);
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, int pPos)
+{
+  return SetToRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, short pPos)
+{
+  return SetToRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, bool pPos)
+{
+  return SetToRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, unsigned pPos)
+{
+  return SetToRegistry(szRegValue, pPos);
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, double pPos)
+{
+  return SetToRegistry(szRegValue, (DWORD)pPos);
+}
+
+bool
+Profile::Set(const TCHAR *szRegValue, long pPos)
+{
+  return SetToRegistry(szRegValue, (unsigned long)pPos);
+}
+
+bool
+Profile::SetString(const TCHAR *szRegValue, const TCHAR *Pos)
+{
+  return SetRegistryString(szRegValue, Pos);
+}
+
+void
+Profile::SetStringIfAbsent(const TCHAR *szRegValue, const TCHAR *Pos)
+{
+  TCHAR temp[MAX_PATH];
+  if (!GetString(szRegValue, temp, MAX_PATH))
+    SetString(szRegValue, Pos);
+}
+
 static void
 DefaultRegistrySettingsAltair()
 {
@@ -661,21 +811,6 @@ Profile::Use()
 }
 
 void
-Profile::SetAirspaceMode(int i)
-{
-  int val = XCSoarInterface::SettingsComputer().iAirspaceMode[i];
-  Profile::Set(szProfileAirspaceMode[i], val);
-}
-
-int
-Profile::GetAirspaceMode(int i)
-{
-  int Temp = 3; // display + warnings
-  Profile::Get(szProfileAirspaceMode[i], Temp);
-  return Temp;
-}
-
-void
 Profile::SetSoundSettings()
 {
   Profile::Set(szProfileSoundVolume,
@@ -688,17 +823,6 @@ Profile::SetSoundSettings()
                XCSoarInterface::SettingsComputer().EnableSoundTask);
   Profile::Set(szProfileSoundModes,
                XCSoarInterface::SettingsComputer().EnableSoundModes);
-}
-
-void
-Profile::SetWind()
-{
-  int Temp;
-  Temp = iround(XCSoarInterface::Basic().wind.norm);
-  Profile::Set(szProfileWindSpeed, Temp);
-  Temp = iround(XCSoarInterface::Basic().wind.bearing);
-  Profile::Set(szProfileWindBearing, Temp);
-  //TODO  SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing);
 }
 
 void
@@ -717,154 +841,15 @@ Profile::GetWind()
   */
 }
 
-TCHAR startProfileFile[MAX_PATH];
-TCHAR defaultProfileFile[MAX_PATH];
-TCHAR failsafeProfileFile[MAX_PATH];
-
 void
-Profile::Load()
+Profile::SetWind()
 {
-  LogStartUp(_T("Loading profiles"));
-  // load registry backup if it exists
-  LoadFile(failsafeProfileFile);
-  LoadFile(startProfileFile);
-}
-
-void
-Profile::LoadFile(const TCHAR *szFile)
-{
-  if (string_is_empty(szFile))
-    return;
-
-  LogStartUp(TEXT("Loading profile from %s"), szFile);
-  LoadRegistryFromFile(szFile);
-}
-
-void
-Profile::Save()
-{
-  LogStartUp(_T("Saving profiles"));
-  // save registry backup first (try a few places)
-  SaveFile(startProfileFile);
-  SaveFile(defaultProfileFile);
-}
-
-void
-Profile::SaveFile(const TCHAR *szFile)
-{
-  if (string_is_empty(szFile))
-    return;
-
-  LogStartUp(TEXT("Saving profile to %s"), szFile);
-  SaveRegistryToFile(szFile);
-}
-
-
-void
-Profile::SetFiles(const TCHAR* override)
-{
-  // Set the default profile file
-  if (is_altair())
-    LocalPath(defaultProfileFile, _T("config/")_T(XCSPROFILE));
-  else
-    LocalPath(defaultProfileFile, _T(XCSPROFILE));
-
-  // Set the failsafe profile file
-  LocalPath(failsafeProfileFile, _T(XCSPROFILE));
-
-  // Set the profile file to load at startup
-  // -> to the default file
-  _tcscpy(startProfileFile, defaultProfileFile);
-
-  // -> to the given filename (if exists)
-  if (!string_is_empty(override))
-    _tcsncpy(startProfileFile, override, MAX_PATH - 1);
-}
-
-bool
-Profile::Get(const TCHAR *szRegValue, int &pPos)
-{
-  return GetFromRegistry(szRegValue, pPos);
-}
-
-bool
-Profile::Get(const TCHAR *szRegValue, short &pPos)
-{
-  return GetFromRegistry(szRegValue, pPos);
-}
-
-bool
-Profile::Get(const TCHAR *szRegValue, bool &pPos)
-{
-  return GetFromRegistry(szRegValue, pPos);
-}
-
-bool
-Profile::Get(const TCHAR *szRegValue, unsigned &pPos)
-{
-  return GetFromRegistry(szRegValue, pPos);
-}
-
-bool
-Profile::Get(const TCHAR *szRegValue, double &pPos)
-{
-  return GetFromRegistry(szRegValue, pPos);
-}
-
-bool
-Profile::GetString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
-{
-  return GetRegistryString(szRegValue, pPos, dwSize);
-}
-
-bool
-Profile::Set(const TCHAR *szRegValue, int pPos)
-{
-  return SetToRegistry(szRegValue, pPos);
-}
-
-bool
-Profile::Set(const TCHAR *szRegValue, short pPos)
-{
-  return SetToRegistry(szRegValue, pPos);
-}
-
-bool
-Profile::Set(const TCHAR *szRegValue, bool pPos)
-{
-  return SetToRegistry(szRegValue, pPos);
-}
-
-bool
-Profile::Set(const TCHAR *szRegValue, unsigned pPos)
-{
-  return SetToRegistry(szRegValue, pPos);
-}
-
-bool
-Profile::Set(const TCHAR *szRegValue, double pPos)
-{
-  return SetToRegistry(szRegValue, (DWORD)pPos);
-}
-
-bool
-Profile::Set(const TCHAR *szRegValue, long pPos)
-{
-  return SetToRegistry(szRegValue, (unsigned long)pPos);
-}
-
-bool
-Profile::SetString(const TCHAR *szRegValue, const TCHAR *Pos)
-{
-  return SetRegistryString(szRegValue, Pos);
-}
-
-void
-Profile::SetStringIfAbsent(const TCHAR *szRegValue, const TCHAR *Pos)
-{
-  TCHAR temp[MAX_PATH];
-  if (!GetString(szRegValue, temp, MAX_PATH))
-    SetString(szRegValue, Pos);
+  int Temp;
+  Temp = iround(XCSoarInterface::Basic().wind.norm);
+  Profile::Set(szProfileWindSpeed, Temp);
+  Temp = iround(XCSoarInterface::Basic().wind.bearing);
+  Profile::Set(szProfileWindBearing, Temp);
+  //TODO  SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing);
 }
 
 int
@@ -900,6 +885,21 @@ Profile::GetScaleList(fixed *List, size_t Size)
   }
 
   return Idx;
+}
+
+int
+Profile::GetAirspaceMode(int i)
+{
+  int Temp = 3; // display + warnings
+  Profile::Get(szProfileAirspaceMode[i], Temp);
+  return Temp;
+}
+
+void
+Profile::SetAirspaceMode(int i)
+{
+  int val = XCSoarInterface::SettingsComputer().iAirspaceMode[i];
+  Profile::Set(szProfileAirspaceMode[i], val);
 }
 
 void

@@ -47,10 +47,6 @@ Copyright_License {
 namespace Profile
 {
   /**
-   * Adjusts the application settings according to the profile settings
-   */
-  void Use();
-  /**
    * Loads the profile files
    */
   void Load();
@@ -61,28 +57,13 @@ namespace Profile
   /**
    * Saves the profile into the profile files
    */
+
   void Save();
   /**
    * Saves the profile into the given profile file
    */
   void SaveFile(const TCHAR *szFile);
-  /**
-   * Saves the sound settings to the profile
-   */
-  void SetSoundSettings();
-  /**
-   * Saves the wind settings to the profile
-   */
-  void SetWind();
-  /**
-   * Loads the wind settings from the profile
-   */
-  void GetWind();
-  /**
-   * Saves the airspace mode setting to the profile
-   * @param i Airspace class index
-   */
-  void SetAirspaceMode(int i);
+
   /**
    * Sets the profile files to load when calling Load()
    * @param override NULL or file to load when calling Load()
@@ -107,14 +88,37 @@ namespace Profile
   void SetStringIfAbsent(const TCHAR *szRegValue, const TCHAR *Pos);
 
   /**
+   * Adjusts the application settings according to the profile settings
+   */
+  void Use();
+
+  /**
+   * Saves the sound settings to the profile
+   */
+  void SetSoundSettings();
+
+  /**
+   * Loads the wind settings from the profile
+   */
+  void GetWind();
+  /**
+   * Saves the wind settings to the profile
+   */
+  void SetWind();
+
+  int GetScaleList(fixed *List, size_t Size);
+
+  /**
    * Reads the airspace mode setting from the profile
    * @param i Airspace class index
    * @return The mode
    */
   int GetAirspaceMode(int i);
-
-  int GetScaleList(fixed *List, size_t Size);
-
+  /**
+   * Saves the airspace mode setting to the profile
+   * @param i Airspace class index
+   */
+  void SetAirspaceMode(int i);
   void SetAirspaceColor(int i, int c);
   void SetAirspaceBrush(int i, int c);
 };
