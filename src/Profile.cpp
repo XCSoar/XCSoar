@@ -721,7 +721,7 @@ TCHAR defaultProfileFile[MAX_PATH];
 TCHAR failsafeProfileFile[MAX_PATH];
 
 void
-Profile::Load(void)
+Profile::Load()
 {
   LogStartUp(_T("Load profile"));
   // load registry backup if it exists
@@ -730,7 +730,7 @@ Profile::Load(void)
 }
 
 void
-Profile::Save(void)
+Profile::Save()
 {
   LogStartUp(_T("Save profile"));
   // save registry backup first (try a few places)

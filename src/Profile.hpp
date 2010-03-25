@@ -47,15 +47,15 @@ namespace Profile
    * Reads the profile settings from the registry and adjusts the
    * application settings
    */
-  void Use(void);
+  void Use();
   /**
    * Loads the profile files into the registry
    */
-  void Load(void);
+  void Load();
   /**
    * Saves the registry into the profile files
    */
-  void Save(void);
+  void Save();
   /**
    * Saves the sound settings to the registry
    */
