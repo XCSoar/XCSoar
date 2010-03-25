@@ -66,6 +66,7 @@ ColumnIsEmpty(const TCHAR *line, unsigned column)
   return buffer[0] == _T('\0');
 }
 
+#ifdef FIXED_MATH
 static bool
 ParseNumber(const TCHAR *line, unsigned column, fixed &value_r)
 {
@@ -76,6 +77,7 @@ ParseNumber(const TCHAR *line, unsigned column, fixed &value_r)
   value_r = _tcstol(buffer, &endptr, 10);
   return endptr > buffer && *endptr == '\0';
 }
+#endif
 
 static bool
 ParseNumber(const TCHAR *line, unsigned column, double &value_r)
