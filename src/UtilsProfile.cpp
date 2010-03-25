@@ -81,7 +81,7 @@ WriteFileRegistryString(HANDLE hFile, TCHAR *instring)
 void
 WriteProfile(const TCHAR *szFile)
 {
-  SaveRegistryToFile(szFile);
+  Profile::SaveFile(szFile);
 }
 
 #ifdef ENABLE_UNUSED_CODE
@@ -103,7 +103,7 @@ ReadFileRegistryString(HANDLE hFile, TCHAR *instring)
 void
 ReadProfile(const TCHAR *szFile)
 {
-  LoadRegistryFromFile(szFile);
+  Profile::LoadFile(szFile);
 
   WaypointFileChanged = true;
   TerrainFileChanged = true;
