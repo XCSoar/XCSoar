@@ -352,17 +352,11 @@ SaveRegistryToFile(const TCHAR *szFile)
 {
 #ifdef WIN32
   TCHAR lpstrName[nMaxKeyNameSize+1];
-#ifdef __GNUC__
+
   union {
     BYTE pValue[nMaxValueValueSize+4];
     DWORD dValue;
   } uValue;
-#else
-  BYTE pValue[nMaxValueValueSize+1];
-
-  char sName[MAX_PATH];
-  char sValue[MAX_PATH];
-#endif
 
   // If no file is given -> return
   if (string_is_empty(szFile))
@@ -394,12 +388,7 @@ SaveRegistryToFile(const TCHAR *szFile)
 
     // Get i-th subkey from the registry key defined by hkFrom
     res = ::RegEnumValue(hkFrom, i, lpstrName, &nNameSize, 0, &nType,
-#ifdef __GNUC__
-                         uValue.pValue,
-#else
-                         pValue,
-#endif
-                         &nValueSize);
+                         uValue.pValue, &nValueSize);
 
     // If we iterated to the end of the subkey "array" -> quit the for-loop
     if (ERROR_NO_MORE_ITEMS == res)
@@ -415,17 +404,9 @@ SaveRegistryToFile(const TCHAR *szFile)
     if (_tcslen(lpstrName) <= 1)
       continue;
 
-#ifndef __GNUC__
-    wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
-#endif
-
     if (nType == REG_DWORD) {
       // If the subkey type is DWORD
-#ifdef __GNUC__
       writer.printfln(_T("%s=%d"), lpstrName, uValue.dValue);
-#else
-      writer.printfln(_T("%s=%d"), sName, *((DWORD*)pValue));
-#endif
     } else if (nType == REG_SZ) {
       // If the subkey type is STRING
 
@@ -437,7 +418,6 @@ SaveRegistryToFile(const TCHAR *szFile)
       }
 
       /// @todo SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
-#ifdef __GNUC__
       // Force null-termination
       uValue.pValue[nValueSize] = 0;
       uValue.pValue[nValueSize + 1] = 0;
@@ -449,21 +429,6 @@ SaveRegistryToFile(const TCHAR *szFile)
       else
         // otherwise -> write ="" to the output file
         writer.printfln(_T("%s=\"\""), lpstrName);
-#else
-      // Force null-termination
-      pValue[nValueSize] = 0; // null terminate, just in case
-      pValue[nValueSize + 1] = 0; // null terminate, just in case
-
-      // If the value string is not empty
-      if (!string_is_empty((const TCHAR*)pValue)) {
-        // -> write the value to the output file
-        wcstombs(sValue, (TCHAR*)pValue, nMaxKeyNameSize + 1);
-        writer.printfln(_T("%s=\"%s\""), sName, sValue);
-      } else {
-        // otherwise -> write ="" to the output file
-        writer.printfln(_T("%s=\"\""), sName);
-      }
-#endif
     }
   }
 
