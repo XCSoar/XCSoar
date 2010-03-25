@@ -815,6 +815,12 @@ Profile::Get(const TCHAR *szRegValue, double &pPos)
 }
 
 bool
+Profile::GetString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+{
+  return GetRegistryString(szRegValue, pPos, dwSize);
+}
+
+bool
 Profile::Set(const TCHAR *szRegValue, int pPos)
 {
   return SetToRegistry(szRegValue, pPos);
@@ -842,6 +848,12 @@ bool
 Profile::Set(const TCHAR *szRegValue, double pPos)
 {
   return SetToRegistry(szRegValue, (DWORD)pPos);
+}
+
+bool
+Profile::SetString(const TCHAR *szRegValue, const TCHAR *Pos)
+{
+  return SetRegistryString(szRegValue, Pos);
 }
 
 int

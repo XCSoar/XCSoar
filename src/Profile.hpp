@@ -42,6 +42,7 @@ Copyright_License {
 #include "ProfileKeys.hpp"
 #include "Engine/Math/fixed.hpp"
 #include <tchar.h>
+#include <windef.h>
 
 namespace Profile
 {
@@ -93,12 +94,14 @@ namespace Profile
   bool Get(const TCHAR *szRegValue, bool &pPos);
   bool Get(const TCHAR *szRegValue, unsigned &pPos);
   bool Get(const TCHAR *szRegValue, double &pPos);
+  bool GetString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
 
   bool Set(const TCHAR *szRegValue, int pPos);
   bool Set(const TCHAR *szRegValue, short pPos);
   bool Set(const TCHAR *szRegValue, bool pPos);
   bool Set(const TCHAR *szRegValue, unsigned pPos);
   bool Set(const TCHAR *szRegValue, double pPos);
+  bool SetString(const TCHAR *szRegValue, const TCHAR *Pos);
 
   /**
    * Reads the airspace mode setting from the profile
