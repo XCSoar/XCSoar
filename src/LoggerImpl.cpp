@@ -429,7 +429,7 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
   if (gps_info.gps.Simulator) {
     _tcscpy(device_config.driver_name, _T("Simulator"));
   } else {
-    ReadDeviceConfig(0, device_config);
+    Profile::GetDeviceConfig(0, device_config);
   }
 
   sprintf(temp, "HFGPS: %S\r\n", device_config.driver_name);

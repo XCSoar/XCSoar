@@ -64,38 +64,6 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
 bool
 SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
 
-struct DeviceConfig {
-  enum port_type {
-    /**
-     * Serial port, i.e. COMx / RS-232.
-     */
-    SERIAL,
-
-    /**
-     * Attempt to auto-discover the GPS source.
-     *
-     * On Windows CE, this opens the GPS Intermediate Driver
-     * Multiplexer:
-     * http://msdn.microsoft.com/en-us/library/bb202042.aspx
-     */
-    AUTO,
-  };
-
-  port_type port_type;
-
-  unsigned port_index;
-
-  unsigned speed_index;
-
-  TCHAR driver_name[32];
-};
-
-void
-ReadDeviceConfig(unsigned n, DeviceConfig &config);
-
-void
-WriteDeviceConfig(unsigned n, const DeviceConfig &config);
-
 void SaveRegistryToFile(const TCHAR* szFile);
 void LoadRegistryFromFile(const TCHAR* szFile);
 

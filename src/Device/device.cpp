@@ -55,6 +55,7 @@ Copyright_License {
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
 #include "Asset.hpp"
 #include "Simulator.hpp"
+#include "Profile.hpp"
 
 #include <assert.h>
 
@@ -272,7 +273,7 @@ devInit(const TCHAR *CommandLine)
   DeviceConfig config[NUMDEV];
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    ReadDeviceConfig(i, config[i]);
+    Profile::GetDeviceConfig(i, config[i]);
 
   devInitOne(DeviceList[0], config[0], pDevNmeaOut);
 

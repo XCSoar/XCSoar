@@ -1261,7 +1261,7 @@ static void setVariables(void) {
   //  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    ReadDeviceConfig(i, device_config[i]);
+    Profile::GetDeviceConfig(i, device_config[i]);
 
   SetupDeviceFields(DeviceList[0], device_config[0], dwDeviceIndex1,
                     (WndProperty*)wf->FindByName(_T("prpComPort1")),
@@ -3451,7 +3451,7 @@ void dlgConfigurationShowModal(void){
 
   if (DevicePortChanged) {
     for (unsigned i = 0; i < NUMDEV; ++i) {
-      WriteDeviceConfig(i, device_config[i]);
+      Profile::SetDeviceConfig(i, device_config[i]);
     }
   }
 
