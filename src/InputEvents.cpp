@@ -205,9 +205,9 @@ InputEvents::readFile()
   TCHAR szFile1[MAX_PATH];
 
   // Open file from registry
-  GetRegistryString(szProfileInputFile, szFile1, MAX_PATH);
+  Profile::GetString(szProfileInputFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
-  SetRegistryString(szProfileInputFile, TEXT("\0"));
+  Profile::SetString(szProfileInputFile, TEXT("\0"));
 
   if (string_is_empty(szFile1))
     return;
@@ -451,7 +451,7 @@ InputEvents::readFile()
 
   // file was ok, so save it to registry
   ContractLocalPath(szFile1);
-  SetRegistryString(szProfileInputFile, szFile1);
+  Profile::SetString(szProfileInputFile, szFile1);
 }
 
 #ifdef _INPUTDEBUG_

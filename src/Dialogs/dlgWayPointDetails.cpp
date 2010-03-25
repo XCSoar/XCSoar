@@ -392,7 +392,7 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point)
   if (!wf)
     return;
 
-  GetRegistryString(szProfileWayPointFile, szWaypointFile, MAX_PATH);
+  Profile::GetString(szProfileWayPointFile, szWaypointFile, MAX_PATH);
   ExpandLocalPath(szWaypointFile);
   ExtractDirectory(Directory, szWaypointFile);
 

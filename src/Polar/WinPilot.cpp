@@ -119,7 +119,7 @@ ReadWinPilotPolar(Polar &polar)
   POLARV[2]= 212.72;
   POLARW[2]= -3.4;
 
-  GetRegistryString(szProfilePolarFile, szFile, MAX_PATH);
+  Profile::GetString(szProfilePolarFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
   TextReader reader(szFile);

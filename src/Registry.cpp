@@ -370,7 +370,7 @@ ReadPortType(unsigned n)
   TCHAR name[64], value[64];
 
   MakeDeviceSettingName(name, CONF("Port"), n, _T("Type"));
-  if (!GetRegistryString(name, value, sizeof(value) / sizeof(value[0])))
+  if (!Profile::GetString(name, value, sizeof(value) / sizeof(value[0])))
     return DeviceConfig::SERIAL;
 
   return StringToPortType(value);
@@ -396,7 +396,7 @@ ReadDeviceConfig(unsigned n, DeviceConfig &config)
 
   _tcscpy(buffer, CONF("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
-  GetRegistryString(buffer, config.driver_name,
+  Profile::GetString(buffer, config.driver_name,
                     sizeof(config.driver_name) / sizeof(config.driver_name[0]));
 }
 
@@ -424,7 +424,7 @@ WritePortType(unsigned n, enum DeviceConfig::port_type type)
   TCHAR name[64];
 
   MakeDeviceSettingName(name, CONF("Port"), n, _T("Type"));
-  return SetRegistryString(name, value) == ERROR_SUCCESS;
+  return Profile::SetString(name, value) == ERROR_SUCCESS;
 }
 
 void
@@ -442,7 +442,7 @@ WriteDeviceConfig(unsigned n, const DeviceConfig &config)
 
   _tcscpy(buffer, CONF("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
-  SetRegistryString(buffer, config.driver_name);
+  Profile::SetString(buffer, config.driver_name);
 }
 
 // Registry file handling

@@ -59,7 +59,7 @@ ReadAirspace(AirspaceClientUI &airspace,
   bool airspace_ok = false;
 
   // Read the airspace filenames from the registry
-  GetRegistryString(szProfileAirspaceFile, tpath, MAX_PATH);
+  Profile::GetString(szProfileAirspaceFile, tpath, MAX_PATH);
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 
@@ -75,7 +75,7 @@ ReadAirspace(AirspaceClientUI &airspace,
     // TODO feature: airspace in xcm files should be a feature
     /*
     static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
-    GetRegistryString(szProfileMapFile, szMapFile, MAX_PATH);
+    Profile::GetString(szProfileMapFile, szMapFile, MAX_PATH);
     ExpandLocalPath(szMapFile);
     wcscat(szMapFile,TEXT("/"));
     wcscat(szMapFile,TEXT("airspace.txt"));
@@ -84,7 +84,7 @@ ReadAirspace(AirspaceClientUI &airspace,
     */
   }
 
-  GetRegistryString(szProfileAdditionalAirspaceFile, tpath, MAX_PATH);
+  Profile::GetString(szProfileAdditionalAirspaceFile, tpath, MAX_PATH);
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 

@@ -168,12 +168,12 @@ ReadLanguageFile()
   FILE *fp = NULL;
 
   // Read the language filename from the registry
-  GetRegistryString(szProfileLanguageFile, szFile1, MAX_PATH);
+  Profile::GetString(szProfileLanguageFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
 
   // Reset filename in registry in case language
   // loading crashes the application
-  SetRegistryString(szProfileLanguageFile, TEXT("\0"));
+  Profile::SetString(szProfileLanguageFile, TEXT("\0"));
 
   // If the language file is not set use the default one
   if (string_is_empty(szFile1))
@@ -211,7 +211,7 @@ ReadLanguageFile()
 
   // file was OK, so save filename to registry again
   ContractLocalPath(szFile1);
-  SetRegistryString(szProfileLanguageFile, szFile1);
+  Profile::SetString(szProfileLanguageFile, szFile1);
 
   fclose(fp);
 }

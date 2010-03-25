@@ -160,12 +160,12 @@ TopologyStore::Open()
     topology_store[z] = 0;
   }
 
-  GetRegistryString(szProfileTopologyFile, szFile, MAX_PATH);
+  Profile::GetString(szProfileTopologyFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
   if (string_is_empty(szFile)) {
     // file is blank, so look for it in a map file
-    GetRegistryString(szProfileMapFile, szFile, MAX_PATH);
+    Profile::GetString(szProfileMapFile, szFile, MAX_PATH);
     if (string_is_empty(szFile))
       return;
 

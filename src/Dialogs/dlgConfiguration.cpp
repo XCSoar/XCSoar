@@ -164,7 +164,7 @@ static void UpdateButtons(void) {
   TCHAR text[120];
   TCHAR val[100];
   if (buttonPilotName) {
-    GetRegistryString(szProfilePilotName, val, 100);
+    Profile::GetString(szProfilePilotName, val, 100);
     if (string_is_empty(val))
       _stprintf(val, gettext(_T("(blank)")));
 
@@ -172,7 +172,7 @@ static void UpdateButtons(void) {
     buttonPilotName->SetCaption(text);
   }
   if (buttonAircraftType) {
-    GetRegistryString(szProfileAircraftType, val, 100);
+    Profile::GetString(szProfileAircraftType, val, 100);
     if (string_is_empty(val))
       _stprintf(val, gettext(_T("(blank)")));
 
@@ -180,7 +180,7 @@ static void UpdateButtons(void) {
     buttonAircraftType->SetCaption(text);
   }
   if (buttonAircraftRego) {
-    GetRegistryString(szProfileAircraftRego, val, 100);
+    Profile::GetString(szProfileAircraftRego, val, 100);
     if (string_is_empty(val))
       _stprintf(val, gettext(_T("(blank)")));
 
@@ -188,7 +188,7 @@ static void UpdateButtons(void) {
     buttonAircraftRego->SetCaption(text);
   }
   if (buttonLoggerID) {
-    GetRegistryString(szProfileLoggerID, val, 100);
+    Profile::GetString(szProfileLoggerID, val, 100);
     if (string_is_empty(val))
       _stprintf(val, gettext(_T("(blank)")));
 
@@ -634,9 +634,9 @@ OnAircraftRegoClicked(gcc_unused WndButton &button)
 {
   TCHAR Temp[100];
   if (buttonAircraftRego) {
-    GetRegistryString(szProfileAircraftRego,Temp,100);
+    Profile::GetString(szProfileAircraftRego,Temp,100);
     if (dlgTextEntryShowModal(Temp,100)) {
-      SetRegistryString(szProfileAircraftRego,Temp);
+      Profile::SetString(szProfileAircraftRego,Temp);
       changed = true;
     }
   }
@@ -648,9 +648,9 @@ OnAircraftTypeClicked(gcc_unused WndButton &button)
 {
   TCHAR Temp[100];
   if (buttonAircraftType) {
-    GetRegistryString(szProfileAircraftType,Temp,100);
+    Profile::GetString(szProfileAircraftType,Temp,100);
     if (dlgTextEntryShowModal(Temp,100)){
-      SetRegistryString(szProfileAircraftType,Temp);
+      Profile::SetString(szProfileAircraftType,Temp);
       changed = true;
     }
   }
@@ -662,9 +662,9 @@ OnPilotNameClicked(gcc_unused WndButton &button)
 {
   TCHAR Temp[100];
   if (buttonPilotName) {
-    GetRegistryString(szProfilePilotName,Temp,100);
+    Profile::GetString(szProfilePilotName,Temp,100);
     if (dlgTextEntryShowModal(Temp,100)){
-      SetRegistryString(szProfilePilotName,Temp);
+      Profile::SetString(szProfilePilotName,Temp);
       changed = true;
     }
   }
@@ -676,9 +676,9 @@ OnLoggerIDClicked(gcc_unused WndButton &button)
 {
   TCHAR Temp[100];
   if (buttonLoggerID) {
-    GetRegistryString(szProfileLoggerID,Temp,100);
+    Profile::GetString(szProfileLoggerID,Temp,100);
     if(dlgTextEntryShowModal(Temp,100)){
-      SetRegistryString(szProfileLoggerID,Temp);
+      Profile::SetString(szProfileLoggerID,Temp);
       changed = true;
     }
     ReadAssetNumber();
@@ -1649,7 +1649,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfilePolarFile, szPolarFile, MAX_PATH);
+  Profile::GetString(szProfilePolarFile, szPolarFile, MAX_PATH);
   _tcscpy(temptext,szPolarFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpPolarFile"));
@@ -1661,7 +1661,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfileAirspaceFile, szAirspaceFile, MAX_PATH);
+  Profile::GetString(szProfileAirspaceFile, szAirspaceFile, MAX_PATH);
   _tcscpy(temptext,szAirspaceFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpAirspaceFile"));
@@ -1673,7 +1673,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfileAdditionalAirspaceFile,
+  Profile::GetString(szProfileAdditionalAirspaceFile,
                     szAdditionalAirspaceFile, MAX_PATH);
   _tcscpy(temptext,szAdditionalAirspaceFile);
   ExpandLocalPath(temptext);
@@ -1686,7 +1686,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfileWayPointFile, szWaypointFile, MAX_PATH);
+  Profile::GetString(szProfileWayPointFile, szWaypointFile, MAX_PATH);
   _tcscpy(temptext,szWaypointFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointFile"));
@@ -1701,7 +1701,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfileAdditionalWayPointFile,
+  Profile::GetString(szProfileAdditionalWayPointFile,
                     szAdditionalWaypointFile, MAX_PATH);
   _tcscpy(temptext,szAdditionalWaypointFile);
   ExpandLocalPath(temptext);
@@ -1717,7 +1717,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfileMapFile, szMapFile, MAX_PATH);
+  Profile::GetString(szProfileMapFile, szMapFile, MAX_PATH);
   _tcscpy(temptext,szMapFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpMapFile"));
@@ -1729,7 +1729,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfileTerrainFile, szTerrainFile, MAX_PATH);
+  Profile::GetString(szProfileTerrainFile, szTerrainFile, MAX_PATH);
   _tcscpy(temptext,szTerrainFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainFile"));
@@ -1742,7 +1742,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfileTopologyFile, szTopologyFile, MAX_PATH);
+  Profile::GetString(szProfileTopologyFile, szTopologyFile, MAX_PATH);
   _tcscpy(temptext,szTopologyFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpTopologyFile"));
@@ -1754,7 +1754,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfileAirfieldFile, szAirfieldFile, MAX_PATH);
+  Profile::GetString(szProfileAirfieldFile, szAirfieldFile, MAX_PATH);
   _tcscpy(temptext,szAirfieldFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpAirfieldFile"));
@@ -1766,7 +1766,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfileLanguageFile, szLanguageFile, MAX_PATH);
+  Profile::GetString(szProfileLanguageFile, szLanguageFile, MAX_PATH);
   _tcscpy(temptext,szLanguageFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpLanguageFile"));
@@ -1778,7 +1778,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfileStatusFile, szStatusFile, MAX_PATH);
+  Profile::GetString(szProfileStatusFile, szStatusFile, MAX_PATH);
   _tcscpy(temptext,szStatusFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpStatusFile"));
@@ -1790,7 +1790,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  GetRegistryString(szProfileInputFile, szInputFile, MAX_PATH);
+  Profile::GetString(szProfileInputFile, szInputFile, MAX_PATH);
   _tcscpy(temptext,szInputFile);
   ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(_T("prpInputFile"));
@@ -2771,7 +2771,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szPolarFile)) {
-      SetRegistryString(szProfilePolarFile, temptext);
+      Profile::SetString(szProfilePolarFile, temptext);
       PolarFileChanged = true;
       changed = true;
     }
@@ -2784,7 +2784,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szWaypointFile)) {
-      SetRegistryString(szProfileWayPointFile, temptext);
+      Profile::SetString(szProfileWayPointFile, temptext);
       WaypointFileChanged= true;
       changed = true;
     }
@@ -2797,7 +2797,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAdditionalWaypointFile)) {
-      SetRegistryString(szProfileAdditionalWayPointFile, temptext);
+      Profile::SetString(szProfileAdditionalWayPointFile, temptext);
       WaypointFileChanged= true;
       changed = true;
     }
@@ -2810,7 +2810,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAirspaceFile)) {
-      SetRegistryString(szProfileAirspaceFile, temptext);
+      Profile::SetString(szProfileAirspaceFile, temptext);
       AirspaceFileChanged= true;
       changed = true;
     }
@@ -2823,7 +2823,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAdditionalAirspaceFile)) {
-      SetRegistryString(szProfileAdditionalAirspaceFile, temptext);
+      Profile::SetString(szProfileAdditionalAirspaceFile, temptext);
       AirspaceFileChanged= true;
       changed = true;
     }
@@ -2836,7 +2836,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szMapFile)) {
-      SetRegistryString(szProfileMapFile, temptext);
+      Profile::SetString(szProfileMapFile, temptext);
       MapFileChanged= true;
       changed = true;
     }
@@ -2849,7 +2849,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szTerrainFile)) {
-      SetRegistryString(szProfileTerrainFile, temptext);
+      Profile::SetString(szProfileTerrainFile, temptext);
       TerrainFileChanged= true;
       changed = true;
     }
@@ -2862,7 +2862,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szTopologyFile)) {
-      SetRegistryString(szProfileTopologyFile, temptext);
+      Profile::SetString(szProfileTopologyFile, temptext);
       TopologyFileChanged= true;
       changed = true;
     }
@@ -2875,7 +2875,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAirfieldFile)) {
-      SetRegistryString(szProfileAirfieldFile, temptext);
+      Profile::SetString(szProfileAirfieldFile, temptext);
       AirfieldFileChanged= true;
       changed = true;
     }
@@ -2888,7 +2888,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szLanguageFile)) {
-      SetRegistryString(szProfileLanguageFile, temptext);
+      Profile::SetString(szProfileLanguageFile, temptext);
       requirerestart = true;
       changed = true;
     }
@@ -2901,7 +2901,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szStatusFile)) {
-      SetRegistryString(szProfileStatusFile, temptext);
+      Profile::SetString(szProfileStatusFile, temptext);
       requirerestart = true;
       changed = true;
     }
@@ -2914,7 +2914,7 @@ void dlgConfigurationShowModal(void){
     _tcscpy(temptext, dfe->GetPathFile());
     ContractLocalPath(temptext);
     if (_tcscmp(temptext,szInputFile)) {
-      SetRegistryString(szProfileInputFile, temptext);
+      Profile::SetString(szProfileInputFile, temptext);
       requirerestart = true;
       changed = true;
     }

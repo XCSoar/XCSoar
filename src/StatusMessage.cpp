@@ -70,10 +70,10 @@ StatusMessageList::LoadFile()
   TCHAR szFile1[MAX_PATH];
 
   // Open file from registry
-  GetRegistryString(szProfileStatusFile, szFile1, MAX_PATH);
+  Profile::GetString(szProfileStatusFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
 
-  SetRegistryString(szProfileStatusFile, TEXT("\0"));
+  Profile::SetString(szProfileStatusFile, TEXT("\0"));
 
   if (string_is_empty(szFile1))
     return;
@@ -149,7 +149,7 @@ StatusMessageList::LoadFile()
 
   // file was ok, so save it to registry
   ContractLocalPath(szFile1);
-  SetRegistryString(szProfileStatusFile, szFile1);
+  Profile::SetString(szProfileStatusFile, szFile1);
 }
 
 void
