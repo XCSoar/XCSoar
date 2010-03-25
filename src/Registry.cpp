@@ -385,11 +385,11 @@ ReadDeviceConfig(unsigned n, DeviceConfig &config)
   config.port_type = ReadPortType(n);
 
   MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
-  if (GetFromRegistry(buffer, Temp) == ERROR_SUCCESS)
+  if (Profile::Get(buffer, Temp) == ERROR_SUCCESS)
     config.port_index = Temp;
 
   MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
-  if (GetFromRegistry(buffer, Temp) == ERROR_SUCCESS)
+  if (Profile::Get(buffer, Temp) == ERROR_SUCCESS)
     config.speed_index = Temp;
 
   config.driver_name[0] = '\0';

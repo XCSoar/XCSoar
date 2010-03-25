@@ -145,15 +145,15 @@ Profile::Use()
 		  settings_task.StartMaxSpeedMargin);
 
   Temp = settings_task.SectorType;
-  GetFromRegistryD(szProfileFAISector, Temp);
+  Profile::Get(szProfileFAISector, Temp);
   settings_task.SectorType = (ASTSectorType_t)Temp;
 
   Temp = settings_task.StartType;
-  GetFromRegistryD(szProfileStartLine, Temp);
+  Profile::Get(szProfileStartLine, Temp);
   settings_task.StartType = (StartSectorType_t)Temp;
 
   Temp = settings_task.FinishType;
-  GetFromRegistryD(szProfileFinishLine, Temp);
+  Profile::Get(szProfileFinishLine, Temp);
   settings_task.FinishType = (FinishSectorType_t)Temp;
 
   Profile::Get(szProfileSectorRadius,
@@ -165,7 +165,7 @@ Profile::Use()
       settings_task.FinishRadius);
 
   Temp = settings_task.AutoAdvance;
-  GetFromRegistryD(szProfileAutoAdvance, Temp);
+  Profile::Get(szProfileAutoAdvance, Temp);
   settings_task.AutoAdvance = (AutoAdvanceMode_t)Temp;
 
   Profile::Get(szProfileFAIFinishHeight,
