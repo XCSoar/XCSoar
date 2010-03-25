@@ -802,43 +802,41 @@ SaveRegistryToFile(const TCHAR *szFile)
       // in case things get weird
       continue;
 
-    if (_tcslen(lpstrName) > 1) {
-      // type 1 text
-      // type 4 integer (valuesize 4)
+    if (_tcslen(lpstrName) <= 1)
+      continue;
 
-      if (nType == REG_DWORD) { // data
+    if (nType == REG_DWORD) { // data
 #ifdef __GNUC__
-        writer.printfln(_T("%s=%d"), lpstrName, uValue.dValue);
+      writer.printfln(_T("%s=%d"), lpstrName, uValue.dValue);
 #else
-        wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
-        writer.printfln(_T("%s=%d"), sName, *((DWORD*)pValue));
+      wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
+      writer.printfln(_T("%s=%d"), sName, *((DWORD*)pValue));
 #endif
-      } else if (nType == REG_SZ) {
-        // text
-        // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
-        if (nValueSize > 0) {
+    } else if (nType == REG_SZ) {
+      // text
+      // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
+      if (nValueSize > 0) {
 #ifdef __GNUC__
-          uValue.pValue[nValueSize] = 0; // null terminate, just in case
-          uValue.pValue[nValueSize + 1] = 0; // null terminate, just in case
-          if (!string_is_empty((const TCHAR*)uValue.pValue))
-            writer.printfln(_T("%s=\"%s\""), lpstrName, uValue.pValue);
-          else
-            writer.printfln(_T("%s=\"\""), lpstrName);
-#else
-          if (!string_is_empty((const TCHAR*)pValue)) {
-            pValue[nValueSize] = 0; // null terminate, just in case
-            pValue[nValueSize + 1] = 0; // null terminate, just in case
-            wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
-            wcstombs(sValue, (TCHAR*)pValue, nMaxKeyNameSize + 1);
-            writer.printfln(_T("%s=\"%s\""), sName, sValue);
-          } else {
-            wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
-            writer.printfln(_T("%s=\"\""), sName);
-          }
-#endif
-        } else {
+        uValue.pValue[nValueSize] = 0; // null terminate, just in case
+        uValue.pValue[nValueSize + 1] = 0; // null terminate, just in case
+        if (!string_is_empty((const TCHAR*)uValue.pValue))
+          writer.printfln(_T("%s=\"%s\""), lpstrName, uValue.pValue);
+        else
           writer.printfln(_T("%s=\"\""), lpstrName);
+#else
+        if (!string_is_empty((const TCHAR*)pValue)) {
+          pValue[nValueSize] = 0; // null terminate, just in case
+          pValue[nValueSize + 1] = 0; // null terminate, just in case
+          wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
+          wcstombs(sValue, (TCHAR*)pValue, nMaxKeyNameSize + 1);
+          writer.printfln(_T("%s=\"%s\""), sName, sValue);
+        } else {
+          wcstombs(sName, lpstrName, nMaxKeyNameSize + 1);
+          writer.printfln(_T("%s=\"\""), sName);
         }
+#endif
+      } else {
+        writer.printfln(_T("%s=\"\""), lpstrName);
       }
     }
   }
