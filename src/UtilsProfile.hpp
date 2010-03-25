@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_UTILS_PROFILE_HPP
 #define XCSOAR_UTILS_PROFILE_HPP
 
+#include "Engine/Math/fixed.hpp"
+
 #ifdef PNA
 void CleanRegistry(); // VENTA2-ADDON cleanregistrykeyA
 #endif
