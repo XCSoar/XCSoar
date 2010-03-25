@@ -106,7 +106,7 @@ PaintWindow::on_message(HWND hWnd, UINT message,
 
   case WM_PAINT:
     {
-      PaintCanvas canvas(*this, hWnd);
+      PaintCanvas canvas(*this);
       on_paint(canvas);
     }
     return 0;

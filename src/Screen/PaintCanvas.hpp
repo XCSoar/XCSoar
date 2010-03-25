@@ -53,11 +53,11 @@ class PaintWindow;
  */
 class PaintCanvas : public Canvas {
 private:
-  HWND hWnd;
+  PaintWindow &window;
   PAINTSTRUCT ps;
 
 public:
-  PaintCanvas(const PaintWindow &window, HWND _hWnd);
+  PaintCanvas(PaintWindow &_window);
   ~PaintCanvas();
 };
 

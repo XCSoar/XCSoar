@@ -39,15 +39,15 @@ Copyright_License {
 #include "Screen/PaintCanvas.hpp"
 #include "Screen/PaintWindow.hpp"
 
-PaintCanvas::PaintCanvas(const PaintWindow &window, HWND _hWnd)
-  :hWnd(_hWnd)
+PaintCanvas::PaintCanvas(PaintWindow &_window)
+  :window(_window)
 {
-  HDC hDC = ::BeginPaint(hWnd, &ps);
+  HDC hDC = window.BeginPaint(&ps);
   set(hDC, window.get_width(), window.get_height());
 }
 
 PaintCanvas::~PaintCanvas()
 {
   DeleteDC(dc);
-  ::EndPaint(hWnd, &ps);
+  window.EndPaint(&ps);
 }
