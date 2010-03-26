@@ -320,9 +320,7 @@ SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 
 // Registry file handling
 
-const static size_t nMaxValueNameSize = MAX_PATH + 6; //255 + 1 + /r/n
 const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6; // max regkey name is 256 chars + " = "
-const static size_t nMaxClassSize = MAX_PATH + 6;
 const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 
 void
