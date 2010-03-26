@@ -433,21 +433,24 @@ InputEvents::eventZoom(const TCHAR* misc)
   SendSettingsMap(true);
 }
 
-// Pan
-//	on	Turn pan on
-//	off	Turn pan off
-//      supertoggle Toggles pan and fullscreen
-//	up	Pan up
-//	down	Pan down
-//	left	Pan left
-//	right	Pan right
-//	TODO feature: n,n	Go that direction - +/-
-//	TODO feature: ???	Go to particular point
-//	TODO feature: ???	Go to waypoint (eg: next, named)
+/**
+ * This function handles all "pan" input events
+ * @param misc A string describing the desired pan action.
+ *  on             Turn pan on
+ *  off            Turn pan off
+ *  toogle         Toogles pan mode
+ *  supertoggle    Toggles pan mode and fullscreen
+ *  up             Pan up
+ *  down           Pan down
+ *  left           Pan left
+ *  right          Pan right
+ *  @todo feature: n,n Go that direction - +/-
+ *  @todo feature: ??? Go to particular point
+ *  @todo feature: ??? Go to waypoint (eg: next, named)
+ */
 void
 InputEvents::eventPan(const TCHAR *misc)
 {
-
   if (_tcscmp(misc, TEXT("toggle")) == 0)
     sub_Pan(-1);
   else if (_tcscmp(misc, TEXT("supertoggle")) == 0)
@@ -1716,6 +1719,15 @@ InputEvents::sub_TerrainTopology(int vswitch)
   }
 }
 
+/**
+ * This function switches the pan mode on and off
+ * @param vswitch This parameter determines what to do:
+ * -2 supertoogle
+ * -1 toogle
+ * 1  on
+ * 0  off
+ * @see InputEvents::eventPan()
+ */
 void
 InputEvents::sub_Pan(int vswitch)
 {
@@ -1723,7 +1735,7 @@ InputEvents::sub_Pan(int vswitch)
   bool oldPan = SettingsMap().EnablePan;
 
   if (vswitch == -2) {
-    // superpan, toggles fullscreen also
+    // supertoogle, toogle pan mode and fullscreen
 
     /* JMW broken/illegal
     if (!EnablePan) {
@@ -1739,8 +1751,11 @@ InputEvents::sub_Pan(int vswitch)
       //JMW illegal      askFullScreen = true;
     }
   } else if (vswitch == -1)
+    // toogle, toogle pan mode only
     SetSettingsMap().EnablePan = !SettingsMap().EnablePan;
   else
+    // 1 = enable pan mode
+    // 0 = disable pan mode
     SetSettingsMap().EnablePan = (vswitch !=0);
 
   if (SettingsMap().EnablePan != oldPan) {
