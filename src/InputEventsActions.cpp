@@ -453,30 +453,36 @@ InputEvents::eventPan(const TCHAR *misc)
 {
   if (_tcscmp(misc, TEXT("toggle")) == 0)
     sub_Pan(-1);
+
   else if (_tcscmp(misc, TEXT("supertoggle")) == 0)
     sub_Pan(-2);
+
   else if (_tcscmp(misc, TEXT("on")) == 0)
     sub_Pan(1);
+
   else if (_tcscmp(misc, TEXT("off")) == 0)
     sub_Pan(0);
 
-  // VENTA-ADDON  let pan mode scroll wheel zooming with HP31X. VENTA-TODO: make it different for other PNAs
-  #if defined(PNA) || defined(FIVV)
   else if (_tcscmp(misc, TEXT("up")) == 0)
-    sub_ScaleZoom(1);
+    if (model_is_hp31x())
+      // Scroll wheel on the HP31x series should zoom in pan mode
+      sub_ScaleZoom(1);
+    else
+      sub_PanCursor(0, 1);
+
   else if (_tcscmp(misc, TEXT("down")) == 0)
-    sub_ScaleZoom(-1); // fixed v58
-  #else
-  else if (_tcscmp(misc, TEXT("up")) == 0)
-    sub_PanCursor(0, 1);
-  else if (_tcscmp(misc, TEXT("down")) == 0)
-    sub_PanCursor(0, -1);
-  #endif
+    if (model_is_hp31x())
+      // Scroll wheel on the HP31x series should zoom in pan mode
+      sub_ScaleZoom(-1);
+    else
+      sub_PanCursor(0, -1);
 
   else if (_tcscmp(misc, TEXT("left")) == 0)
     sub_PanCursor(1, 0);
+
   else if (_tcscmp(misc, TEXT("right")) == 0)
     sub_PanCursor(-1, 0);
+
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (SettingsMap().EnablePan)
       Message::AddMessage(TEXT("Pan mode ON"));
