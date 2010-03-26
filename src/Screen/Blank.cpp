@@ -154,15 +154,14 @@ BlankDisplay(bool doblank)
     } else {
       ResetDisplayTimeOut();
     }
-  } else {
-    if (oldblank) { // was blanked
-      // Power on the display
-      vpm.PowerState = VideoPowerOn;
-      ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm,
-                0, NULL);
-      oldblank = false;
-      XCSoarInterface::SetSettingsMap().ScreenBlanked = false;
-    }
+  } else if (oldblank) {
+    // was blanked
+    // Power on the display
+    vpm.PowerState = VideoPowerOn;
+    ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm,
+              0, NULL);
+    oldblank = false;
+    XCSoarInterface::SetSettingsMap().ScreenBlanked = false;
   }
   ::ReleaseDC(NULL, gdc);
 }
