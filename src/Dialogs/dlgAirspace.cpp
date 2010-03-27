@@ -39,8 +39,7 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "../Message.hpp"
 #include "Profile.hpp"
-#include "Registry.hpp"
-#include "UtilsProfile.hpp"
+#include "ProfileKeys.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
@@ -111,7 +110,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
     int c = dlgAirspaceColoursShowModal();
     if (c >= 0) {
       XCSoarInterface::SetSettingsMap().iAirspaceColour[ItemIndex] = c;
-      SetRegistryColour(ItemIndex,
+      Profile::SetAirspaceColor(ItemIndex,
           XCSoarInterface::SettingsMap().iAirspaceColour[ItemIndex]);
       changed = true;
     }
@@ -119,14 +118,14 @@ OnAirspaceListEnter(unsigned ItemIndex)
     int p = dlgAirspacePatternsShowModal();
     if (p >= 0) {
       XCSoarInterface::SetSettingsMap().iAirspaceBrush[ItemIndex] = p;
-      SetRegistryBrush(ItemIndex,
+      Profile::SetAirspaceBrush(ItemIndex,
           XCSoarInterface::SettingsMap().iAirspaceBrush[ItemIndex]);
       changed = true;
     }
   } else {
     int v = (XCSoarInterface::SettingsComputer().iAirspaceMode[ItemIndex] + 1) % 4;
     XCSoarInterface::SetSettingsComputer().iAirspaceMode[ItemIndex] = v;
-    Profile::SetRegistryAirspaceMode(ItemIndex);
+    Profile::SetAirspaceMode(ItemIndex);
     changed = true;
   }
 }

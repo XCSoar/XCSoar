@@ -37,15 +37,6 @@ Copyright_License {
 
 #include "Registry.hpp"
 
-const TCHAR szRegistryWayPointFile[] = _T("");
-const TCHAR szRegistryAdditionalWayPointFile[] = _T("");
-const TCHAR szRegistryWaypointsOutOfRange[] = _T("");
-const TCHAR szRegistryMapFile[] = _T("");
-const TCHAR szRegistryAlternate1[] = _T("");
-const TCHAR szRegistryAlternate2[] = _T("");
-const TCHAR szRegistryHomeWaypoint[] = _T("");
-const TCHAR szRegistryTeamcodeRefWaypoint[] = _T("");
-
 bool
 GetFromRegistry(const TCHAR *szRegValue, int &pPos)
 {

@@ -42,32 +42,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Window.hpp"
 
-class PaintWindow;
-
-/**
- * A #Canvas implementation which allows you to draw directly into a
- * #PaintWindow, outside of the PaintWindow::on_paint().
- */
-class WindowCanvas : public Canvas {
-#ifdef ENABLE_SDL
-public:
-  explicit WindowCanvas(Window &window)
-    :Canvas(window.canvas.surface) {}
-
-#else /* !ENABLE_SDL */
-
-protected:
-  HWND wnd;
-
-public:
-  explicit WindowCanvas(PaintWindow &window);
-
-  ~WindowCanvas() {
-    ::ReleaseDC(wnd, dc);
-  }
-#endif /* !ENABLE_SDL */
-};
-
 class ContainerWindow;
 
 /**
@@ -80,6 +54,10 @@ private:
   void install_wndproc();
 
 public:
+  PaintWindow() {
+    enable_custom_painting();
+  }
+
   virtual ~PaintWindow();
 
   static bool register_class(HINSTANCE hInstance);
@@ -101,14 +79,6 @@ public:
            int left, int top, unsigned width, unsigned height,
            const WindowStyle style=WindowStyle()) {
     set(parent, _T("PaintWindow"), left, top, width, height, style);
-  }
-
-  unsigned get_width() const {
-    return get_size().cx;
-  }
-
-  unsigned get_height() const {
-    return get_size().cy;
   }
 
   int get_left() const {
@@ -142,7 +112,6 @@ public:
   void invalidate() {
 #ifdef ENABLE_SDL
     // XXX
-    WindowCanvas canvas(*this);
     on_paint(canvas);
     expose();
 #else /* !ENABLE_SDL */
@@ -167,7 +136,6 @@ public:
 
 #ifdef ENABLE_SDL
     // XXX
-    WindowCanvas canvas(*this);
     on_paint(canvas);
     expose();
 #else /* !ENABLE_SDL */
@@ -176,25 +144,7 @@ public:
 #endif /* !ENABLE_SDL */
   }
 
-#ifndef ENABLE_SDL
-  HDC BeginPaint(PAINTSTRUCT *ps) {
-    return ::BeginPaint(hWnd, ps);
-  }
-
-  void EndPaint(PAINTSTRUCT *ps) {
-    ::EndPaint(hWnd, ps);
-  }
-#endif /* !ENABLE_SDL */
-
 protected:
-  virtual bool on_erase(Canvas &canvas);
-  virtual void on_paint(Canvas &canvas);
-
-#ifndef ENABLE_SDL
-  virtual LRESULT on_message(HWND hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
-#endif /* !ENABLE_SDL */
-
   virtual bool register_class(HINSTANCE hInstance, const TCHAR* szWindowClass);
 };
 

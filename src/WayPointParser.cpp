@@ -38,7 +38,6 @@ Copyright_License {
 
 #include "WayPointParser.h"
 #include "DeviceBlackboard.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
@@ -85,7 +84,7 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
         SETTINGS_COMPUTER &settings,
         const bool reset, const bool set_location)
 {
-  LogStartUp(TEXT("SetHome\n"));
+  LogStartUp(TEXT("SetHome"));
 
   // check invalid home waypoint or forced reset due to file change
   if (reset || way_points.empty() ||
@@ -115,13 +114,13 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
   if (set_location) {
     if (const Waypoint *wp = way_points.lookup_id(settings.HomeWaypoint)) {
       // OK, passed all checks now
-      LogStartUp(TEXT("Start at home waypoint\n"));
+      LogStartUp(TEXT("Start at home waypoint"));
       device_blackboard.SetStartupLocation(wp->Location, wp->Altitude);
     } else if (terrain != NULL) {
       // no home at all, so set it from center of terrain if available
       GEOPOINT loc;
       if (terrain->GetTerrainCenter(&loc)) {
-        LogStartUp(TEXT("Start at terrain center\n"));
+        LogStartUp(TEXT("Start at terrain center"));
         device_blackboard.SetStartupLocation(loc, 0);
       }
     }
@@ -132,10 +131,10 @@ SetHome(const Waypoints &way_points, const RasterTerrain *terrain,
   //
   // VENTA3> this is probably useless, since HomeWayPoint &c were currently
   //         just loaded from registry.
-  SetToRegistry(szRegistryHomeWaypoint,settings.HomeWaypoint);
-  SetToRegistry(szRegistryAlternate1,settings.Alternate1);
-  SetToRegistry(szRegistryAlternate2,settings.Alternate2);
-  SetToRegistry(szRegistryTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
+  Profile::Set(szProfileHomeWaypoint,settings.HomeWaypoint);
+  Profile::Set(szProfileAlternate1,settings.Alternate1);
+  Profile::Set(szProfileAlternate2,settings.Alternate2);
+  Profile::Set(szProfileTeamcodeRefWaypoint,settings.TeamCodeRefWaypoint);
 }
 
 
@@ -143,7 +142,7 @@ bool
 WayPointParser::ReadWaypoints(Waypoints &way_points,
                               const RasterTerrain *terrain)
 {
-  LogStartUp(TEXT("ReadWaypoints\n"));
+  LogStartUp(TEXT("ReadWaypoints"));
 
   bool found = false;
   TCHAR szFile[MAX_PATH];
@@ -165,9 +164,9 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
   // ### FIRST FILE ###
 
   // Get first waypoint filename
-  GetRegistryString(szRegistryWayPointFile, szFile, MAX_PATH);
+  Profile::Get(szProfileWayPointFile, szFile, MAX_PATH);
   // and clear registry setting (if loading goes totally wrong)
-  SetRegistryString(szRegistryWayPointFile, TEXT("\0"));
+  Profile::Set(szProfileWayPointFile, TEXT("\0"));
 
   wp_file0 = WayPointFile::create(szFile, 0);
 
@@ -176,24 +175,24 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
     // parse the file
     if (wp_file0->Parse(way_points, terrain)) {
       // reset the registry to the actual file name
-      SetRegistryString(szRegistryWayPointFile, szFile);
+      Profile::Set(szProfileWayPointFile, szFile);
 
       found = true;
       // Set waypoints writable flag
       way_points.set_file0_writable(wp_file0->IsWritable());
     } else {
-      LogStartUp(TEXT("Parse error in waypoint file 1\n"));
+      LogStartUp(TEXT("Parse error in waypoint file 1"));
     }
   } else {
-    LogStartUp(TEXT("No waypoint file 1\n"));
+    LogStartUp(TEXT("No waypoint file 1"));
   }
 
   // ### SECOND FILE ###
 
   // Get second waypoint filename
-  GetRegistryString(szRegistryAdditionalWayPointFile, szFile, MAX_PATH);
+  Profile::Get(szProfileAdditionalWayPointFile, szFile, MAX_PATH);
   // and clear registry setting (if loading goes totally wrong)
-  SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));
+  Profile::Set(szProfileAdditionalWayPointFile, TEXT("\0"));
 
   wp_file1 = WayPointFile::create(szFile, 1);
   // If waypoint file exists
@@ -201,13 +200,13 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
     // parse the file
     if (wp_file1->Parse(way_points, terrain)) {
       // reset the registry to the actual file name
-      SetRegistryString(szRegistryAdditionalWayPointFile, szFile);
+      Profile::Set(szProfileAdditionalWayPointFile, szFile);
       found = true;
     } else {
-      LogStartUp(TEXT("Parse error in waypoint file 2\n"));
+      LogStartUp(TEXT("Parse error in waypoint file 2"));
     }
   } else {
-    LogStartUp(TEXT("No waypoint file 2\n"));
+    LogStartUp(TEXT("No waypoint file 2"));
   }
 
   // ### MAP/THIRD FILE ###
@@ -215,7 +214,7 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
   // If no waypoint file found yet
   if (!found) {
     // Get the map filename
-    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    Profile::Get(szProfileMapFile, szFile, MAX_PATH);
     _tcscat(szFile, TEXT("/"));
     _tcscat(szFile, TEXT("waypoints.xcw"));
 
@@ -227,10 +226,10 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
       if (wp_file2->Parse(way_points, terrain)) {
         found = true;
       } else {
-        LogStartUp(TEXT("Parse error in map waypoint file\n"));
+        LogStartUp(TEXT("Parse error in map waypoint file"));
       }
     } else {
-      LogStartUp(TEXT("No waypoint file in the map file\n"));
+      LogStartUp(TEXT("No waypoint file in the map file"));
     }
   }
 
@@ -245,23 +244,23 @@ WayPointParser::ReadWaypoints(Waypoints &way_points,
 void
 WayPointParser::SaveWaypoints(Waypoints &way_points)
 {
-  LogStartUp(TEXT("SaveWaypoints\n"));
+  LogStartUp(TEXT("SaveWaypoints"));
 
   // ### FIRST FILE ###
   if (wp_file0) {
     if (!wp_file0->Save(way_points)) {
-      LogStartUp(TEXT("Save error in waypoint file 1\n"));
+      LogStartUp(TEXT("Save error in waypoint file 1"));
     } else {
-      LogStartUp(TEXT("Waypoint file 1 can not be written\n"));
+      LogStartUp(TEXT("Waypoint file 1 can not be written"));
     }
   }
 
   // ### SECOND FILE ###
   if (wp_file1) {
     if (!wp_file1->Save(way_points)) {
-      LogStartUp(TEXT("Save error in waypoint file 2\n"));
+      LogStartUp(TEXT("Save error in waypoint file 2"));
     } else {
-      LogStartUp(TEXT("Waypoint file 2 can not be written\n"));
+      LogStartUp(TEXT("Waypoint file 2 can not be written"));
     }
   }
 }

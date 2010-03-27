@@ -36,18 +36,13 @@ Copyright_License {
 }
 */
 
-#include "Screen/PaintCanvas.hpp"
-#include "Screen/Window.hpp"
+#include "Screen/WindowCanvas.hpp"
+#include "Screen/PaintWindow.hpp"
 
-PaintCanvas::PaintCanvas(Window &_window)
-  :window(_window)
-{
-  HDC hDC = window.BeginPaint(&ps);
-  set(hDC, window.get_width(), window.get_height());
-}
+#ifndef ENABLE_SDL
 
-PaintCanvas::~PaintCanvas()
-{
-  DeleteDC(dc);
-  window.EndPaint(&ps);
-}
+WindowCanvas::WindowCanvas(PaintWindow &window)
+  :Canvas(::GetDC(window), window.get_width(), window.get_height()),
+   wnd(window) {}
+
+#endif /* !ENABLE_SDL */

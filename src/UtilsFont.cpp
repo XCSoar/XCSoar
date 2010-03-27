@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "UtilsFont.hpp"
 #include "UtilsText.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 
 #include <assert.h>
 #include <stdlib.h> /* for strtol() */
@@ -119,7 +119,7 @@ void propGetFontSettings(const TCHAR *Name, LOGFONT* lplf) {
   assert(Name[0] != '\0');
   assert(lplf != NULL);
 
-  if (GetRegistryString(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
+  if (Profile::Get(Name, Buffer, sizeof(Buffer) / sizeof(TCHAR)))
     propGetFontSettingsFromString(Buffer, lplf);
 }
 

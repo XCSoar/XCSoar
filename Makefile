@@ -107,6 +107,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgFlarmTraffic.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgLoggerReplay.cpp \
+	$(SRC)/Dialogs/dlgSimulatorPrompt.cpp \
 	$(SRC)/Dialogs/dlgStartup.cpp \
 	$(SRC)/Dialogs/dlgStatus.cpp \
 	$(SRC)/Dialogs/dlgSwitches.cpp \
@@ -129,8 +130,6 @@ DIALOG_SOURCES = \
 
 
 XCSOAR_SOURCES := \
-	$(SRC)/Globals.cpp \
-	\
 	$(SRC)/AirspaceClient.cpp \
 	$(SRC)/AirspaceClientUI.cpp \
 	$(SRC)/AirspaceClientCalc.cpp \
@@ -264,7 +263,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/UtilsFLARM.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsFont.cpp \
-	$(SRC)/UtilsProfile.cpp \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsText.cpp \
@@ -277,6 +275,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Compatibility/string.c 	\
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \

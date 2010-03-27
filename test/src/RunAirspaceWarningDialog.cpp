@@ -44,7 +44,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "wcecompat/ts_string.h"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "RasterTerrain.h"
 #include "AirspaceClientUI.hpp"
 #include "AirspaceParser.hpp"
@@ -99,7 +99,7 @@ static void
 LoadFiles()
 {
   TCHAR tpath[MAX_PATH];
-  GetRegistryString(szRegistryAirspaceFile, tpath, MAX_PATH);
+  Profile::Get(szProfileAirspaceFile, tpath, MAX_PATH);
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 

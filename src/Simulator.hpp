@@ -39,7 +39,7 @@ Copyright_License {
 #ifndef XCSOAR_SIMULATOR_H
 #define XCSOAR_SIMULATOR_H
 
-#if !defined(GNAV) && !defined(PNA)
+#if !defined(GNAV)
 #define SIMULATOR_AVAILABLE
 #endif
 
@@ -49,6 +49,7 @@ Copyright_License {
  * Do not access this variable directly, use is_simulator() instead.
  */
 extern bool global_simulator_flag;
+extern bool sim_set_in_cmd_line_flag;
 
 #endif
 

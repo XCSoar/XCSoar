@@ -36,15 +36,36 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UTILS_PROFILE_HPP
-#define XCSOAR_UTILS_PROFILE_HPP
+#ifndef XCSOAR_SCREEN_WINDOW_CANVAS_HXX
+#define XCSOAR_SCREEN_WINDOW_CANVAS_HXX
 
-#ifdef PNA
-void CleanRegistry(); // VENTA2-ADDON cleanregistrykeyA
-#endif
+#include "Screen/Window.hpp"
+#include "Screen/Canvas.hpp"
 
-void WriteProfile(const TCHAR *szFile);
-void ReadProfile(const TCHAR *szFile);
-int propGetScaleList(fixed *List, size_t Size);
+class PaintWindow;
+
+/**
+ * A #Canvas implementation which allows you to draw directly into a
+ * #PaintWindow, outside of the PaintWindow::on_paint().
+ */
+class WindowCanvas : public Canvas {
+#ifdef ENABLE_SDL
+public:
+  explicit WindowCanvas(Window &window)
+    :Canvas(window.canvas.surface) {}
+
+#else /* !ENABLE_SDL */
+
+protected:
+  HWND wnd;
+
+public:
+  explicit WindowCanvas(PaintWindow &window);
+
+  ~WindowCanvas() {
+    ::ReleaseDC(wnd, dc);
+  }
+#endif /* !ENABLE_SDL */
+};
 
 #endif

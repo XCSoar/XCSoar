@@ -41,7 +41,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "SettingsTask.hpp"
 #include "Language.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Interface.hpp"
@@ -68,15 +68,15 @@ OpenAirfieldDetails()
 
   zAirfieldDetails = NULL;
 
-  GetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
+  Profile::Get(szProfileAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
 
   if (!string_is_empty(szAirfieldDetailsFile)) {
     ExpandLocalPath(szAirfieldDetailsFile);
     unicode2ascii(szAirfieldDetailsFile, zfilename, MAX_PATH);
-    SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
+    Profile::Set(szProfileAirfieldFile, TEXT("\0"));
   } else {
     static TCHAR szFile[MAX_PATH];
-    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    Profile::Get(szProfileMapFile, szFile, MAX_PATH);
     if (!string_is_empty(szFile)) {
       ExpandLocalPath(szFile);
       _tcscat(szFile,TEXT("/airfields.txt"));
@@ -101,7 +101,7 @@ CloseAirfieldDetails()
   }
   // file was OK, so save the registry
   ContractLocalPath(szAirfieldDetailsFile);
-  SetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile);
+  Profile::Set(szProfileAirfieldFile, szAirfieldDetailsFile);
 
   zzip_fclose(zAirfieldDetails);
   zAirfieldDetails = NULL;
@@ -268,7 +268,7 @@ ParseAirfieldDetails()
 void
 ReadAirfieldFile()
 {
-  LogStartUp(TEXT("ReadAirfieldFile\n"));
+  LogStartUp(TEXT("ReadAirfieldFile"));
   XCSoarInterface::CreateProgressDialog(
       gettext(TEXT("Loading Airfield Details File...")));
 

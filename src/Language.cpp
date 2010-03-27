@@ -42,7 +42,7 @@ Copyright_License {
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "Sizes.h"
 
 /**
@@ -161,18 +161,18 @@ gettext(const TCHAR* text)
 void
 ReadLanguageFile()
 {
-  LogStartUp(TEXT("Loading language file\n"));
+  LogStartUp(TEXT("Loading language file"));
 
   TCHAR szFile1[MAX_PATH];
   FILE *fp = NULL;
 
   // Read the language filename from the registry
-  GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
+  Profile::Get(szProfileLanguageFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
 
   // Reset filename in registry in case language
   // loading crashes the application
-  SetRegistryString(szRegistryLanguageFile, TEXT("\0"));
+  Profile::Set(szProfileLanguageFile, TEXT("\0"));
 
   // If the language file is not set use the default one
   if (string_is_empty(szFile1))
@@ -210,7 +210,7 @@ ReadLanguageFile()
 
   // file was OK, so save filename to registry again
   ContractLocalPath(szFile1);
-  SetRegistryString(szRegistryLanguageFile, szFile1);
+  Profile::Set(szProfileLanguageFile, szFile1);
 
   fclose(fp);
 }

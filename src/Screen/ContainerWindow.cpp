@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/WindowCanvas.hpp"
 
 #ifdef ENABLE_SDL
 
@@ -180,6 +181,17 @@ ContainerWindow::get_focused_window()
   return NULL;
 }
 
+void
+ContainerWindow::expose_child(const Window &child)
+{
+  const WindowCanvas child_canvas(const_cast<Window &>(child));
+  canvas.copy(child.get_left(), child.get_top(),
+              child_canvas.get_width(),
+              child_canvas.get_height(),
+              child_canvas, 0, 0);
+  expose(child.get_position());
+}
+
 #else /* !ENABLE_SDL */
 
 LRESULT
@@ -188,16 +200,34 @@ ContainerWindow::on_message(HWND hWnd, UINT message,
 {
   switch (message) {
   case WM_CTLCOLORSTATIC:
-    Window *window = Window::get((HWND)lParam);
-    if (window == NULL)
-      break;
+    {
+      Window *window = Window::get((HWND)lParam);
+      if (window == NULL)
+        break;
 
-    Canvas canvas((HDC)wParam, 1, 1);
-    Brush *brush = on_color(*window, canvas);
-    if (brush == NULL)
-      break;
+      Canvas canvas((HDC)wParam, 1, 1);
+      Brush *brush = on_color(*window, canvas);
+      if (brush == NULL)
+        break;
 
-    return (LRESULT)brush->native();
+      return (LRESULT)brush->native();
+    }
+
+  case WM_DRAWITEM:
+    /* forward WM_DRAWITEM to the child window who sent this
+       message */
+    {
+      const DRAWITEMSTRUCT *di = (const DRAWITEMSTRUCT *)lParam;
+
+      Window *window = Window::get(di->hwndItem);
+      if (window == NULL)
+        break;
+
+      Canvas canvas(di->hDC, di->rcItem.right - di->rcItem.left,
+                    di->rcItem.bottom - di->rcItem.top);
+      window->on_paint(canvas);
+      return TRUE;
+    }
   };
 
   return PaintWindow::on_message(hWnd, message, wParam, lParam);

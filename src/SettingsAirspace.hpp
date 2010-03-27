@@ -41,9 +41,6 @@ Copyright_License {
 
 #include "Airspace/AirspaceClass.hpp"
 
-extern int    AirspacePriority[AIRSPACECLASSCOUNT];
-
-
 /** Airspace display modes */
 typedef enum
 {

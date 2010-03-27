@@ -75,6 +75,8 @@
 #define IDB_SCROLLBARFILL               327
 #define IDB_OBSTACLE                    328
 #define IDB_THERMALSOURCE2              329
+#define IDB_LAUNCHER1                   330
+#define IDB_LAUNCHER2                   331
 #define IDC_MESSAGE                     1094
 #define IDC_PROGRESS1                   1239
 #define IDC_VERSION                     1254

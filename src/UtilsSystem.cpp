@@ -41,7 +41,6 @@ Copyright_License {
 #include "Defines.h"
 #include "Interface.hpp"
 #include "Asset.hpp"
-#include "Registry.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Simulator.hpp"
@@ -269,24 +268,21 @@ SmartGlobalModelType()
 void
 SetModelType()
 {
-  TCHAR sTmp[100];
-  TCHAR szRegistryInfoBoxModel[] = _T("AppInfoBoxModel");
+  TCHAR szProfileInfoBoxModel[] = _T("AppInfoBoxModel");
   int Temp = 0;
 
-  GetFromRegistry(szRegistryInfoBoxModel, Temp);
+  Profile::Get(szProfileInfoBoxModel, Temp);
 
   if (SetModelName(Temp) != true) {
-    _stprintf(sTmp, _T("SetModelType ERROR! ModelName returned")
-              _T("invalid value <%d> from Registry!\n"), Temp);
-    LogStartUp(sTmp);
+    LogStartUp(_T("SetModelType ERROR! ModelName returned")
+               _T("invalid value <%d> from Registry!"), Temp);
     GlobalModelType = MODELTYPE_PNA_PNA;
   } else {
     GlobalModelType = Temp;
   }
 
-  _stprintf(sTmp, _T("SetModelType: Name=<%s> Type=%d\n"), GlobalModelName,
-      GlobalModelType);
-  LogStartUp(sTmp);
+  LogStartUp(_T("SetModelType: Name=<%s> Type=%d"), GlobalModelName,
+             GlobalModelType);
 }
 
 // Parse a MODELTYPE value and set the equivalent model name.
@@ -668,7 +664,17 @@ ParseCommandLine(LPCTSTR CommandLine)
   extrnProfileFile[0] = 0;
 
 #ifdef SIMULATOR_AVAILABLE
-  global_simulator_flag = _tcsstr(CommandLine, _T("-simulator")) != NULL;
+  bool bSimTemp=false;
+  bSimTemp = _tcsstr(CommandLine, _T("-simulator")) != NULL;
+  if (bSimTemp) {
+    global_simulator_flag=true;
+    sim_set_in_cmd_line_flag=true;
+  }
+  bSimTemp = _tcsstr(CommandLine, _T("-fly")) != NULL;
+  if (bSimTemp) {
+    global_simulator_flag=false;
+    sim_set_in_cmd_line_flag=true;
+  }
 #endif
 
 #ifdef WINDOWSPC
@@ -773,7 +779,7 @@ StartupLogFreeRamAndStorage()
   TCHAR buffer[MAX_PATH];
   LocalPath(buffer);
   int freestorage = FindFreeSpace(buffer);
-  LogStartUp(_T("Free ram %d; free storage %d\n"), freeram, freestorage);
+  LogStartUp(_T("Free ram %d; free storage %d"), freeram, freestorage);
 }
 
 WPARAM

@@ -112,6 +112,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsFile.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/Simulator.cpp \
@@ -154,6 +155,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
 	$(TEST_SRC_DIR)/FakeRegistry.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/RunDeviceDriver.cpp
 RUN_DEVICE_DRIVER_OBJS = $(call SRC_TO_OBJ,$(RUN_DEVICE_DRIVER_SOURCES))
 RUN_DEVICE_DRIVER_LDADD = \
@@ -194,7 +196,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/AirspaceParser.cpp \
 	$(SRC)/AirspaceVisibility.cpp \
 	$(SRC)/Appearance.cpp \
-	$(SRC)/Globals.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/RenderObservationZone.cpp \
@@ -258,6 +259,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSystem.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/WayPointParser.cpp \
 	$(SRC)/WayPointFile.cpp \
 	$(SRC)/WayPointFileWinPilot.cpp \
@@ -341,6 +343,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/TextReader.cpp \
+	$(SRC)/TextWriter.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \
@@ -350,6 +353,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UtilsFont.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/UtilsSystem.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \

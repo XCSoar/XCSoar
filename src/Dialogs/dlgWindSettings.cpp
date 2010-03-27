@@ -41,7 +41,6 @@ Copyright_License {
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
-#include "Registry.hpp"
 #include "Profile.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
@@ -80,7 +79,7 @@ static void UpdateWind(bool set) {
 static void OnSaveClicked(WindowControl * Sender){
   (void)Sender;
   UpdateWind(true);
-  Profile::SaveWindToRegistry();
+  Profile::SetWind();
   wf->SetModalResult(mrOK);
 }
 
@@ -169,7 +168,7 @@ void dlgWindSettingsShowModal(void){
 
   wf->ShowModal();
 
-  SetValueRegistryOnChange(wf, _T("prpAutoWind"), szRegistryAutoWind,
+  SetValueRegistryOnChange(wf, _T("prpAutoWind"), szProfileAutoWind,
                            XCSoarInterface::SetSettingsComputer().AutoWindMode);
   SetValueOnChange(wf, _T("prpTrailDrift"),
                    XCSoarInterface::SetSettingsMap().EnableTrailDrift);

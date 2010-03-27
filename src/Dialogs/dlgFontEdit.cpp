@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Integer.hpp"
@@ -134,7 +134,7 @@ static void RedrawSampleFont(void)
   NewFont.set(&NewLogFont);
 #endif /* !ENABLE_SDL */
 
-  if ( _tcscmp(OriginalFontRegKey, szRegistryFontMapWindowBoldFont) == 0 ) {
+  if ( _tcscmp(OriginalFontRegKey, szProfileFontMapWindowBoldFont) == 0 ) {
     wf->SetFont(NewFont);
     wf->SetTitleFont(NewFont);
   }
@@ -272,7 +272,7 @@ void SaveValues(const TCHAR * FontRegKey )
                         NewLogFont.lfQuality,
                         NewLogFont.lfPitchAndFamily,
                         NewLogFont.lfFaceName);
-  SetRegistryString(FontRegKey, sValue);
+  Profile::Set(FontRegKey, sValue);
 }
 
 void InitGUI(const TCHAR * FontDescription)

@@ -256,10 +256,10 @@ LoggerImpl::LinkGRecordDLL()
   if ((GRecordDLLHandle == NULL) && bFirstTime) {
     bFirstTime = false;
 
-    LogStartUp(TEXT("Searching for GRecordDLL\n"));
+    LogStartUp(TEXT("Searching for GRecordDLL"));
     if (is_altair()) {
       if (FileExists(TEXT("\\NOR Flash\\GRecordDLL.dat"))) {
-        LogStartUp(TEXT("Updating GRecordDLL.DLL\n"));
+        LogStartUp(TEXT("Updating GRecordDLL.DLL"));
         DeleteFile(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
         MoveFile(TEXT("\\NOR Flash\\GRecordDLL.dat"),
             TEXT("\\NOR Flash\\GRecordDLL.DLL"));
@@ -348,16 +348,16 @@ LoggerImpl::LinkGRecordDLL()
 
       // all need to link, or disable entire library.
       if (!bLoadOK) {
-        _stprintf(szLoadResults, TEXT("Found GRecordDLL %s but incomplete\n"),
+        _stprintf(szLoadResults, TEXT("Found GRecordDLL %s but incomplete"),
             szGRecordVersion);
         FreeLibrary(GRecordDLLHandle);
         GRecordDLLHandle = NULL;
       } else {
-        _stprintf(szLoadResults, TEXT("Loaded GRecordDLL %s \n"),
+        _stprintf(szLoadResults, TEXT("Loaded GRecordDLL %s"),
             szGRecordVersion);
       }
     } else {
-      _tcscpy(szLoadResults, TEXT("Can't load GRecordDLL\n"));
+      _tcscpy(szLoadResults, TEXT("Can't load GRecordDLL"));
     }
 
     LogStartUp(szLoadResults);

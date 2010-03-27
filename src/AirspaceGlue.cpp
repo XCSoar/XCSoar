@@ -39,7 +39,7 @@ Copyright_License {
 #include "AirspaceGlue.hpp"
 #include "AirspaceParser.hpp"
 #include "AirspaceClientUI.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "RasterTerrain.h"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
@@ -58,7 +58,7 @@ ReadAirspace(AirspaceClientUI &airspace,
   bool airspace_ok = false;
 
   // Read the airspace filenames from the registry
-  GetRegistryString(szRegistryAirspaceFile, tpath, MAX_PATH);
+  Profile::Get(szProfileAirspaceFile, tpath, MAX_PATH);
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 
@@ -66,7 +66,7 @@ ReadAirspace(AirspaceClientUI &airspace,
     unicode2ascii(tpath, path, sizeof(path));
 
     if (!airspace.read(path)) {
-      LogStartUp(TEXT("No airspace file 1\n"));
+      LogStartUp(TEXT("No airspace file 1"));
     } else {
       airspace_ok =  true;
     }
@@ -74,7 +74,7 @@ ReadAirspace(AirspaceClientUI &airspace,
     // TODO feature: airspace in xcm files should be a feature
     /*
     static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
-    GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
+    Profile::Get(szProfileMapFile, szMapFile, MAX_PATH);
     ExpandLocalPath(szMapFile);
     wcscat(szMapFile,TEXT("/"));
     wcscat(szMapFile,TEXT("airspace.txt"));
@@ -83,7 +83,7 @@ ReadAirspace(AirspaceClientUI &airspace,
     */
   }
 
-  GetRegistryString(szRegistryAdditionalAirspaceFile, tpath, MAX_PATH);
+  Profile::Get(szProfileAdditionalAirspaceFile, tpath, MAX_PATH);
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 
@@ -91,7 +91,7 @@ ReadAirspace(AirspaceClientUI &airspace,
     unicode2ascii(tpath, path, sizeof(path));
 
     if (!airspace.read(path)) {
-      LogStartUp(TEXT("No airspace file 2\n"));
+      LogStartUp(TEXT("No airspace file 2"));
     } else {
       airspace_ok = true;
     }

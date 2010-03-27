@@ -45,6 +45,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Message.hpp"
 #include "Dialogs.h"
+#include "Screen/WindowCanvas.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Defines.h"

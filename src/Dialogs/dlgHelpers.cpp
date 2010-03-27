@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "Dialogs/dlgHelpers.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Form.hpp"
 #include "DataField/Base.hpp"
@@ -47,7 +47,7 @@ bool SetValueRegistryOnChange(WndForm* wfm,
 			      const TCHAR* reg,
 			      bool &value) {
   if (SetValueOnChange(wfm, field, value)) {
-    SetToRegistry(reg, (DWORD)value);
+    Profile::Set(reg, value);
     return true;
   } else {
     return false;
@@ -60,7 +60,7 @@ bool SetValueRegistryOnChange(WndForm* wfm,
 			      const TCHAR* reg,
 			      unsigned int &value) {
   if (SetValueOnChange(wfm, field, value)) {
-    SetToRegistry(reg, (DWORD)value);
+    Profile::Set(reg, value);
     return true;
   } else {
     return false;
@@ -73,7 +73,7 @@ bool SetValueRegistryOnChange(WndForm* wfm,
 			      const TCHAR* reg,
 			      int &value) {
   if (SetValueOnChange(wfm, field, value)) {
-    SetToRegistry(reg, (DWORD)value);
+    Profile::Set(reg, value);
     return true;
   } else {
     return false;
@@ -85,7 +85,7 @@ bool SetValueRegistryOnChange(WndForm* wfm,
 			      const TCHAR* reg,
 			      DisplayTextType_t &value) {
   if (SetValueOnChange(wfm, field, value)) {
-    SetToRegistry(reg, (DWORD)value);
+    Profile::Set(reg, value);
     return true;
   } else {
     return false;
@@ -97,7 +97,7 @@ bool SetValueRegistryOnChange(WndForm* wfm,
 			      const TCHAR* reg,
 			      short &value) {
   if (SetValueOnChange(wfm, field, value)) {
-    SetToRegistry(reg, (DWORD)value);
+    Profile::Set(reg, value);
     return true;
   } else {
     return false;

@@ -39,54 +39,116 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_HPP
 #define XCSOAR_PROFILE_HPP
 
-#include "Interface.hpp"
+#include "ProfileKeys.hpp"
+#include "Engine/Math/fixed.hpp"
+#include <tchar.h>
+#include <windef.h>
 
-class Profile: public XCSoarInterface
+struct DeviceConfig {
+  enum port_type {
+    /**
+     * Serial port, i.e. COMx / RS-232.
+     */
+    SERIAL,
+
+    /**
+     * Attempt to auto-discover the GPS source.
+     *
+     * On Windows CE, this opens the GPS Intermediate Driver
+     * Multiplexer:
+     * http://msdn.microsoft.com/en-us/library/bb202042.aspx
+     */
+    AUTO,
+  };
+
+  port_type port_type;
+  unsigned port_index;
+  unsigned speed_index;
+  TCHAR driver_name[32];
+};
+
+namespace Profile
 {
-public:
   /**
-   * Reads the profile settings from the registry and adjusts the
-   * application settings
+   * Loads the profile files
    */
-  static void ReadRegistrySettings(void);
+  void Load();
   /**
-   * Loads the profile files into the registry
+   * Loads the given profile file
    */
-  static void Load(void);
+  void LoadFile(const TCHAR *szFile);
   /**
-   * Saves the registry into the profile files
+   * Saves the profile into the profile files
    */
-  static void Save(void);
+
+  void Save();
   /**
-   * Saves the sound settings to the registry
+   * Saves the profile into the given profile file
    */
-  static void SaveSoundSettings();
+  void SaveFile(const TCHAR *szFile);
+
   /**
-   * Saves the wind settings to the registry
-   */
-  static void SaveWindToRegistry();
-  /**
-   * Loads the wind settings from the registry
-   */
-  static void LoadWindFromRegistry();
-  /**
-   * Saves the airspace mode setting to the registry
-   * @param i Airspace class index
-   */
-  static void SetRegistryAirspaceMode(int i);
-  /**
-   * Sets the files to load when calling Load()
+   * Sets the profile files to load when calling Load()
    * @param override NULL or file to load when calling Load()
    */
-  static void SetFiles(const TCHAR* override);
+  void SetFiles(const TCHAR* override);
 
-private:
+  bool Get(const TCHAR *key, int &value);
+  bool Get(const TCHAR *key, short &value);
+  bool Get(const TCHAR *key, bool &value);
+  bool Get(const TCHAR *key, unsigned &value);
+  bool Get(const TCHAR *key, double &value);
+  bool Get(const TCHAR *key, TCHAR *value, DWORD dwSize);
+
+  bool Set(const TCHAR *key, int value);
+  bool Set(const TCHAR *key, short value);
+  bool Set(const TCHAR *key, bool value);
+  bool Set(const TCHAR *key, unsigned value);
+  bool Set(const TCHAR *key, double value);
+  bool Set(const TCHAR *key, long value);
+  bool Set(const TCHAR *key, const TCHAR *value);
+
+  void SetStringIfAbsent(const TCHAR *key, const TCHAR *value);
+
   /**
-   * Reads the airspace mode setting from the registry
+   * Adjusts the application settings according to the profile settings
+   */
+  void Use();
+
+  /**
+   * Saves the sound settings to the profile
+   */
+  void SetSoundSettings();
+
+  /**
+   * Loads the wind settings from the profile
+   */
+  void GetWind();
+  /**
+   * Saves the wind settings to the profile
+   */
+  void SetWind();
+
+  int GetScaleList(fixed *List, size_t Size);
+
+  /**
+   * Reads the airspace mode setting from the profile
    * @param i Airspace class index
    * @return The mode
    */
-  static int GetRegistryAirspaceMode(int i);
+  int GetAirspaceMode(int i);
+  /**
+   * Saves the airspace mode setting to the profile
+   * @param i Airspace class index
+   */
+  void SetAirspaceMode(int i);
+  void SetAirspaceColor(int i, int c);
+  void SetAirspaceBrush(int i, int c);
+
+  void SetInfoBoxes(int Index,int InfoType);
+
+  void GetDeviceConfig(unsigned n, DeviceConfig &config);
+  void SetDeviceConfig(unsigned n, const DeviceConfig &config);
 };
 
 #endif

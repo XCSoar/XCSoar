@@ -37,7 +37,7 @@ Copyright_License {
 */
 
 #include "StatusMessage.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
@@ -64,15 +64,15 @@ StatusMessageList::StatusMessageList()
 void
 StatusMessageList::LoadFile()
 {
-  LogStartUp(TEXT("Loading status file\n"));
+  LogStartUp(TEXT("Loading status file"));
 
   TCHAR szFile1[MAX_PATH];
 
   // Open file from registry
-  GetRegistryString(szRegistryStatusFile, szFile1, MAX_PATH);
+  Profile::Get(szProfileStatusFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
 
-  SetRegistryString(szRegistryStatusFile, TEXT("\0"));
+  Profile::Set(szProfileStatusFile, TEXT("\0"));
 
   if (string_is_empty(szFile1))
     return;
@@ -148,7 +148,7 @@ StatusMessageList::LoadFile()
 
   // file was ok, so save it to registry
   ContractLocalPath(szFile1);
-  SetRegistryString(szRegistryStatusFile, szFile1);
+  Profile::Set(szProfileStatusFile, szFile1);
 }
 
 void

@@ -257,7 +257,7 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 
   if (TargetMoveMode) {
-    LogStartUp(_T("moving\n"));
+    LogStartUp(_T("moving"));
     switch (key_code) {
     case VK_UP:
       MoveTarget(0);

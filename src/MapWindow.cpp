@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/WindowCanvas.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "TopologyStore.h"
 #include "RasterTerrain.h"

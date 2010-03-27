@@ -37,16 +37,12 @@ Copyright_License {
 */
 
 #include "LogFile.hpp"
-#include "Thread/Mutex.hpp"
 #include "LocalPath.hpp"
 #include "Asset.hpp"
-#include "UtilsText.hpp"
 #include "TextWriter.hpp"
 
 #include <stdio.h>
 #include <stdarg.h>
-
-static Mutex mutexLogFile;
 
 #if !defined(NDEBUG) && !defined(GNAV)
 /**
@@ -57,7 +53,14 @@ void
 LogDebug(const TCHAR *Str, ...)
 {
   static bool initialised = false;
-  TCHAR szFileName[] = _T("xcsoar-debug.log");
+  static TCHAR szFileName[MAX_PATH];
+
+  if (!initialised) {
+    if (is_altair())
+      LocalPath(szFileName, _T("persist/xcsoar-debug.log"));
+    else
+      LocalPath(szFileName, _T("xcsoar-debug.log"));
+  }
 
   TCHAR buf[MAX_PATH];
   va_list ap;
@@ -66,10 +69,6 @@ LogDebug(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
-  /* let TextWriter do the end-of-line marker */
-  TrimRight(buf);
-
-  ScopeLock lock(mutexLogFile);
   TextWriter writer(szFileName, initialised);
   if (!writer.error())
     writer.writeln(buf);
@@ -103,10 +102,6 @@ LogStartUp(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
-  /* let TextWriter do the end-of-line marker */
-  TrimRight(buf);
-
-  ScopeLock lock(mutexLogFile);
   TextWriter writer(szFileName, initialised);
   if (!writer.error())
     writer.writeln(buf);

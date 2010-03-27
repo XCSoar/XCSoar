@@ -41,7 +41,7 @@ Copyright_License {
 #include "UtilsFont.hpp"
 #include "InfoBoxLayout.hpp"
 #include "ButtonLabel.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "Asset.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/VirtualCanvas.hpp"
@@ -201,12 +201,8 @@ InitialiseFontsHardCoded(const struct Appearance &appearance, RECT rc,
   if (iWidth == 640 && iHeight == 480) ScreenSize=(ScreenSize_t)ss640x480; //   VGA
   if (iWidth == 800 && iHeight == 480) ScreenSize=(ScreenSize_t)ss800x480; //  WVGA
 
-  TCHAR tbuf[80];
-  if (ScreenSize==0) {
-    _stprintf(tbuf, _T("--- ERROR UNKNOWN RESOLUTION %dx%d !\r\n"),
-              iWidth, iHeight);
-	LogStartUp(tbuf);
-  }
+  if (ScreenSize == 0)
+	  LogStartUp(_T("--- ERROR UNKNOWN RESOLUTION %dx%d !"), iWidth, iHeight);
 
   if (is_pna()) {
     if (ScreenSize==(ScreenSize_t)ss480x272) { // WQVGA  e.g. MIO
@@ -614,42 +610,42 @@ InitialiseFonts(const struct Appearance &appearance, RECT rc)
     autoStatisticsLogFont = hardStatisticsLogFont;
 
   InitializeOneFont (&InfoWindowFont,
-                        szRegistryFontInfoWindowFont,
+                        szProfileFontInfoWindowFont,
                         autoInfoWindowLogFont,
                         NULL);
 
   InitializeOneFont (&TitleWindowFont,
-                        szRegistryFontTitleWindowFont,
+                        szProfileFontTitleWindowFont,
                         autoTitleWindowLogFont,
                         NULL);
 
   InitializeOneFont (&CDIWindowFont,
-                        szRegistryFontCDIWindowFont,
+                        szProfileFontCDIWindowFont,
                         autoCDIWindowLogFont,
                         NULL);
 
   InitializeOneFont (&MapLabelFont,
-                        szRegistryFontMapLabelFont,
+                        szProfileFontMapLabelFont,
                         autoMapLabelLogFont,
                         NULL);
 
   InitializeOneFont (&StatisticsFont,
-                        szRegistryFontStatisticsFont,
+                        szProfileFontStatisticsFont,
                         autoStatisticsLogFont,
                         NULL);
 
   InitializeOneFont (&MapWindowFont,
-                        szRegistryFontMapWindowFont,
+                        szProfileFontMapWindowFont,
                         autoMapWindowLogFont,
                         NULL);
 
   InitializeOneFont (&MapWindowBoldFont,
-                        szRegistryFontMapWindowBoldFont,
+                        szProfileFontMapWindowBoldFont,
                         autoMapWindowBoldLogFont,
                         NULL);
 
   InitializeOneFont (&TitleSmallWindowFont,
-                        szRegistryFontTitleSmallWindowFont,
+                        szProfileFontTitleSmallWindowFont,
                         autoTitleSmallWindowLogFont,
                         NULL);
 }

@@ -40,7 +40,7 @@ Copyright_License {
 #include "Polar/Polar.hpp"
 #include "UtilsText.hpp"
 #include "TextReader.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "Sizes.h"
 
@@ -118,7 +118,7 @@ ReadWinPilotPolar(Polar &polar)
   POLARV[2]= 212.72;
   POLARW[2]= -3.4;
 
-  GetRegistryString(szRegistryPolarFile, szFile, MAX_PATH);
+  Profile::Get(szProfilePolarFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
   TextReader reader(szFile);

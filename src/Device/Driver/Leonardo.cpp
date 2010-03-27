@@ -41,6 +41,7 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "NMEA/Info.hpp"
 #include "Protection.hpp"
+#include "Units.hpp"
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -66,6 +67,7 @@ ColumnIsEmpty(const TCHAR *line, unsigned column)
   return buffer[0] == _T('\0');
 }
 
+#ifdef FIXED_MATH
 static bool
 ParseNumber(const TCHAR *line, unsigned column, fixed &value_r)
 {
@@ -76,6 +78,7 @@ ParseNumber(const TCHAR *line, unsigned column, fixed &value_r)
   value_r = _tcstol(buffer, &endptr, 10);
   return endptr > buffer && *endptr == '\0';
 }
+#endif
 
 static bool
 ParseNumber(const TCHAR *line, unsigned column, double &value_r)
@@ -109,7 +112,7 @@ LeonardoParseC(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
   /* XXX is that TAS or IAS? */
   info.AirspeedAvailable = ParseNumber(line, 2, info.TrueAirspeed);
   if (info.AirspeedAvailable) {
-    info.TrueAirspeed /= 3.6;
+    info.TrueAirspeed = Units::ToSysUnit(info.TrueAirspeed, unKiloMeterPerHour);
     info.IndicatedAirspeed = info.TrueAirspeed; // XXX convert properly
   }
 
@@ -117,7 +120,7 @@ LeonardoParseC(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
     /* short "$C" sentence ends after airspeed */
     return true;
 
-  // 3 = netto vario [m/s]
+  // 3 = netto vario [dm/s]
   info.NettoVarioAvailable = ParseNumber(line, 3, info.NettoVario);
   if (info.NettoVarioAvailable)
     info.NettoVario /= 10;
@@ -129,6 +132,8 @@ LeonardoParseC(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
   // 11 = wind direction [degrees]
   info.ExternalWindAvailable = ParseNumber(line, 10, info.wind.norm)
     && ParseNumber(line, 11, info.wind.bearing);
+  if (info.ExternalWindAvailable)
+    info.wind.norm = Units::ToSysUnit(info.wind.norm, unKiloMeterPerHour);
 
   TriggerVarioUpdate();
 
@@ -163,7 +168,7 @@ LeonardoParseD(const TCHAR *line, NMEA_INFO &info, bool enable_baro)
   /* XXX is that TAS or IAS? */
   info.AirspeedAvailable = ParseNumber(line, 3, info.TrueAirspeed) / 3.6;
   if (info.AirspeedAvailable) {
-    info.TrueAirspeed /= 3.6;
+    info.TrueAirspeed = Units::ToSysUnit(info.TrueAirspeed, unKiloMeterPerHour);
     info.IndicatedAirspeed = info.TrueAirspeed; // XXX convert properly
   }
 

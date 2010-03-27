@@ -64,7 +64,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "LogFile.hpp"
 #include "Compatibility/vk.h"
 #include "ButtonLabel.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
@@ -169,7 +169,7 @@ Mutex InputEvents::mutexEventQueue;
 void
 InputEvents::readFile()
 {
-  LogStartUp(TEXT("Loading input events file\n"));
+  LogStartUp(TEXT("Loading input events file"));
 
   // clear the GCE and NMEA queues
   mutexEventQueue.Lock();
@@ -204,9 +204,9 @@ InputEvents::readFile()
   TCHAR szFile1[MAX_PATH];
 
   // Open file from registry
-  GetRegistryString(szRegistryInputFile, szFile1, MAX_PATH);
+  Profile::Get(szProfileInputFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
-  SetRegistryString(szRegistryInputFile, TEXT("\0"));
+  Profile::Set(szProfileInputFile, TEXT("\0"));
 
   if (string_is_empty(szFile1))
     return;
@@ -450,7 +450,7 @@ InputEvents::readFile()
 
   // file was ok, so save it to registry
   ContractLocalPath(szFile1);
-  SetRegistryString(szRegistryInputFile, szFile1);
+  Profile::Set(szProfileInputFile, szFile1);
 }
 
 #ifdef _INPUTDEBUG_

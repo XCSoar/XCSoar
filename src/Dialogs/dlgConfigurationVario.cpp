@@ -40,7 +40,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Screen/Layout.hpp"
 #include "Device/device.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
 #include "Simulator.hpp"
@@ -71,26 +71,26 @@ static const TCHAR *const captions[] = {
 };
 
 static bool changed = false;
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 static TabbedControl *tabbed;
 
-static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
-                                     bool setvalue=false,
-                                     long ext_setvalue=0) {
+static bool
+VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
+                         long ext_setvalue = 0)
+{
   TCHAR updatename[100];
   TCHAR fullname[100];
   TCHAR propname[100];
   TCHAR requesttext[100];
-  DWORD updated=0;
-  unsigned newval=0;
-  unsigned lvalue=0;
+  unsigned updated = 0;
+  unsigned newval = 0;
+  unsigned lvalue = 0;
 
   WndProperty* wp;
 
 #ifndef WINDOWSPC
-  if (first) {
+  if (first)
     XCSoarInterface::StepProgressDialog();
-  }
 #endif
 
   _stprintf(updatename, _T("Vega%sUpdated"), name);
@@ -98,10 +98,10 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
   _stprintf(propname, _T("prp%s"), name);
 
   if (first) {
-    SetToRegistry(updatename, 0);
+    Profile::Set(updatename, 0);
     // we are not ready, haven't received value from vario
     // (do request here)
-    _stprintf(requesttext,_T("PDVSC,R,%s"),name);
+    _stprintf(requesttext, _T("PDVSC,R,%s"), name);
     VarioWriteNMEA(requesttext);
 
     if (!is_simulator())
@@ -114,7 +114,7 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
       wp->GetDataField()->Set((int)ext_setvalue);
       wp->RefreshDisplay();
     }
-    _stprintf(requesttext,_T("PDVSC,S,%s,%d"),name, ext_setvalue);
+    _stprintf(requesttext, _T("PDVSC,S,%s,%d"), name, ext_setvalue);
     VarioWriteNMEA(requesttext);
 
     if (!is_simulator())
@@ -123,14 +123,13 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
     return true;
   }
 
-  if (!(GetFromRegistry(fullname, lvalue)==ERROR_SUCCESS)) {
+  if (!(Profile::Get(fullname, lvalue) == ERROR_SUCCESS)) {
     // vario hasn't set the value in the registry yet,
     // so no sensible defaults
     return false;
   } else {
-
     // hack, fix the -1 (plug and play settings)
-    if (_tcscmp(name, _T("HasTemperature")) == 0){
+    if (_tcscmp(name, _T("HasTemperature")) == 0) {
       if (lvalue >= 255)
         lvalue = 2;
     }
@@ -145,27 +144,25 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
     }
   }
 
-  if (GetFromRegistryD(updatename, updated)==ERROR_SUCCESS) {
-
-    if (updated==1) {
+  if (Profile::Get(updatename, updated) == ERROR_SUCCESS) {
+    if (updated == 1) {
       // value is updated externally, so set the property and can proceed
       // to editing values
-
-      SetToRegistry(updatename, 2);
+      Profile::Set(updatename, 2);
 
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
         wp->GetDataField()->Set(lvalue);
         wp->RefreshDisplay();
       }
-    } else if (updated==2) {
+    } else if (updated == 2) {
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
         newval = (wp->GetDataField()->GetAsInteger());
         if (newval != lvalue) {
           // value has changed
-          SetToRegistry(updatename, 2);
-          SetToRegistry(fullname, (DWORD)lvalue);
+          Profile::Set(updatename, 2);
+          Profile::Set(fullname, lvalue);
 
           changed = true;
 
@@ -173,12 +170,12 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
           // note that this code currently won't work for longs
 
           // hack, fix the -1 (plug and play settings)
-          if (_tcscmp(name, _T("HasTemperature")) == 0){
+          if (_tcscmp(name, _T("HasTemperature")) == 0) {
             if (newval == 2)
               newval = 255;
           }
 
-          _stprintf(requesttext,_T("PDVSC,S,%s,%d"),name, newval);
+          _stprintf(requesttext, _T("PDVSC,S,%s,%d"), name, newval);
           VarioWriteNMEA(requesttext);
 
           if (!is_simulator())
@@ -191,7 +188,6 @@ static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
   }
   return false;
 }
-
 
 typedef struct VEGA_SCHEME_t
 {
@@ -237,9 +233,9 @@ typedef struct VEGA_SCHEME_t
 } VEGA_SCHEME;
 
 // Value used for comparison in climb tone
-#define  X_NONE                       0
-#define  X_MACCREADY                   1
-#define  X_AVERAGE                    2
+#define  X_NONE 0
+#define  X_MACCREADY 1
+#define  X_AVERAGE 2
 
 // Condition for detecting lift in cruise mode
 #define  Y_NONE 0
@@ -328,11 +324,12 @@ VEGA_SCHEME VegaSchemes[4]= {
 
 };
 
-static void SetParametersScheme(int schemetype) {
-
+static void
+SetParametersScheme(int schemetype)
+{
   if(MessageBoxX(gettext(_T("Set new audio scheme?  Old values will be lost.")),
                  gettext(_T("Vega Audio")),
-                 MB_YESNO|MB_ICONQUESTION) != IDYES)
+                 MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
 
@@ -411,9 +408,9 @@ static void SetParametersScheme(int schemetype) {
               gettext(_T("Vega Audio")), MB_OK);
 }
 
-
-static void UpdateParametersScheme(bool first) {
-
+static void
+UpdateParametersScheme(bool first)
+{
   VegaConfigurationUpdated(_T("ToneClimbComparisonType"), first);
   VegaConfigurationUpdated(_T("ToneCruiseLiftDetectionType"), first);
 
@@ -452,10 +449,11 @@ static void UpdateParametersScheme(bool first) {
   VegaConfigurationUpdated(_T("ToneCirclingDescendingPitchScale"), first);
   VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScheme"), first);
   VegaConfigurationUpdated(_T("ToneCirclingDescendingPeriodScale"), first);
-
 }
 
-static void UpdateParameters(bool first) {
+static void
+UpdateParameters(bool first)
+{
   VegaConfigurationUpdated(_T("HasPressureTE"), first);
   VegaConfigurationUpdated(_T("HasPressurePitot"), first);
   VegaConfigurationUpdated(_T("HasPressureStatic"), first);
@@ -536,9 +534,7 @@ static void UpdateParameters(bool first) {
   VegaConfigurationUpdated(_T("LedBrightness"), first);
 
   VegaConfigurationUpdated(_T("BaudRateA"), first);
-
 }
-
 
 static void
 PageSwitched()
@@ -546,17 +542,19 @@ PageSwitched()
   wf->SetCaption(captions[tabbed->GetCurrentPage()]);
 
   UpdateParameters(false);
-
 }
 
-
-static void OnNextClicked(WindowControl * Sender){
+static void
+OnNextClicked(WindowControl * Sender)
+{
   (void)Sender;
   tabbed->NextPage();
   PageSwitched();
 }
 
-static void OnPrevClicked(WindowControl * Sender){
+static void
+OnPrevClicked(WindowControl * Sender)
+{
   (void)Sender;
   tabbed->PreviousPage();
   PageSwitched();
@@ -565,45 +563,56 @@ static void OnPrevClicked(WindowControl * Sender){
 static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
-  UpdateParameters(false);  // 20060801:sgi make shure changes are
-                            // sent to device
+  UpdateParameters(false);
+  // make sure changes are sent to device
   wf->SetModalResult(mrOK);
 }
 
-static void OnSaveClicked(WindowControl * Sender){
+static void
+OnSaveClicked(WindowControl * Sender)
+{
   (void)Sender;
-  UpdateParameters(false);  // 20060801:sgi make shure changes are
-                            // sent to device
+  UpdateParameters(false);
+  // make sure changes are sent to device
   VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
 
   if (!is_simulator())
     Sleep(500);
 }
 
-static void OnDemoClicked(WindowControl * Sender){
+static void
+OnDemoClicked(WindowControl * Sender)
+{
   (void)Sender;
   // retrieve changes from form
   UpdateParameters(false);
   dlgVegaDemoShowModal();
 }
 
-
-static void OnSchemeVegaClicked(WindowControl * Sender){
+static void
+OnSchemeVegaClicked(WindowControl * Sender)
+{
   (void)Sender;
   SetParametersScheme(0);
 }
 
-static void OnSchemeBorgeltClicked(WindowControl * Sender){
+static void
+OnSchemeBorgeltClicked(WindowControl * Sender)
+{
   (void)Sender;
   SetParametersScheme(1);
 }
 
-static void OnSchemeCambridgeClicked(WindowControl * Sender){
+static void
+OnSchemeCambridgeClicked(WindowControl * Sender)
+{
   (void)Sender;
   SetParametersScheme(2);
 }
 
-static void OnSchemeZanderClicked(WindowControl * Sender){
+static void
+OnSchemeZanderClicked(WindowControl * Sender)
+{
   (void)Sender;
   SetParametersScheme(3);
 }
@@ -612,7 +621,7 @@ static bool
 FormKeyDown(WindowControl *Sender, unsigned key_code)
 {
   switch (key_code) {
-    // JMW NO! This disables editing! //   case VK_LEFT:
+  // JMW NO! This disables editing! //   case VK_LEFT:
   case '6':
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
     tabbed->PreviousPage();
@@ -633,8 +642,7 @@ FormKeyDown(WindowControl *Sender, unsigned key_code)
   }
 }
 
-
-static CallBackTableEntry_t CallBackTable[]={
+static CallBackTableEntry_t CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(OnDemoClicked),
@@ -646,12 +654,13 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-
-static void FillAudioEnums(const TCHAR* name) {
+static void
+FillAudioEnums(const TCHAR* name)
+{
   WndProperty *wp;
   TCHAR fullname[100];
 
-  _stprintf(fullname,_T("prpTone%sBeepType"),name);
+  _stprintf(fullname, _T("prpTone%sBeepType"), name);
   wp = (WndProperty*)wf->FindByName(fullname);
   if (wp) {
     DataFieldEnum* dfe;
@@ -665,7 +674,7 @@ static void FillAudioEnums(const TCHAR* name) {
     wp->RefreshDisplay();
   }
 
-  _stprintf(fullname,_T("prpTone%sPitchScheme"),name);
+  _stprintf(fullname, _T("prpTone%sPitchScheme"), name);
   wp = (WndProperty*)wf->FindByName(fullname);
   if (wp) {
     DataFieldEnum* dfe;
@@ -682,7 +691,7 @@ static void FillAudioEnums(const TCHAR* name) {
     wp->RefreshDisplay();
   }
 
-  _stprintf(fullname,_T("prpTone%sPeriodScheme"),name);
+  _stprintf(fullname, _T("prpTone%sPeriodScheme"), name);
   wp = (WndProperty*)wf->FindByName(fullname);
   if (wp) {
     DataFieldEnum* dfe;
@@ -700,7 +709,7 @@ static void FillAudioEnums(const TCHAR* name) {
     wp->RefreshDisplay();
   }
 
-  _stprintf(fullname,_T("prpTone%sPitchScale"),name);
+  _stprintf(fullname, _T("prpTone%sPitchScale"), name);
   wp = (WndProperty*)wf->FindByName(fullname);
   if (wp) {
     DataFieldEnum* dfe;
@@ -714,7 +723,7 @@ static void FillAudioEnums(const TCHAR* name) {
     wp->RefreshDisplay();
   }
 
-  _stprintf(fullname,_T("prpTone%sPeriodScale"),name);
+  _stprintf(fullname, _T("prpTone%sPeriodScale"), name);
   wp = (WndProperty*)wf->FindByName(fullname);
   if (wp) {
     DataFieldEnum* dfe;
@@ -727,9 +736,7 @@ static void FillAudioEnums(const TCHAR* name) {
     dfe->addEnumText(_T("-High end"));
     wp->RefreshDisplay();
   }
-
 }
-
 
 static void FillAllAudioEnums(void) {
   FillAudioEnums(_T("CruiseFaster"));
@@ -740,7 +747,9 @@ static void FillAllAudioEnums(void) {
   FillAudioEnums(_T("CirclingDescending"));
 }
 
-static void FillEnums(void) {
+static void
+FillEnums(void)
+{
   WndProperty *wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpBaudRateA"));
@@ -916,40 +925,32 @@ static void FillEnums(void) {
   }
 
   FillAllAudioEnums();
-
 }
 
-
-bool dlgConfigurationVarioShowModal(void){
-
+bool
+dlgConfigurationVarioShowModal(void)
+{
   changed = false;
 
   if (!is_simulator() && devVarioFindVega() == NULL) {
-    MessageBoxX (
-                 gettext(_T("No communication with Vega.")),
+    MessageBoxX (gettext(_T("No communication with Vega.")),
                  gettext(_T("Vega error")), MB_OK);
     return false;
   }
 
-  if (!Layout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgVario_L.xml"),
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_VARIO_L"));
-  } else {
-    wf = dlgLoadFromXML(CallBackTable,
-                        _T("dlgVario.xml"),
-                        XCSoarInterface::main_window,
-                        _T("IDR_XML_VARIO"));
-  }
+  if (!Layout::landscape)
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgVario_L.xml"),
+                        XCSoarInterface::main_window, _T("IDR_XML_VARIO_L"));
+  else
+    wf = dlgLoadFromXML(CallBackTable, _T("dlgVario.xml"),
+                        XCSoarInterface::main_window, _T("IDR_XML_VARIO"));
 
-  if (!wf) return false;
+  if (!wf)
+    return false;
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))
-    ->SetOnClickNotify(OnCloseClicked);
+  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(tabbed != NULL);
@@ -963,9 +964,7 @@ bool dlgConfigurationVarioShowModal(void){
   XCSoarInterface::CreateProgressDialog(gettext(_T("Reading vario settings...")));
   // Need step size finer than default 10
   XCSoarInterface::SetProgressStepSize(2);
-
   UpdateParameters(true);
-
   XCSoarInterface::CloseProgressDialog();
 
   wf->ShowModal();
@@ -973,7 +972,6 @@ bool dlgConfigurationVarioShowModal(void){
   UpdateParameters(false);
 
   delete wf;
-
   wf = NULL;
 
   return changed;
@@ -1089,4 +1087,3 @@ Advanced alerts
 "BatEmptyDelay" 0 100
 "BatRepeatTime" 0 100
 */
-

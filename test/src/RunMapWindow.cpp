@@ -49,7 +49,7 @@ Copyright_License {
 #include "RasterWeather.h"
 #include "RasterTerrain.h"
 #include "UtilsSystem.hpp"
-#include "UtilsProfile.hpp"
+#include "ProfileKeys.hpp"
 #include "LocalTime.hpp"
 #include "LocalPath.hpp"
 #include "WayPointParser.h"
@@ -66,7 +66,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "AirspaceClientUI.hpp"
 #include "AirspaceParser.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
@@ -246,7 +246,7 @@ LoadFiles()
   WayPointParser::ReadWaypoints(way_points, &terrain);
 
   TCHAR tpath[MAX_PATH];
-  GetRegistryString(szRegistryAirspaceFile, tpath, MAX_PATH);
+  Profile::Get(szProfileAirspaceFile, tpath, MAX_PATH);
   if (tpath[0] != 0) {
     ExpandLocalPath(tpath);
 
@@ -254,7 +254,7 @@ LoadFiles()
     unicode2ascii(tpath, path, sizeof(path));
 
     if (!ReadAirspace(airspace_database, path))
-      LogStartUp(TEXT("No airspace file 1\n"));
+      LogStartUp(TEXT("No airspace file 1"));
 
     airspace_database.optimise();
   }

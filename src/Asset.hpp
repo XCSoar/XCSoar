@@ -49,16 +49,16 @@ void ReadAssetNumber(void);
 // model info
 
 #if defined(PNA) || defined(FIVV)  // VENTA2- ADD GlobalEllipse
-extern int	GlobalModelType;
-extern TCHAR	GlobalModelName[];
-extern float	GlobalEllipse;
+extern int GlobalModelType;
+extern TCHAR GlobalModelName[];
+extern float GlobalEllipse;
 extern const TCHAR *gmfpathname();
 extern const TCHAR *gmfbasename();
-extern int		GetGlobalModelName();
-extern void		SmartGlobalModelType();
-extern short		InstallFonts();
-extern bool		CheckDataDir();
-extern bool		CheckRegistryProfile();
+extern int GetGlobalModelName();
+extern void SmartGlobalModelType();
+extern short InstallFonts();
+extern bool CheckDataDir();
+extern bool CheckRegistryProfile();
 
 static inline void
 SetGlobalEllipse(float value)
@@ -79,7 +79,7 @@ SetGlobalEllipse(float value)
 #endif
 
 /*
-    Here we declare Model Types for embedded custom versions. Initially for PNAs only.
+  Here we declare Model Types for embedded custom versions. Initially for PNAs only.
 	We don't need a "type" and a "model" such as "pna" and "hp310". Instead we use a
 	single int value with subsets made of ranges.
 	We use modeltypes currently for extraclipping, hardware key transcoding, and we should
@@ -93,45 +93,44 @@ SetGlobalEllipse(float value)
     types over 100000	are reserved and should not be used
  */
 
-#if defined(PNA) || defined(FIVV) // VENTA
-#define MODELTYPE_UNKNOWN		0
-#define MODELTYPE_GENERIC		0
+#if defined(PNA) || defined(FIVV)
+#define MODELTYPE_UNKNOWN 0
+#define MODELTYPE_GENERIC 0
 
-#define MODELTYPE_EMBEDDED		 100	// generic embedded
-#define MODELTYPE_ALTAIR		 101
+#define MODELTYPE_EMBEDDED 100	// generic embedded
+#define MODELTYPE_ALTAIR 101
 
-#define MODELTYPE_PDA_PDA		1000	// generic PDA
-#define MODELTYPE_PDA			1000
+#define MODELTYPE_PDA_PDA 1000	// generic PDA
+#define MODELTYPE_PDA 1000
 
-#define MODELTYPE_PNA_PNA		10000	// generic PNA
-#define MODELTYPE_PNA			10000
-#define MODELTYPE_PNA_HP		10200	// Generic HP
-#define MODELTYPE_PNA_HP31X		10201	// HP310, 312, 314, 316
+#define MODELTYPE_PNA_PNA 10000	// generic PNA
+#define MODELTYPE_PNA 10000
+#define MODELTYPE_PNA_HP 10200	// Generic HP
+#define MODELTYPE_PNA_HP31X 10201	// HP310, 312, 314, 316
 
-#define MODELTYPE_PNA_DAYTON	10400	// Generic VDO Dayton
-#define MODELTYPE_PNA_PN6000	10401
+#define MODELTYPE_PNA_DAYTON 10400	// Generic VDO Dayton
+#define MODELTYPE_PNA_PN6000 10401
 
-#define MODELTYPE_PNA_MIO		10600	// Generic definitions
-#define MODELTYPE_PNA_MIO520	10601
-#define	MODELTYPE_PNA_MIOP350	10602
+#define MODELTYPE_PNA_MIO 10600	// Generic definitions
+#define MODELTYPE_PNA_MIO520 10601
+#define	MODELTYPE_PNA_MIOP350 10602
 
-#define MODELTYPE_PNA_NAVMAN	10800
-#define MODELTYPE_PNA_GARMIN	11000
-#define MODELTYPE_PNA_CLARION	11200
-#define MODELTYPE_PNA_MEDION	11400
-#define MODELTYPE_PNA_MEDION_P5	11401	// clipping problems for P5430 and P5 family
-#define MODELTYPE_PNA_SAMSUNG	11600
-#define MODELTYPE_PNA_NAVIGO	11800
-#define MODELTYPE_PNA_NOKIA	12000
-#define MODELTYPE_PNA_NOKIA_500	12001 // 480x272
-
-
+#define MODELTYPE_PNA_NAVMAN 10800
+#define MODELTYPE_PNA_GARMIN 11000
+#define MODELTYPE_PNA_CLARION 11200
+#define MODELTYPE_PNA_MEDION 11400
+#define MODELTYPE_PNA_MEDION_P5 11401	// clipping problems for P5430 and P5 family
+#define MODELTYPE_PNA_SAMSUNG 11600
+#define MODELTYPE_PNA_NAVIGO 11800
+#define MODELTYPE_PNA_NOKIA 12000
+#define MODELTYPE_PNA_NOKIA_500 12001 // 480x272
 #endif
 
 /**
  * Returns whether this is a debug build.
  */
-static inline bool is_debug()
+static inline bool
+is_debug()
 {
 #ifdef NDEBUG
   return false;
@@ -144,7 +143,8 @@ static inline bool is_debug()
  * Returns whether the application is running on an embedded platform.
  * @return True if host hardware is an embedded platform, False otherwise
  */
-static inline bool is_embedded()
+static inline bool
+is_embedded()
 {
 #if defined(WINDOWSPC) || !defined(WIN32)
   return false;
@@ -157,7 +157,8 @@ static inline bool is_embedded()
  * Returns whether the application is running on a PNA
  * @return True if host hardware is a PNA, False otherwise
  */
-static inline bool is_pna()
+static inline bool
+is_pna()
 {
 #if defined(PNA)
   return true;
@@ -170,7 +171,8 @@ static inline bool is_pna()
  * Returns whether the application is running on a HP31x
  * @return True if host hardware is a HP31x, False otherwise
  */
-static inline bool model_is_hp31x()
+static inline bool
+model_is_hp31x()
 {
 #if defined(PNA) || defined(FIVV)
   return GlobalModelType == MODELTYPE_PNA_HP31X;
@@ -183,7 +185,8 @@ static inline bool model_is_hp31x()
  * Returns whether the application is running on a Medion P5
  * @return True if host hardware is a Medion P5, False otherwise
  */
-static inline bool model_is_medion_p5()
+static inline bool
+model_is_medion_p5()
 {
 #if defined(PNA) || defined(FIVV)
   return GlobalModelType == MODELTYPE_PNA_MEDION_P5;
@@ -196,7 +199,8 @@ static inline bool model_is_medion_p5()
  * Returns whether the application is running on an Altair
  * @return True if host hardware is an Altair, False otherwise
  */
-static inline bool is_altair()
+static inline bool
+is_altair()
 {
 #if defined(GNAV)
   return true;
@@ -210,7 +214,8 @@ static inline bool is_altair()
  * (enables old experimental code)
  * @return True if compiled in "FIVV" mode, False otherwise
  */
-static inline bool is_fivv()
+static inline bool
+is_fivv()
 {
 #if defined(FIVV)
   return true;
@@ -223,7 +228,8 @@ static inline bool is_fivv()
  * Flag to activate extra clipping for some PNAs.
  * @return True if extra clipping needs to be done, False otherwise
  */
-static inline bool need_clipping()
+static inline bool
+need_clipping()
 {
   return model_is_hp31x() || model_is_medion_p5();
 }
@@ -233,7 +239,8 @@ static inline bool need_clipping()
  * @return True if a touch screen or mouse is assumed for the hardware
  * that XCSoar is running on, False if the hardware has only buttons
  */
-static inline bool has_pointer()
+static inline bool
+has_pointer()
 {
   return !is_altair();
 }
@@ -243,7 +250,8 @@ static inline bool has_pointer()
  *
  * XXX not yet implemented!
  */
-static inline bool has_colors()
+static inline bool
+has_colors()
 {
   return true;
 }

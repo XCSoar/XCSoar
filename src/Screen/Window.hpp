@@ -47,6 +47,7 @@ Copyright_License {
 #include "Screen/Timer.hpp"
 #endif /* ENABLE_SDL */
 
+class Canvas;
 class ContainerWindow;
 
 /**
@@ -64,11 +65,12 @@ public:
 #else /* !ENABLE_SDL */
 protected:
   DWORD style, ex_style;
+  bool custom_painting;
 
 public:
   WindowStyle()
     :style(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
-     ex_style(0) {}
+     ex_style(0), custom_painting(false) {}
 #endif /* !ENABLE_SDL */
 
   void hide() {
@@ -117,6 +119,12 @@ public:
 #endif
   }
 
+  void enable_custom_painting() {
+#ifndef ENABLE_SDL
+    custom_painting = true;
+#endif
+  }
+
   friend class Window;
 };
 
@@ -126,6 +134,8 @@ public:
  * into a Window, derive your class from #PaintWindow.
  */
 class Window {
+  friend class ContainerWindow;
+
 public:
 #ifdef ENABLE_SDL
   friend class SDLTimer;
@@ -148,6 +158,9 @@ protected:
 #endif
 
 private:
+  bool custom_painting;
+
+private:
   /* copy constructor not allowed */
   Window(const Window &window) {}
   Window &operator=(const Window &window) { return *this; }
@@ -156,9 +169,19 @@ public:
 #ifdef ENABLE_SDL
   Window():parent(NULL), focused(false) {}
 #else
-  Window():hWnd(NULL), prev_wndproc(NULL) {}
+  Window():hWnd(NULL), prev_wndproc(NULL), custom_painting(false) {}
 #endif
   virtual ~Window();
+
+  /**
+   * Activates the on_paint() method.  It is disabled by default
+   * because its preparation would needlessly allocate resources.
+   */
+  void enable_custom_painting() {
+#ifndef ENABLE_SDL
+    custom_painting = true;
+#endif
+  }
 
 #ifndef ENABLE_SDL
   operator HWND() const {
@@ -217,6 +240,14 @@ public:
 
   int get_vmiddle() const {
     return (get_top() + get_bottom()) / 2;
+  }
+#else /* !ENABLE_SDL */
+  unsigned get_width() const {
+    return get_size().cx;
+  }
+
+  unsigned get_height() const {
+    return get_size().cy;
   }
 #endif
 
@@ -543,6 +574,14 @@ public:
 #else /* !ENABLE_SDL */
   void expose(const RECT &rect) {}
   void expose() {}
+
+  HDC BeginPaint(PAINTSTRUCT *ps) {
+    return ::BeginPaint(hWnd, ps);
+  }
+
+  void EndPaint(PAINTSTRUCT *ps) {
+    ::EndPaint(hWnd, ps);
+  }
 #endif /* !ENABLE_SDL */
 
 #ifndef ENABLE_SDL
@@ -634,9 +673,10 @@ public:
   virtual bool on_timer(timer_t id);
   virtual bool on_user(unsigned id);
 
-#ifdef ENABLE_SDL
+  virtual bool on_erase(Canvas &canvas);
   virtual void on_paint(Canvas &canvas);
 
+#ifdef ENABLE_SDL
   virtual bool on_event(const SDL_Event &event);
 
 #else /* !ENABLE_SDL */

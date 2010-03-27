@@ -37,10 +37,13 @@ Copyright_License {
 */
 
 #include "Registry.hpp"
+#include "Profile.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Defines.h"
 #include "Sizes.h"
+#include "TextReader.hpp"
+#include "TextWriter.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -49,264 +52,6 @@ Copyright_License {
 #ifndef WIN32
 #include <gconf/gconf.h>
 #endif
-
-#ifdef WIN32
-#define CONF(key) _T(key)
-#else /* !WIN32 */
-#define CONF(key) ("/apps/XCSoar/" key)
-#endif
-
-const TCHAR szRegistryKey[] = CONF(REGKEYNAME);
-const TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] = {
-  CONF("Info0"),
-  CONF("Info1"),
-  CONF("Info2"),
-  CONF("Info3"),
-  CONF("Info4"),
-  CONF("Info5"),
-  CONF("Info6"),
-  CONF("Info7"),
-  CONF("Info8"),
-  CONF("Info9"),
-  CONF("Info10"),
-  CONF("Info11"),
-  CONF("Info12"),
-  CONF("Info13"),
-}; // pL
-
-const TCHAR *szRegistryColour[] = {
-  CONF("Colour0"),
-  CONF("Colour1"),
-  CONF("Colour2"),
-  CONF("Colour3"),
-  CONF("Colour4"),
-  CONF("Colour5"),
-  CONF("Colour6"),
-  CONF("Colour7"),
-  CONF("Colour8"),
-  CONF("Colour9"),
-  CONF("Colour10"),
-  CONF("Colour11"),
-  CONF("Colour12"),
-  CONF("Colour13"),
-  CONF("Colour14"),
-}; // pL
-
-const TCHAR *szRegistryBrush[] = {
-  CONF("Brush0"),
-  CONF("Brush1"),
-  CONF("Brush2"),
-  CONF("Brush3"),
-  CONF("Brush4"),
-  CONF("Brush5"),
-  CONF("Brush6"),
-  CONF("Brush7"),
-  CONF("Brush8"),
-  CONF("Brush9"),
-  CONF("Brush10"),
-  CONF("Brush11"),
-  CONF("Brush12"),
-  CONF("Brush13"),
-  CONF("Brush14"),
-}; // pL
-
-const TCHAR *szRegistryAirspaceMode[] = {
-  CONF("AirspaceMode0"),
-  CONF("AirspaceMode1"),
-  CONF("AirspaceMode2"),
-  CONF("AirspaceMode3"),
-  CONF("AirspaceMode4"),
-  CONF("AirspaceMode5"),
-  CONF("AirspaceMode6"),
-  CONF("AirspaceMode7"),
-  CONF("AirspaceMode8"),
-  CONF("AirspaceMode9"),
-  CONF("AirspaceMode10"),
-  CONF("AirspaceMode11"),
-  CONF("AirspaceMode12"),
-  CONF("AirspaceMode13"),
-  CONF("AirspaceMode14"),
-}; // pL
-
-const TCHAR *szRegistryAirspacePriority[] = {
-  CONF("AirspacePriority0"),
-  CONF("AirspacePriority1"),
-  CONF("AirspacePriority2"),
-  CONF("AirspacePriority3"),
-  CONF("AirspacePriority4"),
-  CONF("AirspacePriority5"),
-  CONF("AirspacePriority6"),
-  CONF("AirspacePriority7"),
-  CONF("AirspacePriority8"),
-  CONF("AirspacePriority9"),
-  CONF("AirspacePriority10"),
-  CONF("AirspacePriority11"),
-  CONF("AirspacePriority12"),
-  CONF("AirspacePriority13"),
-  CONF("AirspacePriority14"),
-}; // pL
-
-const TCHAR szRegistryAirspaceWarning[] = CONF("AirspaceWarn");
-const TCHAR szRegistryAirspaceBlackOutline[] = CONF("AirspaceBlackOutline");
-const TCHAR szRegistryAltMargin[] = CONF("AltMargin");
-const TCHAR szRegistryAltMode[] = CONF("AltitudeMode");
-const TCHAR szRegistryAltitudeUnitsValue[] = CONF("Altitude");
-const TCHAR szRegistryCircleZoom[] = CONF("CircleZoom");
-const TCHAR szRegistryClipAlt[] = CONF("ClipAlt");
-const TCHAR szRegistryDisplayText[] = CONF("DisplayText");
-const TCHAR szRegistryDisplayUpValue[] = CONF("DisplayUp");
-const TCHAR szRegistryDistanceUnitsValue[] = CONF("Distance");
-const TCHAR szRegistryDrawTerrain[] = CONF("DrawTerrain");
-const TCHAR szRegistryDrawTopology[] = CONF("DrawTopology");
-const TCHAR szRegistryFAISector[] = CONF("FAISector");
-const TCHAR szRegistryFinalGlideTerrain[] = CONF("FinalGlideTerrain");
-const TCHAR szRegistryAutoWind[] = CONF("AutoWind");
-const TCHAR szRegistryHomeWaypoint[] = CONF("HomeWaypoint");
-const TCHAR szRegistryAlternate1[] = CONF("Alternate1"); // VENTA3
-const TCHAR szRegistryAlternate2[] = CONF("Alternate2");
-const TCHAR szRegistryLiftUnitsValue[] = CONF("Lift");
-const TCHAR szRegistryLatLonUnits[] = CONF("LatLonUnits");
-const TCHAR szRegistryPolarID[] = CONF("Polar"); // pL
-const TCHAR szRegistryRegKey[] = CONF("RegKey");
-const TCHAR szRegistrySafetyAltitudeArrival[] = CONF("SafetyAltitudeArrival");
-const TCHAR szRegistrySafetyAltitudeBreakOff[] = CONF("SafetyAltitudeBreakOff");
-const TCHAR szRegistrySafetyAltitudeTerrain[] = CONF("SafetyAltitudeTerrain");
-const TCHAR szRegistrySafteySpeed[] = CONF("SafteySpeed");
-const TCHAR szRegistrySectorRadius[] = CONF("Radius");
-const TCHAR szRegistrySnailTrail[] = CONF("SnailTrail");
-const TCHAR szRegistryTrailDrift[] = CONF("TrailDrift");
-const TCHAR szRegistryThermalLocator[] = CONF("ThermalLocator");
-const TCHAR szRegistryAnimation[] = CONF("Animation");
-const TCHAR szRegistrySpeedUnitsValue[] = CONF("Speed");
-const TCHAR szRegistryTaskSpeedUnitsValue[] = CONF("TaskSpeed");
-const TCHAR szRegistryStartLine[] = CONF("StartLine");
-const TCHAR szRegistryStartRadius[] = CONF("StartRadius");
-const TCHAR szRegistryFinishLine[] = CONF("FinishLine");
-const TCHAR szRegistryFinishRadius[] = CONF("FinishRadius");
-const TCHAR szRegistryWarningTime[] = CONF("WarnTime");
-const TCHAR szRegistryAcknowledgementTime[] = CONF("AcknowledgementTime");
-const TCHAR szRegistryWindSpeed[] = CONF("WindSpeed");
-const TCHAR szRegistryWindBearing[] = CONF("WindBearing");
-const TCHAR szRegistryAirfieldFile[] = CONF("AirfieldFile"); // pL
-const TCHAR szRegistryAirspaceFile[] = CONF("AirspaceFile"); // pL
-const TCHAR szRegistryAdditionalAirspaceFile[] = CONF("AdditionalAirspaceFile"); // pL
-const TCHAR szRegistryPolarFile[] = CONF("PolarFile"); // pL
-const TCHAR szRegistryTerrainFile[] = CONF("TerrainFile"); // pL
-const TCHAR szRegistryTopologyFile[] = CONF("TopologyFile"); // pL
-const TCHAR szRegistryWayPointFile[] = CONF("WPFile"); // pL
-const TCHAR szRegistryAdditionalWayPointFile[] = CONF("AdditionalWPFile"); // pL
-const TCHAR szRegistryLanguageFile[] = CONF("LanguageFile"); // pL
-const TCHAR szRegistryStatusFile[] = CONF("StatusFile"); // pL
-const TCHAR szRegistryInputFile[] = CONF("InputFile"); // pL
-const TCHAR szRegistryPilotName[] = CONF("PilotName");
-const TCHAR szRegistryAircraftType[] = CONF("AircraftType");
-const TCHAR szRegistryAircraftRego[] = CONF("AircraftRego");
-const TCHAR szRegistryLoggerID[] = CONF("LoggerID");
-const TCHAR szRegistryLoggerShort[] = CONF("LoggerShortName");
-const TCHAR szRegistrySoundVolume[] = CONF("SoundVolume");
-const TCHAR szRegistrySoundDeadband[] = CONF("SoundDeadband");
-const TCHAR szRegistrySoundAudioVario[] = CONF("AudioVario");
-const TCHAR szRegistrySoundTask[] = CONF("SoundTask");
-const TCHAR szRegistrySoundModes[] = CONF("SoundModes");
-const TCHAR szRegistryNettoSpeed[] = CONF("NettoSpeed");
-const TCHAR szRegistryAccelerometerZero[] = CONF("AccelerometerZero");
-const TCHAR szRegistryCDICruise[] = CONF("CDICruise");
-const TCHAR szRegistryCDICircling[] = CONF("CDICircling");
-
-const TCHAR szRegistryAutoBlank[] = CONF("AutoBlank");
-const TCHAR szRegistryAutoBacklight[] = CONF("AutoBacklight");
-const TCHAR szRegistryAutoSoundVolume[] = CONF("AutoSoundVolume");
-const TCHAR szRegistryExtendedVisualGlide[] = CONF("ExtVisualGlide");
-const TCHAR szRegistryVirtualKeys[] = CONF("VirtualKeys");
-const TCHAR szRegistryAverEffTime[] = CONF("AverEffTime");
-const TCHAR szRegistryVarioGauge[] = CONF("VarioGauge");
-
-const TCHAR szRegistryDebounceTimeout[] = CONF("DebounceTimeout");
-
-const TCHAR szRegistryAppIndFinalGlide[] = CONF("AppIndFinalGlide");
-const TCHAR szRegistryAppIndLandable[] = CONF("AppIndLandable");
-const TCHAR szRegistryAppInverseInfoBox[] = CONF("AppInverseInfoBox");
-const TCHAR szRegistryAppGaugeVarioSpeedToFly[] = CONF("AppGaugeVarioSpeedToFly");
-const TCHAR szRegistryAppGaugeVarioAvgText[] = CONF("AppGaugeVarioAvgText");
-const TCHAR szRegistryAppGaugeVarioMc[] = CONF("AppGaugeVarioMc");
-const TCHAR szRegistryAppGaugeVarioBugs[] = CONF("AppGaugeVarioBugs");
-const TCHAR szRegistryAppGaugeVarioBallast[] = CONF("AppGaugeVarioBallast");
-const TCHAR szRegistryAppGaugeVarioGross[] = CONF("AppGaugeVarioGross");
-const TCHAR szRegistryAppCompassAppearance[] = CONF("AppCompassAppearance");
-const TCHAR szRegistryAppStatusMessageAlignment[] = CONF("AppStatusMessageAlignment");
-const TCHAR szRegistryAppTextInputStyle[] = CONF("AppTextInputStyle");
-const TCHAR szRegistryAppDialogStyle[] = CONF("AppDialogStyle");
-const TCHAR szRegistryAppInfoBoxColors[] = CONF("AppInfoBoxColors");
-const TCHAR szRegistryAppDefaultMapWidth[] = CONF("AppDefaultMapWidth");
-const TCHAR szRegistryTeamcodeRefWaypoint[] = CONF("TeamcodeRefWaypoint");
-const TCHAR szRegistryAppInfoBoxBorder[] = CONF("AppInfoBoxBorder");
-
-#if defined(PNA) || defined(FIVV)
-const TCHAR szRegistryAppInfoBoxGeom[] = CONF("AppInfoBoxGeom"); // VENTA-ADDON GEOMETRY CONFIG
-const TCHAR szRegistryAppInfoBoxModel[] = CONF("AppInfoBoxModel"); // VENTA-ADDON MODEL CONFIG
-#endif
-
-const TCHAR szRegistryAppAveNeedle[] = CONF("AppAveNeedle");
-
-const TCHAR szRegistryAutoAdvance[] = CONF("AutoAdvance");
-const TCHAR szRegistryUTCOffset[] = CONF("UTCOffset");
-const TCHAR szRegistryBlockSTF[] = CONF("BlockSpeedToFly");
-const TCHAR szRegistryAutoZoom[] = CONF("AutoZoom");
-const TCHAR szRegistryMenuTimeout[] = CONF("MenuTimeout");
-const TCHAR szRegistryLockSettingsInFlight[] = CONF("LockSettingsInFlight");
-const TCHAR szRegistryTerrainContrast[] = CONF("TerrainContrast");
-const TCHAR szRegistryTerrainBrightness[] = CONF("TerrainBrightness");
-const TCHAR szRegistryTerrainRamp[] = CONF("TerrainRamp");
-const TCHAR szRegistryEnableFLARMMap[] = CONF("EnableFLARMDisplay");
-const TCHAR szRegistryEnableFLARMGauge[] = CONF("EnableFLARMGauge");
-const TCHAR szRegistryFLARMGaugeBearing[] = CONF("FLARMGaugeBearing");
-const TCHAR szRegistryGliderScreenPosition[] = CONF("GliderScreenPosition");
-const TCHAR szRegistrySetSystemTimeFromGPS[] = CONF("SetSystemTimeFromGPS");
-
-const TCHAR szRegistryVoiceClimbRate[] = CONF("VoiceClimbRate");
-const TCHAR szRegistryVoiceTerrain[] = CONF("VoiceTerrain");
-const TCHAR szRegistryVoiceWaypointDistance[] = CONF("VoiceWaypointDistance");
-const TCHAR szRegistryVoiceTaskAltitudeDifference[] = CONF("VoiceTaskAltitudeDifference");
-const TCHAR szRegistryVoiceMacCready[] = CONF("VoiceMacCready");
-const TCHAR szRegistryVoiceNewWaypoint[] = CONF("VoiceNewWaypoint");
-const TCHAR szRegistryVoiceInSector[] = CONF("VoiceInSector");
-const TCHAR szRegistryVoiceAirspace[] = CONF("VoiceAirspace");
-
-const TCHAR szRegistryFinishMinHeight[] = CONF("FinishMinHeight");
-const TCHAR szRegistryStartMaxHeight[] = CONF("StartMaxHeight");
-const TCHAR szRegistryStartMaxSpeed[] = CONF("StartMaxSpeed");
-const TCHAR szRegistryStartMaxHeightMargin[] = CONF("StartMaxHeightMargin");
-const TCHAR szRegistryStartMaxSpeedMargin[] = CONF("StartMaxSpeedMargin");
-const TCHAR szRegistryStartHeightRef[] = CONF("StartHeightRef");
-const TCHAR szRegistryEnableNavBaroAltitude[] = CONF("EnableNavBaroAltitude");
-
-const TCHAR szRegistryLoggerTimeStepCruise[] = CONF("LoggerTimeStepCruise");
-const TCHAR szRegistryLoggerTimeStepCircling[] = CONF("LoggerTimeStepCircling");
-
-const TCHAR szRegistrySafetyMacCready[] = CONF("SafetyMacCready");
-const TCHAR szRegistryAbortSafetyUseCurrent[] = CONF("AbortSafetyUseCurrent");
-const TCHAR szRegistryAutoMcMode[] = CONF("AutoMcMode");
-const TCHAR szRegistryWaypointsOutOfRange[] = CONF("WaypointsOutOfRange");
-const TCHAR szRegistryEnableExternalTriggerCruise[] = CONF("EnableExternalTriggerCruise");
-const TCHAR szRegistryFAIFinishHeight[] = CONF("FAIFinishHeight");
-const TCHAR szRegistryOLCRules[] = CONF("OLCRules");
-const TCHAR szRegistryHandicap[] = CONF("Handicap");
-const TCHAR szRegistrySnailWidthScale[] = CONF("SnailWidthScale");
-const TCHAR szRegistryUserLevel[] = CONF("UserLevel");
-const TCHAR szRegistryRiskGamma[] = CONF("RiskGamma");
-const TCHAR szRegistryWindArrowStyle[] = CONF("WindArrowStyle");
-const TCHAR szRegistryDisableAutoLogger[] = CONF("DisableAutoLogger");
-const TCHAR szRegistryMapFile[] = CONF("MapFile"); // pL
-const TCHAR szRegistryBallastSecsToEmpty[] = CONF("BallastSecsToEmpty");
-const TCHAR szRegistryUseCustomFonts[] = CONF("UseCustomFonts");
-const TCHAR szRegistryFontInfoWindowFont[] = CONF("InfoWindowFont");
-const TCHAR szRegistryFontTitleWindowFont[] = CONF("TitleWindowFont");
-const TCHAR szRegistryFontMapWindowFont[] = CONF("MapWindowFont");
-const TCHAR szRegistryFontTitleSmallWindowFont[] = CONF("TeamCodeFont");
-const TCHAR szRegistryFontMapWindowBoldFont[] = CONF("MapWindowBoldFont");
-const TCHAR szRegistryFontCDIWindowFont[] = CONF("CDIWindowFont");
-const TCHAR szRegistryFontMapLabelFont[] = CONF("MapLabelFont");
-const TCHAR szRegistryFontStatisticsFont[] = CONF("StatisticsFont");
 
 #ifndef WIN32
 
@@ -352,56 +97,42 @@ public:
 
 #endif /* !WIN32 */
 
-void
-StoreType(int Index, int the_type)
-{
-  SetToRegistry(szRegistryDisplayType[Index],(DWORD)the_type);
-}
-
-void
-SetRegistryStringIfAbsent(const TCHAR* name, const TCHAR* value)
-{
-  // VENTA force fonts registry rewrite in PNAs
-#if defined(PNA) || defined(FIVV) // VENTA TODO WARNING should really delete the key before creating it TODO
-  SetRegistryString(name, value);
-#else
-  TCHAR temp[MAX_PATH];
-  if (GetRegistryString(name, temp, MAX_PATH))
-    SetRegistryString(name, value);
-#endif
-}
-
 //
 // NOTE: all registry variables are unsigned!
 //
 bool
 GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
-{  // returns 0 on SUCCESS, else the non-zero error code
+{
+// returns 0 on SUCCESS, else the non-zero error code
 #ifdef WIN32
-  HKEY    hKey;
-  DWORD    dwSize, dwType;
-  long    hRes;
+
+  HKEY hKey;
+  DWORD dwSize, dwType;
+  long hRes;
   DWORD defaultVal;
 
-  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_ALL_ACCESS, &hKey);
+  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, KEY_ALL_ACCESS, &hKey);
   if (hRes != ERROR_SUCCESS)
     return hRes;
 
   defaultVal = pPos;
   dwSize = sizeof(DWORD);
-  hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)&pPos, &dwSize);
-  if (hRes != ERROR_SUCCESS) {
+  hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE) & pPos, &dwSize);
+  if (hRes != ERROR_SUCCESS)
     pPos = defaultVal;
-  }
+
   RegCloseKey(hKey);
   return hRes;
+
 #else /* !WIN32 */
+
   int value;
   if (!GConf().get(szRegValue, value))
     return false;
 
   pPos = (DWORD)value;
   return true;
+
 #endif /* !WIN32 */
 }
 
@@ -464,34 +195,37 @@ HRESULT
 SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 {
 #ifdef WIN32
-  HKEY    hKey;
-  DWORD    Disp;
+
+  HKEY hKey;
+  DWORD Disp;
   HRESULT hRes;
 
-  hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
-  if (hRes != ERROR_SUCCESS) {
+  hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
+  if (hRes != ERROR_SUCCESS)
     return FALSE;
-  }
 
-  hRes = RegSetValueEx(hKey, szRegValue,0,REG_DWORD, (LPBYTE)&Pos, sizeof(DWORD));
+  hRes = RegSetValueEx(hKey, szRegValue, 0, REG_DWORD, (LPBYTE)&Pos,
+                       sizeof(DWORD));
   RegCloseKey(hKey);
 
   return hRes;
-#else /* !WIN32 */
-  GConf().set(szRegValue, (int)Pos);
 
+#else /* !WIN32 */
+
+  GConf().set(szRegValue, (int)Pos);
   return 0;
+
 #endif /* !WIN32 */
 }
 
-// Set bool value to registry as 1 or 0 - JG
+// Set bool value to registry as 1 or 0
 HRESULT
 SetToRegistry(const TCHAR *szRegValue, bool bVal)
 {
   return SetToRegistry(szRegValue, bVal ? DWORD(1) : DWORD(0));
 }
 
-// Set int value to registry - JG
+// Set int value to registry
 HRESULT
 SetToRegistry(const TCHAR *szRegValue, int nVal)
 {
@@ -516,16 +250,18 @@ bool
 GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
 #ifdef WIN32
-  HKEY    hKey;
-  DWORD   dwType = REG_SZ;
-  long    hRes;
+
+  HKEY hKey;
+  DWORD dwType = REG_SZ;
+  long hRes;
   unsigned int i;
-  for (i=0; i<dwSize; i++) {
-    pPos[i]=0;
+  for (i = 0; i < dwSize; i++) {
+    pPos[i] = 0;
   }
 
   pPos[0]= '\0';
-  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_READ /*KEY_ALL_ACCESS*/, &hKey);
+  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0,
+                      KEY_READ, &hKey);
   if (hRes != ERROR_SUCCESS)
     return false;
 
@@ -535,6 +271,7 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 
   RegCloseKey(hKey);
   return hRes == ERROR_SUCCESS;
+
 #else /* !WIN32 */
   return GConf().get(szRegValue, pPos, dwSize);
 #endif /* !WIN32 */
@@ -549,146 +286,25 @@ bool
 SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
 #ifdef WIN32
+
   HKEY    hKey;
   DWORD    Disp;
   HRESULT hRes;
 
-  hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
+  hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, NULL, 0,
+                        KEY_ALL_ACCESS, NULL, &hKey, &Disp);
   if (hRes != ERROR_SUCCESS)
     return false;
 
-  hRes = RegSetValueEx(hKey, szRegValue,0,REG_SZ, (LPBYTE)Pos, (_tcslen(Pos)+1)*sizeof(TCHAR));
+  hRes = RegSetValueEx(hKey, szRegValue, 0, REG_SZ, (LPBYTE)Pos,
+                       (_tcslen(Pos) + 1) * sizeof(TCHAR));
   RegCloseKey(hKey);
 
   return hRes == ERROR_SUCCESS;
+
 #else /* !WIN32 */
   return GConf().set(szRegValue, Pos);
 #endif /* !WIN32 */
-}
-
-#define CheckIndex(x, i) assert(i >= 0 && (unsigned)i < sizeof(x) / sizeof(x[0]))
-
-void
-SetRegistryColour(int i, DWORD c)
-{
-  CheckIndex(szRegistryColour, i);
-
-  SetToRegistry(szRegistryColour[i], c);
-}
-
-void
-SetRegistryBrush(int i, DWORD c)
-{
-  CheckIndex(szRegistryBrush, i);
-
-  SetToRegistry(szRegistryBrush[i], c);
-}
-
-const TCHAR *
-MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
-                      const TCHAR *suffix)
-{
-  _tcscpy(buffer, prefix);
-
-  if (n > 0)
-    _stprintf(buffer + _tcslen(buffer), _T("%u"), n + 1);
-
-  _tcscat(buffer, suffix);
-
-  return buffer;
-}
-
-static enum DeviceConfig::port_type
-StringToPortType(const TCHAR *value)
-{
-  if (_tcscmp(value, _T("serial")) == 0)
-    return DeviceConfig::SERIAL;
-
-  if (_tcscmp(value, _T("auto")) == 0)
-    return DeviceConfig::AUTO;
-
-  return DeviceConfig::SERIAL;
-}
-
-static enum DeviceConfig::port_type
-ReadPortType(unsigned n)
-{
-  TCHAR name[64], value[64];
-
-  MakeDeviceSettingName(name, CONF("Port"), n, _T("Type"));
-  if (!GetRegistryString(name, value, sizeof(value) / sizeof(value[0])))
-    return DeviceConfig::SERIAL;
-
-  return StringToPortType(value);
-}
-
-void
-ReadDeviceConfig(unsigned n, DeviceConfig &config)
-{
-  TCHAR buffer[64];
-  DWORD Temp=0;
-
-  config.port_type = ReadPortType(n);
-
-  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
-  if (GetFromRegistryD(buffer, Temp) == ERROR_SUCCESS)
-    config.port_index = Temp;
-
-  MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
-  if (GetFromRegistryD(buffer, Temp) == ERROR_SUCCESS)
-    config.speed_index = Temp;
-
-  config.driver_name[0] = '\0';
-
-  _tcscpy(buffer, CONF("DeviceA"));
-  buffer[_tcslen(buffer) - 1] += n;
-  GetRegistryString(buffer, config.driver_name,
-                    sizeof(config.driver_name) / sizeof(config.driver_name[0]));
-}
-
-static const TCHAR *
-PortTypeToString(enum DeviceConfig::port_type type)
-{
-  switch (type) {
-  case DeviceConfig::SERIAL:
-    return _T("serial");
-
-  case DeviceConfig::AUTO:
-    return _T("auto");
-  }
-
-  return NULL;
-}
-
-static bool
-WritePortType(unsigned n, enum DeviceConfig::port_type type)
-{
-  const TCHAR *value = PortTypeToString(type);
-  if (value == NULL)
-    return false;
-
-  TCHAR name[64];
-
-  MakeDeviceSettingName(name, CONF("Port"), n, _T("Type"));
-  return SetRegistryString(name, value) == ERROR_SUCCESS;
-}
-
-void
-WriteDeviceConfig(unsigned n, const DeviceConfig &config)
-{
-  TCHAR buffer[64];
-
-  WritePortType(n, config.port_type);
-
-  MakeDeviceSettingName(buffer, CONF("Port"), n, _T("Index"));
-  SetToRegistry(buffer, config.port_index);
-
-  MakeDeviceSettingName(buffer, CONF("Speed"), n, _T("Index"));
-  SetToRegistry(buffer, config.speed_index);
-
-  _tcscpy(buffer, CONF("DeviceA"));
-  buffer[_tcslen(buffer) - 1] += n;
-  SetRegistryString(buffer, config.driver_name);
 }
 
 // Registry file handling
@@ -698,128 +314,37 @@ const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6; // max regkey name is
 const static size_t nMaxClassSize = MAX_PATH + 6;
 const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 
-static bool
-LoadRegistryFromFile_inner(const TCHAR *szFile, bool wide = true)
+void
+LoadRegistryFromFile(const TCHAR *szFile)
 {
-  LogStartUp(TEXT("Loading registry from %s\n"), szFile);
-  bool found = false;
-  FILE *fp = NULL;
-  if (!string_is_empty(szFile))
-#ifndef __GNUC__
-    if (wide)
-      fp = _tfopen(szFile, TEXT("rb"));
-    else
-      fp = _tfopen(szFile, TEXT("rt"));
-#else
-  fp = _tfopen(szFile, TEXT("rb")); //20060515:sgi add b
-#endif
-  if (fp == NULL)
-    // error
-    return false;
+  if (string_is_empty(szFile))
+    return;
 
-  TCHAR winval[nMaxValueValueSize];
+  LogStartUp(TEXT("Loading registry from %s"), szFile);
+  TextReader reader(szFile);
+  if (reader.error())
+    return;
+
+  const TCHAR *winval;
   TCHAR wname[nMaxValueValueSize];
   TCHAR wvalue[nMaxValueValueSize];
   int j;
 
-#ifdef __GNUC__
-  char inval[nMaxValueValueSize];
-  char name [nMaxValueValueSize];
-  char value [nMaxValueValueSize];
-
-  if (wide) {
-#endif
-
-  while (_fgetts(winval, nMaxValueValueSize, fp)) {
-
-#ifdef _UNICODE
-    if (winval[0] > 255)
-      // not reading corectly, probably narrow file.
-      break;
-#endif /* _UNICODE */
-
+  while ((winval = reader.read_tchar_line()) != NULL) {
     if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"),
                  wname, wvalue) == 2) {
-      if (!string_is_empty(wname)) {
+      if (!string_is_empty(wname))
         SetRegistryString(wname, wvalue);
-        found = true;
-      }
     } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
-      if (!string_is_empty(wname)) {
+      if (!string_is_empty(wname))
         SetToRegistry(wname, j);
-        found = true;
-      }
     } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
-      if (!string_is_empty(wname)) {
+      if (!string_is_empty(wname))
         SetRegistryString(wname, TEXT(""));
-        found = true;
-      }
     } else {
-      // assert(false);	// Invalid line reached
+      // assert(false); // Invalid line reached
     }
   }
-
-#ifdef __GNUC__
-  } else {
-  while (fgets(inval, nMaxValueValueSize, fp)) {
-    if (sscanf(inval, "%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]", name, value) == 2) {
-      if (strlen(name)>0) {
-#ifdef _UNICODE
-        mbstowcs(wname, name, strlen(name)+1);
-        mbstowcs(wvalue, value, strlen(value)+1);
-#else
-        strcpy(wname, name);
-        strcpy(wvalue, value);
-#endif
-        SetRegistryString(wname, wvalue);
-        found = true;
-      }
-    } else if (sscanf(inval, "%[^#=\r\n ]=%d[\r\n]", name, &j) == 2) {
-      if (strlen(name)>0) {
-#ifdef _UNICODE
-        mbstowcs(wname, name, strlen(name)+1);
-#else
-        strcpy(wname, name);
-#endif
-        SetToRegistry(wname, j);
-        found = true;
-      }
-    } else if (sscanf(inval, "%[^#=\r\n ]=\"\"[\r\n]", name) == 1) {
-      if (strlen(name)>0) {
-#ifdef _UNICODE
-        mbstowcs(wname, name, strlen(name)+1);
-#else
-        strcpy(wname, name);
-#endif
-        SetRegistryString(wname, TEXT(""));
-        found = true;
-      }
-    } else {
-      // assert(false);	// Invalid line reached
-    }
-  }
-}
-#endif
-
-  fclose(fp);
-
-  return found;
-}
-
-void
-LoadRegistryFromFile(const TCHAR *szFile)
-{
-#ifndef __GNUC__
-  // legacy, wide chars
-  if (!LoadRegistryFromFile_inner(szFile,true))
-    // new, non-wide chars
-    LoadRegistryFromFile_inner(szFile,false);
-#else
-  // new, non-wide chars
-  if (!LoadRegistryFromFile_inner(szFile,false))
-    // legacy, wide chars
-    LoadRegistryFromFile_inner(szFile,true);
-#endif
 }
 
 void
@@ -827,119 +352,87 @@ SaveRegistryToFile(const TCHAR *szFile)
 {
 #ifdef WIN32
   TCHAR lpstrName[nMaxKeyNameSize+1];
-  //  TCHAR lpstrClass[nMaxClassSize+1];
-#ifdef __GNUC__
+
   union {
     BYTE pValue[nMaxValueValueSize+4];
     DWORD dValue;
   } uValue;
-#else
-  BYTE pValue[nMaxValueValueSize+1];
 
-  char sName[MAX_PATH];
-  char sValue[MAX_PATH];
+  // If no file is given -> return
+  if (string_is_empty(szFile))
+    return;
 
-#endif
+  // Try to open the file for writing
+  TextWriter writer(szFile);
+  // ... on error -> return
+  if (writer.error())
+    return;
 
+  // Try to open the XCSoar registry key
   HKEY hkFrom;
-  LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey,
+  LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey,
                             0, KEY_ALL_ACCESS, &hkFrom);
-
+  // ... on error -> return
   if (ERROR_SUCCESS != res)
     return;
 
-  FILE *fp = NULL;
-  if (!string_is_empty(szFile))
-    fp = _tfopen(szFile, TEXT("wb"));  //20060515:sgi add b
-  if(fp == NULL) {
-    // error
-    ::RegCloseKey(hkFrom);
-    return;
-  }
-
-  for (int i = 0;;i++) {
+  // Iterate through the registry subkeys
+  for (int i = 0;; i++) {
     DWORD nType;
+    // Reset the buffer sizes
     DWORD nValueSize = nMaxValueValueSize;
     DWORD nNameSize = nMaxKeyNameSize;
-    // DWORD nClassSize = nMaxClassSize;
 
-    lpstrName[0] = _T('\0'); // null terminate, just in case
+    // Reset the key-name buffer
+    lpstrName[0] = _T('\0');
 
-    LONG res = ::RegEnumValue(hkFrom, i, lpstrName,
-                              &nNameSize, 0,
-#ifdef __GNUC__
-                              &nType, uValue.pValue,
-#else
-                              &nType, pValue,
-#endif
-                              &nValueSize);
+    // Get i-th subkey from the registry key defined by hkFrom
+    res = ::RegEnumValue(hkFrom, i, lpstrName, &nNameSize, 0, &nType,
+                         uValue.pValue, &nValueSize);
 
+    // If we iterated to the end of the subkey "array" -> quit the for-loop
     if (ERROR_NO_MORE_ITEMS == res)
       break;
 
+    // If the size of the name is <= 0 or the buffer is to small
+    // -> skip this subkey
     if ((nNameSize <= 0) || (nNameSize > nMaxKeyNameSize))
-      // in case things get weird
       continue;
 
-    // null terminate, just in case
-    lpstrName[nNameSize] = _T('\0');
+    // If the string length of the name is smaller then one character
+    // -> skip this subkey
+    if (_tcslen(lpstrName) <= 1)
+      continue;
 
-    if (_tcslen(lpstrName)>1) {
+    if (nType == REG_DWORD) {
+      // If the subkey type is DWORD
+      writer.printfln(_T("%s=%d"), lpstrName, uValue.dValue);
+    } else if (nType == REG_SZ) {
+      // If the subkey type is STRING
 
-      // type 1 text
-      // type 4 integer (valuesize 4)
-
-      if (nType==4) { // data
-#ifdef __GNUC__
-        fprintf(fp, "%S=%d\r\n", lpstrName, uValue.dValue);
-#else
-        wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-        fprintf(fp, "%s=%d\r\n", sName, *((DWORD*)pValue));
-#endif
-      } else if (nType == 1) {
-        // text
-        // XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
-        if (nValueSize > 0) {
-#ifdef __GNUC__
-          uValue.pValue[nValueSize] = 0; // null terminate, just in case
-          uValue.pValue[nValueSize + 1] = 0; // null terminate, just in case
-          if (!string_is_empty((const TCHAR*)uValue.pValue))
-            fprintf(fp, "%S=\"%S\"\r\n", lpstrName, uValue.pValue);
-          else
-            fprintf(fp, "%S=\"\"\r\n", lpstrName);
-#else
-          if (!string_is_empty((const TCHAR*)pValue)) {
-            pValue[nValueSize]= 0; // null terminate, just in case
-            pValue[nValueSize+1]= 0; // null terminate, just in case
-            wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-            wcstombs(sValue,(TCHAR*)pValue,nMaxKeyNameSize+1);
-            fprintf(fp, "%s=\"%s\"\r\n", sName, sValue);
-          } else {
-            wcstombs(sName,lpstrName,nMaxKeyNameSize+1);
-            fprintf(fp, "%s=\"\"\r\n", sName);
-          }
-#endif
-        } else {
-#ifdef __GNUC__
-          fprintf(fp, "%S=\"\"\r\n", lpstrName);
-#else
-          fprintf(fp, "%s=\"\"\r\n", lpstrName);
-#endif
-        }
+      // If the value is empty
+      if (nValueSize <= 0) {
+        // -> write ="" to the output file an continue with the next subkey
+        writer.printfln(_T("%s=\"\""), lpstrName);
+        continue;
       }
+
+      /// @todo SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
+      // Force null-termination
+      uValue.pValue[nValueSize] = 0;
+      uValue.pValue[nValueSize + 1] = 0;
+
+      // If the value string is not empty
+      if (!string_is_empty((const TCHAR*)uValue.pValue))
+        // -> write the value to the output file
+        writer.printfln(_T("%s=\"%s\""), lpstrName, uValue.pValue);
+      else
+        // otherwise -> write ="" to the output file
+        writer.printfln(_T("%s=\"\""), lpstrName);
     }
   }
-#ifdef __GNUC__
-  // JMW why flush agressively?
-  fflush(fp);
-#endif
 
-#ifdef __GNUC__
-  fprintf(fp, "\r\n"); // end of file
-#endif
-
-  fclose(fp);
-
+  // Close the XCSoar registry key
   ::RegCloseKey(hkFrom);
 #else /* !WIN32 */
   // XXX implement

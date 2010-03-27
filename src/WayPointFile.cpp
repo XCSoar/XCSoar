@@ -44,7 +44,7 @@ Copyright_License {
 #include "Profile.hpp"
 #include "UtilsText.hpp"
 #include "Language.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "UtilsFile.hpp"
@@ -187,12 +187,12 @@ WayPointFile::checkWaypointInTerrainRange(const Waypoint &way_point,
   // Execute result
   switch (WaypointOutOfTerrainRangeDialogResult) {
   case wpTerrainBoundsYesAll:
-    SetToRegistry(szRegistryWaypointsOutOfRange, 1);
+    Profile::Set(szProfileWaypointsOutOfRange, 1);
     Profile::Save();
     return true;
 
   case wpTerrainBoundsNoAll:
-    SetToRegistry(szRegistryWaypointsOutOfRange, 2);
+    Profile::Set(szProfileWaypointsOutOfRange, 2);
     Profile::Save();
     return false;
 

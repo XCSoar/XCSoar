@@ -90,14 +90,14 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   }
 
   // Debug Log
-  LogStartUp(TEXT("LoadCalculationsPersist\n"));
+  LogStartUp(TEXT("LoadCalculationsPersist"));
 
   DWORD sizein;
 
   // Try to open the persistent memory file
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("rb"));
   if (file == NULL) {
-    LogStartUp(TEXT("LoadCalculationsPersist file not found\n"));
+    LogStartUp(TEXT("LoadCalculationsPersist file not found"));
     return;
   }
 
@@ -164,7 +164,7 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   polar.set_ballast(fixed(BALLAST));
   task_ui.set_glide_polar(polar);
 
-  LogStartUp(TEXT("LoadCalculationsPersist OK\n"));
+  LogStartUp(TEXT("LoadCalculationsPersist OK"));
 
   fclose(file);
 }
@@ -184,19 +184,19 @@ SaveCalculationsPersist(const NMEA_INFO &gps_info,
 
   if (FindFreeSpace(szCalculationsPersistDirectory) < MINFREESTORAGE) {
     if (!logger.LoggerClearFreeSpace(gps_info)) {
-      LogStartUp(TEXT("SaveCalculationsPersist insufficient storage\n"));
+      LogStartUp(TEXT("SaveCalculationsPersist insufficient storage"));
       return;
     } else {
-      LogStartUp(TEXT("SaveCalculationsPersist cleared logs to free storage\n"));
+      LogStartUp(TEXT("SaveCalculationsPersist cleared logs to free storage"));
     }
   }
 
-  LogStartUp(TEXT("SaveCalculationsPersist\n"));
+  LogStartUp(TEXT("SaveCalculationsPersist"));
 
   FILE *file = _tfopen(szCalculationsPersistFileName, _T("wb"));
 
   if (file == NULL) {
-    LogStartUp(TEXT("SaveCalculationsPersist can't create file\n"));
+    LogStartUp(TEXT("SaveCalculationsPersist can't create file"));
     return;
   }
 
@@ -230,7 +230,7 @@ SaveCalculationsPersist(const NMEA_INFO &gps_info,
   //    WriteFile(hFile,&CRUISE_EFFICIENCY,
   //              size,&dwBytesWritten,(OVERLAPPED*)NULL);
 
-  LogStartUp(TEXT("SaveCalculationsPersist ok\n"));
+  LogStartUp(TEXT("SaveCalculationsPersist ok"));
 
   fclose(file);
 }

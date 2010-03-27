@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_BUTTON_WINDOW_HXX
 
 #include <Screen/Window.hpp>
+#include "Util/tstring.hpp"
 
 class ButtonWindowStyle : public WindowStyle {
 public:
@@ -54,12 +55,18 @@ public:
     style |= BS_MULTILINE;
 #endif
   }
+
+  void enable_custom_painting() {
+    WindowStyle::enable_custom_painting();
+#ifndef ENABLE_SDL
+    style |= BS_OWNERDRAW;
+#endif
+  }
 };
 
 #ifdef ENABLE_SDL
 
 #include "Screen/PaintWindow.hpp"
-#include "Util/tstring.hpp"
 
 /**
  * A clickable button.
@@ -86,6 +93,14 @@ public:
     invalidate();
   }
 
+  const tstring &get_text() const {
+    return text;
+  }
+
+  bool is_down() const {
+    return down;
+  }
+
 protected:
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
@@ -96,6 +111,7 @@ protected:
 
 #include "Screen/Window.hpp"
 
+#include <windowsx.h>
 #include <tchar.h>
 
 /**
@@ -111,6 +127,12 @@ public:
     assert_none_locked();
 
     ::SetWindowText(hWnd, text);
+  }
+
+  const tstring get_text() const;
+
+  bool is_down() const {
+    return (Button_GetState(hWnd) & BST_PUSHED) != 0;
   }
 };
 

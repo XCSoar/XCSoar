@@ -40,7 +40,7 @@
 #include "Version.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "UtilsText.hpp"
@@ -382,14 +382,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     }
   }
 
-  TCHAR szMessage[MAX_PATH];
-
-  _tcsncpy(szMessage, _T("Logger Started: "), MAX_PATH);
-  _tcsncat(szMessage, szLoggerFileName, MAX_PATH);
-  _tcsncat(szMessage, _T("\r\n"), MAX_PATH);
-  LogStartUp(szMessage);
-
-  return;
+  LogStartUp(_T("Logger Started: %s"), szLoggerFileName);
 }
 
 void
@@ -416,15 +409,15 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
 
   IGCWriteRecord(GetHFFXARecord(), szLoggerFileName);
 
-  GetRegistryString(szRegistryPilotName, PilotName, 100);
+  Profile::Get(szProfilePilotName, PilotName, 100);
   sprintf(temp, "HFPLTPILOT:%S\r\n", PilotName);
   IGCWriteRecord(temp, szLoggerFileName);
 
-  GetRegistryString(szRegistryAircraftType, AircraftType, 100);
+  Profile::Get(szProfileAircraftType, AircraftType, 100);
   sprintf(temp, "HFGTYGLIDERTYPE:%S\r\n", AircraftType);
   IGCWriteRecord(temp, szLoggerFileName);
 
-  GetRegistryString(szRegistryAircraftRego, AircraftRego, 100);
+  Profile::Get(szProfileAircraftRego, AircraftRego, 100);
   sprintf(temp, "HFGIDGLIDERID:%S\r\n", AircraftRego);
   IGCWriteRecord(temp, szLoggerFileName);
 
@@ -435,7 +428,7 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
   if (gps_info.gps.Simulator) {
     _tcscpy(device_config.driver_name, _T("Simulator"));
   } else {
-    ReadDeviceConfig(0, device_config);
+    Profile::GetDeviceConfig(0, device_config);
   }
 
   sprintf(temp, "HFGPS: %S\r\n", device_config.driver_name);
@@ -576,9 +569,9 @@ LoggerImpl::LoggerDeviceDeclare()
   bool found_logger = false;
   struct Declaration Decl;
 
-  GetRegistryString(szRegistryPilotName, Decl.PilotName, 64);
-  GetRegistryString(szRegistryAircraftType, Decl.AircraftType, 32);
-  GetRegistryString(szRegistryAircraftRego, Decl.AircraftRego, 32);
+  Profile::Get(szProfilePilotName, Decl.PilotName, 64);
+  Profile::Get(szProfileAircraftType, Decl.AircraftType, 32);
+  Profile::Get(szProfileAircraftRego, Decl.AircraftRego, 32);
 
 #ifdef OLD_TASK
   for (unsigned i = 0; task.ValidTaskPoint(i); i++) {
@@ -800,10 +793,10 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
     }
   }
   if (kbfree >= LOGGER_MINFREESTORAGE) {
-    LogStartUp(_T("LoggerFreeSpace returned: true\r\n"));
+    LogStartUp(_T("LoggerFreeSpace returned: true"));
     return true;
   } else {
-    LogStartUp(_T("LoggerFreeSpace returned: false\r\n"));
+    LogStartUp(_T("LoggerFreeSpace returned: false"));
     return false;
   }
 }
@@ -861,7 +854,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
     } else {
       MessageBoxX(gettext(_T("Logger inactive, insufficient storage!")),
                   gettext(_T("Logger Error")), MB_OK| MB_ICONERROR);
-      LogStartUp(_T("Logger not started: Insufficient Storage\r\n"));
+      LogStartUp(_T("Logger not started: Insufficient Storage"));
     }
   }
 }

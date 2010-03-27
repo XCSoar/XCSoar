@@ -81,7 +81,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Gauge/GaugeFLARM.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
-#include "UtilsProfile.hpp"
+#include "ProfileKeys.hpp"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
 #include "Audio/Sound.hpp"
@@ -1007,7 +1007,7 @@ InputEvents::eventAudioDeadband(const TCHAR *misc)
   VarioSound_SetVdead(SoundDeadband);
   */
 
-  Profile::SaveSoundSettings(); // save to registry
+  Profile::SetSoundSettings(); // save to registry
 
   // TODO feature: send to vario if available
 }
@@ -1316,8 +1316,19 @@ InputEvents::eventTaskSave(const TCHAR *misc)
 void
 InputEvents::eventProfileLoad(const TCHAR *misc)
 {
-  if (!string_is_empty(misc))
-    ReadProfile(misc);
+  if (!string_is_empty(misc)) {
+    Profile::LoadFile(misc);
+
+    WaypointFileChanged = true;
+    TerrainFileChanged = true;
+    TopologyFileChanged = true;
+    AirspaceFileChanged = true;
+    AirfieldFileChanged = true;
+    PolarFileChanged = true;
+
+    // assuming all is ok, we can...
+    Profile::Use();
+  }
 }
 
 // ProfileSave
@@ -1326,7 +1337,7 @@ void
 InputEvents::eventProfileSave(const TCHAR *misc)
 {
   if (!string_is_empty(misc))
-    WriteProfile(misc);
+    Profile::SaveFile(misc);
 }
 
 void
@@ -1394,7 +1405,7 @@ InputEvents::eventDLLExecute(const TCHAR *misc)
   #ifdef WIN32
   // LoadLibrary(TEXT("test.dll"));
 
-  LogStartUp(TEXT("%s\n"), misc);
+  LogStartUp(TEXT("%s"), misc);
 
   TCHAR data[MAX_PATH];
   TCHAR* dll_name;

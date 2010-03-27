@@ -41,7 +41,7 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Screen/Layout.hpp"
 #include "SettingsComputer.hpp"
-#include "UtilsProfile.hpp"
+#include "Profile.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Waypoint/Waypoint.hpp"
@@ -66,8 +66,8 @@ void
 MapWindowProjection::InitialiseScaleList
 (const SETTINGS_MAP &settings_map)
 {
-  ScaleListCount = propGetScaleList(ScaleList,
-				    sizeof(ScaleList)/sizeof(ScaleList[0]));
+  ScaleListCount = Profile::GetScaleList(ScaleList,
+                                         sizeof(ScaleList)/sizeof(ScaleList[0]));
   _RequestedMapScale = LimitMapScale(_RequestedMapScale, settings_map);
 }
 

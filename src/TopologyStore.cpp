@@ -43,7 +43,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Language.hpp"
 #include "Compatibility/string.h"
-#include "Registry.hpp"
+#include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
@@ -115,7 +115,7 @@ TopologyStore::~TopologyStore()
 void
 TopologyStore::Close()
 {
-  LogStartUp(TEXT("CloseTopology\n"));
+  LogStartUp(TEXT("CloseTopology"));
 
   Poco::ScopedRWLock protect(lock, true);
 
@@ -145,7 +145,7 @@ TopologyStore::Draw(Canvas &canvas, MapWindow &m_window, const RECT rc)
 void
 TopologyStore::Open()
 {
-  LogStartUp(TEXT("OpenTopology\n"));
+  LogStartUp(TEXT("OpenTopology"));
 
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Topology File...")));
 
@@ -159,12 +159,12 @@ TopologyStore::Open()
     topology_store[z] = 0;
   }
 
-  GetRegistryString(szRegistryTopologyFile, szFile, MAX_PATH);
+  Profile::Get(szProfileTopologyFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
   if (string_is_empty(szFile)) {
     // file is blank, so look for it in a map file
-    GetRegistryString(szRegistryMapFile, szFile, MAX_PATH);
+    Profile::Get(szProfileMapFile, szFile, MAX_PATH);
     if (string_is_empty(szFile))
       return;
 
@@ -185,7 +185,7 @@ TopologyStore::Open()
   unicode2ascii(szFile, zfilename, MAX_PATH);
   zFile = zzip_fopen(zfilename, "rt");
   if (!zFile) {
-    LogStartUp(TEXT("No topology file: %s\n"), szFile);
+    LogStartUp(TEXT("No topology file: %s"), szFile);
     return;
   }
 

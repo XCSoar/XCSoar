@@ -50,11 +50,11 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
-#include "Registry.hpp"
 #include "NMEA/Checksum.h"
 #include "options.h" /* for LOGGDEVCOMMANDLINE */
 #include "Asset.hpp"
 #include "Simulator.hpp"
+#include "Profile.hpp"
 
 #include <assert.h>
 
@@ -159,11 +159,11 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
 
   case DeviceConfig::AUTO:
     if (!detect_gps(buffer, sizeof(buffer))) {
-      LogStartUp(_T("no GPS detected\n"));
+      LogStartUp(_T("no GPS detected"));
       return false;
     }
 
-    LogStartUp(_T("GPS detected: %s\n"), buffer);
+    LogStartUp(_T("GPS detected: %s"), buffer);
 
     path = buffer;
     break;
@@ -272,7 +272,7 @@ devInit(const TCHAR *CommandLine)
   DeviceConfig config[NUMDEV];
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    ReadDeviceConfig(i, config[i]);
+    Profile::GetDeviceConfig(i, config[i]);
 
   devInitOne(DeviceList[0], config[0], pDevNmeaOut);
 
@@ -382,7 +382,7 @@ devVarioFindVega(void)
 void
 devStartup(const TCHAR *lpCmdLine)
 {
-  LogStartUp(_T("Register serial devices\n"));
+  LogStartUp(_T("Register serial devices"));
 
   devInit(lpCmdLine);
 }
@@ -393,7 +393,7 @@ devShutdown()
   int i;
 
   // Stop COM devices
-  LogStartUp(_T("Stop COM devices\n"));
+  LogStartUp(_T("Stop COM devices"));
 
   for (i = 0; i < NUMDEV; i++) {
     DeviceList[i].Close();
@@ -417,7 +417,7 @@ devRestart()
   #endif
   */
 
-  LogStartUp(_T("RestartCommPorts\n"));
+  LogStartUp(_T("RestartCommPorts"));
 
   ScopeLock protect(mutexComm);
 
