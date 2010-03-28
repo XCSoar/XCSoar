@@ -70,13 +70,21 @@ static bool task_modified = false;
 static bool
 CommitTaskChanges()
 {
-  if (task_modified && ordered_task->check_task()) {
+  if (!task_modified)
+    return true;
+
+  if (ordered_task->check_task()) {
 
     MessageBoxX (gettext(TEXT("Active task modified")),
                  TEXT("Task Manager"), MB_OK);
 
     task_ui.task_commit(*ordered_task);
     task_modified = false;
+    return true;
+
+  } else if (MessageBoxX(gettext(_T("Task not valid. Changes will be lost.")),
+                    gettext(_T("Task Manager")),
+                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
     return true;
   }
   return false;
@@ -91,7 +99,10 @@ RefreshView()
 static void OnCloseClicked(WindowControl * Sender)
 {
   (void)Sender;
-  wf->SetModalResult(mrCancel);
+
+  if (CommitTaskChanges()) {
+    wf->SetModalResult(mrOK);
+  }
 }
 
 static void OnEditClicked(WindowControl * Sender)
@@ -177,8 +188,6 @@ dlgTaskManagerShowModal(SingleWindow &parent)
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
 
   wf->ShowModal();
-
-  CommitTaskChanges();
 
   delete wf;
   delete ordered_task;
