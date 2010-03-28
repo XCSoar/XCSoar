@@ -67,7 +67,7 @@ static void RefreshView()
     dfe->addEnumText(gettext(_T("Auto")));
     dfe->addEnumText(gettext(_T("Arm")));
     dfe->addEnumText(gettext(_T("Arm start")));
-    dfe->Set(0);
+    dfe->Set(0); /// @todo hook up auto advance to task props
     wp->RefreshDisplay();
   }
 
@@ -171,8 +171,17 @@ static void ReadValues()
     }
   }
 
-
+  wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
+  if (wp) {
+    if (p.start_max_height_ref 
+        != (unsigned)wp->GetDataField()->GetAsInteger()) {
+      p.start_max_height_ref = 
+        wp->GetDataField()->GetAsInteger();
+      task_changed = true;
+    }
+  }
 }
+
 
 static void OnCloseClicked(WindowControl * Sender)
 {
