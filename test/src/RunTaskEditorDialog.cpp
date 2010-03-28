@@ -170,16 +170,16 @@ CreateDefaultTask(TaskManager &task_manager, const Waypoints &way_points)
   const tstring first_turn_point(_T("Uslar"));
   const tstring second_turn_point(_T("Suhl Goldlaut"));
 
-  task_manager.set_factory(TaskManager::FACTORY_MIXED);
-  AbstractTaskFactory *factory = task_manager.get_factory();
+  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  AbstractTaskFactory &factory = task_manager.get_factory();
 
   const Waypoint *wp;
   OrderedTaskPoint *tp;
 
   wp = way_points.lookup_name(start_name);
   if (wp != NULL) {
-    tp = factory->createStart(AbstractTaskFactory::START_LINE, *wp);
-    if (!factory->append(tp, false)) {
+    tp = factory.createStart(AbstractTaskFactory::START_LINE, *wp);
+    if (!factory.append(tp, false)) {
       fprintf(stderr, "Failed to create start point\n");
     }
   } else {
@@ -188,8 +188,8 @@ CreateDefaultTask(TaskManager &task_manager, const Waypoints &way_points)
 
   wp = way_points.lookup_name(first_turn_point);
   if (wp != NULL) {
-    tp = factory->createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
-    if (!factory->append(tp, false)) {
+    tp = factory.createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
+    if (!factory.append(tp, false)) {
       fprintf(stderr, "Failed to create turn point\n");
     }
   } else {
@@ -198,8 +198,8 @@ CreateDefaultTask(TaskManager &task_manager, const Waypoints &way_points)
 
   wp = way_points.lookup_name(second_turn_point);
   if (wp != NULL) {
-    tp = factory->createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
-    if (!factory->append(tp, false)) {
+    tp = factory.createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
+    if (!factory.append(tp, false)) {
       fprintf(stderr, "Failed to create turn point\n");
     }
   } else {
@@ -208,8 +208,8 @@ CreateDefaultTask(TaskManager &task_manager, const Waypoints &way_points)
 
   wp = way_points.lookup_name(start_name);
   if (wp != NULL) {
-    tp = factory->createFinish(AbstractTaskFactory::FINISH_LINE, *wp);
-    if (!factory->append(tp, false)) {
+    tp = factory.createFinish(AbstractTaskFactory::FINISH_LINE, *wp);
+    if (!factory.append(tp, false)) {
       fprintf(stderr, "Failed to create finish point\n");
     }
   } else {

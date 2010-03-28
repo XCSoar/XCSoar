@@ -49,8 +49,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "StringUtil.hpp"
 #include "TaskClientUI.hpp"
-#include "Task/TaskPoints/StartPoint.cpp"
-#include "Task/TaskPoints/FinishPoint.cpp"
+#include "Task/TaskPoints/StartPoint.hpp"
+#include "Task/TaskPoints/FinishPoint.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
 
 #include <assert.h>
@@ -202,6 +202,9 @@ static void OverviewRefreshTask(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));
   if (wp) {
+
+    /// @todo: this is zero now because update_geometry doesn't update stats
+
     const double dd = ordered_task->get_stats().total.TimePlanned;
     wp->GetDataField()->SetAsFloat(dd/60.0);
     wp->RefreshDisplay();

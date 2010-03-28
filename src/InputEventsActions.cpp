@@ -1371,7 +1371,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (_tcscmp(misc, TEXT("System")) == 0)
     SystemConfiguration();
   else if (_tcscmp(misc, TEXT("Task")) == 0)
-    dlgTaskOverviewShowModal(main_window);
+    dlgTaskManagerShowModal(main_window);
   else if (_tcscmp(misc, TEXT("Airspace")) == 0)
     dlgAirspaceShowModal(false);
   else if (_tcscmp(misc, TEXT("Weather")) == 0)

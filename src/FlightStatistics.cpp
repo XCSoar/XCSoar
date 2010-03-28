@@ -57,7 +57,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Projection.hpp"
+#include "ChartProjection.hpp"
 #include "RenderTask.hpp"
 #include "RenderTaskPoint.hpp"
 #include "RenderObservationZone.hpp"
@@ -342,46 +342,6 @@ FlightStatistics::RenderGlidePolar(Canvas &canvas,
             (double)glide_polar.get_wing_loading());
   canvas.text_opaque(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(40), text);
 }
-
-
-class ChartProjection:
-  public Projection
-{
-public:
-  ChartProjection(const RECT &rc,
-                  const TaskClientUI& task,
-                  const GEOPOINT &fallback_loc) 
-    {
-      const GEOPOINT center = task.get_task_center(fallback_loc);
-      const fixed radius = max(fixed(1e3), task.get_task_radius(fallback_loc)); 
-      set_projection(rc, center, radius);
-    }
-
-  ChartProjection(const RECT &rc,
-                  const TracePointVector& trace,
-                  const GEOPOINT &fallback_loc) 
-    {
-      const TaskProjection proj = get_bounds(trace, fallback_loc);
-      const GEOPOINT center = proj.get_center();
-      const fixed radius = max(fixed(1e3), proj.get_radius()); 
-      set_projection(rc, center, radius);
-    }
-
-private:
-
-  void set_projection(const RECT &rc, 
-                      const GEOPOINT &center,
-                      const fixed radius)
-    {
-      SetScaleMetersToScreen(max_dimension(rc)/(radius*fixed_two));
-      PanLocation = center;
-      MapRect = rc;
-      Orig_Screen.x = (rc.left + rc.right)/2;
-      Orig_Screen.y = (rc.bottom + rc.top)/2;
-      UpdateScreenBounds();
-    }
-
-};
 
 
 static void

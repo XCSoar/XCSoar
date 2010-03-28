@@ -172,6 +172,12 @@ IDR_XML_WINDSETTINGS    XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgWindSettings
 IDR_XML_WEATHER         XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgWeather.xml"
 IDR_XML_WEATHER_L       XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgWeather_L.xml"
 
+// new task editor
+IDR_XML_TASKEDIT        XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgTaskEdit.xml"
+IDR_XML_TASKLIST        XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgTaskList.xml"
+IDR_XML_TASKMANAGER     XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgTaskManager.xml"
+IDR_XML_TASKPROPERTIES  XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgTaskProperties.xml"
+
 // --- EGM96 Raster Data --- 
 
 IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "Bitmaps/egm96s.dem"

@@ -52,6 +52,10 @@ Copyright_License {
 int DisplayTimeOut = 0;
 #endif
 
+#ifdef WIN32
+#include <shellapi.h>
+#endif
+
 void
 LocalPath(TCHAR *buf, const TCHAR* file, int loc)
 {
@@ -61,8 +65,9 @@ LocalPath(TCHAR *buf, const TCHAR* file, int loc)
 void
 LocalPathS(char *buf, const TCHAR* file, int loc)
 {
-  strcpy(buf, (const char *)file);
-  //unicode2ascii(file, buf);
+//  strcpy(buf, (const char *)file);
+  unicode2ascii(file, buf);
+  printf("File %s\n",buf);
 }
 
 void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText)
@@ -113,26 +118,30 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LPCTSTR lpCmdLine = GetCommandLine();
 #endif
 
+  int argc;
+  LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
+
   CommonInterface::hInst = hInstance;
 
   PaintWindow::register_class(hInstance);
 #else
   const TCHAR *lpCmdLine = argv[1];
 
-  if (argc != 2) {
+  if (argc < 2) {
     fprintf(stderr, "Usage: %s XMLFILE\n", argv[0]);
     return 1;
   }
 #endif
 
+  Layout::Initialize(320,240);
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunDialog"),
-                  0, 0, 640, 480);
+                  0, 0, 320, 240);
   main_window.show();
 
-  WndForm *form = dlgLoadFromXML(NULL, lpCmdLine, main_window);
+  WndForm *form = dlgLoadFromXML(NULL, argv[1], main_window, argv[2]);
   if (form == NULL) {
-    fprintf(stderr, "Failed to load XML file\n");
+    fprintf(stderr, "Failed to load XML file '%S' / ID '%S'\n", argv[1], argv[2]);
     return 1;
   }
 

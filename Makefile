@@ -111,6 +111,12 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgStartup.cpp \
 	$(SRC)/Dialogs/dlgStatus.cpp \
 	$(SRC)/Dialogs/dlgSwitches.cpp \
+	\
+	$(SRC)/Dialogs/dlgTaskManager.cpp \
+	$(SRC)/Dialogs/dlgTaskEdit.cpp \
+	$(SRC)/Dialogs/dlgTaskProperties.cpp \
+	$(SRC)/Dialogs/dlgTaskList.cpp \
+	\
 	$(SRC)/Dialogs/dlgTaskOverview.cpp \
 	$(SRC)/Dialogs/dlgTaskWaypoint.cpp \
 	$(SRC)/Dialogs/dlgTaskCalculator.cpp \
@@ -208,6 +214,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/RenderTaskPoint.cpp \
 	$(SRC)/RenderTask.cpp \
+	$(SRC)/ChartProjection.cpp \
 	$(SRC)/MapWindow.cpp \
 	$(SRC)/MapWindowAirspace.cpp \
 	$(SRC)/MapWindowEvents.cpp \

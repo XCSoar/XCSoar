@@ -108,6 +108,24 @@ dlgTaskWaypointShowModal(SingleWindow &parent,
 void
 dlgTaskOverviewShowModal(SingleWindow &parent);
 
+// new task ////////
+
+class OrderedTask;
+
+void
+dlgTaskManagerShowModal(SingleWindow &parent);
+
+bool
+dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task);
+
+bool
+dlgTaskPropertiesShowModal(SingleWindow &parent, OrderedTask** task);
+
+bool
+dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task);
+
+/////////
+
 void dlgVoiceShowModal();
 
 void

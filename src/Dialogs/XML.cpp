@@ -393,14 +393,14 @@ load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
     xMainNode = XMLNode::openFileHelper(FileName);
 
 #ifdef WIN32
-
   // If XML file hasn't been loaded
-  if (xMainNode.isEmpty())
+  if (xMainNode.isEmpty()) {
+
     // and resource exists
     if (resource)
       // -> Load XML from resource
       xMainNode = xmlOpenResourceHelper(resource);
-
+  }
 #endif
 
   return xMainNode;
