@@ -45,11 +45,13 @@ OrderedTaskPoint::OrderedTaskPoint(ObservationZonePoint* _oz,
                                    const TaskProjection& tp,
                                    const Waypoint & wp, 
                                    const TaskBehaviour &tb,
+                                   const OrderedTaskBehaviour& to,
                                    const bool b_scored): 
   TaskLeg(*this),
   ScoredTaskPoint(tp, wp, tb, b_scored),
   ObservationZoneClient(_oz),
   m_active_state(NOTFOUND_ACTIVE),
+  m_ordered_task_behaviour(to),
   tp_next(NULL),
   tp_previous(NULL)
 {
@@ -177,9 +179,11 @@ public:
    * @param _wp Waypoint to shift the task point to
    */
   TaskPointCloneVisitor(const TaskBehaviour& tb,
+                        const OrderedTaskBehaviour &to,
                         const TaskProjection &tp,
                         const Waypoint *_wp):
     m_task_behaviour(tb),
+    m_ordered_task_behaviour(to),
     m_task_projection(tp),
     m_retval(NULL),
     m_waypoint(_wp)
@@ -200,21 +204,26 @@ public:
 private:
   virtual void Visit(const FinishPoint& tp) {
     m_retval= new FinishPoint(tp.get_oz()->clone(&m_waypoint->Location),
-                              m_task_projection,*m_waypoint,m_task_behaviour);
+                              m_task_projection,*m_waypoint,m_task_behaviour,
+                              m_ordered_task_behaviour);
   }
   virtual void Visit(const StartPoint& tp) {
     m_retval= new StartPoint(tp.get_oz()->clone(&m_waypoint->Location),
-                             m_task_projection,*m_waypoint,m_task_behaviour);
+                             m_task_projection,*m_waypoint,m_task_behaviour,
+                             m_ordered_task_behaviour);
   }
   virtual void Visit(const AATPoint& tp) {
     m_retval= new AATPoint(tp.get_oz()->clone(&m_waypoint->Location),
-                           m_task_projection,*m_waypoint,m_task_behaviour);
+                           m_task_projection,*m_waypoint,m_task_behaviour,
+                           m_ordered_task_behaviour);
   }
   virtual void Visit(const ASTPoint& tp) {
     m_retval= new ASTPoint(tp.get_oz()->clone(&m_waypoint->Location),
-                           m_task_projection,*m_waypoint,m_task_behaviour);
+                           m_task_projection,*m_waypoint,m_task_behaviour,
+                           m_ordered_task_behaviour);
   }
   const TaskBehaviour &m_task_behaviour;
+  const OrderedTaskBehaviour &m_ordered_task_behaviour;
   const TaskProjection &m_task_projection;
   OrderedTaskPoint* m_retval;
   const Waypoint* m_waypoint;
@@ -223,10 +232,12 @@ private:
 
 OrderedTaskPoint* 
 OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
+                        const OrderedTaskBehaviour &ordered_task_behaviour,
                         const TaskProjection &task_projection,
                         const Waypoint* waypoint) const
 {
   TaskPointCloneVisitor tpcv(task_behaviour, 
+                             ordered_task_behaviour,
                              task_projection, waypoint);
   return tpcv.Visit(*this);
 }

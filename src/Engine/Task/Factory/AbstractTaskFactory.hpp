@@ -72,11 +72,13 @@ public:
   AbstractTaskFactory(OrderedTask& task,
                       const TaskBehaviour &behaviour):
     m_task(task),
-    m_behaviour(behaviour) 
+    m_behaviour(behaviour)
     {
     }
 
-    virtual ~AbstractTaskFactory() {};
+  virtual ~AbstractTaskFactory() {};
+
+  virtual void update_ordered_task_behaviour(OrderedTaskBehaviour& to);
 
   /**
    * Legal types of StartPoint observation zones
@@ -283,7 +285,10 @@ public:
    */
   bool has_entered(unsigned index) const;
 
+  const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
+
 protected:
+
 /** 
  * Test whether a candidate object is of correct type to be added/replaced/etc
  * in the task.

@@ -330,11 +330,11 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 
   if (has_start()
       && (task_behaviour.optimise_targets_range)
-      && (task_behaviour.aat_min_time>fixed_zero)) {
+      && (get_ordered_task_behaviour().aat_min_time>fixed_zero)) {
 
     if (activeTaskPoint>0) {
 
-      fixed p = calc_min_target(state, task_behaviour.aat_min_time);
+      fixed p = calc_min_target(state, get_ordered_task_behaviour().aat_min_time);
       (void)p;
 
       if (task_behaviour.optimise_targets_bearing) {
@@ -693,9 +693,11 @@ OrderedTask::OrderedTask(TaskEvents &te,
   ts(NULL),
   tf(NULL),
   factory_mode(FACTORY_FAI),
-  active_factory(NULL)
+  active_factory(NULL),
+  m_ordered_behaviour(tb.ordered_defaults)
 {
   active_factory = new FAITaskFactory(*this, task_behaviour);
+  active_factory->update_ordered_task_behaviour(m_ordered_behaviour);
 }
 
 void 
@@ -922,9 +924,13 @@ OrderedTask::clone(TaskEvents &te,
                    GlidePolar &gp) const
 {
   OrderedTask* new_task = new OrderedTask(te, tb, ta, gp);
+
+  new_task->m_ordered_behaviour = m_ordered_behaviour;
+
   new_task->set_factory(factory_mode);
   for (unsigned i=0; i<tps.size(); ++i) {
-    new_task->append(tps[i]->clone(tb, 
+    new_task->append(tps[i]->clone(tb,
+                                   new_task->m_ordered_behaviour,
                                    new_task->get_task_projection()));
   }
   new_task->update_geometry();
@@ -939,6 +945,9 @@ OrderedTask::commit(const OrderedTask& that)
   // change mode to that one 
   set_factory(that.factory_mode);
 
+  // copy across behaviour
+  m_ordered_behaviour = that.m_ordered_behaviour;
+
   // remove if that task is smaller than this one
   while (task_size() > that.task_size()) {
     remove(task_size()-1);
@@ -949,13 +958,15 @@ OrderedTask::commit(const OrderedTask& that)
     if (i>= task_size()) {
       // that task is larger than this
       append(that.tps[i]->clone(task_behaviour,
-                                 get_task_projection()));
+                                m_ordered_behaviour,
+                                get_task_projection()));
       modified = true;
     } else if (!tps[i]->equals(that.tps[i])) {
       // that task point is changed
       replace(that.tps[i]->clone(task_behaviour,
-                                  get_task_projection()),
-        i);
+                                 m_ordered_behaviour,
+                                 get_task_projection()),
+              i);
       modified = true;
     }
   }
@@ -975,6 +986,7 @@ OrderedTask::relocate(const unsigned position, const Waypoint& waypoint)
   if (position>= task_size()) return false;
 
   OrderedTaskPoint *new_tp = tps[position]->clone(task_behaviour,
+                                                  m_ordered_behaviour,
                                                   task_projection,
                                                   &waypoint);
   return replace(new_tp, position);
@@ -1018,5 +1030,32 @@ OrderedTask::set_factory(const Factory_t the_factory)
     active_factory = new MixedTaskFactory(*this, task_behaviour);
     break;
   };
+  active_factory->update_ordered_task_behaviour(m_ordered_behaviour);
+
   return factory_mode;
+}
+
+const OrderedTaskBehaviour& 
+OrderedTask::get_ordered_task_behaviour() const
+{
+  return m_ordered_behaviour;
+}
+
+
+OrderedTaskBehaviour& 
+OrderedTask::get_ordered_task_behaviour() 
+{
+  return m_ordered_behaviour;
+}
+
+void 
+OrderedTask::set_ordered_task_behaviour(const OrderedTaskBehaviour& ob)
+{
+  m_ordered_behaviour = ob;
+}
+
+bool 
+OrderedTask::is_scored() const
+{
+  return m_ordered_behaviour.task_scored;
 }

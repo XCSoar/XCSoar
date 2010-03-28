@@ -34,49 +34,66 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+#include "Navigation/Aircraft.hpp"
+#include "OrderedTaskBehaviour.hpp"
 #include "TaskBehaviour.hpp"
 
-TaskBehaviour::TaskBehaviour():
-    optimise_targets_range(true),
-    optimise_targets_bearing(true),
-    auto_mc(false),
-    auto_mc_mode(AUTOMC_BOTH),
-    calc_cruise_efficiency(true),
-    calc_effective_mc(true),
-    calc_glide_required(true),
-    goto_nonlandable(true),
-    safety_height_terrain(150.0),
-    safety_height_arrival(300.0),
-    risk_gamma(0.0),
-    enable_olc(false),
-    olc_rules(OLC_Sprint),
-    olc_handicap(100),
-    safety_mc(fixed_one),
-    safety_mc_use_current(false),
-    start_max_speed_margin(0.0),
-    start_max_height_margin(0)
+OrderedTaskBehaviour::OrderedTaskBehaviour():
+    task_scored(true),
+    aat_min_time(3600*5.35),
+    start_max_speed(60.0),
+    start_max_height(0),
+    start_max_height_ref(0),
+    finish_min_height(0),
+    fai_finish(false)
 {
-}
 
+}
 
 void
-TaskBehaviour::all_off()
+OrderedTaskBehaviour::all_off()
 {
-  optimise_targets_range=false;
-  optimise_targets_bearing=false;
-  auto_mc= false;
-  calc_cruise_efficiency=false;
-  calc_glide_required=false;
-  enable_olc = false;
-  ordered_defaults.all_off();
+  task_scored = false;
+}
+
+bool 
+OrderedTaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state,
+                                        const TaskBehaviour& behaviour,
+                                        const bool with_margin) const
+{
+  if (start_max_speed==0)
+    return true;
+
+  const fixed margin = with_margin? behaviour.start_max_speed_margin:fixed_zero;
+
+  return state.Speed <= start_max_speed+margin;
 }
 
 
-fixed 
-TaskBehaviour::get_safety_mc(const fixed fallback_mc) const
+bool 
+OrderedTaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
+                                         const TaskBehaviour& behaviour,
+                                         const bool with_margin) const
 {
-  if (safety_mc_use_current) 
-    return fallback_mc;
-  else
-    return safety_mc;
+  if (start_max_height==0)
+    return true;
+
+  const unsigned margin = with_margin? behaviour.start_max_height_margin:0;
+
+  if (start_max_height_ref>0) {
+    return state.NavAltitude <= start_max_height+margin;
+  } else {
+    return state.AltitudeAGL <= start_max_height+margin;
+  }
 }
+
+
+bool 
+OrderedTaskBehaviour::check_finish_height(const AIRCRAFT_STATE &state) const
+{
+  if (finish_min_height==0)
+    return true;
+
+  return state.AltitudeAGL >= finish_min_height;
+}
+

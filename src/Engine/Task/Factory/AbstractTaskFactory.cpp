@@ -74,15 +74,18 @@ AbstractTaskFactory::createStart(const LegalStartType_t type,
   switch (type) {
   case START_SECTOR:
     return new StartPoint(new FAISectorZone(wp.Location),
-                          m_task.get_task_projection(),wp,m_behaviour);
+                          m_task.get_task_projection(),wp,m_behaviour,
+                          get_ordered_task_behaviour());
     break;
   case START_LINE:
     return new StartPoint(new LineSectorZone(wp.Location),
-                          m_task.get_task_projection(),wp,m_behaviour);
+                          m_task.get_task_projection(),wp,m_behaviour,
+                          get_ordered_task_behaviour());
     break;
   case START_CYLINDER:
     return new StartPoint(new CylinderZone(wp.Location),
-                          m_task.get_task_projection(),wp,m_behaviour);
+                          m_task.get_task_projection(),wp,m_behaviour,
+                          get_ordered_task_behaviour());
     break;
   default:
     assert(1);
@@ -101,19 +104,23 @@ AbstractTaskFactory::createIntermediate(const LegalIntermediateType_t type,
   switch (type) {
   case FAI_SECTOR:
     return new ASTPoint(new FAISectorZone(wp.Location),
-                        m_task.get_task_projection(),wp,m_behaviour);
+                        m_task.get_task_projection(),wp,m_behaviour,
+                        get_ordered_task_behaviour());
     break;
   case AST_CYLINDER:
     return new ASTPoint(new CylinderZone(wp.Location),
-                        m_task.get_task_projection(),wp,m_behaviour);
+                        m_task.get_task_projection(),wp,m_behaviour,
+                        get_ordered_task_behaviour());
     break;
   case AAT_CYLINDER:
     return new AATPoint(new CylinderZone(wp.Location),
-                        m_task.get_task_projection(),wp,m_behaviour);
+                        m_task.get_task_projection(),wp,m_behaviour,
+                        get_ordered_task_behaviour());
     break;
   case AAT_SEGMENT:
     return new AATPoint(new SectorZone(wp.Location),
-                        m_task.get_task_projection(),wp,m_behaviour);
+                        m_task.get_task_projection(),wp,m_behaviour,
+                        get_ordered_task_behaviour());
     break;
   default:
     assert(1);
@@ -132,15 +139,18 @@ AbstractTaskFactory::createFinish(const LegalFinishType_t type,
   switch (type) {
   case FINISH_SECTOR:
     return new FinishPoint(new FAISectorZone(wp.Location),
-                          m_task.get_task_projection(),wp,m_behaviour);
+                           m_task.get_task_projection(),wp,m_behaviour,
+                           get_ordered_task_behaviour());
     break;
   case FINISH_LINE:
     return new FinishPoint(new LineSectorZone(wp.Location),
-                          m_task.get_task_projection(),wp,m_behaviour);
+                           m_task.get_task_projection(),wp,m_behaviour,
+                           get_ordered_task_behaviour());
     break;
   case FINISH_CYLINDER:
     return new FinishPoint(new CylinderZone(wp.Location),
-                          m_task.get_task_projection(),wp,m_behaviour);
+                           m_task.get_task_projection(),wp,m_behaviour,
+                           get_ordered_task_behaviour());
     break;
   default:
     assert(1);
@@ -347,6 +357,7 @@ AbstractTaskFactory::swap(const unsigned position,
 
   const OrderedTaskPoint* orig = m_task.getTaskPoint(position+1);
   OrderedTaskPoint* copy = orig->clone(m_behaviour, 
+                                       get_ordered_task_behaviour(),
                                        orig->get_task_projection(),
                                        NULL);
   bool retval = insert(copy, position, auto_mutate);
@@ -364,4 +375,15 @@ AbstractTaskFactory::relocate(const unsigned position,
 {
   m_task.relocate(position, waypoint);  
   return *m_task.getTaskPoint(position);
+}
+
+const OrderedTaskBehaviour& 
+AbstractTaskFactory::get_ordered_task_behaviour() const {
+  return m_task.get_ordered_task_behaviour();
+}
+
+void 
+AbstractTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+{
+
 }

@@ -420,6 +420,8 @@ public:
   void print(const AIRCRAFT_STATE &location);
 #endif
 
+  const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
+
 private:
   GlidePolar m_glide_polar;
 

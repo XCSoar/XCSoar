@@ -73,12 +73,6 @@ GlideComputerTask::ProcessBasicTask()
 
   // JMW TODO OLD_TASK, this is a hack
     task_behaviour = SettingsComputer();
-    task_behaviour.aat_min_time = 60*45;
-
-//    task_behaviour.all_off();
-//    task_behaviour.optimise_targets_range = true;
-//  task_behaviour.auto_mc=true;
-    task_behaviour.enable_olc = true;
 
     if (!basic.gps.NAVWarning) {
       const AIRCRAFT_STATE current_as = ToAircraftState(Basic());

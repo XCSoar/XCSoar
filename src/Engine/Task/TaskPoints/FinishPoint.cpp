@@ -42,8 +42,9 @@
 FinishPoint::FinishPoint(ObservationZonePoint* _oz,
                          const TaskProjection& tp,
                          const Waypoint & wp,
-                         const TaskBehaviour& tb) : 
-  OrderedTaskPoint(_oz,tp,wp,tb),
+                         const TaskBehaviour& tb,
+                         const OrderedTaskBehaviour& to) : 
+  OrderedTaskPoint(_oz,tp,wp,tb,to),
   fai_finish_height(fixed_zero)
 { 
 }
@@ -67,7 +68,7 @@ FinishPoint::get_elevation() const
   const fixed nominal_elevation = m_elevation
     +m_task_behaviour.safety_height_arrival;
 
-  if (m_task_behaviour.fai_finish) {
+  if (m_ordered_task_behaviour.fai_finish) {
     return max(nominal_elevation, fai_finish_height);
   } else {
     return nominal_elevation;
@@ -112,10 +113,10 @@ FinishPoint::isInSector(const AIRCRAFT_STATE &state) const
 bool
 FinishPoint::is_in_height_limit(const AIRCRAFT_STATE &state) const
 {
-  if (!m_task_behaviour.check_finish_height(state)) 
+  if (!m_ordered_task_behaviour.check_finish_height(state)) 
     return false;
 
-  if (m_task_behaviour.fai_finish) {
+  if (m_ordered_task_behaviour.fai_finish) {
     return state.NavAltitude > fai_finish_height;
   }
   return true;

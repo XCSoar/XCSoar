@@ -43,6 +43,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatLine.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskAdvance.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
+	$(ENGINE_SRC_DIR)/Task/OrderedTaskBehaviour.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskEvents.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskManager.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/AbstractTaskFactory.cpp \

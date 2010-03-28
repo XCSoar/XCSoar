@@ -44,8 +44,9 @@
 StartPoint::StartPoint(ObservationZonePoint* _oz,
                        const TaskProjection& tp,
                        const Waypoint & wp,
-                       const TaskBehaviour& tb) : 
-  OrderedTaskPoint(_oz,tp,wp,tb), 
+                       const TaskBehaviour& tb,
+                       const OrderedTaskBehaviour& to): 
+  OrderedTaskPoint(_oz,tp,wp,tb,to), 
   enabled(true) 
 {
 }
@@ -74,7 +75,7 @@ StartPoint::update_sample(const AIRCRAFT_STATE& state,
                           TaskEvents &task_events)
 {
   if (isInSector(state)) {
-    if (!m_task_behaviour.check_start_speed(state)) {
+    if (!m_ordered_task_behaviour.check_start_speed(state, m_task_behaviour)) {
       task_events.warning_start_speed();
     }
   }
@@ -137,15 +138,19 @@ StartPoint::isInSector(const AIRCRAFT_STATE &state) const
   if (!ObservationZoneClient::isInSector(state)) 
     return false;
 
-  return m_task_behaviour.check_start_height(state);  
+  return m_ordered_task_behaviour.check_start_height(state, m_task_behaviour);  
 }
 
 bool 
 StartPoint::check_transition_exit(const AIRCRAFT_STATE & ref_now, 
                                   const AIRCRAFT_STATE & ref_last) const
 {
-  const bool now_in_height = m_task_behaviour.check_start_height(ref_now);
-  const bool last_in_height = m_task_behaviour.check_start_height(ref_last);
+  const bool now_in_height = 
+    m_ordered_task_behaviour.check_start_height(ref_now,
+                                                m_task_behaviour);
+  const bool last_in_height = 
+    m_ordered_task_behaviour.check_start_height(ref_last,
+                                                m_task_behaviour);
 
   if (now_in_height && last_in_height) {
     // both within height limit, so use normal location checks

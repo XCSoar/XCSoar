@@ -37,8 +37,8 @@
 #ifndef TASK_BEHAVIOUR_HPP
 #define TASK_BEHAVIOUR_HPP
 
-#include "Math/fixed.hpp"
 #include "Tasks/PathSolvers/OLCRules.hpp"
+#include "OrderedTaskBehaviour.hpp"
 
 class AIRCRAFT_STATE;
 
@@ -75,17 +75,6 @@ public:
   bool calc_effective_mc; /**< Option to enable calculation of effective mc */
   bool calc_glide_required; /**< Option to enable calculation of required sink rate for final glide */
   bool goto_nonlandable; /**< Option to enable Goto tasks for non-landable waypoints */
-  bool task_scored; /**< Option to enable calculation of scores, and protect against task changes
-                       if flight/task has started */
-  fixed aat_min_time; /**< Desired AAT minimum task time (s) */
-  fixed safety_height_terrain; /**< Minimum height above terrain for arrival height at non-landable waypoint (m) */
-  fixed safety_height_arrival; /**< Minimum height above terrain for arrival height at landable waypoint (m) */
-  fixed start_max_speed; /**< Maximum ground speed (m/s) allowed in start sector */
-  fixed start_max_speed_margin; /**< Margin in maximum ground speed (m/s) allowed in start sector */
-  unsigned start_max_height; /**< Maximum height (m) allowed in start sector */
-  unsigned start_max_height_ref; /**< Reference for max start height (0=AGL, 1=abs) */
-  unsigned start_max_height_margin; /**< Margin in maximum height (m) allowed in start sector */
-  unsigned finish_min_height; /**< Minimum height AGL (m) allowed to finish */
 
   fixed risk_gamma; /**< Compensation factor for risk at low altitude */
 
@@ -93,47 +82,23 @@ public:
 
   OLCRules olc_rules; /**< Rule set to scan for in OLC */
   unsigned olc_handicap; /**< Handicap factor */
-  bool fai_finish; /**< Whether ordered task finish requires FAI height rule */
 
   fixed safety_mc; /**< Safety MacCready value (m/s) used by abort task */
   bool safety_mc_use_current; /**< Whether to use safety mc value or current task polar MC */
+
+  fixed safety_height_terrain; /**< Minimum height above terrain for arrival height at non-landable waypoint (m) */
+  fixed safety_height_arrival; /**< Minimum height above terrain for arrival height at landable waypoint (m) */
+
+  fixed start_max_speed_margin; /**< Margin in maximum ground speed (m/s) allowed in start sector */
+  unsigned start_max_height_margin; /**< Margin in maximum height (m) allowed in start sector */
+
+  OrderedTaskBehaviour ordered_defaults; /**< Defaults for ordered task */
 
 /** 
  * Convenience function (used primarily for testing) to disable
  * all expensive task behaviour functions.
  */
   void all_off();
-
-/** 
- * Check whether aircraft speed is within start speed limits
- * 
- * @param state Aircraft state
- * @param with_margin Whether to use margin for minor rule violation
- * 
- * @return True if within limits
- */
-  bool check_start_speed(const AIRCRAFT_STATE &state, 
-                         const bool with_margin=false) const;
-
-/** 
- * Check whether aircraft height is within start height limit
- * 
- * @param state Aircraft state
- * @param with_margin Whether to use margin for minor rule violation
- * 
- * @return True if within limits
- */
-  bool check_start_height(const AIRCRAFT_STATE &state,
-                          const bool with_margin=false) const;
-
-/** 
- * Check whether aircraft height is within finish height limit
- * 
- * @param state Aircraft state
- * 
- * @return True if within limits
- */
-  bool check_finish_height(const AIRCRAFT_STATE &state) const;
 
 /** 
  * Return safety MC value (based on options)

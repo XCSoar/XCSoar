@@ -60,14 +60,16 @@ public:
  * @param tp Projection used for internal representations
  * @param wp Waypoint associated with this task point
  * @param tb Task Behaviour defining options (esp safety heights)
+ * @param to OrderedTask Behaviour defining options 
  * 
  * @return Partially initialised object 
  */
   ASTPoint(ObservationZonePoint* _oz,
            const TaskProjection&tp,
            const Waypoint & wp,
-           const TaskBehaviour &tb) 
-    : IntermediatePoint(_oz,tp,wp,tb)
+           const TaskBehaviour &tb,
+           const OrderedTaskBehaviour& to) 
+    : IntermediatePoint(_oz,tp,wp,tb,to)
     { };
 
 /** 

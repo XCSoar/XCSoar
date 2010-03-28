@@ -101,6 +101,8 @@ public:
    */
   bool task_commit(const OrderedTask& that);
 
+  const OrderedTaskBehaviour get_ordered_task_behaviour() const;
+
 protected:
   const TaskBehaviour &task_behaviour;
   TaskEvents &task_events;

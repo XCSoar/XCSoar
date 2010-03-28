@@ -67,13 +67,15 @@ public:
  * @param tp Global projection 
  * @param wp Waypoint origin of turnpoint
  * @param tb Task Behaviour defining options (esp safety heights)
+ * @param to OrderedTask Behaviour defining options 
  * 
  * @return Partially-initialised object
  */
   StartPoint(ObservationZonePoint* _oz,
              const TaskProjection& tp,
              const Waypoint & wp,
-             const TaskBehaviour& tb);
+             const TaskBehaviour& tb,
+             const OrderedTaskBehaviour& to);
 
 /** 
  * Set previous/next taskpoints in sequence.

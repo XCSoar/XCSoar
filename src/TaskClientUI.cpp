@@ -197,3 +197,10 @@ TaskClientUI::task_commit(const OrderedTask& that)
   ScopeLock lock(mutex);
   return task_manager.commit(that);
 }
+
+const OrderedTaskBehaviour 
+TaskClientUI::get_ordered_task_behaviour() const
+{
+  ScopeLock lock(mutex);
+  return task_manager.get_ordered_task_behaviour();
+}

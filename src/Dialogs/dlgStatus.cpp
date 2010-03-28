@@ -484,8 +484,7 @@ static void UpdateValuesTask(void) {
   TCHAR Temp[80];
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskTime"));
-  Units::TimeToText(Temp, 
-                    (int)XCSoarInterface::SettingsComputer().aat_min_time);
+  Units::TimeToText(Temp, task_ui.get_ordered_task_behaviour().aat_min_time);
   if (wp) {
     if (XCSoarInterface::Calculated().task_stats.has_targets) {
       wp->SetText(Temp);

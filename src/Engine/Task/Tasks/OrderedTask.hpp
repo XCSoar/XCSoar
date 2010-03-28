@@ -337,6 +337,8 @@ protected:
 
   bool has_targets() const;
 
+  bool is_scored() const;
+
 /** 
  * Retrieve vector of search points to be used in max/min distance
  * scans (by TaskDijkstra).
@@ -633,7 +635,13 @@ private:
   Factory_t factory_mode;
   AbstractTaskFactory* active_factory;
 
+  OrderedTaskBehaviour m_ordered_behaviour;
+
 public:
+
+  const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
+  OrderedTaskBehaviour& get_ordered_task_behaviour();
+  void set_ordered_task_behaviour(const OrderedTaskBehaviour& ob);
 
 #ifdef DO_PRINT
   void print(const AIRCRAFT_STATE &state);

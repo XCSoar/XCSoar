@@ -1458,7 +1458,7 @@ static void setVariables(void) {
   LoadFormProperty(*wf, _T("prpBlockSTF"),
                    XCSoarInterface::SettingsComputer().EnableBlockSTF);
   LoadFormProperty(*wf, _T("prpFAIFinishHeight"),
-                   XCSoarInterface::SettingsComputer().fai_finish);
+                   XCSoarInterface::SettingsComputer().ordered_defaults.fai_finish);
 
   wp = (WndProperty*)wf->FindByName(_T("prpOLCRules"));
   if (wp) {
@@ -2173,7 +2173,7 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(XCSoarInterface::SettingsComputer().start_max_height)));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -2191,13 +2191,13 @@ static void setVariables(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(_T("AGL")));
     dfe->addEnumText(gettext(_T("MSL")));
-    dfe->Set(XCSoarInterface::SettingsComputer().start_max_height_ref);
+    dfe->Set(XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height_ref);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(XCSoarInterface::SettingsComputer().start_max_speed)));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserSpeed(XCSoarInterface::SettingsComputer().ordered_defaults.start_max_speed)));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
   }
@@ -2741,11 +2741,11 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(_T("prpFAIFinishHeight"));
   if (wp) {
-    if (XCSoarInterface::SettingsComputer().fai_finish 
+    if (XCSoarInterface::SettingsComputer().ordered_defaults.fai_finish 
         != (wp->GetDataField()->GetAsInteger()>0)) {
-      XCSoarInterface::SetSettingsComputer().fai_finish = (wp->GetDataField()->GetAsInteger()>0);
+      XCSoarInterface::SetSettingsComputer().ordered_defaults.fai_finish = (wp->GetDataField()->GetAsInteger()>0);
       Profile::Set(szProfileFAIFinishHeight, 
-                    XCSoarInterface::SettingsComputer().fai_finish);
+                    XCSoarInterface::SettingsComputer().ordered_defaults.fai_finish);
       changed = true;
       taskchanged = true;
     }
@@ -3349,10 +3349,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)XCSoarInterface::SettingsComputer().start_max_height != ival) {
-      XCSoarInterface::SetSettingsComputer().start_max_height = ival;
+    if ((int)XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height != ival) {
+      XCSoarInterface::SetSettingsComputer().ordered_defaults.start_max_height = ival;
       Profile::Set(szProfileStartMaxHeight, 
-                    XCSoarInterface::SettingsComputer().start_max_height);
+                    XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height);
       changed = true;
       taskchanged = true;
     }
@@ -3371,13 +3371,13 @@ void dlgConfigurationShowModal(void){
   }
   wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
   if (wp) {
-    if (XCSoarInterface::SettingsComputer().start_max_height_ref 
+    if (XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height_ref 
         != (unsigned)wp->GetDataField()->GetAsInteger()) {
 
-      XCSoarInterface::SetSettingsComputer().start_max_height_ref = 
+      XCSoarInterface::SetSettingsComputer().ordered_defaults.start_max_height_ref = 
         wp->GetDataField()->GetAsInteger();
       Profile::Set(szProfileStartHeightRef, 
-                    XCSoarInterface::SettingsComputer().start_max_height_ref);
+                    XCSoarInterface::SettingsComputer().ordered_defaults.start_max_height_ref);
       changed = true;
       taskchanged = true;
     }
@@ -3386,10 +3386,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
   if (wp) {
     ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
-    if ((int)XCSoarInterface::SetSettingsComputer().start_max_speed != ival) {
-      XCSoarInterface::SetSettingsComputer().start_max_speed = ival;
+    if ((int)XCSoarInterface::SetSettingsComputer().ordered_defaults.start_max_speed != ival) {
+      XCSoarInterface::SetSettingsComputer().ordered_defaults.start_max_speed = ival;
       Profile::Set(szProfileStartMaxSpeed,
-                    (int)XCSoarInterface::SettingsComputer().start_max_speed);
+                    (int)XCSoarInterface::SettingsComputer().ordered_defaults.start_max_speed);
       changed = true;
       taskchanged = true;
     }

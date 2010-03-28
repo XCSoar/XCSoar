@@ -88,7 +88,7 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpAATTime"));
   if (wp) {
     if (XCSoarInterface::Calculated().task_stats.has_targets) {
-      wp->GetDataField()->SetAsFloat(XCSoarInterface::SettingsComputer().aat_min_time/60);
+      wp->GetDataField()->SetAsFloat(task_ui.get_ordered_task_behaviour().aat_min_time/60);
       wp->RefreshDisplay();
     } else {
       wp->hide();

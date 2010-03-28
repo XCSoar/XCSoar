@@ -68,8 +68,9 @@ public:
                     const TaskProjection& tp,
                     const Waypoint & wp, 
                     const TaskBehaviour& tb,
+                    const OrderedTaskBehaviour& to,
                     const bool b_scored=false): 
-    OrderedTaskPoint(_oz, tp, wp, tb, b_scored) 
+    OrderedTaskPoint(_oz, tp, wp, tb, to, b_scored) 
     {};
 
 /** 

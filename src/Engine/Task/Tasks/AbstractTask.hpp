@@ -430,6 +430,8 @@ protected:
    */
   virtual bool has_targets() const = 0;
 
+  virtual bool is_scored() const = 0;
+
 protected:
 
   unsigned activeTaskPoint; /**< task point sequence index */
@@ -448,8 +450,8 @@ protected:
  * @param location Location of observer
  * @param full_update Whether all calculations or minimal ones to be performed
  */
-  void update_stats_distances(const GEOPOINT &location,
-                              const bool full_update);
+  virtual void update_stats_distances(const GEOPOINT &location,
+                                      const bool full_update);
 
 private:
   void update_glide_solutions(const AIRCRAFT_STATE &state);

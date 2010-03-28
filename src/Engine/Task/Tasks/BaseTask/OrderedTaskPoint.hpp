@@ -66,6 +66,7 @@ public:
  * @param tp Projection used for internal representations
  * @param wp Waypoint associated with this task point
  * @param tb Task Behaviour defining options (esp safety heights)
+ * @param to OrderedTask Behaviour defining options 
  * @param b_scored Whether distance within OZ is scored 
  * 
  * @return Partially initialised object 
@@ -74,6 +75,7 @@ public:
                    const TaskProjection& tp,
                    const Waypoint & wp, 
                    const TaskBehaviour &tb,
+                   const OrderedTaskBehaviour& to,
                    const bool b_scored=false);
 
   virtual ~OrderedTaskPoint() {}
@@ -87,6 +89,7 @@ public:
    * @param wp Waypoint to shift to (or NULL)
    */
   OrderedTaskPoint* clone(const TaskBehaviour &task_behaviour,
+                          const OrderedTaskBehaviour &task_behaviour,
                           const TaskProjection &task_projection,
                           const Waypoint* waypoint=NULL) const;
 
@@ -212,6 +215,8 @@ public:
 #endif
 
 protected:
+
+  const OrderedTaskBehaviour &m_ordered_task_behaviour; /**< Reference to ordered task behaviour (for task-specific options) */
 
 /** 
  * Calculate distance from previous remaining/planned location to a point,

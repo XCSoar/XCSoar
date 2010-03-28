@@ -176,7 +176,8 @@ TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
     common_stats.task_started = task_ordered.get_stats().task_started;
     common_stats.task_finished = task_ordered.get_stats().task_finished;
 
-    common_stats.aat_time_remaining = max(fixed_zero, task_behaviour.aat_min_time
+    common_stats.aat_time_remaining = max(fixed_zero, 
+                                          task_ordered.get_ordered_task_behaviour().aat_min_time
                                           -task_ordered.get_stats().total.TimeElapsed);
 
     if (positive(common_stats.aat_time_remaining)) {
@@ -186,9 +187,11 @@ TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
       common_stats.aat_speed_remaining = -fixed_one;
     }
 
-    if (positive(task_behaviour.aat_min_time)) {
-      common_stats.aat_speed_max = task_ordered.get_stats().distance_max / task_behaviour.aat_min_time;
-      common_stats.aat_speed_min = task_ordered.get_stats().distance_min / task_behaviour.aat_min_time;
+    fixed aat_min_time = task_ordered.get_ordered_task_behaviour().aat_min_time;
+
+    if (positive(aat_min_time)) {
+      common_stats.aat_speed_max = task_ordered.get_stats().distance_max / aat_min_time;
+      common_stats.aat_speed_min = task_ordered.get_stats().distance_min / aat_min_time;
     } else {
       common_stats.aat_speed_max = -fixed_one;
       common_stats.aat_speed_min = -fixed_one;
@@ -643,4 +646,10 @@ OrderedTask::Factory_t
 TaskManager::set_factory(const OrderedTask::Factory_t the_factory)
 {
   return task_ordered.set_factory(the_factory);
+}
+
+const OrderedTaskBehaviour& 
+TaskManager::get_ordered_task_behaviour() const
+{
+  return task_ordered.get_ordered_task_behaviour();
 }

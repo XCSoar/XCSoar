@@ -143,6 +143,17 @@ GlideComputer glide_computer(task_calc,
 void
 test_task()
 {
+
+//    task_behaviour.all_off();
+//    task_behaviour.optimise_targets_range = true;
+//  task_behaviour.auto_mc=true;
+
+  task_behaviour.ordered_defaults.aat_min_time = 60*45;
+  task_behaviour.enable_olc = true;
+
+  TaskBehaviour& tb = XCSoarInterface::SetSettingsComputer();
+  tb = task_behaviour;
+
   GlidePolar glide_polar = task_manager.get_glide_polar();
   glide_polar.set_mc(fixed_two);
   task_manager.set_glide_polar(glide_polar);

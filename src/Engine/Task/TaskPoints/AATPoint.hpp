@@ -60,14 +60,16 @@ public:
  * @param tp Global projection 
  * @param wp Waypoint origin of turnpoint
  * @param tb Task Behaviour defining options (esp safety heights)
+ * @param to OrderedTask Behaviour defining options 
  * 
  * @return Partially-initialised object
  */
   AATPoint(ObservationZonePoint* _oz,
            const TaskProjection& tp,
            const Waypoint & wp,
-           const TaskBehaviour &tb) : 
-    IntermediatePoint(_oz,tp,wp,tb,true), 
+           const TaskBehaviour &tb,
+           const OrderedTaskBehaviour& to) : 
+    IntermediatePoint(_oz,tp,wp,tb,to,true), 
     m_target_location(wp.Location),
     m_target_save(wp.Location),
     m_target_locked(false)
