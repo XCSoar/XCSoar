@@ -97,7 +97,7 @@ static void OnCloseClicked(WindowControl * Sender)
 static void OnEditClicked(WindowControl * Sender)
 {
   (void)Sender;
-  task_modified = dlgTaskEditShowModal(*parent_window, &ordered_task);
+  task_modified |= dlgTaskEditShowModal(*parent_window, &ordered_task);
   if (task_modified) {
     RefreshView();
   }
@@ -106,7 +106,7 @@ static void OnEditClicked(WindowControl * Sender)
 static void OnListClicked(WindowControl * Sender)
 {
   (void)Sender;
-  task_modified = dlgTaskListShowModal(*parent_window, &ordered_task);
+  task_modified |= dlgTaskListShowModal(*parent_window, &ordered_task);
   if (task_modified) {
     RefreshView();
   }

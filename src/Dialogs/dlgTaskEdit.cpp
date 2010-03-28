@@ -90,7 +90,7 @@ RefreshView()
 static void OnPropertiesClicked(WindowControl * Sender)
 {
   (void)Sender;
-  task_modified = dlgTaskPropertiesShowModal(*parent_window, &ordered_task);
+  task_modified |= dlgTaskPropertiesShowModal(*parent_window, &ordered_task);
   RefreshView();
 }
 
@@ -150,7 +150,7 @@ OnTaskListEnter(unsigned ItemIndex)
   if (MessageBoxX(gettext(_T("Edit tp?")),
                   gettext(_T("Task Editor")),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
-    task_modified = true;
+    task_modified |= true;
     RefreshView();
   }
 }

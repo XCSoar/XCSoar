@@ -38,15 +38,10 @@ Copyright_License {
 
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
-#include "Protection.hpp"
-#include "Blackboard.hpp"
-#include "SettingsTask.hpp"
-#include "Logger.hpp"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "LocalPath.hpp"
-#include "DataField/FileReader.hpp"
-#include "Components.hpp"
+#include "DataField/Enum.hpp"
 #include "StringUtil.hpp"
 
 #include "Task/Tasks/OrderedTask.hpp"
@@ -56,12 +51,25 @@ Copyright_License {
 static SingleWindow *parent_window;
 static WndForm *wf=NULL;
 static OrderedTask* ordered_task= NULL;
+static bool task_changed = false;
 
 static void RefreshView()
 {
   WndProperty* wp;
   OrderedTask::Factory_t ftype = ordered_task->get_factory_type();
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
+
+  wp = (WndProperty*)wf->FindByName(_T("prpAutoAdvance"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(_T("Manual")));
+    dfe->addEnumText(gettext(_T("Auto")));
+    dfe->addEnumText(gettext(_T("Arm")));
+    dfe->addEnumText(gettext(_T("Arm start")));
+    dfe->Set(0);
+    wp->RefreshDisplay();
+  }
 
   wp = ((WndProperty*)wf->FindByName(_T("prpTaskScored")));
   if (wp) {
@@ -82,18 +90,94 @@ static void RefreshView()
     wp->GetDataField()->SetAsBoolean(p.fai_finish);
     wp->RefreshDisplay();
   }
+
+  wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxSpeed")));
+  if (wp) {
+    wp->set_visible(1);
+    wp->GetDataField()->SetAsFloat(Units::ToUserSpeed(p.start_max_speed));
+    wp->GetDataField()->SetUnits(Units::GetSpeedName());
+    wp->RefreshDisplay();
+  }
+
+  wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxHeight")));
+  if (wp) {
+    wp->set_visible(1);
+    wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(p.start_max_height));
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+    wp->RefreshDisplay();
+  }
+
+  wp = ((WndProperty*)wf->FindByName(_T("prpFinishMinHeight")));
+  if (wp) {
+    wp->set_visible(1);
+    wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(p.finish_min_height));
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(_T("AGL")));
+    dfe->addEnumText(gettext(_T("MSL")));
+    dfe->Set(p.start_max_height_ref);
+    wp->RefreshDisplay();
+  }
+
   // fixed aat_min_time
-  // start_max_speed
-  // start_max_height
-  // start_max_height_ref
   // finish_min_height
 }
 
 
+static void ReadValues()
+{
+  WndProperty* wp;
+  OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
+
+  wp = (WndProperty*)wf->FindByName(_T("prpFAIFinishHeight"));
+  if (wp) {
+    if (p.fai_finish 
+        != (wp->GetDataField()->GetAsInteger()>0)) {
+      p.fai_finish = (wp->GetDataField()->GetAsInteger()>0);
+      task_changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxHeight"));
+  if (wp) {
+    int ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
+    if ((int)p.start_max_height != ival) {
+      p.start_max_height = ival;
+      task_changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpStartMaxSpeed"));
+  if (wp) {
+    int ival = iround(Units::ToSysSpeed(wp->GetDataField()->GetAsInteger()));
+    if ((int)p.start_max_speed != ival) {
+      p.start_max_speed = ival;
+      task_changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
+  if (wp) {
+    int ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
+    if ((int)p.finish_min_height != ival) {
+      p.finish_min_height = ival;
+      task_changed = true;
+    }
+  }
+
+
+}
+
 static void OnCloseClicked(WindowControl * Sender)
 {
   (void)Sender;
-  wf->SetModalResult(mrCancel);
+  wf->SetModalResult(mrOK);
 }
 
 static CallBackTableEntry_t CallBackTable[]={
@@ -106,6 +190,7 @@ dlgTaskPropertiesShowModal(SingleWindow &parent, OrderedTask** task)
 {
   parent_window = &parent;
   ordered_task = *task;
+  task_changed = false;
 
   wf = NULL;
 
@@ -127,6 +212,9 @@ dlgTaskPropertiesShowModal(SingleWindow &parent, OrderedTask** task)
   RefreshView();
 
   wf->ShowModal();
+
+  ReadValues();
+
   delete wf;
   wf = NULL;
 
@@ -134,6 +222,6 @@ dlgTaskPropertiesShowModal(SingleWindow &parent, OrderedTask** task)
     *task = ordered_task;
     return true;
   } else {
-    return false;
+    return task_changed;
   }
 }
