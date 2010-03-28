@@ -89,7 +89,7 @@ public:
    * @param wp Waypoint to shift to (or NULL)
    */
   OrderedTaskPoint* clone(const TaskBehaviour &task_behaviour,
-                          const OrderedTaskBehaviour &task_behaviour,
+                          const OrderedTaskBehaviour &ordered_task_behaviour,
                           const TaskProjection &task_projection,
                           const Waypoint* waypoint=NULL) const;
 
