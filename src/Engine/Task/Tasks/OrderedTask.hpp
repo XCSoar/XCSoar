@@ -633,11 +633,16 @@ private:
   GEOPOINT m_location_min_last;
 
   Factory_t factory_mode;
+
   AbstractTaskFactory* active_factory;
 
   OrderedTaskBehaviour m_ordered_behaviour;
 
 public:
+
+  Factory_t get_factory_type() const {
+    return factory_mode;
+  }
 
   const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
   OrderedTaskBehaviour& get_ordered_task_behaviour();

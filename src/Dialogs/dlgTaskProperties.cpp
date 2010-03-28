@@ -49,15 +49,46 @@ Copyright_License {
 #include "Components.hpp"
 #include "StringUtil.hpp"
 
-#include "Task/TaskPoints/StartPoint.hpp"
-#include "Task/TaskPoints/FinishPoint.hpp"
-#include "Task/Visitors/TaskVisitor.hpp"
+#include "Task/Tasks/OrderedTask.hpp"
 
 #include <assert.h>
 
 static SingleWindow *parent_window;
 static WndForm *wf=NULL;
 static OrderedTask* ordered_task= NULL;
+
+static void RefreshView()
+{
+  WndProperty* wp;
+  OrderedTask::Factory_t ftype = ordered_task->get_factory_type();
+  OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
+
+  wp = ((WndProperty*)wf->FindByName(_T("prpTaskScored")));
+  if (wp) {
+    wp->GetDataField()->SetAsBoolean(1);
+    wp->RefreshDisplay();
+  }
+
+  wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
+  if (wp) {
+    wp->set_visible(ftype != OrderedTask::FACTORY_FAI);
+    wp->GetDataField()->SetAsFloat(p.aat_min_time/60);
+    wp->RefreshDisplay();
+  }
+
+  wp = ((WndProperty*)wf->FindByName(_T("prpFAIFinishHeight")));
+  if (wp) {
+    wp->set_visible(ftype == OrderedTask::FACTORY_FAI);
+    wp->GetDataField()->SetAsBoolean(p.fai_finish);
+    wp->RefreshDisplay();
+  }
+  // fixed aat_min_time
+  // start_max_speed
+  // start_max_height
+  // start_max_height_ref
+  // finish_min_height
+}
+
 
 static void OnCloseClicked(WindowControl * Sender)
 {
@@ -92,6 +123,9 @@ dlgTaskPropertiesShowModal(SingleWindow &parent, OrderedTask** task)
 
   if (!wf) return false;
   assert(wf!=NULL);
+
+  RefreshView();
+
   wf->ShowModal();
   delete wf;
   wf = NULL;
