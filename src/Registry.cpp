@@ -321,7 +321,7 @@ LoadRegistryFromFile(const TCHAR *szFile)
     return;
 
   LogStartUp(TEXT("Loading registry from %s"), szFile);
-  TextReader reader(szFile);
+  FileTextReader reader(szFile);
   if (reader.error())
     return;
 

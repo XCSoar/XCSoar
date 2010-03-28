@@ -121,7 +121,7 @@ ReadWinPilotPolar(Polar &polar)
   Profile::Get(szProfilePolarFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
-  TextReader reader(szFile);
+  FileTextReader reader(szFile);
   if (reader.error())
     return false;
 

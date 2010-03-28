@@ -44,83 +44,7 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-TextReader::TextReader(const char *path)
-{
-  file = fopen(path, "rb");
-}
-
-#ifdef _UNICODE
-
-TextReader::TextReader(const TCHAR *path)
-{
-  file = _tfopen(path, _T("rb"));
-}
-
-#endif
-
-TextReader::~TextReader()
-{
-  if (file != NULL)
-    fclose(file);
-}
-
-static bool
-is_line_terminator(char ch)
-{
-  return ch == '\n' || ch == '\r';
-}
-
-static bool
-chomp(char *p)
-{
-  size_t length = strlen(p);
-  if (length == 0)
-    return false;
-
-  if (!is_line_terminator(p[length - 1]))
-    return false;
-
-  --length;
-  while (length > 0 && is_line_terminator(p[length - 1]))
-    --length;
-
-  p[length] = 0;
-  return true;
-}
-
-char *
-TextReader::read_raw_line()
-{
-  size_t max = 256;
-  char *dest = buffer.get(max);
-  if (dest == NULL || fgets(dest, max, file) == NULL)
-    return NULL;
-
-  if (chomp(dest))
-    return dest;
-
-  /* the line is longer than the specified buffer; try again with a
-     larger buffer */
-  size_t length = strlen(dest);
-  max = 4096;
-  dest = buffer.grow(length + 1, max);
-  if (dest == NULL)
-    return NULL;
-
-  if (fgets(dest + length, max - length, file) == NULL || chomp(dest))
-    return dest;
-
-  /* still larger: last chance with an even larger buffer */
-  length = strlen(dest);
-  max = 16384;
-  dest = buffer.grow(length + 1, max);
-  if (dest == NULL)
-    return NULL;
-
-  fgets(dest + length, max - length, file);
-  chomp(dest);
-  return dest;
-}
+TextReader::~TextReader() {}
 
 #ifdef _UNICODE
 
@@ -152,3 +76,81 @@ TextReader::read_tchar_line()
 }
 
 #endif /* _UNICODE */
+
+FileTextReader::FileTextReader(const char *path)
+{
+  file = fopen(path, "rb");
+}
+
+#ifdef _UNICODE
+
+FileTextReader::FileTextReader(const TCHAR *path)
+{
+  file = _tfopen(path, _T("rb"));
+}
+
+#endif
+
+FileTextReader::~FileTextReader()
+{
+  if (file != NULL)
+    fclose(file);
+}
+
+static bool
+is_line_terminator(char ch)
+{
+  return ch == '\n' || ch == '\r';
+}
+
+static bool
+chomp(char *p)
+{
+  size_t length = strlen(p);
+  if (length == 0)
+    return false;
+
+  if (!is_line_terminator(p[length - 1]))
+    return false;
+
+  --length;
+  while (length > 0 && is_line_terminator(p[length - 1]))
+    --length;
+
+  p[length] = 0;
+  return true;
+}
+
+char *
+FileTextReader::read_raw_line()
+{
+  size_t max = 256;
+  char *dest = buffer.get(max);
+  if (dest == NULL || fgets(dest, max, file) == NULL)
+    return NULL;
+
+  if (chomp(dest))
+    return dest;
+
+  /* the line is longer than the specified buffer; try again with a
+     larger buffer */
+  size_t length = strlen(dest);
+  max = 4096;
+  dest = buffer.grow(length + 1, max);
+  if (dest == NULL)
+    return NULL;
+
+  if (fgets(dest + length, max - length, file) == NULL || chomp(dest))
+    return dest;
+
+  /* still larger: last chance with an even larger buffer */
+  length = strlen(dest);
+  max = 16384;
+  dest = buffer.grow(length + 1, max);
+  if (dest == NULL)
+    return NULL;
+
+  fgets(dest + length, max - length, file);
+  chomp(dest);
+  return dest;
+}

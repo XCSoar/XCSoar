@@ -88,7 +88,7 @@ OpenFLARMDetails()
   TCHAR filename[MAX_PATH];
   LocalPath(filename, TEXT("xcsoar-flarm.txt"));
 
-  TextReader reader(filename);
+  FileTextReader reader(filename);
   if (reader.error())
     return;
 

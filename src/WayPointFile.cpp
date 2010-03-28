@@ -218,7 +218,7 @@ WayPointFile::Parse(Waypoints &way_points, const RasterTerrain *terrain)
   // If normal file
   if (!compressed) {
     // Try to open waypoint file
-    TextReader reader(file);
+    FileTextReader reader(file);
     if (reader.error())
       return false;
 

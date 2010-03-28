@@ -77,7 +77,7 @@ StatusMessageList::LoadFile()
   if (string_is_empty(szFile1))
     return;
 
-  TextReader reader(szFile1);
+  FileTextReader reader(szFile1);
   // Unable to open file
   if (reader.error())
     return;

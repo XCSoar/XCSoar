@@ -194,7 +194,7 @@ LoadChecklist(void)
   TCHAR filename[MAX_PATH];
   LocalPath(filename, _T(XCSCHKLIST));
 
-  TextReader reader(filename);
+  FileTextReader reader(filename);
   if (reader.error())
     return;
 

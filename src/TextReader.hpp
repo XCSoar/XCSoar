@@ -47,27 +47,50 @@ Copyright_License {
 #include <tchar.h>
 #endif
 
-/**
- * Line-based reader for text files.  Currently, it is limited to
- * reading UTF-8 characters.
- */
 class TextReader {
 private:
-  FILE *file;
-
-  ReusableArray<char> buffer;
 #ifdef _UNICODE
   ReusableArray<TCHAR> tbuffer;
 #endif
 
 public:
-  TextReader(const char *path);
+  virtual ~TextReader();
+
+protected:
+  virtual char *read_raw_line() = 0;
+
+public:
+  char *read_utf8_line() {
+    return read_raw_line();
+  }
 
 #ifdef _UNICODE
-  TextReader(const TCHAR *path);
+  TCHAR *read_tchar_line();
+#else
+  char *read_tchar_line() {
+    return read_raw_line();
+  }
+#endif
+};
+
+/**
+ * Line-based reader for text files.  Currently, it is limited to
+ * reading UTF-8 characters.
+ */
+class FileTextReader : public TextReader {
+private:
+  FILE *file;
+
+  ReusableArray<char> buffer;
+
+public:
+  FileTextReader(const char *path);
+
+#ifdef _UNICODE
+  FileTextReader(const TCHAR *path);
 #endif
 
-  ~TextReader();
+  virtual ~FileTextReader();
 
   /**
    * Returns true if opening the file has failed.  This must be
@@ -78,29 +101,7 @@ public:
   }
 
 protected:
-  char *read_raw_line();
-
-public:
-  /**
-   * Reads one line from the input file.  The returned buffer is
-   * writable, but is invalidated by the next call.  The end-of-line
-   * characters are stripped, but not other leading/trailing
-   * whitespace.  Returns NULL on end of file or on error.
-   */
-  char *read_utf8_line() {
-    return read_raw_line();
-  }
-
-  /**
-   * Like read_raw_line(), but convert it to a TCHAR string.
-   */
-#ifdef _UNICODE
-  TCHAR *read_tchar_line();
-#else
-  char *read_tchar_line() {
-    return read_raw_line();
-  }
-#endif
+  virtual char *read_raw_line();
 };
 
 #endif

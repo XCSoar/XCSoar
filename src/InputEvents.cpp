@@ -211,7 +211,7 @@ InputEvents::readFile()
   if (string_is_empty(szFile1))
     return;
 
-  TextReader reader(szFile1);
+  FileTextReader reader(szFile1);
   if (reader.error())
     return;
 
