@@ -83,7 +83,7 @@ MainWindow::set(LPCTSTR text,
   rc = get_client_rect();
 #endif
 
-  Layout::Initalize(rc.right - rc.left, rc.bottom - rc.top);
+  Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
 
   LogStartUp(TEXT("InfoBox geometry"));
   InfoBoxLayout::ScreenGeometry(rc);
