@@ -143,7 +143,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                   0, 0, 640, 480);
   main_window.show();
 
-  Layout::Initalize(640, 480);
+  Layout::Initialize(640, 480);
   InitialiseFonts(Appearance, main_window.get_client_rect());
 
   dlgAirspaceWarningInit(main_window);
