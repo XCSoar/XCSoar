@@ -279,6 +279,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/TextReader.cpp \
 	$(SRC)/TextWriter.cpp \
+	$(SRC)/ZipTextReader.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \

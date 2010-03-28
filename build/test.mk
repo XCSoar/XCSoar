@@ -63,7 +63,7 @@ $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $
 	gcc -o $@ $<
 
 DEBUG_PROGRAM_NAMES = \
-	DumpTextFile WriteTextFile RunTextWriter \
+	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
 	RunWayPointParser RunDeviceDriver \
 	RunCanvas RunMapWindow RunDialog \
 	RunAirspaceWarningDialog \
@@ -78,6 +78,18 @@ DUMP_TEXT_FILE_LDADD = \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/DumpTextFile$(TARGET_EXEEXT): $(DUMP_TEXT_FILE_OBJS) $(DUMP_TEXT_FILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+DUMP_TEXT_ZIP_SOURCES = \
+	$(SRC)/TextReader.cpp \
+	$(SRC)/ZipTextReader.cpp \
+	$(TEST_SRC_DIR)/DumpTextZip.cpp
+DUMP_TEXT_ZIP_OBJS = $(call SRC_TO_OBJ,$(DUMP_TEXT_ZIP_SOURCES))
+DUMP_TEXT_ZIP_LDADD = \
+	$(ZZIP_LIBS) \
+	$(COMPAT_LIBS)
+$(TARGET_BIN_DIR)/DumpTextZip$(TARGET_EXEEXT): $(DUMP_TEXT_ZIP_OBJS) $(DUMP_TEXT_ZIP_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
