@@ -56,7 +56,7 @@ namespace Layout {
    * @param width the width of the screen in pixels
    * @param height the width of the screen in pixels
    */
-  void Initalize(unsigned width, unsigned height);
+  void Initialize(unsigned width, unsigned height);
 
   /**
    * Is scaling supported by this platform?

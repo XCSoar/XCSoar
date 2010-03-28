@@ -52,7 +52,7 @@ namespace Layout {
 }
 
 void
-Layout::Initalize(unsigned width, unsigned height)
+Layout::Initialize(unsigned width, unsigned height)
 {
   unsigned maxsize = max(width, height);
   unsigned minsize = min(width, height);
