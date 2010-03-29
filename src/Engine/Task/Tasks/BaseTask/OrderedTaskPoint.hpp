@@ -207,6 +207,8 @@ public:
  */
   virtual bool equals(const OrderedTaskPoint* other) const;
 
+  void scan_projection(TaskProjection& task_projection) const;
+
 #ifdef DO_PRINT
   virtual void print(std::ostream& f, const AIRCRAFT_STATE& state,
                      const int item=0) const;

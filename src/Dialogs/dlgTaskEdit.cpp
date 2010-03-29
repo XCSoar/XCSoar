@@ -156,11 +156,11 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 static void
 OnTaskListEnter(unsigned ItemIndex)
 {
-  if (MessageBoxX(gettext(_T("Edit tp?")),
-                  gettext(_T("Task Editor")),
-                  MB_YESNO|MB_ICONQUESTION) == IDYES) {
-    task_modified |= true;
-    RefreshView();
+  if (ItemIndex< ordered_task->task_size()) {
+    if (dlgTaskPointShowModal(*parent_window, &ordered_task, ItemIndex)) {
+      task_modified = true;
+      RefreshView();
+    }
   }
 }
 

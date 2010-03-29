@@ -77,3 +77,16 @@ void ChartProjection::set_projection(const RECT &rc,
   Orig_Screen.y = (rc.bottom + rc.top)/2;
   UpdateScreenBounds();
 }
+
+ChartProjection::ChartProjection(const RECT &rc,
+                                 const OrderedTaskPoint& point,
+                                 const GEOPOINT &fallback_loc)
+{
+  TaskProjection task_projection;
+  task_projection.reset(fallback_loc);
+  point.scan_projection(task_projection);
+
+  const GEOPOINT center = task_projection.get_center();
+  const fixed radius = max(fixed(1e3), task_projection.get_radius()); 
+  set_projection(rc, center, radius);
+}

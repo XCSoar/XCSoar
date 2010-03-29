@@ -52,6 +52,10 @@ public:
                   const GEOPOINT &fallback_loc);
 
   ChartProjection(const RECT &rc,
+                  const OrderedTaskPoint& point,
+                  const GEOPOINT &fallback_loc);
+
+  ChartProjection(const RECT &rc,
                   const TracePointVector& trace,
                   const GEOPOINT &fallback_loc);
 private:

@@ -178,6 +178,7 @@ IDR_XML_TASKLIST        XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgTaskList.xml
 IDR_XML_TASKMANAGER     XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgTaskManager.xml"
 IDR_XML_TASKPROPERTIES  XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgTaskProperties.xml"
 IDR_XML_TASKTYPE        XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgTaskType.xml"
+IDR_XML_TASKPOINT       XMLDIALOG DISCARDABLE   "../Data/Dialogs/dlgTaskPoint.xml"
 
 // --- EGM96 Raster Data --- 
 

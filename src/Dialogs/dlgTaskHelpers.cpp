@@ -125,6 +125,7 @@ private:
   TCHAR *text;
 };
 
+
 class LabelTaskPoint:
   public TaskPointConstVisitor
 {

@@ -68,14 +68,9 @@ OrderedTask::update_geometry()
   for (unsigned i=0; i<tps.size(); ++i) {
     if (i==0) {
       task_projection.reset(tps[i]->get_location());
-    } else {
-      task_projection.scan_location(tps[i]->get_location());
     }
-    static const fixed fixed_steps(0.05);
 
-    for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps) {
-      task_projection.scan_location(tps[i]->get_boundary_parametric(t));
-    }
+    tps[i]->scan_projection(task_projection);
   }
   task_projection.update_fast();
 
@@ -1079,4 +1074,15 @@ OrderedTask::clear()
   }
   reset();
   m_ordered_behaviour = task_behaviour.ordered_defaults;
+}
+
+
+OrderedTaskPoint* 
+OrderedTask::get_tp(const unsigned position)
+{
+  if (position>= task_size()) {
+    return NULL;
+  } else {
+    return tps[position];
+  }
 }
