@@ -39,6 +39,8 @@ Copyright_License {
 #include "dlgTaskHelpers.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Units.hpp"
+#include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type)
 {
@@ -92,4 +94,89 @@ void OrderedTaskSummary(OrderedTask* task, TCHAR* text)
               Units::GetDistanceName()
       );
   }
+}
+
+
+class LabelObservationZone
+{
+public:
+  LabelObservationZone(TCHAR* buff): text(buff) {}
+
+  void Visit(const FAISectorZone& oz) 
+    {
+      _stprintf(text, _T("FAI Sector"));
+    }
+
+  void Visit(const SectorZone& oz) 
+    {
+      _stprintf(text, _T("Sector"));
+    }
+
+  void Visit(const LineSectorZone& oz) 
+    {
+      _stprintf(text, _T("Line"));
+    }
+
+  void Visit(const CylinderZone& oz) 
+    {
+      _stprintf(text, _T("Cylinder"));
+    }
+private:
+  TCHAR *text;
+};
+
+class LabelTaskPoint:
+  public TaskPointConstVisitor
+{
+public:
+  LabelTaskPoint(const unsigned index, TCHAR* buff):
+    text(buff),
+    m_active_index(index),
+    m_index(0) {
+    text[0] = NULL;
+  }
+
+  void Visit(const UnorderedTaskPoint& tp) {
+  }
+  void Visit(const StartPoint& tp) {    
+    if (found()) {
+      _stprintf(text, _T("S:  %s"), tp.get_waypoint().Name.c_str());
+    }
+    inc_index();
+  }
+  void Visit(const FinishPoint& tp) {
+    if (found()) {
+      _stprintf(text, _T("F:  %s"), tp.get_waypoint().Name.c_str());
+    }
+    inc_index();
+  }
+  void Visit(const AATPoint& tp) {
+    if (found()) {
+      _stprintf(text, _T("A%d: %s"), m_index, tp.get_waypoint().Name.c_str());
+    }
+    inc_index();
+  }
+  void Visit(const ASTPoint& tp) {
+    if (found()) {
+      _stprintf(text, _T("T%d: %s"), m_index, tp.get_waypoint().Name.c_str());
+    }
+    inc_index();
+  }
+
+private:
+  bool found() {
+    return (m_index == m_active_index);
+  }
+  void inc_index() {
+    m_index++;
+  }
+  unsigned m_index;
+  const unsigned m_active_index;
+  TCHAR* text;
+};
+
+void OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* text)
+{
+  LabelTaskPoint tpv(index, text);
+  task->tp_CAccept(tpv);
 }

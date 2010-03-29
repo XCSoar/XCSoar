@@ -133,22 +133,21 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
   ordered_task->CAccept(dv); 
 }
 
-static unsigned UpLimit=0;
-
 
 static void
 OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
   TCHAR sTmp[120];
-  if (DrawListIndex > UpLimit) {
+  if (DrawListIndex > ordered_task->task_size()) {
+    // error!
     return;
   }
-  if (DrawListIndex == UpLimit) {
+  if (DrawListIndex == ordered_task->task_size()) {
     _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 sTmp);
   } else {
-    _stprintf(sTmp, _T("TP%d"), DrawListIndex);
+    OrderedTaskPointLabel(ordered_task, DrawListIndex, sTmp);
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 sTmp);
   }
@@ -202,8 +201,7 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
 
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);
-  UpLimit = 3;
-  wTaskPoints->SetLength(UpLimit+1);
+  wTaskPoints->SetLength(ordered_task->task_size()+1);
 
   RefreshView();
 

@@ -43,6 +43,7 @@ Copyright_License {
 const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type);
 const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type);
 void OrderedTaskSummary(OrderedTask* task, TCHAR* text);
+void OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* text);
 
 #endif
 
