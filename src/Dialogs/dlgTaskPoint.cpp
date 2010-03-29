@@ -73,7 +73,7 @@ static unsigned active_index = 0;
 static void OnCloseClicked(WindowControl * Sender)
 {
   (void)Sender;
-  wf->SetModalResult(mrCancel);
+  wf->SetModalResult(mrOK);
 }
 
 
@@ -178,6 +178,73 @@ private:
   TCHAR *text;
 };
 
+class TPReadObservationZone:
+  public ObservationZoneVisitor
+{
+public:
+  void Visit(FAISectorZone& oz) 
+    {
+    }
+
+  void Visit(SectorZone& oz) 
+    {
+      WndProperty* wv;
+      wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorRadius")));
+      if (wv) {
+        double val = Units::ToSysDistance(wv->GetDataField()->GetAsFloat());
+        if (val != oz.getRadius()) {
+          oz.setRadius((fixed)val);
+          task_modified = true;
+        }
+      }
+
+      wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorStartRadial")));
+      if (wv) {
+        double val = wv->GetDataField()->GetAsFloat();
+        if (val != oz.getStartRadial()) {
+          oz.setStartRadial((fixed)val);
+          task_modified = true;
+        }
+      }
+
+      wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorFinishRadial")));
+      if (wv) {
+        double val = wv->GetDataField()->GetAsFloat();
+        if (val != oz.getEndRadial()) {
+          oz.setEndRadial((fixed)val);
+          task_modified = true;
+        }
+      }
+    }
+
+  void Visit(LineSectorZone& oz) 
+    {
+      WndProperty* wv;
+      wv = ((WndProperty*)wf->FindByName(_T("prpOZLineLength")));
+      if (wv) {
+        double val = Units::ToSysDistance(wv->GetDataField()->GetAsFloat());
+        if (val != oz.getLength()) {
+          oz.setLength((fixed)val);
+          task_modified = true;
+        }
+      }
+    }
+
+  void Visit(CylinderZone& oz) 
+    {
+      WndProperty* wv;
+      wv = ((WndProperty*)wf->FindByName(_T("prpOZCylinderRadius")));
+      if (wv) {
+        double val = Units::ToSysDistance(wv->GetDataField()->GetAsFloat());
+        if (val != oz.getRadius()) {
+          oz.setRadius((fixed)val);
+          task_modified = true;
+        }
+      }
+    }
+};
+
+
 class TPLabelTaskPoint:
   public TaskPointConstVisitor
 {
@@ -223,6 +290,16 @@ RefreshView()
   wf->SetCaption(tpv.text);
 }
 
+
+static void
+ReadValues()
+{
+  TPReadObservationZone tpv;
+  OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
+  tp->Accept_oz(tpv);
+}
+
+
 static void
 OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 {
@@ -254,8 +331,22 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 }
 
 
+static void 
+OnRemoveClicked(WindowControl * Sender) 
+{
+  (void)Sender;
+
+  if (!ordered_task->get_factory().remove(active_index))
+    return;
+
+  task_modified = true;
+  wf->SetModalResult(mrCancel);
+}
+
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnRemoveClicked),
   DeclareCallBackEntry(OnTaskPaint),
   DeclareCallBackEntry(NULL)
 };
@@ -289,7 +380,11 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task, const unsigned i
 
   if (!wf) return false;
   assert(wf!=NULL);
-  wf->ShowModal();
+
+  if (wf->ShowModal() == mrOK) {
+    ReadValues();
+  }
+
   delete wf;
   wf = NULL;
 
