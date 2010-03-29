@@ -40,7 +40,6 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
-#include "UtilsText.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "RasterTerrain.h"
@@ -59,8 +58,6 @@ using std::max;
 #ifdef HAVE_POSIX
 #include <errno.h>
 #endif
-
-#include "wcecompat/ts_string.h"
 
 WayPointFile* WayPointParser::wp_file0 = NULL;
 WayPointFile* WayPointParser::wp_file1 = NULL;

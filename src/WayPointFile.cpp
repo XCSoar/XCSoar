@@ -42,13 +42,13 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Dialogs.h"
 #include "Profile.hpp"
-#include "UtilsText.hpp"
 #include "Language.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "UtilsFile.hpp"
 #include "TextReader.hpp"
+#include "ZipTextReader.hpp"
 #include "TextWriter.hpp"
 
 #include "wcecompat/ts_string.h"
@@ -231,23 +231,16 @@ WayPointFile::Parse(Waypoints &way_points, const RasterTerrain *terrain)
   // If compressed file inside map file
   } else {
     // convert path to ascii
-    char path_ascii[MAX_PATH];
-    unicode2ascii(file, path_ascii, sizeof(path_ascii));
-
-    // Try to open compressed waypoint file inside map file
-    ZZIP_FILE *fp;
-    fp = zzip_fopen(path_ascii, "rt");
-    if (fp == NULL)
+    ZipTextReader reader(file);
+    if (reader.error())
       return false;
 
     // Read through the lines of the file
-    TCHAR line[255];
-    for (unsigned i = 0; ReadString(fp, 255, line); i++) {
+    TCHAR *line;
+    for (unsigned i = 0; (line = reader.read_tchar_line()) != NULL; i++) {
       // and parse them
       parseLine(line, i, way_points, terrain);
     }
-
-    zzip_fclose(fp);
   }
 
   return true;

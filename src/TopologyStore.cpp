@@ -49,11 +49,10 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "LogFile.hpp"
 #include "SettingsUser.hpp" // for EnableTopology
-#include <assert.h>
 #include "Interface.hpp"
+#include "ZipTextReader.hpp"
 
-#include "wcecompat/ts_string.h"
-// TODO code: check ts_string does the right thing
+#include <assert.h>
 
 void
 TopologyStore::TriggerUpdateCaches(MapWindowProjection &m_projection)
@@ -180,17 +179,14 @@ TopologyStore::Open()
   }
 
   // Ready to open the file now..
-  static ZZIP_FILE* zFile;
-  char zfilename[MAX_PATH];
-  unicode2ascii(szFile, zfilename, MAX_PATH);
-  zFile = zzip_fopen(zfilename, "rt");
-  if (!zFile) {
+  ZipTextReader reader(szFile);
+  if (reader.error()) {
     LogStartUp(TEXT("No topology file: %s"), szFile);
     return;
   }
 
   TCHAR ctemp[80];
-  TCHAR TempString[READLINE_LENGTH + 1];
+  TCHAR *TempString;
   TCHAR ShapeName[50];
   double ShapeRange;
   long ShapeIcon;
@@ -200,7 +196,7 @@ TopologyStore::Open()
   int numtopo = 0;
   char ShapeFilename[MAX_PATH];
 
-  while(ReadString(zFile,READLINE_LENGTH,TempString)) {
+  while ((TempString = reader.read_tchar_line()) != NULL) {
     // Look For Comment
     if (!string_is_empty(TempString)
         && (_tcsstr(TempString, TEXT("*")) != TempString)) {
@@ -280,6 +276,4 @@ TopologyStore::Open()
       numtopo++;
     }
   }
-
-  zzip_fclose(zFile);
 }

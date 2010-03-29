@@ -38,7 +38,6 @@ Copyright_License {
 */
 
 #include "AirfieldDetails.h"
-#include "UtilsText.hpp"
 #include "SettingsTask.hpp"
 #include "Language.hpp"
 #include "Profile.hpp"
@@ -46,10 +45,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "StringUtil.hpp"
-
-#include <zzip/lib.h>
-#include "wcecompat/ts_string.h"
-#include <stdlib.h>
+#include "ZipTextReader.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointSorter.hpp"
 #include "Components.hpp"
@@ -122,20 +118,18 @@ LookupAirfieldDetail(WaypointSelectInfoVector &airports,
  * Parses the data provided by the airfield details file handle
  */
 static void
-ParseAirfieldDetails(ZZIP_FILE* zAirfieldDetails)
+ParseAirfieldDetails(TextReader &reader)
 {
   /*
    * VENTA3 fix: if empty lines, do not set details for the waypoint
    *        fix: remove CR from text appearing as a spurious char in waypoint details
    */
 
-  TCHAR TempString[READLINE_LENGTH + 1];
   TCHAR CleanString[READLINE_LENGTH + 1];
   tstring Details;
   TCHAR Name[201];
 
   Name[0] = 0;
-  TempString[0] = 0;
   CleanString[0] = 0;
 
   bool inDetails = false;
@@ -150,7 +144,8 @@ ParseAirfieldDetails(ZZIP_FILE* zAirfieldDetails)
   WaypointSelectInfoVector airports = waypoints_filter.get_list();
   waypoints_filter.filter_airport(airports);
 
-  while (ReadString(zAirfieldDetails, READLINE_LENGTH, TempString)) {
+  TCHAR *TempString;
+  while ((TempString = reader.read_tchar_line()) != NULL) {
     if (TempString[0] == '[') { // Look for start
       if (inDetails) {
         LookupAirfieldDetail(airports, Name, Details);
@@ -218,11 +213,14 @@ ReadAirfieldFile()
   TCHAR path[MAX_PATH];
   Profile::Get(szProfileAirfieldFile, path, MAX_PATH);
 
-  char zfilename[MAX_PATH];
-
   if (!string_is_empty(path)) {
     ExpandLocalPath(path);
-    unicode2ascii(path, zfilename, MAX_PATH);
+
+    FileTextReader reader(path);
+    if (reader.error())
+      return;
+
+    ParseAirfieldDetails(reader);
   } else {
     Profile::Get(szProfileMapFile, path, MAX_PATH);
     if (string_is_empty(path))
@@ -230,14 +228,11 @@ ReadAirfieldFile()
 
     ExpandLocalPath(path);
     _tcscat(path, _T("/airfields.txt"));
-    unicode2ascii(path, zfilename, MAX_PATH);
+
+    ZipTextReader reader(path);
+    if (reader.error())
+      return;
+
+    ParseAirfieldDetails(reader);
   }
-
-  ZZIP_FILE* zAirfieldDetails = zzip_fopen(zfilename, "rb");
-  if (zAirfieldDetails == NULL)
-    return;
-
-  ParseAirfieldDetails(zAirfieldDetails);
-
-  zzip_fclose(zAirfieldDetails);
 }

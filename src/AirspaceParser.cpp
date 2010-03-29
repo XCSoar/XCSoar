@@ -45,8 +45,8 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Math/Earth.hpp"
 #include "options.h"
-#include "Compatibility/string.h"
 #include "Math/Geometry.hpp"
+#include "ZipTextReader.hpp"
 
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
@@ -67,9 +67,9 @@ static void
 CalculateSector(TCHAR *Text);
 
 static bool
-ParseLine(Airspaces &airspace_database, int nLineType);
+ParseLine(Airspaces &airspace_database, int nLineType, TCHAR *TempString);
 
-static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text);
+static int GetNextLine(TextReader &reader, TCHAR *&Text);
 
 static int LineCount;
 
@@ -117,9 +117,6 @@ static const int k_nAreaType[k_nAreaCount] = {
 
 // this can now be called multiple times to load several airspaces.
 
-static TCHAR TempString[READLINE_LENGTH+1];
-
-
 struct TempAirspaceType {
   TempAirspaceType() {
     reset();
@@ -160,7 +157,7 @@ struct TempAirspaceType {
 static TempAirspaceType temp_area;
 
 static bool
-ReadAirspace(Airspaces &airspace_database, ZZIP_FILE *fp)
+ReadAirspace(Airspaces &airspace_database, TextReader &reader)
 {
   LogStartUp(TEXT("ReadAirspace"));
   int	Tock = 0;
@@ -174,29 +171,28 @@ ReadAirspace(Airspaces &airspace_database, ZZIP_FILE *fp)
   XCSoarInterface::CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
   // Need step size finer than default 10
   XCSoarInterface::SetProgressStepSize(5);
-  dwStep = zzip_file_size(fp) / 5L;
+  dwStep = reader.size() / 5L;
 
   dwOldPos = 0L;
   XCSoarInterface::StepProgressDialog();
 
   temp_area.reset();
 
-  while((nLineType = GetNextLine(fp, TempString)) >= 0) {
+  TCHAR *line;
+  while((nLineType = GetNextLine(reader, line)) >= 0) {
     Tock++;
     Tock %= 50;
 
     if (Tock == 0) {
-      dwPos = zzip_tell(fp);
+      dwPos = reader.tell();
       if ((dwPos - dwOldPos) >= dwStep) {
         XCSoarInterface::StepProgressDialog();
         dwOldPos = dwPos;
       }
     }
 
-    if (!ParseLine(airspace_database, nLineType)) {
+    if (!ParseLine(airspace_database, nLineType, line))
       return false;
-    }
-
   }
 
   // Process final area (if any). bFillMode is true.  JG 10-Nov-2005
@@ -207,7 +203,7 @@ ReadAirspace(Airspaces &airspace_database, ZZIP_FILE *fp)
 }
 
 static bool
-ParseLine(Airspaces &airspace_database, int nLineType)
+ParseLine(Airspaces &airspace_database, int nLineType, TCHAR *TempString)
 {
   int nIndex;
   GEOPOINT TempPoint;
@@ -310,16 +306,14 @@ OnError:
 
 
 // Returns index of line type found, or -1 if end of file reached
-static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
+static int GetNextLine(TextReader &reader, TCHAR *&Text)
 {
   TCHAR *Comment;
   int nSize;
   int nLineType = -1;
   TCHAR sTmp[READLINE_LENGTH];
 
-  while (ReadString(fp, READLINE_LENGTH, Text)){
-    // JMW was ReadStringX
-
+  while ((Text = reader.read_tchar_line()) != NULL) {
     LineCount++;
 
     nSize = _tcslen(Text);
@@ -361,7 +355,7 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
       default:
         _stprintf(sTmp, _T("%s: %d\r\n\"%s\"\r\n%s."),
                   gettext(_T("Parse Error at Line")),
-                  LineCount, TempString,
+                  LineCount, Text,
                   gettext(_T("Line skipped.")));
         if (MessageBoxX(sTmp,
                         gettext(_T("Airspace")),
@@ -396,7 +390,7 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
       default:
         _stprintf(sTmp, _T("%s: %d\r\n\"%s\"\r\n%s."),
                   gettext(_T("Parse Error at Line")),
-                  LineCount, TempString,
+                  LineCount, Text,
                   gettext(_T("Line skipped.")));
         if (MessageBoxX(sTmp,
                         gettext(_T("Airspace")),
@@ -420,7 +414,7 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
     default:
       _stprintf(sTmp, _T("%s: %d\r\n\"%s\"\r\n%s."),
                 gettext(_T("Parse Error at Line")),
-                LineCount, TempString,
+                LineCount, Text,
                 gettext(_T("Line skipped.")));
       if (MessageBoxX(sTmp, gettext(_T("Airspace")),
                       MB_OKCANCEL) == IDCANCEL)
@@ -739,12 +733,10 @@ OLD_TASK
 bool
 ReadAirspace(Airspaces &airspace_database, const char *path)
 {
-  ZZIP_FILE *fp = zzip_fopen(path, "rt");
-  if (fp == NULL)
+  ZipTextReader reader(path);
+  if (reader.error())
     return false;
 
-  const bool retval = ReadAirspace(airspace_database, fp);
-  zzip_fclose(fp);
-  return retval;
+  return ReadAirspace(airspace_database, reader);
 }
 
