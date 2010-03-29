@@ -88,5 +88,5 @@ ChartProjection::ChartProjection(const RECT &rc,
 
   const GEOPOINT center = task_projection.get_center();
   const fixed radius = max(fixed(1e3), task_projection.get_radius()); 
-  set_projection(rc, center, radius);
+  set_projection(rc, center, radius*1.3);
 }
