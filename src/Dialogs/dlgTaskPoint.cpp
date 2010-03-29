@@ -77,11 +77,11 @@ static void OnCloseClicked(WindowControl * Sender)
 }
 
 
-class LabelObservationZone:
+class TPLabelObservationZone:
   public ObservationZoneConstVisitor
 {
 public:
-  LabelObservationZone(TCHAR* buff): text(buff) {
+  TPLabelObservationZone(TCHAR* buff): text(buff) {
     text[0]= 0;
   }
 
@@ -211,7 +211,7 @@ RefreshView()
   wTaskView->invalidate();
 
   TCHAR buf[100];
-  LabelObservationZone ozv(buf);
+  TPLabelObservationZone ozv(buf);
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
 
   if (tp) {
