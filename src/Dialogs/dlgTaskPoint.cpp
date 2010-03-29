@@ -155,6 +155,9 @@ public:
       }
       _stprintf(text, _T("Cylinder"));
     }
+
+  TCHAR *text;
+
 private:
   void hide_all() {
     WndFrame* wp;
@@ -175,7 +178,6 @@ private:
       wp->hide();
     }
   }
-  TCHAR *text;
 };
 
 class TPReadObservationZone:
@@ -277,12 +279,25 @@ RefreshView()
 {
   wTaskView->invalidate();
 
-  TCHAR buf[100];
-  TPLabelObservationZone ozv(buf);
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
 
-  if (tp) {
-    tp->CAccept_oz(ozv);
+  if (!tp) {
+    return;
+  }
+
+  TCHAR buf[100];
+  TPLabelObservationZone ozv(buf);
+  tp->CAccept_oz(ozv);
+
+  WndButton* wb;
+  wb = ((WndButton*)wf->FindByName(_T("butType")));
+  if (wb) {
+    wb->SetCaption(ozv.text);
+  }
+  
+  wb = ((WndButton*)wf->FindByName(_T("butDetails")));
+  if (wb) {
+    wb->SetCaption(tp->get_waypoint().Name.c_str());
   }
 
   TPLabelTaskPoint tpv(buf);
@@ -344,10 +359,53 @@ OnRemoveClicked(WindowControl * Sender)
 }
 
 
+static void OnMoveAfterClicked(WindowControl * Sender){
+  (void)Sender;
+  if (!ordered_task->get_factory().swap(active_index, true))
+    return;
+  task_modified = true;
+  wf->SetModalResult(mrOK);
+}
+
+static void OnMoveBeforeClicked(WindowControl * Sender){
+  (void)Sender;
+  if (!ordered_task->get_factory().swap(active_index-1, true))
+    return;
+  task_modified = true;
+  wf->SetModalResult(mrOK);
+}
+
+static void OnDetailsClicked(WindowControl * Sender) {
+  OrderedTaskPoint* task_point = ordered_task->get_tp(active_index);
+  if (task_point) {
+    dlgWayPointDetailsShowModal(*parent_window, task_point->get_waypoint());
+  }
+}
+
+static void OnRelocateClicked(WindowControl * Sender) {
+  const Waypoint *wp = dlgWayPointSelect(*parent_window,
+                                         XCSoarInterface::Basic().Location);
+  if (wp == NULL)
+    return;
+
+  ordered_task->get_factory().relocate(active_index, *wp);
+  task_modified = true;
+  RefreshView();
+}
+
+
+static void OnTypeClicked(WindowControl * Sender) {
+}
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnRemoveClicked),
+  DeclareCallBackEntry(OnRelocateClicked),
+  DeclareCallBackEntry(OnDetailsClicked),
+  DeclareCallBackEntry(OnTypeClicked),
   DeclareCallBackEntry(OnTaskPaint),
+  DeclareCallBackEntry(OnMoveAfterClicked),
+  DeclareCallBackEntry(OnMoveBeforeClicked),
   DeclareCallBackEntry(NULL)
 };
 
