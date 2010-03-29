@@ -104,19 +104,26 @@ OnTaskListEnter(unsigned ItemIndex)
     // no change
     return;
   }
+  bool apply = false;
   if (!ordered_task->task_size()) {
-
+    apply = true;
     // empty task, don't ask confirmation
-    task_modified |= true;
-    wf->SetModalResult(mrOK);
-
   } else if (MessageBoxX(gettext(_T("Change task type?")),
                   gettext(_T("Task Type")),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
+    apply = true;
+  }
+  if (apply) {
     task_modified |= true;
     ordered_task->set_factory(get_cursor_type());
     wf->SetModalResult(mrOK);
   }
+}
+
+static void
+OnTaskCursorCallback(unsigned i)
+{
+  RefreshView();
 }
 
 static CallBackTableEntry_t CallBackTable[]={
@@ -152,7 +159,9 @@ dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task)
 
   wTaskTypes->SetActivateCallback(OnTaskListEnter);
   wTaskTypes->SetPaintItemCallback(OnTaskPaintListItem);
-  UpLimit = 3;
+  wTaskTypes->SetCursorCallback(OnTaskCursorCallback);
+
+  UpLimit = factory_types.size();
   wTaskTypes->SetLength(UpLimit);
 
   for (unsigned i=0; i<UpLimit; i++) {

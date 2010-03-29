@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "dlgTaskHelpers.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Units.hpp"
 
 const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type)
 {
@@ -73,3 +74,22 @@ const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
   return text;
 }
 
+void OrderedTaskSummary(OrderedTask* task, TCHAR* text)
+{
+  const TaskStats &stats = task->get_stats();
+
+  if (!task->task_size()) {
+    _stprintf(text, _T("%s\nTask is empty"),
+              OrderedTaskFactoryName(task->get_factory_type()));
+  } else {
+    _stprintf(text, _T("%s\nNominal dist: %.0f %s\nMax dist: %.0f %s\nMin dist: %.0f %s"), 
+              OrderedTaskFactoryName(task->get_factory_type()),
+              Units::ToUserDistance(stats.distance_nominal),
+              Units::GetDistanceName(),
+              Units::ToUserDistance(stats.distance_max),
+              Units::GetDistanceName(),
+              Units::ToUserDistance(stats.distance_min),
+              Units::GetDistanceName()
+      );
+  }
+}

@@ -47,6 +47,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 
+#include "Dialogs/dlgTaskHelpers.hpp"
+
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
@@ -80,9 +82,10 @@ RefreshView()
 
   WndFrame* wSummary = (WndFrame *)wf->FindByName(_T("frmSummary"));
   if (wSummary) {
-    wSummary->SetCaption(_T("AAT\nNominal dist: 30km\nMax dist: 40km\nMin dist: 20km"));
+    TCHAR text[300];
+    OrderedTaskSummary(ordered_task, text);
+    wSummary->SetCaption(text);
   }
-
 }
 
 

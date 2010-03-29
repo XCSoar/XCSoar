@@ -47,6 +47,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "DataField/FileReader.hpp"
 #include "StringUtil.hpp"
+#include "Dialogs/dlgTaskHelpers.hpp"
 
 #include "RenderTask.hpp"
 #include "RenderTaskPoint.hpp"
@@ -72,9 +73,7 @@ static void
 OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT rc = Sender->get_client_rect();
-
   Chart chart(canvas, rc);
-
 
   if (wTasks->GetCursorIndex()>0) {
     chart.DrawNoData();
@@ -129,9 +128,14 @@ RefreshView()
 
   WndFrame* wSummary = (WndFrame *)wf->FindByName(_T("frmSummary"));
   if (wSummary) {
-    wSummary->SetCaption(_T("AAT\nNominal dist: 30km\nMax dist: 40km\nMin dist: 20km"));
+    if (wTasks->GetCursorIndex()==0) {
+      TCHAR text[300];
+      OrderedTaskSummary(ordered_task, text);
+      wSummary->SetCaption(text);
+    } else {
+      wSummary->SetCaption(_T("null"));
+    }
   }
-
 }
 
 
