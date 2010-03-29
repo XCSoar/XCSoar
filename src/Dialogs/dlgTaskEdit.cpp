@@ -45,7 +45,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "LocalPath.hpp"
-#include "DataField/FileReader.hpp"
 #include "StringUtil.hpp"
 
 #include "Task/TaskPoints/StartPoint.hpp"
@@ -94,6 +93,14 @@ static void OnPropertiesClicked(WindowControl * Sender)
   RefreshView();
 }
 
+static void OnNewClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  task_modified = true;
+  ordered_task->clear();
+  dlgTaskTypeShowModal(*parent_window, &ordered_task);
+  RefreshView();
+}
 
 static void
 OnTaskPaint(WindowControl *Sender, Canvas &canvas)
@@ -158,6 +165,7 @@ OnTaskListEnter(unsigned ItemIndex)
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnPropertiesClicked),
+  DeclareCallBackEntry(OnNewClicked),
   DeclareCallBackEntry(OnTaskPaint),
   DeclareCallBackEntry(NULL)
 };

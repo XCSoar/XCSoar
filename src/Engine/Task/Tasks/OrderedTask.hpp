@@ -116,10 +116,25 @@ public:
   Factory_t set_factory(const Factory_t _factory);
 
   /** 
+   * Return list of factory types
+   * 
+   * @param all If true, return all types, otherwise only valid transformable ones
+   * 
+   * @return Vector of factory types
+   */
+  std::vector<Factory_t> get_factory_types(bool all=true) const;
+
+  /** 
    * Reset the task (as if never flown)
    * 
    */
   void reset();
+
+  /** 
+   * Clear all points and restore default ordered task behaviour
+   * 
+   */
+  void clear();
 
   /**
    * Create a clone of the task. 

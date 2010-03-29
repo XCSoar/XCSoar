@@ -1059,3 +1059,24 @@ OrderedTask::is_scored() const
 {
   return m_ordered_behaviour.task_scored;
 }
+
+std::vector<OrderedTask::Factory_t> 
+OrderedTask::get_factory_types(bool all) const
+{
+  /// @todo: check transform types if all=false
+  std::vector<Factory_t> f_list;
+  f_list.push_back(FACTORY_FAI);
+  f_list.push_back(FACTORY_AAT);
+  f_list.push_back(FACTORY_MIXED);
+  return f_list;
+}
+
+void 
+OrderedTask::clear()
+{
+  while (tps.size()) {
+    erase(0);
+  }
+  reset();
+  m_ordered_behaviour = task_behaviour.ordered_defaults;
+}
