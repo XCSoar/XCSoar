@@ -135,6 +135,15 @@ static void ReadValues()
   WndProperty* wp;
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
+  wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
+  if (wp) {
+    if (p.aat_min_time
+        != (wp->GetDataField()->GetAsFloat()*60)) {
+      p.aat_min_time = (wp->GetDataField()->GetAsFloat()*60);
+      task_changed = true;
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpFAIFinishHeight"));
   if (wp) {
     if (p.fai_finish 

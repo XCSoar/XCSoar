@@ -81,6 +81,16 @@ public:
   virtual void update_ordered_task_behaviour(OrderedTaskBehaviour& to);
 
   /**
+   * Legal types based on position
+   */
+  enum LegalPointType_t {
+    POINT_START,
+    POINT_AAT,
+    POINT_AST,
+    POINT_FINISH
+  };
+
+  /**
    * Legal types of StartPoint observation zones
    */
   enum LegalStartType_t {
@@ -287,6 +297,8 @@ public:
 
   const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
 
+  virtual bool validType(LegalPointType_t type, const unsigned position) const;
+
 protected:
 
 /** 
@@ -299,6 +311,10 @@ protected:
  * @return True if candidate is valid at the position
  */
   virtual bool validType(OrderedTaskPoint *new_tp, unsigned position) const;
+
+  bool validFinishType(LegalFinishType_t type) const;
+  bool validStartType(LegalStartType_t type) const;
+  bool validIntermediateType(LegalIntermediateType_t type) const;
 
   OrderedTask &m_task; /**< task managed by this factory */
   const TaskBehaviour &m_behaviour; /**< behaviour (settings) */
