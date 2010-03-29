@@ -42,7 +42,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Components.hpp"
 
 void MapWindow::CalculateScreenPositionsThermalSources() {
   for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
@@ -123,7 +122,9 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
   bool draw_start_height = false;
   double hstart=0;
   
-  OrderedTaskBehaviour task_props = task_ui.get_ordered_task_behaviour();
+  OrderedTaskBehaviour task_props;
+  if (task != NULL)
+    task_props = task->get_ordered_task_behaviour();
 
   draw_start_height = Calculated().common_stats.ordered_valid
     && (task_props.start_max_height != 0)
