@@ -44,7 +44,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "StringUtil.hpp"
 
-#include "Task/Tasks/OrderedTask.hpp"
+#include "Dialogs/dlgTaskHelpers.hpp"
 
 #include <assert.h>
 
@@ -53,7 +53,8 @@ static WndForm *wf=NULL;
 static OrderedTask* ordered_task= NULL;
 static bool task_changed = false;
 
-static void RefreshView()
+static void 
+RefreshView()
 {
   WndProperty* wp;
   OrderedTask::Factory_t ftype = ordered_task->get_factory_type();
@@ -125,12 +126,19 @@ static void RefreshView()
     wp->RefreshDisplay();
   }
 
+  WndButton* wb;
+  wb = ((WndButton*)wf->FindByName(_T("butType")));
+  if (wb) {
+    wb->SetCaption(OrderedTaskFactoryName(ordered_task->get_factory_type()));
+  }
+
   // fixed aat_min_time
   // finish_min_height
 }
 
 
-static void ReadValues()
+static void 
+ReadValues()
 {
   WndProperty* wp;
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
@@ -198,8 +206,16 @@ static void OnCloseClicked(WindowControl * Sender)
   wf->SetModalResult(mrOK);
 }
 
+static void OnTypeClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  dlgTaskTypeShowModal(*parent_window, &ordered_task);
+  RefreshView();
+}
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnTypeClicked),
   DeclareCallBackEntry(NULL)
 };
 
