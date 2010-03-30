@@ -62,14 +62,60 @@ AbstractTaskFactory::createFinish(const Waypoint &wp) const
   return createFinish(*m_finish_types.begin(), wp);
 }
 
-StartPoint* 
-AbstractTaskFactory::createStart(const LegalStartType_t type,
+AbstractTaskFactory::LegalPointType_t 
+AbstractTaskFactory::getType(const OrderedTaskPoint* point) const
+{
+  const ObservationZonePoint* oz = point->get_oz();
+
+  if (dynamic_cast<const StartPoint*>(point) != NULL) {
+    if (dynamic_cast<const FAISectorZone*>(oz) != NULL) {
+      return START_SECTOR;
+    } else
+    if (dynamic_cast<const LineSectorZone*>(oz) != NULL) {
+      return START_LINE;
+    } else
+    if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
+      return START_CYLINDER;
+    } 
+  } else 
+  if (dynamic_cast<const AATPoint*>(point) != NULL) {
+    if (dynamic_cast<const SectorZone*>(oz) != NULL) {
+      return AAT_SEGMENT;
+    } else
+    if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
+      return AAT_CYLINDER;
+    } 
+  } else
+  if (dynamic_cast<const ASTPoint*>(point) != NULL) {
+    if (dynamic_cast<const FAISectorZone*>(oz) != NULL) {
+      return FAI_SECTOR;
+    } else
+    if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
+      return AST_CYLINDER;
+    } 
+  } else
+  if (dynamic_cast<const FinishPoint*>(point) != NULL) {
+    if (dynamic_cast<const FAISectorZone*>(oz) != NULL) {
+      return FINISH_SECTOR;
+    } else
+    if (dynamic_cast<const LineSectorZone*>(oz) != NULL) {
+      return FINISH_LINE;
+    } else
+    if (dynamic_cast<const CylinderZone*>(oz) != NULL) {
+      return FINISH_CYLINDER;
+    } 
+  } 
+
+  // fail, should never get here
+  assert(1);
+  return START_LINE;
+}
+
+
+OrderedTaskPoint* 
+AbstractTaskFactory::createPoint(const LegalPointType_t type,
                                  const Waypoint &wp) const
 {
-  if (!validStartType(type)) {
-    // error, invalid type!
-    return NULL;
-  }
   switch (type) {
   case START_SECTOR:
     return new StartPoint(new FAISectorZone(wp.Location),
@@ -86,20 +132,6 @@ AbstractTaskFactory::createStart(const LegalStartType_t type,
                           m_task.get_task_projection(),wp,m_behaviour,
                           get_ordered_task_behaviour());
     break;
-  default:
-    assert(1);
-  };
-  return NULL;
-}
-
-IntermediatePoint* 
-AbstractTaskFactory::createIntermediate(const LegalIntermediateType_t type,
-                                        const Waypoint &wp) const
-{
-  if (!validIntermediateType(type)) {
-    return NULL;
-  }
-  switch (type) {
   case FAI_SECTOR:
     return new ASTPoint(new FAISectorZone(wp.Location),
                         m_task.get_task_projection(),wp,m_behaviour,
@@ -120,20 +152,6 @@ AbstractTaskFactory::createIntermediate(const LegalIntermediateType_t type,
                         m_task.get_task_projection(),wp,m_behaviour,
                         get_ordered_task_behaviour());
     break;
-  default:
-    assert(1);
-  };
-  return NULL;
-}
-
-FinishPoint* 
-AbstractTaskFactory::createFinish(const LegalFinishType_t type,
-                                  const Waypoint &wp) const
-{
-  if (!validFinishType(type)) {
-    return NULL;
-  }
-  switch (type) {
   case FINISH_SECTOR:
     return new FinishPoint(new FAISectorZone(wp.Location),
                            m_task.get_task_projection(),wp,m_behaviour,
@@ -153,6 +171,38 @@ AbstractTaskFactory::createFinish(const LegalFinishType_t type,
     assert(1);
   };
   return NULL;
+}
+
+
+StartPoint* 
+AbstractTaskFactory::createStart(const LegalPointType_t type,
+                                 const Waypoint &wp) const
+{
+  if (!validStartType(type)) {
+    // error, invalid type!
+    return NULL;
+  }
+  return (StartPoint*)createPoint(type, wp);
+}
+
+IntermediatePoint* 
+AbstractTaskFactory::createIntermediate(const LegalPointType_t type,
+                                        const Waypoint &wp) const
+{
+  if (!validIntermediateType(type)) {
+    return NULL;
+  }
+  return (IntermediatePoint*)createPoint(type, wp);
+}
+
+FinishPoint* 
+AbstractTaskFactory::createFinish(const LegalPointType_t type,
+                                  const Waypoint &wp) const
+{
+  if (!validFinishType(type)) {
+    return NULL;
+  }
+  return (FinishPoint*)createPoint(type, wp);
 }
 
 
@@ -378,20 +428,25 @@ AbstractTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 ////////
 
 bool
-AbstractTaskFactory::validType(LegalPointType_t type, const unsigned position) const
+AbstractTaskFactory::validAbstractType(LegalAbstractPointType_t type, 
+                                       const unsigned position) const
 {
-  if (position == 0) {
-    return (type== POINT_START);
-  }
-  if (position+1 >= m_task.task_size()) {
-    return (type== POINT_FINISH);
-  }
-  if (type== POINT_AST) {
-    return validIntermediateType(FAI_SECTOR) || validIntermediateType(AST_CYLINDER);
-  }
-  if (type== POINT_AST) {
-    return validIntermediateType(AAT_CYLINDER) || validIntermediateType(AAT_SEGMENT);
-  }
+  const bool is_start = (position==0);
+  const bool is_finish = (position+1 >= m_task.task_size()) && !is_start;
+  const bool is_intermediate = !is_start && !is_finish;
+
+  switch (type) {
+  case POINT_START:
+    return is_start;
+  case POINT_FINISH:
+    return is_finish;
+  case POINT_AST:
+    return is_intermediate &&
+      (validIntermediateType(FAI_SECTOR) || validIntermediateType(AST_CYLINDER));
+  case POINT_AAT:
+    return is_intermediate &&
+      (validIntermediateType(AAT_CYLINDER) || validIntermediateType(AAT_SEGMENT));
+  };
   return false;
 }
 
@@ -401,37 +456,53 @@ AbstractTaskFactory::validType(OrderedTaskPoint *new_tp, unsigned position) cons
   /// @todo also check OZ type is legal?
 
   if (NULL != dynamic_cast<StartPoint*>(new_tp)) {
-    return validType(POINT_START, position);
+    return validAbstractType(POINT_START, position);
   }
   if (NULL != dynamic_cast<FinishPoint*>(new_tp)) {
-    return validType(POINT_FINISH, position);
+    return validAbstractType(POINT_FINISH, position);
   }
   if (NULL != dynamic_cast<AATPoint*>(new_tp)) {
-    return validType(POINT_AAT, position);
+    return validAbstractType(POINT_AAT, position);
   }
   if (NULL != dynamic_cast<ASTPoint*>(new_tp)) {
-    return validType(POINT_AST, position);
+    return validAbstractType(POINT_AST, position);
   }
   return false;
 }
 
 bool
-AbstractTaskFactory::validIntermediateType(LegalIntermediateType_t type) const 
+AbstractTaskFactory::validIntermediateType(LegalPointType_t type) const 
 {
   return (std::find(m_intermediate_types.begin(), m_intermediate_types.end(), type) 
           != m_intermediate_types.end());
 }
 
 bool
-AbstractTaskFactory::validStartType(LegalStartType_t type) const 
+AbstractTaskFactory::validStartType(LegalPointType_t type) const 
 {
   return (std::find(m_start_types.begin(), m_start_types.end(), type) 
           != m_start_types.end());
 }
 
 bool
-AbstractTaskFactory::validFinishType(LegalFinishType_t type) const 
+AbstractTaskFactory::validFinishType(LegalPointType_t type) const 
 {
   return (std::find(m_finish_types.begin(), m_finish_types.end(), type) 
           != m_finish_types.end());
+}
+
+AbstractTaskFactory::LegalPointVector 
+AbstractTaskFactory::getValidTypes(unsigned position) const
+{
+  LegalPointVector v;
+  if (validAbstractType(POINT_START, position)) {
+    v.insert(v.end(), m_start_types.begin(), m_start_types.end());
+  }
+  if (validAbstractType(POINT_AAT, position) || validAbstractType(POINT_AST, position)) {
+    v.insert(v.end(), m_intermediate_types.begin(), m_intermediate_types.end());
+  }
+  if (validAbstractType(POINT_FINISH, position)) {
+    v.insert(v.end(), m_finish_types.begin(), m_finish_types.end());
+  }
+  return v;
 }

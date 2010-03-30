@@ -118,6 +118,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTaskList.cpp \
 	$(SRC)/Dialogs/dlgTaskType.cpp \
 	$(SRC)/Dialogs/dlgTaskPoint.cpp \
+	$(SRC)/Dialogs/dlgTaskPointType.cpp \
 	$(SRC)/Dialogs/dlgTaskHelpers.cpp \
 	\
 	$(SRC)/Dialogs/dlgTaskOverview.cpp \

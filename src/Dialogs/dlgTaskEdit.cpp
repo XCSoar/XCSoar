@@ -161,6 +161,11 @@ OnTaskListEnter(unsigned ItemIndex)
       task_modified = true;
       RefreshView();
     }
+  } else {
+    if (dlgTaskPointNew(*parent_window, &ordered_task, ItemIndex)) {
+      task_modified = true;
+      RefreshView();
+    }
   }
 }
 

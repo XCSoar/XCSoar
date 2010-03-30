@@ -130,6 +130,12 @@ dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task);
 bool
 dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task, const unsigned index);
 
+bool
+dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index);
+
+bool
+dlgTaskPointNew(SingleWindow &parent, OrderedTask** task, const unsigned index);
+
 /////////
 
 void dlgVoiceShowModal();

@@ -78,45 +78,38 @@ public:
 
   virtual ~AbstractTaskFactory() {};
 
-  virtual void update_ordered_task_behaviour(OrderedTaskBehaviour& to);
+  /// @todo should be abstract
+  virtual void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
 
   /**
    * Legal types based on position
    */
-  enum LegalPointType_t {
+  enum LegalAbstractPointType_t {
     POINT_START,
     POINT_AAT,
     POINT_AST,
     POINT_FINISH
   };
 
+  typedef std::vector<LegalAbstractPointType_t> LegalAbstractVector;
+
   /**
-   * Legal types of StartPoint observation zones
+   * Legal types of points with observation zones
    */
-  enum LegalStartType_t {
+  enum LegalPointType_t {
     START_SECTOR = 0,
     START_LINE,
-    START_CYLINDER
-  };
-
-  /**
-   * Legal types of IntermediatePoint observation zones (and type AAT/AST)
-   */
-  enum LegalIntermediateType_t {
-    FAI_SECTOR = 0,
+    START_CYLINDER,
+    FAI_SECTOR,
     AST_CYLINDER,
     AAT_CYLINDER,
-    AAT_SEGMENT
-  };
-
-  /**
-   * Legal types of FinishPoint observation zones
-   */
-  enum LegalFinishType_t {
-    FINISH_SECTOR = 0,
+    AAT_SEGMENT,
+    FINISH_SECTOR,
     FINISH_LINE,
     FINISH_CYLINDER
   };
+  
+  typedef std::vector<LegalPointType_t> LegalPointVector;
 
 /** 
  * Replace taskpoint in ordered task.
@@ -199,7 +192,7 @@ public:
  * 
  * @return list of valid start types
  */
-  const std::vector<LegalStartType_t>& getStartTypes() const {
+  const LegalPointVector& getStartTypes() const {
     return m_start_types;
   }
 
@@ -208,7 +201,7 @@ public:
  * 
  * @return list of valid intermediate types
  */
-  const std::vector<LegalIntermediateType_t>& getIntermediateTypes() const {
+  const LegalPointVector& getIntermediateTypes() const {
     return m_intermediate_types;
   }
 
@@ -217,9 +210,12 @@ public:
  * 
  * @return list of valid finish types
  */
-  const std::vector<LegalFinishType_t>& getFinishTypes() const {
+  const LegalPointVector& getFinishTypes() const {
     return m_finish_types;
   }
+
+  OrderedTaskPoint* createPoint(const LegalPointType_t type,
+                                const Waypoint &wp) const;
 
 /** 
  * Create start point of specified type
@@ -229,8 +225,8 @@ public:
  * 
  * @return Initialised StartPoint if valid, otherwise NULL
  */
-  virtual StartPoint* createStart(const LegalStartType_t type,
-                                 const Waypoint &wp) const;
+  StartPoint* createStart(const LegalPointType_t type,
+                          const Waypoint &wp) const;
 
 /** 
  * Create intermediate point of specified type
@@ -240,8 +236,8 @@ public:
  * 
  * @return Initialised IntermediatePoint if valid, otherwise NULL
  */
-  virtual IntermediatePoint* createIntermediate(const LegalIntermediateType_t type,
-                                                const Waypoint &wp) const;
+  IntermediatePoint* createIntermediate(const LegalPointType_t type,
+                                        const Waypoint &wp) const;
 
 /** 
  * Create finish point of specified type
@@ -251,8 +247,8 @@ public:
  * 
  * @return Initialised FinishPoint if valid, otherwise NULL
  */
-  virtual FinishPoint* createFinish(const LegalFinishType_t type,
-                                 const Waypoint &wp) const;
+  FinishPoint* createFinish(const LegalPointType_t type,
+                            const Waypoint &wp) const;
 
 /** 
  * Create start point of default type
@@ -261,7 +257,7 @@ public:
  * 
  * @return Initialised StartPoint if valid, otherwise NULL
  */
-  virtual StartPoint* createStart(const Waypoint &wp) const;
+  StartPoint* createStart(const Waypoint &wp) const;
 
 /** 
  * Create intermediate point of default type
@@ -270,7 +266,7 @@ public:
  * 
  * @return Initialised IntermediatePoint if valid, otherwise NULL
  */
-  virtual IntermediatePoint* createIntermediate(const Waypoint &wp) const;
+  IntermediatePoint* createIntermediate(const Waypoint &wp) const;
 
 /** 
  * Create finish point of default type
@@ -279,7 +275,7 @@ public:
  * 
  * @return Initialised FinishPoint if valid, otherwise NULL
  */
-  virtual FinishPoint* createFinish(const Waypoint &wp) const;
+  FinishPoint* createFinish(const Waypoint &wp) const;
 
 /** 
  * Check whether task is complete and valid according to factory rules
@@ -288,6 +284,10 @@ public:
  */
   virtual bool validate() = 0;
 
+  const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
+
+  virtual bool validAbstractType(LegalAbstractPointType_t type, const unsigned position) const;
+
   /**
    *  FOR TESTING ONLY
    * @param index index of task point sequence
@@ -295,9 +295,8 @@ public:
    */
   bool has_entered(unsigned index) const;
 
-  const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
-
-  virtual bool validType(LegalPointType_t type, const unsigned position) const;
+  LegalPointVector getValidTypes(unsigned position) const;
+  LegalPointType_t getType(const OrderedTaskPoint* point) const;
 
 protected:
 
@@ -312,16 +311,16 @@ protected:
  */
   virtual bool validType(OrderedTaskPoint *new_tp, unsigned position) const;
 
-  bool validFinishType(LegalFinishType_t type) const;
-  bool validStartType(LegalStartType_t type) const;
-  bool validIntermediateType(LegalIntermediateType_t type) const;
+  bool validFinishType(LegalPointType_t type) const;
+  bool validStartType(LegalPointType_t type) const;
+  bool validIntermediateType(LegalPointType_t type) const;
 
   OrderedTask &m_task; /**< task managed by this factory */
   const TaskBehaviour &m_behaviour; /**< behaviour (settings) */
 
-  std::vector<LegalStartType_t> m_start_types; /**< list of valid start types, for specialisation */
-  std::vector<LegalIntermediateType_t> m_intermediate_types; /**< list of valid intermediate types, for specialisation */
-  std::vector<LegalFinishType_t> m_finish_types; /**< list of valid finish types, for specialisation */
+  LegalPointVector m_start_types; /**< list of valid start types, for specialisation */
+  LegalPointVector m_intermediate_types; /**< list of valid intermediate types, for specialisation */
+  LegalPointVector m_finish_types; /**< list of valid finish types, for specialisation */
 };
 
 #endif

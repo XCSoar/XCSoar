@@ -81,9 +81,6 @@ class TPLabelObservationZone:
   public ObservationZoneConstVisitor
 {
 public:
-  TPLabelObservationZone(TCHAR* buff): text(buff) {
-    text[0]= 0;
-  }
 
   void Visit(const FAISectorZone& oz) 
     {
@@ -92,7 +89,6 @@ public:
       if (wp) {
         wp->show();
       }
-      _stprintf(text, _T("FAI Sector"));
     }
 
   void Visit(const SectorZone& oz) 
@@ -119,7 +115,6 @@ public:
         wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getEndRadial()));
         wv->RefreshDisplay();
       }
-      _stprintf(text, _T("Sector"));
     }
 
   void Visit(const LineSectorZone& oz) 
@@ -136,7 +131,6 @@ public:
         wv->GetDataField()->SetUnits(Units::GetDistanceName());
         wv->RefreshDisplay();
       }
-      _stprintf(text, _T("Line"));
     }
 
   void Visit(const CylinderZone& oz) 
@@ -153,10 +147,7 @@ public:
         wv->GetDataField()->SetUnits(Units::GetDistanceName());
         wv->RefreshDisplay();
       }
-      _stprintf(text, _T("Cylinder"));
     }
-
-  TCHAR *text;
 
 private:
   void hide_all() {
@@ -285,14 +276,13 @@ RefreshView()
     return;
   }
 
-  TCHAR buf[100];
-  TPLabelObservationZone ozv(buf);
+  TPLabelObservationZone ozv;
   tp->CAccept_oz(ozv);
 
   WndButton* wb;
   wb = ((WndButton*)wf->FindByName(_T("butType")));
   if (wb) {
-    wb->SetCaption(ozv.text);
+    wb->SetCaption(OrderedTaskPointName(ordered_task->get_factory().getType(tp)));
   }
   
   wb = ((WndButton*)wf->FindByName(_T("butDetails")));
@@ -300,6 +290,7 @@ RefreshView()
     wb->SetCaption(tp->get_waypoint().Name.c_str());
   }
 
+  TCHAR buf[100];
   TPLabelTaskPoint tpv(buf);
   tp->CAccept(tpv);
   wf->SetCaption(tpv.text);
@@ -395,6 +386,10 @@ static void OnRelocateClicked(WindowControl * Sender) {
 
 
 static void OnTypeClicked(WindowControl * Sender) {
+  if (dlgTaskPointType(*parent_window, &ordered_task, active_index)) {
+    task_modified = true;
+    RefreshView();
+  }
 }
 
 static CallBackTableEntry_t CallBackTable[]={
@@ -430,14 +425,13 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task, const unsigned i
                         parent,
                         _T("IDR_XML_TASKPOINT"));
   }
+  if (!wf) return false;
+  assert(wf!=NULL);
 
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
   assert(wTaskView!=NULL);
 
   RefreshView();
-
-  if (!wf) return false;
-  assert(wf!=NULL);
 
   if (wf->ShowModal() == mrOK) {
     ReadValues();

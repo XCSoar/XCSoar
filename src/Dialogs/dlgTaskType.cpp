@@ -70,13 +70,12 @@ RefreshView()
   }
 }
 
-static unsigned UpLimit=0;
 
 static void
 OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
   TCHAR sTmp[120];
-  if (DrawListIndex >= UpLimit) {
+  if (DrawListIndex >= factory_types.size()) {
     return;
   }
 
@@ -161,10 +160,9 @@ dlgTaskTypeShowModal(SingleWindow &parent, OrderedTask** task)
   wTaskTypes->SetPaintItemCallback(OnTaskPaintListItem);
   wTaskTypes->SetCursorCallback(OnTaskCursorCallback);
 
-  UpLimit = factory_types.size();
-  wTaskTypes->SetLength(UpLimit);
+  wTaskTypes->SetLength(factory_types.size());
 
-  for (unsigned i=0; i<UpLimit; i++) {
+  for (unsigned i=0; i<factory_types.size(); i++) {
     if (factory_types[i] == ordered_task->get_factory_type()) {
       wTaskTypes->SetCursorIndex(i); 
     }

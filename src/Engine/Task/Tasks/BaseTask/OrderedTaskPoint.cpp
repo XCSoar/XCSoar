@@ -157,7 +157,8 @@ bool
 OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
 {
   return (get_waypoint() == other->get_waypoint()) &&
-    get_oz()->equals(other->get_oz());
+    get_oz()->equals(other->get_oz()) &&
+    other->get_oz()->equals(get_oz());
 }
 
 

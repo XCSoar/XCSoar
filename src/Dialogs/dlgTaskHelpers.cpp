@@ -42,38 +42,36 @@ Copyright_License {
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 
+#include <assert.h>
+
 const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type)
 {
-  const TCHAR* text;
   switch(type) {
   case OrderedTask::FACTORY_FAI:
-    text = _T("FAI triangle");
-    break;
+    return _T("FAI triangle");
   case OrderedTask::FACTORY_AAT:
-    text = _T("AAT");
-    break;
+    return _T("AAT");
   case OrderedTask::FACTORY_MIXED:
-    text = _T("Mixed AAT");
-    break;
+    return _T("Mixed AAT");
+  default:
+    assert(1);
   };
-  return text;
+  return NULL;
 }
 
 const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
 {
-  const TCHAR* text;
   switch(type) {
   case OrderedTask::FACTORY_FAI:
-    text = _T("FAI triangle task");
-    break;
+    return _T("FAI triangle task");
   case OrderedTask::FACTORY_AAT:
-    text = _T("AAT racing task, all turnpoints are are assigned areas");
-    break;
+    return _T("AAT racing task, all turnpoints are are assigned areas");
   case OrderedTask::FACTORY_MIXED:
-    text = _T("AAT racing task, mixed assigned area and non-assigned area turnpoints");
-    break;
+    return _T("AAT racing task, mixed assigned area and non-assigned area turnpoints");
+  default:
+    assert(1);
   };
-  return text;
+  return NULL;
 }
 
 void OrderedTaskSummary(OrderedTask* task, TCHAR* text)
@@ -180,4 +178,63 @@ void OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* text)
 {
   LabelTaskPoint tpv(index, text);
   task->tp_CAccept(tpv);
+}
+
+
+const TCHAR* OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
+{
+  switch(type) {
+  case AbstractTaskFactory::START_SECTOR:
+    return _T("Cross corner edge from inside area to start");
+  case AbstractTaskFactory::START_LINE:
+    return _T("Cross line from inside area to start");
+  case AbstractTaskFactory::START_CYLINDER:
+    return _T("Exit area to start");
+  case AbstractTaskFactory::FAI_SECTOR:
+    return _T("Any point within area scored from corner point");
+  case AbstractTaskFactory::AST_CYLINDER:
+    return _T("Any point within area scored from center");
+  case AbstractTaskFactory::AAT_CYLINDER:
+    return _T("Scored inside area");
+  case AbstractTaskFactory::AAT_SEGMENT:
+    return _T("Scored inside area");
+  case AbstractTaskFactory::FINISH_SECTOR:
+    return _T("Cross corner edge to finish");
+  case AbstractTaskFactory::FINISH_LINE:
+    return _T("Cross line into area to finish");
+  case AbstractTaskFactory::FINISH_CYLINDER:
+    return _T("Enter area to finish");
+  default:
+    assert(1);
+  };
+  return NULL;
+}
+
+const TCHAR* OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
+{
+  switch(type) {
+  case AbstractTaskFactory::START_SECTOR:
+    return _T("Start sector");
+  case AbstractTaskFactory::START_LINE:
+    return _T("Start line");
+  case AbstractTaskFactory::START_CYLINDER:
+    return _T("Start cylinder");
+  case AbstractTaskFactory::FAI_SECTOR:
+    return _T("Turnpoint FAI sector");
+  case AbstractTaskFactory::AST_CYLINDER:
+    return _T("Turnpoint cylinder");
+  case AbstractTaskFactory::AAT_CYLINDER:
+    return _T("Area cylinder");
+  case AbstractTaskFactory::AAT_SEGMENT:
+    return _T("Area segment");
+  case AbstractTaskFactory::FINISH_SECTOR:
+    return _T("Finish sector");
+  case AbstractTaskFactory::FINISH_LINE:
+    return _T("Finish line");
+  case AbstractTaskFactory::FINISH_CYLINDER:
+    return _T("Finish cylinder");
+  default:
+    assert(1);
+  };
+  return NULL;
 }
