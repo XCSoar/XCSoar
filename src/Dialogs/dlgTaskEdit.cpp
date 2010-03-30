@@ -77,6 +77,7 @@ static void OnCloseClicked(WindowControl * Sender)
 static void
 RefreshView()
 {
+  wTaskPoints->SetLength(ordered_task->task_size()+1);
   wTaskView->invalidate();
   wTaskPoints->invalidate();
 
@@ -99,10 +100,17 @@ static void OnPropertiesClicked(WindowControl * Sender)
 static void OnNewClicked(WindowControl * Sender)
 {
   (void)Sender;
-  task_modified = true;
-  ordered_task->clear();
-  dlgTaskTypeShowModal(*parent_window, &ordered_task);
-  RefreshView();
+
+  if ((ordered_task->task_size()<2) || 
+      (MessageBoxX(gettext(_T("Clear task?")),
+                   gettext(_T("Task edit")),
+                   MB_YESNO|MB_ICONQUESTION) == IDYES)) {
+
+    task_modified = true;
+    ordered_task->clear();
+    dlgTaskTypeShowModal(*parent_window, &ordered_task);
+    RefreshView();
+  }
 }
 
 static void
@@ -206,7 +214,6 @@ dlgTaskEditShowModal(SingleWindow &parent, OrderedTask** task)
 
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);
-  wTaskPoints->SetLength(ordered_task->task_size()+1);
 
   RefreshView();
 

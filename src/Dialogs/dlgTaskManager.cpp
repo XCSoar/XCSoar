@@ -73,7 +73,7 @@ CommitTaskChanges()
   if (!task_modified)
     return true;
 
-  if (ordered_task->check_task()) {
+  if (!ordered_task->task_size() || ordered_task->check_task()) {
 
     MessageBoxX (gettext(TEXT("Active task modified")),
                  TEXT("Task Manager"), MB_OK);

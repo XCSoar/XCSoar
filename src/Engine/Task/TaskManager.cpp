@@ -629,7 +629,16 @@ TaskManager::clone(TaskEvents &te,
 bool 
 TaskManager::commit(const OrderedTask& other)
 {
-  return task_ordered.commit(other);
+  bool retval;
+  if ((mode== MODE_ORDERED) && !other.task_size()) {
+    set_mode(MODE_NULL);
+  } 
+  retval = task_ordered.commit(other);
+
+  if (mode== MODE_NULL) {
+    set_mode(MODE_ORDERED);
+  }
+  return retval;
 }
 
 
