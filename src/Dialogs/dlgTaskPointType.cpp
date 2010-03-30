@@ -149,6 +149,10 @@ OnPointListEnter(unsigned ItemIndex)
         task_modified = true;
       }
     } else {
+
+      way_point = dlgWayPointSelect(*parent_window,
+                                    XCSoarInterface::Basic().Location);
+
       point = factory.createPoint(type, *way_point);
       if (point) {
         if (factory.append(point, true)) {
@@ -179,9 +183,6 @@ static CallBackTableEntry_t CallBackTable[]={
 bool
 dlgTaskPointNew(SingleWindow &parent, OrderedTask** task, const unsigned index)
 {
-  way_point = dlgWayPointSelect(parent,
-                                XCSoarInterface::Basic().Location);
-
   return dlgTaskPointType(parent, task, index);
 }
 
@@ -197,9 +198,9 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
   point = ordered_task->get_tp(active_index);
   if (point) {
     way_point = &point->get_waypoint();
+  } else {
+    way_point = NULL;
   }
-  if (way_point == NULL)
-    return false;
 
   wf = NULL;
 
