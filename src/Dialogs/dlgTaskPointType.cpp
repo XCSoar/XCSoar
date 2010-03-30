@@ -113,13 +113,8 @@ OnPointPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 }
 
 
-static void
-OnPointListEnter(unsigned ItemIndex)
-{
-  if (ItemIndex >= point_types.size()) {
-    return;
-  }
-  AbstractTaskFactory::LegalPointType_t type = point_types[ItemIndex];
+static bool
+SetPointType(AbstractTaskFactory::LegalPointType_t type) {
 
   bool apply = false;
 
@@ -129,8 +124,7 @@ OnPointListEnter(unsigned ItemIndex)
   } else {
     if (type == get_point_type()) {
       // no change
-      wf->SetModalResult(mrOK);
-      return;
+      return true;
     }
     if (MessageBoxX(gettext(_T("Change point type?")),
                     gettext(_T("Task Point")),
@@ -161,7 +155,19 @@ OnPointListEnter(unsigned ItemIndex)
         }
       }
     }
+    return true;
+  }
+  return false;
+}
 
+
+static void
+OnPointListEnter(unsigned ItemIndex)
+{
+  if (wPointTypes->GetCursorIndex() >= point_types.size()) {
+    return;
+  }
+  if (SetPointType(get_cursor_type())) {
     wf->SetModalResult(mrOK);
   }
 }
@@ -238,7 +244,11 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
 
   RefreshView();
 
-  wf->ShowModal();
+  if (point_types.size()==1) {
+    SetPointType(point_types[0]);
+  } else {
+    wf->ShowModal();
+  }
 
   delete wf;
   wf = NULL;
