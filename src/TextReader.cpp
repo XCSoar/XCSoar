@@ -46,6 +46,18 @@ Copyright_License {
 
 TextReader::~TextReader() {}
 
+long
+TextReader::size() const
+{
+  return -1;
+}
+
+long
+TextReader::tell() const
+{
+  return -1;
+}
+
 #ifdef _UNICODE
 
 TCHAR *
@@ -77,9 +89,24 @@ TextReader::read_tchar_line()
 
 #endif /* _UNICODE */
 
+static long
+FILE_size(FILE *file)
+{
+  if (fseek(file, 0L, SEEK_END) < 0)
+    return -1;
+
+  long size = ftell(file);
+  fseek(file, 0L, SEEK_SET);
+
+  return size;
+}
+
 FileTextReader::FileTextReader(const char *path)
 {
   file = fopen(path, "rb");
+
+  if (file != NULL)
+    the_size = FILE_size(file);
 }
 
 #ifdef _UNICODE
@@ -87,6 +114,9 @@ FileTextReader::FileTextReader(const char *path)
 FileTextReader::FileTextReader(const TCHAR *path)
 {
   file = _tfopen(path, _T("rb"));
+
+  if (file != NULL)
+    the_size = FILE_size(file);
 }
 
 #endif
@@ -95,6 +125,18 @@ FileTextReader::~FileTextReader()
 {
   if (file != NULL)
     fclose(file);
+}
+
+long
+FileTextReader::size() const
+{
+  return the_size;
+}
+
+long
+FileTextReader::tell() const
+{
+  return ftell(file);
 }
 
 static bool

@@ -60,6 +60,18 @@ protected:
   virtual char *read_raw_line() = 0;
 
 public:
+  /**
+   * Determins the size of the file.  Returns -1 if the size is
+   * unknown.
+   */
+  virtual long size() const;
+
+  /**
+   * Determins the current position within the file.  Returns -1 if
+   * this is unknown.
+   */
+  virtual long tell() const;
+
   char *read_utf8_line() {
     return read_raw_line();
   }
@@ -80,6 +92,8 @@ public:
 class FileTextReader : public TextReader {
 private:
   FILE *file;
+
+  long the_size;
 
   ReusableArray<char> buffer;
 
@@ -102,6 +116,10 @@ public:
 
 protected:
   virtual char *read_raw_line();
+
+public:
+  virtual long size() const;
+  virtual long tell() const;
 };
 
 #endif
