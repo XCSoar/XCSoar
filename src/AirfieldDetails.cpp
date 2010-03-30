@@ -54,56 +54,6 @@ Copyright_License {
 #include "Waypoint/WaypointSorter.hpp"
 #include "Components.hpp"
 
-ZZIP_FILE* zAirfieldDetails = NULL;
-
-static TCHAR  szAirfieldDetailsFile[MAX_PATH] = TEXT("\0");
-
-/**
- * Opens the airfield details file handle
- */
-static void
-OpenAirfieldDetails()
-{
-  char zfilename[MAX_PATH];
-
-  zAirfieldDetails = NULL;
-
-  Profile::Get(szProfileAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
-
-  if (!string_is_empty(szAirfieldDetailsFile)) {
-    ExpandLocalPath(szAirfieldDetailsFile);
-    unicode2ascii(szAirfieldDetailsFile, zfilename, MAX_PATH);
-  } else {
-    static TCHAR szFile[MAX_PATH];
-    Profile::Get(szProfileMapFile, szFile, MAX_PATH);
-    if (!string_is_empty(szFile)) {
-      ExpandLocalPath(szFile);
-      _tcscat(szFile,TEXT("/airfields.txt"));
-      unicode2ascii(szFile, zfilename, MAX_PATH);
-    } else {
-      zfilename[0]= 0;
-    }
-  }
-  if (strlen(zfilename)>0) {
-    zAirfieldDetails = zzip_fopen(zfilename,"rb");
-  }
-}
-
-/**
- * Closes the airfield details file handle
- */
-static void
-CloseAirfieldDetails()
-{
-  if (zAirfieldDetails == NULL) {
-    return;
-  }
-
-  zzip_fclose(zAirfieldDetails);
-  zAirfieldDetails = NULL;
-}
-
-
 static bool
 check_name(const Waypoint &waypoint, const TCHAR *Name)
 {
@@ -172,15 +122,12 @@ LookupAirfieldDetail(WaypointSelectInfoVector &airports,
  * Parses the data provided by the airfield details file handle
  */
 static void
-ParseAirfieldDetails()
+ParseAirfieldDetails(ZZIP_FILE* zAirfieldDetails)
 {
   /*
    * VENTA3 fix: if empty lines, do not set details for the waypoint
    *        fix: remove CR from text appearing as a spurious char in waypoint details
    */
-
-  if (zAirfieldDetails == NULL)
-    return;
 
   TCHAR TempString[READLINE_LENGTH + 1];
   TCHAR CleanString[READLINE_LENGTH + 1];
@@ -268,7 +215,29 @@ ReadAirfieldFile()
   XCSoarInterface::CreateProgressDialog(
       gettext(TEXT("Loading Airfield Details File...")));
 
-  OpenAirfieldDetails();
-  ParseAirfieldDetails();
-  CloseAirfieldDetails();
+  TCHAR path[MAX_PATH];
+  Profile::Get(szProfileAirfieldFile, path, MAX_PATH);
+
+  char zfilename[MAX_PATH];
+
+  if (!string_is_empty(path)) {
+    ExpandLocalPath(path);
+    unicode2ascii(path, zfilename, MAX_PATH);
+  } else {
+    Profile::Get(szProfileMapFile, path, MAX_PATH);
+    if (string_is_empty(path))
+      return;
+
+    ExpandLocalPath(path);
+    _tcscat(path, _T("/airfields.txt"));
+    unicode2ascii(path, zfilename, MAX_PATH);
+  }
+
+  ZZIP_FILE* zAirfieldDetails = zzip_fopen(zfilename, "rb");
+  if (zAirfieldDetails == NULL)
+    return;
+
+  ParseAirfieldDetails(zAirfieldDetails);
+
+  zzip_fclose(zAirfieldDetails);
 }
