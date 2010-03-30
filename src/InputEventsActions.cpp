@@ -1061,6 +1061,7 @@ InputEvents::eventAbortTask(const TCHAR *misc)
   } else {
     // toggle
     switch (task_ui.get_mode()) {
+    case TaskManager::MODE_NULL:
     case TaskManager::MODE_ORDERED:
       task_ui.abort();
       break;
