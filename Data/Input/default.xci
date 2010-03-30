@@ -422,7 +422,7 @@ type=key
 data=6
 event=Setup Task
 event=Mode default
-label=$(CheckTaskResumed)Task\nEdit$(CheckWaypointFile)
+label=Task\nEdit$(CheckWaypointFile)
 location=5
 
 mode=Nav2
@@ -430,7 +430,7 @@ type=key
 data=7
 event=StatusMessage Task saved
 event=TaskSave Default.tsk
-label=$(CheckTaskResumed)Task\nSave
+label=Task\nSave
 location=6
 
 mode=Nav2
