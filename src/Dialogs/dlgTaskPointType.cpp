@@ -150,6 +150,9 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type) {
         way_point = dlgWayPointSelect(*parent_window,
                                       XCSoarInterface::Basic().Location);
       }
+      if (!way_point) {
+        return false;
+      }
 
       point = factory.createPoint(type, *way_point);
       if (point) {
@@ -173,6 +176,8 @@ OnPointListEnter(unsigned ItemIndex)
   }
   if (SetPointType(get_cursor_type())) {
     wf->SetModalResult(mrOK);
+  } else {
+    wf->SetModalResult(mrCancel);
   }
 }
 
