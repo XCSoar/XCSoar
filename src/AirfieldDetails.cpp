@@ -73,7 +73,6 @@ OpenAirfieldDetails()
   if (!string_is_empty(szAirfieldDetailsFile)) {
     ExpandLocalPath(szAirfieldDetailsFile);
     unicode2ascii(szAirfieldDetailsFile, zfilename, MAX_PATH);
-    Profile::Set(szProfileAirfieldFile, TEXT("\0"));
   } else {
     static TCHAR szFile[MAX_PATH];
     Profile::Get(szProfileMapFile, szFile, MAX_PATH);
@@ -99,9 +98,6 @@ CloseAirfieldDetails()
   if (zAirfieldDetails == NULL) {
     return;
   }
-  // file was OK, so save the registry
-  ContractLocalPath(szAirfieldDetailsFile);
-  Profile::Set(szProfileAirfieldFile, szAirfieldDetailsFile);
 
   zzip_fclose(zAirfieldDetails);
   zAirfieldDetails = NULL;
