@@ -47,7 +47,8 @@ OrderedTaskBehaviour::OrderedTaskBehaviour():
     finish_min_height(0),
     fai_finish(false),
     min_points(2),
-    max_points(20)
+    max_points(20),
+    homogeneous_tps(false)
 {
 
 }

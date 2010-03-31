@@ -54,6 +54,7 @@ public:
   bool fai_finish; /**< Whether ordered task finish requires FAI height rule */
   unsigned min_points; /**< Minimum number of turnpoints including start/finish */
   unsigned max_points; /**< Maximum number of turnpoints including start/finish */
+  bool homogeneous_tps; /**< Whether all turnpoints except start/finish are same type */
 
 /** 
  * Check whether aircraft speed is within start speed limits

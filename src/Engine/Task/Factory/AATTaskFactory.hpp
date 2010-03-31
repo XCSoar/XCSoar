@@ -58,6 +58,8 @@ public:
 
   ~AATTaskFactory() {};
 
+  void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
+
 /** 
  * Check whether task is complete and valid according to factory rules
  * 

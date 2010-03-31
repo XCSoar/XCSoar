@@ -295,6 +295,7 @@ public:
    */
   bool has_entered(unsigned index) const;
 
+  LegalPointVector getValidIntermediateTypes(unsigned position) const;
   LegalPointVector getValidTypes(unsigned position) const;
   LegalPointType_t getType(const OrderedTaskPoint* point) const;
 

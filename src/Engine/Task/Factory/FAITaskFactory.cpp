@@ -95,3 +95,9 @@ FAITaskFactory::validate()
   // unknown task...
   return true;
 }
+
+void 
+FAITaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+{
+  to.homogeneous_tps = true;
+}

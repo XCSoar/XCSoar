@@ -53,6 +53,12 @@ AbstractTaskFactory::createStart(const Waypoint &wp) const
 IntermediatePoint* 
 AbstractTaskFactory::createIntermediate(const Waypoint &wp) const
 {
+  if (get_ordered_task_behaviour().homogeneous_tps && (m_task.task_size()>1)) {
+    LegalPointType_t type = getType(m_task.get_tp(1));
+    if (validIntermediateType(type)) {
+      return createIntermediate(type, wp);
+    }
+  }
   return createIntermediate(*m_intermediate_types.begin(), wp);
 }
 
@@ -438,11 +444,17 @@ AbstractTaskFactory::is_position_intermediate(const unsigned position) const
 {
   if (is_position_start(position))
     return false;
+  if (position+1>= get_ordered_task_behaviour().max_points)
+    return false;
+
   if (get_ordered_task_behaviour().is_fixed_size()) {
     return (position+1< get_ordered_task_behaviour().max_points);
+/*
+  } else if (m_task.has_finish()) {
+    return (position+1< m_task.task_size());
+*/
   } else {
-    return (position+1< get_ordered_task_behaviour().max_points) &&
-      (position<= m_task.task_size());
+    return (position<= m_task.task_size());
   }
 }
 
@@ -451,11 +463,13 @@ AbstractTaskFactory::is_position_finish(const unsigned position) const
 {
   if (is_position_start(position))
     return false;
+  if (position+1> get_ordered_task_behaviour().max_points)
+    return false;
+
   if (get_ordered_task_behaviour().is_fixed_size()) {
     return (position+1== get_ordered_task_behaviour().max_points);
   } else {
-    return (position+1<= get_ordered_task_behaviour().max_points) &&
-      (position<= m_task.task_size());
+    return (position+1 >= m_task.task_size());
   }
 }
 
@@ -530,11 +544,30 @@ AbstractTaskFactory::getValidTypes(unsigned position) const
   if (validAbstractType(POINT_START, position)) {
     v.insert(v.end(), m_start_types.begin(), m_start_types.end());
   }
-  if (validAbstractType(POINT_AAT, position) || validAbstractType(POINT_AST, position)) {
-    v.insert(v.end(), m_intermediate_types.begin(), m_intermediate_types.end());
+  LegalPointVector i = getValidIntermediateTypes(position);
+  if (!i.empty()) {
+    v.insert(v.end(), i.begin(), i.end());
   }
   if (validAbstractType(POINT_FINISH, position)) {
     v.insert(v.end(), m_finish_types.begin(), m_finish_types.end());
+  }
+  return v;
+}
+
+AbstractTaskFactory::LegalPointVector 
+AbstractTaskFactory::getValidIntermediateTypes(unsigned position) const
+{
+  LegalPointVector v;
+  if (get_ordered_task_behaviour().homogeneous_tps 
+      && (position>1) && (m_task.task_size()>1)) {
+    LegalPointType_t type = getType(m_task.get_tp(1));
+    if (validIntermediateType(type)) {
+      v.push_back(type);
+      return v;
+    }
+  }
+  if (validAbstractType(POINT_AAT, position) || validAbstractType(POINT_AST, position)) {
+    v.insert(v.end(), m_intermediate_types.begin(), m_intermediate_types.end());
   }
   return v;
 }

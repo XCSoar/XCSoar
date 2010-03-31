@@ -66,3 +66,11 @@ MixedTaskFactory::validate()
 
   return true;
 }
+
+void 
+MixedTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+{
+  to.task_scored = true;
+  to.fai_finish = false;  
+  to.homogeneous_tps = false;
+}

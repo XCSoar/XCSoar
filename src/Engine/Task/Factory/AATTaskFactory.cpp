@@ -64,3 +64,11 @@ AATTaskFactory::validate()
 
   return true;
 }
+
+void 
+AATTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+{
+  to.task_scored = true;
+  to.fai_finish = false;  
+  to.homogeneous_tps = false;
+}
