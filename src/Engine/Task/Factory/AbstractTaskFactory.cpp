@@ -446,6 +446,8 @@ AbstractTaskFactory::is_position_intermediate(const unsigned position) const
     return false;
   if (position+1>= get_ordered_task_behaviour().max_points)
     return false;
+  if (position+1<= get_ordered_task_behaviour().min_points)
+    return true;
 
   if (get_ordered_task_behaviour().is_fixed_size()) {
     return (position+1< get_ordered_task_behaviour().max_points);
@@ -453,6 +455,8 @@ AbstractTaskFactory::is_position_intermediate(const unsigned position) const
   } else if (m_task.has_finish()) {
     return (position+1< m_task.task_size());
 */
+  } else if (m_task.task_size()< get_ordered_task_behaviour().min_points) {
+    return true;
   } else {
     return (position<= m_task.task_size());
   }
@@ -462,6 +466,9 @@ bool
 AbstractTaskFactory::is_position_finish(const unsigned position) const
 {
   if (is_position_start(position))
+    return false;
+
+  if (position+1< get_ordered_task_behaviour().min_points) 
     return false;
   if (position+1> get_ordered_task_behaviour().max_points)
     return false;
