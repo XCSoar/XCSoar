@@ -40,14 +40,11 @@ Copyright_License {
 
 #include <tchar.h>
 #include <stdio.h>
-#include <zzip/lib.h>
 
 /**
  * Strips trailing whitespace.
  */
 void TrimRight(TCHAR *p);
-
-bool ReadString(ZZIP_FILE* zFile, size_t Max, TCHAR *String);
 
 void
 PExtractParameter(const TCHAR *Source, TCHAR *Destination,

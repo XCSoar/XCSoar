@@ -86,61 +86,6 @@ PExtractParameter(const TCHAR *Source, TCHAR *Destination,
   }
 }
 
-// JMW added support for zzip files
-
-bool
-ReadString(ZZIP_FILE *zFile, size_t Max, TCHAR *String)
-{
-  char sTmp[READLINE_LENGTH + 1];
-  char FileBuffer[READLINE_LENGTH + 1];
-  zzip_size_t dwNumBytesRead;
-  size_t dwTotalNumBytesRead = 0;
-  zzip_off_t dwFilePos;
-
-  String[0] = '\0';
-  sTmp[0] = 0;
-
-  assert(Max < sizeof(sTmp));
-
-  if (Max >= sizeof(sTmp))
-    return false;
-  if (!zFile)
-    return false;
-
-  dwFilePos = zzip_tell(zFile);
-
-  dwNumBytesRead = zzip_fread(FileBuffer, 1, Max, zFile);
-  if (dwNumBytesRead <= 0)
-    return false;
-
-  size_t i = 0, j = 0;
-  while (i < Max && j < dwNumBytesRead) {
-
-    char c = FileBuffer[j];
-    j++;
-    dwTotalNumBytesRead++;
-
-    if ((c == '\n')) {
-      break;
-    }
-
-    sTmp[i] = c;
-    i++;
-  }
-
-  sTmp[i] = 0;
-  zzip_seek(zFile, dwFilePos + j, SEEK_SET);
-  sTmp[Max - 1] = '\0';
-
-#ifdef _UNICODE
-  mbstowcs(String, sTmp, strlen(sTmp)+1);
-#else
-  strcpy(String, sTmp);
-#endif
-
-  return (dwTotalNumBytesRead>0);
-}
-
 // RMN: Volkslogger outputs data in hex-strings.  Function copied from StrToDouble
 // Note: Decimal-point and decimals disregarded.  Assuming integer amounts only.
 double
