@@ -154,6 +154,8 @@ test_task()
   TaskBehaviour& tb = XCSoarInterface::SetSettingsComputer();
   tb = task_behaviour;
 
+  /*
+
   GlidePolar glide_polar = task_manager.get_glide_polar();
   glide_polar.set_mc(fixed_two);
   task_manager.set_glide_polar(glide_polar);
@@ -161,7 +163,8 @@ test_task()
   OrderedTaskPoint *tp;
   const Waypoint *wp;
 
-  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
+  task_manager.set_factory(OrderedTask::FACTORY_FAI);
+
   AbstractTaskFactory &fact = task_manager.get_factory();
 
   wp = way_points.lookup_name(_T("BENALLA"));
@@ -190,6 +193,7 @@ test_task()
 
   task_manager.setActiveTaskPoint(0);
   task_manager.resume();
+  */
 }
 
 void

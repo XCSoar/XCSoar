@@ -65,9 +65,9 @@ public:
 
   ObservationZonePoint* clone(const GEOPOINT * _location=0) const {
     if (_location) {
-      return new LineSectorZone(*_location, Radius);
+      return new LineSectorZone(*_location, getLength());
     } else {
-      return new LineSectorZone(get_location(), Radius);
+      return new LineSectorZone(get_location(), getLength());
     }
   }
 
