@@ -53,6 +53,8 @@ const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type)
     return _T("AAT");
   case OrderedTask::FACTORY_MIXED:
     return _T("Mixed AAT");
+  case OrderedTask::FACTORY_TOURING:
+    return _T("Touring");
   default:
     assert(1);
   };
@@ -68,6 +70,8 @@ const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
     return _T("AAT racing task, all turnpoints are are assigned areas");
   case OrderedTask::FACTORY_MIXED:
     return _T("AAT racing task, mixed assigned area and non-assigned area turnpoints");
+  case OrderedTask::FACTORY_TOURING:
+    return _T("Casual touring task");
   default:
     assert(1);
   };

@@ -34,37 +34,36 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef FAI_TASK_FACTORY_HPP
-#define FAI_TASK_FACTORY_HPP
+#include "TouringTaskFactory.hpp"
 
-#include "AbstractTaskFactory.hpp"
-
-/**
- * Factory for construction of legal FAI tasks
- * Currently the validate() method will check 4-point tasks as to whether they
- * satisfy short and long-distance FAI triangle rules.
- */
-class FAITaskFactory: 
-  public AbstractTaskFactory 
+TouringTaskFactory::TouringTaskFactory(OrderedTask& _task,
+                               const TaskBehaviour &tb):
+  AbstractTaskFactory(_task, tb)
 {
-public:
-/** 
- * Constructor
- * 
- * @param _task Ordered task to be managed by this factory
- * @param tb Behaviour (options)
- */  
-  FAITaskFactory(OrderedTask& _task,
-                 const TaskBehaviour &tb);
+  m_start_types.push_back(START_CYLINDER);
+  m_intermediate_types.push_back(FAI_SECTOR);
+  m_finish_types.push_back(FINISH_CYLINDER);
+}
 
-  ~FAITaskFactory() {};
+bool 
+TouringTaskFactory::validate()
+{
 
-/** 
- * Check whether task is complete and valid according to factory rules
- * 
- * @return True if task is valid according to factory rules
- */
-  virtual bool validate();
-};
+  if (!m_task.has_start() || !m_task.has_finish()) {
+    return false;
+  }
+  // unknown task...
+  return true;
+}
 
-#endif
+void 
+TouringTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
+{
+  to.task_scored = false;
+  to.aat_min_time = 0;
+  to.start_max_speed = 0;
+  to.start_max_height = 0;
+  to.start_max_height_ref = 0;
+  to.finish_min_height = 0;
+  to.fai_finish = false;  
+}

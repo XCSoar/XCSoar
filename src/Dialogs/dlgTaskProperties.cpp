@@ -74,13 +74,14 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpTaskScored")));
   if (wp) {
-    wp->GetDataField()->SetAsBoolean(1);
+    wp->set_visible(ftype != OrderedTask::FACTORY_TOURING);
+    wp->GetDataField()->SetAsBoolean(p.task_scored);
     wp->RefreshDisplay();
   }
 
   wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
   if (wp) {
-    wp->set_visible(ftype != OrderedTask::FACTORY_FAI);
+    wp->set_visible((ftype != OrderedTask::FACTORY_FAI) && (ftype != OrderedTask::FACTORY_TOURING));
     wp->GetDataField()->SetAsFloat(p.aat_min_time/60);
     wp->RefreshDisplay();
   }
@@ -94,7 +95,7 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxSpeed")));
   if (wp) {
-    wp->set_visible(1);
+    wp->set_visible(ftype != OrderedTask::FACTORY_TOURING);
     wp->GetDataField()->SetAsFloat(Units::ToUserSpeed(p.start_max_speed));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
@@ -102,7 +103,7 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxHeight")));
   if (wp) {
-    wp->set_visible(1);
+    wp->set_visible(ftype != OrderedTask::FACTORY_TOURING);
     wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(p.start_max_height));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
@@ -110,7 +111,7 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpFinishMinHeight")));
   if (wp) {
-    wp->set_visible(1);
+    wp->set_visible(ftype != OrderedTask::FACTORY_TOURING);
     wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(p.finish_min_height));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
@@ -118,6 +119,7 @@ RefreshView()
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
   if (wp) {
+    wp->set_visible(ftype != OrderedTask::FACTORY_TOURING);
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(_T("AGL")));

@@ -34,17 +34,15 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef FAI_TASK_FACTORY_HPP
-#define FAI_TASK_FACTORY_HPP
+#ifndef TOURING_TASK_FACTORY_HPP
+#define TOURING_TASK_FACTORY_HPP
 
 #include "AbstractTaskFactory.hpp"
 
 /**
- * Factory for construction of legal FAI tasks
- * Currently the validate() method will check 4-point tasks as to whether they
- * satisfy short and long-distance FAI triangle rules.
+ * Factory for construction of casual touring tasks
  */
-class FAITaskFactory: 
+class TouringTaskFactory: 
   public AbstractTaskFactory 
 {
 public:
@@ -54,17 +52,19 @@ public:
  * @param _task Ordered task to be managed by this factory
  * @param tb Behaviour (options)
  */  
-  FAITaskFactory(OrderedTask& _task,
+  TouringTaskFactory(OrderedTask& _task,
                  const TaskBehaviour &tb);
 
-  ~FAITaskFactory() {};
+  ~TouringTaskFactory() {};
+
+  void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
 
 /** 
  * Check whether task is complete and valid according to factory rules
  * 
  * @return True if task is valid according to factory rules
  */
-  virtual bool validate();
+  bool validate();
 };
 
 #endif

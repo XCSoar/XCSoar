@@ -50,6 +50,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Factory/FAITaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/AATTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/MixedTaskFactory.cpp \
+	$(ENGINE_SRC_DIR)/Task/Factory/TouringTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskInterface.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/AbortTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/AbstractTask.cpp \

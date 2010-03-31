@@ -54,6 +54,7 @@
 #include "Task/Factory/FAITaskFactory.hpp"
 #include "Task/Factory/AATTaskFactory.hpp"
 #include "Task/Factory/MixedTaskFactory.hpp"
+#include "Task/Factory/TouringTaskFactory.hpp"
 
 
 void
@@ -1024,6 +1025,9 @@ OrderedTask::set_factory(const Factory_t the_factory)
   case FACTORY_MIXED:
     active_factory = new MixedTaskFactory(*this, task_behaviour);
     break;
+  case FACTORY_TOURING:
+    active_factory = new TouringTaskFactory(*this, task_behaviour);
+    break;
   };
   active_factory->update_ordered_task_behaviour(m_ordered_behaviour);
 
@@ -1063,6 +1067,7 @@ OrderedTask::get_factory_types(bool all) const
   f_list.push_back(FACTORY_FAI);
   f_list.push_back(FACTORY_AAT);
   f_list.push_back(FACTORY_MIXED);
+  f_list.push_back(FACTORY_TOURING);
   return f_list;
 }
 
