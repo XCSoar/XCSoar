@@ -137,7 +137,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
     const fixed fi = i*f_scale;
     // fraction of glide_max_range
     
-    if (positive(max_range)&&(fi>=fixed_one)) {
+    if (fi>=fixed_one) {
       // early exit
       retval.out_of_range = true;
       return retval;
@@ -240,7 +240,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state)
     const fixed fi = i*f_scale;
     // fraction of glide_max_range
     
-    if (positive(max_range)&&(fi>=fixed_one)) {
+    if (fi>=fixed_one) {
       // early exit
       retval.out_of_range = true;
       return retval;
