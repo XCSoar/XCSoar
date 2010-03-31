@@ -81,7 +81,8 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
   if (wp) {
-    wp->set_visible((ftype != OrderedTask::FACTORY_FAI) && (ftype != OrderedTask::FACTORY_TOURING));
+    wp->set_visible((ftype != OrderedTask::FACTORY_RT) 
+                    && (ftype != OrderedTask::FACTORY_TOURING));
     wp->GetDataField()->SetAsFloat(p.aat_min_time/60);
     wp->RefreshDisplay();
   }

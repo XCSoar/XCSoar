@@ -299,6 +299,16 @@ public:
   LegalPointVector getValidTypes(unsigned position) const;
   LegalPointType_t getType(const OrderedTaskPoint* point) const;
 
+  // whether task is closed (finish same as start)
+  bool is_closed() const;
+
+  // whether task is unique (other than start/finish, no points used more than once)
+  bool is_unique() const;
+
+  bool validFinishType(LegalPointType_t type) const;
+  bool validStartType(LegalPointType_t type) const;
+  bool validIntermediateType(LegalPointType_t type) const;
+
 protected:
 
 /** 
@@ -311,10 +321,6 @@ protected:
  * @return True if candidate is valid at the position
  */
   virtual bool validType(OrderedTaskPoint *new_tp, unsigned position) const;
-
-  bool validFinishType(LegalPointType_t type) const;
-  bool validStartType(LegalPointType_t type) const;
-  bool validIntermediateType(LegalPointType_t type) const;
 
   OrderedTask &m_task; /**< task managed by this factory */
   const TaskBehaviour &m_behaviour; /**< behaviour (settings) */

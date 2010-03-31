@@ -41,11 +41,11 @@ FAITaskFactory::FAITaskFactory(OrderedTask& _task,
   AbstractTaskFactory(_task, tb)
 {
   m_start_types.push_back(START_SECTOR);
-  m_start_types.push_back(START_CYLINDER);
+  m_start_types.push_back(START_LINE);
   m_intermediate_types.push_back(FAI_SECTOR);
   m_intermediate_types.push_back(AST_CYLINDER);
   m_finish_types.push_back(FINISH_SECTOR);
-  m_finish_types.push_back(FINISH_CYLINDER);
+  m_finish_types.push_back(FINISH_LINE);
 }
 
 bool 
@@ -55,6 +55,11 @@ FAITaskFactory::validate()
   if (!m_task.has_start() || !m_task.has_finish()) {
     return false;
   }
+
+  if (!is_closed()) 
+    return false;
+  if (!is_unique())
+    return false;
 
   if (m_task.task_size()==4) {
 
@@ -72,17 +77,17 @@ FAITaskFactory::validate()
 
     /**
      * From kflog:
-     * A triangle is a valig FAI-triangle, if no side is less than
-     * 28% of the total length (totallength less than 500 km), or no
+     * A triangle is a valid FAI-triangle, if no side is less than
+     * 28% of the total length (total length less than 750 km), or no
      * side is less than 25% or larger than 45% of the total length
-     * (totallength >= 500km).
+     * (totallength >= 750km).
      */
  
-    if( ( d_wp < 500.0 ) &&
+    if( ( d_wp < 750.0 ) &&
         ( d1 >= 0.28 * d_wp && d2 >= 0.28 * d_wp && d3 >= 0.28 * d_wp ) )
       // small FAI
       return true;
-    else if( d_wp >= 500.0 &&
+    else if( d_wp >= 750.0 &&
              ( d1 > 0.25 * d_wp && d2 > 0.25 * d_wp && d3 > 0.25 * d_wp ) &&
              ( d1 <= 0.45 * d_wp && d2 <= 0.45 * d_wp && d3 <= 0.45 * d_wp ) )
       // large FAI
@@ -99,5 +104,14 @@ FAITaskFactory::validate()
 void 
 FAITaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 {
+  to.task_scored = true;
+  to.fai_finish = true;  
   to.homogeneous_tps = true;
+  to.is_closed = true;
+  to.min_points = 3;
+
+  to.start_max_speed = 0;
+  to.start_max_height = 0;
+  to.start_max_height_ref = 0;
+  to.finish_min_height = 0;
 }

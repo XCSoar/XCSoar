@@ -94,6 +94,7 @@ public:
    */
   enum Factory_t {
     FACTORY_FAI = 0,
+    FACTORY_RT,
     FACTORY_AAT,
     FACTORY_MIXED,
     FACTORY_TOURING

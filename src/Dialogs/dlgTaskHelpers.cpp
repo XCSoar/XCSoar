@@ -47,6 +47,8 @@ Copyright_License {
 const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type)
 {
   switch(type) {
+  case OrderedTask::FACTORY_RT:
+    return _T("RT");
   case OrderedTask::FACTORY_FAI:
     return _T("FAI triangle");
   case OrderedTask::FACTORY_AAT:
@@ -64,6 +66,8 @@ const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type)
 const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
 {
   switch(type) {
+  case OrderedTask::FACTORY_RT:
+    return _T("Racing task");
   case OrderedTask::FACTORY_FAI:
     return _T("FAI triangle task");
   case OrderedTask::FACTORY_AAT:

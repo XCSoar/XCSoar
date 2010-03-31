@@ -51,6 +51,7 @@
 #include "TaskSolvers/TaskOptTarget.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
+#include "Task/Factory/RTTaskFactory.hpp"
 #include "Task/Factory/FAITaskFactory.hpp"
 #include "Task/Factory/AATTaskFactory.hpp"
 #include "Task/Factory/MixedTaskFactory.hpp"
@@ -1016,6 +1017,9 @@ OrderedTask::set_factory(const Factory_t the_factory)
   delete active_factory;
 
   switch (factory_mode) {
+  case FACTORY_RT:
+    active_factory = new RTTaskFactory(*this, task_behaviour);
+    break;
   case FACTORY_FAI:
     active_factory = new FAITaskFactory(*this, task_behaviour);
     break;
@@ -1033,6 +1037,7 @@ OrderedTask::set_factory(const Factory_t the_factory)
 
   return factory_mode;
 }
+
 
 const OrderedTaskBehaviour& 
 OrderedTask::get_ordered_task_behaviour() const
@@ -1065,6 +1070,7 @@ OrderedTask::get_factory_types(bool all) const
   /// @todo: check transform types if all=false
   std::vector<Factory_t> f_list;
   f_list.push_back(FACTORY_FAI);
+  f_list.push_back(FACTORY_RT);
   f_list.push_back(FACTORY_AAT);
   f_list.push_back(FACTORY_MIXED);
   f_list.push_back(FACTORY_TOURING);

@@ -55,6 +55,7 @@ public:
   unsigned min_points; /**< Minimum number of turnpoints including start/finish */
   unsigned max_points; /**< Maximum number of turnpoints including start/finish */
   bool homogeneous_tps; /**< Whether all turnpoints except start/finish are same type */
+  bool is_closed; /**< Whether start/finish turnpoints must be the same */
 
 /** 
  * Check whether aircraft speed is within start speed limits

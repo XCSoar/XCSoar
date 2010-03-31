@@ -124,27 +124,27 @@ AbstractTaskFactory::createPoint(const LegalPointType_t type,
 {
   switch (type) {
   case START_SECTOR:
-    return new StartPoint(new FAISectorZone(wp.Location),
+    return new StartPoint(new FAISectorZone(wp.Location, false),
                           m_task.get_task_projection(),wp,m_behaviour,
                           get_ordered_task_behaviour());
     break;
   case START_LINE:
-    return new StartPoint(new LineSectorZone(wp.Location),
+    return new StartPoint(new LineSectorZone(wp.Location, (fixed)1000),
                           m_task.get_task_projection(),wp,m_behaviour,
                           get_ordered_task_behaviour());
     break;
   case START_CYLINDER:
-    return new StartPoint(new CylinderZone(wp.Location),
+    return new StartPoint(new CylinderZone(wp.Location, (fixed)1000),
                           m_task.get_task_projection(),wp,m_behaviour,
                           get_ordered_task_behaviour());
     break;
   case FAI_SECTOR:
-    return new ASTPoint(new FAISectorZone(wp.Location),
+    return new ASTPoint(new FAISectorZone(wp.Location, true),
                         m_task.get_task_projection(),wp,m_behaviour,
                         get_ordered_task_behaviour());
     break;
   case AST_CYLINDER:
-    return new ASTPoint(new CylinderZone(wp.Location),
+    return new ASTPoint(new CylinderZone(wp.Location, (fixed)500),
                         m_task.get_task_projection(),wp,m_behaviour,
                         get_ordered_task_behaviour());
     break;
@@ -159,17 +159,17 @@ AbstractTaskFactory::createPoint(const LegalPointType_t type,
                         get_ordered_task_behaviour());
     break;
   case FINISH_SECTOR:
-    return new FinishPoint(new FAISectorZone(wp.Location),
+    return new FinishPoint(new FAISectorZone(wp.Location, false),
                            m_task.get_task_projection(),wp,m_behaviour,
                            get_ordered_task_behaviour());
     break;
   case FINISH_LINE:
-    return new FinishPoint(new LineSectorZone(wp.Location),
+    return new FinishPoint(new LineSectorZone(wp.Location, (fixed)1000),
                            m_task.get_task_projection(),wp,m_behaviour,
                            get_ordered_task_behaviour());
     break;
   case FINISH_CYLINDER:
-    return new FinishPoint(new CylinderZone(wp.Location),
+    return new FinishPoint(new CylinderZone(wp.Location, (fixed)1000),
                            m_task.get_task_projection(),wp,m_behaviour,
                            get_ordered_task_behaviour());
     break;
@@ -571,3 +571,39 @@ AbstractTaskFactory::getValidIntermediateTypes(unsigned position) const
   }
   return v;
 }
+
+
+
+bool 
+AbstractTaskFactory::is_closed() const
+{
+  if (m_task.task_size()<3) 
+    return false;
+
+  const Waypoint& wp_start = m_task.get_tp(0)->get_waypoint();
+  const Waypoint& wp_finish = m_task.get_tp(m_task.task_size()-1)->get_waypoint();
+
+  return (wp_start == wp_finish);
+}
+
+bool 
+AbstractTaskFactory::is_unique() const
+{
+  const unsigned size = m_task.task_size();
+  for (unsigned i=0; i+1< size; i++) {
+    const Waypoint& wp_0 = m_task.get_tp(i)->get_waypoint();
+
+    for (unsigned j=i+1; j< size; j++) {
+      if ((i==0)&&(j+1==size)) {
+        // ok to be the same
+      } else {
+        const Waypoint& wp_1 = m_task.get_tp(j)->get_waypoint();
+        if (wp_1 == wp_0) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+

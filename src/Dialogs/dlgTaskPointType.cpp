@@ -144,8 +144,12 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type) {
       }
     } else {
 
-      way_point = dlgWayPointSelect(*parent_window,
-                                    XCSoarInterface::Basic().Location);
+      if (factory.validFinishType(type) && ordered_task->get_ordered_task_behaviour().is_closed) {
+        way_point = &(ordered_task->get_tp(0)->get_waypoint());
+      } else {
+        way_point = dlgWayPointSelect(*parent_window,
+                                      XCSoarInterface::Basic().Location);
+      }
 
       point = factory.createPoint(type, *way_point);
       if (point) {

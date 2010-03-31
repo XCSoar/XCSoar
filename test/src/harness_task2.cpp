@@ -8,7 +8,7 @@ bool test_task_bad(TaskManager& task_manager,
 {
   test_task_random(task_manager,waypoints,2);
 
-  task_manager.set_factory(OrderedTask::FACTORY_FAI);
+  task_manager.set_factory(OrderedTask::FACTORY_RT);
   AbstractTaskFactory& fact = task_manager.get_factory();
 
   const Waypoint* wp = random_waypoint(waypoints);
