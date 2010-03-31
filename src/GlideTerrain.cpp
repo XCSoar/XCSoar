@@ -104,6 +104,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state,
 
   if (!valid()) {
     // no terrain!
+    retval.out_of_range = true;
     return retval;
   }
   
@@ -214,6 +215,7 @@ GlideTerrain::find_intersection(const AIRCRAFT_STATE &state)
 
   if (!valid() || !positive(max_range)) {
     // no terrain!
+    retval.out_of_range = true;
     return retval;
   }
 
