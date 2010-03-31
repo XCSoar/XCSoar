@@ -45,7 +45,9 @@ OrderedTaskBehaviour::OrderedTaskBehaviour():
     start_max_height(0),
     start_max_height_ref(0),
     finish_min_height(0),
-    fai_finish(false)
+    fai_finish(false),
+    min_points(2),
+    max_points(20)
 {
 
 }
@@ -95,5 +97,12 @@ OrderedTaskBehaviour::check_finish_height(const AIRCRAFT_STATE &state) const
     return true;
 
   return state.AltitudeAGL >= finish_min_height;
+}
+
+
+bool 
+OrderedTaskBehaviour::is_fixed_size() const
+{
+  return (min_points == max_points);
 }
 

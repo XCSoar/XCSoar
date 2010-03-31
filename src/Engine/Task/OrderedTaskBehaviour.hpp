@@ -52,6 +52,8 @@ public:
   unsigned start_max_height_ref; /**< Reference for max start height (0=AGL, 1=abs) */
   unsigned finish_min_height; /**< Minimum height AGL (m) allowed to finish */
   bool fai_finish; /**< Whether ordered task finish requires FAI height rule */
+  unsigned min_points; /**< Minimum number of turnpoints including start/finish */
+  unsigned max_points; /**< Maximum number of turnpoints including start/finish */
 
 /** 
  * Check whether aircraft speed is within start speed limits
@@ -93,6 +95,7 @@ public:
  */
   void all_off();
 
+  bool is_fixed_size() const;
 };
 
 #endif

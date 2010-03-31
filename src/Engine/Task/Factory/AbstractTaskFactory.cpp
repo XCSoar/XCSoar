@@ -421,19 +421,51 @@ AbstractTaskFactory::get_ordered_task_behaviour() const {
 void 
 AbstractTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 {
-
+  /// @todo implement for concrete atf's
 }
 
 
 ////////
 
+bool 
+AbstractTaskFactory::is_position_start(const unsigned position) const
+{
+  return (position==0);
+}
+
+bool 
+AbstractTaskFactory::is_position_intermediate(const unsigned position) const
+{
+  if (is_position_start(position))
+    return false;
+  if (get_ordered_task_behaviour().is_fixed_size()) {
+    return (position+1< get_ordered_task_behaviour().max_points);
+  } else {
+    return (position+1< get_ordered_task_behaviour().max_points) &&
+      (position<= m_task.task_size());
+  }
+}
+
+bool 
+AbstractTaskFactory::is_position_finish(const unsigned position) const
+{
+  if (is_position_start(position))
+    return false;
+  if (get_ordered_task_behaviour().is_fixed_size()) {
+    return (position+1== get_ordered_task_behaviour().max_points);
+  } else {
+    return (position+1<= get_ordered_task_behaviour().max_points) &&
+      (position<= m_task.task_size());
+  }
+}
+
 bool
 AbstractTaskFactory::validAbstractType(LegalAbstractPointType_t type, 
                                        const unsigned position) const
 {
-  const bool is_start = (position==0);
-  const bool is_finish = (position+1 >= m_task.task_size()) && !is_start;
-  const bool is_intermediate = !is_start && !is_finish;
+  const bool is_start = is_position_start(position);
+  const bool is_finish = is_position_finish(position);
+  const bool is_intermediate = is_position_intermediate(position);
 
   switch (type) {
   case POINT_START:

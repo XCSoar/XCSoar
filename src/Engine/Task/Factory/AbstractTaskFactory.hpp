@@ -321,6 +321,10 @@ protected:
   LegalPointVector m_start_types; /**< list of valid start types, for specialisation */
   LegalPointVector m_intermediate_types; /**< list of valid intermediate types, for specialisation */
   LegalPointVector m_finish_types; /**< list of valid finish types, for specialisation */
+
+  bool is_position_start(const unsigned position) const;
+  bool is_position_intermediate(const unsigned position) const;
+  bool is_position_finish(const unsigned position) const;
 };
 
 #endif

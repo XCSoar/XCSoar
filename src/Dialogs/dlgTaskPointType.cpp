@@ -228,6 +228,10 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
   assert(wPointTypes!=NULL);
 
   point_types = ordered_task->get_factory().getValidTypes(index);
+  if (point_types.empty()) {
+    assert(1);
+    return false;
+  }
 
   wPointTypes->SetActivateCallback(OnPointListEnter);
   wPointTypes->SetPaintItemCallback(OnPointPaintListItem);
