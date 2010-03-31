@@ -408,6 +408,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/UtilsText.cpp \

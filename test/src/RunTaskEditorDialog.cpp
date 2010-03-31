@@ -146,7 +146,7 @@ Waypoints way_points;
 static TaskBehaviour task_behaviour;
 static TaskEvents task_events;
 static TaskManager task_manager(task_events, task_behaviour, way_points);
-TaskClientUI task_ui(task_manager);
+TaskClientUI task_ui(task_manager, task_behaviour, task_events);
 
 static Airspaces airspace_database;
 
@@ -245,7 +245,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ((Window &)main_window).install_wndproc();
   main_window.show();
 
-  Layout::Initalize(640, 480);
+  Layout::Initialize(640, 480);
   InitialiseFonts(Appearance, main_window.get_client_rect());
 
   dlgTaskOverviewShowModal(main_window);
