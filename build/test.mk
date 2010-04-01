@@ -130,6 +130,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/Simulator.cpp \
 	$(SRC)/TextReader.cpp \
 	$(SRC)/TextWriter.cpp \
+	$(SRC)/ZipTextReader.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -262,6 +263,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/TerrainRenderer.cpp \
 	$(SRC)/TextReader.cpp \
 	$(SRC)/TextWriter.cpp \
+	$(SRC)/ZipTextReader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Topology.cpp \
@@ -356,6 +358,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/TextReader.cpp \
 	$(SRC)/TextWriter.cpp \
+	$(SRC)/ZipTextReader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \
@@ -417,6 +420,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/TaskClientUI.cpp \
 	$(SRC)/TextReader.cpp \
 	$(SRC)/TextWriter.cpp \
+	$(SRC)/ZipTextReader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \
