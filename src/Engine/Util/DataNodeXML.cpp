@@ -97,6 +97,18 @@ DataNodeXML::add_child(const tstring &name)
   return new DataNodeXML(name, m_xml_node->AddChild(stringDup(name), false));
 }
 
+
+DataNode* 
+DataNodeXML::get_child_by_name(const tstring name, const unsigned i) const
+{
+  XMLNode child = m_xml_node->getChildNode(name.c_str(), i);
+  if (child.isEmpty()) {
+    return NULL;
+  }
+  return new DataNodeXML(child.getName(), child);
+}
+
+
 DataNode*
 DataNodeXML::get_child(unsigned i) const
 {
@@ -139,4 +151,5 @@ DataNodeXML::save(const char* path)
 
   return true;
 }
+
 

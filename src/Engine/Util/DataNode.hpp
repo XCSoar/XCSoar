@@ -52,6 +52,7 @@ public:
 
   virtual DataNode* add_child(const tstring &name) = 0;
   virtual DataNode* get_child(unsigned i) const = 0;
+  virtual DataNode* get_child_by_name(const tstring name, const unsigned i=0) const = 0;
   virtual const tstring serialise() = 0;
 
   virtual void set_attribute(const tstring &name, const tstring value) = 0;

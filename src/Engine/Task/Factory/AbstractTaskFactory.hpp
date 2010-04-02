@@ -42,6 +42,8 @@
 #include "Task/TaskBehaviour.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/Tasks/BaseTask/IntermediatePoint.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
+#include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
 
 #include <vector>
@@ -276,6 +278,15 @@ public:
  * @return Initialised FinishPoint if valid, otherwise NULL
  */
   FinishPoint* createFinish(const Waypoint &wp) const;
+
+  StartPoint* createStart(ObservationZonePoint* pt,
+                                const Waypoint &wp) const;
+  ASTPoint* createAST(ObservationZonePoint* pt,
+                              const Waypoint &wp) const;
+  AATPoint* createAAT(ObservationZonePoint* pt,
+                                const Waypoint &wp) const;
+  FinishPoint* createFinish(ObservationZonePoint* pt,
+                            const Waypoint &wp) const;
 
 /** 
  * Check whether task is complete and valid according to factory rules

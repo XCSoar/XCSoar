@@ -140,7 +140,7 @@ AirspaceClientCalc airspace_calc(airspace_database,
 GlideComputer glide_computer(task_calc,
                              airspace_calc);
 
-extern void test_datanodexml(const OrderedTask& task);
+extern void test_datanodexml(OrderedTask& task);
 
 void
 test_task()
@@ -160,6 +160,7 @@ test_task()
   glide_polar.set_mc(fixed_two);
   task_manager.set_glide_polar(glide_polar);
 
+  /*
   OrderedTaskPoint *tp;
   const Waypoint *wp;
 
@@ -190,15 +191,17 @@ test_task()
     tp = fact.createFinish(AbstractTaskFactory::FINISH_LINE, *wp);
     fact.append(tp, false);
   }
+  */
+
+  OrderedTask* ordered_task = task_ui.task_clone();
+  test_datanodexml(*ordered_task);
+  task_ui.task_commit(*ordered_task);
+  delete ordered_task;
 
   task_manager.setActiveTaskPoint(0);
   task_manager.resume();
- 
-  OrderedTask* ordered_task = task_ui.task_clone();
-  test_datanodexml(*ordered_task);
-  delete ordered_task;
-
 }
+
 
 void
 XCSoarInterface::PreloadInitialisation(bool ask)

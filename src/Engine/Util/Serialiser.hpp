@@ -39,10 +39,9 @@
 
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
+#include "Task/Tasks/OrderedTask.hpp"
 
 class DataNode;
-class OrderedTaskBehaviour;
-class OrderedTask;
 class Waypoint;
 
 class Serialiser:
@@ -67,15 +66,24 @@ public:
 protected:
   void serialise(const OrderedTaskBehaviour& data);
   void deserialise(OrderedTaskBehaviour& data);
+
   void serialise(const Waypoint& data);
-  void deserialise(Waypoint& data);
+  Waypoint* deserialise_waypoint();
+
   void serialise(const GEOPOINT& data);
   void deserialise(GEOPOINT& data);
+
   void serialise(const ObservationZonePoint& data);
+  ObservationZonePoint* deserialise_oz(const Waypoint& wp, const bool is_turnpoint);
 
   DataNode* serialise(const OrderedTaskPoint& data, const TCHAR* name);
+  void deserialise_point(OrderedTask& data);
 
   DataNode &m_node;
+
+private:
+  OrderedTask::Factory_t task_factory_type() const;
+  const TCHAR* task_factory_type(OrderedTask::Factory_t the_type) const;
 };
 
 #endif

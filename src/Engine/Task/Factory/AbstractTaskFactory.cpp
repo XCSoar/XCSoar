@@ -36,13 +36,48 @@
  */
 #include "AbstractTaskFactory.hpp"
 
-#include "Task/TaskPoints/AATPoint.hpp"
-#include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include <algorithm>
 
+StartPoint* 
+AbstractTaskFactory::createStart(ObservationZonePoint* oz,
+                                 const Waypoint& wp) const
+{
+  return new StartPoint(oz, m_task.get_task_projection(), 
+                        wp, m_behaviour,
+                        get_ordered_task_behaviour());
+}
+
+FinishPoint* 
+AbstractTaskFactory::createFinish(ObservationZonePoint* oz,
+                                 const Waypoint& wp) const
+{
+  return new FinishPoint(oz, m_task.get_task_projection(), 
+                         wp, m_behaviour,
+                         get_ordered_task_behaviour());
+}
+
+AATPoint* 
+AbstractTaskFactory::createAAT(ObservationZonePoint* oz,
+                               const Waypoint& wp) const
+{
+  return new AATPoint(oz, m_task.get_task_projection(), 
+                      wp, m_behaviour,
+                      get_ordered_task_behaviour());
+}
+
+ASTPoint* 
+AbstractTaskFactory::createAST(ObservationZonePoint* oz,
+                               const Waypoint& wp) const
+{
+  return new ASTPoint(oz, m_task.get_task_projection(), 
+                      wp, m_behaviour,
+                      get_ordered_task_behaviour());
+}
+
+///////
 
 StartPoint* 
 AbstractTaskFactory::createStart(const Waypoint &wp) const
@@ -124,55 +159,25 @@ AbstractTaskFactory::createPoint(const LegalPointType_t type,
 {
   switch (type) {
   case START_SECTOR:
-    return new StartPoint(new FAISectorZone(wp.Location, false),
-                          m_task.get_task_projection(),wp,m_behaviour,
-                          get_ordered_task_behaviour());
-    break;
+    return createStart(new FAISectorZone(wp.Location, false), wp);
   case START_LINE:
-    return new StartPoint(new LineSectorZone(wp.Location, (fixed)1000),
-                          m_task.get_task_projection(),wp,m_behaviour,
-                          get_ordered_task_behaviour());
-    break;
+    return createStart(new LineSectorZone(wp.Location, (fixed)1000), wp);
   case START_CYLINDER:
-    return new StartPoint(new CylinderZone(wp.Location, (fixed)1000),
-                          m_task.get_task_projection(),wp,m_behaviour,
-                          get_ordered_task_behaviour());
-    break;
+    return createStart(new CylinderZone(wp.Location, (fixed)1000), wp);
   case FAI_SECTOR:
-    return new ASTPoint(new FAISectorZone(wp.Location, true),
-                        m_task.get_task_projection(),wp,m_behaviour,
-                        get_ordered_task_behaviour());
-    break;
+    return createAST(new FAISectorZone(wp.Location, true), wp);
   case AST_CYLINDER:
-    return new ASTPoint(new CylinderZone(wp.Location, (fixed)500),
-                        m_task.get_task_projection(),wp,m_behaviour,
-                        get_ordered_task_behaviour());
-    break;
+    return createAST(new CylinderZone(wp.Location, (fixed)500), wp);
   case AAT_CYLINDER:
-    return new AATPoint(new CylinderZone(wp.Location),
-                        m_task.get_task_projection(),wp,m_behaviour,
-                        get_ordered_task_behaviour());
-    break;
+    return createAAT(new CylinderZone(wp.Location), wp);
   case AAT_SEGMENT:
-    return new AATPoint(new SectorZone(wp.Location),
-                        m_task.get_task_projection(),wp,m_behaviour,
-                        get_ordered_task_behaviour());
-    break;
+    return createAAT(new SectorZone(wp.Location), wp);
   case FINISH_SECTOR:
-    return new FinishPoint(new FAISectorZone(wp.Location, false),
-                           m_task.get_task_projection(),wp,m_behaviour,
-                           get_ordered_task_behaviour());
-    break;
+    return createFinish(new FAISectorZone(wp.Location, false), wp);
   case FINISH_LINE:
-    return new FinishPoint(new LineSectorZone(wp.Location, (fixed)1000),
-                           m_task.get_task_projection(),wp,m_behaviour,
-                           get_ordered_task_behaviour());
-    break;
+    return createFinish(new LineSectorZone(wp.Location, (fixed)1000), wp);
   case FINISH_CYLINDER:
-    return new FinishPoint(new CylinderZone(wp.Location, (fixed)1000),
-                           m_task.get_task_projection(),wp,m_behaviour,
-                           get_ordered_task_behaviour());
-    break;
+    return createFinish(new CylinderZone(wp.Location, (fixed)1000), wp);
   default:
     assert(1);
   };

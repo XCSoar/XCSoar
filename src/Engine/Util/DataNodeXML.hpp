@@ -58,6 +58,7 @@ public:
 
   DataNode* add_child(const tstring &name);
   DataNode* get_child(unsigned i) const;
+  DataNode* get_child_by_name(const tstring name, const unsigned i=0) const;
 
   void set_attribute(const tstring &name, const tstring value);
   bool get_attribute(const tstring &name, tstring &value) const;
