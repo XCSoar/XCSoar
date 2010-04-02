@@ -538,3 +538,15 @@ DataFieldFileReader::CreateComboList(void)
   mComboList.ComboPopupItemCount = i;
   return mComboList.ComboPopupItemCount;
 }
+
+unsigned
+DataFieldFileReader::size() const
+{
+  return nFiles;
+}
+
+const DataFieldFileReaderEntry&
+DataFieldFileReader::getItem(unsigned index) const
+{
+  return fields[index];
+}

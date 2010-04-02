@@ -193,6 +193,19 @@ TaskClientUI::task_clone()
                             glide_polar);
 }
 
+OrderedTask* 
+TaskClientUI::task_blank()
+{
+  ScopeLock lock(mutex);
+  task_advance = task_manager.get_task_advance();
+  glide_polar = task_manager.get_glide_polar();
+  return new OrderedTask(task_events,
+                         task_behaviour,
+                         task_advance,
+                         glide_polar);
+}
+
+
 bool
 TaskClientUI::task_commit(const OrderedTask& that)
 {
@@ -224,30 +237,46 @@ TaskClientUI::task_save(const TCHAR* path)
     retval = true;
   }
   delete root;  
+  delete task;
   return retval;
 }
 
+
+OrderedTask* 
+TaskClientUI::task_create(const TCHAR* path)
+{
+  DataNode* root = DataNodeXML::load(path);
+  if (!root) {
+    return NULL;
+  }
+  if (_tcscmp(root->get_name().c_str(),_T("Task"))==0) {
+    OrderedTask* task = task_blank();
+    Serialiser des(*root);
+    des.deserialise(*task);
+    if (task->check_task()) {
+      delete root;
+      return task;
+    } else {
+      delete task;
+      delete root;
+      return NULL;
+    }
+  }
+  delete root;
+  return NULL;
+}
  
 bool 
 TaskClientUI::task_load(const TCHAR* path)
 {
-  DataNode* root = DataNodeXML::load(path);
-  if (!root) {
-    return false;
+  OrderedTask* task = task_create(path);
+  if (task != NULL) {
+    task_commit(*task);
+    resume();
+    delete task;
+    return true;
   }
-  bool retval = false;
-  if (_tcscmp(root->get_name().c_str(),_T("Task"))==0) {
-    OrderedTask* task = task_clone();
-    Serialiser des(*root);
-    des.deserialise(*task);
-    if (task->check_task()) {
-      task_commit(*task);
-      retval = true;
-      resume();
-    }
-  }
-  delete root;
-  return retval;
+  return false;
 }
 
 const TCHAR TaskClientUI::default_task_path[] = _T("Default.tsk");

@@ -146,6 +146,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/TaskClient.cpp \
 	$(SRC)/TaskClientUI.cpp \
 	$(SRC)/TaskClientCalc.cpp \
+	$(SRC)/TaskStore.cpp \
 	\
 	$(SRC)/Poco/RWLock.cpp \
 	\

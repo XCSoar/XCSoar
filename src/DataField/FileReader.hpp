@@ -188,6 +188,10 @@ public:
   void Sort();
   void ScanDirectoryTop(const TCHAR *filter);
 
+  /** For use by other classes */
+  unsigned size() const;
+  const DataFieldFileReaderEntry& getItem(unsigned index) const;
+
  protected:
   bool ScanFiles(const TCHAR *pattern, const TCHAR *filter);
   bool ScanDirectories(const TCHAR *pattern, const TCHAR *filter);

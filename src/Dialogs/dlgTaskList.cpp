@@ -54,6 +54,7 @@ Copyright_License {
 #include "RenderObservationZone.hpp"
 #include "Screen/Chart.hpp"
 #include "ChartProjection.hpp"
+#include "TaskStore.hpp"
 
 #include <assert.h>
 
@@ -61,12 +62,16 @@ static SingleWindow *parent_window;
 static WndForm *wf=NULL;
 static WndListFrame* wTasks= NULL;
 static WndFrame* wTaskView = NULL;
-static OrderedTask* ordered_task= NULL;
+static TaskStore task_store;
 
 static void OnCloseClicked(WindowControl * Sender)
 {
   (void)Sender;
   wf->SetModalResult(mrCancel);
+}
+
+static unsigned get_cursor_index() {
+  return wTasks->GetCursorIndex();
 }
 
 static void
@@ -75,11 +80,16 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
   RECT rc = Sender->get_client_rect();
   Chart chart(canvas, rc);
 
-  if (wTasks->GetCursorIndex()>0) {
+  if (get_cursor_index()>= task_store.size()) {
     chart.DrawNoData();
     return;
   }
 
+  OrderedTask* ordered_task = task_store.get_task(get_cursor_index());
+  if (ordered_task == NULL) {
+    chart.DrawNoData();
+    return;
+  }
   if (!ordered_task->check_task()) {
     chart.DrawNoData();
     return;
@@ -107,15 +117,13 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(NULL)
 };
 
-static unsigned UpLimit=0;
-
 
 static void
 OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
   TCHAR sTmp[120];
-  if (DrawListIndex < UpLimit) {
-    _stprintf(sTmp, _T(" File %d: %s"), DrawListIndex, gettext(_T("blah")));
+  if (DrawListIndex < task_store.size()) {
+    _stprintf(sTmp, _T("%s"), task_store.get_name(DrawListIndex).c_str());
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
                 sTmp);
   }
@@ -124,17 +132,21 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 static void
 RefreshView()
 {
+  wTasks->SetLength(task_store.size());
   wTaskView->invalidate();
 
   WndFrame* wSummary = (WndFrame *)wf->FindByName(_T("frmSummary"));
   if (wSummary) {
-    if (wTasks->GetCursorIndex()==0) {
+    if (get_cursor_index()<task_store.size()) {
       TCHAR text[300];
-      OrderedTaskSummary(ordered_task, text);
-      wSummary->SetCaption(text);
-    } else {
-      wSummary->SetCaption(_T("null"));
+      OrderedTask* ordered_task = task_store.get_task(get_cursor_index());
+      if (ordered_task != NULL) {
+        OrderedTaskSummary(ordered_task, text);
+        wSummary->SetCaption(text);
+        return;
+      }
     }
+    wSummary->SetCaption(_T(""));
   }
 }
 
@@ -165,7 +177,7 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
 {
   parent_window = &parent;
 
-  ordered_task = *task;
+  task_store.scan();
 
   wf = NULL;
 
@@ -192,8 +204,6 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
   wTasks->SetActivateCallback(OnTaskListEnter);
   wTasks->SetPaintItemCallback(OnTaskPaintListItem);
   wTasks->SetCursorCallback(OnTaskCursorCallback);
-  UpLimit = 3;
-  wTasks->SetLength(UpLimit);
 
   RefreshView();
 
@@ -201,10 +211,16 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
   delete wf;
   wf = NULL;
 
+  /*
   if (*task != ordered_task) {
     *task = ordered_task;
     return true;
   } else {
     return false;
   }
+  */
+
+  task_store.clear();
+
+  return false;
 }

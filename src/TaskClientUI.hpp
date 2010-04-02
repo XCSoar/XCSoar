@@ -93,6 +93,7 @@ public:
 
   // 
   OrderedTask* task_clone();
+  OrderedTask* task_blank();
 
   /**
    * Copy task into this task
@@ -108,6 +109,8 @@ public:
   bool task_load(const TCHAR* path);
   bool task_save_default();
   bool task_load_default();
+
+  OrderedTask* task_create(const TCHAR* path);
 
 protected:
   const TaskBehaviour &task_behaviour;
