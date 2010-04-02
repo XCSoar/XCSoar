@@ -55,6 +55,8 @@ Copyright_License {
 #include "Screen/Chart.hpp"
 #include "ChartProjection.hpp"
 #include "TaskStore.hpp"
+#include "TaskClientUI.hpp"
+#include "Components.hpp"
 
 #include <assert.h>
 
@@ -63,6 +65,8 @@ static WndForm *wf=NULL;
 static WndListFrame* wTasks= NULL;
 static WndFrame* wTaskView = NULL;
 static TaskStore task_store;
+static OrderedTask* active_task = NULL;
+static bool task_modified;
 
 static void OnCloseClicked(WindowControl * Sender)
 {
@@ -74,18 +78,29 @@ static unsigned get_cursor_index() {
   return wTasks->GetCursorIndex();
 }
 
+static bool cursor_is_active() {
+  return (wTasks->GetCursorIndex()==0);
+}
+
+static OrderedTask* get_cursor_task() {
+  if (get_cursor_index()> task_store.size())
+    return NULL;
+  if (cursor_is_active()) {
+    return active_task;
+  } else if (get_cursor_index()> task_store.size()) {
+    return NULL;
+  } else {
+    return task_store.get_task(get_cursor_index()-1);
+  }
+}
+
 static void
 OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 {
   RECT rc = Sender->get_client_rect();
   Chart chart(canvas, rc);
 
-  if (get_cursor_index()>= task_store.size()) {
-    chart.DrawNoData();
-    return;
-  }
-
-  OrderedTask* ordered_task = task_store.get_task(get_cursor_index());
+  OrderedTask* ordered_task = get_cursor_task();
   if (ordered_task == NULL) {
     chart.DrawNoData();
     return;
@@ -121,32 +136,34 @@ static CallBackTableEntry_t CallBackTable[]={
 static void
 OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
 {
-  TCHAR sTmp[120];
-  if (DrawListIndex < task_store.size()) {
-    _stprintf(sTmp, _T("%s"), task_store.get_name(DrawListIndex).c_str());
+  if (DrawListIndex <= task_store.size()) {
+    tstring name;
+    if (DrawListIndex==0) {
+      name = _T("(Active task)");
+    } else {
+      name = task_store.get_name(DrawListIndex-1);
+    }
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-                sTmp);
+                name.c_str());
   }
 }
 
 static void
 RefreshView()
 {
-  wTasks->SetLength(task_store.size());
+  wTasks->SetLength(task_store.size()+1);
   wTaskView->invalidate();
 
   WndFrame* wSummary = (WndFrame *)wf->FindByName(_T("frmSummary"));
   if (wSummary) {
-    if (get_cursor_index()<task_store.size()) {
+    OrderedTask* ordered_task = get_cursor_task();
+    if (ordered_task != NULL) {
       TCHAR text[300];
-      OrderedTask* ordered_task = task_store.get_task(get_cursor_index());
-      if (ordered_task != NULL) {
-        OrderedTaskSummary(ordered_task, text);
-        wSummary->SetCaption(text);
-        return;
-      }
+      OrderedTaskSummary(ordered_task, text);
+      wSummary->SetCaption(text);
+    } else {
+      wSummary->SetCaption(_T(""));
     }
-    wSummary->SetCaption(_T(""));
   }
 }
 
@@ -154,15 +171,21 @@ RefreshView()
 static void
 OnTaskListEnter(unsigned ItemIndex)
 {
-  if (MessageBoxX(gettext(_T("Activate task?")),
-                  gettext(_T("Task Selection")),
-                  MB_YESNO|MB_ICONQUESTION) == IDYES) {
+  if (cursor_is_active()) 
+    return;
 
-    /*
-    delete ordered_task;
-    ordered_task = foo->clone();
-    RefreshView();
-    */
+  const OrderedTask* orig = get_cursor_task();
+  if (orig != NULL) {
+
+    if (MessageBoxX(gettext(_T("Activate task?")),
+                    gettext(_T("Task Selection")),
+                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
+      
+      delete active_task;
+      active_task = task_ui.task_copy(*orig);
+      RefreshView();
+      task_modified = true;
+    }
   }
 }
 
@@ -176,6 +199,9 @@ bool
 dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
 {
   parent_window = &parent;
+  
+  active_task = *task;
+  task_modified = false;
 
   task_store.scan();
 
@@ -210,17 +236,14 @@ dlgTaskListShowModal(SingleWindow &parent, OrderedTask** task)
   wf->ShowModal();
   delete wf;
   wf = NULL;
-
-  /*
-  if (*task != ordered_task) {
-    *task = ordered_task;
-    return true;
-  } else {
-    return false;
+  
+  bool retval = false;
+  if (*task != active_task) {
+    *task = active_task;
+    retval= true;
   }
-  */
 
   task_store.clear();
 
-  return false;
+  return retval || task_modified;
 }

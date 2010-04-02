@@ -194,6 +194,18 @@ TaskClientUI::task_clone()
 }
 
 OrderedTask* 
+TaskClientUI::task_copy(const OrderedTask& that)
+{
+  ScopeLock lock(mutex);
+  task_advance = task_manager.get_task_advance();
+  glide_polar = task_manager.get_glide_polar();
+  return that.clone(task_events,
+                    task_behaviour,
+                    task_advance,
+                    glide_polar);
+}
+
+OrderedTask* 
 TaskClientUI::task_blank()
 {
   ScopeLock lock(mutex);

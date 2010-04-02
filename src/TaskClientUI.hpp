@@ -109,7 +109,7 @@ public:
   bool task_load(const TCHAR* path);
   bool task_save_default();
   bool task_load_default();
-
+  OrderedTask* task_copy(const OrderedTask& that);
   OrderedTask* task_create(const TCHAR* path);
 
 protected:
