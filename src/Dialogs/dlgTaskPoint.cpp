@@ -107,12 +107,12 @@ public:
       }
       wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorStartRadial")));
       if (wv) {
-        wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getStartRadial()));
+        wv->GetDataField()->SetAsFloat(oz.getStartRadial());
         wv->RefreshDisplay();
       }
       wv = ((WndProperty*)wf->FindByName(_T("prpOZSectorFinishRadial")));
       if (wv) {
-        wv->GetDataField()->SetAsFloat(Units::ToUserDistance(oz.getEndRadial()));
+        wv->GetDataField()->SetAsFloat(oz.getEndRadial());
         wv->RefreshDisplay();
       }
     }
