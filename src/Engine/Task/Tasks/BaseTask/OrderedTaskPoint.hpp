@@ -42,6 +42,7 @@
 #include "TaskLeg.hpp"
 #include "ScoredTaskPoint.hpp"
 #include "ObservationZoneClient.hpp"
+#include "Util/Serialisable.hpp"
 
 /**
  *  Abstract compound specialisation of TaskLeg and ScoredTaskPoint,
@@ -58,6 +59,8 @@ class OrderedTaskPoint :
   public ObservationZoneClient
 {
 public:
+  friend class Serialiser;
+
 /** 
  * Constructor.
  * Ownership of oz is transferred to this object

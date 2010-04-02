@@ -61,10 +61,10 @@ class AbstractTaskFactory;
  * - multiple start points
  */
 class OrderedTask:
-  public AbstractTask,
-  public Serialisable
+  public AbstractTask
 {
 public:
+  friend class Serialiser;
   friend class TaskDijkstra;
 
   typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector; /**< Storage type of task points */ 

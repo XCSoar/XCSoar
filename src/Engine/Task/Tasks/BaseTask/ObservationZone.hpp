@@ -46,7 +46,8 @@
  * Abstract class giving properties of a zone which is used to measure
  * transitions in/out of and interior/exterior checking.
  */
-class ObservationZone {
+class ObservationZone
+{
 public:
   ObservationZone() {
 

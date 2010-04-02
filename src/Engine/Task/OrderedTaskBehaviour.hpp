@@ -38,11 +38,16 @@
 #define ORDEREDTASK_BEHAVIOUR_HPP
 
 #include "Math/fixed.hpp"
+#include "Util/Serialisable.hpp"
+
 class AIRCRAFT_STATE;
 class TaskBehaviour;
 
-class OrderedTaskBehaviour {
+class OrderedTaskBehaviour:
+  public Serialisable
+{
 public:
+  friend class Serialiser;
   OrderedTaskBehaviour();
 
   bool task_scored; /**< Option to enable calculation of scores, and protect against task changes if flight/task has started */
@@ -98,6 +103,8 @@ public:
   void all_off();
 
   bool is_fixed_size() const;
+
+public:
 };
 
 #endif

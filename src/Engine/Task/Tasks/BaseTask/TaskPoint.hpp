@@ -41,7 +41,6 @@
 #define TASKPOINT_HPP
 
 #include "Compiler.h"
-#include "Util/Serialisable.hpp"
 #include "Navigation/ReferencePoint.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Navigation/Aircraft.hpp"
@@ -58,7 +57,6 @@
 
 class TaskPoint : 
   public ReferencePoint, 
-  public Serialisable,
   public BaseVisitable<>
 {
 

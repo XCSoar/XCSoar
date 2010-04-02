@@ -83,6 +83,8 @@ class Waypoint:
   public BaseConstVisitable<>
 {
 public:
+  friend class Serialiser;
+
   /**
    * Constructor for real waypoints
    *

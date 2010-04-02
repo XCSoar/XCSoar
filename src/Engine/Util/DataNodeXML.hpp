@@ -1,5 +1,4 @@
-/*
-  Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,24 +33,36 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#ifndef SERIALISABLE_HPP
-#define SERIALISABLE_HPP
+#ifndef DATANODE_XML_HPP
+#define DATANODE_XML_HPP
 
-// Abstract classes
+#include "DataNode.hpp"
 
-#ifdef DO_PRINT
-#include <iostream>
-#endif
+struct XMLNode;
 
-class DataNode;
-#include "tstring.hpp"
-
-/** Base class for classes that can be serialised/unserialised for file storage */
-
-class Serialisable
+class DataNodeXML:
+  public DataNode
 {
+protected:
+  DataNodeXML(const tstring &node_name, const XMLNode& the_node);
+public:
+  ~DataNodeXML();
+  static DataNode* load(const char* path);
+  static DataNodeXML* createRoot(const tstring &node_name);
+  const tstring serialise();
+  bool save(const char* path);
+
+  const tstring get_name() const;
+
+  DataNode* add_child(const tstring &name);
+  DataNode* get_child(unsigned i) const;
+
+  void set_attribute(const tstring &name, const tstring value);
+  bool get_attribute(const tstring &name, tstring &value) const;
+private:
+  XMLNode *m_xml_node;
 };
 
 #endif

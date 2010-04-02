@@ -629,6 +629,12 @@ LPCTSTR XMLNode::getError(XMLError error)
   return _T("Unknown");
 }
 
+
+XMLNode XMLNode::createRoot(LPCTSTR lpszName)
+{
+  return XMLNode(NULL, lpszName, false);
+}
+
 XMLNode::XMLNode(XMLNode *pParent, LPCTSTR lpszName, int isDeclaration)
 {
   d = (XMLNodeData*)malloc(sizeof(XMLNodeData));

@@ -1,5 +1,4 @@
-/*
-  Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,24 +33,38 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#ifndef SERIALISABLE_HPP
-#define SERIALISABLE_HPP
+#ifndef DATANODE_HPP
+#define DATANODE_HPP
 
-// Abstract classes
-
-#ifdef DO_PRINT
-#include <iostream>
-#endif
-
-class DataNode;
 #include "tstring.hpp"
+#include "Math/fixed.hpp"
 
-/** Base class for classes that can be serialised/unserialised for file storage */
-
-class Serialisable
+class DataNode 
 {
+protected:
+  DataNode(const tstring &node_name);
+public:
+  virtual ~DataNode();
+
+  virtual const tstring get_name() const = 0;
+
+  virtual DataNode* add_child(const tstring &name) = 0;
+  virtual DataNode* get_child(unsigned i) const = 0;
+  virtual const tstring serialise() = 0;
+
+  virtual void set_attribute(const tstring &name, const tstring value) = 0;
+  void set_attribute(const tstring &name, fixed value);
+  void set_attribute(const tstring &name, int value);
+  void set_attribute(const tstring &name, unsigned value);
+  void set_attribute(const tstring &name, bool &value);
+
+  virtual bool get_attribute(const tstring &name, tstring &value) const = 0;
+  bool get_attribute(const tstring &name, fixed &value) const;
+  bool get_attribute(const tstring &name, int &value) const;
+  bool get_attribute(const tstring &name, unsigned &value) const;
+  bool get_attribute(const tstring &name, bool &value) const;
 };
 
 #endif

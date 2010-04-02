@@ -121,7 +121,10 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Util/WindowFilter.cpp \
 	$(ENGINE_SRC_DIR)/Util/Gradient.cpp \
 	$(ENGINE_SRC_DIR)/Util/tstring.cpp \
-	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp
+	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
+	$(ENGINE_SRC_DIR)/Util/Serialiser.cpp \
+	$(ENGINE_SRC_DIR)/Util/DataNodeXML.cpp \
+	$(ENGINE_SRC_DIR)/Util/DataNode.cpp
 
 ENGINE_LIBS = $(TARGET_OUTPUT_DIR)/task.a
 

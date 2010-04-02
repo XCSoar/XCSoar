@@ -1,5 +1,4 @@
-/*
-  Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
@@ -34,24 +33,49 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
+#ifndef SERIALISER_HPP
+#define SERIALISER_HPP
 
-#ifndef SERIALISABLE_HPP
-#define SERIALISABLE_HPP
-
-// Abstract classes
-
-#ifdef DO_PRINT
-#include <iostream>
-#endif
+#include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 class DataNode;
-#include "tstring.hpp"
+class OrderedTaskBehaviour;
+class OrderedTask;
+class Waypoint;
 
-/** Base class for classes that can be serialised/unserialised for file storage */
-
-class Serialisable
+class Serialiser:
+  public TaskPointConstVisitor,
+  public virtual ObservationZoneConstVisitor
 {
+public:
+  Serialiser(DataNode& the_node): m_node(the_node) {};
+  void serialise(const OrderedTask& data);
+  void deserialise(OrderedTask& data);
+
+  void Visit(const StartPoint& data);
+  void Visit(const ASTPoint& data);
+  void Visit(const AATPoint& data);
+  void Visit(const FinishPoint& data);
+  void Visit(const UnorderedTaskPoint& data);
+  void Visit(const FAISectorZone& data);
+  void Visit(const SectorZone& data);
+  void Visit(const LineSectorZone& data);
+  void Visit(const CylinderZone& data);
+
+protected:
+  void serialise(const OrderedTaskBehaviour& data);
+  void deserialise(OrderedTaskBehaviour& data);
+  void serialise(const Waypoint& data);
+  void deserialise(Waypoint& data);
+  void serialise(const GEOPOINT& data);
+  void deserialise(GEOPOINT& data);
+  void serialise(const ObservationZonePoint& data);
+
+  DataNode* serialise(const OrderedTaskPoint& data, const TCHAR* name);
+
+  DataNode &m_node;
 };
 
 #endif

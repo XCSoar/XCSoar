@@ -138,6 +138,8 @@ public:
   // You must create your first instance of XMLNode with these 3 parse functions:
   // (see complete explanation of parameters below)
 
+  static XMLNode createRoot(LPCTSTR lpszName);
+
   static XMLNode parseString   (LPCTSTR     lpszXML, XMLResults *pResults=NULL);
   static XMLNode parseFile     (const char *lpszXML, XMLResults *pResults=NULL);
   static XMLNode openFileHelper(const char *lpszXML);

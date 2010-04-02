@@ -47,6 +47,8 @@ Copyright_License {
  * @todo - support wrap-around at 0,360 degrees longitude
  */
 struct GEOPOINT {
+  friend class Serialiser;
+
   /**
    * Constructor (origin)
    *

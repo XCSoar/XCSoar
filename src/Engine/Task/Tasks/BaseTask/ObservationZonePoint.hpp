@@ -42,6 +42,7 @@
 #include "ObservationZone.hpp"
 #include "Util/GenericVisitor.hpp"
 #include "Util/NonCopyable.hpp"
+#include "Util/Serialisable.hpp"
 
 struct GEOPOINT;
 class TaskPoint;
@@ -56,6 +57,8 @@ class ObservationZonePoint : public ReferencePoint,
                              public BaseVisitable<>
 {
 public:
+  friend class Serialiser;
+
 /** 
  * Constructor
  * 

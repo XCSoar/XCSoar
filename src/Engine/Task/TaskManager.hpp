@@ -39,7 +39,6 @@
 #define TASKMANAGER_H
 
 #include "Compiler.h"
-#include "Util/Serialisable.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Tasks/TaskInterface.hpp"
 #include "Tasks/AbortTask.hpp"
@@ -54,6 +53,7 @@
 #include "TaskAdvance.hpp"
 #include "Trace/Trace.hpp"
 #include "Factory/AbstractTaskFactory.hpp"
+#include "Util/Serialisable.hpp"
 
 class Waypoints;
 class TaskVisitor;
@@ -67,6 +67,8 @@ class TaskManager:
   private NonCopyable
 {
 public:
+  friend class Serialiser;
+
   /**
    * Constructor for task manager
    *
