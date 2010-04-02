@@ -234,7 +234,7 @@ const TCHAR* OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
   case AbstractTaskFactory::AAT_CYLINDER:
     return _T("Area cylinder");
   case AbstractTaskFactory::AAT_SEGMENT:
-    return _T("Area segment");
+    return _T("Area sector");
   case AbstractTaskFactory::FINISH_SECTOR:
     return _T("Finish sector");
   case AbstractTaskFactory::FINISH_LINE:
