@@ -140,8 +140,6 @@ AirspaceClientCalc airspace_calc(airspace_database,
 GlideComputer glide_computer(task_calc,
                              airspace_calc);
 
-extern void test_datanodexml(OrderedTask& task);
-
 void
 test_task()
 {
@@ -193,13 +191,7 @@ test_task()
   }
   */
 
-  OrderedTask* ordered_task = task_ui.task_clone();
-  test_datanodexml(*ordered_task);
-  task_ui.task_commit(*ordered_task);
-  delete ordered_task;
-
-  task_manager.setActiveTaskPoint(0);
-  task_manager.resume();
+  task_ui.task_load_default();
 }
 
 
@@ -540,13 +532,9 @@ XCSoarInterface::Shutdown(void)
 
   // Save the task for the next time
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
-  LogStartUp(TEXT("Resume abort task"));
-  task_manager.resume();
 
-#ifdef OLD_TASK
   LogStartUp(TEXT("Save default task"));
-  task_manager.save_default();
-#endif
+  task_ui.task_save_default();
 
   // Clear airspace database
   LogStartUp(TEXT("Close airspace"));

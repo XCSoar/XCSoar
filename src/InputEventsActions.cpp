@@ -1291,9 +1291,7 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
 
   if (!string_is_empty(misc)) {
     LocalPath(buffer, misc);
-#ifdef OLD_TASK
-    task.LoadNewTask(buffer, SettingsComputer(), Basic());
-#endif
+    task_ui.task_load(buffer);
   }
 }
 
@@ -1306,9 +1304,7 @@ InputEvents::eventTaskSave(const TCHAR *misc)
 
   if (!string_is_empty(misc)) {
     LocalPath(buffer, misc);
-#ifdef OLD_TASK
-    task.SaveTask(buffer);
-#endif
+    task_ui.task_save(buffer);
   }
 }
 

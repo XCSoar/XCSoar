@@ -49,10 +49,10 @@ protected:
   DataNodeXML(const tstring &node_name, const XMLNode& the_node);
 public:
   ~DataNodeXML();
-  static DataNode* load(const char* path);
+  static DataNode* load(const TCHAR* path);
   static DataNodeXML* createRoot(const tstring &node_name);
   const tstring serialise();
-  bool save(const char* path);
+  bool save(const TCHAR* path);
 
   const tstring get_name() const;
 

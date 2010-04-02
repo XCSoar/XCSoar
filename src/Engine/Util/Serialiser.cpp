@@ -417,59 +417,10 @@ Serialiser::task_factory_type(OrderedTask::Factory_t the_type) const
 }
 
 
+
 ///////////////////////////////////////////////////////////////////
+/*
 #include "DataNodeXML.hpp"
-
-bool test_serialiser_save(const char* path, const OrderedTask& task)
-{
-  DataNodeXML* root = DataNodeXML::createRoot(_T("Task"));
-
-  /*
-  DataNode* child;
-  child = root->add_child(_T("Task"));
-  Serialiser ser(*child);
-  ser.serialise(task);
-  delete child;
-  */
-  Serialiser tser(*root);
-  tser.serialise(task);
-
-  printf("CREATED\n%S", root->serialise().c_str());
-
-  bool retval = false;
-  if (!root->save(path)) {
-    printf("can't save\n");
-  } else {
-    retval = true;
-  }
-  delete root;  
-  return retval;
-
-  return true;
-}
-
-bool test_serialiser_load(const char* path, OrderedTask& task)
-{
-  DataNode* root = DataNodeXML::load(path);
-  if (!root) {
-    printf("can't load\n");
-    return false;
-  }
-  if (_tcscmp(root->get_name().c_str(),_T("Task"))==0) {
-    Serialiser des(*root);
-    des.deserialise(task);
-
-    printf("LOADED\n%S", root->serialise().c_str());
-  } else {
-    printf("can't find task\n");
-  }
-
-  delete root;
-
-  return true;
-}
-
-/////////////
 
 
 bool test_datanodexml_save(const char* path)
@@ -519,7 +470,8 @@ void test_datanodexml(OrderedTask& task)
 //  test_datanodexml_save(path);
 //  test_datanodexml_load(path);
 //  test_serialiser_save(path, task);
-  test_serialiser_load(path, task);
+//  test_serialiser_load(path, task);
 }
 
+*/
 

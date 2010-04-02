@@ -37,6 +37,7 @@
 #ifndef TASKCLIENTUI_HPP
 #define TASKCLIENTUI_HPP
 
+#include <tchar.h>
 #include "TaskClient.hpp"
 #include "Task/TaskAdvance.hpp"
 #include "Waypoint/Waypoint.hpp"
@@ -103,11 +104,18 @@ public:
 
   const OrderedTaskBehaviour get_ordered_task_behaviour() const;
 
+  bool task_save(const TCHAR* path);
+  bool task_load(const TCHAR* path);
+  bool task_save_default();
+  bool task_load_default();
+
 protected:
   const TaskBehaviour &task_behaviour;
   TaskEvents &task_events;
   GlidePolar glide_polar;
   TaskAdvance task_advance;
+
+  static const TCHAR default_task_path[];
 };
 
 

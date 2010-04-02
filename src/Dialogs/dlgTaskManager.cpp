@@ -79,6 +79,8 @@ CommitTaskChanges()
                  TEXT("Task Manager"), MB_OK);
 
     task_ui.task_commit(*ordered_task);
+    task_ui.task_save_default();
+
     task_modified = false;
     return true;
 

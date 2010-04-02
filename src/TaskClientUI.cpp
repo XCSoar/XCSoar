@@ -1,5 +1,7 @@
 #include "TaskClientUI.hpp"
-
+#include "Util/Serialiser.hpp"
+#include "Util/DataNodeXML.hpp"
+#include "LocalPath.hpp"
 
 TaskAdvance::TaskAdvanceMode_t 
 TaskClientUI::get_advance_mode() const
@@ -203,4 +205,65 @@ TaskClientUI::get_ordered_task_behaviour() const
 {
   ScopeLock lock(mutex);
   return task_manager.get_ordered_task_behaviour();
+}
+
+
+bool 
+TaskClientUI::task_save(const TCHAR* path)
+{
+  OrderedTask* task = task_clone();
+
+  DataNodeXML* root = DataNodeXML::createRoot(_T("Task"));
+  Serialiser tser(*root);
+  tser.serialise(*task);
+
+  bool retval = false;
+  if (!root->save(path)) {
+//    printf("can't save\n");
+  } else {
+    retval = true;
+  }
+  delete root;  
+  return retval;
+}
+
+ 
+bool 
+TaskClientUI::task_load(const TCHAR* path)
+{
+  DataNode* root = DataNodeXML::load(path);
+  if (!root) {
+    return false;
+  }
+  bool retval = false;
+  if (_tcscmp(root->get_name().c_str(),_T("Task"))==0) {
+    OrderedTask* task = task_clone();
+    Serialiser des(*root);
+    des.deserialise(*task);
+    if (task->check_task()) {
+      task_commit(*task);
+      retval = true;
+      resume();
+    }
+  }
+  delete root;
+  return retval;
+}
+
+const TCHAR TaskClientUI::default_task_path[] = _T("default.tsk");
+
+bool 
+TaskClientUI::task_load_default()
+{
+  TCHAR path[MAX_PATH];
+  LocalPath(path, default_task_path);
+  return task_load(path);
+}
+
+bool 
+TaskClientUI::task_save_default()
+{
+  TCHAR path[MAX_PATH];
+  LocalPath(path, default_task_path);
+  return task_save(path);
 }

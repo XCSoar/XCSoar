@@ -523,6 +523,8 @@ OrderedTask::setActiveTaskPoint(unsigned index)
       task_advance.set_armed(false);
     }
     activeTaskPoint = index;
+  } else if (tps.empty()) {
+    activeTaskPoint = 0;
   }
 }
 
@@ -727,6 +729,7 @@ OrderedTask::reset()
   stats.task_finished = false;
   stats.task_started = false;
   task_advance.reset();
+  setActiveTaskPoint(0);
 }
 
 

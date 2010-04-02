@@ -636,6 +636,7 @@ TaskManager::commit(const OrderedTask& other)
   retval = task_ordered.commit(other);
 
   if (mode== MODE_NULL) {
+    setActiveTaskPoint(0);
     set_mode(MODE_ORDERED);
   }
   return retval;

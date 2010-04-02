@@ -37,6 +37,8 @@
 
 #include "DataNodeXML.hpp"
 #include "xmlParser.h"
+#include "wcecompat/ts_string.h"
+
 
 static LPTSTR stringDup(const tstring text) 
 {
@@ -59,9 +61,12 @@ DataNodeXML::~DataNodeXML()
 
 
 DataNode* 
-DataNodeXML::load(const char* path)
+DataNodeXML::load(const TCHAR* path)
 {
-  XMLNode child = XMLNode::openFileHelper(path);
+  char buf[MAX_PATH];
+  unicode2ascii(path,buf);
+
+  XMLNode child = XMLNode::openFileHelper(buf);
   if (child.isEmpty()) {
     return NULL;
   }
@@ -137,11 +142,14 @@ DataNodeXML::get_attribute(const tstring &name, tstring &value) const
 }
 
 bool 
-DataNodeXML::save(const char* path)
+DataNodeXML::save(const TCHAR* path)
 {
   /// @todo make xml writing portable (unicode etc)
 
-  FILE* file = fopen(path, "wt");
+  char buf[MAX_PATH];
+  unicode2ascii(path,buf);
+
+  FILE* file = fopen(buf, "wt");
   if (file == NULL)
     return false;
 
