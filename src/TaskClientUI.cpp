@@ -250,7 +250,7 @@ TaskClientUI::task_load(const TCHAR* path)
   return retval;
 }
 
-const TCHAR TaskClientUI::default_task_path[] = _T("default.tsk");
+const TCHAR TaskClientUI::default_task_path[] = _T("Default.tsk");
 
 bool 
 TaskClientUI::task_load_default()
