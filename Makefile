@@ -120,10 +120,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTaskPoint.cpp \
 	$(SRC)/Dialogs/dlgTaskPointType.cpp \
 	$(SRC)/Dialogs/dlgTaskHelpers.cpp \
-	\
-	$(SRC)/Dialogs/dlgTaskOverview.cpp \
-	$(SRC)/Dialogs/dlgTaskWaypoint.cpp \
 	$(SRC)/Dialogs/dlgTaskCalculator.cpp \
+	\
 	$(SRC)/Dialogs/dlgTeamCode.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \

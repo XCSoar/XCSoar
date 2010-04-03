@@ -99,16 +99,6 @@ void dlgStatusShowModal(int page);
 
 void dlgSwitchesShowModal();
 
-void
-dlgTaskWaypointShowModal(SingleWindow &parent,
-                         AbstractTaskFactory &task_factory,
-                         unsigned task_point_position,
-                         const OrderedTaskPoint &task_point,
-                         bool addonly);
-
-void
-dlgTaskOverviewShowModal(SingleWindow &parent);
-
 // new task ////////
 
 class OrderedTask;
@@ -154,7 +144,6 @@ bool dlgWaypointEditShowModal(Waypoint &way_point);
 
 void dlgWeatherShowModal();
 void dlgTarget();
-bool dlgTaskRules();
 void dlgFlarmTrafficShowModal();
 bool dlgTextEntryKeyboardShowModal(TCHAR *text, int width = 0);
 void dlgNumberEntryKeyboardShowModal(int *value, int width = 0);
