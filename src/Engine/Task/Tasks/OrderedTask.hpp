@@ -48,6 +48,7 @@
 class OrderedTaskPoint;
 class TaskPointVisitor;
 class AbstractTaskFactory;
+class TaskAdvance;
 
 /**
  * A task comprising an ordered sequence of task points, each with
@@ -356,6 +357,8 @@ public:
   fixed get_task_radius(const GEOPOINT& fallback_location) const;
 
 protected:
+
+  TaskAdvance &task_advance; /**< reference to global advance mechanism */
 
   bool has_targets() const;
 

@@ -42,9 +42,8 @@
 
 UnorderedTask::UnorderedTask(TaskEvents &te, 
                              const TaskBehaviour &tb,
-                             TaskAdvance &ta,
                              GlidePolar &gp):
-  AbstractTask(te, tb, ta, gp) 
+  AbstractTask(te, tb, gp) 
 {
 }
 

@@ -41,9 +41,8 @@
 
 GotoTask::GotoTask(TaskEvents &te, 
                    const TaskBehaviour &tb,
-                   TaskAdvance &ta,
                    GlidePolar &gp): 
-  UnorderedTask(te,tb,ta,gp),
+  UnorderedTask(te,tb,gp),
   tp(NULL) 
 {
 }

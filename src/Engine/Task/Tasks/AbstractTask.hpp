@@ -46,7 +46,6 @@ class TaskPointVisitor;
 class AbortTask;
 class TaskBehaviour;
 class TaskEvents;
-class TaskAdvance;
 class GlidePolar;
 
 /**
@@ -64,14 +63,12 @@ public:
    * 
    * @param te Task events callback class (shared among all tasks) 
    * @param tb Global task behaviour settings
-   * @param ta Advance mechanism used for advancable tasks
    * @param gp Global glide polar used for navigation calculations
    * 
    * @return Initialised object
    */
   AbstractTask(TaskEvents &te,
                const TaskBehaviour &tb,
-               TaskAdvance &ta,
                GlidePolar &gp);
   /** 
    * Reset the task (as if never flown)
@@ -438,7 +435,6 @@ protected:
   unsigned activeTaskPoint_last; /**< task point sequence index at last update*/
   TaskStats stats; /**< statistics of this task */
   TaskEvents &task_events; /**< reference to task events (feedback) */
-  TaskAdvance &task_advance; /**< reference to global advance mechanism */
   const TaskBehaviour &task_behaviour; /**< reference to task behaviour (settings) */
   GlidePolar &glide_polar; /**< reference to global glide polar */
 
