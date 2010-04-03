@@ -39,6 +39,7 @@
 #include "xmlParser.h"
 #include "wcecompat/ts_string.h"
 
+#include <stdio.h>
 
 static LPTSTR stringDup(const tstring text) 
 {
