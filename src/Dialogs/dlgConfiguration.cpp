@@ -92,7 +92,7 @@ static const TCHAR *const captions[] = {
   _T("12 Fonts"),
   _T("13 Vario Gauge and FLARM"),
   _T("14 Task"),
-  _T("15 Task rules"),
+  _T("15 Default task rules"),
   _T("16 InfoBox Cruise"),
   _T("17 InfoBox Circling"),
   _T("18 InfoBox Final Glide"),
@@ -3272,11 +3272,6 @@ void dlgConfigurationShowModal(void){
 
   if (taskchanged) {
     changed = true;
-#ifdef OLD_TASK
-    task.setSettings(settings_task);
-    task.RefreshTask(XCSoarInterface::SettingsComputer(),
-                     XCSoarInterface::Basic());
-#endif
   }
 
   if (!is_embedded() && DevicePortChanged) {
