@@ -48,6 +48,8 @@ LogStartUp(const TCHAR *fmt, ...)
   va_start(ap, fmt);
   _vftprintf(stderr, fmt, ap);
   va_end(ap);
+
+  fputc('\n', stderr);
 }
 
 void
@@ -58,4 +60,6 @@ LogDebug(const TCHAR *fmt, ...)
   va_start(ap, fmt);
   _vftprintf(stderr, fmt, ap);
   va_end(ap);
+
+  fputc('\n', stderr);
 }
