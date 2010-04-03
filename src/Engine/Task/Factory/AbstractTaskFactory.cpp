@@ -222,6 +222,7 @@ bool
 AbstractTaskFactory::append(OrderedTaskPoint *new_tp, const bool auto_mutate)
 {
   if (!new_tp) return false;
+  if (m_task.is_max_size()) return false;
 
   if (auto_mutate) {
     if (!m_task.task_size()) {
@@ -449,17 +450,13 @@ AbstractTaskFactory::is_position_intermediate(const unsigned position) const
 {
   if (is_position_start(position))
     return false;
-  if (position+1>= get_ordered_task_behaviour().max_points)
+  if (position>= get_ordered_task_behaviour().max_points)
     return false;
-  if (position+1<= get_ordered_task_behaviour().min_points)
+  if (position+1< get_ordered_task_behaviour().min_points)
     return true;
 
   if (get_ordered_task_behaviour().is_fixed_size()) {
     return (position+1< get_ordered_task_behaviour().max_points);
-/*
-  } else if (m_task.has_finish()) {
-    return (position+1< m_task.task_size());
-*/
   } else if (m_task.task_size()< get_ordered_task_behaviour().min_points) {
     return true;
   } else {
@@ -570,6 +567,11 @@ AbstractTaskFactory::LegalPointVector
 AbstractTaskFactory::getValidIntermediateTypes(unsigned position) const
 {
   LegalPointVector v;
+
+  if (!is_position_intermediate(position)) {
+    return v;
+  }
+
   if (get_ordered_task_behaviour().homogeneous_tps 
       && (position>1) && (m_task.task_size()>1)) {
     LegalPointType_t type = getType(m_task.get_tp(1));

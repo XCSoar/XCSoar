@@ -57,9 +57,9 @@ public:
   FAITaskFactory(OrderedTask& _task,
                  const TaskBehaviour &tb);
 
-  ~FAITaskFactory() {};
+  virtual ~FAITaskFactory() {};
 
-  void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
+  virtual void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
 
 /** 
  * Check whether task is complete and valid according to factory rules

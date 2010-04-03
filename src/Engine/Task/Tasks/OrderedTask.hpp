@@ -93,7 +93,10 @@ public:
    * types of ordered task that can be created.
    */
   enum Factory_t {
-    FACTORY_FAI = 0,
+    FACTORY_FAI_GENERAL = 0,
+    FACTORY_FAI_TRIANGLE,
+    FACTORY_FAI_OR,
+    FACTORY_FAI_GOAL,
     FACTORY_RT,
     FACTORY_AAT,
     FACTORY_MIXED,
@@ -323,6 +326,8 @@ public:
  * @return Number of task points in task
  */
   unsigned task_size() const;
+
+  bool is_max_size() const;
 
 /** 
  * Accessor for task projection, for use when creating task points

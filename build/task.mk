@@ -49,6 +49,9 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Factory/AbstractTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/RTTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/FAITaskFactory.cpp \
+	$(ENGINE_SRC_DIR)/Task/Factory/FAITriangleTaskFactory.cpp \
+	$(ENGINE_SRC_DIR)/Task/Factory/FAIORTaskFactory.cpp \
+	$(ENGINE_SRC_DIR)/Task/Factory/FAIGoalTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/AATTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/MixedTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/TouringTaskFactory.cpp \

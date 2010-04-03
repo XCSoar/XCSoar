@@ -60,6 +60,16 @@ RefreshView()
   OrderedTask::Factory_t ftype = ordered_task->get_factory_type();
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
+  bool fai_types = (ftype == OrderedTask::FACTORY_FAI_GENERAL) ||
+    (ftype == OrderedTask::FACTORY_FAI_TRIANGLE) ||
+    (ftype == OrderedTask::FACTORY_FAI_OR) ||
+    (ftype == OrderedTask::FACTORY_FAI_GOAL);
+  bool aat_types = 
+    (ftype == OrderedTask::FACTORY_AAT) ||
+    (ftype == OrderedTask::FACTORY_MIXED);
+  bool racing_types = 
+    (ftype == OrderedTask::FACTORY_RT) || aat_types;
+
   wp = (WndProperty*)wf->FindByName(_T("prpAutoAdvance"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -74,29 +84,28 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpTaskScored")));
   if (wp) {
-    wp->set_visible(ftype != OrderedTask::FACTORY_TOURING);
+    wp->set_visible(fai_types || racing_types);
     wp->GetDataField()->SetAsBoolean(p.task_scored);
     wp->RefreshDisplay();
   }
 
   wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
   if (wp) {
-    wp->set_visible((ftype != OrderedTask::FACTORY_RT) 
-                    && (ftype != OrderedTask::FACTORY_TOURING));
+    wp->set_visible(aat_types);
     wp->GetDataField()->SetAsFloat(p.aat_min_time/60);
     wp->RefreshDisplay();
   }
 
   wp = ((WndProperty*)wf->FindByName(_T("prpFAIFinishHeight")));
   if (wp) {
-    wp->set_visible(ftype == OrderedTask::FACTORY_FAI);
+    wp->set_visible(fai_types);
     wp->GetDataField()->SetAsBoolean(p.fai_finish);
     wp->RefreshDisplay();
   }
 
   wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxSpeed")));
   if (wp) {
-    wp->set_visible(ftype != OrderedTask::FACTORY_TOURING);
+    wp->set_visible(racing_types);
     wp->GetDataField()->SetAsFloat(Units::ToUserSpeed(p.start_max_speed));
     wp->GetDataField()->SetUnits(Units::GetSpeedName());
     wp->RefreshDisplay();
@@ -104,7 +113,7 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxHeight")));
   if (wp) {
-    wp->set_visible(ftype != OrderedTask::FACTORY_TOURING);
+    wp->set_visible(racing_types);
     wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(p.start_max_height));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
@@ -112,7 +121,7 @@ RefreshView()
 
   wp = ((WndProperty*)wf->FindByName(_T("prpFinishMinHeight")));
   if (wp) {
-    wp->set_visible(ftype != OrderedTask::FACTORY_TOURING);
+    wp->set_visible(racing_types);
     wp->GetDataField()->SetAsFloat(Units::ToUserAltitude(p.finish_min_height));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
@@ -120,7 +129,7 @@ RefreshView()
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
   if (wp) {
-    wp->set_visible(ftype != OrderedTask::FACTORY_TOURING);
+    wp->set_visible(racing_types);
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(gettext(_T("AGL")));

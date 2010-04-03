@@ -34,48 +34,30 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+#ifndef FAI_OR_TASK_FACTORY_HPP
+#define FAI_OR_TASK_FACTORY_HPP
+
 #include "FAITaskFactory.hpp"
 
-FAITaskFactory::FAITaskFactory(OrderedTask& _task,
-                               const TaskBehaviour &tb):
-  AbstractTaskFactory(_task, tb)
+/**
+ * Factory for construction of legal FAI tasks
+ */
+class FAIORTaskFactory: 
+  public FAITaskFactory 
 {
-  m_start_types.push_back(START_SECTOR);
-  m_start_types.push_back(START_LINE);
-  m_intermediate_types.push_back(FAI_SECTOR);
-  m_intermediate_types.push_back(AST_CYLINDER);
-  m_finish_types.push_back(FINISH_SECTOR);
-  m_finish_types.push_back(FINISH_LINE);
-}
+public:
+/** 
+ * Constructor
+ * 
+ * @param _task Ordered task to be managed by this factory
+ * @param tb Behaviour (options)
+ */  
+  FAIORTaskFactory(OrderedTask& _task,
+                 const TaskBehaviour &tb);
 
-bool 
-FAITaskFactory::validate()
-{
+  virtual ~FAIORTaskFactory() {};
 
-  if (!m_task.has_start() || !m_task.has_finish()) {
-    return false;
-  }
+  virtual void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
+};
 
-  if ((m_task.task_size()>2) && (!is_closed()))
-    return false;
-
-  if (!is_unique())
-    return false;
-
-  return true;
-}
-
-void 
-FAITaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
-{
-  to.task_scored = true;
-  to.fai_finish = true;  
-  to.homogeneous_tps = true;
-  to.is_closed = true;
-  to.min_points = 3;
-
-  to.start_max_speed = 0;
-  to.start_max_height = 0;
-  to.start_max_height_ref = 0;
-  to.finish_min_height = 0;
-}
+#endif

@@ -101,6 +101,7 @@ OnTaskListEnter(unsigned ItemIndex)
 {
   if (ordered_task->get_factory_type() == get_cursor_type()) {
     // no change
+    wf->SetModalResult(mrOK);
     return;
   }
   bool apply = false;

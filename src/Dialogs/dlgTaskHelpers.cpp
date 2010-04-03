@@ -49,8 +49,14 @@ const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type)
   switch(type) {
   case OrderedTask::FACTORY_RT:
     return _T("RT");
-  case OrderedTask::FACTORY_FAI:
+  case OrderedTask::FACTORY_FAI_GENERAL:
+    return _T("FAI generic");
+  case OrderedTask::FACTORY_FAI_TRIANGLE:
     return _T("FAI triangle");
+  case OrderedTask::FACTORY_FAI_OR:
+    return _T("FAI out and return");
+  case OrderedTask::FACTORY_FAI_GOAL:
+    return _T("FAI goal");
   case OrderedTask::FACTORY_AAT:
     return _T("AAT");
   case OrderedTask::FACTORY_MIXED:
@@ -67,13 +73,17 @@ const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type)
 {
   switch(type) {
   case OrderedTask::FACTORY_RT:
-    return _T("Racing task");
-  case OrderedTask::FACTORY_FAI:
-    return _T("FAI triangle task");
+    return _T("Racing task around turnpoints");
+  case OrderedTask::FACTORY_FAI_TRIANGLE:
+    return _T("FAI rules, path from a start to two turnpoints and return");
+  case OrderedTask::FACTORY_FAI_OR:
+    return _T("FAI rules, path from start to a single turnpoint and return");
+  case OrderedTask::FACTORY_FAI_GOAL:
+    return _T("FAI rules, path from start to a goal destination");
   case OrderedTask::FACTORY_AAT:
-    return _T("AAT racing task, all turnpoints are are assigned areas");
+    return _T("Racing task through assigned areas, minimum task time applies");
   case OrderedTask::FACTORY_MIXED:
-    return _T("AAT racing task, mixed assigned area and non-assigned area turnpoints");
+    return _T("Racing task with a mix of assigned areas and turnpoints, minimum task time applies");
   case OrderedTask::FACTORY_TOURING:
     return _T("Casual touring task");
   default:

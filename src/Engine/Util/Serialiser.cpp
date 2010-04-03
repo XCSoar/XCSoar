@@ -90,7 +90,7 @@ Serialiser::deserialise_point(OrderedTask& data)
       pt = fact.createAAT(oz, *wp);
     }
   } else if (_tcscmp(type.c_str(), _T("Finish")) == 0) {
-    if ((oz = oser.deserialise_oz(*wp, true)) != NULL) {
+    if ((oz = oser.deserialise_oz(*wp, false)) != NULL) {
       pt = fact.createFinish(oz, *wp);
     }
   } 
@@ -378,12 +378,16 @@ Serialiser::task_factory_type() const
   tstring type;
   if (!m_node.get_attribute(_T("type"),type)) {
     assert(1);
-    return OrderedTask::FACTORY_FAI;
+    return OrderedTask::FACTORY_FAI_GENERAL;
   }
-  if (_tcscmp(type.c_str(), _T("FAI")) == 0) {
-    return OrderedTask::FACTORY_FAI;
-  } else if (_tcscmp(type.c_str(), _T("FAI")) == 0) {
-    return OrderedTask::FACTORY_FAI;
+  if (_tcscmp(type.c_str(), _T("FAIGeneral")) == 0) {
+    return OrderedTask::FACTORY_FAI_GENERAL;
+  } else if (_tcscmp(type.c_str(), _T("FAITriangle")) == 0) {
+    return OrderedTask::FACTORY_FAI_TRIANGLE;
+  } else if (_tcscmp(type.c_str(), _T("FAIOR")) == 0) {
+    return OrderedTask::FACTORY_FAI_OR;
+  } else if (_tcscmp(type.c_str(), _T("FAIGoal")) == 0) {
+    return OrderedTask::FACTORY_FAI_GOAL;
   } else if (_tcscmp(type.c_str(), _T("RT")) == 0) {
     return OrderedTask::FACTORY_RT;
   } else if (_tcscmp(type.c_str(), _T("AAT")) == 0) {
@@ -394,15 +398,21 @@ Serialiser::task_factory_type() const
     return OrderedTask::FACTORY_TOURING;
   }
   assert(1);
-  return OrderedTask::FACTORY_FAI;
+  return OrderedTask::FACTORY_FAI_GENERAL;
 }
 
 const TCHAR* 
 Serialiser::task_factory_type(OrderedTask::Factory_t the_type) const
 {
   switch(the_type) {
-  case OrderedTask::FACTORY_FAI:
-    return _T("FAI");
+  case OrderedTask::FACTORY_FAI_GENERAL:
+    return _T("FAIGeneral");
+  case OrderedTask::FACTORY_FAI_TRIANGLE:
+    return _T("FAITriangle");
+  case OrderedTask::FACTORY_FAI_OR:
+    return _T("FAIOR");
+  case OrderedTask::FACTORY_FAI_GOAL:
+    return _T("FAIGoal");
   case OrderedTask::FACTORY_RT:
     return _T("RT");
   case OrderedTask::FACTORY_AAT:

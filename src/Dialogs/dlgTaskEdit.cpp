@@ -77,7 +77,11 @@ static void OnCloseClicked(WindowControl * Sender)
 static void
 RefreshView()
 {
-  wTaskPoints->SetLength(ordered_task->task_size()+1);
+  if (!ordered_task->is_max_size()) {
+    wTaskPoints->SetLength(ordered_task->task_size()+1);
+  } else {
+    wTaskPoints->SetLength(ordered_task->task_size());
+  }
   wTaskView->invalidate();
   wTaskPoints->invalidate();
 
@@ -151,9 +155,11 @@ OnTaskPaintListItem(Canvas &canvas, const RECT rc, unsigned DrawListIndex)
     return;
   }
   if (DrawListIndex == ordered_task->task_size()) {
-    _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
-    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-                sTmp);
+    if (!ordered_task->is_max_size()) {
+      _stprintf(sTmp, _T("  (%s)"), gettext(_T("add waypoint")));
+      canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
+                  sTmp);
+    }
   } else {
     OrderedTaskPointLabel(ordered_task, DrawListIndex, sTmp);
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
@@ -169,7 +175,7 @@ OnTaskListEnter(unsigned ItemIndex)
       task_modified = true;
       RefreshView();
     }
-  } else {
+  } else if (!ordered_task->is_max_size()) {
     if (dlgTaskPointNew(*parent_window, &ordered_task, ItemIndex)) {
       task_modified = true;
       RefreshView();

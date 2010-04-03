@@ -53,6 +53,9 @@
 
 #include "Task/Factory/RTTaskFactory.hpp"
 #include "Task/Factory/FAITaskFactory.hpp"
+#include "Task/Factory/FAITriangleTaskFactory.hpp"
+#include "Task/Factory/FAIORTaskFactory.hpp"
+#include "Task/Factory/FAIGoalTaskFactory.hpp"
 #include "Task/Factory/AATTaskFactory.hpp"
 #include "Task/Factory/MixedTaskFactory.hpp"
 #include "Task/Factory/TouringTaskFactory.hpp"
@@ -691,7 +694,7 @@ OrderedTask::OrderedTask(TaskEvents &te,
   AbstractTask(te, tb, ta, gp),
   ts(NULL),
   tf(NULL),
-  factory_mode(FACTORY_FAI),
+  factory_mode(FACTORY_FAI_GENERAL),
   active_factory(NULL),
   m_ordered_behaviour(tb.ordered_defaults)
 {
@@ -1023,8 +1026,17 @@ OrderedTask::set_factory(const Factory_t the_factory)
   case FACTORY_RT:
     active_factory = new RTTaskFactory(*this, task_behaviour);
     break;
-  case FACTORY_FAI:
+  case FACTORY_FAI_GENERAL:
     active_factory = new FAITaskFactory(*this, task_behaviour);
+    break;
+  case FACTORY_FAI_TRIANGLE:
+    active_factory = new FAITriangleTaskFactory(*this, task_behaviour);
+    break;
+  case FACTORY_FAI_OR:
+    active_factory = new FAIORTaskFactory(*this, task_behaviour);
+    break;
+  case FACTORY_FAI_GOAL:
+    active_factory = new FAIGoalTaskFactory(*this, task_behaviour);
     break;
   case FACTORY_AAT:
     active_factory = new AATTaskFactory(*this, task_behaviour);
@@ -1072,7 +1084,10 @@ OrderedTask::get_factory_types(bool all) const
 {
   /// @todo: check transform types if all=false
   std::vector<Factory_t> f_list;
-  f_list.push_back(FACTORY_FAI);
+  f_list.push_back(FACTORY_FAI_GENERAL);
+  f_list.push_back(FACTORY_FAI_TRIANGLE);
+  f_list.push_back(FACTORY_FAI_OR);
+  f_list.push_back(FACTORY_FAI_GOAL);
   f_list.push_back(FACTORY_RT);
   f_list.push_back(FACTORY_AAT);
   f_list.push_back(FACTORY_MIXED);
@@ -1099,4 +1114,10 @@ OrderedTask::get_tp(const unsigned position)
   } else {
     return tps[position];
   }
+}
+
+bool 
+OrderedTask::is_max_size() const
+{
+  return (task_size()== m_ordered_behaviour.max_points);
 }
