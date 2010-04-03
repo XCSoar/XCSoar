@@ -448,6 +448,13 @@ AbstractTaskFactory::is_position_start(const unsigned position) const
 bool 
 AbstractTaskFactory::is_position_intermediate(const unsigned position) const
 {
+  /*
+  printf("%d %d %d\n",
+         position,
+         get_ordered_task_behaviour().min_points,
+         get_ordered_task_behaviour().max_points);
+  */
+
   if (is_position_start(position))
     return false;
   if (position>= get_ordered_task_behaviour().max_points)
