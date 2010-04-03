@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_FIFO_BUFFER_HPP
 
 #include <utility>
+#include <algorithm>
 
 /**
  * A first-in-first-out buffer: you can append data at the end, and
