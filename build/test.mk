@@ -281,6 +281,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/WayPointFileZander.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Simulator.cpp \
+	$(SRC)/xmlParser.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeInterface.cpp \
