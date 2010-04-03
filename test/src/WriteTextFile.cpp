@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "TextWriter.hpp"
+#include "IO/TextWriter.hpp"
 
 #include <stdio.h>
 #include <string.h>

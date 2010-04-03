@@ -47,9 +47,9 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "UtilsFile.hpp"
-#include "TextReader.hpp"
-#include "ZipTextReader.hpp"
-#include "TextWriter.hpp"
+#include "IO/TextReader.hpp"
+#include "IO/ZipTextReader.hpp"
+#include "IO/TextWriter.hpp"
 
 #include "wcecompat/ts_string.h"
 

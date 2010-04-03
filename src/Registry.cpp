@@ -42,8 +42,8 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Defines.h"
 #include "Sizes.h"
-#include "TextReader.hpp"
-#include "TextWriter.hpp"
+#include "IO/TextReader.hpp"
+#include "IO/TextWriter.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

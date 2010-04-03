@@ -50,7 +50,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "SettingsUser.hpp" // for EnableTopology
 #include "Interface.hpp"
-#include "ZipTextReader.hpp"
+#include "IO/ZipTextReader.hpp"
 
 #include <assert.h>
 

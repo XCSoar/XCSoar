@@ -70,10 +70,10 @@ DEBUG_PROGRAM_NAMES = \
 DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
 
 DUMP_TEXT_FILE_SOURCES = \
-	$(SRC)/TextReader.cpp \
 	$(TEST_SRC_DIR)/DumpTextFile.cpp
 DUMP_TEXT_FILE_OBJS = $(call SRC_TO_OBJ,$(DUMP_TEXT_FILE_SOURCES))
 DUMP_TEXT_FILE_LDADD = \
+	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/DumpTextFile$(TARGET_EXEEXT): $(DUMP_TEXT_FILE_OBJS) $(DUMP_TEXT_FILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
@@ -81,11 +81,10 @@ $(TARGET_BIN_DIR)/DumpTextFile$(TARGET_EXEEXT): $(DUMP_TEXT_FILE_OBJS) $(DUMP_TE
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 DUMP_TEXT_ZIP_SOURCES = \
-	$(SRC)/TextReader.cpp \
-	$(SRC)/ZipTextReader.cpp \
 	$(TEST_SRC_DIR)/DumpTextZip.cpp
 DUMP_TEXT_ZIP_OBJS = $(call SRC_TO_OBJ,$(DUMP_TEXT_ZIP_SOURCES))
 DUMP_TEXT_ZIP_LDADD = \
+	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/DumpTextZip$(TARGET_EXEEXT): $(DUMP_TEXT_ZIP_OBJS) $(DUMP_TEXT_ZIP_LDADD) | $(TARGET_BIN_DIR)/dirstamp
@@ -93,10 +92,10 @@ $(TARGET_BIN_DIR)/DumpTextZip$(TARGET_EXEEXT): $(DUMP_TEXT_ZIP_OBJS) $(DUMP_TEXT
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 WRITE_TEXT_FILE_SOURCES = \
-	$(SRC)/TextWriter.cpp \
 	$(TEST_SRC_DIR)/WriteTextFile.cpp
 WRITE_TEXT_FILE_OBJS = $(call SRC_TO_OBJ,$(WRITE_TEXT_FILE_SOURCES))
 WRITE_TEXT_FILE_LDADD = \
+	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/WriteTextFile$(TARGET_EXEEXT): $(WRITE_TEXT_FILE_OBJS) $(WRITE_TEXT_FILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
@@ -104,10 +103,10 @@ $(TARGET_BIN_DIR)/WriteTextFile$(TARGET_EXEEXT): $(WRITE_TEXT_FILE_OBJS) $(WRITE
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_TEXT_WRITER_SOURCES = \
-	$(SRC)/TextWriter.cpp \
 	$(TEST_SRC_DIR)/RunTextWriter.cpp
 RUN_TEXT_WRITER_OBJS = $(call SRC_TO_OBJ,$(RUN_TEXT_WRITER_SOURCES))
 RUN_TEXT_WRITER_LDADD = \
+	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/RunTextWriter$(TARGET_EXEEXT): $(RUN_TEXT_WRITER_OBJS) $(RUN_TEXT_WRITER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
@@ -127,9 +126,6 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/StringUtil.cpp \
 	$(SRC)/Simulator.cpp \
-	$(SRC)/TextReader.cpp \
-	$(SRC)/TextWriter.cpp \
-	$(SRC)/ZipTextReader.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -144,6 +140,7 @@ RUN_WAY_POINT_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_WAY_POINT_PARSER_SOURCES))
 RUN_WAY_POINT_PARSER_LDADD = \
 	$(FAKE_LIBS) \
 	$(ENGINE_LIBS) \
+	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS) $(RUN_WAY_POINT_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
@@ -263,9 +260,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/TaskClient.cpp \
 	$(SRC)/TaskClientUI.cpp \
 	$(SRC)/TerrainRenderer.cpp \
-	$(SRC)/TextReader.cpp \
-	$(SRC)/TextWriter.cpp \
-	$(SRC)/ZipTextReader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Topology.cpp \
@@ -299,6 +293,7 @@ RUN_MAP_WINDOW_LDADD = \
 	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
 	$(JASPER_LIBS) \
+	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS) \
 	$(RESOURCE_BINARY)
@@ -359,9 +354,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
-	$(SRC)/TextReader.cpp \
-	$(SRC)/TextWriter.cpp \
-	$(SRC)/ZipTextReader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \
@@ -390,6 +382,7 @@ RUN_AIRSPACE_WARNING_DIALOG_LDADD = \
 	$(FORM_LIBS) \
 	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
+	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS) \
 	$(RESOURCE_BINARY)
@@ -421,9 +414,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Screen/shapelib/mapsearch.cpp \
 	$(SRC)/TaskClient.cpp \
 	$(SRC)/TaskClientUI.cpp \
-	$(SRC)/TextReader.cpp \
-	$(SRC)/TextWriter.cpp \
-	$(SRC)/ZipTextReader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Registry.cpp \
@@ -455,6 +445,7 @@ RUN_TASK_EDITOR_DIALOG_LDADD = \
 	$(FORM_LIBS) \
 	$(SCREEN_LIBS) \
 	$(ENGINE_LIBS) \
+	$(IO_LIBS) \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS) \
 	$(RESOURCE_BINARY)

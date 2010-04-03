@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TEXT_WRITER_HPP
-#define XCSOAR_TEXT_WRITER_HPP
+#ifndef XCSOAR_IO_TEXT_WRITER_HPP
+#define XCSOAR_IO_TEXT_WRITER_HPP
 
 #include "Compiler.h"
 #include "ReusableArray.hpp"

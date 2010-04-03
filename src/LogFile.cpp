@@ -39,7 +39,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "Asset.hpp"
-#include "TextWriter.hpp"
+#include "IO/TextWriter.hpp"
 
 #include <stdio.h>
 #include <stdarg.h>

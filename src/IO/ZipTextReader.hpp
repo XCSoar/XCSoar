@@ -36,75 +36,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TEXT_READER_HPP
-#define XCSOAR_TEXT_READER_HPP
+#ifndef XCSOAR_IO_ZIP_TEXT_READER_HPP
+#define XCSOAR_IO_ZIP_TEXT_READER_HPP
 
-#include "ReusableArray.hpp"
+#include "TextReader.hpp"
+#include "FifoBuffer.hpp"
 
-#include <stdio.h>
+#include <zzip/lib.h>
 
-#ifdef _UNICODE
-#include <tchar.h>
-#endif
-
-class TextReader {
+class ZipTextReader : public TextReader {
 private:
-#ifdef _UNICODE
-  ReusableArray<TCHAR> tbuffer;
-#endif
+  ZZIP_FILE *file;
+  FifoBuffer<char> buffer;
 
 public:
-  virtual ~TextReader();
-
-protected:
-  virtual char *read_raw_line() = 0;
-
-public:
-  /**
-   * Determins the size of the file.  Returns -1 if the size is
-   * unknown.
-   */
-  virtual long size() const;
-
-  /**
-   * Determins the current position within the file.  Returns -1 if
-   * this is unknown.
-   */
-  virtual long tell() const;
-
-  char *read_utf8_line() {
-    return read_raw_line();
-  }
+  ZipTextReader(const char *path);
 
 #ifdef _UNICODE
-  TCHAR *read_tchar_line();
-#else
-  char *read_tchar_line() {
-    return read_raw_line();
-  }
-#endif
-};
-
-/**
- * Line-based reader for text files.  Currently, it is limited to
- * reading UTF-8 characters.
- */
-class FileTextReader : public TextReader {
-private:
-  FILE *file;
-
-  long the_size;
-
-  ReusableArray<char> buffer;
-
-public:
-  FileTextReader(const char *path);
-
-#ifdef _UNICODE
-  FileTextReader(const TCHAR *path);
+  ZipTextReader(const TCHAR *path);
 #endif
 
-  virtual ~FileTextReader();
+  virtual ~ZipTextReader();
 
   /**
    * Returns true if opening the file has failed.  This must be
@@ -113,6 +65,11 @@ public:
   bool error() const {
     return file == NULL;
   }
+
+private:
+  char *extract_line();
+  char *extract_rest();
+  bool fill_buffer();
 
 protected:
   virtual char *read_raw_line();

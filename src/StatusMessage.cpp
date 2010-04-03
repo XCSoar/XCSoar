@@ -42,7 +42,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
-#include "TextReader.hpp"
+#include "IO/TextReader.hpp"
 
 #include <stdio.h>
 

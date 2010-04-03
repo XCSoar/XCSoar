@@ -40,7 +40,7 @@ Copyright_License {
 #include "Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "RasterTerrain.h"
-#include "TextWriter.hpp"
+#include "IO/TextWriter.hpp"
 
 bool
 WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,

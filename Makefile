@@ -60,6 +60,7 @@ include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk
 include $(topdir)/build/compat.mk
 include $(topdir)/build/driver.mk
+include $(topdir)/build/io.mk
 include $(topdir)/build/shapelib.mk
 include $(topdir)/build/task.mk
 include $(topdir)/build/datafield.mk
@@ -276,9 +277,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/UtilsText.cpp \
-	$(SRC)/TextReader.cpp \
-	$(SRC)/TextWriter.cpp \
-	$(SRC)/ZipTextReader.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
@@ -343,6 +341,7 @@ XCSOAR_SOURCES := \
 
 XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
 XCSOAR_LDADD = \
+	$(IO_LIBS) \
 	$(DATA_FIELD_LIBS) \
 	$(FORM_LIBS) \
 	$(SCREEN_LIBS) \

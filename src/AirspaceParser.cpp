@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "options.h"
 #include "Math/Geometry.hpp"
-#include "ZipTextReader.hpp"
+#include "IO/ZipTextReader.hpp"
 
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"

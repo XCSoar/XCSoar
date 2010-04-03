@@ -70,7 +70,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "StringUtil.hpp"
 #include "Asset.hpp"
 #include "MenuData.hpp"
-#include "TextReader.hpp"
+#include "IO/TextReader.hpp"
 
 #include <assert.h>
 #include <ctype.h>

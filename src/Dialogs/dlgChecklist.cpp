@@ -43,7 +43,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Defines.h"
 #include "StringUtil.hpp"
-#include "TextReader.hpp"
+#include "IO/TextReader.hpp"
 #include "Compiler.h"
 
 #include <assert.h>

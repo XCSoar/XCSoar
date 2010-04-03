@@ -44,7 +44,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "StringUtil.hpp"
-#include "ZipTextReader.hpp"
+#include "IO/ZipTextReader.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointSorter.hpp"
 #include "Components.hpp"

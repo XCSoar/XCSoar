@@ -42,8 +42,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Sizes.h"
 #include "FLARM/FLARMNet.hpp"
-#include "TextReader.hpp"
-#include "TextWriter.hpp"
+#include "IO/TextReader.hpp"
+#include "IO/TextWriter.hpp"
 
 static FLARMNetDatabase flarm_net;
 
