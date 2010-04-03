@@ -171,8 +171,22 @@ RefreshView()
 static void
 OnTaskListEnter(unsigned ItemIndex)
 {
-  if (cursor_is_active()) 
+  if (cursor_is_active()) {
+    if (MessageBoxX(gettext(_T("Save task?")),
+                    gettext(_T("Task Selection")),
+                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
+      tstring fname;
+      if (dlgTextEntryShowModal(fname, 10)) {
+        TCHAR path[MAX_PATH];
+        fname += _T(".tsk");
+        LocalPath(path, fname.c_str());
+        task_ui.task_save(path, *active_task);
+        task_store.scan();
+        RefreshView();
+      };
+    }
     return;
+  }
 
   const OrderedTask* orig = get_cursor_task();
   if (orig != NULL) {

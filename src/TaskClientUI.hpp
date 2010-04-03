@@ -111,6 +111,7 @@ public:
   bool task_load_default();
   OrderedTask* task_copy(const OrderedTask& that);
   OrderedTask* task_create(const TCHAR* path);
+  bool task_save(const TCHAR* path, const OrderedTask& task);
 
 protected:
   const TaskBehaviour &task_behaviour;

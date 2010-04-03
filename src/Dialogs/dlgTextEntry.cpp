@@ -288,6 +288,18 @@ static void dlgTextEntryHighscoreType(TCHAR *text, int width)
   delete wf;
 }
 
+bool dlgTextEntryShowModal(tstring &text, int width)
+{
+  TCHAR buf[width];
+  _tcscpy(buf, text.c_str());
+  if (dlgTextEntryShowModal(buf, width) && _tcslen(buf)) {
+    text = tstring(buf);
+    return true;
+  } else {
+    return false;
+  }
+}
+
 
 bool dlgTextEntryShowModal(TCHAR *text, int width)
 {

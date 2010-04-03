@@ -40,6 +40,7 @@ Copyright_License {
 #define XCSOAR_DIALOGS_H
 
 #include <tchar.h>
+#include "Util/tstring.hpp"
 
 struct GEOPOINT;
 class SingleWindow;
@@ -144,6 +145,8 @@ void
 dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint);
 
 bool dlgTextEntryShowModal(TCHAR *text, int width = 0);
+bool dlgTextEntryShowModal(tstring &text, int width = 0);
+
 void dlgTeamCodeShowModal();
 void dlgStartPointShowModal();
 

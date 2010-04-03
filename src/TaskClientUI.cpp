@@ -232,15 +232,12 @@ TaskClientUI::get_ordered_task_behaviour() const
   return task_manager.get_ordered_task_behaviour();
 }
 
-
 bool 
-TaskClientUI::task_save(const TCHAR* path)
+TaskClientUI::task_save(const TCHAR* path, const OrderedTask& task)
 {
-  OrderedTask* task = task_clone();
-
   DataNodeXML* root = DataNodeXML::createRoot(_T("Task"));
   Serialiser tser(*root);
-  tser.serialise(*task);
+  tser.serialise(task);
 
   bool retval = false;
   if (!root->save(path)) {
@@ -249,6 +246,15 @@ TaskClientUI::task_save(const TCHAR* path)
     retval = true;
   }
   delete root;  
+  return retval;
+}
+
+
+bool 
+TaskClientUI::task_save(const TCHAR* path)
+{
+  OrderedTask* task = task_clone();
+  bool retval = task_save(path, *task);
   delete task;
   return retval;
 }
