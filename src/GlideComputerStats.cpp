@@ -40,7 +40,6 @@ Copyright_License {
 #include "GlideComputerStats.hpp"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Logger.hpp"

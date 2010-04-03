@@ -71,9 +71,6 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
 void
 MapWindow::DrawThermalEstimate(Canvas &canvas)
 {
-  if (!SettingsComputer().EnableThermalLocator)
-    return;
-
   if (DisplayMode == dmCircling) {
     if (Calculated().ThermalEstimate_R>0) {
       draw_masked_bitmap_if_visible(canvas, MapGfx.hBmpThermalSource,
@@ -115,7 +112,7 @@ void MapWindow::DrawThermalBand(Canvas &canvas, const RECT rc)
 #define TBSCALEX 20
 
   // calculate height above safety altitude
-  double hoffset = SettingsComputer().SafetyAltitudeBreakoff
+  double hoffset = SettingsComputer().safety_height_terrain
     +Calculated().TerrainBase;
   h = Basic().NavAltitude - hoffset;
 

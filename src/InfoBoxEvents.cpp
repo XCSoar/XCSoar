@@ -41,7 +41,6 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Device/Port.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
 #include "Math/FastMath.h"
 #include "Dialogs.h"
 #include "Message.hpp"

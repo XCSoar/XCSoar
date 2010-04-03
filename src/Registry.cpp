@@ -191,6 +191,17 @@ GetFromRegistry(const TCHAR *szRegValue, double &pPos)
   return res;
 }
 
+bool
+GetFromRegistry(const TCHAR *szRegValue, fixed &pPos)
+{
+  DWORD Temp = (DWORD)(long)pPos;
+  fixed res;
+  if ((res = GetFromRegistryD(szRegValue, Temp)) == ERROR_SUCCESS)
+    pPos = (fixed)Temp;
+
+  return res;
+}
+
 HRESULT
 SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 {

@@ -42,7 +42,6 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "SettingsAirspace.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "Appearance.hpp"
 #include "Gauge/GaugeFLARM.hpp"
@@ -117,8 +116,6 @@ static const unsigned num_port_types =
   sizeof(port_types) / sizeof(port_types[0]) - 1;
 
 extern ldrotary_s rotaryLD;
-
-static SETTINGS_TASK settings_task;
 
 static Font TempInfoWindowFont;
 static Font TempTitleWindowFont;
@@ -1376,15 +1373,7 @@ static void setVariables(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeArrival"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
-        XCSoarInterface::SettingsComputer().SafetyAltitudeArrival)));
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeBreakoff"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
-        XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff)));
+        XCSoarInterface::SettingsComputer().safety_height_arrival)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -1392,19 +1381,8 @@ static void setVariables(void) {
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeTerrain"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(
-        XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain)));
+        XCSoarInterface::SettingsComputer().safety_height_terrain)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFinalGlideTerrain"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("OFF")));
-    dfe->addEnumText(gettext(_T("Line")));
-    dfe->addEnumText(gettext(_T("Shade")));
-    dfe->Set(XCSoarInterface::SettingsComputer().FinalGlideTerrain);
     wp->RefreshDisplay();
   }
 
@@ -1561,17 +1539,6 @@ static void setVariables(void) {
 
   LoadFormProperty(*wf, _T("prpTrailDrift"),
                    XCSoarInterface::SettingsMap().EnableTrailDrift);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpThermalLocator"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("OFF")));
-    dfe->addEnumText(gettext(_T("Circle at center")));
-    dfe->addEnumText(gettext(_T("Pan to center")));
-    dfe->Set(XCSoarInterface::SettingsComputer().EnableThermalLocator);
-    wp->RefreshDisplay();
-  }
 
   LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
                    XCSoarInterface::SettingsMap().SetSystemTimeFromGPS);
@@ -2094,79 +2061,9 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskFinishLine"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Cylinder")));
-    dfe->addEnumText(gettext(_T("Line")));
-    dfe->addEnumText(gettext(_T("FAI Sector")));
-    dfe->Set(settings_task.FinishType);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskFinishRadius"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(lround(Units::ToUserDistance(
-        settings_task.FinishRadius) * DISTANCE_ROUNDING) / DISTANCE_ROUNDING);
-    wp->GetDataField()->SetUnits(Units::GetDistanceName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskStartLine"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Cylinder")));
-    dfe->addEnumText(gettext(_T("Line")));
-    dfe->addEnumText(gettext(_T("FAI Sector")));
-    dfe->Set(settings_task.StartType);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskStartRadius"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(lround(Units::ToUserDistance(
-        settings_task.StartRadius) * DISTANCE_ROUNDING) / DISTANCE_ROUNDING);
-    wp->GetDataField()->SetUnits(Units::GetDistanceName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskFAISector"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Cylinder")));
-    dfe->addEnumText(gettext(_T("FAI Sector")));
-    dfe->addEnumText(gettext(_T("DAe 0.5/10")));
-    dfe->Set(settings_task.SectorType);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskSectorRadius"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(lround(Units::ToUserDistance(
-        settings_task.SectorRadius) * DISTANCE_ROUNDING) / DISTANCE_ROUNDING);
-    wp->GetDataField()->SetUnits(Units::GetDistanceName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoAdvance"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Manual")));
-    dfe->addEnumText(gettext(_T("Auto")));
-    dfe->addEnumText(gettext(_T("Arm")));
-    dfe->addEnumText(gettext(_T("Arm start")));
-    dfe->Set(settings_task.AutoAdvance);
-    wp->RefreshDisplay();
-  }
-
   wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(settings_task.FinishMinHeight)));
+    wp->GetDataField()->SetAsFloat(iround(Units::ToUserAltitude(XCSoarInterface::SettingsComputer().ordered_defaults.finish_min_height)));
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
@@ -2407,9 +2304,7 @@ void dlgConfigurationShowModal(void){
   changed |= SetValueRegistryOnChange(wf, _T("prpTrailDrift"),
                                       szProfileTrailDrift,
                                       XCSoarInterface::SetSettingsMap().EnableTrailDrift);
-  changed |= SetValueRegistryOnChange(wf, _T("prpThermalLocator"),
-                                      szProfileThermalLocator,
-                                      XCSoarInterface::SetSettingsComputer().EnableThermalLocator);
+
   changed |= SetValueRegistryOnChange(wf, _T("prpTrail"),
                                       szProfileSnailTrail,
                                       XCSoarInterface::SetSettingsMap().TrailActive);
@@ -2550,21 +2445,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeArrival"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if (XCSoarInterface::SettingsComputer().SafetyAltitudeArrival != ival) {
-      XCSoarInterface::SetSettingsComputer().SafetyAltitudeArrival = ival;
+    if (XCSoarInterface::SettingsComputer().safety_height_arrival != ival) {
+      XCSoarInterface::SetSettingsComputer().safety_height_arrival = ival;
       Profile::Set(szProfileSafetyAltitudeArrival,
-                    XCSoarInterface::SettingsComputer().SafetyAltitudeArrival);
-      changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeBreakoff"));
-  if (wp) {
-    ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if (XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff != ival) {
-      XCSoarInterface::SetSettingsComputer().SafetyAltitudeBreakoff = ival;
-      Profile::Set(szProfileSafetyAltitudeBreakOff,
-                    XCSoarInterface::SettingsComputer().SafetyAltitudeBreakoff);
+                   (int)XCSoarInterface::SettingsComputer().safety_height_arrival);
       changed = true;
     }
   }
@@ -2572,10 +2456,10 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyAltitudeTerrain"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if (XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain != ival) {
-      XCSoarInterface::SetSettingsComputer().SafetyAltitudeTerrain = ival;
+    if (XCSoarInterface::SettingsComputer().safety_height_terrain != ival) {
+      XCSoarInterface::SetSettingsComputer().safety_height_terrain = ival;
       Profile::Set(szProfileSafetyAltitudeTerrain,
-                    XCSoarInterface::SettingsComputer().SafetyAltitudeTerrain);
+                   (int)XCSoarInterface::SettingsComputer().safety_height_terrain);
       changed = true;
     }
   }
@@ -2613,10 +2497,6 @@ void dlgConfigurationShowModal(void){
   changed |= SetValueRegistryOnChange(wf, _T("prpEnableNavBaroAltitude"),
                                       szProfileEnableNavBaroAltitude,
                                       XCSoarInterface::SetSettingsComputer().EnableNavBaroAltitude);
-
-  changed |= SetValueRegistryOnChange(wf, _T("prpFinalGlideTerrain"),
-                                      szProfileFinalGlideTerrain,
-                                      XCSoarInterface::SetSettingsComputer().FinalGlideTerrain);
 
   changed |= SetValueRegistryOnChange(wf, _T("prpBlockSTF"),
                                       szProfileBlockSTF,
@@ -2736,18 +2616,6 @@ void dlgConfigurationShowModal(void){
         Units::SetUserAltitudeUnit(unMeter);
         break;
       }
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFAIFinishHeight"));
-  if (wp) {
-    if (XCSoarInterface::SettingsComputer().ordered_defaults.fai_finish 
-        != (wp->GetDataField()->GetAsInteger()>0)) {
-      XCSoarInterface::SetSettingsComputer().ordered_defaults.fai_finish = (wp->GetDataField()->GetAsInteger()>0);
-      Profile::Set(szProfileFAIFinishHeight, 
-                    XCSoarInterface::SettingsComputer().ordered_defaults.fai_finish);
-      changed = true;
-      taskchanged = true;
     }
   }
 
@@ -2931,69 +2799,6 @@ void dlgConfigurationShowModal(void){
       Profile::Set(szProfileSafteySpeed,
                     XCSoarInterface::SettingsComputer().SafetySpeed);
       changed = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskFinishLine"));
-  if (wp) {
-    if ((int)settings_task.FinishType != wp->GetDataField()->GetAsInteger()) {
-      settings_task.FinishType = (FinishSectorType_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileFinishLine,settings_task.FinishType);
-      changed = true;
-      taskchanged = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskFinishRadius"));
-  if (wp) {
-    ival = iround(Units::ToSysDistance(wp->GetDataField()->GetAsFloat()));
-    if ((int)settings_task.FinishRadius != ival) {
-      settings_task.FinishRadius = ival;
-      Profile::Set(szProfileFinishRadius,settings_task.FinishRadius);
-      changed = true;
-      taskchanged = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskStartLine"));
-  if (wp) {
-    if ((int)settings_task.StartType != wp->GetDataField()->GetAsInteger()) {
-      settings_task.StartType = (StartSectorType_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileStartLine,settings_task.StartType);
-      changed = true;
-      taskchanged = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskStartRadius"));
-  if (wp) {
-    ival = iround(Units::ToSysDistance(wp->GetDataField()->GetAsFloat()));
-    if ((int)settings_task.StartRadius != ival) {
-      settings_task.StartRadius = ival;
-      Profile::Set(szProfileStartRadius,settings_task.StartRadius);
-      changed = true;
-      taskchanged = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskFAISector"));
-  if (wp) {
-    if ((int)settings_task.SectorType != wp->GetDataField()->GetAsInteger()) {
-      settings_task.SectorType = (ASTSectorType_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileFAISector,settings_task.SectorType);
-      changed = true;
-      taskchanged = true;
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTaskSectorRadius"));
-  if (wp) {
-    ival = iround(Units::ToSysDistance(wp->GetDataField()->GetAsFloat()));
-    if ((int)settings_task.SectorRadius != ival) {
-      settings_task.SectorRadius = ival;
-      Profile::Set(szProfileSectorRadius,settings_task.SectorRadius);
-      changed = true;
-      taskchanged = true;
     }
   }
 
@@ -3338,9 +3143,9 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(_T("prpFinishMinHeight"));
   if (wp) {
     ival = iround(Units::ToSysAltitude(wp->GetDataField()->GetAsInteger()));
-    if ((int)settings_task.FinishMinHeight != ival) {
-      settings_task.FinishMinHeight = ival;
-      Profile::Set(szProfileFinishMinHeight,settings_task.FinishMinHeight);
+    if ((int)XCSoarInterface::SettingsComputer().ordered_defaults.finish_min_height != ival) {
+      XCSoarInterface::SetSettingsComputer().ordered_defaults.finish_min_height = ival;
+      Profile::Set(szProfileFinishMinHeight,ival);
       changed = true;
       taskchanged = true;
     }
@@ -3406,12 +3211,6 @@ void dlgConfigurationShowModal(void){
       taskchanged = true;
     }
   }
-
-  tmp = settings_task.AutoAdvance;
-  taskchanged |= SetValueRegistryOnChange(wf, _T("prpAutoAdvance"),
-                                          szProfileAutoAdvance,
-                                          tmp);
-  settings_task.AutoAdvance = (AutoAdvanceMode_t)tmp;
 
   changed |= SetValueRegistryOnChange(wf, _T("prpLoggerTimeStepCruise"),
                                       szProfileLoggerTimeStepCruise,

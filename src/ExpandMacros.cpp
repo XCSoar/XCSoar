@@ -43,7 +43,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
 #include "Components.hpp"
 #include "Compatibility/string.h"
 #include "SettingsUser.hpp"

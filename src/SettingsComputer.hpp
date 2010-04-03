@@ -144,23 +144,12 @@ struct SETTINGS_PLACES_OF_INTEREST {
 };
 
 
-struct SETTINGS_HEIGHT_MARGINS {
-  double SafetyAltitudeArrival;
-  double SafetyAltitudeBreakoff;
-  double SafetyAltitudeTerrain;
-};
-
 struct SETTINGS_FEATURES {
-  /** Calculate final glide over terrain */
-  int FinalGlideTerrain;
-
   /** block speed to fly instead of dolphin */
   bool EnableBlockSTF;
 
   /** Navigate by baro altitude instead of GPS altitude */
   bool EnableNavBaroAltitude;
-
-  int EnableThermalLocator;
 };
 
 
@@ -173,7 +162,6 @@ struct SETTINGS_COMPUTER:
   public SETTINGS_TEAMCODE,
   public SETTINGS_VOICE,
   public SETTINGS_PLACES_OF_INTEREST,
-  public SETTINGS_HEIGHT_MARGINS,
   public SETTINGS_FEATURES,
   public TaskBehaviour
 {

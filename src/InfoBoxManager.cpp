@@ -54,7 +54,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/Layout.hpp"
-#include "SettingsTask.hpp"
 #include "SettingsUser.hpp"
 #include "SettingsComputer.hpp"
 #include "Interface.hpp"

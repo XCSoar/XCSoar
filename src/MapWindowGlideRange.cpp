@@ -43,10 +43,8 @@ Copyright_License {
 #include <stdio.h>
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
-  if (SettingsComputer().FinalGlideTerrain) {
-    LonLat2Screen(Calculated().GlideFootPrint,
-                  Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS+1, 1);
-  }
+  LonLat2Screen(Calculated().GlideFootPrint,
+                Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS+1, 1);
 }
 
 /**
@@ -88,12 +86,9 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas)
 {
   canvas.select(MapGfx.hpTerrainLineBg);
   canvas.polyline(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
-  if ((SettingsComputer().FinalGlideTerrain==1) ||
-      ((!SettingsMap().EnableTerrain || !Basic().flight.Flying) &&
-       (SettingsComputer().FinalGlideTerrain==2))) {
-    canvas.select(MapGfx.hpTerrainLine);
-    canvas.polyline(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
-  }
+
+  canvas.select(MapGfx.hpTerrainLine);
+  canvas.polyline(Groundline, TERRAIN_ALT_INFO::NUMTERRAINSWEEPS + 1);
 
   if (!Basic().flight.Flying)
     return;

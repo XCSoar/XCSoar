@@ -38,7 +38,6 @@ Copyright_License {
 */
 
 #include "AirfieldDetails.h"
-#include "SettingsTask.hpp"
 #include "Language.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"

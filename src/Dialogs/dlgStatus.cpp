@@ -40,7 +40,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
-#include "SettingsTask.hpp"
 #include "Math/Earth.hpp"
 #include "Battery.h"
 #include "Units.hpp"

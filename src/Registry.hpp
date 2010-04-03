@@ -42,6 +42,7 @@ Copyright_License {
 #include <windows.h>
 
 #include <tchar.h>
+#include "Math/fixed.hpp"
 
 bool GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos);
 bool GetFromRegistry(const TCHAR *szRegValue, int &pPos);
@@ -49,6 +50,7 @@ bool GetFromRegistry(const TCHAR *szRegValue, short &pPos);
 bool GetFromRegistry(const TCHAR *szRegValue, bool &pPos);
 bool GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos);
 bool GetFromRegistry(const TCHAR *szRegValue, double &pPos);
+bool GetFromRegistry(const TCHAR *szRegValue, fixed &pPos);
 
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal);	// JG

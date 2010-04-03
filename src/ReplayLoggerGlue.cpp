@@ -42,7 +42,6 @@
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
 #include "Device/Port.hpp"
-#include "SettingsTask.hpp"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"

@@ -112,7 +112,7 @@ private:
   fixed h_terrain(const GEOPOINT& loc);
 
   RasterTerrain &m_terrain;
-  const fixed SafetyAltitudeTerrain;
+  const fixed safety_height_terrain;
   fixed TerrainBase;
   fixed max_range;
   RasterRounding *rounding;

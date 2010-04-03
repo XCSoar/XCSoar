@@ -98,6 +98,7 @@ namespace Profile
   bool Get(const TCHAR *key, bool &value);
   bool Get(const TCHAR *key, unsigned &value);
   bool Get(const TCHAR *key, double &value);
+  bool Get(const TCHAR *key, fixed &value);
   bool Get(const TCHAR *key, TCHAR *value, DWORD dwSize);
 
   bool Set(const TCHAR *key, int value);

@@ -43,7 +43,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "MapWindowProjection.hpp"
 #include "MainWindow.hpp"
-#include "SettingsTask.hpp"
 #include "Screen/ProgressWindow.hpp"
 #include "UtilsText.hpp"
 #include "UtilsSystem.hpp"

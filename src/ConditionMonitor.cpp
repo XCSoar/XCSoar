@@ -41,7 +41,6 @@ Copyright_License {
 #include "Math/Geometry.hpp"
 #include "Message.hpp"
 #include "Device/device.hpp"
-#include "SettingsTask.hpp"
 #include "Protection.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "LocalTime.hpp"

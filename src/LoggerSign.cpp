@@ -40,7 +40,6 @@
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "Device/Port.hpp"
-#include "SettingsTask.hpp"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"

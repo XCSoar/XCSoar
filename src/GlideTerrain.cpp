@@ -62,7 +62,7 @@ TerrainIntersection::TerrainIntersection(const GEOPOINT& start):
 GlideTerrain::GlideTerrain(const SETTINGS_COMPUTER &settings,
                            RasterTerrain &terrain):
   m_terrain(terrain),
-  SafetyAltitudeTerrain(settings.SafetyAltitudeTerrain),
+  safety_height_terrain(settings.safety_height_terrain),
   TerrainBase(fixed_zero),
   max_range(-fixed_one)
 {
@@ -204,7 +204,7 @@ GlideTerrain::h_terrain(const GEOPOINT& loc)
 {
   return max(fixed_zero, 
              fixed(m_terrain.GetTerrainHeight(loc, *rounding)))
-    +SafetyAltitudeTerrain;
+    +safety_height_terrain;
 }
 
 

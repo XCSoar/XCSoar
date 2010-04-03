@@ -39,7 +39,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Blackboard.hpp"
-#include "SettingsTask.hpp"
 #include "SettingsComputer.hpp"
 #include "Units.hpp"
 #include "DataField/Base.hpp"

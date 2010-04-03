@@ -40,7 +40,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "TaskClientUI.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
 #include "Math/FastMath.h"
 #include "Math/Geometry.hpp"
 #include "Math/Earth.hpp"

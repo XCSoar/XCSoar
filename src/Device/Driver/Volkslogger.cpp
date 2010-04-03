@@ -46,7 +46,6 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Interface.hpp"
 #include "Language.hpp"
-#include "SettingsTask.hpp"
 #include "UtilsText.hpp"
 #include "Device/Volkslogger/vlapi2.h"
 #include "Device/Volkslogger/vlapihlp.h"

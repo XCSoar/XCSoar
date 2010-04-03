@@ -53,7 +53,6 @@ Copyright_License {
 #include "RasterMap.h"
 #include "Calibration.hpp"
 #include "GlideTerrain.hpp"
-#include "SettingsTask.hpp"
 #include "LocalTime.hpp"
 #include "MapWindowProjection.hpp"
 #include "Components.hpp"
@@ -513,9 +512,6 @@ GlideComputerAirData::TerrainFootprint(double screen_range)
   // initialise base
   SetCalculated().TerrainBase = Calculated().TerrainAlt;
 
-  if (!SettingsComputer().FinalGlideTerrain) 
-    return;
-
   // estimate max range (only interested in at most one screen
   // distance away) except we need to scan for terrain base, so 20km
   // search minimum is required
@@ -621,9 +617,6 @@ GlideComputerAirData::PercentCircling(const double Rate)
 void
 GlideComputerAirData::ProcessThermalLocator()
 {
-  if (!SettingsComputer().EnableThermalLocator)
-    return;
-
   if (Calculated().Circling) {
     thermallocator.AddPoint(Basic().Time, Basic().Location,
                             Basic().NettoVario);
@@ -855,8 +848,7 @@ GlideComputerAirData::LastThermalStats()
 void
 GlideComputerAirData::OnDepartedThermal()
 {
-  if (SettingsComputer().EnableThermalLocator)
-    ThermalSources();
+  ThermalSources();
 }
 
 void

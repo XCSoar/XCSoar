@@ -41,9 +41,6 @@ Copyright_License {
 SettingsComputerBlackboard::SettingsComputerBlackboard()
 {
   settings_computer.AutoWindMode= D_AUTOWIND_CIRCLING;
-  settings_computer.SafetyAltitudeArrival = 500;
-  settings_computer.SafetyAltitudeBreakoff = 700;
-  settings_computer.SafetyAltitudeTerrain = 200;
   settings_computer.SafetySpeed = 50.0;
   settings_computer.EnableBlockSTF = false;
 
@@ -57,7 +54,6 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.EnableNavBaroAltitude=false;
   settings_computer.EnableExternalTriggerCruise=false;
   settings_computer.EnableCalibration = false;
-  settings_computer.EnableThermalLocator = 1;
   settings_computer.LoggerTimeStepCruise=5;
   settings_computer.LoggerTimeStepCircling=1;
   settings_computer.DisableAutoLogger = false;

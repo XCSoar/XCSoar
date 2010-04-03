@@ -671,7 +671,7 @@ void
 DeviceBlackboard::WorkingBand()
 {
   const fixed working_band_height = Basic().TEAltitude 
-    - SettingsComputer().SafetyAltitudeBreakoff 
+    - SettingsComputer().safety_height_terrain 
     - Calculated().TerrainBase;
  
   SetBasic().working_band_height = working_band_height;

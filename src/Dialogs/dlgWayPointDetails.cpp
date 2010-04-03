@@ -47,7 +47,6 @@ Copyright_License {
 #include "Math/SunEphemeris.hpp"
 #include "Blackboard.hpp"
 #include "SettingsComputer.hpp"
-#include "SettingsTask.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"

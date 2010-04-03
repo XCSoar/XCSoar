@@ -199,36 +199,8 @@ MapWindowProjection::CalculateOrigin
   if (settings_map.EnablePan) {
     PanLocation = settings_map.PanLocation;
   } else {
-
-    if (IsOriginCentered()
-        && DerivedDrawInfo.Circling
-        && (settings_computer.EnableThermalLocator==2)) {
-
-      if (DerivedDrawInfo.ThermalEstimate_R>0) {
-        PanLocation = DerivedDrawInfo.ThermalEstimate_Location;
-        // TODO enhancement: only pan if distance of center to
-        // aircraft is smaller than one third screen width
-
-        POINT screen;
-        LonLat2Screen(PanLocation, screen);
-
-        LonLat2Screen(DrawInfo.Location, Orig_Aircraft);
-
-        if ((fabs((double)Orig_Aircraft.x-screen.x)<(rc.right-rc.left)/3)
-            && (fabs((double)Orig_Aircraft.y-screen.y)<(rc.bottom-rc.top)/3)) {
-
-        } else {
-          // out of bounds, center on aircraft
-          PanLocation = DrawInfo.Location;
-        }
-      } else {
-        // out of bounds, center on aircraft
-        PanLocation = DrawInfo.Location;
-      }
-    } else {
-      // Pan is off
-      PanLocation = DrawInfo.Location;
-    }
+    // Pan is off
+    PanLocation = DrawInfo.Location;
   }
 
   LonLat2Screen(DrawInfo.Location,

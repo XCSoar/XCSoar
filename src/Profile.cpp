@@ -39,7 +39,6 @@ Copyright_License {
 #include "Profile.hpp"
 #include "Registry.hpp"
 #include "LogFile.hpp"
-#include "SettingsTask.hpp"
 #include "Appearance.hpp"
 #include "InfoBoxManager.hpp"
 #include "GlideRatio.hpp"
@@ -147,6 +146,12 @@ Profile::Get(const TCHAR *key, unsigned &value)
 
 bool
 Profile::Get(const TCHAR *key, double &value)
+{
+  return GetFromRegistry(key, value);
+}
+
+bool
+Profile::Get(const TCHAR *key, fixed &value)
 {
   return GetFromRegistry(key, value);
 }
@@ -460,11 +465,9 @@ Profile::Use()
       XCSoarInterface::SetSettingsComputer().AltWarningMargin);
 
   Profile::Get(szProfileSafetyAltitudeArrival,
-      XCSoarInterface::SetSettingsComputer().SafetyAltitudeArrival);
-  Profile::Get(szProfileSafetyAltitudeBreakOff,
-      XCSoarInterface::SetSettingsComputer().SafetyAltitudeBreakoff);
+      XCSoarInterface::SetSettingsComputer().safety_height_arrival);
   Profile::Get(szProfileSafetyAltitudeTerrain,
-      XCSoarInterface::SetSettingsComputer().SafetyAltitudeTerrain);
+      XCSoarInterface::SetSettingsComputer().safety_height_terrain);
   Profile::Get(szProfileSafteySpeed,
       XCSoarInterface::SetSettingsComputer().SafetySpeed);
   Profile::Get(szProfilePolarID, 
@@ -496,9 +499,6 @@ Profile::Use()
   Profile::Get(szProfileTrailDrift,
       XCSoarInterface::SetSettingsMap().EnableTrailDrift);
 
-  Profile::Get(szProfileThermalLocator,
-      XCSoarInterface::SetSettingsComputer().EnableThermalLocator);
-
   Profile::Get(szProfileAnimation, XCSoarInterface::EnableAnimation);
 
   Profile::Get(szProfileDrawTopology,
@@ -506,9 +506,6 @@ Profile::Use()
 
   Profile::Get(szProfileDrawTerrain,
       XCSoarInterface::SetSettingsMap().EnableTerrain);
-
-  Profile::Get(szProfileFinalGlideTerrain,
-      XCSoarInterface::SetSettingsComputer().FinalGlideTerrain);
 
   Profile::Get(szProfileAutoWind,
       XCSoarInterface::SetSettingsComputer().AutoWindMode);
