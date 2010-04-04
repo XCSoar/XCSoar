@@ -284,49 +284,27 @@ Profile::Use()
   if (is_altair())
     DefaultRegistrySettingsAltair();
 
-#ifdef OLD_TASK
-  SETTINGS_TASK settings_task = task.getSettings();
+  OrderedTaskBehaviour &osettings_task = 
+    XCSoarInterface::SetSettingsComputer().ordered_defaults;
+
+  TaskBehaviour &settings_task = 
+    XCSoarInterface::SetSettingsComputer();
+
   Profile::Get(szProfileFinishMinHeight,
-		  settings_task.FinishMinHeight);
+		  osettings_task.finish_min_height);
   Profile::Get(szProfileStartHeightRef,
-		  settings_task.StartHeightRef);
+		  osettings_task.start_max_height_ref);
   Profile::Get(szProfileStartMaxHeight,
-		  settings_task.StartMaxHeight);
-  Profile::Get(szProfileStartMaxHeightMargin,
-		  settings_task.StartMaxHeightMargin);
+		  osettings_task.start_max_height);
   Profile::Get(szProfileStartMaxSpeed,
-		  settings_task.StartMaxSpeed);
+		  osettings_task.start_max_speed);
+
+  Profile::Get(szProfileStartMaxHeightMargin,
+		  settings_task.start_max_height_margin);
   Profile::Get(szProfileStartMaxSpeedMargin,
-		  settings_task.StartMaxSpeedMargin);
+		  settings_task.start_max_speed_margin);
 
-  Temp = settings_task.SectorType;
-  Profile::Get(szProfileFAISector, Temp);
-  settings_task.SectorType = (ASTSectorType_t)Temp;
-
-  Temp = settings_task.StartType;
-  Profile::Get(szProfileStartLine, Temp);
-  settings_task.StartType = (StartSectorType_t)Temp;
-
-  Temp = settings_task.FinishType;
-  Profile::Get(szProfileFinishLine, Temp);
-  settings_task.FinishType = (FinishSectorType_t)Temp;
-
-  Profile::Get(szProfileSectorRadius,
-      settings_task.SectorRadius);
-
-  Profile::Get(szProfileStartRadius,
-      settings_task.StartRadius);
-  Profile::Get(szProfileFinishRadius,
-      settings_task.FinishRadius);
-
-  Temp = settings_task.AutoAdvance;
-  Profile::Get(szProfileAutoAdvance, Temp);
-  settings_task.AutoAdvance = (AutoAdvanceMode_t)Temp;
-
-  Profile::Get(szProfileFAIFinishHeight,
-		  settings_task.EnableFAIFinishHeight);
-  task.setSettings(settings_task);
-
+#ifdef OLD_TASK
   for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
     Profile::Get(szProfileAirspacePriority[i], AirspacePriority[i]);
   }
@@ -718,6 +696,7 @@ Profile::Use()
   Profile::Get(szProfileAutoMcMode,
 		  SetSettingsComputer().auto_mc_mode);
 #endif
+
   Profile::Get(szProfileWaypointsOutOfRange,
                   WayPointFile::WaypointsOutOfRangeSetting);
   {

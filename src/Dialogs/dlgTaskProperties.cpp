@@ -70,18 +70,6 @@ RefreshView()
   bool racing_types = 
     (ftype == OrderedTask::FACTORY_RT) || aat_types;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoAdvance"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(_T("Manual")));
-    dfe->addEnumText(gettext(_T("Auto")));
-    dfe->addEnumText(gettext(_T("Arm")));
-    dfe->addEnumText(gettext(_T("Arm start")));
-    dfe->Set(0); /// @todo hook up auto advance to task props
-    wp->RefreshDisplay();
-  }
-
   wp = ((WndProperty*)wf->FindByName(_T("prpTaskScored")));
   if (wp) {
     wp->set_visible(fai_types || racing_types);

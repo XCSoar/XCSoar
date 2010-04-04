@@ -7,15 +7,6 @@
 
   <Panel Name="frmProperties" X=70 Y=0 Width=248 Height=222 Font=2>
 
-    <WndProperty Name="prpAutoAdvance" Caption="Auto advance"      X=2 Y=-1   Width=220 Height=22 CaptionWidth=150 Font=2   Help="Determines how waypoints are advanced through the task.
-[Manual] Fully manual task waypoint advancing
-[Auto] Fully automatic task waypoint advancing
-[Arm] Automatic task waypoint advancing needs to be armed each waypoint
-[Arm start] Automatic task waypoint advancing needs to be armed for the start
-">
-      <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-    </WndProperty>
-
     <WndProperty Name="prpMinTime" Caption="AAT min time" X=2 Y=-1  Width=220 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 min=0 max=600 step=10 Help="Minimum AAT task time in minutes.">
       <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
     </WndProperty>

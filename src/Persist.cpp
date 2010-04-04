@@ -120,18 +120,7 @@ LoadCalculationsPersist(DERIVED_INFO *Calculated)
   // Read persistent memory into FlightStats
   fread(&glide_computer.GetFlightStats(), sizeof(glide_computer.GetFlightStats()), 1, file);
 
-#ifdef OLD_TASK
-  fread(&sizein, sizeof(sizein), 1, file);
-  if (sizein != sizeof(glide_computer.GetOLC().data)) {
-    glide_computer.GetOLC().ResetFlight();
-    fclose(file);
-    return;
-  }
-
-  // Read persistent memory into OLC.data
-  fread(&glide_computer.GetOLC().data, sizeof(glide_computer.GetOLC().data), 1, file);
-#endif
-
+  /// @todo persistence for OLC data
 
   fread(&sizein, sizeof(sizein), 1, file);
   if (sizein != 4 * sizeof(double)) {
@@ -208,11 +197,7 @@ SaveCalculationsPersist(const NMEA_INFO &gps_info,
   fwrite(&size, sizeof(size), 1, file);
   fwrite(&glide_computer.GetFlightStats(), size, 1, file);
 
-#ifdef OLD_TASK
-  size = sizeof(OLCData);
-  fwrite(&size, sizeof(size), 1, file);
-  fwrite(&glide_computer.GetOLC().data, size, 1, file);
-#endif
+  /// @todo persistence for OLC data
 
   GlidePolar polar = task_ui.get_glide_polar();
   double MACCREADY = polar.get_mc();
