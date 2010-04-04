@@ -92,6 +92,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 
 #include "Waypoint/Waypoints.hpp"
 #include "TaskClientUI.hpp"
+#include "AirspaceClientUI.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -511,12 +512,12 @@ InputEvents::eventTerrainTopology(const TCHAR *misc)
 void
 InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc)
 {
-	(void)misc;
-#ifdef OLD_TASK
-  if (ClearAirspaceWarnings(airspace_database, true, false))
-    // airspace was active, enter was used to acknowledge
+  (void)misc;
+
+  if (!airspace_ui.warning_empty()) {
+    airspace_ui.clear_warnings();
     return;
-#endif
+  }
   // Else toggle TerrainTopology - and show the results
   sub_TerrainTopology(-1);
   sub_TerrainTopology(0);
@@ -525,23 +526,10 @@ InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc)
 
 // ClearAirspaceWarnings
 // Clears airspace warnings for the selected airspace
-//     day: clears the warnings for the entire day
-//     ack: clears the warnings for the acknowledgement time
 void
 InputEvents::eventClearAirspaceWarnings(const TCHAR *misc)
 {
-#ifdef OLD_TASK
-  // JMW clear airspace warnings for entire day (for selected airspace)
-  if (_tcscmp(misc, TEXT("day")) == 0)
-    ClearAirspaceWarnings(airspace_database, true, true);
-
-  // default, clear airspace for short acknowledgement time
-  else {
-    if (ClearAirspaceWarnings(airspace_database, true, false)) {
-      // nothing
-    }
-  }
-#endif
+  airspace_ui.clear_warnings();
 }
 
 // ClearStatusMessages
@@ -1205,7 +1193,6 @@ InputEvents::eventRepeatStatusMessage(const TCHAR *misc)
 // to the nearest exit to the airspace.
 
 #include "AirspaceVisibility.hpp"
-#include "AirspaceClientUI.hpp"
 #include "Airspace/AirspaceSoonestSort.hpp"
 
 void 

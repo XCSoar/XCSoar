@@ -162,6 +162,8 @@ public:
     m_warnings.clear();
   }
 
+  void acknowledge_all();
+
 /** 
  * Return size of warning list
  * 

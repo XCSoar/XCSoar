@@ -75,6 +75,7 @@ public:
   bool airspace_empty() const;
 
   void clear();
+  void clear_warnings();
 
   void lock() const;
   void unlock() const;

@@ -384,3 +384,13 @@ AirspaceWarningManager::acknowledge_day(const AbstractAirspace& airspace,
   get_warning(airspace).acknowledge_day(set);
 }
 
+
+void 
+AirspaceWarningManager::acknowledge_all()
+{
+  for (AirspaceWarningList::iterator it = m_warnings.begin();
+       it != m_warnings.end(); ++it) {
+    (*it).acknowledge_warning(true);
+    (*it).acknowledge_inside(true);
+  }
+}

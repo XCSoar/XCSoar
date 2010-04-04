@@ -46,6 +46,14 @@ AirspaceClientUI::clear()
   airspaces.clear();
 }
 
+void
+AirspaceClientUI::clear_warnings()
+{
+  Poco::ScopedRWLock lock(mutex, true);
+  airspace_warning.acknowledge_all();
+}
+
+
 bool
 AirspaceClientUI::read(char* path)
 {
