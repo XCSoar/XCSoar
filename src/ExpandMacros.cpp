@@ -189,52 +189,40 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
   }
 
   if (_tcsstr(OutBuffer, TEXT("$(AdvanceArmed)"))) {
-
-    switch (task_ui.get_advance_mode()) {
-    case TaskAdvance::ADVANCE_MANUAL:
+    TaskAdvance::TaskAdvanceState_t s = task_ui.get_advance_state();
+    switch (s) {
+    case TaskAdvance::MANUAL:
       ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
                       TEXT("(manual)"), Size);
       invalid = true;
       break;
-    case TaskAdvance::ADVANCE_AUTO:
+    case TaskAdvance::AUTO:
       ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
                       TEXT("(auto)"), Size);
       invalid = true;
       break;
-    case TaskAdvance::ADVANCE_ARM:
-      if (Calculated().common_stats.active_has_previous) {
-        if (Calculated().common_stats.active_has_next) {
-          CondReplaceInString(task_ui.is_advance_armed(), 
-                              OutBuffer, TEXT("$(AdvanceArmed)"),
-                              TEXT("Cancel"), TEXT("TURN"), Size);
-        } else {
-          ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"),
-                          TEXT("(finish)"), Size);
-          invalid = true;
-        }
-      } else {
-        CondReplaceInString(task_ui.is_advance_armed(), 
-                            OutBuffer, TEXT("$(AdvanceArmed)"),
-                            TEXT("Cancel"), TEXT("START"), Size);
-      }
+    case TaskAdvance::START_ARMED:
+      ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
+                      TEXT("Hold\nStart"), Size);
+      invalid = false;
       break;
-    case TaskAdvance::ADVANCE_ARMSTART:
-      if (!Calculated().common_stats.active_has_previous) {
-        CondReplaceInString(task_ui.is_advance_armed(), 
-                            OutBuffer, TEXT("$(AdvanceArmed)"),
-                            TEXT("Cancel"), TEXT("START"), Size);
-      } else if (Calculated().common_stats.previous_is_first) {
-        CondReplaceInString(task_ui.is_advance_armed(), 
-                            OutBuffer, 
-                            TEXT("$(AdvanceArmed)"),
-                            TEXT("Cancel"), TEXT("RESTART"), Size);
-      } else {
-        ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
-                        TEXT("(auto)"), Size);
-        invalid = true;
-      }
+    case TaskAdvance::START_DISARMED:
+      ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
+                      TEXT("Ready\nStart"), Size);
+      invalid = false;
+      break;
+    case TaskAdvance::TURN_ARMED:
+      ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
+                      TEXT("Hold\nTurn"), Size);
+      invalid = false;
+      break;
+    case TaskAdvance::TURN_DISARMED:
+      ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
+                      TEXT("Ready\nTurn"), Size);
+      invalid = false;
+      break;
     default:
-      break;
+      assert(1);
     }
   }
 

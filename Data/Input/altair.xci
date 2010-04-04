@@ -306,7 +306,7 @@ type=key
 data=0
 event=ArmAdvance show
 event=ArmAdvance toggle
-label=$(CheckTaskResumed)$(CheckTask)Advance\n$(AdvanceArmed)
+label=$(CheckTaskResumed)$(CheckTask)$(AdvanceArmed)
 location=9
 
 
@@ -423,7 +423,7 @@ data=7
 event=ArmAdvance show
 event=ArmAdvance on
 event=Mode default
-label=$(CheckTaskResumed)$(CheckTask)Advance\n$(AdvanceArmed)
+label=$(CheckTaskResumed)$(CheckTask)$(AdvanceArmed)
 location=6
 
 mode=Nav1

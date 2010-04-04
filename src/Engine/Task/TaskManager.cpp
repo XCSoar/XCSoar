@@ -47,7 +47,7 @@ TaskManager::TaskManager(TaskEvents &te,
   m_glide_polar(fixed_zero),
   trace_full(),
   trace_sprint(9000, 2, 300),
-  task_ordered(te,tb,task_advance,m_glide_polar),
+  task_ordered(te,tb,m_glide_polar),
   task_goto(te,tb,m_glide_polar),
   task_abort(te,tb,m_glide_polar,wps),
   task_olc(te,tb,m_glide_polar,common_stats, trace_full, trace_sprint),
@@ -510,7 +510,7 @@ TaskManager::get_safety_polar() const
 TaskAdvance& 
 TaskManager::get_task_advance() 
 {
-  return task_advance;
+  return task_ordered.get_task_advance();
 }
 
 
@@ -620,10 +620,9 @@ TaskManager::get_task_radius(const GEOPOINT& fallback_location) const
 OrderedTask* 
 TaskManager::clone(TaskEvents &te, 
                    const TaskBehaviour &tb,
-                   TaskAdvance &ta,
                    GlidePolar &gp) const
 {
-  return task_ordered.clone(te, tb, ta, gp);
+  return task_ordered.clone(te, tb, gp);
 }
 
 bool 

@@ -49,7 +49,8 @@ OrderedTaskBehaviour::OrderedTaskBehaviour():
     min_points(2),
     max_points(20),
     homogeneous_tps(false),
-    is_closed(false)
+    is_closed(false),
+    start_requires_arm(false)
 {
 
 }

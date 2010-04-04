@@ -689,15 +689,14 @@ OrderedTask::~OrderedTask()
 
 OrderedTask::OrderedTask(TaskEvents &te, 
                          const TaskBehaviour &tb,
-                         TaskAdvance &ta,
                          GlidePolar &gp):
   AbstractTask(te, tb, gp),
-  task_advance(ta),
   ts(NULL),
   tf(NULL),
   factory_mode(FACTORY_FAI_GENERAL),
   active_factory(NULL),
-  m_ordered_behaviour(tb.ordered_defaults)
+  m_ordered_behaviour(tb.ordered_defaults),
+  task_advance(m_ordered_behaviour)
 {
   active_factory = new FAITaskFactory(*this, task_behaviour);
   active_factory->update_ordered_task_behaviour(m_ordered_behaviour);
@@ -924,10 +923,9 @@ OrderedTask::get_task_radius(const GEOPOINT& fallback_location) const
 OrderedTask* 
 OrderedTask::clone(TaskEvents &te, 
                    const TaskBehaviour &tb,
-                   TaskAdvance &ta,
                    GlidePolar &gp) const
 {
-  OrderedTask* new_task = new OrderedTask(te, tb, ta, gp);
+  OrderedTask* new_task = new OrderedTask(te, tb, gp);
 
   new_task->m_ordered_behaviour = m_ordered_behaviour;
 

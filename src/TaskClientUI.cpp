@@ -3,6 +3,16 @@
 #include "Util/DataNodeXML.hpp"
 #include "LocalPath.hpp"
 
+#include "Task/TaskAdvance.hpp"
+
+TaskAdvance::TaskAdvanceState_t 
+TaskClientUI::get_advance_state() const
+{
+  ScopeLock lock(mutex);
+  return task_manager.get_task_advance().get_advance_state();
+}
+
+/*
 TaskAdvance::TaskAdvanceMode_t 
 TaskClientUI::get_advance_mode() const
 {
@@ -16,6 +26,7 @@ TaskClientUI::set_advance_mode(TaskAdvance::TaskAdvanceMode_t the_mode)
   ScopeLock lock(mutex);
   task_manager.get_task_advance().set_mode(the_mode);
 }
+*/
 
 void 
 TaskClientUI::set_advance_armed(const bool do_armed)
@@ -185,11 +196,9 @@ OrderedTask*
 TaskClientUI::task_clone()
 {
   ScopeLock lock(mutex);
-  task_advance = task_manager.get_task_advance();
   glide_polar = task_manager.get_glide_polar();
   return task_manager.clone(task_events,
                             task_behaviour,
-                            task_advance,
                             glide_polar);
 }
 
@@ -197,11 +206,9 @@ OrderedTask*
 TaskClientUI::task_copy(const OrderedTask& that)
 {
   ScopeLock lock(mutex);
-  task_advance = task_manager.get_task_advance();
   glide_polar = task_manager.get_glide_polar();
   return that.clone(task_events,
                     task_behaviour,
-                    task_advance,
                     glide_polar);
 }
 
@@ -209,11 +216,9 @@ OrderedTask*
 TaskClientUI::task_blank()
 {
   ScopeLock lock(mutex);
-  task_advance = task_manager.get_task_advance();
   glide_polar = task_manager.get_glide_polar();
   return new OrderedTask(task_events,
                          task_behaviour,
-                         task_advance,
                          glide_polar);
 }
 

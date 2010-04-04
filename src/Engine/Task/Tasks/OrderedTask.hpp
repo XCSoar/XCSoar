@@ -45,10 +45,11 @@
 #include "Util/Serialisable.hpp"
 #include "GlideSolvers/MacCready.hpp"
 
+#include "Task/TaskAdvanceSmart.hpp"
+
 class OrderedTaskPoint;
 class TaskPointVisitor;
 class AbstractTaskFactory;
-class TaskAdvance;
 
 /**
  * A task comprising an ordered sequence of task points, each with
@@ -78,14 +79,12 @@ public:
    * 
    * @param te Task events
    * @param tb Task behaviour
-   * @param ta Task advance
    * @param gp Glide Polar
    * 
    * @return Initialised object
    */
   OrderedTask(TaskEvents &te, 
               const TaskBehaviour &tb,
-              TaskAdvance &ta,
               GlidePolar &gp);
   ~OrderedTask();
 
@@ -148,14 +147,12 @@ public:
    *
    * @param te Task events
    * @param tb Task behaviour
-   * @param ta Task advance
    * @param gp Glide Polar
    *
    * @return Initialised object
    */
   OrderedTask* clone(TaskEvents &te, 
                      const TaskBehaviour &tb,
-                     TaskAdvance &ta,
                      GlidePolar &gp) const;
 
   /**
@@ -357,8 +354,6 @@ public:
   fixed get_task_radius(const GEOPOINT& fallback_location) const;
 
 protected:
-
-  TaskAdvance &task_advance; /**< reference to global advance mechanism */
 
   bool has_targets() const;
 
@@ -663,7 +658,12 @@ private:
 
   OrderedTaskBehaviour m_ordered_behaviour;
 
+  TaskAdvanceSmart task_advance;
+
 public:
+  TaskAdvance& get_task_advance() {
+    return task_advance;
+  }
 
   Factory_t get_factory_type() const {
     return factory_mode;

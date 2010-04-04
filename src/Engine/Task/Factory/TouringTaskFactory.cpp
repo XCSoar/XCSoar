@@ -69,4 +69,5 @@ TouringTaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
   to.start_max_height = 0;
   to.start_max_height_ref = 0;
   to.finish_min_height = 0;
+  to.start_requires_arm = false;
 }

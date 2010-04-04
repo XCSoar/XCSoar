@@ -34,46 +34,50 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+#ifndef TASKADVANCESMART_HPP
+#define TASKADVANCESMART_HPP
+
 #include "TaskAdvance.hpp"
-#include "Tasks/BaseTask/TaskPoint.hpp"
-#include "TaskPoints/StartPoint.hpp"
-#include "TaskPoints/AATPoint.hpp"
-#include "Tasks/BaseTask/IntermediatePoint.hpp"
-#include "Navigation/Aircraft.hpp"
 
-TaskAdvance::TaskAdvance():
-    m_armed(false),
-    m_request_armed(false)
-{
-}
+class OrderedTaskBehaviour;
 
-void
-TaskAdvance::reset()
+/**
+ * Class used to control advancement through an OrderedTask
+ */
+class TaskAdvanceSmart: 
+  public TaskAdvance
 {
-  m_armed = false;
-  m_request_armed = false;
-}
+public:
+/** 
+ * Constructor.  Sets defaults to auto-mode
+ */
+  TaskAdvanceSmart(const OrderedTaskBehaviour &task_behaviour);
 
-bool 
-TaskAdvance::state_ready(const TaskPoint &tp,
-                         const AIRCRAFT_STATE &state,
-                         const bool x_enter, 
-                         const bool x_exit) const
-{
-  if (dynamic_cast<const StartPoint*>(&tp)) {
-    return x_exit;
-  }
-  if (const AATPoint* ap = dynamic_cast<const AATPoint*>(&tp)) {
-    return aat_state_ready(ap->has_entered(), ap->close_to_target(state));
-  } else if (const IntermediatePoint* ip = 
-      dynamic_cast<const IntermediatePoint*>(&tp)) {
-    return ip->has_entered();
-  }
-  return false;
-}
+  TaskAdvance::TaskAdvanceState_t get_advance_state() const;
 
-bool TaskAdvance::aat_state_ready(const bool has_entered,
-                                  const bool close_to_target) const
-{
-  return has_entered;
-}
+/** 
+ * Determine whether all conditions are satisfied for a turnpoint
+ * to auto-advance based on condition of the turnpoint, transition
+ * characteristics and advance mode.
+ * 
+ * @param tp The task point to check for satisfaction
+ * @param state current aircraft state
+ * @param x_enter whether this step transitioned enter to this tp
+ * @param x_exit whether this step transitioned exit to this tp
+ * 
+ * @return true if this tp is ready to advance
+ */
+  bool ready_to_advance(const TaskPoint &tp,
+                        const AIRCRAFT_STATE &state,
+                        const bool x_enter, 
+                        const bool x_exit);
+
+protected:
+
+  const OrderedTaskBehaviour &m_task_behaviour;
+
+  TaskAdvanceState_t m_state;       /**< active advance state */
+};
+
+
+#endif

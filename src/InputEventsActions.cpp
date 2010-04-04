@@ -603,49 +603,34 @@ InputEvents::eventChangeInfoBoxType(const TCHAR *misc)
 void
 InputEvents::eventArmAdvance(const TCHAR *misc)
 {
-  const TaskAdvance::TaskAdvanceMode_t mode = 
-    task_ui.get_advance_mode();
-
-  if ((mode == TaskAdvance::ADVANCE_ARM) 
-      || (mode==TaskAdvance::ADVANCE_ARMSTART)) {
-    if (_tcscmp(misc, TEXT("on")) == 0) {
-      task_ui.set_advance_armed(true);
-    } else if (_tcscmp(misc, TEXT("off")) == 0) {
-      task_ui.set_advance_armed(false);
-    } else if (_tcscmp(misc, TEXT("toggle")) == 0) {
-      task_ui.toggle_advance_armed();
-    }
-  }
-  if (_tcscmp(misc, TEXT("show")) == 0) {
+  const TaskAdvance::TaskAdvanceState_t mode = 
+    task_ui.get_advance_state();
+  
+  if (_tcscmp(misc, TEXT("on")) == 0) {
+    task_ui.set_advance_armed(true);
+  } else if (_tcscmp(misc, TEXT("off")) == 0) {
+    task_ui.set_advance_armed(false);
+  } else if (_tcscmp(misc, TEXT("toggle")) == 0) {
+    task_ui.toggle_advance_armed();
+  } else if (_tcscmp(misc, TEXT("show")) == 0) {
     switch (mode) {
-    case TaskAdvance::ADVANCE_MANUAL:
+    case TaskAdvance::MANUAL:
       Message::AddMessage(TEXT("Advance: Manual"));
       break;
-    case TaskAdvance::ADVANCE_AUTO:
+    case TaskAdvance::AUTO:
       Message::AddMessage(TEXT("Advance: Automatic"));
       break;
-    case TaskAdvance::ADVANCE_ARM:
-      if (task_ui.is_advance_armed()) {
-        Message::AddMessage(TEXT("Advance: ARMED"));
-      } else {
-        Message::AddMessage(TEXT("Advance: DISARMED"));
-      }
+    case TaskAdvance::START_ARMED:
+      Message::AddMessage(TEXT("Advance: Ready to start"));
       break;
-    case 3:
-      if (Calculated().common_stats.previous_is_first
-          || !Calculated().common_stats.active_has_previous) { 
-        // past start (but can re-start)
-
-        if (task_ui.is_advance_armed()) {
-          Message::AddMessage(TEXT("Advance: ARMED"));
-        } else {
-          Message::AddMessage(TEXT("Advance: DISARMED"));
-        }
-      } else {
-        Message::AddMessage(TEXT("Advance: Automatic"));
-      }
+    case TaskAdvance::START_DISARMED:
+      Message::AddMessage(TEXT("Advance: Hold start"));
       break;
-    default:
+    case TaskAdvance::TURN_ARMED:
+      Message::AddMessage(TEXT("Advance: Ready to turn"));
+      break;
+    case TaskAdvance::TURN_DISARMED:
+      Message::AddMessage(TEXT("Advance: Hold turn"));
       break;
     }
   }

@@ -50,11 +50,11 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskEvents.hpp"
 #include "TaskBehaviour.hpp"
-#include "TaskAdvance.hpp"
 #include "Trace/Trace.hpp"
 #include "Factory/AbstractTaskFactory.hpp"
 #include "Util/Serialisable.hpp"
 
+class TaskAdvance;
 class Waypoints;
 class TaskVisitor;
 /**
@@ -285,7 +285,6 @@ public:
    */
   OrderedTask* clone(TaskEvents &te, 
                      const TaskBehaviour &tb,
-                     TaskAdvance &ta,
                      GlidePolar &gp) const;
 
   /**
@@ -446,8 +445,6 @@ private:
   const TaskStats null_stats;
 
   TaskMode_t set_mode(const TaskMode_t mode);
-
-  TaskAdvance task_advance;
 
   CommonStats common_stats;
 

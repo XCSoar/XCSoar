@@ -34,84 +34,34 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef TASKADVANCE_HPP
-#define TASKADVANCE_HPP
+#ifndef TASKADVANCELEGACY_HPP
+#define TASKADVANCELEGACY_HPP
 
-class TaskPoint;
-struct AIRCRAFT_STATE;
+#include "TaskAdvance.hpp"
 
 /**
  * Class used to control advancement through an OrderedTask
  */
-class TaskAdvance
+class TaskAdvanceLegacy: 
+  public TaskAdvance
 {
 public:
-
-  enum TaskAdvanceState_t {
-    MANUAL = 0,
-    AUTO,
-    START_ARMED,
-    START_DISARMED,
-    TURN_ARMED,
-    TURN_DISARMED
-  };
-
 /** 
  * Constructor.  Sets defaults to auto-mode
  */
-  TaskAdvance();
+  TaskAdvanceLegacy();
 
 /**
- * Resets as if never flown
+ * Advance mode
  */
-  virtual void reset();
+  enum TaskAdvanceMode_t {
+    ADVANCE_MANUAL =0,          /**< No automatic advance */
+    ADVANCE_AUTO,               /**< Automatic, triggers as soon as condition satisfied */
+    ADVANCE_ARM,                /**< Requires arming of trigger on each task point */
+    ADVANCE_ARMSTART            /**< Requires arming of trigger before start, thereafter works as ADVANCE_AUTO */
+  };
 
-/** 
- * Set arming trigger
- * 
- * @param do_armed True to arm trigger, false to clear
- */
-  void set_armed(const bool do_armed) 
-    {
-      m_armed = do_armed;
-      m_request_armed = false;
-    }
-
-/** 
- * Accessor for arm state
- * 
- * @return True if armed
- */
-  bool is_armed() const 
-    {
-      return m_armed;
-    }
-
-/** 
- * Accessor for arm request state
- * 
- * @return True if arm requested
- */
-  bool request_armed() const 
-    {
-      return m_request_armed;
-    }
-
-/** 
- * Toggle arm state
- * 
- * @return Arm state after toggle
- */
-  bool toggle_armed()
-    {
-      m_armed = !m_armed;
-      if (m_armed) {
-        m_request_armed = false;
-      }
-      return m_armed;
-    }
-
-  virtual TaskAdvanceState_t get_advance_state() const = 0;
+  TaskAdvance::TaskAdvanceState_t get_advance_state() const;
 
 /** 
  * Determine whether all conditions are satisfied for a turnpoint
@@ -125,33 +75,45 @@ public:
  * 
  * @return true if this tp is ready to advance
  */
-  virtual bool ready_to_advance(const TaskPoint &tp,
-                                const AIRCRAFT_STATE &state,
-                                const bool x_enter, 
-                                const bool x_exit) = 0;
+  bool ready_to_advance(const TaskPoint &tp,
+                        const AIRCRAFT_STATE &state,
+                        const bool x_enter, 
+                        const bool x_exit);
+
+/** 
+ * Set task advance mode
+ * 
+ * @param the_mode New task advance mode
+ */
+  void set_mode(TaskAdvanceMode_t the_mode) {
+    mode = the_mode;
+  }
+
+/** 
+ * Get task advance mode
+ * 
+ * @return Current task advance mode
+ */
+  TaskAdvanceMode_t get_mode() const {
+    return mode;
+  }
 
 protected:
 
-  virtual bool aat_state_ready(const bool has_entered,
-                               const bool close_to_target) const;
+  bool aat_state_ready(const bool has_entered,
+                       const bool close_to_target) const;
 
 /** 
- * Determine whether state is satisfied for a turnpoint
- * 
+ * Determine whether mode allows auto-advance, without
+ * knowledge about turnpoint or state characteristics
+ *
  * @param tp The task point to check for satisfaction
- * @param state current aircraft state
- * @param x_enter whether this step transitioned enter to this tp
- * @param x_exit whether this step transitioned exit to this tp
  * 
- * @return true if this tp is ready to advance
+ * @return True if this mode allows auto-advance
  */
-  bool state_ready(const TaskPoint &tp,
-                   const AIRCRAFT_STATE &state,
-                   const bool x_enter, 
-                   const bool x_exit) const;
+  bool mode_ready(const TaskPoint &tp) const;
 
-  bool m_armed;                   /**< arm state */
-  bool m_request_armed;           /**< need to arm */
+  TaskAdvanceMode_t mode;       /**< acive advance mode */
 };
 
 

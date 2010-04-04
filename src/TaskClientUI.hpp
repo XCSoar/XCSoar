@@ -39,9 +39,9 @@
 
 #include <tchar.h>
 #include "TaskClient.hpp"
-#include "Task/TaskAdvance.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Task/TaskManager.hpp"
+#include "Task/TaskAdvance.hpp"
 
 class TaskClientUI: public TaskClient
 {
@@ -54,8 +54,12 @@ public:
     task_events(te),
     glide_polar(tm.get_glide_polar()) {};
 
+  TaskAdvance::TaskAdvanceState_t get_advance_state() const;
+
+/*
   TaskAdvance::TaskAdvanceMode_t get_advance_mode() const;
   void set_advance_mode(TaskAdvance::TaskAdvanceMode_t the_mode);
+*/
   void set_advance_armed(const bool do_armed);
   bool is_advance_armed() const;
   bool toggle_advance_armed();
@@ -117,7 +121,6 @@ protected:
   const TaskBehaviour &task_behaviour;
   TaskEvents &task_events;
   GlidePolar glide_polar;
-  TaskAdvance task_advance;
 
   static const TCHAR default_task_path[];
 };
