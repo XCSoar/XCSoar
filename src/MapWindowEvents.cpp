@@ -317,6 +317,11 @@ MapWindow::on_mouse_up(int x, int y)
 #endif
       return true;
     }
+    else {
+      if (InputEvents::processKey(wParam)) {
+        return true; // don't go to default handler
+      }
+    }
   }
 
   GEOPOINT G;
