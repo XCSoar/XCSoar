@@ -100,15 +100,22 @@ void OrderedTaskSummary(OrderedTask* task, TCHAR* text)
     _stprintf(text, _T("%s\nTask is empty"),
               OrderedTaskFactoryName(task->get_factory_type()));
   } else {
-    _stprintf(text, _T("%s\nNominal dist: %.0f %s\nMax dist: %.0f %s\nMin dist: %.0f %s"), 
-              OrderedTaskFactoryName(task->get_factory_type()),
-              Units::ToUserDistance(stats.distance_nominal),
-              Units::GetDistanceName(),
-              Units::ToUserDistance(stats.distance_max),
-              Units::GetDistanceName(),
-              Units::ToUserDistance(stats.distance_min),
-              Units::GetDistanceName()
-      );
+    if (task->has_targets()) {
+      _stprintf(text, _T("%s\nNominal dist: %.0f %s\nMax dist: %.0f %s\nMin dist: %.0f %s"), 
+                OrderedTaskFactoryName(task->get_factory_type()),
+                Units::ToUserDistance(stats.distance_nominal),
+                Units::GetDistanceName(),
+                Units::ToUserDistance(stats.distance_max),
+                Units::GetDistanceName(),
+                Units::ToUserDistance(stats.distance_min),
+                Units::GetDistanceName()
+        );
+    } else {
+      _stprintf(text, _T("%s\nDistance: %.0f %s"), 
+                OrderedTaskFactoryName(task->get_factory_type()),
+                Units::ToUserDistance(stats.distance_nominal),
+                Units::GetDistanceName());
+    }
   }
 }
 

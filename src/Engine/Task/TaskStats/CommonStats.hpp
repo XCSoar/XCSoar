@@ -42,6 +42,7 @@ public:
   bool mode_ordered; /**< Whether task is ordered mode */
   bool mode_goto; /**< Whether task is goto mode */
   bool ordered_valid; /**< Whether ordered task is valid */
+  bool ordered_has_targets; /**< Whether ordered task has AAT areas */
 
   bool active_has_next; /**< Is there a tp after this */
   bool active_has_previous; /**< Is there a tp before this */

@@ -942,15 +942,17 @@ FlightStatistics::CaptionTempTrace(TCHAR *sTmp) const
 void
 FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
 {
-#ifdef OLD_TASK
-  if (!task.check_task()) {
+  const CommonStats &common = derived.common_stats;
+  double d_remaining  = derived.task_stats.total.remaining.get_distance();
+
+  if (!common.ordered_valid) {
     _stprintf(sTmp, gettext(TEXT("No task")));
   } else {
     TCHAR timetext1[100];
     TCHAR timetext2[100];
-    if (task.getSettings().AATEnabled) {
-      Units::TimeToText(timetext1, (int)derived.TaskTimeToGo);
-      Units::TimeToText(timetext2, (int)derived.AATTimeToGo);
+    if (common.ordered_has_targets) {
+      Units::TimeToText(timetext1, (int)common.task_time_remaining);
+      Units::TimeToText(timetext2, (int)common.aat_time_remaining);
 
       if (Layout::landscape) {
 	_stprintf(sTmp,
@@ -960,10 +962,10 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
                     gettext(TEXT("AAT to go")),
 		  timetext2,
 		  gettext(TEXT("Distance to go")),
-		  Units::ToUserUnit(derived.AATTargetDistance, Units::DistanceUnit),
+		  Units::ToUserUnit(d_remaining, Units::DistanceUnit),
 		  Units::GetDistanceName(),
 		  gettext(TEXT("Target speed")),
-		  Units::ToUserUnit(derived.AATTargetSpeed, Units::TaskSpeedUnit),
+		  Units::ToUserUnit(common.aat_speed_remaining, Units::TaskSpeedUnit),
 		  Units::GetTaskSpeedName()
 		  );
       } else {
@@ -974,24 +976,21 @@ FlightStatistics::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
 		  gettext(TEXT("AAT to go")),
 		  timetext2,
 		  gettext(TEXT("Distance to go")),
-      Units::ToUserUnit(derived.AATTargetDistance, Units::DistanceUnit),
+                  Units::ToUserUnit(d_remaining, Units::DistanceUnit),
 		  Units::GetDistanceName(),
 		  gettext(TEXT("Target speed")),
-		      Units::ToUserUnit(derived.AATTargetSpeed, Units::TaskSpeedUnit),
+		      Units::ToUserUnit(common.aat_speed_remaining, Units::TaskSpeedUnit),
 		  Units::GetTaskSpeedName()
 		  );
       }
     } else {
-      Units::TimeToText(timetext1, (int)derived.TaskTimeToGo);
+      Units::TimeToText(timetext1, (int)common.task_time_remaining);
       _stprintf(sTmp, TEXT("%s: %s\r\n%s: %5.0f %s\r\n"),
 		gettext(TEXT("Task to go")),
 		timetext1,
 		gettext(TEXT("Distance to go")),
-		Units::ToUserUnit(derived.TaskDistanceToGo, Units::DistanceUnit),
+		Units::ToUserUnit(d_remaining, Units::DistanceUnit),
 		Units::GetDistanceName());
     }
   }
-#else
-  _stprintf(sTmp, gettext(TEXT("No task")));
-#endif
 }

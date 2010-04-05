@@ -353,9 +353,9 @@ public:
   GEOPOINT get_task_center(const GEOPOINT& fallback_location) const;
   fixed get_task_radius(const GEOPOINT& fallback_location) const;
 
-protected:
-
   bool has_targets() const;
+
+protected:
 
   bool is_scored() const;
 

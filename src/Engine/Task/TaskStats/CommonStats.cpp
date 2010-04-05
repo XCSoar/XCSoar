@@ -23,6 +23,7 @@ CommonStats::reset_task()
   mode_goto = false;
   mode_ordered = false;
   ordered_valid = false;
+  ordered_has_targets = false;
 
   active_has_next = false;
   active_has_previous = false; 
