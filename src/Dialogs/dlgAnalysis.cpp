@@ -157,6 +157,7 @@ Update(void)
 
   FlightStatistics &fs = glide_computer.GetFlightStats();
   GlidePolar polar = task_ui.get_glide_polar();
+  const CommonStats& stats = XCSoarInterface::Calculated().common_stats;
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -165,7 +166,6 @@ Update(void)
     wf->SetCaption(sTmp);
     fs.CaptionBarograph(sTmp);
     wInfo->SetCaption(sTmp);
-
     break;
   case ANALYSIS_PAGE_CLIMB:
     _stprintf(sTmp, _T("%s: %s"), gettext(_T("Analysis")),
@@ -216,28 +216,28 @@ Update(void)
     wf->SetCaption(sTmp);
 
     TCHAR timetext1[100];
-    Units::TimeToText(timetext1, (int)XCSoarInterface::Calculated().common_stats.time_olc);
+    Units::TimeToText(timetext1, (int)stats.time_olc);
     if (Layout::landscape) {
       _stprintf(sTmp,
                 _T("%s:\r\n  %d %s\r\n%s: %s\r\n%s: %d %s\r\n"),
                 gettext(_T("Distance")),
-                (int)Units::ToUserUnit(XCSoarInterface::Calculated().common_stats.distance_olc, Units::DistanceUnit),
+                (int)Units::ToUserUnit(stats.distance_olc, Units::DistanceUnit),
                 Units::GetDistanceName(),
                 gettext(_T("Time")),
                 timetext1,
                 gettext(_T("Speed")),
-                (int)Units::ToUserUnit(XCSoarInterface::Calculated().common_stats.speed_olc, Units::TaskSpeedUnit),
+                (int)Units::ToUserUnit(stats.speed_olc, Units::TaskSpeedUnit),
                 Units::GetTaskSpeedName());
     } else {
       _stprintf(sTmp,
                 _T("%s: %d %s\r\n%s: %s\r\n%s: %d %s\r\n"),
                 gettext(_T("Distance")),
-                (int)Units::ToUserUnit(XCSoarInterface::Calculated().common_stats.distance_olc, Units::DistanceUnit),
+                (int)Units::ToUserUnit(stats.distance_olc, Units::DistanceUnit),
                 Units::GetDistanceName(),
                 gettext(_T("Time")),
                 timetext1,
                 gettext(_T("Speed")),
-                (int)Units::ToUserUnit(XCSoarInterface::Calculated().common_stats.speed_olc, Units::TaskSpeedUnit),
+                (int)Units::ToUserUnit(stats.speed_olc, Units::TaskSpeedUnit),
                 Units::GetTaskSpeedName());
     }
     wInfo->SetCaption(sTmp);

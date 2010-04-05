@@ -249,7 +249,7 @@ XCSoarInterface::AfterStartup()
   LogStartUp(TEXT("Create default task"));
   task_manager.default_task(Basic().Location);
 
-  task_behaviour.enable_olc = true;
+  SetSettingsComputer().enable_olc = true;
   task_ui.task_load_default();
 
   task_manager.resume();
