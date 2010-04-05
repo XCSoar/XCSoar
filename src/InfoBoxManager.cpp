@@ -38,6 +38,7 @@ Copyright_License {
 */
 
 #include "InfoBoxManager.hpp"
+#include "TaskClientUI.hpp"
 #include "InfoBox.hpp"
 #include "InfoBoxLayout.hpp"
 #include "Form/Control.hpp"
@@ -794,7 +795,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
       ActiveAlternate = SettingsComputer().Alternate1;
     else if (type == 68)
       ActiveAlternate = SettingsComputer().Alternate2;
-#ifdef OLD_TASK
+#ifdef OLD_TASK // alternates
     else
       ActiveAlternate = Calculated().BestAlternate;
 #endif
@@ -877,14 +878,11 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
   //
   switch (type) {
   case 14: // Next waypoint
-#ifdef OLD_TASK
-    if (theactive != -1) {
-      int index = task.getWaypointIndex();
-      if ((index >= 0) && way_points.verify_index(index))
-        info_box.SetComment(way_points.get(index).Comment);
+    if (const Waypoint* way_point = task_ui.getActiveWaypoint()) {
+      info_box.SetComment(way_point->Comment.c_str());
+    } else {
+      info_box.SetComment(_T(""));
     }
-#endif
-    info_box.SetComment(_T(""));
     break;
 
   case 10:

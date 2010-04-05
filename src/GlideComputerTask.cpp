@@ -98,7 +98,7 @@ GlideComputerTask::ProcessBasicTask()
   SetCalculated().ZoomDistance = 
     Calculated().task_stats.current_leg.solution_remaining.Vector.Distance;
 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // target control
   if (!targetManipEvent.test()) {
     // don't calculate these if optimise function being invoked or
     // target is being adjusted
@@ -151,7 +151,7 @@ GlideComputerTask::TerrainWarning()
 void
 GlideComputerTask::LDNext()
 {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // LD calcs
   if (!task.Valid()) {
     SetCalculated().LDNext = INVALID_GR;
     SetCalculated().LDFinish = INVALID_GR;
@@ -222,108 +222,3 @@ GlideComputerTask::LDNext()
 */
 
 /////////////////////////////////
-
-
-/*
-
-  Track 'TaskStarted' in Calculated info, so it can be
-  displayed in the task status dialog.
-
-  Must be reset at start of flight.
-
-  For multiple starts, after start has been passed, need
-  to set the first waypoint to the start waypoint and
-  then recalculate task stats.
-
-*/
-
-#ifdef OLD_TASK
-
-void
-GlideComputerTask::CheckStart()
-{
-  bool StartCrossed = false;
-
-  if (InStartSector(&StartCrossed)) {
-    SetCalculated().IsInSector = true;
-
-    if (ReadyToStart()) {
-      aatdistance.AddPoint(Basic().Location, 0, AATCloseDistance());
-    }
-
-    // TODO: we are ready to start even when outside start rules but
-    // within margin
-    if (ValidStartSpeed(task.getSettings().StartMaxSpeedMargin)) {
-      ReadyToAdvance(false, true);
-    }
-    // TODO accuracy: monitor start speed throughout time in start sector
-  }
-
-  if (StartCrossed) {
-    // TODO: Check whether speed and height are within the rules or
-    // not (zero margin)
-    if(!task.ActiveIsFinalWaypoint() && ValidStartSpeed() && InsideStartHeight()) {
-      // This is set whether ready to advance or not, because it will
-      // appear in the flight log, so if it's valid, it's valid.
-      SetCalculated().ValidStart = true;
-
-      if (ReadyToAdvance(true, true)) {
-        task.setActiveIndex(0); // enforce this since it may be 1
-        StartTask(true, true);
-      }
-
-      if (Calculated().Flying) {
-        SetCalculated().ValidFinish = false;
-      }
-      // JMW TODO accuracy: This causes Vaverage to go bonkers
-      // if the user has already passed the start
-      // but selects the start
-
-      // Note: pilot must have armed advance
-      // for the start to be registered
-
-      // ToLo: If speed and height are outside the rules they must be
-      // within the margin...
-    } else {
-      if ((task.getActiveIndex()<=1)
-          && !task.ActiveIsFinalWaypoint()
-          && (Calculated().ValidStart==false)
-          && (Calculated().Flying)) {
-
-        // need to detect bad starts, just to get the statistics
-        // in case the bad start is the best available, or the user
-        // manually started
-        StartTask(false, false);
-        // Calculated().ValidStart = false;
-
-        bool startTaskAnyway = false;
-
-        if (ReadyToAdvance(true, true)) {
-
-	  /* JMW TODO THIS IS BAD!!! SEND AN EVENT TO THE GUI INSTEAD
-	     OF RUNNING A DIALOG FROM THE CALCULATIONS THREAD
-          //DoStatusMessage(TEXT("Start Anyway?"));
-          dlgStartTaskShowModal(&startTaskAnyway,
-                                Calculated().TaskStartTime,
-                                Calculated().TaskStartSpeed,
-                                Calculated().TaskStartAltitude);
-	  */
-          if (startTaskAnyway) {
-            task.setActiveIndex(0); // enforce this since it may be 1
-            StartTask(true, true);
-          }
-        }
-
-        SetCalculated().ValidStart = startTaskAnyway;
-
-        if (Calculated().Flying) {
-          SetCalculated().ValidFinish = false;
-        }
-
-        // TODO: Display infobox when only a bit over start rules
-      }
-    }
-  }
-}
-
-#endif

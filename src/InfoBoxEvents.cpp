@@ -151,7 +151,7 @@ ActionInterface::on_key_Altitude(int UpDown)
 void
 ActionInterface::on_key_Alternate1(int UpDown)
 {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // alternates
    if (UpDown==0) {
      if ( SettingsComputer().Alternate1 <0 ) return;
      task.setSelected(SettingsComputer().Alternate1);
@@ -164,7 +164,7 @@ ActionInterface::on_key_Alternate1(int UpDown)
 void
 ActionInterface::on_key_Alternate2(int UpDown)
 {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // alternates
    if (UpDown==0) {
      if ( SettingsComputer().Alternate2 <0 )
        return;
@@ -178,7 +178,7 @@ ActionInterface::on_key_Alternate2(int UpDown)
 void
 ActionInterface::on_key_BestAlternate(int UpDown)
 {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // alternates
    if (UpDown==0) {
      if ( Calculated().BestAlternate <0 )
        return;
