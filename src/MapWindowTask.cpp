@@ -58,9 +58,13 @@ public:
                      RenderObservationZone &_ozv,
                      const bool draw_bearing,
                      const GEOPOINT location,
-                     MapWindow& map):
+                     MapWindow& map,
+                     const fixed bearing,
+                     const bool do_draw_off_track):
     RenderTaskPoint(_helper, _ozv, draw_bearing, location),
-    m_map(map) {};
+    m_map(map),
+    m_bearing(bearing),
+    m_draw_off_track(do_draw_off_track) {};
 
 protected:
   void draw_target(const TaskPoint &tp) 
@@ -72,9 +76,72 @@ protected:
                                           tp.get_location_remaining(),
                                           10, 10);
     }
+  void draw_off_track(const TaskPoint &tp) 
+    {
+      if (!m_draw_off_track) 
+        return;
+      if (!point_current())
+        return;
+      
+      GeoVector vec(m_location, tp.get_location_remaining());
+
+      if (fabs(AngleLimit180(m_bearing-vec.Bearing))<10) {
+        // insignificant error
+        return;
+      }
+
+      double distance_max = min(vec.Distance,
+                                m_map.GetScreenDistanceMeters()*0.7);
+      if (distance_max < 5000.0) {
+        // too short to bother
+        return;
+      }
+
+      GEOPOINT start = m_location;
+      GEOPOINT target = tp.get_location_remaining();
+
+      m_canvas.select(TitleWindowFont);
+      m_canvas.set_text_color(Color(0x0, 0x0, 0x0));
+
+      GEOPOINT dloc;
+      int ilast = 0;
+      for (double d=0.25; d<=1.0; d+= 0.25) {
+        FindLatitudeLongitude(start,
+                              m_bearing,
+                              (fixed)(distance_max*d),
+                              &dloc);
+
+        double distance0 = Distance(start, dloc);
+        double distance1 = Distance(dloc, target);
+        double distance = (distance0+distance1)/vec.Distance;
+        int idist = iround((distance-1.0)*100);
+
+        if ((idist != ilast) && (idist>0) && (idist<1000)) {
+
+          TCHAR Buffer[5];
+          _stprintf(Buffer, TEXT("%d"), idist);
+          POINT sc;
+          RECT brect;
+          m_map.LonLat2Screen(dloc, sc);
+          SIZE tsize = m_canvas.text_size(Buffer);
+
+          brect.left = sc.x-4;
+          brect.right = brect.left+tsize.cx+4;
+          brect.top = sc.y-4;
+          brect.bottom = brect.top+tsize.cy+4;
+          
+          if (m_map.getLabelBlock()->check(brect)) {
+            m_canvas.text(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
+            ilast = idist;
+          }
+        }
+      }
+    }
 
 private:
   MapWindow& m_map;
+  const fixed m_bearing;
+  const bool m_draw_off_track;
 };
 
 void
@@ -92,77 +159,15 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
                          SettingsMap());
     RenderObservationZone ozv(helper);
     RenderTaskPointMap tpv(helper, ozv, draw_bearing,
-                           Basic().Location, *this);
+                           Basic().Location, *this, 
+                           Basic().TrackBearing,
+                           !Calculated().Circling);
     RenderTask dv(tpv);
     task->CAccept(dv); 
   }
 }
 
 #ifdef OLD_TASK
-
-void
-MapWindow::DrawOffTrackIndicator(Canvas &canvas)
-{
-  if (task == NULL || !task->Valid() || task->getActiveIndex() <= 0)
-    return;
-
-  if (fabs(Basic().TrackBearing-Calculated().WaypointBearing)<10) {
-    // insignificant error
-    return;
-  }
-  if (Calculated().Circling || task->TaskIsTemporary() ||
-      SettingsMap().TargetPan) {
-    // don't display in various modes
-    return;
-  }
-
-  double distance_max = min(Calculated().WaypointDistance,
-			    GetScreenDistanceMeters()*0.7);
-  if (distance_max < 5000.0) {
-    // too short to bother
-    return;
-  }
-
-  GEOPOINT start = Basic().Location;
-  GEOPOINT target = task->getTargetLocation();
-
-  canvas.select(TitleWindowFont);
-  canvas.set_text_color(Color(0x0, 0x0, 0x0));
-
-  GEOPOINT dloc;
-  int ilast = 0;
-  for (double d=0.25; d<=1.0; d+= 0.25) {
-    FindLatitudeLongitude(start,
-			  Basic().TrackBearing,
-			  distance_max*d,
-			  &dloc);
-
-    double distance0 = Distance(start, dloc);
-    double distance1 = Distance(dloc, target);
-    double distance = (distance0+distance1)/Calculated().WaypointDistance;
-    int idist = iround((distance-1.0)*100);
-
-    if ((idist != ilast) && (idist>0) && (idist<1000)) {
-
-      TCHAR Buffer[5];
-      _stprintf(Buffer, TEXT("%d"), idist);
-      POINT sc;
-      RECT brect;
-      LonLat2Screen(dloc, sc);
-      SIZE tsize = canvas.text_size(Buffer);
-
-      brect.left = sc.x-4;
-      brect.right = brect.left+tsize.cx+4;
-      brect.top = sc.y-4;
-      brect.bottom = brect.top+tsize.cy+4;
-
-      if (label_block.check(brect)) {
-        canvas.text(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
-	ilast = idist;
-      }
-    }
-  }
-}
 
 void
 MapWindow::DrawProjectedTrack(Canvas &canvas)

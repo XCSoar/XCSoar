@@ -140,10 +140,10 @@ AirspaceClientCalc airspace_calc(airspace_database,
 GlideComputer glide_computer(task_calc,
                              airspace_calc);
 
+/*
 void
 test_task()
 {
-
 //    task_behaviour.all_off();
 //    task_behaviour.optimise_targets_range = true;
 //  task_behaviour.auto_mc=true;
@@ -158,7 +158,6 @@ test_task()
   glide_polar.set_mc(fixed_two);
   task_manager.set_glide_polar(glide_polar);
 
-  /*
   OrderedTaskPoint *tp;
   const Waypoint *wp;
 
@@ -189,11 +188,10 @@ test_task()
     tp = fact.createFinish(AbstractTaskFactory::FINISH_LINE, *wp);
     fact.append(tp, false);
   }
-  */
 
   task_ui.task_load_default();
 }
-
+*/
 
 void
 XCSoarInterface::PreloadInitialisation(bool ask)
@@ -251,9 +249,7 @@ XCSoarInterface::AfterStartup()
   LogStartUp(TEXT("Create default task"));
   task_manager.default_task(Basic().Location);
 
-#ifndef OLD_TASK
-  test_task(); // for testing only
-#endif
+  task_ui.task_load_default();
 
   task_manager.resume();
 

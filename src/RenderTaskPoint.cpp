@@ -43,6 +43,7 @@ RenderTaskPoint::Visit(const UnorderedTaskPoint& tp)
   }
   if (m_layer == 3) {
     draw_bearing(tp);
+    draw_off_track(tp);
   }
   m_index++;
 }
@@ -87,6 +88,7 @@ RenderTaskPoint::Visit(const FinishPoint& tp)
   draw_ordered(tp);
   if (m_layer == 3) {
     draw_bearing(tp);
+    draw_off_track(tp);
     draw_target(tp);
   }
 }
@@ -100,6 +102,7 @@ RenderTaskPoint::Visit(const AATPoint& tp)
   if (m_layer == 3) {
     draw_isoline(tp);
     draw_bearing(tp);
+    draw_off_track(tp);
     draw_target(tp);
   }
 }
@@ -112,6 +115,7 @@ RenderTaskPoint::Visit(const ASTPoint& tp)
   draw_ordered(tp);
   if (m_layer == 3) {
     draw_bearing(tp);
+    draw_off_track(tp);
     draw_target(tp);
   }
 }
@@ -289,4 +293,10 @@ RenderTaskPoint::draw_oz_foreground(const OrderedTaskPoint& tp)
   ozv.set_current(point_current());
   ozv.set_background(false);
   tp.CAccept_oz(ozv);
+}
+
+void 
+RenderTaskPoint::draw_off_track(const TaskPoint &tp) 
+{
+
 }

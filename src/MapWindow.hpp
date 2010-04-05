@@ -211,7 +211,6 @@ private:
   void DrawGPSStatus(Canvas &canvas, const RECT rc, const GPS_STATE &gps);
   void DrawTrail(Canvas &canvas);
   void DrawTeammate(Canvas &canvas);
-  void DrawOffTrackIndicator(Canvas &canvas);
   void DrawProjectedTrack(Canvas &canvas);
   void DrawTask(Canvas &canvas, RECT rc, Canvas &buffer);
   void DrawThermalEstimate(Canvas &canvas);

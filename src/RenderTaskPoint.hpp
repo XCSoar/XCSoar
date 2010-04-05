@@ -71,6 +71,7 @@ protected:
   bool do_draw_isoline(const TaskPoint &tp);
   void draw_bearing(const TaskPoint &tp);
   virtual void draw_target(const TaskPoint &tp);
+  virtual void draw_off_track(const TaskPoint &tp);
   void draw_task_line(const GEOPOINT& start, const GEOPOINT& end);
   void draw_isoline(const AATPoint& tp);
   void draw_samples(const OrderedTaskPoint& tp);

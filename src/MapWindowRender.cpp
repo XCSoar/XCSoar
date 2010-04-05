@@ -275,10 +275,6 @@ void MapWindow::RenderSymbology_lower(Canvas &canvas, const RECT rc)
 {
   if (Basic().gps.Connected) {
     // TODO enhancement: don't draw offtrack indicator if showing spot heights
-#ifdef OLD_TASK
-    DrawProjectedTrack(canvas);
-    DrawOffTrackIndicator(canvas);
-#endif
     DrawBestCruiseTrack(canvas);
   }
 
