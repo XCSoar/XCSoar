@@ -304,7 +304,7 @@ Profile::Use()
   Profile::Get(szProfileStartMaxSpeedMargin,
 		  settings_task.start_max_speed_margin);
 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // airspace priority
   for (i = 0; i < AIRSPACECLASSCOUNT; i++) {
     Profile::Get(szProfileAirspacePriority[i], AirspacePriority[i]);
   }
@@ -692,7 +692,7 @@ Profile::Use()
   // IndFinalGlide
   // IndLandable
 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // auto mc mode
   Profile::Get(szProfileAutoMcMode,
 		  SetSettingsComputer().auto_mc_mode);
 #endif

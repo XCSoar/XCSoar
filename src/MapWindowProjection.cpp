@@ -142,7 +142,7 @@ MapWindowProjection::CalculateOrientationTargetPan
   // Target pan mode, show track up when looking at current task point,
   // otherwise north up.  If circling, orient towards target.
 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // target control
 
   _origin_centered = true;
   if (((int)task.getActiveIndex()==settings.TargetPanIndex)
@@ -222,16 +222,18 @@ MapWindowProjection::GetMapResolutionFactor(void) const
   return IBLSCALE(30);
 }
 
-fixed MapWindowProjection::LimitMapScale(fixed value,
-                                         const SETTINGS_MAP& settings_map) {
+fixed 
+MapWindowProjection::LimitMapScale(fixed value,
+                                   const SETTINGS_MAP& settings_map) {
 
   fixed minreasonable;
 
   minreasonable = 0.05;
 
   if (settings_map.AutoZoom && DisplayMode != dmCircling) {
-#ifdef OLD_TASK
-    if (task.getSettings().AATEnabled && (task.getActiveIndex()>0)) {
+#ifdef OLD_TASK // auto zoom 
+    if (Calculated().common_stats.active_has_previous &&
+        Calculated().common_stats.ordered_has_targets) {
       minreasonable = 0.88;
     } else {
       minreasonable = 0.44;
@@ -373,7 +375,7 @@ MapWindowProjection::UpdateMapScale(const DERIVED_INFO &DerivedDrawInfo,
   }
 
   // if there is an active waypoint
-#ifdef OLD_TASK
+#ifdef OLD_TASK // auto zoom
   if (task.Valid()) {
     int task_index = task.getWaypointIndex();
 

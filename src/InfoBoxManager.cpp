@@ -1046,7 +1046,7 @@ InfoBoxManager::Update(InfoBox &info_box, unsigned type, bool needupdate)
       info_box.SetComment(_T(""));
       break;
     }
-#ifdef OLD_TASK
+#ifdef OLD_TASK // alternates
     if (FlipBoxValue == true) {
       Units::FormatUserDistance(way_points.get_calc(ActiveAlternate).Distance,
                                 sTmp, sizeof(sTmp) / sizeof(sTmp[0]));

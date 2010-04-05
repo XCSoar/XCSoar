@@ -167,7 +167,7 @@ MapWindow::DrawTask(Canvas &canvas, const RECT rc, Canvas &buffer)
   }
 }
 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // projected track line
 
 void
 MapWindow::DrawProjectedTrack(Canvas &canvas)

@@ -197,7 +197,7 @@ MapWindow::on_mouse_double(int x, int y)
 bool
 MapWindow::on_mouse_move(int x, int y, unsigned keys)
 {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // target control
   if (task != NULL &&
       task->getSettings().AATEnabled &&
       SettingsMap().TargetPan &&
@@ -243,7 +243,7 @@ MapWindow::on_mouse_down(int x, int y)
   XstartScreen = x;
   YstartScreen = y;
 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // target control
   if (task != NULL &&
       task->getSettings().AATEnabled &&
       SettingsMap().TargetPan) {
@@ -322,7 +322,7 @@ MapWindow::on_mouse_up(int x, int y)
   GEOPOINT G;
   Screen2LonLat(x, y, G);
 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // target control
   if (task != NULL &&
       task->getSettings().AATEnabled &&
       my_target_pan &&

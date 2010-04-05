@@ -316,12 +316,6 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     LocalPath(path);
   #endif
 
-#ifdef OLD_TASK
-  if (task.isTaskModified()) {
-    task.SaveDefaultTask();
-  }
-#endif
-
   WriteLock();
   DiskBufferReset();
   Unlock();
@@ -573,7 +567,7 @@ LoggerImpl::LoggerDeviceDeclare()
   Profile::Get(szProfileAircraftType, Decl.AircraftType, 32);
   Profile::Get(szProfileAircraftRego, Decl.AircraftRego, 32);
 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // task declaration
   for (unsigned i = 0; task.ValidTaskPoint(i); i++) {
     Decl.waypoint[i] = &task.getWaypoint(i);
   }
@@ -819,7 +813,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
   TCHAR TaskMessage[1024];
   _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // task declaration
   if (task.Valid()) {
     for (unsigned i = 0; task.ValidTaskPoint(i); i++) {
       _tcscat(TaskMessage, task.getWaypoint(i).Name);
@@ -838,7 +832,7 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
       StartLogger(gps_info, settings, strAssetNumber);
       LoggerHeader(gps_info);
 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // task declaration
       if (task.Valid()) {
         int ntp = task.getFinalWaypoint();
         StartDeclaration(gps_info, ntp);
