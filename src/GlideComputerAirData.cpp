@@ -476,7 +476,7 @@ GlideComputerAirData::OnLanding()
   // JMWX  restore data calculated at finish so
   // user can review flight as at finish line
 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // persistence of finish condition
   if (Calculated().ValidFinish) {
     RestoreFinish();
   }

@@ -43,7 +43,7 @@ Copyright_License {
 void 
 GlideComputerTaskEvents::transition_enter(const TaskPoint &tp) 
 {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // fast logging on OZ entry
   GlideComputerStats::SetFastLogging();
 #endif
 }
@@ -64,7 +64,7 @@ void
 GlideComputerTaskEvents::task_start()
 {
   InputEvents::processGlideComputer(GCE_TASK_START);
-#ifdef OLD_TASK
+#ifdef OLD_TASK // start task event
   GlideComputerBlackboard::StartTask();
   GlideComputerStats::StartTask();
 #endif

@@ -173,7 +173,7 @@ bool ButtonLabel::ExpandMacros(const TCHAR *In,
                           TEXT("Waypoint\nStart"),
                           TEXT("Waypoint\nPrevious"), Size);
     } 
-#ifdef OLD_TASK
+#ifdef OLD_TASK // multiple start points
     else if (task.getSettings().EnableMultipleStartPoints) {
       invalid |= !task.ValidTaskPoint(0);
       CondReplaceInString((task.getActiveIndex()==0),

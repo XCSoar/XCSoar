@@ -714,7 +714,7 @@ CalculateArc(TCHAR *Text)
 }
 
 /*
-OLD_TASK
+OLD_TASK boundary wrap 180
     // JMW detect airspace that wraps across 180
     if ((area.bounds.minx< -90) && (area.bounds.maxx>90)) {
       double tmp = area.bounds.minx;

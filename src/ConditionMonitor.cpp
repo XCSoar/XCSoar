@@ -199,7 +199,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-#ifdef OLD_TASK    
+#ifdef OLD_TASK    // final glide messages
     if (!cmp.Basic().Flying || !task.Valid())
       return false;
 
@@ -268,7 +268,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // sunset time warning
     if (!task.Valid() || !cmp.Basic().Flying)
       return false;
 
@@ -318,7 +318,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // aat time warnings
     if (!task.getSettings().AATEnabled || !task.Valid()
         || task.TaskIsTemporary() || !(cmp.Calculated().ValidStart
         && !cmp.Calculated().ValidFinish) || !cmp.Basic().Flying)
@@ -367,7 +367,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // start condition warnings
     if (!task.Valid()
         || !cmp.Basic().Flying
         || (task.getActiveIndex() > 0)
@@ -422,7 +422,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // terrain warning messages
     if (!cmp.Basic().Flying || !task.Valid())
       return false;
 

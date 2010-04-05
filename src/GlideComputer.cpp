@@ -194,7 +194,7 @@ static PeriodClock last_team_code_update;
 void
 GlideComputer::CalculateOwnTeamCode()
 {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // team code
   // No reference waypoint for teamcode calculation chosen -> cancel
   if (SettingsComputer().TeamCodeRefWaypoint < 0)
     return;
@@ -233,7 +233,7 @@ GlideComputer::CalculateOwnTeamCode()
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // team code
   static bool InTeamSector = false;
 
   // No reference waypoint for teamcode calculation chosen -> cancel
@@ -333,7 +333,7 @@ GlideComputer::OnDepartedThermal()
 void
 GlideComputer::FLARM_ScanTraffic()
 {
-#ifdef OLD_TASK
+#ifdef OLD_TASK // flarm team code
   // If (not FLARM available) cancel
   if (!Basic().flarm.FLARM_Available)
     return;
