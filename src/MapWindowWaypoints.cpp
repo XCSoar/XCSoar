@@ -47,9 +47,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-// JMW OLD_TASK TODO: add visitor for task to draw task waypoints
-// (can use same class WaypointVisitorMap)
-
 //FIX
 void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
 			 TextInBoxMode_t Mode, int AltArivalAGL,

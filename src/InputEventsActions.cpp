@@ -1354,7 +1354,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (_tcscmp(misc, TEXT("Teamcode")) == 0)
     dlgTeamCodeShowModal();
   else if (_tcscmp(misc, TEXT("Target")) == 0)
-#ifdef OLD_TASK
+#ifdef OLD_TASK // target control
     dlgTarget();
 #else
 	(void)1;
