@@ -45,6 +45,7 @@ const TCHAR* OrderedTaskFactoryDescription(OrderedTask::Factory_t type);
 const TCHAR* OrderedTaskFactoryName(OrderedTask::Factory_t type);
 void OrderedTaskSummary(OrderedTask* task, TCHAR* text);
 void OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* text);
+bool OrderedTaskSave(const OrderedTask& task, bool noask=false);
 
 const TCHAR* OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type);
 const TCHAR* OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type);

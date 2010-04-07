@@ -47,6 +47,7 @@ struct NMEA_INFO;
 struct SETTINGS_COMPUTER;
 
 class LoggerImpl;
+class OrderedTask;
 
 class Logger {
 private:
@@ -71,7 +72,7 @@ public:
                        bool noAsk = false);
   void guiStopLogger(const NMEA_INFO &gps_info,
                      bool noAsk = false);
-  void LoggerDeviceDeclare();
+  void LoggerDeviceDeclare(const OrderedTask& task);
   void LoggerNote(const TCHAR *text);
   void clearBuffer();
 };

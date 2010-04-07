@@ -143,10 +143,10 @@ Logger::guiStopLogger(const NMEA_INFO &gps_info,
 }
 
 void
-Logger::LoggerDeviceDeclare()
+Logger::LoggerDeviceDeclare(const OrderedTask& task)
 {
   Poco::ScopedRWLock protect(lock, true);
-  return _logger->LoggerDeviceDeclare();
+  return _logger->LoggerDeviceDeclare(task);
 }
 
 void

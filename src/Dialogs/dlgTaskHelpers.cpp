@@ -37,10 +37,14 @@ Copyright_License {
 */
 
 #include "dlgTaskHelpers.hpp"
+#include "Dialogs/Internal.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Units.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
+#include "TaskClientUI.hpp"
+#include "Components.hpp"
+#include "LocalPath.hpp"
 
 #include <assert.h>
 
@@ -262,4 +266,21 @@ const TCHAR* OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type)
     assert(1);
   };
   return NULL;
+}
+
+bool OrderedTaskSave(const OrderedTask& task, bool noask)
+{
+  if (noask || MessageBoxX(gettext(_T("Save task?")),
+                           gettext(_T("Task Selection")),
+                           MB_YESNO|MB_ICONQUESTION) == IDYES) {
+    tstring fname;
+    if (dlgTextEntryShowModal(fname, 10)) {
+      TCHAR path[MAX_PATH];
+      fname += _T(".tsk");
+      LocalPath(path, fname.c_str());
+      task_ui.task_save(path, task);
+      return true;
+    };
+  }
+  return false;
 }

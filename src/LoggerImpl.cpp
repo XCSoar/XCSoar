@@ -556,15 +556,11 @@ LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev,
 }
 
 void
-LoggerImpl::LoggerDeviceDeclare()
+LoggerImpl::LoggerDeviceDeclare(const OrderedTask& task)
 {
   DeclaredToDevice = false;
   bool found_logger = false;
-  OrderedTask* task = task_ui.task_clone();
-  if (!task) return;
-
-  const Declaration decl(*task);
-  delete task;
+  const Declaration decl(task);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     if (LoggerDeclare(&DeviceList[i], decl))

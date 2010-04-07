@@ -52,6 +52,7 @@ Copyright_License {
 struct NMEA_INFO;
 struct SETTINGS_COMPUTER;
 struct Declaration;
+class OrderedTask;
 
 class LoggerImpl {
 public:
@@ -91,7 +92,7 @@ public:
                        bool noAsk = false);
   void guiStopLogger(const NMEA_INFO &gps_info,
                      bool noAsk = false);
-  void LoggerDeviceDeclare();
+  void LoggerDeviceDeclare(const OrderedTask& task);
   void LoggerNote(const TCHAR *text);
   void clearBuffer();
 

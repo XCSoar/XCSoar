@@ -182,11 +182,36 @@ OnTaskListEnter(unsigned ItemIndex)
   }
 }
 
+static void
+OnDeclareClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  logger.LoggerDeviceDeclare(*ordered_task);
+}
+
+static void
+OnSaveClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  if (!ordered_task->check_task()) {
+    MessageBoxX (gettext(TEXT("Task invalid.  Not saved.")),
+                 TEXT("Task Edit"), MB_OK);
+    return;
+  }
+
+  if (OrderedTaskSave(*ordered_task, true)) {
+    MessageBoxX (gettext(TEXT("Task saved")),
+                 TEXT("Task Edit"), MB_OK);
+  }
+}
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnPropertiesClicked),
   DeclareCallBackEntry(OnNewClicked),
+  DeclareCallBackEntry(OnSaveClicked),
   DeclareCallBackEntry(OnTaskPaint),
+  DeclareCallBackEntry(OnDeclareClicked),
   DeclareCallBackEntry(NULL)
 };
 

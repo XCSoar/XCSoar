@@ -43,7 +43,6 @@ Copyright_License {
 #include "Logger.hpp"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
-#include "LocalPath.hpp"
 #include "DataField/FileReader.hpp"
 #include "StringUtil.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
@@ -171,18 +170,9 @@ static void
 OnTaskListEnter(unsigned ItemIndex)
 {
   if (cursor_is_active()) {
-    if (MessageBoxX(gettext(_T("Save task?")),
-                    gettext(_T("Task Selection")),
-                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
-      tstring fname;
-      if (dlgTextEntryShowModal(fname, 10)) {
-        TCHAR path[MAX_PATH];
-        fname += _T(".tsk");
-        LocalPath(path, fname.c_str());
-        task_ui.task_save(path, *active_task);
-        task_store.scan();
-        RefreshView();
-      };
+    if (OrderedTaskSave(*active_task)) {
+      task_store.scan();
+      RefreshView();
     }
     return;
   }
