@@ -45,14 +45,7 @@ Copyright_License {
 #include "Math/SunEphemeris.hpp"
 #include "LocalTime.hpp"
 #include "InputEvents.h"
-#include "Math/SunEphemeris.hpp"
 #include "GlideComputer.hpp"
-#include "Components.hpp"
-
-#ifdef OLD_TASK
-#include "WayPoint.hpp"
-#include "WayPointList.hpp"
-#endif
 
 #include <math.h>
 
