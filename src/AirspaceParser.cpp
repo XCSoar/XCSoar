@@ -50,6 +50,8 @@ Copyright_License {
 
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
+#include "Compatibility/string.h"
+
 
 #include <math.h>
 #include <tchar.h>
