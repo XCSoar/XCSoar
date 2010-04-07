@@ -674,6 +674,7 @@ public:
   void set_ordered_task_behaviour(const OrderedTaskBehaviour& ob);
 
   OrderedTaskPoint* get_tp(const unsigned index);
+  const OrderedTaskPoint* get_tp(const unsigned index) const;
 
 #ifdef DO_PRINT
   void print(const AIRCRAFT_STATE &state);

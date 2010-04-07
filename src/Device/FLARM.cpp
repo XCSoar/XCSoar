@@ -62,7 +62,7 @@ FlarmDeclareSetGet(ComPort *port, TCHAR *Buffer)
 }
 
 bool
-FlarmDeclare(ComPort *port, const struct Declaration *decl)
+FlarmDeclare(ComPort *port, const Declaration *decl)
 {
   assert(port != NULL);
 
@@ -93,14 +93,12 @@ FlarmDeclare(ComPort *port, const struct Declaration *decl)
   if (!FlarmDeclareSetGet(port, Buffer))
     result = false;
 
-#ifdef OLD_TASK
-
-  for (int i = 0; i < decl->num_waypoints; i++) {
+  for (unsigned i = 0; i < decl->size(); ++i) {
     int DegLat, DegLon;
     double tmp, MinLat, MinLon;
     char NoS, EoW;
 
-    tmp = decl->waypoint[i]->Location.Latitude;
+    tmp = decl->get_location(i).Latitude;
     NoS = 'N';
     if(tmp < 0)
       {
@@ -110,7 +108,7 @@ FlarmDeclare(ComPort *port, const struct Declaration *decl)
     DegLat = (int)tmp;
     MinLat = (tmp - DegLat) * 60 * 1000;
 
-    tmp = decl->waypoint[i]->Location.Longitude;
+    tmp = decl->get_location(i).Longitude;
     EoW = 'E';
     if(tmp < 0)
       {
@@ -123,11 +121,10 @@ FlarmDeclare(ComPort *port, const struct Declaration *decl)
     _stprintf(Buffer,
 	      _T("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"),
 	      DegLat, MinLat, NoS, DegLon, MinLon, EoW,
-	      decl->waypoint[i]->Name);
+	      decl->get_name(i));
     if (!FlarmDeclareSetGet(port, Buffer))
       result = false;
   }
-#endif
 
   _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
   if (!FlarmDeclareSetGet(port, Buffer))

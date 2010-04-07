@@ -1115,6 +1115,16 @@ OrderedTask::get_tp(const unsigned position)
   }
 }
 
+const OrderedTaskPoint* 
+OrderedTask::get_tp(const unsigned position) const
+{
+  if (position>= task_size()) {
+    return NULL;
+  } else {
+    return tps[position];
+  }
+}
+
 bool 
 OrderedTask::is_max_size() const
 {

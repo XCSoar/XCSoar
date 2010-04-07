@@ -40,17 +40,23 @@ Copyright_License {
 #define XCSOAR_DEVICE_DECLARATION_H
 
 #include "Sizes.h"
-
+#include <vector>
 #include <tchar.h>
+#include "Navigation/GeoPoint.hpp"
+
+class OrderedTask;
+class Waypoint;
 
 struct Declaration {
+public:
+  Declaration(const OrderedTask& task);
   TCHAR PilotName[64];
   TCHAR AircraftType[32];
   TCHAR AircraftRego[32];
-  int num_waypoints;
-#ifdef OLD_TASK
-  const struct WAYPOINT *waypoint[MAXTASKPOINTS];
-#endif
+  std::vector<Waypoint> waypoints;
+  const TCHAR* get_name(const unsigned i) const;
+  const GEOPOINT& get_location(const unsigned i) const;
+  size_t size() const;
 };
 
 #endif

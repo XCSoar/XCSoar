@@ -324,6 +324,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/XCSoar.cpp \
 	\
 	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/List.cpp \
 	$(SRC)/Device/device.cpp \

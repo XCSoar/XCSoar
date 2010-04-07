@@ -46,6 +46,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
 #include "NMEA/Info.hpp"
+#include "Waypoint/Waypoint.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -72,12 +73,9 @@ protected:
 public:
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
                          bool enable_baro);
-#ifdef OLD_TASK
-  virtual bool Declare(const struct Declaration *declaration);
-#endif
+  virtual bool Declare(const Declaration *declaration);
 };
 
-#ifdef OLD_TASK
 static bool
 ExpectStringWait(ComPort *port, const TCHAR *token)
 {
@@ -106,7 +104,6 @@ ExpectStringWait(ComPort *port, const TCHAR *token)
   #endif
   return false;
 }
-#endif
 
 bool
 EWMicroRecorderDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
@@ -172,7 +169,6 @@ EWMicroRecorderDevice::TryConnect()
   return false;
 }
 
-#ifdef OLD_TASK
 
 static void
 EWMicroRecorderPrintf(ComPort *port, const TCHAR *fmt, ...)
@@ -189,7 +185,7 @@ EWMicroRecorderPrintf(ComPort *port, const TCHAR *fmt, ...)
 
 static void
 EWMicroRecorderWriteWayPoint(ComPort *port,
-                             const WAYPOINT &way_point, const TCHAR *EWType)
+                             const Waypoint &way_point, const TCHAR *EWType)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
@@ -220,20 +216,20 @@ EWMicroRecorderWriteWayPoint(ComPort *port,
   MinLon = (tmp - DegLon) * 60 * 1000;
 
   EWMicroRecorderPrintf(port,
-            _T("%-17s %02d%05d%c%03d%05d%c %s\r\n"),
-            EWType,
-            DegLat, (int)MinLat, NoS,
-            DegLon, (int)MinLon, EoW,
-            way_point.Name);
+                        _T("%-17s %02d%05d%c%03d%05d%c %s\r\n"),
+                        EWType,
+                        DegLat, (int)MinLat, NoS,
+                        DegLon, (int)MinLon, EoW,
+                        way_point.Name.c_str());
 }
 
 bool
-EWMicroRecorderDevice::Declare(const struct Declaration *decl)
+EWMicroRecorderDevice::Declare(const Declaration *decl)
 {
   nDeclErrorCode = 0;
 
   // Must have at least two, max 12 waypoints
-  if (decl->num_waypoints < 2 || decl->num_waypoints > 12)
+  if (decl->size() < 2 || decl->size() > 12)
     return false;
 
   port->StopRxThread();
@@ -253,20 +249,22 @@ EWMicroRecorderDevice::Declare(const struct Declaration *decl)
                _T("Aircraft Type:"), decl->AircraftType);
   port->WriteString(_T("Description:      Declaration\r\n"));
 
-  for (int i = 0; i < 11; i++) {
-    const WAYPOINT &wp = *decl->waypoint[i];
-    if (i == 0) {
-      EWMicroRecorderWriteWayPoint(port, wp, _T("Take Off LatLong:"));
-      EWMicroRecorderWriteWayPoint(port, wp, _T("Start LatLon:"));
-    } else if (i + 1 < decl->num_waypoints) {
-      EWMicroRecorderWriteWayPoint(port, wp, _T("TP LatLon:"));
-    } else {
+  for (unsigned i = 0; i < 11; i++) {
+    if (i+1>= decl->size()) {
       EWMicroRecorderPrintf(port, _T("%-17s %s\r\n"),
                _T("TP LatLon:"), _T("0000000N00000000E TURN POINT\r\n"));
+    } else {
+      const Waypoint &wp = decl->waypoints[i];
+      if (i == 0) {
+        EWMicroRecorderWriteWayPoint(port, wp, _T("Take Off LatLong:"));
+        EWMicroRecorderWriteWayPoint(port, wp, _T("Start LatLon:"));
+      } else if (i + 1 < decl->size()) {
+        EWMicroRecorderWriteWayPoint(port, wp, _T("TP LatLon:"));
+      }
     }
   }
 
-  const WAYPOINT &wp = *decl->waypoint[decl->num_waypoints - 1];
+  const Waypoint &wp = decl->waypoints[decl->size() - 1];
   EWMicroRecorderWriteWayPoint(port, wp, _T("Finish LatLon:"));
   EWMicroRecorderWriteWayPoint(port, wp, _T("Land LatLon:"));
 
@@ -284,7 +282,6 @@ EWMicroRecorderDevice::Declare(const struct Declaration *decl)
   return nDeclErrorCode == 0; // return true on success
 }
 
-#endif
 
 static Device *
 EWMicroRecorderCreateOnComPort(ComPort *com_port)

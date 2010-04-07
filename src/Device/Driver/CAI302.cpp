@@ -50,6 +50,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Units.hpp"
 #include "NMEA/Info.hpp"
+#include "Waypoint/Waypoint.hpp"
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -140,18 +141,14 @@ public:
   virtual bool PutMacCready(double MacCready);
   virtual bool PutBugs(double bugs);
   virtual bool PutBallast(double ballast);
-#ifdef OLD_TASK
-  virtual bool Declare(const struct Declaration *declaration);
-#endif
+  virtual bool Declare(const Declaration *declaration);
 };
 
-#ifdef OLD_TASK
 //static cai302_Wdata_t cai302_Wdata;
 static cai302_OdataNoArgs_t cai302_OdataNoArgs;
 static cai302_OdataPilot_t cai302_OdataPilot;
 static cai302_GdataNoArgs_t cai302_GdataNoArgs;
 static cai302_Gdata_t cai302_Gdata;
-#endif
 
 // Additional sentance for CAI302 support
 static bool
@@ -242,15 +239,14 @@ CAI302Device::Open()
   return true;
 }
 
-#ifdef OLD_TASK
 static int DeclIndex = 128;
 static int nDeclErrorCode;
 
 static bool
-cai302DeclAddWayPoint(ComPort *port, const WAYPOINT &way_point);
+cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point);
 
 bool
-CAI302Device::Declare(const struct Declaration *decl)
+CAI302Device::Declare(const Declaration *decl)
 {
   TCHAR PilotName[25];
   TCHAR GliderType[13];
@@ -393,8 +389,8 @@ CAI302Device::Declare(const struct Declaration *decl)
 
   DeclIndex = 128;
 
-  for (int i = 0; i < decl->num_waypoints; i++)
-    cai302DeclAddWayPoint(port, *decl->waypoint[i]);
+  for (unsigned i = 0; i < decl->size(); ++i)
+    cai302DeclAddWayPoint(port, decl->waypoints[i]);
 
   if (nDeclErrorCode == 0){
 
@@ -425,7 +421,7 @@ CAI302Device::Declare(const struct Declaration *decl)
 }
 
 static bool
-cai302DeclAddWayPoint(ComPort *port, const WAYPOINT &way_point)
+cai302DeclAddWayPoint(ComPort *port, const Waypoint &way_point)
 {
   TCHAR Name[13];
   TCHAR  szTmp[128];
@@ -436,7 +432,7 @@ cai302DeclAddWayPoint(ComPort *port, const WAYPOINT &way_point)
   if (nDeclErrorCode != 0)
     return false;
 
-  _tcsncpy(Name, way_point.Name, 12);
+  _tcsncpy(Name, way_point.Name.c_str(), 12);
   Name[12] = '\0';
 
   tmp = way_point.Location.Latitude;
@@ -479,8 +475,6 @@ cai302DeclAddWayPoint(ComPort *port, const WAYPOINT &way_point)
 
   return true;
 }
-
-#endif
 
 static Device *
 CAI302CreateOnComPort(ComPort *com_port)

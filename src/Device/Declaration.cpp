@@ -36,40 +36,35 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DEVICE_HPP
-#define XCSOAR_DEVICE_DEVICE_HPP
+#include "Declaration.hpp"
+#include "Task/Tasks/OrderedTask.hpp"
+#include "Profile.hpp"
 
-#include "Device/Declaration.hpp"
+Declaration::Declaration(const OrderedTask& task)
+{
+  Profile::Get(szProfilePilotName, PilotName, 64);
+  Profile::Get(szProfileAircraftType, AircraftType, 32);
+  Profile::Get(szProfileAircraftRego, AircraftRego, 32);
 
-#include <tchar.h>
-#include <stdio.h>
+  for (unsigned i=0; i< task.task_size(); i++) {
+    waypoints.push_back(task.get_tp(i)->get_waypoint());
+  }
+}
 
-class Mutex;
-class DeviceDescriptor;
+const TCHAR* 
+Declaration::get_name(const unsigned i) const
+{
+  return waypoints[i].Name.c_str();
+}
 
-extern Mutex mutexComm;
+const GEOPOINT& 
+Declaration::get_location(const unsigned i) const
+{
+  return waypoints[i].Location;
+}
 
-void devWriteNMEAString(DeviceDescriptor &d, const TCHAR *Text);
-void VarioWriteNMEA(const TCHAR *Text);
-struct DeviceDescriptor *devVarioFindVega(void);
-
-bool devHasBaroSource(void);
-bool devDeclare(DeviceDescriptor &d, const struct Declaration *decl);
-bool devIsLogger(const DeviceDescriptor &d);
-bool devIsGPSSource(const DeviceDescriptor &d);
-bool devIsBaroSource(const DeviceDescriptor &d);
-
-/**
- * Returns true if at least one of the connected device is a Condor
- * flight simulator.
- */
-bool
-HaveCondorDevice();
-
-void devConnectionMonitor();
-
-void devStartup(const TCHAR *lpCmdLine);
-void devShutdown();
-void devRestart(void);
-
-#endif
+size_t 
+Declaration::size() const
+{
+  return waypoints.size();
+}

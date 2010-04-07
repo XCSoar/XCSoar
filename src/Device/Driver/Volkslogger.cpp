@@ -51,6 +51,7 @@ Copyright_License {
 #include "Device/Volkslogger/vlapihlp.h"
 #include "Components.hpp"
 #include "NMEA/Info.hpp"
+#include "Waypoint/Waypoint.hpp"
 
 class VolksloggerDevice : public AbstractDevice {
 private:
@@ -62,9 +63,7 @@ public:
 public:
   virtual bool ParseNMEA(const TCHAR *line, struct NMEA_INFO *info,
                          bool enable_baro);
-#ifdef OLD_TASK
-  virtual bool Declare(const struct Declaration *declaration);
-#endif
+  virtual bool Declare(const Declaration *declaration);
 };
 
 // RMN: Volkslogger
@@ -130,14 +129,13 @@ VolksloggerDevice::ParseNMEA(const TCHAR *String, NMEA_INFO *GPS_INFO,
 
 static VLAPI vl;
 
-#ifdef OLD_TASK
-static int nturnpoints = 0;
+static unsigned nturnpoints = 0;
 
 static bool
 VLDeclAddWayPoint(const Waypoint &way_point);
 
 bool
-VolksloggerDevice::Declare(const struct Declaration *decl)
+VolksloggerDevice::Declare(const Declaration *decl)
 {
   XCSoarInterface::CreateProgressDialog(gettext(_T("Comms with Volkslogger")));
 
@@ -167,6 +165,7 @@ VolksloggerDevice::Declare(const struct Declaration *decl)
     sprintf(temp, "%S", decl->AircraftType);
     strncpy(vl.declaration.flightinfo.competitionclass, temp, 12);
 
+#ifdef OLD_TASK
     if (way_points.verify_index(XCSoarInterface::SettingsComputer().HomeWaypoint)) {
       const WAYPOINT &way_point = way_points.get(XCSoarInterface::SettingsComputer().HomeWaypoint);
 
@@ -176,17 +175,20 @@ VolksloggerDevice::Declare(const struct Declaration *decl)
       vl.declaration.flightinfo.homepoint.lon = way_point.Location.Longitude;
       vl.declaration.flightinfo.homepoint.lat = way_point.Location.Latitude;
     }
+#endif
+
   }
 
   if (err != VLA_ERR_NOERR)
     return false;
 
-  int i;
-  for (i = 0; i < decl->num_waypoints; i++)
-    VLDeclAddWayPoint(*decl->waypoint[i]);
+  unsigned i;
+  for (i = 0; i < decl->size(); i++)
+    VLDeclAddWayPoint(decl->waypoints[i]);
 
-  vl.declaration.task.nturnpoints = max(min(nturnpoints-2, 12), 0);
+  vl.declaration.task.nturnpoints = (nturnpoints<=2)? 0: std::min(nturnpoints-2, (unsigned)12);
 
+#ifdef OLD_TASK
   const SETTINGS_TASK settings = task.getSettings();
 
   // start..
@@ -261,6 +263,7 @@ VolksloggerDevice::Declare(const struct Declaration *decl)
     break;
   }
   vl.declaration.task.finishpoint.ws = 360;
+#endif
 
   bool ok = (vl.write_db_and_declaration() == VLA_ERR_NOERR);
 
@@ -273,10 +276,10 @@ VolksloggerDevice::Declare(const struct Declaration *decl)
 
 
 static bool
-VLDeclAddWayPoint(const WAYPOINT &way_point)
+VLDeclAddWayPoint(const Waypoint &way_point)
 {
   char temp[100];
-  sprintf(temp, "%S", way_point.Name);
+  sprintf(temp, "%S", way_point.Name.c_str());
 
   if (nturnpoints == 0) {
     strncpy(vl.declaration.task.startpoint.name, temp, 6);
@@ -299,7 +302,6 @@ VLDeclAddWayPoint(const WAYPOINT &way_point)
 
 }
 
-#endif
 
 static Device *
 VolksloggerCreateOnComPort(ComPort *com_port)

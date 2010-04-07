@@ -109,17 +109,17 @@ private:
                    const SETTINGS_COMPUTER &settings,
                    const TCHAR *strAssetNumber);
 
-  void AddDeclaration(double Lattitude, double Longditude, const TCHAR *ID);
+  void AddDeclaration(const GEOPOINT &location, const TCHAR *ID);
   void StartDeclaration(const NMEA_INFO &gps_info,
                         const int numturnpoints);
   void EndDeclaration(void);
-  void LoggerHeader(const NMEA_INFO &gps_info);
+  void LoggerHeader(const NMEA_INFO &gps_info, const Declaration& decl);
 
   void StopLogger(const NMEA_INFO &gps_info);
   bool IGCWriteRecord(const char *szIn, const TCHAR *);
 
   bool LoggerDeclare(struct DeviceDescriptor *dev,
-                     const struct Declaration *decl);
+                     const Declaration &decl);
   void LoggerGInit();
   
 private:

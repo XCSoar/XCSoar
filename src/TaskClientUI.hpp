@@ -43,6 +43,8 @@
 #include "Task/TaskManager.hpp"
 #include "Task/TaskAdvance.hpp"
 
+class Declaration;
+
 class TaskClientUI: public TaskClient
 {
 public:

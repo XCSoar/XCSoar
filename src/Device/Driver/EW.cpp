@@ -48,6 +48,7 @@ Copyright_License {
 
 #include <tchar.h>
 #include <stdio.h>
+#include "Waypoint/Waypoint.hpp"
 
 #define  USESHORTTPNAME   1       // hack, soulf be configurable
 
@@ -68,9 +69,7 @@ public:
 
 protected:
   bool TryConnect();
-#ifdef OLD_TASK
-  bool AddWayPoint(const WAYPOINT &way_point);
-#endif
+  bool AddWayPoint(const Waypoint &way_point);
 
 public:
   virtual void LinkTimeout();
@@ -202,10 +201,8 @@ EWDevice::Declare(const struct Declaration *decl)
       return false;
     };
   }
-#ifdef OLD_TASK
-  for (int j = 0; j < decl->num_waypoints; j++)
-    AddWayPoint(*decl->waypoint[j]);
-#endif
+  for (unsigned j = 0; j < decl->size(); ++j)
+    AddWayPoint(decl->waypoints[j]);
 
   port->WriteString(_T("NMEA\r\n"));         // switch to NMEA mode
 
@@ -220,10 +217,9 @@ EWDevice::Declare(const struct Declaration *decl)
 
 }
 
-#ifdef OLD_TASK
 
 bool
-EWDevice::AddWayPoint(const WAYPOINT &way_point)
+EWDevice::AddWayPoint(const Waypoint &way_point)
 {
   TCHAR EWRecord[100];
   TCHAR IDString[12];
@@ -239,7 +235,7 @@ EWDevice::AddWayPoint(const WAYPOINT &way_point)
     return false;
   }
 
-  _tcsncpy(IDString, way_point.Name, 6); // copy at least 6 chars
+  _tcsncpy(IDString, way_point.Name.c_str(), 6); // copy at least 6 chars
 
   while (_tcslen(IDString) < 6)                   // fill up with spaces
     _tcscat(IDString, _T(" "));
@@ -324,7 +320,6 @@ EWDevice::AddWayPoint(const WAYPOINT &way_point)
   return true;
 }
 
-#endif
 
 void
 EWDevice::LinkTimeout()

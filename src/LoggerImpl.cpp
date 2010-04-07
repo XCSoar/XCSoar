@@ -37,6 +37,8 @@
 */
 
 #include "LoggerImpl.hpp"
+#include "Components.hpp"
+#include "TaskClientUI.hpp"
 #include "Version.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language.hpp"
@@ -380,13 +382,10 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 }
 
 void
-LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
+LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info, const Declaration &decl)
 {
   char datum[] = "HFDTM100Datum: WGS-84\r\n";
   char temp[100];
-  TCHAR PilotName[100];
-  TCHAR AircraftType[100];
-  TCHAR AircraftRego[100];
 
   // Flight recorder ID number MUST go first..
   sprintf(temp, "AXCS%C%C%C\r\n",
@@ -403,16 +402,13 @@ LoggerImpl::LoggerHeader(const NMEA_INFO &gps_info)
 
   IGCWriteRecord(GetHFFXARecord(), szLoggerFileName);
 
-  Profile::Get(szProfilePilotName, PilotName, 100);
-  sprintf(temp, "HFPLTPILOT:%S\r\n", PilotName);
+  sprintf(temp, "HFPLTPILOT:%S\r\n", decl.PilotName);
   IGCWriteRecord(temp, szLoggerFileName);
 
-  Profile::Get(szProfileAircraftType, AircraftType, 100);
-  sprintf(temp, "HFGTYGLIDERTYPE:%S\r\n", AircraftType);
+  sprintf(temp, "HFGTYGLIDERTYPE:%S\r\n", decl.AircraftType);
   IGCWriteRecord(temp, szLoggerFileName);
 
-  Profile::Get(szProfileAircraftRego, AircraftRego, 100);
-  sprintf(temp, "HFGIDGLIDERID:%S\r\n", AircraftRego);
+  sprintf(temp, "HFGIDGLIDERID:%S\r\n", decl.AircraftRego);
   IGCWriteRecord(temp, szLoggerFileName);
 
   sprintf(temp, "HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_VersionStringOld);
@@ -476,10 +472,12 @@ LoggerImpl::EndDeclaration(void)
 }
 
 void
-LoggerImpl::AddDeclaration(double Latitude, double Longitude, const TCHAR *ID)
+LoggerImpl::AddDeclaration(const GEOPOINT &location, const TCHAR *ID)
 {
-  char szCRecord[500];
+  const double Latitude = location.Latitude;
+  const double Longitude = location.Longitude;
 
+  char szCRecord[500];
   char IDString[MAX_PATH];
   int i;
 
@@ -536,14 +534,14 @@ LoggerImpl::LoggerNote(const TCHAR *text)
 
 bool
 LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev,
-    const struct Declaration *decl)
+                          const Declaration &decl)
 {
   if (!devIsLogger(*dev))
     return false;
 
   if (MessageBoxX(gettext(_T("Declare Task?")),
                   dev->GetName(), MB_YESNO| MB_ICONQUESTION) == IDYES) {
-    if (devDeclare(*dev, decl)) {
+    if (devDeclare(*dev, &decl)) {
       MessageBoxX(gettext(_T("Task Declared!")),
                   dev->GetName(), MB_OK| MB_ICONINFORMATION);
       DeclaredToDevice = true;
@@ -560,24 +558,16 @@ LoggerImpl::LoggerDeclare(struct DeviceDescriptor *dev,
 void
 LoggerImpl::LoggerDeviceDeclare()
 {
-  bool found_logger = false;
-  struct Declaration Decl;
-
-  Profile::Get(szProfilePilotName, Decl.PilotName, 64);
-  Profile::Get(szProfileAircraftType, Decl.AircraftType, 32);
-  Profile::Get(szProfileAircraftRego, Decl.AircraftRego, 32);
-
-#ifdef OLD_TASK // task declaration
-  for (unsigned i = 0; task.ValidTaskPoint(i); i++) {
-    Decl.waypoint[i] = &task.getWaypoint(i);
-  }
-  Decl.num_waypoints = i;
-#endif
-
   DeclaredToDevice = false;
+  bool found_logger = false;
+  OrderedTask* task = task_ui.task_clone();
+  if (!task) return;
+
+  const Declaration decl(*task);
+  delete task;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    if (LoggerDeclare(&DeviceList[i], &Decl))
+    if (LoggerDeclare(&DeviceList[i], decl))
       found_logger = true;
 
   if (!found_logger) {
@@ -810,40 +800,37 @@ LoggerImpl::guiStartLogger(const NMEA_INFO& gps_info,
     return;
   }
 
+  OrderedTask* task = task_ui.task_clone();
+  if (!task) return;
+
+  const Declaration decl(*task);
+  delete task;
+
   TCHAR TaskMessage[1024];
   _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
 
-#ifdef OLD_TASK // task declaration
-  if (task.Valid()) {
-    for (unsigned i = 0; task.ValidTaskPoint(i); i++) {
-      _tcscat(TaskMessage, task.getWaypoint(i).Name);
+  if (decl.size()) {
+    for (unsigned i = 0; i< decl.size(); ++i) {
+      _tcscat(TaskMessage, decl.get_name(i));
       _tcscat(TaskMessage, _T("\r\n"));
     }
   } else {
     _tcscat(TaskMessage, _T("None"));
   }
-#else
-    _tcscat(TaskMessage, _T("None"));
-#endif
 
   if (noAsk || (MessageBoxX(TaskMessage, gettext(_T("Start Logger")),
                            MB_YESNO | MB_ICONQUESTION) == IDYES)) {
     if (LoggerClearFreeSpace(gps_info)) {
       StartLogger(gps_info, settings, strAssetNumber);
-      LoggerHeader(gps_info);
+      LoggerHeader(gps_info, decl);
 
-#ifdef OLD_TASK // task declaration
-      if (task.Valid()) {
-        int ntp = task.getFinalWaypoint();
-        StartDeclaration(gps_info, ntp);
-        for (unsigned i = 0; task.ValidTaskPoint(i); i++) {
-          const WAYPOINT &way_point = task.getWaypoint(i);
-          AddDeclaration(way_point.Location.Latitude,
-              way_point.Location.Longitude, way_point.Name);
+      if (decl.size()) {
+        StartDeclaration(gps_info, decl.size());
+        for (unsigned i = 0; i< decl.size(); ++i) {
+          AddDeclaration(decl.get_location(i), decl.get_name(i));
         }
         EndDeclaration();
       }
-#endif
       LoggerActive = true; // start logger after Header is completed.  Concurrency
     } else {
       MessageBoxX(gettext(_T("Logger inactive, insufficient storage!")),
