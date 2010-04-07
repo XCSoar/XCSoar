@@ -130,11 +130,6 @@ OnTaskPaint(WindowControl *Sender, Canvas &canvas)
 
   Chart chart(canvas, rc);
 
-  if (!ordered_task->check_task()) {
-    chart.DrawNoData();
-    return;
-  }
-
   BufferCanvas buffer;
   BufferCanvas stencil;
 
