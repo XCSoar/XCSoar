@@ -226,7 +226,7 @@ SetupDevice(DeviceDescriptor &device)
 
   // this is a hack, devices dont jet support device dependant setup dialogs
 
-  if (!is_simulator() && !device.IsVega())
+  if (is_simulator() || !device.IsVega())
     return;
 
   changed = dlgConfigurationVarioShowModal();
