@@ -51,7 +51,11 @@ AvFilter::update(const double x0)
 double
 AvFilter::average()
 {
-  assert(n > 0);
+  assert(n > 0); // should never get here..
+
+  if (!n) {
+    return 0;
+  }
 
   double y = 0;
   for (unsigned i = 0; i < n; i++) {
