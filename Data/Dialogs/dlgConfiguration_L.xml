@@ -529,10 +529,6 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
       </WndProperty>
     </Panel>
   
-    <Panel Name="frmTask" X=0 Y=0 Width=240 Height=222 Font=2>
-  
-    </Panel>
-  
     <Panel Name="frmTaskRules" X=0 Y=0 Width=240 Height=222 Font=2>  
       <WndProperty Name="prpStartMaxSpeed" Caption="Start max speed"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
         Help="Maximum speed allowed in start observation zone.  Set to 0 for no limit.">

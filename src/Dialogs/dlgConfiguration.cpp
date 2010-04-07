@@ -91,15 +91,14 @@ static const TCHAR *const captions[] = {
   _T("11 Appearance"),
   _T("12 Fonts"),
   _T("13 Vario Gauge and FLARM"),
-  _T("14 Task"),
-  _T("15 Default task rules"),
-  _T("16 InfoBox Cruise"),
-  _T("17 InfoBox Circling"),
-  _T("18 InfoBox Final Glide"),
-  _T("19 InfoBox Auxiliary"),
-  _T("20 Logger"),
-  _T("21 Waypoint Edit"),
-  _T("22 Experimental features"),
+  _T("14 Default task rules"),
+  _T("15 InfoBox Cruise"),
+  _T("16 InfoBox Circling"),
+  _T("17 InfoBox Final Glide"),
+  _T("18 InfoBox Auxiliary"),
+  _T("19 Logger"),
+  _T("20 Waypoint Edit"),
+  _T("21 Experimental features"),
 };
 
 static const struct {
@@ -200,7 +199,7 @@ PageSwitched()
 
   wf->SetCaption(gettext(captions[config_page]));
 
-  if ((config_page>=15) && (config_page<=18)) {
+  if ((config_page>=14) && (config_page<=17)) {
     if (buttonCopy) {
       buttonCopy->show();
     }
@@ -1234,16 +1233,6 @@ static void setVariables(void) {
 
   UpdateButtons();
 
-  /*
-    wf->ShowModal();
-
-    delete wf;
-
-    wf = NULL;
-
-    return;
-  */
-
   wp = (WndProperty*)wf->FindByName(_T("prpUserLevel"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -2232,10 +2221,6 @@ void dlgConfigurationShowModal(void){
   for (int item=0; item<10; item++) {
     cpyInfoBox[item] = -1;
   }
-
-#ifdef OLD_TASK
-  settings_task = task.getSettings();
-#endif
 
   setVariables();
   PageSwitched();
