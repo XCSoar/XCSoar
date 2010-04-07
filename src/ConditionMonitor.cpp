@@ -199,15 +199,15 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-#ifdef OLD_TASK    // final glide messages
-    if (!cmp.Basic().Flying || !task.Valid())
+    if (!cmp.Basic().flight.Flying || !cmp.Calculated().task_stats.task_valid)
       return false;
 
-    // TODO: use low pass filter
-    tad = cmp.Calculated().TaskAltitudeDifference * 0.2 + 0.8 * tad;
+    const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
 
-    bool BeforeFinalGlide = (task.ValidTaskPoint(task.getActiveIndex() + 1)
-                            && !cmp.Calculated().FinalGlide);
+    // TODO: use low pass filter
+    tad = res.AltitudeDifference * 0.2 + 0.8 * tad;
+
+    bool BeforeFinalGlide = !res.is_final_glide();
 
     if (BeforeFinalGlide) {
       Interval_Notification = 60 * 5;
@@ -218,7 +218,7 @@ protected:
         last_tad = tad;
     } else {
       Interval_Notification = 60;
-      if (cmp.Calculated().FinalGlide) {
+      if (res.is_final_glide()) {
         if ((last_tad < -50) && (tad > 1))
           // just reached final glide, previously well below
           return true;
@@ -230,7 +230,6 @@ protected:
         }
       }
     }
-#endif
     return false;
   }
 
@@ -268,14 +267,16 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-#ifdef OLD_TASK // sunset time warning
-    if (!task.Valid() || !cmp.Basic().Flying)
+    if (!cmp.Basic().flight.Flying || !cmp.Calculated().task_stats.task_valid)
       return false;
+  
+    const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
 
-    double sunsettime = sun.CalcSunTimes(task.getActiveLocation(),
+    /// @todo should be destination location
+
+    double sunsettime = sun.CalcSunTimes(cmp.Basic().Location,
         cmp.Basic().DateTime, GetUTCOffset() / 3600);
-    double d1 = (cmp.Calculated().TaskTimeToGo
-        + DetectCurrentTime(&cmp.Basic())) / 3600;
+    double d1 = (res.TimeElapsed + DetectCurrentTime(&cmp.Basic())) / 3600;
     double d0 = (DetectCurrentTime(&cmp.Basic())) / 3600;
 
     bool past_sunset = (d1 > sunsettime) && (d0 < sunsettime);
@@ -285,10 +286,6 @@ protected:
       return true;
     else
       return false;
-    }
-#else
-    return false;
-#endif
   }
 
   void
@@ -318,25 +315,21 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-#ifdef OLD_TASK // aat time warnings
-    if (!task.getSettings().AATEnabled || !task.Valid()
-        || task.TaskIsTemporary() || !(cmp.Calculated().ValidStart
-        && !cmp.Calculated().ValidFinish) || !cmp.Basic().Flying)
+    if (!cmp.Basic().flight.Flying || 
+        !cmp.Calculated().task_stats.task_valid ||
+        !cmp.Calculated().common_stats.mode_ordered ||
+        !cmp.Calculated().common_stats.ordered_valid ||
+        !cmp.Calculated().common_stats.ordered_has_targets ||
+        !cmp.Calculated().common_stats.task_started ||
+        !cmp.Calculated().common_stats.active_has_next ||
+        cmp.Calculated().common_stats.task_finished)
       return false;
 
-    bool OnFinalWaypoint = !task.Valid();
-    if (OnFinalWaypoint)
-      // can't do much about it now, so don't give a warning
-      return false;
-
-    if (cmp.Calculated().TaskTimeToGo < cmp.Calculated().AATTimeToGo)
+    if (cmp.Calculated().common_stats.task_time_remaining < 
+        cmp.Calculated().common_stats.aat_time_remaining)
       return true;
     else
       return false;
-    }
-#else
-    return false;
-#endif
   }
 
   void
@@ -414,30 +407,18 @@ public:
   {
     Interval_Notification = 60 * 5;
     Interval_Check = 1;
-    fgtt = 0;
-    fgtt_last = false;
   }
 
 protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-#ifdef OLD_TASK // terrain warning messages
-    if (!cmp.Basic().Flying || !task.Valid())
+    if (!cmp.Basic().flight.Flying || 
+        !cmp.Calculated().task_stats.task_valid)
       return false;
 
-    fgtt = !((cmp.Calculated().TerrainWarningLocation.Latitude == 0.0)
-        && (cmp.Calculated().TerrainWarningLocation.Longitude == 0.0));
-
-    if (!cmp.Calculated().FinalGlide
-        || (cmp.Calculated().TaskAltitudeDifference < -50))
-      fgtt_last = false;
-    else if ((fgtt) && (!fgtt_last))
-      // just reached final glide, previously well below
-      return true;
-    }
-#endif
-    return false;
+    const GEOPOINT null_point;
+    return (cmp.Calculated().TerrainWarningLocation != null_point);
   }
 
   void
@@ -449,12 +430,7 @@ protected:
   void
   SaveLast(void)
   {
-    fgtt_last = fgtt;
   }
-
-private:
-  bool fgtt;
-  bool fgtt_last;
 };
 
 ConditionMonitorWind cm_wind;

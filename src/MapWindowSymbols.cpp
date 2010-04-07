@@ -459,7 +459,7 @@ MapWindow::DrawFinalGlide(Canvas &canvas, const RECT rc)
   int Offset0;
   int i;
 
-  if (task != NULL && task->check_task()) {
+  if (Calculated().task_stats.task_valid) {
     const int y0 = ((rc.bottom - rc.top) / 2) + rc.top;
 
     // 60 units is size, div by 8 means 60*8 = 480 meters.
