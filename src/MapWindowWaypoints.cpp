@@ -268,7 +268,5 @@ void MapWindow::DrawWaypoints(Canvas &canvas)
                        get_glide_polar());
   way_points->visit_within_range(PanLocation, fixed(GetScreenDistanceMeters()), v);
 
-  // OLD_TASK -> new TODO, also draw waypoints in task 
-
   MapWaypointLabelSortAndRender(canvas);
 }
