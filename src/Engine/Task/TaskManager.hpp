@@ -73,13 +73,11 @@ public:
    * Constructor for task manager
    *
    * @param te Task events callback object
-   * @param tb Task behaviour options
    * @param wps Waypoint system for use by AbortTask
    *
    * @return Initialised object
    */
   TaskManager(TaskEvents &te,
-              const TaskBehaviour &tb,
               const Waypoints &wps);
 
   ~TaskManager();
@@ -423,6 +421,10 @@ public:
 
   const OrderedTaskBehaviour& get_ordered_task_behaviour() const;
 
+  void set_task_behaviour(const TaskBehaviour& behaviour) {
+    task_behaviour = behaviour;
+  }
+
 private:
   GlidePolar m_glide_polar;
 
@@ -437,7 +439,7 @@ private:
 
   OnlineContest task_olc;
 
-  const TaskBehaviour &task_behaviour;
+  TaskBehaviour task_behaviour;
 
   TaskMode_t mode;
   AbstractTask* active_task;

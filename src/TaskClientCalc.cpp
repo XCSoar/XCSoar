@@ -50,5 +50,5 @@ void
 TaskClientCalc::set_task_behaviour(const TaskBehaviour& behaviour)
 {
   ScopeLock lock(mutex);
-  m_task_behaviour = behaviour;
+  task_manager.set_task_behaviour(behaviour);
 }

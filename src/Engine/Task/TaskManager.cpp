@@ -42,16 +42,14 @@
 
 
 TaskManager::TaskManager(TaskEvents &te,
-                         const TaskBehaviour &tb,
                          const Waypoints &wps): 
   m_glide_polar(fixed_zero),
   trace_full(),
   trace_sprint(9000, 2, 300),
-  task_ordered(te,tb,m_glide_polar),
-  task_goto(te,tb,m_glide_polar),
-  task_abort(te,tb,m_glide_polar,wps),
-  task_olc(te,tb,m_glide_polar,common_stats, trace_full, trace_sprint),
-  task_behaviour(tb),
+  task_ordered(te,task_behaviour,m_glide_polar),
+  task_goto(te,task_behaviour,m_glide_polar),
+  task_abort(te,task_behaviour,m_glide_polar,wps),
+  task_olc(te,task_behaviour,m_glide_polar,common_stats, trace_full, trace_sprint),
   mode(MODE_NULL),
   active_task(NULL)
 {

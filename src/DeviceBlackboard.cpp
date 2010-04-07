@@ -63,11 +63,11 @@ DeviceBlackboard::Initialise()
   ScopeLock protect(mutexBlackboard);
 
   // Clear the gps_info and calculated_info
-  /// @todo JMW OLD_TASK TODO: make a reset() method that clears gps/calculation states
-
+  gps_info.reset();
+  calculated_info.reset();
+  
   // Set the NAVWarning positive (assume not gps found yet)
   gps_info.gps.NAVWarning = true;
-
   gps_info.gps.Simulator = false;
 
   // Clear the SwitchStates

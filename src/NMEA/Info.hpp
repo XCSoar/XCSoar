@@ -168,6 +168,12 @@ struct ACCELERATION_STATE
  * A struct that holds all the parsed data read from the connected devices
  */
 struct NMEA_INFO {
+
+  /**
+   * @todo Reset to cleared state
+   */
+  void reset() {};
+
   GPS_STATE gps;
 
   ACCELERATION_STATE acceleration;

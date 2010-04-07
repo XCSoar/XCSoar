@@ -46,9 +46,8 @@ class TaskBehaviour;
 class TaskClientCalc: public TaskClient
 {
 public:
-  TaskClientCalc(TaskManager& tm, TaskBehaviour& behaviour):
-    TaskClient(tm), 
-    m_task_behaviour(behaviour) {};
+  TaskClientCalc(TaskManager& tm):
+    TaskClient(tm) {};
 
   /** Reset the tasks (as if never flown) */
   void reset();
@@ -65,9 +64,6 @@ public:
 
   const TaskStats& get_stats() const;
   const CommonStats& get_common_stats() const;
-
-private:
-  TaskBehaviour& m_task_behaviour;
 };
 
 

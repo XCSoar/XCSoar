@@ -219,6 +219,14 @@ struct DERIVED_INFO:
   public THERMAL_LOCATOR_INFO,
   public TEAMCODE_INFO
 {
+  /**
+   * @todo Reset to cleared state
+   */
+  void reset() {
+    task_stats.reset();
+    common_stats.reset();
+  };
+
   fixed V_stf; /**< Speed to fly block/dolphin (m/s) */
 
   /** Wind speed */

@@ -110,18 +110,16 @@ ReplayLoggerGlue replay;
 
 Waypoints way_points;
 
-TaskBehaviour task_behaviour;
 GlideComputerTaskEvents task_events;
 
 TaskManager task_manager(task_events,
-                         task_behaviour,
                          way_points);
+TaskClientCalc task_calc(task_manager);
 
-TaskClientUI task_ui(task_manager, XCSoarInterface::SettingsComputer(),
+TaskClientUI task_ui(task_manager, 
+                     XCSoarInterface::SettingsComputer(),
                      task_events);
 /// @todo JMW have ui-specific task_events! Don't use glide computer's events
-
-TaskClientCalc task_calc(task_manager, task_behaviour);
 
 AIRCRAFT_STATE ac_state;
 
@@ -139,59 +137,6 @@ AirspaceClientCalc airspace_calc(airspace_database,
 
 GlideComputer glide_computer(task_calc,
                              airspace_calc);
-
-/*
-void
-test_task()
-{
-//    task_behaviour.all_off();
-//    task_behaviour.optimise_targets_range = true;
-//  task_behaviour.auto_mc=true;
-
-  task_behaviour.ordered_defaults.aat_min_time = 60*45;
-  task_behaviour.enable_olc = true;
-
-  TaskBehaviour& tb = XCSoarInterface::SetSettingsComputer();
-  tb = task_behaviour;
-
-  GlidePolar glide_polar = task_manager.get_glide_polar();
-  glide_polar.set_mc(fixed_two);
-  task_manager.set_glide_polar(glide_polar);
-
-  OrderedTaskPoint *tp;
-  const Waypoint *wp;
-
-  task_manager.set_factory(OrderedTask::FACTORY_MIXED);
-
-  AbstractTaskFactory &fact = task_manager.get_factory();
-
-  wp = way_points.lookup_name(_T("BENALLA"));
-  if (wp) {
-    tp = fact.createStart(AbstractTaskFactory::START_LINE, *wp);
-    fact.append(tp, false);
-  }
-
-  wp = way_points.lookup_name(_T("Goorambat"));
-  if (wp) {
-    tp = fact.createIntermediate(AbstractTaskFactory::AAT_CYLINDER, *wp);
-    fact.append(tp, false);
-  }
-
-  wp = way_points.lookup_name(_T("Glenrowan"));
-  if (wp) {
-    tp = fact.createIntermediate(AbstractTaskFactory::AST_CYLINDER, *wp);
-    fact.append(tp, false);
-  }
-
-  wp = way_points.lookup_name(_T("BENALLA"));
-  if (wp) {
-    tp = fact.createFinish(AbstractTaskFactory::FINISH_LINE, *wp);
-    fact.append(tp, false);
-  }
-
-  task_ui.task_load_default();
-}
-*/
 
 void
 XCSoarInterface::PreloadInitialisation(bool ask)
