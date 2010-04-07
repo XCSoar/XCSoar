@@ -136,7 +136,8 @@ AirspaceClientCalc airspace_calc(airspace_database,
                                  airspace_warning);
 
 GlideComputer glide_computer(task_calc,
-                             airspace_calc);
+                             airspace_calc,
+                             task_events);
 
 void
 XCSoarInterface::PreloadInitialisation(bool ask)

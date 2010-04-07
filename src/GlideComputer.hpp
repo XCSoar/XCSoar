@@ -45,6 +45,8 @@ Copyright_License {
 #include "GlideComputerStats.hpp"
 #include "GlideComputerTask.hpp"
 
+class GlideComputerTaskEvents;
+
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
@@ -54,7 +56,8 @@ class GlideComputer:
 {
 public:
   GlideComputer(TaskClientCalc& task,
-                AirspaceClientCalc& airspace);
+                AirspaceClientCalc& airspace,
+                GlideComputerTaskEvents& events);
 
   void ResetFlight(const bool full=true);
   void Initialise();
@@ -64,6 +67,10 @@ public:
   // TODO: make these const
   /** Returns the FlightStatistics object */
   FlightStatistics &GetFlightStats() { return flightstats; }
+
+  void OnStartTask();
+  void OnFinishTask();
+  void OnTransitionEnter();
 
 protected:
   VegaVoice    vegavoice;

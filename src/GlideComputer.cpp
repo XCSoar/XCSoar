@@ -46,19 +46,21 @@ Copyright_License {
 #include "TeamCodeCalculation.h"
 #include "Components.hpp"
 #include "PeriodClock.hpp"
+#include "GlideComputerInterface.hpp"
 
 /**
  * Constructor of the GlideComputer class
  * @return
  */
 GlideComputer::GlideComputer(TaskClientCalc &task,
-                             AirspaceClientCalc& airspace):
+                             AirspaceClientCalc& airspace,
+                             GlideComputerTaskEvents& events):
   GlideComputerAirData(airspace, task),
   GlideComputerTask(task),
   GlideComputerStats(task),
   GlideComputerBlackboard(task)
 {
-
+  events.set_computer(*this);
 }
 
 /**
@@ -368,6 +370,26 @@ GlideComputer::FLARM_ScanTraffic()
     }
   }
 #endif
+}
+
+
+void 
+GlideComputer::OnStartTask()
+{
+  GlideComputerBlackboard::StartTask();
+  GlideComputerStats::StartTask();
+}
+
+void 
+GlideComputer::OnFinishTask()
+{
+  SaveFinish();
+}
+
+void
+GlideComputer::OnTransitionEnter()
+{
+  GlideComputerStats::SetFastLogging();
 }
 
 

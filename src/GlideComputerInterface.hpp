@@ -3,10 +3,14 @@
 
 #include "Task/TaskEvents.hpp"
 
+class GlideComputer;
+
 class GlideComputerTaskEvents:
   public TaskEvents
 {
 public:
+  void set_computer(GlideComputer& computer);
+
   void transition_enter(const TaskPoint& tp);
 
   void active_advanced(const TaskPoint &tp, const int i);
@@ -18,6 +22,8 @@ public:
   void task_finish();
 
   void transition_flight_mode(const bool is_final);
+private:
+  GlideComputer* m_computer;
 };
 
 #endif

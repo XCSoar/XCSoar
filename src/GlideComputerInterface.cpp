@@ -39,13 +39,19 @@ Copyright_License {
 
 #include "GlideComputerInterface.hpp"
 #include "InputEvents.h"
+#include "GlideComputer.hpp"
+
+void 
+GlideComputerTaskEvents::set_computer(GlideComputer& computer)
+{
+  m_computer = &computer;
+}
+
 
 void 
 GlideComputerTaskEvents::transition_enter(const TaskPoint &tp) 
 {
-#ifdef OLD_TASK // fast logging on OZ entry
-  GlideComputerStats::SetFastLogging();
-#endif
+  m_computer->OnTransitionEnter();
 }
 
 void 
@@ -64,17 +70,14 @@ void
 GlideComputerTaskEvents::task_start()
 {
   InputEvents::processGlideComputer(GCE_TASK_START);
-#ifdef OLD_TASK // start task event
-  GlideComputerBlackboard::StartTask();
-  GlideComputerStats::StartTask();
-#endif
+  m_computer->OnStartTask();
 }
 
 void 
 GlideComputerTaskEvents::task_finish()
 {
   InputEvents::processGlideComputer(GCE_TASK_FINISH);
-  // @todo SaveFinish();
+  m_computer->OnFinishTask();
 }
 
 void
