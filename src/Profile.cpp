@@ -692,10 +692,11 @@ Profile::Use()
   // IndFinalGlide
   // IndLandable
 
-#ifdef OLD_TASK // auto mc mode
-  Profile::Get(szProfileAutoMcMode,
-		  SetSettingsComputer().auto_mc_mode);
-#endif
+  {
+    unsigned t = XCSoarInterface::SettingsComputer().auto_mc_mode;
+    Profile::Get(szProfileAutoMcMode, t);
+    XCSoarInterface::SetSettingsComputer().auto_mc_mode = (TaskBehaviour::AutoMCMode_t)t;
+  }
 
   Profile::Get(szProfileWaypointsOutOfRange,
                   WayPointFile::WaypointsOutOfRangeSetting);
