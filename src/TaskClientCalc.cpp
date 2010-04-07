@@ -46,3 +46,9 @@ TaskClientCalc::get_common_stats() const
   return task_manager.get_common_stats();
 }
 
+void
+TaskClientCalc::set_task_behaviour(const TaskBehaviour& behaviour)
+{
+  ScopeLock lock(mutex);
+  m_task_behaviour = behaviour;
+}

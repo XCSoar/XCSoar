@@ -57,7 +57,6 @@ class ReplayLoggerGlue;
 extern Waypoints way_points;
 extern AirspaceClientUI airspace_ui;
 extern TaskClientUI task_ui;
-extern TaskBehaviour task_behaviour;
 extern ReplayLoggerGlue replay;
 extern Marks *marks;
 extern TopologyStore *topology;

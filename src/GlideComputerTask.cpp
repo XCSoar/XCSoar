@@ -69,10 +69,9 @@ GlideComputerTask::ProcessBasicTask()
 {
   const NMEA_INFO &basic = Basic();
 
-  if (basic.Time != LastBasic().Time) {
+  m_task.set_task_behaviour(SettingsComputer());
 
-  // JMW TODO OLD_TASK, this is a hack
-    task_behaviour = SettingsComputer();
+  if (basic.Time != LastBasic().Time) {
 
     if (!basic.gps.NAVWarning) {
       const AIRCRAFT_STATE current_as = ToAircraftState(Basic());

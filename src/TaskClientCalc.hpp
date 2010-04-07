@@ -41,11 +41,14 @@
 #include "Task/TaskStats/TaskStats.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
 
+class TaskBehaviour;
+
 class TaskClientCalc: public TaskClient
 {
 public:
-  TaskClientCalc(TaskManager& tm):
-    TaskClient(tm) {};
+  TaskClientCalc(TaskManager& tm, TaskBehaviour& behaviour):
+    TaskClient(tm), 
+    m_task_behaviour(behaviour) {};
 
   /** Reset the tasks (as if never flown) */
   void reset();
@@ -58,8 +61,13 @@ public:
   bool update_auto_mc(const AIRCRAFT_STATE& state_now,
                       const fixed fallback_mc);
 
+  void set_task_behaviour(const TaskBehaviour& behaviour);
+
   const TaskStats& get_stats() const;
   const CommonStats& get_common_stats() const;
+
+private:
+  TaskBehaviour& m_task_behaviour;
 };
 
 
