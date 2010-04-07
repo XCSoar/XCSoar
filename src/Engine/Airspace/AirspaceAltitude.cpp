@@ -36,7 +36,7 @@
 */
 #include "AirspaceAltitude.hpp"
 #include "Atmosphere/Pressure.hpp"
-
+#include "Units.hpp"
 
 void 
 AIRSPACE_ALT::set_flight_level(const AtmosphericPressure &press)
@@ -64,65 +64,21 @@ AIRSPACE_ALT::get_as_text(const bool concise) const
     if (!positive(AGL)) {
       oss << _T("GND");
     } else {
-      oss << (int)AGL << _T(" AGL");
+      oss << (int)Units::ToUserAltitude(AGL) << _T(" ") << Units::GetAltitudeName() << _T(" AGL");
     }
     break;
   case abFL:
     oss << _T("FL") << (int)FL;
     break;
   case abMSL:
-    oss << (int)Altitude;
+    oss << (int)Units::ToUserAltitude(Altitude) << _T(" ") << Units::GetAltitudeName();
     break;
   case abUndef:
   default:
     break;
   };
   if (!concise && Base!=abMSL && positive(Altitude)) {
-    oss << _T(" ") << (int)Altitude;
+    oss << _T(" ") << (int)Units::ToUserAltitude(Altitude) << _T(" ") << Units::GetAltitudeName();
   }
   return oss.str();
 }
-
-
-/*
-
-    switch (top->Base) {
-    case abUndef:
-      if (Units::GetUserAltitudeUnit() == unMeter)
-        _stprintf(buffer, _T("%.0f[m] %.0f[ft] [?]"),
-                  top->Altitude, top->Altitude * TOFEET);
-      else
-        _stprintf(buffer, _T("%.0f ft [?]"),
-                  top->Altitude * TOFEET);
-
-      break;
-    case abMSL:
-      if (Units::GetUserAltitudeUnit() == unMeter)
-        _stprintf(buffer, _T("%.0f[m] %.0f[ft] MSL"),
-                  top->Altitude, top->Altitude * TOFEET);
-      else
-        _stprintf(buffer, _T("%.0f ft MSL"), top->Altitude * TOFEET);
-
-      break;
-    case abAGL:
-      if (Units::GetUserAltitudeUnit() == unMeter)
-        _stprintf(buffer, _T("%.0f[m] %.0f[ft] AGL"),
-                  top->AGL, top->AGL * TOFEET);
-      else
-        _stprintf(buffer, _T("%.0f ft AGL"), top->AGL * TOFEET);
-
-      break;
-    case abFL:
-      if (Units::GetUserAltitudeUnit() == unMeter)
-        _stprintf(buffer, _T("FL%.0f (%.0f[m] %.0f[ft])"),
-                  top->FL, FLAltRounded(top->Altitude),
-                  FLAltRounded(top->Altitude * TOFEET));
-      else
-        _stprintf(buffer, _T("FL%.0f (%.0f ft)"),
-                  top->FL, FLAltRounded(top->Altitude * TOFEET));
-
-      break;
-    }
-    wp->SetText(buffer);
-
-*/
