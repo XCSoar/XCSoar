@@ -52,17 +52,30 @@ Copyright_License {
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
 {
-  set(parent,
-      Layout::landscape
-      ? (const TCHAR *)IDD_PROGRESS_LANDSCAPE
-      : (const TCHAR *)IDD_PROGRESS);
+
+  RECT rc = parent.get_client_rect();
+  bool isWINDOWSPC=false;
+#ifdef WINDOWSPC
+  isWINDOWSPC=true;
+#endif
+
+  if (rc.right - rc.left > 640 && !isWINDOWSPC){
+    set(parent,
+        Layout::landscape
+        ? (const TCHAR *)IDD_PROGRESS_LANDSCAPE2
+        : (const TCHAR *)IDD_PROGRESS);
+  }else{
+    set(parent,
+        Layout::landscape
+        ? (const TCHAR *)IDD_PROGRESS_LANDSCAPE
+        : (const TCHAR *)IDD_PROGRESS);
+  }
 
   TCHAR Temp[1024];
   _stprintf(Temp, _T("%s"), XCSoar_ProductToken);
   set_item_text(IDC_VERSION, Temp);
 
 #ifdef WINDOWSPC
-  RECT rc = parent.get_client_rect();
   RECT rcp = get_client_rect();
 
   move(rc.left, rc.top, rcp.right - rcp.left, rcp.bottom - rcp.top);
