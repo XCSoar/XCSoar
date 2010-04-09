@@ -66,8 +66,7 @@ DEBUG_PROGRAM_NAMES = \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
 	RunWayPointParser RunDeviceDriver \
 	RunCanvas RunMapWindow RunDialog \
-	RunAirspaceWarningDialog \
-	RunTaskEditorDialog
+	RunAirspaceWarningDialog
 DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
 
 DUMP_TEXT_FILE_SOURCES = \
