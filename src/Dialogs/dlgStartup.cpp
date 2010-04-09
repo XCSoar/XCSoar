@@ -50,14 +50,21 @@ Copyright_License {
 #include "Compiler.h"
 
 static WndForm *wf=NULL;
-static WndOwnerDrawFrame *wSplash=NULL;
 
+/* use a smaller icon for smaller screens because the "stretch" will not shrink
+ */
 static void
 OnSplashPaint(WindowControl *Sender, Canvas &canvas)
 {
-  Bitmap splash_bitmap(IDB_DISCLAIMER);
+  Bitmap splash_bitmap;
+  if (Layout::dscale > 1.5) {
+    splash_bitmap.load(IDB_SWIFT);
+  } else {
+    splash_bitmap.load(IDB_SWIFT2);
+  }
+
   BitmapCanvas bitmap_canvas(canvas, splash_bitmap);
-  canvas.stretch(bitmap_canvas, 0, 0, 318, 163);
+  canvas.stretch(bitmap_canvas, 0, 0, Layout::Scale(110), Layout::Scale(82));
 }
 
 static void
@@ -90,8 +97,6 @@ void dlgStartupShowModal(void){
   }
   if (!wf) return;
 
-  wSplash = (WndOwnerDrawFrame*)wf->FindByName(_T("frmSplash"));
-
   ((WndButton *)wf->FindByName(_T("cmdClose")))
     ->SetOnClickNotify(OnCloseClicked);
 
@@ -100,9 +105,8 @@ void dlgStartupShowModal(void){
   _stprintf(temp,_T("XCSoar: Version %s"), XCSoar_VersionString);
   wf->SetCaption(temp);
 
-  wp = ((WndProperty *)wf->FindByName(_T("prpDisclaimer")));
-  if (wp)
-    wp->SetText(_T("Pilot assumes complete\r\nresponsibility to operate\r\nthe aircraft safely.\r\nMaintain effective lookout.\r\n"));
+  static WndFrame *wDisclaimer1 = (WndFrame *)wf->FindByName(_T("frmDisclaimer1"));
+  wDisclaimer1->SetCaption(_T("Pilot assumes complete responsibility to operate the aircraft safely.  Maintain effective lookout."));
 
   wp = ((WndProperty *)wf->FindByName(_T("prpProfile")));
   if (wp) {

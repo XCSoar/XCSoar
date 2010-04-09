@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmStartup" Width=240 Height=320 Caption="XCSoar">
-  <WndOwnerDrawFrame Name="frmSplash" X=0 Y=2 Width=240 Height=123 Font=0 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnSplashPaint" />
+<WndForm Name="frmStartup" Width=240 Height=320 Caption="XCSoar" BackColor=0xFFFFFF>
 
-  <WndButton Name="cmdClose" Caption="Accept" X=2 Y=-1 Width=230  Height=30 Font=2 />
+  <WndOwnerDrawFrame Name="frmspacer1" X=2 Y=-1 Width=240 Height=20 />
 
-  <WndProperty Name="prpProfile" Caption="Profile"      X=2 Y=-1   Width=230 Height=25 CaptionWidth=60 Font=2>
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
-  </WndProperty>
+  <WndOwnerDrawFrame Name="frmSplash" X=65 Y=-1 Width=110 Height=81 Font=0 OnPaint="OnSplashPaint" />
+
+  <WndOwnerDrawFrame Name="frmspacer2" X=2 Y=-1 Width=300 Height=15 />
+
+  <WndFrame Name="frmDisclaimer1" X=2 Y=-1 Width=235 Height=75 Font=2 	/>
+
+  <WndOwnerDrawFrame Name="frmspacer3" X=2 Y=-1 Width=240 Height=7 />
+  
+  <Panel Name="frmShade" X=0 Y=-1 Width=240 Height=145 Font=2 Border="0" BackColor=0xDADBAB>
+    <WndButton Name="cmdClose" Caption="Accept" X=2 Y=-1 Width=235  Height=30 Font=2 />
+
+    <WndProperty Name="prpProfile" Caption="Profile" X=2 Y=-1   Width=235 Height=25 CaptionWidth=60 Font=2 BackColor=0xDADBAB>
+      <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+    </WndProperty>
+  </Panel>
 </WndForm>
+
+
