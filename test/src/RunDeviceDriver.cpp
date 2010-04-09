@@ -146,6 +146,12 @@ ComPort::GetChar()
   return getchar();
 }
 
+int
+ComPort::Read(void *Buffer, size_t Size)
+{
+  return 0;
+}
+
 /*
  * Fake MapWindowProjection.cpp
  */

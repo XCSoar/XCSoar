@@ -75,6 +75,13 @@ InputEvents::findEvent(const TCHAR *)
 void RasterTerrain::Lock(void) {}
 void RasterTerrain::Unlock(void) {}
 
+short
+RasterTerrain::GetTerrainHeight(const GEOPOINT &location,
+                                const RasterRounding &rounding) const
+{
+  return 0;
+}
+
 #ifndef ENABLE_SDL
 bool
 MapWindow::identify(HWND hWnd)

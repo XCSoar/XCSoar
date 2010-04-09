@@ -159,11 +159,14 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Descriptor.cpp \
 	$(SRC)/Device/FLARM.cpp \
+	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
 	$(TEST_SRC_DIR)/FakeRegistry.cpp \

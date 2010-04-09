@@ -46,6 +46,11 @@ XCSoarInterface::CreateProgressDialog(const TCHAR *text)
 }
 
 void
+XCSoarInterface::CloseProgressDialog()
+{
+}
+
+void
 XCSoarInterface::StepProgressDialog(void)
 {
 }
