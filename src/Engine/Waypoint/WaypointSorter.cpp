@@ -2,6 +2,8 @@
 #include <algorithm>
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Math/Geometry.hpp"
+#include "UtilsText.hpp"
+#include <string>
 
 static int SelectedWayPointFileIdx=0;
 
@@ -94,18 +96,29 @@ WaypointSorter::filter_file(WaypointSelectInfoVector& vec,
 }
 
 static unsigned char MatchChar = 0;
+static TCHAR MatchString[NAMEFILTERLEN+1];
 
 static bool
 WaypointNameFilter(const WayPointSelectInfo& elem1)
 {
-  return (((elem1.FourChars & 0xff000000) >> 24) != MatchChar);
+  if (((elem1.FourChars & 0xff000000) >> 24) != MatchChar) {
+    return true;
+  }
+  else if (_tcsnicmp( elem1.way_point->Name.c_str(),MatchString,_tcslen(MatchString)) != 0) {
+    return true;
+  }
+
+  return false;
+
 }
 
 void
 WaypointSorter::filter_name(WaypointSelectInfoVector& vec,
-                            const unsigned char c) const
+                            const TCHAR * s) const
 {
-  MatchChar = c;
+  MatchChar = s[0] &0xff;
+  _tcscpy(MatchString, s);
+
   vec.erase(std::remove_if(vec.begin(), vec.end(), WaypointNameFilter), vec.end());
 }
 
@@ -162,7 +175,13 @@ static bool
 WaypointNameCompare(const WayPointSelectInfo& elem1, 
                     const WayPointSelectInfo& elem2 ) 
 {
-  return (elem1.FourChars < elem2.FourChars);
+  if (elem1.FourChars != elem2.FourChars) {
+    return (elem1.FourChars < elem2.FourChars);
+  }
+  else {
+    // if they're equal to 4 chars, then do full name comparison
+    return elem1.way_point->Name.compare(elem2.way_point->Name) < 0;
+  }
 }
 
 

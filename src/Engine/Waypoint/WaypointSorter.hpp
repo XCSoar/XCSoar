@@ -4,6 +4,8 @@
 #include "Waypoint/Waypoints.hpp"
 #include <vector>
 
+#define NAMEFILTERLEN 10
+
 /**
  * Structure to hold Waypoint sorting information
  */
@@ -78,7 +80,7 @@ public:
  * @param vec List of waypoints to filter (read-write)
  * @param c Character to match
  */
-  void filter_name(WaypointSelectInfoVector& vec, const unsigned char c) const;
+  void filter_name(WaypointSelectInfoVector& vec, const TCHAR *) const;
 
 /** 
  * Remove waypoints bearing greater than 18 degrees from supplied direction 
