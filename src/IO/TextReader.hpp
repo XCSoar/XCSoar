@@ -72,10 +72,6 @@ public:
    */
   virtual long tell() const;
 
-  char *read_utf8_line() {
-    return read_raw_line();
-  }
-
 #ifdef _UNICODE
   TCHAR *read_tchar_line();
 #else

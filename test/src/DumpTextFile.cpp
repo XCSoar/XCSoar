@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  char *line;
-  while ((line = reader.read_utf8_line()) != NULL)
-    puts(line);
+  TCHAR *line;
+  while ((line = reader.read_tchar_line()) != NULL)
+    _putts(line);
 }
