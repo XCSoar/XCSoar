@@ -39,6 +39,8 @@ Copyright_License {
 #ifndef XCSOAR_FIFO_BUFFER_HPP
 #define XCSOAR_FIFO_BUFFER_HPP
 
+#include "Util/NonCopyable.hpp"
+
 #include <utility>
 #include <algorithm>
 
@@ -48,7 +50,7 @@ Copyright_License {
  * buffer as needed.  It is not thread safe.
  */
 template<class T>
-class FifoBuffer {
+class FifoBuffer : private NonCopyable {
 public:
   typedef std::pair<T*, unsigned> Range;
 

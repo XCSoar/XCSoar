@@ -39,11 +39,13 @@ Copyright_License {
 #ifndef XCSOAR_REUSABLE_ARRAY_HPP
 #define XCSOAR_REUSABLE_ARRAY_HPP
 
+#include "Util/NonCopyable.hpp"
+
 #include <algorithm>
 #include <stddef.h>
 
 template<class T>
-class ReusableArray {
+class ReusableArray : private NonCopyable {
 protected:
   T *data;
   unsigned length;
