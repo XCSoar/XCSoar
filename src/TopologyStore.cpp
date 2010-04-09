@@ -50,7 +50,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "SettingsUser.hpp" // for EnableTopology
 #include "Interface.hpp"
-#include "IO/ZipTextReader.hpp"
+#include "IO/ZipLineReader.hpp"
 
 #include <assert.h>
 
@@ -179,7 +179,7 @@ TopologyStore::Open()
   }
 
   // Ready to open the file now..
-  ZipTextReader reader(szFile);
+  ZipLineReader reader(szFile);
   if (reader.error()) {
     LogStartUp(TEXT("No topology file: %s"), szFile);
     return;

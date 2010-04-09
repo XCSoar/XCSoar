@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_IO_FILE_LINE_READER_HPP
-#define XCSOAR_IO_FILE_LINE_READER_HPP
+#ifndef XCSOAR_IO_ZIP_LINE_READER_HPP
+#define XCSOAR_IO_ZIP_LINE_READER_HPP
 
 #include "ZipSource.hpp"
 #include "LineSplitter.hpp"

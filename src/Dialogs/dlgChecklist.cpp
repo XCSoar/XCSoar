@@ -43,7 +43,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Defines.h"
 #include "StringUtil.hpp"
-#include "IO/TextReader.hpp"
+#include "IO/FileLineReader.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -194,7 +194,7 @@ LoadChecklist(void)
   TCHAR filename[MAX_PATH];
   LocalPath(filename, _T(XCSCHKLIST));
 
-  FileTextReader reader(filename);
+  FileLineReader reader(filename);
   if (reader.error())
     return;
 

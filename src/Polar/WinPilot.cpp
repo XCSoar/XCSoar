@@ -39,7 +39,7 @@ Copyright_License {
 #include "Polar/WinPilot.hpp"
 #include "Polar/Polar.hpp"
 #include "UtilsText.hpp"
-#include "IO/TextReader.hpp"
+#include "IO/FileLineReader.hpp"
 #include "Profile.hpp"
 #include "LocalPath.hpp"
 #include "Sizes.h"
@@ -121,7 +121,7 @@ ReadWinPilotPolar(Polar &polar)
   Profile::Get(szProfilePolarFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
 
-  FileTextReader reader(szFile);
+  FileLineReader reader(szFile);
   if (reader.error())
     return false;
 

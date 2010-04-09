@@ -44,7 +44,8 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "StringUtil.hpp"
-#include "IO/ZipTextReader.hpp"
+#include "IO/FileLineReader.hpp"
+#include "IO/ZipLineReader.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointSorter.hpp"
 #include "Components.hpp"
@@ -117,7 +118,7 @@ LookupAirfieldDetail(WaypointSelectInfoVector &airports,
  * Parses the data provided by the airfield details file handle
  */
 static void
-ParseAirfieldDetails(TextReader &reader)
+ParseAirfieldDetails(TLineReader &reader)
 {
   /*
    * VENTA3 fix: if empty lines, do not set details for the waypoint
@@ -215,7 +216,7 @@ ReadAirfieldFile()
   if (!string_is_empty(path)) {
     ExpandLocalPath(path);
 
-    FileTextReader reader(path);
+    FileLineReader reader(path);
     if (reader.error())
       return;
 
@@ -228,7 +229,7 @@ ReadAirfieldFile()
     ExpandLocalPath(path);
     _tcscat(path, _T("/airfields.txt"));
 
-    ZipTextReader reader(path);
+    ZipLineReader reader(path);
     if (reader.error())
       return;
 

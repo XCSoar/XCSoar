@@ -42,7 +42,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Sizes.h"
 #include "FLARM/FLARMNet.hpp"
-#include "IO/TextReader.hpp"
+#include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
 static FLARMNetDatabase flarm_net;
@@ -88,7 +88,7 @@ OpenFLARMDetails()
   TCHAR filename[MAX_PATH];
   LocalPath(filename, TEXT("xcsoar-flarm.txt"));
 
-  FileTextReader reader(filename);
+  FileLineReader reader(filename);
   if (reader.error())
     return;
 

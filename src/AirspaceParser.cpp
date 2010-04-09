@@ -46,7 +46,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "options.h"
 #include "Math/Geometry.hpp"
-#include "IO/ZipTextReader.hpp"
+#include "IO/ZipLineReader.hpp"
 
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
@@ -71,7 +71,7 @@ CalculateSector(TCHAR *Text);
 static bool
 ParseLine(Airspaces &airspace_database, int nLineType, TCHAR *TempString);
 
-static int GetNextLine(TextReader &reader, TCHAR *&Text);
+static int GetNextLine(TLineReader &reader, TCHAR *&Text);
 
 static int LineCount;
 
@@ -159,7 +159,7 @@ struct TempAirspaceType {
 static TempAirspaceType temp_area;
 
 static bool
-ReadAirspace(Airspaces &airspace_database, TextReader &reader)
+ReadAirspace(Airspaces &airspace_database, TLineReader &reader)
 {
   LogStartUp(TEXT("ReadAirspace"));
   int	Tock = 0;
@@ -308,7 +308,7 @@ OnError:
 
 
 // Returns index of line type found, or -1 if end of file reached
-static int GetNextLine(TextReader &reader, TCHAR *&Text)
+static int GetNextLine(TLineReader &reader, TCHAR *&Text)
 {
   TCHAR *Comment;
   int nSize;
@@ -735,7 +735,7 @@ OLD_TASK boundary wrap 180
 bool
 ReadAirspace(Airspaces &airspace_database, const char *path)
 {
-  ZipTextReader reader(path);
+  ZipLineReader reader(path);
   if (reader.error())
     return false;
 

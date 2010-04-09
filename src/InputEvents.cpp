@@ -70,7 +70,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "StringUtil.hpp"
 #include "Asset.hpp"
 #include "MenuData.hpp"
-#include "IO/TextReader.hpp"
+#include "IO/FileLineReader.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -211,7 +211,7 @@ InputEvents::readFile()
   if (string_is_empty(szFile1))
     return;
 
-  FileTextReader reader(szFile1);
+  FileLineReader reader(szFile1);
   if (reader.error())
     return;
 

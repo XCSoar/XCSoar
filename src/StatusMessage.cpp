@@ -42,7 +42,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "StringUtil.hpp"
-#include "IO/TextReader.hpp"
+#include "IO/FileLineReader.hpp"
 
 #include <stdio.h>
 
@@ -77,7 +77,7 @@ StatusMessageList::LoadFile()
   if (string_is_empty(szFile1))
     return;
 
-  FileTextReader reader(szFile1);
+  FileLineReader reader(szFile1);
   // Unable to open file
   if (reader.error())
     return;

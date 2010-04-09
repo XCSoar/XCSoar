@@ -36,7 +36,7 @@ Copyright_License {
 }
 */
 
-#include "IO/TextReader.hpp"
+#include "IO/FileLineReader.hpp"
 
 #include <stdio.h>
 
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
   }
 
   const char *path = argv[1];
-  FileTextReader reader(path);
+  FileLineReader reader(path);
   if (reader.error()) {
     fprintf(stderr, "Failed to open %s\n", path);
     return 1;

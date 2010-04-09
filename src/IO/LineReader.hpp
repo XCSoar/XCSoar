@@ -70,6 +70,6 @@ public:
   }
 };
 
-class TLineReader : LineReader<TCHAR> {};
+class TLineReader : public LineReader<TCHAR> {};
 
 #endif

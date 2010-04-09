@@ -47,8 +47,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
 #include "UtilsFile.hpp"
-#include "IO/TextReader.hpp"
-#include "IO/ZipTextReader.hpp"
+#include "IO/FileLineReader.hpp"
+#include "IO/ZipLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
 #include "wcecompat/ts_string.h"
@@ -218,7 +218,7 @@ WayPointFile::Parse(Waypoints &way_points, const RasterTerrain *terrain)
   // If normal file
   if (!compressed) {
     // Try to open waypoint file
-    FileTextReader reader(file);
+    FileLineReader reader(file);
     if (reader.error())
       return false;
 
@@ -231,7 +231,7 @@ WayPointFile::Parse(Waypoints &way_points, const RasterTerrain *terrain)
   // If compressed file inside map file
   } else {
     // convert path to ascii
-    ZipTextReader reader(file);
+    ZipLineReader reader(file);
     if (reader.error())
       return false;
 

@@ -42,7 +42,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Defines.h"
 #include "Sizes.h"
-#include "IO/TextReader.hpp"
+#include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
 #include <assert.h>
@@ -332,7 +332,7 @@ LoadRegistryFromFile(const TCHAR *szFile)
     return;
 
   LogStartUp(TEXT("Loading registry from %s"), szFile);
-  FileTextReader reader(szFile);
+  FileLineReader reader(szFile);
   if (reader.error())
     return;
 
