@@ -245,7 +245,7 @@ InputEvents::readFile()
   // TODO code: Note that ^# does not allow # in key - might be required (probably not)
   //   Better way is to separate the check for # and the scanf
   TCHAR *buffer;
-  while ((buffer = reader.read_tchar_line()) != NULL
+  while ((buffer = reader.read()) != NULL
          && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)) {
 
     line++;

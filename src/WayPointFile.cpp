@@ -224,7 +224,7 @@ WayPointFile::Parse(Waypoints &way_points, const RasterTerrain *terrain)
 
     // Read through the lines of the file
     TCHAR *line;
-    for (unsigned i = 0; (line = reader.read_tchar_line()) != NULL; i++) {
+    for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
       // and parse them
       parseLine(line, i, way_points, terrain);
     }
@@ -237,7 +237,7 @@ WayPointFile::Parse(Waypoints &way_points, const RasterTerrain *terrain)
 
     // Read through the lines of the file
     TCHAR *line;
-    for (unsigned i = 0; (line = reader.read_tchar_line()) != NULL; i++) {
+    for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
       // and parse them
       parseLine(line, i, way_points, terrain);
     }

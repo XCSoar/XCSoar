@@ -341,7 +341,7 @@ LoadRegistryFromFile(const TCHAR *szFile)
   TCHAR wvalue[nMaxValueValueSize];
   int j;
 
-  while ((winval = reader.read_tchar_line()) != NULL) {
+  while ((winval = reader.read()) != NULL) {
     if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"),
                  wname, wvalue) == 2) {
       if (!string_is_empty(wname))

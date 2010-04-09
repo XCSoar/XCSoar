@@ -93,7 +93,7 @@ OpenFLARMDetails()
     return;
 
   const TCHAR *line;
-  while ((line = reader.read_tchar_line()) != NULL) {
+  while ((line = reader.read()) != NULL) {
     long id;
     TCHAR Name[MAX_PATH];
 

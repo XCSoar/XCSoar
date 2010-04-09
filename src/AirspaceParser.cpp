@@ -315,7 +315,7 @@ static int GetNextLine(TextReader &reader, TCHAR *&Text)
   int nLineType = -1;
   TCHAR sTmp[READLINE_LENGTH];
 
-  while ((Text = reader.read_tchar_line()) != NULL) {
+  while ((Text = reader.read()) != NULL) {
     LineCount++;
 
     nSize = _tcslen(Text);

@@ -61,7 +61,7 @@ TextReader::tell() const
 #ifdef _UNICODE
 
 TCHAR *
-TextReader::read_tchar_line()
+TextReader::read()
 {
   char *raw = read_raw_line();
   if (raw == NULL)

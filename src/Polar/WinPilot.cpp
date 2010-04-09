@@ -126,7 +126,7 @@ ReadWinPilotPolar(Polar &polar)
     return false;
 
   const TCHAR *line;
-  while ((line = reader.read_tchar_line()) != NULL) {
+  while ((line = reader.read()) != NULL) {
     if (line[0] != _T('*')) { /* not a comment */
       PExtractParameter(line, ctemp, 0);
       ww[0] = _tcstod(ctemp, NULL);

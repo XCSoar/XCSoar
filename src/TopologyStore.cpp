@@ -196,7 +196,7 @@ TopologyStore::Open()
   int numtopo = 0;
   char ShapeFilename[MAX_PATH];
 
-  while ((TempString = reader.read_tchar_line()) != NULL) {
+  while ((TempString = reader.read()) != NULL) {
     // Look For Comment
     if (!string_is_empty(TempString)
         && (_tcsstr(TempString, TEXT("*")) != TempString)) {

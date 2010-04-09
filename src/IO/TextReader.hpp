@@ -73,9 +73,9 @@ public:
   virtual long tell() const;
 
 #ifdef _UNICODE
-  TCHAR *read_tchar_line();
+  TCHAR *read();
 #else
-  char *read_tchar_line() {
+  char *read() {
     return read_raw_line();
   }
 #endif

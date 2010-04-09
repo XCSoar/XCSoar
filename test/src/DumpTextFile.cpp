@@ -55,6 +55,6 @@ int main(int argc, char **argv)
   }
 
   TCHAR *line;
-  while ((line = reader.read_tchar_line()) != NULL)
+  while ((line = reader.read()) != NULL)
     _putts(line);
 }

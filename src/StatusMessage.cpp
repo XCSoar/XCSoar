@@ -98,7 +98,7 @@ StatusMessageList::LoadFile()
   const TCHAR *buffer;
   while (
 	 (StatusMessageData_Size < MAXSTATUSMESSAGECACHE)
-         && (buffer = reader.read_tchar_line()) != NULL
+         && (buffer = reader.read()) != NULL
 	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
 	 ) {
     // Check valid line? If not valid, assume next record (primative, but works ok!)

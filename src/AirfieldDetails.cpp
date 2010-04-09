@@ -144,7 +144,7 @@ ParseAirfieldDetails(TextReader &reader)
   waypoints_filter.filter_airport(airports);
 
   TCHAR *TempString;
-  while ((TempString = reader.read_tchar_line()) != NULL) {
+  while ((TempString = reader.read()) != NULL) {
     if (TempString[0] == '[') { // Look for start
       if (inDetails) {
         LookupAirfieldDetail(airports, Name, Details);

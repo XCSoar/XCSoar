@@ -207,7 +207,7 @@ LoadChecklist(void)
   Name[0] = 0;
 
   TCHAR *TempString;
-  while ((TempString = reader.read_tchar_line()) != NULL) {
+  while ((TempString = reader.read()) != NULL) {
     // Look for start
     if (TempString[0] == '[') {
       if (inDetails) {
