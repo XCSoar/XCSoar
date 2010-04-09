@@ -9,9 +9,7 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/ConvertLineReader.cpp \
 	$(IO_SRC_DIR)/FileLineReader.cpp \
 	$(IO_SRC_DIR)/ZipLineReader.cpp \
-	$(IO_SRC_DIR)/TextReader.cpp \
-	$(IO_SRC_DIR)/TextWriter.cpp \
-	$(IO_SRC_DIR)/ZipTextReader.cpp
+	$(IO_SRC_DIR)/TextWriter.cpp
 
 IO_OBJS = $(call SRC_TO_OBJ,$(IO_SOURCES))
 
