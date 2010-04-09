@@ -78,6 +78,7 @@
 #define IDB_LAUNCHER1                   330
 #define IDB_LAUNCHER2                   331
 #define IDB_SWIFT2                      332
+#define IDD_PROGRESS_LANDSCAPE2         333
 #define IDC_MESSAGE                     1094
 #define IDC_PROGRESS1                   1239
 #define IDC_VERSION                     1254
