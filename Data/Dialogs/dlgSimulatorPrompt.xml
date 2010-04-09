@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<WndForm Name="frmComboPopup" Width=240 Height=320 Caption="XCSoar">
+<WndForm Name="frmComboPopup" Width=240 Height=320 Caption="XCSoar" BackColor=0xFFFFFF>
 
 
   <WndFrame X=8 Y=100 Width=310 Height=20 Font=2 Caption="What do you want to do:" />
