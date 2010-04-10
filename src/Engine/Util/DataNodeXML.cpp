@@ -138,7 +138,7 @@ DataNodeXML::get_attribute(const tstring &name, tstring &value) const
   if (!m_xml_node->isAttributeSet(name.c_str())) {
     return false;
   }
-  tstring val(m_xml_node->getAttribute(name.c_str(), NULL));
+  tstring val(m_xml_node->getAttribute(name.c_str()));
   value = val;
   return true;
 }
