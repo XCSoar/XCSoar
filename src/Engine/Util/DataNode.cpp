@@ -37,6 +37,8 @@
 
 #include "DataNode.hpp"
 
+#include <stdio.h>
+
 DataNode::~DataNode()
 {
 }
