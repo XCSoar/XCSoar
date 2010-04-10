@@ -108,23 +108,8 @@ static void InitializeDirection(bool bOnlyHeading) {
 
 static void SetNameCaptionFlushLeft(const TCHAR * sIn) { // sets button with enough spaces to appear flush left
 
-  /*
-  int wa = wpDistance->canvas.text_width(sIn);
-  int ws = wbName->canvas.text_width(_T(" "));
-  int wbutton=wbName->get_width();
-  int inumspaces = (wbutton - wa -8) / ws;
-  TCHAR sSpace[100];  // pad with spaces so "*" appears flush left
-  int iLen=std::min(_tcslen(sIn),99);
-  _tcsncpy(sSpace,sIn,iLen);
-  sSpace[iLen]='\0'; // safely
-  int i=0;
-  for (i=iLen; i<99 && i<inumspaces+iLen; i++) {
-    sSpace[i]=' ';
-  }
-  sSpace[i]='\0';
-*/
+  //ToDo: RLD make the text sflush left instead of centered on button
   wbName->SetCaption(sIn);
-
 }
 
 static void PrepareData(void){
