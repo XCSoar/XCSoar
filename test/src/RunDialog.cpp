@@ -125,8 +125,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   PaintWindow::register_class(hInstance);
 #else
-  const TCHAR *lpCmdLine = argv[1];
-
   if (argc < 2) {
     fprintf(stderr, "Usage: %s XMLFILE\n", argv[0]);
     return 1;
