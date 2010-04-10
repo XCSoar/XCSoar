@@ -129,7 +129,6 @@ static void PrepareData(void){
         sTmp[1]='\0';
       }
       else {
-        static const double fTmp =  DistanceFilter[i];
         _stprintf(sTmp, TEXT("%.0f%s"),
                 (double)DistanceFilter[i],
                 Units::GetDistanceName());
