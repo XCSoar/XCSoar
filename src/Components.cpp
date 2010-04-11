@@ -293,9 +293,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance, LPCTSTR lpCmdLine)
 
   glide_computer.Initialise();
 
-  // try to link DLL if it exists
-  logger.LinkGRecordDLL();
-
   // Load the EGM96 geoid data
   OpenGeoid();
 

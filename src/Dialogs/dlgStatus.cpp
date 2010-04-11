@@ -212,7 +212,6 @@ static void UpdateValuesSystem() {
 
   wp = (WndProperty*)wf->FindByName(_T("prpLogger"));
   if (wp) {
-    logger.LinkGRecordDLL();
     if (logger.LoggerGActive()) {
       if (logger.isLoggerActive()) {
         wp->SetText(gettext(_T("ON (G)")));

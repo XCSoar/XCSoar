@@ -243,126 +243,6 @@ LoggerImpl::DiskBufferReset()
 // JMW: not sure that would work, I think dll has to be in OS
 // directory or same directory as exe
 
-void
-LoggerImpl::LinkGRecordDLL()
-{
-#ifdef WIN32
-  static bool bFirstTime = true;
-  TCHAR szLoadResults [100];
-  TCHAR szGRecordVersion[100];
-
-  // only try to load DLL once per session
-  if ((GRecordDLLHandle == NULL) && bFirstTime) {
-    bFirstTime = false;
-
-    LogStartUp(TEXT("Searching for GRecordDLL"));
-    if (is_altair()) {
-      if (FileExists(TEXT("\\NOR Flash\\GRecordDLL.dat"))) {
-        LogStartUp(TEXT("Updating GRecordDLL.DLL"));
-        DeleteFile(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
-        MoveFile(TEXT("\\NOR Flash\\GRecordDLL.dat"),
-            TEXT("\\NOR Flash\\GRecordDLL.DLL"));
-      }
-
-      GRecordDLLHandle = LoadLibrary(TEXT("\\NOR Flash\\GRecordDLL.DLL"));
-    } else {
-      GRecordDLLHandle = LoadLibrary(TEXT("GRecordDLL.DLL"));
-    }
-
-    if (GRecordDLLHandle != NULL) {
-      // if any pointers don't link, disable entire library
-      BOOL bLoadOK = true;
-
-      GRecordGetVersion = (GRRECORDGETVERSION)GetProcAddress(GRecordDLLHandle,
-                                                             PROC_NAME("GRecordGetVersion"));
-
-      // read version for log
-      if (!GRecordGetVersion) {
-        bLoadOK = false;
-        _tcscpy(szGRecordVersion, TEXT("version unknown"));
-      } else {
-        GRecordGetVersion(szGRecordVersion);
-      }
-
-      GRecordInit = (GRECORDINIT)GetProcAddress(GRecordDLLHandle,
-                                                PROC_NAME("GRecordInit"));
-
-      if (!GRecordInit)
-        bLoadOK = false;
-
-      GRecordGetDigestMaxLen = (GRECORDGETDIGESTMAXLEN)GetProcAddress(
-          GRecordDLLHandle, PROC_NAME("GRecordGetDigestMaxLen"));
-
-      if (!GRecordGetDigestMaxLen)
-        bLoadOK = false;
-
-      GRecordAppendRecordToBuffer
-          = (GRECORDAPPENDRECORDTOBUFFER)GetProcAddress(GRecordDLLHandle,
-              PROC_NAME("GRecordAppendRecordToBuffer"));
-
-      if (!GRecordAppendRecordToBuffer)
-        bLoadOK = false;
-
-      GRecordFinalizeBuffer = (GRECORDFINALIZEBUFFER)GetProcAddress(
-          GRecordDLLHandle, PROC_NAME("GRecordFinalizeBuffer"));
-
-      if (!GRecordFinalizeBuffer)
-        bLoadOK = false;
-
-      GRecordGetDigest = (GRECORDGETDIGEST)GetProcAddress(GRecordDLLHandle,
-          PROC_NAME("GRecordGetDigest"));
-
-      if (!GRecordGetDigest)
-        bLoadOK = false;
-
-      GRecordSetFileName = (GRECORDSETFILENAME)GetProcAddress(GRecordDLLHandle,
-          PROC_NAME("GRecordSetFileName"));
-
-      if (!GRecordSetFileName)
-        bLoadOK = false;
-
-      GRecordLoadFileToBuffer = (GRECORDLOADFILETOBUFFER)GetProcAddress(
-          GRecordDLLHandle, PROC_NAME("GRecordLoadFileToBuffer"));
-
-      if (!GRecordLoadFileToBuffer)
-        bLoadOK = false;
-
-      GRecordAppendGRecordToFile = (GRECORDAPPENDGRECORDTOFILE)GetProcAddress(
-          GRecordDLLHandle, PROC_NAME("GRecordAppendGRecordToFile"));
-
-      if (!GRecordAppendGRecordToFile)
-        bLoadOK = false;
-
-      GRecordReadGRecordFromFile = (GRECORDREADGRECORDFROMFILE)GetProcAddress(
-          GRecordDLLHandle, PROC_NAME("GRecordReadGRecordFromFile"));
-
-      if (!GRecordReadGRecordFromFile)
-        bLoadOK = false;
-
-      GRecordVerifyGRecordInFile = (GRECORDVERIFYGRECORDINFILE)GetProcAddress(
-          GRecordDLLHandle, PROC_NAME("GRecordVerifyGRecordInFile"));
-
-      if (!GRecordVerifyGRecordInFile)
-        bLoadOK=false;
-
-      // all need to link, or disable entire library.
-      if (!bLoadOK) {
-        _stprintf(szLoadResults, TEXT("Found GRecordDLL %s but incomplete"),
-            szGRecordVersion);
-        FreeLibrary(GRecordDLLHandle);
-        GRecordDLLHandle = NULL;
-      } else {
-        _stprintf(szLoadResults, TEXT("Loaded GRecordDLL %s"),
-            szGRecordVersion);
-      }
-    } else {
-      _tcscpy(szLoadResults, TEXT("Can't load GRecordDLL"));
-    }
-
-    LogStartUp(szLoadResults);
-  }
-#endif
-}
 
 /**
  * Returns whether the GRecord DLL has been found
@@ -413,8 +293,6 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
 void
 LoggerImpl::LoggerGInit()
 {
-  // try to link DLL if it exists
-  LinkGRecordDLL();
   if (LoggerGActive())
     GRecordInit();
 }

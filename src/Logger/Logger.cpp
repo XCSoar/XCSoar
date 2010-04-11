@@ -101,13 +101,6 @@ Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
   return _logger->LoggerClearFreeSpace(gps_info);
 }
 
-void
-Logger::LinkGRecordDLL(void)
-{
-  Poco::ScopedRWLock protect(lock, true);
-  return _logger->LinkGRecordDLL();
-}
-
 bool
 Logger::LoggerGActive()
 {
