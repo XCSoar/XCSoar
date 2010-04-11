@@ -169,6 +169,7 @@ Registry::Get(const TCHAR *szRegValue, bool &pPos)
   return res;
 }
 
+#ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
 bool
 Registry::Get(const TCHAR *szRegValue, unsigned &pPos)
 {
@@ -179,6 +180,7 @@ Registry::Get(const TCHAR *szRegValue, unsigned &pPos)
 
   return res;
 }
+#endif
 
 bool
 Registry::Get(const TCHAR *szRegValue, double &pPos)
