@@ -677,21 +677,6 @@ ParseCommandLine(LPCTSTR CommandLine)
   }
 #endif
 
-#ifdef WINDOWSPC
-  SCREENWIDTH = 640;
-  SCREENHEIGHT = 480;
-
-  #if defined(SCREENWIDTH_)
-  SCREENWIDTH = SCREENWIDTH_;
-  #endif
-  #if defined(SCREENHEIGHT_)
-  SCREENHEIGHT = SCREENHEIGHT_;
-  #endif
-
-#else
-  return; // don't do anything for PDA platforms
-#endif
-
   const TCHAR *pC, *pCe;
 
   pC = _tcsstr(CommandLine, _T("-profile="));
@@ -713,7 +698,19 @@ ParseCommandLine(LPCTSTR CommandLine)
     }
   }
 
+  Profile::SetFiles(extrnProfileFile);
+
 #ifdef WINDOWSPC
+  SCREENWIDTH = 640;
+  SCREENHEIGHT = 480;
+
+  #if defined(SCREENWIDTH_)
+  SCREENWIDTH = SCREENWIDTH_;
+  #endif
+  #if defined(SCREENHEIGHT_)
+  SCREENHEIGHT = SCREENHEIGHT_;
+  #endif
+
   pC = _tcsstr(CommandLine, _T("-800x480"));
   if (pC != NULL) {
     SCREENWIDTH = 800;
@@ -768,8 +765,6 @@ ParseCommandLine(LPCTSTR CommandLine)
     SCREENHEIGHT = 240;
   }
 #endif
-
-  Profile::SetFiles(extrnProfileFile);
 }
 
 void
