@@ -213,7 +213,7 @@ Profile::SetStringIfAbsent(const TCHAR *key, const TCHAR *value)
 }
 
 static void
-DefaultRegistrySettingsAltair()
+SetAltairDefaults()
 {
   // these are redundant b/c they're also added to "InitialiseFontsHardCoded"
   Profile::SetStringIfAbsent(_T("InfoWindowFont"),
@@ -282,7 +282,7 @@ Profile::Use()
   LogStartUp(_T("Read registry settings"));
 
   if (is_altair())
-    DefaultRegistrySettingsAltair();
+    SetAltairDefaults();
 
   OrderedTaskBehaviour &osettings_task = 
     XCSoarInterface::SetSettingsComputer().ordered_defaults;
