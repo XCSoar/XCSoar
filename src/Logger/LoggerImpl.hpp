@@ -45,6 +45,7 @@ Copyright_License {
 #include "Poco/RWLock.h"
 #include "Poco/RWLock.h"
 #include "Navigation/GeoPoint.hpp"
+#include "Logger/LoggerGRecord.hpp"
 
 #include <tchar.h>
 #include <windef.h>
@@ -72,6 +73,8 @@ public:
 
     const struct LoggerPreTakeoffBuffer &operator=(const NMEA_INFO &src);
   };
+private:
+  GRecord oGRecord;
 
 public:
   LoggerImpl();

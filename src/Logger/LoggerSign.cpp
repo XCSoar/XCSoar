@@ -61,9 +61,6 @@
 #define PROC_NAME(x) (x)
 #endif
 
-typedef int (*GRECORDINIT)(void);
-static GRECORDINIT GRecordInit;
-
 typedef int (*GRECORDAPPENDRECORDTOBUFFER)(TCHAR * szIn);
 static GRECORDAPPENDRECORDTOBUFFER GRecordAppendRecordToBuffer;
 
@@ -230,7 +227,7 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
   GRecordGetDigest(OldGRecordBuff);
 
   // now calc from whats in the igc file on disk
-  GRecordInit();
+  oGRecord.Init();
   GRecordSetFileName(szLoggerFileName);
   GRecordLoadFileToBuffer();
   GRecordFinalizeBuffer();
@@ -245,11 +242,9 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
 
 /**
  * Initialize the GRecord part of the Logger
- * -> Link the DLL
- * -> Call external GRecordInit()
  */
 void
 LoggerImpl::LoggerGInit()
 {
-  GRecordInit();
+  oGRecord.Init();
 }
