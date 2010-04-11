@@ -95,7 +95,7 @@ Profile::SaveFile(const TCHAR *szFile)
     return;
 
   LogStartUp(TEXT("Saving profile to %s"), szFile);
-  Registry::SaveRegistryToFile(szFile);
+  Registry::Export(szFile);
 }
 
 

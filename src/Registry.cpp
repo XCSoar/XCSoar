@@ -357,7 +357,7 @@ Registry::LoadRegistryFromFile(const TCHAR *szFile)
 }
 
 void
-Registry::SaveRegistryToFile(const TCHAR *szFile)
+Registry::Export(const TCHAR *szFile)
 {
 #ifdef WIN32
   TCHAR lpstrName[nMaxKeyNameSize+1];
