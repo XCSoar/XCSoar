@@ -36,7 +36,7 @@
 }
 */
 
-#include "LoggerImpl.hpp"
+#include "Logger/LoggerImpl.hpp"
 #include "Components.hpp"
 #include "TaskClientUI.hpp"
 #include "Version.hpp"

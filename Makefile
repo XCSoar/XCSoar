@@ -168,11 +168,11 @@ XCSOAR_SOURCES := \
 	$(SRC)/GlideComputerTask.cpp \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/GlideTerrain.cpp \
-	$(SRC)/Logger.cpp \
-	$(SRC)/LoggerFRecord.cpp \
-	$(SRC)/LoggerEPE.cpp \
-	$(SRC)/LoggerImpl.cpp \
-	$(SRC)/LoggerSign.cpp \
+	$(SRC)/Logger/Logger.cpp \
+	$(SRC)/Logger/LoggerFRecord.cpp \
+	$(SRC)/Logger/LoggerEPE.cpp \
+	$(SRC)/Logger/LoggerImpl.cpp \
+	$(SRC)/Logger/LoggerSign.cpp \
 	$(SRC)/ReplayLogger.cpp \
 	$(SRC)/ReplayLoggerGlue.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \

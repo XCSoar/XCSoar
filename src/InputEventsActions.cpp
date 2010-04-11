@@ -87,7 +87,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Language.hpp"
-#include "Logger.hpp"
+#include "Logger/Logger.hpp"
 #include "Asset.hpp"
 
 #include "Waypoint/Waypoints.hpp"

@@ -36,8 +36,8 @@
 }
 */
 
-#include "Logger.hpp"
-#include "LoggerImpl.hpp"
+#include "Logger/Logger.hpp"
+#include "Logger/LoggerImpl.hpp"
 
 /**
  * Constructor of the Logger class

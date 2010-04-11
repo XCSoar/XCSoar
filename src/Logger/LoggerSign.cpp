@@ -36,7 +36,7 @@
 }
 */
 
-#include "LoggerImpl.hpp"
+#include "Logger/LoggerImpl.hpp"
 #include "Protection.hpp"
 #include "Dialogs.h"
 #include "Device/Port.hpp"

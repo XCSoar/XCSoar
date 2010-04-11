@@ -42,7 +42,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "Logger.hpp"
+#include "Logger/Logger.hpp"
 #include "Math/Earth.hpp"
 #include "GPSClock.hpp"
 

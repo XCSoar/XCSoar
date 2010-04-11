@@ -43,7 +43,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Battery.h"
 #include "Units.hpp"
-#include "Logger.hpp"
+#include "Logger/Logger.hpp"
 #include "Math/FastMath.h"
 #include "LocalTime.hpp"
 #include "MainWindow.hpp"
