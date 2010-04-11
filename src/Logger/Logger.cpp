@@ -101,13 +101,6 @@ Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
   return _logger->LoggerClearFreeSpace(gps_info);
 }
 
-bool
-Logger::LoggerGActive()
-{
-  Poco::ScopedRWLock protect(lock, false);
-  return _logger->LoggerGActive();
-}
-
 void
 Logger::guiStartLogger(const NMEA_INFO& gps_info,
                     const SETTINGS_COMPUTER& settings,

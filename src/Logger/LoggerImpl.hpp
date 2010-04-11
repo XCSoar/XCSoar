@@ -82,7 +82,6 @@ public:
   bool isTaskDeclared() const;
   bool isLoggerActive() const;
   bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
-  bool LoggerGActive() const;
   void guiStartLogger(const NMEA_INFO& gps_info,
                       const SETTINGS_COMPUTER& settings,
                       bool noAsk = false);

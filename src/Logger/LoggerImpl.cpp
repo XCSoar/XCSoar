@@ -177,7 +177,7 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
   Unlock();
 
   // Write GRecord
-  if (!Simulator && LoggerGActive())
+  if (!Simulator)
     LoggerGStop(szLoggerFileName);
 
   NumLoggerPreTakeoffBuffered = 0;

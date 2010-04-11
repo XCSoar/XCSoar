@@ -193,7 +193,7 @@ LoggerImpl::DiskBufferFlush()
         buffer_G[j] = (TCHAR)LoggerDiskBuffer[i][j];
       }
 
-      if (!Simulator && LoggerGActive())
+      if (!Simulator)
         GRecordAppendRecordToBuffer(pbuffer_G);
     }
   }
@@ -244,21 +244,6 @@ LoggerImpl::DiskBufferReset()
 // directory or same directory as exe
 
 
-/**
- * Returns whether the GRecord DLL has been found
- * @return True if the GRecord DLL has been found, False otherwise
- */
-bool
-LoggerImpl::LoggerGActive() const
-{
-#ifdef WIN32
-  if (GRecordDLLHandle)
-    return true;
-  else
-#endif
-    return false;
-}
-
 void
 LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
 {
@@ -293,6 +278,5 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
 void
 LoggerImpl::LoggerGInit()
 {
-  if (LoggerGActive())
-    GRecordInit();
+  GRecordInit();
 }
