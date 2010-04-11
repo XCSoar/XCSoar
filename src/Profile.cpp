@@ -123,37 +123,37 @@ Profile::SetFiles(const TCHAR* override)
 bool
 Profile::Get(const TCHAR *key, int &value)
 {
-  return Registry::GetFromRegistry(key, value);
+  return Registry::Get(key, value);
 }
 
 bool
 Profile::Get(const TCHAR *key, short &value)
 {
-  return Registry::GetFromRegistry(key, value);
+  return Registry::Get(key, value);
 }
 
 bool
 Profile::Get(const TCHAR *key, bool &value)
 {
-  return Registry::GetFromRegistry(key, value);
+  return Registry::Get(key, value);
 }
 
 bool
 Profile::Get(const TCHAR *key, unsigned &value)
 {
-  return Registry::GetFromRegistry(key, value);
+  return Registry::Get(key, value);
 }
 
 bool
 Profile::Get(const TCHAR *key, double &value)
 {
-  return Registry::GetFromRegistry(key, value);
+  return Registry::Get(key, value);
 }
 
 bool
 Profile::Get(const TCHAR *key, fixed &value)
 {
-  return Registry::GetFromRegistry(key, value);
+  return Registry::Get(key, value);
 }
 
 bool

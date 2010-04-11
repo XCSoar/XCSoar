@@ -45,15 +45,15 @@ Copyright_License {
 #include <tchar.h>
 
 namespace Registry {
-  bool GetFromRegistry(const TCHAR *szRegValue, DWORD &pPos);
-  bool GetFromRegistry(const TCHAR *szRegValue, int &pPos);
-  bool GetFromRegistry(const TCHAR *szRegValue, short &pPos);
-  bool GetFromRegistry(const TCHAR *szRegValue, bool &pPos);
+  bool Get(const TCHAR *szRegValue, DWORD &pPos);
+  bool Get(const TCHAR *szRegValue, int &pPos);
+  bool Get(const TCHAR *szRegValue, short &pPos);
+  bool Get(const TCHAR *szRegValue, bool &pPos);
 #ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
-  bool GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos);
+  bool Get(const TCHAR *szRegValue, unsigned &pPos);
 #endif
-  bool GetFromRegistry(const TCHAR *szRegValue, double &pPos);
-  bool GetFromRegistry(const TCHAR *szRegValue, fixed &pPos);
+  bool Get(const TCHAR *szRegValue, double &pPos);
+  bool Get(const TCHAR *szRegValue, fixed &pPos);
 
   HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
   HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal);

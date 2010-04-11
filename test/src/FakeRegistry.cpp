@@ -38,7 +38,7 @@ Copyright_License {
 #include "Registry.hpp"
 
 bool
-Registry::GetFromRegistry(const TCHAR *szRegValue, int &pPos)
+Registry::Get(const TCHAR *szRegValue, int &pPos)
 {
   return false;
 }

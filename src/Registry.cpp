@@ -101,7 +101,7 @@ public:
 // NOTE: all registry variables are unsigned!
 //
 bool
-Registry::GetFromRegistry(const TCHAR *szRegValue, DWORD &pPos)
+Registry::Get(const TCHAR *szRegValue, DWORD &pPos)
 {
 // returns 0 on SUCCESS, else the non-zero error code
 #ifdef WIN32
@@ -137,66 +137,66 @@ Registry::GetFromRegistry(const TCHAR *szRegValue, DWORD &pPos)
 }
 
 bool
-Registry::GetFromRegistry(const TCHAR *szRegValue, int &pPos)
+Registry::Get(const TCHAR *szRegValue, int &pPos)
 {
   DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistry(szRegValue, Temp)) == ERROR_SUCCESS)
+  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
     pPos = Temp;
 
   return res;
 }
 
 bool
-Registry::GetFromRegistry(const TCHAR *szRegValue, short &pPos)
+Registry::Get(const TCHAR *szRegValue, short &pPos)
 {
   DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistry(szRegValue, Temp)) == ERROR_SUCCESS)
+  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
     pPos = Temp;
 
   return res;
 }
 
 bool
-Registry::GetFromRegistry(const TCHAR *szRegValue, bool &pPos)
+Registry::Get(const TCHAR *szRegValue, bool &pPos)
 {
   DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistry(szRegValue, Temp)) == ERROR_SUCCESS)
+  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
     pPos = Temp > 0;
 
   return res;
 }
 
 bool
-Registry::GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
+Registry::Get(const TCHAR *szRegValue, unsigned &pPos)
 {
   DWORD Temp = pPos;
   long res;
-  if ((res = GetFromRegistry(szRegValue, Temp)) == ERROR_SUCCESS)
+  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
     pPos = Temp;
 
   return res;
 }
 
 bool
-Registry::GetFromRegistry(const TCHAR *szRegValue, double &pPos)
+Registry::Get(const TCHAR *szRegValue, double &pPos)
 {
   DWORD Temp = (DWORD)pPos;
   long res;
-  if ((res = GetFromRegistry(szRegValue, Temp)) == ERROR_SUCCESS)
+  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
     pPos = (double)Temp;
 
   return res;
 }
 
 bool
-Registry::GetFromRegistry(const TCHAR *szRegValue, fixed &pPos)
+Registry::Get(const TCHAR *szRegValue, fixed &pPos)
 {
   DWORD Temp = (DWORD)(long)pPos;
   fixed res;
-  if ((res = GetFromRegistry(szRegValue, Temp)) == ERROR_SUCCESS)
+  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
     pPos = (fixed)Temp;
 
   return res;
