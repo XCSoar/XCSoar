@@ -105,65 +105,63 @@ BlankDisplay(bool doblank)
   int iESC = SETPOWERMANAGEMENT;
 
   gdc = ::GetDC(NULL);
-  if (ExtEscape(gdc, QUERYESCSUPPORT, sizeof(int), (LPCSTR)&iESC,
-                0, NULL)==0) {
+  if (ExtEscape(gdc, QUERYESCSUPPORT, sizeof(int), (LPCSTR)&iESC, 0, NULL) == 0)
     // can't do it, not supported
-  } else {
-    VIDEO_POWER_MANAGEMENT vpm;
-    vpm.Length = sizeof(VIDEO_POWER_MANAGEMENT);
-    vpm.DPMSVersion = 0x0001;
+    return;
 
-    // TODO feature: Trigger a GCE (Glide Computer Event) when
-    // switching to battery mode This can be used to warn users that
-    // power has been lost and you are now on battery power - ie:
-    // something else is wrong
+  VIDEO_POWER_MANAGEMENT vpm;
+  vpm.Length = sizeof(VIDEO_POWER_MANAGEMENT);
+  vpm.DPMSVersion = 0x0001;
 
-    if (doblank) {
-      /* Battery status - simulator only - for safety of battery data
-         note: Simulator only - more important to keep running in your plane
-      */
+  // TODO feature: Trigger a GCE (Glide Computer Event) when
+  // switching to battery mode This can be used to warn users that
+  // power has been lost and you are now on battery power - ie:
+  // something else is wrong
 
-      // JMW, maybe this should be active always...
-      // we don't want the PDA to be completely depleted.
+  if (doblank) {
+    /* Battery status - simulator only - for safety of battery data
+       note: Simulator only - more important to keep running in your plane
+    */
 
-      if (BatteryInfo.acStatus == 0) {
-        if (is_simulator() && (PDABatteryPercent < BATTERY_EXIT)) {
-          LogStartUp(TEXT("Battery low exit..."));
-          // TODO feature: Warning message on battery shutdown
-          XCSoarInterface::SignalShutdown(true);
-        } else {
-          if (PDABatteryPercent < BATTERY_WARNING) {
-            DWORD LocalWarningTime = ::GetTickCount();
-            if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
-              BatteryWarningTime = LocalWarningTime;
-              // TODO feature: Show the user what the batt status is.
-              Message::AddMessage(TEXT("Organiser Battery Low"));
-            }
-          } else {
-            BatteryWarningTime = 0;
+    // JMW, maybe this should be active always...
+    // we don't want the PDA to be completely depleted.
+
+    if (BatteryInfo.acStatus == 0) {
+      if (is_simulator() && (PDABatteryPercent < BATTERY_EXIT)) {
+        LogStartUp(TEXT("Battery low exit..."));
+        // TODO feature: Warning message on battery shutdown
+        XCSoarInterface::SignalShutdown(true);
+      } else {
+        if (PDABatteryPercent < BATTERY_WARNING) {
+          DWORD LocalWarningTime = ::GetTickCount();
+          if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
+            BatteryWarningTime = LocalWarningTime;
+            // TODO feature: Show the user what the batt status is.
+            Message::AddMessage(TEXT("Organiser Battery Low"));
           }
+        } else {
+          BatteryWarningTime = 0;
         }
       }
+    }
 
-      if (BatteryInfo.acStatus == 0) {
-        // Power off the display
-        vpm.PowerState = VideoPowerOff;
-        ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm,
-                  0, NULL);
-        oldblank = true;
-        XCSoarInterface::SetSettingsMap().ScreenBlanked = true;
-      } else {
-        ResetDisplayTimeOut();
-      }
+    if (BatteryInfo.acStatus == 0) {
+      // Power off the display
+      vpm.PowerState = VideoPowerOff;
+      ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR)&vpm, 0, NULL);
+      oldblank = true;
+      XCSoarInterface::SetSettingsMap().ScreenBlanked = true;
     } else {
-      if (oldblank) { // was blanked
-        // Power on the display
-        vpm.PowerState = VideoPowerOn;
-        ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm,
-                  0, NULL);
-        oldblank = false;
-        XCSoarInterface::SetSettingsMap().ScreenBlanked = false;
-      }
+      ResetDisplayTimeOut();
+    }
+  } else {
+    if (oldblank) { // was blanked
+      // Power on the display
+      vpm.PowerState = VideoPowerOn;
+      ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm,
+                0, NULL);
+      oldblank = false;
+      XCSoarInterface::SetSettingsMap().ScreenBlanked = false;
     }
   }
   ::ReleaseDC(NULL, gdc);
