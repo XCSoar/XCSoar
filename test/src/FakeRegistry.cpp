@@ -50,19 +50,19 @@ Registry::GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 }
 
 HRESULT
-Registry::SetToRegistry(const TCHAR *szRegValue, int nVal)
+Registry::Set(const TCHAR *szRegValue, int nVal)
 {
   return 0;
 }
 
 HRESULT
-Registry::SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
+Registry::Set(const TCHAR *szRegValue, unsigned nVal)
 {
   return 0;
 }
 
 HRESULT
-Registry::SetToRegistry(const TCHAR *szRegValue, unsigned long nVal)
+Registry::Set(const TCHAR *szRegValue, unsigned long nVal)
 {
   return 0;
 }

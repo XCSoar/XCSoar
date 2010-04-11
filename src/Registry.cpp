@@ -203,7 +203,7 @@ Registry::Get(const TCHAR *szRegValue, fixed &pPos)
 }
 
 HRESULT
-Registry::SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
+Registry::Set(const TCHAR *szRegValue, DWORD Pos)
 {
 #ifdef WIN32
 
@@ -231,23 +231,23 @@ Registry::SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 
 // Set bool value to registry as 1 or 0
 HRESULT
-Registry::SetToRegistry(const TCHAR *szRegValue, bool bVal)
+Registry::Set(const TCHAR *szRegValue, bool bVal)
 {
-  return SetToRegistry(szRegValue, bVal ? DWORD(1) : DWORD(0));
+  return Set(szRegValue, bVal ? DWORD(1) : DWORD(0));
 }
 
 // Set int value to registry
 HRESULT
-Registry::SetToRegistry(const TCHAR *szRegValue, int nVal)
+Registry::Set(const TCHAR *szRegValue, int nVal)
 {
-  return SetToRegistry(szRegValue, DWORD(nVal));
+  return Set(szRegValue, DWORD(nVal));
 }
 
 #ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
 HRESULT
-Registry::SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
+Registry::Set(const TCHAR *szRegValue, unsigned nVal)
 {
-  return SetToRegistry(szRegValue, DWORD(nVal));
+  return Set(szRegValue, DWORD(nVal));
 }
 #endif
 
@@ -346,7 +346,7 @@ Registry::LoadRegistryFromFile(const TCHAR *szFile)
         SetRegistryString(wname, wvalue);
     } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
       if (!string_is_empty(wname))
-        SetToRegistry(wname, j);
+        Set(wname, j);
     } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
       if (!string_is_empty(wname))
         SetRegistryString(wname, TEXT(""));

@@ -165,37 +165,37 @@ Profile::Get(const TCHAR *key, TCHAR *value, DWORD dwSize)
 bool
 Profile::Set(const TCHAR *key, int value)
 {
-  return Registry::SetToRegistry(key, value);
+  return Registry::Set(key, value);
 }
 
 bool
 Profile::Set(const TCHAR *key, short value)
 {
-  return Registry::SetToRegistry(key, value);
+  return Registry::Set(key, value);
 }
 
 bool
 Profile::Set(const TCHAR *key, bool value)
 {
-  return Registry::SetToRegistry(key, value);
+  return Registry::Set(key, value);
 }
 
 bool
 Profile::Set(const TCHAR *key, unsigned value)
 {
-  return Registry::SetToRegistry(key, value);
+  return Registry::Set(key, value);
 }
 
 bool
 Profile::Set(const TCHAR *key, double value)
 {
-  return Registry::SetToRegistry(key, (DWORD)value);
+  return Registry::Set(key, (DWORD)value);
 }
 
 bool
 Profile::Set(const TCHAR *key, long value)
 {
-  return Registry::SetToRegistry(key, (unsigned long)value);
+  return Registry::Set(key, (unsigned long)value);
 }
 
 bool
