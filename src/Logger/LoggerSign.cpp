@@ -53,32 +53,6 @@
 #include <assert.h>
 #include <tchar.h>
 
-/* the GetProcAddress() prototype differs between Windows CE and
-   desktop Windows */
-#ifdef _WIN32_WCE
-#define PROC_NAME(x) _T(x)
-#else
-#define PROC_NAME(x) (x)
-#endif
-
-typedef int (*GRECORDAPPENDRECORDTOBUFFER)(TCHAR * szIn);
-static GRECORDAPPENDRECORDTOBUFFER GRecordAppendRecordToBuffer;
-
-typedef int (*GRECORDFINALIZEBUFFER)(void);
-static GRECORDFINALIZEBUFFER GRecordFinalizeBuffer;
-
-typedef int (*GRECORDGETDIGEST)(TCHAR * szOut);
-static GRECORDGETDIGEST GRecordGetDigest;
-
-typedef int (*GRECORDSETFILENAME)(TCHAR * szIn);
-static GRECORDSETFILENAME GRecordSetFileName;
-
-typedef int (*GRECORDLOADFILETOBUFFER)(void);
-static GRECORDLOADFILETOBUFFER GRecordLoadFileToBuffer;
-
-typedef int (*GRECORDAPPENDGRECORDTOFILE)(BOOL bValid);
-static GRECORDAPPENDGRECORDTOFILE GRecordAppendGRecordToFile;
-
 /**
  * Checks whether the character c is a valid IGC character
  * @param c Character to check
@@ -164,7 +138,7 @@ LoggerImpl::DiskBufferFlush()
       }
 
       if (!Simulator)
-        GRecordAppendRecordToBuffer(pbuffer_G);
+        oGRecord.AppendRecordToBuffer(pbuffer_G);
     }
   }
 
@@ -222,22 +196,22 @@ LoggerImpl::LoggerGStop(TCHAR* szLoggerFileName)
   TCHAR NewGRecordBuff[MAX_IGC_BUFF];
 
   // buffer is appended w/ each igc file write
-  GRecordFinalizeBuffer();
+  oGRecord.FinalizeBuffer();
   // read record built by individual file writes
-  GRecordGetDigest(OldGRecordBuff);
+  oGRecord.GetDigest(OldGRecordBuff);
 
   // now calc from whats in the igc file on disk
   oGRecord.Init();
-  GRecordSetFileName(szLoggerFileName);
-  GRecordLoadFileToBuffer();
-  GRecordFinalizeBuffer();
-  GRecordGetDigest(NewGRecordBuff);
+  oGRecord.SetFileName(szLoggerFileName);
+  oGRecord.LoadFileToBuffer();
+  oGRecord.FinalizeBuffer();
+  oGRecord.GetDigest(NewGRecordBuff);
 
   for (unsigned int i = 0; i < 128; i++)
     if (OldGRecordBuff[i] != NewGRecordBuff[i])
       bFileValid = false;
 
-  GRecordAppendGRecordToFile(bFileValid);
+  oGRecord.AppendGRecordToFile(bFileValid);
 }
 
 /**
