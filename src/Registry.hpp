@@ -39,10 +39,10 @@ Copyright_License {
 #ifndef XCSOAR_REGISTRY_HPP
 #define XCSOAR_REGISTRY_HPP
 
-#include <windows.h>
-
-#include <tchar.h>
 #include "Math/fixed.hpp"
+
+#include <windows.h>
+#include <tchar.h>
 
 bool GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos);
 bool GetFromRegistry(const TCHAR *szRegValue, int &pPos);
