@@ -118,7 +118,6 @@ static void PrepareData(void){
 
   sNameFilter[0]='\0';
   SetNameCaptionFlushLeft(_T("*"));
-  LogStartUp(TEXT("dlgWayPointSelect 3"));
 
   if (wpDistance) {  // initialize datafieldenum for Distance
     DataFieldEnum* dfe;
@@ -138,8 +137,6 @@ static void PrepareData(void){
     dfe->SetAsInteger(0);
     wpDistance->RefreshDisplay();
   }
-
-  LogStartUp(TEXT("dlgWayPointSelect 4"));
 
   InitializeDirection(false);
 
@@ -161,7 +158,6 @@ static void PrepareData(void){
 static void UpdateList(void)
 {
   WayPointSelectInfo = waypoint_sorter->get_list();
-  LogStartUp(TEXT("dlgWayPointSelect 5"));
 
   switch( wpType->GetDataField()->GetAsInteger() ) {
   case 1: 
@@ -180,7 +176,6 @@ static void UpdateList(void)
   default:
     break;
   }
-  LogStartUp(TEXT("dlgWayPointSelect 6"));
 
   bool sort_distance = false;
   if (wpDistance->GetDataField()->GetAsInteger()) {
@@ -197,7 +192,6 @@ static void UpdateList(void)
     }
     waypoint_sorter->filter_direction(WayPointSelectInfo, fixed(a));
   }
-  LogStartUp(TEXT("dlgWayPointSelect 7"));
 
   if (sort_distance) {
     waypoint_sorter->sort_distance(WayPointSelectInfo);
@@ -205,7 +199,6 @@ static void UpdateList(void)
   if (_tcslen(sNameFilter) > 0) {
     waypoint_sorter->filter_name(WayPointSelectInfo, sNameFilter);
   }
-  LogStartUp(TEXT("dlgWayPointSelect 8"));
 
   UpLimit = WayPointSelectInfo.size();
   wWayPointList->SetLength(UpLimit);
@@ -542,9 +535,7 @@ dlgWayPointSelect(SingleWindow &parent,
 
   WaypointSorter g_waypoint_sorter(way_points, location, fixed(Units::ToUserDistance(1)));
   waypoint_sorter = &g_waypoint_sorter;
-  LogStartUp(TEXT("dlgWayPointSelect 1"));
   PrepareData();
-  LogStartUp(TEXT("dlgWayPointSelect 2"));
   UpdateList();
 
   wf->SetTimerNotify(OnTimerNotify);
