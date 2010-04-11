@@ -119,7 +119,7 @@ private:
 
   void StopLogger(const NMEA_INFO &gps_info);
   bool IGCWriteRecord(const char *szIn, const TCHAR *);
-
+  void CleanIGCRecord(char * szIn);
   bool LoggerDeclare(struct DeviceDescriptor *dev,
                      const Declaration &decl);
   void LoggerGInit();

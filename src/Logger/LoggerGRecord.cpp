@@ -382,5 +382,6 @@ bool GRecord::VerifyGRecordInFile()
 int
 GRecord::IsValidIGCChar(char c) //returns 1 if Valid IGC Char
 {//                                  else 0
+  // ToDo: RLD move this function out of MD5 class
   return oMD5[0].IsValidIGCChar(c);
 }

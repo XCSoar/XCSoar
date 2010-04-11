@@ -54,40 +54,16 @@
 #include <tchar.h>
 
 /**
- * Checks whether the character c is a valid IGC character
- * @param c Character to check
- * @return True if valid character, False otherwise
- */
-bool
-IsValidIGCChar(char c) //returns 1 if valid char for IGC files
-{
-  if (c >= 0x20 &&
-      c <= 0x7E &&
-      c != 0x0D &&
-      c != 0x0A &&
-      c != 0x24 &&
-      c != 0x2A &&
-      c != 0x2C &&
-      c != 0x21 &&
-      c != 0x5C &&
-      c != 0x5E &&
-      c != 0x7E)
-    return true;
-  else
-    return false;
-}
-
-/**
  * Checks a string for invalid characters and replaces them with 0x20 (space)
  * @param szIn Input/Output string (pointer)
  */
 void
-CleanIGCRecord(char * szIn)
+LoggerImpl::CleanIGCRecord(char * szIn)
 {  
   // don't clean terminating \r\n!
   int iLen = strlen(szIn) - 2;
   for (int i = 0; i < iLen; i++) {
-    if (!IsValidIGCChar(szIn[i]))
+    if (!oGRecord.IsValidIGCChar(szIn[i]))
       szIn[i] = ' ';
   }
 }
