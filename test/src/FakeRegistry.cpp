@@ -38,37 +38,37 @@ Copyright_License {
 #include "Registry.hpp"
 
 bool
-GetFromRegistry(const TCHAR *szRegValue, int &pPos)
+Registry::GetFromRegistry(const TCHAR *szRegValue, int &pPos)
 {
   return false;
 }
 
 bool
-GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+Registry::GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
   return false;
 }
 
 HRESULT
-SetToRegistry(const TCHAR *szRegValue, int nVal)
+Registry::SetToRegistry(const TCHAR *szRegValue, int nVal)
 {
   return 0;
 }
 
 HRESULT
-SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
+Registry::SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
 {
   return 0;
 }
 
 HRESULT
-SetToRegistry(const TCHAR *szRegValue, unsigned long nVal)
+Registry::SetToRegistry(const TCHAR *szRegValue, unsigned long nVal)
 {
   return 0;
 }
 
 bool
-SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
+Registry::SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   return 0;
 }

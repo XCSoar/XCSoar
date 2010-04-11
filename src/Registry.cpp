@@ -101,7 +101,7 @@ public:
 // NOTE: all registry variables are unsigned!
 //
 bool
-GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
+Registry::GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
 {
 // returns 0 on SUCCESS, else the non-zero error code
 #ifdef WIN32
@@ -137,7 +137,7 @@ GetFromRegistryD(const TCHAR *szRegValue, DWORD &pPos)
 }
 
 bool
-GetFromRegistry(const TCHAR *szRegValue, int &pPos)
+Registry::GetFromRegistry(const TCHAR *szRegValue, int &pPos)
 {
   DWORD Temp = pPos;
   long res;
@@ -148,7 +148,7 @@ GetFromRegistry(const TCHAR *szRegValue, int &pPos)
 }
 
 bool
-GetFromRegistry(const TCHAR *szRegValue, short &pPos)
+Registry::GetFromRegistry(const TCHAR *szRegValue, short &pPos)
 {
   DWORD Temp = pPos;
   long res;
@@ -159,7 +159,7 @@ GetFromRegistry(const TCHAR *szRegValue, short &pPos)
 }
 
 bool
-GetFromRegistry(const TCHAR *szRegValue, bool &pPos)
+Registry::GetFromRegistry(const TCHAR *szRegValue, bool &pPos)
 {
   DWORD Temp = pPos;
   long res;
@@ -170,7 +170,7 @@ GetFromRegistry(const TCHAR *szRegValue, bool &pPos)
 }
 
 bool
-GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
+Registry::GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
 {
   DWORD Temp = pPos;
   long res;
@@ -181,7 +181,7 @@ GetFromRegistry(const TCHAR *szRegValue, unsigned &pPos)
 }
 
 bool
-GetFromRegistry(const TCHAR *szRegValue, double &pPos)
+Registry::GetFromRegistry(const TCHAR *szRegValue, double &pPos)
 {
   DWORD Temp = (DWORD)pPos;
   long res;
@@ -192,7 +192,7 @@ GetFromRegistry(const TCHAR *szRegValue, double &pPos)
 }
 
 bool
-GetFromRegistry(const TCHAR *szRegValue, fixed &pPos)
+Registry::GetFromRegistry(const TCHAR *szRegValue, fixed &pPos)
 {
   DWORD Temp = (DWORD)(long)pPos;
   fixed res;
@@ -203,7 +203,7 @@ GetFromRegistry(const TCHAR *szRegValue, fixed &pPos)
 }
 
 HRESULT
-SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
+Registry::SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 {
 #ifdef WIN32
 
@@ -231,21 +231,21 @@ SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 
 // Set bool value to registry as 1 or 0
 HRESULT
-SetToRegistry(const TCHAR *szRegValue, bool bVal)
+Registry::SetToRegistry(const TCHAR *szRegValue, bool bVal)
 {
   return SetToRegistry(szRegValue, bVal ? DWORD(1) : DWORD(0));
 }
 
 // Set int value to registry
 HRESULT
-SetToRegistry(const TCHAR *szRegValue, int nVal)
+Registry::SetToRegistry(const TCHAR *szRegValue, int nVal)
 {
   return SetToRegistry(szRegValue, DWORD(nVal));
 }
 
 #ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
 HRESULT
-SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
+Registry::SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
 {
   return SetToRegistry(szRegValue, DWORD(nVal));
 }
@@ -258,7 +258,7 @@ SetToRegistry(const TCHAR *szRegValue, unsigned nVal)
  * @param dwSize Maximum size of the output buffer
  */
 bool
-GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+Registry::GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
 #ifdef WIN32
 
@@ -294,7 +294,7 @@ GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
  * @param Pos Value that should be written
  */
 bool
-SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
+Registry::SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
 #ifdef WIN32
 
@@ -324,7 +324,7 @@ const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6; // max regkey name is
 const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 
 void
-LoadRegistryFromFile(const TCHAR *szFile)
+Registry::LoadRegistryFromFile(const TCHAR *szFile)
 {
   if (string_is_empty(szFile))
     return;
@@ -357,7 +357,7 @@ LoadRegistryFromFile(const TCHAR *szFile)
 }
 
 void
-SaveRegistryToFile(const TCHAR *szFile)
+Registry::SaveRegistryToFile(const TCHAR *szFile)
 {
 #ifdef WIN32
   TCHAR lpstrName[nMaxKeyNameSize+1];

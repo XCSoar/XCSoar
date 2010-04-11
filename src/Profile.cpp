@@ -76,7 +76,7 @@ Profile::LoadFile(const TCHAR *szFile)
     return;
 
   LogStartUp(TEXT("Loading profile from %s"), szFile);
-  LoadRegistryFromFile(szFile);
+  Registry::LoadRegistryFromFile(szFile);
 }
 
 void
@@ -95,7 +95,7 @@ Profile::SaveFile(const TCHAR *szFile)
     return;
 
   LogStartUp(TEXT("Saving profile to %s"), szFile);
-  SaveRegistryToFile(szFile);
+  Registry::SaveRegistryToFile(szFile);
 }
 
 
@@ -123,85 +123,85 @@ Profile::SetFiles(const TCHAR* override)
 bool
 Profile::Get(const TCHAR *key, int &value)
 {
-  return GetFromRegistry(key, value);
+  return Registry::GetFromRegistry(key, value);
 }
 
 bool
 Profile::Get(const TCHAR *key, short &value)
 {
-  return GetFromRegistry(key, value);
+  return Registry::GetFromRegistry(key, value);
 }
 
 bool
 Profile::Get(const TCHAR *key, bool &value)
 {
-  return GetFromRegistry(key, value);
+  return Registry::GetFromRegistry(key, value);
 }
 
 bool
 Profile::Get(const TCHAR *key, unsigned &value)
 {
-  return GetFromRegistry(key, value);
+  return Registry::GetFromRegistry(key, value);
 }
 
 bool
 Profile::Get(const TCHAR *key, double &value)
 {
-  return GetFromRegistry(key, value);
+  return Registry::GetFromRegistry(key, value);
 }
 
 bool
 Profile::Get(const TCHAR *key, fixed &value)
 {
-  return GetFromRegistry(key, value);
+  return Registry::GetFromRegistry(key, value);
 }
 
 bool
 Profile::Get(const TCHAR *key, TCHAR *value, DWORD dwSize)
 {
-  return GetRegistryString(key, value, dwSize);
+  return Registry::GetRegistryString(key, value, dwSize);
 }
 
 bool
 Profile::Set(const TCHAR *key, int value)
 {
-  return SetToRegistry(key, value);
+  return Registry::SetToRegistry(key, value);
 }
 
 bool
 Profile::Set(const TCHAR *key, short value)
 {
-  return SetToRegistry(key, value);
+  return Registry::SetToRegistry(key, value);
 }
 
 bool
 Profile::Set(const TCHAR *key, bool value)
 {
-  return SetToRegistry(key, value);
+  return Registry::SetToRegistry(key, value);
 }
 
 bool
 Profile::Set(const TCHAR *key, unsigned value)
 {
-  return SetToRegistry(key, value);
+  return Registry::SetToRegistry(key, value);
 }
 
 bool
 Profile::Set(const TCHAR *key, double value)
 {
-  return SetToRegistry(key, (DWORD)value);
+  return Registry::SetToRegistry(key, (DWORD)value);
 }
 
 bool
 Profile::Set(const TCHAR *key, long value)
 {
-  return SetToRegistry(key, (unsigned long)value);
+  return Registry::SetToRegistry(key, (unsigned long)value);
 }
 
 bool
 Profile::Set(const TCHAR *key, const TCHAR *value)
 {
-  return SetRegistryString(key, value);
+  return Registry::SetRegistryString(key, value);
 }
 
 void
