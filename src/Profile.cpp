@@ -76,7 +76,7 @@ Profile::LoadFile(const TCHAR *szFile)
     return;
 
   LogStartUp(TEXT("Loading profile from %s"), szFile);
-  Registry::LoadRegistryFromFile(szFile);
+  Registry::Import(szFile);
 }
 
 void

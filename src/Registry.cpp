@@ -324,7 +324,7 @@ const static size_t nMaxValueValueSize = MAX_PATH * 2 + 6; // max regkey name is
 const static size_t nMaxKeyNameSize = MAX_PATH + 6;
 
 void
-Registry::LoadRegistryFromFile(const TCHAR *szFile)
+Registry::Import(const TCHAR *szFile)
 {
   if (string_is_empty(szFile))
     return;
