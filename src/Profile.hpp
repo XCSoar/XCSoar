@@ -77,10 +77,10 @@ namespace Profile
    * Loads the given profile file
    */
   void LoadFile(const TCHAR *szFile);
+
   /**
    * Saves the profile into the profile files
    */
-
   void Save();
   /**
    * Saves the profile into the given profile file
