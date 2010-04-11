@@ -159,7 +159,7 @@ Profile::Get(const TCHAR *key, fixed &value)
 bool
 Profile::Get(const TCHAR *key, TCHAR *value, DWORD dwSize)
 {
-  return Registry::GetRegistryString(key, value, dwSize);
+  return Registry::Get(key, value, dwSize);
 }
 
 bool
@@ -201,7 +201,7 @@ Profile::Set(const TCHAR *key, long value)
 bool
 Profile::Set(const TCHAR *key, const TCHAR *value)
 {
-  return Registry::SetRegistryString(key, value);
+  return Registry::Set(key, value);
 }
 
 void

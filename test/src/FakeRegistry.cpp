@@ -44,7 +44,7 @@ Registry::Get(const TCHAR *szRegValue, int &pPos)
 }
 
 bool
-Registry::GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+Registry::Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
   return false;
 }
@@ -68,7 +68,7 @@ Registry::Set(const TCHAR *szRegValue, unsigned long nVal)
 }
 
 bool
-Registry::SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
+Registry::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   return 0;
 }

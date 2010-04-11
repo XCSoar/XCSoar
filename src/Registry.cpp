@@ -258,7 +258,7 @@ Registry::Set(const TCHAR *szRegValue, unsigned nVal)
  * @param dwSize Maximum size of the output buffer
  */
 bool
-Registry::GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+Registry::Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
 #ifdef WIN32
 
@@ -294,7 +294,7 @@ Registry::GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
  * @param Pos Value that should be written
  */
 bool
-Registry::SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
+Registry::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 {
 #ifdef WIN32
 
@@ -343,13 +343,13 @@ Registry::LoadRegistryFromFile(const TCHAR *szFile)
     if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"%[^\r\n\"]\"[\r\n]"),
                  wname, wvalue) == 2) {
       if (!string_is_empty(wname))
-        SetRegistryString(wname, wvalue);
+        Set(wname, wvalue);
     } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=%d[\r\n]"), wname, &j) == 2) {
       if (!string_is_empty(wname))
         Set(wname, j);
     } else if (_stscanf(winval, TEXT("%[^#=\r\n ]=\"\"[\r\n]"), wname) == 1) {
       if (!string_is_empty(wname))
-        SetRegistryString(wname, TEXT(""));
+        Set(wname, TEXT(""));
     } else {
       // assert(false); // Invalid line reached
     }

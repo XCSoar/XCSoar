@@ -63,11 +63,8 @@ namespace Registry {
   HRESULT Set(const TCHAR *szRegValue, unsigned nVal);
   #endif
 
-  bool
-  GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
-
-  bool
-  SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos);
+  bool Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
+  bool Set(const TCHAR *szRegValue, const TCHAR *Pos);
 
   void SaveRegistryToFile(const TCHAR* szFile);
   void LoadRegistryFromFile(const TCHAR* szFile);
