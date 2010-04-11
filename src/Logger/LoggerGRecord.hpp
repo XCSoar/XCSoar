@@ -64,6 +64,7 @@ public:
   int GetDigestMaxLen(void);
   int FinalizeBuffer();
   int GetDigest(TCHAR * szOut);
+  int IsValidIGCChar(char c);
 
   // File specific functions
   int SetFileName(TCHAR * szIn);

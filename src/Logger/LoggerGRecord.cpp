@@ -379,4 +379,8 @@ bool GRecord::VerifyGRecordInFile()
   return bRetVal;
 }
 
-
+int
+GRecord::IsValidIGCChar(char c) //returns 1 if Valid IGC Char
+{//                                  else 0
+  return oMD5[0].IsValidIGCChar(c);
+}
