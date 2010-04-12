@@ -143,15 +143,13 @@ ExpandLocalPath(TCHAR* filein)
 
   // Get the relative file name and location (ptr)
   const TCHAR *ptr = string_after_prefix(filein, code);
-  if (!ptr)
+  if (!ptr || string_is_empty(ptr))
     return;
 
-  if (!string_is_empty(ptr)) {
-    // Replace the code "%LOCAL_PATH%\\" by the full local path (output)
-    _stprintf(output, TEXT("%s%s"), lpath, ptr);
-    // ... and copy it to the buffer (filein)
-    _tcscpy(filein, output);
-  }
+  // Replace the code "%LOCAL_PATH%\\" by the full local path (output)
+  _stprintf(output, TEXT("%s%s"), lpath, ptr);
+  // ... and copy it to the buffer (filein)
+  _tcscpy(filein, output);
 
   // Normalize the backslashes (if necessary)
   normalize_backslashes(filein);
