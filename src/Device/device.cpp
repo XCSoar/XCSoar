@@ -256,27 +256,25 @@ devInit(const TCHAR *CommandLine)
   for (unsigned i = 0; i < NUMDEV; i++)
     DeviceList[i].Clear();
 
-  DWORD PortIndex1, PortIndex2, SpeedIndex1, SpeedIndex2;
-  if (is_altair()) {
-    PortIndex1 = 2;
-    SpeedIndex1 = 5;
-    PortIndex2 = 0;
-    SpeedIndex2 = 5;
-  } else {
-    PortIndex1 = 0;
-    SpeedIndex1 = 2;
-    PortIndex2 = 0;
-    SpeedIndex2 = 2;
-  }
-
   DeviceConfig config[NUMDEV];
+  if (is_altair()) {
+    config[0].port_index = 2;
+    config[0].speed_index = 5;
+    config[1].port_index = 0;
+    config[1].speed_index = 5;
+  } else {
+    config[0].port_index = 0;
+    config[0].speed_index = 2;
+    config[1].port_index = 0;
+    config[1].speed_index = 2;
+  }
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     Profile::GetDeviceConfig(i, config[i]);
 
   devInitOne(DeviceList[0], config[0], pDevNmeaOut);
 
-  if (PortIndex1 != PortIndex2)
+  if (config[0].port_index != config[1].port_index)
     devInitOne(DeviceList[1], config[1], pDevNmeaOut);
 
   CommandLine = LOGGDEVCOMMANDLINE;
