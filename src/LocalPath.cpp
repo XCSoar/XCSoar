@@ -167,12 +167,10 @@ ContractLocalPath(TCHAR* filein)
   LocalPath(lpath);
 
   const TCHAR *ptr = string_after_prefix(filein, lpath);
-  if (!ptr)
+  if (!ptr || string_is_empty(ptr))
     return;
 
-  if (!string_is_empty(ptr)) {
-    _stprintf(output, TEXT("%s%s"), code, ptr);
-    _tcscpy(filein, output);
-  }
+  _stprintf(output, TEXT("%s%s"), code, ptr);
+  _tcscpy(filein, output);
 }
 
