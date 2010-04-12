@@ -63,7 +63,7 @@ LocalPath(TCHAR *buf, const TCHAR* file, int loc)
 }
 
 void
-LocalPathS(char *buf, const TCHAR* file, int loc)
+LocalPath(char *buf, const TCHAR* file, int loc)
 {
 //  strcpy(buf, (const char *)file);
   unicode2ascii(file, buf);

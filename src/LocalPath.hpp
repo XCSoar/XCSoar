@@ -47,8 +47,10 @@ Copyright_License {
 void LocalPath(TCHAR* buf, const TCHAR* file = TEXT(""),
                int loc = CSIDL_PERSONAL);
 
-void LocalPathS(char* buf, const TCHAR* file = TEXT(""),
-                int loc = CSIDL_PERSONAL);
+#ifndef HAVE_POSIX
+void LocalPath(char* buf, const TCHAR* file = TEXT(""),
+               int loc = CSIDL_PERSONAL);
+#endif
 
 void ExpandLocalPath(TCHAR* filein);
 void ContractLocalPath(TCHAR* filein);

@@ -107,7 +107,7 @@ void RasterWeather::RASP_filename(char* rasp_filename,
   _stprintf(fname,
             TEXT("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"),
             name, IndexToTime(_weather_time));
-  LocalPathS(rasp_filename, fname);
+  LocalPath(rasp_filename, fname);
 }
 
 bool RasterWeather::LoadItem(int item, const TCHAR* name) {

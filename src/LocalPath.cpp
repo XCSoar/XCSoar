@@ -105,17 +105,15 @@ LocalPath(TCHAR* buffer, const TCHAR* file, int loc)
   }
 }
 
+#ifndef HAVE_POSIX
 void
-LocalPathS(char *buffer, const TCHAR* file, int loc)
+LocalPath(char *buffer, const TCHAR* file, int loc)
 {
-#ifdef HAVE_POSIX
-  LocalPath(buffer, file, loc);
-#else
   TCHAR wbuffer[MAX_PATH];
   LocalPath(wbuffer, file, loc);
   sprintf(buffer, "%S", wbuffer);
-#endif
 }
+#endif
 
 /**
  * Convert backslashes to slashes on platforms where it matters.

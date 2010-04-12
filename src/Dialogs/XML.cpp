@@ -386,7 +386,7 @@ load_xml_file_or_resource(const TCHAR *name, const TCHAR* resource)
 
   // Get filepath
   char FileName[MAX_PATH];
-  LocalPathS(FileName, name);
+  LocalPath(FileName, name);
 
   // If file exists -> Load XML from file
   if (FileExists(FileName))
