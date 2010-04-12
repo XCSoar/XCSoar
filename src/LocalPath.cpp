@@ -45,7 +45,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-// Get local My Documents path - optionally include file to add and location
 void
 LocalPath(TCHAR* buffer, const TCHAR* file, int loc)
 {
@@ -117,12 +116,12 @@ LocalPath(char *buffer, const TCHAR* file, int loc)
 
 /**
  * Convert backslashes to slashes on platforms where it matters.
+ * @param p Pointer to the string to normalize
  */
 static void
 normalize_backslashes(TCHAR *p)
 {
 #if !defined(_WIN32) || defined(__WINE__)
-  /* convert backslash to slash */
   while ((p = _tcschr(p, '\\')) != NULL)
     *p++ = '/';
 #endif
@@ -131,46 +130,55 @@ normalize_backslashes(TCHAR *p)
 void
 ExpandLocalPath(TCHAR* filein)
 {
-  // Convert %LOCALPATH% to Local Path
-
+  // If no string to convert -> return
   if (string_is_empty(filein))
     return;
 
   TCHAR lpath[MAX_PATH];
   TCHAR code[] = TEXT("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
+
+  // Get the XCSoarData folder location (lpath)
   LocalPath(lpath);
 
+  // Get the relative file name and location (ptr)
   const TCHAR *ptr = string_after_prefix(filein, code);
   if (!ptr)
     return;
 
   if (!string_is_empty(ptr)) {
+    // Replace the code "%LOCAL_PATH%\\" by the full local path (output)
     _stprintf(output, TEXT("%s%s"), lpath, ptr);
+    // ... and copy it to the buffer (filein)
     _tcscpy(filein, output);
   }
 
+  // Normalize the backslashes (if necessary)
   normalize_backslashes(filein);
 }
 
 void
 ContractLocalPath(TCHAR* filein)
 {
-  // Convert Local Path part to %LOCALPATH%
-
+  // If no string to convert -> return
   if (string_is_empty(filein))
     return;
 
   TCHAR lpath[MAX_PATH];
   TCHAR code[] = TEXT("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
+
+  // Get the XCSoarData folder location (lpath)
   LocalPath(lpath);
 
+  // Get the relative file name and location (ptr)
   const TCHAR *ptr = string_after_prefix(filein, lpath);
   if (!ptr || string_is_empty(ptr))
     return;
 
+  // Replace the full local path by the code "%LOCAL_PATH%\\" (output)
   _stprintf(output, TEXT("%s%s"), code, ptr);
+  // ... and copy it to the buffer (filein)
   _tcscpy(filein, output);
 }
 

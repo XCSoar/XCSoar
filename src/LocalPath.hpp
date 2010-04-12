@@ -44,6 +44,12 @@ Copyright_License {
 #include <windows.h>
 #include <shlobj.h>
 
+/**
+ * Returns the path of the XCSoarData folder, optionally including
+ * the given file name
+ * @param buffer Output buffer
+ * @param file optional filename to include in the output
+ */
 void LocalPath(TCHAR* buf, const TCHAR* file = TEXT(""),
                int loc = CSIDL_PERSONAL);
 
@@ -52,7 +58,18 @@ void LocalPath(char* buf, const TCHAR* file = TEXT(""),
                int loc = CSIDL_PERSONAL);
 #endif
 
+/**
+ * Converts a file path by replacing %LOCAL_PATH% with the full pathname to
+ * the XCSoarData folder
+ * @param filein Pointer to the string to convert
+ */
 void ExpandLocalPath(TCHAR* filein);
+
+/**
+ * Converts a file path from full pathname to a shorter version with the
+ * XCSoarData folder replaced by %LOCAL_PATH%
+ * @param filein Pointer to the string to convert
+ */
 void ContractLocalPath(TCHAR* filein);
 
 #endif
