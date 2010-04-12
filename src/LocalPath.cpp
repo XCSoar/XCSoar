@@ -46,7 +46,9 @@ Copyright_License {
 #include <stdio.h>
 
 // Get local My Documents path - optionally include file to add and location
-void LocalPath(TCHAR* buffer, const TCHAR* file, int loc) {
+void
+LocalPath(TCHAR* buffer, const TCHAR* file, int loc)
+{
   /*
   loc = CSIDL_PROGRAMS
 
@@ -59,7 +61,7 @@ void LocalPath(TCHAR* buffer, const TCHAR* file, int loc) {
   CSIDL_PROGRAM_FILES 0x0026   The program files folder.
   */
   #if defined(GNAV) && !defined(PCGNAV)
-    _tcscpy(buffer,TEXT("\\NOR Flash"));
+    _tcscpy(buffer, TEXT("\\NOR Flash"));
   #elif defined (PNA) && !defined(WINDOWSPC)
    /*
     * VENTA-ADDON "smartpath" for PNA only
@@ -79,10 +81,10 @@ void LocalPath(TCHAR* buffer, const TCHAR* file, int loc) {
     /*
      * Force LOCALPATH to be the same of the executing program
      */
-    _stprintf(buffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
+    _stprintf(buffer, TEXT("%s%S"), gmfpathname(), XCSDATADIR);
   // VENTA2 FIX PC BUG
   #elif defined (FIVV) && !defined(WINDOWSPC)
-    _stprintf(buffer,TEXT("%s%S"),gmfpathname(), XCSDATADIR );
+    _stprintf(buffer, TEXT("%s%S"), gmfpathname(), XCSDATADIR);
   #elif !defined(_WIN32) || defined(__WINE__)
     /* on Unix or WINE, use ~/.xcsoar */
     const char *home = getenv("HOME");
@@ -103,14 +105,15 @@ void LocalPath(TCHAR* buffer, const TCHAR* file, int loc) {
   }
 }
 
-
-void LocalPathS(char *buffer, const TCHAR* file, int loc) {
+void
+LocalPathS(char *buffer, const TCHAR* file, int loc)
+{
 #ifdef HAVE_POSIX
-  LocalPath(buffer,file,loc);
+  LocalPath(buffer, file, loc);
 #else
   TCHAR wbuffer[MAX_PATH];
-  LocalPath(wbuffer,file,loc);
-  sprintf(buffer,"%S",wbuffer);
+  LocalPath(wbuffer, file, loc);
+  sprintf(buffer, "%S", wbuffer);
 #endif
 }
 
@@ -127,7 +130,9 @@ normalize_backslashes(TCHAR *p)
 #endif
 }
 
-void ExpandLocalPath(TCHAR* filein) {
+void
+ExpandLocalPath(TCHAR* filein)
+{
   // Convert %LOCALPATH% to Local Path
 
   if (string_is_empty(filein))
@@ -139,18 +144,20 @@ void ExpandLocalPath(TCHAR* filein) {
   LocalPath(lpath);
 
   const TCHAR *ptr = string_after_prefix(filein, code);
-  if (!ptr) return;
+  if (!ptr)
+    return;
 
   if (!string_is_empty(ptr)) {
-    _stprintf(output,TEXT("%s%s"),lpath, ptr);
+    _stprintf(output, TEXT("%s%s"), lpath, ptr);
     _tcscpy(filein, output);
   }
 
   normalize_backslashes(filein);
 }
 
-
-void ContractLocalPath(TCHAR* filein) {
+void
+ContractLocalPath(TCHAR* filein)
+{
   // Convert Local Path part to %LOCALPATH%
 
   if (string_is_empty(filein))
@@ -162,10 +169,11 @@ void ContractLocalPath(TCHAR* filein) {
   LocalPath(lpath);
 
   const TCHAR *ptr = string_after_prefix(filein, lpath);
-  if (!ptr) return;
+  if (!ptr)
+    return;
 
   if (!string_is_empty(ptr)) {
-    _stprintf(output,TEXT("%s%s"),code, ptr);
+    _stprintf(output, TEXT("%s%s"), code, ptr);
     _tcscpy(filein, output);
   }
 }
