@@ -1441,7 +1441,7 @@ static void setVariables(void) {
   LoadFormProperty(*wf, _T("prpHandicap"),
                    XCSoarInterface::SettingsComputer().olc_handicap);
 
-  if(Profile::Get(szProfileSpeedUnitsValue,Speed)!=ERROR_SUCCESS) {
+  if(!Profile::Get(szProfileSpeedUnitsValue,Speed)) {
     Profile::Set(szProfileSpeedUnitsValue, Speed);
     changed = true;
   }
@@ -1468,7 +1468,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(Profile::Get(szProfileTaskSpeedUnitsValue,TaskSpeed)!=ERROR_SUCCESS) {
+  if(!Profile::Get(szProfileTaskSpeedUnitsValue,TaskSpeed)) {
     Profile::Set(szProfileTaskSpeedUnitsValue, TaskSpeed);
     changed = true;
   }
@@ -1483,7 +1483,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(Profile::Get(szProfileDistanceUnitsValue,Distance)!=ERROR_SUCCESS) {
+  if(!Profile::Get(szProfileDistanceUnitsValue,Distance)) {
     Profile::Set(szProfileDistanceUnitsValue, Distance);
     changed = true;
   }
@@ -1498,7 +1498,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(Profile::Get(szProfileAltitudeUnitsValue,Altitude)!=ERROR_SUCCESS) {
+  if(!Profile::Get(szProfileAltitudeUnitsValue,Altitude)) {
     Profile::Set(szProfileAltitudeUnitsValue, Altitude);
     changed = true;
   }
@@ -1512,7 +1512,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
-  if(Profile::Get(szProfileLiftUnitsValue,Lift)!=ERROR_SUCCESS) {
+  if(!Profile::Get(szProfileLiftUnitsValue,Lift)) {
     Profile::Set(szProfileLiftUnitsValue, Lift);
     changed = true;
   }

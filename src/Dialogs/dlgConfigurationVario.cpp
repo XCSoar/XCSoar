@@ -123,7 +123,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
     return true;
   }
 
-  if (!(Profile::Get(fullname, lvalue) == ERROR_SUCCESS)) {
+  if (!Profile::Get(fullname, lvalue)) {
     // vario hasn't set the value in the registry yet,
     // so no sensible defaults
     return false;
@@ -144,7 +144,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
     }
   }
 
-  if (Profile::Get(updatename, updated) == ERROR_SUCCESS) {
+  if (Profile::Get(updatename, updated)) {
     if (updated == 1) {
       // value is updated externally, so set the property and can proceed
       // to editing values

@@ -113,7 +113,7 @@ Registry::Get(const TCHAR *szRegValue, DWORD &pPos)
 
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, KEY_ALL_ACCESS, &hKey);
   if (hRes != ERROR_SUCCESS)
-    return hRes;
+    return false;
 
   defaultVal = pPos;
   dwSize = sizeof(DWORD);
@@ -122,7 +122,7 @@ Registry::Get(const TCHAR *szRegValue, DWORD &pPos)
     pPos = defaultVal;
 
   RegCloseKey(hKey);
-  return hRes;
+  return hRes == ERROR_SUCCESS;
 
 #else /* !WIN32 */
 
@@ -140,8 +140,9 @@ bool
 Registry::Get(const TCHAR *szRegValue, int &pPos)
 {
   DWORD Temp = pPos;
-  long res;
-  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
+  bool res;
+  res = Get(szRegValue, Temp);
+  if (res)
     pPos = Temp;
 
   return res;
@@ -151,8 +152,9 @@ bool
 Registry::Get(const TCHAR *szRegValue, short &pPos)
 {
   DWORD Temp = pPos;
-  long res;
-  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
+  bool res;
+  res = Get(szRegValue, Temp);
+  if (res)
     pPos = Temp;
 
   return res;
@@ -162,8 +164,9 @@ bool
 Registry::Get(const TCHAR *szRegValue, bool &pPos)
 {
   DWORD Temp = pPos;
-  long res;
-  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
+  bool res;
+  res = Get(szRegValue, Temp);
+  if (res)
     pPos = Temp > 0;
 
   return res;
@@ -174,8 +177,9 @@ bool
 Registry::Get(const TCHAR *szRegValue, unsigned &pPos)
 {
   DWORD Temp = pPos;
-  long res;
-  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
+  bool res;
+  res = Get(szRegValue, Temp);
+  if (res)
     pPos = Temp;
 
   return res;
@@ -186,8 +190,9 @@ bool
 Registry::Get(const TCHAR *szRegValue, double &pPos)
 {
   DWORD Temp = (DWORD)pPos;
-  long res;
-  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
+  bool res;
+  res = Get(szRegValue, Temp);
+  if (res)
     pPos = (double)Temp;
 
   return res;
@@ -197,8 +202,9 @@ bool
 Registry::Get(const TCHAR *szRegValue, fixed &pPos)
 {
   DWORD Temp = (DWORD)(long)pPos;
-  fixed res;
-  if ((res = Get(szRegValue, Temp)) == ERROR_SUCCESS)
+  bool res;
+  res = Get(szRegValue, Temp);
+  if (res)
     pPos = (fixed)Temp;
 
   return res;

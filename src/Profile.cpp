@@ -495,7 +495,7 @@ Profile::Use()
       XCSoarInterface::SetSettingsComputer().HomeWaypoint);
 
   Temp = XCSoarInterface::SettingsComputer().Alternate1;
-  if (Get(szProfileAlternate1, Temp) == ERROR_SUCCESS) {
+  if (Get(szProfileAlternate1, Temp)) {
     // TODO: for portrait no need to force alternate calculations here.
     // Infobox will trigger them on if visible..
     XCSoarInterface::SetSettingsComputer().Alternate1 = Temp;
@@ -506,7 +506,7 @@ Profile::Use()
   }
 
   Temp = XCSoarInterface::SettingsComputer().Alternate2;
-  if (Get(szProfileAlternate2, Temp) == ERROR_SUCCESS) {
+  if (Get(szProfileAlternate2, Temp)) {
     XCSoarInterface::SetSettingsComputer().Alternate2 = Temp;
     XCSoarInterface::SetSettingsComputer().EnableAlternate2 = true;
   } else {
