@@ -123,6 +123,11 @@ namespace Registry {
     return Set(key, DWORD(value));
   }
 
+  static inline bool Set(const TCHAR *key, long value)
+  {
+    return Set(key, DWORD(value));
+  }
+
   #ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
   static inline bool Set(const TCHAR *key, unsigned value)
   {

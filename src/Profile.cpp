@@ -199,7 +199,7 @@ Profile::Set(const TCHAR *key, double value)
 bool
 Profile::Set(const TCHAR *key, long value)
 {
-  return Registry::Set(key, (unsigned long)value);
+  return Registry::Set(key, value);
 }
 
 bool
