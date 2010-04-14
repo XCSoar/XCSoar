@@ -40,7 +40,7 @@
 #include "wcecompat/ts_string.h"
 
 #include <stdio.h>
-#include <limits.h>
+#include <syslimits.h>
 
 static LPTSTR stringDup(const tstring text) 
 {
