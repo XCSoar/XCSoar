@@ -50,52 +50,8 @@ Copyright_License {
 #include <stdio.h>
 
 #ifndef WIN32
-#include <gconf/gconf.h>
+#include "Config/GConf.hpp"
 #endif
-
-#ifndef WIN32
-
-class GConf {
-protected:
-  GConfEngine *engine;
-
-public:
-  GConf():engine(gconf_engine_get_default()) {}
-  ~GConf() {
-    gconf_engine_unref(engine);
-  }
-
-  bool get(const char *key, int &value) {
-    GError *error = NULL;
-    value = gconf_engine_get_int(engine, key, &error);
-    if (value == 0 && error != NULL) {
-      g_error_free(error);
-      return false;
-    }
-
-    return true;
-  }
-
-  bool get(const char *key, char *value, size_t max_length) {
-    gchar *buffer = gconf_engine_get_string(engine, key, NULL);
-    if (buffer == NULL)
-      return false;
-
-    g_strlcpy(value, buffer, max_length);
-    g_free(buffer);
-    return true;
-  }
-
-  bool set(const char *key, int value) {
-    return gconf_engine_set_int(engine, key, value, NULL);
-  }
-
-  bool set(const char *key, const char *value) {
-    return gconf_engine_set_string(engine, key, value, NULL);
-  }
-};
-
-#endif /* !WIN32 */
 
 //
 // NOTE: all registry variables are unsigned!
