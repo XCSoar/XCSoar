@@ -77,11 +77,29 @@ PosixFileSource::read(char *p, unsigned n)
 
 #ifdef WIN32
 
+#ifdef _WIN32_WCE
+#include <syslimits.h> /* for PATH_MAX */
+#endif
+
 WindowsFileSource::WindowsFileSource(const char *path)
   :BufferedSource<char>(4096)
 {
+#ifdef _WIN32_WCE
+  /* Windows Mobile doesn't provide narrow API functions */
+  TCHAR tpath[PATH_MAX];
+
+  int length = ::MultiByteToWideChar(CP_ACP, 0, path, -1, tpath, PATH_MAX);
+  if (length == 0) {
+    handle = INVALID_HANDLE_VALUE;
+    return;
+  }
+
+  handle = ::CreateFile(tpath, GENERIC_READ, FILE_SHARE_READ, NULL,
+                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+#else
   handle = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, NULL,
                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+#endif
 }
 
 #ifdef _UNICODE
