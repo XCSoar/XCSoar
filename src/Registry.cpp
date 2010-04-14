@@ -214,7 +214,7 @@ Registry::Get(const TCHAR *szRegValue, fixed &pPos)
 
 #endif /* FIXED_MATH */
 
-HRESULT
+bool
 Registry::Set(const TCHAR *szRegValue, DWORD Pos)
 {
 #ifdef WIN32
@@ -225,38 +225,37 @@ Registry::Set(const TCHAR *szRegValue, DWORD Pos)
 
   hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
   if (hRes != ERROR_SUCCESS)
-    return FALSE;
+    return false;
 
   hRes = RegSetValueEx(hKey, szRegValue, 0, REG_DWORD, (LPBYTE)&Pos,
                        sizeof(DWORD));
   RegCloseKey(hKey);
 
-  return hRes;
+  return hRes == ERROR_SUCCESS;
 
 #else /* !WIN32 */
 
-  GConf().set(szRegValue, (int)Pos);
-  return 0;
+  return GConf().set(szRegValue, (int)Pos);
 
 #endif /* !WIN32 */
 }
 
 // Set bool value to registry as 1 or 0
-HRESULT
+bool
 Registry::Set(const TCHAR *szRegValue, bool bVal)
 {
   return Set(szRegValue, bVal ? DWORD(1) : DWORD(0));
 }
 
 // Set int value to registry
-HRESULT
+bool
 Registry::Set(const TCHAR *szRegValue, int nVal)
 {
   return Set(szRegValue, DWORD(nVal));
 }
 
 #ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
-HRESULT
+bool
 Registry::Set(const TCHAR *szRegValue, unsigned nVal)
 {
   return Set(szRegValue, DWORD(nVal));

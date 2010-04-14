@@ -58,12 +58,12 @@ namespace Registry {
   bool Get(const TCHAR *szRegValue, fixed &pPos);
 #endif
 
-  HRESULT Set(const TCHAR *szRegValue, DWORD Pos);
-  HRESULT Set(const TCHAR *szRegValue, bool bVal);
-  HRESULT Set(const TCHAR *szRegValue, int nVal);
+  bool Set(const TCHAR *szRegValue, DWORD Pos);
+  bool Set(const TCHAR *szRegValue, bool bVal);
+  bool Set(const TCHAR *szRegValue, int nVal);
 
   #ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
-  HRESULT Set(const TCHAR *szRegValue, unsigned nVal);
+  bool Set(const TCHAR *szRegValue, unsigned nVal);
   #endif
 
   bool Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
