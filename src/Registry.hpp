@@ -46,24 +46,88 @@ Copyright_License {
 
 namespace Registry {
   bool Get(const TCHAR *szRegValue, DWORD &pPos);
-  bool Get(const TCHAR *szRegValue, int &pPos);
-  bool Get(const TCHAR *szRegValue, short &pPos);
-  bool Get(const TCHAR *szRegValue, bool &pPos);
+
+  static inline bool Get(const TCHAR *key, int &value)
+  {
+    DWORD temp;
+    if (!Get(key, temp))
+      return false;
+
+    value = temp;
+    return true;
+  }
+
+  static inline bool Get(const TCHAR *key, short &value)
+  {
+    DWORD temp;
+    if (!Get(key, temp))
+      return false;
+
+    value = temp;
+    return true;
+  }
+
+  static inline bool Get(const TCHAR *key, bool &value)
+  {
+    DWORD temp;
+    if (!Get(key, temp))
+      return false;
+
+    value = temp > 0;
+    return true;
+  }
+
 #ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
-  bool Get(const TCHAR *szRegValue, unsigned &pPos);
+  static inline bool Get(const TCHAR *key, unsigned &value)
+  {
+    DWORD temp;
+    if (!Get(key, temp))
+      return false;
+
+    value = temp;
+    return true;
+  }
 #endif
-  bool Get(const TCHAR *szRegValue, double &pPos);
+
+  static inline bool Get(const TCHAR *key, double &value)
+  {
+    DWORD temp;
+    if (!Get(key, temp))
+      return false;
+
+    value = temp;
+    return true;
+  }
 
 #ifdef FIXED_MATH
-  bool Get(const TCHAR *szRegValue, fixed &pPos);
+  static inline bool Get(const TCHAR *key, fixed &value)
+  {
+    DWORD temp;
+    if (!Get(key, temp))
+      return false;
+
+    value = temp;
+    return true;
+  }
 #endif
 
   bool Set(const TCHAR *szRegValue, DWORD Pos);
-  bool Set(const TCHAR *szRegValue, bool bVal);
-  bool Set(const TCHAR *szRegValue, int nVal);
+
+  static inline bool Set(const TCHAR *key, bool value)
+  {
+    return Set(key, value ? DWORD(1) : DWORD(0));
+  }
+
+  static inline bool Set(const TCHAR *key, int value)
+  {
+    return Set(key, DWORD(value));
+  }
 
   #ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
-  bool Set(const TCHAR *szRegValue, unsigned nVal);
+  static inline bool Set(const TCHAR *key, unsigned value)
+  {
+    return Set(key, DWORD(value));
+  }
   #endif
 
   bool Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);

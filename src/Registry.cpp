@@ -137,84 +137,6 @@ Registry::Get(const TCHAR *szRegValue, DWORD &pPos)
 }
 
 bool
-Registry::Get(const TCHAR *szRegValue, int &pPos)
-{
-  DWORD Temp = pPos;
-  bool res;
-  res = Get(szRegValue, Temp);
-  if (res)
-    pPos = Temp;
-
-  return res;
-}
-
-bool
-Registry::Get(const TCHAR *szRegValue, short &pPos)
-{
-  DWORD Temp = pPos;
-  bool res;
-  res = Get(szRegValue, Temp);
-  if (res)
-    pPos = Temp;
-
-  return res;
-}
-
-bool
-Registry::Get(const TCHAR *szRegValue, bool &pPos)
-{
-  DWORD Temp = pPos;
-  bool res;
-  res = Get(szRegValue, Temp);
-  if (res)
-    pPos = Temp > 0;
-
-  return res;
-}
-
-#ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
-bool
-Registry::Get(const TCHAR *szRegValue, unsigned &pPos)
-{
-  DWORD Temp = pPos;
-  bool res;
-  res = Get(szRegValue, Temp);
-  if (res)
-    pPos = Temp;
-
-  return res;
-}
-#endif
-
-bool
-Registry::Get(const TCHAR *szRegValue, double &pPos)
-{
-  DWORD Temp = (DWORD)pPos;
-  bool res;
-  res = Get(szRegValue, Temp);
-  if (res)
-    pPos = (double)Temp;
-
-  return res;
-}
-
-#ifdef FIXED_MATH
-
-bool
-Registry::Get(const TCHAR *szRegValue, fixed &pPos)
-{
-  DWORD Temp = (DWORD)(long)pPos;
-  bool res;
-  res = Get(szRegValue, Temp);
-  if (res)
-    pPos = (fixed)Temp;
-
-  return res;
-}
-
-#endif /* FIXED_MATH */
-
-bool
 Registry::Set(const TCHAR *szRegValue, DWORD Pos)
 {
 #ifdef WIN32
@@ -239,28 +161,6 @@ Registry::Set(const TCHAR *szRegValue, DWORD Pos)
 
 #endif /* !WIN32 */
 }
-
-// Set bool value to registry as 1 or 0
-bool
-Registry::Set(const TCHAR *szRegValue, bool bVal)
-{
-  return Set(szRegValue, bVal ? DWORD(1) : DWORD(0));
-}
-
-// Set int value to registry
-bool
-Registry::Set(const TCHAR *szRegValue, int nVal)
-{
-  return Set(szRegValue, DWORD(nVal));
-}
-
-#ifndef HAVE_POSIX /* DWORD==unsigned on WINE, would be duplicate */
-bool
-Registry::Set(const TCHAR *szRegValue, unsigned nVal)
-{
-  return Set(szRegValue, DWORD(nVal));
-}
-#endif
 
 /**
  * Reads a value from the registry file
