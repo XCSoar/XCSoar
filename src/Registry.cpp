@@ -49,7 +49,9 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifndef WIN32
+#ifdef WIN32
+#include "Config/Registry.hpp"
+#else
 #include "Config/GConf.hpp"
 #endif
 
@@ -61,24 +63,18 @@ Registry::Get(const TCHAR *szRegValue, DWORD &pPos)
 {
 // returns 0 on SUCCESS, else the non-zero error code
 #ifdef WIN32
-
-  HKEY hKey;
-  DWORD dwSize, dwType;
-  long hRes;
-
-  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, KEY_ALL_ACCESS, &hKey);
-  if (hRes != ERROR_SUCCESS)
+  RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, true);
+  if (registry.error())
     return false;
 
+  DWORD dwSize, dwType;
   DWORD value;
-  dwSize = sizeof(value);
-  hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType,
-                         (LPBYTE)&value, &dwSize);
-  if (hRes == ERROR_SUCCESS)
-    pPos = value;
 
-  RegCloseKey(hKey);
-  return hRes == ERROR_SUCCESS;
+  if (!registry.get_value(szRegValue, &dwType, (LPBYTE)&value, &dwSize))
+    return false;
+
+  pPos = value;
+  return true;
 
 #else /* !WIN32 */
 
@@ -97,19 +93,9 @@ Registry::Set(const TCHAR *szRegValue, DWORD Pos)
 {
 #ifdef WIN32
 
-  HKEY hKey;
-  DWORD Disp;
-  HRESULT hRes;
-
-  hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
-  if (hRes != ERROR_SUCCESS)
-    return false;
-
-  hRes = RegSetValueEx(hKey, szRegValue, 0, REG_DWORD, (LPBYTE)&Pos,
-                       sizeof(DWORD));
-  RegCloseKey(hKey);
-
-  return hRes == ERROR_SUCCESS;
+  RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, false);
+  return !registry.error() &&
+    registry.set_value(szRegValue, Pos);
 
 #else /* !WIN32 */
 
@@ -129,22 +115,17 @@ Registry::Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
 #ifdef WIN32
 
-  HKEY hKey;
   DWORD dwType = REG_SZ;
-  long hRes;
+
+  RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, true);
+  if (registry.error())
+    return false;
 
   pPos[0]= '\0';
-  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0,
-                      KEY_READ, &hKey);
-  if (hRes != ERROR_SUCCESS)
-    return false;
 
   dwSize *= sizeof(pPos[0]);
 
-  hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)pPos, &dwSize);
-
-  RegCloseKey(hKey);
-  return hRes == ERROR_SUCCESS;
+  return registry.get_value(szRegValue, &dwType, (LPBYTE)pPos, &dwSize);
 
 #else /* !WIN32 */
   return GConf().get(szRegValue, pPos, dwSize);
@@ -161,20 +142,9 @@ Registry::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 {
 #ifdef WIN32
 
-  HKEY    hKey;
-  DWORD    Disp;
-  HRESULT hRes;
-
-  hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, NULL, 0,
-                        KEY_ALL_ACCESS, NULL, &hKey, &Disp);
-  if (hRes != ERROR_SUCCESS)
-    return false;
-
-  hRes = RegSetValueEx(hKey, szRegValue, 0, REG_SZ, (LPBYTE)Pos,
-                       (_tcslen(Pos) + 1) * sizeof(TCHAR));
-  RegCloseKey(hKey);
-
-  return hRes == ERROR_SUCCESS;
+  RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, false);
+  return !registry.error() &&
+    registry.set_value(szRegValue, Pos);
 
 #else /* !WIN32 */
   return GConf().set(szRegValue, Pos);
