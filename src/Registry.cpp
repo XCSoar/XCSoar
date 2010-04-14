@@ -198,6 +198,8 @@ Registry::Get(const TCHAR *szRegValue, double &pPos)
   return res;
 }
 
+#ifdef FIXED_MATH
+
 bool
 Registry::Get(const TCHAR *szRegValue, fixed &pPos)
 {
@@ -209,6 +211,8 @@ Registry::Get(const TCHAR *szRegValue, fixed &pPos)
 
   return res;
 }
+
+#endif /* FIXED_MATH */
 
 HRESULT
 Registry::Set(const TCHAR *szRegValue, DWORD Pos)

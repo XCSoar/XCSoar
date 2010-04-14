@@ -53,7 +53,10 @@ namespace Registry {
   bool Get(const TCHAR *szRegValue, unsigned &pPos);
 #endif
   bool Get(const TCHAR *szRegValue, double &pPos);
+
+#ifdef FIXED_MATH
   bool Get(const TCHAR *szRegValue, fixed &pPos);
+#endif
 
   HRESULT Set(const TCHAR *szRegValue, DWORD Pos);
   HRESULT Set(const TCHAR *szRegValue, bool bVal);
