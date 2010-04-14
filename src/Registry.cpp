@@ -132,10 +132,6 @@ Registry::Get(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   HKEY hKey;
   DWORD dwType = REG_SZ;
   long hRes;
-  unsigned int i;
-  for (i = 0; i < dwSize; i++) {
-    pPos[i] = 0;
-  }
 
   pPos[0]= '\0';
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0,
