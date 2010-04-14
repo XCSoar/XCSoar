@@ -56,8 +56,6 @@ AIRSPACE_ALT::set_ground_level(const fixed alt)
 const tstring 
 AIRSPACE_ALT::get_as_text(const bool concise) const
 {
-  static const fixed fixed_10(10);
-
   tstringstream oss;
   switch (Base) {
   case abAGL:
