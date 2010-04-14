@@ -65,17 +65,17 @@ Registry::Get(const TCHAR *szRegValue, DWORD &pPos)
   HKEY hKey;
   DWORD dwSize, dwType;
   long hRes;
-  DWORD defaultVal;
 
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szProfileKey, 0, KEY_ALL_ACCESS, &hKey);
   if (hRes != ERROR_SUCCESS)
     return false;
 
-  defaultVal = pPos;
-  dwSize = sizeof(DWORD);
-  hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE) & pPos, &dwSize);
-  if (hRes != ERROR_SUCCESS)
-    pPos = defaultVal;
+  DWORD value;
+  dwSize = sizeof(value);
+  hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType,
+                         (LPBYTE)&value, &dwSize);
+  if (hRes == ERROR_SUCCESS)
+    pPos = value;
 
   RegCloseKey(hKey);
   return hRes == ERROR_SUCCESS;
