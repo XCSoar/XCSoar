@@ -256,28 +256,16 @@ OnSetupDeviceBClicked(WndButton &button)
 }
 
 static void
-UpdateDeviceSetupButton(int DeviceIdx, const TCHAR *Name)
+UpdateDeviceSetupButton(unsigned DeviceIdx, const TCHAR *Name)
 {
-  WndButton *wb;
+  assert(DeviceIdx < 26);
 
-  if (DeviceIdx == 0){
+  TCHAR button_name[] = _T("cmdSetupDeviceA");
+  button_name[(sizeof(button_name) / sizeof(button_name[0])) - 2] += DeviceIdx;
 
-    wb = ((WndButton *)wf->FindByName(_T("cmdSetupDeviceA")));
-    if (wb != NULL) {
-      wb->set_visible(Name != NULL && _tcscmp(Name, _T("Vega")) == 0);
-    }
-
-  }
-
-  if (DeviceIdx == 1){
-
-    wb = ((WndButton *)wf->FindByName(_T("cmdSetupDeviceB")));
-    if (wb != NULL) {
-      wb->set_visible(Name != NULL && _tcscmp(Name, _T("Vega")) == 0);
-    }
-
-  }
-
+  WndButton *wb = (WndButton *)wf->FindByName(button_name);
+  if (wb != NULL)
+    wb->set_visible(Name != NULL && _tcscmp(Name, _T("Vega")) == 0);
 }
 
 
