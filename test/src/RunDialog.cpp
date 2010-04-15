@@ -62,6 +62,7 @@ LocalPath(TCHAR *buf, const TCHAR* file, int loc)
   _tcscpy(buf, file);
 }
 
+#ifdef _UNICODE
 void
 LocalPath(char *buf, const TCHAR* file, int loc)
 {
@@ -69,6 +70,7 @@ LocalPath(char *buf, const TCHAR* file, int loc)
   unicode2ascii(file, buf);
   printf("File %s\n",buf);
 }
+#endif
 
 void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText)
 {
