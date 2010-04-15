@@ -64,6 +64,8 @@ $(TARGET_BIN_DIR)/01_test_tap$(TARGET_EXEEXT): $(TEST_SRC_DIR)/01_test_tap.c | $
 
 DEBUG_PROGRAM_NAMES = \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
+	ReadProfileString ReadProfileInt \
+	WriteProfileString WriteProfileInt \
 	RunWayPointParser RunDeviceDriver \
 	RunCanvas RunMapWindow RunDialog \
 	RunAirspaceWarningDialog
@@ -110,6 +112,66 @@ RUN_TEXT_WRITER_LDADD = \
 	$(ZZIP_LIBS) \
 	$(COMPAT_LIBS)
 $(TARGET_BIN_DIR)/RunTextWriter$(TARGET_EXEEXT): $(RUN_TEXT_WRITER_OBJS) $(RUN_TEXT_WRITER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+READ_PROFILE_STRING_SOURCES = \
+	$(SRC)/StringUtil.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Registry.cpp \
+	$(SRC)/Profile.cpp \
+	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Units.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/ReadProfileString.cpp
+READ_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_STRING_SOURCES))
+READ_PROFILE_STRING_LDADD = $(IO_LIBS)
+$(TARGET_BIN_DIR)/ReadProfileString$(TARGET_EXEEXT): $(READ_PROFILE_STRING_OBJS) $(READ_PROFILE_STRING_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+READ_PROFILE_INT_SOURCES = \
+	$(SRC)/StringUtil.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Registry.cpp \
+	$(SRC)/Profile.cpp \
+	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Units.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/ReadProfileInt.cpp
+READ_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_INT_SOURCES))
+READ_PROFILE_INT_LDADD = $(IO_LIBS)
+$(TARGET_BIN_DIR)/ReadProfileInt$(TARGET_EXEEXT): $(READ_PROFILE_INT_OBJS) $(READ_PROFILE_INT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+WRITE_PROFILE_STRING_SOURCES = \
+	$(SRC)/StringUtil.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Registry.cpp \
+	$(SRC)/Profile.cpp \
+	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Units.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/WriteProfileString.cpp
+WRITE_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_STRING_SOURCES))
+WRITE_PROFILE_STRING_LDADD = $(IO_LIBS)
+$(TARGET_BIN_DIR)/WriteProfileString$(TARGET_EXEEXT): $(WRITE_PROFILE_STRING_OBJS) $(WRITE_PROFILE_STRING_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+WRITE_PROFILE_INT_SOURCES = \
+	$(SRC)/StringUtil.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Registry.cpp \
+	$(SRC)/Profile.cpp \
+	$(SRC)/ProfileKeys.cpp \
+	$(SRC)/Units.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/WriteProfileInt.cpp
+WRITE_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_INT_SOURCES))
+WRITE_PROFILE_INT_LDADD = $(IO_LIBS)
+$(TARGET_BIN_DIR)/WriteProfileInt$(TARGET_EXEEXT): $(WRITE_PROFILE_INT_OBJS) $(WRITE_PROFILE_INT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
