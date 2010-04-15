@@ -140,7 +140,14 @@ public:
                              sc.x, sc.y,
                              20, 20);
 
-    if (!irange && !intask && !dowrite)
+    if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
+      if (!intask)
+        return;
+
+      dowrite = true;
+    }
+
+    if (!dowrite)
       return;
 
     TCHAR Buffer[32];
@@ -148,18 +155,6 @@ public:
 
     switch (pDisplayTextType) {
     case DISPLAYNAMEIFINTASK:
-      dowrite = intask;
-      if (intask) {
-        if (draw_alt)
-          _stprintf(Buffer, TEXT("%s:%d%s"),
-                    way_point.Name.c_str(),
-                    AltArrivalAGL,
-                    sAltUnit);
-        else
-          _stprintf(Buffer, TEXT("%s"),way_point.Name.c_str());
-      }
-      break;
-
     case DISPLAYNAME:
       if (draw_alt)
         _stprintf(Buffer, TEXT("%s:%d%s"),
@@ -221,9 +216,6 @@ public:
       assert(0);
       break;
     }
-
-    if (!dowrite)
-      return;
 
     MapWaypointLabelAdd(Buffer, sc.x + 5, sc.y,
                         TextDisplayMode,
