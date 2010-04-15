@@ -50,6 +50,8 @@ Copyright_License {
 #include "RenderTaskPoint.hpp"
 #include "RenderObservationZone.hpp"
 
+#include <stdio.h>
+
 class RenderTaskPointMap:
   public RenderTaskPoint
 {
