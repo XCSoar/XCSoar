@@ -52,6 +52,8 @@ LogStartUp(const TCHAR *fmt, ...)
   fputc('\n', stderr);
 }
 
+#if !defined(NDEBUG) && !defined(GNAV)
+
 void
 LogDebug(const TCHAR *fmt, ...)
 {
@@ -63,3 +65,5 @@ LogDebug(const TCHAR *fmt, ...)
 
   fputc('\n', stderr);
 }
+
+#endif
