@@ -54,6 +54,7 @@ public:
                      Canvas &_canvas,
                      const GlidePolar &polar)
     :map(_map),
+     aircraft_state(ToAircraftState(map.Basic())),
      canvas(_canvas),
      glide_polar(polar) {
     // if pan mode, show full names
@@ -89,7 +90,6 @@ public:
       bool reachable = false;
 
       if ((map.SettingsMap().DeclutterLabels < 1) || intask) {
-        const AIRCRAFT_STATE aircraft_state = ToAircraftState(map.Basic());
         UnorderedTaskPoint t(way_point, map.SettingsComputer());
         GlideResult r =
           TaskSolution::glide_solution_remaining(t, aircraft_state,
@@ -229,6 +229,7 @@ public:
   }
 private:
   MapWindow &map;
+  const AIRCRAFT_STATE aircraft_state;
   Canvas &canvas;
   int pDisplayTextType;
   TCHAR sAltUnit[4];
