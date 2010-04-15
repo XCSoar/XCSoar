@@ -58,7 +58,6 @@ extern int GetGlobalModelName();
 extern void SmartGlobalModelType();
 extern short InstallFonts();
 extern bool CheckDataDir();
-extern bool CheckRegistryProfile();
 
 static inline void
 SetGlobalEllipse(float value)

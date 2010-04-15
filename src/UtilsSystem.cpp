@@ -630,26 +630,6 @@ bool CheckDataDir() {
 	  return false;
 	return true;
 }
-
-/*
- * Check for xcsoar-registry.prf  existance
- * Should really check if geometry has changed.. in 5.2.3!
- * Currently we disable it for HP31X which is the only PNA with different settings
- * for different geometries
- * 5.2.3 BOOL changed to bool
- * TODO: VENTA4 now that Rob fonts is used, should return false all the way
- */
-bool CheckRegistryProfile() {
-	TCHAR srcpath[MAX_PATH];
-	if (GlobalModelType == MODELTYPE_PNA_HP31X)
-	  return false;
-
-	_stprintf(srcpath,_T("%s%S\\%S"),gmfpathname(), XCSDATADIR , XCSPROFILE);
-
-	if (GetFileAttributes(srcpath) == 0xffffffff)
-	  return false;
-	return true;
-}
 #endif
 
 
