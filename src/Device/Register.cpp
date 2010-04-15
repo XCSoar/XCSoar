@@ -55,6 +55,7 @@ Copyright_License {
 #include "Device/Driver/XCOM760.hpp"
 #include "Device/Driver/Condor.hpp"
 #include "Device/Driver/Leonardo.hpp"
+#include "Device/Driver/Flytec.hpp"
 
 /** NULL terminated array of available device drivers. */
 static const struct DeviceRegister *const DeviceRegister[] = {
@@ -76,6 +77,7 @@ static const struct DeviceRegister *const DeviceRegister[] = {
   &xcom760Device,
   &condorDevice,
   &leonardo_device_driver,
+  &flytec_device_driver,
   NULL
 };
 

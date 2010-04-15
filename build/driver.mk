@@ -22,6 +22,7 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/EW.cpp \
 	$(DRIVER_SRC_DIR)/EWMicroRecorder.cpp \
 	$(DRIVER_SRC_DIR)/FlymasterF1.cpp \
+	$(DRIVER_SRC_DIR)/Flytec.cpp \
 	$(DRIVER_SRC_DIR)/Generic.cpp \
 	$(DRIVER_SRC_DIR)/LX.cpp \
 	$(DRIVER_SRC_DIR)/Leonardo.cpp \
