@@ -3,6 +3,8 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Math/Geometry.hpp"
 #include "UtilsText.hpp"
+#include "Compatibility/string.h" /* _tcsnicmp -> _strnicmp -> strncasecmp */
+
 #include <string>
 
 static int SelectedWayPointFileIdx=0;
