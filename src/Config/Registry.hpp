@@ -80,6 +80,17 @@ public:
   }
 
   /**
+   * Reads a string value.  When this function fails, the value in the
+   * buffer is undefined (may have been modified by this method).
+   *
+   * @return true on success
+   */
+  bool get_value(const TCHAR *name, TCHAR *value, unsigned max_length) const {
+    DWORD type, length = max_length * sizeof(value[0]);
+    return get_value(name, &type, (LPBYTE)value, &length) && type == REG_SZ;
+  }
+
+  /**
    * Read an integer value.  The value is unchanged when this function
    * fails.
    *
