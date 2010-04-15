@@ -37,6 +37,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "MapWindowLabels.hpp"
 #include "Screen/Graphics.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
@@ -46,15 +47,6 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdio.h>
-
-//FIX
-void MapWaypointLabelAdd(TCHAR *Name, int X, int Y,
-			 TextInBoxMode_t Mode, int AltArivalAGL,
-			 bool inTask, bool isLandable,
-			 bool isAirport, bool isExcluded,
-			 RECT rc);
-void MapWaypointLabelClear();
-
 
 class WaypointVisitorMap: public WaypointVisitor {
 public:

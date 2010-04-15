@@ -36,8 +36,8 @@ Copyright_License {
 }
 */
 
+#include "MapWindowLabels.hpp"
 #include "MapWindow.hpp"
-#include "Screen/Graphics.hpp"
 
 #include <stdlib.h>
 #include <assert.h>
