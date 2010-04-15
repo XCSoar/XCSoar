@@ -151,70 +151,42 @@ public:
       return;
 
     TCHAR Buffer[32];
-    TCHAR Buffer2[32];
 
     switch (pDisplayTextType) {
     case DISPLAYNAMEIFINTASK:
     case DISPLAYNAME:
-      if (draw_alt)
-        _stprintf(Buffer, TEXT("%s:%d%s"),
-                  way_point.Name.c_str(),
-                  AltArrivalAGL,
-                  sAltUnit);
-      else
-        _stprintf(Buffer, TEXT("%s"),way_point.Name.c_str());
-
+      _stprintf(Buffer, _T("%s"), way_point.Name.c_str());
       break;
 
     case DISPLAYNUMBER:
-      if (draw_alt)
-        _stprintf(Buffer, TEXT("%d:%d%s"),
-                  way_point.id,
-                  AltArrivalAGL,
-                  sAltUnit);
-      else
-        _stprintf(Buffer, TEXT("%d"),way_point.id);
-
+      _stprintf(Buffer, _T("%d"), way_point.id);
       break;
 
     case DISPLAYFIRSTFIVE:
-      _tcsncpy(Buffer2, way_point.Name.c_str(), 5);
-      Buffer2[5] = '\0';
-      if (draw_alt)
-        _stprintf(Buffer, TEXT("%s:%d%s"),
-                  Buffer2,
-                  AltArrivalAGL,
-                  sAltUnit);
-      else
-        _stprintf(Buffer, TEXT("%s"),Buffer2);
-
+      _tcsncpy(Buffer, way_point.Name.c_str(), 5);
+      Buffer[5] = '\0';
       break;
 
     case DISPLAYFIRSTTHREE:
-      _tcsncpy(Buffer2, way_point.Name.c_str(), 3);
-      Buffer2[3] = '\0';
-      if (draw_alt)
-        _stprintf(Buffer, TEXT("%s:%d%s"),
-                  Buffer2,
-                  AltArrivalAGL,
-                  sAltUnit);
-      else
-        _stprintf(Buffer, TEXT("%s"),Buffer2);
-
+      _tcsncpy(Buffer, way_point.Name.c_str(), 3);
+      Buffer[3] = '\0';
       break;
 
     case DISPLAYNONE:
-      if (draw_alt)
-        _stprintf(Buffer, TEXT("%d%s"),
-                  AltArrivalAGL,
-                  sAltUnit);
-      else
-        Buffer[0] = '\0';
+      Buffer[0] = '\0';
       break;
 
     default:
       assert(0);
       break;
+    }
+
+    if (draw_alt) {
+      size_t length = _tcslen(Buffer);
+      if (length > 0)
+        Buffer[length++] = _T(':');
+
+      _stprintf(Buffer + length, _T("%d%s"), AltArrivalAGL, sAltUnit);
     }
 
     MapWaypointLabelAdd(Buffer, sc.x + 5, sc.y,
