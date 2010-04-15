@@ -64,17 +64,8 @@ Registry::Get(const TCHAR *szRegValue, DWORD &pPos)
 // returns 0 on SUCCESS, else the non-zero error code
 #ifdef WIN32
   RegistryKey registry(HKEY_CURRENT_USER, szProfileKey, true);
-  if (registry.error())
-    return false;
-
-  DWORD dwSize, dwType;
-  DWORD value;
-
-  if (!registry.get_value(szRegValue, &dwType, (LPBYTE)&value, &dwSize))
-    return false;
-
-  pPos = value;
-  return true;
+  return !registry.error() &&
+    registry.get_value(szRegValue, pPos);
 
 #else /* !WIN32 */
 

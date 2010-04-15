@@ -79,6 +79,22 @@ public:
     return result == ERROR_SUCCESS;
   }
 
+  /**
+   * Read an integer value.  The value is unchanged when this function
+   * fails.
+   *
+   * @return true on success
+   */
+  bool get_value(const TCHAR *name, DWORD &value_r) const {
+    DWORD type, value, length = sizeof(value);
+    if (!get_value(name, &type, (LPBYTE)&value, &length) ||
+        type != REG_DWORD || length != sizeof(value))
+      return false;
+
+    value_r = value;
+    return true;
+  }
+
   bool set_value(const TCHAR *name, DWORD type,
                  const BYTE *data, DWORD length) {
     LONG result = ::RegSetValueEx(hKey, name, 0, type, data, length);
