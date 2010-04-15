@@ -284,6 +284,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Compatibility/string.c 	\
 	$(SRC)/Registry.cpp \
 	$(SRC)/Profile.cpp \
+	$(SRC)/ProfileGlue.cpp \
 	$(SRC)/ProfileKeys.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Thread/Thread.cpp \
