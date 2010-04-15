@@ -134,7 +134,6 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
-	$(TEST_SRC_DIR)/FakeRegistry.cpp \
 	$(TEST_SRC_DIR)/RunWayPointParser.cpp
 RUN_WAY_POINT_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_WAY_POINT_PARSER_SOURCES))
 RUN_WAY_POINT_PARSER_LDADD = \
@@ -166,7 +165,6 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProgressDialog.cpp \
-	$(TEST_SRC_DIR)/FakeRegistry.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/RunDeviceDriver.cpp
 RUN_DEVICE_DRIVER_OBJS = $(call SRC_TO_OBJ,$(RUN_DEVICE_DRIVER_SOURCES))
