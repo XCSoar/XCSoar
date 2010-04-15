@@ -87,19 +87,16 @@ public:
     if (way_point.is_landable()) {
       islandable = true; // so we can always draw them
 
-      bool reachable = false;
+      const UnorderedTaskPoint t(way_point, map.SettingsComputer());
+      const GlideResult r =
+        TaskSolution::glide_solution_remaining(t, aircraft_state,
+                                               glide_polar);
+      bool reachable = r.glide_reachable();
 
       if ((map.SettingsMap().DeclutterLabels < 1) || intask) {
-        UnorderedTaskPoint t(way_point, map.SettingsComputer());
-        GlideResult r =
-          TaskSolution::glide_solution_remaining(t, aircraft_state,
-                                                 glide_polar);
-        reachable = r.glide_reachable();
-
         if (reachable)
           AltArrivalAGL = (int)Units::ToUserUnit(r.AltitudeDifference,
                                                  Units::AltitudeUnit);
-
         draw_alt = reachable;
       }
 
