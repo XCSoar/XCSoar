@@ -51,19 +51,18 @@ Copyright_License {
 class WaypointVisitorMap: public WaypointVisitor {
 public:
   WaypointVisitorMap(MapWindow &_map,
-                     Canvas& _canvas,
-                     const GlidePolar& polar):map(_map),
-                                              canvas(_canvas),
-                                              glide_polar(polar)
-    {
-      // if pan mode, show full names
-      pDisplayTextType = map.SettingsMap().DisplayTextType;
-      if (map.SettingsMap().EnablePan) {
-        pDisplayTextType = DISPLAYNAME;
-      }
-      _tcscpy(sAltUnit, Units::GetAltitudeName());
+                     Canvas &_canvas,
+                     const GlidePolar &polar)
+    :map(_map),
+     canvas(_canvas),
+     glide_polar(polar) {
+    // if pan mode, show full names
+    pDisplayTextType = map.SettingsMap().DisplayTextType;
+    if (map.SettingsMap().EnablePan)
+      pDisplayTextType = DISPLAYNAME;
 
-    };
+    _tcscpy(sAltUnit, Units::GetAltitudeName());
+  }
 
   void DrawWaypoint(const Waypoint& way_point, bool intask=false) {
 
