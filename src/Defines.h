@@ -105,7 +105,6 @@ Copyright_License {
 #define REGKEYNAME	"Software\\MPSR\\XCSoar"
 #define XCSDATADIR	"XCSoarData"
 #define XCSCHKLIST	"xcsoar-checklist.txt"
-#define XCSPROFILE	"xcsoar-registry.prf"
 
 /** Max items in any rotary buffer (used in filters) */
 #define RASIZE 180

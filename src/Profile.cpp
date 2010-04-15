@@ -54,6 +54,8 @@ Copyright_License {
 
 #include <assert.h>
 
+#define XCSPROFILE "xcsoar-registry.prf"
+
 extern int WaypointsOutOfRange;
 
 TCHAR startProfileFile[MAX_PATH];
